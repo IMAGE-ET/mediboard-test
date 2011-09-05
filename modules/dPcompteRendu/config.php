@@ -16,6 +16,7 @@ $dPconfig["dPcompteRendu"] = array (
     "time_before_thumbs" => '3',
     "multiple_doc_correspondants" => "0",
     "header_footer_fly" => "0",
-    "clean_word" => "1"
+    "clean_word" => "1",
+    "choice_factory" => "CDomPDFConverter"
   ),
 );

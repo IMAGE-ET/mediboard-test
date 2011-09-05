@@ -19,23 +19,6 @@ function loadSejour(sejour_id){
   url.requestUpdate("listView");
 }
 
-function reloadListFile(sAction){
-  if(sAction == "delete" && file_preview == file_deleted){
-    ZoomAjax("","","","", 0);
-  }
-  var url = new Url("dPfiles", "httpreq_vw_listfiles");
-  url.addParam("selKey", document.FrmClass.selKey.value);
-  url.addParam("selClass", document.FrmClass.selClass.value);  
-  url.addParam("typeVue", document.FrmClass.typeVue.value);
-  url.requestUpdate('listView');
-  
-  if(sAction == "add" || sAction == "delete"){
-    url = new Url("dPpatients", "httpreq_vw_full_patient");
-    url.addParam("patient_id", "{{$patient->_id}}");
-    url.requestUpdate('listInfosPat');
-  }
-}
-
 function saveObjectInfos(oObject){
   var url = new Url("dPpatients", "httpreq_save_classKey");
   url.addParam("selClass", oObject.objClass);

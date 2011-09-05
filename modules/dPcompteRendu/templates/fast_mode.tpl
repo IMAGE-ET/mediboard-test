@@ -67,7 +67,7 @@ generatePdf = function(id) {
 printDoc = function(id, args) {
   Document.print(id);
   Control.Modal.close();
-	Document.refreshList('{{$object_class}}', '{{$object_id}}');
+	Document.refreshList($V(getForm('fastModeForm-{{$uid_fast_mode}}').file_category_id), '{{$object_class}}', '{{$object_id}}');
 }
 
 printToServer = function(file_id) {
@@ -85,7 +85,7 @@ streamOrNotStream = function(form) {
 	else {
 		onSubmitFormAjax(form, {onComplete: function() {
       Control.Modal.close();
-      Document.refreshList('{{$object_class}}', '{{$object_id}}')
+      Document.refreshList($V(getForm('fastModeForm-{{$uid_fast_mode}}').file_category_id), '{{$object_class}}', '{{$object_id}}')
     }});
 	}
 }
@@ -95,7 +95,7 @@ streamPDF = function(id) {
 	$V(form.file_id, id);
 	form.submit();
 	Control.Modal.close();
-	Document.refreshList('{{$object_class}}', '{{$object_id}}');
+	Document.refreshList($V(getForm('fastModeForm-{{$uid_fast_mode}}').file_category_id), '{{$object_class}}', '{{$object_id}}');
 }
 
 switchToEditor = function() {

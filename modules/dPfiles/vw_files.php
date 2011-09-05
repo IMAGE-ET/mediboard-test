@@ -16,7 +16,6 @@ $selView       = CValue::getOrSession("selView" , null);
 $typeVue       = CValue::getOrSession("typeVue" , 0);
 $file_id       = CValue::get("file_id"          , null);
 $accordDossier = CValue::get("accordDossier"    , 0);
-$reloadlist    = 0;
 
 $file = new CFile;
 $file->load($file_id);
@@ -57,7 +56,6 @@ $smarty->assign("file"           , $file        );
 $smarty->assign("keywords"       , $keywords    );
 $smarty->assign("object"         , $object      );
 $smarty->assign("typeVue"        , $typeVue     );
-$smarty->assign("reloadlist"     , $reloadlist  );
 $smarty->assign("fileSel"        , null);
 $smarty->assign("accordDossier"  , $accordDossier);
 $smarty->display("vw_files.tpl");

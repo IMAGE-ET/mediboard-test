@@ -62,10 +62,10 @@
             {{include file="inc_list_view_colonne.tpl" praticienId=0}}
           {{else}}
           <td style="width: 400px;" id="listView">
-            {{include file="inc_list_view.tpl"}}
+            {{mb_include module=dPfiles template=inc_list_view}}
           </td>
           <td id="bigView" style="text-align: center;">
-            {{include file="inc_preview_file.tpl"}}
+            {{mb_include module=dPfiles template=inc_preview_file}}
           </td>
           {{/if}}
         </tr>

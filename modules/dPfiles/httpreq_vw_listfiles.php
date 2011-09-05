@@ -14,7 +14,9 @@ $object_class  = CValue::getOrSession("selClass", null);
 $object_id     = CValue::getOrSession("selKey"  , null);
 $typeVue       = CValue::getOrSession("typeVue" , 0);
 $accordDossier = CValue::get("accordDossier"    , 0);
-$reloadlist = 1;
+$category_id   = CValue::get("category_id");
+$only_list     = isset($_GET["category_id"]);
+
 
 // Liste des Class
 $listCategory = CFilesCategory::listCatClass($object_class);
@@ -68,23 +70,34 @@ if($object_id && $object_class){
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("affichageFile", $affichageFile);
 $smarty->assign("canFile"      , $canFile);
-$smarty->assign("reloadlist"   , $reloadlist); 
 $smarty->assign("listCategory" , $listCategory);
 $smarty->assign("praticienId"  , $praticienId);
-$smarty->assign("selClass"     , $object_class);
-$smarty->assign("selKey"       , $object_id);
 $smarty->assign("object"       , $object);
 $smarty->assign("typeVue"      , $typeVue);
 $smarty->assign("accordDossier", $accordDossier);
+$smarty->assign("affichageFile", $affichageFile);
 
 switch($typeVue) {
   case 0 :
-    $smarty->display("inc_list_view.tpl");
+    if ($only_list) {
+      $smarty->assign("category_id", $category_id ? $category_id : 0);
+      $smarty->assign("list", $affichageFile[$category_id ? $category_id : 0]["items"]);
+      $smarty->display("inc_list_files.tpl");
+    }
+    else {
+      $smarty->display("inc_list_view.tpl");
+    }
     break;
   case 1 :
-    $smarty->display("inc_list_view_colonne.tpl");
+    if ($only_list) {
+      $smarty->assign("category_id", $category_id ? $category_id : 0);
+      $smarty->assign("list", $affichageFile[$category_id ? $category_id : 0]["items"]);
+      $smarty->display("inc_list_files_colonne.tpl");
+    }
+    else {
+      $smarty->display("inc_list_view_colonne.tpl");
+    }
     break;
 }
 

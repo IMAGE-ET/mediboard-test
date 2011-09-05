@@ -1030,7 +1030,7 @@ TESTS A EFFECTUER
   }
   
   function loadRefPatient($cache = 1) {
-    $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
+    return $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
   }
   
   // Chargement du sejour et du RPU dans le cas d'une urgence

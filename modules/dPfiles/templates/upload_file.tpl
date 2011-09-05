@@ -1,7 +1,7 @@
 <script type="text/javascript">
-reloadCallback = function() {
+reloadCallback = function(id, object) {
   if (window.parent.reloadAfterUploadFile) {
-    window.parent.reloadAfterUploadFile();
+    window.parent.reloadAfterUploadFile(object.file_category_id);
   }
 
   if (window.parent.File && window.parent.File.refresh) {

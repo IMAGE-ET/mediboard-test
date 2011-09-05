@@ -236,4 +236,22 @@ class CMbXMLDocument extends DOMDocument {
   function getDocumentElements() {
     return array();
   }
+  
+  static function insertTextElement($element, $name, $value, $attrs = null) {
+    $root = $element->ownerDocument;
+    $tag = $root->createElement($name);
+    $value = utf8_encode($value);
+    $value_elt = $root->createTextNode($value);
+    $tag->appendChild($value_elt);
+    $element->appendChild($tag);
+    
+    if ($attrs) {
+      foreach ($attrs as $key => $value) {
+        $att = $root->createAttribute($key);
+        $value_att = $root->createTextNode($value);
+        $att->appendChild($value_att);
+        $tag->appendChild($att);
+      }
+    }
+  }
 }

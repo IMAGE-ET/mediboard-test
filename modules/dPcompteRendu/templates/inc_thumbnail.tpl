@@ -6,7 +6,7 @@
   Main.add(function() {
   if(Thumb.compte_rendu_id) {
     try {
-      window.opener.Document.refreshList(Thumb.object_class,Thumb.object_id);
+      window.opener.Document.refreshList("{{$category_id}}", Thumb.object_class,Thumb.object_id);
       window.opener.reloadListFileEditPatient("load");
      }
     catch (e) {}

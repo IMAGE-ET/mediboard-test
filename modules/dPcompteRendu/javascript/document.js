@@ -86,14 +86,14 @@ var Document = {
     
     var oAjaxOptions = {
       onComplete: function () {
-        Document.refreshList($V(form.object_class), $V(form.object_id)); 
+        Document.refreshList($V(form.file_category_id), $V(form.object_class), $V(form.object_id)); 
       }
     };
     
     confirmDeletion(form, oConfirmOptions, oAjaxOptions);
   },
   
-  refreshList: function(object_class, object_id) {
+  refreshList: function(category_id, object_class, object_id) {
     var selector = printf("div.documents-%s-%s", object_class, object_id);
     $$(selector).each(Document.refresh);
   },
@@ -121,10 +121,10 @@ var Document = {
     var div = new Element("div", {style: "min-width:260px;"+((mode != "hide") ? "min-height:50px;" : "")});
     div.className = printf("documents-%s-%s praticien-%s mode-%s", object_class, object_id, praticien_id, mode);
     $(element).insert(div);
-    Document.refresh(div);
+    Document.refresh(div, null, 0);
   },
   
-  refresh: function(container, oOptions) {
+  refresh: function(container, oOptions, only_docs) {
     var matches = container.className.match(/documents-(\w+)-(\d+) praticien-(\d*) mode-(\w+)/);
 
     if (!matches) {
@@ -144,7 +144,14 @@ var Document = {
     url.addParam("object_id"   , oOptions.object_id);
     url.addParam("praticien_id", oOptions.praticien_id);
     url.addParam("mode"        , oOptions.mode);
-    url.requestUpdate(container);
+    
+    if (only_docs == undefined || only_docs == 1) {
+      url.addParam("only_docs", 1);
+      url.requestUpdate("docs_"+oOptions.object_class+oOptions.object_id);
+    }
+    else {
+      url.requestUpdate(container);
+    }
   },
   
   print: function(document_id) {

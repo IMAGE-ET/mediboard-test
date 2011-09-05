@@ -142,7 +142,7 @@ else {
   // Suppression des espaces, tabulations, retours chariots et sauts de lignes pour effectuer le md5
   if (md5($c1) != md5($c2) || !$file->_id || !file_exists($file->_file_path) || file_get_contents($file->_file_path) == "") {
     $htmltopdf = new CHtmlToPDF;
-    $htmltopdf->generatePDF($content, 0, $page_format, isset(CCompteRendu::$_page_formats[$page_format]) ? $orientation : null, $file);
+    $htmltopdf->generatePDF($content, 0, $page_format, @isset(CCompteRendu::$_page_formats[$page_format]) ? $orientation : null, $file);
     $file->file_size = filesize($file->_file_path);
   }
   
@@ -174,6 +174,7 @@ if ($write_page) {
   $smarty->assign("file_id", $file->_id);
   $smarty->assign("_nb_pages", $file->_nb_pages);
   $smarty->assign("print", $print);
+  $smarty->assign("category_id", $compte_rendu->file_category_id);
   $smarty->display("inc_thumbnail.tpl");
 }
 

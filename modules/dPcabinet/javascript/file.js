@@ -40,7 +40,7 @@ var File = {
     confirmDeletion(oButton.form, oOptions, oAjaxOptions);
   },
   
-  refresh: function(object_id, object_class) {
+  refresh: function(object_id, object_class, only_files) {
   	var div_id = printf("files-%s-%s", object_id, object_class);
   	if (!$(div_id)) {
   	  return;
@@ -48,7 +48,13 @@ var File = {
     var url = new Url("dPcabinet", "httpreq_widget_files");
     url.addParam("object_id", object_id);
     url.addParam("object_class", object_class);
-    url.requestUpdate("files-"+object_id+"-"+object_class);
+    if (only_files == undefined || only_files == 1) {
+      url.addParam("only_files", 1);
+      url.requestUpdate("list_"+object_class+object_id);
+    }
+    else {
+      url.requestUpdate("files-"+object_id+"-"+object_class);
+    }
   },
   
   register: function(object_id, object_class, container) {
@@ -58,9 +64,9 @@ var File = {
     div.id = printf("files-%s-%s", object_id, object_class);
     $(container).insert(div);
     
-    Main.add( function() {
-      File.refresh(object_id,object_class)
-    } );
+    Main.add(function() {
+      File.refresh(object_id,object_class, 0)
+    });
   },
   
   editNom: function(guid) {
