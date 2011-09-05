@@ -26,8 +26,9 @@
           {{$_transmission->date|date_format:$conf.time}}
         </td>
         <td class="text {{if $_transmission->type}}trans-{{$_transmission->type}}{{/if}} libelle_trans" {{if $_transmission->degre == "high"}} style="background-color: #faa" {{/if}}>
+          <button class="add notext" type="button" data-text="{{$_transmission->text}}" onclick="completeTrans('{{$_transmission->type}}',this);" style="float: right;">{{tr}}Add{{/tr}}</button>
           {{mb_value object=$_transmission field=text}}
-        </td>
+				</td>
       </tr>
     {{foreachelse}}
       <tr>

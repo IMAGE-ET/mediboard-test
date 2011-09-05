@@ -155,6 +155,15 @@ submitTrans = function(form) {
     }
   {{/if}}
 }
+
+completeTrans = function(type, button){
+  var oFormTrans = getForm("editTrans");
+  var fieldName = "_text_"+type;
+  var oField = oFormTrans.elements["_text_"+type];
+	var text = button.get("text");
+  $V(oField, $V(oField) ? $V(oField)+"\n"+text : text);
+}
+
 </script>
 
 <form name="editTrans" action="?" method="post" onsubmit="return checkForm(this)" style="text-align: left;">
