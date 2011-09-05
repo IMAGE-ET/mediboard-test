@@ -115,7 +115,7 @@ emptyBirthday = function() {
     <th><label for="nom" title="Nom du patient à rechercher, au moins les premières lettres">Nom</label></th>
     <td><input tabindex="1" type="text" name="nom" value="{{$nom|stripslashes}}" /></td>
     <td class="field_basic" colspan="2">
-      <button type="button" style="float: right;" class="add" title="{{tr}}CPatient.other_fields{{/tr}}"
+      <button type="button" style="float: right;" class="search" title="{{tr}}CPatient.other_fields{{/tr}}"
         onclick="toggleSearch();">{{tr}}CPatient.other_fields{{/tr}}</button>
     </td>
     <th style="display: none;" class="field_advanced"><label for="cp" title="Code postal du patient à rechercher">Code postal</label></th>
