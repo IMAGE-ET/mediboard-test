@@ -64,7 +64,7 @@ Main.add(function () {
 </ul>
 
       
-<form action="?" name="selection" method="get">
+<form action="?" name="selectBloc" method="get">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="vw_idx_materiel" />
   <select name="bloc_id" style="float: right;" onchange="this.form.submit()">

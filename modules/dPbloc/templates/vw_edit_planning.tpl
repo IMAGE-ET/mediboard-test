@@ -86,7 +86,7 @@ Main.add(function(){
       </button>
       {{/if}}
       
-      <form action="?" name="selection" method="get">
+      <form action="?" name="selectBloc" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="vw_edit_planning" />
         <select name="bloc_id" onchange="this.form.submit();">

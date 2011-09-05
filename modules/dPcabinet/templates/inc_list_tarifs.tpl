@@ -12,7 +12,7 @@
   {{if $user->_is_secretaire}}
   <tr>
     <td colspan="10">
-      <form action="?" name="selection" method="get">
+      <form action="?" name="selectPrat" method="get">
         <input type="hidden" name="tarif_id" value="" />
         <input type="hidden" name="m" value="{{$m}}" />
         <select name="prat_id" onchange="this.form.submit()">

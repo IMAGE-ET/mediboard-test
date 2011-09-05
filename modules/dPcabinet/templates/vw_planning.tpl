@@ -76,7 +76,7 @@ Main.add(function () {
       </form>
     </th>
     <td style="min-width: 350px;">
-      <form action="?" name="selection" method="get">
+      <form action="?" name="selectPrat" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
         <select name="chirSel" style="width: 15em;" onchange="this.form.submit()">
