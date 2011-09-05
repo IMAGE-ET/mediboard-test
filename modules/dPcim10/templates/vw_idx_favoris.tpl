@@ -11,7 +11,7 @@
 <table class="bookCode">
   <tr>
     <th colspan="4">
-      <form action="?" name="selection" method="get">
+      <form action="?" name="selectLang" method="get">
       {{include file="inc_select_lang.tpl"}}
 
       <input type="hidden" name="m" value="dPcim10" />

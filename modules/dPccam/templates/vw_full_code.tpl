@@ -49,7 +49,7 @@ Main.add(function () {
       <table>
         <tr>
           <td colspan="2">
-            <form action="?" name="selection" method="get" >
+            <form action="?" name="findCode" method="get" >
 
             <input type="hidden" name="m" value="{{$m}}" />
             <input type="hidden" name="{{$actionType}}" value="{{$action}}" />

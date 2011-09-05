@@ -38,7 +38,7 @@ function selectCode() {
   
   <tr>
     <td class="leftPane">
-      <form action="?" name="selection" method="get" onsubmit="return checkForm(this)">
+      <form action="?" name="findCode" method="get" onsubmit="return checkForm(this)">
       
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="{{$actionType}}" value="{{$action}}" />

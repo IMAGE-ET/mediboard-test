@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<form  name="selection" action="?" method="get" >
+<form  name="findCode" action="?" method="get" >
 
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="{{$actionType}}" value="{{$action}}" />

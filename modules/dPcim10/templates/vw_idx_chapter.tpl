@@ -11,7 +11,7 @@
 <table width="100%" bgcolor="#cccccc">
   <tr>
     <th align="center">
-      <form action="?" name="selection" method="get" >
+      <form action="?" name="selectLang" method="get" >
       {{include file="inc_select_lang.tpl"}}
 
       <input type="hidden" name="m" value="dPcim10" />
