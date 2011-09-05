@@ -9,10 +9,10 @@
 *}}
 
 <script type="text/javascript">
-  Calendar.regField(getForm("selection").date, null, {noView: true});
+  Calendar.regField(getForm("selectPatient").date, null, {noView: true});
 </script>
   
-<form action="?" name="selection" method="get">
+<form action="?" name="selectPatient" method="get">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="vw_bloodSalvage_sspi" />
 
