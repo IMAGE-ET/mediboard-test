@@ -46,6 +46,10 @@
       prescription.setStyle({pageBreakAfter: "always"});
     }
   }
+
+  Main.add(function() {
+    window.print();
+  });
 </script>
 
 <table class="tbl print_patient">
@@ -56,6 +60,7 @@
       <label><input type="checkbox" checked="checked" onchange="togglePrintZone('print_sejour')" /> Séjour</label>
       <label><input type="checkbox" checked="checked" onchange="togglePrintZone('print_prescription')"/> Prescription</label>
       <label><input type="checkbox" checked="checked" onchange="togglePrintZone('print_tasks')"/> Tâches</label>
+      <button class="print" type="button" onclick="window.print()">Imprimer</button>
     </td>
   </tr>
 	<tr>
