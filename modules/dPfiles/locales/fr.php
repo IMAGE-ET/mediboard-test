@@ -177,6 +177,7 @@ $locales['config-dPfiles-extensions_yoplet'] = 'Extensions de fichiers';
 $locales['config-dPfiles-extensions_yoplet-desc'] = 'Extensions de fichiers prises en charge pour l\'enregistrement en masse de fichiers';
 $locales['config-dPfiles-system_sender'] = 'Transmission de documents';
 $locales['config-dPfiles-system_sender-'] = 'Aucun';
+$locales['config-dPfiles-system_sender-CDMPSender'] = 'DMP';
 $locales['config-dPfiles-system_sender-CEcDocumentSender'] = 'e-Cap';
 $locales['config-dPfiles-system_sender-CMedinetSender'] = 'Medinet';
 $locales['config-dPfiles-system_sender-desc'] = 'Système de transmission de fichiers vers de plateformes tierces';

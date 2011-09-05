@@ -77,6 +77,7 @@ class CDocumentItem extends CMbMetaObject {
   function updateFormFields() {
   	parent::updateFormFields();
   	$this->getSendProblem();
+  	$this->loadRefCategory();
   }
   
   /**
