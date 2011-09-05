@@ -400,6 +400,7 @@ class CAppUI {
 
  /**
   * Echo an ajax callback with given value
+  * 
   * @param string $callback : name of the javascript function 
   * @param string $value : value paramater for javascript function
   */

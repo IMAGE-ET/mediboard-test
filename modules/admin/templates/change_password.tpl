@@ -15,9 +15,11 @@
 {{else}}
   <form name="chpwdFrm" action="?m={{$m}}&amp;{{if $forceChange}}tab{{else}}a{{/if}}=chpwd" method="post" onsubmit="return onSubmitFormAjax(this)">
   
-  <input type="hidden" name="m" value="admin" />
-  <input type="hidden" name="dosql" value="do_chpwd_aed" />
-  <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="m" value="admin" />
+    <input type="hidden" name="dosql" value="do_chpwd_aed" />
+    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="callback" value="Control.Modal.close" />
+  
     {{if !$forceChange}}
       <input type="hidden" name="dialog" value="1" />
     {{else}}
@@ -32,27 +34,28 @@
   
     <table class="form">
       <tr>
-        <th style="width:50%">
+        <th style="width: 50%;">
           <label for="old_pwd" title="{{tr}}CUser-user_password-current{{/tr}}">
             {{tr}}CUser-user_password-current{{/tr}}
           </label>
         </th>
-        <td style="width:50%">
+        <td style="width: 50%;">
           <input class="notNull str" type="password" name="old_pwd" />
         </td>
       </tr>
+      
       <tr>
         <th>
           <label for="new_pwd1" title="{{tr}}CUser-user_password-new{{/tr}}">
             {{tr}}CUser-user_password-new{{/tr}}
           </label>
         </th>
-        <td>
+        <td class="text">
           <input type="hidden" name="user_username" value="{{$user->user_username}}" />
           <input class="{{$user->_props._user_password}}" type="password" name="new_pwd1" onkeyup="checkFormElement(this);" />
-          <div id="chpwdFrm_new_pwd1_message"></div>
         </td>
       </tr>
+      
       <tr>
         <th>
           <label for="new_pwd2" title="{{tr}}Repeat New Password{{/tr}}">
@@ -63,6 +66,13 @@
           <input class="notNull password sameAs|new_pwd1" type="password" name="new_pwd2" />
         </td>
       </tr>
+      
+      <tr>
+        <td colspan="3" style="height: 3em;">
+          <div id="chpwdFrm_new_pwd1_message"></div>
+        </td>
+      </tr>
+      
       <tr>
         <td colspan="2" class="button">
           <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>

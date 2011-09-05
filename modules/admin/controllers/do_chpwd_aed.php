@@ -11,6 +11,7 @@
 $old_pwd  = CValue::post("old_pwd" );
 $new_pwd1 = CValue::post("new_pwd1");
 $new_pwd2 = CValue::post("new_pwd2");
+$callback = CValue::post("callback");
 
 // Vérification du mot de passe actuel de l'utilisateur courant
 $user = CUser::get();
@@ -37,5 +38,7 @@ if ($msg = $user->store()) {
 
 CAppUI::stepAjax("CUser-msg-password-updated", UI_MSG_OK);
 CAppUI::$instance->weak_password = false;
+CAppUI::callbackAjax($callback);
+
 CApp::rip();
 ?>

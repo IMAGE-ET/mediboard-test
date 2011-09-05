@@ -573,7 +573,7 @@ function uploadFile(object_class, object_id, file_category_id, _rename, for_iden
 }
 
 function popChgPwd() {
-  new Url("admin", "chpwd").requestModal(400, 150);
+  new Url("admin", "chpwd").requestModal(400);
 }
 
 var Note = {
