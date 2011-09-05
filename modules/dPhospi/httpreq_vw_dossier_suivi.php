@@ -35,7 +35,9 @@ $cibles = array();
 $users = array();
 
 foreach($sejour->_ref_suivi_medical as $_suivi) {
-  $_suivi = $_suivi[0];
+  if (is_array($_suivi)) { 
+    $_suivi = $_suivi[0];
+  }
   // Elements et commentaires
   if($_suivi instanceof CPrescriptionLineElement || $_suivi instanceof CPrescriptionLineComment){
     $_suivi->loadRefPraticien();
@@ -73,7 +75,9 @@ if (!$cible && CAppUI::conf("soins constantes_show") && $_show_const){
 //mettre les transmissions dans un tableau dont l'index est le datetime
 $list_trans_const = array();
 foreach($sejour->_ref_suivi_medical as $_trans_const) {
-  $_trans_const = $_trans_const[0];
+  if (is_array($_trans_const)) {
+    $_trans_const = $_trans_const[0];
+  }
   if ($_trans_const instanceof CObservationMedicale && !$_show_obs) {
     continue;
   }
