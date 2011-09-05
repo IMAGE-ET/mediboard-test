@@ -8,7 +8,7 @@
 
 Main.add(function () {
   new Control.Tabs.create('reveil_tabs', true);
-  Calendar.regField(getForm("selection").date, null, {noView: true});
+  Calendar.regField(getForm("selectBloc").date, null, {noView: true});
 	
   var url = new Url("dPsalleOp", "httpreq_reveil");
   
@@ -75,7 +75,7 @@ codageCCAM = function(operation_id){
 	  	<li><a href="#all">{{tr}}SSPI.Encours{{/tr}} / {{tr}}SSPI.Attente{{/tr}} / {{tr}}SSPI.Reveil{{/tr}} / {{tr}}SSPI.Sortie{{/tr}}</a></li>
 	  {{/if}}
 	  <li style="float:right; font-weight: bold;">
-		  <form action="?" name="selection" method="get">
+		  <form action="?" name="selectBloc" method="get">
 		    <input type="hidden" name="m" value="{{$m}}" />
 	      <input type="hidden" name="tab" value="vw_reveil" />
 		    <span id="heure">{{$hour|date_format:$conf.time}}</span> - {{$date|date_format:$conf.longdate}}
@@ -133,7 +133,7 @@ codageCCAM = function(operation_id){
 </script>
 
   <div style="text-align: center">
-    <form action="?" name="selection" method="get">
+    <form action="?" name="selectBloc" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="vw_reveil" />
       <span id="heure">{{$hour|date_format:$conf.time}}</span> - {{$date|date_format:$conf.longdate}}

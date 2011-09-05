@@ -1,13 +1,13 @@
 <script type="text/javascript">
 Main.add(function () {
-  Calendar.regField(getForm("selection").date, null, {noView: true});
+  Calendar.regField(getForm("selectSalle").date, null, {noView: true});
 });
 showLegend = function() {
   new Url("dPbloc", "legende").popup(500, 150, "Légende");
 }
 </script>
 
-<form action="?" name="selection" method="get">
+<form action="?" name="selectSalle" method="get">
 	<input type="hidden" name="m" value="{{$m}}" />
 	<input type="hidden" name="op" value="0" />
 	<table class="form">
