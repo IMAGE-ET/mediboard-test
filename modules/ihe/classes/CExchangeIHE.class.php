@@ -15,7 +15,7 @@
  * Class CExchangeIHE 
  * Exchange IHE
  */
-CAppUI::requireModuleClass("eai", "CExchange_tabular");
+CAppUI::requireModuleClass("eai", "CExchangeTabular");
 
 class CExchangeIHE extends CExchangeTabular {
   static $messages = array(

@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("hprimxml", "evenementspatients");
+CAppUI::requireModuleClass("hprimxml", "CHPrimXMLEvenementsPatients");
 
 class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients { 
   var $actions = array(

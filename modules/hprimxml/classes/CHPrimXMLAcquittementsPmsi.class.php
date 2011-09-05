@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("hprimxml", "acquittementsserveuractivitepmsi");
+CAppUI::requireModuleClass("hprimxml", "CHPrimXMLAcquittementsServeurActivitePmsi");
 
 class CHPrimXMLAcquittementsPmsi extends CHPrimXMLAcquittementsServeurActivitePmsi {
   function __construct() {

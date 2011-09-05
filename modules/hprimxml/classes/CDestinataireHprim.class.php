@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("eai", "interop_receiver");
+CAppUI::requireModuleClass("eai", "CInteropReceiver");
 
 class CDestinataireHprim extends CInteropReceiver {
   // DB Table key

@@ -15,7 +15,7 @@ global $m, $a;
 
 CCanDo::checkRead();
 
-CAppUI::requireModuleClass("eai", "eai_soap_handler");
+CAppUI::requireModuleClass("eai", "CEAISoapHandler");
 
 $wsdl = CValue::get('wsdl');
 

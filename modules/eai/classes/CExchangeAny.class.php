@@ -16,7 +16,7 @@
  * Echange Tabular
  */
 
-CAppUI::requireModuleClass("eai", "CExchange_data_format");
+CAppUI::requireModuleClass("eai", "CExchangeDataFormat");
 
 class CExchangeAny extends CExchangeDataFormat {
   static $messages = array(

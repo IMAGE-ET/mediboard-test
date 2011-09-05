@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("eai", "exchange_data_format");
+CAppUI::requireModuleClass("eai", "CExchangeTabular");
 
 class CEchangeHprim21 extends CExchangeTabular {
   static $messages = array(
