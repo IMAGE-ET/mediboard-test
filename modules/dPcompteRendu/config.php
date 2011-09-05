@@ -17,6 +17,7 @@ $dPconfig["dPcompteRendu"] = array (
     "multiple_doc_correspondants" => "0",
     "header_footer_fly" => "0",
     "clean_word" => "1",
-    "choice_factory" => "CDomPDFConverter"
+    "choice_factory" => "CDomPDFConverter",
+    "arch_wkhtmltopdf" => "i386"
   ),
 );

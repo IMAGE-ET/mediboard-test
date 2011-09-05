@@ -21,7 +21,7 @@
     </th>
   </tr>
 
-  {{if $dompdf_installed}}
+  {{if $dompdf_installed || $wkhtmltopdf_installed}}
     {{assign var="var" value="pdf_thumbnails"}}
     {{mb_include module=system template=inc_config_bool}}
     {{assign var="var" value="same_print"}}
@@ -31,7 +31,7 @@
   {{else}}
     <tr>
       <td colspan="2">
-        <div class="small-error">La librairie DOMPDF n'est pas installée</div>
+        <div class="small-error">Aucune librairie de conversion PDF n'est installée</div>
       </td>
     </tr>
   {{/if}}
@@ -55,7 +55,23 @@
     {{assign var="var" value="clean_word"}}
     {{mb_include module=system template=inc_config_bool}}
   </tr>
-
+  <tr>
+    {{assign var="var" value="choice_factory"}}
+    {{mb_include module=system template=inc_config_enum values="CDomPDFConverter|CWkHtmlToPDFConverter"}}
+  </tr>
+  <tr>
+    {{assign var="var" value="arch_wkhtmltopdf"}}
+    {{mb_include module=system template=inc_config_enum values=i386|amd64}}
+  </tr>
+  {{if !$can_64bit}}
+    <tr>
+      <td colspan="2">
+        <div class="warning" style="float: right;">
+          Le serveur n'est pas compatible pour exécuter la version 64 bit de wkhtmltoPDF
+        </div>
+      </td>
+    </tr>
+  {{/if}}
   <tr>
     <th class="category" colspan="2">
       Horodatage pour les aides à la saisie

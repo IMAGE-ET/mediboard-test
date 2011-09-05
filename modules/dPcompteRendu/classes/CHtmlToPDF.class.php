@@ -12,15 +12,14 @@ if (!is_dir("lib/dompdf")) return;
 class CHtmlToPDF {
 
   var $nbpages = null;
-  var $dompdf  = null;
   var $content = null;
   var $display_elem = array (
-	  "inline" => array(
-		  "b", "strong", "big", "blink", "cite", "code", "del", "dfn",
+    "inline" => array(
+      "b", "strong", "big", "blink", "cite", "code", "del", "dfn",
       "em", "font", "i", "ins", "kbd", "nobr", "q", "s", "samp", "small",
       "span", "strike", "sub", "sup", "tt", "u", "var"
     ),
-	  "block"  => array(
+    "block"  => array(
       "address", "blockquote", "dd", "dl", "dt", "div", "dir",
       "h1", "h2", "h3", "h4", "h5", "h6", /*"hr",*/
       "listing", "isindex", "map", "menu", "multicol", "ol",
@@ -54,10 +53,8 @@ class CHtmlToPDF {
   );
   
   function __construct() {
-		CAppUI::requireModuleFile("dPcompteRendu", "dompdf_config");
-		CAppUI::requireLibraryFile("dompdf/dompdf_config.inc");
-		
-    $this->dompdf = new DOMPDF;
+    $factory = CAppUI::conf("dPcompteRendu CCompteRendu choice_factory");
+    CHtmlToPDFConverter::init($factory);
   }
 
   function __destruct() {
@@ -68,23 +65,31 @@ class CHtmlToPDF {
   }
 
   function generatePDF($content, $stream, $format, $orientation, $file) {
-  	$this->content = $this->fixBlockElements($content);
-  	$this->content = str_replace("[Général - numéro de page]", "<span class='page'></span>", $this->content);
-  	
-    $this->dompdf->set_paper($format, $orientation);
-    $this->dompdf->set_protocol(isset($_SERVER["HTTPS"]) ? "https://" : "http://");
-    $this->dompdf->set_host($_SERVER["SERVER_NAME"]);
-    $this->dompdf->load_html($this->content);
-    $this->dompdf->render();
+    $this->content = $this->fixBlockElements($content);
+    $this->content = str_replace("[Général - numéro de page]", "<span class='page'></span>", $this->content);
+    
+    $pdf_content = CHtmlToPDFConverter::convert($content, $format, $orientation);
 
     if ($file->_file_path) {
-      file_put_contents($file->_file_path, $this->dompdf->output());
+      file_put_contents($file->_file_path, $pdf_content);
     }
     
-    $this->nbpages = $this->dompdf->get_canvas()->get_page_count();
+    $this->nbpages = preg_match_all("/\/Page\W/", $pdf_content, $matches);
 
     if ($stream) {
-      $this->dompdf->stream($file->file_name, array("Attachment" => 0));
+      header("Pragma: ");
+      header("Cache-Control: ");
+      header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+      header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+      header("Cache-Control: no-store, no-cache, must-revalidate");  //HTTP/1.1
+      header("Cache-Control: post-check=0, pre-check=0", false);
+      // END extra headers to resolve IE caching bug
+      header("MIME-Version: 1.0");
+      header("Content-length: {$this->file_size}");
+      header("Content-type: $this->file_type");
+      header("Content-disposition: inline; filename=\"".$this->file_name."\"");
+      
+      echo $pdf_content;
     }
   }
 
@@ -178,25 +183,25 @@ class CHtmlToPDF {
   //   largeur en cm : 21
   //   largeur en pixels : 595.28
   function resizeTable(DomNode &$node) {
-  	if (!$node->hasChildNodes()) {
+    if (!$node->hasChildNodes()) {
       return;
     }
     
     foreach($node->childNodes as $_child) {
-    	if ($_child->nodeName == "table") {
-	    	$width = $_child->getAttribute("width");
-	    	$width_without_marges = CHtmlToPDF::$_width_page - (CHtmlToPDF::$_marges / CHtmlToPDF::$_width_page) * 100;
-	    	if (!strrpos($width, "%")) {
-		  		if ($width > $width_without_marges) {
-		    	  $_child->setAttribute("width", "100%");
-		    	} else if ($width <= $width_without_marges & $width > 0) {
-		    		
-		    	  $new_width = ($width * 100) / ($width_without_marges - CHtmlToPDF::$_marges * 2 );
-		        $_child->setAttribute("width", "$new_width%");
-		    	}
-    	  }
-    	}
-    	CHtmlToPDF::resizeTable($_child);
+      if ($_child->nodeName == "table") {
+        $width = $_child->getAttribute("width");
+        $width_without_marges = CHtmlToPDF::$_width_page - (CHtmlToPDF::$_marges / CHtmlToPDF::$_width_page) * 100;
+        if (!strrpos($width, "%")) {
+          if ($width > $width_without_marges) {
+            $_child->setAttribute("width", "100%");
+          } else if ($width <= $width_without_marges & $width > 0) {
+            
+            $new_width = ($width * 100) / ($width_without_marges - CHtmlToPDF::$_marges * 2 );
+            $_child->setAttribute("width", "$new_width%");
+          }
+        }
+      }
+      CHtmlToPDF::resizeTable($_child);
     }
   }
   

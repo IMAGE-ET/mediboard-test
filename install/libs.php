@@ -406,4 +406,16 @@ $library->versionString = "updated:2011-01-07";
 
 CLibrary::$all[$library->name] = $library;
 
+$library = new CLibrary;
+$library->name = "wkhtmltoPDF";
+$library->url = "http://code.google.com/p/wkhtmltopdf/";
+$library->fileName = "wkhtmltopdf.tar.gz";
+$library->description = "Html To PDF converter";
+$library->sourceDir = "wkhtmltopdf";
+$library->targetDir = "wkhtmltopdf";
+$library->versionFile = "version.txt";
+$library->versionString = "0.10.0_rc2";
+
+CLibrary::$all[$library->name] = $library;
+
 ?>
