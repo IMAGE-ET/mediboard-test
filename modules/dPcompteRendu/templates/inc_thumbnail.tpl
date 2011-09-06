@@ -5,11 +5,12 @@
 	// @FIXME: Pourquoi rafraichir la widget ici ???
   Main.add(function() {
   if(Thumb.compte_rendu_id) {
-    try {
+    if (window.opener.reloadListFileEditPatient) {
+      window.opener.reloadListFileEditPatient("load", "{{$category_id}}"); 
+    }
+    else if (window.opener.Document.refreshList){
       window.opener.Document.refreshList("{{$category_id}}", Thumb.object_class,Thumb.object_id);
-      window.opener.reloadListFileEditPatient("load");
-     }
-    catch (e) {}
+    }
   }
   });
   

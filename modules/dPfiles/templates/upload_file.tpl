@@ -9,7 +9,7 @@ reloadCallback = function(id, object) {
   }
 
   if (window.parent.reloadListFileEditPatient) {
-    window.parent.reloadListFileEditPatient("load");
+    window.parent.reloadListFileEditPatient("load", object.file_category_id);
   }
   
   // Redirection du message de l'iframe dans le systemMsg

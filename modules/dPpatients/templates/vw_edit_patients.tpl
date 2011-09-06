@@ -97,7 +97,7 @@ function confirmCreation(oForm){
   return false;
 }
 
-function reloadListFileEditPatient(sAction){
+function reloadListFileEditPatient(sAction, category_id){
   if(sAction == "delete" && file_preview == file_deleted){
     ZoomAjax("","","","", 0);
   }
@@ -105,7 +105,15 @@ function reloadListFileEditPatient(sAction){
   url.addParam("selKey", document.FrmClass.selKey.value);
   url.addParam("selClass", document.FrmClass.selClass.value);  
   url.addParam("typeVue", document.FrmClass.typeVue.value);
-  url.requestUpdate('listView');
+  if (category_id != undefined) {
+    url.addParam("category_id", category_id);
+    if (category_id == "") category_id = 0;
+    url.addParam("category_id", category_id);
+    url.requestUpdate('Category-' + category_id);
+  }
+  else {
+    url.requestUpdate('listView');
+  }
 }
 
 var tabs;

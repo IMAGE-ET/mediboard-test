@@ -7,6 +7,7 @@
       var button = $("docItem_{{$object->_guid}}");
       var tab = $("tab_category_{{$category_id}}");
       var countTab = tab.down("small");
+      var tabPatient = $("listViewPatient");
       
       if (button) {
         button.update(countDocItemTotal);
@@ -26,6 +27,15 @@
         }
         else {
           tab.removeClassName("empty");
+        }
+      }
+      if (tabPatient) {
+        tabPatient.down("span").update(countDocItemTotal);
+        if (!countDocItemCat) {
+          tabPatient.addClassName("empty");
+        }
+        else {
+          tabPatient.removeClassName("empty");
         }
       }
     });
