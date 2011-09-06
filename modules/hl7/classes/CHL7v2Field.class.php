@@ -44,7 +44,7 @@ class CHL7v2Field extends CHL7v2Entity {
       throw new CHL7v2Exception(CHL7v2Exception::FIELD_EMPTY, $message->current_line+1, $this->name, $this->description, $message->getCurrentLine());
     }
     
-    $items = CHL7v2::split($message->repetitionSeparator, $this->data, $this->name === "MSH.2");
+    $items = CHL7v2::split($message->repetitionSeparator, $this->data, self::keep($this->name));
     
     /* // Ce test ne semble pas etre valide, car meme si maxOccurs n'est pas unbounded, on en trouve souvent plusieurs occurences 
     if (!$this->unbounded && count($items) > 1) {

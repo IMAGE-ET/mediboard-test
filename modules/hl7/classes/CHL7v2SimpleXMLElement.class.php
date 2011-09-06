@@ -14,8 +14,9 @@ class CHL7v2SimpleXMLElement extends CMbSimpleXMLElement {
   }
   
   function reset(){
-    $this->attributes()->mb_occurences = 0;
-    $this->attributes()->mb_open = 0;
+    $this->attributes()->mbOccurences = 0;
+    $this->attributes()->mbOpen = 0;
+    $this->attributes()->mbUsed = 0;
   }
   
   function isRequired(){
@@ -32,11 +33,14 @@ class CHL7v2SimpleXMLElement extends CMbSimpleXMLElement {
    * @return void
    */
   private function init(){
-    if (!isset($this->attributes()->mb_occurences))
-      $this->addAttribute("mb_occurences", 0);
+    if (!isset($this->attributes()->mbOccurences))
+      $this->addAttribute("mbOccurences", 0);
       
-    if (!isset($this->attributes()->mb_open))
-      $this->addAttribute("mb_open", 0);
+    if (!isset($this->attributes()->mbOpen))
+      $this->addAttribute("mbOpen", 0);
+      
+    if (!isset($this->attributes()->mbUsed))
+      $this->addAttribute("mbUsed", 0);
   }
   
   /**
@@ -45,7 +49,7 @@ class CHL7v2SimpleXMLElement extends CMbSimpleXMLElement {
    * @return int
    */
   function getOccurences(){
-    return (int)$this->attributes()->mb_occurences;
+    return (int)$this->attributes()->mbOccurences;
   }
   
   /**
@@ -54,7 +58,16 @@ class CHL7v2SimpleXMLElement extends CMbSimpleXMLElement {
    * @return bool
    */
   function isOpen(){
-    return (bool)$this->attributes()->mb_open;
+    return (bool)$this->attributes()->mbOpen;
+  }
+  
+  /**
+   * Si le groupe est utilisé
+   * 
+   * @return bool
+   */
+  function isUsed(){
+    return (bool)$this->attributes()->mbUsed;
   }
   
   /** 
@@ -64,14 +77,22 @@ class CHL7v2SimpleXMLElement extends CMbSimpleXMLElement {
     $this->init();
     
     // @todo a mon avis ce n'est pas ici qu'il faut incrementer
-    $this->attributes()->mb_occurences = $this->getOccurences()+1;
-    $this->attributes()->mb_open = 1;
+    $this->attributes()->mbOccurences = $this->getOccurences()+1;
+    $this->attributes()->mbOpen = 1;
     
     $parent = $this->getParent();
     
     if ($parent && $parent->getName() !== "message") {
       $parent->markOpen();
     }
+  }
+  
+  /** 
+   * Marque l'element comme ouvert, et tous ses parents
+   */
+  function markUsed(){
+    $this->init();
+    $this->attributes()->mbUsed = 1;
   }
   
   function getSegmentHeader(){

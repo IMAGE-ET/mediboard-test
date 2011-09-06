@@ -24,12 +24,12 @@ class CHL7v2FieldItem {
     $this->data = $data;
     
     $message = $field->getMessage();
-    $is_encoding_chars_field = $field->name === "MSH.2";
+    $keep_original = CHL7v2::keep($field->name);
     
-    $components = CHL7v2::split($message->componentSeparator, $data, $is_encoding_chars_field);
+    $components = CHL7v2::split($message->componentSeparator, $data, $keep_original);
     
     foreach($components as &$component) {
-      $component = CHL7v2::split($message->subcomponentSeparator, $component, $is_encoding_chars_field);
+      $component = CHL7v2::split($message->subcomponentSeparator, $component, $keep_original);
     }
     
     $this->components = $components;

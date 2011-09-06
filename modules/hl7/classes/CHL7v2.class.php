@@ -27,6 +27,8 @@ abstract class CHL7v2 {
     "2_5"
   );
   
+  static $keep_original = array("MSH.2", "NTE.3", "OBX.5");
+  
   static $schemas = array();
   
   /**
@@ -41,15 +43,19 @@ abstract class CHL7v2 {
     return ($dont_split ? array($data) : explode($delimiter, $data));
   }
   
+  static function keep($field_name) {
+    return in_array($field_name, self::$keep_original);
+  }
+  
   abstract function getSpecs();
   
   abstract function getVersion();
   
   function getSchema($type, $name) {
-  	/*if (empty(self::$schemas)) {
-  		self::$schemas = SHM::get("hl7-v2-schemas");
-  	}*/
-		
+    /*if (empty(self::$schemas)) {
+      self::$schemas = SHM::get("hl7-v2-schemas");
+    }*/
+    
     $version = $this->getVersion();
     
     if (isset(self::$schemas[$version][$type][$name])) {
@@ -71,15 +77,21 @@ abstract class CHL7v2 {
     }
 
     $schema = simplexml_load_file($this->spec_filename, "CHL7v2SimpleXMLElement");
-		
+    
     self::$schemas[$version][$type][$name] = $schema;
-		
-		//SHM::put("hl7-v2-schemas", self::$schemas);
-		
+    
+    //SHM::put("hl7-v2-schemas", self::$schemas);
+    
     return $this->specs = $schema;
   }
   
-  function d($str) {
+  /**
+   * Debug output
+   * 
+   * @param string $str
+   * @return void
+   */
+  static function d($str) {
     if (!self::$debug) return;
     mbTrace($str);
   }
