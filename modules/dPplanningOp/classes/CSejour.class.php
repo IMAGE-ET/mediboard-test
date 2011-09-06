@@ -1080,9 +1080,9 @@ class CSejour extends CCodable implements IPatientRelated {
     return $this->_ref_prestation = $this->loadFwdRef("prestation_id", true);
   }
   
-  function loadRefsTransmissions($important = false){
+  function loadRefsTransmissions($important = false, $limit = ""){
     if($important){
-      // Chargement des transmissions ciblées sur une catégorie importante
+      // Chargement de la derniere transmission importante (macrocible)
       $transmission = new CTransmissionMedicale();
       $ljoin = array();
       $ljoin["category_prescription"] = "category_prescription.category_prescription_id = transmission_medicale.object_id";
@@ -1092,7 +1092,7 @@ class CSejour extends CCodable implements IPatientRelated {
       $where["sejour_id"] = " = '$this->_id'";
       $where["category_prescription.cible_importante"] = " = '1'";
       $order = "date DESC";
-      $this->_ref_transmissions = $transmission->loadList($where, $order, null, null, $ljoin);
+      $this->_ref_transmissions = $transmission->loadList($where, $order, $limit, null, $ljoin);
     } else {
       $this->_ref_transmissions = $this->loadBackRefs("transmissions"); 
     }
