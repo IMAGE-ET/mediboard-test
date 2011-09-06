@@ -1,4 +1,4 @@
-<tr class="lit" id="lit-{{$curr_lit->_id}}">
+<tr {{if !$conf.dPhospi.CLit.show_in_tableau}}class="lit"{{/if}} id="lit-{{$curr_lit->_id}}">
   <td>
     {{if $curr_lit->_overbooking}}
       <img src="images/icons/warning.png" alt="warning" title="Over-booking: {{$curr_lit->_overbooking}} collisions" />

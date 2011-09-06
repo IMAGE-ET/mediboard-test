@@ -15,7 +15,8 @@ $dPconfig["dPhospi"] = array (
     "consult"    => ""
   ),
   "CLit" => array(
-    "prefixe" => ""
+    "prefixe"         => "",
+    "show_in_tableau" => 0
   ),
   "CChambre" => array(
     "prefixe" => ""

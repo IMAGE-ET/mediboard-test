@@ -13,8 +13,9 @@
   <input type="hidden" name="m" value="system" />
   
   <table class="form">
-    {{mb_include module=system template=inc_config_str class=CLit     var=prefixe}}
-    {{mb_include module=system template=inc_config_str class=CChambre var=prefixe}}
+    {{mb_include module=system template=inc_config_bool class=CLit     var=show_in_tableau}}
+    {{mb_include module=system template=inc_config_str  class=CLit     var=prefixe}}
+    {{mb_include module=system template=inc_config_str  class=CChambre var=prefixe}}
     <tr>
       <td class="button" colspan="100">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
