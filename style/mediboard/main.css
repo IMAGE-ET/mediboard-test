@@ -1323,6 +1323,40 @@ ul li a.chapitre_signe.active{
   line-height: 1.2em; 
 }
 
+/* ER7 */
+.er7 .fs {
+  color: #0000FF;
+}
+
+.er7 .cs {
+  color: #009966;
+}
+
+.er7 .scs {
+  color: #996600;
+}
+
+.er7 .rs {
+  color: #007F00;
+}
+
+.er7 .segment:after {
+  color: red;
+  font-size: 0.5em;
+  content: "[CR]";
+}
+
+.er7 i {
+  font-style: inherit;
+	cursor: default;
+}
+
+.er7 i:hover {
+	background: #aaffcc;
+	border-radius: 2px;
+	padding: 2px 0;
+}
+
 .septique {
   color: #3A3;
 }

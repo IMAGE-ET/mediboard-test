@@ -42,7 +42,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     //
   }
   
-  function parse($data) {
+  function parse($data, $parse_body = true) {
     // remove all chars before MSH
     $msh_pos = strpos($data, "MSH");
     $data = substr($data, $msh_pos);
@@ -114,7 +114,10 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $this->validate();
     
     $this->readHeader();
-    $this->readSegments();
+		
+		if ($parse_body) {
+      $this->readSegments();
+		}
   }
   
   function readHeader(){
@@ -354,4 +357,30 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     
     return $str;
   }
+	
+	static function hightligt_er7($msg){
+		$msg = str_replace("\r\n", "\n", $msg);
+		
+		$message = new CHL7v2Message;
+		$message->parse($msg, false);
+		
+		// highlight segment name
+		$msg = preg_replace("/^([A-Z]{2}[A-Z0-9])/m", '<strong>$1</strong>', $msg);
+		$msg = preg_replace("/^(.*)/m", '<div class="segment">$1</div>', $msg); // we assume $message->segmentTerminator is always \n
+		
+		$msg = str_replace("\n", "", $msg);
+		
+		$pat = array(
+		  "&" => "&amp;",
+		  $message->fieldSeparator => "<span class='fs'>$message->fieldSeparator</span>",
+		  $message->componentSeparator => "<span class='cs'>$message->componentSeparator</span>",
+		  $message->subcomponentSeparator => "<span class='scs'>$message->subcomponentSeparator</span>",
+		  $message->repetitionSeparator => "<span class='re'>$message->repetitionSeparator</span>",
+		);
+		
+		$seps = preg_quote($message->fieldSeparator.$message->componentSeparator.$message->subcomponentSeparator.$message->repetitionSeparator);
+		$msg = preg_replace("/([^$seps]+)/", '<i>$1</i>', $msg);
+		
+		return "<pre class='er7'>".strtr($msg, $pat)."</pre>";
+	}
 }

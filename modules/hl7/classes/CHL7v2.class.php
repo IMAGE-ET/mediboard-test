@@ -19,12 +19,12 @@ abstract class CHL7v2 {
   const PREFIX_COMPOSITE_NAME = "composite";
   
   static $versions = array(
-    "2_1",
-    "2_2",
-    "2_3",
-    "2_3_1",
-    "2_4",
-    "2_5"
+    "2.1",
+    "2.2",
+    "2.3",
+    "2.3.1",
+    "2.4",
+    "2.5"
   );
   
   static $keep_original = array("MSH.2", "NTE.3", "OBX.5");
@@ -62,12 +62,11 @@ abstract class CHL7v2 {
       return self::$schemas[$version][$type][$name];
     }
     
-    $version_dir = preg_replace("/[^0-9]/", "_", $version); 
-    if (!in_array($version_dir, self::$versions)) {
+    if (!in_array($version, self::$versions)) {
       throw new CHL7v2Exception(CHL7v2Exception::VERSION_UNKOWN, $version_dir);
     }
     
-    $version_dir = "hl7v$version_dir";
+    $version_dir = "hl7v".preg_replace("/[^0-9]/", "_", $version);
     $name_dir = preg_replace("/[^A-Z0-9_]/", "", $name);
     
     $this->spec_filename = self::LIB_HL7."/$version_dir/$type$name_dir.xml";
