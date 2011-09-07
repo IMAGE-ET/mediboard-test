@@ -63,7 +63,7 @@ abstract class CHL7v2 {
     }
     
     if (!in_array($version, self::$versions)) {
-      throw new CHL7v2Exception(CHL7v2Exception::VERSION_UNKOWN, $version_dir);
+      $this->error(CHL7v2Exception::VERSION_UNKOWN, $version_dir);
     }
     
     $version_dir = "hl7v".preg_replace("/[^0-9]/", "_", $version);
@@ -72,7 +72,7 @@ abstract class CHL7v2 {
     $this->spec_filename = self::LIB_HL7."/$version_dir/$type$name_dir.xml";
     
     if (!file_exists($this->spec_filename)) {
-      throw new CHL7v2Exception(CHL7v2Exception::SPECS_FILE_MISSING, $this->spec_filename);
+      $this->error(CHL7v2Exception::SPECS_FILE_MISSING, $this->spec_filename);
     }
 
     $schema = simplexml_load_file($this->spec_filename, "CHL7v2SimpleXMLElement");

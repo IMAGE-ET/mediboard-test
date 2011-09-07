@@ -36,7 +36,14 @@ abstract class CHL7v2Entity extends CHL7v2 {
     return CHL7v2XPath::queryTextNode($spec_field, "datatype");
   }
   
+  function error($code, $data, $field = null) {    
+    $this->getMessage()->error($code, $data, $field);
+  }
+  
   abstract function validate();
   
+	/**
+	 * @return CHL7v2Message
+	 */
   abstract function getMessage();
 }

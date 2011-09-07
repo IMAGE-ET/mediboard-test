@@ -40,8 +40,8 @@ class CHL7v2Field extends CHL7v2Entity {
     $specs = $this->getSpecs();
     $message = $this->getMessage();
     
-    if ($this->required && $this->data === $message->nullValue) { // nullValue ("") or null ??
-      throw new CHL7v2Exception(CHL7v2Exception::FIELD_EMPTY, $message->current_line+1, $this->name, $this->description, $message->getCurrentLine());
+    if ($this->required && $this->data === "" /* === $message->nullValue*/) { // nullValue ("") or null ??
+      $this->error(CHL7v2Exception::FIELD_EMPTY, null, $this);
     }
     
     $items = CHL7v2::split($message->repetitionSeparator, $this->data, self::keep($this->name));
@@ -49,7 +49,7 @@ class CHL7v2Field extends CHL7v2Entity {
     /* // Ce test ne semble pas etre valide, car meme si maxOccurs n'est pas unbounded, on en trouve souvent plusieurs occurences 
     if (!$this->unbounded && count($items) > 1) {
       mbTrace($this);
-      throw new CHL7v2Exception(CHL7v2Exception::TOO_MANY_FIELD_ITEMS, $message->current_line+1, $this->name, $this->description, $message->getCurrentLine());
+      $this->error(CHL7v2Exception::TOO_MANY_FIELD_ITEMS, $this->name, $this);
     }*/
     
     $this->items = array();

@@ -136,7 +136,7 @@ class CHL7v2DataType extends CHL7v2 {
    * @param string $value
    * @return bool
    */
-  function validate($value){
+  function validate($value, CHLv2Field $field){
     if (is_array($value)) {
       $count = count($value);
       
@@ -151,36 +151,36 @@ class CHL7v2DataType extends CHL7v2 {
     $valid = preg_match($this->getRegExpHL7(), trim($value));
     
     if (!$valid) {
-      throw new Exception("Invalid data for type $this->type : ".var_export($value, true)." Regexp : ".htmlentities($this->getRegExpHL7()));
+      $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $this->type, $field);
       return false;
     }
     
     return true;
   }
   
-  function parseHL7($value) {
+  function parseHL7($value, CHLv2Field $field) {
     if (!preg_match($this->getRegExpHL7(), $value, $matches)) {
-      throw new CHL7v2Exception(CHL7v2Exception::INVALID_DATA_FORMAT, "HL7", $this->type, $value);
+      $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $value, $field);
     }
     
     return $matches;
   }
   
-  function parseMB($value) {
+  function parseMB($value, CHLv2Field $field) {
     if (!preg_match($this->getRegExpMB(), $value, $matches)) {
-      throw new CHL7v2Exception(CHL7v2Exception::INVALID_DATA_FORMAT, "MB", $this->type, $value);
+      $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $value, $field);
     }
     
     return $matches;
   }
   
-  function toMB($value){
-    if ($this->validate($value)) {
+  function toMB($value, CHLv2Field $field){
+    if ($this->validate($value, $field)) {
       return $value;
     }
   }
   
-  function toHL7($value) {
+  function toHL7($value, CHLv2Field $field) {
     return $value;
   }
   

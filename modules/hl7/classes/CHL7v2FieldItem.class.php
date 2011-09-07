@@ -36,13 +36,16 @@ class CHL7v2FieldItem {
   }
   
   function validate(){
-    $this->composite_specs = CHL7v2DataType::load($this->field->datatype, $this->field->getVersion());
-    if (!$this->composite_specs->validate($this->components)) {
-      throw new Exception("Invalid data {$this->field->name} : ".var_export($this->components, true));
+  	$field = $this->field;
+		
+    $this->composite_specs = CHL7v2DataType::load($field->datatype, $field->getVersion());
+		
+    if (!$this->composite_specs->validate($this->components, $field)) {
+      $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, var_export($this->components, true), $field);
     }
   }
   
   function getValue() {
-    return $this->composite_specs->toMB($this->components);
+    return $this->composite_specs->toMB($this->components, $this->field);
   }
 }

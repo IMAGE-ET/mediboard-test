@@ -29,7 +29,7 @@ class CHL7v2DataTypeComposite extends CHL7v2DataType {
     //
   }
   
-  function validate($components) {
+  function validate($components, CHL7v2Field $field) {
     // Happens for ST, ID, NM, etc (they are nearly base types, they were not split as sub-sub-component)
     if (!is_array($components)) {
       $components = array($components);
@@ -40,8 +40,8 @@ class CHL7v2DataTypeComposite extends CHL7v2DataType {
         //mbTrace($this->components);
         break;
       }
-      if (!$this->components[$k]->validate($component)) {
-        throw new Exception("Invalid structure for type $this->type : ".var_export($component, true));
+      if (!$this->components[$k]->validate($component, $field)) {
+        $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $this->type, $field);
         return false;
       }
     }

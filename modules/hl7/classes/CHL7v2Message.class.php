@@ -37,6 +37,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   var $description = null;
   var $lines       = array();
   var $current_line = 0;
+  var $errors = array();
     
   function __construct() {
     //
@@ -54,14 +55,14 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     
     // first tokenize the segments
     if (($message == null) || (strlen($message) < 4)) {
-      throw new CHL7v2Exception(CHL7v2Exception::EMPTY_MESSAGE, $message);
+      $this->error(CHL7v2Exception::EMPTY_MESSAGE, $message);
     }
     
     $this->fieldSeparator = $message[3];
     
     // valid separator
     if (!preg_match("/[^a-z0-9]/i", $this->fieldSeparator) ) {
-      throw new CHL7v2Exception(CHL7v2Exception::INVALID_SEPARATOR, $message);
+      $this->error(CHL7v2Exception::INVALID_SEPARATOR, $message);
     }
 
     $nextDelimiter = strpos($message, $this->fieldSeparator, 4);
@@ -223,7 +224,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
           else {
             if (!$current_node->getParent() || $current_node->getParent()->isOpen()) {
               CHL7v2::d(" --> !!!!!!!!!!!!!!!!! Segment non present et groupe requis");
-              throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_MISSING, (string)$current_node);
+              $this->error(CHL7v2Exception::SEGMENT_MISSING, (string)$current_node);
             }
           }
        
@@ -277,7 +278,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     
     foreach($this->lines as $line) {
       if (!preg_match("/^[A-Z]{2}[A-Z0-9]$sep_preg.+/", $line)) {
-        throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $this->fieldSeparator, $line);
+        $this->error(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $line);
       }
     }
   }
@@ -295,6 +296,15 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
    */
   function getMessage() {
     return $this;
+  }
+  
+  function error($code, $data, $field = null) {    
+    $this->errors[] = array(
+		  "line"  => $this->current_line, 
+      "field" => $field,
+			"code"  => $code, 
+			"data"  => $data,
+		);
   }
   
   private function getDelimEscSeq($seq) {
@@ -358,11 +368,9 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     return $str;
   }
 	
-	static function hightligt_er7($msg){
+	function highlight_er7(){
+    $msg = $this->data;
 		$msg = str_replace("\r\n", "\n", $msg);
-		
-		$message = new CHL7v2Message;
-		$message->parse($msg, false);
 		
 		// highlight segment name
 		$msg = preg_replace("/^([A-Z]{2}[A-Z0-9])/m", '<strong>$1</strong>', $msg);
@@ -372,13 +380,13 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
 		
 		$pat = array(
 		  "&" => "&amp;",
-		  $message->fieldSeparator => "<span class='fs'>$message->fieldSeparator</span>",
-		  $message->componentSeparator => "<span class='cs'>$message->componentSeparator</span>",
-		  $message->subcomponentSeparator => "<span class='scs'>$message->subcomponentSeparator</span>",
-		  $message->repetitionSeparator => "<span class='re'>$message->repetitionSeparator</span>",
+		  $this->fieldSeparator => "<span class='fs'>$this->fieldSeparator</span>",
+		  $this->componentSeparator => "<span class='cs'>$this->componentSeparator</span>",
+		  $this->subcomponentSeparator => "<span class='scs'>$this->subcomponentSeparator</span>",
+		  $this->repetitionSeparator => "<span class='re'>$this->repetitionSeparator</span>",
 		);
 		
-		$seps = preg_quote($message->fieldSeparator.$message->componentSeparator.$message->subcomponentSeparator.$message->repetitionSeparator);
+		$seps = preg_quote($this->fieldSeparator.$this->componentSeparator.$this->subcomponentSeparator.$this->repetitionSeparator);
 		$msg = preg_replace("/([^$seps]+)/", '<i>$1</i>', $msg);
 		
 		return "<pre class='er7'>".strtr($msg, $pat)."</pre>";

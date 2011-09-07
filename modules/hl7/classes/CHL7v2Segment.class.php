@@ -55,12 +55,12 @@ class CHL7v2Segment extends CHL7v2Entity {
     // check the number of fields
     /*$fields_count = count($specs->elements->children());
     if (count($fields)+1 > $fields_count) {
-      throw new CHL7v2Exception(CHL7v2Exception::TOO_MANY_FIELDS, $this->data);
+      $this->error(CHL7v2Exception::TOO_MANY_FIELDS, $this->data);
     }*/
     
     // valid fields number, at least two
     if (count(array_filter($fields, "stringNotEmpty")) < 1) {
-      throw new CHL7v2Exception(CHL7v2Exception::TOO_FEW_SEGMENT_FIELDS, $this->data);
+      $this->error(CHL7v2Exception::TOO_FEW_SEGMENT_FIELDS, $this->data);
     }
     
     $this->description = (string)$specs->description;
@@ -77,15 +77,10 @@ class CHL7v2Segment extends CHL7v2Entity {
       
       $_data = $fields[$i++];
       
-      try {
-        $field = new CHL7v2Field($this, $_spec);
-        $field->parse($_data);
-        
-        $this->fields[] = $field;
-      } catch (Exception $e) {
-        exceptionHandler($e);
-        return;
-      }
+      $field = new CHL7v2Field($this, $_spec);
+      $field->parse($_data);
+      
+      $this->fields[] = $field;
     }
   }
   
