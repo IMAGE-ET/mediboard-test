@@ -1424,6 +1424,14 @@ class CPrescription extends CMbObject implements IPatientRelated {
    */
   function loadRefsLinesMed($with_child = 0, $with_subst = 0, $emplacement="", $order="", $protocole_id = "", $in_progress=0) {
     if ($this->_ref_prescription_lines) {
+    	foreach($this->_ref_prescription_lines as $_line_med){
+		    if($with_subst != "1" && $_line_med->substitution_line_id){
+		    	unset($this->_ref_prescription_lines[$_line_med->_id]);
+		    }
+				if($with_child != "1" && $_line_med->child_id){
+          unset($this->_ref_prescription_lines[$_line_med->_id]);
+        }
+    	}
       return;
     }
 		$line = new CPrescriptionLineMedicament();
