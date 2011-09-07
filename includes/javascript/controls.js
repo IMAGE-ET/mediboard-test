@@ -159,6 +159,9 @@ Element.addMethods(['input', 'textarea'], {
     element.value = s;
     
     element.setInputSelection(sel.start, sel.start+text.length);
+  },
+  setInputPosition: function(element, position) {
+    return element.setInputSelection(position, position);
   }
 });
 
@@ -219,8 +222,8 @@ Element.addMethods('input', {
       writeBuffer();
       var f = function() {
         valid ?
-          Prototype.emptyFunction :///element.caret(0, mask.length):
-          element.caret(firstNonMaskPos);
+          Prototype.emptyFunction :///element.setInputSelection(0, mask.length):
+          element.setInputPosition(firstNonMaskPos);
       };
       element.oldValue = element.value;
       f.defer();
@@ -229,30 +232,32 @@ Element.addMethods('input', {
     
     // Key down event, called on element.onkeydown
     function keydownEvent(e) {
-      var pos = element.caret();
+      var pos = element.getInputSelection(true);
       var k = Event.key(e);
       ignore = ((k < 41) && (k != 32) && (k != 16)); // ignore modifiers, home, end, ... except space and shift
       
       //delete selection before proceeding
-      if((pos.begin - pos.end) != 0 && (!ignore || k==Event.KEY_BACKSPACE || k==Event.KEY_DELETE)) { // if not ignored or is backspace or delete
-        clearBuffer(pos.begin, pos.end);
+      if((pos.start - pos.end) != 0 && (!ignore || k==Event.KEY_BACKSPACE || k==Event.KEY_DELETE)) { // if not ignored or is backspace or delete
+        clearBuffer(pos.start, pos.end);
       }
       
       //backspace and delete get special treatment
       switch (k) {
       case Event.KEY_BACKSPACE:
-        while(pos.begin-- >= 0) {
-          if(!locked[pos.begin]) {
-            buffer[pos.begin] = element.options.placeholder;
+        while(pos.start-- >= 0) {
+          var start = pos.start;
+          
+          if(!locked[start]) {
+            buffer[start] = element.options.placeholder;
             if(Prototype.Browser.Opera) {
               //Opera won't let you cancel the backspace, so we'll let it backspace over a dummy character.
               s = writeBuffer();
-              element.value = s.substring(0, pos.begin)+" "+s.substring(pos.begin);
-              element.caret(pos.begin+1);
+              element.value = s.substring(0, start)+" "+s.substring(start);
+              element.setInputPosition(start+1);
             }
             else {
               writeBuffer();
-              element.caret(Math.max(firstNonMaskPos, pos.begin));
+              element.setInputPosition(Math.max(firstNonMaskPos, start));
             }
             return false;
           }
@@ -260,16 +265,17 @@ Element.addMethods('input', {
       break;
       
       case Event.KEY_DELETE:
-        clearBuffer(pos.begin, pos.begin+1);
+        var start = pos.start;
+        clearBuffer(start, start+1);
         writeBuffer();
-        element.caret(Math.max(firstNonMaskPos, pos.begin));
+        element.setInputPosition(Math.max(firstNonMaskPos, start));
         return false;
       break;
 
       case Event.KEY_ESC:
         clearBuffer(0, mask.length);
         writeBuffer();
-        element.caret(firstNonMaskPos);
+        element.setInputPosition(firstNonMaskPos);
         return false;
       break;
       }
@@ -292,10 +298,10 @@ Element.addMethods('input', {
           (k == Event.KEY_TAB) || 
           (k >= Event.KEY_PAGEDOWN && k <= Event.KEY_DOWN)) return true; //Ignore
       
-      var pos = element.caret();
+      var pos = element.getInputSelection(true);
       
       if ((k >= 41 && k <= 122) || k == 32 || k > 186) {//typeable characters
-        var p = seekNext(pos.begin-1);
+        var p = seekNext(pos.start-1);
 
         if (p < mask.length) {
           var nRe = new RegExp(element.options.charmap[mask.charAt(p)]);
@@ -305,7 +311,7 @@ Element.addMethods('input', {
             buffer[p] = c;
             writeBuffer();
             var next = seekNext(p);
-            element.caret(next);
+            element.setInputPosition(next);
             
             if (next == mask.length) {
               checkVal();

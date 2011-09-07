@@ -549,7 +549,7 @@ Element.addMethods('form', {
     });
   },
   isReadonly: function(form) {
-    return App.readonly && form.method === "post" && (!form.elements.dosql || form.elements.dosql.value !== "do_configure");
+    return !!(App.readonly && User.id && form.method === "post" && (!form.elements.dosql || form.elements.dosql.value !== "do_configure"));
   }
 });
 

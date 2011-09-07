@@ -182,6 +182,31 @@ function prepareForm(oForm) {
     sFormName = oForm.cloneNode(false).getAttribute("name");
   else
     sFormName = oForm.getAttribute("name");
+    
+  // forbidden form names (the list contains IE's and Chrome's) minus improbable ones (upperchars, etc)
+  if (!Prototype.Browser.IE && Preferences.INFOSYSTEM == 1) {
+    var forbidden = "attribution-img images app-notification-close uid head all doctype nodeType linkColor body embeds URL parentElement bgColor \
+    styleSheets localName ownerDocument forms referrer defaultCharset nodeValue documentURI height designMode readyState lastModified \
+    webkitVisibilityState preferredStylesheetSet prefix width xmlEncoding characterSet anchors previousSibling plugins fgColor namespaceURI \
+    activeElement lastChild xmlStandalone textContent nextSibling domain applets charset nodeName cookie childNodes baseURI inputEncoding \
+    implementation compatMode links title firstChild attributes defaultView vlinkColor xmlVersion selectedStylesheetSet alinkColor parentNode \
+    webkitHidden location scripts documentElement dir open close write writeln clear captureEvents releaseEvents hasFocus createElement \
+    createDocumentFragment createTextNode createComment createCDATASection createProcessingInstruction createAttribute createEntityReference \
+    getElementsByTagName createElementNS createAttributeNS getElementsByTagNameNS getElementById createEvent createRange evaluate execCommand \
+    queryCommandEnabled queryCommandIndeterm queryCommandState queryCommandSupported queryCommandValue getElementsByName elementFromPoint \
+    caretRangeFromPoint getSelection getCSSCanvasContext getElementsByClassName querySelector querySelectorAll importNode adoptNode \
+    createNodeIterator createTreeWalker getOverrideStyle createExpression createNSResolver insertBefore replaceChild removeChild appendChild \
+    hasChildNodes cloneNode normalize isSupported hasAttributes lookupPrefix isDefaultNamespace lookupNamespaceURI addEventListener \
+    removeEventListener isSameNode isEqualNode compareDocumentPosition dispatchEvent namespaces onstorage onstoragecommit fileCreatedDate \
+    onbeforeeditfocus oncontextmenu onrowexit onactivate mimeType onmousemove compatible onselectstart oncontrolselect protocol onkeypress \
+    onrowenter onmousedown onreadystatechange onbeforedeactivate fileModifiedDate onmouseover media onafterupdate ondragstart oncellchange \
+    nameProp ondatasetcomplete onmousewheel onerrorupdate onselectionchange ondblclick onkeyup onrowsinserted onmouseup onkeydown \
+    onrowsdelete documentMode onfocusout ondatasetchanged onmouseout parentWindow onpropertychange onstop onhelp onbeforeactivate frames \
+    onbeforeupdate onclick onfocusin selection fileUpdatedDate security fileSize ondataavailable URLUnencoded ondeactivate".split(/\s+/);
+    if (forbidden.indexOf(sFormName) != -1) {
+      console.error("Form name forbidden", oForm);
+    }
+  }
 
   oForm.lockAllFields = readonly || (oForm._locked && oForm._locked.value) == "1";
 
@@ -387,7 +412,7 @@ function prepareForm(oForm) {
 function makeReadOnly(element) {
   (function(){
     element.select("form[method='post']").each(function(form){
-      if ($V(form.dosql) === "do_configure") return;
+      if (form.dosql && form.dosql.value === "do_configure") return;
       
       form.select(".inputExtension, .dropdown-trigger, .numericField .arrows").invoke("hide");
       form.select("input.autocomplete").invoke("removeClassName", "autocomplete");
