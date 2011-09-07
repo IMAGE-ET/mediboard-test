@@ -971,7 +971,8 @@ class CMediusers extends CMbObject {
   }
   
   function getAutocompleteList($keywords, $where = null, $limit = null) {
-    $list = parent::getAutocompleteList($keywords, $where, $limit);
+    $ljoin = array("users" => "users.user_id = users_mediboard.user_id");
+    $list = $this->seek($keywords, $where, $limit, null, $ljoin, "users.user_last_name");
     
     foreach($list as $_mediuser) {
       $_mediuser->loadRefFunction();

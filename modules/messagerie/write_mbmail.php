@@ -9,7 +9,6 @@
 
 CCanDo::checkRead();
 $user = CUser::get();
-
 $mbmail = new CMbMail();
 $mbmail->from    = $user->_id;
 $mbmail->to      = CValue::get("to");
@@ -23,24 +22,25 @@ if ($mbmail->to == $user->_id && $mbmail->date_sent && ! $mbmail->date_read) {
   $mbmail->store();
 }
 
-$functions = CMediusers::loadFonctions();
-foreach($functions as &$curr_func) {
-  $curr_func->loadRefsUsers();
-}
-
 if ($mbmail->to) {
-  $user_to = new CMediusers();
-  $user_to->load($mbmail->to); 
-  $user_to->loadRefFunction();
-  if(!isset($functions[$user_to->_ref_function->_id])) {
-    $functions[$user_to->_ref_function->_id] = $user_to->_ref_function;
-  }
-  if(!isset($functions[$user_to->_ref_function->_id]->_ref_users[$user_to->_id])) {
-    $functions[$user_to->_ref_function->_id]->_ref_users[$user_to->_id] = $user_to;
-  }
+  $mbmail->loadRefUserTo();
 }
 
-// Initialisation de FCKEditor
+// Historique des messages avec le destinataire
+$where = array();
+$where[] = "(mbmail.from = '$mbmail->from' AND mbmail.to = '$mbmail->to')".
+           "OR (mbmail.from = '$mbmail->to' AND mbmail.to = '$mbmail->from')";
+
+$historique = $mbmail->loadList($where, "date_sent DESC", "20");
+CMbObject::massLoadFwdRef($historique, "from");
+CMbObject::massLoadFwdRef($historique, "to");
+
+foreach ($historique as $_mail) {
+  $_mail->loadRefUserFrom(1);
+  $_mail->loadRefUserTo(1);
+}
+
+// Initialisation de CKEditor
 $templateManager = new CTemplateManager();
 $templateManager->editor = "ckeditor";
 $templateManager->simplifyMode = true;
@@ -55,7 +55,7 @@ $templateManager->initHTMLArea();
 $smarty = new CSmartyDP();
 
 $smarty->assign("mbmail"   , $mbmail);
-$smarty->assign("functions", $functions);
+$smarty->assign("historique", $historique);
 
 $smarty->display("write_mbmail.tpl");
 

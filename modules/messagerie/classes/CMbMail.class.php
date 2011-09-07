@@ -94,18 +94,16 @@ class CMbMail extends CMbObject {
     if ($this->starred  ) $this->_to_state = "starred";    
   }
   
-  function loadRefUserFrom() {
-    $this->_ref_user_from = new CMediusers();
-    if ($this->_ref_user_from->load($this->from)) {
-      $this->_ref_user_from->loadRefFunction();
-    }
+  function loadRefUserFrom($cache = 0) {
+    $this->_ref_user_from = $this->loadFwdRef("from", $cache);
+    $this->_ref_user_from->loadRefFunction();
+    return $this->_ref_user_from;
   }
 
-  function loadRefUserTo() {
-    $this->_ref_user_to = new CMediusers();
-    if ($this->_ref_user_to->load($this->to)) {
-      $this->_ref_user_to->loadRefFunction();
-    }
+  function loadRefUserTo($cache = 0) {
+    $this->_ref_user_to = $this->loadFwdRef("to", $cache);
+    $this->_ref_user_to->loadRefFunction();
+    return $this->_ref_user_to;
   }
   
   function loadRefsFwd(){

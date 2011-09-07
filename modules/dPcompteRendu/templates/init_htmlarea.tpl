@@ -30,6 +30,10 @@ function initCKEditor() {
       var dims = document.viewport.getDimensions();
       var greedyPane = $$(".greedyPane")[0];
       
+      if (!greedyPane) {
+        return;
+      }
+      
       CKEDITOR.instances.htmlarea.resize('', (dims["height"] - greedyPane.cumulativeOffset().top - 10));
       if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
         $("thumbs").style.height = (dims["height"] - greedyPane.cumulativeOffset().top - 10) +"px";
@@ -44,7 +48,7 @@ function initCKEditor() {
       var spans = ck_instance.document.getBody().getElementsByTag("span").$;
       for(var i in spans) {
         var span = spans[i];
-        if (span && span.className && Element.hasClassName(span, "field"))
+        if (span && span.className && (Element.hasClassName(span, "field") || Element.hasClassName(span, "name")))
           span.contentEditable = false;
       }
 
@@ -78,6 +82,7 @@ function initCKEditor() {
 		Event.observe(window, "resize", function(e){
 		  window.resizeEditor();
     });
+		
 		{{if $templateManager->printMode}}
       CKEDITOR.instances.htmlarea.element.$.disabled=true;
       CKEDITOR.instances.htmlarea.element.$.contentEditable=false;
@@ -87,11 +92,14 @@ function initCKEditor() {
       });
     {{else}}
 		  {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
-  		  Thumb.content = ck_instance.getData();
-  	    window.thumbs_timeout = setTimeout(function() {
-          Thumb.refreshThumbs(1);
-  	    }, time_before_thumbs);
+        if (window.Thumb) {
+    		  Thumb.content = ck_instance.getData();
+    	    window.thumbs_timeout = setTimeout(function() {
+            Thumb.refreshThumbs(1);
+    	    }, time_before_thumbs);
+        }
   		{{/if}}
+      
   		// Don't close the window with escape
   	  document.stopObserving('keydown', closeWindowByEscape);
   	  
@@ -115,8 +123,10 @@ function initCKEditor() {
 	    });
 
     // Surveillance de modification de l'éditeur de texte
-    ck_instance.on("key", loadOld);
-
+    if (window.Thumb) {
+      ck_instance.on("key", loadOld);
+    }
+    
     // Redéfinition du copier-coller dans CKEditor pour firefox, car le comportement par défaut ne convient pas
     if (Prototype.Browser.Gecko) {
       ck_instance.on("paste", function(evt) {
