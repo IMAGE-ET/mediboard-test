@@ -75,7 +75,7 @@ $smarty->assign("patient"      , $patient);
 $smarty->assign("categories"   , $categories);
 $smarty->assign("dates"        , $dates);
 $smarty->assign("prescription" , $prescription);
-$smarty->assign("now"          , $date);
+$smarty->assign("now"          , mbDate());
 $smarty->assign("categorie"    , new CCategoryPrescription());
 $smarty->assign("monday"       , $monday);
 $smarty->assign("sunday"       , $sunday);
