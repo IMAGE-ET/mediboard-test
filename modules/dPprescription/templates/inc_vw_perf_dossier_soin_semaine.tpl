@@ -16,22 +16,49 @@
   </td>
 	{{/if}}
  	<td class="text">
- 	  <div onclick="addCibleTransmission('{{$_prescription_line_mix->_ref_prescription->object_id}}', 'CPrescriptionLineMix', '{{$_prescription_line_mix->_id}}')" 
-	       class="{{if @$transmissions.CPrescriptionLineMix.$prescription_line_mix_id|@count}}transmission{{else}}transmission_possible{{/if}}">
-	    <a href="#{{$_prescription_line_mix->_guid}}" onmouseover="ObjectTooltip.createEx(this, '{{$_prescription_line_mix->_guid}}')">
-	      {{$_prescription_line_mix}} 
-	    </a>
+ 	  <div style="cursor: pointer; padding: 2px; font-weight: bold;"
+				 onclick="addCibleTransmission('{{$_prescription_line_mix->_ref_prescription->object_id}}', 'CPrescriptionLineMix', '{{$_prescription_line_mix->_id}}')" 
+	       class="{{if @$transmissions.CPrescriptionLineMix.$prescription_line_mix_id|@count}}transmission{{else}}transmission_possible{{/if}}"
+				 onmouseover="ObjectTooltip.createEx(this, '{{$_prescription_line_mix->_guid}}')">
+
+			 {{tr}}CPrescriptionLineMix.type.{{$_prescription_line_mix->type}}{{/tr}} 
+    {{if $_prescription_line_mix->voie}}
+      <div style="white-space: nowrap;">[{{$_prescription_line_mix->voie}}]</div>
+    {{/if}}
+    {{if $_prescription_line_mix->interface}}
+          <div style="white-space: nowrap;">[{{tr}}CPrescriptionLineMix.interface.{{$_prescription_line_mix->interface}}{{/tr}}]</div>
+    {{/if}}
+		
 	  </div>
 	  </div>
 	</td>
- 	<td class="text" style="font-size: 1em;">
- 	  <ul>
- 	   {{foreach from=$_prescription_line_mix->_ref_lines item=_line}}
- 	     <li>{{$_line->_view}}</li>
- 	   {{/foreach}}
- 	  </ul>
- 	</td>
+
+	<td style="width: 200px;" class="text compact">
+	   {{foreach from=$_prescription_line_mix->_ref_lines item=_line}}
+	     <div style="margin: 5px 0;">
+	       <strong>{{$_line->_ucd_view}}</strong>
+	       <div>
+	         {{$_line->_posologie}}
+	         {{if $_line->_unite_administration && $_line->_unite_administration != "ml"}}
+	           [{{$_line->_unite_administration}}]
+	         {{/if}}
+	       </div>
+	     </div>      
+	   {{/foreach}}
 	
+	  <hr style="width: 70%; border-color: #aaa; margin: 1px auto;">
+	  <div style="white-space: nowrap;">
+	  {{if $_prescription_line_mix->_frequence}}
+	    {{if $_prescription_line_mix->type_line == "perfusion"}}Débit initial: {{/if}}
+	    {{$_prescription_line_mix->_frequence}}
+	    {{if $_prescription_line_mix->volume_debit && $_prescription_line_mix->duree_debit}}
+	      <br />
+	      ({{mb_value object=$_prescription_line_mix field=volume_debit}} ml en {{mb_value object=$_prescription_line_mix field=duree_debit}} h)
+	    {{/if}}
+	  {{/if}}
+	  </div> 
+	</td>
+
 	{{if !$_prescription_line_mix->signature_prat && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
 	  <td colspan="7">
 	  	<div class="small-warning">Ligne non signée</div>

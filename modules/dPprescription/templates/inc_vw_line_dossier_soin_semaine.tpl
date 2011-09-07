@@ -11,7 +11,6 @@
 {{assign var=line_id value=$line->_id}}
 {{assign var=line_class value=$line->_class}}
 
-
 <tr>
 	{{if $conf.dPprescription.CPrescription.show_categories_plan_soins}}
 	  {{if $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
@@ -63,25 +62,26 @@
 	
    <!-- Affichage du libelle de la ligne -->
    <td class="text narrow">
-    
-       <div onclick="addCibleTransmission('{{$line->_ref_prescription->object_id}}','{{$line_class}}', '{{$line->_id}}')" 
-	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}">
-	    <a href="#{{$line->_guid}}" onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')">
-	      {{if $line_class == "CPrescriptionLineMedicament"}}
-	        {{$line->_ucd_view}}  - <span style="font-size: 0.8em">{{$line->_forme_galenique}}</span>
-	        {{if $line->traitement_personnel}} (Traitement perso){{/if}}
-	        {{if $line->commentaire}}<br /> ({{$line->commentaire}}){{/if}}
-	      {{else}}
-				  <div class="mediuser" style="border-color: #{{$line->_ref_element_prescription->_color}}">
-	          {{$line->_view}}
-					</div>
-	      {{/if}} 
-	    </a>
-	  </div>
-	  {{if $line->_class == "CPrescriptionLineMedicament"}}
-	    {{$line->voie}}
-	  {{/if}}
-	 
+     <div onclick="addCibleTransmission('{{$line->_ref_prescription->object_id}}', '{{$line_class}}', '{{$line->_id}}');" 
+         class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}"
+         onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}');"
+         style="font-weight: bold; text-decoration: none; line-height: 1;">
+     
+        {{if $line_class == "CPrescriptionLineMedicament"}}
+          {{$line->_ucd_view}}
+          <br />
+          {{include file="../../dPprescription/templates/inc_vw_info_line_medicament.tpl"}}
+          {{if $line->traitement_personnel}} (Traitement perso){{/if}}
+        {{else}}
+          <div class="mediuser" style="border-color: #{{$line->_ref_element_prescription->_color}}">
+            {{$line->_view}}
+            {{if $line->cip_dm}}
+              <br />
+              <span style="font-size: 0.8em;" class="opacity-70">({{$line->_ref_dm->libelle}})</span>
+            {{/if}}
+          </div>
+        {{/if}} 
+    </div>
    </td>
    
 	 {{if !$line->signee && $line->_class == "CPrescriptionLineMedicament" && $conf.dPprescription.CPrescription.show_unsigned_med_msg && !$line->inscription}}
@@ -92,7 +92,7 @@
 	  </td>
 	 {{else}}
 	   <!-- Affichage de la prise -->
-		 <td class="text">
+		 <td class="text compact">
 		   <small>
 		   {{if @$line->_prises_for_plan.$unite_prise}}
 		     {{if is_numeric($unite_prise)}}
@@ -116,13 +116,33 @@
 		           {{$_prise->_short_view}}
 						 </div>
 		       {{/foreach}}
-		       {{if $line->_class == "CPrescriptionLineMedicament"}}
-					   {{if $line->_ref_produit_prescription->_id}}
-	             ({{$_prise->_ref_object->_ref_produit_prescription->unite_prise}})<br />
-						 {{else}}
-		           ({{$_prise->_ref_object->_unite_administration}})<br />
-		         {{/if}}
-					 {{/if}}
+		       
+					 
+					  {{if $line instanceof CPrescriptionLineMedicament}}
+				      <!-- Affichage de la forme galenique -->
+				      <div>
+				      {{if !$line->inscription}}
+				        <hr style="width: 70%; border-color: #AAA; margin: 1px auto;" />
+				      {{/if}}
+				      
+				          {{$line->_forme_galenique}}
+				          {{if $line->_ref_produit_prescription->unite_prise}}
+				            ({{$line->_ref_produit_prescription->unite_prise}})
+				          {{else}}
+				            {{if $line->_unite_administration && ($line->_unite_administration != $line->_forme_galenique)}}
+				              ({{$line->_unite_administration}})
+				            {{/if}}
+				          {{/if}}
+				          <strong>
+				      {{if $line->voie}}
+				        [{{$line->voie}}]
+				      {{/if}}
+				          </strong>
+				      </div>
+				    {{/if}}
+					 
+					 
+					 
 		     {{/if}}
 		   {{/if}}
 		   </small>
