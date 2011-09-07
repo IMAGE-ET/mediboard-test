@@ -9,8 +9,13 @@
  */
 
 class CHL7v2DataTypeDateTime extends CHL7v2DataType {
-  function toMB($value){
-    $hl7 = $this->parseHL7($value);
+  function toMB($value, CHLv2Field $field){
+    $hl7 = $this->parseHL7($value, $field);
+    
+    if ($hl7 === false) {
+      return;
+    }
+    
     return $hl7["year"].
             "-".CValue::read($hl7, "month",  "00").
             "-".CValue::read($hl7, "day",    "00").
@@ -19,13 +24,18 @@ class CHL7v2DataTypeDateTime extends CHL7v2DataType {
             ":".CValue::read($hl7, "second", "00");
   }
   
-  function toHL7($value) {
-    $mb = $this->parseMB($value);
-    return  $mb["year"].
-           ($mb["month"] === "00" ? "" : $mb["month"]).
-           ($mb["day"]   === "00" ? "" : $mb["day"]).
-            $mb["hour"].
-            $mb["minute"].
-            $mb["second"];
+  function toHL7($value, CHLv2Field $field) {
+    $mb = $this->parseMB($value, $field);
+    
+    if ($mb === false) {
+      return;
+    }
+    
+    return  CValue::read($mb, "year").
+           (CValue::read($mb, "month") === "00" ? "" : $mb["month"]).
+           (CValue::read($mb, "day")   === "00" ? "" : $mb["day"]).
+            CValue::read($mb, "hour").
+            CValue::read($mb, "minute").
+            CValue::read($mb, "second");
   }
 }

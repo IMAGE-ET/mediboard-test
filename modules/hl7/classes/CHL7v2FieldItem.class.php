@@ -36,10 +36,10 @@ class CHL7v2FieldItem {
   }
   
   function validate(){
-  	$field = $this->field;
-		
+    $field = $this->field;
+    
     $this->composite_specs = CHL7v2DataType::load($field->datatype, $field->getVersion());
-		
+    
     if (!$this->composite_specs->validate($this->components, $field)) {
       $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, var_export($this->components, true), $field);
     }

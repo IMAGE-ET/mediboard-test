@@ -9,13 +9,13 @@
  */
 
 class CHL7v2DataTypeInteger extends CHL7v2DataType {
-  function toMB($value){
-    $result = parent::toMB($value);
-    return ($result === null ? null : (int)$result);
+  function toMB($value, CHLv2Field $field){
+    $result = parent::toMB($value, $field);
+    return ($result === false ? null : (int)$result);
   }
   
-  function toHL7($value) {
-    $result = parent::toHL7($value);
-    return ($result === null ? null : (int)$result);
+  function toHL7($value, CHLv2Field $field) {
+    $result = parent::toHL7($value, $field);
+    return ($result === false ? null : (int)$result);
   }
 }

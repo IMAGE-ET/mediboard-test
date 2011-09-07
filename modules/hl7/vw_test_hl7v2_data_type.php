@@ -92,6 +92,9 @@ $test_suite = array(
 );
 
 $results = array();
+$dummy_message = new CHL7v2Message;
+$dummy_segment = new CHL7v2Segment($dummy_message);
+$dummy_field = new CHL7v2Field($dummy_segment, new CHL7v2SimpleXMLElement('<?xml version="1.0" ?><root/>'));
 
 foreach($test_suite as $type => $systems) {
   echo "<h1>$type</h1>";
@@ -105,7 +108,7 @@ foreach($test_suite as $type => $systems) {
       $result = null;
       
       try {
-        $result = $dt->$method($from);
+        $result = $dt->$method($from, $dummy_field);
       }
       catch(Exception $e) {
         $result = $e;
@@ -117,7 +120,7 @@ foreach($test_suite as $type => $systems) {
 }
 
 function pre($str) {
-	return "<pre>$str</pre>";
+  return "<pre>$str</pre>";
 }
 
 $message = new CHL7v2Message;

@@ -31,10 +31,10 @@ foreach($list as $filepath) {
     $hl7v2_reader = new CHL7v2Reader();
     
     $message = $hl7v2_reader->readFile($filename);
-		
-		if (!$message) {
-			$message = new CHL7v2Message;
-		}
+    
+    if (!$message) {
+      $message = new CHL7v2Message;
+    }
     
     $message->filename = basename($filepath);
     $messages[] = $message;

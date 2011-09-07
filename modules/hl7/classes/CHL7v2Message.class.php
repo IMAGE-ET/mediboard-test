@@ -115,10 +115,10 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $this->validate();
     
     $this->readHeader();
-		
-		if ($parse_body) {
+    
+    if ($parse_body) {
       $this->readSegments();
-		}
+    }
   }
   
   function readHeader(){
@@ -300,11 +300,11 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   
   function error($code, $data, $field = null) {    
     $this->errors[] = array(
-		  "line"  => $this->current_line, 
+      "line"  => $this->current_line, 
       "field" => $field,
-			"code"  => $code, 
-			"data"  => $data,
-		);
+      "code"  => $code, 
+      "data"  => $data,
+    );
   }
   
   private function getDelimEscSeq($seq) {
@@ -367,28 +367,28 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     
     return $str;
   }
-	
-	function highlight_er7(){
+  
+  function highlight_er7(){
     $msg = $this->data;
-		$msg = str_replace("\r\n", "\n", $msg);
-		
-		// highlight segment name
-		$msg = preg_replace("/^([A-Z]{2}[A-Z0-9])/m", '<strong>$1</strong>', $msg);
-		$msg = preg_replace("/^(.*)/m", '<div class="segment">$1</div>', $msg); // we assume $message->segmentTerminator is always \n
-		
-		$msg = str_replace("\n", "", $msg);
-		
-		$pat = array(
-		  "&" => "&amp;",
-		  $this->fieldSeparator => "<span class='fs'>$this->fieldSeparator</span>",
-		  $this->componentSeparator => "<span class='cs'>$this->componentSeparator</span>",
-		  $this->subcomponentSeparator => "<span class='scs'>$this->subcomponentSeparator</span>",
-		  $this->repetitionSeparator => "<span class='re'>$this->repetitionSeparator</span>",
-		);
-		
-		$seps = preg_quote($this->fieldSeparator.$this->componentSeparator.$this->subcomponentSeparator.$this->repetitionSeparator);
-		$msg = preg_replace("/([^$seps]+)/", '<i>$1</i>', $msg);
-		
-		return "<pre class='er7'>".strtr($msg, $pat)."</pre>";
-	}
+    $msg = str_replace("\r\n", "\n", $msg);
+    
+    // highlight segment name
+    $msg = preg_replace("/^([A-Z]{2}[A-Z0-9])/m", '<strong>$1</strong>', $msg);
+    $msg = preg_replace("/^(.*)/m", '<div class="segment">$1</div>', $msg); // we assume $message->segmentTerminator is always \n
+    
+    $msg = str_replace("\n", "", $msg);
+    
+    $pat = array(
+      "&" => "&amp;",
+      $this->fieldSeparator => "<span class='fs'>$this->fieldSeparator</span>",
+      $this->componentSeparator => "<span class='cs'>$this->componentSeparator</span>",
+      $this->subcomponentSeparator => "<span class='scs'>$this->subcomponentSeparator</span>",
+      $this->repetitionSeparator => "<span class='re'>$this->repetitionSeparator</span>",
+    );
+    
+    $seps = preg_quote($this->fieldSeparator.$this->componentSeparator.$this->subcomponentSeparator.$this->repetitionSeparator);
+    $msg = preg_replace("/([^$seps]+)/", '<i>$1</i>', $msg);
+    
+    return "<pre class='er7'>".strtr($msg, $pat)."</pre>";
+  }
 }
