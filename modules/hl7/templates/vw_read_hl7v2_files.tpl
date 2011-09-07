@@ -18,12 +18,23 @@ var Action = {
     var url = new Url(this.module, "ajax_read_hl7v2_file");
     url.requestUpdate("read_hl7_file");
   },
+  
+  triggerPatientModif: function () {
+    var url = new Url();
+    url.addParam("m", this.module);
+    url.addParam("dosql", "do_trigger_object_modification");
+    url.requestUpdate("read_hl7_file", {method: "post"});
+  }
 }
 
 </script>
 
 <button type="button" class="new" onclick="Action.read()">
   {{tr}}Read{{/tr}}
+</button>
+
+<button type="button" class="new" onclick="Action.triggerPatientModif()">
+  Evt Patient
 </button>
 
 <div id="read_hl7_file"></div>
