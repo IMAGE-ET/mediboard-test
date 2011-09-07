@@ -16,3 +16,7 @@
 {{if $line->_ref_produit->_supprime}}
   <img src="images/icons/medicament_barre.gif" title="Produit supprimé" />
 {{/if}}
+
+{{if $line->countBackRefs("prev_hist_line")}}
+	<img src="images/icons/subst.png" title="Substitution" />
+{{/if}}
