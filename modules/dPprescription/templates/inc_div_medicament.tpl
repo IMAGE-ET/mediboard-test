@@ -371,9 +371,7 @@ updateModaleAfterAddLine = function(line_id){
   {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
     {{if !$praticien_sortie_id || ($praticien_sortie_id == $curr_line->praticien_id)}}
       <!-- Si la ligne ne possede pas d'enfant -->
-	    {{if !$curr_line->child_id}}
-	       {{include file="../../dPprescription/templates/inc_vw_line_medicament_lite.tpl"}}
-	    {{/if}}
+	    {{include file="../../dPprescription/templates/inc_vw_line_medicament_lite.tpl"}}
     {{/if}}
   {{/foreach}}
   
