@@ -93,30 +93,21 @@ updatePrescriptionId = function(prescription_id){
 	// Ligne de commentaire
 	var oFormLineCommentSuivi = getForm('addLineCommentMedSuiviSoins');
 	$V(oFormLineCommentSuivi.prescription_id, prescription_id);
-	
+
+	// Protocole
 	var oFormProtocoleSuiviSoins = getForm("applyProtocoleSuiviSoins");
 	$V(oFormProtocoleSuiviSoins.prescription_id, prescription_id);
   
-	// Selection du formulaire a envoyer (suivant celui qui est rempli)
+	// Envoi du formulaire (suivant celui qui est rempli)
 	if($V(oFormLineElementSuivi.element_prescription_id)){
-	  var oForm = oFormLineElementSuivi;
+	  submitLineElement();
 	}
-	if($V(oFormLineCommentSuivi.commentaire)){
-    var oForm = oFormLineCommentSuivi;
+	else if($V(oFormLineCommentSuivi.commentaire)){
+	  submitLineComment();
   }
-  if($V(oFormProtocoleSuiviSoins.pack_protocole_id)){
-    var oForm = oFormProtocoleSuiviSoins;
+	else {
+	  submitProtocoleSuiviSoins();
   }
-  
-  return onSubmitFormAjax(oForm, { onComplete: function() {
-    Control.Modal.close();
-    if (window.updateNbTrans) {
-      updateNbTrans('{{$sejour->_id}}');
-    }
-    if (window.loadSuivi) {
-      loadSuivi('{{$sejour->_id}}');
-    }
-  } });
 }
 
 addTransmissionAdm = function(line_id, line_class){
@@ -213,6 +204,9 @@ Main.add(function () {
   <button class="add" onclick="addObservation('{{$sejour->_id}}', '{{$user->_id}}');">Ajouter une observation</button>
   {{if $sejour->type == "urg" && $conf.dPprescription.CPrescription.prescription_suivi_soins}}
     <button class="add" onclick="addPrescription('{{$sejour->_id}}', '{{$user->_id}}')">Ajouter une prescription</button>
+  {{/if}}
+  {{if @isset($modules.dPcabinet|smarty:nodefaults)}}
+    <a class="button new" href="?m=dPcabinet&tab=edit_planning&pat_id={{$sejour->patient_id}}&chir_id={{$user->_id}}">Nouvelle consultation</a>
   {{/if}}
 {{/if}}
 
