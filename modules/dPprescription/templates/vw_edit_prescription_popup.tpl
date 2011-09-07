@@ -101,11 +101,15 @@ Main.add(function () {
 });
 </script>
 
-{{if $multiple_prescription|@count > 1 && $admin_prescription}}
+{{if $multiple_prescription|@count > 1}}
   <div class="big-error">
     {{tr}}CPrescription.merge_prescription_message{{/tr}}
     <br/>
+    {{if $admin_prescription}}
     <button class="hslip" onclick="Prescription.mergePrescriptions(prescriptions_ids)">Fusionner les prescriptions</button>
+    {{else}}
+      Veuillez contacter un praticien ou un administrateur pour effectuer cette fusion.
+    {{/if}}
   </div>
 {{else}}
   <table class="main">

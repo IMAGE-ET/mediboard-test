@@ -357,7 +357,7 @@ else {
     );
     
     $multiple_prescription = $prescription_multiple->loadIds($where);
-    $smarty->assign("admin_prescription", CModule::getCanDo("dPprescription")->admin);
+    $smarty->assign("admin_prescription", CModule::getCanDo("dPprescription")->admin || CMediusers::get()->isPraticien());
     $smarty->assign("multiple_prescription", $multiple_prescription);
 	  $smarty->assign("move_dossier_soin"   , false);
 	  $smarty->display("inc_vw_dossier_soins.tpl");

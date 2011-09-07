@@ -565,7 +565,7 @@ $smarty->assign("hidden_lines_count"   , $hidden_lines_count);
 $smarty->assign("hide_header"          , $hide_header);
 $smarty->assign("sejour"               , $_sejour);
 $smarty->assign("multiple_prescription", $multiple_prescription);
-$smarty->assign("admin_prescription"   , CModule::getCanDo("dPprescription")->admin);
+$smarty->assign("admin_prescription"   , CModule::getCanDo("dPprescription")->admin || CMediusers::get()->isPraticien());
 
 if($full_mode){
   $smarty->assign("praticien_sejour", $_sejour->praticien_id);
