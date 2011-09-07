@@ -26,7 +26,7 @@ foreach ($sejours_rhs as $_rhs) {
 }
 
 $where['rhs.facture'] = " = '0'";
-$count_sej_rhs_no_charge = $rhs->countList($where, null, null, null, $join);
+$count_sej_rhs_no_charge = $rhs->countList($where, null, $join);
 
 // Création du template
 $smarty = new CSmartyDP();

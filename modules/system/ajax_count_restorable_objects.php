@@ -43,6 +43,6 @@ if ($fields){
   $where[] = implode(" OR ", $whereField);
 }
 
-$count = count($user_log->countMultipleList($where, "date ASC", null, "object_id"));
+$count = count($user_log->countMultipleList($where, "date ASC", "object_id"));
 echo $count;
 CApp::rip();

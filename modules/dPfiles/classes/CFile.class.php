@@ -176,7 +176,7 @@ class CFile extends CDocumentItem {
       $where["object_class"] = " = '$this->object_class'";
       $where["object_id"   ] = " = '$this->object_id'";
     	$where["file_name"]    = $ds->prepare("= %", $this->file_name);
-    	if ($this->countlist($where)) {
+    	if ($this->countList($where)) {
 	      $last_point = strrpos($this->file_name, '.');
 	      $base_name = substr($this->file_name, 0, $last_point);
 	      $extension = substr($this->file_name, $last_point+1);

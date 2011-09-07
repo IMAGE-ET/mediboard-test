@@ -49,14 +49,14 @@ if ($spec instanceof CRefSpec) {
   }
   else {
     $matches = $target_object->loadList($where, $view_field, $limit, $view_field);
-    $total = $target_object->countList($where, null, null, $view_field);
+    $total = $target_object->countList($where, $view_field);
   } 
   $template = $target_object->getTypedTemplate("autocomplete");
 }
 else {
   $where[$field] = $ds->prepareLike($search);
 	$matches = $object->loadList($where, $field, $limit, $field);
-  /*$counts = CMbArray::pluck($object->countMultipleList($where, $field, $limit, $field), "total");
+  /*$counts = CMbArray::pluck($object->countMultipleList($where, $field, $field), "total");
   $count = count($counts);
   
   if ($limit)

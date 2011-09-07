@@ -205,7 +205,7 @@ class CFicheEi extends CMbObject {
   /**
    * Load list overlay for current group
    */
-  function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array(), $countOnly = false) {
+  function loadGroupList($where = array(), $order = null, $limit = null, $group = null, $ljoin = array(), $countOnly = false) {
 		$ljoin["users_mediboard"] = "users_mediboard.user_id = fiches_ei.user_id";
 		$ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
     // Filtre sur l'établissement
@@ -213,8 +213,8 @@ class CFicheEi extends CMbObject {
 		$where["functions_mediboard.group_id"] = "= '$g->_id'";
     
     return $countOnly ? 
-              $this->countList($where, null, $limit, $groupby, $ljoin) :
-              $this->loadList($where, $order, $limit, $groupby, $ljoin);
+      $this->countList($where, $group, $ljoin) :
+      $this->loadList($where, $order, $limit, $group, $ljoin);
   }
   
   static function loadFichesEtat($etat, $user_id = null, $where_termine = null, $annule = 0, $countOnly = false, $first = 0, $noLimit = false){

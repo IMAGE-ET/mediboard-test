@@ -38,7 +38,7 @@ if ($interv) {
 
 $limit = "$current, $step";
 $order = "users.user_last_name ASC, users.user_first_name ASC";
-$total = $mediuser->countList($where, $order, null, null, $ljoin);
+$total = $mediuser->countList($where, null, $ljoin);
 $mediusers = $mediuser->loadList($where, $order, $limit, null, $ljoin);
 
 foreach($mediusers as &$_mediuser) {

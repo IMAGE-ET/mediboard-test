@@ -33,12 +33,12 @@ if (!$do_purge) {
   $ljoin["echange_hprim"] = "`echange_hprim`.`message_content_id` = `content_xml`.`content_id`";
   $where = array();
   $where["echange_hprim.date_production"] = "< '$date_max'";
-  $count = $content_xml->countList($where, null, null, null, $ljoin);
+  $count = $content_xml->countList($where, null, $ljoin);
   
   $ljoin["echange_hprim"] = "`echange_hprim`.`acquittement_content_id` = `content_xml`.`content_id`";
   $where = array();
   $where["echange_hprim.date_production"] = "< '$date_max'";
-  $count += $content_xml->countList($where, null, null, null, $ljoin);
+  $count += $content_xml->countList($where, null, $ljoin);
   
   CAppUI::stepAjax("CEchangeHprim-msg-purge_count", UI_MSG_OK, $count);
   return;

@@ -842,7 +842,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $where[] = "sejour.entree <= '$date 23:59:59'";
     $where[] = "sejour.sortie >= '$date 00:00:00'";
     $sejour = new CSejour;
-    return $sejour->countList($where, null, null, null, $leftjoin);
+    return $sejour->countList($where, null, $leftjoin);
   }
   
   /**
@@ -858,7 +858,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $where[] = "sejour.entree <= '$datetime'";
     $where[] = "sejour.sortie >= '$datetime'";
     $sejour = new CSejour;
-    return $sejour->countList($where, null, null, null, $leftjoin);
+    return $sejour->countList($where, null, $leftjoin);
   }
 
   /**
@@ -1841,7 +1841,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $ljoin[] = "evenement_ssr AS evt_seance ON (evt_seance.seance_collective_id = evenement_ssr.evenement_ssr_id)";
     $where[] = "(evenement_ssr.sejour_id = '$this->_id') OR (evenement_ssr.sejour_id IS NULL AND evt_seance.sejour_id = '$this->_id')";
     $where["evenement_ssr.debut"] = "BETWEEN '$date 00:00:00' AND '$date 23:59:59'";
-    return $this->_count_evenements_ssr = $evenement->countList($where, null, null, null, $ljoin);
+    return $this->_count_evenements_ssr = $evenement->countList($where, null, $ljoin);
   }
   
   function countEvenementsSSRWeek($kine_id, $date_min, $date_max) {
@@ -1853,10 +1853,10 @@ class CSejour extends CCodable implements IPatientRelated {
     $ljoin[] = "evenement_ssr AS evt_seance ON (evt_seance.seance_collective_id = evenement_ssr.evenement_ssr_id)";
     $where[] = "(evenement_ssr.sejour_id = '$this->_id') OR (evenement_ssr.sejour_id IS NULL AND evt_seance.sejour_id = '$this->_id')";
     $where["evenement_ssr.therapeute_id"] = "= '$kine_id'";
-    $this->_count_evenements_ssr      = $evenement->countList($where, null, null, null, $ljoin);
+    $this->_count_evenements_ssr      = $evenement->countList($where, null, $ljoin);
     
     $where["evenement_ssr.debut"] = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
-    $this->_count_evenements_ssr_week = $evenement->countList($where, null, null, null, $ljoin);
+    $this->_count_evenements_ssr_week = $evenement->countList($where, null, $ljoin);
   }
   
   function getNbJourPlanning($date){
@@ -1869,7 +1869,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $where = array();
     $where["evenement_ssr.debut"] = "BETWEEN '$sunday 00:00:00' AND '$sunday 23:59:59'";
     $where[] = "(evenement_ssr.sejour_id = '$this->_id') OR (evenement_ssr.sejour_id IS NULL AND evt_seance.sejour_id = '$this->_id')";
-    $count_event_sunday = $_evt->countList($where, null, null, null, $ljoin);
+    $count_event_sunday = $_evt->countList($where, null, $ljoin);
 
     $nb_days = 7;
     
@@ -1877,7 +1877,7 @@ class CSejour extends CCodable implements IPatientRelated {
     if(!$count_event_sunday){
       $nb_days = 6;
       $where["evenement_ssr.debut"] = "BETWEEN '$saturday 00:00:00' AND '$saturday 23:59:59'";
-      $count_event_saturday= $_evt->countList($where, null, null, null, $ljoin);  
+      $count_event_saturday= $_evt->countList($where, null, $ljoin);  
       // Aucun evenement le samedi et aucun le dimanche
       if(!$count_event_saturday){
         $nb_days = 5;

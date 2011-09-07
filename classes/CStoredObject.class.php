@@ -383,7 +383,7 @@ class CStoredObject extends CModelObject {
   function loadListWithPerms($permType = PERM_READ, $where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
     // Filter with permission
     if (!$permType) {
-      $this->_totalWithPerms = $this->countList($where, null, null, $group, $leftjoin);
+      $this->_totalWithPerms = $this->countList($where, $group, $leftjoin);
       return $this->loadList($where, $order, $limit, $group, $leftjoin);
     }
 
@@ -479,18 +479,14 @@ class CStoredObject extends CModelObject {
   
   /**
    * Size of the list of objects matching the $this properties
-   * @param array|string $order Order SQL statement
-   * @param string       $limit Limit SQL statement
    * @param array|string $group Group by SQL statement
    * @param array        $ljoin Left join SQL statement collection
    * @return integer The count
    */
-  function countMatchingList($order = null, $limit = null, $group = null, $ljoin = null) {
+  function countMatchingList($group = null, $ljoin = null) {
     $request = new CRequest;
     $request->addLJoin($ljoin);
     $request->addGroup($group);
-    $request->addOrder($order);
-    $request->setLimit($limit);
 
     $this->updatePlainFields();
     $fields = $this->getPlainFields();
@@ -499,7 +495,7 @@ class CStoredObject extends CModelObject {
         $request->addWhereClause($key, "= '$value'");
       }
     }
-    return $this->countList($request->where, $request->order, $request->limit, $request->group, $request->ljoin);
+    return $this->countList($request->where, $request->group, $request->ljoin);
   }
   
   /**
@@ -541,12 +537,12 @@ class CStoredObject extends CModelObject {
     }
     
     $request = new CRequest();
-    $request->addForceIndex($index);
     $request->addLJoin($ljoin);
     $request->addWhere($where);
     $request->addGroup($group);
     $request->addOrder($order);
     $request->setLimit($limit);
+    $request->addForceIndex($index);
     
     $query_list = $this->loadQueryList($request->getRequest($this, $found_rows));
     if ($found_rows) {
@@ -557,20 +553,20 @@ class CStoredObject extends CModelObject {
   
   /**
    * Object list for a given group
+   * @param array        $where Where SQL statement
    * @param array|string $order Order SQL statement
    * @param string       $limit Limit SQL statement
    * @param array|string $group Group by SQL statement
    * @param array        $ljoin Left join SQL statement collection
-   * @param boolean      $index Add the forceindex SQL statement
    * @return self[] List of found objects, null if module is not installed
    */
-  function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
+  function loadGroupList($where = array(), $order = null, $limit = null, $group = null, $ljoin = array()) {
     if (property_exists($this, "group_id")) {
       // Filtre sur l'établissement
       $g = CGroups::loadCurrent();
       $where["group_id"] = "= '$g->_id'";
     }
-    return $this->loadList($where, $order, $limit, $groupby, $ljoin);
+    return $this->loadList($where, $order, $limit, $group, $ljoin);
   }
 
   /**
@@ -600,16 +596,14 @@ class CStoredObject extends CModelObject {
   
   /**
    * Object count for given statements
-   * @todo Remove useless order and limit statements
+   * 
    * @param array        $where Array of where clauses
-   * @param array|string $order Order SQL statement
-   * @param string       $limit MySQL limit clause
-   * @param array|string $order Order SQL statement
+   * @param array|string $group Group by SQL statement
    * @param array        $ljoin Array of left join clauses
    * @param string       $index Force the use of specified index
    * @return int The found objects count, null if module is not installed
    */
-  function countList($where = null, $order = null, $limit = null, $group = null, $ljoin = null, $index = null) {
+  function countList($where = null, $group = null, $ljoin = null, $index = null) {
     if (!$this->_ref_module) {
       return null;
     }
@@ -619,62 +613,55 @@ class CStoredObject extends CModelObject {
     $request->addLJoin($ljoin);
     $request->addWhere($where);
     $request->addGroup($group);
-    $request->addOrder($order);
-    $request->setLimit($limit);
 
     $ds = $this->_spec->ds;
     return $ds->loadResult($request->getCountRequest($this));
   }
   
   /**
-   * Object count varialnt using builtin found-rows database feature
+   * Object count variant using builtin found-rows database feature
    * @todo Remove useless order and limit statements
    * @param array        $where Array of where clauses
-   * @param array|string $order Order SQL statement
-   * @param string       $limit MySQL limit clause
-   * @param array|string $order Order SQL statement
    * @param array        $ljoin Array of left join clauses
    * @param string       $index Force the use of specified index
    * @return int The found objects count, null if module is not installed
    */
-  function countRows($where = null, $order = null, $limit = null, $group = null, $ljoin = null, $index = null) {
+  function countRows($where = null, $group = null, $ljoin = null, $index = null) {
     if (!$this->_ref_module) {
       return null;
     }
     
     $request = new CRequest();
     $request->addForceIndex($index);
-    $request->addLJoin($ljoin);
     $request->addWhere($where);
     $request->addGroup($group);
     $request->addOrder($order);
+    $request->addLJoin($ljoin);
     $request->setLimit($limit);
-
+    
     $ds = $this->_spec->ds;
     return $ds->foundRows($request->getCountRequest($this, null, true));
   }
   
   /*
-   * Object count of a multiple list by a request constructor using group-by statement
+   * Object count of a multiple list by an SQL request constructor using group-by statement
    * @param array        $where Array of where clauses
-   * @param array|string $order Order SQL statement
-   * @param string       $limit MySQL limit clause
-   * @param array|string $order Order SQL statement
+   * @param array|string $order Order statement
+   * @param array|string $order Group by statement
    * @param array        $ljoin Array of left join clauses
    * @param string       $index Force the use of specified index
    */
-  function countMultipleList($where = null, $order = null, $limit = null, $group = null, $ljoin = null, $fields = array()) {
+  function countMultipleList($where = null, $order = null, $group = null, $ljoin = null, $fields = array()) {
     if (!$this->_ref_module) {
       return null;
     }
     
     $request = new CRequest();
-    $request->addLJoin($ljoin);
     $request->addWhere($where);
-    $request->addGroup($group);
     $request->addOrder($order);
-    $request->setLimit($limit);
-
+    $request->addGroup($group);
+    $request->addLJoin($ljoin);
+    
     $ds = $this->_spec->ds;
     return $ds->loadList($request->getCountRequest($this, $fields));
   }
@@ -693,7 +680,7 @@ class CStoredObject extends CModelObject {
   }  
   
   /**
-   * return an array of objects from a SQL SELECT query
+   * return an array of objects from an SQL SELECT query
    * @todo to optimize request, only select object oids in $query
    * @return self[] List of found objects, null if module is not installed
    */
@@ -721,7 +708,7 @@ class CStoredObject extends CModelObject {
   
   /**
    * References global loader
-   * DEPRECATED: out of control resouce consumption
+   * DEPRECATED: out of control resouce consumtion
    * @return id Object id
    */
   function loadRefs() {
@@ -735,7 +722,7 @@ class CStoredObject extends CModelObject {
 
   /**
    * Back references global loader
-   * DEPRECATED: out of control resouce consumption
+   * DEPRECATED: out of control resouce consumtion
    * @return id Object id
    */
   function loadRefsBack() {
@@ -743,7 +730,7 @@ class CStoredObject extends CModelObject {
 
   /**
    * Forward references global loader
-   * DEPRECATED: out of control resouce consumption
+   * DEPRECATED: out of control resouce consumtion
    * @return id Object id
    */
   function loadRefsFwd() {

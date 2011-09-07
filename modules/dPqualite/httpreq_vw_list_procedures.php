@@ -68,7 +68,7 @@ foreach($list_procedures as &$curr_proc){
   $curr_proc->loadLastActif();
 }
 
-$count_procedures = $procedure->countList($where, null, null, null, $ljoin);
+$count_procedures = $procedure->countList($where, null, $ljoin);
 
 if ($count_procedures >= 20)
   $pages = range(0, $count_procedures, 20);

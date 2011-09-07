@@ -61,10 +61,10 @@ if($perop){
 							prescription_line_mix.perop = '1'";
 	$group_by = "prescription.prescription_id";
   $protocoles = $protocole->loadList($where, "prescription.libelle", $limit, $group_by, $ljoin);
-  $count_protocoles = $protocole->countList($where, "prescription.libelle", null, $group_by, $ljoin);
+  $count_protocoles = $protocole->countList($where, $group_by, $ljoin);
 } else {
 	$protocoles = $protocole->loadList($where, "libelle", $limit);
-	$count_protocoles = $protocole->countList($where, "libelle");
+	$count_protocoles = $protocole->countList($where);
 }
 
 
@@ -95,7 +95,7 @@ if($libelle_protocole){
 $packs = !$perop ? $pack->loadList($where, "libelle", $limit) : array();
 
 if (!$perop) {
-  $count_protocoles += $pack->countList($where, "libelle", $limit);
+  $count_protocoles += $pack->countList($where);
 }
 
 // Chargement du nombre d'element par chapitre dans les packs

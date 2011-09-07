@@ -464,7 +464,7 @@ class CProduct extends CMbObject {
     
     $item = new CProductOrderItem;
     if ($count)
-      $list = $item->countList($where, null, null, null, $leftjoin);
+      $list = $item->countList($where, null, $leftjoin);
     else
       $list = $item->loadList($where, "date_ordered ASC", null, "product_order_item.order_item_id", $leftjoin);
       

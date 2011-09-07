@@ -63,7 +63,7 @@ foreach($list_stocks as $_stock) {
 }
 
 if (!$only_ordered_stocks)
-  $list_stocks_count = $stock->countList($where, $orderby, null, null, $leftjoin);
+  $list_stocks_count = $stock->countList($where, null, $leftjoin);
 else 
   $list_stocks_count = count($stock->loadList($where, null, null, "product_stock_group.stock_id", $leftjoin));
 

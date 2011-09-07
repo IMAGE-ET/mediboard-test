@@ -19,7 +19,7 @@ $where["group_id"] = " = '".CGroups::loadCurrent()->_id."'";
 
 $order = "date_extract DESC";
 
-$total_passages = $extractPassages->countList($where, $order);
+$total_passages = $extractPassages->countList($where);
 $listPassages   = $extractPassages->loadList($where, $order, "$page, 20");
 
 $total_rpus = 0;

@@ -58,7 +58,7 @@ $join = array(
 $order = "prescription_line_dmi.date";
 
 $lines =      $filter->loadList($where, $order, "$start,30", null, $join);
-$line_count = $filter->countList($where, $order, null, null, $join);
+$line_count = $filter->countList($where, null, $join);
 
 // Detail loading
 foreach($lines as $_line) {

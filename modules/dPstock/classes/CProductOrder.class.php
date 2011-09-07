@@ -340,7 +340,7 @@ class CProductOrder extends CMbMetaObject {
       $orders_list = CRequest::artificialLimit($orders_list, $old_limit);
     }
     else {
-      $this->_search_count = count($this->countMultipleList($where, null, null, $groupby, $leftjoin));
+      $this->_search_count = count($this->countMultipleList($where, null, $groupby, $leftjoin));
     }
     
     /*if ($type === 'pending') {

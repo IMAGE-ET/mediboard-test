@@ -70,7 +70,7 @@ $exchange->group_id = $group_id;
 $exchange->loadRefGroups();
 
 $forceindex[] = "date_production";
-$total_exchanges = $itemExchange->countList($where, null, null, null, null, $forceindex);
+$total_exchanges = $itemExchange->countList($where, null, null, $forceindex);
 $order = "date_production DESC";
 
 $exchanges = $itemExchange->loadList($where, $order, "$page, 20", null, null, $forceindex);

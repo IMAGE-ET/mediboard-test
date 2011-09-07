@@ -56,7 +56,7 @@ elseif ($labo_id) {
 
 $group_by = "prescription_line_dmi.product_id";
 
-$dmi_lines_count = $dmi_line->countMultipleList($where, "product.name", null, $group_by, $ljoin, $fields);
+$dmi_lines_count = $dmi_line->countMultipleList($where, "product.name", $group_by, $ljoin, $fields);
 
 //mbTrace($dmi_lines_count);
 

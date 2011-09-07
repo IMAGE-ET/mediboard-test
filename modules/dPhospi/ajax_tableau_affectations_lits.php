@@ -95,7 +95,7 @@ if($filterFunction){
 }
 
 $sejour = new CSejour();
-$alerte = $sejour->countList($where, null, null, null, $leftjoin);
+$alerte = $sejour->countList($where, null, $leftjoin);
 $phpChrono->stop("Patient à placer dans la semaine");
 $phpChrono->start();
 

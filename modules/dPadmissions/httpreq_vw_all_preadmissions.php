@@ -54,7 +54,7 @@ $groupby = "plageconsult.date";
 
 $fields = array("plageconsult.date");
 
-$listMonth = $consult->countMultipleList($where, $order, null, $groupby, $ljoin, $fields);
+$listMonth = $consult->countMultipleList($where, $order, $groupby, $ljoin, $fields);
 foreach($listMonth as $_day) {
   $days[$_day["date"]]["total"] = $_day["total"];
 }

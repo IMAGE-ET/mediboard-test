@@ -36,7 +36,7 @@ if ("" !== $filter->done = CValue::getOrSession("done", "")) {
   $where["done"] = "= '$filter->done'"; 
 }
 
-$count = $filter->countList($where, "trigger_class, trigger_number");
+$count = $filter->countList($where);
 $marks = $filter->loadList($where, "trigger_class, trigger_number DESC", 100);
 
 // Création du template

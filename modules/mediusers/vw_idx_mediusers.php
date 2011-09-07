@@ -84,7 +84,7 @@ if ($order_col == "user_last_login") {
   $order .= ", users.user_last_name ASC, users.user_first_name ASC";
 }
 
-$total_mediuser = $mediuser->countList($where, $order, null, null, $ljoin);
+$total_mediuser = $mediuser->countList($where, null, $ljoin);
 $mediusers = $mediuser->loadList($where, $order, "$page, $step", null, $ljoin);
 foreach($mediusers as &$_mediuser) {
   $_mediuser->loadRefFunction();

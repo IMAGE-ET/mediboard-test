@@ -1074,12 +1074,12 @@ class CPrescription extends CMbObject implements IPatientRelated {
       $whereMed["protocole_id"] = " = '$protocole_id'";
     }
     $this->_counts_by_chapitre["med"] = $line_med->countList($whereMed);
-    $this->_counts_by_chapitre["med"] += $line_comment_med->countList($where, null, null, null, $ljoin_comment);
+    $this->_counts_by_chapitre["med"] += $line_comment_med->countList($where, null, $ljoin_comment);
     
     $whereMed["signee"] = " = '0'";
     $where["signee"]  =" = '0'";
     $this->_counts_by_chapitre_non_signee["med"] = $line_med->countList($whereMed);
-    $this->_counts_by_chapitre_non_signee["med"] += $line_comment_med->countList($where, null, null, null, $ljoin_comment);
+    $this->_counts_by_chapitre_non_signee["med"] += $line_comment_med->countList($where, null, $ljoin_comment);
     
     $prescription_line_mix_item  = new CPrescriptionLineMixItem();
     $ljoinPerf["prescription_line_mix"] = "prescription_line_mix_item.prescription_line_mix_id = prescription_line_mix.prescription_line_mix_id";
@@ -1089,9 +1089,9 @@ class CPrescription extends CMbObject implements IPatientRelated {
     if ($protocole_id) {
       $wherePerf["protocole_id"] = " = '$protocole_id'";
     }
-    $this->_counts_by_chapitre["med"] += $prescription_line_mix_item->countList($wherePerf, null, null, null, $ljoinPerf);
+    $this->_counts_by_chapitre["med"] += $prescription_line_mix_item->countList($wherePerf, null, $ljoinPerf);
     $wherePerf["signature_prat"] = " = '0'";
-    $this->_counts_by_chapitre_non_signee["med"] += $prescription_line_mix_item->countList($wherePerf, null, null, null, $ljoinPerf);
+    $this->_counts_by_chapitre_non_signee["med"] += $prescription_line_mix_item->countList($wherePerf, null, $ljoinPerf);
     
     // Count sur les elements
     $ljoin_element["element_prescription"] = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";
@@ -1121,8 +1121,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
     }
     foreach ($chapitres as $chapitre) {
       $where["category_prescription.chapitre"] = " = '$chapitre'";
-      $nb_element = $line_element->countList($where, null, null, null, $ljoin_element);
-      $nb_comment = $line_comment->countList($where, null, null, null, $ljoin_comment);
+      $nb_element = $line_element->countList($where, null, $ljoin_element);
+      $nb_comment = $line_comment->countList($where, null, $ljoin_comment);
       $this->_counts_by_chapitre[$chapitre] = $nb_element + $nb_comment;
     }
     
@@ -1134,8 +1134,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
     $where["signee"] = " = '0'";
     foreach ($chapitres as $chapitre) {
       $where["category_prescription.chapitre"] = " = '$chapitre'";
-      $nb_element = $line_element->countList($where, null, null, null, $ljoin_element);
-      $nb_comment = $line_comment->countList($where, null, null, null, $ljoin_comment);
+      $nb_element = $line_element->countList($where, null, $ljoin_element);
+      $nb_comment = $line_comment->countList($where, null, $ljoin_comment);
       $this->_counts_by_chapitre_non_signee[$chapitre] = $nb_element + $nb_comment;
     }
 		
@@ -1357,7 +1357,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
                           (prescription_line_mix.prescription_id = prescription.prescription_id) OR
 													(prescription_line_comment.prescription_id = prescription.prescription_id)";
 		
-		return $alert->countList($where, null, null, null, $ljoin);											
+		return $alert->countList($where, null, $ljoin);											
 	}
   
 	function loadRefsAlertes($level = "medium"){
@@ -1905,7 +1905,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
 		$where[] = "prescription_line_element.perop = '0' OR  prescription_line_element.perop IS NULL";
     $where[] = "prescription_line_mix.perop = '0' OR  prescription_line_mix.perop IS NULL";
     
-		if(!$this->object_id || ($this->type != "sejour") || ($planif->countList($where, null, null, null, $ljoin) && !$perop)){
+		if(!$this->object_id || ($this->type != "sejour") || ($planif->countList($where, null, $ljoin) && !$perop)){
 	   return;
     }
 		

@@ -71,7 +71,7 @@ if ($order_col == "cp") {
 
 $medecins = new CMedecin();
 
-$count_medecins = $medecins->countlist($where, $order);
+$count_medecins = $medecins->countList($where);
 $medecins = $medecins->loadList($where, $order, "0, 50");
 
 $list_types = $medecin->_specs['type']->_locales;

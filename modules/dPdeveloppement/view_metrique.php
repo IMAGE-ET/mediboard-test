@@ -58,7 +58,7 @@ if($nb_etabs > 1) {
 	$ljoin["users_mediboard"]     = "plageconsult.chir_id = users_mediboard.user_id";
 	$ljoin["functions_mediboard"] = "users_mediboard.function_id = functions_mediboard.function_id";
 	$where["functions_mediboard.group_id"] = " = $current_group";
-	$res_current_etab["CConsultation"] = $consultation->countList($where, null, null, null, $ljoin);
+	$res_current_etab["CConsultation"] = $consultation->countList($where, null, $ljoin);
 	
 	// - Lits
 	$ljoin = array();
@@ -67,7 +67,7 @@ if($nb_etabs > 1) {
 	$ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
 	$ljoin["service"] = "chambre.service_id = service.service_id";
 	$where["service.group_id"] = " = $current_group";
-	$res_current_etab["CLit"] = $lit->countList($where, null, null, null, $ljoin);
+	$res_current_etab["CLit"] = $lit->countList($where, null, $ljoin);
 	
 	// - Chambres
 	$ljoin = array();
@@ -75,7 +75,7 @@ if($nb_etabs > 1) {
 	$chambre = new CChambre;
 	$ljoin["service"] = "chambre.service_id = service.service_id";
 	$where["service.group_id"] = " = $current_group";
-	$res_current_etab["CChambre"] = $chambre->countList($where, null, null, null, $ljoin);
+	$res_current_etab["CChambre"] = $chambre->countList($where, null, $ljoin);
 	
 	// - Utilisateurs
 	$ljoin = array();
@@ -83,7 +83,7 @@ if($nb_etabs > 1) {
 	$mediuser = new CMediusers;
 	$ljoin["functions_mediboard"]   = "users_mediboard.function_id = functions_mediboard.function_id";
 	$where["functions_mediboard.group_id"] = " = $current_group";
-	$res_current_etab["CMediusers"] = $mediuser->countList($where, null, null, null, $ljoin);
+	$res_current_etab["CMediusers"] = $mediuser->countList($where, null, $ljoin);
 	 
 	// - Entrées de journal
 	$ljoin = array();
@@ -92,7 +92,7 @@ if($nb_etabs > 1) {
 	$ljoin["users_mediboard"] = "user_log.user_id = users_mediboard.user_id";
 	$ljoin["functions_mediboard"] = "users_mediboard.function_id = functions_mediboard.function_id";
 	$where["functions_mediboard.group_id"] = " = $current_group";
-	$res_current_etab["CUserLog"] = $user_log->countList($where, null, null, null, $ljoin);
+	$res_current_etab["CUserLog"] = $user_log->countList($where, null, $ljoin);
 }
 
 // Création du template

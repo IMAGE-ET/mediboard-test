@@ -45,7 +45,7 @@ $ljoin["id_sante400"] = "sejour.sejour_id = id_sante400.object_id AND id_sante40
 $where["id_sante400.id_sante400_id"] = "IS NULL";
 
 // Comptage
-$count = $sejour->countList($where, null, null, null, $ljoin);
+$count = $sejour->countList($where, null, $ljoin);
 $max = $sip_config["repair_segment"];
 $max = min($max, $count);
 CAppUI::stepAjax("Export de $max sur $count objets de type 'CSejour' à partir de l'ID '$idMin'", UI_MSG_OK);

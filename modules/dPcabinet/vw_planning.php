@@ -119,7 +119,7 @@ $ljoin = array(
   "plageconsult" => "plageconsult.plageconsult_id = consultation.plageconsult_id",
 );
 $consultation_desist = new CConsultation;
-$count_si_desistement = $consultation_desist->countList($where, null, null, null, $ljoin);
+$count_si_desistement = $consultation_desist->countList($where, null, $ljoin);
 
 // Création du tableau de visualisation
 $affichages = array();

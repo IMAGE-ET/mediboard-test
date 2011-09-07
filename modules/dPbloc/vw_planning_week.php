@@ -61,7 +61,7 @@ $where = array();
 $where["date"]            = "BETWEEN '$date' AND '$fin'";
 $where[]                  = "salle_id IS NULL OR salle_id ". CSQLDataSource::prepareIn(array_keys($listSalles));
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
-$nbIntervHorsPlage = $operation->countList($where, null, null, null, $ljoin);
+$nbIntervHorsPlage = $operation->countList($where, null, $ljoin);
 
 foreach($listDays as $keyDate => $valDate){
   

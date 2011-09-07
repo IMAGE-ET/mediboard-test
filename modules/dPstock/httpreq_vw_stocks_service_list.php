@@ -37,7 +37,7 @@ $leftjoin = array();
 $leftjoin['product'] = 'product.product_id = product_stock_service.product_id'; // product to stock
 
 $stock = new CProductStockService();
-$list_stocks_count = $stock->countList($where, $orderby, null, null, $leftjoin);
+$list_stocks_count = $stock->countList($where, null, $leftjoin);
 $list_stocks = $stock->loadList($where, $orderby, intval($start).",".CAppUI::conf("dPstock CProductStockService pagination_size"), null, $leftjoin);
 
 // Smarty template

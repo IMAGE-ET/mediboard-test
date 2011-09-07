@@ -42,7 +42,7 @@ if ($mode == "count" || $mode == "referenced") {
 	$where["technicien.kine_id"] = "= '$kine_id'";
 	
 	if ($mode == "count") {
-	  $counts["referenced"] = $sejour->countList($where, $order, null, null, $join);
+	  $counts["referenced"] = $sejour->countList($where, null, $join);
 	} 
 	else {
 	  $sejours = $sejour->loadList($where, $order, null, null, $join);
@@ -67,7 +67,7 @@ if ($mode == "count" || $mode == "replaced") {
   $where["plageconge.date_fin"  ] = ">= '$planning->date_min'";
 	
 	if ($mode == "count") {
-	  $counts["replaced"] = $sejour->countList($where, $order, null, null, $join);
+	  $counts["replaced"] = $sejour->countList($where, null, $join);
 	} 
 	else {
 	  $sejours = $sejour->loadList($where, $order, null, null, $join);
@@ -146,7 +146,7 @@ if ($mode == "count" || $mode == "plannable") {
 	$order = "nom, prenom";
 	
 	if ($mode == "count") {
-	  $counts["plannable"] = $sejour->countList($where, $order, null, null, $join);
+	  $counts["plannable"] = $sejour->countList($where, null, $join);
 	} 
 	else {
 	  $sejours = $sejour->loadList($where, $order, null, null, $join);

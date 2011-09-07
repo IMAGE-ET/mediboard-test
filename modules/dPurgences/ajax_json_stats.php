@@ -42,7 +42,7 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
       foreach ($dates as $i => $_date) {
         $_date_next = mbDate("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
-        $count = $sejour->countList($where, null, null, null, $ljoin);
+        $count = $sejour->countList($where, null, $ljoin);
         $total += $count;
         $series[$key]['data'][$i] = array($i, intval($count));
       }
@@ -232,7 +232,7 @@ switch ($axe) {
       foreach ($dates as $i => $_date) {
         $_date_next = mbDate("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
-        $count = $sejour->countList($where, null, null, null, $ljoin);
+        $count = $sejour->countList($where, null, $ljoin);
         $total += $count;
         $series[$key]['data'][$i] = array($i, intval($count));
       }
@@ -260,7 +260,7 @@ switch ($axe) {
       foreach ($dates as $i => $_date) {
         $_date_next = mbDate("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
-        $count = $sejour->countList($where, null, null, null, $ljoin);
+        $count = $sejour->countList($where, null, $ljoin);
         $total += $count;
         $series[$key]['data'][$i] = array($i, intval($count));
       }
@@ -292,7 +292,7 @@ switch ($axe) {
       foreach ($dates as $i => $_date) {
         $_date_next = mbDate("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
-        $count = $sejour->countList($where, null, null, null, $ljoin);
+        $count = $sejour->countList($where, null, $ljoin);
         $total += $count;
         $series[$key]['data'][$i] = array($i, intval($count));
       }
@@ -318,7 +318,7 @@ switch ($axe) {
       foreach ($dates as $i => $_date) {
         $_date_next = mbDate("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
-        $count = $sejour->countList($where, null, null, null, $ljoin);
+        $count = $sejour->countList($where, null, $ljoin);
         $total += $count;
         $series[$key]['data'][$i] = array($i, intval($count));
       }
@@ -343,7 +343,7 @@ switch ($axe) {
       foreach ($dates as $i => $_date) {
         $_date_next = mbDate("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
-        $count = $sejour->countList($where, null, null, null, $ljoin);
+        $count = $sejour->countList($where, null, $ljoin);
         $total += $count;
         $series[$key]['data'][$i] = array($i, intval($count));
       }
@@ -379,7 +379,7 @@ switch ($axe) {
         $_date_next = mbDate("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
         $where['sejour.etablissement_transfert_id'] = ($_id === "none" ? "IS NULL" : "= '$_id'");
-        $count = $sejour->countList($where, null, null, null, $ljoin);
+        $count = $sejour->countList($where, null, $ljoin);
         $total += $count;
         $sub_total += $count;
         $series[$key]['data'][$i] = array($i, intval($count));
@@ -426,7 +426,7 @@ switch ($axe) {
         $_date_next = mbDate("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
         $where['sejour.service_mutation_id'] = ($_id === "none" ? "IS NULL" : "= '$_id'");
-        $count = $sejour->countList($where, null, null, null, $ljoin);
+        $count = $sejour->countList($where, null, $ljoin);
         $total += $count;
         $sub_total += $count;
         $series[$key]['data'][$i] = array($i, intval($count));
@@ -607,7 +607,7 @@ switch ($axe) {
     $where['sejour.group_id'] = " = '$group_id'";
     
     $where['sejour.entree'] = "BETWEEN '".reset($dates)."' AND '".end($dates)."'";
-    $nb_rpus = $rpu->countList($where, null, null, null, $ljoin);
+    $nb_rpus = $rpu->countList($where, null, $ljoin);
 
     $percent = CValue::get("_percent") * $nb_rpus;
     
@@ -648,7 +648,7 @@ switch ($axe) {
     foreach($dates as $i => $_date) {
       $_date_next = mbDate("+1 $period", $_date);
       $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
-      $totaux[$i] = $rpu->countList($where, null, null, null, $ljoin);
+      $totaux[$i] = $rpu->countList($where, null, $ljoin);
     }
     
     $j = 0;
@@ -670,7 +670,7 @@ switch ($axe) {
         }
         $_date_next = mbDate("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
-        $count = $rpu->countList($where, null, null, null, $ljoin);
+        $count = $rpu->countList($where, null, $ljoin);
         $totaux[$i] -= $count;
         
         $total += $count;

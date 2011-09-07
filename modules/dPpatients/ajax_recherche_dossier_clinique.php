@@ -175,7 +175,7 @@ $count_patient = array();
 
 if ($one_field) {
   $list_patient = $patient->loadList($where, "patients.nom, patients.prenom", "$start,30", "patients.patient_id", $ljoin);
-  $count_patient = count($patient->countMultipleList($where, null, null, "patients.patient_id", $ljoin));
+  $count_patient = count($patient->countMultipleList($where, null, "patients.patient_id", $ljoin));
 }
 
 // Création du template

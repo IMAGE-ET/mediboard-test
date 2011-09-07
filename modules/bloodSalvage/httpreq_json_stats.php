@@ -44,7 +44,7 @@ function fillData(&$where, $ljoin, &$serie, $dates) {
   
   foreach ($dates as $month => $date) {
     $where['plagesop.date'] = "BETWEEN '{$date['start']}' AND '{$date['end']}'";
-    $count = $bs->countList($where, null, null, null, $ljoin);
+    $count = $bs->countList($where, null, $ljoin);
     $d[$i] = array($i, intval($count));
     $i++;
   }

@@ -58,7 +58,7 @@ if ($antecedent_patient){
 $order_ant = "antecedent_id, rques";
 $total_antecedents = null;
 if ($where_ant) {
-  $total_antecedents = $ant->countList($where_ant, $order_ant, null, null, $ljoin);
+  $total_antecedents = $ant->countList($where_ant, null, $ljoin);
   $antecedents = $ant->loadList($where_ant, $order_ant, "$page_antecedent, 30", null, $ljoin);
 }
 
@@ -85,7 +85,7 @@ if ($traitement_patient){
 $order_trait = "traitement_id, traitement";
 $total_traitements = null;
 if ($where_trait) {
-  $total_traitements = $trait->countList($where_trait, $order_trait, null, null, $ljoin);
+  $total_traitements = $trait->countList($where_trait, null, $ljoin);
   $traitements = $trait->loadList($where_trait, $order_trait, "$page_traitement, 30", null, $ljoin);
 }
 
@@ -110,7 +110,7 @@ $dossierMedical = new CDossierMedical();
 $pat_diag = new CPatient();
 $total_dossierMedicals = null;
 if ($where_diag){
-  $total_dossierMedicals = $dossierMedical->countList($where_diag, $order_diag);
+  $total_dossierMedicals = $dossierMedical->countList($where_diag);
   $dossiersMed = $dossierMedical->loadList($where_diag, $order_diag, "$page_dossierMedical, 30");
 }
 
@@ -175,7 +175,7 @@ $patients_consult = array();
 $order_consult = "patient_id";
 $total_consults = null;
 if ($where_consult){
-  $total_consults = $consult->countList($where_consult, $order_consult);
+  $total_consults = $consult->countList($where_consult);
   $consultations = $consult->loadList($where_consult, $order_consult, "$page_consult, 30"); 
 }
 
@@ -222,7 +222,7 @@ if($recherche_sejour == "or") {
 $order_sejour = "patient_id";
 $total_sejours = null;
 if($where_sejour){
-  $total_sejours = $sejour->countList($where_sejour, $order_sejour);
+  $total_sejours = $sejour->countList($where_sejour);
   $sejours = $sejour->loadList($where_sejour, $order_sejour, "$page_sejour, 30");
 }
 
@@ -283,7 +283,7 @@ if($recherche_intervention == "or"){
 $order_intervention = "rques";
 $total_intervs = null;
 if($where_intervention){
-  $total_intervs = $intervention->countList($where_intervention, $order_intervention);
+  $total_intervs = $intervention->countList($where_intervention);
   $interventions = $intervention->loadlist($where_intervention, $order_intervention, "$page_interv, 30");
 }
 

@@ -47,7 +47,7 @@ $where[] = "user_id ".CSQLDataSource::prepareIn(array_keys($listUsers), $filter-
 $order = "$order_col $order_way";
 $group = "ip_address";
 
-$total_list_count = $filter->countMultipleList($where, $order, null, $group, null, array("ip_address", "MAX(date) AS date_max, GROUP_CONCAT(DISTINCT user_id SEPARATOR '|') AS user_list"));
+$total_list_count = $filter->countMultipleList($where, $order, $group, null, array("ip_address", "MAX(date) AS date_max, GROUP_CONCAT(DISTINCT user_id SEPARATOR '|') AS user_list"));
 
 foreach($total_list_count as $key => $_log) {
   if (inet_ntop($_log["ip_address"]) != (inet_ntop($_log["ip_address"] & inet_pton($filter->ip_address)))) {

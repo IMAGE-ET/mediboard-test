@@ -407,7 +407,7 @@ class CPrescriptionLineMix extends CMbObject {
     $planification = new CPlanificationSysteme();
     $where = array();
     $where["prescription_line_mix.prescription_line_mix_id"] = " = '$this->_id'";
-    $this->_count_locked_planif = $count_planifications = $administration->countList($where, null, null, null, $ljoin);
+    $this->_count_locked_planif = $count_planifications = $administration->countList($where, null, $ljoin);
   }
   	
 	/*

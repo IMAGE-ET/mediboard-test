@@ -63,7 +63,7 @@ $group_by_map = array(
 	"labo"      => "product_reference.societe_id",
 );
 
-$dmi_lines_count = $dmi_line->countMultipleList($where, "total DESC", null, $group_by_map[$group_by], $ljoin, $fields);
+$dmi_lines_count = $dmi_line->countMultipleList($where, "total DESC" $group_by_map[$group_by], $ljoin, $fields);
 
 foreach($dmi_lines_count as &$_stat) {
 	$mediuser = new CMediusers;

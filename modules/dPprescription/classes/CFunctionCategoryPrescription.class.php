@@ -87,7 +87,7 @@ class CFunctionCategoryPrescription extends CMbObject {
     $ljoin["element_prescription"] = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";
     $where["element_prescription.category_prescription_id"] = " = '$this->category_prescription_id'";
     $where["prescription_line_element.user_executant_id"] = CSQLDataSource::prepareIn($users_id);
-    $count_lines_element = $prescription_line_element->countList($where, null, null, null, $ljoin);
+    $count_lines_element = $prescription_line_element->countList($where, null, $ljoin);
     
     // Calcul du nombre de lignes de commentaires
     $prescription_line_comment = new CPrescriptionLineComment();

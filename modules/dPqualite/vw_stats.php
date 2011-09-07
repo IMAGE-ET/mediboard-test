@@ -152,7 +152,7 @@ foreach ($comparison as $comp) {
 	            
 	            // Filtrage sur les types d'evenements
 	            if (!$evts || count($list_evts) <= 0) {
-	              $count = $fiche->countList($where, null, null, null, $ljoin);
+	              $count = $fiche->countList($where, null, $ljoin);
 	            }
 	            else {
 	              $where['evenements'] = 'IS NOT NULL';

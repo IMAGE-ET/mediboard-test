@@ -26,7 +26,7 @@ $where["id_sante400.id400"]        = "IS NOT NULL";
 $where["users.template"]           = "= '0'";
 
 if (!$do_import) {
-  $count_users_ldap = $user->countList($where, null, null, null, $ljoin);
+  $count_users_ldap = $user->countList($where, null, $ljoin);
   $where = array();
   $where["users.template"] = "= '0'";
   $count_users_all  = $user->countList($where);
