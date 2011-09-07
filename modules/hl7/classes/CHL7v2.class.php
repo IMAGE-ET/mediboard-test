@@ -43,8 +43,8 @@ abstract class CHL7v2 {
     return ($dont_split ? array($data) : explode($delimiter, $data));
   }
   
-  static function keep($field_name) {
-    return in_array($field_name, self::$keep_original);
+  function keep() {
+    return in_array($this->name, self::$keep_original);
   }
   
   abstract function getSpecs();

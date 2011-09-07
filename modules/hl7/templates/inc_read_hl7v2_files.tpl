@@ -37,7 +37,8 @@
           
           <ul class="control_tabs" id="message-tab-{{$_key}}">
             <li><a href="#message-{{$_key}}-tree">Arbre</a></li>
-            <li><a href="#message-{{$_key}}-er7">ER7</a></li>
+            <li><a href="#message-{{$_key}}-er7-input">ER7 Input</a></li>
+            <li><a href="#message-{{$_key}}-er7-output">ER7 Output</a></li>
             <li><a href="#message-{{$_key}}-errors" {{if $_message->errors|@count}} class="wrong" {{/if}}>Erreurs</a></li>
           </ul>
           <hr class="control_tabs" />
@@ -46,8 +47,12 @@
             {{mb_include module=hl7 template=inc_segment_group_children segment_group=$_message}}
           </ul>
           
-          <div id="message-{{$_key}}-er7" style="display: none;">
+          <div id="message-{{$_key}}-er7-input" style="display: none;">
             {{$_message->highlight_er7()|smarty:nodefaults}}
+          </div>
+          
+          <div id="message-{{$_key}}-er7-output" style="display: none;">
+            {{$_message->highlight_er7($_message)|smarty:nodefaults}}
           </div>
           
           <div id="message-{{$_key}}-errors" style="display: none;">

@@ -98,6 +98,17 @@ class CHL7v2Segment extends CHL7v2Entity {
   function getSpecs(){
     return $this->getSchema(self::PREFIX_SEGMENT_NAME, $this->name);
   }
+  
+  function __toString(){
+    $sep = $this->getMessage()->fieldSeparator;
+		$fields = $this->fields;
+		
+  	if ($this->name === "MSH") {
+  		array_shift($fields);
+  	}
+		
+    return $this->name.$sep.implode($sep, $fields);
+  }
 }
 
 ?>

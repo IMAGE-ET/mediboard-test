@@ -44,7 +44,7 @@ class CHL7v2Field extends CHL7v2Entity {
       $this->error(CHL7v2Exception::FIELD_EMPTY, null, $this);
     }
     
-    $items = CHL7v2::split($message->repetitionSeparator, $this->data, self::keep($this->name));
+    $items = CHL7v2::split($message->repetitionSeparator, $this->data, $this->keep());
     
     /* // Ce test ne semble pas etre valide, car meme si maxOccurs n'est pas unbounded, on en trouve souvent plusieurs occurences 
     if (!$this->unbounded && count($items) > 1) {
@@ -54,7 +54,9 @@ class CHL7v2Field extends CHL7v2Entity {
     
     $this->items = array();
     foreach($items as $_item) {
-      $this->items[] = new CHL7v2FieldItem($this, $_item);
+    	$_field_item = new CHL7v2FieldItem($this);
+			$_field_item->parse($_item);
+      $this->items[] = $_field_item;
     }
     
     $this->validate();
@@ -99,4 +101,8 @@ class CHL7v2Field extends CHL7v2Entity {
   function getMessage(){
     return $this->owner_segment->getMessage();
   }
+	
+	function __toString(){
+		return implode($this->getMessage()->repetitionSeparator, $this->items);
+	}
 }

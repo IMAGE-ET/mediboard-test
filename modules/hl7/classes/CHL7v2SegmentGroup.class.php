@@ -68,6 +68,10 @@ class CHL7v2SegmentGroup extends CHL7v2Entity {
   function appendChild($child){
     return $this->children[] = $child;
   }
+  
+  function __toString(){
+    return implode($this->getMessage()->segmentTerminator, $this->children);
+  }
 }
 
 ?>

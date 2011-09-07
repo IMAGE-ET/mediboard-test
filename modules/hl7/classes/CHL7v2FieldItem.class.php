@@ -18,22 +18,31 @@ class CHL7v2FieldItem {
   var $specs = null;
   var $composite_specs = null;
   
-  function __construct(CHL7v2Field $field, $data) {
+  function __construct(CHL7v2Field $field) {
     $this->field = $field;
     $this->specs = $field->getSpecs();
+  }
+	
+	function parse($data) {
     $this->data = $data;
     
-    $message = $field->getMessage();
-    $keep_original = CHL7v2::keep($field->name);
+    $message = $this->getMessage();
+    $keep_original = $this->field->keep();
     
     $components = CHL7v2::split($message->componentSeparator, $data, $keep_original);
     
     foreach($components as &$component) {
-      $component = CHL7v2::split($message->subcomponentSeparator, $component, $keep_original);
+      $sub_compoments = CHL7v2::split($message->subcomponentSeparator, $component, $keep_original);
+      
+      if (!$keep_original) {
+        $sub_compoments = array_map(array($message, "unescape"), $sub_compoments);
+      }
+      
+      $component = $sub_compoments;
     }
     
     $this->components = $components;
-  }
+	}
   
   function validate(){
     $field = $this->field;
@@ -47,5 +56,25 @@ class CHL7v2FieldItem {
   
   function getValue() {
     return $this->composite_specs->toMB($this->components, $this->field);
+  }
+	
+	function getMessage(){
+		return $this->field->getMessage();
+	}
+  
+  function __toString(){
+  	$message = $this->getMessage();
+    $keep_original = $this->field->keep();
+  	$comp = array();
+		
+		foreach($this->components as $sub_compoments) {
+			if (!$keep_original) {
+				$sub_compoments = array_map(array($message, "escape"), $sub_compoments);
+			}
+			
+			$comp[] = implode($message->subcomponentSeparator, $sub_compoments);
+		}
+		
+    return implode($message->componentSeparator, $comp);
   }
 }

@@ -333,9 +333,9 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   }
   
   function unescape($str) {
-    if ($str === $this->nullValue) {
+    /*if ($str === $this->nullValue) {
       return null; //"__NULL__";
-    }
+    }*/
     
     $str = strtr($str, $this->unescape_sequences);
     
@@ -368,8 +368,32 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     return $str;
   }
   
-  function highlight_er7(){
-    $msg = $this->data;
+  static function highlight_er7_str($str, self $message){
+    $msg = $message->data;
+    $msg = str_replace("\r\n", "\n", $msg);
+    
+    // highlight segment name
+    $msg = preg_replace("/^([A-Z]{2}[A-Z0-9])/m", '<strong>$1</strong>', $msg);
+    $msg = preg_replace("/^(.*)/m", '<div class="segment">$1</div>', $msg); // we assume $message->segmentTerminator is always \n
+    
+    $msg = str_replace("\n", "", $msg);
+    
+    $pat = array(
+      "&" => "&amp;",
+      $message->fieldSeparator => "<span class='fs'>$message->fieldSeparator</span>",
+      $message->componentSeparator => "<span class='cs'>$message->componentSeparator</span>",
+      $message->subcomponentSeparator => "<span class='scs'>$message->subcomponentSeparator</span>",
+      $message->repetitionSeparator => "<span class='re'>$message->repetitionSeparator</span>",
+    );
+    
+    $seps = preg_quote($message->fieldSeparator.$message->componentSeparator.$message->subcomponentSeparator.$message->repetitionSeparator);
+    $msg = preg_replace("/([^$seps]+)/", '<i>$1</i>', $msg);
+    
+    return "<pre class='er7'>".strtr($msg, $pat)."</pre>";
+  }
+  
+  function highlight_er7($data = null){
+    $msg = (isset($data) ? $data : $this->data);
     $msg = str_replace("\r\n", "\n", $msg);
     
     // highlight segment name
@@ -390,5 +414,12 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $msg = preg_replace("/([^$seps]+)/", '<i>$1</i>', $msg);
     
     return "<pre class='er7'>".strtr($msg, $pat)."</pre>";
+  }
+  
+  function __toString(){
+  	// Il y a des lignes vides a cause des goupes imbriqués
+  	$str = parent::__toString();
+		$sep = preg_quote($this->getMessage()->segmentTerminator);
+    return preg_replace("/$sep+/", $sep, $str);
   }
 }

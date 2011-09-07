@@ -1324,6 +1324,10 @@ ul li a.chapitre_signe.active{
 }
 
 /* ER7 */
+.er7 {
+  max-height: auto;
+}
+
 .er7 .fs {
   color: #0000FF;
 }
