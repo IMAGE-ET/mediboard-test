@@ -90,22 +90,22 @@ if (!$sip_config["verify_repair"]) {
 	  $dest_hprim->message = "patients";
 	  $dest_hprim->loadMatchingObject();
 	
-	  if (!$sejour->_num_dossier) {
-	    $num_dossier = new CIdSante400();
+	  if (!$sejour->_NDA) {
+	    $nda = new CIdSante400();
 	    //Paramétrage de l'id 400
-	    $num_dossier->object_class = "CSejour";
-	    $num_dossier->object_id = $num_dossier->_id;
-	    $num_dossier->tag = $dest_hprim->_tag_sejour;
-	    $num_dossier->loadMatchingObject();
+	    $nda->object_class = "CSejour";
+	    $nda->object_id = $nda->_id;
+	    $nda->tag = $dest_hprim->_tag_sejour;
+	    $nda->loadMatchingObject();
 	
-	    $sejour->_num_dossier = $num_dossier->id400;
+	    $sejour->_NDA = $nda->id400;
 	  }
 	
 	  if (CAppUI::conf("sip send_sej_pa") && ($sejour->_etat != "preadmission")) {
 	    continue;
 	  }
 	
-	  if (CAppUI::conf("sip sej_no_numdos") && $sejour->_num_dossier && ($sejour->_num_dossier != "-")) {
+	  if (CAppUI::conf("sip sej_no_numdos") && $sejour->_NDA && ($sejour->_NDA != "-")) {
 	    continue;
 	  }
 	  

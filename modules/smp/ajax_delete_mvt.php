@@ -96,15 +96,15 @@ foreach ($sejours as $sejour) {
   $dest_hprim->load(CAppUI::conf("sip export_dest"));
   $dest_hprim->loadConfigValues();
   
-  if (!$sejour->_num_dossier) {
-    $num_dossier = new CIdSante400();
+  if (!$sejour->_NDA) {
+    $nda = new CIdSante400();
     //Paramétrage de l'id 400
-    $num_dossier->object_class = "CSejour";
-    $num_dossier->object_id = $sejour->_id;
-    $num_dossier->tag = $dest_hprim->_tag_sejour;
-    $num_dossier->loadMatchingObject();
+    $nda->object_class = "CSejour";
+    $nda->object_id = $sejour->_id;
+    $nda->tag = $dest_hprim->_tag_sejour;
+    $nda->loadMatchingObject();
 
-    $sejour->_num_dossier = $num_dossier->id400;
+    $sejour->_NDA = $nda->id400;
   }
   
   if (!$sejour->_ref_patient->_IPP) {
@@ -121,7 +121,7 @@ foreach ($sejours as $sejour) {
     continue;
   }
 
-  if (!CAppUI::conf("sip sej_no_numdos") && (!$sejour->_num_dossier || ($sejour->_num_dossier == "-"))) {
+  if (!CAppUI::conf("sip sej_no_numdos") && (!$sejour->_NDA || ($sejour->_NDA == "-"))) {
     continue;
   }
 
