@@ -135,18 +135,18 @@ foreach($listHprimSejours as $_sejour) {
     continue;
   }
   // Recherche si la liaison a déjà été faite
-  $num_dossier = new CIdSante400();
-  $num_dossier->object_class = "CSejour";
-  $num_dossier->tag = $tag_sejour;
-  $num_dossier->id400 = "$_sejour->external_id";
-  $num_dossier->loadMatchingObject("last_update DESC");
-  if($num_dossier->_id) {
-    $_sejour->sejour_id = $num_dossier->object_id;
+  $nda = new CIdSante400();
+  $nda->object_class = "CSejour";
+  $nda->tag = $tag_sejour;
+  $nda->id400 = "$_sejour->external_id";
+  $nda->loadMatchingObject("last_update DESC");
+  if($nda->_id) {
+    $_sejour->sejour_id = $nda->object_id;
     $_sejour->store();
     
-    $echg_hprim->object_class = $num_dossier->object_class;
-    $echg_hprim->object_id    = $num_dossier->object_id;
-    $echg_hprim->id_permanent = $num_dossier->id400;
+    $echg_hprim->object_class = $nda->object_class;
+    $echg_hprim->object_id    = $nda->object_id;
+    $echg_hprim->id_permanent = $nda->id400;
     $echg_hprim->store();
     
     $anc++;
@@ -169,16 +169,16 @@ foreach($listHprimSejours as $_sejour) {
   }
   $sejour = reset($listSej);
   if ($sejour->_id) {
-    $num_dossier->object_id   = $sejour->_id;
-    $num_dossier->last_update = mbDateTime();
-    $num_dossier->store();   
+    $nda->object_id   = $sejour->_id;
+    $nda->last_update = mbDateTime();
+    $nda->store();   
      
     $_sejour->sejour_id = $sejour->_id;
     $_sejour->store();
     
-    $echg_hprim->object_class = $num_dossier->object_class;
-    $echg_hprim->object_id    = $num_dossier->object_id;
-    $echg_hprim->id_permanent = $num_dossier->id400;
+    $echg_hprim->object_class = $nda->object_class;
+    $echg_hprim->object_id    = $nda->object_id;
+    $echg_hprim->id_permanent = $nda->id400;
     $echg_hprim->store();
     
     $nouv++;
