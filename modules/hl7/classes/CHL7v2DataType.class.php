@@ -53,19 +53,34 @@ class CHL7v2DataType extends CHL7v2 {
   
   static $typesMap = array(
     "TimeStamp" => "DateTime",
-    //"DT"  => "Date",
-    //"DTM" => "DateTime",
-    //"GTS" => "String",
-    //"ID"  => "String",
-    //"IS"  => "String",
-    //"FT"  => "String",
-    //"NM"  => "Double",
-    //"SI"  => "String",
-    //"ST"  => "String",
-    //"TM"  => "Time",
-    //"TN"  => "String",
+    "DT"  => "Date",
+    "DTM" => "DateTime",
+    "GTS" => "String",
+    "ID"  => "String",
+    "IS"  => "String",
+    "FT"  => "String",
+    "NM"  => "Double",
+    "SI"  => "String",
+    "ST"  => "String",
+    "TM"  => "Time",
+    "TN"  => "String",
     //"TS"  => "DateTime",
-    //"TX"  => "String",
+    "TX"  => "String",
+  );
+	
+	static $scalarTypes = array(
+    "DT"  => "Date",
+    "DTM" => "DateTime",
+    "GTS" => "String",
+    "ID"  => "String",
+    "IS"  => "String",
+    "FT"  => "String",
+    "NM"  => "Double",
+    "SI"  => "String",
+    "ST"  => "String",
+    "TM"  => "Time",
+    "TN"  => "String",
+    "TX"  => "String",
   );
   
   static $re_hl7 = array();
@@ -83,7 +98,7 @@ class CHL7v2DataType extends CHL7v2 {
     self::$re_hl7 = array(
       "Date"     => '/^'.self::RE_HL7_DATE.'$/',
       "DateTime" => '/^'.self::RE_HL7_DATE.'(?:'.self::RE_HL7_TIME.')?$/',
-      "Time"     => '/^'.self::RE_HL7_TIME.'$/',
+      "Time"     => '/^(?:'.self::RE_HL7_DATE.')?'.self::RE_HL7_TIME.'$/',
       "Double"   => '/^[+-]?\d*\.?\d*$/', 
       "Integer"  => '/^[+-]?\d+$/',
       "String"   => '/.*/',
@@ -117,19 +132,20 @@ class CHL7v2DataType extends CHL7v2 {
     
     $class_type = self::mapToBaseType($type);
     
-    if (isset($cache[$version][$class_type])) {
-      return $cache[$version][$class_type];
+    if (isset($cache[$version][$type])) {
+      return $cache[$version][$type];
     }
     
     if (in_array($class_type, self::$typesBase)) {
       $class = "CHL7v2DataType$class_type";
       $instance = new $class($class_type, $version);
+			//$instance->getSpecs();
     }
     else {
       $instance = new CHL7v2DataTypeComposite($type, $version);
     }
     
-    return $cache[$version][$class_type] = $instance;
+    return $cache[$version][$type] = $instance;
   }
   
   /**
@@ -158,7 +174,7 @@ class CHL7v2DataType extends CHL7v2 {
     return true;
   }
   
-  function parseHL7($value, CHLv2Field $field) {
+  protected function parseHL7($value, CHLv2Field $field) {
     if (!preg_match($this->getRegExpHL7(), $value, $matches)) {
       $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $value, $field);
       return false;
@@ -167,7 +183,7 @@ class CHL7v2DataType extends CHL7v2 {
     return $matches;
   }
   
-  function parseMB($value, CHLv2Field $field) {
+  protected function parseMB($value, CHLv2Field $field) {
     if (!preg_match($this->getRegExpMB(), $value, $matches)) {
       $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $value, $field);
       return false;
@@ -195,6 +211,10 @@ class CHL7v2DataType extends CHL7v2 {
   function getVersion(){
     return $this->version;
   }
+	
+	public function getType(){
+		return $this->type;
+	}
   
   protected function getRegExpMB(){
     return self::$re_mb[$this->type];

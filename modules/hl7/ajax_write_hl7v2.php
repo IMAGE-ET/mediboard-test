@@ -29,7 +29,7 @@ $data = array(
   null, // MSH-10: Message Control ID (ST) 
   null, // MSH-11: Processing ID (PT) 
   null, // MSH-12: Version ID (VID) 
-  null, // MSH-13: Sequence Number (NM) (optional)
+  15, // MSH-13: Sequence Number (NM) (optional)
   null, // MSH-14: Continuation Pointer (ST) (optional)
   null, // MSH-15: Accept Acknowledgment Type (ID) (optional)
   null, // MSH-16: Application Acknowledgment Type (ID) (optional)
@@ -42,6 +42,36 @@ $data = array(
     
 $segment->fill($data);
 $msg->appendChild($segment);
+
+$segment = CHL7v2Segment::create("EVN", $msg);
+
+$data = array(
+  // EVN-1: Event Type Code (ID) (optional)
+  "toto",
+  // EVN-2: Recorded Date/Time (TS)
+  mbDateTime(),
+  // EVN-3: Date/Time Planned Event (TS)(optional)
+  "2011-10-01",
+  // EVN-4: Event Reason Code (IS) (optional)
+  // Table 062
+  // 01 - Patient request
+  // 02 - Physician/health practitioner order 
+  // 03 - Census management
+  // O  - Other 
+  // U  - Unknown
+  null,
+  // EVN-5: Operator ID (XCN) (optional repeating)
+  CUser::get(),
+  // EVN-6: Event Occurred (TS) (optional)
+  "2011-02-02 10:10:10",
+  // EVN-7: Event Facility (HD) (optional)
+  null,
+);
+    
+$segment->fill($data);
+$msg->appendChild($segment);
+
+$msg->validate();
 
 echo "Généré";
 echo $msg->highlight_er7($msg."");

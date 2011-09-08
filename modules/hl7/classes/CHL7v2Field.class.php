@@ -69,6 +69,7 @@ class CHL7v2Field extends CHL7v2Entity {
     }
     
     if (!is_array($items)) {
+    	$items = trim($items);
       $items = array($items);
     }
     

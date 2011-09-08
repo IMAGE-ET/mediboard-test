@@ -22,7 +22,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     $this->parent = $parent;
   }
   
-  function path($path){
+  function path($path) {
     $path = preg_split("/\s*,\s*/", $path);
     if (count($path) > 3) return false;
     

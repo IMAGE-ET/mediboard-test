@@ -37,25 +37,13 @@ class CHL7v2DataTypeComposite extends CHL7v2DataType {
         break;
       }
       
-      $component_spec = $this->components[$k];
-      
-      /*if (!$component_spec instanceof self) {
-        mbTrace($component);
-        $component = reset($component); // @todo ajouter une exception si jamais on a plusieurs elt
-      }*/
-      
-      $hl7[] = $component_spec->toHL7($component, $field);
+      $hl7[] = $this->components[$k]->toHL7($component, $field);
     }
     
     return $hl7;
   }
   
   function validate($components, CHL7v2Field $field) {
-    // Happens for ST, ID, NM, etc (they are nearly base types, they were not split as sub-sub-component)
-    if (!is_array($components)) {
-      $components = array($components);
-    }
-    
     foreach($components as $k => $component) {
       if (!array_key_exists($k, $this->components)) {
         break;

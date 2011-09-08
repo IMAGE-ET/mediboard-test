@@ -111,6 +111,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
       $type = implode("", $message_type);
     }
     $this->name    = preg_replace("/[^A-Z0-9]/", "", $type);
+		$this->description = (string)$this->getSpecs()->description;
     
     $this->validate();
     

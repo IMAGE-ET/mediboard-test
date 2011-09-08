@@ -1,8 +1,56 @@
 <style>
   ul, ol {
-    line-height: normal;
-    padding-left: 3em;
+    line-height: 1.4;
+		padding-left: 2em;
+		margin-bottom: 6px;
   }
+	
+	ol {
+	  list-style-type: none;
+	}
+	
+	.type {
+	  color: #2D9A00;
+	}
+  
+  .type:before {
+    content: "(";
+  }
+  
+  .type:after {
+    content: ")";
+  }
+  
+  .field-name {
+    color: #3252A7;
+    margin-right: 5px;
+		display: inline-block;
+		width: 4em;
+		white-space: nowrap;
+  }
+  
+  .field-description {
+    color: #999;
+  }
+  
+  .value {
+    background: #eee;
+		padding: 0 2px;
+  }
+	
+	.field-item {
+	  border: 1px dotted #ccc;
+		margin: 1px;
+	}
+  
+  .field-item > ol {
+    padding-left: 2px;
+    margin-bottom: 0px;
+  }
+	
+	.field-empty {
+	  opacity: 0.5;
+	}
 </style>
 
 <script>
@@ -33,7 +81,7 @@
           });
         </script>
         <div style="display: none;" id="message-{{$_key}}">
-          <h1>{{$_message->name}} - {{$_message->version}} - {{$_message->filename}}</h1>
+          <h1>{{$_message->description}} ({{$_message->version}}) <span class="type">{{$_message->name}}</span></h1>
           
           <ul class="control_tabs" id="message-tab-{{$_key}}">
             <li><a href="#message-{{$_key}}-tree">Arbre</a></li>
