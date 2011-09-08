@@ -352,6 +352,6 @@ newExam = function(sAction, consultation_id) {
   La consultation d'anesthésie n'est associé à aucun séjour, 
   il n'y a donc pas de dossier médical disponible.
 </div>
-{{else}}
-{{include file=../../dPpatients/templates/CDossierMedical_complete.tpl object=$sejour->_ref_dossier_medical}}
+{{elseif $sejour->_ref_dossier_medical->_id}}
+  {{include file=../../dPpatients/templates/CDossierMedical_complete.tpl object=$sejour->_ref_dossier_medical}}
 {{/if}}
