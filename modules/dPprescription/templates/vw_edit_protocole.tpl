@@ -132,7 +132,7 @@ resetSearchForm = function(){
 						<tr>
 							<td>
 								<input type="text" name="libelle_protocole" value="" size="20" style="font-weight: bold; font-size: 1.3em; width: 216px;" />
-                 <button type="submit" class="submit notext">{{tr}}Filter{{/tr}}</button>
+                 <button type="submit" class="search notext">{{tr}}Filter{{/tr}}</button>
 							</td>
 						</tr>
             <tr>

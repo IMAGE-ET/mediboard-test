@@ -414,6 +414,11 @@ Prescription = {
         break;
     }
   },
+	popupLabo : function(sejour_id){
+    var url = new Url("dPImeds", "httpreq_vw_sejour_results");
+    url.addParam("sejour_id", sejour_id);
+    url.popup(800,800,"Résultats Labo");
+	},
   viewSubstitutionLines: function(object_id, object_class, mode_pack){
     var url = new Url("dPprescription", "httpreq_add_substitution_line");
     url.addParam("object_id", object_id);

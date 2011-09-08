@@ -672,6 +672,11 @@ Main.add( function(){
 							{{if !$mode_protocole && $prescription->type == "sejour"}}
 			          <button type="button" class="search" onclick="popupTransmission('{{$prescription->object_id}}');">Transmissions</button>
 			        {{/if}} 
+							
+							{{if @$modules.dPImeds->mod_active && $prescription->object_class == "CSejour"}}
+							  <button type="button" class="search" onclick="Prescription.popupLabo('{{$prescription->object_id}}');">Labo</button>
+              {{/if}}
+		
 							<button type="button" class="search" onclick="Prescription.popup('{{$prescription->_id}}', 'viewAlertes');">Alertes</button>
 							{{if $prescription->object_id}}
 							<button type="button" class="search" onclick="Prescription.popup('{{$prescription->_id}}', 'viewHistorique');">Historique</button>
