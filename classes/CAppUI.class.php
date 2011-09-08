@@ -597,10 +597,23 @@ class CAppUI {
     $sibling->user_username = $user->user_username;
     $sibling->loadMatchingObject();
     $sibling->loadRefMediuser();
+		
+		$mediuser = $sibling->_ref_mediuser;
 
-    if ($sibling->_ref_mediuser && $sibling->_ref_mediuser->_id && !$sibling->_ref_mediuser->actif) {
-      self::setMsg("Auth-failed-user-deactivated", UI_MSG_ERROR);
-      return false;
+    if ($mediuser && $mediuser->_id) {
+    	if (!$mediuser->actif) {
+	      self::setMsg("Auth-failed-user-deactivated", UI_MSG_ERROR);
+	      return false;
+	    }
+    
+		  $today = mbDate();
+			
+			// Check if the user is in his activity period
+	    if ($mediuser->fin_activite && $mediuser->fin_activite <= $today ||
+			    $mediuser->deb_activite && $mediuser->deb_activite >  $today) {
+        self::setMsg("Auth-failed-user-deactivated", UI_MSG_ERROR);
+        return false;
+      }
     }
     
     if ($sibling->_login_locked) {

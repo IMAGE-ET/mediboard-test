@@ -18,7 +18,7 @@
   pour l'ajouter à un bon de retour. Un clic sur un autre article du même 
   labo l'ajoutera à ce bon de retour tant qu'il n'est pas validé.
   <br/>
-  Une fois votre bon de retour terminé, vous pourrez supprimer les lots recommandés avec le bouton 
+  Une fois votre bon de retour terminé, vous pourrez supprimer les lots retournés avec le bouton 
   <button class="cancel notext" type="button">Annuler le lot</button>
 </div>
 
@@ -88,7 +88,7 @@
                   </select>
                 </td>
                 <td class="narrow">
-                  <button class="tick notext" type="submit">Commander</button>
+                  <button class="tick notext" type="submit">Retour</button>
                 </td>
               </tr>
               <tr>
