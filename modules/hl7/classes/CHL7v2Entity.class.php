@@ -20,9 +20,15 @@
  */
 
 abstract class CHL7v2Entity extends CHL7v2 {
+	protected static $_id = 0;
+  protected $id      = null;
   var $spec_filename = null;
   var $specs         = null;
   var $data          = null;
+	
+	function __construct(){
+		$this->id = self::$_id++;
+	}
   
   function parse($data) {
     $this->data = $data;

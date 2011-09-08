@@ -92,11 +92,11 @@ class CHL7v2Field extends CHL7v2Entity {
     $specs = $this->getSchema(self::PREFIX_COMPOSITE_NAME, $this->datatype);
     
     // The timestamp case, where Time contains TimeStamp data
-    if (!$this->_ts_fixed && $this->datatype === "TS") {
-      //$specs->elements->field[0]->datatype = "TimeStamp";
+    /*if (!$this->_ts_fixed && $this->datatype === "TS") {
+      $specs->elements->field[0]->datatype = "TimeStamp";
     }
     
-    $this->_ts_fixed = true;
+    $this->_ts_fixed = true;*/
     
     return $specs;
   }

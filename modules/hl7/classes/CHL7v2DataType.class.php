@@ -52,7 +52,7 @@ class CHL7v2DataType extends CHL7v2 {
   );
   
   static $typesMap = array(
-    "TimeStamp" => "DateTime",
+    //"TimeStamp" => "DateTime",
     "DT"  => "Date",
     "DTM" => "DateTime",
     "GTS" => "String",

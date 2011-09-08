@@ -57,12 +57,14 @@ class CHL7v2FieldItem {
 		
 		if ($this->hasSubComponents()) {
 			$components = CHL7v2::split($message->componentSeparator, $data, $keep_original);
-	    
+			$components = array_pad($components, count($this->getCompositeSpecs()->components), null);
+			
 	    foreach($components as $i => &$component) {
 	    	// If this component has sub components
 	    	if ($this->hasSubComponents($i)) {
 	        $sub_components = CHL7v2::split($message->subcomponentSeparator, $component, $keep_original);
-	      
+	        //$sub_components = array_pad($sub_components, count($this->getCompositeSpecs()->components[$i]->components), null);
+					
 		      /*if (!$keep_original) {
 		        $sub_components = array_map(array($message, "unescape"), $sub_components);
 		      }*/

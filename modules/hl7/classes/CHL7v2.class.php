@@ -39,7 +39,7 @@ abstract class CHL7v2 {
    * @return array
    */
   static function split($delimiter, $data, $dont_split = false) {
-    if ($data === "") return array();
+    if ($data === "" || $data === null) return array();
     return ($dont_split ? array($data) : explode($delimiter, $data));
   }
   

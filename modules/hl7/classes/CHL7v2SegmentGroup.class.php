@@ -21,27 +21,8 @@ class CHL7v2SegmentGroup extends CHL7v2Entity {
     
   function __construct(CHL7v2SegmentGroup $parent) {
     $this->parent = $parent;
+		$this->name = implode(" ", $this->getSpecs()->xpath("//segment"));
     $parent->appendChild($this);
-  }
-  
-  static function getFirstSegmentHeader($spec, $header_name) {
-    $xp = "*//segment[text()='$header_name']";
-    $elements = $spec->xpath($xp);
-    $first = reset($elements);
-    
-    if (!$first) return;
-    
-    $stack = array($first);
-    $p = $first;
-    while(($p = self::getParentElement($p)) && ($p != $spec)) {
-      $stack[] = $p;
-    }
-    
-    return array_reverse($stack);
-  }
-  
-  static function getParentElement($spec) {
-    return $spec->getParent();
   }
   
   function validate(){

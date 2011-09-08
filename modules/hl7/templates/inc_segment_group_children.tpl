@@ -32,6 +32,8 @@
 				                    	
 															{{if $_component|@is_array}}
                                 <span class="field-description">{{$_item->specs->elements->field.$_j->description}}</span>
+                                <span class="type">{{$_item->specs->elements->field.$_j->datatype}}</span>
+																
 															  {{if $_component|@count > 0}}
 						                      <ol>
 							                      {{foreach from=$_component key=_k item=_sub_component}}
