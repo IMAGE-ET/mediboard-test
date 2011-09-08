@@ -1,9 +1,9 @@
 <?php
 
 /**
- * IHE Object Handler
+ * Admit Discharge Transfer HL7
  *  
- * @category IHE
+ * @category HL7
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -12,13 +12,11 @@
  */
 
 /**
- * Class CIHEObjectHandler 
- * IHE Object Handler
+ * Class CHL7MessageADT 
+ * Admit Discharge Transfer
  */
-class CIHEObjectHandler {
-  static $handled = array ();
-  
-  
+class CHL7MessageADT extends CMbObject {
+
 }
 
 ?>

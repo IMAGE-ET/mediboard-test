@@ -156,6 +156,17 @@ class CHL7v2Segment extends CHL7v2Entity {
     
     return $this->name.$sep.implode($sep, $fields);
   }
+  
+  function build(CHL7v2Event $event, $name) {
+    if (!$event->msg_codes) {
+      throw new CHL7v2Exception(CHL7v2Exception::MSH_CODE_MISSING);
+    }
+    
+    // This segment has the following fields
+    $this->name = $name;
+    
+    $this->message->appendChild($this);
+  }
 }
 
 ?>

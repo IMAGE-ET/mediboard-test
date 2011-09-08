@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Admit Discharge Transfer HL7
+ * HL7 Tools
  *  
  * @category HL7
  * @package  Mediboard
@@ -11,12 +11,18 @@
  * @link     http://www.mediboard.org
  */
 
-/**
- * Class CADT 
- * Admit Discharge Transfer
- */
-class CADT {
+CAppUI::requireModuleClass("hl7", "CHL7v2");
 
+/**
+ * Class CHL7 
+ * Tools
+ */
+class CHL7 {
+  static $versions = array ();
 }
+
+CHL7::$versions = array (
+  "v2" => CHL7v2::$versions,
+);
 
 ?>

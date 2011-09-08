@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ITI31 Object Handler
+ * ITI31 Delegated Handler
  *  
  * @category IHE
  * @package  Mediboard
@@ -12,11 +12,13 @@
  */
 
 /**
- * Class CITI31ObjectHandler 
- * ITI31 Object Handler
+ * Class CITI31DelegatedHandler 
+ * ITI31 Delegated Handler
  */
-class CITI31ObjectHandler extends CIHEObjectHandler {
+class CITI31DelegatedHandler extends CIHEDelegatedHandler {
   static $handled = array ("CSejour", "CAffectation");
+  static $profil      = "PAM";
+  static $transaction = "ITI31";
   
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);

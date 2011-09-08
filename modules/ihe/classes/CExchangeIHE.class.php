@@ -23,7 +23,9 @@ class CExchangeIHE extends CExchangeTabular {
   );
   
   // DB Table key
-  var $exchange_ihe_id     = null;
+  var $exchange_ihe_id = null;
+  
+  var $code            = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -39,7 +41,8 @@ class CExchangeIHE extends CExchangeTabular {
     
     $props["receiver_id"]   = "ref class|CReceiverIHE"; 
     $props["object_class"]  = "enum list|CPatient|CSejour|COperation|CAffectation show|0";
-    
+    $props["code"]          = "str";
+
     return $props;
   }
   

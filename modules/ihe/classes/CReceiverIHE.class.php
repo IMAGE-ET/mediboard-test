@@ -34,8 +34,9 @@ class CReceiverIHE extends CInteropReceiver {
   }
   
   function getBackProps() {
-    $backProps = parent::getBackProps();
-    $backProps['echanges'] = "CExchangeIHE receiver_id";
+    $backProps                   = parent::getBackProps();
+    $backProps['object_configs'] = "CReceiverIHEConfig object_id";
+    $backProps['echanges']       = "CExchangeIHE receiver_id";
     
     return $backProps;
   }
@@ -49,6 +50,26 @@ class CReceiverIHE extends CInteropReceiver {
     foreach ($this->_ref_msg_supported_family as $_evenement) {
       $this->_ref_exchanges_sources[$_evenement] = CExchangeSource::get("$this->_guid-$_evenement", null, true, $this->_type_echange);
     }
+  }
+  
+  function getFormatObjectHandler(CEAIObjectHandler $objectHandler) {
+    $ihe_object_handlers = CIHE::getObjectHandlers();
+    $object_handler_class  = get_class($objectHandler);
+    if (array_key_exists($object_handler_class, $ihe_object_handlers)) {
+      return new $ihe_object_handlers[$object_handler_class];
+    }
+  }
+  
+  function getHL7Version($transaction) {
+    $iti_hl7_version = $this->_configs[$transaction."_hl7_version"];
+    return CHL7::$versions[$iti_hl7_version];
+  }
+  
+  function sendEvent($evenement, CMbObject $mbObject) {
+    $evenement->_sender = $this;
+    
+    $evenement->build($mbObject);    
+    $msg = $evenement->flatten();
   }
 }
 ?>

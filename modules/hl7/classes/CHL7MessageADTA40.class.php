@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Transaction Patient Encounter Management IHE
+ * A40 - Merge patient - HL7
  *  
- * @category IHE
+ * @category HL7
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -12,15 +12,11 @@
  */
 
 /**
- * Class CITI31 
- * Patient Encounter Management
+ * Class CHL7MessageADTA40 
+ * A40 - Merge patient
  */
-CAppUI::requireModuleClass("ihe", "CPAM");
+class CHL7MessageADTA40 {
 
-class CITI31 extends CPAM {
-  
-  
-  
 }
 
 ?>

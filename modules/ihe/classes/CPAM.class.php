@@ -15,10 +15,11 @@
  * Class CPAM 
  * Patient Administration Management
  */
-class CPAM extends CMbObject {
+class CPAM {
   static $evenements = array(
-    'ITI30' => "CITI30",
-    'ITI31' => "CITI31"
+    "A28" => "CHL7MessageADTA28",
+    "A31" => "CHL7MessageADTA31",
+    "A40" => "CHL7MessageADTA40",
   );
 
   function getEvenements() {
@@ -26,9 +27,9 @@ class CPAM extends CMbObject {
   }
   
   function __construct() {
-    $this->evenement = "evenementsPatient";
-    $this->type      = "PAM";
-                
+    $this->type = "PAM";
+
+    
   }
 }
 

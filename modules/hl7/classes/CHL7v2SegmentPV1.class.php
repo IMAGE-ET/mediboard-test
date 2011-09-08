@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Transaction Patient Identity Management IHE
+ * Represents an HL7 PV1 message segment (Patient Visit) - HL7
  *  
- * @category IHE
+ * @category HL7
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -12,13 +12,11 @@
  */
 
 /**
- * Class CITI30 
- * Patient Identity Management
+ * Class CHL7v2SegmentPV1 
+ * PV1 - Represents an HL7 PV1 message segment (Patient Visit)
  */
-CAppUI::requireModuleClass("ihe", "CPAM");
 
-class CITI30 extends CPAM {
-  
+class CHL7v2SegmentPV1 extends CHL7v2Segment {
   
   
 }

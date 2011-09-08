@@ -23,6 +23,7 @@ class CHL7v2Exception extends Exception {
   const FIELD_EMPTY                = 12;
   const TOO_MANY_FIELD_ITEMS       = 13;
   const SEGMENT_MISSING            = 14;
+  const MSH_CODE_MISSING           = 15;
   
   // argument 2 must be named "code" ...
   public function __construct($id, $code = 0) {

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A40 - Merge patient - HL7
+ * A31 - Update person information - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,10 +12,10 @@
  */
 
 /**
- * Class CADTA40
- * A40 - Merge patient
+ * Class CHL7MessageADTA31 
+ * A31 - Add person information
  */
-class CADTA40 extends CADT {
+class CHL7MessageADTA31 {
 
 }
 

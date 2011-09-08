@@ -123,7 +123,7 @@ class CInteropActor extends CMbObject {
     $msg_supported->object_id    = $this->_id;
     $msg_supported->message      = $message;
     $msg_supported->active       = 1;
-    
+
     return $msg_supported->loadMatchingObject();
   }
   

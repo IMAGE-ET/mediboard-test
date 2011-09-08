@@ -12,10 +12,10 @@
  */
 
 /**
- * Class CADTA28 
+ * Class CHL7MessageADTA28 
  * A28 - Add person information
  */
-class CADTA28 extends CADT {
+class CHL7MessageADTA28 {
 
 }
 

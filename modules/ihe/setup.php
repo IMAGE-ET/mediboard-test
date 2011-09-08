@@ -67,7 +67,28 @@ class CSetupihe extends CSetup {
               ADD INDEX (`group_id`);";
     $this->addQuery($query);         
      
-    $this->mod_version = "0.02";
+    $this->makeRevision("0.02");
+    
+    $query = "CREATE TABLE `receiver_ihe_config` (
+                `receiver_ihe_config_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `object_id` INT (11) UNSIGNED,
+                `ITI30_HL7_version` ENUM ('2.1','2.2','2.3','2.3.1','2.4','2.5') DEFAULT '2.5',
+                `ITI31_HL7_version` ENUM ('2.1','2.2','2.3','2.3.1','2.4','2.5') DEFAULT '2.5',
+                `send_all_patients` ENUM ('0','1') DEFAULT '0'
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query); 
+    
+    $query = "ALTER TABLE `receiver_ihe_config` 
+                ADD INDEX (`object_id`);";
+    $this->addQuery($query); 
+    
+    $this->makeRevision("0.03");
+    
+    $query = "ALTER TABLE `exchange_ihe` 
+                ADD `code` VARCHAR (255);";
+    $this->addQuery($query); 
+    
+    $this->mod_version = "0.04";
   }
 }
 

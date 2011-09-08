@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A31 - Update person information - HL7
+ * Admit Discharge Transfer HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,10 +12,10 @@
  */
 
 /**
- * Class CADTA31 
- * A31 - Add person information
+ * Class CHL7v2MessageADT 
+ * Admit Discharge Transfer
  */
-class CADTA31 extends CADT {
+class CHL7v2MessageADT extends CMbObject {
 
 }
 

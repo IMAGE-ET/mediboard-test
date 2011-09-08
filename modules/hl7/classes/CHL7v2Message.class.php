@@ -29,18 +29,18 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   var $subcomponentSeparator = self::DEFAULT_SUBCOMPONENT_SEPARATOR;
   var $nullValue             = self::DEFAULT_NULL_VALUE;
   
-  var $escape_sequences = null;
+  var $escape_sequences   = null;
   var $unescape_sequences = null;
 
-  var $version     = '2.5';
-  var $name        = null;
-  var $description = null;
-  var $lines       = array();
+  var $version      = '2.5';
+  var $name         = null;
+  var $description  = null;
+  var $lines        = array();
   var $current_line = 0;
-  var $errors = array();
-    
+  var $errors       = array();
+  
   function __construct() {
-    //
+    
   }
   
   function parse($data, $parse_body = true) {
