@@ -1081,7 +1081,7 @@ TESTS A EFFECTUER
     $sejour->loadRefRPU();
 		
     // Consultations d'urgences
-    if ($praticien->isUrgentiste() && $sejour->_ref_rpu->_id) {
+    if ($praticien->isUrgentiste() && $sejour->_ref_rpu && $sejour->_ref_rpu->_id) {
       $this->_type = "urg";
     }
 		
