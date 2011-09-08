@@ -45,7 +45,13 @@ function submitCompteRendu(callback){
     mess.stopObserving("click");
   }
   (function(){
+    if (window.pdf_thumbnails && Prototype.Browser.IE) {
+      restoreStyle();
+    }
     var html = CKEDITOR.instances.htmlarea.getData();
+    if (window.pdf_thumbnails && Prototype.Browser.IE) {
+      window.save_style = deleteStyle();
+    }
     $V($("htmlarea"), html, false);
     
     var form = getForm("editFrm");

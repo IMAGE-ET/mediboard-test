@@ -45,13 +45,6 @@ function initCKEditor() {
 	  {{if !$templateManager->valueMode}}
   
       // Le content editable des champs
-      var spans = ck_instance.document.getBody().getElementsByTag("span").$;
-      for(var i in spans) {
-        var span = spans[i];
-        if (span && span.className && (Element.hasClassName(span, "field") || Element.hasClassName(span, "name")))
-          span.contentEditable = false;
-      }
-
       // Les plugins qui ne doivent pas être pris en compte pour le changement de valeur pour contentEditable
       var plugins = ["source", "undo", "redo", "pastefromword"];    
       window.toggleContentEditable = function(state, obj) {
@@ -62,10 +55,18 @@ function initCKEditor() {
         var spans = ck_instance.document.getBody().getElementsByTag("span").$;
         for(var i in spans) {
           var span = spans[i];
-          if (span && span.className && Element.hasClassName(span, "field"))
-            span.contentEditable = state;
+          if (span && span.className && (Element.hasClassName(span, "field") || Element.hasClassName(span, "name"))) {
+            if (state) {
+              span.removeAttribute("contentEditable");
+            }
+            else {
+              span.contentEditable = false;
+            }
+          }
         }
       };
+      
+      window.toggleContentEditable(false);
       
       ck_instance.on('beforeCommandExec' , window.toggleContentEditable.curry(true));
       ck_instance.on('afterCommandExec'  , window.toggleContentEditable.curry(false));
@@ -99,6 +100,12 @@ function initCKEditor() {
     	    }, time_before_thumbs);
         }
   		{{/if}}
+
+		  if (window.pdf_thumbnails && Prototype.Browser.IE) {
+	      window.save_style = deleteStyle();
+	      ck_instance.on("beforePreview", function() { restoreStyle(); });
+	      ck_instance.on("afterPreview", function() { window.save_style = deleteStyle(); });
+	    }
       
   		// Don't close the window with escape
   	  document.stopObserving('keydown', closeWindowByEscape);

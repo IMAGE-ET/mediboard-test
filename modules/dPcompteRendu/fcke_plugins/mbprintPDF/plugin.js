@@ -28,7 +28,13 @@ function mbprintPDF_onclick(editor) {
 }
 
 function streamPDF(editor) {
+  if (window.parent.pdf_thumbnails && window.parent.Prototype.Browser.IE) {
+    window.parent.restoreStyle();
+  }
   var content = editor.getData();
+  if (window.parent.pdf_thumbnails && window.parent.Prototype.Browser.IE) {
+    window.parent.save_style = window.parent.deleteStyle();
+  }
   var form = window.parent.document.forms["download-pdf-form"];
   form.elements.content.value = encodeURIComponent(content);
   form.onsubmit();

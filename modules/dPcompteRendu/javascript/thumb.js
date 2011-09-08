@@ -38,7 +38,13 @@ var Thumb = {
     var content = '';
     
     if (window.CKEDITOR && CKEDITOR.instances.htmlarea.getData) {
+      if (window.pdf_thumbnails && Prototype.Browser.IE) {
+        restoreStyle();
+      }
       content = CKEDITOR.instances.htmlarea.getData();
+      if (window.pdf_thumbnails && Prototype.Browser.IE) {
+        window.save_style = deleteStyle();
+      }
     } else {
       content = $V(form._source);
     }
@@ -170,6 +176,27 @@ function loadOld() {
       clearTimeout(window.thumbs_timeout);
       Thumb.old();
     }
+  }
+}
+
+function restoreStyle() {
+  var instance = CKEDITOR.instances.htmlarea;
+  
+  if (!window.save_style) return;
+  var tag = instance.document.getBody().getFirst();
+  if (tag.$.tagName == "STYLE") return;
+  window.save_style.insertBefore(tag);
+  //tag.insertBeforeMe(window.save_style);
+  
+}
+
+function deleteStyle() {
+  var instance = CKEDITOR.instances.htmlarea;
+  
+  if (!instance.document) return;
+  var styleTag = instance.document.getBody().getFirst();
+  if (styleTag.$.tagName == "STYLE") {
+    return styleTag.remove();
   }
 }
 
