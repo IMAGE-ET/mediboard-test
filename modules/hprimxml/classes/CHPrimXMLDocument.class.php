@@ -620,10 +620,10 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     if(!$referent) {
       $this->addIdentifiantPart($identifiant, "emetteur",  $mbVenue->sejour_id, $referent);
-      if($mbVenue->_num_dossier)
-        $this->addIdentifiantPart($identifiant, "recepteur", $mbVenue->_num_dossier, $referent);
+      if($mbVenue->_NDA)
+        $this->addIdentifiantPart($identifiant, "recepteur", $mbVenue->_NDA, $referent);
     } else {
-      $this->addIdentifiantPart($identifiant, "emetteur",  $mbVenue->_num_dossier, $referent);
+      $this->addIdentifiantPart($identifiant, "emetteur",  $mbVenue->_NDA, $referent);
       
       if(isset($mbVenue->_id400))
         $this->addIdentifiantPart($identifiant, "recepteur", $mbVenue->_id400, $referent);

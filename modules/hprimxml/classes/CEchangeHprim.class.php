@@ -117,8 +117,8 @@ class CEchangeHprim extends CEchangeXML {
     }
     if ($mbObject instanceof CSejour) {
       $this->object_class = "CSejour";
-      if ($mbObject->_num_dossier) {
-        $this->id_permanent = $mbObject->_num_dossier;
+      if ($mbObject->_NDA) {
+        $this->id_permanent = $mbObject->_NDA;
       }
     }
     if ($mbObject instanceof COperation) {

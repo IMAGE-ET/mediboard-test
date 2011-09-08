@@ -301,7 +301,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     );
 
     // Détermine le type de venue depuis la config des numéros de dossier 
-    $type_config = self::getVenueType($sender, $mbVenue->_num_dossier);
+    $type_config = self::getVenueType($sender, $mbVenue->_NDA);
     if ($type_config) {
       $mbVenue->type = $type_config;
     }
@@ -319,7 +319,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     return $mbVenue;
   }
   
-  static function getVenueType($sender, $num_dossier) {
+  static function getVenueType($sender, $nda) {
     $types = array(
       "type_sej_hospi"   => "comp",
       "type_sej_ambu"    => "ambu",
@@ -333,7 +333,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     foreach($types as $config => $type) {
       if (!$sender->_configs[$config]) continue;
       
-      if (preg_match($sender->_configs[$config], $num_dossier)) {
+      if (preg_match($sender->_configs[$config], $nda)) {
         return $type;
       }
     }
@@ -651,12 +651,12 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   
   function trashNumDossier(CSejour $venue, CInteropSender $sender) {
     if (isset($sender->_configs["type_sej_pa"])) {
-      if ($venue->_num_dossier && preg_match($sender->_configs["type_sej_pa"], $venue->_num_dossier)) {
+      if ($venue->_NDA && preg_match($sender->_configs["type_sej_pa"], $venue->_NDA)) {
         // Passage en pa_ de l'id externe
         $num_pa = new CIdSante400();
         $num_pa->object_class = "CSejour";
         $num_pa->tag = $sender->_tag_sejour;
-        $num_pa->id400 = $venue->_num_dossier;
+        $num_pa->id400 = $venue->_NDA;
         if ($num_pa->loadMatchingObject()) {
           $num_pa->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$sender->_tag_sejour;
           $num_pa->last_update = mbDateTime();
@@ -665,7 +665,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
         return false;
       }
     }
-    if ($venue->_num_dossier) {
+    if ($venue->_NDA) {
       return true;
     }
     return false;

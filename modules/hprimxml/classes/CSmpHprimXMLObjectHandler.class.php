@@ -62,12 +62,12 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
           return;
         }
         
-        if (!$mbObject->_num_dossier) {
-          $num_dossier = new CIdSante400();
+        if (!$mbObject->_NDA) {
+          $nda = new CIdSante400();
           //Paramétrage de l'id 400
-          $num_dossier->loadLatestFor($mbObject, $receiver->_tag_sejour);
+          $nda->loadLatestFor($mbObject, $receiver->_tag_sejour);
   
-          $mbObject->_num_dossier = $num_dossier->id400;
+          $mbObject->_NDA = $nda->id400;
         }
         
         if (!$mbObject->_ref_patient->_IPP) {
@@ -109,7 +109,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
           $this->sendEvenementPatient("CHPrimXMLMouvementPatient", $affectation);
         }
         
-        $mbObject->_num_dossier = null;
+        $mbObject->_NDA = null;
       }
     }
     // Traitement Affectation
@@ -129,17 +129,17 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
         $mbObject->_ref_sejour->loadRefPatient();
         $mbObject->_ref_sejour->loadRefPraticien();
       
-        if (!$mbObject->_ref_sejour->_num_dossier) {
-          $num_dossier = new CIdSante400();
+        if (!$mbObject->_ref_sejour->_NDA) {
+          $nda = new CIdSante400();
           //Paramétrage de l'id 400
-          $num_dossier->loadLatestFor($mbObject->_ref_sejour, $receiver->_tag_sejour);
+          $nda->loadLatestFor($mbObject->_ref_sejour, $receiver->_tag_sejour);
   
-          $mbObject->_ref_sejour->_num_dossier = $num_dossier->id400;
+          $mbObject->_ref_sejour->_NDA = $nda->id400;
         }
         
         $this->sendEvenementPatient("CHPrimXMLMouvementPatient", $mbObject);
         
-        $mbObject->_num_dossier = null;
+        $mbObject->_NDA = null;
       }
     }
   }
@@ -169,13 +169,13 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
             continue;
           }
           
-          $sejour->_num_dossier = null;
+          $sejour->_NDA = null;
           $sejour->loadNumDossier($_group->_id);
-          $sejour1_nda = $sejour->_num_dossier;
+          $sejour1_nda = $sejour->_NDA;
 
-          $sejour_eliminee->_num_dossier = null;
+          $sejour_eliminee->_NDA = null;
           $sejour_eliminee->loadNumDossier($_group->_id);
-          $sejour2_nda = $sejour_eliminee->_num_dossier;
+          $sejour2_nda = $sejour_eliminee->_NDA;
           
           // Passage en trash des NDA des séjours
           $tap_NDA = CSejour::getTagNumDossier($_group->_id);
@@ -243,10 +243,10 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
             continue;
           }
           
-          $sejour1_nda = $sejour->_num_dossier = $infos_fus["sejour1_nda"];
+          $sejour1_nda = $sejour->_NDA = $infos_fus["sejour1_nda"];
           
           $sejour_eliminee = $infos_fus["sejourEliminee"];
-          $sejour2_nda = $sejour_eliminee->_num_dossier = $infos_fus["sejour2_nda"];
+          $sejour2_nda = $sejour_eliminee->_NDA = $infos_fus["sejour2_nda"];
 
           // Cas 0 NDA : Aucune notification envoyée
           if (!$sejour1_nda && !$sejour2_nda) {
@@ -256,7 +256,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
           // Cas 1 NDA : Pas de message de fusion mais d'une modification de la venue
           if ((!$sejour1_nda && $sejour2_nda) || ($sejour1_nda && !$sejour2_nda)) {
             if ($sejour2_nda)
-              $sejour->_num_dossier = $sejour2_nda;
+              $sejour->_NDA = $sejour2_nda;
             
             $this->sendEvenementPatient("CHPrimXMLVenuePatient", $sejour);
             continue;
