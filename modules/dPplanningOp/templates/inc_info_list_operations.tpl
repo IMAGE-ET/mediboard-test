@@ -21,12 +21,13 @@
 	
   {{if $_operation->annulee}}
   <th class="category cancelled">
-    <strong>{{tr}}COperation-annulee{{/tr}}</strong>
+    <strong onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}');">{{tr}}COperation-annulee{{/tr}}</strong>
   </th>
   {{else}}
   <td class="text">
     {{mb_include module=dPplanningOp template=inc_vw_operation}}
   </td>
+	{{/if}}
   <td class="narrow">
     <button class="{{if $_operation->_ref_consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}" type="button" onclick="printFicheAnesth('{{$_operation->_ref_consult_anesth->_ref_consultation->_id}}', '{{$_operation->_id}}');">
       Fiche d'anesthésie
@@ -36,7 +37,6 @@
       Feuille de bloc
     </button>
   </td>
-  {{/if}}
 </tr>
 
 {{if $_operation->_back && array_key_exists("check_lists", $_operation->_back)}}
