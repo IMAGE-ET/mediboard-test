@@ -51,7 +51,7 @@ class CEAISejour extends CEAIMbObject {
   }
   
   static function storeSejour(CSejour $newSejour, $NDA) {
-    $newSejour->_num_dossier = $NDA;
+    $newSejour->_NDA = $NDA;
     
     return $newSejour->store();
   }
