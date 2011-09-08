@@ -21,11 +21,6 @@ $operation->loadRefChir();
 $sejour =& $operation->_ref_sejour;
 $sejour->loadRefPatient();
 $sejour->_ref_patient->loadRefPhotoIdentite();
-$dossier_medical = $sejour->loadRefDossierMedical();
-$dossier_medical->loadRefsAntecedents();
-$dossier_medical->loadRefsAllergies();
-$dossier_medical->loadRefsTraitements();
-$dossier_medical->loadRefPrescription();
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -141,8 +141,7 @@ Main.add(function () {
 		<div id="prescription_sejour" style="display: none;"></div>
 	{{/if}}
 	
-	<!-- Dossier Medical et documents-->
-	{{assign var="dossier_medical" value=$sejour->_ref_dossier_medical}}
+	<!-- Documents-->
 	<div id="dossier_tab" style="display:none">
 	  <table class="form">
 	    <tr>
@@ -155,24 +154,6 @@ Main.add(function () {
 	          {{mb_script module="dPcompteRendu" script="modele_selector"}}
 	          {{include file=../../dPplanningOp/templates/inc_documents_operation.tpl}}
 	        </div>
-	      </td>
-	    </tr>
-	    <tr>
-	      <td>
-	        {{if !$dossier_medical->_id}}
-	        <div class="big-info">
-	          Le dossier médical pour ce séjour n'est pas créé, ou ne contient pas d'éléments parmi :
-	          <ul>
-	            <li>{{tr}}CAntecedent{{/tr}}</li>
-	            <li>Diagnostics associés</li>
-	          </ul>
-	          Ces informations doivent être renseignés pendant la consultation de pré-anesthésie
-	        </div>
-	        {{else}}
-	        <div class="text">
-	          {{include file=../../dPpatients/templates/CDossierMedical_complete.tpl object=$dossier_medical}}
-	        </div>
-	        {{/if}}
 	      </td>
 	    </tr>
 	  </table>
