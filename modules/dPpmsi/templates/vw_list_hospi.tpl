@@ -18,7 +18,7 @@ Main.add(function () {
   </tr>
   <tr>
     <th>{{mb_title class=CSejour field=facture}}</th>
-    <th>{{mb_title class=CSejour field=_num_dossier}}</th>
+    <th>{{mb_title class=CSejour field=_NDA}}</th>
     <th>{{mb_label class=CSejour field=praticien_id}}</th>
     <th>{{mb_label class=CSejour field=patient_id}}</th>
     <th>
@@ -40,7 +40,7 @@ Main.add(function () {
     </td>
     <td>
       <strong onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
-        {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
+        {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$_sejour->_NDA}}
       </strong>
     </td>
 

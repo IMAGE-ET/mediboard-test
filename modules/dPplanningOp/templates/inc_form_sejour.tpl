@@ -315,8 +315,8 @@ Main.add( function(){
      </a>
     {{/if}}
     {{tr}}CSejour-msg-informations{{/tr}} 
-		{{if $mode_operation && $sejour->_num_dossier}}
-		{{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
+		{{if $mode_operation && $sejour->_NDA}}
+		{{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}
 		{{/if}}
   </th>
 </tr>

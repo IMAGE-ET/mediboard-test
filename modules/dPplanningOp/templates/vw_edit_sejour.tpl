@@ -103,7 +103,7 @@ function reloadSejours(checkCollision) {
         {{tr}}button-COperation-modeExpert{{/tr}}
       </button>
       
-      Modification du séjour {{$sejour->_view}} {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
+      Modification du séjour {{$sejour->_view}} {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}
     </th>
     {{else}}
     <th colspan="2" class="title">

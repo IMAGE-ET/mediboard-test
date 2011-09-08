@@ -50,7 +50,7 @@ printDossier = function(rpu_id) {
       </div>
 
       {{$object}}
-      {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
+      {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}
     </th>
   </tr>
   {{/if}}

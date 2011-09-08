@@ -6,7 +6,7 @@
       <tr>
         <th class="title" colspan="7">
           {{$sejour->_view}}
-          {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
+          {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}
         </th>
       </tr>
     </thead>

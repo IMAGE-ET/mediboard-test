@@ -262,7 +262,7 @@ function toggleList(list, button) {
   <tr class="sejour">
     <th>Dr {{$curr_sejour->_ref_praticien}}</th>
     <td colspan="3"> 
-      {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$curr_sejour->_num_dossier}}
+      {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$curr_sejour->_NDA}}
       Du {{mb_value object=$curr_sejour field=entree_prevue}}
       au {{mb_value object=$curr_sejour field=sortie_prevue}}
       - ({{mb_value object=$curr_sejour field=type}})

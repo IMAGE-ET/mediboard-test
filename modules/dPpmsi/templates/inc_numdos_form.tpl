@@ -50,7 +50,7 @@
           <input type="hidden" class="notNull" name="object_id" value="{{$sejour->_id}}" />
           <input type="hidden" class="notNull" name="object_class" value="CSejour" />
           <input type="hidden" name="last_update" value="{{$sejour->_ref_numdos->last_update}}" />
-          <em>(Suggestion : {{$sejour->_guess_num_dossier}}) </em>
+          <em>(Suggestion : {{$sejour->_guess_NDA}}) </em>
         </td>
         <td class="button" rowspan="2">
           <button class="submit" type="submit">{{tr}}Validate{{/tr}}</button>

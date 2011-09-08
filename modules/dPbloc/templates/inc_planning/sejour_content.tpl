@@ -17,8 +17,8 @@
 		    <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}');">
 		      {{mb_value object=$sejour field=entree}}
 		    </span>
-		    {{if $_print_numdoss && $sejour->_num_dossier}}
-		      [{{$sejour->_num_dossier}}]
+		    {{if $_print_numdoss && $sejour->_NDA}}
+		      [{{$sejour->_NDA}}]
 		    {{/if}}
 		  </td>
 		  <td class="text">

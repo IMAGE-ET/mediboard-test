@@ -122,7 +122,7 @@ function toggleList(list, button) {
   <tr class="sejour">
     <th class="text">{{$curr_sejour->_ref_praticien->_view}}</th>
     <td colspan="3">
-      {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$curr_sejour->_num_dossier}}
+      {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$curr_sejour->_NDA}}
       Du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}}
       au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}
 			- ({{mb_value object=$curr_sejour field=type}})

@@ -51,7 +51,7 @@
     <td class="cancelled" colspan="10">
       {{if $rpu->mutation_sejour_id}}
       Hospitalisation
-        dossier {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$rpu->_ref_sejour_mutation->_num_dossier}}
+        dossier {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$rpu->_ref_sejour_mutation->_NDA}}
       {{else}}
       {{tr}}Cancelled{{/tr}}
       {{/if}}
@@ -109,7 +109,7 @@
     
     <td class="text sortie {{$sejour->mode_sortie}}">
 		  <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
-		    {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
+		    {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}
 		    {{if !$sejour->sortie_reelle}} 
 		    {{mb_title object=$sejour field=_entree}}
 		    {{/if}}

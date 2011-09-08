@@ -61,7 +61,7 @@
         <th></th>
         <th>{{mb_title class=CIdSante400 field=object_class}}</th>  
         <th>{{mb_title class=CIdSante400 field=last_update}}</th>
-        <th>{{mb_title class=CSejour field=_num_dossier}}</th> 
+        <th>{{mb_title class=CSejour field=_NDA}}</th> 
         <th>{{mb_title class=CIdSante400 field=tag}}</th>
       {{/if}}
     </tr>

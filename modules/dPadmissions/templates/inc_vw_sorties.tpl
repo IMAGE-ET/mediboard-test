@@ -147,7 +147,7 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
       </a>
       {{/foreach}}
       {{/if}}
-      {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier _doss_id=$_sejour->_id}}
+      {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$_sejour->_NDA _doss_id=$_sejour->_id}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_ref_patient->_guid}}');">
         {{$_sejour->_ref_patient->_view}}
       </span>

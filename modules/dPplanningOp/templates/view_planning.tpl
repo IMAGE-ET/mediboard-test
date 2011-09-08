@@ -5,7 +5,7 @@
   <tr>
     <th class="title" colspan="2">
       <span style="float:left;font-size:12px;">
-        [{{$sejour->_num_dossier}}]
+        [{{$sejour->_NDA}}]
       </span>
       <span style="float:right;font-size:12px;">
         {{$sejour->_ref_group->text}}
@@ -105,11 +105,11 @@
   </tr>
   {{/if}}
   
-  {{if $sejour->_num_dossier}}
+  {{if $sejour->_NDA}}
   <tr>
-    <th>{{tr}}CSejour-_num_dossier{{/tr}}</th>
+    <th>{{tr}}CSejour-_NDA{{/tr}}</th>
     <td>
-      [{{$sejour->_num_dossier}}]
+      [{{$sejour->_NDA}}]
     </td>
   </tr>
   {{/if}}

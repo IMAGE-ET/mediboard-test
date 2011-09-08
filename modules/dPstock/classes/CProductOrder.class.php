@@ -535,7 +535,7 @@ class CProductOrder extends CMbMetaObject {
         else {
           $this->_ref_object->loadRefSejour();
           $this->_ref_object->_ref_sejour->loadNumDossier();
-          $num_dos = $this->_ref_object->_ref_sejour->_num_dossier;
+          $num_dos = $this->_ref_object->_ref_sejour->_NDA;
           $this->comments = "Numéro de séjour: $num_dos";
         }
       }

@@ -29,7 +29,7 @@ switch ($object_class) {
 		  $mbSejour->loadNumDossier();
 		  $mbSejour->_ref_patient->loadIPP();
 		  if (isset($_POST["sc_patient_id"  ])) $mbSejour->_ref_patient->_IPP = $_POST["sc_patient_id"  ];
-		  if (isset($_POST["sc_venue_id"    ])) $mbSejour->_num_dossier       = $_POST["sc_venue_id"    ];
+		  if (isset($_POST["sc_venue_id"    ])) $mbSejour->_NDA             = $_POST["sc_venue_id"    ];
 		  if (isset($_POST["cmca_uf_code"   ])) $object->code_uf            = $_POST["cmca_uf_code"   ];
 		  if (isset($_POST["cmca_uf_libelle"])) $object->libelle_uf         = $_POST["cmca_uf_libelle"];
 		}
@@ -45,7 +45,7 @@ switch ($object_class) {
 		  $object->loadNumDossier();
 		  $object->_ref_patient->loadIPP();
 		  if (isset($_POST["sc_patient_id"  ])) $object->_ref_patient->_IPP = $_POST["sc_patient_id"  ];
-		  if (isset($_POST["sc_venue_id"    ])) $object->_num_dossier       = $_POST["sc_venue_id"    ];
+		  if (isset($_POST["sc_venue_id"    ])) $object->_NDA               = $_POST["sc_venue_id"    ];
 		}
     break;
 }

@@ -89,7 +89,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_min_entree_prevue  = null;
   var $_min_sortie_prevue  = null;
   var $_sortie_autorisee   = null;
-  var $_guess_num_dossier  = null;
+  var $_guess_NDA  = null;
   var $_at_midnight        = null;
   var $_couvert_cmu        = null;
   var $_couvert_ald        = null;
@@ -153,7 +153,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_dates_operations          = null;
   var $_dates_consultations       = null;
   var $_codes_ccam_operations     = null;
-  var $_num_dossier               = null;
+  var $_NDA                       = null;
   var $_list_constantes_medicales = null;
   var $_cancel_alerts             = null;
   var $_ref_suivi_medical         = null;
@@ -294,7 +294,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["_date_min_stat"]  = "date";
     $props["_date_max_stat"]  = "date moreEquals|_date_min_stat";
     $props["_filter_type"]    = "enum list|comp|ambu|exte|seances|ssr|psy|urg|consult";
-    $props["_num_dossier"]    = "str";
+    $props["_NDA"]            = "str";
     $props["_ccam_libelle"]   = "bool default|0";
     $props["_coordonnees"]    = "bool default|0";
     $props["_adresse_par"]    = "bool";
@@ -712,14 +712,14 @@ class CSejour extends CCodable implements IPatientRelated {
 
     switch(CAppUI::conf("dPpmsi systeme_facturation")) {
       case "siemens" :
-        $this->_guess_num_dossier = mbTransformTime(null, $this->entree_prevue, "%y");
-        $this->_guess_num_dossier .= 
+        $this->_guess_NDA = mbTransformTime(null, $this->entree_prevue, "%y");
+        $this->_guess_NDA .= 
           $this->type == "exte" ? "5" :
           $this->type == "ambu" ? "4" : "0";
-        $this->_guess_num_dossier .="xxxxx";
+        $this->_guess_NDA .="xxxxx";
         break;
       default: 
-        $this->_guess_num_dossier = "-";
+        $this->_guess_NDA = "-";
     }
     $this->_at_midnight = ($this->_date_entree_prevue != $this->_date_sortie_prevue);
 
@@ -1458,7 +1458,7 @@ class CSejour extends CCodable implements IPatientRelated {
     
     // Aucune configuration de numéro de dossier
     if (null == $tag_dossier = $this->getTagNumDossier($group_id)) {
-      $this->_num_dossier = str_pad($this->_id, 6, "0", STR_PAD_LEFT);
+      $this->_NDA = str_pad($this->_id, 6, "0", STR_PAD_LEFT);
       return;
     }  
     
@@ -1468,24 +1468,24 @@ class CSejour extends CCodable implements IPatientRelated {
     
     // Stockage de la valeur de l'id400
     $this->_ref_numdos  = $id400;
-    $this->_num_dossier = $id400->id400;
+    $this->_NDA = $id400->id400;
   }
   
-  function loadFromNumDossier($num_dossier) {
+  function loadFromNumDossier($nda) {
     // Aucune configuration de numéro de dossier
     if (null == $tag_dossier = $this->getTagNumDossier()) {
       return;
     }  
     
     $idDossier = new CIdSante400();
-    $idDossier->id400 = $num_dossier;
+    $idDossier->id400 = $nda;
     $idDossier->tag = $tag_dossier;
     $idDossier->object_class = $this->_class;
     $idDossier->loadMatchingObject();
     
     if ($idDossier->_id) {
       $this->load($idDossier->object_id);
-      $this->_num_dossier = $idDossier->id400;
+      $this->_NDA = $idDossier->id400;
     }
   }
     
@@ -1594,9 +1594,9 @@ class CSejour extends CCodable implements IPatientRelated {
     $template->addDateProperty("Hospitalisation - Date sortie", $this->sortie_prevue);
     
     $this->loadNumDossier();
-    $template->addProperty("Sejour - Numéro de dossier"       , $this->_num_dossier );
+    $template->addProperty("Sejour - Numéro de dossier"       , $this->_NDA );
     $template->addBarcode ("Sejour - Code barre ID"           , "SID$this->_id"     );
-    $template->addBarcode ("Sejour - Code barre NDOS"         , "NDOS$this->_num_dossier");
+    $template->addBarcode ("Sejour - Code barre NDOS"         , "NDOS$this->_NDA");
     
     $template->addDateProperty("Sejour - Date entrée"         , $this->entree);
     $template->addTimeProperty("Sejour - Heure entrée"        , $this->entree);
@@ -1890,7 +1890,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $this->loadRefPraticien();
     $this->loadNumDossier();
     return array("DATE ENT" => mbDateToLocale($this->entree), "PRAT RESPONSABLE" => $this->_ref_praticien->_view,
-                 "NDOS"     => $this->_num_dossier); 
+                 "NDOS"     => $this->_NDA); 
   }
   
   function checkMerge($sejours = array()/*<CSejour>*/) {

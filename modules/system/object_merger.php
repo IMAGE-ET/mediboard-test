@@ -48,7 +48,7 @@ if (class_exists($objects_class) && count($objects_id)) {
     $extid = array();
     
     foreach($objects as $_object) {
-      if ($_object instanceof CSejour && $_object->_num_dossier ||
+      if ($_object instanceof CSejour && $_object->_NDA ||
             $_object instanceof CPatient && $_object->_IPP) {
         $extid[] = $_object;
       }

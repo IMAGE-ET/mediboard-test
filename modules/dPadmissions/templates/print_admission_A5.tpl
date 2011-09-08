@@ -71,7 +71,7 @@
   </tr>
 
   <tr>
-    <th class="category" colspan="4">Admission {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$curr_adm->_num_dossier}}</th>
+    <th class="category" colspan="4">Admission {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$curr_adm->_NDA}}</th>
   </tr>
   
   <tr>

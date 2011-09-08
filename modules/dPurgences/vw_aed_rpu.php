@@ -48,7 +48,7 @@ if ($rpu->_id || $rpu->sejour_id) {
   // Chargement de l'IPP ($_IPP)
   $patient->loadIPP();
 	
-  // Chargement du numero de dossier ($_num_dossier)
+  // Chargement du numero de dossier ($_NDA)
   $sejour->loadNumDossier();
   $sejour->loadRefPraticien(1);
   $sejour->loadRefsNotes();

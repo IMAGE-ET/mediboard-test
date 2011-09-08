@@ -46,7 +46,7 @@ foreach ($listIdSante400 as $_idSante400) {
     continue;
   }
   // L'ancien est à mettre en trash
-  if ($_idSante400->id400 == $object->_num_dossier) {
+  if ($_idSante400->id400 == $object->_NDA) {
     $_idSante400->tag = CAppUI::conf("dPplanningOp CSejour tag_dossier_trash") .$tag;
     if ($msg = $_idSante400->store()) {
       CAppUI::stepAjax($msg, UI_MSG_ERROR); 

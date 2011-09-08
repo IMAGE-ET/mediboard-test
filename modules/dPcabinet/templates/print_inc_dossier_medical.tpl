@@ -1,8 +1,8 @@
 <tr>
   <th class="category" colspan="4">
     Dossier médical
-    {{if $sejour->_num_dossier}}
-     - [{{mb_value object=$sejour field="_num_dossier"}}]
+    {{if $sejour->_NDA}}
+     - [{{mb_value object=$sejour field="_NDA"}}]
     {{/if}}
   </th>
 </tr>

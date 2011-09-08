@@ -44,7 +44,7 @@ Voir les séjour :
     <th>{{mb_title class=CPatient field=_age}}</th>
     <th>{{mb_label class=CPatient field=adresse}}</th>
     <th colspan="2">{{mb_label class=CSejour field=_entree}}</th>
-    <th>{{mb_title class=CSejour field=_num_dossier}}</th>
+    <th>{{mb_title class=CSejour field=_NDA}}</th>
   </tr>
 
   {{foreach from=$patients item=_patient}}
@@ -98,12 +98,12 @@ Voir les séjour :
 			</big>
 		</td>
     <td {{if ($_sejour->annule == 1)}}class="cancelled"{{/if}}>
-    	{{if !$_sejour->_num_dossier}} 
+    	{{if !$_sejour->_NDA}} 
        <div class="warning">
           {{tr}}None{{/tr}}
        </div>
     	{{else}}
-      <strong>{{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier _doss_id=$_sejour->_id}}</strong>
+      <strong>{{mb_include module=dPplanningOp template=inc_vw_numdos nda=$_sejour->_NDA _doss_id=$_sejour->_id}}</strong>
     	{{/if}}
 		</td>
     

@@ -55,7 +55,7 @@ if ($idSante400->_id) {
   
   foreach ($listIdSante400 as $key=>$_idSante400) {
     $_idSante400->loadRefs();
-    if (!$idSante400_id && $_idSante400->id400 == $object->_num_dossier) {
+    if (!$idSante400_id && $_idSante400->id400 == $object->_NDA) {
       $idSante400_id = $_idSante400->_id;
     }
   }

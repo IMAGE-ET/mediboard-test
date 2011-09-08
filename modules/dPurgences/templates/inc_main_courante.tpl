@@ -144,7 +144,7 @@
       <a href="{{$rpu_link}}">
       	<span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
           {{mb_value object=$_sejour field=_entree date=$date}}
-         {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
+         {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$_sejour->_NDA}}
         </span>
       </a>
 								

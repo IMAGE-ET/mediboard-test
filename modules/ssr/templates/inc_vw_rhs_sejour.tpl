@@ -75,7 +75,7 @@
 		    
 		    <td class="{{$arretee}}" style="text-align: center;">
 		      <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
-		       {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
+		       {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$_sejour->_NDA}}
 		      </span>
 		      <div class="opacity-60">
 		       {{mb_value object=$_sejour field=service_id}}

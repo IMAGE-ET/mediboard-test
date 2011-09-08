@@ -42,7 +42,7 @@ if($nb_etabs > 1) {
 	$where["tag"] = " = '$tag_dossier'";
 	$where["object_class"] = " = 'CSejour'";
 	$id400 = new CIdSante400;
-	$res_current_etab["CSejour-_num_dossier"] = $id400->countList($where);
+	$res_current_etab["CSejour-_NDA"] = $id400->countList($where);
 	
 	// - Patients IPP
 	$tag_ipp = CPatient::getTagIPP($current_group);
