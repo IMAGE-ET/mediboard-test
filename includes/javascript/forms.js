@@ -439,7 +439,7 @@ function prepareForms(root) {
     if (App.readonly) {
       makeReadOnly(root);
     }
-		
+    
     root.select("form:not(.prepared)").each(prepareForm);
     
     root.select("button.singleclick").each(function(button) {
@@ -462,23 +462,36 @@ function prepareForms(root) {
   } catch (e) {}
 }
 
+function serializeForm(form, options) {
+  options = Object.extend({
+    useDollarV: false
+  }, options);
+  
+  var i = 0, 
+      element, 
+      result = {};
+  
+  while (element = form.elements[i++]) {
+    if (element.name && !element.disabled && (element.checked || (element.type != "radio" && element.type != "checkbox"))) {
+      result[element.name] = (options.useDollarV ? $V(element) : element.value);
+    }
+  }
+  
+  return result;
+}
+
 function submitFormAjax(oForm, ioTarget, oOptions) {
   // the second test is only for IE
   if (oForm.attributes.onsubmit &&
       oForm.attributes.onsubmit.nodeValue &&
       !oForm.onsubmit()) return;
 
-  var url = new Url, i = 0, oElement;
-  while (oElement = oForm.elements[i++]) {
-    if (!oElement.disabled && ((oElement.type != "radio" && oElement.type != "checkbox") || oElement.checked)) {
-      url.addParam(oElement.name, oElement.value);
-    }
-  }
-
   oOptions = Object.extend({
     method: oForm.method
   }, oOptions);
 
+  var url = new Url;
+  url.mergeParams(serializeForm(oForm, oOptions));
   url.requestUpdate(ioTarget, oOptions);
 }
 
@@ -510,23 +523,10 @@ function onSubmitFormAjax(oForm, oOptions, ioTarget) {
   }
 
   // Build url
-  var url = new Url, i = 0, oElement;
-  
-  while (oElement = oForm.elements[i++]) {
-    if (!oElement.disabled && ((oElement.type != "radio" && oElement.type != "checkbox") || oElement.checked)) {
-      if (oOptions.useDollarV) {
-        url.addParam(oElement.name, $V(oElement));
-      }
-      else
-        url.addParam(oElement.name, oElement.value);
-    }
-  }
-
-  // Launch
-  
+  var url = new Url;
+  url.mergeParams(serializeForm(oForm, oOptions));
   url.requestUpdate(ioTarget, oOptions);
   
-  // return
   return false;
 }
 
@@ -537,17 +537,12 @@ function submitFormAjaxOffline(oForm, ioTarget, oOptions) {
       oForm.attributes.onsubmit.nodeValue &&
       !oForm.onsubmit()) return;
   
-  var url = new Url, i = 0, oElement;
-  while (oElement = oForm.elements[i++]) {
-    if ((oElement.type != "radio" && oElement.type != "checkbox") || oElement.checked) {
-      url.addParam(oElement.name, oElement.value);
-    }
-  }
-
   oOptions = Object.extend({
     method : "post"
   }, oOptions);
-
+  
+  var url = new Url;
+  url.mergeParams(serializeForm(oForm, oOptions));
   url.requestUpdateOffline(ioTarget, oOptions);
 }
 
@@ -570,7 +565,34 @@ Object.extend(Form, {
       $V(form.elements[pair.key], pair.value);
     });
   },
-  onSubmitComplete: Prototype.emptyFunction
+  onSubmitComplete: Prototype.emptyFunction,
+  multiSubmit: function(forms, options) {
+    options = Object.extend({
+      useDollarV: false,
+      check: checkForm,
+      target: SystemMessage.id
+    }, options);
+  
+    if (options.check && !$A(forms).all(options.check)) {
+      return false;
+    }
+    
+    var data = [];
+    forms.each(function(form){
+      data.push({
+        method: form.method,
+        data:   serializeForm(form, options)
+      });
+    });
+    
+    options.method = "post";
+    
+    var url = new Url;
+    url.addParam("data",  Object.toJSON(data));
+    url.addParam("m",     "system");
+    url.addParam("dosql", "do_multirequest");
+    url.requestUpdate(options.target, options);
+  }
 });
 
 // Form getter
