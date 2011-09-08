@@ -312,6 +312,10 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   }
   
   function initEscapeSequences() {
+    if (!empty($this->escape_sequences)) {
+      return;
+    }
+    
     $delimiters = array(
       $this->fieldSeparator        => "F",
       $this->componentSeparator    => "S",
@@ -325,6 +329,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   }
   
   function escape($str){
+    $this->initEscapeSequences();
     return strtr($str, $this->escape_sequences);
   }
   
@@ -368,28 +373,8 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     return $str;
   }
   
-  static function highlight_er7_str($str, self $message){
-    $msg = $message->data;
-    $msg = str_replace("\r\n", "\n", $msg);
-    
-    // highlight segment name
-    $msg = preg_replace("/^([A-Z]{2}[A-Z0-9])/m", '<strong>$1</strong>', $msg);
-    $msg = preg_replace("/^(.*)/m", '<div class="segment">$1</div>', $msg); // we assume $message->segmentTerminator is always \n
-    
-    $msg = str_replace("\n", "", $msg);
-    
-    $pat = array(
-      "&" => "&amp;",
-      $message->fieldSeparator => "<span class='fs'>$message->fieldSeparator</span>",
-      $message->componentSeparator => "<span class='cs'>$message->componentSeparator</span>",
-      $message->subcomponentSeparator => "<span class='scs'>$message->subcomponentSeparator</span>",
-      $message->repetitionSeparator => "<span class='re'>$message->repetitionSeparator</span>",
-    );
-    
-    $seps = preg_quote($message->fieldSeparator.$message->componentSeparator.$message->subcomponentSeparator.$message->repetitionSeparator);
-    $msg = preg_replace("/([^$seps]+)/", '<i>$1</i>', $msg);
-    
-    return "<pre class='er7'>".strtr($msg, $pat)."</pre>";
+  function encoding_characters() {
+    return $this->fieldSeparator.$this->componentSeparator.$this->subcomponentSeparator.$this->escapeCharacter.$this->repetitionSeparator;
   }
   
   function highlight_er7($data = null){
@@ -399,27 +384,26 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     // highlight segment name
     $msg = preg_replace("/^([A-Z]{2}[A-Z0-9])/m", '<strong>$1</strong>', $msg);
     $msg = preg_replace("/^(.*)/m", '<div class="segment">$1</div>', $msg); // we assume $message->segmentTerminator is always \n
-    
     $msg = str_replace("\n", "", $msg);
     
     $pat = array(
       "&" => "&amp;",
-      $this->fieldSeparator => "<span class='fs'>$this->fieldSeparator</span>",
-      $this->componentSeparator => "<span class='cs'>$this->componentSeparator</span>",
+      $this->fieldSeparator        => "<span class='fs'>$this->fieldSeparator</span>",
+      $this->componentSeparator    => "<span class='cs'>$this->componentSeparator</span>",
       $this->subcomponentSeparator => "<span class='scs'>$this->subcomponentSeparator</span>",
-      $this->repetitionSeparator => "<span class='re'>$this->repetitionSeparator</span>",
+      $this->repetitionSeparator   => "<span class='re'>$this->repetitionSeparator</span>",
     );
     
-    $seps = preg_quote($this->fieldSeparator.$this->componentSeparator.$this->subcomponentSeparator.$this->repetitionSeparator);
+    $seps = preg_quote($this->encoding_characters());
     $msg = preg_replace("/([^$seps]+)/", '<i>$1</i>', $msg);
     
     return "<pre class='er7'>".strtr($msg, $pat)."</pre>";
   }
   
   function __toString(){
-  	// Il y a des lignes vides a cause des goupes imbriqués
-  	$str = parent::__toString();
-		$sep = preg_quote($this->getMessage()->segmentTerminator);
+    // Il y a des lignes vides a cause des goupes imbriqués
+    $str = parent::__toString();
+    $sep = preg_quote($this->getMessage()->segmentTerminator);
     return preg_replace("/$sep+/", $sep, $str);
   }
 }

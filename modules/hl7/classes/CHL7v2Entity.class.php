@@ -28,6 +28,8 @@ abstract class CHL7v2Entity extends CHL7v2 {
     $this->data = $data;
   }
   
+  function fill($items) {}
+  
   function getDescription() {
     return CHL7v2XPath::queryTextNode($this->getSpecs(), "description");
   }

@@ -29,6 +29,27 @@ class CHL7v2DataTypeComposite extends CHL7v2DataType {
     //
   }
   
+  function toHL7($components, CHLv2Field $field){
+    $hl7 = array();
+    
+    foreach($components as $k => $component) {
+      if (!array_key_exists($k, $this->components)) {
+        break;
+      }
+      
+      $component_spec = $this->components[$k];
+      
+      /*if (!$component_spec instanceof self) {
+        mbTrace($component);
+        $component = reset($component); // @todo ajouter une exception si jamais on a plusieurs elt
+      }*/
+      
+      $hl7[] = $component_spec->toHL7($component, $field);
+    }
+    
+    return $hl7;
+  }
+  
   function validate($components, CHL7v2Field $field) {
     // Happens for ST, ID, NM, etc (they are nearly base types, they were not split as sub-sub-component)
     if (!is_array($components)) {
@@ -36,10 +57,10 @@ class CHL7v2DataTypeComposite extends CHL7v2DataType {
     }
     
     foreach($components as $k => $component) {
-      if (!isset($this->components[$k])) {
-        //mbTrace($this->components);
+      if (!array_key_exists($k, $this->components)) {
         break;
       }
+      
       if (!$this->components[$k]->validate($component, $field)) {
         $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $this->type, $field);
         return false;

@@ -71,7 +71,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     
     $i = 0;
     foreach($specs->elements->field as $_spec){
-      if (!isset($fields[$i])) {
+      if (!array_key_exists($i, $fields)) {
         break;
       }
       
@@ -79,6 +79,38 @@ class CHL7v2Segment extends CHL7v2Entity {
       
       $field = new CHL7v2Field($this, $_spec);
       $field->parse($_data);
+      
+      $this->fields[] = $field;
+    }
+  }
+  
+  function fill($fields) {
+    if (!$this->name) return;
+    
+    $specs = $this->getSpecs();
+    $message = $this->getMessage();
+    
+    if ($this->name === "MSH") {
+      // Encoding characters without the field separator
+      $fields[1] = substr($message->encoding_characters(), 1); 
+      
+      // Message type
+      $fields[8] = $message->name;
+      
+      // Version Id
+      $fields[11] = $message->version;
+    }
+    
+    $i = 0;
+    foreach($specs->elements->field as $_spec){
+      if (!array_key_exists($i, $fields)) {
+        break;
+      }
+      
+      $_data = $fields[$i++];
+      
+      $field = new CHL7v2Field($this, $_spec);
+      $field->fill($_data);
       
       $this->fields[] = $field;
     }
@@ -99,14 +131,29 @@ class CHL7v2Segment extends CHL7v2Entity {
     return $this->getSchema(self::PREFIX_SEGMENT_NAME, $this->name);
   }
   
+  static function create($name, CHL7v2SegmentGroup $parent) {
+    $class = "CHL7v2Segment$name";
+    
+    if (class_exists($class)) {
+      $segment = new $class($parent);
+    }
+    else {
+      $segment = new self($parent);
+    }
+    
+    $segment->name = $name;
+    
+    return $segment;
+  }
+  
   function __toString(){
     $sep = $this->getMessage()->fieldSeparator;
-		$fields = $this->fields;
-		
-  	if ($this->name === "MSH") {
-  		array_shift($fields);
-  	}
-		
+    $fields = $this->fields;
+    
+    if ($this->name === "MSH") {
+      array_shift($fields);
+    }
+    
     return $this->name.$sep.implode($sep, $fields);
   }
 }

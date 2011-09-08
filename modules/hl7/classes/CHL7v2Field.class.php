@@ -53,13 +53,32 @@ class CHL7v2Field extends CHL7v2Entity {
     }*/
     
     $this->items = array();
-    foreach($items as $_item) {
-    	$_field_item = new CHL7v2FieldItem($this);
-			$_field_item->parse($_item);
+    
+    foreach($items as $components) {
+      $_field_item = new CHL7v2FieldItem($this);
+      $_field_item->parse($components);
       $this->items[] = $_field_item;
     }
     
     $this->validate();
+  }
+  
+  function fill($items) {
+    if (!isset($items)) {
+      return;
+    }
+    
+    if (!is_array($items)) {
+      $items = array($items);
+    }
+    
+    $this->items = array();
+    
+    foreach($items as $components) {
+      $_field_item = new CHL7v2FieldItem($this);
+      $_field_item->fill($components);
+      $this->items[] = $_field_item;
+    }
   }
   
   function validate() {
@@ -73,7 +92,7 @@ class CHL7v2Field extends CHL7v2Entity {
     
     // The timestamp case, where Time contains TimeStamp data
     if (!$this->_ts_fixed && $this->datatype === "TS") {
-      $specs->elements->field[0]->datatype = "TimeStamp";
+      //$specs->elements->field[0]->datatype = "TimeStamp";
     }
     
     $this->_ts_fixed = true;
@@ -101,8 +120,8 @@ class CHL7v2Field extends CHL7v2Entity {
   function getMessage(){
     return $this->owner_segment->getMessage();
   }
-	
-	function __toString(){
-		return implode($this->getMessage()->repetitionSeparator, $this->items);
-	}
+  
+  function __toString(){
+    return implode($this->getMessage()->repetitionSeparator, $this->items);
+  }
 }

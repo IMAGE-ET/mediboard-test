@@ -22,8 +22,8 @@ class CHL7v2FieldItem {
     $this->field = $field;
     $this->specs = $field->getSpecs();
   }
-	
-	function parse($data) {
+  
+  function parse($data) {
     $this->data = $data;
     
     $message = $this->getMessage();
@@ -42,39 +42,61 @@ class CHL7v2FieldItem {
     }
     
     $this->components = $components;
-	}
+  }
+  
+  function fill($components) {
+    if (!is_array($components)) {
+      $components = array($components);
+    }
+    
+    $specs = $this->getSpecs();
+    
+    foreach($components as &$sub_compoments) {
+      if (!is_array($sub_compoments)) {
+        $sub_compoments = array($sub_compoments);
+      }
+    }
+    
+    $this->components = $specs->toHL7($components, $this->field);
+  }
+  
+  /**
+   * @return CHL7v2DataType
+   */
+  function getSpecs(){
+    return $this->composite_specs = CHL7v2DataType::load($this->field->datatype, $this->field->getVersion());
+  }
   
   function validate(){
     $field = $this->field;
+    $specs = $this->getSpecs();
     
-    $this->composite_specs = CHL7v2DataType::load($field->datatype, $field->getVersion());
-    
-    if (!$this->composite_specs->validate($this->components, $field)) {
+    if (!$specs->validate($this->components, $field)) {
       $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, var_export($this->components, true), $field);
     }
   }
   
   function getValue() {
-    return $this->composite_specs->toMB($this->components, $this->field);
+    return $this->getSpecs()->toMB($this->components, $this->field);
   }
-	
-	function getMessage(){
-		return $this->field->getMessage();
-	}
+  
+  function getMessage(){
+    return $this->field->getMessage();
+  }
   
   function __toString(){
-  	$message = $this->getMessage();
+    $message = $this->getMessage();
     $keep_original = $this->field->keep();
-  	$comp = array();
-		
-		foreach($this->components as $sub_compoments) {
-			if (!$keep_original) {
-				$sub_compoments = array_map(array($message, "escape"), $sub_compoments);
-			}
-			
-			$comp[] = implode($message->subcomponentSeparator, $sub_compoments);
-		}
-		
+    $comp = array();
+    
+    foreach($this->components as $sub_compoments) {
+      if (!$keep_original) {
+        $sub_compoments = array_map(array($message, "escape"), $sub_compoments);
+      }
+      
+      $comp[] = implode($message->subcomponentSeparator, $sub_compoments);
+    }
+    
     return implode($message->componentSeparator, $comp);
   }
 }

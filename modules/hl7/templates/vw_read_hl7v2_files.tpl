@@ -19,6 +19,11 @@ var Action = {
     url.requestUpdate("read_hl7_file");
   },
   
+  create: function () {
+    var url = new Url(this.module, "ajax_write_hl7v2");
+    url.requestUpdate("read_hl7_file");
+  },
+  
   triggerPatientModif: function () {
     var url = new Url();
     url.addParam("m", this.module);
@@ -31,6 +36,10 @@ var Action = {
 
 <button type="button" class="new" onclick="Action.read()">
   {{tr}}Read{{/tr}}
+</button>
+
+<button type="button" class="new" onclick="Action.create()">
+  {{tr}}Creation{{/tr}}
 </button>
 
 <button type="button" class="new" onclick="Action.triggerPatientModif()">
