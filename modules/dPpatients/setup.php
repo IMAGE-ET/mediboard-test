@@ -1278,8 +1278,13 @@ class CSetupdPpatients extends CSetup {
       ADD `INS` CHAR(22) AFTER `matricule`";
     $this->addQuery($query);
     
-    $this->mod_version = "1.18";
+    $this->makeRevision("1.18");
+    $query = "ALTER TABLE `patients`
+      CHANGE `INS` `INSC` CHAR(22),
+      ADD `INSC_date` DATETIME AFTER `INSC`";
+    $this->addQuery($query);
     
+    $this->mod_version = "1.19";
     
   }
 }

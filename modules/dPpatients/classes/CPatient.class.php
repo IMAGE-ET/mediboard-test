@@ -98,7 +98,7 @@ class CPatient extends CMbObject {
   var $incapable_majeur = null;
   var $ATNC             = null;
   var $matricule        = null;
-  var $INS              = null;
+  var $INSC             = null;
   
   var $code_regime      = null;
   var $caisse_gest      = null;
@@ -179,6 +179,7 @@ class CPatient extends CMbObject {
   var $assure_matricule             = null;
   
   // Other fields
+  var $INSC_date                    = null;
   var $date_lecture_vitale          = null;
   var $_static_cim10                = null;
   var $_pays_naissance_insee        = null;
@@ -278,7 +279,7 @@ class CPatient extends CMbObject {
     $specs["medecin_traitant_declare"] = "bool";
     $specs["medecin_traitant"]  = "ref class|CMedecin";
     $specs["matricule"]         = "code insee confidential mask|9S99S99S9xS999S999S99";
-    $specs["INS"]               = "str length|22";
+    $specs["INSC"]              = "str length|22";
     $specs["code_regime"]       = "numchar length|2";
     $specs["caisse_gest"]       = "numchar length|3";
     $specs["centre_gest"]       = "numchar length|4";
@@ -374,6 +375,7 @@ class CPatient extends CMbObject {
     $specs["assure_profession"]           = "str autocomplete";
     $specs["assure_rques"]                = "text";
     $specs["assure_matricule"]            = "code insee confidential mask|9S99S99S99S999S999S99";
+    $specs["INSC_date"]                   = "dateTime";
     $specs["date_lecture_vitale"]         = "dateTime";
     $specs["_id_vitale"]                  = "num";
     $specs["_pays_naissance_insee"]       = "str";
@@ -534,6 +536,8 @@ class CPatient extends CMbObject {
       $patient_vitale = new CPatient;
       $patient_vitale->getPropertiesFromVitale();
       $patient_vitale->date_lecture_vitale = mbDateTime();
+      $patient_vitale->calculINS_C();
+      
       foreach (array_keys($this->getPlainFields()) as $field) {
         $vitale_value = $patient_vitale->$field;
         if ($vitale_value || $vitale_value === "0") {
@@ -1757,20 +1761,29 @@ class CPatient extends CMbObject {
     return true;
   }
   
-  function calculINS_C() {
-    $norm = $this->prenom;
-
-    if ($this->prenom_2) {
-      $norm .= " " . $this->prenom_2;
+  function calculINS_C($prenom=null, $naissance=null, $matricule=null) {
+    $norm = $prenom;
+    
+    if ($norm !== null ){
+      if (!$norm){ 
+        $norm=" ";
+      }
     }
-    if ($this->prenom_3) {
-      $norm .= " " . $this->prenom_3;
-    }
-    if ($this->prenom_4) {
-      $norm .= " " . $this->prenom_4;
-    }
-    if (!$norm) {
-      $norm = " ";
+    else {
+      $norm = $this->prenom;
+  
+      if ($this->prenom_2) {
+        $norm .= " " . $this->prenom_2;
+      }
+      if ($this->prenom_3) {
+        $norm .= " " . $this->prenom_3;
+      }
+      if ($this->prenom_4) {
+        $norm .= " " . $this->prenom_4;
+      }
+      if (!$norm) {
+        $norm = " ";
+      }
     }
     
     // Normalisation des caractères
@@ -1798,10 +1811,12 @@ class CPatient extends CMbObject {
     if (strlen($norm) > 10) {
       $norm = substr($norm, 0, 10);
     }
-    $this->_firstname_norm = $norm;
     
     // check birthdate
-    $birthdate = mbTransformTime($this->naissance, null, "%d/%m/%Y");
+    $birthdate = $naissance;
+    if ($birthdate === null) {
+      $birthdate = mbTransformTime($this->naissance, null, "%d/%m/%Y");
+    }
 
     if(!$birthdate){ 
       $birthdate="000000";
@@ -1821,12 +1836,14 @@ class CPatient extends CMbObject {
     else {
       return "date de naissance non valide";
     }
-    
-    $this->_birthdate_norm = $birthdate;
 
-    // check $nir 
-    // contrôler avec la clef
-    $nir = $this->matricule;
+    // Check $nir 
+    // Contrôler avec la clef
+    $nir = $matricule;
+    if ($nir === null) {
+      $nir = $this->matricule;
+    }
+    
     if (preg_match ("/^([0-9]{7,8}[A-Z])$/i", $nir)) {
       return "Matricule incomplet";
     }
@@ -1843,15 +1860,15 @@ class CPatient extends CMbObject {
       return "Matricule incorrect, la clé n'est pas valide";
     }
       
-    //Création de la graine
-    $this->_seed = $norm.$birthdate.$code;
+    // Création de la graine
+    $seed = $norm.$birthdate.$code;
     
-    //hash de la graine
-    $this->_hash_seed = hash("sha256", $this->_seed);
+    // Hash de la graine
+    $hash_seed = hash("sha256", $seed);
     
     // Calcul de l'INS-C
-    $sha_hex = substr($this->_hash_seed, 0, 16);
-    $sha_dec = $this->bchexdec($sha_hex);
+    $sha_hex = substr($hash_seed, 0, 16);
+    $sha_dec = CPatient::bchexdec($sha_hex);
     $sha_dec = explode(".", $sha_dec);
     $sha_dec = $sha_dec[0];
     
@@ -1864,8 +1881,21 @@ class CPatient extends CMbObject {
     if (strlen($cle)<2){
       $cle = str_pad($cle, 2, "0", STR_PAD_LEFT);
     }
-
-    $this->INS = $sha_dec . $cle; 
+    
+    if ($prenom !== null && $naissance !== null && $matricule !== null) {
+      return array(
+        "prenom_norm" => $norm,
+        "naissance_norm" => $birthdate,
+        "seed" => $seed,
+        "hash_seed" => $hash_seed,
+        "insc" => $sha_dec,
+        "cle_insc" => $cle
+      );
+    }
+    else {
+      $this->INSC = $sha_dec . $cle;
+      $this->INSC_date = mbDateTime();
+    } 
   }
   
   function bchexdec($hex) {
