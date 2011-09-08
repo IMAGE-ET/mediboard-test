@@ -19,7 +19,8 @@ refreshListProtocole = function(oForm){
   if(oFormFilter.praticien_id.value || oFormFilter.function_id.value || oFormFilter.group_id.value){
 	  submitFormAjax(oForm, 'systemMsg', { 
 	    onComplete : function() { 
-	       Protocole.refreshList(oForm.prescription_id.value) 
+	       Protocole.refreshList(oForm.prescription_id.value);
+				 window.tabProtocoles.setActiveTab("creation_prot");
 	    } 
 	  });
   }

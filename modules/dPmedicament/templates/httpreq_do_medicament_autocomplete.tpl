@@ -10,14 +10,14 @@
 
 
 <ul>
-  {{foreach from=$produits item=produit}}
+	{{foreach from=$produits item=produit}}
 	  {{assign var=code_cip value=$produit->CodeCIP}}
     <li style="text-align: left;">
       <small style="display: none;" class="code-cip">{{$produit->CodeCIP}}</small>
       <small style="display: none;" class="code-ucd">{{$produit->CodeUCD}}</small>
       <small style="display: none;" class="code-cis">{{$produit->code_cis}}</small>
 			Produit:
-			<strong>
+			<strong class="libelle_ucd">
 			
 			{{if $fast_access && $protocoles.$code_cip|@count}}
         <img src="images/icons/downarrow.png" style="float: right"/>

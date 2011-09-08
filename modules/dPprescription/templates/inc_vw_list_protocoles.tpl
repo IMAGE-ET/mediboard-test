@@ -26,18 +26,13 @@ Main.add(function(){
 });
 </script>
 
-{{if $praticien_id || $function_id || $group_id}}
-<ul id="list_protocoles_prescription" class="control_tabs">
+<ul id="list_protocoles_prescription" class="control_tabs small">
 	{{foreach from=$protocoles key=owner item=_protocoles_by_owner}}
 	<li><a href="#list_prot_{{$owner}}" {{if !$_protocoles_by_owner|@count}}class="empty"{{/if}}>{{tr}}CPrescription._owner.{{$owner}}{{/tr}}</a></li>
 	{{/foreach}}
 </ul>
 <hr class="control_tabs" />
-{{else}}
-<div class="small-info">
-	Veuillez sélectionner un praticien, un cabinet ou un établissement pour visualiser les protocoles
-</div>
-{{/if}}
+
 
 <form name="delProt" action="?" method="post" class="prepared">
   <input type="hidden" name="dosql" value="do_prescription_aed" />
@@ -80,6 +75,20 @@ Main.add(function(){
       <a href="#{{$protocole->_id}}" onclick="markAsSelected(this); Protocole.edit('{{$protocole->_id}}','{{$protocole->praticien_id}}','{{$protocole->function_id}}')">
         {{$protocole->libelle}}
       </a>
+
+			{{if $search}}
+			  <div class="compact">
+			  {{if $protocole->praticien_id}}
+				  {{$protocole->_ref_praticien->_view}}
+				{{/if}}
+				{{if $protocole->function_id}}
+          {{$protocole->_ref_function->_view}}
+        {{/if}}
+				{{if $protocole->group_id}}
+          {{$protocole->_ref_group->_view}}
+        {{/if}}
+				</div>
+			{{/if}}
     </td>
   </tr>
   {{/foreach}}

@@ -30,13 +30,16 @@ var Protocole = {
     } );
   },
   // Refresh de la liste des protocoles
-  refreshList : function(protocoleSel_id) {
+  refreshList : function(protocoleSel_id, libelle_protocole, code_cis, element_prescription_id) {
     var oForm = document.selPrat;
     var url = new Url("dPprescription", "httpreq_vw_list_protocoles");
     url.addParam("praticien_id", oForm.praticien_id.value);
     url.addParam("function_id", oForm.function_id.value);
     url.addParam("group_id", oForm.group_id.value);
     url.addParam("protocoleSel_id", protocoleSel_id);
+		url.addParam("code_cis", code_cis);
+		url.addParam("element_prescription_id", element_prescription_id);
+    url.addParam("libelle_protocole", libelle_protocole);
     url.requestUpdate("protocoles");
   },
   refreshListProt: function(){
