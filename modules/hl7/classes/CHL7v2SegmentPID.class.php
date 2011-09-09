@@ -292,6 +292,8 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
         ),
         "PI"
       );
+    } else {
+      $data[] = null;
     }
     
     // PID-19: SSN Number - Patient (ST) (optional)
