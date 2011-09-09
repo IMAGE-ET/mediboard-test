@@ -575,9 +575,8 @@ Main.add( function(){
     </td>  
   {{/if}}
   
-	<td>
-	  <div id="modal-outils" style="display: none;">
-		
+	<td id="modal-outils" style="display: none;">
+	  <div>
 				<table class="form" >
 					<tr>
 		        <th class="title">
