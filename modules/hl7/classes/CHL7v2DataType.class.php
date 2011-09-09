@@ -67,21 +67,6 @@ class CHL7v2DataType extends CHL7v2 {
     //"TS"  => "DateTime",
     "TX"  => "String",
   );
-	
-	static $scalarTypes = array(
-    "DT"  => "Date",
-    "DTM" => "DateTime",
-    "GTS" => "String",
-    "ID"  => "String",
-    "IS"  => "String",
-    "FT"  => "String",
-    "NM"  => "Double",
-    "SI"  => "String",
-    "ST"  => "String",
-    "TM"  => "Time",
-    "TN"  => "String",
-    "TX"  => "String",
-  );
   
   static $re_hl7 = array();
   static $re_mb  = array();
@@ -164,10 +149,12 @@ class CHL7v2DataType extends CHL7v2 {
       }
     }
     
-    $valid = preg_match($this->getRegExpHL7(), trim($value));
-    
+		$value = trim($value);
+		if ($value === "") return true;
+		
+    $valid = preg_match($this->getRegExpHL7(), $value);
     if (!$valid) {
-      $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $this->type, $field);
+      $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, "$value ($this->type)", $field);
       return false;
     }
     
@@ -176,7 +163,7 @@ class CHL7v2DataType extends CHL7v2 {
   
   protected function parseHL7($value, CHLv2Field $field) {
     if (!preg_match($this->getRegExpHL7(), $value, $matches)) {
-      $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $value, $field);
+      //$field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $value, $field);
       return false;
     }
     
@@ -185,7 +172,7 @@ class CHL7v2DataType extends CHL7v2 {
   
   protected function parseMB($value, CHLv2Field $field) {
     if (!preg_match($this->getRegExpMB(), $value, $matches)) {
-      $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $value, $field);
+      //$field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $value, $field);
       return false;
     }
     

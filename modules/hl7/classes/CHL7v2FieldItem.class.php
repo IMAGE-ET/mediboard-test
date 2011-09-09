@@ -38,7 +38,7 @@ class CHL7v2FieldItem {
       $spec = $spec->components[$i];
     }
     
-    return $spec instanceof CHL7v2DataTypeComposite; // !array_key_exists($spec->getType(), CHL7v2DataType::$scalarTypes);
+    return $spec instanceof CHL7v2DataTypeComposite;
   }
   
 	/**
@@ -125,7 +125,7 @@ class CHL7v2FieldItem {
     $specs = $this->getCompositeSpecs();
     
     if (!$specs->validate($this->components, $field)) {
-      $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, var_export($this->components, true), $field);
+      //$field->error(CHL7v2Exception::INVALID_DATA_FORMAT, var_export($this->components, true), $field);
       return false;
     }
 		

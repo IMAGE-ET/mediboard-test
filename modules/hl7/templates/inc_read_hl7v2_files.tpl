@@ -25,7 +25,7 @@
     color: #3252A7;
     margin-right: 5px;
 		display: inline-block;
-		width: 4em;
+		width: 5em;
 		white-space: nowrap;
   }
   
