@@ -172,7 +172,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     // This segment has the following fields
     $this->name = $name;
     
-    $this->message->appendChild($this);
+    $this->getMessage()->appendChild($this);
   }
 }
 

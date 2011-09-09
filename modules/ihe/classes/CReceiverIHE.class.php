@@ -61,12 +61,17 @@ class CReceiverIHE extends CInteropReceiver {
   }
   
   function getHL7Version($transaction) {
-    $iti_hl7_version = $this->_configs[$transaction."_hl7_version"];
-    return CHL7::$versions[$iti_hl7_version];
+    $iti_hl7_version = $this->_configs[$transaction."_HL7_version"];
+    foreach (CHL7::$versions as $_version => $_sub_versions) {      
+      if (in_array($iti_hl7_version, $_sub_versions)) {
+        return $_version;
+      }
+    }
   }
   
   function sendEvent($evenement, CMbObject $mbObject) {
-    $evenement->_sender = $this;
+    $evenement->_sender   = $this;
+    $evenement->_receiver = $mbObject->_receiver;
     
     $evenement->build($mbObject);    
     $msg = $evenement->flatten();

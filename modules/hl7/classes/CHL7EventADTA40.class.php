@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Admit Discharge Transfer HL7
+ * A40 - Merge patient - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -11,12 +11,12 @@
  * @link     http://www.mediboard.org
  */
 
-/**
- * Class CHL7v2MessageADT 
- * Admit Discharge Transfer
- */
-class CHL7v2MessageADT extends CMbObject {
+CAppUI::requireModuleClass("hl7", "CHL7EventADT");
 
-}
+/**
+ * Interface CHL7EventADTA40 
+ * A40 - Merge patient
+ */
+interface CHL7EventADTA40 extends CHL7EventADT {}
 
 ?>

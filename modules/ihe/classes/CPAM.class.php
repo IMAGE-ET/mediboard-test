@@ -17,9 +17,9 @@
  */
 class CPAM {
   static $evenements = array(
-    "A28" => "CHL7MessageADTA28",
-    "A31" => "CHL7MessageADTA31",
-    "A40" => "CHL7MessageADTA40",
+    "A28" => "CHL7EventADTA28",
+    "A31" => "CHL7EventADTA31",
+    "A40" => "CHL7EventADTA40",
   );
 
   function getEvenements() {

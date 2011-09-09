@@ -23,6 +23,14 @@ class CITI30DelegatedHandler extends CIHEDelegatedHandler {
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);
   }
+  
+  static function getProfil() {
+    return self::$profil;
+  }
+  
+  static function getTransaction() {
+    return self::$transaction;
+  }
  
   function onAfterStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
@@ -41,7 +49,7 @@ class CITI30DelegatedHandler extends CIHEDelegatedHandler {
     if (!$receiver->_configs["send_all_patients"] && !$mbObject->_IPP) {
       return;
     }
-    
+
     switch ($mbObject->loadLastLog()->type) {
       case "create":
         $code = "A28";
@@ -58,7 +66,7 @@ class CITI30DelegatedHandler extends CIHEDelegatedHandler {
       return;
     }
     
-    $this->sendITI($code, $mbObject);
+    $this->sendITI(self::$profil, self::$transaction, $code, $mbObject);
     
     $mbObject->_IPP = null;
   }

@@ -17,28 +17,24 @@
  */
 class CIHEDelegatedHandler {
   static $handled     = array ();
-  static $profil      = null;
-  static $transaction = null;
   
-  function sendITI($transaction, $code, CMbObject $mbObject) {
-    $receiver  = $mbObject->_receiver;
+  function sendITI($profil, $transaction, $code, CMbObject $mbObject) {
+    $receiver    = $mbObject->_receiver;
     
-    $class_parent = "CHL7MessageADT$code";
-    $event_parent = new $class_parent;
-    if (!$receiver->isMessageSupported($event_parent)) {
+    if (!$receiver->isMessageSupported("CHL7EventADT$code")) {
       return;
     }
     
     $hl7_version = $receiver->getHL7Version($transaction);
-    $class       = "CHL7Message".$hl7_version."ADT".$code;
+    $class       = "CHL7".$hl7_version."EventADT".$code;
     if (!class_exists($class)) {
       /*@todo trigger_error */
       return;  
     }
-    
+
     $event              = new $class;
-    $event->profil      = self::$profil;
-    $event->transaction = self::$transaction;
+    $event->profil      = $profil;
+    $event->transaction = $transaction;
     $receiver->sendEvent($event, $mbObject);
   }
   

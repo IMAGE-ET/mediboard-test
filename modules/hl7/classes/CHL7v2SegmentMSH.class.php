@@ -38,7 +38,7 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     $data[] = "Mediboard_$group->finess"; 
     
     // MSH-5: Receiving Application (HD) (optional)
-    $data[] = $receiver ? $receiver->name : "no_receiver"; 
+    $data[] = $receiver ? $receiver->nom : "no_receiver"; 
     
     // MSH-6: Receiving Facility (HD) (optional)
     $data[] = null; 

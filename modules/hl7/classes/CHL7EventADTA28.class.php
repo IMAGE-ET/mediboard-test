@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Admit Discharge Transfer HL7
+ * A28 - Add person information - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -11,12 +11,12 @@
  * @link     http://www.mediboard.org
  */
 
-/**
- * Class CHL7MessageADT 
- * Admit Discharge Transfer
- */
-class CHL7MessageADT extends CMbObject {
+CAppUI::requireModuleClass("hl7", "CHL7EventADT");
 
-}
+/**
+ * Interface CHL7EventADTA28 
+ * A28 - Add person information
+ */
+interface CHL7EventADTA28 extends CHL7EventADT {}
 
 ?>

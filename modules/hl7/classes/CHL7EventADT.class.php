@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A31 - Update person information - HL7
+ * Admit Discharge Transfer HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,11 +12,13 @@
  */
 
 /**
- * Class CHL7MessageADTA31 
- * A31 - Add person information
+ * Interface CHL7EventADT 
+ * Admit Discharge Transfer
  */
-class CHL7MessageADTA31 {
-
+interface CHL7EventADT {
+  function __construct();
+  
+  function build($object);
 }
 
 ?>

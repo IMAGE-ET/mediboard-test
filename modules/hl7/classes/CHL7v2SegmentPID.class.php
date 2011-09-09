@@ -28,7 +28,6 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $receiver = $event->_receiver;
     $group    = $receiver->_ref_group;
     
-    $patient  = new CPatient;
     $patient  = $this->patient;
     
     $data = array();
@@ -90,7 +89,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
       ),
       "INS-C",
       null,
-      $patient->INSC_date
+      mbDate($patient->INSC_date)
     );
     }
     $data[] = $identifiers;
@@ -159,10 +158,10 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $data[] = strtoupper($patient->sexe);
     
     // PID-9: Patient Alias (XPN) (optional repeating)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-10: Race (CE) (optional repeating)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-11: Patient Address (XAD) (optional repeating)
     $address = array();
@@ -216,7 +215,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $data[] =  $address;
     
     // PID-12: County Code (IS) (optional)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-13: Phone Number - Home (XTN) (optional repeating)
     $phones = array();
@@ -266,16 +265,16 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $data[] =  $phones;
     
     // PID-14: Phone Number - Business (XTN) (optional repeating)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-15: Primary Language (CE) (optional)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-16: Marital Status (CE) (optional)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-17: Religion (CE) (optional)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-18: Patient Account Number (CX) (optional)
     if ($this->sejour) {
@@ -296,45 +295,43 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     }
     
     // PID-19: SSN Number - Patient (ST) (optional)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-20: Driver's License Number - Patient (DLN) (optional)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-21: Mother's Identifier (CX) (optional repeating)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-22: Ethnic Group (CE) (optional repeating)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-23: Birth Place (ST) (optional)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-24: Multiple Birth Indicator (ID) (optional)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-25: Birth Order (NM) (optional)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-26: Citizenship (CE) (optional repeating)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-27: Veterans Military Status (CE) (optional)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-28: Nationality (CE) (optional)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-29: Patient Death Date and Time (TS) (optional)
-    if ($patient->deces) {
-      $data[] = $patient->deces;
-    }
+    $data[] = ($patient->deces) ? $patient->deces : null;
     
     // PID-30: Patient Death Indicator (ID) (optional)
     $data[] = ($patient->deces) ? "Y" : "N";
     
     // PID-31: Identity Unknown Indicator (ID) (optional)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-32: Identity Reliability Code (IS) (optional repeating)
     $data[] =  array (
@@ -364,22 +361,22 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $data[] =  $event->last_log->date;
     
     // PID-34: Last Update Facility (HD) (optional)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-35: Species Code (CE) (optional)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-36: Breed Code (CE) (optional)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-37: Strain (ST) (optional)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-38: Production Class Code (CE) (optional)
-    $data[] =  null;
+    $data[] = null;
     
     // PID-39: Tribal Citizenship (CWE) (optional repeating)
-    $data[] =  null;
+    $data[] = null;
           
     $this->fill($data);
   }

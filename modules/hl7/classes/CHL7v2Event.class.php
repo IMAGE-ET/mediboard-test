@@ -28,27 +28,33 @@ class CHL7v2Event {
   var $msg_codes     = array();
   
   var $_receiver     = null;
+  var $_sender       = null;
   var $_exchange_ihe = null;  
   
-  function build(CMbObject $object) {
+  function __construct() {}
+  
+  function build($object) {
     // Traitement sur le mbObject
     $this->object   = $object;
-    $this->last_log = $object->object->_ref_last_log;
+    $this->last_log = $this->object->_ref_last_log;
     
     // Récupération de la version HL7 en fonction du receiver et de la transaction
-    $this->version = $this->_receiver->getHL7Version($this->transaction);
+    $this->version  = $this->_receiver->_configs[$this->transaction."_HL7_version"];
     
     // Génération de l'échange
     $this->generateExchange();
-    
+ 
     // Création du message HL7
     $this->message          = new CHL7v2Message();
     $this->message->version = $this->version;
-    $this->message->name    = $msg_codes[0].$msg_codes[1];
+    $this->message->name    = $this->msg_codes[0].$this->msg_codes[1];
   }
   
   function flatten() {
-    
+    $msg_hl7 = $this->message->flatten();
+    mbTrace($msg_hl7, "Message HL7 généré");
+    $this->message->validate();
+    mbTrace($this->message->errors, "Erreurs message HL7");
   }
   
   function generateExchange() {

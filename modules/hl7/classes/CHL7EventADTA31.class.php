@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A28 - Add person information - HL7
+ * A31 - Update person information - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -11,12 +11,12 @@
  * @link     http://www.mediboard.org
  */
 
-/**
- * Class CHL7MessageADTA28 
- * A28 - Add person information
- */
-class CHL7MessageADTA28 {
+CAppUI::requireModuleClass("hl7", "CHL7EventADT");
 
-}
+/**
+ * Interface CHL7EventADTA31 
+ * A31 - Add person information
+ */
+interface CHL7EventADTA31 extends CHL7EventADT {}
 
 ?>

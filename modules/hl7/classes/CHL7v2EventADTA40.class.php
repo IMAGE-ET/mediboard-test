@@ -11,12 +11,17 @@
  * @link     http://www.mediboard.org
  */
 
+CAppUI::requireModuleClass("hl7", "CHL7v2Event");
+CAppUI::requireModuleClass("hl7", "CHL7EventADTA40");
+
 /**
- * Class CHL7MessageADTA40 
+ * Class CHL7v2EventADTA40
  * A40 - Merge patient
  */
-class CHL7MessageADTA40 {
-
+class CHL7v2EventADTA40 extends CHL7v2Event implements CHL7EventADTA40 {
+  function __construct(){}
+  
+  function build($object){}
 }
 
 ?>
