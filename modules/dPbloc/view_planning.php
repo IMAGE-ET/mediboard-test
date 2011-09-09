@@ -127,6 +127,8 @@ $ljoin["sejour"] = "operations.sejour_id = sejour.sejour_id";
 $where = array();
 $where["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($praticiens));
 $where["operations.annulee"] = "= '0'";
+$whereOperations["operations.annulee"] = "= '0'";
+
 switch ($filter->_intervention) {
   case "1" : $where["operations.rank"] = "!= '0'"; break;
   case "2" : $where["operations.rank"] = "= '0'"; break;
