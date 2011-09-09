@@ -446,8 +446,42 @@ Element.addMethods({
     return element.hide();
   },
   getText: function(element) {
-		// using || may not work
+    // using || may not work
     return ("innerText" in element ? element.innerText : element.textContent)+"";
+  },
+  prepareTouchEvents: function(root){
+    if (!App.touchDevice) return;
+    
+    root.select("*[onmouseover]").each(function(element){
+      if (element.touchEventsPrepared) return;
+      
+      element.observe("touchstart", function(event){
+        Event.stop(event);
+        element.mouseOverTriggered = false;
+        
+        element.timer = setTimeout(function(){
+          element.onmouseover(event);
+          element.mouseOverTriggered = true;
+        }, 300);
+      });
+      
+      element.observe("touchend", function(event){
+        clearTimeout(element.timer);
+        
+        if (!element.mouseOverTriggered) {
+          // event bubbling
+          var bubble = (element.onclick || element.href) ? element : element.up("[onclick], :link");
+          
+          // simulate event firing
+          if ((!bubble.onclick || bubble.onclick() !== false) && bubble.href) {
+            location.href = bubble.href;
+            return;
+          }
+        }
+      });
+      
+      element.touchEventsPrepared = true;
+    });
   }
 });
 

@@ -64,12 +64,12 @@ if (!isset($_SESSION['browser'])) {
       }
     }
     
-		$ipad = preg_match("/ipad/i", $user_agent);
-		if ($ipad) {
-			$browser['name'] = 'ipad';
-		}
-		
-    $browser['mobile'] = !$ipad && preg_match("/mobi|phone|symbian/i", $user_agent);
+    $ios = preg_match("/(ipad|iphone)/", $user_agent, $matches);
+    if ($ios) {
+      $browser['name'] = $matches[1];
+    }
+    
+    $browser['mobile'] = ($browser['name'] !== 'ipad' && preg_match("/mobi|phone|symbian/i", $user_agent));
   }
   
   $browser['deprecated'] = isset($minimal_versions[$browser['name']]) && 

@@ -45,6 +45,20 @@ var ObjectTooltip = Class.create({
         .observe("mousedown", this.cancelShow.bind(this))
         .observe("mousemove", this.resetShow.bind(this));
     
+    if (App.touchDevice) {
+      var that = this;
+      document.observe("touchstart", function(event){
+        var element = Event.element(event);
+        var eTooltip = $(that.sTooltip);
+        
+        if (!eTooltip || element == eTooltip || element.descendantOf(eTooltip)) {
+          return;
+        }
+        
+        that.launchHide(that);
+      });
+    }
+    
     this.mode = ObjectTooltip.modes[this.oOptions.mode];
   },
   
@@ -78,6 +92,12 @@ var ObjectTooltip = Class.create({
     
     var eTooltip = $(this.sTooltip);
     
+    $$("div.tooltip").each(function(other) {
+      if (!eTooltip.descendantOf(other)) {
+        other.hide();
+      }
+    });
+    
     if (!eTooltip) return;
     
     if (eTooltip.empty()) {
@@ -95,7 +115,7 @@ var ObjectTooltip = Class.create({
   reposition: function() {
     var eTrigger = $(this.sTrigger),
         eTooltip = $(this.sTooltip);
-				
+        
     if (!eTrigger || this.dontShow) return; // necessary, unless it throws an error some times (why => ?)
 
     var dim = eTrigger.getDimensions();
@@ -103,7 +123,7 @@ var ObjectTooltip = Class.create({
     eTooltip.show()
         .setStyle({marginTop: 0, marginLeft: 0})
         .clonePosition(eTrigger, {
-          offsetTop: dim.height, 
+          offsetTop: (App.touchDevice ? -eTooltip.getHeight() : dim.height), 
           offsetLeft: Math.min(dim.width, 20), 
           setWidth: false, 
           setHeight: false
@@ -214,8 +234,8 @@ Object.extend(ObjectTooltip, {
   },
 
   createEx: function(eTrigger, guid, mode, params) {
-  	mode = mode || 'objectView';
-  	params = params || {};
+    mode = mode || 'objectView';
+    params = params || {};
     
     params.object_guid = guid;
     

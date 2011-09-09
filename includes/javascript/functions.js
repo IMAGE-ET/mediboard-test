@@ -17,6 +17,7 @@ function main() {
     Note.refresh();
     Element.warnDuplicates();
     Event.preventBackspace();
+    $(document.documentElement).prepareTouchEvents();
     Main.init();
   }
   catch (e) {

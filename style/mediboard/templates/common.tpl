@@ -59,7 +59,8 @@
           config: {
             log_js_errors: {{if $conf.log_js_errors}}true{{else}}false{{/if}}
           },
-          readonly: "{{$conf.readonly}}" == 1 && User.id != null
+          readonly: "{{$conf.readonly}}" == 1 && User.id != null,
+          touchDevice: "{{$browser.name}}".match(/^ipad|iphone$/i)
         };
     
     var Mediboard = {{$version|@json}};
