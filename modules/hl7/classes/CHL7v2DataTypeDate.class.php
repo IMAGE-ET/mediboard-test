@@ -17,8 +17,8 @@ class CHL7v2DataTypeDate extends CHL7v2DataType {
     }
     
     return CValue::read($hl7, "year")."-".
-		       CValue::read($hl7, "month", "00")."-".
-					 CValue::read($hl7, "day", "00");
+           CValue::read($hl7, "month", "00")."-".
+           CValue::read($hl7, "day", "00");
   }
   
   function toHL7($value, CHLv2Field $field) {

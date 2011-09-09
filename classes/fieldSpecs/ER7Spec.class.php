@@ -25,9 +25,7 @@ class CER7Spec extends CTextSpec {
   
   function getValue($object, $smarty = null, $params = array()) {
     $value = $object->{$this->fieldName};
-		$message = new CHL7v2Message;
-		$message->parse($value, false);
-    return $message->highlight_er7();
+    return CHL7v2Message::highlight_er7($value);
   }
   
   function sample(&$object, $consistent = true){

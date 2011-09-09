@@ -96,11 +96,11 @@
           </ul>
           
           <div id="message-{{$_key}}-er7-input" style="display: none;">
-            {{$_message->highlight_er7()|smarty:nodefaults}}
+            {{$_message->highlight_er7($_message->data)|smarty:nodefaults}}
           </div>
           
           <div id="message-{{$_key}}-er7-output" style="display: none;">
-            {{$_message->highlight_er7($_message)|smarty:nodefaults}}
+            {{$_message->highlight_er7($_message->flatten())|smarty:nodefaults}}
           </div>
           
           <div id="message-{{$_key}}-errors" style="display: none;">

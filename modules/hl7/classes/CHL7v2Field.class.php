@@ -26,9 +26,14 @@ class CHL7v2Field extends CHL7v2Entity {
   private $_ts_fixed = false;
   
   function __construct(CHL7v2Segment $segment, $spec) {
+    parent::__construct($segment);
+    
     $this->owner_segment = $segment;
     $this->name        = (string)$spec->name;
     $this->datatype    = (string)$spec->datatype;
+    if ($this->datatype == "TS") {
+      $this->datatype = "DTM";
+    }
     $this->description = (string)$spec->description;
     $this->required    = $spec->isRequired();
     $this->unbounded   = $spec->isUnbounded();
@@ -69,7 +74,7 @@ class CHL7v2Field extends CHL7v2Entity {
     }
     
     if (!is_array($items)) {
-    	$items = trim($items);
+      $items = trim($items);
       $items = array($items);
     }
     
@@ -93,7 +98,7 @@ class CHL7v2Field extends CHL7v2Entity {
     
     // The timestamp case, where Time contains TimeStamp data
     /*if (!$this->_ts_fixed && $this->datatype === "TS") {
-      $specs->elements->field[0]->datatype = "TimeStamp";
+      $specs->elements->field[0]->datatype = "DTM";
     }
     
     $this->_ts_fixed = true;*/

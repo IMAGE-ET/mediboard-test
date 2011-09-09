@@ -20,8 +20,10 @@ class CHL7v2SegmentGroup extends CHL7v2Entity {
   var $parent = null;
     
   function __construct(CHL7v2SegmentGroup $parent) {
+    parent::__construct($parent);
+    
     $this->parent = $parent;
-		$this->name = implode(" ", $this->getSpecs()->xpath("//segment"));
+    $this->name = implode(" ", $this->getSpecs()->xpath("//segment"));
     $parent->appendChild($this);
   }
   

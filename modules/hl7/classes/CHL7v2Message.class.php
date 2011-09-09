@@ -20,6 +20,8 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   const DEFAULT_NULL_VALUE              = '""';
 
   static $enteredHeaders = array("MSH", "FHS", "BHS");
+  
+  static $decorateToString = false;
    
   var $segmentTerminator     = self::DEFAULT_SEGMENT_TERMINATOR;
   var $escapeCharacter       = self::DEFAULT_ESCAPE_CHARACTER;
@@ -39,9 +41,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   var $current_line = 0;
   var $errors       = array();
   
-  function __construct() {
-    
-  }
+  function __construct() { }
   
   function parse($data, $parse_body = true) {
     // remove all chars before MSH
@@ -111,7 +111,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
       $type = implode("", $message_type);
     }
     $this->name    = preg_replace("/[^A-Z0-9]/", "", $type);
-		$this->description = (string)$this->getSpecs()->description;
+    $this->description = (string)$this->getSpecs()->description;
     
     $this->validate();
     
@@ -374,12 +374,13 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   }
   
   function encoding_characters() {
-    return $this->fieldSeparator.$this->componentSeparator.$this->subcomponentSeparator.$this->escapeCharacter.$this->repetitionSeparator;
+    return $this->fieldSeparator.$this->componentSeparator.$this->repetitionSeparator.$this->escapeCharacter.$this->subcomponentSeparator;
   }
   
-  function highlight_er7($data = null){
-    $msg = (isset($data) ? $data : $this->data);
+  static function highlight_er7($msg){
     $msg = str_replace("\r\n", "\n", $msg);
+    
+    preg_match("/.*MSH(.)(.)(.)(.)(.)/", $msg, $matches);
     
     // highlight segment name
     $msg = preg_replace("/^([A-Z]{2}[A-Z0-9])/m", '<strong>$1</strong>', $msg);
@@ -388,13 +389,13 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     
     $pat = array(
       "&" => "&amp;",
-      $this->fieldSeparator        => "<span class='fs'>$this->fieldSeparator</span>",
-      $this->componentSeparator    => "<span class='cs'>$this->componentSeparator</span>",
-      $this->subcomponentSeparator => "<span class='scs'>$this->subcomponentSeparator</span>",
-      $this->repetitionSeparator   => "<span class='re'>$this->repetitionSeparator</span>",
+      $matches[1] => "<span class='fs'>$matches[1]</span>",
+      $matches[2] => "<span class='cs'>$matches[2]</span>",
+      $matches[3] => "<span class='scs'>$matches[3]</span>",
+      $matches[4] => "<span class='re'>$matches[4]</span>",
     );
     
-    $seps = preg_quote($this->encoding_characters());
+    $seps = preg_quote(implode("", array_slice($matches, 1)));
     $msg = preg_replace("/([^$seps]+)/", '<i>$1</i>', $msg);
     
     return "<pre class='er7'>".strtr($msg, $pat)."</pre>";
@@ -404,10 +405,11 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     // Il y a des lignes vides a cause des goupes imbriqués
     $str = parent::__toString();
     $sep = preg_quote($this->getMessage()->segmentTerminator);
-    return preg_replace("/$sep+/", $sep, $str);
+    $str = preg_replace("/$sep+/", $sep, $str);
+    return $str;
   }
-	
-	function flatten(){
-		return $this->__toString();
-	}
+  
+  function flatten(){
+    return $this->__toString();
+  }
 }

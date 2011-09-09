@@ -83,7 +83,7 @@ class CHL7v2DataType extends CHL7v2 {
     self::$re_hl7 = array(
       "Date"     => '/^'.self::RE_HL7_DATE.'$/',
       "DateTime" => '/^'.self::RE_HL7_DATE.'(?:'.self::RE_HL7_TIME.')?$/',
-      "Time"     => '/^(?:'.self::RE_HL7_DATE.')?'.self::RE_HL7_TIME.'$/',
+      "Time"     => '/^'.self::RE_HL7_TIME.'$/',
       "Double"   => '/^[+-]?\d*\.?\d*$/', 
       "Integer"  => '/^[+-]?\d+$/',
       "String"   => '/.*/',
@@ -91,7 +91,7 @@ class CHL7v2DataType extends CHL7v2 {
     
     self::$re_mb = array(
       "Date"     => '/^'.self::RE_MB_DATE.'$/',
-      "DateTime" => '/^'.self::RE_MB_DATE.'[ T]'.self::RE_MB_TIME.'$/',
+      "DateTime" => '/^'.self::RE_MB_DATE.'(?:[ T]'.self::RE_MB_TIME.')?$/',
       "Time"     => '/^'.self::RE_MB_TIME.'$/',
       "Double"   => self::$re_hl7["Double"], 
       "Integer"  => self::$re_hl7["Integer"],
@@ -115,6 +115,10 @@ class CHL7v2DataType extends CHL7v2 {
   static function load($type, $version) {
     static $cache = array();
     
+    if ($type == "TS") {
+      $type = "DTM";
+    }
+    
     $class_type = self::mapToBaseType($type);
     
     if (isset($cache[$version][$type])) {
@@ -124,7 +128,7 @@ class CHL7v2DataType extends CHL7v2 {
     if (in_array($class_type, self::$typesBase)) {
       $class = "CHL7v2DataType$class_type";
       $instance = new $class($class_type, $version);
-			//$instance->getSpecs();
+      //$instance->getSpecs();
     }
     else {
       $instance = new CHL7v2DataTypeComposite($type, $version);
@@ -149,9 +153,9 @@ class CHL7v2DataType extends CHL7v2 {
       }
     }
     
-		$value = trim($value);
-		if ($value === "") return true;
-		
+    $value = trim($value);
+    if ($value === "") return true;
+    
     $valid = preg_match($this->getRegExpHL7(), $value);
     if (!$valid) {
       $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, "$value ($this->type)", $field);
@@ -198,10 +202,10 @@ class CHL7v2DataType extends CHL7v2 {
   function getVersion(){
     return $this->version;
   }
-	
-	public function getType(){
-		return $this->type;
-	}
+  
+  public function getType(){
+    return $this->type;
+  }
   
   protected function getRegExpMB(){
     return self::$re_mb[$this->type];

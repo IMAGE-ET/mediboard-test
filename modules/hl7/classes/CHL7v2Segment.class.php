@@ -19,6 +19,8 @@ class CHL7v2Segment extends CHL7v2Entity {
   var $parent = null;
     
   function __construct(CHL7v2SegmentGroup $parent) {
+    parent::__construct($parent);
+    
     $this->parent = $parent;
   }
   
@@ -131,6 +133,11 @@ class CHL7v2Segment extends CHL7v2Entity {
     return $this->getSchema(self::PREFIX_SEGMENT_NAME, $this->name);
   }
   
+  /**
+   * @param string             $name
+   * @param CHL7v2SegmentGroup $parent
+   * @return CHL7v2Segment
+   */
   static function create($name, CHL7v2SegmentGroup $parent) {
     $class = "CHL7v2Segment$name";
     

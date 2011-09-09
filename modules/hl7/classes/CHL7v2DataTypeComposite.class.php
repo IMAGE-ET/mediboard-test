@@ -44,11 +44,11 @@ class CHL7v2DataTypeComposite extends CHL7v2DataType {
   }
   
   function validate($components_data, CHL7v2Field $field) {
-  	// Sometimes, we have a string here (OBR-32-1-2)
-  	if (!is_array($components_data)) {
-  		$components_data = array($components_data);
-  	}
-		
+    // Sometimes, we have a string here (OBR-32-1-2)
+    if (!is_array($components_data)) {
+      $components_data = array($components_data);
+    }
+    
     foreach($components_data as $k => $component_data) {
       if (!array_key_exists($k, $this->components)) {
         break;
