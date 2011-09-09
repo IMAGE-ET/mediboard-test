@@ -24,10 +24,11 @@ var Action = {
     url.requestUpdate("read_hl7_file");
   },
   
-  triggerPatientModif: function () {
+  triggerPatient: function (action) {
     var url = new Url();
     url.addParam("m", this.module);
     url.addParam("dosql", "do_trigger_object_modification");
+    url.addParam("action", action);
     url.requestUpdate("read_hl7_file", {method: "post"});
   }
 }
@@ -42,8 +43,12 @@ var Action = {
   {{tr}}Creation{{/tr}}
 </button>
 
-<button type="button" class="new" onclick="Action.triggerPatientModif()">
-  Evt Patient
+<button type="button" class="new" onclick="Action.triggerPatient('create')">
+  Patient create
+</button>
+
+<button type="button" class="new" onclick="Action.triggerPatient('modify')">
+  Patient modify
 </button>
 
 <div id="read_hl7_file"></div>

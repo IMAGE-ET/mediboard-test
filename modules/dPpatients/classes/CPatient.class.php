@@ -1906,6 +1906,17 @@ class CPatient extends CMbObject {
     }
     return $dec;
   }
+  
+  function sample($staticsProps = array()){
+    foreach($this->_specs as $key => $spec){
+      if(isset($staticsProps[$key])){
+        $this->$key = $staticsProps[$key];
+      }
+      elseif($key[0] != "_"){
+        $spec->sample($this, false);
+      }
+    }
+  }
 }
 
 ?>

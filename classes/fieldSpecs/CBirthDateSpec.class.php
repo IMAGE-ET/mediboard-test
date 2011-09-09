@@ -50,11 +50,11 @@ class CBirthDateSpec extends CMbFieldSpec {
   
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
-    
+		
     $object->{$this->fieldName} = 
-     "19".self::randomString(CMbFieldSpec::$nums, 2).
-      "-".self::randomString(CMbFieldSpec::$months, 1).
-      "-".self::randomString(CMbFieldSpec::$days, 1);
+      sprintf("19%02d-%02d-%02d", self::randomString(CMbFieldSpec::$nums, 2),
+                                  self::randomString(CMbFieldSpec::$months, 1),
+                                  self::randomString(CMbFieldSpec::$days, 1));
   }
   
   function getFormHtmlElement($object, $params, $value, $className){

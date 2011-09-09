@@ -10,17 +10,30 @@
 
 CCanDo::checkAdmin();
 
+$action = CValue::post("action", "modify");
+
 $patient = new CPatient;
-while(!$patient->load(rand(1, 5000)));
 
-// randomize name
-$nom = str_split($patient->nom);
-shuffle($nom);
-$patient->nom = implode("", $nom);
+switch($action) {
+	case "modify":
+		while(!$patient->load(rand(1, 5000)));
+		
+		// randomize name
+		$nom = str_split($patient->nom);
+		shuffle($nom);
+		$patient->nom = implode("", $nom);
+	break;
+	
+	case "create":
+		$patient->sample();
+		//$patient->updateFormFields();
+	break;
+}
 
-mbTrace($patient->_id, $patient->_view);
+CAppUI::displayMsg($patient->store(), "CPatient-msg-$action");
 
-CAppUI::displayMsg($patient->store(), "CPatient-msg-modify");
+mbTrace($patient);
+
 echo CAppUI::getMsg();
 
 CApp::rip();

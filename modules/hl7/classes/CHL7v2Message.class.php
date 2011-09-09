@@ -406,4 +406,8 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $sep = preg_quote($this->getMessage()->segmentTerminator);
     return preg_replace("/$sep+/", $sep, $str);
   }
+	
+	function flatten(){
+		return $this->__toString();
+	}
 }

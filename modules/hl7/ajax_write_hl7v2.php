@@ -74,7 +74,7 @@ $msg->appendChild($segment);
 $msg->validate();
 
 echo "Généré";
-echo $msg->highlight_er7($msg."");
+echo $msg->highlight_er7($msg->flatten());
 
 echo "Parsé";
 $msg2 = new CHL7v2Message;
