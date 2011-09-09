@@ -17,6 +17,8 @@ $annulation = CValue::request("annulation", "0");
 $search_value = $annulation ? 1 : 0;
 $new_value = $annulation ? 0 : 1;
 $only_perop = CValue::post("only_perop", false);
+$alertes_lines = CValue::post("alertes_lines");
+$_alertes_lines = explode("|", $alertes_lines);
 
 // Tableau de prescription pour la validation multiple de la pharmacie
 $prescriptions_pharma = CValue::post("prescriptions_pharma");
@@ -241,6 +243,10 @@ foreach($prescriptions as $prescription_id){
 	// Parcours du tableau et signature des lignes
 	foreach($lines as $_type_line => $_lines){
 		foreach($_lines as $_line){
+			if($mode_pharma && in_array($_line->_guid, $_alertes_lines)){
+				continue;
+			}
+			
 			switch($_type_line){
 				case "CPrescriptionLineMedicament":
 					$_line->countPrisesLine();

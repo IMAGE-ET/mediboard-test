@@ -107,11 +107,23 @@
 	    {{/if}}
 	  {{/foreach}}
   {{/if}}
-  
+
   <!-- Sélection de la puce à afficher -->
   {{if $puce_rouge}}
     {{assign var="image" value="note_red.png"}}
     {{assign var="color" value=#ff7474}}
+				
+		<script type="text/javascript">
+			{{if $mode_pharma}}
+				Main.add( function(){
+				  {{if $line instanceof CPrescriptionLineMixItem}}
+				    window.alertesLines.add("{{$line->_ref_prescription_line_mix->_guid}}");
+	        {{else}}
+					  window.alertesLines.add("{{$line->_guid}}");
+					{{/if}}
+				});
+			{{/if}}
+		</script>
   {{else}}
     {{if $puce_orange}}
       {{assign var="image" value="note_orange.png"}}
@@ -122,8 +134,7 @@
 {{/if}}
 
 {{if $image && $color}}
-	<img src="images/icons/{{$image}}"
-			 onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-alertes-line-{{$line->_guid}}")' />
+	<img src="images/icons/{{$image}}" onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-alertes-line-{{$line->_guid}}")' />
 	
 	<div id="tooltip-content-alertes-line-{{$line->_guid}}" style="display: none; background-color: {{$color}};">
 		{{foreach from=$prescription->_alertes key=type item=curr_type}}

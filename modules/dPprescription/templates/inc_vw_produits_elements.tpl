@@ -213,7 +213,11 @@ submitValideAllLines = function (prescription_id, chapitre, mode_pharma) {
   var oForm = getForm("valideAllLines");
   oForm.prescription_id.value = prescription_id;
   oForm.chapitre.value = chapitre;
-  if (mode_pharma) {
+	
+	// Permet de passer les lignes a ne pas valider
+	oForm.alertes_lines.value = document.alertesLinesForm.alertes_lines.value;
+	
+	if (mode_pharma) {
     oForm.mode_pharma.value = mode_pharma;
   }
   return onSubmitFormAjax(oForm);
@@ -599,6 +603,7 @@ reloadPerfEvolution = function(perf_id, object){
   <input type="hidden" name="prescription_id" value="" />
   <input type="hidden" name="chapitre" value="" />
   <input type="hidden" name="mode_pharma" value="" />
+	<input type="hidden" name="alertes_lines" value="" />
 </form>
 
 <form name="voie" method="post" action="">

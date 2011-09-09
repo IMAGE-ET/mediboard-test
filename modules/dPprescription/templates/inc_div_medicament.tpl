@@ -53,6 +53,8 @@ Main.add( function(){
 	  toggleSearchOptions('searchProd', 'med');
 	{{/if}}
 	
+  window.alertesLines = new TokenField(document.alertesLinesForm.alertes_lines);
+	
 } );
 
 transfertLineTP = function(line_id, sejour_id){
@@ -120,6 +122,10 @@ updateModaleAfterAddLine = function(line_id){
 
 </script>
 
+<form name="alertesLinesForm" action="?" method="get">
+ <input type="hidden" name="alertes_lines" value="" />     
+</form>	
+	
 <form name="transfert_line_TP" action="?" method="post">
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="dosql" value="do_transfert_line_tp_aed" />
@@ -202,7 +208,7 @@ updateModaleAfterAddLine = function(line_id){
 	        <span>
 		      {{if $mode_pharma && $prescription->_score_prescription == "2"}}
 		      <br />
-		      Validation automatique impossible
+		      Validation partielle uniquement
 		      {{/if}}
 	      </strong>
       </div>
@@ -248,7 +254,7 @@ updateModaleAfterAddLine = function(line_id){
 	<tr>
   	<td class="text">
   	 <!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
-    {{if $prescription->object_id && ($is_praticien || ($mode_pharma && $prescription->_score_prescription != "2"))}}
+    {{if $prescription->object_id && ($is_praticien || $mode_pharma)}}
     <button class="tick" type="button" onclick="submitValideAllLines('{{$prescription->_id}}', 'medicament', '{{$mode_pharma}}');" style="float: right">
       {{if $mode_pharma}}
         Valider toutes les lignes
