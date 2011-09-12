@@ -1328,14 +1328,13 @@ ul li a.chapitre_signe.active{
 .er7 {
   max-height: auto;
 	padding: 3px;
-  overflow: visible;
 }
 
 .er7 .fs,
 .er7 .rs,
 .er7 .cs,
 .er7 .scs {
-  padding: 0.2em;
+  padding: 0.15em;
 }
 
 .er7 .fs {
