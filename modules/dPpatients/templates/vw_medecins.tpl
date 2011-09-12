@@ -289,6 +289,16 @@ function onSubmitCorrespondant(form) {
           <th>{{mb_label object=$medecin field="complementaires"}}</th>
           <td>{{mb_field object=$medecin field="complementaires"}}</td>
         </tr>
+        
+        <tr>
+          <th>{{mb_label object=$medecin field="adeli"}}</th>
+          <td>{{mb_field object=$medecin field="adeli"}}</td>
+        </tr>
+        
+        <tr>
+          <th>{{mb_label object=$medecin field="rpps"}}</th>
+          <td>{{mb_field object=$medecin field="rpps"}}</td>
+        </tr>
 
         <tr>
           <td class="button" colspan="4">

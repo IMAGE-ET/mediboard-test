@@ -1284,7 +1284,12 @@ class CSetupdPpatients extends CSetup {
       ADD `INSC_date` DATETIME AFTER `INSC`";
     $this->addQuery($query);
     
-    $this->mod_version = "1.19";
+    $this->makeRevision("1.19");
+    $query = "ALTER TABLE `medecin` 
+               ADD `rpps` BIGINT (11) UNSIGNED ZEROFILL;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.20";
     
   }
 }
