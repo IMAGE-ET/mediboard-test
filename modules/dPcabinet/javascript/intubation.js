@@ -148,9 +148,7 @@ SchemaDentaire = {
         }
         
         // Callbacks on the tooth
-        oDent.observe('mouseover', this.onMouseOver.bindAsEventListener(this))
-             .observe('mouseout', this.onMouseOut.bindAsEventListener(this))
-             .observe('click', this.onClick.bindAsEventListener(this));
+        oDent.observe('click', this.onClick.bindAsEventListener(this));
       }
     , this);
     } else {
@@ -162,7 +160,7 @@ SchemaDentaire = {
     $('dents-schema-legend').childElements().invoke('removeClassName', 'active');
     if (this.sPaint != state) {
       this.sPaint = state;
-      $('dents-schema-legend').select('.'+state).first().addClassName('active');
+      $('dents-schema-legend').down('.'+state).addClassName('active');
     }
     else {
       this.sPaint = null;
@@ -194,32 +192,6 @@ SchemaDentaire = {
         }
       }
     }
-  },
-  
-  onMouseOver: function (e) {
-    var el = e.element().addClassName('hover'), 
-    style = {
-      width: parseInt(el.getStyle('width'))-1, 
-      height: parseInt(el.getStyle('height'))-1
-    };
-
-    el.setStyle({
-      width: style.width+'px',
-      height: style.height+'px'
-    });
-  },
-  
-  onMouseOut: function (e) {
-    var el = e.element().removeClassName('hover'),
-    style = {
-      width: parseInt(el.getStyle('width'))+1, 
-      height: parseInt(el.getStyle('height'))+1
-    };
-    
-    el.setStyle({
-      width: style.width+'px',
-      height: style.height+'px'
-    });
   },
   
   // Show the menu

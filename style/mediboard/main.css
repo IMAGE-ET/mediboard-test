@@ -1047,14 +1047,15 @@ table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
   border-radius: 22px;
   position: absolute;
   cursor: pointer;
+  background:transparent;
 }
 
-.hover {
-  border: 2px solid #F00;
+.dent:hover {
+  outline: 2px solid #F00;
 }
 
 .focus {
-  border: 1px solid #F00;
+  outline: 1px solid #F00;
 }
 
 .bridge {

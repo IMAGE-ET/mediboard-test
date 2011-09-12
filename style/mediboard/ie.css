@@ -48,6 +48,11 @@ select {
   *margin: 0;
 }
 
+/* A transparent pixel because IE doesn't consider "transparent" color as opaque for the mouse pointer */
+.dent {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQAAAAA3bvkkAAAAAnRSTlMAAQGU%2Fa4AAAAKSURBVHjaY2oAAACGAIOk3dDiAAAAAElFTkSuQmCC);
+}
+
 /* Cross browser opacity */
   .opacity-0, 
 tr.opacity-0 td, 
