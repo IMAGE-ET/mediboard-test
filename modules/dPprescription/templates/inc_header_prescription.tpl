@@ -169,7 +169,6 @@ Main.add( function(){
 			updateElement: function(selectedElement) {
 			  var node = $(selectedElement).down('.view');
 			  $V($("applyProtocole_libelle_protocole"), (node.innerHTML).replace("&lt;", "<").replace("&gt;",">"));
-        $V(oFormProtocole.protocole_id, selectedElement.get("id"));
         
 				if (autocompleter.options.afterUpdateElement) {
 			    autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
@@ -533,7 +532,6 @@ Main.add( function(){
 	      <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
 	      <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
 	      <input type="hidden" name="pratSel_id" value="" />
-        <input type="hidden" name="protocole_id" value="" />
 	      <input type="hidden" name="pack_protocole_id" value="" />
 				<input type="hidden" name="time_debut" value="" />
         
