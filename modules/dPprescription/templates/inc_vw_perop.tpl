@@ -102,6 +102,7 @@ Main.add( function(){
         <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
         <input type="hidden" name="pratSel_id" value="" />
         <input type="hidden" name="pack_protocole_id" value="" />
+        <input type="hidden" name="advanced_prot" value="0" />
         <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" class="autocomplete" style="font-weight: bold; font-size: 1.3em; width: 300px;"/>
         <div style="display:none; width: 350px;" class="autocomplete" id="protocole_perop_auto_complete"></div>
 				<input type="hidden" name="operation_id" value="{{$operation_id}}" />

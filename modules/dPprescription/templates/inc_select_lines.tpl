@@ -108,6 +108,6 @@
   </table>
   <p style="text-align: center;">
     <button type="button" class="save oneclick" onclick="submitChangedLines()">{{tr}}CPrescription.apply_advanced_protocole{{/tr}}</button>
-    <button type="button" class="cancel" onclick="cancelProtocole(this)">{{tr}}CPrescription.cancel_advanced_protocole{{/tr}}</button>
+    <button type="button" class="cancel oneclick" onclick="cancelProtocole(this)">{{tr}}CPrescription.cancel_advanced_protocole{{/tr}}</button>
   </p>
 </form>
