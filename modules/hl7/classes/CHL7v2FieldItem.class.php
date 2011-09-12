@@ -147,19 +147,19 @@ class CHL7v2FieldItem {
     $id = $field->getId();
     $self_pos = array_search($this, $field->items);
     $specs = $this->getCompositeSpecs();
-	  
+    
     if ($this->hasSubComponents()) {
       $message = $this->getMessage();
       $keep_original = $field->keep();
       $comp = array();
-			
+      
       $cs  = $message->componentSeparator;
       $scs = $message->subcomponentSeparator;
-			
-			if (CHL7v2Message::$decorateToString) {
-				$cs  = "<span class='cs'>$cs</span>";
+      
+      if (CHL7v2Message::$decorateToString) {
+        $cs  = "<span class='cs'>$cs</span>";
         $scs = "<span class='scs'>$scs</span>";
-			}
+      }
       
       foreach($this->components as $i => $sub_compoments) {
         if ($this->hasSubComponents($i)) {
@@ -168,16 +168,16 @@ class CHL7v2FieldItem {
           }
           
           if (CHL7v2Message::$decorateToString) {
-          	foreach($sub_compoments as $j => &$_sub) {
-          		$_spec = $specs->components[$i]->components[$j];
+            foreach($sub_compoments as $j => &$_sub) {
+              $_spec = $specs->components[$i]->components[$j];
               $title = $field->name.".".($i+1).".".($j+1)." - ".$_spec->getType();
-							
-							if ($_spec instanceof CHL7v2DataTypeComposite) {
-								$title .= " - ".$_spec->description;
-							}
-							
+              
+              if ($_spec instanceof CHL7v2DataTypeComposite) {
+                $title .= " - ".$_spec->description;
+              }
+              
               $_sub = "<span class='sub-component' id='sub-component-$id-$self_pos-$i-$j' data-title='$title'>$_sub</span>";
-          	}
+            }
           }
           
           $comp[] = implode($scs, $sub_compoments);
@@ -188,17 +188,17 @@ class CHL7v2FieldItem {
       }
           
       if (CHL7v2Message::$decorateToString) {
-			  foreach($comp as $i => &$_comp) {
-			  	$_spec = $specs->components[$i];
-			  	$title = $field->name.".".($i+1)." - ".$_spec->getType();
+        foreach($comp as $i => &$_comp) {
+          $_spec = $specs->components[$i];
+          $title = $field->name.".".($i+1)." - ".$_spec->getType();
               
           if ($_spec instanceof CHL7v2DataTypeComposite) {
             $title .= " - ".$_spec->description;
           }
-					
-	        $_comp = "<span class='component' id='component-$id-$self_pos-$i' data-title='$title'>$_comp</span>";
-	      }
-			}
+          
+          $_comp = "<span class='component' id='component-$id-$self_pos-$i' data-title='$title'>$_comp</span>";
+        }
+      }
     
       $str = implode($cs, $comp);
     }
@@ -207,7 +207,7 @@ class CHL7v2FieldItem {
     }
     
     if (CHL7v2Message::$decorateToString) {
-    	$field = $this->field;
+      $field = $this->field;
       $str = "<span class='field-item' id='field-item-$id-$self_pos' data-title='$field->name - $field->datatype - $field->description'>$str</span>";
     }
     

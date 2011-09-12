@@ -119,9 +119,9 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
   
   function validate() {
-  	foreach($this->fields as $field) {
-  		$field->validate();
-  	}
+    foreach($this->fields as $field) {
+      $field->validate();
+    }
   }
   
   function getMessage() {
@@ -158,24 +158,24 @@ class CHL7v2Segment extends CHL7v2Entity {
   
   function __toString(){
     $sep = $this->getMessage()->fieldSeparator;
-		$name = $this->name;
-		
-		if (CHL7v2Message::$decorateToString) {
+    $name = $this->name;
+    
+    if (CHL7v2Message::$decorateToString) {
       $sep = "<span class='fs'>$sep</span>";
       $name = "<strong>$name</strong>";
-		}
-		
+    }
+    
     $fields = $this->fields;
     
     if ($this->name === "MSH") {
       array_shift($fields);
     }
-		
-		$str = $name.$sep.implode($sep, $fields);
-		
-		if (CHL7v2Message::$decorateToString) {
-			$str = "<div class='segment' id='segment-$this->id' data-title='$this->description'>$str</div>";
-		}
+    
+    $str = $name.$sep.implode($sep, $fields);
+    
+    if (CHL7v2Message::$decorateToString) {
+      $str = "<div class='segment' id='segment-$this->id' data-title='$this->description'>$str</div>";
+    }
     
     return $str;
   }

@@ -285,7 +285,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     }
   }
   
-	/*
+  /*
   function validate() {
     // @todo validate segments sequence
   }
@@ -313,6 +313,18 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
       "code"  => $code, 
       "data"  => $data,
     );
+  }
+  
+  function dumpErrors(){
+    $errors = array();
+    
+    foreach ($this->errors as $_error) {
+      $_code  = CAppUI::tr("CHL7v2Exception-{$_error['code']}");
+      $_field = ($_error["field"] ? $_error["field"]->name.", " : "");
+      $errors[] = "Ligne {$_error['line']} : $_code - $_field {$_error['data']}";
+    }
+    
+    return $errors;
   }
   
   private function getDelimEscSeq($seq) {
@@ -419,15 +431,15 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   
   function flatten($highlight = false){
     $old = self::$decorateToString;
-  	self::$decorateToString = $highlight;
-		
+    self::$decorateToString = $highlight;
+    
     $str = $this->__toString();
-		
-		if ($highlight) {
-			$str = "<pre class='er7'>$str</pre>";
-		}
-		
+    
+    if ($highlight) {
+      $str = "<pre class='er7'>$str</pre>";
+    }
+    
     self::$decorateToString = $old;
-		return $str;
+    return $str;
   }
 }

@@ -1,17 +1,17 @@
 <style>
   ul, ol {
     line-height: 1.4;
-		padding-left: 2em;
-		margin-bottom: 6px;
+    padding-left: 2em;
+    margin-bottom: 6px;
   }
-	
-	ol {
-	  list-style-type: none;
-	}
-	
-	.type {
-	  color: #2D9A00;
-	}
+  
+  ol {
+    list-style-type: none;
+  }
+  
+  .type {
+    color: #2D9A00;
+  }
   
   .type:before {
     content: "(";
@@ -24,9 +24,9 @@
   .field-name {
     color: #3252A7;
     margin-right: 5px;
-		display: inline-block;
-		width: 5em;
-		white-space: nowrap;
+    display: inline-block;
+    width: 5em;
+    white-space: nowrap;
   }
   
   .field-description {
@@ -35,22 +35,22 @@
   
   .value {
     background: #eee;
-		padding: 0 2px;
+    padding: 0 2px;
   }
-	
-	.field-item {
-	  border: 1px dotted #ccc;
-		margin: 1px;
-	}
+  
+  .field-item {
+    border: 1px dotted #ccc;
+    margin: 1px;
+  }
   
   .field-item > ol {
     padding-left: 2px;
     margin-bottom: 0px;
   }
-	
-	.field-empty {
-	  opacity: 0.5;
-	}
+  
+  .field-empty {
+    opacity: 0.5;
+  }
 </style>
 
 <script>

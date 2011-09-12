@@ -29,10 +29,10 @@ abstract class CHL7v2Entity extends CHL7v2 {
   function __construct(){
     $this->id = self::$_id++;
   }
-	
-	function getId(){
-		return $this->id;
-	}
+  
+  function getId(){
+    return $this->id;
+  }
   
   function parse($data) {
     $this->data = $data;
