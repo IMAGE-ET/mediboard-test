@@ -12,97 +12,68 @@ CCanDo::checkRead();
 $group = CGroups::loadCurrent();
 
 $ds = CSQLDataSource::get("std");
-$service_id = CValue::getOrSession("service_id", 0); 
+$service_id = CValue::getOrSession("service_id", 0);
+$bloc_id    = CValue::getOrSession("bloc_id"   , 0);
 $date_suivi = CValue::getOrSession("date_suivi", mbDate());
 $listOps = array();
 
 // Liste des services
-$services = new CService;
+$service = new CService();
 $where = array();
 $where["group_id"] = "= '$group->_id'";
 $order = "nom";
-$services = $services->loadListWithPerms(PERM_READ,$where, $order);
+$services = $service->loadListWithPerms(PERM_READ,$where, $order);
 
-if($service_id!=0 && array_key_exists($service_id,$services)){
-  $listService = array($service_id);
-}else{
-  CValue::setSession("service_id", 0);
-  $service_id = 0;
-  $listService = array_keys($services);
+// Liste des blocs
+$bloc = new CBlocOperatoire();
+$where = array();
+$where["group_id"] = "= '$group->_id'";
+$order = "nom";
+$blocs = $bloc->loadListWithPerms(PERM_READ,$where, $order);
+
+// Listes des interventions
+$operation = new COperation();
+$ljoin = array(
+  "plagesop"   => "`operations`.`plageop_id` = `plagesop`.`plageop_id`",
+  "sallesbloc" => "`operations`.`salle_id` = `sallesbloc`.`salle_id`",
+  "sejour"     => "`operations`.`sejour_id` = `sejour`.`sejour_id`");
+$where = array();
+$where[] = "`plagesop`.`date` = '$date_suivi' OR `operations`.`date` = '$date_suivi'";
+if($bloc_id) {
+  $where["sallesbloc.bloc_id"] = "= '$bloc_id'";
 }
+$where["operations.annulee"] = "= '0'";
+$where["sejour.group_id"] = "= '$group->_id'";
+$order = "operations.time_operation";
+$listOps = $operation->loadList($where,$order, null, null, $ljoin);
 
-
-// Selection des plages opératoires de la journée
-$plages = new CPlageOp;
-$where = array();
-$where["date"] = "= '$date_suivi'";
-$plages = $plages->loadList($where);
-
-// Listes des opérations
-$listOps = new COperation;
-$where = array();
-$where[] = "`plageop_id` ".CSQLDataSource::prepareIn(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date_suivi')";
-$where["annulee"] = "= '0'";
-$order = "time_operation";
-$listOps = $listOps->loadList($where,$order);
-foreach($listOps as $key => $value) {
-	$oper =& $listOps[$key];
-  // Chargement des infos de l'opération
-  $oper->loadRefChir();
-  $oper->loadRefSejour();
-  $oper->_ref_sejour->loadRefsFwd();
-  $oper->_ref_sejour->loadRefsAffectations();
-  $oper->_ref_sejour->_curr_affectation = null;
-  if(!count($oper->_ref_sejour->_ref_affectations)){
-    unset($listOps[$key]);
+$listServices = array();
+// Chargement des infos des interventions
+foreach($listOps as $_key => $_op) {
+  $_op->loadRefChir();
+  $_op->_ref_chir->loadRefFunction();
+  $_op->loadRefSejour();
+  $_op->_ref_sejour->loadRefPatient();
+  $_op->loadRefAffectation();
+  if($_op->_ref_affectation->_id) {
+    if(!$service_id || $service_id == $_op->_ref_affectation->_ref_lit->_ref_chambre->service_id) {
+      $listServices[$_op->_ref_affectation->_ref_lit->_ref_chambre->service_id][$_op->_id] = $op;
+    }
+  } elseif(!$service_id) {
+    $listServices["NP"][$_op->_id] = $_op;
   }
 } 
-
-   
-$affOper = array();
-// Classement pour le/les services
-foreach($listService as $currService){
-  $affOper[$currService] = array();
-  
-  //Liste des lits du service
-  $table    = "lit";
-  $select   = "lit_id";
-  $leftjoin = array("chambre"     => "chambre.chambre_id = lit.chambre_id");
-  $where    = array("service_id"=>"= '$currService'");  
-  $request  = new CRequest();
-  $request->addTable($table);
-  $request->addSelect($select);
-  $request->addLJoin($leftjoin);
-  $request->addWhere($where);
-  $resultLit = $ds->loadList($request->getRequest());  
-  
-  $listLit = array();
-  foreach($resultLit as $aLit){
-    $listLit[] = $aLit["lit_id"]; 
-  }
-  
-  foreach($listOps as $key => $value) {
-    $oper = $listOps[$key];
-    foreach($oper->_ref_sejour->_ref_affectations as $keyAff=>$currAff){
-      $affect =& $oper->_ref_sejour->_ref_affectations[$keyAff];          
-      if(mbDate($affect->entree) <= $date_suivi && mbDate($affect->sortie) >= $date_suivi && in_array($affect->lit_id,$listLit)){
-        $affect->loadRefLit();
-        $affect->_ref_lit->loadCompleteView();
-        $oper->_ref_sejour->_curr_affectation =& $affect;
-        $affOper[$currService][$oper->_id] = $oper;
-      }
-    }
-  }
-}
 
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("date_suivi"  , $date_suivi);
-$smarty->assign("affOper"     , $affOper);
+$smarty->assign("listServices", $listServices);
 $smarty->assign("services"    , $services);
 $smarty->assign("service_id"  , $service_id);
+$smarty->assign("blocs"       , $blocs);
+$smarty->assign("bloc_id"     , $bloc_id);
 
 $smarty->display("vw_suivi_bloc.tpl");
 ?>

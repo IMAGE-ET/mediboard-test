@@ -28,7 +28,7 @@
     {{mb_include module=dPplanningOp template=inc_vw_operation}}
   </td>
 	{{/if}}
-  <td class="narrow">
+  <td class="narrow button">
     <button class="{{if $_operation->_ref_consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}" type="button" onclick="printFicheAnesth('{{$_operation->_ref_consult_anesth->_ref_consultation->_id}}', '{{$_operation->_id}}');">
       Fiche d'anesthésie
     </button>
@@ -36,6 +36,7 @@
     <button class="print" style="width: 100%; min-width: 10em;" type="button" onclick="printFicheBloc('{{$_operation->_id}}');">
       Feuille de bloc
     </button>
+    {{mb_include module=forms template=inc_widget_ex_class_register object=$_operation event=liaison}}
   </td>
 </tr>
 
