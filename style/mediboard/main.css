@@ -1327,10 +1327,23 @@ ul li a.chapitre_signe.active{
 /* ER7 */
 .er7 {
   max-height: auto;
+	padding: 4px;
+	overflow: visible;
 }
 
 .er7 .fs {
-  color: #0000FF;
+  color: #CC0000;
+}
+
+.er7 .fs,
+.er7 .rs,
+.er7 .cs,
+.er7 .scs {
+	padding: 0.3em;
+}
+
+.er7 .rs {
+  color: #9F0000;
 }
 
 .er7 .cs {
@@ -1338,15 +1351,16 @@ ul li a.chapitre_signe.active{
 }
 
 .er7 .scs {
-  color: #996600;
+  color: #006699;
 }
 
-.er7 .rs {
-  color: #007F00;
+.er7 .segment {
+  vertical-align: middle;
+  line-height: 1.8;
 }
 
 .er7 .segment:after {
-  color: red;
+  color: #AAA;
   font-size: 0.5em;
   content: "[CR]";
 }
@@ -1360,6 +1374,81 @@ ul li a.chapitre_signe.active{
 	background: #aaffcc;
 	border-radius: 2px;
 	padding: 2px 0;
+}
+
+.er7 .field-item,
+.er7 .component,
+.er7 .sub-component {
+  position: relative;
+}
+
+.er7 .field-item:before,
+.er7 .component:before,
+.er7 .sub-component:before {
+  position: absolute;
+  border: 1px solid;
+  padding: 2px;
+	top: -17px;
+	left: -1px;
+  z-index: 200;
+  line-height: 1.4;
+  font-size: 0.9em;
+}
+
+.er7 .field-item:before {
+  bottom: -17px;
+  top: auto;
+}
+
+.er7 .sub-component:before {
+  bottom: -17px;
+  top: auto;
+	right: -1px;
+	left:  auto;
+}
+
+.er7 .field-item:hover:before,
+.er7 .component:hover:before,
+.er7 .sub-component:hover:before {
+  content: attr(data-title);
+}
+
+.er7 .field:hover {
+  background: #ddffee;
+}
+
+.er7 .field-item:hover {
+  outline: 1px solid #CC0000; 
+  padding: 6px 0;
+}
+
+.er7 .field-item:before {
+  background-color: #FF9999;
+	border-top: none;
+	border-color: #CC0000;
+}
+
+.er7 .component:hover {
+  outline: 1px solid #009966; 
+  padding: 3px 0;
+}
+
+.er7 .component:before {
+  background-color: #99FFAA;
+  border-bottom: none;
+  border-color: #009966;
+}
+
+.er7 .sub-component:hover {
+  outline: 1px solid #006699; 
+  padding: 0px 0;
+}
+
+.er7 .sub-component:before {
+  background: #99CCFF;
+  bottom: -17px;
+  border-top: none;
+  border-color: #006699;
 }
 
 .septique {

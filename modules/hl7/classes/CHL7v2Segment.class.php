@@ -155,13 +155,26 @@ class CHL7v2Segment extends CHL7v2Entity {
   
   function __toString(){
     $sep = $this->getMessage()->fieldSeparator;
+		$name = $this->name;
+		
+		if (CHL7v2Message::$decorateToString) {
+      $sep = "<span class='fs'>$sep</span>";
+      $name = "<strong>$name</strong>";
+		}
+		
     $fields = $this->fields;
     
     if ($this->name === "MSH") {
       array_shift($fields);
     }
+		
+		$str = $name.$sep.implode($sep, $fields);
+		
+		if (CHL7v2Message::$decorateToString) {
+			$str = "<div class='segment' id='segment-$this->id'>$str</div>";
+		}
     
-    return $this->name.$sep.implode($sep, $fields);
+    return $str;
   }
   
   function build(CHL7v2Event $event, $name) {

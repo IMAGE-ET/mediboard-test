@@ -143,10 +143,23 @@ class CHL7v2FieldItem {
   }
   
   function __toString(){
+    $field = $this->field;
+    $id = $field->getId();
+    $self_pos = array_search($this, $field->items);
+    $specs = $this->getCompositeSpecs();
+	  
     if ($this->hasSubComponents()) {
       $message = $this->getMessage();
-      $keep_original = $this->field->keep();
+      $keep_original = $field->keep();
       $comp = array();
+			
+      $cs  = $message->componentSeparator;
+      $scs = $message->subcomponentSeparator;
+			
+			if (CHL7v2Message::$decorateToString) {
+				$cs  = "<span class='cs'>$cs</span>";
+        $scs = "<span class='scs'>$scs</span>";
+			}
       
       foreach($this->components as $i => $sub_compoments) {
         if ($this->hasSubComponents($i)) {
@@ -154,17 +167,38 @@ class CHL7v2FieldItem {
             $sub_compoments = array_map(array($message, "escape"), $sub_compoments);
           }
           
-          $comp[] = implode($message->subcomponentSeparator, $sub_compoments);
+          if (CHL7v2Message::$decorateToString) {
+          	foreach($sub_compoments as $j => &$_sub) {
+              $title = $field->name.".".($i+1).".".($j+1)." - ".$specs->components[$i]->components[$j]->getType();
+              $_sub = "<span class='sub-component' id='sub-component-$id-$self_pos-$i-$j' data-title='$title'>$_sub</span>";
+          	}
+          }
+          
+          $comp[] = implode($scs, $sub_compoments);
         }
         else {
           $comp[] = $sub_compoments;
         }
       }
+          
+      if (CHL7v2Message::$decorateToString) {
+			  foreach($comp as $i => &$_comp) {
+			  	$title = $field->name.".".($i+1)." - ".$specs->components[$i]->getType();
+	        $_comp = "<span class='component' id='component-$id-$self_pos-$i' data-title='$title'>$_comp</span>";
+	      }
+			}
     
-      return implode($message->componentSeparator, $comp);
+      $str = implode($cs, $comp);
     }
     else {
-      return "$this->components";
+      $str = "$this->components";
     }
+    
+    if (CHL7v2Message::$decorateToString) {
+    	$field = $this->field;
+      $str = "<span class='field-item' id='field-item-$id-$self_pos' data-title='$field->name - $field->datatype - $field->description'>$str</span>";
+    }
+    
+    return $str;
   }
 }

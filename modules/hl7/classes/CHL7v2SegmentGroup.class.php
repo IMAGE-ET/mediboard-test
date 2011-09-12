@@ -55,7 +55,7 @@ class CHL7v2SegmentGroup extends CHL7v2Entity {
   }
   
   function __toString(){
-    return implode($this->getMessage()->segmentTerminator, $this->children);
+    return implode((CHL7v2Message::$decorateToString ? "" : $this->getMessage()->segmentTerminator), $this->children);
   }
 }
 

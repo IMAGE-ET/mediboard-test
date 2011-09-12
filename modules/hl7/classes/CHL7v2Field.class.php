@@ -128,6 +128,18 @@ class CHL7v2Field extends CHL7v2Entity {
   }
   
   function __toString(){
-    return implode($this->getMessage()->repetitionSeparator, $this->items);
+  	$rs = $this->getMessage()->repetitionSeparator;
+		
+		if (CHL7v2Message::$decorateToString) {
+		  $rs = "<span class='rs'>$rs</span>";
+		}
+		
+    $str = implode($rs, $this->items);
+		
+    if (CHL7v2Message::$decorateToString) {
+      $str = "<span class='field' id='field-$this->id'>$str</span>";
+    }
+		
+    return $str;
   }
 }

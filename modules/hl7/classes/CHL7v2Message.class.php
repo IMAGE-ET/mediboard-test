@@ -409,7 +409,17 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     return $str;
   }
   
-  function flatten(){
-    return $this->__toString();
+  function flatten($highlight = false){
+    $old = self::$decorateToString;
+  	self::$decorateToString = $highlight;
+		
+    $str = $this->__toString();
+		
+		if ($highlight) {
+			$str = "<pre class='er7'>$str</pre>";
+		}
+		
+    self::$decorateToString = $old;
+		return $str;
   }
 }
