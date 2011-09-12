@@ -1423,8 +1423,9 @@ ul li a.chapitre_signe.active{
 }
 
 .er7 .field-item:hover {
-  outline: 1px solid #CC0000; 
+  border: 1px solid #CC0000;  /** outline bugs in Firefox **/
   padding: 6px 0;
+	margin: -1px;
 }
 
 .er7 .field-item:before {
@@ -1434,8 +1435,9 @@ ul li a.chapitre_signe.active{
 }
 
 .er7 .component:hover {
-  outline: 1px solid #009966; 
+  border: 1px solid #009966; 
   padding: 3px 0;
+  margin: -1px;
 }
 
 .er7 .component:before {
@@ -1445,8 +1447,9 @@ ul li a.chapitre_signe.active{
 }
 
 .er7 .sub-component:hover {
-  outline: 1px solid #006699; 
+  border: 1px solid #006699; 
   padding: 0px 0;
+  margin: -1px;
 }
 
 .er7 .sub-component:before {
