@@ -169,7 +169,13 @@ class CHL7v2FieldItem {
           
           if (CHL7v2Message::$decorateToString) {
           	foreach($sub_compoments as $j => &$_sub) {
-              $title = $field->name.".".($i+1).".".($j+1)." - ".$specs->components[$i]->components[$j]->getType();
+          		$_spec = $specs->components[$i]->components[$j];
+              $title = $field->name.".".($i+1).".".($j+1)." - ".$_spec->getType();
+							
+							if ($_spec instanceof CHL7v2DataTypeComposite) {
+								$title .= " - ".$_spec->description;
+							}
+							
               $_sub = "<span class='sub-component' id='sub-component-$id-$self_pos-$i-$j' data-title='$title'>$_sub</span>";
           	}
           }
@@ -183,7 +189,13 @@ class CHL7v2FieldItem {
           
       if (CHL7v2Message::$decorateToString) {
 			  foreach($comp as $i => &$_comp) {
-			  	$title = $field->name.".".($i+1)." - ".$specs->components[$i]->getType();
+			  	$_spec = $specs->components[$i];
+			  	$title = $field->name.".".($i+1)." - ".$_spec->getType();
+              
+          if ($_spec instanceof CHL7v2DataTypeComposite) {
+            $title .= " - ".$_spec->description;
+          }
+					
 	        $_comp = "<span class='component' id='component-$id-$self_pos-$i' data-title='$title'>$_comp</span>";
 	      }
 			}

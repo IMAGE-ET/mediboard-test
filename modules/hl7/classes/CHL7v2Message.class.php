@@ -115,7 +115,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $this->name    = preg_replace("/[^A-Z0-9]/", "", $type);
     $this->description = (string)$this->getSpecs()->description;
     
-    $this->validate();
+    $this->validateSyntax();
     
     $this->readHeader();
     
@@ -274,7 +274,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     // $c = $specs->xpath("//segment | //group");
   }
   
-  function validate() {
+  protected function validateSyntax() {
     // validation de la syntaxe : chaque ligne doit commencer par 3 lettre + un separateur + au moins une donnée
     $sep_preg = preg_quote($this->fieldSeparator);
     
@@ -284,6 +284,12 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
       }
     }
   }
+  
+	/*
+  function validate() {
+    // @todo validate segments sequence
+  }
+  */
   
   function getVersion(){
     return $this->version;

@@ -167,7 +167,7 @@ class CHL7v2DataType extends CHL7v2 {
   
   protected function parseHL7($value, CHLv2Field $field) {
     if (!preg_match($this->getRegExpHL7(), $value, $matches)) {
-      //$field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $value, $field);
+      $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $value, $field);
       return false;
     }
     
@@ -176,7 +176,7 @@ class CHL7v2DataType extends CHL7v2 {
   
   protected function parseMB($value, CHLv2Field $field) {
     if (!preg_match($this->getRegExpMB(), $value, $matches)) {
-      //$field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $value, $field);
+      $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $value, $field);
       return false;
     }
     

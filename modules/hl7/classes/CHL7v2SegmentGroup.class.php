@@ -27,8 +27,10 @@ class CHL7v2SegmentGroup extends CHL7v2Entity {
     $parent->appendChild($this);
   }
   
-  function validate(){
-    
+  function validate() {
+    foreach($this->children as $child) {
+      $child->validate();
+    }
   }
   
   function getVersion(){

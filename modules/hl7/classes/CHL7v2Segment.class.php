@@ -119,6 +119,9 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
   
   function validate() {
+  	foreach($this->fields as $field) {
+  		$field->validate();
+  	}
   }
   
   function getMessage() {

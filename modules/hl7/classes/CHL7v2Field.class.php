@@ -32,7 +32,7 @@ class CHL7v2Field extends CHL7v2Entity {
     $this->name        = (string)$spec->name;
     $this->datatype    = (string)$spec->datatype;
     if ($this->datatype == "TS") {
-      $this->datatype = "DTM";
+      //$this->datatype = "DTM";
     }
     $this->description = (string)$spec->description;
     $this->required    = $spec->isRequired();
