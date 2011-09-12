@@ -48,6 +48,8 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $msh_pos = strpos($data, "MSH");
     $data = substr($data, $msh_pos);
     $data = trim($data);
+    $data = str_replace("\r\n", "\n", $data);
+    $data = str_replace("\r", "\n", $data);
     
     parent::parse($data);
     

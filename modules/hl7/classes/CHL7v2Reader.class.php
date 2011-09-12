@@ -19,8 +19,6 @@ class CHL7v2Reader {
     
     try {
       $fileContents = file_get_contents($fileName);
-      $fileContents = str_replace("\r\n", "\n", $fileContents);
-      $fileContents = str_replace("\r", "\n", $fileContents);
       $message->parse($fileContents);
     } catch (Exception $e) {
       exceptionHandler($e);

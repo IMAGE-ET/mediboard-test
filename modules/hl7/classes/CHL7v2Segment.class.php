@@ -171,7 +171,7 @@ class CHL7v2Segment extends CHL7v2Entity {
 		$str = $name.$sep.implode($sep, $fields);
 		
 		if (CHL7v2Message::$decorateToString) {
-			$str = "<div class='segment' id='segment-$this->id'>$str</div>";
+			$str = "<div class='segment' id='segment-$this->id' data-title='$this->description'>$str</div>";
 		}
     
     return $str;

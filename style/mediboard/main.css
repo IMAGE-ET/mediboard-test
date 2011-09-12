@@ -1327,19 +1327,19 @@ ul li a.chapitre_signe.active{
 /* ER7 */
 .er7 {
   max-height: auto;
-	padding: 4px;
-	overflow: visible;
-}
-
-.er7 .fs {
-  color: #CC0000;
+	padding: 3px;
+  overflow: visible;
 }
 
 .er7 .fs,
 .er7 .rs,
 .er7 .cs,
 .er7 .scs {
-	padding: 0.3em;
+  padding: 0.2em;
+}
+
+.er7 .fs {
+  color: #CC0000;
 }
 
 .er7 .rs {
@@ -1378,10 +1378,13 @@ ul li a.chapitre_signe.active{
 
 .er7 .field-item,
 .er7 .component,
-.er7 .sub-component {
+.er7 .sub-component,
+.er7 .segment {
   position: relative;
+	cursor: default;
 }
 
+.er7 .segment:before,
 .er7 .field-item:before,
 .er7 .component:before,
 .er7 .sub-component:before {
@@ -1393,6 +1396,7 @@ ul li a.chapitre_signe.active{
   z-index: 200;
   line-height: 1.4;
   font-size: 0.9em;
+	background: #eee;
 }
 
 .er7 .field-item:before {
@@ -1407,6 +1411,7 @@ ul li a.chapitre_signe.active{
 	left:  auto;
 }
 
+.er7 .segment:hover:before,
 .er7 .field-item:hover:before,
 .er7 .component:hover:before,
 .er7 .sub-component:hover:before {
