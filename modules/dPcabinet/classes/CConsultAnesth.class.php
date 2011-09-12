@@ -183,7 +183,7 @@ class CConsultAnesth extends CMbObject {
   }
   
   function loadRefChir() {
-    $this->_ref_chir = $this->loadFwdRef("chir_id", true);
+    return $this->_ref_chir = $this->loadFwdRef("chir_id", true);
   }
 
   function loadRefOperation() {

@@ -107,6 +107,42 @@
     </td>
   {{/if}}
 
+{{if $_suivi instanceof CConsultation}}
+  <tr>
+    <td>
+      {{if $_suivi->_ref_consult_anesth->_id}}
+        <strong>{{tr}}CConsultAnesth{{/tr}}</strong>
+      {{else}}
+        <strong>{{tr}}CConsultation{{/tr}}</strong>
+      {{/if}}
+    </td>
+    <td>
+      <strong>
+        <div class="mediuser" style="border-color: #{{$_suivi->_ref_praticien->_ref_function->color}};">
+          {{mb_value object=$_suivi field="_praticien_id"}}
+        </div>
+      </strong>
+    </td>
+    <td style="text-align: center">
+      {{mb_ditto name=date value=$_suivi->_datetime|date_format:$conf.date}}
+    </td>
+    <td>{{$_suivi->_datetime|date_format:$conf.time}}</td>
+    <td></td>
+    <td>
+      {{if $_suivi->_ref_consult_anesth->_id}}
+        {{$_suivi->rques}}
+      {{else}}
+        {{$_suivi->conclusion}}
+      {{/if}}
+    </td>
+    <td>
+      {{if !$readonly && $_suivi->_canEdit}}
+        <button type="button" class="edit notext" onclick="modalConsult('{{$_suivi->_id}}')"></button>
+      {{/if}}
+    </td>
+  </tr>
+{{/if}}
+
 {{* Tableau de transmissions *}}
 {{if $_suivi|is_array}}
   {{assign var=nb_trans value=$_suivi|@count}}

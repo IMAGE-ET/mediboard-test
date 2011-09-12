@@ -156,18 +156,16 @@ class CDoObjectAddEdit {
     
     $fields["_ui_messages"] = $messages;
     
-    $fields = array_map_recursive("utf8_encode", $fields);
-    
-    $json = @json_encode($fields);
-    
     $id = $this->_obj->_id ? $this->_obj->_id : 0;
+    
     if ($this->callBack) {
-      echo "\n<script type=\"text/javascript\">{$this->callBack}($id, $json)</script>";
+      CAppUI::callbackAjax($this->callBack, $id, $fields);
     }
     else {
       $guid = "$this->className-$id";
-      echo "\n<script type=\"text/javascript\">Form.onSubmitComplete('$guid', $json)</script>";
+      CAppUI::callbackAjax("Form.onSubmitComplete", $guid, $fields);
     }
+    
     CApp::rip();
   }
 

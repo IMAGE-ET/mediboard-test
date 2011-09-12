@@ -28,9 +28,8 @@ Main.add(function () {
 
 </script>
 
-{{if !@$readonly}}
-  {{assign var=readonly value=0}}
-{{/if}}
+{{mb_default var=readonly value=0}}
+{{mb_default var=isPrescriptionInstalled value=isset($modules.dPprescription|smarty:nodefaults)}}
 
 <table class="form">
   <tr>

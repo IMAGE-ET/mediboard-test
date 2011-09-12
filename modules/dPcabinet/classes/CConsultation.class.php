@@ -1147,7 +1147,7 @@ TESTS A EFFECTUER
   }
 
   function loadRefConsultAnesth() {
-  	$this->_ref_consult_anesth = $this->loadUniqueBackRef("consult_anesth");
+  	return $this->_ref_consult_anesth = $this->loadUniqueBackRef("consult_anesth");
   }
   
   function loadRefsExamAudio(){
@@ -1307,7 +1307,7 @@ TESTS A EFFECTUER
 		if ($sejour->_id) {
 			$sejour->fillLimitedTemplate($template);
 			$rpu = $sejour->loadRefRPU();
-			if ($rpu->_id) {
+			if ($rpu && $rpu->_id) {
 			  $rpu->fillLimitedTemplate($template);
 			}
 		}

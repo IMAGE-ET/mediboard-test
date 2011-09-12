@@ -179,6 +179,23 @@ addPrescription = function(sejour_id, user_id, object_id, object_class) {
   }
 }
 
+bindOperation = function(sejour_id) {
+  var url = new Url("dPcabinet", "ajax_bind_operation");
+  url.addParam("sejour_id", sejour_id);
+  url.requestModal(500, null, {showReload: false, showClose: false});
+}
+
+modalConsult = function(consult_id) {
+  var url = new Url("dPcabinet", "ajax_short_consult");
+  url.addParam("consult_id", consult_id);
+  url.modal(600, 400);
+  url.modalObject.observe("afterClose", function() {
+    if (window.loadSuivi) {
+      loadSuivi('{{$sejour->_id}}');
+    }
+  });
+}
+
 Main.add(function () {
 	if({{$count_trans}} > 0) {
 	  showListTransmissions(0, {{$count_trans}});
@@ -198,6 +215,16 @@ Main.add(function () {
   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
 </form>
 
+<form name="addConsultation" method="post" action="?">
+  <input type="hidden" name="m" value="dPcabinet" />
+  <input type="hidden" name="dosql" value="do_consult_now" />
+  <input type="hidden" name="prat_id" value="{{$user->_id}}" />
+  <input type="hidden" name="patient_id" value="{{$sejour->patient_id}}" />
+  <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+  <input type="hidden" name="_operation_id" value="" />
+  <input type="hidden" name="callback" value="modalConsult" />
+</form>
+
 {{if !$isPraticien}}
   <button class="add" onclick="addTransmission('{{$sejour->_id}}', '{{$user->_id}}', null, null, null, null, 1);">Ajouter une transmission</button>
 {{else}}
@@ -206,7 +233,8 @@ Main.add(function () {
     <button class="add" onclick="addPrescription('{{$sejour->_id}}', '{{$user->_id}}')">Ajouter une prescription</button>
   {{/if}}
   {{if @isset($modules.dPcabinet|smarty:nodefaults)}}
-    <a class="button new" href="?m=dPcabinet&tab=edit_planning&pat_id={{$sejour->patient_id}}&chir_id={{$user->_id}}">Nouvelle consultation</a>
+    <a class="button new" href="#1"
+      onclick="{{if $isAnesth}}bindOperation('{{$sejour->_id}}');{{else}}onSubmitFormAjax(getForm('addConsultation'));{{/if}}">Nouvelle consultation</a>
   {{/if}}
 {{/if}}
 

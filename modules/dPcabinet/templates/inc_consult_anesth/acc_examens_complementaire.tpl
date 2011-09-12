@@ -1,4 +1,5 @@
 {{mb_script module=dPcabinet script=exam_comp}}
+{{mb_default var=view_prescription value=1}}
 
 <script type="text/javascript">
 function calculClairance () {
@@ -231,7 +232,7 @@ Main.add(function () {
       <div id="listExamComp">
       {{include file="../../dPcabinet/templates/exam_comp.tpl"}}
       </div>
-      {{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription}}
+      {{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription && $view_prescription}}
       <button class="tick" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour')">Accéder à la prescription</button>
       {{/if}}
       <table class="form">

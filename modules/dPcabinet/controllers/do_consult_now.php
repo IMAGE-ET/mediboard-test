@@ -18,6 +18,7 @@ $prat_id       = CValue::post("prat_id");
 $patient_id    = CValue::post("patient_id");
 $_operation_id = CValue::post("_operation_id");
 $_datetime     = CValue::post("_datetime");
+$callback      = CValue::post("callback");
 
 if (!$_datetime || $_datetime == "now") {
   $_datetime = mbDateTime();
@@ -147,9 +148,11 @@ if ($ref_chir->isFromType(array("Anesthésiste"))) {
   // Un Anesthesiste a été choisi 
   $consultAnesth = new CConsultAnesth;
   $where = array();
-  $where["consultation_id"] = "= '".$consult->consultation_id."'";
-  $consultAnesth->loadObject($where);  
-  $consultAnesth->consultation_id = $consult->consultation_id;
+  $where["consultation_id"] = "= '".$consult->_id."'";
+  
+  $consultAnesth->loadObject($where);
+  
+  $consultAnesth->consultation_id = $consult->_id;
   $consultAnesth->operation_id = $_operation_id;      
   if($msg = $consultAnesth->store()) {
     CAppUI::setMsg($msg, UI_MSG_WARNING);
@@ -159,6 +162,9 @@ if ($ref_chir->isFromType(array("Anesthésiste"))) {
 // Redirect final
 if($ajax) {
   echo CAppUI::getMsg();
+  if ($callback) {
+    CAppUI::callbackAjax($callback, $consult->_id);
+  }
   CApp::rip();
 }
 if($current_m = CValue::post("_m_redirect")) {

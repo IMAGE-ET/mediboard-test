@@ -402,11 +402,21 @@ class CAppUI {
   * Echo an ajax callback with given value
   * 
   * @param string $callback : name of the javascript function 
-  * @param string $value : value paramater for javascript function
+  * @param string $args : value parameter(s) for javascript function
   */
-  static function callbackAjax($callback, $value = '') {
-    $value = json_encode($value);
-    echo "\n<script type='text/javascript'>$callback($value);</script>";
+  static function callbackAjax($callback, $args = '') {
+    $args = func_get_args();
+    $args = array_slice($args,1);
+    
+    foreach ($args as $key=>$_arg) {
+      if (!is_numeric($_arg)) {
+        $args[$key] = json_encode(array_map_recursive("utf8_encode",$_arg));
+      }
+    }
+    
+    $args = implode(",", $args); 
+    
+    echo "\n<script type='text/javascript'>$callback($args);</script>";
   }
   
 /**

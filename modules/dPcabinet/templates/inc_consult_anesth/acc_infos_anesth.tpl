@@ -1,5 +1,6 @@
-<script type="text/javascript">
+{{mb_default var="view_prescription" value=1}}
 
+<script type="text/javascript">
 function submitTech(oForm) {
   onSubmitFormAjax(oForm, { onComplete : reloadListTech });
   if ($V(oForm.elements.del)) {
@@ -124,9 +125,11 @@ Main.add(function () {
 	                {{mb_field object=$consult_anesth field="premedication" rows="4" onchange="this.form.onsubmit()"}}
 	              {{else}}
 	                {{if $conf.dPcabinet.CPrescription.view_prescription}}
-	                  {{mb_label object=$consult_anesth field="premedication"}}
-	                  <br />
-	                  <button class="tick" type="button" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour')">Accéder à la prescription</button>
+                    {{if $view_prescription}}
+  	                  {{mb_label object=$consult_anesth field="premedication"}}
+  	                  <br />
+	                    <button class="tick" type="button" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour')">Accéder à la prescription</button>
+                    {{/if}}
 	                {{else}}
 	                  <div class="small-info">
 	                    La saisie de la prémédication n'est actuellement pas active
