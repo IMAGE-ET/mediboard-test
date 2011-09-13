@@ -39,11 +39,16 @@ $smarty->assign("patient"        , $patient);
 
 if ($consult_anesth->_id) {
   $consult_anesth->loadRefOperation();
+  $anesth = new CTypeAnesth;
+  $orderanesth = "name";
+  $anesth = $anesth->loadList(null,$orderanesth);
+  
   $smarty->assign("list_etat_dents", $list_etat_dents);
   $smarty->assign("mins"           , range(0, 15-1, 1));
   $smarty->assign("secs"           , range(0, 60-1, 1));
   $smarty->assign("examComp"       , new CExamComp);
   $smarty->assign("techniquesComp" , new CTechniqueComp);
+  $smarty->assign("anesth"         , $anesth);
   $smarty->assign("view_prescription", 0);
   $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 }

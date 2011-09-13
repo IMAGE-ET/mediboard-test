@@ -19,8 +19,12 @@
     <tr>
       <td>
         <strong>{{tr}}COperation.none{{/tr}}</strong><br/>
-        <button class="hslip" onclick="switchToConsult()">Passer à la consultation</button>
       </td>
     </tr>
   {{/foreach}}
+  <tr>
+    <td style="text-align: center;">
+      <button class="hslip" onclick="switchToConsult()">Passer à la consultation</button>
+    </td>
+  </tr>
 </table>

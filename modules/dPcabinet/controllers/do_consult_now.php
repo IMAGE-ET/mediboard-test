@@ -153,7 +153,12 @@ if ($ref_chir->isFromType(array("Anesthésiste"))) {
   $consultAnesth->loadObject($where);
   
   $consultAnesth->consultation_id = $consult->_id;
-  $consultAnesth->operation_id = $_operation_id;      
+  if ($_operation_id) {
+    $consultAnesth->operation_id = $_operation_id;
+  }
+  elseif ($sejour->_id) {
+    $consultAnesth->sejour_id = $sejour->_id;
+  }
   if($msg = $consultAnesth->store()) {
     CAppUI::setMsg($msg, UI_MSG_WARNING);
   }
