@@ -14,17 +14,17 @@
     
 <ul id="tab-modules" class="control_tabs_vertical" style="width: 20em;">
   {{foreach from=$prefs key=module item=_prefs}}
-  {{if $_prefs}}  
+  {{if $_prefs && ($module == "common" || $module|module_active)}}  
   <li>
-  	<a href="#{{$module}}" style="line-height: 24px;">
+  	<a href="#module-{{$module}}" style="line-height: 24px;">
       {{if $module != "common"}}
         <img src="modules/{{$module}}/images/icon.png" width="24" style="float: left;" />
       {{/if}}
 	  	{{tr}}module-{{$module}}-court{{/tr}}
 	  	<small>({{$_prefs|@count}})</small> 
 	  </a>
-	 </li>
-	 {{/if}}
+	</li>
+	{{/if}}
 	{{/foreach}}
 </ul>
 
@@ -54,12 +54,7 @@ Preferences.onSubmit = function(form) {
   {{else}}
     <col style="width: 40%;" />	
   {{/if}}
-	  
-  <tr>
-    <th colspan="4" class="title">
-      {{tr}}User preferences{{/tr}}
-    </th>
-	</tr>
+	
 	<tr>
     <th class="category">
       {{tr}}Preference{{/tr}}
@@ -101,7 +96,7 @@ Preferences.onSubmit = function(form) {
 
   <!-- Tous modules confondus -->
   {{assign var="module" value="common"}}
-	<tbody style="display: none" id="{{$module}}">
+	<tbody style="display: none" id="module-{{$module}}">
 
   {{mb_include template=inc_pref spec=enum var=LOCALE values=$locales value_locale_prefix="language."}}
   {{mb_include template=inc_pref spec=enum var=UISTYLE values=$styles value_locale_prefix="style."}}
@@ -116,8 +111,8 @@ Preferences.onSubmit = function(form) {
   </tbody>
   
   {{foreach from=$prefs key=module item=_prefs}}
-    {{if $module != "common" && isset($modules.$module|smarty:nodefaults)}}
-    <tbody style="display: none" id="{{$module}}">
+    {{if $module != "common" && $module|module_active}}
+    <tbody style="display: none" id="module-{{$module}}">
       {{mb_include module=$module template=preferences}}
     </tbody>
     {{/if}}
