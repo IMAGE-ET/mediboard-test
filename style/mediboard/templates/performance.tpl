@@ -33,7 +33,7 @@
   {{foreach from=$performance.cachableCounts key=objectClass item=cachableCount}}
   &ndash; {{$cachableCount}} {{$objectClass}}
   {{/foreach}}
-	
+  
   <br />
   Détails objets :
   {{foreach from=$performance.objectCounts key=objectClass item=objectCount}}

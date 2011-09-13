@@ -18,9 +18,9 @@
 
 {{if $app->user_id}}
   {{assign var=href value="?m=`$homepage.0`"}}
-	{{if $homepage|@count == 2}}
-	  {{assign var=href value="`$href`&tab=`$homepage.1`"}}
-	{{/if}}
+  {{if $homepage|@count == 2}}
+    {{assign var=href value="`$href`&tab=`$homepage.1`"}}
+  {{/if}}
 {{else}}
   {{assign var=href value=$conf.system.website_url}}
 {{/if}}

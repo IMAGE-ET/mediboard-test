@@ -339,7 +339,7 @@ table.tbl tr.clear th {
 /* Form tables */
 table.form th {
   vertical-align: top;
-	border-right: 1px solid #ddd;
+  border-right: 1px solid #ddd;
 }
 
 table.form th.title {
@@ -781,8 +781,8 @@ ul.control_tabs_vertical li a.active {
   #leftMenu, #tabmenu, #main > .title {
     display: none;
   }
-	
-	#main, #main > .content {
-		border: none;
-	}
+  
+  #main, #main > .content {
+    border: none;
+  }
 }

@@ -91,8 +91,8 @@ table.form td.compte_rendu {
 }
 
 .wizard {
-	background-color: #f8f8f8;
-	border-color: #888;
+  background-color: #f8f8f8;
+  border-color: #888;
 }
 
 /* Navigation */
@@ -316,7 +316,7 @@ a:hover.button {
 
 /* Standard table */
 table.tbl, table.form {
-	border-collapse: collapse;
+  border-collapse: collapse;
 }
 
 table.tbl {
@@ -327,12 +327,12 @@ table.tbl {
 table.tbl td, 
 table.tbl th {
   border-color: #ddd;
-	background-color: #eee;
+  background-color: #eee;
 }
 
 table.tbl th {
   background-color: #abe;
-	font-weight: bold;
+  font-weight: bold;
   color: #000;
   text-align: center;
 }
@@ -441,7 +441,7 @@ tr.catalogue-3 th {
 
 fieldset, 
 fieldset legend {
-	border: 1px solid #ABE;
+  border: 1px solid #ABE;
 }
 
 fieldset legend {
@@ -478,7 +478,7 @@ ul.control_tabs_vertical li a.active {
   #leftMenu, #mainHeader {
     display: none;
   }
-	
+  
   table.tbl td,
   table.tbl th,
   table.tbl th.title {

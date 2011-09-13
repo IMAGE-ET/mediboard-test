@@ -25,18 +25,18 @@ var Menu = {
       <table>
         <tbody id="menuIcons">
           <!-- Module icons -->
-	        <tr>
-	          <td></td>
-	          {{foreach from=$modules key=mod_name item=currModule}}
-	          {{if $currModule->_can->view && $currModule->mod_ui_active}}
-	          <td align="center" class="{{if $mod_name==$m}}iconSelected{{else}}iconNonSelected{{/if}}">
-	            <a href="?m={{$mod_name}}" title="{{tr}}module-{{$mod_name}}-long{{/tr}}">
-	              <img src="./modules/{{$mod_name}}/images/icon.png" alt="{{$mod_name}}" height="48" width="48" />
-	            </a>
-	          </td>
-	          {{/if}}
-	          {{/foreach}}
-	        </tr>
+          <tr>
+            <td></td>
+            {{foreach from=$modules key=mod_name item=currModule}}
+            {{if $currModule->_can->view && $currModule->mod_ui_active}}
+            <td align="center" class="{{if $mod_name==$m}}iconSelected{{else}}iconNonSelected{{/if}}">
+              <a href="?m={{$mod_name}}" title="{{tr}}module-{{$mod_name}}-long{{/tr}}">
+                <img src="./modules/{{$mod_name}}/images/icon.png" alt="{{$mod_name}}" height="48" width="48" />
+              </a>
+            </td>
+            {{/if}}
+            {{/foreach}}
+          </tr>
         </tbody>
         
         <!-- Modules names -->
@@ -67,7 +67,7 @@ var Menu = {
       </span>
       -  
       {{mb_include module=mediboard template=change_group}}
-		  {{mb_include module=mediboard template=svnstatus}}
+      {{mb_include module=mediboard template=svnstatus}}
         
       <a title="{{tr}}portal-help{{/tr}}" href="{{$portal.help}}" target="_blank">
         <img src="style/mediboard/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />

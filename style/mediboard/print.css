@@ -6,7 +6,7 @@
   }
   
   .not-printable, 
-	#user, #menubar, .titleblock, .tabmenu, #systemMsg, #performance, .smarty-include {
+  #user, #menubar, .titleblock, .tabmenu, #systemMsg, #performance, .smarty-include {
     display: none;
   }
   
@@ -26,10 +26,10 @@
     display:none;
   }
   
-	table.tbl td {
-		border-width: 2px;
-	}
-	
+  table.tbl td {
+    border-width: 2px;
+  }
+  
   .planning .event  {    
     font-size: 110%;
   }

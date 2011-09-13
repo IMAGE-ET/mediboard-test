@@ -25,7 +25,7 @@ class CHL7v2Exception extends Exception {
   const SEGMENT_MISSING            = 14;
   const MSG_CODE_MISSING           = 15;
   const UNKNOWN_AUTHORITY          = 16;
-	const UNEXPECTED_DATA_TYPE       = 17;
+  const UNEXPECTED_DATA_TYPE       = 17;
   
   // argument 2 must be named "code" ...
   /*public function __construct($id, $code = 0) {

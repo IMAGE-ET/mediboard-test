@@ -1,58 +1,3 @@
-<style>
-  ul, ol {
-    line-height: 1.4;
-    padding-left: 2em;
-    margin-bottom: 6px;
-  }
-  
-  ol {
-    list-style-type: none;
-  }
-  
-  .type {
-    color: #2D9A00;
-  }
-  
-  .type:before {
-    content: "(";
-  }
-  
-  .type:after {
-    content: ")";
-  }
-  
-  .field-name {
-    color: #3252A7;
-    margin-right: 5px;
-    display: inline-block;
-    width: 5em;
-    white-space: nowrap;
-  }
-  
-  .field-description {
-    color: #999;
-  }
-  
-  .value {
-    background: #eee;
-    padding: 0 2px;
-  }
-  
-  .field-item {
-    border: 1px dotted #ccc;
-    margin: 1px;
-  }
-  
-  .field-item > ol {
-    padding-left: 2px;
-    margin-bottom: 0px;
-  }
-  
-  .field-empty {
-    opacity: 0.5;
-  }
-</style>
-
 <script>
   Main.add(function(){
     Control.Tabs.create("mesaages-tab");
@@ -91,7 +36,7 @@
           </ul>
           <hr class="control_tabs" />
             
-          <ul id="message-{{$_key}}-tree" style="display: none;">
+          <ul id="message-{{$_key}}-tree" style="display: none;" class="hl7-tree">
             {{mb_include module=hl7 template=inc_segment_group_children segment_group=$_message}}
           </ul>
           

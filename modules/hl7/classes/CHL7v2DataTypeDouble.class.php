@@ -21,7 +21,7 @@ class CHL7v2DataTypeDouble extends CHL7v2DataType {
     if ($parsed === false) {
       return;
     }
-		
+    
     return (double)$parsed;
   }
   
@@ -37,7 +37,7 @@ class CHL7v2DataTypeDouble extends CHL7v2DataType {
     if ($parsed === false) {
       return;
     }
-		
+    
     return (double)$parsed;
   }
 }

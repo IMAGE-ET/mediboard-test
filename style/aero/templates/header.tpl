@@ -9,8 +9,8 @@
     <td class="menuTitle" id="modMenu" onmouseover="$(this).down().show()" onmouseout="$(this).down().hide()">
       Modules
       <div class="dropdown" style="display: none; position: absolute;">
-		    {{foreach from=$modules key=mod_name item=currModule}}
-		    {{if $currModule->mod_ui_active && $currModule->_can->view}}
+        {{foreach from=$modules key=mod_name item=currModule}}
+        {{if $currModule->mod_ui_active && $currModule->_can->view}}
           <a href="?m={{$mod_name}}" title="{{tr}}module-{{$mod_name}}-long{{/tr}}" class="{{if $mod_name == $m}}selected{{/if}}">
             {{thumb src="modules/$mod_name/images/icon.png" h="16" w="16" f="png"}}
             {{tr}}module-{{$mod_name}}-court{{/tr}}
@@ -79,8 +79,8 @@
     <td class="tabox">
       {{mb_include module=mediboard template=obsolete_module}}
 {{if $dialog}}
-	  <!-- System messages -->
-	  <div id="systemMsg">
-	    {{$errorMessage|nl2br|smarty:nodefaults}}
-	  </div>
+    <!-- System messages -->
+    <div id="systemMsg">
+      {{$errorMessage|nl2br|smarty:nodefaults}}
+    </div>
 {{/if}}

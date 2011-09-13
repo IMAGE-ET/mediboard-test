@@ -98,7 +98,7 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     
     // MSH-21: Message Profile Identifier (EI) (optional repeating) 
     $data[] = null;
-		
+    
     $this->fill($data);
   }
 }

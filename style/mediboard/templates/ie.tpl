@@ -76,9 +76,9 @@ Main.add(function () {
   <a href="#1" style="float: right;" onclick="$('ie7warning').hide(); cookiejar.put('IE7WarningClosed', 'closed');">{{tr}}Close{{/tr}}</a>
   <img src="images/icons/warning.png" style="float: left;"/>
   <span style="margin: 0.2em;">
-  	Pour un meilleur confort d'utilisation, nous vous conseillons d'utiliser le navigateur Firefox. 
-  	<a href="http://mediboard.org/public/Firefox" target="_blank" style="font-weight: bold; text-decoration: underline;">Cliquez ici</a> 
-  	pour plus d'informations.
+    Pour un meilleur confort d'utilisation, nous vous conseillons d'utiliser le navigateur Firefox. 
+    <a href="http://mediboard.org/public/Firefox" target="_blank" style="font-weight: bold; text-decoration: underline;">Cliquez ici</a> 
+    pour plus d'informations.
   </span>
 </div>
 <![endif]-->

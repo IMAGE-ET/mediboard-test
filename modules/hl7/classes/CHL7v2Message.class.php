@@ -415,9 +415,6 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
       $matches[4] => "<span class='re'>$matches[4]</span>",
     );
     
-    $seps = preg_quote(implode("", array_slice($matches, 1)));
-    $msg = preg_replace("/([^$seps]+)/", '<i>$1</i>', $msg);
-    
     return "<pre class='er7'>".strtr($msg, $pat)."</pre>";
   }
   

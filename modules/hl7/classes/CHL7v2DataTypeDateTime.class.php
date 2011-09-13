@@ -11,13 +11,13 @@
 class CHL7v2DataTypeDateTime extends CHL7v2DataType {
   function toMB($value, CHLv2Field $field){
     $parsed = $this->parseHL7($value, $field);
-		
-		// empty value
+    
+    // empty value
     if ($parsed === "") {
       return "";
     }
     
-		// invalid value
+    // invalid value
     if ($parsed === false) {
       return;
     }

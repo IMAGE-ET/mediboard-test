@@ -170,13 +170,10 @@ class CHL7v2FieldItem {
           if (CHL7v2Message::$decorateToString) {
             foreach($sub_compoments as $j => &$_sub) {
               $_spec = $specs->components[$i]->components[$j];
-              $title = $field->name.".".($i+1).".".($j+1)." - ".$_spec->getType();
+              $_meta_specs = $specs->components[$i]->getSpecs()->elements->field[$j];
               
-              if ($_spec instanceof CHL7v2DataTypeComposite) {
-                $title .= " - ".$_spec->description;
-              }
-              
-              $_sub = "<span class='sub-component' id='sub-component-$id-$self_pos-$i-$j' data-title='$title'>$_sub</span>";
+              $title = $field->name.".".($i+1).".".($j+1)." - ".$_spec->getType()." - ".$_meta_specs->description;
+              $_sub = "<span class='entity sub-component' id='sub-component-$id-$self_pos-$i-$j' data-title='$title'>$_sub</span>";
             }
           }
           
@@ -190,13 +187,10 @@ class CHL7v2FieldItem {
       if (CHL7v2Message::$decorateToString) {
         foreach($comp as $i => &$_comp) {
           $_spec = $specs->components[$i];
-          $title = $field->name.".".($i+1)." - ".$_spec->getType();
-              
-          if ($_spec instanceof CHL7v2DataTypeComposite) {
-            $title .= " - ".$_spec->description;
-          }
+          $_meta_specs = $this->specs->elements->field[$i];
           
-          $_comp = "<span class='component' id='component-$id-$self_pos-$i' data-title='$title'>$_comp</span>";
+          $title = $field->name.".".($i+1)." - ".$_spec->getType()." - ".$_meta_specs->description;
+          $_comp = "<span class='entity component' id='component-$id-$self_pos-$i' data-title='$title'>$_comp</span>";
         }
       }
     
@@ -208,7 +202,7 @@ class CHL7v2FieldItem {
     
     if (CHL7v2Message::$decorateToString) {
       $field = $this->field;
-      $str = "<span class='field-item' id='field-item-$id-$self_pos' data-title='$field->name - $field->datatype - $field->description'>$str</span>";
+      $str = "<span class='entity field-item' id='field-item-$id-$self_pos' data-title='$field->name - $field->datatype - $field->description'>$str</span>";
     }
     
     return $str;

@@ -73,6 +73,8 @@ class CHL7v2DataType extends CHL7v2 {
   
   protected $type;
   protected $version;
+  protected $length;
+  protected $table;
   
   protected function __construct($datatype, $version) {
     $this->type = (string)$datatype;
@@ -156,6 +158,11 @@ class CHL7v2DataType extends CHL7v2 {
     $value = trim($value);
     if ($value === "") return true;
     
+    if ($this->length && is_string($value) && strlen($value) > $this->length) {
+      //$field->error(CHL7v2Exception::INVALID_DATA_FORMAT, "'$value' ($this->type[$this->length])", $field);
+      //return false;
+    }
+    
     $valid = preg_match($this->getRegExpHL7(), $value);
     if (!$valid) {
       $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, "'$value' ($this->type)", $field);
@@ -169,7 +176,7 @@ class CHL7v2DataType extends CHL7v2 {
     if ($value === null) {
       return array();
     }
-		
+    
     if (!preg_match($this->getRegExpHL7(), $value, $matches)) {
       $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, "'$value' ($this->type)", $field);
       return false;
@@ -182,7 +189,7 @@ class CHL7v2DataType extends CHL7v2 {
     if ($value === null) {
       return array();
     }
-		
+    
     if (!preg_match($this->getRegExpMB(), $value, $matches)) {
       $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, "'$value' ($this->type)", $field);
       return false;
@@ -213,6 +220,14 @@ class CHL7v2DataType extends CHL7v2 {
   
   public function getType(){
     return $this->type;
+  }
+  
+  public function getLength(){
+    return $this->length;
+  }
+  
+  public function getTable(){
+    return $this->table;
   }
   
   protected function getRegExpMB(){

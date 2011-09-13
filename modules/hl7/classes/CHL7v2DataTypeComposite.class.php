@@ -19,7 +19,12 @@ class CHL7v2DataTypeComposite extends CHL7v2DataType {
     $this->description = (string)$specs->description;
     
     foreach($specs->elements->field as $field) {
-      $this->components[] = CHL7v2DataType::load((string)$field->datatype, $this->version);
+      $comp = CHL7v2DataType::load((string)$field->datatype, $this->version);
+      
+      $comp->length = (int)$field->attributes()->length;
+      $comp->table = (int)$field->attributes()->table;
+      
+      $this->components[] = $comp;
     }
   }
   

@@ -57,7 +57,7 @@ table.titleblock td.titlecell {
   font-size: 1.8em; 
   color: #620;
   width: 100%;
-	vertical-align: middle;
+  vertical-align: middle;
 }
 
 /* Tab view table */
@@ -79,8 +79,8 @@ table.tabmenu {
 
 table.tabmenu td {
   background: url(./images/icons/tabBg.png) repeat-x top;
-	padding: 3px 8px 0 8px;
-	height: 24px;
+  padding: 3px 8px 0 8px;
+  height: 24px;
 }
 
 table.tabmenu td.left,
@@ -593,7 +593,7 @@ td.redefined {
 
 #listebrancards th, 
 #listebrancards td {
-	min-width:80px;
-	max-width:80px;
-	white-space :normal;
+  min-width:80px;
+  max-width:80px;
+  white-space :normal;
 }

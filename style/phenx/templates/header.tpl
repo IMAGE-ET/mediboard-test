@@ -12,7 +12,7 @@
           {{$app->user_first_name}} {{$app->user_last_name}}
         </div>
         
-		    {{mb_include module=mediboard template=svnstatus}}    
+        {{mb_include module=mediboard template=svnstatus}}    
         
         <div class="menu">
           <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank"><img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" /></a>
@@ -29,8 +29,8 @@
       </div>
       
       <ul id="nav">
-     		{{foreach from=$modules key=mod_name item=currModule}}
-     		{{if $currModule->mod_ui_active && $currModule->_can->view}}    
+         {{foreach from=$modules key=mod_name item=currModule}}
+         {{if $currModule->mod_ui_active && $currModule->_can->view}}    
         <li {{if $mod_name==$m}}class="selected"{{/if}}>
         <a href="?m={{$mod_name}}">
           <img src="./modules/{{$mod_name}}/images/icon.png" alt="{{tr}}module-{{$mod_name}}-court{{/tr}}" />
@@ -46,13 +46,13 @@
       {{mb_include module=mediboard template=obsolete_module}}
       {{include file="../../mediboard/templates/message.tpl" nodebug=true}}
       
-    	<div id="systemMsg">
-    	  {{$errorMessage|nl2br|smarty:nodefaults|nl2br}}
-    	</div>
-      
-    	{{if !$dialog && !$offline}}
-    	<div class="title">
-    	  <img src="./modules/{{$m}}/images/icon.png" alt="Icone {{$m}}" height="24" width="24" />
-    	  <h1>{{tr}}module-{{$m}}-long{{/tr}}</h1>
+      <div id="systemMsg">
+        {{$errorMessage|nl2br|smarty:nodefaults|nl2br}}
       </div>
-    	{{/if}}
+      
+      {{if !$dialog && !$offline}}
+      <div class="title">
+        <img src="./modules/{{$m}}/images/icon.png" alt="Icone {{$m}}" height="24" width="24" />
+        <h1>{{tr}}module-{{$m}}-long{{/tr}}</h1>
+      </div>
+      {{/if}}

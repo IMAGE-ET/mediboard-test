@@ -44,7 +44,7 @@ var Menu = {
   </script>
   
   {{if !$offline}}
-	{{assign var=style value="width: 130px;"}}
+  {{assign var=style value="width: 130px;"}}
   {{mb_include module=mediboard template=change_group}}
   
   <!-- Welcome -->
@@ -86,12 +86,12 @@ var Menu = {
 
     <hr />
     {{foreach from=$modules key=mod_name item=_module}}
-	    {{if $_module->mod_ui_active && $_module->_can->view}}
-		    <a href="?m={{$_module->mod_name}}" title="{{tr}}module-{{$_module->mod_name}}-long{{/tr}}" class="{{if $mod_name == $m}}textSelected{{else}}textNonSelected{{/if}}">
-		      <img src="modules/{{$_module->mod_name}}/images/icon.png" alt="Icone {{$_module->mod_name}}" />
-		      {{tr}}module-{{$_module->mod_name}}-court{{/tr}}
-		    </a>
-	    {{/if}}
+      {{if $_module->mod_ui_active && $_module->_can->view}}
+        <a href="?m={{$_module->mod_name}}" title="{{tr}}module-{{$_module->mod_name}}-long{{/tr}}" class="{{if $mod_name == $m}}textSelected{{else}}textNonSelected{{/if}}">
+          <img src="modules/{{$_module->mod_name}}/images/icon.png" alt="Icone {{$_module->mod_name}}" />
+          {{tr}}module-{{$_module->mod_name}}-court{{/tr}}
+        </a>
+      {{/if}}
     {{/foreach}}
   </div>
   
@@ -135,7 +135,7 @@ var Menu = {
           </td>
           <td class="welcome">
             {{if !$offline}}
-  				    {{mb_include module=mediboard template=svnstatus}}
+              {{mb_include module=mediboard template=svnstatus}}
               {{mb_include module=mediboard template=change_group}}
             {{/if}}
             <br />

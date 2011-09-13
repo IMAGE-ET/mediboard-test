@@ -21,7 +21,7 @@ class CHL7v2DataTypeInteger extends CHL7v2DataType {
     if ($parsed === false) {
       return;
     }
-		
+    
     return (int)$parsed;
   }
   
@@ -37,7 +37,7 @@ class CHL7v2DataTypeInteger extends CHL7v2DataType {
     if ($parsed === false) {
       return;
     }
-		
+    
     return (int)$parsed;
   }
 }

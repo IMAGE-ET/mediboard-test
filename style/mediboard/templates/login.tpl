@@ -42,7 +42,7 @@
     <tr>
       <td colspan="10" class="button"><button class="tick" type="submit" name="login">{{tr}}Login{{/tr}}</button></td>
     </tr>
-	</table>
+  </table>
   </form>
 </div>
 

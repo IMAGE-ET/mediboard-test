@@ -1324,12 +1324,14 @@ ul li a.chapitre_signe.active{
   line-height: 1.2em; 
 }
 
-/* ER7 */
+/*** ER7 ***/
 .er7 {
   max-height: auto;
-	padding: 18px 3px;
+  max-width: 100%;
+  padding: 18px 3px;
 }
 
+/* separators */
 .er7 .fs,
 .er7 .rs,
 .er7 .cs,
@@ -1353,9 +1355,16 @@ ul li a.chapitre_signe.active{
   color: #006699;
 }
 
+/* entities */
 .er7 .segment {
   vertical-align: middle;
   line-height: 1.8;
+}
+
+.er7 .segment:hover {
+  background-color: #fff;
+  border: none !important;
+  margin: 0 !important;
 }
 
 .er7 .segment:after {
@@ -1364,79 +1373,59 @@ ul li a.chapitre_signe.active{
   content: "[CR]";
 }
 
-.er7 i {
-  font-style: inherit;
-	cursor: default;
-}
-
-.er7 i:hover {
-	background: #aaffcc;
-	border-radius: 2px;
-	padding: 2px 0;
-}
-
-.er7 .field-item,
-.er7 .component,
-.er7 .sub-component,
-.er7 .segment {
+.er7 .entity {
   position: relative;
-	cursor: default;
+  cursor: default;
 }
 
-.er7 .segment:before,
-.er7 .field-item:before,
-.er7 .component:before,
-.er7 .sub-component:before {
+.er7 .entity:before {
+  font-family: sans-serif;
   position: absolute;
   border: 1px solid;
   padding: 2px;
-	top: -17px;
-	left: -1px;
+  top: -17px;
+  left: -1px;
   z-index: 200;
   line-height: 1.4;
   font-size: 0.9em;
-	background: #eee;
+  background: #eee;
 }
 
-.er7 .field-item:before {
-  bottom: -17px;
-  top: auto;
-}
-
-.er7 .sub-component:before {
-  bottom: -17px;
-  top: auto;
-	right: -1px;
-	left:  auto;
-}
-
-.er7 .segment:hover:before,
-.er7 .field-item:hover:before,
-.er7 .component:hover:before,
-.er7 .sub-component:hover:before {
+.er7 .entity:hover:before {
   content: attr(data-title);
+}
+
+.er7 .entity:hover {
+  border: 1px solid gray;
+  margin: -1px;
 }
 
 .er7 .field:hover {
   background: #ddffee;
+  border: none;
+  margin: 0;
+}
+
+.er7 .field:hover:before {
+  content: none;
 }
 
 .er7 .field-item:hover {
-  border: 1px solid #CC0000;  /** outline bugs in Firefox **/
+  border-color: #CC0000;  /** outline bugs in Firefox **/
   padding: 6px 0;
-	margin: -1px;
 }
 
 .er7 .field-item:before {
+  bottom: -17px;
+  top: auto;
   background-color: #FF9999;
-	border-top: none;
-	border-color: #CC0000;
+  border-top: none;
+  border-color: #CC0000;
 }
 
 .er7 .component:hover {
-  border: 1px solid #009966; 
-  padding: 3px 0;
-  margin: -1px;
+  border-color: #009966; 
+  padding: 4px 0;
 }
 
 .er7 .component:before {
@@ -1446,17 +1435,79 @@ ul li a.chapitre_signe.active{
 }
 
 .er7 .sub-component:hover {
-  border: 1px solid #006699; 
-  padding: 0px 0;
-  margin: -1px;
+  border-color: #006699; 
+  padding: 2px 0;
 }
 
 .er7 .sub-component:before {
+  top: auto;
+  right: -1px;
+  left:  auto;
   background: #99CCFF;
   bottom: -17px;
   border-top: none;
   border-color: #006699;
 }
+/*** /ER7 ***/
+
+/*** HL7 Tree ***/
+
+ul.hl7-tree,
+.hl7-tree ul,
+.hl7-tree ol {
+  line-height: 1.4;
+  padding-left: 2em;
+  margin-bottom: 6px;
+	text-align: left;
+}
+
+.hl7-tree ol {
+  list-style-type: none;
+}
+
+.hl7-tree .type {
+  color: #2D9A00;
+}
+
+.hl7-tree .type:before {
+  content: "(";
+}
+
+.hl7-tree .type:after {
+  content: ")";
+}
+
+.hl7-tree .field-name {
+  color: #3252A7;
+  margin-right: 5px;
+  display: inline-block;
+  width: 5em;
+  white-space: nowrap;
+}
+
+.hl7-tree .field-description {
+  color: #999;
+}
+
+.hl7-tree .value {
+  background: #eee;
+  padding: 0 2px;
+}
+
+.hl7-tree .field-item {
+  border: 1px dotted #ccc;
+  margin: 1px;
+}
+
+.hl7-tree .field-item > ol {
+  padding-left: 2px;
+  margin-bottom: 0px;
+}
+
+.hl7-tree .field-empty {
+  opacity: 0.5;
+}
+/*** /HL7 Tree ***/
 
 .septique {
   color: #3A3;
@@ -1696,7 +1747,7 @@ td.loading {
 }
 
 div.sniffer {
-	float: right;
-	margin-top: -4px;
-	margin-right: -4px;
+  float: right;
+  margin-top: -4px;
+  margin-right: -4px;
 }

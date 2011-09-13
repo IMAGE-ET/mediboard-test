@@ -36,8 +36,8 @@
   <tr>
     <td id="menubar">
       | <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">{{tr}}portal-help{{/tr}}</a>
-	    {{foreach from=$modules key=mod_name item=currModule}}
-	    {{if $currModule->_can->view && $currModule->mod_ui_active}}
+      {{foreach from=$modules key=mod_name item=currModule}}
+      {{if $currModule->_can->view && $currModule->mod_ui_active}}
       <a href="?m={{$mod_name}}" class="{{if $mod_name==$m}}textSelected{{else}}textNonSelected{{/if}}">
         {{tr}}module-{{$mod_name}}-court{{/tr}}
       </a> |

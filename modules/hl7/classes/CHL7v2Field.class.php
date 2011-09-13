@@ -137,7 +137,7 @@ class CHL7v2Field extends CHL7v2Entity {
     $str = implode($rs, $this->items);
     
     if (CHL7v2Message::$decorateToString) {
-      $str = "<span class='field' id='field-$this->id'>$str</span>";
+      $str = "<span class='entity field' id='field-$this->id'>$str</span>";
     }
     
     return $str;

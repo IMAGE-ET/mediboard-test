@@ -27,7 +27,7 @@ pre {
   margin: 2px 10px;
   max-height: 250px;
   overflow: auto;
-	text-align: left;
+  text-align: left;
 }
 
 table {
@@ -53,7 +53,7 @@ text-indent: -1.5em;
 
 img {
   border: none;
-	vertical-align: middle;
+  vertical-align: middle;
   image-rendering: optimizeQuality;  /* Firefox 3.6+ */
   -ms-interpolation-mode: bicubic;   /* Internet Explorer 7.0+ */
 }
@@ -61,7 +61,7 @@ img {
 ul, ol {
   margin: 0;
   padding-left: 1.5em;
-	line-height: 1.1;
+  line-height: 1.1;
 }
 
 dl {
@@ -102,7 +102,7 @@ h1 {
   font-size: 1.6em;
   color: #444;
   margin: 10px 0px;
-	page-break-before: always;
+  page-break-before: always;
 }
 
 h1.no-break {

@@ -17,7 +17,7 @@
  */
 
 class CHL7v2SegmentPV1 extends CHL7v2Segment {
-	var $name = "PV1";
+  var $name = "PV1";
   var $sejour  = null;
   
   function build(CHL7v2Event $event) {
