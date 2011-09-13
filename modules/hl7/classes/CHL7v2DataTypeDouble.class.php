@@ -10,12 +10,34 @@
 
 class CHL7v2DataTypeDouble extends CHL7v2DataType {
   function toMB($value, CHLv2Field $field){
-    $result = parent::toMB($value, $field);
-    return ($result === false ? null : (double)$result);
+    $parsed = parent::toMB($value, $field);
+    
+    // empty value
+    if ($parsed === "") {
+      return "";
+    }
+    
+    // invalid value
+    if ($parsed === false) {
+      return;
+    }
+		
+    return (double)$parsed;
   }
   
   function toHL7($value, CHLv2Field $field) {
-    $result = parent::toHL7($value, $field);
-    return ($result === false ? null : (double)$result);
+    $parsed = parent::toHL7($value, $field);
+    
+    // empty value
+    if ($parsed === "") {
+      return "";
+    }
+    
+    // invalid value
+    if ($parsed === false) {
+      return;
+    }
+		
+    return (double)$parsed;
   }
 }

@@ -10,32 +10,44 @@
 
 class CHL7v2DataTypeDateTime extends CHL7v2DataType {
   function toMB($value, CHLv2Field $field){
-    $hl7 = $this->parseHL7($value, $field);
+    $parsed = $this->parseHL7($value, $field);
+		
+		// empty value
+    if ($parsed === "") {
+      return "";
+    }
     
-    if ($hl7 === false) {
+		// invalid value
+    if ($parsed === false) {
       return;
     }
     
-    return $hl7["year"].
-            "-".CValue::read($hl7, "month",  "00").
-            "-".CValue::read($hl7, "day",    "00").
-            " ".CValue::read($hl7, "hour",   "00").
-            ":".CValue::read($hl7, "minute", "00").
-            ":".CValue::read($hl7, "second", "00");
+    return $parsed["year"].
+            "-".CValue::read($parsed, "month",  "00").
+            "-".CValue::read($parsed, "day",    "00").
+            " ".CValue::read($parsed, "hour",   "00").
+            ":".CValue::read($parsed, "minute", "00").
+            ":".CValue::read($parsed, "second", "00");
   }
   
   function toHL7($value, CHLv2Field $field) {
-    $mb = $this->parseMB($value, $field);
+    $parsed = $this->parseMB($value, $field);
     
-    if ($mb === false) {
+    // empty value
+    if ($parsed === "") {
+      return "";
+    }
+    
+    // invalid value
+    if ($parsed === false) {
       return;
     }
     
-    return  CValue::read($mb, "year").
-           (CValue::read($mb, "month") === "00" ? "" : $mb["month"]).
-           (CValue::read($mb, "day")   === "00" ? "" : $mb["day"]).
-            CValue::read($mb, "hour").
-            CValue::read($mb, "minute").
-            CValue::read($mb, "second");
+    return  CValue::read($parsed, "year").
+           (CValue::read($parsed, "month") === "00" ? "" : CValue::read($parsed, "month")).
+           (CValue::read($parsed, "day")   === "00" ? "" : CValue::read($parsed, "day")).
+            CValue::read($parsed, "hour").
+            CValue::read($parsed, "minute").
+            CValue::read($parsed, "second");
   }
 }

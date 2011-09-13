@@ -57,7 +57,7 @@ class CHL7v2DataTypeComposite extends CHL7v2DataType {
       }
       
       if (!$this->components[$k]->validate($component_data, $field)) {
-        $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $this->type, $field);
+        $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, var_export($component_data, true)." ($this->type)", $field);
         return false;
       }
     }

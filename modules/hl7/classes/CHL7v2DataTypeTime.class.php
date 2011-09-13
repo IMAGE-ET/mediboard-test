@@ -10,27 +10,38 @@
 
 class CHL7v2DataTypeTime extends CHL7v2DataType {
   function toMB($value, CHLv2Field $field){
-    $hl7 = $this->parseHL7($value, $field);
+    $parsed = $this->parseHL7($value, $field);
     
-    if ($hl7 === false) {
+    // empty value
+    if ($parsed === "") {
+      return "";
+    }
+    
+    // invalid value
+    if ($parsed === false) {
       return;
     }
     
-    return      CValue::read($hl7, "hour",   "00").
-            ":".CValue::read($hl7, "minute", "00").
-            ":".CValue::read($hl7, "second", "00");
+    return      CValue::read($parsed, "hour",   "00").
+            ":".CValue::read($parsed, "minute", "00").
+            ":".CValue::read($parsed, "second", "00");
   }
   
   function toHL7($value, CHLv2Field $field) {
-    $mb = $this->parseMB($value, $field);
+    $parsed = $this->parseMB($value, $field);
     
-    if ($mb === false) {
+    // empty value
+    if ($parsed === "") {
+      return "";
+    }
+    
+    // invalid value
+    if ($parsed === false) {
       return;
     }
     
-    
-    return $mb["hour"].
-           $mb["minute"].
-           $mb["second"];
+    return $parsed["hour"].
+           $parsed["minute"].
+           $parsed["second"];
   }
 }

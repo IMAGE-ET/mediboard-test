@@ -10,24 +10,36 @@
 
 class CHL7v2DataTypeDate extends CHL7v2DataType {
   function toMB($value, CHLv2Field $field){
-    $hl7 = $this->parseHL7($value, $field);
+    $parsed = $this->parseHL7($value, $field);
     
-    if ($hl7 === false) {
+    // empty value
+    if ($parsed === "") {
+      return "";
+    }
+    
+    // invalid value
+    if ($parsed === false) {
       return;
     }
     
-    return CValue::read($hl7, "year")."-".
-           CValue::read($hl7, "month", "00")."-".
-           CValue::read($hl7, "day", "00");
+    return CValue::read($parsed, "year")."-".
+           CValue::read($parsed, "month", "00")."-".
+           CValue::read($parsed, "day", "00");
   }
   
   function toHL7($value, CHLv2Field $field) {
-    $mb = $this->parseMB($value, $field);
+    $parsed = $this->parseMB($value, $field);
     
-    if ($mb === false) {
+    // empty value
+    if ($parsed === "") {
+      return "";
+    }
+    
+    // invalid value
+    if ($parsed === false) {
       return;
     }
     
-    return $mb["year"].($mb["month"] === "00" ? "" : $mb["month"]).($mb["day"] === "00" ? "" : $mb["day"]);
+    return $parsed["year"].($parsed["month"] === "00" ? "" : $parsed["month"]).($parsed["day"] === "00" ? "" : $parsed["day"]);
   }
 }
