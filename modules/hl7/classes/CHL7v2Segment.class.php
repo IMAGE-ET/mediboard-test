@@ -92,17 +92,6 @@ class CHL7v2Segment extends CHL7v2Entity {
     $specs = $this->getSpecs();
     $message = $this->getMessage();
     
-    if ($this->name === "MSH") {
-      // Encoding characters without the field separator
-      $fields[1] = substr($message->encoding_characters(), 1); 
-      
-      // Message type
-      $fields[8] = $message->name;
-      
-      // Version Id
-      $fields[11] = $message->version;
-    }
-    
     $i = 0;
     foreach($specs->elements->field as $_spec){
       if (!array_key_exists($i, $fields)) {
@@ -110,6 +99,10 @@ class CHL7v2Segment extends CHL7v2Entity {
       }
       
       $_data = $fields[$i++];
+      
+      if ($_data instanceof CMbObject) {
+        throw new CHL7v2Exception($_data->_class, CHL7v2Exception::UNEXPECTED_DATA_TYPE);
+      }
       
       $field = new CHL7v2Field($this, $_spec);
       $field->fill($_data);
@@ -182,7 +175,7 @@ class CHL7v2Segment extends CHL7v2Entity {
   
   function build(CHL7v2Event $event, $name = null) {
     if (!$event->msg_codes) {
-      throw new CHL7v2Exception(CHL7v2Exception::MSH_CODE_MISSING);
+      throw new CHL7v2Exception(CHL7v2Exception::MSG_CODE_MISSING);
     }
     
     // This segment has the following fields

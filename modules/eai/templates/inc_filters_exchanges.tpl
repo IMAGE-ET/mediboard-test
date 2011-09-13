@@ -54,8 +54,8 @@
             <td colspan="2">{{mb_field object=$exchange field=$exchange->_spec->key}}</td>
           </tr>
           <tr>
-            <th colspan="2">{{mb_label object=$exchange field="object_id}}</th>
-            <td colspan="2">{{mb_field object=$exchange field="object_id}}</td>
+            <th colspan="2">{{mb_label object=$exchange field="object_id"}}</th>
+            <td colspan="2">{{mb_field object=$exchange field="object_id"}}</td>
           </tr>
           <tr>
             <th colspan="2">{{mb_label object=$exchange field="id_permanent"}}</th>
@@ -87,7 +87,10 @@
           <tr>
             <td colspan="4" style="text-align: center">
               {{foreach from=$types key=type item=value}}
-                <input onclick="$V(this.form.page, 0)" type="checkbox" name="types[{{$type}}]"/>{{tr}}CExchange-type-{{$type}}{{/tr}}
+                <label>
+                  <input onclick="$V(this.form.page, 0)" type="checkbox" name="types[{{$type}}]"/> 
+                  {{tr}}CExchange-type-{{$type}}{{/tr}}
+                </label>
               {{/foreach}}
             </td>
           </tr>

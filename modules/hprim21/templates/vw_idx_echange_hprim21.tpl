@@ -65,7 +65,11 @@ refreshEchange = function(echange_hprim21_id){
           <tr>
             <td colspan="4" style="text-align: center">
               {{foreach from=$types key=type item=value}}
-                <input onclick="$V(this.form.page, 0)" type="checkbox" name="types[{{$type}}]" {{if array_key_exists($type, $selected_types)}}checked="checked"{{/if}} />{{tr}}CEchangeHprim-type-{{$type}}{{/tr}}
+                <label>
+                  <input onclick="$V(this.form.page, 0)" type="checkbox" name="types[{{$type}}]" 
+                         {{if array_key_exists($type, $selected_types)}}checked="checked"{{/if}} />
+                  {{tr}}CEchangeHprim-type-{{$type}}{{/tr}}
+                </label>
               {{/foreach}}
             </td>
           </tr>

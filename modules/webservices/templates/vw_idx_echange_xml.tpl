@@ -86,8 +86,11 @@ function changePage(page) {
           <tr>
             <td colspan="4" style="text-align: center">
               {{foreach from=$types key=type item=value}}
-                <input onclick="$V(this.form.page, 0)" type="checkbox" name="types[{{$type}}]" 
-                  {{if array_key_exists($type, $selected_types)}}checked="checked"{{/if}} />{{tr}}{{$echange_xml->_class}}-type-{{$type}}{{/tr}}
+                <label>
+                  <input onclick="$V(this.form.page, 0)" type="checkbox" name="types[{{$type}}]" 
+                    {{if array_key_exists($type, $selected_types)}}checked="checked"{{/if}} />
+                  {{tr}}{{$echange_xml->_class}}-type-{{$type}}{{/tr}}
+                </label>
               {{/foreach}}
             </td>
           </tr>

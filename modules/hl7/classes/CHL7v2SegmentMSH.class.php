@@ -26,10 +26,10 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     $data = array();
     
     // MSH-1: Field Separator (ST)
-    $data[] = null;  
+    $data[] = $message->fieldSeparator;  
            
     // MSH-2: Encoding Characters (ST)
-    $data[] = null;       
+    $data[] = substr($message->encoding_characters(), 1);       
      
     // MSH-3: Sending Application (HD) (optional)
     $data[] = "Mediboard"; 
@@ -96,7 +96,7 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     
     // MSH-21: Message Profile Identifier (EI) (optional repeating) 
     $data[] = null;
-    
+		
     $this->fill($data);
   }
 }
