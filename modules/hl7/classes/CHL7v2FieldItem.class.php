@@ -127,7 +127,7 @@ class CHL7v2FieldItem {
     $specs = $this->getCompositeSpecs();
     
     if (!$specs->validate($this->components, $field)) {
-      //$field->error(CHL7v2Exception::INVALID_DATA_FORMAT, var_export($this->components, true), $field);
+      $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, var_export($this->components, true), $field);
       return false;
     }
     

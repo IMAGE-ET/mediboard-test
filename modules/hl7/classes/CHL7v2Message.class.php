@@ -250,7 +250,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
           
           if ($current_node->isUnbounded() || $current_node->getOccurences() == 0) {
             CHL7v2::d(" --> Groupe multiple ou pas encore utilisé, on entre dedans (occurences = ".$current_node->getOccurences().")");
-            $current_group = new CHL7v2SegmentGroup($current_group);
+            $current_group = new CHL7v2SegmentGroup($current_group, $current_node);
             
             $current_node = $current_node->getFirstChild();
           }
