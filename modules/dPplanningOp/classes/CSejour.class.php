@@ -143,7 +143,8 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_ref_replacements        = null;
   var $_ref_replacement         = null;
   var $_ref_tasks               = null;
-  
+  var $_ref_tasks_not_created   = null;
+	
   // External objects
   var $_ext_diagnostic_principal = null;
   var $_ext_diagnostic_relie     = null;
