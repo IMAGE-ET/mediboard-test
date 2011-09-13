@@ -17,10 +17,11 @@
  */
 
 class CHL7v2SegmentPD1 extends CHL7v2Segment {
+  var $name    = "PD1";
   var $patient = null;
   
   function build(CHL7v2Event $event) {
-    parent::build($event, "PD1");
+    parent::build($event);
         
     $patient  = $this->patient;
     

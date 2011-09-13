@@ -17,12 +17,13 @@
  */
 
 class CHL7v2SegmentROL extends CHL7v2Segment {
+  var $name = "ROL";
   var $medecin = null;
   var $action  = "UC";
   var $role_id = null;
   
   function build(CHL7v2Event $event) {
-    parent::build($event, "ROL");
+    parent::build($event);
         
     $medecin  = $this->medecin;
 
@@ -62,63 +63,7 @@ class CHL7v2SegmentROL extends CHL7v2Segment {
     );
      
     // ROL-4: Role Person (XCN) (repeating)
-    $data[] = array(
-      array (
-        // XCN-1
-        CValue::first($medecin->rpps, $medecin->adeli, $medecin->_id),
-        // XCN-2
-        $medecin->nom,
-        // XCN-3
-        $medecin->prenom,
-        // XCN-4
-        null,
-        // XCN-5
-        null,
-        // XCN-6
-        null,
-        // XCN-7
-        null,
-        // XCN-8
-        null,
-        // XCN-9
-        // Autorité d'affectation
-        $this->getAssigningAuthority($medecin->rpps ? "RPPS" : ($medecin->adeli ? "ADELI" : "mediboard")),
-        // XCN-10
-        // Table - 0200
-        // L - Legal Name - Nom de famille
-        "L",
-        // XCN-11
-        null,
-        // XCN-12
-        null,
-        // XCN-13
-        // Table - 0203
-        // ADELI - Numéro au répertoire ADELI du professionnel de santé
-        // RPPS  - N° d'inscription au RPPS du professionnel de santé 
-        // RI    - Ressource interne
-        $medecin->rpps ? "RPPS" : ($medecin->adeli ? "ADELI" : "RI"),
-        // XCN-14
-        null,
-        // XCN-15
-        null,
-        // XCN-16
-        null,
-        // XCN-17
-        null,
-        // XCN-18
-        null,
-        // XCN-19
-        null,
-        // XCN-20
-        null,
-        // XCN-21
-        null,
-        // XCN-22
-        null,
-        // XCN-23
-        null,
-      )
-    );
+    $data[] = $this->getXCN($medecin);
     
     // ROL-5: Role Begin Date/Time (TS) (optional)
     $data[] = null;

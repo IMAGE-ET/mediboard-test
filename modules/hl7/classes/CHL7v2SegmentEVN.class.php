@@ -17,11 +17,12 @@
  */
 
 class CHL7v2SegmentEVN extends CHL7v2Segment {
+  var $name             = "EVN";
   var $planned_datetime = null;
   var $occured_datetime = null;
   
   function build(CHL7v2Event $event) {
-    parent::build($event, "EVN");
+    parent::build($event);
 
     $data = array();
     
@@ -44,7 +45,7 @@ class CHL7v2SegmentEVN extends CHL7v2Segment {
     $data[] = null;
     
     // EVN-5: Operator ID (XCN) (optional repeating)
-    $data[] = $event->last_log->loadRefUser();
+    $data[] = $this->getXCN($event->last_log->loadRefUser());
     
     // EVN-6: Event Occurred (TS) (optional)
     $data[] = $this->occured_datetime;

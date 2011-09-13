@@ -217,9 +217,86 @@ class CHL7v2Segment extends CHL7v2Entity {
         );
         break;  
       default :
-        throw new CHL7v2Exception(CHL7v2Exception::NO_AUTHORITY);
+        throw new CHL7v2Exception(CHL7v2Exception::UNKNOWN_AUTHORITY);
         break;
     }
+  }
+  
+  function getXCN(CMbObject $object) {
+    $xcn1 = $xcn2 = $xcn3 = $xcn9 = $xcn13 = null;
+    
+    if ($object instanceof CMedecin) {
+      $xcn1  = CValue::first($object->rpps, $object->adeli, $object->_id);
+      $xcn2  = $object->nom;
+      $xcn3  = $object->prenom;
+      $xcn9  = $this->getAssigningAuthority($object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "mediboard"));
+      $xcn13 = $object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "RI");
+    }
+    elseif ($object instanceof CUser) {
+      $xcn1  = $object->_id;
+      $xcn2  = $object->user_last_name;
+      $xcn3  = $object->user_first_name;
+      $xcn9  = $this->getAssigningAuthority("mediboard");
+      $xcn13 = "RI";
+    }
+    
+    return array(
+      array (
+        // XCN-1
+        $xcn1,
+        // XCN-2
+        $xcn2,
+        // XCN-3
+        $xcn3,
+        // XCN-4
+        null,
+        // XCN-5
+        null,
+        // XCN-6
+        null,
+        // XCN-7
+        null,
+        // XCN-8
+        null,
+        // XCN-9
+        // Autorité d'affectation
+        $xcn9,
+        // XCN-10
+        // Table - 0200
+        // L - Legal Name - Nom de famille
+        "L",
+        // XCN-11
+        null,
+        // XCN-12
+        null,
+        // XCN-13
+        // Table - 0203
+        // ADELI - Numéro au répertoire ADELI du professionnel de santé
+        // RPPS  - N° d'inscription au RPPS du professionnel de santé 
+        // RI    - Ressource interne
+        $xcn13,
+        // XCN-14
+        null,
+        // XCN-15
+        null,
+        // XCN-16
+        null,
+        // XCN-17
+        null,
+        // XCN-18
+        null,
+        // XCN-19
+        null,
+        // XCN-20
+        null,
+        // XCN-21
+        null,
+        // XCN-22
+        null,
+        // XCN-23
+        null,
+      )
+    );
   }
 }
 

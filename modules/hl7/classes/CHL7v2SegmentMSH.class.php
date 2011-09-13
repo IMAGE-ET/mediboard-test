@@ -17,8 +17,10 @@
  */
 
 class CHL7v2SegmentMSH extends CHL7v2Segment {
+  var $name = "MSH";
+  
   function build(CHL7v2Event $event) {
-    parent::build($event, "MSH");
+    parent::build($event);
     
     $message  = $event->message;
     $receiver = $event->_receiver;
