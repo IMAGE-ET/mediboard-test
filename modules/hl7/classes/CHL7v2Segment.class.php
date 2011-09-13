@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-class CHL7v2Segment extends CHL7v2Entity {   
+class CHL7v2Segment extends CHL7v2Entity {
   var $name        = null;
   var $description = null;
   var $fields      = array();
@@ -180,13 +180,15 @@ class CHL7v2Segment extends CHL7v2Entity {
     return $str;
   }
   
-  function build(CHL7v2Event $event, $name) {
+  function build(CHL7v2Event $event, $name = null) {
     if (!$event->msg_codes) {
       throw new CHL7v2Exception(CHL7v2Exception::MSH_CODE_MISSING);
     }
     
     // This segment has the following fields
-    $this->name = $name;
+    if ($name) {
+      $this->name = $name;
+    }
     
     $this->getMessage()->appendChild($this);
   }

@@ -17,10 +17,11 @@
  */
 
 class CHL7v2SegmentPV1 extends CHL7v2Segment {
+	var $name = "PV1";
   var $sejour  = null;
   
   function build(CHL7v2Event $event) {
-    parent::build($event, "PID");
+    parent::build($event);
     
     $message  = $event->message;
     $receiver = $event->_receiver;
