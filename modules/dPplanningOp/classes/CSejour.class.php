@@ -1218,6 +1218,8 @@ class CSejour extends CCodable implements IPatientRelated {
     $this->_ref_consult_anesth = new CConsultAnesth();
     $this->_ref_consult_anesth->sejour_id = $this->_id;
     $this->_ref_consult_anesth->loadMatchingObject($order);
+    
+    return $this->_ref_consult_anesth;
   }
   
   /**

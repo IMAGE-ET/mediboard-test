@@ -13,8 +13,13 @@ $can->needsRead();
 $sejour = new CSejour();
 $sejour->load(CValue::get("sejour_id"));
 $sejour->loadRefsOperations();
+$consult_anesth = $sejour->loadRefsConsultAnesth();
+$consult_anesth->loadRefsFwd();
+
 foreach ($sejour->_ref_operations as $_operation) {
 	$_operation->loadRefPlageOp();
+	$consult_anesth = $_operation->loadRefsConsultAnesth();
+	$consult_anesth->loadRefsFwd();
 }
 
 // Création du template
