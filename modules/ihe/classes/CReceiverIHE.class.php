@@ -70,11 +70,11 @@ class CReceiverIHE extends CInteropReceiver {
   }
   
   function sendEvent($evenement, CMbObject $mbObject) {
-    $evenement->_sender   = $this;
-    $evenement->_receiver = $mbObject->_receiver;
+    $evenement->_receiver = $this;
     
     $evenement->build($mbObject);    
     $msg = $evenement->flatten();
+    
   }
 }
 ?>

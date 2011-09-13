@@ -18,10 +18,33 @@ CAppUI::requireModuleClass("hl7", "CHL7EventADTA31");
  * Class CHL7v2EventADTA31 
  * A31 - Add person information
  */
-class CHL7v2EventADTA31 extends CHL7v2Event implements CHL7EventADTA31 {
-  function __construct(){}
+class CHL7v2EventADTA31 extends CHL7v2EventADT implements CHL7EventADTA31 {
+  function __construct() {
+    parent::__construct();
+        
+    $this->code      = "A31";
+    $this->msg_codes = array ( 
+      array(
+        $this->event_type, $this->code, "{$this->event_type}_A05"
+      )
+    );
+  }
   
-  function build($object){}
+  function build($patient){
+    parent::build($patient);
+    
+    // Patient Identification
+    $this->addPID($patient);
+    
+    // Patient Additional Demographic
+    $this->addPD1($patient);
+    
+    // Doctors
+    $this->addROLs($patient);
+    
+    // Patient Visit
+    $this->addPV1();
+  }
 }
 
 ?>

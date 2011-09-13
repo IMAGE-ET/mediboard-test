@@ -16,6 +16,7 @@
  * Event HL7
  */
 class CHL7v2Event {
+  var $event_type    = null;
   var $object        = null;
   var $last_log      = null;
   var $profil        = null;
@@ -24,6 +25,7 @@ class CHL7v2Event {
   var $version       = null;
   
   var $message       = null;
+  var $msg_hl7       = null;
 
   var $msg_codes     = array();
   
@@ -47,14 +49,16 @@ class CHL7v2Event {
     // Création du message HL7
     $this->message          = new CHL7v2Message();
     $this->message->version = $this->version;
-    $this->message->name    = $this->msg_codes[0].$this->msg_codes[1];
+    $this->message->name    = $this->msg_codes;
   }
   
   function flatten() {
-    $msg_hl7 = $this->message->flatten();
-    mbTrace($msg_hl7, "Message HL7 généré");
+    $this->msg_hl7 = $this->message->flatten();
+    mbLog( $this->msg_hl7, "Message HL7 généré");
     $this->message->validate();
-    mbTrace($this->message->errors, "Erreurs message HL7");
+    mbLog($this->message->dumpErrors(), "Erreurs message HL7");
+    
+    $this->updateExchange();
   }
   
   function generateExchange() {
@@ -63,14 +67,25 @@ class CHL7v2Event {
     $exchange_ihe->receiver_id     = $this->_receiver->_id;
     $exchange_ihe->group_id        = $this->_receiver->group_id;
     $exchange_ihe->sender_id       = $this->_sender ? $this->_sender->_id : null;
+    $exchange_ihe->sender_class    = $this->_sender ? $this->_sender->_id : null;
     $exchange_ihe->version         = $this->version;
     $exchange_ihe->type            = $this->profil;
     $exchange_ihe->sous_type       = $this->transaction;
     $exchange_ihe->code            = $this->code;
     $exchange_ihe->object_id       = $this->object->_id;
+    $exchange_ihe->object_class    = $this->object->_class;
     $exchange_ihe->store();
     
     return $this->_exchange_ihe = $exchange_ihe;
+  }
+  
+  function updateExchange() {
+    $exchange_ihe                 = $this->_exchange_ihe;
+    $exchange_ihe->_message       = $this->msg_hl7;
+    $exchange_ihe->message_valide = $this->message->errors ? 0 : 1;
+    $exchange_ihe->store();
+    
+    return $exchange_ihe;
   }
 }
 

@@ -39,11 +39,16 @@ class CCorrespondant extends CMbObject {
   }
     
   function loadRefsFwd() {
-    $patient = new CPatient();
-    $this->_ref_patient = $patient->getCached($this->patient_id);
-    
-    $medecin = new CMedecin();
-    $this->_ref_medecin = $medecin->getCached($this->medecin_id);
+    $this->loadRefPatient();
+    $this->loadRefMedecin();
+  }
+  
+  function loadRefPatient() {
+    return $this->_ref_patient = $this->loadFwdRef("patient_id");
+  }
+  
+  function loadRefMedecin() {
+    return $this->_ref_medecin = $this->loadFwdRef("medecin_id");
   }
 }
 ?>

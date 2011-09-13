@@ -42,6 +42,9 @@ class CExchangeIHE extends CExchangeTabular {
     $props["receiver_id"]   = "ref class|CReceiverIHE"; 
     $props["object_class"]  = "enum list|CPatient|CSejour|COperation|CAffectation show|0";
     $props["code"]          = "str";
+    
+    $props["_message"]      = "er7";
+    $props["_acquittement"] = "er7";
 
     return $props;
   }
@@ -52,6 +55,14 @@ class CExchangeIHE extends CExchangeTabular {
 
   function getFamily() {
     return self::$messages;
+  }
+  
+  function getErrors() {
+    if ($this->_message !== null) {
+      $hl7_message = new CHL7v2Message();
+      $hl7_message->parse($this->_message);
+      $this->_doc_errors_msg = $hl7_message->dumpErrors();
+    } 
   }
 }
 ?>

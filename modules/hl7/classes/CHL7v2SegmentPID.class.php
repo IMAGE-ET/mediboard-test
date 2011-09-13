@@ -63,14 +63,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
       null,
       null,
       // PID-3-4 Autorité d'affectation
-      array(
-        // Nom de l'application
-        "Mediboard",
-        // L'OID de l'application
-        "1.2.250.1.2.3.4",
-        // Editeur de l'application
-        "OpenXtrem"
-      ),
+      $this->getAssigningAuthority("mediboard"),
       "RI"
     );
     if ($patient->INSC) {
@@ -79,14 +72,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
       null,
       null,
       // PID-3-4 Autorité d'affectation
-      array(
-        // Nom de l'application
-        null,
-        // L'OID de l'application
-        "1.2.250.1.213.1.4.2",
-        // Editeur de l'application
-        "ISO"
-      ),
+      $this->getAssigningAuthority("INS-C"),
       "INS-C",
       null,
       mbDate($patient->INSC_date)
@@ -297,7 +283,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     }
     
     // PID-19: SSN Number - Patient (ST) (optional)
-    $data[] = null;
+    $data[] = $patient->matricule;
     
     // PID-20: Driver's License Number - Patient (DLN) (optional)
     $data[] = null;

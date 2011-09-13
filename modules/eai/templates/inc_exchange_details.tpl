@@ -37,7 +37,7 @@
     <hr class="control_tabs" />
     
     <div id="message" style="display: none;">
-      {{mb_value object=$exchange field="_message"}}  
+      {{mb_value object=$exchange field="_message" advanced=true}}  
       {{if $exchange->message_valide != 1 && count($exchange->_doc_errors_msg) > 0}}
       <div class="big-error">
         <strong>{{tr}}CExchange-message-invalide{{/tr}}</strong> <br />
@@ -54,7 +54,7 @@
     <div id="ack" style="display: none;">
       {{if $exchange->message_valide == 1 || $exchange->acquittement_valide == 1}}
         {{if $exchange->_acquittement}}
-          {{mb_value object=$exchange field="_acquittement"}}
+          {{mb_value object=$exchange field="_acquittement" advanced=true}}
           
           {{mb_include module=$exchange->_ref_module->mod_name template="`$exchange->_class`_observations_inc"}}
         {{else}}

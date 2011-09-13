@@ -17,27 +17,108 @@
  */
 
 class CHL7v2SegmentROL extends CHL7v2Segment {
-  var $patient = null;
+  var $medecin = null;
+  var $action  = "UC";
   var $role_id = null;
   
   function build(CHL7v2Event $event) {
     parent::build($event, "ROL");
         
-    $patient  = $this->patient;
-    
+    $medecin  = $this->medecin;
+
     $data = array();
         
     // ROL-1: Role Instance ID (EI) (optional)
+    // The field is optional when used in ADT and Finance messages
     $data[] = null;
     
     // ROL-2: Action Code (ID)
-    $data[] = null;
+    // Table - 0287
+    // AD - ADD - Nouveau rôle du médecin
+    // DE - DELETE - Suppression du rôle du médecin
+    // UC - UNCHANGED - Notification du médecin à prendre en compte pour le rôle défini dans le contexte courant
+    // UP - UPDATE - Mise à jour du rôle du médecin
+    $data[] = $this->action;
      
     // ROL-3: Role-ROL (CE)
-    $data[] = null;
+    // Table - 0443
+    // AD   - Admitting - PV1.17 Médecin de la structure qui décide d'hospitaliser
+    // AT   - Attending - PV1-7 Médecin responsable du patient pendant le séjour
+    // CP   - Consulting Provider - Médecin consulté pour 2ème avis dans le cadre de la venue
+    // FHCP - Family Health Care Professional - Médecin de famille. Utilisé dans les rares cas où il est distinct du médecin traitant
+    // RP   - Referring Provider - PV1-8 Médecin adressant 
+    // RT   - Referred to Provider - Médecin correspondant
+    // ODRP - Officialy Declared Referring Physician - Médecin Traitant
+    // SUBS - Substitute - Remplaçant du médecin traitant
+    $data[] = array( 
+      array (
+        $this->role_id,
+        null,
+        null,
+        null,
+        null,
+        null
+      )
+    );
      
     // ROL-4: Role Person (XCN) (repeating)
-    $data[] = null;
+    $data[] = array(
+      array (
+        // XCN-1
+        CValue::first($medecin->rpps, $medecin->adeli, $medecin->_id),
+        // XCN-2
+        $medecin->nom,
+        // XCN-3
+        $medecin->prenom,
+        // XCN-4
+        null,
+        // XCN-5
+        null,
+        // XCN-6
+        null,
+        // XCN-7
+        null,
+        // XCN-8
+        null,
+        // XCN-9
+        // Autorité d'affectation
+        $this->getAssigningAuthority($medecin->rpps ? "RPPS" : ($medecin->adeli ? "ADELI" : "mediboard")),
+        // XCN-10
+        // Table - 0200
+        // L - Legal Name - Nom de famille
+        "L",
+        // XCN-11
+        null,
+        // XCN-12
+        null,
+        // XCN-13
+        // Table - 0203
+        // ADELI - Numéro au répertoire ADELI du professionnel de santé
+        // RPPS  - N° d'inscription au RPPS du professionnel de santé 
+        // RI    - Ressource interne
+        $medecin->rpps ? "RPPS" : ($medecin->adeli ? "ADELI" : "RI"),
+        // XCN-14
+        null,
+        // XCN-15
+        null,
+        // XCN-16
+        null,
+        // XCN-17
+        null,
+        // XCN-18
+        null,
+        // XCN-19
+        null,
+        // XCN-20
+        null,
+        // XCN-21
+        null,
+        // XCN-22
+        null,
+        // XCN-23
+        null,
+      )
+    );
     
     // ROL-5: Role Begin Date/Time (TS) (optional)
     $data[] = null;

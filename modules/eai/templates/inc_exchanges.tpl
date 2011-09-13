@@ -15,7 +15,7 @@
 {{/if}}
 <table class="tbl">
   <tr>
-    <th class="title" colspan="20">{{tr}}{{$exchange->_class}}{{/tr}} - {{$exchange->_ref_group}} {{if $type}}- {{tr}}{{$mod_name}}-msg-{{$type}}{{/tr}}{{/if}}</th>
+    <th class="title" colspan="21">{{tr}}{{$exchange->_class}}{{/tr}} - {{$exchange->_ref_group}} {{if $type}}- {{tr}}{{$mod_name}}-msg-{{$type}}{{/tr}}{{/if}}</th>
   </tr>
   <tr>
     <th></th>
@@ -29,11 +29,15 @@
     <th>{{mb_title object=$exchange field="receiver_id"}}</th>
     <th>{{mb_title object=$exchange field="type"}}</th>
     <th>{{mb_title object=$exchange field="sous_type"}}</th>
+    {{if $exchange instanceof CExchangeIHE}}
+      <th>{{mb_title object=$exchange field="code"}}</th>
+      <th>{{mb_title object=$exchange field="version"}}</th>
+    {{/if}}
     <th>{{mb_title object=$exchange field="date_echange"}}</th>
     <th>{{mb_title object=$exchange field="statut_acquittement"}}</th>
     <th>{{mb_title object=$exchange field="_observations"}}</th>
-    <th colspan="2">{{mb_title object=$exchange field="message_valide"}}</th>
-    <th colspan="2">{{mb_title object=$exchange field="acquittement_valide"}}</th>
+    <th>{{mb_title object=$exchange field="message_valide"}}</th>
+    <th>{{mb_title object=$exchange field="acquittement_valide"}}</th>
   </tr>
   {{foreach from=$exchanges item=_exchange}}
     <tbody id="exchange_{{$_exchange->_guid}}">
@@ -41,7 +45,7 @@
     </tbody>
   {{foreachelse}}
     <tr>
-      <td colspan="20" class="empty">
+      <td colspan="21" class="empty">
         {{tr}}{{$exchange->_class}}.none{{/tr}}
       </td>
     </tr>

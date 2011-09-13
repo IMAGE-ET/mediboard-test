@@ -190,6 +190,42 @@ class CHL7v2Segment extends CHL7v2Entity {
     
     $this->getMessage()->appendChild($this);
   }
+  
+  function getAssigningAuthority($name = "mediboard") {
+    switch ($name) {
+      case "mediboard" :
+        return array(
+          "Mediboard",
+          "1.2.250.1.2.3.4",
+          "OpenXtrem"
+        );
+        break;
+      case "INS-C" :
+        return array(
+          null,
+          "1.2.250.1.213.1.4.2",
+          "ISO"
+        );
+        break;
+      case "ADELI" :
+        return array(
+          null,
+          "1.2.250.1.71.4.2.1",
+          "ISO"
+        );
+        break;
+      case "RPPS" :
+        return array(
+          null,
+          "1.2.250.1.71.4.2.1",
+          "ISO"
+        );
+        break;  
+      default :
+        throw new CHL7v2Exception(CHL7v2Exception::NO_AUTHORITY);
+        break;
+    }
+  }
 }
 
 ?>

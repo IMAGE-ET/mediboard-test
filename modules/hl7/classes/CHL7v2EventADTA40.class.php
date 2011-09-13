@@ -18,10 +18,24 @@ CAppUI::requireModuleClass("hl7", "CHL7EventADTA40");
  * Class CHL7v2EventADTA40
  * A40 - Merge patient
  */
-class CHL7v2EventADTA40 extends CHL7v2Event implements CHL7EventADTA40 {
-  function __construct(){}
+class CHL7v2EventADTA40 extends CHL7v2EventADT implements CHL7EventADTA31 {
+  function __construct() {
+    parent::__construct();
+        
+    $this->code      = "A40";
+    $this->msg_codes = array ( 
+      array(
+        $this->event_type, $this->code, "{$this->event_type}_A39"
+      )
+    );
+  }
   
-  function build($object){}
+  function build($patient){
+    parent::build($patient);
+    
+    
+  }
 }
+
 
 ?>
