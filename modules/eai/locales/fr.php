@@ -9,6 +9,7 @@ $locales['CEchangeXML.sender_class.CSenderFTP'] = 'Expéditeur FTP';
 $locales['CEchangeXML.sender_class.CSenderSOAP'] = 'Expéditeur SOAP';
 $locales['CExchange-acquittement-invalid'] = 'Erreur de validation de l\'acquittement';
 $locales['CExchange-message-invalid'] = 'Erreur de validation du message';
+$locales['CExchange-message-invalide'] = 'Message invalide - Erreurs :';
 $locales['CExchange-no-acquittement'] = 'Aucun acquittement n\'a été reçu';
 $locales['CExchange-type'] = 'Type';
 $locales['CExchange-type-acquittement_invalide'] = 'ACK invalide';

@@ -78,6 +78,8 @@ class CExchangeTabular extends CExchangeDataFormat {
   function understand($data, CInteropSender $actor = null) {
     return false;
   }
+  
+  function getMessage() {}
 }
 
 ?>

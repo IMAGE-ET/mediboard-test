@@ -1,6 +1,6 @@
 <?php 
 /**
- * View details exchange
+ * View exchange details 
  *  
  * @category EAI
  * @package  Mediboard
@@ -28,6 +28,14 @@ $exchange->getObservations();
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("exchange", $exchange);
-$smarty->display("inc_exchange_details.tpl");
+
+if ($exchange instanceof CExchangeTabular) {
+  $smarty->assign("segment_group", $exchange->getMessage());
+  $smarty->display("inc_exchange_tabular_details.tpl");
+} 
+elseif ($exchange instanceof CEchangeXML) {
+  $smarty->display("inc_exchange_xml_details.tpl");
+}
+
 
 ?>

@@ -1,5 +1,5 @@
 {{*
- * View Exchanges XML Data Format EAI
+ * Details Exchange XML EAI
  *  
  * @category EAI
  * @package  Mediboard

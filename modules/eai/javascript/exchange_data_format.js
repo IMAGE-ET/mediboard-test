@@ -53,7 +53,7 @@ ExchangeDataFormat = {
   viewExchange : function(exchange_guid) {
     var url = new Url("eai", "ajax_vw_exchange_details");
     url.addParam("exchange_guid", exchange_guid);
-	url.requestModal(800, 500);
+	url.requestModal(900, 530);
   },
   
   reprocessing : function(exchange_guid){
