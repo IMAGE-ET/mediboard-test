@@ -57,12 +57,16 @@ class CExchangeIHE extends CExchangeTabular {
     return self::$messages;
   }
   
-  function getErrors() {
+  function getErrors() {}
+  
+  function getMessage() {
     if ($this->_message !== null) {
       $hl7_message = new CHL7v2Message();
       $hl7_message->parse($this->_message);
       $this->_doc_errors_msg = $hl7_message->dumpErrors();
-    } 
+      
+      return $hl7_message;
+    }
   }
 }
 ?>
