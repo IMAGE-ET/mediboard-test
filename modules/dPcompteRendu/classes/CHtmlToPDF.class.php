@@ -68,7 +68,7 @@ class CHtmlToPDF {
     $this->content = $this->fixBlockElements($content);
     $this->content = str_replace("[Général - numéro de page]", "<span class='page'></span>", $this->content);
     
-    $pdf_content = CHtmlToPDFConverter::convert($content, $format, $orientation);
+    $pdf_content = CHtmlToPDFConverter::convert($this->content, $format, $orientation);
 
     if ($file->_file_path) {
       file_put_contents($file->_file_path, $pdf_content);
@@ -106,6 +106,7 @@ class CHtmlToPDF {
     $str = str_replace("<tr/>", '', $str);
     $str = preg_replace("/<tr>[ \t\r\n\f]*<td>[ \t\r\n\f]*&#160;[ \t\r\n\f]*<\/td>[ \t\r\n\f]*<\/tr>/", '', $str);
     $str = str_replace("text-align:=\"\"", '', $str);
+    $str = preg_replace("/v:shapes*=\"[_a-z0-9]+\"/", "", $str);
     return $str;
   }
 
