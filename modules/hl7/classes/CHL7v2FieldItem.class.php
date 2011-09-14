@@ -15,12 +15,12 @@ class CHL7v2FieldItem extends CHL7v2Component {
    * @var CHL7v2Field
    */
   var $parent = null;
-  var $components = array();
   
   function __construct(CHL7v2Field $field, CHL7v2SimpleXMLElement $specs, $self_pos) {
     $message = $field->getMessage();
     
     $separators = array(
+		  // sub parts separator                 self type        sub part separator class
       array($message->componentSeparator,    "field-item",    "cs"), 
       array($message->subcomponentSeparator, "component",     "scs"),
       array(null,                            "sub-component", null),
@@ -33,7 +33,7 @@ class CHL7v2FieldItem extends CHL7v2Component {
     return $this->parent;
   }
   
-  function getPath(){
-    return $this->parent->getPath();
+  function getPath($separator = "."){
+    return $this->parent->getPath($separator);
   }
 }

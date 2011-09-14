@@ -1,6 +1,6 @@
 <div class="field-item">
-  <span class="field-description">{{$component->description}}</span>
-  <span class="type">{{$component->datatype}}[{{$component->length}}]</span>
+  {{* <span class="field-description">{{$component->description}}</span>
+  <span class="type">{{$component->getTypeTitle()}}</span> *}}
   
   {{if $component->props instanceof CHL7v2DataTypeComposite}}
     {{if $component->children|@count > 0}}

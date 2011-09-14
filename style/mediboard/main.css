@@ -534,7 +534,7 @@ table#weeklyPlanning th.today {
   opacity: 0.5;
   border: 1px solid #666;
   background: #fff url(../../images/buttons/move-black.png) no-repeat center center;
-	
+  
   -moz-border-radius-bottomright: 6px;
   -webkit-border-bottom-right-radius: 6px;
   border-bottom-right-radius: 6px;
@@ -1328,7 +1328,8 @@ ul li a.chapitre_signe.active{
 .er7 {
   max-height: auto;
   max-width: 100%;
-  padding: 18px 3px;
+  padding: 20px 3px;
+  overflow-y: hidden;
 }
 
 /* separators */
@@ -1400,6 +1401,11 @@ ul li a.chapitre_signe.active{
   margin: -1px;
 }
 
+.er7 .entity.invalid {
+  padding: 2px;
+  border-bottom: 1px dotted red;
+}
+
 .er7 .field:hover {
   background: #ddffee;
   border: none;
@@ -1458,7 +1464,7 @@ ul.hl7-tree,
   line-height: 1.4;
   padding-left: 2em;
   margin-bottom: 6px;
-	text-align: left;
+  text-align: left;
 }
 
 .hl7-tree ol {
@@ -1469,12 +1475,17 @@ ul.hl7-tree,
   color: #2D9A00;
 }
 
+/*
 .hl7-tree .type:before {
   content: "(";
 }
 
 .hl7-tree .type:after {
   content: ")";
+}*/
+
+.hl7-tree .invalid {
+  color: red !important;
 }
 
 .hl7-tree .field-name {

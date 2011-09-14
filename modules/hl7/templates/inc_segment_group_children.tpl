@@ -12,7 +12,7 @@
           <li>
             <span class="field-name">{{$_child->name}}-{{$_field_pos}}</span>
             <span class="field-description">{{$_field->description}}</span>
-            <span class="type">{{$_field->datatype}}[{{$_field->length}}]</span>
+            <span class="type">{{$_field->getTypeTitle()}}</span>
             
             <ol>
               {{foreach from=$_field->items key=_i item=_item}}

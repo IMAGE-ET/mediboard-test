@@ -1,9 +1,9 @@
 {{assign var=segment value=$component->getSegment()}}
 {{assign var=path value=$component->getPath()}}
 
-<span class="field-name">{{$segment->name}}.{{"."|implode:$path}}</span>
+<span class="field-name {{if $component->invalid}}invalid{{/if}}">{{$segment->name}}.{{"."|implode:$path}}</span>
 <span class="field-description">{{$component->description}}</span>
-<span class="type">{{$component->datatype}}</span>
+<span class="type">{{$component->getTypeTitle()}}</span>
   
 {{if $component->props instanceof CHL7v2DataTypeComposite}}
   {{if $component->children|@count > 0}}

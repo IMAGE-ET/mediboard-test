@@ -57,6 +57,8 @@ class CHL7v2Component extends CHL7v2Entity {
    * @var CHL7v2DataType
    */
   var $props = null;
+	
+	var $invalid = false;
   
   function __construct(CHL7v2Entity $parent, CHL7v2SimpleXMLElement $specs, $self_pos, $separators) {
     parent::__construct();
@@ -68,7 +70,7 @@ class CHL7v2Component extends CHL7v2Entity {
     $this->separators = $separators;
     
     // Intrinsic properties 
-    $this->length      = (int)$specs->length;
+    $this->length      = (int)$specs->attributes()->length;
     $this->datatype    = (string)$specs->datatype;
     $this->description = (string)$specs->description;
     $this->self_pos    = $self_pos;
@@ -98,7 +100,7 @@ class CHL7v2Component extends CHL7v2Entity {
           $this->children[] = $_comp;
         }
         elseif($_component_spec->isRequired()) {
-          $this->error("bah", $this->getPath(), $this->getField());
+          $this->error(CHL7v2Exception::FIELD_EMPTY, $this->getPath(), $this->getField());
         }
       }
     }
@@ -135,14 +137,14 @@ class CHL7v2Component extends CHL7v2Entity {
           $this->children[] = $_comp;
         }
         elseif($_component_spec->isRequired()) {
-          $this->error("bah fill", $this->getPath(), $this->getField());
+          $this->error(CHL7v2Exception::FIELD_EMPTY, $this->getPath(), $this->getField());
         }
       }
     }
     
     // Scalar type (NM, ST, ID, etc)
     else {
-      $this->data = $this->props->toHL7($data, $this->getField());
+      $this->data = trim($this->props->toHL7($data, $this->getField()));
     }
   }
   
@@ -158,14 +160,29 @@ class CHL7v2Component extends CHL7v2Entity {
    * @return bool
    */
   function validate(){
-    return true;
-    $field = $this->getField();
-    $specs = $this->props;
-    
-    if (!$specs->validate($this->children, $field)) {
-      $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, var_export($this->components, true), $field);
-      return false;
-    }
+		$props = $this->props;
+		
+		if ($props instanceof CHL7v2DataTypeComposite) {
+			foreach($this->children as $child) {
+				if (!$child->validate()) {
+					$this->invalid = true;
+				}
+			}
+		}
+		else {
+      $field = $this->getField();
+			
+			if ($this->length && strlen($this->data) > $this->length) {
+        $field->error(CHL7v2Exception::DATA_TOO_LONG, var_export($this->data, true)." ($this->length)", $field);
+        $this->invalid = true;
+			}
+			
+			if (!$props->validate($this->data, $field)) {
+	      $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, var_export($this->data, true), $field);
+				$this->invalid = true;
+	      return false;
+			}
+		}
     
     return true;
   }
@@ -198,11 +215,21 @@ class CHL7v2Component extends CHL7v2Entity {
     return $this->getMessage()->getVersion();
   }
   
-  function getPath(){
-    $path = $this->parent->getPath();
+  function getPath($separator = "."){
+    $path = $this->parent->getPath($separator);
     $path[] = $this->self_pos+1;
     return $path;
   }
+	
+	function getTypeTitle(){
+		$str = $this->datatype;
+		
+		if ($this->length) {
+			$str .= "[$this->length]";
+		}
+		
+		return $str;
+	}
   
   function __toString(){
     $field = $this->getField();
@@ -226,8 +253,8 @@ class CHL7v2Component extends CHL7v2Entity {
     }
       
     if (CHL7v2Message::$decorateToString) {
-      $title = $field->owner_segment->name.".".implode(".", $this->getPath())/*.".".($i+1).".".($j+1)*/." - ".$this->datatype." - ".$this->description;
-      $str = "<span class='entity {$this->separator[1]}' id='{$this->separator[1]}-$this->self_pos' data-title='$title'>$str</span>";
+      $title = $field->owner_segment->name.".".implode(".", $this->getPath())." - $this->datatype - $this->description";
+      $str = "<span class='entity {$this->separator[1]} ".($this->invalid ? 'invalid' : '')."' id='{$this->separator[1]}-$this->self_pos' data-title='$title'>$str</span>";
     }
       
     return $str;

@@ -17,7 +17,7 @@ class CHL7v2DataTypeComposite extends CHL7v2DataType {
     
     $specs = $this->getSpecs();
     $this->description = (string)$specs->description;
-    
+    /*
     $_component_specs = $specs->getItems();
     foreach($_component_specs as $field) {
       $comp = CHL7v2DataType::load((string)$field->datatype, $this->version);
@@ -26,7 +26,7 @@ class CHL7v2DataTypeComposite extends CHL7v2DataType {
       $comp->table = (int)$field->attributes()->table;
       
       $this->components[] = $comp;
-    }
+    }*/
   }
   
   function getRegExpMB() {

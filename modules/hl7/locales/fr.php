@@ -16,6 +16,7 @@ $locales['CHL7v2Exception-14'] = 'Segment manquant';
 $locales['CHL7v2Exception-15'] = 'Code du segment manquant';
 $locales['CHL7v2Exception-16'] = 'Autorité inconnue';
 $locales['CHL7v2Exception-17'] = 'Type de données inattendu';
+$locales['CHL7v2Exception-18'] = 'Chaîne trop longue';
 $locales['HL7-v.2.1'] = 'HL7 version 2.1';
 $locales['HL7-v.2.2'] = 'HL7 version 2.2';
 $locales['HL7-v.2.3'] = 'HL7 version 2.3';
