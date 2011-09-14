@@ -71,18 +71,17 @@ class CHL7v2Segment extends CHL7v2Entity {
       array_unshift($fields, $message->fieldSeparator);
     }
     
-    $i = 0;
-    foreach($specs->elements->field as $_spec){
-      if (!array_key_exists($i, $fields)) {
-        break;
+    $_segment_specs = $specs->getItems();
+    foreach($_segment_specs as $i => $_spec){
+      if (array_key_exists($i, $fields)) {
+        $field = new CHL7v2Field($this, $_spec);
+        $field->parse($fields[$i]);
+        
+        $this->fields[] = $field;
       }
-      
-      $_data = $fields[$i++];
-      
-      $field = new CHL7v2Field($this, $_spec);
-      $field->parse($_data);
-      
-      $this->fields[] = $field;
+      elseif($_spec->isRequired()) {
+        $this->error("segment parse field required", $this->name);
+      }
     }
   }
   
@@ -92,22 +91,23 @@ class CHL7v2Segment extends CHL7v2Entity {
     $specs = $this->getSpecs();
     $message = $this->getMessage();
     
-    $i = 0;
-    foreach($specs->elements->field as $_spec){
-      if (!array_key_exists($i, $fields)) {
-        break;
+    $_segment_specs = $specs->getItems();
+    foreach($_segment_specs as $i => $_spec){
+      if (array_key_exists($i, $fields)) {
+        $_data = $fields[$i];
+        
+        if ($_data instanceof CMbObject) {
+          throw new CHL7v2Exception($_data->_class, CHL7v2Exception::UNEXPECTED_DATA_TYPE);
+        }
+        
+        $field = new CHL7v2Field($this, $_spec);
+        $field->fill($_data);
+        
+        $this->fields[] = $field;
       }
-      
-      $_data = $fields[$i++];
-      
-      if ($_data instanceof CMbObject) {
-        throw new CHL7v2Exception($_data->_class, CHL7v2Exception::UNEXPECTED_DATA_TYPE);
+      elseif($_spec->isRequired()) {
+        $this->error("segment fill field required", $this->name);
       }
-      
-      $field = new CHL7v2Field($this, $_spec);
-      $field->fill($_data);
-      
-      $this->fields[] = $field;
     }
   }
   

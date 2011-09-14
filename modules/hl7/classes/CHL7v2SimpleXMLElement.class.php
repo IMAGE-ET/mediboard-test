@@ -100,4 +100,12 @@ class CHL7v2SimpleXMLElement extends CMbSimpleXMLElement {
       return (string)$this;
     }
   }
+  
+  function getItems(){
+    $items = array();
+    foreach($this->elements->field as $field) {
+      $items[] = $field;
+    }
+    return $items;
+  }
 }

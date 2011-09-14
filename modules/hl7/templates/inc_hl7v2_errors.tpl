@@ -11,7 +11,9 @@
         {{$_error.line}}
       </td>
       <td class="narrow">
-        {{$_error.field|ternary:$_error.field->name:""}}
+      	{{if $_error.field}}
+          {{$_error.field->name}}
+				{{/if}}
       </td>
       <td>
         {{if $_error.code|is_numeric}}

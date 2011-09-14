@@ -308,7 +308,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   
   function error($code, $data, $field = null) {    
     $this->errors[] = array(
-      "line"  => $this->current_line, 
+      "line"  => $this->current_line+1, 
       "field" => $field,
       "code"  => $code, 
       "data"  => $data,
@@ -358,6 +358,8 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   }
   
   function unescape($str) {
+    $this->initEscapeSequences();
+    
     /*if ($str === $this->nullValue) {
       return null; //"__NULL__";
     }*/
@@ -408,7 +410,6 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $msg = str_replace("\n", "", $msg);
     
     $pat = array(
-      "&" => "&amp;",
       $matches[1] => "<span class='fs'>$matches[1]</span>",
       $matches[2] => "<span class='cs'>$matches[2]</span>",
       $matches[3] => "<span class='scs'>$matches[3]</span>",

@@ -18,10 +18,13 @@ class CHL7v2Field extends CHL7v2Entity {
   
   var $name          = null;
   var $datatype      = null;
+  var $length        = null;
   var $description   = null;
   var $required      = null;
   var $unbounded     = null;
   var $items         = array();
+    
+  var $meta_spec     = null;
   
   private $_ts_fixed = false;
   
@@ -29,8 +32,12 @@ class CHL7v2Field extends CHL7v2Entity {
     parent::__construct($segment);
     
     $this->owner_segment = $segment;
-    $this->name        = (string)$spec->name;
-    $this->datatype    = (string)$spec->datatype;
+    $this->name     = (string)$spec->name;
+    $this->datatype = (string)$spec->datatype;
+    $this->length   = (int)$spec->attributes()->length;
+    
+    $this->meta_spec = $spec;
+    
     if ($this->datatype == "TS") {
       //$this->datatype = "DTM";
     }
@@ -42,12 +49,11 @@ class CHL7v2Field extends CHL7v2Entity {
   function parse($data) {
     parent::parse($data);
     
-    $specs = $this->getSpecs();
-    $message = $this->getMessage();
-    
-    if ($this->required && $this->data === "" /* === $message->nullValue*/) { // nullValue ("") or null ??
+    if ($this->required && ($this->data === "" || $this->data === null) /* === $message->nullValue*/) { // nullValue ("") or null ??
       $this->error(CHL7v2Exception::FIELD_EMPTY, null, $this);
     }
+    
+    $message = $this->getMessage();
     
     $items = CHL7v2::split($message->repetitionSeparator, $this->data, $this->keep());
     
@@ -59,9 +65,10 @@ class CHL7v2Field extends CHL7v2Entity {
     
     $this->items = array();
     
-    foreach($items as $components) {
-      $_field_item = new CHL7v2FieldItem($this);
+    foreach($items as $i => $components) {
+      $_field_item = new CHL7v2FieldItem($this, $this->meta_spec, $i);
       $_field_item->parse($components);
+      
       $this->items[] = $_field_item;
     }
     
@@ -80,9 +87,10 @@ class CHL7v2Field extends CHL7v2Entity {
     
     $this->items = array();
     
-    foreach($items as $components) {
-      $_field_item = new CHL7v2FieldItem($this);
-      $_field_item->fill($components);
+    foreach($items as $i => $data) {
+      $_field_item = new CHL7v2FieldItem($this, $this->meta_spec, $i);
+      $_field_item->fill($data);
+      
       $this->items[] = $_field_item;
     }
   }
@@ -110,14 +118,11 @@ class CHL7v2Field extends CHL7v2Entity {
     return $this->owner_segment->getVersion();
   }
   
-  function getValue(){
-    $items = array();
-    
-    foreach($this->items as $item) {
-      $items[] = $item->getValue();
-     }
-    
-    return $items;
+  /**
+   * @return CHL7v2Segment
+   */
+  function getSegment(){
+    return $this->owner_segment;
   }
   
   /**
@@ -125,6 +130,11 @@ class CHL7v2Field extends CHL7v2Entity {
    */
   function getMessage(){
     return $this->owner_segment->getMessage();
+  }
+  
+  function getPath(){
+    $self_pos = explode(".", $this->name);
+    return array((int)$self_pos[1]);
   }
   
   function __toString(){
