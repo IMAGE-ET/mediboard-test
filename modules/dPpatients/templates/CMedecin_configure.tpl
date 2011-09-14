@@ -22,6 +22,7 @@ var Process = {
 	  url.addParam("mode", $V(form.mode));
 	  url.addParam("pass", this.pass);
     url.addParam("departement", $V(form.departement));
+    url.addParam("mode_import", $V(form.mode_import));
 	  url.requestUpdate("process");
 	},
 	
@@ -98,22 +99,31 @@ var Process = {
 	  <td colspan="3">
 	    <form name="import" action="#" onsubmit="return false">
 	    
-	    <input type="radio" name="mode" value="get" />
-	    <label for="get">Import distant</label>
-	    <input type="radio" name="mode" value="xml" />
-	    <label for="xml">Fichiers XML</label>
-	    <input type="radio" name="mode" value="csv" checked="checked" />
-	    <label for="csv">Fichiers CSV</label>
+      <label>
+	      <input type="radio" name="mode" value="get" />Import distant
+      </label>
+      <label>
+	      <input type="radio" name="mode" value="xml" />Fichiers XML
+      </label>
+      <label>
+	      <input type="radio" name="mode" value="csv" checked="checked" />Fichiers CSV
+      </label>
 	    
 	    <input type="checkbox" name="auto" />
 	    <label for="auto">Automatique</label>
-      
+      &mdash;
+      Département :
       <select name="departement">
         {{foreach from=$departements item=_departement}}
           <option value="{{$_departement}}">{{$_departement}}</option>
         {{/foreach}}
       </select>
       
+      Mode d'import :
+      <select name="mode_import">
+        <option value="comp">Import complet</option>
+        <option value="rpps">Mise à jour RPPS</option>
+      </select>
 	    <br/>
 
 	    <label for="step">Etape</label>

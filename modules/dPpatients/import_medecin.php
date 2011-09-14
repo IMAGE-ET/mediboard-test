@@ -259,6 +259,8 @@ $cols = fgetcsv($csvfile);
 
 // Each line
 $medecins = array();
+$mode_import = CValue::get("mode_import");
+
 while ($line = fgetcsv($csvfile)) {
   // Load from CSV
   $medecin = new CMedecin;
@@ -271,7 +273,14 @@ while ($line = fgetcsv($csvfile)) {
   
   if ($medecin->_has_siblings = count($siblings)) {
     $sibling = reset($siblings);
-    $medecin->_id = $sibling->_id;
+    switch($mode_import) {
+      case "comp": $medecin->_id = $sibling->_id;
+      break;
+      case "rpps":
+        $rpps = $medecin->rpps;
+        $medecin = $sibling;
+        $medecin->rpps = $rpps;
+    }
     $updates++;
   } 
 
