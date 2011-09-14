@@ -110,6 +110,15 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     }
     $PV1->build($this);
   }
+  
+  /*
+   * Represents an HL7 MRG message segment (Merge Patient Information)
+   */
+  function addMRG(CPatient $patient_eliminee) {
+    $MRG = CHL7v2Segment::create("MRG", $this->message);
+    $MRG->patient_eliminee = $patient_eliminee;
+    $MRG->build($this);
+  }
 }
 
 ?>

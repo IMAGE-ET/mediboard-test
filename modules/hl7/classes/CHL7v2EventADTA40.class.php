@@ -18,7 +18,7 @@ CAppUI::requireModuleClass("hl7", "CHL7EventADTA40");
  * Class CHL7v2EventADTA40
  * A40 - Merge patient
  */
-class CHL7v2EventADTA40 extends CHL7v2EventADT implements CHL7EventADTA31 {
+class CHL7v2EventADTA40 extends CHL7v2EventADT implements CHL7EventADTA40 {
   function __construct() {
     parent::__construct();
         
@@ -33,7 +33,17 @@ class CHL7v2EventADTA40 extends CHL7v2EventADT implements CHL7EventADTA31 {
   function build($patient){
     parent::build($patient);
     
+    // Patient Identification
+    $this->addPID($patient);
     
+    // Patient Additional Demographic
+    $this->addPD1($patient);
+    
+    // Merge Patient Information
+    $this->addMRG($patient->_patient_elimine);
+    
+    // Patient Visit
+    $this->addPV1();
   }
 }
 

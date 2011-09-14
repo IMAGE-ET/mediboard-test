@@ -39,94 +39,13 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $data[] = null;
     
     // PID-3: Patient Identifier List (CX) (repeating)
-    // Table - 0203
-    // RI - Resource identifier
-    // PI - Patient internal identifier
-    $identifiers = array();
-    if ($patient->_IPP) {
-      $identifiers[] = array(
-        $patient->_IPP,
-        null,
-        null,
-        // PID-3-4 Autorité d'affectation
-        array(
-          // Nom, FINESS 
-          array (
-            $group->_view,
-            $group->finess 
-          )
-        ),
-        "PI"
-      );
-    }
-    $identifiers[] = array(
-      $patient->_id,
-      null,
-      null,
-      // PID-3-4 Autorité d'affectation
-      $this->getAssigningAuthority("mediboard"),
-      "RI"
-    );
-    if ($patient->INSC) {
-      $identifiers[] = array(
-      $patient->INSC,
-      null,
-      null,
-      // PID-3-4 Autorité d'affectation
-      $this->getAssigningAuthority("INS-C"),
-      "INS-C",
-      null,
-      mbDate($patient->INSC_date)
-    );
-    }
-    $data[] = $identifiers;
+    $data[] = $this->getPatientIdentifiers($patient, $group);
     
     // PID-4: Alternate Patient ID - PID (CX) (optional repeating)
     $data[] = null;
     
     // PID-5: Patient Name (XPN) (repeating)
-    $patient_names = array();
-    // Nom usuel
-    $patient_usualname = array(
-      $patient->nom,
-      $patient->prenom,
-      "$patient->prenom_2 $patient->prenom_3 $patient->prenom_4",
-      null,
-      $patient->civilite,
-      null,
-      // Table 0200
-      // A - Alias Name
-      // B - Name at Birth
-      // C - Adopted Name
-      // D - Display Name
-      // I - Licensing Name
-      // L - Legal Name
-      // M - Maiden Name
-      // N - Nickname /_Call me_ Name/Street Name
-      // P - Name of Partner/Spouse (retained for backward compatibility only)
-      // R - Registered Name (animals only)
-      // S - Coded Pseudo-Name to ensure anonymity
-      // T - Indigenous/Tribal/Community Name
-      // U - Unspecified
-      (is_numeric($patient->nom)) ? "S" : "L",
-      // Table 465
-      // A - Alphabetic (i.e., Default or some single-byte)
-      // I - Ideographic (i.e., Kanji)  
-      // P - Phonetic (i.e., ASCII, Katakana, Hiragana, etc.) 
-      "A"
-    );
-    // Cas nom de jeune fille
-    if ($patient->nom_jeune_fille) {
-      $patient_birthname = $patient_usualname;
-      $patient_birthname[0] = $patient->nom_jeune_fille;
-      // Legal Name devient Display Name
-      $patient_usualname[6] = "D"; 
-    }
-    $patient_names[] = $patient_usualname;
-    if ($patient->nom_jeune_fille) {
-      $patient_names[] = $patient_birthname;
-    } 
-    $data[] = $patient_names;
+    $data[] = $this->getXPN($patient);
     
     // PID-6: Mother's Maiden Name (XPN) (optional repeating)
     $data[] = null;

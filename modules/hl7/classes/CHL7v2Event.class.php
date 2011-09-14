@@ -38,7 +38,7 @@ class CHL7v2Event {
   function build($object) {
     // Traitement sur le mbObject
     $this->object   = $object;
-    $this->last_log = $this->object->_ref_last_log;
+    $this->last_log = $object->loadLastLog();
     
     // Récupération de la version HL7 en fonction du receiver et de la transaction
     $this->version  = $this->_receiver->_configs[$this->transaction."_HL7_version"];
@@ -54,9 +54,7 @@ class CHL7v2Event {
   
   function flatten() {
     $this->msg_hl7 = $this->message->flatten();
-    mbLog( $this->msg_hl7, "Message HL7 généré");
     $this->message->validate();
-    mbLog($this->message->dumpErrors(), "Erreurs message HL7");
     
     $this->updateExchange();
   }

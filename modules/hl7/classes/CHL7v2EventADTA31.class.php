@@ -43,7 +43,7 @@ class CHL7v2EventADTA31 extends CHL7v2EventADT implements CHL7EventADTA31 {
     $this->addROLs($patient);
     
     // Patient Visit
-    $this->addPV1();
+    $this->addPV1();    
   }
 }
 

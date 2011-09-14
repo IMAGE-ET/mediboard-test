@@ -75,8 +75,6 @@ class CITI30DelegatedHandler extends CIHEDelegatedHandler {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
-
-    
   }
   
   function onAfterMerge(CMbObject $mbObject) {
@@ -84,7 +82,44 @@ class CITI30DelegatedHandler extends CIHEDelegatedHandler {
       return false;
     }
 
+    $patient = $mbObject;
+    $patient->check();
+    $patient->updateFormFields();
     
+    $receiver = $mbObject->_receiver; 
+    
+    foreach ($mbObject->_fusion as $group_id => $infos_fus) {
+      if ($receiver->group_id != $group_id) {
+        continue;
+      }      
+
+      $patient1_ipp     = $patient->_IPP = $infos_fus["patient1_ipp"];
+      
+      $patient_eliminee = $infos_fus["patientElimine"];
+      $patient2_ipp     = $patient_eliminee->_IPP = $infos_fus["patient2_ipp"];
+
+      // Cas 0 IPP : Aucune notification envoyée
+      if (!$patient1_ipp && !$patient2_ipp) {
+        continue;
+      }
+
+      // Cas 1 IPP : Pas de message de fusion mais d'une modification du patient
+      if ((!$patient1_ipp && $patient2_ipp) || ($patient1_ipp && !$patient2_ipp)) {
+        if ($patient2_ipp)
+          $patient->_IPP = $patient2_ipp;
+
+        $this->sendITI(self::$profil, self::$transaction, "A31", $patient);
+        continue;
+      }
+      
+      // Cas 2 IPPs : Message de fusion
+      if ($patient1_ipp && $patient2_ipp) {
+        $patient->_patient_elimine = $patient_eliminee;
+        
+        $this->sendITI(self::$profil, self::$transaction, "A40", $patient);
+        continue;
+      }
+    }  
   }  
 }
 ?>
