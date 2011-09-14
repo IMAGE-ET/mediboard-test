@@ -12,7 +12,7 @@ class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
   static $handled = array ("CSejour", "COperation");
 
   static function isHandled(CMbObject $mbObject) {
-    return in_array($mbObject->_class, self::$handled);
+    return in_array($mbObject->_class_name, self::$handled);
   }
 
   function onAfterStore(CMbObject $mbObject) {
@@ -30,6 +30,11 @@ class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       $evt = "CHPrimXMLEvenementsServeurActes";
     }
     
+    $receiver = $mbObject->_receiver;
+    if (CGroups::loadCurrent()->_id != $receiver->group_id) {
+      return;
+    }
+        
     $this->sendEvenementPMSI($evt, $mbObject);
     
   }
