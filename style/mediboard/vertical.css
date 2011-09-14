@@ -1,11 +1,12 @@
 /* Vertical text */
 span.vertical {
-  writing-mode: tb-rl;
+  -ms-writing-mode: tb-rl;
   width: 1.1em;
   display: inline-block;
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg);
   -o-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
   transform: rotate(180deg);
 }
 
@@ -14,6 +15,7 @@ span.vertical i {
   -webkit-transform: rotate(90deg);
   -moz-transform: rotate(90deg);
   -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
   transform: rotate(90deg);
   margin-bottom: -60%;
   font-style: normal;

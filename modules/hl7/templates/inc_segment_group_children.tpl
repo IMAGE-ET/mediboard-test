@@ -19,8 +19,6 @@
                 
                 <li>
                   <div class="field-item">
-                    <!-- Item {{$_item_pos}} -->
-                    
                     {{if $_item->components|@is_array}}
                       {{if $_item->components|@count > 0}}
                         <ol>
@@ -31,8 +29,11 @@
                               <span class="field-name">{{$_child->name}}-{{$_field_pos}}-{{$_component_pos}}</span>
                               
                               {{if $_component|@is_array}}
+		                            {{assign var=comp_spec_meta value=$_item->composite_specs->components.$_j}}
+		                            {{assign var=comp_spec value=$comp_spec_meta->getSpecs()}}
+																
                                 <span class="field-description">{{$_item->specs->elements->field.$_j->description}}</span>
-                                <span class="type">{{$_item->specs->elements->field.$_j->datatype}}</span>
+                                <span class="type">{{$_item->specs->elements->field.$_j->datatype}} [{{$comp_spec_meta->getLength()}}] </span>
                                 
                                 {{if $_component|@count > 0}}
                                   <ol>
@@ -40,13 +41,10 @@
                                       {{assign var=_sub_component_pos value=$_k+1}}
                                       
                                       <li>
-                                        {{assign var=comp_spec value=$_item->composite_specs->components.$_j}}
-                                        {{assign var=comp_spec value=$comp_spec->getSpecs()}}
-                                        
                                         <span class="field-name">{{$_child->name}}-{{$_field_pos}}-{{$_component_pos}}-{{$_sub_component_pos}}</span>
                                         <span class="value">{{$_sub_component}}</span>
                                         <span class="field-description">{{$comp_spec->elements->field.$_k->description}}</span>
-                                        <span class="type">{{$comp_spec->elements->field.$_k->datatype}}</span>
+                                        <span class="type">{{$comp_spec->elements->field.$_k->datatype}} [{{$comp_spec_meta->components.$_k->getLength()}}] </span>
                                       </li>
                                     {{/foreach}}
                                   </ol>
@@ -63,7 +61,7 @@
                     {{else}}
                       <span class="value">{{$_item->components}}</span>
                       <span class="field-description">{{$_item->specs->description}}</span>
-                      <span class="type">{{$_item->composite_specs->getType()}}</span>
+                      <span class="type">{{$_item->composite_specs->getType()}} [{{$_item->composite_specs->getLength()}}]</span>
                     {{/if}}
                   </div>
                 </li>

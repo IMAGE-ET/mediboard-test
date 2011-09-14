@@ -270,7 +270,7 @@ button.rtl {
 button.rtl:before,
 a.button.rtl:before {
   float: right;
-  margin-right: 0px;
+  margin-right: 0;
   margin-left: 3px;
   margin-top: -3px;
 }
@@ -289,8 +289,8 @@ button[disabled], a.button.disabled,
 button[disabled="disabled"] { /* For IE */
   cursor: not-allowed;
   opacity: 0.5;
-  filter: alpha(opacity: 50);
-  -ms-filter: "alpha(opacity: 50)";
+  filter: alpha(opacity=50);
+  -ms-filter: "alpha(opacity=50)";
 }
 
 button[disabled]:hover, a.button.disabled:hover,
@@ -641,15 +641,15 @@ div.autocomplete {
   border:1px solid #999;
   margin-top: -2px;
   margin-bottom: 18px;
-  padding:0px;
+  padding: 0;
   z-index: 400;
   white-space: normal;
 }
 
 div.autocomplete ul {
   list-style-type:none;
-  margin:0px;
-  padding:0px;
+  margin: 0;
+  padding: 0;
 }
 
 div.autocomplete ul em {
@@ -665,7 +665,7 @@ div.autocomplete ul li.selected {
 div.autocomplete ul li {
   list-style-type: none;
   display: block;
-  margin: 0px;
+  margin: 0;
   padding: 2px;  
   cursor: pointer;
   line-height: 100%;
@@ -764,7 +764,7 @@ table.tbl .textarea-helped a {
   bottom: 1px;
   right: 1px;
   margin: 2px 1px;
-  padding: 0px;
+  padding: 0;
   vertical-align: middle;
   text-align: right;
   background-color: #fff;
@@ -807,7 +807,7 @@ table.tbl .textarea-helped a {
 }
 
 .textarea-helped .sub-toolbar img {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 .textarea-helped .toolbar a:hover .sub-toolbar img {
@@ -832,7 +832,7 @@ table.tbl .textarea-helped a {
 }
 
 .textarea-helped .throbber-background {
-  background-position: 100% 0px;
+  background-position: 100% 0;
 }
 
 textarea#htmlarea {
@@ -940,16 +940,16 @@ span.highlight {
 
 .ajax-upload .fakefile {
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   z-index: 10;
 }
 
 .ajax-upload input[type="file"] {
   position: relative;
   text-align: right;
-  filter: alpha(opacity: 0);
-  -ms-filter: "alpha(opacity: 0)";
+  filter: alpha(opacity=0);
+  -ms-filter: "alpha(opacity=0)";
   opacity: 0;
   z-index: 20;
   right: 0;

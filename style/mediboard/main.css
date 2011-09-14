@@ -112,13 +112,13 @@ a.DESC:hover{
 .mediuser {
   border-left: 4px solid transparent; 
   padding-left: 4px; 
-  margin-left: 0px;
+  margin-left: 0;
 }
 
 .categorieConsult { 
   padding-left: 20px;
   height: 18px; 
-  margin-left: 0px;
+  margin-left: 0;
 }
 
 /* Drag'n'Drop */ 
@@ -221,7 +221,7 @@ table.selectCode td {
 table.chambrecollapse,
 table.chambreexpand {
   width: 100%;
-  border-spacing: 0px;
+  border-spacing: 0;
   border-collapse: collapse;
   margin: 1px 0;
 }
@@ -293,9 +293,6 @@ table.chambreexpand td.dates {
   color: red;
 }
 
-table.chambreexpand tr.dates {
-}
-
 /* Operations */
 
 table.operationcollapse,
@@ -304,7 +301,7 @@ table.sejourcollapse,
 table.sejourexpand {
   width: 100%;
   background: #fff;
-  border-spacing: 0px;
+  border-spacing: 0;
   border-collapse: collapse;
 }
 
@@ -535,9 +532,12 @@ table#weeklyPlanning th.today {
   height: 15px;
   cursor: move;
   opacity: 0.5;
-  -moz-border-radius-bottomright: 6px;
   border: 1px solid #666;
   background: #fff url(../../images/buttons/move-black.png) no-repeat center center;
+	
+  -moz-border-radius-bottomright: 6px;
+  -webkit-border-bottom-right-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 
 .planning .event.draggable:hover .handle {
@@ -709,7 +709,7 @@ div.tree-content {
 
 div.tree-trigger {
   overflow: hidden;
-  width: 0px;
+  width: 0;
   float: left;
   padding-left: 20px;
 }
@@ -793,7 +793,7 @@ table#weber td {
 }
 
 .wizard .toc ol {
-  margin: 0px;
+  margin: 0;
   padding-left: 20px;
 }
 
@@ -1104,16 +1104,16 @@ table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
 
 .dent-legend, .dent-buttons {
   position: absolute;
-  top: 0px;
+  top: 0;
   margin: 0.5em;
 }
 
 .dent-legend {
-  right: 0px;
+  right: 0;
 }
 
 .dent-buttons {
-  left: 0px;
+  left: 0;
 }
 
 .dent-legend a {
@@ -1501,7 +1501,7 @@ ul.hl7-tree,
 
 .hl7-tree .field-item > ol {
   padding-left: 2px;
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 .hl7-tree .field-empty {
@@ -1595,7 +1595,7 @@ div.ecap-sejour-bar div {
 
 td.ssr-repartition {
   border: 1px solid #aaa; 
-  border-width: 1px 0px; 
+  border-width: 1px 0; 
   line-height: 110%;
 }
 
@@ -1685,9 +1685,9 @@ table.tbl td.hour-plan.active {
 }
 
 img#thumb {
-  -moz-box-shadow:    0px 6px 10px rgba(0,0,0,0.4);
-  -webkit-box-shadow: 0px 6px 10px rgba(0,0,0,0.4);
-  box-shadow:         0px 6px 10px rgba(0,0,0,0.4);
+  -moz-box-shadow:    0 6px 10px rgba(0,0,0,0.4);
+  -webkit-box-shadow: 0 6px 10px rgba(0,0,0,0.4);
+  box-shadow:         0 6px 10px rgba(0,0,0,0.4);
 }
 
 div.oldThumbs {

@@ -32,25 +32,12 @@ function processIE7Button(button) {
   }, 0.1);
 }
 </script>
-
-<style type="text/css">
-div.tooltip {
-  /* IE specific shadow */
-  zoom: 1;
-  filter: progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=135, Strength=6);
-  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=135, Strength=6)";
-}
-
-#waitingMsgText {
-  display: none;
-}
-</style>
 <![endif]-->
 
 <!--[if IE 7]>
 <style type="text/css">
 hr {
-  height: 0px;
+  height: 0;
 }
 
 hr.control_tabs {

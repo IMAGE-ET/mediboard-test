@@ -101,6 +101,24 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     
     $this->fill($data);
   }
+  
+  function fill($fields) {
+    $message = $this->getMessage();
+    
+    // Field separator
+    $fields[0] = $message->fieldSeparator; 
+    
+    // Encoding characters without the field separator
+    $fields[1] = substr($message->encoding_characters(), 1); 
+    
+    // Message type
+    $fields[8] = $message->name;
+    
+    // Version Id
+    $fields[11] = $message->version;
+    
+    return parent::fill($fields);
+  }
 }
 
 ?>

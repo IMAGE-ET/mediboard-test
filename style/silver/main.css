@@ -1,7 +1,7 @@
 /* Menu principal */
 #menubar table {
-  border: 0px;
-  border-spacing: 0px;
+  border: 0;
+  border-spacing: 0;
   background: url(./images/pictures/acier.png) repeat-x scroll bottom left;
 }
 

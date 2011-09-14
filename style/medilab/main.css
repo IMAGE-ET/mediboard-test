@@ -7,7 +7,7 @@ body {
 }
 
 #login {
-  margin: 40px 0px 0px; 
+  margin: 40px 0 0; 
 }
 
 /* Login */
@@ -215,7 +215,7 @@ td#mainHeader td.welcome {
 
 td.tabox {
   background-color: #fff;
-  border: solid #fff 0px;
+  border: solid #fff 0;
 }
 
 table.tabmenu {

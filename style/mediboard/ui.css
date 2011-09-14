@@ -39,12 +39,12 @@ td a.email {
 /* Global header */
 #header {
   width: 100%;
-  border-spacing: 0px;
+  border-spacing: 0;
   border: none;
 }
 
 #header td {
-  padding: 0px;
+  padding: 0;
 }
 
 table.Offline td.button {
@@ -167,7 +167,7 @@ ul#nav-vert {
 #main {
   clear: both;
   width: 100%;
-  border-spacing: 0px
+  border-spacing: 0
 }
 
 #mainPane {
@@ -328,7 +328,7 @@ ul.control_tabs.wide li {
 ul.control_tabs li, 
 ul.control_tabs_vertical li {
   float: left;
-  margin: 0px 2px;
+  margin: 0 2px;
   text-align: center;
   margin-top: 2px;
 }
@@ -586,20 +586,22 @@ td.show {
 
 .datepickerControl {
   border:        1px solid #999999;
-  border-radius: 6px;
-  border-radius-topleft: 0;
-  -moz-border-radius: 6px;
-  -moz-border-radius-topleft: 0;
-  -webkit-border-radius: 6px;
-  -webkit-border-top-left-radius: 0;
   background-color:  #EEEEEE;
   padding:      5px;
   margin-top: -1px;
   cursor: default;
   z-index: 550 !important;
-  -moz-box-shadow   : 0px 4px 8px rgba(0,0,0,0.4);
-  -webkit-box-shadow: 0px 4px 8px rgba(0,0,0,0.4);
-  box-shadow        : 0px 4px 8px rgba(0,0,0,0.4);
+	
+  -moz-box-shadow   : 0 4px 8px rgba(0,0,0,0.4);
+  -webkit-box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  box-shadow        : 0 4px 8px rgba(0,0,0,0.4);
+  
+  -moz-border-radius: 6px;
+  -moz-border-radius-topleft: 0;
+  -webkit-border-radius: 6px;
+  -webkit-border-top-left-radius: 0;
+  border-radius: 6px;
+  border-top-left-radius: 0;
 }
 
 .datepickerControl.inline {
@@ -607,10 +609,11 @@ td.show {
   padding: 0;
   background-color:  transparent;
   width: auto;
+  position: static !important;
+	
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
   box-shadow: none;
-  position: static !important;
 }
 
 .datepickerControl td {
@@ -832,9 +835,9 @@ td.show {
   margin: 0 3px;
   padding: 1px 4px;
   cursor: pointer;
-  -moz-border-radius: 0 0 4px 4px;
-  -webkit-border-bottom-left-radius: 4px;
-  -webkit-border-bottom-right-radius: 4px;
+  -moz-border-radius-bottomleft: 4px;
+  -moz-border-radius-bottomright: 4px;
+  -webkit-border-radius: 0 0 4px 4px;
   border-radius: 0 0 4px 4px;
   opacity: 0.5;
 }
@@ -913,10 +916,12 @@ table.active {
   min-width: 200px;
   padding: 0.3em;
   border: 3px solid #fff;
-  border-radius: 6px;
+  background-color: #eee;
+  
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
-  background-color: #eee;
+  border-radius: 6px;
+  
   -moz-box-shadow: 0 0 15px rgba(0,0,0,0.7);  
   -wekit-box-shadow: 0 0 15px rgba(0,0,0,0.7);  
   box-shadow: 0 0 15px rgba(0,0,0,0.7);
@@ -954,9 +959,9 @@ table.active {
   background: #eee;
   padding: 4px 2em;
   font-weight: bold;
-  border-radius: 5px; 
   -moz-border-radius: 5px; 
   -webkit-border-radius: 5px;
+  border-radius: 5px; 
 }
 
 .modal.popup > button.cancel,
@@ -1033,7 +1038,7 @@ img.thumbnail {
 
 img.thumbnail:hover {
   border: 2px solid #000;
-  padding: 0px;
+  padding: 0;
 }
 
 /** Object tags **/

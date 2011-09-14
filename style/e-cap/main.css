@@ -7,7 +7,7 @@ body {
 }
 
 #login {
-  margin: 40px 0px 0px; 
+  margin: 40px 0 0; 
 }
 
 /* Login */
@@ -18,7 +18,7 @@ body {
 
 /* Form tables */
 table.form {
-  border-spacing: 0px;
+  border-spacing: 0;
 }
 
 table.form th {
@@ -228,7 +228,7 @@ td.tabox {
 
 table.tabmenu {
   margin: 5px 10px;
-  border-spacing: 0px;
+  border-spacing: 0;
   line-height: 90%;
 }
 
@@ -320,7 +320,7 @@ table.tbl, table.form {
 }
 
 table.tbl {
-  border-spacing: 0px;
+  border-spacing: 0;
   background-color: #fff;
 }
 
@@ -451,19 +451,19 @@ fieldset legend {
 /* Shadow for clearer white fonts */
 
 #menubar a.textSelected {
-  text-shadow: 0 0 0 transparent, 0px 0px 2px rgba(255, 255, 255, 0.5); 
+  text-shadow: 0 0 0 transparent, 0 0 2px rgba(255, 255, 255, 0.5); 
 }
 
 #menubar a.textNonSelected,
 table.tabmenu td a {
-  text-shadow: 0 0 0 transparent, 0px 0px 2px rgba(0, 0, 0, 0.5); 
+  text-shadow: 0 0 0 transparent, 0 0 2px rgba(0, 0, 0, 0.5); 
 }
 
 ul.control_tabs li a, 
 ul.control_tabs_vertical li a,
 table.main th.title,
 table th.title h2 {
-  text-shadow: 0 0 0 transparent, 0px 0px 2px rgba(0, 0, 0, 0.7); 
+  text-shadow: 0 0 0 transparent, 0 0 2px rgba(0, 0, 0, 0.7); 
 }
 
 #menubar a:hover,

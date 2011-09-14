@@ -62,19 +62,19 @@ table.titleblock td.titlecell {
 
 /* Tab view table */
 table.tabview {
-  border-spacing: 0px;
+  border-spacing: 0;
   border-collapse: collapse; /* Hack for IE */
   empty-cells: show;
   width: 100%;
 }
 
 table.tabview td {
-  padding: 0px;
+  padding: 0;
 }
 
 table.tabmenu {
   margin-left: 10px;
-  border-spacing: 0px;
+  border-spacing: 0;
 }
 
 table.tabmenu td {
@@ -576,7 +576,7 @@ td.redefined {
 }*/
 
 .treegrid .tree-folding:hover {
-  background-position: 0 0px;
+  background-position: 0 0;
 }
 
 .treegrid .tree-folding {

@@ -101,7 +101,7 @@ h1, h2, h3 {
 h1 {
   font-size: 1.6em;
   color: #444;
-  margin: 10px 0px;
+  margin: 10px 0;
   page-break-before: always;
 }
 

@@ -6,7 +6,7 @@ body {
   color: #0f0;
   font-size: 11px;
   background: #000;
-  margin: 0px;
+  margin: 0;
 }
 
 table {
@@ -20,7 +20,7 @@ h1, h2, h3 {
 /* Login */
 
 #login {
-  margin: 40px 0px 0px; 
+  margin: 40px 0 0; 
 }
 
 #login table {
@@ -175,7 +175,7 @@ td.tabox {
 
 table.tabmenu {
   margin: 5px 10px;
-  border-spacing: 0px;
+  border-spacing: 0;
 }
 
 table.tabmenu td {

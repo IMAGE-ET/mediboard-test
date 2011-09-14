@@ -19,8 +19,8 @@ body {
 }
 
 #headerMenu td.titlecell img {
-  margin: 0px;
-  border: 0px;
+  margin: 0;
+  border: 0;
   padding-left: 20px;
 }
 
@@ -31,9 +31,9 @@ body {
   font-weight: bold;
   color: #000;
   white-space: nowrap;
-  border: 0px;
-  padding: 0px;
-  margin: 0px;
+  border: 0;
+  padding: 0;
+  margin: 0;
 }
 
 #headerMenu td.menuTitle {
@@ -86,17 +86,17 @@ td.tabview {
 table.tabmenu {
   border-top   : 10px;
   border-bottom: 10px;
-  border-left  : 0px;
-  border-right : 0px;
+  border-left  : 0;
+  border-right : 0;
 }
 
 table.tabmenu td {
   height: 18px;
   width: 0%;
-  border: 0px;
-  margin: 0px;
+  border: 0;
+  margin: 0;
   border-bottom: 4px solid #fff;
-  padding: 0px 5px;
+  padding: 0 5px;
   background: #fff;
 }
 
@@ -130,7 +130,7 @@ table.tabmenu td.selected.right {
 }
 
 table.tabmenu td.selected {
-  padding: 0px 5px;
+  padding: 0 5px;
   background: #fff;
   border-bottom: 4px solid #faa;
 }
@@ -140,12 +140,12 @@ table.tabmenu td.selected {
 td.tabox {
   background-color: #fff;
   border: 1px dotted #bbb;
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
 }
 
 table.main {
-  border: 0px;
+  border: 0;
 }
 
 /* System message */
