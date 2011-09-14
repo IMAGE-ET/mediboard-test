@@ -79,7 +79,7 @@ class CDestinataireHprim extends CInteropReceiver {
   function sendEvenementPatient(CHPrimXMLEvenementsPatients $dom_evt, CMbObject $mbObject, $referent = null, $initiateur = null) {
     $msg = $dom_evt->generateTypeEvenement($mbObject, $referent, $initiateur);
     
-    if ($this->actif) {
+    if ($this->actif && $msg) {
       $source = CExchangeSource::get("$this->_guid-evenementPatient");
       if ($source->_id) {
         $source->setData($msg);
@@ -111,8 +111,8 @@ class CDestinataireHprim extends CInteropReceiver {
   
   function sendEvenementPMSI(CHPrimXMLEvenementsServeurActivitePmsi $dom_evt, CMbObject $mbObject) {
     $msg = $dom_evt->generateTypeEvenement($mbObject);
-    
-    if ($this->actif) {
+    mbLog($dom_evt->sous_type);
+    if ($this->actif && $msg) {
       $source = CExchangeSource::get("$this->_guid-$dom_evt->sous_type");
       if ($source->_id) {
         $source->setData($msg);
