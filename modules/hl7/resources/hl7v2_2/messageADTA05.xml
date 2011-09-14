@@ -14,7 +14,7 @@
         <segment minOccurs="0" maxOccurs="unbounded">DG1</segment>
         <segment minOccurs="0" maxOccurs="unbounded">PR1</segment>
         <segment minOccurs="0" maxOccurs="unbounded">GT1</segment>
-        <group maxOccurs="unbounded" minOccurs="0">
+        <group maxOccurs="unbounded" minOccurs="0" name="INSURANCE">
             <segment>IN1</segment>
             <segment minOccurs="0">IN2</segment>
             <segment minOccurs="0">IN3</segment>

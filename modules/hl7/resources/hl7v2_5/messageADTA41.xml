@@ -6,7 +6,7 @@
         <segment>MSH</segment>
         <segment minOccurs="0" maxOccurs="unbounded">SFT</segment>
         <segment>EVN</segment>
-        <group maxOccurs="unbounded">
+        <group maxOccurs="unbounded" name="PATIENT">
             <segment>PID</segment>
             <segment minOccurs="0">PD1</segment>
             <segment>MRG</segment>

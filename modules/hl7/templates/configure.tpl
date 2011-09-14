@@ -15,15 +15,10 @@
 </script>
 
 <ul id="tabs-configure" class="control_tabs">
-  <li><a href="#config-extract">{{tr}}config-hl7v2-extract{{/tr}}</a></li>
   <li><a href="#config-source">{{tr}}config-hl7v2-source{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
-
-<div id="config-extract" style="display: none;">
-  {{mb_include template=inc_config_extract}}
-</div>
 
 <div id="config-source" style="display: none;">
   <h2>Paramètres par défaut du serveur FTP pour HL7 v.2</h2>

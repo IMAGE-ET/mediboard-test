@@ -3,7 +3,7 @@
     <name>NM</name>
     <description>Numeric</description>
     <elements>
-        <field minOccurs="0" maxOccurs="0">
+        <field minOccurs="0" maxOccurs="0" length="16">
             <name>NM.1</name>
             <description>Value</description>
             <datatype>Double</datatype>

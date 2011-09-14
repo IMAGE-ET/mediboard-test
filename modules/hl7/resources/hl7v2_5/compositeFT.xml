@@ -3,7 +3,7 @@
     <name>FT</name>
     <description>Formatted Text Data</description>
     <elements>
-        <field minOccurs="0" maxOccurs="0">
+        <field minOccurs="0" maxOccurs="0" length="65536">
             <name>FT.1</name>
             <description>Value</description>
             <datatype>String</datatype>

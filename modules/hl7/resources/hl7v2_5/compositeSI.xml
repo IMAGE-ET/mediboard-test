@@ -3,7 +3,7 @@
     <name>SI</name>
     <description>Sequence ID</description>
     <elements>
-        <field minOccurs="0" maxOccurs="0">
+        <field minOccurs="0" maxOccurs="0" length="4">
             <name>SI.1</name>
             <description>Value</description>
             <datatype>Integer</datatype>

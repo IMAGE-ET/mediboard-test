@@ -3,7 +3,7 @@
     <name>DTM</name>
     <description>Date/Time</description>
     <elements>
-        <field minOccurs="0" maxOccurs="0">
+        <field minOccurs="0" maxOccurs="0" length="24">
             <name>DTM.1</name>
             <description>Value</description>
             <datatype>DateTime</datatype>

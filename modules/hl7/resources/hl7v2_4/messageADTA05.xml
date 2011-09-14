@@ -17,12 +17,12 @@
         <segment minOccurs="0" maxOccurs="unbounded">AL1</segment>
         <segment minOccurs="0" maxOccurs="unbounded">DG1</segment>
         <segment minOccurs="0">DRG</segment>
-        <group maxOccurs="unbounded" minOccurs="0">
+        <group maxOccurs="unbounded" minOccurs="0" name="PROCEDURE">
             <segment>PR1</segment>
             <segment minOccurs="0" maxOccurs="unbounded">ROL</segment>
         </group>
         <segment minOccurs="0" maxOccurs="unbounded">GT1</segment>
-        <group maxOccurs="unbounded" minOccurs="0">
+        <group maxOccurs="unbounded" minOccurs="0" name="INSURANCE">
             <segment>IN1</segment>
             <segment minOccurs="0">IN2</segment>
             <segment minOccurs="0" maxOccurs="unbounded">IN3</segment>

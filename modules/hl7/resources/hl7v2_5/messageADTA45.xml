@@ -8,7 +8,7 @@
         <segment>EVN</segment>
         <segment>PID</segment>
         <segment minOccurs="0">PD1</segment>
-        <group maxOccurs="unbounded">
+        <group maxOccurs="unbounded" name="MERGE_INFO">
             <segment>MRG</segment>
             <segment>PV1</segment>
         </group>

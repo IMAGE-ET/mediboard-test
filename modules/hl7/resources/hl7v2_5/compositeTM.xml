@@ -3,7 +3,7 @@
     <name>TM</name>
     <description>Time</description>
     <elements>
-        <field minOccurs="0" maxOccurs="0">
+        <field minOccurs="0" maxOccurs="0" length="16">
             <name>TM.1</name>
             <description>Value</description>
             <datatype>Time</datatype>

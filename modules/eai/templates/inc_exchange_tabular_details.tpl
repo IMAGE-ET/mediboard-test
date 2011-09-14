@@ -20,7 +20,7 @@
 <ul class="control_tabs" id="message-tab">
   <li><a href="#message-tree">Arbre</a></li>
   <li><a href="#message-er7">ER7</a></li>
-  <li><a href="#message-errors" {{if $segment_group->errors|@count}} class="wrong" {{/if}}>Erreurs</a></li>
+  <li><a href="#message-errors"  class="{{if $segment_group->errors|@count}}wrong{{elseif}}empty{{/if}}">Erreurs</a></li>
 </ul>
 
 <hr class="control_tabs" />

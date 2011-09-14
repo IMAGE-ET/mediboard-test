@@ -3,12 +3,12 @@
     <name>RI</name>
     <description>Repeat Interval</description>
     <elements>
-        <field minOccurs="0" maxOccurs="0">
+        <field minOccurs="0" maxOccurs="0" length="6" table="0335">
             <name>RI.1</name>
             <description>Repeat Pattern</description>
             <datatype>IS</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0">
+        <field minOccurs="0" maxOccurs="0" length="199">
             <name>RI.2</name>
             <description>Explicit Time Interval</description>
             <datatype>ST</datatype>

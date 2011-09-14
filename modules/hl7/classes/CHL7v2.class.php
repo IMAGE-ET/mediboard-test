@@ -13,7 +13,7 @@ CAppUI::requireModuleClass("hl7", "CHL7v2");
 abstract class CHL7v2 {
   static $debug = false;
   
-  const LIB_HL7 = "lib/hl7";
+  const LIB_HL7               = "modules/hl7/resources";
   const PREFIX_MESSAGE_NAME   = "message";
   const PREFIX_SEGMENT_NAME   = "segment";
   const PREFIX_COMPOSITE_NAME = "composite";

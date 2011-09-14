@@ -3,12 +3,12 @@
     <name>DR</name>
     <description>Date/Time Range</description>
     <elements>
-        <field minOccurs="0" maxOccurs="0">
+        <field minOccurs="0" maxOccurs="0" length="26">
             <name>DR.1</name>
             <description>Range Start Date/Time</description>
-            <datatype>TS</datatype>
+            <datatype>TS</datatype>§
         </field>
-        <field minOccurs="0" maxOccurs="0">
+        <field minOccurs="0" maxOccurs="0" length="26">
             <name>DR.2</name>
             <description>Range End Date/Time</description>
             <datatype>TS</datatype>

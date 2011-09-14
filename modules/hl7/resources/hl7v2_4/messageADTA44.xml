@@ -5,7 +5,7 @@
     <segments>
         <segment>MSH</segment>
         <segment>EVN</segment>
-        <group maxOccurs="unbounded">
+        <group maxOccurs="unbounded" name="PATIENT">
             <segment>PID</segment>
             <segment minOccurs="0">PD1</segment>
             <segment>MRG</segment>
