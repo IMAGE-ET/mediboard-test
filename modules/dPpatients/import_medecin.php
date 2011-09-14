@@ -44,21 +44,56 @@ $mode = CValue::get("mode");
 
 // Step 1: Emulates an HTTP request
 if ($mode == "get") {
+  $departement = CValue::get("departement");
   $cookiepath = CAppUI::getTmpPath("cookie.txt");
-  $baseurl = "http://www.conseil-national.medecin.fr/";
-  $fileurl = $step > 1 ? "index.php?url=annuaire/result.php&from=$from&to=$to" : "annuaire.php?cp=";
-  $url = $baseurl . $fileurl;
+  $page = $step-1;
+  $url_ch1 = "http://www.conseil-national.medecin.fr/annuaire";
+  $url_ch2 = "http://www.conseil-national.medecin.fr/annuaire/resultats?page=$page";
+  
+  $post = array(
+    "sexe" => 3,
+    "departement" => $departement,
+    "op" => "Recherche",
+    "form_build_id" => "form-c2b45a67c53fdd389338ffee58d2c1c2",
+    "form_id" => "cn_search_med_advanced_form");
   
   $ch = curl_init();
+  $ch2 = curl_init();
+  
   curl_setopt($ch, CURLOPT_COOKIEJAR, $cookiepath);
   curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiepath);
   curl_setopt($ch, CURLOPT_VERBOSE, 1);
   curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); 
-  curl_setopt($ch, CURLOPT_URL, $url);
+  curl_setopt($ch, CURLOPT_URL, $url_ch1);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-  $result = curl_exec ($ch);
-  curl_close($ch);
+  curl_setopt($ch, CURLOPT_POST, 1);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array("Connection:: keep-alive"));
   
+  curl_setopt($ch2, CURLOPT_COOKIEJAR, $cookiepath);
+  curl_setopt($ch2, CURLOPT_COOKIEFILE, $cookiepath);
+  curl_setopt($ch2, CURLOPT_VERBOSE, 1);
+  curl_setopt($ch2, CURLOPT_FOLLOWLOCATION, 1);
+  curl_setopt($ch2, CURLOPT_URL, $url_ch2);
+  curl_setopt($ch2, CURLOPT_RETURNTRANSFER, 1);
+  
+  // La recherche a un redirect. Il faut faire une sous requête pour obtenir la bonne page.
+  $mh = curl_multi_init();
+  
+  curl_multi_add_handle($mh, $ch);
+  curl_multi_add_handle($mh, $ch2);
+  
+  $running = null; 
+  do { 
+    curl_multi_exec($mh,$running); 
+  } while($running > 0);
+  
+  $result = curl_multi_getcontent($ch2);
+  
+  curl_multi_remove_handle($mh, $ch);
+  curl_multi_remove_handle($mh, $ch2);
+  curl_multi_close($mh);
+
   file_put_contents($htmpath, $result);
   
   // -- Step: Get data from html file
@@ -75,7 +110,10 @@ if ($mode == "get") {
 
 // Step 2: Parse XML
 $xpath_screwed = false;
+$last_page     = 0;
+
 if (in_array($mode, array("get", "xml"))) {
+  
   // Open CSV File
   $csvfile = fopen($csvpath, "w");
 	$medecin = new CMedecin();
@@ -89,17 +127,23 @@ if (in_array($mode, array("get", "xml"))) {
 	// Small adjustments for line delimitation:  <br/> to \n
 	$html = str_replace("<br>", "\n", $html);
 	
+	
 	// Prepare the document
 	$doc = @DOMDocument::loadHTML($html);
 	file_put_contents($xmlpath, $doc->saveXML());
 	
 	$xpath = new CMbXPath($doc);
 	
-	$query = "/html/body/table/tr[3]/td/table/tr/td[2]/table/tr[7]/td/table/*";
+	// Check last page
+	$query = "/html/body//li[@class='pager-current last']";
+	// Two links to each page, so check if there are 2 elements pointing the last page.
+	$last_page = $xpath->query($query)->length == 2;
+	
+	$query = "/html/body//table[@id]/tr";
 	$medecins = array();
 	foreach ($xpath->query($query) as $key => $nodeMainTr) {
-	  $ndx = intval($key / 3);
-	  $mod = intval($key % 3);
+	  $ndx = intval($key / 4);
+	  $mod = intval($key % 4);
 	  
 	  if ($nodeMainTr->nodeName != "tr") {
 	    trigger_error("Not a main &lt;tr&gt; DOM Node", E_USER_WARNING);
@@ -118,64 +162,84 @@ if (in_array($mode, array("get", "xml"))) {
 	  $xpath2 = new CMbXPath($doc);
 	  switch ($mod) {
 	    case 0:
-	    // Nom du médecin
-	    $query = "td[2]/table/tr[1]/td/b";
-	    $nom = $xpath2->queryTextNode($query, $nodeMainTr);
-	    $nom = substr($nom, 0, -5); 
-	    $fragments = explode(" ", $nom, 2);
-	    $medecin->prenom = @$fragments[0];
-	    $medecin->nom    = @$fragments[1];
-	
-	    // Nom de jeune fille
-	    $query = "td[2]/table/tr[2]/td";
-	    $medecin->jeunefille = $xpath2->queryTextNode($query, $nodeMainTr);
-	            
-	    break;
+  	    // Nom du médecin
+  	    $query = "td[2]/span[1]";
+  	    $nom_prenom = $xpath2->queryTextNode($query, $nodeMainTr);
+  	    
+  	    preg_match('/^\s*(.+)\s+([^\s]+)\s*$/', $nom_prenom, $matches);
+  	    
+  	    $medecin->nom    = $matches[1];
+  	    $medecin->prenom = $matches[2];
+  	    
+  	    // RPPS
+  	    $query = "td[2]/strong[1]";
+  	    $medecin->rpps = $xpath2->queryTextNode($query, $nodeMainTr);
+       
+  	    break;
 	      
 	    case 1:
-	    // Disciplines qualifiantes
-	    $query = "td[1]/table/tr[2]/td";
-	    $medecin->disciplines = $xpath2->queryMultilineTextNode($query, $nodeMainTr, "- ");
-	
-	    // Mentions et orientations
-	    $query = "td[1]/table/tr[4]/td";
-	    $medecin->orientations = $xpath2->queryMultilineTextNode($query, $nodeMainTr, "- ");
-	
-	    // Disciplines complémentaires
-	    $query = "td[2]/table/tr[2]/td";
-	    $medecin->complementaires = $xpath2->queryMultilineTextNode($query, $nodeMainTr, "- ");
-	    
-	    break;
+  	    // Disciplines qualifiantes
+  	    $query = "td[2]/strong";
+  	    $medecin->disciplines = $xpath2->query($query, $nodeMainTr)->item(0)->nextSibling->nodeValue;
+  	    
+  	    break;
 	    
 	    case 2:
-	    // Adresse 
-	    $query = "td[1]/table/tr[2]/td";
-	    $node = $xpath2->queryUniqueNode($query, $nodeMainTr);
-	    $medecin->adresse = $xpath2->queryMultilineTextNode($query, $nodeMainTr);
-	    
-	    // Ville
-	    $query = "td[1]/table/tr[3]/td";
-	    $ville = $xpath2->queryMultilineTextNode($query, $nodeMainTr);
-	    $medecin->ville = trim(substr($ville, 6));
-	    $medecin->cp    = trim(substr($ville, 0, 5));
-	    
-	    // Hack,: le trop de fonctionne pas sur certains cp de la forme 'NN '.
-	    if (strlen($medecin->cp) < 5 ) {
-	      $medecin->cp = substr($medecin->cp, 0, -1);
-	    }
-	
-	    // Contact
-	    $query = "td[2]/table/tr[1]/td[3]";
-	    $medecin->tel = $xpath2->queryNumcharNode($query, $nodeMainTr, 10);
-	
-	    $query = "td[2]/table/tr[2]/td[3]";
-	    $medecin->fax = $xpath2->queryNumcharNode($query, $nodeMainTr, 10);
-	
-	    $query = "td[2]/table/tr[3]/td[3]";
-	    $medecin->email = $xpath2->queryTextNode($query, $nodeMainTr);
-	
-	    fputcsv($csvfile, $medecin->getCSVFields());
-	    break;
+  	    $query = "td[2]";
+  	    $infos = $xpath2->query($query, $nodeMainTr);
+  	    $td = $infos->item(0);
+  	    $child = $td->firstChild;
+  	    $cp_ville = $td->lastChild;
+  	    
+  	    // Adresse
+  	    $medecin->adresse = "";
+  	    while ($child !== $cp_ville) {
+  	      if ($child->nodeName === "br") {
+  	        $medecin->adresse .= "\n";
+  	      }
+  	      else {
+  	        $medecin->adresse .= $child->nodeValue;
+  	      }
+  	      $child = $child->nextSibling;
+  	    }
+  	    
+  	    // Code postal - Ville
+  	    $cp_ville = $cp_ville->nodeValue;
+  	    $first_space = strpos($cp_ville, " ");
+  	    $medecin->cp = substr($cp_ville, 0, $first_space);
+  	    $medecin->ville = substr($cp_ville, $first_space);
+  	    
+  	    // Disciplines complémentaires - Téléphone - Fax
+  	    $query = "td[3]/strong";
+        
+  	    foreach ($xpath2->query($query, $nodeMainTr) as $node) {
+  	      switch (trim($node->nodeValue)) {
+  	        case "Disciplines complementaires d'exercice :":
+  	          $child = $node->nextSibling;
+  	          // Tester la présence du nextSibling (pas de téléphone ni de fax)
+  	          while ($child->nodeName !== "strong" && $child->nextSibling) {
+  	            if ($child->nodeName === "br") {
+	                $medecin->complementaires .= "\n";
+  	            }
+  	            else {
+  	              $medecin->complementaires .= $child->nodeValue;
+  	            }
+	              $child = $child->nextSibling;
+  	          }
+  	          break;
+  	        case "Tel:":
+  	          $medecin->tel = trim(str_replace(".", " ", $node->nextSibling->nodeValue));
+  	          break;
+  	        case "Fax:":
+  	          $medecin->fax = trim(str_replace(".", " ", $node->nextSibling->nodeValue));
+  	      }
+  	    }
+  	    
+  	    fputcsv($csvfile, $medecin->getCSVFields());
+  	    break;
+  	  
+	    case 3:
+	      // Empty tr
 	  } 
 	  
 	}
@@ -239,6 +303,7 @@ $smarty->assign("medecins"      , $medecins);
 $smarty->assign("chrono"        , $chrono);
 $smarty->assign("updates"       , $updates);
 $smarty->assign("errors"        , $errors);
+$smarty->assign("last_page"     , $last_page);
 
 $smarty->display("import_medecin.tpl");
 ?>

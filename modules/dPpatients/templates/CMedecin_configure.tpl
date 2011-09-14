@@ -21,6 +21,7 @@ var Process = {
 	  url.addElement(form.step);	  
 	  url.addParam("mode", $V(form.mode));
 	  url.addParam("pass", this.pass);
+    url.addParam("departement", $V(form.departement));
 	  url.requestUpdate("process");
 	},
 	
@@ -106,7 +107,13 @@ var Process = {
 	    
 	    <input type="checkbox" name="auto" />
 	    <label for="auto">Automatique</label>
-
+      
+      <select name="departement">
+        {{foreach from=$departements item=_departement}}
+          <option value="{{$_departement}}">{{$_departement}}</option>
+        {{/foreach}}
+      </select>
+      
 	    <br/>
 
 	    <label for="step">Etape</label>

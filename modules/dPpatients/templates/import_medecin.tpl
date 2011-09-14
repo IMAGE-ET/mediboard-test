@@ -39,7 +39,7 @@
     {{$errors}}
   );
 {{/if}}
-{{if count($medecins)}}
+{{if !$last_page}}
   Process.endStep();
 {{/if}}
 </script>
