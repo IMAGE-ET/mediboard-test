@@ -19,6 +19,7 @@ class CHL7v2Field extends CHL7v2Entity {
   var $name          = null;
   var $datatype      = null;
   var $length        = null;
+  var $table         = null;
   var $description   = null;
   var $required      = null;
   var $unbounded     = null;
@@ -35,6 +36,7 @@ class CHL7v2Field extends CHL7v2Entity {
     $this->name     = (string)$spec->name;
     $this->datatype = (string)$spec->datatype;
     $this->length   = (int)$spec->attributes()->length;
+    $this->table    = (int)$spec->attributes()->table;
     
     $this->meta_spec = $spec;
     
@@ -157,7 +159,7 @@ class CHL7v2Field extends CHL7v2Entity {
     $str = implode($rs, $this->items);
     
     if (CHL7v2Message::$decorateToString) {
-      $str = "<span class='entity field' id='field-$this->id'>$str</span>";
+      $str = "<span class='entity field' id='entity-er7-$this->id'>$str</span>";
     }
     
     return $str;

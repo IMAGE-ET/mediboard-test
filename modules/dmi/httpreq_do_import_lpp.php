@@ -36,6 +36,8 @@ $distPath = "http://www.codage.ext.cnamts.fr/f_mediam/fo/tips/LPP.zip";
 $targetDir = "tmp/lpp";
 $sourcePath = "$targetDir/LPP.zip";
 
+CMbPath::forceDir($targetDir);
+
 // Download the archive
 file_put_contents($sourcePath, file_get_contents($distPath));
 

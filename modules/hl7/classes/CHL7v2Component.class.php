@@ -48,6 +48,12 @@ class CHL7v2Component extends CHL7v2Entity {
   var $description = null;
   
   /**
+   * Table
+   * @var integer
+   */
+  var $table = null;
+  
+  /**
    * Position of self in its parent
    * @var integer
    */
@@ -71,6 +77,7 @@ class CHL7v2Component extends CHL7v2Entity {
     
     // Intrinsic properties 
     $this->length      = (int)$specs->attributes()->length;
+    $this->table       = (int)$specs->attributes()->table;
     $this->datatype    = (string)$specs->datatype;
     $this->description = (string)$specs->description;
     $this->self_pos    = $self_pos;
@@ -144,7 +151,14 @@ class CHL7v2Component extends CHL7v2Entity {
     
     // Scalar type (NM, ST, ID, etc)
     else {
-      $this->data = trim($this->props->toHL7($data, $this->getField()));
+    	$field = $this->getField();
+			
+    	if (is_array($data)) {
+    		$this->error(CHL7v2Exception::INVALID_DATA_FORMAT, var_export($data, true), $field);
+				return;
+    	}
+			
+      $this->data = trim($this->props->toHL7($data, $field));
     }
   }
   
@@ -178,7 +192,7 @@ class CHL7v2Component extends CHL7v2Entity {
 			}
 			
 			if (!$props->validate($this->data, $field)) {
-	      $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, var_export($this->data, true), $field);
+	      $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $this->data, $field);
 				$this->invalid = true;
 	      return false;
 			}
@@ -254,7 +268,10 @@ class CHL7v2Component extends CHL7v2Entity {
       
     if (CHL7v2Message::$decorateToString) {
       $title = $field->owner_segment->name.".".implode(".", $this->getPath())." - $this->datatype - $this->description";
-      $str = "<span class='entity {$this->separator[1]} ".($this->invalid ? 'invalid' : '')."' id='{$this->separator[1]}-$this->self_pos' data-title='$title'>$str</span>";
+			if ($this->table != 0) {
+				$title .= " [$this->table]";
+			}
+      $str = "<span class='entity {$this->separator[1]} ".($this->invalid ? 'invalid' : '')."' id='entity-er7-$this->id' data-title='$title'>$str</span>";
     }
       
     return $str;

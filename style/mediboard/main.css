@@ -1329,7 +1329,6 @@ ul li a.chapitre_signe.active{
   max-height: auto;
   max-width: 100%;
   padding: 20px 3px;
-  overflow-y: hidden;
 }
 
 /* separators */
@@ -1404,6 +1403,17 @@ ul li a.chapitre_signe.active{
 .er7 .entity.invalid {
   padding: 2px;
   border-bottom: 1px dotted red;
+}
+
+.er7 .group:hover {
+  background-color: rgba(0,0,0,0.1);
+  border: none;
+  margin: 0;
+}
+
+.er7 .group:hover:before {
+  right: -1px;
+  left:  auto;
 }
 
 .er7 .field:hover {
@@ -1483,6 +1493,10 @@ ul.hl7-tree,
 .hl7-tree .type:after {
   content: ")";
 }*/
+
+.hl7-tree .table {
+  color: #9A2D00;
+}
 
 .hl7-tree .invalid {
   color: red !important;

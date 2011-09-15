@@ -4,6 +4,10 @@
 <span class="field-name {{if $component->invalid}}invalid{{/if}}">{{$segment->name}}.{{"."|implode:$path}}</span>
 <span class="field-description">{{$component->description}}</span>
 <span class="type">{{$component->getTypeTitle()}}</span>
+            
+{{if $component->table}}
+  <span class="table">{{$component->table}}</span>
+{{/if}}
   
 {{if $component->props instanceof CHL7v2DataTypeComposite}}
   {{if $component->children|@count > 0}}

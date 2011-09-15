@@ -4,8 +4,12 @@
     <th colspan="3">
     	{{if $group_by == "praticien"}}
     	  Praticien
-			{{else}}
+			{{elseif $group_by == "labo"}}
 			  Labo
+      {{elseif $group_by == "code_lpp"}}
+        Code LPP
+      {{else}}
+        {{$group_by}}
 			{{/if}}
 		</th>
     <th>Total</th>
@@ -19,8 +23,10 @@
              _date_max: '{{$date_max}}', 
 						 {{if $group_by == "praticien"}} 
 						   chir_id: '{{$_stat.$group_by->_id}}',
-						 {{else}}
+						 {{elseif $group_by == "labo"}}
 						   _labo_id: '{{$_stat.$group_by->_id}}',
+             {{elseif  $group_by == "code_lpp"}}
+               {{$group_by}}: '{{$_stat.$group_by}}',
 						 {{/if}}
              septic: '{{$septic}}'
 					})">
@@ -31,10 +37,13 @@
              _date_max: '{{$date_max}}', 
              {{if $group_by == "praticien"}} 
                chir_id: '{{$_stat.$group_by->_id}}',
-             {{else}}
+             {{elseif $group_by == "labo"}}
                _labo_id: '{{$_stat.$group_by->_id}}',
+             {{elseif  $group_by == "code_lpp"}}
+               {{$group_by}}: '{{$_stat.$group_by}}',
              {{/if}}
-             septic: '{{$septic}}'
+             septic: '{{$septic}}',
+						 csv_title: '{{$_stat.$group_by}}'
           })">
             Télécharger fichier CSV
 					</button>
@@ -49,6 +58,8 @@
 					  <span onmouseover="ObjectTooltip.createEx(this, '{{$_stat.$group_by->_guid}}')">
 		          {{$_stat.$group_by}}
 						</span>
+					{{else}}
+					  {{$_stat.$group_by}}
 		      {{/if}}
 				</td>
 				<td>{{$_stat.sum}}</td>
@@ -57,7 +68,7 @@
 		<tbody style="display: none;"></tbody>
 	{{foreachelse}}
 	  <tr>
-	  	<td colspan="4" class="empty">
+	  	<td colspan="5" class="empty">
 	  		Aucune valeur pour ces critères
 	  	</td>
 	  </tr>

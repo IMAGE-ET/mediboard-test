@@ -41,14 +41,22 @@ function downloadDetails(params) {
 					{{/foreach}}
 				</select>
 			</td>
+      
+      <th>
+        <label for="group_by">Grouper par </label>
+      </th>
+      <td>
+        <select name="group_by">
+          <option value="praticien" {{if $group_by == "praticien"}} selected="selected" {{/if}}>Praticien</option>
+          <option value="labo" {{if $group_by == "labo"}} selected="selected" {{/if}}>Laboratoire</option>
+          <option value="code_lpp" {{if $group_by == "code_lpp"}} selected="selected" {{/if}}>Code LPP</option>
+        </select>
+      </td>
 			
 			<th>
         {{mb_label object=$dmi_line field=septic}}
         {{mb_field object=$dmi_line field=septic typeEnum=checkbox}}
 			</th>
-	    <td>
-	    	<button class="search">{{tr}}Filter{{/tr}}</button>
-	    </td>
 		</tr>
 		
 		<tr>
@@ -58,14 +66,11 @@ function downloadDetails(params) {
       <th>{{mb_title object=$dmi field=_labo_id}}</th>
       <td>{{mb_field object=$dmi field=_labo_id form="filter-dmi-stats" autocomplete="true,1,50,true,true"}}</td>
       
-      <th>
-        <label for="group_by">Grouper par </label>
-      </th>
+      <th>{{mb_title object=$dmi field=code_lpp}} (partiel ou complet)</th>
+      <td>{{mb_field object=$dmi field=code_lpp}}</td>
+			
       <td>
-        <select name="group_by">
-          <option value="praticien" {{if $group_by == "praticien"}} selected="selected" {{/if}}>Praticien</option>
-          <option value="labo" {{if $group_by == "labo"}} selected="selected" {{/if}}>Laboratoire</option>
-        </select>
+        <button class="search">{{tr}}Filter{{/tr}}</button>
       </td>
 		</tr>
 	</table>

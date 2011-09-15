@@ -50,7 +50,8 @@ class CStoredObject extends CModelObject {
   var $_ref_last_log   = null;
   
   /**
-   * @var CMbObject The object in database
+   * The object in database
+   * @var CMbObject
    */
   var $_old            = null;
   

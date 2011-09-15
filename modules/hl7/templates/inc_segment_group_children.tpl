@@ -13,6 +13,10 @@
             <span class="field-name">{{$_child->name}}-{{$_field_pos}}</span>
             <span class="field-description">{{$_field->description}}</span>
             <span class="type">{{$_field->getTypeTitle()}}</span>
+						
+						{{if $_field->table}}
+              <span class="table">{{$_field->table}}</span>
+						{{/if}}
             
             <ol>
               {{foreach from=$_field->items key=_i item=_item}}

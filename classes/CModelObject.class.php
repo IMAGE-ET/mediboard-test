@@ -21,32 +21,38 @@ class CModelObject {
   static $ignoredHandlers = array();
     
   /**
-   * @var string The object's class name
+   * The object's class name
+   * @var string
    */
   var $_class         = null; 
   
   /**
-   * @var integer The object ID
+   * The object ID
+   * @var integer
    */
   var $_id            = null;
   
   /**
-   * @var string The object GUID ("_class-_id")
+   * The object GUID ("_class-_id")
+   * @var string
    */
   var $_guid          = null;
   
   /**
-   * @var string The universal object view
+   * The universal object view
+   * @var string
    */
   var $_view          = '';
   
   /**
-   * @var string The universal object shortview
+   * The universal object shortview
+   * @var string
    */
   var $_shortview     = '';
   
   /**
-   * @var CMbObjectSpec The class specification
+   * The class specification
+   * @var CMbObjectSpec 
    */
   var $_spec          = null;    // Class specification
   var $_props         = array(); // Properties specifications as string
@@ -67,10 +73,7 @@ class CModelObject {
    * @var CModule
    */
   var $_ref_module     = null; // Parent module
-
-  /**
-   * Constructor magic method
-   */
+  
   function __construct() {
     return $this->initialize();
   }

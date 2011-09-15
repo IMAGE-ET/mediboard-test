@@ -14,6 +14,7 @@ $chir_id  = CValue::get("chir_id");
 $date_min = CValue::get("_date_min");
 $date_max = CValue::get("_date_max");
 $labo_id  = CValue::get("_labo_id");
+$code_lpp = CValue::get("code_lpp");
 $group_by = CValue::get("group_by");
 $septic   = CValue::get("septic");
 
@@ -21,6 +22,7 @@ CValue::setSession("chir_id",   $chir_id);
 CValue::setSession("_date_min", $date_min);
 CValue::setSession("_date_max", $date_max);
 CValue::setSession("_labo_id",  $labo_id);
+CValue::setSession("code_lpp",  $code_lpp);
 CValue::setSession("group_by",  $group_by);
 CValue::setSession("septic",    $septic);
 
@@ -31,14 +33,16 @@ $where = array(
   "prescription_line_dmi.septic" => $ds->prepare("=%", $septic),
 );
 $ljoin = array(
-  "operations" => "operations.operation_id = prescription_line_dmi.operation_id",
-  //"product" => "product.product_id = prescription_line_dmi.product_id",
+  "operations"        => "operations.operation_id = prescription_line_dmi.operation_id",
+  "product"           => "product.product_id = prescription_line_dmi.product_id",
   "product_reference" => "product_reference.product_id = prescription_line_dmi.product_id",
-	"plagesop" => "plagesop.plageop_id = operations.plageop_id",
+	"plagesop"          => "plagesop.plageop_id = operations.plageop_id",
+  "dmi"               => "dmi.product_id = product.product_id",
 );
 $fields = array(
   "prescription_line_dmi.praticien_id",
-	"product_reference.societe_id",
+  "product_reference.societe_id",
+  "dmi.code_lpp",
 	"SUM(prescription_line_dmi.quantity) AS sum"
 );
 
@@ -48,6 +52,10 @@ if ($chir_id) {
 
 if ($labo_id) {
   $where["product_reference.societe_id"] = $ds->prepare("=%", $labo_id);
+}
+
+if ($code_lpp) {
+  $where["dmi.code_lpp"] = $ds->prepareLike("$code_lpp%");
 }
 
 if ($date_min) {
@@ -60,17 +68,18 @@ if ($date_max) {
 
 $group_by_map = array(
 	"praticien" => "prescription_line_dmi.praticien_id",
-	"labo"      => "product_reference.societe_id",
+  "labo"      => "product_reference.societe_id",
+  "code_lpp"  => "dmi.code_lpp"//SUBSTR(dmi.code_lpp, 0, 5)",
 );
 
-$dmi_lines_count = $dmi_line->countMultipleList($where, "total DESC" $group_by_map[$group_by], $ljoin, $fields);
+$dmi_lines_count = $dmi_line->countMultipleList($where, "total DESC", $group_by_map[$group_by], $ljoin, $fields);
 
 foreach($dmi_lines_count as &$_stat) {
 	$mediuser = new CMediusers;
 	$mediuser->load($_stat["praticien_id"]);
 	$mediuser->loadRefFunction();
 	$_stat["praticien"] = $mediuser;
-	
+  
   $labo = new CSociete;
   $labo->load($_stat["societe_id"]);
   $_stat["labo"] = $labo;
