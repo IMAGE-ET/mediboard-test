@@ -14,6 +14,12 @@ $msg = new CHL7v2Message;
 $msg->version = "2.5";
 $msg->name = "ADT_A08";
 
+//$msg->fieldSeparator = "a";
+//$msg->componentSeparator = "b";
+//$msg->subcomponentSeparator = "e";
+//$msg->repetitionSeparator = "c";
+//$msg->escapeCharacter = "d";
+
 $segment = CHL7v2Segment::create("MSH", $msg);
 
 $data = array(
@@ -26,8 +32,8 @@ $data = array(
   mbDateTime(), // MSH-7: Date/Time Of Message (TS)
   null, // MSH-8: Security (ST) (optional)
   null, // MSH-9: Message Type (MSG)
-  null, // MSH-10: Message Control ID (ST) 
-  null, // MSH-11: Processing ID (PT) 
+  "Msg ctrl id", // MSH-10: Message Control ID (ST) 
+  "A", // MSH-11: Processing ID (PT) 
   null, // MSH-12: Version ID (VID) 
   15, // MSH-13: Sequence Number (NM) (optional)
   null, // MSH-14: Continuation Pointer (ST) (optional)
@@ -43,29 +49,148 @@ $data = array(
 $segment->fill($data);
 $msg->appendChild($segment);
 
-$segment = CHL7v2Segment::create("EVN", $msg);
+$segment = CHL7v2Segment::create("PID", $msg);
 
-$data = array(
-  // EVN-1: Event Type Code (ID) (optional)
-  "toto",
-  // EVN-2: Recorded Date/Time (TS)
-  mbDateTime(),
-  // EVN-3: Date/Time Planned Event (TS)(optional)
-  "2011-10-01",
-  // EVN-4: Event Reason Code (IS) (optional)
-  // Table 062
-  // 01 - Patient request
-  // 02 - Physician/health practitioner order 
-  // 03 - Census management
-  // O  - Other 
-  // U  - Unknown
-  null,
-  // EVN-5: Operator ID (XCN) (optional repeating)
-  CUser::get(),
-  // EVN-6: Event Occurred (TS) (optional)
-  "2011-02-02 10:10:10",
-  // EVN-7: Event Facility (HD) (optional)
-  null,
+$data = array (
+  0 => 1,
+  1 => NULL,
+  2 => 
+  array (
+    0 => 
+    array (
+      0 => '323241',
+      1 => NULL,
+      2 => NULL,
+      3 => 
+      array (
+        0 => 'Mediboard',
+        1 => '1.2.250.1.2.3.4',
+        2 => 'OpenXtrem',
+      ),
+      4 => 'RI',
+    ),
+    1 => 
+    array (
+      0 => 'fgfg',
+      1 => NULL,
+      2 => NULL,
+      3 => 
+      array (
+        0 => NULL,
+        1 => '1.2.250.1.213.1.4.2',
+        2 => 'ISO',
+      ),
+      4 => 'INS-C',
+      5 => NULL,
+      6 => '1946-10-17',
+    ),
+  ),
+  3 => NULL,
+  4 => 
+  array (
+    0 => 
+    array (
+      0 => 'EZZHJ',
+      1 => 'Rtaso',
+      2 => 'qldax',
+      3 => NULL,
+      4 => 'dr',
+      5 => NULL,
+      6 => 'D',
+      7 => 'A',
+    ),
+    1 => 
+    array (
+      0 => 'MEBJO',
+      1 => 'Rtaso',
+      2 => 'qldax',
+      3 => NULL,
+      4 => 'dr',
+      5 => NULL,
+      6 => 'L',
+      7 => 'A',
+    ),
+  ),
+  5 => NULL,
+  6 => '1987-09-24',
+  7 => 'F',
+  8 => NULL,
+  9 => NULL,
+  10 => 
+  array (
+    0 => 
+    array (
+      0 => "adresse test 
+ \\ | & ^ ~",
+      1 => NULL,
+      2 => 'rtckkljfgrw',
+      3 => NULL,
+      4 => '4294967295',
+      5 => NULL,
+      6 => 'H',
+    ),
+    1 => 
+    array (
+      0 => NULL,
+      1 => NULL,
+      2 => 'vlfxif',
+      3 => NULL,
+      4 => '40048',
+      5 => '000',
+      6 => 'BR',
+    ),
+  ),
+  11 => NULL,
+  12 => 
+  array (
+    0 => 
+    array (
+      0 => '43502',
+      1 => 'PRN',
+      2 => 'PH',
+    ),
+    1 => 
+    array (
+      0 => '42287',
+      1 => 'ORN',
+      2 => 'CP',
+    ),
+    2 => 
+    array (
+      0 => 'oezym',
+      1 => 'ORN',
+      2 => 'PH',
+    ),
+  ),
+  13 => NULL,
+  14 => NULL,
+  15 => NULL,
+  16 => NULL,
+  17 => NULL,
+  18 => NULL,
+  19 => NULL,
+  20 => NULL,
+  21 => NULL,
+  22 => NULL,
+  23 => NULL,
+  24 => NULL,
+  25 => NULL,
+  26 => NULL,
+  27 => NULL,
+  28 => '1905-05-06',
+  29 => 'Y',
+  /*30 => NULL,
+  31 => 
+  array (
+    0 => 'VALI',
+  ),
+  31 => array('2011-09-01 15:34:27'),
+  32 => NULL,
+  33 => NULL,
+  34 => NULL,
+  35 => NULL,
+  36 => NULL,
+  37 => NULL,*/
 );
     
 $segment->fill($data);
@@ -73,11 +198,22 @@ $msg->appendChild($segment);
 
 $msg->validate();
 
+foreach($msg->errors as $error) {
+  mbTrace(@$error["field"]->name, CAppUI::tr("CHL7v2Exception-".$error["code"])." - ".$error["data"]);
+}
+
 echo "Généré";
-echo $msg->highlight_er7($msg->flatten());
+echo $msg->flatten(true);
+
+$message_str = $msg->flatten();
 
 echo "Parsé";
 $msg2 = new CHL7v2Message;
-$msg2->parse($msg);
+$msg2->parse($message_str);
+$msg2->validate();
 
-echo $msg2->highlight_er7();
+foreach($msg2->errors as $error) {
+  mbTrace(@$error["field"]->name, CAppUI::tr("CHL7v2Exception-".$error["code"])." - ".$error["data"]);
+}
+
+echo $msg2->flatten(true);

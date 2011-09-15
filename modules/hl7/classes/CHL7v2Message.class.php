@@ -170,7 +170,20 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     return array($current_node, $current_group);
   }
   
-  // @todo Gérer les segments recursif s (pour le moment tout est aplati)
+  function handleLine($current_node, $current_group) {
+    // On est dans le bon groupe
+    $current_node->markOpen();
+    
+    // On enregistre le segment dans le groupe courant
+    $_segment = new CHL7v2Segment($current_group);
+    $_segment->parse($this->getCurrentLine());
+    $current_group->appendChild($_segment);
+    
+    // On avance dans le fichier
+    $this->current_line++;
+    CHL7v2::d(" --> ### Creation du segment ###, ligne suivante : $this->current_line");
+  }
+  
   function readSegments() {
     $specs = $this->getSpecs();
     
@@ -199,20 +212,12 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
         case "segment":
           CHL7v2::d($current_node->getSegmentHeader(), "Segment");
           
+          $handled = false;
+          
           // Si la spec correspond a la ligne courante
           if ($this->getCurrentLineHeader() == $current_node->getSegmentHeader()) {
-            
-            // On est dans le bon groupe
-            $current_node->markOpen();
-            
-            // On enregistre le segment dans le groupe courant
-            $_segment = new CHL7v2Segment($current_group);
-            $_segment->parse($this->getCurrentLine());
-            $current_group->appendChild($_segment);
-            
-            // On avance dans le fichier
-            $this->current_line++;
-            CHL7v2::d(" --> ### Creation du segment ###, ligne suivante : $this->current_line");
+            $this->handleLine($current_node, $current_group);
+            $handled = true;
           }
           
           // Segment non requis, on passe au suivant
@@ -231,8 +236,8 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
             }
           }
        
-          // le segment est multiple
-          if ($current_node->isUnbounded()) {
+          // le segment est multiple, on reste sur lui
+          if ($handled && $current_node->isUnbounded()) {
             CHL7v2::d(" --> Segment multiple");
           }
           
@@ -291,10 +296,16 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   }
   */
   
+  /**
+   * @return string
+   */
   function getVersion(){
     return $this->version;
   }
   
+  /**
+   * @return CHL7v2SimpleXMLElement
+   */
   function getSpecs(){
     return $this->getSchema(self::PREFIX_MESSAGE_NAME, $this->name);
   }
@@ -337,6 +348,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     }
     
     $delimiters = array(
+      $this->segmentTerminator     => "X0D",
       $this->fieldSeparator        => "F",
       $this->componentSeparator    => "S",
       $this->subcomponentSeparator => "T",
@@ -349,6 +361,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   }
   
   function escape($str){
+    $str = str_replace("\r\n", "\n", $str);
     $this->initEscapeSequences();
     return strtr($str, $this->escape_sequences);
   }
