@@ -657,7 +657,7 @@ switch ($axe) {
       unset($where[10]);
       $label = utf8_encode($value);
       $value = addslashes($value);
-      $where[10] = "rpu.diag_infirmier RLIKE '^{$value}[[:space:]]*\n'";
+      $where[10] = "(rpu.diag_infirmier RLIKE '^{$value}[[:space:]]*\n' OR rpu.diag_infirmier RLIKE '^{$value}[[:space:]]*')";
 
       $series[$j] = array('data' => array(), 'label' => $label);
       
