@@ -54,7 +54,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       }
       // Si Client
       else {
-        if ($mbObject->_hprim_initiateur_group_id || !$receiver->isMessageSupported("CHPrimXMLVenuePatient")) {
+        if ($mbObject->_eai_initiateur_group_id || !$receiver->isMessageSupported("CHPrimXMLVenuePatient")) {
           return;
         }
           
@@ -165,7 +165,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       if (!CAppUI::conf('sip server')) {
         $mbObject->_fusion = array();
         foreach (CGroups::loadGroups() as $_group) {
-          if ($mbObject->_hprim_initiateur_group_id == $_group->_id) {
+          if ($mbObject->_eai_initiateur_group_id == $_group->_id) {
             continue;
           }
           
@@ -239,7 +239,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
             continue;
           } 
 
-          if ($mbObject->_hprim_initiateur_group_id == $receiver->group_id) {
+          if ($mbObject->_eai_initiateur_group_id == $receiver->group_id) {
             continue;
           }
           

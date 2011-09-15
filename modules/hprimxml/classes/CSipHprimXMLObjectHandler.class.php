@@ -43,7 +43,7 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     }
     // Si Client
     else {
-      if ($mbObject->_hprim_initiateur_group_id || !$receiver->isMessageSupported("CHPrimXMLEnregistrementPatient")) {
+      if ($mbObject->_eai_initiateur_group_id || !$receiver->isMessageSupported("CHPrimXMLEnregistrementPatient")) {
         return;
       }
       
@@ -89,7 +89,7 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
           continue;
         }      
       
-        if ($mbObject->_hprim_initiateur_group_id == $receiver->group_id) {
+        if ($mbObject->_eai_initiateur_group_id == $receiver->group_id) {
           continue;
         }
         

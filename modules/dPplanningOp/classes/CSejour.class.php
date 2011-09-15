@@ -113,7 +113,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_no_synchro    = null;
 
   // HPRIM Fields
-  var $_hprim_initiateur_group_id  = null; // group initiateur du message HPRIM
+  var $_eai_initiateur_group_id  = null; // group initiateur du message EAI
     
   // Object References
   var $_ref_patient           = null; // Declared in CCodable

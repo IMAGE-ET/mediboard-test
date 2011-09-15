@@ -16,20 +16,12 @@
  * ITI30 Delegated Handler
  */
 class CITI30DelegatedHandler extends CIHEDelegatedHandler {
-  static $handled     = array ("CPatient");
-  static $profil      = "PAM";
-  static $transaction = "ITI30";
+  static $handled        = array ("CPatient");
+  protected $profil      = "PAM";
+  protected $transaction = "ITI30";
   
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);
-  }
-  
-  static function getProfil() {
-    return self::$profil;
-  }
-  
-  static function getTransaction() {
-    return self::$transaction;
   }
  
   function onAfterStore(CMbObject $mbObject) {
@@ -66,7 +58,7 @@ class CITI30DelegatedHandler extends CIHEDelegatedHandler {
       return;
     }
     
-    $this->sendITI(self::$profil, self::$transaction, $code, $mbObject);
+    $this->sendITI($this->profil, $this->transaction, $code, $mbObject);
     
     $mbObject->_IPP = null;
   }
@@ -108,7 +100,7 @@ class CITI30DelegatedHandler extends CIHEDelegatedHandler {
         if ($patient2_ipp)
           $patient->_IPP = $patient2_ipp;
 
-        $this->sendITI(self::$profil, self::$transaction, "A31", $patient);
+        $this->sendITI($this->profil, $this->transaction, "A31", $patient);
         continue;
       }
       
@@ -116,7 +108,7 @@ class CITI30DelegatedHandler extends CIHEDelegatedHandler {
       if ($patient1_ipp && $patient2_ipp) {
         $patient->_patient_elimine = $patient_eliminee;
         
-        $this->sendITI(self::$profil, self::$transaction, "A40", $patient);
+        $this->sendITI($this->profil, $this->transaction, "A40", $patient);
         continue;
       }
     }  

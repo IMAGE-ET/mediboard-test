@@ -17,8 +17,8 @@
  */
 class CITI31DelegatedHandler extends CIHEDelegatedHandler {
   static $handled = array ("CSejour", "CAffectation");
-  static $profil      = "PAM";
-  static $transaction = "ITI31";
+  protected $profil      = "PAM";
+  protected $transaction = "ITI31";
   
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);

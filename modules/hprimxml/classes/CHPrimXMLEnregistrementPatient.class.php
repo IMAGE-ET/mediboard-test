@@ -336,7 +336,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             $newPatient = $this->mappingPatient($data['patient'], $newPatient);
           
             // Notifier les autres destinataires autre que le sender
-            $newPatient->_hprim_initiateur_group_id = $sender->group_id;
+            $newPatient->_eai_initiateur_group_id = $sender->group_id;
             $msgPatient = $newPatient->store();
         
             $modified_fields = CEAIPatient::getModifiedFields($newPatient);
@@ -353,7 +353,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         // Mapping du patient
         $newPatient = $this->mappingPatient($data['patient'], $newPatient);
         // Notifier les autres destinataires autre que le sender
-        $newPatient->_hprim_initiateur_group_id = $sender->group_id;
+        $newPatient->_eai_initiateur_group_id = $sender->group_id;
               
         if (!$newPatient->_id) {
           // Patient retrouvé
@@ -419,7 +419,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           }
         }
         // Notifier les autres destinataires autre que le sender
-        $newPatient->_hprim_initiateur_group_id = $sender->group_id;
+        $newPatient->_eai_initiateur_group_id = $sender->group_id;
         $msgPatient = $newPatient->store();
         
         $modified_fields = CEAIPatient::getModifiedFields($newPatient);

@@ -88,7 +88,15 @@ class CSetupihe extends CSetup {
                 ADD `code` VARCHAR (255);";
     $this->addQuery($query); 
     
-    $this->mod_version = "0.04";
+    $this->makeRevision("0.04");
+    
+    $query = "ALTER TABLE `receiver_ihe_config` 
+                ADD `assigning_authority_namespace_id` VARCHAR (255),
+                ADD `assigning_authority_universal_id` VARCHAR (255),
+                ADD `assigning_authority_universal_type_id` VARCHAR (255);";
+    $this->addQuery($query); 
+    
+    $this->mod_version = "0.05";
   }
 }
 

@@ -140,7 +140,7 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       $mbPatient->_id = $first_patient_id;
       
       // Notifier les autres destinataires
-      $mbPatient->_hprim_initiateur_group_id = $sender->group_id;
+      $mbPatient->_eai_initiateur_group_id = $sender->group_id;
       $mbPatient->_merging = CMbArray::pluck($patientsElimine_array, "_id");
       $msg = $mbPatient->merge($patientsElimine_array);
       

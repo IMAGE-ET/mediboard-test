@@ -194,7 +194,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         return array(
           "Mediboard",
           "1.2.250.1.2.3.4",
-          "OpenXtrem"
+          "OX"
         );
         break;
       case "INS-C" :
@@ -238,10 +238,8 @@ class CHL7v2Segment extends CHL7v2Entity {
         // PID-3-4 Autorité d'affectation
         array(
           // Nom, FINESS 
-          array (
-            $group->_view,
-            $group->finess 
-          )
+          $group->_view,
+          $group->finess 
         ),
         "PI"
       );
@@ -256,15 +254,15 @@ class CHL7v2Segment extends CHL7v2Entity {
     );
     if ($patient->INSC) {
       $identifiers[] = array(
-      $patient->INSC,
-      null,
-      null,
-      // PID-3-4 Autorité d'affectation
-      $this->getAssigningAuthority("INS-C"),
-      "INS-C",
-      null,
-      mbDate($patient->INSC_date)
-    );
+        $patient->INSC,
+        null,
+        null,
+        // PID-3-4 Autorité d'affectation
+        $this->getAssigningAuthority("INS-C"),
+        "INS-C",
+        null,
+        mbDate($patient->INSC_date)
+      );
     }
     
     return $identifiers;

@@ -40,7 +40,12 @@ class CEAIObjectHandler extends CMbObjectHandler {
         // Récupère le handler du format
         $format_object_handler = new $format_object_handler_classname;
         // Envoi l'action au handler du format
-        $format_object_handler->$action($mbObject);
+        try {
+          $format_object_handler->$action($mbObject);
+        } 
+        catch (Exception $e) {
+          CAppUI::setMsg($e, UI_MSG_ERROR);
+        }
       }
     }
   }

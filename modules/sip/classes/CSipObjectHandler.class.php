@@ -48,7 +48,7 @@ class CSipObjectHandler extends CEAIObjectHandler {
     if (!CAppUI::conf('sip server')) {
       $mbObject->_fusion = array();
       foreach (CGroups::loadGroups() as $_group) {
-        if ($mbObject->_hprim_initiateur_group_id == $_group->_id) {
+        if ($mbObject->_eai_initiateur_group_id == $_group->_id) {
           continue;
         }
         

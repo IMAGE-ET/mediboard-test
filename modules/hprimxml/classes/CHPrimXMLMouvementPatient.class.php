@@ -113,7 +113,7 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
       $newVenue = $this->mappingMouvements($data['mouvements'], $newVenue);
 
       // Notifier les autres destinataires
-      $newVenue->_hprim_initiateur_group_id = $sender->group_id;
+      $newVenue->_eai_initiateur_group_id = $sender->group_id;
       $msgVenue = $newVenue->store();
       
       $codes = array ($msgVenue ? "A103" : "I102");

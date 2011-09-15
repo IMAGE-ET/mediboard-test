@@ -452,7 +452,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
               $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
               
               // Notifier les autres destinataires autre que le sender
-              $newVenue->_hprim_initiateur_group_id = $sender->group_id;
+              $newVenue->_eai_initiateur_group_id = $sender->group_id;
               $msgVenue = $newVenue->store();
           
               $modified_fields = CEAISejour::getModifiedFields($newVenue);
@@ -493,7 +493,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
                 $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
 
                 // Notifier les autres destinataires autre que le sender
-                $newVenue->_hprim_initiateur_group_id = $sender->group_id;
+                $newVenue->_eai_initiateur_group_id = $sender->group_id;
                 $msgVenue = $newVenue->store();
 
                 $modified_fields = CEAISejour::getModifiedFields($newVenue);
@@ -538,7 +538,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
             
             // Notifier les autres destinataires autre que le sender
-            $newVenue->_hprim_initiateur_group_id = $sender->group_id;
+            $newVenue->_eai_initiateur_group_id = $sender->group_id;
             $msgVenue = $newVenue->store();
             
             $commentaire = "Séjour créé : $newVenue->_id. ";
@@ -605,7 +605,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           }
         }
         // Notifier les autres destinataires autre que le sender
-        $newVenue->_hprim_initiateur_group_id = $sender->group_id;
+        $newVenue->_eai_initiateur_group_id = $sender->group_id;
         $msgVenue = $newVenue->store();
         
         $modified_fields = CEAISejour::getModifiedFields($newVenue);

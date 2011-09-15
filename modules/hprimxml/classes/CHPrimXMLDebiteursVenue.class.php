@@ -111,7 +111,7 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
       $newPatient->repair();
       
       // Notifier les autres destinataires
-      $newPatient->_hprim_initiateur_group_id = $sender->group_id;
+      $newPatient->_eai_initiateur_group_id = $sender->group_id;
       $msgPatient = $newPatient->store();
       
       $modified_fields = CEAIPatient::getModifiedFields($newPatient);
