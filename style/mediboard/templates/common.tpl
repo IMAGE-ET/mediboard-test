@@ -78,24 +78,11 @@
   
   {{$mediboardScript|smarty:nodefaults}}
   
-  <script type="text/javascript">
-    {{if $dialog}}
-    Event.observe(document, 'keydown', closeWindowByEscape);
-    {{/if}}
-    
-    /*if (Preferences.INFOSYTEM == 0) {
-      var disableBackButton = function(back){
-        dsHistory.addFunction(disableBackButton);
-      }
-      
-      // This need to be set here, not in a JS file, or it won't work.
-      window.onload = function(){
-        // This need to be called twice
-        dsHistory.addFunction(disableBackButton);
-        dsHistory.addFunction(disableBackButton);
-      }
-    }*/
-  </script>
+  {{if $dialog}}
+	  <script type="text/javascript">
+	    Event.observe(document, 'keydown', closeWindowByEscape);
+	  </script>
+  {{/if}}
 </head>
 
 <body class="{{if @$app->user_prefs.touchscreen == 1 || $browser.name == 'ipad'}} touchscreen {{/if}} {{if $browser.name == 'ipad'}} ipad {{/if}}">
@@ -105,7 +92,7 @@
 {{/if}}
 
 {{if $conf.readonly}}
-<div class="big-info">
+<div class="big-info not-printable">
   <big>{{tr}}Mode-readonly-title{{/tr}}</big>
   <div>{{tr}}Mode-readonly-description{{/tr}}</div>
   <div>{{tr}}Mode-readonly-disclaimer{{/tr}}</div>
@@ -175,7 +162,7 @@
 
 <!-- Mails -->
 {{if !$dialog && @count($mails)}}
-<div class="small-mail" onmouseover="ObjectTooltip.createDOM(this, 'mail-details');">
+<div class="small-mail not-printable" onmouseover="ObjectTooltip.createDOM(this, 'mail-details');">
   <label>
     {{tr}}CMbMail{{/tr}} :
     
@@ -191,7 +178,7 @@
   </label>
 </div>
 
-<div id="mail-details" style="display: none;">
+<div id="mail-details not-printable" style="display: none;">
   <table class="tbl">
   {{foreach from=$mails key=to_state item=_mails}}
     <tr>

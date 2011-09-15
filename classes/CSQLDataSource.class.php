@@ -37,7 +37,7 @@ abstract class CSQLDataSource {
   /**
    * Get the data source with given name.
    * Create it if necessary
-   * @return CSQLDataSource, null if unhandled type
+   * @return CSQLDataSource or null if unhandled type
    */
   static function get($dsn) {  	
   	if (!array_key_exists($dsn, self::$dataSources)) {

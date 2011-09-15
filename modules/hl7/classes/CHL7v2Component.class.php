@@ -186,10 +186,21 @@ class CHL7v2Component extends CHL7v2Entity {
 		else {
       $field = $this->getField();
 			
+			// length
 			if ($this->length && strlen($this->data) > $this->length) {
         $field->error(CHL7v2Exception::DATA_TOO_LONG, var_export($this->data, true)." ($this->length)", $field);
         $this->invalid = true;
 			}
+      
+			// table
+      if ($this->table && $this->data !== "") {
+      	$entries = CHL7v2::getTable($this->table);
+				
+				if (!empty($entries) && !array_key_exists($this->data, $entries)) {
+	        $field->error(CHL7v2Exception::UNKNOWN_TABLE_ENTRY, "'$this->data' (table $this->table)", $field);
+	        $this->invalid = true;
+				}
+      }
 			
 			if (!$props->validate($this->data, $field)) {
 	      $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $this->data, $field);
