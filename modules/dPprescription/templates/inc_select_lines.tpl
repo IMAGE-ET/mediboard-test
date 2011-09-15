@@ -50,18 +50,21 @@
     $prescription->_ref_prescription_line_mixes|@count}}
     <div id="medicaments">
       {{foreach from=$prescription->_ref_lines_med_comments.med item=_line}}
-        {{assign var=checked_lines value=$checked_lines_tab.`$_line->protocole_id`}}
+        {{assign var=protocole_id value=$_line->protocole_id}}
+        {{assign var=checked_lines value=$checked_lines_tab.$protocole_id}}
         {{mb_include template=inc_vw_line_medicament_lite curr_line=$_line}}
       {{/foreach}}
       
       <table class="tbl">
       {{foreach from=$prescription->_ref_lines_med_comments.comment item=_line}}
-        {{assign var=checked_lines value=$checked_lines_tab.`$_line->protocole_id`}}
+        {{assign var=protocole_id value=$_line->protocole_id}}
+        {{assign var=checked_lines value=$checked_lines_tab.$protocole_id}}
         {{mb_include template=inc_vw_line_comment_lite _line_comment=$_line}}
       {{/foreach}}
       </table>
       
       {{foreach from=$prescription->_ref_prescription_line_mixes item=_line}}
+        {{assign var=protocole_id value=$_line->protocole_id}}
         {{assign var=checked_lines value=$checked_lines_tab.`$_line->protocole_id`}}
         {{mb_include template=inc_vw_line_mix_lite _prescription_line_mix=$_line}}
       {{/foreach}}
@@ -73,7 +76,8 @@
       {{assign var=has_element value=0}}
       {{foreach from=$_lines_by_chap item=_lines_by_cat}}
         {{foreach from=$_lines_by_cat.element item=_line name=foreach_elt}}
-          {{assign var=checked_lines value=$checked_lines_tab.`$_line->protocole_id`}}
+          {{assign var=protocole_id value=$_line->protocole_id}}
+          {{assign var=checked_lines value=$checked_lines_tab.$protocole_id}}
           {{if $smarty.foreach.foreach_elt.first}}
             {{assign var=has_element value=1}}
             <table class="tbl">
@@ -88,7 +92,8 @@
         {{/foreach}}
         
         {{foreach from=$_lines_by_cat.comment item=_line name=foreach_elt}}
-          {{assign var=checked_lines value=`$checked_lines.$_line->protocole_id`}}
+          {{assign var=protocole_id value=$_line->protocole_id}}
+          {{assign var=checked_lines value=$checked_lines.$protocole_id}}
           {{if $smarty.foreach.foreach_elt.first && !$has_element}}
             <table class="tbl">
               <tr>
