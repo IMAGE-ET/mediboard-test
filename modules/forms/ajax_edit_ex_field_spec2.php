@@ -47,11 +47,19 @@ if ($spec instanceof CBoolSpec && strpos($prop, "default|") === false) {
   $spec->default = null;
 }
 
+if ($spec instanceof CEnumSpec && ($spec->typeEnum === null || !in_array($spec->typeEnum, $spec->_options["typeEnum"]))) {
+	$spec->typeEnum = reset($spec->_options["typeEnum"]);
+}
+
 $exclude = array(
   "confidential", "mask", "format", "reported", 
   "perm", "seekable", "pattern", "autocomplete", 
   "cascade", "delimiter", "canonical", "protected", 
   "class", "alphaAndNum", "byteUnit",
+);
+
+$boolean = array(
+  "notNull", "vertical", "progressive", "cascade",
 );
 
 $options = $spec->_options;
@@ -177,6 +185,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("prop", $prop);
 $smarty->assign("spec", $spec);
 $smarty->assign("options", $options);
+$smarty->assign("boolean", $boolean);
 $smarty->assign("items_all", $items_all);
 $smarty->assign("items_sub", $items_sub);
 $smarty->assign("form_name", $form_name);

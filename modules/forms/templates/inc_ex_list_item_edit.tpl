@@ -39,7 +39,12 @@ Main.add(function(){
 {{assign var=owner_field value=$context->getBackRefField()}}
 
 <form name="CExListItem-create" method="post" action="?" 
-      onsubmit="return onSubmitFormAjax(this, {onComplete: {{if $context instanceof CExClassField}} (function(){ if(!$V(this.elements.ex_list_item_id)) { (function(){ $('save-to-take-effect').show(); }).delay(1); } ExField.edit('{{$context->_id}}') }).bind(this) {{else}} MbObject.edit.curry('{{$context->_guid}}') {{/if}} })">
+      onsubmit="return onSubmitFormAjax(this, {onComplete: 
+			  {{if $context instanceof CExClassField}} 
+				  (function(){ if(!$V(this.elements.ex_list_item_id)) { (function(){ $('save-to-take-effect').show(); }).delay(1); } ExField.edit('{{$context->_id}}') }).bind(this) 
+				{{else}} 
+				  MbObject.edit.curry('{{$context->_guid}}') 
+				{{/if}} })">
         
   {{mb_class class=CExListItem}}
   <input type="hidden" name="ex_list_item_id" value="" class="ref" />

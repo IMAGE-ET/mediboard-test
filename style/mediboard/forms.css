@@ -183,7 +183,7 @@ a.button {
   white-space: nowrap;
   display: inline-block;
   
-  color: #000;
+  color: #000 !important;
   background: #eee url(images/buttons/button.png) center center repeat-x;
   
   border: 1px solid #999;
@@ -196,6 +196,8 @@ a.button {
   padding: 1px;
   padding-right: 3px;
   margin: 1px;
+	
+	text-shadow: none;
   /*
   -moz-appearance: button;
   -webkit-appearance: button;*/
@@ -221,10 +223,6 @@ form button:not([type]) {
 
 a.button {
   height: 16px;
-}
-
-table.tbl th a.button {
-  color: #000;
 }
 
 button.notext, 

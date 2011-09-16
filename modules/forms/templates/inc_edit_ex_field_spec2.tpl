@@ -11,6 +11,7 @@
 <script type="text/javascript">
 
 ExConceptSpec.options = {{$spec->getOptions()|@json}};
+booleanSpecs = {{$boolean|@json}};
 
 updateFieldSpec = function(){
   var form = getForm("editFieldSpec");
@@ -19,7 +20,15 @@ updateFieldSpec = function(){
   var data = form.serialize(true);
   var fields = {};
   var str = "{{$spec->getSpecType()}}";
-  
+	
+	var newData = {};
+  Object.keys(data).each(function(k){
+	  if (data[k] !== "0" || booleanSpecs.indexOf(k) == -1) {
+		  newData[k] = data[k];
+		}
+	});
+	data = newData;
+	
   Object.keys(data).each(function(k){
     if (k.indexOf("__") === 0) return;
     
@@ -36,7 +45,7 @@ updateFieldSpec = function(){
         str += "|"+d.invoke("replace", /\s/g, "\\x20").invoke("replace", /\|/g, "\\x7C").join("|");
       else {
         var v = d.strip();
-        if (ExFieldSpec.options[k] != "bool" || v != "1") {
+        if (booleanSpecs.indexOf(k) == -1 && (ExFieldSpec.options[k] != "bool" || v != "1")) {
           str += "|"+v.replace(/\s/g, "\\x20").replace(/\|/g, "\\x7C");
         }
       }
@@ -143,8 +152,11 @@ Main.add(function(){
             
           {{* bool *}}
           {{elseif $_type == "bool"}}
-            <label><input type="radio" name="{{$_name}}" value=""  {{if $spec_value === null || $spec_value === ""}}checked="checked"{{/if}} /> {{tr}}Undefined{{/tr}}</label>
-            <label><input type="radio" name="{{$_name}}" value="0" {{if $spec_value === 0 || $spec_value === "0"}}checked="checked"{{/if}} /> {{tr}}No{{/tr}}</label>
+					  {{if !in_array($_name, $boolean)}}
+              <label><input type="radio" name="{{$_name}}" value=""  {{if $spec_value === null || $spec_value === ""}}checked="checked"{{/if}} /> {{tr}}Undefined{{/tr}}</label>
+						{{/if}}
+						
+            <label><input type="radio" name="{{$_name}}" value="0" {{if $spec_value === 0 || $spec_value === "0" || (($spec_value === null || $spec_value === "") && in_array($_name, $boolean))}}checked="checked"{{/if}} /> {{tr}}No{{/tr}}</label>
             <label><input type="radio" name="{{$_name}}" value="1" {{if $spec_value == 1}}checked="checked"{{/if}} /> {{tr}}Yes{{/tr}}</label>
             
           {{* enum *}}
@@ -253,12 +265,18 @@ Main.add(function(){
           {{* bool *}}
           {{elseif $_type == "bool"}}
             {{if $_name == "notNull"}}
-	            <label><input type="radio" name="{{$_name}}" value=""  {{if $spec_value === null || $spec_value === ""}}checked="checked"{{/if}} /> {{tr}}Undefined{{/tr}}</label>
-	            <label><input type="radio" name="{{$_name}}" value="0" {{if $spec_value === 0 || $spec_value === "0"}}checked="checked"{{/if}} /> {{tr}}No{{/tr}}</label>
+              {{if !in_array($_name, $boolean)}}
+	              <label><input type="radio" name="{{$_name}}" value=""  {{if $spec_value === null || $spec_value === ""}}checked="checked"{{/if}} /> {{tr}}Undefined{{/tr}}</label>
+							{{/if}}
+							
+	            <label><input type="radio" name="{{$_name}}" value="0" {{if $spec_value === 0 || $spec_value === "0" || (($spec_value === null || $spec_value === "") && in_array($_name, $boolean))}}checked="checked"{{/if}} /> {{tr}}No{{/tr}}</label>
 	            <label><input type="radio" name="{{$_name}}" value="1" {{if $spec_value == 1}}checked="checked"{{/if}} /> {{tr}}Yes{{/tr}}</label>
             {{else}}
-							{{if $spec_value === null || $spec_value === ""}}{{tr}}Undefined{{/tr}}{{/if}}
-	            {{if $spec_value === 0 || $spec_value === "0"}}{{tr}}No{{/tr}}{{/if}}
+						  {{if !in_array($_name, $boolean)}}
+							  {{if $spec_value === null || $spec_value === ""}}{{tr}}Undefined{{/tr}}{{/if}}
+							{{/if}}
+							
+	            {{if $spec_value === 0 || $spec_value === "0" || (($spec_value === null || $spec_value === "") && in_array($_name, $boolean))}}{{tr}}No{{/tr}}{{/if}}
 	            {{if $spec_value == 1}}{{tr}}Yes{{/tr}}{{/if}}
 						{{/if}}
             

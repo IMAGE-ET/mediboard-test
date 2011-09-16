@@ -59,13 +59,6 @@ table.form th a:link {
   color: #eee;
 }
 
-table.form th a.button:link,
-table.form th a.button.edit:link,
-table.form th a.button.search:link,
-table.form th a.button.save:link {
-  color: #000;
-}
-
 table.form td {
   background-color: #ffd;
   border: none;

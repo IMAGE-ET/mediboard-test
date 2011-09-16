@@ -351,9 +351,13 @@ Element.addMethods({
       element.style.left = parseInt(element.style.left) - (pos.right - viewport.width) - offset + 'px';
     }
 
+    // If the element exceeds the viewport on the top
+    if (pos.top < 0) {
+      element.style.top = '0px';
+    }
     // If the element exceeds the viewport on the bottom
-    if (pos.bottom > (viewport.height - offset)) {
-      element.style.top = parseInt(element.style.top) - (pos.bottom - viewport.height) - offset + 'px';
+    else if (pos.bottom > (viewport.height - offset)) {
+      element.style.top = Math.max(0, parseInt(element.style.top) - (pos.bottom - viewport.height) - offset) + 'px';
     }
     
     return element;

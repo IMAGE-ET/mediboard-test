@@ -57,19 +57,9 @@ table.form th.category label {
   color: #000;
 }
 
-table.tbl th a {
-  color:#008;
-}
-
+table.tbl th a,
 table.form th a:link,
 table.form th a:visited {
-  color:#008;
-}
-
-table.form th a.button:link,
-table.form th a.button.edit:link,
-table.form th a.button.search:link,
-table.form th a.button.save:link {
   color:#008;
 }
 
