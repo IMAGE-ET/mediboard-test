@@ -779,6 +779,10 @@ Object.extend (Control.Tabs, {
       }
       return tab;
     }
+  },
+  
+  activateTab: function(tabName) {
+    Control.Tabs.findByTabId(tabName).setActiveTab(tabName);
   }
 });
 
