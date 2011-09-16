@@ -65,7 +65,7 @@
       
       {{foreach from=$prescription->_ref_prescription_line_mixes item=_line}}
         {{assign var=protocole_id value=$_line->protocole_id}}
-        {{assign var=checked_lines value=$checked_lines_tab.`$_line->protocole_id`}}
+        {{assign var=checked_lines value=$checked_lines_tab.$protocole_id}}
         {{mb_include template=inc_vw_line_mix_lite _prescription_line_mix=$_line}}
       {{/foreach}}
     </div>
