@@ -50,7 +50,7 @@
   			Import des tables
   		</th>
  	  <tr>
- 		  <td><button onclick="importHL7v2Tables()" class="change">{{tr}}Import{{/tr}}</button></td>
+ 		  <td class="narrow"><button onclick="importHL7v2Tables()" class="change">{{tr}}Import{{/tr}}</button></td>
 		  <td id="import-log"></td>
  	  </tr>
   </table>

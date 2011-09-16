@@ -29,7 +29,19 @@ class CITI31DelegatedHandler extends CIHEDelegatedHandler {
       return false;
     }
     
-   
+    $receiver = $mbObject->_receiver;  
+    
+    // Traitement Sejour
+    if ($sejour = $mbObject instanceof CSejour) {
+      // Si Serveur
+      if (CAppUI::conf('smp server')) {
+        
+      } 
+      // Si Client
+      else {
+        
+      }
+    }
   }
 
   function onBeforeMerge(CMbObject $mbObject) {
