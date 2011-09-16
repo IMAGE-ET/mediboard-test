@@ -106,75 +106,75 @@ Traitement = {
 <strong>Antécédents</strong>
 
 <ul id="antecedents-{{$dossier_medical->_guid}}">
-	{{if $dossier_medical->_count_antecedents || $dossier_medical->_count_cancelled_antecedents}}
-	  {{foreach from=$dossier_medical->_all_antecedents item=_antecedent}}
-	  <li {{if $_antecedent->annule}}class="cancelled" style="display: none;"{{/if}}>
-	    <form name="delAntFrm-{{$_antecedent->_id}}" action="?m=dPcabinet" method="post">
-	      <input type="hidden" name="m" value="dPpatients" />
-	      <input type="hidden" name="del" value="0" />
-	      <input type="hidden" name="dosql" value="do_antecedent_aed" />
-	      <input type="hidden" name="antecedent_id" value="{{$_antecedent->_id}}" />
-	      <input type="hidden" name="annule" value="" />
-	             
-	      <!-- Seulement si l'utilisateur est le créateur -->
-	      {{if $_antecedent->_ref_first_log && $_antecedent->_ref_first_log->user_id == $app->user_id}}
-	      <button title="{{tr}}Delete{{/tr}}" class="trash notext" type="button" onclick="Antecedent.remove(this.form, DossierMedical.reloadDossierPatient)">
-	        {{tr}}Delete{{/tr}}
-	      </button>
-	      {{/if}}
-	      
-	      {{if $_is_anesth && $sejour->_id}}
-	      <button title="{{tr}}Add{{/tr}}" class="add notext" type="button" onclick="copyAntecedent({{$_antecedent->_id}})">
-	        {{tr}}Add{{/tr}}
-	      </button>
-	      {{/if}}         
-		  </form>
-	
-	    <span onmouseover="ObjectTooltip.createEx(this, '{{$_antecedent->_guid}}')">
-		    <strong>
-		    	{{if $_antecedent->type    }} {{mb_value object=$_antecedent field=type    }} {{/if}}
-		    	{{if $_antecedent->appareil}} {{mb_value object=$_antecedent field=appareil}} {{/if}}
-		    </strong>
-	      {{if $_antecedent->date}}
-	        [{{mb_value object=$_antecedent field=date}}] : 
-	      {{/if}}
-	      {{$_antecedent->rques}}
-	    </span>
-	  </li>
-	  {{/foreach}}
-	{{else}}
-		<li class="empty">{{tr}}CAntecedent.unknown{{/tr}}</li>
-	{{/if}}
+  {{if $dossier_medical->_count_antecedents || $dossier_medical->_count_cancelled_antecedents}}
+    {{foreach from=$dossier_medical->_all_antecedents item=_antecedent}}
+    <li {{if $_antecedent->annule}}class="cancelled" style="display: none;"{{/if}}>
+      <form name="delAntFrm-{{$_antecedent->_id}}" action="?m=dPcabinet" method="post">
+        <input type="hidden" name="m" value="dPpatients" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="dosql" value="do_antecedent_aed" />
+        <input type="hidden" name="antecedent_id" value="{{$_antecedent->_id}}" />
+        <input type="hidden" name="annule" value="" />
+               
+        <!-- Seulement si l'utilisateur est le créateur -->
+        {{if $_antecedent->_ref_first_log && $_antecedent->_ref_first_log->user_id == $app->user_id}}
+        <button title="{{tr}}Delete{{/tr}}" class="trash notext" type="button" onclick="Antecedent.remove(this.form, DossierMedical.reloadDossierPatient)">
+          {{tr}}Delete{{/tr}}
+        </button>
+        {{/if}}
+        
+        {{if $_is_anesth && $sejour->_id}}
+        <button title="{{tr}}Add{{/tr}}" class="add notext" type="button" onclick="copyAntecedent({{$_antecedent->_id}})">
+          {{tr}}Add{{/tr}}
+        </button>
+        {{/if}}         
+      </form>
+  
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$_antecedent->_guid}}')">
+        <strong>
+          {{if $_antecedent->type    }} {{mb_value object=$_antecedent field=type    }} {{/if}}
+          {{if $_antecedent->appareil}} {{mb_value object=$_antecedent field=appareil}} {{/if}}
+        </strong>
+        {{if $_antecedent->date}}
+          [{{mb_value object=$_antecedent field=date}}] : 
+        {{/if}}
+        {{$_antecedent->rques}}
+      </span>
+    </li>
+    {{/foreach}}
+  {{else}}
+    <li class="empty">{{tr}}CAntecedent.unknown{{/tr}}</li>
+  {{/if}}
 </ul>
 
 {{if $dossier_medical->_ref_prescription}}
-	<strong>Traitements personnels</strong>
-	<ul>
-	{{foreach from=$dossier_medical->_ref_prescription->_ref_prescription_lines item=_line}}
-	  <li>
-	    <form name="delTraitementDossierMedPat-{{$_line->_id}}"  action="?" method="post">
-	      <input type="hidden" name="m" value="dPprescription" />
-	      <input type="hidden" name="del" value="1" />
-	      <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
-	      <input type="hidden" name="prescription_line_medicament_id" value="{{$_line->_id}}" />
-	        <button class="trash notext" type="button" onclick="Traitement.remove(this.form, DossierMedical.reloadDossierPatient)">
-	          {{tr}}Delete{{/tr}}
-	        </button>
+  <strong>Traitements personnels</strong>
+  <ul>
+  {{foreach from=$dossier_medical->_ref_prescription->_ref_prescription_lines item=_line}}
+    <li>
+      <form name="delTraitementDossierMedPat-{{$_line->_id}}"  action="?" method="post">
+        <input type="hidden" name="m" value="dPprescription" />
+        <input type="hidden" name="del" value="1" />
+        <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
+        <input type="hidden" name="prescription_line_medicament_id" value="{{$_line->_id}}" />
+          <button class="trash notext" type="button" onclick="Traitement.remove(this.form, DossierMedical.reloadDossierPatient)">
+            {{tr}}Delete{{/tr}}
+          </button>
         {{if $sejour->_id && $user->_is_praticien}}
-	        <button class="add notext" type="button" onclick="Traitement.copyTraitement('{{$_line->_id}}')">
+          <button class="add notext" type="button" onclick="Traitement.copyTraitement('{{$_line->_id}}')">
             {{tr}}Add{{/tr}}
           </button>
         {{/if}}
-	      {{if $_line->fin}}
-		      Du {{$_line->debut|date_format:"%d/%m/%Y"}} au {{$_line->fin|date_format:"%d/%m/%Y"}} :
-		    {{elseif $_line->debut}}
-		      Depuis le {{$_line->debut|date_format:"%d/%m/%Y"}} :
-		    {{/if}}
-	      <span onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView')">
-			    <a href=#1 onclick="Prescription.viewProduit(null,'{{$_line->code_ucd}}','{{$_line->code_cis}}');">
-			      {{$_line->_ucd_view}}
-			    </a>
-			  </span>
+        {{if $_line->fin}}
+          Du {{$_line->debut|date_format:"%d/%m/%Y"}} au {{$_line->fin|date_format:"%d/%m/%Y"}} :
+        {{elseif $_line->debut}}
+          Depuis le {{$_line->debut|date_format:"%d/%m/%Y"}} :
+        {{/if}}
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView')">
+          <a href=#1 onclick="Prescription.viewProduit(null,'{{$_line->code_ucd}}','{{$_line->code_cis}}');">
+            {{$_line->_ucd_view}}
+          </a>
+        </span>
         {{if $_line->_ref_prises|@count}}
           <br />
           ({{foreach from=`$_line->_ref_prises` item=_prise name=foreach_prise}}
@@ -182,11 +182,11 @@ Traitement = {
             {{if !$smarty.foreach.foreach_prise.last}},{{/if}}
           {{/foreach}})
         {{/if}}
-		  </form>
-		</li>
-	{{/foreach}}
-	</ul>
-	{{if $dossier_medical->_ref_traitements|@count && $dossier_medical->_ref_prescription->_ref_prescription_lines|@count}}
+      </form>
+    </li>
+  {{/foreach}}
+  </ul>
+  {{if $dossier_medical->_ref_traitements|@count && $dossier_medical->_ref_prescription->_ref_prescription_lines|@count}}
   <hr style="width: 50%;" />
   {{/if}}
 {{/if}}
@@ -205,7 +205,7 @@ Traitement = {
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="dosql" value="do_traitement_aed" />
     {{mb_key object=$_traitement}}
-		
+    
     <button class="trash notext" type="button" onclick="Traitement.remove(this.form, DossierMedical.reloadDossierPatient)">
       {{tr}}delete{{/tr}}
     </button>
@@ -268,9 +268,14 @@ Traitement = {
 <script type="text/javascript">
 // FIXME : Modifier le tokenfield, car deux appels à onchange
 Main.add(function(){
-  oCimField = new TokenField(getForm("editDiagFrm").codes_cim, { 
-    confirm  : 'Voulez-vous réellement supprimer ce diagnostic ?',
-    onChange : updateTokenCim10
-  });
+  var form = getForm("editDiagFrm");
+  
+  // form may be undefined if the page is changed while loading
+  if (form) {
+    oCimField = new TokenField(form.codes_cim, { 
+      confirm  : 'Voulez-vous réellement supprimer ce diagnostic ?',
+      onChange : updateTokenCim10
+    });
+  }
 });
 </script>      

@@ -11,11 +11,11 @@ delCibleTransmission = function() {
 }
 
 showListTransmissions = function(page, total) {
+  page = page || 0;
+	
   $$("div.list_trans").invoke("hide");
   $("list_"+page).show();
-  if (!page){
-    page = 0;
-  }
+	
   var url = new Url("system", "ajax_pagination");
   
   if (total){
@@ -196,11 +196,9 @@ modalConsult = function(consult_id) {
   });
 }
 
-Main.add(function () {
-	if({{$count_trans}} > 0) {
-	  showListTransmissions(0, {{$count_trans}});
-	}
-});
+{{if $count_trans > 0}}
+  Main.add(showListTransmissions.curry(0, {{$count_trans}}));
+{{/if}}
 
 </script>
 
