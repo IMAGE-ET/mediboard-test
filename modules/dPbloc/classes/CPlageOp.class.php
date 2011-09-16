@@ -92,7 +92,7 @@ class CPlageOp extends CMbObject {
     $specs["_minutedeb"]       = "num min|0 max|59";
     $specs["_heurefin"]        = "num min|0 max|23";
     $specs["_minutefin"]       = "num min|0 max|59";
-    $specs["_type_repeat"]     = "enum list|simple|double|triple|sameweek";
+    $specs["_type_repeat"]     = "enum list|simple|double|triple|quadruple|sameweek";
     return $specs;
   }
   
@@ -313,6 +313,8 @@ class CPlageOp extends CMbObject {
   
   function becomeNext() {
     switch($this->_type_repeat) {
+      case "quadruple": 
+        $this->date = mbDate("+7 DAYS", $this->date); // 4
       case "triple": 
         $this->date = mbDate("+7 DAYS", $this->date); // 3
       case "double": 

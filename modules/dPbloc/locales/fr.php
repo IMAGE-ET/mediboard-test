@@ -89,6 +89,7 @@ $locales['CPlageOp-unique_chir'] = 'Chirurgien unique';
 $locales['CPlageOp-unique_chir-court'] = 'Chir. unique';
 $locales['CPlageOp-unique_chir-desc'] = 'Une seul praticien peut placer des interventions dans cette plage';
 $locales['CPlageOp._type_repeat.double'] = 'Une semaine sur deux';
+$locales['CPlageOp._type_repeat.quadruple'] = 'Une semaine sur quatre';
 $locales['CPlageOp._type_repeat.sameweek'] = 'La même semaine tous les mois';
 $locales['CPlageOp._type_repeat.simple'] = 'Toutes les semaines';
 $locales['CPlageOp._type_repeat.triple'] = 'Une semaine sur trois';
