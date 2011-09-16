@@ -19,10 +19,12 @@ class CHL7v2TableDescription extends CHL7v2TableObject {
   // DB Table key
   var $table_description_id = null;
   
+  // DB Fields
   var $number               = null;
   var $description          = null;
   
-  var $_count_entries = null;
+  // Form fields
+  var $_count_entries       = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -35,8 +37,11 @@ class CHL7v2TableDescription extends CHL7v2TableObject {
     $props = parent::getProps();
 
     // DB Fields
-    $props["number"]      = "num notNull maxLength|5 seekable";
-    $props["description"] = "str maxLength|80 seekable";
+    $props["number"]         = "num notNull maxLength|5 seekable";
+    $props["description"]    = "str maxLength|80 seekable";
+    
+    // Form fields
+    $props["_count_entries"] = "num";
     return $props;
   }
   

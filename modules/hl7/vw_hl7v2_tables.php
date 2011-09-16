@@ -25,6 +25,7 @@ foreach ($tables as $_table) {
 $table_entry         = new CHL7v2TableEntry();
 $table_entry->number = $table_number;
 $table_entries       = $table_entry->loadMatchingList("user");
+$table_entry->user   = 1;
 
 $table_description         = new CHL7v2TableDescription();
 $table_description->number = $table_number;
@@ -32,12 +33,12 @@ $table_description->loadMatchingObject();
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("page"         , $page);
-$smarty->assign("tables"       , $tables);
-$smarty->assign("total_tables" , $total_tables);
-$smarty->assign("table_entry"  , $table_entry);
-$smarty->assign("table_entries", $table_entries);
-$smarty->assign("table_name"   , $table_description->description);
+$smarty->assign("page"             , $page);
+$smarty->assign("tables"           , $tables);
+$smarty->assign("total_tables"     , $total_tables);
+$smarty->assign("table_entry"      , $table_entry);
+$smarty->assign("table_entries"    , $table_entries);
+$smarty->assign("table_description", $table_description);
 $smarty->display("vw_hl7v2_tables.tpl");
 
 ?>

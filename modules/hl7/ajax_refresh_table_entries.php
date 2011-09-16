@@ -23,9 +23,9 @@ $table_description->loadMatchingObject();
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("table_entry"  , $table_entry);
-$smarty->assign("table_name"   , $table_description->description);
-$smarty->assign("table_entries", $table_entries);
+$smarty->assign("table_entry"      , $table_entry);
+$smarty->assign("table_description", $table_description);
+$smarty->assign("table_entries"    , $table_entries);
 $smarty->display("inc_hl7v2_table_entries.tpl");
 
 ?>

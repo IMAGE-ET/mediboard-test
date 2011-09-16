@@ -10,12 +10,12 @@
 
 <table class="tbl">
   <tr>
-    <th class="title" colspan="3">{{$table_name}} </th>
+    <th class="title" colspan="3">{{$table_description->description}} </th>
   </tr>
   <tr>
-    <th class="category narrow">Code HL7</th>
-    <th class="category narrow">Code MB</th>
-    <th class="category">Description</th>
+    <th class="category">{{mb_title object=$table_entry field=code_hl7}}</th>
+    <th class="category">{{mb_title object=$table_entry field=code_mb}}</th>
+    <th class="category">{{mb_title object=$table_entry field=description}}</th>
   </tr>
   {{foreach from=$table_entries item=_table_entry}}
     <tr>
@@ -57,7 +57,7 @@
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="3">{{tr}}No result{{/tr}}</td>
+      <td colspan="3">{{tr}}CHL7v2TableEntry.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

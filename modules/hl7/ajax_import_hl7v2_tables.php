@@ -10,6 +10,12 @@
 
 CCanDo::checkAdmin();
 
+$table_entry = new CHL7v2TableEntry();
+$where[]     =  "(user = '1') OR (code_mb IS NOT NULL)";
+if ($table_entry->countList($where) > 0) {
+  CAppUI::stepAjax("Des données ont été saisies manuellement - Import impossible", UI_MSG_ERROR);
+}
+
 $sourcePath = "modules/hl7/base/hl7v2.tar.gz";
 $targetDir = "tmp/hl7";
 $targetPath = "tmp/hl7/hl7v2.sql";

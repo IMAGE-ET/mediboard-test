@@ -10,9 +10,9 @@
 
 <table class="tbl">
   <tr>
-    <th>Table</th>
-    <th>Descriptions</th>
-    <th>Entrées associées</th>
+    <th>{{mb_title object=$table_description field=number}}</th>
+    <th>{{mb_title object=$table_description field=description}}</th>
+    <th>{{mb_title object=$table_description field=_count_entries}}</th>
   </tr>
   {{foreach from=$tables item=_table}}
     <tr {{if $_table->number == $table_entry->number}}class="selected"{{/if}}>
@@ -26,7 +26,7 @@
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="3">{{tr}}No result{{/tr}}</td>
+      <td colspan="3">{{tr}}CHL7v2TableDescription.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>
