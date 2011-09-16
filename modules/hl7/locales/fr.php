@@ -26,6 +26,7 @@ $locales['HL7-v.2.4'] = 'HL7 version 2.4';
 $locales['HL7-v.2.5'] = 'HL7 version 2.5';
 $locales['config-hl7v2-extract'] = 'Extraction des specs HL7 v.2.x';
 $locales['config-hl7v2-source'] = 'Source d\'échange';
+$locales['config-hl7v2-tables'] = 'Tables HL7v2';
 $locales['mod-hl7-tab-configure'] = 'Configurer';
 $locales['mod-hl7-tab-vw_read_hl7v2_files'] = 'Lecture fichier HL7';
 $locales['mod-hl7-tab-vw_test_hl7v2_data_type'] = 'Test types de données';

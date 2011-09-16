@@ -1306,6 +1306,7 @@ $locales['config-db-dbpass'] = 'Mot de passe';
 $locales['config-db-dbtype'] = 'Type de serveur';
 $locales['config-db-dbtype-ingres'] = 'Ingres';
 $locales['config-db-dbtype-mysql'] = 'MySQL';
+$locales['config-db-dbtype-mysqli'] = 'MySQLi';
 $locales['config-db-dbtype-oracle'] = 'Oracle';
 $locales['config-db-dbuser'] = 'Utilisateur';
 $locales['config-debug'] = 'Mode debug';

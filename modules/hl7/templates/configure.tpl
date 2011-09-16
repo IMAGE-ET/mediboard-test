@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-
-
 <script type="text/javascript">
   Main.add(Control.Tabs.create.curry('tabs-configure', true));
 	
@@ -44,12 +42,16 @@
 <div id="config-hl7v2-tables" style="display: none;">
   <h2>Paramètres des tables HL7</h2>
 
- {{mb_include module=system template=configure_dsn dsn=hl7v2}}
+  {{mb_include module=system template=configure_dsn dsn=hl7v2}}
  
- <table class="main tbl">
- 	<tr>
- 		<td><button onclick="importHL7v2Tables()" class="change">{{tr}}Import{{/tr}}</button></td>
-		<td id="import-log"></td>
- 	</tr>
- </table>
+  <table class="main tbl">
+  	<tr>
+  		<th class="title" colspan="2">
+  			Import des tables
+  		</th>
+ 	  <tr>
+ 		  <td><button onclick="importHL7v2Tables()" class="change">{{tr}}Import{{/tr}}</button></td>
+		  <td id="import-log"></td>
+ 	  </tr>
+  </table>
 </div>
