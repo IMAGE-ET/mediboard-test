@@ -15,7 +15,7 @@
         <a href="#" onclick="window.print()">
           Planning du {{$filter->_date_min|date_format:$conf.date}}
           {{if $filter->_date_min != $filter->_date_max}}
-          au {{$filter->_date_max|$conf.date}}
+          au {{$filter->_date_max|date_format:$conf.date}}
           {{/if}}
           -
           {{$numOp}} intervention(s)
