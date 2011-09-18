@@ -17,6 +17,9 @@ $bloc_id    = CValue::getOrSession("bloc_id", reset($listBlocs)->_id);
 if(!key_exists($bloc_id, $listBlocs)) {
   $bloc_id = reset($listBlocs)->_id;
 }
+$bloc = new CBlocOperatoire();
+$bloc->load($bloc_id);
+$bloc->loadRefs();
 
 // Chargement des Anesthésistes
 $listAnesths = new CMediusers;
@@ -25,12 +28,6 @@ $listAnesths = $listAnesths->loadAnesthesistes(PERM_READ);
 // Chargement des Chirurgiens
 $listChirs = new CMediusers;
 $listChirs = $listChirs->loadPraticiens(PERM_READ);
-
-$bloc = new CBlocOperatoire();
-if (!$bloc->load($bloc_id)) {
-  $bloc = reset($listBlocs);
-}
-$bloc->loadRefs();
 
 $salle = new CSalle;
 $where = array("bloc_id" => "='$bloc->_id'");
