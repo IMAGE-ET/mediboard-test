@@ -231,7 +231,7 @@ Main.add(function(){
       </tr>
       <tr>
         <th>
-          <label for="_repeat" title="Nombre de plages à créer">Nombre de plages</label>
+          <label for="_repeat" title="Nombre de semaines de répétition">Nombre de semaines</label>
         </th>
         <td>
           <input type="text" class="notNull num min|1" name="_repeat" size="1" value="1" />
@@ -273,6 +273,9 @@ Main.add(function(){
         <td class="button" colspan="4">
         {{if $plagesel->plageop_id}}
           <button type="submit" class="modify">Modifier</button>
+          <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'la plage opératoire',objName:'{{$plagesel->_view|smarty:nodefaults|JSAttribute}}'})">
+            Supprimer
+          </button>
         {{else}}
           <button type="submit" class="new">Ajouter</button>
         {{/if}}
@@ -280,30 +283,6 @@ Main.add(function(){
       </tr>
     </table>
     </form>
-
-    {{if $plagesel->plageop_id}}
-      <form name="removeFrm" action="?m={{$m}}" method="post" class="{{$plagesel->_spec}}">
-      <input type="hidden" name="dosql" value="do_plagesop_aed" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="plageop_id" value="{{$plagesel->plageop_id}}" /> 
-      <table class="form">
-        <tr>
-          <th class="title" colspan="2">Supprimer la plage opératoire</th>
-        </tr>  
-        <tr>
-          <th>Supprimer cette plage pendant</th> 
-          <td><input type="text" name="_repeat" size="1" value="1" /> semaine(s)</td>
-        </tr>   
-        <tr>
-          <td class="button" colspan="2">
-            <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'la plage opératoire',objName:'{{$plagesel->_view|smarty:nodefaults|JSAttribute}}'})">
-              Supprimer
-            </button>
-          </td>
-        </tr>
-      </table>
-      </form>
-    {{/if}}
     {{/if}}
     {{/if}}
    </td>

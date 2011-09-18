@@ -25,16 +25,13 @@ $header   = array();
 $msgNo    = null;
 
 if ($del) {
-  
-  // Suppression
-
+  // Supression des plages
   $obj->load();
-
-  $deleted = 0;
+  $deleted     = 0;
   $not_deleted = 0;
-  $not_found = 0;
+  $not_found   = 0;
 
-  while ($repeat--) {
+  while ($repeat > 0) {
     $msg = null;
     if ($obj->plageop_id) {
       if (!$msg = $obj->canDeleteEx()) {
@@ -47,36 +44,28 @@ if ($del) {
       } else {
         $not_deleted++;
       } 
-    }
-    else {
+    } else {
       $not_found++;
       $msg = "Impossible de supprimer, plage non trouvée";
     }
-    
     $body_msg .= "<br />Plage du $obj->_day-$obj->_month-$obj->_year: " . $msg;
-    
-    $obj->becomeNext();
+    $repeat -= $obj->becomeNext();
   }
-  
   if ($deleted    ) $header [] = "$deleted plage(s) supprimée(s)";
   if ($not_deleted) $header [] = "$not_deleted plage(s) non supprimée(s)";
   if ($not_found  ) $header [] = "$not_found plage(s) non trouvée(s)";
-  
   $msgNo = $deleted ? UI_MSG_ALERT : UI_MSG_ERROR;
-
   $_SESSION["dPbloc"]["id"] = null;
   
 } else {
-
-  //Modification
-  
+  //Modification des plages
   if($obj->plageop_id!=0) {
     $created = 0;
     $updated = 0;
     $not_created = 0;
     $not_updated = 0;
 
-    while ($repeat-- > 0) {
+    while ($repeat > 0) {
       $msg = null;
       if ($obj->plageop_id) {
         if ($msg = $obj->store()) {
@@ -89,7 +78,7 @@ if ($del) {
     
       $body_msg .= "<br />Plage du $obj->_day-$obj->_month-$obj->_year: " . $msg;
     
-      $obj->becomeNext();
+      $repeat -= $obj->becomeNext();
     }
   
     if ($created) $header [] = "$created plage(s) créée(s)";
@@ -111,7 +100,7 @@ if ($del) {
     $not_created = 0;
     $not_updated = 0;
 
-    while ($repeat-- > 0) {
+    while ($repeat > 0) {
       $msg = null;
       if ($obj->plageop_id) {
         if ($msg = $obj->store()) {
@@ -131,7 +120,7 @@ if ($del) {
     
       $body_msg .= "<br />Plage du $obj->_day-$obj->_month-$obj->_year: " . $msg;
     
-      $obj->becomeNext();
+      $repeat -= $obj->becomeNext();
     }
   
     if ($created) $header [] = "$created plage(s) créée(s)";

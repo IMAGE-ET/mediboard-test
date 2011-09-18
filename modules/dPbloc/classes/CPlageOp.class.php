@@ -311,27 +311,36 @@ class CPlageOp extends CMbObject {
     return parent::updatePlainFields();
   }
   
+  
+  /**
+   * find the next plageop according
+   * to the current plageop parameters
+   * return the number of weeks jumped
+   * @return int
+   */
   function becomeNext() {
+    $week_jumped = 0;
     switch($this->_type_repeat) {
       case "quadruple": 
-        $this->date = mbDate("+7 DAYS", $this->date); // 4
+        $this->date = mbDate("+1 WEEK", $this->date); // 4
+        $week_jumped++;
       case "triple": 
-        $this->date = mbDate("+7 DAYS", $this->date); // 3
+        $this->date = mbDate("+1 WEEK", $this->date); // 3
+        $week_jumped++;
       case "double": 
-        $this->date = mbDate("+7 DAYS", $this->date); // 2
-      default:
+        $this->date = mbDate("+1 WEEK", $this->date); // 2
+        $week_jumped++;
       case "simple": 
-        $this->date = mbDate("+7 DAYS", $this->date); // 1
-      break;
-      
-      //
+        $this->date = mbDate("+1 WEEK", $this->date); // 1
+        $week_jumped++;
+        break;
       case "sameweek":
         $week_number = CMbDate::weekNumberInMonth($this->date);
         $next_month  = CMbDate::monthNumber(mbDate("+1 MONTH", $this->date));
-        
         $i=0;
         do {
           $this->date = mbDate("+1 WEEK", $this->date);
+          $week_jumped++;
           $i++;
         } while(
           $i<10 && 
@@ -341,9 +350,9 @@ class CPlageOp extends CMbObject {
       break;
     }
     
-    $where = array();
-    $where["date"] = "= '$this->date'";
-    $where[] = "`debut` = '$this->debut' OR `fin` = '$this->fin'";
+    $where             = array();
+    $where["date"]     = "= '$this->date'";
+    $where[]           = "`debut` = '$this->debut' OR `fin` = '$this->fin'";
     $where["salle_id"] = "= '$this->salle_id'";
     if($this->chir_id) {
       $where["chir_id"] = "= '$this->chir_id'";
@@ -358,9 +367,8 @@ class CPlageOp extends CMbObject {
     $anesth_id        = $this->anesth_id;
     $delay_repl       = $this->delay_repl;
     $spec_repl_id     = $this->spec_repl_id;
-    $msg = null;
     if(count($plages) > 0) {
-      $msg = $this->load(reset($plages)->plageop_id);
+      $this->load(reset($plages)->plageop_id);
     }
     else {
       $this->plageop_id = null;
@@ -375,7 +383,7 @@ class CPlageOp extends CMbObject {
     $this->delay_repl       = $delay_repl;
     $this->spec_repl_id     = $spec_repl_id;
     $this->updateFormFields();
-    return $msg;
+    return $week_jumped;
   }
   
   function getNbOperations($addedTime = null, $useTimeInterOp = true) {
