@@ -59,7 +59,7 @@ $ljoin = array();
 $ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
 $where = array();
 $where["date"]            = "BETWEEN '$date' AND '$fin'";
-$where["annulee"]          = "= '0'";
+$where["annulee"]         = "= '0'";
 $where[]                  = "salle_id IS NULL OR salle_id ". CSQLDataSource::prepareIn(array_keys($listSalles));
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $nbIntervHorsPlage = $operation->countList($where, null, $ljoin);

@@ -184,7 +184,7 @@ class CPlageOp extends CMbObject {
   
 	/** Mise à jour des horaires en fonction de l'ordre des operations, 
 	 *  et mise a jour des rank, de sorte qu'ils soient consecutifs
-	 **/
+	 */
   function reorderOp() {
     $this->completeField("debut", "temps_inter_op");
     if(!count($this->_ref_operations)) {
@@ -202,16 +202,20 @@ class CPlageOp extends CMbObject {
         }
         $op->updateFormFields();
         $op->store(false);
-        $new_time = mbAddTime($op->temp_operation, $new_time); // Durée de l'operation
-        $new_time = mbAddTime($this->temps_inter_op, $new_time); // + durée entre les operations
-        $new_time = mbAddTime($op->pause, $new_time); // + durée de pause
+        // Durée de l'operation
+        // + durée entre les operations
+        // + durée de pause
+        $new_time = mbAddTime($op->temp_operation, $new_time);
+        $new_time = mbAddTime($this->temps_inter_op, $new_time);
+        $new_time = mbAddTime($op->pause, $new_time);
       }
     }
   }
   
 
-/*
+/**
  * returns collision message, null for no collision
+ * @return str
  */
   function hasCollisions() {
     $this->completeField("salle_id");
@@ -283,6 +287,21 @@ class CPlageOp extends CMbObject {
       $this->reorderOp();
     }
     return parent::store();
+  }
+
+  function delete() {
+    $this->completeField("salle_id", "date");
+    $this->loadRefsOperations();
+    $_op = new COperation();
+    foreach($this->_ref_operations as $_op) {
+      if($_op->annulee) {
+        $_op->plageop_id = "";
+        $_op->date       = $this->date;
+        $_op->salle_id   = $this->salle_id;
+        $_op->store();
+      }
+    }
+    return parent::delete();
   }
   
   function updateFormFields() {

@@ -79,9 +79,10 @@ $operation = new COperation();
 $ljoin = array();
 $ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
 $where = array();
-$where["operations.date"] = "= '$date'";
-$where[]                  = "operations.salle_id IS NULL OR operations.salle_id ". CSQLDataSource::prepareIn(array_keys($listSalles));
-$where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+$where["operations.date"]    = "= '$date'";
+$where["operations.annulee"] = "= '0'";
+$where[]                     = "operations.salle_id IS NULL OR operations.salle_id ". CSQLDataSource::prepareIn(array_keys($listSalles));
+$where["sejour.group_id"]    = "= '".CGroups::loadCurrent()->_id."'";
 $horsPlages = $operation->loadList($where, null, null, null, $ljoin);
 $nbIntervHorsPlage = count($horsPlages);
 

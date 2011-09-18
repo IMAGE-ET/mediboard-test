@@ -34,15 +34,11 @@ if ($del) {
   while ($repeat > 0) {
     $msg = null;
     if ($obj->plageop_id) {
-      if (!$msg = $obj->canDeleteEx()) {
-        if ($msg = $obj->delete()) {
-          $not_deleted++;
-        } else {
-          $msg = "plage supprimée";
-          $deleted++;
-        }
-      } else {
+      if ($msg = $obj->delete()) {
         $not_deleted++;
+      } else {
+        $msg = "plage supprimée";
+        $deleted++;
       } 
     } else {
       $not_found++;

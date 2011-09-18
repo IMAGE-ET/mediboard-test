@@ -33,56 +33,70 @@ Main.add(function () {
       </span>
     </td>
     <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_op->_ref_chir}}</td>
-    <td class="text">
-      <form name="editTimeFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
-        <input type="hidden" name="m" value="dPplanningOp" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="dosql" value="do_planning_aed" />
-        <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
-        {{assign var=curr_op_id value=$curr_op->_id}}
-        {{mb_field object=$curr_op field=time_operation form="editTimeFrm$curr_op_id" register=true onchange="onSubmitFormAjax(this.form)"}}
-      </form>
+    {{if $curr_op->annulee}}
+    <td colspan="2" class="cancelled">
+      Annulée
     </td>
+    {{else}}
     <td class="text">
-      <form name="editSalleFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
-        <input type="hidden" name="m" value="dPplanningOp" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="dosql" value="do_planning_aed" />
-        <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
-        <select  style="width: 15em;" name="salle_id" onchange="onSubmitFormAjax(this.form)">
-          <option value="">&mdash; {{tr}}CSalle.select{{/tr}}</option>
-          {{foreach from=$listBlocs item=curr_bloc}}
-          <optgroup label="{{$curr_bloc->nom}}">
-            {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
-            <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $curr_op->salle_id}}selected="selected"{{/if}}>
-              {{$curr_salle->nom}}
-            </option>
-            {{foreachelse}}
-            <option value="" disabled="disabled">{{tr}}CSalle.none{{/tr}}</option>
-            {{/foreach}}
-          </optgroup>
-          {{/foreach}}
-        </select>
-      </form>
-      {{if $curr_op->_alternate_plages|@count}}
-      <form name="editPlageFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
-        <input type="hidden" name="m" value="dPplanningOp" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="dosql" value="do_planning_aed" />
-        <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
-        <input type="hidden" name="date" value="" />
-        <input type="hidden" name="time_op" value="" />
-        <input type="hidden" name="salle_id" value="" />
-        <input type="hidden" name="horaire_voulu" value="{{$curr_op->time_operation}}" />
-        <select name="plageop_id" style="width: 15em;" onchange="this.form.submit()">
-          <option value="">&mdash; Replacer cette intervention</option>
-          {{foreach from=$curr_op->_alternate_plages item=_plage}}
-          <option value="{{$_plage->_id}}">{{$_plage->_ref_salle}} - {{mb_value object=$_plage field=debut}} à {{mb_value object=$_plage field=fin}} - {{$_plage}}</option>
-          {{/foreach}}
-        </select>
-      </form>
+      {{if $can->_edit && !$curr_op->annulee}}
+        <form name="editTimeFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
+          <input type="hidden" name="m" value="dPplanningOp" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="dosql" value="do_planning_aed" />
+          <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
+          {{assign var=curr_op_id value=$curr_op->_id}}
+          {{mb_field object=$curr_op field=time_operation form="editTimeFrm$curr_op_id" register=true onchange="onSubmitFormAjax(this.form)"}}
+        </form>
+      {{else}}
+        {{mb_value object=$curr_op field=time_operation}}
       {{/if}}
     </td>
+    <td class="text">
+      {{if $can->_edit && !$curr_op->annulee}}
+        <form name="editSalleFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
+          <input type="hidden" name="m" value="dPplanningOp" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="dosql" value="do_planning_aed" />
+          <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
+          <select  style="width: 15em;" name="salle_id" onchange="onSubmitFormAjax(this.form)">
+            <option value="">&mdash; {{tr}}CSalle.select{{/tr}}</option>
+            {{foreach from=$listBlocs item=curr_bloc}}
+            <optgroup label="{{$curr_bloc->nom}}">
+              {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
+              <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $curr_op->salle_id}}selected="selected"{{/if}}>
+                {{$curr_salle->nom}}
+              </option>
+              {{foreachelse}}
+              <option value="" disabled="disabled">{{tr}}CSalle.none{{/tr}}</option>
+              {{/foreach}}
+            </optgroup>
+            {{/foreach}}
+          </select>
+        </form>
+        {{if $curr_op->_alternate_plages|@count}}
+        <form name="editPlageFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
+          <input type="hidden" name="m" value="dPplanningOp" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="dosql" value="do_planning_aed" />
+          <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
+          <input type="hidden" name="date" value="" />
+          <input type="hidden" name="time_op" value="" />
+          <input type="hidden" name="salle_id" value="" />
+          <input type="hidden" name="horaire_voulu" value="{{$curr_op->time_operation}}" />
+          <select name="plageop_id" style="width: 15em;" onchange="this.form.submit()">
+            <option value="">&mdash; Replacer cette intervention</option>
+            {{foreach from=$curr_op->_alternate_plages item=_plage}}
+            <option value="{{$_plage->_id}}">{{$_plage->_ref_salle}} - {{mb_value object=$_plage field=debut}} à {{mb_value object=$_plage field=fin}} - {{$_plage}}</option>
+            {{/foreach}}
+          </select>
+        </form>
+        {{/if}}
+      {{else}}
+        {{mb_value object=$curr_op field=salle_id}}
+      {{/if}}
+    </td>
+    {{/if}}
     <td class="text">
       <a href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->_id}}">
       <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}');">

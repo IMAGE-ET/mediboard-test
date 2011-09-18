@@ -106,12 +106,6 @@ Main.add(function(){
       {{include file="inc_planning_day.tpl"}}
       </table>
       {{if $can->edit}}
-      {{if $plagesel->plageop_id}}
-      <a class="button new" href="?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id=0">
-        {{tr}}CPlageOp-title-create{{/tr}}
-      </a>
-      {{/if}}
-      {{if $can->edit}}
       <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkPlage()" class="{{$plagesel->_spec}}">
       <input type="hidden" name="dosql" value="do_plagesop_aed" />
       <input type="hidden" name="del" value="0" />
@@ -121,6 +115,9 @@ Main.add(function(){
         <tr>
           {{if $plagesel->plageop_id}}
           <th class="title modify" colspan="6">
+            <a class="button new" style="float: left;" href="?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id=0">
+              {{tr}}CPlageOp-title-create{{/tr}}
+            </a>
 				    {{mb_include module=system template=inc_object_idsante400 object=$plagesel}}
 				    {{mb_include module=system template=inc_object_history object=$plagesel}}
             {{tr}}CPlageOp-title-modify{{/tr}}
@@ -129,6 +126,21 @@ Main.add(function(){
             {{tr}}CPlageOp-title-create{{/tr}}
           {{/if}}
           </th>
+        </tr>
+        <tr>
+          <td colspan="6" class="text">
+            <div class="small-info">
+              <strong>La gestion des plages a évolué :</strong>
+              <ul>
+                <li>La répétition est maintenant indiquée en nombre de semaines et plus en nombre de plages</li>
+                <li>
+                  la supression d'un plage est intégré au formulaire principal : il faut utiliser le nombre
+                  de semaines et le type de répétitions pour indiquer les supressions à effectuer, puis cliquer
+                  directement sur le bouton supprimer
+                </li>
+              </ul>
+            </div>
+          </td>
         </tr>
         <tr>
          <th>{{mb_label object=$plagesel field="chir_id"}}</th>
@@ -264,7 +276,7 @@ Main.add(function(){
       <tr>
         <td colspan="4" class="text">
           <div class="small-info">
-            Pour modifier plusieurs plages (nombre de plages > 1),
+            Pour modifier plusieurs plages (nombre de semaines > 1),
             veuillez ne pas changer les champs début et fin en même temps
           </div>
         </td>
@@ -283,7 +295,6 @@ Main.add(function(){
       </tr>
     </table>
     </form>
-    {{/if}}
     {{/if}}
    </td>
    <td>
