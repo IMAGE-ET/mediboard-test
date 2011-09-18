@@ -7,30 +7,32 @@
 <table class="tbl">
   <tr class="clear">
     <th colspan="10">
-      <a href="#" onclick="window.print()">
-        {{if $filter->plageconsult_id}}
-        Plage du {{mb_value object=$filter->_ref_plageconsult field=date}}
-        de {{mb_value object=$filter->_ref_plageconsult field=debut}} à {{mb_value object=$filter->_ref_plageconsult field=fin}}
-        {{else}}
-        Rapport du {{mb_value object=$filter field=_date_min}}
-        {{if $filter->_date_min != $filter->_date_max}}
-        au {{mb_value object=$filter field=_date_max}}
-        {{/if}}
-        {{/if}}
-      </a>
+      <h1>
+        <a href="#" onclick="window.print()">
+          {{if $filter->plageconsult_id}}
+          Plage du {{mb_value object=$filter->_ref_plageconsult field=date}}
+          de {{mb_value object=$filter->_ref_plageconsult field=debut}} à {{mb_value object=$filter->_ref_plageconsult field=fin}}
+          {{else}}
+          Planning du {{mb_value object=$filter field=_date_min}}
+          {{if $filter->_date_min != $filter->_date_max}}
+          au {{mb_value object=$filter field=_date_max}}
+          {{/if}}
+          {{/if}}
+        </a>
+      </h1>
     </th>
   </tr>
   
   {{foreach from=$listPlage item=curr_plage}}
   <tr class="clear">
     <td colspan="10">
-      <h3>
+      <h2>
       	{{$curr_plage->date|date_format:$conf.longdate}}
       	- 
       	Dr {{$curr_plage->_ref_chir->_view}}
         -
         {{$curr_plage->libelle}}
-      </h3>
+      </h2>
     </td>
   </tr>
   

@@ -8,31 +8,33 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<h1 style="text-align: center">
-  <a href="#" onclick="window.print()">
-    Planning du {{$filter->_date_min|date_format:"%d/%m/%Y"}}
-    {{if $filter->_date_min != $filter->_date_max}}
-    au {{$filter->_date_max|date_format:"%d/%m/%Y"}}
-    {{/if}}
-    -
-    {{$numOp}} intervention(s)
-    {{if $operations|@count}}(dont {{$operations|@count}} hors plage){{/if}}
-  </a>
-</h1>
 <table class="tbl">
+  <tr class="clear">
+    <th colspan="11">
+      <h1>
+        <a href="#" onclick="window.print()">
+          Planning du {{$filter->_date_min|date_format:$conf.date}}
+          {{if $filter->_date_min != $filter->_date_max}}
+          au {{$filter->_date_max|$conf.date}}
+          {{/if}}
+          -
+          {{$numOp}} intervention(s)
+          {{if $operations|@count}}(dont {{$operations|@count}} hors plage){{/if}}
+        </a>
+      </h1>
+    </th>
+  </tr>
   {{foreach from=$listDates key=curr_date item=listPlages}}
   {{foreach from=$listPlages key=curr_plage_id item=curr_plageop}}
-  <tr>
+  <tr class="clear">
     <td colspan="11" class="text">
       {{if $curr_plage_id == "hors_plage"}}
         <h2>
-          &bull;
           <strong>Interventions hors plage</strong>
           du {{$curr_date|date_format:"%d/%m/%Y"}}
         </h2>
       {{else}}
         <h2>
-          &bull;
           {{if $curr_plageop->chir_id}}
             <strong>Dr {{$curr_plageop->_ref_chir->_view}}</strong> -
           {{else}}
