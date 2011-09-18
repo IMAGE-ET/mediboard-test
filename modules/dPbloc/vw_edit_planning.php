@@ -13,6 +13,9 @@ $plageop_id = CValue::getOrSession("plageop_id");
 
 $listBlocs  = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");
 $bloc_id    = CValue::getOrSession("bloc_id", reset($listBlocs)->_id);
+if(!key_exists($bloc_id, $listBlocs)) {
+  $bloc_id = reset($listBlocs)->_id;
+}
 $listSalles = array();
 
 foreach($listBlocs as &$curr_bloc) {

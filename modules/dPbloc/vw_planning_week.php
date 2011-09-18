@@ -24,6 +24,9 @@ for($i = 0; $i < 7; $i++) {
 // Liste des blocs
 $listBlocs = CGroups::loadCurrent()->loadBlocs();
 $bloc_id   = CValue::getOrSession("bloc_id", reset($listBlocs)->_id);
+if(!key_exists($bloc_id, $listBlocs)) {
+  $bloc_id = reset($listBlocs)->_id;
+}
 
 $bloc = new CBlocOperatoire();
 $bloc->load($bloc_id);

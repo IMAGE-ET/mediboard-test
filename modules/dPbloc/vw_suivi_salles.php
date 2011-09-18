@@ -12,7 +12,11 @@ global $can, $g;
 $can->needsRead();
 
 $date_suivi = CValue::getOrSession("date", mbDate());
-$bloc_id    = CValue::getOrSession("bloc_id");
+$listBlocs  = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");
+$bloc_id    = CValue::getOrSession("bloc_id", reset($listBlocs)->_id);
+if(!key_exists($bloc_id, $listBlocs)) {
+  $bloc_id = reset($listBlocs)->_id;
+}
 
 // Chargement des Anesthésistes
 $listAnesths = new CMediusers;
@@ -21,8 +25,6 @@ $listAnesths = $listAnesths->loadAnesthesistes(PERM_READ);
 // Chargement des Chirurgiens
 $listChirs = new CMediusers;
 $listChirs = $listChirs->loadPraticiens(PERM_READ);
-
-$listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
 
 $bloc = new CBlocOperatoire();
 if (!$bloc->load($bloc_id)) {
