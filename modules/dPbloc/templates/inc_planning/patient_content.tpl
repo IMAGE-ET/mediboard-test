@@ -9,7 +9,7 @@
 *}}
 
 <!-- Patient -->
-		  <td>
+		  <td class="text">
 		    <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
 		      {{$patient->_view}}
 		    </span>

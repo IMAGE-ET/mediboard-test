@@ -43,7 +43,7 @@
         {{/foreach}}
       </td>
 		  <td>{{$curr_op->cote|truncate:1:""|capitalize}}</td>
-      <td>
+      <td class="text">
         {{if $curr_op->type_anesth != null}}
         {{$curr_op->_lu_type_anesth}}
         {{else}}

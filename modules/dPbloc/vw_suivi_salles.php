@@ -11,8 +11,8 @@
 global $can, $g;
 $can->needsRead();
 
-$date_suivi = CValue::getOrSession("date_suivi", mbDate());
-$bloc_id = CValue::getOrSession("bloc_id");
+$date_suivi = CValue::getOrSession("date", mbDate());
+$bloc_id    = CValue::getOrSession("bloc_id");
 
 // Chargement des Anesthésistes
 $listAnesths = new CMediusers;
