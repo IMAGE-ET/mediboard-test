@@ -77,7 +77,7 @@
       ({{tr}}chambre_seule.{{$curr_sejour->chambre_seule}}{{/tr}})
     </td>
     <td class="text">{{$curr_sejour->rques}}</td>
-    <td>
+    <td class="text">
       {{foreach from=$curr_sejour->_ref_operations item=curr_operation}}
         {{$curr_operation->_datetime|date_format:"%d/%m/%Y"}}
         {{if $curr_operation->time_operation != "00:00:00"}}
@@ -133,7 +133,7 @@
         {{$patient->_view}}
       </span>
     </td>
-    <td>
+    <td class="text">
       {{mb_value object=$patient field="naissance"}} ({{$patient->_age}} ans)
     </td>
     
