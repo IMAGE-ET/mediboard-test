@@ -95,7 +95,7 @@
   </td>
   <td class="{{if $object->type == 'inconnu'}}error{{/if}} narrow">{{mb_value object=$object field="type"}}</td>
   <td class="{{if $object->sous_type == 'inconnu'}}error{{/if}} narrow">{{mb_value object=$object field="sous_type"}}</td>
-  {{if $exchange instanceof CExchangeIHE}}
+  {{if $object instanceof CExchangeIHE}}
     <td class="narrow">{{mb_value object=$object field="code"}}</td>
     <td class="narrow">{{mb_value object=$object field="version"}}</td>
   {{/if}}

@@ -63,7 +63,7 @@ ExchangeDataFormat = {
     	ExchangeDataFormat.refreshExchange.curry(exchange_guid) });
   },
 
-  refreshExchange : function(exchange_guid){console.debug(exchange_guid);
+  refreshExchange : function(exchange_guid){
     var url = new Url("eai", "ajax_refresh_exchange");
     url.addParam("exchange_guid", exchange_guid);
     url.requestUpdate("exchange_"+exchange_guid);
