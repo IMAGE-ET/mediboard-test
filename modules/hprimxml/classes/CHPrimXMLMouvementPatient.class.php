@@ -138,13 +138,8 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
         
       $echg_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
     }
-    
-    $echg_hprim->_acquittement = $msgAcq;
-    $echg_hprim->date_echange = mbDateTime();
-    $echg_hprim->setObjectIdClass("CSejour", $data['idCibleVenue'] ? $data['idCibleVenue'] : $newVenue->_id);
-    $echg_hprim->store();
-
-    return $msgAcq;
+		
+		return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $commentaire, $newVenue);
   } 
 }
 ?>
