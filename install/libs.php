@@ -269,12 +269,12 @@ CLibrary::$all[$library->name] = $library;
 $library = new CLibrary;
 $library->name = "kcfinder";
 $library->url = "http://kcfinder.sunhater.com/";
-$library->fileName = "kcfinder-2.2.tar.gz";
+$library->fileName = "kcfinder-2.51.tar.gz";
 $library->description = "Gestionnaire de fichier en ajax";
-$library->sourceDir = "kcfinder-2.2";
+$library->sourceDir = "kcfinder-2.51";
 $library->targetDir = "kcfinder";
 $library->versionFile = "browse.php";
-$library->versionString = "@version 2.2";
+$library->versionString = "@version 2.51";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "kcfinder";
