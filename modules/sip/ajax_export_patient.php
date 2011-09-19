@@ -67,36 +67,32 @@ foreach ($patients as $patient) {
   $patient->loadIPP();
   $patient->loadRefsSejours();
   $patient->_ref_last_log->type = "create";
-  $dest_hprim = new CDestinataireHprim();
-	$dest_hprim->message = "patients";
-  $dest_hprim->loadMatchingObject();
-  $dest_hprim->loadConfigValues();
   
+  $receiver = new CDestinataireHprim();
+  $receiver->load(CAppUI::conf("sip export_dest"));
+  $receiver->loadConfigValues();
+
   if (!$patient->_IPP) {
     $IPP = new CIdSante400();
     //Paramétrage de l'id 400
     $IPP->object_class = "CPatient";
     $IPP->object_id = $patient->_id;
-    $IPP->tag = $dest_hprim->_tag_patient;
+    $IPP->tag = $receiver->_tag_patient;
     $IPP->loadMatchingObject();
 
     $patient->_IPP = $IPP->id400;
   }
 
   if ((CAppUI::conf("sip pat_no_ipp") && $patient->_IPP  && ($patient->_IPP != "-")) || 
-      (!$dest_hprim->_configs["send_all_patients"] && empty($patient->_ref_sejours))) {
+      (!$receiver->_configs["send_all_patients"] && empty($patient->_ref_sejours))) {
   	continue;
   }
 
-  $domEvenement = new CHPrimXMLEnregistrementPatient();
-  $domEvenement->emetteur     = CAppUI::conf('mb_id');
-  $domEvenement->destinataire = $dest_hprim->nom;
-  $domEvenement->group_id     = $dest_hprim->group_id;
+  $dom = new CHPrimXMLEnregistrementPatient();
+  $dom->_ref_receiver = $receiver;
+  $receiver->sendEvenementPatient($dom, $patient);
   
-  $messageEvtPatient = $domEvenement->generateTypeEvenement($patient);
-  $doc_valid = $domEvenement->schemaValidate();
-  
-  if (!$doc_valid) {
+  if (!$dom->_ref_echange_hprim->message_valide) {
     $errors++;
   	trigger_error("Création de l'événement patient impossible.", E_USER_WARNING);
     CAppUI::stepAjax("Import de '$patient->_view' échoué", UI_MSG_WARNING);

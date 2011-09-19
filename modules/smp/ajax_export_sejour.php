@@ -15,7 +15,7 @@ if (!CAppUI::conf("dPplanningOp CSejour tag_dossier") || !CAppUI::conf("dPpatien
   CAppUI::stepAjax("Aucun tag (patient/séjour) de défini.", UI_MSG_ERROR);
 }
 
-if (!CAppUI::conf("sip export_dest")) {
+if (!CAppUI::conf("smp export_dest")) {
   CAppUI::stepAjax("Aucun destinataire de défini pour l'export.", UI_MSG_ERROR);
 }
 
@@ -38,25 +38,25 @@ $where = array();
 $where[$sejour->_spec->key] = "> '$idMin'";
 $where['annule'] = " = '0'";
 
-$sip_config = CAppUI::conf("sip");
+$smp_config = CAppUI::conf("smp");
 
 // Bornes
-if ($export_id_min = $sip_config["export_id_min"]) {
+if ($export_id_min = $smp_config["export_id_min"]) {
   $where[] = $sejour->_spec->key." >= '$export_id_min'";
 }
-if ($export_id_max = $sip_config["export_id_max"]) {
+if ($export_id_max = $smp_config["export_id_max"]) {
   $where[] = $sejour->_spec->key." <= '$export_id_max'";
 }
 
-if (preg_match("/(\d{4})-(\d{2})-(\d{2})/", $sip_config["export_date_min"]) && 
-    preg_match("/(\d{4})-(\d{2})-(\d{2})/", $sip_config["export_date_max"])) {
-  $where['entree'] = " BETWEEN '".$sip_config["export_date_min"]."' AND '".$sip_config["export_date_max"]."'";
+if (preg_match("/(\d{4})-(\d{2})-(\d{2})/", $smp_config["export_date_min"]) && 
+    preg_match("/(\d{4})-(\d{2})-(\d{2})/", $smp_config["export_date_max"])) {
+  $where['entree'] = " BETWEEN '".$smp_config["export_date_min"]."' AND '".$smp_config["export_date_max"]."'";
 }
 
 // Comptage
 $count = $sejour->countList($where);
 
-$max = $sip_config["export_segment"];
+$max = $smp_config["export_segment"];
 $max = min($max, $count);
 CAppUI::stepAjax("Export de $max sur $count objets de type 'CSejour' à partir de l'ID '$idMin'", UI_MSG_OK);
 
@@ -91,7 +91,7 @@ foreach ($sejours as $sejour) {
   $sejour->_ref_last_log->type = "create";
   
   $dest_hprim = new CDestinataireHprim();
-  $dest_hprim->load(CAppUI::conf("sip export_dest"));
+  $dest_hprim->load(CAppUI::conf("smp export_dest"));
   $dest_hprim->loadConfigValues();
   
   if (!$sejour->_NDA) {
@@ -115,11 +115,11 @@ foreach ($sejours as $sejour) {
     $sejour->_ref_patient->_IPP = $IPP->id400;
   }
 
-  if (CAppUI::conf("sip send_sej_pa") && ($sejour->_etat != "preadmission")) {
+  if (CAppUI::conf("smp send_sej_pa") && ($sejour->_etat != "preadmission")) {
     continue;
   }
 
-  if (!CAppUI::conf("sip sej_no_numdos") && (!$sejour->_NDA || ($sejour->_NDA == "-"))) {
+  if (!CAppUI::conf("smp sej_no_numdos") && (!$sejour->_NDA || ($sejour->_NDA == "-"))) {
     continue;
   }
 
@@ -152,7 +152,7 @@ foreach ($sejours as $sejour) {
     }
   }
   
-  if (CAppUI::conf("sip send_mvt")) {
+  /*if (CAppUI::conf("sip send_mvt")) {
     foreach ($sejour->_ref_affectations as $_affectation) {
       $_affectation->loadRefLit();
       $_affectation->_ref_lit->loadRefChambre();
@@ -174,7 +174,7 @@ foreach ($sejours as $sejour) {
         CAppUI::stepAjax("Import de '$sejour->_view' échoué", UI_MSG_WARNING);
       }
     }
-  }
+  }*/
   
   if (!$errors) {
     $echange++;

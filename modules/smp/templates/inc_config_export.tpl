@@ -72,7 +72,7 @@
     <th class="title" colspan="100">{{tr}}smp-export-classes{{/tr}}</th>
   </tr>
   <tr>
-    <td>
+    <td class="narrow">
       {{tr}}sip-export-class{{/tr}} '{{tr}}CSejour{{/tr}}'
     </td>
     <td>
