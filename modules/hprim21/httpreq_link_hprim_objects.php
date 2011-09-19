@@ -49,7 +49,7 @@ foreach($listHprimMedecins as $_medecin) {
 CAppUI::stepAjax("Médecins utilisés : '$total'");
 CAppUI::stepAjax("Médecins rapprochés : '$nouv'");
 if ($total > 0)
-  CAppUI::stepAjax($nouv*100/($total).", % de rapprochement de médecins");
+  CAppUI::stepAjax($nouv*100/($total).", %% de rapprochement de médecins");
 
 // Gestion des patients
 $hprimPatient = new CHprim21Patient();
@@ -111,7 +111,7 @@ CAppUI::stepAjax("Patient utilisés : '$total'");
 CAppUI::stepAjax("Patient anciennement rapprochés : '$anc'");
 CAppUI::stepAjax("Nouveaux patients rapprochés : '$nouv'");
 if (($total-$anc) > 0)
-  CAppUI::stepAjax($nouv*100/($total-$anc)."% de rapprochement de patients", UI_MSG_OK);
+  CAppUI::stepAjax($nouv*100/($total-$anc)."%% de rapprochement de patients", UI_MSG_OK);
 
 // Gestion des séjours
 $hprimSejour = new CHprim21Sejour();
@@ -191,6 +191,6 @@ CAppUI::stepAjax("Séjours anciennement rapprochés : '$anc'");
 CAppUI::stepAjax("Séjours multiples trouvés : '$moresej'");
 CAppUI::stepAjax("Nouveaux séjours rapprochés : '$nouv'");
 if (($total-$nopat-$anc-$moresej) > 0)
-  CAppUI::stepAjax($nouv*100/($total-$nopat-$anc-$moresej)."% de rapprochement de séjours");
+  CAppUI::stepAjax($nouv*100/($total-$nopat-$anc-$moresej)."%% de rapprochement de séjours");
 
 ?>
