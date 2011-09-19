@@ -14,6 +14,8 @@ $can->needsRead();
 
 $board = CValue::get("board", 0);
 
+$mediuser = CMediusers::get();
+
 $patient_id = CValue::getOrSession("patient_id");
 
 // Récuperation des patients recherchés
