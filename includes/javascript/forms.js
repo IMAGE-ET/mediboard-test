@@ -450,7 +450,7 @@ function prepareForms(root) {
       });
     });
     
-    root.select("button.oneclick").invoke("observe", "click", function(e){
+    root.select("button.oneclick").invoke("observe", "click", function(event){
       var element = Event.element(event);
       Form.Element.disable.defer(element);
     });
