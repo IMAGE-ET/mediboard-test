@@ -21,10 +21,11 @@ onSubmitObjectConfigs = function(oForm, object_instance_id, object_guid) {
 
 <form name="editObjectConfig-{{$object->_id}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitObjectConfigs(this, '{{$object->object_id}}', '{{$object->_guid}}') ">
   <input type="hidden" name="m" value="system" />
-  <input type="hidden" name="dosql" value="do_config_object_aed" />
-  {{mb_key object=$object}}
   <input type="hidden" name="del" value="0" /> 
-  <input type="hidden" name="_class" value="{{$object->_class}}" /> 
+  
+  <input type="hidden" name="@class" value="{{$object->_class}}" /> 
+  {{mb_key object=$object}}
+  
   <input type="hidden" name="object_id" value="{{$object->object_id}}" /> 
   <table class="form">
     <tr>
