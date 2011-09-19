@@ -27,13 +27,13 @@ else {
 }
 
 // Récuperation des patients recherchés
-$patient_nom         = trim(CValue::getOrSession("nom"   ));
+$patient_nom         = trim(CValue::getOrSession("nom"));
 $patient_prenom      = trim(CValue::getOrSession("prenom"));
-$patient_ville       = CValue::get("ville" );
-$patient_cp          = CValue::get("cp"    );
-$patient_day         = CValue::getOrSession("Date_Day"  );
+$patient_ville       = CValue::get("ville");
+$patient_cp          = CValue::get("cp");
+$patient_day         = CValue::getOrSession("Date_Day");
 $patient_month       = CValue::getOrSession("Date_Month");
-$patient_year        = CValue::getOrSession("Date_Year" );
+$patient_year        = CValue::getOrSession("Date_Year");
 $patient_naissance   = null;
 $patient_ipp         = CValue::get("patient_ipp");
 $useVitale           = CValue::get("useVitale",  CAppUI::pref('GestionFSE') && CAppUI::pref('VitaleVision') ? 1 : 0);
@@ -163,29 +163,29 @@ $prats = $mediuser->loadPraticiens();
 $smarty = new CSmartyDP();
 
 $smarty->assign("dPsanteInstalled", CModule::getInstalled("dPsante400"));
-$smarty->assign("canPatients"     , CModule::getCanDo("dPpatients")    );
-$smarty->assign("canAdmissions"   , CModule::getCanDo("dPadmissions")  );
-$smarty->assign("canPlanningOp"   , CModule::getCanDo("dPplanningOp")  );
-$smarty->assign("canCabinet"      , CModule::getCanDo("dPcabinet")     );
+$smarty->assign("canPatients"     , CModule::getCanDo("dPpatients"));
+$smarty->assign("canAdmissions"   , CModule::getCanDo("dPadmissions"));
+$smarty->assign("canPlanningOp"   , CModule::getCanDo("dPplanningOp"));
+$smarty->assign("canCabinet"      , CModule::getCanDo("dPcabinet"));
 
-$smarty->assign("nom"                 , $patient_nom              );
-$smarty->assign("prenom"              , $patient_prenom           );
-$smarty->assign("naissance"           , $patient_naissance        );
-$smarty->assign("ville"               , $patient_ville            );
-$smarty->assign("cp"                  , $patient_cp               );
-$smarty->assign("nom_search"          , $patient_nom_search       );
-$smarty->assign("prenom_search"       , $patient_prenom_search    );
+$smarty->assign("nom"                 , $patient_nom);
+$smarty->assign("prenom"              , $patient_prenom);
+$smarty->assign("naissance"           , $patient_naissance);
+$smarty->assign("ville"               , $patient_ville);
+$smarty->assign("cp"                  , $patient_cp);
+$smarty->assign("nom_search"          , $patient_nom_search);
+$smarty->assign("prenom_search"       , $patient_prenom_search);
 $smarty->assign("prat_id"             , $prat_id);
 $smarty->assign("prats"               , $prats);
 
-$smarty->assign("useVitale"           , $useVitale                );
-$smarty->assign("patVitale"           , $patVitale                );
-$smarty->assign("patients"            , $patients                 );
-$smarty->assign("patientsSoundex"     , $patientsSoundex          );
+$smarty->assign("useVitale"           , $useVitale);
+$smarty->assign("patVitale"           , $patVitale);
+$smarty->assign("patients"            , $patients);
+$smarty->assign("patientsSoundex"     , $patientsSoundex);
 
-$smarty->assign("patient"             , $patient                  );
-$smarty->assign("board"               , 0                         );
-$smarty->assign("patient_ipp"         , $patient_ipp              );
+$smarty->assign("patient"             , $patient);
+$smarty->assign("board"               , 0);
+$smarty->assign("patient_ipp"         , $patient_ipp);
 
 $smarty->display("vw_idx_patients.tpl");
 

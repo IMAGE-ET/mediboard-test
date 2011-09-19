@@ -16,18 +16,18 @@ $board = CValue::get("board", 0);
 
 $patient_id = CValue::getOrSession("patient_id");
 
-// Patients
-$patient_nom       = CValue::getOrSession("nom"       , "");
-$patient_prenom    = CValue::getOrSession("prenom"    , "");
-
-$patient_ville     = CValue::getOrSession("ville"     , "");
-$patient_cp        = CValue::getOrSession("cp"        , "");
-$patient_day       = CValue::getOrSession("Date_Day"  , "");
-$patient_month     = CValue::getOrSession("Date_Month", "");
-$patient_year      = CValue::getOrSession("Date_Year" , "");
-$patient_ipp       = CValue::get("patient_ipp");
-$patient_naissance = null;
-$useVitale         = CValue::get("useVitale");
+// Récuperation des patients recherchés
+$patient_nom         = trim(CValue::getOrSession("nom"));
+$patient_prenom      = trim(CValue::getOrSession("prenom"));
+$patient_ville       = CValue::get("ville");
+$patient_cp          = CValue::get("cp");
+$patient_day         = CValue::getOrSession("Date_Day");
+$patient_month       = CValue::getOrSession("Date_Month");
+$patient_year        = CValue::getOrSession("Date_Year");
+$patient_naissance   = null;
+$patient_ipp         = CValue::get("patient_ipp");
+$useVitale           = CValue::get("useVitale",  CAppUI::pref('GestionFSE') && CAppUI::pref('VitaleVision') ? 1 : 0);
+$prat_id             = CValue::get("prat_id");
 
 $patVitale = new CPatient;
 
@@ -123,23 +123,24 @@ else {
 $smarty = new CSmartyDP();
 
 $smarty->assign("dPsanteInstalled", CModule::getInstalled("dPsante400"));
-$smarty->assign("patient_ipp"    , $patient_ipp                );
-$smarty->assign("board"          , $board                      );
+$smarty->assign("patient_ipp"    , $patient_ipp);
+$smarty->assign("board"          , $board);
 
-$smarty->assign("nom"            , $patient_nom                );
-$smarty->assign("prenom"         , $patient_prenom             );
-$smarty->assign("ville"          , $patient_ville              );
-$smarty->assign("cp"             , $patient_cp                 );
-$smarty->assign("naissance"      , $patient_naissance          );
-$smarty->assign("nom_search"     , $patient_nom_search         );
-$smarty->assign("prenom_search"  , $patient_prenom_search      );
+$smarty->assign("nom"            , $patient_nom);
+$smarty->assign("prenom"         , $patient_prenom);
+$smarty->assign("ville"          , $patient_ville);
+$smarty->assign("cp"             , $patient_cp);
+$smarty->assign("naissance"      , $patient_naissance);
+$smarty->assign("nom_search"     , $patient_nom_search);
+$smarty->assign("prenom_search"  , $patient_prenom_search);
+$smarty->assign("prat_id"        , $prat_id);
 
-$smarty->assign("useVitale"      , $useVitale                  );
-$smarty->assign("patVitale"      , $patVitale                  );
-$smarty->assign("patients"       , $patients                   );
-$smarty->assign("patientsCount"  , count($patients)            );
+$smarty->assign("useVitale"      , $useVitale);
+$smarty->assign("patVitale"      , $patVitale);
+$smarty->assign("patients"       , $patients);
+$smarty->assign("patientsCount"  , count($patients));
 $smarty->assign("patientsSoundexCount", count($patientsSoundex));
-$smarty->assign("patientsSoundex", $patientsSoundex            );
-$smarty->assign("patient"        , $patient                    );
+$smarty->assign("patientsSoundex", $patientsSoundex);
+$smarty->assign("patient"        , $patient);
 
 $smarty->display("inc_list_patient.tpl");
