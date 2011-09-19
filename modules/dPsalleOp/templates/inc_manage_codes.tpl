@@ -10,7 +10,7 @@ changeCodeToDel = function(subject_id, code_ccam, actes_ids){
 </script>
 
 <!-- Pas d'affichage de inc_manage_codes si la consultation est deja validée -->
- {{if $subject instanceof CConsultation && !$subject->_coded}}  
+ {{*if $subject instanceof CConsultation && !$subject->_coded*}}  
   <table class="main layout">
     <tr>
       <td class="halfPane">
@@ -96,7 +96,7 @@ changeCodeToDel = function(subject_id, code_ccam, actes_ids){
       {{/if}}
     </tr>
   </table>
-{{/if}}
+{{*/if*}}
 
 {{if $ajax}}
 <script type="text/javascript">
