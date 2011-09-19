@@ -53,10 +53,6 @@ class CITI30DelegatedHandler extends CIHEDelegatedHandler {
         $code = null;
         break;
     }
-
-    if (!$code) {
-      return;
-    }
     
     $this->sendITI($this->profil, $this->transaction, $code, $mbObject);
     

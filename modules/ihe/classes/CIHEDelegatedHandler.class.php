@@ -20,6 +20,10 @@ class CIHEDelegatedHandler {
   
   function sendITI($profil, $transaction, $code, CMbObject $mbObject) {
     $receiver    = $mbObject->_receiver;
+
+    if (!$code) {
+      throw new CMbException("CIHE-code-none");
+    }
     
     if (!$receiver->isMessageSupported("CHL7EventADT$code")) {
       return;
