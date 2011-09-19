@@ -575,7 +575,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       // idSource connu
       else {
         $newVenue->_NDA = $nda->id400;
-        $newVenue->load($da->object_id);
+        $newVenue->load($nda->object_id);
         // Dans le cas d'une annulation de la venue
         if ($cancel) {
           if ($msgAcq = $this->doNotCancelVenue($newVenue, $dom_acq, $echg_hprim)) {
