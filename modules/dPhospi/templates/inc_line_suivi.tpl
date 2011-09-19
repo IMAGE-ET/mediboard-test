@@ -216,6 +216,8 @@
 
 
 {{* Tableau de transmissions *}}
+{{* Affichage aggrégé dans le volet transmissions, de 1 à 3 objets (D-A-R) *}}
+
 {{if $_suivi|is_array}}
   {{assign var=nb_trans value=$_suivi|@count}}
   
