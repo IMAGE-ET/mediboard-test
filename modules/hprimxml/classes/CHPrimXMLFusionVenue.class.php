@@ -94,7 +94,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
     $dom_acq->_ref_echange_hprim    = $echg_hprim;
     
      // Si CIP
-    if (!CAppUI::conf('sip server')) {
+    if (!CAppUI::conf('smp server')) {
       $mbVenueEliminee = new CSejour();
       $mbVenue = new CSejour();
      
@@ -159,6 +159,8 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
         }
         // Cas 0
         $messages = $this->mapAndStoreVenue($newVenue, $data, $etatVenueEliminee, $id400Venue, $id400VenueEliminee);
+        
+        $commentaire = "Séjour modifié : $newVenue->_id.";
       }
       // Cas 2 : 2 Séjour
       else if ($mbVenue->_id && $mbVenueEliminee->_id) {
@@ -184,6 +186,8 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       if ($messages['msgVenue']) {
         $avertissement = $messages['msgVenue'];
       }
+      
+      $commentaire = "Séjour $newVenue->_id fusionné";
         
       $msgAcq = $dom_acq->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($messages['commentaire'], 0, 4000)); 
       $doc_valid = $dom_acq->schemaValidate();
@@ -191,12 +195,8 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
         
       $echg_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
     }
-    $echg_hprim->_acquittement = $msgAcq;
-    $echg_hprim->date_echange = mbDateTime();
-    $echg_hprim->setObjectIdClass("CSejour", $data['idCibleVenue'] ? $data['idCibleVenue'] : $newVenue->_id);
-    $echg_hprim->store();
-
-    return $msgAcq;
+    
+    return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $commentaire, $newVenue);
   }
   
   private function mapAndStoreVenue(&$newVenue, $data, $etatVenueEliminee, &$id400Venue, &$id400VenueEliminee) {
