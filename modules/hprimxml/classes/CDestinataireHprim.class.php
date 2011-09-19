@@ -111,7 +111,6 @@ class CDestinataireHprim extends CInteropReceiver {
   
   function sendEvenementPMSI(CHPrimXMLEvenementsServeurActivitePmsi $dom_evt, CMbObject $mbObject) {
     $msg = $dom_evt->generateTypeEvenement($mbObject);
-    mbLog($dom_evt->sous_type);
     if ($this->actif && $msg) {
       $source = CExchangeSource::get("$this->_guid-$dom_evt->sous_type");
       if ($source->_id) {
