@@ -27,7 +27,7 @@ class CSmpObjectHandler extends CEAIObjectHandler {
 
     // Si serveur et pas de NDA sur le séjour
     if ((isset($mbObject->_no_num_dos) && ($mbObject->_no_num_dos == 1)) &&
-        CAppUI::conf('sip server')) {
+        CAppUI::conf('smp server')) {
       return;
     }
     

@@ -32,7 +32,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       $mbObject->loadRefAdresseParPraticien();
 
       // Si Serveur
-      if (CAppUI::conf('sip server')) {
+      if (CAppUI::conf('smp server')) {
         
         $echange_hprim = new CEchangeHprim();
         if (isset($mbObject->_hprim_initiator_id)) {
@@ -115,7 +115,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     // Traitement Affectation
     elseif ($mbObject instanceof CAffectation) {
       // Si Client
-      if (!CAppUI::conf('sip server')) {
+      if (!CAppUI::conf('smp server')) {
         if (!$receiver->isMessageSupported("CHPrimXMLMouvementPatient")) {
           return;
         }
@@ -162,7 +162,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       $sejour_eliminee->loadRefAdresseParPraticien();
       
       // Si Client
-      if (!CAppUI::conf('sip server')) {
+      if (!CAppUI::conf('smp server')) {
         $mbObject->_fusion = array();
         foreach (CGroups::loadGroups() as $_group) {
           if ($mbObject->_eai_initiateur_group_id == $_group->_id) {
@@ -233,7 +233,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       $receiver = $mbObject->_receiver;
       
       // Si Client
-      if (!CAppUI::conf('sip server')) {
+      if (!CAppUI::conf('smp server')) {
         foreach ($mbObject->_fusion as $group_id => $infos_fus) {
           if ($receiver->group_id != $group_id) {
             continue;
