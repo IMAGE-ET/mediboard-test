@@ -57,7 +57,7 @@ foreach($listOps as $_key => $_op) {
   $_op->loadRefAffectation();
   if($_op->_ref_affectation->_id) {
     if(!$service_id || $service_id == $_op->_ref_affectation->_ref_lit->_ref_chambre->service_id) {
-      $listServices[$_op->_ref_affectation->_ref_lit->_ref_chambre->service_id][$_op->_id] = $op;
+      $listServices[$_op->_ref_affectation->_ref_lit->_ref_chambre->service_id][$_op->_id] = $_op;
     }
   } elseif(!$service_id) {
     $listServices["NP"][$_op->_id] = $_op;
