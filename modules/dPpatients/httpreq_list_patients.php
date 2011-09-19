@@ -118,6 +118,9 @@ else {
 	}
 }
 
+// Liste des praticiens
+$prats = $mediuser->loadPraticiens();
+
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -134,6 +137,7 @@ $smarty->assign("naissance"      , $patient_naissance);
 $smarty->assign("nom_search"     , $patient_nom_search);
 $smarty->assign("prenom_search"  , $patient_prenom_search);
 $smarty->assign("prat_id"        , $prat_id);
+$smarty->assign("prats"          , $prats);
 
 $smarty->assign("useVitale"      , $useVitale);
 $smarty->assign("patVitale"      , $patVitale);
