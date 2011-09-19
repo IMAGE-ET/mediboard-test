@@ -39,7 +39,7 @@ Main.add(function () {
     </td>
     {{else}}
     <td class="text">
-      {{if $can->_edit && !$curr_op->annulee}}
+      {{if !$curr_op->annulee}}
         <form name="editTimeFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
           <input type="hidden" name="m" value="dPplanningOp" />
           <input type="hidden" name="del" value="0" />
@@ -53,7 +53,7 @@ Main.add(function () {
       {{/if}}
     </td>
     <td class="text">
-      {{if $can->_edit && !$curr_op->annulee}}
+      {{if !$curr_op->annulee}}
         <form name="editSalleFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
           <input type="hidden" name="m" value="dPplanningOp" />
           <input type="hidden" name="del" value="0" />
