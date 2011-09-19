@@ -130,6 +130,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     // Affectation de l'établissement
     $newVenue->group_id = $sender->group_id;
     
+		$commentaire = "";
+		
     // Si SIP
     if (CAppUI::conf('sip server')) {
       // Cas 2 : idSource non fourni, idCible fourni
