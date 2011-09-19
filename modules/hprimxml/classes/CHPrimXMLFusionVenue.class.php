@@ -188,12 +188,6 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       }
       
       $commentaire = "Séjour $newVenue->_id fusionné";
-        
-      $msgAcq = $dom_acq->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($messages['commentaire'], 0, 4000)); 
-      $doc_valid = $dom_acq->schemaValidate();
-      $echg_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-        
-      $echg_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
     }
     
     return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $commentaire, $newVenue);

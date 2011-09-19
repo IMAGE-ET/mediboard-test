@@ -104,7 +104,7 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
     $dom_acq->_ref_echange_hprim    = $echg_hprim;
     
     // Si CIP
-    if (!CAppUI::conf('sip server')) { 
+    if (!CAppUI::conf('smp server')) { 
       $sender = $echg_hprim->_ref_sender;
       
       $avertissement = null;
@@ -131,12 +131,6 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
       
         $commentaire = "Séjour modifiée : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields.";
       }
-      
-      $msgAcq = $dom_acq->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
-      $doc_valid = $dom_acq->schemaValidate();
-      $echg_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-        
-      $echg_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
     }
 		
 		return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $commentaire, $newVenue);

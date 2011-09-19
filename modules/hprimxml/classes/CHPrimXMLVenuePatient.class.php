@@ -133,7 +133,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
 		$commentaire = "";
 		
     // Si SIP
-    if (CAppUI::conf('sip server')) {
+    if (CAppUI::conf('smp server')) {
       // Cas 2 : idSource non fourni, idCible fourni
       if (!$data['idSourceVenue'] && $data['idCibleVenue']) {
         $nda = CIdSante400::getMatch("CSejour", CAppUI::conf("sip tag_dossier"), str_pad($data['idCibleVenue'], 6, '0', STR_PAD_LEFT));
