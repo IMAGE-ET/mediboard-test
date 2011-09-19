@@ -43,7 +43,7 @@ Main.add(function () {
        {{if $keyServ == "NP"}}
          Non placés
        {{else}}
-         {{$currService->_view}}
+         {{$services.$keyServ->_view}}
        {{/if}}
      </th>
   </tr>
