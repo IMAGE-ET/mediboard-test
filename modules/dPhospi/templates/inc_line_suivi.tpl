@@ -143,6 +143,78 @@
   </tr>
 {{/if}}
 
+{{if $_suivi instanceof CTransmissionMedicale}}
+  {{if @$show_patient}}
+    <td>{{$_suivi->_ref_sejour->_ref_patient}}</td>
+    <td class="text">{{$_suivi->_ref_sejour->_ref_last_affectation->_ref_lit->_view}}</td>
+  {{/if}}
+  <td class="narrow">{{tr}}{{$_suivi->_class_name}}{{/tr}}</td>
+  <td class="narrow">{{$_suivi->_ref_user}}</td>
+  <td style="text-align: center;" class="narrow">
+    {{mb_ditto name=date value=$_suivi->date|date_format:$conf.date}}
+  </td>
+  <td class="narrow">{{$_suivi->date|date_format:$conf.time}}</td>
+  <td class="text" style="height: 22px;">
+    {{if $_suivi->object_id && $_suivi->object_class}}
+      {{assign var=classes value=' '|explode:"CPrescriptionLineMedicament CPrescriptionLineElement CAdministration CPrescriptionLineMix"}}
+      {{if in_array($_suivi->object_class, $classes)}}
+        <span
+         title="{{$_suivi->_ref_object->_view}} {{if $_suivi->_ref_object instanceof CPrescriptionLineElement && $_suivi->_ref_object->commentaire}}({{$_suivi->_ref_object->commentaire}}){{/if}}"
+          style="float: left; border: 2px solid #800; width: 5px; height: 11px; margin-right: 3px;">
+        </span>
+      {{/if}}
+      {{if !$readonly && $_suivi->_canEdit}}
+        <a href="#1" onclick="if (window.addTransmission) { addTransmission('{{$_suivi->sejour_id}}', '{{$app->user_id}}', null, '{{$_suivi->object_id}}', '{{$_suivi->object_class}}'); }">
+      {{/if}}
+        {{if !in_array($_suivi->object_class, $classes)}}
+          {{$_suivi->_ref_object->_view}}
+        {{/if}}
+        {{if $_suivi->object_class == "CPrescriptionLineMedicament"}}
+        [{{$_suivi->_ref_object->_ref_produit->_ref_ATC_2_libelle}}]
+        {{/if}}
+        
+        {{if $_suivi->object_class == "CPrescriptionLineElement"}}
+        [{{$_suivi->_ref_object->_ref_element_prescription->_ref_category_prescription->_view}}]
+        {{/if}}
+        
+        {{if $_suivi->object_class == "CAdministration"}}
+          {{if $_suivi->_ref_object->object_class == "CPrescriptionLineMedicament"}}
+            [{{$_suivi->_ref_object->_ref_object->_ref_produit->_ref_ATC_2_libelle}}]
+          {{/if}}
+          
+          {{if $_suivi->_ref_object->object_class == "CPrescriptionLineElement"}}
+            [{{$_suivi->_ref_object->_ref_object->_ref_element_prescription->_ref_category_prescription->_view}}]
+          {{/if}}
+        {{/if}}
+      {{if !$readonly && $_suivi->_canEdit}}
+        </a>
+      {{/if}}
+    {{/if}}
+    {{if $_suivi->libelle_ATC}}
+      <a href="#1" onclick="if (window.addTransmission) { addTransmission('{{$_suivi->sejour_id}}', '{{$_suivi->user_id}}', null, null, null, '{{$_suivi->libelle_ATC|smarty:nodefaults|JSAttribute}}'); }">{{$_suivi->libelle_ATC}}</a>
+    {{/if}}
+  </td>
+  <td class="text {{if $_suivi->type}}trans-{{$_suivi->type}}{{/if}} libelle_trans" {{if $_suivi->degre == "high"}} style="background-color: #faa" {{/if}}>
+    {{mb_value object=$_suivi field=text}}
+  </td>
+  
+  <td style="white-space: nowrap;">
+    {{if !$readonly && $_suivi->_canEdit}}
+      <form name="Del-{{$_suivi->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+        <input type="hidden" name="dosql" value="do_transmission_aed" />
+        <input type="hidden" name="del" value="1" />
+        <input type="hidden" name="m" value="dPhospi" />
+        <input type="hidden" name="transmission_medicale_id" value="{{$_suivi->_id}}" />
+        <input type="hidden" name="sejour_id" value="{{$_suivi->sejour_id}}" />
+        <button type="button" class="trash notext" onclick="submitSuivi(this.form, 1)">{{tr}}Delete{{/tr}}</button>
+      </form>
+      <button type="button" class="edit notext" onclick="addTransmission(null, null, '{{$_suivi->_id}}', null, null, null, 1)"></button>
+    {{/if}}
+  </td>
+  
+{{/if}}
+
+
 {{* Tableau de transmissions *}}
 {{if $_suivi|is_array}}
   {{assign var=nb_trans value=$_suivi|@count}}
