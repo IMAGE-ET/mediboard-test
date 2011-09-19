@@ -10,7 +10,7 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  Calendar.regField(getForm("changeDate").date_suivi, null, {noView: true});
+  Calendar.regField(getForm("changeDate").date, null, {noView: true});
 });
 
 function printFicheBloc(oper_id) {
@@ -48,7 +48,7 @@ function showLegend() {
         {{/foreach}}
         </select>
         {{$date_suivi|date_format:$conf.longdate}}
-        <input type="hidden" name="date_suivi" class="date" value="{{$date_suivi}}" onchange="this.form.submit()" />
+        <input type="hidden" name="date" class="date" value="{{$date_suivi}}" onchange="this.form.submit()" />
       </form>
     </th>
   </tr>
