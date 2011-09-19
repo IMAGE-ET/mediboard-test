@@ -37,9 +37,23 @@
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
         <input type="hidden" name="page" value="{{$page}}" onchange="this.form.submit()"/>
+        
+        <table class="form">
+          <tr>
+            <th class="title" colspan="10">
+              {{tr}}Filter{{/tr}}
+            </th>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align: center">
+              <input type="text" name="keywords" value="{{$keywords}}" onchange="$V(this.form.page, 0)" />
+              <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
+            </td>
+          </tr>
+        </table>
            
         {{if $total_tables != 0}}
-          {{mb_include module=system template=inc_pagination total=$total_tables current=$page change_page='changePage'}}
+          {{mb_include module=system template=inc_pagination total=$total_tables current=$page change_page='changePage' step='25'}}
         {{/if}}
       </form>
       

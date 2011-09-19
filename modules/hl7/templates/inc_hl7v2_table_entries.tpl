@@ -10,15 +10,28 @@
 
 <table class="tbl">
   <tr>
-    <th class="title" colspan="3">{{$table_description->description}} </th>
+    <th class="title" colspan="4">{{$table_description->description}} </th>
   </tr>
   <tr>
+    <th></th>
     <th class="category">{{mb_title object=$table_entry field=code_hl7}}</th>
     <th class="category">{{mb_title object=$table_entry field=code_mb}}</th>
     <th class="category">{{mb_title object=$table_entry field=description}}</th>
   </tr>
   {{foreach from=$table_entries item=_table_entry}}
     <tr>
+      <td style="width: 5%">
+        {{if $_table_entry->user}}
+          <form name="editTabEntryHL7Code-{{$_table_entry->_id}}" action="?m=hl7" method="post" onsubmit="return onSubmitFormAjax(this, { 
+            onComplete : function() { loadEntries('{{$_table_entry->number}}') }});">
+            <input type="hidden" name="m" value="hl7" />
+            <input type="hidden" name="@class" value="{{$_table_entry->_class}}" />
+            <input type="hidden" name="del" value="1" />
+            {{mb_key object=$_table_entry}}
+            <button type="submit" class="trash notext">{{tr}}Delete{{/tr}}</button>
+          </form>
+        {{/if}}
+      </td>
       <td class="disabled" style="width: 20%">
         {{if !$_table_entry->user}}
           {{mb_value object=$_table_entry field="code_hl7"}}
@@ -41,7 +54,7 @@
           {{mb_field object=$_table_entry field="code_mb" size="10"}}  <button type="submit" class="save notext">{{tr}}Save{{/tr}}</button>
         </form>
       </td>
-      <td class="disabled" style="width: 60%">
+      <td class="disabled text" style="width: 55%">
         {{if !$_table_entry->user}}
           {{mb_value object=$_table_entry field="description"}}
         {{else}}
@@ -50,14 +63,14 @@
             <input type="hidden" name="m" value="hl7" />
             <input type="hidden" name="@class" value="{{$_table_entry->_class}}" />
             {{mb_key object=$_table_entry}}
-            {{mb_field object=$_table_entry field="description"}}  <button type="submit" class="save notext">{{tr}}Save{{/tr}}</button>
+            {{mb_field object=$_table_entry field="description" size="40"}}  <button type="submit" class="save notext">{{tr}}Save{{/tr}}</button>
           </form>
         {{/if}}
       </td>
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="3">{{tr}}CHL7v2TableEntry.none{{/tr}}</td>
+      <td colspan="4">{{tr}}CHL7v2TableEntry.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>
@@ -72,14 +85,17 @@
   
   <table class="tbl">
     <tr>
+      <td style="width: 5%">
+        <button type="submit" class="add notext">{{tr}}Save{{/tr}}</button>
+      </td>
       <td class="disabled" style="width: 20%">
         {{mb_field object=$table_entry field="code_hl7" size="10"}} 
       </td> 
       <td class="disabled" style="width: 20%">
         {{mb_field object=$table_entry field="code_mb" size="10"}} 
       </td> 
-      <td class="disabled" style="width: 60%">
-        {{mb_field object=$table_entry field="description"}}  <button type="submit" class="add notext">{{tr}}Save{{/tr}}</button>
+      <td class="disabled" style="width: 55%">
+        {{mb_field object=$table_entry field="description" size="40"}} 
       </td>   
     </tr>
   </table>

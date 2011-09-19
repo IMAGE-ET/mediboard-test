@@ -29,8 +29,9 @@ class CHL7v2TableEntry extends CHL7v2TableObject {
       
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table       = 'table_entry';
-    $spec->key         = 'table_entry_id';
+    $spec->table                  = 'table_entry';
+    $spec->key                    = 'table_entry_id';
+    $spec->uniques["code_number"] = array("number", "code_hl7");
     return $spec;
   }
 
@@ -44,6 +45,10 @@ class CHL7v2TableEntry extends CHL7v2TableObject {
     $props["description"] = "str seekable";
     $props["user"]        = "bool notNull default|0";
     return $props;
+  }
+  
+  function getBackProps() {
+    return array();
   }
   
   function updateFormFields() {
