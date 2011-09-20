@@ -1343,7 +1343,14 @@ class CSetupdPcabinet extends CSetup {
       ADD `reprise_at` DATETIME DEFAULT NULL";
     $this->addQuery($query);
     
-    $this->mod_version = "1.30";
+    $this->makeRevision("1.30");
+    $query = "ALTER TABLE `plageconsult`
+      ADD `remplacant_id` BIGINT DEFAULT '0' NOT NULL,
+      ADD `desistee` ENUM ('0', '1') NOT NULL DEFAULT '0',
+      ADD `remplacant_ok` ENUM ('0', '1') NOT NULL DEFAULT '0'";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.33";
   }
 }
 ?>

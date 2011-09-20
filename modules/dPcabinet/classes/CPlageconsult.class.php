@@ -19,7 +19,8 @@ class CPlageconsult extends CMbObject {
 
   // DB References
   var $chir_id = null;
-
+  var $remplacant_id = null;
+  
   // DB fields
   var $date    = null;
   var $freq    = null;
@@ -27,7 +28,9 @@ class CPlageconsult extends CMbObject {
   var $fin     = null;
   var $libelle = null;
   var $locked  = null;
-
+  var $remplacant_ok = null;
+  var $desistee = null;
+  
   // Form fields
   var $_hour_deb             = null;
   var $_min_deb              = null;
@@ -53,6 +56,7 @@ class CPlageconsult extends CMbObject {
   // Object References
   var $_ref_chir          = null;
   var $_ref_consultations = null;
+  var $_ref_remplacant    = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -71,13 +75,16 @@ class CPlageconsult extends CMbObject {
     $parentSpecs = parent::getProps();
     $specs = array (
       "chir_id" => "ref notNull class|CMediusers seekable",
+      "remplacant_id" => "ref class|CMediusers seekable",
       "date"    => "date notNull",
       "freq"    => "time notNull",
       "debut"   => "time notNull",
       "fin"     => "time notNull",
       "libelle" => "str seekable",
       "locked"  => "bool default|0",
-
+      "remplacant_ok" => "bool default|0",
+      "desistee"   => "bool default|0",
+      
       // Form fields
       "_hour_deb"  => "",
       "_min_deb"   => "",
@@ -116,7 +123,7 @@ class CPlageconsult extends CMbObject {
     
     $order = "heure";
     $consult = new CConsultation();
-    $this->_ref_consultations = $consult->loadList($where, $order);
+    return $this->_ref_consultations = $consult->loadList($where, $order);
   }
   
   function countPatients(){
@@ -174,6 +181,7 @@ class CPlageconsult extends CMbObject {
   
   function loadRefsFwd($cache = 0) {
     $this->_ref_chir = $this->loadFwdRef("chir_id");
+    $this->_ref_remplacant = $this->loadFwdRef("remplacant_id");
   }
   
   function getPerm($permType) {
