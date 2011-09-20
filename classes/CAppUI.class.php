@@ -87,6 +87,7 @@ class CAppUI {
    * @param string $className The class name
    */
   static function loadClass($className) {
+    return;
     if (!class_exists($className)) {
       return mbAutoload($className);
     }
@@ -98,6 +99,7 @@ class CAppUI {
    * @param string $name The class root file name (excluding .class.php)
    */
   static function requireSystemClass($name) {
+    return;
     if ($root = self::conf("root_dir")) {
       return require_once "$root/classes/$name.class.php";
     }
@@ -109,6 +111,7 @@ class CAppUI {
    * @return string The path to the include file
    */
   static function requireLegacyClass($name) {
+    return;
     if ($root = self::conf("root_dir")) {
       return require_once("$root/legacy/$name.class.php");
     }
@@ -136,6 +139,7 @@ class CAppUI {
    * @param string $file The file name of the class to include
    */
   static function requireModuleClass($name = null, $file = null) {
+  	return;
     if ($name && $root = self::conf("root_dir")) {
       $filename = $file ? $file : $name;
         

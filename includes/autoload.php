@@ -16,131 +16,81 @@
 global $performance;
 $performance["autoload"] = 0;
 
-// Load class paths in shared memory
-if (null == $classPaths = SHM::get("class-paths")) {
-  updateClassPathCache();
-}
-
-/** 
- * Updates the PHP classes paths cache 
- * 
- * @return void
- */
-function updateClassPathCache() {
-  // debut de refactoring pour ne pas vider le cache a chaque fois, mais le completer
-  /*$classPaths = SHM::get("class-paths");
-
-  // unset obsolete paths
-  if ($classPaths) {
-    foreach ($classPaths as $className => $path) {
-      if (!file_exists($path)) {
-        unset($classPaths[$className]);
-      }
-    }
-  }*/
-  
-  // update paths
-  $classNames = CApp::getChildClasses(null);
-  foreach ($classNames as $className) {
-    $class = new ReflectionClass($className);
-    $classPaths[$className] = $class->getFileName();
-  }
-  
-  SHM::put("class-paths", $classPaths);
-}
+$classPaths = SHM::get("class-paths");
 
 /**
- * Mediboard autoload strategy
+ * Mediboard class autoloader
  * 
- * @param string $className Class to be loaded
- * 
- * @return bool  
+ * @param string $class Class to be loaded
+ * @return bool
  */
-function mbAutoload($className) {
-  global $classPaths, $performance;
-  
-  if (isset($classPaths[$className])) {
-    if ($classPaths[$className] === false) {
-      return false; 
-    }
-    
-    if (file_exists($classPaths[$className])) {
-      $performance["autoload"]++;
-      return include_once $classPaths[$className];
-    }
-  }
-  else {
-    /*
-    $contexts = debug_backtrace();
-    foreach($contexts as &$ctx) {
-      unset($ctx['args']);
-      unset($ctx['object']);
-    }
-    mbTrace($contexts, $className, true );
-    */
-    updateClassPathCache();
-  }
-	
-  if (!class_exists($className, false)) {
-    $classPaths[$className] = false;
-    SHM::put("class-paths", $classPaths);
-    return false;
-  }
-  
-  return true;
-}
-
-// nouveau mode
-function mbAutoload2($class) {
+function mbAutoload($class) {
   global $classPaths, $performance;
   
   $file_exists = false;
   
-  // entry already in cache
-  if (isset($classPaths[$class]) && ($file_exists = file_exists($classPaths[$class]))) {
-    $performance["autoload"]++;
-    return include_once $classPaths[$class];
-  }
-  else {
-    if (!$file_exists) {
-      unset($classPaths[$class]);
-    }
-    
-    $dirs = array(
-      "classes/$class.class.php", 
-      "*/*/$class.class.php",
-      "modules/*/classes/$class.class.php", // Require all modules classes
-    );
-    
-    if (preg_match("/^CSetup.+/", $class)) {
-      $dirs[] = "modules/*/setup.php"; // Require all setup classes
-    }
-    
-    $rootDir = CAppUI::conf("root_dir");
-    
-    foreach ($dirs as $dir) {
-      $files = glob("$rootDir/$dir");
-      foreach ($files as $filename) {
-        include_once $filename;
-      }
-    }
-    
-    // update the cache
-    if (class_exists($class, false)) {
-      $class = new ReflectionClass($class);
-      $classPaths[$class] = $class->getFileName();
-      SHM::put("class-paths", $classPaths);
-    }
-    else {
+  // Entry already in cache
+  if (isset($classPaths[$class])) {
+    // The class is known to not be in MB
+    if ($classPaths[$class] === false) {
       return false;
+    }
+    
+    // Load it if we can
+    if ($file_exists = file_exists($classPaths[$class])) {
+      $performance["autoload"]++;
+      return include_once $classPaths[$class];
     }
   }
   
-  return true;
+  // File moved ?
+  if (!$file_exists) {
+    unset($classPaths[$class]);
+  }
+  
+  // CSetup* class
+  if (preg_match("/^CSetup.+/", $class)) {
+    $dirs = array("modules/*/setup.php");
+  }
+  
+  // Other class
+  else {
+    $dirs = array(
+      "classes/$class.class.php", 
+      "classes/*/$class.class.php",
+      "modules/*/classes/$class.class.php",
+    );
+  }
+  
+  $rootDir = CAppUI::conf("root_dir");
+  
+  foreach ($dirs as $dir) {
+    $files = glob("$rootDir/$dir");
+    foreach ($files as $filename) {
+      include_once $filename;
+    }
+  }
+  
+  $mb_class = true;
+  
+  // The class was found
+  if (class_exists($class, false) || interface_exists($class, false)) {
+    $reflection = new ReflectionClass($class);
+    $classPaths[$class] = $reflection->getFileName();
+  }
+  
+  // Class not found, it is not in MB
+  else {
+    $classPaths[$class] = false;
+    $mb_class = false;
+  }
+  
+  SHM::put("class-paths", $classPaths);
+  
+  return $mb_class;
 }
 
 if (function_exists("spl_autoload_register")) {
-  //spl_autoload_register("mbAutoload2");
   spl_autoload_register("mbAutoload");
 }
 else {
