@@ -34,9 +34,11 @@
 			{{/if}}
     {{else}}
       {{$_child->name}}
-      <ul>
-        {{mb_include module=hl7 template=inc_segment_group_children segment_group=$_child}}
-      </ul>
+			{{if $_child->children|@count}}
+	      <ul>
+	        {{mb_include module=hl7 template=inc_segment_group_children segment_group=$_child}}
+	      </ul>
+			{{/if}}
     {{/if}}
   </li>
 {{/foreach}}

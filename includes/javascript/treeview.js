@@ -2,7 +2,11 @@
  * Modified version of TreeView from https://github.com/kaiwren/treeview
  */
 
-function TreeView(target) {
+function TreeView(target, options) {
+	this.options = Object.extend({
+		titleClickable: true
+	}, options);
+	
   this.target = $(target);
   this.initialize();
 }
@@ -53,8 +57,6 @@ TreeView.prototype = {
   },
 
   render: function() {
-    var self = this;
-
     this.target.addClassName(TreeView.classes.treeview);
 
     this.extractBranches().each(function(element) {
@@ -71,10 +73,17 @@ TreeView.prototype = {
       hitArea.store('node', element);
       element.insert({top: hitArea.addClassName(TreeView.classes.collapsableHitArea)});
 
-      hitArea.observe('click', function(e){
-        self.toggle(e.element().retrieve('node'));
-      });
-    });
+      var clickEvent = this.toggle.bind(this).curry(element);
+			
+      hitArea.observe('click', clickEvent);
+			
+			/*if (this.options.titleClickable) {
+        element.observe('click', function(e){
+					clickEvent();
+          Event.stop(e);
+				});
+			}*/
+    }, this);
 
     this.extractLastBranches().each(function(element) {
       element.addClassName(TreeView.classes.lastCollapsable);
@@ -88,41 +97,63 @@ TreeView.prototype = {
 
   toggle: function(node){
     var children = node.retrieve('children');
+		
+    if(children.visible()){
+      this.collapse(node);
+    }
+		else {
+      this.expand(node);
+    }
+  }, 
+	
+	collapse: function(node) {
+    var children = node.retrieve('children');
     var hitArea = node.retrieve('hitArea');
     var classes = TreeView.classes;
+		
+		children.hide();
+		
+    if(node.hasClassName(classes.collapsable)){
+      node.removeClassName(classes.collapsable);
+      node.addClassName(classes.expandable);
 
-    Effect.toggle(children, 'blind', {duration: 0});
-    if(!children.visible()){
-      if(node.hasClassName(classes.expandable)){
-        node.removeClassName(classes.expandable);
-        node.addClassName(classes.collapsable);
-
-        hitArea.removeClassName(classes.expandableHitArea);
-        hitArea.addClassName(classes.collapsableHitArea);
-      }
-      if(node.hasClassName(classes.lastExpandable)){
-        node.removeClassName(classes.lastExpandable);
-        node.addClassName(classes.lastCollapsable);
-
-        hitArea.removeClassName(classes.lastExpandableHitArea);
-        hitArea.addClassName(classes.lastCollapsableHitArea);
-      }
-    }else{
-      if(node.hasClassName(classes.collapsable)){
-        node.removeClassName(classes.collapsable);
-        node.addClassName(classes.expandable);
-
-        hitArea.removeClassName(classes.collapsableHitArea);
-        hitArea.addClassName(classes.expandableHitArea);
-      }
-      if(node.hasClassName(classes.lastCollapsable)){
-        node.removeClassName(classes.lastCollapsable);
-        node.addClassName(classes.lastExpandable);
-
-        hitArea.removeClassName(classes.lastCollapsableHitArea);
-        hitArea.addClassName(classes.lastExpandableHitArea);
-      }
+      hitArea.removeClassName(classes.collapsableHitArea);
+      hitArea.addClassName(classes.expandableHitArea);
     }
-  }
+    if(node.hasClassName(classes.lastCollapsable)){
+      node.removeClassName(classes.lastCollapsable);
+      node.addClassName(classes.lastExpandable);
+
+      hitArea.removeClassName(classes.lastCollapsableHitArea);
+      hitArea.addClassName(classes.lastExpandableHitArea);
+    }
+	},
+	
+	expand: function(node) {
+    var children = node.retrieve('children');
+    var hitArea = node.retrieve('hitArea');
+    var classes = TreeView.classes;
+    
+    children.show();
+		
+    if(node.hasClassName(classes.expandable)){
+      node.removeClassName(classes.expandable);
+      node.addClassName(classes.collapsable);
+
+      hitArea.removeClassName(classes.expandableHitArea);
+      hitArea.addClassName(classes.collapsableHitArea);
+    }
+    if(node.hasClassName(classes.lastExpandable)){
+      node.removeClassName(classes.lastExpandable);
+      node.addClassName(classes.lastCollapsable);
+
+      hitArea.removeClassName(classes.lastExpandableHitArea);
+      hitArea.addClassName(classes.lastCollapsableHitArea);
+    }
+	},
+	
+	collapseAll: function(){
+		this.extractBranches().each(this.collapse);
+	}
 }
 

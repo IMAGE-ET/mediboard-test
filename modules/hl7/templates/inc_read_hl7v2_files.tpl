@@ -24,6 +24,7 @@
           Main.add(function(){
             Control.Tabs.create("message-tab-{{$_key}}");
 						var tree = new TreeView("message-{{$_key}}-tree");
+						tree.collapseAll();
           });
         </script>
         <div style="display: none;" id="message-{{$_key}}">
