@@ -10,10 +10,14 @@
 
 CCanDo::checkAdmin();
 
-$table_entry = new CHL7v2TableEntry();
-$where[]     =  "(user = '1') OR (code_mb_from IS NOT NULL) OR (code_mb_to IS NOT NULL)";
-if ($table_entry->countList($where) > 0) {
-  CAppUI::stepAjax("Des données ont été saisies manuellement - Import impossible", UI_MSG_ERROR);
+$ds = CSQLDataSource::get("hl7v2");
+
+if ($ds && $ds->loadTable("table_entry")) {
+	$table_entry = new CHL7v2TableEntry();
+	$where[]     =  "(user = '1') OR (code_mb_from IS NOT NULL) OR (code_mb_to IS NOT NULL)";
+	if ($table_entry->countList($where) > 0) {
+	  CAppUI::stepAjax("Des données ont été saisies manuellement - Import impossible", UI_MSG_ERROR);
+	}
 }
 
 $sourcePath = "modules/hl7/base/hl7v2.tar.gz";
@@ -27,7 +31,6 @@ if (null == $nbFiles = CMbPath::extract($sourcePath, $targetDir)) {
 
 CAppUI::stepAjax("Extraction de $nbFiles fichier(s)", UI_MSG_OK);
 
-$ds = CSQLDataSource::get("hl7v2");
 if (null == $lineCount = $ds->queryDump($targetPath)) {
   $msg = $ds->error();
   CAppUI::stepAjax("Erreur de requête SQL: $msg", UI_MSG_ERROR);
