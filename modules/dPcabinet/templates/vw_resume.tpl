@@ -225,7 +225,7 @@ function newExam(sAction, consultation_id) {
             {{if !$_op->annulee}}
               {{foreach from=$_op->_ref_files item=_file}}
               <a href="#" onclick="popFile('{{$_file->object_class}}','{{$_file->object_id}}','{{$_file->_class}}','{{$_file->_id}}')">
-                {{$curr_file->file_name}}
+                {{$_file->file_name}}
               </a>
               {{/foreach}}
             {{/if}}
