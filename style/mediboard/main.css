@@ -1469,15 +1469,11 @@ ul li a.chapitre_signe.active{
 /*** HL7 Tree ***/
 
 ul.hl7-tree,
-.hl7-tree ul,
-.hl7-tree ol {
+.hl7-tree ul {
   line-height: 1.4;
   padding-left: 2em;
   margin-bottom: 6px;
   text-align: left;
-}
-
-.hl7-tree ol {
   list-style-type: none;
 }
 

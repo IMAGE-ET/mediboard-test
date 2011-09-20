@@ -66,6 +66,9 @@ CJSLoader::$files = array(
   
   // Growler
   //"lib/growler/build/Growler-compressed.js",
+	
+	// TreeView
+  "includes/javascript/treeview.js",
 
   // Flotr
   "lib/flotr/flotr.js",

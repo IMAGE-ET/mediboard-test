@@ -565,6 +565,10 @@ button.zoom-out:before, a.button.zoom-out:before {
   content: url(images/buttons/zoom_out.png);
 }
 
+button.forms:before, a.button.forms:before {
+  content: url(images/buttons/forms.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }

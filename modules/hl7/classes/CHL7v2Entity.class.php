@@ -44,8 +44,8 @@ abstract class CHL7v2Entity extends CHL7v2 {
   
   function fill($items) {}
   
-  function error($code, $data, $field = null) {    
-    $this->getMessage()->error($code, $data, $field);
+  function error($code, $data, $field = null, $level = CHL7v2::E_ERROR) {    
+    $this->getMessage()->error($code, $data, $field, $level);
   }
   
   abstract function validate();

@@ -46,8 +46,6 @@ Main.add(function(){
 });
 </script>
 
-{{mb_script module=dPstock script=barcode}}
-
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="10">

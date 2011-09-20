@@ -1,18 +1,14 @@
-<div class="field-item">
-  {{* <span class="field-description">{{$component->description}}</span>
-  <span class="type">{{$component->getTypeTitle()}}</span> *}}
-  
-  {{if $component->props instanceof CHL7v2DataTypeComposite}}
-    {{if $component->children|@count > 0}}
-      <ol>
-        {{foreach from=$component->children key=i item=_child}}
-          <li>
-            {{mb_include module=hl7 template=inc_tree_component component=$_child}}
-          </li>
-        {{/foreach}}
-      </ol>
-    {{/if}}
-  {{else}}
-    <span class="value">{{$component->data}}</span>
+
+{{if $component->props instanceof CHL7v2DataTypeComposite}}
+  {{if $component->children|@count > 0}}
+    <ul class="field-item">
+      {{foreach from=$component->children key=i item=_child}}
+        <li>
+          {{mb_include module=hl7 template=inc_tree_component component=$_child}}
+        </li>
+      {{/foreach}}
+    </ul>
   {{/if}}
-</div>
+{{else}}
+  <span class="value">{{$component->data}}</span>
+{{/if}}

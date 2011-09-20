@@ -10,14 +10,14 @@
 {{/if}}
   
 {{if $component->props instanceof CHL7v2DataTypeComposite}}
-  {{if $component->children|@count > 0}}
-    <ol>
+  {{if $component->children|@count}}
+    <ul>
       {{foreach from=$component->children key=i item=_child}}
         <li>
           {{mb_include module=hl7 template=inc_tree_component component=$_child}}
         </li>
       {{/foreach}}
-    </ol>
+    </ul>
   {{/if}}
 {{else}}
   <span class="value">{{$component->data}}</span>

@@ -197,7 +197,7 @@ class CHL7v2Component extends CHL7v2Entity {
       	$entries = CHL7v2::getTable($this->table);
 				
 				if (!empty($entries) && !array_key_exists($this->data, $entries)) {
-	        $field->error(CHL7v2Exception::UNKNOWN_TABLE_ENTRY, "'$this->data' (table $this->table)", $field);
+	        $field->error(CHL7v2Exception::UNKNOWN_TABLE_ENTRY, "'$this->data' (table $this->table)", $field, CHL7v2::E_WARNING);
 	        $this->invalid = true;
 				}
       }
