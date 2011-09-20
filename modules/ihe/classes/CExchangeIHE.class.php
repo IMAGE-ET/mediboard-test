@@ -63,8 +63,9 @@ class CExchangeIHE extends CExchangeTabular {
     if ($this->_message !== null) {
       $hl7_message = new CHL7v2Message();
       $hl7_message->parse($this->_message);
-      $this->_doc_errors_msg = $hl7_message->dumpErrors();
-      
+      $this->_doc_errors_msg   = !$hl7_message->isOK(CHL7v2::E_ERROR);
+      $this->_doc_warnings_msg = !$hl7_message->isOK(CHL7v2::E_WARNING);
+
       return $hl7_message;
     }
   }

@@ -27,7 +27,15 @@ var Action = {
   triggerPatient: function (action) {
     var url = new Url();
     url.addParam("m", this.module);
-    url.addParam("dosql", "do_trigger_object_modification");
+    url.addParam("dosql", "do_trigger_patient_modification");
+    url.addParam("action", action);
+    url.requestUpdate("read_hl7_file", {method: "post"});
+  },
+
+  triggerSejour: function (action) {
+    var url = new Url();
+    url.addParam("m", this.module);
+    url.addParam("dosql", "do_trigger_sejour_modification");
     url.addParam("action", action);
     url.requestUpdate("read_hl7_file", {method: "post"});
   }
@@ -49,6 +57,14 @@ var Action = {
 
 <button type="button" class="new" onclick="Action.triggerPatient('modify')">
   Patient modify
+</button>
+
+<button type="button" class="new" onclick="Action.triggerSejour('create')">
+  Séjour create
+</button>
+
+<button type="button" class="new" onclick="Action.triggerSejour('modify')">
+  Séjour modify
 </button>
 
 <div id="read_hl7_file"></div>

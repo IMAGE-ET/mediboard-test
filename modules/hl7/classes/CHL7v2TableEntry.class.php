@@ -58,5 +58,13 @@ class CHL7v2TableEntry extends CHL7v2TableObject {
     $this->_view      = $this->description;
     $this->_shortview = $this->number;
   }
+  
+  static function mapTo($table, $mbValue) {
+    return CHL7v2::getTableHL7Value($table, $mbValue);
+  }
+  
+  static function mapFrom($table, $hl7Value) {
+    return CHL7v2::getTableMbValue($table, $hl7Value);
+  }
 }
 ?>

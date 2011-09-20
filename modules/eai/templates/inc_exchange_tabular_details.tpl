@@ -12,6 +12,7 @@
 <script>
   Main.add(function(){
     Control.Tabs.create("message-tab");
+    var tree = new TreeView("message-tree");
   });
 </script>
 
@@ -20,7 +21,8 @@
 <ul class="control_tabs" id="message-tab">
   <li><a href="#message-tree">Arbre</a></li>
   <li><a href="#message-er7">ER7</a></li>
-  <li><a href="#message-errors"  class="{{if $segment_group->errors|@count}}wrong{{elseif !$segment_group->errors}}empty{{/if}}">Erreurs</a></li>
+  <li><a href="#message-warnings" class="{{if $exchange->_doc_warnings_msg}}wrong{{else}}empty{{/if}}">Avertissements</a></li>
+  <li><a href="#message-errors" class="{{if $exchange->_doc_errors_msg}}wrong{{else}}empty{{/if}}">Erreurs</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -33,6 +35,10 @@
   {{$segment_group->flatten(true)|smarty:nodefaults}}
 </div>
 
+<div id="message-warnings" style="display: none;">
+  {{mb_include module=hl7 template=inc_hl7v2_errors errors=$segment_group->errors level=1}}
+</div>
+
 <div id="message-errors" style="display: none;">
-  {{mb_include module=hl7 template=inc_hl7v2_errors errors=$segment_group->errors}}
+  {{mb_include module=hl7 template=inc_hl7v2_errors errors=$segment_group->errors level=2}}
 </div>

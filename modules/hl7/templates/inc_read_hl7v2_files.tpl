@@ -33,6 +33,7 @@
             <li><a href="#message-{{$_key}}-tree">Arbre</a></li>
             <li><a href="#message-{{$_key}}-er7-input">ER7 Input</a></li>
             <li><a href="#message-{{$_key}}-er7-output">ER7 Output</a></li>
+            <li><a href="#message-{{$_key}}-warnings" {{if $_message->errors|@count}} class="wrong" {{/if}}>Avertissements</a></li>
             <li><a href="#message-{{$_key}}-errors" {{if $_message->errors|@count}} class="wrong" {{/if}}>Erreurs</a></li>
           </ul>
           <hr class="control_tabs" />
@@ -51,8 +52,12 @@
             {{$_message->flatten(true)|smarty:nodefaults}}
           </div>
           
+          <div id="message-{{$_key}}-warnings" style="display: none;">
+            {{mb_include module=hl7 template=inc_hl7v2_errors errors=$_message->errors level=1}}
+          </div>
+          
           <div id="message-{{$_key}}-errors" style="display: none;">
-            {{mb_include module=hl7 template=inc_hl7v2_errors errors=$_message->errors}}
+            {{mb_include module=hl7 template=inc_hl7v2_errors errors=$_message->errors level=2}}
           </div>
         </div>
       {{/foreach}}
