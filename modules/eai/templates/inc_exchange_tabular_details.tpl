@@ -13,6 +13,7 @@
   Main.add(function(){
     Control.Tabs.create("message-tab");
     var tree = new TreeView("message-tree");
+		tree.collapseAll();
   });
 </script>
 
