@@ -74,7 +74,7 @@ if (!window.reloadPrescription) {
   }
 }
 
-selectLines = function(prescription_id, protocole_id) {
+selectLines = function(prescription_id, protocole_id, ids) {
   var oForm = getForm("applyProtocoleFirst");
   
   // Ouverture de la modale pour choisir les lignes
@@ -83,6 +83,7 @@ selectLines = function(prescription_id, protocole_id) {
   url.addParam("protocole_id", protocole_id);
   url.addParam("pratSel_id", $V(oForm.pratSel_id));
   url.addParam("praticien_id", $V(oForm.praticien_id));
+  url.addParam("ids[]", ids);
   url.requestModal(700, 300, {showClose: false, showReload: false});
 
 }

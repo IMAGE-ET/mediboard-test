@@ -67,7 +67,7 @@ submitProtocole = function(){
   return onSubmitFormAjax(oForm);
 }
 
-selectLines = function(prescription_id, protocole_id) {
+selectLines = function(prescription_id, protocole_id, ids) {
   var oForm = getForm("applyProtocole");
   
   // Ouverture de la modale pour choisir les lignes
@@ -76,6 +76,7 @@ selectLines = function(prescription_id, protocole_id) {
   window.selectLines.addParam("protocole_id", protocole_id);
   window.selectLines.addParam("pratSel_id", $V(oForm.pratSel_id));
   window.selectLines.addParam("praticien_id", $V(oForm.praticien_id));
+  window.selectLines.addParam("ids[]", ids);
   window.selectLines.requestModal(700, 300, {showClose: false, showReload: false});
 }
 

@@ -93,7 +93,7 @@
         
         {{foreach from=$_lines_by_cat.comment item=_line name=foreach_elt}}
           {{assign var=protocole_id value=$_line->protocole_id}}
-          {{assign var=checked_lines value=$checked_lines.$protocole_id}}
+          {{assign var=checked_lines value=$checked_lines_tab.$protocole_id}}
           {{if $smarty.foreach.foreach_elt.first && !$has_element}}
             <table class="tbl">
               <tr>

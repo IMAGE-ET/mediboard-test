@@ -110,6 +110,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
 	var $_ref_prescription_lines_by_cat = null;
 	var $_protocole_locked = null;
 	
+	var $_ids = null;
+	
 	static $cache_service = null;
   static $images = array(
 		"med"      => "modules/soins/images/medicaments.png",
@@ -627,6 +629,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
         $pack = new CPrescriptionProtocolePack();
         $pack->load($pack_id);
         $pack->loadRefsPackItems();
+        
         foreach($pack->_ref_protocole_pack_items as $_pack_item){
           $_pack_item->loadRefPrescription();
           $_protocole =& $_pack_item->_ref_prescription;
@@ -645,8 +648,10 @@ class CPrescription extends CMbObject implements IPatientRelated {
                 CAppUI::setMsg($msg, UI_MSG_ERROR);
               }
             }
+            
             // Et on applique le protocole
             $prescription->applyProtocole($_protocole->_id, $praticien_id, $date_sel, $time_sel, $operation_id);
+            $this->_ids[] = $prescription->_id;
           }
           else {
             // Sinon, application directe du protocole
@@ -658,6 +663,13 @@ class CPrescription extends CMbObject implements IPatientRelated {
         $this->applyProtocole($protocole_id, $praticien_id, $date_sel, $time_sel, $operation_id);
       }
     }
+    // Suppression des doublons éventuels sur les ids des prescriptions des autres types
+    // (lors de l'application d'un pack contenant des protocoles de types différents)
+    // L'utilisation d'array_values permet de réindexer les clés de 0 à n
+    if (is_array($this->_ids)) {
+      $this->_ids = array_values(array_unique($this->_ids));
+    }
+    
   }
   
   /*

@@ -12,6 +12,12 @@ $prescription_id = CValue::get("prescription_id");
 $pack_protocole_id    = CValue::get("protocole_id");
 $pratSel_id      = CValue::get("pratSel_id");
 $praticien_id    = CValue::get("praticien_id");
+$ids = CValue::get("ids");
+
+if (!is_array($ids)) {
+  $ids = array();
+}
+$ids[] = $prescription_id;
 
 $pack_protocole = explode("-", $pack_protocole_id);
 $pack_id = ($pack_protocole[0] === "pack") ? $pack_protocole[1] : "";
@@ -30,6 +36,7 @@ if ($protocole_id) {
   $prescription->loadRefsLinesElementsComments("1", "", "", $protocole_id);
   $prescription->loadRefsPrescriptionLineMixes("", 1, 1, $protocole_id);
   $prescription->countLinesMedsElements(null, null, $protocole_id);
+  
   // On instancie le protocole utilisé pour récupérer
   // le champ checked_lines (lignes cochées dans la modale)
   $protocole = new CPrescription;
@@ -40,37 +47,44 @@ else if ($pack_id) {
   $pack = new CPrescriptionProtocolePack();
   $pack->load($pack_id);
   $pack->loadRefsPackItems();
+  
   foreach($pack->_ref_protocole_pack_items as $_pack_item){
-    
-    $prescription = new CPrescription;
-    $prescription->load($prescription_id);
     $protocole_id = $_pack_item->prescription_id;
     $protocole = new CPrescription;
     $protocole->load($protocole_id);
     
-    $prescription->loadRefsLinesMedComments("1", "", $protocole_id);
-    if (is_array($prescription->_ref_lines_med_comments)) {
-      $lines_med_comments = array_merge_recursive($lines_med_comments, $prescription->_ref_lines_med_comments);
-    }
-    
-    $prescription->loadRefsLinesElementsComments("1", "", "", $protocole_id);
-    if (is_array($prescription->_ref_lines_elements_comments)) {
-      $lines_elt_comments = array_merge_recursive($lines_elt_comments, $prescription->_ref_lines_elements_comments);
-    }
-    
-    $prescription->loadRefsPrescriptionLineMixes("", 1, 1, $protocole_id);
-    if (is_array($prescription->_ref_prescription_line_mixes)) {
-      $lines_mixes = array_merge($lines_mixes, $prescription->_ref_prescription_line_mixes);
-    }
-    
-    $prescription->countLinesMedsElements(null, null, $protocole_id);
-    
-    if (is_array($prescription->_counts_by_chapitre)) {
-      foreach($prescription->_counts_by_chapitre as $chap=>$count) {
-        @$count_lines_meds[$chap] += $count;
+    foreach ($ids as $_id) {
+      $prescription = new CPrescription;
+      $prescription->load($_id);
+      
+      if ($protocole->type !== $prescription->type) {
+        continue;
       }
+      
+      $prescription->loadRefsLinesMedComments("1", "", $protocole_id);
+      if (is_array($prescription->_ref_lines_med_comments)) {
+        $lines_med_comments = array_merge_recursive($lines_med_comments, $prescription->_ref_lines_med_comments);
+      }
+      
+      $prescription->loadRefsLinesElementsComments("1", "", "", $protocole_id);
+      if (is_array($prescription->_ref_lines_elements_comments)) {
+        $lines_elt_comments = array_merge_recursive($lines_elt_comments, $prescription->_ref_lines_elements_comments);
+      }
+      
+      $prescription->loadRefsPrescriptionLineMixes("", 1, 1, $protocole_id);
+      if (is_array($prescription->_ref_prescription_line_mixes)) {
+        $lines_mixes = array_merge($lines_mixes, $prescription->_ref_prescription_line_mixes);
+      }
+      
+      $prescription->countLinesMedsElements(null, null, $protocole_id);
+      
+      if (is_array($prescription->_counts_by_chapitre)) {
+        foreach($prescription->_counts_by_chapitre as $chap=>$count) {
+          @$count_lines_meds[$chap] += $count;
+        }
+      }
+      $checked_lines_tab[$protocole_id] = $protocole->checked_lines;
     }
-    $checked_lines_tab[$protocole_id] = $protocole->checked_lines;
   }
   
   $prescription->_ref_lines_med_comments = $lines_med_comments;
