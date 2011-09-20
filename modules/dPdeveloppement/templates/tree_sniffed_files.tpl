@@ -7,6 +7,13 @@
       <button type="button" class="search notext" onclick="CodeSniffer.show(this);">{{tr}}Show{{/tr}}</button>
     {{/if}}
   </div>
+  {{if !is_array($files)}}
+    {{assign var=fullpath value=$dir|replace:":":"/"}}
+    {{assign var=fullpath value=$fullpath|substr:9}}
+    {{if $reports[$fullpath]}}
+    <div class="sniffed ok"></div>
+    {{/if}}
+  {{/if}}
 	<span class="basename" {{if is_array($files)}}style="font-weight: bold;"{{/if}}>
     {{$basename}}
 	</span>

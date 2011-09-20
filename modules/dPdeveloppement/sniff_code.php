@@ -14,11 +14,9 @@ if (!class_exists("CMbCodeSniffer")) {
   return;
 }
 
-$file = "classes/mbobject.class.php";
-
 $sniffer = new CMbCodeSniffer;
 $files = $sniffer->getFilesTree();
-
+$reports = $sniffer->checkReports($files);
 
 // Cuz sniffer changes work dir but restores it at destruction
 // Be aware that unset() won't call __destruct() anyhow
@@ -27,6 +25,7 @@ $sniffer->__destruct();
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("files", $files);
+$smarty->assign("reports", $reports);
 $smarty->display("sniff_code.tpl");
 
 ?>

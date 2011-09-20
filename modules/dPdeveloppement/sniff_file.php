@@ -18,20 +18,20 @@ $file = CValue::get("file");
 $file = str_replace(":", "/", $file);
 
 $sniffer = new CMbCodeSniffer;
-echo "<pre>";
 $sniffer->process($file);
-$sniffer->report($file, "full");
-echo "</pre>";
+$report = $sniffer->makeReportPath($file);
+$errors = reset($sniffer->getFilesErrors());
+$alerts = $sniffer->getFlattenAlerts();
 
 // Cuz sniffer changes work dir but restores it at destruction
 // Be aware that unset() won't call __destruct() anyhow
 $sniffer->__destruct();
   
-return;
-
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("files", $files);
+$smarty->assign("file", $file);
+$smarty->assign("alerts", $alerts);
+$smarty->assign("errors", $errors);
 $smarty->display("sniff_file.tpl");
 
 ?>

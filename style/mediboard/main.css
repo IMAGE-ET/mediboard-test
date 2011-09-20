@@ -1776,3 +1776,24 @@ div.sniffer {
   margin-top: -4px;
   margin-right: -4px;
 }
+
+div.sniffed {
+  float: left;
+	border: 1px solid #888;
+  width: 1em;
+  height: 1em;
+	margin: 0 5px;
+	margin-left: -20px;
+}
+
+div.sniffed.ko {
+	background: #eee; 
+}
+
+div.sniffed.ok {
+  background: #dfd; 
+}
+
+div.sniffed.old {
+  background: #ffd; 
+}

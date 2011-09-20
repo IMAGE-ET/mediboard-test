@@ -18,13 +18,15 @@ if (!class_exists("PHP_CodeSniffer")) {
  */
 class CMbCodeSniffer extends PHP_CodeSniffer {
 	
+  var $reports = array();
+  
   /**
    * Adapt CLI behaviour to framework
    * 
    * @return CMbCodeSniffer
    */
 	function __construct() {
-		$verbosity = 1;
+		$verbosity = 0;
 		$tabwidth = 2;
 		// Use for Apache MacOSX
 		if (!isset($_SERVER["argc"])) {
@@ -77,27 +79,100 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
 	 * 
 	 * @param string $file       
 	 * @param string $reportType One of full xml checkstyle csv emacs source summary svnblame gitblame
-	 * @return 
+	 * @return int               Error and warning count
 	 */
-	function report($file, $reportType) {
+	function report($file, $reportType = "xml") {
 		// Create the file
-    $root_dir = CAppUI::conf("root_dir");
-		$reportFile = "$root_dir/tmp/CodeSniffer/$file.$reportType.xml";
-		CMbPath::forceDir(dirname($reportFile));
-		touch($reportFile);
+		$reportPath = $this->makeReportPath($file, $reportType);
+		CMbPath::forceDir(dirname($reportPath));
+		touch($reportPath);
 
-    // Build the report
-    $showSources = true;
-		$reportWidth = 120;
+		// Build the report
 		$reporting = new PHP_CodeSniffer_Reporting();
 		return $reporting->printReport(
 		  $reportType,
 		  $this->getFilesErrors(),
-		  $showSources,
-		  $reportFile,
-		  $reportWidth
+      $showSources = true,
+		  $reportPath,
+		  $reportWidth = 120
 		);
-		
 	}
+	
+  /**
+   * Make a report file path
+   * 
+   * @param string $file       
+   * @param string $reportType One of full xml checkstyle csv emacs source summary svnblame gitblame
+   * @return string
+   */
+	function makeReportPath($file, $reportType = "xml") {
+    $root_dir = CAppUI::conf("root_dir");
+    return "$root_dir/tmp/CodeSniffer/$file.$reportType";
+	}
+	
+  /**
+   * Check reports for file tree
+   * 
+   * @param array $files Tree
+   * @return array Reports status for files
+   */
+	function checkReports($files) {
+	  $this->reports = array();
+	  $this->checkReport("", $files);
+	  return $this->reports;
+	} 
+	
+  /**
+   * Build report status for a specicic file tree node
+   * 
+   * @param string $basedir Tree node base directory context
+   * @param miced  $files   Tree node, either a single file or a collection
+   * @return void
+   */
+	function checkReport($basedir, $file) {
+    // Directory case
+	  if (is_array($file)) {
+      foreach ($file as $dirname => $basename) {
+        $this->checkReport("$basedir/$dirname", $basename);
+      }
+    }
+    // File case
+    else {
+      $subpath = "$basedir";
+      $report = $this->makeReportPath($subpath, "xml");
+      $this->reports[$subpath] = is_file($report);
+    }
+	}
+	
+	function getFlattenAlerts() {
+	  $alerts = array();
+	  
+	  foreach ($this->getFilesErrors() as $_file => $_by_file) {
+	    foreach ($_by_file as $_type => $_by_type) {
+        if ($_type == "numWarnings" || $_type == "numErrors") {
+          continue;
+        }
+      
+	      foreach ($_by_type as $_line => $_by_line) {
+          foreach ($_by_line as $_column => $_by_column) {
+            foreach ($_by_column as $_info) {
+              $alerts[] = array (
+                "type"     => substr($_type, 0, -1),
+                "line"     => $_line,
+                "column"   => $_column,
+                "severity" => $_info["severity"],
+                "source"   => $_info["source"],
+                "message"  => $_info["message"],
+              );
+            }
+          } 
+        }
+	    }
+	  }
+
+	  array_multisort(CMbArray::pluck($alerts, "line"), SORT_ASC, $alerts);
+	  return $alerts;
+	}
+
 }
 ?>
