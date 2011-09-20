@@ -32,7 +32,7 @@
 
 <table class="main">
   <tr>
-    <td style="width: 40%">   
+    <td style="width: 30%">   
       <form name="listFilter" action="?m={{$m}}" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
@@ -53,7 +53,7 @@
         </table>
            
         {{if $total_tables != 0}}
-          {{mb_include module=system template=inc_pagination total=$total_tables current=$page change_page='changePage' step='25'}}
+          {{mb_include module=system template=inc_pagination total=$total_tables current=$page change_page='changePage' step='25' narrow=true}}
         {{/if}}
       </form>
       

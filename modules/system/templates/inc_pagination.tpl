@@ -1,18 +1,14 @@
 {{* $change_page, $total, $current, $step = 20, jumper = 1 *}}
 
-{{if !isset($step|smarty:nodefaults)}}
-  {{assign var="step" value=20}}
-{{/if}}
-
-{{if !isset($jumper|smarty:nodefaults)}}
-  {{assign var="jumper" value=0}}
-{{/if}}
+{{mb_default var="step" value=20}}
+{{mb_default var="jumper" value=0}}
+{{mb_default var="narrow" value=false}}
 
 {{assign var="last_page" value=$total-1}}
 {{assign var="last_page" value=$last_page/$step|intval}}
 {{assign var="pagination" value=0|range:$last_page}}
 
-<div class="pagination" style="min-height: 1em;">
+<div class="pagination {{if $narrow}}narrow{{/if}}" style="min-height: 1em;">
   <div style="float: right;">{{$total}} {{tr}}results{{/tr}}</div>
   
   {{if $total > $step}}

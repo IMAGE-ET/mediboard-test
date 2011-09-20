@@ -22,29 +22,34 @@ class CHL7v2TableEntry extends CHL7v2TableObject {
   var $table_entry_id  = null;
   
   var $number          = null;
-  var $code_hl7        = null;
+	
+  var $code_hl7_from   = null;
+  var $code_hl7_to     = null;
+	
   var $code_mb_from    = null;
   var $code_mb_to      = null;
+	
   var $description     = null;
   var $user            = null;
       
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = 'table_entry';
-    $spec->key   = 'table_entry_id';
-    $spec->uniques["number_code_hl7"] = array("number", "code_hl7");
+    $spec->table = "table_entry";
+    $spec->key   = "table_entry_id";
+    $spec->uniques["number_code_hl7"] = array("number", "code_hl7_from");
     $spec->uniques["number_code_mb"]  = array("number", "code_mb_from");
     return $spec;
   }
 
   function getProps() {
     $props = parent::getProps();
-    $props["number"]      = "num notNull maxLength|5 seekable";
-    $props["code_hl7"]    = "str maxLength|30 protected";
-    $props["code_mb_from"]= "str maxLength|30 protected";
-    $props["code_mb_to"]  = "str maxLength|30 protected";
-    $props["description"] = "str seekable";
-    $props["user"]        = "bool notNull default|0";
+    $props["number"]        = "num notNull maxLength|5 seekable";
+    $props["code_hl7_from"] = "str maxLength|30 protected";
+    $props["code_hl7_to"]   = "str maxLength|30 protected";
+    $props["code_mb_from"]  = "str maxLength|30 protected";
+    $props["code_mb_to"]    = "str maxLength|30 protected";
+    $props["description"]   = "str seekable";
+    $props["user"]          = "bool notNull default|0";
     return $props;
   }
   

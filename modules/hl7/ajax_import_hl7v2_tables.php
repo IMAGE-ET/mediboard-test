@@ -45,7 +45,8 @@ $ds = CSQLDataSource::get("hl7v2");
 
 $query = "CREATE TABLE IF NOT EXISTS `table_entry` (
   `number` INT(5) UNSIGNED NOT NULL,
-  `code_hl7` VARCHAR(30), 
+  `code_hl7_from` VARCHAR(30), 
+  `code_hl7_to` VARCHAR(30), 
   `code_mb_from` VARCHAR(30), 
   `code_mb_to` VARCHAR(30), 
   `description` VARCHAR(255)
@@ -73,7 +74,7 @@ foreach($csv_files as $csv_file) {
   }
 	
 	$count += count($items);
-	$query = "INSERT INTO `table_entry` (`number`, `code_hl7`, `description`) VALUES ".implode(", ", $items);
+	$query = "INSERT INTO `table_entry` (`number`, `code_hl7_from`, `description`) VALUES ".implode(", ", $items);
   $ds->exec($query);
 }
 

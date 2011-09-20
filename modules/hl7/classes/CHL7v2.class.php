@@ -71,9 +71,9 @@ abstract class CHL7v2 {
 		  "number" => self::$ds->prepare("=%", $table)
 		);
 		
-		$cols = array("code_hl7", "code_mb_to", "description");
+		$cols = array("code_hl7_from", "code_mb_to", "description");
 		if (!$from_mb) {
-			$cols = array("code_mb_from", "code_hl7", "description");
+			$cols = array("code_mb_from", "code_hl7_to", "description");
 		}
 		
 		$req = new CRequest;
