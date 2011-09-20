@@ -80,16 +80,16 @@ tickFormatterSpreadsheet = function (n) {
 trackFormatter = function (obj) {
   var n = parseInt(obj.x);
   var data = obj.series.data[obj.index];
-	var unit = (data[4] || "");
-	
-	if ("cumul" in obj.series) {
-	  return obj.series.cumul + "<br /><strong>" + data[1] + " " + unit + "</strong>";
-	}
-	
-  var str = dates[n] + ' ' + hours[n] + "<br /><strong>" + data[1] + " " + unit + "</strong><br />" + data[2];
+  var unit = (data[7] || "");
+  
+  if ("cumul" in obj.series) {
+    return obj.series.cumul + "<br /><strong>" + data[1] + " " + unit + "</strong>";
+  }
+  
+  var str = dates[n] + ' ' + hours[n] + "<br /><strong>" + data[1] + " " + unit + "</strong><br />" + data[5];
          
-  if (data[3]) {
-    str += '<hr />' + data[3];
+  if (data[6]) {
+    str += '<hr />' + data[6];
   }
   
   str += '<hr /><button class="edit" onclick="editConstantes('+const_ids[n]+', \'{{$context_guid}}\')">{{tr}}Edit{{/tr}}</button>';
@@ -167,13 +167,19 @@ options = {
   lines: {
     show: true
   },
+  candles: {
+    upFillColor: '#ff8c00',
+    downFillColor: '#ff8c00',
+    candleWidth: 0.2
+  },
   grid: {
+	  outlineWidth: 1,
     backgroundColor: '#fff'
   },
   legend: {
     position: 'nw',
     backgroundOpacity: 0
-  },
+  }/*,
   spreadsheet: {
     show: true,
     tabGraphLabel: 'Graphique',
@@ -181,7 +187,7 @@ options = {
     toolbarDownload: 'Télécharger les données (CSV)',
     toolbarSelectAll: 'Tout sélectionner',
     tickFormatter: tickFormatterSpreadsheet
-  }
+  }*/
 };
 
 if (Prototype.Browser.IE) {
@@ -223,7 +229,7 @@ drawGraph = function() {
       var graph = insertGraph(c, d, id, width, height);
       
       {{if !$print}}
-        var tabs = graph.spreadsheet.tabs;
+        /*var tabs = graph.spreadsheet.tabs;
         
         tabs.data.observe('click', function(e){
           g.each(function(graph2){
@@ -235,7 +241,7 @@ drawGraph = function() {
           g.each(function(graph2){
             graph2.spreadsheet.showTab('graph');
           });
-        });
+        });*/
       {{/if}}
       
       last_date = null;
@@ -282,9 +288,9 @@ toggleAllGraphs = function() {
 Main.add(function () {
   drawGraph();
   toggleAllGraphs();
-	document.observe("click", function(){
-	  $$(".flotr-mouse-value").invoke("hide");
-	})
+  document.observe("click", function(){
+    $$(".flotr-mouse-value").invoke("hide");
+  })
 });
 
 loadConstantesMedicales  = function(context_guid) {
@@ -378,19 +384,37 @@ loadConstantesMedicales  = function(context_guid) {
         {{include file="inc_form_edit_constantes_medicales.tpl" context_guid=$context_guid}}
       </td>
       <td>
-        <div class="small-info">
-          Vous pouvez maintenant naviguer à droite et à gauche pour afficher les relevés précédents. <br />
-          Par défaut seuls <strong>les 15 derniers sont affichés</strong>.
-        </div>
-        
-        <button class="hslip notext" style="float: left;" title="Afficher/Cacher le formulaire" onclick="$('constantes-medicales-form').toggle();" type="button">
-          Formulaire constantes
-        </button>
-        
-        <button id="constantes-medicales-graph-before" class="left" style="float: left;"       onclick="shiftGraphs('before');">Avant</button>
-        <button id="constantes-medicales-graph-after"  class="right rtl" style="float: right;" onclick="shiftGraphs('after');">Après</button>
-        
-        <div id="constantes-medicales-graph" style="margin-left: 5px; text-align: center; clear: both;"></div>
+		    <script type="text/javascript">
+		      Main.add(function(){
+		        Control.Tabs.create("tabs-constantes-graph-table");
+		      });
+		    </script>
+				
+      	<ul class="control_tabs small" id="tabs-constantes-graph-table">
+          <li><a href="#constantes-graph">Graphiques</a></li>
+          <li><a href="#constantes-table">Tableau</a></li>
+      	</ul>
+				<hr class="control_tabs" />
+				
+				<div id="constantes-graph">
+	        <div class="small-info">
+	          Vous pouvez maintenant naviguer à droite et à gauche pour afficher les relevés précédents. <br />
+	          Par défaut seuls <strong>les 15 derniers sont affichés</strong>.
+	        </div>
+	        
+	        <button class="hslip notext" style="float: left;" title="Afficher/Cacher le formulaire" onclick="$('constantes-medicales-form').toggle();" type="button">
+	          Formulaire constantes
+	        </button>
+	        
+	        <button id="constantes-medicales-graph-before" class="left" style="float: left;"       onclick="shiftGraphs('before');">Avant</button>
+	        <button id="constantes-medicales-graph-after"  class="right rtl" style="float: right;" onclick="shiftGraphs('after');">Après</button>
+	        
+	        <div id="constantes-medicales-graph" style="margin-left: 5px; text-align: center; clear: both;"></div>
+				</div>
+				
+				<div id="constantes-table" style="display: none;">
+					{{mb_include module=dPpatients template=print_constantes}}
+				</div>
       </td>
     </tr>
   </table>

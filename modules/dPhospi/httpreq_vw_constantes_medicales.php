@@ -128,6 +128,8 @@ if ($date_max) {
 // Les constantes qui correspondent (dans le contexte cette fois)
 $list_constantes = $constantes->loadList($where, "datetime");
 
+$constantes_medicales_grid = CConstantesMedicales::buildGrid($list_constantes);
+
 $standard_struct = array(
   "series" => array(
     array(
@@ -190,7 +192,7 @@ foreach ($constants_to_draw as $name => $params) {
   
   $data[$name] = $standard_struct;
   
-  if (isset($params["formfields"])) {
+  if (isset($params["formfields"]) && empty($params["candles"])) {
     $serie = &$data[$name]["series"];
     
     $serie = array();
@@ -222,48 +224,94 @@ if ($list_constantes) {
     foreach ($constants_to_draw as $name => $params) {
       if ($name[0] === "_" && empty($params["plot"])) continue;
       
+      $candles = isset($params["candles"]);
+      
       $d = &$data[$name];
 
       $user_view = "";
-			
-			if ($name[0] !== "_") {
-	      $log = $cst->loadLastLogForField($name);
-	      if (!$log->_id && $cst->_ref_last_log) {
-	        $log = $cst->_ref_last_log;
-	      }
-	      $log->loadRefsFwd();
-	      
-	      if ($log->_ref_user) {
-	        $user_view = utf8_encode($log->_ref_user->_view);
-	      }
-			}
-    
-      // We push the values
-      if (isset($params["formfields"])) {
-        $fields = $params["formfields"];
-      }
-      else {
-        $fields = array($name);
+      
+      if ($name[0] !== "_") {
+        $log = $cst->loadLastLogForField($name);
+        if (!$log->_id && $cst->_ref_last_log) {
+          $log = $cst->_ref_last_log;
+        }
+        $log->loadRefsFwd();
+        
+        if ($log->_ref_user) {
+          $user_view = utf8_encode($log->_ref_user->_view);
+        }
       }
       
-      $i = count($d["series"][0]["data"]);
-      foreach($fields as $n => $_field) {
-        //if ($cst->$_field !== null && $cst->$_field !== "") // We have to show empty points too!
-        $value = getValue($cst->$_field);
-        $d["series"][$n]["data"][] = array(
-          $i, 
-          $value, 
-          $user_view, 
-          $comment,
-          utf8_encode($params['unit']),
-        );
+      // normal plots
+      if (empty($params["candles"])) {
+        if (isset($params["formfields"])) {
+          $fields = $params["formfields"];
+        }
+        else {
+          $fields = array($name);
+        }
         
-        if ($name == "diurese") {
-          if (!isset($cumuls_day[$name][$day_24h])) {
-            $cumuls_day[$name][$day_24h] = array("n" => 0, "value" => 0);
+        $i = count($d["series"][0]["data"]);
+        foreach($fields as $n => $_field) {
+          $ya = $yb = $yc = $yd = null;
+          
+          $ya = getValue($cst->$_field);
+            
+          $d["series"][$n]["data"][] = array(
+            $i, 
+            $ya, $yb, $yc, $yd,
+            $user_view, 
+            $comment,
+            utf8_encode($params['unit']),
+          );
+          
+          if ($name == "diurese") {
+            if (!isset($cumuls_day[$name][$day_24h])) {
+              $cumuls_day[$name][$day_24h] = array("n" => 0, "value" => 0);
+            }
+            $cumuls_day[$name][$day_24h]["value"] += $ya;
+            $cumuls_day[$name][$day_24h]["n"]++;
           }
-          $cumuls_day[$name][$day_24h]["value"] += $value;
-          $cumuls_day[$name][$day_24h]["n"]++;
+        }
+      }
+        
+      // composite plots (TA)
+      else {
+        $fields = $params["formfields"];
+        $first = true;
+        
+        $i = count($d["series"][0]["data"]);
+        foreach($fields as $n => $_field) {
+          $ya = $yb = $yc = $yd = null;
+          
+          // first series : all values
+          if ($first) {
+            $ya = $yb = getValue($cst->{$fields[1]});
+            $yc = $yd = getValue($cst->{$fields[0]});
+            
+            $d["series"][$n]["candles"]["show"] = true;
+            $d["series"][$n]["markers"]["position"] = "cb";
+          }
+          
+          // second series : only second value
+          else {
+            $ya = getValue($cst->$fields[0]);
+            $d["series"][$n]["markers"]["position"] = "ct";
+          }
+          
+          $d["series"][$n]["markers"]["show"] = true;
+          $d["series"][$n]["lines"]["show"] = false;
+          $d["series"][$n]["points"]["show"] = false;
+            
+          $d["series"][$n]["data"][] = array(
+            $i, 
+            $ya, $yb, $yc, $yd,
+            $user_view, 
+            $comment,
+            utf8_encode($params['unit']),
+          );
+          
+          $first = false;
         }
       }
      
@@ -294,7 +342,7 @@ foreach($cumuls_day as $name => $days) {
       "markers" => array(
         "show" => true,
         "position" => "rm",
-			),
+      ),
       "bars" => array(
         "show" => true,
         "barWidth" => $values["n"],
@@ -371,6 +419,7 @@ $smarty->assign('latest_constantes', $latest_constantes);
 $smarty->assign('selection',     $selection);
 $smarty->assign('print',         $print);
 $smarty->assign('graphs',        $graphs);
+$smarty->assign('constantes_medicales_grid', $constantes_medicales_grid);
 $smarty->display('inc_vw_constantes_medicales.tpl');
 
 ?>
