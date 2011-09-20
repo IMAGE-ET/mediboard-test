@@ -23,25 +23,26 @@ class CHL7v2TableEntry extends CHL7v2TableObject {
   
   var $number          = null;
   var $code_hl7        = null;
-  var $code_mb         = null;
+  var $code_mb_from    = null;
+  var $code_mb_to      = null;
   var $description     = null;
   var $user            = null;
       
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table                  = 'table_entry';
-    $spec->key                    = 'table_entry_id';
-    $spec->uniques["code_number"] = array("number", "code_hl7");
+    $spec->table = 'table_entry';
+    $spec->key   = 'table_entry_id';
+    $spec->uniques["number_code_hl7"] = array("number", "code_hl7");
+    $spec->uniques["number_code_mb"]  = array("number", "code_mb_from");
     return $spec;
   }
 
   function getProps() {
     $props = parent::getProps();
-
-    // DB Fields
     $props["number"]      = "num notNull maxLength|5 seekable";
     $props["code_hl7"]    = "str maxLength|30 protected";
-    $props["code_mb"]     = "str maxLength|30 protected";
+    $props["code_mb_from"]= "str maxLength|30 protected";
+    $props["code_mb_to"]  = "str maxLength|30 protected";
     $props["description"] = "str seekable";
     $props["user"]        = "bool notNull default|0";
     return $props;

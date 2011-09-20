@@ -11,7 +11,7 @@
 CCanDo::checkAdmin();
 
 $table_entry = new CHL7v2TableEntry();
-$where[]     =  "(user = '1') OR (code_mb IS NOT NULL)";
+$where[]     =  "(user = '1') OR (code_mb_from IS NOT NULL) OR (code_mb_to IS NOT NULL)";
 if ($table_entry->countList($where) > 0) {
   CAppUI::stepAjax("Des données ont été saisies manuellement - Import impossible", UI_MSG_ERROR);
 }
@@ -43,7 +43,8 @@ $ds = CSQLDataSource::get("hl7v2");
 $query = "CREATE TABLE IF NOT EXISTS `table_entry` (
   `number` INT(5) UNSIGNED NOT NULL,
   `code_hl7` VARCHAR(30), 
-  `code_mb` VARCHAR(30), 
+  `code_mb_from` VARCHAR(30), 
+  `code_mb_to` VARCHAR(30), 
   `description` VARCHAR(255)
 )";
 $ds->exec($query);
