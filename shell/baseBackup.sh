@@ -9,6 +9,18 @@ BASH_PATH=$(dirname $0)
 
 announce_script "Database daily backup"
 
+## If no enough free disk space (6 Go), send mail and quit
+freedisk=`df -k /|tail -n 1|sed -r 's/\s+/\ /g'|cut -d" " -f 4`
+
+if [ $freedisk -lt 6291456 ]
+then
+  # Name of the instance of mediboard
+  instance=$(cd $BASH_PATH/../; pwd);
+  instance=${instance##*/}
+  wget "http://localhost/${instance}/index.php?login=1&username=cron&password=alltheway&m=system&a=ajax_send_mail_diskfull"
+  exit 0
+fi
+
 if [ "$#" -lt 5 ]
 then 
   echo "Usage: $0 <method> <username> <password> <database> <backup_path> options"
