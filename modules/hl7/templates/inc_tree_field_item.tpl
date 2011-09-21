@@ -1,6 +1,7 @@
 
 {{if $component->props instanceof CHL7v2DataTypeComposite}}
   {{if $component->children|@count > 0}}
+    Item {{$_i+1}}
     <ul class="field-item">
       {{foreach from=$component->children key=i item=_child}}
         <li>

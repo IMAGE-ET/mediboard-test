@@ -7,57 +7,58 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
-
 <script type="text/javascript">
-  Echange = {
-    purge: function(force) {
-      form = getForm('EchangePurge');
+Echange = {
+  purge: function(force) {
+    var form = getForm('EchangePurge');
 
-	  if (!force && !$V(form.auto)) {
-		return;
-	  }
-	  
-      if (!checkForm(form)) {
-        return;
-      }
-      
-      var url = new Url('webservices', 'ajax_purge_echange');
-      url.addElement(form.date_max);
-      url.addElement(form.do_purge);  
-      url.requestUpdate("purge-echange");
+    if (!force && !$V(form.auto)) {
+      return;
     }
+  
+    if (!checkForm(form)) {
+      return;
+    }
+    
+    var url = new Url('webservices', 'ajax_purge_echange');
+    url.addFormData(form);
+    url.requestUpdate("purge-echange");
   }
-
+}
 </script>
 
-<table class="main">
-  <tr>
-    <td class="button">
-      <form name="EchangePurge" action="?" method="get">
-        <table class="form">
-          <tr>
-            <td colspan="2">
-             <label for="date_max">{{tr}}CEchangeSOAP-_date_max{{/tr}}</label> : 
-             <input class="date notNull" type="hidden" name="date_max" value="" />
-              <script type="text/javascript">
-                Main.add(function () {
-                  Calendar.regField(getForm('EchangePurge').date_max);
-                });
-              </script>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <button type="button" class="change" onclick="Echange.purge(true)">
-                {{tr}}CEchangeSOAP-purge-search{{/tr}}
-              </button>
-              <label><input type="checkbox" name="do_purge" />{{tr}}Purge{{/tr}}</label>
-              <label><input type="checkbox" name="auto" />{{tr}}Auto{{/tr}}</label>
-            </td>
-            <td id="purge-echange"></td>
-          </tr>
-        </table>
-      </form>
-    </td>
-  </tr>
-</table>
+<form name="EchangePurge" action="?" method="get">
+  <table class="main form" style="table-layout: fixed;">
+    <tr>
+      <th>
+        <label for="date_max">{{tr}}CEchangeSOAP-_date_max{{/tr}}</label>
+      </th>
+      <td>
+        <input class="date notNull" type="hidden" name="date_max" value="" />
+        <script type="text/javascript">
+          Main.add(function () {
+            Calendar.regField(getForm('EchangePurge').date_max);
+          });
+        </script>
+      </td>
+    </tr>
+    <tr>
+      <th>
+        <label for="delete">Supprimer les échanges antérieurs à 6 mois : </label>
+      </th>
+      <td>
+        <input type="checkbox" name="delete" value="1" />
+      </td>
+    </tr>
+    <tr>
+      <th>
+        <button type="button" class="change" onclick="Echange.purge(true)">
+          {{tr}}CEchangeSOAP-purge-search{{/tr}}
+        </button>
+        <label><input type="checkbox" name="do_purge" /> {{tr}}Purge{{/tr}}</label>
+        <label><input type="checkbox" name="auto" /> {{tr}}Auto{{/tr}}</label>
+      </th>
+      <td id="purge-echange"></td>
+    </tr>
+  </table>
+</form>

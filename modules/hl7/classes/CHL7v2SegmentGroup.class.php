@@ -28,7 +28,7 @@ class CHL7v2SegmentGroup extends CHL7v2Entity {
     
     $name = (string)$self_specs->attributes()->name;
     
-    $this->name = ($name ? $name : implode(" ", $self_specs->xpath("//segment")));
+    $this->name = ($name ? $name : implode(" ", $self_specs->xpath(".//segment")));
     
     $parent->appendChild($this);
   }
