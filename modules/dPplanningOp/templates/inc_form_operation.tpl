@@ -253,10 +253,11 @@ CCAMSelector.init = function(){
 	        onfocus="PlageOpSelector.init()"
 	        value="{{$plage->date|date_format:"%d/%m/%Y"}}"
 	        style="width: 15em" />
-	      {{if $op->_ref_salle && $op->_ref_salle->_id}}
-	      en {{$op->_ref_salle->_view}}
-	      {{/if}}
 	      <button type="button" class="search notext" onclick="PlageOpSelector.init()">Choisir une date</button>
+        {{if $op->_ref_salle && $op->_ref_salle->_id}}
+        <br />
+        en {{$op->_ref_salle->_view}}
+        {{/if}}
 	    </td>
     {{/if}}
   </tr>
