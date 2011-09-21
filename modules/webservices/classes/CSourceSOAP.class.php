@@ -52,7 +52,9 @@ class CSourceSOAP extends CExchangeSource {
       throw new CMbException("CSourceSOAP-unreachable-source", $this->name);
     }
     // Applatissement du tableau $arguments qui contient un élement vide array([0] => ...) ?
-    $this->_client->flatten = $flatten;
+    $this->_client->flatten  = $flatten;
+    // Aucun log à produire ? 
+    $this->_client->loggable = $this->loggable;
     
     if ($this->single_parameter) {
       $this->_data = array("$this->single_parameter" => $this->_data);

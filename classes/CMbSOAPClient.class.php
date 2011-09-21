@@ -20,6 +20,7 @@ class CMbSOAPClient extends SoapClient {
 	var $type_echange_soap = null;
 	var $soap_client_error = false;
 	var $flatten           = null;
+	var $loggable          = null;
 	
   function __construct($rooturl, $type = null, $options = array()) {
   	$this->wsdl = $rooturl;
@@ -60,6 +61,15 @@ class CMbSOAPClient extends SoapClient {
 
     if ($this->flatten && isset($arguments[0]) && !empty($arguments[0])) {
       $arguments = $arguments[0];
+    }
+   
+    if (!$this->loggable) {
+      try {
+        return parent::__soapCall($function_name, $arguments, $options, $input_headers, $output_headers);
+      } 
+      catch(SoapFault $fault) {
+        throw $fault;
+      }
     }
     
     $output = null;

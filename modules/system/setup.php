@@ -820,6 +820,16 @@ class CSetupsystem extends CSetup {
               ADD `unicity` ENUM ('no','host','reference1','reference2') NOT NULL DEFAULT 'no';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.81";
+    $this->makeRevision("1.0.81");
+    
+    $query = "ALTER TABLE `source_smtp` 
+              ADD `loggable` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `source_file_system` 
+              ADD `loggable` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.82";
   }
 }

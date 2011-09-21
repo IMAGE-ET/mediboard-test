@@ -101,7 +101,13 @@ class CSetupftp extends CSetup {
                 ADD INDEX (`user_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.06";
+    $this->makeRevision("0.06");
+    
+    $query = "ALTER TABLE `source_ftp` 
+              ADD `loggable` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.07";    
   }
 }
 ?>

@@ -124,7 +124,13 @@ function __construct() {
                 ADD INDEX (`user_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.21";      
+    $this->makeRevision("0.21");
+    
+    $query = "ALTER TABLE `source_soap` 
+              ADD `loggable` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.22";      
   }
 }
 ?>

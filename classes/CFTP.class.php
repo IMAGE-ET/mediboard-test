@@ -81,12 +81,20 @@ class CFTP {
     
      // response time
     $echange_ftp->response_time = $chrono->total;
-
+    
     // Truncate input and output before storing
     $args = array_map_recursive(array("CFTP", "truncate"), $args);
     
     $echange_ftp->input = serialize($args);
     if ($echange_ftp->ftp_fault != 1) {
+      if ($function_name == "_getlistfiles") {
+        // Truncate le tableau des fichiers reçus dans le cas où c'est > 100
+        $array_count = count($output);
+        if ($array_count > 100) {
+          $output          = array_slice($output, 0, 100);
+          $output["count"] = "$array_count files";
+        }
+      }
       $echange_ftp->output = serialize(array_map_recursive(array("CFTP", "truncate"), $output));
     }
     $echange_ftp->store();
