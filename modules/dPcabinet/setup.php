@@ -1350,7 +1350,12 @@ class CSetupdPcabinet extends CSetup {
       ADD `remplacant_ok` ENUM ('0', '1') NOT NULL DEFAULT '0'";
     $this->addQuery($query);
     
-    $this->mod_version = "1.33";
+    $this->makeRevision("1.33");
+    $query = "ALTER TABLE `plageconsult`
+     CHANGE `remplacant_id` `remplacant_id` BIGINT DEFAULT NULL";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.34";
   }
 }
 ?>
