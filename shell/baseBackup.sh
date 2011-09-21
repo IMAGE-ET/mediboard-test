@@ -54,7 +54,6 @@ then
     # Name of the instance of mediboard
     instance=$(cd $BASH_PATH/../; pwd);
     instance=${instance##*/}
-    #. $BASH_PATH/send_mail.sh flavien.crochard@openxtrem.com flavien.crochard@openxtrem.com "test email sujet" "corps du test email" |telnet smtp.gmail.com 25
     wget "http://localhost/${instance}/index.php?login=1&username=cron&password=alltheway&m=system&a=ajax_send_mail_diskfull&mail=${mail}"
   fi
   exit 0
