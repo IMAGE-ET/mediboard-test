@@ -34,16 +34,20 @@ editConstantes = function (const_id, context_guid){
 }
 
 insertGraph = function (container, data, id, width, height) {
-  if (!$(id)) {
-    container.insert('<div id="'+id+'" style="width:'+width+';height:'+height+';margin:auto;"></div>');
+  var element = $(id);
+  
+  if (!element) {
+    container.insert('<div id="'+id+'" style="width:'+width+';height:'+height+';margin:auto;" class="constantes-graph"></div>');
+    element = $(id);
   }
+  
   last_date = null;
   
   var o = Flotr.clone(data.options);
   o.xaxis.min += window.globalXOffset;
   o.xaxis.max += window.globalXOffset;
   
-  return Flotr.draw($(id), data.series, o);
+  return Flotr.draw(element, data.series, o);
 }
 
 tickFormatter = function (n) {
@@ -173,7 +177,7 @@ options = {
     candleWidth: 0.2
   },
   grid: {
-	  outlineWidth: 1,
+    outlineWidth: 1,
     backgroundColor: '#fff'
   },
   legend: {
@@ -285,12 +289,24 @@ toggleAllGraphs = function() {
   {{/if}}
 }
 
+hideMouseTrack = function(event){
+  var element = Event.element(event);
+  var container = element.up(".constantes-graph");
+  
+  if (!container) return;
+  
+  //"constantes-graph"
+  $$(".flotr-mouse-value").each(function(track){
+    if (track.up(".constantes-graph") != container) {
+      track.hide();
+    }
+  });
+}
+
 Main.add(function () {
   drawGraph();
   toggleAllGraphs();
-  document.observe("click", function(){
-    $$(".flotr-mouse-value").invoke("hide");
-  })
+  document.observe("mouseover", hideMouseTrack);
 });
 
 loadConstantesMedicales  = function(context_guid) {
@@ -384,37 +400,37 @@ loadConstantesMedicales  = function(context_guid) {
         {{include file="inc_form_edit_constantes_medicales.tpl" context_guid=$context_guid}}
       </td>
       <td>
-		    <script type="text/javascript">
-		      Main.add(function(){
-		        Control.Tabs.create("tabs-constantes-graph-table");
-		      });
-		    </script>
-				
-      	<ul class="control_tabs small" id="tabs-constantes-graph-table">
+        <script type="text/javascript">
+          Main.add(function(){
+            Control.Tabs.create("tabs-constantes-graph-table");
+          });
+        </script>
+        
+        <ul class="control_tabs small" id="tabs-constantes-graph-table">
           <li><a href="#constantes-graph">Graphiques</a></li>
           <li><a href="#constantes-table">Tableau</a></li>
-      	</ul>
-				<hr class="control_tabs" />
-				
-				<div id="constantes-graph">
-	        <div class="small-info">
-	          Vous pouvez maintenant naviguer à droite et à gauche pour afficher les relevés précédents. <br />
-	          Par défaut seuls <strong>les 15 derniers sont affichés</strong>.
-	        </div>
-	        
-	        <button class="hslip notext" style="float: left;" title="Afficher/Cacher le formulaire" onclick="$('constantes-medicales-form').toggle();" type="button">
-	          Formulaire constantes
-	        </button>
-	        
-	        <button id="constantes-medicales-graph-before" class="left" style="float: left;"       onclick="shiftGraphs('before');">Avant</button>
-	        <button id="constantes-medicales-graph-after"  class="right rtl" style="float: right;" onclick="shiftGraphs('after');">Après</button>
-	        
-	        <div id="constantes-medicales-graph" style="margin-left: 5px; text-align: center; clear: both;"></div>
-				</div>
-				
-				<div id="constantes-table" style="display: none;">
-					{{mb_include module=dPpatients template=print_constantes}}
-				</div>
+        </ul>
+        <hr class="control_tabs" />
+        
+        <div id="constantes-graph">
+          <div class="small-info">
+            Vous pouvez maintenant naviguer à droite et à gauche pour afficher les relevés précédents. <br />
+            Par défaut seuls <strong>les 15 derniers sont affichés</strong>.
+          </div>
+          
+          <button class="hslip notext" style="float: left;" title="Afficher/Cacher le formulaire" onclick="$('constantes-medicales-form').toggle();" type="button">
+            Formulaire constantes
+          </button>
+          
+          <button id="constantes-medicales-graph-before" class="left" style="float: left;"       onclick="shiftGraphs('before');">Avant</button>
+          <button id="constantes-medicales-graph-after"  class="right rtl" style="float: right;" onclick="shiftGraphs('after');">Après</button>
+          
+          <div id="constantes-medicales-graph" style="margin-left: 5px; text-align: center; clear: both;"></div>
+        </div>
+        
+        <div id="constantes-table" style="display: none;">
+          {{mb_include module=dPpatients template=print_constantes}}
+        </div>
       </td>
     </tr>
   </table>
