@@ -14,7 +14,7 @@ $date_limite = mbDate("- 1 month");
 $qte_limite  = 1000;
 
 $tag_ipp    = CPatient::getTagIPP();
-$tag_sejour = CSejour::getTagNumDossier();
+$tag_sejour = CSejour::getTagNDA();
 
 // Gestion des médecins
 $hprimMedecin = new CHprim21Medecin();

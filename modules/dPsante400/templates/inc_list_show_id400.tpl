@@ -40,7 +40,7 @@
       });
     });
     
-    trashNumDossier = function(idSante400_id) {
+    trashNDA = function(idSante400_id) {
       var url = new Url("dPsante400", "ajax_trash_id400");
       url.addParam("idSante400_id", idSante400_id);
       url.requestUpdate("systemMsg", {onComplete : function() {
@@ -70,7 +70,7 @@
         {{if $admin_admission && $sip_active}}
           <td>
             <input type="radio" name="radio[]" {{if $_idSante400->_id == $idSante400_id}}checked="checked"{{/if}}
-              onchange="trashNumDossier('{{$_idSante400->_id}}');"/>
+              onchange="trashNDA('{{$_idSante400->_id}}');"/>
           </td>
         {{else}}
           <td></td>

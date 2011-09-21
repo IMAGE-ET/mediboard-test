@@ -95,7 +95,7 @@ foreach ($affectations as $affectation_id => $affectation) {
   $sejour->_ref_patient->loadIPP();
   
   // Chargment du numéro de dossier
-  $sejour->loadNumDossier();
+  $sejour->loadNDA();
 }
 
 // Si la fonction selectionnée n'est pas dans la liste des fonction, on la rajoute

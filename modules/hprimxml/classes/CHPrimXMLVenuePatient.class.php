@@ -110,7 +110,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     $dom_acq->_ref_echange_hprim    = $echg_hprim;
     
     // Traitement du message des erreurs
-    $avertissement = $msgID400 = $msgVenue = $msgNumDossier = "";    
+    $avertissement = $msgID400 = $msgVenue = $msgNDA = "";    
     $_code_Venue   = $_code_NumDos = $_num_dos_create = $_modif_venue = false;
     
     $sender = $echg_hprim->_ref_sender;
@@ -193,14 +193,14 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             $newVenue->_no_num_dos = 1;
             $msgVenue = $newVenue->store();
             
-            $msgNumDossier = CEAISejour::storeNDA($nda, $newVenue);
+            $msgNDA = CEAISejour::storeNDA($nda, $newVenue);
             
             $newVenue->_NDA = $nda->id400;
             // Si serveur et on a un num_dos sur la venue
             $newVenue->_no_num_dos = 0;
             $msgVenue = $newVenue->store();
                       
-            $codes = array ($msgVenue ? "A102" : "I101", $msgNumDossier ? "A105" : "A101", $cancel ? "A130" : null);
+            $codes = array ($msgVenue ? "A102" : "I101", $msgNDA ? "A105" : "A101", $cancel ? "A130" : null);
             if ($msgVenue) {
               $avertissement = $msgVenue." ";
             } else {
@@ -242,7 +242,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
               // Incrementation de l'id400
               CEAISejour::NDASMPIncrement($nda);
 
-              $msgNumDossier = CEAISejour::storeNDA($nda);
+              $msgNDA = CEAISejour::storeNDA($nda);
                 
               $_num_dos_create = true;
             }
@@ -253,9 +253,9 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
 
             $modified_fields = CEAISejour::getModifiedFields($newVenue);
              
-            $codes = array ($msgVenue ? "A103" : "I102", $msgNumDossier ? "A105" : $_num_dos_create ? "I106" : "I108", $cancel ? "A130" : null);
-            if ($msgVenue || $msgNumDossier) {
-              $avertissement = $msgVenue." ".$msgNumDossier;
+            $codes = array ($msgVenue ? "A103" : "I102", $msgNDA ? "A105" : $_num_dos_create ? "I106" : "I108", $cancel ? "A130" : null);
+            if ($msgVenue || $msgNDA) {
+              $avertissement = $msgVenue." ".$msgNDA;
             } else {
               $commentaire = "Venue : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields. Numéro de dossier : $nda->id400.";
             }
@@ -413,10 +413,10 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         
         $codes = array ($msgVenue ? ($_modif_venue ? "A103" : "A102") : "I101", 
                         $msgID400 ? "A104" : "I104", 
-                        $msgNumDossier ? "A105" : $_code_NumDos, 
+                        $msgNDA ? "A105" : $_code_NumDos, 
                         $cancel ? "A130" : null);
-        if ($msgVenue || $msgID400 || $msgNumDossier) {
-          $avertissement = $msgVenue." ".$msgID400." ".$msgNumDossier;
+        if ($msgVenue || $msgID400 || $msgNDA) {
+          $avertissement = $msgVenue." ".$msgID400." ".$msgNDA;
         } else {
           $commentaire = "Venue : $newVenue->_id. Identifiant externe : $id400Venue->id400. IPP : $nda->id400.";
         }
@@ -446,8 +446,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             
             // Recherche d'un num dossier déjà existant pour cette venue 
             // Mise en trash du numéro de dossier reçu
-            $newVenue->loadNumDossier();
-            if ($this->trashNumDossier($newVenue, $sender)) {
+            $newVenue->loadNDA();
+            if ($this->trashNDA($newVenue, $sender)) {
                 $nda->_trash = true;
             } else {
                // Mapping du séjour si pas de numéro de dossier
@@ -486,8 +486,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
               
               // Recherche d'un num dossier déjà existant pour cette venue 
               // Mise en trash du numéro de dossier reçu
-              $newVenue->loadNumDossier();
-              if ($this->trashNumDossier($newVenue, $sender)) {
+              $newVenue->loadNDA();
+              if ($this->trashNDA($newVenue, $sender)) {
                 $nda->_trash = true;
               } else {
                 
@@ -519,8 +519,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
               
               // Recherche d'un num dossier déjà existant pour cette venue 
               // Mise en trash du numéro de dossier reçu
-              $newVenue->loadNumDossier();
-              if ($this->trashNumDossier($newVenue, $sender)) {
+              $newVenue->loadNDA();
+              if ($this->trashNDA($newVenue, $sender)) {
                 $nda->_trash = true;
               } else {
                 // Mapping du séjour
@@ -559,15 +559,15 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           $nda->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$sender->_tag_sejour;
         }
         
-        $msgNumDossier = CEAISejour::storeNDA($nda, $newVenue);
+        $msgNDA = CEAISejour::storeNDA($nda, $newVenue);
         
         if (!isset($nda->_trash)) { 
           $codes = array ($msgVenue ? ($_code_Venue ? "A103" : "A102") : ($_code_Venue ? "I102" : "I101"), 
-                        $msgNumDossier ? "A105" : $_code_NumDos);
+                        $msgNDA ? "A105" : $_code_NumDos);
         }
         
-        if ($msgVenue || $msgNumDossier) {
-          $avertissement = $msgVenue." ".$msgNumDossier;
+        if ($msgVenue || $msgNDA) {
+          $avertissement = $msgVenue." ".$msgNDA;
         } else {
           if (!isset($nda->_trash)) {
             $commentaire .= "Numéro dossier créé : $nda->id400.";
@@ -618,11 +618,11 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           $codes[] = "A130";
           $nda->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$sender->_tag_sejour;
           $nda->last_update = mbDateTime();
-          $msgNumDossier = $nda->store();
+          $msgNDA = $nda->store();
         }
 
-        if ($msgVenue || $msgNumDossier) {
-          $avertissement = $msgVenue." ".$msgNumDossier;
+        if ($msgVenue || $msgNDA) {
+          $avertissement = $msgVenue." ".$msgNDA;
         } else {
           $commentaire = "Séjour modifiée : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields. Numéro dossier associé : $nda->id400.";
         }

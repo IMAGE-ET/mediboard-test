@@ -20,7 +20,7 @@ $rpu->loadRefSejourMutation();
 // Chargement du séjour
 $sejour = $rpu->loadRefSejour();
 $sejour->loadRefPatient()->loadIPP();
-$sejour->loadNumDossier();
+$sejour->loadNDA();
 $sejour->loadRefsConsultations();
 
 // Horaire par défaut

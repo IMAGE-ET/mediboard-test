@@ -35,7 +35,7 @@ if($sejour_id) {
 }
 
 $sejour->makeDatesOperations();
-$sejour->loadNumDossier();
+$sejour->loadNDA();
 
 $patient->loadRefsFwd();
 $patient->loadRefsCorrespondants();

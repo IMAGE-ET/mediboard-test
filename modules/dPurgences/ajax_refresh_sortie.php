@@ -22,7 +22,7 @@ $sejour = $rpu->_ref_sejour;
 $sejour->_ref_rpu = $rpu;
 $sejour->loadRefsFwd();
 $sejour->_ref_rpu->loadRefSejourMutation();
-$sejour->loadNumDossier();
+$sejour->loadNDA();
 $sejour->loadRefsConsultations();
 $sejour->_ref_rpu->_ref_consult->loadRefsActes();
 // Chargement de l'IPP

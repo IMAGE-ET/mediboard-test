@@ -17,29 +17,29 @@ $filter = new CIdSante400;
 $filter->object_class = $idSante400->object_class;
 $filter->object_id    = $idSante400->object_id;
 
-$filter->tag = CSejour::getTagNumDossier(CGroups::loadCurrent()->_id);
+$filter->tag = CSejour::getTagNDA(CGroups::loadCurrent()->_id);
 $listIdSante400 = $filter->loadMatchingList(CGroups::loadCurrent()->_id);
 
-$filter->tag = CSejour::getTagNumDossier(CGroups::loadCurrent()->_id, "tag_dossier_cancel");
+$filter->tag = CSejour::getTagNDA(CGroups::loadCurrent()->_id, "tag_dossier_cancel");
 $listIdSante400 = array_merge($listIdSante400, $filter->loadMatchingList());
 
-$filter->tag = CSejour::getTagNumDossier(CGroups::loadCurrent()->_id, "tag_dossier_trash");
+$filter->tag = CSejour::getTagNDA(CGroups::loadCurrent()->_id, "tag_dossier_trash");
 $listIdSante400 = array_merge($listIdSante400, $filter->loadMatchingList());
 
-$filter->tag = CSejour::getTagNumDossier(CGroups::loadCurrent()->_id, "tag_dossier_pa");
+$filter->tag = CSejour::getTagNDA(CGroups::loadCurrent()->_id, "tag_dossier_pa");
 $listIdSante400 = array_merge($listIdSante400, $filter->loadMatchingList());
 
-$tag = CSejour::getTagNumDossier(CGroups::loadCurrent()->_id);
+$tag = CSejour::getTagNDA(CGroups::loadCurrent()->_id);
 
 // Chargement de l'objet afin de récupérer l'id400 associé
 $object = new $filter->object_class;
 $object->load($filter->object_id);
-$object->loadNumDossier(CGroups::loadCurrent()->_id);
+$object->loadNDA(CGroups::loadCurrent()->_id);
 
 foreach ($listIdSante400 as $_idSante400) {
   // L'identifiant 400 coché
   if ($_idSante400->_id == $idSante400_id) {
-    $_idSante400->tag = CSejour::getTagNumDossier(CGroups::loadCurrent()->_id);
+    $_idSante400->tag = CSejour::getTagNDA(CGroups::loadCurrent()->_id);
     if ($msg = $_idSante400->store()) {
       CAppUI::stepAjax($msg, UI_MSG_ERROR); 
     }

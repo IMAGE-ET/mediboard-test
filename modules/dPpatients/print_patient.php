@@ -22,7 +22,7 @@ $patient->loadRefsSejours();
 foreach ($patient->_ref_sejours as $sejour) {
   $sejour->loadRefPraticien();
 	$sejour->loadRefsOperations();
-  $sejour->loadNumDossier();
+  $sejour->loadNDA();
   foreach($sejour->_ref_operations as $operation) {
     $operation->loadRefPlageOp();
 		$operation->loadRefChir();

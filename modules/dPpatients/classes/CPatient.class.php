@@ -1280,7 +1280,7 @@ class CPatient extends CMbObject {
     // Sejours
     foreach ($this->_ref_sejours as $keySejour => $valueSejour) {
       $sejour =& $this->_ref_sejours[$keySejour];
-      $sejour->loadNumDossier();
+      $sejour->loadNDA();
       $sejour->loadRefsAffectations();
       $sejour->loadRefsOperations();
       $sejour->countDocItems($permType);
@@ -1905,17 +1905,6 @@ class CPatient extends CMbObject {
         $dec = bcadd($dec, bcmul(hexdec($hex[$i - 1]), bcpow('16', $len - $i)));
     }
     return $dec;
-  }
-  
-  function sample($staticsProps = array()){
-    foreach($this->_specs as $key => $spec){
-      if(isset($staticsProps[$key])){
-        $this->$key = $staticsProps[$key];
-      }
-      elseif($key[0] != "_"){
-        $spec->sample($this, false);
-      }
-    }
   }
 }
 

@@ -83,7 +83,7 @@ foreach ($sejours as $sejour) {
     $actes_ccam->loadRefPraticien();
   }
   $sejour->loadRefsAffectations();
-  $sejour->loadNumDossier();
+  $sejour->loadNDA();
   $sejour->loadLogs();
   $sejour->loadRefsConsultations();
   $sejour->loadRefsConsultAnesth();
@@ -159,7 +159,7 @@ foreach ($sejours as $sejour) {
       $_affectation->_ref_lit->_ref_chambre->loadRefService();
       $_affectation->loadLastLog();
       $_affectation->loadRefSejour();
-      $_affectation->_ref_sejour->loadNumDossier();
+      $_affectation->_ref_sejour->loadNDA();
       $_affectation->_ref_sejour->loadRefPatient();
       $_affectation->_ref_sejour->loadRefPraticien();
       

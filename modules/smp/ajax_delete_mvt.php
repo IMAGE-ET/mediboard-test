@@ -85,7 +85,7 @@ foreach ($sejours as $sejour) {
     $actes_ccam->loadRefPraticien();
   }
   $sejour->loadRefsAffectations();
-  $sejour->loadNumDossier();
+  $sejour->loadNDA();
   $sejour->loadLogs();
   $sejour->loadRefsConsultations();
   $sejour->loadRefsConsultAnesth();

@@ -63,7 +63,7 @@ class CInteropActor extends CMbObject {
     $this->_type_echange = $this->_class;
 
     $this->_tag_patient  = CPatient::getTagIPP($this->group_id);  
-    $this->_tag_sejour   = CSejour::getTagNumDossier($this->group_id);
+    $this->_tag_sejour   = CSejour::getTagNDA($this->group_id);
     $this->_tag_mediuser = CMediusers::getTagMediusers($this->group_id);
     $this->_tag_service  = CService::getTagService($this->group_id);
     

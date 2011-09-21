@@ -43,7 +43,7 @@ foreach ($sejours as &$_sejour) {
   }
   
   // Chargement du numero de dossier
-  $_sejour->loadNumDossier();
+  $_sejour->loadNDA();
 
   // Chargement de l'IPP
   $_sejour->loadRefPatient();

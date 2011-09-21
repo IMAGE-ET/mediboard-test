@@ -649,7 +649,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     }  
   }
   
-  function trashNumDossier(CSejour $venue, CInteropSender $sender) {
+  function trashNDA(CSejour $venue, CInteropSender $sender) {
     if (isset($sender->_configs["type_sej_pa"])) {
       if ($venue->_NDA && preg_match($sender->_configs["type_sej_pa"], $venue->_NDA)) {
         // Passage en pa_ de l'id externe

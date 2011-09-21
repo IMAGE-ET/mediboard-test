@@ -164,7 +164,7 @@ foreach($plagesop as &$plage) {
     $sejour =& $operation->_ref_sejour;
     $sejour->loadRefsFwd(1);
     if($_print_numdoss) {
-      $sejour->loadNumDossier();
+      $sejour->loadNDA();
     }  
     // On utilise la first_affectation pour contenir l'affectation courante du patient
     $sejour->_ref_first_affectation = $sejour->getCurrAffectation(mbDate($operation->_datetime));

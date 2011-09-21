@@ -41,7 +41,7 @@ foreach($plages as &$_plage) {
     $_operation->loadRefChir(1);
     $_operation->_ref_chir->loadRefFunction();
     $_operation->loadRefSejour();
-    $_operation->_ref_sejour->loadNumDossier();
+    $_operation->_ref_sejour->loadNDA();
     $_operation->_ref_sejour->countDocItems();
     $_operation->_ref_sejour->loadRefPatient();
     $_operation->_ref_sejour->_ref_patient->loadIPP();
@@ -71,7 +71,7 @@ foreach($urgences as $_urgence) {
   $_urgence->loadRefChir(1);
   $_urgence->_ref_chir->loadRefFunction();
   $_urgence->loadRefSejour();
-  $_urgence->_ref_sejour->loadNumDossier();
+  $_urgence->_ref_sejour->loadNDA();
   $_urgence->_ref_sejour->loadRefPatient();
   $_urgence->_ref_sejour->_ref_patient->loadIPP();
   $_urgence->loadExtCodesCCAM();

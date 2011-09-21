@@ -38,8 +38,8 @@ if($nb_etabs > 1) {
 	$ljoin= array();
 	
 	// - Nombre de séjours
-	$tag_dossier = CSejour::getTagNumDossier($current_group);
-	$where["tag"] = " = '$tag_dossier'";
+	$tag_NDA = CSejour::getTagNDA($current_group);
+	$where["tag"] = " = '$tag_NDA'";
 	$where["object_class"] = " = 'CSejour'";
 	$id400 = new CIdSante400;
 	$res_current_etab["CSejour-_NDA"] = $id400->countList($where);

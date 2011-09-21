@@ -114,7 +114,7 @@ foreach ($sejours as $sejour_id => $_sejour) {
   $_sejour->_ref_patient->loadIPP();
   
   // Chargment du numéro de dossier
-  $_sejour->loadNumDossier();
+  $_sejour->loadNDA();
   $whereOperations = array("annulee" => "= '0'");
 
   // Chargement des interventions

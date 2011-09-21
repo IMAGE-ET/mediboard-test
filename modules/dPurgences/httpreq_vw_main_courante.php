@@ -79,7 +79,7 @@ if ($order_col == "_patient_id") {
 $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
 foreach ($listSejours as &$sejour) {
   // Chargement du numero de dossier
-  $sejour->loadNumDossier();
+  $sejour->loadNDA();
   $sejour->loadRefsFwd();
   $sejour->loadRefRPU();
   $sejour->_ref_rpu->loadRefSejourMutation();

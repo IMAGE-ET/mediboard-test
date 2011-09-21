@@ -25,7 +25,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     // Traitement Sejour
     if ($mbObject instanceof CSejour) {
       $mbObject->loadRefPraticien();
-      $mbObject->loadNumDossier();
+      $mbObject->loadNDA();
       $mbObject->loadLastLog();
       
       $mbObject->loadRefPatient();
@@ -102,7 +102,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
           $affectation->_ref_lit->_ref_chambre->_ref_service = $service;
           $affectation->sejour_id = $mbObject->_id;
           $affectation->loadRefSejour();
-          $affectation->_ref_sejour->loadNumDossier();
+          $affectation->_ref_sejour->loadNDA();
           $affectation->_ref_sejour->loadRefPatient();
           $affectation->_ref_sejour->loadRefPraticien();
           
@@ -125,7 +125,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
         $mbObject->_ref_lit->_ref_chambre->loadRefService();
         $mbObject->loadLastLog();
         $mbObject->loadRefSejour();
-        $mbObject->_ref_sejour->loadNumDossier();
+        $mbObject->_ref_sejour->loadNDA();
         $mbObject->_ref_sejour->loadRefPatient();
         $mbObject->_ref_sejour->loadRefPraticien();
       
@@ -170,15 +170,15 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
           }
           
           $sejour->_NDA = null;
-          $sejour->loadNumDossier($_group->_id);
+          $sejour->loadNDA($_group->_id);
           $sejour1_nda = $sejour->_NDA;
 
           $sejour_eliminee->_NDA = null;
-          $sejour_eliminee->loadNumDossier($_group->_id);
+          $sejour_eliminee->loadNDA($_group->_id);
           $sejour2_nda = $sejour_eliminee->_NDA;
           
           // Passage en trash des NDA des séjours
-          $tap_NDA = CSejour::getTagNumDossier($_group->_id);
+          $tap_NDA = CSejour::getTagNDA($_group->_id);
 
           $id400Sejour               = new CIdSante400();
           $id400Sejour->tag          = $tap_NDA;

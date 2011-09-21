@@ -36,22 +36,22 @@ if ($idSante400->_id) {
   $filter->object_class = $idSante400->object_class;
   $filter->object_id    = $idSante400->object_id;
   
-  $filter->tag = CSejour::getTagNumDossier($group_id);
+  $filter->tag = CSejour::getTagNDA($group_id);
   $listIdSante400  = $filter->loadMatchingList($order);
   
-  $filter->tag = CSejour::getTagNumDossier($group_id, "tag_dossier_trash");
+  $filter->tag = CSejour::getTagNDA($group_id, "tag_dossier_trash");
   $listIdSante400 += $filter->loadMatchingList($order);
   
-  $filter->tag = CSejour::getTagNumDossier($group_id, "tag_dossier_cancel");
+  $filter->tag = CSejour::getTagNDA($group_id, "tag_dossier_cancel");
   $listIdSante400 += $filter->loadMatchingList($order);
   
-  $filter->tag = CSejour::getTagNumDossier($group_id, "tag_dossier_pa");
+  $filter->tag = CSejour::getTagNDA($group_id, "tag_dossier_pa");
   $listIdSante400 += $filter->loadMatchingList($order);
   
   // Chargement de l'objet afin de récupérer l'id400 associé (le latest)
   $object = new $filter->object_class;
   $object->load($filter->object_id);
-  $object->loadNumDossier($group_id);
+  $object->loadNDA($group_id);
   
   foreach ($listIdSante400 as $key=>$_idSante400) {
     $_idSante400->loadRefs();

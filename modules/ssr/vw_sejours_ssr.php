@@ -118,7 +118,7 @@ foreach ($sejours as $_sejour) {
 	
   // Détail du séjour
   $_sejour->checkDaysRelative($date);
-  $_sejour->loadNumDossier();
+  $_sejour->loadNDA();
   $_sejour->loadRefsNotes();
 	
   // Patient

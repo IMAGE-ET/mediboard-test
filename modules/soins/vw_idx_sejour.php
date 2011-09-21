@@ -150,7 +150,7 @@ if($praticien_id && !$service_id){
    		$_sejour->loadRefPatient();
 	    $_sejour->loadRefPraticien();
 	    $_sejour->_ref_praticien->loadRefFunction();
-	    $_sejour->loadNumDossier();
+	    $_sejour->loadNDA();
 		  $sejoursParService["NP"][$_sejour->_id] = $_sejour;
     }
 	}
@@ -171,7 +171,7 @@ foreach ($sejoursParService as $key => $_service) {
 	    		$_sejour->loadRefPatient();
 			    $_sejour->loadRefPraticien();
 			    $_sejour->_ref_praticien->loadRefFunction();
-			    $_sejour->loadNumDossier();
+			    $_sejour->loadNDA();
 			
 					if($_sejour->_ref_prescriptions){
 					  if(array_key_exists('sejour', $_sejour->_ref_prescriptions)){

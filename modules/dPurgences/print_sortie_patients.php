@@ -50,7 +50,7 @@ $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
 foreach ($listSejours as &$_sejour) {
   $_sejour->loadRefsFwd();
   $_sejour->loadRefRPU();
-  $_sejour->loadNumDossier();
+  $_sejour->loadNDA();
   $_sejour->loadRefsConsultations();
   $_sejour->_veille = mbDate($_sejour->entree) != $date;
   

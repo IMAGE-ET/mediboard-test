@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if $sejour->_ref_numdos}}
+{{if $sejour->_ref_NDA}}
   <script type="text/javascript">
   Main.add(function () {
     prepareForm(document.forms.editNumdos{{$sejour->_id}});
@@ -20,7 +20,7 @@
     <input type="hidden" name="m" value="dPsante400" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="ajax" value="1" />
-    <input type="hidden" name="id_sante400_id" value="{{$sejour->_ref_numdos->_id}}" />
+    <input type="hidden" name="id_sante400_id" value="{{$sejour->_ref_NDA->_id}}" />
     
     <table class="form" style="table-layout:fixed">
       <tr>
@@ -45,11 +45,11 @@
           <label for="id400" title="Saisir le numéro de dossier">Numéro de dossier</label>
         </th>
         <td>
-          <input type="text" class="notNull" name="id400" value="{{$sejour->_ref_numdos->id400}}" size="8" />
-          <input type="hidden" class="notNull" name="tag" value="{{$sejour->_ref_numdos->tag}}" />
+          <input type="text" class="notNull" name="id400" value="{{$sejour->_ref_NDA->id400}}" size="8" />
+          <input type="hidden" class="notNull" name="tag" value="{{$sejour->_ref_NDA->tag}}" />
           <input type="hidden" class="notNull" name="object_id" value="{{$sejour->_id}}" />
           <input type="hidden" class="notNull" name="object_class" value="CSejour" />
-          <input type="hidden" name="last_update" value="{{$sejour->_ref_numdos->last_update}}" />
+          <input type="hidden" name="last_update" value="{{$sejour->_ref_NDA->last_update}}" />
           <em>(Suggestion : {{$sejour->_guess_NDA}}) </em>
         </td>
         <td class="button" rowspan="2">

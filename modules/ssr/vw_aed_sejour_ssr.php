@@ -35,7 +35,7 @@ $lines = array();
 
 if ($sejour->_id) {
   $sejour->loadRefPatient();
-  $sejour->loadNumDossier();
+  $sejour->loadNDA();
 
   // Chargement du patient
   $patient = $sejour->_ref_patient;

@@ -38,7 +38,7 @@ foreach($patient->_ref_sejours as $_sejour) {
       $_sejour->_is_proche = 1;
     }
   }
-  $_sejour->loadNumDossier();
+  $_sejour->loadNDA();
   $_sejour->loadRefPraticien();
   $_sejour->loadRefEtablissement();
 }

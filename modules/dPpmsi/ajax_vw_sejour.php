@@ -39,7 +39,7 @@ $sejour->loadExtDiagnostics();
 $sejour->loadRefs();
 $sejour->countExchanges();
 $sejour->loadRefGHM();
-$sejour->loadNumDossier();
+$sejour->loadNDA();
 $sejour->canRead();
 $sejour->canEdit();
 foreach ($sejour->_ref_operations as $_operation) {

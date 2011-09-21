@@ -75,7 +75,7 @@ if (CAppUI::conf("dPpmsi transmission_actes") == "signature" && $object_class ==
     }
     $mbSejour =& $mbObject->_ref_sejour;
     $mbSejour->loadRefsFwd();
-    $mbSejour->loadNumDossier();
+    $mbSejour->loadNDA();
     $mbSejour->_ref_patient->loadIPP();
   }
   

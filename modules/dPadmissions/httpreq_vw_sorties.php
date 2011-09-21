@@ -103,7 +103,7 @@ foreach ($sejours as $sejour_id => $_sejour) {
   $_sejour->loadRefPatient(1)->loadIPP();
   
   // Chargment du numéro de dossier
-  $_sejour->loadNumDossier();
+  $_sejour->loadNDA();
 
   // Chargement des interventions
   $whereOperations = array("annulee" => "= '0'");

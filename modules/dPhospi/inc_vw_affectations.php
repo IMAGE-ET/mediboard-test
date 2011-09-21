@@ -119,7 +119,7 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type =
           $sejour =& $affectation->_ref_sejour;
           $sejour->loadRefPrestation();
           $sejour->loadRefsOperations();
-          $sejour->loadNumDossier();
+          $sejour->loadNDA();
           $sejour->_ref_praticien =& getCachedPraticien($sejour->praticien_id);
           $sejour->_ref_patient =& getCachedPatient($sejour->patient_id);
 		      // Chargement des droits CMU
@@ -171,7 +171,7 @@ function loadSejourNonAffectes($where, $order = null, $praticien_id = null) {
 
   foreach ($sejourNonAffectes as &$sejour) {
   	$sejour->loadRefPrestation();
-  	$sejour->loadNumDossier();
+  	$sejour->loadNDA();
   	$sejour->loadRefsPrescriptions();
     $sejour->_ref_praticien =& getCachedPraticien($sejour->praticien_id);
     $sejour->_ref_patient   =& getCachedPatient($sejour->patient_id);

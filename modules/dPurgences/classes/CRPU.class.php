@@ -289,7 +289,7 @@ class CRPU extends CMbObject {
   
   function loadRefSejourMutation() {
     $this->_ref_sejour_mutation = $this->loadFwdRef("mutation_sejour_id", true);
-    $this->_ref_sejour_mutation->loadNumDossier();
+    $this->_ref_sejour_mutation->loadNDA();
   }
   
   function bindSejour() {

@@ -24,13 +24,14 @@ class CExchangeSource extends CMbObject {
   );
   
   // DB Fields
-  var $name         = null;
-  var $role         = null;
-  var $host         = null;
-  var $user         = null;
-  var $password     = null;
-  var $type_echange = null;
-  var $active       = null;
+  var $name               = null;
+  var $role               = null;
+  var $host               = null;
+  var $user               = null;
+  var $password           = null;
+  var $type_echange       = null;
+  var $active             = null;
+  var $loggable           = null;
   
   // Behaviour Fields
   var $_client            = null;
@@ -53,6 +54,7 @@ class CExchangeSource extends CMbObject {
     $specs["password"]       = "password revealable";
     $specs["type_echange"]   = "str protected";
     $specs["active"]         = "bool default|1 notNull";
+    $specs["loggable"]       = "bool default|1 notNull";
     
     $specs["_incompatible"]  = "bool";
     $specs["_reachable"]     = "enum list|0|1|2 default|0";

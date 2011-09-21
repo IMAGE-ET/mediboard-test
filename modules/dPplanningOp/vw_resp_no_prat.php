@@ -30,7 +30,7 @@ if ($repair) {
   $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
   foreach ($sejours as $_sejour) {
     $_sejour->loadRefPraticien();
-    $_sejour->loadNumDossier();
+    $_sejour->loadNDA();
     $_sejour->loadRefsConsultations();
     $consult_atu = $_sejour->_ref_consult_atu;
     $consult_atu->loadRefPlageConsult();
@@ -43,7 +43,7 @@ if ($repair) {
 
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 foreach ($sejours as $_sejour) {
-  $_sejour->loadNumDossier();
+  $_sejour->loadNDA();
   $_sejour->loadRefPraticien();
   $_sejour->loadRefsConsultations();
   $_sejour->_ref_consult_atu->loadRefPlageConsult();

@@ -203,7 +203,7 @@ if ($consult->sejour_id) {
 if ($consult->_ref_sejour && $consult->_ref_sejour->_id){
   $consult->_ref_sejour->loadExtDiagnostics();
   $consult->_ref_sejour->loadRefDossierMedical();
-  $consult->_ref_sejour->loadNumDossier();
+  $consult->_ref_sejour->loadNDA();
   
   $consult->_ref_chir->isUrgentiste();
   if ($consult->_ref_chir->_is_urgentiste) {

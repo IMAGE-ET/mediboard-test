@@ -80,7 +80,7 @@ if (!$sip_config["verify_repair"]) {
 	    $actes_ccam->loadRefPraticien();
 	  }
 	  $sejour->loadRefsAffectations();
-	  $sejour->loadNumDossier();
+	  $sejour->loadNDA();
 	  $sejour->loadLogs();
 	  $sejour->loadRefsConsultations();
 	  $sejour->loadRefsConsultAnesth();

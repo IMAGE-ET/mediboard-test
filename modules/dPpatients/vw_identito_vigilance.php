@@ -40,7 +40,7 @@ if ($patient->_id) {
 
 if ($patient->_id) {
   foreach($patient->_ref_sejours as &$_sejour){
-  	$_sejour->loadNumDossier();
+  	$_sejour->loadNDA();
   }
 }
 
@@ -55,7 +55,7 @@ foreach ($listSiblings as &$_sibling) {
   $_sibling->loadIPP();
   $_sibling->loadIdVitale();
   foreach($_sibling->_ref_sejours as &$_sejour){
-  	$_sejour->loadNumDossier();
+  	$_sejour->loadNDA();
   }
 }
 

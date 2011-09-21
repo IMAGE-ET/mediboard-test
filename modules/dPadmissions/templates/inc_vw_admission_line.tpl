@@ -124,19 +124,19 @@
       this.pop();
     };
   </script>
-  {{if $_sejour->_ref_numdos}}
+  {{if $_sejour->_ref_NDA}}
   <form name="editNumdos{{$_sejour->_id}}" action="?m={{$m}}" method="post" onsubmit="return ExtRefManager.submitNumdosForm({{$_sejour->_id}})">
     <input type="hidden" name="dosql" value="do_idsante400_aed" />
     <input type="hidden" name="m" value="dPsante400" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="ajax" value="1" />
-    <input type="hidden" name="id_sante400_id" value="{{$_sejour->_ref_numdos->_id}}" />
-    <input type="hidden" class="notNull" name="id400" value="{{$_sejour->_ref_numdos->id400}}" size="8" />
-    <input type="hidden" class="notNull" name="tag" value="{{$_sejour->_ref_numdos->tag}}" />
+    <input type="hidden" name="id_sante400_id" value="{{$_sejour->_ref_NDA->_id}}" />
+    <input type="hidden" class="notNull" name="id400" value="{{$_sejour->_ref_NDA->id400}}" size="8" />
+    <input type="hidden" class="notNull" name="tag" value="{{$_sejour->_ref_NDA->tag}}" />
     <input type="hidden" class="notNull" name="object_id" value="{{$_sejour->_id}}" />
     <input type="hidden" class="notNull" name="object_class" value="CSejour" />
     <input type="hidden" class="notNull" name="sejour_id" value="{{$_sejour->_id}}" />
-    <input type="hidden" name="last_update" value="{{$_sejour->_ref_numdos->last_update}}" />
+    <input type="hidden" name="last_update" value="{{$_sejour->_ref_NDA->last_update}}" />
     {{if @$modules.hprim21}}
       <button type="button" class="edit notext" onclick="setExternalIds(this.form)">Edit external Ids</button>
     {{/if}}

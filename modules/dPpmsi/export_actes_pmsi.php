@@ -26,7 +26,7 @@ switch ($object_class) {
 		  }
 		  $mbSejour =& $object->_ref_sejour;
 		  $mbSejour->loadRefsFwd();
-		  $mbSejour->loadNumDossier();
+		  $mbSejour->loadNDA();
 		  $mbSejour->_ref_patient->loadIPP();
 		  if (isset($_POST["sc_patient_id"  ])) $mbSejour->_ref_patient->_IPP = $_POST["sc_patient_id"  ];
 		  if (isset($_POST["sc_venue_id"    ])) $mbSejour->_NDA             = $_POST["sc_venue_id"    ];
@@ -42,7 +42,7 @@ switch ($object_class) {
 		if ($object->load($sejour_id)) {
 		  $object->loadRefs();
 		  $object->loadRefDossierMedical();
-		  $object->loadNumDossier();
+		  $object->loadNDA();
 		  $object->_ref_patient->loadIPP();
 		  if (isset($_POST["sc_patient_id"  ])) $object->_ref_patient->_IPP = $_POST["sc_patient_id"  ];
 		  if (isset($_POST["sc_venue_id"    ])) $object->_NDA               = $_POST["sc_venue_id"    ];

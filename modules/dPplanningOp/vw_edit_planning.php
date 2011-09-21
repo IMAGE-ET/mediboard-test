@@ -119,7 +119,7 @@ CValue::setSession("chir_id", $chir->_id);
 
 // Compléments de chargement du séjour
 $sejour->makeDatesOperations();
-$sejour->loadNumDossier();
+$sejour->loadNDA();
 $sejour->loadRefsNotes();
 
 // Chargements de chargement du patient

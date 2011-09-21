@@ -35,7 +35,7 @@ if ($patient->_id) {
   
   // Sejours
   foreach ($patient->_ref_sejours as $_sejour) {
-    $_sejour->loadNumDossier();
+    $_sejour->loadNDA();
     $_sejour->loadRefsOperations();
     $_sejour->canRead();
     $_sejour->canEdit();

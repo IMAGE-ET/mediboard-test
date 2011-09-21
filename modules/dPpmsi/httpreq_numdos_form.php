@@ -18,7 +18,7 @@ $sejour->load($sejour_id);
 $sejour->loadRefPatient();
 
 if ($sejour->_id) {
-  $sejour->loadNumDossier();
+  $sejour->loadNDA();
 }
 
 // Création du template

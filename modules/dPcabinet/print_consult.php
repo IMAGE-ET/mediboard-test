@@ -27,7 +27,7 @@ $consult->loadComplete();
 $sejour = $consult->_ref_sejour;
 $sejour->loadRefsConsultations();
 $sejour->loadListConstantesMedicales();
-$sejour->loadNumDossier();
+$sejour->loadNDA();
 $sejour->loadSuiviMedical();
 $patient = $consult->_ref_patient;
 

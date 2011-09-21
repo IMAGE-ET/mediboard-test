@@ -136,7 +136,8 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_ref_consult_atu       = null;
   var $_ref_prescriptions     = null;
   var $_ref_last_prescription = null;
-  var $_ref_numdos            = null;
+  var $_ref_NDA               = null; 
+  var $_ref_NPA               = null; 
   var $_ref_prescripteurs     = null;
   var $_ref_adresse_par_prat  = null;
   var $_ref_prescription_sejour = null;
@@ -154,8 +155,9 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_dates_operations          = null;
   var $_dates_consultations       = null;
   var $_codes_ccam_operations     = null;
-  var $_NDA                       = null;
-  var $_list_constantes_medicales = null;
+  var $_NDA                       = null; // Numéro Dossier Administratif
+  var $_NPA                       = null; // Numéro Pré-Admission
+  var $_list_constantes_medicales = null; 
   var $_cancel_alerts             = null;
   var $_ref_suivi_medical         = null;
   var $_diagnostics_associes      = null;
@@ -1356,7 +1358,7 @@ class CSejour extends CCodable implements IPatientRelated {
       $this->_ref_rpu->loadRefSejour();
     }
     
-    $this->loadNumDossier();
+    $this->loadNDA();
     
     // Chargement de la consultation anesth pour l'affichage de la fiche d'anesthesie
     $this->loadRefsConsultAnesth();
@@ -1368,7 +1370,7 @@ class CSejour extends CCodable implements IPatientRelated {
   
   function loadView() {
     parent::loadView();
-    $this->loadNumDossier();
+    $this->loadNDA();
   }
 
 /**
@@ -1417,15 +1419,15 @@ class CSejour extends CCodable implements IPatientRelated {
    * @param $group_id Permet de charger le NDOS pour un établissement donné si non null
    * @return string
    */
-  static function getTagNumDossier($group_id = null, $type_tag = "tag_dossier") {
-    $tag_dossier = CAppUI::conf("dPplanningOp CSejour tag_dossier");
+  static function getTagNDA($group_id = null, $type_tag = "tag_dossier") {
+    $tag_NDA = CAppUI::conf("dPplanningOp CSejour tag_dossier");
     
     if ($type_tag != "tag_dossier") {
-      $tag_dossier = CAppUI::conf("dPplanningOp CSejour $type_tag") . $tag_dossier;
+      $tag_NDA = CAppUI::conf("dPplanningOp CSejour $type_tag") . $tag_NDA;
     }
     
     // Pas de tag Num dossier
-    if (null == $tag_dossier) {
+    if (null == $tag_NDA) {
       return;
     }
     
@@ -1443,46 +1445,71 @@ class CSejour extends CCodable implements IPatientRelated {
     }
     
     if (CAppUI::conf('smp server')) {
-      $tag_dossier = CAppUI::conf('smp tag_dossier');
+      $tag_NDA = CAppUI::conf('smp tag_dossier');
     }
     
-    return str_replace('$g', $group_id, $tag_dossier);
+    return str_replace('$g', $group_id, $tag_NDA);
   }
   
   /**
    * Charge le NDA du séjour pour l'établissement courant
    * @param $group_id Permet de charger le NDA pour un établissement donné si non null
    */
-  function loadNumDossier($group_id = null) {
+  function loadNDA($group_id = null) {
     // Objet inexistant
     if (!$this->_id) {
       return "-";
     }
     
     // Aucune configuration de numéro de dossier
-    if (null == $tag_dossier = $this->getTagNumDossier($group_id)) {
+    if (null == $tag_NDA = $this->getTagNDA($group_id)) {
       $this->_NDA = str_pad($this->_id, 6, "0", STR_PAD_LEFT);
       return;
     }  
     
     // Recuperation de la valeur de l'id400
     $id400 = new CIdSante400();
-    $id400->loadLatestFor($this, $tag_dossier);
+    $id400->loadLatestFor($this, $tag_NDA);
     
     // Stockage de la valeur de l'id400
-    $this->_ref_numdos  = $id400;
-    $this->_NDA = $id400->id400;
+    $this->_ref_NDA = $id400;
+    $this->_NDA     = $id400->id400;
   }
   
-  function loadFromNumDossier($nda) {
+  /**
+   * Charge le Numéro de pré-admission du séjour pour l'établissement courant
+   * @param $group_id Permet de charger le NPA pour un établissement donné si non null
+   */
+  function loadNPA($group_id = null) {
+    // Objet inexistant
+    if (!$this->_id) {
+      return "-";
+    }
+    
     // Aucune configuration de numéro de dossier
-    if (null == $tag_dossier = $this->getTagNumDossier()) {
+    if (null == $tag_NPA = $this->getTagNDA($group_id, "tag_dossier_pa")) {
+      $this->_NPA = str_pad($this->_id, 6, "0", STR_PAD_LEFT);
+      return;
+    }  
+    
+    // Recuperation de la valeur de l'id400
+    $id400 = new CIdSante400();
+    $id400->loadLatestFor($this, $tag_NPA);
+    
+    // Stockage de la valeur de l'id400
+    $this->_ref_NPA = $id400;
+    $this->_NPA     = $id400->id400;
+  }
+  
+  function loadFromNDA($nda) {
+    // Aucune configuration de numéro de dossier
+    if (null == $tag_NDA = $this->getTagNDA()) {
       return;
     }  
     
     $idDossier = new CIdSante400();
     $idDossier->id400 = $nda;
-    $idDossier->tag = $tag_dossier;
+    $idDossier->tag = $tag_NDA;
     $idDossier->object_class = $this->_class;
     $idDossier->loadMatchingObject();
     
@@ -1596,7 +1623,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $template->addProperty("Hospitalisation - Durée"          , $this->_duree_prevue);
     $template->addDateProperty("Hospitalisation - Date sortie", $this->sortie_prevue);
     
-    $this->loadNumDossier();
+    $this->loadNDA();
     $template->addProperty("Sejour - Numéro de dossier"       , $this->_NDA );
     $template->addBarcode ("Sejour - Code barre ID"           , "SID$this->_id"     );
     $template->addBarcode ("Sejour - Code barre NDOS"         , "NDOS$this->_NDA");
@@ -1891,7 +1918,7 @@ class CSejour extends CCodable implements IPatientRelated {
   
   function completeLabelFields() {
     $this->loadRefPraticien();
-    $this->loadNumDossier();
+    $this->loadNDA();
     return array("DATE ENT" => mbDateToLocale($this->entree), "PRAT RESPONSABLE" => $this->_ref_praticien->_view,
                  "NDOS"     => $this->_NDA); 
   }

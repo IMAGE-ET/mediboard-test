@@ -29,7 +29,7 @@ foreach($service->_ref_chambres as &$_chambre){
       
       // Détail du séjour
       $sejour->checkDaysRelative($date);
-      $sejour->loadNumDossier();
+      $sejour->loadNDA();
       $sejour->loadRefsNotes();
       
       // Patient

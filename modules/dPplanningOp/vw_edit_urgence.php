@@ -108,7 +108,7 @@ $anesthesistes = $chir->loadAnesthesistes(PERM_READ);
 
 // Compléments de chargement du séjour
 $sejour->makeDatesOperations();
-$sejour->loadNumDossier();
+$sejour->loadNDA();
 $sejour->loadRefsNotes();
 
 // Chargements de chargement du patient

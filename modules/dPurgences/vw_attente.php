@@ -30,7 +30,7 @@ foreach($listSejours as &$_sejour) {
   $_sejour->loadRefsFwd();
   $_sejour->loadRefRPU();
   $_sejour->_ref_rpu->loadRefSejourMutation();
-  $_sejour->loadNumDossier();
+  $_sejour->loadNDA();
   
   // Chargement de l'IPP
   $_sejour->_ref_patient->loadIPP();

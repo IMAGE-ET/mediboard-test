@@ -86,7 +86,7 @@ $patient->loadRefsSejours();
 
 if (count($patient->_ref_sejours))
   foreach($patient->_ref_sejours as $_sejour) {
-    $_sejour->loadNumDossier();
+    $_sejour->loadNDA();
     $_sejour->loadRefPraticien();
     $_sejour->loadRefEtablissement();
   }
@@ -121,7 +121,7 @@ $heure_entree_veille = $config["heure_entree_veille"];
 $heure_entree_jour   = $config["heure_entree_jour"];
 
 $sejour->makeCancelAlerts();
-$sejour->loadNumDossier();
+$sejour->loadNDA();
 
 // Chargement des etablissements externes
 $order = "nom";
