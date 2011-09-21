@@ -10,6 +10,7 @@
 
 $dPconfig["dPcabinet"] = array(
   "keepchir" => 1,
+  "display_nb_consult" => "cab",
   "CPlageconsult" => array (
     "hours_start"      => "8",
     "hours_stop"       => "20",

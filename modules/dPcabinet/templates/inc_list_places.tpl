@@ -44,9 +44,10 @@ PlageConsult.addPlaceAfter = function(plage_id) {
 </form>
 {{/if}}
 <table class="tbl">
+  {{assign var=display_nb_consult value=$conf.dPcabinet.display_nb_consult}}
   {{if $plage->_id}}
   <tr>
-    <th colspan="3">
+    <th colspan="{{if $display_nb_consult}}5{{else}}3{{/if}}">
       {{if $online}}
         {{mb_include module=system template=inc_object_notes object=$plage}}
       {{/if}}
@@ -57,7 +58,7 @@ PlageConsult.addPlaceAfter = function(plage_id) {
   </tr>
   {{if $online && !$plage->locked}}
   <tr>
-    <td class="button" colspan="3">
+    <td class="button" colspan="{{if $display_nb_consult}}5{{else}}3{{/if}}">
       <button type="button" class="add singleclick" onclick="PlageConsult.addPlaceBefore()">
         Avant
       </button>
@@ -68,13 +69,23 @@ PlageConsult.addPlaceAfter = function(plage_id) {
   </tr>
   {{/if}}
   <tr>
-    <th>Heure</th>
-    <th>Patient</th>
-    <th>Durée</th>
+    <th class="narrow" rowspan="2">Heure</th>
+    <th rowspan="2">Patient</th>
+    {{if $display_nb_consult != "none"}}
+      <th colspan="{{if $display_nb_consult == "cab"}}2{{else}}3{{/if}}" class="narrow">Occupation</th>
+    {{/if}}
+  </tr>
+  <tr>
+    {{if $display_nb_consult == "cab" || $display_nb_consult == "etab"}}
+      <th>Cab.</th>
+    {{/if}}
+    {{if $display_nb_consult == "etab"}}
+      <th>Etab.</th>
+    {{/if}}
   </tr>
   {{else}}
   <tr>
-    <th colspan="3">Pas de plage le {{$date|date_format:$conf.longdate}}</th>
+    <th colspan="{{if $display_nb_consult}}5{{else}}3{{/if}}">Pas de plage le {{$date|date_format:$conf.longdate}}</th>
   </tr>
   {{/if}}
   {{foreach from=$listBefore item =_consultation}}
@@ -98,31 +109,18 @@ PlageConsult.addPlaceAfter = function(plage_id) {
         {{assign var="style" value=""}}
       {{/if}}
       <div {{$style|smarty:nodefaults}}>
-        {{if !$_consultation->patient_id}}
-          [PAUSE]
-          {{if $_consultation->motif}}
-          ({{$_consultation->motif|truncate:"20"}})
-          {{/if}}
-        {{else}}
-          {{$_consultation->_ref_patient->_view}}
-          {{if $_consultation->motif}}
-          ({{$_consultation->motif|truncate:"20"}})
-          {{/if}}
+        {{$_consultation->patient_id|ternary:$_consultation->_ref_patient:"[PAUSE]"}}
+        {{if $_consultation->duree > 1}}
+          x{{$_consultation->duree}}
+        {{/if}}
+        {{if $_consultation->motif}}
+          <div class="compact">
+            {{$_consultation->motif|spancate}}
+          </div>
         {{/if}}
       </div>
     </td>
-    <td>
-      {{if !$_consultation->patient_id}}
-        {{assign var="style" value="style='background: #ffa;'"}}
-      {{elseif $_consultation->premiere}}
-        {{assign var="style" value="style='background: #faa;'"}}
-      {{else}} 
-        {{assign var="style" value=""}}
-      {{/if}}
-      <div {{$style|smarty:nodefaults}}>
-        {{$_consultation->duree}}
-      </div>
-    </td>
+    <td {{if $display_nb_consult}}colspan="3"{{/if}}></td>
   </tr>
   {{/foreach}}
   {{foreach from=$listPlace item=_place}}
@@ -154,34 +152,29 @@ PlageConsult.addPlaceAfter = function(plage_id) {
         {{assign var="style" value=""}}
       {{/if}}
       <div {{$style|smarty:nodefaults}}>
-        {{if !$_consultation->patient_id}}
-          [PAUSE]
-          {{if $_consultation->motif}}
-          ({{$_consultation->motif|truncate:"20"}})
-          {{/if}}
-        {{else}}
-          {{$_consultation->_ref_patient->_view}}
-          {{if $_consultation->motif}}
-          ({{$_consultation->motif|truncate:"20"}})
-          {{/if}}
+        {{$_consultation->patient_id|ternary:$_consultation->_ref_patient:"[PAUSE]"}}
+        {{if $_consultation->duree > 1}}
+          x{{$_consultation->duree}}
+        {{/if}}
+        {{if $_consultation->motif}}
+          <div class="compact">
+            {{$_consultation->motif|spancate}}
+          </div>
         {{/if}}
       </div>
       {{/foreach}}
     </td>
-    <td>
-      {{foreach from=$_place.consultations item=_consultation}}
-        {{if !$_consultation->patient_id}}
-          {{assign var="style" value="style='background: #ffa;'"}}
-        {{elseif $_consultation->premiere}}
-          {{assign var="style" value="style='background: #faa;'"}}
-        {{else}} 
-          {{assign var="style" value=""}}
-        {{/if}}
-        <div {{$style|smarty:nodefaults}}>
-          {{$_consultation->duree}}
-        </div>
-      {{/foreach}}
-    </td>
+    {{assign var=time value=$_place.time}}
+    {{if $display_nb_consult == "cab" || $display_nb_consult == "etab"}}
+      <td>
+        {{mb_include module=dPcabinet template=inc_vw_jeton nb=$utilisation_func.$time}}
+      </td>
+    {{/if}}
+    {{if $display_nb_consult == "etab"}}
+      <td>
+        {{mb_include module=dPcabinet template=inc_vw_jeton nb=$utilisation_etab.$time}}
+      </td>
+    {{/if}}
   </tr>
   {{/foreach}}
   {{foreach from=$listAfter item =_consultation}}
@@ -205,31 +198,18 @@ PlageConsult.addPlaceAfter = function(plage_id) {
         {{assign var="style" value=""}}
       {{/if}}
       <div {{$style|smarty:nodefaults}}>
-        {{if !$_consultation->patient_id}}
-          [PAUSE]
-          {{if $_consultation->motif}}
-          ({{$_consultation->motif|truncate:"20"}})
-          {{/if}}
-        {{else}}
-          {{$_consultation->_ref_patient->_view}}
-          {{if $_consultation->motif}}
-          ({{$_consultation->motif|truncate:"20"}})
-          {{/if}}
+        {{$_consultation->patient_id|ternary:$_consultation->_ref_patient:"[PAUSE]"}}
+        {{if $_consultation->duree > 1}}
+          x{{$_consultation->duree}}
+        {{/if}}
+        {{if $_consultation->motif}}
+          <div class="compact">
+            {{$_consultation->motif|spancate}}
+          </div>
         {{/if}}
       </div>
     </td>
-    <td>
-      {{if !$_consultation->patient_id}}
-        {{assign var="style" value="style='background: #ffa;'"}}
-      {{elseif $_consultation->premiere}}
-        {{assign var="style" value="style='background: #faa;'"}}
-      {{else}} 
-        {{assign var="style" value=""}}
-      {{/if}}
-      <div {{$style|smarty:nodefaults}}>
-        {{$_consultation->duree}}
-      </div>
-    </td>
+    <td {{if $display_nb_consult}}colspan="3"{{/if}}></td>
   </tr>
   {{/foreach}}
 </table>

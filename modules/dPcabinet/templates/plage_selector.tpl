@@ -34,7 +34,7 @@ Main.add(function () {
 
 </script>
 
-<table class="main">
+<table class="main" style="table-layout: fixed;">
 
 <tr>
   <td class="category" colspan="2">

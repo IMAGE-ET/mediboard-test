@@ -50,6 +50,8 @@
   
   {{mb_include module=system template=inc_config_bool var=keepchir}}
   
+  {{mb_include module=system template=inc_config_enum var=display_nb_consult values="none|cab|etab"}}
+  
   <!-- Champs de l'onglet examen -->
   {{assign var="class" value="CConsultation"}}
     

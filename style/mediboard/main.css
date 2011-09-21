@@ -1793,3 +1793,40 @@ div.sniffed.ok {
 div.sniffed.old {
   background: #ffd; 
 }
+
+div.jeton_dizaine {
+  background: #333;
+  border: 1px solid #666;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  float: left;
+  width: 11px;
+  height: 11px;
+  margin-right: -7px;
+}
+  
+div.jeton_unite {
+  background: #ddd;
+  border: 1px solid #666;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  float: left;
+  width: 7px;
+  height: 7px;
+  margin-top: 2px;
+  margin-right: -6px;
+}
+
+td.desistee {
+	background: #faa !important;
+}
+
+td.waiting {
+	background: #fda !important;
+}
+
+td.remplacement_ok {
+	background: #bfb !important;
+}
