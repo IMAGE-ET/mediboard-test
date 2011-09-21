@@ -65,9 +65,9 @@
     {{if $medicalView}}
 			<th style="width: 16em;">
 			{{if $conf.dPurgences.diag_prat_view}}
-	      {{tr}}CRPU-diag_infirmier{{/tr}} / {{tr}}Medical{{/tr}}
+	      {{tr}}CRPU-diag_infirmier-court{{/tr}} / {{tr}}Medical{{/tr}}
 			{{else}}
-			  {{tr}}CRPU-diag_infirmier{{/tr}}
+			  {{tr}}CRPU-diag_infirmier-court{{/tr}}
 			{{/if}}
 		  </th>
     {{/if}}

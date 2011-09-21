@@ -18,11 +18,9 @@ function printPage(element){
   
   var mainCourante = $("main-courante-container").clone(true);
   var container = DOM.div({}, mainCourante);
-  var dossiers = mainCourante.select('div.dossier');
+  var dossiers = mainCourante.select('div.dossier > .content');
   
   dossiers.each(function(e){
-    e.style.cssText = null; // e.show()
-    e.removeClassName("modal");
     container.insert(e);
   });
   
@@ -35,16 +33,17 @@ function printPage(element){
 <table class="main">
   <tr>
     <th>
-    	{{if $offline}}
-        <button style="float: left;" onclick="printPage(this)" class="print not-printable">{{tr}}Print{{/tr}}</button>
-	      <span style="float: right;">
-	        {{$dateTime|date_format:$conf.datetime}}
-	      </span>
-	    {{/if}}
+      {{if $offline}}
+        <button style="float: left;" onclick="window.print()" class="print not-printable">Main courante</button>
+        <button style="float: left;" onclick="printPage(this)" class="print not-printable">Dossiers</button>
+        <span style="float: right;">
+          {{$dateTime|date_format:$conf.datetime}}
+        </span>
+      {{/if}}
        <a href="#print" onclick="printPage(this)">
         Résumé des Passages aux Urgences du 
-				{{$date|date_format:$conf.longdate}}
-				<br /> Total: {{$sejours|@count}} RPU
+        {{$date|date_format:$conf.longdate}}
+        <br /> Total: {{$sejours|@count}} RPU
       </a>
     </th>
   </tr>
@@ -53,104 +52,104 @@ function printPage(element){
       <table class="tbl">
         <tr>
           <th class="narrow text">{{mb_title class=CRPU field=_entree}}</th>
-				  <th>{{mb_label class=CRPU field=_patient_id}}</th>
-				  <th style="width:  8em;">{{mb_label class=CRPU field=ccmu}}</th>
-					<th>{{mb_label class=CRPU field=diag_infirmier}}</th>
-					<th class="narrow">Heure PeC</th>
-				  <th style="width:  8em;">{{mb_label class=CRPU field=_responsable_id}}</th>  
-					<th class="narrow">
-						{{mb_label class=CSejour field=mode_sortie}} 
-						<br/> &amp; 
-						{{mb_label class=CRPU field=orientation}}
-					</th>
-				  <th class="narrow">{{mb_title class=CRPU field=_sortie}}</th>
-				</tr>
-				
-			  {{foreach from=$sejours item=sejour}}
-			  {{assign var=rpu value=$sejour->_ref_rpu}}
-			  {{assign var=patient value=$sejour->_ref_patient}}
-			  {{assign var=consult value=$rpu->_ref_consult}}
-			  <tr>
+          <th>{{mb_title class=CRPU field=_patient_id}}</th>
+          <th style="width: 8em;">{{mb_title class=CRPU field=ccmu}}</th>
+          <th>{{mb_title class=CRPU field=diag_infirmier}}</th>
+          <th class="narrow">Heure PeC</th>
+          <th style="width: 8em;">{{mb_title class=CRPU field=_responsable_id}}</th>  
+          <th class="narrow">
+            {{mb_title class=CSejour field=mode_sortie}} 
+            <br/> &amp; 
+            {{mb_title class=CRPU field=orientation}}
+          </th>
+          <th class="narrow">{{mb_title class=CRPU field=_sortie}}</th>
+        </tr>
+        
+        {{foreach from=$sejours item=sejour}}
+        {{assign var=rpu value=$sejour->_ref_rpu}}
+        {{assign var=patient value=$sejour->_ref_patient}}
+        {{assign var=consult value=$rpu->_ref_consult}}
+        <tr>
           <td style="text-align: right;">
             {{mb_value object=$sejour field=entree}}
             {{if $sejour->_veille}}
               <br/> Admis la veille
             {{/if}}
           </td>
-			    <td class="text">
-						{{if $offline && $rpu->_id}}
-	            <button class="search notext not-printable" onclick="$('modal-{{$sejour->_id}}').up('tr').show(); modalwindow = modal($('modal-{{$sejour->_id}}'));">
-	              {{tr}}Show{{/tr}}
-	            </button>
- 	          {{/if}}
+          <td class="text">
+            {{if $offline && $rpu->_id}}
+              <button class="search notext not-printable" onclick="$('modal-{{$sejour->_id}}').up('tr').show(); modalwindow = modal($('modal-{{$sejour->_id}}'));">
+                {{tr}}Show{{/tr}}
+              </button>
+             {{/if}}
             {{assign var=rpu_link value="#`$patient->_guid`"}}
             {{mb_include template=inc_rpu_patient}}
-					</td>
+          </td>
         {{if $rpu->_id}}
-					<td class="ccmu-{{$rpu->ccmu}} text">
+          <td class="ccmu-{{$rpu->ccmu}} text">
             {{if $rpu->ccmu}}
-  						{{mb_value object=$rpu field="ccmu"}}
+              {{mb_value object=$rpu field="ccmu"}}
             {{/if}}
-					</td>
-					<td class="text">
-	          {{if $rpu->date_at}} 
-  	        <img src="images/icons/accident_travail.png" />
-	          {{/if}}
+          </td>
+          <td class="text">
+            {{if $rpu->date_at}} 
+            <img src="images/icons/accident_travail.png" />
+            {{/if}}
             <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
               {{$rpu->diag_infirmier|nl2br}}
             </span>
-					</td>    
-					<td>{{mb_value object=$consult field="heure"}}</td>      
-			    <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}</td>
-					<td>
-						{{if $sejour->sortie_reelle}}
-							{{mb_value object=$sejour field="mode_sortie"}}
-						{{/if}}
-					  {{if $sejour->mode_sortie == "transfert"}}
-						  <br />
-						  &gt; <strong>{{mb_value object=$sejour field=etablissement_transfert_id}}</strong>
-						{{/if}}
+          </td>    
+          <td>{{mb_value object=$consult field="heure"}}</td>      
+          <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}</td>
+          <td>
+            {{if $sejour->sortie_reelle}}
+              {{mb_value object=$sejour field="mode_sortie"}}
+            {{/if}}
+            {{if $sejour->mode_sortie == "transfert"}}
+              <br />
+              &gt; <strong>{{mb_value object=$sejour field=etablissement_transfert_id}}</strong>
+            {{/if}}
             {{if $sejour->mode_sortie == "mutation"}}
               <br />
               &gt; <strong>{{mb_value object=$sejour field=service_mutation_id}}</strong>
             {{/if}}
-						{{if $rpu->orientation}}
-							<br />
-						  {{mb_value object=$rpu field="orientation"}}
-						{{/if}}
-						<em>{{mb_value object=$sejour field=commentaires_sortie}}</em>
-					</td>
+            {{if $rpu->orientation}}
+              <br />
+              {{mb_value object=$rpu field="orientation"}}
+            {{/if}}
+            <em>{{mb_value object=$sejour field=commentaires_sortie}}</em>
+          </td>
           
-					
+          
           {{if $sejour->type != "urg"}}
             <td colspan="2" class="text arretee">
-    					<strong>{{mb_value object=$sejour field=type}}</strong>
-						</td>
+              <strong>{{mb_value object=$sejour field=type}}</strong>
+            </td>
 
-		      {{elseif $sejour->annule}}
+          {{elseif $sejour->annule}}
           <td class="cancelled" colspan="2">
             {{tr}}Cancelled{{/tr}}
-				  </td>
-					
+          </td>
+          
           {{elseif $rpu->mutation_sejour_id}}
-		      {{mb_include template=inc_dossier_mutation colspan=2}}
-						
-					{{else}}
-						{{if !$sejour->sortie_reelle}}
-	  					<td />
-						{{else}}
-		          <td style="text-align: right;">{{mb_value object=$sejour field=_sortie}}</td>
-	          {{/if}}
-					{{/if}}
-			  {{else}}
-					<!-- Pas de RPU pour ce séjour d'urgence -->
-					<td colspan="10">
-					  <div class="small-warning">
-					  	Ce séjour d'urgence n'est pas associé à un RPU.
-					  </div>
-					</td>
-				{{/if}}
-				</tr>
+          {{mb_include template=inc_dossier_mutation colspan=2}}
+            
+          {{else}}
+            {{if !$sejour->sortie_reelle}}
+              <td />
+            {{else}}
+              <td style="text-align: right;">{{mb_value object=$sejour field=_sortie}}</td>
+            {{/if}}
+          {{/if}}
+        {{else}}
+          <!-- Pas de RPU pour ce séjour d'urgence -->
+          <td colspan="10">
+            <div class="small-warning">
+              Ce séjour d'urgence n'est pas associé à un RPU.
+            </div>
+          </td>
+        {{/if}}
+        </tr>
         
         <!-- Modal window -->
         <tr style="display: none;" class="modal-row">
@@ -158,73 +157,78 @@ function printPage(element){
             {{if $offline && $rpu->_id}}
               <div id="modal-{{$sejour->_id}}" style="height: 90%; min-width: 700px; overflow: auto;" class="dossier">
                 <button style="float: right" class="cancel not-printable" onclick="modalwindow.close(); $('modal-{{$sejour->_id}}').up('tr').hide()">{{tr}}Close{{/tr}}</button>
+                <button style="float: right" class="print not-printable" onclick="$(this).next('.content').print()">{{tr}}Print{{/tr}}</button>
                 
-                {{assign var=sejour_id value=$sejour->_id}}
-                {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
-                
-                {{if array_key_exists($sejour_id, $csteByTimeAll)}}
-                  {{assign var=constantes_medicales_grid value=$csteByTimeAll.$sejour_id}}
-                {{/if}}
-                
-                {{mb_include module=dPurgences template=print_dossier}}
+                <div class="content" style="page-break-before: always;">
+                  {{assign var=sejour_id value=$sejour->_id}}
+                  {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
+                  
+                  {{assign var=constantes_medicales_grid value=null}}
+                    
+                  {{if array_key_exists($sejour_id, $csteByTimeAll)}}
+                    {{assign var=constantes_medicales_grid value=$csteByTimeAll.$sejour_id}}
+                  {{/if}}
+                  
+                  {{mb_include module=dPurgences template=print_dossier}}
+                </div>
               </div>
             {{/if}}
           </td>
         </tr>
-			  {{/foreach}}
-			</table>
-	  </td>
+        {{/foreach}}
+      </table>
+    </td>
   </tr>
 </table>
 
 <table class="tbl">
-	<tr>
+  <tr>
     <th class="title" colspan="1">
-    	Statistiques d'entrée
+      Statistiques d'entrée
       <small>({{$stats.entree.total}})</small>
-		</th>
+    </th>
     <th class="title" colspan="2">
-    	Statistiques de sorties
+      Statistiques de sorties
       <small>({{$stats.sortie.total}})</small>
-		</th>
-	</tr>
-	
-	<tr>
-		<th>{{mb_title class=CPatient field=_age}}</th>
+    </th>
+  </tr>
+  
+  <tr>
+    <th>{{mb_title class=CPatient field=_age}}</th>
     <th>
-    	{{mb_title class=CSejour field=etablissement_transfert_id}}
-			<small>({{$stats.sortie.transferts_count}})</small>
-		</th>
+      {{mb_title class=CSejour field=etablissement_transfert_id}}
+      <small>({{$stats.sortie.transferts_count}})</small>
+    </th>
     <th>
-    	{{mb_title class=CSejour field=service_mutation_id}}
+      {{mb_title class=CSejour field=service_mutation_id}}
       <small>({{$stats.sortie.mutations_count}})</small>
-		</th>
-	</tr>
-	
-	<tr>
-		<td>
-			<ul>
-			  <li>
-			    Patients de moins de 1 ans : 
-			    <strong>{{$stats.entree.less_than_1}}</strong>
-			  </li>
-			  <li>
-			    Patients de 75 ans ou plus : 
-			    <strong>{{$stats.entree.more_than_75}}</strong>
-			  </li>
-			</ul>
-		</td>
+    </th>
+  </tr>
+  
+  <tr>
+    <td>
+      <ul>
+        <li>
+          Patients de moins de 1 ans : 
+          <strong>{{$stats.entree.less_than_1}}</strong>
+        </li>
+        <li>
+          Patients de 75 ans ou plus : 
+          <strong>{{$stats.entree.more_than_75}}</strong>
+        </li>
+      </ul>
+    </td>
 
     <td>
       <ul>
-      	{{foreach from=$stats.sortie.etablissements_transfert item=_etablissement_transfert}}
-      	<li>
-      		{{$_etablissement_transfert.ref}} : 
-					<strong>{{$_etablissement_transfert.count}}</strong>
-				</li>
-      	{{foreachelse}}
+        {{foreach from=$stats.sortie.etablissements_transfert item=_etablissement_transfert}}
+        <li>
+          {{$_etablissement_transfert.ref}} : 
+          <strong>{{$_etablissement_transfert.count}}</strong>
+        </li>
+        {{foreachelse}}
         <li class="empty">{{tr}}None{{/tr}}</li>
-      	{{/foreach}}
+        {{/foreach}}
       </ul>
     </td>
 
@@ -240,7 +244,7 @@ function printPage(element){
         {{/foreach}}
       </ul>
     </td>
-	</tr>
+  </tr>
 </table>
-<br style="page-break-after: always;"/>
+
 </div>

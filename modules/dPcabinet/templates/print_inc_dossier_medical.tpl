@@ -37,5 +37,5 @@
 
 <tr>
   <th>{{mb_label object=$patient field="medecin_traitant"}}</th>
-  <td>{{mb_value object=$patient field="medecin_traitant"}}</td>
+  <td colspan="3">{{mb_value object=$patient field="medecin_traitant"}}</td>
 </tr>
