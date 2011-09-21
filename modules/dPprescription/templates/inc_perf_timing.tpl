@@ -8,6 +8,21 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+
+{{if $prescription_line_mix->perop}}
+// Submit du debut ou de la fin de la perf
+submitTiming = function(){
+  var oForm = document.forms['editPerf{{$prescription_line_mix->_id}}'];
+  submitFormAjax(oForm, "systemMsg", { onComplete: function() {
+    window.opener.Prescription.updatePerop('{{$sejour_id}}');
+		window.close();
+  } } );
+}
+{{/if}}
+	
+</script>
+
 {{assign var=prescription_line_mix_id value=$prescription_line_mix->_id}}
 <form name="editPerf{{$prescription_line_mix->_id}}" method="post" action="?">
   <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
@@ -54,6 +69,7 @@
 	</table>
 </form>
 
+{{if !$prescription_line_mix->perop}}
 <table class="tbl">
 	<th class="title">Variations du débit de la perfusion</th>
 	{{foreach from=$prescription_line_mix->_ref_variations item=_variation}}
@@ -72,7 +88,7 @@
 			  			<button type="button" class="cancel notext" onclick="$V(this.form.del, '1'); this.form.onsubmit();"></button>
 			  		</td>
 			  		<td>{{mb_field object=$_variation field=dateTime form=editVariation-$variation_id register=true}}</td>
-	          <td>{{mb_field object=$_variation field=debit increment=1 form=editVariation-$variation_id"}}</td>
+	          <td>{{mb_field object=$_variation field=debit increment=1 form="editVariation-$variation_id"}}</td>
 						<td><button type="submit" class="submit notext"></button></td>
 			  	</tr>
 			  </table>
@@ -85,3 +101,4 @@
 	</tr>
 	{{/foreach}}
 </table>
+{{/if}}

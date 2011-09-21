@@ -104,10 +104,10 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $specs["time_arret"]        = "time";
     $specs["child_id"]          = "ref class|$this->_class unlink show|0";
     $specs["decalage_line"]     = "num show|0";
-    $specs["jour_decalage"]     = "enum list|E|I|S|N default|E show|0";
+    $specs["jour_decalage"]     = "enum list|E|I|S|N|A default|E show|0";
     $specs["fin"]               = "date";
     $specs["valide_infirmiere"] = "bool";
-    $specs["jour_decalage_fin"] = "enum list|I|S show|0";
+    $specs["jour_decalage_fin"] = "enum list|I|S|A show|0";
     $specs["decalage_line_fin"] = "num show|0";
     $specs["time_fin"]          = "time show|0";
     $specs["conditionnel"]      = "bool";
@@ -122,7 +122,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $specs["recusee"]           = "bool default|0";
     $specs["_fin"]              = "date moreEquals|debut";
     $specs["_fin_reelle"]       = "date";
-    $specs["_duree"]                 = "num min|0";
+    $specs["_duree"]            = "num min|0";
 
     return $specs;
   }
@@ -478,11 +478,9 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
    */
   function removePlanifSysteme(){
 		$ds = CSQLDataSource::get("std");
-    $query = "DELETE planification_systeme.* FROM planification_systeme 
-              LEFT JOIN administration ON administration.planification_systeme_id = planification_systeme.planification_systeme_id
+    $query = "DELETE planification_systeme.* FROM planification_systeme
               WHERE planification_systeme.object_id = '$this->_id'
-							AND planification_systeme.object_class = '$this->_class'
-              AND administration.administration_id IS NULL;";
+							AND planification_systeme.object_class = '$this->_class'";
     $ds->exec($query);
   }
 	

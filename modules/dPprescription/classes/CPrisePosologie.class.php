@@ -28,10 +28,12 @@ class CPrisePosologie extends CMbMetaObject {
   var $decalage_prise        = null;  // decalage de la prise J + $decalage (par defaut 0)
   var $unite_prise           = null;
 
-  // I +/- X heures
-  var $decalage_intervention = null;  // decalage en heures par rapport à l'intervention
+  // I ou A +/- X heures
+  var $type_decalage = null;
+	var $decalage_intervention = null;  // decalage en heures par rapport à l'intervention
   var $unite_decalage_intervention = null;
   var $heure_prise           = null;  // heure calculée
+  
   
   var $condition             = null;
 	var $datetime              = null;
@@ -76,6 +78,7 @@ class CPrisePosologie extends CMbMetaObject {
     $specs["heure_prise"]           = "time";
     $specs["urgence_datetime"]   = "dateTime";          
     $specs["unite_decalage_intervention"] = "enum list|minute|heure default|heure show|0";  
+		$specs["type_decalage"] = "enum list|I|A default|I";
     $specs["condition"] = "str show|0";
     $specs["datetime"] = "dateTime show|0";
     $specs["_urgent"] = "bool";
@@ -163,13 +166,13 @@ class CPrisePosologie extends CMbMetaObject {
 			}
 			   
       // Gestion des unites de prises exprimées en libelle de presentation (ex: poche ...)
-      if($this->unite_prise == $produit->libelle_presentation){           
-        $this->_quantite_administrable *= $produit->nb_unite_presentation;
+      if($this->unite_prise == $produit->libelle_presentation){         
+			   $this->_quantite_administrable *= $produit->nb_unite_presentation;
       }
 			
       // Gestion des unite autres unite de prescription
       if(!isset($produit->rapport_unite_prise[$unite_prise][$produit->libelle_unite_presentation])) {
-        $coef = 1;
+				$coef=0;
       } else {
         $coef = $produit->rapport_unite_prise[$unite_prise][$produit->libelle_unite_presentation];
       }
@@ -268,7 +271,7 @@ class CPrisePosologie extends CMbMetaObject {
 				if($this->decalage_intervention >= 0){
 					$signe_decalage = "+";
 				}
-				$this->_view .= " à I $signe_decalage $this->decalage_intervention $this->unite_decalage_intervention(s)";
+				$this->_view .= " à $this->type_decalage $signe_decalage $this->decalage_intervention $this->unite_decalage_intervention(s)";
 			}
 		}
 		
@@ -415,7 +418,7 @@ class CPrisePosologie extends CMbMetaObject {
     if($this->heure_prise ){
       $dateTimePrise = mbAddDateTime($this->heure_prise, mbDate($this->_ref_object->_debut_reel));
       if(($sejour->_entree <= $dateTimePrise) && ($sejour->_sortie >= $dateTimePrise)){
-			$planifs[] = array("unite_prise" => "", "prise_id" => $this->_id, "dateTime" => $dateTimePrise);
+			  $planifs[] = array("unite_prise" => "", "prise_id" => $this->_id, "dateTime" => $dateTimePrise);
       }
     }
   
@@ -477,12 +480,10 @@ class CPrisePosologie extends CMbMetaObject {
     if($is_element){
       $ds = CSQLDataSource::get("std");
       $query = "DELETE planification_systeme.* FROM planification_systeme 
-              LEFT JOIN administration ON administration.planification_systeme_id = planification_systeme.planification_systeme_id
-              WHERE planification_systeme.object_id = '{$this->_ref_object->_id}'
-              AND planification_systeme.object_class = '{$this->_ref_object->_class}'
-							AND planification_systeme.sejour_id = '{$this->_ref_object->_ref_prescription->object_id}'
-							AND planification_systeme.prise_id IS NULL
-              AND administration.administration_id IS NULL;";
+                WHERE planification_systeme.object_id = '{$this->_ref_object->_id}'
+                AND planification_systeme.object_class = '{$this->_ref_object->_class}'
+							  AND planification_systeme.sejour_id = '{$this->_ref_object->_ref_prescription->object_id}'
+							  AND planification_systeme.prise_id IS NULL;";
       $ds->exec($query);    	
     }
 

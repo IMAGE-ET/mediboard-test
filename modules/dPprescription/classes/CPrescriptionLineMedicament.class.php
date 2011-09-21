@@ -540,18 +540,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       $this->code_cis = $produit->code_cis;
     }
   }
-	
-	function countLockedPlanif(){
-    $administration = new CAdministration();
-    $ljoin["planification_systeme"] = "planification_systeme.planification_systeme_id = administration.planification_systeme_id";
-    $ljoin["prescription_line_medicament"] = "prescription_line_medicament.prescription_line_medicament_id = planification_systeme.object_id AND planification_systeme.object_class = 'CPrescriptionLineMedicament'";
-    
-    // Chargement des planifications sur la ligne
-    $planification = new CPlanificationSysteme();
-    $where = array();
-    $where["prescription_line_medicament.prescription_line_medicament_id"] = " = '$this->_id'";
-    $this->_count_locked_planif = $count_planifications = $administration->countList($where, null, $ljoin);
-  }
   
   function store(){   
 		// Sauvegarde de la voie lors de la creation de la ligne
@@ -625,10 +613,9 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   	}
 
     if($calcul_planif && $this->_ref_prescription->type == "sejour"){
-  		$this->countLockedPlanif();
-	
+  
 			// Si aucune planification n'est associée à une administration, on peut les supprimer
-			if($this->_count_locked_planif == 0 && !$this->inscription){
+			if(!$this->inscription){
 				$this->removePlanifSysteme();
 				if(!$this->substitution_line_id && $this->substitution_active){
 					$this->calculPlanifSysteme();

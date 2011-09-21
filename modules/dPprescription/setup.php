@@ -2005,7 +2005,52 @@ class CSetupdPprescription extends CSetup {
               CHANGE `checked_lines` `checked_lines` ENUM ('0','1') DEFAULT '1'";
     $this->addQuery($query);
     
-		$this->mod_version = "1.48";
+		$this->makeRevision("1.48");
+		$query = "ALTER TABLE `administration`
+              DROP `planification_systeme_id`;";
+		$this->addQuery($query);
+		
+		$this->makeRevision("1.49");
+		$query = "ALTER TABLE `prescription_line_medicament`
+              CHANGE `jour_decalage` `jour_decalage` ENUM ('E','I','S','N','A') DEFAULT 'E';";
+		$this->addQuery($query);
+		
+		$query = "ALTER TABLE `prescription_line_element`
+              CHANGE `jour_decalage` `jour_decalage` ENUM ('E','I','S','N','A') DEFAULT 'E';";
+    $this->addQuery($query);
+		
+		$query = "ALTER TABLE `prescription_line_comment`
+              CHANGE `jour_decalage` `jour_decalage` ENUM ('E','I','S','N','A') DEFAULT 'E';";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `prescription_line_mix`
+              CHANGE `jour_decalage` `jour_decalage` ENUM ('E','I','S','N','A');";
+    $this->addQuery($query);
+		
+		$this->makeRevision("1.50");
+		
+		$query = "ALTER TABLE `prescription_line_medicament`
+              CHANGE `jour_decalage_fin` `jour_decalage_fin` ENUM ('I','S','A');";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `prescription_line_element`
+              CHANGE `jour_decalage_fin` `jour_decalage_fin` ENUM ('I','S','A');";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `prescription_line_comment`
+              CHANGE `jour_decalage_fin` `jour_decalage_fin` ENUM ('I','S','A');";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `prescription_line_mix`
+              CHANGE `jour_decalage_fin` `jour_decalage_fin` ENUM ('I','S','A');";
+    $this->addQuery($query);
+		
+		$this->makeRevision("1.51");
+		$query = "ALTER TABLE `prise_posologie` 
+              ADD `type_decalage` ENUM ('I','A') DEFAULT 'I';";
+		$this->addQuery($query);
+		
+		$this->mod_version = "1.52";
   }
 }
 

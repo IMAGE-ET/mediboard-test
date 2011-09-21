@@ -19,7 +19,6 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
   var $unite_prise       = null;  // Info sur la prise
   var $commentaire       = null;  // Commentaire sur l'administration
   var $prise_id          = null;
-  var $planification_systeme_id  = null;
 	var $constantes_medicales_id   = null;
 	
   // Gestion des replanifications
@@ -74,7 +73,6 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
     $specs["commentaire"]       = "text";
     $specs["planification"]     = "bool default|0";
     $specs["original_dateTime"] = "dateTime";
-    $specs["planification_systeme_id"] = "ref class|CPlanificationSysteme show|0";
     $specs["constantes_medicales_id"] = "ref class|CConstantesMedicales show|0";
     return $specs;
   }

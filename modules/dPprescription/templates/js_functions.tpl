@@ -135,6 +135,7 @@ selDivPoso = function(type, line_id, type_elt){
     break;
 		
     case "decalage_intervention"+type_elt: 
+      oFormPrise.type_decalage.enable().show();
       oFormPrise.decalage_intervention.enable().show();
 			oFormPrise.unite_decalage_intervention.enable().show();
       if(oDivDecalageIntervention){
@@ -404,7 +405,7 @@ updateFieldsMedicament = function(selected) {
 }
 
 modifUniteDecal = function(oFieldJour, oFieldUnite){
-  if(oFieldJour.value != "I"){
+  if(oFieldJour.value != "I" && oFieldJour.value != "A"){
     $V(oFieldUnite,"jour");
     oFieldUnite.disabled = "disabled";
   } else {

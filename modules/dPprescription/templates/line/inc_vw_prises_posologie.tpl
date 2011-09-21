@@ -84,6 +84,10 @@ Main.add(function () {
 					 {{if $line->_ref_produit_prescription->_id}}
 					   <option value="{{$line->_ref_produit_prescription->unite_prise}}" {{if $prise->unite_prise == $line->_ref_produit_prescription->unite_prise}}selected="selected"{{/if}}>{{$line->_ref_produit_prescription->unite_prise}}</option>
 	         {{/if}}
+					 
+					 {{if $prise->unite_prise && !in_array($prise->unite_prise, $line->_unites_prise) &&  ($prise->unite_prise != $line->_ref_produit_prescription->unite_prise)}}
+					 <option value="{{$prise->unite_prise}}" style="background-color: red;" selected="selected">{{$prise->unite_prise}}</option>
+					 {{/if}}
 				</select>
 		  {{/if}}
 		  {{if $line->_class == "CPrescriptionLineElement"}}
@@ -95,6 +99,7 @@ Main.add(function () {
 			  le {{$prise->urgence_datetime|date_format:$conf.datetime}} 
 				{{/if}} (Urgence)
 			{{/if}}
+			
 			
 		  <!-- Cas d'un moment unitaire_id -->
 		  {{if $prise->moment_unitaire_id}}
@@ -131,11 +136,19 @@ Main.add(function () {
 			    {{assign var=signe_decalage_intervention value=""}}
 			  {{/if}}
 			  à {{if $line->_protocole}}
-			  	I {{$signe_decalage_intervention}}{{mb_value object=$prise showPlus="true" field=decalage_intervention}} {{mb_value object=$prise showPlus="true" field=unite_decalage_intervention}} 
+			    {{mb_value object=$prise field="type_decalage"}} {{$signe_decalage_intervention}}{{mb_value object=$prise showPlus="true" field=decalage_intervention}} {{mb_value object=$prise showPlus="true" field=unite_decalage_intervention}} 
 			 	{{else}}
 			 	  {{mb_value object=$prise field="heure_prise"}}
 			 	{{/if}}
 			{{/if}}
+			
+			{{if $line->_class == "CPrescriptionLineMedicament"}}
+        {{if $prise->unite_prise && !in_array($prise->unite_prise, $line->_unites_prise) &&  ($prise->unite_prise != $line->_ref_produit_prescription->unite_prise)}}
+          <div class="small-error">
+            L'unité de prise sélectionnée ({{$prise->unite_prise}}) n'est plus disponible dans la banque de médicaments, veuillez la modifier !
+          </div>   
+        {{/if}}  
+      {{/if}}
 	  </form>
   </div>
 {{foreachelse}}

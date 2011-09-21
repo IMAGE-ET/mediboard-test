@@ -208,10 +208,10 @@ class CPrescriptionLineMix extends CMbObject {
 		$specs["conditionnel"]           = "bool";
     $specs["condition_active"]       = "bool";
 		
-    $specs["jour_decalage"]          = "enum list|E|I|S|N";
+    $specs["jour_decalage"]          = "enum list|E|I|S|N|A";
     $specs["decalage_line"]          = "num";
 	  $specs["unite_decalage"]         = "enum list|jour|heure";
-    $specs["jour_decalage_fin"]      = "enum list|I|S";
+    $specs["jour_decalage_fin"]      = "enum list|I|S|A";
     $specs["decalage_line_fin"]      = "num";
 		$specs["unite_decalage_fin"]     = "enum list|jour|heure";
 	
@@ -396,19 +396,6 @@ class CPrescriptionLineMix extends CMbObject {
 	    $this->_recent_modification = $this->hasRecentLog($nb_hours);
 		}
 	}
-	
-	function countLockedPlanif(){
-    $administration = new CAdministration();
-    $ljoin["planification_systeme"] = "planification_systeme.planification_systeme_id = administration.planification_systeme_id";
-    $ljoin["prescription_line_mix_item"] = "prescription_line_mix_item.prescription_line_mix_item_id = planification_systeme.object_id AND planification_systeme.object_class = 'CPrescriptionLineMixItem'";
-    $ljoin["prescription_line_mix"] = "prescription_line_mix.prescription_line_mix_id = prescription_line_mix_item.prescription_line_mix_id";
-    
-    // Chargement des planifications sur la ligne
-    $planification = new CPlanificationSysteme();
-    $where = array();
-    $where["prescription_line_mix.prescription_line_mix_id"] = " = '$this->_id'";
-    $this->_count_locked_planif = $count_planifications = $administration->countList($where, null, $ljoin);
-  }
   	
 	/*
 	 * Duplication d'une prescription_line_mix
@@ -561,11 +548,9 @@ class CPrescriptionLineMix extends CMbObject {
 		}
 		foreach($this->_ref_lines as $_perf_line){
 			$ds = CSQLDataSource::get("std");
-	    $query = "DELETE planification_systeme.* FROM planification_systeme 
-                LEFT JOIN administration ON administration.planification_systeme_id = planification_systeme.planification_systeme_id
+	    $query = "DELETE planification_systeme.* FROM planification_systeme
 	              WHERE planification_systeme.object_id = '$_perf_line->_id'
-	              AND planification_systeme.object_class = '$_perf_line->_class'
-	              AND administration.administration_id IS NULL;";
+	              AND planification_systeme.object_class = '$_perf_line->_class';";
 	    $ds->exec($query);
 		}
   }
@@ -802,15 +787,9 @@ class CPrescriptionLineMix extends CMbObject {
     }
 
 		if($calculPlanif && $this->_ref_prescription->type == "sejour"){
-			$this->countLockedPlanif();
-			
-			if($this->_count_locked_planif == 0){
-			
-		  $this->removePlanifSysteme();
+			$this->removePlanifSysteme();
 			if($this->substitution_active){
 				$this->calculPlanifsPerf();
-			}
-			
 			}
 		}
   }

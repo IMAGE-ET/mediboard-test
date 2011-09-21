@@ -49,7 +49,7 @@ Main.add(function(){
 	{{if $type != "mode_grille" && $line->_protocole && $line->_ref_prescription->type!="externe"}}
 	<label>
 	  <input name="typePrise" type="radio" value="decalage_intervention{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /> 
-	  I + x heures
+	  I/A + x heures
 	</label>
 	{{/if}}
 
@@ -122,7 +122,9 @@ Main.add(function(){
 	
   {{if $line->_protocole && $line->_ref_prescription->type!="externe"}}
   <span id="decalage_intervention{{$type}}{{$line->_id}}" style="display: none;">
-	  à I {{mb_field object=$prise_posologie showPlus="1" field=decalage_intervention size=3 increment=1 form=addPrise$type$line_id}} 
+	  à 
+		{{mb_field object=$prise_posologie field=type_decalage}}
+    {{mb_field object=$prise_posologie showPlus="1" field=decalage_intervention size=3 increment=1 form=addPrise$type$line_id}} 
 		{{mb_field object=$prise_posologie field=unite_decalage_intervention}}
   </span>
   {{/if}}

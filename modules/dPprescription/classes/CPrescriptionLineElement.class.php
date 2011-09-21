@@ -166,18 +166,6 @@ class CPrescriptionLineElement extends CPrescriptionLine {
       }
     }
   }
-  
-  function countLockedPlanif(){
-    $administration = new CAdministration();
-    $ljoin["planification_systeme"] = "planification_systeme.planification_systeme_id = administration.planification_systeme_id";
-    $ljoin["prescription_line_element"] = "prescription_line_element.prescription_line_element_id = planification_systeme.object_id AND planification_systeme.object_class = 'CPrescriptionLineElement'";
-    
-    // Chargement des planifications sur la ligne
-    $planification = new CPlanificationSysteme();
-    $where = array();
-    $where["prescription_line_element.prescription_line_element_id"] = " = '$this->_id'";
-    $this->_count_locked_planif = $count_planifications = $administration->countList($where, null, $ljoin);
-  }
 	
   function store(){
     $mode_creation = !$this->_id;
@@ -238,8 +226,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   	}
     
 		if($calcul_planif && $this->_ref_prescription->type == "sejour"){
-		  $this->countLockedPlanif();
-			if($this->_count_locked_planif == 0 && !$this->inscription){
+			if(!$this->inscription){
 		    $this->removePlanifSysteme();
 		    $this->calculPlanifSysteme();	
 			}

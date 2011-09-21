@@ -120,6 +120,9 @@
          <img src="images/icons/stop.png" title="Retrait de la perfusion" style="{{if $_prescription_line_mix->date_retrait}}opacity: 0.5{{/if}}" />
         {{if !$_prescription_line_mix->date_retrait}}</a>{{/if}}
       </form>
+			
+			
+			
 			</div>
 		{{/if}}
   {{/if}}

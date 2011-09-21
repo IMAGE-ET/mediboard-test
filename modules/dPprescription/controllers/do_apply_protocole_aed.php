@@ -21,6 +21,7 @@ $praticien_id    = CValue::post("praticien_id", $user->_id);
 $operation_id    = CValue::post("operation_id");
 $pratSel_id      = CValue::post("pratSel_id");
 $advanced_prot   = CValue::post("advanced_prot", 1);
+$perop           = CValue::post("perop", 0);
 
 // Si aucun pack/protocole selectionne, on ne fait rien
 if (!$pack_protocole_id){
@@ -136,6 +137,10 @@ $prescription->applyPackOrProtocole($pack_protocole_id, $praticien_id, $date_sel
 if ($advanced_prot) {
   // Lancement du refresh des lignes de la prescription
   echo "<script type='text/javascript'>if(window.selectLines){ selectLines('$prescription->_id', '$pack_protocole_id',".json_encode($prescription->_ids)."); }</script>";
+}
+
+if ($perop) {
+	CAppUI::callbackAjax("signatureLinesPerop");
 }
 
 echo CAppUI::getMsg();

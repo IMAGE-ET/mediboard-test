@@ -29,12 +29,6 @@ class CPlanificationSysteme extends CMbMetaObject {
     return $spec;
   }
   
-	function getBackProps() {
-    $backProps = parent::getBackProps();
-    $backProps["administration"] = "CAdministration planification_systeme_id";
-    return $backProps;
-  }
-
   function getProps() {
     $specs = parent::getProps();
     $specs["object_id"]         = "ref notNull class|CMbObject meta|object_class cascade";
@@ -50,10 +44,6 @@ class CPlanificationSysteme extends CMbMetaObject {
     $this->_ref_prise = new CPrisePosologie();
 		$this->_ref_prise = $this->_ref_prise->getCached($this->prise_id);
 		$this->_ref_prise->updateQuantite();
-	}
-	
-	function loadRefsAdministrations(){
-		$this->_ref_administrations = $this->loadBackRefs("administration");
 	}
 }
 

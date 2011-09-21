@@ -322,9 +322,13 @@ class CPrescription extends CMbObject implements IPatientRelated {
         break;
       case 'S': $date_debut = ($debut_sejour) ? $debut_sejour : $sejour->sortie; break;
       case 'N': $date_debut = mbDate(); break;
+			case 'A':
+				 $date_debut = mbDate($operation->_datetime); 
+				 // Si l'heure d'induction n'est pas encore precisée, on utilise la date prévue de l'intervention
+				 $time_debut = $operation->induction_debut ? $operation->induction_debut : mbTime($operation->_datetime);
+				 break;
     }
-    
-		
+
     $date_fin = "";
     $time_fin = "";
             
@@ -341,6 +345,10 @@ class CPrescription extends CMbObject implements IPatientRelated {
           }
         }
         break;
+			case 'A';
+			  $date_fin = mbDate($operation->_datetime); 
+        $time_fin = $operation->induction_debut ? $operation->induction_debut : mbTime($operation->_datetime);
+				break;
       case 'S': $date_fin = ($fin_sejour) ? $fin_sejour : $sejour->_sortie; break;
     }
     
@@ -397,7 +405,6 @@ class CPrescription extends CMbObject implements IPatientRelated {
 				$_line->duree++;
 			} 
 			
-			
 			// Decalage en heure
 			else {
       	$date_time_fin = mbDateTime("$signe_fin $_line->decalage_line_fin HOURS", "$date_fin $time_fin");
@@ -405,20 +412,23 @@ class CPrescription extends CMbObject implements IPatientRelated {
         $time_fin = mbTime($date_time_fin);
         
 			  if($_line instanceof CPrescriptionLineMix){
-			  	$duree_hours_mix = mbHoursRelative("$_line->date_debut $_line->time_debut", $date_time_fin);
-
-					if(($duree_hours_mix <= 24) || ($unite_decalage_debut == "HOURS" && $unite_decalage_fin == "HOURS")){
-            $_line->unite_duree = "heure";
-            $_line->duree = $duree_hours_mix;
-					} else {
-						$_line->unite_duree = "jour";
-						$_line->duree = mbDaysRelative($_line->date_debut, $date_fin);
-						$_line->duree++;
-					}
-			  } else {
-			  	$_line->duree = mbDaysRelative($_line->debut, $date_fin);
-		      $_line->duree++;
-			  }
+			  	$duree_hours = mbHoursRelative("$_line->date_debut $_line->time_debut", $date_time_fin);
+				} else {
+				  $duree_hours = mbHoursRelative("$_line->debut $_line->time_debut", $date_time_fin);
+        }
+				
+				if(($duree_hours <= 24) || ($unite_decalage_debut == "HOURS" && $unite_decalage_fin == "HOURS")){
+          $_line->unite_duree = "heure";
+          $_line->duree = $duree_hours;
+				} else {
+					$_line->unite_duree = "jour";
+					$_line->duree = mbDaysRelative($_line->date_debut, $date_fin);
+					$_line->duree++;
+					if($_line instanceof CPrescriptionLineMedicament || $_line instanceof CPrescriptionLineElement){
+	          $_line->time_fin = $time_fin;
+	        }
+				}
+		
       }
     }
 		
@@ -427,7 +437,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
       $_line->duree = 0;
     }
     
-    if($_line->jour_decalage === "I" || $_line->jour_decalage_fin === "I"){
+    if($_line->jour_decalage === "I" || $_line->jour_decalage_fin === "I" || $_line->jour_decalage === "A" || $_line->jour_decalage_fin === "A"){
       if($operation_id){
         $_line->operation_id = $operation_id;
       } else {
@@ -490,8 +500,12 @@ class CPrescription extends CMbObject implements IPatientRelated {
 	          if($date_operation){
 	            $time_operation = mbTime($date_operation); 
 	          } elseif ($operation->_id) {
-	            $time_operation = $hour_operation;
-	          }
+	            if($prise->type_decalage == "I"){
+	              $time_operation = $hour_operation;
+              } else {
+	              $time_operation = $operation->induction_debut ? $operation->induction_debut : mbTime($operation->_datetime);
+              }
+						}
 	          $signe_decalage_intervention = ($prise->decalage_intervention >= 0) ? "+" : "";
 	          if($time_operation){
 	            $unite_decalage_intervention = ($prise->unite_decalage_intervention == "heure") ? "HOURS" : "MINUTES";
@@ -505,9 +519,6 @@ class CPrescription extends CMbObject implements IPatientRelated {
 	        CAppUI::displayMsg($msg, "CPrisePosologie-msg-create");  
 	      }
 			}
-      
-			
-			
 		}   
   }
   
@@ -1978,9 +1989,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
     }
 		$ds = CSQLDataSource::get("std");
 		$query = "DELETE planification_systeme.* FROM planification_systeme 
-              LEFT JOIN administration ON administration.planification_systeme_id = planification_systeme.planification_systeme_id
-		          WHERE planification_systeme.sejour_id = '$this->object_id'
-							AND administration.administration_id IS NULL;";
+		          WHERE planification_systeme.sejour_id = '$this->object_id';";
 		$ds->exec($query);
 		
 		// Sauvegarde de planif_removed pour indiquer que les planifs doivent etre re-calculer
