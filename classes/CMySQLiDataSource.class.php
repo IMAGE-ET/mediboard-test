@@ -62,7 +62,7 @@ class CMySQLiDataSource extends CMySQLDataSource {
   }
 
   function affectedRows() {
-    return $this->link->affected_rows();
+    return $this->link->affected_rows;
   }
   
   function fetchRow($result) {
