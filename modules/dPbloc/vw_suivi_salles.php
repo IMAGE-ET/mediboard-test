@@ -21,6 +21,11 @@ $bloc = new CBlocOperatoire();
 $bloc->load($bloc_id);
 $bloc->loadRefs();
 
+// Chargement de la liste des salles de chaque bloc
+foreach($listBlocs as $_bloc) {
+  $_bloc->loadRefsSalles();
+}
+
 // Chargement des Anesthésistes
 $listAnesths = new CMediusers;
 $listAnesths = $listAnesths->loadAnesthesistes(PERM_READ);
