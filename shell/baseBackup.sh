@@ -9,18 +9,6 @@ BASH_PATH=$(dirname $0)
 
 announce_script "Database daily backup"
 
-## If no enough free disk space (6 Go), send mail and quit
-freedisk=`df -k /|tail -n 1|sed -r 's/\s+/\ /g'|cut -d" " -f 4`
-
-if [ $freedisk -lt 6291456 ]
-then
-  # Name of the instance of mediboard
-  instance=$(cd $BASH_PATH/../; pwd);
-  instance=${instance##*/}
-  wget "http://localhost/${instance}/index.php?login=1&username=cron&password=alltheway&m=system&a=ajax_send_mail_diskfull"
-  exit 0
-fi
-
 if [ "$#" -lt 5 ]
 then 
   echo "Usage: $0 <method> <username> <password> <database> <backup_path> options"
@@ -32,12 +20,14 @@ then
   echo " Options:"
   echo "   [-t <time>] is time in days before removal of files, default 7"
   echo "   [-b ] to create mysql binary log index"
+  echo "   [-m <mail>] mail address to send if diskfull detected"
   exit 1
 fi
 
+mail=''
 time=7
 binary_log=0
-args=`getopt t:b $*`
+args=`getopt m:t:b $*`
 
 if [ $? != 0 ] ; then
   echo "Invalid argument. Check your command line"; exit 0;
@@ -48,10 +38,27 @@ set -- $args
 for i; do
   case "$i" in
     -t) time=$2; shift 2;;
+    -m) mail=$2; shift 2;;
     -b) binary_log=1; shift;;
     --) shift ; break ;;
   esac
 done
+
+## If no enough free disk space (6 Go), send mail if provided and quit
+freedisk=`df -k /|tail -n 1|sed -r 's/\s+/\ /g'|cut -d" " -f 4`
+
+if [ $freedisk -lt 629145600 ]
+then
+  if [ ${#mail} -gt 1 ]
+  then
+    # Name of the instance of mediboard
+    instance=$(cd $BASH_PATH/../; pwd);
+    instance=${instance##*/}
+    #. $BASH_PATH/send_mail.sh flavien.crochard@openxtrem.com flavien.crochard@openxtrem.com "test email sujet" "corps du test email" |telnet smtp.gmail.com 25
+    wget "http://localhost/${instance}/index.php?login=1&username=cron&password=alltheway&m=system&a=ajax_send_mail_diskfull&mail=${mail}"
+  fi
+  exit 0
+fi
 
 method=$1
 username=$2
