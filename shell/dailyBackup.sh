@@ -9,4 +9,11 @@ BASH_PATH=$(dirname $0)
 
 announce_script "Mediboard daily backup"
 
-sh $BASH_PATH/baseBackup.sh hotcopy mbadmin adminmb mediboard /var/backup
+if [ "$#" -lt 2 ]
+then
+  sh $BASH_PATH/baseBackup.sh hotcopy mbadmin adminmb mediboard /var/backup
+else
+  user=$1
+  pass=$2
+  sh $BASH_PATH/baseBackup.sh hotcopy $user $pass mediboard /var/backup
+fi
