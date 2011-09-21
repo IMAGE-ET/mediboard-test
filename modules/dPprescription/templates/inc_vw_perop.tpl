@@ -189,7 +189,7 @@ Main.add( function(){
 					  <a href="#" onclick="viewTimingPerf('{{$_line->_id}}');">
 					{{/if}} 	
 					
-					<strong style="padding-left: 10px;">
+					<strong style="padding-left: 10px;" onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}');">
 	          {{if $_line instanceof CPrescriptionLineElement}}
 						  {{$_line->_view}}
             {{elseif $_line instanceof CPrescriptionLineMix}}
