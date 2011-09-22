@@ -1,23 +1,4 @@
 <script type="text/javascript">
-reloadCallback = function(id, object) {
-  if (window.parent.reloadAfterUploadFile) {
-    window.parent.reloadAfterUploadFile(object.file_category_id);
-  }
-
-  if (window.parent.File && window.parent.File.refresh) {
-	  window.parent.File.refresh("{{$object->_id}}", "{{$object->_class}}");
-  }
-
-  if (window.parent.reloadListFileEditPatient) {
-    window.parent.reloadListFileEditPatient("load", object.file_category_id);
-  }
-  
-  // Redirection du message de l'iframe dans le systemMsg
-  var systemMsg = $("systemMsg").update();
-  systemMsg.insert(window.parent.$("upload-{{$object->_guid}}").contentDocument.documentElement.getElementsByClassName("info")[0].cloneNode(true));
-  systemMsg.show();
-  Control.Modal.close();
-}
 
 showLoading = function(){
   var systemMsg = $('systemMsg');
@@ -65,7 +46,7 @@ addFile = function(elt) {
 
 <iframe name="upload-{{$object->_guid}}" id="upload-{{$object->_guid}}" style="width: 1px; height: 1px;"></iframe>
 
-<form name="uploadFrm" action="?m=dPfiles&amp;a=upload_file&amp;suppressHeaders=1&amp;ajax=1" enctype="multipart/form-data" method="post"
+<form name="uploadFrm" action="?" enctype="multipart/form-data" method="post"
   onsubmit="return checkForm(this)" target="upload-{{$object->_guid}}">
 <input type="hidden" name="m" value="dPfiles" />
 <input type="hidden" name="a" value="upload_file" />
@@ -73,7 +54,7 @@ addFile = function(elt) {
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="ajax" value="1" />
 <input type="hidden" name="suppressHeaders" value="1" />
-<input type="hidden" name="callback" value="window.parent.reloadCallback" />
+<input type="hidden" name="callback" value="reloadCallback" />
 <input type="hidden" name="object_class" value="{{$object->_class}}" />
 <input type="hidden" name="object_id" value="{{$object->_id}}" />
 <input type="hidden" name="for_identite" value="{{$for_identite}}" />
