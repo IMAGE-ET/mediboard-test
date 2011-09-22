@@ -32,6 +32,11 @@
     		Exécutants <small>({{$executants|@count}})</small>
 			</a>
 		</li>
+    <li>
+      <a href="#protocoles">
+        Protocoles <small>({{$protocoles|@count}})</small>
+      </a>
+    </li>
 	</ul>
 	<hr class="control_tabs" />
 
@@ -163,4 +168,31 @@
 			{{/foreach}}
      </table>
 	</div>
+  
+  <div id="protocoles" style="display: none;">
+   <table class="tbl">
+     <tr>
+       <th colspan="2" class="title">Protocoles</th>
+     </tr>
+     <tr>
+       <th>Element</th>
+       <th>Protocoles</th>
+     </tr>
+     {{foreach from=$protocoles key=_elt item=_protocoles}}
+       <tr>
+         <td class="text">{{$_elt}}</td>
+         <td class="text">
+           {{foreach from=$_protocoles item=_protocole name=foreachprot}}
+             {{$_protocole->libelle}}
+             {{if !$smarty.foreach.foreachprot.last}}&mdash;{{/if}}
+           {{/foreach}}
+         </td>
+       </tr>
+     {{foreachelse}}
+       <tr>
+         <td colspan="2">Aucun protocole</td>
+       </tr>
+     {{/foreach}}
+   </table>
+  </div>
 {{/if}}

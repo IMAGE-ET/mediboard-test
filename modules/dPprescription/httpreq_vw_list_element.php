@@ -13,6 +13,7 @@ $element_prescription_id = CValue::getOrSession("element_prescription_id");
 
 $associations = array();
 $executants = array();
+$protocoles = array();
 
 $category = new CCategoryPrescription();
 $category->load($category_prescription_id);
@@ -26,7 +27,17 @@ if($element_prescription_id && !$category_prescription_id){
 
 if($category_prescription_id){
 	$category->loadElementsPrescription();
+	$prescription = new CPrescription();
+	$where = array();
+	$where["object_id"] = "IS NULL";
+	$ljoin = array();
+	$ljoin["prescription_line_element"] = "prescription_line_element.prescription_id = prescription.prescription_id";
   foreach ($category->_ref_elements_prescription as $_element) {
+    $where["element_prescription_id"] = "= '$_element->_id'";
+    $prots = $prescription->loadList($where, null, null, null, $ljoin);
+    if (count($prots)) {
+      $protocoles[$_element->libelle] = $prots;
+    }
 	  $_element->_count_cdarr_by_type = array();
 		$_element->loadBackRefs("cdarrs");
 		$_element->countRefsConstantesItems();
@@ -65,6 +76,7 @@ $smarty->assign("category", $category);
 $smarty->assign("element_prescription_id", $element_prescription_id);
 $smarty->assign("associations", $associations);
 $smarty->assign("executants", $executants);
+$smarty->assign("protocoles", $protocoles);
 $smarty->display("inc_list_elements.tpl");
 
 ?>
