@@ -187,6 +187,7 @@ class CMbObject extends CStoredObject {
   /**
    * Chargement du dernier identifiant id400
    * @param $tag string Tag à utiliser comme filtre
+   * @return CIdSante400
    */
   function loadLastId400($tag = null) {
     $id400 = new CIdSante400();
@@ -194,6 +195,7 @@ class CMbObject extends CStoredObject {
       $id400->loadLatestFor($this, $tag);
       $this->_ref_last_id400 = $id400;
     }
+    return $id400;
   } 
     
   /**
@@ -353,7 +355,7 @@ class CMbObject extends CStoredObject {
   
   /**
    * Chargement des affectations de personnel par emplacements
-   * @return unknown_type
+   * @return array
    */
   function loadAffectationsPersonnel() {
     // Initialisation
