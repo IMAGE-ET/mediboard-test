@@ -134,7 +134,7 @@ Main.add(function(){
               <ul>
                 <li>La répétition est maintenant indiquée en nombre de semaines et plus en nombre de plages</li>
                 <li>
-                  la supression d'un plage est intégré au formulaire principal : il faut utiliser le nombre
+                  la supression d'une plage est intégrée au formulaire principal : il faut utiliser le nombre
                   de semaines et le type de répétitions pour indiquer les supressions à effectuer, puis cliquer
                   directement sur le bouton supprimer
                 </li>
