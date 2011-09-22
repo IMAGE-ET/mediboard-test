@@ -44,21 +44,6 @@ for i; do
   esac
 done
 
-## If no enough free disk space (6 Go), send mail if provided and quit
-freedisk=`df -k /|tail -n 1|sed -r 's/\s+/\ /g'|cut -d" " -f 4`
-
-if [ $freedisk -lt 629145600 ]
-then
-  if [ ${#mail} -gt 1 ]
-  then
-    # Name of the instance of mediboard
-    instance=$(cd $BASH_PATH/../; pwd);
-    instance=${instance##*/}
-    wget "http://localhost/${instance}/index.php?login=1&username=cron&password=alltheway&m=system&a=ajax_send_mail_diskfull&mail=${mail}"
-  fi
-  exit 0
-fi
-
 method=$1
 username=$2
 password=$3
@@ -80,6 +65,31 @@ force_dir $BACKUP_PATH
 BASE_PATH=${BACKUP_PATH}/$database-db
 force_dir $BASE_PATH
 cd ${BASE_PATH}
+
+## If no enough free disk space (1.5 * size of database), send mail if provided and quit
+conf=`locate my.cnf|head -n 1`
+dir_mysql=`cat $conf|grep datadir|tr -s ' '|cut -d"=" -f 2`
+dir_mysql="$dir_mysql/$database"
+size_database=`du -k $dir_mysql|tail -n 1|sed -r 's/\s+/\ /g'|cut -d" " -f 1`
+
+# Expanded size (database + tar)
+size_expanded=`echo "$size_database*1.5"|bc -l`
+freedisk=`df -k $BACKUP_PATH|tail -n 1|sed -r 's/\s+/\ /g'|cut -d" " -f 4`
+
+# The size expanded is float, so execute the test with bc command
+full=`echo "$freedisk < $size_expanded"|bc`
+
+if [ $full -eq 1 ]
+then
+  if [ ${#mail} -gt 1 ]
+  then
+    # Name of the instance of mediboard
+    instance=$(cd $BASH_PATH/../; pwd);
+    instance=${instance##*/}
+    wget "http://localhost/${instance}/index.php?login=1&username=cron&password=alltheway&m=system&a=ajax_send_mail_diskfull&mail=${mail}"
+  fi
+  exit 0
+fi
 
 ## Make MySQL medthod
 
