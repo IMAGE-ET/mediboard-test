@@ -202,6 +202,7 @@ $locales['config-webservices-webservice-CSigems'] = 'Sigems';
 $locales['config-webservices-webservice-CWebservice'] = 'Aucun';
 $locales['config-webservices-webservice-desc'] = 'Nom du webservice';
 $locales['mod-webservices-tab-ajax_purge_echange'] = 'Purge d\'échanges de services web';
+$locales['mod-webservices-tab-ajax_test_send_event'] = 'Test d\'envoi SOAP';
 $locales['mod-webservices-tab-configure'] = 'Configuration';
 $locales['mod-webservices-tab-download_echange'] = 'Téléchargement de l\'échange';
 $locales['mod-webservices-tab-soap_server'] = 'Serveur SOAP';

@@ -2,16 +2,23 @@
 
 {{*
  * @package Mediboard
- * @subpackage system
+ * @subpackage webservices
  * @version $Revision: 6239 $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
 <script type="text/javascript">
-  getEvenementName = function(button, func) {
+  getEventName = function(button, func) {
 	  var method = func.split(/[ \(]/i)[1];
 	  $V(button.up('.source').down('form').evenement_name, method);
+	}
+
+  sendEvent = function(func, exchange_source_guid) {
+		var url = new Url("webservices", "ajax_test_send_event");
+	  url.addParam("function", func);
+	  url.addParam("exchange_source_guid", exchange_source_guid);
+	  url.requestModal(800, 350);
 	}
 </script>
 
@@ -27,7 +34,8 @@
   {{foreach from=$functions item=_function}}
   <tr>
   	<td class="narrow">
-  		<button class="tick notext" onclick="getEvenementName($(this), '{{$_function}}')"></button>
+  		<button class="add notext" onclick="getEventName($(this), '{{$_function}}')"></button>
+  		<button class="tick notext" onclick="sendEvent('{{$_function}}', '{{$exchange_source->_guid}}')"></button>
 	  </td>
     <td class="text">
       {{$_function}}
