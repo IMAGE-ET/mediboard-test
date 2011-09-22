@@ -1,12 +1,13 @@
 <script type="text/javascript">
+  function importDisciplineTarifaireTable(){
+    var url = new Url("dPplanningOp", "ajax_import_discipline_tarifaire_table");
+    url.requestUpdate("import-log");
+  }
+
   Main.add(function() {
-    getForm("editConfig")["dPplanningOp[CSejour][max_cancel_time]"].addSpinner({min:0, max:24});
-  });
-  Main.add(function() {
-    getForm("editConfig")["dPplanningOp[CSejour][hours_sejour_proche]"].addSpinner({min:0, max:96});
-  });
-  
-  Main.add(function () {
+	  var form = getForm("editConfig");
+	  form["dPplanningOp[CSejour][max_cancel_time]"].addSpinner({min:0, max:24});
+	  form["dPplanningOp[CSejour][hours_sejour_proche]"].addSpinner({min:0, max:96});
     Control.Tabs.create('tabs-configure', true);
   });
 </script>
@@ -18,6 +19,7 @@
   <li><a href="#configure-blocage">Blocage</a></li>
   <li><a href="#configure-CIdSante400">{{tr}}CIdSante400-tag{{/tr}}</a></li>
   <li><a href="#configure-maintenance">{{tr}}Maintenance{{/tr}}</a></li>
+  <li><a href="#config-discipline_tarifaire-table">{{tr}}config-discipline_tarifaire-table{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -169,6 +171,9 @@
     </td>
   </tr>
   {{/foreach}}
+  
+  {{assign var="var" value="show_discipline_tarifaire"}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
   <tr>
     <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
@@ -218,4 +223,21 @@
 
 <div id="configure-maintenance" style="display:none">
   {{include file=inc_configure_actions.tpl}}
+</div>
+
+<div id="config-discipline_tarifaire-table" style="display: none;">
+  <h2>Paramètres de la table Discipline Médico-Tarifaire</h2>
+
+  {{mb_include module=system template=configure_dsn dsn=discipline_tarifaire}}
+ 
+  <table class="main tbl">
+    <tr>
+      <th class="title" colspan="2">
+        Import des tables
+      </th>
+    <tr>
+      <td class="narrow"><button onclick="importDisciplineTarifaireTable()" class="change">{{tr}}Import{{/tr}}</button></td>
+      <td id="import-log"></td>
+    </tr>
+  </table>
 </div>

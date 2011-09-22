@@ -525,4 +525,18 @@ class CMbObject extends CStoredObject {
     }
   }
   
+  /*
+   * Fills the object with random sample data, for testing purposes
+   * @param array() $staticsProps Properties to assess
+   */
+  function sample($staticsProps = array()) {
+    foreach($this->_specs as $key => $spec) {
+      if (isset($staticsProps[$key])) {
+        $this->$key = $staticsProps[$key];
+      }
+      elseif ($key[0] != "_") {
+        $spec->sample($this, false);
+      }
+    }
+  }
 }

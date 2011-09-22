@@ -33,6 +33,7 @@ class CStoredObject extends CModelObject {
   var $_canEdit       = null; // write permission for the object
   var $_external      = null; // true if object is has remote ids
   var $_locked        = null; // true if object is locked
+  var $_totalSeek     = null;
   
   /**
    * References

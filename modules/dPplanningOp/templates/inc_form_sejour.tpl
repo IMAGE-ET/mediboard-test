@@ -670,6 +670,16 @@ Main.add( function(){
 </tr>
 {{/if}}
 
+
+{{if $conf.dPplanningOp.CSejour.show_discipline_tarifaire}}
+<tr>
+  <th>{{mb_label object=$sejour field=discipline_id}}</th>
+  <td colspan="3">
+    {{mb_field object=$sejour field=discipline_id form="editSejour" autocomplete="true,1,50,true,true"}}
+  </td>
+</tr>
+{{/if}}
+
 <tr>
   <th>{{mb_label object=$sejour field="zt"}}</th>
   <td colspan="3">

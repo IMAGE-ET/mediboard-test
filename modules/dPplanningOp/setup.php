@@ -1117,7 +1117,17 @@ class CSetupdPplanningOp extends CSetup {
               ADD INDEX (`group_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.21";
+    $this->makeRevision("1.21");
+    
+    $query = "ALTER TABLE `sejour` 
+                ADD `discipline_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `sejour` 
+                ADD INDEX (`discipline_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.22";
     
   }
 }

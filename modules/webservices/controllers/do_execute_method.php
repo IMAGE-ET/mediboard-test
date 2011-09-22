@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+CCanDo::checkAdmin();
+
 $method               = CValue::post("func");
 $exchange_source_guid = CValue::post("exchange_source_guid");
 $parameters           = CValue::post("parameters");

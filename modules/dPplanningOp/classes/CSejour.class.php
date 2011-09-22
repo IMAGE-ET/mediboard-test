@@ -72,7 +72,8 @@ class CSejour extends CCodable implements IPatientRelated {
   var $adresse_par_etab_id = null;
   var $libelle             = null;  
   var $forfait_se          = null;
-  var $commentaires_sortie = null;   
+  var $commentaires_sortie = null;
+  var $discipline_id       = null;   
   
   // Form Fields
   var $_entree             = null;
@@ -279,6 +280,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["facture"]             = "bool default|0";
     $props["forfait_se"]          = "bool default|0";
     $props["commentaires_sortie"] = "text helped";
+    $props["discipline_id"]       = "ref class|CDisciplineTarifaire autocomplete|description";
     
     $props["_time_entree_prevue"] = "time";
     $props["_time_sortie_prevue"] = "time";
@@ -1209,7 +1211,7 @@ class CSejour extends CCodable implements IPatientRelated {
   
   function loadRefAdresseParPraticien() {
     $this->_ref_adresse_par_prat = new CMedecin();
-    $this->_ref_adresse_par_prat->load($this->adresse_par_prat_id);
+    return $this->_ref_adresse_par_prat->load($this->adresse_par_prat_id);
   }
   
   function loadRefsConsultAnesth() {
