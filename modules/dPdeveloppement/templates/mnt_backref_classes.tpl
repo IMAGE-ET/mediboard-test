@@ -12,9 +12,9 @@
 			<td>
 			  <select name="class" onchange="submit();">
 			    <option value="">&mdash; Toutes les classes</option>
-					{{foreach from=$classes item=class}}  
-			    <option value="{{$class}}"{{if $class == $_class}} selected="selected"{{/if}}>
-			    	{{$class}} ({{tr}}{{$class}}{{/tr}})
+					{{foreach from=$classes item=_class}}  
+			    <option value="{{$_class}}"{{if $class == $_class}} selected="selected"{{/if}}>
+			    	{{$class}} ({{tr}}{{$_class}}{{/tr}})
 			    </option>
 			    {{/foreach}}
 			  </select>
