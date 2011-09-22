@@ -14,7 +14,7 @@
 			    <option value="">&mdash; Toutes les classes</option>
 					{{foreach from=$classes item=_class}}  
 			    <option value="{{$_class}}"{{if $class == $_class}} selected="selected"{{/if}}>
-			    	{{$class}} ({{tr}}{{$_class}}{{/tr}})
+			    	{{$_class}} ({{tr}}{{$_class}}{{/tr}})
 			    </option>
 			    {{/foreach}}
 			  </select>
