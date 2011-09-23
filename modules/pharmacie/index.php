@@ -16,5 +16,5 @@ $module->registerTab("vw_idx_delivrance"          , TAB_READ);
 $module->registerTab("vw_idx_outflow"             , TAB_READ);
 $module->registerTab("ajax_vw_inventory"          , TAB_READ);
 $module->registerTab("vw_idx_balance"             , TAB_READ);
+$module->registerTab("vw_idx_recherche_delivrances", TAB_READ);
 $module->registerTab("vw_idx_stupefiant"          , TAB_READ);
-?>

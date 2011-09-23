@@ -47,6 +47,7 @@ $locales['mod-pharmacie-tab-vw_idx_dispensation'] = 'Préparation';
 $locales['mod-pharmacie-tab-vw_idx_dispensation_nominative'] = 'Dispensation nominative';
 $locales['mod-pharmacie-tab-vw_idx_outflow'] = 'Sorties';
 $locales['mod-pharmacie-tab-vw_idx_prescriptions_sejour'] = 'Analyse pharmaceutique';
+$locales['mod-pharmacie-tab-vw_idx_recherche_delivrances'] = 'Bilan délivrances';
 $locales['mod-pharmacie-tab-vw_idx_restockage_service'] = 'Réception dans les services';
 $locales['mod-pharmacie-tab-vw_idx_stupefiant'] = 'Stupéfiants';
 $locales['module-pharmacie-court'] = 'Pharmacie';
