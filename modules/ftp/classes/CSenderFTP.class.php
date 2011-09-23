@@ -31,6 +31,7 @@ class CSenderFTP extends CInteropSender {
     $backProps = parent::getBackProps();
     $backProps["expediteur_hprimxml"] = "CEchangeHprim sender_id";
     $backProps["expediteur_hprim21"]  = "CEchangeHprim21 sender_id";
+    $backProps["expediteur_ihe"]      = "CExchangeIHE sender_id";
     $backProps["config_hprimxml"]     = "CHprimXMLConfig sender_id";
     $backProps["expediteur_phast"]    = "CPhastEchange sender_id";
     return $backProps;

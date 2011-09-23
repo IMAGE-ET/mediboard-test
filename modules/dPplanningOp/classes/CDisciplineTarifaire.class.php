@@ -35,6 +35,12 @@ class CDisciplineTarifaire extends CMbObject {
     return $props;
   }
   
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["sejours"] = "CSejour discipline_id";
+    return $backProps;
+  }
+  
   function updateFormFields() {
     parent::updateFormFields();
     

@@ -40,6 +40,8 @@ class CContentTabular extends CMbObject {
     $backProps = parent::getBackProps();
     $backProps["messages_hprim21"]      = "CEchangeHprim21 message_content_id";
     $backProps["acquittements_hprim21"] = "CEchangeHprim21 acquittement_content_id";
+    $backProps["messages_ihe"]          = "CExchangeIHE message_content_id";
+    $backProps["acquittements_ihe"]     = "CExchangeIHE acquittement_content_id";
     return $backProps;
   }
 }

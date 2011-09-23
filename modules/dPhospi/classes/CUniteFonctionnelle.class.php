@@ -44,6 +44,12 @@ class CUniteFonctionnelle extends CMbObject {
     return $props;
   }
   
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["affectations_uf"] = "CAffectationUniteFonctionnelle uf_id";
+    return $backProps;
+  }
+  
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->libelle;

@@ -59,11 +59,9 @@ class CGroups extends CMbObject {
     $backProps["config_moment"]           = "CConfigMomentUnitaire group_id";
     $backProps["config_service"]          = "CConfigService group_id";
     $backProps["check_item_types"]        = "CDailyCheckItemType group_id";
-    $backProps["destinataires_hprim"]     = "CDestinataireHprim group_id";
     $backProps["dmi_categories"]          = "CDMICategory group_id";
     $backProps["documents_ged"]           = "CDocGed group_id";
     $backProps["etablissements_sherpa"]   = "CSpEtablissement group_id";
-    $backProps["echanges_hprim"]          = "CEchangeHprim group_id";
     $backProps["functions"]               = "CFunctions group_id";
     $backProps["listes_choix"]            = "CListeChoix group_id";
     $backProps["modeles"]                 = "CCompteRendu group_id";
@@ -90,17 +88,22 @@ class CGroups extends CMbObject {
     $backProps['object_configs']          = "CGroupsConfig object_id";
     $backProps["stock_locations"]         = "CProductStockLocation object_id";
     $backProps["stock_first_config"]      = "CCegiStockFirstConfig object_id";
+    $backProps["destinataires_hprim"]     = "CDestinataireHprim group_id";
     $backProps["destinataires_sigems"]    = "CDestinataireSigems group_id";
-    $backProps["echanges_generique"]      = "CExchangeAny group_id";
-    $backProps["echanges_hprim21"]        = "CEchangeHprim21 group_id";
-    $backProps["extract_passages"]        = "CExtractPassages group_id";
-    $backProps["destinataires_phast"]     = "CPhastDestinataire group_id";
-    $backProps["echanges_phast"]          = "CPhastEchange group_id";
     $backProps["destinataires_hprim21"]   = "CDestinataireHprim21 group_id";
+    $backProps["destinataires_ihe"]       = "CReceiverIHE group_id";
+    $backProps["echanges_generique"]      = "CExchangeAny group_id";
+    $backProps["echanges_hprim"]          = "CEchangeHprim group_id";
+    $backProps["echanges_hprim21"]        = "CEchangeHprim21 group_id";
+    $backProps["echanges_ihe"]            = "CExchangeIHE group_id";
+    $backProps["echanges_phast"]          = "CPhastEchange group_id";
+    $backProps["extract_passages"]        = "CExtractPassages group_id";
+    $backProps["destinataires_phast"]     = "CPhastDestinataire group_id";  
     $backProps["senders_ftp"]             = "CSenderFTP group_id";
     $backProps["senders_soap"]            = "CSenderSOAP group_id";
     $backProps["view_sender_sources"]     = "CViewSenderSource group_id";
     $backProps["modeles_etiquette"]       = "CModeleEtiquette group_id";
+    $backProps["unites_fonctionnelles"]   = "CUniteFonctionnelle group_id";
     
     return $backProps;
   }

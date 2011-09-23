@@ -220,13 +220,15 @@ class CSejour extends CCodable implements IPatientRelated {
     $backProps["transmissions"]        = "CTransmissionMedicale sejour_id";
     $backProps["dossier_medical"]      = "CDossierMedical object_id";
     $backProps["ghm"]                  = "CGHM sejour_id";
-    $backProps["echanges_hprim"]       = "CEchangeHprim object_id";
     $backProps["planifications"]       = "CPlanificationSysteme sejour_id";
     $backProps["rhss"]                 = "CRHS sejour_id";
     $backProps["evenements_ssr"]       = "CEvenementSSR sejour_id";
     $backProps["replacements"]         = "CReplacement sejour_id";
+    $backProps["echanges_hprim"]       = "CEchangeHprim object_id";
     $backProps["echanges_hprim21"]     = "CEchangeHprim21 object_id";
+    $backProps["echanges_ihe"]         = "CExchangeIHE object_id";
     $backProps["tasks"]                = "CSejourTask sejour_id";
+    $backProps["affectations_uf"]      = "CAffectationUniteFonctionnelle object_id";
     return $backProps;
   }
 
@@ -1969,6 +1971,10 @@ class CSejour extends CCodable implements IPatientRelated {
     $fix_edit_doc = CAppUI::conf("dPplanningOp CSejour fix_doc_edit");
     
     return !$fix_edit_doc ? true : $this->sortie_reelle === null;
+  }
+  
+  function getCurrentUF() {
+    return new CUniteFonctionnelle();
   }
 }
 ?>
