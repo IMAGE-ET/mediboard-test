@@ -800,7 +800,9 @@ TESTS A EFFECTUER
       $where = array();
       $where['annule']     = " = '0'";
       $where['patient_id'] = " = '$this->patient_id'";
-      $where['group_id']   = " = '".CGroups::loadCurrent()->_id."'";
+      if (CAppUI::conf("dPcabinet CConsultation search_sejour_all_groups")) {
+        $where['group_id']   = " = '".CGroups::loadCurrent()->_id."'";
+      }
       $where['facturable']     = " = '$facturable'";
       $datetime_before     = mbDateTime("+$minutes_before_consult_sejour minute", "$this->_date $this->heure");
       $where[] = "`sejour`.`entree` <= '$datetime_before' AND `sejour`.`sortie` >= '$datetime'";

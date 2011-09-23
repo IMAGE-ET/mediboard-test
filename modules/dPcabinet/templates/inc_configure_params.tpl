@@ -66,6 +66,8 @@
   {{mb_include module=system template=inc_config_bool var=show_conclusion}}
   
   {{mb_include module=system template=inc_config_bool var=attach_consult_sejour onchange="showCreateSejour(this)"}}
+  
+  {{mb_include module=system template=inc_config_bool var=search_sejour_all_groups}}
 
   {{mb_include module=system template=inc_config_bool var=create_consult_sejour}}
   
