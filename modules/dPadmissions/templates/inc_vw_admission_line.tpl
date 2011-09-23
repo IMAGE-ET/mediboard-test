@@ -172,7 +172,7 @@
       <input type="hidden" name="patient_id" value="{{$_sejour->patient_id}}" />
       {{if $_sejour->chambre_seule}}
         <input type="hidden" name="chambre_seule" value="0" />
-        <button class="change" type="button" style="color: #f22" onclick="submitAdmission(this.form, 1);">
+        <button class="change" type="button" style="color: #f22 !important" onclick="submitAdmission(this.form, 1);">
           Chambre simple
         </button>
       {{else}}

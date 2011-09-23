@@ -75,7 +75,7 @@
   <input type="hidden" name="patient_id" value="{{$curr_adm->patient_id}}" />
   {{if $curr_adm->chambre_seule}}
   <input type="hidden" name="chambre_seule" value="0" />
-  <button class="change" type="button" style="color: #f22" onclick="submitPreAdmission(this.form, 1);">
+  <button class="change" type="button" style="color: #f22 !important" onclick="submitPreAdmission(this.form, 1);">
     Chambre simple
   </button>
   {{else}}
