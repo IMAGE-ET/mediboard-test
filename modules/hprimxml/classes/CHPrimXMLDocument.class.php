@@ -272,10 +272,12 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addAttribute($acteCCAM, "valide", "oui");
     $this->addAttribute($acteCCAM, "documentaire", "non");
     $this->addAttribute($acteCCAM, "gratuit", "non");
-    $this->addAttribute($acteCCAM, "remboursementExceptionnel", $mbActeCCAM->_rembex ? "oui" : "non");
+    if($mbActeCCAM->_rembex) {
+      $this->addAttribute($acteCCAM, "remboursementExceptionnel", "oui");
+    }
     
     $identifiant = $this->addElement($acteCCAM, "identifiant");
-    $emetteur = $this->addElement($identifiant, "emetteur", "acte{$mbActeCCAM->_id}");
+    $emetteur    = $this->addElement($identifiant, "emetteur", "acte{$mbActeCCAM->_id}");
     $this->addElement($acteCCAM, "codeActe", $mbActeCCAM->code_acte);
     $this->addElement($acteCCAM, "codeActivite", $mbActeCCAM->code_activite);
     $this->addElement($acteCCAM, "codePhase", $mbActeCCAM->code_phase);
@@ -311,8 +313,10 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $montant = $this->addElement($acteCCAM, "montant");
     if ($mbActeCCAM->montant_depassement > 0) {
       $montantDepassement = $this->addElement($montant, "montantDepassement", sprintf("%.2f", $mbActeCCAM->montant_depassement));
-      if(CAppUI::conf("dPsalleOp CActeCCAM envoi_motif_depassement"))
-        $this->addAttribute($montantDepassement, "motif", "d");
+      //if(CAppUI::conf("dPsalleOp CActeCCAM envoi_motif_depassement")) {
+      if($mbActeCCAM->motif_depassement) {
+        $this->addAttribute($montantDepassement, "motif", $mbActeCCAM->montant_depassement);
+      }
     }
     
     return $acteCCAM;

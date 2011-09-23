@@ -1,18 +1,10 @@
+{{mb_script module="dPccam" script="code_ccam" ajax="true"}}
 <script type="text/javascript">
 
-function viewCode(code, object_class){
-  var url = new Url;
-  url.setModuleAction("dPccam", "vw_full_code");
-  url.addParam("codeacte", code);
-  url.addParam("object_class", object_class);
-  url.addParam("hideSelect", "1");
-  url.popup(700, 550, "Code CCAM");
-}
-
-function setToNow(element) {
-  element.value = "now";
-  element.form.elements[element.name+"_da"].value = "Maintenant";
-}
+  function setToNow(element) {
+    element.value = "now";
+    element.form.elements[element.name+"_da"].value = "Maintenant";
+  }
 
 </script>
 
@@ -38,7 +30,7 @@ function setToNow(element) {
     </select>
     {{/if}}
     <!-- Forfait spécifique -->
-    <a href="#" {{if $confCCAM.contraste}}style="color: #fff;"{{/if}} onclick="viewCode('{{$_code->code}}', '{{$subject->_class}}')">
+    <a href="#" {{if $confCCAM.contraste}}style="color: #fff;"{{/if}} onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class}}')">
       {{$_code->code}}
     </a> :
     <label title="{{$_code->libelleLong}}">
@@ -225,7 +217,10 @@ function setToNow(element) {
               {{if $confCCAM.tarif || $subject->_class == "CConsultation" || ($subject->_class == "COperation" && $subject->_ref_salle->dh == 1)}}
               <tr class="{{$view}}">
                 <th>{{mb_label object=$acte field=montant_depassement}}</th>
-                <td>{{mb_field object=$acte field=montant_depassement}}</td>
+                <td>
+                  {{mb_field object=$acte field=montant_depassement}}
+                  {{mb_field object=$acte field=motif_depassement emptyLabel="CActeCCAM-motif_depassement"}}
+                </td>
               </tr>
               {{/if}}
               {{/if}}
@@ -293,16 +288,10 @@ function setToNow(element) {
                   </strong>
                 {{/if}}
    
-                Association pour le Dr {{$acte->_ref_executant->_view}}
-                
-                <strong>
-                {{if $confCCAM.tarif || $subject->_class == "CConsultation"}}
-                  &mdash; {{$acte->_tarif|currency}}
-                {{/if}}
-                </strong>
         
-                {{if $acte->code_association != $acte->_guess_association}}
                 <span onmouseover="ObjectTooltip.createDOM(this, 'association-{{$acte->_guid}}')">
+                Association pour le Dr {{$acte->_ref_executant->_view}}
+                {{if $acte->code_association != $acte->_guess_association}}
                   <strong>
                     {{if $acte->_guess_association && $acte->_guess_association != "X"}}
                       ({{$acte->_guess_association}} conseillé)
@@ -312,14 +301,19 @@ function setToNow(element) {
                       (Aucune règle d'association trouvée)
                     {{/if}}
                   </strong>
+                {{/if}}
                 </span>
-                <div id="association-{{$acte->_guid}}" style="display:none">
+                
+                <div id="association-{{$acte->_guid}}" style="display: none;">
                   {{tr}}CActeCCAM-regle-association-{{$acte->_guess_regle_asso}}{{/tr}}
                 </div>
+                
+                {{if $confCCAM.tarif || $subject->_class == "CConsultation"}}
+                  <strong>&mdash; {{$acte->_tarif|currency}}</strong>
                 {{/if}}
                 
                 {{if $confCCAM.tarif || $subject->_class == "CConsultation"  || ($subject->_class == "COperation" && $subject->_ref_salle->dh == 1)}}
-                &mdash;  {{mb_label object=$acte field=montant_depassement}} : {{mb_value object=$acte field=montant_depassement}}
+                  <br />  {{mb_label object=$acte field=montant_depassement}} : {{mb_value object=$acte field=montant_depassement}}
                 {{/if}}
                 {{/if}}
                 </td>

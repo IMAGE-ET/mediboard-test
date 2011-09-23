@@ -30,6 +30,7 @@ class CActeCCAM extends CActe {
   var $code_phase          = null;
   var $execution           = null;
   var $modificateurs       = null;
+  var $motif_depassement   = null;
   var $commentaire         = null;
   var $code_association    = null;
   var $rembourse           = null;
@@ -72,6 +73,7 @@ class CActeCCAM extends CActe {
     $specs["code_phase"]          = "num notNull min|0 max|99";
     $specs["execution"]           = "dateTime notNull";
     $specs["modificateurs"]       = "str maxLength|4";
+    $specs["motif_depassement"]   = "enum list|d|e|f|n";
     $specs["commentaire"]         = "text";
     $specs["code_association"]    = "enum list|1|2|3|4|5";
     $specs["rembourse"]           = "bool default|1";
@@ -257,9 +259,9 @@ class CActeCCAM extends CActe {
     $this->getLinkedActes(false);
     $_acte = new CActeCCAM();
     
+    /**
     // Cas du nombre d'actes
     // Cas général : 2 actes au plus
-    /**
     $distinctCodes = array();
     foreach($this->_linked_actes as $_acte) {
       $_acte->loadRefCodeCCAM();
@@ -270,7 +272,7 @@ class CActeCCAM extends CActe {
     if(count($distinctCodes) >= 2) {
       return "Vous ne pouvez pas coder plus de deux actes";
     }
-     */
+    */
     
     // Cas des incompatibilités
     foreach($this->_linked_actes as $_acte) {
@@ -427,6 +429,17 @@ class CActeCCAM extends CActe {
     arsort($orderedActes);
     $position = array_search($this->_id, array_keys($orderedActes));
     
+    // Nombre d'actes des chap. 12, 13 et 14 (chirurgie membres, tronc et cou)
+    $numChap121314 = 0;
+    if(in_array($this->_ref_code_ccam->chapitres[0]["db"], array("000012", "000013", "000014"))) {
+      $numChap121314++;
+    }
+    foreach($this->_linked_actes as $linkedActe) {
+      if(in_array($linkedActe->_ref_code_ccam->chapitres[0]["db"], array("000012", "000013", "000014"))) {
+        $numChap121314++;
+      }
+    }
+    
     // Nombre d'actes du chap. 18.01
     $numChap1801 = 0;
     if($this->_ref_code_ccam->chapitres[0]["db"] == "000018" && $this->_ref_code_ccam->chapitres[1]["db"] == "000001") {
@@ -540,6 +553,9 @@ class CActeCCAM extends CActe {
           $DPC = true;
         }
       }
+      if($operation->cote == "bilatéral") {
+        $membresDiff = true;
+      }
     }
     
     // Association d'1 exérèse, d'1 curage et d'1 reconstruction
@@ -588,7 +604,7 @@ class CActeCCAM extends CActe {
       return $this->_guess_association;
     }
     
-    // 1 actes + 1 acte du chap. 18.02 ou du chap. 19.02 (règles B) (règle supprimée pour l'instant à cause de l'interface factu)
+    // 1 actes + 1 acte du chap. 18.02 ou du chap. 19.02 (règles B)
     if($numActes == 2) {
       // 1 acte + 1 geste complémentaire chap. 18.02 (règle B)
       if($numChap1802 == 1) {
@@ -673,6 +689,40 @@ class CActeCCAM extends CActe {
         case 1 :
           $this->_guess_association = "3";
           $this->_guess_regle_asso  = "G";
+          break;
+      }
+      return $this->_guess_association;
+    }
+    
+    // 2 actes des chap. 12, 13 ou 14 sur des membres différents (règle G2)
+    if($numActes == 2 && $numChap121314 == 2 && $membresDiff) {
+      switch($position) {
+        case 0 :
+          $this->_guess_association = "1";
+          $this->_guess_regle_asso  = "G2";
+          break;
+        case 1 :
+          $this->_guess_association = "3";
+          $this->_guess_regle_asso  = "G2";
+          break;
+      }
+      return $this->_guess_association;
+    }
+    
+    // 3 actes des chap. 12, 13 ou 14 sur des membres différents (règle G3)
+    if($numActes == 3 && $numChap121314 == 3 && $membresDiff) {
+      switch($position) {
+        case 0 :
+          $this->_guess_association = "1";
+          $this->_guess_regle_asso  = "G3";
+          break;
+        case 1 :
+          $this->_guess_association = "3";
+          $this->_guess_regle_asso  = "G3";
+          break;
+        case 3 :
+          $this->_guess_association = "2";
+          $this->_guess_regle_asso  = "G3";
           break;
       }
       return $this->_guess_association;

@@ -774,7 +774,12 @@ class CSetupdPsalleOp extends CSetup {
               ADD `incident` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.39";
+    $this->makeRevision("0.39");
+    $query = "ALTER TABLE `acte_ccam` 
+              ADD `motif_depassement` ENUM ('d','e','f','n') AFTER `montant_depassement`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.40";
   }
 }
 ?>
