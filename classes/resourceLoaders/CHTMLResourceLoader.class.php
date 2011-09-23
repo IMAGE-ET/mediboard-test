@@ -107,6 +107,11 @@ abstract class CHTMLResourceLoader {
   
   private static function replaceStylesheetUrl($matches) {
     $src = $matches[1];
+    
+    if (strpos($src, "data:") === 0) {
+      return $src;
+    }
+    
     $src = preg_replace('/(\?.*)$/', '', $src);
     $ext = CMbPath::getExtension($src);
     $url = self::getFileContents(self::$_stylesheet_path."/".$src);
@@ -179,7 +184,7 @@ abstract class CHTMLResourceLoader {
   }
   
   static function allInOne($html) {
-  	set_min_memory_limit("256M");
+    set_min_memory_limit("256M");
     $html = preg_replace_callback("/<img([^>]*)src\s*=\s*[\"']([^\"']+)[\"']([^>]*)>/i", array('self', 'replaceImgSrc'), $html);
     $html = preg_replace_callback("/<link[^>]*rel=\"stylesheet\"[^>]*href\s*=\s*[\"']([^\"']+)[\"'][^>]*>/i", array('self', 'replaceStylesheet'), $html);
     $html = preg_replace_callback("/<script[^>]*src\s*=\s*[\"']([^\"']+)[\"'][^>]*>\s*<\/script>/i", array('self', 'replaceScriptSrc'), $html);
