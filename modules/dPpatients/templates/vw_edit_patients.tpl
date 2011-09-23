@@ -116,12 +116,21 @@ function reloadListFileEditPatient(sAction, category_id){
   }
 }
 
+function mapIdCorres(id, object) {
+  var oForm = getForm("editCorrespondant_"+object.relation);
+  if (!$V(oForm.correspondant_patient_id)) {
+    $V(oForm.correspondant_patient_id, id);
+  }
+}
+
 var tabs;
 Main.add(function () {
-  InseeFields.initCPVille("editFrm", "cp", "ville","pays");
-  InseeFields.initCPVille("editFrm", "cp_naissance", "lieu_naissance","_pays_naissance_insee");
-  InseeFields.initCPVille("editFrm", "prevenir_cp", "prevenir_ville", "prevenir_tel");
-  InseeFields.initCPVille("editFrm", "employeur_cp", "employeur_ville", "employeur_tel");
+  {{if $patient->_id}}
+    InseeFields.initCPVille("editFrm", "cp", "ville","pays");
+    InseeFields.initCPVille("editFrm", "cp_naissance", "lieu_naissance","_pays_naissance_insee");
+    InseeFields.initCPVille("editCorrespondant_prevenir", "cp", "ville", "tel");
+    InseeFields.initCPVille("editCorrespondant_employeur", "cp", "ville", "tel");
+  {{/if}}
   initPaysField("editFrm", "_pays_naissance_insee", "profession");
   initPaysField("editFrm", "pays", "tel");
   
@@ -273,9 +282,6 @@ Main.add(function () {
         <div id="identite" style="display: none;">
           {{mb_include template=inc_acc/inc_acc_identite}}
         </div>
-        <div id="correspondance" style="display: none;">
-          {{mb_include template=inc_acc/inc_acc_corresp}}
-        </div>
         <div id="assure" style="display: none;">
           {{mb_include template=inc_acc/inc_acc_assure}}
         </div>
@@ -283,7 +289,9 @@ Main.add(function () {
           {{mb_include template=inc_acc/inc_acc_beneficiaire}}   
         </div>
       </form>
-      
+      <div id="correspondance" style="display: none;">
+        {{mb_include template=inc_acc/inc_acc_corresp}}
+      </div>
       <div id="medecins" style="display: none;">
         {{mb_include template=inc_acc/inc_acc_medecins}}
       </div>

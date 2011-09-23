@@ -1,105 +1,76 @@
-<table style="width: 100%;">
-  <tr>
-    <td style="width: 33%;">
-      <table class="form">
-        <tr>
-          <th class="category" colspan="2">Personne à prévenir</th>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="prevenir_nom"}}</th>
-          <td>{{mb_field object=$patient field="prevenir_nom"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="prevenir_prenom"}}</th>
-          <td>{{mb_field object=$patient field="prevenir_prenom"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="prevenir_adresse"}}</th>
-          <td>{{mb_field object=$patient field="prevenir_adresse"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="prevenir_cp"}}</th>
-          <td>{{mb_field object=$patient field="prevenir_cp"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="prevenir_ville"}}</th>
-          <td>{{mb_field object=$patient field="prevenir_ville"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="prevenir_tel"}}</th>
-          <td>{{mb_field object=$patient field="prevenir_tel"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="prevenir_parente"}}</th>
-          <td>{{mb_field object=$patient field="prevenir_parente" defaultOption="&mdash;Veuillez Choisir"}}</td>
-        </tr>
-      </table>
-    </td>
-    <td style="width: 33%;">
-      <table class="form">
-        <tr>
-          <th class="category" colspan="2">Personne de confiance</th>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="confiance_nom"}}</th>
-          <td>{{mb_field object=$patient field="confiance_nom"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="confiance_prenom"}}</th>
-          <td>{{mb_field object=$patient field="confiance_prenom"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="confiance_adresse"}}</th>
-          <td>{{mb_field object=$patient field="confiance_adresse"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="confiance_cp"}}</th>
-          <td>{{mb_field object=$patient field="confiance_cp"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="confiance_ville"}}</th>
-          <td>{{mb_field object=$patient field="confiance_ville"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="confiance_tel"}}</th>
-          <td>{{mb_field object=$patient field="confiance_tel"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="confiance_parente"}}</th>
-          <td>{{mb_field object=$patient field="confiance_parente" defaultOption="&mdash;Veuillez Choisir"}}</td>
-        </tr>
-      </table>
-    </td>
-    <td style="34%">
-      <table class="form">
-        <tr>
-          <th class="category" colspan="2">Employeur</th>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="employeur_nom"}}</th>
-          <td>{{mb_field object=$patient field="employeur_nom"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="employeur_adresse"}}</th>
-          <td>{{mb_field object=$patient field="employeur_adresse"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="employeur_cp"}}</th>
-          <td>{{mb_field object=$patient field="employeur_cp"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="employeur_ville"}}</th>
-          <td>{{mb_field object=$patient field="employeur_ville"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="employeur_tel"}}</th>
-          <td>{{mb_field object=$patient field="employeur_tel"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$patient field="employeur_urssaf"}}</th>
-          <td>{{mb_field object=$patient field="employeur_urssaf" onblur="tabs.changeTabAndFocus('assure', this.form.assure_nom);"}}</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
+{{if !$patient->_id}}
+  <div class="small-info">
+    Veuillez créer la fiche patient avant de pouvoir ajouter ses correspondants.
+  </div>
+{{else}}
+  <table style="width: 100%;">
+    <tr>
+      {{foreach from=`$patient->_ref_cp_by_relation` item=_correspondants}}
+        {{assign var=_correspondant value=$_correspondants|@reset}}
+        <td style="width: 33%;">
+          <form name="editCorrespondant_{{$_correspondant->relation}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
+            <input type="hidden" name="m" value="dPpatients" />
+            <input type="hidden" name="dosql" value="do_correspondant_patient_aed" />
+            <input type="hidden" name="callback" value="mapIdCorres" />
+            {{mb_key object=$_correspondant}}
+            <input type="hidden" name="patient_id" value="{{$_correspondant->patient_id}}" />
+            <input type="hidden" name="relation" value="{{$_correspondant->relation}}" />
+            <table class="form">
+              <tr>
+                <th class="category" colspan="2">{{mb_value object=$_correspondant field=relation}}</th>
+              </tr>
+              <tr>
+                <th>{{mb_label object=$_correspondant field="nom"}}</th>
+                <td>{{mb_field object=$_correspondant field="nom" onchange="this.form.onsubmit()"}}</td>
+              </tr>
+              
+              {{if $_correspondant->relation != "employeur"}}
+                <tr>
+                  <th>{{mb_label object=$_correspondant field="prenom"}}</th>
+                  <td>{{mb_field object=$_correspondant field="prenom" onchange="this.form.onsubmit()"}}</td>
+                </tr>
+              {{/if}}
+              
+              <tr>
+                <th>{{mb_label object=$_correspondant field="adresse"}}</th>
+                <td>{{mb_field object=$_correspondant field="adresse" onchange="this.form.onsubmit()"}}</td>
+              </tr>
+              <tr>
+                <th>{{mb_label object=$_correspondant field="cp"}}</th>
+                <td>{{mb_field object=$_correspondant field="cp" onchange="this.form.onsubmit()"}}</td>
+              </tr>
+              <tr>
+                <th>{{mb_label object=$_correspondant field="ville"}}</th>
+                <td>{{mb_field object=$_correspondant field="ville" onchange="this.form.onsubmit()"}}</td>
+              </tr>
+              <tr>
+                <th>{{mb_label object=$_correspondant field="tel"}}</th>
+                <td>{{mb_field object=$_correspondant field="tel" onchange="this.form.onsubmit()"}}</td>
+              </tr>
+              
+              {{if $_correspondant->relation == "employeur"}}
+                <tr>
+                  <th>{{mb_label object=$_correspondant field="urssaf"}}</th>
+                  <td>{{mb_field object=$_correspondant field="urssaf" onblur="this.form.onsubmit(); tabs.changeTabAndFocus('assure', this.form.assure_nom);"}}</td>
+                </tr>
+              {{else}}
+                <tr>
+                  <th>{{mb_label object=$_correspondant field="parente"}}</th>
+                  <td>{{mb_field object=$_correspondant field="parente" defaultOption="&mdash;Veuillez Choisir" onchange="this.form.onsubmit()"}}</td>
+                </tr>
+              {{/if}}
+              <tr>
+                <th>{{mb_label object=$_correspondant field="email"}}</th>
+                <td>{{mb_field object=$_correspondant field="email" onchange="this.form.onsubmit()"}}</th>
+              </tr>
+              <tr>
+                <th>{{mb_label object=$_correspondant field="remarques"}}</th>
+                <td>{{mb_field object=$_correspondant field="remarques" onchange="this.form.onsubmit()"}}</td>
+              </tr>
+            </table>
+          </form>
+        </td>
+      {{/foreach}}
+    </tr>
+  </table>
+{{/if}}

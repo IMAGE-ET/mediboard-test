@@ -141,7 +141,7 @@ Main.add(checkFinAmo);
   </tr>
   <tr>
   	<th>{{mb_label object=$patient field="libelle_exo"}}</th>
-  	<td>{{mb_field object=$patient field="libelle_exo" onblur="tabs.changeTabAndFocus('correspondance', this.form.prevenir_nom)"}}</td>
+  	<td>{{mb_field object=$patient field="libelle_exo" onblur="tabs.changeTabAndFocus('correspondance', getForm('editCorrespondant_prevenir').nom)"}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="notes_amc"}}</th>

@@ -156,39 +156,41 @@ function toggleList(list, button) {
     <th class="category" colspan="2" style="font-size: 1.0em;">Employeur</th>
   </tr>
   <tr>
-    <th>{{mb_label object=$patient field="prevenir_nom"}}</th>
+    {{assign var=prevenir  value=$patient->_ref_cp_by_relation.prevenir.0}}
+    {{assign var=employeur value=$patient->_ref_cp_by_relation.employeur.0}}
+    <th>{{mb_label object=$prevenir field=nom}}</th>
     <td>
-      {{mb_value object=$patient field="prevenir_nom"}}
-      {{mb_value object=$patient field="prevenir_prenom"}}
+      {{mb_value object=$prevenir field=nom}}
+      {{mb_value object=$prevenir field=prenom}}
     </td>
-    <th>{{mb_label object=$patient field="employeur_nom"}}</th>
-    <td>{{mb_value object=$patient field="employeur_nom"}}</td>
+    <th>{{mb_label object=$employeur field="nom"}}</th>
+    <td>{{mb_value object=$employeur field="nom"}}</td>
   </tr>
   <tr>
-    <th>{{mb_label object=$patient field="prevenir_adresse"}}</th>
+    <th>{{mb_label object=$prevenir field="adresse"}}</th>
     <td>
-      {{mb_value object=$patient field="prevenir_adresse"}}<br />
-      {{mb_value object=$patient field="prevenir_cp"}}
-      {{mb_value object=$patient field="prevenir_ville"}}
+      {{mb_value object=$prevenir field="adresse"}}<br />
+      {{mb_value object=$prevenir field="cp"}}
+      {{mb_value object=$prevenir field="ville"}}
     </td>
-    <th>{{mb_label object=$patient field="employeur_adresse"}}</th>
+    <th>{{mb_label object=$employeur field="adresse"}}</th>
     <td>
-      {{mb_value object=$patient field="employeur_adresse"}}<br />
-      {{mb_value object=$patient field="employeur_cp"}}
-      {{mb_value object=$patient field="employeur_ville"}}
+      {{mb_value object=$employeur field="adresse"}}<br />
+      {{mb_value object=$employeur field="cp"}}
+      {{mb_value object=$employeur field="ville"}}
     </td>
   </tr>
   <tr>
-    <th>{{mb_label object=$patient field="prevenir_tel"}}</th>
-    <td>{{mb_value object=$patient field="prevenir_tel"}}</td>
-    <th>{{mb_label object=$patient field="employeur_tel"}}</th>
-    <td>{{mb_value object=$patient field="employeur_tel"}}</td>
+    <th>{{mb_label object=$prevenir  field="tel"}}</th>
+    <td>{{mb_value object=$prevenir  field="tel"}}</td>
+    <th>{{mb_label object=$employeur field="tel"}}</th>
+    <td>{{mb_value object=$employeur field="tel"}}</td>
   </tr>
   <tr>
-    <th>{{mb_label object=$patient field="prevenir_parente"}}</th>
-    <td>{{mb_value object=$patient field="prevenir_parente"}}</td>
-    <th>{{mb_label object=$patient field="employeur_urssaf"}}</th>
-    <td>{{mb_value object=$patient field="employeur_urssaf"}}</td>
+    <th>{{mb_label object=$prevenir  field="parente"}}</th>
+    <td>{{mb_value object=$prevenir  field="parente"}}</td>
+    <th>{{mb_label object=$employeur field="urssaf"}}</th>
+    <td>{{mb_value object=$employeur field="urssaf"}}</td>
   </tr>
   <tr><th class="category" colspan="10">Assuré social</th></tr>
   <tr>

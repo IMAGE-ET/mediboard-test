@@ -1289,8 +1289,67 @@ class CSetupdPpatients extends CSetup {
                ADD `rpps` BIGINT (11) UNSIGNED ZEROFILL;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.20";
+    $this->makeRevision("1.20");
+    $query = "CREATE TABLE `correspondant_patient` (
+      `correspondant_patient_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `patient_id` INT (11) UNSIGNED NOT NULL,
+      `relation` ENUM ('confiance','prevenir','employeur'),
+      `nom` VARCHAR (255),
+      `prenom` VARCHAR (255),
+      `adresse` TEXT,
+      `cp` INT (5) UNSIGNED ZEROFILL,
+      `ville` VARCHAR (255),
+      `tel` BIGINT (10) UNSIGNED ZEROFILL,
+      `urssaf` BIGINT (11) UNSIGNED ZEROFILL,
+      `parente` ENUM ('conjoint','enfant','ascendant','colateral','divers'),
+      `email` VARCHAR (255),
+      `remarques` TEXT
+      ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
     
+    $query = "ALTER TABLE `correspondant_patient` 
+              ADD INDEX (`patient_id`);";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO correspondant_patient (patient_id, relation, nom, adresse, cp, ville, tel, urssaf)
+      SELECT patient_id, 'employeur', employeur_nom, employeur_adresse, employeur_cp, employeur_ville, employeur_tel, employeur_urssaf
+      FROM patients";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO correspondant_patient (patient_id, relation, nom, prenom, adresse, cp, ville, tel, parente)
+      SELECT patient_id, 'prevenir', prevenir_nom, prevenir_prenom, prevenir_adresse, prevenir_cp, prevenir_ville, prevenir_tel, prevenir_parente
+      FROM patients";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO correspondant_patient (patient_id, relation, nom, prenom, adresse, cp, ville, tel, parente)
+      SELECT patient_id, 'confiance', confiance_nom, confiance_prenom, confiance_adresse, confiance_cp, confiance_ville, confiance_tel, confiance_parente
+      FROM patients";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `patients`
+      DROP `employeur_nom`,
+      DROP `employeur_adresse`,
+      DROP `employeur_cp`,
+      DROP `employeur_ville`,
+      DROP `employeur_tel`,
+      DROP `employeur_urssaf`,
+      DROP `prevenir_nom`,
+      DROP `prevenir_prenom`,
+      DROP `prevenir_adresse`,
+      DROP `prevenir_cp`,
+      DROP `prevenir_ville`,
+      DROP `prevenir_tel`,
+      DROP `prevenir_parente`,
+      DROP `confiance_nom`,
+      DROP `confiance_prenom`,
+      DROP `confiance_adresse`,
+      DROP `confiance_cp`,
+      DROP `confiance_ville`,
+      DROP `confiance_tel`,
+      DROP `confiance_parente`";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.21";
   }
 }
 

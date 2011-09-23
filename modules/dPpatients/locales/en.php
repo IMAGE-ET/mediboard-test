@@ -31,7 +31,6 @@ $locales['CPatient.ATNC.1'] = 'Oui';
 $locales['CPatient.incapable_majeur.'] = ' ';
 $locales['CPatient.incapable_majeur.0'] = 'Non';
 $locales['CPatient.incapable_majeur.1'] = 'Oui';
-$locales['CPatient.prevenir_parente.'] = ' ';
 $locales['CPatient.sexe.'] = ' ';
 $locales['Intermax.error.30'] = 'Le praticien de Mediboard ne correspond à aucune fiche praticien de LogicMax. Vérifiez que : \\n\\t1. Le code Adeli est bien paramétré dans Mediboard\\n\\t2. Le praticien est configuré dans LogicMax avec le même code Adeli';
 $locales['Intermax.error.35'] = 'La patient n\'est pas référencé dans la base LogicMax';

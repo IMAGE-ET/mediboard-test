@@ -120,93 +120,95 @@
       {{mb_value object=$object field="rques"}}
     </td>
   </tr>
-  
-  <tr>
-    <th class="category" colspan="2">
-      Personne à prévenir
-    </th>
-  </tr>
-  <tr>
-    <td class="text">
-      <strong>{{mb_label object=$object field="prevenir_nom"}}</strong>
-      {{mb_value object=$object field="prevenir_nom"}}
-    </td>
-    <td class="text">
-      <strong>{{mb_label object=$object field="prevenir_adresse"}}</strong>
-      {{mb_value object=$object field="prevenir_adresse"}}
-    </td>
-  </tr>
-  <tr>
-    <td class="text">
-      <strong>{{mb_label object=$object field="prevenir_prenom"}}</strong>
-      {{mb_value object=$object field="prevenir_prenom"}}
-    </td>
-    <td class="text">
-      <strong>{{mb_label object=$object field="prevenir_cp"}}</strong>
-      {{mb_value object=$object field="prevenir_cp"}}
-    </td>
-  </tr>
-  <tr>
-    <td class="text">
-      <strong>{{mb_label object=$object field="prevenir_tel"}}</strong>
-      {{mb_value object=$object field="prevenir_tel"}}
-    </td>
-    <td class="text">
-      <strong>{{mb_label object=$object field="prevenir_ville"}}</strong>
-      {{mb_value object=$object field="prevenir_ville"}}
-    </td>
-  </tr>
-  <tr>
-    <td class="text">
-      <strong>{{mb_label object=$object field="prevenir_parente"}}</strong>
-      {{mb_value object=$object field="prevenir_parente"}}
-    </td>
-    <td class="text" />
-  </tr>
-  
-  <tr>
-    <th class="category" colspan="2">
-      Personne de confiance
-    </th>
-  </tr>
-  <tr>
-    <td class="text">
-      <strong>{{mb_label object=$object field="confiance_nom"}}</strong>
-      {{mb_value object=$object field="confiance_nom"}}
-    </td>
-    <td class="text">
-      <strong>{{mb_label object=$object field="confiance_adresse"}}</strong>
-      {{mb_value object=$object field="confiance_adresse"}}
-    </td>
-  </tr>
-  <tr>
-    <td class="text">
-      <strong>{{mb_label object=$object field="confiance_prenom"}}</strong>
-      {{mb_value object=$object field="confiance_prenom"}}
-    </td>
-    <td class="text">
-      <strong>{{mb_label object=$object field="confiance_cp"}}</strong>
-      {{mb_value object=$object field="confiance_cp"}}
-    </td>
-  </tr>
-  <tr>
-    <td class="text">
-      <strong>{{mb_label object=$object field="confiance_tel"}}</strong>
-      {{mb_value object=$object field="confiance_tel"}}
-    </td>
-    <td class="text">
-      <strong>{{mb_label object=$object field="confiance_ville"}}</strong>
-      {{mb_value object=$object field="confiance_ville"}}
-    </td>
-  </tr>
-  <tr>
-    <td class="text">
-      <strong>{{mb_label object=$object field="confiance_parente"}}</strong>
-      {{mb_value object=$object field="confiance_parente"}}
-    </td>
-    <td class="text" />
-  </tr>
-  
+    
+  {{foreach from=$object->_ref_cp_by_relation.prevenir item=prevenir name=foreach_prevenir}}
+    <tr>
+      <th class="category" colspan="2">
+        Personne à prévenir
+      </th>
+    </tr>
+    <tr>
+      <td class="text">
+        <strong>{{mb_label object=$prevenir field="nom"}}</strong>
+        {{mb_value object=$prevenir field="nom"}}
+      </td>
+      <td class="text">
+        <strong>{{mb_label object=$prevenir field="adresse"}}</strong>
+        {{mb_value object=$prevenir field="adresse"}}
+      </td>
+    </tr>
+    <tr>
+      <td class="text">
+        <strong>{{mb_label object=$prevenir field="prenom"}}</strong>
+        {{mb_value object=$prevenir field="prenom"}}
+      </td>
+      <td class="text">
+        <strong>{{mb_label object=$prevenir field="cp"}}</strong>
+        {{mb_value object=$prevenir field="cp"}}
+      </td>
+    </tr>
+    <tr>
+      <td class="text">
+        <strong>{{mb_label object=$prevenir field="tel"}}</strong>
+        {{mb_value object=$prevenir field="tel"}}
+      </td>
+      <td class="text">
+        <strong>{{mb_label object=$prevenir field="ville"}}</strong>
+        {{mb_value object=$prevenir field="ville"}}
+      </td>
+    </tr>
+    <tr>
+      <td class="text">
+        <strong>{{mb_label object=$prevenir field="parente"}}</strong>
+        {{mb_value object=$prevenir field="parente"}}
+      </td>
+      <td class="text" />
+    </tr>
+  {{/foreach}}
+  {{foreach from=$object->_ref_cp_by_relation.confiance item=confiance}}
+    <tr>
+      <th class="category" colspan="2">
+        Personne de confiance
+      </th>
+    </tr>
+    <tr>
+      <td class="text">
+        <strong>{{mb_label object=$confiance field="nom"}}</strong>
+        {{mb_value object=$confiance field="nom"}}
+      </td>
+      <td class="text">
+        <strong>{{mb_label object=$confiance field="adresse"}}</strong>
+        {{mb_value object=$confiance field="adresse"}}
+      </td>
+    </tr>
+    <tr>
+      <td class="text">
+        <strong>{{mb_label object=$confiance field="prenom"}}</strong>
+        {{mb_value object=$confiance field="prenom"}}
+      </td>
+      <td class="text">
+        <strong>{{mb_label object=$confiance field="cp"}}</strong>
+        {{mb_value object=$confiance field="cp"}}
+      </td>
+    </tr>
+    <tr>
+      <td class="text">
+        <strong>{{mb_label object=$confiance field="tel"}}</strong>
+        {{mb_value object=$confiance field="tel"}}
+      </td>
+      <td class="text">
+        <strong>{{mb_label object=$confiance field="ville"}}</strong>
+        {{mb_value object=$confiance field="ville"}}
+      </td>
+    </tr>
+    <tr>
+      <td class="text">
+        <strong>{{mb_label object=$confiance field="parente"}}</strong>
+        {{mb_value object=$confiance field="parente"}}
+      </td>
+      <td class="text" />
+    </tr>
+  {{/foreach}}
   <tr>
     <th class="category" colspan="2">
       Bénéficiaire de soins

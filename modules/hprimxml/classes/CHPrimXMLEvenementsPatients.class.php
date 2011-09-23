@@ -187,25 +187,33 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     return $mbPatient;
   }
   
+  /**
+   * @todo: Gérer le store des correspondants patients après le mapping
+  **/
   static function getPersonnesPrevenir($node, CPatient $mbPatient) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
     $personnesPrevenir = $xpath->query("hprim:personnesPrevenir/*", $node);
+    
     foreach ($personnesPrevenir as $personnePrevenir) {
-      $mbPatient->prevenir_nom = $xpath->queryTextNode("hprim:nomUsuel", $personnePrevenir);
+      $prevenir = new CCorrespondantPatient;
+      $prevenir->relation = "prevenir";
+      $prevenir->nom = $xpath->queryTextNode("hprim:nomUsuel", $personnePrevenir);
       $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $personnePrevenir);
-      $mbPatient->prevenir_prenom = $prenoms[0];
+      $prevenir->prenom = $prenoms[0];
       
       $adresses = $xpath->queryUniqueNode("hprim:adresses", $personnePrevenir);
       $adresse = $xpath->queryUniqueNode("hprim:adresse", $adresses);
-      $mbPatient->prevenir_adresse = $xpath->queryTextNode("hprim:ligne", $adresse);
-      $mbPatient->prevenir_ville = $xpath->queryTextNode("hprim:ville", $adresse);
-      $mbPatient->prevenir_cp = $xpath->queryTextNode("hprim:codePostal", $adresse);
+      $prevenir->adresse = $xpath->queryTextNode("hprim:ligne", $adresse);
+      $prevenir->ville = $xpath->queryTextNode("hprim:ville", $adresse);
+      $prevenir->cp = $xpath->queryTextNode("hprim:codePostal", $adresse);
       
       $telephones = $xpath->getMultipleTextNodes("hprim:telephones/*", $personnePrevenir);
-      $mbPatient->prevenir_tel = isset($telephones[0]) ? $telephones[0] : null;
+      $prevenir->tel = isset($telephones[0]) ? $telephones[0] : null;
+      
+      $mbPatient->_ref_correspondants_patient[] = $prevenir;
     }
-        
+    
     return $mbPatient;
   }
   

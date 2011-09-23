@@ -131,29 +131,6 @@ class CPatient extends CMbObject {
   var $pays_naissance_insee = null;
   var $profession           = null;
 
-  var $employeur_nom     = null;
-  var $employeur_adresse = null;
-  var $employeur_cp      = null;
-  var $employeur_ville   = null;
-  var $employeur_tel     = null;
-  var $employeur_urssaf  = null;
-
-  var $prevenir_nom     = null;
-  var $prevenir_prenom  = null;
-  var $prevenir_adresse = null;
-  var $prevenir_cp      = null;
-  var $prevenir_ville   = null;
-  var $prevenir_tel     = null;
-  var $prevenir_parente = null;
-
-  var $confiance_nom     = null;
-  var $confiance_prenom  = null;
-  var $confiance_adresse = null;
-  var $confiance_cp      = null;
-  var $confiance_ville   = null;
-  var $confiance_tel     = null;
-  var $confiance_parente = null;
-
   // Assuré
   var $assure_nom                   = null;
   var $assure_nom_jeune_fille       = null;
@@ -232,6 +209,9 @@ class CPatient extends CMbObject {
   var $_ref_next_affectation        = null;
   var $_ref_medecin_traitant        = null;
   var $_ref_medecins_correspondants = null;
+  var $_ref_correspondants_patient  = null;
+  var $_ref_cp_by_relation          = array();
+  
   var $_ref_dossier_medical         = null;
   var $_ref_IPP                     = null;
   var $_ref_vitale_idsante400       = null;
@@ -253,6 +233,7 @@ class CPatient extends CMbObject {
 	  $backProps["constantes"]            = "CConstantesMedicales patient_id";
 	  $backProps["consultations"]         = "CConsultation patient_id";
 	  $backProps["correspondants"]        = "CCorrespondant patient_id";
+	  $backProps["correspondants_patient"] = "CCorrespondantPatient patient_id";
 	  $backProps["hprim21_patients"]      = "CHprim21Patient patient_id";
 	  $backProps["prescriptions_labo"]    = "CPrescriptionLabo patient_id";
 	  $backProps["product_deliveries"]    = "CProductDelivery patient_id";
@@ -330,29 +311,6 @@ class CPatient extends CMbObject {
     $specs["cp_naissance"]         = "numchar minLength|4 maxLength|5";
     $specs["pays_naissance_insee"] = "str";
     $specs["profession"]           = "str autocomplete";
-      
-    $specs["employeur_nom"]     = "str confidential";
-    $specs["employeur_adresse"] = "text";
-    $specs["employeur_cp"]      = "numchar minLength|4 maxLength|5";
-    $specs["employeur_ville"]   = "str confidential";
-    $specs["employeur_tel"]     = "numchar confidential length|10 mask|$phone_number_format";
-    $specs["employeur_urssaf"]  = "numchar length|11 confidential";
-
-    $specs["prevenir_nom"]      = "str confidential";
-    $specs["prevenir_prenom"]   = "str";
-    $specs["prevenir_adresse"]  = "text";
-    $specs["prevenir_cp"]       = "numchar minLength|4 maxLength|5";
-    $specs["prevenir_ville"]    = "str confidential";
-    $specs["prevenir_tel"]      = "numchar confidential length|10 mask|$phone_number_format";
-    $specs["prevenir_parente"]  = "enum list|conjoint|enfant|ascendant|colateral|divers";
-    
-    $specs["confiance_nom"]      = "str confidential";
-    $specs["confiance_prenom"]   = "str";
-    $specs["confiance_adresse"]  = "text";
-    $specs["confiance_cp"]       = "numchar minLength|4 maxLength|5";
-    $specs["confiance_ville"]    = "str confidential";
-    $specs["confiance_tel"]      = "numchar confidential length|10 mask|$phone_number_format";
-    $specs["confiance_parente"]  = "enum list|conjoint|enfant|ascendant|colateral|divers";
     
     $specs["assure_nom"]                  = "str confidential";
     $specs["assure_prenom"]               = "str";
@@ -1214,6 +1172,7 @@ class CPatient extends CMbObject {
     parent::loadComplete();
     $this->loadIPP();
     $this->loadRefPhotoIdentite();
+    $this->loadRefsCorrespondantsPatient();
     $this->loadRefDossierMedical();
     $this->_ref_dossier_medical->canRead();
     $this->_ref_dossier_medical->loadRefsAntecedents();
@@ -1230,12 +1189,13 @@ class CPatient extends CMbObject {
   function loadDossierComplet($permType = null) {
   	$this->_ref_praticiens = array();
     $pat_id = $this->loadRefs();
-        
+    
     $this->canRead();
     $this->canEdit();
     $this->countDocItems($permType);
     $this->loadRefPhotoIdentite();
     $this->loadRefsNotes();
+    $this->loadRefsCorrespondantsPatient();
     
     // Affectations courantes
     $affectation =& $this->_ref_curr_affectation;
@@ -1331,6 +1291,32 @@ class CPatient extends CMbObject {
     }
 
   	return $this->_ref_medecins_correspondants;
+  }
+  
+  // Prévenir - Confiance - Employeur
+  function loadRefsCorrespondantsPatient() {
+    $this->_ref_correspondants_patient = $this->loadBackRefs("correspondants_patient");
+    
+    $correspondant = new CCorrespondantPatient;
+    foreach (explode("|", $correspondant->_specs["relation"]->list) as $_relation) {
+      $this->_ref_cp_by_relation[$_relation] = array();
+    }
+    
+    foreach ($this->_ref_correspondants_patient as $_correspondant) {
+      $this->_ref_cp_by_relation[$_correspondant->relation][$_correspondant->_id] = $_correspondant;
+    }
+    
+    // Si aucun correspondant dans chaque catégorie, on en crée un nouveau et on initialise le champ relation
+    foreach ($this->_ref_cp_by_relation as $relation => $_correspondants) {
+      if (!count($this->_ref_cp_by_relation[$relation])) {
+        $correspondant = new CCorrespondantPatient;
+        $correspondant->relation = $relation;
+        $correspondant->patient_id = $this->_id;
+        $this->_ref_cp_by_relation[$relation][] = $correspondant;
+      }
+    }
+    
+    return $this->_ref_correspondants_patient;
   }
 	
 	/**
@@ -1507,31 +1493,40 @@ class CPatient extends CMbObject {
     }
     
     // Employeur
-    $template->addProperty("Patient - employeur - nom"    , $this->employeur_nom);
-    $template->addProperty("Patient - employeur - adresse", $this->employeur_adresse);
-    $template->addProperty("Patient - employeur - cp"     , $this->employeur_cp);
-    $template->addProperty("Patient - employeur - ville"  , $this->employeur_ville);
-    $template->addProperty("Patient - employeur - tel"    , $this->getFormattedValue("employeur_tel"));
-    $template->addProperty("Patient - employeur - urssaf" , $this->employeur_urssaf);
+    $this->loadRefsCorrespondantsPatient();
+    $correspondants = $this->_ref_cp_by_relation;
     
-    // Prevenir
-    $template->addProperty("Patient - prévenir - nom"    , $this->prevenir_nom);
-    $template->addProperty("Patient - prévenir - prénom" , $this->prevenir_prenom);
-    $template->addProperty("Patient - prévenir - adresse", $this->prevenir_adresse);
-    $template->addProperty("Patient - prévenir - cp"     , $this->prevenir_cp);
-    $template->addProperty("Patient - prévenir - ville"  , $this->prevenir_ville);
-    $template->addProperty("Patient - prévenir - tel"    , $this->getFormattedValue("prevenir_tel"));
-    $template->addProperty("Patient - prévenir - parente", $this->prevenir_parente);
-    
-    // Confiance
-    $template->addProperty("Patient - confiance - nom"    , $this->confiance_nom);
-    $template->addProperty("Patient - confiance - prénom" , $this->confiance_prenom);
-    $template->addProperty("Patient - confiance - adresse", $this->confiance_adresse);
-    $template->addProperty("Patient - confiance - cp"     , $this->confiance_cp);
-    $template->addProperty("Patient - confiance - ville"  , $this->confiance_ville);
-    $template->addProperty("Patient - confiance - tel"    , $this->getFormattedValue("confiance_tel"));
-    $template->addProperty("Patient - confiance - parente", $this->confiance_parente);
-	
+    foreach ($correspondants as $_correspondants) {
+      $_correspondant = reset($_correspondants);
+      switch($_correspondant->relation) {
+        case "employeur" :
+          $template->addProperty("Patient - employeur - nom"    , $_correspondant->nom);
+          $template->addProperty("Patient - employeur - adresse", $_correspondant->adresse);
+          $template->addProperty("Patient - employeur - cp"     , $_correspondant->cp);
+          $template->addProperty("Patient - employeur - ville"  , $_correspondant->ville);
+          $template->addProperty("Patient - employeur - tel"    , $_correspondant->getFormattedValue("tel"));
+          $template->addProperty("Patient - employeur - urssaf" , $_correspondant->urssaf);
+          break;
+        case "prevenir":
+          $template->addProperty("Patient - prévenir - nom"    , $_correspondant->nom);
+          $template->addProperty("Patient - prévenir - prénom" , $_correspondant->prenom);
+          $template->addProperty("Patient - prévenir - adresse", $_correspondant->adresse);
+          $template->addProperty("Patient - prévenir - cp"     , $_correspondant->cp);
+          $template->addProperty("Patient - prévenir - ville"  , $_correspondant->ville);
+          $template->addProperty("Patient - prévenir - tel"    , $_correspondant->getFormattedValue("tel"));
+          $template->addProperty("Patient - prévenir - parente", $_correspondant->parente);
+          break;
+        case "confiance":
+          $template->addProperty("Patient - confiance - nom"    , $_correspondant->nom);
+          $template->addProperty("Patient - confiance - prénom" , $_correspondant->prenom);
+          $template->addProperty("Patient - confiance - adresse", $_correspondant->adresse);
+          $template->addProperty("Patient - confiance - cp"     , $_correspondant->cp);
+          $template->addProperty("Patient - confiance - ville"  , $_correspondant->ville);
+          $template->addProperty("Patient - confiance - tel"    , $_correspondant->getFormattedValue("tel"));
+          $template->addProperty("Patient - confiance - parente", $_correspondant->parente);
+      }
+    }
+  
     // Vider les anciens holders
     for ($i = 1; $i < 4; $i++) {
       $template->addProperty("Patient - médecin correspondant $i");

@@ -35,6 +35,7 @@ foreach($patient->_ref_consultations as $consultation) {
 }
 
 $patient->loadRefsCorrespondants();
+$patient->loadRefsCorrespondantsPatient();
 $patient->loadIPP();
 
 // Création du template
