@@ -800,7 +800,7 @@ TESTS A EFFECTUER
       $where = array();
       $where['annule']     = " = '0'";
       $where['patient_id'] = " = '$this->patient_id'";
-      if (CAppUI::conf("dPcabinet CConsultation search_sejour_all_groups")) {
+      if (!CAppUI::conf("dPcabinet CConsultation search_sejour_all_groups")) {
         $where['group_id']   = " = '".CGroups::loadCurrent()->_id."'";
       }
       $where['facturable']     = " = '$facturable'";
