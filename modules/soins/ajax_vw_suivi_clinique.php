@@ -14,6 +14,7 @@ $sejour = new CSejour;
 $sejour->load($sejour_id);
 $sejour->canRead();
 $patient = $sejour->loadRelPatient();
+$patient->loadRefsCorrespondantsPatient();
 $patient->loadRefPhotoIdentite();
 $patient->loadRefsNotes();
 $dossier_medical = $patient->loadRefDossierMedical();

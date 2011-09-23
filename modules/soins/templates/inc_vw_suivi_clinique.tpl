@@ -166,55 +166,32 @@
           <th style="width: 1%;">
           </th>
           <th>
-            {{mb_label object=$patient field="prevenir_nom"}}
+            <strong>{{tr}}CCorrespondantPatient-nom{{/tr}}</strong>
           </th>
           <th>
-            {{mb_label object=$patient field="prevenir_prenom"}}
+            <strong>{{tr}}CCorrespondantPatient-prenom{{/tr}}</strong>
           </th>
           <th>
-            {{mb_label object=$patient field="prevenir_tel"}}
+            <strong>{{tr}}CCorrespondantPatient-tel{{/tr}}</strong>
           </th>
         </tr>
-        <tr>
-          <td>
-            <strong>Personne à prévenir</strong>
-          </td>
-          <td>
-            {{mb_value object=$patient field="prevenir_nom"}}
-          </td>
-          <td>
-            {{mb_value object=$patient field="prevenir_prenom"}}
-          </td>
-          <td>
-            {{mb_value object=$patient field="prevenir_tel"}}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <strong>Personne de confiance</strong>
-          </td>
-          <td>
-            {{mb_value object=$patient field="confiance_nom"}}
-          </td>
-          <td>
-            {{mb_value object=$patient field="confiance_prenom"}}
-          </td>
-          <td>
-            {{mb_value object=$patient field="confiance_tel"}}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <strong>Employeur</strong>
-          </td>
-          <td>
-            {{mb_value object=$patient field="employeur_nom"}}
-          </td>
-          <td></td>
-          <td>
-            {{mb_value object=$patient field="employeur_tel"}}
-          </td>
-        </tr>
+        {{foreach from=$patient->_ref_cp_by_relation item=_correspondants}}
+          {{assign var=_correspondant value=$_correspondants|@reset}}
+          <tr>
+            <td>
+              <strong>{{mb_value object=$_correspondant field=relation}}</strong>
+            </td>
+            <td>
+              {{mb_value object=$_correspondant field="nom"}}
+            </td>
+            <td>
+              {{mb_value object=$_correspondant field="prenom"}}
+            </td>
+            <td>
+              {{mb_value object=$_correspondant field="tel"}}
+            </td>
+          </tr>
+        {{/foreach}}
       </table>
       
       <!--  Informations sur le séjour -->
