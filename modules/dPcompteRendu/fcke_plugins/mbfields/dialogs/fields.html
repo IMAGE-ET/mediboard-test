@@ -12,6 +12,7 @@
     </style>
     <script type="text/javascript" src="../../../../../lib/scriptaculous/lib/prototype.js"></script>
     <script type="text/javascript">
+      var valueMode = window.parent.parent.fields[0].spanClass == "value";
       var fields = window.parent.parent.fields[0].options;
       var CKEDITOR = window.parent.parent.CKEDITOR;
       
@@ -83,8 +84,12 @@
       }
 
       function insertHTML(string) {
-        //var sHtml = "<span class='field' contenteditable='false'>" + string + "</span>&nbsp;";
-        var sHtml = "<span class='field'>" + string + "</span>&nbsp;";
+        if (valueMode) {
+          var sHtml = "<span class='field'>" + string + "</span>&nbsp;";
+        }
+        else {
+          var sHtml = "<span class='field' contenteditable='false'>" + string + "</span>&nbsp;";
+        }
         CKEDITOR.instances.htmlarea.focus();
         if (CKEDITOR.env.gecko && string.match(/Code barre/) == -1) {
           insertSpecialChar(sHtml);
