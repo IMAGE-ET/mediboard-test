@@ -262,7 +262,7 @@ a.button.rtl {
 }
 
 button.rtl {
-  padding-top: 2px;
+  padding-top: 4px;
 }
 
 button.rtl:before,
@@ -271,10 +271,6 @@ a.button.rtl:before {
   margin-right: 0;
   margin-left: 3px;
   margin-top: -3px;
-}
-
-button.rtl:before {
-  margin-top: -1px;
 }
 
 a.button:hover,

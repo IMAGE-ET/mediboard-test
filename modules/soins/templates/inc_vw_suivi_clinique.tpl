@@ -13,9 +13,14 @@
     url.requestModal(700, 550);
   }
 
-  toggleProgressFuture = function() {
-    $$(".opacity-40").each(function(elt) {
-      elt.toggleClassName("in_progress_future");
+  toggleProgressBefore = function() {
+    $$(".in_progress_before").each(function(elt) {
+      elt.toggleClassName("show_important");
+    });
+  }
+  toggleProgressAfter = function() {
+    $$(".in_progress_after").each(function(elt) {
+      elt.toggleClassName("show_important");
     });
   }
   
@@ -27,8 +32,11 @@
 </script>
 
 <style type="text/css">
-  .in_progress_future {
+  .in_progress_before, .in_progress_after {
     display: none;
+  }
+  .show_important {
+    display: block !important;
   }
 </style>
 
@@ -273,7 +281,12 @@
         <table class="tbl">
           <tr>
             <th class="title">
-              <button type="button" style="float: right;" class="add notext" onclick="toggleProgressFuture();" title="{{tr}}CPrescription.in_progress_more{{/tr}}"></button>
+              <button type="button" style="float: right;" class="right rtl" onclick="toggleProgressAfter();" title="{{tr}}CPrescription.in_progress_after{{/tr}}">
+                +{{$days_config}}J
+              </button>
+              <button type="button" style="float: right;" class="left" onclick="toggleProgressBefore();" title="{{tr}}CPrescription.in_progress_before{{/tr}}">
+                -{{$days_config}}J
+              </button>
               {{tr}}CPrescription.in_progress{{/tr}}
             </th>
             {{if $prescription->_ref_lines_med_comments.med|@count || $prescription->_ref_lines_med_comments.comment|@count ||
@@ -282,45 +295,65 @@
               <tr>
                 <th>{{tr}}CPrescription._chapitres.med{{/tr}}</th>
               </tr>
-              <!-- -24h -->
-              <tr class="hatching in_progress_future opacity-40">
+              <!-- passé -->
+              <tr class="hatching in_progress_before opacity-40">
                 <td class="text">
-                  {{foreach from=$prescription->_ref_lines_med_comments.med item=_line name=foreach_med}}
+                  {{assign var=is_first value=1}}
+                  {{assign var=total value=0}}
+                  {{foreach from=$prescription->_ref_lines_med_comments.med item=_line}}
                     {{if $_line->_fin_reelle && $_line->_fin_reelle < $date && $_line->_fin_reelle >= $date_before}}
-                      {{if !$smarty.foreach.foreach_med.first}}
+                      {{if !$is_first}}
                         &ndash;
                       {{/if}}
+                      {{assign var=is_first value=0}}
+                      {{math equation="x+1" x=$total assign=total}}
                       {{$_line->_ref_produit->libelle_abrege}}
                     {{/if}}
                   {{/foreach}}
+                  {{if $total == 0}}
+                    Aucune ligne de médicament passée
+                  {{/if}}
                 </td>
               </tr>
               <!-- Maintenant -->
               <tr>
                 <td class="text">
-                  {{foreach from=$prescription->_ref_lines_med_comments.med item=_line name=foreach_med}}
+                  {{assign var=is_first value=1}}
+                  {{assign var=total value=0}}
+                  {{foreach from=$prescription->_ref_lines_med_comments.med item=_line}}
                     {{if ($_line->_fin_reelle && $_line->_fin_reelle >= $date) &&
                        $_line->_debut_reel && $_line->_debut_reel <= $date}}
-                      {{if !$smarty.foreach.foreach_med.first}}
+                      {{if !$is_first}}
                         &ndash;
                       {{/if}}
+                      {{assign var=is_first value=0}}
+                      {{math equation="x+1" x=$total assign=total}}
                       {{$_line->_ref_produit->libelle_abrege}}
                     {{/if}}
                   {{/foreach}}
+                  {{if $total == 0}}
+                    Aucune ligne de médicament en cours
+                  {{/if}}
                 </td>
               </tr>
-              <!-- +24h -->
+              <!-- A venir -->
               <tr>
-                <td class="text in_progress_future opacity-40">
-                  {{foreach from=$prescription->_ref_lines_med_comments.med item=_line name=foreach_med}}
-                    
+                <td class="text in_progress_after opacity-40">
+                  {{assign var=is_first value=1}}
+                  {{assign var=total value=0}}
+                  {{foreach from=$prescription->_ref_lines_med_comments.med item=_line}}
                     {{if $_line->_debut_reel && $_line->_debut_reel > $date && $_line->_debut_reel <= $date_after}}
-                      {{if !$smarty.foreach.foreach_med.first}}
+                      {{if !$is_first}}
                         &ndash;
                       {{/if}}
+                      {{assign var=is_first value=0}}
+                      {{math equation="x+1" x=$total assign=total}}
                       {{$_line->_ref_produit->libelle_abrege}}
                     {{/if}}
                   {{/foreach}}
+                  {{if $total == 0}}
+                    Aucune ligne de médicament à venir
+                  {{/if}}
                 </td>
               </tr>
             {{/if}}
@@ -330,43 +363,64 @@
                 <tr>
                   <th>{{tr}}CPrescription._chapitres.{{$chap}}{{/tr}}</th>
                 </tr>
-                <tr class="hatching in_progress_future opacity-40">
+                <tr class="hatching in_progress_before opacity-40">
                   <td class="text">
-                    {{foreach from=$_lines_by_type item=_line name=foreach_line}}
+                    {{assign var=total value=0}}
+                    {{assign var=is_first value=1}}
+                    {{foreach from=$_lines_by_type item=_line}}
                       {{if $_line->_fin && $_line->_fin < $date && $_line->_fin >= $date_before}}
-                        {{if !$smarty.foreach.foreach_line.first}}
+                        {{if !$is_first}}
                           &ndash;
                         {{/if}}
+                        {{assign var=is_first value=0}}
+                        {{math equation="x+1" x=$total assign=total}}
                         {{$_line->voie}}
                         ({{$_line->_compact_view}})
                       {{/if}}
                     {{/foreach}}
+                    {{if $total == 0}}
+                      Aucune ligne de {{tr}}CPrescription._chapitres.{{$chap}}{{/tr}} passée
+                    {{/if}}
                   </td>
                 </tr>
                 <tr>
                   <td class="text">
-                    {{foreach from=$_lines_by_type item=_line name=foreach_line}}
+                    {{assign var=total value=0}}
+                    {{assign var=is_first value=1}}
+                    {{foreach from=$_lines_by_type item=_line}}
                       {{if ($_line->_fin && $_line->_fin >= $date) && ($_line->_debut && $_line->_debut <= $date)}}
-                        {{if !$smarty.foreach.foreach_line.first}}
+                        {{if !$is_first}}
                           &ndash;
                         {{/if}}
+                        {{assign var=is_first value=0}}
+                        {{math equation="x+1" x=$total assign=total}}
                         {{$_line->voie}}
                         ({{$_line->_compact_view}})
                       {{/if}}
                     {{/foreach}}
+                    {{if $total == 0}}
+                      Aucune ligne de {{tr}}CPrescription._chapitres.{{$chap}}{{/tr}} en cours
+                    {{/if}}
                   </td>
                 </tr>
-                <tr class="in_progress_future opacity-40">
+                <tr class="in_progress_after opacity-40">
                   <td class="text">
-                    {{foreach from=$_lines_by_type item=_line name=foreach_line}}
+                    {{assign var=total value=0}}
+                    {{assign var=is_first value=1}}
+                    {{foreach from=$_lines_by_type item=_line}}
                       {{if $_line->_debut && $_line->_debut > $date && $_line->_debut <= $date_after}}
-                        {{if !$smarty.foreach.foreach_line.first}}
+                        {{if !$is_first}}
                           &ndash;
                         {{/if}}
+                        {{assign var=is_first value=0}}
+                        {{math equation="x+1" x=$total assign=total}}
                         {{$_line->voie}}
                         ({{$_line->_compact_view}})
                       {{/if}}
                     {{/foreach}}
+                    {{if $total == 0}}
+                      Aucune ligne de {{tr}}CPrescription._chapitres.{{$chap}}{{/tr}} à venir
+                    {{/if}}
                   </td>
                 </tr>
               {{/foreach}}
@@ -377,60 +431,92 @@
                 <th>{{tr}}CPrescription._chapitres.{{$_category_name}}{{/tr}}</th>
               </tr>
               
-              <tr class="hatching in_progress_future opacity-40">
+              <tr class="hatching in_progress_before opacity-40">
                 <td class="text">
-                  {{assign var=first_no_display value=0}}
+                  {{assign var=total value=0}}
+                  {{assign var=is_first_chap value=1}}
+                  {{assign var=count_elts value=0}}
                   {{foreach from=$chap_element item=cat_element}}
-                    {{foreach from=$cat_element.element item=element name=foreach_elt}}
+                    {{if !$is_first_chap && $count_elts && $cat_element.element|@count > 0}}
+                      {{assign var=count_elts value=0}}
+                      &ndash;
+                    {{/if}}
+                    {{assign var=is_first_chap value=0}}
+                    {{assign var=is_first_cat value=1}}
+                    {{foreach from=$cat_element.element item=element}}
                       {{if $element->_fin_reelle && $element->_fin_reelle < $date && $element->_fin_reelle >= $date_before}}
-                        {{if !$smarty.foreach.foreach_elt.first && !$first_no_display}}
+                        {{if !$is_first_cat}}
                           &ndash;
                         {{/if}}
+                        {{assign var=is_first_cat value=0}}
+                        {{math equation="x+1" x=$count_elts assign=count_elts}}
+                        {{math equation="x+1" x=$total assign=total}}
                         {{$element->_view}}
-                      {{else}}
-                        {{if $smarty.foreach.foreach_elt.first}}
-                          {{assign var=first_no_display value=1}}
-                        {{/if}}
                       {{/if}}
                     {{/foreach}}
                   {{/foreach}}
+                  {{if $total == 0}}
+                    Aucune ligne de {{tr}}CPrescription._chapitres.{{$_category_name}}{{/tr}} passée
+                  {{/if}}
                 </td>
               </tr>
              
               <tr>
                 <td class="text">
-                  {{assign var=first_no_display value=0}}
-                  {{foreach from=$chap_element item=cat_element name=foreach_cat}}
-                    {{foreach from=$cat_element.element item=element name=foreach_elt}}
-
+                  {{assign var=total value=0}}
+                  {{assign var=is_first_chap value=1}}
+                  {{assign var=count_elts value=0}}
+                  {{foreach from=$chap_element item=cat_element}}
+                    {{if !$is_first_chap && $count_elts && $cat_element.element|@count > 0}}
+                       {{assign var=count_elts value=0}}
+                       &ndash;
+                    {{/if}}
+                    {{assign var=is_first_chap value=0}}
+                    {{assign var=is_first_cat value=1}}
+                    {{foreach from=$cat_element.element item=element}}
                       {{if ($element->_fin_reelle && $element->_fin_reelle >= $date) && ($element->_debut_reel && $element->_debut_reel <= $date)}}
-                        {{if !$smarty.foreach.foreach_elt.first && !$first_no_display}}
+                        {{if !$is_first_cat}}
                           &ndash;
                         {{/if}}
+                        {{assign var=is_first_cat value=0}}
+                        {{math equation="x+1" x=$total assign=total}}
+                        {{math equation="x+1" x=$count_elts assign=count_elts}}
                         {{$element->_view}}
-                        {{assign var=first_no_display value=0}}
-                      {{else}}
-                        {{if $smarty.foreach.foreach_elt.first}}
-                          {{assign var=first_no_display value=1}}
-                        {{/if}}
                       {{/if}}
                     {{/foreach}}
                   {{/foreach}}
+                  {{if $total == 0}}
+                    Aucune ligne de {{tr}}CPrescription._chapitres.{{$_category_name}}{{/tr}} en cours
+                  {{/if}}
                 </td>
               </tr>
              
-              <tr class="in_progress_future opacity-40">
+              <tr class="in_progress_after opacity-40">
                 <td class="text">
+                  {{assign var=total value=0}}
+                  {{assign var=is_first_chap value=1}}
+                  {{assign var=count_elts value=0}}
                   {{foreach from=$chap_element item=cat_element}}
-                    {{foreach from=$cat_element.element item=element name=foreach_elt}}
+                    {{if !$is_first_chap && $count_elts && $cat_element.element|@count > 0}}
+                       {{assign var=count_elts value=0}}
+                       &ndash;
+                    {{/if}}
+                    {{assign var=is_first_chap value=0}}
+                    {{assign var=is_first_cat value=1}}
+                    {{foreach from=$cat_element.element item=element}}
                       {{if $element->_debut_reel && $element->_debut_reel > $date && $element->_debut_reel <= $date_after}}
-                        {{if !$smarty.foreach.foreach_elt.first}}
+                        {{if !$is_first_cat}}
                           &ndash;
                         {{/if}}
+                        {{assign var=is_first_cat value=0}}
+                        {{math equation="x+1" x=$count_elts assign=count_elts}}
                         {{$element->_view}}
                       {{/if}}
                     {{/foreach}}
                   {{/foreach}}
+                  {{if $total == 0}}
+                    Aucune ligne de {{tr}}CPrescription._chapitres.{{$_category_name}}{{/tr}} à venir
+                  {{/if}}
                 </td>
               </tr>
             {{/foreach}}

@@ -54,11 +54,11 @@ $sejour->_ref_consult_anesth->loadRefConsultation();
 $prescription_sejour = $sejour->loadRefPrescriptionSejour();
 
 // Chargement des lignes de prescriptions
-$prescription_sejour->loadRefsLinesMedComments("1", "debut ASC", "", 24);
-$prescription_sejour->loadRefsLinesElementsComments("1","","debut ASC", "", 24);
+$prescription_sejour->loadRefsLinesMedComments();
+$prescription_sejour->loadRefsLinesElementsComments();
 
 // Chargement des prescription_line_mixes
-$prescription_sejour->loadRefsPrescriptionLineMixes("", 0, 1, "", 24);
+$prescription_sejour->loadRefsPrescriptionLineMixes();
 
 foreach ($prescription_sejour->_ref_prescription_line_mixes as $curr_prescription_line_mix){
   $curr_prescription_line_mix->loadRefsLines();
@@ -77,12 +77,14 @@ foreach ($prescription_sejour->_ref_prescription_line_mixes as $curr_prescriptio
 }
 
 $date = mbDateTime();
-$date_before = mbDateTime("-24 hours", $date);
-$date_after  = mbDateTime("+24 hours", $date);
+$days_config = CAppUI::conf("dPprescription CPrescription nb_days_prescription_current");
+$date_before = mbDateTime("-$days_config DAY", $date);
+$date_after  = mbDateTime("+$days_config DAY", $date);
 
 $smarty = new CSmartyDP;
 $smarty->assign("sejour", $sejour);
 $smarty->assign("date"  , $date);
+$smarty->assign("days_config", $days_config);
 $smarty->assign("date_before"  , $date_before);
 $smarty->assign("date_after"   , $date_after);
 $smarty->display("inc_vw_suivi_clinique.tpl");

@@ -1498,11 +1498,11 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Chargement des lignes de prescription de médicament par catégorie ATC
    */
-  function loadRefsLinesMedByCat($with_child = 0, $with_subst = 0, $emplacement = "") {
+  function loadRefsLinesMedByCat($with_child = 0, $with_subst = 0, $emplacement = "", $in_progress=0) {
     if ($this->_ref_prescription_lines_by_cat) {
       return;
     }
-    $this->loadRefsLinesMed($with_child, $with_subst, $emplacement);
+    $this->loadRefsLinesMed($with_child, $with_subst, $emplacement, "", "", $in_progress);
     $this->_ref_prescription_lines_by_cat = array();
     foreach($this->_ref_prescription_lines as &$_line){
       $produit =& $_line->_ref_produit;
