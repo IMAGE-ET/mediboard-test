@@ -240,8 +240,9 @@ chooseSubmit = function() {
     <input type="hidden" name="object_id" value="{{$line->_id}}" />
     <input type="hidden" name="object_class" value="{{$line->_class}}" />
     <input type="hidden" name="unite_prise" value="{{$unite_prise}}" />
-    <input type="hidden" name="dateTime" value="{{$dateTime}}" />
-    <input type="hidden" name="prise_id" value="{{$prise_id}}" />
+	
+    
+		<input type="hidden" name="prise_id" value="{{$prise_id}}" />
     <input type="hidden" name="callback" value="submitTransmission" />
     <input type="hidden" name="_quantite_prevue" value="{{$prise->quantite}}" />
     <input type="hidden" name="constantes_medicales_id" value="" />
@@ -271,6 +272,8 @@ chooseSubmit = function() {
   				{{mb_label object=$prise field=quantite}}
   	      {{mb_field object=$prise field=quantite min=0 increment=1 form=addAdministration onchange="updateQuantite('$ratio_UI', this)"}}
   	      
+					
+					
   	      {{if $line instanceof CPrescriptionLineMedicament}}
   				  {{if $line->_ref_produit_prescription->_id}}
   					  {{$line->_ref_produit_prescription->unite_prise}}
@@ -280,17 +283,10 @@ chooseSubmit = function() {
   	      {{else}}
   	        {{$line->_unite_prise}}
   	      {{/if}} 
-  	      
-  	      {{if $mode_plan}}
-  	      à
-  	      <select name="_hour" class="notNull" onchange="$V(this.form.dateTime, '{{$dateTime}} '+this.value);">
-  	        <option value="">&mdash; Heure</option>
-  	        {{foreach from=$hours item=_hour}}
-  	        <option value="{{$_hour}}:00:00">{{$_hour}}h</option>
-  	        {{/foreach}}
-  	      </select>
-  	      {{/if}}
-  				
+  	      			
+		      <input type="hidden" name="_date" value="{{$dateTime|iso_date}}" />
+          à {{mb_field object=$new_adm field=_time form=addAdministration}}
+      		
   				{{if $line instanceof CPrescriptionLineMedicament && $line->_ref_produit->_ratio_UI}}
   					soit 
   				  {{mb_field object=$prise field=_quantite_UI min=0 increment=1 form=addAdministration onchange="updateQuantite('$ratio_UI', this)"}} UI

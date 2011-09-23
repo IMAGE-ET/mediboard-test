@@ -151,8 +151,13 @@ if ($line instanceof CPrescriptionLineElement) {
   $latest_constantes = $patient->loadRefConstantesMedicales();
 }
 
+$new_adm = new CAdministration();
+$new_adm->_date = mbDate($dateTime);
+$new_adm->_time = mbTime($dateTime);
+
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("new_adm", $new_adm);
 $smarty->assign("key_tab", $key_tab);
 $smarty->assign("date_sel", $date_sel);
 $smarty->assign("administrations", $administrations);

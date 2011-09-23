@@ -36,6 +36,10 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
   var $_ref_log   = null;
   var $_ref_planification_systeme = null;
 	
+	var $_date = null;
+	var $_time = null;
+	
+	
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'administration';
@@ -70,6 +74,8 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
     $specs["quantite"]          = "float";
     $specs["unite_prise"]       = "text";
     $specs["dateTime"]          = "dateTime";
+		$specs["_date"]          = "date";
+    $specs["_time"]          = "time";
     $specs["commentaire"]       = "text";
     $specs["planification"]     = "bool default|0";
     $specs["original_dateTime"] = "dateTime";
@@ -92,6 +98,12 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
   	$this->_unite_prise = ($this->unite_prise !== "aucune_prise" ? $this->unite_prise : ""); // Parfois modifié par loadRefPrise
   }
   
+	function updatePlainFields(){
+		if($this->_date !== null && $this->_time !== null){
+			$this->dateTime = "$this->_date $this->_time";
+		}
+	}
+	
   function loadRefsFwd(){
   	parent::loadRefsFwd();
   	$this->loadRefAdministrateur();
