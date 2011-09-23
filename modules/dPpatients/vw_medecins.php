@@ -48,16 +48,15 @@ $where = array();
 if ($medecin_nom   ) $where["nom"]      = "LIKE '$medecin_nom%'";
 if ($medecin_prenom) $where["prenom"]   = "LIKE '$medecin_prenom%'";
 if ($medecin_cp && $medecin_cp != "00") {
-  $cps = explode("|", $medecin_cp);
-  $where_cp = "";
+  $cps = preg_split("/\s*[\s\|,]\s*/", $medecin_cp);
   CMbArray::removeValue("", $cps);
+	
+  $where_cp = array();
   foreach($cps as $cp) {
-    $where_cp .= "cp LIKE '".$cp."%'";
-    if ($cp != end($cps)) {
-      $where_cp .= " OR ";
-    }
+    $where_cp[] = "cp LIKE '".$cp."%'";
   }
-  $where[] = $where_cp;
+	
+  $where[] = implode(" OR ", $where_cp);
 }
 if ($medecin_type)   $where["type"]     = "= '$medecin_type'";
 

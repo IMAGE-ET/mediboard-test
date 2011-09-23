@@ -62,7 +62,7 @@ class CSourceFTP extends CExchangeSource {
     return $ftp;
   }
   
-  function send() {
+  function send($evenement_name = null) {
     $ftp = $this->init($this);
     
     $this->counter++;

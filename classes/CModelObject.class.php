@@ -412,7 +412,7 @@ class CModelObject {
    * @param $objects An array of CMbObject
    * @return $this or an error
    */
-  function mergePlainFields ($objects = array()/*<CMbObject>*/, $getFirstValue = false) {
+  function mergePlainFields ($objects /*array(<CMbObject>)*/, $getFirstValue = false) {
     $fields = $this->getPlainFields();
     $diffs = $fields;
     foreach ($diffs as &$diff) $diff = false;

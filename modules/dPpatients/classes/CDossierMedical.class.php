@@ -123,7 +123,7 @@ class CDossierMedical extends CMbMetaObject {
     parent::updatePlainFields();
   }
   
-  function mergePlainFields ($objects = array()/*<CMbObject>*/) {
+  function mergePlainFields ($objects /*array(<CMbObject>)*/, $getFirstValue = false) {
     $codes_cim_array = CMbArray::pluck($objects, 'codes_cim');
     $codes_cim_array[] = $this->codes_cim;
     $codes_cim = implode('|', $codes_cim_array);

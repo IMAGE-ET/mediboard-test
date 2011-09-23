@@ -47,7 +47,7 @@ class CFilesCategory extends CMbObject {
     return $specs;
   }
   
-  function countDocItems() {
+  function countDocItems($permType = null) {
     $this->_count_documents = $this->countBackRefs("categorized_documents");
     $this->_count_files     = $this->countBackRefs("categorized_files"    );
     $this->_count_doc_items = $this->_count_documents + $this->_count_files;

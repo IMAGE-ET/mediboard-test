@@ -68,7 +68,12 @@ function onSubmitCorrespondant(form) {
         
         <tr>
           <th><label for="medecin_cp" title="Code postal du correspondant recherché (au moins 2 chiffres)">Département</label></th>
-          <td><input type="text" name="medecin_cp" value="{{$cp|stripslashes}}" /></td>
+          <td class="text">
+          	<input type="text" name="medecin_cp" value="{{$cp|stripslashes}}" />
+            <div class="info" style="display: inline-block;">
+              {{tr}}CMedecin.several_departements{{/tr}}
+            </div>
+					</td>
         </tr>
         
         <tr>
@@ -80,13 +85,6 @@ function onSubmitCorrespondant(form) {
                 <option value="{{$key}}" {{if $type == $key}}selected="selected"{{/if}}>{{$curr_type}}</option>
               {{/foreach}}
             </select>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            <div class="info">
-              {{tr}}CMedecin.several_departements{{/tr}}
-            </div>
           </td>
         </tr>
         <tr>

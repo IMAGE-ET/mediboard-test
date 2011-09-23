@@ -89,7 +89,7 @@ class CSourceSMTP extends CExchangeSource {
     $this->_mail->AddEmbeddedImage($file_path, $cid);
   }
   
-  function send() {
+  function send($evenement_name = null) {
   	$this->_mail->send();
   }
 }

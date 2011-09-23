@@ -22,16 +22,14 @@ if ($keywords) {
   $medecin_cps_prefs = CAppUI::pref("medecin_cps_pref");
   
   if ($medecin_cps_prefs != "") {
-    $where_cp = "(";
-    $cps = explode("|", $medecin_cps_prefs);
+    $cps = preg_split("/\s*[\s\|,]\s*/", $medecin_cps_prefs);
+    CMbArray::removeValue("", $cps);
+		
+    $where_cp = array();
     foreach($cps as $cp) {
-      $where_cp .= "cp LIKE '".$cp."___'";
-      if ($cp != end($cps)) {
-        $where_cp .= " OR ";
-      }
+      $where_cp[] = "cp LIKE '".$cp."___'";
     }
-    $where[] = $where_cp . ")";
-    
+    $where[] = implode(" OR ", $where_cp);
   }
   else if($indexGroup->_cp_court) {
     $where['cp'] = "LIKE '".$indexGroup->_cp_court."___'"; 
