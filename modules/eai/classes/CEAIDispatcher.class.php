@@ -25,7 +25,7 @@ class CEAIDispatcher {
     // Accepte t-on des utilisateurs acteurs non enregistrés ?
     if (!$actor) {
       CEAIDispatcher::$errors[] = CAppUI::tr("CEAIDispatcher-no_actor");
-      return self::dispachError($data);
+      return self::dispatchError($data);
     }
     
     foreach (CExchangeDataFormat::getAll() as $key => $_exchange_class) {  
@@ -42,7 +42,7 @@ class CEAIDispatcher {
 
     if (!$understand) {
       self::$errors[] = CAppUI::tr("CEAIDispatcher-no_understand");
-      return self::dispachError($data);
+      return self::dispatchError($data);
     }
 
     // est-ce que je comprend la famille de messages ?
@@ -56,7 +56,7 @@ class CEAIDispatcher {
 
     if (!$supported) {
       self::$errors[] = CAppUI::tr("CEAIDispatcher-_family_message_no_supported_for_this_actor", $family_message_class);
-      return self::dispachError($data);
+      return self::dispatchError($data);
     }
     
     CAppUI::stepAjax("CEAIDispatcher-understand");
@@ -74,11 +74,11 @@ class CEAIDispatcher {
       return $data_format->handle();    
     } catch(CMbException $e) {
       self::$errors[] = $e->getMessage();
-      return self::dispachError($data);
+      return self::dispatchError($data);
     }
   }
   
-  static function dispachError($data) {
+  static function dispatchError($data) {
     foreach (self::$errors as $_error) {
       CAppUI::stepAjax($_error, UI_MSG_WARNING);
     }
@@ -93,9 +93,9 @@ class CEAIDispatcher {
     
     // Création d'un message de retour
     $dom = new CMbXMLDocument();
-    $mb_errors = $dom->addElement($dom, "MB_Dispach_Errors");
+    $mb_errors = $dom->addElement($dom, "MB_Dispatch_Errors");
     foreach (self::$errors as $_error) {
-      $dom->addElement($mb_errors, "MB_Dispach_Error", $_error);
+      $dom->addElement($mb_errors, "MB_Dispatch_Error", $_error);
     }
     self::$xml_error = $dom->saveXML();
     

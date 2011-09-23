@@ -43,8 +43,8 @@ foreach ($classes as $_class) {
 		      if ($spec->meta) {
 		        $meta_spec = $object->_specs[$spec->meta];
             if ($meta_spec instanceof CEnumSpec) {
-              foreach ($meta_spec->_list as $_class) {
-		            $wanted[$_class]["$_class $field"] = true;
+              foreach ($meta_spec->_list as $_class_meta) {
+		            $wanted[$_class_meta]["$_class $field"] = true;
             	}
             }
             else {
