@@ -63,7 +63,7 @@ class CChambre extends CMbObject {
   	$specs = parent::getProps();
     $specs["service_id"]       = "ref notNull class|CService seekable";
     $specs["nom"]              = "str notNull seekable";
-    $specs["caracteristiques"] = "text confidential";
+    $specs["caracteristiques"] = "text";
     $specs["lits_alpha"]       = "bool default|0";
     $specs["annule"]           = "bool";
     $specs["plan_x"]           = "num";

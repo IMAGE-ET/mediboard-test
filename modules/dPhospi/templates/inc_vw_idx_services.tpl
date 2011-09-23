@@ -16,7 +16,6 @@
 	    <tr>
 	      <th>{{mb_title class=CService field=nom}}</th>
 	      <th>{{mb_title class=CService field=description}}</th>
-	      <th>{{mb_label class=CService field=group_id}}</th>
 	    </tr>
 	
 			{{foreach from=$services item=_service}}
@@ -27,7 +26,6 @@
 					</a>
 				</td>
 	      <td class="text">{{mb_value object=$_service field=description}}</td>
-	      <td>{{mb_value object=$_service field=group_id}}</td>
 	    </tr>
 	    {{/foreach}}
     </table>

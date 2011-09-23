@@ -7,15 +7,24 @@
 * @author Thomas Despoix
 */
 
-CCanDo::checkRead();
+CCanDo::checkAdmin();
 
-$prestation_id = CValue::getOrSession("prestation_id");
+$service_id    = CValue::getOrSession("service_id");
 $chambre_id    = CValue::getOrSession("chambre_id");
 $lit_id        = CValue::getOrSession("lit_id");
-$service_id    = CValue::getOrSession("service_id");
+$uf_id         = CValue::getOrSession("uf_id");
+$prestation_id = CValue::getOrSession("prestation_id");
+
+$group = CGroups::loadCurrent();
 
 // Liste des Etablissements
 $etablissements = CMediusers::loadEtablissements(PERM_READ);
+
+// Chargement du service à ajouter/editer
+$service = new CService();
+$service->group_id = $group->_id;
+$service->load($service_id);
+$service->loadRefsNotes();
 
 // Récupération de la chambre à ajouter/editer
 $chambre = new CChambre();
@@ -29,13 +38,6 @@ foreach ($chambre->loadRefsLits() as $_lit) {
 if (!$chambre->_id) {
   CValue::setSession("lit_id", 0);
 }
-
-// Chargement du service à ajouter/editer
-$group = CGroups::loadCurrent();
-$service = new CService();
-$service->group_id = $group->_id;
-$service->load($service_id);
-$service->loadRefsNotes();
 
 // Chargement du lit à ajouter/editer
 $lit = new CLit();
@@ -53,7 +55,17 @@ foreach ($services as $_service) {
 	}
 }
 
-// Chargement de la prestation
+// Chargement de l'uf à ajouter/éditer
+$uf = new CUniteFonctionnelle();
+$uf->group_id = $group->_id;
+$uf->load($uf_id);
+$uf->loadRefsNotes();
+
+// Récupération des ufs
+$order = "group_id, code";
+$ufs = $uf->loadList(null, $order);
+
+// Chargement de la prestation à ajouter/éditer
 $prestation = new CPrestation();
 $prestation->group_id = $group->_id;
 $prestation->load($prestation_id);
@@ -71,14 +83,15 @@ $praticiens = CAppUI::$user->loadPraticiens();
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("chambre"  , $chambre);
-$smarty->assign("lit"      , $lit);
-$smarty->assign("service"  , $service);
-$smarty->assign("services" , $services);
-$smarty->assign("prestation" , $prestation);
-$smarty->assign("prestations", $prestations);
-$smarty->assign("praticiens", $praticiens);
-
+$smarty->assign("services"      , $services);
+$smarty->assign("service"       , $service);
+$smarty->assign("chambre"       , $chambre);
+$smarty->assign("lit"           , $lit);
+$smarty->assign("ufs"           , $ufs);
+$smarty->assign("uf"            , $uf);
+$smarty->assign("prestations"   , $prestations);
+$smarty->assign("prestation"    , $prestation);
+$smarty->assign("praticiens"    , $praticiens);
 $smarty->assign("etablissements", $etablissements);
 
 $smarty->display("vw_idx_chambres.tpl");

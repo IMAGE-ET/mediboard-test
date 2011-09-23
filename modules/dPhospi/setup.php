@@ -350,8 +350,36 @@ class CSetupdPhospi extends CSetup {
     $query = "ALTER TABLE  `chambre` ADD  `plan_x` INT(11) NULL ,
       ADD  `plan_y` INT(11) NULL;";
     $this->addQuery($query);
+
+    $this->makeRevision("0.45");
+    $query = "CREATE TABLE `uf` (
+              `uf_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `group_id` INT (11) UNSIGNED NOT NULL,
+              `code` VARCHAR (255) NOT NULL,
+              `libelle` VARCHAR (255) NOT NULL,
+              `description` TEXT
+               ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `uf` 
+              ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+    $query = "CREATE TABLE `affectation_uf` (
+              `affectation_uf_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `uf_id` INT (11) UNSIGNED NOT NULL,
+              `debut` DATETIME,
+              `fin` DATETIME,
+              `object_id` INT (11) UNSIGNED NOT NULL,
+              `object_class` ENUM ('CSejour','Clit','CMediuser') NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `affectation_uf` 
+              ADD INDEX (`uf_id`),
+              ADD INDEX (`debut`),
+              ADD INDEX (`fin`),
+              ADD INDEX (`object_id`);";
+    $this->addQuery($query);
      
-    $this->mod_version = "0.45";
+    $this->mod_version = "0.46";
   }
 }
 ?>
