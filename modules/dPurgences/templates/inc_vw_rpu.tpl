@@ -318,7 +318,7 @@ function showEtabEntreeTransfert(mode) {
           {{if @$modules.ecap->mod_active && ($conf.ecap.dhe.dhe_mode_choice == "new")}}
             {{mb_include module=ecap template=inc_button_non_prevue patient_id=$rpu->_patient_id}}
           {{else}}
-            {{if $conf.dPurgences.gerer_hospi == "1"}} 
+            {{if $conf.dPurgences.gerer_hospi == "1" && $conf.dPurgences.create_sejour_hospit == "0" && !$sejour->sortie_reelle}} 
               {{assign var=label value=$conf.dPurgences.create_sejour_hospit|ternary:"simple":"transfert"}}
               <!-- Hospitalisation immediate, creation d'un sejour et transfert des actes dans le nouveau sejour -->
               <form name="transfertHospi" method="post" action="?m={{$m}}" onsubmit="return confirm($T('confirm-RPU-Hospitalisation-{{$label}}'));">
