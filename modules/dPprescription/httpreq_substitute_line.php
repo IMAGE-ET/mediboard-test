@@ -25,6 +25,7 @@ $line->loadRefsSubstitutionLines();
 // Creation de la nouvelle ligne
 $line->_id = "";
 $line->code_cip = $code_cip;
+$line->code_ucd = "";
 $line->creator_id = $user->_id;
 $line->accord_praticien = "";
 $line->debut = mbDate();
