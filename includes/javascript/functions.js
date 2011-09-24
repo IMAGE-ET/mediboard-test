@@ -783,6 +783,29 @@ Object.extend (Control.Tabs, {
   
   activateTab: function(tabName) {
     Control.Tabs.findByTabId(tabName).setActiveTab(tabName);
+  },
+  
+  setTabCount: function(tabName, count) {
+    // Find anchor
+    var anchors = $$('a[href=#'+tabName+']');
+    if (anchors.length != 1) {
+      Console.error('Anchor not found or found multiple for tab: '+tabName);
+      return;
+    }
+    var anchor = anchors[0];
+    
+    // Set empty class
+    anchor.setClassName('empty', count < 1);
+    
+    // Find count span
+    var small = anchor.down('small');
+    if (!small) {
+      Console.error('Small count span not found for tab: '+tabName);
+      return;
+    }
+    
+    // Set count label
+    small.update('('+count+')');
   }
 });
 
