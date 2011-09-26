@@ -50,6 +50,9 @@
   			{{/if}}
       </script>
     {{/if}}
+    {{if $line->date_arret && $line->time_arret}}      
+      <img src="style/mediboard/images/buttons/stop.png" title="{{tr}}CPrescriptionLineElement-date_arret{{/tr}} : {{$line->date_arret|date_format:$conf.date}} {{$line->time_arret|date_format:$conf.time}}"/>
+    {{/if}}
 		<span style="float: right">
 	    {{if $line->conditionnel}}{{mb_label object=$line field="conditionnel"}}&nbsp;{{/if}}
 	    {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}

@@ -20,3 +20,7 @@
 {{if $line->countBackRefs("prev_hist_line")}}
 	<img src="images/icons/subst.png" title="Substitution" />
 {{/if}}
+
+{{if $line->date_arret && $line->time_arret}}      
+  <img src="style/mediboard/images/buttons/stop.png" title="{{tr}}CPrescriptionLineElement-date_arret{{/tr}} : {{$line->date_arret|date_format:$conf.date}} {{$line->time_arret|date_format:$conf.time}}"/>
+{{/if}}
