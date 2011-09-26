@@ -120,7 +120,7 @@ Main.add(function () {
 	              {{mb_field object=$consult_anesth field="prepa_preop" rows="4" onchange="this.form.onsubmit()"}}
 	            </td>
 	            <td class="halfPane">
-	              {{if !$isPrescriptionInstalled || $conf.dPcabinet.CConsultAnesth.view_premedication}}
+	              {{if !$isPrescriptionInstalled || ($conf.dPcabinet.CConsultAnesth.view_premedication && $app->user_prefs.displayPremedConsult)}}
 	                {{mb_label object=$consult_anesth field="premedication"}}
 	                {{mb_field object=$consult_anesth field="premedication" rows="4" onchange="this.form.onsubmit()"}}
 	              {{else}}

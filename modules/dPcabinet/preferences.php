@@ -21,6 +21,9 @@ CPreferences::$modules["dPcabinet"] = array (
   "resumeCompta",
   "showDatesAntecedents",
   "dPcabinet_show_program",
-  "pratOnlyForConsult"
+  "pratOnlyForConsult",
+  "displayDocsConsult",
+  "displayPremedConsult",
+  "displayResultsConsult"
 );
 ?>

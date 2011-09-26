@@ -23,3 +23,6 @@
 {{mb_include template=inc_pref spec=bool var=resumeCompta}}
 {{mb_include template=inc_pref spec=bool var=showDatesAntecedents}}
 {{mb_include template=inc_pref spec=bool var=pratOnlyForConsult}}
+{{mb_include template=inc_pref spec=bool var=displayDocsConsult}}
+{{mb_include template=inc_pref spec=bool var=displayPremedConsult}}
+{{mb_include template=inc_pref spec=bool var=displayResultsConsult}}

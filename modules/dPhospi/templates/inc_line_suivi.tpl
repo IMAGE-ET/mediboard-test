@@ -128,8 +128,23 @@
     </td>
     <td>{{$_suivi->_datetime|date_format:$conf.time}}</td>
     <td></td>
-    <td>
+    <td class="text">
       {{if $_suivi->_ref_consult_anesth->_id}}
+        {{assign var=consult_anesth value=$_suivi->_ref_consult_anesth}}
+        {{if $consult_anesth->ASA}}
+          {{tr}}CConsultAnesth.ASA.{{$consult_anesth->ASA}}{{/tr}} -
+        {{/if}}
+        {{if $consult_anesth->position}}
+          {{$consult_anesth->position}} -
+        {{/if}}
+        {{if $consult_anesth->prepa_preop}}
+          {{$consult_anesth->prepa_preop}} -
+        {{/if}}
+        {{if $consult_anesth|@count}}
+          {{foreach from=$consult_anesth->_ref_techniques item=_technique}}
+            {{$_technique->technique}} -
+          {{/foreach}}
+        {{/if}}
         {{$_suivi->rques}}
       {{else}}
         {{$_suivi->conclusion}}

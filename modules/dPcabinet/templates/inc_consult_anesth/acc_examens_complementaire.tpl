@@ -97,119 +97,121 @@ Main.add(function () {
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
       {{mb_key object=$consult_anesth}}
-      <fieldset>
-        <legend>Résultats d'analyse</legend>
-        <table class="layout main">
-          <tr>
-            <th>{{mb_label object=$consult_anesth field="date_analyse"}}</th>
-            <td>
-              {{mb_field object=$consult_anesth field="date_analyse" form="editExamCompFrm" register="true" onchange="submitForm(this.form)"}}
-            </td>      
-            <th>{{mb_label object=$consult_anesth field="creatinine"}}</th>
-            <td>
-              {{mb_field object=$consult_anesth field="creatinine" tabindex="108" size="4" onchange="calculClairance();submitForm(this.form);"}}
-              mg/l
-            </td>
-          </tr>
-          <tr>
-            <th>{{mb_label object=$consult_anesth field="groupe"}}</th>
-            <td>
-              {{mb_field object=$consult_anesth field="groupe" tabindex="101" onchange="submitForm(this.form)"}}
-              /
-              {{mb_field object=$consult_anesth field="rhesus" tabindex="102" onchange="submitForm(this.form)"}}
-            </td>
-            <th>{{mb_label object=$consult_anesth field="_clairance"}}</th>
-            <td>
-              {{mb_field object=$consult_anesth field="_clairance"  size="4" readonly="readonly"}}
-              ml/min
-            </td>
-          </tr>
-          <tr>
-            <th>{{mb_label object=$consult_anesth field="groupe_ok"}}</th>
-            <td>
-              {{mb_field object=$consult_anesth field="groupe_ok" typeEnum="checkbox" tabindex="103" onchange="submitForm(this.form)"}}
-            </td>
-            <th>{{mb_label object=$consult_anesth field="fibrinogene"}}</th>
-            <td>
-              {{mb_field object=$consult_anesth field="fibrinogene" tabindex="109" size="4" onchange="submitForm(this.form)"}}
-              g/l
-            </td>
-          </tr>
-          <tr>
-            <th>{{mb_label object=$consult_anesth field="rai"}}</th>
-            <td>
-              {{mb_field object=$consult_anesth field="rai" tabindex="103" onchange="submitForm(this.form)"}}
-            </td>
-            <th>{{mb_label object=$consult_anesth field="na"}}</th>
-            <td>
-              {{mb_field object=$consult_anesth field="na" tabindex="109" size="4" onchange="submitForm(this.form)"}}
-              mmol/l
-            </td>
-          </tr>
-          <tr> 
-            <th>{{mb_label object=$consult_anesth field="hb"}}</th>
-            <td>
-              {{mb_field object=$consult_anesth field="hb" tabindex="104" size="4" onchange="submitForm(this.form)"}}
-              g/dl
-            </td>
-            <th>{{mb_label object=$consult_anesth field="k"}}</th>
-            <td>
-              {{mb_field object=$consult_anesth field="k" tabindex="110" size="4" onchange="submitForm(this.form)"}}
-              mmol/l
-            </td>
-          </tr>
-          <tr>
-            <th>{{mb_label object=$consult_anesth field="ht"}}</th>
-            <td>
-              {{mb_field object=$consult_anesth field="ht" tabindex="105" size="4" onchange="calculPSA();submitForm(this.form);"}}
-              %
-            </td>
-            <th>{{mb_label object=$consult_anesth field="tp"}}</th>
-            <td>
-              {{mb_field object=$consult_anesth field="tp" tabindex="111" size="4" onchange="submitForm(this.form)"}}
-              %
-            </td>
-          </tr>
-          <tr>
-            <th>{{mb_label object=$consult_anesth field="ht_final"}}</th>
-            <td>
-              {{mb_field object=$consult_anesth field="ht_final" tabindex="106" size="4" onchange="calculPSA();submitForm(this.form);"}}
-              %
-            </td>
-            <th>{{mb_label object=$consult_anesth field="tca" defaultFor="tca_temoin"}}</th>
-            <td>
-              {{mb_field object=$consult_anesth field="tca_temoin" tabindex="112" maxlength="2" size="2" onchange="submitForm(this.form)"}}
-              s /
-              {{mb_field object=$consult_anesth field="tca" tabindex="113" maxlength="2" size="2" onchange="submitForm(this.form)"}}
-               s
-            </td>
-          </tr>
-          <tr>
-            <th>{{mb_label object=$consult_anesth field="_psa"}}</th>
-            <td>
-              {{mb_field object=$consult_anesth field="_psa"  size="4" readonly="readonly"}}
-              ml/GR
-            </td>
-            <th>{{mb_label object=$consult_anesth field="tsivy" defaultFor="_min_tsivy"}}</th>
-            <td>
-              {{html_options tabindex="114" name="_min_tsivy" values=$mins output=$mins selected=$consult_anesth->_min_tsivy onchange="submitForm(this.form)"}}
-              min
-              {{html_options tabindex="115" name="_sec_tsivy" values=$secs output=$secs selected=$consult_anesth->_sec_tsivy onchange="submitForm(this.form)"}}
-              s
-            </td>
-          </tr>
-          <tr>
-            <th>{{mb_label object=$consult_anesth field="plaquettes"}}</th>
-            <td>
-              {{mb_field object=$consult_anesth field="plaquettes" tabindex="107" size="6" onchange="submitForm(this.form)"}} (x1000) /mm3
-            </td>
-            <th>{{mb_label object=$consult_anesth field="ecbu"}}</th>
-            <td>
-              {{mb_field object=$consult_anesth field="ecbu" tabindex="116" onchange="submitForm(this.form)"}}
-            </td>
-          </tr>
-        </table>
-      </fieldset>
+      {{if $app->user_prefs.displayResultsConsult}}
+        <fieldset>
+          <legend>Résultats d'analyse</legend>
+          <table class="layout main">
+            <tr>
+              <th>{{mb_label object=$consult_anesth field="date_analyse"}}</th>
+              <td>
+                {{mb_field object=$consult_anesth field="date_analyse" form="editExamCompFrm" register="true" onchange="submitForm(this.form)"}}
+              </td>
+              <th>{{mb_label object=$consult_anesth field="creatinine"}}</th>
+              <td>
+                {{mb_field object=$consult_anesth field="creatinine" tabindex="108" size="4" onchange="calculClairance();submitForm(this.form);"}}
+                mg/l
+              </td>
+            </tr>
+            <tr>
+              <th>{{mb_label object=$consult_anesth field="groupe"}}</th>
+              <td>
+                {{mb_field object=$consult_anesth field="groupe" tabindex="101" onchange="submitForm(this.form)"}}
+                /
+                {{mb_field object=$consult_anesth field="rhesus" tabindex="102" onchange="submitForm(this.form)"}}
+              </td>
+              <th>{{mb_label object=$consult_anesth field="_clairance"}}</th>
+              <td>
+                {{mb_field object=$consult_anesth field="_clairance"  size="4" readonly="readonly"}}
+                ml/min
+              </td>
+            </tr>
+            <tr>
+              <th>{{mb_label object=$consult_anesth field="groupe_ok"}}</th>
+              <td>
+                {{mb_field object=$consult_anesth field="groupe_ok" typeEnum="checkbox" tabindex="103" onchange="submitForm(this.form)"}}
+              </td>
+              <th>{{mb_label object=$consult_anesth field="fibrinogene"}}</th>
+              <td>
+                {{mb_field object=$consult_anesth field="fibrinogene" tabindex="109" size="4" onchange="submitForm(this.form)"}}
+                g/l
+              </td>
+            </tr>
+            <tr>
+              <th>{{mb_label object=$consult_anesth field="rai"}}</th>
+              <td>
+                {{mb_field object=$consult_anesth field="rai" tabindex="103" onchange="submitForm(this.form)"}}
+              </td>
+              <th>{{mb_label object=$consult_anesth field="na"}}</th>
+              <td>
+                {{mb_field object=$consult_anesth field="na" tabindex="109" size="4" onchange="submitForm(this.form)"}}
+                mmol/l
+              </td>
+            </tr>
+            <tr> 
+              <th>{{mb_label object=$consult_anesth field="hb"}}</th>
+              <td>
+                {{mb_field object=$consult_anesth field="hb" tabindex="104" size="4" onchange="submitForm(this.form)"}}
+                g/dl
+              </td>
+              <th>{{mb_label object=$consult_anesth field="k"}}</th>
+              <td>
+                {{mb_field object=$consult_anesth field="k" tabindex="110" size="4" onchange="submitForm(this.form)"}}
+                mmol/l
+              </td>
+            </tr>
+            <tr>
+              <th>{{mb_label object=$consult_anesth field="ht"}}</th>
+              <td>
+                {{mb_field object=$consult_anesth field="ht" tabindex="105" size="4" onchange="calculPSA();submitForm(this.form);"}}
+                %
+              </td>
+              <th>{{mb_label object=$consult_anesth field="tp"}}</th>
+              <td>
+                {{mb_field object=$consult_anesth field="tp" tabindex="111" size="4" onchange="submitForm(this.form)"}}
+                %
+              </td>
+            </tr>
+            <tr>
+              <th>{{mb_label object=$consult_anesth field="ht_final"}}</th>
+              <td>
+                {{mb_field object=$consult_anesth field="ht_final" tabindex="106" size="4" onchange="calculPSA();submitForm(this.form);"}}
+                %
+              </td>
+              <th>{{mb_label object=$consult_anesth field="tca" defaultFor="tca_temoin"}}</th>
+              <td>
+                {{mb_field object=$consult_anesth field="tca_temoin" tabindex="112" maxlength="2" size="2" onchange="submitForm(this.form)"}}
+                s /
+                {{mb_field object=$consult_anesth field="tca" tabindex="113" maxlength="2" size="2" onchange="submitForm(this.form)"}}
+                 s
+              </td>
+            </tr>
+            <tr>
+              <th>{{mb_label object=$consult_anesth field="_psa"}}</th>
+              <td>
+                {{mb_field object=$consult_anesth field="_psa"  size="4" readonly="readonly"}}
+                ml/GR
+              </td>
+              <th>{{mb_label object=$consult_anesth field="tsivy" defaultFor="_min_tsivy"}}</th>
+              <td>
+                {{html_options tabindex="114" name="_min_tsivy" values=$mins output=$mins selected=$consult_anesth->_min_tsivy onchange="submitForm(this.form)"}}
+                min
+                {{html_options tabindex="115" name="_sec_tsivy" values=$secs output=$secs selected=$consult_anesth->_sec_tsivy onchange="submitForm(this.form)"}}
+                s
+              </td>
+            </tr>
+            <tr>
+              <th>{{mb_label object=$consult_anesth field="plaquettes"}}</th>
+              <td>
+                {{mb_field object=$consult_anesth field="plaquettes" tabindex="107" size="6" onchange="submitForm(this.form)"}} (x1000) /mm3
+              </td>
+              <th>{{mb_label object=$consult_anesth field="ecbu"}}</th>
+              <td>
+                {{mb_field object=$consult_anesth field="ecbu" tabindex="116" onchange="submitForm(this.form)"}}
+              </td>
+            </tr>
+          </table>
+        </fieldset>
+      {{/if}}
       <table class="layout main">
         <tr>
           <td class="halfPane">
@@ -228,28 +230,30 @@ Main.add(function () {
       </table> 
       </form>
     </td>
-    <td class="text">
-      <div id="listExamComp">
-      {{include file="../../dPcabinet/templates/exam_comp.tpl"}}
-      </div>
-      {{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription && $view_prescription}}
-      <button class="tick" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour')">Accéder à la prescription</button>
-      {{/if}}
-      <table class="form">
-			  <!-- Documents ExamComp -->
-			  <tr>
-			    <th class="category">Documents</th>
-			  </tr>
-			  <tr>
-			    <td id="documents-exam">
-			      {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
-			      <!-- Documents -->
-			      <script type="text/javascript">
-			         Document.register('{{$object->_id}}','{{$object->_class}}','{{$consult->_praticien_id}}','documents-exam');
-            </script>
-			    </td>
-			  </tr>
-      </table>
-    </td>
+    {{if $app->user_prefs.displayDocsConsult}}
+      <td class="text">
+        <div id="listExamComp">
+        {{include file="../../dPcabinet/templates/exam_comp.tpl"}}
+        </div>
+        {{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription && $view_prescription}}
+        <button class="tick" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour')">Accéder à la prescription</button>
+        {{/if}}
+        <table class="form">
+  			  <!-- Documents ExamComp -->
+  			  <tr>
+  			    <th class="category">Documents</th>
+  			  </tr>
+  			  <tr>
+  			    <td id="documents-exam">
+  			      {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
+  			      <!-- Documents -->
+  			      <script type="text/javascript">
+  			         Document.register('{{$object->_id}}','{{$object->_class}}','{{$consult->_praticien_id}}','documents-exam');
+              </script>
+  			    </td>
+  			  </tr>
+        </table>
+      </td>
+    {{/if}}
   </tr>
 </table>

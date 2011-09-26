@@ -187,11 +187,12 @@ bindOperation = function(sejour_id) {
 
 modalConsult = function(consult_id) {
   var url = new Url("dPcabinet", "ajax_short_consult");
+  url.addParam("sejour_id", "{{$sejour->_id}}");
   url.addParam("consult_id", consult_id);
   url.modal(600, 400);
   url.modalObject.observe("afterClose", function() {
     if (window.loadSuivi) {
-      loadSuivi('{{$sejour->_id}}');
+      loadSuivi("{{$sejour->_id}}");
     }
   });
 }

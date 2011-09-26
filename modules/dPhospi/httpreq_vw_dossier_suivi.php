@@ -130,7 +130,10 @@ foreach($sejour->_ref_suivi_medical as $_trans_const) {
 if ($_show_obs) {
   foreach ($sejour->_ref_consultations as $_consult) {
     $_consult->canEdit();
-    $_consult->loadRefConsultAnesth();
+    $_consult_anesth = $_consult->loadRefConsultAnesth();
+    if ($_consult_anesth->_id) {
+      $_consult_anesth->loadRefsTechniques();
+    }
     $_consult->loadRefPlageConsult();
     $prat = $_consult->loadRefPraticien();
     $prat->loadRefFunction();

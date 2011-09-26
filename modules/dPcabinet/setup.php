@@ -1364,7 +1364,12 @@ class CSetupdPcabinet extends CSetup {
      SET `remplacant_id`=NULL WHERE `remplacant_id` = '0'";
     $this->addQuery($query);
     
-    $this->mod_version = "1.35";
+    $this->makeRevision("1.35");
+    $this->addPrefQuery("displayDocsConsult", "1");
+    $this->addPrefQuery("displayPremedConsult", "1");
+    $this->addPrefQuery("displayResultsConsult", "1");
+    
+    $this->mod_version = "1.36";
   }
 }
 ?>

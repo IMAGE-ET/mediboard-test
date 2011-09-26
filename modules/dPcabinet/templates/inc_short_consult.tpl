@@ -17,6 +17,9 @@
 </form>
 
 <ul id="tabs_consult" class="control_tabs">
+  <li href="#antecedents">
+    <a href="#antecedents">Antécédents</a>
+  </li>
   {{if !$consult_anesth->_id}}
     <li>
       <a href="#exams">Examens</a>
@@ -39,6 +42,9 @@
 
 <hr class="control_tabs" />
 
+<div id="antecedents" style="display: none">
+  {{mb_include module=dPcabinet template="inc_ant_consult"}}
+</div>
 {{if !$consult_anesth->_id}}
   <div id="exams" style="display: none;">
     {{mb_include module=dPcabinet template="inc_main_consultform"}}

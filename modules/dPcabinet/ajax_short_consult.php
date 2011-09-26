@@ -9,6 +9,7 @@
  */
 
 $consult_id = CValue::get("consult_id");
+$sejour_id  = CValue::get("sejour_id");
 
 $consult = new CConsultation;
 $consult->load($consult_id);
@@ -31,14 +32,25 @@ if ($dossier_medical->_id) {
   }
 }
 
+$user = CMediusers::get();
+
 $smarty = new CSmartyDP;
 
 $smarty->assign("consult"        , $consult);
 $smarty->assign("consult_anesth" , $consult_anesth);
 $smarty->assign("patient"        , $patient);
+$smarty->assign("_is_anesth"     , $user->isAnesth());
+$smarty->assign("antecedent"     , new CAntecedent);
+$smarty->assign("traitement"     , new CTraitement);
+$smarty->assign("line"           , new CPrescriptionLineMedicament);
+$smarty->assign("userSel"        , $user);
+$smarty->assign("sejour_id"      , $sejour_id);
+$smarty->assign("today"          , mbDate());
+$smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 
 if ($consult_anesth->_id) {
   $consult_anesth->loadRefOperation();
+  $consult_anesth->loadRefsTechniques();
   $anesth = new CTypeAnesth;
   $orderanesth = "name";
   $anesth = $anesth->loadList(null,$orderanesth);
@@ -50,7 +62,6 @@ if ($consult_anesth->_id) {
   $smarty->assign("techniquesComp" , new CTechniqueComp);
   $smarty->assign("anesth"         , $anesth);
   $smarty->assign("view_prescription", 0);
-  $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 }
 
 $smarty->display("inc_short_consult.tpl");
