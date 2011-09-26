@@ -77,6 +77,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     $_IPP_create   = $_modif_patient = false;
     
     $echg_hprim = $this->_ref_echange_hprim; 
+    $echg_hprim->_ref_sender->loadConfigValues();
     $sender     = $echg_hprim->_ref_sender;
     
     // Acquittement d'erreur : identifiants source et cible non fournis
@@ -142,11 +143,11 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
       
       $id400 = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $data['idSourcePatient']);
       // Cas 2 : Patient existe sur le SIP
-      if($id400->_id) {
+      if ($id400->_id) {
         // Identifiant du patient sur le SIP
         $idPatientSIP = $id400->object_id;
         // Cas 2.1 : Pas d'idCible
-        if(!$data['idCiblePatient']) {
+        if (!$data['idCiblePatient']) {
           if ($newPatient->load($idPatientSIP)) {
             // Mapping du patient
             $newPatient = $this->mappingPatient($data['patient'], $newPatient);

@@ -1343,10 +1343,6 @@ class CPatient extends CMbObject {
       $group_id = $idex->id400;
     }
     
-    if (CAppUI::conf('sip server')) {
-      $tag_ipp = CAppUI::conf('sip tag_ipp');
-    }
-    
     return str_replace('$g', $group_id, $tag_ipp);
 	}
 

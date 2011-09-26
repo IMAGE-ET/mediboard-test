@@ -20,8 +20,8 @@ class CEAIMbObject {
   static function getModifiedFields(CMbObject $mbOject) {
     $mbOject->loadLogs();
     $modified_fields = "";
-    if (is_array($mbOject->_ref_last_log->_fields)) {
-      foreach ($mbOject->_ref_last_log->_fields as $field) {
+    if (is_array($mbOject->_ref_current_log->_fields)) {
+      foreach ($mbOject->_ref_current_log->_fields as $field) {
         $modified_fields .= "$field \n";
       }
     } 

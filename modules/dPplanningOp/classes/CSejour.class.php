@@ -1448,10 +1448,6 @@ class CSejour extends CCodable implements IPatientRelated {
       $group_id = $idex->id400;
     }
     
-    if (CAppUI::conf('smp server')) {
-      $tag_NDA = CAppUI::conf('smp tag_dossier');
-    }
-    
     return str_replace('$g', $group_id, $tag_NDA);
   }
   
