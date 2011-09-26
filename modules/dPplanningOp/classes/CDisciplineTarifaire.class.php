@@ -22,7 +22,7 @@ class CDisciplineTarifaire extends CMbObject {
   
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->dsn   = 'discipline_tarifaire';
+    $spec->dsn   = 'sae';
     $spec->table = "discipline_tarifaire";
     $spec->key   = "nodess";
     return $spec;

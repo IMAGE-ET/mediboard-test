@@ -10,7 +10,7 @@
 
 CCanDo::checkAdmin();
 
-$ds = CSQLDataSource::get("discipline_tarifaire");
+$ds = CSQLDataSource::get("sae");
 
 $sourcePath = "modules/dPplanningOp/base/discipline_tarifaire.tar.gz";
 $targetDir = "tmp/dPlanningOp";

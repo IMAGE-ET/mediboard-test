@@ -1,6 +1,6 @@
 <script type="text/javascript">
-  function importDisciplineTarifaireTable(){
-    var url = new Url("dPplanningOp", "ajax_import_discipline_tarifaire_table");
+  function importSAEBase(){
+    var url = new Url("dPplanningOp", "ajax_import_sae_base");
     url.requestUpdate("import-log");
   }
 
@@ -19,7 +19,7 @@
   <li><a href="#configure-blocage">Blocage</a></li>
   <li><a href="#configure-CIdSante400">{{tr}}CIdSante400-tag{{/tr}}</a></li>
   <li><a href="#configure-maintenance">{{tr}}Maintenance{{/tr}}</a></li>
-  <li><a href="#config-discipline_tarifaire-table">{{tr}}config-discipline_tarifaire-table{{/tr}}</a></li>
+  <li><a href="#config-sae-base">{{tr}}config-sae-base{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -225,18 +225,18 @@
   {{include file=inc_configure_actions.tpl}}
 </div>
 
-<div id="config-discipline_tarifaire-table" style="display: none;">
-  <h2>Paramètres de la table Discipline Médico-Tarifaire</h2>
+<div id="config-sae-base" style="display: none;">
+  <h2>Paramètres de la base SAE</h2>
 
-  {{mb_include module=system template=configure_dsn dsn=discipline_tarifaire}}
+  {{mb_include module=system template=configure_dsn dsn=sae}}
  
   <table class="main tbl">
     <tr>
       <th class="title" colspan="2">
-        Import des tables
+        Import de la base
       </th>
     <tr>
-      <td class="narrow"><button onclick="importDisciplineTarifaireTable()" class="change">{{tr}}Import{{/tr}}</button></td>
+      <td class="narrow"><button onclick="importSAEBase()" class="change">{{tr}}Import{{/tr}}</button></td>
       <td id="import-log"></td>
     </tr>
   </table>

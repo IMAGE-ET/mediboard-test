@@ -282,7 +282,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["facture"]             = "bool default|0";
     $props["forfait_se"]          = "bool default|0";
     $props["commentaires_sortie"] = "text helped";
-    $props["discipline_id"]       = "ref class|CDisciplineTarifaire autocomplete|description";
+    $props["discipline_id"]       = "ref class|CDisciplineTarifaire autocomplete|description show|0";
     
     $props["_time_entree_prevue"] = "time";
     $props["_time_sortie_prevue"] = "time";

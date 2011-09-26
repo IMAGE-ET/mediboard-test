@@ -946,6 +946,7 @@ $locales['config-dPplanningOp-CSejour-tag_dossier_pa-desc'] = 'Préfixe tag dossi
 $locales['config-dPplanningOp-CSejour-tag_dossier_trash'] = 'Préfixe tag numéro de dossier poubelle';
 $locales['config-dPplanningOp-CSejour-tag_dossier_trash-desc'] = 'Préfixe tag numéro de dossier poubelle';
 $locales['config-discipline_tarifaire-table'] = 'Import table discipline tarifaire';
+$locales['config-sae-base'] = 'Import de la base SAE';
 $locales['mod-dPplanningOp-tab-ajax_vw_detail_cccam'] = 'Détail du code';
 $locales['mod-dPplanningOp-tab-check_synchro_hours_sejour'] = 'Recherche synchronisation des heures du séjour';
 $locales['mod-dPplanningOp-tab-code_selector'] = 'Sélecteur du code';
