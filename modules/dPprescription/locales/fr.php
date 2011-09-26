@@ -579,6 +579,7 @@ $locales['CPrescription._chapitres.imagerie'] = 'Imagerie';
 $locales['CPrescription._chapitres.inj'] = 'Injections';
 $locales['CPrescription._chapitres.kine'] = 'Rééducation';
 $locales['CPrescription._chapitres.med'] = 'Médicaments';
+$locales['CPrescription._chapitres.med_elt'] = 'Méd. hors AMM';
 $locales['CPrescription._chapitres.oxygene'] = 'Oxygène';
 $locales['CPrescription._chapitres.perf'] = 'Perfusions';
 $locales['CPrescription._chapitres.perfusion'] = 'Perfusion';
