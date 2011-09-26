@@ -95,6 +95,8 @@ Main.add( function(){
   {{if $refresh_popup == 1}}
 	  $V(getForm("all_adm").adm, $V(window.opener.getForm('adm_multiple')._administrations));
   {{/if}}
+	
+	$("multiple_adm_button").focus();
 } );
 
 </script>
@@ -123,7 +125,7 @@ Main.add( function(){
 {{if $mode_dossier == "administration"}}
 	{{if $sejour->_id}}
 		<button type="button" class="cancel" onclick="closeApplyAdministrations()">{{tr}}Cancel{{/tr}}</button>
-		<button type="button" class="tick" onclick="submitAllAdministrations()">Tout valider</button>
+		<button type="button" class="tick" onclick="submitAllAdministrations()" id="multiple_adm_button">Tout valider</button>
 		
 		<table class="form" id="administrations">
 		{{foreach from=$administrations item=adm key=line_id name=by_adm}}
