@@ -117,6 +117,8 @@ if($prescription->_ref_lines_elements_comments|@count){
 	      $_line_elt_comment->loadRefPraticien();
 			}
 			foreach($_lines_by_cat["element"] as $_line_elt){
+			  $_line_elt->loadRefElement();
+			  $_line_elt->_ref_element_prescription->loadRefCategory();
 	    	$list_lines[$chap][$_line_elt->_id] = $_line_elt;
 	      $_line_elt->loadRefsAdministrations();
 	      foreach($_line_elt->_ref_administrations as $_administration_elt){

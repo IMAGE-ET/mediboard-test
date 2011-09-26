@@ -22,6 +22,7 @@ $dPconfig["dPprescription"] = array (
     "qte_obligatoire_inscription" => "0",
     "max_details_result" => "20",
     "nb_days_prescription_current" => "1",
+    "display_cat_for_elt" => "0",
     "scores" => array(
       "interaction" => array(
         "niv1" => "1",

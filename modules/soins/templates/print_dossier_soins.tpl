@@ -171,36 +171,68 @@
 	
   {{foreach from=$prescription->_ref_lines_elements_comments key=_chap item=_lines_by_chap}}
     {{if $_lines_by_chap|@count}}
-    <tr>
-      <th>
-        {{tr}}CCategoryPrescription.chapitre.{{$_chap}}{{/tr}}
-      </th>
-    </tr>
+      <tr>
+        <th>
+          {{tr}}CCategoryPrescription.chapitre.{{$_chap}}{{/tr}}
+        </th>
+      </tr>
     {{/if}}
-    {{foreach from=$_lines_by_chap item=_lines_by_cat}}
-      {{if array_key_exists('element', $_lines_by_cat)}}
-			  {{foreach from=$_lines_by_cat.element item=line_elt}}
-				  <tr>
-				  	<td class="text">
-				  	   {{mb_include module="dPprescription" template="inc_print_element" elt=$line_elt nodebug=true}}
-          	</td>
-				  </tr>
-        {{/foreach}}
-			{{/if}}
-			{{if array_key_exists('comment', $_lines_by_cat)}}
-        {{foreach from=$_lines_by_cat.comment item=line_elt_comment}}
+    {{if $conf.dPprescription.CPrescription.display_cat_for_elt}}
+      {{foreach from=$_lines_by_chap item=_lines_by_cat}}
+        {{assign var=cat_displayed value="0"}}
+        {{if array_key_exists('element', $_lines_by_cat) || array_key_exists('comment', $_lines_by_cat)}}
           <tr>
-          	<td class="text">
-							 <li>
-							   ({{$line_elt_comment->_ref_praticien->_view}})
-							   {{$line_elt_comment->commentaire|nl2br}}
-							</li>
-          	</td>
+            <td class="text">
+            {{if array_key_exists('comment', $_lines_by_cat)}}
+              {{foreach from=$_lines_by_cat.element item=line_elt name=foreach_lines}}
+                {{if $smarty.foreach.foreach_lines.first}}
+                  {{assign var=cat_displayed value="1"}}
+                  <strong>{{$line_elt->_ref_element_prescription->_ref_category_prescription->nom}} :</strong>
+                {{/if}}
+                {{mb_include module="dPprescription" template="inc_print_element" elt=$line_elt nodebug=true}}
+              {{/foreach}}
+            {{/if}}
+            {{if array_key_exists('comment', $_lines_by_cat)}}
+              {{foreach from=$_lines_by_cat.comment item=line_elt_comment name=foreach_lines}}
+                {{if $smarty.foreach.foreach_lines && !$cat_displayed}}
+                  <strong>{{$line_elt_comment->_ref_category_prescription->nom}} :</strong>
+                {{/if}}
+                <li>
+                   ({{$line_elt_comment->_ref_praticien->_view}})
+                   {{$line_elt_comment->commentaire|nl2br}}
+                </li>
+              {{/foreach}}
+            {{/if}}
+            </td>
           </tr>
-				{{/foreach}}
-      {{/if}}
-    {{/foreach}}
-   {{/foreach}}
+        {{/if}}
+      {{/foreach}}
+    {{else}}
+      {{foreach from=$_lines_by_chap item=_lines_by_cat}}
+        {{if array_key_exists('element', $_lines_by_cat)}}
+          {{foreach from=$_lines_by_cat.element item=line_elt}}
+            <tr>
+              <td class="text">
+                 {{mb_include module="dPprescription" template="inc_print_element" elt=$line_elt nodebug=true}}
+              </td>
+            </tr>
+          {{/foreach}}
+        {{/if}}
+        {{if array_key_exists('comment', $_lines_by_cat)}}
+          {{foreach from=$_lines_by_cat.comment item=line_elt_comment}}
+            <tr>
+              <td class="text">
+                 <li>
+                   ({{$line_elt_comment->_ref_praticien->_view}})
+                   {{$line_elt_comment->commentaire|nl2br}}
+                </li>
+              </td>
+            </tr>
+          {{/foreach}}
+        {{/if}}
+      {{/foreach}}
+    {{/if}}
+  {{/foreach}}
 </table>
 
 {{mb_include module=soins template=inc_vw_tasks_sejour mode_realisation=0 readonly=1}}
