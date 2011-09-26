@@ -15,7 +15,7 @@
       {{if $reste > 0}}
         {{foreach from=1|range:$reste item=i}}
           {{math equation="x*y" x="1" y=$i assign=margin}}
-          <div class="jeton_unite" title="{{$}}"></div>
+          <div class="jeton_unite"></div>
         {{/foreach}}
       {{/if}}
     {{/if}}
