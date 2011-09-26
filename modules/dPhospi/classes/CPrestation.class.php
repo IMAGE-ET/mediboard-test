@@ -15,7 +15,8 @@ class CPrestation extends CMbObject {
   var $group_id = null;
   
   // DB fields
-  var $nom = null;
+  var $nom         = null;
+  var $code        = null;
   var $description = null;
   
   function getSpec() {
@@ -33,8 +34,9 @@ class CPrestation extends CMbObject {
     
   function getProps(){
   	$specs = parent::getProps();
-    $specs["group_id"] = "ref notNull class|CGroups";
-    $specs["nom"] = "str notNull seekable";
+    $specs["group_id"]    = "ref notNull class|CGroups";
+    $specs["nom"]         = "str notNull seekable";
+    $specs["code"]        = "str maxLength|12 seekable";
     $specs["description"] = "text confidential seekable";
     return $specs;
   }

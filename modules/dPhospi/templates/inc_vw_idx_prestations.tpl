@@ -9,10 +9,11 @@
     <table class="tbl">
     	
     <tr>
-      <th colspan="3">{{tr}}CPrestation.all{{/tr}}</th>
+      <th colspan="4" class="title">{{tr}}CPrestation.all{{/tr}}</th>
     </tr>
 		
     <tr>
+      <th>{{mb_title class=CPrestation field=code}}</th>
       <th>{{mb_title class=CPrestation field=nom}}</th>
       <th>{{mb_title class=CPrestation field=description}}</th>
       <th>{{mb_title class=CPrestation field=group_id}}</th>
@@ -20,12 +21,13 @@
 		
     {{foreach from=$prestations item=_prestation}}
     <tr {{if $_prestation->_id == $prestation->_id}} class="selected" {{/if}}>
+      <td>{{mb_value object=$_prestation field=code}}</td>
       <td>
       	<a href="?m={{$m}}&amp;tab={{$tab}}&amp;prestation_id={{$_prestation->_id}}">
       		{{mb_value object=$_prestation field=nom}}
 			  </a>
 			</td>
-      <td class="text">{{mb_value object=$_prestation field=description}}</td>
+      <td class="text compact">{{mb_value object=$_prestation field=description}}</td>
       <td>{{mb_value object=$_prestation field=group_id}}</td>
     </tr>
     {{/foreach}}
@@ -66,9 +68,14 @@
     </tr>
 		
     <tr>
+      <th>{{mb_label object=$prestation field=code}}</th>
+      <td>{{mb_field object=$prestation field=code}}</td>
+    </tr> 
+    
+    <tr>
       <th>{{mb_label object=$prestation field=nom}}</th>
       <td>{{mb_field object=$prestation field=nom}}</td>
-    </tr>       
+    </tr>   
 
     <tr>
       <th>{{mb_label object=$prestation field=description}}</th>

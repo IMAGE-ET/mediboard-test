@@ -379,7 +379,12 @@ class CSetupdPhospi extends CSetup {
               ADD INDEX (`object_id`);";
     $this->addQuery($query);
      
-    $this->mod_version = "0.46";
+    $this->makeRevision("0.46");
+    $query = "ALTER TABLE  `prestation`   
+                ADD  `code` VARCHAR(12)";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.47";
   }
 }
 ?>
