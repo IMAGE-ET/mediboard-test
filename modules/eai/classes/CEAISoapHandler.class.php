@@ -24,12 +24,17 @@ class CEAISoapHandler extends CSoapHandler {
       "message" => "string"),
   );
   
-  function event($message) {
+  function event($message, $actor_id = null) {
     $actor = null;
     
-    $sender_soap          = new CSenderSOAP();
-    $sender_soap->user_id = CUser::get()->_id;
-    $sender_soap->loadMatchingObject();
+    $sender_soap = new CSenderSOAP();
+    if (!$actor_id) {
+      $sender_soap->load($actor_id);
+    } else {
+      $sender_soap->user_id = CUser::get()->_id;
+      $sender_soap->loadMatchingObject();
+    }
+    
     if ($sender_soap->_id) {
       $actor = $sender_soap;
     }
