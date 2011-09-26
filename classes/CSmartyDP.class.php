@@ -706,7 +706,8 @@ class CSmartyDP extends Smarty {
     $this->register_block   ("tr"                , "do_translation"); 
     $this->register_block   ("main"              , "script_main"); 
     $this->register_block   ("mb_form"           , "mb_form"); 
-    $this->register_block   ("vertical"          , "smarty_vertical"); 
+    $this->register_block   ("vertical"          , "smarty_vertical");
+     
     $this->register_function("thumb"             , "thumb");
     $this->register_function("unique_id"         , "smarty_function_unique_id");
     $this->register_function("mb_default"        , "smarty_function_mb_default");
@@ -721,6 +722,7 @@ class CSmartyDP extends Smarty {
     $this->register_function("mb_colonne"        , "smarty_function_mb_colonne");
     $this->register_function("mb_include"        , "smarty_function_mb_include");
     $this->register_function("mb_script"         , "smarty_function_mb_script");
+    
     $this->register_modifier("pad"               , "smarty_modifier_pad");
     $this->register_modifier("json"              , "smarty_modifier_json");
     $this->register_modifier("iso_date"          , "smarty_modifier_iso_date");

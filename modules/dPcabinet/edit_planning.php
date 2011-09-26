@@ -97,27 +97,43 @@ else {
   }
 }
 
+// Chargement des categories
 $categorie = new CConsultationCategorie();
 $whereCategorie["function_id"] = " = '$chir->function_id'";
 $orderCategorie = "nom_categorie ASC";
 $categories = $categorie->loadList($whereCategorie,$orderCategorie);
 
-
 // Creation du tableau de categories simplifié pour le traitement en JSON
 $listCat = array();
-foreach($categories as $key => $cat){
+foreach($categories as $cat){
   $listCat[$cat->_id] = $cat->nom_icone;
 }
 
-
 // Ajout du motif de la consultation passé en parametre
-if(!$consult->_id && $consult_urgence_id){
+if (!$consult->_id && $consult_urgence_id){
   // Chargement de la consultation de passage aux urgences
   $consultUrgence = new CConsultation();
   $consultUrgence->load($consult_urgence_id);
   $consultUrgence->loadRefSejour();
   $consultUrgence->_ref_sejour->loadRefRPU();
   $consult->motif = "Reconvocation suite à un passage aux urgences, {$consultUrgence->_ref_sejour->_ref_rpu->motif}";
+}
+
+// Locks sur le rendez-vous
+$consult->_locks = null;
+$today = mbDate();
+if ($consult->_id) {
+  if ($consult->_datetime < $today) {
+    $consult->_locks[] = "datetime";
+  }
+  
+  if ($consult->chrono == CConsultation::TERMINE) {
+    $consult->_locks[] = "termine";
+  }
+  
+  if ($consult->valide) {
+    $consult->_locks[] = "valide";
+  }
 }
 
 // Création du template
@@ -133,7 +149,7 @@ $smarty->assign("listPraticiens"        , $listPraticiens);
 $smarty->assign("listFunctions"         , $listFunctions);
 $smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
 $smarty->assign("medecin_adresse_par"   , $medecin_adresse_par);
-$smarty->assign("today"   , mbDate());
+$smarty->assign("today"                 , $today);
 $smarty->display("addedit_planning.tpl");
 
 ?>

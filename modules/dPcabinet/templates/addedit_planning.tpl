@@ -1,14 +1,16 @@
 <!-- $Id$ -->
 
-{{mb_script module="dPpatients" script="pat_selector"}}
-{{mb_script module="dPcabinet" script="plage_selector"}}
+{{mb_script module="dPpatients"    script="pat_selector"}}
+{{mb_script module="dPcabinet"     script="plage_selector"}}
+{{mb_script module="dPcabinet"     script="file"}}
 {{mb_script module="dPcompteRendu" script="document"}}
 {{mb_script module="dPcompteRendu" script="modele_selector"}}
-{{mb_script module="dPcabinet" script="file"}}
+
 {{if $consult->_id}}
   {{mb_ternary var=object_consult test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
   {{mb_include module="dPfiles" template="yoplet_uploader" object=$object_consult}}
 {{/if}}
+
 {{assign var=attach_consult_sejour value=$conf.dPcabinet.CConsultation.attach_consult_sejour}}
 <script type="text/javascript">
 
@@ -162,6 +164,7 @@ Main.add(function () {
 <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;consultation_id=0">
   {{tr}}CConsultation-title-create{{/tr}}
 </a>
+
 {{if $consult->_id}}
 <a class="button search" href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}" style="float: right;">
   {{tr}}CConsultation-title-access{{/tr}}
@@ -188,20 +191,48 @@ Main.add(function () {
     <th class="category cancelled" colspan="3">{{tr}}CConsultation-annule{{/tr}}</th>
   </tr>
   {{/if}}
-  {{if $consult->_id && $consult->_datetime < $today && $can->admin}}
-  <tr>
-    <td colspan="3">
-      <div class="small-warning">Attention, vous êtes en train de modifier une consultation passée</div>
-    </td>
-  </tr>
-  {{elseif $consult->_id && $consult->_datetime < $today}}
-  <tr>
-    <td colspan="3">
-      <div class="small-info">Vous ne pouvez pas modifier une consultation passée, veuillez contacter un administrateur</div>
-      <input type="hidden" name="_locked" value="1" />
-    </td>
-  </tr>
+  
+  {{if $consult->_locks}}
+    <tr>
+      <td colspan="3">
+          {{if $can->admin}}
+        <div class="small-warning">
+          Attention, vous êtes en train de modifier une consultation ayant :
+          {{else}}
+        <div class="small-info">
+          <input type="hidden" name="_locked" value="1" />
+          Vous ne pouvez pas modifier la consultation pour les raisons suivantes  (consulter un administrateur pour plus de renseignements) :
+          {{/if}}
+        
+          <ul>
+            {{if in_array("datetime", $consult->_locks)}} 
+            <li>le rendez-vous <strong>passé de {{mb_value object=$consult field=_datetime format=relative}}</strong></li>
+            {{/if}}
+
+            {{if in_array("termine", $consult->_locks)}} 
+            <li>la consultation <strong>notée terminée</strong></li>
+            {{/if}}
+            
+            {{if in_array("valide", $consult->_locks)}} 
+            <li>la cotation <strong>validée</strong></li>
+            {{/if}}
+
+          </ul>
+        </div>
+      </td>
+    </tr>
+  {{elseif $consult->_id && $consult->_datetime|iso_date == $today}}
+    <tr>
+      <td colspan="3">
+        <div class="small-warning">
+          Attention, vous êtes en train de modifier 
+          <strong>une consultation du jour</strong>.
+        </div>
+      </td>
+    </tr>
   {{/if}}
+
+
   <tr>
     <td style="width: 50%;">
       <fieldset>
@@ -312,6 +343,10 @@ Main.add(function () {
             <th>{{mb_label object=$consult field="heure"}}</th>
             <td>
               <input type="text" name="heure" value="{{$consult->heure}}" style="width: 15em;" onfocus="PlageConsultSelector.init()" readonly="readonly" />
+              {{if $consult->patient_id}}
+              <br />
+              <a class="button new" href="?m=dPcabinet&tab=edit_planning&pat_id={{$consult->patient_id}}&consultation_id=0">Nouveau RDV pour ce patient</a>
+              {{/if}}
             </td>
           </tr>
             
@@ -397,7 +432,7 @@ Main.add(function () {
             <th>Choix par cabinet</th>
             <td>
               <select name="_function_id" style="width: 15em;" onchange = "if (this.value != '') { $V(this.form.chir_id, ''); $V(this.form._date, '');}">
-                <option value="">&mdash; choisir un cabinet</option>
+                <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
                 {{foreach from=$listFunctions item=_function}}
                 <option value="{{$_function->_id}}" class="mediuser" style="border-color: #{{$_function->color}};">
                   {{$_function->_view}}
@@ -418,22 +453,24 @@ Main.add(function () {
         <tr>
           <td class="button">
           {{if $consult->_id}}
-            <button class="modify" type="submit">
-            	{{tr}}Edit{{/tr}}
-            </button>
-            {{if $consult->annule}}
-	            <button class="change" type="button" onclick="annuleConsult(this.form, 0)">
-	            	{{tr}}Restore{{/tr}}
-	            </button>
-            {{else}}
-	            <button class="cancel" type="button" onclick="annuleConsult(this.form, 1)">
-	            	{{tr}}Cancel{{/tr}}
-	            </button>
-            {{/if}}
-            {{if $can->admin || !$consult->patient_id}}
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la consultation de',objName:'{{$consult->_ref_patient->_view|smarty:nodefaults|JSAttribute}}'})">
-              {{tr}}Delete{{/tr}}
-            </button>
+            {{if !$consult->_locks}}
+              <button class="modify" type="submit">
+              	{{tr}}Edit{{/tr}}
+              </button>
+              {{if $consult->annule}}
+  	            <button class="change" type="button" onclick="annuleConsult(this.form, 0)">
+  	            	{{tr}}Restore{{/tr}}
+  	            </button>
+              {{else}}
+  	            <button class="cancel" type="button" onclick="annuleConsult(this.form, 1)">
+  	            	{{tr}}Cancel{{/tr}}
+  	            </button>
+              {{/if}}
+              {{if $can->admin || !$consult->patient_id}}
+              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la consultation de',objName:'{{$consult->_ref_patient->_view|smarty:nodefaults|JSAttribute}}'})">
+                {{tr}}Delete{{/tr}}
+              </button>
+              {{/if}}
             {{/if}}
             <button class="print" id="print_fiche_consult" type="button" {{if !$consult->patient_id}}disabled="disabled"{{/if}}onclick="printForm();">
               {{tr}}Print{{/tr}}
