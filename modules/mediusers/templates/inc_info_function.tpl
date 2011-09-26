@@ -23,8 +23,8 @@ Main.add(function () {
 
 <table class="form">
   <tr>
-    <th class="title" colspan="2">
-      {{$fonction->_view}}
+    <th class="title modify text" colspan="2">
+      {{$fonction}}
     </th>
   </tr>
   <tr>

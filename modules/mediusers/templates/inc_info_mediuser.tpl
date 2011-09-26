@@ -24,8 +24,8 @@
 
 <table class="form">
   <tr>
-    <th class="title" colspan="2">
-      {{$user->_view}}
+    <th class="title modify text" colspan="2">
+      {{$user}}
     </th>
   </tr>
   <tr>
