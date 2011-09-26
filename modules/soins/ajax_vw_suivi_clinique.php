@@ -12,6 +12,8 @@ $sejour_id = CValue::get("sejour_id");
 
 $sejour = new CSejour;
 $sejour->load($sejour_id);
+$sejour->loadRefCurrAffectation();
+$sejour->_ref_curr_affectation->loadView();
 $sejour->canRead();
 $patient = $sejour->loadRelPatient();
 $patient->loadRefsCorrespondantsPatient();

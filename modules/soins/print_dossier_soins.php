@@ -25,6 +25,9 @@ $sejour->loadListConstantesMedicales();
 $sejour->loadRefsOperations();
 $sejour->canRead();
 $sejour->loadRefsTasks();
+$sejour->loadRefCurrAffectation();
+$sejour->_ref_curr_affectation->loadView();
+
 foreach ($sejour->_ref_tasks as $_task) {
   $_task->loadRefPrescriptionLineElement();
 }

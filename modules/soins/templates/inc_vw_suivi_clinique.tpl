@@ -81,7 +81,7 @@
         <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
         <h2 style="color: #fff; font-weight: bold;">
           {{$patient->_view}}
-          <span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
+          <span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}} <br /> {{$sejour->_ref_curr_affectation->_ref_lit}}</span>
           {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
           {{assign var=antecedents value=$dossier_medical->_ref_antecedents}}
           {{assign var=sejour_id value=$sejour->_id}}

@@ -83,6 +83,8 @@
       <th class="title">
         {{$object->_view}}
         {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+        <br />
+        {{$object->_ref_curr_affectation->_ref_lit}}
       </th>
     </tr>
   </thead>
@@ -184,8 +186,8 @@
           <tr>
             <td class="text">
             {{if array_key_exists('comment', $_lines_by_cat)}}
-              {{foreach from=$_lines_by_cat.element item=line_elt name=foreach_lines}}
-                {{if $smarty.foreach.foreach_lines.first}}
+              {{foreach from=$_lines_by_cat.element item=line_elt name=foreach_lines_a}}
+                {{if $smarty.foreach.foreach_lines_a.first}}
                   {{assign var=cat_displayed value="1"}}
                   <strong>{{$line_elt->_ref_element_prescription->_ref_category_prescription->nom}} :</strong>
                 {{/if}}
@@ -193,8 +195,8 @@
               {{/foreach}}
             {{/if}}
             {{if array_key_exists('comment', $_lines_by_cat)}}
-              {{foreach from=$_lines_by_cat.comment item=line_elt_comment name=foreach_lines}}
-                {{if $smarty.foreach.foreach_lines && !$cat_displayed}}
+              {{foreach from=$_lines_by_cat.comment item=line_elt_comment name=foreach_lines_b}}
+                {{if $smarty.foreach.foreach_lines_b.first && !$cat_displayed}}
                   <strong>{{$line_elt_comment->_ref_category_prescription->nom}} :</strong>
                 {{/if}}
                 <li>
