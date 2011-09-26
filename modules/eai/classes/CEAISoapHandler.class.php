@@ -28,7 +28,7 @@ class CEAISoapHandler extends CSoapHandler {
     $actor = null;
     
     $sender_soap = new CSenderSOAP();
-    if (!$actor_id) {
+    if ($actor_id) {
       $sender_soap->load($actor_id);
     } else {
       $sender_soap->user_id = CUser::get()->_id;

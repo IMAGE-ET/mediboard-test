@@ -15,9 +15,6 @@ CCanDo::checkAdmin();
 $sender_soap_id = CValue::get("sender_soap_id");
 $message        = CValue::get("message");
 
-$sender_soap = new CSenderSOAP();
-$sender_soap->load($sender_soap_id);
-
 $soap_handler = new CEAISoapHandler();
 // Dispatch EAI 
 if (!$ack = $soap_handler->event($message, $sender_soap_id)) {
