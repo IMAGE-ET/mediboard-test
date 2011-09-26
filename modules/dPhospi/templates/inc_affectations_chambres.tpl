@@ -23,35 +23,35 @@
         {{/foreach}}
         {{/foreach}}">
       {{if $curr_chambre->_overbooking}}
-      <img src="images/icons/surb.png" alt="warning" title="Over-booking: {{$curr_chambre->_overbooking}} collisions" />
+      <img src="modules/dPhospi/images/surb.png" alt="warning" title="Over-booking: {{$curr_chambre->_overbooking}} collisions" />
       {{/if}}
 
       {{if $curr_chambre->_ecart_age > 15}}
-      <img src="images/icons/age.png" alt="warning" title="Ecart d'âge important: {{$curr_chambre->_ecart_age}} ans" />
+      <img src="modules/dPhospi/images/age.png" alt="warning" title="Ecart d'âge important: {{$curr_chambre->_ecart_age}} ans" />
       {{/if}}
 
       {{if $curr_chambre->_genres_melanges}}
-      <img src="images/icons/sexe.png" alt="warning" title="Sexes opposés" />
+      <img src="modules/dPhospi/images/sexe.png" alt="warning" title="Sexes opposés" />
       {{/if}}
 
       {{if $curr_chambre->_chambre_seule}}
-      <img src="images/icons/seul.png" alt="warning" title="Chambre seule obligatoire" />
+      <img src="modules/dPhospi/images/seul.png" alt="warning" title="Chambre seule obligatoire" />
       {{/if}}
       
       {{if $curr_chambre->_chambre_double}}
-      <img src="images/icons/double.png" alt="warning" title="Chambre double possible" />
+      <img src="modules/dPhospi/images/double.png" alt="warning" title="Chambre double possible" />
       {{/if}}
 
       {{if $curr_chambre->_conflits_chirurgiens}}
-      <img src="images/icons/prat.png" alt="warning" title="{{$curr_chambre->_conflits_chirurgiens}} Conflit(s) de praticiens" />
+      <img src="modules/dPhospi/images/prat.png" alt="warning" title="{{$curr_chambre->_conflits_chirurgiens}} Conflit(s) de praticiens" />
       {{/if}}
 
       {{if $curr_chambre->_conflits_pathologies}}
-      <img src="images/icons/path.png" alt="warning" title="{{$curr_chambre->_conflits_pathologies}} Conflit(s) de pathologies" />
+      <img src="modules/dPhospi/images/path.png" alt="warning" title="{{$curr_chambre->_conflits_pathologies}} Conflit(s) de pathologies" />
       {{/if}}
       
       {{if $curr_chambre->annule == 1}}
-      <img src="images/icons/annule.png" alt="warning" title="Chambre plus utilisée" />
+      <img src="modules/dPhospi/images/annule.png" alt="warning" title="Chambre plus utilisée" />
       {{/if}}
 
       <a name="chambre{{$curr_chambre->_id}}" style="font-weight: bold;">

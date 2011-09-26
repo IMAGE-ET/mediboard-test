@@ -46,19 +46,24 @@
         {{if $sejour->_couvert_ald}}
         <div><strong>ALD</strong></div>
         {{/if}}
+        {{if $conf.dPhospi.CLit.alt_icons_sortants}}
+          {{assign var=suffixe_icons value="2"}}
+        {{else}}
+          {{assign var=suffixe_icons value=""}}
+        {{/if}}
         {{if $sejour->type == "ambu"}}
-        <img src="images/icons/X.png" alt="X" title="Sortant ce soir" />
+        <img src="modules/dPhospi/images/X{{$suffixe_icons}}.png" alt="X" title="Sortant ce soir" />
         {{elseif $curr_affectation->sortie|iso_date == $demain}}
           {{if $aff_next->_id}}
-        <img src="images/icons/OC.png" alt="OC" title="Sortant demain" />
+        <img src="modules/dPhospi/images/OC{{$suffixe_icons}}.png" alt="OC" title="Sortant demain" />
           {{else}}
-        <img src="images/icons/O.png" alt="O" title="Sortant demain" />
+        <img src="modules/dPhospi/images/O{{$suffixe_icons}}.png" alt="O" title="Sortant demain" />
           {{/if}}
         {{elseif $curr_affectation->sortie|iso_date == $date}}
           {{if $aff_next->_id}}
-        <img src="images/icons/OoC.png" alt="OoC" title="Sortant aujourd'hui" />
+        <img src="modules/dPhospi/images/OoC{{$suffixe_icons}}.png" alt="OoC" title="Sortant aujourd'hui" />
           {{else}}
-        <img src="images/icons/Oo.png" alt="Oo" title="Sortant aujourd'hui" />
+        <img src="modules/dPhospi/images/Oo{{$suffixe_icons}}.png" alt="Oo" title="Sortant aujourd'hui" />
           {{/if}}
         {{/if}}
       </td>  

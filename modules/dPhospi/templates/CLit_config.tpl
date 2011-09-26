@@ -14,6 +14,7 @@
   
   <table class="form">
     {{mb_include module=system template=inc_config_bool class=CLit     var=show_in_tableau}}
+    {{mb_include module=system template=inc_config_bool class=CLit     var=alt_icons_sortants}}
     {{mb_include module=system template=inc_config_str  class=CLit     var=prefixe}}
     {{mb_include module=system template=inc_config_str  class=CChambre var=prefixe}}
     <tr>
