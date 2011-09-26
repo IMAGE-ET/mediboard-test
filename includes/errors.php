@@ -9,47 +9,68 @@
  */
 
 global $dPconfig;
-define('LOG_PATH', $dPconfig["root_dir"]."/tmp/mb-log.html");
-define('E_JS_ERROR', 0);
+
+define("LOG_PATH", $dPconfig["root_dir"]."/tmp/mb-log.html");
+define("E_JS_ERROR", 0);
+
+// Since PHP 5.2.0
+if (!defined("E_RECOVERABLE_ERROR")) {
+  define("E_RECOVERABLE_ERROR", 4096);
+}
+
+// Since PHP 5.3.0
+if (!defined("E_DEPRECATED")) {
+  define("E_DEPRECATED", 8192);
+  define("E_USER_DEPRECATED", 16384);
+}
 
 // Do not set to E_STRICT as it hides fatal errors to our error handler
-// Strict warning will still be handle by our handler anyway
 
+// developement
+//error_reporting(E_ALL | E_STRICT | E_USER_DEPRECATED | E_DEPRECATED);
+
+// production 
 error_reporting(E_ALL);
+
 ini_set("error_log", LOG_PATH);
 ini_set("log_errors_max_len", "4M");
 ini_set("log_errors", true);
 ini_set("display_errors", $dPconfig["debug"]);
 
 $divClasses = array (
-  E_ERROR => "big-error",
-  E_WARNING => "big-warning",
-  E_NOTICE => "big-info",
-  E_STRICT => "big-info",
-  E_PARSE => "big-info",
-  E_CORE_ERROR => "big-error",
-  E_CORE_WARNING => "big-warning",
-  E_COMPILE_ERROR => "big-error",
-  E_COMPILE_WARNING => "big-warning",
-  E_USER_ERROR => "big-error",
-  E_USER_WARNING => "big-warning",
-  E_USER_NOTICE => "big-info",
-  E_JS_ERROR => "big-warning javascript",
+  E_ERROR => "big-error",                // 1
+  E_WARNING => "big-warning",            // 2
+  E_PARSE => "big-info",                 // 4
+  E_NOTICE => "big-info",                // 8
+  E_CORE_ERROR => "big-error",           // 16
+  E_CORE_WARNING => "big-warning",       // 32
+  E_COMPILE_ERROR => "big-error",        // 64
+  E_COMPILE_WARNING => "big-warning",    // 128
+  E_USER_ERROR => "big-error",           // 256
+  E_USER_WARNING => "big-warning",       // 512
+  E_USER_NOTICE => "big-info",           // 1024
+  E_STRICT => "big-info",                // 2048
+  E_RECOVERABLE_ERROR => "big-error",    // 4096
+  E_DEPRECATED => "big-info",            // 8192
+  E_USER_DEPRECATED => "big-info",       // 16384
+                                 // E_ALL = 32767 (PHP 5.4)
+  E_JS_ERROR => "big-warning javascript",// 0
 );
 
 // Pour BCB 
 unset($divClasses[E_STRICT]);
+unset($divClasses[E_DEPRECATED]);
 
 if (!$dPconfig["debug"]) {
   unset($divClasses[E_STRICT]);
+  unset($divClasses[E_RECOVERABLE_ERROR]); // Thrown by bad type hinting
 }
 
 $errorTypes = array (
   E_ERROR => "Error",
   E_WARNING => "Warning",
-  E_NOTICE => "Notice",
-  E_STRICT => "Strict",
   E_PARSE => "Parse",
+  E_NOTICE => "Notice",
   E_CORE_ERROR => "Core error",
   E_CORE_WARNING => "Core warning",
   E_COMPILE_ERROR => "Compile error",
@@ -57,15 +78,18 @@ $errorTypes = array (
   E_USER_ERROR => "User error",
   E_USER_WARNING => "User warning",
   E_USER_NOTICE => "User notice",
+  E_STRICT => "Strict",
+  E_RECOVERABLE_ERROR => "Recoverable error",
+  E_DEPRECATED => "Deprecated",
+  E_USER_DEPRECATED => "User deprecated",
   E_JS_ERROR => "Javascript error",
 );
 
 $errorCategories = array (
   E_ERROR => "error",
   E_WARNING => "warning",
-  E_NOTICE => "notice",
-  E_STRICT => "notice",
   E_PARSE => "error",
+  E_NOTICE => "notice",
   E_CORE_ERROR => "error",
   E_CORE_WARNING => "warning",
   E_COMPILE_ERROR => "error",
@@ -73,6 +97,10 @@ $errorCategories = array (
   E_USER_ERROR => "error",
   E_USER_WARNING => "warning",
   E_USER_NOTICE => "notice",
+  E_STRICT => "notice",
+  E_RECOVERABLE_ERROR => "error",
+  E_DEPRECATED => "notice",
+  E_USER_DEPRECATED => "notice",
   E_JS_ERROR => "warning",
 );
 

@@ -141,7 +141,7 @@ class CHL7v2DataType extends CHL7v2 {
    * @param string $value
    * @return bool
    */
-  function validate($value, CHLv2Field $field){
+  function validate($value, CHL7v2Field $field){
     if (is_array($value)) {
       $count = count($value);
       
@@ -165,7 +165,7 @@ class CHL7v2DataType extends CHL7v2 {
     return true;
   }
   
-  protected function parseHL7($value, CHLv2Field $field) {
+  protected function parseHL7($value, CHL7v2Field $field) {
     if ($value === null) {
       return array();
     }
@@ -178,7 +178,7 @@ class CHL7v2DataType extends CHL7v2 {
     return $matches;
   }
   
-  protected function parseMB($value, CHLv2Field $field) {
+  protected function parseMB($value, CHL7v2Field $field) {
     if ($value === null) {
       return array();
     }
@@ -191,7 +191,7 @@ class CHL7v2DataType extends CHL7v2 {
     return $matches;
   }
   
-  function toMB($value, CHLv2Field $field){
+  function toMB($value, CHL7v2Field $field){
     if ($this->validate($value, $field)) {
       return $value;
     }
@@ -199,7 +199,7 @@ class CHL7v2DataType extends CHL7v2 {
     return false;
   }
   
-  function toHL7($value, CHLv2Field $field) {
+  function toHL7($value, CHL7v2Field $field) {
     return $value;
   }
   

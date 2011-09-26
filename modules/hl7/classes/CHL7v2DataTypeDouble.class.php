@@ -9,7 +9,7 @@
  */
 
 class CHL7v2DataTypeDouble extends CHL7v2DataType {
-  function toMB($value, CHLv2Field $field){
+  function toMB($value, CHL7v2Field $field){
     $parsed = parent::toMB($value, $field);
     
     // empty value
@@ -25,7 +25,7 @@ class CHL7v2DataTypeDouble extends CHL7v2DataType {
     return (double)$parsed;
   }
   
-  function toHL7($value, CHLv2Field $field) {
+  function toHL7($value, CHL7v2Field $field) {
     $parsed = parent::toHL7($value, $field);
     
     // empty value

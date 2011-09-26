@@ -9,7 +9,7 @@
  */
 
 class CHL7v2DataTypeDateTime extends CHL7v2DataType {
-  function toMB($value, CHLv2Field $field){
+  function toMB($value, CHL7v2Field $field){
     $parsed = $this->parseHL7($value, $field);
     
     // empty value
@@ -30,7 +30,7 @@ class CHL7v2DataTypeDateTime extends CHL7v2DataType {
             ":".CValue::read($parsed, "second", "00");
   }
   
-  function toHL7($value, CHLv2Field $field) {
+  function toHL7($value, CHL7v2Field $field) {
     $parsed = $this->parseMB($value, $field);
     
     // empty value

@@ -37,7 +37,7 @@ class CHL7v2DataTypeComposite extends CHL7v2DataType {
     //
   }
   
-  function toHL7($components, CHLv2Field $field){
+  function toHL7($components, CHL7v2Field $field){
     $hl7 = array();
     
     foreach($components as $k => $component) {
