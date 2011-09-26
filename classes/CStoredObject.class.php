@@ -49,6 +49,7 @@ class CStoredObject extends CModelObject {
   var $_ref_logs       = null; // history of the object
   var $_ref_first_log  = null;
   var $_ref_last_log   = null;
+  var $_ref_current_log = null; // log related to the current store or delete
   
   /**
    * The object in database
@@ -863,6 +864,8 @@ class CStoredObject extends CModelObject {
    * @return CUserLog null if not loggable
    */
   protected function prepareLog() {
+    $this->_ref_current_log = null;
+    
     // If the object is not loggable
     if (!$this->_spec->loggable || $this->_purge) {
       return;
@@ -946,6 +949,7 @@ class CStoredObject extends CModelObject {
       return;
     }
     
+    $this->_ref_current_log = $this->_ref_last_log;
     $this->_ref_last_log->store();
   }
 
