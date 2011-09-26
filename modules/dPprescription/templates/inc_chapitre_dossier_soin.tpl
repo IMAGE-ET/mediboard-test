@@ -7,7 +7,7 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
-
+	
 {{if $chapitre == "med"}}
 	{{foreach from=$prescription->_ref_lines_med_for_plan item=_cat_ATC key=_key_cat_ATC name="foreach_cat"}}
 	  {{foreach from=$_cat_ATC item=_line name="foreach_med"}}
@@ -49,7 +49,9 @@
 		</tr>
 	{{/foreach}}
 {{elseif $chapitre == "inscription"}}
-
+  <script type="text/javascript">
+    Control.Tabs.setTabCount("_inscription", "{{$prescription->_count_inscriptions}}");
+  </script>
   {{foreach from=$prescription->_ref_inscriptions_for_plan item=_inscription name="foreach_inscription"}}
   	{{include file="../../dPprescription/templates/inc_vw_line_dossier_soin.tpl"
 		  line=$_inscription
@@ -94,19 +96,19 @@
 	{{assign var=elements value=$prescription->_ref_lines_elt_for_plan}}
 	{{assign var=elements_chap value=$elements.$chapitre}}
 	{{assign var=name_chap value=$chapitre}}
-	  {{foreach from=$elements_chap key=name_cat item=elements_cat name="foreach_chap"}}
-	    {{assign var=categorie value=$categories.$name_chap.$name_cat}}
-	    {{foreach from=$elements_cat item=_element name="foreach_cat"}}
-	      {{foreach from=$_element key=unite_prise item=element name="foreach_elt"}} 	          
-	        {{include file="../../dPprescription/templates/inc_vw_line_dossier_soin.tpl" 
-	                  line=$element
-	                  nodebug=true
-	                  first_foreach=foreach_cat
-	                  last_foreach=foreach_elt
-	                  global_foreach=foreach_chap
-	                  nb_line=$_element|@count
-	                  dosql=do_prescription_line_element_aed}}
-	      {{/foreach}}
-	    {{/foreach}}
-	  {{/foreach}}
+  {{foreach from=$elements_chap key=name_cat item=elements_cat name="foreach_chap"}}
+    {{assign var=categorie value=$categories.$name_chap.$name_cat}}
+    {{foreach from=$elements_cat item=_element name="foreach_cat"}}
+      {{foreach from=$_element key=unite_prise item=element name="foreach_elt"}} 	          
+        {{include file="../../dPprescription/templates/inc_vw_line_dossier_soin.tpl" 
+                  line=$element
+                  nodebug=true
+                  first_foreach=foreach_cat
+                  last_foreach=foreach_elt
+                  global_foreach=foreach_chap
+                  nb_line=$_element|@count
+                  dosql=do_prescription_line_element_aed}}
+      {{/foreach}}
+    {{/foreach}}
+  {{/foreach}}
 {{/if}}

@@ -887,8 +887,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
   
 	  $this->_count_inscriptions = count($this->_ref_lines_inscriptions["med"]) + count($this->_ref_lines_inscriptions["elt"]);
 	}
-  
-  
+	
   /*
    * Chargement du praticien utilisé pour l'affichage des protocoles/favoris
    */

@@ -107,7 +107,7 @@
 	{{if $conf.dPprescription.CPrescription.show_inscription}}
 	<!-- Volet Inscription --> 
 	<li onmousedown="refreshDossierSoin(null, 'inscription');">
-    <a href="#_inscription">Inscription</a>
+    <a href="#_inscription" {{if $prescription->_count_inscriptions == 0}}class="empty"{{/if}}>Inscription  <small>({{$prescription->_count_inscriptions}})</small></a>
 	</li>
 	{{/if}}
 </ul> 
