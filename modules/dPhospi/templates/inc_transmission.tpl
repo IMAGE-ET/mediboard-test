@@ -2,6 +2,7 @@
 {{mb_default var=hide_button_add value=0}}
 {{mb_default var=update_plan_soin value=0}}
 {{assign var=hour_quantum value=$conf.dPhospi.nb_hours_trans}}
+{{assign var=cible_mandatory_trans value=$conf.soins.cible_mandatory_trans}}
 {{mb_default var=data_id value=""}}
 {{mb_default var=action_id value=""}}
 {{mb_default var=result_id value=""}}
@@ -135,6 +136,12 @@ updateCible = function(elt) {
 }
 
 submitTrans = function(form) {
+  {{if $cible_mandatory_trans}}
+    if (!$V(form.cible)) {
+      alert("{{tr}}CTransmissionMedicale.cible_mandatory_trans{{/tr}}");
+      return; 
+    }
+  {{/if}}
   {{if $refreshTrans || $update_plan_soin}}
     submitFormAjax(form, 'systemMsg', {onComplete: function() {
       {{if $refreshTrans}}

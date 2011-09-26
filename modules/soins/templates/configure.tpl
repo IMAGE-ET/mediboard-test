@@ -72,7 +72,16 @@
 			  {{mb_include module=system template=inc_config_enum var=transmissions_hours values="12|24|36|48" skip_locales=1}}
 		  </td>
 		</tr>	
-		
+		<tr>
+      <th class="category" colspan="2">
+        Transmissions
+      </th>
+    </tr>
+    <tr>
+      <td colspan="2">
+        {{mb_include module=system template=inc_config_bool var=cible_mandatory_trans}}
+      </td>
+    </tr>
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

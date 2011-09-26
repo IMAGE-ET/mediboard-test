@@ -369,6 +369,7 @@ $locales['CTransmissionMedicale._heure'] = 'Heure';
 $locales['CTransmissionMedicale._show_trans'] = 'Trans.';
 $locales['CTransmissionMedicale.all'] = 'Toutes les transmissions';
 $locales['CTransmissionMedicale.caracteristiques'] = 'Caractéristiques';
+$locales['CTransmissionMedicale.cible_mandatory_trans'] = 'Veuillez sélectionner une cible avant de créer la/les transmission(s).';
 $locales['CTransmissionMedicale.degre.high'] = 'Haute';
 $locales['CTransmissionMedicale.degre.low'] = 'Normal';
 $locales['CTransmissionMedicale.none'] = 'Aucune transmission médicale';

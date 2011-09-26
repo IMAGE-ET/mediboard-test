@@ -11,6 +11,7 @@
 $dPconfig["soins"] = array (
   "constantes_show" => "1",
 	"transmissions_hours" => "24",
+  "cible_mandatory_trans" => "0",
   "CLit" => array (
     "align_right" => "1")
 );
