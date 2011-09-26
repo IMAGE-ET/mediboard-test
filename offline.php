@@ -35,6 +35,7 @@ header("Content-type: text/html; charset=iso-8859-1");
   
   <link rel="shortcut icon" type="image/ico" href="style/mediboard/images/icons/favicon.ico" />
   <link rel="stylesheet" type="text/css" href="style/mediboard/main.css" media="all" />
+  <link rel="stylesheet" type="text/css" href="style/e-cap/main.css" media="all" />
 </head>
 
 <body style="padding-top: 3em; text-align: center;">
