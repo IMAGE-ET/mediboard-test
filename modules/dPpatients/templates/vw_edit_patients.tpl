@@ -126,16 +126,17 @@ function mapIdCorres(id, object) {
 var tabs;
 Main.add(function () {
   {{if $patient->_id}}
-    InseeFields.initCPVille("editFrm", "cp", "ville","pays");
-    InseeFields.initCPVille("editFrm", "cp_naissance", "lieu_naissance","_pays_naissance_insee");
     InseeFields.initCPVille("editCorrespondant_prevenir", "cp", "ville", "tel");
     InseeFields.initCPVille("editCorrespondant_employeur", "cp", "ville", "tel");
   {{/if}}
   initPaysField("editFrm", "_pays_naissance_insee", "profession");
   initPaysField("editFrm", "pays", "tel");
   
+  InseeFields.initCPVille("editFrm", "cp", "ville","pays");
+  InseeFields.initCPVille("editFrm", "cp_naissance", "lieu_naissance","_pays_naissance_insee");
   InseeFields.initCPVille("editFrm", "assure_cp", "assure_ville","assure_pays_insee");
   InseeFields.initCPVille("editFrm", "assure_cp_naissance", "assure_lieu_naissance","_assure_pays_naissance_insee");
+	
   initPaysField("editFrm", "_assure_pays_naissance_insee", "assure_profession");
   initPaysField("editFrm", "assure_pays", "assure_tel");
 
