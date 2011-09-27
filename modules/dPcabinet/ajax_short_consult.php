@@ -62,6 +62,13 @@ if ($consult_anesth->_id) {
   $smarty->assign("techniquesComp" , new CTechniqueComp);
   $smarty->assign("anesth"         , $anesth);
   $smarty->assign("view_prescription", 0);
+  
+  if (CAppUI::conf("dPcabinet CConsultAnesth show_facteurs_risque")) {
+    $sejour = new CSejour;
+    $sejour->load($sejour_id);
+    $sejour->loadRefDossierMedical();
+    $smarty->assign("sejour"       , $sejour);
+  }
 }
 
 $smarty->display("inc_short_consult.tpl");

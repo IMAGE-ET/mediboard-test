@@ -37,6 +37,11 @@
     <li>
       <a href="#infos_anesth">Infos. Anesth.</a>
     </li>
+    {{if $conf.dPcabinet.CConsultAnesth.show_facteurs_risque}}
+      <li>
+        <a href="#facteurs_risque">Facteurs de risques</a>
+      </li>
+    {{/if}}
   {{/if}}
 </ul>
 
@@ -62,4 +67,9 @@
   <div id="infos_anesth" style="display: none;">
     {{mb_include module=dPcabinet template="inc_consult_anesth/acc_infos_anesth"}}
   </div>
+  {{if $conf.dPcabinet.CConsultAnesth.show_facteurs_risque}}
+    <div id="facteurs_risque" style="display: none;">
+      {{mb_include module=dPcabinet template="inc_consult_anesth/inc_vw_facteurs_risque"}}
+    </div>
+  {{/if}}
 {{/if}}
