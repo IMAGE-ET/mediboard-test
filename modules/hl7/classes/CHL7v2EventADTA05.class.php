@@ -30,10 +30,21 @@ class CHL7v2EventADTA05 extends CHL7v2EventADT implements CHL7EventADTA05 {
     );
   }
   
-  function build($patient) {
-    parent::build($patient);
+  function build($sejour) {
+    parent::build($sejour);
     
+    $patient = $sejour->_ref_patient;
+    // Patient Identification
+    $this->addPID($patient);
     
+    // Patient Additional Demographic
+    $this->addPD1($patient);
+    
+    // Doctors
+    $this->addROLs($patient);
+    
+    // Patient Visit
+    $this->addPV1($sejour);
   }
   
 }

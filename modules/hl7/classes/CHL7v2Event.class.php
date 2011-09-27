@@ -72,7 +72,7 @@ class CHL7v2Event {
     $exchange_ihe->code            = $this->code;
     $exchange_ihe->object_id       = $this->object->_id;
     $exchange_ihe->object_class    = $this->object->_class;
-    mbTrace($exchange_ihe->store());
+    $exchange_ihe->store();
     
     return $this->_exchange_ihe = $exchange_ihe;
   }

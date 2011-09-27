@@ -61,7 +61,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     // U - Unknown
     // A - Ambiguous  
     // N - Not applicable
-    $data[] = strtoupper($patient->sexe);
+    $data[] = CHL7v2TableEntry::mapTo("1", $patient->sexe);
     
     // PID-9: Patient Alias (XPN) (optional repeating)
     $data[] = null;
@@ -184,20 +184,15 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     
     // PID-18: Patient Account Number (CX) (optional)
     if ($this->sejour) {
-      $data[] = array(
-        $sejour->_NDA,
-        null,
-        null,
-        // PID-3-4 Autorité d'affectation
-        array(
-          // Nom, FINESS 
-          array (
-            $group->_view,
-            $group->finess 
-          )
-        ),
-        "PI"
-      );
+      $this->sejour->loadNDA();
+      $data[] = $sejour->_NDA ? array(
+                    $sejour->_NDA,
+                    null,
+                    null,
+                    // PID-3-4 Autorité d'affectation
+                    $this->getAssigningAuthority("FINESS", $group->finess),
+                    "AN") :
+                  null;
     } else {
       $data[] = null;
     }

@@ -30,8 +30,8 @@ class CHL7v2EventADTA11 extends CHL7v2EventADT implements CHL7EventADTA11 {
     );
   }
   
-  function build($patient) {
-    parent::build($patient);
+  function build($sejour) {
+    parent::build($sejour);
     
     
   }

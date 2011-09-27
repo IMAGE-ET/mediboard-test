@@ -39,81 +39,71 @@ class CITI31DelegatedHandler extends CIHEDelegatedHandler {
       if (CAppUI::conf('smp server')) {} 
       // Si Client
       else {
-        $sejour->loadLastLog();
-        $last_log = $sejour->_ref_last_log;
-        
-        // Cas d'une pré-admission
-        if ($sejour->_etat == "preadmission") {
-          // Création d'une pré-admission
-          if ($last_log->type == "create") {
-            $code = "A05";
-          } 
-          // Modification d'une pré-admission
-          elseif ($last_log->type == "store") {
-            // Cas d'une annulation ? 
-            if ($sejour->fieldModified("annule", "1")) {
-              $code = "A38";
-            }
-            // Simple modification ? 
-            else {
-              $code = "Z99";
-            }
-          } 
-          // Aucun cas ?
-          else {
-            $code = null;
-          }
-        }
-        
-        // Cas d'un séjour en cours (entrée réelle)
-        elseif ($sejour->_etat == "encours") {
-          // Admission faite
-          if ($sejour->fieldModified("entree_reelle")) {
-            // Admission hospitalisé
-            if ($sejour->type = "comp") {
-              $code = "A01";
-            } 
-            // Patient externe
-            else {
-              $code = "A04";
-            }
-          }
-          // Modification de l'admission 
-          else {
-            /* @todo AJOUTER LES TESTS EN AMONT */
-            // Cas d'une annulation ? 
-            if ($sejour->fieldModified("annule", "1")) {
-              $code = "A11";
-            }
-            // Simple modification ? 
-            else {
-              $code = "Z99";
-            }
-          }
-        }
-        
-        // Cas d'un séjour clôturé (sortie réelle)
-        elseif ($sejour->_etat == "cloture") {
-          // Sortie réelle renseignée
-          if ($sejour->fieldModified("sortie_reelle")) {
-            $code = "A03";
-          }
-          // Modification de l'admission 
-          else {
-            // Cas d'une annulation ? 
-            if ($sejour->fieldModified("annule", "1")) {
-              $code = "A13";
-            }
-            // Simple modification ? 
-            else {
-              $code = "Z99";
-            }
-          }
-        }
+        $code = $this->getCode($sejour);
         
         // Envoi de l'événement
         $this->sendITI($this->profil, $this->transaction, $code, $sejour);
       }
+    }
+  }
+  
+  function getCode(CSejour $sejour) {
+    $last_log = $sejour->loadLastLog();
+    if (!in_array(array("create", "store"), $last_log->type)) {
+      return null;
+    }
+    
+    // Cas d'une pré-admission
+    if ($sejour->_etat == "preadmission") {
+      // Création d'une pré-admission
+      if ($last_log->type == "create") {
+        return "A05";
+      } 
+      // Modification d'une pré-admission
+      // Cas d'une annulation ? 
+      if ($sejour->fieldModified("annule", "1")) {
+        return "A38";
+      }
+      // Simple modification ? 
+      return "Z99";
+    }
+    
+    // Cas d'un séjour en cours (entrée réelle)
+    if ($sejour->_etat == "encours") {
+      // Admission faite
+      if ($sejour->fieldModified("entree_reelle")) {
+        // Admission hospitalisé
+        if ($sejour->type = "comp") {
+          return "A01";
+        } 
+        // Patient externe
+        return "A04";
+      }
+      
+      // Modification de l'admission 
+      /* @todo AJOUTER LES TESTS EN AMONT */
+      // Cas d'une annulation ? 
+      if ($sejour->fieldModified("annule", "1")) {
+        return "A11";
+      }
+      
+      // Simple modification ? 
+      return "Z99";
+    }
+    
+    // Cas d'un séjour clôturé (sortie réelle)
+    if ($sejour->_etat == "cloture") {
+      // Sortie réelle renseignée
+      if ($sejour->fieldModified("sortie_reelle")) {
+        return "A03";
+      }
+      // Modification de l'admission 
+      // Cas d'une annulation ? 
+      if ($sejour->fieldModified("annule", "1")) {
+        return "A13";
+      }
+      // Simple modification ? 
+      return "Z99";
     }
   }
 

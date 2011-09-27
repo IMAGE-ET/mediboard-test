@@ -188,7 +188,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     $this->getMessage()->appendChild($this);
   }
   
-  function getAssigningAuthority($name = "mediboard") {
+  function getAssigningAuthority($name = "mediboard", $value= null) {
     switch ($name) {
       case "mediboard" :
         return array(
@@ -217,11 +217,26 @@ class CHL7v2Segment extends CHL7v2Entity {
           "1.2.250.1.71.4.2.1",
           "ISO"
         );
-        break;  
+        break; 
+      case "FINESS" :
+        return array(
+          $value,
+          null,
+          null
+        );
+        break; 
       default :
         throw new CHL7v2Exception(CHL7v2Exception::UNKNOWN_AUTHORITY);
         break;
     }
+  }
+  
+  function getGroupAssigningAuthority(CGroups $group) {
+    return array(
+      null,
+      "1.2.250.1.x.x.xx.x",
+      "ISO"
+    );
   }
   
   function getPatientIdentifiers(CPatient $patient, CGroups $group) {
@@ -236,11 +251,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         null,
         null,
         // PID-3-4 Autorité d'affectation
-        array(
-          // Nom, FINESS 
-          $group->_view,
-          $group->finess 
-        ),
+        $this->getAssigningAuthority("FINESS", $group->finess),
         "PI"
       );
     }
@@ -278,12 +289,19 @@ class CHL7v2Segment extends CHL7v2Entity {
       $xcn9  = $this->getAssigningAuthority($object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "mediboard"));
       $xcn13 = $object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "RI");
     }
-    elseif ($object instanceof CUser) {
+    if ($object instanceof CUser) {
       $xcn1  = $object->_id;
       $xcn2  = $object->user_last_name;
       $xcn3  = $object->user_first_name;
       $xcn9  = $this->getAssigningAuthority("mediboard");
       $xcn13 = "RI";
+    }
+    if ($object instanceof CMediusers) {
+      $xcn1  = CValue::first($object->rpps, $object->adeli, $object->_id);
+      $xcn2  = $object->_user_last_name;
+      $xcn3  = $object->_user_first_name;
+      $xcn9  = $this->getAssigningAuthority($object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "mediboard"));
+      $xcn13 = $object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "RI");
     }
     
     return array(
@@ -389,6 +407,25 @@ class CHL7v2Segment extends CHL7v2Entity {
     } 
     
     return $patient_names;
+  }
+  
+  function getPL(CSejour $sejour) {
+    $affectation = $sejour->getCurrAffectation();
+    return array(
+      // PL-1 - Code UF hébergement
+      $sejour->getCurrentUF()->code,
+      // PL-2 - Chambre
+      $affectation->_id ? $affectation->_ref_lit->_ref_chambre->nom : null,
+      // PL-3 - Lit
+      $affectation->_id ? $affectation->_ref_lit->nom : null,
+      // PL-4 - Etablissement hospitalier
+      $this->getGroupAssigningAuthority($sejour->_ref_group),
+      // PL-5 - Statut du lit
+      // Table - 0116
+      // O - Occupé
+      // U - Libre
+      "0"
+    );
   }
 }
 

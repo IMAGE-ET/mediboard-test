@@ -33,6 +33,8 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     
     // Event Type
     $this->addEVN();
+    
+    
   }
   
   /*
@@ -103,11 +105,10 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   /*
    * Represents an HL7 PV1 message segment (Patient Visit)
    */
-  function addPV1(CSejour $sejour = null) {
+  function addPV1(CSejour $sejour = null, $set_id = 1) {
     $PV1 = CHL7v2Segment::create("PV1", $this->message);
-    if ($sejour) {
-      $PV1->sejour = $sejour;
-    }
+    $PV1->sejour = $sejour;
+    $PV1->set_id = 1;
     $PV1->build($this);
   }
   

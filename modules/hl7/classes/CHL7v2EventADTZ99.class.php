@@ -30,8 +30,8 @@ class CHL7v2EventADTZ99 extends CHL7v2EventADT implements CHL7EventADTZ99 {
     );
   }
   
-  function build($patient) {
-    parent::build($patient);
+  function build($sejour) {
+    parent::build($sejour);
     
     
   }
