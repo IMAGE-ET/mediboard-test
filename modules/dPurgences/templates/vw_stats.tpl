@@ -136,8 +136,7 @@ Main.add(function () {
           </tr>
         </table>
         {{if $ecap_installed}}
-          <br />
-          <a class="button hslip" href="?m=ecap&tab=vw_anap" title="Redirection vers l'onglet ANAP">ANAP</a>
+          <button class="change" type="button" onclick="new Url('ecap', 'vw_anap').requestModal()">ANAP</a>
         {{/if}}
       </td>
       <td style="white-space: normal;">
