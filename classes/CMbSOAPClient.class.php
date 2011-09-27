@@ -63,14 +63,14 @@ class CMbSOAPClient extends SoapClient {
       $arguments = $arguments[0];
     }
    
-    if (!$this->loggable) {
+    /*if (!$this->loggable) {
       try {
         return parent::__soapCall($function_name, $arguments, $options, $input_headers, $output_headers);
       } 
       catch(SoapFault $fault) {
         throw $fault;
       }
-    }
+    }*/
     
     $output = null;
     
