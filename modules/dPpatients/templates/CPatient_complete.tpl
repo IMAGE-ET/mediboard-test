@@ -73,65 +73,53 @@
     </td>
   </tr>
   <tr>
-    {{if $object->nom_jeune_fille || $object->tel}}
-      <td class="text">
-        <strong>{{mb_label object=$object field="nom_jeune_fille"}}</strong>
-        {{mb_value object=$object field="nom_jeune_fille"}}
-      </td>
-      <td class="text">
-        <strong>{{mb_label object=$object field="tel"}}</strong>
-        {{mb_value object=$object field="tel"}}
-      </td>
-    {{/if}}
+    <td class="text">
+      <strong>{{mb_label object=$object field="nom_jeune_fille"}}</strong>
+      {{mb_value object=$object field="nom_jeune_fille"}}
+    </td>
+    <td class="text">
+      <strong>{{mb_label object=$object field="tel"}}</strong>
+      {{mb_value object=$object field="tel"}}
+    </td>
   </tr>
   <tr>
-    {{if $object->naissance != "0000-00-00" || $object->tel2}}
-      <td class="text">
-        <strong>{{mb_label object=$object field="naissance"}}</strong>
-        {{mb_value object=$object field="naissance"}}
-      </td> 
-      <td class="text">
-        <strong>{{mb_label object=$object field="tel2"}}</strong>
-        {{mb_value object=$object field="tel2"}}
-      </td>
-    {{/if}}
+    <td class="text">
+      <strong>{{mb_label object=$object field="naissance"}}</strong>
+      {{mb_value object=$object field="naissance"}}
+    </td> 
+    <td class="text">
+      <strong>{{mb_label object=$object field="tel2"}}</strong>
+      {{mb_value object=$object field="tel2"}}
+    </td>
   </tr>
   <tr>
     <td class="text">
       <strong>{{mb_label object=$object field="sexe"}}</strong>
       {{mb_value object=$object field="sexe"}}
     </td>
-    {{if $object->tel_autre}}
       <td class="text">
         <strong>{{mb_label object=$object field="tel_autre"}}</strong>
         {{mb_value object=$object field="tel_autre"}}
-      </td>
-    {{else}}
-      <td></td>
-    {{/if}}
+    </td>
   </tr>
-  {{if $object->email}}
-    <tr>
-      <td>
-      </td>
-      <td class="text">
-        <strong>{{mb_label object=$object field="email"}}</strong>
-        {{mb_value object=$object field="email"}}
-      </td>
-    </tr>
-  {{/if}}
-  {{if $object->profession || $object->rques}}
-    <tr>
-      <td class="text">
-        <strong>{{mb_label object=$object field="profession"}}</strong>
-        {{mb_value object=$object field="profession"}}
-      </td>
-      <td class="text">
-        <strong>{{mb_label object=$object field="rques"}}</strong>
-        {{mb_value object=$object field="rques"}}
-      </td>
-    </tr>
-  {{/if}}
+  <tr>
+    <td>
+    </td>
+    <td class="text">
+      <strong>{{mb_label object=$object field="email"}}</strong>
+      {{mb_value object=$object field="email"}}
+    </td>
+  </tr>
+  <tr>
+    <td class="text">
+      <strong>{{mb_label object=$object field="profession"}}</strong>
+      {{mb_value object=$object field="profession"}}
+    </td>
+    <td class="text">
+      <strong>{{mb_label object=$object field="rques"}}</strong>
+      {{mb_value object=$object field="rques"}}
+    </td>
+  </tr>
   
   {{foreach from=$object->_ref_cp_by_relation.prevenir item=prevenir name=foreach_prevenir}}
     <tr>
