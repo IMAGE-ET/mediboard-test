@@ -463,6 +463,8 @@
               {{/foreach}}
             {{/if}}
             
+            {{assign var=display_cat_for_elt value=$conf.dPprescription.CPrescription.display_cat_for_elt}}
+            
             {{foreach from=$prescription->_ref_lines_elements_comments item=chap_element key=_chap_name}}
               <tr>
                 <th>{{tr}}CPrescription._chapitres.{{$_chap_name}}{{/tr}}</th>
@@ -482,10 +484,10 @@
                     {{assign var=is_first_cat value=1}}
                     {{foreach from=$cat_element.element item=element}}
                       {{if $element->_fin_reelle && $element->_fin_reelle < $date && $element->_fin_reelle >= $date_before}}
-                        {{if $is_first_cat}}
-                          <strong>{{$element->_ref_element_prescription->_ref_category_prescription->nom}} : </strong>
-                        {{else}}
+                        {{if !$is_first_cat}}
                           &ndash;
+                        {{elseif $display_cat_for_elt}}
+                          <strong>{{$element->_ref_element_prescription->_ref_category_prescription->nom}} : </strong>
                         {{/if}}
                         {{assign var=is_first_cat value=0}}
                         {{math equation="x+1" x=$count_elts assign=count_elts}}
@@ -514,10 +516,10 @@
                     {{assign var=is_first_cat value=1}}
                     {{foreach from=$cat_element.element item=element}}
                       {{if ($element->_fin_reelle && $element->_fin_reelle >= $date) && ($element->_debut_reel && $element->_debut_reel <= $date)}}
-                        {{if $is_first_cat}}
-                          <strong>{{$element->_ref_element_prescription->_ref_category_prescription->nom}} : </strong>
-                        {{else}}
+                        {{if !$is_first_cat}}
                           &ndash;
+                        {{elseif $display_cat_for_elt}}
+                          <strong>{{$element->_ref_element_prescription->_ref_category_prescription->nom}} : </strong>
                         {{/if}}
                         {{assign var=is_first_cat value=0}}
                         {{math equation="x+1" x=$total assign=total}}
@@ -546,10 +548,10 @@
                     {{assign var=is_first_cat value=1}}
                     {{foreach from=$cat_element.element item=element}}
                       {{if $element->_debut_reel && $element->_debut_reel > $date && $element->_debut_reel <= $date_after}}
-                        {{if $is_first_cat}}
-                          <strong>{{$element->_ref_element_prescription->_ref_category_prescription->nom}} : </strong>
-                        {{else}}
+                        {{if !$is_first_cat}}
                           &ndash;
+                        {{elseif $display_cat_for_elt}}
+                          <strong>{{$element->_ref_element_prescription->_ref_category_prescription->nom}} : </strong>
                         {{/if}}
                         {{assign var=is_first_cat value=0}}
                         {{math equation="x+1" x=$total assign=total}}
