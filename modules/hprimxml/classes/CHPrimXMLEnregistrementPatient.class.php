@@ -80,16 +80,19 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     $echg_hprim->_ref_sender->loadConfigValues();
     $sender     = $echg_hprim->_ref_sender;
     
+    $idSourcePatient = $data['idSourcePatient'];
+    $idCiblePatient  = $data['idCiblePatient'];
+    
     // Acquittement d'erreur : identifiants source et cible non fournis
-    if (!$data['idCiblePatient'] && !$data['idSourcePatient']) {
+    if (!$idCiblePatient && !$idSourcePatient) {
       return $echg_hprim->setAckError($dom_acq, "E005", $commentaire, $newPatient);
-    }
-      
+    }    
+    
     // Si SIP
     if (CAppUI::conf('sip server')) {      
       // Cas 1 : Identifiant source (IC) non fourni et identifiant cible fourni (IPP)
-      if (!$data['idSourcePatient'] && $data['idCiblePatient']) {
-        $IPP = CIdSante400::getMatch("CPatient", CAppUI::conf("sip tag_ipp"), str_pad($data['idCiblePatient'], 6, '0', STR_PAD_LEFT));
+      if (!$idSourcePatient && $idCiblePatient) {
+        $IPP = CIdSante400::getMatch("CPatient", CAppUI::conf("sip tag_ipp"), str_pad($idCiblePatient, 6, '0', STR_PAD_LEFT));
         // Cas 1.1 : idCible connu
         if ($IPP->_id) {
           $newPatient->load($IPP->object_id);
@@ -141,17 +144,17 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $commentaire, $newPatient);
       }
       
-      $id400 = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $data['idSourcePatient']);
+      $id400 = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $idSourcePatient);
       // Cas 2 : Patient existe sur le SIP
       if ($id400->_id) {
         // Identifiant du patient sur le SIP
         $idPatientSIP = $id400->object_id;
         // Cas 2.1 : Pas d'idCible
-        if (!$data['idCiblePatient']) {
+        if (!$idCiblePatient) {
           if ($newPatient->load($idPatientSIP)) {
             // Mapping du patient
             $newPatient = $this->mappingPatient($data['patient'], $newPatient);
-
+            
             // Création de l'IPP
             $IPP = new CIdSante400();
             //Paramétrage de l'id 400
@@ -187,7 +190,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         }
         // Cas 2.2 : idCible envoyé
         else {
-          $IPP = CIdSante400::getMatch("CPatient", CAppUI::conf("sip tag_ipp"), $data['idCiblePatient']);
+          $IPP = CIdSante400::getMatch("CPatient", CAppUI::conf("sip tag_ipp"), $idCiblePatient);
           // Cas 2.2.1 : idCible connu
           if ($IPP->_id) {
             // Acquittement d'erreur idSource et idCible incohérent
@@ -226,6 +229,14 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         $newPatient = $this->mappingPatient($data['patient'], $newPatient);
         // Cas 3.1 : Patient retrouvé  (nom, prénom et date de naissance)      
         if ($newPatient->loadMatchingPatient()) {
+          // Cas où le patient a déjà un identifiant externe pour ce même destinataire
+          $idex = new CIdSante400();
+          $idex->loadLatestFor($newPatient, $sender->_tag_patient);
+          if ($idex->id400 != $idSourcePatient) {
+            $commentaire = "Le patient possède déjà un identifiant dans notre base ('$idex->id400')";
+            return $echg_hprim->setAckError($dom_acq, "E017", $commentaire, $newPatient);
+          }
+          
           // Mapping du patient
           $newPatient = $this->mappingPatient($data['patient'], $newPatient);
           // Si serveur et pas d'IPP sur le patient
@@ -248,7 +259,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         
         // Création de l'identifiant externe TAG CIP + idSource
         $id400Patient = new CIdSante400();
-        CEAIPatient::storeID400CIP($id400Patient, $sender, $data['idSourcePatient'], $newPatient);        
+        CEAIPatient::storeID400CIP($id400Patient, $sender, $idSourcePatient, $newPatient);        
         
         // Création de l'IPP
         $IPP = new CIdSante400();
@@ -258,8 +269,8 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         $mutex = new CMbSemaphore("sip-ipp");
         $mutex->acquire();
         // Cas IPP fourni
-        if ($data['idCiblePatient']) {
-          $IPP->id400 = str_pad($data['idCiblePatient'], 6, '0', STR_PAD_LEFT);
+        if ($idCiblePatient) {
+          $IPP->id400 = str_pad($idCiblePatient, 6, '0', STR_PAD_LEFT);
 
           // IPP fourni non connu
           if (!$IPP->loadMatchingObject() && is_numeric($IPP->id400) && (strlen($IPP->id400) <= 6)) {
@@ -317,12 +328,12 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     } 
     // Si CIP
     else {      
-      $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $data['idSourcePatient']);
+      $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $idSourcePatient);
       // idSource non connu
       if (!$IPP->_id) {
         // idCible fourni
-        if ($data['idCiblePatient']) {
-          if ($newPatient->load($data['idCiblePatient'])) {
+        if ($idCiblePatient) {
+          if ($newPatient->load($idCiblePatient)) {
             // Le patient trouvé est-il différent ?
             /*if (!$this->checkSimilarPatient($newPatient, $data['patient'])) {
               $commentaire = "Le nom et/ou le prénom sont très différents."; 
@@ -402,12 +413,12 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         $newPatient = $this->mappingPatient($data['patient'], $newPatient);
                         
         // idCible non fourni
-        if (!$data['idCiblePatient']) {
+        if (!$idCiblePatient) {
           $_code_IPP = "I023"; 
         } else {
           $tmpPatient = new CPatient();
           // idCible connu
-          if ($tmpPatient->load($data['idCiblePatient'])) {
+          if ($tmpPatient->load($idCiblePatient)) {
             if ($tmpPatient->_id != $IPP->object_id) {
               $commentaire = "L'identifiant source fait référence au patient : $IPP->object_id et l'identifiant cible au patient : $tmpPatient->_id.";
               return $echg_hprim->setAckError($dom_acq, "E004", $commentaire, $newPatient);

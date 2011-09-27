@@ -78,7 +78,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     $data['idCiblePatient']  = $this->getIdCible($data['patient']);
     
     $data['idSourceVenue'] = $this->getIdSource($data['venue']);
-    $data['idCibleVenue'] = $this->getIdCible($data['venue']);
+    $data['idCibleVenue']  = $this->getIdCible($data['venue']);
     
     return $data;
   }
@@ -114,6 +114,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     $_code_Venue   = $_code_NumDos = $_num_dos_create = $_modif_venue = false;
     
     $sender = $echg_hprim->_ref_sender;
+    $idSourceVenue = $data['idSourceVenue'];
+    $idCibleVenue  = $data['idCibleVenue'];
     
     if (!$newVenue) {
       $newVenue = new CSejour();
@@ -130,13 +132,13 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     // Affectation de l'établissement
     $newVenue->group_id = $sender->group_id;
     
-		$commentaire = "";
-		
+    $commentaire = "";
+    
     // Si SIP
     if (CAppUI::conf('smp server')) {
       // Cas 2 : idSource non fourni, idCible fourni
-      if (!$data['idSourceVenue'] && $data['idCibleVenue']) {
-        $nda = CIdSante400::getMatch("CSejour", CAppUI::conf("sip tag_dossier"), str_pad($data['idCibleVenue'], 6, '0', STR_PAD_LEFT));
+      if (!$idSourceVenue && $idCibleVenue) {
+        $nda = CIdSante400::getMatch("CSejour", CAppUI::conf("smp tag_dossier"), str_pad($idCibleVenue, 6, '0', STR_PAD_LEFT));
         // Cas 2.1 : idCible connu
         if ($nda->_id) {
           $newVenue->load($nda->object_id);
@@ -212,13 +214,13 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $commentaire, $newVenue);
       }
       
-      $id400 = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $data['idSourceVenue']);
+      $id400 = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $idSourceVenue);
       // Cas 3 : idSource fourni et retrouvé : la venue existe sur le SMP
       if ($id400->_id) {
         // Identifiant de la venue sur le SMP
         $idVenueSMP = $id400->object_id;
         // Cas 3.1 : idCible non fourni
-        if (!$data['idCibleVenue']) {
+        if (!$idCibleVenue) {
           if ($newVenue->load($idVenueSMP)) {
             // Dans le cas d'une annulation de la venue
             if ($cancel) {
@@ -265,7 +267,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         }
         // Cas 3.2 : idCible fourni
         else {
-          $nda = CIdSante400::getMatch("CSejour", CAppUI::conf("sip tag_dossier"), $data['idCibleVenue']);
+          $nda = CIdSante400::getMatch("CSejour", CAppUI::conf("smp tag_dossier"), $idCibleVenue);
           // Cas 3.2.1 : idCible connu
           if ($nda->_id) {
             // Acquittement d'erreur idSource et idCible incohérent
@@ -312,6 +314,14 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         $newVenue = $this->mappingVenue($data['venue'], $newVenue);
         // Cas 4.1 : Venue retrouvé  (patient, date d'entrée, date de sortie)     
         if ($newVenue->loadMatchingSejour()) {
+          // Cas où le séjour a déjà un identifiant externe pour ce même destinataire
+          $idex = new CIdSante400();
+          $idex->loadLatestFor($newVenue, $sender->_tag_sejour);
+          if ($idex->id400 != $idSourceVenue) {
+            $commentaire = "Le séjour possède déjà un identifiant dans notre base ('$idex->id400')";
+            return $echg_hprim->setAckError($dom_acq, "E117", $commentaire, $newVenue);
+          }
+          
           // Dans le cas d'une annulation de la venue
           if ($cancel) {
             if ($msgAcq = $this->doNotCancelVenue($newVenue, $dom_acq, $echg_hprim)) {
@@ -350,7 +360,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         
         // Création de l'identifiant externe TAG CIP + idSource
         $id400Venue = new CIdSante400();
-        $msgID400 = CEAISejour::storeID400CIP($id400Venue, $sender, $data['idSourceVenue'], $newVenue);
+        $msgID400 = CEAISejour::storeID400CIP($id400Venue, $sender, $idSourceVenue, $newVenue);
         
         // Création du numéro de dossier
         $nda = new CIdSante400();
@@ -360,8 +370,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         $mutexSej = new CMbSemaphore("sip-numdos"); 
         $mutexSej->acquire();
         // Cas num dossier fourni
-        if ($data['idCibleVenue']) {
-          $nda->id400 = str_pad($data['idCibleVenue'], 6, '0', STR_PAD_LEFT);
+        if ($idCibleVenue) {
+          $nda->id400 = str_pad($idCibleVenue, 6, '0', STR_PAD_LEFT);
 
           // Num dossier fourni non connu
           if (!$nda->loadMatchingObject() && is_numeric($nda->id400) && (strlen($nda->id400) <= 6)) {
@@ -427,16 +437,16 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     // Si CIP
     else {      
       // Acquittement d'erreur : identifiants source et cible non fournis pour le patient / venue
-      if (!$data['idSourceVenue'] && !$data['idCibleVenue']) {
+      if (!$idSourceVenue && !$idCibleVenue) {
         return $echg_hprim->setAckError($dom_acq, "E100", $commentaire, $newVenue);
       }
       
-      $nda = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $data['idSourceVenue']);
+      $nda = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $idSourceVenue);
       // idSource non connu
       if (!$nda->_id) {
         // idCible fourni
-        if ($data['idCibleVenue']) {
-          if ($newVenue->load($data['idCibleVenue'])) {
+        if ($idCibleVenue) {
+          if ($newVenue->load($idCibleVenue)) {
             // Dans le cas d'une annulation de la venue
             if ($cancel) {
               if ($msgAcq = $this->doNotCancelVenue($newVenue, $dom_acq, $echg_hprim)) {
@@ -589,12 +599,12 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
                         
         // idCible non fourni
-        if (!$data['idCibleVenue']) {
+        if (!$idCibleVenue) {
           $_code_NumDos = "I123"; 
         } else {
           $tmpVenue = new CSejour();
           // idCible connu
-          if ($tmpVenue->load($data['idCibleVenue'])) {
+          if ($tmpVenue->load($idCibleVenue)) {
             if ($tmpVenue->_id != $nda->object_id) {
               $commentaire = "L'identifiant source fait référence au séjour : $nda->object_id et l'identifiant cible au séjour : $tmpVenue->_id.";
               return $dom_acq->generateAcquittementsError("E104", $commentaire, $newVenue);
