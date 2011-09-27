@@ -142,11 +142,13 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_ref_prescripteurs     = null;
   var $_ref_adresse_par_prat  = null;
   var $_ref_prescription_sejour = null;
-  var $_ref_replacements        = null;
-  var $_ref_replacement         = null;
-  var $_ref_tasks               = null;
-  var $_ref_tasks_not_created   = null;
-	
+  var $_ref_replacements      = null;
+  var $_ref_replacement       = null;
+  var $_ref_tasks             = null;
+  var $_ref_tasks_not_created = null;
+	var $_ref_transmissions     = null;
+	var $_ref_observations      = null;
+  
   // External objects
   var $_ext_diagnostic_principal = null;
   var $_ext_diagnostic_relie     = null;
@@ -1106,6 +1108,21 @@ class CSejour extends CCodable implements IPatientRelated {
     
     return $this->_ref_transmissions;
   }
+  
+  function loadRefsObservations($important = false) {
+    if ($important) {
+      $obs = new CObservationMedicale;
+      $where = array();
+      $where["sejour_id"] = " = '$this->_id'";
+      $where["degre"]     = " = 'high'";
+      $order = "date DESC";
+      return $this->_ref_observations = $obs->loadList($where);
+    }
+    else {
+      return $this->_ref_observations = $this->loadBackRefs("observations");
+    }
+  }
+  
   
   function loadRefsTasks(){
     return $this->_ref_tasks = $this->loadBackRefs("tasks"); 

@@ -93,7 +93,7 @@
   <tr>
     <!-- Informations sur le patient -->
     <td style="width: 50%; vertical-align: top">
-       <table class="tbl">
+       <table class="tbl" style="table-layout: fixed;">
         <tr>
           <th colspan="2" class="category">
             <span style="float: right">
@@ -106,64 +106,76 @@
           </th>
         </tr>
         <tr>
-          <td style="width: 50%;">
-            <strong>{{mb_label object=$patient field="nom"}}</strong>
-            {{mb_value object=$patient field="nom"}}
-          </td>
-          <td>
-            <strong>{{mb_label object=$patient field="prenom"}}</strong>
-            {{mb_value object=$patient field="prenom"}}{{if $patient->prenom_2}}, 
-            {{mb_value object=$patient field="prenom_2"}}{{/if}}{{if $patient->prenom_3}}, 
-            {{mb_value object=$patient field="prenom_3"}}{{/if}}{{if $patient->prenom_4}}, 
-            {{mb_value object=$patient field="prenom_4"}} {{/if}}
-          </td>
-        </tr>
-        <tr>
-          <td class="text">
-            <strong>{{mb_label object=$patient field="nom_jeune_fille"}}</strong>
-            {{mb_value object=$patient field="nom_jeune_fille"}}
-          </td>
-          <td class="text">
-            <strong>{{mb_label object=$patient field="tel"}}</strong>
-            {{mb_value object=$patient field="tel"}}
-          </td>
-        </tr>
-        <tr>
-          <td class="text">
-            <strong>{{mb_label object=$patient field="naissance"}}</strong>
-            {{mb_value object=$patient field="naissance"}}
-          </td>
-          <td class="text">
-            <strong>{{mb_label object=$patient field="tel2"}}</strong>
-            {{mb_value object=$patient field="tel2"}}
-          </td>
-        </tr>
-        <tr>
-          <td class="text">
-            <strong>{{mb_label object=$patient field="sexe"}}</strong>
-            {{mb_value object=$patient field="sexe"}}
-          </td>
-          <td class="text">
-            <strong>{{mb_label object=$patient field="tel_autre"}}</strong>
-            {{mb_value object=$patient field="tel_autre"}}
-          </td>
-        </tr>
-        <tr>
-          <td>
-          </td>
-          <td class="text">
-            <strong>{{mb_label object=$patient field="email"}}</strong>
-            {{mb_value object=$patient field="email"}}
-          </td>
-        </tr> 
-        <tr>
-          <td class="text">
-            <strong>{{mb_label object=$patient field="profession"}}</strong>
-            {{mb_value object=$patient field="profession"}}
-          </td>
-          <td class="text">
-            <strong>{{mb_label object=$patient field="rques"}}</strong>
-            {{mb_value object=$patient field="rques"}}
+          <td colspan="2">
+            {{if $patient->nom}}
+              <div class="cellule_patient">
+                <strong>{{mb_label object=$patient field="nom"}}</strong>
+                {{mb_value object=$patient field="nom"}}
+              </div>
+            {{/if}}
+            {{if $patient->prenom}}
+              <div class="cellule_patient">
+                <strong>{{mb_label object=$patient field="prenom"}}</strong>
+                {{mb_value object=$patient field="prenom"}}{{if $patient->prenom_2}}, 
+                {{mb_value object=$patient field="prenom_2"}}{{/if}}{{if $patient->prenom_3}}, 
+                {{mb_value object=$patient field="prenom_3"}}{{/if}}{{if $patient->prenom_4}}, 
+                {{mb_value object=$patient field="prenom_4"}} {{/if}}
+              </div>
+            {{/if}}
+            {{if $patient->nom_jeune_fille}}
+              <div class="cellule_patient">
+                <strong>{{mb_label object=$patient field="nom_jeune_fille"}}</strong>
+                {{mb_value object=$patient field="nom_jeune_fille"}}
+              </div>
+            {{/if}}
+            {{if $patient->tel}}
+              <div class="cellule_patient">
+                <strong>{{mb_label object=$patient field="tel"}}</strong>
+                {{mb_value object=$patient field="tel"}}
+              </div>
+            {{/if}}
+            {{if $patient->naissance}}
+              <div class="cellule_patient">
+                <strong>{{mb_label object=$patient field="naissance"}}</strong>
+                {{mb_value object=$patient field="naissance"}}
+              </div>
+            {{/if}}
+            {{if $patient->tel2}}
+              <div class="cellule_patient">
+                <strong>{{mb_label object=$patient field="tel2"}}</strong>
+                {{mb_value object=$patient field="tel2"}}
+              </div>
+            {{/if}}
+            {{if $patient->sexe}}
+              <div class="cellule_patient">
+                <strong>{{mb_label object=$patient field="sexe"}}</strong>
+                {{mb_value object=$patient field="sexe"}}
+              </div>
+            {{/if}}
+            {{if $patient->tel_autre}}
+              <div class="cellule_patient">
+                <strong>{{mb_label object=$patient field="tel_autre"}}</strong>
+                {{mb_value object=$patient field="tel_autre"}}
+              </div>
+            {{/if}}
+            {{if $patient->email}}
+              <div class="cellule_patient">
+                <strong>{{mb_label object=$patient field="email"}}</strong>
+                {{mb_value object=$patient field="email"}}
+              </div>
+            {{/if}}
+            {{if $patient->profession}}
+              <div class="cellule_patient">
+                <strong>{{mb_label object=$patient field="profession"}}</strong>
+                {{mb_value object=$patient field="profession"}}
+              </div>
+            {{/if}}
+            {{if $patient->rques}}
+              <div class="cellule_patient">
+                <strong>{{mb_label object=$patient field="rques"}}</strong>
+                {{mb_value object=$patient field="rques"}}
+              </div>
+            {{/if}}
           </td>
         </tr>
       </table>
@@ -183,23 +195,34 @@
             <strong>{{tr}}CCorrespondantPatient-tel{{/tr}}</strong>
           </th>
         </tr>
+        {{assign var=count_correspondants value=0}}
         {{foreach from=$patient->_ref_cp_by_relation item=_correspondants}}
           {{assign var=_correspondant value=$_correspondants|@reset}}
+          {{if $_correspondant->_id}}
+            {{math equation="x+1" x=$count_correspondants assign=count_correspondants}}
+            <tr>
+              <td>
+                <strong>{{mb_value object=$_correspondant field=relation}}</strong>
+              </td>
+              <td>
+                {{mb_value object=$_correspondant field="nom"}}
+              </td>
+              <td>
+                {{mb_value object=$_correspondant field="prenom"}}
+              </td>
+              <td>
+                {{mb_value object=$_correspondant field="tel"}}
+              </td>
+            </tr>
+          {{/if}}
+        {{/foreach}}
+        {{if $count_correspondants == 0}}
           <tr>
-            <td>
-              <strong>{{mb_value object=$_correspondant field=relation}}</strong>
-            </td>
-            <td>
-              {{mb_value object=$_correspondant field="nom"}}
-            </td>
-            <td>
-              {{mb_value object=$_correspondant field="prenom"}}
-            </td>
-            <td>
-              {{mb_value object=$_correspondant field="tel"}}
+            <td colspan="4">
+              {{tr}}CCorrespondantPatient.none{{/tr}}
             </td>
           </tr>
-        {{/foreach}}
+        {{/if}}
       </table>
       
       <!--  Informations sur le séjour -->
@@ -274,6 +297,35 @@
           {{/foreach}}
         </table>
       {{/if}}
+      
+      {{if $sejour->_ref_observations|@count}}
+        <table class="tbl">
+          <tr>
+            <th colspan="7" class="title">Observations</th>
+          </tr>
+          <tr>
+            <th class="narrow">{{tr}}Date{{/tr}}</th>
+            <th class="narrow">{{tr}}Hour{{/tr}}</th>
+            <th>{{mb_title class=CObservationMedicale field=text}}</th>
+          </tr>
+          {{foreach from=$sejour->_ref_observations item=_obs}}
+            <tr>
+              <td style="text-align: center; height: 22px;">
+                {{mb_ditto name=date_obs value=$_obs->date|date_format:$conf.date}}
+              </td>
+              <td style="text-align: center;">
+                {{$_obs->date|date_format:$conf.time}}
+              </td>
+              <td class="text libelle_trans">{{mb_value object=$_obs field=text}}</td>
+            </tr>
+          {{/foreach}}
+        </table>
+      {{/if}}
+      
+      {{if $sejour->_ref_tasks|@count}}
+        {{mb_include module=soins template=inc_vw_tasks_sejour mode_realisation=0 readonly=1 header=0}}
+      {{/if}}
+      
     </td>
     <td style="vertical-align: top;" rowspan="2">
       {{assign var=prescription value=$sejour->_ref_prescription_sejour}}
@@ -426,9 +478,9 @@
               {{/foreach}}
             {{/if}}
             
-            {{foreach from=$prescription->_ref_lines_elements_comments item=chap_element key=_category_name}}
+            {{foreach from=$prescription->_ref_lines_elements_comments item=chap_element key=_chap_name}}
               <tr>
-                <th>{{tr}}CPrescription._chapitres.{{$_category_name}}{{/tr}}</th>
+                <th>{{tr}}CPrescription._chapitres.{{$_chap_name}}{{/tr}}</th>
               </tr>
               
               <tr class="hatching in_progress_before opacity-40">
@@ -445,7 +497,9 @@
                     {{assign var=is_first_cat value=1}}
                     {{foreach from=$cat_element.element item=element}}
                       {{if $element->_fin_reelle && $element->_fin_reelle < $date && $element->_fin_reelle >= $date_before}}
-                        {{if !$is_first_cat}}
+                        {{if $is_first_cat}}
+                          <strong>{{$element->_ref_element_prescription->_ref_category_prescription->nom}} : </strong>
+                        {{else}}
                           &ndash;
                         {{/if}}
                         {{assign var=is_first_cat value=0}}
@@ -456,7 +510,7 @@
                     {{/foreach}}
                   {{/foreach}}
                   {{if $total == 0}}
-                    Aucune ligne de {{tr}}CPrescription._chapitres.{{$_category_name}}{{/tr}} passée
+                    Aucune ligne de {{tr}}CPrescription._chapitres.{{$_chap_name}}{{/tr}} passée
                   {{/if}}
                 </td>
               </tr>
@@ -475,7 +529,9 @@
                     {{assign var=is_first_cat value=1}}
                     {{foreach from=$cat_element.element item=element}}
                       {{if ($element->_fin_reelle && $element->_fin_reelle >= $date) && ($element->_debut_reel && $element->_debut_reel <= $date)}}
-                        {{if !$is_first_cat}}
+                        {{if $is_first_cat}}
+                          <strong>{{$element->_ref_element_prescription->_ref_category_prescription->nom}} : </strong>
+                        {{else}}
                           &ndash;
                         {{/if}}
                         {{assign var=is_first_cat value=0}}
@@ -486,7 +542,7 @@
                     {{/foreach}}
                   {{/foreach}}
                   {{if $total == 0}}
-                    Aucune ligne de {{tr}}CPrescription._chapitres.{{$_category_name}}{{/tr}} en cours
+                    Aucune ligne de {{tr}}CPrescription._chapitres.{{$_chap_name}}{{/tr}} en cours
                   {{/if}}
                 </td>
               </tr>
@@ -505,17 +561,20 @@
                     {{assign var=is_first_cat value=1}}
                     {{foreach from=$cat_element.element item=element}}
                       {{if $element->_debut_reel && $element->_debut_reel > $date && $element->_debut_reel <= $date_after}}
-                        {{if !$is_first_cat}}
+                        {{if $is_first_cat}}
+                          <strong>{{$element->_ref_element_prescription->_ref_category_prescription->nom}} : </strong>
+                        {{else}}
                           &ndash;
                         {{/if}}
                         {{assign var=is_first_cat value=0}}
+                        {{math equation="x+1" x=$total assign=total}}
                         {{math equation="x+1" x=$count_elts assign=count_elts}}
                         {{$element->_view}}
                       {{/if}}
                     {{/foreach}}
                   {{/foreach}}
                   {{if $total == 0}}
-                    Aucune ligne de {{tr}}CPrescription._chapitres.{{$_category_name}}{{/tr}} à venir
+                    Aucune ligne de {{tr}}CPrescription._chapitres.{{$_chap_name}}{{/tr}} à venir
                   {{/if}}
                 </td>
               </tr>

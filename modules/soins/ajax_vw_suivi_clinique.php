@@ -31,6 +31,14 @@ if ($dossier_medical->_id) {
 $sejour->loadRefPraticien();
 $sejour->loadRefsOperations();
 $sejour->loadRefsTransmissions(true);
+$sejour->loadRefsObservations(true);
+$sejour->loadRefsTasks();
+
+foreach ($sejour->_ref_tasks as $key=>$_task) {
+  if ($_task->realise) {
+    unset($sejour->_ref_tasks[$key]);
+  }
+}
 
 // Tri des transmissions par catégorie
 $transmissions = array();

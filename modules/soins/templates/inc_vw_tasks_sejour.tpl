@@ -17,19 +17,22 @@ editTask = function(task_id){
 </script>
 
 {{mb_default var=offline value=0}}
+{{mb_default var=header value=1}}
 
 <div id="modal-task-{{$sejour->_id}}" style="display: none; width: 70%;">
 </div>
 
 <table class="tbl print_tasks">
-  <thead>
-    <tr>
-      <th class="title" colspan="3">
-        {{$sejour->_view}}
-        {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}
-      </th>
-    </tr>
-  </thead>
+  {{if $header}}
+    <thead>
+      <tr>
+        <th class="title" colspan="3">
+          {{$sejour->_view}}
+          {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+        </th>
+      </tr>
+    </thead>
+  {{/if}}
   <tr>
     <th colspan="4" class="title">
     	{{if !$mode_realisation && !$readonly}}
