@@ -11,6 +11,18 @@
 
 <script type="text/javascript">
   ExchangeDataFormat.evenements = {{"utf8_encode"|array_map_recursive:$evenements|@json:true}};
+	toggleAutoRefresh = function(){
+	  if (!window.autoRefresh) {
+		  window.autoRefresh = setInterval(function(){
+			  getForm("filterExchange").onsubmit();
+			}, 5000);
+			$("auto-refresh-toggler").style.borderColor = "red";
+		}
+		else {
+		  clearTimeout(window.autoRefresh);
+      $("auto-refresh-toggler").style.borderColor = "";
+		}
+	}
 </script>
 
 {{assign var=mod_name value=$exchange->_ref_module->mod_name}}
@@ -20,6 +32,9 @@
     <th class="title">
       <button onclick="ExchangeDataFormat.toggle();" style="float: left;" class="hslip notext" type="button" title="{{tr}}CExchangeDataFormat{{/tr}}">
         {{tr}}CExchangeDataFormat{{/tr}}
+      </button>
+      <button onclick="toggleAutoRefresh()" id="auto-refresh-toggler" style="float: right;" class="change notext" type="button">
+        Auto-refresh (5s)
       </button>
       {{tr}}{{$exchange->_class}}{{/tr}}</th>
   </tr>
