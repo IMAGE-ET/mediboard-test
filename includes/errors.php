@@ -171,9 +171,16 @@ function mbExport($var, $label = null, $log = false) {
 }
 
 function print_infos($var, $name = '') {
-	if (count($var))
-	  return "\n<pre><a href='#1' onclick='var s=this.parentNode.childNodes[1].style;s.display=s.display==\"none\"?\"\":\"none\";return false;'>$name</a><span style='display:none;'> " . 
-             substr(print_r($var, true), 6) . '</span></pre>';
+  if (empty($var)) return;
+  
+  $ret = "\n<pre><a href='#1' onclick='var s=this.parentNode.childNodes[1].style;s.display=s.display==\"none\"?\"\":\"none\";return false;'>$name</a>";
+  
+  if ($name == "GET") {
+    $ret .= " - <a href='?".http_build_query($var, true, "&")."' target='_blank'>Link</a>";
+  }
+  
+  $ret .= "<span style='display:none;'> ".substr(print_r($var, true), 6).'</span></pre>';
+  return $ret;
 }
 
 /**
@@ -225,13 +232,13 @@ function errorHandler($errorCode, $errorText, $errorFile, $errorLine, $errContex
   
   $log .= print_infos($_GET, 'GET');
   $log .= print_infos($_POST, 'POST');
-	
+  
   // Might noy be ready at the time error is thrown
   $session = isset($_SESSION) ? $_SESSION : array();
   unset($session['AppUI']);
   unset($session['dPcompteRendu']['templateManager']);
   $log .= print_infos($session, 'SESSION');
-	
+  
   foreach($contexts as $context) {
     $function = isset($context["class"]) ? $context["class"] . ":" : "";
     $function.= $context["function"] . "()";
@@ -299,10 +306,10 @@ function exceptionHandler($exception) {
              <strong>Text: </strong>$errorText
              <strong>File: </strong>$errorFile
              <strong>Line: </strong>$errorLine";
-						 
+             
   $log .= print_infos($_GET, 'GET');
   $log .= print_infos($_POST, 'POST');
-	
+  
   $session = $_SESSION;
   unset($session['AppUI']);
   unset($session['dPcompteRendu']['templateManager']);
