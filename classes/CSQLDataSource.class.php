@@ -37,21 +37,32 @@ abstract class CSQLDataSource {
   /**
    * Get the data source with given name.
    * Create it if necessary
+   * 
+   * @param string $dsn   Data source name
+   * @param bool   $quiet Won't trigger errors if true
    * @return CSQLDataSource or null if unhandled type
    */
-  static function get($dsn) {  	
+  static function get($dsn, $quiet = false) {  	
   	if (!array_key_exists($dsn, self::$dataSources)) {
 
+  	  if ($quiet) {
+  	    $reporting = error_reporting(0);
+  	  }
+
   	  if (null == $dbtype = CAppUI::conf("db $dsn dbtype")) {
-        trigger_error( "FATAL ERROR: Undefined type DSN type for '$dsn'.", E_USER_ERROR );        
+        trigger_error( "FATAL ERROR: Undefined type DSN type for '$dsn'.", E_USER_ERROR );
         return;
   	  }
 
   	  if (null == $dsClass = @self::$engines[$dbtype]) {
-        trigger_error( "FATAL ERROR: DSN type '$dbtype' unhandled.", E_USER_ERROR );
-  	    return;
+  	    trigger_error( "FATAL ERROR: DSN type '$dbtype' unhandled.", E_USER_ERROR );
+    	  return;
   	  }
 
+      if ($quiet) {
+        error_reporting($reporting);
+      }
+  	  
   	  $dataSource = new $dsClass;
   	  $dataSource->init($dsn);
   	  self::$dataSources[$dsn] = $dataSource->link ? $dataSource : null;

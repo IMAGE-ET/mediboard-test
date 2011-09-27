@@ -129,9 +129,6 @@ class CModelObject {
     $this->_class = $class;
     $this->_spec =& self::$spec[$class];
     
-    // @todo to be removed
-    $this->_class_name = $class;
-    
     if ($key = $this->_spec->key) {
       $this->_id =& $this->$key;
     }

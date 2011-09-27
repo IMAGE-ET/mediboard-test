@@ -13,7 +13,7 @@ class CMbObjectSpec {
   public $incremented         = true;
   public $loggable            = true;
   public $nullifyEmptyStrings = true;
-  public $dsn                 = 'std';
+  public $dsn                 = "std";
   public $table               = null;
   public $key                 = null;
   public $measureable         = false;
@@ -30,7 +30,7 @@ class CMbObjectSpec {
    * Initialize derivate fields
    */
   public function init() {
-    $this->ds = CSQLDataSource::get($this->dsn);
+    $this->ds = CSQLDataSource::get($this->dsn, $this->dsn != "std");
   }
   
   /**
