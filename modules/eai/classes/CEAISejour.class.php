@@ -31,7 +31,7 @@ class CEAISejour extends CEAIMbObject {
   
   static function NDASMPSetting(CIdSante400 $NDA, $idVenueSMP = null) {
     $NDA->object_class = "CSejour";
-    $NDA->tag          = CAppUI::conf("sip tag_nda");
+    $NDA->tag          = CAppUI::conf("smp tag_dossier");
     if ($idVenueSMP)
       $NDA->object_id  = $idVenueSMP;
   }
