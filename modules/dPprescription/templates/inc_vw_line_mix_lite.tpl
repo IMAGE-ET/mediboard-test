@@ -53,7 +53,7 @@
     {{/if}}
   </td>
   <td style="width: 45%" class="text">
-    {{if $line->date_arret && $line->time_arret}}      
+    {{if $_prescription_line_mix->date_arret && $_prescription_line_mix->time_arret}}      
       <img src="style/mediboard/images/buttons/stop.png" title="{{tr}}CPrescriptionLineElement-date_arret{{/tr}} : {{$line->date_arret|date_format:$conf.date}} {{$line->time_arret|date_format:$conf.time}}"/>
     {{/if}}
     {{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line name=lines}}
