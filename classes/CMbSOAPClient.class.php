@@ -16,26 +16,30 @@ if (!class_exists("SoapClient")) {
  * The CMbSOAPClient class
  */
 class CMbSOAPClient extends SoapClient {
-	var $wsdl              = null;
-	var $type_echange_soap = null;
-	var $soap_client_error = false;
-	var $flatten           = null;
-	var $loggable          = null;
-	
-  function __construct($rooturl, $type = null, $options = array()) {
-  	$this->wsdl = $rooturl;
-  	
-  	if ($type) {
-  		$this->type_echange_soap = $type;
-  	}
-  	
+  var $wsdl              = null;
+  var $type_echange_soap = null;
+  var $soap_client_error = false;
+  var $flatten           = null;
+  var $loggable          = null;
+  
+  function __construct($rooturl, $type = null, $options = array(), $loggable = null) {
+    $this->wsdl = $rooturl;
+    
+    if ($loggable) {
+      $this->loggable = $loggable;
+    }
+    
+    if ($type) {
+      $this->type_echange_soap = $type;
+    }
+    
     if (!$html = file_get_contents($this->wsdl)) {
-    	$this->soap_client_error = true;
-    	throw new CMbException("CSourceSOAP-unable-to-parse-url", $this->wsdl);
+      $this->soap_client_error = true;
+      throw new CMbException("CSourceSOAP-unable-to-parse-url", $this->wsdl);
     }
 
     if (strpos($html, "<?xml") === false) {
-    	$this->soap_client_error = true;
+      $this->soap_client_error = true;
       throw new CMbException("CSourceSOAP-wsdl-invalid");
     }
     
@@ -62,39 +66,39 @@ class CMbSOAPClient extends SoapClient {
     if ($this->flatten && isset($arguments[0]) && !empty($arguments[0])) {
       $arguments = $arguments[0];
     }
-   
-    /*if (!$this->loggable) {
+
+    if (!$this->loggable) {
       try {
         return parent::__soapCall($function_name, $arguments, $options, $input_headers, $output_headers);
       } 
       catch(SoapFault $fault) {
         throw $fault;
       }
-    }*/
+    }
     
     $output = null;
     
-  	$echange_soap = new CEchangeSOAP();
-  	$echange_soap->date_echange = mbDateTime();
-  	$echange_soap->emetteur     = CAppUI::conf("mb_id");
-  	$echange_soap->destinataire = $this->wsdl;
-  	$echange_soap->type         = $this->type_echange_soap;
+    $echange_soap = new CEchangeSOAP();
+    $echange_soap->date_echange = mbDateTime();
+    $echange_soap->emetteur     = CAppUI::conf("mb_id");
+    $echange_soap->destinataire = $this->wsdl;
+    $echange_soap->type         = $this->type_echange_soap;
 
-		$url  = parse_url($this->wsdl);
-		$path = explode("/",$url['path']);
-  	$echange_soap->web_service_name = end($path);
-  	
-  	$echange_soap->function_name = $function_name;
-  	
-   	$phpChrono->stop();
-  	$chrono = new Chronometer();
+    $url  = parse_url($this->wsdl);
+    $path = explode("/",$url['path']);
+    $echange_soap->web_service_name = end($path);
+    
+    $echange_soap->function_name = $function_name;
+    
+    $phpChrono->stop();
+    $chrono = new Chronometer();
     $chrono->start();
 
     try {
-  	  $output = parent::__soapCall($function_name, $arguments, $options, $input_headers, $output_headers);
-  	} 
-		catch(SoapFault $fault) {
-  		// trace
+      $output = parent::__soapCall($function_name, $arguments, $options, $input_headers, $output_headers);
+    } 
+    catch(SoapFault $fault) {
+      // trace
       if (CAppUI::conf("webservices trace")) {
         $echange_soap->trace                 = true;
         $echange_soap->last_request_headers  = $this->__getLastRequestHeaders();
@@ -103,13 +107,13 @@ class CMbSOAPClient extends SoapClient {
         $echange_soap->last_response         = $this->__getLastResponse();
       }
     
-  	  $echange_soap->output    = $fault->faultstring;
-  		$echange_soap->soapfault = 1;
-  		$echange_soap->store();
-  		
+      $echange_soap->output    = $fault->faultstring;
+      $echange_soap->soapfault = 1;
+      $echange_soap->store();
+      
       $phpChrono->start();
       
-  		throw $fault;
+      throw $fault;
     }
     $chrono->stop();
     $phpChrono->start();
@@ -128,49 +132,49 @@ class CMbSOAPClient extends SoapClient {
 
     // Truncate input and output before storing
     $arguments = array_map_recursive(array("CMbSOAPClient", "truncate"), $arguments);
-		
+    
     $echange_soap->input = serialize($arguments);
     if ($echange_soap->soapfault != 1) {
-    	$echange_soap->output = serialize(array_map_recursive(array("CMbSOAPClient", "truncate"), $output));
+      $echange_soap->output = serialize(array_map_recursive(array("CMbSOAPClient", "truncate"), $output));
     }
     $echange_soap->store();
-  	
-  	return $output;
+    
+    return $output;
   }
   
-	static public function truncate($string) {
+  static public function truncate($string) {
     if (!is_string($string)) {
       return $string;
     }
 
-		// Truncate
-		$max = 1024;		
-		$result = CMbString::truncate($string, $max);
-		
-		// Indicate true size
-		$length = strlen($string);
+    // Truncate
+    $max = 1024;    
+    $result = CMbString::truncate($string, $max);
+    
+    // Indicate true size
+    $length = strlen($string);
     if ($length > 1024) {
       $result .= " [$length bytes]";
     }
-		
-		return $result;
-	}
-	
-  static public function make($rooturl, $login = null, $password = null, $type = null, $options = array()) {
-  	if (!url_exists($rooturl)) {
-  		throw new CMbException("CSourceSOAP-unreachable-source", $rooturl);
-  	}
+    
+    return $result;
+  }
+  
+  static public function make($rooturl, $login = null, $password = null, $type = null, $options = array(), $loggable = null) {
+    if (!url_exists($rooturl)) {
+      throw new CMbException("CSourceSOAP-unreachable-source", $rooturl);
+    }
 
-  	if (($login && $password) || (array_key_exists('login', $options) && array_key_exists('password', $options))) {
+    if (($login && $password) || (array_key_exists('login', $options) && array_key_exists('password', $options))) {
 
-  		if (preg_match('#\%u#', $rooturl)) 
+      if (preg_match('#\%u#', $rooturl)) 
         $rooturl = str_replace('%u', $login ? $login : $options['login'], $rooturl);
     
-	    if (preg_match('#\%p#', $rooturl)) 
-	      $rooturl = str_replace('%p', $password ? $password : $options['password'], $rooturl);
-  	}
+      if (preg_match('#\%p#', $rooturl)) 
+        $rooturl = str_replace('%p', $password ? $password : $options['password'], $rooturl);
+    }
 
-    if (!$client = new CMbSOAPClient($rooturl, $type, $options)) {
+    if (!$client = new CMbSOAPClient($rooturl, $type, $options, $loggable)) {
       throw new CMbException("CSourceSOAP-soapclient-impossible");
     }
     
