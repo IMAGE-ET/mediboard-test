@@ -38,6 +38,9 @@ if (null == $lineCount = $ds->queryDump($targetPath)) {
 
 CAppUI::stepAjax("Import effectué avec succès de $lineCount lignes", UI_MSG_OK);
 
+unlink($targetPath);
+rmdir($targetDir);
+
 /*
 $path = "/path/to/hl7_tables";
 

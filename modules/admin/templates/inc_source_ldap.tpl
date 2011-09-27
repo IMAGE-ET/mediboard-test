@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<table class="main"> 
+<table class="main form"> 
   <tr>
     <td>
       <form name="edit_source_ldap" action="?" method="post" 
@@ -123,64 +123,55 @@
           },
         }
       </script>
-      <table class="tbl">
+      <table class="main form">
         <tr>
-          <th class="category" colspan="100">
+          <th class="category" colspan="2">
             {{tr}}utilities-source-ldap{{/tr}}
           </th>
         </tr>
         
         <!-- Test d'authentification -->
         <tr>
-          <td class="narrow">
-            <table class="tbl">
-              <tr>
-                <td colspan="2">
-                  <button type="button" class="tick" onclick="LDAP.bind('{{$source_ldap->_id}}');">
-                    {{tr}}utilities-source-ldap-bind{{/tr}}
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>DN ou RDN LDAP </td>
-                <td><input type="text" name="ldaprdn" id="ldaprdn" value=""/></td>
-              </tr>
-              <tr>
-                <td>Mot de passe associé</td>
-                <td><input type="text" name="ldappass" id="ldappass" value=""/></td>
-              </tr>
-            </table>
+          <td colspan="2">
+            <button type="button" class="tick" onclick="LDAP.bind('{{$source_ldap->_id}}');">
+              {{tr}}utilities-source-ldap-bind{{/tr}}
+            </button>
           </td>
-          <td id="utilities-source-ldap-bind-{{$source_ldap->_id}}" class="text"></td>
+        </tr>
+        <tr>
+          <th>DN ou RDN LDAP </th>
+          <td><input type="text" name="ldaprdn" id="ldaprdn" value=""/></td>
+        </tr>
+        <tr>
+          <th>Mot de passe associé</th>
+          <td><input type="text" name="ldappass" id="ldappass" value=""/></td>
+        </tr>
+        <tr>
+          <td colspan="2" id="utilities-source-ldap-bind-{{$source_ldap->_id}}" class="text"></td>
         </tr>
         
         <!-- Test de recherche -->
         <tr>
-          <td class="narrow">
-            <table class="tbl">
-              <tr>
-                <td colspan="2">
-                  <button type="button" class="tick" onclick="LDAP.search('{{$source_ldap->_id}}');">
-                    {{tr}}utilities-source-ldap-search{{/tr}}
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>Filtre de recherche</td>
-              </tr>
-              <tr>
-                <td><textarea name="filter" id="filter">(samaccountname=*)</textarea></td>
-              </tr>
-              <tr>
-                <td>Attributs retournés (ex : mail, sn, cn)</td>
-              </tr>
-              <tr>
-                <td><textarea name="attributes" id="attributes">samaccountname, useraccountcontrol, sn, givenname, mail</textarea>
-                </td>
-              </tr>
-            </table>
+          <td colspan="2">
+            <button type="button" class="tick" onclick="LDAP.search('{{$source_ldap->_id}}');">
+              {{tr}}utilities-source-ldap-search{{/tr}}
+            </button>
           </td>
-          <td id="utilities-source-ldap-search-{{$source_ldap->_id}}" class="text"></td>
+        </tr>
+        <tr>
+          <td colspan="2">Filtre de recherche</td>
+        </tr>
+        <tr>
+          <td colspan="2"><textarea name="filter" id="filter">(samaccountname=*)</textarea></td>
+        </tr>
+        <tr>
+          <td colspan="2">Attributs retournés (ex : mail, sn, cn)</td>
+        </tr>
+        <tr>
+          <td colspan="2"><textarea name="attributes" id="attributes">samaccountname, useraccountcontrol, sn, givenname, mail</textarea></td>
+				</tr>
+				<tr>
+          <td id="utilities-source-ldap-search-{{$source_ldap->_id}}" class="text" colspan="2"></td>
         </tr>
       </table>
     </td>

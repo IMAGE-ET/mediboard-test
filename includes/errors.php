@@ -173,7 +173,7 @@ function mbExport($var, $label = null, $log = false) {
 function print_infos($var, $name = '') {
   if (empty($var)) return;
   
-  $ret = "\n<pre><a href='#1' onclick='var s=this.parentNode.childNodes[1].style;s.display=s.display==\"none\"?\"\":\"none\";return false;'>$name</a>";
+  $ret = "\n<pre><a href='#1' onclick='var s=this.parentNode.getElementsByTagName(\"span\")[0].style;s.display=s.display==\"none\"?\"\":\"none\";return false;'>$name</a>";
   
   if ($name == "GET") {
     $ret .= " - <a href='?".http_build_query($var, true, "&")."' target='_blank'>Link</a>";
