@@ -135,6 +135,10 @@ Main.add(function () {
             </td>
           </tr>
         </table>
+        {{if $ecap_installed}}
+          <br />
+          <a class="button hslip" href="?m=ecap&tab=vw_anap" title="Redirection vers l'onglet ANAP">ANAP</a>
+        {{/if}}
       </td>
       <td style="white-space: normal;">
         {{foreach from=$axes key=_axis item=_label}}
