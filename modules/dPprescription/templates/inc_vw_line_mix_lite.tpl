@@ -47,9 +47,9 @@
           </a>
       {{/if}}
     {{else}}
-      <input type="checkbox" {{if $checked_lines}}checked="checked"{{/if}} name="_view_{{$_line->_guid}}"
+      <input type="checkbox" {{if $checked_lines}}checked="checked"{{/if}} name="_view_{{$_prescription_line_mix->_guid}}"
         onchange="$V(this.next(), this.checked ? 1 : 0)"/>
-      <input type="hidden" value="{{$checked_lines}}" name="lines[{{$_line->_guid}}]" />
+      <input type="hidden" value="{{$checked_lines}}" name="lines[{{$_prescription_line_mix->_guid}}]" />
     {{/if}}
   </td>
   <td style="width: 45%" class="text">
