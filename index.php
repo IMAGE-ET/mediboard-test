@@ -34,8 +34,8 @@ $performance = array(
   // Cache
   "cachableCount" => null,
   "cachableCounts" => null,
-	
-	// Objects
+  
+  // Objects
   "objectCounts" => null,
 );
 
@@ -139,10 +139,17 @@ if (CValue::get("ldap_guid")) {
 
 // check if the user is trying to log in
 if (isset($_REQUEST["login"])) {
+  $login_action = $_REQUEST["login"];
+  
+  // login with "login=user:password"
+  if (strpos($login_action, ":") !== false) {
+    list($_REQUEST["username"], $_REQUEST["password"]) = explode(":", $login_action, 2);
+  }
+  
   include "./locales/core.php";
   if (null == $ok = CAppUI::login()) {
     CAppUI::$instance->user_id = null;
-		
+    
     // we delete the session in case the user was deactivated
     CAppUI::setMsg("Auth-failed", UI_MSG_ERROR);
   }
