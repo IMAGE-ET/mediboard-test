@@ -181,15 +181,15 @@ foreach($listDays as $keyDate=>$valDate){
 
   foreach($listPlages[$keyDate] as $plage){
     $plage->_nb_intervals = mbTimeCountIntervals($plage->debut, $plage->fin, "00:".CPlageconsult::$minutes_interval.":00");
-    $i = 0;
+    $j = 0;
     for($time = $plage->debut; $time <= $plage->fin; $time = mbTime("+".CPlageconsult::$minutes_interval." minutes", $time) ){
       // Si la plage se finit à 23h59, alors on sort losque tous les créneaux sont passés.
       // time vaut alors 00:00:00, mais de la journée suivante.
-      if ($i == $plage->_nb_intervals) {
+      if ($j == $plage->_nb_intervals) {
         break;
       }
       $affichages["$keyDate $time"] = "full";
-      $i++;
+      $j++;
     } 
     $affichages["$keyDate $plage->debut"] = $plage->_id;
   }
