@@ -297,7 +297,7 @@
           R: 
         {{/if}}
       </strong>
-      {{$_trans->text}} <br />
+      {{$_trans->text|nl2br|smarty:nodefaults}} <br />
     {{/foreach}}
   </td>
   
