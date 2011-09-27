@@ -107,21 +107,6 @@
         </tr>
         <tr>
           <td colspan="2">
-            {{if $patient->nom}}
-              <div class="cellule_patient">
-                <strong>{{mb_label object=$patient field="nom"}}</strong>
-                {{mb_value object=$patient field="nom"}}
-              </div>
-            {{/if}}
-            {{if $patient->prenom}}
-              <div class="cellule_patient">
-                <strong>{{mb_label object=$patient field="prenom"}}</strong>
-                {{mb_value object=$patient field="prenom"}}{{if $patient->prenom_2}}, 
-                {{mb_value object=$patient field="prenom_2"}}{{/if}}{{if $patient->prenom_3}}, 
-                {{mb_value object=$patient field="prenom_3"}}{{/if}}{{if $patient->prenom_4}}, 
-                {{mb_value object=$patient field="prenom_4"}} {{/if}}
-              </div>
-            {{/if}}
             {{if $patient->nom_jeune_fille}}
               <div class="cellule_patient">
                 <strong>{{mb_label object=$patient field="nom_jeune_fille"}}</strong>
