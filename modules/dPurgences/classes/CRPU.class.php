@@ -123,7 +123,7 @@ class CRPU extends CMbObject {
       "circonstance"     => "str",
     
       "_DP"              => "code cim10 show|1",
-      "_mode_entree"     => "enum list|6|7|8",
+      "_mode_entree"     => "enum list|6|7|8 notNull",
       "_mode_sortie"     => "enum list|6|7|8|9 default|8",
       "_sortie"          => "dateTime",
       "_patient_id"      => "ref notNull class|CPatient",
