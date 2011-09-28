@@ -133,7 +133,7 @@ span.page:before {
     width: 100%;
     position: fixed;
     overflow: hidden;
-    border: 0 solid #888;
+    border: none;
   }
   
   table {
