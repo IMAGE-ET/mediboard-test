@@ -231,7 +231,7 @@ Main.add( function(){
         <input class="valeur" type="hidden" name="decalage_prise" value="" />
         <button type="button" 
                 class="submit" 
-                onclick="this.form.onsubmit()">Signer les éléments sélectionnés</button>
+                onclick="this.form.onsubmit()">{{if $prescription->object_id}}Signer{{else}}Appliquer{{/if}} les éléments sélectionnés</button>
       </form>
     </td>
   </tr>
