@@ -96,7 +96,9 @@ Main.add( function(){
 	  $V(getForm("all_adm").adm, $V(window.opener.getForm('adm_multiple')._administrations));
   {{/if}}
 	
-	$("multiple_adm_button").focus();
+	if($("multiple_adm_button")){
+   $("multiple_adm_button").focus();
+	}
 } );
 
 </script>
