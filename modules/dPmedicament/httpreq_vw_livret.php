@@ -26,7 +26,7 @@ if($lettre == "hors_T2A"){
   $produits_livret = CBcbProduit::getHorsT2ALivret($function_guid);
 } else {
 	// Chargement des produits du livret therapeutique
-	$produits_livret = CBcBProduit::loadRefLivretTherapeutique($function_guid, $lettre, 200);
+	$produits_livret = CBcbProduit::loadRefLivretTherapeutique($function_guid, $lettre, 200);
 }
 
 $tabLettre = range('A', 'Z');
