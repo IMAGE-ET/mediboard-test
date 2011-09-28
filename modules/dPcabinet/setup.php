@@ -1362,13 +1362,19 @@ class CSetupdPcabinet extends CSetup {
     
     $query = "UPDATE `plageconsult`
      SET `remplacant_id`=NULL WHERE `remplacant_id` = '0'";
+
     $this->addQuery($query);
-    
     $this->makeRevision("1.35");
     $this->addPrefQuery("displayDocsConsult", "1");
     $this->addPrefQuery("displayPremedConsult", "1");
     $this->addPrefQuery("displayResultsConsult", "1");
     
+    $this->makeRevision("1.34");
+    $query = "UPDATE `consultation`
+      SET chrono = '16'
+      WHERE annule = '1'";
+    $this->addQuery($query);
+        
     $this->mod_version = "1.36";
   }
 }

@@ -65,28 +65,19 @@ function ClearRDV(){
   $V(oForm.heure, "");
 }
 
-function annuleConsult(oForm, etat) {
-  if(etat) {
-    if(confirm("Voulez-vous vraiment annuler cette consultation ?")) {
-      oForm.chrono.value = {{$consult|const:'TERMINE'}};
-    } else {
-      return;
-    }
-  } else {
-    if(confirm("Voulez-vous vraiment rétablir cette consultation ?")) {
-      oForm.chrono.value = {{$consult|const:'PLANIFIE'}};
-    } else {
-      return;
-    }
+function annuleConsult(form, value) {
+  if (!confirm($T('CConsultation-confirm-cancel-'+value))) {
+    return;
   }
-  oForm.annule.value = etat;
-  if(checkForm(oForm)) {
-    oForm.submit();
+
+  $V(form.annule, value);
+  if (checkForm(form)) {
+    form.submit();
   }
 }
 
 function checkFormRDV(oForm){
-  if(!oForm._pause.checked && oForm.patient_id.value == ""){
+  if(!form._pause.checked && form.patient_id.value == ""){
     alert("Veuillez sélectionner un patient");
     PatSelector.init();
     return false;
@@ -95,9 +86,9 @@ function checkFormRDV(oForm){
     var operations = infoPat.select('input[name=_operation_id]');
     var checkedOperation = operations.find(function (o) {return o.checked});
     if (checkedOperation) {
-      oForm._operation_id.value = checkedOperation.value;
+      form._operation_id.value = checkedOperation.value;
     }
-    return checkForm(oForm);
+    return checkForm(form);
   }
 }
 
@@ -109,10 +100,10 @@ function printForm() {
 }
 
 function printDocument(iDocument_id) {
-	var oForm = getForm("editFrm");
+	var form = getForm("editFrm");
   if (iDocument_id.value != 0) {
     var url = new Url("dPcompteRendu", "edit_compte_rendu");
-    url.addElement(oForm.consultation_id, "object_id");
+    url.addElement(form.consultation_id, "object_id");
     url.addElement(iDocument_id, "modele_id");
     url.popup(700, 600, "Document");
     return true;
@@ -121,22 +112,22 @@ function printDocument(iDocument_id) {
 }
 
 checkCorrespondantMedical = function(){
-  oForm = getForm("editFrm");
+  form = getForm("editFrm");
   var url = new Url("dPplanningOp", "ajax_check_correspondant_medical");
-  url.addParam("patient_id", $V(oForm.patient_id));
-  url.addParam("object_id" , $V(oForm.consultation_id));
+  url.addParam("patient_id", $V(form.patient_id));
+  url.addParam("object_id" , $V(form.consultation_id));
   url.addParam("object_class", '{{$consult->_class}}');
   url.requestUpdate("correspondant_medical");
 }
 
 Main.add(function () {
-  var oForm = getForm("editFrm");
+  var form = getForm("editFrm");
 
   requestInfoPat();
 
   {{if $plageConsult->_id && !$consult->_id}}
-  $V(oForm.chir_id, '{{$plageConsult->chir_id}}');
-  $V(oForm.plageconsult_id, '{{$plageConsult->_id}}');
+  $V(form.chir_id, '{{$plageConsult->chir_id}}');
+  $V(form.plageconsult_id, '{{$plageConsult->_id}}');
   refreshListCategorie({{$plageConsult->chir_id}});
   PlageConsultSelector.init();
   {{/if}}
@@ -344,6 +335,7 @@ Main.add(function () {
             <td>
               <input type="text" name="heure" value="{{$consult->heure}}" style="width: 15em;" onfocus="PlageConsultSelector.init()" readonly="readonly" />
               {{if $consult->patient_id}}
+              ({{$consult->_etat}})
               <br />
               <a class="button new" href="?m=dPcabinet&tab=edit_planning&pat_id={{$consult->patient_id}}&consultation_id=0">Nouveau RDV pour ce patient</a>
               {{/if}}
@@ -453,7 +445,7 @@ Main.add(function () {
         <tr>
           <td class="button">
           {{if $consult->_id}}
-            {{if !$consult->_locks}}
+            {{if !$consult->_locks || $can->admin}}
               <button class="modify" type="submit">
               	{{tr}}Edit{{/tr}}
               </button>
