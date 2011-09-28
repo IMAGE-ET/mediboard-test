@@ -69,8 +69,8 @@
   </tr>
   
   <tr> 
-    <th>{{mb_label object=$rpu field="mode_entree"}}</th>
-    <td>{{mb_value object=$rpu field="mode_entree"}}</td>
+    <th>{{mb_label object=$sejour field="mode_entree"}}</th>
+    <td>{{mb_value object=$sejour field="mode_entree"}}</td>
 		
 		<th>{{mb_label object=$rpu field="provenance"}}</th>
     <td>{{mb_value object=$rpu field="provenance"}}</td>

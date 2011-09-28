@@ -65,6 +65,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $repas_sans_sel     = null;
   var $repas_sans_residu  = null;
   var $repas_sans_porc    = null;
+  var $mode_entree        = null;
   var $mode_sortie        = null;
   var $prestation_id      = null;
   var $facturable         = null; 
@@ -271,6 +272,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["repas_sans_sel"]      = "bool";
     $props["repas_sans_residu"]   = "bool";
     $props["repas_sans_porc"]     = "bool";
+    $props["mode_entree"]         = "enum list|6|7|8";
     $props["mode_sortie"]         = "enum list|normal|transfert|mutation|deces default|normal";
     $props["prestation_id"]       = "ref class|CPrestation";
     $props["facturable"]          = "bool notNull default|1 show|0";
@@ -1655,6 +1657,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $template->addDateProperty("Sejour - Date sortie réelle"  , $this->sortie_reelle);
     $template->addTimeProperty("Sejour - Heure sortie réelle" , $this->sortie_reelle);
     
+    $template->addProperty("Sejour - Mode d'entrée"           , $this->getFormattedValue("mode_entree"));
     $template->addProperty("Sejour - Mode de sortie"          , $this->getFormattedValue("mode_sortie"));
     $template->addProperty("Sejour - Service de sortie"       , $this->getFormattedValue("service_mutation_id"));
     $template->addProperty("Sejour - Etablissement de sortie" , $this->getFormattedValue("etablissement_transfert_id"));

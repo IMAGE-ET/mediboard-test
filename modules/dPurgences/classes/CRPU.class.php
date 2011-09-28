@@ -19,7 +19,6 @@ class CRPU extends CMbObject {
   // DB Fields
   var $sejour_id       = null;
   var $diag_infirmier  = null;
-  var $mode_entree     = null;
   var $provenance      = null;
   var $transport       = null;
   var $pec_transport   = null;
@@ -85,6 +84,7 @@ class CRPU extends CMbObject {
   // Behaviour fields
   var $_bind_sejour = null;
   var $_sortie          = null;
+  var $_mode_entree     = null;
   var $_mode_sortie     = null;
   var $_date_at         = null;
   function getSpec() {
@@ -101,7 +101,6 @@ class CRPU extends CMbObject {
       "sejour_id"        => "ref notNull class|CSejour cascade",
       "diag_infirmier"   => "text helped",
       "pec_douleur"      => "text helped",
-      "mode_entree"      => "enum list|6|7|8 notNull",
       "provenance"       => "enum list|1|2|3|4|5|8",
       "transport"        => "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo notNull",
       "pec_transport"    => "enum list|med|paramed|aucun",
@@ -124,6 +123,7 @@ class CRPU extends CMbObject {
       "circonstance"     => "str",
     
       "_DP"              => "code cim10 show|1",
+      "_mode_entree"     => "enum list|6|7|8",
       "_mode_sortie"     => "enum list|6|7|8|9 default|8",
       "_sortie"          => "dateTime",
       "_patient_id"      => "ref notNull class|CPatient",
@@ -199,6 +199,7 @@ class CRPU extends CMbObject {
     	$this->_mode_sortie = 9;
     }
     
+    $this->_mode_entree = $sejour->mode_entree;
     $this->_sortie = $sejour->sortie_reelle;
     $this->_etablissement_transfert_id = $sejour->etablissement_transfert_id;
 		$this->_etablissement_entree_transfert_id = $sejour->etablissement_entree_transfert_id;
@@ -312,11 +313,12 @@ class CRPU extends CMbObject {
     $sejour->service_id    = $this->_service_id;
     $sejour->etablissement_entree_transfert_id = $this->_etablissement_entree_transfert_id;
 		$sejour->service_entree_mutation_id = $this->_service_entree_mutation_id;
-
+    $sejour->mode_entree = $this->_mode_entree;
+    
     // Le patient est souvent chargé à vide ce qui pose problème
     // dans le onAfterStore(). Ne pas supprimer.
     $sejour->_ref_patient = null;
-
+    
     if ($msg = $sejour->store()) {
       return $msg;
     }
@@ -352,9 +354,9 @@ class CRPU extends CMbObject {
         $this->_bind_sejour = false;
       }
     }
-
+    
 		// Changement suivant le mode d'entrée
-		switch ($this->mode_entree) {
+		switch ($this->_mode_entree) {
 			case 6:
 			  $this->_etablissement_entree_transfert_id = "";
 			  break;
@@ -433,7 +435,6 @@ class CRPU extends CMbObject {
 	  
 	  $template->addProperty("RPU - Diagnostic infirmier"         , $this->diag_infirmier);
 	  $template->addProperty("RPU - Prise en charge douleur"      , $this->pec_douleur);
-    $template->addProperty("RPU - Mode d'entrée"                , $this->getFormattedValue("mode_entree"));
     $template->addProperty("RPU - Transport"                    , $this->getFormattedValue("transport"));
     $template->addProperty("RPU - PeC Transport"                , $this->getFormattedValue("pec_transport"));
     $template->addProperty("RPU - Motif"                        , $this->motif);

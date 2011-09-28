@@ -269,8 +269,8 @@
 	      </select>
 	    </td>
 	    
-	    <th>{{mb_label object=$rpu field="mode_entree"}}</th>
-	    <td>{{mb_field object=$rpu field="mode_entree" style="width: 15em;" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true); changeModeEntree(this.value)"}}</td>
+	    <th>{{mb_label object=$rpu field="_mode_entree"}}</th>
+	    <td>{{mb_field object=$rpu field="_mode_entree" style="width: 15em;" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true); changeModeEntree(this.value)"}}</td>
 	  </tr>
 	  
 	  <tr>
@@ -574,10 +574,10 @@
 	{{/if}}
 	
 	
-	{{if $rpu->mode_entree}}
+	{{if $sejour->mode_entree}}
 	<script type="text/javascript">
   	// Lancement des fonctions de contraintes entre les champs
-  	ContraintesRPU.updateProvenance("{{$rpu->mode_entree}}");
+  	ContraintesRPU.updateProvenance("{{$sejour->mode_entree}}");
 	</script>
 	{{/if}}
 {{/if}}

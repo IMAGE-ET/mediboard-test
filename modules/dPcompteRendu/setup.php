@@ -580,7 +580,12 @@ class CSetupdPcompteRendu extends CSetup {
               ADD `fast_edit_pdf` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.65";
+    $this->makeRevision("0.65");
+    $query = self::replaceTemplateQuery("[RPU - Mode", "[Sejour - Mode", true);
+    
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.66";
     
   }
 }

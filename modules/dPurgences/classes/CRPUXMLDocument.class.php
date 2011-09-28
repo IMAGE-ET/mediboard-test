@@ -77,7 +77,7 @@ class CRPUXMLDocument extends CMbXMLDocument {
     $this->addElement($elParent, "SEXE", strtoupper($mbObject->_sexe));
     
     $this->addElement($elParent, "ENTREE", mbTransformTime($mbObject->_entree, null, "%d/%m/%Y %H:%M"));
-    $this->addElement($elParent, "MODE_ENTREE", $mbObject->mode_entree);
+    $this->addElement($elParent, "MODE_ENTREE", $mbObject->_ref_sejour->mode_entree);
     $this->addElement($elParent, "PROVENANCE", $mbObject->provenance);
     if ($mbObject->transport == "perso_taxi") {
       $mbObject->transport = "perso";

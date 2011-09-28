@@ -1127,7 +1127,16 @@ class CSetupdPplanningOp extends CSetup {
                 ADD INDEX (`discipline_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.22";
+    $this->makeRevision("1.22");
+    $query = "ALTER TABLE `sejour`
+      ADD `mode_entree` ENUM('6','7','8') AFTER `codes_ccam`;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `sejour`
+      ADD INDEX (`mode_entree`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.23";
     
   }
 }

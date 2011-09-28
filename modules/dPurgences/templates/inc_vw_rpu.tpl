@@ -102,6 +102,8 @@ function showEtabEntreeTransfert(mode) {
 
 </script>
 
+{{assign var=sejour value=$rpu->_ref_sejour}}
+
 <table class="form">
   <tr>
     <td class="halfPane">
@@ -164,16 +166,16 @@ function showEtabEntreeTransfert(mode) {
             </tr>
             
             <tr> 
-              <th>{{mb_label object=$rpu field="mode_entree"}}</th>
-              <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true); showEtabEntreeTransfert(this.value); this.form.onsubmit();"}}</td>
+              <th>{{mb_label object=$rpu field="_mode_entree"}}</th>
+              <td>{{mb_field object=$rpu field="_mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true); showEtabEntreeTransfert(this.value); this.form.onsubmit();"}}</td>
             </tr>
             
-            <tr id="etablissement_entree_transfert" {{if $rpu->mode_entree != '7'}}style="display:none"{{/if}}>
+            <tr id="etablissement_entree_transfert" {{if $sejour->mode_entree != '7'}}style="display:none"{{/if}}>
               <th>{{mb_label object=$rpu field="_etablissement_entree_transfert_id"}}</th>
               <td>{{mb_field object=$rpu field="_etablissement_entree_transfert_id" form="editRPU" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}</td> 
             </tr>
             
-            <tr id="service_entree_transfert" {{if $rpu->mode_entree != '6'}}style="display:none"{{/if}}>
+            <tr id="service_entree_transfert" {{if $sejour->mode_entree != '6'}}style="display:none"{{/if}}>
               <th>{{mb_label object=$rpu field="_service_entree_mutation_id"}}</th>
               <td>
                 {{mb_field object=$rpu field="_service_entree_mutation_id" form="editRPU" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}
@@ -254,7 +256,6 @@ function showEtabEntreeTransfert(mode) {
            </table>
          </form>
      
-        {{assign var=sejour value=$rpu->_ref_sejour}}
         {{mb_include module=dPurgences template=inc_form_sortie}}
 
       </fieldset>
@@ -352,10 +353,9 @@ function showEtabEntreeTransfert(mode) {
 </table>
 
 <script type="text/javascript">
-
 // Lancement des fonctions de contraintes entre les champs
-{{if $rpu->mode_entree}}
-ContraintesRPU.updateProvenance("{{$rpu->mode_entree}}");
+{{if $sejour->mode_entree}}
+  ContraintesRPU.updateProvenance("{{$rpu->_mode_entree}}");
 {{/if}}
 
 {{if $sejour->mode_sortie}}

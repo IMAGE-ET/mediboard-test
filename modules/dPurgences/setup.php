@@ -279,7 +279,16 @@ class CSetupdPurgences extends CSetup {
     $query = "ALTER TABLE `rpu` CHANGE `accident_travail` `date_at` DATE DEFAULT NULL";
     $this->addQuery($query);
     
-    $this->mod_version = "0.33";
+    $this->makeRevision("0.33");
+    $this->addDependency("dPplanningOp", "1.23");
+    $query = "UPDATE `sejour`,`rpu` SET `sejour`.`mode_entree` = `rpu`.`mode_entree` WHERE `rpu`.`sejour_id` = `sejour`.`sejour_id`;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `rpu`
+      DROP `mode_entree`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.34";
   }  
 }
 

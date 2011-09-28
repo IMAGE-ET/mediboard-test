@@ -269,7 +269,6 @@ switch ($axe) {
   
   // Sur le RPU
   case "ccmu":
-  case "mode_entree":
   case "provenance":
   case "destination":
   case "orientation":
@@ -300,6 +299,7 @@ switch ($axe) {
     break;
     
   // Sur le séjour
+  case "mode_entree":
   case "mode_sortie":
     $data[$axe] = array(
       "options" => array(
