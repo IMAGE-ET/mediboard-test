@@ -272,7 +272,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["repas_sans_sel"]      = "bool";
     $props["repas_sans_residu"]   = "bool";
     $props["repas_sans_porc"]     = "bool";
-    $props["mode_entree"]         = "enum list|6|7|8";
+    $props["mode_entree"]         = "enum list|6|7|8 notNull";
     $props["mode_sortie"]         = "enum list|normal|transfert|mutation|deces default|normal";
     $props["prestation_id"]       = "ref class|CPrestation";
     $props["facturable"]          = "bool notNull default|1 show|0";
