@@ -1369,13 +1369,13 @@ class CSetupdPcabinet extends CSetup {
     $this->addPrefQuery("displayPremedConsult", "1");
     $this->addPrefQuery("displayResultsConsult", "1");
     
-    $this->makeRevision("1.34");
+    $this->makeRevision("1.36");
     $query = "UPDATE `consultation`
       SET chrono = '16'
       WHERE annule = '1'";
     $this->addQuery($query);
         
-    $this->mod_version = "1.36";
+    $this->mod_version = "1.37";
   }
 }
 ?>
