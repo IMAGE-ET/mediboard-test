@@ -35,7 +35,7 @@ deliveryTraceInfo = function(delivery_trace_id) {
         {{/foreach}}
         </select>
       </td>
-      <th>{{mb_label object=$delivery_trace field=delivery_trace_id}}</th>
+      <th><strong>OU</strong> {{mb_label object=$delivery_trace field=delivery_trace_id}}</th>
       <td>{{mb_field object=$delivery_trace field=delivery_trace_id}}</td>
 			<td><button type="submit" class="search">{{tr}}Search{{/tr}}</button></td>
 		</tr>

@@ -27,12 +27,17 @@ $delivery->service_id = $service_id;
 $delivery_trace = new CProductDeliveryTrace;
 $delivery_trace->delivery_trace_id = $delivery_trace_id;
 
-$where = array(
-  "product_delivery_trace.date_delivery" => "BETWEEN '$datetime_min' AND '$datetime_max'",
-);
+$where = array();
 
-if ($service_id) {
-  $where["product_delivery.service_id"] = "= '$service_id'";
+if ($delivery_trace_id) {
+  $where["product_delivery_trace.delivery_trace_id"] = "= '$delivery_trace_id'";
+}
+else {
+	$where["product_delivery_trace.date_delivery"] = "BETWEEN '$datetime_min' AND '$datetime_max'";
+	
+	if ($service_id) {
+	  $where["product_delivery.service_id"] = "= '$service_id'";
+	}
 }
 
 $ljoin = array(
