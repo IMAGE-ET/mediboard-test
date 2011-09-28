@@ -9,6 +9,11 @@
 *}}
 
 <script>
+  function addHL7v2TableDescription() {
+	  var url = new Url("hl7", "ajax_add_hl7v2_table_description");
+	  url.requestModal(400, 200);
+  }
+  
   function loadEntries(table_number, element) {
 	  if (element)
 	   element.up('tr').addUniqueClassName('selected');
@@ -17,6 +22,11 @@
 	  url.requestUpdate("entries");
   }
 
+  function loadTables() {
+    var url = new Url("hl7", "ajax_refresh_tables");
+    url.requestUpdate("tables");
+  }
+  
   function changePage(page) {
 	  $V(getForm('listFilter').page,page);
 	}
@@ -32,32 +42,14 @@
 
 <table class="main">
   <tr>
-    <td style="width: 30%">   
-      <form name="listFilter" action="?m={{$m}}" method="get">
-        <input type="hidden" name="m" value="{{$m}}" />
-        <input type="hidden" name="tab" value="{{$tab}}" />
-        <input type="hidden" name="page" value="{{$page}}" onchange="this.form.submit()"/>
-        
-        <table class="form">
-          <tr>
-            <th class="title" colspan="10">
-              {{tr}}Filter{{/tr}}
-            </th>
-          </tr>
-          <tr>
-            <td colspan="2" style="text-align: center">
-              <input type="text" name="keywords" value="{{$keywords}}" onchange="$V(this.form.page, 0)" />
-              <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
-            </td>
-          </tr>
-        </table>
-           
-        {{if $total_tables != 0}}
-          {{mb_include module=system template=inc_pagination total=$total_tables current=$page change_page='changePage' step='25' narrow=true}}
-        {{/if}}
-      </form>
-      
-       {{mb_include template=inc_list_hl7v2_tables}}
+    <td style="width: 30%">  
+      <button class="new" onclick="addHL7v2TableDescription()"> {{tr}}CHL7v2TableDescription-title-create{{/tr}} </button>
+    </td>
+    <td></td>
+  </tr>
+  <tr>
+    <td id="tables">
+      {{mb_include template=inc_list_hl7v2_tables}}
     </td>
     <td id="entries">
       {{mb_include template=inc_hl7v2_table_entries}}

@@ -28,7 +28,6 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     $receiver = $event->_receiver;
     $group    = $receiver->_ref_group;
     
-    $sejour  = new CSejour();
     $sejour  = $this->sejour;
     
     $data = array();

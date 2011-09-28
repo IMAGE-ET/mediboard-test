@@ -107,7 +107,7 @@ class CSetup {
    * @param string $query  SQL query
    * @param bool   $ignore Ignore errors if true
    */
-  function addQuery($query, $ignore_errors = false) {
+  function addQuery($query, $ignore_errors = false, $dsn = null) {
     // Table creation ?
     if (preg_match("/CREATE\s+TABLE\s+(\S+)/i", $query, $matches)) {
       $table = trim($matches[1], "`");
@@ -126,7 +126,7 @@ class CSetup {
       $this->dropTable($table);
     }
     
-    $this->queries[current($this->revisions)][] = array($query, $ignore_errors);
+    $this->queries[current($this->revisions)][] = array($query, $ignore_errors, $dsn);
   }
   
   /**
@@ -267,8 +267,10 @@ class CSetup {
 
       // Query upgrading
       foreach ($this->queries[$currRevision] as $_query) {
-        list($query, $ignore_errors) = $_query;
-        if (!$this->ds->exec($query)) {
+        list($query, $ignore_errors, $dsn) = $_query;
+        $ds = ($dsn ? CSQLDataSource::get($dsn) : $this->ds); 
+        
+        if (!$ds->exec($query)) {
           if ($ignore_errors) {
             CAppUI::setMsg("Errors ignored for revision '%s'", UI_MSG_OK, $currRevision);
             continue;

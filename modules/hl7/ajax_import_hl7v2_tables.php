@@ -13,11 +13,7 @@ CCanDo::checkAdmin();
 $ds = CSQLDataSource::get("hl7v2");
 
 if ($ds && $ds->loadTable("table_entry")) {
-	$table_entry = new CHL7v2TableEntry();
-	$where[]     =  "(user = '1') OR (code_mb_from IS NOT NULL) OR (code_mb_to IS NOT NULL)";
-	if ($table_entry->countList($where) > 0) {
-	  CAppUI::stepAjax("Des données ont été saisies manuellement - Import impossible", UI_MSG_ERROR);
-	}
+  CAppUI::stepAjax("La table a déjà été importée - Import impossible", UI_MSG_ERROR);
 }
 
 $sourcePath = "modules/hl7/base/hl7v2.tar.gz";

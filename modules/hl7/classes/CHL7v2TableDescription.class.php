@@ -24,6 +24,7 @@ class CHL7v2TableDescription extends CHL7v2TableObject {
   // DB Fields
   var $number               = null;
   var $description          = null;
+  var $user                 = null;  
   
   // Form fields
   var $_count_entries       = null;
@@ -39,12 +40,17 @@ class CHL7v2TableDescription extends CHL7v2TableObject {
     $props = parent::getProps();
 
     // DB Fields
-    $props["number"]         = "num notNull maxLength|5 seekable";
-    $props["description"]    = "str maxLength|80 seekable";
+    $props["number"]      = "num notNull maxLength|5 seekable";
+    $props["description"] = "str maxLength|80 seekable";
+    $props["user"]        = "bool notNull default|0";
     
     // Form fields
     $props["_count_entries"] = "num";
     return $props;
+  }
+  
+  function getBackProps() {
+    return array();
   }
   
   function updateFormFields() {

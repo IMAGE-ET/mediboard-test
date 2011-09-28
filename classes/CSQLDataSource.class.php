@@ -58,14 +58,14 @@ abstract class CSQLDataSource {
   	    trigger_error( "FATAL ERROR: DSN type '$dbtype' unhandled.", E_USER_ERROR );
     	  return;
   	  }
-
-      if ($quiet) {
-        error_reporting($reporting);
-      }
   	  
   	  $dataSource = new $dsClass;
   	  $dataSource->init($dsn);
   	  self::$dataSources[$dsn] = $dataSource->link ? $dataSource : null;
+  	     
+      if ($quiet) {
+        error_reporting($reporting);
+      }
   	}
   	return self::$dataSources[$dsn];
   }

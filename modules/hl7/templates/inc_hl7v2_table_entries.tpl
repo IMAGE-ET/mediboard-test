@@ -13,12 +13,12 @@
     <th class="title" colspan="6">{{$table_description->description}}</th>
   </tr>
   <tr>
-    <th style="width: 20px;">&nbsp;</th>
-    <th class="category" style="width: 15%">{{mb_title object=$table_entry field=code_mb_from}}</th>
-    <th class="category" style="width: 15%">{{mb_title object=$table_entry field=code_hl7_to}}</th>
+    <th style="width: 20px">&nbsp;</th>
+    <th class="category" style="width: 18%">{{mb_title object=$table_entry field=code_mb_from}}</th>
+    <th class="category" style="width: 18%">{{mb_title object=$table_entry field=code_hl7_to}}</th>
 		
-    <th class="category" style="width: 15%">{{mb_title object=$table_entry field=code_hl7_from}}</th>
-    <th class="category" style="width: 15%">{{mb_title object=$table_entry field=code_mb_to}}</th>
+    <th class="category" style="width: 18%">{{mb_title object=$table_entry field=code_hl7_from}}</th>
+    <th class="category" style="width: 18%">{{mb_title object=$table_entry field=code_mb_to}}</th>
     <th class="category">{{mb_title object=$table_entry field=description}}</th>
   </tr>
   {{foreach from=$table_entries item=_table_entry}}
@@ -84,7 +84,7 @@
             <input type="hidden" name="m" value="hl7" />
             <input type="hidden" name="@class" value="{{$_table_entry->_class}}" />
             {{mb_key object=$_table_entry}}
-            {{mb_field object=$_table_entry field="description" size="40"}}  <button type="submit" class="save notext" style="margin: -1px;">{{tr}}Save{{/tr}}</button>
+            {{mb_field object=$_table_entry field="description" size="25"}}  <button type="submit" class="save notext" style="margin: -1px;">{{tr}}Save{{/tr}}</button>
           </form>
         {{/if}}
       </td>
@@ -106,23 +106,23 @@
   
   <table class="tbl">
     <tr>
-      <td style="width: 20px;">
+      <td style="width: 20px">
         <button type="submit" class="add notext" style="margin: 0;">{{tr}}Save{{/tr}}</button>
       </td>
-      <td class="disabled" style="width: 15%">
+      <td class="disabled" style="width: 18%">
         {{mb_field object=$table_entry field="code_mb_from" size="10"}} 
       </td> 
-      <td class="disabled" style="width: 15%">
+      <td class="disabled" style="width: 18%">
         {{mb_field object=$table_entry field="code_hl7_to" size="10"}} 
       </td> 
-      <td class="disabled button" style="width: 15%">
+      <td class="disabled button" style="width: 18%">
         {{mb_field object=$table_entry field="code_hl7_from" size="10"}} 
       </td> 
-      <td class="disabled" style="width: 15%">
+      <td class="disabled" style="width: 18%">
         {{mb_field object=$table_entry field="code_mb_to" size="10"}} 
       </td> 
       <td class="disabled text">
-        {{mb_field object=$table_entry field="description" size="40"}} 
+        {{mb_field object=$table_entry field="description" size="25"}} 
       </td>   
     </tr>
   </table>
