@@ -31,6 +31,22 @@ $_CONFIG = array(
     'filePerms' => 0644,
 
     'deniedExts' => "exe com msi bat php cgi pl",
+    
+    'access' => array(
+        'files' => array(
+            'upload' => true,
+            'delete' => true,
+            'copy' => true,
+            'move' => true,
+            'rename' => true
+        ),
+
+        'dirs' => array(
+            'create' => true,
+            'delete' => true,
+            'rename' => true
+        )
+    ),
 
     'types' => array(
 
