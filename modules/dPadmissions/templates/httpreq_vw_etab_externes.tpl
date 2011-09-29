@@ -15,7 +15,7 @@ if(!self.changeEtablissementId) {
 </script>
 
 {{if $listEtab|@count}}
-<select name="etablissement_transfert_id" onchange="changeEtablissementId(this.form);">
+<select name="etablissement_sortie_id" onchange="changeEtablissementId(this.form);">
 <option value="">&mdash; Etab. de transfert</option>
 {{foreach from=$listEtab item="etab"}}
 <option value="{{$etab->_id}}" {{if $etab->_id == $etabSelected}}selected="selected"{{/if}}>

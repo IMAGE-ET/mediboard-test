@@ -550,7 +550,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $etabExterne = new CEtabExterne();
     
     
-    return $mbVenue->etablissement_transfert_id;
+    return $mbVenue->etablissement_sortie_id;
   }
   
   function mappingMouvements($node, CSejour $mbVenue) {

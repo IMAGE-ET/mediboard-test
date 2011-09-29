@@ -15,7 +15,7 @@ if(!self.changeServiceId) {
 </script>
 
 {{if $services|@count}}
-	<select name="service_mutation_id" onchange="changeServiceId(this.form);">
+	<select name="service_sortie_id" onchange="changeServiceId(this.form);">
 		<option value="">&mdash; Serv. de mutation</option>
 		{{foreach from=$services item="_service"}}
 		<option value="{{$_service->_id}}" {{if $_service->_id == $service}}selected="selected"{{/if}}>

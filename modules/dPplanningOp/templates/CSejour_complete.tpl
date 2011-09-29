@@ -204,9 +204,9 @@ printDossier = function(rpu_id) {
       {{/if}}
     </td>
     <td>
-      <strong>{{mb_label object=$rpu field="_etablissement_transfert_id"}}</strong>
+      <strong>{{mb_label object=$rpu field="_etablissement_sortie_id"}}</strong>
       {{if $rpu->provenance}}
-        {{mb_value object=$rpu field=_etablissement_transfert_id}}
+        {{mb_value object=$rpu field=_etablissement_sortie_id}}
       {{/if}}
     </td>
   </tr>

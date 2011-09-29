@@ -860,6 +860,17 @@ class CSetupsystem extends CSetup {
               ADD `loggable` ENUM ('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.82";
+    $this->makeRevision("1.0.82");
+    $queries = array();
+    $queries = self::getFieldRenameQueries("CSejour", "etablissement_entree_transfert_id", "etablissement_entree_id");
+    $queries = array_merge($queries, self::getFieldRenameQueries("CSejour", "etablissement_transfert_id", "etablissement_sortie_id"));
+    $queries = array_merge($queries, self::getFieldRenameQueries("CSejour", "service_entree_mutation_id", "service_entree_id"));
+    $queries = array_merge($queries, self::getFieldRenameQueries("CSejour", "service_mutation_id", "service_sortie_id"));
+    
+    foreach ($queries as $query) {
+      $this->addQuery($query);
+    }
+    
+    $this->mod_version = "1.0.83";
   }
 }

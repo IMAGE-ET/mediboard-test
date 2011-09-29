@@ -107,11 +107,11 @@ function printPage(element){
             {{/if}}
             {{if $sejour->mode_sortie == "transfert"}}
               <br />
-              &gt; <strong>{{mb_value object=$sejour field=etablissement_transfert_id}}</strong>
+              &gt; <strong>{{mb_value object=$sejour field=etablissement_sortie_id}}</strong>
             {{/if}}
             {{if $sejour->mode_sortie == "mutation"}}
               <br />
-              &gt; <strong>{{mb_value object=$sejour field=service_mutation_id}}</strong>
+              &gt; <strong>{{mb_value object=$sejour field=service_sortie_id}}</strong>
             {{/if}}
             {{if $rpu->orientation}}
               <br />
@@ -196,11 +196,11 @@ function printPage(element){
   <tr>
     <th>{{mb_title class=CPatient field=_age}}</th>
     <th>
-      {{mb_title class=CSejour field=etablissement_transfert_id}}
+      {{mb_title class=CSejour field=etablissement_sortie_id}}
       <small>({{$stats.sortie.transferts_count}})</small>
     </th>
     <th>
-      {{mb_title class=CSejour field=service_mutation_id}}
+      {{mb_title class=CSejour field=service_sortie_id}}
       <small>({{$stats.sortie.mutations_count}})</small>
     </th>
   </tr>

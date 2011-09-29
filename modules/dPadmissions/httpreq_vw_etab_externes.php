@@ -13,7 +13,7 @@ CCanDo::checkRead();
 // Chargement su séjour s'il y en a un
 $sejour = new CSejour();
 $sejour->load(CValue::get("sejour_id"));
-$etabSelected = $sejour->etablissement_transfert_id;
+$etabSelected = $sejour->etablissement_sortie_id;
 
 // Chargement des etablissements externes
 $order = "nom";

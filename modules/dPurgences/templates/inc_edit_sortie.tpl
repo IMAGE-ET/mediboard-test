@@ -35,10 +35,10 @@ Fields = {
       form.mode_sortie.clear();
       form.sortie_reelle.clear();
       form.sortie_reelle_da.clear();
-      form.etablissement_transfert_id_autocomplete_view.clear();
-      form.etablissement_transfert_id.clear();
-      form.service_mutation_id_autocomplete_view.clear();
-      form.service_mutation_id.clear();
+      form.etablissement_sortie_id_autocomplete_view.clear();
+      form.etablissement_sortie_id.clear();
+      form.service_sortie_id_autocomplete_view.clear();
+      form.service_sortie_id.clear();
       form.commentaires_sortie.clear();
 			
 			submitSejour(true);

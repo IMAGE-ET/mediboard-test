@@ -71,10 +71,10 @@ class CRPU extends CMbObject {
   var $_DP             = null;
   var $_ref_actes_ccam = null;
   var $_service_id     = null;
-	var $_etablissement_transfert_id        = null;
-  var $_etablissement_entree_transfert_id = null;
-	var $_service_entree_mutation_id        = null;
-	var $_service_mutation_id               = null;
+	var $_etablissement_sortie_id = null;
+  var $_etablissement_entree_id = null;
+	var $_service_entree_id       = null;
+	var $_service_sortie_id       = null;
   
   // Object References
   var $_ref_sejour = null;
@@ -130,10 +130,10 @@ class CRPU extends CMbObject {
       "_responsable_id"  => "ref notNull class|CMediusers",
       "_service_id"      => "ref".(CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1 ? ' notNull' : '')." class|CService seekable",
       "_entree"          => "dateTime",
-      "_etablissement_transfert_id"        => "ref class|CEtabExterne autocomplete|nom",
-      "_etablissement_entree_transfert_id" => "ref class|CEtabExterne autocomplete|nom", 
-			"_service_entree_mutation_id" => "ref class|CService autocomplete|nom dependsOn|group_id|cancelled", 
-			"_service_mutation_id"        => "ref class|CService autocomplete|nom dependsOn|group_id|cancelled",
+      "_etablissement_sortie_id"        => "ref class|CEtabExterne autocomplete|nom",
+      "_etablissement_entree_id" => "ref class|CEtabExterne autocomplete|nom", 
+			"_service_entree_id" => "ref class|CService autocomplete|nom dependsOn|group_id|cancelled", 
+			"_service_sortie_id"        => "ref class|CService autocomplete|nom dependsOn|group_id|cancelled",
       "_attente"           => "time",
       "_presence"          => "time",
       "_can_leave"         => "time",
@@ -201,10 +201,10 @@ class CRPU extends CMbObject {
     
     $this->_mode_entree = $sejour->mode_entree;
     $this->_sortie = $sejour->sortie_reelle;
-    $this->_etablissement_transfert_id = $sejour->etablissement_transfert_id;
-		$this->_etablissement_entree_transfert_id = $sejour->etablissement_entree_transfert_id;
-		$this->_service_entree_mutation_id = $sejour->service_entree_mutation_id;
-		$this->_service_mutation_id = $sejour->service_mutation_id;
+    $this->_etablissement_sortie_id = $sejour->etablissement_sortie_id;
+		$this->_etablissement_entree_id = $sejour->etablissement_entree_id;
+		$this->_service_entree_id = $sejour->service_entree_id;
+		$this->_service_sortie_id = $sejour->service_sortie_id;
 		
 		// @todo: A supprimer du updateFormFields
 		$this->loadRefConsult();
@@ -311,8 +311,8 @@ class CRPU extends CMbObject {
     $sejour->sortie_prevue = (CAppUI::conf("dPurgences sortie_prevue") == "h24") ? mbDateTime("+1 DAY", $this->_entree) : mbDate(null, $this->_entree)." 23:59:59";
     $sejour->annule        = $this->_annule;    
     $sejour->service_id    = $this->_service_id;
-    $sejour->etablissement_entree_transfert_id = $this->_etablissement_entree_transfert_id;
-		$sejour->service_entree_mutation_id = $this->_service_entree_mutation_id;
+    $sejour->etablissement_entree_id = $this->_etablissement_entree_id;
+		$sejour->service_entree_id = $this->_service_entree_id;
     $sejour->mode_entree = $this->_mode_entree;
     
     // Le patient est souvent chargé à vide ce qui pose problème
@@ -358,14 +358,14 @@ class CRPU extends CMbObject {
 		// Changement suivant le mode d'entrée
 		switch ($this->_mode_entree) {
 			case 6:
-			  $this->_etablissement_entree_transfert_id = "";
+			  $this->_etablissement_entree_id = "";
 			  break;
 			case 7:
-			  $this->_service_entree_mutation_id = "";
+			  $this->_service_entree_id = "";
 				break;
 			case 8:
-				$this->_service_entree_mutation_id = "";
-        $this->_etablissement_entree_transfert_id = "";
+				$this->_service_entree_id = "";
+        $this->_etablissement_entree_id = "";
 				break;
 		}
  

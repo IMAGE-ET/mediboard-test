@@ -84,7 +84,7 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
       
       {{if $_sejour->sortie_reelle}}
       <input type="hidden" name="mode_sortie" value="{{$_sejour->mode_sortie}}" />
-      <input type="hidden" name="etablissement_transfert_id" value="{{$_sejour->etablissement_transfert_id}}" />
+      <input type="hidden" name="etablissement_sortie_id" value="{{$_sejour->etablissement_sortie_id}}" />
       <input type="hidden" name="_modifier_sortie" value="0" />
       <button class="cancel" type="button" onclick="submitSortie(this.form)">
         Annuler la sortie
@@ -96,7 +96,7 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
         {{$_sejour->sortie_reelle|date_format:$conf.time}}
       {{/if}}
       - {{tr}}CSejour.mode_sortie.{{$_sejour->mode_sortie}}{{/tr}}
-      {{if $_sejour->etablissement_transfert_id}}
+      {{if $_sejour->etablissement_sortie_id}}
         - {{$_sejour->_ref_etablissement_transfert}}
       {{/if}}
       {{else}}
@@ -124,7 +124,7 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
       <br />
       {{tr}}CSejour.mode_sortie.{{$_sejour->mode_sortie}}{{/tr}}
       {{/if}}
-      {{if $_sejour->etablissement_transfert_id}}
+      {{if $_sejour->etablissement_sortie_id}}
         <br />{{$_sejour->_ref_etablissement_transfert}}
       {{/if}}
       {{else}}

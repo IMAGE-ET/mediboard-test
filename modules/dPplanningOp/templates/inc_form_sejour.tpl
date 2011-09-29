@@ -644,11 +644,11 @@ Main.add( function(){
   <td>
     {{if $can->view}}
       {{mb_field object=$sejour defaultOption="&mdash; Mode de sortie" field=mode_sortie onchange="changeModeSortie(this.value);" style="width: 15em;"}}
-      <div id="listEtabExterne" {{if !$sejour->etablissement_transfert_id}}style="display:none"{{/if}}>
-        {{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour" autocomplete="true,1,50,true,true" style="width: 12em;"}}
+      <div id="listEtabExterne" {{if !$sejour->etablissement_sortie_id}}style="display:none"{{/if}}>
+        {{mb_field object=$sejour field="etablissement_sortie_id" form="editSejour" autocomplete="true,1,50,true,true" style="width: 12em;"}}
       </div>
-      <div id="services" {{if !$sejour->service_mutation_id}}style="display:none"{{/if}}>
-        {{mb_field object=$sejour field="service_mutation_id" form="editSejour" autocomplete="true,1,50,true,true" style="width: 12em;"}}
+      <div id="services" {{if !$sejour->service_sortie_id}}style="display:none"{{/if}}>
+        {{mb_field object=$sejour field="service_sortie_id" form="editSejour" autocomplete="true,1,50,true,true" style="width: 12em;"}}
         <input type="hidden" name="cancelled" value="0" />
       </div>
     {{else}}

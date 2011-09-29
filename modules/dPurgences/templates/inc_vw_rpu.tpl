@@ -96,7 +96,7 @@ function showEtabEntreeTransfert(mode) {
   } 
   else if (mode == 6) {
     $('service_entree_transfert').show();
-    $V(getForm('editRPU')._etablissement_entree_transfert_id, '');
+    $V(getForm('editRPU')._etablissement_entree_id, '');
   }
 }
 
@@ -171,14 +171,14 @@ function showEtabEntreeTransfert(mode) {
             </tr>
             
             <tr id="etablissement_entree_transfert" {{if $sejour->mode_entree != '7'}}style="display:none"{{/if}}>
-              <th>{{mb_label object=$rpu field="_etablissement_entree_transfert_id"}}</th>
-              <td>{{mb_field object=$rpu field="_etablissement_entree_transfert_id" form="editRPU" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}</td> 
+              <th>{{mb_label object=$rpu field="_etablissement_entree_id"}}</th>
+              <td>{{mb_field object=$rpu field="_etablissement_entree_id" form="editRPU" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}</td> 
             </tr>
             
             <tr id="service_entree_transfert" {{if $sejour->mode_entree != '6'}}style="display:none"{{/if}}>
-              <th>{{mb_label object=$rpu field="_service_entree_mutation_id"}}</th>
+              <th>{{mb_label object=$rpu field="_service_entree_id"}}</th>
               <td>
-                {{mb_field object=$rpu field="_service_entree_mutation_id" form="editRPU" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}
+                {{mb_field object=$rpu field="_service_entree_id" form="editRPU" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}
                 <input type="hidden" name="cancelled" value="0" />
               </td> 
             </tr>

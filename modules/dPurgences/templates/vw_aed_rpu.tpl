@@ -280,11 +280,11 @@
 		  <th></th>
 			<td>
 				<input type="hidden" name="group_id" value="{{$g}}" />
-				<div id="etablissement_entree_transfert" {{if !$rpu->_etablissement_entree_transfert_id}}style="display:none"{{/if}}>
-          {{mb_field object=$rpu field="_etablissement_entree_transfert_id" form="editRPU" style="width: 12em;" autocomplete="true,1,50,true,true"}}
+				<div id="etablissement_entree_transfert" {{if !$rpu->_etablissement_entree_id}}style="display:none"{{/if}}>
+          {{mb_field object=$rpu field="_etablissement_entree_id" form="editRPU" style="width: 12em;" autocomplete="true,1,50,true,true"}}
         </div>
-        <div id="service_entree_mutation" {{if !$rpu->_service_entree_mutation_id}}style="display:none"{{/if}}>
-          {{mb_field object=$rpu field="_service_entree_mutation_id" form="editRPU" autocomplete="true,1,50,true,true"}}
+        <div id="service_entree_mutation" {{if !$rpu->_service_entree_id}}style="display:none"{{/if}}>
+          {{mb_field object=$rpu field="_service_entree_id" form="editRPU" autocomplete="true,1,50,true,true"}}
           <input type="hidden" name="cancelled" value="0" />
         </div>
 			</td>	

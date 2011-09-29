@@ -14,7 +14,7 @@ $can->needsRead();
 // Chargement su séjour s'il y en a un
 $sejour = new CSejour();
 $sejour->load(CValue::get("sejour_id"));
-$service = $sejour->service_mutation_id;
+$service = $sejour->service_sortie_id;
 
 // Chargement des services
 $order = "nom";

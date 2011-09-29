@@ -115,10 +115,10 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     if ($sejour->adresse_par_prat_id) {
       $admit_source = "1";
     }
-    if ($sejour->etablissement_entree_transfert_id) {
+    if ($sejour->etablissement_entree_id) {
       $admit_source = "4";
     }
-    if ($sejour->service_entree_mutation_id) {
+    if ($sejour->service_entree_id) {
       $admit_source = "6";
     }
     if ($sejour->type == "urg") {
@@ -218,7 +218,7 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     $data[] = $sejour->_sortie_autorisee ? "3": "4";
     
     // PV1-37: Discharged to Location (DLD) (optional)
-    $data[] = $sejour->etablissement_transfert_id ? $sejour->loadRefEtablissementTransfert()->finess : null;
+    $data[] = $sejour->etablissement_sortie_id ? $sejour->loadRefEtablissementTransfert()->finess : null;
     
     // PV1-38: Diet Type (CE) (optional)
     $data[] = null;

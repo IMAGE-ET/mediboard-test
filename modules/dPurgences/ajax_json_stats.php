@@ -378,7 +378,7 @@ switch ($axe) {
       foreach ($dates as $i => $_date) {
         $_date_next = mbDate("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
-        $where['sejour.etablissement_transfert_id'] = ($_id === "none" ? "IS NULL" : "= '$_id'");
+        $where['sejour.etablissement_sortie_id'] = ($_id === "none" ? "IS NULL" : "= '$_id'");
         $count = $sejour->countList($where, null, $ljoin);
         $total += $count;
         $sub_total += $count;
@@ -425,7 +425,7 @@ switch ($axe) {
       foreach ($dates as $i => $_date) {
         $_date_next = mbDate("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
-        $where['sejour.service_mutation_id'] = ($_id === "none" ? "IS NULL" : "= '$_id'");
+        $where['sejour.service_sortie_id'] = ($_id === "none" ? "IS NULL" : "= '$_id'");
         $count = $sejour->countList($where, null, $ljoin);
         $total += $count;
         $sub_total += $count;

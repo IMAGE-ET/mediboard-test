@@ -1151,7 +1151,15 @@ class CSetupdPplanningOp extends CSetup {
               ADD `nature_accident` ENUM ('P','T','D','S','J','C','L','B','U');";
     $this->addQuery($query);
     
-    $this->mod_version = "1.24";
+    $this->makeRevision("1.24");
+    $query = "ALTER TABLE `sejour`
+      CHANGE `etablissement_entree_transfert_id` `etablissement_entree_id` INT (11) UNSIGNED,
+      CHANGE `etablissement_transfert_id` `etablissement_sortie_id` INT(11) UNSIGNED,
+      CHANGE `service_entree_mutation_id` `service_entree_id` INT (11) UNSIGNED,
+      CHANGE `service_mutation_id` `service_sortie_id` INT (11) UNSIGNED";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.25";
     
   }
 }

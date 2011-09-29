@@ -737,9 +737,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addElement($modeSortieHprim, "code", $modeSortieEtablissementHprim);
       $this->addElement($modeSortieHprim, "libelle", $mbVenue->mode_sortie);
       
-      if ($mbVenue->etablissement_transfert_id) {
+      if ($mbVenue->etablissement_sortie_id) {
         $destination = $this->addElement($modeSortieHprim, "destination");
-        $this->addElement($destination, "libelle", $mbVenue->etablissement_transfert_id);
+        $this->addElement($destination, "libelle", $mbVenue->etablissement_sortie_id);
       }
         
       $this->addAttribute($modeSortieHprim, "valeur", $modeSortieEtablissementHprim);

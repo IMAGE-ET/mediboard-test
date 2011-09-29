@@ -52,14 +52,14 @@
 	</tr>
 	
   <tr id="etablissement_sortie_transfert" {{if $sejour->mode_sortie != "transfert"}} style="display:none;" {{/if}}>
-  	<th>{{mb_label object=$sejour field="etablissement_transfert_id"}}</th>
-    <td>{{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}</td>
+  	<th>{{mb_label object=$sejour field="etablissement_sortie_id"}}</th>
+    <td>{{mb_field object=$sejour field="etablissement_sortie_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}</td>
   </tr>
 
   <tr id="service_sortie_transfert" {{if $sejour->mode_sortie != "mutation"}} style="display:none;" {{/if}}>
-  	<th>{{mb_label object=$sejour field="service_mutation_id"}}</th>
+  	<th>{{mb_label object=$sejour field="service_sortie_id"}}</th>
 		<td>
-      {{mb_field object=$sejour field="service_mutation_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}
+      {{mb_field object=$sejour field="service_sortie_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}
       <input type="hidden" name="cancelled" value="0" />
     </td>
   </tr>

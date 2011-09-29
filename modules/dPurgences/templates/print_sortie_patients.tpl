@@ -127,12 +127,12 @@
 		    {{mb_title object=$sejour field=sortie}} :
 		    {{mb_value object=$sejour field=mode_sortie}}
 		  
-		    {{if $sejour->mode_sortie == "transfert" && $sejour->etablissement_transfert_id}}
-		      <br />&gt; <strong>{{mb_value object=$sejour field=etablissement_transfert_id}}</strong>
+		    {{if $sejour->mode_sortie == "transfert" && $sejour->etablissement_sortie_id}}
+		      <br />&gt; <strong>{{mb_value object=$sejour field=etablissement_sortie_id}}</strong>
 		    {{/if}}
 		  
-		    {{if $sejour->mode_sortie == "mutation" && $sejour->service_mutation_id}}
-		      {{assign var=service_id value=$sejour->service_mutation_id}}
+		    {{if $sejour->mode_sortie == "mutation" && $sejour->service_sortie_id}}
+		      {{assign var=service_id value=$sejour->service_sortie_id}}
 		      {{assign var=service value=$services.$service_id}}
 		      <br />&gt; <strong>{{$service}}</strong>
 		    {{/if}}

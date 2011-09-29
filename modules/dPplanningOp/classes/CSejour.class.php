@@ -23,10 +23,10 @@ class CSejour extends CCodable implements IPatientRelated {
   var $praticien_id        = null; 
   var $group_id            = null;
   
-  var $etablissement_transfert_id        = null;
-  var $etablissement_entree_transfert_id = null;
-  var $service_entree_mutation_id        = null; // Service d'entrée du séjour
-  var $service_mutation_id               = null; // Service du séjour de mutation
+  var $etablissement_entree_id = null;
+  var $etablissement_sortie_id = null;
+  var $service_entree_id       = null; // Service d'entrée du séjour
+  var $service_sortie_id       = null; // Service du séjour de mutation
   
   // DB Fields
   var $type                = null; 
@@ -283,10 +283,10 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["mode_sortie"]         = "enum list|normal|transfert|mutation|deces default|normal";
     $props["prestation_id"]       = "ref class|CPrestation";
     $props["facturable"]          = "bool notNull default|1 show|0";
-    $props["etablissement_transfert_id"]        = "ref class|CEtabExterne autocomplete|nom";
-    $props["etablissement_entree_transfert_id"] = "ref class|CEtabExterne autocomplete|nom";
-    $props["service_entree_mutation_id"]        = "ref class|CService autocomplete|nom dependsOn|group_id|cancelled";
-    $props["service_mutation_id"]               = "ref class|CService autocomplete|nom dependsOn|group_id|cancelled";
+    $props["etablissement_sortie_id"] = "ref class|CEtabExterne autocomplete|nom";
+    $props["etablissement_entree_id"] = "ref class|CEtabExterne autocomplete|nom";
+    $props["service_entree_id"]       = "ref class|CService autocomplete|nom dependsOn|group_id|cancelled";
+    $props["service_sortie_id"]       = "ref class|CService autocomplete|nom dependsOn|group_id|cancelled";
     $props["adresse_par_prat_id"] = "ref class|CMedecin";
     $props["adresse_par_etab_id"] = "ref class|CEtabExterne autocomplete|nom";
     $props["libelle"]             = "str seekable autocomplete dependsOn|praticien_id";
@@ -588,10 +588,10 @@ class CSejour extends CCodable implements IPatientRelated {
     // Annulation de l'établissement de transfert si le mode de sortie n'est pas transfert
     if (null !== $this->mode_sortie) {
       if ("transfert" != $this->mode_sortie) {
-        $this->etablissement_transfert_id = "";
+        $this->etablissement_sortie_id = "";
       }
       if ("mutation" != $this->mode_sortie) {
-        $this->service_mutation_id = "";
+        $this->service_sortie_id = "";
       }
     }
     
@@ -1036,14 +1036,14 @@ class CSejour extends CCodable implements IPatientRelated {
    * @return CEtabExterne
    */
   function loadRefEtablissementTransfert($cache = true){
-    return $this->_ref_etablissement_transfert = $this->loadFwdRef("etablissement_transfert_id", $cache);
+    return $this->_ref_etablissement_transfert = $this->loadFwdRef("etablissement_sortie_id", $cache);
   }
   
   /**
    * @return CService
    */
   function loadRefServiceMutation($cache = true){
-    return $this->_ref_service_mutation = $this->loadFwdRef("service_mutation_id", $cache);
+    return $this->_ref_service_mutation = $this->loadFwdRef("service_sortie_id", $cache);
   }
   
   function countNotificationVisite($date = ''){
@@ -1673,8 +1673,8 @@ class CSejour extends CCodable implements IPatientRelated {
     
     $template->addProperty("Sejour - Mode d'entrée"           , $this->getFormattedValue("mode_entree"));
     $template->addProperty("Sejour - Mode de sortie"          , $this->getFormattedValue("mode_sortie"));
-    $template->addProperty("Sejour - Service de sortie"       , $this->getFormattedValue("service_mutation_id"));
-    $template->addProperty("Sejour - Etablissement de sortie" , $this->getFormattedValue("etablissement_transfert_id"));
+    $template->addProperty("Sejour - Service de sortie"       , $this->getFormattedValue("service_sortie_id"));
+    $template->addProperty("Sejour - Etablissement de sortie" , $this->getFormattedValue("etablissement_sortie_id"));
     $template->addProperty("Sejour - Commentaires de sortie"  , $this->getFormattedValue("commentaires_sortie"));
     
     $this->loadRefPraticien();
