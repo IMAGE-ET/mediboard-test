@@ -1136,7 +1136,22 @@ class CSetupdPplanningOp extends CSetup {
       ADD INDEX (`mode_entree`);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.23";
+    $this->makeRevision("1.23");
+    
+    $query = "ALTER TABLE `protocole`
+              ADD `cote` ENUM ('droit','gauche','bilatéral','total','inconnu') AFTER `libelle`";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `sejour`
+              ADD `assurance_maladie` VARCHAR (255),
+              ADD `rques_assurance_maladie` TEXT,
+              ADD `assurance_accident` VARCHAR (255),
+              ADD `rques_assurance_accident` TEXT,
+              ADD `date_accident` DATE,
+              ADD `nature_accident` ENUM ('P','T','D','S','J','C','L','B','U');";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.24";
     
   }
 }

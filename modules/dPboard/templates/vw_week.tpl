@@ -39,7 +39,7 @@ function viewItem(oTd, guid, date) {
   var url = new Url;
   url.addParam("board"     , "1");
   url.addParam("boardItem" , "1");
-  url.addParam("chirSel" , "{{$prat->_id}}");
+  url.addParam("pratSel" , "{{$prat->_id}}");
   url.addParam("date"    , date);
   
   if(sClassName == "CPlageconsult"){
@@ -59,7 +59,7 @@ function viewItem(oTd, guid, date) {
 
 function updateSemainier() {
   var url = new Url("dPboard", "httpreq_semainier");
-  url.addParam("chirSel" , "{{$prat->_id}}");
+  url.addParam("pratSel" , "{{$prat->_id}}");
   url.addParam("date"    , "{{$date}}");
   url.addParam("board"   , "1");
   url.requestUpdate("semainier");

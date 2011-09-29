@@ -1,6 +1,4 @@
 <!-- $Id$ -->
-{{mb_script module="dPplanningOp" script="plage_selector"}}
-{{mb_script module="dPpatients" script="pat_selector"}}
 
 
 <form name="editOpEasy" action="?m={{$m}}" method="post" onsubmit="return checkFormOperation()">
@@ -40,7 +38,7 @@
 	  <th>
 	    {{mb_label object=$sejour field="service_id"}}
 	  </th>
-	  <td colspan="3">
+	  <td colspan="2">
 	    <select name="service_id" class="{{$sejour->_props.service_id}}" onchange="synchroService(this);" style="width: 15em;">
 	      <option value="">&mdash; Choisir un service</option>
 	      {{foreach from=$listServices item=_service}}
@@ -64,10 +62,36 @@
       </button>
     </td>
   </tr>
+
+  <!-- Diagnostic principal -->
+  <tr>
+    <th>{{mb_label object=$sejour field="DP"}}</th>
+    <td colspan="2">
+      <script type="text/javascript">
+      Main.add(function(){
+        var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
+        url.autoComplete(getForm("editOpEasy").keywords_code, '', {
+          minChars: 1,
+          dropdown: true,
+          width: "250px",
+          select: "code",
+          afterUpdateElement: function(oHidden) {
+            $V(getForm("editOpEasy").DP, oHidden.value);
+          }
+        });
+      });
+      </script>
+      
+      <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$sejour->DP}}" onchange="synchroService(this);" style="width: 12em" />
+      <button type="button" class="cancel notext" onclick="$V(this.form.DP, '');" />
+      <button type="button" class="search notext" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
+      <input type="hidden" name="DP" value="{{$sejour->DP}}" onchange="$V(this.form.keywords_code, this.value); synchroService(this);"/>
+    </td>
+  </tr>
   
   
   <!-- Liste des codes ccam -->
-  <tr>
+  <tr {{if !$conf.dPplanningOp.COperation.use_ccam}}style="display: none;"{{/if}}>
     <th>Liste des codes CCAM
     {{mb_field object=$op field="codes_ccam" onchange="refreshListCCAM('easy');" hidden=1}}
     </th>

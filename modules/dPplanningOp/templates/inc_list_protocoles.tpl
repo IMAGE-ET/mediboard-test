@@ -19,6 +19,7 @@
       protocole_id     : {{$_protocole->protocole_id}},
       chir_id          : {{if $_protocole->chir_id}}"{{$_protocole->chir_id}}"{{else}}"{{$chir_id}}"{{/if}},
       codes_ccam       : "{{$_protocole->codes_ccam}}",
+      cote             : "{{$_protocole->cote}}",
       DP               : "{{$_protocole->DP}}",
       libelle          : "{{$_protocole->libelle|smarty:nodefaults|escape:"javascript"}}",
       libelle_sejour   : "{{$_protocole->libelle_sejour|smarty:nodefaults|escape:"javascript"}}",

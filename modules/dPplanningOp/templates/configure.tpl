@@ -37,6 +37,8 @@
   
   {{assign var="class" value="CSejour"}}
 	
+  {{assign var="var"   value="easy_cim10"}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var"   value="easy_service"}}
   {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var"   value="easy_chambre_simple"}}
@@ -67,6 +69,8 @@
     <th class="title" colspan="2">{{tr}}{{$class}}{{/tr}}</th>
   </tr>
   
+  {{assign var="var" value="use_ccam"}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var" value="verif_cote"}}
   {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var" value="horaire_voulu"}}
@@ -122,6 +126,10 @@
   {{assign var="var" value="service_id_notNull"}}
   {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var" value="consult_accomp"}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
+  {{assign var="var" value="accident"}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
+  {{assign var="var" value="assurances"}}
   {{mb_include module=system template=inc_config_bool var=$var }}
 	{{assign var="var" value="delete_only_admin"}}
   {{mb_include module=system template=inc_config_bool var=$var }}

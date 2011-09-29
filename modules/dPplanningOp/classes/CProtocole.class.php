@@ -30,6 +30,7 @@ class CProtocole extends CMbObject {
   // DB Fields Operation
   var $codes_ccam        = null;
   var $libelle           = null;
+  var $cote              = null;
   var $temp_operation    = null;
   var $examen            = null;
   var $materiel          = null;
@@ -82,6 +83,7 @@ class CProtocole extends CMbObject {
     $specs["convalescence"]   = "text";
     $specs["rques_sejour"]    = "text";
     $specs["libelle"]         = "str seekable";
+    $specs["cote"]            = "enum list|droit|gauche|bilatéral|total|inconnu";
     $specs["libelle_sejour"]  = "str seekable";
     $specs["service_id"]      = "ref".(CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1 ? ' notNull' : '')." class|CService seekable";
     $specs["examen"]          = "text confidential seekable";

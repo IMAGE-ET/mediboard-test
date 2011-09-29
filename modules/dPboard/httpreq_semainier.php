@@ -13,7 +13,7 @@ global $listMins,$listHours,$HeureMax,$MinMax,$HeureMin,$MinMin,$aAffichage;
 CCanDo::checkRead();
 
 // Récupération des paramètres
-$chirSel   = CValue::getOrSession("chirSel", 25);
+$pratSel   = CValue::getOrSession("pratSel");
 $date      = CValue::getOrSession("date", mbDate());
 $debut = mbDate("last sunday", $date);
 $debut = mbDate("+1 day", $debut);
@@ -148,12 +148,15 @@ $plagesPerDayOp   = array();
 
 for($i = 0; $i < 7; $i++) {
   $where = array();
-  $where["chir_id"] = "= '$chirSel'";
+  $where["chir_id"] = "= '$pratSel'";
   $date             = mbDate("+$i day", $debut);
   $where["date"]    = "= '$date'";
   
   $plagesPerDayConsult = $plageConsult->loadList($where);
   $nb_oper = 0;
+  $where = array();
+  $where[] = "chir_id = '$pratSel' OR anesth_id = '$pratSel'";
+  $where["date"]    = "= '$date'";
   foreach($listSalles as $keySalle=>$salle){
     $where["salle_id"] = "= '$keySalle'";
     $plagesPerDayOp[$keySalle] = $plageOp->loadList($where);
@@ -224,7 +227,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("listEntry"         , $listEntry);
 $smarty->assign("aAffichage"        , $aAffichage);
-$smarty->assign("chirSel"           , $chirSel);
+$smarty->assign("pratSel"           , $pratSel);
 $smarty->assign("debut"             , $debut);
 $smarty->assign("listHours"         , $listHours);
 $smarty->assign("listMins"          , $listMins);

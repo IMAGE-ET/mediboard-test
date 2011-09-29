@@ -423,6 +423,43 @@ Main.add( function(){
 </tr>
 
 <tr>
+  <th>{{mb_label object=$sejour field="DP"}}</th>
+  <td colspan="3">
+    <script type="text/javascript">
+    Main.add(function(){
+      var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
+      url.autoComplete(getForm("editSejour").keywords_code, '', {
+        minChars: 1,
+        dropdown: true,
+        width: "250px",
+        select: "code",
+        afterUpdateElement: function(oHidden) {
+          $V(getForm("editSejour").DP, oHidden.value);
+        }
+      });
+    });
+    </script>
+    
+    <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$sejour->DP}}" onchange="if(getForm('editOp')) {synchroService(this)};" style="width: 12em" />
+    <button type="button" class="cancel notext" onclick="$V(this.form.DP, '');" />
+    <button type="button" class="search notext" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
+    <input type="hidden" name="DP" value="{{$sejour->DP}}" onchange="$V(this.form.keywords_code, this.value); if(getForm('editOp')) {synchroService(this)};"/>
+  </td>
+</tr>
+
+{{if $conf.dPplanningOp.CSejour.accident}}
+<tr>
+  <th>{{mb_label object=$sejour field="date_accident"}}</th>
+  <td colspan="3">{{mb_field object=$sejour form="editSejour" field="date_accident" register=true}}</td>
+</tr>
+
+<tr>
+  <th>{{mb_label object=$sejour field="nature_accident"}}</th>
+  <td colspan="3">{{mb_field object=$sejour field="nature_accident" defaultOption="&mdash; Choisir une nature" style="width: 15em;"}}</td>
+</tr>
+{{/if}}}
+
+<tr>
   <th>
     {{mb_label object=$sejour field="service_id"}}
   </th>
@@ -470,31 +507,6 @@ Main.add( function(){
   </td>
 </tr>
 {{/if}}
-
-<tr>
-  <th>{{mb_label object=$sejour field="DP"}}</th>
-  <td colspan="3">
-    <script type="text/javascript">
-    Main.add(function(){
-      var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-      url.autoComplete(getForm("editSejour").keywords_code, '', {
-        minChars: 1,
-        dropdown: true,
-        width: "250px",
-        select: "code",
-        afterUpdateElement: function(oHidden) {
-          $V(getForm("editSejour").DP, oHidden.value);
-        }
-      });
-    });
-    </script>
-    
-    <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$sejour->DP}}" style="width: 12em" />
-    <button type="button" class="cancel notext" onclick="$V(this.form.DP, '');" />
-    <button type="button" class="search notext" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
-    <input type="hidden" name="DP" value="{{$sejour->DP}}" onchange="$V(this.form.keywords_code, this.value);"/>
-  </td>
-</tr>
 
 {{if $sejour->annule}}
 <tr>
@@ -631,12 +643,12 @@ Main.add( function(){
   <th>{{mb_label object=$sejour field=mode_sortie}}</th>
   <td>
     {{if $can->view}}
-      {{mb_field object=$sejour defaultOption="&mdash; Mode de sortie" field=mode_sortie onchange="changeModeSortie(this.value);"}}
+      {{mb_field object=$sejour defaultOption="&mdash; Mode de sortie" field=mode_sortie onchange="changeModeSortie(this.value);" style="width: 15em;"}}
       <div id="listEtabExterne" {{if !$sejour->etablissement_transfert_id}}style="display:none"{{/if}}>
-        {{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour" autocomplete="true,1,50,true,true"}}
+        {{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour" autocomplete="true,1,50,true,true" style="width: 12em;"}}
       </div>
       <div id="services" {{if !$sejour->service_mutation_id}}style="display:none"{{/if}}>
-        {{mb_field object=$sejour field="service_mutation_id" form="editSejour" autocomplete="true,1,50,true,true"}}
+        {{mb_field object=$sejour field="service_mutation_id" form="editSejour" autocomplete="true,1,50,true,true" style="width: 12em;"}}
         <input type="hidden" name="cancelled" value="0" />
       </div>
     {{else}}
@@ -808,6 +820,49 @@ Main.add( function(){
     {{mb_field object=$sejour field="rques" rows="3"}}
   </td>
 </tr>
+
+{{if $conf.dPplanningOp.CSejour.assurances}}
+<tr>
+  <th colspan="4" class="category">Assurance</th>
+</tr>
+<tr>
+  <th>{{mb_label object=$sejour field="assurance_maladie"}}</th>
+  <td colspan="3">{{mb_field object=$sejour field="assurance_maladie" form="editSejour" style="width: 12em" autocomplete="true,1,50,true,true"}}</td>
+</tr>
+<tr>
+  <th>{{mb_label object=$sejour field="rques_assurance_maladie"}}</th>
+  <td colspan="3">
+    <script type="text/javascript">
+      Main.add(function() {
+        new AideSaisie.AutoComplete(getForm("editSejour").elements.rques_assurance_maladie, {
+          objectClass: "{{$sejour->_class}}",
+          timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+          validateOnBlur: 0
+        });
+      });
+    </script>
+    {{mb_field object=$sejour field="rques_assurance_maladie"}}</td>
+</tr>
+<tr>
+  <th>{{mb_label object=$sejour field="assurance_accident"}}</th>
+  <td colspan="3">{{mb_field object=$sejour field="assurance_accident" form="editSejour" style="width: 12em" autocomplete="true,1,50,true,true"}}</td>
+</tr>
+<tr>
+  <th>{{mb_label object=$sejour field="rques_assurance_accident"}}</th>
+  <td colspan="3">
+    <script type="text/javascript">
+      Main.add(function() {
+        new AideSaisie.AutoComplete(getForm("editSejour").elements.rques_assurance_accident, {
+          objectClass: "{{$sejour->_class}}",
+          timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+          validateOnBlur: 0
+        });
+      });
+    </script>
+    {{mb_field object=$sejour field="rques_assurance_accident"}}</td>
+</tr>
+{{/if}}
+
 <tbody class="modeExpert">
 {{if !$sejour->_id && array_key_exists("dPprescription", $modules)}}
 <tr>

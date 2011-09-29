@@ -9,6 +9,7 @@ ProtocoleSelector = {
   sLibelle_easy    : null,
   sCodes_ccam      : null,
   sCodes_ccam_easy : null,
+  sCote            : null,
   sDuree_prevu     : null,
   sHour_op         : null,
   sMateriel        : null,
@@ -57,6 +58,7 @@ ProtocoleSelector = {
       
       $V(oOpForm[this.sCodes_ccam],        protocole.codes_ccam);
       $V(oOpForm[this.sLibelle],           protocole.libelle);
+      $V(oOpForm[this.sCote],              protocole.cote);
       $V(oOpForm[this.sHour_op],           protocole._hour_op);
       $V(oOpForm[this.sMin_op],            protocole._min_op);
       $V(oOpForm[this.sMateriel],          protocole.materiel);

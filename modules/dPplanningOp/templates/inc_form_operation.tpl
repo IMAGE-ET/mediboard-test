@@ -2,6 +2,7 @@
 
 {{mb_script module="dPplanningOp" script="ccam_selector"}}
 {{mb_script module="dPplanningOp" script="plage_selector"}}
+{{mb_script module="dPpatients"   script="pat_selector"}}
 
 <script type="text/javascript">
 Main.add(function(){
@@ -111,7 +112,7 @@ CCAMSelector.init = function(){
     </td>
   </tr>
   
-  <tr>
+  <tr {{if !$conf.dPplanningOp.COperation.use_ccam}}style="display: none;"{{/if}}>
     <th>{{mb_label object=$op field="codes_ccam" defaultFor="_codes_ccam"}}</th>
     <td colspan="2">
       <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()" style="width: 12em" value="" class="autocomplete"/>
@@ -135,7 +136,7 @@ CCAMSelector.init = function(){
       <button type="button" class="search notext" onclick="CCAMSelector.init()">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>
     </td>
   </tr>
-  <tr>
+  <tr {{if !$conf.dPplanningOp.COperation.use_ccam}}style="display: none;"{{/if}}>
     <th>
       Liste des codes CCAM
       {{mb_field object=$op field="codes_ccam" onchange="refreshListCCAM('expert');" hidden=1}}

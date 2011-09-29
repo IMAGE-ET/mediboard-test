@@ -100,6 +100,7 @@ ProtocoleSelector.init = function(){
   this.sForSejour     = false;
   this.sChir_id       = "chir_id";
   this.sCodes_ccam    = "codes_ccam";
+  this.sCote          = "cote";
   this.sLibelle       = "libelle";
   this.sHour_op       = "_hour_op";
   this.sMin_op        = "_min_op";

@@ -19,9 +19,9 @@ class CSejour extends CCodable implements IPatientRelated {
   var $sejour_id = null;
   
   // DB Réference
-  var $patient_id         = null;
-  var $praticien_id       = null; 
-  var $group_id           = null;
+  var $patient_id          = null;
+  var $praticien_id        = null; 
+  var $group_id            = null;
   
   var $etablissement_transfert_id        = null;
   var $etablissement_entree_transfert_id = null;
@@ -29,52 +29,59 @@ class CSejour extends CCodable implements IPatientRelated {
   var $service_mutation_id               = null; // Service du séjour de mutation
   
   // DB Fields
-  var $type               = null; 
-  var $modalite           = null;
-  var $annule             = null; 
-  var $recuse             = null; 
-  var $chambre_seule      = null; 
-  var $reanimation        = null; 
-  var $zt                 = null; 
-  var $service_id         = null; 
+  var $type                = null; 
+  var $modalite            = null;
+  var $annule              = null; 
+  var $recuse              = null; 
+  var $chambre_seule       = null; 
+  var $reanimation         = null; 
+  var $zt                  = null; 
+  var $service_id          = null; 
 
-  var $entree_prevue      = null;
-  var $sortie_prevue      = null;
-  var $entree_reelle      = null;
-  var $sortie_reelle      = null;
-  var $entree             = null;
-  var $sortie             = null;
+  var $entree_prevue       = null;
+  var $sortie_prevue       = null;
+  var $entree_reelle       = null;
+  var $sortie_reelle       = null;
+  var $entree              = null;
+  var $sortie              = null;
   
-  var $saisi_SHS          = null; // @todo Renommer ce champ
-  var $modif_SHS          = null; // @todo Renommer ce champ
+  var $saisi_SHS           = null; // @todo Renommer ce champ
+  var $modif_SHS           = null; // @todo Renommer ce champ
 
-  var $DP                 = null; 
-  var $DR                 = null;
-  var $pathologie         = null;
-  var $septique           = null;
-  var $convalescence      = null;
+  var $DP                  = null; 
+  var $DR                  = null;
+  var $pathologie          = null;
+  var $septique            = null;
+  var $convalescence       = null;
 
-  var $rques              = null;
-  var $ATNC               = null;
-  var $consult_accomp     = null;
-  var $hormone_croissance = null;
-  var $lit_accompagnant   = null;
-  var $isolement          = null;
-  var $television         = null;
-  var $repas_diabete      = null;
-  var $repas_sans_sel     = null;
-  var $repas_sans_residu  = null;
-  var $repas_sans_porc    = null;
-  var $mode_entree        = null;
-  var $mode_sortie        = null;
-  var $prestation_id      = null;
-  var $facturable         = null; 
+  var $rques               = null;
+  var $ATNC                = null;
+  var $consult_accomp      = null;
+  var $hormone_croissance  = null;
+  var $lit_accompagnant    = null;
+  var $isolement           = null;
+  var $television          = null;
+  var $repas_diabete       = null;
+  var $repas_sans_sel      = null;
+  var $repas_sans_residu   = null;
+  var $repas_sans_porc     = null;
+  var $mode_entree         = null;
+  var $mode_sortie         = null;
+  var $prestation_id       = null;
+  var $facturable          = null; 
   var $adresse_par_prat_id = null;
   var $adresse_par_etab_id = null;
   var $libelle             = null;  
   var $forfait_se          = null;
   var $commentaires_sortie = null;
-  var $discipline_id       = null;   
+  var $discipline_id       = null;
+  
+  var $assurance_maladie        = null;
+  var $rques_assurance_maladie  = null;  
+  var $assurance_accident       = null;
+  var $rques_assurance_accident = null;
+  var $date_accident            = null;
+  var $nature_accident          = null;
   
   // Form Fields
   var $_entree             = null;
@@ -91,7 +98,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_min_entree_prevue  = null;
   var $_min_sortie_prevue  = null;
   var $_sortie_autorisee   = null;
-  var $_guess_NDA  = null;
+  var $_guess_NDA          = null;
   var $_at_midnight        = null;
   var $_couvert_cmu        = null;
   var $_couvert_ald        = null;
@@ -288,6 +295,13 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["commentaires_sortie"] = "text helped";
     $props["discipline_id"]       = "ref class|CDisciplineTarifaire autocomplete|description show|0";
     
+    $props["assurance_maladie"]        = "str autocomplete";
+    $props["rques_assurance_maladie"]  = "text helped";  
+    $props["assurance_accident"]       = "str autocomplete";
+    $props["rques_assurance_accident"] = "text helped";
+    $props["date_accident"]            = "date";
+    $props["nature_accident"]          = "enum list|P|T|D|S|J|C|L|B|U";
+  
     $props["_time_entree_prevue"] = "time";
     $props["_time_sortie_prevue"] = "time";
     

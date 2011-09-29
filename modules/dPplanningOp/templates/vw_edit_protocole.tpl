@@ -173,7 +173,7 @@ Main.add(function () {
       <select name="chir_id" class="{{$protocole->_props.chir_id}}"
               onchange="$('editFrm_libelle_protocole').value = '';
                         this.form.protocole_prescription_chir_id.value = '';"
-              style="width: 16em;">
+              style="width: 15em;">
         <option value="">&mdash; Choisir un praticien</option>
         {{foreach from=$listPraticiens item=_prat}}
         <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}"
@@ -190,7 +190,7 @@ Main.add(function () {
       <select name="function_id" class="{{$protocole->_props.function_id}}"
               onchange="$('editFrm_libelle_protocole').value = '';
                         this.form.protocole_prescription_chir_id.value = '';"
-              style="width: 16em;">
+              style="width: 15em;">
         <option value="">&mdash; Choisir une fonction</option>
         {{foreach from=$listFunctions item=_function}}
         <option class="mediuser" style="border-color: #{{$_function->color}};" value="{{$_function->_id}}"
@@ -220,35 +220,17 @@ Main.add(function () {
         
         <tr>
           <th>{{mb_label object=$protocole field="libelle"}}</th>
-          <td colspan="2">{{mb_field object=$protocole field="libelle" size="35"}}</td>
-        </tr>
-        
-        <tr>
-          <th>
-            {{mb_label object=$protocole field="_hour_op"}}
-          </th>
-          <td colspan="2">
-            <select name="_hour_op" class="notNull num min|0">
-            {{foreach from=$hours|smarty:nodefaults key=key item=hour}}
-              <option value="{{$key}}" {{if (!$protocole && $key == 1) || $protocole->_hour_op == $key}} selected="selected" {{/if}}>{{$key}}</option>
-            {{/foreach}}
-            </select> h 
-            <select name="_min_op">
-            {{foreach from=$mins|smarty:nodefaults item=min}}
-              <option value="{{$min}}" {{if (!$protocole && $min == 0) || $protocole->_min_op == $min}} selected="selected" {{/if}}>{{$min}}</option>
-            {{/foreach}}
-            </select> mn
-          </td>
+          <td colspan="2">{{mb_field object=$protocole field="libelle" style="width: 15em"}}</td>
         </tr>
 
-        <tr>
+        <tr {{if !$conf.dPplanningOp.COperation.use_ccam}}style="display: none;"{{/if}}>
           <th>
             {{mb_label object=$protocole field="codes_ccam"}}
           </th>
           <td colspan="2">
-            <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()" size="10" value="" />
+            <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()"  style="width: 12em" value="" />
             <button class="add notext" type="button" onclick="oCcamField.add($V(this.form._codes_ccam), true)">{{tr}}Add{{/tr}}</button>
-            <button class="search" type="button" onclick="CCAMSelector.init()">Choisir un code</button>
+            <button class="search notext" type="button" onclick="CCAMSelector.init()">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>
             <script type="text/javascript">
               var oForm = getForm('editFrm');
               Main.add(function() {
@@ -274,12 +256,37 @@ Main.add(function () {
           </td>
         </tr>
 
-        <tr>
+        <tr {{if !$conf.dPplanningOp.COperation.use_ccam}}style="display: none;"{{/if}}>
           <th>
             Liste des codes CCAM
             {{mb_field object=$protocole field="codes_ccam" hidden=1}}
           </th>
           <td colspan="2" class="text" id="listCodesCcam"></td>
+        </tr>
+  
+        <tr>
+          <th>{{mb_label object=$protocole field="cote"}}</th>
+          <td colspan="2">
+            {{mb_field object=$protocole field="cote" style="width: 15em" defaultOption="&mdash; Choisir"}}
+          </td>
+        </tr> 
+        
+        <tr>
+          <th>
+            {{mb_label object=$protocole field="_hour_op"}}
+          </th>
+          <td colspan="2">
+            <select name="_hour_op" class="notNull num min|0">
+            {{foreach from=$hours|smarty:nodefaults key=key item=hour}}
+              <option value="{{$key}}" {{if (!$protocole && $key == 1) || $protocole->_hour_op == $key}} selected="selected" {{/if}}>{{$key}}</option>
+            {{/foreach}}
+            </select> h 
+            <select name="_min_op">
+            {{foreach from=$mins|smarty:nodefaults item=min}}
+              <option value="{{$min}}" {{if (!$protocole && $min == 0) || $protocole->_min_op == $min}} selected="selected" {{/if}}>{{$min}}</option>
+            {{/foreach}}
+            </select> mn
+          </td>
         </tr>
         
         <tr>
@@ -320,7 +327,7 @@ Main.add(function () {
         
         <tr>
           <th>{{mb_label object=$protocole field="libelle_sejour"}}</th>
-          <td>{{mb_field object=$protocole field="libelle_sejour"}}</td>
+          <td>{{mb_field object=$protocole field="libelle_sejour" style="width: 15em;"}}</td>
         </tr>
         
         <tr>
@@ -328,7 +335,7 @@ Main.add(function () {
 				    {{mb_label object=$protocole field="service_id"}}
 				  </th>
 				  <td>
-				    <select name="service_id" class="{{$protocole->_props.service_id}}" style="max-width: 150px;">
+				    <select name="service_id" class="{{$protocole->_props.service_id}}" style="width: 15em;">
 				      <option value="">&mdash; Choisir un service</option>
 				      {{foreach from=$listServices item=_service}}
 				      <option value="{{$_service->_id}}" {{if $protocole->service_id == $_service->_id}} selected="selected" {{/if}}>
@@ -359,10 +366,10 @@ Main.add(function () {
             });
             </script>
             
-				    <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$protocole->DP}}" size="8"/>
+				    <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$protocole->DP}}" style="width: 12em;" />
 	          <input type="hidden" name="DP" value="{{$protocole->DP}}" onchange="$V(this.form.keywords_code, this.value)"/>
             <button type="button" class="cancel notext" onclick="$V(this.form.DP, '');" />
-	          <button type="button" class="search" onclick="CIM10Selector.init()">Choisir un code</button>
+	          <button type="button" class="search notext" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
               <script type="text/javascript">
                 CIM10Selector.init = function(){
                   this.sForm = "editFrm";
@@ -381,7 +388,7 @@ Main.add(function () {
 
         <tr>
           <th>{{mb_label object=$protocole field="type"}}</th>
-          <td>{{mb_field object=$protocole field="type"}}</td>
+          <td>{{mb_field object=$protocole field="type" style="width: 15em;"}}</td>
         </tr>
         
         <tr>
@@ -399,7 +406,7 @@ Main.add(function () {
         </tr>
         {{if array_key_exists("dPprescription", $modules)}}
         <tr>
-          <td colspan="2">
+          <th>
             <script type="text/javascript">
             Main.add(function(){
               var form = getForm("editFrm");
@@ -421,10 +428,11 @@ Main.add(function () {
               });
             });
             </script>
-            
             {{mb_label object=$protocole field="protocole_prescription_chir_id"}}
+          </th>
+          <td>
             <input type="text" name="libelle_protocole" id="editFrm_libelle_protocole" class="autocomplete str"
-              value="{{if $protocole->_id}}{{$protocole->_ref_protocole_prescription_chir->libelle}}{{/if}}"/>
+              value="{{if $protocole->_id}}{{$protocole->_ref_protocole_prescription_chir->libelle}}{{/if}}"  style="width: 12em;"/>
             <input type="hidden" name="protocole_prescription_chir_id" value="{{$protocole->protocole_prescription_chir_id}}"
               onchange="fillClass(this.form.protocole_prescription_chir_id, this.form.protocole_prescription_chir_class);
               submitFormAjax(this.form, 'systemMsg');"/>

@@ -50,7 +50,7 @@ if($userSel->_id){
     $in = " OR plagesop.spec_id ".CSQLDataSource::prepareIn(array_keys($secondary_specs));
   }
   
-  $where[] = "plagesop.chir_id = '$userSel->_id' OR plagesop.spec_id = '$userSel->function_id' $in";
+  $where[] = "plagesop.chir_id = '$userSel->_id' OR plagesop.anesth_id = '$userSel->_id' OR plagesop.spec_id = '$userSel->function_id' $in";
   $order = "debut, salle_id";
   
   $listDay = $plageOp->loadList($where, $order);
@@ -59,14 +59,10 @@ if($userSel->_id){
     $curr_plage->loadRefsFwd();
     $curr_plage->loadRefsOperations(0);
     foreach ($curr_plage->_ref_operations as $key_op => &$curr_op) {
-      if($curr_op->chir_id != $userSel->_id) {
-        unset($curr_plage->_ref_operations[$key_op]);
-      } else {
-        $curr_op->loadRefsFwd();
-        $curr_op->loadRefsDocs();
-        $curr_op->_ref_sejour->loadRefsFwd();
-        $curr_op->_ref_sejour->loadRefsDocs();
-      }
+      $curr_op->loadRefsFwd();
+      $curr_op->loadRefsDocs();
+      $curr_op->_ref_sejour->loadRefsFwd();
+      $curr_op->_ref_sejour->loadRefsDocs();
     }
   }
 }
