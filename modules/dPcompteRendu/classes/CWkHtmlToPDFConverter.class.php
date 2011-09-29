@@ -95,13 +95,14 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
       $this->footer_height = $matches[1];
     }
     
-    // Supprimer le padding-top du body
+    // Supprimer le padding-top du body et du hr
     $this->html = preg_replace("/#body\s*\{\s*padding-top:\s*[0-9]*px;\s*\}/", "", $this->html);
+    $this->html = preg_replace("/hr.pagebreak\s*{\s*padding-top:\s*[0-9]*px;\s*}/", "", $this->html);
     
     // Supression de la balise script pour l'impression
     $this->html = preg_replace("/(<script type=\"text\/javascript\">.*<\/script>)/s", "", $this->html);
     
-    // Supression du position fixed du header et du footer
+    // Suppression du position fixed du header et du footer
     if ($header_footer_common) {
       $header_footer_common = preg_replace("/position:\s*fixed;/", "", $header_footer_common);
       $header_footer_common = preg_replace("/(<script type=\"text\/javascript\">.*<\/script>)/s", "", $header_footer_common);
