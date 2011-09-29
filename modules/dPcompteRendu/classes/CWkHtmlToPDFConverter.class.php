@@ -159,7 +159,10 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
     }
     
     if ($this->width && $this->height) {
-      $options .= "--page-width $this->width --page-height $this->height ";
+      // Conversion en mm
+      $width = (25.4*$this->width)/72;
+      $height = (25.4*$this->height)/72;
+      $options .= "--page-width $width --page-height $height ";
     }
     
     $options .= "$this->file $result";
