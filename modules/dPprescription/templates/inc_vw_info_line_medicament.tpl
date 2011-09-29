@@ -18,17 +18,14 @@
 {{/if}}
 
 {{if $line instanceof CPrescriptionLineMixItem}}
-  {{if $line->_ref_prescription_line_mix->countBackRefs("prev_hist_line")}}
-  	<img src="images/icons/subst.png" title="Substitution" />
-  {{/if}}
   {{if $line->_ref_prescription_line_mix->date_arret && $line->time_arret}}
     <img src="style/mediboard/images/buttons/stop.png" title="{{tr}}CPrescriptionLineElement-date_arret{{/tr}} : {{$line->_ref_prescription_line_mix->date_arret|date_format:$conf.date}} {{$line->_ref_prescription_line_mix->time_arret|date_format:$conf.time}}"/>
   {{/if}}
 {{else}}
-  {{if $line->countBackRefs("prev_hist_line")}}
-    <img src="images/icons/subst.png" title="Substitution" />
-  {{/if}}
   {{if $line->date_arret && $line->time_arret}}
     <img src="style/mediboard/images/buttons/stop.png" title="{{tr}}CPrescriptionLineElement-date_arret{{/tr}} : {{$line->date_arret|date_format:$conf.date}} {{$line->time_arret|date_format:$conf.time}}"/>
   {{/if}}
+{{/if}}
+{{if $line instanceof CPrescriptionLineMedicament && $line->countBackRefs("prev_hist_line")}}
+  <img src="images/icons/subst.png" title="Substitution" />
 {{/if}}
