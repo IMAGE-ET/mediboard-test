@@ -76,7 +76,7 @@ function annuleConsult(form, value) {
   }
 }
 
-function checkFormRDV(oForm){
+function checkFormRDV(form){
   if(!form._pause.checked && form.patient_id.value == ""){
     alert("Veuillez sélectionner un patient");
     PatSelector.init();
