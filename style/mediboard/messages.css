@@ -61,6 +61,10 @@ div.info {
   background-image: url(../../images/icons/info.png);
 }
 
+div.noted {
+  margin-right: 20px; 
+}
+
 div.loading {
   background-image: url(images/icons/loading.gif);
 }

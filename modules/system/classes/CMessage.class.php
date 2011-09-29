@@ -62,11 +62,14 @@ class CMessage extends CMbObject {
   }
 
   /**
-   * Loads messages from a publication date perspective : 
-   * @param string status Wanted status, null for all
-   * @param string module Module name restriction, null for all
+   * Loads messages from a publication date perspective
+   * 
+   * @param string status   Wanted status, null for all
+   * @param string mod_name Module name restriction, null for all
+   * @return array          Published messages
+   * 
    */ 
-  function loadPublications($status = null, $module = null, $group_id = null) {
+  function loadPublications($status = null, $mod_name = null, $group_id = null) {
     $now = mbDateTime();
     $where = array();
     
@@ -90,10 +93,10 @@ class CMessage extends CMbObject {
     $messages = $this->loadList($where, "deb DESC");
     
     // Module name restriction
-    if ($module) {
+    if ($mod_name) {
 			foreach ($messages as $message_id => $_message) {
 			  if ($_message->module_id) {
-					if ($_message->_ref_module->mod_name != $module) {
+					if ($_message->loadRefModule()->mod_name != $mod_name) {
 						unset($messages[$message_id]);
 					}
 			  }
@@ -105,14 +108,18 @@ class CMessage extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->loadRefsFwd();
-    $this->_view = ($this->module_id ? "[$this->_ref_module] - " : "") . $this->titre;
+    $this->_view = $this->titre;
   }
   
-  function loadRefsFwd() {
-    parent::loadRefsFwd();
-    $this->_ref_module = $this->loadFwdRef("module_id", true);
-    $this->_ref_group = $this->loadFwdRef("group_id", true);
+  function loadRefModule() {
+    $module = $this->loadFwdRef("module_id", true);
+    $this->_view = ($module->_id ? "[$module] - " : "") . $this->titre;
+    return $this->_ref_module = $module;
+  
+  }
+  
+  function loadRefGroup() {
+    return $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
 }
 

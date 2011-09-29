@@ -1,4 +1,4 @@
-{{* $Id: inc_edit_messages.tpl 10391 2010-10-14 14:34:09Z lryo $ *}}
+{{* $Id: $ *}}
 
 {{*
  * @package Mediboard

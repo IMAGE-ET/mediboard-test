@@ -8,10 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;message_id=0">
-  Créer un message
-</a>
-
 <form name="Filter" action="?" method="get">
 
 <input type="hidden" name="m" value="{{$m}}" />
@@ -19,7 +15,7 @@
 <table class="form">
   <tr>
     <th>{{mb_label object=$filter field=_status}}</th>
-    <td>{{mb_field object=$filter field=_status defaultOption="&mdash; Tous"}}</td>
+    <td>{{mb_field object=$filter field=_status emptyLabel=All}}</td>
   </tr>
 </table>
 
@@ -28,7 +24,7 @@
 <table class="tbl">
 
 <tr>
-  <th colspan="10">
+  <th colspan="10" class="title">
     {{$messages|@count}}
   	{{tr}}CMessage{{/tr}}s
   	{{tr}}found{{/tr}}
@@ -36,46 +32,60 @@
 </tr>
 
 <tr>
-  <th>{{mb_title class=CMessage field=titre}}</th>
-  <th>{{mb_title class=CMessage field=module_id}}</th>
-  <th class="narrow">{{mb_title class=CMessage field=deb}}</th>
-  <th class="narrow">{{mb_title class=CMessage field=fin}}</th>
-  <th class="narrow">{{mb_title class=CMessage field=group_id}}</th>
+  <th colspan="2" class="narrow">{{mb_title class=CMessage field=titre}}</th>
+  <th class="narrow">
+    {{mb_label class=CMessage field=group_id}} <br />
+    {{mb_label class=CMessage field=module_id}}
+  </th>
+  <th class="narrow">
+    {{mb_title class=CMessage field=deb}} <br />
+    {{mb_title class=CMessage field=fin}}
+  </th>
+  <th>
+    {{mb_title class=CMessage field=corps}}
+  </th>
 </tr>
 
 {{foreach from=$messages item=_message}}
 <tbody class="hoverable">
 
-<tr {{if $_message->_id == $message->_id}}class="selected"{{/if}}>
-  {{assign var="message_id" value=$_message->message_id}}
-  {{assign var="href" value="?m=$m&tab=$tab&message_id=$message_id"}}
-  <td {{if $_message->urgence == "urgent"}}class="highlight"{{/if}}>
-    <strong><a href="{{$href}}">{{mb_value object=$_message field=titre}}</a></strong>
-  </td>
-  
+<tr>
   <td>
-  {{if $_message->module_id}}
-    {{$_message->_ref_module}}
-  {{else}}
-  	{{tr}}All{{/tr}}
-  {{/if}}
+    <button class="edit notext" onclick="Message.edit('{{$_message->_id}}');">
+      {{tr}}Edit{{/tr}}
+    </button> 
   </td>
-  
-  <td>{{mb_value object=$_message field=deb}}</td>
-  <td>{{mb_value object=$_message field=fin}}</td>
-  
   <td>
-  {{if $_message->group_id}}
-    {{$_message->_ref_group}}
-  {{else}}
-    {{tr}}All{{/tr}}
-  {{/if}}
-  </td>
-</tr>
+    {{mb_include module=system template=inc_object_notes object=$_message float=right}}
 
-<tr {{if $_message->_id == $message->_id}}class="selected"{{/if}}>
-  <td class="text compact" colspan="5" style="padding-left: 2em;">
-  	{{mb_value object=$_message field=corps}}
+    {{assign var=class value=info}}
+    {{if $_message->urgence == "urgent"}}{{assign var=class value=warning}}{{/if}}
+    <div class="{{$class}} noted">
+      <strong>{{mb_value object=$_message field=titre}}</strong>
+    </div>
+  </td>
+  
+  <td>
+    {{if $_message->group_id}}
+      {{$_message->_ref_group}}
+    {{else}}
+      {{tr}}All{{/tr}}
+    {{/if}}
+    <br />
+    {{if $_message->module_id}}
+      {{$_message->_ref_module}}
+    {{else}}
+    	{{tr}}All{{/tr}}
+    {{/if}}
+  </td>
+  
+  <td>
+    {{mb_value object=$_message field=deb}} <br />
+    {{mb_value object=$_message field=fin}}
+  </td>
+  
+  <td class="text compact">
+    {{mb_value object=$_message field=corps}}
   </td>
 </tr>
 
