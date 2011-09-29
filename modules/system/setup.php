@@ -10,6 +10,36 @@
 
 class CSetupsystem extends CSetup {
   
+  static function getFieldRenameQueries($object_class, $from, $to) {
+    $ds = CSQLDataSource::get("std");
+    
+    $queries = array();
+    
+    $queries[] = 
+      "UPDATE `user_log` 
+       SET   
+         `fields` = '$to', 
+         `extra`  = REPLACE(`extra`, '\"$from\":', '\"$to\":')
+       WHERE 
+         `object_class` = '$object_class' AND 
+         `fields` = '$from' AND 
+         `type` IN('store', 'merge')";
+    
+    $queries[] = 
+      "UPDATE `user_log` 
+       SET   
+         `fields` = REPLACE(`fields`, ' $from ', ' $to '), 
+         `fields` = REPLACE(`fields`, '$from ' , '$to '), 
+         `fields` = REPLACE(`fields`, ' $from' , ' $to'), 
+         `extra`  = REPLACE(`extra`, '\"$from\":', '\"$to\":')
+       WHERE 
+         `object_class` = '$object_class' AND 
+         `fields` LIKE '%$from%' AND 
+         `type` IN('store', 'merge')";
+    
+    return $queries;
+  }
+  
   function __construct() {
     parent::__construct();
     
@@ -20,69 +50,69 @@ class CSetupsystem extends CSetup {
     
     $this->makeRevision("1.0.00");
     $query = "CREATE TABLE `access_log` (
-		  `accesslog_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
-			`module` VARCHAR( 40 ) NOT NULL ,
-			`action` VARCHAR( 40 ) NOT NULL ,
-			`period` DATETIME NOT NULL ,
-			`hits` TINYINT DEFAULT '0' NOT NULL ,
-			`duration` DOUBLE NOT NULL,
-			PRIMARY KEY ( `accesslog_id` )) /*! ENGINE=MyISAM */";
+      `accesslog_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+      `module` VARCHAR( 40 ) NOT NULL ,
+      `action` VARCHAR( 40 ) NOT NULL ,
+      `period` DATETIME NOT NULL ,
+      `hits` TINYINT DEFAULT '0' NOT NULL ,
+      `duration` DOUBLE NOT NULL,
+      PRIMARY KEY ( `accesslog_id` )) /*! ENGINE=MyISAM */";
     $this->addQuery($query);
     $query = "ALTER TABLE `access_log` 
-		  ADD UNIQUE `triplet` (`module` , `action` , `period`)";
+      ADD UNIQUE `triplet` (`module` , `action` , `period`)";
     $this->addQuery($query);
     $query = "ALTER TABLE `access_log`
-		   ADD INDEX ( `module` )";
+       ADD INDEX ( `module` )";
     $this->addQuery($query);
     $query = "ALTER TABLE `access_log` 
-		  ADD INDEX ( `action` )";
+      ADD INDEX ( `action` )";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.01");
     $query = "ALTER TABLE `access_log` CHANGE `
-		  hits` `hits` INT UNSIGNED DEFAULT '0' NOT NULL ";
+      hits` `hits` INT UNSIGNED DEFAULT '0' NOT NULL ";
     $this->addQuery($query);
     $query = "ALTER TABLE `access_log` 
-		  ADD `request` DOUBLE NOT NULL ;";
+      ADD `request` DOUBLE NOT NULL ;";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.02");
     $query = "ALTER TABLE `access_log` 
-		  DROP INDEX `action_2` ;";
+      DROP INDEX `action_2` ;";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.03");
     $this->setTimeLimit(300);
     $query = "ALTER TABLE `user_log` 
-		  CHANGE `type` `type` ENUM( 'create', 'store', 'delete' ) NOT NULL; ";
+      CHANGE `type` `type` ENUM( 'create', 'store', 'delete' ) NOT NULL; ";
     $this->addQuery($query);
     $query = "ALTER TABLE `user_log` 
-		  ADD `fields` TEXT;";
+      ADD `fields` TEXT;";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.04");
     $this->setTimeLimit(300);
     $query = "ALTER TABLE `access_log`
-		  CHANGE `accesslog_id` `accesslog_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-			CHANGE `module` `module` VARCHAR(255) NOT NULL,
-			CHANGE `action` `action` VARCHAR(255) NOT NULL,
-			CHANGE `hits` `hits` int(11) unsigned NOT NULL DEFAULT '0',
-			CHANGE `duration` `duration` float NOT NULL DEFAULT '0',
-			CHANGE `request` `request` float NOT NULL DEFAULT '0'; ";
+      CHANGE `accesslog_id` `accesslog_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+      CHANGE `module` `module` VARCHAR(255) NOT NULL,
+      CHANGE `action` `action` VARCHAR(255) NOT NULL,
+      CHANGE `hits` `hits` int(11) unsigned NOT NULL DEFAULT '0',
+      CHANGE `duration` `duration` float NOT NULL DEFAULT '0',
+      CHANGE `request` `request` float NOT NULL DEFAULT '0'; ";
     $this->addQuery($query);
     $query = "ALTER TABLE `message` 
-		  CHANGE `message_id` `message_id` int(11) unsigned NOT NULL AUTO_INCREMENT; ";
+      CHANGE `message_id` `message_id` int(11) unsigned NOT NULL AUTO_INCREMENT; ";
     $this->addQuery($query);
     $query = "ALTER TABLE `user_log`
-		  CHANGE `user_log_id` `user_log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-			CHANGE `user_id` `user_id` int(11) unsigned NOT NULL DEFAULT '0',
-			CHANGE `object_id` `object_id` int(11) unsigned NOT NULL DEFAULT '0'; ";
+      CHANGE `user_log_id` `user_log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+      CHANGE `user_id` `user_id` int(11) unsigned NOT NULL DEFAULT '0',
+      CHANGE `object_id` `object_id` int(11) unsigned NOT NULL DEFAULT '0'; ";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.05");
     $this->setTimeLimit(300);
     $query = "DELETE FROM `user_log` 
-		  WHERE `object_id` = '0'";
+      WHERE `object_id` = '0'";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.06");
@@ -110,7 +140,7 @@ class CSetupsystem extends CSetup {
     
     $this->makeRevision("1.0.09");
     $query = "ALTER TABLE `message`
-	    ADD `module_id` INT(11) UNSIGNED;";
+      ADD `module_id` INT(11) UNSIGNED;";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.10");
@@ -120,16 +150,16 @@ class CSetupsystem extends CSetup {
     
     $this->makeRevision("1.0.11");
     $query = "ALTER TABLE `user_log` 
-			CHANGE `type` `type` ENUM ('create','store','merge','delete') NOT NULL,
-			ADD INDEX (`date`);";
+      CHANGE `type` `type` ENUM ('create','store','merge','delete') NOT NULL,
+      ADD INDEX (`date`);";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.12");
     $query = "ALTER TABLE `access_log` 
-			ADD `size` INT (11) UNSIGNED,
-			ADD `errors` INT (11) UNSIGNED,
-			ADD `warnings` INT (11)  UNSIGNED,
-			ADD `notices` INT (11) UNSIGNED;";
+      ADD `size` INT (11) UNSIGNED,
+      ADD `errors` INT (11) UNSIGNED,
+      ADD `warnings` INT (11)  UNSIGNED,
+      ADD `notices` INT (11) UNSIGNED;";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.13");
@@ -174,14 +204,14 @@ class CSetupsystem extends CSetup {
     
     $this->makeRevision("1.0.20");
     $query = "CREATE TABLE `alert` (
-	    `alert_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-	    `tag` VARCHAR (255) NOT NULL,
-	    `level` ENUM ('low','medium','high') NOT NULL DEFAULT 'medium',
-	    `comments` TEXT,
-	    `handled` ENUM ('0','1') NOT NULL DEFAULT '0',
-	    `object_id` INT (11) UNSIGNED NOT NULL,
-	    `object_class` VARCHAR (255) NOT NULL
-	  ) /*! ENGINE=MyISAM */;";
+      `alert_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `tag` VARCHAR (255) NOT NULL,
+      `level` ENUM ('low','medium','high') NOT NULL DEFAULT 'medium',
+      `comments` TEXT,
+      `handled` ENUM ('0','1') NOT NULL DEFAULT '0',
+      `object_id` INT (11) UNSIGNED NOT NULL,
+      `object_class` VARCHAR (255) NOT NULL
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `alert` 
       ADD INDEX (`object_id`),
@@ -191,45 +221,45 @@ class CSetupsystem extends CSetup {
     
     $this->makeRevision("1.0.21");
     $query = "UPDATE user_preferences 
-		  SET value = 'e-cap' 
-			WHERE value = 'tonkin';";
+      SET value = 'e-cap' 
+      WHERE value = 'tonkin';";
     $this->addQuery($query);
     $query = "UPDATE user_preferences 
-		  SET value = 'e-cap' 
-			WHERE value = 'K-Open';";
+      SET value = 'e-cap' 
+      WHERE value = 'K-Open';";
     $this->addQuery($query);
     $query = "UPDATE user_preferences 
-		  SET value = 'mediboard' 
-			WHERE value = 'mediboard_lite';";
+      SET value = 'mediboard' 
+      WHERE value = 'mediboard_lite';";
     $this->addQuery($query);
     $query = "UPDATE user_preferences 
-		  SET value = 'mediboard' 
-			WHERE value = 'mediboard_super_lite';";
+      SET value = 'mediboard' 
+      WHERE value = 'mediboard_super_lite';";
     $this->addQuery($query);    
-    		
+        
     $this->makeRevision("1.0.26");
     $query = "DELETE FROM `modules` 
-		  WHERE `mod_name` = 'dPinterop'";
+      WHERE `mod_name` = 'dPinterop'";
     $this->addQuery($query, true);
     
-		$this->makeRevision("1.0.27");
+    $this->makeRevision("1.0.27");
     $query = "DELETE FROM `modules` 
-		  WHERE `mod_name` = 'dPmateriel'";
+      WHERE `mod_name` = 'dPmateriel'";
     $this->addQuery($query, true);
-		
+    
     $this->makeRevision("1.0.28");
     $query = "CREATE TABLE IF NOT EXISTS `content_html` (
-		  `content_id` BIGINT NOT NULL auto_increment PRIMARY KEY,
-		  `content` TEXT,
-		  `cr_id` INT
-		) /*! ENGINE=MyISAM */;";
+      `content_id` BIGINT NOT NULL auto_increment PRIMARY KEY,
+      `content` TEXT,
+      `cr_id` INT
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $query = "CREATE TABLE `content_xml` (
-		  `content_id` BIGINT NOT NULL auto_increment PRIMARY KEY,
-		  `content` TEXT,
-		  `import_id` INT
-		) /*! ENGINE=MyISAM */;";
+      `content_id` BIGINT NOT NULL auto_increment PRIMARY KEY,
+      `content` TEXT,
+      `import_id` INT
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.29");
@@ -245,21 +275,21 @@ class CSetupsystem extends CSetup {
     
     $this->makeRevision("1.0.32");
     $query = "ALTER TABLE `access_log` 
-		  ADD INDEX ( `period` )";
+      ADD INDEX ( `period` )";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.34");
     $query = "CREATE TABLE `source_smtp` (
-	    `source_smtp_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-	    `port` INT (11) DEFAULT '25',
-	    `email` VARCHAR (50),
-	    `ssl` ENUM ('0','1') DEFAULT '0',
-	    `name` VARCHAR  (255) NOT NULL,
-	    `role` ENUM ('prod','qualif') NOT NULL DEFAULT 'qualif',
-	    `host` TEXT NOT NULL,
-	    `user` VARCHAR  (255),
-	    `password` VARCHAR (50),
-	    `type_echange` VARCHAR  (255)
+      `source_smtp_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `port` INT (11) DEFAULT '25',
+      `email` VARCHAR (50),
+      `ssl` ENUM ('0','1') DEFAULT '0',
+      `name` VARCHAR  (255) NOT NULL,
+      `role` ENUM ('prod','qualif') NOT NULL DEFAULT 'qualif',
+      `host` TEXT NOT NULL,
+      `user` VARCHAR  (255),
+      `password` VARCHAR (50),
+      `type_echange` VARCHAR  (255)
     ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
@@ -314,9 +344,9 @@ class CSetupsystem extends CSetup {
     ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `ex_class_field_enum_translation` 
-	    ADD INDEX (`ex_class_field_id`),
-	    ADD INDEX (`lang`),
-	    ADD INDEX (`key`);";
+      ADD INDEX (`ex_class_field_id`),
+      ADD INDEX (`lang`),
+      ADD INDEX (`key`);";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.37");
@@ -326,7 +356,7 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `ex_class_field_translation` 
       ADD INDEX (`lang`)";
     $this->addQuery($query);
-		
+    
     $this->makeRevision("1.0.38");
     $query = "ALTER TABLE `ex_class_field` 
       ADD `coord_field_x` TINYINT (4) UNSIGNED,
@@ -334,33 +364,33 @@ class CSetupsystem extends CSetup {
       ADD `coord_label_x` TINYINT (4) UNSIGNED,
       ADD `coord_label_y` TINYINT (4) UNSIGNED;";
     $this->addQuery($query);
-		
-		$this->makeRevision("1.0.39");
-		$query = "CREATE TABLE `ex_class_host_field` (
-	    `ex_class_host_field_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-	    `ex_class_id` INT (11) UNSIGNED NOT NULL,
-	    `field` VARCHAR (80) NOT NULL,
-	    `coord_label_x` TINYINT (4) UNSIGNED,
-	    `coord_label_y` TINYINT (4) UNSIGNED,
-	    `coord_value_x` TINYINT (4) UNSIGNED,
-	    `coord_value_y` TINYINT (4) UNSIGNED
-	    ) /*! ENGINE=MyISAM */;";
+    
+    $this->makeRevision("1.0.39");
+    $query = "CREATE TABLE `ex_class_host_field` (
+      `ex_class_host_field_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `ex_class_id` INT (11) UNSIGNED NOT NULL,
+      `field` VARCHAR (80) NOT NULL,
+      `coord_label_x` TINYINT (4) UNSIGNED,
+      `coord_label_y` TINYINT (4) UNSIGNED,
+      `coord_value_x` TINYINT (4) UNSIGNED,
+      `coord_value_y` TINYINT (4) UNSIGNED
+      ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `ex_class_host_field` 
       ADD INDEX (`ex_class_id`);";
     $this->addQuery($query);
-		
-		$this->makeRevision("1.0.40");
-		$query = "ALTER TABLE `ex_class_field` 
+    
+    $this->makeRevision("1.0.40");
+    $query = "ALTER TABLE `ex_class_field` 
       CHANGE `ex_class_id` `ex_class_id` INT (11) UNSIGNED,
       ADD `concept_id` INT (11) UNSIGNED;";
     $this->addQuery($query);
     $query = "ALTER TABLE `ex_class_field` 
       ADD INDEX (`concept_id`);";
     $this->addQuery($query);
-		
-		$this->makeRevision("1.0.41");
-		$query = "ALTER TABLE `ex_class` 
+    
+    $this->makeRevision("1.0.41");
+    $query = "ALTER TABLE `ex_class` 
       ADD `disabled` ENUM ('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($query);
       
@@ -372,9 +402,9 @@ class CSetupsystem extends CSetup {
       `separator` CHAR (1)
     ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-		
-		$this->makeRevision("1.0.43");
-		$query = "CREATE TABLE `tag` (
+    
+    $this->makeRevision("1.0.43");
+    $query = "CREATE TABLE `tag` (
               `tag_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `parent_id` INT (11) UNSIGNED,
               `object_class` VARCHAR (80),
@@ -385,7 +415,7 @@ class CSetupsystem extends CSetup {
               ADD INDEX (`parent_id`),
               ADD INDEX (`object_class`);";
     $this->addQuery($query);
-		$query = "CREATE TABLE `tag_item` (
+    $query = "CREATE TABLE `tag_item` (
               `tag_item_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `tag_id` INT (11) UNSIGNED NOT NULL,
               `object_id` INT (11) UNSIGNED NOT NULL,
@@ -397,19 +427,19 @@ class CSetupsystem extends CSetup {
               ADD INDEX (`object_id`),
               ADD INDEX (`object_class`);";
     $this->addQuery($query);
-		
-		$this->makeRevision("1.0.44");
-		$query = "ALTER TABLE `tag` 
+    
+    $this->makeRevision("1.0.44");
+    $query = "ALTER TABLE `tag` 
               ADD `color` VARCHAR (20);";
     $this->addQuery($query);
-		
-		$this->makeRevision("1.0.45");
-		$query = "CREATE TABLE `ex_list` (
+    
+    $this->makeRevision("1.0.45");
+    $query = "CREATE TABLE `ex_list` (
               `ex_list_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `name` VARCHAR (255) NOT NULL
-							) /*! ENGINE=MyISAM */;";
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-		$query = "CREATE TABLE `ex_list_item` (
+    $query = "CREATE TABLE `ex_list_item` (
               `ex_list_item_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `list_id` INT (11) UNSIGNED NOT NULL,
               `name` VARCHAR (255) NOT NULL,
@@ -419,7 +449,7 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `ex_list_item` 
               ADD INDEX (`list_id`);";
     $this->addQuery($query);
-		$query = "CREATE TABLE `ex_concept` (
+    $query = "CREATE TABLE `ex_concept` (
               `ex_concept_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `ex_list_id` INT (11) UNSIGNED,
               `name` VARCHAR (255) NOT NULL,
@@ -451,9 +481,9 @@ class CSetupsystem extends CSetup {
               ADD INDEX (`concept_id`),
               ADD INDEX (`field_id`);";
     $this->addQuery($query);
-		
+    
     $this->makeRevision("1.0.48");
-		$query = "CREATE TABLE `ex_class_field_group` (
+    $query = "CREATE TABLE `ex_class_field_group` (
               `ex_class_field_group_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `ex_class_id` INT (11) UNSIGNED,
               `name` VARCHAR (255) NOT NULL
@@ -462,27 +492,27 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `ex_class_field_group` 
               ADD INDEX (`ex_class_id`);";
     $this->addQuery($query);
-		$query = "INSERT INTO `ex_class_field_group` (`name`, `ex_class_id`)
+    $query = "INSERT INTO `ex_class_field_group` (`name`, `ex_class_id`)
               SELECT 'Groupe principal', `ex_class`.`ex_class_id` FROM `ex_class`";
     $this->addQuery($query);
-		
-		// class field
-		$query = "ALTER TABLE `ex_class_field` 
+    
+    // class field
+    $query = "ALTER TABLE `ex_class_field` 
               ADD `ex_group_id` INT (11) UNSIGNED";
     $this->addQuery($query);
     $query = "ALTER TABLE `ex_class_field` 
               ADD INDEX (`ex_group_id`)";
     $this->addQuery($query);
     $query = "UPDATE `ex_class_field` 
-		          SET `ex_group_id` = (
-							  SELECT `ex_class_field_group`.`ex_class_field_group_id` 
-								FROM `ex_class_field_group` 
-								WHERE `ex_class_field_group`.`ex_class_id` = `ex_class_field`.`ex_class_id`
-								LIMIT 1
-							)";
+              SET `ex_group_id` = (
+                SELECT `ex_class_field_group`.`ex_class_field_group_id` 
+                FROM `ex_class_field_group` 
+                WHERE `ex_class_field_group`.`ex_class_id` = `ex_class_field`.`ex_class_id`
+                LIMIT 1
+              )";
     $this->addQuery($query);
-							
-		// class host field
+              
+    // class host field
     $query = "ALTER TABLE `ex_class_host_field` 
               ADD `ex_group_id` INT (11) UNSIGNED";
     $this->addQuery($query);
@@ -514,27 +544,27 @@ class CSetupsystem extends CSetup {
                 `type_echange` VARCHAR (255)
               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-		
+    
     $this->makeRevision("1.0.51");
     function update_ex_object_tables(){
       $ds = CSQLDataSource::get("std");
-			
+      
       if ($ds) {
-      	$ex_classes = $ds->loadList("SELECT * FROM ex_class");
-				foreach($ex_classes as $_ex_class) {
-					$_ex_class['host_class'] = strtolower($_ex_class['host_class']);
-					
-					$old_name = "ex_{$_ex_class['host_class']}_{$_ex_class['event']}_{$_ex_class['ex_class_id']}";
-					$new_name = "ex_object_{$_ex_class['ex_class_id']}";
-					
-					$query = "RENAME TABLE `$old_name` TO `$new_name`";
-					$ds->query($query);
-				}
+        $ex_classes = $ds->loadList("SELECT * FROM ex_class");
+        foreach($ex_classes as $_ex_class) {
+          $_ex_class['host_class'] = strtolower($_ex_class['host_class']);
+          
+          $old_name = "ex_{$_ex_class['host_class']}_{$_ex_class['event']}_{$_ex_class['ex_class_id']}";
+          $new_name = "ex_object_{$_ex_class['ex_class_id']}";
+          
+          $query = "RENAME TABLE `$old_name` TO `$new_name`";
+          $ds->query($query);
+        }
       }
-			
+      
       return true;
     }
-		
+    
     $this->addFunction("update_ex_object_tables");
 
     $this->makeRevision("1.0.52");
@@ -552,7 +582,7 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `view_sender` 
       ADD INDEX (`source_id`);";
     $this->addQuery($query);
-		
+    
     $query = "CREATE TABLE `view_sender_source` (
       `source_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
       `name` VARCHAR (255) NOT NULL
@@ -584,9 +614,9 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `view_sender` 
       CHANGE `offset` `offset` INT (11) UNSIGNED NOT NULL DEFAULT '0';";
     $this->addQuery($query);
-		
+    
     $this->makeRevision("1.0.56");
-		$query = "ALTER TABLE `ex_class` 
+    $query = "ALTER TABLE `ex_class` 
               ADD `conditional` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
     
@@ -628,14 +658,14 @@ class CSetupsystem extends CSetup {
       DROP `formula`, 
       DROP `formula_result_field_id`;";
     $this->addQuery($query);
-		
-		$this->makeRevision("1.0.61");
-		$query = "ALTER TABLE `ex_list` 
+    
+    $this->makeRevision("1.0.61");
+    $query = "ALTER TABLE `ex_list` 
               ADD `multiple` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
-		
-		$this->makeRevision("1.0.62");
-		$query = "ALTER TABLE `ex_class` 
+    
+    $this->makeRevision("1.0.62");
+    $query = "ALTER TABLE `ex_class` 
               ADD `required` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
     
@@ -647,7 +677,7 @@ class CSetupsystem extends CSetup {
                `to` VARCHAR (255) NOT NULL
               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-		
+    
     $this->makeRevision("1.0.64");
     $query = "CREATE TABLE `ex_class_message` (
               `ex_class_message_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
@@ -664,9 +694,9 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `ex_class_message` 
               ADD INDEX (`ex_group_id`);";
     $this->addQuery($query);
-		
+    
     $this->makeRevision("1.0.65");
-		function setup_system_addExReferenceFields(){
+    function setup_system_addExReferenceFields(){
       set_time_limit(1800);
       ignore_user_abort(1);
       
@@ -682,14 +712,14 @@ class CSetupsystem extends CSetup {
         $ds->exec($query);
       }
       return true;
-		}
-		$this->addFunction("setup_system_addExReferenceFields");
+    }
+    $this->addFunction("setup_system_addExReferenceFields");
     $query = "ALTER TABLE `ex_class_field`
               ADD `reported` ENUM ('0','1') NOT NULL DEFAULT '0'";
     $this->addQuery($query);
-		
-		$this->makeRevision("1.0.66");
-		$query = "ALTER TABLE `ex_class_message` 
+    
+    $this->makeRevision("1.0.66");
+    $query = "ALTER TABLE `ex_class_message` 
               CHANGE `type` `type` ENUM ('title','info','warning','error');";
     $this->addQuery($query);
     
@@ -814,9 +844,9 @@ class CSetupsystem extends CSetup {
                `data` BLOB
               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-		
-		$this->makeRevision("1.0.80");
-		$query = "ALTER TABLE `ex_class` 
+    
+    $this->makeRevision("1.0.80");
+    $query = "ALTER TABLE `ex_class` 
               ADD `unicity` ENUM ('no','host','reference1','reference2') NOT NULL DEFAULT 'no';";
     $this->addQuery($query);
     
