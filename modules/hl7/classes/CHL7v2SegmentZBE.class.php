@@ -34,7 +34,7 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     // ZBE-2: Start of Movement Date/Time (TS)
     $data[] = null;
     
-    // ZBE-3: Start of Movement Date/Time (TS) <b>optional </b>
+    // ZBE-3: End of Movement Date/Time (TS) <b>optional </b>
     $data[] = null;
     
     // ZBE-4: Action on the Movement (ID)

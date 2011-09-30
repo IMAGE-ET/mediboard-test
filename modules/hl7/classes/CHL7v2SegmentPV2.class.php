@@ -35,7 +35,7 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
     
     // PV2-3: Admit Reason (Psychiatrie) (CE) (optional)
     // Table - 9000
-    // HL  - Hospitalisation
+    // HL  - Hospitalisation libre
     // HO  - Placement d'office
     // HDT - Hospitalisation à la demande d'un tiers
     if ($sejour->type == "psy") {

@@ -91,7 +91,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     
     $specs = $this->getSpecs();
     $message = $this->getMessage();
-    
+    mbLog($this->name);
     $_segment_specs = $specs->getItems();
     foreach($_segment_specs as $i => $_spec){
       $field = new CHL7v2Field($this, $_spec);
@@ -419,7 +419,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       // PL-3 - Lit
       $affectation->_id ? $affectation->_ref_lit->nom : null,
       // PL-4 - Etablissement hospitalier
-      $this->getGroupAssigningAuthority($sejour->_ref_group),
+      $this->getGroupAssigningAuthority($sejour->loadRefEtablissement()),
       // PL-5 - Statut du lit
       // Table - 0116
       // O - Occupé

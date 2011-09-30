@@ -32,9 +32,9 @@ class CSetuphl7 extends CSetup {
        
     $this->makeRevision("0.02");
   
-    $sql = "ALTER TABLE `table_description` 
+    $query = "ALTER TABLE `table_description` 
               ADD `user` ENUM ('0','1') NOT NULL DEFAULT '0';";
-    $this->addQuery($sql, false, "hl7v2");
+    $this->addQuery($query, false, "hl7v2");
     
     // Gestion du mode de placement en psychiatrie
     $query = "INSERT INTO `hl7v2`.`table_description` (
@@ -44,10 +44,205 @@ class CSetuphl7 extends CSetup {
               );";
     $this->addQuery($query, false, "hl7v2");
     
-    $this->mod_version = "0.03";
+    $this->makeRevision("0.03");
+    
+    $query = "ALTER TABLE `hl7v2`.`table_entry` DROP INDEX `number_code_hl7` ,
+                ADD INDEX `number_code_hl7` ( `number` , `code_hl7_from` );";
+    $this->addQuery($query, false, "hl7v2");
+    
+    // Table - 0001
+    // F - Female
+    $set = array( 
+      "code_hl7_to"   => "F",
+      "code_mb_from"  => "f",
+      "code_mb_to"    => "f"
+    );
+    $and = array(
+      "code_hl7_from" => "F"
+    );
+    $this->updateTableEntry("1", $set, $and);
+    // M - Male
+    $set = array( 
+      "code_hl7_to"   => "M",
+      "code_mb_from"  => "m",
+      "code_mb_to"    => "m"
+    );
+    $and = array(
+      "code_hl7_from" => "M"
+    );
+    $this->updateTableEntry("1", $set, $and);
+    // O - Other
+    $set = array(
+      "code_mb_to"    => "m"
+    );
+    $and = array(
+      "code_hl7_from" => "O"
+    );
+    $this->updateTableEntry("1", $set, $and);
+    // U - Unknown
+    $set = array(
+      "code_mb_to"    => "m"
+    );
+    $and = array(
+      "code_hl7_from" => "U"
+    );
+    $this->updateTableEntry("1", $set, $and);
+    // A - Ambiguous  
+    $set = array(
+      "code_mb_to"    => "m"
+    );
+    $and = array(
+      "code_hl7_from" => "A"
+    );
+    $this->updateTableEntry("1", $set, $and);
+    // N - Not applicable
+    $set = array(
+      "code_mb_to"    => "m"
+    );
+    $and = array(
+      "code_hl7_from" => "N"
+    );
+    $this->updateTableEntry("1", $set, $and);
+
+    // Table 0004 - Patient Class
+    // E - Emergency - Passage aux Urgences - Arrivée aux urgences
+    $set = array(
+      "code_hl7_to"   => "E",
+      "code_mb_from"  => "urg",
+      "code_mb_to"    => "urg"
+    );
+    $and = array(
+      "code_hl7_from" => "E"
+    );
+    $this->updateTableEntry("4", $set, $and);
+    // I - Inpatient - Hospitalisation
+    $set = array(
+      "code_hl7_to"   => "I",
+      "code_mb_from"  => "urg",
+      "code_mb_to"    => "urg"
+    );
+    $and = array(
+      "code_hl7_from" => "I"
+    );
+    $this->updateTableEntry("4", $set, $and);
+    $this->insertTableEntry("4", null, "I", "ssr", null, "Inpatient");
+    $this->insertTableEntry("4", null, "I", "psy", null, "Inpatient");
+    // O - Outpatient - Actes et consultation externe
+    $set = array(
+      "code_hl7_to"   => "O",
+      "code_mb_from"  => "ambu",
+      "code_mb_to"    => "ambu"
+    );
+    $and = array(
+      "code_hl7_from" => "O"
+    );
+    $this->updateTableEntry("4", $set, $and);
+    $this->insertTableEntry("4", null, "O", "exte", null, "Outpatient");
+    $this->insertTableEntry("4", null, "O", "consult", null, "Outpatient");
+    // R - Recurring patient - Séances
+    $set = array(
+      "code_hl7_to"   => "R",
+      "code_mb_from"  => "seances",
+      "code_mb_to"    => "seances"
+    );
+    $and = array(
+      "code_hl7_from" => "R"
+    );
+    $this->updateTableEntry("4", $set, $and);
+    
+    // Table 0032 - Charge price indicator
+    // 03 - Hospitalisation complète
+    $set = array(
+      "code_hl7_to"   => "03",
+      "code_mb_from"  => "comp",
+      "code_mb_to"    => "comp"
+    );
+    $and = array(
+      "code_hl7_from" => "03"
+    );
+    $this->updateTableEntry("32", $set, $and);
+    // 07 - Consultations, soins externes
+    $set = array(
+      "code_hl7_to"   => "07",
+      "code_mb_from"  => "consult",
+      "code_mb_to"    => "consult"
+    );
+    $and = array(
+      "code_hl7_from" => "07"
+    );
+    $this->updateTableEntry("32", $set, $and);
+    // 10 - Accueil des urgences
+    $set = array(
+      "code_hl7_to"   => "10",
+      "code_mb_from"  => "urg",
+      "code_mb_to"    => "urg"
+    );
+    $and = array(
+      "code_hl7_from" => "10"
+    );
+    $this->updateTableEntry("32", $set, $and);
+
+    // Table - 9000
+    // HL  - Hospitalisation libre
+    $this->insertTableEntry("9000", "HL", "HL", "libre", "libre", "Hospitalisation libre");
+    // HO  - Placement d'office
+    $this->insertTableEntry("9000", "HO", "HO", "office", "office", "Placement d'office");
+    // HDT - Hospitalisation à la demande d'un tiers
+    $this->insertTableEntry("9000", "HDT", "HDT", "tiers", "tiers", "Hospitalisation à la demande d'un tiers");
+    
+    // Table - 0430
+    // 0 - Police
+    $this->insertTableEntry("430", "0", "0", "fo", "fo", "Police");
+    // 1 - SAMU, SMUR terrestre
+    $this->insertTableEntry("430", "1", "1", "smur", "smur", "SAMU, SMUR terrestre");
+    // 2 - Ambulance publique
+    $this->insertTableEntry("430", "2", "2", "ambu", "ambu", "Ambulance publique");
+    // 3 - Ambulance privée
+    $this->insertTableEntry("430", null, "3", "ambu", null, "Ambulance privée");
+    // 4 - Taxi
+    $this->insertTableEntry("430", "4", "4", "perso_taxi", "perso_taxi", "Taxi");
+    // 5 - Moyens personnels
+    $this->insertTableEntry("430", "5", "5", "perso", "perso", "Moyens personnels");
+    // 6 - SAMU, SMUR hélicoptère
+    $this->insertTableEntry("430", "6", "6", "heli", "heli", "SAMU, SMUR hélicoptère");
+    // 7 - Pompier
+    $this->insertTableEntry("430", "7", "7", "vsab", "vsab", "Pompier");
+    // 8 - VSL
+    $this->insertTableEntry("430", null, "8", "ambu_vsl", null, "VSL");
+    // 9 - Autre
+    $this->insertTableEntry("430", null, "9", "perso", null, "Autre");
+    
+    $this->mod_version = "0.04";
   }
   
+  function insertTableEntry($number, $code_hl7_from, $code_hl7_to, $code_mb_from, $code_mb_to, $description) {
+    $description = $this->ds->escape($description);
+    
+    $query = "INSERT INTO `hl7v2`.`table_entry` (
+              `table_entry_id`, `number`, `code_hl7_from`, `code_hl7_to`, `code_mb_from`, `code_mb_to`, `description`, `user`
+              ) VALUES (
+                NULL , '$number', '$code_hl7_from', '$code_hl7_to', '$code_mb_from', '$code_mb_to', '$description', '1'
+              );";
+    
+    $this->addQuery($query, false, "hl7v2");
+  }
   
+  function updateTableEntry($number, $update, $where) {
+    foreach ($update as $field => $value) {
+      $set[] = "`$field` = '$value'";
+    }
+    
+    $and = "";
+    foreach ($where as $field => $value) {
+      $and .= "AND `$field` = '$value' ";
+    }
+    $query = "UPDATE `hl7v2`.`table_entry`
+              SET ".implode(", ", $set)."
+              WHERE `number` = '$number'
+              $and;";
+
+    $this->addQuery($query, false, "hl7v2");
+  }
 }
 
 ?>

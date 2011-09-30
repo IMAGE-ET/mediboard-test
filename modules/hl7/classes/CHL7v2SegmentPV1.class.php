@@ -42,7 +42,6 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     // N - Not Applicable - Non applicable - 
     // O - Outpatient - Actes et consultation externe
     // R - Recurring patient - Séances
-    
     // Cas de la transaction ITI-30 "Patient Identity Field"
     if (!$sejour) {
       $data[] = "N";
@@ -144,12 +143,14 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     // PV1-19: Visit Number (CX) (optional)
     /* @todo Gestion des séances */ 
     $data[] = array(
-      $sejour->_id,
-      null,
-      null,
-      // PID-3-4 Autorité d'affectation
-      $this->getAssigningAuthority("mediboard"),
-      "RI"
+      array (
+        $sejour->_id,
+        null,
+        null,
+        // PID-3-4 Autorité d'affectation
+        $this->getAssigningAuthority("mediboard"),
+        "RI"
+      )
     );
     
     // PV1-20: Financial Class (FC) (optional repeating)

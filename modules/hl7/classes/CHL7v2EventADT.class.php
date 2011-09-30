@@ -113,6 +113,24 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   }
   
   /*
+   * Represents an HL7 PV2 message segment (Patient Visit - Additional Information)
+   */
+  function addPV2(CSejour $sejour = null) {
+    $PV2 = CHL7v2Segment::create("PV2", $this->message);
+    $PV2->sejour = $sejour;
+    $PV2->build($this);
+  }
+  
+  /*
+   * Represents an HL7 ZBE message segment (Movement)
+   */
+  function addZBE(CSejour $sejour = null) {
+    $ZBE = CHL7v2Segment::create("ZBE", $this->message);
+    $ZBE->sejour = $sejour;
+    $ZBE->build($this);
+  }
+  
+  /*
    * Represents an HL7 MRG message segment (Merge Patient Information)
    */
   function addMRG(CPatient $patient_eliminee) {

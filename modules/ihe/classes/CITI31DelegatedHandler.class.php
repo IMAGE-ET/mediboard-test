@@ -49,7 +49,7 @@ class CITI31DelegatedHandler extends CIHEDelegatedHandler {
   
   function getCode(CSejour $sejour) {
     $last_log = $sejour->loadLastLog();
-    if (!in_array(array("create", "store"), $last_log->type)) {
+    if (!in_array($last_log->type, array("create", "store"))) {
       return null;
     }
     
