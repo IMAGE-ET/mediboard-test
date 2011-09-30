@@ -67,6 +67,7 @@ function graphTempsSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
     AND affectation_personnel.object_class = 'COperation'
     AND plagesop.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
   
+  if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   if($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
   if($prat_id)       $query .= "\nAND plagesop.chir_id = '$prat_id'";
   if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
@@ -86,7 +87,7 @@ function graphTempsSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
       $query_hors_plage .= "LEFT JOIN sejour ON sejour.sejour_id = operations.sejour_id ";
     }
     
-    $query .= "WHERE affectation_personnel.debut < affectation_personnel.fin
+    $query_hors_plage .= "WHERE affectation_personnel.debut < affectation_personnel.fin
     AND operations.date IS NOT NULL
     AND operations.plageop_id IS NULL
     AND affectation_personnel.debut IS NOT NULL
@@ -94,9 +95,11 @@ function graphTempsSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
     AND affectation_personnel.object_class = 'COperation'
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
   
-    if($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
+    if($type_hospi)    $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
     if($prat_id)       $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
     if($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+    if($codeCCAM)      $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+    
     $query_hors_plage .=  "\nAND operations.date BETWEEN '$debut' AND '$fin'
       GROUP BY mois HAVING total > 0 ORDER BY orderitem";
     
@@ -149,12 +152,14 @@ function graphTempsSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
     FROM plagesop
     LEFT JOIN operations ON plagesop.plageop_id = operations.plageop_id
     LEFT JOIN users_mediboard ON plagesop.chir_id = users_mediboard.user_id ";
-    if ($type_hospi) {
-      $query .= "LEFT JOIN sejour ON sejour.sejour_id = operations.sejour_id ";
-    }
-    $query .= "WHERE operations.entree_salle < operations.sortie_salle
-    AND plagesop.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
-    
+  
+  if ($type_hospi) {
+    $query .= "LEFT JOIN sejour ON sejour.sejour_id = operations.sejour_id ";
+  }
+  $query .= "WHERE operations.entree_salle < operations.sortie_salle
+  AND plagesop.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
+  
+  if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   if($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
   if($prat_id)       $query .= "\nAND plagesop.chir_id = '$prat_id'";
   if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
@@ -198,12 +203,13 @@ function graphTempsSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
     FROM plagesop
     LEFT JOIN users_mediboard ON plagesop.chir_id = users_mediboard.user_id ";
   
-  if ($type_hospi) {
+  if ($type_hospi || $codeCCAM) {
     $query .= "LEFT JOIN operations ON operations.plageop_id = plagesop.plageop_id
       LEFT JOIN sejour ON sejour.sejour_id = operations.sejour_id ";
   }
   $query .= "WHERE plagesop.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
   
+  if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   if($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
   if($prat_id)       $query .= "\nAND plagesop.chir_id = '$prat_id'";
   if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
