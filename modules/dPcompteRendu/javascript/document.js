@@ -178,18 +178,24 @@ var Document = {
     oIframe.src = sUrl;
   },
   
-  printPDF: function(document_id) {
-    if (this.iframe) {
-      this.iframe.remove();
-    }
-    
-    this.iframe = Element.getTempIframe();
-    
+  printPDF: function(document_id, factory) {
     var url = new Url("dPcompteRendu", "ajax_pdf");
     url.addParam("suppressHeaders", 1);
-    url.pop(0, 0, "Download PDF", null, null, {
-       compte_rendu_id: document_id,
-       stream: 1}, this.iframe);
+    if (factory == "CDomPDFConverter") {
+      if (this.iframe) {
+        this.iframe.remove();
+      }
+      
+      this.iframe = Element.getTempIframe();
+      url.pop(0, 0, "Download PDF", null, null, {
+         compte_rendu_id: document_id,
+         stream: 1}, this.iframe);
+    }
+    else {
+      url.popup(600, 400, "Download PDF", null, {
+        compte_rendu_id: document_id,
+        stream: 1});
+    }
   },
   
   printSelDocs: function(object_id, object_class) {

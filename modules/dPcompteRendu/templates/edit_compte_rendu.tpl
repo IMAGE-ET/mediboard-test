@@ -1,5 +1,5 @@
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
-
+{{assign var=choice_factory value=$conf.dPcompteRendu.CCompteRendu.choice_factory}}
 {{mb_script module=dPcompteRendu script=thumb}}
 
 <script type="text/javascript">
@@ -8,7 +8,7 @@ window.pdf_thumbnails = {{$pdf_thumbnails|@json}} == 1;
 window.nb_printers = {{$nb_printers|@json}};
 window.modal_mode_play = null;
 window.documentGraphs = {{$templateManager->graphs|@json}};
-
+window.choice_factory = {{$choice_factory|@json}};
 function playField(element, class_name, editor_element, name) {
   var modal = $("play_modal");
   var field_area = modal.select("td.field_aera")[0];
@@ -311,7 +311,7 @@ Main.add(function(){
 
 
 <!-- Formulaire pour streamer le pdf -->
-<form style="display: none;" name="download-pdf-form" target="download_pdf" method="post" action="?m=dPcompteRendu&amp;a=ajax_pdf"
+<form style="display: none;" name="download-pdf-form" target="{{if $choice_factory == "CDomPDFConverter"}}download_pdf{{else}}_blank{{/if}}" method="post" action="?m=dPcompteRendu&amp;a=ajax_pdf"
       onsubmit="completeLayout(); this.submit();">
   <input type="hidden" name="content" value=""/>
   <input type="hidden" name="compte_rendu_id" value='{{if $compte_rendu->_id != ''}}{{$compte_rendu->_id}}{{else}}{{$modele_id}}{{/if}}' />

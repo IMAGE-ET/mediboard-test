@@ -25,7 +25,7 @@
     <button type="button" class="print notext"
       onclick="
       {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
-        Document.printPDF('{{$_doc_item->_id}}');
+        Document.printPDF('{{$_doc_item->_id}}', '{{$conf.dPcompteRendu.CCompteRendu.choice_factory}}');
       {{else}}
         Document.print('{{$_doc_item->_id}}')
       {{/if}}">
