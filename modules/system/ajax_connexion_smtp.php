@@ -23,7 +23,7 @@ if (!$exchange_source->_id) {
 }
 $exchange_source->init();
 
-if($type_action == "connexion") {
+if ($type_action == "connexion") {
 	try {
 		$exchange_source->_mail->SmtpConnect();
 		CAppUI::stepAjax("Connecté au serveur $exchange_source->host sur le port $exchange_source->port");
@@ -32,7 +32,8 @@ if($type_action == "connexion") {
 	} catch(CMbException $e) {
 	  $e->stepAjax(UI_MSG_WARNING);
 	}
-} elseif($type_action == "envoi") {
+} 
+elseif ($type_action == "envoi") {
   try {
     $exchange_source->setRecipient($exchange_source->email, $exchange_source->email);
   	$exchange_source->setSubject("Test d'envoi de mail par Mediboard");
@@ -40,8 +41,6 @@ if($type_action == "connexion") {
     $exchange_source->addAttachment("./images/pictures/logo.png");
   	$exchange_source->send();
     CAppUI::stepAjax("Message envoyé au serveur $exchange_source->host sur le port $exchange_source->port");
-  } catch(phpmailerException $e) {
-    CAppUI::stepAjax($e->errorMessage(), UI_MSG_WARNING);
   } catch(CMbException $e) {
     $e->stepAjax();
   }

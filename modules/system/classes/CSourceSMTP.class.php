@@ -90,7 +90,11 @@ class CSourceSMTP extends CExchangeSource {
   }
   
   function send($evenement_name = null) {
-  	$this->_mail->send();
+    try {
+      $this->_mail->send();
+    } catch(phpmailerException $e) {
+     throw $e;
+    }
   }
 }
 ?>
