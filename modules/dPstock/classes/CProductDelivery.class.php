@@ -204,6 +204,9 @@ class CProductDelivery extends CMbObject {
     return $this->_ref_patient = $this->loadFwdRef("patient_id", true);  
   }
 
+  /**
+   * @return CProductStock
+   */
   function loadRefStock(){
     return $this->_ref_stock = $this->loadFwdRef("stock_id", true);
   }
@@ -266,6 +269,8 @@ class CProductDelivery extends CMbObject {
       $delivery_trace->quantity = $this->quantity;
       $delivery_trace->date_delivery = $this->date_delivery ? $this->date_delivery : mbDateTime();
       $delivery_trace->date_reception = $delivery_trace->date_delivery;
+      $location = CProductStockLocation::getDefaultLocation($this->loadRefService(), $this->loadRefStock()->loadRefProduct());
+      $delivery_trace->target_location_id = $location->_id;
       if ($msg = $delivery_trace->store()) {
         CAppUI::setMsg("La commande a été validée, mais elle n'a pas pu etre délivrée automatiquement pour la raison suivante: <br />$msg", UI_MSG_WARNING);
       }

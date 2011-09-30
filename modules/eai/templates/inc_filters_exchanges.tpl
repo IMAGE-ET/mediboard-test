@@ -11,18 +11,19 @@
 
 <script type="text/javascript">
   ExchangeDataFormat.evenements = {{"utf8_encode"|array_map_recursive:$evenements|@json:true}};
-	toggleAutoRefresh = function(){
-	  if (!window.autoRefresh) {
-		  window.autoRefresh = setInterval(function(){
-			  getForm("filterExchange").onsubmit();
-			}, 5000);
-			$("auto-refresh-toggler").style.borderColor = "red";
-		}
-		else {
-		  clearTimeout(window.autoRefresh);
+  toggleAutoRefresh = function(){
+    if (!window.autoRefresh) {
+      window.autoRefresh = setInterval(function(){
+        getForm("filterExchange").onsubmit();
+      }, 5000);
+      $("auto-refresh-toggler").style.borderColor = "red";
+    }
+    else {
+      clearTimeout(window.autoRefresh);
+          window.autoRefresh = null;
       $("auto-refresh-toggler").style.borderColor = "";
-		}
-	}
+    }
+  }
 </script>
 
 {{assign var=mod_name value=$exchange->_ref_module->mod_name}}

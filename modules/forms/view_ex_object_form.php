@@ -40,9 +40,9 @@ $ex_object->setExClass();
 list($grid, $out_of_grid, $groups) = $ex_object->_ref_ex_class->getGrid();
 
 /*foreach($groups as $_group) {
-	foreach($_group->_ref_fields as $_field) {
+  foreach($_group->_ref_fields as $_field) {
     $_field->loadTriggeredData();
-	}
+  }
 }*/
 
 if ($ex_object_id) {
@@ -52,10 +52,10 @@ if ($ex_object_id) {
 // loadAllFwdRefs ne marche pas bien (a cause de la clé primaire)
 foreach($ex_object->_specs as $_field => $_spec) {
   if ($_spec instanceof CRefSpec && $_field != $ex_object->_spec->key) {
-  	$class = $_spec->meta ? $ex_object->{$_spec->meta} : $_spec->class;
-		
-		if (!$class) continue;
-		
+    $class = $_spec->meta ? $ex_object->{$_spec->meta} : $_spec->class;
+    
+    if (!$class) continue;
+    
     $obj = new $class;
     $obj->load($ex_object->$_field);
     $ex_object->_fwd[$_field] = $obj;
@@ -73,6 +73,17 @@ foreach($fields as $_field) {
 
 $ex_object->loadRefReferenceObjects();
 $ex_object->getReportedValues();
+
+$ex_object->_rel_patient = null;
+if (in_array("IPatientRelated", class_implements($ex_object->object_class))) {
+  $rel_patient = $ex_object->_ref_object->loadRelPatient();
+  $rel_patient->loadIPP();
+  $ex_object->_rel_patient = $rel_patient;
+}
+
+if ($ex_object->_ref_reference_object_2 instanceof CPatient) {
+  $ex_object->_ref_reference_object_2->loadIPP();
+}
 
 $formula_token_values = array();
 foreach($fields as $_field) {

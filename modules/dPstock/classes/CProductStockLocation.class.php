@@ -170,7 +170,7 @@ class CProductStockLocation extends CMbMetaObject {
    * @param CProduct $product
    * @return CProductStockLocation
    */
-  static function getDefaultLocation(CMbObject $host, CProduct $product) {
+  static function getDefaultLocation(CMbObject $host, CProduct $product = null) {
     $stock_class = self::getStockClass($host->_class);
     
     $stock = new $stock_class;
@@ -179,16 +179,19 @@ class CProductStockLocation extends CMbMetaObject {
     $stock->loadMatchingObject();
     
     if (!$stock->_id || !$stock->location_id) {
-      $location = new CProductStockLocation;
-      $location->object_class = $host->_class;
-      $location->object_id    = $host->_id;
-			
-      if (!$location->loadMatchingObject("position")) {
-      	$location->name = "Lieu par défaut";
-				$location->group_id = ($host instanceof CGroups ? $host->_id : $host->group_id);
-				$location->store();
+      $ds = $host->_spec->ds;
+      $where = array(
+        "object_class" => $ds->prepare("=%", $host->_class),
+        "object_id"    => $ds->prepare("=%", $host->_id),
+      );
+      
+      // pas loadMatchingObject a cause du "position" pré-rempli :(
+      if (!$location->loadObject($where, "position")) {
+        $location->name = "Lieu par défaut";
+        $location->group_id = ($host instanceof CGroups ? $host->_id : $host->group_id);
+        $location->store();
       }
-			
+      
       return $location;
     }
     else {

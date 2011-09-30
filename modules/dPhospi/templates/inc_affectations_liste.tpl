@@ -75,7 +75,7 @@
   </tr>
 	
   <tr>
-    <td colspan="2"><strong>Age</strong> : {{$_sejour->_ref_patient->_age}} ans ({{mb_value object=$_sejour->_ref_patient field=naissance}})
+    <td colspan="2"><strong>Age</strong> : {{$_sejour->_ref_patient->_age}} ans ({{mb_value object=$_sejour->_ref_patient field=naissance}}) </td>
   </tr>
 	
   <tr>
