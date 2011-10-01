@@ -18,6 +18,7 @@ Main.add(function(){
   <li><a href="#ui">{{tr}}config-ui{{/tr}}</a></li>
   <li><a href="#formats">{{tr}}config-formats{{/tr}}</a></li>
   <li><a href="#system">{{tr}}config-system{{/tr}}</a></li>
+  <li><a href="#CMessage">{{tr}}CMessage{{/tr}}</a></li>
   <li><a href="#php-config">PHP</a></li>
 </ul>
 
@@ -35,6 +36,10 @@ Main.add(function(){
 
 <div id="system" style="display: none;">
 {{mb_include template=inc_config_system}}
+</div>
+
+<div id="CMessage" style="display: none;">
+{{mb_include template=CMessage_configure}}
 </div>
 
 <div id="php-config" style="display: none;">

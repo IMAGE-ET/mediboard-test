@@ -29,6 +29,16 @@ class CMessage extends CMbObject {
   // Form fields
   var $_status = null;
   
+  // Behaviour fields
+  var $_email_send    = null;
+  var $_email_to      = null;
+  var $_email_details = null;
+  
+  var $_update_moment    = null;
+  var $_update_initiator = null;
+  var $_update_benefits  = null;
+  
+  
   // Object references
   var $_ref_module;
   var $_ref_group;
@@ -48,17 +58,22 @@ class CMessage extends CMbObject {
   }
 
   function getProps() {
-    $specs = parent::getProps();
-    $specs["deb"]       = "dateTime notNull";
-    $specs["fin"]       = "dateTime notNull";
-    $specs["titre"]     = "str notNull maxLength|40";
-    $specs["corps"]     = "text notNull";
-    $specs["urgence"]   = "enum notNull list|normal|urgent default|normal";
-    $specs["module_id"] = "ref class|CModule";
-    $specs["group_id"]   = "ref class|CGroups";
+    $props = parent::getProps();
+    $props["deb"]       = "dateTime notNull";
+    $props["fin"]       = "dateTime notNull";
+    $props["titre"]     = "str notNull maxLength|40";
+    $props["corps"]     = "text notNull";
+    $props["urgence"]   = "enum notNull list|normal|urgent default|normal";
+    $props["module_id"] = "ref class|CModule";
+    $props["group_id"]  = "ref class|CGroups";
 
-    $specs["_status"]   = "enum list|past|present|future";
-    return $specs;
+    $props["_status"]         = "enum list|past|present|future";
+    $props["_email_to"]       = "str";
+    $props["_email_details"]  = "text";
+    $props["_update_moment"]    = "dateTime";
+    $props["_update_initiator"] = "str";
+    $props["_update_benefits"]  = "text";
+    return $props;
   }
 
   /**
@@ -104,6 +119,62 @@ class CMessage extends CMbObject {
     }
     
     return $messages;
+  }
+  
+  function store() {
+    $msg = parent::store();
+    $this->sendEmail();
+    return $msg;
+  }
+  
+  function sendEmail() {
+    if (!$this->_email_send) {
+      return;
+    }
+    
+    try {
+      // Source init
+      $source = CExchangeSource::get("system-message");
+      $source->init();
+      $source->setRecipient($this->_email_to, $this->_email_to);
+
+      // Email subject
+      $page_title = CAppUI::conf("page_title");
+      $source->setSubject("$page_title - $this->titre");
+      
+      // Email body
+      $info = CAppUI::tr("CMessage-info-published");
+      $body = "<strong>$page_title</strong> $info<br />";
+      $body.= $this->getFieldContent("titre");
+      $body.= $this->getFieldContent("deb");
+      $body.= $this->getFieldContent("fin");
+      $body.= $this->getFieldContent("module_id");
+      $body.= $this->getFieldContent("group_id");
+      $body.= $this->getFieldContent("corps");
+      $body.= $this->getFieldContent("_email_details");
+      $source->setBody($body);
+      
+      // Do send
+      $source->send();
+    }
+    catch (CMbException $e) {
+      $e->stepAjax();
+    }
+    
+    CAppUI::setMsg("Ok");
+  }
+  
+  function getFieldContent($field) {
+    if (!$this->$field) {
+      return;
+    }
+    
+    // Build content
+    $label = $this->getLabelElement($field);
+    $value = $this->getFormattedValue($field);
+    $content = "<br/ >$label : <strong>$value</strong>\n"; 
+        
+    return $content;
   }
   
   function updateFormFields() {

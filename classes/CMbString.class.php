@@ -249,6 +249,18 @@ abstract class CMbString {
     return implode("&", $_params);
   }
   
+  /**
+   * Turns HTML break tags to ascii new line
+   * Reciproque for nl2br
+   * @param string $string
+   * @return string
+   */
+  static function br2nl($string) {
+    // Actually just rmove break tag
+    return str_ireplace("<br />", "", $string);
+  }
+  
+  
   // Table extraite de :
   // - http://www.sourcerally.net/Scripts/39-Convert-HTML-Entities-to-XML-Entities
   // - http://yost.com/computers/htmlchars/html40charsbynumber.html

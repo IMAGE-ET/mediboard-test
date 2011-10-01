@@ -18,7 +18,7 @@
 
 <tr>
   {{if $message->_id}}
-  <th class="title modify" colspan="2">
+  <th class="title modify text" colspan="2">
     {{mb_include module=system template=inc_object_notes      object=$message}}
     {{mb_include module=system template=inc_object_idsante400 object=$message}}
     {{mb_include module=system template=inc_object_history    object=$message}}
@@ -67,7 +67,7 @@
 
 <tr>
   <th>{{mb_label object=$message field="urgence"}}</th>
-  <td>{{mb_field object=$message field="urgence"}}</td>
+  <td>{{mb_field object=$message field="urgence" typeEnum="radio"}}</td>
 </tr>
 
 <tr>
@@ -92,6 +92,46 @@
     </button>
     {{else}}
     <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+    {{/if}}
+  </td>
+</tr>
+
+<tr>
+  <td colspan="2"><hr/></td>
+</tr>
+
+{{if !$message_smtp->_id}}
+<tr>
+  <td colspan="2">
+    <div class="small-info">
+      {{tr}}CMessage-info-smtp_not_config{{/tr}}
+    </div>
+  </td>
+</tr>
+{{else}}
+
+<tr>
+  <th>{{mb_label object=$message field="_email_to"}}</th>
+  <td>{{mb_field object=$message field="_email_to"}}</td>
+</tr>
+
+<tr>
+  <th>{{mb_label object=$message field="_email_details"}}</th>
+  <td>{{mb_field object=$message field="_email_details" rows="6"}}</td>
+</tr>
+{{/if}}
+
+<tr>
+  <td class="button" colspan="2">
+    <input name="_email_send" type="hidden" />
+    {{if $message->_id}}
+    <button class="modify" type="submit" onclick="$V(this.form._email_send, '1');">
+      {{tr}}Save{{/tr}} &amp; {{tr}}Send-email{{/tr}}
+    </button>
+    {{else}}
+    <button class="submit" type="submit" onclick="$V(this.form._email_send, '1');">
+      {{tr}}Create{{/tr}} &amp; {{tr}}Send-email{{/tr}}
+    </button>
     {{/if}}
   </td>
 </tr>

@@ -18,4 +18,8 @@ Main.add(Message.refreshList);
   {{tr}}CMessage-title-create{{/tr}}
 </button>
 
+<button class="new singleclick" onclick="Message.createUpdate();" style="float:right;">
+  {{tr}}CMessage-title-create_update{{/tr}}
+</button>
+
 <div id="list-messages"></div>

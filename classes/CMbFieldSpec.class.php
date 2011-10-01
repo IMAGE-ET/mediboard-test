@@ -461,7 +461,7 @@ class CMbFieldSpec {
    *   - defaultFor : name of a radio option to associate label with
    * @return string Rendered HTML
    */
-  function getLabelElement($object, $params) {
+  function getLabelElement($object, $params = array()) {
     $defaultFor = CMbArray::extract($params, "defaultFor");
     $forName = $defaultFor ? $defaultFor : $this->getLabelForElement($object, $params);
     $className = $object->_specs[$this->fieldName]->notNull ? "checkNull" : "";

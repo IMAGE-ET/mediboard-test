@@ -63,12 +63,16 @@ $browser_compat = array(
   ),
 );
 
+// Source SMTP
+$message_smtp = CExchangeSource::get("system-message", "smtp", true);
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("timezones", $timezones);
 $smarty->assign("php_config", $php_config_tree);
 $smarty->assign("php_config_important", $php_config_important);
 $smarty->assign("browser_compat", $browser_compat);
+$smarty->assign("message_smtp", $message_smtp);
 $smarty->display("configure.tpl");
 
 ?>

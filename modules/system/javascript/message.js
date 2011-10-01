@@ -9,24 +9,40 @@
  */
 
 Message = {
-  modal: null,
-  
-  edit: function(sender_id) {
+  edit: function(message_id) {
     var url = new Url('system', 'ajax_form_message');
-    url.addParam('message_id', sender_id);
-    url.requestModal(400);
-    this.modal = url.modalObject;
+    url.addParam('message_id', message_id);
+    url.requestModal(500);
   },
 
   onSubmit: function(form) {
     return onSubmitFormAjax(form, { 
       onComplete: function() {
         Message.refreshList();
-        Message.modal.close();
+        Control.Modal.close();
       }
     })
   },
 
+  createUpdate: function() {
+    var url = new Url('system', 'ajax_form_message_update');
+    url.requestModal(500);
+  },
+
+  onSubmitUpdate: function(form) {
+    if (!checkForm(form)) {
+      return false;
+    }
+    
+    Control.Modal.close();
+    
+    var url = new Url('system', 'ajax_form_message');
+    url.addElement(form._update_moment);
+    url.addElement(form._update_initiator);
+    url.addElement(form._update_benefits);
+    url.requestModal(500);
+  },
+  
   duplicate: function(form) {
     $V(form.message_id, '');
     $V(form.titre, 'copie de ' + $V(form.titre));
@@ -42,7 +58,7 @@ Message = {
     var ajax = {
       onComplete: function() {
         Message.refreshList();
-        Message.modal.close();
+        Control.Modal.close();
       }
     }
     
