@@ -186,7 +186,7 @@ modeExpertDisplay = function() {
   </form>
 </div>
 
-<table class="main" style="margin: 4px; border-spacing: 0px;">
+<table class="main">
   {{if $op->operation_id}}
   <tr>
     <td colspan="2">
