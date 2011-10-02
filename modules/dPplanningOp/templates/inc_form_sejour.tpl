@@ -457,7 +457,7 @@ Main.add( function(){
   <th>{{mb_label object=$sejour field="nature_accident"}}</th>
   <td colspan="3">{{mb_field object=$sejour field="nature_accident" defaultOption="&mdash; Choisir une nature" style="width: 15em;"}}</td>
 </tr>
-{{/if}}}
+{{/if}}
 
 <tr>
   <th>
