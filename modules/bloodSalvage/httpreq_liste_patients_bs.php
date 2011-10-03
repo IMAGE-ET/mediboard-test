@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $m, $g;
+CCanDo::checkRead();
 
 $blood_salvage      = new CBloodSalvage();
 
@@ -16,7 +16,6 @@ $operation_id       = CValue::getOrSession("operation_id");
 $date               = CValue::getOrSession("date", mbDate());
 $hour               = mbTime();
 $totaltime          = "00:00:00";
-
 
 // Selection des plages opératoires de la journée
 $plages = new CPlageOp;

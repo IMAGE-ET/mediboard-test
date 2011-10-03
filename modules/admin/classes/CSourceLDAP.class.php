@@ -28,6 +28,7 @@ class CSourceLDAP extends CMbObject{
   var $bind_rdn_suffix           = null;
   var $ldap_opt_protocol_version = null;
   var $ldap_opt_referrals        = null;
+  var $priority                  = null;
   
   var $_options                  = array();
   
@@ -41,7 +42,6 @@ class CSourceLDAP extends CMbObject{
   
   function getProps() {
     $props = parent::getProps();
-    
     $props["name"]                      = "str notNull";
     $props["host"]                      = "text notNull";
     $props["port"]                      = "num default|389";
@@ -49,6 +49,7 @@ class CSourceLDAP extends CMbObject{
     $props["bind_rdn_suffix"]           = "str";
     $props["ldap_opt_protocol_version"] = "num default|3";
     $props["ldap_opt_referrals"]        = "bool default|0";
+    $props["priority"]                  = "num";
     return $props;
   }
   
@@ -61,6 +62,9 @@ class CSourceLDAP extends CMbObject{
     ); 
   }
   
+	/**
+	 * @return resource link_identifier 
+	 */
   function ldap_connect() {
     if (!function_exists("ldap_connect")){
       throw new CMbException("CSourceLDAP_ldap-functions-not-available");
@@ -68,7 +72,9 @@ class CSourceLDAP extends CMbObject{
     
     if (!$fp = @fsockopen($this->host, $this->port, $errno, $errstr, 2)){
       throw new CMbException("CSourceLDAP_unreachable", $this->host);
+      return false;
     }
+    
     fclose($fp);
     
     $ldapconn = @ldap_connect($this->host, $this->port);
@@ -83,6 +89,13 @@ class CSourceLDAP extends CMbObject{
     return $ldapconn;
   }
   
+	/**
+	 * @param resource $ldapconn [optional]
+	 * @param string   $ldaprdn [optional]
+	 * @param string   $ldappass [optional]
+	 * @param boolean  $showInvalidCredentials [optional]
+	 * @return 
+	 */
   function ldap_bind($ldapconn = null, $ldaprdn = null, $ldappass = null, $showInvalidCredentials = false) {
     if (!$ldapconn) {
       $ldapconn = $this->ldap_connect();
@@ -94,9 +107,11 @@ class CSourceLDAP extends CMbObject{
     
     $ldapbind = @ldap_bind($ldapconn, $ldaprdn, $ldappass);
     $error = ldap_errno($ldapconn);
+		
     if (!$showInvalidCredentials && ($error == 49)) {
       return false;     
     }
+		
     if (!$ldapbind) {
       throw new CMbException("CSourceLDAP_no-authenticate", $this->host, $ldaprdn, ldap_err2str($error));
     }
@@ -104,8 +119,14 @@ class CSourceLDAP extends CMbObject{
     return true;
   }
   
+	/**
+	 * @param resource $ldapconn
+	 * @param string   $filter
+	 * @param array    $attributes [optional]
+	 * @return array
+	 */
   function ldap_search($ldapconn, $filter, $attributes = array()) {
-    $results= null;
+    $results = null;
     $ldapsearch = @ldap_search($ldapconn, $this->rootdn, $filter, $attributes);
     if ($ldapsearch) {
       $results = ldap_get_entries($ldapconn, $ldapsearch);
@@ -116,4 +137,3 @@ class CSourceLDAP extends CMbObject{
     return $results;
   }
 }
-?>

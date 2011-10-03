@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global  $can, $m, $g;
-$can->needsRead();
+CCanDo::checkRead();
+
 /*
  * Récupération des variables en session et ou issues des formulaires.
  */
@@ -17,9 +17,7 @@ $salle        		= CValue::getOrSession("salle");
 $op           		= CValue::getOrSession("op");
 $date         		= CValue::getOrSession("date", mbDate());
 
-
 $blood_salvage = new CBloodSalvage();
-
 
 $selOp = new COperation();
 

@@ -8,7 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $m, $g;
 CAppUI::requireModuleFile("bloodSalvage", "inc_personnel");
 
 $selOp = new COperation;

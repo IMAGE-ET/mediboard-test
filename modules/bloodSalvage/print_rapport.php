@@ -8,10 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $m;
 CAppUI::requireModuleFile("bloodSalvage", "inc_personnel");
 
-$anticoag ="";
+$anticoag = "";
 $blood_salvage_id = CValue::get("blood_salvage_id");
 $blood_salvage = new CBloodSalvage();
 

@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-$user_id = $can->edit ? CValue::getOrSession("user_id", "default") : null;
+$user_id = CCanDo::edit() ? CValue::getOrSession("user_id", "default") : null;
 $user =  CUser::get($user_id);
 $prof = $user->profile_id ? CUser::get($user->profile_id) : new CUser;
 

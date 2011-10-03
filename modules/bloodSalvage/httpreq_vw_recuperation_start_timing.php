@@ -8,13 +8,11 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $m;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $blood_salvage_id = CValue::getOrSession("blood_salvage_id");
 $date  = CValue::getOrSession("date", mbDate());
-$modif_operation    = $can->edit || $date >= mbDate();
+$modif_operation    = CCanDo::edit() || $date >= mbDate();
 $timing  = CValue::getOrSession("timing");
 
 

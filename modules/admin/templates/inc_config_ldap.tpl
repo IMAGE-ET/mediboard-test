@@ -9,11 +9,13 @@
 *}}
 
 <script type="text/javascript">
-  Main.add(Control.Tabs.create.curry('tabs-configure-ldap', true));
+  Main.add(function(){
+    Control.Tabs.create('tabs-configure-ldap', true);
+    refreshSources();
+  });
   
-  refreshSourceLDAP = function(source_ldap_id) {
+  refreshSources = function() {
     var url = new Url("admin", "ajax_refresh_source_ldap");
-    url.addParam("source_ldap_id", source_ldap_id);
     url.requestUpdate("CSourceLDAP");
   }
   
@@ -32,16 +34,17 @@
     url.addParam("do_import", $V(button.form.elements.do_import) ? 1 : 0);
     url.addParam("count", $V(button.form.elements.count));
     url.requestUpdate("ldap-massive-import-search", { onComplete:function() { 
-    	LDAPMassiveImport(button);
+      LDAPMassiveImport(button);
     }} );
   }
 </script>
 
 <table class="main">
   <tr>
-    <td style="vertical-align: top; width: 100px">
+    <td style="vertical-align: top; width: 130px">
       <ul id="tabs-configure-ldap" class="control_tabs_vertical">
         <li><a href="#ldap">{{tr}}ldap{{/tr}}</a></li>
+        <li><a href="#ldap-user">Utilisateur LDAP</a></li>
         <li><a href="#CSourceLDAP">{{tr}}CSourceLDAP{{/tr}}</a></li>
       </ul>
     </td>
@@ -96,10 +99,41 @@
           </table>
         </form>
       </div>
-      
-      <div id="CSourceLDAP" style="display: none;">
-        {{mb_include template=inc_source_ldap}}
+          
+     <div id="ldap-user">
+        <form name="editConfigLDAPUser" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
+          <input type="hidden" name="dosql" value="do_configure" />
+          <input type="hidden" name="m" value="system" />
+        
+          <table class="form">
+            <tr>
+              <th class="category" colspan="2">
+                {{tr}}config-user-source-ldap{{/tr}}
+              </th>
+            </tr>        
+            {{assign var="class" value="LDAP"}}
+            {{mb_include module=system template=inc_config_str var=ldap_user}}
+            
+            {{assign var="var" value="ldap_password"}}
+            <th>
+              <label title="{{tr}}config-admin-{{$class}}-{{$var}}-desc{{/tr}}">
+                {{tr}}config-admin-{{$class}}-{{$var}}{{/tr}}
+              </label>  
+            </th>
+            <td>
+              {{mb_ternary test=ldapUser var=value value=$conf.admin.$class.$var other=""}}
+              <input type="password" name="admin[{{$class}}][{{$var}}]" value="{{$value}}" />
+            </td>
+            <tr>
+              <td class="button" colspan="100">
+                <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
+              </td>
+            </tr>
+          </table>
+        </form>
       </div>
+      
+      <div id="CSourceLDAP" style="display: none;"></div>
     </td>
   </tr>
 </table>

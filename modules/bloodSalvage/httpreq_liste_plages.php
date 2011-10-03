@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $g;
-
-$can->needsRead();
+CCanDo::check>needsRead();
 
 $date  = CValue::getOrSession("date", mbDate());
 $operation_id = CValue::getOrSession("operation_id");

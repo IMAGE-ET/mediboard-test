@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $blood_salvage_id = CValue::postOrSession("blood_salvage_id");
 
@@ -19,7 +17,6 @@ if($blood_salvage_id){
   $blood_salvage->load($blood_salvage_id);
   $blood_salvage->loadRefs();
 }
-
 
 // Création du template
 $smarty = new CSmartyDP();

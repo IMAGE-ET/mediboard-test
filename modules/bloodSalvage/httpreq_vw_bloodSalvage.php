@@ -8,14 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $m;
-$can->needsRead();
+CCanDo::checkRead();
 
 $salle            = CValue::getOrSession("salle");
 $op               = CValue::getOrSession("op");
 $date             = CValue::getOrSession("date", mbDate());
 
-$modif_operation  = $can->edit || $date >= mbDate();
+$modif_operation  = CCanDo::edit() || $date >= mbDate();
 $timing = array();
 
 $inLivretTherapeutique = CAppUI::conf("bloodSalvage inLivretTherapeutique");

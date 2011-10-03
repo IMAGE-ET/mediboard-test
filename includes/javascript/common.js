@@ -131,7 +131,7 @@ var Main = {
   initialized: false,
   
   /**
-   * Add a script to be lanuched after onload notification
+   * Add a script to be launched after onload notification
    * On the fly execution if already page already loaded
    */
   add: function(callback) {
@@ -164,7 +164,16 @@ var Main = {
    * Call all Main functions
    */
   init: function() {
-    this.callbacks.each(function(e) { e() } );
+    this.callbacks.each(function(callback) { 
+      //try {
+        callback();
+      //}
+      //catch (e) {
+      //  errorHandler("Main.add exception", location.href, null, e);
+      //  console.error(e);
+      //}
+    });
+    
     this.initialized = true;
   }
 };
@@ -200,37 +209,37 @@ Localize = {
   strings: [],
 
   that: function() {
-	  var args = $A(arguments),
-	  string = args[0];
-	  args[0] = (window.locales ? (window.locales[string] || string) : string);
-	  if (window.locales && !window.locales[string]) {
-	    Localize.addString(string);
-	  }
-	  
-	  return printf.apply(null, args);
+    var args = $A(arguments),
+    string = args[0];
+    args[0] = (window.locales ? (window.locales[string] || string) : string);
+    if (window.locales && !window.locales[string]) {
+      Localize.addString(string);
+    }
+    
+    return printf.apply(null, args);
   },
   
   populate: function(strings) {
-	if (strings.length) {
-	  strings.each(Localize.addString.bind(Localize));
-	}
+    if (strings.length) {
+      strings.each(Localize.addString.bind(Localize));
+    }
   },
   
   addString: function(string) {
-	if (this.strings.include(string)) {
+    if (this.strings.include(string)) {
       return;
-	}
+    }
 
     this.strings.push(string);
 
-	// Try and show unloc warning
-	var div = $('UnlocDiv');
-	if (div) {
-	  div.down('strong').update(this.strings.length);
-	  div.show();
-	}
-	
-	// Add a row in form
+    // Try and show unloc warning
+    var div = $('UnlocDiv');
+    if (div) {
+      div.down('strong').update(this.strings.length);
+      div.show();
+    }
+    
+    // Add a row in form
     var name = 'tableau['+string+']';
     var form = getForm('UnlocForm');
     if (form) {
@@ -247,7 +256,7 @@ Localize = {
   },
   
   showForm: function() {
-    var form = getForm('UnlocForm')
+    var form = getForm('UnlocForm');
     modal(form, { 
       closeOnClick: form.down('button.close'),
       height: "50px"

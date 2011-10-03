@@ -20,9 +20,9 @@ define("UI_MSG_ERROR"  , 4);
  * @todo Is being split into CApp et CUI classes
  */
 class CAppUI {
-	/**
-	 * @var CAppUI
-	 */
+  /**
+   * @var CAppUI
+   */
   static $instance = null;
   
   /** 
@@ -139,7 +139,7 @@ class CAppUI {
    * @param string $file The file name of the class to include
    */
   static function requireModuleClass($name = null, $file = null) {
-  	return;
+    return;
     if ($name && $root = self::conf("root_dir")) {
       $filename = $file ? $file : $name;
         
@@ -155,11 +155,11 @@ class CAppUI {
     }
   }
   
-	/**
-	 * Used to include a php file from the module directory
-	 * @param string $name The module name
-	 * @param string $file The name of the file to include
-	 */
+  /**
+   * Used to include a php file from the module directory
+   * @param string $name The module name
+   * @param string $file The name of the file to include
+   */
   static function requireModuleFile($name = null, $file = null) {
     if ($name && $root = self::conf("root_dir")) {
       $filename = $file ? $file : $name;
@@ -167,26 +167,26 @@ class CAppUI {
     }
   }
   
-	/**
-	 * Used to store information in tmp directory
-	 * @param string $subpath in tmp directory
-	 * @return string The path to the include file
-	 */
+  /**
+   * Used to store information in tmp directory
+   * @param string $subpath in tmp directory
+   * @return string The path to the include file
+   */
   static function getTmpPath($subpath) {
     if ($subpath && $root = self::conf("root_dir")) {
       return "$root/tmp/$subpath";
     }
   }
   
-	/**
-	 * Utility function to read the "directories" under "path"
-	 *
-	 * This function is used to read the modules or locales installed on the file system
-	 * @param string The path to read
-	 * @return array A named array of the directories (the key and value are identical)
-	 */
+  /**
+   * Utility function to read the "directories" under "path"
+   *
+   * This function is used to read the modules or locales installed on the file system
+   * @param string The path to read
+   * @return array A named array of the directories (the key and value are identical)
+   */
   static function readDirs($path) {
-  	$root_dir = self::conf("root_dir");
+    $root_dir = self::conf("root_dir");
     $dirs = array();
     $d = dir("$root_dir/$path");
     
@@ -203,12 +203,12 @@ class CAppUI {
     return $dirs;
   }
 
-	/**
-	 * Utility function to read the files under $path
-	 * @param string The path to read
-	 * @param string A regular expression to filter by
-	 * @return array A named array of the files (the key and value are identical)
-	 */
+  /**
+   * Utility function to read the files under $path
+   * @param string The path to read
+   * @param string A regular expression to filter by
+   * @return array A named array of the files (the key and value are identical)
+   */
   static function readFiles($path, $filter = ".") {
     $files = array();
 
@@ -225,12 +225,12 @@ class CAppUI {
     return $files;
   }
   
-	/**
-	 * Utility function to check whether a file name is "safe"
-	 * Prevents from access to relative directories (eg ../../dealyfile.php)
-	 * @param string The file name
-	 * @return array A named array of the files (the key and value are identical)
-	 */
+  /**
+   * Utility function to check whether a file name is "safe"
+   * Prevents from access to relative directories (eg ../../dealyfile.php)
+   * @param string The file name
+   * @return array A named array of the files (the key and value are identical)
+   */
   static function checkFileName($file) {
     // define bad characters and their replacement
     $bad_chars = ";.\\";
@@ -246,15 +246,15 @@ class CAppUI {
   }
 
 /**
-	* Redirects the browser to a new page.
-	*
-	* Mostly used in conjunction with the savePlace method. It is generally used
-	* to prevent nasties from doing a browser refresh after a db update.  The
-	* method deliberately does not use javascript to effect the redirect.
-	*
-	* @param string The URL query string to append to the URL
-	* @param string A marker for a historic "place", only -1 or an empty string is valid.
-	*/
+  * Redirects the browser to a new page.
+  *
+  * Mostly used in conjunction with the savePlace method. It is generally used
+  * to prevent nasties from doing a browser refresh after a db update.  The
+  * method deliberately does not use javascript to effect the redirect.
+  *
+  * @param string The URL query string to append to the URL
+  * @param string A marker for a historic "place", only -1 or an empty string is valid.
+  */
   static function redirect($params="") {
 
     session_write_close();
@@ -337,9 +337,9 @@ class CAppUI {
     $args = func_get_args();
     $action = self::tr($action, array_slice($args, 2));
     if ($msg) {
-    	$msg = self::tr($msg);
-    	self::setMsg("$action: $msg", UI_MSG_ERROR);
-			return;
+      $msg = self::tr($msg);
+      self::setMsg("$action: $msg", UI_MSG_ERROR);
+      return;
     } 
 
     self::setMsg($action, UI_MSG_OK);
@@ -420,7 +420,11 @@ class CAppUI {
     
     $args = implode(",", $args); 
     
-    echo "\n<script type='text/javascript'>$callback($args);</script>";
+    self::JS("$callback($args);");
+  }
+  
+  static function JS($script) {
+    echo "\n<script>$script</script>";
   }
   
 /**
@@ -435,11 +439,11 @@ class CAppUI {
  * @return boolean True if successful, false if not
  */
   static function login($force_login = false) {
-  	$ds = CSQLDataSource::get("std");
-  	
-  	$ldap_connection = CAppUI::conf("admin LDAP ldap_connection");
-  	$ldap_guid = CValue::get("ldap_guid");
-  	
+    $ds = CSQLDataSource::get("std");
+    
+    $ldap_connection = CAppUI::conf("admin LDAP ldap_connection");
+    $ldap_guid = CValue::get("ldap_guid");
+    
     // Test login and password validity
     $user = new CUser;
     
@@ -492,18 +496,21 @@ class CAppUI {
       $user_ldap->user_username = $username;
       $user_ldap->loadMatchingObject();
       $user_ldap->loadLastId400(CAppUI::conf("admin LDAP ldap_tag"));
+      
       if ($user_ldap->_ref_last_id400->_id) {
         $user_ldap->_user_password = $password;
         $user_ldap->_bound = false;
+        
         try {        
           $user_ldap = CLDAP::login($user_ldap, $ldap_guid);
+          
+          if (!$user_ldap->_bound) {
+            self::setMsg("Auth-failed-combination", UI_MSG_ERROR);
+            return false;
+          }
         } catch (CMbException $e) {
-          $e->stepAjax(UI_MSG_ERROR);
-        }
-
-        if (!$user_ldap->_bound) {
-          self::setMsg("Auth-failed-combination", UI_MSG_ERROR);
-          return false;
+          // Maybe source unreachable ?
+          self::setMsg($e->getMessage(), UI_MSG_WARNING); // no UI_MSG_ERROR nor $e->stepAjax as it needs to continue !!!!
         }
       }
     }
@@ -521,10 +528,10 @@ class CAppUI {
       self::$instance->user_remote = $ds->loadResult($sql);
 
       $sql = "SELECT `groups_mediboard`.`group_id`
-				FROM `groups_mediboard`, `functions_mediboard`, `users_mediboard`
-				WHERE `groups_mediboard`.`group_id` = `functions_mediboard`.`group_id`
-				AND `functions_mediboard`.`function_id` = `users_mediboard`.`function_id`
-				AND `users_mediboard`.`user_id` = '$user->_id'";
+        FROM `groups_mediboard`, `functions_mediboard`, `users_mediboard`
+        WHERE `groups_mediboard`.`group_id` = `functions_mediboard`.`group_id`
+        AND `functions_mediboard`.`function_id` = `users_mediboard`.`function_id`
+        AND `users_mediboard`.`user_id` = '$user->_id'";
       self::$instance->user_group = $ds->loadResult($sql);
     }
     
@@ -576,7 +583,7 @@ class CAppUI {
     if ($pwdSpecs->minLength > strlen($pwd)) {
       return true;
     }
-	
+  
     // notContaining
     if ($pwdSpecs->notContaining) {
       $target = $pwdSpecs->notContaining;
@@ -611,20 +618,20 @@ class CAppUI {
     $sibling->user_username = $user->user_username;
     $sibling->loadMatchingObject();
     $sibling->loadRefMediuser();
-		
-		$mediuser = $sibling->_ref_mediuser;
+    
+    $mediuser = $sibling->_ref_mediuser;
 
     if ($mediuser && $mediuser->_id) {
-    	if (!$mediuser->actif) {
-	      self::setMsg("Auth-failed-user-deactivated", UI_MSG_ERROR);
-	      return false;
-	    }
+      if (!$mediuser->actif) {
+        self::setMsg("Auth-failed-user-deactivated", UI_MSG_ERROR);
+        return false;
+      }
     
-		  $today = mbDate();
-			
-			// Check if the user is in his activity period
-	    if ($mediuser->fin_activite && $mediuser->fin_activite <= $today ||
-			    $mediuser->deb_activite && $mediuser->deb_activite >  $today) {
+      $today = mbDate();
+      
+      // Check if the user is in his activity period
+      if ($mediuser->fin_activite && $mediuser->fin_activite <= $today ||
+          $mediuser->deb_activite && $mediuser->deb_activite >  $today) {
         self::setMsg("Auth-failed-user-deactivated", UI_MSG_ERROR);
         return false;
       }
@@ -661,39 +668,39 @@ class CAppUI {
  * @param int $uid User id number, 0 for default preferences
  */
   static function loadPrefs($user_id = 0) {
-		// Former pure SQL system
+    // Former pure SQL system
     $ds = CSQLDataSource::get("std");
     if ($ds->loadField("user_preferences", "pref_name")) {
-	    $query = "SELECT pref_name, pref_value 
-			  FROM user_preferences
-				WHERE pref_user = '$user_id'";
-	    $user_prefs = $ds->loadHashList($query);
+      $query = "SELECT pref_name, pref_value 
+        FROM user_preferences
+        WHERE pref_user = '$user_id'";
+      $user_prefs = $ds->loadHashList($query);
     }
-		// Latter object oriented system
+    // Latter object oriented system
     else {
-    	$user_prefs = CPreferences::get($user_id);
+      $user_prefs = CPreferences::get($user_id);
     }
 
     self::$instance->user_prefs = array_merge(self::$instance->user_prefs, $user_prefs);
   }
   
-	/**
-	 * Apply default / profile / user preferences
-	 */
+  /**
+   * Apply default / profile / user preferences
+   */
   static function buildPrefs() {
     // Default
     self::loadPrefs();
 
-		// Profile
+    // Profile
     $user = CUser::get();
     if ($user->profile_id) {
       self::loadPrefs($user->profile_id);
     }
-		
-		// User
+    
+    // User
     self::loadPrefs($user->_id);
   }
-	
+  
   
   /**
    * Get a named user preference
@@ -768,19 +775,19 @@ class CAppUI {
     
     // Defined and not empty
     if (isset($locales) && self::$localize) {
-	    if (isset($locales[$str]) && $locales[$str] !== "") {
-	      $str = $locales[$str];
-	    }
-	    // Other wise keep it in a stack...
-	    else {
-	      if (!in_array($str, self::$unlocalized)) {
-	        self::$unlocalized[] = $str;
-	      }
-	      // ... and decorate
-	      if (self::$locale_mask) {
-	        $str = sprintf(self::$locale_mask, $str);
-	      }
-	    }
+      if (isset($locales[$str]) && $locales[$str] !== "") {
+        $str = $locales[$str];
+      }
+      // Other wise keep it in a stack...
+      else {
+        if (!in_array($str, self::$unlocalized)) {
+          self::$unlocalized[] = $str;
+        }
+        // ... and decorate
+        if (self::$locale_mask) {
+          $str = sprintf(self::$locale_mask, $str);
+        }
+      }
     }
 
     if ($args !== null) {
@@ -809,7 +816,7 @@ class CAppUI {
     
     $items = explode(' ', $path);
     foreach ($items as $part) {
-    	$conf = $conf[$part];
+      $conf = $conf[$part];
     }
     return $conf;
   }
@@ -817,7 +824,7 @@ class CAppUI {
   static function unique_id() {
     return self::$unique_id++;
   }
-	
+  
   static function HtmlTable($array, $options = array()) {
     $options += array(
       'tableClass' => '',

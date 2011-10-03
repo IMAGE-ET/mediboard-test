@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $m;
-
 CCanDo::checkEdit();
 
 $user = CUser::get(CValue::getOrSession("user_id"));
@@ -17,8 +15,8 @@ $user = CUser::get(CValue::getOrSession("user_id"));
 $user_id = CValue::getOrSession("user_id", $user->_id);
 
 if(!$user_id) {
-  CAppUI::setMsg("Vous devez selectionner un utilisateur");
-  CAppUI::redirect("m=$m&tab=vw_edit_users");
+  CAppUI::setMsg("Vous devez sélectionner un utilisateur");
+  CAppUI::redirect("m=admin&tab=vw_edit_users");
 }
 
 $modulesInstalled = CModule::getInstalled();

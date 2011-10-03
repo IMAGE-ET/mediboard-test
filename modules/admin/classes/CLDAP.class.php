@@ -9,6 +9,11 @@
  */
 
 class CLDAP {
+  /**
+   * @param CUser  $user
+   * @param string $ldap_guid
+   * @return CUser
+   */
   static function login(CUser $user, $ldap_guid) {
     if (!$ldap_guid) {
       $source_ldap = self::bind($user);
@@ -27,22 +32,41 @@ class CLDAP {
     return $user;
   }
   
+  /**
+   * @return CSourceLDAP
+   */
   static function connect() {
     $source_ldap = new CSourceLDAP();
-    $source_ldap->loadObject();
+    $sources_ldap = $source_ldap->loadList(null, "priority DESC");
     
-    if (!$source_ldap->_id) {
+    if (empty($sources_ldap)) {
       throw new CMbException("CSourceLDAP_undefined");
     }
     
-    $ldapconn = $source_ldap->ldap_connect();
-    $source_ldap->_ldapconn = $ldapconn;
+    foreach($sources_ldap as $_source) {
+      try {
+        $ldapconn = $_source->ldap_connect();
+        $_source->_ldapconn = $ldapconn;
+        return $_source;
+      }
+      catch(CMbException $e) {
+        CAppUI::setMsg($e->getMessage(), UI_MSG_WARNING);
+      }
+    }
     
-    return $source_ldap;
+    return false;
   }
-
+  
+  /**
+   * @return CSourceLDAP
+   */
   static function bind(CUser $user = null, $ldaprdn = null, $ldappass = null) {
     $source_ldap = CLDAP::connect();
+    
+    if (!$source_ldap) {
+      throw new CMbException("CSourceLDAP_all-unreachable", "ANY");
+    }
+    
     $ldapconn = $source_ldap->_ldapconn;
     
     if (!$ldaprdn) {
@@ -60,6 +84,52 @@ class CLDAP {
     return $source_ldap;
   }
   
+  /**
+   * @param CUser  $user
+   * @param string $old_pass
+   * @param string $new_pass
+   * @param string $encryption [optional]
+   * @param boolean $encoded_password [optional] If the password is already encoded
+   * @return boolean Success
+   */
+  static function changePassword(CUser $user, $old_pass, $new_pass, $encryption = "MD5", $encoded_password = false) {
+    if (!in_array($encryption, array("MD5", "SHA"/*, "CRYPT"*/))) {
+      return false;
+    }
+    
+    $source_ldap = CLDAP::connect();
+
+    $bound = $source_ldap->ldap_bind($source_ldap->_ldapconn, $user->user_username, $old_pass);
+    
+    if (!$bound) {
+      return false;
+    }
+    
+    if (!$encoded_password) {
+      switch($encryption) {
+        case "MD5":   $new_pass = md5($new_pass);   break;
+        case "SHA":   $new_pass = sha1($new_pass);  break;
+        //case "CRYPT": $new_pass = crypt($new_pass); break; // we may need a salt
+      }
+    }
+    
+    $entry = array(
+      "userPassword" => "\{$encryption\}".base64_encode(pack("H*", $new_pass))
+    );
+    
+    return ldap_modify($con, $user, $entry);
+  }
+  
+	/**
+	 * 
+	 * @param CUser       $user
+	 * @param CSourceLDAP $source_ldap
+	 * @param resource    $ldapconn
+	 * @param string      $person [optional]
+	 * @param string      $filter [optional]
+	 * @param boolean     $force_create [optional]
+	 * @return CUser
+	 */
   static function searchAndMap(CUser $user, CSourceLDAP $source_ldap, $ldapconn, $person = null, $filter = null, $force_create = false) {
     if (!$person) {
       $person = $user->user_username;
@@ -157,6 +227,13 @@ class CLDAP {
     return $user;
   }
   
+	/**
+	 * @param array   $values [optional]
+	 * @param string  $name
+	 * @param boolean $single [optional]
+	 * @param boolean $utf8_decode [optional]
+	 * @return string
+	 */
   static function getValue($values = array(), $name, $single = true, $utf8_decode = true) {
     if (array_key_exists($name, $values)) {
       
@@ -166,6 +243,11 @@ class CLDAP {
     }
   }
   
+  /**
+   * @param CUser $user
+   * @param array $values
+   * @return CUser
+   */
   static function mapTo(CUser $user, $values) {
     $user->user_username   = self::getValue($values, "samaccountname");
     $user->user_first_name = self::getValue($values, "givenname");
@@ -203,6 +285,10 @@ class CLDAP {
     return $user;
   }
   
+	/**
+	 * @param array $values
+	 * @return string
+	 */
   static function getObjectGUID($values) {
     // Passage en hexadécimal de l'objectguid
     $objectguid = unpack('H*', self::getValue($values, "objectguid", true, false));
@@ -227,22 +313,22 @@ class CLDAP {
     return $objectguid;
   }
   
+	/**
+	 * @param string $ldap_guid
+	 * @return CUser
+	 */
   static function getFromLDAPGuid($ldap_guid) {
     if (!$ldap_guid) {
       throw new CMbException("CUser_no-ldap-guid");
     }
     
-    $id400               = new CIdSante400();
-    $id400->object_class = "CUser";
-    $id400->tag          = CAppUI::conf("admin LDAP ldap_tag");
-    $id400->id400        = $ldap_guid;
-    $id400->loadMatchingObject();
+    $id400 = CIdSante400::getMatch("CUser", CAppUI::conf("admin LDAP ldap_tag"), $ldap_guid);
+		
     if (!$id400->_id) {
       throw new CMbException("CUser_ldap-guid-no-user");
-    } 
-    $user = new CUser();
-    
-    return $user->load($id400->object_id);
+    }
+		
+    return $id400->loadTargetObject();
   }
 }
 

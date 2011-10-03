@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $g;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $blood_salvage_id = CValue::get("blood_salvage_id");
 $totaltime = CValue::getOrSession("totaltime","00:00:00");

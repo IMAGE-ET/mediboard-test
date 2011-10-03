@@ -10,12 +10,8 @@
 
 CCanDo::checkAdmin();
 
-$source_ldap = new CSourceLDAP();
-$source_ldap->loadObject();
-
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("source_ldap", $source_ldap);
 $smarty->display("configure.tpl");
 
 ?>

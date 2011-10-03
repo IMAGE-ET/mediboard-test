@@ -181,6 +181,10 @@ var Console = {
     } );
   },
   
+  info: function (sMsg) {
+    this.trace("Info: " + sMsg);
+  },
+  
   error: function (sMsg) {
     this.trace("Error: " + sMsg, "error");
   },

@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global  $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 $cell_saver_id = CValue::getOrSession("cell_saver_id");
 

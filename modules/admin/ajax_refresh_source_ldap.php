@@ -10,14 +10,14 @@
 
 CCanDo::checkAdmin();
 
-$source_ldap_id = CValue::get("source_ldap_id");
-
 $source_ldap = new CSourceLDAP();
-$source_ldap->load($source_ldap_id);
+$sources_ldap = $source_ldap->loadList(null, "priority DESC");
+
+$sources_ldap[] = $source_ldap; // to create a new one
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("source_ldap", $source_ldap);
-$smarty->display("inc_source_ldap.tpl");
+$smarty->assign("sources_ldap", $sources_ldap);
+$smarty->display("inc_sources_ldap.tpl");
 
 ?>

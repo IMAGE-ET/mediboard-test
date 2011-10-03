@@ -11,13 +11,13 @@
 <table class="main form"> 
   <tr>
     <td>
-      <form name="edit_source_ldap" action="?" method="post" 
+      <form name="edit_source_ldap-{{$number}}" action="?" method="post" 
         onsubmit="return onSubmitFormAjax(this)">
         <input type="hidden" name="m" value="admin" />
         <input type="hidden" name="dosql" value="do_source_ldap_aed" />
         <input type="hidden" name="source_ldap_id" value="{{$source_ldap->_id}}" />
         <input type="hidden" name="del" value="0" /> 
-        <input type="hidden" name="callback" value="refreshSourceLDAP" /> 
+        <input type="hidden" name="callback" value="refreshSources" /> 
            
         <table class="form">        
           <tr>
@@ -36,6 +36,10 @@
           <tr>
             <th> {{mb_label object=$source_ldap field=port}} </th>
             <td> {{mb_field object=$source_ldap field=port}} </td>
+          </tr>
+          <tr>
+            <th> {{mb_label object=$source_ldap field=priority}} </th>
+            <td> {{mb_field object=$source_ldap field=priority increment=true form="edit_source_ldap-$number"}} </td>
           </tr>
           <tr>
             <th> {{mb_label object=$source_ldap field=rootdn}} </th>
@@ -59,42 +63,12 @@
                 <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
                 <button type="button" class="trash" 
                   onclick="confirmDeletion(this.form,{ajax:1, typeName:'',objName:'{{$source_ldap->_view|smarty:nodefaults|JSAttribute}}', 
-                  onComplete: refreshSourceLDAP.curry('{{$source_ldap->name}}')})">
+                  onComplete: refreshSources.curry('{{$source_ldap->name}}')})">
                   {{tr}}Delete{{/tr}}
                 </button>
               {{else}}  
                 <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
               {{/if}}
-            </td>
-          </tr>
-        </table>
-      </form>
-      <form name="editConfigLDAPUser" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
-        <input type="hidden" name="dosql" value="do_configure" />
-        <input type="hidden" name="m" value="system" />
-      
-        <table class="form">
-          <tr>
-            <th class="category" colspan="2">
-              {{tr}}config-user-source-ldap{{/tr}}
-            </th>
-          </tr>        
-          {{assign var="class" value="LDAP"}}
-          {{mb_include module=system template=inc_config_str var=ldap_user}}
-          
-          {{assign var="var" value="ldap_password"}}
-          <th>
-            <label title="{{tr}}config-admin-{{$class}}-{{$var}}-desc{{/tr}}">
-              {{tr}}config-admin-{{$class}}-{{$var}}{{/tr}}
-            </label>  
-          </th>
-          <td>
-            {{mb_ternary test=ldapUser var=value value=$conf.admin.$class.$var other=""}}
-            <input type="password" name="admin[{{$class}}][{{$var}}]" value="{{$value}}" />
-          </td>
-          <tr>
-            <td class="button" colspan="100">
-              <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
             </td>
           </tr>
         </table>
@@ -120,7 +94,7 @@
             url.addParam("filter", $('filter').value);
             url.addParam("attributes", $('attributes').value);
             url.requestUpdate("utilities-source-ldap-search-"+source_ldap_id);
-          },
+          }
         }
       </script>
       <table class="main form">

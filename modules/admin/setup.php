@@ -264,7 +264,12 @@ class CSetupadmin extends CSetup {
                 ADD `bind_rdn_suffix` VARCHAR (255);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.20";
+    $this->makeRevision("1.0.20");
+    $query = "ALTER TABLE `source_ldap` 
+              ADD `priority` INT (11);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.21";
   }
 }
 ?>

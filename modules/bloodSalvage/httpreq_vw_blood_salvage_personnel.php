@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-
 CAppUI::requireModuleFile("bloodSalvage", "inc_personnel");
 
 $blood_salvage_id = CValue::getOrSession("blood_salvage_id");
@@ -17,7 +15,7 @@ $blood_salvage = new CBloodSalvage();
 
 $date  = CValue::getOrSession("date", mbDate());
 
-$modif_operation = $can->edit || $date >= mbDate();
+$modif_operation = CCanDo::edit() || $date >= mbDate();
 
 $list_nurse_sspi= CPersonnel::loadListPers("reveil");
 
@@ -28,8 +26,6 @@ if($blood_salvage_id) {
 	$blood_salvage->load($blood_salvage_id);
 	loadAffected($blood_salvage_id, $list_nurse_sspi, $tabAffected, $timingAffect);
 }
-
-
 
 $smarty = new CSmartyDP();
 

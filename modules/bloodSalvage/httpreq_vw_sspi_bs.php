@@ -8,15 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $m, $g;
 CAppUI::requireModuleFile("bloodSalvage", "inc_personnel");
-
 
 $blood_salvage      = new CBloodSalvage();
 $date               = CValue::getOrSession("date", mbDate());
 $op                 = CValue::getOrSession("op");
 $totaltime          = "00:00:00";
-$modif_operation    = $can->edit || $date >= mbDate();
+$modif_operation    = CCanDo::edit() || $date >= mbDate();
 $timing             = array();
 $tabAffected        = array();
 /*

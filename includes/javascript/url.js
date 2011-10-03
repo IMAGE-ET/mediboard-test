@@ -677,12 +677,18 @@ var Url = Class.create({
     if (Preferences.INFOSYSTEM == 1 && oOptions.method === "get") {
       var lastQuery = Url.requestTimers[targetId];
       
-      //if (lastQuery && (lastQuery[0] > now - 2 * 1000) && (lastQuery[1] === paramsString)) {
-      
+      // Same query on the same node 
       if (lastQuery && (lastQuery === paramsString)) {
-        Console.error("Chargement en double de l'élément '"+targetId+"'");
+        Console.info("Chargement en double de l'élément '"+targetId+"'");
         return;
       }
+      /*else {
+        // Different query on the same node, while the previous one is not finished
+        if (element.currentXHR && element.currentXHR.transport.readyState < 4) {
+          element.currentXHR.transport.abort();
+          console.info("XHR cancelled", element, lastQuery.toQueryParams());
+        }
+      }*/
       
       Url.requestTimers[targetId] = paramsString;
     }
@@ -720,7 +726,7 @@ var Url = Class.create({
     }
 
     var getParams = oOptions.getParameters ? "?" + $H(oOptions.getParameters).toQueryString() : '';
-    new Ajax.Updater(element, oOptions.urlBase + "index.php" + getParams, oOptions);
+    /*element.currentXHR = */new Ajax.Updater(element, oOptions.urlBase + "index.php" + getParams, oOptions);
     
     return this;
   },
