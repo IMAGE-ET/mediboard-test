@@ -186,6 +186,7 @@ class CProductStockLocation extends CMbMetaObject {
       );
       
       // pas loadMatchingObject a cause du "position" pré-rempli :(
+      $location = new CProductStockLocation;
       if (!$location->loadObject($where, "position")) {
         $location->name = "Lieu par défaut";
         $location->group_id = ($host instanceof CGroups ? $host->_id : $host->group_id);

@@ -141,10 +141,18 @@ class CProductStock extends CMbObject {
     return parent::store();
   }
   
+  /**
+   * @param boolean $cache [optional]
+   * @return CProductStockLocation
+   */
   function loadRefLocation(){
     return $this->_ref_location = $this->loadFwdRef("location_id", true);
   }
   
+	/**
+	 * @param boolean $cache [optional]
+	 * @return CProduct
+	 */
   function loadRefProduct($cache = true){
     return $this->_ref_product = $this->loadFwdRef("product_id", $cache);
   }
