@@ -114,14 +114,13 @@ if($do_trans){
   $ljoin["service"] = "chambre.service_id = service.service_id";
   
   $where[] = "(degre = 'high') OR (date >= '$dateTime_min' AND date <= '$dateTime_max')";
-  $where[] = "affectation.entree >= (
-    SELECT max(a2.entree) FROM affectation a2
-    WHERE a2.sejour_id = affectation.sejour_id)";
+
+  $where[] = "(sejour.entree <= '$dateTime_min' OR sejour.entree BETWEEN '$dateTime_min' AND '$dateTime_max') AND
+                ((sejour.sortie BETWEEN '$dateTime_min' AND '$dateTime_max') OR (sejour.sortie >= '$dateTime_max'))";
+  $where[] = "(affectation.entree <= '$dateTime_min' OR affectation.entree BETWEEN '$dateTime_min' AND '$dateTime_max') AND
+                ((affectation.sortie BETWEEN '$dateTime_min' AND '$dateTime_max') OR (affectation.sortie >= '$dateTime_max'))";
+
   $where["service.service_id"] = " = '$service_id'";
-  
-  $where[] = "(sejour.entree BETWEEN '$dateTime_min' AND '$dateTime_max') OR 
-            (sejour.sortie BETWEEN '$dateTime_min' AND '$dateTime_max') OR
-            (sejour.entree <= '$dateTime_min' AND sejour.sortie >= '$dateTime_max')";
   
   if ($_present_only) {
     $where["sejour.sortie_reelle"] = 'IS NULL';
