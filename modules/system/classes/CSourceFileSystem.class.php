@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireModuleClass("system", "CExchangeSource");
-
 class CSourceFileSystem extends CExchangeSource {
   // DB Table key
   var $source_file_system_id = null;
