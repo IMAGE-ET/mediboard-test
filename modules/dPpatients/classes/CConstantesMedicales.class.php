@@ -119,7 +119,7 @@ class CConstantesMedicales extends CMbObject {
     ),
     "temperature"       => array(
       "unit" => "°C", 
-      "min" => 36, "max" => 41,
+      "min" => 36, "max" => 40,
       "standard" => 37.5,
       "colors" => array("orange")
     ), 

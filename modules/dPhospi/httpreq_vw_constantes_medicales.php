@@ -371,11 +371,14 @@ foreach($data as $name => &$_data) {
     $_data["standard"] = $params["standard"];
   }
   
+  $margin_ratio = 0.1;
+  
   if (in_array($name, array("ta", "ta_gauche", "ta_droit"))) {
     if (isset($params["conversion"][$unite_ta]) && ($unite_ta != $params["conversion"][$unite_ta])) {
       $_data["standard"] *= $params["conversion"][$unite_ta];
     }
     
+    $margin_ratio = 0.3;
     $params['unit'] = $unite_ta;
   }
   
@@ -386,11 +389,13 @@ foreach($data as $name => &$_data) {
     $y_values = array_merge($y_values, $_values);
   }
   
+  $margin = abs($params["min"] - $params["max"]) * $margin_ratio;
+  
   $_data["options"] = array(
     "title" => utf8_encode(CAppUI::tr("CConstantesMedicales-$name-desc").($params['unit'] ? " ({$params['unit']})" : "")),
     "yaxis" => array(
-      "min" => getMin($params["min"], $y_values), // min
-      "max" => getMax($params["max"], $y_values) * 1.1, // max
+      "min" => getMin($params["min"], $y_values) - $margin, // min
+      "max" => getMax($params["max"], $y_values) + $margin, // max
     )
   );
   
