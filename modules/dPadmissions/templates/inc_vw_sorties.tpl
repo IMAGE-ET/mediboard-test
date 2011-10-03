@@ -62,6 +62,9 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
       {{mb_colonne class="CSejour" field="sortie_prevue" order_col=$order_col order_way=$order_way url="$url"}}
     </th>
     <th>Chambre</th>
+    {{if $conf.dPadmissions.show_dh}}
+      <th>DH</th>
+    {{/if}}
   </tr>
   
   {{foreach from=$sejours item=_sejour}}
@@ -184,6 +187,37 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
         {{/if}}
        {{/if}}  
     </td>
+    {{if $conf.dPadmissions.show_dh}}
+      <td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+        {{foreach from=$_sejour->_ref_operations item=curr_op}}
+        {{if $curr_op->_ref_actes_ccam|@count}}
+        <span style="color: #484;">
+        {{foreach from=$curr_op->_ref_actes_ccam item=_acte}}
+          {{if $_acte->montant_depassement}}
+            {{if $_acte->code_activite == 1}}
+            Chir :
+            {{elseif $_acte->code_activite == 4}}
+            Anesth :
+            {{else}}
+            Activité {{$_acte->code_activite}} :
+            {{/if}}
+            {{mb_value object=$_acte field=montant_depassement}}
+            <br />
+          {{/if}}
+        {{/foreach}}
+        </span>
+        {{/if}}
+        {{if $curr_op->depassement}}
+        <!-- Pas de possibilité d'imprimer les dépassements pour l'instant -->
+        <!-- <a href="#" onclick="printDepassement({{$_sejour->sejour_id}})"></a> -->
+        Prévu : {{mb_value object=$curr_op field="depassement"}}
+        <br />
+        {{/if}}
+        {{foreachelse}}
+        -
+        {{/foreach}}
+      </td>
+    {{/if}}
   </tr>
   {{/foreach}}
 </table>
