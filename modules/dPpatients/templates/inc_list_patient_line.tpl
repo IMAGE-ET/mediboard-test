@@ -12,8 +12,8 @@
     </a>
   </td>
   {{else}}
-  <td style="padding-right: 16px;">
-    <div style="float: right; margin-right: -16px;">
+  <td>
+    <div style="float: right;">
       {{mb_include module=system template=inc_object_notes object=$_patient}}
     </div>
 		
@@ -23,9 +23,11 @@
     </div>
     {{/if}}
 
-    <a href="#{{$_patient->_guid}}" onclick="reloadPatient('{{$_patient->_id}}', this);">
-      {{mb_value object=$_patient field="_view"}}
-    </a>
+    <div class="text noted">
+      <a href="#{{$_patient->_guid}}" onclick="reloadPatient('{{$_patient->_id}}', this);">
+        {{mb_value object=$_patient field="_view"}}
+      </a>
+    </div>
     
   </td>
   <td>
