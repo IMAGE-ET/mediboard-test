@@ -39,7 +39,7 @@ onSubmitObjectConfigs = function(oForm, object_instance_id, object_guid) {
       <td><button class="notext cancel" type="button" onclick="resetValue('{{$object->_id}}', '{{$_field_name}}');">{{tr}}Delete{{/tr}}</button></td>
       <td>
         {{if $object->_specs.$_field_name instanceof CEnumSpec || $object->_specs.$_field_name instanceof CBoolSpec}}
-        {{mb_field object=$object field=$_field_name typeEnum=select defaultOption="Indéfini"}}
+        {{mb_field object=$object field=$_field_name typeEnum=select emptyLabel="Undefined"}}
         {{else}}
         {{mb_field object=$object field=$_field_name}}
         {{/if}}

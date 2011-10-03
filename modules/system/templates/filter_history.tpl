@@ -66,7 +66,7 @@ Main.add(function(){
   </tr>
   <tr>
     <th>{{mb_label object=$filter field=type}}</th>
-    <td>{{mb_field object=$filter field=type canNull=true defaultOption="&mdash; Choisir un type"}}</td>
+    <td>{{mb_field object=$filter field=type canNull=true emptyLabel="Choose"}}</td>
 
     <th>{{mb_label object=$filter field=object_id}}</th>
     <td>

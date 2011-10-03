@@ -127,6 +127,7 @@ $locales['CSalle.one'] = 'salle opératoire';
 $locales['CSalle.select'] = 'Choisir une salle';
 $locales['CSalle.stats.0'] = '0';
 $locales['CSalle.stats.1'] = '1';
+$locales['CSejour.type.all'] = 'Tous les types';
 $locales['config-dPbloc-CPlageOp-chambre_operation'] = 'Afficher l\'intervention et la chambre du patient dans le suivi des salles';
 $locales['config-dPbloc-CPlageOp-days_locked'] = 'Blocage de plages opératoires à J-';
 $locales['config-dPbloc-CPlageOp-hours_start'] = 'Heure de début';

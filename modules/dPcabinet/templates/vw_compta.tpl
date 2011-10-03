@@ -121,7 +121,7 @@ function viewActes(){
         </tr>
         <tr>
           <th>{{mb_label object=$filter_reglement field="mode"}}</th>
-          <td>{{mb_field object=$filter_reglement field="mode" defaultOption="&mdash; Tout type &mdash;" canNull="true"}}</td> 
+          <td>{{mb_field object=$filter_reglement field="mode" emptyLabel="All" canNull="true"}}</td> 
           <td colspan="2" rowspan="3" class="text">
             <div class="big-info">
               Affichage des règlements effectués, en fonction de la date de paiement.
@@ -158,11 +158,11 @@ function viewActes(){
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_etat_reglement_patient"}}</th>
-          <td>{{mb_field object=$filter field="_etat_reglement_patient" defaultOption="&mdash; Tous  &mdash;" canNull="true"}}</td>          
+          <td>{{mb_field object=$filter field="_etat_reglement_patient" emptyLabel="All" canNull="true"}}</td>          
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_etat_reglement_tiers"}}</th>
-          <td>{{mb_field object=$filter field="_etat_reglement_tiers" defaultOption="&mdash; Tous  &mdash;" canNull="true"}}</td>          
+          <td>{{mb_field object=$filter field="_etat_reglement_tiers" emptyLabel="All" canNull="true"}}</td>          
         </tr>
         <tr>
           <td class="button" colspan="2">

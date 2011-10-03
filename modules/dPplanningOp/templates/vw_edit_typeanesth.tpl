@@ -21,7 +21,7 @@
           <td>
             {{$_type_anesth->_count_operations}}
           </td>
-          <td class="text">
+          <td class="text {{if !$_type_anesth->ext_doc}} empty {{/if}}">
 						{{mb_value object=$_type_anesth field=ext_doc}}
           </td>
         </tr>
@@ -34,27 +34,22 @@
       <form name="editType" action="?m={{$m}}&amp;tab=vw_edit_typeanesth" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPplanningOp" />
       <input type="hidden" name="dosql" value="do_typeanesth_aed" />
-      {{mb_field object=$type_anesth field="type_anesth_id" hidden=1}}
       <input type="hidden" name="del" value="0" />
+      {{mb_key object=$type_anesth}}
+
       <table class="form">
-        <tr>
-          {{if $type_anesth->_id}}
-          <th class="title modify" colspan="2">{{tr}}CTypeAnesth-title-modify{{/tr}} {{$type_anesth->name}}</th>
-          {{else}}
-          <th class="title" colspan="2">{{tr}}CTypeAnesth-title-create{{/tr}}</th>
-          {{/if}}
-        </tr> 
+        {{mb_include module=system template=inc_form_table_header object=$type_anesth}}
         <tr>
           <th>{{mb_label object=$type_anesth field="name"}}</th>
           <td>{{mb_field object=$type_anesth field="name"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$type_anesth field="ext_doc"}}</th>
-          <td>{{mb_field object=$type_anesth field="ext_doc" defaultOption="&mdash; Sélection d'une extension"}}</td>
+          <td>{{mb_field object=$type_anesth field="ext_doc" emptyLabel="Choose"}}</td>
         </tr>  
         <tr>
           <td class="button" colspan="2">
-            {{if $type_anesth->type_anesth_id}}
+            {{if $type_anesth->_id}}
               <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
               <button class="trash" type="button" onclick="confirmDeletion(this.form,{objName:'{{$type_anesth->name|smarty:nodefaults|JSAttribute}}'})">{{tr}}Delete{{/tr}}</button>
             {{else}}

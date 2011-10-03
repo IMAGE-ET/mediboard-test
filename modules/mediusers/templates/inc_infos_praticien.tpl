@@ -43,7 +43,7 @@
 
 <tr>
   <th>{{mb_label object=$object field="secteur"}}</th>
-  <td>{{mb_field object=$object field="secteur" defaultOption="&mdash; Choix d'un secteur"}}</td>
+  <td>{{mb_field object=$object field="secteur" emptyLabel="Choose"}}</td>
 </tr>
 
 <tr>

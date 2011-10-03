@@ -455,7 +455,7 @@ Main.add( function(){
 
 <tr>
   <th>{{mb_label object=$sejour field="nature_accident"}}</th>
-  <td colspan="3">{{mb_field object=$sejour field="nature_accident" defaultOption="&mdash; Choisir une nature" style="width: 15em;"}}</td>
+  <td colspan="3">{{mb_field object=$sejour field="nature_accident" emptyLabel="Choose" style="width: 15em;"}}</td>
 </tr>
 {{/if}}
 
@@ -466,7 +466,7 @@ Main.add( function(){
   <td colspan="3">
     <select name="service_id" class="{{$sejour->_props.service_id}}" style="width: 15em"
       onchange="if(getForm('editOp')) {synchroService(this)};">
-      <option value="">&mdash; Choisir un service</option>
+      <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
       {{foreach from=$listServices item=_service}}
       <option value="{{$_service->_id}}" {{if $sejour->service_id == $_service->_id}} selected="selected" {{/if}}>
         {{$_service->_view}}
@@ -643,7 +643,7 @@ Main.add( function(){
   <th>{{mb_label object=$sejour field=mode_sortie}}</th>
   <td>
     {{if $can->view}}
-      {{mb_field object=$sejour defaultOption="&mdash; Mode de sortie" field=mode_sortie onchange="changeModeSortie(this.value);" style="width: 15em;"}}
+      {{mb_field object=$sejour emptyLabel="Choose" field=mode_sortie onchange="changeModeSortie(this.value);" style="width: 15em;"}}
       <div id="listEtabExterne" {{if !$sejour->etablissement_sortie_id}}style="display:none"{{/if}}>
         {{mb_field object=$sejour field="etablissement_sortie_id" form="editSejour" autocomplete="true,1,50,true,true" style="width: 12em;"}}
       </div>

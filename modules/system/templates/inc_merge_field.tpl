@@ -21,7 +21,7 @@
     {{if $spec instanceof CDateSpec || $spec instanceof CTimeSpec || $spec instanceof CDateTimeSpec}}
       {{mb_field object=$result field=$field form="form-merge" register=true onchange=$onchange}}
     {{elseif $spec instanceof CEnumSpec || $spec instanceof CBoolSpec}}
-      {{mb_field object=$result field=$field defaultOption="&mdash; Non spécifié" onchange=$onchange}}
+      {{mb_field object=$result field=$field emptyLabel="Undefined" onchange=$onchange}}
     {{elseif $spec instanceof CRefSpec}}
       {{mb_field object=$result field=$field hidden=1}}
       <input type="text" readonly="readonly" size="30" name="_{{$field}}_view" value="{{$result->_fwd.$field}}" onchange="{{$onchange}}" />

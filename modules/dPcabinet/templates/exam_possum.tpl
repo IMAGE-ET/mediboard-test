@@ -50,57 +50,57 @@ var scoreOper   = {{$exam_possum->_score_oper}};
   <tr>
     <th>{{mb_label object=$exam_possum field="age"}}</th>
     <td>
-      {{mb_field object=$exam_possum field="age" defaultOption="&mdash;" onchange="calculPhysio()"}}
+      {{mb_field object=$exam_possum field="age" emptyLabel=" " onchange="calculPhysio()"}}
     </td>
     <th>{{mb_label object=$exam_possum field="kaliemie"}}</th>
     <td>
-      {{mb_field object=$exam_possum field="kaliemie" defaultOption="&mdash;" onchange="calculPhysio()"}}
+      {{mb_field object=$exam_possum field="kaliemie" emptyLabel=" " onchange="calculPhysio()"}}
     </td>
     <th>{{mb_label object=$exam_possum field="signes_respiratoires"}}</th>
     <td>
-      {{mb_field object=$exam_possum field="signes_respiratoires" defaultOption="&mdash;" onchange="calculPhysio()"}}
+      {{mb_field object=$exam_possum field="signes_respiratoires" emptyLabel=" " onchange="calculPhysio()"}}
     </td>
   </tr>
   
   <tr>
     <th>{{mb_label object=$exam_possum field="uree"}}</th>
     <td>
-      {{mb_field object=$exam_possum field="uree" defaultOption="&mdash;" onchange="calculPhysio()"}}
+      {{mb_field object=$exam_possum field="uree" emptyLabel=" " onchange="calculPhysio()"}}
     </td>
     <th>{{mb_label object=$exam_possum field="natremie"}}</th>
     <td>
-      {{mb_field object=$exam_possum field="natremie" defaultOption="&mdash;" onchange="calculPhysio()"}}
+      {{mb_field object=$exam_possum field="natremie" emptyLabel=" " onchange="calculPhysio()"}}
     </td>
     <th>{{mb_label object=$exam_possum field="signes_cardiaques"}}</th>
     <td>
-      {{mb_field object=$exam_possum field="signes_cardiaques" defaultOption="&mdash;" onchange="calculPhysio()"}}
+      {{mb_field object=$exam_possum field="signes_cardiaques" emptyLabel=" " onchange="calculPhysio()"}}
     </td>
   </tr>
   
   <tr>
     <th>{{mb_label object=$exam_possum field="hb"}}</th>
     <td>
-      {{mb_field object=$exam_possum field="hb" defaultOption="&mdash;" onchange="calculPhysio()"}}
+      {{mb_field object=$exam_possum field="hb" emptyLabel=" " onchange="calculPhysio()"}}
     </td>
     <th>{{mb_label object=$exam_possum field="freq_cardiaque"}}</th>
     <td>
-      {{mb_field object=$exam_possum field="freq_cardiaque" defaultOption="&mdash;" onchange="calculPhysio()"}}
+      {{mb_field object=$exam_possum field="freq_cardiaque" emptyLabel=" " onchange="calculPhysio()"}}
     </td>
     <th>{{mb_label object=$exam_possum field="ecg"}}</th>
     <td>
-      {{mb_field object=$exam_possum field="ecg" defaultOption="&mdash;" onchange="calculPhysio()"}}
+      {{mb_field object=$exam_possum field="ecg" emptyLabel=" " onchange="calculPhysio()"}}
     </td>
   </tr>
   
   <tr>
     <th>{{mb_label object=$exam_possum field="leucocytes"}}</th>
     <td>
-      {{mb_field object=$exam_possum field="leucocytes" defaultOption="&mdash;" onchange="calculPhysio()"}}
+      {{mb_field object=$exam_possum field="leucocytes" emptyLabel=" " onchange="calculPhysio()"}}
     </td>
     <td colspan="2"></td>
     <th>{{mb_label object=$exam_possum field="pression_arterielle"}}</th>
     <td>
-      {{mb_field object=$exam_possum field="pression_arterielle" defaultOption="&mdash;" onchange="calculPhysio()"}}
+      {{mb_field object=$exam_possum field="pression_arterielle" emptyLabel=" " onchange="calculPhysio()"}}
     </td>
   </tr>
   
@@ -111,15 +111,15 @@ var scoreOper   = {{$exam_possum->_score_oper}};
   <tr>
     <th>{{mb_label object=$exam_possum field="ouverture_yeux"}}</th>
     <td>
-      {{mb_field object=$exam_possum field="ouverture_yeux" defaultOption="&mdash;" onchange="calculPhysio()"}}
+      {{mb_field object=$exam_possum field="ouverture_yeux" emptyLabel=" " onchange="calculPhysio()"}}
     </td>
     <th>{{mb_label object=$exam_possum field="rep_verbale"}}</th>
     <td>
-      {{mb_field object=$exam_possum field="rep_verbale" defaultOption="&mdash;" onchange="calculPhysio()"}}
+      {{mb_field object=$exam_possum field="rep_verbale" emptyLabel=" " onchange="calculPhysio()"}}
     </td>
     <th>{{mb_label object=$exam_possum field="rep_motrice"}}</th>
     <td>
-      {{mb_field object=$exam_possum field="rep_motrice" defaultOption="&mdash;" onchange="calculPhysio()"}}
+      {{mb_field object=$exam_possum field="rep_motrice" emptyLabel=" " onchange="calculPhysio()"}}
     </td>  
   </tr>
 
@@ -132,30 +132,30 @@ var scoreOper   = {{$exam_possum->_score_oper}};
   <tr>
     <th>{{mb_label object=$exam_possum field="gravite"}}</th>
     <td>
-      {{mb_field object=$exam_possum field="gravite" defaultOption="&mdash;" onchange="calculOper()"}}
+      {{mb_field object=$exam_possum field="gravite" emptyLabel=" " onchange="calculOper()"}}
     </td>  
     <th>{{mb_label object=$exam_possum field="nb_interv"}}</th>
     <td>
-      {{mb_field object=$exam_possum field="nb_interv" defaultOption="&mdash;" onchange="calculOper()"}}
+      {{mb_field object=$exam_possum field="nb_interv" emptyLabel=" " onchange="calculOper()"}}
     </td>  
     <th>{{mb_label object=$exam_possum field="pertes_sanguines"}}</th>
     <td>
-      {{mb_field object=$exam_possum field="pertes_sanguines" defaultOption="&mdash;" onchange="calculOper()"}}
+      {{mb_field object=$exam_possum field="pertes_sanguines" emptyLabel=" " onchange="calculOper()"}}
     </td>  
   </tr>
   
   <tr>
     <th>{{mb_label object=$exam_possum field="contam_peritoneale"}}</th>
     <td>
-      {{mb_field object=$exam_possum field="contam_peritoneale" defaultOption="&mdash;" onchange="calculOper()"}}
+      {{mb_field object=$exam_possum field="contam_peritoneale" emptyLabel=" " onchange="calculOper()"}}
     </td> 
     <th>{{mb_label object=$exam_possum field="cancer"}}</th>
     <td>
-      {{mb_field object=$exam_possum field="cancer" defaultOption="&mdash;" onchange="calculOper()"}}
+      {{mb_field object=$exam_possum field="cancer" emptyLabel=" " onchange="calculOper()"}}
     </td>
     <th>{{mb_label object=$exam_possum field="circonstances_interv"}}</th>
     <td>
-      {{mb_field object=$exam_possum field="circonstances_interv" defaultOption="&mdash;" onchange="calculOper()"}}
+      {{mb_field object=$exam_possum field="circonstances_interv" emptyLabel=" " onchange="calculOper()"}}
     </td>
   </tr>
   

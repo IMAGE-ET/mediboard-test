@@ -70,7 +70,7 @@ Main.add(function(){
 				</select>
 			</td>
 			<td>
-				{{mb_field object=$sejour field="type" defaultOption="&mdash; Tous les types" onchange="this.form.submit();"}}
+				{{mb_field object=$sejour field="type" emptyLabel="All" onchange="this.form.submit();"}}
 			</td>
 		</tr>
 	</table>

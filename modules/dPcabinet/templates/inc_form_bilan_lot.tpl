@@ -39,7 +39,7 @@ function checkBilanLot() {
 
   <tr>
     <th>{{mb_label object=$lot field=S_LOT_ETAT}}</th>
-    <td>{{mb_field object=$lot field=S_LOT_ETAT defaultOption="&mdash; Tous"}}</td>
+    <td>{{mb_field object=$lot field=S_LOT_ETAT emptyLabel="All"}}</td>
   </tr>
 
   <tr>

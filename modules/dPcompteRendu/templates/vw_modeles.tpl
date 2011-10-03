@@ -42,7 +42,7 @@ Main.add(function () {
 	</td>
 
   <th>{{mb_label object=$filtre field=type}}</th>
-  <td>{{mb_field object=$filtre field=type onchange="this.form.submit()" canNull=true defaultOption="&mdash; Tous les types"}}</td>
+  <td>{{mb_field object=$filtre field=type onchange="this.form.submit()" canNull=true emptyLabel="All"}}</td>
 </tr>
 
 </table>

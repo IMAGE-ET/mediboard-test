@@ -157,17 +157,17 @@ function showEtabEntreeTransfert(mode) {
             
             <tr>
               <th>{{mb_label object=$rpu field="_entree"}}</th>
-              <td>{{$rpu->_entree|date_format:"%d %b %Y à %Hh%M"}}</td>
+              <td>{{mb_value object=$rpu field="_entree"}}</td>
             </tr>
             
             <tr>
               <th>{{mb_label object=$rpu field="ccmu"}}</th>
-              <td>{{mb_field object=$rpu field="ccmu" canNull=false defaultOption="&mdash; Code CCMU" onchange="this.form.onsubmit();"}}</td>
+              <td>{{mb_field object=$rpu field="ccmu" canNull=false emptyLabel="Choose" onchange="this.form.onsubmit();"}}</td>
             </tr>
             
             <tr> 
               <th>{{mb_label object=$rpu field="_mode_entree"}}</th>
-              <td>{{mb_field object=$rpu field="_mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true); showEtabEntreeTransfert(this.value); this.form.onsubmit();"}}</td>
+              <td>{{mb_field object=$rpu field="_mode_entree" emptyLabel="Choose" onchange="ContraintesRPU.updateProvenance(this.value, true); showEtabEntreeTransfert(this.value); this.form.onsubmit();"}}</td>
             </tr>
             
             <tr id="etablissement_entree_transfert" {{if $sejour->mode_entree != '7'}}style="display:none"{{/if}}>
@@ -186,23 +186,23 @@ function showEtabEntreeTransfert(mode) {
             {{if $conf.dPurgences.old_rpu == "1"}}
             <tr>
               <th>{{mb_label object=$rpu field="urprov"}}</th>
-              <td>{{mb_field object=$rpu field="urprov" defaultOption="&mdash; Provenance" onchange="this.form.onsubmit();"}}</td>
+              <td>{{mb_field object=$rpu field="urprov" emptyLabel="Choose" onchange="this.form.onsubmit();"}}</td>
             </tr>
             {{else}}
             <tr>
               <th>{{mb_label object=$rpu field="provenance"}}</th>
-              <td>{{mb_field object=$rpu field="provenance" defaultOption="&mdash; Provenance" onchange="this.form.onsubmit();"}}</td>
+              <td>{{mb_field object=$rpu field="provenance" emptyLabel="Choose" onchange="this.form.onsubmit();"}}</td>
             </tr>
             {{/if}}    
             
             <tr>   
               <th>{{mb_label object=$rpu field="transport"}}</th>
-              <td>{{mb_field object=$rpu field="transport" defaultOption="&mdash; Type de transport" onchange="this.form.onsubmit();"}}</td>
+              <td>{{mb_field object=$rpu field="transport" emptyLabel="Choose" onchange="this.form.onsubmit();"}}</td>
             </tr>
             
             <tr>
               <th>{{mb_label object=$rpu field="pec_transport"}}</th>
-              <td>{{mb_field object=$rpu field="pec_transport" defaultOption="&mdash; Prise en charge" onchange="this.form.onsubmit();"}}</td>
+              <td>{{mb_field object=$rpu field="pec_transport" emptyLabel="Choose" onchange="this.form.onsubmit();"}}</td>
             </tr>
             
             <tr>
@@ -270,33 +270,33 @@ function showEtabEntreeTransfert(mode) {
           <table class="layout" style="width: 100%">
             <tr>
               <th style="width: 120px;">{{mb_label object=$rpu field="gemsa"}}</th>
-              <td>{{mb_field object=$rpu field="gemsa" canNull=false defaultOption="&mdash; Code GEMSA" onchange="this.form.onsubmit();"}}</td>
+              <td>{{mb_field object=$rpu field="gemsa" canNull=false emptyLabel="Choose" onchange="this.form.onsubmit();"}}</td>
             </tr>          
             
             {{if $conf.dPurgences.old_rpu == "1"}}
             <tr>
               <th>{{mb_label object=$rpu field="type_pathologie"}}</th>
-              <td>{{mb_field object=$rpu field="type_pathologie" canNull=true defaultOption="&mdash; Type de pathologie" onchange="this.form.onsubmit();"}}</td>
+              <td>{{mb_field object=$rpu field="type_pathologie" canNull=true emptyLabel="Choose" onchange="this.form.onsubmit();"}}</td>
             </tr>
             
             <tr>
               <th>{{mb_label object=$rpu field="urtrau"}}</th>
-              <td>{{mb_field object=$rpu field="urtrau" canNull=true defaultOption="&mdash; Type de soins traumato" onchange="this.form.onsubmit();"}}</td>
+              <td>{{mb_field object=$rpu field="urtrau" canNull=true emptyLabel="Choose" onchange="this.form.onsubmit();"}}</td>
             </tr>
             {{/if}}
             {{if $conf.dPurgences.old_rpu == "1"}}
             <tr>
               <th>{{mb_label object=$rpu field="urmuta"}}</th>
-              <td>{{mb_field object=$rpu field="urmuta" canNull=true defaultOption="&mdash; Cause" onchange="this.form.onsubmit();"}}</td>
+              <td>{{mb_field object=$rpu field="urmuta" canNull=true emptyLabel="Choose" onchange="this.form.onsubmit();"}}</td>
             </tr>
             {{else}}
             <tr>
               <th>{{mb_label object=$rpu field="orientation"}}</th>
-              <td>{{mb_field object=$rpu field="orientation" defaultOption="&mdash; Orientation" onchange="this.form.onsubmit();"}}</td>
+              <td>{{mb_field object=$rpu field="orientation" emptyLabel="Choose" onchange="this.form.onsubmit();"}}</td>
             </tr>
             <tr> 
               <th>{{mb_label object=$rpu field="destination"}}</th>
-              <td>{{mb_field object=$rpu field="destination" defaultOption="&mdash; Destination" onchange="this.form.onsubmit();"}}</td> 
+              <td>{{mb_field object=$rpu field="destination" emptyLabel="Choose" onchange="this.form.onsubmit();"}}</td> 
             </tr>
             {{/if}}      
             

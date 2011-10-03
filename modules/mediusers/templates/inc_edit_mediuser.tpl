@@ -128,7 +128,7 @@ Main.add(function () {
 	    <th>{{mb_label object=$object field="function_id"}}</th>
 	    <td>
 	      <select name="function_id" style="width: 150px;" class="{{$object->_props.function_id}}">
-	        <option value="">&mdash; Choisir une fonction</option>
+	        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
 	        {{foreach from=$group->_ref_functions item=_function}}
 	        <option class="mediuser" style="border-color: #{{$_function->color}};" value="{{$_function->_id}}"
 	        	 {{if $_function->_id == $object->function_id}} selected="selected" {{/if}}
@@ -159,7 +159,7 @@ Main.add(function () {
 	    <th>{{mb_label object=$object field="_profile_id"}}</th>
 	    <td>
 	      <select name="_profile_id" style="width: 150px;">
-	        <option value="">&mdash; Choisir un profil</option>
+	        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
 	        {{foreach from=$profiles item=_profile}}
 	        <option value="{{$_profile->user_id}}" {{if $_profile->user_id == $object->_profile_id}} selected="selected" {{/if}}>{{$_profile->user_username}}</option>
 	        {{/foreach}}

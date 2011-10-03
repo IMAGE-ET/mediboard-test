@@ -174,7 +174,7 @@ Main.add(function () {
               onchange="$('editFrm_libelle_protocole').value = '';
                         this.form.protocole_prescription_chir_id.value = '';"
               style="width: 15em;">
-        <option value="">&mdash; Choisir un praticien</option>
+        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
         {{foreach from=$listPraticiens item=_prat}}
         <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}"
                 {{if $chir->_id == $_prat->_id}}selected="selected"{{/if}}>
@@ -191,7 +191,7 @@ Main.add(function () {
               onchange="$('editFrm_libelle_protocole').value = '';
                         this.form.protocole_prescription_chir_id.value = '';"
               style="width: 15em;">
-        <option value="">&mdash; Choisir une fonction</option>
+        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
         {{foreach from=$listFunctions item=_function}}
         <option class="mediuser" style="border-color: #{{$_function->color}};" value="{{$_function->_id}}"
                 {{if $protocole->function_id == $_function->_id}}selected="selected"{{/if}}>
@@ -267,7 +267,7 @@ Main.add(function () {
         <tr>
           <th>{{mb_label object=$protocole field="cote"}}</th>
           <td colspan="2">
-            {{mb_field object=$protocole field="cote" style="width: 15em" defaultOption="&mdash; Choisir"}}
+            {{mb_field object=$protocole field="cote" style="width: 15em" emptyLabel="Choose"}}
           </td>
         </tr> 
         
@@ -336,7 +336,7 @@ Main.add(function () {
 				  </th>
 				  <td>
 				    <select name="service_id" class="{{$protocole->_props.service_id}}" style="width: 15em;">
-				      <option value="">&mdash; Choisir un service</option>
+				      <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
 				      {{foreach from=$listServices item=_service}}
 				      <option value="{{$_service->_id}}" {{if $protocole->service_id == $_service->_id}} selected="selected" {{/if}}>
 				        {{$_service->_view}}

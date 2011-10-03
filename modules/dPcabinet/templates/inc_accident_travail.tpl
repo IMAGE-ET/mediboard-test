@@ -49,9 +49,9 @@
         <th>{{mb_label object=$consult field=pec_at}}</th>
         <td>
           {{if $consult->date_at}}
-            {{mb_field object=$consult field=pec_at onchange="this.form.onsubmit()" defaultOption="&mdash; Prise en charge"}}
+            {{mb_field object=$consult field=pec_at onchange="this.form.onsubmit()" emptyLabel="Choose"}}
           {{else}}
-            {{mb_field object=$consult field=pec_at onchange="this.form.onsubmit()" defaultOption="&mdash; Prise en charge" readonly=readonly}}
+            {{mb_field object=$consult field=pec_at onchange="this.form.onsubmit()" emptyLabel="Choose" readonly=readonly}}
           {{/if}}
         </td>
       </tr>

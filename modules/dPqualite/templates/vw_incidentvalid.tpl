@@ -96,7 +96,7 @@ Main.add(function() {
   <tr>
     <td class="halfPane">
       <form name="filter-ei" action="?" method="get" onsubmit="return filterFiches()">
-        {{mb_field object=$filterFiche field=elem_concerne style="width: 14em;" defaultOption=" &mdash; Cet élément concerne" onchange="this.form.onsubmit()"}}
+        {{mb_field object=$filterFiche field=elem_concerne style="width: 14em;" emptyLabel="CFicheEi-elem_concerne" onchange="this.form.onsubmit()"}}
         
         <select name="evenements" style="width: 9em;" onchange="this.form.filter_item.value = ''; reloadItems(this.value); this.form.onsubmit()">
           <option value=""> &mdash; Catégorie</option>

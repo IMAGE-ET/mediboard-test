@@ -28,7 +28,7 @@
         <input type="hidden" name="dosql" value="do_planning_aed" />
         {{mb_key object=$curr_op}}
         {{mb_label object=$curr_op field="cote_admission"}} :
-        {{mb_field defaultOption="&mdash; choisir" object=$curr_op field="cote_admission" onchange="submitCote(this.form);"}}
+        {{mb_field emptyLabel="Choose" object=$curr_op field="cote_admission" onchange="submitCote(this.form);"}}
       </form>
       <br />
     {{/if}}

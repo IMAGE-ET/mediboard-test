@@ -95,8 +95,8 @@
       <input type="hidden" name="dosql" value="do_rpu_aed" />
       <input type="hidden" name="del" value="0" />
       {{mb_key object=$rpu}}
-      {{mb_field object=$rpu field="destination" defaultOption="&mdash; Destination" onchange="this.form.onsubmit()"}}<br />
-      {{mb_field object=$rpu field="orientation" defaultOption="&mdash; Orientation" onchange="this.form.onsubmit()"}}
+      {{mb_field object=$rpu field="destination" emptyLabel="CRPU-destination" onchange="this.form.onsubmit()"}}<br />
+      {{mb_field object=$rpu field="orientation" emptyLabel="CRPU-orientation" onchange="this.form.onsubmit()"}}
     </form>
   {{/if}}
 </td>

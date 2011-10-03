@@ -260,7 +260,7 @@
 	    <th>{{mb_label object=$rpu field="_responsable_id"}}</th>
 	    <td>
 	      <select name="_responsable_id" style="width: 15em;" class="{{$rpu->_props._responsable_id}}">
-	        <option value="">&mdash; Choisir un responsable</option>
+	        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
 	        {{foreach from=$listResponsables item=curr_user}}
 	        <option value="{{$curr_user->_id}}" class="mediuser" style="border-color: #{{$curr_user->_ref_function->color}}" {{if $curr_user->_id == $rpu->_responsable_id}}selected="selected"{{/if}}>
 	          {{$curr_user->_view}}
@@ -270,7 +270,7 @@
 	    </td>
 	    
 	    <th>{{mb_label object=$rpu field="_mode_entree"}}</th>
-	    <td>{{mb_field object=$rpu field="_mode_entree" style="width: 15em;" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true); changeModeEntree(this.value)"}}</td>
+	    <td>{{mb_field object=$rpu field="_mode_entree" style="width: 15em;" emptyLabel="Choose" onchange="ContraintesRPU.updateProvenance(this.value, true); changeModeEntree(this.value)"}}</td>
 	  </tr>
 	  
 	  <tr>
@@ -325,30 +325,30 @@
 	    
 	    {{if $conf.dPurgences.old_rpu == "1"}}
 	    <th>{{mb_label object=$rpu field="urprov"}}</th>
-	    <td>{{mb_field object=$rpu field="urprov" defaultOption="&mdash; Provenance" style="width: 15em;"}}</td>
+	    <td>{{mb_field object=$rpu field="urprov" emptyLabel="Choose" style="width: 15em;"}}</td>
 	    {{else}}
 	    <th>{{mb_label object=$rpu field="provenance"}}</th>
-	    <td>{{mb_field object=$rpu field="provenance" defaultOption="&mdash; Provenance" style="width: 15em;"}}</td>
+	    <td>{{mb_field object=$rpu field="provenance" emptyLabel="Choose" style="width: 15em;"}}</td>
 	    {{/if}}
 	  </tr>
 	  
 	  <tr>
 		  {{if $can->edit}}
 	    <th>{{mb_label object=$rpu field="ccmu"}}</th>
-	    <td>{{mb_field object=$rpu field="ccmu" defaultOption="&mdash; Code CCMU" style="width: 15em;"}}</td>
+	    <td>{{mb_field object=$rpu field="ccmu" emptyLabel="Choose" style="width: 15em;"}}</td>
 			{{else}}
 			<th></th>
 	    <td></td>
 		  {{/if}}
 		  <th>{{mb_label object=$rpu field="transport"}}</th>
-	    <td>{{mb_field object=$rpu field="transport" defaultOption="&mdash; Type de transport" style="width: 15em;"}}</td>
+	    <td>{{mb_field object=$rpu field="transport" emptyLabel="Choose" style="width: 15em;"}}</td>
 	  </tr>
 	  
 	   <!-- Selection du service -->
 	  <tr>
 	    <td colspan="2"></td>
 		  <th>{{mb_label object=$rpu field="pec_transport"}}</th>
-	    <td>{{mb_field object=$rpu field="pec_transport" defaultOption="&mdash; Prise en charge" style="width: 15em;"}}</td>
+	    <td>{{mb_field object=$rpu field="pec_transport" emptyLabel="Choose" style="width: 15em;"}}</td>
       </tr>
 	
 	  <tr>
@@ -366,7 +366,7 @@
           {{$first_service->_view}}
         {{else}}
         <select name="_service_id" class="{{$sejour->_props.service_id}}">
-          <option value="">&mdash; Choisir un service</option>
+          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
           {{foreach from=$listServicesUrgence item=_service}}
           <option value="{{$_service->_id}}" {{if "Urgences" == $_service->nom}} selected="selected" {{/if}}>
             {{$_service->_view}}

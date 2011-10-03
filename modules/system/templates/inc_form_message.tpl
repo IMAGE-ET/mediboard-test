@@ -16,20 +16,7 @@
 
 <table class="form">
 
-<tr>
-  {{if $message->_id}}
-  <th class="title modify text" colspan="2">
-    {{mb_include module=system template=inc_object_notes      object=$message}}
-    {{mb_include module=system template=inc_object_idsante400 object=$message}}
-    {{mb_include module=system template=inc_object_history    object=$message}}
-
-    {{tr}}CMessage-title-modify{{/tr}} '{{$message}}'
-  {{else}}
-  <th class="title" colspan="2">
-    {{tr}}CMessage-title-create{{/tr}}
-  {{/if}}
-  </th>
-</tr>
+{{mb_include module=system template=inc_form_table_header object=$message}}
 
 <tr>
   <th class="narrow">{{mb_label object=$message field="deb"}}</th>

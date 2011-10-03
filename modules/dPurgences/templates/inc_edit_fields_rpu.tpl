@@ -26,11 +26,11 @@
       </tr>
       <tr>
         <th>{{mb_label object=$rpu field="ccmu"}}</th>
-        <td>{{mb_field object=$rpu field="ccmu" defaultOption="&mdash; Code CCMU" onchange="this.form.onsubmit();"}}</td>
+        <td>{{mb_field object=$rpu field="ccmu" emptyLabel="Choose" onchange="this.form.onsubmit();"}}</td>
       </tr>
       <tr>
         <th>{{mb_label object=$rpu field="gemsa"}}</th>
-        <td>{{mb_field object=$rpu field="gemsa" canNull=false defaultOption="&mdash; Code GEMSA" onchange="this.form.onsubmit();"}}</td>
+        <td>{{mb_field object=$rpu field="gemsa" canNull=false emptyLabel="Choose" onchange="this.form.onsubmit();"}}</td>
       </tr>
     </table>
   </form>

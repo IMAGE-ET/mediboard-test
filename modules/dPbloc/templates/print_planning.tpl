@@ -143,7 +143,7 @@ function showCheckboxAnesth(element){
         <tr>
           <th>{{mb_label object=$filterSejour field="type"}}</th>
           <td colspan="2">
-            {{mb_field object=$filterSejour field="type" canNull=true style="width: 15em;" defaultOption="&mdash; Tous les types"}}
+            {{mb_field object=$filterSejour field="type" canNull=true style="width: 15em;" emptyLabel="CSejour.type.all"}}
           </td>
         </tr>
       </table>

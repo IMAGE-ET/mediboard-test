@@ -37,7 +37,7 @@
     <th>{{mb_label object=$filter field=mark}}</th>
     <td>{{mb_field object=$filter field=mark canNull=true}}</td>
     <th>{{mb_label object=$filter field=done}}</th>
-    <td>{{mb_field object=$filter field=done typeEnum=select defaultOption="Tous" canNull=true}}</td>
+    <td>{{mb_field object=$filter field=done typeEnum=select emptyLabel="All" canNull=true}}</td>
   </tr>
 
   <tr>

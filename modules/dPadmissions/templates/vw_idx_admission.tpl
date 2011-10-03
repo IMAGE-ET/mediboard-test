@@ -158,7 +158,7 @@ Main.add(function () {
   </td>
   <td style="float: right">
     <form action="?" name="selType" method="get">
-      {{mb_field object=$sejour field="_type_admission" emptyLabel="CSejour-_type_admission" onchange="reloadFullAdmissions()"}}
+      {{mb_field object=$sejour field="_type_admission" emptyLabel="CSejour.all" onchange="reloadFullAdmissions()"}}
       <select name="service_id" onchange="reloadFullAdmissions();">
         <option value="">&mdash; Tous les services</option>
         {{foreach from=$services item=_service}}

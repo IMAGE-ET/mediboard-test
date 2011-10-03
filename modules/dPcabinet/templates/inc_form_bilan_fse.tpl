@@ -38,7 +38,7 @@ function checkBilanFSE() {
 
   <tr>
     <th>{{mb_label object=$fse field=S_FSE_ETAT}}</th>
-    <td>{{mb_field object=$fse field=S_FSE_ETAT defaultOption="&mdash; Tous"}}</td>
+    <td>{{mb_field object=$fse field=S_FSE_ETAT emptyLabel="All"}}</td>
   </tr>
 
   <tr>

@@ -56,7 +56,7 @@
         </tr>
         <tr>
           <th>{{mb_label object=$specialite field="categorie"}}</th>
-          <td>{{mb_field object=$specialite field="categorie" defaultOption="&mdash;"}}</td>
+          <td>{{mb_field object=$specialite field="categorie" emptyLabel="Choose"}}</td>
         </tr>
         <tr>
           <td class="button" colspan="2">

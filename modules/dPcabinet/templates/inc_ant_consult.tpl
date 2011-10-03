@@ -191,12 +191,12 @@ Main.add(function () {
     
             <tr>
               <th style="height: 100%">{{mb_label object=$antecedent field="type"}}</th>
-              <td>{{mb_field object=$antecedent field="type" defaultOption="&mdash; Aucun" alphabet="1" style="width: 9em;" onchange=""}}</td>
+              <td>{{mb_field object=$antecedent field="type" emptyLabel="None" alphabet="1" style="width: 9em;" onchange=""}}</td>
             </tr>
     
             <tr>
               <th>{{mb_label object=$antecedent field="appareil"}}</th>
-              <td>{{mb_field object=$antecedent field="appareil" defaultOption="&mdash; Aucun" alphabet="1" style="width: 9em;"}}</td>
+              <td>{{mb_field object=$antecedent field="appareil" emptyLabel="None" alphabet="1" style="width: 9em;"}}</td>
             </tr>
             
             <tr>

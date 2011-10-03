@@ -32,7 +32,7 @@
           </tr>
           <tr>
             <th>{{mb_label object=$filter field="emplacement"}}</th>
-            <td>{{mb_field object=$filter defaultOption="&mdash; Tous" canNull=true field="emplacement"}}</td>
+            <td>{{mb_field object=$filter emptyLabel="All" canNull=true field="emplacement"}}</td>
           </tr>
           <tr>
             <td class="button" colspan="6">

@@ -148,7 +148,7 @@ CCAMSelector.init = function(){
   <tr>
     <th>{{mb_label object=$op field="cote"}}</th>
     <td colspan="2">
-      {{mb_field object=$op field="cote" style="width: 15em" defaultOption="&mdash; Choisir" onchange="Value.synchronize(this);"}}
+      {{mb_field object=$op field="cote" style="width: 15em" emptyLabel="Choose" onchange="Value.synchronize(this);"}}
     </td>
   </tr> 
   

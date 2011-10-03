@@ -34,7 +34,7 @@ Main.add(function(){
       <td>{{mb_field object=$ex_message field=title}}</td>
 			
       <th>{{mb_label object=$ex_message field=type}}</th>
-      <td>{{mb_field object=$ex_message field=type defaultOption="Normal" onchange="\$('text-preview').className='small-'+\$V(this)"}}</td>
+      <td>{{mb_field object=$ex_message field=type emptyLabel="Normal" onchange="\$('text-preview').className='small-'+\$V(this)"}}</td>
     </tr>
     <tr>
       <th>{{mb_label object=$ex_message field=text}}</th>

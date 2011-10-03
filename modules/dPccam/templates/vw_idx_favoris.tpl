@@ -36,7 +36,7 @@ function modifClass(){
     </th>
     <td>
     <form name="selClass" action="?">
-    {{mb_field object=$favoris field="filter_class" selected=$favoris->object_class defaultOption="&mdash; Tous" onchange="modifClass()"}}
+    {{mb_field object=$favoris field="filter_class" selected=$favoris->object_class emptyLabel="All" onchange="modifClass()"}}
     </form>
     </td>
   </tr>

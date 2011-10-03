@@ -224,13 +224,13 @@ Main.add( function(){
 	                   {{mb_field object=$line field=duree size=1 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="\$V(this.form.jour_decalage_fin, '', false); return onSubmitFormAjax(this.form);"}}
 	                   {{mb_field object=$line field=unite_duree onchange="return onSubmitFormAjax(this.form);"}}
 										 à partir de
-										 {{mb_field object=$line field="jour_decalage" onchange="modifUniteDecal(this, this.form.unite_decalage); return onSubmitFormAjax(this.form);" defaultOption="&mdash; Moment"}} 
+										 {{mb_field object=$line field="jour_decalage" onchange="modifUniteDecal(this, this.form.unite_decalage); return onSubmitFormAjax(this.form);" emptyLabel="Moment"}} 
                      {{mb_field object=$line field=decalage_line showPlus="1" increment=1 size="2" form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
-                     {{mb_field object=$line field=unite_decalage onchange="return onSubmitFormAjax(this.form)" defaultOption="&mdash; Unité"}}
+                     {{mb_field object=$line field=unite_decalage onchange="return onSubmitFormAjax(this.form)" emptyLabel="Unit"}}
 										 jusqu'à 
-										 {{mb_field object=$line field="jour_decalage_fin" onchange="\$V(this.form.duree, '', false); modifUniteDecal(this, this.form.unite_decalage_fin); return onSubmitFormAjax(this.form);" defaultOption="&mdash; Moment"}} 
+										 {{mb_field object=$line field="jour_decalage_fin" onchange="\$V(this.form.duree, '', false); modifUniteDecal(this, this.form.unite_decalage_fin); return onSubmitFormAjax(this.form);" emptyLabel="Moment"}} 
                      {{mb_field object=$line field=decalage_line_fin showPlus="1" increment=1 size="2" form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
-                     {{mb_field object=$line field=unite_decalage_fin onchange=" return onSubmitFormAjax(this.form);" defaultOption="&mdash; Unité"}}
+                     {{mb_field object=$line field=unite_decalage_fin onchange=" return onSubmitFormAjax(this.form);" emptyLabel="Unit"}}
 	                 {{else}}
 	                   {{if $line->duree}}
 	                     {{mb_value object=$line field=duree}}

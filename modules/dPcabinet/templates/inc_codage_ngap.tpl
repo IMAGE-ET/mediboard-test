@@ -130,7 +130,7 @@ ActesNGAP = {
           	{{mb_field object=$acte_ngap field="lettre_cle" hidden=hidden}}
           </td>
           <td>{{mb_field object=$acte_ngap field="montant_depassement"}}</td>
-          <td>{{mb_field object=$acte_ngap field="complement" onchange="refreshTarif()" onkeyup="refreshTarif()" defaultOption="&mdash; Aucun"}}</td>
+          <td>{{mb_field object=$acte_ngap field="complement" onchange="refreshTarif()" onkeyup="refreshTarif()" emptyLabel="None"}}</td>
           <td>
             <select name="executant_id" style="width: 120px;" class="{{$acte_ngap->_props.executant_id}}">
               <option value="">&mdash; {{tr}}Choose{{/tr}}</option>

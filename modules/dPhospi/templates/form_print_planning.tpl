@@ -99,7 +99,7 @@ function changeDateCal(){
           <th>{{mb_label object=$filter field="_service"}}</th>
           <td colspan="2">
           	<select name="_service">
-            	<option value="0">&mdash; Tous les services &mdash;</option>
+            	<option value="0">&mdash; {{tr}}All{{/tr}}</option>
             	{{foreach from=$listServ item=curr_serv}}
             	<option value="{{$curr_serv->service_id}}">{{$curr_serv->nom}}</option>
             	{{/foreach}}
@@ -117,12 +117,12 @@ function changeDateCal(){
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_filter_type"}}</th>
-          <td>{{mb_field object=$filter field="_filter_type" defaultOption="&mdash; Tous types d'admission"}}</td>
+          <td>{{mb_field object=$filter field="_filter_type" emptyLabel="All"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="praticien_id"}}</th>
-          <td><select name="praticien_id">
-            <option value="0">&mdash; Tous les praticiens</option>
+          <td><select name="praticien_id" style="width: 20em;">
+            <option value="0">&mdash; {{tr}}All{{/tr}}</option>
             {{foreach from=$listPrat item=curr_prat}}
               <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}">{{$curr_prat->_view}}</option>
             {{/foreach}}
@@ -130,8 +130,8 @@ function changeDateCal(){
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_specialite"}}</th>
-          <td><select name="_specialite">
-            <option value="0">&mdash; Toutes les spécialités</option>
+          <td><select name="_specialite" style="width: 20em;">
+            <option value="0">&mdash; {{tr}}All{{/tr}}</option>
             {{foreach from=$listSpec item=curr_spec}}
               <option class="mediuser" style="border-color: #{{$curr_spec->color}};" value="{{$curr_spec->function_id}}">{{$curr_spec->text}}</option>
             {{/foreach}}

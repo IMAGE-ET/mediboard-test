@@ -56,7 +56,7 @@
               {{else}}
                 <tr>
                   <th>{{mb_label object=$_correspondant field="parente"}}</th>
-                  <td>{{mb_field object=$_correspondant field="parente" defaultOption="&mdash;Veuillez Choisir" onchange="this.form.onsubmit()"}}</td>
+                  <td>{{mb_field object=$_correspondant field="parente" emptyLabel="Choose" onchange="this.form.onsubmit()"}}</td>
                 </tr>
               {{/if}}
               <tr>

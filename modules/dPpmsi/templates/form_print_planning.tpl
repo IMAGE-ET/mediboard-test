@@ -136,7 +136,7 @@ function changeDateCal(){
         </tr>
         <tr>
           <th>{{mb_label object=$filterSejour field="type"}}</th>
-          <td>{{mb_field object=$filterSejour field="type" canNull=true defaultOption="&mdash; Tous les types"}}</td>
+          <td>{{mb_field object=$filterSejour field="type" canNull=true emptyLabel="All"}}</td>
         </tr>
            <tr>
           <th>{{mb_label object=$filter field="_codes_ccam"}}</th>
