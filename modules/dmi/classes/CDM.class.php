@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireModuleClass('dmi', 'CProduitPrescriptible');
-
 class CDM extends CProduitPrescriptible {
   // DB Table key
   var $dm_id  = null;
