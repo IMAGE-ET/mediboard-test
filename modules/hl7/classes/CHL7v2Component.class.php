@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("hl7", "CHL7v2Entity");
-
 class CHL7v2Component extends CHL7v2Entity {
   /**
    * @var CHL7v2Component

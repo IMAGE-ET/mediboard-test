@@ -11,9 +11,6 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireModuleClass("hl7", "CHL7v2Event");
-CAppUI::requireModuleClass("hl7", "CHL7EventADT");
-
 /**
  * Classe CHL7v2EventADT 
  * Admit Discharge Transfer

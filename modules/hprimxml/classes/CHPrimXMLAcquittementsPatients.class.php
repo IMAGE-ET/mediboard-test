@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("hprimxml", "CHPrimXMLAcquittements");
-
 class CHPrimXMLAcquittementsPatients extends CHPrimXMLAcquittements {
   var $_identifiant_acquitte = null;
   var $_sous_type_evt        = null;

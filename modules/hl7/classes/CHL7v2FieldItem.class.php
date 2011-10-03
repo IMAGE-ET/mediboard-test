@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("hl7", "CHL7v2Component");
-
 class CHL7v2FieldItem extends CHL7v2Component {
   /**
    * @var CHL7v2Field

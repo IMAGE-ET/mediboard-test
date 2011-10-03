@@ -11,9 +11,6 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireModuleClass("hl7", "CHL7v2EventADT");
-CAppUI::requireModuleClass("hl7", "CHL7EventADTZ99");
-
 /**
  * Class CHL7v2EventADTZ99
  * Z99 - Change admit

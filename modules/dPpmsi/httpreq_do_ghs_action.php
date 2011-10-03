@@ -82,7 +82,7 @@ function addcm() {
   if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   } else {
-    echo "<div class='message'>Table des CM créée</div>";
+    echo "<div class='info'>Table des CM créée</div>";
   }
 
   // Lecture du fichier
@@ -105,10 +105,10 @@ function addcm() {
       echo "<div class='error'>$error ($sql)</div>";
     } else {
       $nCM++;
-      //echo "<div class='message'>$id-$nom</div>";
+      //echo "<div class='info'>$id-$nom</div>";
     }
   }
-  echo "<div class='message'> $nCM CM créés</div>";
+  echo "<div class='info'> $nCM CM créés</div>";
 }
 
 /** Ajout des diagnostics d'entrée dans les CM, valide pour la version 1010
@@ -131,7 +131,7 @@ function adddiagcm() {
   if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   } else {
-    echo "<div class='message'> Table des diagnostics d'entrée créée</div>";
+    echo "<div class='info'> Table des diagnostics d'entrée créée</div>";
   }
   $file = @fopen( $fileName, 'rw' );
   if(! $file) {
@@ -156,11 +156,11 @@ function adddiagcm() {
         echo "<div class='error'>$error ($sql)</div>";
       } else {
         $nDiags++;
-        //echo "<div class='message'> ".$diag[1]." ($curr_cmd)</div>";
+        //echo "<div class='info'> ".$diag[1]." ($curr_cmd)</div>";
       }
     }
   }
-  echo "<div class='message'> $nDiags diagnostics créés dans $nCM CM</div>";
+  echo "<div class='info'> $nDiags diagnostics créés dans $nCM CM</div>";
 }
 
 /** Ajout des listes d'actes, valide pour la version 1010
@@ -188,7 +188,7 @@ function addactes() {
   if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   } else {
-    echo "<div class='message'> Table des listes créée</div>";
+    echo "<div class='info'> Table des listes créée</div>";
   }
   $sql = "DROP TABLE IF EXISTS `acte`;";
   $ds->exec($sql);
@@ -206,7 +206,7 @@ function addactes() {
   if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   } else {
-    echo "<div class='message'> Table des actes créée</div>";
+    echo "<div class='info'> Table des actes créée</div>";
   }
   $sql = "DROP TABLE IF EXISTS `diag`;";
   $ds->exec($sql);
@@ -223,7 +223,7 @@ function addactes() {
   if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   } else {
-    echo "<div class='message'> Table des diagnostics créée</div>";
+    echo "<div class='info'> Table des diagnostics créée</div>";
   }
   $file = @fopen( $fileName, 'rw' );
   if(! $file) {
@@ -257,7 +257,7 @@ function addactes() {
         echo "<div class='error'>$error ($sql)</div>";
       } else {
         $nListes++;
-        //echo "<div class='message'> ".$liste[1]." : ".$liste[2]." (".$curr_cmd.")</div>"; 
+        //echo "<div class='info'> ".$liste[1]." : ".$liste[2]." (".$curr_cmd.")</div>"; 
       }
     } else if(preg_match("`^($regCCAM)/([[:digit:]])`", $line, $acte) && $curr_liste) {
       $sql = "INSERT INTO acte VALUES('".$acte[1]."', '".$acte[2]."', '$curr_liste', '$curr_cmd')";
@@ -266,7 +266,7 @@ function addactes() {
         echo "<div class='error'>$error ($sql)</div>";
       } else {
         $nActes++;
-        //echo "<div class='message'> ".$acte[1]."/".$acte[2]." ($curr_liste, CMD $curr_cmd)</div>";
+        //echo "<div class='info'> ".$acte[1]."/".$acte[2]." ($curr_liste, CMD $curr_cmd)</div>";
       }
     } else if(preg_match("`^($regCim10)`", $line, $diag) && $curr_liste) {
       $sql = "INSERT INTO diag VALUES('".$diag[1]."', '$curr_liste', '$curr_cmd')";
@@ -275,7 +275,7 @@ function addactes() {
         //echo "<div class='error'>$error ($sql)</div>";
       } else {
         $nDiags++;
-        //echo "<div class='message'> ".$diag[1]." ($curr_liste, CMD $curr_cmd)</div>";
+        //echo "<div class='info'> ".$diag[1]." ($curr_liste, CMD $curr_cmd)</div>";
       }
     }
   }
@@ -302,11 +302,11 @@ function addactes() {
         echo "<div class='error'>$error ($sql)</div>";
       } else {
         $nActes++;
-        //echo "<div class='message'> ".$acte[1]."/".$acte[2]." ($curr_liste, CMD $curr_cmd)</div>";
+        //echo "<div class='info'> ".$acte[1]."/".$acte[2]." ($curr_liste, CMD $curr_cmd)</div>";
       }
     }
   }
-  echo "<div class='message'> $nCM CM trouvés et $nListes listes, $nActes actes et $nDiags diagnostics créés</div>";
+  echo "<div class='info'> $nCM CM trouvés et $nListes listes, $nActes actes et $nDiags diagnostics créés</div>";
 }
 
 /** Ajout des GHM, valide pour la version 1010
@@ -338,7 +338,7 @@ function addghm() {
   if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   } else {
-    echo "<div class='message'> Table des GHM créée</div>";
+    echo "<div class='info'> Table des GHM créée</div>";
   }
 
   // Lecture du fichier
@@ -360,10 +360,10 @@ function addghm() {
     $GHM = null;
     if(preg_match("`^CATÉGORIE MAJEURE DE DIAGNOSTIC : ([[:digit:]]{2})`", $line, $cm)) {
       $curr_CM = $cm[1];
-      //echo "<div class='message'> Curr_CM = $curr_CM</div>";
+      //echo "<div class='info'> Curr_CM = $curr_CM</div>";
     } else if(preg_match("`^Groupes ([{$alnum}[:space:][:punct:]]*)`", $line, $groupe)) {
       $curr_group = $groupe[1];
-      //echo "<div class='message'> Curr_groupe = $curr_groupe</div>";
+      //echo "<div class='info'> Curr_groupe = $curr_groupe</div>";
     } else if(preg_match("`^([[:digit:]]{2}[{$alpha}][[:digit:]]{2}[{$alpha}]) ([{$alnum}[:space:][:punct:]]*)`", $line, $GHM)) {
       $sql = "INSERT INTO ghm" .
           "\nvalues('".addslashes($GHM[1])."', '".addslashes($GHM[2])."'," .
@@ -373,12 +373,12 @@ function addghm() {
       if($error = $ds->error()) {
         echo "<div class='error'>$error ($sql)</div>";
       } else {
-        //echo "<div class='message'> ".$id."-".$nom."</div>";
+        //echo "<div class='info'> ".$id."-".$nom."</div>";
         $nGHM++;
       }
     }
   }
-  echo "<div class='message'> $nGHM GHM créés</div>";
+  echo "<div class='info'> $nGHM GHM créés</div>";
   
   // Ajout des tarifs
   $fileName = "$targetDir/tarifsGHS.csv";
@@ -420,11 +420,11 @@ function addghm() {
       echo "<div class='error'>$error ($sql)</div>";
       $nFailed++;
     } else {
-      //echo "<div class='message'> $line</div>";
+      //echo "<div class='info'> $line</div>";
       $nPass++;
     }
   }
-  echo "<div class='message'> $nPass tarifs créés, $nFailed échoués</div>";
+  echo "<div class='info'> $nPass tarifs créés, $nFailed échoués</div>";
 }
 
 /** Ajout des CMA, valide pour la version 1010
@@ -453,7 +453,7 @@ function addcma() {
     if($error = $ds->error()) {
       echo "<div class='error'>$error ($sql)</div>";
     } else {
-      echo "<div class='message'> Table des $typeCM créée</div>";
+      echo "<div class='info'> Table des $typeCM créée</div>";
     }
   
     $fileName = "$targetDir/$typeCM.txt";
@@ -480,7 +480,7 @@ function addcma() {
         }
       }
     }
-    echo "<div class='message'> $nombre $typeCM créés</div>";
+    echo "<div class='info'> $nombre $typeCM créés</div>";
   }
 }
 
@@ -505,7 +505,7 @@ function addincomp() {
   if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   } else {
-    echo "<div class='message'> Table des incompatibilités créée</div>";
+    echo "<div class='info'> Table des incompatibilités créée</div>";
   }
 
   $fileName = "$targetDir/incomp.txt";
@@ -567,7 +567,7 @@ function addincomp() {
       }
     }
   }
-  echo "<div class='message'> $nIncomp incompatibilités créées</div>";
+  echo "<div class='info'> $nIncomp incompatibilités créées</div>";
 }
 
 /** Création de l'arbre de décision pour l'orientation vers les GHM
@@ -617,7 +617,7 @@ function addarbre() {
   if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
   } else {
-    echo "<div class='message'> Table de l'arbre de décision créée</div>";
+    echo "<div class='info'> Table de l'arbre de décision créée</div>";
   }
   
   $nPass = 0;
@@ -641,10 +641,10 @@ function addarbre() {
       echo "<div class='error'>$error ($sql)</div>";
       $nFailed++;
     } else {
-      //echo "<div class='message'> $line</div>";
+      //echo "<div class='info'> $line</div>";
       $nPass++;
     }
   }
-  echo "<div class='message'> $nPass lignes créés, $nFailed lignes échouées</div>";
+  echo "<div class='info'> $nPass lignes créés, $nFailed lignes échouées</div>";
 }
 ?>

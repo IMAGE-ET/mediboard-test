@@ -11,9 +11,6 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireModuleClass("hl7", "CHL7v2EventADT");
-CAppUI::requireModuleClass("hl7", "CHL7EventADTA01");
-
 /**
  * Class CHL7v2EventADTA13
  * A13 - Cancel discharge/end visit

@@ -11,8 +11,6 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireModuleClass("hl7", "CHL7v2");
-
 /**
  * Class CHL7 
  * Tools

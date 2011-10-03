@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("hprimxml", "CHPrimXMLEvenements");
-
 class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   static $evenements = array(
     'enregistrementPatient' => "CHPrimXMLEnregistrementPatient",

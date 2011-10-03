@@ -14,8 +14,6 @@ if(!defined("PERM_DENY")) {
   define("PERM_EDIT" , 2);
 }
 
-CAppUI::requireModuleClass("admin", "CUser");
-
 /**
  * The CPermObject class
  */

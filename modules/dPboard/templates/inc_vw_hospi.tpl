@@ -57,7 +57,7 @@ PairEffect.initGroup("functionEffect", {
 		<td>
       {{assign var=GHM value=$curr_sejour->_ref_GHM}}
       {{if $GHM->_DP}}
-        <div class={{if $GHM->_borne_basse > $GHM->_duree || $GHM->_borne_haute < $GHM->_duree}}"warning"{{else}}"message"{{/if}}>
+        <div class="{{if $GHM->_borne_basse > $GHM->_duree || $GHM->_borne_haute < $GHM->_duree}}warning{{else}}info{{/if}}">
 	        De {{$GHM->_borne_basse}}
 	        à {{$GHM->_borne_haute}} jours
 	        ({{$GHM->_duree}})

@@ -23,8 +23,7 @@ function doGHSAction(sType, bFollowed) {
     oOptions.onComplete = null;
   }
   
-  var url = new Url;
-  url.setModuleAction("dPpmsi", "httpreq_do_ghs_action");
+  var url = new Url("dPpmsi", "httpreq_do_ghs_action");
   url.addParam("type", sType);
   url.requestUpdate(sType, oOptions);
 }

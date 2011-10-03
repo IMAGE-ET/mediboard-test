@@ -11,9 +11,6 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireModuleClass("hl7", "CHL7v2Event");
-CAppUI::requireModuleClass("hl7", "CHL7EventADTA39");
-
 /**
  * Class CHL7v2EventADTA40
  * A40 - Merge patient

@@ -11,9 +11,6 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireModuleClass("hl7", "CHL7v2EventADT");
-CAppUI::requireModuleClass("hl7", "CHL7EventADTA38");
-
 /**
  * Class CHL7v2EventADTA38
  * A38 - Cancel pre-admit 

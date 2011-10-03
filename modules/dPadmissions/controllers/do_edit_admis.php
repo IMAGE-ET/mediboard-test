@@ -39,7 +39,7 @@ switch ($mode) {
 
 if ($ajax) {
   $dbError = $ds->error();
-  echo "<div class='message'>Action effectuée</div>";
+  echo "<div class='info'>Action effectuée</div>";
   CApp::rip();
 }
 

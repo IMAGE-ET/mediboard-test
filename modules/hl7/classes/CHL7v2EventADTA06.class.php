@@ -11,9 +11,6 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireModuleClass("hl7", "CHL7v2EventADT");
-CAppUI::requireModuleClass("hl7", "CHL7EventADTA06");
-
 /**
  * Class CHL7v2EventADTA06
  * A06 - Change an outpatient to an inpatient

@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("hprimxml", "CHPrimXMLEvenementsServeurActivitePmsi");
-
 class CHPrimXMLEvenementsPmsi extends CHPrimXMLEvenementsServeurActivitePmsi {
   function __construct() {
     $this->sous_type = "evenementPMSI";

@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("eai", "CEchangeXML");
-
 class CEchangeHprim extends CEchangeXML {
 	static $messages = array(
 		 "patients" => "CHPrimXMLEvenementsPatients",

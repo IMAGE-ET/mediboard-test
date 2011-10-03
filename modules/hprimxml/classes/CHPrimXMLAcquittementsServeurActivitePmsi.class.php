@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("hprimxml", "CHPrimXMLAcquittements");
-
 class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
   static $evenements = array(
     'evenementPMSI'                => "CHPrimXMLAcquittementsPmsi",

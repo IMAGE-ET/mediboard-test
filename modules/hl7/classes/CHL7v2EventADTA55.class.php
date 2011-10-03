@@ -11,9 +11,6 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireModuleClass("hl7", "CHL7v2EventADT");
-CAppUI::requireModuleClass("hl7", "CHL7EventADTA52");
-
 /**
  * Class CHL7v2EventADTA55
  * A55 - Cancel change attending doctor

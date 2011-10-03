@@ -11,8 +11,6 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireModuleClass("hl7", "CHL7v2TableObject");
-
 /**
  * Class CHL7v2TableEntry 
  * HL7 Table Entry

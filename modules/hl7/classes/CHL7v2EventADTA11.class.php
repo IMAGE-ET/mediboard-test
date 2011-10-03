@@ -11,9 +11,6 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireModuleClass("hl7", "CHL7v2EventADT");
-CAppUI::requireModuleClass("hl7", "CHL7EventADTA09");
-
 /**
  * Class CHL7v2EventADTA11
  * A11 - Cancel admit/visit notification

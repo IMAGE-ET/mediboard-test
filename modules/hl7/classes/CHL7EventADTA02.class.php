@@ -11,8 +11,6 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireModuleClass("hl7", "CHL7EventADT");
-
 /**
  * Interface CHL7EventADTA02 
  * A02 - Transfer a patient
