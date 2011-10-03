@@ -39,6 +39,7 @@ class CTemplateManager {
     $this->addProperty("Courrier - adresse destinataire" , "[Courrier - adresse destinataire]");
     $this->addProperty("Courrier - cp ville destinataire", "[Courrier - cp ville destinataire]");
     $this->addProperty("Courrier - copie à"              , "[Courrier - copie à]");
+    $this->addProperty("Courrier - copie à (complet)"    , "[Courrier - copie à (complet)]");
 
     $now = mbDateTime();
     $this->addDateProperty("Général - date du jour", $now);

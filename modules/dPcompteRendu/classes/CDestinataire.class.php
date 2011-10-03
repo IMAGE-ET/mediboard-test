@@ -70,7 +70,7 @@ class CDestinataire {
         $dest->tag = $_corres->relation;
         $dest->nom = $_corres->nom;
         $dest->adresse = $_corres->adresse;
-        $dest->cpville = $_corres->cp;
+        $dest->cpville = "$_corres->cp $_corres->ville";
         $dest->email = $_corres->email;
         self::$destByClass[$mbObject->_class][] = $dest;
       }

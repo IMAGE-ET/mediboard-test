@@ -123,8 +123,12 @@ if (isset($_POST["_source"])) {
     }
     // On crée les fichiers pour chaque destinataire
     $copyTo = "";
+    $copyToComplet = "";
     foreach($destinataires as $curr_dest) {
       $copyTo .= $allDest[$curr_dest[1]][$curr_dest[2]]->nom."; ";
+      $copyToComplet .= $allDest[$curr_dest[1]][$curr_dest[2]]->nom. " - " .
+                        $allDest[$curr_dest[1]][$curr_dest[2]]->adresse. " ".
+                        $allDest[$curr_dest[1]][$curr_dest[2]]->cpville. "; ";
     }
     
     // On fait le doBind avant le foreach si la config est à 1.
@@ -143,13 +147,15 @@ if (isset($_POST["_source"])) {
         htmlentities("[Courrier - nom destinataire]"),
         htmlentities("[Courrier - adresse destinataire]"),
         htmlentities("[Courrier - cp ville destinataire]"),
-        htmlentities("[Courrier - copie à]")
+        htmlentities("[Courrier - copie à]"),
+        htmlentities("[Courrier - copie à (complet)]")
       );
       $values = array(
         $allDest[$curr_dest[1]][$curr_dest[2]]->nom,
         $allDest[$curr_dest[1]][$curr_dest[2]]->adresse,
         $allDest[$curr_dest[1]][$curr_dest[2]]->cpville,
-        $copyTo
+        $copyTo,
+        $copyToComplet
       );
       if (!CAppUI::conf("dPcompteRendu CCompteRendu multiple_doc_correspondants")) {
         $allSources[] = str_ireplace($fields, $values, $body);
