@@ -65,7 +65,6 @@ class CSetSpec extends CEnumSpec {
     $typeEnum      = CMbArray::extract($params, "typeEnum", $this->typeEnum ? $this->typeEnum : "checkbox");
     $separator     = CMbArray::extract($params, "separator", $this->vertical ? "<br />" : null);
     $cycle         = CMbArray::extract($params, "cycle", 1);
-    $defaultOption = CMbArray::extract($params, "defaultOption");
     $alphabet      = CMbArray::extract($params, "alphabet", false);
     $size          = CMbArray::extract($params, "size", min(3, count($locales)));
     $form          = CMbArray::extract($params, "form"); // needs to be extracted

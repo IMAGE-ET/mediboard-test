@@ -754,9 +754,6 @@ class CMbFieldSpec {
       if (isset($this->default) && !($this instanceof CBoolSpec && $this->default === "")) {
         $props['default'] = "DEFAULT '$this->default'";
       }
-      elseif (isset($this->defaultOption)) {
-        $props['default'] = "DEFAULT '$this->defaultOption'";
-      }
     }
     
     return implode(' ', $props);

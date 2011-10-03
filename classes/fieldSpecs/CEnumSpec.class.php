@@ -88,13 +88,12 @@ class CEnumSpec extends CMbFieldSpec {
     $typeEnum      = CMbArray::extract($params, "typeEnum", $this->typeEnum ? $this->typeEnum : "select");
     $separator     = CMbArray::extract($params, "separator");
     $cycle         = CMbArray::extract($params, "cycle", 1);
-    $defaultOption = CMbArray::extract($params, "defaultOption");
     $alphabet      = CMbArray::extract($params, "alphabet", false);
     $form          = CMbArray::extract($params, "form"); // needs to be extracted
 
-    // Empty label translation
+    // Empty label
     if ($emptyLabel = CMbArray::extract($params, "emptyLabel")) {
-      $defaultOption = "&mdash; ". CAppUI::tr($emptyLabel);
+      $emptyLabel = "&mdash; ". CAppUI::tr($emptyLabel);
     }
     
     // Extra info por HTML generation
@@ -118,20 +117,20 @@ class CEnumSpec extends CMbFieldSpec {
         
         $html .= "<select name=\"$field\" class=\"$className\" $disabled $extra>";
         
-        // Default option
-        if ($defaultOption){
+        // Empty option label
+        if ($emptyLabel) {
           if ($value === null) {
-            $html .= "\n<option value=\"\" selected=\"selected\">$defaultOption</option>";
+            $html .= "\n<option value=\"\" selected=\"selected\">$emptyLabel</option>";
           } 
           else {
-            $html .= "\n<option value=\"\">$defaultOption</option>";
+            $html .= "\n<option value=\"\">$emptyLabel</option>";
           }
         }
         
         // All other options
         foreach ($locales as $key => $item){
           $selected = "";
-          if (($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default" && !$defaultOption)) {
+          if (($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default" && !$emptyLabel)) {
             $selected = " selected=\"selected\""; 
           }
           

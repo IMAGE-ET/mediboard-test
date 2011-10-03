@@ -67,10 +67,14 @@ class CBoolSpec extends CMbFieldSpec {
     $disabled      = CMbArray::extract($params, "disabled");
     $readonly      = CMbArray::extract($params, "readonly"); 
     $default       = CMbArray::extract($params, "default", $this->default);
-    $defaultOption = CMbArray::extract($params, "defaultOption");
     $form          = CMbArray::extract($params, "form"); // needs to be extracted
     $className     = htmlspecialchars(trim("$className $this->prop"));
     $extra         = CMbArray::makeXmlAttributes($params);
+    
+    // Empty label
+    if ($emptyLabel = CMbArray::extract($params, "emptyLabel")) {
+      $emptyLabel = "&mdash; ". CAppUI::tr($emptyLabel);
+    }
     
     switch ($typeEnum) {
       case "radio":
@@ -125,16 +129,16 @@ class CBoolSpec extends CMbFieldSpec {
         $disabled = $readonly ? "disabled=\"1\"" : $disabled;
         $sHtml       = "<select name=\"$field\" class=\"$className\" $disabled $extra>";
         
-        if ($defaultOption){
+        if ($emptyLabel){
           if($value === null) {
-            $sHtml    .= "\n<option value=\"\" selected=\"selected\">&mdash; $defaultOption</option>";
+            $sHtml    .= "\n<option value=\"\" selected=\"selected\">$emptyLabel</option>";
           } else {
-            $sHtml    .= "\n<option value=\"\">&mdash; $defaultOption</option>";
+            $sHtml    .= "\n<option value=\"\">$emptyLabel</option>";
           }
         }
         
         foreach ($this->_locales as $key => $item){
-          if(($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default" && !$defaultOption)){
+          if(($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default" && !$emptyLabel)){
             $selected = " selected=\"selected\""; 
           }else{
             $selected = "";

@@ -349,7 +349,7 @@ function smarty_modifier_trace($value) {
  * - separator       : {optionnel} Séparation entre les champs de type "radio" [default: ""]
  * - cycle           : {optionnel} Cycle de répétition du séparateur (pour les enums en type radio) [default: "1"]
  * - typeEnum        : {optionnel} Type d'affichage des enums (values : "select", "radio") [default: "select"]
- * - defaultOption   : {optionnel} Ajout d'un "option" en amont des valeurs ayant pour value ""
+ * - emptyLabel      : {optionnel} Ajout d'un "option" en amont des valeurs ayant pour value ""
  * - class           : {optionnel} Permet de donner une classe aux champs
  * - hidden          : {optionnel} Permet de forcer le type "hidden"
  * - canNull         : {optionnel} Permet de passer outre le notNull de la spécification

@@ -92,7 +92,7 @@
    </tr>
    {{foreachelse}}
    <tr>
-     <td colspan="10">{{tr}}No result{{/tr}}</td>
+     <td colspan="10" class="empty">{{tr}}No result{{/tr}}</td>
    </tr>
    {{/foreach}}
  </table>
