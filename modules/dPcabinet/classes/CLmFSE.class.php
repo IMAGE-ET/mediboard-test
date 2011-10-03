@@ -162,7 +162,7 @@ class CLmFSE extends CLmObject {
 			$patient = new CPatient();
 			
 			$id_vitale = new CIdSante400();
-			$id_vitale->object_class = $patient->_class_name;
+			$id_vitale->object_class = $patient->_class;
 			$id_vitale->id400 = $this->S_FSE_VIT; 
 			$id_vitale->tag = "LogicMax VitNumero";
 			$id_vitale->loadMatchingObject();
