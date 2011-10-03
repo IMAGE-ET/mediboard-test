@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A04 - Register a patient - HL7
+ * A44 - Move account information - patient account number - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,20 +12,20 @@
  */
 
 CAppUI::requireModuleClass("hl7", "CHL7v2EventADT");
-CAppUI::requireModuleClass("hl7", "CHL7EventADTA01");
+CAppUI::requireModuleClass("hl7", "CHL7EventADTA43");
 
 /**
- * Class CHL7v2EventADTA04
- * A04 - Register a patient
+ * Class CHL7v2EventADTA44
+ * A44 - Move account information - patient account number
  */
-class CHL7v2EventADTA04 extends CHL7v2EventADT implements CHL7EventADTA01 {
+class CHL7v2EventADTA44 extends CHL7v2EventADT implements CHL7EventADTA43 {
   function __construct() {
     parent::__construct();
         
-    $this->code      = "A04";
+    $this->code      = "A44";
     $this->msg_codes = array ( 
       array(
-        $this->event_type, $this->code, "{$this->event_type}_A01"
+        $this->event_type, $this->code, "{$this->event_type}_A43"
       )
     );
   }
@@ -40,17 +40,8 @@ class CHL7v2EventADTA04 extends CHL7v2EventADT implements CHL7EventADTA01 {
     // Patient Additional Demographic
     $this->addPD1($patient);
     
-    // Doctors
-    $this->addROLs($patient);
-    
-    // Patient Visit
-    $this->addPV1($sejour);
-    
-    // Patient Visit - Additionale Info
-    $this->addPV2($sejour);
-    
-    // Movement segment
-    $this->addZBE($sejour);
+    // Merge Patient Information
+    $this->addMRG($patient->_patient_elimine);
   }
   
 }

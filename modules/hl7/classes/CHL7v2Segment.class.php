@@ -91,7 +91,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     
     $specs = $this->getSpecs();
     $message = $this->getMessage();
-    mbLog($this->name);
+
     $_segment_specs = $specs->getItems();
     foreach($_segment_specs as $i => $_spec){
       $field = new CHL7v2Field($this, $_spec);

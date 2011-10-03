@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A04 - Register a patient - HL7
+ * A07 - Change an inpatient to an outpatient - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,20 +12,20 @@
  */
 
 CAppUI::requireModuleClass("hl7", "CHL7v2EventADT");
-CAppUI::requireModuleClass("hl7", "CHL7EventADTA01");
+CAppUI::requireModuleClass("hl7", "CHL7EventADTA06");
 
 /**
- * Class CHL7v2EventADTA04
- * A04 - Register a patient
+ * Class CHL7v2EventADTA07
+ * A07 - Change an inpatient to an outpatient
  */
-class CHL7v2EventADTA04 extends CHL7v2EventADT implements CHL7EventADTA01 {
+class CHL7v2EventADTA07 extends CHL7v2EventADT implements CHL7EventADTA06 {
   function __construct() {
     parent::__construct();
         
-    $this->code      = "A04";
+    $this->code      = "A07";
     $this->msg_codes = array ( 
       array(
-        $this->event_type, $this->code, "{$this->event_type}_A01"
+        $this->event_type, $this->code, "{$this->event_type}_A06"
       )
     );
   }

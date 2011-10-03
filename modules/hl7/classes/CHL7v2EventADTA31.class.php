@@ -12,13 +12,13 @@
  */
 
 CAppUI::requireModuleClass("hl7", "CHL7v2Event");
-CAppUI::requireModuleClass("hl7", "CHL7EventADTA31");
+CAppUI::requireModuleClass("hl7", "CHL7EventADTA05");
 
 /**
  * Class CHL7v2EventADTA31 
  * A31 - Add person information
  */
-class CHL7v2EventADTA31 extends CHL7v2EventADT implements CHL7EventADTA31 {
+class CHL7v2EventADTA31 extends CHL7v2EventADT implements CHL7EventADTA05 {
   function __construct() {
     parent::__construct();
         

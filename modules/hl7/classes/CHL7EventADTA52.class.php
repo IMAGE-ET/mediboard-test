@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A40 - Merge patient - HL7
+ * A52 - Structure - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -14,9 +14,9 @@
 CAppUI::requireModuleClass("hl7", "CHL7EventADT");
 
 /**
- * Interface CHL7EventADTA40 
- * A40 - Merge patient
+ * Interface CHL7EventADTA52   
+ * A52 - Structure
  */
-interface CHL7EventADTA40 extends CHL7EventADT {}
+interface CHL7EventADTA52 extends CHL7EventADT {}
 
 ?>

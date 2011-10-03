@@ -48,6 +48,8 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
       $this->fill($data);
       return;
     } 
+    mbLog($sejour->type);
+    mbLog(CHL7v2TableEntry::mapTo("4", $sejour->type));
     $data[] = CHL7v2TableEntry::mapTo("4", $sejour->type);
     
     // PV1-3: Assigned Patient Location (PL) (optional)

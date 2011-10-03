@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A04 - Register a patient - HL7
+ * A55 - Cancel change attending doctor - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,20 +12,20 @@
  */
 
 CAppUI::requireModuleClass("hl7", "CHL7v2EventADT");
-CAppUI::requireModuleClass("hl7", "CHL7EventADTA01");
+CAppUI::requireModuleClass("hl7", "CHL7EventADTA52");
 
 /**
- * Class CHL7v2EventADTA04
- * A04 - Register a patient
+ * Class CHL7v2EventADTA55
+ * A55 - Cancel change attending doctor
  */
-class CHL7v2EventADTA04 extends CHL7v2EventADT implements CHL7EventADTA01 {
+class CHL7v2EventADTA55 extends CHL7v2EventADT implements CHL7EventADTA52 {
   function __construct() {
     parent::__construct();
         
-    $this->code      = "A04";
+    $this->code      = "A55";
     $this->msg_codes = array ( 
       array(
-        $this->event_type, $this->code, "{$this->event_type}_A01"
+        $this->event_type, $this->code, "{$this->event_type}_A52"
       )
     );
   }
@@ -40,9 +40,6 @@ class CHL7v2EventADTA04 extends CHL7v2EventADT implements CHL7EventADTA01 {
     // Patient Additional Demographic
     $this->addPD1($patient);
     
-    // Doctors
-    $this->addROLs($patient);
-    
     // Patient Visit
     $this->addPV1($sejour);
     
@@ -52,7 +49,6 @@ class CHL7v2EventADTA04 extends CHL7v2EventADT implements CHL7EventADTA01 {
     // Movement segment
     $this->addZBE($sejour);
   }
-  
 }
 
 ?>

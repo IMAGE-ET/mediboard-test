@@ -12,13 +12,13 @@
  */
 
 CAppUI::requireModuleClass("hl7", "CHL7v2Event");
-CAppUI::requireModuleClass("hl7", "CHL7EventADTA40");
+CAppUI::requireModuleClass("hl7", "CHL7EventADTA39");
 
 /**
  * Class CHL7v2EventADTA40
  * A40 - Merge patient
  */
-class CHL7v2EventADTA40 extends CHL7v2EventADT implements CHL7EventADTA40 {
+class CHL7v2EventADTA40 extends CHL7v2EventADT implements CHL7EventADTA39 {
   function __construct() {
     parent::__construct();
         

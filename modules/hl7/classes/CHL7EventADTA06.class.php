@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A13 - Cancel discharge/end visit - HL7
+ * A06 - Structure - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -14,9 +14,9 @@
 CAppUI::requireModuleClass("hl7", "CHL7EventADT");
 
 /**
- * Interface CHL7EventADTA13 
- * A13 - Cancel discharge/end visit 
+ * Interface CHL7EventADTA06 
+ * A06 - Structure
  */
-interface CHL7EventADTA13 extends CHL7EventADT {}
+interface CHL7EventADTA06 extends CHL7EventADT {}
 
 ?>

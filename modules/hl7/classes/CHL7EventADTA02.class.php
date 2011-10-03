@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A05 - Structure - HL7
+ * A02 - Transfer a patient - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -14,9 +14,9 @@
 CAppUI::requireModuleClass("hl7", "CHL7EventADT");
 
 /**
- * Interface CHL7EventADTA05 
- * A05 - Structure
+ * Interface CHL7EventADTA02 
+ * A02 - Transfer a patient
  */
-interface CHL7EventADTA05 extends CHL7EventADT {}
+interface CHL7EventADTA02 extends CHL7EventADT {}
 
 ?>

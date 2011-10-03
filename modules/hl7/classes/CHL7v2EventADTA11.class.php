@@ -12,13 +12,13 @@
  */
 
 CAppUI::requireModuleClass("hl7", "CHL7v2EventADT");
-CAppUI::requireModuleClass("hl7", "CHL7EventADTA11");
+CAppUI::requireModuleClass("hl7", "CHL7EventADTA09");
 
 /**
  * Class CHL7v2EventADTA11
  * A11 - Cancel admit/visit notification
  */
-class CHL7v2EventADTA11 extends CHL7v2EventADT implements CHL7EventADTA11 {
+class CHL7v2EventADTA11 extends CHL7v2EventADT implements CHL7EventADTA09 {
   function __construct() {
     parent::__construct();
         
@@ -33,7 +33,24 @@ class CHL7v2EventADTA11 extends CHL7v2EventADT implements CHL7EventADTA11 {
   function build($sejour) {
     parent::build($sejour);
     
+    $patient = $sejour->_ref_patient;
+    // Patient Identification
+    $this->addPID($patient);
     
+    // Patient Additional Demographic
+    $this->addPD1($patient);
+    
+    // Doctors
+    $this->addROLs($patient);
+    
+    // Patient Visit
+    $this->addPV1($sejour);
+    
+    // Patient Visit - Additionale Info
+    $this->addPV2($sejour);
+    
+    // Movement segment
+    $this->addZBE($sejour);
   }
   
 }

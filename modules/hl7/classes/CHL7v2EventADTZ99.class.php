@@ -33,7 +33,24 @@ class CHL7v2EventADTZ99 extends CHL7v2EventADT implements CHL7EventADTZ99 {
   function build($sejour) {
     parent::build($sejour);
     
+    $patient = $sejour->_ref_patient;
+    // Patient Identification
+    $this->addPID($patient);
     
+    // Patient Additional Demographic
+    $this->addPD1($patient);
+    
+    // Doctors
+    $this->addROLs($patient);
+    
+    // Patient Visit
+    $this->addPV1($sejour);
+    
+    // Patient Visit - Additionale Info
+    $this->addPV2($sejour);
+    
+    // Movement segment
+    $this->addZBE($sejour);
   }
   
 }

@@ -16,9 +16,12 @@
  * ITI31 Delegated Handler
  */
 class CITI31DelegatedHandler extends CIHEDelegatedHandler {
-  static $handled = array ("CSejour", "CAffectation");
+  static $handled        = array ("CSejour", "CAffectation");
   protected $profil      = "PAM";
   protected $transaction = "ITI31";
+  
+  static $inpatient      = array("comp", "ssr", "psy", "seances", "consult");
+  static $outpatient     = array("urg", "ambu", "exte");
   
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);
@@ -72,16 +75,56 @@ class CITI31DelegatedHandler extends CIHEDelegatedHandler {
     if ($sejour->_etat == "encours") {
       // Admission faite
       if ($sejour->fieldModified("entree_reelle")) {
-        // Admission hospitalisé
-        if ($sejour->type = "comp") {
-          return "A01";
-        } 
         // Patient externe
-        return "A04";
+        if (in_array($sejour->type, self::$outpatient)) {
+          return "A04";
+        } 
+        // Admission hospitalisé
+        return "A01";
       }
       
       // Modification de l'admission 
-      /* @todo AJOUTER LES TESTS EN AMONT */
+      // Externe devient hospitalisé
+      if ($sejour->fieldModified("type") && 
+          in_array($sejour->type, self::$outpatient) && 
+          in_array($sejour->_old->type, self::$inpatient)) {
+        return "A06";
+      } 
+
+      // Externe devient hospitalisé
+      if ($sejour->fieldModified("type") && 
+          in_array($sejour->type, self::$inpatient) && 
+          in_array($sejour->_old->type, self::$outpatient)) {
+        return "A07";
+      }
+      
+      // Cas d'une mutation ? 
+      if ($sejour->fieldModified("service_entree_id")) {
+        return "A02";
+      }
+      // Annulation de la mutation ? 
+      if ($sejour->fieldModified("service_entree_id", "")) {
+        return "A12";
+      }
+      
+      // Changement du médecin responsable
+      if ($sejour->fieldModified("praticien_id")) {
+        return "A54";
+      }
+      // Annulation de la mutation ? 
+      if ($sejour->fieldModified("praticien_id", "")) {
+        return "A55";
+      }
+      
+      // Réattribution dossier administratif
+      if ($sejour->fieldModified("patient_id")) {
+        return "A44";
+      }
+      
+      /* @todo Changement d'UF Médicale */
+      
+      /* @todo Changement d'UF de Soins */
+      
       // Cas d'une annulation ? 
       if ($sejour->fieldModified("annule", "1")) {
         return "A11";

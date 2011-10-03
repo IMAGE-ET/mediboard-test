@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A01 - Admit/visit notification  - HL7
+ * A01 - Structure - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -15,7 +15,7 @@ CAppUI::requireModuleClass("hl7", "CHL7EventADT");
 
 /**
  * Interface CHL7EventADTA01 
- * A01 - Admit/visit notification 
+ * A01 - Structure
  */
 interface CHL7EventADTA01 extends CHL7EventADT {}
 

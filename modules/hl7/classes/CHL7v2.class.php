@@ -72,7 +72,7 @@ abstract class CHL7v2 {
 		);
 		
 		$cols = array("code_hl7_from", "code_mb_to", "description");
-		if (!$from_mb) {
+		if ($from_mb) {
 			$cols = array("code_mb_from", "code_hl7_to", "description");
 		}
 		
@@ -96,7 +96,7 @@ abstract class CHL7v2 {
   
   static function getTableHL7Value($table, $value) {
     $data = self::getTable($table, true);
-    
+
     if (empty($data)) {
       return null;
     }

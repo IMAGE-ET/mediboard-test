@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A05 - Structure - HL7
+ * A43 - Structure - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -14,9 +14,9 @@
 CAppUI::requireModuleClass("hl7", "CHL7EventADT");
 
 /**
- * Interface CHL7EventADTA05 
- * A05 - Structure
+ * Interface CHL7EventADTA43
+ * A43 - Structure
  */
-interface CHL7EventADTA05 extends CHL7EventADT {}
+interface CHL7EventADTA43 extends CHL7EventADT {}
 
 ?>
