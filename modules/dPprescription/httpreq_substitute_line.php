@@ -19,8 +19,8 @@ $mode_protocole = CValue::get("mode_protocole");
 $line = new CPrescriptionLineMedicament();
 $line->load($line_id);
 
-// Chargement des substitutions possibles de la ligne
-$line->loadRefsSubstitutionLines();
+// Chargement des variantes possibles de la ligne
+$line->loadRefsVariantes();
 
 // Creation de la nouvelle ligne
 $line->_id = "";
@@ -30,12 +30,13 @@ $line->creator_id = $user->_id;
 $line->accord_praticien = "";
 $line->debut = mbDate();
 $line->time_debut = mbTime();
+$line->substitute_for_id = $line_id;
 $msg = $line->store();
 
-// Réaffectation des lignes de substitutions à l'equivalent
-foreach($line->_ref_substitution_lines as $subst_lines){
+// Réaffectation des lignes de variantes à l'equivalent
+foreach($line->_ref_variantes as $subst_lines){
   foreach($subst_lines as $_subst_line){
-    $_subst_line->substitute_for_id = $line->_id;
+    $_subst_line->variante_for_id = $line->_id;
     $msg = $_subst_line->store();
     CAppUI::displayMsg($msg, "$_subst_line->_class-msg-store");
   }
@@ -46,7 +47,7 @@ CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
 // Sauvegarde de l'ancienne ligne
 $old_line = new CPrescriptionLineMedicament();
 $old_line->load($line_id);
-$old_line->substitution_line_id = $line->_id;
+$old_line->substituted = "1";
 $old_line->date_arret = mbDate();
 $old_line->time_arret = mbTime();
 $msg = $old_line->store();

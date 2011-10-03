@@ -179,8 +179,8 @@ updateModaleAfterAddLine = function(line_id){
   <input type="hidden" name="time_debut" value="" />
   <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
   <input type="hidden" name="refresh_pharma" value="{{$refresh_pharma}}" />
-  <input type="hidden" name="substitute_for_id" value="" />
-  <input type="hidden" name="substitution_active" value="1" />
+  <input type="hidden" name="variante_for_id" value="" />
+  <input type="hidden" name="variante_active" value="1" />
   {{if $prescription->object_id}}
   <input type="hidden" name="_most_used_poso" value="1" />
   {{/if}}

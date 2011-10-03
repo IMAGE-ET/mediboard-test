@@ -399,12 +399,12 @@ p.duplicata {
       {{if $line_medicament_element_no_ald->_class == "CPrescriptionLineMedicament"}}
         {{include file="inc_print_medicament.tpl" med=$line_medicament_element_no_ald nodebug=true}}
         {{if !$prescription->object_id}}
-	        {{if $line_medicament_element_no_ald->_ref_substitution_lines.CPrescriptionLineMedicament|@count
-	          || $line_medicament_element_no_ald->_ref_substitution_lines.CPrescriptionLineMix|@count}}
+	        {{if $line_medicament_element_no_ald->_ref_variantes.CPrescriptionLineMedicament|@count
+	          || $line_medicament_element_no_ald->_ref_variantes.CPrescriptionLineMix|@count}}
 	        <br />
 	        <ul style="margin-left: 15px;">
 	        <strong>Variantes possibles:</strong> 
-	        {{foreach from=$line_medicament_element_no_ald->_ref_substitution_lines item=_subst_line_by_chap}}
+	        {{foreach from=$line_medicament_element_no_ald->_ref_variantes item=_subst_line_by_chap}}
 	        {{foreach from=$_subst_line_by_chap item=_subst_line_med}}
 	          {{if $_subst_line_med->_class == "CPrescriptionLineMedicament"}}
 	            {{include file="inc_print_medicament.tpl" med=$_subst_line_med nodebug=true}}
@@ -419,12 +419,12 @@ p.duplicata {
       {{else}}
         {{include file="inc_print_prescription_line_mix.tpl" perf=$line_medicament_element_no_ald}}
         {{if !$prescription->object_id}}
-	        {{if $line_medicament_element_no_ald->_ref_substitution_lines.CPrescriptionLineMedicament|@count
-	          || $line_medicament_element_no_ald->_ref_substitution_lines.CPrescriptionLineMix|@count}}
+	        {{if $line_medicament_element_no_ald->_ref_variantes.CPrescriptionLineMedicament|@count
+	          || $line_medicament_element_no_ald->_ref_variantes.CPrescriptionLineMix|@count}}
 	        <br />
 	        <ul style="margin-left: 15px;">
 	          <strong>Variantes possibles:</strong> 
-	        {{foreach from=$line_medicament_element_no_ald->_ref_substitution_lines item=_subst_line_by_chap}}
+	        {{foreach from=$line_medicament_element_no_ald->_ref_variantes item=_subst_line_by_chap}}
 	        {{foreach from=$_subst_line_by_chap item=_subst_line_med}}
 	          {{if $_subst_line_med->_class == "CPrescriptionLineMedicament"}}
 	            {{include file="inc_print_medicament.tpl" med=$_subst_line_med nodebug=true}}

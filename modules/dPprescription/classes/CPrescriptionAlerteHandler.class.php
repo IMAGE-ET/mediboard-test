@@ -65,7 +65,7 @@ class CPrescriptionAlerteHandler extends CMbObjectHandler {
 		// Si la ligne (substitution) n'est pas active, on ne genere pas d'alerte (on la supprime si elle existe)
 		if(($object instanceof CPrescriptionLineMedicament || $object instanceof CPrescriptionLineMix)){
 			// Suppression de l'alerte si elle existe
-			if(!$object->substitution_active){
+			if(!$object->variante_active){
 		    if($alerte->_id){
 		    	$alerte->delete();
 		    }

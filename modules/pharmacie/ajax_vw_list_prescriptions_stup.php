@@ -31,7 +31,7 @@ $ljoin["prescription"] = "prescription.prescription_id = prescription_line_medic
 $ljoin["sejour"] = "prescription.object_id = sejour.sejour_id AND prescription.object_class = 'CSejour' AND prescription.type = 'sejour'";
 $where = array();
 $where[] = "sejour.entree <= '$max' AND sejour.sortie >= '$min'";
-$where["substitution_active"] = " = '1'";
+$where["variante_active"] = " = '1'";
 $where["stupefiant"] = " = '1'";
 $where["sejour.group_id"] = " = '$group_id'";
 
@@ -51,7 +51,7 @@ $ljoin["prescription"] = "prescription.prescription_id = prescription_line_mix.p
 $ljoin["sejour"] = "prescription.object_id = sejour.sejour_id AND prescription.object_class = 'CSejour' AND prescription.type = 'sejour'";
 $where = array();
 $where[] = "sejour.entree <= '$max' AND sejour.sortie >= '$min'";
-$where["substitution_active"] = " = '1'";
+$where["variante_active"] = " = '1'";
 $where["stupefiant"] = " = '1'";
 $where["sejour.group_id"] = " = '$group_id'";
 $lines_mix_item = $prescription_line_mix_item->loadList($where, null, null, null, $ljoin);

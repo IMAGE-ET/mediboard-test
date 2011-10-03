@@ -254,9 +254,9 @@ addAerosol = function(){
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
   <input type="hidden" name="creator_id" value="{{$app->user_id}}" />
   <input type="hidden" name="code_cip" value=""/>
-  <input type="hidden" name="substitute_for_id" value="{{$line->_id}}" />
-  <input type="hidden" name="substitute_for_class" value="{{$line->_class}}" />
-  <input type="hidden" name="substitution_active" value="0" />
+  <input type="hidden" name="variante_for_id" value="{{$line->_id}}" />
+  <input type="hidden" name="variante_for_class" value="{{$line->_class}}" />
+  <input type="hidden" name="variante_active" value="0" />
 </form>
 
 <form name="add_aerosol" action="?" method="post">
@@ -272,9 +272,9 @@ addAerosol = function(){
   <input type="hidden" name="unite_duree" value="jour" />
   <input type="hidden" name="unite_duree_passage" value="minute" />
   <input type="hidden" name="date_debut" value="" />
-	<input type="hidden" name="substitute_for_id" value="{{$line->_id}}" />
-  <input type="hidden" name="substitute_for_class" value="{{$line->_class}}" />
-	<input type="hidden" name="substitution_active" value="0" />
+	<input type="hidden" name="variante_for_id" value="{{$line->_id}}" />
+  <input type="hidden" name="variante_for_class" value="{{$line->_class}}" />
+	<input type="hidden" name="variante_active" value="0" />
 </form>
 
 {{if $line->_class == "CPrescriptionLineMedicament"}}
@@ -320,12 +320,12 @@ addAerosol = function(){
   </tr>
   <tr>
     <td>
-      Substitution possible dans le plan de soin
+      Selection d'une variante possible dans le plan de soins
       <form name="editLine" action="?" method="post">
 			  <input type="hidden" name="m" value="dPprescription" />
 			  <input type="hidden" name="dosql" value="{{$dosql}}" />
 				<input type="hidden" name="{{$line->_spec->key}}" value="{{$line->_id}}" />
-				{{mb_field object=$line field="substitution_plan_soin" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+				{{mb_field object=$line field="variante_plan_soin" onchange="submitFormAjax(this.form, 'systemMsg')"}}
 			</form>
     </td>
   </tr>
@@ -335,7 +335,7 @@ addAerosol = function(){
 </table>
 {{/if}}
 <table class="tbl">
-  {{foreach from=$line->_ref_substitution_lines item=lines_chap}}
+  {{foreach from=$line->_ref_variantes item=lines_chap}}
 	  {{foreach from=$lines_chap item=curr_line}}
 	    {{if $mode_pack}}
 	    	{{if $curr_line->_class == "CPrescriptionLineMedicament"}}

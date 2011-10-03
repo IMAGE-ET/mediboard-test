@@ -11,7 +11,7 @@
 <tr>
   <th colspan="8">
   <div style="float: right">
-    {{if !$_prescription_line_mix->substitute_for_id}}
+    {{if !$_prescription_line_mix->variante_for_id}}
 	  <form name="modifProtocole{{$_prescription_line_mix->_id}}" method="get" action="?">
 	    <input type="hidden" name="m" value="dPprescription" />
 	    <input type="hidden" name="tab" value="vw_edit_protocole" />

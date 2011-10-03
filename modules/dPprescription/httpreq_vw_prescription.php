@@ -196,7 +196,7 @@ if($prescription->_id){
 	  		$_line_med->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma, $operation_id);
 	  	  if($_line_med->_class == "CPrescriptionLineMedicament"){
 	  	    $_line_med->countBackRefs("administration");
-	  	    $_line_med->loadRefsSubstitutionLines();
+	  	    $_line_med->loadRefsVariantes();
 					$_line_med->loadRefParentLine();
 					
 	  	  }

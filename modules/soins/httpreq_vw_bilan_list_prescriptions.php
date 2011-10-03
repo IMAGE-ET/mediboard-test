@@ -43,10 +43,10 @@ if($type_prescription == "sejour" || $type_prescription == "sortie_manquante"){
 if($signee == "0"){ 
   if($praticien_id){
     $where[] = "(prescription_line_element.praticien_id = '$praticien_id' AND prescription_line_element.signee != '1') 
-                OR (prescription_line_medicament.praticien_id = '$praticien_id' AND prescription_line_medicament.signee != '1' AND prescription_line_medicament.substitution_active = '1')
-                OR (prescription_line_mix.praticien_id = '$praticien_id' AND prescription_line_mix.signature_prat != '1' AND prescription_line_mix.substitution_active = '1')";
+                OR (prescription_line_medicament.praticien_id = '$praticien_id' AND prescription_line_medicament.signee != '1' AND prescription_line_medicament.variante_active = '1')
+                OR (prescription_line_mix.praticien_id = '$praticien_id' AND prescription_line_mix.signature_prat != '1' AND prescription_line_mix.variante_active = '1')";
   } else {
-    $where[] = "(prescription_line_element.signee != '1') OR (prescription_line_medicament.signee != '1' AND prescription_line_medicament.substitution_active = '1') OR (prescription_line_mix.signature_prat != '1' AND prescription_line_mix.substitution_active = '1')";
+    $where[] = "(prescription_line_element.signee != '1') OR (prescription_line_medicament.signee != '1' AND prescription_line_medicament.variante_active = '1') OR (prescription_line_mix.signature_prat != '1' AND prescription_line_mix.variante_active = '1')";
   }
 } else {
   if($praticien_id){

@@ -35,7 +35,7 @@ if (!function_exists('exportXML')) {
     $keys =
       array("prescription_line_medicament_id", "prise_posologie_id", "prescription_line_mix_id",
             "prescription_line_mix_item_id", "prescription_line_mix_variation_id", "prescription_line_element_id",
-            "prescription_id", "substitution_line_id", "moment_unitaire_id", "substitute_for_id", "praticien_id",
+            "prescription_id", "moment_unitaire_id", "variante_for_id", "praticien_id",
             "creator_id", "child_id", "operation_id", "object_id", "executant_prescription_line_id",
             "user_executant_id", "next_line_id", "prescription_line_comment_id", "protocole_id");
     $fields = $object->getPlainFields();
@@ -95,10 +95,10 @@ foreach ($prescription->_ref_prescription_lines as $_line) {
     exportXML($_ref_prise, $doc, null, $_line->_id);
   }
   
-  if (!$_line->substitute_for_id) {
-    $_line->loadRefsSubstitutionLines();
+  if (!$_line->variante_for_id) {
+    $_line->loadRefsVariantes();
     
-    foreach ($_line->_ref_substitution_lines["CPrescriptionLineMedicament"] as $_ref_line_med) {
+    foreach ($_line->_ref_variantes["CPrescriptionLineMedicament"] as $_ref_line_med) {
       exportXML($_ref_line_med, $doc, $_line->_id);
       
       $_ref_line_med->loadRefsPrises();
@@ -107,7 +107,7 @@ foreach ($prescription->_ref_prescription_lines as $_line) {
       }
     }
     
-    foreach ($_line->_ref_substitution_lines["CPrescriptionLineMix"] as $_ref_line_mix) {
+    foreach ($_line->_ref_variantes["CPrescriptionLineMix"] as $_ref_line_mix) {
       exportXML($_ref_line_mix, $doc, $_line->_id);
       foreach($_ref_line_mix->_ref_lines as $_ref_line) {
         exportXML($_ref_line, $doc);
@@ -137,10 +137,10 @@ foreach ($prescription->_ref_prescription_line_mixes as $_line) {
     exportXML($_ref_line, $doc);
   }
   
-  if (!$_line->substitute_for_id) {
-    $_line->loadRefsSubstitutionLines();
+  if (!$_line->variante_for_id) {
+    $_line->loadRefsVariantes();
     
-    foreach ($_line->_ref_substitution_lines["CPrescriptionLineMedicament"] as $_ref_line_med) {
+    foreach ($_line->_ref_variantes["CPrescriptionLineMedicament"] as $_ref_line_med) {
       exportXML($_ref_line_med, $doc, $_line->_id);
       $_ref_line_med->loadRefsPrises();
       foreach($_ref_line_med->_ref_prises as $_ref_prise) {
@@ -148,7 +148,7 @@ foreach ($prescription->_ref_prescription_line_mixes as $_line) {
       }
     }
     
-    foreach ($_line->_ref_substitution_lines["CPrescriptionLineMix"] as $_ref_line_mix) {
+    foreach ($_line->_ref_variantes["CPrescriptionLineMix"] as $_ref_line_mix) {
       exportXML($_ref_line_mix, $doc, $_line->_id);
       foreach($_ref_line_mix->_ref_lines as $_ref_line) {
         exportXML($_ref_line, $doc);

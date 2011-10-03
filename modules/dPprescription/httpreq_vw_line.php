@@ -73,9 +73,9 @@ if($line instanceof CPrescriptionLineMedicament){
    }
   
    $line->countBackRefs("administration");
-   $line->loadRefsSubstitutionLines();
+   $line->loadRefsVariantes();
    
-   foreach($line->_ref_substitution_lines["CPrescriptionLineMedicament"] as $_line_med) {
+   foreach($line->_ref_variantes["CPrescriptionLineMedicament"] as $_line_med) {
      $_line_med->loadRefsPrises();
    }
    
@@ -121,7 +121,7 @@ if($line instanceof CPrescriptionLineMix){
   $line->loadRefPraticien();
   $line->loadRefsLines();
   $line->loadRefParentLine();
-	$line->loadRefsSubstitutionLines();
+	$line->loadRefsVariantes();
   $line->loadVoies(); 
 
   if($line->_ref_lines){

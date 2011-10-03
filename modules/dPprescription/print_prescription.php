@@ -141,8 +141,8 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 	  $line_medicament->loadRefsFwd();
 	  if(!$prescription->object_id){
 	    if($line_medicament instanceof CPrescriptionLineMedicament){
-		    $line_medicament->loadRefsSubstitutionLines();
-		    foreach($line_medicament->_ref_substitution_lines as $_subst_by_chap){
+		    $line_medicament->loadRefsVariantes();
+		    foreach($line_medicament->_ref_variantes as $_subst_by_chap){
 		      foreach($_subst_by_chap as $_subst_line){
 		        if($_subst_line instanceof CPrescriptionLineMedicament){
 						  $_subst_line->loadRefsPrises();
@@ -212,8 +212,8 @@ if (!$prescription->object_id){
 // Parcours des prescription_line_mixes
 foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
   $_prescription_line_mix->loadRefPraticien();
-  $_prescription_line_mix->loadRefsSubstitutionLines();
-  foreach($_prescription_line_mix->_ref_substitution_lines as $_subst_by_chap){
+  $_prescription_line_mix->loadRefsVariantes();
+  foreach($_prescription_line_mix->_ref_variantes as $_subst_by_chap){
     foreach($_subst_by_chap as &$_subst_perf){
       $_subst_perf->loadRefPraticien();
 			if($_subst_perf instanceof CPrescriptionLineMix){

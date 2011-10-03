@@ -338,7 +338,7 @@ class CPrescriptionLineMixItem extends CMbObject implements IPatientRelated {
 				return;
 			}
     	$this->_ref_prescription_line_mix->removePlanifSysteme();
-			 if($this->_ref_prescription_line_mix->substitution_active){
+			 if($this->_ref_prescription_line_mix->variante_active){
          $this->_ref_prescription_line_mix->calculPlanifsPerf();
 			 }
     }

@@ -559,8 +559,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
     // Parcours des lignes de medicaments
     foreach($protocole->_ref_prescription_lines as &$_line_med){      
         // Chargement des lignes de substitutions de la ligne de protocole
-        $_line_med->loadRefsSubstitutionLines();
-        $_substitutions = $_line_med->_ref_substitution_lines;
+        $_line_med->loadRefsVariantes();
+        $_substitutions = $_line_med->_ref_variantes;
       
       // Creation et modification de la ligne en fonction des dates
       $this->applyDateProtocole($_line_med, $praticien_id, $date_sel, $time_sel, $operation_id, $debut_sejour, $fin_sejour, 
@@ -569,8 +569,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
       // Creation d'une nouvelle ligne de substitution qui pointe vers la ligne qui vient d'etre crée
       foreach($_substitutions as $_line_subst_by_chap){
         foreach($_line_subst_by_chap as $_line_subst){
-          $_line_subst->substitute_for_id = $_line_med->_id;
-          $_line_subst->substitute_for_class = $_line_med->_class;
+          $_line_subst->variante_for_id = $_line_med->_id;
+          $_line_subst->variante_for_class = $_line_med->_class;
           $this->applyDateProtocole($_line_subst, $praticien_id, $date_sel, $time_sel, $operation_id, $debut_sejour, $fin_sejour, 
                                     $date_operation, $hour_operation, $operation, $sejour, $protocole_id);
         }
@@ -591,8 +591,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
   
     // Parcours des prescription_line_mixes
     foreach($protocole->_ref_prescription_line_mixes as &$_prescription_line_mix){
-      $_prescription_line_mix->loadRefsSubstitutionLines();
-      $_substitutions_perf = $_prescription_line_mix->_ref_substitution_lines;
+      $_prescription_line_mix->loadRefsVariantes();
+      $_substitutions_perf = $_prescription_line_mix->_ref_variantes;
       
 
       $this->applyDateProtocole($_prescription_line_mix, $praticien_id, $date_sel, $time_sel, $operation_id, $debut_sejour, $fin_sejour, 
@@ -601,8 +601,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
   
       foreach($_substitutions_perf as $_line_subst_by_chap){
         foreach($_line_subst_by_chap as $_line_subst){
-          $_line_subst->substitute_for_id = $_prescription_line_mix->_id;
-          $_line_subst->substitute_for_class = $_prescription_line_mix->_class;
+          $_line_subst->variante_for_id = $_prescription_line_mix->_id;
+          $_line_subst->variante_for_class = $_prescription_line_mix->_class;
           $this->applyDateProtocole($_line_subst, $praticien_id, $date_sel, $time_sel, $operation_id, $debut_sejour, $fin_sejour, 
                                     $date_operation, $hour_operation, $operation, $sejour, $protocole_id);
         }
@@ -847,7 +847,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
       $where["protocole_id"] = " = '$protocole_id'";
     }
     // Permet de ne pas afficher les lignes de substitutions
-    $where["substitution_active"] = " = '$with_subst_active'";
+    $where["variante_active"] = " = '$with_subst_active'";
     
     $this->_ref_prescription_line_mixes = $prescription_line_mix->loadList($where);
 		
@@ -1035,9 +1035,9 @@ class CPrescription extends CMbObject implements IPatientRelated {
       $where["signee"] = " = '0'";
       $where["prescription_id"] = " = '$this->_id'";
       $where["child_id"] = "IS NULL";
-      $where["substitution_line_id"] = "IS NULL";
-      $where["substitute_for_id"] = "IS NULL";
-      $where["substitution_active"] = " = '1'";
+      $where["substituted"] = " = '0'";
+      $where["variante_for_id"] = "IS NULL";
+      $where["variante_active"] = " = '1'";
       
       if ($praticien_id) {
         $where["praticien_id"] = " = '$praticien_id'";
@@ -1045,9 +1045,9 @@ class CPrescription extends CMbObject implements IPatientRelated {
       
       $this->_counts_no_valide = $line->countList($where);
       
-      unset($where["substitution_line_id"]);
-      unset($where["substitute_for_id"]);
-      unset($where["substitution_active"]);
+      unset($where["substituted"]);
+      unset($where["variante_for_id"]);
+      unset($where["variante_active"]);
       
       $line = new CPrescriptionLineElement();
       $this->_counts_no_valide += $line->countList($where);
@@ -1057,8 +1057,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
       
       $line = new CPrescriptionLineMix();
       $where = array();
-      $where["substitute_for_id"] = "IS NULL";
-      $where["substitution_active"] = " = '1'";
+      $where["variante_for_id"] = "IS NULL";
+      $where["variante_active"] = " = '1'";
       $where["prescription_id"] = " = '$this->_id'";
       
       $where["signature_prat"] = " = '0'";
@@ -1087,8 +1087,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
     $line_med = new CPrescriptionLineMedicament();
     $whereMed["prescription_id"] = " = '$this->_id'";
     $whereMed["child_id"] = "IS NULL";
-    $whereMed["substitution_line_id"] = "IS NULL";
-    $whereMed["substitution_active"] = " = '1'";
+    $whereMed["substituted"] = " = '0'";
+    $whereMed["variante_active"] = " = '1'";
     $whereMed["inscription"] = " = '0'";
 		
     if ($praticien_sortie_id) {
@@ -1112,7 +1112,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
     $ljoinPerf["prescription_line_mix"] = "prescription_line_mix_item.prescription_line_mix_id = prescription_line_mix.prescription_line_mix_id";
     $wherePerf["prescription_line_mix.prescription_id"] = " = '$this->_id'";
     $wherePerf["prescription_line_mix.next_line_id"] = " IS NULL";
-    $wherePerf["prescription_line_mix.substitution_active"] = " = '1'";
+    $wherePerf["prescription_line_mix.variante_active"] = " = '1'";
     if ($protocole_id) {
       $wherePerf["protocole_id"] = " = '$protocole_id'";
     }
@@ -1452,7 +1452,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
   function loadRefsLinesMed($with_child = 0, $with_subst = 0, $emplacement="", $order="", $protocole_id = "", $in_progress=0) {
     if ($this->_ref_prescription_lines) {
     	foreach($this->_ref_prescription_lines as $_line_med){
-		    if($with_subst != "1" && $_line_med->substitution_line_id){
+		    if($with_subst != "1" && $_line_med->substituted){
 		    	unset($this->_ref_prescription_lines[$_line_med->_id]);
 		    }
 				if($with_child != "1" && $_line_med->child_id){
@@ -1469,10 +1469,10 @@ class CPrescription extends CMbObject implements IPatientRelated {
       $where["child_id"] = "IS NULL";
     }
     if($with_subst != "1"){
-      $where["substitution_line_id"] = "IS NULL";
+      $where["substituted"] = " = '0'";
     }
     // Permet de ne pas afficher les lignes de substitutions
-    $where["substitution_active"] = " = '1'";
+    $where["variante_active"] = " = '1'";
     
     if ($protocole_id) {
       $where["protocole_id"] = " = '$protocole_id'";

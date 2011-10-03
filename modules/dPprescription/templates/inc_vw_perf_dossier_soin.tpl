@@ -151,8 +151,8 @@
   {{/if}}
 	
   {{if !$_prescription_line_mix->date_pose}}
-    {{if ($_prescription_line_mix->_ref_substitution_lines.CPrescriptionLineMedicament|@count || $_prescription_line_mix->_ref_substitution_lines.CPrescriptionLineMix|@count) &&
-          $_prescription_line_mix->_ref_substitute_for->substitution_plan_soin}}
+    {{if ($_prescription_line_mix->_ref_variantes.CPrescriptionLineMedicament|@count || $_prescription_line_mix->_ref_variantes.CPrescriptionLineMix|@count) &&
+          $_prescription_line_mix->_ref_variante_for->variante_plan_soin}}
     <form action="?" method="post" name="changeLine-{{$prescription_line_mix_id}}">
       <input type="hidden" name="m" value="dPprescription" />
       <input type="hidden" name="dosql" value="do_substitution_line_aed" />
@@ -160,7 +160,7 @@
               onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
       										PlanSoins.loadTraitement('{{$_prescription_line_mix->_ref_prescription->object_id}}','{{$date}}','','administration');} } )">
         <option value="">Subst.</option>
-        {{foreach from=$_prescription_line_mix->_ref_substitution_lines item=lines_subst_by_chap}}
+        {{foreach from=$_prescription_line_mix->_ref_variantes item=lines_subst_by_chap}}
           {{foreach from=$lines_subst_by_chap item=_line_subst}}
 					  <option value="{{$_line_subst->_guid}}">
               {{if $_line_subst instanceof CPrescriptionLineMix}}
@@ -168,7 +168,7 @@
               {{else}}	
 							  {{$_line_subst->_view}}
 						  {{/if}}
-						{{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
+						{{if !$_line_subst->variante_for_id}}(originale){{/if}}</option>
 	        {{/foreach}}
 	      {{/foreach}}
       </select>

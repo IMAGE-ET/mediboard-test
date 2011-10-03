@@ -227,8 +227,8 @@
 		
 	  {{if $line instanceof CPrescriptionLineMedicament}}
 	    {{if !$line->_count.administration}}
-		    {{if ($line->_ref_substitution_lines.CPrescriptionLineMedicament|@count || $line->_ref_substitution_lines.CPrescriptionLineMix|@count) &&
-		    			$line->_ref_substitute_for->substitution_plan_soin}}
+		    {{if ($line->_ref_variantes.CPrescriptionLineMedicament|@count || $line->_ref_variantes.CPrescriptionLineMix|@count) &&
+		    			$line->_ref_variante_for->variante_plan_soin}}
 			    <form action="?" method="post" name="changeLine-{{$line->_guid}}">
 			      <input type="hidden" name="m" value="dPprescription" />
 			      <input type="hidden" name="dosql" value="do_substitution_line_aed" />
@@ -237,14 +237,14 @@
 			                           PlanSoins.loadTraitement('{{$line->_ref_prescription->object_id}}','{{$date}}','','administration')
 			                         } } )">
 			        <option value="">Subst.</option>
-				      {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
+				      {{foreach from=$line->_ref_variantes item=lines_subst_by_chap}}
 				          {{foreach from=$lines_subst_by_chap item=_line_subst}}
 									{{if $_line_subst->_class == "CPrescriptionLineMix"}}
 									<option value="{{$_line_subst->_guid}}">{{$_line_subst->_short_view}}
 		              {{else}}
 				          <option value="{{$_line_subst->_guid}}">{{$_line_subst->_view}}
 				          {{/if}}
-									{{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
+									{{if !$_line_subst->variante_for_id}}(originale){{/if}}</option>
 				        {{/foreach}}
 				      {{/foreach}}
 			      </select>

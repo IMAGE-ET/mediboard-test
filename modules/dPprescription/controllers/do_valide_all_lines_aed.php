@@ -91,16 +91,16 @@ foreach($prescriptions as $prescription_id){
 		$lines[$prescription_line->_class][$prescription_line->_id] = $prescription_line;
 	
 		// Si la ligne peut etre substituée par les infirmieres, elle est automatiquement signée
-		if($prescription_line->substitute_for_id){
-			$original_line = new $prescription_line->substitute_for_class;
-			$original_line->load($prescription_line->substitute_for_id);
-			$subst_plan_soin = $original_line->substitution_plan_soin;
+		if($prescription_line->variante_for_id){
+			$original_line = new $prescription_line->variante_for_class;
+			$original_line->load($prescription_line->variante_for_id);
+			$subst_plan_soin = $original_line->variante_plan_soin;
 		} else {
-			$subst_plan_soin = $prescription_line->substitution_plan_soin;
+			$subst_plan_soin = $prescription_line->variante_plan_soin;
 		}
 		if($subst_plan_soin){
-			$prescription_line->loadRefsSubstitutionLines();
-			foreach($prescription_line->_ref_substitution_lines as $_subst_lines_by_type){
+			$prescription_line->loadRefsVariantes();
+			foreach($prescription_line->_ref_variantes as $_subst_lines_by_type){
 			  foreach($_subst_lines_by_type as $_subst_line){
 			  	$lines[$_subst_line->_class][$_subst_line->_id] = $_subst_line;
 			  }
@@ -122,18 +122,18 @@ foreach($prescriptions as $prescription_id){
 		$where["prescription_id"] = " = '$prescription_id'";
 		$where["praticien_id"] = " = '$praticien_id'";
 		$where["signee"] = " = '$search_value'";
-	  $where["substitution_active"] = " = '1'";
+	  $where["variante_active"] = " = '1'";
 		if($only_perop){
 		  $where["perop"] = " = '1'";
 	  }
 		$lines_med = $prescriptionLineMedicament->loadList($where);
 		foreach($lines_med as $_line_med){
 			$lines[$_line_med->_class][$_line_med->_id] = $_line_med;
-		  $_line_med->countSubstitutionsLines();
-			if($_line_med->_count_substitution_lines){
-				$_line_med->loadRefsSubstitutionLines();
-				if($_line_med->_ref_substitute_for->substitution_plan_soin){
-			    foreach($_line_med->_ref_substitution_lines as $_subst_lines_by_type){
+		  $_line_med->countVariantes();
+			if($_line_med->_count_variantes){
+				$_line_med->loadRefsVariantes();
+				if($_line_med->_ref_variante_for->variante_plan_soin){
+			    foreach($_line_med->_ref_variantes as $_subst_lines_by_type){
 			      foreach($_subst_lines_by_type as $_subst_line){
 			        $lines[$_subst_line->_class][$_subst_line->_id] = $_subst_line;
 			      }
@@ -148,18 +148,18 @@ foreach($prescriptions as $prescription_id){
 	  $where["prescription_id"] = " = '$prescription_id'";
 	  $where["praticien_id"] = " = '$praticien_id'";
 	  $where["signature_prat"] = " = '$search_value'";
-	  $where["substitution_active"] = " = '1'";
+	  $where["variante_active"] = " = '1'";
 	  if($only_perop){
 	    $where["perop"] = " = '1'";
 	  }
 	  $lines_perf = $prescription_line_mix->loadList($where);
 	  foreach($lines_perf as $_line_perf){
 	  	$lines[$_line_perf->_class][$_line_perf->_id] = $_line_perf;
-	    $_line_perf->countSubstitutionsLines();
-	    if($_line_perf->_count_substitution_lines){
-	      $_line_perf->loadRefsSubstitutionLines();
-	      if($_line_perf->_ref_substitute_for->substitution_plan_soin){
-	        foreach($_line_perf->_ref_substitution_lines as $_subst_lines_by_type){
+	    $_line_perf->countVariantes();
+	    if($_line_perf->_count_variantes){
+	      $_line_perf->loadRefsVariantes();
+	      if($_line_perf->_ref_variante_for->variante_plan_soin){
+	        foreach($_line_perf->_ref_variantes as $_subst_lines_by_type){
 	          foreach($_subst_lines_by_type as $_subst_line){
 	            $lines[$_subst_line->_class][$_subst_line->_id] = $_subst_line;
 	          } 
@@ -229,12 +229,12 @@ foreach($prescriptions as $prescription_id){
 	  $prescription->loadRefsLinesMed();
 	  $prescription->loadRefsPrescriptionLineMixes();  
 	  foreach ($prescription->_ref_prescription_lines as &$_line_med) {
-	    if(!$_line_med->child_id && $_line_med->substitution_active){
+	    if(!$_line_med->child_id && $_line_med->variante_active){
 	      $lines[$_line_med->_class][$_line_med->_id] = $_line_med;
 	    }
 	  }
 	  foreach($prescription->_ref_prescription_line_mixes as &$_prescription_line_mix){
-	    if(!$_prescription_line_mix->next_line_id && $_prescription_line_mix->substitution_active){
+	    if(!$_prescription_line_mix->next_line_id && $_prescription_line_mix->variante_active){
 	      $lines[$_prescription_line_mix->_class][$_prescription_line_mix->_id] = $_prescription_line_mix;
 	    }
 	  }

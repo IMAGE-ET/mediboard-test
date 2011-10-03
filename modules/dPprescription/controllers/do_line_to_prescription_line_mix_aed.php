@@ -16,8 +16,8 @@ $prescription_line_mix_id = CValue::post("prescription_line_mix_id");
 $type = CValue::post("type");
 $mode_pharma = CValue::post("mode_pharma");
 
-$substitute_for_id = CValue::post("substitute_for_id");
-$substitute_for_class = CValue::post("substitute_for_class");
+$variante_for_id = CValue::post("variante_for_id");
+$variante_for_class = CValue::post("variante_for_class");
 
 // Chargement de la ligne de medicament
 $line_med = new CPrescriptionLineMedicament();
@@ -33,10 +33,10 @@ if(!$prescription_line_mix_id){
   $prescription_line_mix->praticien_id = $line_med->praticien_id;
   $prescription_line_mix->date_debut = $line_med->debut;
   $prescription_line_mix->time_debut = $line_med->time_debut;
-  $prescription_line_mix->substitute_for_id = $substitute_for_id;
-  $prescription_line_mix->substitute_for_class = $substitute_for_class;
-  if($prescription_line_mix->substitute_for_id){
-    $prescription_line_mix->substitution_active = 0;
+  $prescription_line_mix->variante_for_id = $variante_for_id;
+  $prescription_line_mix->variante_for_class = $variante_for_class;
+  if($prescription_line_mix->variante_for_id){
+    $prescription_line_mix->variante_active = 0;
   }
   $msg = $prescription_line_mix->store();
   CAppUI::displayMsg($msg, "CPrescriptionLineMix-msg-create");

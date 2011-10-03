@@ -24,15 +24,17 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $voie             = null;
   var $commentaire         = null;
   
-  // Substitution sous forme d'historique
-  var $substitution_line_id = null;
-  
-  // Alternative entre plusieurs lignes
-  var $substitute_for_id    = null; //$substitute_for_id => id de la ligne substituée
-  var $substitute_for_class = null;
-  
-  var $substitution_active  = null;    
-  var $substitution_plan_soin = null;
+  // Substitution d'un medicament par un ou plusieurs autres
+  var $substitute_for_id = null;
+  var $substituted       = null;
+	
+  // Variantes
+  var $variante_for_id    = null;
+  var $variante_for_class = null;
+  var $variante_active  = null;    
+  var $variante_plan_soin = null;
+	
+	
   var $traitement_personnel = null;
 	var $injection_ide = null;
 	var $stupefiant = null;
@@ -111,7 +113,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   // Form Field
   var $_unites_prise    = null;
   var $_specif_prise    = null;
-  var $_count_substitution_lines = null;
+  var $_count_variantes = null;
   var $_ucd_view        = null;
   var $_dci_view        = null;
   var $_is_perfusable   = null;
@@ -122,8 +124,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_ref_prescription = null;
   var $_ref_produit      = null;
   var $_ref_posologie    = null;
-  var $_ref_substitution_lines = null;
-  var $_ref_substitute_for = null; // ligne (med ou perf) que la ligne peut substituer
+  var $_ref_variantes = null;
+  var $_ref_variante_for = null; // ligne (med ou perf) que la ligne peut substituer
   var $_ref_produit_prescription = null;
 	
   // Alertes
@@ -198,13 +200,17 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $specs["no_poso"]                = "num max|128";
     $specs["valide_pharma"]          = "bool";
     $specs["accord_praticien"]       = "bool";
-    $specs["substitution_line_id"]   = "ref class|CPrescriptionLineMedicament show|0";
-    $specs["substitute_for_id"]      = "ref class|CMbObject meta|substitute_for_class cascade show|0";
-    $specs["substitute_for_class"]   = "enum list|CPrescriptionLineMedicament|CPrescriptionLineMix default|CPrescriptionLineMedicament show|0";
-    $specs["substitution_active"]    = "bool";
+    
+		$specs["variante_for_id"]      = "ref class|CMbObject meta|variante_for_class cascade show|0";
+    $specs["variante_for_class"]   = "enum list|CPrescriptionLineMedicament|CPrescriptionLineMix default|CPrescriptionLineMedicament show|0";
+		
+    $specs["substitute_for_id"]      = "ref class|CPrescriptionLineMedicament show|0";
+    $specs["substituted"]            = "bool default|0";
+		
+    $specs["variante_active"]    = "bool";
     $specs["_unite_prise"]           = "str";
     $specs["voie"]                   = "str";
-    $specs["substitution_plan_soin"] = "bool show|0";
+    $specs["variante_plan_soin"] = "bool show|0";
     $specs["traitement_personnel"]   = "bool";
     $specs["injection_ide"]          = "bool";
     $specs["stupefiant"]             = "bool default|0";
@@ -230,10 +236,10 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["prev_hist_line"] = "CPrescriptionLineMedicament substitution_line_id";
-    $backProps["substitutions_medicament"] = "CPrescriptionLineMedicament substitute_for_id";
-    $backProps["substitutions_prescription_line_mix"]  = "CPrescriptionLineMix substitute_for_id";
-    $backProps["parent_line"]    = "CPrescriptionLineMedicament child_id";  
+    $backProps["variantes_medicament"] = "CPrescriptionLineMedicament variante_for_id";
+    $backProps["variantes_prescription_line_mix"]  = "CPrescriptionLineMix variante_for_id";
+    $backProps["parent_line"]    = "CPrescriptionLineMedicament child_id";
+		$backProps["substitution"]   = "CPrescriptionLineMedicament substitute_for_id";
     $backProps["transmissions"]   = "CTransmissionMedicale object_id";
     $backProps["administration"]  = "CAdministration object_id";
     $backProps["prise_posologie"] = "CPrisePosologie object_id";
@@ -246,8 +252,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     parent::updateFormFields();   
 
     $this->loadRefProduit();
-    
-		
+
     if(self::$_load_lite) {
       return;
     }
@@ -292,7 +297,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     }
 
     if($this->_protocole){
-      $this->countSubstitutionsLines();
+      $this->countVariantes();
     }
     $this->isPerfusable();
     $this->isInjectable();
@@ -369,7 +374,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     	$this->_can_view_form_ald = 1;
     }
     // View Conditionnel
-    //if($perm_edit && !($this->_protocole && $this->substitute_for_id)){
     if($perm_edit){
     	$this->_can_view_form_conditionnel = 1;
     }
@@ -571,9 +575,9 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 											$this->fieldModified("duree") || 
 											$this->fieldModified("unite_duree") || 
 											$this->fieldModified("time_fin") ||
-											$this->fieldModified("substitution_active") ||
+											$this->fieldModified("variante_active") ||
 											$this->fieldModified("date_arret") || 
-											$this->fieldModified("substitution_line_id") ||
+											$this->fieldModified("substituted") ||
 											$this->_update_planif_systeme ||
 											$this->fieldModified("inscription"));
   
@@ -617,7 +621,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 			// Si aucune planification n'est associée à une administration, on peut les supprimer
 			if(!$this->inscription){
 				$this->removePlanifSysteme();
-				if(!$this->substitution_line_id && $this->substitution_active){
+				if(!$this->substituted && $this->variante_active){
 					$this->calculPlanifSysteme();
 				}
 			}
@@ -775,37 +779,19 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       $this->_ref_next_hist_line->loadMatchingObject();
     }  
   }
-  
-  
+    
   /*
-   * Calcul permettant de savoir si la ligne possède un historique (substitution)
-   */
-  function countPrevHistLine(){
-    $line = new $this->_class;
-    $line->subsitution_line_id = $this->_id;
-    $this->_count_prev_hist_line = $line->countMatchingList(); 
-  }
-  
-  /*
-   * Chargement de la ligne precedent la ligne courante
-   */
-  function loadRefPrevHistLine(){
-  	$this->_ref_prev_hist_line = $this->loadUniqueBackRef("prev_hist_line");
-  }
-
-  /*
-   * Chargement récursif des parents d'une ligne (substitution) permet d'afficher l'historique d'une ligne
+   * Chargement des substitutions d'une ligne
    */
   function loadRefsPrevLines($lines = array()) {
     if(!array_key_exists($this->_id, $lines)){
       $lines[$this->_id] = $this;
     }
     // Chargement de la parent_line
-    $this->loadRefPrevHistLine();
-    if($this->_ref_prev_hist_line->_id){
-      $lines[$this->_ref_prev_hist_line->_id] = $this->_ref_prev_hist_line;
-      return $this->_ref_prev_hist_line->loadRefsPrevLines($lines);
-    } else {
+    if($this->substitute_for_id){
+    	$sub = new CPrescriptionLineMedicament();
+			$sub->load($this->substitute_for_id);
+      $lines[$this->substitute_for_id] = $sub;
       return $lines;
     }
   }
@@ -813,21 +799,21 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   /*
    * Chargement des lignes de substitution possibles
    */
-  function loadRefsSubstitutionLines(){
-    if(!$this->substitute_for_id){
-		  $this->_ref_substitution_lines["CPrescriptionLineMedicament"] = $this->loadBackRefs("substitutions_medicament"); 
-      $this->_ref_substitution_lines["CPrescriptionLineMix"] = $this->loadBackRefs("substitutions_prescription_line_mix");  
-      $this->_ref_substitute_for = $this;
+  function loadRefsVariantes(){
+    if(!$this->variante_for_id){
+		  $this->_ref_variantes["CPrescriptionLineMedicament"] = $this->loadBackRefs("variantes_medicament"); 
+      $this->_ref_variantes["CPrescriptionLineMix"] = $this->loadBackRefs("variantes_prescription_line_mix");  
+      $this->_ref_variante_for = $this;
     } else {
-	    $_base_line = new $this->substitute_for_class;
-		  $_base_line->load($this->substitute_for_id);
-		  $_base_line->loadRefsSubstitutionLines();
-	    $this->_ref_substitution_lines = $_base_line->_ref_substitution_lines;
-	    $this->_ref_substitution_lines[$_base_line->_class][$_base_line->_id] = $_base_line;
-			unset($this->_ref_substitution_lines[$this->_class][$this->_id]);		
-		  $this->_ref_substitute_for = $_base_line;			  
+	    $_base_line = new $this->variante_for_class;
+		  $_base_line->load($this->variante_for_id);
+		  $_base_line->loadRefsVariantes();
+	    $this->_ref_variantes = $_base_line->_ref_variantes;
+	    $this->_ref_variantes[$_base_line->_class][$_base_line->_id] = $_base_line;
+			unset($this->_ref_variantes[$this->_class][$this->_id]);		
+		  $this->_ref_variante_for = $_base_line;			  
 	  }
-		foreach($this->_ref_substitution_lines["CPrescriptionLineMix"] as $_substitution_line){
+		foreach($this->_ref_variantes["CPrescriptionLineMix"] as $_substitution_line){
 		  $_substitution_line->loadRefsLines();
 	  }
   }
@@ -835,30 +821,35 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   /*
    * Permet de connaitre le nombre de lignes de substitutions possibles
    */
-  function countSubstitutionsLines(){
-    if(!$this->substitute_for_id){
-      $this->_count_substitution_lines = $this->countBackRefs("substitutions_medicament") + $this->countBackRefs("substitutions_prescription_line_mix");
+  function countVariantes(){
+    if(!$this->variante_for_id){
+      $this->_count_variantes = $this->countBackRefs("variantes_medicament") + $this->countBackRefs("variantes_prescription_line_mix");
     } else {
-      $object = new $this->substitute_for_class;
-      $object->load($this->substitute_for_id);
-      $object->countSubstitutionsLines();
-      $this->_count_substitution_lines = $object->_count_substitution_lines;    
+      $object = new $this->variante_for_class;
+      $object->load($this->variante_for_id);
+      $object->countVariantes();
+      $this->_count_variantes = $object->_count_variantes;    
     }
   }
   
   function delete(){
-    // Chargement de la substitution_line de l'objet à supprimer
-    $line = new $this->_class;
-    $line->substitution_line_id = $this->_id;
-    $line->loadMatchingObject();
-    if($line->_id){
-      if($msg = $line->delete()){
-        return $msg;
-      }
-    }
-    // Suppression de la ligne
+  	// recuperation de l'id de la ligne substituée avant suppression
+  	$this->completeField("substitute_for_id");
+		$substitute_for_id = $this->substitute_for_id;
+		
+		// Suppression de la ligne
     if($msg = parent::delete()){
       return $msg;
+    }
+		
+		// Si la suppression concernée une substitution, on verifie si la ligne originale est toujours substituée
+		if ($substitute_for_id){
+      $original_line = new CPrescriptionLineMedicament();
+      $original_line->load($this->substitute_for_id);
+      if($original_line->countBackRefs("substitution") == 0){
+      	$original_line->substituted = 0;
+				$original_line->store();
+      }
     }
   }
    

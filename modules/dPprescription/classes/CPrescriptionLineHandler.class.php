@@ -99,7 +99,7 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
 			 if($_line instanceof CPrescriptionLineMedicament && !$_line->jour_decalage && !$_line->jour_decalage_fin){
      	 	 if(!$_line->inscription){
 	         $_line->removePlanifSysteme();
-	         if(!$_line->substitution_line_id && $_line->substitution_active){
+	         if(!$_line->substituted && $_line->variante_active){
 	         	 $_line->calculPlanifSysteme();
 					 }
 	       }

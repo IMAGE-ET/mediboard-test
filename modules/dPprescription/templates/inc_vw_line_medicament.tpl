@@ -55,7 +55,7 @@
 				{{include file="../../dPprescription/templates/inc_vw_info_line_medicament.tpl"}}
 				</div>
 				
-        {{if !($line->_protocole && $line->substitute_for_id)}}
+        {{if !($line->_protocole && $line->variante_for_id)}}
 	        {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}
 	      {{/if}}
       </div>
@@ -79,16 +79,16 @@
           {{/if}}
         {{/if}}
       
-        {{if $line->_perm_edit && $line->_protocole && !$line->substitute_for_id && !$mode_pack}}
+        {{if $line->_perm_edit && $line->_protocole && !$line->variante_for_id && !$mode_pack}}
           <button type="button" class="add" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class}}')">
              Variantes
-            ({{$line->_count_substitution_lines}})
+            ({{$line->_count_variantes}})
           </button>
         {{/if}}
         
         <button class="lock notext" onclick="modalPrescription.close(); 
   				{{if @$mode_substitution}}
-  				 Prescription.viewSubstitutionLines('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
+  				 Prescription.viewSubstitutionLines('{{$line->variante_for_id}}','{{$line->variante_for_class}}');
   				{{else}}
   				 Prescription.reload('{{$prescription->_id}}', '', '{{$div_refresh}}', '', '{{$mode_pharma}}', null, '', null, {{$advanced_prot}});
   				{{/if}}">
@@ -157,15 +157,15 @@
 		  		  <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
 		  		  <input type="hidden" name="prescription_line_medicament_id" value="{{$line->_id}}" />
 	
-		  		  <input type="hidden" name="substitute_for_id" value="{{$line->substitute_for_id}}" />
-		  		  <input type="hidden" name="substitute_for_class" value="{{$line->substitute_for_class}}" />
+		  		  <input type="hidden" name="variante_for_id" value="{{$line->variante_for_id}}" />
+		  		  <input type="hidden" name="variante_for_class" value="{{$line->variante_for_class}}" />
 	          <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
 						
 		  		  <select name="prescription_line_mix_id" onchange="toggleTypePerfusion(this.form);" style="width: 150px;">
 		  		    <option value="">Nouvelle perfusion</option>
-			  		  {{if $line->substitute_for_id}}
+			  		  {{if $line->variante_for_id}}
 				  		  {{foreach from=$prescription->_ref_prescription_line_mixes item=_prescription_line_mix}}
-				  		    {{if ($line->substitute_for_id == $_prescription_line_mix->substitute_for_id) && ($line->substitute_for_class == $_prescription_line_mix->substitute_for_class)}}
+				  		    {{if ($line->variante_for_id == $_prescription_line_mix->variante_for_id) && ($line->variante_for_class == $_prescription_line_mix->variante_for_class)}}
 				  		    <option value="{{$_prescription_line_mix->_id}}">
 				  		    {{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line name=foreach_prescription_line_mix}}
 									  {{$_perf_line->_ref_produit->libelle_abrege}}
@@ -208,7 +208,7 @@
 	            onSubmitFormAjax(this.form, { 
 			  		  onComplete: function() { 
 			  		    {{if @$mode_substitution}}
-			  		      Prescription.viewSubstitutionLines('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
+			  		      Prescription.viewSubstitutionLines('{{$line->variante_for_id}}','{{$line->variante_for_class}}');
 			  			  {{/if}}
 			  		  } } );">
 			  		  Ajouter à la perfusion
@@ -350,7 +350,7 @@
   </tr>
 	
 	<!-- Variantes -->
-	{{if ($line->_ref_substitution_lines.CPrescriptionLineMedicament|@count || $line->_ref_substitution_lines.CPrescriptionLineMix|@count) &&
+	{{if ($line->_ref_variantes.CPrescriptionLineMedicament|@count || $line->_ref_variantes.CPrescriptionLineMix|@count) &&
             !$line->_count.administration && $line->_ref_prescription->object_id && $line->_perm_edit && !$line->_protocole}}
 		<tr>
 			<td>
@@ -364,7 +364,7 @@
 	                               Prescription.reloadLine.curry(this.value, null, null, null, null, {{$advanced_prot}})
 	                              } )">
 	            <option value="">Variantes</option>
-	            {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
+	            {{foreach from=$line->_ref_variantes item=lines_subst_by_chap}}
 	                {{foreach from=$lines_subst_by_chap item=_line_subst}}
 	                <option value="{{$_line_subst->_guid}}">
 	                  {{if $_line_subst->_class == "CPrescriptionLineMix"}}
@@ -378,7 +378,7 @@
                       {{/foreach}}
                       {{if $_line_subst->_ref_prises|@count}} ) {{/if}}
 	                  {{/if}}
-	                {{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
+	                {{if !$_line_subst->variante_for_id}}(originale){{/if}}</option>
 	              {{/foreach}}
 	            {{/foreach}}
 	          </select>

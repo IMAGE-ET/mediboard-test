@@ -26,7 +26,7 @@
 	      {{/if}}
     </div>
     <div style="float: right">
-    {{if ($line->_class == "CPrescriptionLineMedicament" && !$line->substitute_for_id) || ($line->_class != "CPrescriptionLineMedicament")}}
+    {{if ($line->_class == "CPrescriptionLineMedicament" && !$line->variante_for_id) || ($line->_class != "CPrescriptionLineMedicament")}}
 	    <form name="modifProtocole{{$line->_id}}" method="get" action="?">
 	      <input type="hidden" name="m" value="dPprescription" />
 	      <input type="hidden" name="tab" value="vw_edit_protocole" />
@@ -36,7 +36,7 @@
 	    {{if $line->_class == "CPrescriptionLineMedicament"}}
 	      <button type="button" class="search" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}', '{{$line->_class}}','1')">
 	         Variantes
-	         ({{$line->_count_substitution_lines}})
+	         ({{$line->_count_variantes}})
 	      </button>
 	    {{/if}}
     {{/if}}

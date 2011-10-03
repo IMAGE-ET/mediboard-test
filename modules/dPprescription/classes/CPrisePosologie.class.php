@@ -678,7 +678,7 @@ class CPrisePosologie extends CMbMetaObject {
 	  		$this->loadTargetObject();
 	  	}
 
-		  if(!($this->_ref_object instanceof CPrescriptionLineMedicament && !$this->_ref_object->substitution_active) && CPlanificationSysteme::$_calcul_planif){
+		  if(!($this->_ref_object instanceof CPrescriptionLineMedicament && !$this->_ref_object->variante_active) && CPlanificationSysteme::$_calcul_planif){
 			  $this->calculPlanifs();
 			}
 	  }

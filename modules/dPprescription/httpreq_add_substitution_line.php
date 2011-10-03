@@ -22,11 +22,11 @@ $user = CMediusers::get();
 $is_praticien = $user->isPraticien();
 
 // Chargement des lignes de substitutions de la ligne
-$object->loadRefsSubstitutionLines();
+$object->loadRefsVariantes();
 $object->loadRefPrescription();
 
 // Chargement des droits sur les lignes
-foreach($object->_ref_substitution_lines as $_lines){
+foreach($object->_ref_variantes as $_lines){
 	foreach($_lines as $_line_sub){
 	  if($_line_sub instanceof CPrescriptionLineMedicament){
 	    $_line_sub->loadRefsFwd();

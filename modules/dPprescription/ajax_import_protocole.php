@@ -80,7 +80,7 @@ if (strtolower(pathinfo($file['name'] , PATHINFO_EXTENSION) == 'xml')) {
     $imported ++;
     
     $current_id_object  = null;
-    $substitute_for_id  = null;
+    $variante_for_id  = null;
     $save_substitute_id = null;
     $save_line_mix_id   = null;
     
@@ -93,16 +93,16 @@ if (strtolower(pathinfo($file['name'] , PATHINFO_EXTENSION) == 'xml')) {
       $object = new $class->nodeName;
       
       if (($class->nodeName == "CPrescriptionLineMix" || $class->nodeName == "CPrescriptionLineMedicament")) {
-        $substitute_for_id = substr($class->getAttribute("substitute_for_id"), 3);
-        // On réinitialise la sauvegarde de substitute_for_id si c'est pas une ligne de substitution
-        if (!$substitute_for_id) {
+        $variante_for_id = substr($class->getAttribute("variante_for_id"), 3);
+        // On réinitialise la sauvegarde de variante_for_id si c'est pas une ligne de substitution
+        if (!$variante_for_id) {
           $save_substitute_id = null;
         }
       }
       
       if ($class->nodeName == "CPrescriptionLineElement") {
         $save_substitute_id = null;
-        $substitute_for_id = null;
+        $variante_for_id = null;
       }
       
       foreach ($class->childNodes as $_property) {
@@ -115,8 +115,8 @@ if (strtolower(pathinfo($file['name'] , PATHINFO_EXTENSION) == 'xml')) {
         case "CPrescriptionLineMix":
           $object->creator_id = CAppUI::$user->_id;
           $object->prescription_id = $prescription->_id;
-          if ($substitute_for_id) {
-            $object->substitute_for_id = $current_id_object;
+          if ($variante_for_id) {
+            $object->variante_for_id = $current_id_object;
           }
           break;
         case "CPrescriptionLineComment":
@@ -183,8 +183,8 @@ if (strtolower(pathinfo($file['name'] , PATHINFO_EXTENSION) == 'xml')) {
       
       // Si c'est une ligne de substitution, il faut conserver son id pour les posologies
       if (($class->nodeName == "CPrescriptionLineMix" || $class->nodeName == "CPrescriptionLineMedicament")
-          && $substitute_for_id) {
-        $save_substitute_id = $substitute_for_id ? $object->_id : 0;
+          && $variante_for_id) {
+        $save_substitute_id = $variante_for_id ? $object->_id : 0;
       }
       
       // On sauvegarde la line_mix_id pour les line_mix_items
@@ -193,7 +193,7 @@ if (strtolower(pathinfo($file['name'] , PATHINFO_EXTENSION) == 'xml')) {
       }
   
       // Si ce n'est pas une ligne de substitution, on sauvegarde l'id pour les posologies
-      if (!in_array($class->nodeName, $classes) && !$substitute_for_id) {
+      if (!in_array($class->nodeName, $classes) && !$variante_for_id) {
         $current_id_object  = $object->_id;
       }
     }

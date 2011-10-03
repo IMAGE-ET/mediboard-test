@@ -137,9 +137,9 @@ if($object_id && $object_class){
   $line->load($object_id);
 	
   if($line instanceof CPrescriptionLineMedicament){
-  	$line->countSubstitutionsLines();
+  	$line->countVariantes();
 	  $line->countBackRefs("administration");
-		$line->loadRefsSubstitutionLines();
+		$line->loadRefsVariantes();
   }
 
   foreach($_dates as $curr_date){
@@ -172,8 +172,8 @@ if($object_id && $object_class){
   }
     
   if($line instanceof CPrescriptionLineMix){
-	 	$line->countSubstitutionsLines();
-		$line->loadRefsSubstitutionLines();
+	 	$line->countVariantes();
+		$line->loadRefsVariantes();
     $line->loadRefsLines();
 		$line->loadVoies();
     $line->loadRefPraticien();
@@ -212,17 +212,17 @@ else {
 		  $prescription->loadRefsLinesMedByCat("1","1");
       foreach($prescription->_ref_prescription_lines as &$_line_med){
 			  $_line_med->loadRefLogSignee();
-			  $_line_med->countSubstitutionsLines();
+			  $_line_med->countVariantes();
 			  $_line_med->countBackRefs("administration");
-				$_line_med->loadRefsSubstitutionLines();
+				$_line_med->loadRefsVariantes();
 				$_line_med->loadRefProduitPrescription();
 			}
     } elseif($chapitre == "perfusion" || $chapitre == "aerosol" || $chapitre == "alimentation" || $chapitre == "oxygene") {
       // Chargement des prescription_line_mixes
 	    $prescription->loadRefsPrescriptionLineMixes($chapitre,"1");
 		  foreach($prescription->_ref_prescription_line_mixes as &$_prescription_line_mix){
-		    $_prescription_line_mix->countSubstitutionsLines();
-		    $_prescription_line_mix->loadRefsSubstitutionLines();
+		    $_prescription_line_mix->countVariantes();
+		    $_prescription_line_mix->loadRefsVariantes();
 		    $_prescription_line_mix->getRecentModification();
 		    $_prescription_line_mix->loadRefsLines();
 				$_prescription_line_mix->loadVoies();

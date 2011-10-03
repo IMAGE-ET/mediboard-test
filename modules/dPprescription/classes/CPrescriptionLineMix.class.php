@@ -56,10 +56,10 @@ class CPrescriptionLineMix extends CMbObject {
   var $periode_interdite   = null; // Periode interdite en minutes
   //var $dose_limite_horaire = null; // Dose maxi pour une heure
   
-  var $substitute_for_id    = null;
-  var $substitute_for_class = null;
-  var $substitution_active = null;
-  var $substitution_plan_soin = null;
+  var $variante_for_id    = null;
+  var $variante_for_class = null;
+  var $variante_active = null;
+  var $variante_plan_soin = null;
   
 	var $conditionnel = null;
 	var $condition_active = null;
@@ -96,7 +96,7 @@ class CPrescriptionLineMix extends CMbObject {
   var $_add_perf_contigue = null;
   var $_count_parent_line = null;
   var $_recent_modification = null;
-  var $_count_substitution_lines = null;
+  var $_count_variantes = null;
   var $_pose = null;
   var $_retrait   = null;
   var $_voies = null;
@@ -107,7 +107,7 @@ class CPrescriptionLineMix extends CMbObject {
 	
   // Object references
   var $_ref_log_signature_prat = null;
-  var $_ref_substitute_for = null; // ligne (med ou perf) que la ligne peut substituer
+  var $_ref_variante_for = null; // ligne (med ou perf) que la ligne peut substituer
   var $_ref_log_date_arret = null;
   var $_ref_log_date_retrait = null;
   
@@ -199,10 +199,10 @@ class CPrescriptionLineMix extends CMbObject {
     $specs["date_retrait"]           = "date";
     $specs["time_retrait"]           = "time";
     $specs["emplacement"]            = "enum notNull list|service|bloc|service_bloc default|service";
-    $specs["substitute_for_id"]      = "ref class|CMbObject meta|substitute_for_class cascade";
-    $specs["substitute_for_class"]   = "enum list|CPrescriptionLineMedicament|CPrescriptionLineMix default|CPrescriptionLineMix";
-    $specs["substitution_active"]    = "bool";
-    $specs["substitution_plan_soin"] = "bool";
+    $specs["variante_for_id"]      = "ref class|CMbObject meta|variante_for_class cascade";
+    $specs["variante_for_class"]   = "enum list|CPrescriptionLineMedicament|CPrescriptionLineMix default|CPrescriptionLineMix";
+    $specs["variante_active"]    = "bool";
+    $specs["variante_plan_soin"] = "bool";
     $specs["nb_tous_les"]            = "num";
     $specs["commentaire"]            = "text helped";
 		$specs["conditionnel"]           = "bool";
@@ -286,7 +286,7 @@ class CPrescriptionLineMix extends CMbObject {
     $this->getRecentModification();    
     
     if($this->_protocole){
-      $this->countSubstitutionsLines();
+      $this->countVariantes();
     }
 		$this->_active = (!$this->conditionnel) ? 1 : $this->condition_active;
 		
@@ -303,8 +303,8 @@ class CPrescriptionLineMix extends CMbObject {
     $backProps["lines_mix"] = "CPrescriptionLineMixItem prescription_line_mix_id";
     $backProps["prev_line"] = "CPrescriptionLineMix next_line_id";
     $backProps["transmissions"] = "CTransmissionMedicale object_id";
-    $backProps["substitutions_medicament"] = "CPrescriptionLineMedicament substitute_for_id";
-    $backProps["substitutions_prescription_line_mix"]  = "CPrescriptionLineMix substitute_for_id";
+    $backProps["variantes_medicament"] = "CPrescriptionLineMedicament variante_for_id";
+    $backProps["variantes_prescription_line_mix"]  = "CPrescriptionLineMix variante_for_id";
 		$backProps["variations"] = "CPrescriptionLineMixVariation prescription_line_mix_id";
     return $backProps;
   }
@@ -780,7 +780,7 @@ class CPrescriptionLineMix extends CMbObject {
                       $this->fieldModified("date_retrait")||
                       $this->fieldModified("date_arret")||
 											$this->fieldModified("time_arret")||
-											$this->fieldModified("substitution_active"));
+											$this->fieldModified("variante_active"));
 													
     if($msg = parent::store()){
   		return $msg;
@@ -788,7 +788,7 @@ class CPrescriptionLineMix extends CMbObject {
 
 		if($calculPlanif && $this->_ref_prescription->type == "sejour"){
 			$this->removePlanifSysteme();
-			if($this->substitution_active){
+			if($this->variante_active){
 				$this->calculPlanifsPerf();
 			}
 		}
@@ -819,21 +819,21 @@ class CPrescriptionLineMix extends CMbObject {
   /*
    * Chargement des lignes de substitution possibles
    */
-  function loadRefsSubstitutionLines(){
-    if(!$this->substitute_for_id){
-		  $this->_ref_substitution_lines["CPrescriptionLineMedicament"] = $this->loadBackRefs("substitutions_medicament"); 
-      $this->_ref_substitution_lines["CPrescriptionLineMix"] = $this->loadBackRefs("substitutions_prescription_line_mix");  
-      $this->_ref_substitute_for = $this;
+  function loadRefsVariantes(){
+    if(!$this->variante_for_id){
+		  $this->_ref_variantes["CPrescriptionLineMedicament"] = $this->loadBackRefs("variantes_medicament"); 
+      $this->_ref_variantes["CPrescriptionLineMix"] = $this->loadBackRefs("variantes_prescription_line_mix");  
+      $this->_ref_variante_for = $this;
     } else {
-	    $_base_line = new $this->substitute_for_class;
-		  $_base_line->load($this->substitute_for_id);
-		  $_base_line->loadRefsSubstitutionLines();
-	    $this->_ref_substitution_lines = $_base_line->_ref_substitution_lines;
-	    $this->_ref_substitution_lines[$_base_line->_class][$_base_line->_id] = $_base_line;
-			unset($this->_ref_substitution_lines[$this->_class][$this->_id]);		
-		  $this->_ref_substitute_for = $_base_line;			  
+	    $_base_line = new $this->variante_for_class;
+		  $_base_line->load($this->variante_for_id);
+		  $_base_line->loadRefsVariantes();
+	    $this->_ref_variantes = $_base_line->_ref_variantes;
+	    $this->_ref_variantes[$_base_line->_class][$_base_line->_id] = $_base_line;
+			unset($this->_ref_variantes[$this->_class][$this->_id]);		
+		  $this->_ref_variante_for = $_base_line;			  
 	  }
-		foreach($this->_ref_substitution_lines["CPrescriptionLineMix"] as $_substitution_line){
+		foreach($this->_ref_variantes["CPrescriptionLineMix"] as $_substitution_line){
       $_substitution_line->loadRefsLines();
     }
   }
@@ -841,14 +841,14 @@ class CPrescriptionLineMix extends CMbObject {
   /*
    * Permet de connaitre le nombre de lignes de substitutions possibles
    */
-  function countSubstitutionsLines(){
-    if(!$this->substitute_for_id){
-      $this->_count_substitution_lines = $this->countBackRefs("substitutions_medicament") + $this->countBackRefs("substitutions_prescription_line_mix");
+  function countVariantes(){
+    if(!$this->variante_for_id){
+      $this->_count_variantes = $this->countBackRefs("variantes_medicament") + $this->countBackRefs("variantes_prescription_line_mix");
     } else {
-      $object = new $this->substitute_for_class;
-      $object->load($this->substitute_for_id);
-      $object->countSubstitutionsLines();    
-      $this->_count_substitution_lines = $object->_count_substitution_lines;
+      $object = new $this->variante_for_class;
+      $object->load($this->variante_for_id);
+      $object->countVariantes();    
+      $this->_count_variantes = $object->_count_variantes;
     }
   }
   
@@ -966,7 +966,7 @@ class CPrescriptionLineMix extends CMbObject {
 	function bindOxygene($values = array()){
 		$prescription_id      = $values['prescription_id'];
 	  $praticien_id         = $values['praticien_id'];
-		$substitute_for_id    = $values['substitute_for_id'];
+		$variante_for_id    = $values['variante_for_id'];
     $code_cip             = $values['code_cip'];
 
 	  // Voir les types d'oxygene
@@ -977,7 +977,7 @@ class CPrescriptionLineMix extends CMbObject {
 	  $this->prescription_id = $prescription_id;
 	  $this->creator_id = CAppUI::$user->_id;
 	  $this->praticien_id = $praticien_id;
-	  $this->substitute_for_id = $substitute_for_id;
+	  $this->variante_for_id = $variante_for_id;
 
     if(isset($values['debut'])){
       $this->date_debut = $values['debut'];
@@ -985,11 +985,11 @@ class CPrescriptionLineMix extends CMbObject {
     if(isset($values['time_debut'])){
       $this->time_debut = $values['time_debut'];
     }
-		if(isset($values['substitute_for_class'])){
-			$this->substitute_for_class = $values['substitute_for_class'];
+		if(isset($values['variante_for_class'])){
+			$this->variante_for_class = $values['variante_for_class'];
 		}
-	  if($this->substitute_for_id){
-	    $this->substitution_active = 0;
+	  if($this->variante_for_id){
+	    $this->variante_active = 0;
 	  }
 	  
 		// Sauvegarde de la voie lors de la creation de la ligne

@@ -8,9 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{if !$line->substitute_for_id}}
 <button type="button" class="change notext" onclick="EquivSelector.init('{{$line->_id}}','{{$line->_ref_produit->code_cip}}');">
   Equivalents
 </button>
+{{/if}}
+
 <script type="text/javascript">
   if(EquivSelector.oUrl) {
     EquivSelector.close();

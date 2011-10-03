@@ -83,16 +83,16 @@ Main.add( function(){
 				
       </div>
       <div style="float: right">
-        {{if $line->_protocole && $line->_perm_edit && !$line->substitute_for_id && !$mode_pack}}
+        {{if $line->_protocole && $line->_perm_edit && !$line->variante_for_id && !$mode_pack}}
           <button type="button" class="add" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class}}')">
              Variantes
-            ({{$line->_count_substitution_lines}})
+            ({{$line->_count_variantes}})
             </button>
         {{/if}}
         
          <button class="lock notext" onclick="modalPrescription.close();
 				 {{if @$mode_substitution}}
-           Prescription.viewSubstitutionLines.defer('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
+           Prescription.viewSubstitutionLines.defer('{{$line->variante_for_id}}','{{$line->variante_for_class}}');
 				 {{else}}
 				   Prescription.reload.defer('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '', null, {{$advanced_prot}});
 				 {{/if}}"></button>
@@ -544,7 +544,7 @@ Main.add( function(){
 	                          $V(this.form.del,'1'); submitFormAjax(this.form, 'systemMsg', { 
 				                    onComplete: function(){
 				                    	{{if @$mode_substitution}}
-										  		      Prescription.viewSubstitutionLines('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
+										  		      Prescription.viewSubstitutionLines('{{$line->variante_for_id}}','{{$line->variante_for_class}}');
 										  		    {{else}}
 										  			    Prescription.reloadLine('{{$line->_guid}}','{{$_line_item->_protocole}}','{{$mode_pharma}}', null, null, {{$advanced_prot}});
 				                      {{/if}}
@@ -742,7 +742,7 @@ Main.add( function(){
   {{/if}}
 	
 	{{if !$line->date_pose && $line->_ref_prescription->object_id && 
-       (($line->_ref_substitution_lines.CPrescriptionLineMedicament|@count) || ($line->_ref_substitution_lines.CPrescriptionLineMix|@count))}} 
+       (($line->_ref_variantes.CPrescriptionLineMedicament|@count) || ($line->_ref_variantes.CPrescriptionLineMix|@count))}} 
 		<tr>
 			<td>
 				<fieldset>
@@ -752,7 +752,7 @@ Main.add( function(){
 	          <select name="object_guid" style="width: 150px;" 
 	                  onchange="onSubmitFormAjax(this.form, { onComplete: Prescription.reloadLine.curry(this.value, null, null, null, null, {{$advanced_prot}}) } )">
 	            <option value="">Variantes</option>
-	            {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
+	            {{foreach from=$line->_ref_variantes item=lines_subst_by_chap}}
 	                {{foreach from=$lines_subst_by_chap item=_line_subst}}
 	                <option value="{{$_line_subst->_guid}}">
 	                   {{if $_line_subst->_class == "CPrescriptionLineMix"}}
@@ -761,7 +761,7 @@ Main.add( function(){
 	                   {{else}}
 	                     {{$_line_subst->_view}}
 	                   {{/if}}
-	                   {{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
+	                   {{if !$_line_subst->variante_for_id}}(originale){{/if}}</option>
 	              {{/foreach}}
 	            {{/foreach}}
 	          </select>
@@ -832,7 +832,7 @@ Main.add( function(){
 		                $V(getForm('editPerf-{{$line->_id}}').del,'1');
 		                return onSubmitFormAjax(getForm('editPerf-{{$line->_id}}'), { onComplete: function(){
 		                  {{if @$mode_substitution}}
-		                    Prescription.viewSubstitutionLines('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
+		                    Prescription.viewSubstitutionLines('{{$line->variante_for_id}}','{{$line->variante_for_class}}');
 		                  {{else}}
 		                    modalPrescription.close(); Prescription.reloadPrescPerf('{{$line->prescription_id}}','{{$line->_protocole}}','{{$mode_pharma}}');
 		                  {{/if}}

@@ -51,7 +51,7 @@ if($pack->_id){
       foreach($_prescription->_ref_lines_med_comments as $type => $lines_by_type){
 	      foreach($lines_by_type as $_line){
 	        if($_line->_class == "CPrescriptionLineMedicament"){
-	          $_line->countSubstitutionsLines();
+	          $_line->countVariantes();
 	        }
 	        $prescription->_ref_lines_med_comments[$type][] = $_line;
 	      }
@@ -74,7 +74,7 @@ if($pack->_id){
     $_prescription->loadRefsPrescriptionLineMixes();
     if($_prescription->_ref_prescription_line_mixes){
       foreach($_prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
-        $_prescription_line_mix->countSubstitutionsLines();
+        $_prescription_line_mix->countVariantes();
         $_prescription_line_mix->loadRefsLines();
 				$_prescription_line_mix->loadVoies();
         $prescription->_ref_prescription_line_mixes[$_prescription_line_mix->_id] = $_prescription_line_mix;

@@ -39,7 +39,7 @@ if(!$protocole_dest_id){
 // Parcours des medicaments
 foreach($protocole->_ref_prescription_lines as $line){
 	$line->loadRefsPrises();
-	$line->loadRefsSubstitutionLines();
+	$line->loadRefsVariantes();
 	$line->prescription_id = $protocole_dest_id;
 	$line->_id = "";
 	$msg = $line->store();
@@ -53,10 +53,10 @@ foreach($protocole->_ref_prescription_lines as $line){
 	  CAppUI::displayMsg($msg, "CPrisePosologie-msg-create");
 	}
 	
-  //Parcours des lignes de substitution
-  foreach($line->_ref_substitution_lines as $_lines_subst_by_type){
+  //Parcours des lignes de variantes
+  foreach($line->_ref_variantes as $_lines_subst_by_type){
     foreach($_lines_subst_by_type as $_line_subst){
-      $_line_subst->substitute_for_id = $line->_id;
+      $_line_subst->variante_for_id = $line->_id;
       $_line_subst->prescription_id = $protocole_dest_id;	    
 	    
       // Medicaments
@@ -97,16 +97,16 @@ foreach($protocole->_ref_prescription_lines as $line){
 foreach($protocole->_ref_prescription_line_mixes as $_prescription_line_mix){
   $_prescription_line_mix->loadRefsLines();
 	$_prescription_line_mix->loadVoies();
-  $_prescription_line_mix->loadRefsSubstitutionLines();
+  $_prescription_line_mix->loadRefsVariantes();
   $_prescription_line_mix->prescription_id = $protocole_dest_id;
   $_prescription_line_mix->_id = "";
   $msg = $_prescription_line_mix->store();
   CAppUI::displayMsg($msg, "CPrescriptionLineMix-msg-create");
   
-  //Parcours des lignes de substitution
-  foreach($_prescription_line_mix->_ref_substitution_lines as $_lines_subst_by_type){
+  //Parcours des lignes de variantes
+  foreach($_prescription_line_mix->_ref_variantes as $_lines_subst_by_type){
     foreach($_lines_subst_by_type as $_line_subst){
-      $_line_subst->substitute_for_id = $_prescription_line_mix->_id;
+      $_line_subst->variante_for_id = $_prescription_line_mix->_id;
       $_line_subst->prescription_id = $protocole_dest_id;	    
 	    
       // Medicaments

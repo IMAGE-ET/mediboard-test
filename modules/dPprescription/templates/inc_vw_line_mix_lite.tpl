@@ -32,7 +32,7 @@
                  return onSubmitFormAjax(this.form, { 
                    onComplete: function(){
 									   {{if @$mode_substitution}}
-                       Prescription.viewSubstitutionLines.defer('{{$_prescription_line_mix->substitute_for_id}}','{{$_prescription_line_mix->substitute_for_class}}');
+                       Prescription.viewSubstitutionLines.defer('{{$_prescription_line_mix->variante_for_id}}','{{$_prescription_line_mix->variante_for_class}}');
 									   {{else}}
                        Prescription.reloadPrescPerf('{{$_prescription_line_mix->prescription_id}}','{{$_prescription_line_mix->_protocole}}','{{$mode_pharma}}');
                      {{/if}}

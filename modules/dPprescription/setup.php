@@ -2050,7 +2050,44 @@ class CSetupdPprescription extends CSetup {
               ADD `type_decalage` ENUM ('I','A') DEFAULT 'I';";
 		$this->addQuery($query);
 		
-		$this->mod_version = "1.52";
+		$this->makeRevision("1.52");
+		$query = "ALTER TABLE `prescription_line_medicament` 
+              CHANGE `substitute_for_id` `variante_for_id` INT (11) UNSIGNED,
+              CHANGE `substitute_for_class` `variante_for_class` ENUM ('CPrescriptionLineMedicament','CPrescriptionLineMix') DEFAULT 'CPrescriptionLineMedicament',
+              CHANGE `substitution_active` `variante_active` ENUM ('0','1') DEFAULT '0',
+              CHANGE `substitution_plan_soin` `variante_plan_soin` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($query);
+		
+		$query = "ALTER TABLE `prescription_line_mix` 
+              CHANGE `substitute_for_id` `variante_for_id` INT (11) UNSIGNED,
+              CHANGE `substitute_for_class` `variante_for_class` ENUM ('CPrescriptionLineMedicament','CPrescriptionLineMix') DEFAULT 'CPrescriptionLineMix',
+              CHANGE `substitution_active` `variante_active` ENUM ('0','1') DEFAULT '0',
+              CHANGE `substitution_plan_soin` `variante_plan_soin` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+	  
+		$this->makeRevision("1.53");
+		$query = "ALTER TABLE `prescription_line_medicament` ADD `substitute_for_id` INT (11) UNSIGNED;";
+		$this->addQuery($query);
+		
+		$query = "ALTER TABLE `prescription_line_medicament` ADD INDEX (`substitute_for_id`);";
+    $this->addQuery($query);
+    
+		$query = "UPDATE `prescription_line_medicament` as ligne2
+		          LEFT JOIN prescription_line_medicament as ligne1 ON ligne1.substitution_line_id = ligne2.prescription_line_medicament_id
+							SET ligne2.substitute_for_id = ligne1.prescription_line_medicament_id;";
+		$this->addQuery($query);
+		
+		$this->makeRevision("1.54");
+		$query = "ALTER TABLE `prescription_line_medicament` 
+              ADD `substituted` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($query);
+		
+		$query = "UPDATE `prescription_line_medicament` 
+              SET `substituted` = '1' 
+							WHERE `substitution_line_id` IS NOT NULL;";
+    $this->addQuery($query);
+    
+		$this->mod_version = "1.55";
   }
 }
 
