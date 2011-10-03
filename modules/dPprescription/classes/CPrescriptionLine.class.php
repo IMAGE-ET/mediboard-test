@@ -81,7 +81,8 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
 	var $_planifs_systeme = array();
 	var $_urgence = null;
   var $_duree   = null;
-
+  var $_count_administrations = null;
+	
 
   // Can fields
   var $_perm_edit = null;
@@ -279,6 +280,13 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     }
     $this->_ref_administrations = $administration->loadList($where);
   }
+	
+	function countAdministrations(){
+	  $administration = new CAdministration();
+    $administration->setObject($this);
+		$administration->planification = 0;
+	  $this->_count_administrations = $administration->countMatchingList();
+	}
   
   /*
    * Chargement des prises de la ligne

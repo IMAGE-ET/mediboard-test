@@ -2087,7 +2087,16 @@ class CSetupdPprescription extends CSetup {
 							WHERE `substitution_line_id` IS NOT NULL;";
     $this->addQuery($query);
     
-		$this->mod_version = "1.55";
+		$this->makeRevision("1.55");
+		$query = "ALTER TABLE `prescription_line_medicament` 
+              CHANGE `variante_active` `variante_active` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `prescription_line_mix` 
+              CHANGE `variante_active` `variante_active` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+    
+		$this->mod_version = "1.56";
   }
 }
 

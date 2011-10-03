@@ -61,9 +61,14 @@ if($inLivret){
   $code_thera_ATC = $produit->_ref_ATC_2_code;
 }
 
+$line = new CPrescriptionLineMedicament();
+$line->load($line_id);
+$line->countAdministrations();
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("line_id", $line_id);
+$smarty->assign("line", $line);
 $smarty->assign("equivalents_strictes_ATC", $equivalents_strictes_ATC);
 $smarty->assign("equivalents_strictes_BCB", $equivalents_strictes_BCB);
 $smarty->assign("equivalents_thera_ATC", $equivalents_thera_ATC);
