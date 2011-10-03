@@ -326,3 +326,14 @@ if (!function_exists("inet_ntop")) {
     return "";
   }
 }
+
+if (!function_exists("hash")) {
+  function hash($algo, $data) {
+    switch ($algo) {
+      case "sha256":
+        return sha256($data, true);
+      default:
+        throw new CMbException("hash with algo $algo not implemented");
+    }
+  }
+}
