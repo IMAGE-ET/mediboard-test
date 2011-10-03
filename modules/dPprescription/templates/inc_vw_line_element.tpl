@@ -63,7 +63,7 @@
       </div>
       <!-- View de l'element -->
       <strong style="font-size: 1.5em;">
-        {{$line->_ref_element_prescription->_view}}
+        {{$line->_ref_element_prescription->_view|spancate:30}}
       </strong>
 			
 			{{mb_include module=forms template=inc_widget_ex_class_register object=$line event=prescription}}
