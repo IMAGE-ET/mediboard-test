@@ -210,7 +210,7 @@ class CPatient extends CMbObject {
   var $_ref_medecin_traitant        = null;
   var $_ref_medecins_correspondants = null;
   var $_ref_correspondants_patient  = null;
-  var $_ref_cp_by_relation          = array();
+  var $_ref_cp_by_relation          = null;
   
   var $_ref_dossier_medical         = null;
   var $_ref_IPP                     = null;
@@ -1298,6 +1298,7 @@ class CPatient extends CMbObject {
     $this->_ref_correspondants_patient = $this->loadBackRefs("correspondants_patient");
     
     $correspondant = new CCorrespondantPatient;
+    $this->_ref_cp_by_relation = array();
     foreach (explode("|", $correspondant->_specs["relation"]->list) as $_relation) {
       $this->_ref_cp_by_relation[$_relation] = array();
     }

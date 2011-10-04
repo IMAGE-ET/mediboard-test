@@ -64,8 +64,8 @@
           <td class="text">
             <strong>Antécédents</strong>
             <ul>
-            {{if $dossier_medical->_ref_antecedents}}
-              {{foreach from=$dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
+            {{if $dossier_medical->_ref_antecedents_by_type}}
+              {{foreach from=$dossier_medical->_ref_antecedents_by_type key=curr_type item=list_antecedent}}
               {{if $list_antecedent|@count}}
               <li>
                 {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}

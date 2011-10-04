@@ -34,9 +34,9 @@ class CDossierMedical extends CMbMetaObject {
 
   // Back references
   var $_all_antecedents = null;
-	// @todo: renommer en $_ref_antecetents_by_type
-  var $_ref_antecedents = null;
+  var $_ref_antecedents_by_type = null;
   var $_ref_antecedents_by_appareil = null;
+  var $_ref_antecedents_by_type_appareil = null;
   var $_ref_traitements = null;
   var $_ref_etats_dents = null;
   var $_ref_prescription = null;
@@ -156,17 +156,22 @@ class CDossierMedical extends CMbMetaObject {
     $atcd = new CAntecedent();
 
     // Classement par type
-    $this->_ref_antecedents = array_fill_keys($atcd->_specs["type"]->_list, array());
-    ksort($this->_ref_antecedents);
+    $this->_ref_antecedents_by_type = array_fill_keys($atcd->_specs["type"]->_list, array());
+    ksort($this->_ref_antecedents_by_type);
     foreach ($this->_all_antecedents as $_atcd) {
-      $this->_ref_antecedents[$_atcd->type][$_atcd->_id] = $_atcd;
+      $this->_ref_antecedents_by_type[$_atcd->type][$_atcd->_id] = $_atcd;
     }
 
-    // Classement par type
+    // Classement par appareil
     $this->_ref_antecedents_by_appareil = array_fill_keys($atcd->_specs["appareil"]->_list, array());
-    ksort($this->_ref_antecedents);
     foreach ($this->_all_antecedents as $_atcd) {
       $this->_ref_antecedents_by_appareil[$_atcd->appareil][$_atcd->_id] = $_atcd;
+    }
+    
+    // Classement par type puis appareil
+    $this->_ref_antecedents_by_type_appareil = array_fill_keys($atcd->_specs["type"]->_list, array());
+    foreach ($this->_all_antecedents as $_atcd) {
+      @$this->_ref_antecedents_by_type_appareil[$_atcd->type][$_atcd->appareil][$_atcd->_id] = $_atcd;
     }
   }
   

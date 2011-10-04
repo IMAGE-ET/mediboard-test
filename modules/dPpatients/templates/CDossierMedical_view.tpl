@@ -16,7 +16,7 @@
   
   <tr>
     <td class="text">
-      {{foreach from=$object->_ref_antecedents key=curr_type item=list_antecedent}}
+      {{foreach from=$object->_ref_antecedents_by_type key=curr_type item=list_antecedent}}
       {{if $list_antecedent|@count}}
       <strong>
         {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}

@@ -419,7 +419,7 @@ Main.add( function(){
           {{/if}}
 				 
           <span id="antecedent_allergie">
-	          {{assign var=antecedents value=$dossier_medical->_ref_antecedents}}
+	          {{assign var=antecedents value=$dossier_medical->_ref_antecedents_by_type}}
 	          {{assign var=sejour_id value=$prescription->object_id}}
 	          {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl" nodebug=true}}    
 	        </span> 

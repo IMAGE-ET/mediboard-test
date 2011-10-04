@@ -35,7 +35,7 @@
 			 {{if $line->_ref_prescription->type == "sejour"}}
          - {{$line->_ref_prescription->_ref_object->_shortview}}
          {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
-         {{assign var=antecedents value=$dossier_medical->_ref_antecedents}}
+         {{assign var=antecedents value=$dossier_medical->_ref_antecedents_by_type}}
           {{assign var=sejour_id value=$prescription->object_id}}
          {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl" nodebug=true}}    
        {{/if}}

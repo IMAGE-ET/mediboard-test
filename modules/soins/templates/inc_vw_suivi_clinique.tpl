@@ -31,15 +31,6 @@
   {{/if}}
 </script>
 
-<style type="text/css">
-  .in_progress_before, .in_progress_after {
-    display: none;
-  }
-  .show_important {
-    display: block !important;
-  }
-</style>
-
 <table style="text-align: left; width: 100%">
   <tr>
     <th class="title" colspan="2" style="background-color: #6688CC">
@@ -83,7 +74,7 @@
           {{$patient->_view}}
           <span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}} <br /> {{$sejour->_ref_curr_affectation->_ref_lit}}</span>
           {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
-          {{assign var=antecedents value=$dossier_medical->_ref_antecedents}}
+          {{assign var=antecedents value=$dossier_medical->_ref_antecedents_by_type}}
           {{assign var=sejour_id value=$sejour->_id}}
           {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl" nodebug=true}}
         </h2>
@@ -374,8 +365,8 @@
                 </td>
               </tr>
               <!-- A venir -->
-              <tr>
-                <td class="text in_progress_after opacity-40">
+              <tr class="text in_progress_after opacity-40">
+                <td>
                   {{assign var=is_first value=1}}
                   {{assign var=total value=0}}
                   {{foreach from=$prescription->_ref_lines_med_comments.med item=_line}}

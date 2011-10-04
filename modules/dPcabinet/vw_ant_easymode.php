@@ -44,7 +44,7 @@ $patient->_ref_dossier_medical->loadRefsAntecedents();
 $patient->_ref_dossier_medical->loadRefsTraitements();
 
 $applied_antecedents = array();
-foreach($dossier_medical->_ref_antecedents as $list) {
+foreach($dossier_medical->_ref_antecedents_by_type as $list) {
   foreach($list as $a) {
     if (!isset($applied_antecedents[$a->type])) $applied_antecedents[$a->type] = array();
     $applied_antecedents[$a->type][$a->rques] = true;

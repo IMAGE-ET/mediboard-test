@@ -204,7 +204,7 @@ if($prescription->_id){
 	  }
 		
 		// Chargement des prescription_line_mixes
-	  $prescription->loadRefsPrescriptionLineMixes();  
+	  $prescription->loadRefsPrescriptionLineMixes();
 		if($prescription->_ref_prescription_line_mixes_by_type){
 		  foreach($prescription->_ref_prescription_line_mixes_by_type as $_type_line => $_lines_mixes){
 		  	foreach($_lines_mixes as $_line_mix_id => $_prescription_line_mix){

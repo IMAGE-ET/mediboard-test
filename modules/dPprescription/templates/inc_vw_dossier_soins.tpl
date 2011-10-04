@@ -305,7 +305,7 @@ Main.add(function () {
   		      {{$sejour->_ref_patient->_view}}
   					<span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}} <br /> {{$sejour->_ref_curr_affectation->_ref_lit}}</span>
             {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
-            {{assign var=antecedents value=$dossier_medical->_ref_antecedents}}
+            {{assign var=antecedents value=$dossier_medical->_ref_antecedents_by_type}}
             {{assign var=sejour_id value=$prescription->object_id}}
             {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl" nodebug=true}}
   				 </h2>

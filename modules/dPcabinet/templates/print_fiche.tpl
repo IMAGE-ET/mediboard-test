@@ -111,7 +111,7 @@
   
   {{assign var=const_med value=$patient->_ref_constantes_medicales}}
   {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
-  {{assign var=ant value=$dossier_medical->_ref_antecedents}}
+  {{assign var=ant value=$dossier_medical->_ref_antecedents_by_type}}
   <tr>
     <td class="halfPane" {{if !$dossier_medical->_count_allergies}}colspan="2"{{/if}}>
       <table width="100%">
@@ -187,9 +187,9 @@
         </tr>
         <tr>
           <td style="font-weight: bold; white-space: normal; font-size:130%;">
-          {{if $dossier_medical->_ref_antecedents && $dossier_medical->_ref_antecedents.alle|@count}}
+          {{if $dossier_medical->_ref_antecedents_by_type && $dossier_medical->_ref_antecedents_by_type.alle|@count}}
             <div class="small-warning">
-            {{foreach from=$dossier_medical->_ref_antecedents.alle item=currAnt}}
+            {{foreach from=$dossier_medical->_ref_antecedents_by_type.alle item=currAnt}}
               <ul>
                 <li> 
                   {{if $currAnt->date}}
@@ -219,8 +219,8 @@
         </tr>
         <tr>
           <td>
-          {{if $dossier_medical->_ref_antecedents}}
-            {{foreach from=$dossier_medical->_ref_antecedents key=keyAnt item=currTypeAnt}}
+          {{if $dossier_medical->_ref_antecedents_by_type}}
+            {{foreach from=$dossier_medical->_ref_antecedents_by_type key=keyAnt item=currTypeAnt}}
               {{if $currTypeAnt}}
                 <strong>{{tr}}CAntecedent.type.{{$keyAnt}}{{/tr}}</strong>
                 {{foreach from=$currTypeAnt item=currAnt}}

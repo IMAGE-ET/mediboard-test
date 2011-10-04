@@ -16,20 +16,27 @@
   
   <tr>
     <td class="text top">
-      {{foreach from=$object->_ref_antecedents key=curr_type item=list_antecedent}}
-      {{if $list_antecedent|@count}}
-      <strong>
-        {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
-      </strong>
-      <ul>
-        {{foreach from=$list_antecedent item=curr_antecedent}}
-        <li>
-          {{mb_value object=$curr_antecedent field="date"}}
-          {{mb_value object=$curr_antecedent field="rques"}}
-        </li>
-        {{/foreach}}
-      </ul>
-      {{/if}}
+      {{foreach from=$object->_ref_antecedents_by_type_appareil key=curr_type item=antecedents_by_appareil}}
+        {{if $antecedents_by_appareil|@count}}
+          <strong>
+            {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
+          </strong>
+          <div style="margin-left: 1em;">
+            <ul>
+              {{foreach from=$antecedents_by_appareil key=curr_appareil item=antecedents name=foreach_atcd}}
+                <li><strong>{{tr}}CAntecedent.appareil.{{$curr_appareil}}{{/tr}}</strong></li>
+                <ul>
+                  {{foreach from=$antecedents item=_antecedent}}
+                    <li>
+                      {{mb_value object=$_antecedent field="date"}}
+                      {{mb_value object=$_antecedent field="rques"}}
+                    </li>
+                  {{/foreach}}
+                </ul>
+              {{/foreach}}
+            </ul>
+          </div>
+        {{/if}}
       {{/foreach}}
       {{if !count($object->_all_antecedents)}}
       <div class="empty">{{tr}}CAntecedent.none{{/tr}}</div>

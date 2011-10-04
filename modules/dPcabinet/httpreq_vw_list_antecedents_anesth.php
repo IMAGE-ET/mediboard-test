@@ -21,9 +21,9 @@ $dossier_medical =& $sejour->_ref_dossier_medical;
 
 // Chargement des antecedents et traitements
 $dossier_medical->loadRefsAntecedents(true);
-if ($dossier_medical->_ref_antecedents) {
+if ($dossier_medical->_ref_antecedents_by_type) {
 	$dossier_medical->countAntecedents();
-	foreach ($dossier_medical->_ref_antecedents as &$type) {
+	foreach ($dossier_medical->_ref_antecedents_by_type as &$type) {
 	  foreach ($type as &$ant) {
 	    $ant->loadLogs();
 	  }

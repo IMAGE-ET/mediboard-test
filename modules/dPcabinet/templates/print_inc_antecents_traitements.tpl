@@ -2,7 +2,7 @@
     <th>Antécédents</th>
     <td>
       {{if $dossier_medical->_count_antecedents}}
-        {{foreach from=$dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
+        {{foreach from=$dossier_medical->_ref_antecedents_by_type key=curr_type item=list_antecedent}}
         {{foreach from=$list_antecedent item=_antecedent}}
           {{if $_antecedent->type    }} {{mb_value object=$_antecedent field=type    }} {{/if}}
           {{if $_antecedent->appareil}} {{mb_value object=$_antecedent field=appareil}} {{/if}}

@@ -22,7 +22,7 @@ $dossier_medical->countAllergies();
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("antecedents", $dossier_medical->_ref_antecedents);
+$smarty->assign("antecedents", $dossier_medical->_ref_antecedents_by_type);
 $smarty->assign("sejour_id", $sejour->_id);
 $smarty->assign("dossier_medical", $dossier_medical);
 $smarty->display("inc_vw_antecedent_allergie.tpl");

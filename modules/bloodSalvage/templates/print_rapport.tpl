@@ -13,7 +13,7 @@
 {{assign var=consult_anesth value=$blood_salvage->_ref_operation->_ref_consult_anesth}}
 {{assign var=const_med value=$patient->_ref_constantes_medicales}}
 {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
-{{assign var=ant value=$dossier_medical->_ref_antecedents}}
+{{assign var=ant value=$dossier_medical->_ref_antecedents_by_type}}
 {{if !$ant}}
   {{assign var=no_alle value=0}}
 {{else}}

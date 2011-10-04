@@ -11,7 +11,7 @@
 <ul>
   <li>Du patient
     <ul>
-      {{foreach from=$patient->_ref_dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
+      {{foreach from=$patient->_ref_dossier_medical->_ref_antecedents_by_type key=curr_type item=list_antecedent}}
       {{if $list_antecedent|@count}}
       <li>
         {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
@@ -34,7 +34,7 @@
   </li>
   <li>Significatifs du séjour
     <ul>
-      {{foreach from=$sejour->_ref_dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
+      {{foreach from=$sejour->_ref_dossier_medical->_ref_antecedents_by_type key=curr_type item=list_antecedent}}
       {{if $list_antecedent|@count}}
       <li>
         {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}

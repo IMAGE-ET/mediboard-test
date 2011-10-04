@@ -21,7 +21,7 @@
 
 {{assign var=const_med value=$patient->_ref_constantes_medicales}}
 {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
-{{assign var=ant value=$dossier_medical->_ref_antecedents}}
+{{assign var=ant value=$dossier_medical->_ref_antecedents_by_type}}
 <table class="{{$tbl_class}}">
   <tr>
     <td colspan="2">
@@ -168,8 +168,8 @@
         </tr>
         <tr>
           <td style="font-weight: bold; white-space: normal; font-size:130%;">
-          {{if $dossier_medical->_ref_antecedents && array_key_exists('alle', $dossier_medical->_ref_antecedents)}}
-            {{foreach from=$dossier_medical->_ref_antecedents.alle item=currAnt}}
+          {{if $dossier_medical->_ref_antecedents_by_type && array_key_exists('alle', $dossier_medical->_ref_antecedents_by_type)}}
+            {{foreach from=$dossier_medical->_ref_antecedents_by_type.alle item=currAnt}}
               <ul>
                 <li> 
                   {{if $currAnt->date}}
@@ -294,9 +294,9 @@
         </tr>
         <tr>
           <td>
-            {{if $dossier_medical->_ref_antecedents && array_key_exists('chir', $dossier_medical->_ref_antecedents)}}
+            {{if $dossier_medical->_ref_antecedents_by_type && array_key_exists('chir', $dossier_medical->_ref_antecedents_by_type)}}
             <ul>
-            {{foreach from=$dossier_medical->_ref_antecedents.chir item=currAnt}}
+            {{foreach from=$dossier_medical->_ref_antecedents_by_type.chir item=currAnt}}
               <li> 
                 {{if $currAnt->date}}
                   {{mb_value object=$currAnt field=date}} :
@@ -313,9 +313,9 @@
         </tr>
         <tr>
           <td>
-            {{if $dossier_medical->_ref_antecedents && array_key_exists('anesth', $dossier_medical->_ref_antecedents)}}
+            {{if $dossier_medical->_ref_antecedents_by_type && array_key_exists('anesth', $dossier_medical->_ref_antecedents_by_type)}}
             <ul>
-            {{foreach from=$dossier_medical->_ref_antecedents.anesth item=currAnt}}
+            {{foreach from=$dossier_medical->_ref_antecedents_by_type.anesth item=currAnt}}
               <li> 
                 {{if $currAnt->date}}
                   {{mb_value object=$currAnt field=date}} :
@@ -428,9 +428,9 @@
             {{/if}}
             <br />
             {{$consult_anesth->examenCardio}}
-            {{if $dossier_medical->_ref_antecedents && array_key_exists('cardio', $dossier_medical->_ref_antecedents)}}
+            {{if $dossier_medical->_ref_antecedents_by_type && array_key_exists('cardio', $dossier_medical->_ref_antecedents_by_type)}}
             <ul>
-            {{foreach from=$dossier_medical->_ref_antecedents.cardio item=currAnt}}
+            {{foreach from=$dossier_medical->_ref_antecedents_by_type.cardio item=currAnt}}
               <li> 
                 {{if $currAnt->date}}
                   {{mb_value object=$currAnt field=date}} :
@@ -448,9 +448,9 @@
         <tr>
           <td>
             {{$consult_anesth->examenPulmo}}
-            {{if $dossier_medical->_ref_antecedents && array_key_exists('pulmo', $dossier_medical->_ref_antecedents)}}
+            {{if $dossier_medical->_ref_antecedents_by_type && array_key_exists('pulmo', $dossier_medical->_ref_antecedents_by_type)}}
             <ul>
-            {{foreach from=$dossier_medical->_ref_antecedents.pulmo item=currAnt}}
+            {{foreach from=$dossier_medical->_ref_antecedents_by_type.pulmo item=currAnt}}
               <li> 
                 {{if $currAnt->date}}
                   {{mb_value object=$currAnt field=date}} :
@@ -467,9 +467,9 @@
         </tr>
         <tr>
           <td>
-            {{if $dossier_medical->_ref_antecedents && array_key_exists('uro', $dossier_medical->_ref_antecedents)}}
+            {{if $dossier_medical->_ref_antecedents_by_type && array_key_exists('uro', $dossier_medical->_ref_antecedents_by_type)}}
             <ul>
-            {{foreach from=$dossier_medical->_ref_antecedents.uro item=currAnt}}
+            {{foreach from=$dossier_medical->_ref_antecedents_by_type.uro item=currAnt}}
               <li> 
                 {{if $currAnt->date}}
                   {{mb_value object=$currAnt field=date}} :
@@ -486,9 +486,9 @@
         </tr>
         <tr>
           <td>
-            {{if $dossier_medical->_ref_antecedents && array_key_exists('neuropsy', $dossier_medical->_ref_antecedents)}}
+            {{if $dossier_medical->_ref_antecedents_by_type && array_key_exists('neuropsy', $dossier_medical->_ref_antecedents_by_type)}}
             <ul>
-            {{foreach from=$dossier_medical->_ref_antecedents.neuropsy item=currAnt}}
+            {{foreach from=$dossier_medical->_ref_antecedents_by_type.neuropsy item=currAnt}}
               <li> 
                 {{if $currAnt->date}}
                   {{mb_value object=$currAnt field=date}} :
@@ -505,9 +505,9 @@
         </tr>
         <tr>
           <td>
-            {{if $dossier_medical->_ref_antecedents && array_key_exists('endocrino', $dossier_medical->_ref_antecedents)}}
+            {{if $dossier_medical->_ref_antecedents_by_type && array_key_exists('endocrino', $dossier_medical->_ref_antecedents_by_type)}}
             <ul>
-            {{foreach from=$dossier_medical->_ref_antecedents.endocrino item=currAnt}}
+            {{foreach from=$dossier_medical->_ref_antecedents_by_type.endocrino item=currAnt}}
               <li> 
                 {{if $currAnt->date}}
                   {{mb_value object=$currAnt field=date}} :
@@ -524,9 +524,9 @@
         </tr>
         <tr>
           <td>
-            {{if $dossier_medical->_ref_antecedents && array_key_exists('gyn', $dossier_medical->_ref_antecedents)}}
+            {{if $dossier_medical->_ref_antecedents_by_type && array_key_exists('gyn', $dossier_medical->_ref_antecedents_by_type)}}
             <ul>
-            {{foreach from=$dossier_medical->_ref_antecedents.gyn item=currAnt}}
+            {{foreach from=$dossier_medical->_ref_antecedents_by_type.gyn item=currAnt}}
               <li> 
                 {{if $currAnt->date}}
                   {{mb_value object=$currAnt field=date}} :
@@ -545,7 +545,7 @@
           <td>
             {{$consult->examen}}
             <ul>
-              {{foreach from=$dossier_medical->_ref_antecedents key=type_name item=curr_type}}
+              {{foreach from=$dossier_medical->_ref_antecedents_by_type key=type_name item=curr_type}}
               {{if $type_name != 'alle'
                 && $type_name != 'chir'
                 && $type_name != 'anesth'

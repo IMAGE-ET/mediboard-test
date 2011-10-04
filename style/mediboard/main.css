@@ -1837,3 +1837,10 @@ div.cellule_patient {
 	width: 49%;
 	padding: 1px;
 }
+
+tr.in_progress_before, tr.in_progress_after {
+  display: none !important;
+}
+tr .show_important {
+  display: block !important;
+}
