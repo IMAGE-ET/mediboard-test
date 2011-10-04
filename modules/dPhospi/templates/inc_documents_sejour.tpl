@@ -23,7 +23,7 @@
   <h2 style="clear: both;">{{tr}}CConsultAnesth{{/tr}} du {{$consult_anesth->_date_consult|date_format:$conf.date}}</h2>
   <div id="Documents-{{$consult_anesth->_guid}}" style="float: left; width: 50%;">
     <script type="text/javascript">
-    Document.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class}}','{{$consult_anesth->praticien_id}}', 'Documents-{{$consult_anesth->_guid}}', 'normal');
+    Document.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class}}','{{$consult_anesth->chir_id}}', 'Documents-{{$consult_anesth->_guid}}', 'normal');
     </script>
   </div>
   
