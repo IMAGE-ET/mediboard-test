@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::loadClass("CActe");
-
 class CFraisDivers extends CActe {
   var $frais_divers_id = null;
   
