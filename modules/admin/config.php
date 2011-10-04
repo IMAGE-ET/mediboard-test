@@ -18,7 +18,8 @@ $dPconfig["admin"] = array (
     "ldap_tag"         => "ldap",
     "ldap_user"        => "",
     "ldap_password"    => "",
-    "object_guid_mode" => "hexa"
+    "object_guid_mode" => "hexa",
+    "allow_change_password" => "0",
   ),
 );
 

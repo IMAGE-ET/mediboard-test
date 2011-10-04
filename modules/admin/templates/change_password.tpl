@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<h1> {{tr}}CUser-user_password-change{{/tr}} </h1>
-
-{{if $user->_ldap_linked}}
+{{if $user->_ldap_linked && !$conf.admin.LDAP.allow_change_password}}
   <div class="small-warning">{{tr}}CUser_associate-ldap-no-password-change{{/tr}}</div>
 {{else}}
   <form name="chpwdFrm" action="?m={{$m}}&amp;{{if $forceChange}}tab{{else}}a{{/if}}=chpwd" method="post" onsubmit="return onSubmitFormAjax(this)">
@@ -25,7 +23,7 @@
     {{else}}
       <div class="big-warning">
         <strong>Votre mot de passe ne correspond pas aux critères de sécurité de Mediboard</strong>. 
-        Vous ne pourrez pas accéder à Mediboard tant que vous ne l\'aurez pas changé afin qu\'il respecte ces critères.
+        Vous ne pourrez pas accéder à Mediboard tant que vous ne l'aurez pas changé afin qu'il respecte ces critères.
         La sécurité des informations de vos patients en dépend.<br />
         Pour plus de précisions, veuillez vous référer aux 
         <a href="http://mediboard.org/public/Recommandations+de+la+CNIL" target="_blank"> recommandations de la CNIL</a>.

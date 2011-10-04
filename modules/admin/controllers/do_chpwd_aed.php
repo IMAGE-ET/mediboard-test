@@ -25,6 +25,14 @@ if (!$user->loadObject($where)) {
   CAppUI::stepAjax("CUser-user_password-nomatch", UI_MSG_ERROR);
 }
 
+$allow_change_password = CAppUI::conf("admin LDAP allow_change_password");
+$ldap_linked = $user->isLDAPLinked();
+
+// Si utilisateur associé au LDAP et modif de mot de passe non autorisée: ERROR
+if (!$allow_change_password && $ldap_linked) {
+  CAppUI::stepAjax("CUser_associate-ldap-no-password-change", UI_MSG_ERROR);
+}
+
 // Mots de passe différents
 if ($new_pwd1 != $new_pwd2) {
   CAppUI::stepAjax("CUser-user_password-nomatch", UI_MSG_ERROR);
@@ -34,6 +42,22 @@ if ($new_pwd1 != $new_pwd2) {
 $user->_user_password = $new_pwd1;
 if ($msg = $user->store()) {
   CAppUI::stepAjax($msg, UI_MSG_ERROR);
+}
+
+// Si utilisateur associé au LDAP et modif mdp autorisée
+if ($ldap_linked && $allow_change_password) {
+  if (!CLDAP::changePassword($user, $old_pwd, $new_pwd1)) {
+    $user->_user_password = $old_pwd;
+    if ($msg = $user->store()) {
+      CAppUI::stepAjax($msg, UI_MSG_ERROR);
+    }
+    
+    echo CAppUI::getMsg();
+    CAppUI::stepAjax("CLDAP-change_password_failed", UI_MSG_ERROR);
+  }
+  else {
+    CAppUI::stepAjax("CLDAP-change_password_succeeded", UI_MSG_OK);
+  }
 }
 
 CAppUI::stepAjax("CUser-msg-password-updated", UI_MSG_OK);

@@ -4,7 +4,6 @@ $locales['CMbObject-back-permissions'] = 'Permissions';
 $locales['CPermModule'] = 'Modules Permissions';
 $locales['CPermObject'] = 'Objects Permissions';
 $locales['CUser'] = 'Users';
-$locales['CUser-user_password-change'] = 'Change User Password';
 $locales['CUser-user_password-current'] = 'Current Password';
 $locales['CUser-user_password-new'] = 'New Password';
 $locales['CUser-user_password-nomatch'] = 'You have entered the wrong old password';

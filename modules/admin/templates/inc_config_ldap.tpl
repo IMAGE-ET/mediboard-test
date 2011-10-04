@@ -60,6 +60,7 @@
               <th class="title" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
             </tr>
             {{mb_include module=system template=inc_config_bool var=ldap_connection}}
+            {{mb_include module=system template=inc_config_bool var=allow_change_password}}
             {{mb_include module=system template=inc_config_str var=ldap_tag}}
             {{mb_include module=system template=inc_config_enum var=object_guid_mode values=hexa|registry}}
             <tr>

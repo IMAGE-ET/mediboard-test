@@ -98,6 +98,10 @@ class CLDAP {
     }
     
     $source_ldap = CLDAP::connect();
+		
+		if (!$source_ldap) {
+			return false;
+		}
 
     $bound = $source_ldap->ldap_bind($source_ldap->_ldapconn, $user->user_username, $old_pass);
     
