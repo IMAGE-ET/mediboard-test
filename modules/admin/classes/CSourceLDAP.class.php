@@ -62,9 +62,9 @@ class CSourceLDAP extends CMbObject{
     ); 
   }
   
-	/**
-	 * @return resource link_identifier 
-	 */
+  /**
+   * @return resource link_identifier 
+   */
   function ldap_connect() {
     if (!function_exists("ldap_connect")){
       throw new CMbException("CSourceLDAP_ldap-functions-not-available");
@@ -89,13 +89,13 @@ class CSourceLDAP extends CMbObject{
     return $ldapconn;
   }
   
-	/**
-	 * @param resource $ldapconn [optional]
-	 * @param string   $ldaprdn [optional]
-	 * @param string   $ldappass [optional]
-	 * @param boolean  $showInvalidCredentials [optional]
-	 * @return 
-	 */
+  /**
+   * @param resource $ldapconn [optional]
+   * @param string   $ldaprdn [optional]
+   * @param string   $ldappass [optional]
+   * @param boolean  $showInvalidCredentials [optional]
+   * @return 
+   */
   function ldap_bind($ldapconn = null, $ldaprdn = null, $ldappass = null, $showInvalidCredentials = false) {
     if (!$ldapconn) {
       $ldapconn = $this->ldap_connect();
@@ -107,11 +107,12 @@ class CSourceLDAP extends CMbObject{
     
     $ldapbind = @ldap_bind($ldapconn, $ldaprdn, $ldappass);
     $error = ldap_errno($ldapconn);
-		
+    
     if (!$showInvalidCredentials && ($error == 49)) {
-      return false;     
+      throw new CMbException("CSourceLDAP-invalid_credentials", ldap_err2str($error));
+      return false;
     }
-		
+    
     if (!$ldapbind) {
       throw new CMbException("CSourceLDAP_no-authenticate", $this->host, $ldaprdn, ldap_err2str($error));
     }
@@ -119,12 +120,37 @@ class CSourceLDAP extends CMbObject{
     return true;
   }
   
-	/**
-	 * @param resource $ldapconn
-	 * @param string   $filter
-	 * @param array    $attributes [optional]
-	 * @return array
-	 */
+  /**
+   * @param resource $ldapconn [optional]
+   * @param string   $ldaprdn [optional]
+   * @param array    $entry [optional]
+   * @return 
+   */
+  function ldap_modify($ldapconn = null, $ldaprdn = null, $entry) {
+    if (!$ldapconn) {
+      $ldapconn = $this->ldap_connect();
+    }
+    
+    if ($this->bind_rdn_suffix) {
+      $ldaprdn = $ldaprdn.$this->bind_rdn_suffix;
+    }
+    
+    $ret = ldap_modify($ldapconn, $ldaprdn, $entry);
+    
+    if (!$ret) {
+      $error = ldap_errno($ldapconn);
+      throw new CMbException("CSourceLDAP-entry_modify_error", ldap_err2str($error));
+    }
+    
+    return true;
+  }
+  
+  /**
+   * @param resource $ldapconn
+   * @param string   $filter
+   * @param array    $attributes [optional]
+   * @return array
+   */
   function ldap_search($ldapconn, $filter, $attributes = array()) {
     $results = null;
     $ldapsearch = @ldap_search($ldapconn, $this->rootdn, $filter, $attributes);
