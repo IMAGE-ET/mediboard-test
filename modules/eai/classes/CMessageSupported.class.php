@@ -16,8 +16,6 @@
  * Message supported
  */
 
-CAppUI::requireSystemClass('CMbMetaObject');
-
 class CMessageSupported extends CMbMetaObject {
   var $message_supported_id = null;
   

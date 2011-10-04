@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireSystemClass("CMbObject");
-
 if(!defined("TAB_READ")) {
   define("TAB_READ"  , 0);
   define("TAB_EDIT"  , 1);

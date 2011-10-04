@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireSystemClass("fieldSpecs/CTextSpec");
-
 class CER7Spec extends CTextSpec { 
   function getSpecType() {
     return "er7";

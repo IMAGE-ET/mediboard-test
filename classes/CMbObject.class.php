@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireSystemClass("CStoredObject");
-
 /**
  * @abstract Mediboard business object layer 
  * Handles: notes, documents, aides, views, affectations personnels (!), model templates, echanges

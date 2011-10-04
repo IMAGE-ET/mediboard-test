@@ -213,8 +213,6 @@ if ($user->isInstalled()) {
   CAppUI::$instance->_ref_user =& CAppUI::$user;
 }
 
-CAppUI::requireSystemClass("CSmartyDP");
-
 ob_start();
 
 // We check if the mobile feature is available and if the user agent is a mobile

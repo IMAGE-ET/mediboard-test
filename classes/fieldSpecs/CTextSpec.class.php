@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireSystemClass("CMbFieldSpec");
-
 class CTextSpec extends CMbFieldSpec {
   function getSpecType() {
     return "text";

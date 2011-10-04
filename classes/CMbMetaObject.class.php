@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireSystemClass("CMbObject");
-
 class CMbMetaObject extends CMbObject {
   var $object_id    = null;
   var $object_class = null;
