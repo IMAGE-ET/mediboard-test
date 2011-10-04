@@ -11,11 +11,14 @@
 {{assign var=id value=$curr_delivery->_id}}
 {{assign var=product value=$curr_delivery->_ref_stock->_ref_product}}
 
-<td {{if $product->_in_order}}class="ok"{{/if}}>
+<td {{if $product->_in_order}}class="ok"{{/if}}>	
   {{mb_include module=dPstock template=inc_product_in_order product=$product}}
 </td>
 
 <td>
+	 <span onmouseover="ObjectTooltip.createEx(this, '{{$lines.$id}}');" style="float: right;">
+    Presc.
+  </span>
   {{if @$line_refresh}}
   <script type="text/javascript">
     if (!$V(getForm("filter").display_delivered) && ({{$curr_delivery->_delivered|ternary:1:0}} || '{{$curr_delivery->date_delivery}}')) {
