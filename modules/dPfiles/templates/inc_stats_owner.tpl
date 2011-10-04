@@ -16,6 +16,11 @@
       {{$_stat.user_first_name}} {{$_stat.user_last_name}}
     {{/if}}     
   </td>
+  <td>
+    <button class="search notext" type="button" onclick="Details.statOwner('{{$owner->_guid}}');">
+      {{tr}}Details{{/tr}}
+    </button>
+  </td>
 </tr>
 
 {{foreachelse}}

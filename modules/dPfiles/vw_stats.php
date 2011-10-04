@@ -6,9 +6,8 @@
 * @version $Revision: 6345 $
 * @author Thomas Despoix
 */
-
-global $can;
-$can->needsAdmin();
+ 
+CCanDo::checkAdmin();
 
 $file = new CFile;
 $ds = $file->_spec->ds;
@@ -87,5 +86,4 @@ $smarty->assign("stats_user", $stats_user);
 $smarty->assign("stats_func", $stats_func);
 $smarty->assign("total", $total);
 $smarty->display("vw_stats.tpl");
-
 ?>

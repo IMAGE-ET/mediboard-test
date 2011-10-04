@@ -2,6 +2,14 @@
 Main.add(function () {
   Control.Tabs.create('tabs-owner', true);
 });
+
+Details = {
+  statOwner: function (owner_guid) {
+    new Url('dPfiles', 'stats_details') .
+      addParam('owner_guid', owner_guid) .
+      requestModal();
+  }
+}
 </script>
 
 <ul id="tabs-owner" class="control_tabs">
@@ -17,6 +25,7 @@ Main.add(function () {
   <th colspan="2">{{tr}}CFile-_total_weight{{/tr}}</th>
   <th>{{tr}}CFile-_average_weight{{/tr}}</th>
   <th>{{tr}}Owner{{/tr}}</th>
+  <th class="narrow"></th>
 </tr>
 
 <tr style="font-weight: bold;">
@@ -25,7 +34,7 @@ Main.add(function () {
   <td style="text-align: right;">{{$total._files_weight}}</td>
   <td style="text-align: right;">{{1|percent}}</td>
   <td style="text-align: right;">{{$total._file_average_weight}}</td>
-  <td>{{tr}}Total{{/tr}}
+  <td colspan="2">{{tr}}Total{{/tr}}
 </tr>
 
 <tbody id="tab-user" style="display: none;">
