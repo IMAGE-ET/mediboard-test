@@ -122,20 +122,26 @@ class CSourceLDAP extends CMbObject{
   
   /**
    * @param resource $ldapconn [optional]
-   * @param string   $ldaprdn [optional]
+   * @param string   $filter [optional]
    * @param array    $entry [optional]
    * @return 
    */
-  function ldap_modify($ldapconn = null, $ldaprdn = null, $entry) {
+  function ldap_modify($ldapconn = null, $filter = null, $entry) {
     if (!$ldapconn) {
       $ldapconn = $this->ldap_connect();
     }
-    
-    if ($this->bind_rdn_suffix) {
-      $ldaprdn = $ldaprdn.$this->bind_rdn_suffix;
+		
+		$ldapsearch = @ldap_search($ldapconn, $this->rootdn, $filter);
+    if ($ldapsearch) {
+      $results = ldap_get_entries($ldapconn, $ldapsearch);
     }
-    
-    $ret = ldap_modify($ldapconn, $ldaprdn, $entry);
+		
+		if ($results["count"] > 1) {
+			throw new CMbException("CSourceLDAP_too-many-results");
+		}
+		
+		$dn = $results[0]["dn"];
+    $ret = ldap_modify($ldapconn, $dn, $entry);
     
     if (!$ret) {
       $error = ldap_errno($ldapconn);

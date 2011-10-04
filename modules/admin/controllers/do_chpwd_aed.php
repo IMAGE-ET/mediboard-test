@@ -46,17 +46,19 @@ if ($msg = $user->store()) {
 
 // Si utilisateur associé au LDAP et modif mdp autorisée
 if ($ldap_linked && $allow_change_password) {
-  if (!CLDAP::changePassword($user, $old_pwd, $new_pwd1)) {
+  try {
+  	CLDAP::changePassword($user, $old_pwd, $new_pwd1);
+    CAppUI::stepAjax("CLDAP-change_password_succeeded", UI_MSG_OK);
+	}
+	catch(CMbException $e) {
+		// Rétablissement de l'ancien mot de passe
     $user->_user_password = $old_pwd;
     if ($msg = $user->store()) {
       CAppUI::stepAjax($msg, UI_MSG_ERROR);
     }
     
-    echo CAppUI::getMsg();
+		$e->stepAjax();
     CAppUI::stepAjax("CLDAP-change_password_failed", UI_MSG_ERROR);
-  }
-  else {
-    CAppUI::stepAjax("CLDAP-change_password_succeeded", UI_MSG_OK);
   }
 }
 
