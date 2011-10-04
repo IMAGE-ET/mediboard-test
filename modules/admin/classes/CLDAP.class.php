@@ -121,7 +121,7 @@ class CLDAP {
       "userPassword" => "\{$encryption\}".base64_encode(pack("H*", $new_pass))
     );
     
-    return $source_ldap->ldap_modify($source_ldap->_ldapconn, "(samaccountname={$user->user_username})", $entry);
+    return $source_ldap->ldap_mod_replace($source_ldap->_ldapconn, "(samaccountname={$user->user_username})", $entry);
   }
   
   /**

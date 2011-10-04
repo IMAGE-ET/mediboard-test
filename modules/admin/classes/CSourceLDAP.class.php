@@ -126,7 +126,7 @@ class CSourceLDAP extends CMbObject{
    * @param array    $entry [optional]
    * @return 
    */
-  function ldap_modify($ldapconn = null, $filter = null, $entry) {
+  function ldap_mod_replace($ldapconn = null, $filter = null, $entry) {
     if (!$ldapconn) {
       $ldapconn = $this->ldap_connect();
     }
@@ -141,7 +141,7 @@ class CSourceLDAP extends CMbObject{
 		}
 		
 		$dn = $results[0]["dn"];
-    $ret = ldap_modify($ldapconn, $dn, $entry);
+    $ret = ldap_mod_replace($ldapconn, $dn, $entry);
     
     if (!$ret) {
       $error = ldap_errno($ldapconn);
