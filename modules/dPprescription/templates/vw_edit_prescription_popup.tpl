@@ -315,7 +315,7 @@ Main.add(function () {
   				          <input type="hidden" name="object_class" value="CSejour" />
   				          <input type="hidden" name="type" value="sejour"/>
   				          <input type="hidden" name="callback" value="addProtocole" />
-  	                <button type="button" class="submit singleclick" onclick="WaitingMessage.cover('prescription_sejour'); onSubmitFormAjax(this.form);">Créer</button>         
+  	                <button type="button" class="submit singleclick" onclick="onSubmitFormAjax(this.form);">Créer</button>         
                   </form>
   				      </td>
   				    </tr>
