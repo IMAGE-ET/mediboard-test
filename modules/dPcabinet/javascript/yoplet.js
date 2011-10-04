@@ -12,6 +12,7 @@ if (!window.File.applet) {
     modalWindow: null,
     timer: null,
     isOpen: false,
+    autocompleteCat: null,
 /*    appletCode: DOM.applet({id: 'uploader', name: 'yopletuploader', width: 0, height: 0,
                             code: 'org.yoplet.Yoplet.class', archive: 'includes/applets/yoplet2.jar'},
       DOM.param({name: 'action', value: ''}),
@@ -166,6 +167,8 @@ if (!window.File.applet) {
       this.modalWindow = modal($("modal-yoplet"));
       $$(".uploadinmodal")[0].disabled = '';
       this.object_guid = object_guid;
+      // Mise à jour de l'object_class dans l'autocomplete des catégories
+      this.autocompleteCat.url = this.autocompleteCat.url.replace(/object_class=[^&]*/, "object_class="+object_guid.split("-")[0]);
       this.modalWindow.position();
     },
     closeModal: function() {
