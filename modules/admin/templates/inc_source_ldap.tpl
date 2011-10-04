@@ -51,7 +51,7 @@
           </tr>
           <tr>
             <th> {{mb_label object=$source_ldap field=ldap_opt_protocol_version}} </th>
-            <td> {{mb_field object=$source_ldap field=ldap_opt_protocol_version increment=true form=edit_source_ldap min=2 max=3}} </td>
+            <td> {{mb_field object=$source_ldap field=ldap_opt_protocol_version increment=true form="edit_source_ldap-$number" min=2 max=3}} </td>
           </tr>
           <tr>
             <th> {{mb_label object=$source_ldap field=ldap_opt_referrals}} </th>
