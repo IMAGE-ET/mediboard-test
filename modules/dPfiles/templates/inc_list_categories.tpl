@@ -17,7 +17,9 @@
       </a>
     </td>
 
-    <td>{{tr}}{{$_category->class|default:'All'}}{{/tr}}</td>
+    <td {{if !$_category->class}} class="empty" {{/if}}>
+      {{tr}}{{$_category->class|default:'All'}}{{/tr}}
+    </td>
     <td>{{mb_value object=$_category field=send_auto}}</td>
 
   </tr>

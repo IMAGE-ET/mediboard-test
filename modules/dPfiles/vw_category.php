@@ -15,6 +15,7 @@ $file_category_id = CValue::getOrSession("file_category_id");
 $category = new CFilesCategory;
 $category->load($file_category_id);
 $category->countDocItems();
+$category->loadRefsNotes();
 
 // Liste des Catégories
 $categories = $category->loadList(null, "class, nom");

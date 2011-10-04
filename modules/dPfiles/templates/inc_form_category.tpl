@@ -6,18 +6,7 @@
 <input type="hidden" name="del" value="0" />
 
 <table class="form">
-  <tr>
-    {{if $category->_id}}
-    <th class="title modify" colspan="2">
-      {{mb_include module=system template=inc_object_idsante400 object=$category}}
-      {{mb_include module=system template=inc_object_history object=$category }}
-       
-    	{{tr}}CFilesCategory-title-modify{{/tr}} '{{$category}}'
-    </th>
-    {{else}}
-    <th class="title" colspan="2">{{tr}}CFilesCategory-title-create{{/tr}}</th>
-    {{/if}}
-  </tr> 
+  {{mb_include module=system template=inc_form_table_header object=$category}}
   
   <tr>
     <th>{{mb_label object=$category field=nom}}</th>
@@ -36,10 +25,14 @@
       {{tr}}{{$category->class|default:'All'}}{{/tr}}
       {{else}}
       <select name="class">
+      
       <option value="">&mdash; Toutes</option>
       {{foreach from=$listClass item=_class}}
-      <option value="{{$_class}}"{{if $category->class==$_class}} selected="selected"{{/if}}>{{tr}}{{$_class}}{{/tr}}</option>
+      <option value="{{$_class}}"{{if $category->class==$_class}} selected="selected"{{/if}}>
+        {{tr}}{{$_class}}{{/tr}}
+      </option>
       {{/foreach}}
+      
       </select>
       {{/if}}
     </td>

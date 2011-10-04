@@ -1,10 +1,10 @@
 <table class="main">
   <tr>
-    <td>
-      {{include file=inc_list_categories.tpl}}
+    <td style="width: 50%;">
+      {{mb_include template=inc_list_categories}}
     </td>
-    <td>
-      {{include file=inc_form_category.tpl}}
+    <td style="width: 50%;">
+      {{mb_include template=inc_form_category}}
     </td>
   </tr>
 </table>
