@@ -27,7 +27,7 @@ class CHL7v2Exception extends Exception {
   const UNKNOWN_AUTHORITY          = 16;
   const UNEXPECTED_DATA_TYPE       = 17;
   const DATA_TOO_LONG              = 18;
-	const UNKNOWN_TABLE_ENTRY        = 19;
+  const UNKNOWN_TABLE_ENTRY        = 19;
   
   // argument 2 must be named "code" ...
   /*public function __construct($id, $code = 0) {

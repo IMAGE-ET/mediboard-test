@@ -61,8 +61,8 @@ class CHL7v2Component extends CHL7v2Entity {
    * @var CHL7v2DataType
    */
   var $props = null;
-	
-	var $invalid = false;
+  
+  var $invalid = false;
   
   function __construct(CHL7v2Entity $parent, CHL7v2SimpleXMLElement $specs, $self_pos, $separators) {
     parent::__construct();
@@ -81,6 +81,36 @@ class CHL7v2Component extends CHL7v2Entity {
     $this->self_pos    = $self_pos;
     
     $this->props = CHL7v2DataType::load($this->datatype, $this->getVersion());
+  }
+  
+  function _toXML(DOMNode $node) {
+    $doc = $node->ownerDocument;
+    $field = $this->getField();
+    
+    if ($this->props instanceof CHL7v2DataTypeComposite) {
+      foreach($this->children as $i => $_child) {
+        $new_node = $doc->createElement("$this->datatype.".($i+1));
+        $_child->_toXML($new_node);
+        $node->appendChild($new_node);
+      }
+    }
+    else {
+      if ($this->datatype === "TS" && $this->props instanceof CHL7v2DataTypeDateTime) {
+        $new_node = $doc->createElement("$this->datatype.1");
+        $node->appendChild($new_node);
+        $node = $new_node;
+      }
+    
+      if ($field->keep()){
+        $str = $this->data;
+      }
+      else {
+        $str = $this->getMessage()->escape($this->data);
+      }
+      
+      $new_node = $doc->createTextNode($str);
+      $node->appendChild($new_node);
+    }
   }
   
   /**
@@ -149,13 +179,13 @@ class CHL7v2Component extends CHL7v2Entity {
     
     // Scalar type (NM, ST, ID, etc)
     else {
-    	$field = $this->getField();
-			
-    	if (is_array($data)) {
-    		$this->error(CHL7v2Exception::INVALID_DATA_FORMAT, var_export($data, true), $field);
-				return;
-    	}
-			
+      $field = $this->getField();
+      
+      if (is_array($data)) {
+        $this->error(CHL7v2Exception::INVALID_DATA_FORMAT, var_export($data, true), $field);
+        return;
+      }
+      
       $this->data = trim($this->props->toHL7($data, $field));
     }
   }
@@ -172,40 +202,40 @@ class CHL7v2Component extends CHL7v2Entity {
    * @return bool
    */
   function validate(){
-		$props = $this->props;
-		
-		if ($props instanceof CHL7v2DataTypeComposite) {
-			foreach($this->children as $child) {
-				if (!$child->validate()) {
-					$this->invalid = true;
-				}
-			}
-		}
-		else {
+    $props = $this->props;
+    
+    if ($props instanceof CHL7v2DataTypeComposite) {
+      foreach($this->children as $child) {
+        if (!$child->validate()) {
+          $this->invalid = true;
+        }
+      }
+    }
+    else {
       $field = $this->getField();
-			
-			// length
-			if ($this->length && strlen($this->data) > $this->length) {
+      
+      // length
+      if ($this->length && strlen($this->data) > $this->length) {
         $field->error(CHL7v2Exception::DATA_TOO_LONG, var_export($this->data, true)." ($this->length)", $field);
         $this->invalid = true;
-			}
-      
-			// table
-      if ($this->table && $this->data !== "") {
-      	$entries = CHL7v2::getTable($this->table, false);
-				
-				if (!empty($entries) && !array_key_exists($this->data, $entries)) {
-	        $field->error(CHL7v2Exception::UNKNOWN_TABLE_ENTRY, "'$this->data' (table $this->table)", $field, CHL7v2::E_WARNING);
-	        $this->invalid = true;
-				}
       }
-			
-			if (!$props->validate($this->data, $field)) {
-	      $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $this->data, $field);
-				$this->invalid = true;
-	      return false;
-			}
-		}
+      
+      // table
+      if ($this->table && $this->data !== "") {
+        $entries = CHL7v2::getTable($this->table, false);
+        
+        if (!empty($entries) && !array_key_exists($this->data, $entries)) {
+          $field->error(CHL7v2Exception::UNKNOWN_TABLE_ENTRY, "'$this->data' (table $this->table)", $field, CHL7v2::E_WARNING);
+          $this->invalid = true;
+        }
+      }
+      
+      if (!$props->validate($this->data, $field)) {
+        $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $this->data, $field);
+        $this->invalid = true;
+        return false;
+      }
+    }
     
     return true;
   }
@@ -243,16 +273,16 @@ class CHL7v2Component extends CHL7v2Entity {
     $path[] = $this->self_pos+1;
     return $path;
   }
-	
-	function getTypeTitle(){
-		$str = $this->datatype;
-		
-		if ($this->length) {
-			$str .= "[$this->length]";
-		}
-		
-		return $str;
-	}
+  
+  function getTypeTitle(){
+    $str = $this->datatype;
+    
+    if ($this->length) {
+      $str .= "[$this->length]";
+    }
+    
+    return $str;
+  }
   
   function __toString(){
     $field = $this->getField();
@@ -277,9 +307,9 @@ class CHL7v2Component extends CHL7v2Entity {
       
     if (CHL7v2Message::$decorateToString) {
       $title = $field->owner_segment->name.".".implode(".", $this->getPath())." - $this->datatype - $this->description";
-			if ($this->table != 0) {
-				$title .= " [$this->table]";
-			}
+      if ($this->table != 0) {
+        $title .= " [$this->table]";
+      }
       $str = "<span class='entity {$this->separator[1]} ".($this->invalid ? 'invalid' : '')."' id='entity-er7-$this->id' data-title='$title'>$str</span>";
     }
       

@@ -41,6 +41,55 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   
   function __construct() { }
   
+  function get($path) {
+    mbTrace(self::parseHL7Path($path));
+  }
+  
+  static function parseHL7Path($path) {
+    $parts = explode("/", $path);
+    $folders = array();
+    
+    foreach($parts as $_part) {
+      if (!preg_match('/^([^\[]*)(?:\[(\d+)\])?$/', $_part, $matches)) {
+        return false;
+      }
+      
+      $folders[] = array(
+        "name"  => $matches[1],
+        "index" => CValue::read($matches, 2, "self"),
+      );
+    }
+    
+    return $folders;
+  }
+  
+  function toXML() {
+    $field = $this->children[0]->fields[8]->items[0];
+    $name = $field->children[0]->data."_".$field->children[1]->data;
+    
+    $doc = new CMbXMLDocument("utf-8");
+    $doc->formatOutput = true;
+    
+    $root = $doc->createElement($name);
+    $doc->addAttribute($root, "xmlns", "urn:hl7-org:v2xml");
+    $doc->addAttribute($root, "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+    $doc->addAttribute($root, "xsi:schemaLocation", "urn:hl7-org:v2xml $name.xsd");
+
+    $doc->appendChild($root);
+    
+    return $this->_toXML($root);
+  }
+  
+  function _toXML(DOMNode $node) {
+    $doc = $node->ownerDocument;
+    
+    foreach($this->children as $_child) {
+      $_child->_toXML($node);
+    }
+    
+    return $doc;
+  }
+  
   function parse($data, $parse_body = true) {
     // remove all chars before MSH
     $msh_pos = strpos($data, "MSH");

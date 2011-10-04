@@ -20,13 +20,13 @@ class CHL7v2TableEntry extends CHL7v2TableObject {
   var $table_entry_id  = null;
   
   var $number          = null;
-	
+  
   var $code_hl7_from   = null;
   var $code_hl7_to     = null;
-	
+  
   var $code_mb_from    = null;
   var $code_mb_to      = null;
-	
+  
   var $description     = null;
   var $user            = null;
       

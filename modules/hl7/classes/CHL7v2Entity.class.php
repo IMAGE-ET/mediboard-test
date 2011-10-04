@@ -54,4 +54,6 @@ abstract class CHL7v2Entity extends CHL7v2 {
    * @return CHL7v2Message
    */
   abstract function getMessage();
+  
+  abstract function _toXML(DOMNode $node);
 }

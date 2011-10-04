@@ -28,11 +28,11 @@ abstract class CHL7v2 {
     "2.5"
   );
   
-  static $keep_original = array("MSH.2", "NTE.3", "OBX.5");
+  static $keep_original = array("MSH.1", "MSH.2", "NTE.3", "OBX.5");
   
   static $schemas = array();
-	
-	static $ds = false;
+  
+  static $ds = false;
   
   /**
    * When explode() is passed an empty $string, it returns a one element array
@@ -49,48 +49,48 @@ abstract class CHL7v2 {
   function keep() {
     return in_array($this->name, self::$keep_original);
   }
-	
-	static function getTable($table, $from_mb = true){
-		if (self::$ds === null) {
-			return;
-		}
-		
-		if (self::$ds === false) {
-			self::$ds = CSQLDataSource::get("hl7v2");
-		}
-		
-		static $tables = array();
-		
-		if (isset($tables[$table][$from_mb])) {
-			return $tables[$table][$from_mb];
-		}
-		
-		$where = array(
-		  "number" => self::$ds->prepare("=%", $table)
-		);
-		
-		$cols = array("code_hl7_from", "code_mb_to", "description");
-		if ($from_mb) {
-			$cols = array("code_mb_from", "code_hl7_to", "description");
-		}
-		
-		$req = new CRequest;
-		$req->addSelect($cols);
+  
+  static function getTable($table, $from_mb = true){
+    if (self::$ds === null) {
+      return;
+    }
+    
+    if (self::$ds === false) {
+      self::$ds = CSQLDataSource::get("hl7v2");
+    }
+    
+    static $tables = array();
+    
+    if (isset($tables[$table][$from_mb])) {
+      return $tables[$table][$from_mb];
+    }
+    
+    $where = array(
+      "number" => self::$ds->prepare("=%", $table)
+    );
+    
+    $cols = array("code_hl7_from", "code_mb_to", "description");
+    if ($from_mb) {
+      $cols = array("code_mb_from", "code_hl7_to", "description");
+    }
+    
+    $req = new CRequest;
+    $req->addSelect($cols);
     $req->addTable("table_entry");
     $req->addWhere($where);
-		
-		return $tables[$table][$from_mb] = self::$ds->loadHashList($req->getRequest());
-	}
-	
-	static function getTableMbValue($table, $value) {
-		$data = self::getTable($table, false);
-		
-		if (empty($data)) {
-			return null;
-		}
-		
-		return CValue::read($data, $value, false);
-	}
+    
+    return $tables[$table][$from_mb] = self::$ds->loadHashList($req->getRequest());
+  }
+  
+  static function getTableMbValue($table, $value) {
+    $data = self::getTable($table, false);
+    
+    if (empty($data)) {
+      return null;
+    }
+    
+    return CValue::read($data, $value, false);
+  }
   
   static function getTableHL7Value($table, $value) {
     $data = self::getTable($table, true);

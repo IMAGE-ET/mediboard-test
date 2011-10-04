@@ -24,20 +24,15 @@ class CHL7v2Segment extends CHL7v2Entity {
     $this->parent = $parent;
   }
   
-  function path($path) {
-    $path = preg_split("/\s*,\s*/", $path);
-    if (count($path) > 3) return false;
+  function _toXML(DOMNode $node) {
+    $doc = $node->ownerDocument;
+    $new_node = $doc->createElement($this->name);
     
-    $data = $this->fields;
-    try {
-      $field = $data[$path[0]];
-      $item  = $field->items[$path[1]];
-      
-      return $item->components[$path[2]];
+    foreach($this->fields as $_field) {
+      $_field->_toXML($new_node);
     }
-    catch(Exception $e) {
-      return false;
-    }
+    
+    $node->appendChild($new_node);
   }
   
   function getFieldsCount() {
@@ -74,7 +69,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     $_segment_specs = $specs->getItems();
     foreach($_segment_specs as $i => $_spec){
       $field = new CHL7v2Field($this, $_spec);
-			
+      
       if (array_key_exists($i, $fields)) {
         $field->parse($fields[$i]);
         
@@ -95,7 +90,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     $_segment_specs = $specs->getItems();
     foreach($_segment_specs as $i => $_spec){
       $field = new CHL7v2Field($this, $_spec);
-			
+      
       if (array_key_exists($i, $fields)) {
         $_data = $fields[$i];
         

@@ -18,7 +18,7 @@ class CHL7v2FieldItem extends CHL7v2Component {
     $message = $field->getMessage();
     
     $separators = array(
-		  // sub parts separator                 self type        sub part separator class
+      // sub parts separator                 self type        sub part separator class
       array($message->componentSeparator,    "field-item",    "cs"), 
       array($message->subcomponentSeparator, "component",     "scs"),
       array(null,                            "sub-component", null),
@@ -29,6 +29,16 @@ class CHL7v2FieldItem extends CHL7v2Component {
   
   function getField(){
     return $this->parent;
+  }
+  
+  function _toXML(DOMNode $node) {
+    $doc = $node->ownerDocument;
+    $field = $this->getField();
+    $new_node = $doc->createElement($field->name);
+    
+    parent::_toXML($new_node);
+    
+    $node->appendChild($new_node);
   }
   
   function getPath($separator = "."){

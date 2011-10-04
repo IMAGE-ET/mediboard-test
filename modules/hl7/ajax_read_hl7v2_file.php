@@ -37,6 +37,13 @@ foreach($list as $filepath) {
     }
     
     $message->filename = basename($filepath);
+    
+    $geshi = new Geshi($message->toXML()->saveXML(), "xml");
+    $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
+    $geshi->set_overall_style("max-height: 100%; white-space:pre-wrap;");
+    $geshi->enable_classes();
+    $message->_xml = $geshi->parse_code();
+    
     $messages[] = $message;
     
     unlink($filename);
