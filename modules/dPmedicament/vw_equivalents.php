@@ -8,9 +8,14 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$code_cip = CValue::get("code_cip");
 $line_id  = CValue::get("line_id");
 $inLivret = CValue::get("inLivret");
+
+$line = new CPrescriptionLineMedicament();
+$line->load($line_id);
+$line->countAdministrations();
+
+$code_cip = $line->_ref_produit->code_cip;
 
 // Initialisations
 $classe_ATC = new CBcbClasseATC();  
@@ -60,10 +65,6 @@ if($inLivret){
 	$libelle_thera_ATC = $classe_ATC->getLibelle($produit->_ref_ATC_2_code);
   $code_thera_ATC = $produit->_ref_ATC_2_code;
 }
-
-$line = new CPrescriptionLineMedicament();
-$line->load($line_id);
-$line->countAdministrations();
 
 // Création du template
 $smarty = new CSmartyDP();

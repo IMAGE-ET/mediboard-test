@@ -1468,9 +1468,9 @@ class CPrescription extends CMbObject implements IPatientRelated {
     if($with_child != "1"){
       $where["child_id"] = "IS NULL";
     }
-    if($with_subst != "1"){
+    //if($with_subst != "1"){
       $where["substituted"] = " = '0'";
-    }
+    //}
     // Permet de ne pas afficher les lignes de substitutions
     $where["variante_active"] = " = '1'";
     

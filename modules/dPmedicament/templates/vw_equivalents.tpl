@@ -21,6 +21,17 @@ function setClose(code, line_id) {
 Main.add(function () {
   // Initialisation des onglets du menu
   Control.Tabs.create('tabs-equivalent', false);
+
+  // Autocomplete des produits
+  var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
+  url.autoComplete(getForm("searchProd").produit, "produit_auto_complete", {
+    minChars: 2,
+    updateElement: function(selected) {
+      Element.cleanWhitespace(selected);
+      var dn = selected.childNodes;
+      setClose(dn[0].firstChild.nodeValue, '{{$line->_id}}')
+    }
+  } );
 });
 
 </script>
@@ -44,6 +55,7 @@ Main.add(function () {
 	  {{if $inLivret}}
 	  <li><a href="#equivalents_therapeutiques_ATC">Equivalents ATC Thérapeutiques</a></li>
 	  {{/if}}
+		<li><a href="#recherche_produit">Recherche</a></li>
 	</ul>
 	<hr class="control_tabs" />
 	<!-- Equivalents strictes BCB -->
@@ -109,4 +121,15 @@ Main.add(function () {
 	  {{/foreach}}
 	</table>
 	{{/if}}
+	
+	<div id="recherche_produit">
+		<form action="?" method="get" name="searchProd">
+	    <input type="text" style="width: 350px;" name="produit" class="autocomplete" autofocus="autofocus"/>
+	    <label title="Recherche dans le livret thérapeutique">
+	      <input type="checkbox" value="1" name="_recherche_livret"
+	        {{if $line->_ref_prescription->type == "sejour"}}checked="checked"{{/if}} /> Livret Thérap.
+	    </label>
+	    <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
+	  </form>
+	</div>
 {{/if}}

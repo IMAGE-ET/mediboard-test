@@ -173,7 +173,6 @@
 	      {{if $line_class == "CPrescriptionLineMedicament"}}
 					{{$line->_ucd_view}}
 					<br />
-          {{include file="../../dPprescription/templates/inc_vw_info_line_medicament.tpl"}}
 					{{if $line->traitement_personnel}} (Traitement perso){{/if}}
 	      {{else}}
 				  <div class="mediuser" style="border-color: #{{$line->_ref_element_prescription->_color}}">
@@ -185,8 +184,12 @@
 					</div>
 				{{/if}} 
 	  </div>
-		  
-    {{if $line->conditionnel}}
+		
+		{{if $line_class == "CPrescriptionLineMedicament"}}
+      {{include file="../../dPprescription/templates/inc_vw_info_line_medicament.tpl"}}
+		{{/if}}
+    
+		{{if $line->conditionnel}}
       <form action="?" method="post" name="activeCondition-{{$line_id}}-{{$line_class}}">
         <input type="hidden" name="m" value="dPprescription" />
         <input type="hidden" name="dosql" value="{{$dosql}}" />

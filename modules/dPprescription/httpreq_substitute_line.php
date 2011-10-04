@@ -28,9 +28,9 @@ $line->code_cip = $code_cip;
 $line->code_ucd = "";
 $line->creator_id = $user->_id;
 $line->accord_praticien = "";
-$line->debut = mbDate();
-$line->time_debut = mbTime();
 $line->substitute_for_id = $line_id;
+$line->substituted = 0;
+$line->voie = "";
 $msg = $line->store();
 
 // Réaffectation des lignes de variantes à l'equivalent
@@ -48,8 +48,8 @@ CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
 $old_line = new CPrescriptionLineMedicament();
 $old_line->load($line_id);
 $old_line->substituted = "1";
-$old_line->date_arret = mbDate();
-$old_line->time_arret = mbTime();
+//$old_line->date_arret = mbDate();
+//$old_line->time_arret = mbTime();
 $msg = $old_line->store();
 CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-store");
 

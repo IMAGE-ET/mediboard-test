@@ -127,6 +127,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_ref_variantes = null;
   var $_ref_variante_for = null; // ligne (med ou perf) que la ligne peut substituer
   var $_ref_produit_prescription = null;
+	var $_ref_substitute_for = null;
 	
   // Alertes
   var $_ref_alertes      = null;
@@ -755,6 +756,10 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   	$this->_ref_produit = CBcbProduit::get($this->code_cip);
   }
   
+	function loadRefSubstituteFor(){
+    $this->_ref_substitute_for = $this->loadFwdRef("substitute_for_id", true);
+  }
+	
   /*
    * Chargement de la posologie
    */
@@ -766,18 +771,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $this->_unite_prise = $posologie->_code_unite_prise["LIBELLE_UNITE_DE_PRISE"];
     $this->_specif_prise = $posologie->_code_prise1;
     $this->_ref_posologie = $posologie;
-  }
-  
-  
-  /*
-   * Chargement de la ligne suivante (dans le cas d'une subsitution)
-   */
-  function loadRefNextHistLine(){
-    $this->_ref_next_hist_line = new $this->_class;
-    if($this->subsitution_line_id){
-      $this->_ref_next_hist_line->_id = $this->subsitution_line_id;
-      $this->_ref_next_hist_line->loadMatchingObject();
-    }  
   }
     
   /*
