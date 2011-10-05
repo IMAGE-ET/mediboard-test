@@ -86,6 +86,7 @@ $locales['mod-hl7-tab-ajax_import_hl7v2_tables'] = 'Importer les tables HL7v2';
 $locales['mod-hl7-tab-ajax_read_hl7v2_file'] = 'Lire fichier HL7v2';
 $locales['mod-hl7-tab-ajax_refresh_table_entries'] = 'Afficher les entrées d\'une table HL7v2';
 $locales['mod-hl7-tab-configure'] = 'Configurer';
+$locales['mod-hl7-tab-vw_hl7v2_schemas'] = 'Schémas HL7v2';
 $locales['mod-hl7-tab-vw_hl7v2_tables'] = 'Tables HL7v2';
 $locales['mod-hl7-tab-vw_read_hl7v2_files'] = 'Lecture fichier HL7';
 $locales['mod-hl7-tab-vw_test_hl7v2_data_type'] = 'Test types de données';
