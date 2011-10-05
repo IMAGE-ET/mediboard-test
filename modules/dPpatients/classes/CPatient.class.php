@@ -1483,8 +1483,15 @@ class CPatient extends CMbObject {
     $this->loadRefsCorrespondantsPatient();
     $correspondants = $this->_ref_cp_by_relation;
     
-    foreach ($correspondants as $_correspondants) {
-      $_correspondant = reset($_correspondants);
+    foreach ($correspondants as $relation => $_correspondants) {
+      $_correspondant = @reset($_correspondants);
+      
+      // Dans le cas d'un modèle, création d'un correspondant pour chaque type de relation
+      if (!count($_correspondants)) {
+        $_correspondant = new CCorrespondantPatient;
+        $_correspondant->relation = $relation;
+      }
+      
       switch($_correspondant->relation) {
         case "employeur" :
           $template->addProperty("Patient - employeur - nom"    , $_correspondant->nom);
