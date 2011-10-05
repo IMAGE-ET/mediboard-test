@@ -985,6 +985,7 @@ $locales['config-dPpatients-intermax-auto_watch-desc'] = 'Récupération automatiq
 $locales['dPpatients-CPatient-close-results'] = 'Résultats proches';
 $locales['dPpatients-CPatient-exact-results'] = 'Résultats exacts';
 $locales['dPpatients-CPatient-no-exact-results'] = 'Aucun résultat exact';
+$locales['mod-dPpatients-tab-ajax_form_correspondant'] = 'Edition de correspondant';
 $locales['mod-dPpatients-tab-autocomplete_cp_commune'] = 'Code postal de la commune';
 $locales['mod-dPpatients-tab-configure'] = 'Configuration';
 $locales['mod-dPpatients-tab-fusion_medecin'] = 'Fusion des médecins';

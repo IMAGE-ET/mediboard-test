@@ -794,9 +794,6 @@ Object.extend (Control.Tabs, {
     }
     var anchor = anchors[0];
     
-    // Set empty class
-    anchor.setClassName('empty', count < 1);
-    
     // Find count span
     var small = anchor.down('small');
     if (!small) {
@@ -804,7 +801,15 @@ Object.extend (Control.Tabs, {
       return;
     }
     
-    // Set count label
+    // Manage relative count
+    if (count.charAt(0) == "+" || count.charAt(0) == "-") {
+      count = parseInt(small.innerHTML.replace(/(\(|\))*/,"")) + parseInt(count);
+    }
+    
+    // Set empty class
+    anchor.setClassName('empty', count < 1);
+    
+     // Set count label
     small.update('('+count+')');
   }
 });

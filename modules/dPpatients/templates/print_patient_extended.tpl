@@ -152,46 +152,73 @@ function toggleList(list, button) {
 
   <tr><th class="category" colspan="10">Correspondance</th></tr>
   <tr>
-    <th class="category" colspan="2" style="font-size: 1.0em;">Personne à prévenir</th>
+    <th class="category" colspan="2" style="font-size: 1.0em;">Personne(s) à prévenir</th>
     <th class="category" colspan="2" style="font-size: 1.0em;">Employeur</th>
   </tr>
   <tr>
-    {{assign var=prevenir  value=$patient->_ref_cp_by_relation.prevenir.0}}
-    {{assign var=employeur value=$patient->_ref_cp_by_relation.employeur.0}}
-    <th>{{mb_label object=$prevenir field=nom}}</th>
-    <td>
-      {{mb_value object=$prevenir field=nom}}
-      {{mb_value object=$prevenir field=prenom}}
+    <td colspan="2" style="width: 50%;">
+      {{foreach from=$patient->_ref_cp_by_relation.prevenir item=prevenir name=foreach_prevenir}}
+        <table class="print" style="font-size: 11px; width: 100%;">
+          <tr>
+            <th style="width: 30%;">{{mb_label object=$prevenir field=nom}}</th>
+            <td>
+              {{mb_value object=$prevenir field=nom}}
+              {{mb_value object=$prevenir field=prenom}}
+            </td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$prevenir field="adresse"}}</th>
+            <td>
+              {{mb_value object=$prevenir field="adresse"}}<br />
+              {{mb_value object=$prevenir field="cp"}}
+              {{mb_value object=$prevenir field="ville"}}
+            </td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$prevenir  field="tel"}}</th>
+            <td>{{mb_value object=$prevenir  field="tel"}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$prevenir  field="parente"}}</th>
+            <td>{{mb_value object=$prevenir  field="parente"}}</td>
+          </tr>
+        </table>
+        {{if !$smarty.foreach.foreach_prevenir.last}}
+          <br />
+        {{/if}}
+      {{/foreach}}
     </td>
-    <th>{{mb_label object=$employeur field="nom"}}</th>
-    <td>{{mb_value object=$employeur field="nom"}}</td>
-  </tr>
-  <tr>
-    <th>{{mb_label object=$prevenir field="adresse"}}</th>
-    <td>
-      {{mb_value object=$prevenir field="adresse"}}<br />
-      {{mb_value object=$prevenir field="cp"}}
-      {{mb_value object=$prevenir field="ville"}}
+    <td colspan="2" style="width: 50%; width: 100%;">
+      {{foreach from=$patient->_ref_cp_by_relation.employeur item=employeur name=foreach_employeur}}
+        <table class="print" style="font-size: 11px;">
+          <tr>
+            <th style="width: 30%;">{{mb_label object=$employeur field="nom"}}</th>
+            <td>{{mb_value object=$employeur field="nom"}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$employeur field="adresse"}}</th>
+            <td>
+              {{mb_value object=$employeur field="adresse"}}<br />
+              {{mb_value object=$employeur field="cp"}}
+              {{mb_value object=$employeur field="ville"}}
+            </td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$employeur field="tel"}}</th>
+            <td>{{mb_value object=$employeur field="tel"}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$employeur field="urssaf"}}</th>
+            <td>{{mb_value object=$employeur field="urssaf"}}</td>
+          </tr>
+        </table>
+        {{if !$smarty.foreach.foreach_employeur.last}}
+          <br />
+        {{/if}}
+      {{/foreach}}
     </td>
-    <th>{{mb_label object=$employeur field="adresse"}}</th>
-    <td>
-      {{mb_value object=$employeur field="adresse"}}<br />
-      {{mb_value object=$employeur field="cp"}}
-      {{mb_value object=$employeur field="ville"}}
-    </td>
   </tr>
-  <tr>
-    <th>{{mb_label object=$prevenir  field="tel"}}</th>
-    <td>{{mb_value object=$prevenir  field="tel"}}</td>
-    <th>{{mb_label object=$employeur field="tel"}}</th>
-    <td>{{mb_value object=$employeur field="tel"}}</td>
-  </tr>
-  <tr>
-    <th>{{mb_label object=$prevenir  field="parente"}}</th>
-    <td>{{mb_value object=$prevenir  field="parente"}}</td>
-    <th>{{mb_label object=$employeur field="urssaf"}}</th>
-    <td>{{mb_value object=$employeur field="urssaf"}}</td>
-  </tr>
+  
   <tr><th class="category" colspan="10">Assuré social</th></tr>
   <tr>
     <th>{{mb_label object=$patient field=assure_nom}} / {{mb_label object=$patient field=assure_prenom}}</th>

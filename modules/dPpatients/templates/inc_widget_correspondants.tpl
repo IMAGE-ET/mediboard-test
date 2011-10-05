@@ -12,20 +12,27 @@ Medecin = {
   del: function(form) {
     if (confirm("Voulez vous vraiment supprimer ce médecin ?")) {
       $V(form._view, '');
-      if (form.medecin_traitant)
+      if (form.medecin_traitant) {
         $V(form.medecin_traitant, '');
-      else
+      }
+      else {
+        Control.Tabs.setTabCount("medecins", "-1");
         $V(form.del, 1);
+      }
     }
   },
   
   set: function(id, view) {
+    emptyMedecinTraitant = !$V(this.form.medecin_traitant);
     $V(this.form.medecin_traitant ? this.form.medecin_traitant : this.form.medecin_id, id);
     $V(this.form._view, view);
   }
 };
 
 submitMedecin = function(form) {
+  if (!$V(form.del) && ($V(form.dosql) != "do_patients_aed")) {
+    Control.Tabs.setTabCount("medecins", "+1");
+  }
 	// Update main form for unexisting patient 
 	if (!$V(form.patient_id)) {
 		$V(document.editFrm.medecin_traitant, $V(form.medecin_traitant));
@@ -38,12 +45,25 @@ submitMedecin = function(form) {
   });
 }
 
-Main.add(function () {
+updateMedTraitant = function(form) {
+  if (!$V(form.medecin_traitant)) {
+    Control.Tabs.setTabCount('medecins', '-1');
+  }
+  else if (emptyMedecinTraitant) {
+    Control.Tabs.setTabCount('medecins', '+1');
+  }
+  return submitMedecin(form);
+}
+
+Main.add(function () { 
   var formTraitant = getForm("traitant-edit-{{$patient->_id}}");
+  emptyMedecinTraitant = !$V(formTraitant.medecin_traitant);
   var urlTraitant = new Url("dPpatients", "httpreq_do_medecins_autocomplete");
   urlTraitant.autoComplete(formTraitant._view, formTraitant._view.id+'_autocomplete', {
     minChars: 2,
     updateElement : function(element) {
+      emptyMedecinTraitant = !$V(formTraitant.medecin_traitant);
+      console.log(emptyMedecinTraitant);
       $V(formTraitant.medecin_traitant, element.id.split('-')[1]);
       $V(formTraitant._view, element.select(".view")[0].innerHTML.stripTags());
     }
@@ -79,7 +99,7 @@ Main.add(function () {
     	{{assign var=medecin_traitant_view value=$patient->_ref_medecin_traitant->_view}}
 			{{/if}}
 
-      <form name="traitant-edit-{{$patient->_id}}" action="?" method="post" onsubmit="return submitMedecin(this)">
+      <form name="traitant-edit-{{$patient->_id}}" action="?" method="post" onsubmit="return updateMedTraitant(this);">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dosql" value="do_patients_aed" />
         <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
@@ -99,7 +119,7 @@ Main.add(function () {
         <th rowspan="{{$patient->_ref_medecins_correspondants|@count}}">{{tr}}CPatient-back-medecins_correspondants{{/tr}}</th>
       {{/if}}
       <td>
-        <form name="correspondant-edit-{{$patient->_id}}" action="?" method="post" onsubmit="return submitMedecin(this)">
+        <form name="correspondant-edit-{{$curr_corresp->_id}}" action="?" method="post" onsubmit="return submitMedecin(this)">
           <input type="hidden" name="m" value="{{$m}}" />
           <input type="hidden" name="dosql" value="do_correspondant_aed" />
           <input type="hidden" name="del" value="" onchange="this.form.onsubmit()" />

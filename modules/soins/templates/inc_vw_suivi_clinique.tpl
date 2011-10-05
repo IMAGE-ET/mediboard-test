@@ -171,11 +171,8 @@
             <strong>{{tr}}CCorrespondantPatient-tel{{/tr}}</strong>
           </th>
         </tr>
-        {{assign var=count_correspondants value=0}}
         {{foreach from=$patient->_ref_cp_by_relation item=_correspondants}}
-          {{assign var=_correspondant value=$_correspondants|@reset}}
-          {{if $_correspondant->_id}}
-            {{math equation="x+1" x=$count_correspondants assign=count_correspondants}}
+          {{foreach from=$_correspondants item=_correspondant}}
             <tr>
               <td>
                 <strong>{{mb_value object=$_correspondant field=relation}}</strong>
@@ -190,11 +187,11 @@
                 {{mb_value object=$_correspondant field="tel"}}
               </td>
             </tr>
-          {{/if}}
+          {{/foreach}}
         {{/foreach}}
-        {{if $count_correspondants == 0}}
+        {{if !$patient->_ref_correspondants_patient|@count}}
           <tr>
-            <td colspan="4">
+            <td colspan="4" class="empty">
               {{tr}}CCorrespondantPatient.none{{/tr}}
             </td>
           </tr>

@@ -9,6 +9,7 @@
 {{mb_script module="dPcompteRendu" script="modele_selector"}}
 {{if $patient->_id}}
   {{mb_include module="dPfiles" template="yoplet_uploader" object=$patient}}
+  {{mb_script module="dPpatients"  script="correspondant"}}
 {{/if}}
 
 {{if $app->user_prefs.VitaleVision}}
@@ -125,10 +126,6 @@ function mapIdCorres(id, object) {
 
 var tabs;
 Main.add(function () {
-  {{if $patient->_id}}
-    InseeFields.initCPVille("editCorrespondant_prevenir", "cp", "ville", "tel");
-    InseeFields.initCPVille("editCorrespondant_employeur", "cp", "ville", "tel");
-  {{/if}}
   initPaysField("editFrm", "_pays_naissance_insee", "profession");
   initPaysField("editFrm", "pays", "tel");
   
@@ -246,13 +243,14 @@ Main.add(function () {
     </th>
   {{/if}}
   </tr>
-  
+  {{mb_ternary var=x test=$patient->medecin_traitant value=1 other=0}}
+  {{math equation="$x+y" y=$patient->_ref_medecins_correspondants|@count assign=count_correspondants}}
   <tr>
     <td colspan="5">
       <ul id="tab-patient" class="control_tabs">
         <li><a href="#identite">Patient</a></li>
-        <li><a href="#medecins">Correspondants médicaux</a></li>
-        <li><a href="#correspondance">Correspondance</a></li>
+        <li><a href="#medecins" {{if !$count_correspondants}}class="empty"{{/if}}>Correspondants médicaux <small>({{$count_correspondants}})</small></a></li>
+        <li><a href="#correspondance" {{if !$patient->_ref_correspondants_patient|@count}}class="empty"{{/if}}>Correspondance <small>({{$patient->_ref_correspondants_patient|@count}})</small></a></li>
         <li><a href="#assure">Assuré social</a></li>
         <li><a href="#beneficiaire">Bénéficiaire de soins</a></li>
         <li><a href="#listView" {{if $patient->_nb_files_docs == 0}}class="empty"{{/if}}

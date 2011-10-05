@@ -1307,16 +1307,6 @@ class CPatient extends CMbObject {
       $this->_ref_cp_by_relation[$_correspondant->relation][$_correspondant->_id] = $_correspondant;
     }
     
-    // Si aucun correspondant dans chaque catégorie, on en crée un nouveau et on initialise le champ relation
-    foreach ($this->_ref_cp_by_relation as $relation => $_correspondants) {
-      if (!count($this->_ref_cp_by_relation[$relation])) {
-        $correspondant = new CCorrespondantPatient;
-        $correspondant->relation = $relation;
-        $correspondant->patient_id = $this->_id;
-        $this->_ref_cp_by_relation[$relation][] = $correspondant;
-      }
-    }
-    
     return $this->_ref_correspondants_patient;
   }
 	
