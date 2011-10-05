@@ -8,25 +8,32 @@
 */
 
 /*
-Pour acceder à cette page ==>
-http://localhost/mediboard/index.php?m=dPhospi&a=get_etat_lits_txt&dialog=1&suppressHeaders=1;  
+ * Pour acceder à cette page ==>
+ * http://localhost/mediboard/index.php?m=dPhospi&a=get_etat_lits_txt&dialog=1&suppressHeaders=1;
+ * renvoi :
+ * NOM;Prénom;patient_id;service_id;chambre_id;lit_id;sexe(m ou f);naissance(YYYYMMJJ);
+ * entree(YYYYMMDD);entree(HHMM);sortie(YYYYMMDD);sortie(HHMM);type_hospi(comp ou ambu)
 */
 
 // Date actuelle
 $date = mbDateTime();
 
-// Chargement des services
-$services = new CService;
-$services = $services->loadListWithPerms(PERM_READ);
-
 // Affectation a la date $date
 $affectation = new CAffectation();
-$whereAffect["entree"] = "<= '$date'";
-$whereAffect["sortie"] = ">= '$date'";
-$whereAffect["sejour_id"] = "!= '0'";
+
+$ljoinAffect = array();
+$ljoinAffect["sejour"] = "sejour.sejour_id = affectation.sejour_id";
+
+$whereAffect = array();
+$whereAffect["affectation.entree"]    = "<= '$date'";
+$whereAffect["affectation.sortie"]    = ">= '$date'";
+$whereAffect["affectation.sejour_id"] = "!= '0'";
+$whereAffect["sejour.group_id"]       = "= '".CGroups::loadCurrent()->_id."'";
+$whereAffect["sejour.annule"]         = "= '0'";
+
 $groupAffect = "sejour_id";
 
-$affectations = $affectation->loadList($whereAffect,null,null,$groupAffect);
+$affectations = $affectation->loadList($whereAffect,null,null,$groupAffect, $ljoinAffect);
 
 $list_affectations = array();
 
@@ -46,10 +53,10 @@ foreach($affectations as $key=>$_affectation){
    $list_affectations[$key]["lit"]          = $_affectation->_ref_lit->_id;
    $list_affectations[$key]["sexe"]         = $_affectation->_ref_sejour->_ref_patient->sexe;
    $list_affectations[$key]["naissance"]    = mbTransformTime(null, $_affectation->_ref_sejour->_ref_patient->naissance, "%Y%m%d");
-   $list_affectations[$key]["date_entree"]  = mbTransformTime(null, mbDate($_affectation->_ref_sejour->entree_reelle), "%Y%m%d"); 
-   $list_affectations[$key]["heure_entree"] = mbTransformTime(null, mbTime($_affectation->_ref_sejour->entree_reelle), "%H%M");
-   $list_affectations[$key]["date_sortie"]  = mbTransformTime(null, mbDate($_affectation->_ref_sejour->sortie_reelle), "%Y%m%d");
-   $list_affectations[$key]["heure_sortie"] = mbTransformTime(null, mbTime($_affectation->_ref_sejour->sortie_reelle), "%H%M");
+   $list_affectations[$key]["date_entree"]  = mbTransformTime(null, mbDate($_affectation->_ref_sejour->entree), "%Y%m%d"); 
+   $list_affectations[$key]["heure_entree"] = mbTransformTime(null, mbTime($_affectation->_ref_sejour->entree), "%H%M");
+   $list_affectations[$key]["date_sortie"]  = mbTransformTime(null, mbDate($_affectation->_ref_sejour->sortie), "%Y%m%d");
+   $list_affectations[$key]["heure_sortie"] = mbTransformTime(null, mbTime($_affectation->_ref_sejour->sortie), "%H%M");
    $list_affectations[$key]["type"]         = $_affectation->_ref_sejour->type;
 }
 
