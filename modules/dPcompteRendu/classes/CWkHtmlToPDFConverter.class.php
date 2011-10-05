@@ -54,19 +54,30 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
       "left"   => $matches[4] * 10
     );
     
-    $pos_header = strpos($this->html, "<div id=\"header\">");
-    $pos_footer = strpos($this->html, "<div id=\"footer\">");
+    $pos_header = strpos($this->html, "<div id=\"header\"");
+    $pos_footer = strpos($this->html, "<div id=\"footer\"");
     $pos_body   = strpos($this->html, "<div id=\"body\">");
     
     /* header / footer sans body */
     if (!$pos_body) {
-      $pos_body = strlen($this->html) - 15;
+      $pos_body = strlen($this->html) - 16;
     }
     
     $header     = null;
     $footer     = null;
     $header_footer_common = null;
-    
+    $page_number = "<script type='text/javascript'>
+      function subst() {
+        var vars={};
+        var x=document.location.search.substring(1).split('&');
+        for (var i in x) {var z=x[i].split('=',2);vars[z[0]] = unescape(z[1]);}
+        var x=['page'];
+        for (var i in x) {
+          var y = document.getElementsByClassName(x[i]);
+          for(var j=0; j<y.length; ++j) y[j].textContent = vars[x[i]];
+        }
+      }
+    </script>";
     // Extraire l'entête
     if ($pos_header) {
       $header_footer_common = substr($this->html, 0, $pos_header);
@@ -113,11 +124,11 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
       // On supprime l'entête que maintenant sinon les positions de chaînes seront erronées
       $this->html = str_replace($header, '', $this->html);
       $this->header = $this->temp_name . "-header.html";
-      file_put_contents($this->header, $header_footer_common.$header."</body></html>");
+      file_put_contents($this->header, $header_footer_common.$page_number.$header."</body></html>");
     }
     if ($footer) {
       $this->footer = $this->temp_name . "-footer.html";
-      file_put_contents($this->footer, $header_footer_common.$footer."</body></html>");
+      file_put_contents($this->footer, $header_footer_common.$page_number.$footer."</body></html>");
     }
     
     $this->file = $this->temp_name.".html";

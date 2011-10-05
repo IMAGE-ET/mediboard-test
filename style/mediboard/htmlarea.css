@@ -130,6 +130,8 @@ span.page:before {
 
 @media print {
   #header, #footer {
+  	/* si le display est changé par les plugins ckeditor */
+  	display: block !important;
     width: 100%;
     position: fixed;
     overflow: hidden;
