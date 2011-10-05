@@ -41,7 +41,9 @@ class CHL7v2FieldItem extends CHL7v2Component {
     $node->appendChild($new_node);
   }
   
-  function getPath($separator = "."){
-    return $this->parent->getPath($separator);
+  function getPath($separator = ".", $with_name = false){
+    $path = $this->parent->getPath($separator, $with_name);
+    $path[count($path)-1] = $path[count($path)-1]."[".($this->self_pos+1)."]";
+    return $path;
   }
 }

@@ -140,7 +140,11 @@ class CHL7v2Field extends CHL7v2Entity {
     return $this->owner_segment->getMessage();
   }
   
-  function getPath($separator = "."){
+  function getPath($separator = ".", $with_name = false){
+    if ($with_name) {
+      return array($this->name);
+    }
+    
     $self_pos = explode($separator, $this->name);
     return array((int)$self_pos[1]);
   }

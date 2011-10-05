@@ -268,9 +268,15 @@ class CHL7v2Component extends CHL7v2Entity {
     return $this->getMessage()->getVersion();
   }
   
-  function getPath($separator = "."){
-    $path = $this->parent->getPath($separator);
-    $path[] = $this->self_pos+1;
+  function getPath($separator = ".", $with_name = false){
+    $path = $this->parent->getPath($separator, $with_name);
+    $label = $this->self_pos+1;
+    
+    if ($with_name) {
+      $label = "$this->datatype.$label";
+    }
+    
+    $path[] = $label;
     return $path;
   }
   
@@ -307,10 +313,14 @@ class CHL7v2Component extends CHL7v2Entity {
       
     if (CHL7v2Message::$decorateToString) {
       $title = $field->owner_segment->name.".".implode(".", $this->getPath())." - $this->datatype - $this->description";
+      
       if ($this->table != 0) {
         $title .= " [$this->table]";
       }
-      $str = "<span class='entity {$this->separator[1]} ".($this->invalid ? 'invalid' : '')."' id='entity-er7-$this->id' data-title='$title'>$str</span>";
+      
+      $xpath = ($this->getSegment()->name)."/".implode("/", $this->getPath(".", true));
+      
+      $str = "<span class='entity {$this->separator[1]} ".($this->invalid ? 'invalid' : '')."' id='entity-er7-$this->id' data-title='$title' data-xpath='$xpath' onclick='Event.stop(event);prompt(null,this.get(\"xpath\"))'>$str</span>";
     }
       
     return $str;
