@@ -111,6 +111,70 @@ function checkConsultAccompSejourEasy(){
   }
 }
 
+function checkAccident(){
+  var oForm = getForm("editSejour");
+  var oFormEasy = getForm("editOpEasy");
+  
+  var date_accident    = $V(oForm.date_accident);
+  var date_accident_da = $V(oForm.date_accident_da);
+  var nature_accident  = $V(oForm.nature_accident);
+  
+  if (oFormEasy) {
+    $V(oFormEasy.date_accident   , date_accident   , false);
+    $V(oFormEasy.date_accident_da, date_accident_da, false);
+    $V(oFormEasy.nature_accident , nature_accident , false);
+  }
+}
+
+
+function checkAccidentEasy(){
+  var oForm = getForm("editSejour");
+  var oFormEasy = getForm("editOpEasy");
+  
+  if (oFormEasy) {
+    var date_accident    = $V(oFormEasy.date_accident);
+    var date_accident_da = $V(oFormEasy.date_accident_da);
+    var nature_accident  = $V(oFormEasy.nature_accident);
+    $V(oForm.date_accident   , date_accident   , false);
+    $V(oForm.date_accident_da, date_accident_da, false);
+    $V(oForm.nature_accident , nature_accident , false);
+  }
+}
+
+function checkAssurances(){
+  var oForm = getForm("editSejour");
+  var oFormEasy = getForm("editOpEasy");
+  
+  var assurance_maladie        = $V(oForm.assurance_maladie);
+  var rques_assurance_maladie  = $V(oForm.rques_assurance_maladie);
+  var assurance_accident       = $V(oForm.assurance_accident);
+  var rques_assurance_accident = $V(oForm.rques_assurance_accident);
+  
+  if (oFormEasy) {
+    $V(oFormEasy.assurance_maladie       , assurance_maladie       , false);
+    $V(oFormEasy.rques_assurance_maladie , rques_assurance_maladie , false);
+    $V(oFormEasy.assurance_accident      , assurance_accident      , false);
+    $V(oFormEasy.rques_assurance_accident, rques_assurance_accident, false);
+  }
+}
+
+
+function checkAssurancesEasy(){
+  var oForm = getForm("editSejour");
+  var oFormEasy = getForm("editOpEasy");
+  
+  if (oFormEasy) {
+    var assurance_maladie        = $V(oFormEasy.assurance_maladie);
+    var rques_assurance_maladie  = $V(oFormEasy.rques_assurance_maladie);
+    var assurance_accident       = $V(oFormEasy.assurance_accident);
+    var rques_assurance_accident = $V(oFormEasy.rques_assurance_accident);
+    $V(oForm.assurance_maladie       , assurance_maladie       , false);
+    $V(oForm.rques_assurance_maladie , rques_assurance_maladie , false);
+    $V(oForm.assurance_accident      , assurance_accident      , false);
+    $V(oForm.rques_assurance_accident, rques_assurance_accident, false);
+  }
+}
+
 function printFormSejour() {
   var url = new Url;
   url.setModuleAction("dPplanningOp", "view_planning"); 
@@ -450,12 +514,12 @@ Main.add( function(){
 {{if $conf.dPplanningOp.CSejour.accident}}
 <tr>
   <th>{{mb_label object=$sejour field="date_accident"}}</th>
-  <td colspan="3">{{mb_field object=$sejour form="editSejour" field="date_accident" register=true}}</td>
+  <td colspan="3">{{mb_field object=$sejour form="editSejour" field="date_accident" register=true onchange="checkAccident();"}}</td>
 </tr>
 
 <tr>
   <th>{{mb_label object=$sejour field="nature_accident"}}</th>
-  <td colspan="3">{{mb_field object=$sejour field="nature_accident" emptyLabel="Choose" style="width: 15em;"}}</td>
+  <td colspan="3">{{mb_field object=$sejour field="nature_accident" emptyLabel="Choose" style="width: 15em;" onchange="checkAccident();"}}</td>
 </tr>
 {{/if}}
 
@@ -827,7 +891,7 @@ Main.add( function(){
 </tr>
 <tr>
   <th>{{mb_label object=$sejour field="assurance_maladie"}}</th>
-  <td colspan="3">{{mb_field object=$sejour field="assurance_maladie" form="editSejour" style="width: 12em" autocomplete="true,1,50,true,true"}}</td>
+  <td colspan="3">{{mb_field object=$sejour field="assurance_maladie" form="editSejour" style="width: 12em" autocomplete="true,1,50,true,true" onchange="checkAssurances();"}}</td>
 </tr>
 <tr>
   <th>{{mb_label object=$sejour field="rques_assurance_maladie"}}</th>
@@ -841,11 +905,11 @@ Main.add( function(){
         });
       });
     </script>
-    {{mb_field object=$sejour field="rques_assurance_maladie"}}</td>
+    {{mb_field object=$sejour field="rques_assurance_maladie" onchange="checkAssurances();"}}</td>
 </tr>
 <tr>
   <th>{{mb_label object=$sejour field="assurance_accident"}}</th>
-  <td colspan="3">{{mb_field object=$sejour field="assurance_accident" form="editSejour" style="width: 12em" autocomplete="true,1,50,true,true"}}</td>
+  <td colspan="3">{{mb_field object=$sejour field="assurance_accident" form="editSejour" style="width: 12em" autocomplete="true,1,50,true,true" onchange="checkAssurances();"}}</td>
 </tr>
 <tr>
   <th>{{mb_label object=$sejour field="rques_assurance_accident"}}</th>
@@ -859,7 +923,7 @@ Main.add( function(){
         });
       });
     </script>
-    {{mb_field object=$sejour field="rques_assurance_accident"}}</td>
+    {{mb_field object=$sejour field="rques_assurance_accident" onchange="checkAssurances();"}}</td>
 </tr>
 {{/if}}
 

@@ -53,6 +53,10 @@
   {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var"   value="easy_regime"}}
   {{mb_include module=system template=inc_config_bool var=$var }}
+  {{assign var="var"   value="easy_accident"}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
+  {{assign var="var"   value="easy_assurances"}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
   
   <tr>
     <td class="button" colspan="2">

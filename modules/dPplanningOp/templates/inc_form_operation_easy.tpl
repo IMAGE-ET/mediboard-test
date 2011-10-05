@@ -302,5 +302,58 @@
 		{{/if}}
   </tr>
 	{{/if}}
+
+  {{if $conf.dPplanningOp.CSejour.accident && $conf.dPplanningOp.COperation.easy_accident}}
+  <tr>
+    <th>{{mb_label object=$sejour field="date_accident"}}</th>
+    <td colspan="3">{{mb_field object=$sejour form="editOpEasy" field="date_accident" register=true onchange="checkAccidentEasy();"}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$sejour field="nature_accident"}}</th>
+    <td colspan="3">{{mb_field object=$sejour field="nature_accident" emptyLabel="Choose" style="width: 15em;" onchange="checkAccidentEasy();"}}</td>
+  </tr>
+  {{/if}}
+
+  {{if $conf.dPplanningOp.CSejour.assurances && $conf.dPplanningOp.COperation.easy_assurances}}
+  <tr>
+    <th colspan="4" class="category">Assurance</th>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$sejour field="assurance_maladie"}}</th>
+    <td colspan="3">{{mb_field object=$sejour field="assurance_maladie" form="editOpEasy" style="width: 12em" autocomplete="true,1,50,true,true" onchange="checkAssurancesEasy();"}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$sejour field="rques_assurance_maladie"}}</th>
+    <td colspan="3">
+      <script type="text/javascript">
+        Main.add(function() {
+          new AideSaisie.AutoComplete(getForm("editOpEasy").elements.rques_assurance_maladie, {
+            objectClass: "{{$sejour->_class}}",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            validateOnBlur: 0
+          });
+        });
+      </script>
+      {{mb_field object=$sejour field="rques_assurance_maladie" onchange="checkAssurancesEasy();"}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$sejour field="assurance_accident"}}</th>
+    <td colspan="3">{{mb_field object=$sejour field="assurance_accident" form="editOpEasy" style="width: 12em" autocomplete="true,1,50,true,true" onchange="checkAssurancesEasy();"}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$sejour field="rques_assurance_accident"}}</th>
+    <td colspan="3">
+      <script type="text/javascript">
+        Main.add(function() {
+          new AideSaisie.AutoComplete(getForm("editOpEasy").elements.rques_assurance_accident, {
+            objectClass: "{{$sejour->_class}}",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            validateOnBlur: 0
+          });
+        });
+      </script>
+      {{mb_field object=$sejour field="rques_assurance_accident" onchange="checkAssurancesEasy();"}}</td>
+  </tr>
+  {{/if}}
 </table>
 </form>
