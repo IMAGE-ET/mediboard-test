@@ -40,6 +40,9 @@ class CHL7v2EventADTA06 extends CHL7v2EventADT implements CHL7EventADTA06 {
     // Doctors
     $this->addROLs($patient);
     
+    // Next of Kin / Associated Parties
+    $this->addNK1s($patient);
+    
     // Patient Visit
     $this->addPV1($sejour);
     

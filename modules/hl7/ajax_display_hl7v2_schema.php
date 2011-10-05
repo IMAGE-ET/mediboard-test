@@ -14,6 +14,8 @@ CCanDo::checkRead();
 
 $path = CValue::get("path");
 
+echo "<h1>$path</h1>";
+
 $geshi = new Geshi(file_get_contents($path), "xml");
 $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
 $geshi->set_overall_style("max-height: 100%; white-space:pre-wrap;");

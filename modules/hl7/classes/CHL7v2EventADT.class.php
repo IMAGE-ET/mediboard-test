@@ -30,8 +30,6 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     
     // Event Type
     $this->addEVN();
-    
-    
   }
   
   /*
@@ -96,6 +94,20 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
       $ROL->medecin = $medecin;
       $ROL->role_id = "RT";
       $ROL->build($this);
+    }
+  }
+  
+  /*
+   * Represents an HL7 NK1 message segment (Next of Kin / Associated Parties)
+   */
+  function addNK1s(CPatient $patient) {
+    $i = 1;
+    foreach ($patient->loadRefsCorrespondantsPatient() as $_correspondant) {
+      $NK1 = CHL7v2Segment::create("NK1", $this->message);
+      $NK1->set_id = $i;
+      $NK1->correspondant = $_correspondant;
+      $NK1->build($this);
+      $i++;
     }
   }
   

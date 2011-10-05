@@ -38,7 +38,8 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
     // HL  - Hospitalisation libre
     // HO  - Placement d'office
     // HDT - Hospitalisation à la demande d'un tiers
-    if ($sejour->type == "psy") {
+    $triggers = array("A01", "A05", "A06", "A14", "Z99");
+    if ($sejour->type == "psy" && (in_array($event->code, $triggers))) {
       $data[] = CHL7v2TableEntry::mapTo("9000", $sejour->modalite);
     } else {
       $data[] = null;

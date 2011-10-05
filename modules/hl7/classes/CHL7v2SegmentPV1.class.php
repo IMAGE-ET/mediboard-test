@@ -220,7 +220,7 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     $data[] = $sejour->_sortie_autorisee ? "3": "4";
     
     // PV1-37: Discharged to Location (DLD) (optional)
-    $data[] = $sejour->etablissement_sortie_id ? $sejour->loadRefEtablissementTransfert()->finess : null;
+    $data[] = ($sejour->etablissement_sortie_id && ($event->code == "A03" || $event->code == "A16")) ? $sejour->loadRefEtablissementTransfert()->finess : null;
     
     // PV1-38: Diet Type (CE) (optional)
     $data[] = null;
@@ -237,8 +237,11 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     // Table - 0117
     // D - C'était la dernière venue pour ce dossier administratif
     // N - Ce n'était pas la dernière venue pour ce dossier administratif
-    /* @todo A03 - Z99 */
-    $data[] = ($sejour->type != "sceances" && $sejour->sortie_reelle) ? "D" : "N";
+    if ($event->code == "A03" || $event->code == "Z99") {
+      $data[] = ($sejour->type != "seances" && $sejour->sortie_reelle) ? "D" : "N";
+    } else {
+      $data[] = null;
+    }
     
     // PV1-42: Pending Location (PL) (optional)
     $data[] = null;

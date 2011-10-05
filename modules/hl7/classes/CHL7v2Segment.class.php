@@ -358,50 +358,65 @@ class CHL7v2Segment extends CHL7v2Entity {
     );
   }
   
-  function getXPN(CPatient $patient) {
-    $patient_names = array();
-    // Nom usuel
-    $patient_usualname = array(
-      $patient->nom,
-      $patient->prenom,
-      "$patient->prenom_2 $patient->prenom_3 $patient->prenom_4",
-      null,
-      $patient->civilite,
-      null,
-      // Table 0200
-      // A - Alias Name
-      // B - Name at Birth
-      // C - Adopted Name
-      // D - Display Name
-      // I - Licensing Name
-      // L - Legal Name
-      // M - Maiden Name
-      // N - Nickname /_Call me_ Name/Street Name
-      // P - Name of Partner/Spouse (retained for backward compatibility only)
-      // R - Registered Name (animals only)
-      // S - Coded Pseudo-Name to ensure anonymity
-      // T - Indigenous/Tribal/Community Name
-      // U - Unspecified
-      (is_numeric($patient->nom)) ? "S" : "L",
-      // Table 465
-      // A - Alphabetic (i.e., Default or some single-byte)
-      // I - Ideographic (i.e., Kanji)  
-      // P - Phonetic (i.e., ASCII, Katakana, Hiragana, etc.) 
-      "A"
-    );
-    // Cas nom de jeune fille
-    if ($patient->nom_jeune_fille) {
-      $patient_birthname = $patient_usualname;
-      $patient_birthname[0] = $patient->nom_jeune_fille;
-      // Legal Name devient Display Name
-      $patient_usualname[6] = "D"; 
-    }
-    $patient_names[] = $patient_usualname;
-    if ($patient->nom_jeune_fille) {
-      $patient_names[] = $patient_birthname;
-    } 
+  function getXPN(CMbObject $object) {
+    $names = array();
     
-    return $patient_names;
+    if ($object instanceof CPatient) {
+      // Nom usuel
+      $patient_usualname = array(
+        $object->nom,
+        $object->prenom,
+        "$object->prenom_2 $object->prenom_3 $object->prenom_4",
+        null,
+        $object->civilite,
+        null,
+        // Table 0200
+        // A - Alias Name
+        // B - Name at Birth
+        // C - Adopted Name
+        // D - Display Name
+        // I - Licensing Name
+        // L - Legal Name
+        // M - Maiden Name
+        // N - Nickname /_Call me_ Name/Street Name
+        // P - Name of Partner/Spouse (retained for backward compatibility only)
+        // R - Registered Name (animals only)
+        // S - Coded Pseudo-Name to ensure anonymity
+        // T - Indigenous/Tribal/Community Name
+        // U - Unspecified
+        (is_numeric($object->nom)) ? "S" : "L",
+        // Table 465
+        // A - Alphabetic (i.e., Default or some single-byte)
+        // I - Ideographic (i.e., Kanji)  
+        // P - Phonetic (i.e., ASCII, Katakana, Hiragana, etc.) 
+        "A"
+      );
+      // Cas nom de jeune fille
+      if ($object->nom_jeune_fille) {
+        $patient_birthname = $patient_usualname;
+        $patient_birthname[0] = $object->nom_jeune_fille;
+        // Legal Name devient Display Name
+        $patient_usualname[6] = "D"; 
+      }
+      $names[] = $patient_usualname;
+      if ($object->nom_jeune_fille) {
+        $names[] = $patient_birthname;
+      } 
+    }
+    if ($object instanceof CCorrespondantPatient) {
+      $names[] = array(
+        $object->nom,
+        $object->prenom,
+        null,
+        null,
+        null,
+        null,
+        (is_numeric($object->nom)) ? "S" : "L",
+        "A"
+      );
+    }
+
+    return $names;
   }
   
   function getPL(CSejour $sejour) {
