@@ -1088,10 +1088,10 @@ class CStoredObject extends CModelObject {
    * @return CUserLog
    */
   function loadLastLog() {
-    $last_log = new CUserLog;
-    $last_log->setObject($this);
-    $last_log->loadMatchingObject("date DESC");
-    return $this->_ref_last_log = $last_log;
+    $log = new CUserLog;
+    $log->setObject($this);
+    $log->loadMatchingObject("date DESC");
+    return $this->_ref_last_log = $log;
   }
   
   /**
@@ -1100,10 +1100,10 @@ class CStoredObject extends CModelObject {
    * @return CUserLog
    */
   function loadFirstLog() {
-    $last_log = new CUserLog;
-    $last_log->setObject($this);
-    $last_log->loadMatchingObject("date ASC");
-    return $this->_ref_first_log = $last_log;
+    $log = new CUserLog;
+    $log->setObject($this);
+    $log->loadMatchingObject("date ASC");
+    return $this->_ref_first_log = $log;
   }
 
   /**
