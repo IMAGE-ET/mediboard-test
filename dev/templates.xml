@@ -1,32 +1,16 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><templates><template autoinsert="true" context="smarty_code" deleted="false" description="Function comment" enabled="true" name="{** function">{{** &#13;
-  * Description...&#13;
-  * @param $$${param} ${type} ${Description}&#13;
-  * @return ${type} ${Description}&#13;
-  *}}</template><template autoinsert="true" context="smarty_code" deleted="false" description="" enabled="true" name="assign">{{assign var=${file} value=$$${value}}}</template><template autoinsert="true" context="smarty_code" deleted="false" description="" enabled="true" name="ControlTabs">&lt;script type="text/javascript"&gt;&#13;
-Main.add(function () {&#13;
-  Control.Tabs.create('tabs-${name}', true);&#13;
-});&#13;
-&lt;/script&gt;&#13;
-&#13;
-&lt;ul id="tabs-${name}" class="control_tabs"&gt;&#13;
-  &lt;li&gt;&lt;a href="#stuff1"&gt;Stuff 1&lt;/a&gt;&lt;/li&gt;&#13;
-  &lt;li&gt;&lt;a href="#stuff2"&gt;Stuff 2&lt;/a&gt;&lt;/li&gt;&#13;
-&lt;/ul&gt;&#13;
-&#13;
-&lt;hr class="control_tabs" /&gt;&#13;
-&#13;
-&lt;div id="stuff1" style="display: none;"&gt;&#13;
- Stuff 1 détail&#13;
-&lt;/div&gt;&#13;
-&#13;
-&lt;div id="stuff2" style="display: none;"&gt;&#13;
- Stuff 2 détail&#13;
-&lt;/div&gt;</template><template autoinsert="true" context="smarty_code" deleted="false" description="Allows to create for each loop" enabled="true" id="com.aptana.smarty.ui.editor.templates.php.print" name="foreach">{{foreach from=$$${from} key=${key} item=${item}}}
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><templates><template autoinsert="true" context="smarty" deleted="false" description="" enabled="true" name="assign&#10;">{{assign var=${file} value=$$${value}}}
+</template><template autoinsert="true" context="smarty" deleted="false" description="" enabled="true" name="foreach">{{foreach from=$$${from} key=${key} item=${item}}}
   ${cursor} 
 {{foreachelse}}
-{{/foreach}}</template><template autoinsert="true" context="smarty_code" deleted="false" description="Allows to create if" enabled="true" id="com.aptana.smarty.ui.editor.templates.smarty.if" name="if">{{if $$${condition}}} &#13;
-  ${cursor} &#13;
-{{else}}&#13;
-{{/if}}</template><template autoinsert="true" context="smarty_code" deleted="false" description="" enabled="true" name="include">{{include file=${file}.tpl ${var}=$$${value}}}</template><template autoinsert="true" context="smarty_code" deleted="false" description="" enabled="true" name="mbditto">{{mb_ditto name=${name} value=$$${value}}}</template><template autoinsert="true" context="smarty_code" deleted="false" description="" enabled="true" name="mbfield">{{mb_field object=$$${object} field=${filter}}}</template><template autoinsert="true" context="smarty_code" deleted="false" description="" enabled="true" name="mbinclude">{{mb_include module=${module} template=${template}}}</template><template autoinsert="true" context="smarty_code" deleted="false" description="" enabled="true" name="mbkey">{{mb_key object=$$${object}}}</template><template autoinsert="true" context="smarty_code" deleted="false" description="" enabled="true" name="mblabel">{{mb_label object=$$${object} field=${filter}}}</template><template autoinsert="true" context="smarty_code" deleted="false" description="" enabled="true" name="mbscript">{{mb_script module=${module} script=${template}}}</template><template autoinsert="true" context="smarty_code" deleted="false" description="" enabled="true" name="mbternary">{{mb_ternary var=${var} test=$$${test} value=${value} other=${other}}}</template><template autoinsert="true" context="smarty_code" deleted="false" description="" enabled="true" name="mbtitle">{{mb_title class=C${class} field=${field}}}</template><template autoinsert="true" context="smarty_code" deleted="false" description="" enabled="true" name="mbvalue">{{mb_value object=$$${object} field=${filter}}}</template><template autoinsert="true" context="smarty_code" deleted="false" description="" enabled="true" name="script">&lt;script type="text/javascript"&gt;&#13;
-${cursor}&#13;
-&lt;/script&gt;</template><template autoinsert="true" context="smarty_code" deleted="false" description="localisation bloc" enabled="true" name="tr">{{tr}}${cursor}{{/tr}}</template></templates>
+{{/foreach}}</template><template autoinsert="true" context="smarty" deleted="false" description="" enabled="true" name="if">{{if $$${condition}}} 
+  ${cursor} 
+{{else}}
+{{/if}}</template><template autoinsert="true" context="smarty" deleted="false" description="" enabled="true" name="mbditto">{{mb_ditto name=${name} value=$$${value}}}
+</template><template autoinsert="true" context="smarty" deleted="false" description="" enabled="true" name="mbfield">{{mb_field object=$$${object} field=${filter}}}
+</template><template autoinsert="true" context="smarty" deleted="false" description="" enabled="true" name="mbinclude">{{mb_include module=${module} template=${template}}}
+</template><template autoinsert="true" context="smarty" deleted="false" description="&#10;" enabled="true" name="mbkey">{{mb_key object=$$${object}}}</template><template autoinsert="true" context="smarty" deleted="false" description="" enabled="true" name="mblabel">{{mb_label object=$$${object} field=${filter}}}
+</template><template autoinsert="true" context="smarty" deleted="false" description="" enabled="true" name="mbscript">{{mb_script module=${module} script=${template}}}
+</template><template autoinsert="true" context="smarty" deleted="false" description="" enabled="true" name="mbtitle">{{mb_title class=C${class} field=${field}}}
+</template><template autoinsert="true" context="smarty" deleted="false" description="" enabled="true" name="mbvalue">{{mb_value object=$$${object} field=${field}}}
+</template><template autoinsert="true" context="smarty" deleted="false" description="" enabled="true" name="tr">{{tr}}${cursor}{{/tr}}
+</template></templates>
