@@ -111,7 +111,7 @@ Main.add(function(){
 	          {{/if}}
 						
 	          <th class="narrow" rowspan="{{$rowspan}}">
-	          	<button type="button" onclick="deliverAll('{{$mode}}-service-{{$service_id}}')" class="tick">Tout déliv.</button>
+	          	<button type="button" onclick="deliverAll('{{$mode}}-service-{{$service_id}}')" class="tick not-printable">Tout déliv.</button>
 						</th>
 						
 	          <th rowspan="{{$rowspan}}">{{mb_title class=CProduct field=_unit_title}}</th>
@@ -119,7 +119,10 @@ Main.add(function(){
 						
 						{{if $mode == "nominatif"}}
 						  {{assign var=count_date value=$pilulier_init|@count}}
-						  <th colspan="{{$count_date*$count_periods}}">Pilulier</th>
+						  <th colspan="{{$count_date*$count_periods}}">
+						  	Pilulier
+								<button class="print not-printable" onclick="$(this).up('table').print()">{{tr}}Print{{/tr}}</button>
+							</th>
 						{{/if}}
 	        </tr>
 					
@@ -136,9 +139,14 @@ Main.add(function(){
           {{foreach from=$_deliveries item=_delivery_by_patient name="deliveries_patient"}}
             {{foreach from=$_delivery_by_patient item=_delivery_by_ucd name="deliveries_ucd"}}
 							{{foreach from=$_delivery_by_ucd item=_delivery name="deliveries"}}
-		            {{if  $smarty.foreach.deliveries.first &&  $smarty.foreach.deliveries_ucd.first  && $mode == "nominatif"}}
+		            {{if  $smarty.foreach.deliveries.first && $smarty.foreach.deliveries_ucd.first && $mode == "nominatif"}}
 		              <tr>
-		                <th colspan="{{$cols}}" class="title">{{$_delivery->_ref_patient}}</th>
+		                <th colspan="{{$cols}}" class="title">
+		                	{{$_delivery->_ref_patient}}
+											{{if $_delivery->_ref_patient->_ref_curr_affectation}}
+											  &mdash; <span style="font-weight: normal">{{$_delivery->_ref_patient->_ref_curr_affectation->_ref_lit}}</span>
+											{{/if}}
+										</th>
 		                {{foreach from=$pilulier_init key=_date item=_pilulier_by_date}}
 		                  <th class="title" style="font-size: 0.9em;" colspan="{{$count_periods}}">{{$_date|date_format:"%a %d/%m"}}</th>
 		                {{/foreach}}

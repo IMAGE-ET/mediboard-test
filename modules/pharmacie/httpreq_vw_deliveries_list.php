@@ -1,9 +1,9 @@
 <?php /* $Id$ */
 
 /**
- *	@package Mediboard
- *	@subpackage pharmacie
- *	@version $Revision$
+ *  @package Mediboard
+ *  @subpackage pharmacie
+ *  @version $Revision$
  *  @author SARL OpenXtrem
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
@@ -35,23 +35,23 @@ for($i=1; $i<6; $i++){
 
 $count_periods = 0;
 foreach ($conf_periodes as $_periode){
-	if($_periode["heure"] && $_periode["libelle"]){
-		$count_periods++;
-		$list_moments[]  = $_periode["heure"];
-		$nom_moments[]   = $_periode["libelle"];
-		$color_moments[] = "#".$_periode["couleur"];
-	}
+  if($_periode["heure"] && $_periode["libelle"]){
+    $count_periods++;
+    $list_moments[]  = $_periode["heure"];
+    $nom_moments[]   = $_periode["libelle"];
+    $color_moments[] = "#".$_periode["couleur"];
+  }
 }
 
 $prev_hour = 0;
 foreach($list_moments as $key_period => $_hour_period){
   for($i=0; $i < 24; $i++){
-	  if(isset($list_moments[$key_period-1])){
-	    $prev_hour = $list_moments[$key_period-1];
-	  }  
-	  if($i < $_hour_period && $i >= $prev_hour){
-	    $moments[str_pad($i, 2, '0', STR_PAD_LEFT)] = $key_period;
-	  }
+    if(isset($list_moments[$key_period-1])){
+      $prev_hour = $list_moments[$key_period-1];
+    }  
+    if($i < $_hour_period && $i >= $prev_hour){
+      $moments[str_pad($i, 2, '0', STR_PAD_LEFT)] = $key_period;
+    }
   }
 }
 // Initialisation du pilulier standard
@@ -59,9 +59,9 @@ $_date_min = mbDate($datetime_min);
 $_date_max = mbDate($datetime_max);
 $dates = array();
 for($_date = $_date_min; $_date <= $_date_max; $_date = mbDate("+ 1 DAY", $_date)){
-	foreach($nom_moments as $key_period => $_moment){
+  foreach($nom_moments as $key_period => $_moment){
     $pilulier_init[$_date][$key_period] = "";
-	}
+  }
 }
 
 if (!in_array($mode, array("global", "nominatif"))) {
@@ -116,31 +116,31 @@ $delivery = new CProductDelivery();
 $lines = array();
 if($delivery_id){
   $delivery->load($delivery_id);
-	$services = array(
-	  $delivery->service_id => $delivery->loadRefService()
-	);
+  $services = array(
+    $delivery->service_id => $delivery->loadRefService()
+  );
 }
 
 foreach($services as $_service_id => $_service) {
-	// one line
-	if($delivery_id){
-		$deliveries[$delivery->_id] = $delivery;
-	} 
-	
-	// all lines
-	else {
-		if ($_service_id == "none") {
-	    $where['service_id'] = "IS NULL OR service_id = ''";
-	  }
-	  else {
-	    $where['service_id'] = " = '$_service->_id'";
-	  }
+  // one line
+  if($delivery_id){
+    $deliveries[$delivery->_id] = $delivery;
+  } 
+  
+  // all lines
+  else {
+    if ($_service_id == "none") {
+      $where['service_id'] = "IS NULL OR service_id = ''";
+    }
+    else {
+      $where['service_id'] = " = '$_service->_id'";
+    }
     $deliveries = $delivery->loadList($where, $order_by, 200, null, $ljoin);
-	}
+  }
   
   foreach($deliveries as $_id => $_delivery) {
-  	$_delivery->_pilulier = $pilulier_init;
-		
+    $_delivery->_pilulier = $pilulier_init;
+    
     $_delivery->loadRefsFwd();
     $_delivery->_ref_stock->loadRefsFwd();
     $_delivery->isDelivered();
@@ -160,36 +160,40 @@ foreach($services as $_service_id => $_service) {
     
     $stocks_service[$_delivery->_id] = CProductStockService::getFromCode($_product->code, $_delivery->service_id);
 
-		
-		// Chargement du pilulier
+    
+    // Chargement du pilulier
     $_delivery->loadRefsPrisesDispensationMed($datetime_min, $datetime_max);
-		foreach($_delivery->_ref_prises_dispensation_med as $_prise_disp){
-			$lines[$_delivery->_id] = "$_prise_disp->object_class-$_prise_disp->object_id";
-			
-			
-			$time = mbTransformTime($_prise_disp->datetime,null,"%H");
-			@$_delivery->_pilulier[mbDate($_prise_disp->datetime)][$moments[$time]] += $_prise_disp->quantite_disp;
-			
-			if (!$_delivery->_code_cis || !$_delivery->_code_ucd) {
-				$_prise_disp->loadTargetObject();
-	      $_delivery->_code_cis = $_prise_disp->_ref_object->code_cis;
-			  $_delivery->_code_ucd = $_prise_disp->_ref_object->code_ucd;
-			}
-		}
-		
-		$key_delivery = (($_delivery->patient_id) ? "$_delivery->datetime_min-$_delivery->datetime_max-$_delivery->_code_ucd" : "key");
+    foreach($_delivery->_ref_prises_dispensation_med as $_prise_disp){
+      $lines[$_delivery->_id] = "$_prise_disp->object_class-$_prise_disp->object_id";
+      
+      
+      $time = mbTransformTime($_prise_disp->datetime,null,"%H");
+      @$_delivery->_pilulier[mbDate($_prise_disp->datetime)][$moments[$time]] += $_prise_disp->quantite_disp;
+      
+      if (!$_delivery->_code_cis || !$_delivery->_code_ucd) {
+        $_prise_disp->loadTargetObject();
+        $_delivery->_code_cis = $_prise_disp->_ref_object->code_cis;
+        $_delivery->_code_ucd = $_prise_disp->_ref_object->code_ucd;
+      }
+    }
+    
+    $key_delivery = (($_delivery->patient_id) ? "$_delivery->datetime_min-$_delivery->datetime_max-$_delivery->_code_ucd" : "key");
     $key = "global";
     
     if ($_delivery->patient_id) {
       $patient = $_delivery->_ref_patient;
+      $patient->loadRefsAffectations($_delivery->datetime_min);
+      if ($patient->_ref_curr_affectation) {
+        $patient->_ref_curr_affectation->loadRefLit();
+      }
       $key = str_pad($patient->nom, 20, " ", STR_PAD_RIGHT).str_pad($patient->prenom, 20, " ", STR_PAD_RIGHT);
     }
-		else {
-	    if ($_delivery->date_delivery || $_delivery->_delivered) {
-	      $delivered_counts[$_service_id]++;
-	    }
-		}
-		
+    else {
+      if ($_delivery->date_delivery || $_delivery->_delivered) {
+        $delivered_counts[$_service_id]++;
+      }
+    }
+    
     $deliveries_by_service[$_service_id][$key][$key_delivery][$_delivery->_id] = $_delivery;
   }
 }
@@ -198,15 +202,15 @@ foreach($services as $_service_id => $_service) {
 $deliveries_count = 0;
 $deliveries_count_by_service = array();
 foreach($deliveries_by_service as $_service_id => $_by_service) {
-	$deliveries_count_by_service[$_service_id] = 0;
-	ksort($deliveries_by_service[$_service_id]);
-	
+  $deliveries_count_by_service[$_service_id] = 0;
+  ksort($deliveries_by_service[$_service_id]);
+  
   foreach($_by_service as $_deliveries_by_patient) {
-	  foreach($_deliveries_by_patient as $_deliveries_by_ucd) {
-	    $deliveries_count += count($_deliveries_by_ucd);
-			$deliveries_count_by_service[$_service_id] += count($_deliveries_by_ucd);
+    foreach($_deliveries_by_patient as $_deliveries_by_ucd) {
+      $deliveries_count += count($_deliveries_by_ucd);
+      $deliveries_count_by_service[$_service_id] += count($_deliveries_by_ucd);
     }
-	}
+  }
 }
 
 // Création du template
@@ -226,20 +230,20 @@ if($delivery_id){
   $smarty->assign('line_refresh', true);
   $smarty->assign('service_id', $delivery->service_id);
   $smarty->assign("single_location", CProductStockGroup::getHostGroup(false)->countBackRefs("stock_locations") < 2);
-	$smarty->assign("count_date", count($pilulier_init));
+  $smarty->assign("count_date", count($pilulier_init));
   $smarty->assign('show_pil',  true);
   $smarty->assign('count_pil',  1);
-	$smarty->display('inc_vw_line_delivrance.tpl');
-	
+  $smarty->display('inc_vw_line_delivrance.tpl');
+  
 } else {
-	$smarty->assign('order_col',     $order_col);
-	$smarty->assign('order_way',     $order_way);
-	$smarty->assign('deliveries',     $deliveries);
-	$smarty->assign('deliveries_by_service', $deliveries_by_service);
-	$smarty->assign('deliveries_count', $deliveries_count);
-	$smarty->assign('services',       $services);
-	$smarty->assign('delivered_counts', $delivered_counts);
-	$smarty->assign('display_delivered', $display_delivered);
-	$smarty->assign("single_location", CProductStockGroup::getHostGroup(false)->countBackRefs("stock_locations") < 2);
-	$smarty->display('inc_deliveries_list.tpl');	
+  $smarty->assign('order_col',     $order_col);
+  $smarty->assign('order_way',     $order_way);
+  $smarty->assign('deliveries',     $deliveries);
+  $smarty->assign('deliveries_by_service', $deliveries_by_service);
+  $smarty->assign('deliveries_count', $deliveries_count);
+  $smarty->assign('services',       $services);
+  $smarty->assign('delivered_counts', $delivered_counts);
+  $smarty->assign('display_delivered', $display_delivered);
+  $smarty->assign("single_location", CProductStockGroup::getHostGroup(false)->countBackRefs("stock_locations") < 2);
+  $smarty->display('inc_deliveries_list.tpl');  
 }

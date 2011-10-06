@@ -16,9 +16,12 @@
 </td>
 
 <td>
-	 <span onmouseover="ObjectTooltip.createEx(this, '{{$lines.$id}}');" style="float: right;">
+	{{if $mode == "nominatif"}}
+	<span onmouseover="ObjectTooltip.createEx(this, '{{$lines.$id}}');" style="float: right; margin-left: 5px;">
     Presc.
   </span>
+	{{/if}}
+	
   {{if @$line_refresh}}
   <script type="text/javascript">
     if (!$V(getForm("filter").display_delivered) && ({{$curr_delivery->_delivered|ternary:1:0}} || '{{$curr_delivery->date_delivery}}')) {
@@ -70,7 +73,7 @@
   {{assign var=remaining value=$curr_delivery->quantity-$curr_delivery->countDelivered()}}
   
   {{if $remaining < 1}}
-    <button type="button" class="down notext" onclick="ObjectTooltip.createDOM(this, $(this).next('table'), {duration:0})" style="margin: -1px;"></button> 
+    <button type="button" class="down notext not-printable" onclick="ObjectTooltip.createDOM(this, $(this).next('table'), {duration:0})" style="margin: -1px;"></button> 
     {{$remaining}} restants
   {{/if}}
   
@@ -87,7 +90,7 @@
             <input type="hidden" name="delivery_trace_id" value="{{$trace->_id}}" />
             <input type="hidden" name="_delivery_id" value="{{$id}}" /> <!-- used by refreshDeliveryLine -->
             <input type="hidden" name="_undeliver" value="1" />
-            <button type="submit" class="cancel notext singleclick" style="margin: -1px;">{{tr}}Cancel{{/tr}}</button>
+            <button type="submit" class="cancel notext singleclick not-printable" style="margin: -1px;">{{tr}}Cancel{{/tr}}</button>
           </form>
         {{else}}
           <img src="images/icons/tick.png" title="Délivré" />
@@ -110,7 +113,7 @@
     <tr>
       <td colspan="10" title="Quantité d'origine: {{mb_value object=$curr_delivery field=quantity}}" style="padding: 0;">
         {{unique_id var=uid}}
-        <form name="delivery-trace-{{$uid}}-new" action="?" method="post" class="deliver"
+        <form name="delivery-trace-{{$uid}}-new" action="?" method="post" class="deliver not-printable"
               onsubmit="return deliverLine(this)" {{if $curr_delivery->_delivered}}style="display: none;"{{/if}}>
           <input type="hidden" name="m" value="dPstock" /> 
           <input type="hidden" name="del" value="0" />
@@ -136,7 +139,7 @@
     <input type="hidden" name="dosql" value="do_delivery_aed" />
     {{mb_key object=$curr_delivery}}
     <input type="hidden" name="date_delivery" value="{{if !$curr_delivery->date_delivery}}now{{/if}}" />
-    <button type="submit" class="{{$curr_delivery->date_delivery|ternary:'tick':'cancel'}} notext" 
+    <button type="submit" class="{{$curr_delivery->date_delivery|ternary:'tick':'cancel'}} notext not-printable" 
 		        style="margin: -1px;" title="Marquer comme{{$curr_delivery->date_delivery|ternary:' non':''}} délivré"></button>
   </form>
 </td>

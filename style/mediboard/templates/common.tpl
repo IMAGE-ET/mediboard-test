@@ -3,6 +3,7 @@
 <head>
   <!-- Content-Type meta tags need to be the first in the page (even before title) -->
   <meta http-equiv="Content-Type" content="text/html;charset={{$localeInfo.charset}}" />
+  <meta http-equiv="X-UA-Compatible" content="IE=8" /> {{* For IE in All-in-one mode *}}
   
   <title>
     {{if !$dialog}}
