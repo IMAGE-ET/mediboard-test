@@ -140,17 +140,23 @@ class CDocumentItem extends CMbMetaObject {
   }
   
   function loadRefCategory() {
-    $this->_ref_category = $this->loadFwdRef("file_category_id", true);
+    return $this->_ref_category = $this->loadFwdRef("file_category_id", true);
   }
   
   function loadRefAuthor() {
-    if (!$this->_id) return;
-    $this->loadFirstLog();
-    if ($this->_ref_first_log->_id) {
-      $this->_ref_first_log->loadRefsFwd();
-      $this->_ref_first_log->_ref_user->loadRefMediuser();
-      $this->_ref_author = $this->_ref_first_log->_ref_user->_ref_mediuser;
+    if (!$this->_id) {
+      return;
     }
+    
+    $this->loadFirstLog();
+    if (!$this->_ref_first_log->_id) {
+      return;
+    }
+    
+    $this->_ref_first_log->loadRefsFwd();
+    $this->_ref_first_log->_ref_user->loadRefMediuser();
+    $this->_ref_author = $this->_ref_first_log->_ref_user->_ref_mediuser;
+    return $this->_ref_author;
   }
   
   function canRead() {
@@ -165,6 +171,25 @@ class CDocumentItem extends CMbMetaObject {
 		
     global $can;
     return $this->_canRead = ($this->_ref_author->function_id == CAppUI::$user->function_id || $can->admin) && $this->getPerm(PERM_READ);
+  }
+  
+  /**
+   * Load aggregated doc item ownership
+   * @return array collection of arrays with 
+   *   docs_count, docs_weight and owner_id keys
+   */
+  function getUsersStats() {
+    return array();
+  }
+  
+  /**
+   * Load details doc item ownership for a user collection
+   * @param  array ID collection of CUser
+   * @return array collection of arrays with 
+   *   docs_count, docs_weight, object_class and category_id keys
+   */
+  function getUsersStatsDetails($user_ids) {
+    return array();
   }
 }
 

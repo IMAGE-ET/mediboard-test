@@ -4,8 +4,9 @@ Main.add(function () {
 });
 
 Details = {
-  statOwner: function (owner_guid) {
+  statOwner: function (doc_class, owner_guid) {
     new Url('dPfiles', 'stats_details') .
+      addParam('doc_class', doc_class) .
       addParam('owner_guid', owner_guid) .
       requestModal();
   }
@@ -29,20 +30,20 @@ Details = {
 </tr>
 
 <tr style="font-weight: bold;">
-  <td style="text-align: right;">{{$total.files_count}}</td>
+  <td style="text-align: right;">{{$total.docs_count}}</td>
   <td style="text-align: right;">{{1|percent}}</td>
-  <td style="text-align: right;">{{$total._files_weight}}</td>
+  <td style="text-align: right;">{{$total.docs_weight|decabinary}}</td>
   <td style="text-align: right;">{{1|percent}}</td>
-  <td style="text-align: right;">{{$total._file_average_weight}}</td>
+  <td style="text-align: right;">{{$total._docs_average_weight|decabinary}}</td>
   <td colspan="2">{{tr}}Total{{/tr}}
 </tr>
 
 <tbody id="tab-user" style="display: none;">
-  {{mb_include template=inc_stats_owner stats=$stats_user}}
+  {{mb_include template=inc_stats_owner stats=$users_stats}}
 </tbody>
 
 <tbody id="tab-func" style="display: none;">
-  {{mb_include template=inc_stats_owner stats=$stats_func}}
+  {{mb_include template=inc_stats_owner stats=$funcs_stats}}
 </tbody>
 
 </table>

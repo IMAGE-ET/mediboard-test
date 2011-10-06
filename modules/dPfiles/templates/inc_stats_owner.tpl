@@ -1,13 +1,16 @@
 
 {{foreach from=$stats item=_stat}}
 <tr>
-  <td style="text-align: right;">{{$_stat.files_count}}</td>
-  <td style="text-align: right;">{{$_stat._files_count_percent|percent}}</td>
-  <td style="text-align: right;">{{$_stat._files_weight}}</td>
-  <td style="text-align: right;">{{$_stat._files_weight_percent|percent}}</td>
-  <td style="text-align: right;">{{$_stat._file_average_weight}}</td>
+  <td style="text-align: right;">{{$_stat.docs_count}}</td>
+  <td style="text-align: right;">{{$_stat._docs_count_percent|percent}}</td>
+  <td style="text-align: right;">{{$_stat.docs_weight|decabinary}}</td>
+  <td style="text-align: right;">{{$_stat._docs_weight_percent|percent}}</td>
+  <td style="text-align: right;">{{$_stat._docs_average_weight|decabinary}}</td>
+  {{assign var=owner value=$_stat._ref_owner}}
+  {{if !$owner->_id}}
+  <td class="empty" colspan="2">{{tr}}None{{/tr}}</td>
+  {{else}}
   <td>
-    {{assign var=owner value=$_stat._ref_owner}}
     {{if $owner instanceof CMediusers}}
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$owner}}
     {{elseif $owner instanceof CFunctions}}
@@ -17,10 +20,11 @@
     {{/if}}     
   </td>
   <td>
-    <button class="search notext" type="button" onclick="Details.statOwner('{{$owner->_guid}}');">
+    <button class="search notext" type="button" onclick="Details.statOwner('{{$doc_class}}', '{{$owner->_guid}}');">
       {{tr}}Details{{/tr}}
     </button>
   </td>
+  {{/if}}
 </tr>
 
 {{foreachelse}}

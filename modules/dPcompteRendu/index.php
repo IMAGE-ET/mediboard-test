@@ -14,5 +14,6 @@ $module->registerTab("addedit_modeles"      , TAB_READ);
 $module->registerTab("vw_idx_aides"         , TAB_READ);
 $module->registerTab("vw_idx_listes"        , TAB_READ);
 $module->registerTab("vw_idx_packs"         , TAB_READ);
+$module->registerTab("vw_stats"             , TAB_ADMIN);
 
 ?>

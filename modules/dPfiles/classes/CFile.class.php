@@ -546,6 +546,41 @@ class CFile extends CDocumentItem {
     
     echo file_get_contents($this->_file_path);
   }
+  
+  /**
+   * @see parent::getUsersStats();
+   */
+  function getUsersStats() {
+    $ds = $this->_spec->ds;
+    $query = "
+      SELECT 
+        COUNT(`file_id`) AS `docs_count`, 
+        SUM(`file_size`) AS `docs_weight`,
+        `file_owner` AS `owner_id`
+      FROM `files_mediboard` 
+      LEFT JOIN `users` ON `users`.`user_id` = `file_owner`
+      GROUP BY `owner_id`
+      ORDER BY `docs_weight` DESC";
+    return $ds->loadList($query);
+  }
+  
+  /**
+   * @see parent::getUsersStatsDetails();
+   */
+  function getUsersStatsDetails($user_ids) {
+    $ds = $this->_spec->ds;
+    $in_owner = $ds->prepareIn($user_ids);
+    $query = "
+      SELECT 
+        COUNT(`file_id`) AS `docs_count`, 
+        SUM(`file_size`) AS `docs_weight`, 
+        `object_class`, 
+        `file_category_id` AS `category_id`
+      FROM `files_mediboard` 
+      WHERE `file_owner` $in_owner
+      GROUP BY `object_class`, `category_id`";
+    return $ds->loadList($query);
+  }
 }
 
 // We have to replace the backslashes with slashes because of PHPthumb on Windows

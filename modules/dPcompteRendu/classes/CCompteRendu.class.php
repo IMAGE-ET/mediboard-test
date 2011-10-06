@@ -791,6 +791,40 @@ class CCompteRendu extends CDocumentItem {
     }
     return $source;
   }
+  
+  /**
+   * @see parent::getUsersStats();
+   */
+  function getUsersStats() {
+    $ds = $this->_spec->ds;
+    $query = "
+      SELECT 
+        COUNT(`compte_rendu_id`) AS `docs_count`, 
+        SUM(1) AS `docs_weight`,
+        `user_id` AS `owner_id`
+      FROM `compte_rendu` 
+      GROUP BY `owner_id`
+      ORDER BY `docs_weight` DESC";
+    return $ds->loadList($query);
+  }
+  
+  /**
+   * @see parent::getUsersStatsDetails();
+   */
+  function getUsersStatsDetails($user_ids) {
+    $ds = $this->_spec->ds;
+    $in_owner = $ds->prepareIn($user_ids);
+    $query = "
+      SELECT 
+        COUNT(`compte_rendu_id`) AS `docs_count`, 
+        SUM(1) AS `docs_weight`, 
+        `object_class`, 
+        `file_category_id` AS `category_id`
+      FROM `compte_rendu` 
+      WHERE `user_id` $in_owner
+      GROUP BY `object_class`, `category_id`";
+    return $ds->loadList($query);
+  }
 }
 
 ?>

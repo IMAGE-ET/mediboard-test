@@ -373,6 +373,7 @@ $locales['mod-dPcompteRendu-tab-vw_idx_aides'] = 'Aides à la saisie';
 $locales['mod-dPcompteRendu-tab-vw_idx_listes'] = 'Listes de choix';
 $locales['mod-dPcompteRendu-tab-vw_idx_packs'] = 'Packs de modèles';
 $locales['mod-dPcompteRendu-tab-vw_modeles'] = 'Liste des modèles';
+$locales['mod-dPcompteRendu-tab-vw_stats'] = 'Statistiques';
 $locales['module-dPcompteRendu-court'] = 'Modèles';
 $locales['module-dPcompteRendu-long'] = 'Modèles de document';
 $locales['pref-aideAutoComplete'] = 'Utiliser la saisie semi-automatique';

@@ -9,66 +9,64 @@
  
 CCanDo::checkAdmin();
 
-$file = new CFile;
-$ds = $file->_spec->ds;
-$query = "SELECT COUNT(`file_id`) AS files_count, SUM(`file_size`) AS files_weight, `file_owner`, users.user_first_name, users.user_last_name   
-  FROM `files_mediboard` 
-  LEFT JOIN `users` ON `users`.`user_id` = `file_owner`
-  GROUP BY `file_owner`
-  ORDER BY `files_weight` DESC";
-$stats_user = $ds->loadList($query);
-$stats_func = array();
+// Get Concrete class
+$doc_class = CValue::get("doc_class", "CFile");
+if (!is_subclass_of($doc_class, "CDocumentItem")) {
+  trigger_error("Wrong '$doc_class' won't inerit from CDocumentItem", E_USER_ERROR);
+  return;
+}
+
+$doc = new $doc_class;
+$users_stats = $doc->getUsersStats();
+$funcs_stats = array();
 
 $total = array(
-  "files_weight" => 0,
-  "files_count" => 0,
+  "docs_weight" => 0,
+  "docs_count" => 0,
 );
 
 // Stat per user
-foreach ($stats_user as &$_stat_user) {
-  $total["files_weight"] += $_stat_user["files_weight"];
-  $total["files_count"]  += $_stat_user["files_count"];
+foreach ($users_stats as &$_stat_user) {
+  $total["docs_weight"] += $_stat_user["docs_weight"];
+  $total["docs_count"]  += $_stat_user["docs_count"];
 
-  $_stat_user["_file_average_weight"] = $_stat_user["files_weight"] / $_stat_user["files_count"];
-  $_stat_user["_file_average_weight"] = CMbString::toDecaBinary($_stat_user["_file_average_weight"]);
-  $_stat_user["_files_weight"]        = CMbString::toDecaBinary($_stat_user["files_weight"]);
+  $_stat_user["_docs_average_weight"] = $_stat_user["docs_weight"] / $_stat_user["docs_count"];
 
   // Make it mediusers uninstalled compliant
   if (CModule::getActive("mediusers")) {
     // Get the owner
     $user = new CMediusers();
-    $user = $user->getCached($_stat_user["file_owner"]);
+    $user = $user->getCached($_stat_user["owner_id"]);
     $user->loadRefFunction();
+    
     $_stat_user["_ref_owner"] = $user;
 
     // Initilize function data
-    if (!isset($stats_func[$user->function_id])) {
-      $stats_func[$user->function_id] = array(
-        "files_weight" => 0,
-        "files_count"  => 0,
+    if (!isset($funcs_stats[$user->function_id])) {
+      $funcs_stats[$user->function_id] = array(
+        "docs_weight" => 0,
+        "docs_count"  => 0,
       );
     }
     
     // Cummulate data per function
-    $stat_func =& $stats_func[$user->function_id];
-    $stat_func["files_weight"] += $_stat_user["files_weight"];
-    $stat_func["files_count"]  += $_stat_user["files_count"];
+    $stat_func =& $funcs_stats[$user->function_id];
+    $stat_func["docs_weight"] += $_stat_user["docs_weight"];
+    $stat_func["docs_count" ] += $_stat_user["docs_count" ];
   }
 }
 
 // Get user data percentages
-foreach ($stats_user as &$_stat_user) {
-  $_stat_user["_files_weight_percent"] = $_stat_user["files_weight"] / $total["files_weight"];
-  $_stat_user["_files_count_percent" ] = $_stat_user["files_count"] / $total["files_count" ];
+foreach ($users_stats as &$_stat_user) {
+  $_stat_user["_docs_weight_percent"] = $_stat_user["docs_weight"] / $total["docs_weight"];
+  $_stat_user["_docs_count_percent" ] = $_stat_user["docs_count" ] / $total["docs_count" ];
 }
 
 // Get function data percentages
-foreach ($stats_func as $function_id => &$_stat_func) {
-  $_stat_func["_files_weight_percent"] = $_stat_func["files_weight"] / $total["files_weight"];
-  $_stat_func["_files_count_percent" ] = $_stat_func["files_count" ] / $total["files_count" ];
-  $_stat_func["_file_average_weight"] = $_stat_func["files_weight"] / $_stat_func["files_count"];
-  $_stat_func["_file_average_weight"] = CMbString::toDecaBinary($_stat_func["_file_average_weight"]);
-  $_stat_func["_files_weight"] = CMbString::toDecaBinary($_stat_func["files_weight"]);
+foreach ($funcs_stats as $function_id => &$_stat_func) {
+  $_stat_func["_docs_weight_percent"] = $_stat_func["docs_weight"] / $total["docs_weight"];
+  $_stat_func["_docs_count_percent" ] = $_stat_func["docs_count" ] / $total["docs_count" ];
+  $_stat_func["_docs_average_weight"] = $_stat_func["docs_weight"] / $_stat_func["docs_count"];
 
   // Get the owner
   $func = new CFunctions();
@@ -76,14 +74,13 @@ foreach ($stats_func as $function_id => &$_stat_func) {
   $_stat_func["_ref_owner"] = $func;
 }
 
-$total["_file_average_weight"] = $total["files_count"] ? ($total["files_weight"] / $total["files_count"]) : 0;
-$total["_file_average_weight"] = CMbString::toDecaBinary($total["_file_average_weight"]);
-$total["_files_weight"]        = CMbString::toDecaBinary($total["files_weight"]);
+$total["_docs_average_weight"] = $total["docs_count"] ? ($total["docs_weight"] / $total["docs_count"]) : 0;
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("stats_user", $stats_user);
-$smarty->assign("stats_func", $stats_func);
+$smarty->assign("doc_class", $doc_class);
+$smarty->assign("users_stats", $users_stats);
+$smarty->assign("funcs_stats", $funcs_stats);
 $smarty->assign("total", $total);
 $smarty->display("vw_stats.tpl");
 ?>
