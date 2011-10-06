@@ -27,7 +27,7 @@ $receiver = $exchange->_ref_receiver;
 $evenement = null;
 if ($receiver instanceof CReceiverIHE) {
   if ($exchange->type = "PAM") {
-    $evenement = "evenementPatient";
+    $evenement = "evenementsPatient";
   }
 }
 
@@ -45,6 +45,10 @@ if (!$evenement) {
 }
 
 $source = CExchangeSource::get("$receiver->_guid-$evenement");
+if (!$source->_id) {
+  CAppUI::stepAjax("Aucune source pour cet acteur", UI_MSG_ERROR);
+}
+
 $source->setData($exchange->_message);
 $source->send();
 if ($acq = $source->getACQ()) {
