@@ -8,14 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<div class="small-info">
-	L'ergonomie de cet affichage a été légèrement modifiée:
-	<ul>
-	  <li>Le <strong>nom des produits</strong> à préparer est à présent sur la gauche </li>
-	  <li>Pour visualiser le <strong>détail des préparations effectuées</strong>, il faut survoler les éléments dans la colonne de droite</li>
-	</ul>
-</div>
-
 <script type="text/javascript">
 $$('a[href=#list-dispensations] small')[0].update('({{$dispensations|@count}})');
 

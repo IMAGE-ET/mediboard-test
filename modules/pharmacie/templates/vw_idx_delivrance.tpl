@@ -101,14 +101,6 @@ Main.add(function () {
   </table>
 </form>
 
-<div class="small-info">
-  L'ergonomie de cet affichage a été modifiée:
-  <ul>
-    <li>Au survol de la date de préparation, il est possible de connaitre <strong>l'intervalle des dates de réassort</strong></li>
-    <li>L'affichage d'un <strong>pilulier</strong> est maintenant disponible pour les nouvelles délivrances nominatives</li>
-  </ul>
-</div>
-
 <ul id="tab_delivrances" class="control_tabs">
   <li><a href="#list-global">Globales <small>(0)</small></a></li>
   <li><a href="#list-nominatif">Nominatives <small>(0)</small></a></li>
