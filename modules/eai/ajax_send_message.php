@@ -18,6 +18,10 @@ $exchange_guid = CValue::get("exchange_guid");
 $exchange = CMbObject::loadFromGuid($exchange_guid);
 $exchange->loadRefsInteropActor();
 
+if (!$exchange->message_valide) {
+  CAppUI::stepAjax("Le message de l'échange est invalide il ne peut pas être renvoyé", UI_MSG_ERROR);
+}
+
 $receiver = $exchange->_ref_receiver;
 
 $evenement = null;
