@@ -74,7 +74,7 @@ class CITI31DelegatedHandler extends CIHEDelegatedHandler {
     // Cas d'un séjour en cours (entrée réelle)
     if ($sejour->_etat == "encours") {
       // Admission faite
-      if ($sejour->fieldModified("entree_reelle")) {
+      if ($sejour->fieldModified("entree_reelle") && !$sejour->_old->entree_reelle) {
         // Patient externe
         if (in_array($sejour->type, self::$outpatient)) {
           return "A04";
@@ -82,19 +82,19 @@ class CITI31DelegatedHandler extends CIHEDelegatedHandler {
         // Admission hospitalisé
         return "A01";
       }
-      
-      // Modification de l'admission 
-      // Externe devient hospitalisé
-      if ($sejour->fieldModified("type") && 
-          in_array($sejour->type, self::$outpatient) && 
-          in_array($sejour->_old->type, self::$inpatient)) {
-        return "A06";
-      } 
 
+      // Modification de l'admission 
       // Externe devient hospitalisé
       if ($sejour->fieldModified("type") && 
           in_array($sejour->type, self::$inpatient) && 
           in_array($sejour->_old->type, self::$outpatient)) {
+        return "A06";
+      } 
+
+      // Hospitalisé devient externe
+      if ($sejour->fieldModified("type") && 
+          in_array($sejour->type, self::$outpatient) && 
+          in_array($sejour->_old->type, self::$inpatient)) {
         return "A07";
       }
       
@@ -111,7 +111,8 @@ class CITI31DelegatedHandler extends CIHEDelegatedHandler {
       if ($sejour->fieldModified("praticien_id")) {
         return "A54";
       }
-      // Annulation de la mutation ? 
+      
+      // Annulation du médecin responsable
       if ($sejour->fieldModified("praticien_id", "")) {
         return "A55";
       }
@@ -137,7 +138,7 @@ class CITI31DelegatedHandler extends CIHEDelegatedHandler {
     // Cas d'un séjour clôturé (sortie réelle)
     if ($sejour->_etat == "cloture") {
       // Sortie réelle renseignée
-      if ($sejour->fieldModified("sortie_reelle")) {
+      if ($sejour->fieldModified("sortie_reelle") && !$sejour->_old->sortie_reelle) {
         return "A03";
       }
       // Modification de l'admission 
@@ -149,6 +150,8 @@ class CITI31DelegatedHandler extends CIHEDelegatedHandler {
       return "Z99";
     }
   }
+  
+  
 
   function onBeforeMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {

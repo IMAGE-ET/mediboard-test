@@ -425,9 +425,9 @@ class CHL7v2Segment extends CHL7v2Entity {
       // PL-1 - Code UF hébergement
       $sejour->getCurrentUF()->code,
       // PL-2 - Chambre
-      $affectation->_id ? $affectation->_ref_lit->_ref_chambre->nom : null,
+      ($affectation->_id && $affectation->_ref_lit) ? $affectation->_ref_lit->_ref_chambre->nom : null,
       // PL-3 - Lit
-      $affectation->_id ? $affectation->_ref_lit->nom : null,
+      ($affectation->_id && $affectation->_ref_lit) ? $affectation->_ref_lit->nom : null,
       // PL-4 - Etablissement hospitalier
       $this->getGroupAssigningAuthority($sejour->loadRefEtablissement()),
       // PL-5 - Statut du lit

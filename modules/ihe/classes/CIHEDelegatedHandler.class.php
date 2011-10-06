@@ -32,13 +32,14 @@ class CIHEDelegatedHandler {
     $hl7_version = $receiver->getHL7Version($transaction);
     $class       = "CHL7".$hl7_version."EventADT".$code;
     if (!class_exists($class)) {
-      /*@todo trigger_error */
+      trigger_error("class-CHL7".$hl7_version."EventADT".$code."-not-found", UI_MSG_ERROR);
       return;  
     }
 
     $event              = new $class;
     $event->profil      = $profil;
     $event->transaction = $transaction;
+    
     $receiver->sendEvent($event, $mbObject);
   }
   
