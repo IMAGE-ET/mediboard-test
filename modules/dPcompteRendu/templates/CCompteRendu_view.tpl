@@ -1,6 +1,7 @@
-{{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
-{{assign var="document" value=$object}}
+{{mb_script module=dPcompteRendu script=document ajax=1}}
 
+{{mb_script module=dPcompteRendu script=document}}{{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+{{assign var="document" value=$object}}
 {{if !$document->object_id}}
 <table class="tbl">
   <tr>
@@ -34,9 +35,10 @@
 	</tr>
 	
 	<tr>
-		<td>
-      <strong>{{tr}}CCompteRendu-count-words{{/tr}} :</strong>
-      {{$document->_source|count_words}} {{tr}}CCompteRendu-words{{/tr}}
+		<td class="button">
+      <strong>{{$document->_source|count_words}} {{tr}}CCompteRendu-words{{/tr}}</strong>
+      <br/>
+      <button type="button" class="search" onclick="Document.edit('{{$document->_id}}')">{{tr}}Open{{/tr}}</button>
     </td>
   </tr>
 </table>

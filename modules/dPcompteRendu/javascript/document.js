@@ -1,4 +1,4 @@
-var Document = {
+Document = {
   popupSize: {
     width: 950,
     height: 800
