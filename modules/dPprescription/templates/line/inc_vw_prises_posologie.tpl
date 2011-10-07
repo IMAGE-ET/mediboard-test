@@ -125,7 +125,7 @@ Main.add(function () {
 			{{/if}}
 			
 			{{if $prise->datetime}}
-        le {{$prise->datetime|date_format:$conf.datetime}} 
+			   <label title="le {{$prise->datetime|date_format:$conf.datetime}}">1 fois</label> 
 			{{/if}}
 			
 			<!-- Cas du decalage par rapport à l'intervention -->

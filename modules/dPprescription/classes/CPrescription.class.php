@@ -515,6 +515,9 @@ class CPrescription extends CMbObject implements IPatientRelated {
 	        if($prise->urgence_datetime){
 	          $prise->urgence_datetime = mbDateTime();
 	        }
+					if($prise->datetime){
+            $prise->datetime = $_line->_debut_reel;
+          }
 	        $msg = $prise->store();
 	        CAppUI::displayMsg($msg, "CPrisePosologie-msg-create");  
 	      }

@@ -118,6 +118,9 @@ selDivPoso = function(type, line_id, type_elt){
 	        oFormPrise._urgent.enable().show();
 	        changeUrgence(oFormPrise, oFormPrise._urgent.checked);
         }
+				if(oFormPrise._now){
+				  oFormPrise._now.enable().show();
+				}
         $("moment_"+type_elt+"_"+line_id).insert(oFormPrise.moment_unitaire_id);
 
       } else {
@@ -188,6 +191,9 @@ onSubmitPrise = function(oForm, chapitre){
       if(oForm._urgent){
 	      oForm._urgent.checked = false;
 	      changeUrgence(oForm, false);
+      }
+		  if(oForm._now){
+        oForm._now.checked = false;
       }
   } });
 }

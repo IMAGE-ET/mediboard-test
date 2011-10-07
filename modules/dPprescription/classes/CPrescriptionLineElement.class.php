@@ -425,7 +425,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     
     // Pre-remplissage des prises les plus utilisées
     foreach($line_element->_ref_prises as $_prise){
-      if(!$_prise->urgence_datetime && !$_prise->decalage_intervention){
+      if(!$_prise->datetime && !$_prise->urgence_datetime && !$_prise->decalage_intervention){
         $_prise->_id = '';
         $_prise->object_id = $this->_id;
         $_prise->object_class = $this->_class;

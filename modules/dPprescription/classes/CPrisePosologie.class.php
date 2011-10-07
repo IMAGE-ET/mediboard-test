@@ -48,6 +48,7 @@ class CPrisePosologie extends CMbMetaObject {
   var $_quantite_dispensation = null;
   var $_quantite_administrable = null; // Quantité de produit en unité d'administration
   var $_urgent = null;
+	var $_now    = null;
   var $_equivalence_unite_prise = null;
   var $_view_unite_prise = null;
 	var $_short_view_unite_prise = null;
@@ -77,11 +78,14 @@ class CPrisePosologie extends CMbMetaObject {
     $specs["decalage_intervention"] = "num";
     $specs["heure_prise"]           = "time";
     $specs["urgence_datetime"]   = "dateTime";          
+    
     $specs["unite_decalage_intervention"] = "enum list|minute|heure default|heure show|0";  
 		$specs["type_decalage"] = "enum list|I|A default|I";
     $specs["condition"] = "str show|0";
     $specs["datetime"] = "dateTime show|0";
     $specs["_urgent"] = "bool";
+		$specs["_now"] = "bool";
+    
     $specs["_quantite_UI"]          = "float";
     return $specs;
   }
@@ -221,7 +225,7 @@ class CPrisePosologie extends CMbMetaObject {
         $this->_view .= " (Urgence)";
       }
     }
-    
+		
     if($this->moment_unitaire_id){
       $this->loadRefMoment();
       $this->_view .= " ".$this->_ref_moment->_view;
@@ -281,9 +285,9 @@ class CPrisePosologie extends CMbMetaObject {
 		}
 		
 		if($this->datetime){
-      $this->_view .= " le ".mbTransformTime(null, $this->datetime, "%d/%m/%Y à %Hh%M");
-      $this->_short_view .= " le ".mbTransformTime(null, $this->datetime, "%d/%m/%Y à %Hh%M");
-    }
+		  $this->_view .= " 1 fois";
+			$this->_short_view .= " 1 fois";
+		}
 		
     $this->_view = stripslashes($this->_view);
 		$this->_short_view = stripslashes($this->_short_view);

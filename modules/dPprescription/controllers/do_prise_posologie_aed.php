@@ -41,13 +41,17 @@ foreach($list_checkbox as $key_moment => $_checkbox_libelle){
   }
 }
 
-if(isset($_POST["_urgent"])){
+if(isset($_POST["_urgent"]) || isset($_POST["_now"])){
   $prise_poso = new CPrisePosologie();
 	$prise_poso->object_id = CValue::post("object_id");
 	$prise_poso->object_class = CValue::post("object_class");
 	$prise_poso->quantite = CValue::post("quantite");
 	$prise_poso->unite_prise = CValue::post("unite_prise");
-	$prise_poso->urgence_datetime = mbDateTime();
+	if(isset($_POST["_urgent"])){
+	  $prise_poso->urgence_datetime = mbDateTime();
+  } else {
+    $prise_poso->datetime = mbDateTime();
+  }
 	$msg = $prise_poso->store();
   $mode_checkbox = true;
 }

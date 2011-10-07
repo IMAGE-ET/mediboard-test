@@ -96,6 +96,8 @@ Main.add(function(){
     {{/foreach}}
 	  
     <input type="checkbox" name="_urgent" onchange="changeUrgence(this.form, this.checked);" /><label for="_urgent"> Urg.</label>
+		<input type="checkbox" name="_now"  /><label for="_now"> 1 fois</label>
+    
 	  {{/if}}
   </span>
 
