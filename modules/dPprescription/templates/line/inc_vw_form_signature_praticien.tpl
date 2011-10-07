@@ -19,7 +19,6 @@
     <input type="hidden" name="recusee" value="0" />
 	{{/if}}
 	
-	
 	<!-- Si la ligne est signée et qu'on est le prescripteur, on peut supprimer la signature de la ligne -->
   {{if $line->signee && !$line->recusee && ($app->user_id == $line->praticien_id || $line->inscription)}}
 	  <!-- Annulation de la signature -->
@@ -32,7 +31,7 @@
     <input type="hidden" name="signee" value="1" />
     <button type="button" class="tick" id="signature_{{$line->_id}}" 
 		        onclick="{{if $line->praticien_id && ($app->user_id != $line->praticien_id)}}
-						         if(!confirm('Attention, vous etes sur le point de signer une ligne créée par un autre praticien, êtes vous sur de vouloir continuer ?')){
+						         if(!confirm('Attention, vous etes sur le point de signer une ligne créée par un autre utilisateur, êtes vous sur de vouloir continuer ?')){
 										   return;
 										 }
 										 {{/if}}

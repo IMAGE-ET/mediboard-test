@@ -322,10 +322,9 @@ class CPrescriptionLineElement extends CPrescriptionLine {
 			$chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;
 			
       $perm_edit = $can->admin || ((!$this->signee) &&
-                 ($this->praticien_id == $current_user->user_id || $operation_id || $is_praticien || 
+                 ($this->praticien_id == $current_user->user_id || $operation_id || $is_praticien || $this->canModify() || 
 								 ($current_user->isExecutantPrescription() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_$chapitre") && !CAppUI::conf("dPprescription CPrescription role_propre"))));
-    }
-    
+		}
     $this->_perm_edit = $perm_edit;
     
     // Modification des dates
@@ -347,7 +346,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     }
 		
     // Affichage du formulaire de signature praticien
-    if(!$this->_protocole && ($is_praticien || $this->praticien_id == $current_user->_id)){
+    if(!$this->_protocole && $this->canModify()){
     	$this->_can_view_form_signature_praticien = 1;
     }
 
@@ -366,6 +365,22 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     } 
 	}
   
+	
+	function canModify(){
+		$chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;
+		$current_user = CMediusers::get();
+
+		if($current_user->isExecutantPrescription() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_$chapitre") && 
+		   (($current_user->isInfirmiere() && $this->_ref_element_prescription->prescriptible_infirmiere == 1) ||
+		   ($current_user->isAideSoignant() && $this->_ref_element_prescription->prescriptible_AS == 1) || 
+			 ($current_user->isKine() && $this->_ref_element_prescription->prescriptible_kine == 1))){
+		  return true;
+	  } else {
+	  	return false;
+	  }
+	}
+	
+	
   function loadRefsFwd() {
     parent::loadRefsFwd();
     $this->loadRefElement();
