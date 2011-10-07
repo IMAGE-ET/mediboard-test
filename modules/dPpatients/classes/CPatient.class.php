@@ -1756,6 +1756,9 @@ class CPatient extends CMbObject {
   }
   
   function calculINS_C($prenom=null, $naissance=null, $matricule=null) {
+    // Fonction non implémentée avant php <= 5.1
+    if (!function_exists("hash")) return;
+    
     $norm = $prenom;
     
     if ($norm !== null ){
