@@ -21,6 +21,7 @@ $product->loadRefStock();
 $series = array(
   array("label" => utf8_encode("Entrées"), "color" => "#66CC00", "data" => array()),
   array("label" => utf8_encode("Sorties"), "color" => "#CB4B4B", "data" => array()),
+  array("label" => utf8_encode("Périmés"), "color" => "#6600CC", "data" => array()),
 );
 $ticks = array();
 $max = 1;
@@ -65,6 +66,7 @@ while($date < $now) {
   $where = array(
     "product_delivery.stock_class"         => "= 'CProductStockGroup'",
     "product_delivery.stock_id"            => "= '{$product->_ref_stock_group->_id}'",
+    "product_delivery.type"                => "!= 'expired' OR product_delivery.type IS NULL",
     "product_delivery_trace.date_delivery" => "BETWEEN '$date' AND '$to'",
   );
   
@@ -80,8 +82,19 @@ while($date < $now) {
     $total += $_trace->quantity;
   }
   $max = max($max, $total);
-  
   $series[1]["data"][] = array(count($series[1]["data"])*2, $total);
+	
+	
+	// Output expired
+  $where["product_delivery.type"] = "= 'expired'";
+  $traces = $trace->loadList($where, null, null, null, $ljoin);
+  
+  $total_expired = 0;
+  foreach($traces as $_trace) {
+    $total_expired += $_trace->quantity;
+  }
+  $max = max($max, $total_expired + $total);
+  $series[2]["data"][] = array(count($series[2]["data"])*2, $total_expired);
   ///////////////
   
   $date = $to;
@@ -93,7 +106,8 @@ $data = array(
   "series" => $series,
   "options" => CFlotrGraph::merge("bars", array(
     "fontSize" => 7,
-    "bars" => array("barWidth" => 0.8),
+    "shadowSize" => 0,
+    "bars" => array("barWidth" => 0.8, "stacked" => true),
     "xaxis" => array(
       "showLabels" => true, 
       "ticks" => $ticks,

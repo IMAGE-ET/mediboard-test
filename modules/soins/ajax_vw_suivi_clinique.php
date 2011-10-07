@@ -33,6 +33,7 @@ $sejour->loadRefsOperations();
 $sejour->loadRefsTransmissions(true);
 $sejour->loadRefsObservations(true);
 $sejour->loadRefsTasks();
+$sejour->loadRefsNotes();
 
 foreach ($sejour->_ref_tasks as $key=>$_task) {
   if ($_task->realise) {

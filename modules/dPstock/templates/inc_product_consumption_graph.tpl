@@ -14,4 +14,9 @@ Main.add(function(){
 });
 </script>
 
-<div style="width: {{$width}}px; height: {{$height}}px; margin: 1em auto;" id="consumption-graph-{{$graph_id}}"></div>
+<div style="text-align: center;">
+  <div style="width: 8px; height: 8px; display: inline-block; background-color: #66CC00;"></div> Entrées
+  <div style="width: 8px; height: 8px; display: inline-block; background-color: #CB4B4B;"></div> Sorties
+  <div style="width: 8px; height: 8px; display: inline-block; background-color: #6600CC;"></div> Périmés
+</div>
+<div style="width: {{$width}}px; height: {{$height}}px; margin: 0 auto;" id="consumption-graph-{{$graph_id}}"></div>
