@@ -142,6 +142,7 @@ $smarty->assign("prescription_id", $prescription_id);
 $smarty->assign("checked_lines_tab"  , $checked_lines_tab);
 $smarty->assign("sejour"         , $prescription->_ref_object);
 $smarty->assign("now", mbDate());
+$smarty->assign("mode"           , "validation");
 $smarty->display("inc_select_lines.tpl");
 
 ?>

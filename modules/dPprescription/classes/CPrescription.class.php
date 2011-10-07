@@ -830,7 +830,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Chargement des prescription_line_mixes
    */
-  function loadRefsPrescriptionLineMixes($chapitre = "", $with_child = 0, $with_subst_active = 1, $protocole_id = '', $in_progress=0){
+  function loadRefsPrescriptionLineMixes($chapitre = "", $with_child = 0, $variante_active = 1, $protocole_id = '', $in_progress=0){
     if($this->_ref_prescription_line_mixes){
     	return;
     }
@@ -847,7 +847,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
       $where["protocole_id"] = " = '$protocole_id'";
     }
     // Permet de ne pas afficher les lignes de substitutions
-    $where["variante_active"] = " = '$with_subst_active'";
+    $where["variante_active"] = " = '$variante_active'";
     
     $this->_ref_prescription_line_mixes = $prescription_line_mix->loadList($where);
 		

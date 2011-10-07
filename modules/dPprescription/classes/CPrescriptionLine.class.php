@@ -50,6 +50,8 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
   var $_count_parent_line  = null;
   var $_count_prises_line  = null;  
   var $_fin_reelle         = null;
+  var $_old_fin_reelle     = null;
+
   var $_debut_reel         = null;
   var $_active             = null;
   var $_recent_modification = false;
@@ -377,7 +379,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
   /*
    * Duplication d'une ligne
    */
-  function duplicateLine($praticien_id, $prescription_id, $debut="", $time_debut="") {
+   function duplicateLine($praticien_id, $prescription_id, $debut="", $time_debut="", $duree="") {
     if(!$debut){
       $debut = mbDate();
     }
@@ -405,7 +407,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $new_line->_id = "";
     
     // Si date_arret (cas du sejour)
-    $new_line->debut = $debut;
+		$new_line->debut = $debut;
     $new_line->time_debut = $time_debut;
     $new_line->date_arret = "";
     $new_line->time_arret = "";
@@ -413,6 +415,11 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     if($new_line->duree < 0){
       $new_line->duree = "";
     }
+		
+		if($duree){
+		  $new_line->duree = $duree;
+    }
+		
     $new_line->praticien_id = $praticien_id;
     $new_line->signee = 0;
     $new_line->valide_pharma = 0;

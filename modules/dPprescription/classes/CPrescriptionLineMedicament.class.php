@@ -310,6 +310,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       }
     }
 		
+		$this->_old_fin_reelle = $this->_fin_reelle;
 		if($this->date_arret){
       $this->_fin_reelle = $this->date_arret;
       $this->_fin_reelle .= $this->time_arret ? " $this->time_arret" : " 23:59:00";

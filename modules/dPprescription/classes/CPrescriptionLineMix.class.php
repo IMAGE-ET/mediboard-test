@@ -92,6 +92,7 @@ class CPrescriptionLineMix extends CMbObject {
   // Form fields
   var $_debut             = null; // Debut de la prescription_line_mix (dateTime)
   var $_fin               = null; // Fin de la prescription_line_mix (dateTime)
+
   var $_protocole         = null; // Perfusion de protocole
   var $_add_perf_contigue = null;
   var $_count_parent_line = null;
@@ -400,7 +401,7 @@ class CPrescriptionLineMix extends CMbObject {
 	/*
 	 * Duplication d'une prescription_line_mix
 	 */
-	function duplicatePerf(){
+	function duplicatePerf($date_debut = "", $time_debut = "", $duree = ""){
     $this->_add_perf_contigue = false;
     
 	  // Creation de la nouvelle prescription_line_mix
@@ -410,6 +411,21 @@ class CPrescriptionLineMix extends CMbObject {
     $new_perf->_id = "";
     $new_perf->signature_pharma = 0;
     $new_perf->signature_prat = 0;
+		
+		$new_perf->date_arret = "";
+		$new_perf->time_arret = "";
+		
+		if($date_debut){
+			$new_perf->date_debut = $date_debut;
+		}
+		
+		if($time_debut){
+      $new_perf->time_debut = $time_debut;
+		}
+		
+		if($duree){
+			$new_perf->duree = $duree;
+		}
 		
 		if($this->_praticien_id){
 		  $new_perf->praticien_id = $this->_praticien_id;
@@ -432,8 +448,10 @@ class CPrescriptionLineMix extends CMbObject {
     }
 
     // Arret de la ligne et creation de l'historique
-    $this->date_arret = mbDate();
-    $this->time_arret = mbTime();
+		if(!$this->date_arret){
+      $this->date_arret = mbDate();
+      $this->time_arret = mbTime();
+		}
     $this->next_line_id = $new_perf->_id;
 	}
 
