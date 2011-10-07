@@ -50,7 +50,9 @@ if(isset($_POST["_urgent"]) || isset($_POST["_now"])){
 	if(isset($_POST["_urgent"])){
 	  $prise_poso->urgence_datetime = mbDateTime();
   } else {
-    $prise_poso->datetime = mbDateTime();
+  	$object = new $prise_poso->object_class;
+		$object->load($prise_poso->object_id);
+    $prise_poso->datetime = $object->_debut_reel;
   }
 	$msg = $prise_poso->store();
   $mode_checkbox = true;
