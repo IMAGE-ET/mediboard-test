@@ -667,8 +667,8 @@ class CCompteRendu extends CDocumentItem {
     return $smarty->fetch("../../dPcompteRendu/templates/htmlheader.tpl");
   }
   
-  function makePDFpreview() {
-    if (!CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") || !CAppUI::pref("pdf_and_thumbs")) {
+  function makePDFpreview($force_generating = 0) {
+    if ((!CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") || !CAppUI::pref("pdf_and_thumbs")) && !$force_generating) {
       return;    	
     } 
   
