@@ -346,7 +346,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     }
 		
     // Affichage du formulaire de signature praticien
-    if(!$this->_protocole && $this->canModify()){
+    if(!$this->_protocole && ($this->canModify() || $is_praticien)){
     	$this->_can_view_form_signature_praticien = 1;
     }
 
