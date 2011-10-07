@@ -63,7 +63,6 @@ Main.add(function () {
     minChars: 2,
     updateElement : function(element) {
       emptyMedecinTraitant = !$V(formTraitant.medecin_traitant);
-      console.log(emptyMedecinTraitant);
       $V(formTraitant.medecin_traitant, element.id.split('-')[1]);
       $V(formTraitant._view, element.select(".view")[0].innerHTML.stripTags());
     }
