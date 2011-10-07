@@ -652,29 +652,30 @@ Main.add( function(){
 				      {{/if}}
 						</td>
 					</tr>
-					
+			  {{if $prescription->type == "sejour"}}
 					<tr>
 						<th class="category">
 							Actions
 						</th>
-				</tr>
-				<tr>
-				  <td class="button">
-				  	<form name="stopAllLines" action="?" method="post">
-				  		<input type="hidden" name="m" value="dPprescription" />
-				  		<input type="hidden" name="dosql" value="do_stop_all_lines_aed" />
-							<input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
-							<button type="button" class="cancel singleclick" onclick="return onSubmitFormAjax(this.form, { onComplete: function(){ 
-							Prescription.reload('{{$prescription->_id}}', '', 'medicament', '0', '{{$mode_pharma}}');
-							modalWindowTools.close();
-							}	})">Tout arrêter</button>
-				  	</form>
-				  	
-						{{if $is_praticien}}
-						  <button type="button" class="tick" onclick="selectStoppedLines('{{$prescription->_id}}');">Tout reprendre</button>
-            {{/if}}
-					</td>	
-				</tr>	
+			  	</tr>
+  				<tr>
+  				  <td class="button">
+  				  	<form name="stopAllLines" action="?" method="post">
+  				  		<input type="hidden" name="m" value="dPprescription" />
+  				  		<input type="hidden" name="dosql" value="do_stop_all_lines_aed" />
+  							<input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+  							<button type="button" class="cancel singleclick" onclick="return onSubmitFormAjax(this.form, { onComplete: function(){ 
+  							Prescription.reload('{{$prescription->_id}}', '', 'medicament', '0', '{{$mode_pharma}}');
+  							modalWindowTools.close();
+  							}	})">Tout arrêter</button>
+  				  	</form>
+  				  	
+  						{{if $is_praticien}}
+  						  <button type="button" class="tick" onclick="selectStoppedLines('{{$prescription->_id}}');">Tout reprendre</button>
+              {{/if}}
+  					</td>	
+  				</tr>
+        {{/if}}	
 					{{if $prescription->object_id && ($is_praticien || $mode_protocole || @$operation_id || $can->admin) && $prescription->type != "externe"}}
 					<tr>
 						<th class="category">Traitements personnels</th>
