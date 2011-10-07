@@ -2096,7 +2096,12 @@ class CSetupdPprescription extends CSetup {
               CHANGE `variante_active` `variante_active` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
     
-		$this->mod_version = "1.56";
+    $this->makeRevision("1.56");
+    $query = "ALTER TABLE `element_prescription`
+              ADD `consultation` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+		$this->mod_version = "1.57";
   }
 }
 

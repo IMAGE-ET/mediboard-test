@@ -59,6 +59,9 @@ function submitTransmission(administration_id){
   if (administration_id) {
     $V(oFormTransmission.object_class, "CAdministration", false);
     $V(oFormTransmission.object_id, administration_id, false);
+    {{if $line instanceof CPrescriptionLineElement && $line->_ref_element_prescription->consultation && $is_praticien}}
+      $V(oFormTransmission.callback, "window.opener.createConsult", false);
+    {{/if}}
   }
   else {
     $V(oFormTransmission.object_class, '{{$line->_class}}', false);

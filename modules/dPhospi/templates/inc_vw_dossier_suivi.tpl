@@ -185,6 +185,12 @@ bindOperation = function(sejour_id) {
   url.requestModal(500, null, {showReload: false, showClose: false});
 }
 
+validateAdministration = function(sejour_id) {
+  var url = new Url("dPprescription", "ajax_administration_for_consult");
+  url.addParam("sejour_id", sejour_id);
+  url.requestModal(500, null, {showReload: false, showClose: false});
+}
+
 modalConsult = function(consult_id) {
   var url = new Url("dPcabinet", "ajax_short_consult");
   url.addParam("sejour_id", "{{$sejour->_id}}");
@@ -195,6 +201,14 @@ modalConsult = function(consult_id) {
       loadSuivi("{{$sejour->_id}}");
     }
   });
+}
+
+createConsult = function() {
+  {{if $isAnesth}}
+    bindOperation('{{$sejour->_id}}');
+  {{else}}
+    onSubmitFormAjax(getForm('addConsultation'));
+  {{/if}}
 }
 
 {{if $count_trans > 0}}
@@ -232,8 +246,8 @@ modalConsult = function(consult_id) {
     <button class="add" onclick="addPrescription('{{$sejour->_id}}', '{{$user->_id}}')">Ajouter une prescription</button>
   {{/if}}
   {{if @isset($modules.dPcabinet|smarty:nodefaults)}}
-    <a class="button new" href="#1"
-      onclick="{{if $isAnesth}}bindOperation('{{$sejour->_id}}');{{else}}onSubmitFormAjax(getForm('addConsultation'));{{/if}}">Nouvelle consultation</a>
+    <a class="button new" href="#1" id="newConsult"
+      onclick="validateAdministration('{{$sejour->_id}}');">Nouvelle consultation</a>
   {{/if}}
 {{/if}}
 

@@ -185,7 +185,7 @@ completeTrans = function(type, button){
   <input type="hidden" name="data_id" value="{{$data_id}}" />
   <input type="hidden" name="action_id" value="{{$action_id}}" />
   <input type="hidden" name="result_id" value="{{$result_id}}" />
-  
+  <input type="hidden" name="callback" value="" />
   <table style="width: 100%;">
     <tr>
       <td>

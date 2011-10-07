@@ -9,6 +9,7 @@
  */
 
 $del = CValue::post("del");
+$callback = CValue::post("callback");
 $data_id = CValue::post("data_id");
 $action_id = CValue::post("action_id");
 $result_id = CValue::post("result_id");
@@ -51,6 +52,7 @@ else if ($do->_obj->_text_result) {
   $do->doStore();
 }
 
+$do->callBack = $callback;
 $do->ajax = 1;
 $do->doRedirect();
 ?>

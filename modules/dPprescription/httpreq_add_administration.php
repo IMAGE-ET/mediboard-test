@@ -181,5 +181,6 @@ $smarty->assign("selection", $selection);
 $smarty->assign("constantes", $constantes);
 $smarty->assign("latest_constantes", $latest_constantes);
 $smarty->assign("params", CConstantesMedicales::$list_constantes);
+$smarty->assign("is_praticien", CAppUI::$user->isPraticien());
 $smarty->display("inc_vw_add_administration.tpl");
 ?>

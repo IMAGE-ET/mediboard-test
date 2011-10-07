@@ -71,6 +71,10 @@
       <th>{{mb_label object=$element_prescription field="rdv"}}</th>
       <td>{{mb_field object=$element_prescription field="rdv"}}</td>
     </tr>
+    <tr>
+      <th>{{mb_label object=$element_prescription field="consultation"}}</th>
+      <td>{{mb_field object=$element_prescription field="consultation"}}</td>
+    </tr>
 		 <tr>
 		   <td colspan="2" class="text">
 		   </td>
