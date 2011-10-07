@@ -269,13 +269,21 @@ else {
 	    $operation->sejour_id = $prescription->object_id;
 	    $operation->annulee = "0";
 	    $_operations  = $operation->loadMatchingList();
+			
+			
 	    foreach($_operations as $_operation){
 	      if($_operation->time_operation != "00:00:00"){
-	        $_operation->loadRefPlageOp(); 
-	        $hour_operation = mbTransformTime(null, $_operation->time_operation, '%H');
+	        if($_operation->plageop_id){
+	          $_operation->loadRefPlageOp(); 
+          	$date_operation = $_operation->_ref_plageop->date;
+	        } else {
+	        	$date_operation = $_operation->date;
+	        }
+					
+					$hour_operation = mbTransformTime(null, $_operation->time_operation, '%H');
 	        $hour_operation = (($hour_operation % 2) == 0) ? $hour_operation : $hour_operation-1;
 	        $hour_operation .= ":00:00";
-	        $operations["{$_operation->_ref_plageop->date} $hour_operation"] = $_operation->time_operation;
+	        $operations["$date_operation $hour_operation"] = $_operation->time_operation;
 	      }
 	    }
 	  }	 
