@@ -652,7 +652,7 @@ Main.add( function(){
 				      {{/if}}
 						</td>
 					</tr>
-			  {{if $prescription->type == "sejour"}}
+			  {{if !$mode_protocole && $prescription->type == "sejour"}}
 					<tr>
 						<th class="category">
 							Actions
