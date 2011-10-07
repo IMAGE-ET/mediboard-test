@@ -21,7 +21,7 @@ $finact        = CValue::getOrSession("finact", mbDate());
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("user_id"  , $user_id  );
+$smarty->assign("user_id"  , $user->_id  );
 $smarty->assign("listUsers", $listUsers);
 $smarty->assign("debutlog" , $debutlog );
 $smarty->assign("finlog"   , $finlog   );
