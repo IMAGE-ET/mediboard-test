@@ -278,7 +278,7 @@ Main.add(function () {
         <input type="hidden" name="dialog" value="{{$dialog}}" />
         {{/if}}
         
-        <div id="identite" style="display: none;">
+        <div id="identite">
           {{mb_include template=inc_acc/inc_acc_identite}}
         </div>
         <div id="assure" style="display: none;">

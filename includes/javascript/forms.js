@@ -303,8 +303,13 @@ function prepareForm(oForm) {
     }
     
     // Focus on first text input
-    if (bGiveFormFocus && sType === "text" && 
-        !oElement.className.match(/autocomplete/) &&
+		// Conditions : 
+		//  - Focus not give yet
+		//  - input text and not autocomplete
+		//  -    OR textearea
+		//  - not disabled and not readonly
+		//  - element is on screen
+    if (bGiveFormFocus && (sType === "textarea" || sType === "text" && !oElement.className.match(/autocomplete/)) && 
         !oElement.getAttribute("disabled") && !oElement.getAttribute("readonly") && 
         oElement.clientWidth > 0) {
         // oElement.clientWidth MUST be at the end. This "call" slows down IE a LOT
