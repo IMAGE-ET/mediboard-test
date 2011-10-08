@@ -1,7 +1,8 @@
 <script type="text/javascript">
 Main.add(function(){
-  var buttonClasses = $w("none edit hslip trash submit modify save new print cancel search lookup lock tick down "+
-    "up left left-disabled right right-disabled change add remove stop warning send send-cancel send-again send-problem send-auto vcard merge history close");
+  var buttonClasses = $w('none edit hslip trash submit modify save new print cancel search lookup'+
+    ' lock tick down up left left-disabled right right-disabled change add remove stop warning'+
+    ' send send-cancel send-again send-problem send-auto vcard merge history close select-all');
                       
   var buttonsContainers = $$("#buttons td");
   buttonClasses.each(function(c){
@@ -92,6 +93,11 @@ Main.add(function(){
     <td class="disabled">disabled</td>
   </tr>
   <tr>
+    <td colspan="5" class="empty">
+      empty
+    </td>
+  </tr>
+  <tr>
     <td>Cell 1 - 1</td>
     <td>Cell 1 - 2</td>
     <td>Cell 1 - 3</td>
@@ -106,6 +112,13 @@ Main.add(function(){
   </tr>
   <tr>
     <td colspan="5" class="text">
+      <p>
+        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede.
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="5" class="text compact">
       <p>
         Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede.
       </p>

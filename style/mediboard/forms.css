@@ -565,6 +565,10 @@ button.forms:before, a.button.forms:before {
   content: url(images/buttons/forms.png);
 }
 
+button.select-all:before, a.select-all:before {
+  content: url(images/buttons/select-all.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }
