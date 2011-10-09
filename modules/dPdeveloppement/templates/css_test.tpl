@@ -1,8 +1,6 @@
 <script type="text/javascript">
 Main.add(function(){
-  var buttonClasses = $w('none edit hslip trash submit modify save new print cancel search lookup'+
-    ' lock tick down up left left-disabled right right-disabled change add remove stop warning'+
-    ' send send-cancel send-again send-problem send-auto vcard merge history close select-all');
+  var buttonClasses = {{$button_classes|@json}};
                       
   var buttonsContainers = $$("#buttons td");
   buttonClasses.each(function(c){
@@ -19,6 +17,8 @@ Main.add(function(){
   Calendar.regField(form.time);
   Calendar.regField(form.date);
   Calendar.regField(form.dateInline, null, {inline: true, container: $(form.dateInline).up(), noView: true});
+  
+  //Form.multiSubmit($$("form"), {check: false});
 });
 </script>
 
@@ -149,9 +149,9 @@ Main.add(function(){
       <label class="notNull">Title 1</label>
     </th>
     <td>
-      <input type="text" value="text" /><br />
-      <input type="text" value="text" class="autocomplete" /><br />
-      <input type="password" value="password" />
+      <input name="text_foo" type="text" value="text" /><br />
+      <input name="text_autocomplete" type="text" value="text" class="autocomplete" /><br />
+      <input name="password_foo" type="password" value="password" />
     </td>
     <th rowspan="2">
       <label>Title 2</label>
@@ -165,7 +165,7 @@ Main.add(function(){
       <label class="canNull">Title 3</label>
     </th>
     <td>
-      <textarea></textarea>
+      <textarea name="textarea_foo"></textarea>
     </td>
   </tr>
   <tr>
@@ -173,7 +173,7 @@ Main.add(function(){
       <label class="notNullOK">Title 5</label>
     </th>
     <td>
-      <select>
+      <select name="select_foo">
         <option style="background: url(./images/icons/cancel.png)">Option 1</option>
         <option value="1">Option 2</option>
         <option value="2">Option 3</option>
@@ -187,7 +187,7 @@ Main.add(function(){
       <label>Title 6</label>
     </th>
     <td>
-      <input type="file" />
+      <input type="file" name="file" />
     </td>
   </tr>
   <tr>
@@ -215,11 +215,11 @@ Main.add(function(){
       <label>Title 8</label>
     </th>
     <td>
-      <input type="checkbox" /> 1
-      <input type="checkbox" /> 2
+      <label for="checkbox_1"> 1 </label><input type="checkbox" name="checkbox" value="1" />
+      <label for="checkbox_2"> 2 </label><input type="checkbox" name="checkbox" value="2" />
       <br />
-      <input type="radio" /> 1
-      <input type="radio" /> 2
+      <label for="radio_1"> 1 </label><input type="radio" name="radio" value="1" />
+      <label for="radio_2"> 2 </label><input type="radio" name="radio" value="2" />
     </td>
   </tr>
   <tr>
