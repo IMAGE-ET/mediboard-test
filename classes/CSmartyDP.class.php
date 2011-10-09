@@ -179,6 +179,15 @@ function smarty_modifier_iso_datetime($datetime) {
   return strftime("%Y-%m-%d %H:%M:%S", strtotime($datetime));
 }
 
+/**
+ * @abstract Format to relative datetime 
+ * Example:  {$datetime|rel_datetime:$now}
+ * @param datetime $datetime The date to format
+ */
+function smarty_modifier_rel_datetime($datetime, $reference = null) {
+  $relative = CMbDate::relative(mbDateTime($reference), $datetime);
+  return $relative["count"] . " " . CAppUI::tr($relative["unit"] . ($relative["count"] > 1 ? "s" : ""));
+}
 
 /**
  * @abstract Currency format modifier
@@ -728,6 +737,7 @@ class CSmartyDP extends Smarty {
     $this->register_modifier("iso_date"          , "smarty_modifier_iso_date");
     $this->register_modifier("iso_time"          , "smarty_modifier_iso_time");
     $this->register_modifier("iso_datetime"      , "smarty_modifier_iso_datetime");
+    $this->register_modifier("rel_datetime"      , "smarty_modifier_rel_datetime");
     $this->register_modifier("const"             , "smarty_modifier_const");
     $this->register_modifier("static"            , "smarty_modifier_static");
     $this->register_modifier("static_call"       , "smarty_modifier_static_call");
