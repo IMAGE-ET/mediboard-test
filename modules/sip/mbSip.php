@@ -12,8 +12,6 @@ global $m, $a;
 
 CCanDo::checkRead();
 
-CAppUI::requireModuleClass("sip", "CHprimSoapHandler");
-
 $wsdl = CValue::get('wsdl');
 
 // première étape : désactiver le cache lors de la phase de test

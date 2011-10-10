@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("system", "CExchangeTransportLayer");
-
 class CEchangeSOAP extends CExchangeTransportLayer {
   // DB Table key
   var $echange_soap_id       = null;

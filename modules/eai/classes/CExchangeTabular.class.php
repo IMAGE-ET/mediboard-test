@@ -16,8 +16,6 @@
  * Echange Tabular
  */
 
-CAppUI::requireModuleClass("eai", "CExchangeDataFormat");
-
 class CExchangeTabular extends CExchangeDataFormat {
   // DB Fields
   var $version           = null;

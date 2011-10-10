@@ -15,8 +15,6 @@ global $m, $a;
 
 CCanDo::checkRead();
 
-CAppUI::requireModuleClass("eai", "CEAISoapHandler");
-
 $wsdl = CValue::get('wsdl');
 
 // première étape : désactiver le cache lors de la phase de test

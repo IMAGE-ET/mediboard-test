@@ -11,8 +11,6 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireModuleClass("eai", "CInteropReceiver");
-
 class CDestinataireHprim21 extends CInteropReceiver {
   // DB Table key
   var $dest_hprim21_id  = null;

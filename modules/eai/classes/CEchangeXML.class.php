@@ -16,8 +16,6 @@
  * Echange XML
  */
 
-CAppUI::requireModuleClass("eai", "CExchangeDataFormat");
-
 class CEchangeXML extends CExchangeDataFormat {
   var $identifiant_emetteur    = null;
   var $initiateur_id           = null;  

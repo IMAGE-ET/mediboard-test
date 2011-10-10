@@ -15,7 +15,6 @@
  * Class CReceiverIHE 
  * Receiver IHE
  */
-CAppUI::requireModuleClass("eai", "CInteropReceiver");
 
 class CReceiverIHE extends CInteropReceiver {
   // DB Table key

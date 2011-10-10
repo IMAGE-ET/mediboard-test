@@ -11,8 +11,6 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireModuleClass("eai", "CEAIOperator");
-
 /**
  * Class COperatorIHE 
  * Operator IHE

@@ -16,8 +16,6 @@
  * Source LPR
  */
 
-CAppUI::requireModuleClass("printing", "CSourcePrinter");
-
 class CSourceLPR extends CSourcePrinter {
   // DB Table key
   var $source_lpr_id = null;

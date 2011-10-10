@@ -16,8 +16,6 @@
  * Source SMB
  */
 
-CAppUI::requireModuleClass("printing", "CSourcePrinter");
-
 class CSourceSMB extends CSourcePrinter {
   // DB Table key
   var $source_smb_id = null;

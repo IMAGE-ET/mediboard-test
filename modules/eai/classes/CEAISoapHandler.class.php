@@ -16,8 +16,6 @@
  * EAI SOAP Handler
  */
 
-CAppUI::requireModuleClass("webservices", "CSoapHandler");
-
 class CEAISoapHandler extends CSoapHandler {
   static $paramSpecs = array(
     "event" => array ( 
