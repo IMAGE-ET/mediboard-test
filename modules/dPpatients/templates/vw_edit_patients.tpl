@@ -3,8 +3,8 @@
 {{mb_script module="dPpatients"    script="autocomplete"}}
 {{mb_script module="dPpatients"    script="siblings_checker"}}
 {{mb_script module="dPpatients"    script="patient"}}
-{{mb_script module="dPfiles"       script="files"}}
 {{mb_script module="dPcompteRendu" script="document"}}
+{{mb_script module="dPfiles"       script="files"}}
 {{mb_script module="dPcabinet"     script="file"}}
 {{mb_script module="dPcompteRendu" script="modele_selector"}}
 {{if $patient->_id}}
