@@ -286,9 +286,16 @@ class CExClass extends CMbObject {
     return false;
   }
   
+  static function getHostObjectSpecs($object) {
+    $specs = array();
+    $specs["CONNECTED_USER"] = CMbFieldSpecFact::getSpec(CMediusers::get(), "CONNECTED_USER", "ref class|CMediusers show|1");;
+    return array_merge($specs, $object->_specs);
+  }
+  
   function getAvailableFields(){
     $object = new $this->host_class;
-    $this->_host_class_fields = $object->_specs;
+    
+    $this->_host_class_fields = self::getHostObjectSpecs($object);
     
     foreach($this->_host_class_fields as $_field => $_spec) {
       if ($_field == $object->_spec->key) {
@@ -311,8 +318,7 @@ class CExClass extends CMbObject {
       }
       
       // LEVEL 2
-      if ($_spec instanceof CRefSpec) {
-        
+      if ($_spec instanceof CRefSpec) {        
         // LEVEL 2 + Class list
         if ($_spec->meta && $this->_host_class_fields[$_spec->meta] instanceof CEnumSpec) {
           unset($this->_host_class_fields[$_field]);
@@ -387,6 +393,12 @@ class CExClass extends CMbObject {
         "field" => null,
       );
       
+      $host_class = $this->host_class;
+      
+      if ("CONNECTED_USER" === $_field) {
+        $host_class = "CMediusers";
+      }
+      
       $_subfield = explode(".", $_field);
       
       // Level 1 title
@@ -405,14 +417,14 @@ class CExClass extends CMbObject {
       
       // Level 1 type
       if (count($_subfield) > 1) {
-        $element["title"] = CAppUI::tr("$this->host_class-$_subfield[0]")." de type ".CAppUI::tr("$_subfield[1]");
-        $element["longview"] = CAppUI::tr("$this->host_class-$_subfield[0]-desc")." de type ".CAppUI::tr("$_subfield[1]");
-        $element["field"] = "$this->host_class-$_subfield[0]";
+        $element["title"] = CAppUI::tr("$host_class-$_subfield[0]")." de type ".CAppUI::tr("$_subfield[1]");
+        $element["longview"] = CAppUI::tr("$host_class-$_subfield[0]-desc")." de type ".CAppUI::tr("$_subfield[1]");
+        $element["field"] = "$host_class-$_subfield[0]";
       }
       else {
-        $element["title"] = CAppUI::tr("$this->host_class-$_field");
-        $element["longview"] = CAppUI::tr("$this->host_class-$_field-desc");
-        $element["field"] = "$this->host_class-$_field";
+        $element["title"] = CAppUI::tr("$host_class-$_field");
+        $element["longview"] = CAppUI::tr("$host_class-$_field-desc");
+        $element["field"] = "$host_class-$_field";
       }
       
       $element["view"] = $element["title"];

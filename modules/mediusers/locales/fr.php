@@ -168,6 +168,7 @@ $locales['CMediusers-commentaires-desc'] = 'Commentaires sur l\'utilisateur';
 $locales['CMediusers-compte'] = 'Compte bancaire';
 $locales['CMediusers-compte-court'] = 'Relevé d\'Identité Bancaire';
 $locales['CMediusers-compte-desc'] = 'RIB';
+$locales['CMediusers-CONNECTED_USER'] = 'Utilisateur connecté';
 $locales['CMediusers-conv'] = 'CONV';
 $locales['CMediusers-conv-court'] = 'CONV';
 $locales['CMediusers-conv-desc'] = 'CONV';
