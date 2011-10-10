@@ -41,14 +41,14 @@ class CTag extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["children"] = "CTag parent_id";
-    $backProps["items"] = "CTagItem tag_id";
+    $backProps["items"   ] = "CTagItem tag_id";
     return $backProps;
   }
 
   function updateFormFields() {
     parent::updateFormFields();
 		$parent = $this->loadRefParent();
-		$this->_view = ($parent->_id ? "$parent->_view >> " : "").$this->name;
+		$this->_view = ($parent->_id ? "$parent->_view &raquo; " : "").$this->name;
   }
 	
 	function loadRefItems(){
