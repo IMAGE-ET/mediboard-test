@@ -60,7 +60,7 @@ Main.add(function () {
   emptyMedecinTraitant = !$V(formTraitant.medecin_traitant);
   var urlTraitant = new Url("dPpatients", "httpreq_do_medecins_autocomplete");
   urlTraitant.autoComplete(formTraitant._view, formTraitant._view.id+'_autocomplete', {
-    minChars: 2,
+    minChars: 3,
     updateElement : function(element) {
       emptyMedecinTraitant = !$V(formTraitant.medecin_traitant);
       $V(formTraitant.medecin_traitant, element.id.split('-')[1]);
@@ -72,7 +72,7 @@ Main.add(function () {
   var formCorresp = getForm("correspondant-new-{{$patient->_id}}");
   var urlCorresp = new Url("dPpatients", "httpreq_do_medecins_autocomplete");
   urlCorresp.autoComplete(formCorresp._view, formCorresp._view.id+'_autocomplete', {
-    minChars: 2,
+    minChars: 3,
     updateElement : function(element) {
       $V(formCorresp.medecin_id, element.id.split('-')[1]);
       $V(formCorresp._view, element.select(".view")[0].innerHTML.stripTags());
