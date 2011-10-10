@@ -3,13 +3,15 @@
 {{mb_default var="step" value=20}}
 {{mb_default var="jumper" value=0}}
 {{mb_default var="narrow" value=false}}
+{{mb_default var="align" value=null}}
 
 {{assign var="last_page" value=$total-1}}
 {{assign var="last_page" value=$last_page/$step|intval}}
 {{assign var="pagination" value=0|range:$last_page}}
 
-<div class="pagination {{if $narrow}}narrow{{/if}}" style="min-height: 1em;">
-  <div style="float: right;">{{$total}} {{tr}}results{{/tr}}</div>
+<div class="pagination {{if $narrow}}narrow{{/if}}" style="min-height: 1em; {{if $align}}text-align: {{$align}};{{/if}}">
+  {{if !$align}} <div style="float: right;">{{$total}} {{tr}}results{{/tr}}</div> {{/if}}
+  {{if $align == "right"}} {{$total}} {{tr}}results{{/tr}} {{/if}}
   
   {{if $total > $step}}
   
@@ -63,4 +65,5 @@
     
   {{/if}}
 
+  {{if $align == "left"}} {{$total}} {{tr}}results{{/tr}} {{/if}}
 </div>

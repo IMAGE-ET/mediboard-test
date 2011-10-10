@@ -123,7 +123,8 @@ ExObject = {
     ex_class_id = ex_class_id || "";
     
     options = Object.extend({
-      print: 0
+      print: 0,
+      start: 0
     }, options);
     
     var url = new Url("forms", "ajax_list_ex_object");

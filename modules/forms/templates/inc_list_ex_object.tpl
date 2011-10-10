@@ -67,11 +67,22 @@ toggleEmptyRows = function(){
   container.toggleClassName("hide-empty-rows", show);
 }
 
-refreshSelf = function(){
-  ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', '{{$target_element}}', '{{$detail}}', '{{$ex_class_id}}');
+refreshSelf = function(start){
+  start = start || 0;
+  ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', '{{$target_element}}', '{{$detail}}', '{{$ex_class_id}}', {start: start});
 }
 
 </script>
+
+{{if $step}}
+  {{assign var=align value=null}}
+  
+  {{if $detail == 2}}
+    {{assign var=align value=left}}
+  {{/if}}
+  
+  {{mb_include module=system template=inc_pagination change_page="refreshSelf" total=$total current=$start step=$step align=$align}}
+{{/if}}
 
 {{* FULL DETAIL *}}
 {{if $detail == 2}}
@@ -90,22 +101,19 @@ refreshSelf = function(){
   {{/if}}
   
   <div id="ex_class-tables" class="hide-empty-rows">
-  	{{if !$print}}
+    {{if !$print}}
     <button class="change" onclick="toggleEmptyRows()">
       Afficher/cacher les valeurs vides
     </button>
-		{{/if}}
+    {{/if}}
     
     {{foreach from=$ex_objects_by_event item=ex_objects_by_class key=_host_event}}
-		  {{if $print}}
-			  {{assign var=parts value="-"|explode:$_host_event}}
+      {{if $print}}
+        {{assign var=parts value="-"|explode:$_host_event}}
         <h2>{{tr}}{{$parts.0}}{{/tr}} - {{tr}}{{$parts.0}}-event-{{$parts.1}}{{/tr}}</h2>
-			{{/if}}
-			
+      {{/if}}
+      
       <div id="tab-{{$_host_event}}" {{if !$ex_class_id && !$print}} style="display: none;" {{/if}} class="ex_class-table">
-      	{{if $reaches_limit && $limit}}
-      	  <div class="small-info">Seuls les {{$limit}} derniers enregistrements de chaque formulaire sont affichés.</div>
-				{{/if}}
         {{mb_include module=forms template=inc_ex_objects_columns}}
       </div>
     {{foreachelse}}
@@ -122,8 +130,8 @@ refreshSelf = function(){
         {{assign var=parts value="-"|explode:$_host_event}}
         <li>
           <a href="#tab-{{$_host_event}}">
-          	{{tr}}{{$parts.0}}{{/tr}} - {{tr}}{{$parts.0}}-event-{{$parts.1}}{{/tr}}
-					</a>
+            {{tr}}{{$parts.0}}{{/tr}} - {{tr}}{{$parts.0}}-event-{{$parts.1}}{{/tr}}
+          </a>
         </li>
       {{/foreach}}
     </ul>
@@ -133,34 +141,29 @@ refreshSelf = function(){
   
   {{foreach from=$ex_objects_by_event item=ex_objects_by_class key=_host_event}}
   <div id="tab-{{$_host_event}}" {{if $ex_objects_by_event|@count > 1}} style="display: none;" {{/if}}>
-		
-    {{if $reaches_limit && $limit}}
-      <div class="small-info">Seuls les {{$limit}} derniers enregistrements de chaque formulaire sont affichés.</div>
+    {{assign var=_parts value="-"|explode:$_host_event}}
+    {{if $_parts.0 == $reference_class && $ex_classes_creation.$_host_event|@count > 0}}
+      <table class="main layout">
+        <tr>
+          <td style="text-align: right;">Remplir un nouveau formulaire:</td>
+          <td>
+            <select onchange="selectExClass(this, '{{$reference_class}}-{{$reference_id}}', '{{$_parts.1}}', '@refreshSelf')">
+              <option>&ndash; Formulaires disponibles</option>
+              {{foreach from=$ex_classes_creation.$_host_event item=_ex_class key=_ex_class_id}}
+                <option value="{{$_ex_class->_id}}">{{$_ex_class->name}}</option>
+              {{/foreach}}
+            </select>
+          </td>
+        </tr>
+      </table>
+      <hr style="border-color: #aaa;" />
     {{/if}}
-		
-	  {{assign var=_parts value="-"|explode:$_host_event}}
-	  {{if $_parts.0 == $reference_class && $ex_classes_creation.$_host_event|@count > 0}}
-		  <table class="main layout">
-		  	<tr>
-		  		<td style="text-align: right;">Remplir un nouveau formulaire:</td>
-					<td>
-						<select onchange="selectExClass(this, '{{$reference_class}}-{{$reference_id}}', '{{$_parts.1}}', '@refreshSelf')">
-	            <option>&ndash; Formulaires disponibles</option>
-	            {{foreach from=$ex_classes_creation.$_host_event item=_ex_class key=_ex_class_id}}
-	              <option value="{{$_ex_class->_id}}">{{$_ex_class->name}}</option>
-	            {{/foreach}}
-	          </select>
-					</td>
-		  	</tr>
-		  </table>
-			<hr style="border-color: #aaa;" />
-		{{/if}}
-		
+    
     {{foreach from=$ex_objects_by_class item=_ex_objects key=_ex_class_id}}
       {{assign var=_ex_obj value=$_ex_objects|@reset}}
       {{assign var=_ex_class value=$ex_classes.$_ex_class_id}}
-			
-			{{if $_ex_objects|@count}}
+      
+      {{if $_ex_objects|@count}}
       <h3 style="margin: 0.5em 1em;">
         {{if isset($ex_classes_creation.$_host_event.$_ex_class_id|smarty:nodefaults)}}
           <button style="margin: -1px; float: right;" class="new" 
@@ -168,8 +171,8 @@ refreshSelf = function(){
             {{tr}}New{{/tr}}
           </button>
         {{/if}}
-				
-			  {{$_ex_class->name}}
+        
+        {{$_ex_class->name}}
       </h3>
       
       {{foreach from=$_ex_objects item=_ex_object name=_ex_object}}
@@ -198,19 +201,19 @@ refreshSelf = function(){
              </td>
              <td class="text compact">
                <strong style="color: #000;">{{mb_value object=$_ex_object->_ref_first_log field=date}}</strong>
-							 
-							 {{if $_ex_class->host_class != $reference_class}}
-	               <br />
-	               {{$_ex_object->_ref_object}}
-							{{/if}}
+               
+               {{if $_ex_class->host_class != $reference_class}}
+                 <br />
+                 {{$_ex_object->_ref_object}}
+              {{/if}}
              </td>
            </tr>
          </table>
       {{/foreach}}
-			
+      
       <hr style="border-color: #aaa;" />
-			{{/if}}
-			
+      {{/if}}
+      
     {{/foreach}}
     </div>
   {{foreachelse}}
@@ -233,21 +236,21 @@ refreshSelf = function(){
               {{tr}}{{$parts.0}}{{/tr}} - {{tr}}{{$parts.0}}-event-{{$parts.1}}{{/tr}}
             </th>
           </tr>
-				
+        
           {{foreach from=$ex_objects_by_class item=_ex_objects key=_ex_class_id}}
-						{{if $_ex_objects|@count}}
-	          <tr>
-	            <td class="text">
-	              {{$ex_classes.$_ex_class_id->name}}
-	            </td>
-	            <td class="narrow" style="text-align: right;">
-	              <button class="right rtl" style="margin: -1px" 
-	                      onclick="ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', 'ex_class-list', 2, '{{$_ex_class_id}}')">
-	                {{$_ex_objects|@count}}
-	              </button>
-	            </td>
-	          </tr>
-						{{/if}}
+            {{if $_ex_objects|@count}}
+            <tr>
+              <td class="text">
+                {{$ex_classes.$_ex_class_id->name}}
+              </td>
+              <td class="narrow" style="text-align: right;">
+                <button class="right rtl" style="margin: -1px" 
+                        onclick="ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', 'ex_class-list', 2, '{{$_ex_class_id}}')">
+                  {{$_ex_objects|@count}}
+                </button>
+              </td>
+            </tr>
+            {{/if}}
           {{/foreach}}
         {{/foreach}}
       </table>
