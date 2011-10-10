@@ -13,7 +13,7 @@
     <li>
       <strong>{{$ccam.CODE}}</strong>
       <br />
-      <small>{{$ccam.LIBELLELONG|emphasize:$_codes_ccam}}</small>
+      <small>{{$ccam.LIBELLELONG|smarty:nodefaults|emphasize:$_codes_ccam}}</small>
     </li>
   {{/foreach}}
 </ul>

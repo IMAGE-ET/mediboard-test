@@ -480,7 +480,7 @@ class CCodeCCAM {
         $listLike[] = "LIBELLELONG LIKE '%".addslashes($value)."%'";
       }
       // Combiner la recherche de code et libellé
-      if ($code) {
+      if ($code != "") {
         foreach ($codes as $key => $value) {
           $codeLike[] = "CODE LIKE '".addslashes($value) . "%'";
         }
@@ -493,7 +493,7 @@ class CCodeCCAM {
         $query .= " AND (";
       }
       $query .= implode(" AND ", $listLike);
-      if ($code) $query .= ") ) ";
+      if ($code != "") $query .= ") ) ";
 
     }
     // Ou que le code
