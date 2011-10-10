@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- saved from url=(0014)about:internet --> {{* MOTW http://msdn.microsoft.com/en-us/library/ms537628(v=vs.85).aspx *}}
 <html lang="{{$localeInfo.alpha2}}">
 <head>
   <!-- Content-Type meta tags need to be the first in the page (even before title) -->
