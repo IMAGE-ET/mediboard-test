@@ -69,20 +69,22 @@ PlageConsult.addPlaceAfter = function(plage_id) {
   </tr>
   {{/if}}
   <tr>
-    <th class="narrow" rowspan="2">Heure</th>
-    <th rowspan="2">Patient</th>
-    {{if $display_nb_consult != "none"}}
+    <th class="narrow" {{if $online}}rowspan="2"{{/if}}>Heure</th>
+    <th {{if $online}}rowspan="2"{{/if}}>Patient</th>
+    {{if $display_nb_consult != "none" && $online}}
       <th colspan="{{if $display_nb_consult == "cab"}}2{{else}}3{{/if}}" class="narrow">Occupation</th>
     {{/if}}
   </tr>
-  <tr>
-    {{if $display_nb_consult == "cab" || $display_nb_consult == "etab"}}
-      <th>Cab.</th>
-    {{/if}}
-    {{if $display_nb_consult == "etab"}}
-      <th>Etab.</th>
-    {{/if}}
-  </tr>
+  {{if $online}}
+    <tr>
+      {{if $display_nb_consult == "cab" || $display_nb_consult == "etab"}}
+        <th>Cab.</th>
+      {{/if}}
+      {{if $display_nb_consult == "etab"}}
+        <th>Etab.</th>
+      {{/if}}
+    </tr>
+  {{/if}}
   {{else}}
   <tr>
     <th colspan="{{if $display_nb_consult}}5{{else}}3{{/if}}">Pas de plage le {{$date|date_format:$conf.longdate}}</th>
@@ -164,16 +166,18 @@ PlageConsult.addPlaceAfter = function(plage_id) {
       </div>
       {{/foreach}}
     </td>
-    {{assign var=time value=$_place.time}}
-    {{if $display_nb_consult == "cab" || $display_nb_consult == "etab"}}
-      <td>
-        {{mb_include module=dPcabinet template=inc_vw_jeton nb=$utilisation_func.$time}}
-      </td>
-    {{/if}}
-    {{if $display_nb_consult == "etab"}}
-      <td>
-        {{mb_include module=dPcabinet template=inc_vw_jeton nb=$utilisation_etab.$time}}
-      </td>
+    {{if $online}}
+      {{assign var=time value=$_place.time}}
+      {{if $display_nb_consult == "cab" || $display_nb_consult == "etab"}}
+        <td>
+          {{mb_include module=dPcabinet template=inc_vw_jeton nb=$utilisation_func.$time}}
+        </td>
+      {{/if}}
+      {{if $display_nb_consult == "etab"}}
+        <td>
+          {{mb_include module=dPcabinet template=inc_vw_jeton nb=$utilisation_etab.$time}}
+        </td>
+      {{/if}}
     {{/if}}
   </tr>
   {{/foreach}}
