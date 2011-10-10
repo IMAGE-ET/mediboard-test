@@ -158,7 +158,7 @@ abstract class CMbString {
     $ratio = ($si ? 1000 : 1024);
     $string = strtolower(trim($string));
     
-    if (!preg_match("/^(\d+)([kmgt])/", $string, $matches)) {
+    if (!preg_match("/^([,\.\d]+)([kmgt])/", $string, $matches)) {
       return intval($string);
     }
     
