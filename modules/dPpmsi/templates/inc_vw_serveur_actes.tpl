@@ -44,6 +44,14 @@
   </tr>
   {{/foreach}}
   <tr>
+    <th>{{mb_label object=$curr_op field=depassement}}</th>
+    <td colspan="3">{{mb_value object=$curr_op field=depassement}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$curr_op field=depassement_anesth}}</th>
+    <td colspan="3">{{mb_value object=$curr_op field=depassement_anesth}}</td>
+  </tr>
+  <tr>
     <th>{{mb_label object=$curr_op field=anapath}}</th>
     <td colspan="3">{{mb_value object=$curr_op field=anapath}}</td>
   </tr>
