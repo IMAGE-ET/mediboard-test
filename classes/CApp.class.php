@@ -40,6 +40,17 @@ class CApp {
   }
   
   /**
+   * Changes to memory limit to $ratio * [current limit]
+   * @param float $ratio
+   * @return Old memory limit
+   */
+  static function memoryRatio($ratio) {
+    $limit = CMbString::fromDecaSI(ini_get("memory_limit"), "") * $ratio;
+    $limit = CMbString::toDecaSI($limit, "");
+    return ini_set("memory_limit", $limit);
+  }
+  
+  /**
    * This will make a redirect to empty the POST data, so 
    * that it is not posted back when refreshing the page.
    * Use it instead of CApp::rip() directly
@@ -137,7 +148,7 @@ class CApp {
   static function getChildClasses($parent = "CMbObject", $properties = array(), $active_module = false) {
     $childclasses = SHM::get("child-classes");
     
-		// Do not cache when we want all the classes
+    // Do not cache when we want all the classes
     if ($parent && empty($properties) && isset($childclasses[$parent][$active_module])) {
       return $childclasses[$parent][$active_module];
     }

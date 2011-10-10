@@ -324,7 +324,7 @@ function mbMinutesRelative($from, $to) {
  * @return boolean true or false
  **/
 function isLunarDate($date) {
-	$fragments = explode("-", $date);
+  $fragments = explode("-", $date);
 
   return ($fragments[2] > 31) || ($fragments[1] > 12);
 }
@@ -352,12 +352,12 @@ class CMbDate {
    * @param date $to Ending time, now if null
    * return array[int] Number of years and months
    */
-	static function achievedDurations($from, $to = null) {
+  static function achievedDurations($from, $to = null) {
     $achieved = array(
       "year" => "??",
       "month" => "??",
-		);
-		
+    );
+    
     if ($from == "0000-00-00" || !$from) {
       return $achieved;
     }
@@ -366,18 +366,18 @@ class CMbDate {
       $to = mbDate();
     }
     
-		list($yf, $mf, $df) = explode("-", $from);
+    list($yf, $mf, $df) = explode("-", $from);
     list($yt, $mt, $dt) = explode("-", $to);
 
     $achieved["month"] = 12*($yt-$yf) + ($mt-$mf);
     if ($mt == $mf && $dt < $df) {
       $achieved["month"]--;
     }
-		
-		$achieved["year"] = intval($achieved["month"] / 12); 
-		return $achieved;
-	}
-	
+    
+    $achieved["year"] = intval($achieved["month"] / 12); 
+    return $achieved;
+  }
+  
   /**
    * Compute user friendly approximative duration between two date time
    * @param datetime $from Starting time
@@ -688,10 +688,10 @@ function luhn ($code) {
  * @return bool
  */
 function url_exists($url) {
-	$old = ini_set('default_socket_timeout', 5); 
+  $old = ini_set('default_socket_timeout', 5); 
 
-	$headers = @get_headers($url);
-	ini_set('default_socket_timeout', $old); 
+  $headers = @get_headers($url);
+  ini_set('default_socket_timeout', $old); 
   return (preg_match("|200|", $headers[0])); 
 }
 

@@ -107,31 +107,71 @@ abstract class CMbString {
    * @param integer $number
    * @return string Deca-binary equivalent
    */
-  static function toDecaBinary($number, $unit = "o") {
-    $bytes = $value = $number;
+  static function toDecaBinary($value, $unit = "o") {
+    return self::fromBytes($value, false)."i$unit";
+  }
+
+  /**
+   * Convert a number to the deca-binary syntax
+   * @param integer $number
+   * @return string Deca-binary equivalent
+   */
+  static function toDecaSI($value, $unit = "o") {
+    return self::fromBytes($value, true).$unit;
+  }
+  
+  private static function fromBytes($value, $si = false) {
+    $bytes = $value;
     $suffix = "";
+    $ratio = ($si ? 1000 : 1024);
   
-    $bytes = $bytes / 1024;
+    $bytes = $bytes / $ratio;
     if ($bytes >= 1) {
       $value = $bytes;
-      $suffix = "Ki";
+      $suffix = ($si ? "k" : "K");
     }
   
-    $bytes = $bytes / 1024;
+    $bytes = $bytes / $ratio;
     if ($bytes >= 1) {
       $value = $bytes;
-      $suffix = "Mi";
+      $suffix = "M";
     }
   
-    $bytes = $bytes / 1024;
+    $bytes = $bytes / $ratio;
     if ($bytes >= 1) {
       $value = $bytes;
-      $suffix = "Gi";
+      $suffix = "G";
+    }
+  
+    $bytes = $bytes / $ratio;
+    if ($bytes >= 1) {
+      $value = $bytes;
+      $suffix = "T";
     }
     
     // Value with 3 significant digits
     $value = round($value, 2 - intval(log10($value)));
-    return "$value$suffix$unit";
+    return "$value$suffix";
+  }
+  
+  private static function toBytes($string, $si = false) {
+    $ratio = ($si ? 1000 : 1024);
+    $string = strtolower(trim($string));
+    
+    if (!preg_match("/^(\d+)([kmgt])/", $string, $matches)) {
+      return intval($string);
+    }
+    
+    list($string, $value, $suffix) = $matches;
+    
+    switch($suffix) {
+      case 't': $value *= $ratio;     
+      case 'g': $value *= $ratio;
+      case 'm': $value *= $ratio;
+      case 'k': $value *= $ratio;
+    }
+    
+    return intval($value);
   }
   
   /**
@@ -139,20 +179,17 @@ abstract class CMbString {
    * @param string $string Deca-binary string
    * @return integer Integer equivalent
    */
-  static function fromDecaBinary($string, $unit = "o") {
-    $string = strtolower(trim($string));
-    if (!preg_match("/(.*)([kmgt])[$unit]?/", $string, $matches)) {
-      return intval($string);
-    }
-    
-    list($string, $value, $suffix) = $matches;
-    switch($suffix) {
-      case 't': $value *= 1024;     
-      case 'g': $value *= 1024;
-      case 'm': $value *= 1024;
-      case 'k': $value *= 1024;
-    }
-    return intval($value);
+  static function fromDecaBinary($string) {
+    return self::toBytes($string, false);
+  }
+  
+  /**
+   * Convert a deca-SI string to a integer
+   * @param string $string Deca-SI string
+   * @return integer Integer equivalent
+   */
+  static function fromDecaSI($string) {
+    return self::toBytes($string, true);
   }
   
   static function unslash($str) {
@@ -197,7 +234,7 @@ abstract class CMbString {
 
   static function isUTF8($string) {
     return mb_detect_encoding($string) === "UTF-8";
-		
+    
     /* // à tester :
     $invalidchars = '[\xC0-\xDF]([^\x80-\xBF]|$)' .
       '|[\xE0-\xEF].{0,1}([^\x80-\xBF]|$)' .
@@ -216,23 +253,23 @@ abstract class CMbString {
       
     return !preg_match("!$invalidchars!", $string);
     
-		$length = strlen($string);
-		
-		for ($i=0; $i < $length; $i++) {
-			$c = ord($string[$i]);
-			     if ($c < 0x80) $n = 0; # 0bbbbbbb
-			elseif (($c & 0xE0) == 0xC0) $n=1; # 110bbbbb
-			elseif (($c & 0xF0) == 0xE0) $n=2; # 1110bbbb
-			elseif (($c & 0xF8) == 0xF0) $n=3; # 11110bbb
-			elseif (($c & 0xFC) == 0xF8) $n=4; # 111110bb
-			elseif (($c & 0xFE) == 0xFC) $n=5; # 1111110b
-			else return false; # Does not match any model
-			
-			for ($j=0; $j<$n; $j++) { # n bytes matching 10bbbbbb follow ?
-			  if ((++$i == $length) || ((ord($string[$i]) & 0xC0) != 0x80))
-			  return false;
-			}
-		}
+    $length = strlen($string);
+    
+    for ($i=0; $i < $length; $i++) {
+      $c = ord($string[$i]);
+           if ($c < 0x80) $n = 0; # 0bbbbbbb
+      elseif (($c & 0xE0) == 0xC0) $n=1; # 110bbbbb
+      elseif (($c & 0xF0) == 0xE0) $n=2; # 1110bbbb
+      elseif (($c & 0xF8) == 0xF0) $n=3; # 11110bbb
+      elseif (($c & 0xFC) == 0xF8) $n=4; # 111110bb
+      elseif (($c & 0xFE) == 0xFC) $n=5; # 1111110b
+      else return false; # Does not match any model
+      
+      for ($j=0; $j<$n; $j++) { # n bytes matching 10bbbbbb follow ?
+        if ((++$i == $length) || ((ord($string[$i]) & 0xC0) != 0x80))
+        return false;
+      }
+    }
     return true;*/
   }
   
