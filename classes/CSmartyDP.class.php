@@ -185,6 +185,9 @@ function smarty_modifier_iso_datetime($datetime) {
  * @param datetime $datetime The date to format
  */
 function smarty_modifier_rel_datetime($datetime, $reference = null) {
+  if (!$datetime) {
+    return;
+  }
   $relative = CMbDate::relative(mbDateTime($reference), $datetime);
   return $relative["count"] . " " . CAppUI::tr($relative["unit"] . ($relative["count"] > 1 ? "s" : ""));
 }
