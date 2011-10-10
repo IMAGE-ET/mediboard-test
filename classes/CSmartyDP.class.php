@@ -189,7 +189,7 @@ function smarty_modifier_rel_datetime($datetime, $reference = null) {
     return;
   }
   $relative = CMbDate::relative(mbDateTime($reference), $datetime);
-  return $relative["count"] . " " . CAppUI::tr($relative["unit"] . ($relative["count"] > 1 ? "s" : ""));
+  return $relative["count"] . " " . CAppUI::tr($relative["unit"] . (abs($relative["count"]) > 1 ? "s" : ""));
 }
 
 /**
