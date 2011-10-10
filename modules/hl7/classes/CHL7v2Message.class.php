@@ -1,11 +1,19 @@
 <?php /* $Id:$ */
 
 /**
- * @package Mediboard
- * @subpackage hl7
- * @version $Revision: 10041 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Message HL7
+ *  
+ * @category HL7
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version  SVN: $Id:$ 
+ * @link     http://www.mediboard.org
+ */
+
+/**
+ * Class CHL7v2Message 
+ * Message HL7
  */
 
 class CHL7v2Message extends CHL7v2SegmentGroup {
@@ -33,6 +41,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   var $unescape_sequences = null;
 
   var $version      = '2.5';
+  var $event_name   = null;
   var $name         = null;
   var $description  = null;
   var $lines        = array();
@@ -67,16 +76,10 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $field = $this->children[0]->fields[8]->items[0];
     $name = $field->children[0]->data."_".$field->children[1]->data;
     
-    $doc = new CMbXMLDocument("utf-8");
-    $doc->formatOutput = true;
-    
-    $root = $doc->createElement($name);
-    $doc->addAttribute($root, "xmlns", "urn:hl7-org:v2xml");
-    $doc->addAttribute($root, "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-    $doc->addAttribute($root, "xsi:schemaLocation", "urn:hl7-org:v2xml $name.xsd");
-
-    $doc->appendChild($root);
-    
+    $dom = new CHL7v2MessageXML();
+    $root = $dom->addElement($dom, $name);
+    $dom->addNameSpaces($name);
+   
     return $this->_toXML($root);
   }
   
@@ -90,8 +93,57 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     return $doc;
   }
   
-  function parse($data, $parse_body = true) {
+  static function isWellFormed($data) {
     // remove all chars before MSH
+    $msh_pos = strpos($data, "MSH");
+    $data = substr($data, $msh_pos);
+    $data = trim($data);
+    $data = str_replace("\r\n", "\n", $data);
+    $data = str_replace("\r", "\n", $data);
+  
+    // first tokenize the segments
+    if (($data == null) || (strlen($data) < 4)) {
+      throw new CHL7v2Exception(CHL7v2Exception::EMPTY_MESSAGE, $data);
+    }
+    
+    $fieldSeparator = $data[3];
+    
+    // valid separator
+    if (!preg_match("/[^a-z0-9]/i", $fieldSeparator) ) {
+      throw new CHL7v2Exception(CHL7v2Exception::INVALID_SEPARATOR, $data);
+    }   
+    
+    $lines = CHL7v2::split(self::DEFAULT_SEGMENT_TERMINATOR, $data);
+    
+    // we extract the first line info "by hand"
+    $first_line = CHL7v2::split($fieldSeparator, reset($lines));
+    
+    // version
+    if (!preg_match('/^([\d\._]+)/', $first_line[11])) {
+      throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $first_line);
+    }
+    
+    // validation de la syntaxe : chaque ligne doit commencer par 3 lettre + un separateur + au moins une donnée
+    $sep_preg = preg_quote($fieldSeparator);
+    
+    foreach($lines as $line) {
+      if (!preg_match("/^[A-Z]{2}[A-Z0-9]$sep_preg.+/", $line)) {
+        throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $line);
+      }
+    }
+    
+    return true;
+  }
+
+  function parse($data, $parse_body = true) {
+    try {
+      self::isWellFormed($data);
+    } catch(CHL7v2Exception $e) {
+      $this->error($e);
+      return false;
+    }
+
+     // remove all chars before MSH
     $msh_pos = strpos($data, "MSH");
     $data = substr($data, $msh_pos);
     $data = trim($data);
@@ -102,18 +154,8 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     
     $message = $this->data;
     
-    // first tokenize the segments
-    if (($message == null) || (strlen($message) < 4)) {
-      $this->error(CHL7v2Exception::EMPTY_MESSAGE, $message);
-    }
-    
     $this->fieldSeparator = $message[3];
     
-    // valid separator
-    if (!preg_match("/[^a-z0-9]/i", $this->fieldSeparator) ) {
-      $this->error(CHL7v2Exception::INVALID_SEPARATOR, $message);
-    }
-
     $nextDelimiter = strpos($message, $this->fieldSeparator, 4);
     if ($nextDelimiter > 4) {
       // usually ^
@@ -159,11 +201,10 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     else {
       $type = implode("", $message_type);
     }
-    $this->name    = preg_replace("/[^A-Z0-9]/", "", $type);
+    $this->name        = preg_replace("/[^A-Z0-9]/", "", $type);
+    $this->event_name  = $message_type[0].$message_type[1];
     $this->description = (string)$this->getSpecs()->description;
-    
-    $this->validateSyntax();
-    
+       
     $this->readHeader();
     
     if ($parse_body) {
@@ -327,14 +368,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   }
   
   protected function validateSyntax() {
-    // validation de la syntaxe : chaque ligne doit commencer par 3 lettre + un separateur + au moins une donnée
-    $sep_preg = preg_quote($this->fieldSeparator);
     
-    foreach($this->lines as $line) {
-      if (!preg_match("/^[A-Z]{2}[A-Z0-9]$sep_preg.+/", $line)) {
-        $this->error(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $line);
-      }
-    }
   }
   
   /*

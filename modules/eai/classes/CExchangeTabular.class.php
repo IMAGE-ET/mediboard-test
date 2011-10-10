@@ -73,11 +73,9 @@ class CExchangeTabular extends CExchangeDataFormat {
     }
   }
   
-  function isWellForm() {}
+  function isWellFormed($data) {}
   
-  function understand($data, CInteropSender $actor = null) {
-    return false;
-  }
+  function understand($data, CInteropActor $actor = null) {}
   
   function getMessage() {}
 }

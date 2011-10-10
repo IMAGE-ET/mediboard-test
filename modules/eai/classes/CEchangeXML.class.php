@@ -89,7 +89,7 @@ class CEchangeXML extends CExchangeDataFormat {
   
   function setAckError($dom_acq, $code_erreur, $commentaires = null, $values) {}
   
-  function isWellForm($data) {
+  function isWellFormed($data) {
     $dom = new CMbXMLDocument();
     if ($dom->loadXML($data, LIBXML_NOWARNING | LIBXML_NOERROR) !== false) {
       return $dom;
@@ -97,7 +97,7 @@ class CEchangeXML extends CExchangeDataFormat {
   }
   
   function understand($data, CInteropSender $actor = null) {
-    if (!$dom = $this->isWellForm($data)) {
+    if (!$dom = $this->isWellFormed($data)) {
       return false;
     } 
 

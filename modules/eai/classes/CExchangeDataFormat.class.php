@@ -52,6 +52,7 @@ class CExchangeDataFormat extends CMbMetaObject {
   var $_doc_errors_ack           = array();
   var $_load_content             = true;
   var $_messages_supported_class = array();
+  var $_family_message_class     = null;
   var $_family_message           = null;
   var $_configs_format           = null;
   var $_delayed                  = null;
@@ -151,7 +152,7 @@ class CExchangeDataFormat extends CMbMetaObject {
     $this->_count_ack_invalide = $this->countList($where);
   }
   
-  function isWellForm($data) {}
+  function isWellFormed($data) {}
   
   function understand($data, CInteropActor $actor = null) {}
   
@@ -163,7 +164,6 @@ class CExchangeDataFormat extends CMbMetaObject {
 
     foreach ($this->getFamily() as $_message => $_root_class) {
       $root  = new $_root_class;
-      
       foreach ($root->getEvenements() as $_evt => $_evt_class) {
         if ($evenement && ($evenement != $_evt)) {
           continue;

@@ -35,10 +35,6 @@ class CHL7v2Segment extends CHL7v2Entity {
     $node->appendChild($new_node);
   }
   
-  function getFieldsCount() {
-    return CHL7v2XPath::queryCountNode($this->getSpecs(), "elements/field");
-  }
-  
   function parse($data) {
     parent::parse($data);
     

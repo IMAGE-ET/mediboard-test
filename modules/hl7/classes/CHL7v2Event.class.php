@@ -15,24 +15,7 @@
  * Class CHL7v2Event 
  * Event HL7
  */
-class CHL7v2Event {
-  var $event_type    = null;
-  var $object        = null;
-  var $last_log      = null;
-  var $profil        = null;
-  var $transaction   = null;
-  var $code          = null;
-  var $version       = null;
-  
-  var $message       = null;
-  var $msg_hl7       = null;
-
-  var $msg_codes     = array();
-  
-  var $_receiver     = null;
-  var $_sender       = null;
-  var $_exchange_ihe = null;  
-  
+class CHL7v2Event extends CHL7Event {
   function __construct() {}
   
   function build($object) {
@@ -50,6 +33,13 @@ class CHL7v2Event {
     $this->message          = new CHL7v2Message();
     $this->message->version = $this->version;
     $this->message->name    = $this->msg_codes;
+  }
+  
+  function handle($msg_hl7) {
+    $this->message = new CHL7v2Message();
+    $this->message->parse($msg_hl7);
+    
+    return $this->message->toXML();
   }
   
   function flatten() {
