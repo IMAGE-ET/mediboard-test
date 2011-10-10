@@ -7,8 +7,6 @@
  * @author
  */
 
-CAppUI::requireModuleClass("dPcompteRendu", "CHtmlToPDFConverter");
-
 class CDomPDFConverter extends CHtmlToPDFConverter {
   
   var $dompdf = null;

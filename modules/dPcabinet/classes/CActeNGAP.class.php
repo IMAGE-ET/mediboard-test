@@ -7,8 +7,6 @@
 * @author Alexis Granger
 */
 
-CAppUI::requireModuleClass("dPccam", "CActe");
-
 class CActeNGAP extends CActe {
   // DB Table key
   var $acte_ngap_id = null;

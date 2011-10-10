@@ -11,8 +11,6 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireModuleClass("system", "CExchangeSource");
-
 class CSourceFTP extends CExchangeSource {
   // DB Table key
   var $source_ftp_id = null;

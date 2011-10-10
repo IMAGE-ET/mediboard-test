@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireModuleClass("dPpatients", "IPatientRelated");
-
 class CPrescriptionLineMixItem extends CMbObject implements IPatientRelated {
 	// DB Table key
   var $prescription_line_mix_item_id = null;

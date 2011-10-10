@@ -8,9 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("dPccam", "CCodable");
-CAppUI::requireModuleClass("dPpatients", "IPatientRelated");
-
 class COperation extends CCodable implements IPatientRelated {
   // DB Table key
   var $operation_id  = null;

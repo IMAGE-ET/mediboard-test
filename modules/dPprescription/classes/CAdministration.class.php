@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireModuleClass("dPpatients", "IPatientRelated");
-
 class CAdministration extends CMbMetaObject implements IPatientRelated {
   // DB Field
   var $administration_id = null;

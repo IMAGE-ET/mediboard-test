@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-CAppUI::requireModuleClass('dPfiles', 'CDocumentItem');
-
 class CCompteRendu extends CDocumentItem {
   // DB Table key
   var $compte_rendu_id   = null;

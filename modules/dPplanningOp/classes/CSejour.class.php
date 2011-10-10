@@ -7,9 +7,6 @@
  *  @author Thomas Despoix
  */
 
-CAppUI::requireModuleClass("dPccam", "CCodable");
-CAppUI::requireModuleClass("dPpatients", "IPatientRelated");
-
 /**
  * Classe CSejour. 
  * @abstract Gère les séjours en établissement

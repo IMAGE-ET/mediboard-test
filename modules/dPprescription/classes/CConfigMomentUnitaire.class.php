@@ -8,7 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireModuleClass('dPprescription', 'CConfigServiceAbstract');
 class CConfigMomentUnitaire extends CConfigServiceAbstract {
   // DB Fields
   var $config_moment_unitaire_id = null;

@@ -7,8 +7,6 @@
  * @author
  */
 
-CAppUI::requireModuleClass("dPfiles", "CDocumentSender");
-
 class CDMPSender extends CDocumentSender {
 
   function send(CCompteRendu $docItem) {

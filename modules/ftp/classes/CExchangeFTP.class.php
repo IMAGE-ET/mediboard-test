@@ -11,8 +11,6 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireModuleClass("system", "CExchangeTransportLayer");
-
 class CExchangeFTP extends CExchangeTransportLayer {
   // DB Table key
   var $echange_ftp_id = null;

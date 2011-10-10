@@ -7,8 +7,6 @@
  * @author
  */ 
 
-CAppUI::requireModuleClass("dPcompteRendu", "CHtmlToPDFConverter");
-
 class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
   
   var $file           = null;

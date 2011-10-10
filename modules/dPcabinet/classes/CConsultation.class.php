@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-CAppUI::requireModuleClass("dPccam", "CCodable");
-
 class CConsultation extends CCodable {
   const PLANIFIE       = 16;
   const PATIENT_ARRIVE = 32;

@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-CAppUI::requireModuleClass("dPsalleOp", "CActeCCAM");
-
 $user = CUser::get();
 
 $ds = CSQLDataSource::get("std");
