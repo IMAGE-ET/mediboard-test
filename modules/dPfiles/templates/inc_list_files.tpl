@@ -4,8 +4,6 @@
       {{assign var="elementId" value=$_doc_item->_id}}
       {{if $_doc_item->_class=="CCompteRendu"}}
         {{if $conf.dPcompteRendu.CCompteRendu.pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
-          {{assign var="nomdoc" value=$_doc_item->nom}}
-          {{assign var="file_owner" value=$_doc_item->user_id}}
           {{assign var="file_id" value=$_doc_item->_ref_file->_id}}
           {{assign var="srcImg" value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$file_id&phpThumb=1&w=64"}}
         {{else}}

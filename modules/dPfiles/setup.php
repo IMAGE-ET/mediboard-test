@@ -199,7 +199,12 @@ class CSetupdPfiles extends CSetup {
     $this->makeRevision("0.27");
     $this->delPrefQuery("extensions_yoplet");
     
-    $this->mod_version = "0.28";
+    $this->makeRevision("0.28");
+    $query = "ALTER TABLE `files_mediboard`
+      CHANGE `file_owner` `author_id` INT(11);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.29";
   }
 }
 ?>

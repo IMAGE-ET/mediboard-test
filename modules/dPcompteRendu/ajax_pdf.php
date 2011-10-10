@@ -123,7 +123,7 @@ else {
     $file->setObject($compte_rendu);
     $file->private = 0;
     $file->file_type  = "application/pdf";
-    $file->file_owner = $user_id;
+    $file->author_id = $user_id;
     $file->fillFields();
     $file->updateFormFields();
     $file->forceDir();

@@ -50,7 +50,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
     	$obj->file_name = $_rename == 'upload' ? $file_name : $_rename . $extension;
       $obj->_old_file_path = $this->request['_file_path'];
     	$obj->file_size = filesize($file_path);
-    	$obj->file_owner = CAppUI::$user->_id;
+    	$obj->author_id = CAppUI::$user->_id;
       $obj->fillFields();
       $obj->updateFormFields();
       $obj->file_type = CMbPath::guessMimeType($file_name);
@@ -141,7 +141,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
               CAppUI::setMsg("Fichier non envoyé", UI_MSG_ERROR);
               continue;
             }
-            $other_file->file_owner = CAppUI::$user->_id;
+            $other_file->author_id = CAppUI::$user->_id;
   
             if ($msg = $other_file->store()) {
               CAppUI::setMsg("Fichier non enregistré: $msg", UI_MSG_ERROR);
@@ -161,7 +161,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
         if ($nb_converted) {
           $obj->file_name = $file_name.".pdf";
           $obj->file_type = "application/pdf";
-          $obj->file_owner = CAppUI::$user->_id;
+          $obj->author_id = CAppUI::$user->_id;
           $obj->private = CValue::post("private");
           $obj->object_id = CValue::post("object_id");
           $obj->object_class = CValue::post("object_class");
@@ -215,7 +215,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
   
           // File owner on creation
           if (!$obj->file_id) {
-            $obj->file_owner = CAppUI::$user->_id;
+            $obj->author_id = CAppUI::$user->_id;
           }
   
           if ($msg = $obj->store()) {

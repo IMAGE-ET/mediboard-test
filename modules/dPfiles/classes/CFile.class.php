@@ -17,7 +17,6 @@ class CFile extends CDocumentItem {
   var $file_real_filename = null;
   var $file_name          = null;
   var $file_type          = null;
-  var $file_owner         = null;
   var $file_date          = null;
   var $file_size          = null;
   var $private            = null;
@@ -36,9 +35,6 @@ class CFile extends CDocumentItem {
   var $_rotate      = null;
 	var $_rename      = null;
   var $_merge_files = null;
-  
-  // References
-  var $_ref_file_owner = null;
 
   // Other fields
   static $rotable_extensions = array("bmp", "gif", "jpg", "jpeg", "png", "pdf");
@@ -73,7 +69,6 @@ class CFile extends CDocumentItem {
     $specs["file_date"]          = "dateTime notNull";
     $specs["file_size"]          = "num pos";
     $specs["file_real_filename"] = "str notNull show|0";
-    $specs["file_owner"]         = "ref notNull class|CMediusers";
     $specs["file_type"]          = "str";
     $specs["file_name"]          = "str notNull show|0";
     $specs["private"]            = "bool notNull default|0";
@@ -119,11 +114,6 @@ class CFile extends CDocumentItem {
     $result = file_put_contents($this->_file_path, $filedata);
     $this->file_size = filesize($this->_file_path);
     return $result;
-  }
-  
-  function loadRefsFwd() {
-  	parent::loadRefsFwd();
-    $this->_ref_file_owner = $this->loadFwdRef("file_owner");
   }
   
   function updateFormFields() {
@@ -426,7 +416,7 @@ class CFile extends CDocumentItem {
       $file->private = $this->private;
       $file->file_name  = $this->file_name . ".pdf";
       $file->file_type  = "application/pdf";
-      $file->file_owner = CAppUI::$user->_id;
+      $file->author_id = CAppUI::$user->_id;
       $file->fillFields();
       $file->updateFormFields();
       $file->forceDir();
@@ -556,9 +546,8 @@ class CFile extends CDocumentItem {
       SELECT 
         COUNT(`file_id`) AS `docs_count`, 
         SUM(`file_size`) AS `docs_weight`,
-        `file_owner` AS `owner_id`
+        `author_id` AS `owner_id`
       FROM `files_mediboard` 
-      LEFT JOIN `users` ON `users`.`user_id` = `file_owner`
       GROUP BY `owner_id`
       ORDER BY `docs_weight` DESC";
     return $ds->loadList($query);
@@ -577,7 +566,7 @@ class CFile extends CDocumentItem {
         `object_class`, 
         `file_category_id` AS `category_id`
       FROM `files_mediboard` 
-      WHERE `file_owner` $in_owner
+      WHERE `author_id` $in_owner
       GROUP BY `object_class`, `category_id`";
     return $ds->loadList($query);
   }

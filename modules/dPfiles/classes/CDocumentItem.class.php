@@ -15,26 +15,28 @@ class CDocumentItem extends CMbMetaObject {
   
 	// DB Fields
   var $file_category_id  = null;
-  var $etat_envoi = null;
+  var $etat_envoi        = null;
+  var $author_id         = null;
   
   // Derivated fields
-  var $_extensioned = null;
+  var $_extensioned      = null;
 
   // Distant field
-  var $_send_problem = null;
-  var $_ref_author = null;
+  var $_send_problem     = null;
+  var $_ref_author       = null;
 
   // Behavior Field
-  var $_send = null; 
+  var $_send             = null; 
   
   // References
-  var $_ref_category = null;
-	
+  var $_ref_category     = null;
+  
   function getProps() {
     $specs = parent::getProps();
     $specs["file_category_id"] = "ref class|CFilesCategory";
     $specs["etat_envoi"]       = "enum notNull list|oui|non|obsolete default|non";
-
+    $specs["author_id"]        = "ref class|CMediusers";
+    
     $specs["_extensioned"]     = "str notNull";
     $specs["_send_problem"]    = "text";
     return $specs;
@@ -137,6 +139,7 @@ class CDocumentItem extends CMbMetaObject {
   function loadRefsFwd() {
 	  parent::loadRefsFwd();
     $this->loadRefCategory();
+    $this->_ref_author = $this->loadFwdRef("author_id");
   }
   
   function loadRefCategory() {
@@ -148,15 +151,7 @@ class CDocumentItem extends CMbMetaObject {
       return;
     }
     
-    $this->loadFirstLog();
-    if (!$this->_ref_first_log->_id) {
-      return;
-    }
-    
-    $this->_ref_first_log->loadRefsFwd();
-    $this->_ref_first_log->_ref_user->loadRefMediuser();
-    $this->_ref_author = $this->_ref_first_log->_ref_user->_ref_mediuser;
-    return $this->_ref_author;
+    return CMediusers::get($this->author_id);
   }
   
   function canRead() {
@@ -165,10 +160,7 @@ class CDocumentItem extends CMbMetaObject {
 		}
     
     $this->loadRefAuthor();
-    if (!$this->_ref_author->_id) {
-    	return parent::canRead();
-		}
-		
+
     global $can;
     return $this->_canRead = ($this->_ref_author->function_id == CAppUI::$user->function_id || $can->admin) && $this->getPerm(PERM_READ);
   }
@@ -176,7 +168,7 @@ class CDocumentItem extends CMbMetaObject {
   /**
    * Load aggregated doc item ownership
    * @return array collection of arrays with 
-   *   docs_count, docs_weight and owner_id keys
+   *   docs_count, docs_weight and author_id keys
    */
   function getUsersStats() {
     return array();

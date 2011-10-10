@@ -31,6 +31,7 @@ if ($compte_rendu_id) {
 // Création à partir d'un modèle vide
 else if ($modele_id == 0 && !$pack_id) {
   $compte_rendu->valueDefaults();
+  $compte_rendu->author_id = CAppUI::$user->_id;
   $compte_rendu->object_id = $object_id;
   $compte_rendu->object_class = $target_class;
   $compte_rendu->_ref_object = new $target_class;
@@ -46,11 +47,11 @@ else {
 	$compte_rendu->loadFile();
   $compte_rendu->loadContent();
   $compte_rendu->_id = null;
-  $compte_rendu->user_id = $praticien_id;
   $compte_rendu->function_id = null;
+  $compte_rendu->group_id = null;
   $compte_rendu->object_id = $object_id;
   $compte_rendu->_ref_object = null;
-
+  $compte_rendu->author_id = CAppUI::$user->_id;
   // Utilisation des headers/footers
   if ($compte_rendu->header_id || $compte_rendu->footer_id) {
     $compte_rendu->loadComponents();

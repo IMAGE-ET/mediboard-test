@@ -585,8 +585,105 @@ class CSetupdPcompteRendu extends CSetup {
     
     $this->addQuery($query);
     
-    $this->mod_version = "0.66";
+    $this->makeRevision("0.66");
+    $query = "ALTER TABLE `compte_rendu`
+      ADD `author_id` INT(11) UNSIGNED AFTER `function_id`;";
+    $this->addQuery($query);
     
+    $query = "ALTER TABLE `compte_rendu`
+      ADD INDEX (`author_id`);";
+    $this->addQuery($query);
+    
+    // Table temporaire de mappage entre le author_id (user_id du first log) et le compte_rendu_id
+    $query = "CREATE TEMPORARY TABLE `owner_doc` (
+      `compte_rendu_id` INT(11), `author_id` INT(11)) AS
+      SELECT `compte_rendu_id`, `user_log`.`user_id` as `author_id`
+      FROM `compte_rendu`, `user_log`
+      WHERE `user_log`.`object_class` = 'CCompteRendu'
+      AND `user_log`.`object_id` = `compte_rendu`.`compte_rendu_id`
+      AND `user_log`.`type` = 'create';";
+    $this->addQuery($query);
+    
+    $query = "UPDATE `compte_rendu`
+      JOIN `owner_doc` ON `compte_rendu`.`compte_rendu_id` = `owner_doc`.`compte_rendu_id`
+      SET `compte_rendu`.`author_id` = `owner_doc`.`author_id`;";
+    $this->addQuery($query);
+    
+    // Mise à jour les compte-rendus de consultation
+    $query = "UPDATE `compte_rendu`
+      SET `author_id` =
+          (
+           SELECT `chir_id`
+           FROM `plageconsult`
+           LEFT JOIN `consultation` ON `consultation`.`plageconsult_id` = `plageconsult`.`plageconsult_id`
+           WHERE `consultation`.`consultation_id` = `compte_rendu`.`object_id`
+           LIMIT 1
+          )
+      WHERE `author_id` IS NULL
+      AND `compte_rendu`.`object_class` = 'CConsultation'
+      AND `compte_rendu`.`object_id` IS NOT NULL;";
+    $this->addQuery($query);
+    
+    // Pour les consultations d'anesthésie rattachées à une opération
+    $query = "UPDATE `compte_rendu`
+      SET `author_id` =
+        (
+          SELECT `operations`.`chir_id`
+          FROM `consultation_anesth`
+          LEFT JOIN `operations` ON `operations`.`operation_id` = `consultation_anesth`.`operation_id`
+          WHERE `consultation_anesth`.`consultation_anesth_id` = `compte_rendu`.`object_id`
+          LIMIT 1
+        )
+      WHERE `author_id` IS NULL
+      AND `compte_rendu`.`object_class` = 'CConsultAnesth'
+      AND `compte_rendu`.`object_id` iS NOT NULL;";
+    $this->addQuery($query);
+    
+    // Ou non
+    $query = "UPDATE `compte_rendu`
+      SET `author_id` =
+        (
+          SELECT `plageconsult`.`chir_id`
+          FROM `consultation_anesth`
+          LEFT JOIN `consultation` ON `consultation`.`consultation_id` = `consultation_anesth`.`consultation_id`
+          LEFT JOIN `plageconsult` ON `plageconsult`.`plageconsult_id` = `consultation`.`plageconsult_id`
+          WHERE `consultation_anesth`.`consultation_anesth_id` = `compte_rendu`.`object_id`
+          LIMIT 1
+        )
+      WHERE `author_id` IS NULL
+      AND `compte_rendu`.`object_class` = 'CConsultAnesth'
+      AND `compte_rendu`.`object_id` iS NOT NULL;";
+    $this->addQuery($query);
+    
+    // Pour les opérations
+    $query = "UPDATE `compte_rendu`
+      SET `author_id` =
+        (
+          SELECT `chir_id`
+          FROM `operations`
+          WHERE `operations`.`operation_id` = `compte_rendu`.`object_id`
+          LIMIT 1
+        )
+      WHERE `author_id` IS NULL
+      AND `compte_rendu`.`object_class` = 'COperation'
+      AND `compte_rendu`.`object_id` iS NOT NULL;";
+    $this->addQuery($query);
+    
+    // Pour les séjours
+    $query = "UPDATE `compte_rendu`
+      SET `author_id` =
+        (
+          SELECT `praticien_id`
+          FROM `sejour`
+          WHERE `sejour`.`sejour_id` = `compte_rendu`.`object_id`
+          LIMIT 1
+        )
+      WHERE `author_id` IS NULL
+      AND `compte_rendu`.`object_class` = 'CSejour'
+      AND `compte_rendu`.`object_id` iS NOT NULL;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.67";
   }
 }
 ?>

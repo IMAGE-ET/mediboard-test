@@ -686,7 +686,7 @@ class CCompteRendu extends CDocumentItem {
       $file->private = 0;
       $file->file_name  = $this->nom . ".pdf";
       $file->file_type  = "application/pdf";
-      $file->file_owner = CAppUI::$user->_id;
+      $file->author_id   = CAppUI::$user->_id;
       $file->fillFields();
       $file->updateFormFields();
       $file->forceDir();
@@ -801,7 +801,7 @@ class CCompteRendu extends CDocumentItem {
       SELECT 
         COUNT(`compte_rendu_id`) AS `docs_count`, 
         SUM(1) AS `docs_weight`,
-        `user_id` AS `owner_id`
+        `author_id` AS `owner_id`
       FROM `compte_rendu` 
       GROUP BY `owner_id`
       ORDER BY `docs_weight` DESC";
