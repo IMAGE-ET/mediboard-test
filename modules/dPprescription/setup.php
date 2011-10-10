@@ -2101,7 +2101,12 @@ class CSetupdPprescription extends CSetup {
               ADD `consultation` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
     
-		$this->mod_version = "1.57";
+		$this->makeRevision("1.57");
+		$query = "ALTER TABLE `prescription_line_mix` 
+              ADD `ponctual` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($query);
+		
+		$this->mod_version = "1.58";
   }
 }
 

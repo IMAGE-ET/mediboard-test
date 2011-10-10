@@ -498,6 +498,38 @@ updateVolumeTotal = function(prescription_line_mix_id, modif_qte_totale, quantit
   });
 }
 
+
+
+changePonctual = function(checked, oForm){
+  if(checked){
+    $V(oForm.nb_tous_les, '');
+    oForm.nb_tous_les.disable();
+    $("dates-perf-"+$V(oForm.prescription_line_mix_id)).hide();
+    $("nb-tous-les-"+$V(oForm.prescription_line_mix_id)).hide();
+  } else {
+    oForm.duree_passage.enable();
+    $("dates-perf-"+$V(oForm.prescription_line_mix_id)).show();   
+    $("nb-tous-les-"+$V(oForm.prescription_line_mix_id)).show();
+  }
+}
+
+changePonctualProt = function(checked, oForm){
+  if(checked){
+    $("duree-"+$V(oForm.prescription_line_mix_id)).hide();
+    $("date-fin-"+$V(oForm.prescription_line_mix_id)).hide();
+	  $("nb-tous-les-"+$V(oForm.prescription_line_mix_id)).hide();
+		
+		$V(oForm.duree, '');
+		$V(oForm.jour_decalage_fin, '');
+    $V(oForm.decalage_line_fin, '');
+    $V(oForm.nb_tous_les, '');
+  } else {
+    $("duree-"+$V(oForm.prescription_line_mix_id)).show();
+    $("date-fin-"+$V(oForm.prescription_line_mix_id)).show();
+		$("nb-tous-les-"+$V(oForm.prescription_line_mix_id)).show();
+  }
+}
+
 updateSolvant = function(prescription_line_mix_id, quantite_totale){
   var checked = $('lines-'+prescription_line_mix_id).select('input[name=__solvant]:checked')[0];
   if (!checked) {

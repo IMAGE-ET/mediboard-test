@@ -39,6 +39,12 @@ Main.add( function(){
 		    }
 		} );
 	}
+	
+	{{if $line->_protocole}}
+	changePonctualProt(editPerfForm.__ponctual.checked, editPerfForm);
+	{{else}}
+	changePonctual(editPerfForm.__ponctual.checked, editPerfForm);
+  {{/if}}
 } );
 
 </script>
@@ -212,6 +218,8 @@ Main.add( function(){
 						
 		            <!-- Début -->
 								{{if $line->_protocole}}
+									 
+									 <span id="duree-{{$line->_id}}">
 									 {{mb_label object=$line field=duree}}
 	                 {{if $line->_can_modify_prescription_line_mix}}
 									   <script type="text/javascript">
@@ -221,17 +229,22 @@ Main.add( function(){
 												modifUniteDecal(oForm.jour_decalage_fin, oForm.unite_decalage_fin);
                       });
 										 </script>
-	                   {{mb_field object=$line field=duree size=1 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="\$V(this.form.jour_decalage_fin, '', false); return onSubmitFormAjax(this.form);"}}
+										 {{mb_field object=$line field=duree size=1 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="\$V(this.form.jour_decalage_fin, '', false); return onSubmitFormAjax(this.form);"}}
 	                   {{mb_field object=$line field=unite_duree onchange="return onSubmitFormAjax(this.form);"}}
+										 </span>
+										 
 										 à partir de
 										 {{mb_field object=$line field="jour_decalage" onchange="modifUniteDecal(this, this.form.unite_decalage); return onSubmitFormAjax(this.form);" emptyLabel="Moment"}} 
                      {{mb_field object=$line field=decalage_line showPlus="1" increment=1 size="2" form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
                      {{mb_field object=$line field=unite_decalage onchange="return onSubmitFormAjax(this.form)" emptyLabel="Unit"}}
+										 
+										 <span id="date-fin-{{$line->_id}}">
 										 jusqu'à 
 										 {{mb_field object=$line field="jour_decalage_fin" onchange="\$V(this.form.duree, '', false); modifUniteDecal(this, this.form.unite_decalage_fin); return onSubmitFormAjax(this.form);" emptyLabel="Moment"}} 
                      {{mb_field object=$line field=decalage_line_fin showPlus="1" increment=1 size="2" form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
                      {{mb_field object=$line field=unite_decalage_fin onchange=" return onSubmitFormAjax(this.form);" emptyLabel="Unit"}}
-	                 {{else}}
+	                   </span>
+									 {{else}}
 	                   {{if $line->duree}}
 	                     {{mb_value object=$line field=duree}}
 	                     {{mb_value object=$line field=unite_duree}}
@@ -252,16 +265,30 @@ Main.add( function(){
 											 {{if $line->decalage_line_fin >= 0}}+{{/if}}
 											 {{mb_value object=$line field=decalage_line_fin}} {{mb_value object=$line field=unite_decalage_fin}}
 										 {{/if}}
-                   {{/if}}   
+                   {{/if}}
+									 
+								   <span style="float: right">
+                      {{mb_field object=$line field=ponctual typeEnum="checkbox" onchange="changePonctualProt(this.form.__ponctual.checked, this.form); return onSubmitFormAjax(this.form);"}}
+                      {{mb_label object=$line field=ponctual}}
+                    </span>
+										 
 								{{else}}
+								   
 		                <strong>{{mb_label object=$line field="date_debut"}}</strong>
 		                {{if $line->_can_modify_prescription_line_mix}}
 		                  {{mb_field object=$line field=date_debut form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);" register=true}}
 		                  {{mb_field object=$line field=time_debut form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);" register=true}}
 											
-											<strong>{{mb_label object=$line field=duree}}</strong>
-											{{mb_field object=$line field=duree size=1 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
-                      {{mb_field object=$line field=unite_duree onchange="return onSubmitFormAjax(this.form);"}}
+											<span id="dates-perf-{{$prescription_line_mix_id}}">
+											  <strong>{{mb_label object=$line field=duree}}</strong>
+											  {{mb_field object=$line field=duree size=1 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
+                        {{mb_field object=$line field=unite_duree onchange="return onSubmitFormAjax(this.form);"}}
+										  </span>
+											
+											<span style="float: right">
+		                    {{mb_field object=$line field=ponctual typeEnum="checkbox" onchange="changePonctual(this.form.__ponctual.checked, this.form); return onSubmitFormAjax(this.form);"}}
+		                    {{mb_label object=$line field=ponctual}}
+		                  </span>
 										{{else}}
 		                  {{mb_value object=$line field=date_debut}}
 		                  {{mb_value object=$line field=time_debut}}
@@ -269,9 +296,11 @@ Main.add( function(){
 											<strong>{{mb_label object=$line field=duree}}</strong>
 											{{mb_value object=$line field=duree}}
                       {{mb_value object=$line field=unite_duree}}
-		                {{/if}} 
-
-		              {{/if}} 
+		                {{/if}}
+										
+		              {{/if}}
+									
+									
 							</fieldset> 					
              
 						  <fieldset>
@@ -353,12 +382,14 @@ Main.add( function(){
 	                    <!-- duree de passage en minutes -->
 	                    {{mb_value object=$line field=unite_duree_passage}}
 	                  {{/if}} 
-	                  toutes les 
-	                  {{if $line->_can_modify_prescription_line_mix}}
-	                    {{mb_field object=$line field=nb_tous_les size=2 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="this.form.volume_debit.value = ''; this.form.duree_debit.value = ''; return onSubmitFormAjax(this.form);"}} h
-	                  {{else}}      
-	                    {{mb_value object=$line field="nb_tous_les"}} h
-	                  {{/if}}
+										<span id="nb-tous-les-{{$line->_id}}">
+		                  toutes les 
+		                  {{if $line->_can_modify_prescription_line_mix}}
+		                    {{mb_field object=$line field=nb_tous_les size=2 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="this.form.volume_debit.value = ''; this.form.duree_debit.value = ''; return onSubmitFormAjax(this.form);"}} h
+		                  {{else}}      
+		                    {{mb_value object=$line field="nb_tous_les"}} h
+		                  {{/if}}
+										</span>
 	                </div>
 	              {{/if}}
 								

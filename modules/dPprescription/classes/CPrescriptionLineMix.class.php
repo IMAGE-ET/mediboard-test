@@ -58,13 +58,13 @@ class CPrescriptionLineMix extends CMbObject {
   
   var $variante_for_id    = null;
   var $variante_for_class = null;
-  var $variante_active = null;
+  var $variante_active    = null;
   var $variante_plan_soin = null;
   
-	var $conditionnel = null;
+	var $conditionnel     = null;
 	var $condition_active = null;
 	
-	var $perop         = null;
+	var $perop            = null;
 	
   var $volume_debit     = null; // En ml
   var $duree_debit      = null; // En heures
@@ -77,10 +77,12 @@ class CPrescriptionLineMix extends CMbObject {
   var $unite_decalage     = null;
   var $decalage_line_fin  = null;
   var $jour_decalage_fin  = null;
-  var $unite_decalage_fin = null; 
+  var $unite_decalage_fin = null;
+	 
+	var $ponctual           = null;
+	
 	var $_date_fin          = null;
 
-	
 	// Fwd Refs
   var $_ref_prescription = null;
   var $_ref_praticien    = null;
@@ -186,6 +188,7 @@ class CPrescriptionLineMix extends CMbObject {
     $specs["date_arret"]             = "date";
     $specs["time_arret"]             = "time";
     $specs["accord_praticien"]       = "bool";
+		$specs["ponctual"]               = "bool default|0";
     $specs["_debut"]                 = "dateTime";
     $specs["_fin"]                   = "dateTime";
     $specs["_date_fin"]              = "dateTime";
@@ -650,19 +653,22 @@ class CPrescriptionLineMix extends CMbObject {
       return;
     }
 		
+		if($this->ponctual){
+			$this->_fin = mbDateTime("+1 DAY", "$this->date_debut $this->time_debut");
+		}
+		
 		// Calcul de la quantite totale de la perf en fonction des produits
     $this->calculQuantiteTotal();
 		
 		$volume_restant = 0;
 		
 		$dates_planif = array();
-    if((($this->date_debut && $this->time_debut) || $this->date_pose)  && $this->duree){
+    if((($this->date_debut && $this->time_debut) || $this->date_pose) && ($this->duree || $this->ponctual)){
       $date_time_temp = $this->_debut;
       $dates_planif[] = $date_time_temp;
-      
+			
       // Perfusion à la vitesse de x ml/h
       if($this->_debit && $this->_quantite_totale){
-      	
 				// Chargement de toutes les variations
 				$this->loadRefsVariations();
 				
@@ -728,15 +734,16 @@ class CPrescriptionLineMix extends CMbObject {
 					$prec_variation = $_variation->dateTime;
           $prec_debit = $_variation->debit;
 				}
+			} elseif ($this->ponctual && $this->duree_passage){
+				$dates_planif[] = $date_time_temp;
 			}
-			
 			// Perfusion toutes les x heures
-      if($this->nb_tous_les){
+      if($this->nb_tous_les && !$this->ponctual){
         while((mbDateTime("+ $this->nb_tous_les hours", $date_time_temp)) < $this->_fin){
           $date_time_temp = mbDateTime("+ $this->nb_tous_les hours", $date_time_temp);
           $dates_planif[] = $date_time_temp;
-        }
-      }
+        }	
+    	}  
     }
     
 		$this->loadRefPrescription();
@@ -744,7 +751,9 @@ class CPrescriptionLineMix extends CMbObject {
 		$sejour =& $this->_ref_prescription->_ref_object;
 		
 	  $_planifs_by_step = array();
-			
+	
+		$this->duree = "";
+		
     // Creation des planifications
 		foreach($this->_ref_lines as $_perf_line){
 			if($check_planif){
@@ -757,12 +766,25 @@ class CPrescriptionLineMix extends CMbObject {
         }
 			}
       
+			$count_planifs = 0;
+			
       foreach($dates_planif as $_datetime){
-        if ($prescription->type == "sejour" &&
-            ($sejour->_entree > $_datetime || $sejour->_sortie < $_datetime)) {
+        if ($prescription->type == "sejour" && ($sejour->_entree > $_datetime || $sejour->_sortie < $_datetime)) {
           continue;
         }
 				
+				if($this->ponctual){
+					$count_planifs++;
+	        if($count_planifs == 2){
+	          if(!$this->duree){
+					    $duree = mbHoursRelative($this->_debut, $_datetime);
+						  $this->duree = $duree;
+						  $this->unite_duree = "heure";
+						  $this->store();
+						}
+            break;
+					}	
+				}
 				
 				$_planifs_by_step[] = array("object_id" => "{$_perf_line->_id}",
                                     "object_class" => "{$_perf_line->_class}",
