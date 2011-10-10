@@ -16,13 +16,18 @@ $event       = CValue::get("event");
 $object = CMbObject::loadFromGuid($object_guid);
 
 $ex_class = new CExClass;
-$ex_class->host_class = $object->_class;
-$ex_class->event = $event;
-$ex_class->disabled = 0;
-$ex_class->conditional = 0;
-$ex_class->required = 1;
+$ds = $ex_class->_spec->ds;
+$group_id = CGroups::loadCurrent()->_id;
 
-$ex_classes = $ex_class->loadMatchingList();
+$where = array(
+  "host_class"  => $ds->prepare("=%", $object->_class),
+  "event"       => $ds->prepare("=%", $event),
+  "disabled"    => $ds->prepare("=%", 0),
+  "conditional" => $ds->prepare("=%", 0),
+  "required"    => $ds->prepare("=%", 1),
+  "group_id"    => $ds->prepare("=% OR group_id IS NULL", $group_id),
+);
+$ex_classes = $ex_class->loadList($where);
 
 foreach($ex_classes as $_id => $_ex_class) {
   if (!$_ex_class->checkConstraints($object)) {

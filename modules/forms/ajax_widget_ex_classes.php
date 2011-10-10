@@ -19,12 +19,17 @@ $object = CMbObject::loadFromGuid($object_guid);
 CExObject::$_load_lite = true;
 
 $ex_class = new CExClass;
-$ex_class->host_class = $object->_class;
-$ex_class->event = $event;
-$ex_class->disabled = 0;
-$ex_class->conditional = 0;
+$ds = $ex_class->_spec->ds;
+$group_id = CGroups::loadCurrent()->_id;
 
-$ex_classes = $ex_class->loadMatchingList();
+$where = array(
+  "host_class"  => $ds->prepare("=%", $object->_class),
+  "event"       => $ds->prepare("=%", $event),
+  "disabled"    => $ds->prepare("=%", 0),
+  "conditional" => $ds->prepare("=%", 0),
+  "group_id"    => $ds->prepare("=% OR group_id IS NULL", $group_id),
+);
+$ex_classes = $ex_class->loadList($where);
 
 $ex_objects = array();
 

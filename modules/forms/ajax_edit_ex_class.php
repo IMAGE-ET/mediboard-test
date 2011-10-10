@@ -78,6 +78,8 @@ if (!$ex_class->_id) {
   $ex_class->disabled = 1;
 }
 
+$groups = CGroups::loadGroups();
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("ex_class", $ex_class);
@@ -85,5 +87,6 @@ $smarty->assign("ex_object", $ex_object);
 $smarty->assign("host_object", $host_object);
 $smarty->assign("classes", $classes);
 $smarty->assign("grid", $grid);
+$smarty->assign("groups", $groups);
 $smarty->assign("out_of_grid", $out_of_grid);
 $smarty->display("inc_edit_ex_class.tpl");

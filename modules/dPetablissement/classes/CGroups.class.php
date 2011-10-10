@@ -104,6 +104,7 @@ class CGroups extends CMbObject {
     $backProps["view_sender_sources"]     = "CViewSenderSource group_id";
     $backProps["modeles_etiquette"]       = "CModeleEtiquette group_id";
     $backProps["unites_fonctionnelles"]   = "CUniteFonctionnelle group_id";
+    $backProps["ex_classes"]              = "CExClass group_id";
     
     return $backProps;
   }

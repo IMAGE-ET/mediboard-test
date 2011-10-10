@@ -31,7 +31,10 @@ CExClassField::$_load_lite = true;
 CExObject::$_multiple_load = true;
 CExObject::$_load_lite = $detail < 2;
 
-$where = array();
+$group_id = CGroups::loadCurrent()->_id;
+$where = array(
+  "group_id = $group_id OR group_id IS NULL"
+);
 
 if ($ex_class_id) {
   $where['ex_class_id'] = "= '$ex_class_id'";

@@ -18,6 +18,7 @@ class CExClass extends CMbObject {
   var $conditional= null;
   var $required   = null;
   var $unicity    = null;
+  var $group_id   = null;
   
   var $_ref_fields = null;
   var $_ref_constraints = null;
@@ -37,20 +38,20 @@ class CExClass extends CMbObject {
     "CConsultation",
     "CAdministration",
   );
-	
-	static function getExtendableSpecs(){
-		$classes = self::$_extendable_classes;
-		$specs = array();
-		
-		foreach($classes as $_class) {
-		  $instance = new $_class;
-		  if (!empty($instance->_spec->events) && $instance->_ref_module && $instance->_ref_module->mod_active) {
-		    $specs[$_class] = $instance->_spec->events;
-		  }
-		}
-		  
-		return $specs;
-	}
+  
+  static function getExtendableSpecs(){
+    $classes = self::$_extendable_classes;
+    $specs = array();
+    
+    foreach($classes as $_class) {
+      $instance = new $_class;
+      if (!empty($instance->_spec->events) && $instance->_ref_module && $instance->_ref_module->mod_active) {
+        $specs[$_class] = $instance->_spec->events;
+      }
+    }
+      
+    return $specs;
+  }
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -69,6 +70,7 @@ class CExClass extends CMbObject {
     $props["conditional"]= "bool notNull default|0";
     $props["required"]   = "bool notNull default|0";
     $props["unicity"]    = "enum notNull list|no|host default|no vertical"; //"enum notNull list|no|host|reference1|reference2 default|no vertical";
+    $props["group_id"]   = "ref class|CGroups";
     return $props;
   }
 
@@ -474,8 +476,13 @@ class CExClass extends CMbObject {
   }
   
   static function getTree(){
+    $group_id = CGroups::loadCurrent()->_id;
+    $where = array(
+      "group_id IS NULL OR group_id = '$group_id'"
+    );
+    
     $ex_class = new self;
-    $list_ex_class = $ex_class->loadList(null, "host_class, event, name");
+    $list_ex_class = $ex_class->loadList($where, "host_class, event, name");
     
     $class_tree = array();
     

@@ -74,6 +74,23 @@ Main.add(function(){
             
             <td class="compact text" style="vertical-align: middle;">{{tr}}CExClass-conditional-desc{{/tr}}</td>
           </tr>
+          
+          <tr>
+            <th>{{mb_label object=$ex_class field=group_id}}</th>
+            <td>
+            	<select name="group_id" style="width: 20em;">
+            		<option value=""> &ndash; Tous </option>
+								{{foreach from=$groups item=_group}}
+								  <option value="{{$_group->_id}}" {{if $ex_class->group_id == $_group->_id}} selected="selected" {{/if}}>{{$_group}}</option>
+								{{/foreach}}
+            	</select>
+						</td>
+            
+            <th>{{mb_label object=$ex_class field=required}}</th>
+            <td>{{mb_field object=$ex_class field=required typeEnum=checkbox}}</td>
+            
+            <td class="compact text" style="vertical-align: middle;">{{tr}}CExClass-required-desc{{/tr}}</td>
+          </tr>
           <tr>
             <th rowspan="2">{{mb_label object=$ex_class field=unicity}}</th>
             <td rowspan="2">
@@ -86,10 +103,10 @@ Main.add(function(){
               {{/if}}
             </td>
             
-            <th>{{mb_label object=$ex_class field=required}}</th>
-            <td>{{mb_field object=$ex_class field=required typeEnum=checkbox}}</td>
+            <th></th>
+            <td></td>
             
-            <td class="compact text" style="vertical-align: middle;">{{tr}}CExClass-required-desc{{/tr}}</td>
+            <td class="compact text" style="vertical-align: middle;"></td>
           </tr>
           
           <tr>

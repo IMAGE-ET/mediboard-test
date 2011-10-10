@@ -871,6 +871,12 @@ class CSetupsystem extends CSetup {
       $this->addQuery($query);
     }
     
-    $this->mod_version = "1.0.83";
+    $this->makeRevision("1.0.83");
+    $query = "ALTER TABLE `ex_class` 
+              ADD `group_id` INT (11) UNSIGNED,
+              ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.84";
   }
 }
