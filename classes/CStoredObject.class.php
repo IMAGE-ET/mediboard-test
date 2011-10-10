@@ -1884,10 +1884,12 @@ class CStoredObject extends CModelObject {
    * @param string $keywords
    * @param array $where [optional]
    * @param string $limit [optional]
+   * @param array $ljoin [optional]
+   * @param string $order [optional]
    * @return array
    */
-  function getAutocompleteList($keywords, $where = null, $limit = null) {
-    return $this->seek($keywords, $where, $limit);
+  function getAutocompleteList($keywords, $where = null, $limit = null, $ljoin = null, $order = null) {
+    return $this->seek($keywords, $where, $limit, false, $ljoin, $order);
   }
   
 }

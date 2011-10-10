@@ -17,11 +17,8 @@ if($dialog) {
 
 // L'utilisateur est-il chirurgien?
 $mediuser = CMediusers::get();
-
-$chir_id      = $mediuser->isPraticien() ? $mediuser->user_id : null;
-
-$chir_id      = CValue::getOrSession("chir_id", $chir_id);
-$chir = new CMediusers();
+$chir_id  = CValue::getOrSession("chir_id", $mediuser->isPraticien() ? $mediuser->user_id : null);
+$chir     = new CMediusers();
 $chir->load($chir_id);
 
 $type         = CValue::getOrSession("type", "interv"); 
@@ -45,8 +42,10 @@ $ljoin = array(
   "users" => "users.user_id = protocole.chir_id"
 );
 
-$list_protocoles  = $protocole->loadListWithPerms(PERM_EDIT, $where, "users.user_username, libelle, libelle_sejour, codes_ccam", "{$page[$type]},40", null, $ljoin);
-$list_protocoles_total = $protocole->loadListWithPerms(PERM_EDIT, $where, "users.user_username, libelle, libelle_sejour, codes_ccam", null, null, $ljoin);
+$order = "libelle, libelle_sejour, codes_ccam";
+
+$list_protocoles       = $protocole->loadList($where, $order, "{$page[$type]},40", null, $ljoin);
+$list_protocoles_total = $protocole->loadList($where, $order, null, null, $ljoin);
 
 $total_protocoles = $protocole->countList($where, null, $ljoin);
 
@@ -61,12 +60,12 @@ foreach ($list_protocoles_total as $_prot) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("list_protocoles" , $list_protocoles);
+$smarty->assign("list_protocoles"      , $list_protocoles);
 $smarty->assign("list_protocoles_total", $list_protocoles_total);
-$smarty->assign("total_protocoles", $total_protocoles);
-$smarty->assign("page"            , $page      );
-$smarty->assign("chir_id"         , $chir_id   );
-$smarty->assign("type"            , $type      );
+$smarty->assign("total_protocoles"     , $total_protocoles);
+$smarty->assign("page"                 , $page);
+$smarty->assign("chir_id"              , $chir_id);
+$smarty->assign("type"                 , $type);
 
 $smarty->display("inc_list_protocoles.tpl");
 

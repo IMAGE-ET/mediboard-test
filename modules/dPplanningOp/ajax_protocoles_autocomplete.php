@@ -35,7 +35,9 @@ if ($keywords == "") {
   $keywords = "%";
 }
 
-$matches = $object->getAutocompleteList($keywords, $where, $limit);
+$order = "libelle, libelle_sejour, codes_ccam";
+
+$matches = $object->getAutocompleteList($keywords, $where, $limit, null, $order);
 
 $template = $object->getTypedTemplate("autocomplete");
 

@@ -18,15 +18,15 @@ else {
 // L'utilisateur est-il chirurgien ?
 $mediuser     = CAppUI::$instance->_ref_user;
 $is_praticien = $mediuser->isPraticien();
-$chir_id      = CValue::getOrSession("chir_id", $is_praticien ? $mediuser->user_id : null);
+$listPrat     = $mediuser->loadPraticiens(PERM_EDIT);
+$chir_id      = CValue::getOrSession("chir_id", $is_praticien ? $mediuser->user_id : reset($listPrat)->_id);
 $type         = CValue::getOrSession("type", "interv");
 $page         = CValue::get("page", array(
   "sejour" => 0,
   "interv" => 0,
 ));
 
-// Praticiens, protocoles disponibles
-$listPrat   = $mediuser->loadPraticiens(PERM_EDIT);
+// Protocoles disponibles
 $_prat = new CMediusers();
 foreach($listPrat as $_prat) {
   $_prat->loadProtocoles();
