@@ -507,7 +507,7 @@ changePonctual = function(checked, oForm){
     $("dates-perf-"+$V(oForm.prescription_line_mix_id)).hide();
     $("nb-tous-les-"+$V(oForm.prescription_line_mix_id)).hide();
   } else {
-    oForm.duree_passage.enable();
+    oForm.nb_tous_les.enable();
     $("dates-perf-"+$V(oForm.prescription_line_mix_id)).show();   
     $("nb-tous-les-"+$V(oForm.prescription_line_mix_id)).show();
   }
