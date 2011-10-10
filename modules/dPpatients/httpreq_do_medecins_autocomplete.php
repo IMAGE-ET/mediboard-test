@@ -29,7 +29,7 @@ if ($keywords) {
     foreach($cps as $cp) {
       $where_cp[] = "cp LIKE '".$cp."___'";
     }
-    $where[] = implode(" OR ", $where_cp);
+    $where[] = "(".implode(" OR ", $where_cp).")";
   }
   else if($indexGroup->_cp_court) {
     $where['cp'] = "LIKE '".$indexGroup->_cp_court."___'"; 
