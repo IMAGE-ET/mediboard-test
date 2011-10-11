@@ -59,6 +59,12 @@ if (!isset($_SESSION['browser'])) {
       if (preg_match("/($_browser)[\/ ]?([0-9.]*)/", $user_agent, $match)) {
         $browser['name'] = $match[1];
         $browser['version'] = $match[2];
+        
+        // Special case of Opera http://dev.opera.com/articles/view/opera-ua-string-changes/
+        if ($browser['name'] == "opera" && preg_match("/(version)\/([0-9.]*)/", $user_agent, $match)) {
+          $browser['version'] = $match[2];
+        }
+        
         @list($browser['majorver'], $browser['minorver'], $browser['build']) = explode('.', $browser['version']);
         break;
       }
