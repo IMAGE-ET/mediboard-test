@@ -777,6 +777,17 @@ table.tbl .textarea-helped a {
   border-radius: 3px;
 }
 
+.textarea-helped .toolbar.left {
+  right: auto;
+  left: 1px;
+}
+
+.textarea-helped .toolbar.left .throbber,
+.textarea-helped .toolbar.left .throbber-background {
+  left: auto;
+  right: -20px;
+}
+
 .textarea-helped .toolbar:hover {
   opacity: 1;
 }

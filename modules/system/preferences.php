@@ -21,12 +21,13 @@ CPreferences::$modules["common"] = array (
   "directory_to_watch",
   "debug_yoplet",
   "autocompleteDelay",
-	"showCounterTip"
+  "showCounterTip",
+  "textareaToolbarPosition",
 );  
   
 CPreferences::$modules["system"] = array (
   "INFOSYSTEM",
   "showTemplateSpans",
-  "moduleFavicon"
+  "moduleFavicon",
 );
 ?>

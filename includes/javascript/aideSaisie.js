@@ -120,7 +120,7 @@ var AideSaisie = {
           buttons = {};
       var container = 
         DOM.div({className: "textarea-helped"},
-        toolbar = DOM.div({className: "toolbar"},
+        toolbar = DOM.div({className: "toolbar "+Preferences.textareaToolbarPosition},
           
           DOM.a({href: "#1", className: "throbber-background"}), 
           throbber = DOM.a({href: "#1", className: "throbber"}).hide(),

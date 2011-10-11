@@ -877,6 +877,9 @@ class CSetupsystem extends CSetup {
               ADD INDEX (`group_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.84";
+    $this->makeRevision("1.0.84");
+    $this->addPrefQuery("textareaToolbarPosition", "right");
+    
+    $this->mod_version = "1.0.85";
   }
 }
