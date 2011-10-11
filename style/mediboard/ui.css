@@ -351,6 +351,12 @@ ul.control_tabs_vertical li a {
   margin-bottom: -1px;
 }
 
+ul.control_tabs li a[data-count]:after, 
+ul.control_tabs_vertical li a[data-count]:after {
+  content: " (" attr(data-count) ")";
+  font-size: smaller;
+}
+
 ul.control_tabs li a:focus, 
 ul.control_tabs_vertical li a:focus {
   outline: 0;

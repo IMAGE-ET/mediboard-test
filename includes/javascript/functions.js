@@ -786,16 +786,24 @@ Object.extend (Control.Tabs, {
   },
   
   setTabCount: function(tabName, count) {
+    count += ""; // String cast
+    
     // Find anchor
     var anchors = $$('a[href=#'+tabName+']');
     if (anchors.length != 1) {
       Console.error('Anchor not found or found multiple for tab: '+tabName);
       return;
     }
+    
     var anchor = anchors[0];
     
+    //anchor.writeAttribute("data-count", count);
+    
     // Find count span
-    var small = anchor.down('small');
+    var small = anchor.down('small') || anchor.insert({
+      bottom: " <small></small>" // keep the space
+    }).down('small');
+    
     if (!small) {
       Console.error('Small count span not found for tab: '+tabName);
       return;
@@ -885,10 +893,10 @@ var DOM = {
   },
   
   tags: [
-    'a', 'applet', 'br', 'button', 'canvas', 'div', 'fieldset', 'form',
+    'a', 'applet', 'big', 'br', 'button', 'canvas', 'div', 'fieldset', 'form',
     'h1', 'h2', 'h3', 'h4', 'h5', 'hr', 'iframe', 'img', 'input', 'label', 
     'legend', 'li', 'ol', 'optgroup', 'option', 'p', 'param', 'pre', 
-    'select', 'span', 'strong', 'table', 'tbody', 'td', 'textarea',
+    'select', 'small', 'span', 'strong', 'table', 'tbody', 'td', 'textarea',
     'tfoot', 'th', 'thead', 'tr', 'tt', 'ul'
   ]
 };
@@ -1083,9 +1091,9 @@ Object.extend(Control.Modal,{
           }
           else {
             var overlay = Control.Overlay.container;
-						var lastModal = Control.Modal.stack.last().container;
+            var lastModal = Control.Modal.stack.last().container;
             overlay.style.zIndex = lastModal.style.zIndex - 2;
-						lastModal.insert({before: overlay}); // move the overlay before the modal element (zIndex trick)
+            lastModal.insert({before: overlay}); // move the overlay before the modal element (zIndex trick)
             Control.Overlay.positionIFrameShim();
           }
             //Control.Modal.current = false;

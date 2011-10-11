@@ -1,4 +1,8 @@
 
+<script>
+  Control.Tabs.setTabCount("fields-constraints", {{$ex_class->_ref_constraints|@count}});
+</script>
+
 <table class="main layout" id="exClassConstraintList">
   <tr>
     <td style="width: 30em; padding-right: 5px;">

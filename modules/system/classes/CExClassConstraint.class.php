@@ -210,11 +210,16 @@ class CExClassConstraint extends CMbObject {
       return false;
     }
     
-    $value = $object->$field;
+    if ($field == "CONNECTED_USER") {
+      $value = $object->_guid;
+    }
+    else {
+      $value = $object->$field;
     
-    if ($object->_specs[$field] instanceof CRefSpec) {
-      $_obj = $object->loadFwdRef($field);
-      $value = $_obj->_guid;
+      if ($object->_specs[$field] instanceof CRefSpec) {
+        $_obj = $object->loadFwdRef($field);
+        $value = $_obj->_guid;
+      }
     }
     
     $cons = $this->value;
