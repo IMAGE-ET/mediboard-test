@@ -151,7 +151,7 @@ class CDocumentItem extends CMbMetaObject {
       return;
     }
     
-    return CMediusers::get($this->author_id);
+    return $this->_ref_author = CMediusers::get($this->author_id);
   }
   
   function canRead() {
