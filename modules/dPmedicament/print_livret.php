@@ -14,7 +14,7 @@ $function_guid = CValue::get("function_guid", null);
 $produits_livret = array();
 
 // Chargement des produits du livret therapeutique
-$produits_livret_temp = CBcBProduit::loadRefLivretTherapeutique($function_guid, '%', 2000, false);
+$produits_livret_temp = CBcbProduit::loadRefLivretTherapeutique($function_guid, '%', 2000, false);
 
 foreach($produits_livret_temp as $_produit_livret){
   $_produit_livret->_ref_produit->isInT2A();
