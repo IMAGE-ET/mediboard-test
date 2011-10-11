@@ -23,11 +23,13 @@ if ($date_debut && $date_fin) {
   if ($purge) {
     $count = 0;
     foreach ($files as $_file) {
-      if ($msg = $_file->purge()) {
-        CAppUI::stepAjax("File id: " . $_file->_id . " - " . $_file->purge());
-      }
-      else {
-        $count++;
+      if (!file_exists($_file->_file_path) || filesize($_file->_file_path) == 0 || file_get_contents($_file->_file_path) == "") {
+        if ($msg = $_file->purge()) {
+          CAppUI::stepAjax("File id: " . $_file->_id . " - " . $_file->purge());
+        }
+        else {
+          $count++;
+        }
       }
     }
     CAppUI::stepAjax("$count fichiers supprimés");
