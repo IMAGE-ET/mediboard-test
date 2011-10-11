@@ -19,8 +19,9 @@ if ($date_debut && $date_fin) {
   $where = array();
   $where["file_date"] =  "BETWEEN '".mbDateTime($date_debut)."' AND '".mbDateTime($date_fin)."'";
   $count_files = $file->countList($where);
-  $files = $file->loadList($where, null, $nb_files);
+  CAppUI::stepAjax(implode("<br />", $file->loadIds($where)));
   if ($purge) {
+    $files = $file->loadList($where, null, $nb_files);
     $count = 0;
     foreach ($files as $_file) {
       if (!file_exists($_file->_file_path) || filesize($_file->_file_path) == 0 || file_get_contents($_file->_file_path) == "") {
