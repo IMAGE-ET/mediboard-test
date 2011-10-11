@@ -18,25 +18,29 @@ $file = new CFile;
 if ($date_debut && $date_fin) {
   $where = array();
   $where["file_date"] =  "BETWEEN '".mbDateTime($date_debut)."' AND '".mbDateTime($date_fin)."'";
-  $count_files = $file->countList($where);
-  CAppUI::stepAjax(implode("<br />", $file->loadIds($where)));
-  if ($purge) {
-    $files = $file->loadList($where, null, $nb_files);
-    $count = 0;
-    foreach ($files as $_file) {
-      if (!file_exists($_file->_file_path) || filesize($_file->_file_path) == 0 || file_get_contents($_file->_file_path) == "") {
-        if ($msg = $_file->purge()) {
-          CAppUI::stepAjax("File id: " . $_file->_id . " - " . $_file->purge());
-        }
-        else {
-          $count++;
-        }
+  
+  $files = $file->loadList($where, null, $nb_files);
+  $count = 0;
+  
+  foreach ($files as $_file) {
+    if (!file_exists($_file->_file_path) || filesize($_file->_file_path) == 0 || file_get_contents($_file->_file_path) == "") {
+      if (!$purge) {
+        CAppUI::stepAjax($_file->_id);
+        $count ++; continue;
+      }
+      if ($msg = $_file->purge()) {
+        CAppUI::stepAjax("File id: " . $_file->_id . " - " . $_file->purge());
+      }
+      else {
+        $count++;
       }
     }
+  }
+  if ($purge) {
     CAppUI::stepAjax("$count fichiers supprimés");
   }
   else {
-    CAppUI::stepAjax("$count_files fichiers à traiter");
+    CAppUI::stepAjax("$count fichiers à traiter");
   }
 }
 else {
