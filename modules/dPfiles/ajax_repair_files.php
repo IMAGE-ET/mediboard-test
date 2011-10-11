@@ -8,18 +8,18 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$nb_files     = round(CValue::get("nb_files", 0));
-$date_debut   = CValue::get("date_debut");
-$date_fin     = CValue::get("date_fin");
-$purge = CValue::get("purge", 0);
-
+$nb_files   = round(CValue::get("nb_files", 0));
+$date_debut = CValue::get("date_debut");
+$date_fin   = CValue::get("date_fin");
+$purge      = CValue::get("purge", 0);
+$step_from  = CValue::get("step_from", 0);
 $file = new CFile;
 
 if ($date_debut && $date_fin) {
   $where = array();
   $where["file_date"] =  "BETWEEN '".mbDateTime($date_debut)."' AND '".mbDateTime($date_fin)."'";
   
-  $files = $file->loadList($where, null, $nb_files);
+  $files = $file->loadList($where, null, "$step_from, 100");
   $count = 0;
   
   foreach ($files as $_file) {

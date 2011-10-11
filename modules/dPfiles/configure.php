@@ -10,10 +10,13 @@
 global $can;
 $can->needsAdmin();
 
+$file = new CFile;
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("listNbFiles"  , range(1,10));
 $smarty->assign("today", mbDate());
+$smarty->assign("nb_files", $file->countList());
 $smarty->display("configure.tpl");
 
 ?>

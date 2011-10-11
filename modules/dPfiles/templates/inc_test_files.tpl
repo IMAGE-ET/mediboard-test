@@ -32,6 +32,7 @@
     addParam("date_debut", $V(oForm.date_debut)).
     addParam("date_fin", $V(oForm.date_fin)).
     addParam("nb_files", $V($("nb_files"))).
+    addParam("step_from", $V(oForm.step_from)).
     requestUpdate("purge_files");
   }
 </script>
@@ -74,6 +75,14 @@
       <button type="button" class="button search" onclick="purge_files()">{{tr}}CFile-purge_files{{/tr}}</button>
       <br />
       <form name="selectDateFiles" method="get">
+        <select name="step_from">
+          {{foreach from=0|range:$nb_files item=i}}
+            {{if $i % 100 == 0}}
+            <option value="{{$i}}">{{$i}}</option>
+            {{/if}}
+          {{/foreach}}
+        </select>
+        
         Début : <input class="date notNull" type="hidden" name="date_debut" value="{{$today}}" />
         Fin : <input class="date notNull" type="hidden" name="date_fin" value="{{$today}}" />
         <label>
