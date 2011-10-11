@@ -57,7 +57,7 @@ refreshSejoursSSR = function(sejour_id){
 		{{if !$sejour->annule}}
 	  <li>
 	  	<a href="#constantes" onmousedown="refreshConstantesMedicales();">
-	  		{{tr}}CConstantesMedicales{{/tr}}
+	  		{{tr}}CPatient.surveillance{{/tr}}
 			</a>
 		</li>
 
