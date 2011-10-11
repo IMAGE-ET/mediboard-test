@@ -25,17 +25,24 @@
             </td>
             <td style="text-align: center;">{{mb_value object=$_constraint field=operator}}</td>
             <td class="text">
-              {{if $_constraint->_ref_target_object->_id}}
-							  {{if $_constraint->_ref_target_object instanceof CMediusers}}
-								  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_constraint->_ref_target_object}}
-							  {{else}}
-	                <span onmouseover="ObjectTooltip.createEx(this, '{{$_constraint->_ref_target_object->_guid}}');">
-	                	{{$_constraint->_ref_target_object}}
-	                </span>
-								{{/if}}
-              {{else}}
-                {{mb_value object=$_constraint field=value}}
-              {{/if}}
+            	{{if !$_constraint->_ref_target_object}}
+							  <div class="small-error">
+							  	L'objet cible n'existe plus
+							  </div>
+							{{else}}
+	              {{if $_constraint->_ref_target_object->_id}}
+								  {{if $_constraint->_ref_target_object instanceof CMediusers}}
+									  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_constraint->_ref_target_object}}
+								  {{else}}
+									{{$_constraint->_ref_target_object}}
+		                <span onmouseover="ObjectTooltip.createEx(this, '{{$_constraint->_ref_target_object->_guid}}');">
+		                	{{$_constraint->_ref_target_object}}
+		                </span>
+									{{/if}}
+	              {{else}}
+	                {{mb_value object=$_constraint field=value}}
+	              {{/if}}
+							{{/if}}
             </td>
           </tr>
         {{foreachelse}}

@@ -159,30 +159,36 @@ selectSugg = function(button) {
         </div>
         
         <div class="specfield spectype-ref">
-          <input type="hidden" name="_object_class" value="{{$ex_constraint->_ref_target_object->_class}}" />
-          <input type="text" name="_object_view" readonly="readonly" ondblclick="ObjectSelector.init()" value="{{$ex_constraint->_ref_target_object}}" size="60" />
-          <button type="button" class="search notext" onclick="ObjectSelector.init()">{{tr}}Search{{/tr}}</button>
-          <script type="text/javascript">
-            ObjectSelector.init = function(){  
-              this.sForm     = "editConstraint";
-              this.sId       = "value";
-              this.sView     = "_object_view";
-              this.sClass    = "_object_class";
-              this.onlyclass = "true";
-              this.pop();
-            }
-            
-            ObjectSelector.set = function(oObject) {
-              var oForm = getForm(this.sForm);
-              
-              if (oForm.elements[this.sView]) {
-                $V(oForm.elements[this.sView], oObject.view);
-              }
-              
-              $V(oForm.elements[this.sClass], oObject.objClass);
-              $V(oForm.elements[this.sId], oObject.objClass+"-"+oObject.id);
-            }
-          </script>
+          {{if !$ex_constraint->_ref_target_object}}
+            <div class="small-error">
+              L'objet cible n'existe plus
+            </div>
+          {{else}}
+	          <input type="hidden" name="_object_class" value="{{$ex_constraint->_ref_target_object->_class}}" />
+	          <input type="text" name="_object_view" readonly="readonly" ondblclick="ObjectSelector.init()" value="{{$ex_constraint->_ref_target_object}}" size="60" />
+	          <button type="button" class="search notext" onclick="ObjectSelector.init()">{{tr}}Search{{/tr}}</button>
+	          <script type="text/javascript">
+	            ObjectSelector.init = function(){  
+	              this.sForm     = "editConstraint";
+	              this.sId       = "value";
+	              this.sView     = "_object_view";
+	              this.sClass    = "_object_class";
+	              this.onlyclass = "true";
+	              this.pop();
+	            }
+	            
+	            ObjectSelector.set = function(oObject) {
+	              var oForm = getForm(this.sForm);
+	              
+	              if (oForm.elements[this.sView]) {
+	                $V(oForm.elements[this.sView], oObject.view);
+	              }
+	              
+	              $V(oForm.elements[this.sClass], oObject.objClass);
+	              $V(oForm.elements[this.sId], oObject.objClass+"-"+oObject.id);
+	            }
+	          </script>
+					{{/if}}
         </div>
         
         <div class="specfield spectype-enum">
