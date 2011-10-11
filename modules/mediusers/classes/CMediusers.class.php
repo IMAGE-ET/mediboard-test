@@ -196,7 +196,7 @@ class CMediusers extends CMbObject {
     $backProps["valid_users"]                     = "CFicheEi valid_user_id";
     $backProps["service_valid_users"]             = "CFicheEi service_valid_user_id";
     $backProps["qualite_users"]                   = "CFicheEi qualite_user_id";
-    $backProps["owned_files"]                     = "CFile file_owner";
+    $backProps["owned_files"]                     = "CFile author_id";
     $backProps["forum_messages"]                  = "CForumMessage user_id";
     $backProps["forum_threads"]                   = "CForumThread user_id";
     $backProps["hprim21_medecins"]                = "CHprim21Medecin user_id";
