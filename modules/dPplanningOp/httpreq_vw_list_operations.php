@@ -55,10 +55,18 @@ if($userSel->_id){
   
   $listDay = $plageOp->loadList($where, $order);
   $curr_plage = new CPlageOp();
-  foreach ($listDay as &$curr_plage) {
+  foreach ($listDay as $curr_plage) {
     $curr_plage->loadRefsFwd();
-    $curr_plage->loadRefsOperations(0);
-    foreach ($curr_plage->_ref_operations as $key_op => &$curr_op) {
+    $where = array();
+    $where["plageop_id"] = "= '$curr_plage->_id'";
+    if($userSel->_id) {
+      $where["chir_id"] = "= '$userSel->_id'";
+    }
+    $where["annulee"] = "= '0'";
+    $op = new COperation;
+    $curr_plage->_ref_operations = $op->loadList($where, "rank, horaire_voulu");
+    foreach ($curr_plage->_ref_operations as $curr_op) {
+      $curr_op->_ref_plageop = $curr_plage;
       $curr_op->loadRefsFwd();
       $curr_op->loadRefsDocs();
       $curr_op->_ref_sejour->loadRefsFwd();
