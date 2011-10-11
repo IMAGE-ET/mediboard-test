@@ -28,8 +28,8 @@ $filter->referent_id  = CValue::getOrSession("referent_id");
 $group = CGroups::loadCurrent();
 $group_id = $group->_id;
 $where["type"] = "= 'ssr'";
-$where["group_id"] = "= '$group_id'";
-$where["annule"] = "= '0'";
+$where["sejour.group_id"] = "= '$group_id'";
+$where["sejour.annule"] = "= '0'";
 $order = null;
 
 if ($order_col == "entree") {
@@ -45,13 +45,22 @@ if ($order_col == "patient_id") {
   $order = "patients.nom $order_way, patients.prenom, sejour.entree";
 }
 
+$ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
+$ljoin["lit"]     = "lit.lit_id = affectation.lit_id";
+$ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
+$ljoin["service"] = "chambre.service_id = service.service_id";
+
+if ($order_col == "lit_id") {
+  $order = "service.nom $order_way, chambre.nom $order_way, lit.nom $order_way, patients.nom, patients.prenom";
+}
+
 // Masquer les services inactifs
 if (!$show_cancelled_services) {
 	$service = new CService;
 	$service->group_id = $group->_id;
 	$service->cancelled = "1";
 	$services = $service->loadMatchingList();
-	$where["service_id"] = CSQLDataSource::prepareNotIn(array_keys($services));
+	$where["sejour.service_id"] = CSQLDataSource::prepareNotIn(array_keys($services));
 }
 
 $sejours = CSejour::loadListForDate($date, $where, $order, null, null, $ljoin);
@@ -130,6 +139,9 @@ foreach ($sejours as $_sejour) {
 
   // Praticien demandeur
 	$bilan->loadRefPraticienDemandeur();
+	
+	// Chargement du lit
+	$_sejour->loadRefCurrAffectation();
 }
 
 // Ajustements services
