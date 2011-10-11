@@ -105,7 +105,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $specs["time_arret"]        = "time";
     $specs["child_id"]          = "ref class|$this->_class unlink show|0";
     $specs["decalage_line"]     = "num show|0";
-    $specs["jour_decalage"]     = "enum list|E|I|S|N|A default|E show|0";
+    $specs["jour_decalage"]     = "enum list|E|I|S|N|A show|0";
     $specs["fin"]               = "date";
     $specs["valide_infirmiere"] = "bool";
     $specs["jour_decalage_fin"] = "enum list|I|S|A show|0";

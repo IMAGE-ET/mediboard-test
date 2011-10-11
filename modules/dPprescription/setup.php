@@ -2106,7 +2106,30 @@ class CSetupdPprescription extends CSetup {
               ADD `ponctual` ENUM ('0','1') DEFAULT '0';";
 		$this->addQuery($query);
 		
-		$this->mod_version = "1.58";
+		$this->makeRevision("1.58");
+		
+    $query = "ALTER TABLE `prescription_line_medicament`
+              CHANGE `jour_decalage` `jour_decalage` ENUM ('E','I','S','N','A');";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `prescription_line_element`
+              CHANGE `jour_decalage` `jour_decalage` ENUM ('E','I','S','N','A');";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `prescription_line_comment`
+              CHANGE `jour_decalage` `jour_decalage` ENUM ('E','I','S','N','A');";
+    $this->addQuery($query);
+		
+		$query = "ALTER TABLE `prise_posologie` 
+              CHANGE `type_decalage` `type_decalage` ENUM ('I','A');";
+    $this->addQuery($query);
+    
+		$query = "UPDATE `prise_posologie`
+		          SET `type_decalage` = NULL
+							WHERE `decalage_intervention` IS NULL;";
+		$this->addQuery($query);
+		
+		$this->mod_version = "1.59";
   }
 }
 

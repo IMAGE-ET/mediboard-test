@@ -9,7 +9,7 @@
 *}}
 
 <tr>
-  <th><strong>{{$var}}</strong></th>
+  <th><strong>{{tr}}CPrescription._chapitres.{{$var}}{{/tr}}</strong></th>
   <td style="text-align: center">
     <input type="text" name="{{$m}}[{{$class}}][{{$var}}][phrase]" value="{{$conf.$m.$class.$var.phrase}}"/>
   </td>

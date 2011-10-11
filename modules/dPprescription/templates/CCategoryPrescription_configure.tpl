@@ -38,7 +38,8 @@
           {{include file="inc_configure_chapitre.tpl" var=soin}}
           {{include file="inc_configure_chapitre.tpl" var=dm}}
           {{include file="inc_configure_chapitre.tpl" var=ds}}
-        </table>
+          {{include file="inc_configure_chapitre.tpl" var=med_elt}}
+				</table>
       </td>
     </tr>
 

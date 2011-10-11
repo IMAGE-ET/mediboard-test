@@ -463,8 +463,9 @@ class CPrescription extends CMbObject implements IPatientRelated {
 		// On vide la reference, elle sera mauvaise car la ligne est appliquée à une nouvelle prescription
 		$_line->_ref_prescription = null;
 		
-	  // Store de la ligne
+		// Store de la ligne
     $msg = $_line->store();
+	
     CAppUI::displayMsg($msg, "{$_line->_class}-msg-create");  
 		
 		

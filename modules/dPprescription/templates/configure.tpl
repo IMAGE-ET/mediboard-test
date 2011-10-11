@@ -16,7 +16,7 @@ Main.add(function () {
 
 <ul id="tabs-configure" class="control_tabs">
   <li><a href="#CPrescription"              >{{tr}}CPrescription{{/tr}}              </a></li>
-  <li><a href="#CCategoryPrescription"      >{{tr}}CCategoryPrescription{{/tr}}      </a></li>
+  <li><a href="#CCategoryPrescription"      >Chapitre                                </a></li>
   <li><a href="#CMomentUnitaire"            >{{tr}}CMomentUnitaire{{/tr}}            </a></li>
   <li><a href="#CPrescriptionLineMedicament">{{tr}}CPrescriptionLineMedicament{{/tr}}</a></li>
   <li><a href="#CPrescriptionLineHandler"   >{{tr}}CPrescriptionLineHandler{{/tr}}   </a></li>
