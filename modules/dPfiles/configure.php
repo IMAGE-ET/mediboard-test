@@ -13,6 +13,7 @@ $can->needsAdmin();
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("listNbFiles"  , range(1,10));
+$smarty->assign("today", mbDate());
 $smarty->display("configure.tpl");
 
 ?>

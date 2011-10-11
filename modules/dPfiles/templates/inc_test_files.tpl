@@ -25,6 +25,15 @@
     addParam("nb_files", $V($("nb_files"))).
     requestUpdate("convert_files");
   }
+  purge_files = function() {
+    var oForm = getForm("selectDateFiles");
+    new Url("dPfiles", "ajax_repair_files").
+    addParam("purge", $V(oForm.purge) ? 1 : 0).
+    addParam("date_debut", $V(oForm.date_debut)).
+    addParam("date_fin", $V(oForm.date_fin)).
+    addParam("nb_files", $V($("nb_files"))).
+    requestUpdate("purge_files");
+  }
 </script>
 <table class="form">
   <tr>
@@ -58,6 +67,29 @@
     </th>
     <td>
       <div id="convert_files"></div>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      <button type="button" class="button search" onclick="purge_files()">{{tr}}CFile-purge_files{{/tr}}</button>
+      <br />
+      <form name="selectDateFiles" method="get">
+        Début : <input class="date notNull" type="hidden" name="date_debut" value="{{$today}}" />
+        Fin : <input class="date notNull" type="hidden" name="date_fin" value="{{$today}}" />
+        <label>
+          <input type="checkbox" id="purge" /> Purge
+        </label>
+        <script type="text/javascript">
+          Main.add(function () {
+            var oForm = getForm('selectDateFiles')
+            Calendar.regField(oForm.date_debut);
+            Calendar.regField(oForm.date_fin);
+          });
+        </script>
+      </form>
+    </th>
+    <td>
+      <div id="purge_files"></div>
     </td>
   </tr>
 </table>
