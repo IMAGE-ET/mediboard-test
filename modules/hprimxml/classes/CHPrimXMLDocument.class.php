@@ -315,7 +315,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $montantDepassement = $this->addElement($montant, "montantDepassement", sprintf("%.2f", $mbActeCCAM->montant_depassement));
       //if(CAppUI::conf("dPsalleOp CActeCCAM envoi_motif_depassement")) {
       if($mbActeCCAM->motif_depassement) {
-        $this->addAttribute($montantDepassement, "motif", $mbActeCCAM->montant_depassement);
+        $this->addAttribute($montantDepassement, "motif", $mbActeCCAM->motif_depassement);
       }
     }
     
