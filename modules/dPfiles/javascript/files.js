@@ -90,4 +90,6 @@ function submitFileChangt(oForm){
   onSubmitFormAjax(oForm, { onComplete : reloadAfterMoveFile });
 }
 
-Document.refreshList = reloadAfterUploadFile;
+if (window.Document) {
+  Document.refreshList = reloadAfterUploadFile;
+}
