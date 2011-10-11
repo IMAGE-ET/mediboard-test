@@ -389,7 +389,7 @@ function switchMode(){
               {{/if}}
             {{elseif $_group.type == "field"}}
               <td>
-                <div {{if $ex_object->_specs.$_field_name instanceof CTextSpec}} style="text-block" {{/if}}
+                <div {{if $ex_object->_specs.$_field_name instanceof CTextSpec}} style="text-block" {{/if}}>
                   {{mb_value object=$ex_object field=$_field_name}}
                 </div>
               </td>
