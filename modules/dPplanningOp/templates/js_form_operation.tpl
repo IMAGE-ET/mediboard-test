@@ -110,16 +110,24 @@ function checkChir() {
 
 function checkDuree() {
   var form = document.editOp;
+  var formEasy = document.editOpEasy;
   field1 = form._hour_op;
   field2 = form._min_op;
+  field1Easy = formEasy._hour_voulu;
+  
   if (field1 && field2) {
     if (field1.value == 0 && field2.value == 0) {
       alert("Temps opératoire invalide");
-      field1.focus();
+      try {
+        field1.focus();
+      } catch(e) {}
+      try {
+        field1Easy.focus();
+      } catch(e2) {}
       return false;
     }
   }
-  return true
+  return true;
 }
 
 function checkCompatOpAdm() {
