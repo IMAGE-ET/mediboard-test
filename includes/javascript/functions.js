@@ -19,6 +19,7 @@ function main() {
     Event.preventBackspace();
     $(document.documentElement).prepareTouchEvents();
     Main.init();
+    new CookieJar().put("cookie-supported", 1);
   }
   catch (e) {
     errorHandler(e.extMessage || e.message || e.description || e, e.fileName, e.lineNumber, e);
