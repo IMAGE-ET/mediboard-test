@@ -57,6 +57,7 @@ $locales['CAntecedent.appareil.endocrinien'] = 'Endocrinien';
 $locales['CAntecedent.appareil.fam'] = 'Familiaux';
 $locales['CAntecedent.appareil.gyn'] = 'Gynécologiques';
 $locales['CAntecedent.appareil.gyneco_obstetrique'] = 'Gynéco/obstétrique';
+$locales['CAntecedent.appareil.locomoteur'] = 'Locomoteur';
 $locales['CAntecedent.appareil.med'] = 'Médicaux';
 $locales['CAntecedent.appareil.neuro_psychiatrique'] = 'Neuro/psychiatrique';
 $locales['CAntecedent.appareil.obst'] = 'Obstétriques';
