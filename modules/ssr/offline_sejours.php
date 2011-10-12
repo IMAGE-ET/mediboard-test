@@ -45,6 +45,9 @@ foreach ($sejours as $_sejour) {
   $_sejour->loadNDA();
   $_sejour->loadRefsNotes();
   
+  // Chargement du lit
+  $_sejour->loadRefCurrAffectation();
+  
   // Patient
   $patient = $_sejour->loadRefPatient();
   $patient->loadIPP();
