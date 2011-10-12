@@ -59,6 +59,7 @@ $favoris              = array();
 $listProduits         = array();
 $historique           = array();
 $executants           = array();
+$protocoles_ids       = array();
 $dossier_medical      = new CDossierMedical();
 
 // Chargement de l'utilisateur courant
@@ -192,7 +193,7 @@ if($prescription->_id){
 	  	    unset($prescription->_ref_lines_med_comments[$type][$med_id]);
 					$hidden_lines_count++;
 	  	  }
-				
+				$protocoles_ids[] = $_line_med->protocole_id;
 	  		$_line_med->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma, $operation_id);
 	  	  if($_line_med->_class == "CPrescriptionLineMedicament"){
 	  	    $_line_med->countBackRefs("administration");
@@ -212,7 +213,7 @@ if($prescription->_id){
 		        unset($prescription->_ref_prescription_line_mixes_by_type[$_type_line][$_line_mix_id]);            
 						$hidden_lines_count++;
 		      }
-					
+					$protocoles_ids[] = $_prescription_line_mix->protocole_id;
 			    $_prescription_line_mix->loadRefPraticien();
 			    $_prescription_line_mix->loadRefsLines();
 			    $_prescription_line_mix->loadRefParentLine();
@@ -322,7 +323,20 @@ if($prescription->_id){
 		    }
 		  }
 	  }
-
+    
+	  $prescription->loadRefsLinesElementsComments("1", $chapitre);
+	  if(count($prescription->_ref_lines_elements_comments)){
+      foreach($prescription->_ref_lines_elements_comments as $name_chap => $cat_by_chap){
+        foreach($cat_by_chap as $name_cat => $lines_by_cat){
+          foreach($lines_by_cat as $type_elt => $lines_by_type){
+            foreach($lines_by_type as $key => $_line){
+              $protocoles_ids[] = $_line->protocole_id;
+            }
+          }
+        }
+      }
+	  }
+    
 		if($prescription->object_id){
 		  $score_prescription = 0;
 		  foreach($prescription->_scores as $type_score => $_score){
@@ -445,6 +459,16 @@ if ($prescription->type != "externe" || ($prescription->type == "externe" && !CA
 $prise = new CPrisePosologie();
 $prise->quantite = 1.0;
 
+$protocoles_ids = array_unique($protocoles_ids);
+CMbArray::removeValue(null, $protocoles_ids);
+$protocoles_ids = array_flip($protocoles_ids);
+
+foreach ($protocoles_ids as $prot_id => $prot) {
+  $prot = new CPrescription;
+  $prot->load($prot_id);
+  $protocoles_ids[$prot_id] = $prot;
+}
+
 // Chargement des aides
 $prescriptionLineMedicament = new CPrescriptionLineMedicament();
 $prescriptionLineElement = new CPrescriptionLineElement();
@@ -566,6 +590,7 @@ $smarty->assign("hide_header"          , $hide_header);
 $smarty->assign("sejour"               , $_sejour);
 $smarty->assign("multiple_prescription", $multiple_prescription);
 $smarty->assign("admin_prescription"   , CModule::getCanDo("dPprescription")->admin || CMediusers::get()->isPraticien());
+$smarty->assign("protocoles_ids"       , $protocoles_ids);
 
 if($full_mode){
   $smarty->assign("praticien_sejour", $_sejour->praticien_id);

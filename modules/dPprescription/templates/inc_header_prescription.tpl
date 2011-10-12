@@ -464,7 +464,7 @@ Main.add( function(){
         {{/if}}
 				</li>
 				
-				<li style="float: right;">		
+				<li style="float: right;">
 					{{if $prescription->object_id && ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $is_executant_prescription)}}
 		        {{if !$mode_pharma}}
 		          {{if $is_praticien || ($is_executant_prescription && $conf.dPprescription.CPrescription.role_propre)}}
@@ -531,6 +531,19 @@ Main.add( function(){
   <tr>
   {{if !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin || $is_executant_prescription)}}
    <td id="div_protocoles" colspan="3">
+     {{if $protocoles_ids|@count}}
+        <span style="float: right;" href="#1" onmouseover="ObjectTooltip.createDOM(this, 'protocoles_ids_hist')">
+          {{$protocoles_ids|@count}} protocole(s) appliqué(s)
+        </span>
+        <div style="display: none;" id="protocoles_ids_hist">
+          <ul>
+          {{foreach from=$protocoles_ids item=_protocole}}
+            <li>{{$_protocole->libelle}}</li>
+          {{/foreach}}
+          </ul>
+        </div>
+      {{/if}}
+      
       <!-- Formulaire de selection protocole -->
       <form name="applyProtocole" method="post" action="?" onsubmit="return false;">
 	      <input type="hidden" name="m" value="dPprescription" />
@@ -544,7 +557,6 @@ Main.add( function(){
         
 	      <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" class="autocomplete" style="font-weight: bold; font-size: 1.3em; width: 300px;" />
 	      <div style="display:none; width: 350px;" class="autocomplete" id="protocole_auto_complete"></div>
-	
  				{{if $prescription->type != "externe"}}
 					<input type="hidden" name="debut" value="" />
 	        

@@ -228,7 +228,12 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
 			            $_line->duree = $duree_hours;
 			          } else {
 			            $_line->unite_duree = "jour";
-			            $_line->duree = mbDaysRelative($_line->date_debut, $date_fin);
+			            if ($_line instanceof CPrescriptionLineMedicament || $_line instanceof CPrescriptionLineElement) {
+			              $_line->duree = mbDaysRelative($_line->debut, $date_fin);
+			            }
+			            else {
+			              $_line->duree = mbDaysRelative($_line->date_debut, $date_fin);
+			            }
 			            $_line->duree++;
 									if($_line instanceof CPrescriptionLineMedicament || $_line instanceof CPrescriptionLineElement){
 										$_line->time_fin = $time_fin;
