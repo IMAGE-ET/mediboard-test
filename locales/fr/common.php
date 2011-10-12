@@ -99,6 +99,7 @@ $locales['Cancelled'] = 'Annulé';
 $locales['Change'] = 'Changer';
 $locales['Charge'] = 'Facturer';
 $locales['Choose'] = 'Choisir';
+$locales['Chose'] = 'Choisir';
 $locales['Clear'] = 'Vider';
 $locales['Close'] = 'Fermer';
 $locales['Complete'] = 'Terminé';

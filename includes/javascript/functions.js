@@ -221,7 +221,7 @@ var AjaxResponse = {
       
       // If Firebug or Chrome console
       if (!("_mediboard" in window.console)) {
-        console.log(getData, " ", performance);
+        console.log(getData, " ", performance, getData.m + " - " + getData.a);
       }
     } catch (e) {}
   }
@@ -1183,6 +1183,7 @@ var UserSwitch = {
   reload: function(){
     this.window.close();
     location.reload();
+		location.href = location.href.match(/^(.*)#/)[1]; // When Mediboard is inside a showModalDialog window (url without what's after #)
   },
   login: function(form){
     if (!checkForm(form)) return false;
