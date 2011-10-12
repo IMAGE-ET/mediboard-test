@@ -309,9 +309,7 @@ class CSetupdPhospi extends CSetup {
       CHANGE `responsable_id` `responsable_id` INT (11) UNSIGNED";
     $this->addQuery($query);
     
-    $this->makeRevision("0.38");
-    $query = "SELECT 0";
-    $this->addQuery($query);
+    $this->makeEmptyRevision("0.38");
     
     $this->makeRevision("0.39");
     $query = "ALTER TABLE `chambre`

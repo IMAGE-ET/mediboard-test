@@ -10,36 +10,6 @@
 
 class CSetupsystem extends CSetup {
   
-  static function getFieldRenameQueries($object_class, $from, $to) {
-    $ds = CSQLDataSource::get("std");
-    
-    $queries = array();
-    
-    $queries[] = 
-      "UPDATE `user_log` 
-       SET   
-         `fields` = '$to', 
-         `extra`  = REPLACE(`extra`, '\"$from\":', '\"$to\":')
-       WHERE 
-         `object_class` = '$object_class' AND 
-         `fields` = '$from' AND 
-         `type` IN('store', 'merge')";
-    
-    $queries[] = 
-      "UPDATE `user_log` 
-       SET   
-         `fields` = REPLACE(`fields`, ' $from ', ' $to '), 
-         `fields` = REPLACE(`fields`, '$from ' , '$to '), 
-         `fields` = REPLACE(`fields`, ' $from' , ' $to'), 
-         `extra`  = REPLACE(`extra`, '\"$from\":', '\"$to\":')
-       WHERE 
-         `object_class` = '$object_class' AND 
-         `fields` LIKE '%$from%' AND 
-         `type` IN('store', 'merge')";
-    
-    return $queries;
-  }
-  
   function __construct() {
     parent::__construct();
     
@@ -860,16 +830,7 @@ class CSetupsystem extends CSetup {
               ADD `loggable` ENUM ('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($query);
     
-    $this->makeRevision("1.0.82");
-    $queries = array();
-    $queries = self::getFieldRenameQueries("CSejour", "etablissement_entree_transfert_id", "etablissement_entree_id");
-    $queries = array_merge($queries, self::getFieldRenameQueries("CSejour", "etablissement_transfert_id", "etablissement_sortie_id"));
-    $queries = array_merge($queries, self::getFieldRenameQueries("CSejour", "service_entree_mutation_id", "service_entree_id"));
-    $queries = array_merge($queries, self::getFieldRenameQueries("CSejour", "service_mutation_id", "service_sortie_id"));
-    
-    foreach ($queries as $query) {
-      $this->addQuery($query);
-    }
+    $this->makeEmptyRevision("1.0.82");
     
     $this->makeRevision("1.0.83");
     $query = "ALTER TABLE `ex_class` 

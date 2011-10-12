@@ -59,6 +59,15 @@ class CSetup {
   }
   
   /**
+   * Create an empty revision
+   * @param string $revision Revision number of form x.y
+   */
+  function makeEmptyRevision($revision) {
+    $this->makeRevision($revision);
+    $this->addQuery("SELECT 0");
+  }
+  
+  /**
    * Add a callback function to be executed
    * function must return true/false
    */
@@ -343,6 +352,40 @@ class CSetup {
    */
   function moveConf($old_path, $new_path) {
     $this->config_moves[current($this->revisions)][] = array($old_path, $new_path);
-  } 
+  }
+  
+  /**
+   * Rename a field in the user log
+   * @param $object_class object_class of the user_log
+   * @param $from The field to rename
+   * @param $to The new name
+   */
+  function getFieldRenameQueries($object_class, $from, $to) {
+    $query =
+      "UPDATE `user_log` 
+       SET   
+         `fields` = '$to', 
+         `extra`  = REPLACE(`extra`, '\"$from\":', '\"$to\":')
+       WHERE 
+         `object_class` = '$object_class' AND 
+         `fields` = '$from' AND 
+         `type` IN('store', 'merge')";
+    
+    $this->addQuery($query);
+    
+    $query =
+      "UPDATE `user_log` 
+       SET   
+         `fields` = REPLACE(`fields`, ' $from ', ' $to '), 
+         `fields` = REPLACE(`fields`, '$from ' , '$to '), 
+         `fields` = REPLACE(`fields`, ' $from' , ' $to'), 
+         `extra`  = REPLACE(`extra`, '\"$from\":', '\"$to\":')
+       WHERE 
+         `object_class` = '$object_class' AND 
+         `fields` LIKE '%$from%' AND 
+         `type` IN('store', 'merge')";
+    
+    $this->addQuery($query);
+  }
 }
 ?>

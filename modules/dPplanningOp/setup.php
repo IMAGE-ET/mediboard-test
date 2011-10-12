@@ -1159,8 +1159,12 @@ class CSetupdPplanningOp extends CSetup {
       CHANGE `service_mutation_id` `service_sortie_id` INT (11) UNSIGNED";
     $this->addQuery($query);
     
-    $this->mod_version = "1.25";
+    $this->getFieldRenameQueries("CSejour", "etablissement_entree_transfert_id", "etablissement_entree_id");
+    $this->getFieldRenameQueries("CSejour", "etablissement_transfert_id", "etablissement_sortie_id");
+    $this->getFieldRenameQueries("CSejour", "service_entree_mutation_id", "service_entree_id");
+    $this->getFieldRenameQueries("CSejour", "service_mutation_id", "service_sortie_id");
     
+    $this->mod_version = "1.25";
   }
 }
 ?>
