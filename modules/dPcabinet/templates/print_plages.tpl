@@ -7,7 +7,7 @@
 <table class="tbl">
   <tr class="clear">
     <th colspan="10">
-      <h1>
+      <h1 class="no-break">
         <a href="#" onclick="window.print()">
           {{if $filter->plageconsult_id}}
           Plage du {{mb_value object=$filter->_ref_plageconsult field=date}}
