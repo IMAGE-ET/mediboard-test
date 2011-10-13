@@ -52,7 +52,7 @@ else {
   else {
     $where = array();
     $where["file_size"] = " = '0'";
-    $files = $file->loadList($where);
+    $files = $file->loadList($where, null, $nb_files);
     
     if (count($files) == 0 ) {
       CAppUI::stepAjax("Aucun fichier à traiter");
