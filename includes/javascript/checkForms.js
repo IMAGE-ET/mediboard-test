@@ -76,24 +76,24 @@ var ElementChecker = {
   //---------------------------------------------------------------------------------
   
   getCastFunction: function() {
-  	if (this.oProperties["num"])   return function(value) { return parseInt(value, 10); }
-		if (this.oProperties["float"]) return function(value) { return parseFloat(value, 10); }
-		if (this.oProperties["date"])  return function(value) { return Date.fromDATE(value); }
-		return Prototype.K;
+    if (this.oProperties["num"])   return function(value) { return parseInt(value, 10); }
+    if (this.oProperties["float"]) return function(value) { return parseFloat(value, 10); }
+    if (this.oProperties["date"])  return function(value) { return Date.fromDATE(value); }
+    return Prototype.K;
   },
   
   castCompareValues: function(sTargetElement) {
     this.oTargetElement = this.oElement.form.elements[sTargetElement];
     if (!this.oTargetElement) {
       return printf("Elément cible pour comparaison invalide ou inexistant (nom = %s)", sTargetElement);
-		}
+    }
     
     var fCaster = this.getCastFunction();
-  	this.oCompare = {
+    this.oCompare = {
       source : this.sValue               ? fCaster(this.sValue) : null,
       target : this.oTargetElement.value ? fCaster(this.oTargetElement.value) : null
-  	}
-  	return null;
+    }
+    return null;
   },
   
   addError: function(prop, message) {
@@ -134,8 +134,14 @@ var ElementChecker = {
 Object.extend(ElementChecker, {
   check: {
     // toNumeric
-    toNumeric: function () {
-      this.sValue = new String(this.sValue).replace(/\s/g, '').replace(/,/, '.');
+    toNumeric: function (isInt) {
+      this.sValue += ""; // Cast to string
+      
+      if (isInt) {
+        Assert.that(!/[,\.]/.test(this.sValue), '"'+this.sValue+'" ne doit pas être un nombre à virgule');
+      }
+      
+      this.sValue = this.sValue.replace(/\s/g, '').replace(/,/, '.');
       
       if (isNaN(this.sValue))
         this.addError("toNumeric", "N'est pas dans un format numérique valide");
@@ -352,20 +358,20 @@ Object.extend(ElementChecker, {
     // list
     list: function() {
       var list = this.assertMultipleArgs("list");
-			
-			// If it is a "set"
-			if (this.oProperties["set"]) {
-				var values = this.sValue.split('|').without(""),
-				    intersect = list.intersect(values);
-						
-				if (intersect.length != values.length) {
-	        this.addError("list", "Contient une valeur invalide possible");
-				}
-			}
-			else {
-				if (!this.sValue || (this.sValue && list.indexOf(this.sValue) == -1)) 
-					this.addError("list", "N'est pas une valeur possible");
-			}
+      
+      // If it is a "set"
+      if (this.oProperties["set"]) {
+        var values = this.sValue.split('|').without(""),
+            intersect = list.intersect(values);
+            
+        if (intersect.length != values.length) {
+          this.addError("list", "Contient une valeur invalide possible");
+        }
+      }
+      else {
+        if (!this.sValue || (this.sValue && list.indexOf(this.sValue) == -1)) 
+          this.addError("list", "N'est pas une valeur possible");
+      }
     },
     
     ///////// Data types ////////////
@@ -385,12 +391,12 @@ Object.extend(ElementChecker, {
     
     // num
     num: function() {
-      this.toNumeric();
+      this.toNumeric(true);
     },
     
     // bool
     bool: function() {
-      this.toNumeric();
+      this.toNumeric(true);
       if(this.sValue != 0 && this.sValue != 1)
         this.addError("bool", "Ne peut être différent de 0 ou 1");
     },
@@ -421,28 +427,28 @@ Object.extend(ElementChecker, {
         if (this.sValue > new Date().toDATE()) {
           this.addError("birthDate", "La date de naissance ne doit pas être dans le futur");
         }
-	      if (parseInt(values[3]) > 31 || parseInt(values[2]) > 12) {
-	        var msg = printf("Le champ '%s' correspond à une date au format lunaire (jour '%s' et mois '%s')",
-	          this.sLabel,
-	          values[3],
-	          values[2]
-	        );
-	         
-	        // Attention, un seul printf() ne fonctionne pas
-	        msg += ".\n\nVoulez vous néanmoins sauvegarder ?";
-	        
-	        if (!confirm(msg)) {
-	          this.addError("birthDate", "N'a pas un format de date correct");
-	        }
-	      }
-	    }
+        if (parseInt(values[3]) > 31 || parseInt(values[2]) > 12) {
+          var msg = printf("Le champ '%s' correspond à une date au format lunaire (jour '%s' et mois '%s')",
+            this.sLabel,
+            values[3],
+            values[2]
+          );
+           
+          // Attention, un seul printf() ne fonctionne pas
+          msg += ".\n\nVoulez vous néanmoins sauvegarder ?";
+          
+          if (!confirm(msg)) {
+            this.addError("birthDate", "N'a pas un format de date correct");
+          }
+        }
+      }
     },
     
     // date
     date: function() {
-    	if (["now", "current"].include(this.sValue)) {
-    		return;
-    	}
+      if (["now", "current"].include(this.sValue)) {
+        return;
+      }
       
       if(this.sValue == "0000-00-00" && this.oProperties.notNull)
         this.addError("date", "N'est pas une date correcte");
@@ -453,9 +459,9 @@ Object.extend(ElementChecker, {
     
     // time
     time: function() {
-    	if (["now", "current"].include(this.sValue)) {
-    		return;
-    	}
+      if (["now", "current"].include(this.sValue)) {
+        return;
+      }
 
       if(!this.sValue.match(/^\d{1,2}:\d{1,2}(:\d{1,2})?$/))
         this.addError("time", "N'a pas un format d'heure correct");
@@ -463,10 +469,10 @@ Object.extend(ElementChecker, {
     
     // dateTime
     dateTime: function() {
-    	if (["now", "current"].include(this.sValue)) {
-    		return;
-    	}
-    	
+      if (["now", "current"].include(this.sValue)) {
+        return;
+      }
+      
       if (!this.sValue.match(/^\d{4}-\d{1,2}-\d{1,2}[ \+]\d{1,2}:\d{1,2}(:\d{1,2})?$/))
         this.addError("dateTime", "N'a pas un format de date/heure correct");
     },
@@ -487,7 +493,7 @@ Object.extend(ElementChecker, {
     // pct
     pct: function() {
       this.toNumeric();
-			
+      
       if (!this.sValue.match(/^\d+(\.\d+)?$/))
         this.addError("pct", "N'est pas une valeur décimale");
     },
@@ -639,24 +645,24 @@ function checkForm(oForm) {
   * Est utile pour la validation lors de la saisie du formulaire.
   */
 function checkFormElement(oElement) {
-	ElementChecker.prepare(oElement);
-	
-	// Recuperation de l'element HTML qui accueillera le message.
-	var oMsg = $(oElement.id+'_message');
-	if (oMsg && ElementChecker.oProperties.password) {
+  ElementChecker.prepare(oElement);
+  
+  // Recuperation de l'element HTML qui accueillera le message.
+  var oMsg = $(oElement.id+'_message');
+  if (oMsg && ElementChecker.oProperties.password) {
     ElementChecker.checkElement();
-		if (ElementChecker.oErrors.length) {
-			oMsg.innerHTML = 'Sécurité trop faible : <br />'+ElementChecker.getErrorMessage().gsub("\n", "<br />");
-			oMsg.style.backgroundColor = '#FF7A7A';
-		} 
-		else {
-			oMsg.innerHTML = 'Sécurité correcte';
-			oMsg.style.backgroundColor = '#33FF66';
-		}
-	}
-	if (oElement.value == '') {
-		oMsg.innerHTML = '';
-		oMsg.style.background = 'none';
-	}
-	return true;
+    if (ElementChecker.oErrors.length) {
+      oMsg.innerHTML = 'Sécurité trop faible : <br />'+ElementChecker.getErrorMessage().gsub("\n", "<br />");
+      oMsg.style.backgroundColor = '#FF7A7A';
+    } 
+    else {
+      oMsg.innerHTML = 'Sécurité correcte';
+      oMsg.style.backgroundColor = '#33FF66';
+    }
+  }
+  if (oElement.value == '') {
+    oMsg.innerHTML = '';
+    oMsg.style.background = 'none';
+  }
+  return true;
 }

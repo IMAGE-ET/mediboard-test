@@ -57,7 +57,7 @@ class CProductDeliveryTrace extends CMbObject {
     $specs['delivery_id']    = 'ref notNull class|CProductDelivery';
     $specs['code']           = 'str maxLength|32';
     
-    $type = (CAppUI::conf("dPstock CProductStock allow_quantity_fractions") ? "float" : "num");
+    $type = (CProductStock::$allow_quantity_fractions ? "float" : "num");
     $specs['quantity']       = "$type notNull";
     
     $specs['date_delivery']  = 'dateTime';

@@ -95,7 +95,7 @@ class CProductDelivery extends CMbObject {
     $specs['datetime_min']      = 'dateTime notNull';
     $specs['datetime_max']      = 'dateTime notNull moreEquals|datetime_min';
     
-    $type = (CAppUI::conf("dPstock CProductStock allow_quantity_fractions") ? "float" : "num");
+    $type = (CProductStock::$allow_quantity_fractions ? "float" : "num");
     $specs['quantity']          = "$type notNull";
     $specs['order']             = 'bool default|0';
     $specs['manual']            = 'bool default|0';

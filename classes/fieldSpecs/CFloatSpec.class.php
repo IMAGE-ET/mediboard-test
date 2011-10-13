@@ -93,12 +93,12 @@ class CFloatSpec extends CMbFieldSpec {
     
     $min = CMbArray::extract($params, "min");
     if ($min === null) {
-      $min = CMbFieldSpec::checkNumeric($this->min);
+      $min = CMbFieldSpec::checkNumeric($this->min, false);
     }
     
     $max = CMbArray::extract($params, "max");
     if ($max === null) {
-      $max = CMbFieldSpec::checkNumeric($this->max);
+      $max = CMbFieldSpec::checkNumeric($this->max, false);
     }
     
     $new_value = CMbArray::extract($params, "value");
@@ -109,7 +109,7 @@ class CFloatSpec extends CMbFieldSpec {
       $decimals = isset($this->precise) ? 4 : 2;
     }
     
-    $step = $this->checkNumeric(CMbArray::extract($params, "step"));
+    $step = CMbFieldSpec::checkNumeric(CMbArray::extract($params, "step"), false);
     
     CMbArray::defaultValue($params, "size", min($maxLength, 20));
     CMbArray::defaultValue($params, "maxlength", $maxLength);

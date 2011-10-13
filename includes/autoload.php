@@ -13,8 +13,7 @@
  * @link       http://www.mediboard.org
  */
 
-global $performance;
-$performance["autoload"] = 0;
+CApp::$performance["autoload"] = 0;
 
 $classPaths = SHM::get("class-paths");
 
@@ -25,7 +24,7 @@ $classPaths = SHM::get("class-paths");
  * @return bool
  */
 function mbAutoload($class) {
-  global $classPaths, $performance;
+  global $classPaths;
   
   $file_exists = false;
   
@@ -38,7 +37,7 @@ function mbAutoload($class) {
     
     // Load it if we can
     if ($file_exists = file_exists($classPaths[$class])) {
-      $performance["autoload"]++;
+      CApp::$performance["autoload"]++;
       return include_once $classPaths[$class];
     }
   }

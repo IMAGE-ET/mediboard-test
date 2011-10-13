@@ -45,12 +45,14 @@ class CProductStock extends CMbObject {
   var $_ref_location            = null;
   
   var $_ref_related_locations   = null;
+  
+  static $allow_quantity_fractions = false;
 
   function getProps() {
     $specs = parent::getProps();
     $specs['product_id']               = 'ref notNull class|CProduct autocomplete|name show|0 dependsOn|cancelled';
     
-    $type = (CAppUI::conf("dPstock CProductStock allow_quantity_fractions") ? "float" : "num");
+    $type = (CProductStock::$allow_quantity_fractions ? "float" : "num");
     $specs['quantity']                 = "$type notNull";
     
     $specs['order_threshold_critical'] = 'num min|0';
@@ -104,7 +106,7 @@ class CProductStock extends CMbObject {
     $this->_package_mod      = $this->quantity % $units;
     $this->_package_quantity = $this->quantity / $units;
     
-    if ($this->_package_mod || !CAppUI::conf("dPstock CProductStock allow_quantity_fractions")) {
+    if ($this->_package_mod || !CProductStock::$allow_quantity_fractions) {
       $this->_package_quantity = floor($this->_package_quantity);
     }
 
@@ -190,4 +192,8 @@ class CProductStock extends CMbObject {
   function setHost(CMbObject $host) {
     trigger_error(__METHOD__." not implemented");
   }
+}
+
+if (CAppUI::conf("dPstock CProductStock allow_quantity_fractions")) {
+  CProductStock::$allow_quantity_fractions = true;
 }

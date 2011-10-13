@@ -188,7 +188,7 @@ function print_infos($var, $name = '') {
  * @return null
  */
 function errorHandler($errorCode, $errorText, $errorFile, $errorLine, $errContext, $backTrace = null) {
-  global $divClasses, $errorTypes, $errorCategories, $performance;
+  global $divClasses, $errorTypes, $errorCategories;
   
 // See ALL errors
 //  echo "<br />[$errno] : $errorText, $errorFile : $errorLine";
@@ -259,7 +259,7 @@ function errorHandler($errorCode, $errorText, $errorFile, $errorLine, $errContex
   
   $log .= "</div>";
   
-  $performance[$errorCategories[$errorCode]]++;
+  CApp::$performance[$errorCategories[$errorCode]]++;
   
   if (ini_get("log_errors")) {
     file_put_contents(LOG_PATH, $log, FILE_APPEND);

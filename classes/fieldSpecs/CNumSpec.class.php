@@ -77,21 +77,19 @@ class CNumSpec extends CMbFieldSpec {
   }
 
   function checkProperty($object){
-    $propValue = CMbFieldSpec::checkNumeric($object->{$this->fieldName}, false);
+    $propValue = CMbFieldSpec::checkNumeric($object->{$this->fieldName});
     
-    if($propValue === null){
+    if ($propValue === null){
       return "N'est pas une chaîne numérique";
     }
 
     // pos
-    if($this->pos){
-      if ($propValue <= 0) {
-        return "Doit avoir une valeur positive";
-      }
+    if ($this->pos && $propValue <= 0) {
+      return "Doit avoir une valeur positive";
     }  
 
     // min
-    if($this->min){
+    if ($this->min){
       if(!$min = CMbFieldSpec::checkNumeric($this->min)){
         trigger_error("Spécification de minimum numérique invalide (min = $this->min)", E_USER_WARNING);
         return "Erreur système";

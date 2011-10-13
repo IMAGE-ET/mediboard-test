@@ -27,8 +27,6 @@ $datetime_max = CValue::getOrSession('_datetime_max');
 CPrescriptionLineMedicament::$_load_lite = true;
 CPrescriptionLineMixItem::$_load_lite = true;
 
-$allow_quantity_fractions = CAppUI::conf("dPstock CProductStock allow_quantity_fractions") == 1;
-
 $prescription = new CPrescription();
 $nb_done_total = array();
 $prises = array();
@@ -164,7 +162,7 @@ if($prescriptions) {
   }
 }  
 
-if (!$allow_quantity_fractions) {
+if (!CProductStock::$allow_quantity_fractions) {
   foreach($besoin_patient as &$quantites_by_patient){
     foreach($quantites_by_patient as &$quantites){
       if(strstr($quantites["quantite_dispensation"], '.')){
@@ -182,7 +180,7 @@ foreach($dispensations as $code => $unites){
     unset($dispensations[$code]); continue;
   }
   
-  if(!$allow_quantity_fractions && strstr($dispensations[$code]["quantite_dispensation"], '.')){
+  if(!CProductStock::$allow_quantity_fractions && strstr($dispensations[$code]["quantite_dispensation"], '.')){
     $dispensations[$code]["quantite_dispensation"] = ceil($dispensations[$code]["quantite_dispensation"]);
   }
     
@@ -363,7 +361,7 @@ foreach($delivrances as $code_cis => $_delivrance){
         
         $_planif_quantite_disp = $prises[$code_cis][$produit->code_cip][$_planif_id]["quantite_adm"] * $ratio;
         
-        if (!$allow_quantity_fractions) {
+        if (!CProductStock::$allow_quantity_fractions) {
           $_planif_quantite_disp = ceil($_planif_quantite_disp);
         }
         
@@ -375,7 +373,7 @@ foreach($delivrances as $code_cis => $_delivrance){
     $administration = $dispensations[$code_cis]["quantite_administration"];
     $quantite_dispensation = $ratio*$administration;
     
-    if(!$allow_quantity_fractions && strstr($quantite_dispensation, '.')){
+    if(!CProductStock::$allow_quantity_fractions && strstr($quantite_dispensation, '.')){
       $quantite_dispensation = ceil($quantite_dispensation);
     }
     

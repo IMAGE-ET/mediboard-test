@@ -15,30 +15,6 @@
 require "./includes/compat.php";
 require "./includes/magic_quotes_gpc.php";
 
-/* 
- * The order of the keys is important (only the first keys 
- * are displayed in the short view of the Firebug console).
- */
-$performance = array(
-  // Performance
-  "genere" => null,
-  "memoire" => null,
-  "size" => null,
-  "objets" => 0,
-  
-  // Errors
-  "error" => 0,
-  "warning" => 0,
-  "notice" => 0,
-  
-  // Cache
-  "cachableCount" => null,
-  "cachableCounts" => null,
-  
-  // Objects
-  "objectCounts" => null,
-);
-
 if (!is_file("./includes/config.php")) {
   header("Location: install/");
   die("Redirection vers l'assistant d'installation");
@@ -72,25 +48,20 @@ if (!is_file($dPconfig["root_dir"]."/includes/config.php")) {
   die("ERREUR FATALE: Le répertoire racine est probablement mal configuré");
 }
 
-require "./classes/SHM.class.php";
-require "./includes/mb_functions.php";
-require "./includes/errors.php";
-
 date_default_timezone_set($dPconfig["timezone"]);
 
-// Start chrono
+// Cord classes and functions
+require "./includes/mb_functions.php";
+require "./includes/errors.php";
+require "./classes/SHM.class.php";
 require "./classes/Chronometer.class.php";
-$phpChrono = new Chronometer;
-$phpChrono->main = true;
-$phpChrono->start();
-
-// Load AppUI from session
 require "./classes/CApp.class.php";
 require "./classes/CAppUI.class.php";
 
-// Register shutdown
+// Shutdown function
 register_shutdown_function(array("CApp", "checkPeace"));
 
+// DBMS
 require "./classes/CSQLDataSource.class.php";
 require "./classes/CMySQLDataSource.class.php";
 require "./classes/CMySQLiDataSource.class.php";
@@ -102,16 +73,12 @@ if (!CSQLDataSource::get("std")) {
 
 require "./classes/CSessionHandler.class.php";
 require "./includes/session.php";
-
-// Write the HTML headers
-header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");  // Date in the past
-header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");  // always modified
-header("Cache-Control: no-cache, no-store, must-revalidate");  // HTTP/1.1
-header("Pragma: no-cache");  // HTTP/1.0
-header("X-UA-Compatible: IE=8"); // Force IE8 mode
-//header("X-UA-Compatible: IE=8;chrome=1"); // To use the ChromeFrame plugin in IE
-
 require "./includes/autoload.php";
+
+// Start chrono (after session_start as it may be locked by another request)
+$phpChrono = new Chronometer;
+$phpChrono->main = true;
+$phpChrono->start();
 
 // Load default preferences if not logged in
 if (!CAppUI::$instance->user_id) {
@@ -182,7 +149,7 @@ if (isset($_REQUEST["login"])) {
 // clear out main url parameters
 $m = $a = $u = $g = "";
 
-// load locale settings
+// Locale
 require "./locales/core.php";
 
 if (empty($locale_info["names"])) {
@@ -194,13 +161,21 @@ if (empty($locale_info["charset"])) {
   $locale_info["charset"] = "UTF-8";
 }
 
-CApp::$encoding = $locale_info["charset"];
 // We don't use mb_internal_encoding as it may be redefined by libs
+CApp::$encoding = $locale_info["charset"];
 
-// output the character set header
+// Character set
 if (!$suppressHeaders || $ajax) {
   header("Content-type: text/html;charset=".CApp::$encoding);
 }
+
+// HTTP headers
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");  // Date in the past
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");  // always modified
+header("Cache-Control: no-cache, no-store, must-revalidate");  // HTTP/1.1
+header("Pragma: no-cache");  // HTTP/1.0
+header("X-UA-Compatible: IE=8"); // Force IE8 mode
+//header("X-UA-Compatible: IE=8;chrome=1"); // To use the ChromeFrame plugin in IE
 
 // Show errors to admin
 ini_set("display_errors", CAppUI::pref("INFOSYSTEM"));
@@ -216,10 +191,7 @@ if ($user->isInstalled()) {
 ob_start();
 
 // We check if the mobile feature is available and if the user agent is a mobile
-if (is_file("./mobile/main.php") 
-    && isset($_SESSION['browser']['mobile']) 
-    && $_SESSION['browser']['mobile']
-) {
+if (is_file("./mobile/main.php") && !empty($_SESSION["browser"]["mobile"])) {
   include "./mobile/main.php";
 }
 else {

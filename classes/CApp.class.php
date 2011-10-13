@@ -14,6 +14,30 @@
 class CApp {
   static $inPeace = false;
   static $encoding = "utf-8";
+  
+  /* 
+   * The order of the keys is important (only the first keys 
+   * are displayed in the short view of the Firebug console).
+   */
+  static $performance = array(
+    // Performance
+    "genere" => null,
+    "memoire" => null,
+    "size" => null,
+    "objets" => 0,
+    
+    // Errors
+    "error" => 0,
+    "warning" => 0,
+    "notice" => 0,
+    
+    // Cache
+    "cachableCount" => null,
+    "cachableCounts" => null,
+    
+    // Objects
+    "objectCounts" => null,
+  );
     
   /**
    * Will trigger an error for logging purpose whenever the application dies unexpectedly

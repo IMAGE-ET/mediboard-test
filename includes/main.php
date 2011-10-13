@@ -108,7 +108,7 @@ if (!CAppUI::$instance->user_id) {
   // Ajax login alert
   if ($ajax) {
     $tplAjax = new CSmartyDP("modules/system");
-    $tplAjax->assign("performance", $performance);
+    $tplAjax->assign("performance", CApp::$performance);
     $tplAjax->display("ajax_errors.tpl");
   }
   else {
@@ -302,15 +302,15 @@ if ($limit &&
 arsort(CMbObject::$cachableCounts);
 arsort(CMbObject::$objectCounts);
 
-$performance["genere"]         = number_format($phpChrono->total, 3);
-$performance["memoire"]        = CMbString::toDecaBinary($memory_peak);
-$performance["objets"]         = CMbObject::$objectCount;
-$performance["cachableCount"]  = array_sum(CMbObject::$cachableCounts);
-$performance["cachableCounts"] = CMbObject::$cachableCounts;
-$performance["objectCounts"]   = CMbObject::$objectCounts;
+CApp::$performance["genere"]         = number_format($phpChrono->total, 3);
+CApp::$performance["memoire"]        = CMbString::toDecaBinary($memory_peak);
+CApp::$performance["objets"]         = CMbObject::$objectCount;
+CApp::$performance["cachableCount"]  = array_sum(CMbObject::$cachableCounts);
+CApp::$performance["cachableCounts"] = CMbObject::$cachableCounts;
+CApp::$performance["objectCounts"]   = CMbObject::$objectCounts;
 
-$performance["size"] = CMbString::toDecaBinary(ob_get_length());
-$performance["ccam"] = array (
+CApp::$performance["size"] = CMbString::toDecaBinary(ob_get_length());
+CApp::$performance["ccam"] = array (
   "cacheCount" => class_exists('CCodeCCAM') ? CCodeCCAM::$cacheCount : 0,
   "useCount"   => class_exists('CCodeCCAM') ? CCodeCCAM::$useCount : 0
 );
@@ -320,7 +320,7 @@ foreach (CSQLDataSource::$dataSources as $dsn => $ds) {
   if (!$ds) continue;
   
   $chrono = $ds->chrono;
-  $performance["dataSources"][$dsn] = array(
+  CApp::$performance["dataSources"][$dsn] = array(
     "count" => $chrono->nbSteps,
     "time" => $chrono->total,
   );
@@ -340,7 +340,7 @@ if (!$suppressHeaders) {
   $tplFooter = new CSmartyDP("style/$uistyle");
   $tplFooter->assign("offline"       , false);
   $tplFooter->assign("debugMode"     , $debug);
-  $tplFooter->assign("performance"   , $performance);
+  $tplFooter->assign("performance"   , CApp::$performance);
   //$tplFooter->assign("userIP"        , $address["client"]);
   $tplFooter->assign("errorMessage"  , CAppUI::getMsg());
   $tplFooter->display("footer.tpl");
@@ -349,6 +349,6 @@ if (!$suppressHeaders) {
 // Ajax performance
 if ($ajax) {
   $tplAjax = new CSmartyDP("modules/system");
-  $tplAjax->assign("performance", $performance);
+  $tplAjax->assign("performance", CApp::$performance);
   $tplAjax->display("ajax_errors.tpl");
 }

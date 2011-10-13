@@ -240,6 +240,10 @@ else {
  */ 
 var Assert = {
   that: function (bPredicate, sMsg) {
+    if (Preferences.INFOSYSTEM != 1) {
+      return;
+    }
+		
     if (!bPredicate) {
       var aArgs = $A(arguments);
       aArgs.shift();

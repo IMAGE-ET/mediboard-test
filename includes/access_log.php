@@ -41,9 +41,9 @@ $log->processor   += floatval($rusage["ru_stime.tv_usec"]) / 1000000 + $rusage["
 $log->request     += $ds->chrono->total;
 $log->size        += ob_get_length();
 $log->peak_memory += memory_get_peak_usage();
-$log->errors      += $performance["error"];
-$log->warnings    += $performance["warning"];
-$log->notices     += $performance["notice"];
+$log->errors      += CApp::$performance["error"];
+$log->warnings    += CApp::$performance["warning"];
+$log->notices     += CApp::$performance["notice"];
 
 // Fast store
 if ($msg = $log->fastStore()) {
