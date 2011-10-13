@@ -1711,7 +1711,10 @@ class CSejour extends CCodable implements IPatientRelated {
     // Prescriptions
     $lines = array();
     if(CModule::getActive('dPprescription')){
-      $prescription = $this->_ref_prescription_sejour;
+      
+      $prescription = $this->loadRefPrescriptionSejour();
+      $prescription->loadRefsLinesAllComments();
+      $prescription->loadRefsLinesElement();
       
       if(isset($prescription->_ref_prescription_lines_all_comments)){
         foreach($prescription->_ref_prescription_lines_all_comments as $_comment){
@@ -1719,6 +1722,7 @@ class CSejour extends CCodable implements IPatientRelated {
           $lines["$_comment->debut $_comment->time_debut $_comment->_guid"] = "$_comment->_view, $datetime, {$_comment->_ref_praticien->_view}";
         }
       }
+      
       if(isset($prescription->_ref_prescription_lines_element)){
         foreach($prescription->_ref_prescription_lines_element as $_line_element){
           $datetime = mbTransformTime(null, "$_line_element->debut $_line_element->time_debut", CAppUI::conf('datetime'));
