@@ -63,29 +63,36 @@ deliveryTraceInfo = function(delivery_trace_id) {
 		{{/if}}
     <th>{{mb_title class=CProductDelivery field=patient_id}}</th>
     <th>{{mb_title class=CProductStockGroup field=location_id}}</th>
-    <th>{{mb_title class=CProductDelivery field=stock_id}}</th>
-    <th>{{mb_title class=CProductDeliveryTrace field=quantity}}</th>
-    <th>{{mb_title class=CProductDeliveryTrace field=target_location_id}}</th>
     <th>Raison</th>
     {{* <th>{{mb_title class=CProductDelivery field=comments}}</th> *}}
+    <th>{{mb_title class=CProductDeliveryTrace field=target_location_id}}</th>
+    <th>{{mb_title class=CProductDeliveryTrace field=quantity}}</th>
 	</tr>
-	{{foreach from=$delivery_traces item=_trace}}
-	  <tr>
-	  	{{* <td><button type="button" onclick="deliveryTraceInfo({{$_trace->_id}})" class="search"></button> *}}
-      <td>{{mb_value object=$_trace field=date_delivery}}</td>
-	    {{if !$delivery->service_id}}
-	      <td>{{mb_value object=$_trace->_ref_delivery field=service_id}}</td>
-			{{/if}}
-      <td>{{mb_value object=$_trace->_ref_delivery field=patient_id}}</td>
-      <td>{{mb_value object=$_trace->_ref_delivery->_ref_stock->_ref_location field=name}}</td>
-      <td><strong>{{mb_value object=$_trace->_ref_delivery field=stock_id}}</strong></td>
-      <td style="background: {{if $_trace->quantity > 0}}#dfd{{else}}#fdd{{/if}}">
-			  {{mb_value object=$_trace field=quantity}}
-				{{$_trace->_ref_delivery->_ref_stock->_ref_product->_unit_title|truncate:30}}
-			</td>
-      <td>{{mb_value object=$_trace field=target_location_id}}</td>
-      <td>{{if $_trace->_ref_delivery->type}}{{mb_value object=$_trace->_ref_delivery field=type}}{{/if}}</td>
-      {{* <td>{{mb_value object=$_trace->_ref_delivery field=comments}}</td> *}}
+	
+  {{foreach from=$products item=_product}}
+		<tr>
+			<th class="title" colspan="{{$delivery->service_id|ternary:5:6}}">{{$_product}}</th>
+			<th class="title" style="text-align: left;">
+				{{$_product->_total}}
+				{{$_product->_unit_title|truncate:30}}
+			</th>
 		</tr>
-	{{/foreach}}
+		{{foreach from=$_product->_traces item=_trace}}
+		  <tr>
+		  	{{* <td><button type="button" onclick="deliveryTraceInfo({{$_trace->_id}})" class="search"></button> *}}
+	      <td>{{mb_value object=$_trace field=date_delivery}}</td>
+		    {{if !$delivery->service_id}}
+		      <td>{{mb_value object=$_trace->_ref_delivery field=service_id}}</td>
+				{{/if}}
+	      <td>{{mb_value object=$_trace->_ref_delivery field=patient_id}}</td>
+	      <td>{{mb_value object=$_trace->_ref_delivery->_ref_stock->_ref_location field=name}}</td>
+        <td>{{mb_value object=$_trace field=target_location_id}}</td>
+        <td>{{if $_trace->_ref_delivery->type}}{{mb_value object=$_trace->_ref_delivery field=type}}{{/if}}</td>
+        {{* <td>{{mb_value object=$_trace->_ref_delivery field=comments}}</td> *}}
+	      <td style="background: {{if $_trace->quantity > 0}}#dfd{{else}}#fdd{{/if}}">
+				  {{mb_value object=$_trace field=quantity}}
+				</td>
+			</tr>
+		{{/foreach}}
+  {{/foreach}}
 </table>

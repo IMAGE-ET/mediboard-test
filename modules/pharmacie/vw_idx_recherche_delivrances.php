@@ -45,9 +45,28 @@ $ljoin = array(
 );
 $delivery_traces = $delivery_trace->loadList($where, "product_delivery_trace.date_delivery", 1000, null, $ljoin);
 
+$products = array();
 foreach($delivery_traces as $_trace) {
-	$_trace->loadRefDelivery()->loadRefStock();
+	$_stock = $_trace->loadRefDelivery()->loadRefStock();
+	
+	$_product = $_stock->loadRefProduct();
+	
+	if (!isset($_product->_total)) {
+		$_product->_total = 0;
+    $_product->_traces = array();
+	}
+	
+	$_product->_total += $_trace->quantity;
+	$_product->_traces[] = $_trace;
+	
+	$products[$_stock->product_id] = $_product;
 }
+
+function sortProduct($a, $b){
+	return strcmp($a->name, $b->name);
+}
+
+usort($products, "sortProduct");
 
 $service = new CService;
 $services = $service->loadListWithPerms(PERM_READ);
@@ -57,5 +76,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("delivery", $delivery);
 $smarty->assign("delivery_trace", $delivery_trace);
 $smarty->assign("delivery_traces", $delivery_traces);
+$smarty->assign("products", $products);
 $smarty->assign("services", $services);
 $smarty->display("vw_idx_recherche_delivrances.tpl");

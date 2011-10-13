@@ -1841,6 +1841,6 @@ div.cellule_patient {
 tr.in_progress_before, tr.in_progress_after {
   display: none !important;
 }
-tr .show_important {
-  display: block !important;
+tr.show_important {
+  display: table-row !important;
 }

@@ -15,6 +15,7 @@ function updateDays() {
 }
 </script>
 
+{{* 
 <table class="form">
   <col style="width: 50%" />
 
@@ -30,6 +31,7 @@ function updateDays() {
     </td>
   </tr>
 </table>
+*}}
 
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="dosql" value="do_configure" />
@@ -43,6 +45,7 @@ function updateDays() {
     
     {{mb_include module=system template=inc_config_bool var=show_totals_in_lists}}
     {{mb_include module=system template=inc_config_str var=num_days_date_min numeric=true size=3}}
+    {{* {{mb_include module=system template=inc_config_bool var=ask_stock_location_administration}} *}}
   
 	  <tr>
 	  	<th colspan="2" class="category">

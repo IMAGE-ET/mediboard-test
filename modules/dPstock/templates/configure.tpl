@@ -60,6 +60,7 @@ Main.add(function(){
     <tr><th class="category" colspan="2">{{tr}}{{$class}}{{/tr}}</th></tr>
     {{mb_include module=system template=inc_config_bool var=advanced_bargraph}}
     {{mb_include module=system template=inc_config_bool var=hide_bargraph}}
+    {{mb_include module=system template=inc_config_bool var=allow_quantity_fractions}}
     
     {{assign var="class" value="CProductStockGroup"}}
     <tr><th class="category" colspan="2">{{tr}}{{$class}}{{/tr}}</th></tr>

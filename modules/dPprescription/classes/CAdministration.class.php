@@ -27,6 +27,7 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
   var $_heure = null;
   
   var $_quantite_prevue = null;
+  var $_stock_location_id = null;
   
   // Object references
   var $_ref_administrateur = null;
@@ -78,6 +79,7 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
     $specs["planification"]     = "bool default|0";
     $specs["original_dateTime"] = "dateTime";
     $specs["constantes_medicales_id"] = "ref class|CConstantesMedicales show|0";
+    $specs["_stock_location_id"] = "ref class|CProductStockLocation notNull";
     return $specs;
   }
 	

@@ -143,7 +143,7 @@ Main.add( function(){
 		        </tr>
 		        {{/if}}
 		        <tr>
-		          <td id="adm_{{$key}}">
+		          <td id="adm_{{$key}}" style="vertical-align: middle;">
 		            {{if $by_hour.line->_class == "CPrescriptionLineMedicament"}}
 								  {{if $by_hour.line->_ref_produit_prescription->_id}}
 									  {{assign var=unite_prise value=$by_hour.line->_ref_produit_prescription->unite_prise}}
@@ -180,6 +180,9 @@ Main.add( function(){
 		              </div>
 		            {{/if}}
 		          </td>
+			        <td>
+			          {{mb_include module=pharmacie template=inc_chose_stock_location_administration adm=$new_adm line=$by_hour.line}}
+			        </td>
 		        </tr>
 		      {{/foreach}}
 		    {{/foreach}}
@@ -191,7 +194,7 @@ Main.add( function(){
 		    <th class="title" colspan="2">{{tr}}CTransmissionMedicale{{/tr}}</th>
 		  </tr>
 		  <tr>
-		    <td>
+		    <td colspan="2">
           {{assign var=hide_button_add value=1}}
           {{mb_include module=dPhospi template=inc_transmission refreshTrans=0}}
 		    </td>

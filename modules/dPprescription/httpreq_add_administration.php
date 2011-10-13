@@ -151,6 +151,10 @@ if ($line instanceof CPrescriptionLineElement) {
   $latest_constantes = $patient->loadRefConstantesMedicales();
 }
 
+if (CAppUI::conf("pharmacie ask_stock_location_administration")) {
+  $line->loadRefsProductsStocks();
+}
+
 $new_adm = new CAdministration();
 $new_adm->_date = mbDate($dateTime);
 $new_adm->_time = mbTime($dateTime);

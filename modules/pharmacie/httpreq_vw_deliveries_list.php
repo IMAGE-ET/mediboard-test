@@ -11,7 +11,7 @@
 CCanDo::checkRead();
 
 $delivery_id       = CValue::get('delivery_id');
-$mode              = CValue::getOrSession('mode', "global");
+$mode              = CValue::get('mode');
 $display_delivered = CValue::getOrSession('display_delivered', 'false') == 'true';
 $order_col         = CValue::get('order_col');
 $order_way         = CValue::get('order_way');
@@ -28,6 +28,7 @@ $datetime_max = CValue::getOrSession('_datetime_max');
 $list_moments = array();
 $nom_moments  = array();
 $color_moments  = array();
+$lines = array();
 
 for($i=1; $i<6; $i++){
   $conf_periodes[] = CAppUI::conf("pharmacie periode_$i");
@@ -62,6 +63,18 @@ for($_date = $_date_min; $_date <= $_date_max; $_date = mbDate("+ 1 DAY", $_date
   foreach($nom_moments as $key_period => $_moment){
     $pilulier_init[$_date][$key_period] = "";
   }
+}
+  
+$delivery = new CProductDelivery();
+if($delivery_id){
+  $delivery->load($delivery_id);
+  if ($delivery->patient_id) {
+    $mode = "nominatif";
+  }
+  
+  $services = array(
+    $delivery->service_id => $delivery->loadRefService()
+  );
 }
 
 if (!in_array($mode, array("global", "nominatif"))) {
@@ -111,15 +124,6 @@ $ljoin = array(
   "product_stock_location" => "product_stock_location.stock_location_id = product_stock_group.location_id",
   "product" => "product.product_id = product_stock_group.product_id",
 );
-  
-$delivery = new CProductDelivery();
-$lines = array();
-if($delivery_id){
-  $delivery->load($delivery_id);
-  $services = array(
-    $delivery->service_id => $delivery->loadRefService()
-  );
-}
 
 foreach($services as $_service_id => $_service) {
   // one line

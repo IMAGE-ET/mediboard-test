@@ -17,6 +17,7 @@ $dPconfig["dPstock"] = array (
   "CProductStock" => array (
     "advanced_bargraph" => '0',
     "hide_bargraph" => '0',
+    "allow_quantity_fractions" => '0',
   ),
   "CProductStockGroup" => array (
     "infinite_quantity" => '0',

@@ -38,10 +38,10 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
   var $emplacement         = null;
   
   var $perop               = null;
-	var $inscription         = null;
-	var $protocole_id        = null;
-	var $recusee             = null;
-	
+  var $inscription         = null;
+  var $protocole_id        = null;
+  var $recusee             = null;
+  
   // Form Fields
   var $_fin                = null;
   var $_protocole          = null;
@@ -67,7 +67,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
   var $_ref_administrations = null;
   var $_ref_transmissions   = null;
   var $_ref_alerte = null;
-	
+  
   // Dossier/Feuille de soin
   var $_administrations = null;          // Administrations d'une ligne stockées par date, heure, type de prise
   var $_administrations_by_line = null; // Administrations d'une ligne stockées par date
@@ -78,18 +78,18 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
   var $_nb_prises_interv = null; // Nombre de prises qui dependent de l'intervention
   var $_update_planif_systeme = null; // Permet de forcer le calcul des planifs systemes pour une ligne
   var $_count_locked_planif = null;
-	var $_planifs_systeme = array();
-	var $_urgence = null;
+  var $_planifs_systeme = array();
+  var $_urgence = null;
   var $_duree   = null;
   var $_count_administrations = null;
-	
+  
 
   // Can fields
   var $_perm_edit = null;
   var $_dates_urgences = null;
   
-	static $contexte_recent_modif = null;
-	
+  static $contexte_recent_modif = null;
+  
   function getProps() {
     $specs = parent::getProps();
     $specs["prescription_id"]   = "ref notNull class|CPrescription cascade";
@@ -140,13 +140,13 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $this->loadRefPraticien();
     $this->_protocole = ($this->_ref_prescription->object_id) ? "0" : "1";
     
-		
-		$this->_active = (!$this->conditionnel) ? 1 : $this->condition_active;
+    
+    $this->_active = (!$this->conditionnel) ? 1 : $this->condition_active;
     $this->getRecentModification();
     $this->calculDatesUrgences();
-		
-		$this->_fin = "";
-		
+    
+    $this->_fin = "";
+    
     if($this->duree && $this->debut){
       switch ($this->unite_duree) {
         case "minute":
@@ -181,8 +181,8 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     // Calcul du debut reel de la ligne
     $time_debut = ($this->time_debut) ? $this->time_debut : "00:00:00";
     $this->_debut_reel = "$this->debut $time_debut";
-		
-		// Calcul de la fin reelle de la ligne
+    
+    // Calcul de la fin reelle de la ligne
     $time_fin = ($this->time_fin) ? $this->time_fin : "23:59:00";
   
     // Si l'unite de duree est l'heure
@@ -191,7 +191,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
       $this->_fin_reelle = mbDateTime("+ $this->duree $_unite", $this->_debut_reel);
     } else {
       $this->_fin_reelle = $this->_fin ? "$this->_fin $time_fin" : "";      
-		}
+    }
   }
   
   /*
@@ -224,8 +224,8 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
       $this->_ref_prescription = new CPrescription();
       $this->_ref_prescription = $this->_ref_prescription->getCached($this->prescription_id);
     }
-		
-		return $this->_ref_prescription;
+    
+    return $this->_ref_prescription;
   }
   
   /*
@@ -280,13 +280,13 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     }
     $this->_ref_administrations = $administration->loadList($where);
   }
-	
-	function countAdministrations(){
-	  $administration = new CAdministration();
+  
+  function countAdministrations(){
+    $administration = new CAdministration();
     $administration->setObject($this);
-		$administration->planification = 0;
-	  $this->_count_administrations = $administration->countMatchingList();
-	}
+    $administration->planification = 0;
+    $this->_count_administrations = $administration->countMatchingList();
+  }
   
   /*
    * Chargement des prises de la ligne
@@ -301,8 +301,8 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
       $prise->loadRefMoment();
       $prise->loadRefsFwd();
     }
-		
-		return $this->_ref_prises;
+    
+    return $this->_ref_prises;
   }
  
   /*
@@ -323,7 +323,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $prise->object_class = $this->_class;
     $this->_count_prises_line = $prise->countMatchinglist();  
   }
-	
+  
   /*
    * Chargement de la ligne precedent la ligne courante
    */
@@ -347,7 +347,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
       return $lines;
     }
   }
-	  
+    
   function delete(){
     // Chargement de la child_line de l'objet à supprimer
     $line = new $this->_class;
@@ -392,11 +392,11 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     // Chargement de la ligne de prescription
     $new_line = new CPrescriptionLineMedicament();
     $new_line->load($this->_id);
-		
-		if($new_line->date_arret){
-			$debut = $new_line->date_arret;
-		}
-		if($new_line->time_arret){
+    
+    if($new_line->date_arret){
+      $debut = $new_line->date_arret;
+    }
+    if($new_line->time_arret){
       $time_debut = $new_line->time_arret;
     }
 
@@ -405,7 +405,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $new_line->_id = "";
     
     // Si date_arret (cas du sejour)
-		$new_line->debut = $debut;
+    $new_line->debut = $debut;
     $new_line->time_debut = $time_debut;
     $new_line->date_arret = "";
     $new_line->time_arret = "";
@@ -413,11 +413,11 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     if($new_line->duree < 0){
       $new_line->duree = "";
     }
-		
-		if($duree){
-		  $new_line->duree = $duree;
+    
+    if($duree){
+      $new_line->duree = $duree;
     }
-		
+    
     $new_line->praticien_id = $praticien_id;
     $new_line->signee = 0;
     $new_line->valide_pharma = 0;
@@ -443,7 +443,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
       $old_line->time_arret = mbTime();
     }
     $old_line->store();
-		return $new_line->_guid;
+    return $new_line->_guid;
   }
   
   /*
@@ -486,51 +486,51 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     }
   }
   
-	/*
+  /*
    * Suppression des planifications systemes
    */
   function removePlanifSysteme(){
-		$ds = CSQLDataSource::get("std");
+    $ds = CSQLDataSource::get("std");
     $query = "DELETE planification_systeme.* FROM planification_systeme
               WHERE planification_systeme.object_id = '$this->_id'
-							AND planification_systeme.object_class = '$this->_class'";
+              AND planification_systeme.object_class = '$this->_class'";
     $ds->exec($query);
   }
-	
+  
   function loadRefAlerte(){
     $this->_ref_alerte = new CAlert();
     $this->_ref_alerte->setObject($this);
     $this->_ref_alerte->handled = "0";
     $this->_ref_alerte->loadMatchingObject();
   }
-	
+  
   /*
    * Permet de savoir si la ligne a ete recemment modifiée
    */
   function getRecentModification(){
-		if(@CAppUI::conf("object_handlers CPrescriptionAlerteHandler") && CPrescriptionLine::$contexte_recent_modif != 'ssr'){
-			$this->loadRefAlerte();
-			if($this->_ref_alerte->_id){
-				$this->_recent_modification = true;
+    if(@CAppUI::conf("object_handlers CPrescriptionAlerteHandler") && CPrescriptionLine::$contexte_recent_modif != 'ssr'){
+      $this->loadRefAlerte();
+      if($this->_ref_alerte->_id){
+        $this->_recent_modification = true;
         if($this->_ref_alerte->level == "high"){
-					 $this->_urgence = true;
+           $this->_urgence = true;
         }
-			}
-		
-		} else {
-			$service_id = isset($_SESSION["soins"]["service_id"]) && $_SESSION["soins"]["service_id"] ?
+      }
+    
+    } else {
+      $service_id = isset($_SESSION["soins"]["service_id"]) && $_SESSION["soins"]["service_id"] ?
       $_SESSION["soins"]["service_id"] : "none";
-	      
-	    if ($service_id == "NP") {
-	      $service_id = "none";
-	    }
-	    
-	    $configs = CConfigService::getAllFor($service_id);
-	    
-	    // modification recente si moins de $nb_hours heures
-	    $nb_hours = $configs["Affichage alertes de modifications"];
-	    $this->_recent_modification = $this->hasRecentLog($nb_hours);
-		}
+        
+      if ($service_id == "NP") {
+        $service_id = "none";
+      }
+      
+      $configs = CConfigService::getAllFor($service_id);
+      
+      // modification recente si moins de $nb_hours heures
+      $nb_hours = $configs["Affichage alertes de modifications"];
+      $this->_recent_modification = $this->hasRecentLog($nb_hours);
+    }
   }
   
   /*
@@ -557,7 +557,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     foreach($this->_ref_administrations as $_administration){
       $heure_adm = substr($_administration->_heure, 0, 2);
       $key_administration = $_administration->prise_id ? $_administration->prise_id : $_administration->unite_prise;
-			
+      
       $administrations =& $this->_administrations[$key_administration][$date][$heure_adm];
     
       // Planifications
@@ -577,13 +577,13 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
       else {
         $_administration->loadRefConstantesMedicales();
         // Stockage des administrations en fonction de l'heure
-				$minute = mbTransformTime(null, $_administration->dateTime, "%M");
-				if(!isset($administrations["adm_in_hour"][$minute])){
-					$administrations["adm_in_hour"][$minute] = 0;
-				}
-				$administrations["adm_in_hour"][$minute] += $_administration->quantite;
+        $minute = mbTransformTime(null, $_administration->dateTime, "%M");
+        if(!isset($administrations["adm_in_hour"][$minute])){
+          $administrations["adm_in_hour"][$minute] = 0;
+        }
+        $administrations["adm_in_hour"][$minute] += $_administration->quantite;
 
-			  if(!isset($administrations['quantite'])){
+        if(!isset($administrations['quantite'])){
           $administrations['quantite'] = '';
           $administrations['administrations'][$_administration->_id] = '';
         }
@@ -634,7 +634,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
         }
       } 
     }
-		
+    
     if(!$this->_ref_prises){
       $this->loadRefsPrises();
     }
@@ -645,30 +645,30 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
    * return planifs
    */
   function calculPlanifSysteme(){
-  	if(!CPlanificationSysteme::$_calcul_planif){
-  		return;
-  	}
-		
-		  
+    if(!CPlanificationSysteme::$_calcul_planif){
+      return;
+    }
+    
+      
     if(!$this->_ref_prises){
       $this->loadRefsPrises();
     }
     if($this instanceof CPrescriptionLineElement && $this->debut && $this->time_debut){
-    	$chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;
+      $chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;
       
-			// On genere une planif a la date et heure de debut si aucune poso n'est presente
-			if($this->debut && $this->time_debut && count($this->_ref_prises) == 0){
-				$new_planif = new CPlanificationSysteme();
+      // On genere une planif a la date et heure de debut si aucune poso n'est presente
+      if($this->debut && $this->time_debut && count($this->_ref_prises) == 0){
+        $new_planif = new CPlanificationSysteme();
         $new_planif->dateTime = "$this->debut $this->time_debut";
-	      $new_planif->object_id = $this->_id;
-	      $new_planif->object_class = $this->_class;
+        $new_planif->object_id = $this->_id;
+        $new_planif->object_class = $this->_class;
         $new_planif->sejour_id = $this->_ref_prescription->object_id;    
         $new_planif->store();
-			}
+      }
     }
-		
+    
     foreach($this->_ref_prises as &$_prise) {
-    	$_prise->calculPlanifs();
+      $_prise->calculPlanifs();
     }
   }
   
@@ -678,25 +678,25 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
   function calculPrises($prescription, $date, $name_chap = "", $name_cat = "", $with_calcul = true, $manual_planif = false) {
     $total_day = 0;
 
-		// Chargement des planifications pour la date courante
-		$planif = new CPlanificationSysteme();
+    // Chargement des planifications pour la date courante
+    $planif = new CPlanificationSysteme();
     $where["object_id"] = " = '$this->_id'";
     $where["object_class"] = " = '$this->_class'";
     $where["dateTime"] = " LIKE '$date%'";
-		
+    
     $planifs = $planif->loadList($where, "dateTime");
-			
+      
     foreach($this->_ref_prises as &$_prise) {
-    	// Mise a jour de la quantite (en fonction du poids et de l'unite d'administration)
+      // Mise a jour de la quantite (en fonction du poids et de l'unite d'administration)
       $_prise->updateQuantite();
       
       // Cle permettant de ranger les prises prevues, unite_prise si la prise est de type moment sinon prise->_id
-			if($this instanceof CPrescriptionLineElement){
+      if($this instanceof CPrescriptionLineElement){
         $key_tab = ($_prise->moment_unitaire_id || $_prise->heure_prise || $_prise->condition || $_prise->datetime) ? $this->_chapitre : $_prise->_id;
-			} else {
-			  $key_tab = ($_prise->moment_unitaire_id || $_prise->heure_prise || $_prise->condition || $_prise->datetime) ? $_prise->unite_prise : $_prise->_id;
+      } else {
+        $key_tab = ($_prise->moment_unitaire_id || $_prise->heure_prise || $_prise->condition || $_prise->datetime) ? $_prise->unite_prise : $_prise->_id;
       }
-			// Stockage des lignes qui composent le plan de soin
+      // Stockage des lignes qui composent le plan de soin
       if($name_chap && $name_cat){
         $prescription->_ref_lines_elt_for_plan[$name_chap][$name_cat][$this->_id][$key_tab] = $this;
       } else {
@@ -712,57 +712,57 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
       if(!$with_calcul){
         continue;
       }
-			
+      
       $line_plan_soin =& $this->_quantity_by_date[$key_tab][$date]['quantites'];
       
       // Parcours des planifs et ajout dans le plan de soin
-			foreach($planifs as $_planif){
+      foreach($planifs as $_planif){
         if($_planif->prise_id != $_prise->_id){
           continue;
         }
-				
-				$_heure = substr(mbTime($_planif->dateTime), 0, 2);
+        
+        $_heure = substr(mbTime($_planif->dateTime), 0, 2);
         $_planif->_quantite = $_prise->_quantite_administrable;
-						
-				if($manual_planif && !preg_match("/[0-9]{1,2}h/i", $_prise->_ref_moment->libelle) && !$_prise->urgence_datetime){
-					// On n'ajoute a la liste que les planifs qui ne sont pas deja planifiées
-	        $_manual_planification = new CAdministration();    
-	        if(is_numeric($key_tab)){
-	          $_manual_planification->prise_id = $key_tab;
-	        } else {
-	          $_manual_planification->unite_prise = addslashes($key_tab);
-	        }
-	        $_manual_planification->original_dateTime = "$date $_heure:00:00";
-	        $_manual_planification->object_id = $this->_id;
-	        $_manual_planification->object_class = $this->_class;
-	        $count_planifications = $_manual_planification->countMatchingList();
-	        if($count_planifications == 0){
-	          $this->_planifs_systeme[$key_tab][$_planif->_id] = $_planif;
-	        }
-				} else {
-					// Ajout dans le plan de soins des planifs systemes
-					if(!isset($line_plan_soin[$_heure])){
-	          $line_plan_soin[$_heure] = array("total" => 0, "total_disp" => 0);
-	        }
-	        $line_plan_soin[$_heure]["total"] += $_prise->_quantite_administrable;
-	        $line_plan_soin[$_heure]["total_disp"] += $_prise->_quantite_dispensation;
-	        $line_plan_soin[$_heure][] = array("quantite" => $_prise->_quantite_administrable, "heure_reelle" => $_heure, "full_hour" => substr(mbTime($_planif->dateTime), 0, 5));
-	       
-				  $line_plan_soin[$_heure]["urgence"] = $_prise->urgence_datetime ? true : false;
-				  
-	        if(!isset($line_plan_soin[$_heure]["nb_adm"])){
-	          $line_plan_soin[$_heure]["nb_adm"] = 0;
-	        }
-	        $line_plan_soin[$_heure]["nb_adm"]++;
-	        $total_day += $_prise->_quantite_administrable;
-				}
+            
+        if($manual_planif && !preg_match("/[0-9]{1,2}h/i", $_prise->_ref_moment->libelle) && !$_prise->urgence_datetime){
+          // On n'ajoute a la liste que les planifs qui ne sont pas deja planifiées
+          $_manual_planification = new CAdministration();    
+          if(is_numeric($key_tab)){
+            $_manual_planification->prise_id = $key_tab;
+          } else {
+            $_manual_planification->unite_prise = addslashes($key_tab);
+          }
+          $_manual_planification->original_dateTime = "$date $_heure:00:00";
+          $_manual_planification->object_id = $this->_id;
+          $_manual_planification->object_class = $this->_class;
+          $count_planifications = $_manual_planification->countMatchingList();
+          if($count_planifications == 0){
+            $this->_planifs_systeme[$key_tab][$_planif->_id] = $_planif;
+          }
+        } else {
+          // Ajout dans le plan de soins des planifs systemes
+          if(!isset($line_plan_soin[$_heure])){
+            $line_plan_soin[$_heure] = array("total" => 0, "total_disp" => 0);
+          }
+          $line_plan_soin[$_heure]["total"] += $_prise->_quantite_administrable;
+          $line_plan_soin[$_heure]["total_disp"] += $_prise->_quantite_dispensation;
+          $line_plan_soin[$_heure][] = array("quantite" => $_prise->_quantite_administrable, "heure_reelle" => $_heure, "full_hour" => substr(mbTime($_planif->dateTime), 0, 5));
+         
+          $line_plan_soin[$_heure]["urgence"] = $_prise->urgence_datetime ? true : false;
+          
+          if(!isset($line_plan_soin[$_heure]["nb_adm"])){
+            $line_plan_soin[$_heure]["nb_adm"] = 0;
+          }
+          $line_plan_soin[$_heure]["nb_adm"]++;
+          $total_day += $_prise->_quantite_administrable;
+        }
       }
-			if($manual_planif && $this->_planifs_systeme){
-				foreach($this->_planifs_systeme as &$_planifs_by_key){
-					krsort($_planifs_by_key);
-				}
-			}
-			      
+      if($manual_planif && $this->_planifs_systeme){
+        foreach($this->_planifs_systeme as &$_planifs_by_key){
+          krsort($_planifs_by_key);
+        }
+      }
+            
       // Stockage du libelle de l'unite de prise
       if($_prise->moment_unitaire_id || $_prise->heure_prise || $_prise->condition || $_prise->datetime){
         if($this instanceof CPrescriptionLineElement){
@@ -770,31 +770,78 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
         } else {
           $this->_prises_for_plan[$_prise->unite_prise][$_prise->_id] = $_prise;
         }
-			} else {
+      } else {
         $this->_prises_for_plan[$_prise->_id] = $_prise;
       }
     }
-		
-		// Pre-remplissage du plan de soins avec les planifs systemes pour les lignes ne possedant pas de posologie
-		if($with_calcul && $this instanceof CPrescriptionLineElement && count($this->_ref_prises) == 0){
-			$chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;
+    
+    // Pre-remplissage du plan de soins avec les planifs systemes pour les lignes ne possedant pas de posologie
+    if($with_calcul && $this instanceof CPrescriptionLineElement && count($this->_ref_prises) == 0){
+      $chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;
       $line_plan_soin =& $this->_quantity_by_date["aucune_prise"][$date]['quantites'];
       
-			foreach($planifs as $_planif){
-	      $_heure = substr(mbTime($_planif->dateTime), 0, 2);
-	      if(!isset($line_plan_soin[$_heure])){
-	        $line_plan_soin[$_heure] = array("total" => 0, "total_disp" => 0);
-	      }
-	      $line_plan_soin[$_heure]["total"] += 1;
-	      $line_plan_soin[$_heure]["total_disp"] += 1;
-	      $line_plan_soin[$_heure][] = array("quantite" => 1, "heure_reelle" => $_heure);
-	      $total_day += 1;
-	    }
-		}
+      foreach($planifs as $_planif){
+        $_heure = substr(mbTime($_planif->dateTime), 0, 2);
+        if(!isset($line_plan_soin[$_heure])){
+          $line_plan_soin[$_heure] = array("total" => 0, "total_disp" => 0);
+        }
+        $line_plan_soin[$_heure]["total"] += 1;
+        $line_plan_soin[$_heure]["total_disp"] += 1;
+        $line_plan_soin[$_heure][] = array("quantite" => 1, "heure_reelle" => $_heure);
+        $total_day += 1;
+      }
+    }
     return $total_day;
   }
-	
-	/*
+  
+  function loadRefsProductsStocks(){
+    $this->_ref_stocks_service = array();
+    //$this->_ref_stocks_group = array();
+      
+    if(CModule::getActive("dPstock") && $this->code_cip){
+      $patient = $this->loadRelPatient();
+      $patient->loadRefsAffectations();
+      $aff = $patient->_ref_curr_affectation;
+      
+      if (!$aff->_id) {
+        $service = new CService;
+        $services = $service->loadGroupList();
+      }
+      else {
+        $services = array($aff->loadRefLit()->loadRefChambre()->loadRefService());
+      }
+      
+      $product = new CProduct();
+      $product->code = $this->code_cip;
+      
+      if ($product->loadMatchingObject()) {
+        $stock_service = new CProductStockService;
+        $where = array(
+          "product_id"   => "= '$product->_id'",
+          "object_class" => "= 'CService'",
+          "object_id"    => $stock_service->_spec->ds->prepareIn(CMbArray::pluck($services, "_id")),
+        );
+        $this->_ref_stocks_service = $stock_service->loadList($where);
+        
+        foreach($this->_ref_stocks_service as $_stock) {
+          $_stock->loadRefLocation();
+        }
+        
+        /*$stock_group = new CProductStockGroup;
+        $where = array(
+          "product_id" => "= '$product->_id'",
+          "group_id"   => "= '".CProductStockGroup::getHostGroup(true)."'",
+        );
+        $this->_ref_stocks_group = $stock_group->loadList($where);
+        
+        foreach($this->_ref_stocks_group as $_stock) {
+          $_stock->loadRefLocation();
+        }*/
+      }
+    }
+  }
+  
+  /*
    * Store-like function, suppression des prises de la ligne
    */
   function deletePrises(){

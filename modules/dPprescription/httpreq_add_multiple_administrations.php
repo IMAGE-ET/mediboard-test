@@ -90,6 +90,11 @@ if (count($adm) > 0) {
 		  $line->_ref_produit->loadConditionnement();
 		  $line->loadRefProduitPrescription();
 		}
+		
+		if (CAppUI::conf("pharmacie ask_stock_location_administration")) {
+		  $line->loadRefsProductsStocks();
+		}
+		
 		$curr_adm['line'] = $line;
 		$curr_adm['prise'] = new CPrisePosologie();
 		$curr_adm['prise']->quantite = $ad['quantite'];
@@ -138,6 +143,7 @@ $smarty->assign("tabs_refresh"  , $tabs_refresh);
 $smarty->assign("user_id"       , $user_id);
 $smarty->assign("refresh_popup" , $refresh_popup);
 $smarty->assign("nb_patients"   , $nb_patients);
+$smarty->assign("new_adm"       , new CAdministration);
 $smarty->display("inc_vw_add_multiple_administrations.tpl");
 
 ?>

@@ -1,5 +1,8 @@
 <?php
 $locales['CAdministration'] = 'Administration';
+$locales['CAdministration-_stock_location_id'] = 'Puisé dans le stock';
+$locales['CAdministration-_stock_location_id-court'] = 'Puisé dans';
+$locales['CAdministration-_stock_location_id-desc'] = 'Puisé dans le stock';
 $locales['CAdministration-administrateur_id'] = 'Administrateur';
 $locales['CAdministration-administrateur_id-court'] = 'Admin.';
 $locales['CAdministration-administrateur_id-desc'] = 'Personne ayant effectué l\'administration';

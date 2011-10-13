@@ -49,7 +49,10 @@ class CProductStock extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs['product_id']               = 'ref notNull class|CProduct autocomplete|name show|0 dependsOn|cancelled';
-    $specs['quantity']                 = 'num notNull';
+    
+    $type = (CAppUI::conf("dPstock CProductStock allow_quantity_fractions") ? "float" : "num");
+    $specs['quantity']                 = "$type notNull";
+    
     $specs['order_threshold_critical'] = 'num min|0';
     $specs['order_threshold_min']      = 'num min|0 notNull moreEquals|order_threshold_critical';
     $specs['order_threshold_optimum']  = 'num min|0 moreEquals|order_threshold_min';
@@ -66,12 +69,12 @@ class CProductStock extends CMbObject {
     return $specs;
   }
 
-	function getBackProps() {
-	  $backProps = parent::getBackProps();
-	  $backProps["discrepancies"] = "CProductDiscrepancy object_id";
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["discrepancies"] = "CProductDiscrepancy object_id";
     $backProps["deliveries"] = "CProductDelivery stock_id";
-	  return $backProps;
-	}
+    return $backProps;
+  }
   
   function getOptimumQuantity(){
     $this->completeField(
@@ -91,14 +94,19 @@ class CProductStock extends CMbObject {
     }
   }
 
-	function updateFormFields() {
+  function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
     $this->_view = $this->_ref_product->_view;
     
     $units = $this->_ref_product->_unit_quantity ? $this->_ref_product->_unit_quantity : 1;
-    $this->_package_quantity = floor($this->quantity / $units);
+    
     $this->_package_mod      = $this->quantity % $units;
+    $this->_package_quantity = $this->quantity / $units;
+    
+    if ($this->_package_mod || !CAppUI::conf("dPstock CProductStock allow_quantity_fractions")) {
+      $this->_package_quantity = floor($this->_package_quantity);
+    }
 
     // Calculation of the levels for the bargraph
     $max = max(
@@ -109,27 +117,27 @@ class CProductStock extends CMbObject {
     ) / 100;
     
     if ($max > 0) {
-	    $this->_quantity = $this->quantity                 / $max;
-	    $this->_critical = $this->order_threshold_critical / $max;
-	    $this->_min      = $this->order_threshold_min      / $max - $this->_critical;
-	    $this->_optimum  = $this->order_threshold_optimum  / $max - $this->_critical - $this->_min;
-	    $this->_max      = $this->order_threshold_max      / $max - $this->_critical - $this->_min - $this->_optimum;
-	      
-	    if ($this->quantity <= $this->order_threshold_critical) {
-	      $this->_zone = 0;
-	      
-	    } elseif ($this->quantity <= $this->order_threshold_min) {
-	      $this->_zone = 1;
-	      
-	    } elseif ($this->quantity <= $this->order_threshold_optimum) {
-	      $this->_zone = 2;
-	      
-	    } else {
-	      $this->_zone = 3;
-	    }
-  	}
+      $this->_quantity = $this->quantity                 / $max;
+      $this->_critical = $this->order_threshold_critical / $max;
+      $this->_min      = $this->order_threshold_min      / $max - $this->_critical;
+      $this->_optimum  = $this->order_threshold_optimum  / $max - $this->_critical - $this->_min;
+      $this->_max      = $this->order_threshold_max      / $max - $this->_critical - $this->_min - $this->_optimum;
+        
+      if ($this->quantity <= $this->order_threshold_critical) {
+        $this->_zone = 0;
+        
+      } elseif ($this->quantity <= $this->order_threshold_min) {
+        $this->_zone = 1;
+        
+      } elseif ($this->quantity <= $this->order_threshold_optimum) {
+        $this->_zone = 2;
+        
+      } else {
+        $this->_zone = 3;
+      }
+    }
   }
-	
+  
   function store(){
     $this->completeField("location_id");
 
@@ -149,10 +157,10 @@ class CProductStock extends CMbObject {
     return $this->_ref_location = $this->loadFwdRef("location_id", true);
   }
   
-	/**
-	 * @param boolean $cache [optional]
-	 * @return CProduct
-	 */
+  /**
+   * @param boolean $cache [optional]
+   * @return CProduct
+   */
   function loadRefProduct($cache = true){
     return $this->_ref_product = $this->loadFwdRef("product_id", $cache);
   }

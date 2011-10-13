@@ -881,17 +881,39 @@ class CSetupdPstock extends CSetup {
               `datetime_min` = `date_dispensation`,
               `datetime_max` = ADDDATE(`date_dispensation`, 1)";
     $this->addQuery($query);
-		
-		$this->makeRevision("1.49");
-		$query = "ALTER TABLE `product` 
+    
+    $this->makeRevision("1.49");
+    $query = "ALTER TABLE `product` 
               ADD `cladimed` VARCHAR (7);";
     $this->addQuery($query);
-		
+    
     $this->makeRevision("1.50");
-		$query = "ALTER TABLE `product_order_item_reception` 
+    $query = "ALTER TABLE `product_order_item_reception` 
               ADD `serial` CHAR (40) AFTER `code`";
     $this->addQuery($query);
     
-    $this->mod_version = "1.51";
+    $this->makeRevision("1.51");
+    $query = "ALTER TABLE `product_delivery` 
+              ADD INDEX (`datetime_min`),
+              ADD INDEX (`datetime_max`)";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `product_delivery` 
+              CHANGE `quantity` `quantity` FLOAT NOT NULL";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `product_delivery_trace` 
+              CHANGE `quantity` `quantity` FLOAT NOT NULL";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `product_stock_service` 
+              CHANGE `quantity` `quantity` FLOAT NOT NULL";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `product_stock_group` 
+              CHANGE `quantity` `quantity` FLOAT NOT NULL";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.52";
   }
 }

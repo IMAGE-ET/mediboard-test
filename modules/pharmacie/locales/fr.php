@@ -1,4 +1,6 @@
 <?php
+$locales['config-pharmacie-ask_stock_location_administration'] = 'Demander l\'emplacement du produit lors de l\'administration';
+$locales['config-pharmacie-ask_stock_location_administration-desc'] = 'Demander l\'emplacement du produit lors de l\'administration';
 $locales['config-pharmacie-dispensation_schedule'] = 'Planning de préparation des dispensations';
 $locales['config-pharmacie-dispensation_schedule-desc'] = 'Jours auxquels la dispensation doit être faite';
 $locales['config-pharmacie-num_days_date_min'] = 'Nombre de jours pour les dates min des filtres';

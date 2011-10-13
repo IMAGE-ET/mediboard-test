@@ -14,14 +14,10 @@
   }
 
   toggleProgressBefore = function() {
-    $$(".in_progress_before").each(function(elt) {
-      elt.toggleClassName("show_important");
-    });
+    $$(".in_progress_before").invoke("toggleClassName", "show_important");
   }
   toggleProgressAfter = function() {
-    $$(".in_progress_after").each(function(elt) {
-      elt.toggleClassName("show_important");
-    });
+    $$(".in_progress_after").invoke("toggleClassName", "show_important");
   }
   
   {{if "forms"|module_active}}
@@ -321,7 +317,7 @@
                 <th>{{tr}}CPrescription._chapitres.med{{/tr}}</th>
               </tr>
               <!-- passé -->
-              <tr class="hatching in_progress_before opacity-40">
+              <tr class="hatching in_progress_before opacity-60">
                 <td class="text">
                   {{assign var=is_first value=1}}
                   {{assign var=total value=0}}
@@ -336,7 +332,7 @@
                     {{/if}}
                   {{/foreach}}
                   {{if $total == 0}}
-                    Aucune ligne de médicament passée
+                    <div class="empty">Aucune ligne de médicament passée</div>
                   {{/if}}
                 </td>
               </tr>
@@ -357,12 +353,12 @@
                     {{/if}}
                   {{/foreach}}
                   {{if $total == 0}}
-                    Aucune ligne de médicament en cours
+                    <div class="empty">Aucune ligne de médicament en cours</div>
                   {{/if}}
                 </td>
               </tr>
               <!-- A venir -->
-              <tr class="text in_progress_after opacity-40">
+              <tr class="text in_progress_after opacity-60">
                 <td>
                   {{assign var=is_first value=1}}
                   {{assign var=total value=0}}
@@ -377,7 +373,7 @@
                     {{/if}}
                   {{/foreach}}
                   {{if $total == 0}}
-                    Aucune ligne de médicament à venir
+                    <div class="empty">Aucune ligne de médicament à venir</div>
                   {{/if}}
                 </td>
               </tr>
@@ -388,7 +384,7 @@
                 <tr>
                   <th>{{tr}}CPrescription._chapitres.{{$chap}}{{/tr}}</th>
                 </tr>
-                <tr class="hatching in_progress_before opacity-40">
+                <tr class="hatching in_progress_before opacity-60">
                   <td class="text">
                     {{assign var=total value=0}}
                     {{assign var=is_first value=1}}
@@ -404,7 +400,7 @@
                       {{/if}}
                     {{/foreach}}
                     {{if $total == 0}}
-                      Aucune ligne de {{tr}}CPrescription._chapitres.{{$chap}}{{/tr}} passée
+                      <div class="empty">Aucune ligne de {{tr}}CPrescription._chapitres.{{$chap}}{{/tr}} passée</div>
                     {{/if}}
                   </td>
                 </tr>
@@ -424,11 +420,11 @@
                       {{/if}}
                     {{/foreach}}
                     {{if $total == 0}}
-                      Aucune ligne de {{tr}}CPrescription._chapitres.{{$chap}}{{/tr}} en cours
+                      <div class="empty">Aucune ligne de {{tr}}CPrescription._chapitres.{{$chap}}{{/tr}} en cours</div>
                     {{/if}}
                   </td>
                 </tr>
-                <tr class="in_progress_after opacity-40">
+                <tr class="in_progress_after opacity-60">
                   <td class="text">
                     {{assign var=total value=0}}
                     {{assign var=is_first value=1}}
@@ -444,7 +440,7 @@
                       {{/if}}
                     {{/foreach}}
                     {{if $total == 0}}
-                      Aucune ligne de {{tr}}CPrescription._chapitres.{{$chap}}{{/tr}} à venir
+                      <div class="empty">Aucune ligne de {{tr}}CPrescription._chapitres.{{$chap}}{{/tr}} à venir</div>
                     {{/if}}
                   </td>
                 </tr>
@@ -458,7 +454,7 @@
                 <th>{{tr}}CPrescription._chapitres.{{$_chap_name}}{{/tr}}</th>
               </tr>
               
-              <tr class="hatching in_progress_before opacity-40">
+              <tr class="hatching in_progress_before opacity-60">
                 <td class="text">
                   {{assign var=total value=0}}
                   {{assign var=is_first_chap value=1}}
@@ -485,7 +481,7 @@
                     {{/foreach}}
                   {{/foreach}}
                   {{if $total == 0}}
-                    Aucune ligne de {{tr}}CPrescription._chapitres.{{$_chap_name}}{{/tr}} passée
+                    <div class="empty">Aucune ligne de {{tr}}CPrescription._chapitres.{{$_chap_name}}{{/tr}} passée</div>
                   {{/if}}
                 </td>
               </tr>
@@ -517,12 +513,12 @@
                     {{/foreach}}
                   {{/foreach}}
                   {{if $total == 0}}
-                    Aucune ligne de {{tr}}CPrescription._chapitres.{{$_chap_name}}{{/tr}} en cours
+                    <div class="empty">Aucune ligne de {{tr}}CPrescription._chapitres.{{$_chap_name}}{{/tr}} en cours</div>
                   {{/if}}
                 </td>
               </tr>
              
-              <tr class="in_progress_after opacity-40">
+              <tr class="in_progress_after opacity-60">
                 <td class="text">
                   {{assign var=total value=0}}
                   {{assign var=is_first_chap value=1}}
@@ -549,7 +545,7 @@
                     {{/foreach}}
                   {{/foreach}}
                   {{if $total == 0}}
-                    Aucune ligne de {{tr}}CPrescription._chapitres.{{$_chap_name}}{{/tr}} à venir
+                    <div class="empty">Aucune ligne de {{tr}}CPrescription._chapitres.{{$_chap_name}}{{/tr}} à venir</div>
                   {{/if}}
                 </td>
               </tr>

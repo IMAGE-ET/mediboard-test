@@ -56,7 +56,10 @@ class CProductDeliveryTrace extends CMbObject {
     $specs[$this->_spec->key] .= " show|1";
     $specs['delivery_id']    = 'ref notNull class|CProductDelivery';
     $specs['code']           = 'str maxLength|32';
-    $specs['quantity']       = 'num notNull';
+    
+    $type = (CAppUI::conf("dPstock CProductStock allow_quantity_fractions") ? "float" : "num");
+    $specs['quantity']       = "$type notNull";
+    
     $specs['date_delivery']  = 'dateTime';
     $specs['date_reception'] = 'dateTime';
     $specs['target_location_id'] = 'ref class|CProductStockLocation'; // can be null if nominative
