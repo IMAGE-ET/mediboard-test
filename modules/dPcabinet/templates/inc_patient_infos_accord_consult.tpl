@@ -55,13 +55,13 @@ function newConsultation(chir_id, pat_id, consult_urgence_id) {
   
   <tr>
     <td class="text">
-      {{include file="../../dPcabinet/templates/inc_patient_infos.tpl"}}
+      {{mb_include module=dPcabinet template=inc_patient_infos}}
     </td>
     <td class="text">
-      {{include file="../../dPcabinet/templates/inc_patient_medecins.tpl"}}
+      {{mb_include module=dPcabinet template=inc_patient_medecins}}
     </td>
     <td class="text">
-      {{include file="../../dPcabinet/templates/inc_patient_history.tpl"}}
+      {{mb_include module=dPcabinet template=inc_patient_history}}
     </td>
     <td class="button">
       {{if !$app->user_prefs.simpleCabinet}}
@@ -80,7 +80,8 @@ function newConsultation(chir_id, pat_id, consult_urgence_id) {
 	      {{/if}}
 	    	{{/if}}
     	{{/if}}
-    	{{if $m != "dPurgences"}}
+      {{assign var=sejour value=$consult->_ref_sejour}}
+    	{{if !$sejour || $sejour->type != "urg"}}
       <button class="new" type="button" onclick="newConsultation({{$consult->_praticien_id}},{{$consult->patient_id}})" style="width: 12em;">
         {{tr}}CConsultation-title-create{{/tr}}
       </button>
