@@ -324,7 +324,7 @@ if($prescription->_id){
 		  }
 	  }
     
-	  $prescription->loadRefsLinesElementsComments("1", $chapitre);
+	  $prescription->loadRefsLinesElementsComments();
 	  if(count($prescription->_ref_lines_elements_comments)){
       foreach($prescription->_ref_lines_elements_comments as $name_chap => $cat_by_chap){
         foreach($cat_by_chap as $name_cat => $lines_by_cat){
