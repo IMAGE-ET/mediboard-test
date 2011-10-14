@@ -284,6 +284,7 @@ else {
 	        $hour_operation = (($hour_operation % 2) == 0) ? $hour_operation : $hour_operation-1;
 	        $hour_operation .= ":00:00";
 	        $operations["$date_operation $hour_operation"] = $_operation->time_operation;
+          $operations["$date_operation $hour_operation object"] = $_operation;
 	      }
 	    }
 	  }	 
