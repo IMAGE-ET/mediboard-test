@@ -13,8 +13,8 @@ $offline = CValue::get("offline");
 $in_modal = CValue::get("in_modal");
 
 if(!$sejour_id){
-	CAppUI::stepMessage(UI_MSG_WARNING, "Veuillez sélectionner un sejour pour visualiser le dossier complet");
-	return;
+  CAppUI::stepMessage(UI_MSG_WARNING, "Veuillez sélectionner un sejour pour visualiser le dossier complet");
+  return;
 }
 
 // Chargement du sejour
@@ -76,63 +76,63 @@ $prescription->loadRefsLinesMedComments();
 $prescription->loadRefsLinesElementsComments();
 $prescription->loadRefsPrescriptionLineMixes();
 
-if($prescription->_ref_prescription_line_mixes|@count){
-	foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
-	  $_prescription_line_mix->loadRefsLines();
-	  $_prescription_line_mix->calculQuantiteTotal();
-		$_prescription_line_mix->loadRefPraticien();
-	  foreach($_prescription_line_mix->_ref_lines as $_perf_line){
-	    $list_lines["prescription_line_mix"][$_perf_line->_id] = $_perf_line;
-	    $_perf_line->loadRefsAdministrations();
-	    foreach($_perf_line->_ref_administrations as $_administration_perf){
-	    	$_administration_perf->loadRefAdministrateur();
-	      if(!$_administration_perf->planification){
-	        $dossier[mbDate($_administration_perf->dateTime)]["prescription_line_mix"][$_perf_line->_id][$_administration_perf->quantite][$_administration_perf->_id] = $_administration_perf;
-	      }
-	    }
-	  }
-	}
+if (count($prescription->_ref_prescription_line_mixes)) {
+  foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
+    $_prescription_line_mix->loadRefsLines();
+    $_prescription_line_mix->calculQuantiteTotal();
+    $_prescription_line_mix->loadRefPraticien();
+    foreach($_prescription_line_mix->_ref_lines as $_perf_line){
+      $list_lines["prescription_line_mix"][$_perf_line->_id] = $_perf_line;
+      $_perf_line->loadRefsAdministrations();
+      foreach($_perf_line->_ref_administrations as $_administration_perf){
+        $_administration_perf->loadRefAdministrateur();
+        if(!$_administration_perf->planification){
+          $dossier[mbDate($_administration_perf->dateTime)]["prescription_line_mix"][$_perf_line->_id][$_administration_perf->quantite][$_administration_perf->_id] = $_administration_perf;
+        }
+      }
+    }
+  }
 }
 
 // Parcours des lignes de medicament et stockage du dossier cloturé
-if($prescription->_ref_prescription_lines|@count){
-	foreach($prescription->_ref_prescription_lines as $_line_med){
-		$_line_med->loadRefsFwd();
-		$_line_med->loadRefsPrises();
-	  $_line_med->loadRefProduitPrescription();
-	  $_line_med->_ref_produit->loadConditionnement();
-	  $list_lines["medicament"][$_line_med->_id] = $_line_med;
-	  $_line_med->loadRefsAdministrations();
-	  foreach($_line_med->_ref_administrations as $_administration_med){
-	  	$_administration_med->loadRefAdministrateur();
-	    if(!$_administration_med->planification){
-	      $dossier[mbDate($_administration_med->dateTime)]["medicament"][$_line_med->_id][$_administration_med->quantite][$_administration_med->_id] = $_administration_med;
-	    }
-	  }
-	}
+if (count($prescription->_ref_prescription_lines)) {
+  foreach($prescription->_ref_prescription_lines as $_line_med){
+    $_line_med->loadRefsFwd();
+    $_line_med->loadRefsPrises();
+    $_line_med->loadRefProduitPrescription();
+    $_line_med->_ref_produit->loadConditionnement();
+    $list_lines["medicament"][$_line_med->_id] = $_line_med;
+    $_line_med->loadRefsAdministrations();
+    foreach($_line_med->_ref_administrations as $_administration_med){
+      $_administration_med->loadRefAdministrateur();
+      if(!$_administration_med->planification){
+        $dossier[mbDate($_administration_med->dateTime)]["medicament"][$_line_med->_id][$_administration_med->quantite][$_administration_med->_id] = $_administration_med;
+      }
+    }
+  }
 }
 
 // Parcours des lignes d'elements
-if($prescription->_ref_lines_elements_comments|@count){
-	foreach($prescription->_ref_lines_elements_comments as $chap => $_lines_by_chap){
-	  foreach($_lines_by_chap as $_lines_by_cat){
-	    foreach($_lines_by_cat["comment"] as $_line_elt_comment){
-	      $_line_elt_comment->loadRefPraticien();
-			}
-			foreach($_lines_by_cat["element"] as $_line_elt){
-			  $_line_elt->loadRefElement();
-			  $_line_elt->_ref_element_prescription->loadRefCategory();
-	    	$list_lines[$chap][$_line_elt->_id] = $_line_elt;
-	      $_line_elt->loadRefsAdministrations();
-	      foreach($_line_elt->_ref_administrations as $_administration_elt){
-	      	$_administration_elt->loadRefAdministrateur();
-	        if(!$_administration_elt->planification){
-	          $dossier[mbDate($_administration_elt->dateTime)][$chap][$_line_elt->_id][$_administration_elt->quantite][$_administration_elt->_id] = $_administration_elt;
-	        }
-	      }
-	    }
-	  }
-	}
+if (count($prescription->_ref_lines_elements_comments)) {
+  foreach($prescription->_ref_lines_elements_comments as $chap => $_lines_by_chap){
+    foreach($_lines_by_chap as $_lines_by_cat){
+      foreach($_lines_by_cat["comment"] as $_line_elt_comment){
+        $_line_elt_comment->loadRefPraticien();
+      }
+      foreach($_lines_by_cat["element"] as $_line_elt){
+        $_line_elt->loadRefElement();
+        $_line_elt->_ref_element_prescription->loadRefCategory();
+        $list_lines[$chap][$_line_elt->_id] = $_line_elt;
+        $_line_elt->loadRefsAdministrations();
+        foreach($_line_elt->_ref_administrations as $_administration_elt){
+          $_administration_elt->loadRefAdministrateur();
+          if(!$_administration_elt->planification){
+            $dossier[mbDate($_administration_elt->dateTime)][$chap][$_line_elt->_id][$_administration_elt->quantite][$_administration_elt->_id] = $_administration_elt;
+          }
+        }
+      }
+    }
+  }
 }
 
 ksort($dossier);
