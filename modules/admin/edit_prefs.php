@@ -30,10 +30,11 @@ $prefs = array(
 // Classement par module et par préférences
 CPreferences::loadModules();
 foreach (CPreferences::$modules as $modname => $prefnames){
-  $prefs[$modname] = array();  
-  $module = CModule::getActive($modname);
+  $module  = CModule::getActive($modname);
   $canRead = $module ? CPermModule::getPermModule($module->_id, PERM_READ, $user_id) : false;
+  
   if ($modname == "common" || $user_id == "default" || $canRead) {
+    $prefs[$modname] = array();
     foreach ($prefnames as $prefname){
       $prefs[$modname][$prefname] = array(
         "default"  => CMbArray::extract($prefvalues["default" ], $prefname),
