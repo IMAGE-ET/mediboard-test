@@ -185,6 +185,11 @@ ul#nav-vert {
   vertical-align: middle;
 }
 
+.touchscreen button {
+  height: auto;
+  min-height: 26px;
+}
+
 .touchscreen input {
   height: 18px;
 }
@@ -204,7 +209,7 @@ ul#nav-vert {
 }
 
 .touchscreen a.button {
-  height: 19px;
+  min-height: 19px;
   padding-top: 4px;
 }
 

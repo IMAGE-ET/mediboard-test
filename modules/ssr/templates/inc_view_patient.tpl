@@ -9,9 +9,12 @@
 *}}
 
 {{assign var=patient_guid value=$patient->_guid}}
+
 {{mb_default var=link   value="#$patient_guid"}}
 {{mb_default var=statut value="present"}}
-<a href="{{$link}}">
+{{mb_default var=onclick value=null}}
+
+<a href="{{$link}}" {{if $onclick}} onclick="{{$onclick}}" {{/if}}>
   <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient_guid}};')"
     {{if $statut == "attente"}}class="patient-not-arrived"{{/if}}
     {{if $statut == "sorti"}}style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"{{/if}}>
