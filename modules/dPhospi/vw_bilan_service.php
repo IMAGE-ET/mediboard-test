@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+set_min_memory_limit("256M");
+
 function getCurrentLit($sejour, $_date, $_hour, &$lits, &$affectations){
   if(!isset($affectations[$sejour->_id]["$_date $_hour:00:00"])){
     $sejour->loadRefCurrAffectation("$_date $_hour:00:00");
