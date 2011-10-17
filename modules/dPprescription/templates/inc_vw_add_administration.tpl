@@ -273,7 +273,12 @@ chooseSubmit = function() {
           {{/if}}
           
           {{mb_label object=$prise field=quantite}}
-          {{mb_field object=$prise field=quantite min=0 increment=1 form=addAdministration onchange="updateQuantite('$ratio_UI', this)"}}
+					
+					{{if $line instanceof CPrescriptionLineElement && !$prise->quantite}}
+					  {{mb_field object=$prise field=quantite min=0 increment=1 form=addAdministration value=1}}
+          {{else}}
+					  {{mb_field object=$prise field=quantite min=0 increment=1 form=addAdministration onchange="updateQuantite('$ratio_UI', this)"}}
+          {{/if}}
           
           {{if $line instanceof CPrescriptionLineMedicament}}
             {{if $line->_ref_produit_prescription->_id}}
