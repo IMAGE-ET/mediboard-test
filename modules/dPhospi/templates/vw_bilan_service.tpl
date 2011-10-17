@@ -494,7 +494,7 @@
 							{{if $prescription_line_mix->_active || $show_inactive}}
 		            <tr>
 								  <td>{{$hour}}h</td>
-								 	<td colspan="5"><strong>{{$prescription_line_mix->_view}}</strong> {{if $prescription_line_mix->conditionnel}} - <strong>Conditionnel</strong>{{/if}}
+								 	<td colspan="5" class="text"><strong>{{$prescription_line_mix->_view}}</strong> {{if $prescription_line_mix->conditionnel}} - <strong>Conditionnel</strong>{{/if}}
 									{{if $prescription_line_mix->commentaire}}
 	                  <br />{{$prescription_line_mix->commentaire}}
 	                {{/if}}
