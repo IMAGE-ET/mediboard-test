@@ -72,7 +72,7 @@ foreach($lines as $cat => $lines_by_type){
 	  
 	  // Ligne de sejour vers ligne de sortie
 	  if($type == "sortie"){
-	  	if((!$line->_fin_reelle && (mbDate($line->_debut_reel) < mbDate($sejour->_sortie))) || mbDate($line->_fin_reelle) <= mbDate($sejour->_sortie)){
+	  	if((!$line->_fin_reelle && (mbDate($line->_debut_reel) < mbDate($sejour->_sortie))) || mbDate($line->_fin_reelle) < mbDate($sejour->_sortie)){
 	      continue;
 	  	}
 	  	// Modification des dates
