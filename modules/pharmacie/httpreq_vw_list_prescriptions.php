@@ -36,7 +36,7 @@ $where["prescription.object_class"] = " = 'CSejour'";
 $where["prescription.type"] = " = 'sejour'";
   
 if($valide_pharma == 0){
-  $where[] = "(prescription_line_medicament.valide_pharma != '1' AND prescription_line_medicament.variante_active = '1') 
+  $where[] = "(prescription_line_medicament.valide_pharma != '1' AND prescription_line_medicament.variante_active = '1' AND prescription_line_medicament.inscription = '0') 
 	           OR (prescription_line_mix.signature_pharma != '1' AND prescription_line_mix.variante_active = '1')";
 } else {
   $where[] = "prescription_line_medicament.variante_active = '1' OR prescription_line_mix.variante_active = '1'";
