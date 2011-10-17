@@ -54,10 +54,11 @@ class CApp {
    */
   static function rip() {
     // If the client doesn't support cookies, we destroy its session
-    if (empty($_COOKIE)) {
+    // Sometimes, the cookie is empty while the client support cookies (url auth in IE)
+    /*if (empty($_COOKIE)) {
       session_unset();
       @session_destroy(); // Escaped because of an unknown error
-    }
+    }*/
     
     self::$inPeace = true;
     die;
