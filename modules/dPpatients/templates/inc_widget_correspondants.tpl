@@ -13,7 +13,10 @@ Medecin = {
     if (confirm("Voulez vous vraiment supprimer ce médecin ?")) {
       $V(form._view, '');
       if (form.medecin_traitant) {
-        $V(form.medecin_traitant, '');
+        if ($V(form.medecin_traitant)) {
+          Control.Tabs.setTabCount("medecins", "-1");
+          $V(form.medecin_traitant, '');
+        }
       }
       else {
         Control.Tabs.setTabCount("medecins", "-1");
@@ -23,14 +26,13 @@ Medecin = {
   },
   
   set: function(id, view) {
-    emptyMedecinTraitant = !$V(this.form.medecin_traitant);
     $V(this.form.medecin_traitant ? this.form.medecin_traitant : this.form.medecin_id, id);
     $V(this.form._view, view);
   }
 };
 
 submitMedecin = function(form) {
-  if (!$V(form.del) && ($V(form.dosql) != "do_patients_aed")) {
+  if (!$V(form.del) && ($V(form.dosql) != "do_patients_aed") && $V(form.medecin_id)) {
     Control.Tabs.setTabCount("medecins", "+1");
   }
 	// Update main form for unexisting patient 
@@ -46,23 +48,18 @@ submitMedecin = function(form) {
 }
 
 updateMedTraitant = function(form) {
-  if (!$V(form.medecin_traitant)) {
-    Control.Tabs.setTabCount('medecins', '-1');
-  }
-  else if (emptyMedecinTraitant) {
+  if ($V(form.medecin_traitant)) {
     Control.Tabs.setTabCount('medecins', '+1');
-  }
+  }  
   return submitMedecin(form);
 }
 
 Main.add(function () { 
   var formTraitant = getForm("traitant-edit-{{$patient->_id}}");
-  emptyMedecinTraitant = !$V(formTraitant.medecin_traitant);
   var urlTraitant = new Url("dPpatients", "httpreq_do_medecins_autocomplete");
   urlTraitant.autoComplete(formTraitant._view, formTraitant._view.id+'_autocomplete', {
     minChars: 3,
     updateElement : function(element) {
-      emptyMedecinTraitant = !$V(formTraitant.medecin_traitant);
       $V(formTraitant.medecin_traitant, element.id.split('-')[1]);
       $V(formTraitant._view, element.select(".view")[0].innerHTML.stripTags());
     }
@@ -98,12 +95,12 @@ Main.add(function () {
     	{{assign var=medecin_traitant_view value=$patient->_ref_medecin_traitant->_view}}
 			{{/if}}
 
-      <form name="traitant-edit-{{$patient->_id}}" action="?" method="post" onsubmit="return updateMedTraitant(this);">
+      <form name="traitant-edit-{{$patient->_id}}" action="?" method="post" onsubmit="return false">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dosql" value="do_patients_aed" />
         <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
-        <input type="hidden" name="medecin_traitant" value="{{$medecin_traitant_id}}" onchange="this.form.onsubmit()"/>
-        <input type="text" name="_view" size="50" value="{{$medecin_traitant_view}}" ondblclick="Medecin.edit(this.form)" class="autocomplete" />
+        <input type="hidden" name="medecin_traitant" value="{{$medecin_traitant_id}}" onchange="updateMedTraitant(this.form);"/>
+        <input type="text" name="_view" size="50" value="{{$medecin_traitant_view}}" ondblclick="Medecin.edit(this.form)" class="autocomplete"/>
         <div id="traitant-edit-{{$patient->_id}}__view_autocomplete" style="display: none; width: 300px;" class="autocomplete"></div>
         <button class="search" type="button" onclick="Medecin.edit(this.form)">{{tr}}Choose{{/tr}}</button>
         <button class="cancel notext" type="button" onclick="Medecin.del(this.form)">{{tr}}Delete{{/tr}}</button>
@@ -118,13 +115,13 @@ Main.add(function () {
         <th rowspan="{{$patient->_ref_medecins_correspondants|@count}}">{{tr}}CPatient-back-medecins_correspondants{{/tr}}</th>
       {{/if}}
       <td>
-        <form name="correspondant-edit-{{$curr_corresp->_id}}" action="?" method="post" onsubmit="return submitMedecin(this)">
+        <form name="correspondant-edit-{{$curr_corresp->_id}}" action="?" method="post" onsubmit="return false;">
           <input type="hidden" name="m" value="{{$m}}" />
           <input type="hidden" name="dosql" value="do_correspondant_aed" />
-          <input type="hidden" name="del" value="" onchange="this.form.onsubmit()" />
+          <input type="hidden" name="del" value="" onchange="submitMedecin(this.form)" />
           <input type="hidden" name="correspondant_id" value="{{$curr_corresp->_id}}" />
           <input type="hidden" name="patient_id" value="{{$curr_corresp->_ref_patient->_id}}" />
-          <input type="hidden" name="medecin_id" value="{{$curr_corresp->_ref_medecin->_id}}" onchange="this.form.onsubmit()" />
+          <input type="hidden" name="medecin_id" value="{{$curr_corresp->_ref_medecin->_id}}" onchange="submitMedecin(this.form)" />
           <input type="text" name="_view" size="50" value="{{$curr_corresp->_ref_medecin->_view}}" ondblclick="Medecin.edit(this.form)" readonly="readonly" />
           <button class="search" type="button" onclick="Medecin.edit(this.form)">{{tr}}Change{{/tr}}</button>
           <button class="cancel notext" type="button" onclick="Medecin.del(this.form)">{{tr}}Delete{{/tr}}</button>

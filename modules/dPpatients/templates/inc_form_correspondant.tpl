@@ -24,7 +24,7 @@
   {{mb_key object=$correspondant}}
   {{mb_field object=$correspondant field="patient_id" hidden=true}}
   
-  <table class="tbl">
+  <table class="form">
     <tr>
       <th colspan="2" class="title {{if $correspondant->_id}}modify{{/if}}">
         {{if $correspondant->_id}}
@@ -38,7 +38,7 @@
       </th>
     </tr>
     <tr>
-      <th class="narrow">{{mb_label object=$correspondant field="nom"}}</th>
+      <th style="width: 30%;">{{mb_label object=$correspondant field="nom"}}</th>
       <td>{{mb_field object=$correspondant field="nom"}}</td>
     </tr>
     

@@ -3,7 +3,7 @@ Correspondant = {
     var url = new Url('dPpatients', 'ajax_form_correspondant');
     url.addParam('correspondant_id', correspondant_id);
     url.addParam("patient_id", patient_id);
-    url.requestModal(500);
+    url.requestModal(400);
   },
 
   onSubmit: function(form) {
