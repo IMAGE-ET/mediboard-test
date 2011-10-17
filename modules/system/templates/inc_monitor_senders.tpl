@@ -35,7 +35,12 @@
 	    {{foreach from=$_sender->_ref_senders_source item=_sender_source name=sender_source}}
 	    <td>{{mb_value object=$_sender_source field=source_id tooltip=true}}</td>
 	    <td>{{$_sender_source->last_duration|round:3}}s</td>
-	    <td>{{$_sender_source->last_size|decabinary}}</td>
+			
+      {{assign var=class value=ok}}
+      {{if $_sender_source->last_size == 0}} 
+        {{assign var=class value=error}}
+      {{/if}}
+	    <td class="{{$class}}">{{$_sender_source->last_size|decabinary}}</td>
       
       {{assign var=class value=ok}}
       {{assign var=colspan value="1"}}
