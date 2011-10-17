@@ -225,9 +225,9 @@ Main.add(function() {
                   <fieldset>
                     <legend>{{tr}}CListeChoix{{/tr}}</legend>
                   {{foreach from=$lists item=curr_list}}
-                    <input type="checkbox" name="_empty_list[{{$curr_list->_id}}]" title="{{tr}}CListeChoix.empty{{/tr}}"
+                    <input type="checkbox" name="_empty_list[{{$curr_list->_id}}]" title="{{tr}}CListeChoix.fill{{/tr}}"
                       style="float: left;" class="empty_field"/>
-                    <select name="_{{$curr_list->_class}}[{{$curr_list->_id}}][]" class="liste">
+                    <select name="_{{$curr_list->_class}}[{{$curr_list->_id}}][]" class="liste" onchange="this.form.elements['_empty_list[{{$curr_list->_id}}]'].checked='checked'">
                       <option value="undef">&mdash; {{$curr_list->nom}}</option>
                       {{foreach from=$curr_list->_valeurs item=curr_valeur}}
                         <option value="{{$curr_valeur}}" title="{{$curr_valeur}}">{{$curr_valeur|truncate}}</option>
@@ -266,9 +266,9 @@ Main.add(function() {
                 <fieldset>
                   <legend>
                     {{$_nom|html_entity_decode}}
-                    <input type="checkbox" name="_empty_texte_libre[{{$_nom|md5}}]" title="{{tr}}CListeChoix.empty{{/tr}}" class="empty_field"/>
+                    <input type="checkbox" name="_empty_texte_libre[{{$_nom|md5}}]" title="{{tr}}CListeChoix.fill{{/tr}}" class="empty_field"/>
                   </legend>
-                  <textarea class="freetext" name="_texte_libre[{{$_nom|md5}}]"></textarea>
+                  <textarea class="freetext" name="_texte_libre[{{$_nom|md5}}]" onkeydown="this.form.elements['_empty_texte_libre[{{$_nom|md5}}]'].checked='checked'; this.onkeydown=''"></textarea>
                   <input type="hidden" name="_texte_libre_md5[{{$_nom|md5}}]" value="{{$_nom}}"/>
                 </fieldset>
 	              {{main}}

@@ -11,7 +11,7 @@ window.onbeforeunload= function () {
 function openWindowMail() {
   var url = new Url("dPcompteRendu", "ajax_view_mail");
   url.addParam("type", "file");
-  url.popup(700, 320, "Envoi mail");
+  url.requestModal(700, 320);
 }
 
 window.destinataires = {{"utf8_encode"|array_map_recursive:$destinataires|@json|smarty:nodefaults}};

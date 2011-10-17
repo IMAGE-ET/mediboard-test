@@ -47,7 +47,7 @@ if (isset($_POST["_texte_libre"])) {
 
 	// Remplacement des \n par des <br>
 	foreach($_POST["_texte_libre"] as $key=>$_texte_libre) {
-	  if (isset($_POST["_empty_texte_libre"][$key]) || $_POST["_texte_libre"][$key] != '') {
+	  if (!isset($_POST["_empty_texte_libre"][$key]) || $_POST["_texte_libre"][$key] != '') {
 	    $fields[] = "[[Texte libre - " . $_POST["_texte_libre_md5"][$key] . "]]";
 	    $values[] = nl2br($_POST["_texte_libre"][$key]);
 	  }
@@ -77,7 +77,7 @@ if (isset($_POST["_source"])) {
       $options = array_map('htmlentities', $options);
 	    $list = new CListeChoix;
 	    $list->load($list_id);
-      if (isset($_POST["_empty_list"][$list_id])) {
+      if (!isset($_POST["_empty_list"][$list_id])) {
         $values[] = "";
       }
 	    else {

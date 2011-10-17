@@ -122,8 +122,12 @@ function refreshZones(id, obj) {
 }
 
 function openWindowMail() {
-  var url = new Url("dPcompteRendu", "ajax_view_mail");
-  url.popup(700, 320, "Envoi mail");
+  {{if $exchange_source->_id}}
+    var url = new Url("dPcompteRendu", "ajax_view_mail");
+    url.requestModal(700, 320);
+  {{else}}
+    alert("Veuillez paramétrer votre compte mail (source smtp dans les préférences utilisateur).");
+  {{/if}}
 }
 
 function openModalPrinters() {

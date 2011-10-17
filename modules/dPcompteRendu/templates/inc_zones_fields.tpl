@@ -24,13 +24,13 @@
         <div class="listeChoixCR">
           {{foreach from=$lists item=curr_list}}
             <select name="_{{$curr_list->_class}}[{{$curr_list->_id}}][]" data-nom="{{$curr_list->nom}}"
-            {{if $mode_play}}size="4" multiple=true{{/if}}>
+            {{if $mode_play}}size="4" multiple="true"{{/if}} onchange="this.form.elements['_empty_list[{{$curr_list->_id}}]'].checked='checked'">
               <option value="undef">&mdash; {{$curr_list->nom}}</option>
               {{foreach from=$curr_list->_valeurs item=curr_valeur}}
                 <option value="{{$curr_valeur}}" title="{{$curr_valeur}}">{{$curr_valeur|truncate}}</option>
               {{/foreach}}
             </select>
-            <input type="checkbox" name="_empty_list[{{$curr_list->_id}}]" title="{{tr}}CListeChoix.empty{{/tr}}"/>
+            <input type="checkbox" name="_empty_list[{{$curr_list->_id}}]" title="{{tr}}CListeChoix.fill{{/tr}}"/>
           {{/foreach}}
         </div>
       </td>
@@ -44,9 +44,12 @@
         <div {{if !$mode_play}}style="max-width: 200px; display: inline-block;"{{/if}} data-nom="{{$_nom}}">
           {{$_nom|html_entity_decode}}
           {{if !$mode_play}}
-            <input type="checkbox" name="_empty_texte_libre[{{$_nom|md5}}]" title="{{tr}}CListeChoix.empty{{/tr}}" class="empty_field"/>
+            <input type="checkbox" name="_empty_texte_libre[{{$_nom|md5}}]" title="{{tr}}CListeChoix.fill{{/tr}}" class="empty_field"/>
           {{/if}}
-          <textarea class="freetext" name="_texte_libre[{{$_nom|md5}}]" id="editFrm__texte_libre[{{$_nom|md5}}]"></textarea>
+          <textarea class="freetext" name="_texte_libre[{{$_nom|md5}}]" id="editFrm__texte_libre[{{$_nom|md5}}]"
+          {{if !$mode_play}}
+            onkeydown="this.form.elements['_empty_texte_libre[{{$_nom|md5}}]'].checked='checked'; this.onkeydown=''"
+          {{/if}}></textarea>
           <input type="hidden" name="_texte_libre_md5[{{$_nom|md5}}]" value="{{$_nom}}"/>
         </div>
         {{main}}
@@ -139,14 +142,6 @@
           </select>
         </td>
       {{/if}}
-    </tr>
-  {{/if}}
-  
-  {{if $exchange_source->_id}}
-    <tr>
-      <td style="button text" colspan="2">
-        <button type="button" class="mail" onclick="openWindowMail();">{{tr}}CCompteRendu.send_mail{{/tr}}</button>
-      </td>
     </tr>
   {{/if}}
 </table>
