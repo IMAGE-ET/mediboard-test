@@ -360,7 +360,12 @@ chooseSubmit = function() {
       <tr>
         <td>
           {{mb_label object=$prise field=quantite}}
-          {{mb_field object=$prise field=quantite min=1 increment=1 form=addPlanification}}
+					
+					{{if $line instanceof CPrescriptionLineElement}}
+					  {{mb_field object=$prise field=quantite min=1 increment=1 form=addPlanification value="1"}}
+          {{else}}
+					  {{mb_field object=$prise field=quantite min=1 increment=1 form=addPlanification}}
+          {{/if}}
           
           {{if $line->_class == "CPrescriptionLineMedicament"}}
             {{if $line->_ref_produit_prescription->_id}}
