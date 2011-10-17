@@ -11,7 +11,7 @@
 {{mb_script module="dPprescription" script="prescription" ajax="true"}}
 
 {{assign var="line" value=$object}}
-<table class="tbl">
+<table class="tbl" style="width: 350px;">
   <tr>
     <th colspan="3"><a href="#" onclick="Prescription.viewProduit(null,'{{$line->code_ucd}}','{{$line->code_cis}}');">{{$line->_ucd_view}}</a></th>
   </tr>
@@ -61,7 +61,7 @@
     </td>
   </tr>
   <tr>
-    <td colspan="3">   
+    <td colspan="3" class="text">
       {{mb_label object=$line field="commentaire"}}:
       {{if $line->commentaire}}
         {{mb_value object=$line field="commentaire"}}
