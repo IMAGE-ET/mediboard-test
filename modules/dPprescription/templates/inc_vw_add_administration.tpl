@@ -300,7 +300,7 @@ chooseSubmit = function() {
         </td>
         
         <td>
-          {{mb_include module=pharmacie template=inc_chose_stock_location_administration adm=$new_adm line=$line}}
+          {{* mb_include module=pharmacie template=inc_chose_stock_location_administration adm=$new_adm line=$line *}}
         </td>
       </tr>
     </table>
