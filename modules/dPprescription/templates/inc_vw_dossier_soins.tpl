@@ -318,7 +318,7 @@ Main.add(function () {
   	  <li onmousedown="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med', '{{$hide_close}}'); refreshTabState();"><a href="#jour">Journée</a></li>
   	  <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Semaine</a></li>
   		<li onmousedown="updateTasks('{{$sejour->_id}}');"><a href="#tasks">Tâches</a></li>
-      <li onmousedown="loadSuivi('{{$sejour->_id}}')"><a href="#dossier_suivi">Transmissions / Observations / Consultations <span id="nb_trans"></span></a></li>
+      <li onmousedown="loadSuivi('{{$sejour->_id}}')"><a href="#dossier_suivi">Trans. <span id="nb_trans"></span> / Obs. / Consult.{{if $conf.soins.constantes_show}} / Const.{{/if}}</a></li>
   	</ul>
   	<hr class="control_tabs" />
   	
