@@ -45,6 +45,18 @@ if ($order_col == "patient_id") {
   $order = "patients.nom $order_way, patients.prenom, sejour.entree";
 }
 
+if ($order_col == "praticien_id") {
+	$order = "sejour.praticien_id $order_way, patients.nom, patients.prenom";
+}
+
+if ($order_col == "libelle") {
+	$order = "sejour.libelle $order_way, patients.nom, patients.prenom";
+}
+
+if ($order_col == "service_id") {
+	$order = "sejour.service_id $order_way, patients.nom, patients.prenom";
+}
+
 $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
 $ljoin["lit"]     = "lit.lit_id = affectation.lit_id";
 $ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
