@@ -12,7 +12,7 @@
  */
 
 /**
- * Class CExchangeTabular
+ * Class CExchangeAny
  * Echange Tabular
  */
 

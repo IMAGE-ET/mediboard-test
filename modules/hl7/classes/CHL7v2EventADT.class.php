@@ -18,8 +18,9 @@
 class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   function __construct() {
     parent::__construct();
-   
-    $this->event_type = "ADT";
+    
+    $this->profil      = "PAM";
+    $this->event_type  = "ADT";
   }
   
   function build($object) {

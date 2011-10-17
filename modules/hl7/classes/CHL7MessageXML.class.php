@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Acknowledgment HL7
+ * Message XML HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,11 +12,11 @@
  */
 
 /**
- * Interface CHL7v2Acknowledgment 
- * Acknowledgment HL7
+ * Interface CHL7MessageXML
+ * Message XML HL7
  */
-interface CHL7Acknowledgment {
-  function generateAcknowledgment();
+interface CHL7MessageXML {
+  function getContentsXML();
 }
 
 ?>

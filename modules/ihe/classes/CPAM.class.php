@@ -16,6 +16,16 @@
  * Patient Administration Management
  */
 class CPAM {
+  static $transaction_iti30 = array(
+    "A28", "A31", "A40"
+  );
+  
+  static $transaction_iti31 = array(
+    "A01", "A02", "A03", "A04", "A05", "A06", "A07",
+    "A11", "A12", "A13", "A38", "A44", "A54", "A55",
+    "Z99"
+  );
+  
   static $evenements = array(
     // ITI-30
     "A28" => "CHL7EventADTA28",
@@ -46,8 +56,16 @@ class CPAM {
   
   function __construct() {
     $this->type = "PAM";
-
+  }
+  
+  static function getTransaction($code) {
+    if (in_array($code, self::$transaction_iti30)) {
+      return "ITI30";
+    }
     
+    if (in_array($code, self::$transaction_iti31)) {
+      return "ITI31";
+    }
   }
 }
 

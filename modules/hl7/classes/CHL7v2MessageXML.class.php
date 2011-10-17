@@ -16,7 +16,9 @@
  * Message XML HL7
  */
 
-class CHL7v2MessageXML extends CMbXMLDocument {
+class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
+  var $_ref_exchange_ihe     = null;
+  
   function __construct() {
     parent::__construct("utf-8");
 
@@ -36,6 +38,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
   
   function getMSHEvenementXML() {
     $data = array();
+    
     $xpath = new CHL7v2MessageXPath($this);   
     $MSH = $xpath->queryUniqueNode("//MSH");
     
@@ -44,6 +47,66 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     
     return $data;
   }
+  
+  function getContentsXML() {
+    $data = array();
+
+    $xpath = new CHL7v2MessageXPath($this);
+    
+    $data["PID"] = $PID = $xpath->queryUniqueNode("//PID");
+    
+    $data["patientIdentifiers"] = $this->getPatientIdentifiers($PID);
+    
+    $data["PD1"] = $PD1 = $xpath->queryUniqueNode("//PD1");
+    
+    $data["NK1"] = $NK1 = $xpath->query("//NK1");
+    
+    $data["ROL"] = $NK1 = $xpath->query("//ROL");
+    
+    return $data;
+  }
+  
+  function getPatientIdentifiers(DOMNode $node) {
+    $data = array();
+    
+    $xpath = new CHL7v2MessageXPath($this);
+    
+    // PID/PID.3
+    foreach ($xpath->query("PID.3", $node) as $_PID3) {
+      // RI - Resource identifier 
+      if ($xpath->queryTextNode("CX.5", $_PID3) == "RI") {
+        $data["RI"] = $xpath->queryTextNode("CX.1", $_PID3);
+      }
+      // PI - Patient internal identifier
+      if ($xpath->queryTextNode("CX.5", $_PID3) == "PI") {
+        $data["PI"] = $xpath->queryTextNode("CX.1", $_PID3);
+      }
+      // INS-C - Identifiant national de santé calculé
+      if ($xpath->queryTextNode("CX.5", $_PID3) == "INS-C") {
+        $data["INSC"] = $xpath->queryTextNode("CX.1", $_PID3);
+      }
+    }
+   
+    return $data;
+  }
+ 
+  function recordPerson(CHL7Acknowledgment $dom_ack, CPatient $newPatient, $data) {
+    // Traitement du message des erreurs
+    $avertissement = $msgID400 = $msgIPP = "";
+    $_IPP_create   = $_modif_patient = false;
+    
+    $exchange_ihe = $this->_ref_exchange_ihe;
+    $exchange_ihe->_ref_sender->loadConfigValues();
+    $sender     = $exchange_ihe->_ref_sender;
+    
+    $patientRI = $data['patientIdentifiers']['RI'];
+    $patientPI = $data['patientIdentifiers']['PI'];
+    
+    // Acquittement d'erreur : identifiants RI et PI non fournis
+    if (!$patientRI && !$patientPI) {
+      return $exchange_ihe->setAckError($dom_ack, "E005", $commentaire, $newPatient);
+    }
+  } 
 }
 
 ?>

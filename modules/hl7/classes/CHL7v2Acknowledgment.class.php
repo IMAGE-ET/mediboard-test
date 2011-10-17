@@ -18,6 +18,8 @@
 class CHL7v2Acknowledgment extends CHL7v2MessageXML implements CHL7Acknowledgment {
   var $_identifiant_acquitte = null;
   
+  var $_ref_exchange_ihe     = null;
+  
   function generateAcknowledgment() {
     
   }

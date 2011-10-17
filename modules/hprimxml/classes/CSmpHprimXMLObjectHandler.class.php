@@ -35,8 +35,8 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       if (CAppUI::conf('smp server')) {
         
         $echange_hprim = new CEchangeHprim();
-        if (isset($mbObject->_hprim_initiator_id)) {
-          $echange_hprim->load($mbObject->_hprim_initiator_id);
+        if (isset($mbObject->_eai_exchange_initiator_id)) {
+          $echange_hprim->load($mbObject->_eai_exchange_initiator_id);
         }
 
         $initiateur = ($receiver->_id == $echange_hprim->sender_id) ? $echange_hprim->_id : null;

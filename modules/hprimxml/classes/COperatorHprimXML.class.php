@@ -106,7 +106,7 @@ class COperatorHprimXML extends CEAIOperator {
   static function eventPatient(CHPrimXMLEvenementsPatients $dom_evt, 
                                $data = array(), CHPrimXMLAcquittementsPatients $dom_acq, CEchangeHprim $echg_hprim) {
     $newPatient = new CPatient();
-    $newPatient->_hprim_initiator_id = $echg_hprim->_id;
+    $newPatient->_eai_exchange_initiator_id = $echg_hprim->_id;
    
     // Un événement concernant un patient appartient à l'une des six catégories suivantes :
     // Enregistrement d'un patient avec son identifiant (ipp) dans le système

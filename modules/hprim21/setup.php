@@ -389,6 +389,12 @@ class CSetuphprim21 extends CSetup {
                 ADD INDEX (`sender_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.20";
+    $this->makeRevision("0.20");
+    
+    $query = "ALTER TABLE `echange_hprim21` 
+                ADD `identifiant_emetteur` VARCHAR (255);";
+    $this->addQuery($query); 
+    
+    $this->mod_version = "0.21";
   }
 }

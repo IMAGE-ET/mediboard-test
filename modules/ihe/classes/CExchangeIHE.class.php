@@ -99,7 +99,7 @@ class CExchangeIHE extends CExchangeTabular {
     $this->group_id        = $data_format->group_id;
     $this->sender_id       = $data_format->sender_id;
     $this->sender_class    = $data_format->sender_class;
-    $this->version         = $event->version;
+    $this->version         = $event->message->version;
     $this->type            = $event->profil;
     $this->sous_type       = $event->transaction;
     $this->code            = $event->code;

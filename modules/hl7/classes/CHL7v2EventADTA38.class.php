@@ -19,8 +19,9 @@ class CHL7v2EventADTA38 extends CHL7v2EventADT implements CHL7EventADTA38 {
   function __construct() {
     parent::__construct();
         
-    $this->code      = "A38";
-    $this->msg_codes = array ( 
+    $this->code        = "A38";
+    $this->transaction = CPAM::getTransaction($this->code);
+    $this->msg_codes   = array ( 
       array(
         $this->event_type, $this->code
       )

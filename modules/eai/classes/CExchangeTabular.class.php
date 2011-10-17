@@ -18,14 +18,16 @@
 
 class CExchangeTabular extends CExchangeDataFormat {
   // DB Fields
-  var $version           = null;
-  var $nom_fichier       = null;
+  var $version              = null;
+  var $nom_fichier          = null;
+  var $identifiant_emetteur = null;
   
   function getProps() {
     $props = parent::getProps();
         
     $props["version"]                 = "str";
     $props["nom_fichier"]             = "str";
+    $props["identifiant_emetteur"]    = "str";
     $props["message_content_id"]      = "ref class|CContentTabular show|0 cascade";
     $props["acquittement_content_id"] = "ref class|CContentTabular show|0 cascade";   
     

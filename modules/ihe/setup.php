@@ -96,7 +96,13 @@ class CSetupihe extends CSetup {
                 ADD `assigning_authority_universal_type_id` VARCHAR (255);";
     $this->addQuery($query); 
     
-    $this->mod_version = "0.05";
+    $this->makeRevision("0.05");
+    
+    $query = "ALTER TABLE `exchange_ihe` 
+                ADD `identifiant_emetteur` VARCHAR (255);";
+    $this->addQuery($query); 
+    
+    $this->mod_version = "0.06";
   }
 }
 

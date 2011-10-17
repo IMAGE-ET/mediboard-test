@@ -19,8 +19,9 @@ class CHL7v2EventADTZ99 extends CHL7v2EventADT implements CHL7EventADTZ99 {
   function __construct() {
     parent::__construct();
         
-    $this->code      = "Z99";
-    $this->msg_codes = array ( 
+    $this->code        = "Z99";
+    $this->transaction = CPAM::getTransaction($this->code);
+    $this->msg_codes   = array ( 
       array(
         $this->event_type, $this->code
       )
