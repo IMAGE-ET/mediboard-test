@@ -152,7 +152,7 @@ addTransmission = function(sejour_id, user_id, transmission_id, object_id, objec
   if (libelle_ATC != undefined) {
     url.addParam("libelle_ATC", libelle_ATC);
   }
-  url.requestModal(600, 400);
+  url.requestModal(800, 400);
 }
 
 addObservation = function(sejour_id, user_id, observation_id) {
