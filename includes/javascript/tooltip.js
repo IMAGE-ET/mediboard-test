@@ -23,6 +23,7 @@ var ObjectTooltip = Class.create({
     this.sTrigger = eTrigger.identify();
     this.sTooltip = null;
     this.idTimeout = null;
+    this.modalScrollTop = null;
     
     var appearenceTimeout = {
       "short": 0.4,
@@ -85,18 +86,40 @@ var ObjectTooltip = Class.create({
     this.idTimeout = this.show.bind(this).delay(this.oOptions.duration);
   },
   
+  getScrollTop: function(){
+    if (!Prototype.Browser.IE) return;
+    
+    var modal = $(this.sTrigger).up(".modal");
+    if (!modal) return;
+    
+    this.modalScrollTop = modal.scrollTop;
+  },
+  
+  setScrollTop: function(){
+    if (!Prototype.Browser.IE) return;
+    
+    var modal = $(this.sTrigger).up(".modal");
+    if (!modal) return;
+    
+    modal.scrollTop = this.modalScrollTop;
+  },
+  
   show: function() {
     if (!this.sTooltip) {
       this.createContainer();
     }
     
+    this.getScrollTop();
+    
     var eTooltip = $(this.sTooltip);
     
-    $$("div.tooltip").each(function(other) {
-      if (!eTooltip.descendantOf(other)) {
-        other.hide();
-      }
-    });
+    if (!Prototype.Browser.IE) {
+      $$("div.tooltip").each(function(other) {
+        if (!eTooltip.descendantOf(other)) {
+          other.hide();
+        }
+      });
+    }
     
     if (!eTooltip) return;
     
@@ -129,6 +152,8 @@ var ObjectTooltip = Class.create({
           setHeight: false
         })
         .unoverflow(20);
+        
+    this.setScrollTop();
   },
   
   load: function() {
