@@ -57,7 +57,7 @@ Main.add(function () {
 
             <table class="form">
               <tr>
-                <th><label for="codeacte" title="Code CCAM de l'acte">Code de l'acte</label></th>
+                <th><label for="_codes_ccam" title="Code CCAM de l'acte">Code de l'acte</label></th>
                 <td>
                   <input tabindex="1" type="text" size="30" name="_codes_ccam" class="code ccam" value="{{if $codeacte!="-"}}{{$codeacte|stripslashes}}{{/if}}" />
                   <div style="display: none;" class="autocomplete" id="codeacte_auto_complete"></div>                 
@@ -171,7 +171,7 @@ Main.add(function () {
         
         <tr>
           <td>
-            <a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;codeacte={{$codeproc}}"><strong>{{$codeproc}}</strong></a>
+            <a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;_codes_ccam={{$codeproc}}"><strong>{{$codeproc}}</strong></a>
             <br />
             {{$textproc}}
           </td>
@@ -242,7 +242,7 @@ Main.add(function () {
         
         {{foreach name=associations from=$asso item=_asso}}
         <tr>
-          <th><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;codeacte={{$_asso.code}}">{{$_asso.code}}</a></th>
+          <th><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;_codes_ccam={{$_asso.code}}">{{$_asso.code}}</a></th>
           <td>{{$_asso.texte}}</td>
         </tr>
         {{/foreach}}
@@ -258,7 +258,7 @@ Main.add(function () {
         
         {{foreach name=incompatibilites from=$incomp item=_incomp}}
         <tr>
-          <th><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;codeacte={{$_incomp.code}}">{{$_incomp.code}}</a></th>
+          <th><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;_codes_ccam={{$_incomp.code}}">{{$_incomp.code}}</a></th>
           <td>{{$_incomp.texte}}</td>
         </tr>
         {{/foreach}}
