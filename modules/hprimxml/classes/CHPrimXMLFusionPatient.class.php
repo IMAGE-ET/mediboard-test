@@ -70,6 +70,7 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
    **/
   function fusionPatient($dom_acq, $newPatient, $data) {
     $echg_hprim = $this->_ref_echange_hprim;
+    $commentaire = "";
     
     // Si CIP
     if (!CAppUI::conf('sip server')) {
