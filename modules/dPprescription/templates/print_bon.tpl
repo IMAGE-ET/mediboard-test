@@ -128,7 +128,7 @@ Main.add( function(){
 		      {{foreach from=$_bons key=line_id item=_bon}}
 		        {{assign var=line value=$lines.$line_id}}
 		        <tr>
-		          <td>
+		          <td class="text">
 		            <strong>{{$line->_view}}</strong>
 		          </td>
 		          <td>
