@@ -48,6 +48,28 @@ if ($patient->_id) {
 $patient->loadIPP();
 $patient->loadIdVitale();
 
+$vip = 0;
+if($patient->vip && !CCanDo::admin()) {
+  $user_in_list_prat = false;
+  $user_in_logs      = false;
+  foreach($patient->_ref_praticiens as $_prat) {
+    if($user->_id == $_prat->user_id) {
+      $user_in_list_prat = true;
+    }
+  }
+  $patient->loadLogs();
+  foreach($patient->_ref_logs as $_log) {
+    if($user->_id == $_log->user_id) {
+      $user_in_logs = true;
+    }
+  }
+  $vip = !$user_in_list_prat && !$user_in_logs;
+}
+
+if($vip) {
+  CValue::setSession("patient_id", 0);
+}
+
 // Liste des siblings
 $listSiblings = $patient->getSiblings();
 foreach ($listSiblings as &$_sibling) {
@@ -70,6 +92,7 @@ $smarty->assign("canCabinet"   , CModule::getCanDo("dPcabinet"));
 $smarty->assign("patient"     , $patient);
 $smarty->assign("listPrat"    , $listPrat);
 $smarty->assign("listSiblings", $listSiblings);
+$smarty->assign("vip"         , $vip);
 
 $smarty->assign("count_matching_patients", $count_matching_patients);
 $smarty->assign("count_conflicts", $count_conflicts);
