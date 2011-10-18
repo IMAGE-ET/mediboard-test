@@ -3,6 +3,16 @@
 {{assign var=operation value=$object}}
 
 <table class="tbl tooltip">
+  {{if $operation->debut_op}}
+    <tr colspan="4">
+      <td>
+        <strong>{{tr}}COperation-debut_op{{/tr}} :</strong>
+        {{$operation->debut_op|date_format:$conf.time}}
+      </td>
+      <td>
+      </td>
+    </tr>
+  {{/if}}
   {{if $operation->annulee == 1}}
   <tr>
     <th class="category cancelled" colspan="4">
@@ -12,7 +22,7 @@
   {{/if}}
   
   <tr>
-    <td class="button">
+    <td class="button" colspan="4">
       {{mb_script module="dPplanningOp" script="operation" ajax="true"}}
     	
       {{if $can->edit}}
