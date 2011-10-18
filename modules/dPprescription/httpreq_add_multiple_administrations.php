@@ -91,7 +91,7 @@ if (count($adm) > 0) {
 		  $line->loadRefProduitPrescription();
 		}
 		
-		if (CAppUI::conf("pharmacie ask_stock_location_administration")) {
+		if ($line instanceof CPrescriptionLineMedicament && CAppUI::conf("pharmacie ask_stock_location_administration")) {
 		  $line->loadRefsProductsStocks();
 		}
 		

@@ -1,4 +1,4 @@
-{{if $conf.pharmacie.ask_stock_location_administration}}
+{{if $line instanceof CPrescriptionLineMedicament && $conf.pharmacie.ask_stock_location_administration}}
   {{if $line->_ref_stocks_service|@count == 0}}
     <div class="small-warning">
       Il n'existe pas de stock pour ce produit

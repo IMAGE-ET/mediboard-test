@@ -878,6 +878,53 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 		  $this->_unite_administration = $this->_ref_produit_prescription->unite_prise;
 		}
 	}
+  
+  function loadRefsProductsStocks(){
+    $this->_ref_stocks_service = array();
+    //$this->_ref_stocks_group = array();
+      
+    if(CModule::getActive("dPstock") && $this->code_cip){
+      $patient = $this->loadRelPatient();
+      $patient->loadRefsAffectations();
+      $aff = $patient->_ref_curr_affectation;
+      
+      if (!$aff->_id) {
+        $service = new CService;
+        $services = $service->loadGroupList();
+      }
+      else {
+        $services = array($aff->loadRefLit()->loadRefChambre()->loadRefService());
+      }
+      
+      $product = new CProduct();
+      $product->code = $this->code_cip;
+      
+      if ($product->loadMatchingObject()) {
+        $stock_service = new CProductStockService;
+        $where = array(
+          "product_id"   => "= '$product->_id'",
+          "object_class" => "= 'CService'",
+          "object_id"    => $stock_service->_spec->ds->prepareIn(CMbArray::pluck($services, "_id")),
+        );
+        $this->_ref_stocks_service = $stock_service->loadList($where);
+        
+        foreach($this->_ref_stocks_service as $_stock) {
+          $_stock->loadRefLocation();
+        }
+        
+        /*$stock_group = new CProductStockGroup;
+        $where = array(
+          "product_id" => "= '$product->_id'",
+          "group_id"   => "= '".CProductStockGroup::getHostGroup(true)."'",
+        );
+        $this->_ref_stocks_group = $stock_group->loadList($where);
+        
+        foreach($this->_ref_stocks_group as $_stock) {
+          $_stock->loadRefLocation();
+        }*/
+      }
+    }
+  }
 }
 
 ?>

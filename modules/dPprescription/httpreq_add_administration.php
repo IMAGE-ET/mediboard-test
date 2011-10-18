@@ -151,7 +151,7 @@ if ($line instanceof CPrescriptionLineElement) {
   $latest_constantes = $patient->loadRefConstantesMedicales();
 }
 
-if (CAppUI::conf("pharmacie ask_stock_location_administration")) {
+if ($line instanceof CPrescriptionLineMedicament && CAppUI::conf("pharmacie ask_stock_location_administration")) {
   $line->loadRefsProductsStocks();
 }
 

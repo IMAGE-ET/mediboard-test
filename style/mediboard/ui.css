@@ -1210,3 +1210,11 @@ span.countertip {
 .treeview div.lastCollapsable-hitarea, .treeview div.lastExpandable-hitarea {
   background-position: 16px;
 }
+
+/* To disable text selection */
+*[unselectable] {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
