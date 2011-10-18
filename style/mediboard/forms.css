@@ -155,6 +155,12 @@ table.layout td.cancelled {
   background-color: #f88 !important;
 }
 
+/** On iOS, labels are not clickable, this may help (or not) **/
+/*label {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+}*/
+
 label:hover {
   cursor: pointer;
 }

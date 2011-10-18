@@ -31,6 +31,7 @@ class CSourceLDAP extends CMbObject{
   var $priority                  = null;
   
   var $_options                  = array();
+	var $_ldapconn                 = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -126,21 +127,11 @@ class CSourceLDAP extends CMbObject{
    * @param array    $entry [optional]
    * @return 
    */
-  function ldap_mod_replace($ldapconn = null, $filter = null, $entry) {
+  function ldap_mod_replace($ldapconn = null, $dn = null, $entry) {
     if (!$ldapconn) {
       $ldapconn = $this->ldap_connect();
     }
-    
-    $ldapsearch = @ldap_search($ldapconn, $this->rootdn, $filter);
-    if ($ldapsearch) {
-      $results = ldap_get_entries($ldapconn, $ldapsearch);
-    }
-    
-    if ($results["count"] > 1) {
-      throw new CMbException("CSourceLDAP_too-many-results");
-    }
-    
-    $dn = $results[0]["dn"];
+		
     $ret = ldap_mod_replace($ldapconn, $dn, $entry);
     
     if (!$ret) {
@@ -158,15 +149,31 @@ class CSourceLDAP extends CMbObject{
    * @param array    $attributes [optional]
    * @return array
    */
-  function ldap_search($ldapconn, $filter, $attributes = array()) {
+  function ldap_search($ldapconn, $filter, $attributes = array(), $unbind = true) {
     $results = null;
     $ldapsearch = @ldap_search($ldapconn, $this->rootdn, $filter, $attributes);
     if ($ldapsearch) {
       $results = ldap_get_entries($ldapconn, $ldapsearch);
     }
     
-    ldap_unbind($ldapconn);
+		if ($unbind) {
+      ldap_unbind($ldapconn);
+		}
     
     return $results;
   }
+	
+	function get_dn($username) {
+    $results = $this->ldap_search($this->_ldapconn, "(samaccountname=$username)", array(), false);
+    
+    if ($results["count"] > 1) {
+      throw new CMbException("CSourceLDAP_too-many-results");
+    }
+    
+    return $results[0]["dn"];
+	}
+	
+	function start_tls($ldapconn){
+		ldap_start_tls($ldapconn);
+	}
 }

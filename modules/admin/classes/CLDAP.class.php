@@ -92,8 +92,8 @@ class CLDAP {
    * @param boolean $encoded_password [optional] If the password is already encoded
    * @return boolean Success
    */
-  static function changePassword(CUser $user, $old_pass, $new_pass, $encryption = "MD5", $encoded_password = false) {
-    if (!in_array($encryption, array("MD5", "SHA"/*, "CRYPT"*/))) {
+  static function changePassword(CUser $user, $old_pass, $new_pass, $encryption = "Unicode") {
+    if (!in_array($encryption, array("Unicode", "MD5", "SHA"))) {
       return false;
     }
     
@@ -102,26 +102,46 @@ class CLDAP {
     if (!$source_ldap) {
       return false;
     }
-
+    
+    $source_ldap->start_tls();
     $bound = $source_ldap->ldap_bind($source_ldap->_ldapconn, $user->user_username, $old_pass);
     
     if (!$bound) {
       return false;
     }
     
-    if (!$encoded_password) {
-      switch($encryption) {
-        case "MD5":   $new_pass = md5($new_pass);   break;
-        case "SHA":   $new_pass = sha1($new_pass);  break;
-        //case "CRYPT": $new_pass = crypt($new_pass); break; // we may need a salt
-      }
+    $entry = array();
+    
+    switch($encryption) {
+      case "Unicode":
+        $entry["unicodePwd"][0] = $this->encodeUnicodePassword($new_pass);  
+        
+        break;
+      case "MD5":
+        $new_pass = md5($new_pass);
+        $entry["userPassword"] = "\{$encryption\}".base64_encode(pack("H*", $new_pass));
+        
+        break;
+      case "SHA":
+        $new_pass = sha1($new_pass);
+        $entry["userPassword"] = "\{$encryption\}".base64_encode(pack("H*", $new_pass));
+        
+        break;
     }
     
-    $entry = array(
-      "userPassword" => "\{$encryption\}".base64_encode(pack("H*", $new_pass))
-    );
+    $dn = $source_ldap->get_dn($user->user_username);
+    return $source_ldap->ldap_mod_replace($source_ldap->_ldapconn, $dn, $entry);
+  }
+  
+  private static function encodeUnicodePassword($password) {
+    $password = "\"$password\"";
+    $encoded = "";
     
-    return $source_ldap->ldap_mod_replace($source_ldap->_ldapconn, "(samaccountname={$user->user_username})", $entry);
+    for ($i = 0; $i < strlen($password); $i++){ 
+      $encoded .= "{$password[$i]}\000"; 
+    }
+    
+    return $encoded;
   }
   
   /**
