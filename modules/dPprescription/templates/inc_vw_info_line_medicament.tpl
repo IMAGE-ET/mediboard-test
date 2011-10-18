@@ -41,7 +41,7 @@ ObjectTooltip.createSubst = function (element, line_id, can_select_equivalent, m
 {{/if}}
 
 {{if $line instanceof CPrescriptionLineMixItem}}
-  {{if $line->_ref_prescription_line_mix->date_arret && $line->time_arret}}
+  {{if $line->_ref_prescription_line_mix->date_arret && $line->_ref_prescription_line_mix->time_arret}}
     <img src="style/mediboard/images/buttons/stop.png" title="{{tr}}CPrescriptionLineElement-date_arret{{/tr}} : {{$line->_ref_prescription_line_mix->date_arret|date_format:$conf.date}} {{$line->_ref_prescription_line_mix->time_arret|date_format:$conf.time}}"/>
   {{/if}}
 {{else}}
