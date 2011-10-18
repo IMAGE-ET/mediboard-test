@@ -55,6 +55,10 @@ foreach($listOps as $_key => $_op) {
   $_op->loadRefSejour();
   $_op->_ref_sejour->loadRefPatient();
   $_op->loadRefAffectation();
+  if (!in_array($_op->_ref_affectation->_ref_lit->_ref_chambre->service_id, array_keys($services))) {
+    unset($listOps[$_key]);
+    continue;
+  }
   if($_op->_ref_affectation->_id) {
     if(!$service_id || $service_id == $_op->_ref_affectation->_ref_lit->_ref_chambre->service_id) {
       $listServices[$_op->_ref_affectation->_ref_lit->_ref_chambre->service_id][$_op->_id] = $_op;
