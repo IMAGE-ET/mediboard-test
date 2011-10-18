@@ -565,7 +565,7 @@
             <th>Formulaires</th>
           </tr>
           <tr>
-            <td id="list-ex_objects"></td>
+            <td id="list-ex_objects" class="text"></td>
           </tr>
         </table>
       {{/if}}

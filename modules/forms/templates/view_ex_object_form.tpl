@@ -31,11 +31,16 @@ span.ex-message-title-spacer {
 
 {{if !@$readonly}}
 
+{{unique_id var=ex_form_hash}}
+{{assign var=ex_form_hash value="ex_$ex_form_hash"}}
+
 <script type="text/javascript">
-var ExObjectForm = {
+ExObjectForms = window.ExObjectForms || {};
+
+ExObjectForms.{{$ex_form_hash}} = {
   confirmSavePrint: function(form){
     var oldCallback = $V(form.callback);
-    $V(form.callback, "ExObjectForm.printForm");
+    $V(form.callback, 'ExObjectForms.{{$ex_form_hash}}.printForm');
     
     (FormObserver.changes == 0 || confirm("Pour imprimer le formulaire, il est nécessaire de l'enregistrer, souhaitez-vous continuer ?")) && 
              form.onsubmit();
@@ -46,7 +51,7 @@ var ExObjectForm = {
   },
 
   closeOnSuccess: function(id, obj) {
-    ExObjectForm.updateId(id, obj);
+    this.updateId(id, obj);
     
     if (!(obj._ui_messages[3] || obj._ui_messages[4])) { // warning ou error
       window.close();
@@ -54,7 +59,7 @@ var ExObjectForm = {
   },
 
   printForm: function(id, obj) {
-    ExObjectForm.updateId(id, obj);
+    this.updateId(id, obj);
     
     FormObserver.changes = 0;
     $("printIframe").src = "about:blank";
@@ -62,13 +67,14 @@ var ExObjectForm = {
   },
 
   updateId: function(id, obj) {
-    $V(getForm("editExObject").ex_object_id, id);
+    $V(getForm("editExObject_{{$ex_form_hash}}").ex_object_id, id);
+    //(window.callback_{{$ex_class_id}} || window.launcher && window.launcher.callback_{{$ex_class_id}})();
   }
 };
 
 Main.add(function(){
-  ExObjectFormula.init({{$formula_token_values|@json}});
   ExObject.current = {object_guid: "{{$object_guid}}", event: "{{$event}}"};
+  new ExObjectFormula({{$formula_token_values|@json}}, getForm("editExObject_{{$ex_form_hash}}"));
 });
 
 if (window.opener && !window.opener.closed && window.opener !== window && window.opener.ExObject) {
@@ -90,7 +96,7 @@ if (window.opener && !window.opener.closed && window.opener !== window && window
 }
 </script>
 
-{{mb_form name="editExObject" m="system" dosql="do_ex_object_aed" method="post" className="watched"
+{{mb_form name="editExObject_$ex_form_hash" m="system" dosql="do_ex_object_aed" method="post" className="watched"
           onsubmit="return onSubmitFormAjax(this)"}}
   {{mb_key object=$ex_object}}
   {{mb_field object=$ex_object field=_ex_class_id hidden=true}}
@@ -98,15 +104,16 @@ if (window.opener && !window.opener.closed && window.opener !== window && window
   {{mb_field object=$ex_object field=object_id hidden=true}}
   
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="callback" value="ExObjectForm.closeOnSuccess" />
+  <input type="hidden" name="callback" value='ExObjectForms.{{$ex_form_hash}}.closeOnSuccess' />
   
   {{if !$print}}
     <iframe id="printIframe" width="0" height="0" style="display: none;"></iframe>
-    <button type="button" class="print" onclick="ExObjectForm.confirmSavePrint(this.form)" style="float: right;">
+    <button type="button" class="print" onclick="ExObjectForms.{{$ex_form_hash}}.confirmSavePrint(this.form)" style="float: right;">
       {{tr}}Print{{/tr}}
     </button>
   {{/if}}
   
+  {{if !$noheader}}
   <h2 style="font-weight: bold;">
     {{if $ex_object->_ref_reference_object_2 && $ex_object->_ref_reference_object_2->_id}}
       <span style="color: #006600;" 
@@ -144,15 +151,18 @@ if (window.opener && !window.opener.closed && window.opener !== window && window
       </span>
     {{/if}}
   </h2>
+  {{/if}}
   
   <script type="text/javascript">
     Main.add(function(){
-      Control.Tabs.create("ex_class-groups-tabs");
-      document.title = "{{$ex_object->_ref_ex_class->name}} - {{$object}}".htmlDecode();
+      Control.Tabs.create("ex_class-groups-tabs-{{$ex_form_hash}}");
+      if (window.parent != window || window.opener != window) {
+        document.title = "{{$ex_object->_ref_ex_class->name}} - {{$object}}".htmlDecode();
+      }
     });
   </script>
   
-  <ul id="ex_class-groups-tabs" class="control_tabs">
+  <ul id="ex_class-groups-tabs-{{$ex_form_hash}}" class="control_tabs" style="clear: left;">
   {{foreach from=$grid key=_group_id item=_grid}}
     {{if $groups.$_group_id->_ref_fields|@count}}
     <li>
@@ -190,7 +200,7 @@ if (window.opener && !window.opener.closed && window.opener !== window && window
               {{/if}}
             {{elseif $_group.type == "field"}}
               <td>
-                {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_field}}
+                {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_field form="editExObject_$ex_form_hash"}}
               </td>
             {{/if}}
           {{elseif $_group.object instanceof CExClassHostField}}
@@ -250,7 +260,7 @@ if (window.opener && !window.opener.closed && window.opener !== window && window
             {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$_field}}
           </th>
           <td colspan="2">
-            {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_field}}
+            {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_field form="editExObject_$ex_form_hash"}}
           </td>
         </tr>
       {{/if}}
@@ -315,6 +325,7 @@ function switchMode(){
 {{/if}}
 
 <table class="main {{if $print}} print {{else}} form {{/if}}">
+  {{if !$noheader}}
   <thead>
     <tr>
       <td colspan="4">
@@ -350,6 +361,7 @@ function switchMode(){
       </td>
     </tr>
   </thead>
+  {{/if}}
   
   {{if $only_filled}}
   

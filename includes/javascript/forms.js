@@ -50,7 +50,7 @@ function $V (element, value, fire) {
   // We get the tag and the type
   var tag  = element.tagName || '',
       type = element.type || '',
-      isInput = tag.match(/^(input|select|textarea)$/i),
+      isInput = /^(input|select|textarea)$/i.test(tag),
       isElement = Object.isElement(element);
 
   if (isElement && !isInput) {
@@ -60,7 +60,7 @@ function $V (element, value, fire) {
   // If it is a form element
   if (isInput && isElement) {
     // If the element is a checkbox, we check if it's checked
-    var oldValue = (type.match(/^checkbox$/i) ? element.checked : $F(element));
+    var oldValue = (/^checkbox$/i.test(type) ? element.checked : $F(element));
 
     // If a value is provided
     if (!Object.isUndefined(value) && value != oldValue) {
@@ -98,7 +98,7 @@ function $V (element, value, fire) {
         type = e.type;
       });
       
-      if (type.match(/^radio$/i)) {
+      if (/^radio$/i.test(type)) {
         ret = (ret.length > 1 ? ret : ret[0]);
       }
       return (ret && ret.length > 0) ? ret : null;
@@ -309,7 +309,7 @@ function prepareForm(oForm) {
 		//  -    OR textearea
 		//  - not disabled and not readonly
 		//  - element is on screen
-    if (bGiveFormFocus && (sType === "textarea" || sType === "text" && !oElement.className.match(/autocomplete/)) && 
+    if (bGiveFormFocus && (sType === "textarea" || sType === "text" && !/autocomplete/.test(oElement.className)) && 
         !oElement.getAttribute("disabled") && !oElement.getAttribute("readonly") && 
         oElement.clientWidth > 0) {
         // oElement.clientWidth MUST be at the end. This "call" slows down IE a LOT
@@ -388,11 +388,6 @@ function prepareForm(oForm) {
       //(function(oElement){
         oElement.fire("ui:change");
       //}).defer(oElement);
-    }
-
-    // Select tree
-    if (props["select-tree"] && Prototype.Browser.Gecko) {
-      oElement.buildTree();
     }
 
     var mask = props.mask;

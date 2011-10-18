@@ -21,6 +21,7 @@ $readonly     = CValue::get("readonly");
 $print        = CValue::get("print");
 $autoprint    = CValue::get("autoprint");
 $only_filled  = CValue::get("only_filled");
+$noheader     = CValue::get("noheader");
 
 if (!$ex_class_id) {
   $msg = "Impossible d'afficher le formulaire sans connaître la classe de base";
@@ -120,4 +121,5 @@ $smarty->assign("readonly",     $readonly);
 $smarty->assign("print",        $print);
 $smarty->assign("autoprint",    $autoprint);
 $smarty->assign("only_filled",  $only_filled);
+$smarty->assign("noheader",     $noheader);
 $smarty->display("view_ex_object_form.tpl");

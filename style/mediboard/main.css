@@ -22,7 +22,6 @@ z-index ordering (foreground to background) :
   550 .datepickerControl
   500 div.modal
   400 div.autocomplete
-  200 .select-tree
   100 .planning .event:hover
   100 .planning .selected, .planning .selected:hover
   100 .dent-menu
@@ -1166,54 +1165,6 @@ table.tbl th.traitement, table.tbl td.traitement, table.tbl tr:hover td.traiteme
 
 table.tbl th.perop, table.tbl td.perop, table.tbl tr:hover td.perop {
   background-color: #fcc;
-}
-
-/* Select tree */
-ul.select-tree {
-  padding: 0;
-  text-align: left;
-  color: #000;
-  font-weight: normal;
-  font-size: 1.0em;
-  z-index: 200;
-}
-
-ul.select-tree ul {
-  padding: 0;
-}
-
-ul.select-tree li {
-  list-style-type: none;
-  border: 1px solid #999;
-  margin-top: -1px;
-  padding: 1px;
-  padding-left: 3px;
-  background: #fff;
-  cursor: pointer;
-  margin-left: 0;
-}
-
-ul.select-tree li:hover {
-  background: #ccc;
-}
-
-ul.select-tree li.selected {
-  background: #666;
-  color: #fff;
-}
-
-ul.select-tree li.focused {
-  background: #ccc;
-}
-
-ul.select-tree li.drop {
-  background-image: url(../../images/icons/a_right.png);
-  background-position: center right;
-  background-repeat: no-repeat;
-}
-
-ul.select-tree .highlight {
-  background: #ddd;
 }
 
 .administration {

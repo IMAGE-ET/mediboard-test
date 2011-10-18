@@ -7,7 +7,7 @@
 {{if $mode == "normal" && $ex_field->_triggered_data|@count}}
   <script type="text/javascript">
   Main.add(function(){
-    var form = getForm("editExObject");
+    var form = getForm("{{$form}}");
     {{if $_spec instanceof CSetSpec}}
       {{foreach from=$_spec->_list item=_value}}
         ExObject.initTriggers({{$ex_field->_triggered_data|@json}}, form, "_{{$_field_name}}_{{$_value}}", "{{$ex_object->_ref_ex_class->name}}", true);
@@ -22,7 +22,7 @@
 {{if $mode == "normal" && $_spec instanceof CRefSpec}}
   <script type="text/javascript">
   Main.add(function(){
-    var form = getForm("editExObject");
+    var form = getForm("{{$form}}");
     var url = new Url("system", "ajax_seek_autocomplete");
     url.addParam("object_class", "{{$_spec->class}}");
     url.addParam("field", "{{$_field_name}}");

@@ -456,6 +456,10 @@ Element.addMethods({
   prepareTouchEvents: function(root){
     if (!App.touchDevice) return;
     
+    /*root.select("label").each(function(label){
+      label.observe("touchstart", Event.stop);
+    });*/
+    
     root.select("*[onmouseover]").each(function(element){
       if (element.touchEventsPrepared) return;
       
@@ -881,7 +885,7 @@ Element.warnDuplicates = function(){
 Event.preventBackspace = function() {
   document.observe("keydown", function(e){
     if(Event.key(e) == Event.KEY_BACKSPACE && 
-      !Event.element(e).tagName.match(/input|textarea/i)){
+      !/input|textarea/i.test(Event.element(e).tagName)) {
       Event.stop(e);
     }
   });

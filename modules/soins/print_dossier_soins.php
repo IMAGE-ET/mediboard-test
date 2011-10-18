@@ -33,7 +33,7 @@ foreach ($sejour->_ref_tasks as $_task) {
 }
 
 foreach($sejour->_ref_operations as $_interv) {
-  $_interv->loadRefPraticien();
+  $_interv->loadRefPraticien(true);
   $_interv->_ref_praticien->loadRefFunction();
   $_interv->loadRefsConsultAnesth();
   $_interv->_ref_consult_anesth->loadRefConsultation();

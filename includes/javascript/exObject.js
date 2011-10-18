@@ -87,6 +87,15 @@ ExObject = {
     if (mode == "display" || mode == "print") {
       url.addParam("readonly", 1);
     }
+    /*else {
+      window["callback_"+ex_class_id] = function(ex_class_id, object_guid){
+        ExObject.register(this.container, {
+          ex_class_id: ex_class_id, 
+          object_guid: object_guid, 
+          event: event
+        });
+      }.bind(this).curry(ex_class_id, object_guid);
+    }*/
     
     if (mode == "print") {
       url.addParam("print", 1);
@@ -138,46 +147,59 @@ ExObject = {
   }
 };
 
-ExObjectFormula = {
+ExObjectFormula = Class.create({
   tokenData: null,
-  parser: new Parser,
+  form: null,
+  customOps: {
+    Min: function (ms) { return Math.ceil(ms / Date.minute) },
+    H:   function (ms) { return Math.ceil(ms / Date.hour) },
+    J:   function (ms) { return Math.ceil(ms / Date.day) },
+    Sem: function (ms) { return Math.ceil(ms / Date.week) },
+    M:   function (ms) { return Math.ceil(ms / Date.month) },
+    A:   function (ms) { return Math.ceil(ms / Date.year) }
+  },
   
-  init: function(tokenData) {
-    ExObjectFormula.tokenData = tokenData;
-		var allFields = Object.keys(ExObjectFormula.tokenData);
+  initialize: function(tokenData, form) {
+    this.tokenData = tokenData;
+    this.form = form;
+    this.parser = new Parser;
     
-    $H(ExObjectFormula.tokenData).each(function(token){
+    // Extend Parser with cutom operators (didn't find a way to do this on the prototype) 
+    this.parser.ops1 = Object.extend(this.customOps, this.parser.ops1);
+    
+    var allFields = Object.keys(this.tokenData);
+    
+    $H(this.tokenData).each(function(token){
       var field = token.key;
       var data = token.value;
       var formula = data.formula;
       
       if (!formula) return;
       
-      var form = getForm("editExObject");
-      var fieldElement = form[field];
+      var fieldElement = this.form[field];
       var compute, variables = [];
       
       // concatenation
       if (fieldElement.hasClassName("text")) {
         fieldElement.value = formula;
         
-				allFields.each(function(v){
-					if (formula.indexOf("["+v+"]") != -1) {
-						variables.push(v);
-					}
-				});
-				
+        allFields.each(function(v){
+          if (formula.indexOf("[" + v + "]") != -1) {
+            variables.push(v);
+          }
+        });
+        
         expr = {
-					evaluate: (function(formula, values) {
-						var result = formula;
-						
-						$H(values).each(function(pair){
-							result = result.replace(new RegExp("(\\["+pair.key+"\\])", "g"), pair.value);
-						});
-						
-						return result;
-					}).curry(formula)
-				};
+          evaluate: (function(formula, values){
+            var result = formula;
+            
+            $H(values).each(function(pair){
+              result = result.replace(new RegExp("(\\[" + pair.key + "\\])", "g"), pair.value);
+            });
+            
+            return result;
+          }).curry(formula)
+        };
       }
       
       // arithmetic
@@ -185,38 +207,41 @@ ExObjectFormula = {
         formula = formula.replace(/[\[\]]/g, "");
         
         try {
-          var expr = ExObjectFormula.parser.parse(formula);
+          var expr = this.parser.parse(formula);
           variables = expr.variables();
-        }
-        catch(e) {
-          fieldElement.insert({after: DOM.div({className: 'small-error'}, "Formule invalide: <br /><strong>"+data.formulaView+"</strong>")});
+        } 
+        catch (e) {
+          fieldElement.insert({
+            after: DOM.div({
+              className: 'small-error'
+            }, "Formule invalide: <br /><strong>" + data.formulaView + "</strong>")
+          });
           return;
         }
       }
-    
-      ExObjectFormula.tokenData[field].parser = expr;
-      ExObjectFormula.tokenData[field].variables = variables;
-  
-      compute = ExObjectFormula.computeResult.curry(fieldElement);
+      
+      this.tokenData[field].parser = expr;
+      this.tokenData[field].variables = variables;
+      
+      compute = this.computeResult.bind(this).curry(fieldElement);
       compute();
       
       variables.each(function(v){
-        if (!form[v]) return;
+        if (!this.form[v]) 
+          return;
         
-        var inputs = Form.getInputsArray(form[v]);
+        var inputs = Form.getInputsArray(this.form[v]);
         
         inputs.each(function(input){
           if (input.hasClassName("date") || input.hasClassName("dateTime") || input.hasClassName("time")) {
             input.onchange = compute;
           }
           else {
-            input.observe("change", compute)
-                 .observe("ui:change", compute)
-                 .observe("click", compute);
+            input.observe("change", compute).observe("ui:change", compute).observe("click", compute);
           }
         });
-      });
-    });
+      }, this);
+    }, this);
   },
   
   //get the input value : coded or non-coded
@@ -226,7 +251,7 @@ ExObjectFormula = {
     element = Form.getInputsArray(element)[0];
     
     var name = element.name;
-    var result = ExObjectFormula.tokenData[name].values;
+    var result = this.tokenData[name].values;
 
     if (element.hasClassName("date")) {
       if (!value) return NaN;
@@ -253,12 +278,12 @@ ExObjectFormula = {
       return value;
 
     // coded
-    return ExObjectFormula.tokenData[name].values[value];
+    return this.tokenData[name].values[value];
   },
 
   //computes the result of a form + exGroup(formula, resultField)
   computeResult: function(target){
-    var data = ExObjectFormula.tokenData[target.name];
+    var data = this.tokenData[target.name];
     if (!data) return;
     
     var form = target.form;
@@ -279,12 +304,12 @@ ExObjectFormula = {
       DateHeureCourante: now
     };
     var values = {};
-		var isConcat = target.hasClassName("text");
+    var isConcat = target.hasClassName("text");
 
     data.variables.each(function(v){
-      values[v] = constants[v] || ExObjectFormula.getInputValue(form[v]);
+      values[v] = constants[v] || this.getInputValue(form[v]);
       if (!isConcat && values[v] === "") values[v] = NaN;
-    });
+    }, this);
   
     var result = data.parser.evaluate(values);
     if (!isConcat && !isFinite(result)) {
@@ -297,24 +322,14 @@ ExObjectFormula = {
       }
     }
     
-		result += "";
+    result += "";
     $V(target, result);
     
     if (isConcat) {
       target.rows = result.split("\n").length;
     }
   }
-};
-
-ExObjectFormula.parser.ops1 = Object.extend({
-  Min: function (ms) { return Math.ceil(ms / Date.minute) },
-  H:   function (ms) { return Math.ceil(ms / Date.hour) },
-  J:   function (ms) { return Math.ceil(ms / Date.day) },
-  Sem: function (ms) { return Math.ceil(ms / Date.week) },
-  M:   function (ms) { return Math.ceil(ms / Date.month) },
-  A:   function (ms) { return Math.ceil(ms / Date.year) }
-}, ExObjectFormula.parser.ops1);
-
+});
 
 // TODO put this in the object
 selectExClass = function(element, object_guid, event, _element_id) {
@@ -322,7 +337,7 @@ selectExClass = function(element, object_guid, event, _element_id) {
   showExClassForm($V(element) || element.value, object_guid, view, null, event, _element_id);
   element.selectedIndex = 0;
 }
-showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event, _element_id, parent_view) {
+showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event, _element_id, parent_view, ajax_container) {
   var url = new Url("forms", "view_ex_object_form");
   url.addParam("ex_class_id", ex_class_id);
   url.addParam("object_guid", object_guid);
@@ -331,21 +346,29 @@ showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event,
   url.addParam("_element_id", _element_id);
   url.addParam("parent_view", parent_view);
 
+  /*window["callback_"+ex_class_id] = function(){
+    ExObject.register(_element_id, {
+      ex_class_id: ex_class_id, 
+      object_guid: object_guid, 
+      event: event, 
+      _element_id: _element_id
+    });
+  }*/
+    
   var _popup = true;//Control.Overlay.container && Control.Overlay.container.visible();
 
+  ajax_container = null;
+  
+  if (ajax_container) {
+    url.requestUpdate(ajax_container);
+    return;
+  }
+  
   if (_popup) {
     url.popup("100%", "100%", title);
   }
   else {
-    url.modal({title: title});
-    url.modalObject.observe("afterClose", function(){
-      ExObject.register(_element_id, {
-        ex_class_id: ex_class_id, 
-        object_guid: object_guid, 
-        event: event, 
-        _element_id: _element_id
-      });
-    });
+    url.modal();
   }
 }
 ////////////////////

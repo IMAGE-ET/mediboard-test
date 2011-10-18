@@ -211,7 +211,7 @@ Object.extend(ElementChecker, {
     // alphaAndNum
     alphaAndNum: function () {
       this.assertNoArg("alphaAndNum");
-      if (!this.sValue.match(/[A-z]/) || !this.sValue.match(/\d+/))
+      if (!/[A-z]/.test(this.sValue) || !/\d+/.test(this.sValue))
         this.addError("alphaAndNum", "Doit contenir au moins une lettre et un chiffre");
     },
     
@@ -262,7 +262,7 @@ Object.extend(ElementChecker, {
     // canonical
     canonical: function(){
       this.assertNoArg("canonical");
-      if (!this.sValue.match(/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/))
+      if (!/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/.test(this.sValue))
         this.addError("canonical", "Ne doit contenir que des chiffres et des lettres non-accentuées (pas d'espaces)");
     },
     
@@ -298,28 +298,28 @@ Object.extend(ElementChecker, {
     // ccam
     ccam: function() {
       this.assertNoArg("ccam");
-      if (!this.sValue.match(/^[A-Z]{4}[0-9]{3}(-[0-9](-[0-9])?)?$/i))
+      if (!/^[A-Z]{4}[0-9]{3}(-[0-9](-[0-9])?)?$/i.test(this.sValue))
         this.addError("ccam", "Code CCAM incorrect");
     },
     
     // cim10
     cim10: function () {
       this.assertNoArg("cim10");
-      if (!this.sValue.match(/^[a-z][0-9x]{2,4}$/i))
+      if (!/^[a-z][0-9x]{2,4}$/i.test(this.sValue))
         this.addError("cim10", "Code CIM incorrect, doit contenir une lettre, puis de 2 à 4 chiffres ou la lettre X");
     },
     
     // adeli
     adeli: function() {
       this.assertNoArg("adeli");
-      if (!this.sValue.match(/^([0-9]){9}$/i))
+      if (!/^([0-9]){9}$/i.test(this.sValue))
         this.addError("adeli", "Code Adeli incorrect, doit contenir exactement 9 chiffres");
     },
     
     // insee
     insee: function () {
       this.assertNoArg("insee");
-      if (this.sValue.match(/^([0-9]{7,8}[A-Z])$/i))
+      if (/^([0-9]{7,8}[A-Z])$/i.test(this.sValue))
         return;
       
       var aMatches = this.sValue.match(/^([12478][0-9]{2}[0-9]{2}[0-9][0-9ab][0-9]{3}[0-9]{3})([0-9]{2})$/i);
@@ -453,7 +453,7 @@ Object.extend(ElementChecker, {
       if(this.sValue == "0000-00-00" && this.oProperties.notNull)
         this.addError("date", "N'est pas une date correcte");
 
-      if (!this.sValue.match(/^\d{4}-\d{1,2}-\d{1,2}$/))
+      if (!/^\d{4}-\d{1,2}-\d{1,2}$/.test(this.sValue))
         this.addError("date", "N'a pas un format de date correct");
     },
     
@@ -463,7 +463,7 @@ Object.extend(ElementChecker, {
         return;
       }
 
-      if(!this.sValue.match(/^\d{1,2}:\d{1,2}(:\d{1,2})?$/))
+      if(!/^\d{1,2}:\d{1,2}(:\d{1,2})?$/.test(this.sValue))
         this.addError("time", "N'a pas un format d'heure correct");
     },
     
@@ -473,7 +473,7 @@ Object.extend(ElementChecker, {
         return;
       }
       
-      if (!this.sValue.match(/^\d{4}-\d{1,2}-\d{1,2}[ \+]\d{1,2}:\d{1,2}(:\d{1,2})?$/))
+      if (!/^\d{4}-\d{1,2}-\d{1,2}[ \+]\d{1,2}:\d{1,2}(:\d{1,2})?$/.test(this.sValue))
         this.addError("dateTime", "N'a pas un format de date/heure correct");
     },
     
@@ -494,7 +494,7 @@ Object.extend(ElementChecker, {
     pct: function() {
       this.toNumeric();
       
-      if (!this.sValue.match(/^\d+(\.\d+)?$/))
+      if (!/^\d+(\.\d+)?$/.test(this.sValue))
         this.addError("pct", "N'est pas une valeur décimale");
     },
     
@@ -511,7 +511,7 @@ Object.extend(ElementChecker, {
     // url // (http|https|ftp)?(www\.)?([\w*])\.[a-zA-Z]{2,3}[/]?$
     url: function() {
       var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-      if (!this.sValue.match(regexp))
+      if (!regexp.test(this.sValue))
          this.addError("url", "Le format de l'url n'est pas valide");
     },
     
@@ -522,7 +522,7 @@ Object.extend(ElementChecker, {
     
     // email
     email: function() {
-      if (!this.sValue.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/))
+      if (!/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(this.sValue))
         this.addError("email", "Le format de l'email n'est pas valide");
     },
     
@@ -545,7 +545,7 @@ Object.extend(ElementChecker, {
       this.assertMultipleArgs("regex");
       var re = new RegExp(this.oProperties.regex[0], this.oProperties.regex[1]);
       
-      if (!this.sValue.match(re))
+      if (!re.test(this.sValue))
         this.addError("regex", "Ne respecte pas le format attendu"); // Inutile de mettre la regex dans le message
     }
   }

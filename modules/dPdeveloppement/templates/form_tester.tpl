@@ -78,21 +78,6 @@ Main.add(function () {
     <tr>
       <th></th>
       <td>
-        <select name="select_tree_1" class="select-tree" onchange="Console.debug(this.value+':'+this.options[this.selectedIndex].text);">
-          <option value="1">Thomas</option>
-          <option value="2">Romain</option>
-          <option value="11">123</option>
-          <optgroup label="Salariés">
-            <option value="3">Alexis</option>
-            <option value="4">Fabien</option>
-          </optgroup>
-          <optgroup label="Stagiaires">
-            <option value="8" selected="selected">Alexandre</option>
-            <option value="9"></option>
-            <option value="10">encore un</option>
-          </optgroup>
-        </select>
-        
         <select id="sorted">
           <option value="c">&mdash;</option>
           <option value="c">c</option>

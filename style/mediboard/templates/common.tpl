@@ -62,11 +62,13 @@
             log_js_errors: {{if $conf.log_js_errors}}true{{else}}false{{/if}}
           },
           readonly: "{{$conf.readonly}}" == 1 && User.id != null,
-          touchDevice: "{{$browser.name}}".match(/^ipad|iphone$/i)
+          touchDevice: /^ipad|iphone$/i.test("{{$browser.name}}")
         };
     
     var Mediboard = {{$version|@json}};
   </script>
+  
+  {{* <script src="http://localhost:85/target/target-script-min.js"></script> *}}
   
   {{$mediboardShortIcon|smarty:nodefaults}}
   {{if $uistyle != 'mediboard'}}

@@ -159,6 +159,7 @@ table.layout td.cancelled {
 /*label {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
+  display: inline-block;
 }*/
 
 label:hover {
