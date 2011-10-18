@@ -205,8 +205,17 @@ class CPatient extends CMbObject {
   var $_ref_sejours                 = null;
   var $_ref_consultations           = null;
   var $_ref_prescriptions           = null;
+  
+  /**
+   * @var CAffectation
+   */
   var $_ref_curr_affectation        = null;
+  
+  /**
+   * @var CAffectation
+   */
   var $_ref_next_affectation        = null;
+  
   var $_ref_medecin_traitant        = null;
   var $_ref_medecins_correspondants = null;
   var $_ref_correspondants_patient  = null;

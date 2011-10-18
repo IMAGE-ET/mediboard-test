@@ -7,8 +7,6 @@
 * @author Fabien Ménager
 */
 
-global $can;
-
 $const_id     = CValue::get('const_id', 0);
 $context_guid = CValue::get('context_guid');
 $patient_id   = CValue::get('patient_id');

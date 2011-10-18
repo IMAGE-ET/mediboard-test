@@ -170,7 +170,7 @@ class CConstantesMedicales extends CMbObject {
     "_diurese_24h"      => array(
       "unit" => "ml",
       "min" => 0, "max" => 2000,
-			"cumul" => ""
+      "cumul" => ""
     ),
     /*"diurese_miction"   => array(
       "unit" => "ml",
@@ -182,7 +182,7 @@ class CConstantesMedicales extends CMbObject {
       "min" => 0, "max" => 10
     ),
     "PVC"               => array(
-      "unit" => "cm H20",
+      "unit" => "cm H2O",
       "min" => 4, "max" => 16
     ),
     "perimetre_abdo"    => array(
@@ -565,8 +565,8 @@ class CConstantesMedicales extends CMbObject {
   static function buildGrid($list, $full = true) {
     $grid = array();
     $selection = array_keys(CConstantesMedicales::$list_constantes);
-		$cumuls_day = array();
-		
+    $cumuls_day = array();
+    
     $diuere_24_reset_hour = CAppUI::conf("dPpatients CConstantesMedicales diuere_24_reset_hour");
     
     if (!$full) {
@@ -578,54 +578,55 @@ class CConstantesMedicales extends CMbObject {
     
     foreach ($list as $_constante_medicale) {
       if (!isset($grid[$_constante_medicale->datetime])) {
-        $grid[$_constante_medicale->datetime] = array(
+        $grid["$_constante_medicale->datetime $_constante_medicale->_id"] = array(
           "comment" => $_constante_medicale->comment, 
           "values"  => array(),
         );
       }
-			
+      
       $day_24h = mbTransformTime("-$diuere_24_reset_hour hours", $_constante_medicale->datetime, '%y-%m-%d');
       
       foreach (CConstantesMedicales::$list_constantes as $_name => $_params) {
         if (in_array($_name, $selection) || $_constante_medicale->$_name != '') {
-        	$value = null;
-					
-        	if ($_name == "_diurese_24h") {
-        		$span = ($_constante_medicale->comment ? 1 : 0);
-						
+          $value = null;
+          
+          if ($_name == "_diurese_24h") {
+            $span = ($_constante_medicale->comment ? 1 : 0);
+            
             if (!isset($cumuls_day[$_name][$day_24h])) {
               $cumuls_day[$_name][$day_24h] = array(
-							  "datetime" => $_constante_medicale->datetime,
+                "id"    => $_constante_medicale->_id,
+                "datetime" => $_constante_medicale->datetime,
                 "value" => 0,
-								"span"  => 0, 
+                "span"  => 0, 
                 "span_com"  => $span, // when comments add lines
                 "pair"  => (@count($cumuls_day[$_name]) % 2 ? "odd" : "even"),
                 "day"   => mbTransformTime($day_24h, null, "%a"),
-							);
+              );
             }
             
             $cumuls_day[$_name][$day_24h]["value"] += $_constante_medicale->diurese;
             $cumuls_day[$_name][$day_24h]["span"]++;
             $cumuls_day[$_name][$day_24h]["span_com"] += ($span + 1);
-						
-						$value = "__empty__";
+            
+            $value = "__empty__";
           }
           else {
-	          $spec = self::$list_constantes[$_name];
-	          $value = $_constante_medicale->$_name;
-	          
-	          if (isset($spec["formfields"])) {
-	            $arr = array();
-	            foreach($spec["formfields"] as $ff) {
-	              if ($_constante_medicale->$ff != "") {
-	                $arr[] = $_constante_medicale->$ff;
-	              }
-	            }
-	            $value = implode(" / ", $arr);
-	          }
-					}
-					
-          $grid[$_constante_medicale->datetime]["values"][$_name] = $value;
+            $spec = self::$list_constantes[$_name];
+            $value = $_constante_medicale->$_name;
+            
+            if (isset($spec["formfields"])) {
+              $arr = array();
+              foreach($spec["formfields"] as $ff) {
+                if ($_constante_medicale->$ff != "") {
+                  $arr[] = $_constante_medicale->$ff;
+                }
+              }
+              $value = implode(" / ", $arr);
+            }
+          }
+          
+          $grid["$_constante_medicale->datetime $_constante_medicale->_id"]["values"][$_name] = $value;
           
           if (!in_array($_name, $names)) {
             $names[] = $_name;
@@ -633,17 +634,46 @@ class CConstantesMedicales extends CMbObject {
         }
       }
     }
-		
-		foreach($cumuls_day as $_name => $_days) {
-			foreach($_days as $_day => $_values) {
-				$grid[$_values["datetime"]]["values"][$_name] = $_values;
-			}
-		}
+    
+    foreach($cumuls_day as $_name => $_days) {
+      foreach($_days as $_day => $_values) {
+        $grid[$_values["datetime"]." ".$_values["id"]]["values"][$_name] = $_values;
+      }
+    }
     
     return array(
       $names, "names" => $names, 
       $grid,  "grid"  => $grid,
     );
+  }
+  
+  static function getRelated($selection, CPatient $patient, CMbObject $context = null, $date_min = null, $date_max = null, $limit = null) {
+    $where = array(
+      "patient_id" => " = '$patient->_id'"
+    );
+    
+    if ($context) {
+      $where["context_class"] = " = '$context->_class'";
+      $where["context_id"]    = " = '$context->_id'";
+    }
+    
+    $whereOr = array();
+    foreach($selection as $name) {
+      if ($name[0] === "_") continue;
+      $whereOr[] = "`$name` IS NOT NULL";
+    }
+    $where[] = implode(" OR ", $whereOr);
+    
+    if ($date_min) {
+      $where[] = "datetime >= '$date_min'";
+    }
+    
+    if ($date_max) {
+      $where[] = "datetime <= '$date_max'";
+    }
+    
+    $constantes = new self;
+    return array_reverse($constantes->loadList($where, "datetime DESC", $limit), true);
   }
 }
 ?>

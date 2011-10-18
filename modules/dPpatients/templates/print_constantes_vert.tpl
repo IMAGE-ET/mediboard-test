@@ -24,6 +24,7 @@
 			</th>
 			
       {{foreach from=$cste_grid.grid item=_constante key=_datetime}}
+        {{assign var=_datetime value=$_datetime|substr:0:18}}
         {{assign var=_value value=$_constante.values.$_cste_name}}
         
         {{if is_array($_value)}}
