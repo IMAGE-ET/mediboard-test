@@ -173,7 +173,7 @@ class CSourceLDAP extends CMbObject{
     return $results[0]["dn"];
 	}
 	
-	function start_tls($ldapconn){
-		ldap_start_tls($ldapconn);
+	function start_tls(){
+		ldap_start_tls($this->_ldapconn);
 	}
 }

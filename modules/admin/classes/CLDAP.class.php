@@ -114,7 +114,7 @@ class CLDAP {
     
     switch($encryption) {
       case "Unicode":
-        $entry["unicodePwd"][0] = $this->encodeUnicodePassword($new_pass);  
+        $entry["unicodePwd"][0] = self::encodeUnicodePassword($new_pass);  
         
         break;
       case "MD5":
