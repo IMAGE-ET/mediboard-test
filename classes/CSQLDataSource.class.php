@@ -10,14 +10,16 @@
 
 abstract class CSQLDataSource { 
   static $engines = array (
-    "mysql"  => "CMySQLDataSource",
-    "mysqli" => "CMySQLiDataSource",
-    "ingres" => "CIngresDataSource",
-    "oracle" => "COracleDataSource",
+    "mysql"      => "CMySQLDataSource",
+    "mysqli"     => "CMySQLiDataSource",
+    "ingres"     => "CIngresDataSource",
+    "oracle"     => "COracleDataSource",
+    "pdo_sqlsrv" => "CPDOSQLServerDataSource",
+    "pdo_mysql"  => "CPDOMySQLDataSource",
   );
   
-	static $dataSources = array();
-	static $trace = false;
+  static $dataSources = array();
+  static $trace = false;
     
   public $dsn       = null;
   public $link      = null;
@@ -26,7 +28,7 @@ abstract class CSQLDataSource {
   // Columns to be never quoted: hack for some SQLDataSources unable to cast implicitly
   public $unquotable = array(
     "table" => array("column"),
-	);
+  );
   
   public $config = array();
 
@@ -42,32 +44,32 @@ abstract class CSQLDataSource {
    * @param bool   $quiet Won't trigger errors if true
    * @return CSQLDataSource or null if unhandled type
    */
-  static function get($dsn, $quiet = false) {  	
-  	if (!array_key_exists($dsn, self::$dataSources)) {
+  static function get($dsn, $quiet = false) {    
+    if (!array_key_exists($dsn, self::$dataSources)) {
 
-  	  if ($quiet) {
-  	    $reporting = error_reporting(0);
-  	  }
+      if ($quiet) {
+        $reporting = error_reporting(0);
+      }
 
-  	  if (null == $dbtype = CAppUI::conf("db $dsn dbtype")) {
+      if (null == $dbtype = CAppUI::conf("db $dsn dbtype")) {
         trigger_error( "FATAL ERROR: Undefined type DSN type for '$dsn'.", E_USER_ERROR );
         return;
-  	  }
+      }
 
-  	  if (null == $dsClass = @self::$engines[$dbtype]) {
-  	    trigger_error( "FATAL ERROR: DSN type '$dbtype' unhandled.", E_USER_ERROR );
-    	  return;
-  	  }
-  	  
-  	  $dataSource = new $dsClass;
-  	  $dataSource->init($dsn);
-  	  self::$dataSources[$dsn] = $dataSource->link ? $dataSource : null;
-  	     
+      if (null == $dsClass = @self::$engines[$dbtype]) {
+        trigger_error( "FATAL ERROR: DSN type '$dbtype' unhandled.", E_USER_ERROR );
+        return;
+      }
+      
+      $dataSource = new $dsClass;
+      $dataSource->init($dsn);
+      self::$dataSources[$dsn] = $dataSource->link ? $dataSource : null;
+         
       if ($quiet) {
         error_reporting($reporting);
       }
-  	}
-  	return self::$dataSources[$dsn];
+    }
+    return self::$dataSources[$dsn];
   }
   
   /**
@@ -225,10 +227,10 @@ abstract class CSQLDataSource {
 
     $this->chrono = new Chronometer;
     $this->link = $this->connect(
-	    $this->config["dbhost"],
-	    $this->config["dbname"],
-	    $this->config["dbuser"],
-	    $this->config["dbpass"]
+      $this->config["dbhost"],
+      $this->config["dbname"],
+      $this->config["dbuser"],
+      $this->config["dbpass"]
     );
     
     if (!$this->link) {
@@ -242,28 +244,28 @@ abstract class CSQLDataSource {
    * @return resource The result resource on SELECT, true on others, false if failed 
    **/
   function exec($query) {
-  	// Query colouring
+    // Query colouring
     if (CSQLDataSource::$trace) {
       CAppUI::requireLibraryFile("geshi/geshi");
-	    $geshi = new Geshi($query, "sql");
-	    $geshi->set_overall_style("white-space: pre-wrap;");
+      $geshi = new Geshi($query, "sql");
+      $geshi->set_overall_style("white-space: pre-wrap;");
       $trace = utf8_decode($geshi->parse_code());
       echo $trace;
     }
     
-		// Chrono
+    // Chrono
     $this->chrono->start();
     $result = $this->query($query);
     $this->chrono->stop();
-		
-		// Error handling
+    
+    // Error handling
     if (!$result) {
       trigger_error("Exécution SQL : $query", E_USER_NOTICE);
       trigger_error("Erreur SQL : ".$this->error(), E_USER_WARNING);
       return false;
     }
   
-	  // Chrono messaging
+    // Chrono messaging
     if (CSQLDataSource::$trace) {
       $step = $this->chrono->step * 1000;
       $pace = floor(2*log10($step));
@@ -273,7 +275,7 @@ abstract class CSQLDataSource {
       CAppUI::stepMessage($type, $message, $this->dsn, number_format($step, 2));
     }
 
-	  return $result;
+    return $result;
   }
   
   /**
@@ -283,21 +285,21 @@ abstract class CSQLDataSource {
    * @return int number of queried lines, false if failed
    */
   function queryDump($dumpPath, $utfDecode = false) {
-		$sqlLines  = file($dumpPath);
-		$query     = "";
-		$nbQueries = 0;
-		foreach ($sqlLines as $lineNumber => $sqlLine) {
-		  $sqlLine = trim($sqlLine);
-		  if ($utfDecode) {
-  		  $sqlLine = utf8_decode($sqlLine);
-		  }
+    $sqlLines  = file($dumpPath);
+    $query     = "";
+    $nbQueries = 0;
+    foreach ($sqlLines as $lineNumber => $sqlLine) {
+      $sqlLine = trim($sqlLine);
+      if ($utfDecode) {
+        $sqlLine = utf8_decode($sqlLine);
+      }
 
-		  // Remove empty lignes
-		  if (!$sqlLine) {
-		    continue;
-		  }
-		  
-		  // Remove comment lines
+      // Remove empty lignes
+      if (!$sqlLine) {
+        continue;
+      }
+      
+      // Remove comment lines
       if (substr($sqlLine, 0, 2) === "--" || substr($sqlLine, 0, 1) === "#") {
         continue;
       }
@@ -305,18 +307,18 @@ abstract class CSQLDataSource {
       $query .= $sqlLine;
       
       // Query at line end
-	    if (preg_match("/;\s*$/", $sqlLine)) {
-	      $this->exec($query);
-	      if ($msg = $this->error()) {
-	        trigger_error("Error reading dump on line $lineNumber : $msg");
-	        return false;
-	      }
-	      $nbQueries++;
-	      $query = "";
-	    }
-		}  
+      if (preg_match("/;\s*$/", $sqlLine)) {
+        $this->exec($query);
+        if ($msg = $this->error()) {
+          trigger_error("Error reading dump on line $lineNumber : $msg");
+          return false;
+        }
+        $nbQueries++;
+        $query = "";
+      }
+    }  
 
-		return $nbQueries;
+    return $nbQueries;
   }
 
   /**
@@ -394,7 +396,7 @@ abstract class CSQLDataSource {
     $this->freeResult($cur);
     return $hashlist;
   }
-	
+  
   /**
    * Returns a array as result of query
    * where column 0 is key and all columns are values
@@ -405,13 +407,13 @@ abstract class CSQLDataSource {
     $cur or CApp::rip();
     $hashlist = array();
     while ($hash = $this->fetchAssoc($cur)) {
-    	$key = reset($hash);
+      $key = reset($hash);
       $hashlist[$key] = $hash;
     }
     $this->freeResult($cur);
     return $hashlist;
   }
-	
+  
 
   /**
    * Return a list of associative array as the query result
@@ -536,45 +538,45 @@ abstract class CSQLDataSource {
     return true;
   }
   
-	
-	function insertMulti($table, $data, $step){
-		$counter = 0;
-		
-		$keys = array_keys(reset($data));
-		$fields = "`".implode("`, `", $keys)."`";
-		
-		$count_data = count($data);
-		
-		foreach($data as $_data){
+  
+  function insertMulti($table, $data, $step){
+    $counter = 0;
+    
+    $keys = array_keys(reset($data));
+    $fields = "`".implode("`, `", $keys)."`";
+    
+    $count_data = count($data);
+    
+    foreach($data as $_data){
       if($counter % $step == 0){
         $query = "INSERT INTO `$table` ($fields) VALUES ";
         $queries = array();
       }
-			
-			$_query = array();
-			foreach($_data as $_value){
-				$_value = trim($_value);
+      
+      $_query = array();
+      foreach($_data as $_value){
+        $_value = trim($_value);
         if($_value === ""){
           $_query[] = "NULL";
         }
-				else {
+        else {
           $_query[] = "'".$this->escape($_value)."'";
-				}
+        }
       }
-			
-			$queries[] = "(".implode(", ", $_query).")";
-			
+      
+      $queries[] = "(".implode(", ", $_query).")";
+      
       $counter++;
-			
-			if($counter % $step == 0 || $counter == $count_data){
+      
+      if($counter % $step == 0 || $counter == $count_data){
         $query .= implode(",", $queries);
         $query .= ";";
-				
+        
         $this->exec($query);
-			}
+      }
     }
-	}
-	
+  }
+  
   /**
    * Quote columns and values 
    * @param $table
@@ -667,17 +669,17 @@ abstract class CSQLDataSource {
     }
     return strtr($query, $trans);
   }
-	
-	function getDBstruct($table, $field = null, $reduce_strings = false){
+  
+  function getDBstruct($table, $field = null, $reduce_strings = false){
     $list_fields = $this->loadList("SHOW COLUMNS FROM `{$table}`");
-		$fields = array();
+    $fields = array();
     
     foreach($list_fields as $curr_field){
-    	if (!$field) continue;
-			
-    	$field_name = $curr_field['Field'];
+      if (!$field) continue;
+      
+      $field_name = $curr_field['Field'];
       $fields[$field_name] = array();
-			
+      
       $_field =& $fields[$field_name];
       
       $props = CMbFieldSpec::parseDBSpec($curr_field['Type']);
@@ -689,23 +691,23 @@ abstract class CSQLDataSource {
       $_field['default']  = $curr_field['Default'];
       $_field['index']    = null;
       $_field['extra']    = $curr_field['Extra'];
-			
-			if ($reduce_strings && is_array($props['params'])) {
+      
+      if ($reduce_strings && is_array($props['params'])) {
         foreach($props['params'] as &$v) {
           if ($v[0] === "'") 
             $v = trim($v, "'");
           else 
             $v = (int)$v;
         }
-			}
-			
+      }
+      
       $_field['params']   = $props['params'];
-			
-			if ($field === $field_name) return $_field;
+      
+      if ($field === $field_name) return $_field;
     }
-		
-		return $fields;
-	}
+    
+    return $fields;
+  }
 
   /**
    * Prepares an IN where clause with a given array of values
@@ -724,7 +726,7 @@ abstract class CSQLDataSource {
       return "IS NULL AND '0' = '1'";
     }
     
-		$quoted = array();
+    $quoted = array();
     foreach ($values as $value) {
       $quoted[] = "'$value'";
     }

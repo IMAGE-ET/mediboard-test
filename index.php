@@ -54,26 +54,20 @@ date_default_timezone_set($dPconfig["timezone"]);
 require "./includes/mb_functions.php";
 require "./includes/errors.php";
 require "./classes/SHM.class.php";
-require "./classes/Chronometer.class.php";
 require "./classes/CApp.class.php";
 require "./classes/CAppUI.class.php";
+require "./includes/autoload.php";
 
 // Shutdown function
 register_shutdown_function(array("CApp", "checkPeace"));
-
-// DBMS
-require "./classes/CSQLDataSource.class.php";
-require "./classes/CMySQLDataSource.class.php";
-require "./classes/CMySQLiDataSource.class.php";
 
 if (!CSQLDataSource::get("std")) {
   header("Location: offline.php?reason=bdd");
   die("La base de données n'est pas connectée");
 }
 
-require "./classes/CSessionHandler.class.php";
+require "./classes/CSessionHandler.class.php"; // Explicit include before session.php
 require "./includes/session.php";
-require "./includes/autoload.php";
 
 // Start chrono (after session_start as it may be locked by another request)
 $phpChrono = new Chronometer;
