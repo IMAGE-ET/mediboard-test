@@ -69,21 +69,30 @@ function refreshOrders(start) {
 }
 
 function dispenseAll(container, callback) {
-  var list = $(container).select("form.dispensation");
-  var post = {};
+  var list = $(container).select("tr:not(.done) form.dispensation");
+  
+  if (list.length == 0) {
+    alert("Rien à préparer");
+    return;
+  }
+	
+  if (!confirm("Confirmez-vous vouloir préparer tous les produits ?")) return;
+	
+  var url = new Url();
+	
   list.each(function(f, i) {
-    if ((!f.del || $V(f.del) == "0") && 
-        (f.patient_id && $V(f.patient_id) || f.service_id && $V(f.service_id) || f.order && $V(f.order) == '0') && 
-        $V(f.date_dispensation) == 'now' && parseInt($V(f.quantity)) > 0) {
-      
-      post[$V(f.delivery_id)] = $V(f.quantity);
+    if ((!f.del || $V(f.del) == "0") && $V(f.quantity) > 0) {
+		  var formData = serializeForm(f);
+			$H(formData).each(function(pair){
+			  url.oParams["d["+i+"]["+pair.key+"]"] = pair.value;
+			});
     }
   });
-  
-  var url = new Url();
+	
+	console.log(url.oParams);
+	
   url.addParam("m", "dPstock");
   url.addParam("dosql", "do_validate_dispensation_lines");
-  url.addObjectParam("d", post);
   url.requestUpdate("systemMsg", {onComplete: callback, method: "post"});
 }
 

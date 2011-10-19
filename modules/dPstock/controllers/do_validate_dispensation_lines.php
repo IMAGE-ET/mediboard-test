@@ -2,7 +2,7 @@
 
 /**
  * @package Mediboard
- * @subpackage {subpackage}
+ * @subpackage dPstock
  * @version $Revision$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -10,20 +10,12 @@
 
 $list = CValue::post("d", array());
 
-foreach($list as $_id => $_qty) {
-  $delivery = new CProductDelivery;
-  $delivery->load($_id);
-  
-  if (!$delivery->date_dispensation)
-    $delivery->date_dispensation = mbDateTime();
-    
-  $delivery->order = 0;
-  if ($msg = $delivery->store()) {
-    CAppUI::setMsg($msg, UI_MSG_WARNING);
-  }
-  else {
-    CAppUI::setMsg("Dispensation validée");
-  }
+foreach($list as $_id => $_data) {
+	$do = new CDoObjectAddEdit('CProductDelivery');
+	unset($do->request);
+	$do->request = $_data;
+	$do->redirect = null;
+	$do->doIt();
 }
 
 echo CAppUI::getMsg();

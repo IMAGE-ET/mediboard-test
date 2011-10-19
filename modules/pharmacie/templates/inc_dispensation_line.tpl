@@ -107,7 +107,8 @@
 		{{assign var=qty value=$delivrance->_ref_stock->_ref_product->_unit_quantity-0}}
 		{{if $infinite || ($delivrance->_ref_stock->quantity>0 && !$infinite)}}
 		
-     <form name="form-dispensation-{{$code_cis}}-{{$code_cip}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function(){ refreshLists('{{$code_cis}}'); } })">
+     <form name="form-dispensation-{{$code_cis}}-{{$code_cip}}" action="?" method="post" class="dispensation"
+		       onsubmit="return onSubmitFormAjax(this, {onComplete: function(){ refreshLists('{{$code_cis}}'); } })">
        <input type="hidden" name="m" value="dPstock" />
        <input type="hidden" name="tab" value="{{$tab}}" />
        <input type="hidden" name="dosql" value="do_delivery_aed" />
@@ -129,7 +130,7 @@
        {{/if}}
        
        {{if $delivrance->quantity == 0}}
-         {{assign var=style value="opacity: 0.3;"}}
+         {{assign var=opacity value="opacity-30"}}
          <script type="text/javascript">
          	 toggleLineDispensation("form-dispensation-{{$code_cis}}-{{$code_cip}}", true);
          </script>
@@ -137,27 +138,29 @@
 			   <script type="text/javascript">
 			   	 toggleLineDispensation("form-dispensation-{{$code_cis}}-{{$code_cip}}", false);
          </script>
-         {{assign var=style value=""}}
+         {{assign var=opacity value=""}}
        {{/if}}
        
-       <strong style="{{$style}}">{{$_produit_cip.LIBELLE_PRODUIT}}</strong><br />
+       <strong class="{{$opacity}}">{{$_produit_cip.LIBELLE_PRODUIT}}</strong><br />
 			 
 			 <div class="opacity-50" style="float: right;">
          (soit <input type="text" name="_quantity_package" value="{{if $qty}}{{$delivrance->quantity/$qty}}{{else}}0{{/if}}" size="3" 
-                onchange="$V(this.form.quantity, Math.round($V(this)*{{$qty}}))" style="{{$style}}" />
+                onchange="$V(this.form.quantity, Math.round($V(this)*{{$qty}}))" class="{{$opacity}}" />
          {{$delivrance->_ref_stock->_ref_product->packaging}})
        </div>
-       <button type="submit" class="tick notext" title="Préparer" style="{{$style}}">Préparer</button>
+       <button type="submit" class="tick notext {{$opacity}}" title="Préparer">Préparer</button>
 
-       {{if $delivrance->_ref_stock->_ref_product->packaging && $qty}}
-				 {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cis-$code_cip" increment=1 size=3 min=0 style=$style onchange="this.form._quantity_package.value = (this.value/$qty).toFixed(2)"}}
-				 {{$delivrance->_ref_stock->_ref_product->_unit_title|truncate:30}}
-         <script type="text/javascript">
-          getForm("form-dispensation-{{$code_cis}}-{{$code_cip}}")._quantity_package.addSpinner({min:0});
-         </script>
-       {{else}}
-         {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cis-$code_cip" increment=1 size=3 min=0 style=$style}}
-       {{/if}}
+       <span class="{{$opacity}}">
+	       {{if $delivrance->_ref_stock->_ref_product->packaging && $qty}}
+					 {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cis-$code_cip" increment=1 size=3 min=0 onchange="this.form._quantity_package.value = (this.value/$qty).toFixed(2)"}}
+					 {{$delivrance->_ref_stock->_ref_product->_unit_title|truncate:30}}
+	         <script type="text/javascript">
+	          getForm("form-dispensation-{{$code_cis}}-{{$code_cip}}")._quantity_package.addSpinner({min:0});
+	         </script>
+	       {{else}}
+	         {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cis-$code_cip" increment=1 size=3 min=0}}
+	       {{/if}}
+			 </span>
 			 
       </form>
 		{{elseif !$infinite}}

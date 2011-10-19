@@ -91,8 +91,8 @@ toggleDoneDispensations = function(){
       <th>Stock<br />pharmacie</th>
     {{/if}}
 		
-    <th style="width: 30%">
-      <!-- <button style="float: right" type="button" onclick="dispenseAll('list-dispensations', refreshLists)" class="tick">Tout dispenser</button> -->
+    <th style="width: 30%; vertical-align: middle;">
+      <button style="float: right" type="button" onclick="dispenseAll('list-dispensations', refreshLists)" class="tick">Tout préparer</button>
       Préparation
     </th>
 		
