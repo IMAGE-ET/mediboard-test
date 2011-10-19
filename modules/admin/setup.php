@@ -268,7 +268,12 @@ class CSetupadmin extends CSetup {
               ADD `priority` INT (11);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.21";
+    $this->makeRevision("1.0.21");
+    $query = "ALTER TABLE `source_ldap` 
+              ADD `secured` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.22";
   }
 }
 ?>

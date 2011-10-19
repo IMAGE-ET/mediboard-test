@@ -38,6 +38,10 @@
             <td> {{mb_field object=$source_ldap field=port}} </td>
           </tr>
           <tr>
+            <th> {{mb_label object=$source_ldap field=secured}} </th>
+            <td> {{mb_field object=$source_ldap field=secured typeEnum=checkbox}} </td>
+          </tr>
+          <tr>
             <th> {{mb_label object=$source_ldap field=priority}} </th>
             <td> {{mb_field object=$source_ldap field=priority increment=true form="edit_source_ldap-$number"}} </td>
           </tr>

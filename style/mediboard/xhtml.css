@@ -46,10 +46,6 @@ td p,
 th p {
   white-space: normal;
   margin: 0;
-/* Suppression temporaire
-padding-left: 1.5em;
-text-indent: -1.5em;
-*/
 }
 
 img {

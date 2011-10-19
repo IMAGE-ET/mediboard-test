@@ -29,6 +29,7 @@ class CSourceLDAP extends CMbObject{
   var $ldap_opt_protocol_version = null;
   var $ldap_opt_referrals        = null;
   var $priority                  = null;
+  var $secured                   = null;
   
   var $_options                  = array();
 	var $_ldapconn                 = null;
@@ -51,6 +52,7 @@ class CSourceLDAP extends CMbObject{
     $props["ldap_opt_protocol_version"] = "num default|3";
     $props["ldap_opt_referrals"]        = "bool default|0";
     $props["priority"]                  = "num";
+    $props["secured"]                   = "bool default|0";
     return $props;
   }
   
@@ -78,6 +80,7 @@ class CSourceLDAP extends CMbObject{
     
     fclose($fp);
     
+    $host = ($this->secured ? "ldaps://" : "") . $this->host;
     $ldapconn = @ldap_connect($this->host, $this->port);
     if (!$ldapconn) {
       throw new CMbException("CSourceLDAP_no-connexion", $this->host);
