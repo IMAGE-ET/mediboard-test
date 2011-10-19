@@ -62,7 +62,7 @@ if ($help) {
 }
 
 try {
-  $connexion = @ftp_connect($hostname, $port);
+  $connexion = @ftp_connect($hostname, $port, 5);
   
   if (!$connexion) {
     throw new Exception("Connection failed : $hostname");
