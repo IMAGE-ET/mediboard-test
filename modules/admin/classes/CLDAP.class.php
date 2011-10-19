@@ -103,7 +103,10 @@ class CLDAP {
       return false;
     }
     
-    $source_ldap->start_tls();
+		if (!$source_ldap->secured) {
+			$source_ldap->start_tls();
+		}
+    
     $bound = $source_ldap->ldap_bind($source_ldap->_ldapconn, $user->user_username, $old_pass);
     
     if (!$bound) {
