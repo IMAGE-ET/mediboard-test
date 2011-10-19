@@ -32,7 +32,7 @@ class CSourceLDAP extends CMbObject{
   var $secured                   = null;
   
   var $_options                  = array();
-	var $_ldapconn                 = null;
+  var $_ldapconn                 = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -113,15 +113,23 @@ class CSourceLDAP extends CMbObject{
     $error = ldap_errno($ldapconn);
     
     if (!$showInvalidCredentials && ($error == 49)) {
-      throw new CMbException("CSourceLDAP-invalid_credentials", ldap_err2str($error));
+      $error = $this->get_error_message($ldapconn);
+      throw new CMbException("CSourceLDAP-invalid_credentials", $error);
       return false;
     }
     
     if (!$ldapbind) {
-      throw new CMbException("CSourceLDAP_no-authenticate", $this->host, $ldaprdn, ldap_err2str($error));
+      $error = $this->get_error_message($ldapconn);
+      throw new CMbException("CSourceLDAP_no-authenticate", $this->host, $ldaprdn, $error);
     }
     
     return true;
+  }
+  
+  function get_error_message($ldapconn) {
+    $error = ldap_errno($ldapconn);
+    ldap_get_option($ldapconn, 0x0032, $extended_error);
+    return ldap_err2str($error). " ($extended_error)";
   }
   
   /**
@@ -134,13 +142,12 @@ class CSourceLDAP extends CMbObject{
     if (!$ldapconn) {
       $ldapconn = $this->ldap_connect();
     }
-		
+    
     $ret = ldap_mod_replace($ldapconn, $dn, $entry);
     
     if (!$ret) {
-      $error = ldap_errno($ldapconn);
-      ldap_get_option($ldapconn, 0x0032, $extended_error);
-      throw new CMbException("CSourceLDAP-entry_modify_error", ldap_err2str($error). " ($extended_error)");
+      $error = $this->get_error_message($ldapconn);
+      throw new CMbException("CSourceLDAP-entry_modify_error", $error);
     }
     
     return true;
@@ -159,14 +166,14 @@ class CSourceLDAP extends CMbObject{
       $results = ldap_get_entries($ldapconn, $ldapsearch);
     }
     
-		if ($unbind) {
+    if ($unbind) {
       ldap_unbind($ldapconn);
-		}
+    }
     
     return $results;
   }
-	
-	function get_dn($username) {
+  
+  function get_dn($username) {
     $results = $this->ldap_search($this->_ldapconn, "(samaccountname=$username)", array(), false);
     
     if ($results["count"] > 1) {
@@ -174,9 +181,9 @@ class CSourceLDAP extends CMbObject{
     }
     
     return $results[0]["dn"];
-	}
-	
-	function start_tls(){
-		ldap_start_tls($this->_ldapconn);
-	}
+  }
+  
+  function start_tls(){
+    ldap_start_tls($this->_ldapconn);
+  }
 }
