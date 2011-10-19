@@ -9,6 +9,13 @@
   Main.add(function() {
     new Control.Tabs.create('tabs_consult');
   });
+  
+  refreshVisite = function(operation_id) {
+    var url = new Url("dPsalleOp", "ajax_refresh_visite_pre_anesth");
+    url.addParam("operation_id", operation_id);
+    url.addParam("callback", "refreshVisite");
+    url.requestUpdate("visite_pre_anesth");
+  }
 </script>
 
 <!-- Formulaire pour réactualiseér -->
@@ -42,6 +49,11 @@
         <a href="#facteurs_risque">Facteurs de risques</a>
       </li>
     {{/if}}
+    {{if $consult_anesth->operation_id}}
+      <li>
+        <a href="#visite_pre_anesth">Visite pré-anesth.</a>
+      </li>  
+    {{/if}}
   {{/if}}
 </ul>
 
@@ -70,6 +82,14 @@
   {{if $conf.dPcabinet.CConsultAnesth.show_facteurs_risque}}
     <div id="facteurs_risque" style="display: none;">
       {{mb_include module=dPcabinet template="inc_consult_anesth/inc_vw_facteurs_risque"}}
+    </div>
+  {{/if}}
+  {{if $consult_anesth->operation_id}}
+    {{assign var=selOp value=$consult_anesth->_ref_operation}}
+    {{assign var=callback value=refreshVisite}}
+    {{assign var=currUser value=$userSel}}
+    <div id="visite_pre_anesth">
+      {{mb_include module=dPsalleOp template=inc_visite_pre_anesth}}
     </div>
   {{/if}}
 {{/if}}

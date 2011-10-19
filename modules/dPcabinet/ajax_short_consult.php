@@ -33,6 +33,8 @@ if ($dossier_medical->_id) {
 }
 
 $user = CMediusers::get();
+$user->isAnesth();
+$user->isPraticien();
 
 $smarty = new CSmartyDP;
 
@@ -68,6 +70,12 @@ if ($consult_anesth->_id) {
     $sejour->load($sejour_id);
     $sejour->loadRefDossierMedical();
     $smarty->assign("sejour"       , $sejour);
+  }
+  
+  if ($consult_anesth->operation_id) {
+    $listAnesths = new CMediusers;
+    $listAnesths = $listAnesths->loadAnesthesistes(PERM_DENY);
+    $smarty->assign("listAnesths", $listAnesths);
   }
 }
 
