@@ -76,7 +76,7 @@ try {
     throw new Exception("Failed to switch passive mode");
   }
   
-  if (ftp_put($connexion, $file, $file, $transport_mode)) {
+  if (ftp_put($connexion, basename($file), $file, $transport_mode)) {
     echo "File $file successfully submitted";
   }
 } catch(Exception $e) {
