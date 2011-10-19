@@ -75,22 +75,20 @@ function dispenseAll(container, callback) {
     alert("Rien à préparer");
     return;
   }
-	
+  
   if (!confirm("Confirmez-vous vouloir préparer tous les produits ?")) return;
-	
+  
   var url = new Url();
-	
+  
   list.each(function(f, i) {
     if ((!f.del || $V(f.del) == "0") && $V(f.quantity) > 0) {
-		  var formData = serializeForm(f);
-			$H(formData).each(function(pair){
-			  url.oParams["d["+i+"]["+pair.key+"]"] = pair.value;
-			});
+      var formData = serializeForm(f);
+      $H(formData).each(function(pair){
+        url.oParams["d["+i+"]["+pair.key+"]"] = pair.value;
+      });
     }
   });
-	
-	console.log(url.oParams);
-	
+  
   url.addParam("m", "dPstock");
   url.addParam("dosql", "do_validate_dispensation_lines");
   url.requestUpdate("systemMsg", {onComplete: callback, method: "post"});
@@ -130,7 +128,7 @@ Main.add(function () {
 <form name="filter" action="?" method="get" onsubmit="if(window.loadSuivi) loadSuivi($V(this.sejour_id)); return (checkForm(this) && refreshLists())">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="start" value="0" />
-	<input type="hidden" name="borne_min" value="" />
+  <input type="hidden" name="borne_min" value="" />
   <input type="hidden" name="borne_max" value="" />
   
   <table class="form">

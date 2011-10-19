@@ -211,7 +211,7 @@ WeekPlanning = Class.create({
     return tableHeight / this.countVisibleLines();
   },
   onEventChange: function(e){
-    console.debug(e.getTime());
+    
   },
   setLoadData: function(load_data, maximum_load){
     this.load_data = load_data;
