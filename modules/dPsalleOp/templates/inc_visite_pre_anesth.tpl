@@ -111,26 +111,28 @@
   {{if !$selOp->date_visite_anesth}}
   <tr>
     <td class="button" colspan="2">
-      <button class="submit" {{if $callback}}type="button" onclick="submitForm(this.form)"{{/if}}>
+      <button class="submit" {{if $callback}}type="button" onclick="onSubmitFormAjax(this.form)"{{/if}}>
         {{tr}}Validate{{/tr}}
       </button>
     </td>
   </tr>
   {{else}}
-  <tr>
-    <th>{{mb_label object=$selOp field="_password_visite_anesth"}}</th>
-    <td>{{mb_field object=$selOp field="_password_visite_anesth"}}</td>
-  </tr>
-  <tr>
-    <td class="button" colspan="2">
-      {{mb_field class="COperation" hidden="hidden" field="date_visite_anesth"}}
-      {{mb_field class="COperation" hidden="hidden" field="rques_visite_anesth"}}
-      {{mb_field class="COperation" hidden="hidden" field="autorisation_anesth"}}
-      <button class="trash" {{if $callback}}type="button" onclick="submitForm(this.form)"{{/if}}>
-        {{tr}}Cancel{{/tr}}
-      </button>
-    </td>
-  </tr>
+    {{if $currUser->_id != $selOp->prat_visite_anesth_id}}
+      <tr>
+        <th>{{mb_label object=$selOp field="_password_visite_anesth"}}</th>
+        <td>{{mb_field object=$selOp field="_password_visite_anesth"}}</td>
+      </tr>
+    {{/if}}
+    <tr>
+      <td class="button" colspan="2">
+        {{mb_field class="COperation" hidden="hidden" field="date_visite_anesth"}}
+        {{mb_field class="COperation" hidden="hidden" field="rques_visite_anesth"}}
+        {{mb_field class="COperation" hidden="hidden" field="autorisation_anesth"}}
+        <button class="trash" {{if $callback}}type="button" onclick="onSubmitFormAjax(this.form)"{{/if}}>
+          {{tr}}Cancel{{/tr}}
+        </button>
+      </td>
+    </tr>
   {{/if}}
 </table>
 </form>

@@ -28,6 +28,13 @@ printIntervAnesth = function(){
 	url.popup(800, 600, "Intervention anesthésiste");
 }
 
+refreshVisite = function(operation_id) {
+  var url = new Url("dPsalleOp", "ajax_refresh_visite_pre_anesth");
+  url.addParam("operation_id", operation_id);
+  url.addParam("callback", "refreshVisite");
+  url.requestUpdate("visite_pre_anesth");
+}
+
 {{if $dialog}}
 reloadAnesth = function() {
   window.opener.location.reload(true);
@@ -152,8 +159,10 @@ Main.add(function(){
 	{{else}}
 	  {{mb_include module=dPcabinet template=inc_choose_dossier_anesth}}
 	{{/if}}
-	
-  {{mb_include module=dPsalleOp template=inc_visite_pre_anesth}}
+  {{assign var=callback value=refreshVisite}}
+  <div id="visite_pre_anesth">
+    {{mb_include module=dPsalleOp template=inc_visite_pre_anesth}}
+  </div>
 </div>
 
 <div id="tab_perop" style="display: none;">

@@ -314,7 +314,7 @@ class COperation extends CCodable implements IPatientRelated {
     // Vérification de la signature de l'anesthésiste pour la
     // visite de pré-anesthésie
     $user = CAppUI::$user;
-    if ($this->fieldModified("prat_visite_anesth_id") && $this->prat_visite_anesth_id !== null && $this->prat_visite_anesth_id != $user->_id) {
+    if ($this->prat_visite_anesth_id !== null && $this->prat_visite_anesth_id != $user->_id) {
       $anesth = new CUser();
       $anesth->load($this->prat_visite_anesth_id);
       if($anesth->user_password != md5($this->_password_visite_anesth)) {
