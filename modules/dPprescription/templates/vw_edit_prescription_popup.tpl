@@ -78,14 +78,13 @@ selectLines = function(prescription_id, protocole_id, ids) {
   var oForm = getForm("applyProtocoleFirst");
   
   // Ouverture de la modale pour choisir les lignes
-  var url = new Url("dPprescription", "ajax_select_lines");
-  url.addParam("prescription_id", prescription_id);
-  url.addParam("protocole_id", protocole_id);
-  url.addParam("pratSel_id", $V(oForm.pratSel_id));
-  url.addParam("praticien_id", $V(oForm.praticien_id));
-  url.addParam("ids[]", ids);
-  url.requestModal(700, 300, {showClose: false, showReload: false});
-
+  window.selectLines = new Url("dPprescription", "ajax_select_lines");
+  window.selectLines.addParam("prescription_id", prescription_id);
+  window.selectLines.addParam("protocole_id", protocole_id);
+  window.selectLines.addParam("pratSel_id", $V(oForm.pratSel_id));
+  window.selectLines.addParam("praticien_id", $V(oForm.praticien_id));
+  window.selectLines.addParam("ids[]", ids);
+  window.selectLines.requestModal(800, 400, {showClose: false, showReload: false});
 }
 
 prescriptions_ids = {{$multiple_prescription|@json}};

@@ -1,6 +1,6 @@
 <script type="text/javascript">
   Main.add(function() {
-    Control.Tabs.create('tabs-protocole');
+    Control.Tabs.create('tabs-protocole', true);
   });
 
   cancelProtocole = function(elt) {
@@ -58,7 +58,7 @@
   {{if $prescription->_ref_lines_med_comments.med|@count ||
     $prescription->_ref_lines_med_comments.comment|@count ||
     $prescription->_ref_prescription_line_mixes|@count}}
-    <div id="medicaments">
+    <div id="medicaments" style="height: 240px; overflow-y: auto">
       {{foreach from=$prescription->_ref_lines_med_comments.med item=_line}}
         {{assign var=protocole_id value=$_line->protocole_id}}
 				{{if $mode == "validation"}}
@@ -95,7 +95,7 @@
   {{/if}}
     
   {{foreach from=$prescription->_ref_lines_elements_comments item=_lines_by_chap key=chap}}
-    <div id="element_{{$chap}}">
+    <div id="element_{{$chap}}" style="height: 240px; overflow-y: auto">
       {{assign var=has_element value=0}}
       {{foreach from=$_lines_by_chap item=_lines_by_cat}}
         {{foreach from=$_lines_by_cat.element item=_line name=foreach_elt}}
@@ -141,8 +141,7 @@
       {{/foreach}}
     </div>
   {{/foreach}}
-  </table>
-  <p style="text-align: center;">
+  <div style="text-align: center; padding-top: 5px;">
 	  {{if $mode == "validation"}}
     <button type="button" class="save oneclick" onclick="submitChangedLines()">{{tr}}CPrescription.apply_advanced_protocole{{/tr}} {{if $app->user_id == $praticien_id}}et signer{{/if}}</button>
     <button type="button" class="cancel oneclick" onclick="cancelProtocole(this)">{{tr}}CPrescription.cancel_advanced_protocole{{/tr}}</button>
@@ -152,5 +151,5 @@
 		<button type="button" class="save oneclick" onclick="submitChangedLines()">Reprendre les lignes</button>
     <button type="button" class="cancel oneclick" onclick="Control.Modal.close();">{{tr}}Cancel{{/tr}}</button>
     {{/if}}
-	</p>
+	</div>
 </form>

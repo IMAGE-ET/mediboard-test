@@ -15,9 +15,10 @@ $prescription_line_medicament_id = CValue::post("prescription_line_medicament_id
 $prescription_line_mix_id = CValue::post("prescription_line_mix_id");
 $type = CValue::post("type");
 $mode_pharma = CValue::post("mode_pharma");
-
+$advanced_prot = CValue::post("advanced_prot", 0);
 $variante_for_id = CValue::post("variante_for_id");
 $variante_for_class = CValue::post("variante_for_class");
+$protocole_id = CValue::post("protocole_id", null);
 
 // Chargement de la ligne de medicament
 $line_med = new CPrescriptionLineMedicament();
@@ -35,6 +36,7 @@ if(!$prescription_line_mix_id){
   $prescription_line_mix->time_debut = $line_med->time_debut;
   $prescription_line_mix->variante_for_id = $variante_for_id;
   $prescription_line_mix->variante_for_class = $variante_for_class;
+  $prescription_line_mix->protocole_id = $protocole_id;
   if($prescription_line_mix->variante_for_id){
     $prescription_line_mix->variante_active = 0;
   }
@@ -105,7 +107,7 @@ if($prescription_line_mix_item->_id){
   CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-delete");
 }
 
-echo "<script type='text/javascript'>Prescription.reloadLine('$prescription_line_mix->_guid', '$line_med->_protocole', '$mode_pharma')</script>";
+echo "<script type='text/javascript'>Prescription.reloadLine('$prescription_line_mix->_guid', '$line_med->_protocole', '$mode_pharma', null, null, $advanced_prot)</script>";
 echo CAppUI::getMsg();
 CApp::rip();
 

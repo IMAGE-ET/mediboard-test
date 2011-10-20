@@ -159,8 +159,11 @@
 	
 		  		  <input type="hidden" name="variante_for_id" value="{{$line->variante_for_id}}" />
 		  		  <input type="hidden" name="variante_for_class" value="{{$line->variante_for_class}}" />
-	          <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
-						
+            <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
+            {{if $advanced_prot}}
+              <input type="hidden" name="advanced_prot" value="{{$advanced_prot}}" />
+              <input type="hidden" name="protocole_id"  value="{{$line->protocole_id}}" />
+            {{/if}}
 		  		  <select name="prescription_line_mix_id" onchange="toggleTypePerfusion(this.form);" style="width: 150px;">
 		  		    <option value="">Nouvelle perfusion</option>
 			  		  {{if $line->variante_for_id}}
