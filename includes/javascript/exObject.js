@@ -133,7 +133,8 @@ ExObject = {
     
     options = Object.extend({
       print: 0,
-      start: 0
+      start: 0,
+      onComplete: function(){}
     }, options);
     
     var url = new Url("forms", "ajax_list_ex_object");
@@ -143,7 +144,7 @@ ExObject = {
     url.addParam("ex_class_id", ex_class_id);
     url.addParam("target_element", target);
     url.mergeParams(options);
-    url.requestUpdate(target);
+    url.requestUpdate(target, {onComplete: options.onComplete});
   }
 };
 

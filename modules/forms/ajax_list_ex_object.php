@@ -55,8 +55,11 @@ if ($print) {
 }
 else {
   switch($detail) {
-    case 2: $limit = ($ex_class_id ? 20 : 15); break;
-    case 1: $limit = ($ex_class_id ? 100 : 50); break;
+    case 3: 
+    case 2: 
+      $limit = ($ex_class_id ? 20 : 15); break;
+    case 1: 
+      $limit = ($ex_class_id ? 100 : 50); break;
   default:
     case 0: 
   }
@@ -72,7 +75,7 @@ if ($limit) {
 foreach($ex_classes as $_ex_class_id => $_ex_class) {
   $ex_class_key = $_ex_class->host_class."-".$_ex_class->event;
     
-  if ($detail == 2) {
+  if ($detail > 1) {
     foreach($_ex_class->loadRefsGroups() as $_group) {
       $_group->loadRefsFields();
       foreach($_group->_ref_fields as $_field) {
@@ -117,9 +120,9 @@ foreach($ex_classes as $_ex_class_id => $_ex_class) {
   }
   
   if ( $_ex_class->host_class == $reference_class && // Possible context
-	    !$_ex_class->disabled && // Not disabled
-			 $_ex_class->checkConstraints($reference) && // Passes constraints
-			 $_ex_class->canCreateNew($reference)
+      !$_ex_class->disabled && // Not disabled
+       $_ex_class->checkConstraints($reference) && // Passes constraints
+       $_ex_class->canCreateNew($reference)
   ) { // Check unicity
     $ex_classes_creation[$ex_class_key][$_ex_class_id] = $_ex_class;
     

@@ -896,7 +896,7 @@ var DOM = {
   tags: [
     'a', 'applet', 'big', 'br', 'button', 'canvas', 'div', 'fieldset', 'form',
     'h1', 'h2', 'h3', 'h4', 'h5', 'hr', 'iframe', 'img', 'input', 'label', 
-    'legend', 'li', 'ol', 'optgroup', 'option', 'p', 'param', 'pre', 
+    'legend', 'li', 'ol', 'optgroup', 'option', 'p', 'param', 'pre', 'script',
     'select', 'small', 'span', 'strong', 'table', 'tbody', 'td', 'textarea',
     'tfoot', 'th', 'thead', 'tr', 'tt', 'ul'
   ]

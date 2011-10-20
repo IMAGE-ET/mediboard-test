@@ -178,10 +178,6 @@ Main.add(function () {
 		nb_postes: {{$bornes_composition_dossier|@count}}
   });
 
-  if(window.loadSuivi){
-	  loadSuivi('{{$sejour->_id}}');
-	}
-
   updateNbTrans('{{$sejour->_id}}');
   
 	// Deplacement du dossier de soin

@@ -6,7 +6,7 @@
   }
   
   .not-printable, 
-  #user, #menubar, .titleblock, .tabmenu, #systemMsg, #performance, .smarty-include {
+  #user, #menubar, .titleblock, .tabmenu, #systemMsg, #performance, .smarty-include, #waitingMsgMask, #waitingMsgText {
     display: none;
   }
   

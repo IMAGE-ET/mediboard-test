@@ -67,9 +67,7 @@
     
     var Mediboard = {{$version|@json}};
   </script>
-  
-  {{* <script src="http://localhost:85/target/target-script-min.js"></script> *}}
-  
+
   {{$mediboardShortIcon|smarty:nodefaults}}
   {{if $uistyle != 'mediboard'}}
     {{$mediboardCommonStyle|smarty:nodefaults}}
@@ -83,9 +81,17 @@
   {{$mediboardScript|smarty:nodefaults}}
   
   {{if $dialog}}
-	  <script type="text/javascript">
-	    Event.observe(document, 'keydown', closeWindowByEscape);
-	  </script>
+    <script type="text/javascript">
+      Event.observe(document, 'keydown', closeWindowByEscape);
+    </script>
+  {{/if}}
+  
+  {{if @$conf.weinre_debug_host}}
+    <script type="text/javascript">
+      setTimeout(function() {
+        $$('head')[0].insert(DOM.script({src: 'http://{{$conf.weinre_debug_host}}/target/target-script-min.js'}));
+      }, 0);
+    </script>
   {{/if}}
 </head>
 

@@ -28,7 +28,7 @@ Main.add(function(){
     {{mb_include module=system template=inc_config_bool var=debug}}
     {{mb_include module=system template=inc_config_bool var=readonly}}
     {{mb_include module=system template=inc_config_bool var=log_js_errors}}
-    {{mb_include module=system template=inc_config_str var=apache_child_terminate_memory_limit numeric=true size=5}}
+    {{mb_include module=system template=inc_config_str var=weinre_debug_host}}
 		
     <tr>
       <th colspan="2" class="title">
