@@ -98,11 +98,18 @@
    * Load first idex for a given object and a wildcarded tag
    * @return CMbObject found idex
    */
-  function loadLikeFirstFor($mbObject, $tag = null) {
-    foreach ($this->loadLikeListFor($mbObject, $tag) as $_idex) {
-      return $_idex;
+  function loadLikeLatestFor($mbObject, $tag = null) {
+    $object_class = get_class($mbObject);
+    if (!$mbObject instanceof CMbObject) {
+      trigger_error("Impossible d'associer un identifiant Santé 400 à un objet de classe '$object_class'");
     }
-    return new CIdSante400();
+        
+    $where["object_id"   ] = "= '$mbObject->_id'";
+    $where["object_class"] = "= '$mbObject->_class'";
+    $where["tag"] = "LIKE '$tag'";
+    
+    $order = "last_update ASC";
+    $this->loadObject($where, $order);
   }
   
   /**
