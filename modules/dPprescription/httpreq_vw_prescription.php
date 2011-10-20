@@ -469,6 +469,8 @@ foreach ($protocoles_ids as $prot_id => $prot) {
   $protocoles_ids[$prot_id] = $prot;
 }
 
+array_multisort(CMbArray::pluck($protocoles_ids, "libelle"), SORT_ASC, $protocoles_ids);
+
 // Chargement des aides
 $prescriptionLineMedicament = new CPrescriptionLineMedicament();
 $prescriptionLineElement = new CPrescriptionLineElement();
