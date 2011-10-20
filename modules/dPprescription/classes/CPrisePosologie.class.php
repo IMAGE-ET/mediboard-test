@@ -306,7 +306,7 @@ class CPrisePosologie extends CMbMetaObject {
     }
 		
     if($this->_ref_moment->_id){
-      $configs = CConfigMomentUnitaire::getAllFor($service_id);
+      $configs = CConfigMomentUnitaire::getAllFor($service_id, $this->_ref_object->_ref_prescription->_ref_object->group_id);
       $this->_ref_moment->heure = $configs[$this->moment_unitaire_id];
       if($this->_ref_moment->heure){
         $this->_heure = $this->_ref_moment->heure;
@@ -510,9 +510,9 @@ class CPrisePosologie extends CMbMetaObject {
   }
   
 	function getPlanifs($dates, $service_id, $bornes){
-    $configs = CConfigService::getAllFor($service_id);
-	 
-	 // Preparation des valeurs
+    $configs = CConfigService::getAllFor($service_id, $this->_ref_object->_ref_prescription->_ref_object->group_id);
+	  
+	  // Preparation des valeurs
 	  if($this->nb_fois && $this->nb_fois <= 6 && $this->unite_fois == "jour"){  
       if($configs["$this->nb_fois fois par jour"]){
         $this->_heures = explode("|",$configs["$this->nb_fois fois par jour"]);

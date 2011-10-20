@@ -32,8 +32,11 @@ class CConfigMomentUnitaire extends CConfigServiceAbstract {
   /*
    * Chargement des configs en fonction du service
    */
-  static function getAllFor($service_id = "none"){
-    $group_id = CGroups::loadCurrent()->_id;
+  static function getAllFor($service_id = "none", $group_id = ""){
+  	if(!$group_id){
+  	  $group_id = CGroups::loadCurrent()->_id;
+    }
+		
     if(!isset(self::$configs_SHM)){
       self::$configs_SHM = $configs = self::getSHM("conf-moment");
     } else {
