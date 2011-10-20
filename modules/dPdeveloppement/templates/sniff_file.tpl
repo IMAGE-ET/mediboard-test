@@ -2,7 +2,7 @@
   File <code>{{$file}}</code>: 
   {{$errors.numErrors}} errors, 
   {{$errors.numWarnings}} warnings
-  </h2>
+</h2>
 
 <table class="tbl">
   <tr>
@@ -20,6 +20,10 @@
     <td class="text">{{$_alert.message}}</td>
     <td class="text">{{$_alert.source|replace:".":" > "}}</td>
     <td class="{{$_alert.type}}">{{$_alert.severity}}</td>
+  </tr>
+{{foreachelse}}
+  <tr>
+    <td colspan="5" class="empty">{{tr}}CAlert.none{{/tr}}</td>
   </tr>
 {{/foreach}}
 

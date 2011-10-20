@@ -171,15 +171,20 @@ function mbExport($var, $label = null, $log = false) {
 }
 
 function print_infos($var, $name = '') {
-  if (empty($var)) return;
-  
-  $ret = "\n<pre><a href='#1' onclick='var s=this.parentNode.getElementsByTagName(\"span\")[0].style;s.display=s.display==\"none\"?\"\":\"none\";return false;'>$name</a>";
-  
-  if ($name == "GET") {
-    $ret .= " - <a href='?".http_build_query($var, true, "&")."' target='_blank'>Link</a>";
+  if (empty($var)) {
+    return; 
   }
   
-  $ret .= "<span style='display:none;'> ".substr(print_r($var, true), 6).'</span></pre>';
+  $ret = "\n<pre>";
+  $ret.= "<a href='#1' onclick='return toggle_info(this)'>$name</a>";
+  
+  if ($name == "GET") {
+    $http_query = http_build_query($var, true, "&");
+    $ret.= " - <a href='?$http_query' target='_blank'>Link</a>";
+  }
+  
+  $info = substr(print_r($var, true), 6);
+  $ret.= "<span style='display:none;'>$info</span></pre>";
   return $ret;
 }
 
@@ -187,22 +192,22 @@ function print_infos($var, $name = '') {
  * Custom herror handler with backtrace
  * @return null
  */
-function errorHandler($errorCode, $errorText, $errorFile, $errorLine, $errContext, $backTrace = null) {
+function errorHandler($code, $text, $file, $line, $context, $backTrace = null) {
   global $divClasses, $errorTypes, $errorCategories;
   
-// See ALL errors
-//  echo "<br />[$errno] : $errorText, $errorFile : $errorLine";
+  // See ALL errors
+  //  echo "<br />[$errno] : $text, $file : $line";
   
   // Handles the @ case
-  if (!error_reporting() || !array_key_exists($errorCode, $divClasses)) {
+  if (!error_reporting() || !array_key_exists($code, $divClasses)) {
     return;
   }
   
-  $errorTime = date("Y-m-d H:i:s");
+  $time = date("Y-m-d H:i:s");
   
   // CMbArray non chargé
-  $divClass = isset($divClasses[$errorCode]) ? $divClasses[$errorCode] : null;
-  $errorType = isset($errorTypes[$errorCode]) ? $errorTypes[$errorCode] : null;
+  $divClass = isset($divClasses[$code]) ? $divClasses[$code] : null;
+  $type = isset($errorTypes[$code]) ? $errorTypes[$code] : null;
   
   // Contextes 
   $contexts = $backTrace ? $backTrace : debug_backtrace();
@@ -210,25 +215,25 @@ function errorHandler($errorCode, $errorText, $errorFile, $errorLine, $errContex
     unset($ctx['args']);
     unset($ctx['object']);
   }
-  $hash = md5($errorCode.$errorText.$errorFile.$errorLine.serialize($contexts));
+  $hash = md5($code.$text.$file.$line.serialize($contexts));
   
   array_shift($contexts);
   $log = "\n\n<div class='$divClass' title='$hash'>";
   
   if (class_exists("CUser")) {
     $user = CUser::get();
-    if ($user->_id){
+    if ($user->_id) {
       $log .= "\n<strong>User: </strong>$user->_view ($user->_id)";
     }
   }
 
   // Erreur générale
-  $errorFile = mbRelativePath($errorFile);
-  $log .= "\n<strong>Time: </strong>$errorTime
-             <strong>Type: </strong>$errorType
-             <strong>Text: </strong>$errorText
-             <strong>File: </strong>$errorFile
-             <strong>Line: </strong>$errorLine";
+  $file = mbRelativePath($file);
+  $log .= "\n<strong>Time: </strong>$time
+             <strong>Type: </strong>$type
+             <strong>Text: </strong>$text
+             <strong>File: </strong>$file
+             <strong>Line: </strong>$line";
   
   $log .= print_infos($_GET, 'GET');
   $log .= print_infos($_POST, 'POST');
@@ -239,7 +244,7 @@ function errorHandler($errorCode, $errorText, $errorFile, $errorLine, $errContex
   unset($session['dPcompteRendu']['templateManager']);
   $log .= print_infos($session, 'SESSION');
   
-  foreach($contexts as $context) {
+  foreach ($contexts as $context) {
     $function = isset($context["class"]) ? $context["class"] . ":" : "";
     $function.= $context["function"] . "()";
     
@@ -259,7 +264,7 @@ function errorHandler($errorCode, $errorText, $errorFile, $errorLine, $errContex
   
   $log .= "</div>";
   
-  CApp::$performance[$errorCategories[$errorCode]]++;
+  CApp::$performance[$errorCategories[$code]]++;
   
   if (ini_get("log_errors")) {
     file_put_contents(LOG_PATH, $log, FILE_APPEND);
@@ -277,13 +282,13 @@ set_error_handler("errorHandler");
  * @return null
  */
 function exceptionHandler($exception) {
-  global $divClasses, $errorTypes, $errorCategories;
+  global $divClasses, $types, $errorCategories;
   
   $divClass = "big-warning";
   
   // Contextes 
   $contexts = $exception->getTrace();
-  foreach($contexts as &$ctx) {
+  foreach ($contexts as &$ctx) {
     unset($ctx['args']);
   }
   $hash = md5(serialize($contexts));
@@ -291,21 +296,21 @@ function exceptionHandler($exception) {
   $log = "\n\n<div class='$divClass' title='$hash'>";
   
   $user = CUser::get();
-  if ($user->_id){
+  if ($user->_id) {
     $log .= "\n<strong>User: </strong>$user->_view ($user->_id)";
   }
   
   // Erreur générale
-  $errorTime = date("Y-m-d H:i:s");
-  $errorType = "Exception";
-  $errorFile = mbRelativePath($exception->getFile());
-  $errorLine = $exception->getLine();
-  $errorText = $exception->getMessage();
-  $log .= "\n<strong>Time: </strong>$errorTime
-             <strong>Type: </strong>$errorType
-             <strong>Text: </strong>$errorText
-             <strong>File: </strong>$errorFile
-             <strong>Line: </strong>$errorLine";
+  $time = date("Y-m-d H:i:s");
+  $type = "Exception";
+  $file = mbRelativePath($exception->getFile());
+  $line = $exception->getLine();
+  $text = $exception->getMessage();
+  $log .= "\n<strong>Time: </strong>$time
+             <strong>Type: </strong>$type
+             <strong>Text: </strong>$text
+             <strong>File: </strong>$file
+             <strong>Line: </strong>$line";
              
   $log .= print_infos($_GET, 'GET');
   $log .= print_infos($_POST, 'POST');
@@ -315,7 +320,7 @@ function exceptionHandler($exception) {
   unset($session['dPcompteRendu']['templateManager']);
   $log .= print_infos($session, 'SESSION');
   
-  foreach($contexts as $context) {
+  foreach ($contexts as $context) {
     $function = isset($context["class"]) ? $context["class"] . ":" : "";
     $function.= $context["function"] . "()";
     
@@ -346,9 +351,5 @@ function exceptionHandler($exception) {
 
 set_exception_handler("exceptionHandler");
 
-// Initialize custom error handler
-if (!is_file(LOG_PATH)) {
-  $initTime = date("Y-m-d H:i:s");
-  $logInit = "<h2>Log de Mediboard ré-initialisé depuis $initTime</h2>";
-  file_put_contents(LOG_PATH, $logInit);
-}
+build_error_log();
+?>

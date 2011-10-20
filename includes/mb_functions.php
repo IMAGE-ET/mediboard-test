@@ -862,3 +862,20 @@ function mb_crc32($str) {
   
   return $crc;
 }
+
+// Initialize custom error handler
+function build_error_log() {
+  if (!is_file(LOG_PATH)) {
+    $initTime = date("Y-m-d H:i:s");
+    $logInit = "<h2>Log de Mediboard ré-initialisés depuis $initTime</h2>
+      <script>
+        function toggle_info(anchor) {
+          var style = anchor.parentNode.getElementsByTagName('span')[0].style;
+          style.display = style.display == 'none' ? '' : 'none';
+          return false;
+        }
+       </script>
+    ";
+    file_put_contents(LOG_PATH, $logInit);
+  }
+}

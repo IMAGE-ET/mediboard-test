@@ -11,12 +11,12 @@ CCanDo::checkEdit();
 
 $hash = CValue::get('hash');
 
-if($hash == 'clean') {
-  $content = "<h2>Log de Mediboard ré-initialisé depuis ".date("Y-m-d H:i:s")."</h2>";
-  file_put_contents(LOG_PATH, $content);
+if ($hash == 'clean') {
+  unlink(LOG_PATH);
+  build_error_log();
 }
 
-else if ($hash) {
+if ($hash) {
   $doc = new DOMDocument();
   @$doc->loadHTMLFile(LOG_PATH);
   
@@ -26,12 +26,9 @@ else if ($hash) {
   foreach($elements as $element) {
     $element->parentNode->removeChild($element);
   }
+
   $content = $doc->saveHTML();
   file_put_contents(LOG_PATH, $content);
 }
 
-else {
-  $content = file_get_contents(LOG_PATH);
-}
-
-echo $content;
+echo file_get_contents(LOG_PATH);
