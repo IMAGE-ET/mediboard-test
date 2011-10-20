@@ -95,6 +95,17 @@
   }
   
   /**
+   * Load first idex for a given object and a wildcarded tag
+   * @return CMbObject found idex
+   */
+  function loadLikeFirstFor($mbObject, $tag = null) {
+    foreach ($this->loadLikeListFor($mbObject, $tag) as $_idex) {
+      return $_idex;
+    }
+    return new CIdSante400();
+  }
+  
+  /**
    * Tries to get an already bound object if id400 is not older than delay
    * @param int $delay hours number of cache duration, if null use module config
    * @return CMbObject
