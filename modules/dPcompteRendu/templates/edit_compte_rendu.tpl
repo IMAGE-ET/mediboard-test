@@ -82,6 +82,8 @@ function submitCompteRendu(callback){
 }
 
 function refreshZones(id, obj) {
+  var form = getForm("editFrm");
+  $V(form.date_print, obj.date_print);
   var afterSetData = function() {
     // Dans le cas de la génération d'un document par correspondant,
     // mise à jour du nom du document dans la popup
@@ -131,6 +133,8 @@ function openWindowMail() {
 }
 
 function openModalPrinters() {
+  // Mise à jour de la date d'impression
+  $V(getForm("editFrm").date_print, "now");
   window.modalPrinters = new Url("dPcompteRendu", "ajax_choose_printer");
   modalPrinters.requestModal(700, 400);
 }
@@ -339,6 +343,7 @@ Main.add(function(){
   <input type="hidden" name="fast_edit" value="0"/>
   <input type="hidden" name="fast_edit_pdf" value="0"/>
   <input type="hidden" name="switch_mode" value='{{$switch_mode}}'/>
+  <input type="hidden" name="date_print" value="{{$compte_rendu->date_print}}" />
   <input type="hidden" name="callback" value="refreshZones" />
   
   {{mb_key object=$compte_rendu}}

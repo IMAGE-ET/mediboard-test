@@ -7,7 +7,7 @@
 * @author Romain OLLIVIER
 */
 
-CCanDo::checkEdit();
+//CCanDo::checkEdit();
 
 $compte_rendu_id = CValue::get("compte_rendu_id"   , 0);
 $modele_id       = CValue::get("modele_id"         , 0);

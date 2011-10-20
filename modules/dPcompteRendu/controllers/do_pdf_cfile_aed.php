@@ -12,6 +12,16 @@
 if ($file_id = CValue::post("file_id")) {
   $file = new CFile;
   $file->load($file_id);
+  
+  // Mise à jour de la date d'impression
+  $cr = new CCompteRendu;
+  $cr->load($file->object_id);
+  $cr->loadContent();
+  $cr->date_print = "now";
+  
+  if ($msg = $cr->store()) {
+    CAppUI::setMsg($msg, UI_MSG_ERROR);
+  }
   $file->streamFile();
   CApp::rip();
 }
@@ -57,6 +67,12 @@ if ($stream) {
 
 // Un callback pour l'impression server side
 if ($print_to_server) {
+  // Mise à jour de la date d'impression
+  $compte_rendu->date_print = "now";
+  if ($msg = $compte_rendu->store()) {
+    CAppUI::setMsg($msg, UI_MSG_ERROR);
+  }
+  
   echo "\n<script type=\"text/javascript\">printToServer($file->_id)</script>";
 }
 

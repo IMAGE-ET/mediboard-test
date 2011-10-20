@@ -33,8 +33,9 @@ class CCompteRendu extends CDocumentItem {
   var $private           = null;
   var $fast_edit         = null;
   var $fast_edit_pdf     = null;
-
-  /// Form fields
+  var $date_print        = null;
+  
+  // Form fields
   var $_is_document      = false;
   var $_is_modele        = false;
   var $_owner            = null;
@@ -116,6 +117,7 @@ class CCompteRendu extends CDocumentItem {
     $specs["private"]          = "bool notNull default|0";
     $specs["fast_edit"]        = "bool notNull default|0";
     $specs["fast_edit_pdf"]    = "bool notNull default|0";
+    $specs["date_print"]       = "dateTime";
     $specs["_owner"]           = "enum list|prat|func|etab";
     $specs["_orientation"]     = "enum list|portrait|landscape";
     $specs["_page_format"]     = "enum list|".implode("|", array_keys(self::$_page_formats));
@@ -498,6 +500,10 @@ class CCompteRendu extends CDocumentItem {
 		  $this->fieldModified("footer_id");
 	  
     if ($source_modified) {
+      
+      // Bug IE : delete id attribute
+      $this->_source = CCompteRendu::restoreId($this->_source);
+      
     	// Empty PDF File
       foreach($this->loadBackRefs("files") as $_file) {
         $_file->file_empty();
@@ -786,6 +792,57 @@ class CCompteRendu extends CDocumentItem {
       
       $source = "<div id='body'>$source</div>";
       $source = $style . $header->_source . $footer->_source . $source;
+    }
+    return $source;
+  }
+  
+  static function restoreId($source) {
+    if (!preg_match("/<div id=\"body\"/", $source) && preg_match("/@media dompdf/", $source)) {
+      $xml = new DOMDocument('1.0', 'iso-8859-1');
+      $xml->loadXML("<div>".utf8_encode(CMbString::convertHTMLToXMLEntities($source))."</div>");
+      $xpath = new DOMXpath($xml);
+      $last_div = null;
+      
+      // Test header id
+      $elements = $xpath->query("//div[@id='header']");
+      
+      if ($elements->length) {
+        $last_div = $elements->item(0);
+        $last_div = $last_div->nextSibling;
+        while ($last_div->nodeType != 1) {
+          $last_div = $last_div->nextSibling;
+        }
+        if ($last_div->getAttribute("id") == "footer") {
+          $last_div = $last_div->nextSibling;
+        }
+      }
+      
+      // Or footer id
+      if (!$last_div) {
+        $last_div = $xpath->query("//div[@id='footer']")->item(0);
+      }
+      
+      // First element to move to the <div id="body">,
+      // so next to the header / footer
+      $last_div = $last_div->nextSibling;
+      while ($last_div->nodeType != 1) {
+        $last_div = $last_div->nextSibling;
+      }
+      
+      $div_body = $xml->createElement("div");
+      $id_body = $xml->createAttribute("id");
+      $id_value = $xml->createTextNode("body");
+      $id_body->appendChild($id_value);
+      $div_body->appendChild($id_body);
+      
+      $div_body = $last_div->parentNode->insertBefore($div_body, $last_div);
+      
+      while ($elt_to_move = $xpath->query("//div[@id='body']")->item(0)->nextSibling) {
+        $div_body->appendChild($elt_to_move->parentNode->removeChild($elt_to_move));
+      }
+      
+      // Substring to remove the header of the xml output, and div surrounded
+      $source = substr($xml->saveXML(), 27, -7); 
     }
     return $source;
   }

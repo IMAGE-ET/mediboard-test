@@ -636,7 +636,7 @@ class CSetupdPcompteRendu extends CSetup {
         )
       WHERE `author_id` IS NULL
       AND `compte_rendu`.`object_class` = 'CConsultAnesth'
-      AND `compte_rendu`.`object_id` iS NOT NULL;";
+      AND `compte_rendu`.`object_id` IS NOT NULL;";
     $this->addQuery($query);
     
     // Ou non
@@ -652,7 +652,7 @@ class CSetupdPcompteRendu extends CSetup {
         )
       WHERE `author_id` IS NULL
       AND `compte_rendu`.`object_class` = 'CConsultAnesth'
-      AND `compte_rendu`.`object_id` iS NOT NULL;";
+      AND `compte_rendu`.`object_id` IS NOT NULL;";
     $this->addQuery($query);
     
     // Pour les opérations
@@ -666,7 +666,7 @@ class CSetupdPcompteRendu extends CSetup {
         )
       WHERE `author_id` IS NULL
       AND `compte_rendu`.`object_class` = 'COperation'
-      AND `compte_rendu`.`object_id` iS NOT NULL;";
+      AND `compte_rendu`.`object_id` IS NOT NULL;";
     $this->addQuery($query);
     
     // Pour les séjours
@@ -680,10 +680,15 @@ class CSetupdPcompteRendu extends CSetup {
         )
       WHERE `author_id` IS NULL
       AND `compte_rendu`.`object_class` = 'CSejour'
-      AND `compte_rendu`.`object_id` iS NOT NULL;";
+      AND `compte_rendu`.`object_id` IS NOT NULL;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.67";
+    $this->makeRevision("0.67");
+    $query = "ALTER TABLE `compte_rendu`
+      ADD date_print DATETIME DEFAULT NULL";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.68";
   }
 }
 ?>

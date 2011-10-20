@@ -5,7 +5,7 @@
       {{$style|smarty:nodefaults}}
     </style>
   </head>
-  <body onload="try{ subst();} catch(e){ }">
+  <body>
     <script type="text/javascript">
       try {
         this.print();

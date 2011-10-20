@@ -159,6 +159,7 @@ Document = {
     var url = new Url("dPcompteRendu", "ajax_get_document_source");
     url.addParam("dialog"         , 1);
     url.addParam("suppressHeaders", 1);
+    url.addParam("update_date_print", 1);
     url.addParam("compte_rendu_id", document_id);
     var sUrl = url.make();
 
@@ -189,12 +190,14 @@ Document = {
       this.iframe = Element.getTempIframe();
       url.pop(0, 0, "Download PDF", null, null, {
          compte_rendu_id: document_id,
-         stream: 1}, this.iframe);
+         stream: 1,
+         update_date_print: 1}, this.iframe);
     }
     else {
       url.popup(600, 400, "Download PDF", null, {
         compte_rendu_id: document_id,
-        stream: 1});
+        stream: 1,
+        update_date_print: 1});
     }
   },
   

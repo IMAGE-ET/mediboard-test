@@ -18,6 +18,8 @@ CKEDITOR.plugins.add('mbprintPDF',{
 
 function mbprintPDF_onclick(editor) {
   if (window.parent.Thumb.mode == "doc") {
+    // Mise à jour de la date d'impression
+    window.parent.$V(window.parent.getForm("editFrm").date_print, "now");
     window.parent.submitCompteRendu(function() {
       streamPDF(editor);
     });

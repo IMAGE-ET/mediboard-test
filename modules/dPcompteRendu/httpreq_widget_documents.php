@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-CCanDo::checkEdit();
+//CCanDo::checkEdit();
 $user = CMediusers::get();
 
 $object_class = CValue::getOrSession("object_class");

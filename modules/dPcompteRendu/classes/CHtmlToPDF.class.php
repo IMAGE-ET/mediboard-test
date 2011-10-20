@@ -58,8 +58,6 @@ class CHtmlToPDF {
   }
 
   function __destruct() {
-    $this->dompdf = null;
-    unset($this->dompdf);
     $this->content = null;
     unset($this->content);
   }
@@ -67,6 +65,8 @@ class CHtmlToPDF {
   function generatePDF($content, $stream, $format, $orientation, $file) {
     $this->content = $this->fixBlockElements($content);
     $this->content = str_replace("[Général - numéro de page]", "<span class='page'></span>", $this->content);
+    
+    // Problème sous IE : supression de i'id sur la div
     
     $pdf_content = CHtmlToPDFConverter::convert($this->content, $format, $orientation);
 
