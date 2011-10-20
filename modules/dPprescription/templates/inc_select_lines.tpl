@@ -58,7 +58,7 @@
   {{if $prescription->_ref_lines_med_comments.med|@count ||
     $prescription->_ref_lines_med_comments.comment|@count ||
     $prescription->_ref_prescription_line_mixes|@count}}
-    <div id="medicaments" style="height: 240px; overflow-y: auto">
+    <div id="medicaments" style="height: 440px; overflow-y: auto">
       {{foreach from=$prescription->_ref_lines_med_comments.med item=_line}}
         {{assign var=protocole_id value=$_line->protocole_id}}
 				{{if $mode == "validation"}}
@@ -95,7 +95,7 @@
   {{/if}}
     
   {{foreach from=$prescription->_ref_lines_elements_comments item=_lines_by_chap key=chap}}
-    <div id="element_{{$chap}}" style="height: 240px; overflow-y: auto">
+    <div id="element_{{$chap}}" style="height: 440px; overflow-y: auto">
       {{assign var=has_element value=0}}
       {{foreach from=$_lines_by_chap item=_lines_by_cat}}
         {{foreach from=$_lines_by_cat.element item=_line name=foreach_elt}}
