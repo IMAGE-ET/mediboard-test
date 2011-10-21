@@ -15,13 +15,40 @@
  * Class CHL7v2Acknowledgment 
  * Acknowledgment v2 HL7
  */
-class CHL7v2Acknowledgment extends CHL7v2MessageXML implements CHL7Acknowledgment {
-  var $_identifiant_acquitte = null;
+class CHL7v2Acknowledgment implements CHL7Acknowledgment {
+  var $ack            = null;
+  var $event          = null;
   
-  var $_ref_exchange_ihe     = null;
+  var $ack_code       = null;
+  var $mb_error_code  = null;
+  var $hl7_error_code = null;
+  var $severity       = null;
+  var $comments       = null;
+  var $object         = null;
   
-  function generateAcknowledgment() {
+  var $code                = null;
+  var $message_control_id  = null;
+  var $_ref_exchange_ihe   = null;
+  
+  function __construct(CHL7Event $event) {
+    $this->event = $event;
+  }
+  
+  function generateAcknowledgment($ack_code, $mb_error_code, $hl7_error_code = null, $severity = "E", $comments = null, $object = null) {
+    $this->ack_code       = $ack_code;
+    $this->mb_error_code  = $mb_error_code;
+    $this->hl7_error_code = $hl7_error_code;
+    $this->severity       = $severity;
+    $this->comments       = $comments;
+    $this->object         = $object;
+
+    $this->event->_exchange_ihe = $this->_ref_exchange_ihe;
+
+    $event_ack = new CHL7v2EventACK($this->event);
+    $event_ack->build($this);
+    $event_ack->flatten();
     
+    return $event_ack->msg_hl7;
   }
 }
 

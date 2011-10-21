@@ -114,5 +114,13 @@ class CExchangeIHE extends CExchangeTabular {
     $this->date_echange        = mbDateTime();
     $this->store();
   }
+  
+  function setAck(CHL7Acknowledgment $ack, $mb_error_code, $warning = null, $comments = null, CMbObject $mbObject = null) {
+                       
+  }
+  
+  function setAckError(CHL7Acknowledgment $ack, $code_erreur, $comments = null, CMbObject $mbObject = null) {
+                         
+  }
 }
 ?>

@@ -23,8 +23,11 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     parent::build($event);
     
     $message  = $event->message;
-    $receiver = $event->_receiver;
-    $group    = $receiver->_ref_group;
+    // Dans le cas d'un segment MSH la création peut-être soit : receiver / sender (ack)
+    $actor    = (isset($event->_sender->_id)) ? $event->_sender : $event->_receiver;
+    $actor->loadRefGroup();
+    $group    = $actor->_ref_group;
+    
     $data = array();
     
     // MSH-1: Field Separator (ST)
@@ -40,7 +43,7 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     $data[] = "Mediboard_$group->finess"; 
     
     // MSH-5: Receiving Application (HD) (optional)
-    $data[] = $receiver ? $receiver->nom : "no_receiver"; 
+    $data[] = $actor ? $actor->nom : "no_actor"; 
     
     // MSH-6: Receiving Facility (HD) (optional)
     $data[] = null; 

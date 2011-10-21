@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Acknowledgment HL7
+ * Represents a ACK message structure HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,11 +12,13 @@
  */
 
 /**
- * Interface CHL7v2Acknowledgment 
- * Acknowledgment HL7
+ * Interface CHL7EventACK
+ * Represents a ACK message structure
  */
-interface CHL7Acknowledgment {
-  function generateAcknowledgment($statut, $codes, $commentaires, $mbObject);
+interface CHL7EventACK {
+  function __construct(CHL7Event $trigger_event);
+  
+  function build($object);
 }
 
 ?>

@@ -90,7 +90,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     return $data;
   }
  
-  function recordPerson(CHL7Acknowledgment $dom_ack, CPatient $newPatient, $data) {
+  function recordPerson(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
     // Traitement du message des erreurs
     $avertissement = $msgID400 = $msgIPP = "";
     $_IPP_create   = $_modif_patient = false;
@@ -104,9 +104,37 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     
     // Acquittement d'erreur : identifiants RI et PI non fournis
     if (!$patientRI && !$patientPI) {
-      return $exchange_ihe->setAckError($dom_ack, "E005", $commentaire, $newPatient);
+      return $exchange_ihe->setAckError($ack, "E005", $comment, $newPatient);
     }
-  } 
+        
+    $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
+
+    // PI non connu
+    if (!$IPP->_id) {
+      // RI fourni
+      if ($patientRI) {
+        if ($newPatient->load($patientRI)) {
+          
+        } else {
+          
+        }
+      } else {
+        
+      }
+      
+
+    } 
+    // PI connu
+    else {
+      
+    }
+    
+    
+  }    
+  
+  function mappingPatient() {
+    
+  }
 }
 
 ?>
