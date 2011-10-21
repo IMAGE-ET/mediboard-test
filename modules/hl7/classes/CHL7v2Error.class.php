@@ -42,26 +42,26 @@ class CHL7v2Error {
    * @var string
    */
   public $level = self::E_WARNING;
-	
-	function getLocation(){
+  
+  function getLocation(){
     $entity = $this->entity;
-		
-		if (!$entity) return null;
-		
-		$path = array();
-		
-		$segment = $entity->getSegment();
-		if ($segment) {
+    
+    if (!$entity) return null;
+    
+    $path = array();
+    
+    $segment = $entity->getSegment();
+    if ($segment) {
       $path[] = $segment->name;
       $path[] = null;
-			
-			CHL7v2FieldItem::$_get_path_full = true;
-			$path = array_merge($path, $entity->getPath());
+      
+      CHL7v2FieldItem::$_get_path_full = true;
+      $path = array_merge($path, $entity->getPath());
       CHL7v2FieldItem::$_get_path_full = false;
-		}
-		
-		return $path;
-	}
+    }
+    
+    return $path;
+  }
 }
 
 ?>
