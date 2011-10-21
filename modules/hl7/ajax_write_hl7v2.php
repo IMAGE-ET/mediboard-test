@@ -199,7 +199,7 @@ $msg->appendChild($segment);
 $msg->validate();
 
 foreach($msg->errors as $error) {
-  mbTrace(@$error["field"]->name, CAppUI::tr("CHL7v2Exception-".$error["code"])." - ".$error["data"]);
+  mbTrace(@$error->entity->getPathString(), CAppUI::tr("CHL7v2Exception-".$error->code)." - ".$error->data);
 }
 
 echo "Généré";
@@ -213,7 +213,7 @@ $msg2->parse($message_str);
 $msg2->validate();
 
 foreach($msg2->errors as $error) {
-  mbTrace(@$error["field"]->name, CAppUI::tr("CHL7v2Exception-".$error["code"])." - ".$error["data"]);
+  mbTrace(@$error->entity->getPathString(), CAppUI::tr("CHL7v2Exception-".$error->code)." - ".$error->data);
 }
 
 echo $msg2->flatten(true);

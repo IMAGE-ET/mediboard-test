@@ -3,30 +3,30 @@
 <table class="main tbl">
   <tr>
     <th>Ligne</th>
-    <th>Champ</th>
+    <th>Entité</th>
     <th></th>
     <th></th>
   </tr>
   {{foreach from=$errors item=_error}}
-    {{if $level && ($level == $_error.level)}}
+    {{if $level && ($level == $_error->level)}}
       <tr>
         <td class="narrow">
-          {{$_error.line}}
+          {{$_error->line}}
         </td>
         <td class="narrow">
-        	{{if $_error.field}}
-            {{$_error.field->name}}
-      		{{/if}}
-        </td>
-        <td>
-          {{if $_error.code|is_numeric}}
-            {{tr}}CHL7v2Exception-{{$_error.code}}{{/tr}}
-          {{else}}
-            {{$_error.code}}
+          {{if $_error->entity}}
+            <pre style="border: none;">{{$_error->entity->getPathString()}}</pre>
           {{/if}}
         </td>
         <td>
-          {{$_error.data}}
+          {{if $_error->code|is_numeric}}
+            {{tr}}CHL7v2Exception-{{$_error->code}}{{/tr}}
+          {{else}}
+            {{$_error->code}}
+          {{/if}}
+        </td>
+        <td>
+          {{$_error->data}}
         </td>
       </tr>
     {{/if}}

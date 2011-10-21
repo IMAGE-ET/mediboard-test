@@ -10,11 +10,11 @@
 
 <script type="text/javascript">
   Main.add(Control.Tabs.create.curry('tabs-configure', true));
-	
-	function importHL7v2Tables(){
-	  var url = new Url("hl7", "ajax_import_hl7v2_tables");
-	  url.requestUpdate("import-log");
-	}
+  
+  function importHL7v2Tables(){
+    var url = new Url("hl7", "ajax_import_hl7v2_tables");
+    url.requestUpdate("import-log");
+  }
 </script>
 
 <ul id="tabs-configure" class="control_tabs">
@@ -45,13 +45,13 @@
   {{mb_include module=system template=configure_dsn dsn=hl7v2}}
  
   <table class="main tbl">
-  	<tr>
-  		<th class="title" colspan="2">
-  			Import des tables
-  		</th>
- 	  <tr>
- 		  <td class="narrow"><button onclick="importHL7v2Tables()" class="change">{{tr}}Import{{/tr}}</button></td>
-		  <td id="import-log"></td>
- 	  </tr>
+    <tr>
+      <th class="title" colspan="2">
+        Import des tables
+      </th>
+     <tr>
+       <td class="narrow"><button onclick="importHL7v2Tables()" class="change">{{tr}}Import{{/tr}}</button></td>
+      <td id="import-log"></td>
+     </tr>
   </table>
 </div>

@@ -44,8 +44,8 @@ abstract class CHL7v2Entity extends CHL7v2 {
   
   function fill($items) {}
   
-  function error($code, $data, $field = null, $level = CHL7v2::E_ERROR) {    
-    $this->getMessage()->error($code, $data, $field, $level);
+  function error($code, $data, $entity = null, $level = CHL7v2Error::E_ERROR) {    
+    $this->getMessage()->error($code, $data, $entity, $level);
   }
   
   abstract function validate();
@@ -54,6 +54,18 @@ abstract class CHL7v2Entity extends CHL7v2 {
    * @return CHL7v2Message
    */
   abstract function getMessage();
+  
+  /**
+   * @return array
+   */
+  abstract function getPath($separator = ".", $with_name = false);
+  
+  /**
+   * @return string
+   */
+  function getPathString($glue = "/", $separator = ".", $with_name = true) {
+    return implode($glue, $this->getPath($separator, $with_name));
+  }
   
   abstract function _toXML(DOMNode $node);
 }

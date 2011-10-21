@@ -23,8 +23,8 @@
         <script>
           Main.add(function(){
             Control.Tabs.create("message-tab-{{$_key}}");
-						var tree = new TreeView("message-{{$_key}}-tree");
-						tree.collapseAll();
+            var tree = new TreeView("message-{{$_key}}-tree");
+            tree.collapseAll();
           });
         </script>
         <div style="display: none;" id="message-{{$_key}}">
@@ -40,11 +40,11 @@
           </ul>
           <hr class="control_tabs" />
            
-					<div id="message-{{$_key}}-tree" style="display: none;">
-	          <ul class="hl7-tree">
-	            {{mb_include module=hl7 template=inc_segment_group_children segment_group=$_message}}
-	          </ul>
-					</div>
+          <div id="message-{{$_key}}-tree" style="display: none;">
+            <ul class="hl7-tree">
+              {{mb_include module=hl7 template=inc_segment_group_children segment_group=$_message}}
+            </ul>
+          </div>
           
           <div id="message-{{$_key}}-er7-input" style="display: none;">
             {{$_message->highlight_er7($_message->data)|smarty:nodefaults}}

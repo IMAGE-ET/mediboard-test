@@ -122,6 +122,10 @@ class CHL7v2Segment extends CHL7v2Entity {
     return $this->getSchema(self::PREFIX_SEGMENT_NAME, $this->name);
   }
   
+  function getPath($separator = ".", $with_name = false){
+    
+  }
+  
   /**
    * @param string             $name
    * @param CHL7v2SegmentGroup $parent

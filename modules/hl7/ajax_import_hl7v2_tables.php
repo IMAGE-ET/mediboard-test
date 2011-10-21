@@ -60,20 +60,20 @@ natsort($csv_files);
 $count = 0;
 
 foreach($csv_files as $csv_file) {
-	preg_match('/(\d*)\.csv$/', $csv_file, $matches);
-	$number = $matches[1];
-	
-	$items = array();
-	
-	$fp = fopen($csv_file, "r");
+  preg_match('/(\d*)\.csv$/', $csv_file, $matches);
+  $number = $matches[1];
+  
+  $items = array();
+  
+  $fp = fopen($csv_file, "r");
   while($line = fgetcsv($fp, null, ";")) {
-  	$desc = $ds->escape($line[1]);
+    $desc = $ds->escape($line[1]);
     $hl7  = $ds->escape($line[0]);
-  	$items[] = "($number, '$hl7', '$desc')";
+    $items[] = "($number, '$hl7', '$desc')";
   }
-	
-	$count += count($items);
-	$query = "INSERT INTO `table_entry` (`number`, `code_hl7_from`, `description`) VALUES ".implode(", ", $items);
+  
+  $count += count($items);
+  $query = "INSERT INTO `table_entry` (`number`, `code_hl7_from`, `description`) VALUES ".implode(", ", $items);
   $ds->exec($query);
 }
 

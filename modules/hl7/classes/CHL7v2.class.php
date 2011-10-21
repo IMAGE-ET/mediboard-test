@@ -16,9 +16,6 @@ abstract class CHL7v2 {
   const PREFIX_SEGMENT_NAME   = "segment";
   const PREFIX_COMPOSITE_NAME = "composite";
   
-  const E_ERROR = 2;
-  const E_WARNING = 1;
-  
   static $versions = array(
     "2.1",
     "2.2",

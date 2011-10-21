@@ -10,16 +10,16 @@
 
 <script>
   function addHL7v2TableDescription() {
-	  var url = new Url("hl7", "ajax_add_hl7v2_table_description");
-	  url.requestModal(400, 200);
+    var url = new Url("hl7", "ajax_add_hl7v2_table_description");
+    url.requestModal(400, 200);
   }
   
   function loadEntries(table_number, element) {
-	  if (element)
-	   element.up('tr').addUniqueClassName('selected');
-	  var url = new Url("hl7", "ajax_refresh_table_entries");
-	  url.addParam("table_number", table_number);
-	  url.requestUpdate("entries");
+    if (element)
+     element.up('tr').addUniqueClassName('selected');
+    var url = new Url("hl7", "ajax_refresh_table_entries");
+    url.addParam("table_number", table_number);
+    url.requestUpdate("entries");
   }
 
   function loadTables() {
@@ -28,13 +28,13 @@
   }
   
   function changePage(page) {
-	  $V(getForm('listFilter').page,page);
-	}
+    $V(getForm('listFilter').page,page);
+  }
 
   Main.add(function(){
     Control.Tabs.create("tables-tab", false, {
         afterChange: function(newContainer){
-    	    loadEntries(newContainer.get('number'));
+          loadEntries(newContainer.get('number'));
         }
     });
   });

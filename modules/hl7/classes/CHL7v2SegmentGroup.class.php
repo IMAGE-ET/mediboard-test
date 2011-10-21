@@ -61,6 +61,10 @@ class CHL7v2SegmentGroup extends CHL7v2Entity {
     return $this->parent;
   }
   
+  function getPath($separator = ".", $with_name = false){
+    
+  }
+  
   /**
    * @return CHL7v2Message
    */

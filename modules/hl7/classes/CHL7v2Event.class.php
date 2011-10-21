@@ -70,7 +70,7 @@ class CHL7v2Event extends CHL7Event {
   function updateExchange() {
     $exchange_ihe                 = $this->_exchange_ihe;
     $exchange_ihe->_message       = $this->msg_hl7;
-    $exchange_ihe->message_valide = $this->message->isOK(CHL7v2::E_ERROR) ? 1 : 0;
+    $exchange_ihe->message_valide = $this->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
     $exchange_ihe->store();
     
     return $exchange_ihe;

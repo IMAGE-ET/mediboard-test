@@ -135,7 +135,7 @@ class CHL7v2Component extends CHL7v2Entity {
           $this->children[] = $_comp;
         }
         elseif($_component_spec->isRequired()) {
-          $this->error(CHL7v2Exception::FIELD_EMPTY, $this->getPath(), $this->getField());
+          $this->error(CHL7v2Exception::FIELD_EMPTY, $this->getPath(), $this);
         }
       }
     }
@@ -172,21 +172,19 @@ class CHL7v2Component extends CHL7v2Entity {
           $this->children[] = $_comp;
         }
         elseif($_component_spec->isRequired()) {
-          $this->error(CHL7v2Exception::FIELD_EMPTY, $this->getPath(), $this->getField());
+          $this->error(CHL7v2Exception::FIELD_EMPTY, $this->getPath(), $this);
         }
       }
     }
     
     // Scalar type (NM, ST, ID, etc)
     else {
-      $field = $this->getField();
-      
       if (is_array($data)) {
-        $this->error(CHL7v2Exception::INVALID_DATA_FORMAT, var_export($data, true), $field);
+        $this->error(CHL7v2Exception::INVALID_DATA_FORMAT, var_export($data, true), $this);
         return;
       }
       
-      $this->data = trim($this->props->toHL7($data, $field));
+      $this->data = trim($this->props->toHL7($data, $this->getField()));
     }
   }
   
@@ -212,11 +210,9 @@ class CHL7v2Component extends CHL7v2Entity {
       }
     }
     else {
-      $field = $this->getField();
-      
       // length
       if ($this->length && strlen($this->data) > $this->length) {
-        $field->error(CHL7v2Exception::DATA_TOO_LONG, var_export($this->data, true)." ($this->length)", $field);
+        $this->error(CHL7v2Exception::DATA_TOO_LONG, var_export($this->data, true)." ($this->length)", $this);
         $this->invalid = true;
       }
       
@@ -225,13 +221,13 @@ class CHL7v2Component extends CHL7v2Entity {
         $entries = CHL7v2::getTable($this->table, false);
         
         if (!empty($entries) && !array_key_exists($this->data, $entries)) {
-          $field->error(CHL7v2Exception::UNKNOWN_TABLE_ENTRY, "'$this->data' (table $this->table)", $field, CHL7v2::E_WARNING);
+          $this->error(CHL7v2Exception::UNKNOWN_TABLE_ENTRY, "'$this->data' (table $this->table)", $this, CHL7v2Error::E_WARNING);
           $this->invalid = true;
         }
       }
       
-      if (!$props->validate($this->data, $field)) {
-        $field->error(CHL7v2Exception::INVALID_DATA_FORMAT, $this->data, $field);
+      if (!$props->validate($this->data, $this->getField())) {
+        $this->error(CHL7v2Exception::INVALID_DATA_FORMAT, $this->data, $this);
         $this->invalid = true;
         return false;
       }
@@ -312,13 +308,13 @@ class CHL7v2Component extends CHL7v2Entity {
     }
       
     if (CHL7v2Message::$decorateToString) {
-      $title = $field->owner_segment->name.".".implode(".", $this->getPath())." - $this->datatype - $this->description";
+      $title = $field->owner_segment->name.".".$this->getPathString(".")." - $this->datatype - $this->description";
       
       if ($this->table != 0) {
         $title .= " [$this->table]";
       }
       
-      $xpath = ($this->getSegment()->name)."/".implode("/", $this->getPath(".", true));
+      $xpath = ($this->getSegment()->name)."/".$this->getPathString("/", ".", true);
       
       $str = "<span class='entity {$this->separator[1]} ".($this->invalid ? 'invalid' : '')."' id='entity-er7-$this->id' data-title='$title' data-xpath='$xpath' onclick='Event.stop(event);prompt(null,this.get(\"xpath\"))'>$str</span>";
     }

@@ -16,7 +16,7 @@
     <th style="width: 20px">&nbsp;</th>
     <th class="category" style="width: 18%">{{mb_title object=$table_entry field=code_mb_from}}</th>
     <th class="category" style="width: 18%">{{mb_title object=$table_entry field=code_hl7_to}}</th>
-		
+    
     <th class="category" style="width: 18%">{{mb_title object=$table_entry field=code_hl7_from}}</th>
     <th class="category" style="width: 18%">{{mb_title object=$table_entry field=code_mb_to}}</th>
     <th class="category">{{mb_title object=$table_entry field=description}}</th>

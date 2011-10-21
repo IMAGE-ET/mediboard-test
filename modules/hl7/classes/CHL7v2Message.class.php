@@ -50,28 +50,6 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   
   function __construct() { }
   
-  function get($path) {
-    mbTrace(self::parseHL7Path($path));
-  }
-  
-  static function parseHL7Path($path) {
-    $parts = explode("/", $path);
-    $folders = array();
-    
-    foreach($parts as $_part) {
-      if (!preg_match('/^([^\[]*)(?:\[(\d+)\])?$/', $_part, $matches)) {
-        return false;
-      }
-      
-      $folders[] = array(
-        "name"  => $matches[1],
-        "index" => CValue::read($matches, 2, "self"),
-      );
-    }
-    
-    return $folders;
-  }
-  
   function toXML() {
     $field = $this->children[0]->fields[8]->items[0];
     $name = $field->children[0]->data."_".$field->children[1]->data;
@@ -398,19 +376,20 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     return $this;
   }
   
-  function error($code, $data, $field = null, $level = CHL7v2::E_ERROR) {    
-    $this->errors[] = array(
-      "line"  => $this->current_line+1, 
-      "field" => $field,
-      "code"  => $code, 
-      "data"  => $data,
-      "level" => $level,
-    );
+  function error($code, $data, $entity = null, $level = CHL7v2Error::E_ERROR) {
+    $error = new CHL7v2Error;
+    $error->line = $this->current_line+1;
+    $error->entity = $entity;
+    $error->code = $code;
+    $error->data = $data;
+    $error->level = $level;
+    
+    $this->errors[] = $error;
   }
   
   function isOK($min_level = 0) {
     foreach ($this->errors as $_error) {
-      if ($_error["level"] >= $min_level) {
+      if ($_error->level >= $min_level) {
         return false;
       }
     }
@@ -422,10 +401,10 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $errors = array();
     
     foreach ($this->errors as $_error) {
-      if ($_error["level"] > $min_level) {
-        $_code  = CAppUI::tr("CHL7v2Exception-{$_error['code']}");
-        $_field = ($_error["field"] ? $_error["field"]->name.", " : "");
-        $errors[] = "Ligne {$_error['line']} : $_code - $_field {$_error['data']}";
+      if ($_error->level > $min_level) {
+        $_code  = CAppUI::tr("CHL7v2Exception-$_error->code");
+        $_entity = ($_error->entity ? $_error->entity->getPathString().", " : "");
+        $errors[] = "Ligne $_error->line : $_code - $_field $_error->data";
       }
     }
     
