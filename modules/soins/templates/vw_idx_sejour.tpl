@@ -532,7 +532,7 @@ printDossierComplet = function(){
         <li><a href="#suivi_clinique" onmousedown="loadSuiviClinique(document.form_prescription.sejour_id.value)">{{tr}}CSejour.suivi_clinique{{/tr}}</a></li>
         <li onmousedown="refreshConstantesHack(document.form_prescription.sejour_id.value)"><a href="#constantes-medicales">{{tr}}CPatient.surveillance{{/tr}}</a></li>
         {{if $isPrescriptionInstalled}}
-        <li onmousedown="PlanSoins.loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')"><a href="#dossier_traitement">Suivi de soins</a></li>
+        <li onmousedown="PlanSoins.loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')"><a href="#dossier_traitement">{{tr}}CSejour.suivi_soins{{/tr}}</a></li>
         <li onmousedown="$('prescription_sejour').update(''); Prescription.reloadPrescSejour('', document.form_prescription.sejour_id.value, null, null, null, null, null, '', null, false);">
           <a href="#prescription_sejour">Prescription</a>
         </li>
