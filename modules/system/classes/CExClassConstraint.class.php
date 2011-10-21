@@ -54,6 +54,10 @@ class CExClassConstraint extends CMbObject {
     if (strpos($field, "CONNECTED_USER") === 0) {
       $object = CMediusers::get();
       $object->_specs = CExClass::getHostObjectSpecs($object);
+      
+      if ($field != "CONNECTED_USER") {
+        $field = substr($field, 15);
+      }
     }
     
     return array($object, $field);
