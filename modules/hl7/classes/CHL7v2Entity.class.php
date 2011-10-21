@@ -56,6 +56,11 @@ abstract class CHL7v2Entity extends CHL7v2 {
   abstract function getMessage();
   
   /**
+   * @return CHL7v2Segment
+   */
+  abstract function getSegment();
+  
+  /**
    * @return array
    */
   abstract function getPath($separator = ".", $with_name = false);

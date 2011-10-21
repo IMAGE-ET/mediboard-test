@@ -14,6 +14,7 @@
           {{$_error->line}}
         </td>
         <td class="narrow">
+        	{{$_error->getLocation()}}
           {{if $_error->entity}}
             <pre style="border: none;">{{$_error->entity->getPathString()}}</pre>
           {{/if}}

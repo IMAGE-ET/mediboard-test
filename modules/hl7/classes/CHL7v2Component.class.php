@@ -135,7 +135,7 @@ class CHL7v2Component extends CHL7v2Entity {
           $this->children[] = $_comp;
         }
         elseif($_component_spec->isRequired()) {
-          $this->error(CHL7v2Exception::FIELD_EMPTY, $this->getPath(), $this);
+          $this->error(CHL7v2Exception::FIELD_EMPTY, $this->getPathString(), $this);
         }
       }
     }
@@ -172,7 +172,7 @@ class CHL7v2Component extends CHL7v2Entity {
           $this->children[] = $_comp;
         }
         elseif($_component_spec->isRequired()) {
-          $this->error(CHL7v2Exception::FIELD_EMPTY, $this->getPath(), $this);
+          $this->error(CHL7v2Exception::FIELD_EMPTY, $this->getPathString(), $this);
         }
       }
     }

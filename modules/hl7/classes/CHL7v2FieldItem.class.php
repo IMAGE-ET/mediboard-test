@@ -9,6 +9,8 @@
  */
 
 class CHL7v2FieldItem extends CHL7v2Component {
+	static $_get_path_full = false;
+	
   /**
    * @var CHL7v2Field
    */
@@ -43,7 +45,14 @@ class CHL7v2FieldItem extends CHL7v2Component {
   
   function getPath($separator = ".", $with_name = false){
     $path = $this->parent->getPath($separator, $with_name);
-    $path[count($path)-1] = $path[count($path)-1]."[".($this->self_pos+1)."]";
+		
+		if(self::$_get_path_full) {
+			$path[] = $this->self_pos+1;
+		}
+		else {
+			$path[count($path)-1] = $path[count($path)-1]."[".($this->self_pos+1)."]";
+		}
+   
     return $path;
   }
 }

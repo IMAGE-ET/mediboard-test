@@ -114,6 +114,13 @@ class CHL7v2Segment extends CHL7v2Entity {
     return $this->parent->getMessage();
   }
   
+  /**
+   * @return CHL7v2Segment
+   */
+  function getSegment(){
+    return $this;
+  }
+  
   function getVersion() {
     return $this->getMessage()->getVersion();
   }

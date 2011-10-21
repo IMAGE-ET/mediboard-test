@@ -72,6 +72,13 @@ class CHL7v2SegmentGroup extends CHL7v2Entity {
     return $this->parent->getMessage();
   }
   
+  /**
+   * @return CHL7v2Segment
+   */
+  function getSegment(){
+    // N/A
+  }
+  
   function appendChild($child){
     return $this->children[] = $child;
   }
