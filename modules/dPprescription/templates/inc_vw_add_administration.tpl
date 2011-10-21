@@ -305,23 +305,51 @@ chooseSubmit = function() {
       </tr>
     </table>
   </form>
-  <br/>
+	
+	<br />
+	
+	{{assign var=show_constantes value=false}}
+	
+	{{if $line->_class == "CPrescriptionLineElement" && $selection|@count}}
+	  {{assign var=show_constantes value=true}}
+	{{/if}}
   
-  {{if $line->_class == "CPrescriptionLineElement" && $selection|@count}}
-    {{assign var=patient value=$sejour->_ref_patient}}
-    {{assign var=context_guid value=$sejour->_guid}}
-    {{assign var=readonly value=0}}
-    {{assign var=hide_save_button value=1}}
-    {{assign var=callback_administration value=1}}
-    {{assign var=display_graph value=0}}
-    {{mb_include module=dPhospi template=inc_form_edit_constantes_medicales}}
-  {{/if}}
-  
-  {{assign var=hide_cible value=1}}
-  {{assign var=hide_button_add value=1}}
-  {{mb_include module=dPhospi template=inc_transmission refreshTrans=0}}
-  <button type="button" class="add singleclick" onclick="chooseSubmit()">{{tr}}Validate{{/tr}}</button>
-  <button type="button" class="cancel" onclick="submitCancelAdm();">{{tr}}Cancel{{/tr}}</button>
+	<table class="main form">
+    <tr>
+      {{if $show_constantes}}
+			  <th class="title">Constantes</th>
+			{{/if}}
+			
+      <th class="title">Transmissions</th>
+    </tr>
+		
+		<tr>
+      {{if $show_constantes}}
+	      <td class="narrow">
+			    {{assign var=patient value=$sejour->_ref_patient}}
+			    {{assign var=context_guid value=$sejour->_guid}}
+			    {{assign var=readonly value=0}}
+			    {{assign var=hide_save_button value=1}}
+			    {{assign var=callback_administration value=1}}
+			    {{assign var=display_graph value=0}}
+			    {{mb_include module=dPhospi template=inc_form_edit_constantes_medicales}}
+		    </td>
+			{{/if}}
+			
+      <td>
+			  {{assign var=hide_cible value=1}}
+			  {{assign var=hide_button_add value=1}}
+			  {{mb_include module=dPhospi template=inc_transmission refreshTrans=0}}
+	    </td>
+		</tr>
+		<tr>
+			<td colspan="{{$show_constantes|ternary:2:1}}" class="button">
+        <hr />
+			  <button type="submit" class="submit singleclick" onclick="chooseSubmit()">{{tr}}Validate{{/tr}}</button>
+			  <button type="button" class="cancel" onclick="submitCancelAdm();">{{tr}}Cancel{{/tr}}</button>
+	    </td>
+		</tr>
+	</table>
 {{/if}}
 
 {{if $mode_dossier == "planification"}}

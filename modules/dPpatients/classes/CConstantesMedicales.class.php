@@ -521,41 +521,31 @@ class CConstantesMedicales extends CMbObject {
     if(!$patient_id) {
       return array($constante, array());
     }
+		
     $constante->patient_id = $patient_id;
     $constante->datetime = mbDateTime();
     $constante->loadRefPatient();
     
-    // Liste des constantes enregistrés du patient
-    $list = new CConstantesMedicales();
-    $list->patient_id = $patient_id;
-    $list = $list->loadMatchingList('datetime DESC');
-    
-    // Liste des dates des dernières valeurs
+		$where = array(
+		  "patient_id" => "= '$patient_id'"
+		);
+		
     $list_datetimes = array();
-    
-    foreach (CConstantesMedicales::$list_constantes as $type => $params) {
-      $list_datetimes[$type] = null;
-    }
-    
-    // Pour toutes les constantes existantes
-    foreach ($list as $const) {
-      if ($constante->context_class == null && $const->context_class != null) {
-        $constante->context_class = $const->context_class;
-        $constante->context_id = $const->context_id;
-      }
-      
-      $continue = false;
-      foreach (CConstantesMedicales::$list_constantes as  $type => $params) {
-        if ($const->$type != null && $constante->$type == null) {
-          $constante->$type = $const->$type;
-          $list_datetimes[$type] = $const->datetime;
-        }
-        if ($constante->$type == null) {
-          $continue = true;
-        }
-      }
-      if (!$continue) break;
-    }
+		foreach (CConstantesMedicales::$list_constantes as $type => $params) {
+			$list_datetimes[$type] = null;
+			
+			if ($type[0] == "_") continue;
+			
+			$_where = $where;
+			$_where[$type] = "IS NOT NULL";
+			$_list = $constante->loadList($_where, "datetime DESC", 1);
+			
+			if (count($_list)) {
+				$_const = reset($_list);
+        $constante->$type = $_const->$type;
+        $list_datetimes[$type] = $_const->datetime;
+			}
+		}
     
     $constante->updateFormFields();
     
