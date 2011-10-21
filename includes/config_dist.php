@@ -39,7 +39,7 @@ $dPconfig["readonly"]          = "0";
 $dPconfig["shared_memory"]     = "none";
 $dPconfig["session_handler"]   = "files";
 $dPconfig["log_js_errors"]     = "1";
-$dPconfig["apache_child_terminate_memory_limit"] = ""; 
+$dPconfig["weinre_debug_host"] = "";
 
 // Object merge
 $dPconfig["alternative_mode"]  = "0";
