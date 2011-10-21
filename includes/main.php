@@ -125,6 +125,7 @@ if (!CAppUI::$instance->user_id) {
     $tplLogin->assign("browser"              , $browser);
     $tplLogin->assign("nodebug"              , true);
     $tplLogin->assign("offline"              , false);
+    $tplLogin->assign("allInOne"             , CValue::get("_aio"));
     $tplLogin->display("login.tpl");
   }
   
@@ -273,6 +274,7 @@ if (!$suppressHeaders) {
   $tplHeader->assign("errorMessage"         , CAppUI::getMsg());
   $tplHeader->assign("Etablissements"       , $etablissements);
   $tplHeader->assign("svnStatus"            , $svnStatus);
+  $tplHeader->assign("allInOne"             , CValue::get("_aio"));
   $tplHeader->assign("portal"               , array (
     "help" => mbPortalURL($m, $tab),
     "tracker" => mbPortalURL("tracker"),

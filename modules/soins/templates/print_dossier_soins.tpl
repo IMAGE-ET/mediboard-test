@@ -92,13 +92,13 @@
   <tr class="not-printable">
     <td style="vertical-align: middle;">
       <strong>Choix des blocs à imprimer : </strong>
-      <label><input type="checkbox" checked="checked" onchange="togglePrintZone('print_patient')" /> {{tr}}CPatient{{/tr}}</label>
-      <label><input type="checkbox" checked="checked" onchange="togglePrintZone('print_sejour')" /> {{tr}}CSejour{{/tr}}</label>
-      <label><input type="checkbox" checked="checked" onchange="togglePrintZone('print_prescription')"/> {{tr}}CPrescription{{/tr}}</label>
-      <label><input type="checkbox" checked="checked" onchange="togglePrintZone('print_tasks')"/> Tâches</label>
+      <label><input type="checkbox" checked="checked" onclick="togglePrintZone('print_patient')" /> {{tr}}CPatient{{/tr}}</label>
+      <label><input type="checkbox" checked="checked" onclick="togglePrintZone('print_sejour')" /> {{tr}}CSejour{{/tr}}</label>
+      <label><input type="checkbox" checked="checked" onclick="togglePrintZone('print_prescription')"/> {{tr}}CPrescription{{/tr}}</label>
+      <label><input type="checkbox" checked="checked" onclick="togglePrintZone('print_tasks')"/> Tâches</label>
       
       {{if "forms"|module_active}}
-        <label><input type="checkbox" onchange="loadExForms(this); togglePrintZone('print_forms')" /> Formulaires</label>
+        <label><input type="checkbox" onclick="loadExForms(this); togglePrintZone('print_forms')" /> Formulaires</label>
         <div class="loading" style="height: 16px; display: none;" id="forms-loading">Chargement des formulaires en cours</div>
       {{/if}}
       
