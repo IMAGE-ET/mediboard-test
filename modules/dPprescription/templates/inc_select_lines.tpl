@@ -1,6 +1,19 @@
 <script type="text/javascript">
   Main.add(function() {
     Control.Tabs.create('tabs-protocole', true);
+    
+    // Si la sauvegarde des checkboxes est présente,
+    // alors on restaure leur état
+    if (window.save_checkboxes) {
+     window.save_checkboxes.each(function(elt) {
+       if (elt.id) {
+         var new_elt=$(elt.id);
+         if (new_elt) {
+           new_elt.checked = elt.checked;
+         }
+       }
+     });
+    }
   });
 
   cancelProtocole = function(elt) {
