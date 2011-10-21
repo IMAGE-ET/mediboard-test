@@ -127,7 +127,7 @@ Main.add( function(){
 {{if $mode_dossier == "administration"}}
 	{{if $sejour->_id}}
 		<button type="button" class="cancel" onclick="closeApplyAdministrations()">{{tr}}Cancel{{/tr}}</button>
-		<button type="button" class="tick" onclick="submitAllAdministrations()" id="multiple_adm_button">Tout valider</button>
+		<button type="button" class="tick oneclick" onclick="submitAllAdministrations()" id="multiple_adm_button">Tout valider</button>
 		
 		<table class="form" id="administrations">
 		{{foreach from=$administrations item=adm key=line_id name=by_adm}}
@@ -210,7 +210,7 @@ Main.add( function(){
 {{if $mode_dossier == "planification"}}
 	{{if $sejour->_id}}	
 		<button type="button" class="cancel" onclick="closeApplyAdministrations()">{{tr}}Cancel{{/tr}}</button>
-		<button type="button" class="tick" onclick="submitAllPlanifications()">Tout valider</button>
+		<button type="button" class="tick oneclick" onclick="submitAllPlanifications()">Tout valider</button>
 		
 		<table class="form" id="planifications">
 		{{foreach from=$administrations item=adm key=line_id name=by_adm}}

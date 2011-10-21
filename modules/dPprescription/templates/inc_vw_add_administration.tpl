@@ -345,7 +345,7 @@ chooseSubmit = function() {
 		<tr>
 			<td colspan="{{$show_constantes|ternary:2:1}}" class="button">
         <hr />
-			  <button type="submit" class="submit singleclick" onclick="chooseSubmit()">{{tr}}Validate{{/tr}}</button>
+			  <button type="submit" class="submit oneclick" onclick="chooseSubmit()">{{tr}}Validate{{/tr}}</button>
 			  <button type="button" class="cancel" onclick="submitCancelAdm();">{{tr}}Cancel{{/tr}}</button>
 	    </td>
 		</tr>

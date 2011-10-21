@@ -587,7 +587,7 @@ Main.add( function(){
 	          } );
 	 				</script>				 				
  				{{/if}}
-        <button type="button" class="submit singleclick" onclick="submitProtocole();">Ouvrir/Appliquer</button>
+        <button type="button" class="submit oneclick" onclick="submitProtocole();">Ouvrir/Appliquer</button>
 		 </form>
     </td>  
   {{/if}}
