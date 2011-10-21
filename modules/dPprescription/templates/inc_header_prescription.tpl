@@ -677,7 +677,7 @@ Main.add( function(){
   				  		<input type="hidden" name="dosql" value="do_stop_all_lines_aed" />
   							<input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
   							<button type="button" class="cancel singleclick" onclick="return onSubmitFormAjax(this.form, { onComplete: function(){ 
-  							Prescription.reload('{{$prescription->_id}}', '', '', '0', '{{$mode_pharma}}');
+  							Prescription.reload('{{$prescription->_id}}', '', 'medicament', '0', '{{$mode_pharma}}');
   							modalWindowTools.close();
   							}	})">Tout arrêter</button>
   				  	</form>
