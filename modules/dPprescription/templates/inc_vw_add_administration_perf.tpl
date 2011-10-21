@@ -120,7 +120,7 @@ refreshAdministrations = function(){
 	  {{/foreach}}
 	  <tr>
 	    <td colspan="2" class="button">
-	      <button class="submit" onclick="addAdministrationsPerf();" type="button">{{tr}}Validate{{/tr}}</button>
+	      <button class="submit oneclick" onclick="addAdministrationsPerf();" type="button">{{tr}}Validate{{/tr}}</button>
 	    </td>
 	  </tr>
 	</table>
