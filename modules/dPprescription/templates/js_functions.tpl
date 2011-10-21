@@ -159,6 +159,15 @@ selDivPoso = function(type, line_id, type_elt){
   }
 }
 
+removeRelativesDates = function (oForm) {
+  $V(oForm.jour_decalage, '');
+	$V(oForm.decalage_line, '');
+  $V(oForm.unite_decalage, '');
+  $V(oForm.jour_decalage_fin, '');
+  $V(oForm.decalage_line_fin, '');
+  $V(oForm.unite_decalage_fin, '');
+}
+
 reloadPrises = function(prescription_line_id, chapitre){
   var url = new Url("dPprescription", "httpreq_vw_prises");
   url.addParam("prescription_line_id", prescription_line_id);

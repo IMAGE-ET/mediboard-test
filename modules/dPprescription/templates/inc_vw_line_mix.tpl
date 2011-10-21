@@ -273,15 +273,22 @@ Main.add( function(){
                     </span>
 										 
 								{{else}}
-								   
+
+										<input type="hidden" name="jour_decalage" value="{{$line->jour_decalage}}" />
+										<input type="hidden" name="decalage_line" value="{{$line->decalage_line}}" />
+										<input type="hidden" name="unite_decalage" value="{{$line->unite_decalage}}" />
+										<input type="hidden" name="jour_decalage_fin" value="{{$line->jour_decalage_fin}}" />
+										<input type="hidden" name="decalage_line_fin" value="{{$line->decalage_line_fin}}" />
+										<input type="hidden" name="unite_decalage_fin" value="{{$line->unite_decalage_fin}}" />
+									 
 		                <strong>{{mb_label object=$line field="date_debut"}}</strong>
 		                {{if $line->_can_modify_prescription_line_mix}}
-		                  {{mb_field object=$line field=date_debut form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);" register=true}}
-		                  {{mb_field object=$line field=time_debut form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);" register=true}}
+		                  {{mb_field object=$line field=date_debut form="editPerf-$prescription_line_mix_id" onchange="removeRelativesDates(this.form); return onSubmitFormAjax(this.form);" register=true}}
+		                  {{mb_field object=$line field=time_debut form="editPerf-$prescription_line_mix_id" onchange="removeRelativesDates(this.form); return onSubmitFormAjax(this.form);" register=true}}
 											
 											<span id="dates-perf-{{$prescription_line_mix_id}}">
 											  <strong>{{mb_label object=$line field=duree}}</strong>
-											  {{mb_field object=$line field=duree size=1 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
+											  {{mb_field object=$line field=duree size=1 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="removeRelativesDates(this.form); return onSubmitFormAjax(this.form);"}}
                         {{mb_field object=$line field=unite_duree onchange="return onSubmitFormAjax(this.form);"}}
 										  </span>
 											

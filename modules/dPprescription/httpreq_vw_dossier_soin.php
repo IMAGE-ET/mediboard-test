@@ -41,6 +41,7 @@ $sejour = new CSejour();
 $sejour->load($sejour_id);
 $sejour->loadRefCurrAffectation();
 $sejour->_ref_curr_affectation->loadView();
+
 if(CGroups::loadCurrent()->_id != $sejour->group_id){
   CAppUI::stepAjax("Ce séjour n'est pas dans l'établissement courant", UI_MSG_WARNING);
   return;

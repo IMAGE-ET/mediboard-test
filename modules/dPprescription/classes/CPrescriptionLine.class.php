@@ -23,17 +23,20 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
   var $date_arret          = null;  // Date d'arret
   var $time_arret          = null;  // Heure d'arret
   var $child_id            = null;
+  
+	// Date relative pour les protocoles
+	var $jour_decalage       = null;  // Jour de decalage: I/E/S/N
   var $decalage_line       = null;  // Permet de definir le decalage de la ligne par rapport au jour de decalage specifié
-  var $jour_decalage       = null;  // Jour de decalage: I/E/S/N
-  var $valide_infirmiere   = null;
-  var $fin                 = null;              
+  var $unite_decalage      = null;
   var $jour_decalage_fin   = null;  // Jour de fin: I/S
   var $decalage_line_fin   = null;  // Decalage de la ligne
+  var $unite_decalage_fin  = null;
+  
+  var $valide_infirmiere   = null;
+  var $fin                 = null;              
   var $time_fin            = null;  // Heure de fin de la ligne de prescription
   var $conditionnel        = null;
   var $condition_active    = null;
-  var $unite_decalage      = null;
-  var $unite_decalage_fin  = null;
   var $operation_id        = null;
   var $emplacement         = null;
   

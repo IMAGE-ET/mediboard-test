@@ -72,11 +72,11 @@ class CPrescriptionLineMix extends CMbObject {
   var $protocole_id     = null;
   
   // Dates relatives
+	var $jour_decalage      = null;
   var $decalage_line      = null;
-  var $jour_decalage      = null;
   var $unite_decalage     = null;
-  var $decalage_line_fin  = null;
   var $jour_decalage_fin  = null;
+  var $decalage_line_fin  = null;
   var $unite_decalage_fin = null;
 	 
 	var $ponctual           = null;

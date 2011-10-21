@@ -47,7 +47,14 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
    <input type="hidden" name="dosql" value="{{$dosql}}" />
    <input type="hidden" name="del" value="0" />
    <input type="hidden" name="{{$line->_spec->key}}" value="{{$line->_id}}" />
-  
+   
+	 <input type="hidden" name="jour_decalage" value="{{$line->jour_decalage}}" />
+   <input type="hidden" name="decalage_line" value="{{$line->decalage_line}}" />
+   <input type="hidden" name="unite_decalage" value="{{$line->unite_decalage}}" />
+   <input type="hidden" name="jour_decalage_fin" value="{{$line->jour_decalage_fin}}" />
+   <input type="hidden" name="decalage_line_fin" value="{{$line->decalage_line_fin}}" />
+   <input type="hidden" name="unite_decalage_fin" value="{{$line->unite_decalage_fin}}" />
+
    <table class="main layout">
 	   {{if !$line->fin}}
 	   <tr>  
@@ -86,7 +93,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 			       </div>	       
 	       {{else}}
 	         {{if $typeDate != "mode_grille"}}
-		         {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}  
+		         {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="removeRelativesDates(this.form); submitFormAjax(this.form, 'systemMsg');"}}  
 	         {{else}}
 	           {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}  
 	         {{/if}}
@@ -111,8 +118,8 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	     <td>
 	      	<strong>{{mb_label object=$line field=duree}}</strong>
 	       {{if $line->_can_modify_dates || $typeDate == "mode_grille"}}
-			     {{mb_field object=$line field=duree increment=1 min=1 form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');" size="1" }}
-			     {{mb_field object=$line style="width: 70px;" field=unite_duree onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
+			     {{mb_field object=$line field=duree increment=1 min=1 form=editDates-$typeDate-$line_id onchange="removeRelativesDates(this.form); syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');" size="1" }}
+			     {{mb_field object=$line style="width: 70px;" field=unite_duree onchange="removeRelativesDates(this.form); syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
 			   {{else}}
 			     {{if $line->duree}}
 			       {{$line->duree}}
