@@ -31,6 +31,7 @@ class CMessage extends CMbObject {
   
   // Behaviour fields
   var $_email_send    = null;
+  var $_email_from    = null;
   var $_email_to      = null;
   var $_email_details = null;
   
@@ -68,6 +69,7 @@ class CMessage extends CMbObject {
     $props["group_id"]  = "ref class|CGroups";
 
     $props["_status"]         = "enum list|past|present|future";
+    $props["_email_from"]     = "str";
     $props["_email_to"]       = "str";
     $props["_email_details"]  = "text";
     $props["_update_moment"]    = "dateTime";
@@ -136,8 +138,10 @@ class CMessage extends CMbObject {
       // Source init
       $source = CExchangeSource::get("system-message");
       $source->init();
-      $source->setRecipient($this->_email_to, $this->_email_to);
-
+      $source->addTo($this->_email_to);
+      $source->addBcc($this->_email_from);
+      $source->addRe($this->_email_from);
+      
       // Email subject
       $page_title = CAppUI::conf("page_title");
       $source->setSubject("$page_title - $this->titre");
@@ -159,9 +163,10 @@ class CMessage extends CMbObject {
     }
     catch (CMbException $e) {
       $e->stepAjax();
+      return;
     }
     
-    CAppUI::setMsg("Ok");
+    CAppUI::setMsg("CMessage-email_sent");
   }
   
   function getFieldContent($field) {

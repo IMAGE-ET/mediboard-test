@@ -41,7 +41,8 @@ $groups = CMediusers::loadEtablissements(PERM_EDIT);
 
 // Source SMTP
 $message_smtp = CExchangeSource::get("system-message", "smtp", true);
-$message->_email_to = CAppUI::conf("system CMessage default_email");
+$message->_email_from = CAppUI::conf("system CMessage default_email_from");
+$message->_email_to   = CAppUI::conf("system CMessage default_email_to"  );
 
 $smarty = new CSmartyDP();
 $smarty->assign("message", $message);

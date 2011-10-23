@@ -7,7 +7,8 @@
 <input type="hidden" name="dosql" value="do_configure" />
 
 <table class="form">  
-  {{mb_include module=system template=inc_config_str var=default_email}}
+  {{mb_include module=system template=inc_config_str var=default_email_from}}
+  {{mb_include module=system template=inc_config_str var=default_email_to}}
   
   <tr>
     <td class="button" colspan="6">

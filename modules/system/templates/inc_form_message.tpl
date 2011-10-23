@@ -71,14 +71,14 @@
   <td class="button" colspan="2">
     {{if $message->_id}}
     <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-    <button class="new" type="submit" onclick="Message.duplicate(this.form);">
+    <button class="new oneclick" type="submit" onclick="Message.duplicate(this.form);">
       {{tr}}Duplicate{{/tr}}
     </button>
-    <button class="trash" type="button" onclick="Message.confirmDeletion(this.form);">
+    <button class="trash singleclick" type="button" onclick="Message.confirmDeletion(this.form);">
       {{tr}}Delete{{/tr}}
     </button>
     {{else}}
-    <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+    <button class="submit oneclick" type="submit">{{tr}}Create{{/tr}}</button>
     {{/if}}
   </td>
 </tr>
@@ -98,6 +98,11 @@
 {{else}}
 
 <tr>
+  <th>{{mb_label object=$message field="_email_from"}}</th>
+  <td>{{mb_field object=$message field="_email_from"}}</td>
+</tr>
+
+<tr>
   <th>{{mb_label object=$message field="_email_to"}}</th>
   <td>{{mb_field object=$message field="_email_to"}}</td>
 </tr>
@@ -112,11 +117,11 @@
   <td class="button" colspan="2">
     <input name="_email_send" type="hidden" />
     {{if $message->_id}}
-    <button class="modify" type="submit" onclick="$V(this.form._email_send, '1');">
+    <button class="modify oneclick" type="submit" onclick="$V(this.form._email_send, '1');">
       {{tr}}Save{{/tr}} &amp; {{tr}}Send-email{{/tr}}
     </button>
     {{else}}
-    <button class="submit" type="submit" onclick="$V(this.form._email_send, '1');">
+    <button class="submit oneclick" type="submit" onclick="$V(this.form._email_send, '1');">
       {{tr}}Create{{/tr}} &amp; {{tr}}Send-email{{/tr}}
     </button>
     {{/if}}

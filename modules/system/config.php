@@ -10,6 +10,7 @@
 
 $dPconfig["system"] = array ( 
   "CMessage" => array (
-    "default_email" => "",
-  ),
+    "default_email_from" => "",
+    "default_email_to" => "",
+),
 );
