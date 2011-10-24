@@ -293,14 +293,6 @@ if ($tab !== null) {
 $phpChrono->stop();
 
 $memory_peak = memory_get_peak_usage();
-$limit = CAppUI::conf("apache_child_terminate_memory_limit");
-
-if ($limit && 
-    $memory_peak > $limit * 1048576 && 
-    function_exists("apache_child_terminate")) { // mega bytes
-  apache_child_terminate();
-}
-
 arsort(CMbObject::$cachableCounts);
 arsort(CMbObject::$objectCounts);
 
