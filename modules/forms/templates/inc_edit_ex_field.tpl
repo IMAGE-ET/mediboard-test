@@ -25,6 +25,7 @@ toggleListCustom = function(form) {
     
     if (enableList) {
       //$V(select, "none");
+      $V(form.prop, "");
     }
     else {
       $V(input, "");
@@ -35,6 +36,14 @@ toggleListCustom = function(form) {
   }
   
   ExFieldSpec.edit(form);
+}
+
+selectConcept = function(input) {
+  ExFieldSpec.edit(input.form);
+
+  if (!$V(input.form._locale)) {
+	  $V(input.form._locale, input.form.concept_id_autocomplete_view.value);
+	}
 }
 
 Main.add(function(){
@@ -155,12 +164,23 @@ Main.add(function(){
         </td>
         
       {{else}}
+        
+        <th>
+          <label>
+            {{tr}}CExClassField-concept_id{{/tr}}
+            <input type="radio" onclick="toggleListCustom(this.form)" name="_concept_type" value="concept" checked="checked" />
+          </label>
+        </th>
+        
+        <td>
+          {{mb_field object=$ex_field field=concept_id form="editField" autocomplete="true,1,50,false,true" 
+                     onchange="selectConcept(this)"}}
+        </td>
       
         <th>
           <label>
             Type personnalisé
-            <input type="radio" {{if !$ex_field->concept_id}} checked="checked" {{/if}} 
-                   onclick="toggleListCustom(this.form)" name="_concept_type" value="custom" />
+            <input type="radio" onclick="toggleListCustom(this.form)" name="_concept_type" value="custom" />
           </label>
         </th>
         
@@ -172,20 +192,6 @@ Main.add(function(){
               </option>
             {{/foreach}}
           </select>
-        </td>
-        
-        <th>
-          <label>
-            {{tr}}CExClassField-concept_id{{/tr}}
-            
-            <input type="radio" {{if $ex_field->concept_id}} checked="checked" {{/if}}
-                   onclick="toggleListCustom(this.form)" name="_concept_type" value="concept" />
-          </label>
-        </th>
-        
-        <td>
-          {{mb_field object=$ex_field field=concept_id form="editField" autocomplete="true,1,50,false,true" 
-                     onchange="ExFieldSpec.edit(this.form)"}}
         </td>
         
       {{/if}}

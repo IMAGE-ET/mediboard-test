@@ -30,6 +30,14 @@ toggleListCustom = function(radio) {
   ExConceptSpec.edit(form);
 }
 
+selectList = function(input) {
+  ExConceptSpec.edit(input.form);
+	
+  if (!$V(input.form.elements.name)) {
+    $V(input.form.elements.name, input.form.ex_list_id_autocomplete_view.value);
+  }
+}
+
 Main.add(function(){
   var radio = getForm("edit-{{$object->_guid}}")._concept_type[0];
   toggleListCustom.defer(radio);
@@ -66,7 +74,7 @@ Main.add(function(){
       </th>
       <td>
         {{if !$object->_id}}
-          {{mb_field object=$object field=ex_list_id form="edit-`$object->_guid`" autocomplete="true,1,50,false,true" onchange="ExConceptSpec.edit(this.form)"}}
+          {{mb_field object=$object field=ex_list_id form="edit-`$object->_guid`" autocomplete="true,1,50,false,true" onchange="selectList(this)"}}
         {{else}}
           {{mb_value object=$object field=ex_list_id}}
           {{mb_field object=$object field=ex_list_id hidden=true}}

@@ -42,6 +42,11 @@ if ($spec_type) {
 
 $spec = CExConcept::getConceptSpec($prop);
 
+if (!$spec->prop) {
+	CAppUI::stepMessage(UI_MSG_ALERT, "Enregistrez le champ avant de pouvoir changer les propriétés");
+	return;
+}
+
 // UGLY hack because of the default value of the Boolspec
 if ($spec instanceof CBoolSpec && strpos($prop, "default|") === false) {
   $spec->default = null;

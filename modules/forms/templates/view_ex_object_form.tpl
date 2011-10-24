@@ -8,27 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<style type="text/css">
-fieldset {
-  margin: 0px;
-}
-
-div.ex-message-title {
-  font-weight: bold;
-  border-bottom: 1px solid #666;
-  font-size: 1.2em;
-  left: 0.5em; 
-  right: 0.5em; 
-  line-height: 1.4;
-  padding-top: 3px;
-  position: absolute;
-}
-
-span.ex-message-title-spacer {
-  font-size: 1.6em;
-}
-</style>
-
 {{if !@$readonly}}
 
 {{unique_id var=ex_form_hash}}
@@ -173,7 +152,7 @@ if (window.opener && !window.opener.closed && window.opener !== window && window
   </ul>
   <hr class="control_tabs" />
   
-  <table class="main form">
+  <table class="main form ex-form">
     
     {{foreach from=$grid key=_group_id item=_grid}}
     {{if $groups.$_group_id->_ref_fields|@count}}

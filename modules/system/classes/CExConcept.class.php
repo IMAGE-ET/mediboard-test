@@ -193,9 +193,6 @@ class CExConcept extends CExListItemsOwner {
       $fields = $this->loadRefClassFields();
       foreach($fields as $_field) {
       	$new_prop = $this->updateFieldProp($_field->prop);
-				
-				//mbTrace($new_prop, "new prop");
-        //mbTrace($_field->prop, "before");
 				$modif = ($_field->prop != $new_prop);
 				
         $_field->prop = $new_prop;
@@ -216,6 +213,10 @@ class CExConcept extends CExListItemsOwner {
    * @return CMbFieldSpec
    */
   static function getConceptSpec($prop){
+  	if ($prop == "mbField") {
+  		$prop = "";
+  	}
+		
     $field = "dummy";
     
     $object = new CMbObject;
