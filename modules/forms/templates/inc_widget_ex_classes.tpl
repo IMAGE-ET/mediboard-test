@@ -58,44 +58,25 @@
 {{foreach from=$ex_objects item=_ex_objects key=_ex_class_id}}
   {{assign var=_ex_class value=$ex_classes.$_ex_class_id}}
 	
-	{{if $_events.$event.multiple}}
-	  <li>
-	    <strong>{{$_ex_class->name}}</strong>
-	    <ul>
-	    {{foreach from=$_ex_objects item=_ex_object}}
-	      <li>
-	        <a href="#{{$_ex_object->_guid}}" 
-	           onclick="showExClassForm({{$_ex_class_id}}, '{{$object->_guid}}', '{{$_ex_object}}', '{{$_ex_object->_id}}', '{{$event}}', '{{$_element_id}}')">
-	          {{mb_value object=$_ex_object->_ref_last_log field=date}} &ndash; 
-	          {{mb_value object=$_ex_object->_ref_last_log field=user_id}}
-	        </a>
-	      </li>
-	    {{foreachelse}}
-	      <li class="empty">{{tr}}CExObject.none{{/tr}}</li>
-	    {{/foreach}}
-	    </ul>
-	  </li>
-	{{else}}
-	  {{foreach from=$_ex_objects item=_ex_object}}
-    <li>
-	    <a href="#{{$_ex_object->_guid}}" style="font-weight: bold;"
-	       onclick="showExClassForm({{$_ex_class_id}}, '{{$object->_guid}}', '{{$_ex_object}}', '{{$_ex_object->_id}}', '{{$event}}', '{{$_element_id}}')">
-	      {{$_ex_class->name}}
-	    </a>
-			<ul style="min-width: 25em;">
-				{{foreach from=$_ex_object->_ref_logs|@array_reverse item=_log}}
-				  <li>
-				  	<span style="float: right;">
-				  		{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_log->_ref_user->_ref_mediuser}}
-							 &ndash; {{mb_value object=$_log field=date}}
-				  	</span>
-				  	<strong>{{mb_value object=$_log field=type}}</strong> &nbsp;&nbsp;
-					</li>
-				{{/foreach}}
-			</ul>
-    </li>
-		{{/foreach}}
-	{{/if}}
+  {{foreach from=$_ex_objects item=_ex_object}}
+  <li>
+    <a href="#{{$_ex_object->_guid}}" style="font-weight: bold;"
+       onclick="showExClassForm({{$_ex_class_id}}, '{{$object->_guid}}', '{{$_ex_object}}', '{{$_ex_object->_id}}', '{{$event}}', '{{$_element_id}}')">
+      {{$_ex_class->name}}
+    </a>
+		<ul style="min-width: 25em;">
+			{{foreach from=$_ex_object->_ref_logs|@array_reverse item=_log}}
+			  <li>
+			  	<span style="float: right;">
+			  		{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_log->_ref_user->_ref_mediuser}}
+						 &ndash; {{mb_value object=$_log field=date}}
+			  	</span>
+			  	<strong>{{mb_value object=$_log field=type}}</strong> &nbsp;&nbsp;
+				</li>
+			{{/foreach}}
+		</ul>
+  </li>
+	{{/foreach}}
 {{/foreach}}
 </ul>
 {{else if $ex_objects|@count == 1}}

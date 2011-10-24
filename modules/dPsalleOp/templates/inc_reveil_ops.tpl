@@ -133,7 +133,7 @@ submitOperationForm = function(oFormOperation) {
     </td>
     <td class="button">
       {{if $modif_operation}}
-      <form name="editEntreeReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
+      <form name="editSortieReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />

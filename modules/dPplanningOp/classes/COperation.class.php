@@ -149,12 +149,14 @@ class COperation extends CCodable implements IPatientRelated {
     $spec->measureable = true;
     $spec->events = array(
       "checklist" => array(
-        "multiple"   => false,
         "reference1" => array("CSejour",  "sejour_id"),
         "reference2" => array("CPatient", "sejour_id.patient_id"),
       ),
       "liaison" => array(
-        "multiple"   => false,
+        "reference1" => array("CSejour",  "sejour_id"),
+        "reference2" => array("CPatient", "sejour_id.patient_id"),
+      ),
+      "sortie_reveil" => array(
         "reference1" => array("CSejour",  "sejour_id"),
         "reference2" => array("CPatient", "sejour_id.patient_id"),
       ),

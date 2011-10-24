@@ -45,9 +45,6 @@ Main.add(function(){
                               {{if $_event_name == "administration"}} disabled="disabled" {{/if}}
                               >
                         {{tr}}{{$_class}}{{/tr}} - {{tr}}{{$_class}}-event-{{$_event_name}}{{/tr}}
-                        {{if array_key_exists("multiple", $_params) && $_params.multiple}}
-                          (multiple)
-                        {{/if}}
                         
                         {{if $_event_name == "administration"}}
                           (Utiliser "Administration - Validation" à la place)

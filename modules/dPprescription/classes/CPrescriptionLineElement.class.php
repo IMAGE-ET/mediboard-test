@@ -54,17 +54,14 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     $spec->key   = 'prescription_line_element_id';
     $spec->events = array(
       "prescription"   => array(
-        "multiple"   => false, 
         "reference1" => array("CSejour",  "prescription_id.object_id"),
         "reference2" => array("CPatient", "prescription_id.object_id.patient_id"),
       ),
       "signature" => array(
-        "multiple"   => false,
         "reference1" => array("CSejour",  "prescription_id.object_id"),
         "reference2" => array("CPatient", "prescription_id.object_id.patient_id"),
       ),
       "administration" => array(
-        "multiple"   => true,
         "reference1" => array("CSejour",  "prescription_id.object_id"),
         "reference2" => array("CPatient", "prescription_id.object_id.patient_id"),
       ),

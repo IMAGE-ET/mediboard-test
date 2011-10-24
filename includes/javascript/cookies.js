@@ -63,7 +63,7 @@ CookieJar.prototype = {
 	 */
 	put: function(name, value) {
 		name = this.appendString + name;
-		cookie = this.options;
+		var cookie = this.options;
 		var type = typeof value;
 		switch(type) {
 		  case 'undefined':
@@ -87,7 +87,7 @@ CookieJar.prototype = {
 	 */
 	remove: function(name) {
 		name = this.appendString + name;
-		cookie = this.options;
+		var cookie = this.options;
 		try {
 			var date = new Date();
 			date.setTime(date.getTime() - (3600 * 1000));
@@ -105,6 +105,7 @@ CookieJar.prototype = {
 	get: function(name) {
 		name = this.appendString + name;
 		var cookies = document.cookie.match(name + '=(.*?)(;|$)');
+		
 		if (cookies) {
 			return (unescape(cookies[1])).evalJSON();
 		} else {
@@ -116,9 +117,10 @@ CookieJar.prototype = {
 	 * Empties the Cookie Jar. Deletes all the cookies.
 	 */
 	empty: function() {
-		keys = this.getKeys();
-		size = keys.size();
-		for(i=0; i<size; i++) {
+		var keys = this.getKeys();
+		var size = keys.size();
+		
+		for(var i=0; i<size; i++) {
 			this.remove(keys[i]);
 		}
 	},
@@ -127,11 +129,11 @@ CookieJar.prototype = {
 	 * Returns all cookies as a single object
 	 */
 	getPack: function() {
-		pack = {};
-		keys = this.getKeys();
-
-		size = keys.size();
-		for(i=0; i<size; i++) {
+		var pack = {};
+		var keys = this.getKeys();
+		var size = keys.size();
+		
+		for(var i=0; i<size; i++) {
 			pack[keys[i]] = this.get(keys[i]);
 		}
 		return pack;
@@ -141,10 +143,12 @@ CookieJar.prototype = {
 	 * Returns all keys.
 	 */
 	getKeys: function() {
-		keys = $A();
-		keyRe= /[^=; ]+(?=\=)/g;
-		str  = document.cookie;
-		CJRe = new RegExp("^" + this.appendString);
+		var keys = $A();
+		var keyRe= /[^=; ]+(?=\=)/g;
+		var str  = document.cookie;
+		var CJRe = new RegExp("^" + this.appendString);
+		var match;
+		
 		while((match = keyRe.exec(str)) != undefined) {
 			if (CJRe.test(match[0].strip())) {
 				keys.push(match[0].strip().gsub("^" + this.appendString,""));
@@ -157,7 +161,7 @@ CookieJar.prototype = {
    * Returns the value associated with key in a particular cookie.
    */
   getValue: function (name, key) {
-    var data = null;
+    var data;
     if (data = this.get(name)) {
       return data[key];
     }

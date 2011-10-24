@@ -10,7 +10,11 @@
 
 <script type="text/javascript">
 Main.add(function(){
-  $("exClassConstraintList").down("tr[data-constraint_id={{$ex_constraint->_id}}]").addUniqueClassName("selected");
+  var line = $("exClassConstraintList").down("tr[data-constraint_id={{$ex_constraint->_id}}]");
+	
+	if (line) {
+	  line.addUniqueClassName("selected");
+	}
 	
   var form = getForm("editConstraint");
   toggleObjectSelector(form.elements.field, form.elements.field);
