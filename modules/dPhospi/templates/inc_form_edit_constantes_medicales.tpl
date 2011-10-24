@@ -193,7 +193,7 @@ Main.add(function () {
       <tr>
         {{if !$hide_save_button}}
           <td colspan="5" class="button">
-            <button class="modify" onclick="return submitConstantesMedicales(this.form);">
+            <button class="modify oneclick" onclick="return submitConstantesMedicales(this.form);">
               {{if !$constantes->datetime}}
                 {{tr}}Create{{/tr}}
               {{else}}
@@ -201,7 +201,7 @@ Main.add(function () {
               {{/if}}
             </button>
             {{if $constantes->datetime}}
-              <button class="new" type="button" onclick="$V(this.form.constantes_medicales_id, ''); $V(this.form._new_constantes_medicales, 1); return submitConstantesMedicales(this.form);">
+              <button class="new oneclick" type="button" onclick="$V(this.form.constantes_medicales_id, ''); $V(this.form._new_constantes_medicales, 1); return submitConstantesMedicales(this.form);">
                 {{tr}}Create{{/tr}}
               </button>
               <br />
