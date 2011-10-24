@@ -35,28 +35,21 @@ $where["functions_mediboard.group_id"] = "= '$group->_id'";
 
 // FIXME: utiliser le seek
 if ($filter) {
-  $nouvelle_date="";
-  if(stripos($filter, "jour") || stripos($filter, "moi") || stripos($filter, "an") ){
+	
+  $re = "/(\d+)\s*(jour|mois|an)/i";
+  if(preg_match($re, $filter, $matches)){
+  	$map = array("an" => "YEAR", "mois" => "MONTH", "jour" => "DAY");
   	
-    if(stripos($filter, "jour")){
-      $nb_minus=strtr($filter, strpbrk($filter, "jour"), "");
-      $date_modifiee=mktime(0, 0, 0, date("m"), date("d")-$nb_minus, date("Y"));
-	  }
-	  elseif( stripos($filter, "moi")  ){
-	  	$nb_minus=strtr($filter, strpbrk($filter, "moi"), "");
-      $date_modifiee=mktime(0, 0, 0, date("m")-$nb_minus, date("d"), date("Y"));
-	  }
-	  elseif( stripos($filter, "annee")){
-      $nb_minus=strtr($filter, strpbrk($filter, "an"), "");
-	    $date_modifiee=mktime(0, 0, 0, date("m"), date("d"), date("Y")-$nb_minus);
-	  }
-    $nouvelle_date=date("Y-m-d H:i:s", $date_modifiee);
+    $nouvelle_date=mbDateTime("-".$matches[1]." ".$map[$matches[2]]);
+    
+  	$where[] ="users.user_last_login <= '$nouvelle_date'";
   }
-  $where[] = "functions_mediboard.text LIKE '%$filter%' OR 
+  else{
+  	$where[] ="functions_mediboard.text LIKE '%$filter%' OR 
               users.user_last_name LIKE '$filter%' OR 
               users.user_first_name LIKE '$filter%' OR 
-              users.user_username LIKE '$filter%' OR
-               users.user_last_login <= '$nouvelle_date'";
+              users.user_username LIKE '$filter%' ";
+  }
   
 }
 if ($pro_sante) {
@@ -82,10 +75,6 @@ if ($ldap_bound) {
 }
 
 $order=null;
-
-if($filter && $nouvelle_date!=""){
-  $order="users.user_last_login DESC, users.user_last_name ASC, users.user_first_name ASC";
-}
 
 if ($order_col == "function_id") {
   $order = "functions_mediboard.text $order_way, users.user_last_name ASC, users.user_first_name ASC";
