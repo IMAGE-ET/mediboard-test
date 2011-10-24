@@ -66,12 +66,12 @@
   </tr>
   
   <tr>
-    <th>Incapable majeur</th>
-    <td>{{tr}}CPatient.incapable_majeur.{{$patient->incapable_majeur}}{{/tr}}</td>
+    <th>{{mb_label object=$patient field=incapable_majeur}}</th>
+    <td>{{mb_value object=$patient field=incapable_majeur}}</td>
   </tr>
 
   <tr>
-    <th>Téléphone</th>
+    <th>{{mb_label object=$patient field=tel}}</th>
     <td>{{mb_value object=$patient field=tel}}</td>
   </tr>
 
@@ -85,10 +85,10 @@
   </tr>
   
   <tr>
-    <th>Adresse</th>
+    <th>{{mb_label object=$patient field=adresse}}</th>
     <td>
-      {{$patient->adresse}} &mdash;
-      {{$patient->cp}} {{$patient->ville}}
+      {{mb_value object=$patient field=adresse}}
+      {{mb_value object=$patient field=cp}} {{mb_value object=$patient field=ville}}
     </td>
   </tr>
   
@@ -98,7 +98,7 @@
   
   {{if $sejour->libelle}}
   <tr>
-    <th>{{tr}}CSejour-libelle-desc{{/tr}}</th>
+    <th>{{mb_label object=$sejour field=libelle}}</th>
     <td>
       {{$sejour->libelle}}
     </td>
@@ -116,20 +116,16 @@
   
   <tr>
     <th>Admission</th>
-    <td>      
-      le {{$sejour->entree_prevue|date_format:"%A %d/%m/%Y à %Hh%M"}} 
-    </td>
+    <td>le {{$sejour->entree_prevue|date_format:"%A %d/%m/%Y à %Hh%M"}}</td>
   </tr>
   
   <tr>
-    <th>Hospitalisation</th>
-    <td>
-      {{tr}}CSejour.type.{{$sejour->type}}{{/tr}}
-    </td>
+    <th>{{mb_label object=$sejour field=type}}</th>
+    <td>{{mb_value object=$sejour field=type}}</td>
   </tr>
   <tr>
-    <th>Chambre particulière</th>
-    <td>{{tr}}CSejour.chambre_seule.{{$sejour->chambre_seule}}{{/tr}}</td>
+    <th>{{mb_label object=$sejour field=chambre_seule}}</th>
+    <td>{{mb_value object=$sejour field=chambre_seule}}</td>
   </tr>
   
   {{if $operation->_id}}
@@ -141,11 +137,12 @@
 	{{if !$simple_DHE}}
   {{if $operation->libelle}}
   <tr>
-    <th>Libellé</th>
-    <td class="text"><em>{{$operation->libelle}}</em></td>
+    <th>{{mb_label object=$operation field=libelle}}</th>
+    <td class="text"><em>{{mb_value object=$operation field=libelle}}</em></td>
   </tr>
   {{/if}}
 
+  {{if $conf.dPplanningOp.COperation.use_ccam}}
   <tr>
     <th>Actes</th>
     <td class="text">
@@ -156,10 +153,46 @@
       {{/foreach}}
     </td>
   </tr>
+  {{/if}}
   
   <tr>
-    <th>Côté</th>
-    <td>{{tr}}COperation.cote.{{$operation->cote}}{{/tr}}</td>
+    <th>{{mb_label object=$operation field=cote}}</th>
+    <td>{{mb_value object=$operation field=cote}}</td>
+  </tr>
+  
+  {{/if}}
+  {{/if}}
+  
+  {{if $conf.dPplanningOp.CSejour.accident && $sejour->date_accident}}
+  <tr>
+    <th>{{mb_label object=$sejour field=date_accident}}</th>
+    <td class="text">{{mb_value object=$sejour field=date_accident}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$sejour field=nature_accident}}</th>
+    <td class="text">{{mb_value object=$sejour field=nature_accident}}</td>
+  </tr>
+  {{/if}}
+  
+  {{if $conf.dPplanningOp.CSejour.assurances}}
+  {{if $sejour->assurance_maladie}}
+  <tr>
+    <th>{{mb_label object=$sejour field=assurance_maladie}}</th>
+    <td class="text">{{mb_value object=$sejour field=assurance_maladie}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$sejour field=rques_assurance_maladie}}</th>
+    <td class="text">{{mb_value object=$sejour field=rques_assurance_maladie}}</td>
+  </tr>
+  {{/if}}
+  {{if $sejour->assurance_accident}}
+  <tr>
+    <th>{{mb_label object=$sejour field=assurance_accident}}</th>
+    <td class="text">{{mb_value object=$sejour field=assurance_accident}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$sejour field=rques_assurance_accident}}</th>
+    <td class="text">{{mb_value object=$sejour field=rques_assurance_accident}}</td>
   </tr>
   {{/if}}
   {{/if}}
@@ -182,14 +215,14 @@
   {{if $operation->_id}}
   {{if $operation->forfait}}
   <tr>
-    <th>Forfait clinique</th>
-    <td>{{$operation->forfait}} euros</td>
+    <th>{{mb_label object=$operation field=forfait}}</th>
+    <td>{{mb_value object=$operation field=forfait}}</td>
   </tr>
 	{{/if}}  
   {{if $operation->fournitures}}
 	  <tr>
-	    <th>Fournitures</th>
-	    <td>{{$operation->fournitures}} euros</td>
+    <th>{{mb_label object=$operation field=fournitures}}</th>
+    <td>{{mb_value object=$operation field=fournitures}}</td>
 	  </tr>
   {{/if}}
 
