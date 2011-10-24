@@ -26,6 +26,7 @@ $selection             = CValue::get('selection');
 $date_min              = CValue::get('date_min');
 $date_max              = CValue::get('date_max');
 $print                 = CValue::get('print');
+$limit                 = CValue::get('limit', 100);
 
 if (!$selection || $selected_context_guid === 'all') {
   //$selection = CConstantesMedicales::$list_constantes;
@@ -68,17 +69,27 @@ $constantes->patient_id = $patient->_id;
 $constantes->loadRefPatient();
 
 // Les constantes qui correspondent (dans le contexte ou non)
-$list_constantes = $constantes->loadList($where, "datetime");
+$where_context = $where;
+$where_context["context_class"] = "IS NOT NULL";
+$where_context["context_id"] = "IS NOT NULL";
 
+$query = new CRequest;
+$query->addTable($constantes->_spec->table);
+$query->addColumn("context_class");
+$query->addColumn("context_id");
+$query->addWhere($where_context);
+$query->addGroup(array("context_class", "context_id"));
+
+$query = $query->getRequest();
+$list = $constantes->_spec->ds->loadList($query);
 $list_contexts = array();
-foreach($list_constantes as $const) {
-  if ($const->context_class && $const->context_id) {
-    $c = new $const->context_class;
-    $c = $c->getCached($const->context_id);
-    if ($c instanceof CConsultation && $c->sejour_id) continue; // Cas d'un RPU
-    $c->loadRefsFwd();
-    $list_contexts[$c->_guid] = $c;
-  }
+
+foreach($list as $_context) {
+  $c = new $_context["context_class"];
+  $c = $c->getCached($_context["context_id"]);
+  if ($c instanceof CConsultation && $c->sejour_id) continue; // Cas d'un RPU
+  $c->loadRefsFwd();
+  $list_contexts[$c->_guid] = $c;
 }
 
 $current_context = CMbObject::loadFromGuid($context_guid);
@@ -126,7 +137,8 @@ if ($date_max) {
 }
 
 // Les constantes qui correspondent (dans le contexte cette fois)
-$list_constantes = $constantes->loadList($where, "datetime");
+$list_constantes = $constantes->loadList($where, "datetime DESC", $limit);
+$list_constantes = array_reverse($list_constantes, true);
 
 $constantes_medicales_grid = CConstantesMedicales::buildGrid($list_constantes);
 
@@ -424,6 +436,7 @@ $smarty->assign('latest_constantes', $latest_constantes);
 $smarty->assign('selection',     $selection);
 $smarty->assign('print',         $print);
 $smarty->assign('graphs',        $graphs);
+$smarty->assign('limit',         $limit);
 $smarty->assign('constantes_medicales_grid', $constantes_medicales_grid);
 $smarty->display('inc_vw_constantes_medicales.tpl');
 

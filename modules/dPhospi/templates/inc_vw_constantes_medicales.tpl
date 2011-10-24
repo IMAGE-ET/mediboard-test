@@ -412,12 +412,13 @@ loadConstantesMedicales  = function(context_guid) {
         </ul>
         <hr class="control_tabs" />
         
+				{{if $const_ids|@count == $limit}}
+	        <div class="small-warning">
+	          Le nombre de constantes affichées est limité à {{$limit}}.
+	        </div>
+				{{/if}}
+					
         <div id="constantes-graph">
-          <div class="small-info">
-            Vous pouvez maintenant naviguer à droite et à gauche pour afficher les relevés précédents. <br />
-            Par défaut seuls <strong>les 15 derniers sont affichés</strong>.
-          </div>
-          
           <button class="hslip notext" style="float: left;" title="Afficher/Cacher le formulaire" onclick="$('constantes-medicales-form').toggle();" type="button">
             Formulaire constantes
           </button>
