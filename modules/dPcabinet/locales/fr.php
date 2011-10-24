@@ -1308,6 +1308,7 @@ $locales['mod-dPcabinet-tab-ajax_bind_operation'] = 'Associer à une intervention
 $locales['mod-dPcabinet-tab-ajax_short_consult'] = 'Consultation immédiate';
 $locales['mod-dPcabinet-tab-configure'] = 'Configuration';
 $locales['mod-dPcabinet-tab-edit_consultation'] = 'Consultation';
+$locales['mod-dPcabinet-tab-edit_plage_consultation'] = 'Plage de consultation';
 $locales['mod-dPcabinet-tab-edit_planning'] = 'Rendez-vous';
 $locales['mod-dPcabinet-tab-exam_audio'] = 'Examen audio';
 $locales['mod-dPcabinet-tab-exam_igs'] = 'Examen IGS';
