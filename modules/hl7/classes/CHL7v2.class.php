@@ -115,7 +115,7 @@ abstract class CHL7v2 {
     }
 
     if (!in_array($version, self::$versions)) {
-      $this->error(CHL7v2Exception::VERSION_UNKOWN, $version);
+      $this->error(CHL7v2Exception::VERSION_UNKNOWN, $version);
     }
     
     $version_dir = "hl7v".preg_replace("/[^0-9]/", "_", $version);

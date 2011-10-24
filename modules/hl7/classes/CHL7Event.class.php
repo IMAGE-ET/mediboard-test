@@ -52,7 +52,7 @@ class CHL7Event {
     }
     
     if (!$hl7_version) {
-      throw new CHL7v2Exception(CHL7v2Exception::VERSION_UNKOWN, $version);
+      throw new CHL7v2Exception(CHL7v2Exception::VERSION_UNKNOWN, $version);
     }
     
     $event_class = "CHL7{$hl7_version}Event{$message_name}";
