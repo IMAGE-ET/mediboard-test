@@ -116,6 +116,11 @@ Main.add(function () {
   <li><a href="#Actes">Cotation</a></li>
   {{/if}}
   
+  {{if $consult->_is_dentiste}}
+    <li><a href="#etat_dentaire">Etat dentaire</a></li>
+    <li><a href="#devenir_dentaire">Devenir dentaire</a></li>
+  {{/if}}
+  
   <li><a href="#fdrConsult">Docs et Règlements</a></li>
 </ul>
 <hr class="control_tabs" />
@@ -210,6 +215,15 @@ Main.add(function () {
     {{/if}}
 	{{/if}}
 </div>
+{{/if}}
+
+{{if $consult->_is_dentiste}}
+  <div id="etat_dentaire">
+    {{mb_include module=dPcabinet template="inc_consult_anesth/intubation"}}
+  </div>
+  <div id="devenir_dentaire">
+    {{mb_include module=dPcabinet template="inc_devenir_dentaire"}}
+  </div>
 {{/if}}
 
 <div id="fdrConsult" style="display: none;">

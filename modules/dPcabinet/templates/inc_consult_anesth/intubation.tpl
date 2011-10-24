@@ -1,4 +1,4 @@
-
+{{mb_default var=_is_dentiste value=0}}
 {{mb_script module=dPcabinet script=intubation}}
 
 <script type="text/javascript">
@@ -8,18 +8,19 @@ Main.add(function () {
   
   var states = [0, 'bridge', 'pivot', 'mobile', 'appareil'];
   SchemaDentaire.initialize("dents-schema", states);
-
-  var oFormIntubation = getForm("editFrmIntubation");
-  new AideSaisie.AutoComplete(oFormIntubation.etatBucco, {
-            objectClass: "CConsultAnesth",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur:0,
-          });
-  new AideSaisie.AutoComplete(oFormIntubation.conclusion, {
-            objectClass: "CConsultAnesth",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur:0
-          });
+  {{if !$_is_dentiste}}
+    var oFormIntubation = getForm("editFrmIntubation");
+    new AideSaisie.AutoComplete(oFormIntubation.etatBucco, {
+              objectClass: "CConsultAnesth",
+              timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+              validateOnBlur:0,
+            });
+    new AideSaisie.AutoComplete(oFormIntubation.conclusion, {
+              objectClass: "CConsultAnesth",
+              timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+              validateOnBlur:0
+            });
+  {{/if}}
 } );
 </script>
 
@@ -33,12 +34,13 @@ Main.add(function () {
   <input type="hidden" name="etat" value="" />
 </form>
 
+{{if !$_is_dentiste}}
 <form name="editFrmIntubation" action="?m=dPcabinet" method="post">
 <input type="hidden" name="m" value="dPcabinet" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
 {{mb_key object=$consult_anesth}}
-
+{{/if}}
 <table class="form">
   <tr>
     <td class="narrow">
@@ -107,6 +109,7 @@ Main.add(function () {
         </div>
       </fieldset>
     </td>
+    {{if !$_is_dentiste}}
     <td>
       <fieldset>
         <legend>Conditions d'intubation</legend>
@@ -181,6 +184,7 @@ Main.add(function () {
         </table>
       </fieldset>
     </td>
+    {{/if}}
   </tr>
 </table>
 </form>

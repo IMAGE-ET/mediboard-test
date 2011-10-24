@@ -283,11 +283,19 @@ $smarty->assign("traitement"     , $traitement);
 $smarty->assign("techniquesComp" , $techniquesComp);
 $smarty->assign("examComp"       , $examComp);
 $smarty->assign("_is_anesth"     , $consult->_is_anesth);
+$smarty->assign("_is_dentiste"   , $consult->_is_dentiste);
 $smarty->assign("current_m"      , $current_m);
 $smarty->assign("list_etat_dents", $list_etat_dents);
 $smarty->assign("now"            , $now);
 $smarty->assign("listPrats"      , $listPrats);
 $smarty->assign("line"           , new CPrescriptionLineMedicament());
+
+if ($consult->_is_dentiste) {
+  $devenir_dentaire = $consult->_ref_patient->loadRefDevenirDentaire();
+  $actes_dentaires = $devenir_dentaire->loadRefsActesDentaires();
+  $smarty->assign("acte_dentaire"  , new CActeDentaire);
+  $smarty->assign("actes_dentaires", $actes_dentaires);
+}
 
 if($consult->_is_anesth) {
   $nextSejourAndOperation = $consult->_ref_patient->getNextSejourAndOperation($consult->_ref_plageconsult->date);

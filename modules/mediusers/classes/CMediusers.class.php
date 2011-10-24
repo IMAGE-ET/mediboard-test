@@ -58,6 +58,7 @@ class CMediusers extends CMbObject {
   // Other fields
   var $_profile_id                 = null;
   var $_is_praticien               = null;
+  var $_is_dentiste                = null;
   var $_is_secretaire              = null;
   var $_is_anesth                  = null;
   var $_is_infirmiere              = null;
@@ -725,7 +726,7 @@ class CMediusers extends CMbObject {
   }
 
   function loadChirurgiens($permType = PERM_READ, $function_id = null, $name = null) {
-    return $this->loadListFromType(array("Chirurgien"), $permType, $function_id, $name);
+    return $this->loadListFromType(array("Chirurgien", "Dentiste"), $permType, $function_id, $name);
   }
 
   function loadAnesthesistes($permType = PERM_READ, $function_id = null, $name = null) {
@@ -733,11 +734,11 @@ class CMediusers extends CMbObject {
   }
 
   function loadPraticiens($permType = PERM_READ, $function_id = null, $name = null, $secondary = false) {
-    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin"), $permType, $function_id, $name, $secondary);
+    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Dentiste"), $permType, $function_id, $name, $secondary);
   }
 
   function loadProfessionnelDeSante($permType = PERM_READ, $function_id = null, $name = null, $secondary = false) {
-    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Kinesitherapeute", "Sage Femme"), $permType, $function_id, $name, $secondary);
+    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Kinesitherapeute", "Sage Femme", "Dentiste"), $permType, $function_id, $name, $secondary);
   }
   
   function loadPersonnels($permType = PERM_READ, $function_id = null, $name = null) {
@@ -758,7 +759,7 @@ class CMediusers extends CMbObject {
    * @return bool
    */
   function isPraticien () {
-    return $this->_is_praticien = $this->isFromType(array("Médecin", "Chirurgien", "Anesthésiste"));
+    return $this->_is_praticien = $this->isFromType(array("Médecin", "Chirurgien", "Anesthésiste", "Dentiste"));
   }
 
   /**
@@ -767,6 +768,14 @@ class CMediusers extends CMbObject {
    */
   function isAnesth () {
     return $this->_is_anesth = $this->isFromType(array("Anesthésiste"));
+  }
+  
+  /**
+   * Check whether user is a dentist
+   * @return 
+   */
+  function isDentiste () {
+    return $this->_is_dentiste = $this->isFromType(array("Dentiste"));
   }
   
   /**
@@ -794,7 +803,7 @@ class CMediusers extends CMbObject {
    * @return bool
    */
   function isMedical() {
-    return $this->isFromType(array("Administrator", "Chirurgien", "Anesthésiste", "Infirmière", "Médecin", "Kinesitherapeute", "Sage Femme"));
+    return $this->isFromType(array("Administrator", "Chirurgien", "Anesthésiste", "Infirmière", "Médecin", "Kinesitherapeute", "Sage Femme", "Dentiste"));
   }
   
   function isExecutantPrescription() {

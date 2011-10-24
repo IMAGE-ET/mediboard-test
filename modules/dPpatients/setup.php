@@ -1349,7 +1349,30 @@ class CSetupdPpatients extends CSetup {
       DROP `confiance_parente`";
     $this->addQuery($query);
     
-    $this->mod_version = "1.21";
+    $this->makeRevision("1.21");
+    $query = "CREATE TABLE `devenir_dentaire` (
+      `devenir_dentaire_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `patient_id` INT (11) UNSIGNED NOT NULL
+      ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `devenir_dentaire` 
+      ADD INDEX (`patient_id`);";
+    $this->addQuery($query);
+    
+    $query = "CREATE TABLE `acte_dentaire` (
+      `acte_dentaire_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `devenir_dentaire_id` INT (11) UNSIGNED NOT NULL,
+      `code` VARCHAR (10) NOT NULL,
+      `commentaire` TEXT
+      ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `acte_dentaire` 
+      ADD INDEX (`devenir_dentaire_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.22";
   }
 }
 
