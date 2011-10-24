@@ -467,17 +467,24 @@ Main.add( function(){
   <td colspan="3">
     <input type="text" name="_patient_view" style="width: 15em" value="{{$patient->_view}}" readonly="readonly"
            onfocus="
-    {{if !$sejour->_id}}
-      PatSelector.init();
-    {{else}}
-      confirmChangePatient();
-    {{/if}}"/>
-  <button type="button" class="search notext" onclick="
-	  {{if !$sejour->_id}}
-      PatSelector.init();
-    {{else}}
-      confirmChangePatient();
-    {{/if}}">Choisir un patient</button>
+      {{if !$sejour->_id}}
+        PatSelector.init();
+      {{else}}
+        confirmChangePatient();
+      {{/if}}"/>
+    <button type="button" class="search notext" onclick="
+	    {{if !$sejour->_id}}
+        PatSelector.init();
+      {{else}}
+        confirmChangePatient();
+    {{/if}}">
+      Choisir un patient
+    </button>
+    <button id="button-edit-patient" type="button" 
+            onclick="location.href='?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id='+this.form.patient_id.value" 
+            class="edit notext" {{if !$patient->_id}}style="display: none;"{{/if}}>
+      {{tr}}Edit{{/tr}}
+    </button>
   </td>
 </tr>
 

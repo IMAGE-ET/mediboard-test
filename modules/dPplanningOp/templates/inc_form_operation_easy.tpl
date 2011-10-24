@@ -206,6 +206,11 @@
   	  />
       {{if $conf.dPplanningOp.CSejour.patient_id || !$sejour->_id || $app->user_type == 1}}
       <button type="button" class="search notext" onclick="PatSelector.init()">Choisir un patient</button>
+      <button id="button-edit-patient" type="button" 
+            onclick="location.href='?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id='+this.form.patient_id.value" 
+            class="edit notext" {{if !$patient->_id}}style="display: none;"{{/if}}>
+        {{tr}}Edit{{/tr}}
+      </button>
       {{/if}}
     </td>
   </tr>
