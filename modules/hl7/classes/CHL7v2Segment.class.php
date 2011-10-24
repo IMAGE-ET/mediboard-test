@@ -195,7 +195,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       case "mediboard" :
         return array(
           "Mediboard",
-          "1.2.250.1.2.3.4",
+          CAppUI::conf("hl7 assigningAuthorityUniversalID"),
           "OX"
         );
         break;

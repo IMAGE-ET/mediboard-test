@@ -1,4 +1,7 @@
 <?php
+$locales['CHL7EventADT-AR-E001'] = 'Le message est compris mais n\'est pas supporté par cet utilisateur Mediboard. Veuillez contacter votre administrateur.';
+$locales['CHL7EventADT-AR-E002'] = 'Le message HL7 n\'est pas conforme à la norme.';
+$locales['CHL7EventADT-AR-E003'] = '';
 $locales['CHL7v2Exception-1'] = 'Fichier vide ou trop court';
 $locales['CHL7v2Exception-2'] = 'En-tête du message invalide (MSH, FHS, BHS)';
 $locales['CHL7v2Exception-3'] = 'Format de séparateur invalide';
@@ -72,15 +75,15 @@ $locales['CHL7v2TableEntry.all'] = 'Toutes les entrées dans la table HL7v2';
 $locales['CHL7v2TableEntry.none'] = 'Aucune entrée dans la table HL7v2';
 $locales['CHL7v2TableEntry.one'] = 'Une entrée dans la table HL7v2';
 $locales['CHL7v2Tables-missing'] = 'La base \'hl7v2\' doit être installée pour poursuivre l\'installation du module';
-$locales['CHL7EventADT-AR-E001'] = 'Le message est compris mais n\'est pas supporté par cet utilisateur Mediboard. Veuillez contacter votre administrateur.';
-$locales['CHL7EventADT-AR-E002'] = 'Le message HL7 n\'est pas conforme à la norme.';
-$locales['CHL7EventADT-AR-E003'] = '';
 $locales['HL7-v.2.1'] = 'HL7 version 2.1';
 $locales['HL7-v.2.2'] = 'HL7 version 2.2';
 $locales['HL7-v.2.3'] = 'HL7 version 2.3';
 $locales['HL7-v.2.3.1'] = 'HL7 version 2.3.1';
 $locales['HL7-v.2.4'] = 'HL7 version 2.4';
 $locales['HL7-v.2.5'] = 'HL7 version 2.5';
+$locales['config-hl7'] = 'HL7';
+$locales['config-hl7-assigningAuthorityUniversalID'] = 'ID de l\'autorité d\'assignation de MB';
+$locales['config-hl7-assigningAuthorityUniversalID-desc'] = 'ID de l\'autorité d\'assignation de Mediboard';
 $locales['config-hl7v2-extract'] = 'Extraction des specs HL7 v.2.x';
 $locales['config-hl7v2-source'] = 'Source d\'échange';
 $locales['config-hl7v2-tables'] = 'Tables HL7v2';

@@ -18,11 +18,16 @@
 </script>
 
 <ul id="tabs-configure" class="control_tabs">
+  <li><a href="#config-hl7">{{tr}}config-hl7{{/tr}}</a></li>
   <li><a href="#config-source">{{tr}}config-hl7v2-source{{/tr}}</a></li>
   <li><a href="#config-hl7v2-tables">{{tr}}config-hl7v2-tables{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
+
+<div id="config-hl7" style="display: none;">
+  {{mb_include module=hl7 template=inc_config_hl7}}
+</div>
 
 <div id="config-source" style="display: none;">
   <h2>Paramètres par défaut du serveur FTP pour HL7 v.2</h2>
