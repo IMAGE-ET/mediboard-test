@@ -61,6 +61,7 @@ Reconvocation = {
 }
 </script>
 
+{{mb_ternary var=current_m test=$mode_urgence value=dPurgences other=dPcabinet}}
 <table class="main">
   {{if $mode_urgence}}
 	<tr>
@@ -120,15 +121,26 @@ Reconvocation = {
               </select>
             </td>
             
-  		      <th>
+  	        <th {{if $mode_urgence}}colspan="5"{{/if}}>
   		      	<label for="closed" title="Type de vue du planning">Type de vue</label>
             </th>
-  		      <td colspan="5">
+  		      <td>
   		        <select name="closed" onchange="this.form.submit()">
   		          <option value="1"{{if $closed == "1"}}selected="selected"{{/if}}>Tout afficher</option>
   		          <option value="0"{{if $closed == "0"}}selected="selected"{{/if}}>Masquer les terminées</option>
   		        </select>
   		      </td>
+            {{if !$mode_urgence}}
+              <th>
+                <label for="mode_vue" title="Mode de vue du planning">Mode de vue</label>
+              </th>
+              <td colspan="3">
+                <select name="mode_vue" onchange="this.form.submit()">
+                  <option value="vertical" {{if $mode_vue == "vertical"}}selected="selected"{{/if}}>Vertical</option>
+                  <option value="horizontal" {{if $mode_vue == "horizontal"}}selected="selected"{{/if}}>Horizontal</option>
+                </select>
+              </td>
+            {{/if}}
           </tr>
         {{else}}
           <tr>
@@ -146,31 +158,39 @@ Reconvocation = {
   <tr>
     <td>
       <table class="form">
-        <tr>
-        {{foreach from=$praticiens item=_praticien}}
-          <th class="title">
-            {{$_praticien}}
-          </th>
-        {{/foreach}}
-        </tr>
-   
-         <!-- Affichage de la liste des consultations -->    
-         <tr>
-         {{foreach from=$listPlages item=curr_day}}
-           <td style="width: 200px; vertical-align: top;">
-             {{assign var="listPlage" value=$curr_day.plages}}
-             {{assign var="tab" value=""}}
-             {{assign var="vue" value="0"}}
-             {{assign var="userSel" value=$curr_day.prat}}
-             
-             {{mb_ternary var=current_m test=$mode_urgence value=dPurgences other=dPcabinet}}
-             
-             {{mb_include module=dPcabinet template=inc_list_consult}}
-           </td>
-         {{foreachelse}}
-           <td class="empty">{{tr}}CPlageconsult.none{{/tr}}</td>
-         {{/foreach}}
-       </tr>
+        {{if $mode_vue == "horizontal"}}
+          {{foreach from=$praticiens item=_praticien key=prat_id}}
+            <tr>
+              <th class="title">{{$_praticien}}</th>
+              {{assign var=listPlage value=$listPlages.$prat_id.plages}}
+              {{mb_include module=dPcabinet template=inc_list_consult_horizontal}}
+            </tr>
+          {{/foreach}}
+           
+        {{else}}
+          <tr>
+          {{foreach from=$praticiens item=_praticien}}
+            <th class="title">
+              {{$_praticien}}
+            </th>
+          {{/foreach}}
+          </tr>
+     
+           <!-- Affichage de la liste des consultations -->    
+           <tr>
+           {{foreach from=$listPlages item=curr_day}}
+             <td style="width: 200px; vertical-align: top;">
+               {{assign var="listPlage" value=$curr_day.plages}}
+               {{assign var="tab" value=""}}
+               {{assign var="vue" value="0"}}
+               {{assign var="userSel" value=$curr_day.prat}}
+               {{mb_include module=dPcabinet template=inc_list_consult}}
+             </td>
+           {{foreachelse}}
+             <td class="empty">{{tr}}CPlageconsult.none{{/tr}}</td>
+           {{/foreach}}
+         </tr>
+       {{/if}}
      </table>
    </td>
  </tr>

@@ -18,6 +18,7 @@ $date         = CValue::getOrSession("date", mbDate());
 $closed       = CValue::getOrSession("closed", true);
 $mode_urgence = CValue::get("mode_urgence", false);
 $offline      = CValue::get("offline", false);
+$mode_vue     = CValue::getOrSession("mode_vue", "vertical");
 
 $hour         = mbTime(null);
 $board        = CValue::get("board", 1);
@@ -37,7 +38,7 @@ $cabinet = new CFunctions;
 
 if ($cabinet_id) {
   $praticiens = CAppUI::pref("pratOnlyForConsult", 1) ? 
-	  $mediuser->loadPraticiens(PERM_READ, $cabinet_id) :
+    $mediuser->loadPraticiens(PERM_READ, $cabinet_id) :
     $mediuser->loadProfessionnelDeSante(PERM_READ, $cabinet_id);
     
   $cabinet->load($cabinet_id);
@@ -75,10 +76,18 @@ $nb_attente = 0;
 $nb_a_venir = 0;
 $patients_fetch = array();
 
+$heure_min = null;
+
 foreach ($listPlages as &$infos_by_prat) {
   foreach ($infos_by_prat["plages"] as $plage) {
+    
     $plage->_ref_chir =& $infos_by_prat["prat"];
     $plage->loadRefsConsultations(true, $closed);
+    
+    if (count($plage->_ref_consultations) && $mode_vue == "horizontal") {
+      $plage->_ref_consultations = array_combine(range(0, count($plage->_ref_consultations)-1),$plage->_ref_consultations);
+    }
+    
     foreach ($plage->_ref_consultations as &$consultation) {
       if ($mode_urgence){
         if ($consultation->loadRefSejour()->_id && $consultation->_ref_sejour->type == "urg"){
@@ -86,11 +95,16 @@ foreach ($listPlages as &$infos_by_prat) {
           continue;
         }
       }
-      
+      if ($heure_min === null) {
+      $heure_min = $consultation->heure;
+    }
+    if ($consultation->heure < $heure_min) {
+      $heure_min = $consultation->heure;
+    }
       if ($consultation->chrono < CConsultation::TERMINE) {
         $nb_a_venir++;
       }
-			if ($consultation->chrono == CConsultation::PATIENT_ARRIVE) {
+      if ($consultation->chrono == CConsultation::PATIENT_ARRIVE) {
         $nb_attente++;
       }
       $consultation->loadRefSejour();
@@ -139,7 +153,9 @@ $smarty->assign("boardItem"     , $boardItem);
 $smarty->assign("canCabinet"    , CModule::getCanDo("dPcabinet"));
 $smarty->assign("mode_urgence"  , $mode_urgence);
 $smarty->assign("nb_attente"    , $nb_attente);
-$smarty->assign("nb_a_venir"   , $nb_a_venir);
+$smarty->assign("nb_a_venir"    , $nb_a_venir);
+$smarty->assign("mode_vue"      , $mode_vue);
+$smarty->assign("heure_min"     , $heure_min);
 $smarty->display("vw_journee.tpl");
 
 
