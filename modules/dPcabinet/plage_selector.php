@@ -65,6 +65,7 @@ switch ($period) {
   case "month":
     $minDate = mbTransformTime(null, $date, "%Y-%m-01");
     $maxDate = mbTransformTime("+1 month", $minDate, "%Y-%m-01");
+    $maxDate = mbDate("-1 day", $maxDate);
     break;
 
   default:
