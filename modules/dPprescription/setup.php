@@ -2129,7 +2129,13 @@ class CSetupdPprescription extends CSetup {
 							WHERE `decalage_intervention` IS NULL;";
 		$this->addQuery($query);
 		
-		$this->mod_version = "1.59";
+		$this->makeRevision("1.59");
+		$query = "ALTER TABLE `administration` 
+              ADD `stock_id` INT (11) UNSIGNED,
+              ADD INDEX (`stock_id`);";
+    $this->addQuery($query);
+		
+		$this->mod_version = "1.60";
   }
 }
 
