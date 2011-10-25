@@ -3,7 +3,6 @@
 }
 
 button, a.button {
-  behavior: expression(processIE7Button(this));
   line-height: 1.0em;
 }
 

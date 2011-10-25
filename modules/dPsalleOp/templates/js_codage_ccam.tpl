@@ -66,7 +66,7 @@ ActesCCAM = {
     if(oCcamField.remove(oForm._selCode.value)){
       submitFormAjax(oForm, 'systemMsg', oDefaultOptions);
     }
-  },
+  }
 }
 
 function setCodeTemp(code){
