@@ -16,7 +16,7 @@
 </td>
 
 <td>
-	{{if $mode == "nominatif"}}
+	{{if $mode == "nominatif" && array_key_exists($id, $lines)}}
 	<span onmouseover="ObjectTooltip.createEx(this, '{{$lines.$id}}');" style="float: right; margin-left: 5px;">
     Presc.
   </span>
