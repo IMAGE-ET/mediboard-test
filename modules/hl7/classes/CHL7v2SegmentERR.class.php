@@ -36,7 +36,7 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
       // ERR-2: Error Location (ERL) (optional repeating)
       $data[] = $error->getLocation();
       // ERR-3: HL7 Error Code (CWE) 
-      $data[] = $error->code;
+      $data[] = $error->getHL7Code();
       // ERR-4: Severity (ID) 
       // Table - 0516
       // W - Warning - Transaction successful, but there may issues 
