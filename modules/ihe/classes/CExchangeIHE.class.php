@@ -115,12 +115,31 @@ class CExchangeIHE extends CExchangeTabular {
     $this->store();
   }
   
-  function setAck(CHL7Acknowledgment $ack, $mb_error_code, $warning = null, $comments = null, CMbObject $mbObject = null) {
-                       
+  function populateExchangeACK(CHL7Acknowledgment $ack, $mbObject) {
+    $msgAck = $ack->event_ack->msg_hl7;
+    
+    $this->statut_acquittement = $ack->ack_code;
+    $this->acquittement_valide = $ack->event_ack->message->isOK(CHL7v2Error::E_ERROR) ? 0 : 1;
+    if ($mbObject) {
+      $this->setObjectIdClass($mbObject);
+    }
+    $this->_acquittement = $msgAck;
+    $this->date_echange = mbDateTime();
+    $this->store();
+    
+    return $msgAck;
   }
   
-  function setAckError(CHL7Acknowledgment $ack, $code_erreur, $comments = null, CMbObject $mbObject = null) {
-                         
+  function setAckAA(CHL7Acknowledgment $ack, $mb_error_codes, $comments = null, CMbObject $mbObject = null) {
+    $ack->generateAcknowledgment("AA", $mb_error_codes, null, "I", $comments, $mbObject);
+        
+    return $this->populateExchangeACK($ack, mbObject);
+  }
+  
+  function setAckAR(CHL7Acknowledgment $ack, $mb_error_codes, $comments = null, CMbObject $mbObject = null) {
+    $ack->generateAcknowledgment("AR", $mb_error_codes, null, "E", $comments, $mbObject);
+    
+    return $this->populateExchangeACK($ack, $mbObject);               
   }
 }
 ?>

@@ -70,11 +70,11 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     $data = array();
     
     $xpath = new CHL7v2MessageXPath($this);
-    
     // PID/PID.3
     foreach ($xpath->query("PID.3", $node) as $_PID3) {
       // RI - Resource identifier 
-      if ($xpath->queryTextNode("CX.5", $_PID3) == "RI") {
+      if (($xpath->queryTextNode("CX.5", $_PID3) == "RI") && 
+          ($xpath->queryTextNode("CX.4/HD.2", $_PID3) == CAppUI::conf("hl7 assigningAuthorityUniversalID"))) {
         $data["RI"] = $xpath->queryTextNode("CX.1", $_PID3);
       }
       // PI - Patient internal identifier
@@ -92,19 +92,28 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
  
   function recordPerson(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
     // Traitement du message des erreurs
-    $avertissement = $msgID400 = $msgIPP = "";
-    $_IPP_create   = $_modif_patient = false;
+    $comment = $warning = "";
+    $_modif_patient = false;
     
     $exchange_ihe = $this->_ref_exchange_ihe;
     $exchange_ihe->_ref_sender->loadConfigValues();
-    $sender     = $exchange_ihe->_ref_sender;
+    $sender       = $exchange_ihe->_ref_sender;
     
-    $patientRI = $data['patientIdentifiers']['RI'];
-    $patientPI = $data['patientIdentifiers']['PI'];
+    $patientRI = $patientPI = null;
+    foreach ($data['patientIdentifiers'] as $identifier_type => $_patient_identifier) {
+      switch ($identifier_type) {
+        case "RI":
+          $patientRI = $_patient_identifier;  
+          break;
+        case "PI":
+          $patientPI = $_patient_identifier;  
+          break;
+      }
+    }
     
     // Acquittement d'erreur : identifiants RI et PI non fournis
     if (!$patientRI && !$patientPI) {
-      return $exchange_ihe->setAckError($ack, "E005", $comment, $newPatient);
+      return $exchange_ihe->setAckAR($ack, "E003", null, $newPatient);
     }
         
     $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
@@ -113,27 +122,103 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     if (!$IPP->_id) {
       // RI fourni
       if ($patientRI) {
+        // Recherche du patient par son RI
         if ($newPatient->load($patientRI)) {
+          // Mapping du patient
+          $newPatient = $this->mappingPatient($data, $newPatient);
           
-        } else {
-          
+          // Notifier les autres destinataires autre que le sender
+          $newPatient->_eai_initiateur_group_id = $sender->group_id;
+          if ($msgPatient = $newPatient->store()) {
+            return $exchange_ihe->setAckAR($ack, "E004", $msgPatient, $newPatient);
+          }
+                    
+          $code_IPP      = "I021";
+          $_modif_patient = true; 
+        } 
+        // Patient non retrouvé par son RI
+        else {
+          $code_IPP = "I020";
         }
       } else {
+        $code_IPP = "I022";
+      }      
+      
+      if (!$newPatient->_id) {
+        // Mapping du patient
+        $newPatient = $this->mappingPatient($data, $newPatient);
         
+        // Patient retrouvé
+        if ($newPatient->loadMatchingPatient()) {
+          // Mapping du patient
+          $newPatient = $this->mappingPatient($data, $newPatient);
+                
+          $code_IPP      = "A021";
+          $_modif_patient = true; 
+        }
+        
+        // Notifier les autres destinataires autre que le sender
+        $newPatient->_eai_initiateur_group_id = $sender->group_id;
+        if ($msgPatient = $newPatient->store()) {
+          return $exchange_ihe->setAckAR($ack, "E004", $msgPatient, $newPatient);
+        }
+      }
+
+      if ($msgIPP = CEAIPatient::storeIPP($IPP, $newPatient)) {
+        return $exchange_ihe->setAckAR($ack, "E005", $msgIPP, $newPatient);
       }
       
-
+      $codes = array (($_modif_patient ? "I002" : "I001"), $code_IPP);
+      
+      $comment  = CEAIPatient::getComment($newPatient);
+      $comment .= CEAIPatient::getComment($IPP);
     } 
     // PI connu
     else {
+      $newPatient->load($IPP->object_id);
       
+      // Mapping du patient
+      $newPatient = $this->mappingPatient($data, $newPatient);
+                      
+      // RI non fourni
+      if (!$patientRI) {
+        $code_IPP = "I023"; 
+      } else {
+        $tmpPatient = new CPatient();
+        // RI connu
+        if ($tmpPatient->load($patientRI)) {
+          if ($tmpPatient->_id != $IPP->object_id) {
+            $comment = "L'identifiant source fait référence au patient : $IPP->object_id et l'identifiant cible au patient : $tmpPatient->_id.";
+            return $exchange_ihe->setAckAR($ack, "E004", $comment, $newPatient);
+          }
+          $code_IPP = "I024"; 
+        }
+        // RI non connu
+        else {
+          $code_IPP = "A020";
+        }
+      }
+      
+      // Notifier les autres destinataires autre que le sender
+      $newPatient->_eai_initiateur_group_id = $sender->group_id;
+      if ($msgPatient = $newPatient->store()) {
+        return $exchange_ihe->setAckAR($ack, "E004", $msgPatient, $newPatient);
+      }
+            
+      $codes = array ("I002", $code_IPP);
+      
+      $comment = CEAIPatient::getComment($newPatient);
     }
     
-    
+    return $exchange_ihe->setAck($ack, $codes, $comment, $newPatient);
   }    
   
-  function mappingPatient() {
+  function mappingPatient($data, CPatient $newPatient) {
+    //$mbPatient = $this->getPID($node, $newPatient);
+    //$mbPatient = $this->getActiviteSocioProfessionnelle($node, $newPatient);
+    //$mbPatient = $this->getPersonnesPrevenir($node, $mbPatient);
     
+    return $newPatient;
   }
 }
 

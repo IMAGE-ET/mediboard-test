@@ -194,6 +194,13 @@ class CExchangeDataFormat extends CMbMetaObject {
   function getFamily() {
     return array(); 
   }
+  
+  function setObjectIdClass(CMbObject $mbObject) {
+    if ($mbObject) {
+      $this->object_id    = $mbObject->_id;
+      $this->object_class = $mbObject->_class;
+    }
+  }
 }
 
 ?>

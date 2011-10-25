@@ -42,39 +42,59 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
       // W - Warning - Transaction successful, but there may issues 
       // I - Information - Transaction was successful but includes information e.g., inform patient
       // E - Error - Transaction was unsuccessful 
-      $data[] = ($error->level == CHL7v2Error::E_ERROR) ? "E" : "W"; 
+      $data[] = ($error->level == CHL7v2Error::E_ERROR) ? "E" : "W";
+      // ERR-5: Application Error Code (CWE) (optional)
+      $data[] = array(
+        "E000",
+        utf8_encode(CAppUI::tr("CHL7EventADT-$acknowledgment->ack_code-E000"))
+      );
+      // ERR-6: Application Error Parameter (ST) (optional repeating)
+      $data[] = null; 
+      
+      // ERR-7: Diagnostic Information (TX) (optional)
+      $data[] = null; 
+      
+      // ERR-8: User Message (TX) (optional)
+      $data[] = null; 
+      
+      // ERR-9: Inform Person Indicator (IS) (optional repeating)
+      $data[] = null; 
+      
+      // ERR-10: Override Type (CWE) (optional)
+      $data[] = null; 
+      
+      // ERR-11: Override Reason Code (CWE) (optional repeating)
+      $data[] = null; 
+      
+      // ERR-12: Help Desk Contact Point (XTN) (optional repeating) 
+      $data[] = null; 
     } else {
+      // ERR-2
       $data[] = null;
+      // ERR-3
       $data[] = $acknowledgment->hl7_error_code;
-      $data[] = $acknowledgment->severity; 
+      // ERR-4
+      $data[] = $acknowledgment->severity;
+      // ERR-5 
+      $data[] = array(
+        $acknowledgment->_mb_error_code,
+        utf8_encode(CAppUI::tr("CHL7EventADT-$acknowledgment->ack_code-$acknowledgment->_mb_error_code"))
+      );
+      // ERR-6
+      $data[] = null;
+      // ERR-7
+      $data[] = null;
+      // ERR-8
+      $data[] = null;
+      // ERR-9
+      $data[] = null;
+      // ERR-10
+      $data[] = null;
+      // ERR-11
+      $data[] = null;
+      // ERR-12
+      $data[] = null;
     }
-    
-    // ERR-5: Application Error Code (CWE) (optional)
-    $data[] = array(
-      $acknowledgment->mb_error_code,
-      utf8_encode(CAppUI::tr("CHL7EventADT-$acknowledgment->ack_code-$acknowledgment->mb_error_code"))
-    ); 
-    
-    // ERR-6: Application Error Parameter (ST) (optional repeating)
-    $data[] = null; 
-    
-    // ERR-7: Diagnostic Information (TX) (optional)
-    $data[] = null; 
-    
-    // ERR-8: User Message (TX) (optional)
-    $data[] = utf8_encode($acknowledgment->comments); 
-    
-    // ERR-9: Inform Person Indicator (IS) (optional repeating)
-    $data[] = null; 
-    
-    // ERR-10: Override Type (CWE) (optional)
-    $data[] = null; 
-    
-    // ERR-11: Override Reason Code (CWE) (optional repeating)
-    $data[] = null; 
-    
-    // ERR-12: Help Desk Contact Point (XTN) (optional repeating) 
-    $data[] = null; 
     
     $this->fill($data);
   }

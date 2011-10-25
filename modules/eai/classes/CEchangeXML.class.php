@@ -78,13 +78,6 @@ class CEchangeXML extends CExchangeDataFormat {
     }
   }
   
-  function setObjectIdClass(CMbObject $mbObject) {
-    if ($mbObject) {
-      $this->object_id    = $mbObject->_id;
-      $this->object_class = $mbObject->_class;
-    }
-  }
-  
   function setAckError($dom_acq, $code_erreur, $commentaires = null, $values) {}
   
   function isWellFormed($data) {
