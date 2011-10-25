@@ -12,10 +12,11 @@
 	  	<input type="hidden" name="param_brancard"  id="param_brancard"
          data-salle-id  ="{{$_operation->salle_id}}"
          data-sejour-id ="{{$_operation->sejour_id}}"
+				 data-operation-id="{{$_operation->_id}}"
          data-charge    ="" />
-	    <button type="button" class="brancard" onclick="CreationBrancard.patientPret('{{$_operation->sejour_id}}','{{$_operation->salle_id}}');" >
+	    <button type="button" class="brancard" onclick="CreationBrancard.patientPret('{{$_operation->sejour_id}}','{{$_operation->salle_id}}','{{$_operation->_id}}');" >
 	       Patient pret
-	   </button>
+	    </button>
 	  </div>
 	{{/if}}
 	

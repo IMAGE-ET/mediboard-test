@@ -22,8 +22,9 @@
       <input type="hidden" name="param_brancard" id="param_brancard"
 	       data-salle-id="{{$selOp->salle_id}}"
 	       data-sejour-id="{{$selOp->sejour_id}}"
+	       data-operation-id="{{$selOp->_id}}"
 	       data-charge=""	data-opid="{{$opid}}"  />
-		    <button type="button" class="brancard" onclick="CreationBrancard.demandeBrancard('{{$selOp->sejour_id}}','{{$selOp->salle_id}}', '{{$opid}}');" >
+		    <button type="button" class="brancard" onclick="CreationBrancard.demandeBrancard('{{$selOp->sejour_id}}','{{$selOp->salle_id}}', '{{$opid}}', '{{$selOp->_id}}');" >
 		      Demande Brancardage
 	      </button>
 	    </td>
