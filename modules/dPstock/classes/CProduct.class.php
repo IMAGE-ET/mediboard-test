@@ -197,6 +197,7 @@ class CProduct extends CMbObject {
       return $this->_ref_stock_group;
     }
     
+		// Coneserver le loadMatchingObject car group_id et product_id sont utilisés (au moins dans CBcbProduitLivretTherapeutique::addToStocks)
     $this->completeField("product_id");
     $this->_ref_stock_group = new CProductStockGroup();
     $this->_ref_stock_group->group_id = CProductStockGroup::getHostGroup();
