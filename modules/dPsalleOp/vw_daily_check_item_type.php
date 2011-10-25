@@ -14,7 +14,9 @@ $can->needsAdmin();
 $item_type_id = CValue::getOrSession('item_type_id');
 
 $item_type = new CDailyCheckItemType;
-$item_type->load($item_type_id);
+if (!$item_type->load($item_type_id)) {
+	$item_type->index = 1;
+}
 
 $item_category = new CDailyCheckItemCategory;
 $item_categories_list = array();

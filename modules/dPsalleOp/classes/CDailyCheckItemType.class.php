@@ -26,6 +26,7 @@ class CDailyCheckItemType extends CMbObject {
   
   // Refs
   var $_ref_group  = null;
+  var $_ref_category  = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -55,6 +56,7 @@ class CDailyCheckItemType extends CMbObject {
 
   function updateFormFields() {
     parent::updateFormFields();
+		
     $this->loadRefsFwd();
     $this->_view = $this->title;
     if ($this->active == 0) {

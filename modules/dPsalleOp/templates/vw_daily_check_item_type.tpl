@@ -108,13 +108,17 @@
             </td>
           </tr>
           <tr>
+            <th>{{mb_label object=$item_type field="index"}}</th>
+            <td>{{mb_field object=$item_type field="index" form="edit-CDailyCheckItemType" increment=true size=1}}</td>
+          </tr>
+          <tr>
             <th>{{mb_label object=$item_type field="attribute"}}</th>
             <td>{{mb_field object=$item_type field="attribute"}}</td>
           </tr>
-	        <tr>
-	          <th>{{mb_label object=$item_type field="active"}}</th>
-	          <td>{{mb_field object=$item_type field="active"}}</td>
-	        </tr>
+          <tr>
+            <th>{{mb_label object=$item_type field="active"}}</th>
+            <td>{{mb_field object=$item_type field="active"}}</td>
+          </tr>
 					<tr>
 	          <td class="button" colspan="2">
 	            {{if $item_type->_id}}

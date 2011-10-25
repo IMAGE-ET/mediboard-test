@@ -5,7 +5,7 @@
 
 <table class="form">
 
-	{{mb_include module=system template=inc_config_bool var=mode_anesth}}  
+  {{mb_include module=system template=inc_config_bool var=mode_anesth}}  
 
   <tr>
     <th class="title" colspan="6">Listes déroulantes des timings</th>
@@ -41,8 +41,8 @@
     <th class="title" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
   </tr>
 
-	{{mb_include module=system template=inc_config_bool var=mode}}  
-	{{mb_include module=system template=inc_config_bool var=modif_salle}}  
+  {{mb_include module=system template=inc_config_bool var=mode}}  
+  {{mb_include module=system template=inc_config_bool var=modif_salle}}  
   
   {{assign var="var" value="modif_actes"}}
   <tr>
@@ -52,29 +52,27 @@
       </label>    
     </th>
     <td>
-    	<select class="str" name="{{$m}}[{{$class}}][{{$var}}]">
+      <select class="str" name="{{$m}}[{{$class}}][{{$var}}]">
         <option value="never" {{if $conf.$m.$class.$var == "never"}}selected="selected"{{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-never{{/tr}}</option>
         <option value="oneday" {{if $conf.$m.$class.$var == "oneday"}}selected="selected"{{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-oneday{{/tr}}</option>
         <option value="button" {{if $conf.$m.$class.$var == "button"}}selected="selected"{{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-button{{/tr}}</option>
-				<option value="facturation" {{if $conf.$m.$class.$var == "facturation"}}selected="selected"{{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-facturation{{/tr}}</option>
+        <option value="facturation" {{if $conf.$m.$class.$var == "facturation"}}selected="selected"{{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-facturation{{/tr}}</option>
       </select>
     </td>             
   </tr>
 
   {{assign var="class" value="CActeCCAM"}}
-  
   <tr>
     <th class="title" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
   </tr>
-  
-	{{mb_include module=system template=inc_config_bool var=contraste}}
-	{{mb_include module=system template=inc_config_bool var=alerte_asso}}
-	{{mb_include module=system template=inc_config_bool var=tarif}}
+  {{mb_include module=system template=inc_config_bool var=contraste}}
+  {{mb_include module=system template=inc_config_bool var=alerte_asso}}
+  {{mb_include module=system template=inc_config_bool var=tarif}}
   {{mb_include module=system template=inc_config_bool var=codage_strict}}
-	{{mb_include module=system template=inc_config_bool var=openline}}
-	{{mb_include module=system template=inc_config_bool var=modifs_compacts}}
-	{{mb_include module=system template=inc_config_bool var=commentaire}}
-	{{mb_include module=system template=inc_config_bool var=signature}}
+  {{mb_include module=system template=inc_config_bool var=openline}}
+  {{mb_include module=system template=inc_config_bool var=modifs_compacts}}
+  {{mb_include module=system template=inc_config_bool var=commentaire}}
+  {{mb_include module=system template=inc_config_bool var=signature}}
   {{mb_include module=system template=inc_config_bool var=envoi_actes_salle}}
   {{mb_include module=system template=inc_config_bool var=envoi_motif_depassement}}
 
@@ -82,26 +80,39 @@
   <tr>
     <th class="title" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
   </tr>
-  
-	{{mb_include module=system template=inc_config_bool var=DAS}}  
+  {{mb_include module=system template=inc_config_bool var=DAS}}  
   
   {{assign var="class" value="CReveil"}}
   <tr>
     <th class="title" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
   </tr>
-  
-	{{mb_include module=system template=inc_config_bool var=multi_tabs_reveil}}  
+  {{mb_include module=system template=inc_config_bool var=multi_tabs_reveil}}  
 
-	{{assign var="class" value="CDailyCheckList"}}
+  {{assign var="class" value="CDailyCheckList"}}
   <tr>
     <th class="title" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
   </tr>
-  
-	{{mb_include module=system template=inc_config_bool var=active}}
+  {{mb_include module=system template=inc_config_bool var=active}}
   {{mb_include module=system template=inc_config_bool var=active_salle_reveil}}
   
   <tr>
-    <td class="button" colspan="100">
+    <th class="title" colspan="2">Cocher la bonne réponse par défaut dans les checklists de : </th>
+  </tr>
+	<tr>
+		<td colspan="2">
+			<div class="small-info">
+				Choisir "Oui" signifie que la réponse cochée par défaut est celle qui serait choisie si le point à vérifier est positif.
+				<br />
+				<strong>Attention, une réponse positive peut être "Non" si par exemple la question est "Risque de saignement important".</strong>
+			</div>
+		</td>
+	</tr>
+  {{mb_include module=system template=inc_config_bool var=default_good_answer_COperation}}
+  {{mb_include module=system template=inc_config_bool var=default_good_answer_CSalle}}
+  {{mb_include module=system template=inc_config_bool var=default_good_answer_CBlocOperatoire}}
+  
+  <tr>
+    <td class="button" colspan="2">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
     </td>
   </tr>
