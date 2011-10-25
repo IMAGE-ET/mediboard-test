@@ -93,6 +93,35 @@ transfertLineTP = function(line_id, sejour_id){
   } } );
 }
 
+transfertAllTP = function(){
+  var oForm = getForm("addAllTP");
+  var oFormDate = document.forms.selDateLine;
+  
+  if(oFormDate){
+    {{if $prescription->type == "sejour"}}
+      $V(oForm.debut, '{{$prescription->_ref_object->entree|iso_date}}');
+    {{else}}
+      if(oFormDate.debut && oFormDate.debut.value){
+        $V(oForm.debut, oFormDate.debut.value);  
+      }
+      if(oFormDate.time_debut && oFormDate.time_debut.value){
+        $V(oForm.time_debut, oFormDate.time_debut.value);
+      }
+    {{/if}}    
+    if(oFormDate.jour_decalage && oFormDate.jour_decalage.value){
+      $V(oForm.jour_decalage, oFormDate.jour_decalage.value);
+    }
+    if(oFormDate.decalage_line && oFormDate.decalage_line.value){
+      $V(oForm.decalage_line, oFormDate.decalage_line.value);
+    }
+    if(oFormDate.unite_decalage && oFormDate.unite_decalage.value){
+      $V(oForm.unite_decalage, oFormDate.unite_decalage.value);
+    }
+    if(oFormDate.operation_id && oFormDate.operation_id.value){
+      $V(oForm.operation_id, oFormDate.operation_id.value);
+    }
+  }
+}
 
 addAerosol = function(){
   var oFormAerosol = getForm("add_aerosol");
@@ -273,6 +302,21 @@ updateModaleAfterAddLine = function(line_id){
 		{{/if}}
 		
     {{if $perm_add_med}}
+		  <form name="addAllTP" action="?" method="post">
+		    <input type="hidden" name="m" value="dPprescription" />
+				<input type="hidden" name="dosql" value="do_add_all_tp_aed" />
+        <input type="hidden" name="dossier_medical_id" value="{{$dossier_medical->_id}}" />
+				<input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+				<input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+			  <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+			  <input type="hidden" name="debut" value="" />
+			  <input type="hidden" name="time_debut" value="" />
+			  <input type="hidden" name="jour_decalage" value="" />
+			  <input type="hidden" name="decalage_line" value="" />
+			  <input type="hidden" name="unite_decalage" value="" />
+			  <input type="hidden" name="operation_id" value="" />
+		  </form>
+		
 			<!-- Affichage des div des medicaments et autres produits -->
 			  <form action="?" method="get" name="searchProd" onsubmit="return false;">
 					<!-- Affichage des produits les plus utilises -->
@@ -281,9 +325,7 @@ updateModaleAfterAddLine = function(line_id){
 					</select>
 					
 					{{if $prescription->object_class == "CSejour" && $prescription->object_id}}
-					<select name="tp" onchange="transfertLineTP(this.value, '{{$prescription->_ref_object->_id}}'); this.value = '';" style="width: 12em;" onclick="updateSelectTP('{{$prescription->_ref_object->patient_id}}', this); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">
-						<option value="">&mdash; Traitements perso</option>
-					</select>
+					  <button type="button" class="add" onclick="transfertAllTP(); return onSubmitFormAjax(getForm('addAllTP'));">Traitements personnels</button>
 					{{/if}}
 					
 					<span id="addComment-med">

@@ -9,7 +9,8 @@
        if (elt.id) {
          var new_elt=$(elt.id);
          if (new_elt) {
-           new_elt.checked = elt.checked;
+           new_elt.checked = true;
+					 $V(new_elt.next('input'), 1);
          }
        }
      });
@@ -58,7 +59,7 @@
 <form name="selLines" method="post" action="?">
   <input type="hidden" name="m" value="dPprescription"/>
 	
-	{{if $mode == "validation"}}
+	{{if $mode == "validation" || $mode == "tp"}}
     <input type="hidden" name="dosql" value="do_select_lines_aed"/>
 	{{else}}
 	  <input type="hidden" name="dosql" value="do_duplicate_lines_aed"/>
@@ -71,14 +72,17 @@
   {{if $prescription->_ref_lines_med_comments.med|@count ||
     $prescription->_ref_lines_med_comments.comment|@count ||
     $prescription->_ref_prescription_line_mixes|@count}}
-    <div id="medicaments" style="height: 440px; overflow-y: auto">
+    <div id="medicaments">
       {{foreach from=$prescription->_ref_lines_med_comments.med item=_line}}
         {{assign var=protocole_id value=$_line->protocole_id}}
-				{{if $mode == "validation"}}
-				  {{assign var=checked_lines value=$checked_lines_tab.$protocole_id}}
-        {{else}}
-				  {{assign var=checked_lines value=1}}
-        {{/if}}
+				
+				{{if $mode == "tp"}}
+				  {{assign var=checked_lines value=0}}
+        {{elseif $mode == "validation"}}
+					{{assign var=checked_lines value=$checked_lines_tab.$protocole_id}}
+	      {{else}}
+					{{assign var=checked_lines value=1}}
+	      {{/if}}
 				
 				{{mb_include template=inc_vw_line_medicament_lite curr_line=$_line}}
       {{/foreach}}
@@ -108,7 +112,7 @@
   {{/if}}
     
   {{foreach from=$prescription->_ref_lines_elements_comments item=_lines_by_chap key=chap}}
-    <div id="element_{{$chap}}" style="height: 440px; overflow-y: auto">
+    <div id="element_{{$chap}}">
       {{assign var=has_element value=0}}
       {{foreach from=$_lines_by_chap item=_lines_by_cat}}
         {{foreach from=$_lines_by_cat.element item=_line name=foreach_elt}}
@@ -155,14 +159,19 @@
     </div>
   {{/foreach}}
   <div style="text-align: center; padding-top: 5px;">
+	  {{if $mode == "tp"}}
+      <button type="button" class="save oneclick" onclick="submitChangedLines()">{{tr}}CPrescription.apply_advanced_protocole{{/tr}} {{if $app->user_id == $praticien_id}}et signer{{/if}}</button>
+      <button type="button" class="cancel oneclick" onclick="cancelProtocole(this)">Annuler l'ajout des traitements personnels</button>
+    {{/if}}
+  
 	  {{if $mode == "validation"}}
-    <button type="button" class="save oneclick" onclick="submitChangedLines()">{{tr}}CPrescription.apply_advanced_protocole{{/tr}} {{if $app->user_id == $praticien_id}}et signer{{/if}}</button>
-    <button type="button" class="cancel oneclick" onclick="cancelProtocole(this)">{{tr}}CPrescription.cancel_advanced_protocole{{/tr}}</button>
+      <button type="button" class="save oneclick" onclick="submitChangedLines()">{{tr}}CPrescription.apply_advanced_protocole{{/tr}} {{if $app->user_id == $praticien_id}}et signer{{/if}}</button>
+      <button type="button" class="cancel oneclick" onclick="cancelProtocole(this)">{{tr}}CPrescription.cancel_advanced_protocole{{/tr}}</button>
     {{/if}}
 		
 		{{if $mode == "stopped_lines"}}
-		<button type="button" class="save oneclick" onclick="submitChangedLines()">Reprendre les lignes</button>
-    <button type="button" class="cancel oneclick" onclick="Control.Modal.close();">{{tr}}Cancel{{/tr}}</button>
+		  <button type="button" class="save oneclick" onclick="submitChangedLines()">Reprendre les lignes</button>
+      <button type="button" class="cancel oneclick" onclick="Control.Modal.close();">{{tr}}Cancel{{/tr}}</button>
     {{/if}}
 	</div>
 </form>

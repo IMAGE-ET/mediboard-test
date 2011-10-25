@@ -67,9 +67,14 @@ submitProtocole = function(){
   return onSubmitFormAjax(oForm);
 }
 
-selectLines = function(prescription_id, protocole_id, ids) {
+selectLines = function(prescription_id, protocole_id, ids, tp) {
   var oForm = getForm("applyProtocole");
   
+	if(document.forms.selPraticienLine){
+    oForm.praticien_id.value = document.forms.selPraticienLine.praticien_id.value;
+    oForm.pratSel_id.value = document.forms.selPraticienLine.praticien_id.value;
+  }
+	
   // Ouverture de la modale pour choisir les lignes
   window.selectLines = new Url("dPprescription", "ajax_select_lines");
   window.selectLines.addParam("prescription_id", prescription_id);
@@ -77,13 +82,14 @@ selectLines = function(prescription_id, protocole_id, ids) {
   window.selectLines.addParam("pratSel_id", $V(oForm.pratSel_id));
   window.selectLines.addParam("praticien_id", $V(oForm.praticien_id));
   window.selectLines.addParam("ids[]", ids);
+	window.selectLines.addParam("tp", tp);
   window.selectLines.requestModal(900, 500, {showClose: false, showReload: false});
 }
 
 selectStoppedLines = function(prescription_id){
   var url = new Url("dPprescription", "ajax_stopped_lines");
 	url.addParam("prescription_id", prescription_id);
-	url.requestModal(700, 300, {showClose: false, showReload: false});
+	url.requestModal(900, 500, {showClose: false, showReload: false});
 }
 
 popupTransmission = function(sejour_id){
@@ -696,7 +702,7 @@ Main.add( function(){
 						<td class="button">
 							{{if $prescription->type == "sejour" && $dossier_medical->_id}}
 				        <button type="button" class="new" onclick="popupTraitements('{{$dossier_medical->_id}}')">{{tr}}CConsultAnesth-traitements{{/tr}}</button>
-				      {{/if}}
+							{{/if}}
 							<button type="button" class="cancel" onclick="Prescription.stopTraitementPerso('{{$prescription->_id}}','{{$mode_pharma}}')">Arrêter</button>
 							<button type="button" class="tick" onclick="Prescription.goTraitementPerso('{{$prescription->_id}}','{{$mode_pharma}}')">Reprendre</button>
 		        </td>

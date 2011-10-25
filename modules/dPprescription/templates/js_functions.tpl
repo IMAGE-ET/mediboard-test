@@ -358,11 +358,13 @@ changePraticienMed = function(praticien_id){
 	var oFormAddAerosol = document.forms.add_aerosol;
   var oFormAddLineCommentMed = document.forms.addLineCommentMed;
 	var oFormTransfert = document.forms.transfert_line_TP;
+  var oFormTransfertAllTP = document.forms.addAllTP;
 
   $V(oFormAddLine.praticien_id, praticien_id);
   $V(oFormAddAerosol.praticien_id, praticien_id);
 	$V(oFormTransfert.praticien_id, praticien_id);
-  $V(oFormAddLineCommentMed.praticien_id, praticien_id);
+  $V(oFormTransfertAllTP.praticien_id, praticien_id);
+	$V(oFormAddLineCommentMed.praticien_id, praticien_id);
 }
 
 // Test permettant de pré-selectionner la case à cocher 

@@ -13,6 +13,7 @@ $pack_protocole_id    = CValue::get("protocole_id");
 $pratSel_id      = CValue::get("pratSel_id");
 $praticien_id    = CValue::get("praticien_id");
 $ids = CValue::get("ids");
+$tp = CValue::get("tp", 0);
 
 if (!is_array($ids)) {
   $ids = array();
@@ -43,7 +44,7 @@ if ($protocole_id) {
   $protocole->load($protocole_id);
   $checked_lines_tab[$protocole_id] = $protocole->checked_lines;
 }
-else if ($pack_id) {
+elseif ($pack_id) {
   $pack = new CPrescriptionProtocolePack();
   $pack->load($pack_id);
   $pack->loadRefsPackItems();
@@ -91,6 +92,24 @@ else if ($pack_id) {
   $prescription->_ref_lines_elements_comments = $lines_elt_comments;
   $prescription->_ref_prescription_line_mixes = $lines_mixes;
   $prescription->_counts_by_chapitre = $count_lines_meds;
+} elseif ($tp){
+	// Chargement des traitements personnels dans la prescription
+	$_tp_med = new CPrescriptionLineMedicament();
+	$_tp_med->traitement_personnel = 1;
+	$_tp_med->prescription_id = $prescription_id;
+	$_tp_med->signee = 0;
+	$traitements_perso = $_tp_med->loadMatchingList();
+	
+	foreach($traitements_perso as $_med_tp){
+		$_med_tp->loadRefsPrises();
+	}
+	
+	$prescription->_counts_by_chapitre["med"] = count($traitements_perso);
+	 
+	$prescription->_ref_lines_med_comments["med"] = $traitements_perso;
+	$prescription->_ref_lines_med_comments["comment"] = array();
+	$prescription->_ref_lines_elements_comments = array();
+  $prescription->_ref_prescription_line_mixes = array();
 }
 
 // Suppression des lignes signées
@@ -142,7 +161,7 @@ $smarty->assign("prescription_id", $prescription_id);
 $smarty->assign("checked_lines_tab"  , $checked_lines_tab);
 $smarty->assign("sejour"         , $prescription->_ref_object);
 $smarty->assign("now", mbDate());
-$smarty->assign("mode"           , "validation");
+$smarty->assign("mode"           , $tp ? "tp" : "validation");
 $smarty->display("inc_select_lines.tpl");
 
 ?>
