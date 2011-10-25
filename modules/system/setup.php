@@ -841,6 +841,13 @@ class CSetupsystem extends CSetup {
     $this->makeRevision("1.0.84");
     $this->addPrefQuery("textareaToolbarPosition", "right");
     
-    $this->mod_version = "1.0.85";
+    $this->makeRevision("1.0.85");
+    $query = "ALTER TABLE `view_sender_source` 
+              ADD `archive` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.86";
+    
+    $this->mod_version = "1.0.86";
   }
 }

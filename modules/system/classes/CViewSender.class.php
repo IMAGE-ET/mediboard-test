@@ -25,21 +25,22 @@ class CViewSender extends CMbObject {
   var $params       = null;
   var $period       = null;
   var $offset       = null;
-	var $active       = null;
-	var $max_archives = null;
+  var $active       = null;
+  var $max_archives = null;
   
   // Form fields
-	var $_params = null;
-	var $_when   = null;
-	var $_active = null;
+  var $_params = null;
+  var $_when   = null;
+  var $_active = null;
   var $_url    = null;
   var $_file   = null;
+  var $_file_compressed = null;
   
   var $_file_download_duration = null;
   var $_file_download_size     = null;
-  	
+    
   // Distant properties
-	var $_hour_plan = null;
+  var $_hour_plan = null;
   
   // Object references
   var $_ref_senders_source;
@@ -80,45 +81,45 @@ class CViewSender extends CMbObject {
     parent::updateFormFields();
 
     $this->_view         = $this->name;
-		$this->_params       = explode("&", $this->params);
-		$this->_when         = "$this->period mn + $this->offset";
+    $this->_params       = explode("&", $this->params);
+    $this->_when         = "$this->period mn + $this->offset";
   }
-	
+  
   function getActive($minute) {
     $period = intval($this->period);
     $offset = intval($this->offset);
     $minute = intval($minute);
-  	
+    
     return $this->_active =  $minute % $period == $offset;
   }
   
-	function makeHourPlan($minute = null) {
-		$period = intval($this->period);
-		$offset = intval($this->offset);
+  function makeHourPlan($minute = null) {
+    $period = intval($this->period);
+    $offset = intval($this->offset);
 
-		// Hour plan
-		foreach (range(0, 59) as $min) {
-			$this->_hour_plan[$min] = $min % $period == $offset;
-		}
+    // Hour plan
+    foreach (range(0, 59) as $min) {
+      $this->_hour_plan[$min] = $min % $period == $offset;
+    }
 
-		// Active
+    // Active
     if ($minute !== null) {
       $this->getActive($minute);
     }
     
     return $this->_hour_plan;
-	}
+  }
 
-	function loadRefSendersSource() {
-		$senders_source = $this->loadBackRefs("sources_link"); 
+  function loadRefSendersSource() {
+    $senders_source = $this->loadBackRefs("sources_link"); 
     foreach ($senders_source as $_sender_source) {
       $_sender_source->loadRefSource()->loadRefSourceFTP();
     }
 
     return $this->_ref_senders_source = $senders_source;
-	}
+  }
 
-	function makeUrl($user) {
+  function makeUrl($user) {
     $base = CAppUI::conf("base_url");
     $params = array();
     parse_str(strtr($this->params, "\n", "&"), $params);
@@ -131,19 +132,19 @@ class CViewSender extends CMbObject {
     $url = "$base/?$query";
     
     return $this->_url = $url;  
-	}
+  }
 
   function makeFile() {
     
-  	$file = tempnam("", "view");
-  	
+    $file = tempnam("", "view");
+    
     global $phpChrono;
-  	$phpChrono->stop();
+    $phpChrono->stop();
     $chrono = new Chronometer();
     $chrono->start();
     
-  	// On récupère et écrit les données dans le fichier temporaire
-  	$contents = file_get_contents($this->_url);
+    // On récupère et écrit les données dans le fichier temporaire
+    $contents = file_get_contents($this->_url);
     if (file_put_contents($file, $contents) === false) {
       $chrono->stop();
       $phpChrono->start();
@@ -156,7 +157,7 @@ class CViewSender extends CMbObject {
     $this->_file_download_duration = $chrono->total;
     $this->_file_download_size     = filesize($file);
     
-  	return $this->_file = $file;
+    return $this->_file = $file;
   }
   
   function sendFile() {
@@ -173,24 +174,44 @@ class CViewSender extends CMbObject {
       $chrono->start();
       
       $source_ftp = $_sender_source->_ref_source->_ref_source_ftp;
-      if ($source_ftp->_id && $source_ftp->active) {     
+      if ($source_ftp->_id && $source_ftp->active) {
         $basename = $this->name;
         $destination_basename = $source_ftp->fileprefix.$basename;
-
+        $can_zip = $_sender_source->_ref_source->archive && class_exists("ZipArchive");
+        
         try {
           $ftp = $source_ftp->init($source_ftp);
           if ($ftp->connect()) {
-            $ftp->sendFile($this->_file, "$destination_basename.html");
+            $file_name = $destination_basename.($can_zip ? ".zip" : ".html");
+            
+            // Création de l'archive si nécessaire
+            if ($can_zip && !file_exists($this->_file_compressed)) {
+              $this->_file_compressed = $this->_file.".zip";
+              $archive = new ZipArchive();
+              $archive->open($this->_file_compressed, ZIPARCHIVE::CREATE);
+              $archive->addFile($this->_file, $destination_basename.".html");
+              $archive->close();
+            }
+            
+            if ($can_zip) {
+              $ftp->sendFile($this->_file_compressed, $file_name);
+            }
+            else {
+              $ftp->sendFile($this->_file, $file_name);
+            }
+            
             $_sender_source->last_status = "uploaded";
-            $_sender_source->last_size   = $ftp->getSize("$destination_basename.html");
-            if ($_sender_source->last_size == $this->_file_download_size) {
+            $_sender_source->last_size   = $ftp->getSize($file_name);
+            
+            if (($can_zip && $_sender_source->last_size == filesize($this->_file_compressed)) ||
+               ((!$can_zip && $_sender_source->last_size == $this->_file_download_size))) {
               $_sender_source->last_status = "checked";
             }
             $source_ftp->counter++;
             $source_ftp->store();          
           }
           
-          $_sender_source->last_count = $this->archiveFile($ftp, $basename);
+          $_sender_source->last_count = $this->archiveFile($ftp, $basename, $can_zip);
 
           $ftp->close();
         } catch (Exception $e) {}
@@ -202,6 +223,7 @@ class CViewSender extends CMbObject {
     }
     
     unlink($this->_file);
+    unlink($this->_file_compressed);
   }
   
   /**
@@ -209,18 +231,25 @@ class CViewSender extends CMbObject {
    * 
    * @param CFTP $ftp        FTP connector 
    * @param string $basename Base name for archive directory
+   * @param boolean $compressed True if file is an archive
    * @return int             Current archive count
    */
-  function archiveFile(CFTP $ftp, $basename) {
-  	try {
+  function archiveFile(CFTP $ftp, $basename, $compressed) {
+    try {
       // Répertoire d'archivage
       $directory = $ftp->fileprefix.$basename;
       $datetime = mbTransformTime(null, null, "%Y-%m-%d_%H-%M-%S");   
       $ftp->createDirectory($directory);
       
       // Transmission de la copie
-      $archive  = "$directory/archive-$datetime.html";
-      $ftp->sendFile($this->_file, $archive);
+      $archive  = "$directory/archive-$datetime". ($compressed ? ".zip" : ".html");
+      
+      if ($compressed) {
+        $ftp->sendFile($this->_file_compressed, $archive);
+      }
+      else {
+        $ftp->sendFile($this->_file, $archive);
+      }
       
       // Rotation des fichiers
       $files = $ftp->getListFiles($directory);
@@ -228,12 +257,12 @@ class CViewSender extends CMbObject {
       $list_files = array_slice($files, $this->max_archives);
       
       foreach ($list_files as $_file) {
-      	$ftp->delFile($_file);
+        $ftp->delFile($_file);
       }
       
      }
      catch (CMbException $e) {
-     	$e->stepAjax();
+       $e->stepAjax();
      }
     return count($ftp->getListFiles($directory));
   }

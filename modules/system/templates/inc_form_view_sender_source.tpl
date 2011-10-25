@@ -50,6 +50,11 @@
     </tr>
     
     <tr>
+      <th>{{mb_label object=$sender_source field=archive}}</th>
+      <td>{{mb_field object=$sender_source field=archive}}</td>
+    </tr>
+    
+    <tr>
       <td class="button" colspan="2">
         {{if $sender_source->_id}}
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

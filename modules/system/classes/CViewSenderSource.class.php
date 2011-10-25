@@ -21,6 +21,7 @@ class CViewSenderSource extends CMbObject {
   var $libelle   = null;
   var $group_id  = null;
   var $actif     = null;
+  var $archive   = null;
   
   // Form fields
   var $_type_echange   = null;
@@ -44,23 +45,24 @@ class CViewSenderSource extends CMbObject {
     $props["libelle"]  = "str";
     $props["group_id"] = "ref notNull class|CGroups autocomplete|text";
     $props["actif"]    = "bool notNull";
+    $props["archive"]  = "bool notNull";
     
     $props["_reachable"] = "bool";
     return $props;
   }
-	
-	function getBackProps() {
-		return parent::getBackProps() + array(
+  
+  function getBackProps() {
+    return parent::getBackProps() + array(
       "senders_link" => "CSourceToViewSender source_id",
-		);
-	}
-	
-	function updateFormFields() {
-		parent::updateFormFields();
-		
-		$this->_type_echange = $this->_class;
-		$this->_view         = $this->name . ($this->libelle ? " - $this->libelle" : "");
-	}
+    );
+  }
+  
+  function updateFormFields() {
+    parent::updateFormFields();
+    
+    $this->_type_echange = $this->_class;
+    $this->_view         = $this->name . ($this->libelle ? " - $this->libelle" : "");
+  }
 
   function loadRefGroup() {
     return $this->_ref_group = $this->loadFwdRef("group_id", 1);
@@ -71,8 +73,8 @@ class CViewSenderSource extends CMbObject {
   }
   
   function loadRefSenders() {
-  	$senders_link = $this->loadBackRefs("senders_link");
-  	return $this->_ref_senders = CMbObject::massLoadFwdRef($senders_link, "sender_id");
+    $senders_link = $this->loadBackRefs("senders_link");
+    return $this->_ref_senders = CMbObject::massLoadFwdRef($senders_link, "sender_id");
   }
 }
 
