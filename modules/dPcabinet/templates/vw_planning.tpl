@@ -182,7 +182,7 @@ Main.add(function () {
 		                  <a class="button clock notext" href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plage->plageconsult_id}}"  title="Planifier une consultation dans cette plage"></a>
 										</div>
 	
-	                  <a href="?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id={{$plage->plageconsult_id}}" title="Voir le contenu de la plage" >
+	                  <a href="#" onclick="showConsultations(this,'{{$plage->plageconsult_id}}');" title="Voir le contenu de la plage" >
 	                    {{if $plage->libelle}}{{$plage->libelle}}<br />{{/if}}
 	                    {{$plage->debut|date_format:$conf.time}} - {{$plage->fin|date_format:$conf.time}}
 	                  </a>
