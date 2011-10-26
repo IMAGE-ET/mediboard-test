@@ -51,7 +51,7 @@ $ex_classes_creation = array();
 $limit = null;
 
 if ($print) {
-  $limit = 50;
+  $limit = 5;
 }
 else {
   switch($detail) {
