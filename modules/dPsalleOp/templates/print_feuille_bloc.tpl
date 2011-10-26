@@ -159,7 +159,7 @@ Main.add(function(){
           <th>Remarques</th>
           <td class="text">
             {{if $operation->rques}}
-              {{mb_label object=$operation field=rques}}
+              {{mb_value object=$operation field=rques}}
             {{else}}
             &mdash;
             {{/if}}
