@@ -223,7 +223,10 @@ class CViewSender extends CMbObject {
     }
     
     unlink($this->_file);
-    unlink($this->_file_compressed);
+    
+    if (file_exists($this->_file_compressed)) {
+      unlink($this->_file_compressed);
+    }
   }
   
   /**
