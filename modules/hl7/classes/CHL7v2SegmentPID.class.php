@@ -75,7 +75,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $linesAdress = explode("\n", $patient->adresse, 2);
     $address[] = array(
       CValue::read($linesAdress, 0),
-      CValue::read($linesAdress, 1),
+      str_replace("\n", $message->componentSeparator, CValue::read($linesAdress, 1)),
       $patient->ville,
       null,
       $patient->cp,
