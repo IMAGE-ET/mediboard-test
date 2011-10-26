@@ -19,8 +19,8 @@ class COperatorIHE extends CEAIOperator {
   function event(CExchangeDataFormat $data_format) {
     $msg = $data_format->_message;
     $evt = $data_format->_family_message;
-    
-    // Récupération des informations du message
+
+    // Récupération des informations du message - CHL7v2MessageXML
     $dom_evt = $evt->handle($msg);
 
     try {
@@ -89,9 +89,9 @@ class COperatorIHE extends CEAIOperator {
       
       $ack = new CHL7v2Acknowledgment($evt);
       $ack->message_control_id = isset($data['identifiantMessage']) ? $data['identifiantMessage'] : "000000000";
-      $dom_acq->_ref_exchange_ihe     = $exchange_ihe;
-      
-      $msgAck = $ack->generateAcknowledgment("AR", "E009");
+      $ack->_ref_exchange_ihe = $exchange_ihe;
+
+      $msgAck = $ack->generateAcknowledgment("AR", "E003", null, "E", $e->getMessage());
       
       $exchange_ihe->populateErrorExchange($msgAck);
       
@@ -114,7 +114,7 @@ class COperatorIHE extends CEAIOperator {
         break;
       // Aucun des événements - retour d'erreur
       default :
-        $msgAck = $ack->generateAcknowledgment("AR", "E007", "200");
+        $msgAck = $ack->generateAcknowledgment("AR", "E004", "200");
         break;
     }
     

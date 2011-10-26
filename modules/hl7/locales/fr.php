@@ -1,7 +1,13 @@
 <?php
 $locales['CHL7EventADT-AR-E001'] = 'Le message est compris mais n\'est pas supporté par cet utilisateur Mediboard. Veuillez contacter votre administrateur.';
 $locales['CHL7EventADT-AR-E002'] = 'Le message HL7 n\'est pas conforme à la norme.';
-$locales['CHL7EventADT-AR-E003'] = '';
+$locales['CHL7EventADT-AR-E003'] = 'Le message HL7 n\'est pas conforme à l\'implémentation Mediboard de la norme HL7';
+$locales['CHL7EventADT-AR-E004'] = 'Le type d\'événement reçu ne correspond pas a un type d\'événement patient du modèle HL7';
+$locales['CHL7EventADT-AR-E005'] = '';
+$locales['CHL7EventADT-AR-E006'] = '';
+$locales['CHL7EventADT-AR-E007'] = '';
+$locales['CHL7EventADT-AR-E100'] = 'Identifiants source (PI) et/ou cible (RI) du patient non fournis.';
+$locales['CHL7EventADT-AR-E101'] = 'L\'enregistrement du patient a échoué.L\'enregistrement de l\'IPP a échoué';
 $locales['CHL7v2Exception-1'] = 'Fichier vide ou trop court';
 $locales['CHL7v2Exception-3'] = 'Format de séparateur invalide';
 $locales['CHL7v2Exception-4'] = 'Syntaxe de segment invalide';

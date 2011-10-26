@@ -30,7 +30,7 @@ class CHL7v2Acknowledgment implements CHL7Acknowledgment {
   var $_ref_exchange_ihe  = null;
   var $_mb_error_code     = null;
   
-  function __construct(CHL7Event $event) {
+  function __construct(CHL7Event $event = null) {
     $this->event = $event;
   }
   
@@ -47,8 +47,14 @@ class CHL7v2Acknowledgment implements CHL7Acknowledgment {
     $this->event_ack = new CHL7v2EventACK($this->event);
     $this->event_ack->build($this);
     $this->event_ack->flatten();
-
+    
+    $this->event_ack->msg_hl7 = utf8_encode($this->event_ack->msg_hl7);
+    
     return $this->event_ack->msg_hl7;
+  }
+  
+  function getStatutAcknowledgment() {
+    
   }
 }
 

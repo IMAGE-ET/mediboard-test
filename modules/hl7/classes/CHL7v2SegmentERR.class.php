@@ -45,8 +45,8 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
       $data[] = ($error->level == CHL7v2Error::E_ERROR) ? "E" : "W";
       // ERR-5: Application Error Code (CWE) (optional)
       $data[] = array(
-        "E000",
-        utf8_encode(CAppUI::tr("CHL7EventADT-$acknowledgment->ack_code-E000"))
+        "E002",
+        CAppUI::tr("CHL7EventADT-$acknowledgment->ack_code-E002")
       );
       // ERR-6: Application Error Parameter (ST) (optional repeating)
       $data[] = null; 
@@ -78,14 +78,14 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
       // ERR-5 
       $data[] = array(
         $acknowledgment->_mb_error_code,
-        utf8_encode(CAppUI::tr("CHL7EventADT-$acknowledgment->ack_code-$acknowledgment->_mb_error_code"))
+        CAppUI::tr("CHL7EventADT-$acknowledgment->ack_code-$acknowledgment->_mb_error_code")
       );
       // ERR-6
       $data[] = null;
       // ERR-7
       $data[] = null;
       // ERR-8
-      $data[] = null;
+      $data[] = $acknowledgment->comments;
       // ERR-9
       $data[] = null;
       // ERR-10

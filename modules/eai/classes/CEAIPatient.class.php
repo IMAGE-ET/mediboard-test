@@ -62,17 +62,17 @@ class CEAIPatient extends CEAIMbObject {
     if ($object instanceof CPatient) {
       // Création du patient
       if ($object->_ref_last_log->type == "create") {
-        return "Le patient a été créé dans Mediboard avec l'IC $newPatient->_id.";
+        return "Le patient a été créé dans Mediboard avec l'IC $object->_id.";
       } 
       
       // Modification du patient
-      $comment = "Le patient avec l'IC '$newPatient->_id' dans Mediboard a été modifié.";
+      $comment = "Le patient avec l'IC '$object->_id' dans Mediboard a été modifié.";
       $comment .= ($modified_fields) ? "Les champs mis à jour sont les suivants : $modified_fields." : null;
       
       return $comment;
     }
     if ($object instanceof CIdSante400) {
-      return "L'IPP créé est : $IPP->id400";
+      return "L'IPP créé est : $object->id400";
     }
   }
 }
