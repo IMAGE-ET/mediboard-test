@@ -72,19 +72,6 @@ Main.add(function () {
 </script>
 
 <style type="text/css">
-#weeklyPlanning .toolbar {
-  position: absolute; 
-  top: -24px; 
-  right: 0; 
-  background: #ddd;
-  display: none;
-	border: 1px solid black;
-	border-radius: 3px;
-}
-
-#weeklyPlanning td:hover .toolbar {
-  display: block;
-}
 	
 </style>
 
@@ -107,7 +94,7 @@ Main.add(function () {
         <a href="#1" onclick="$V($(this).getSurroundingForm().debut, '{{$today}}')">Aujourd'hui</a>
       </form>
 			<br/>
-	    <button class="new" onclick="PlageConsultation.edit('0');">Créer une nouvelle plage</button>
+	    <button style="float:left;" class="new" onclick="PlageConsultation.edit('0');">Créer une nouvelle plage</button>
     </th>
     <td style="min-width: 350px;">
       <form action="?" name="selectPrat" method="get">
@@ -192,7 +179,7 @@ Main.add(function () {
 	                  <div class="toolbar">
 											<a class="button list notext" onclick="showConsultations(this,'{{$plage->plageconsult_id}}');" href="#" title="Voir le contenu de la plage"></a>
 		                  <a class="button edit notext" href="#" onclick="PlageConsultation.edit('{{$plage->plageconsult_id}}');" title="Modifier cette plage"></a>
-		                  <a class="button clock" href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plage->plageconsult_id}}"  title="Planifier une consultation dans cette plage"></a>
+		                  <a class="button clock notext" href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plage->plageconsult_id}}"  title="Planifier une consultation dans cette plage"></a>
 										</div>
 	
 	                  <a href="?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id={{$plage->plageconsult_id}}" title="Voir le contenu de la plage" >

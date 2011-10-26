@@ -464,6 +464,19 @@ table#weeklyPlanning th.today {
   background-color: #ffd;
 }
 
+#weeklyPlanning .toolbar {
+  position: absolute; 
+  top: -24px; 
+  right: 0; 
+  background: #ddd;
+  display: none;
+  border: 1px solid #AAA;
+  border-radius: 3px;
+}
+
+#weeklyPlanning td:hover .toolbar {
+  display: block;
+}
 .planning {
   visibility: hidden;
 }
