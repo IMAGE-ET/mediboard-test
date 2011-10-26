@@ -59,16 +59,34 @@ while($date < $now) {
   }
   $max = max($max, $total);
   
-  $series[0]["data"][] = array(count($series[0]["data"])*2-0.8, $total);
+  $series[0]["data"][] = array(count($series[0]["data"])*2-0.6, $total);
   
+  // Hack pour les etablissements qui ont un service "Périmés"
+  $where_services = array(
+    "nom" => "= 'Périmés'",
+  );
+  $services_expired = new CService;
+  $services_expired = $services_expired->loadListWithPerms(PERM_READ, $where_services);
+  
+  $service_expired_id = null;
+  if (count($services_expired)) {
+    $service_expired = reset($services_expired);
+    $service_expired_id = $service_expired->_id;
+  }
   
   // Output //////////////////
   $where = array(
     "product_delivery.stock_class"         => "= 'CProductStockGroup'",
     "product_delivery.stock_id"            => "= '{$product->_ref_stock_group->_id}'",
-    "product_delivery.type"                => "!= 'expired' OR product_delivery.type IS NULL",
     "product_delivery_trace.date_delivery" => "BETWEEN '$date' AND '$to'",
   );
+  
+  if ($service_expired_id) {
+    $where[100] = "(product_delivery.type != 'expired' OR product_delivery.type IS NULL) AND product_delivery.service_id != '$service_expired_id'";
+  }
+  else {
+    $where[100] =  "product_delivery.type != 'expired' OR product_delivery.type IS NULL";
+  }
   
   $ljoin = array(
     "product_delivery" => "product_delivery.delivery_id = product_delivery_trace.delivery_id"
@@ -83,10 +101,15 @@ while($date < $now) {
   }
   $max = max($max, $total);
   $series[1]["data"][] = array(count($series[1]["data"])*2, $total);
-	
-	
-	// Output expired
-  $where["product_delivery.type"] = "= 'expired'";
+  
+  // Output expired ///////////////////
+  if ($service_expired_id) {
+    $where[100] = "product_delivery.type = 'expired' OR product_delivery.service_id = '$service_expired_id'";
+  }
+  else {
+    $where[100] = "product_delivery.type = 'expired'";
+  }
+  
   $traces = $trace->loadList($where, null, null, null, $ljoin);
   
   $total_expired = 0;
@@ -94,7 +117,7 @@ while($date < $now) {
     $total_expired += $_trace->quantity;
   }
   $max = max($max, $total_expired + $total);
-  $series[2]["data"][] = array(count($series[2]["data"])*2, $total_expired);
+  $series[2]["data"][] = array(count($series[2]["data"])*2+0.6, $total_expired);
   ///////////////
   
   $date = $to;
@@ -107,7 +130,7 @@ $data = array(
   "options" => CFlotrGraph::merge("bars", array(
     "fontSize" => 7,
     "shadowSize" => 0,
-    "bars" => array("barWidth" => 0.8, "stacked" => true),
+    "bars" => array("barWidth" => 0.6/*, "stacked" => true*/),
     "xaxis" => array(
       "showLabels" => true, 
       "ticks" => $ticks,
