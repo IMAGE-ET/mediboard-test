@@ -73,11 +73,11 @@
     
     // Indication du chargement
     $("forms-loading").setStyle({display: "inline-block"});
-    $$("button.print").invoke("disable");
+    $$("button.print").each(Element.disable);
     
     ExObject.loadExObjects("{{$sejour->_class}}", "{{$sejour->_id}}", "ex-objects", 3, null, {print: 1, onComplete: function(){
       $("forms-loading").hide();
-      $$("button.print").invoke("enable");
+      $$("button.print").each(Element.enable);
     }});
     
     checkbox._loaded = true;
