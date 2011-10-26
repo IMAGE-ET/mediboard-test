@@ -72,9 +72,10 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     // PID-11: Patient Address (XAD) (optional repeating)
     $address = array();
     
+    $linesAdress = explode("\n", $patient->adresse, 2);
     $address[] = array(
-      $patient->adresse,
-      null,
+      CValue::read($linesAdress, 0),
+      CValue::read($linesAdress, 1),
       $patient->ville,
       null,
       $patient->cp,
@@ -95,29 +96,31 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
       // RH  - Registry home
       "H",
     );
-    $address[] = array(
-      null,
-      null,
-      $patient->lieu_naissance,
-      null,
-      $patient->cp_naissance,
-      $patient->pays_naissance_insee,
-      // Table - 0190
-      // B   - Firm/Business 
-      // BA  - Bad address 
-      // BDL - Birth delivery location (address where birth occurred)  
-      // BR  - Residence at birth (home address at time of birth)  
-      // C   - Current Or Temporary
-      // F   - Country Of Origin 
-      // H   - Home 
-      // L   - Legal Address 
-      // M   - Mailing
-      // N   - Birth (nee) (birth address, not otherwise specified)  
-      // O   - Office
-      // P   - Permanent 
-      // RH  - Registry home
-      "BR",
-    );
+    if ($patient->lieu_naissance || $patient->cp_naissance || $patient->pays_naissance_insee) {
+      $address[] = array(
+        null,
+        null,
+        $patient->lieu_naissance,
+        null,
+        $patient->cp_naissance,
+        $patient->pays_naissance_insee,
+        // Table - 0190
+        // B   - Firm/Business 
+        // BA  - Bad address 
+        // BDL - Birth delivery location (address where birth occurred)  
+        // BR  - Residence at birth (home address at time of birth)  
+        // C   - Current Or Temporary
+        // F   - Country Of Origin 
+        // H   - Home 
+        // L   - Legal Address 
+        // M   - Mailing
+        // N   - Birth (nee) (birth address, not otherwise specified)  
+        // O   - Office
+        // P   - Permanent 
+        // RH  - Registry home
+        "BR",
+      );
+    }
     $data[] =  $address;
     
     // PID-12: County Code (IS) (optional)
