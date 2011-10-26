@@ -73,11 +73,11 @@
     
     // Indication du chargement
     $("forms-loading").setStyle({display: "inline-block"});
-    $$("button.print").each(Element.disable);
+    $$("button.print").each(function(e){ e.disabled = true; });
     
     ExObject.loadExObjects("{{$sejour->_class}}", "{{$sejour->_id}}", "ex-objects", 3, null, {print: 1, onComplete: function(){
       $("forms-loading").hide();
-      $$("button.print").each(Element.enable);
+      $$("button.print").each(function(e){ e.disabled = null; });
     }});
     
     checkbox._loaded = true;
