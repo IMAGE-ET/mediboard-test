@@ -127,7 +127,7 @@ if ($consult->_id) {
     $consult->_locks[] = "datetime";
   }
   
-  if ($consult->chrono == CConsultation::TERMINE) {
+  if ($consult->chrono == CConsultation::TERMINE && !$consult->annule) {
     $consult->_locks[] = "termine";
   }
   
