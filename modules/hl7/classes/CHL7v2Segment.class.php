@@ -373,7 +373,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       $patient_usualname = array(
         $object->nom,
         $object->prenom,
-        "$object->prenom_2 $object->prenom_3 $object->prenom_4",
+        "$object->prenom_2,$object->prenom_3,$object->prenom_4",
         null,
         $object->civilite,
         null,
