@@ -8,9 +8,9 @@
      window.save_checkboxes.each(function(elt) {
        if (elt.id) {
          var new_elt=$(elt.id);
-         if (new_elt) {
-           new_elt.checked = true;
-					 $V(new_elt.next('input'), 1);
+         if (new_elt && elt.form && elt.form.name === "selLines") {
+           new_elt.checked = elt.checked;
+           $V(new_elt.next('input'), elt.checked == true ? 1 : 0);
          }
        }
      });
