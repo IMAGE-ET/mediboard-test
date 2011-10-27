@@ -2,37 +2,22 @@
 
 <script type="text/javascript">
 function showConsultations(oTd, plageconsult_id){
-	oTd = $(oTd);
-
-	classparent=null;
-	n=0;
-	if(oTd.parentNode.parentNode.parentNode.tagName=="TD"){
-		 classparent=oTd.parentNode.parentNode.parentNode.className;
-		 n=1;
-	}
-  else{
-		classparent=oTd.parentNode.parentNode.className;
-		n=2;
-	}
-	
-	if (classparent != "selectedPlage hour_start") {
-	    $$('td.selectedPlage.hour_start').each(function(elem){
-	            elem.className = "nonEmpty hour_start";
-	    });
-	
-	     if (n == 1) {
-		   	oTd.parentNode.parentNode.parentNode.className = "selectedPlage hour_start";
-		   }
-			 else{
-			 	 oTd.parentNode.parentNode.className = "selectedPlage hour_start";
-			 }
-	      var url = new Url("dPcabinet", "inc_consultation_plage");
-	      url.addParam("plageconsult_id", plageconsult_id);
-	      url.requestUpdate('consultations');
-	}
+  oTd = $(oTd);
+  
+  var selectedTd = oTd.up("table").down("td.selectedPlage");
+  if (selectedTd) {
+    selectedTd.removeClassName("selectedPlage");
+  }
+  
+  oTd.up("td").addClassName("selectedPlage");
+  
+  var url = new Url("dPcabinet", "inc_consultation_plage");
+  url.addParam("plageconsult_id", plageconsult_id);
+  url.requestUpdate('consultations');
 }
+
 function checkPlage() {
-  var form = document.editFrm;
+  var form = getForm("editFrm");
   var timeDebut = form._hour_deb.value + ":" +form._min_deb.value;
   var timeFin   = form._hour_fin.value + ":" +form._min_fin.value;
 
@@ -87,7 +72,7 @@ Main.add(function () {
 </script>
 
 <style type="text/css">
-	
+  
 </style>
 
 {{mb_script module=dPcabinet script=plage_consultation}}
@@ -108,8 +93,8 @@ Main.add(function () {
         <br />
         <a href="#1" onclick="$V($(this).getSurroundingForm().debut, '{{$today}}')">Aujourd'hui</a>
       </form>
-			<br/>
-	    <button style="float:left;" class="new" onclick="PlageConsultation.edit('0');">Créer une nouvelle plage</button>
+      <br/>
+      <button style="float:left;" class="new" onclick="PlageConsultation.edit('0');">Créer une nouvelle plage</button>
     </th>
     <td style="min-width: 350px;">
       <form action="?" name="selectPrat" method="get">
@@ -148,12 +133,12 @@ Main.add(function () {
       {{if $plageSel->_id}}
         <a class="button new" href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plageSel->_id}}">Planifier une consultation dans cette plage</a>
       {{/if}}
-			
+      
     </td>
   </tr>
   <tr>
     <td>
-    	
+      
       <table id="weeklyPlanning">
         <tr>
           <!-- Affichage du nom des jours -->
@@ -191,37 +176,37 @@ Main.add(function () {
               
                 <td class="{{if $plageconsult_id == $plage->plageconsult_id}}selectedPlage{{else}}nonEmpty{{/if}} {{if $curr_mins == '00'}}hour_start{{/if}}" rowspan="{{$plage->_nb_intervals}}">
                   <div style="position: relative;">
-	                  <div class="toolbar">
-											<a class="button list notext" onclick="showConsultations(this,'{{$plage->plageconsult_id}}');" href="#" title="Voir le contenu de la plage"></a>
-		                  <a class="button edit notext" href="#" onclick="PlageConsultation.edit('{{$plage->plageconsult_id}}');" title="Modifier cette plage"></a>
-		                  <a class="button clock notext" href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plage->plageconsult_id}}"  title="Planifier une consultation dans cette plage"></a>
-										</div>
-	
-	                  <a href="#" onclick="showConsultations(this,'{{$plage->plageconsult_id}}');" title="Voir le contenu de la plage" >
-	                    {{if $plage->libelle}}{{$plage->libelle}}<br />{{/if}}
-	                    {{$plage->debut|date_format:$conf.time}} - {{$plage->fin|date_format:$conf.time}}
-	                  </a>
-	                  {{assign var="pct" value=$plage->_fill_rate}}
-	                  {{if $pct gt 100}}
-	                    {{assign var="pct" value=100}}
-	                  {{/if}}
-	                  {{if $pct lt 50}}{{assign var="backgroundClass" value="empty"}}
-	                  {{elseif $pct lt 90}}{{assign var="backgroundClass" value="normal"}}
-	                  {{elseif $pct lt 100}}{{assign var="backgroundClass" value="booked"}}
-	                  {{else}}{{assign var="backgroundClass" value="full"}}
-	                  {{/if}} 
-	                  <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plage->plageconsult_id}}" title="Planifier une consultation dans cette plage"> 
-	                    <div class="progressBar">
-	                      <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
-	                      <div class="text">
-	                        {{if $plage->locked}}
-	                        <img style="float: right; height: 12px;" src="style/mediboard/images/buttons/lock.png" />
-	                        {{/if}}
-	                        {{$plage->_affected}} {{if $plage->_nb_patients != $plage->_affected}}({{$plage->_nb_patients}}){{/if}} / {{$plage->_total|string_format:"%.0f"}}
-	                      </div>
-	                    </div>
-	                  </a>
-									</div>
+                    <div class="toolbar">
+                      <a class="button list notext" onclick="showConsultations(this,'{{$plage->plageconsult_id}}');" href="#" title="Voir le contenu de la plage"></a>
+                      <a class="button edit notext" href="#" onclick="PlageConsultation.edit('{{$plage->plageconsult_id}}');" title="Modifier cette plage"></a>
+                      <a class="button clock notext" href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plage->plageconsult_id}}"  title="Planifier une consultation dans cette plage"></a>
+                    </div>
+  
+                    <a href="#" onclick="showConsultations(this,'{{$plage->plageconsult_id}}');" title="Voir le contenu de la plage" >
+                      {{if $plage->libelle}}{{$plage->libelle}}<br />{{/if}}
+                      {{$plage->debut|date_format:$conf.time}} - {{$plage->fin|date_format:$conf.time}}
+                    </a>
+                    {{assign var="pct" value=$plage->_fill_rate}}
+                    {{if $pct gt 100}}
+                      {{assign var="pct" value=100}}
+                    {{/if}}
+                    {{if $pct lt 50}}{{assign var="backgroundClass" value="empty"}}
+                    {{elseif $pct lt 90}}{{assign var="backgroundClass" value="normal"}}
+                    {{elseif $pct lt 100}}{{assign var="backgroundClass" value="booked"}}
+                    {{else}}{{assign var="backgroundClass" value="full"}}
+                    {{/if}} 
+                    <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plage->plageconsult_id}}" title="Planifier une consultation dans cette plage"> 
+                      <div class="progressBar">
+                        <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
+                        <div class="text">
+                          {{if $plage->locked}}
+                          <img style="float: right; height: 12px;" src="style/mediboard/images/buttons/lock.png" />
+                          {{/if}}
+                          {{$plage->_affected}} {{if $plage->_nb_patients != $plage->_affected}}({{$plage->_nb_patients}}){{/if}} / {{$plage->_total|string_format:"%.0f"}}
+                        </div>
+                      </div>
+                    </a>
+                  </div>
                 </td>
               {{/if}}
             {{/foreach}}
@@ -230,30 +215,30 @@ Main.add(function () {
       </table>
       
     <table >
-    	<div class="small-info">
-    	<strong>L'affichage du semainier a évolué</strong>. Maintenant, vous pouvez utiliser les boutons qui apparaissent au survol de la plage de consultation pour :
-		  <ul>
-		  <li>
-		    <button type="button" class="notext list">Liste</button> :
-		    Afficher la liste des patients sur la droite
-		  </li>
-		  <li>
-		    <button type="button" class="notext edit">Edit</button> :
-		    Modifier la plage selectionnée
-		  </li>
-		  <li>
-		    <button type="button" class="notext clock">RDV</button> :
-		    Prendre un nouveau rendez-vous dans cette plage
-		  </li>
-		  </ul>
-			<br />
-		  Les anciennes commandes fonctionnent encore mais seront supprimées prochainement.
-		</div>
+      <div class="small-info">
+      <strong>L'affichage du semainier a évolué</strong>. Maintenant, vous pouvez utiliser les boutons qui apparaissent au survol de la plage de consultation pour :
+      <ul>
+      <li>
+        <button type="button" class="notext list">Liste</button> :
+        Afficher la liste des patients sur la droite
+      </li>
+      <li>
+        <button type="button" class="notext edit">Edit</button> :
+        Modifier la plage selectionnée
+      </li>
+      <li>
+        <button type="button" class="notext clock">RDV</button> :
+        Prendre un nouveau rendez-vous dans cette plage
+      </li>
+      </ul>
+      <br />
+      Les anciennes commandes fonctionnent encore mais seront supprimées prochainement.
+    </div>
     </table>
-		    <td id="consultations">
-		    	{{mb_include module=dPcabinet template=inc_consultations}}
-		
-		    </td>
-		  </tr>
-			
-		</table>
+        <td id="consultations">
+          {{mb_include module=dPcabinet template=inc_consultations}}
+    
+        </td>
+      </tr>
+      
+    </table>
