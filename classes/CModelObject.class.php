@@ -231,6 +231,14 @@ class CModelObject {
       "logs" => "CUserLog object_id",
     );
   }
+  
+  /**
+   * Get the backrefs to export when using CMbObjecExport
+   * @return array
+   */
+  function getExportedBackRefs(){
+    return array();
+  }
 
   /**
    * Convert string back specifications to objet specifications

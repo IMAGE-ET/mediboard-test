@@ -82,6 +82,15 @@ class CExClass extends CMbObject {
     return $backProps;
   }
   
+  function getExportedBackRefs(){
+    $export = parent::getExportedBackRefs();
+    $export["CExClass"]           = array("field_groups", /*"constraints", */"ex_triggers");
+    $export["CExClassFieldGroup"] = array("class_fields", "host_fields", "class_messages");
+    $export["CExConcept"]         = array("list_items");
+    $export["CExList"]            = array("list_items");
+    return $export;
+  }
+  
   function getHostClassOptions(){
     if (!$this->host_class || !$this->event || $this->event === "void") return;
     
@@ -486,28 +495,28 @@ class CExClass extends CMbObject {
     
     return $list;
   }
-	
-	function canCreateNew(CMbObject $host) {
-		switch($this->unicity) {
-			default:
+  
+  function canCreateNew(CMbObject $host) {
+    switch($this->unicity) {
+      default:
       case "no":
         return true;
         
       case "host":
-		    $ex_object = new CExObject;
-		    $ex_object->_ex_class_id = $this->_id;
-		    $ex_object->loadRefExClass();
-		    $ex_object->setExClass();
-		    $ex_object->setObject($host);
-		    return $ex_object->countMatchingList() == 0;
-				
+        $ex_object = new CExObject;
+        $ex_object->_ex_class_id = $this->_id;
+        $ex_object->loadRefExClass();
+        $ex_object->setExClass();
+        $ex_object->setObject($host);
+        return $ex_object->countMatchingList() == 0;
+        
         /*
       case "reference2": $level++;
       case "reference1": 
         $reference_object = $this->resolveReferenceObject($host, $level);
         return array($this->getLatestExObject($reference_object, $level));*/
     }
-	}
+  }
   
   static function getTree(){
     $group_id = CGroups::loadCurrent()->_id;

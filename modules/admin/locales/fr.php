@@ -284,6 +284,7 @@ $locales['mod-admin-tab-vw_edit_users'] = 'Utilisateurs';
 $locales['module-admin-court'] = 'Permissions';
 $locales['module-admin-long'] = 'Permissions utilisateurs';
 $locales['module-common-court'] = 'Tous modules';
+$locales['Permission denied'] = 'Accès refusé';
 $locales['pref-ccam_consultation-desc'] = 'Affiche le volet de cotation des actes CCAM dans les consultations';
 $locales['utilities-source-ldap'] = 'Utilitaires LDAP';
 $locales['utilities-source-ldap-bind'] = 'Authentification au serveur LDAP';
