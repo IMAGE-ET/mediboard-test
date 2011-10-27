@@ -4,13 +4,28 @@
 function showConsultations(oTd, plageconsult_id){
 	oTd = $(oTd);
 
-	if (oTd.parentNode.parentNode.parentNode.className != "selectedPlage hour_start") {
+	classparent=null;
+	n=0;
+	if(oTd.parentNode.parentNode.parentNode.tagName=="TD"){
+		 classparent=oTd.parentNode.parentNode.parentNode.className;
+		 n=1;
+	}
+  else{
+		classparent=oTd.parentNode.parentNode.className;
+		n=2;
+	}
+	
+	if (classparent != "selectedPlage hour_start") {
 	    $$('td.selectedPlage.hour_start').each(function(elem){
 	            elem.className = "nonEmpty hour_start";
 	    });
 	
-	      oTd.parentNode.parentNode.parentNode.className = "selectedPlage hour_start";
-	
+	     if (n == 1) {
+		   	oTd.parentNode.parentNode.parentNode.className = "selectedPlage hour_start";
+		   }
+			 else{
+			 	 oTd.parentNode.parentNode.className = "selectedPlage hour_start";
+			 }
 	      var url = new Url("dPcabinet", "inc_consultation_plage");
 	      url.addParam("plageconsult_id", plageconsult_id);
 	      url.requestUpdate('consultations');
