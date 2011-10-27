@@ -797,7 +797,7 @@ class CCompteRendu extends CDocumentItem {
   }
   
   static function restoreId($source) {
-    if (!preg_match("/<div id=\"body\"/", $source) || !preg_match("/<div id='body'/") && preg_match("/@media dompdf/", $source)) {
+    if ((!preg_match("/<div id=\"body\"/", $source) && !preg_match("/<div id='body'/")) && preg_match("/@media dompdf/", $source)) {
       $xml = new DOMDocument('1.0', 'iso-8859-1');
       $xml->loadXML("<div>".utf8_encode(CMbString::convertHTMLToXMLEntities($source))."</div>");
       $xpath = new DOMXpath($xml);
