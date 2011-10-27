@@ -177,6 +177,10 @@ class CFTP {
     
     $files = ftp_nlist($this->connexion, $folder);
     
+    if ($files === false) {
+      throw new CMbException("CSourceFTP-getlistfiles-failed", $this->hostname);
+    }
+    
     foreach ($files as &$_file) {
       $_file = str_replace("\\", "/", $_file);
     }

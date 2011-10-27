@@ -141,6 +141,7 @@ $locales['CSourceFTP-fileprefix'] = 'Préfix du fichier';
 $locales['CSourceFTP-fileprefix-court'] = 'Préfix du fichier';
 $locales['CSourceFTP-fileprefix-desc'] = 'Préfix du fichier source FTP';
 $locales['CSourceFTP-function-not-available'] = 'Fonction \'ftp_connect\' FTP non disponibles';
+$locales['CSourceFTP-getlistfiles-failed'] = 'Echec de récupération de la liste de fichiers';
 $locales['CSourceFTP-host'] = 'Serveur';
 $locales['CSourceFTP-host-court'] = 'Serveur';
 $locales['CSourceFTP-host-desc'] = 'Serveur de la source FTP';
