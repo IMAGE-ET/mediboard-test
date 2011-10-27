@@ -125,12 +125,12 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
         // Recherche du patient par son RI
         if ($newPatient->load($patientRI)) {
           // Mapping du patient
-          $newPatient = $this->mappingPatient($data, $newPatient);
+          $this->mappingPatient($data, $newPatient);
           
           // Notifier les autres destinataires autre que le sender
           $newPatient->_eai_initiateur_group_id = $sender->group_id;
           if ($msgPatient = $newPatient->store()) {
-            return $exchange_ihe->setAckAR($ack, "E100", $msgPatient, $newPatient);
+            return $exchange_ihe->setAckAR($ack, "E101", $msgPatient, $newPatient);
           }
                     
           $code_IPP      = "I021";
@@ -146,12 +146,12 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
       
       if (!$newPatient->_id) {
         // Mapping du patient
-        $newPatient = $this->mappingPatient($data, $newPatient);
+        $this->mappingPatient($data, $newPatient);
         
         // Patient retrouvé
         if ($newPatient->loadMatchingPatient()) {
           // Mapping du patient
-          $newPatient = $this->mappingPatient($data, $newPatient);
+          $this->mappingPatient($data, $newPatient);
                 
           $code_IPP      = "A021";
           $_modif_patient = true; 
@@ -160,12 +160,12 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
         // Notifier les autres destinataires autre que le sender
         $newPatient->_eai_initiateur_group_id = $sender->group_id;
         if ($msgPatient = $newPatient->store()) {
-          return $exchange_ihe->setAckAR($ack, "E100", $msgPatient, $newPatient);
+          return $exchange_ihe->setAckAR($ack, "E101", $msgPatient, $newPatient);
         }
       }
 
       if ($msgIPP = CEAIPatient::storeIPP($IPP, $newPatient)) {
-        return $exchange_ihe->setAckAR($ack, "E101", $msgIPP, $newPatient);
+        return $exchange_ihe->setAckAR($ack, "E102", $msgIPP, $newPatient);
       }
       
       $codes = array (($_modif_patient ? "I002" : "I001"), $code_IPP);
@@ -178,7 +178,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
       $newPatient->load($IPP->object_id);
       
       // Mapping du patient
-      $newPatient = $this->mappingPatient($data, $newPatient);
+      $this->mappingPatient($data, $newPatient);
                       
       // RI non fourni
       if (!$patientRI) {
@@ -202,7 +202,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
       // Notifier les autres destinataires autre que le sender
       $newPatient->_eai_initiateur_group_id = $sender->group_id;
       if ($msgPatient = $newPatient->store()) {
-        return $exchange_ihe->setAckAR($ack, "E100", $msgPatient, $newPatient);
+        return $exchange_ihe->setAckAR($ack, "E101", $msgPatient, $newPatient);
       }
             
       $codes = array ("I002", $code_IPP);
@@ -214,11 +214,8 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   }    
   
   function mappingPatient($data, CPatient $newPatient) {
-    mbLog($this->saveXML());
-    $mbPatient = $this->getPID($data["PID"], $newPatient);
+    $this->getPID($data["PID"], $newPatient);
     mbLog($newPatient);
-    
-    return $newPatient;
   }
   
   function getPID(DOMNode $node, CPatient $newPatient) {
@@ -244,9 +241,9 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
       // Prenom(s)
       $newPatient->prenom = $xpath->queryTextNode("XPN.2", $_PID5);
       $first_names = explode(",", $xpath->queryTextNode("XPN.3", $_PID5));
-      $newPatient->prenom_2 = isset($first_names[1]) ? $first_names[1] : null;
-      $newPatient->prenom_3 = isset($first_names[2]) ? $first_names[2] : null;
-      $newPatient->prenom_4 = isset($first_names[2]) ? $first_names[2] : null;
+      $newPatient->prenom_2 = CValue::read($first_names, 1);
+      $newPatient->prenom_3 = CValue::read($first_names, 2);
+      $newPatient->prenom_4 = CValue::read($first_names, 3);
       
       // Civilité
       $newPatient->civilite = $xpath->queryTextNode("XPN.5", $_PID5);
@@ -263,15 +260,35 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     $addresses = array();
     foreach ($PID11 as $_PID11) {
       $adress_type = $xpath->queryTextNode("XAD.7", $_PID11);
-      $addresses[$adress_type]["adresse"]    = "";
+      /* @todo Ajouter la gestion des multi-lignes - SAD.2 */
+      $addresses[$adress_type]["adresse"]    = $xpath->queryTextNode("XAD.1", $_PID11);
       $addresses[$adress_type]["ville"]      = $xpath->queryTextNode("XAD.3", $_PID11);
       $addresses[$adress_type]["cp"]         = $xpath->queryTextNode("XAD.5", $_PID11);
       $addresses[$adress_type]["pays_insee"] = $xpath->queryTextNode("XAD.6", $_PID11);
     }
-    
-    
-    
-    return $newPatient;
+    // Adresse  naissance
+    if (array_key_exists("BR", $addresses)) {
+      $newPatient->lieu_naissance       = CValue::read($addresses["BR"], "ville");
+      $newPatient->cp_naissance         = CValue::read($addresses["BR"], "cp");
+      $newPatient->pays_naissance_insee = CValue::read($addresses["BR"], "pays_insee");
+      
+      unset($addresses["BR"]);
+    }
+    // Adresse
+    if (array_key_exists("H", $addresses)) {
+      $this->getAdress($addresses["H"], $newPatient);
+    } else {
+      foreach ($addresses as $adress_type => $_address) {
+        $this->getAdress($_address, $newPatient);
+      }
+    }
+  }
+  
+  function getAdress($adress, CPatient $newPatient) {
+    $newPatient->adresse    = $adress["adresse"];
+    $newPatient->ville      = $adress["ville"];
+    $newPatient->cp         = $adress["cp"];
+    $newPatient->pays_insee = $adress["pays_insee"];
   }
 }
 

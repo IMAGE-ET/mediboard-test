@@ -50,7 +50,7 @@ class COperatorIHE extends CEAIOperator {
       }
     
       // Acquittement d'erreur d'un document XML recu non valide
-      if (!$evt->message->isOK(CHL7v2Error::E_ERROR)) {
+      if (!$evt->message->isOK(CHL7v2Error::E_ERROR)) {        
         $exchange_ihe->populateExchange($data_format, $evt);
         $exchange_ihe->loadRefsInteropActor();
         

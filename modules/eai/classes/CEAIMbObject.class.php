@@ -17,11 +17,11 @@
  */
 
 class CEAIMbObject {
-  static function getModifiedFields(CMbObject $mbOject) {
-    $mbOject->loadLogs();
+  static function getModifiedFields(CMbObject $object) {
+    $object->loadLogs();
     $modified_fields = "";
-    if ($mbOject->_ref_last_log && is_array($mbOject->_ref_last_log->_fields)) {
-      foreach ($mbOject->_ref_last_log->_fields as $field) {
+    if ($object->_ref_last_log && is_array($object->_ref_last_log->_fields)) {
+      foreach ($object->_ref_last_log->_fields as $field) {
         $modified_fields .= "$field \n";
       }
     } 

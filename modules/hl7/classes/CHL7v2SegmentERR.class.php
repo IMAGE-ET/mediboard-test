@@ -18,7 +18,15 @@
 
 class CHL7v2SegmentERR extends CHL7v2Segment {
   var $name           = "ERR";
+  
+  /**
+   * @var CHL7v2Acknowledgment
+   */
   var $acknowledgment = null;
+  
+  /**
+   * @var CHL7v2Error
+   */
   var $error          = null;
   
   function build(CHL7v2Event $event) {
@@ -55,7 +63,7 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
       $data[] = null; 
       
       // ERR-8: User Message (TX) (optional)
-      $data[] = null; 
+      $data[] = CAppUI::tr("CHL7v2Exception-$error->code") . "($error->data)";
       
       // ERR-9: Inform Person Indicator (IS) (optional repeating)
       $data[] = null; 
