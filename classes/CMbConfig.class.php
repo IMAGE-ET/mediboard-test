@@ -103,6 +103,9 @@ class CMbConfig {
     
     $items = explode(' ', $path);
     foreach ($items as $part) {
+      if (!isset($conf[$part])) {
+        return false;
+      }
       $conf = $conf[$part];
     }
     return $conf;
