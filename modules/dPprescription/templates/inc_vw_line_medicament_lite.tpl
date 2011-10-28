@@ -108,10 +108,9 @@
     </td>
 		{{if !$line->_protocole}}
 	    {{if $line->fin}}
-			  <td colspan="2" style="width: 25%" class="text">
-			    <button style="float: right;" class="edit notext" onclick="Prescription.reloadLine('{{$line->_guid}}','{{$line->_protocole}}','{{$mode_pharma}}','{{$operation_id}}', null, {{$advanced_prot}});"></button>
-          A partir de la fin du séjour jusqu'au {{mb_value object=$line field=fin}}
-				</td>
+          <td colspan="2" style="width: 25%" class="text">
+            A partir de la fin du séjour jusqu'au {{mb_value object=$line field=fin}}
+          </td>
 			{{else}}
 				<td style="width: 10%" class="text">
 	        <!-- Date de debut -->
