@@ -24,7 +24,8 @@ $rpu_id = CValue::post("rpu_id");
 $rpu = new CRPU();
 $rpu->load($rpu_id);
 
-$sejour = $rpu->loadRefSejour();;
+$sejour     = $rpu->loadRefSejour();;
+$sejour_rpu = $sejour;
 
 // Creation d'un séjour reliquat
 if (!CAppUI::conf("dPurgences create_sejour_hospit")) {
