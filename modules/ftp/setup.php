@@ -107,7 +107,13 @@ class CSetupftp extends CSetup {
               ADD `loggable` ENUM ('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.07";    
+    $this->makeRevision("0.07");
+    
+    $query = "ALTER TABLE `echange_ftp` 
+                ADD INDEX (`purge`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.08";    
   }
 }
 ?>

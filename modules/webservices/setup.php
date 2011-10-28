@@ -130,7 +130,13 @@ function __construct() {
               ADD `loggable` ENUM ('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.22";      
+    $this->makeRevision("0.22");
+    
+    $query = "ALTER TABLE `echange_soap` 
+                ADD INDEX (`purge`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.23";      
   }
 }
 ?>
