@@ -311,18 +311,18 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }
     
     $montant = $this->addElement($acteCCAM, "montant");
-    /*if ($mbActeCCAM->montant_depassement > 0) {
-      $montantDepassement = $this->addElement($montant, "montantDepassement", sprintf("%.2f", $mbActeCCAM->montant_depassement));
-      //if(CAppUI::conf("dPsalleOp CActeCCAM envoi_motif_depassement")) {
-      if($mbActeCCAM->motif_depassement) {
-        $this->addAttribute($montantDepassement, "motif", $mbActeCCAM->motif_depassement);
-      }
-    }*/
-    
     if ($mbActeCCAM->montant_depassement > 0) {
       $montantDepassement = $this->addElement($montant, "montantDepassement", sprintf("%.2f", $mbActeCCAM->montant_depassement));
-      if(CAppUI::conf("dPsalleOp CActeCCAM envoi_motif_depassement"))
-        $this->addAttribute($montantDepassement, "motif", "d");
+      if (CAppUI::conf("dPpmsi systeme_facturation") == "siemens") {
+        if (CAppUI::conf("dPsalleOp CActeCCAM envoi_motif_depassement")) {
+          $this->addAttribute($montantDepassement, "motif", "d");
+        }         
+      }
+      else {
+        if ($mbActeCCAM->motif_depassement) {
+          $this->addAttribute($montantDepassement, "motif", $mbActeCCAM->motif_depassement);
+        }
+      }
     }
     
     return $acteCCAM;
