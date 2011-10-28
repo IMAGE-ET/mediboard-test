@@ -71,7 +71,8 @@ class CPAM {
   static function getPAMEvent($code, $version) {
     foreach (CHL7::$versions as $_version => $_sub_versions) {      
       if (in_array($version, $_sub_versions)) {
-        return "CHL7{$_version}EventADT$code";
+        $classname = "CHL7{$_version}EventADT$code";
+        return new $classname;
       }
     }
   }
