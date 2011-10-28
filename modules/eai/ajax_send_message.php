@@ -26,17 +26,21 @@ $receiver = $exchange->_ref_receiver;
 
 $evenement = null;
 if ($receiver instanceof CReceiverIHE) {
-  if ($exchange->type = "PAM") {
-    $evenement = "evenementsPatient";
+  if ($exchange->type == "PAM") {
+    $evenement   = "evenementsPatient";
+    $data_format = CPAM::getPAMEvent($exchange->code, $exchange->version);
   }
 }
 
 if ($receiver instanceof CDestinataireHprim) {
-  if ($exchange->type = "patients") {
-    $evenement = "evenementPatient";
+  if ($exchange->type == "patients") {
+    $evenement   = "evenementPatient";
+    $data_format = CHPrimXMLEvenementsPatients::getHPrimXMLEvenements($exchange->_message);
   }
-  if ($exchange->type = "pmsi") {
-    
+  
+  if ($exchange->type == "pmsi") {
+    $data_format = new CHPrimXMLEvenementsServeurActivitePmsi();
+    CAppUI::stepAjax("L'envoi de cet événement n'est actuellement pas pris en charge", UI_MSG_ERROR);
   }
 }
 
@@ -49,11 +53,14 @@ if (!$source->_id) {
   CAppUI::stepAjax("Aucune source pour cet acteur", UI_MSG_ERROR);
 }
 
-$source->setData($exchange->_message);
+$source->setData(utf8_encode($exchange->_message));
 $source->send();
+
+//mbTrace(utf8_decode($source->getACQ()));
+
 if ($acq = $source->getACQ()) {
   if ($exchange instanceof CEchangeHprim) {
-    $dom_acq = CHPrimXMLAcquittements::getAcquittementEvenementXML($receiver->_data_format->_family_message);
+    $dom_acq = CHPrimXMLAcquittements::getAcquittementEvenementXML($data_format);
     $dom_acq->loadXML($acq);
     $doc_valid = $dom_acq->schemaValidate();
     if ($doc_valid) {
@@ -62,9 +69,18 @@ if ($acq = $source->getACQ()) {
     $exchange->acquittement_valide = $doc_valid ? 1 : 0;
     $exchange->_acquittement = $acq;
     $exchange->store();
-    
-    CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' a été retraité");
   }
+
+  if ($exchange instanceof CExchangeIHE) {
+    $ack = new CHL7v2Acknowledgment($data_format); 
+    $exchange->date_echange        = mbDateTime();   
+    $exchange->statut_acquittement = $ack->getStatutAcknowledgment();
+    $exchange->acquittement_valide = $ack->event_ack->message->isOK(CHL7v2Error::E_ERROR) ? 0 : 1;
+    $exchange->_acquittement       = $ack;
+    $exchange->store();
+  }
+  
+  CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' a été retraité");
 }
 
 ?>
