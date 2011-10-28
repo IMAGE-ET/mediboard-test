@@ -67,6 +67,14 @@ class CPAM {
       return "ITI31";
     }
   }
+  
+  static function getPAMEvent($code, $version) {
+    foreach (CHL7::$versions as $_version => $_sub_versions) {      
+      if (in_array($version, $_sub_versions)) {
+        return "CHL7{$_version}EventADT$code";
+      }
+    }
+  }
 }
 
 ?>
