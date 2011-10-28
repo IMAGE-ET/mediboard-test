@@ -625,7 +625,9 @@ class CSejour extends CCodable implements IPatientRelated {
       foreach ($consultations as $_consult) {
         if ($_consult->patient_id != $this->patient_id) {
           $_consult->patient_id = $this->patient_id;
-          $_consult->store();
+          if ($msg = $_consult->store()) {
+            CAppUI::setMsg($msg, UI_MSG_WARNING);
+          }
         }
       }
     }
