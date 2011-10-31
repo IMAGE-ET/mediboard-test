@@ -72,7 +72,7 @@ class CHL7v2SegmentPD1 extends CHL7v2Segment {
     // Table - 0136
     // Y - Oui - Accès protégé à l'information du patient
     // N - Non - Accès normal à l'information du patient
-    $data[] = ($patient->vip) ? "N" : "Y";
+    $data[] = ($patient->vip) ? "Y" : "N";
     
     // PD1-13: Protection Indicator Effective Date (DT) (optional)
     $data[] = null;

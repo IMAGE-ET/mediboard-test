@@ -59,9 +59,15 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     
     $data["PD1"] = $PD1 = $xpath->queryUniqueNode("//PD1");
     
-    $data["NK1"] = $NK1 = $xpath->query("//NK1");
+    $NK1 = $xpath->query("//NK1");
+    foreach ($NK1 as $_NK1) {
+      $data["NK1"][] = $_NK1;
+    }
     
-    $data["ROL"] = $NK1 = $xpath->query("//ROL");
+    $ROL = $xpath->query("//ROL");
+    foreach ($ROL as $_ROL) {
+      $data["ROL"][] = $_ROL;
+    }
     
     return $data;
   }
@@ -214,8 +220,27 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   }    
   
   function mappingPatient($data, CPatient $newPatient) {
+    // Segment PID
     $this->getPID($data["PID"], $newPatient);
-    //mbLog($newPatient);
+    
+    // Segment PD1
+    $this->getPD1($data["PD1"], $newPatient);
+    
+    // Correspondances
+    // Possible ssi le patient est déjà enregistré
+    if ($newPatient->_id) {
+      foreach ($data["NK1"] as $_NK1) {
+        $this->getNK1($_NK1, $newPatient);
+      }
+    }
+    
+    // Correspondants médicaux
+    if ($newPatient->_id) {
+      foreach ($data["ROL"] as $_ROL) {
+        $this->getROL($_ROL, $newPatient);
+      }
+    }
+    mbLog($newPatient);
   }
   
   function getPID(DOMNode $node, CPatient $newPatient) {
@@ -224,26 +249,10 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     $PID5 = $xpath->query("PID.5", $node);
     foreach ($PID5 as $_PID5) {
       // Nom(s)
-      if ($xpath->queryTextNode("XPN.7", $_PID5) == "D") {
-        $newPatient->nom = $xpath->queryTextNode("XPN.1/FN.1", $_PID5);
-      }
-      if ($xpath->queryTextNode("XPN.7", $_PID5) == "L") {
-        // Dans le cas où l'on a pas de nom de nom de naissance le legal name
-        // est le nom du patient
-        if ($PID5->length > 1) {
-          $newPatient->nom_jeune_fille = $xpath->queryTextNode("XPN.1/FN.1", $_PID5);
-        } 
-        else {
-          $newPatient->nom = $xpath->queryTextNode("XPN.1/FN.1", $_PID5);
-        }
-      }
+      $this->getNames($_PID5, $newPatient, $PID5);
       
       // Prenom(s)
-      $newPatient->prenom = $xpath->queryTextNode("XPN.2", $_PID5);
-      $first_names = explode(",", $xpath->queryTextNode("XPN.3", $_PID5));
-      $newPatient->prenom_2 = CValue::read($first_names, 1);
-      $newPatient->prenom_3 = CValue::read($first_names, 2);
-      $newPatient->prenom_4 = CValue::read($first_names, 3);
+      $this->getFirstNames($_PID5, $newPatient);
       
       // Civilité
       $newPatient->civilite = $xpath->queryTextNode("XPN.5", $_PID5);
@@ -256,6 +265,46 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     $newPatient->sexe = CHL7v2TableEntry::mapFrom("1", $xpath->queryTextNode("PID.8", $node));
     
     // Adresse(s)
+    $this->getAdresses($node, $newPatient);
+    
+    // Téléphones
+    $this->getPhones($node, $newPatient);
+    
+    //NSS
+    $newPatient->matricule = $xpath->queryTextNode("PID.19", $node);
+  }
+  
+  function getNames(DOMNode $node, CPatient $newPatient, DOMNodeList $PID5) {
+    $xpath = new CHL7v2MessageXPath($this);
+    
+    if ($xpath->queryTextNode("XPN.7", $node) == "D") {
+      $newPatient->nom = $xpath->queryTextNode("XPN.1/FN.1", $node);
+    }
+    if ($xpath->queryTextNode("XPN.7", $node) == "L") {
+      // Dans le cas où l'on a pas de nom de nom de naissance le legal name
+      // est le nom du patient
+      if ($PID5->length > 1) {
+        $newPatient->nom_jeune_fille = $xpath->queryTextNode("XPN.1/FN.1", $node);
+      } 
+      else {
+        $newPatient->nom = $xpath->queryTextNode("XPN.1/FN.1", $node);
+      }
+    }
+  }
+  
+  function getFirstNames(DOMNode $node, CPatient $newPatient) {
+    $xpath = new CHL7v2MessageXPath($this);
+    
+    $newPatient->prenom = $xpath->queryTextNode("XPN.2", $node);
+    $first_names = explode(",", $xpath->queryTextNode("XPN.3", $node));
+    $newPatient->prenom_2 = CValue::read($first_names, 1);
+    $newPatient->prenom_3 = CValue::read($first_names, 2);
+    $newPatient->prenom_4 = CValue::read($first_names, 3);
+  }
+  
+  function getAdresses(DOMNode $node, CPatient $newPatient) {
+    $xpath = new CHL7v2MessageXPath($this);
+    
     $PID11 = $xpath->query("PID.11", $node);
     $addresses = array();
     foreach ($PID11 as $_PID11) {
@@ -282,16 +331,55 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
         $this->getAdress($_address, $newPatient);
       }
     }
-    
-    // Téléphones
-    
   }
   
   function getAdress($adress, CPatient $newPatient) {
+    $xpath = new CHL7v2MessageXPath($this);
+    
     $newPatient->adresse    = $adress["adresse"];
     $newPatient->ville      = $adress["ville"];
     $newPatient->cp         = $adress["cp"];
     $newPatient->pays_insee = $adress["pays_insee"];
+  }
+  
+  function getPhones(DOMNode $node, CPatient $newPatient) {
+    $xpath = new CHL7v2MessageXPath($this);
+
+    $PID13 = $xpath->query("PID.13", $node);
+    $phones = array();
+    foreach ($PID13 as $_PID13) {
+      $tel_number = $xpath->queryTextNode("XTN.1", $_PID13);
+      switch ($xpath->queryTextNode("XTN.2", $_PID13)) {
+        case "PRN" :
+          $newPatient->tel  = $tel_number;
+          break;
+        case "ORN" :
+          $newPatient->tel2 = $tel_number;
+          break;
+        default :
+          $newPatient->tel_autre = $tel_number;
+          break;
+      }
+    }
+  }
+  
+  function getPD1(DOMNode $node, CPatient $newPatient) {
+    $xpath = new CHL7v2MessageXPath($this);
+    
+    // VIP ?
+    $newPatient->vip = ($xpath->queryTextNode("PD1.12", $node) == "Y") ? 1 : 0; 
+  }
+  
+  function getNK1(DOMNode $node, CPatient $newPatient) {
+    $xpath = new CHL7v2MessageXPath($this);
+    
+    /* @todo voir quand on aura les tables de correspondances */
+  }
+  
+  function getROL(DOMNode $node, CPatient $newPatient) {
+    $xpath = new CHL7v2MessageXPath($this);
+    
+    
   }
 }
 
