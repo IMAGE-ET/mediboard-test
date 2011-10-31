@@ -1431,6 +1431,15 @@ class CPatient extends CMbObject {
     }
   }
   
+  function getTemplateClasses(){
+    $tab = array();
+    $tab['CPatient'] = $this->_id;
+    $tab['CSejour'] = 0;
+    $tab['COperation'] = 0;
+    
+    return $tab;
+  }
+  
   function fillLimitedTemplate(&$template) {
     CDestinataire::makeAllFor($this);
     

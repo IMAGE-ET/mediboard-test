@@ -34,14 +34,12 @@ $modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where, null, nu
 
 unset($where["user_id"]);
 
-$where["object_class"] = "= '$object_class'";
 $where["type"] = "= 'body'";
 $where["function_id"] = " IN ('$user->function_id', '".CAppUI::$user->function_id."')";
 $modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where, null, null, null, $order));
 
 unset($where["function_id"]);
 
-$where["object_class"] = "= '$object_class'";
 $where["type"] = "= 'body'";
 $where["group_id"] = " = '$user->_group_id'";
 $modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where, null, null, null, $order));
