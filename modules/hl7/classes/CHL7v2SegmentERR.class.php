@@ -43,19 +43,35 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
     if ($error) {
       // ERR-2: Error Location (ERL) (optional repeating)
       $data[] = $error->getLocation();
+      
       // ERR-3: HL7 Error Code (CWE) 
       $data[] = $error->getHL7Code();
-      // ERR-4: Severity (ID) 
-      // Table - 0516
-      // W - Warning - Transaction successful, but there may issues 
-      // I - Information - Transaction was successful but includes information e.g., inform patient
-      // E - Error - Transaction was unsuccessful 
-      $data[] = ($error->level == CHL7v2Error::E_ERROR) ? "E" : "W";
-      // ERR-5: Application Error Code (CWE) (optional)
-      $data[] = array(
-        "E002",
-        CAppUI::tr("CHL7EventADT-$acknowledgment->ack_code-E002")
-      );
+      
+      if ($error->level == CHL7v2Error::E_ERROR) {
+        // ERR-4: Severity (ID) 
+        // Table - 0516
+        // W - Warning - Transaction successful, but there may issues 
+        // I - Information - Transaction was successful but includes information e.g., inform patient
+        // E - Error - Transaction was unsuccessful 
+         $data[] = "E";
+         // ERR-5: Application Error Code (CWE) (optional)
+         $data[] = array(
+           array (
+             "E002",
+             CAppUI::tr("CHL7EventADT-AE-E002")
+           )
+         );
+      }
+      else {
+        $data[] = "W";
+        $data[] = array(
+           array (
+             "A002",
+             CAppUI::tr("CHL7EventADT-AA-A002")
+           )
+       );
+      }
+      
       // ERR-6: Application Error Parameter (ST) (optional repeating)
       $data[] = null; 
       
@@ -85,8 +101,10 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
       $data[] = $acknowledgment->severity;
       // ERR-5 
       $data[] = array(
-        $acknowledgment->_mb_error_code,
-        CAppUI::tr("CHL7EventADT-$acknowledgment->ack_code-$acknowledgment->_mb_error_code")
+          array (
+            $acknowledgment->_mb_error_code,
+            CAppUI::tr("CHL7EventADT-$acknowledgment->ack_code-$acknowledgment->_mb_error_code")
+          )
       );
       // ERR-6
       $data[] = null;

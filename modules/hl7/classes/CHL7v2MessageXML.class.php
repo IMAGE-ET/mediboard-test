@@ -133,15 +133,15 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
             return $exchange_ihe->setAckAR($ack, "E101", $msgPatient, $newPatient);
           }
                     
-          $code_IPP      = "I021";
+          $code_IPP      = "I121";
           $_modif_patient = true; 
         } 
         // Patient non retrouvé par son RI
         else {
-          $code_IPP = "I020";
+          $code_IPP = "I120";
         }
       } else {
-        $code_IPP = "I022";
+        $code_IPP = "I122";
       }      
       
       if (!$newPatient->_id) {
@@ -153,7 +153,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
           // Mapping du patient
           $this->mappingPatient($data, $newPatient);
                 
-          $code_IPP      = "A021";
+          $code_IPP      = "A121";
           $_modif_patient = true; 
         }
         
@@ -168,7 +168,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
         return $exchange_ihe->setAckAR($ack, "E102", $msgIPP, $newPatient);
       }
       
-      $codes = array (($_modif_patient ? "I002" : "I001"), $code_IPP);
+      $codes = array (($_modif_patient ? "I102" : "I101"), $code_IPP);
       
       $comment  = CEAIPatient::getComment($newPatient);
       $comment .= CEAIPatient::getComment($IPP);
@@ -182,7 +182,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
                       
       // RI non fourni
       if (!$patientRI) {
-        $code_IPP = "I023"; 
+        $code_IPP = "I123"; 
       } else {
         $tmpPatient = new CPatient();
         // RI connu
@@ -191,11 +191,11 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
             $comment = "L'identifiant source fait référence au patient : $IPP->object_id et l'identifiant cible au patient : $tmpPatient->_id.";
             return $exchange_ihe->setAckAR($ack, "E100", $comment, $newPatient);
           }
-          $code_IPP = "I024"; 
+          $code_IPP = "I124"; 
         }
         // RI non connu
         else {
-          $code_IPP = "A020";
+          $code_IPP = "A120";
         }
       }
       
@@ -205,7 +205,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
         return $exchange_ihe->setAckAR($ack, "E101", $msgPatient, $newPatient);
       }
             
-      $codes = array ("I002", $code_IPP);
+      $codes = array ("I102", $code_IPP);
       
       $comment = CEAIPatient::getComment($newPatient);
     }
@@ -282,6 +282,9 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
         $this->getAdress($_address, $newPatient);
       }
     }
+    
+    // Téléphones
+    
   }
   
   function getAdress($adress, CPatient $newPatient) {

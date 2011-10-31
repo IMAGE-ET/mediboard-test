@@ -142,13 +142,13 @@ class CExchangeIHE extends CExchangeTabular {
   }
   
   function setAckAA(CHL7Acknowledgment $ack, $mb_error_codes, $comments = null, CMbObject $mbObject = null) {
-    $ack->generateAcknowledgment("AA", $mb_error_codes, null, "I", $comments, $mbObject);
+    $ack->generateAcknowledgment("AA", $mb_error_codes, "0", "I", $comments, $mbObject);
         
     return $this->populateExchangeACK($ack, $mbObject);
   }
   
   function setAckAR(CHL7Acknowledgment $ack, $mb_error_codes, $comments = null, CMbObject $mbObject = null) {
-    $ack->generateAcknowledgment("AR", $mb_error_codes, null, "E", $comments, $mbObject);
+    $ack->generateAcknowledgment("AR", $mb_error_codes, "207", "E", $comments, $mbObject);
     
     return $this->populateExchangeACK($ack, $mbObject);               
   }
