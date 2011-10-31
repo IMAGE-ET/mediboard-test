@@ -215,7 +215,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   
   function mappingPatient($data, CPatient $newPatient) {
     $this->getPID($data["PID"], $newPatient);
-    mbLog($newPatient);
+    //mbLog($newPatient);
   }
   
   function getPID(DOMNode $node, CPatient $newPatient) {

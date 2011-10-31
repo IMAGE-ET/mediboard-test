@@ -56,7 +56,7 @@ class COperatorIHE extends CEAIOperator {
         $exchange_ihe->loadRefsInteropActor();
         
         $ack->_ref_exchange_ihe = $exchange_ihe;
-        $msgAck = $ack->generateAcknowledgment("AR", "E002");
+        $msgAck = $ack->generateAcknowledgment("AR", "E002", "207");
 
         $exchange_ihe->populateErrorExchange($msgAck);
 
@@ -92,7 +92,7 @@ class COperatorIHE extends CEAIOperator {
       $ack->message_control_id = isset($data['identifiantMessage']) ? $data['identifiantMessage'] : "000000000";
       $ack->_ref_exchange_ihe = $exchange_ihe;
 
-      $msgAck = $ack->generateAcknowledgment("AR", "E003", null, "E", $e->getMessage());
+      $msgAck = $ack->generateAcknowledgment("AR", "E003", "207", "E", $e->getMessage());
       
       $exchange_ihe->populateErrorExchange($msgAck);
       

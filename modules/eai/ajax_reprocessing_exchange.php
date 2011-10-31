@@ -42,10 +42,10 @@ if ($exchange instanceof CEchangeHprim) {
 
 if ($exchange instanceof CExchangeIHE) {
   $ack = new CHL7v2Acknowledgment($sender->_data_format->_family_message);
-  $ack_message = $ack->validate($ack_data);
+  $ack->handle($ack_data);
   $exchange->date_echange        = mbDateTime(); 
   $exchange->statut_acquittement = $ack->getStatutAcknowledgment(); 
-  $exchange->acquittement_valide = $ack_message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
+  $exchange->acquittement_valide = $ack->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
   $exchange->_acquittement       = $ack_data;
   $exchange->store();
   

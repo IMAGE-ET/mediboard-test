@@ -114,7 +114,7 @@
              }}warning{{/if}} narrow">
     {{mb_value object=$object field="statut_acquittement"}}
   </td>
-  <td class="narrow {{if !$object->_observations}}error{{/if}}">
+  <td class="narrow {{if !$object->_observations}}warning{{/if}}">
     {{foreach from=$object->_observations item=_observation}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}');">
          {{$_observation.code}}
