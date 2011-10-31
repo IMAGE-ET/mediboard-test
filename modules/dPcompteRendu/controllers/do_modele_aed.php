@@ -12,7 +12,7 @@ if( isset($_POST["_do_empty_pdf"])) {
   $compte_rendu = new CCompteRendu();
   $compte_rendu->load($compte_rendu_id);
 
-	$compte_rendu->loadRefsFiles();
+  $compte_rendu->loadRefsFiles();
   foreach($compte_rendu->_ref_files as $_file) {
     $_file->file_empty();
   }
@@ -24,34 +24,38 @@ $do->redirectDelete = "m=dPcompteRendu&new=1";
 
 // Récupération des marges du modele en fast mode
 if (isset($_POST["fast_edit"]) && $_POST["fast_edit"] == 1 && isset($_POST["object_id"]) && $_POST["object_id"] != '') {
-	$compte_rendu = new CCompteRendu;
-	$compte_rendu->load($_POST["modele_id"]);
-	
-	if ($compte_rendu->_id) {
+  $compte_rendu = new CCompteRendu;
+  $compte_rendu->load($_POST["modele_id"]);
+  
+  if ($compte_rendu->_id) {
     $do->request["margin_top"]    = $compte_rendu->margin_top;
     $do->request["margin_bottom"] = $compte_rendu->margin_bottom;
     $do->request["margin_left"]   = $compte_rendu->margin_left;
     $do->request["margin_right"]  = $compte_rendu->margin_right;
-	}
+  }
 }
 
 if (isset($_POST["_source"])) {
   $_POST["_source"] = stripslashes($_POST["_source"]);
 }
 
+$check_to_empty_field = CAppUI::conf("dPcompteRendu CCompteRendu check_to_empty_field");
+
 // Remplacement des zones de texte libre
 if (isset($_POST["_texte_libre"])) {
   $compte_rendu = new CCompteRendu();
-	$fields = array();
-	$values = array();
+  $fields = array();
+  $values = array();
 
-	// Remplacement des \n par des <br>
-	foreach($_POST["_texte_libre"] as $key=>$_texte_libre) {
-	  if (!isset($_POST["_empty_texte_libre"][$key]) || $_POST["_texte_libre"][$key] != '') {
-	    $fields[] = "[[Texte libre - " . $_POST["_texte_libre_md5"][$key] . "]]";
-	    $values[] = nl2br($_POST["_texte_libre"][$key]);
-	  }
-	}
+  // Remplacement des \n par des <br>
+  foreach($_POST["_texte_libre"] as $key=>$_texte_libre) {
+    if (($check_to_empty_field && isset($_POST["_empty_texte_libre"][$key])) ||
+        (!$check_to_empty_field && !isset($_POST["_empty_texte_libre"][$key])) ||
+        $_POST["_texte_libre"][$key] != '') {
+      $fields[] = "[[Texte libre - " . $_POST["_texte_libre_md5"][$key] . "]]";
+      $values[] = nl2br($_POST["_texte_libre"][$key]);
+    }
+  }
   $_POST["_source"] = str_ireplace($fields, $values, $_POST["_source"]);
   $_POST["_texte_libre"] = null;
 }
@@ -75,21 +79,23 @@ if (isset($_POST["_source"])) {
     $listes = $_POST["_CListeChoix"];
     foreach ($listes as $list_id => $options) {
       $options = array_map('htmlentities', $options);
-	    $list = new CListeChoix;
-	    $list->load($list_id);
-      if (!isset($_POST["_empty_list"][$list_id])) {
+      $list = new CListeChoix;
+      $list->load($list_id);
+      
+      if (($check_to_empty_field && isset($_POST["_empty_list"][$list_id])) ||
+          (!$check_to_empty_field && !isset($_POST["_empty_list"][$list_id]))) {
         $values[] = "";
       }
-	    else {
-  	    if ($options === array(0 => "undef")) {
+      else {
+        if ($options === array(0 => "undef")) {
           continue;
         }
-	      CMbArray::removeValue("undef", $options);
-	      $values[] = nl2br(implode(", ", $options));
-	    }
-	    $nom = str_replace("#039;", "#39;", htmlentities($list->nom, ENT_QUOTES));
-	    $fields[] = "[Liste - ".$nom."]";
-	  }
+        CMbArray::removeValue("undef", $options);
+        $values[] = nl2br(implode(", ", $options));
+      }
+      $nom = str_replace("#039;", "#39;", htmlentities($list->nom, ENT_QUOTES));
+      $fields[] = "[Liste - ".$nom."]";
+    }
   }
   
   $_POST["_source"] = str_ireplace($fields, $values, $_POST["_source"]);

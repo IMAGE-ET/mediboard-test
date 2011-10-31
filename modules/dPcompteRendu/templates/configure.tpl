@@ -56,6 +56,10 @@
     {{mb_include module=system template=inc_config_bool}}
   </tr>
   <tr>
+    {{assign var="var" value="check_to_empty_field"}}
+    {{mb_include module=system template=inc_config_bool}}
+  </tr>
+  <tr>
     {{assign var="var" value="choice_factory"}}
     {{mb_include module=system template=inc_config_enum values="CDomPDFConverter|CWkHtmlToPDFConverter"}}
   </tr>

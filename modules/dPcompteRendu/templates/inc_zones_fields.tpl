@@ -1,4 +1,5 @@
 {{assign var=mode_play value=$app->user_prefs.mode_play}}
+{{assign var=check_to_empty_field value=$conf.dPcompteRendu.CCompteRendu.check_to_empty_field}}
 
 <table>
   {{if $destinataires|@count}}
@@ -24,7 +25,8 @@
         <div class="listeChoixCR">
           {{foreach from=$lists item=curr_list}}
             <select name="_{{$curr_list->_class}}[{{$curr_list->_id}}][]" data-nom="{{$curr_list->nom}}"
-            {{if $mode_play}}size="4" multiple="true"{{/if}} onchange="this.form.elements['_empty_list[{{$curr_list->_id}}]'].checked='checked'">
+            {{if $mode_play}}size="4" multiple="true"{{/if}}
+            {{if !$check_to_empty_field}}onchange="this.form.elements['_empty_list[{{$curr_list->_id}}]'].checked='checked'"{{/if}}>
               <option value="undef">&mdash; {{$curr_list->nom}}</option>
               {{foreach from=$curr_list->_valeurs item=curr_valeur}}
                 <option value="{{$curr_valeur}}" title="{{$curr_valeur}}">{{$curr_valeur|truncate}}</option>
@@ -47,7 +49,7 @@
             <input type="checkbox" name="_empty_texte_libre[{{$_nom|md5}}]" title="{{tr}}CListeChoix.fill{{/tr}}" class="empty_field"/>
           {{/if}}
           <textarea class="freetext" name="_texte_libre[{{$_nom|md5}}]" id="editFrm__texte_libre[{{$_nom|md5}}]"
-          {{if !$mode_play}}
+          {{if !$mode_play && !$check_to_empty_field}}
             onkeydown="this.form.elements['_empty_texte_libre[{{$_nom|md5}}]'].checked='checked'; this.onkeydown=''"
           {{/if}}></textarea>
           <input type="hidden" name="_texte_libre_md5[{{$_nom|md5}}]" value="{{$_nom}}"/>

@@ -18,6 +18,7 @@ $dPconfig["dPcompteRendu"] = array (
     "header_footer_fly" => "0",
     "clean_word" => "1",
     "choice_factory" => "CDomPDFConverter",
-    "arch_wkhtmltopdf" => "i386"
+    "arch_wkhtmltopdf" => "i386",
+    "check_to_empty_field" => "1" 
   ),
 );
