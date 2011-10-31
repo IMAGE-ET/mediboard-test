@@ -94,6 +94,17 @@ class CExchangeIHE extends CExchangeTabular {
     }
   }
   
+  function getACK() {
+    if ($this->_acquittement !== null) {
+      $hl7_ack = new CHL7v2Message();
+      $hl7_ack->parse($this->_acquittement);
+      $this->_doc_errors_ack   = !$hl7_ack->isOK(CHL7v2Error::E_ERROR);
+      $this->_doc_warnings_ack = !$hl7_ack->isOK(CHL7v2Error::E_WARNING);
+
+      return $hl7_ack;
+    }
+  }
+ 
   function populateExchange(CExchangeDataFormat $data_format, CHL7Event $event) {
     $this->date_production = mbDateTime();
     $this->group_id        = $data_format->group_id;

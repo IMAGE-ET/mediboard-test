@@ -56,6 +56,7 @@ class CExchangeDataFormat extends CMbMetaObject {
   var $_family_message           = null;
   var $_configs_format           = null;
   var $_delayed                  = null;
+  var $_exchange_ihe             = null;
   
   // Forward references
   var $_ref_group      = null;

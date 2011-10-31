@@ -179,8 +179,8 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     else {
       $type = implode("", $message_type);
     }
-    $this->name        = preg_replace("/[^A-Z0-9]/", "", $type);
-    $this->event_name  = $message_type[0].$message_type[1];
+    $this->name        = ($message_type[0] == "ACK") ? $message_type[0] : preg_replace("/[^A-Z0-9]/", "", $type);
+    $this->event_name  = ($message_type[0] == "ACK") ? $message_type[0] : $message_type[0].$message_type[1];
     $this->description = (string)$this->getSpecs()->description;
        
     $this->readHeader();

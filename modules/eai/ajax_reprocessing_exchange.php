@@ -18,27 +18,35 @@ $exchange_guid = CValue::get("exchange_guid");
 $object = new CMbObject();
 $exchange = $object->loadFromGuid($exchange_guid);
 
-/* @todo Penser à ajouter les prochains formats */
-if (!$exchange instanceof CEchangeHprim) {
-  CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' ne peut retraité car il n'est pas pris en charge", UI_MSG_ERROR);
-}
-
 $sender = new $exchange->sender_class;
 $sender->load($exchange->sender_id);
 
-if (!$acq = CEAIDispatcher::dispatch($exchange->_message, $sender)) {
+if (!$ack_data = CEAIDispatcher::dispatch($exchange->_message, $sender, $exchange->_id)) {
   CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' ne peut retraité", UI_MSG_ERROR);
 }
 
 if ($exchange instanceof CEchangeHprim) {
-  $dom_acq = CHPrimXMLAcquittements::getAcquittementEvenementXML($sender->_data_format->_family_message);
-  $dom_acq->loadXML($acq);
-  $doc_valid = $dom_acq->schemaValidate();
+  $ack = CHPrimXMLAcquittements::getAcquittementEvenementXML($sender->_data_format->_family_message);
+  $ack->loadXML($ack_data);
+  $doc_valid = $ack->schemaValidate();
   if ($doc_valid) {
-    $exchange->statut_acquittement = $dom_acq->getStatutAcquittement();
+    $exchange->statut_acquittement = $ack->getStatutAcquittement();
   }
+  $exchange->date_echange        = mbDateTime();
   $exchange->acquittement_valide = $doc_valid ? 1 : 0;
-  $exchange->_acquittement = $acq;
+  $exchange->_acquittement = $ack_data;
+  $exchange->store();
+  
+  CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' a été retraité");
+}
+
+if ($exchange instanceof CExchangeIHE) {
+  $ack = new CHL7v2Acknowledgment($sender->_data_format->_family_message);
+  $ack_message = $ack->validate($ack_data);
+  $exchange->date_echange        = mbDateTime(); 
+  $exchange->statut_acquittement = $ack->getStatutAcknowledgment(); 
+  $exchange->acquittement_valide = $ack_message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
+  $exchange->_acquittement       = $ack_data;
   $exchange->store();
   
   CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' a été retraité");

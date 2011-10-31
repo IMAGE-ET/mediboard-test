@@ -72,11 +72,12 @@ if ($acq = $source->getACQ()) {
   }
 
   if ($exchange instanceof CExchangeIHE) {
-    $ack = new CHL7v2Acknowledgment($data_format); 
+    $ack = new CHL7v2Acknowledgment($data_format);
+    $ack_message = $ack->validate($ack_data);
     $exchange->date_echange        = mbDateTime();   
     $exchange->statut_acquittement = $ack->getStatutAcknowledgment();
-    $exchange->acquittement_valide = $ack->event_ack->message->isOK(CHL7v2Error::E_ERROR) ? 0 : 1;
-    $exchange->_acquittement       = $ack;
+    $exchange->acquittement_valide = $ack_message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
+    $exchange->_acquittement       = $ack_data;
     $exchange->store();
   }
   

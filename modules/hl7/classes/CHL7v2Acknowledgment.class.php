@@ -27,11 +27,18 @@ class CHL7v2Acknowledgment implements CHL7Acknowledgment {
   var $comments       = null;
   var $object         = null;
 
-  var $_ref_exchange_ihe  = null;
-  var $_mb_error_code     = null;
+  var $_ref_exchange_ihe = null;
+  var $_mb_error_code    = null;
   
   function __construct(CHL7Event $event = null) {
     $this->event = $event;
+  }
+  
+  function validate($ack) {
+    $ack_message = new CHL7v2Message();
+    $ack_message->parse($ack);
+     
+    return $ack_message;
   }
   
   function generateAcknowledgment($ack_code, $mb_error_codes, $hl7_error_code = null, $severity = "E", $comments = null, $object = null) {

@@ -26,7 +26,8 @@ class COperatorIHE extends CEAIOperator {
     try {
       // Création de l'échange
       $exchange_ihe = new CExchangeIHE();
-
+      $exchange_ihe->load($data_format->_exchange_id);
+      
       // Récupération des données du segment MSH
       $data = $dom_evt->getMSHEvenementXML();
 

@@ -30,7 +30,8 @@ $smarty = new CSmartyDP();
 $smarty->assign("exchange", $exchange);
 
 if ($exchange instanceof CExchangeTabular) {
-  $smarty->assign("segment_group", $exchange->getMessage());
+  $smarty->assign("msg_segment_group", $exchange->getMessage());
+  $smarty->assign("ack_segment_group", $exchange->getACK());
   $smarty->display("inc_exchange_tabular_details.tpl");
 } 
 elseif ($exchange instanceof CEchangeXML) {

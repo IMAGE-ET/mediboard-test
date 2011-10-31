@@ -18,7 +18,10 @@ $extension = ".txt";
 if ($exchange_object instanceof CEchangeXML) {
   $extension = ".xml";    
 }
-  
+if ($exchange_object instanceof CExchangeIHE) {
+  $extension = ".ER7";    
+}
+
 if (CValue::get("message") == 1) {
   $exchange = utf8_decode($exchange_object->_message);
   header("Content-Disposition: attachment; filename=msg-{$exchange_object->sous_type}-{$exchange_object->_id}{$extension}");
