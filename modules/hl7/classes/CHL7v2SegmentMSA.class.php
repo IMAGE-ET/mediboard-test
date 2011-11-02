@@ -18,6 +18,10 @@
 
 class CHL7v2SegmentMSA extends CHL7v2Segment {
   var $name           = "MSA";
+  
+  /**
+   * @var CHL7v2Acknowledgment
+   */
   var $acknowledgment = null;
   
   function build(CHL7v2Event $event) {

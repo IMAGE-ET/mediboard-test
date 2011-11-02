@@ -18,6 +18,10 @@
 
 class CHL7v2SegmentIN1 extends CHL7v2Segment {
   var $name    = "IN1";
+  
+  /**
+   * @var CPatient
+   */
   var $patient = null;
   
   function build(CHL7v2Event $event) {

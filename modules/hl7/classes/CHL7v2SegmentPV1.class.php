@@ -18,8 +18,12 @@
 
 class CHL7v2SegmentPV1 extends CHL7v2Segment {
   var $name   = "PV1";
-  var $sejour = null;
   var $set_id = null;
+  
+  /**
+   * @var CSejour
+   */
+  var $sejour = null;
   
   function build(CHL7v2Event $event) {
     parent::build($event);

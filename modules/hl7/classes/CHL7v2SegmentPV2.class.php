@@ -18,6 +18,10 @@
 
 class CHL7v2SegmentPV2 extends CHL7v2Segment {
   var $name   = "PV2";
+  
+  /**
+   * @var CSejour
+   */
   var $sejour = null;
     
   function build(CHL7v2Event $event) {

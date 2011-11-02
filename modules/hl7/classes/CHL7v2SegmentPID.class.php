@@ -18,9 +18,17 @@
 
 class CHL7v2SegmentPID extends CHL7v2Segment {
   var $name    = "PID";
-  var $patient = null;
-  var $sejour  = null;
   var $set_id  = null;
+  
+  /**
+   * @var CPatient
+   */
+  var $patient = null;
+  
+  /**
+   * @var CSejour
+   */
+  var $sejour  = null;
   
   function build(CHL7v2Event $event) {
     parent::build($event);

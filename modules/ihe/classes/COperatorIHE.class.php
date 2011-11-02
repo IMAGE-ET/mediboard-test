@@ -113,6 +113,12 @@ class COperatorIHE extends CEAIOperator {
         $exchange_ihe->id_permanent = array_key_exists("PI", $data['patientIdentifiers']) ? $data['patientIdentifiers']['PI'] : null;
         $msgAck                     = $dom_evt->recordPerson($ack, $newPatient, $data);
         break;
+      // Fusion de deux patients
+      case "CHL7v2EventADTA40" : 
+        $data                       = array_merge($data, $dom_evt->getContentsXML());
+        $exchange_ihe->id_permanent = array_key_exists("PI", $data['patientIdentifiers']) ? $data['patientIdentifiers']['PI'] : null;
+        $msgAck                     = $dom_evt->mergePersons($ack, $newPatient, $data);
+        break;
       // Aucun des événements - retour d'erreur
       default :
         $msgAck = $ack->generateAcknowledgment("AR", "E004", "200");

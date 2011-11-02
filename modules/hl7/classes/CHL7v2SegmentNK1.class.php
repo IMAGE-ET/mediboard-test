@@ -19,12 +19,15 @@
 class CHL7v2SegmentNK1 extends CHL7v2Segment {
   var $name          = "NK1";
   var $set_id        = null;
+  
+  /**
+   * @var CCorrespondantPatient
+   */
   var $correspondant = null;
   
   function build(CHL7v2Event $event) {
     parent::build($event);
     
-    $correspondant = new CCorrespondantPatient();
     $correspondant = $this->correspondant;
     
     // NK1-1: Set ID - NK1 (SI)

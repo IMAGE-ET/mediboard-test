@@ -18,9 +18,13 @@
 
 class CHL7v2SegmentROL extends CHL7v2Segment {
   var $name = "ROL";
-  var $medecin = null;
   var $action  = "UC";
   var $role_id = null;
+  
+  /**
+   * @var CMedecin
+   */
+  var $medecin = null;
   
   function build(CHL7v2Event $event) {
     parent::build($event);

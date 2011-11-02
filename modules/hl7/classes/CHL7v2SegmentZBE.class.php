@@ -18,7 +18,15 @@
 
 class CHL7v2SegmentZBE extends CHL7v2Segment {
   var $name        = "ZBE";
+  
+  /**
+   * @var CSejour
+   */
   var $sejour      = null;
+  
+  /**
+   * @var CAffectation
+   */
   var $affectation = null;
   
   function build(CHL7v2Event $event) {
