@@ -124,14 +124,14 @@ abstract class CMbArray {
     if (isset($keys[$keyIndexes[$key]-1])) {
       $return["prev"] = $keys[$keyIndexes[$key]-1];
     }
-		else {
+    else {
       $return["prev"] = null;
     }
     
     if (isset($keys[$keyIndexes[$key]+1])) {
       $return["next"] = $keys[$keyIndexes[$key]+1];
     }
-		else {
+    else {
       $return["next"] = null;
     }
     
@@ -221,9 +221,9 @@ abstract class CMbArray {
   static function first($array, $keys, $default = null) {
     foreach ($keys as $key) {
       if (isset($array[$key])) {
-      	return $array[$key];
-			}
-		}
+        return $array[$key];
+      }
+    }
     return $default;
   }
   
@@ -371,5 +371,29 @@ abstract class CMbArray {
     }
     
     return $array;
+  }
+  
+  /**
+   * Insert a key-value pair after a specific key
+   * 
+   * @param array $array
+   * @param string $ref_key
+   * @param string $key
+   * @param mixed $value
+   * @return void
+   */
+  static function insertAfterKey(&$array, $ref_key, $key, $value) {
+    $keys = array_keys($array);
+    $vals = array_values($array);
+    
+    $insertAfter = array_search($ref_key, $keys)+1;
+    
+    $keys2 = array_splice($keys, $insertAfter);
+    $vals2 = array_splice($vals, $insertAfter);
+    
+    $keys[] = $key;
+    $vals[] = $value;
+    
+    $array = array_merge(array_combine($keys, $vals), empty($keys2) ? array() : array_combine($keys2, $vals2));
   }
 }

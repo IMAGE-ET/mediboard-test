@@ -41,18 +41,20 @@ function do_translation($params, $content, &$smarty, &$repeat) {
  */
 function smarty_vertical($params, $content, &$smarty, &$repeat) {
   if (isset($content)) {
-  	$orig = $content;
+    $content = trim($content);
+    $content = preg_replace("/\s+/", " ", $content);
+    $orig = $content;
     $content = strip_tags($content);
-		$content = preg_replace("/\s+/", chr(0xA0), $content); // == nbsp
-		
-		$letters = str_split($content);
-		
-		$html = "";
-		foreach($letters as $_letter) {
-			$html .= "<i>$_letter</i>";
-		}
-		
-		return "<span class=\"vertical\"><span class=\"nowm\">$html</span><span class=\"orig\">$orig</span></span>";
+    $content = preg_replace("/\s+/", chr(0xA0), $content); // == nbsp
+    
+    $letters = str_split($content);
+    
+    $html = "";
+    foreach($letters as $_letter) {
+      $html .= "<i>$_letter</i>";
+    }
+    
+    return "<span class=\"vertical\"><span class=\"nowm\">$html</span><span class=\"orig\">$orig</span></span>";
   }
 }
 
@@ -143,12 +145,12 @@ function smarty_modifier_pad($string, $length, $pad_string = ' ', $pad_type = 'l
  * @param any $object The object to be encoded
  */
 function smarty_modifier_json($object, $force_object = false) {
-	// $options = $force_object ? JSON_FORCE_OBJECT : 0; // Only PHP 5.3 !!
-	
-	if ($force_object && is_array($object) && empty($object)) {
-		return "{}";
-	}
-	
+  // $options = $force_object ? JSON_FORCE_OBJECT : 0; // Only PHP 5.3 !!
+  
+  if ($force_object && is_array($object) && empty($object)) {
+    return "{}";
+  }
+  
   return json_encode($object);
 }
 
@@ -238,10 +240,10 @@ function smarty_modifier_percent($value) {
 }
 
 function smarty_modifier_const($object, $name) {
-	// If the first arg is an instance, we get its class name
-	if (!is_string($object)) {
-		$object = get_class($object);
-	}
+  // If the first arg is an instance, we get its class name
+  if (!is_string($object)) {
+    $object = get_class($object);
+  }
   return constant("$object::$name");
 }
 
@@ -256,15 +258,15 @@ function smarty_modifier_static($object, $name) {
     trigger_error("Static variable '$name' for class '$class->name' does not exist", E_USER_WARNING);
   }
   else {
-  	$static = $statics[$name];
+    $static = $statics[$name];
   }
   return $static;
 }
 
 function smarty_modifier_static_call($callback, $args) {
-	$args = func_get_args();
-	$callback = array_shift($args);
-	$callback = explode("::", $callback);
+  $args = func_get_args();
+  $callback = array_shift($args);
+  $callback = explode("::", $callback);
   return call_user_func_array($callback, $args);
 }
 
@@ -287,11 +289,11 @@ function smarty_modifier_module_active($module) {
 }
 
 function JSAttribute($string){
-	return str_replace(
-	  array('\\',   "'",   '"',      "\r",  "\n",  '</'), 
-		array('\\\\', "\\'", '&quot;', '\\r', '\\n', '<\/'), 
-		$string
-	);
+  return str_replace(
+    array('\\',   "'",   '"',      "\r",  "\n",  '</'), 
+    array('\\\\', "\\'", '&quot;', '\\r', '\\n', '<\/'), 
+    $string
+  );
 }
 
 function smarty_modifier_cleanField($string){
@@ -329,7 +331,7 @@ function smarty_modifier_emphasize($text, $tokens, $tag = "em") {
   }
 
   $regexp = str_replace("/", "\\/", implode("|", $tokens));
-  return preg_replace("/($regexp)/i", "<$tag>$1</$tag>", $text);	
+  return preg_replace("/($regexp)/i", "<$tag>$1</$tag>", $text);  
 }
 
 /**
@@ -411,9 +413,9 @@ function smarty_function_mb_field($params, &$smarty) {
  * Cette fonction prend les mêmes paramètres que smarty_function_mb_field, mais seul object est requis.
  */
 function smarty_function_mb_key($params, &$smarty) {
-	$params['field'] = $params["object"]->_spec->key;
-	$params['prop'] = 'ref';
-	$params['hidden'] = true;
+  $params['field'] = $params["object"]->_spec->key;
+  $params['prop'] = 'ref';
+  $params['hidden'] = true;
   return smarty_function_mb_field($params, $smarty);
 }
 
@@ -455,19 +457,19 @@ function smarty_function_mb_ditto($params, &$smarty) {
  */
 function smarty_function_mb_value($params, &$smarty) {
   if (empty($params["field"])) return $params["object"]->_view;
-	$field = $params["field"];
-	$object = $params["object"];
-	$spec = $params["object"]->_specs[$field];
-	
-	if (null !== $value = CMbArray::extract($params, "value")) {
-		
-		$object->$field = $value;
-		
-		// Empties cache for forward references
-		if (isset($object->_fwd[$field])) {
-      unset($object->_fwd[$field]);	
-		}
-	}
+  $field = $params["field"];
+  $object = $params["object"];
+  $spec = $params["object"]->_specs[$field];
+  
+  if (null !== $value = CMbArray::extract($params, "value")) {
+    
+    $object->$field = $value;
+    
+    // Empties cache for forward references
+    if (isset($object->_fwd[$field])) {
+      unset($object->_fwd[$field]);  
+    }
+  }
   return $spec->getValue($object, $smarty, $params);
 }
 
@@ -552,21 +554,21 @@ function smarty_function_mb_colonne($params, &$smarty) {
   $order_way_inv = ($order_way == "ASC") ? "DESC" : "ASC";
   
   if($url){
-	  if($css_class == "sorted"){
-	  	return "<a class='$css_class $order_way' href='$url&amp;order_col$order_suffixe=$order_col&amp;order_way$order_suffixe=$order_way_inv'>$sHtml</a>";
-	  }
-	  if($css_class == "sortable"){
-	  	return "<a class='$css_class' href='$url&amp;order_col$order_suffixe=$field&amp;order_way$order_suffixe=ASC'>$sHtml</a>";
-	  }
+    if($css_class == "sorted"){
+      return "<a class='$css_class $order_way' href='$url&amp;order_col$order_suffixe=$order_col&amp;order_way$order_suffixe=$order_way_inv'>$sHtml</a>";
+    }
+    if($css_class == "sortable"){
+      return "<a class='$css_class' href='$url&amp;order_col$order_suffixe=$field&amp;order_way$order_suffixe=ASC'>$sHtml</a>";
+    }
   }
   
   if($function){
     if($css_class == "sorted"){
-	  	return "<a class='$css_class $order_way' onclick=$function('$order_col','$order_way_inv');>$sHtml</a>";
-	  }
-	  if($css_class == "sortable"){
-	  	return "<a class='$css_class' onclick=$function('$field','ASC');>$sHtml</a>";
-	  }    
+      return "<a class='$css_class $order_way' onclick=$function('$order_col','$order_way_inv');>$sHtml</a>";
+    }
+    if($css_class == "sortable"){
+      return "<a class='$css_class' onclick=$function('$field','ASC');>$sHtml</a>";
+    }    
   }
 }
 
@@ -583,19 +585,19 @@ function smarty_function_mb_script($params, &$smarty) {
   $extraPath = "";
   $path = CMbArray::extract($params, "path");
   $ajax = CMbArray::extract($params, "ajax");
-	
-	// Script name providied
+  
+  // Script name providied
   if ($script = CMbArray::extract($params, "script")) {
     $module = CMbArray::extract($params, "module");
-  	
+    
     if(CMbArray::extract($params, "mobile")){
       $extraPath = "mobile/";
     }
     $dir = $module ? $extraPath."modules/$module/javascript" : "includes/javascript";
-  	$path = "$dir/$script.js";
+    $path = "$dir/$script.js";
   }
-	
-	// Render HTML with build version
+  
+  // Render HTML with build version
   if ($ajax && !empty($smarty->_tpl_vars["ajax"])) {
     $script = file_get_contents($path);
     return "<script type=\"text/javascript\">$script</script>";
@@ -620,7 +622,7 @@ function smarty_function_mb_include($params, &$smarty) {
   
   // Module précisé
   if ($module = CMbArray::extract($params, "module")) {
-  	$template = "../../$module/templates/$template";
+    $template = "../../$module/templates/$template";
   }
 
   // Style précisé
@@ -630,12 +632,12 @@ function smarty_function_mb_include($params, &$smarty) {
 
   $path = "$template.tpl";
   
-	$tpl_vars = $smarty->_tpl_vars;
-	$smarty->_smarty_include(array(
-	  'smarty_include_tpl_file' => $path,
-	  'smarty_include_vars' => $params
-	));
-	$smarty->_tpl_vars = $tpl_vars;
+  $tpl_vars = $smarty->_tpl_vars;
+  $smarty->_smarty_include(array(
+    'smarty_include_tpl_file' => $path,
+    'smarty_include_vars' => $params
+  ));
+  $smarty->_tpl_vars = $tpl_vars;
 }
 
 /**
@@ -648,10 +650,10 @@ function smarty_function_mb_include($params, &$smarty) {
 function smarty_function_mb_default($params, &$smarty) {
   $var   = CMbArray::extract($params, "var"  , true);
   $value = CMbArray::extract($params, "value", true);
-	
-	if (!isset($smarty->_tpl_vars[$var])) {
-		$smarty->assign($var, $value);
-	}
+  
+  if (!isset($smarty->_tpl_vars[$var])) {
+    $smarty->assign($var, $value);
+  }
 }
 
 /**
@@ -673,8 +675,8 @@ function smarty_function_unique_id($params, &$smarty) {
  * integrated to dotProject framework as well as standard data assignment
  */
 class CSmartyDP extends Smarty {
-	static $extraPath = "";
-	
+  static $extraPath = "";
+  
   /**
    * Construction
    *
@@ -759,7 +761,7 @@ class CSmartyDP extends Smarty {
     
     $modules = CModule::getActive();
     foreach ($modules as $mod) {
-    	$mod->canDo();
+      $mod->canDo();
     }
     
     // Standard data assignment
@@ -823,26 +825,26 @@ class CSmartyDP extends Smarty {
    */
   function showDebugSpans($tpl_file, $params) {
     // The span
-	  echo "\n<span class='smarty-include ".(empty($params['ajax']) ? '' : 'ajax')."'>\n$tpl_file";
-	  
-	  $vars = isset($params["smarty_include_vars"]) ? $params["smarty_include_vars"] : array();
-	  
-	  foreach ($vars as $var => $value) {
-	    $show = $value;
-	    if ($value instanceof CMbObject) {
-	      $show = $value->_guid;
-	    }
-	
-	    if (is_array($value)) {
-	      $count = count($value);
-	      $show = "array ($count)";
-	    }
-	     
-	    echo "\n<br />$var: $show";
-	  }
+    echo "\n<span class='smarty-include ".(empty($params['ajax']) ? '' : 'ajax')."'>\n$tpl_file";
+    
+    $vars = isset($params["smarty_include_vars"]) ? $params["smarty_include_vars"] : array();
+    
+    foreach ($vars as $var => $value) {
+      $show = $value;
+      if ($value instanceof CMbObject) {
+        $show = $value->_guid;
+      }
+  
+      if (is_array($value)) {
+        $count = count($value);
+        $show = "array ($count)";
+      }
+       
+      echo "\n<br />$var: $show";
+    }
 
-	  echo "\n</span>\n";
-	}
+    echo "\n</span>\n";
+  }
   
   /**
    * called for included templates
@@ -851,7 +853,7 @@ class CSmartyDP extends Smarty {
    * @param string $params["smarty_include_vars"]
    */
   function _smarty_include($params) {
-  	$tpl_file = $params["smarty_include_tpl_file"];
+    $tpl_file = $params["smarty_include_tpl_file"];
     $vars     = $params["smarty_include_vars"];
     
     // Only at debug time

@@ -92,7 +92,7 @@ refreshSelf = function(start){
     <tr>
       <th>
         {{assign var=parts value="-"|explode:$_host_event}}
-        {{tr}}{{$parts.0}}{{/tr}} - {{tr}}{{$parts.0}}-event-{{$parts.1}}{{/tr}}
+        {{tr}}{{$parts.0}}{{/tr}} - {{tr}}{{$_host_event}}{{/tr}}
       </th>
     </tr>
     
@@ -127,7 +127,7 @@ refreshSelf = function(start){
       {{foreach from=$ex_objects_by_event item=ex_objects_by_class key=_host_event}}
         {{assign var=parts value="-"|explode:$_host_event}}
         <li>
-          <a href="#tab-{{$_host_event}}">{{tr}}{{$parts.0}}{{/tr}} - {{tr}}{{$parts.0}}-event-{{$parts.1}}{{/tr}}</a>
+          <a href="#tab-{{$_host_event}}">{{tr}}{{$parts.0}}{{/tr}} - {{tr}}{{$_host_event}}{{/tr}}</a>
         </li>
       {{/foreach}}
     </ul>
@@ -145,7 +145,7 @@ refreshSelf = function(start){
     {{foreach from=$ex_objects_by_event item=ex_objects_by_class key=_host_event}}
       {{if $print}}
         {{assign var=parts value="-"|explode:$_host_event}}
-        <h2>{{tr}}{{$parts.0}}{{/tr}} - {{tr}}{{$parts.0}}-event-{{$parts.1}}{{/tr}}</h2>
+        <h2>{{tr}}{{$parts.0}}{{/tr}} - {{tr}}{{$_host_event}}{{/tr}}</h2>
       {{/if}}
       
       <div id="tab-{{$_host_event}}" {{if !$ex_class_id && !$print}} style="display: none;" {{/if}} class="ex_class-table">
@@ -165,7 +165,7 @@ refreshSelf = function(start){
         {{assign var=parts value="-"|explode:$_host_event}}
         <li>
           <a href="#tab-{{$_host_event}}">
-            {{tr}}{{$parts.0}}{{/tr}} - {{tr}}{{$parts.0}}-event-{{$parts.1}}{{/tr}}
+            {{tr}}{{$parts.0}}{{/tr}} - {{tr}}{{$_host_event}}{{/tr}}
           </a>
         </li>
       {{/foreach}}
@@ -182,7 +182,7 @@ refreshSelf = function(start){
         <tr>
           <td style="text-align: right;">Remplir un nouveau formulaire:</td>
           <td>
-            <select onchange="selectExClass(this, '{{$reference_class}}-{{$reference_id}}', '{{$_parts.1}}', '@refreshSelf')">
+            <select onchange="selectExClass(this, '{{$reference_class}}-{{$reference_id}}', '{{$_parts.2}}', '@refreshSelf')">
               <option>&ndash; Formulaires disponibles</option>
               {{foreach from=$ex_classes_creation.$_host_event item=_ex_class key=_ex_class_id}}
                 <option value="{{$_ex_class->_id}}">{{$_ex_class->name}}</option>
@@ -259,21 +259,21 @@ refreshSelf = function(start){
 {{* NO DETAIL *}}
 {{else}}
 
-{{if $ex_objects_by_event|@count > 0}}
+{{if $ex_objects_counts_by_event|@count > 0}}
 <table class="main layout">
   <tr>
     <td class="narrow" style="min-width: 20em;">
       <table class="main tbl">
-        {{foreach from=$ex_objects_by_event item=ex_objects_by_class key=_host_event}}
+        {{foreach from=$ex_objects_counts_by_event item=ex_objects_by_class key=_host_event}}
           <tr>
             <th colspan="2">
               {{assign var=parts value="-"|explode:$_host_event}}
-              {{tr}}{{$parts.0}}{{/tr}} - {{tr}}{{$parts.0}}-event-{{$parts.1}}{{/tr}}
+              {{tr}}{{$parts.0}}{{/tr}} - {{tr}}{{$_host_event}}{{/tr}}
             </th>
           </tr>
         
-          {{foreach from=$ex_objects_by_class item=_ex_objects key=_ex_class_id}}
-            {{if $_ex_objects|@count}}
+          {{foreach from=$ex_objects_by_class item=_ex_objects_count key=_ex_class_id}}
+            {{if $_ex_objects_count}}
             <tr>
               <td class="text">
                 {{$ex_classes.$_ex_class_id->name}}
@@ -281,7 +281,7 @@ refreshSelf = function(start){
               <td class="narrow" style="text-align: right;">
                 <button class="right rtl" style="margin: -1px" 
                         onclick="ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', 'ex_class-list', 2, '{{$_ex_class_id}}')">
-                  {{$_ex_objects|@count}}
+                  {{$_ex_objects_count}}
                 </button>
               </td>
             </tr>

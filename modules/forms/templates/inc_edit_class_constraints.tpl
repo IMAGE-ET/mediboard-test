@@ -34,7 +34,6 @@
 								  {{if $_constraint->_ref_target_object instanceof CMediusers}}
 									  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_constraint->_ref_target_object}}
 								  {{else}}
-									{{$_constraint->_ref_target_object}}
 		                <span onmouseover="ObjectTooltip.createEx(this, '{{$_constraint->_ref_target_object->_guid}}');">
 		                	{{$_constraint->_ref_target_object}}
 		                </span>

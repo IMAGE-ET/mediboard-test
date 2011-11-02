@@ -23,8 +23,8 @@ class CExObject extends CMbMetaObject {
   
   static $_load_lite = false;
   static $_multiple_load = false;
-	
-	static $_ex_specs = array();
+  
+  static $_ex_specs = array();
   
   /**
    * @var CExClass
@@ -76,7 +76,9 @@ class CExObject extends CMbMetaObject {
   }
   
   function loadRefExClass($cache = true){
-    if ($cache && $this->_ref_ex_class && $this->_ref_ex_class->_id) return $this->_ref_ex_class;
+    if ($cache && $this->_ref_ex_class && $this->_ref_ex_class->_id) {
+      return $this->_ref_ex_class;
+    }
     
     $ex_class = new CExClass();
     $ex_class->load($this->getClassId());
@@ -334,14 +336,14 @@ class CExObject extends CMbMetaObject {
     $spec->key = "ex_object_id";
     return $spec;
   }
-	
-	function getClassId(){
-		return ($this->_ex_class_id ? $this->_ex_class_id : $this->_own_ex_class_id);
-	}
-	
-	function getTableName(){
-		return "ex_object_".$this->getClassId();
-	}
+  
+  function getClassId(){
+    return ($this->_ex_class_id ? $this->_ex_class_id : $this->_own_ex_class_id);
+  }
+  
+  function getTableName(){
+    return "ex_object_".$this->getClassId();
+  }
   
   function getProps() {
     $this->loadRefExClass();
@@ -349,7 +351,7 @@ class CExObject extends CMbMetaObject {
     
     $class = get_class($this)."_".$this->getClassId();
     $props = parent::getProps();
-	$props["ex_object_id"] = "ref class|$class show|0";
+    $props["ex_object_id"] = "ref class|$class show|0";
     $props["_ex_class_id"]    = "ref class|CExClass";
     
     $props["reference_class"] = "str class";
@@ -376,10 +378,10 @@ class CExObject extends CMbMetaObject {
   function getSpecs(){
     $ex_class_id = $this->getClassId();
     $this->_class = get_class($this)."_$ex_class_id";
-		
-		if ($this->_id && isset(self::$_ex_specs[$ex_class_id])) {
-			return self::$_ex_specs[$ex_class_id];
-		}
+    
+    if ($this->_id && isset(self::$_ex_specs[$ex_class_id])) {
+      return self::$_ex_specs[$ex_class_id];
+    }
     
     $specs = @parent::getSpecs(); // sometimes there is "list|"
         

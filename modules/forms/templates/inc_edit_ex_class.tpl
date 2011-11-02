@@ -75,13 +75,13 @@ Main.add(function(){
           <tr>
             <th>{{mb_label object=$ex_class field=group_id}}</th>
             <td>
-            	<select name="group_id" style="width: 20em;">
-            		<option value=""> &ndash; Tous </option>
-								{{foreach from=$groups item=_group}}
-								  <option value="{{$_group->_id}}" {{if $ex_class->group_id == $_group->_id}} selected="selected" {{/if}}>{{$_group}}</option>
-								{{/foreach}}
-            	</select>
-						</td>
+              <select name="group_id" style="width: 20em;">
+                <option value=""> &ndash; Tous </option>
+                {{foreach from=$groups item=_group}}
+                  <option value="{{$_group->_id}}" {{if $ex_class->group_id == $_group->_id}} selected="selected" {{/if}}>{{$_group}}</option>
+                {{/foreach}}
+              </select>
+            </td>
             
             <th>{{mb_label object=$ex_class field=required}}</th>
             <td>{{mb_field object=$ex_class field=required typeEnum=checkbox}}</td>
@@ -252,7 +252,7 @@ toggleGroupLabelEdit = function(link) {
                     {{assign var=_spec_type value=$_field->_spec_object->getSpecType()}}
                     {{assign var=_can_formula_arithmetic value="CExClassField::formulaCanArithmetic"|static_call:$_spec_type}}
                     {{assign var=_can_formula_concat value="CExClassField::formulaCanConcat"|static_call:$_spec_type}}
-										
+                    
                     {{if $_can_formula_arithmetic || $_can_formula_concat}}
                     <button class="right notext insert-formula {{if $_can_formula_arithmetic}}arithmetic{{/if}} {{if $_can_formula_concat}}concat{{/if}}" style="margin: -3px; margin-left: -1px; display: none;"
                             onclick="ExFormula.insertText('[{{$_field->_locale|smarty:nodefaults|JSAttribute}}]')">

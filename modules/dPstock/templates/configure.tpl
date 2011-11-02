@@ -23,6 +23,7 @@ Main.add(function(){
   <li><a href="#config">Configuration</a></li>
   <li><a href="#units">Unités de stockage</a></li>
 </ul>
+<hr class="control_tabs" />
 
 <div id="config">
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">

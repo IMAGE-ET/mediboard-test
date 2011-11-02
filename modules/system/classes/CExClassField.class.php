@@ -203,7 +203,7 @@ class CExClassField extends CExListItemsOwner {
       $list = $concept->loadRefExList();
       if (!$list->coded) return $ret;
       
-      $items = $list->loadRefItems();
+      $items = $list->loadRefItems(true);
       $ret = array_combine(CMbArray::pluck($items, "ex_list_item_id"), CMbArray::pluck($items, "code"));
     }
     
@@ -321,10 +321,7 @@ class CExClassField extends CExListItemsOwner {
   }
   
   function loadRefTranslation() {
-    $trans = new CExClassFieldTranslation;
-    $trans->lang = CAppUI::pref("LOCALE");
-    $trans->ex_class_field_id = $this->_id;
-    $trans->loadMatchingObject();
+    $trans = CExClassFieldTranslation::tr($this->_id);
     $trans->fillIfEmpty($this->name);
     return $this->_ref_translation = $trans;
   }
@@ -338,7 +335,7 @@ class CExClassField extends CExListItemsOwner {
   
   function updateTranslation(){
     $list_owner = $this->getRealListOwner();
-    $items = $list_owner->loadRefItems();
+    $items = $list_owner->loadRefItems(true);
     
     global $locales;
     

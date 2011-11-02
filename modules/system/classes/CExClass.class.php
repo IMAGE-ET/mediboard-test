@@ -613,7 +613,7 @@ class CExClass extends CMbObject {
   function getGrid($w = 4, $h = 30, $reduce = true) {
     $big_grid = array();
     $big_out_of_grid = array();
-    $groups = $this->loadRefsGroups();
+    $groups = $this->loadRefsGroups(true);
     
     foreach($groups as $_ex_group) {
       $grid = array_fill(0, $h, array_fill(0, $w, array(

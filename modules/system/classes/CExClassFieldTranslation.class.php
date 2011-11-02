@@ -9,6 +9,8 @@
  */
 
 class CExClassFieldTranslation extends CMbObject {
+  protected static $cache = array();
+  
   var $ex_class_field_translation_id = null;
   
   var $ex_class_field_id = null;
@@ -44,6 +46,25 @@ class CExClassFieldTranslation extends CMbObject {
     return "CExObject_{$class->_id}-{$field->name}";
   }
   
+  /**
+   * @param integer $field_id
+   * @return CExClassFieldTranslation
+   */
+  static function tr($field_id) {
+    $lang = CAppUI::pref("LOCALE");
+    
+    if (isset(self::$cache[$lang][$field_id])) {
+      return self::$cache[$lang][$field_id];
+    }
+    
+    $trans = new self;
+    $trans->lang = $lang;
+    $trans->ex_class_field_id = $field_id;
+    $trans->loadMatchingObject();
+    
+    return self::$cache[$lang][$field_id] = $trans;
+  }
+  
   function updateFormFields(){
     parent::updateFormFields();
     
@@ -55,14 +76,14 @@ class CExClassFieldTranslation extends CMbObject {
     
     $this->_view = $this->std;
   }
-	
-	function fillIfEmpty($str) {
+  
+  function fillIfEmpty($str) {
     if (!$this->_id) {
       $this->std = $this->desc = $this->court = $str;
-			$this->updateFormFields();
+      $this->updateFormFields();
       $this->std = $this->desc = $this->court = "";
     }
-	}
+  }
   
   function loadRefExClassField($cache = true){
     return $this->_ref_ex_class_field = $this->loadFwdRef("ex_class_field_id", $cache);

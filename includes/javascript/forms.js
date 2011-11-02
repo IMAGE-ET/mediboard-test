@@ -319,6 +319,7 @@ function prepareForm(oForm) {
       var i, applets = document.applets;
       
       if (applets.length) {
+        if (!window._focusElement) {
         window._focusElement = oElement;
         
         var inactiveApplets;
@@ -340,6 +341,7 @@ function prepareForm(oForm) {
         }
 
         waitForApplet();
+        }
       }
       else oElement.focus();
       bGiveFormFocus = false;

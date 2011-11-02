@@ -1892,4 +1892,23 @@ class CStoredObject extends CModelObject {
     return $this->seek($keywords, $where, $limit, false, $ljoin, $order);
   }
   
+  function getSimilar($values) {
+    $spec = $this->_spec;
+    
+    if (empty($spec->uniques)) {
+      return;
+    }
+    
+    // @todo only the first unique is used
+    $first_unique = reset($spec->uniques);
+    
+    $where = array();
+    foreach($first_unique as $field_name) {
+      if (!array_key_exists($field_name, $values)) return;
+      
+      $where[$field_name] = $spec->ds->prepare("=%", $values[$field_name]);
+    }
+    
+    return $this->loadObject($where);
+  }
 }

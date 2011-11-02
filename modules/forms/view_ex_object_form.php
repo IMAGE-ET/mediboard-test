@@ -97,10 +97,6 @@ foreach($fields as $_field) {
 
 $forms_admin = CModule::getInstalled("forms")->canAdmin();
 
-/*foreach($fields as $_field) {
-  $_field->updateTranslation();
-}*/
-
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("ex_object",    $ex_object);

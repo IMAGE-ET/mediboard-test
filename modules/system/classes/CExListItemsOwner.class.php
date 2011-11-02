@@ -11,7 +11,11 @@
 class CExListItemsOwner extends CMbObject {
   var $_ref_items = null;
   
-  function loadRefItems() {
+  function loadRefItems($cache = true) {
+    if ($cache && isset($this->_ref_items)) {
+      return $this->_ref_items;
+    }
+    
     return $this->_ref_items = $this->loadBackRefs("list_items", "code, name");
   }
   

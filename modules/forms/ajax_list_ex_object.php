@@ -45,6 +45,7 @@ $ex_classes = $ex_class->loadList($where);
 
 $all_ex_objects = array();
 $ex_objects_by_event = array();
+$ex_classes_by_event = array();
 $ex_objects_counts_by_event = array();
 $ex_classes_creation = array();
 
@@ -57,9 +58,9 @@ else {
   switch($detail) {
     case 3: 
     case 2: 
-      $limit = ($ex_class_id ? 20 : 15); break;
+      $limit = ($ex_class_id ? 15 : 10); break;
     case 1: 
-      $limit = ($ex_class_id ? 100 : 50); break;
+      $limit = ($ex_class_id ? 50 : 25); break;
   default:
     case 0: 
   }
@@ -71,9 +72,11 @@ $total = 0;
 if ($limit) {
   $limit = "$start, $limit";
 }
+
+$ref_objects_cache = array();
   
 foreach($ex_classes as $_ex_class_id => $_ex_class) {
-  $ex_class_key = $_ex_class->host_class."-".$_ex_class->event;
+  $ex_class_key = $_ex_class->host_class."-event-".$_ex_class->event;
     
   if ($detail > 1) {
     foreach($_ex_class->loadRefsGroups() as $_group) {
@@ -98,15 +101,27 @@ foreach($ex_classes as $_ex_class_id => $_ex_class) {
   $_ex_objects_count = $_ex_object->countList($where);
   $total = max($_ex_objects_count, $total);
   
-  $ex_objects_counts_by_event[$ex_class_key][$_ex_class_id] = $_ex_object->countList($where);
+	$count = $_ex_object->countList($where);
+	
+	if ($count) {
+    $ex_objects_counts_by_event[$ex_class_key][$_ex_class_id] = $_ex_object->countList($where);
+	}
   
+	if ($detail == 0) continue;
+	
   foreach($_ex_objects as $_ex) {
     $_ex->_ex_class_id = $_ex_class_id;
     $_ex->load();
-    $_ex->loadTargetObject();
-    
-    // to get the view
-    $_ex->_ref_object->loadComplete();
+		
+		$guid = "$_ex->object_class-$_ex->object_id";
+		
+		if (!isset($ref_objects_cache[$guid])) {
+      $_ex->loadTargetObject()->loadComplete(); // to get the view
+			$ref_objects_cache[$guid] = $_ex->_ref_object;
+		}
+		else {
+			$_ex->_ref_object = $ref_objects_cache[$guid];
+		}
     
     $_ex->loadLogs();
     $_log = $_ex->_ref_first_log;
@@ -114,7 +129,7 @@ foreach($ex_classes as $_ex_class_id => $_ex_class) {
     $all_ex_objects["$_log->date $_ex->_id"] = $_ex;
     $ex_objects_by_event[$ex_class_key][$_ex_class_id]["$_log->date $_ex->_id"] = $_ex;
   }
-  
+
   if (!isset($ex_classes_creation[$ex_class_key])) {
     $ex_classes_creation[$ex_class_key] = array();
   }
