@@ -29,6 +29,8 @@ $lines_elt_comments = array();
 $lines_mixes = array();
 $count_lines_meds = array();
 $checked_lines_tab = array();
+$count_past_lines = 0;
+$current_date = mbDate();
 $prescription = new CPrescription;
 
 if ($protocole_id) {
@@ -113,10 +115,17 @@ elseif ($pack_id) {
 }
 
 // Suppression des lignes signées
+// Check par rapport à la date courante
 foreach ($prescription->_ref_lines_med_comments["med"] as $key=>$_line) {
   if ($_line->signee) {
     unset($prescription->_ref_lines_med_comments["med"][$key]);
     $prescription->_counts_by_chapitre["med"] --;
+  }
+  else {
+    if ($_line->debut && $_line->debut < $current_date) {
+      $count_past_lines++;
+      $_line->_is_past = true;
+    }
   }
 }
 
@@ -135,6 +144,12 @@ if ($prescription->_ref_lines_elements_comments) {
             unset($_elements[$element_key]);
             $prescription->_counts_by_chapitre[$chap_key] --;
           }
+          else {
+            if ($_line->debut && $_line->debut < $current_date) {
+              $_line->_is_past = true;
+              $count_past_lines++;
+            }
+          }
         }
       }
     }
@@ -148,6 +163,10 @@ foreach ($prescription->_ref_prescription_line_mixes as $key=>$_line_mix) {
   else {
     $_line_mix->loadRefsLines();
     $_line_mix->loadRefPraticien();
+    if ($_line_mix->date_debut < $current_date) {
+      $_line->_is_past = true;
+      $count_past_lines++;
+    }
   }
 }
 
@@ -162,6 +181,7 @@ $smarty->assign("checked_lines_tab"  , $checked_lines_tab);
 $smarty->assign("sejour"         , $prescription->_ref_object);
 $smarty->assign("now", mbDate());
 $smarty->assign("mode"           , $tp ? "tp" : "validation");
+$smarty->assign("count_past_lines", $count_past_lines);
 $smarty->display("inc_select_lines.tpl");
 
 ?>

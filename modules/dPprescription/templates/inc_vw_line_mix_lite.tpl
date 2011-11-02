@@ -121,7 +121,7 @@
     </td>
   {{/if}}
   {{if !$_prescription_line_mix->_protocole}}
-  <td style="width: 10%;" class="text">
+  <td style="width: 10%;" class="text" {{if $_prescription_line_mix->_is_past}}warning{{/if}}>
     {{mb_value object=$_prescription_line_mix field=date_debut}}
     {{if $_prescription_line_mix->time_debut}} 
       à {{mb_value object=$_prescription_line_mix field=time_debut}}

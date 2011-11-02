@@ -9,7 +9,7 @@
  */
 
 class CPrescriptionLineMix extends CMbObject {
-	// DB Table key
+  // DB Table key
   var $prescription_line_mix_id = null;
   
   // DB Fields
@@ -36,8 +36,8 @@ class CPrescriptionLineMix extends CMbObject {
     
   var $operation_id     = null;
   var $commentaire      = null;
-	var $type_line        = null;
-	
+  var $type_line        = null;
+  
   var $date_pose        = null; // Date de la pose de la perf
   var $time_pose        = null; // Heure de la pose de la perf
   
@@ -45,11 +45,11 @@ class CPrescriptionLineMix extends CMbObject {
   var $time_retrait     = null; // Heure de retrait de la perf
   var $emplacement      = null;
   var $nb_tous_les      = null;
-	
-	var $quantite_totale     = null; // valeur en ml
-	var $duree_passage       = null; // minutes
-	var $unite_duree_passage = null;
-	
+  
+  var $quantite_totale     = null; // valeur en ml
+  var $duree_passage       = null; // minutes
+  var $unite_duree_passage = null;
+  
   // Champs specifiques aux PCA
   var $mode_bolus          = null; // Mode de bolus 
   var $dose_bolus          = null; // Dose du bolus (en mg)
@@ -61,36 +61,36 @@ class CPrescriptionLineMix extends CMbObject {
   var $variante_active    = null;
   var $variante_plan_soin = null;
   
-	var $conditionnel     = null;
-	var $condition_active = null;
-	
-	var $perop            = null;
-	
+  var $conditionnel     = null;
+  var $condition_active = null;
+  
+  var $perop            = null;
+  
   var $volume_debit     = null; // En ml
   var $duree_debit      = null; // En heures
 
   var $protocole_id     = null;
   
   // Dates relatives
-	var $jour_decalage      = null;
+  var $jour_decalage      = null;
   var $decalage_line      = null;
   var $unite_decalage     = null;
   var $jour_decalage_fin  = null;
   var $decalage_line_fin  = null;
   var $unite_decalage_fin = null;
-	 
-	var $ponctual           = null;
-	
-	var $_date_fin          = null;
+   
+  var $ponctual           = null;
+  
+  var $_date_fin          = null;
 
-	// Fwd Refs
+  // Fwd Refs
   var $_ref_prescription = null;
   var $_ref_praticien    = null;
   
   // Back Refs
   var $_ref_lines        = null;
   var $_ref_alerte       = null;
-		
+    
   // Form fields
   var $_debut             = null; // Debut de la prescription_line_mix (dateTime)
   var $_fin               = null; // Fin de la prescription_line_mix (dateTime)
@@ -104,10 +104,10 @@ class CPrescriptionLineMix extends CMbObject {
   var $_retrait   = null;
   var $_voies = null;
   var $_active = null;
-	var $_nb_gouttes = null;
-	var $_debit = null;
-	var $_praticien_id = null;
-	
+  var $_nb_gouttes = null;
+  var $_debit = null;
+  var $_praticien_id = null;
+  
   // Object references
   var $_ref_log_signature_prat = null;
   var $_ref_variante_for = null; // ligne (med ou perf) que la ligne peut substituer
@@ -135,29 +135,30 @@ class CPrescriptionLineMix extends CMbObject {
   var $_prises_prevues                   = null;
 
   var $_frequence = null;
-	var $_continuite = null;  // continue, discontinue
-	var $_last_debit = null;
-	var $_variations = null;
-	var $_last_variation = null;
-	var $_count_locked_planif = null;
-	var $_planifs_systeme = null;
-	
-	static $type_by_line = array(
-	  "perfusion"    => array("classique", "seringue", "PCA"),
-		"oxygene"      => array("masque", "lunettes", "sonde"),
-		"aerosol"      => array("nebuliseur_ultrasonique", "nebuliseur_pneumatique", "doseur", "inhalateur"),
-		"alimentation" => array("")
-	);
-	
-	static $interface_by_line = array(
-		"aerosol" => array("buccal", "nasal", "bucco_nasal", "masque_facial")
-	);
-	
-	static $unite_by_line = array(
-	  "perfusion" => "ml/h",
-		"oxygene"   => "l/min"
-	);
-	
+  var $_continuite = null;  // continue, discontinue
+  var $_last_debit = null;
+  var $_variations = null;
+  var $_last_variation = null;
+  var $_count_locked_planif = null;
+  var $_planifs_systeme = null;
+  var $_is_past = false;
+  
+  static $type_by_line = array(
+    "perfusion"    => array("classique", "seringue", "PCA"),
+    "oxygene"      => array("masque", "lunettes", "sonde"),
+    "aerosol"      => array("nebuliseur_ultrasonique", "nebuliseur_pneumatique", "doseur", "inhalateur"),
+    "alimentation" => array("")
+  );
+  
+  static $interface_by_line = array(
+    "aerosol" => array("buccal", "nasal", "bucco_nasal", "masque_facial")
+  );
+  
+  static $unite_by_line = array(
+    "perfusion" => "ml/h",
+    "oxygene"   => "l/min"
+  );
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'prescription_line_mix';
@@ -166,19 +167,19 @@ class CPrescriptionLineMix extends CMbObject {
   }
   
   function getProps() {
-  	$specs = parent::getProps();
-  	$specs["prescription_id"]        = "ref class|CPrescription cascade";
-  	$specs["type_line"]              = "enum notNull list|perfusion|aerosol|oxygene|alimentation default|perfusion";
+    $specs = parent::getProps();
+    $specs["prescription_id"]        = "ref class|CPrescription cascade";
+    $specs["type_line"]              = "enum notNull list|perfusion|aerosol|oxygene|alimentation default|perfusion";
     $specs["type"]                   = "enum list|classique|seringue|PCA|PCEA|masque|lunettes|sonde|nebuliseur_ultrasonique|nebuliseur_pneumatique|doseur|inhalateur";
-		$specs["libelle"]                = "str";
+    $specs["libelle"]                = "str";
     $specs["volume_debit"]           = "float pos";
-		$specs["duree_debit"]            = "num pos";
+    $specs["duree_debit"]            = "num pos";
     $specs["voie"]                   = "str";
-		$specs["interface"]              = "str";
+    $specs["interface"]              = "str";
     $specs["date_debut"]             = "date";
     $specs["time_debut"]             = "time";
     $specs["duree"]                  = "num pos";
-		$specs["unite_duree"]            = "enum list|heure|jour default|heure";
+    $specs["unite_duree"]            = "enum list|heure|jour default|heure";
     $specs["next_line_id"]           = "ref class|CPrescriptionLineMix"; 
     $specs["praticien_id"]           = "ref class|CMediusers";
     $specs["creator_id"]             = "ref class|CMediusers";
@@ -188,7 +189,7 @@ class CPrescriptionLineMix extends CMbObject {
     $specs["date_arret"]             = "date";
     $specs["time_arret"]             = "time";
     $specs["accord_praticien"]       = "bool";
-		$specs["ponctual"]               = "bool default|0";
+    $specs["ponctual"]               = "bool default|0";
     $specs["_debut"]                 = "dateTime";
     $specs["_fin"]                   = "dateTime";
     $specs["_date_fin"]              = "dateTime";
@@ -209,32 +210,32 @@ class CPrescriptionLineMix extends CMbObject {
     $specs["variante_plan_soin"] = "bool";
     $specs["nb_tous_les"]            = "num";
     $specs["commentaire"]            = "text helped";
-		$specs["conditionnel"]           = "bool";
+    $specs["conditionnel"]           = "bool";
     $specs["condition_active"]       = "bool";
-		
+    
     $specs["jour_decalage"]          = "enum list|E|I|S|N|A";
     $specs["decalage_line"]          = "num";
-	  $specs["unite_decalage"]         = "enum list|jour|heure";
+    $specs["unite_decalage"]         = "enum list|jour|heure";
     $specs["jour_decalage_fin"]      = "enum list|I|S|A";
     $specs["decalage_line_fin"]      = "num";
-		$specs["unite_decalage_fin"]     = "enum list|jour|heure";
-	
-		$specs["quantite_totale"]        = "num";
-		$specs["duree_passage"]          = "num";
-		$specs["unite_duree_passage"]    = "enum list|minute|heure default|minute";
-		$specs["perop"]                  = "bool default|0"; 
-		$specs["_debit"]                 = "num pos";
+    $specs["unite_decalage_fin"]     = "enum list|jour|heure";
+  
+    $specs["quantite_totale"]        = "num";
+    $specs["duree_passage"]          = "num";
+    $specs["unite_duree_passage"]    = "enum list|minute|heure default|minute";
+    $specs["perop"]                  = "bool default|0"; 
+    $specs["_debit"]                 = "num pos";
     $specs["_quantite_totale"]       = "num";
-		return $specs;
+    return $specs;
   }
 
   function updateFormFields(){
     parent::updateFormFields();
     
-		if($this->volume_debit && $this->duree_debit){ 
-		  $this->_debit = round($this->volume_debit / $this->duree_debit, 2);
-		}
-		
+    if($this->volume_debit && $this->duree_debit){ 
+      $this->_debit = round($this->volume_debit / $this->duree_debit, 2);
+    }
+    
     // Calcul de la view
     $this->_view = ($this->libelle) ? "$this->libelle " : "";
     $this->_view .= ($this->type) ? " ".CAppUI::tr("CPrescriptionLineMix.type.$this->type").", " : "";
@@ -244,16 +245,16 @@ class CPrescriptionLineMix extends CMbObject {
     
     if($this->_debit){
       $this->_frequence = "à $this->_debit";
-			if($this->type_line == "oxygene"){
-				$this->_frequence .= " l/min";
-			} else {
-				$this->_frequence .= " ml/h";
-			}
+      if($this->type_line == "oxygene"){
+        $this->_frequence .= " l/min";
+      } else {
+        $this->_frequence .= " ml/h";
+      }
     }
     if($this->nb_tous_les){
-    	if($this->duree_passage){
-    		$this->_frequence = "en $this->duree_passage min ";
-    	}
+      if($this->duree_passage){
+        $this->_frequence = "en $this->duree_passage min ";
+      }
       $this->_frequence .= "toutes les $this->nb_tous_les"."h";
     }
     
@@ -274,8 +275,8 @@ class CPrescriptionLineMix extends CMbObject {
     $this->_debut = ($this->date_pose) ? "$this->date_pose $this->time_pose" : "$this->date_debut $this->time_debut";
 
     // Calcul de la fin de la prescription_line_mix
-		$increment = ($this->unite_duree == "jour") ? "DAYS" : "HOURS";
-		
+    $increment = ($this->unite_duree == "jour") ? "DAYS" : "HOURS";
+    
     $this->_date_fin = $this->duree ? mbDateTime("+ $this->duree $increment", "$this->_debut") : $this->_debut;
     $this->_fin = ($this->date_arret && $this->time_arret) ? "$this->date_arret $this->time_arret" 
                                                            : ($this->date_retrait ? "$this->date_retrait $this->time_retrait" : $this->_date_fin); 
@@ -292,16 +293,16 @@ class CPrescriptionLineMix extends CMbObject {
     if($this->_protocole){
       $this->countVariantes();
     }
-		$this->_active = (!$this->conditionnel) ? 1 : $this->condition_active;
-		
-		if($this->volume_debit){
-		  $this->_continuite = "continue";
-		}
-		if(($this->nb_tous_les || $this->duree_passage) && $this->type_line != "oxygene"){
-			$this->_continuite = "discontinue";
-		}
+    $this->_active = (!$this->conditionnel) ? 1 : $this->condition_active;
+    
+    if($this->volume_debit){
+      $this->_continuite = "continue";
+    }
+    if(($this->nb_tous_les || $this->duree_passage) && $this->type_line != "oxygene"){
+      $this->_continuite = "discontinue";
+    }
   }
-  	
+    
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["lines_mix"] = "CPrescriptionLineMixItem prescription_line_mix_id";
@@ -309,12 +310,12 @@ class CPrescriptionLineMix extends CMbObject {
     $backProps["transmissions"] = "CTransmissionMedicale object_id";
     $backProps["variantes_medicament"] = "CPrescriptionLineMedicament variante_for_id";
     $backProps["variantes_prescription_line_mix"]  = "CPrescriptionLineMix variante_for_id";
-		$backProps["variations"] = "CPrescriptionLineMixVariation prescription_line_mix_id";
+    $backProps["variations"] = "CPrescriptionLineMixVariation prescription_line_mix_id";
     return $backProps;
   }
   
   function getAdvancedPerms($is_praticien = 0, $mode_protocole = 0, $mode_pharma = 0, $operation_id = 0) {
-		global $can;
+    global $can;
     
     $user = CMediusers::get();
 
@@ -334,108 +335,108 @@ class CPrescriptionLineMix extends CMbObject {
         $perm_edit = $protocole->_ref_group->canEdit();
       }
     } else {
-			if($mode_pharma && $this->signature_pharma){
-				$perm_edit = 0;
-			} else {
+      if($mode_pharma && $this->signature_pharma){
+        $perm_edit = 0;
+      } else {
         $perm_edit = ($can->admin && !$mode_pharma) ||
-				             ((!$this->signature_prat || $mode_pharma) &&
+                     ((!$this->signature_prat || $mode_pharma) &&
                      ($this->praticien_id == $user->_id || $is_praticien || $operation_id || $mode_pharma || ($user->isExecutantPrescription() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_med") && !CAppUI::conf("dPprescription CPrescription role_propre"))));
-			}
-		}
+      }
+    }
     $this->_perm_edit = $perm_edit;
     
     // Modification de la prescription_line_mix et des lignes des prescription_line_mixes
     if($perm_edit){
-    	$this->_can_modify_prescription_line_mix = 1;
-    	$this->_can_modify_prescription_line_mix_item = 1;
+      $this->_can_modify_prescription_line_mix = 1;
+      $this->_can_modify_prescription_line_mix_item = 1;
     }
     if($this->signature_prat && !(CMediusers::get()->isExecutantPrescription() && CAppUI::conf("dPprescription CPrescription role_propre"))){
       $this->_can_vw_form_add_perf_contigue = 1;
-  		$this->_can_vw_form_stop_perf = 1;
+      $this->_can_vw_form_stop_perf = 1;
     }
     // Affichage du formulaire de signature pharmacien
     if($mode_pharma){
-    	$this->_can_vw_form_signature_pharmacien = 1;
+      $this->_can_vw_form_signature_pharmacien = 1;
     }
     // Affichage du formulaire de signature praticien
     if(!$this->_protocole && $is_praticien){
-    	$this->_can_vw_form_signature_praticien = 1;
+      $this->_can_vw_form_signature_praticien = 1;
     }
     // View signature praticien
     if(!$this->_protocole){
-    	$this->_can_vw_signature_praticien = 1;
+      $this->_can_vw_signature_praticien = 1;
     }
     // Suppression de la ligne
     if ($perm_edit){
       $this->_can_delete_prescription_line_mix = 1;
       $this->_can_delete_prescription_line_mix_item = 1;
-  	}
-	}
+    }
+  }
   
-	function loadRefAlerte(){
+  function loadRefAlerte(){
     $this->_ref_alerte = new CAlert();
     $this->_ref_alerte->setObject($this);
     $this->_ref_alerte->handled = "0";    
     $this->_ref_alerte->loadMatchingObject();
   }
-	
-	function getRecentModification(){
-		if(@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")){
+  
+  function getRecentModification(){
+    if(@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")){
       $this->loadRefAlerte();
-			if($this->_ref_alerte->_id){
+      if($this->_ref_alerte->_id){
         $this->_recent_modification = true;
       }
     } else {
-		  $service_id = isset($_SESSION["soins"]["service_id"]) && $_SESSION["soins"]["service_id"] ?
-		  $_SESSION["soins"]["service_id"] : "none";
-	    
-		  if ($service_id == "NP") {
-	      $service_id = "none";
-	    }  
-		  
-	    $configs = CConfigService::getAllFor($service_id);
-	
-	    // modification recente si moins de $nb_hours heures
-	    $nb_hours = $configs["Affichage alertes de modifications"];
-	    $this->_recent_modification = $this->hasRecentLog($nb_hours);
-		}
-	}
-  	
-	/*
-	 * Duplication d'une prescription_line_mix
-	 */
-	function duplicatePerf($date_debut = "", $time_debut = "", $duree = ""){
+      $service_id = isset($_SESSION["soins"]["service_id"]) && $_SESSION["soins"]["service_id"] ?
+      $_SESSION["soins"]["service_id"] : "none";
+      
+      if ($service_id == "NP") {
+        $service_id = "none";
+      }  
+      
+      $configs = CConfigService::getAllFor($service_id);
+  
+      // modification recente si moins de $nb_hours heures
+      $nb_hours = $configs["Affichage alertes de modifications"];
+      $this->_recent_modification = $this->hasRecentLog($nb_hours);
+    }
+  }
+    
+  /*
+   * Duplication d'une prescription_line_mix
+   */
+  function duplicatePerf($date_debut = "", $time_debut = "", $duree = ""){
     $this->_add_perf_contigue = false;
     
-	  // Creation de la nouvelle prescription_line_mix
-	  $new_perf = new CPrescriptionLineMix();
+    // Creation de la nouvelle prescription_line_mix
+    $new_perf = new CPrescriptionLineMix();
     $new_perf->load($this->_id);
     $new_perf->loadRefsLines();
     $new_perf->_id = "";
     $new_perf->signature_pharma = 0;
     $new_perf->signature_prat = 0;
-		
-		$new_perf->date_arret = "";
-		$new_perf->time_arret = "";
-		
-		if($date_debut){
-			$new_perf->date_debut = $date_debut;
-		}
-		
-		if($time_debut){
-      $new_perf->time_debut = $time_debut;
-		}
-		
-		if($duree){
-			$new_perf->duree = $duree;
-		}
-		
-		if($this->_praticien_id){
-		  $new_perf->praticien_id = $this->_praticien_id;
-    } else {
-		  $new_perf->praticien_id = CAppUI::$user->_id;
+    
+    $new_perf->date_arret = "";
+    $new_perf->time_arret = "";
+    
+    if($date_debut){
+      $new_perf->date_debut = $date_debut;
     }
-		$new_perf->creator_id = CAppUI::$user->_id;
+    
+    if($time_debut){
+      $new_perf->time_debut = $time_debut;
+    }
+    
+    if($duree){
+      $new_perf->duree = $duree;
+    }
+    
+    if($this->_praticien_id){
+      $new_perf->praticien_id = $this->_praticien_id;
+    } else {
+      $new_perf->praticien_id = CAppUI::$user->_id;
+    }
+    $new_perf->creator_id = CAppUI::$user->_id;
     
     if($msg = $new_perf->store()){
       return $msg;
@@ -451,110 +452,110 @@ class CPrescriptionLineMix extends CMbObject {
     }
 
     // Arret de la ligne et creation de l'historique
-		if(!$this->date_arret){
+    if(!$this->date_arret){
       $this->date_arret = mbDate();
       $this->time_arret = mbTime();
-		}
+    }
     $this->next_line_id = $new_perf->_id;
-	}
+  }
 
-	function loadRefsTransmissions(){
-	  $this->_ref_transmissions = $this->loadBackRefs("transmissions");
-	  foreach($this->_ref_transmissions as &$_trans){
-	    $_trans->loadRefsFwd();
-	  }
-	}
-	
-	function loadRefsVariations(){
-	  $this->_ref_variations = $this->loadBackRefs("variations", "dateTime");
-		
-		if(count($this->_ref_variations)){
-		  $this->_last_variation = end($this->_ref_variations);
-		} else {
-  		$this->_last_variation = new CPrescriptionLineMixVariation();
-			$this->_last_variation->debit = $this->_debit;
-			$this->_last_variation->prescription_line_mix_id = $this->_id;
-  	}
-	}
-	
-	function calculVariations(){
-		$max_height = 2; // 2 em
+  function loadRefsTransmissions(){
+    $this->_ref_transmissions = $this->loadBackRefs("transmissions");
+    foreach($this->_ref_transmissions as &$_trans){
+      $_trans->loadRefsFwd();
+    }
+  }
+  
+  function loadRefsVariations(){
+    $this->_ref_variations = $this->loadBackRefs("variations", "dateTime");
+    
+    if(count($this->_ref_variations)){
+      $this->_last_variation = end($this->_ref_variations);
+    } else {
+      $this->_last_variation = new CPrescriptionLineMixVariation();
+      $this->_last_variation->debit = $this->_debit;
+      $this->_last_variation->prescription_line_mix_id = $this->_id;
+    }
+  }
+  
+  function calculVariations(){
+    $max_height = 2; // 2 em
 
-		// Perfusion continue (avec eventuellement des changements de debit)
-		if($this->_continuite == "continue"){
-			// Calcul des modifications du debit
-	    $this->loadRefsVariations();
-	
-		  $_date = mbTransformTime(null, $this->_debut, "%Y-%m-%d %H:00:00");
-		  $current_debit = $this->_debit;
-		  $max_debit = $current_debit ? $current_debit : 1;
-			
-			$variation_id = "perf";
-			
-			if($this->_debut != $_date){
-				$_variations[$_date][mbTime($_date)]["debit"] = '';
-				$_variations[$_date][mbTime($_date)]["variation_id"] = "perf";
-				
-				$_variations[$_date][mbTime($this->_debut)]["debit"] = $this->_debit;
+    // Perfusion continue (avec eventuellement des changements de debit)
+    if($this->_continuite == "continue"){
+      // Calcul des modifications du debit
+      $this->loadRefsVariations();
+  
+      $_date = mbTransformTime(null, $this->_debut, "%Y-%m-%d %H:00:00");
+      $current_debit = $this->_debit;
+      $max_debit = $current_debit ? $current_debit : 1;
+      
+      $variation_id = "perf";
+      
+      if($this->_debut != $_date){
+        $_variations[$_date][mbTime($_date)]["debit"] = '';
+        $_variations[$_date][mbTime($_date)]["variation_id"] = "perf";
+        
+        $_variations[$_date][mbTime($this->_debut)]["debit"] = $this->_debit;
         $_variations[$_date][mbTime($this->_debut)]["variation_id"] = "perf";
         
         $_date = mbDateTime("+ 1 hour", $_date);
-			}
-			
-		  while($_date <= $this->_fin){
-			  $_variations[$_date][mbTime($_date)]["debit"] = $current_debit;
-				$_variations[$_date][mbTime($_date)]["variation_id"] = $variation_id;
-			  foreach($this->_ref_variations as $_variation){
-			 	  if($_variation->dateTime >= $_date && $_variation->dateTime < mbDateTime("+ 1 hour", $_date)){
-		 	   	  $current_debit = $_variation->debit;
-				   
-						$_variations[$_date][mbTime($_variation->dateTime)]["debit"] = $current_debit;
-						$variation_id = $_variations[$_date][mbTime($_variation->dateTime)]["variation_id"] = $_variation->_id;
-				  }
-					$max_debit = max($max_debit, $_variation->debit);
-	      }
-		    $_date = mbDateTime("+ 1 hour", $_date);
-			}
-		  
-			foreach($_variations as $key => &$_variations_by_hour){
-		    krsort($_variations_by_hour);
-				
-				if(count($_variations_by_hour) == 1){
-					$_variations[$key][mbTime($key)]["pourcentage"] = "100";
-					$_variations[$key][mbTime($key)]["height"] = round($_variations[$key][mbTime($key)]["debit"] * $max_height / $max_debit, 1);
-				  $_variations[$key][mbTime($key)]["normale"] = round($this->_debit * $max_height / $max_debit, 1);
-	    	}
-				else {
-					$prev_hour_variation = 0;
-					foreach($_variations_by_hour as $_hour_variation => $_debit_variation){
-						if($prev_hour_variation){
-							$_nb_min = mbTransformTime(null, $prev_hour_variation, "%M") - mbTransformTime(null, $_hour_variation, "%M");
-						} else {
-							$_nb_min = 60 - mbTransformTime(null, $_hour_variation, "%M");
-						}
-						$prev_hour_variation = $_hour_variation;
-						$pourcentage = round($_nb_min * 100 / 60);
-						$_variations[$key][$_hour_variation]["pourcentage"] = $pourcentage;
-						$_variations[$key][$_hour_variation]["height"] = round($_debit_variation["debit"] * $max_height / $max_debit, 1);
-						$_variations[$key][$_hour_variation]["variation_id"] = $_debit_variation["variation_id"];
-						$_variations[$key][$_hour_variation]["normale"] = round($this->_debit * $max_height / $max_debit, 1);
-					}
-				}
-				ksort($_variations_by_hour);
-			}
+      }
+      
+      while($_date <= $this->_fin){
+        $_variations[$_date][mbTime($_date)]["debit"] = $current_debit;
+        $_variations[$_date][mbTime($_date)]["variation_id"] = $variation_id;
+        foreach($this->_ref_variations as $_variation){
+           if($_variation->dateTime >= $_date && $_variation->dateTime < mbDateTime("+ 1 hour", $_date)){
+              $current_debit = $_variation->debit;
+           
+            $_variations[$_date][mbTime($_variation->dateTime)]["debit"] = $current_debit;
+            $variation_id = $_variations[$_date][mbTime($_variation->dateTime)]["variation_id"] = $_variation->_id;
+          }
+          $max_debit = max($max_debit, $_variation->debit);
+        }
+        $_date = mbDateTime("+ 1 hour", $_date);
+      }
+      
+      foreach($_variations as $key => &$_variations_by_hour){
+        krsort($_variations_by_hour);
+        
+        if(count($_variations_by_hour) == 1){
+          $_variations[$key][mbTime($key)]["pourcentage"] = "100";
+          $_variations[$key][mbTime($key)]["height"] = round($_variations[$key][mbTime($key)]["debit"] * $max_height / $max_debit, 1);
+          $_variations[$key][mbTime($key)]["normale"] = round($this->_debit * $max_height / $max_debit, 1);
+        }
+        else {
+          $prev_hour_variation = 0;
+          foreach($_variations_by_hour as $_hour_variation => $_debit_variation){
+            if($prev_hour_variation){
+              $_nb_min = mbTransformTime(null, $prev_hour_variation, "%M") - mbTransformTime(null, $_hour_variation, "%M");
+            } else {
+              $_nb_min = 60 - mbTransformTime(null, $_hour_variation, "%M");
+            }
+            $prev_hour_variation = $_hour_variation;
+            $pourcentage = round($_nb_min * 100 / 60);
+            $_variations[$key][$_hour_variation]["pourcentage"] = $pourcentage;
+            $_variations[$key][$_hour_variation]["height"] = round($_debit_variation["debit"] * $max_height / $max_debit, 1);
+            $_variations[$key][$_hour_variation]["variation_id"] = $_debit_variation["variation_id"];
+            $_variations[$key][$_hour_variation]["normale"] = round($this->_debit * $max_height / $max_debit, 1);
+          }
+        }
+        ksort($_variations_by_hour);
+      }
       $this->_variations = $_variations;
-	  } 
-		
-	}
-	
+    } 
+    
+  }
+  
   function loadView() {
-  	parent::loadView();
+    parent::loadView();
     $this->loadRefsLines();
     $this->loadRefsTransmissions();
     $this->loadRefLogDateArret();
     $this->loadRefLogDateRetrait();
   }
-	
+  
   function loadRefLogDateArret(){   
     $this->_ref_log_date_arret = $this->loadLastLogForField("date_arret");
   }
@@ -563,78 +564,78 @@ class CPrescriptionLineMix extends CMbObject {
     $this->_ref_log_date_retrait = $this->loadLastLogForField("date_arret");
   }
   
-	function removePlanifSysteme(){
-		if(!$this->_ref_lines){
-		  $this->loadRefsLines();
-		}
-		foreach($this->_ref_lines as $_perf_line){
-			$ds = CSQLDataSource::get("std");
-	    $query = "DELETE planification_systeme.* FROM planification_systeme
-	              WHERE planification_systeme.object_id = '$_perf_line->_id'
-	              AND planification_systeme.object_class = '$_perf_line->_class';";
-	    $ds->exec($query);
-		}
+  function removePlanifSysteme(){
+    if(!$this->_ref_lines){
+      $this->loadRefsLines();
+    }
+    foreach($this->_ref_lines as $_perf_line){
+      $ds = CSQLDataSource::get("std");
+      $query = "DELETE planification_systeme.* FROM planification_systeme
+                WHERE planification_systeme.object_id = '$_perf_line->_id'
+                AND planification_systeme.object_class = '$_perf_line->_class';";
+      $ds->exec($query);
+    }
   }
-	
-	/*
+  
+  /*
    * Calcul des prises prevues pour la prescription_line_mix
    */
   function calculPrisesPrevues($date, $manual_planif){
-  	if(!$this->_ref_lines){
-  		return;
-  	}
-		
-		$line_perf_ids = CMbArray::pluck($this->_ref_lines, "_id");
-  	$line_perf = reset($this->_ref_lines);
-		
-		$planif = new CPlanificationSysteme();
-		$where = array();
-		$where["object_id"] = " = '$line_perf->_id'";
-		$where["object_class"] = " = '$line_perf->_class'";
-		$where["dateTime"] = " LIKE '$date%'";
-		$planifs = $planif->loadList($where, "dateTime ASC");
-		
-		if($manual_planif){
-			foreach($planifs as $_planif_id => $_planif){
-				$planification = new CAdministration();
-				$where = array();
-				$where["object_class"] = " = 'CPrescriptionLineMixItem'";
+    if(!$this->_ref_lines){
+      return;
+    }
+    
+    $line_perf_ids = CMbArray::pluck($this->_ref_lines, "_id");
+    $line_perf = reset($this->_ref_lines);
+    
+    $planif = new CPlanificationSysteme();
+    $where = array();
+    $where["object_id"] = " = '$line_perf->_id'";
+    $where["object_class"] = " = '$line_perf->_class'";
+    $where["dateTime"] = " LIKE '$date%'";
+    $planifs = $planif->loadList($where, "dateTime ASC");
+    
+    if($manual_planif){
+      foreach($planifs as $_planif_id => $_planif){
+        $planification = new CAdministration();
+        $where = array();
+        $where["object_class"] = " = 'CPrescriptionLineMixItem'";
         $where["object_id"] = CSQLDataSource::prepareIn($line_perf_ids); 
-				$where["original_dateTime"] = " = '$_planif->dateTime'";
-				$where["planification"] = " = '1'";
-				$count_planif = $planification->countList($where);
-				if($count_planif){
-					unset($planifs[$_planif_id]);
-				}
-			}
-		
-			$this->_planifs_systeme[$date] = $planifs;
-	
-		  // Parcours des lines items
-			foreach($this->_ref_lines as $_line_mix_item){
-	      $_line_mix_item->loadRefsPlanifications($date);
-				
-				// Parcours des planifications des lin
+        $where["original_dateTime"] = " = '$_planif->dateTime'";
+        $where["planification"] = " = '1'";
+        $count_planif = $planification->countList($where);
+        if($count_planif){
+          unset($planifs[$_planif_id]);
+        }
+      }
+    
+      $this->_planifs_systeme[$date] = $planifs;
+  
+      // Parcours des lines items
+      foreach($this->_ref_lines as $_line_mix_item){
+        $_line_mix_item->loadRefsPlanifications($date);
+        
+        // Parcours des planifications des lin
         foreach($_line_mix_item->_ref_planifications as $_planif){
-		      $_date = mbDate($_planif->dateTime);
-		      $_hour = mbTransformTime(null, $_planif->dateTime, "%H");
-					if(!isset($this->_prises_prevues[$_date][$_hour]["manual"][$_line_mix_item->_id])){
-						$this->_prises_prevues[$_date][$_hour]["manual"][$_line_mix_item->_id] = 0;
-					}
+          $_date = mbDate($_planif->dateTime);
+          $_hour = mbTransformTime(null, $_planif->dateTime, "%H");
+          if(!isset($this->_prises_prevues[$_date][$_hour]["manual"][$_line_mix_item->_id])){
+            $this->_prises_prevues[$_date][$_hour]["manual"][$_line_mix_item->_id] = 0;
+          }
           $this->_prises_prevues[$_date][$_hour]["manual"][$_line_mix_item->_id] += $_planif->quantite;
         }
-	    }
-		} else {
-			foreach($planifs as $_planif){
+      }
+    } else {
+      foreach($planifs as $_planif){
         $_date = mbDate($_planif->dateTime);
         $_hour = mbTransformTime(null, $_planif->dateTime, "%H");
         $this->_prises_prevues[$_date][$_hour]["real_hour"][] = mbTime($_planif->dateTime);
         $this->_prises_prevues[$_date][$_hour]["plan_hour"] = "$_hour:00:00";
       }
-		}		
+    }    
   }
-	
-	/*
+  
+  /*
    *  Calcul de la quantite totale de la perf en ml ($this->_quantite_totale)
    */
   function calculQuantiteTotal(){
@@ -647,158 +648,158 @@ class CPrescriptionLineMix extends CMbObject {
       $_perf_line->updateQuantiteAdministration();
     }
   }
-	
-	function calculPlanifsPerf($check_planif = false){
-		if(!CPlanificationSysteme::$_calcul_planif){
+  
+  function calculPlanifsPerf($check_planif = false){
+    if(!CPlanificationSysteme::$_calcul_planif){
       return;
     }
-		
-		if($this->ponctual){
-			$this->_fin = mbDateTime("+1 DAY", "$this->date_debut $this->time_debut");
-		}
-		
-		// Calcul de la quantite totale de la perf en fonction des produits
+    
+    if($this->ponctual){
+      $this->_fin = mbDateTime("+1 DAY", "$this->date_debut $this->time_debut");
+    }
+    
+    // Calcul de la quantite totale de la perf en fonction des produits
     $this->calculQuantiteTotal();
-		
-		$volume_restant = 0;
-		
-		$dates_planif = array();
+    
+    $volume_restant = 0;
+    
+    $dates_planif = array();
     if((($this->date_debut && $this->time_debut) || $this->date_pose) && ($this->duree || $this->ponctual)){
       $date_time_temp = $this->_debut;
       $dates_planif[] = $date_time_temp;
-			
+      
       // Perfusion à la vitesse de x ml/h
       if($this->_debit && $this->_quantite_totale){
-				// Chargement de toutes les variations
-				$this->loadRefsVariations();
-				
-				// Initialisation au valeur de depart
-				$prec_variation = $this->_debut;
-				$prec_debit = $this->_debit;
-				
-				$last_variation = new CPrescriptionLineMixVariation();
-				$last_variation->debit = 0;
-				$last_variation->dateTime = $this->_fin;
-				$this->_ref_variations[] = $last_variation;
-				
-				// La quantite restante dans la perf est la quantite totale de la perf (quantite mise au depart)
-				$qte_restante = $this->_quantite_totale;
-				$volume_variation = 0;
-				$current_date = $this->_debut;
+        // Chargement de toutes les variations
+        $this->loadRefsVariations();
         
-				// Parcours des variations
-				foreach($this->_ref_variations as $_variation){
+        // Initialisation au valeur de depart
+        $prec_variation = $this->_debut;
+        $prec_debit = $this->_debit;
+        
+        $last_variation = new CPrescriptionLineMixVariation();
+        $last_variation->debit = 0;
+        $last_variation->dateTime = $this->_fin;
+        $this->_ref_variations[] = $last_variation;
+        
+        // La quantite restante dans la perf est la quantite totale de la perf (quantite mise au depart)
+        $qte_restante = $this->_quantite_totale;
+        $volume_variation = 0;
+        $current_date = $this->_debut;
+        
+        // Parcours des variations
+        foreach($this->_ref_variations as $_variation){
           $duree_variation = mbHoursRelative($prec_variation, $_variation->dateTime);
-					$volume_variation += round($prec_debit * $duree_variation);
+          $volume_variation += round($prec_debit * $duree_variation);
           
-					if($volume_restant){
-						if($prec_debit){
-						  $_duree_volume_restant = round(($volume_restant / $prec_debit) * 60);
-					  	$current_date = mbDateTime("$_duree_volume_restant minutes", $prec_variation);
-						  $dates_planif[] = $current_date;
-						}
-						$volume_restant = 0;
-					}
-				
-					if($volume_variation < $qte_restante){
-						$volume_restant = $qte_restante - $volume_variation;
-						$_duree_variation = round($duree_variation * 60);
-						$current_date = mbDateTime("$_duree_variation minutes", $current_date);
-				  }
-					
-					// si le volume de la variation est plus grand que le contenu de la perf (plusieurs remplissages dans la meme variation)
-					else {
-					  while($volume_variation >= $qte_restante){
-	            // Modification du volume total de la variation en fonction de ce qui est consommé
-							$volume_variation = $volume_variation - $qte_restante;
-							
-							// Calcul de la duree de la consommation en fonction du debit de la prescription_line_mix
-							$_duree = $qte_restante / $prec_debit;
-							
-							// Calcul de l'heure de la prise
-	            if($_duree){
-	              $increment = round($_duree * 60);
-	              $current_date = mbDateTime("$increment minutes", $current_date);
-							}
-	            
-							// Si la quantité restant dans la prescription_line_mix est superieure au volume de la variation, on calcule le volume restant 
-							if($volume_variation <= $qte_restante){
-								$volume_restant = $qte_restante - $volume_variation;                
-							}
-	            
-							if($current_date < $_variation->dateTime){
-							  $dates_planif[] = $current_date;
-							}
+          if($volume_restant){
+            if($prec_debit){
+              $_duree_volume_restant = round(($volume_restant / $prec_debit) * 60);
+              $current_date = mbDateTime("$_duree_volume_restant minutes", $prec_variation);
+              $dates_planif[] = $current_date;
             }
-					}
-					$prec_variation = $_variation->dateTime;
+            $volume_restant = 0;
+          }
+        
+          if($volume_variation < $qte_restante){
+            $volume_restant = $qte_restante - $volume_variation;
+            $_duree_variation = round($duree_variation * 60);
+            $current_date = mbDateTime("$_duree_variation minutes", $current_date);
+          }
+          
+          // si le volume de la variation est plus grand que le contenu de la perf (plusieurs remplissages dans la meme variation)
+          else {
+            while($volume_variation >= $qte_restante){
+              // Modification du volume total de la variation en fonction de ce qui est consommé
+              $volume_variation = $volume_variation - $qte_restante;
+              
+              // Calcul de la duree de la consommation en fonction du debit de la prescription_line_mix
+              $_duree = $qte_restante / $prec_debit;
+              
+              // Calcul de l'heure de la prise
+              if($_duree){
+                $increment = round($_duree * 60);
+                $current_date = mbDateTime("$increment minutes", $current_date);
+              }
+              
+              // Si la quantité restant dans la prescription_line_mix est superieure au volume de la variation, on calcule le volume restant 
+              if($volume_variation <= $qte_restante){
+                $volume_restant = $qte_restante - $volume_variation;                
+              }
+              
+              if($current_date < $_variation->dateTime){
+                $dates_planif[] = $current_date;
+              }
+            }
+          }
+          $prec_variation = $_variation->dateTime;
           $prec_debit = $_variation->debit;
-				}
-			} elseif ($this->ponctual && $this->duree_passage){
-				$dates_planif[] = $date_time_temp;
-			}
-			// Perfusion toutes les x heures
+        }
+      } elseif ($this->ponctual && $this->duree_passage){
+        $dates_planif[] = $date_time_temp;
+      }
+      // Perfusion toutes les x heures
       if($this->nb_tous_les && !$this->ponctual){
         while((mbDateTime("+ $this->nb_tous_les hours", $date_time_temp)) < $this->_fin){
           $date_time_temp = mbDateTime("+ $this->nb_tous_les hours", $date_time_temp);
           $dates_planif[] = $date_time_temp;
-        }	
-    	}  
+        }  
+      }  
     }
     
-		$this->loadRefPrescription();
-		$prescription =& $this->_ref_prescription;
-		$sejour =& $this->_ref_prescription->_ref_object;
-		
-	  $_planifs_by_step = array();
-	
-		$this->duree = "";
-		
+    $this->loadRefPrescription();
+    $prescription =& $this->_ref_prescription;
+    $sejour =& $this->_ref_prescription->_ref_object;
+    
+    $_planifs_by_step = array();
+  
+    $this->duree = "";
+    
     // Creation des planifications
-		foreach($this->_ref_lines as $_perf_line){
-			if($check_planif){
-				$planif = new CPlanificationSysteme();
-		    $where = array();
-		    $where["object_id"] = " = '$_perf_line->_id'";
-		    $where["object_class"] = " = 'CPrescriptionLineMixItem'";
+    foreach($this->_ref_lines as $_perf_line){
+      if($check_planif){
+        $planif = new CPlanificationSysteme();
+        $where = array();
+        $where["object_id"] = " = '$_perf_line->_id'";
+        $where["object_class"] = " = 'CPrescriptionLineMixItem'";
         if($planif->countList($where)){
           continue;
         }
-			}
+      }
       
-			$count_planifs = 0;
-			
+      $count_planifs = 0;
+      
       foreach($dates_planif as $_datetime){
         if ($prescription->type == "sejour" && ($sejour->_entree > $_datetime || $sejour->_sortie < $_datetime)) {
           continue;
         }
-				
-				if($this->ponctual){
-					$count_planifs++;
-	        if($count_planifs == 2){
-	          if(!$this->duree){
-					    $duree = mbHoursRelative($this->_debut, $_datetime);
-						  $this->duree = $duree;
-						  $this->unite_duree = "heure";
-						  $this->store();
-						}
+        
+        if($this->ponctual){
+          $count_planifs++;
+          if($count_planifs == 2){
+            if(!$this->duree){
+              $duree = mbHoursRelative($this->_debut, $_datetime);
+              $this->duree = $duree;
+              $this->unite_duree = "heure";
+              $this->store();
+            }
             break;
-					}	
-				}
-				
-				$_planifs_by_step[] = array("object_id" => "{$_perf_line->_id}",
+          }  
+        }
+        
+        $_planifs_by_step[] = array("object_id" => "{$_perf_line->_id}",
                                     "object_class" => "{$_perf_line->_class}",
                                     "sejour_id" => "{$this->_ref_prescription->object_id}",
                                     "dateTime" => $_datetime);
-			}
+      }
     }
     
-		if(count($_planifs_by_step)){
-		  $ds = CSQLDataSource::get("std");
+    if(count($_planifs_by_step)){
+      $ds = CSQLDataSource::get("std");
       $ds->insertMulti('planification_systeme', $_planifs_by_step, 1000);
-		}
-	}
-  	
+    }
+  }
+    
   function store(){
     if($this->_add_perf_contigue){
       if($msg = $this->duplicatePerf()){
@@ -806,36 +807,36 @@ class CPrescriptionLineMix extends CMbObject {
       }
     }
     
-		if($this->type == "PCEA"){
-		  $this->voie = "Voie péridurale";
-		}
-		
+    if($this->type == "PCEA"){
+      $this->voie = "Voie péridurale";
+    }
+    
     $creation = !$this->_id;
     $calculPlanif =  ($this->fieldModified("volume_debit") ||
-		                  $this->fieldModified("duree_debit") || 
-		                  $this->fieldModified("nb_tous_les") || 
-											$this->fieldModified("date_debut") || 
-											$this->fieldModified("time_debut") ||
-											$this->fieldModified("duree") ||
-											$this->fieldModified("unite_duree") ||
+                      $this->fieldModified("duree_debit") || 
+                      $this->fieldModified("nb_tous_les") || 
+                      $this->fieldModified("date_debut") || 
+                      $this->fieldModified("time_debut") ||
+                      $this->fieldModified("duree") ||
+                      $this->fieldModified("unite_duree") ||
                       $this->fieldModified("date_pose")||
-											$this->fieldModified("time_pose")||
+                      $this->fieldModified("time_pose")||
                       $this->fieldModified("date_retrait")||
                       $this->fieldModified("date_retrait")||
                       $this->fieldModified("date_arret")||
-											$this->fieldModified("time_arret")||
-											$this->fieldModified("variante_active"));
-													
+                      $this->fieldModified("time_arret")||
+                      $this->fieldModified("variante_active"));
+                          
     if($msg = parent::store()){
-  		return $msg;
+      return $msg;
     }
 
-		if($calculPlanif && $this->_ref_prescription->type == "sejour"){
-			$this->removePlanifSysteme();
-			if($this->variante_active){
-				$this->calculPlanifsPerf();
-			}
-		}
+    if($calculPlanif && $this->_ref_prescription->type == "sejour"){
+      $this->removePlanifSysteme();
+      if($this->variante_active){
+        $this->calculPlanifsPerf();
+      }
+    }
   }
   
   function delete(){
@@ -857,7 +858,7 @@ class CPrescriptionLineMix extends CMbObject {
    * Chargement de la ligne precedent la ligne courante
    */
   function loadRefParentLine(){
-  	$this->_ref_parent_line = $this->loadUniqueBackRef("prev_line");
+    $this->_ref_parent_line = $this->loadUniqueBackRef("prev_line");
   }
   
   /*
@@ -865,19 +866,19 @@ class CPrescriptionLineMix extends CMbObject {
    */
   function loadRefsVariantes(){
     if(!$this->variante_for_id){
-		  $this->_ref_variantes["CPrescriptionLineMedicament"] = $this->loadBackRefs("variantes_medicament"); 
+      $this->_ref_variantes["CPrescriptionLineMedicament"] = $this->loadBackRefs("variantes_medicament"); 
       $this->_ref_variantes["CPrescriptionLineMix"] = $this->loadBackRefs("variantes_prescription_line_mix");  
       $this->_ref_variante_for = $this;
     } else {
-	    $_base_line = new $this->variante_for_class;
-		  $_base_line->load($this->variante_for_id);
-		  $_base_line->loadRefsVariantes();
-	    $this->_ref_variantes = $_base_line->_ref_variantes;
-	    $this->_ref_variantes[$_base_line->_class][$_base_line->_id] = $_base_line;
-			unset($this->_ref_variantes[$this->_class][$this->_id]);		
-		  $this->_ref_variante_for = $_base_line;			  
-	  }
-		foreach($this->_ref_variantes["CPrescriptionLineMix"] as $_substitution_line){
+      $_base_line = new $this->variante_for_class;
+      $_base_line->load($this->variante_for_id);
+      $_base_line->loadRefsVariantes();
+      $this->_ref_variantes = $_base_line->_ref_variantes;
+      $this->_ref_variantes[$_base_line->_class][$_base_line->_id] = $_base_line;
+      unset($this->_ref_variantes[$this->_class][$this->_id]);    
+      $this->_ref_variante_for = $_base_line;        
+    }
+    foreach($this->_ref_variantes["CPrescriptionLineMix"] as $_substitution_line){
       $_substitution_line->loadRefsLines();
     }
   }
@@ -928,31 +929,31 @@ class CPrescriptionLineMix extends CMbObject {
    */
   function loadRefsLines(){
     $this->_ref_lines = $this->loadBackRefs("lines_mix");  
-		if(!$this->_short_view){
-		  foreach($this->_ref_lines as $_perf_line){
-		  	$this->_short_view .= $_perf_line->_ref_produit->libelle_abrege.", ";
-		  }
-			$this->_short_view .= "($this->voie - ".CAppUI::tr('CPrescriptionLineMix.type.'.$this->type).")";
-		}
-	}
+    if(!$this->_short_view){
+      foreach($this->_ref_lines as $_perf_line){
+        $this->_short_view .= $_perf_line->_ref_produit->libelle_abrege.", ";
+      }
+      $this->_short_view .= "($this->voie - ".CAppUI::tr('CPrescriptionLineMix.type.'.$this->type).")";
+    }
+  }
   
   /*
    * Chargement des differentes voies disponibles pour la prescription_line_mix
    */
   function loadVoies(){
     foreach($this->_ref_lines as $_perf_line){
-    	if(!$_perf_line->_ref_produit->voies){
-			  $_perf_line->_ref_produit->loadVoies();
-			}
-			$_perf_line->loadRefProduitPrescription();
-			if($_perf_line->_ref_produit_prescription->_id){
-			  $this->_voies[$_perf_line->_ref_produit_prescription->voie] = $_perf_line->_ref_produit_prescription->voie;
+      if(!$_perf_line->_ref_produit->voies){
+        $_perf_line->_ref_produit->loadVoies();
       }
-			if($_perf_line->_ref_produit->voies){
-	      foreach($_perf_line->_ref_produit->voies as $_voie){
-	        $this->_voies[$_voie] = $_voie;
-	      }
-		  }
+      $_perf_line->loadRefProduitPrescription();
+      if($_perf_line->_ref_produit_prescription->_id){
+        $this->_voies[$_perf_line->_ref_produit_prescription->voie] = $_perf_line->_ref_produit_prescription->voie;
+      }
+      if($_perf_line->_ref_produit->voies){
+        foreach($_perf_line->_ref_produit->voies as $_voie){
+          $this->_voies[$_voie] = $_voie;
+        }
+      }
     }
 
     if (!isset($this->_voies["none"])) {
@@ -969,8 +970,8 @@ class CPrescriptionLineMix extends CMbObject {
       $_perf_line->loadRefsAdministrations();
       foreach($_perf_line->_ref_administrations as $_administration){
         $date = mbDate($_administration->dateTime);
-			  $hour = mbTransformTime(null, $_administration->dateTime, "%H");
-			    
+        $hour = mbTransformTime(null, $_administration->dateTime, "%H");
+          
         if(!isset($_perf_line->_administrations[$date][$hour])){
           $_perf_line->_administrations[$date][$hour] = 0;
         }
@@ -978,7 +979,7 @@ class CPrescriptionLineMix extends CMbObject {
       }
     }
   }
-	  
+    
   /*
    * Chargement du praticien
    */
@@ -1003,25 +1004,25 @@ class CPrescriptionLineMix extends CMbObject {
   function loadRefLogSignaturePrat(){
     $this->_ref_log_signature_prat = $this->loadLastLogForField("signature_prat");
   }
-	
-	/*
-	 * Creation d'une ligne d'oxygene a partir des infos du médicament
-	 */
-	function bindOxygene($values = array()){
-		$prescription_id      = $values['prescription_id'];
-	  $praticien_id         = $values['praticien_id'];
-		$variante_for_id    = $values['variante_for_id'];
+  
+  /*
+   * Creation d'une ligne d'oxygene a partir des infos du médicament
+   */
+  function bindOxygene($values = array()){
+    $prescription_id      = $values['prescription_id'];
+    $praticien_id         = $values['praticien_id'];
+    $variante_for_id    = $values['variante_for_id'];
     $code_cip             = $values['code_cip'];
 
-	  // Voir les types d'oxygene
-	  $this->type = "masque";
-	  $this->type_line = "oxygene";
-		$this->unite_duree = "heure";
-		$this->unite_duree_passage = "heure";
-	  $this->prescription_id = $prescription_id;
-	  $this->creator_id = CAppUI::$user->_id;
-	  $this->praticien_id = $praticien_id;
-	  $this->variante_for_id = $variante_for_id;
+    // Voir les types d'oxygene
+    $this->type = "masque";
+    $this->type_line = "oxygene";
+    $this->unite_duree = "heure";
+    $this->unite_duree_passage = "heure";
+    $this->prescription_id = $prescription_id;
+    $this->creator_id = CAppUI::$user->_id;
+    $this->praticien_id = $praticien_id;
+    $this->variante_for_id = $variante_for_id;
 
     if(isset($values['debut'])){
       $this->date_debut = $values['debut'];
@@ -1029,33 +1030,33 @@ class CPrescriptionLineMix extends CMbObject {
     if(isset($values['time_debut'])){
       $this->time_debut = $values['time_debut'];
     }
-		if(isset($values['variante_for_class'])){
-			$this->variante_for_class = $values['variante_for_class'];
-		}
-	  if($this->variante_for_id){
-	    $this->variante_active = 0;
-	  }
-	  
-		// Sauvegarde de la voie lors de la creation de la ligne
+    if(isset($values['variante_for_class'])){
+      $this->variante_for_class = $values['variante_for_class'];
+    }
+    if($this->variante_for_id){
+      $this->variante_active = 0;
+    }
+    
+    // Sauvegarde de la voie lors de la creation de la ligne
     $produit = new CBcbProduit();
-		$produit->load($code_cip);
+    $produit->load($code_cip);
     $produit->loadVoies();
-		$this->voie = $produit->voies[0];
+    $this->voie = $produit->voies[0];
       
     $msg = $this->store();
-	  CAppUI::stepAjax("CPrescriptionLineMix-msg-create");
+    CAppUI::stepAjax("CPrescriptionLineMix-msg-create");
     
-	  $prescription_line_mix_item = new CPrescriptionLineMixItem();
-	  $prescription_line_mix_item->prescription_line_mix_id = $this->_id;
-	  $prescription_line_mix_item->code_cip = $code_cip;
-	  
-		$msg = $prescription_line_mix_item->store();
+    $prescription_line_mix_item = new CPrescriptionLineMixItem();
+    $prescription_line_mix_item->prescription_line_mix_id = $this->_id;
+    $prescription_line_mix_item->code_cip = $code_cip;
+    
+    $msg = $prescription_line_mix_item->store();
     CAppUI::stepAjax("CPrescriptionLineMixItem-msg-create");
-	}
+  }
 }
 
 if(CAppUI::conf("dPprescription CPrescription show_PCEA")){
-	CPrescriptionLineMix::$type_by_line["perfusion"][] = "PCEA";
+  CPrescriptionLineMix::$type_by_line["perfusion"][] = "PCEA";
 }
   
 ?>

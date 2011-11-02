@@ -24,8 +24,8 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
   var $time_arret          = null;  // Heure d'arret
   var $child_id            = null;
   
-	// Date relative pour les protocoles
-	var $jour_decalage       = null;  // Jour de decalage: I/E/S/N
+  // Date relative pour les protocoles
+  var $jour_decalage       = null;  // Jour de decalage: I/E/S/N
   var $decalage_line       = null;  // Permet de definir le decalage de la ligne par rapport au jour de decalage specifié
   var $unite_decalage      = null;
   var $jour_decalage_fin   = null;  // Jour de fin: I/S
@@ -90,6 +90,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
   // Can fields
   var $_perm_edit = null;
   var $_dates_urgences = null;
+  var $_is_past = false;
   
   static $contexte_recent_modif = null;
   

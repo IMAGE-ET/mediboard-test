@@ -112,7 +112,7 @@
             A partir de la fin du séjour jusqu'au {{mb_value object=$line field=fin}}
           </td>
 			{{else}}
-				<td style="width: 10%" class="text">
+				<td style="width: 10%" class="text {{if $line->_is_past}}warning{{/if}}">
 	        <!-- Date de debut -->
 	        {{if $line->debut}}
 	          {{mb_value object=$line field=debut}}

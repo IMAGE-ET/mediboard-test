@@ -83,7 +83,7 @@
   </td>
   
 	{{if !$line->_protocole}}
-		<td style="width:10%;" class="text">
+		<td style="width:10%;" class="text {{if $line->_is_past}}warning{{/if}}">
 		  <!-- Date de debut -->
 	    {{if $line->debut}}
 	      {{mb_value object=$line field=debut}}

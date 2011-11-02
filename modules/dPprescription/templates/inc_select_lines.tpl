@@ -33,6 +33,12 @@
   };
 </script>
 
+{{if $count_past_lines > 0}}
+  <div class="small-warning">
+    Il y a {{$count_past_lines}} ligne{{if $count_past_lines > 1}}s{{/if}} dont le début est antérieur à la date courante.
+  </div>
+{{/if}}
+
 <ul id="tabs-protocole" class="control_tabs">
   {{if $prescription->_ref_lines_med_comments.med|@count || $prescription->_ref_prescription_line_mixes || $prescription->_ref_lines_med_comments.comment|@count}}
     <li><a href="#medicaments">{{tr}}CPrescription._chapitres.med{{/tr}}
