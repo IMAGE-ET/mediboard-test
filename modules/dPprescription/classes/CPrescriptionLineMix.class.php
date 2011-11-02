@@ -169,7 +169,7 @@ class CPrescriptionLineMix extends CMbObject {
   	$specs = parent::getProps();
   	$specs["prescription_id"]        = "ref class|CPrescription cascade";
   	$specs["type_line"]              = "enum notNull list|perfusion|aerosol|oxygene|alimentation default|perfusion";
-    $specs["type"]                   = "enum list|classique|seringue|PCA|masque|lunettes|sonde|nebuliseur_ultrasonique|nebuliseur_pneumatique|doseur|inhalateur";
+    $specs["type"]                   = "enum list|classique|seringue|PCA|PCEA|masque|lunettes|sonde|nebuliseur_ultrasonique|nebuliseur_pneumatique|doseur|inhalateur";
 		$specs["libelle"]                = "str";
     $specs["volume_debit"]           = "float pos";
 		$specs["duree_debit"]            = "num pos";
@@ -257,7 +257,7 @@ class CPrescriptionLineMix extends CMbObject {
       $this->_frequence .= "toutes les $this->nb_tous_les"."h";
     }
     
-    if($this->type == "PCA"){
+    if($this->type == "PCA" || $this->type == "PCEA"){
       $this->_view .= ($this->mode_bolus) ? ", mode PCA: ".CAppUI::tr("CPrescriptionLineMix.mode_bolus.".$this->mode_bolus) : "";
       $this->_view .= ($this->dose_bolus) ? ", bolus de $this->dose_bolus mg" : "";
       $this->_view .= ($this->periode_interdite) ? ", période interdite de $this->periode_interdite min" : "";
@@ -805,7 +805,11 @@ class CPrescriptionLineMix extends CMbObject {
         return $msg;
       }
     }
-              
+    
+		if($this->type == "PCEA"){
+		  $this->voie = "Voie péridurale";
+		}
+		
     $creation = !$this->_id;
     $calculPlanif =  ($this->fieldModified("volume_debit") ||
 		                  $this->fieldModified("duree_debit") || 
@@ -1048,6 +1052,10 @@ class CPrescriptionLineMix extends CMbObject {
 		$msg = $prescription_line_mix_item->store();
     CAppUI::stepAjax("CPrescriptionLineMixItem-msg-create");
 	}
+}
+
+if(CAppUI::conf("dPprescription CPrescription show_PCEA")){
+	CPrescriptionLineMix::$type_by_line["perfusion"][] = "PCEA";
 }
   
 ?>

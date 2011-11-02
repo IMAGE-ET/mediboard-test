@@ -51,6 +51,7 @@ Main.add(Control.Tabs.create.curry('tab-{{$class}}', true));
       {{mb_include module=system template=inc_config_bool var=qte_obligatoire_inscription}}
       {{mb_include module=system template=inc_config_enum var=nb_days_prescription_current values="1|2|3|4|5|6|7" skip_locales=1}}
       {{mb_include module=system template=inc_config_bool var=display_cat_for_elt}}
+		  {{mb_include module=system template=inc_config_bool var=show_PCEA}}
 		</tbody>
 
     <tbody style="display: none" id="chapters_visible">

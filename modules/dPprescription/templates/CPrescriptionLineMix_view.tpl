@@ -87,7 +87,7 @@
       {{/if}}
     </td>
   </tr>
-  {{if $perf->type == "PCA"}}
+  {{if $perf->type == "PCA" || $perf->type == "PCEA"}}
 	  <tr>
 	    <td>
 	      {{mb_label object=$perf field=mode_bolus}}:

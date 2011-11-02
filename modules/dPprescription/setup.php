@@ -2135,7 +2135,12 @@ class CSetupdPprescription extends CSetup {
               ADD INDEX (`stock_id`);";
     $this->addQuery($query);
 		
-		$this->mod_version = "1.60";
+		$this->makeRevision("1.60");
+		$query = "ALTER TABLE `prescription_line_mix` 
+              CHANGE `type` `type` ENUM ('classique','seringue','PCA','PCEA','masque','lunettes','sonde','nebuliseur_ultrasonique','nebuliseur_pneumatique','doseur','inhalateur');";
+		$this->addQuery($query);
+		
+		$this->mod_version = "1.61";
   }
 }
 

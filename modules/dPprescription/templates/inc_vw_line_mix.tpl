@@ -9,15 +9,22 @@
 *}}
 
 {{mb_default var=advanced_prot value=0}}
+{{assign var=prescription_line_mix_id value=$line->_id}}
+
 <script type="text/javascript">
 
 Main.add( function(){
   var editPerfForm = getForm('editPerf-{{$line->_id}}');
   
-  {{if $line->type == "PCA"}}
+  {{if $line->type == "PCA" || $line->type == "PCEA"}}
 	  $("bolus-{{$line->_id}}").show();
 	  {{if $line->_perm_edit}}
 		  changeModeBolus(editPerfForm);
+			{{if $line->type == "PCEA"}}
+        getForm('editVoieLineMix-{{$prescription_line_mix_id}}').hide();
+			{{else}}
+        getForm('editVoieLineMix-{{$prescription_line_mix_id}}').show();
+			{{/if}}
 		{{/if}}		
   {{/if}}
     
@@ -52,7 +59,7 @@ Main.add( function(){
 {{mb_include module="dPprescription" template="inc_header_line"}}
 
 <table class="tbl" id="prescription_line_mix-{{$line->_id}}"> 
-{{assign var=prescription_line_mix_id value=$line->_id}}
+
   <tr>
     <th id="th-perf-{{$line->_id}}" class="text {{if $line->perop}}perop{{/if}}">
       <div style="float: left">
@@ -466,9 +473,14 @@ Main.add( function(){
                 {{assign var=types_for_line value=$types.$type_line}}
                 <select name="type" 
                         onchange="{{if $line->type_line == "perfusion"}}
-                                  if(this.value == 'PCA'){ 
+                                  if(this.value == 'PCA' || this.value == 'PCEA'){ 
                                     $('bolus-{{$prescription_line_mix_id}}').show(); 
                                     changeModeBolus(this.form);
+																		if(this.value == 'PCEA') {
+																		  getForm('editVoieLineMix-{{$prescription_line_mix_id}}').hide();
+																		} else {
+																		  getForm('editVoieLineMix-{{$prescription_line_mix_id}}').show();
+																		}
                                   } else { 
                                     resetBolus(this.form); 
                                     $('bolus-{{$prescription_line_mix_id}}').hide(); 

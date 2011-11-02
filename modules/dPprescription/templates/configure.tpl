@@ -28,7 +28,6 @@ Main.add(function () {
 <div id="CPrescription" style="display: none;">
   {{mb_include template=CPrescription_configure}}
 </div>
-
 <div id="CCategoryPrescription" style="display: none;">
   {{mb_include template=CCategoryPrescription_configure}}
 </div>
