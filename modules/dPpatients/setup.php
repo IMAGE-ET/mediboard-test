@@ -1372,7 +1372,21 @@ class CSetupdPpatients extends CSetup {
       ADD INDEX (`devenir_dentaire_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.22";
+    $this->makeRevision("1.22");
+    $query = "DELETE FROM `correspondant_patient`
+      WHERE `nom` IS NULL
+      AND `prenom` IS NULL
+      AND `adresse` IS NULL
+      AND `cp` IS NULL
+      AND `ville` IS NULL
+      AND `tel` IS NULL
+      AND `urssaf` IS NULL
+      AND `parente` IS NULL
+      AND `email` IS NULL
+      AND `remarques` IS NULL;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.23";
   }
 }
 
