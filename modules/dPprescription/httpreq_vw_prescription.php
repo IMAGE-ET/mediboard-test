@@ -454,6 +454,7 @@ foreach($mins as &$min){
 $filter_line = new CPrescriptionLineMedicament();
 if ($prescription->type != "externe" || ($prescription->type == "externe" && !CAppUI::pref("date_empty_externe"))){
   $filter_line->debut = mbDate();
+	$filter_line->time_debut = mbTransformTime(null, null, "%H:00:00");
 }
 
 $prise = new CPrisePosologie();
