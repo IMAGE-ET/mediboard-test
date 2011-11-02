@@ -158,8 +158,8 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
         case "demi_journee":
           $this->_fin = $this->debut; break;
         case "jour": 
-          $this->_fin = mbDate("+ $this->duree DAYS", $this->debut); break;
-        case "semaine":
+					$this->_fin = mbDate("+ $this->duree DAYS", $this->debut); break;
+				case "semaine":
           $this->_fin = mbDate("+ $this->duree WEEKS", $this->debut); break;
         case "quinzaine":
           $duree_temp = 2 * $this->duree;

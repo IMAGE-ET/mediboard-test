@@ -120,6 +120,11 @@ class CPrescriptionLineElement extends CPrescriptionLine {
 	    }
     }
 		
+		if($this->duree && $this->unite_duree == "jour" && CAppUI::conf("dPprescription CPrescription duration_in_hours")){
+      $duree = $this->duree * 24;
+      $this->_fin_reelle = mbDateTime("+ $duree HOURS", $this->_debut_reel);
+    }
+		
     if(!$this->duree && $this->_ref_prescription->type == "sejour"){
       if(!$this->_fin_reelle){
       	if(CAppUI::conf("dPprescription CCategoryPrescription $chapitre fin_sejour")){

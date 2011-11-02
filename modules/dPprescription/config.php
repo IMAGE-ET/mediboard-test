@@ -24,6 +24,7 @@ $dPconfig["dPprescription"] = array (
     "nb_days_prescription_current" => "1",
     "display_cat_for_elt" => "0",
 		"show_PCEA" => "0",
+		"duration_in_hours" => "0",
     "scores" => array(
       "interaction" => array(
         "niv1" => "1",

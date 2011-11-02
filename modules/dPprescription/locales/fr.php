@@ -1672,6 +1672,8 @@ $locales['config-dPprescription-CPrescription-droits_infirmiers_med_elt'] = 'Méd
 $locales['config-dPprescription-CPrescription-droits_infirmiers_med_elt-desc'] = 'Médicaments hors AMM';
 $locales['config-dPprescription-CPrescription-droits_infirmiers_soin'] = 'Soin';
 $locales['config-dPprescription-CPrescription-droits_infirmiers_soin-desc'] = 'Soin';
+$locales['config-dPprescription-CPrescription-duration_in_hours'] = '1 jour = 24 heures';
+$locales['config-dPprescription-CPrescription-duration_in_hours-desc'] = '1 jour correspond à 24 heures';
 $locales['config-dPprescription-CPrescription-infirmiere_borne'] = 'Création des lignes par les infirmières';
 $locales['config-dPprescription-CPrescription-infirmiere_borne_start'] = 'Borne de début des infirmières';
 $locales['config-dPprescription-CPrescription-infirmiere_borne_start-desc'] = 'Borne de début des infirmières';
