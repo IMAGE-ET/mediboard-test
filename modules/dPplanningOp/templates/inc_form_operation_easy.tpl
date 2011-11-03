@@ -5,6 +5,7 @@
 {{if $op->_id && $op->_ref_sejour->sortie_reelle && !$modules.dPbloc->_can->edit}}
 <!-- <input type="hidden" name="_locked" value="1" /> -->
 {{/if}}
+
 <table class="form">
   {{if $op->annulee == 1}}
   <tr>
@@ -13,11 +14,10 @@
     </th>
   </tr>
   {{/if}}
+  
   <!-- Selection du chirurgien -->
   <tr>
-    <th>
-      {{mb_label object=$op field="chir_id"}}
-    </th>
+    <th>{{mb_label object=$op field="chir_id"}}</th>
     <td colspan="2">
       <select name="chir_id" class="{{$op->_props.chir_id}}"
         onchange="synchroPrat(); Value.synchronize(this); removePlageOp(true);"
@@ -32,26 +32,24 @@
     </td>
   </tr>
   
-	{{if $conf.dPplanningOp.CSejour.easy_service}}
+  {{if $conf.dPplanningOp.CSejour.easy_service}}
   <!-- Selection du service -->
   <tr>
-	  <th>
-	    {{mb_label object=$sejour field="service_id"}}
-	  </th>
-	  <td colspan="2">
-	    <select name="service_id" class="{{$sejour->_props.service_id}}" onchange="synchroService(this);" style="width: 15em;">
-	      <option value="">&mdash; Choisir un service</option>
-	      {{foreach from=$listServices item=_service}}
-	      <option value="{{$_service->_id}}" {{if $sejour->service_id == $_service->_id}} selected="selected" {{/if}}>
-	        {{$_service->_view}}
-	      </option>
-	      {{/foreach}}
-	    </select>
-	  </td>
-	</tr>
+    <th>{{mb_label object=$sejour field="service_id"}}</th>
+    <td colspan="2">
+      <select name="service_id" class="{{$sejour->_props.service_id}}" onchange="synchroService(this);" style="width: 15em;">
+        <option value="">&mdash; Choisir un service</option>
+        {{foreach from=$listServices item=_service}}
+        <option value="{{$_service->_id}}" {{if $sejour->service_id == $_service->_id}} selected="selected" {{/if}}>
+          {{$_service->_view}}
+        </option>
+        {{/foreach}}
+      </select>
+    </td>
+  </tr>
   {{/if}}
-	
-	
+  
+  
   <!-- Affichage du libelle -->
   <tr>
     <th>{{mb_label object=$op field="libelle"}}</th>
@@ -64,6 +62,7 @@
   </tr>
 
   <!-- Diagnostic principal -->
+  {{if $conf.dPplanningOp.CSejour.easy_cim10}}
   <tr>
     <th>{{mb_label object=$sejour field="DP"}}</th>
     <td colspan="2">
@@ -88,18 +87,17 @@
       <input type="hidden" name="DP" value="{{$sejour->DP}}" onchange="$V(this.form.keywords_code, this.value); synchroService(this);"/>
     </td>
   </tr>
+  {{/if}}
   
   
   <!-- Liste des codes ccam -->
   <tr {{if !$conf.dPplanningOp.COperation.use_ccam}}style="display: none;"{{/if}}>
-    <th>Liste des codes CCAM
-    {{mb_field object=$op field="codes_ccam" onchange="refreshListCCAM('easy');" hidden=1}}
+    <th>
+      Liste des codes CCAM
+      {{mb_field object=$op field="codes_ccam" onchange="refreshListCCAM('easy');" hidden=1}}
     </th>
-    <td colspan="2" class="text" id="listCodesCcamEasy">
-  </td>
+    <td colspan="2" class="text" id="listCodesCcamEasy"></td>
   </tr>
-  
-  
     
   <!-- Selection du coté --> 
   <tr>
@@ -199,11 +197,11 @@
       {{mb_label object=$sejour field="patient_id"}}
     </th>
     <td colspan="2">
-  	  <input type="text" name="_patient_view" style="width: 15em" value="{{$patient->_view}}" readonly="readonly"
-  	    {{if $conf.dPplanningOp.CSejour.patient_id || !$sejour->_id || $app->user_type == 1}}
-  	      onfocus="PatSelector.init()"
-  	    {{/if}}
-  	  />
+      <input type="text" name="_patient_view" style="width: 15em" value="{{$patient->_view}}" readonly="readonly"
+        {{if $conf.dPplanningOp.CSejour.patient_id || !$sejour->_id || $app->user_type == 1}}
+          onfocus="PatSelector.init()"
+        {{/if}}
+      />
       {{if $conf.dPplanningOp.CSejour.patient_id || !$sejour->_id || $app->user_type == 1}}
       <button type="button" class="search notext" onclick="PatSelector.init()">Choisir un patient</button>
       <button id="button-edit-patient" type="button" 
@@ -216,27 +214,27 @@
   </tr>
   
   
-	{{if $conf.dPplanningOp.CSejour.easy_chambre_simple || $conf.dPplanningOp.COperation.easy_regime}}
+  {{if $conf.dPplanningOp.CSejour.easy_chambre_simple || $conf.dPplanningOp.COperation.easy_regime}}
   <tr>
-  	{{if $conf.dPplanningOp.CSejour.easy_chambre_simple}}
+    {{if $conf.dPplanningOp.CSejour.easy_chambre_simple}}
       <!-- Selection du type de chambre -->
-	    <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
-	    <td>
-	      {{mb_field object=$sejour field="chambre_seule" onchange="checkChambreSejourEasy()"}}
-	    </td>
-			{{else}}
-			<td colspan="2" />
-		{{/if}}
+      <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
+      <td>
+        {{mb_field object=$sejour field="chambre_seule" onchange="checkChambreSejourEasy()"}}
+      </td>
+      {{else}}
+      <td colspan="2" />
+    {{/if}}
    
-	  {{if $conf.dPplanningOp.COperation.easy_regime}}
-			<td class="button">
-	      <button type="button" class="new" onclick="popRegimes()">Régime alimentaire</button>
-	    </td>
-			{{else}}
-			<td />
-		{{/if}}
-	</tr>
-	{{/if}}
+    {{if $conf.dPplanningOp.COperation.easy_regime}}
+      <td class="button">
+        <button type="button" class="new" onclick="popRegimes()">Régime alimentaire</button>
+      </td>
+      {{else}}
+      <td />
+    {{/if}}
+  </tr>
+  {{/if}}
 
   {{if $conf.dPplanningOp.CSejour.consult_accomp}}
   <tr>
@@ -244,7 +242,7 @@
     <td colspan="3">{{mb_field object=$sejour field=consult_accomp typeEnum=radio onchange="checkConsultAccompSejourEasy()"}}</td>
   </tr>
   {{/if}}
-	
+  
   {{if !$modurgence && $conf.dPplanningOp.COperation.horaire_voulu && $conf.dPplanningOp.COperation.easy_horaire_voulu}}
   <tr>
     <th>Horaire souhaité</th>
@@ -265,19 +263,19 @@
   </tr>
   {{/if}}
   
-	{{if $conf.dPplanningOp.COperation.easy_materiel || $conf.dPplanningOp.COperation.easy_remarques}}
-	<tr>
-		<td />
-		{{if $conf.dPplanningOp.COperation.easy_materiel}}
+  {{if $conf.dPplanningOp.COperation.easy_materiel || $conf.dPplanningOp.COperation.easy_remarques}}
+  <tr>
+    <td />
+    {{if $conf.dPplanningOp.COperation.easy_materiel}}
     <td class="text" {{if !$conf.dPplanningOp.COperation.easy_remarques}}colspan="2"{{/if}}>{{mb_label object=$op field="materiel"}}</td>
-		{{/if}}
-		{{if $conf.dPplanningOp.COperation.easy_remarques}}
+    {{/if}}
+    {{if $conf.dPplanningOp.COperation.easy_remarques}}
     <td class="text" {{if !$conf.dPplanningOp.COperation.easy_materiel}}colspan="2"{{/if}}>{{mb_label object=$op field="rques"}}</td>
-		{{/if}}
+    {{/if}}
   </tr>
   <tr>
   <td />
-  	{{if $conf.dPplanningOp.COperation.easy_materiel}}
+    {{if $conf.dPplanningOp.COperation.easy_materiel}}
     <td style="width: 33%;" {{if !$conf.dPplanningOp.COperation.easy_remarques}}colspan="2"{{/if}}>
       <script type="text/javascript">
         Main.add(function() {
@@ -290,8 +288,8 @@
       </script>
       {{mb_field object=$op field="materiel" onchange="Value.synchronize(this);"}}
     </td>
-		{{/if}}
-		{{if $conf.dPplanningOp.COperation.easy_remarques}}
+    {{/if}}
+    {{if $conf.dPplanningOp.COperation.easy_remarques}}
     <td style="width: 33%;" {{if !$conf.dPplanningOp.COperation.easy_materiel}}colspan="2"{{/if}}>
       <script type="text/javascript">
         Main.add(function() {
@@ -304,9 +302,9 @@
       </script>
       {{mb_field object=$op field="rques" onchange="Value.synchronize(this);"}}
     </td>
-		{{/if}}
+    {{/if}}
   </tr>
-	{{/if}}
+  {{/if}}
 
   {{if $conf.dPplanningOp.CSejour.accident && $conf.dPplanningOp.COperation.easy_accident}}
   <tr>
