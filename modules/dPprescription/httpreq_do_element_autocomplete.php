@@ -14,6 +14,8 @@ $user_id = CValue::get("user_id");
 
 $libelle = CValue::post("libelle", "aaa");
 
+$role_propre = CAppUI::conf("dPprescription CPrescription role_propre");
+
 if(!$category_id){
 	// Chargement de la liste des categories
 	$category_prescription = new CCategoryPrescription();
@@ -35,7 +37,7 @@ if($category_id){
 }
 
 // Filtre sur le user_id pour les prescriptions en role propre
-if($user_id){
+if ($role_propre && $user_id){
 	$user = new CMediusers();
 	$user->load($user_id);
 	
