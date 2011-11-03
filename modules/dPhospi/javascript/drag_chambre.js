@@ -2,23 +2,17 @@
 Main.add(function(){
 	var elements;
 	var divGauche = $('list-chambres-non-placees');
-	var divDroite = $('grille');
 	
 	//Tous les éléments draggables: les div
-	elements = divGauche.select('div');
+	elements = $$('div.chambre');
 	elements.each(function(e) {
 	  new Draggable( e, {revert:true});
 	});
-	
-	elements = divDroite.select('div');
-	elements.each(function(e) {
-	  new Draggable( e, {revert:true});
-	});
-	
+
 	//Toutes les zones droppables: les td
 	Droppables.add(divGauche,{onDrop:TraiterDrop});
 	
-	elements = divDroite.select('td');
+	elements = $$('td.conteneur-chambre');
 	elements.each(function(e) {
 		Droppables.add(e,{onDrop:TraiterDrop});
 	});
@@ -39,11 +33,9 @@ function savePlan(element){
 		url.addParam("plan_x",element.parentNode.get("x"));
 		url.addParam("plan_y",element.parentNode.get("y"));
 	}
-	
 	else{
 		url.addParam("plan_x", null);
 		url.addParam("plan_y", null);
 	}
-	
 	url.requestUpdate(SystemMessage.id);
 }

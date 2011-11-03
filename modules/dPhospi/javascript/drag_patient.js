@@ -2,20 +2,21 @@
 Main.add(function(){
 	var elements;
 	var divGauche = $('list-patients-non-placees');
-	var divDroite = $('grille');
 	
 	//Tous les éléments draggables
-	elements=divGauche.select('div');
+	elements=divGauche.select('div.draggable');
 	elements.each(function(e) {
-		  new Draggable( e, {revert:true});
+		  new Draggable( e, {	revert:true, 
+								scroll: window, 
+								ghosting: true});
 	});
 	
 	//Toutes les zones droppables
 	Droppables.add(divGauche,{onDrop:TraiterDrop});
 	
-	elements=divDroite.select('td');
+	elements=$$('td.chambre');
 	elements.each(function(e) {
-		if(e.select('div').length<e.getAttribute("data-nb-lits")){
+		if(e.select('div.patient').length<e.getAttribute("data-nb-lits")){
 			Droppables.add(e,{onDrop:TraiterDrop});			
 		}
 	});
@@ -23,9 +24,10 @@ Main.add(function(){
 
 function TraiterDrop(element, zoneDrop)
 {
+	element.className="patient";
 	zoneDrop.appendChild(element);
 	savePlan(element, zoneDrop);
-	if(zoneDrop.select('div').length==zoneDrop.getAttribute("data-nb-lits")){
+	if(zoneDrop.select('div.patient').length==zoneDrop.getAttribute("data-nb-lits")){
 		Droppables.remove(zoneDrop);		
 	}
 }

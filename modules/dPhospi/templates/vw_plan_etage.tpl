@@ -24,11 +24,12 @@ div#grille{
 	float:left;
 	margin-left:5px;
 	margin-right:5px;	
+	width:100%;
 }
 
 #grille td.conteneur-chambre{
   width:75px;
-  height:35px;
+  height:50px;
   text-align:center;
   background-color:white;
 }

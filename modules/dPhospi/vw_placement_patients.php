@@ -13,6 +13,7 @@ CCanDo::checkRead();
 global $can, $g;
 
 $can->needsRead();
+$date           = CValue::getOrSession("date", mbDate());
 $ds = CSQLDataSource::get("std");
 
 // Récupération des paramètres
@@ -145,6 +146,8 @@ if($service_id){
     $_aff->loadView();
     $_aff->loadRefSejour();
     $_aff->_ref_sejour->loadRefPatient();
+    $_aff->_ref_sejour->loadComplete();
+    $_aff->_ref_sejour->checkDaysRelative($date);
     $_aff->loadRefLit();
   }
     $sejour = new CSejour();
@@ -164,6 +167,8 @@ if($service_id){
     	else{
       	$_sejour->loadRefPatient();
     	}
+    	$_sejour->loadComplete();
+    	$_sejour->checkDaysRelative($date);
     }
 }
 

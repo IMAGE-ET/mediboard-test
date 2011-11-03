@@ -12,8 +12,18 @@
 
 <style type="text/css">
 	
+div.draggable{
+	background-color: #EEF1FC;
+	border:1px solid silver;
+	width: 150px;
+	height:30px;
+}
+	
 div.patient{
-	background-color: #EEE;
+	background-color: rgba(255,255,255,0.8);
+	border:1px solid silver;
+  width: 120px;
+  height:30px;
 }
 
 div#list-patients-non-placees{
@@ -43,8 +53,8 @@ div#grille table{
 div#grille td.chambre{
 	vertical-align: top;
 	white-space :normal;
-	width:90px;
-	height:60px;
+	width:120px;
+	height:80px;
 	background-color: #ABE;
 }
 
@@ -65,15 +75,20 @@ div#grille td.pas-de-chambre{
 	border-color:white;	
 }
 
+div.ssr-sejour-bar {
+	float:right;
+  position:relative;
+}
+
 </style>
 	
 <table class="main">
 	<tr>
-	  <th class="title" style="width:200px;">Patiens  </th>
+	  <th class="title" style="width:150px;">Patiens  </th>
 	  <th class="title">{{if $service_id!=""}}{{$service_selectionne->nom}}{{else}}Plan{{/if}}</th>
 	</tr>
 	<tr>
-		<td>
+		<td >
 			<div id="list-patients-non-placees">
 				<p>Non placés</p>						
 			  {{foreach from=$chambre_non_affectees item=_affectation}}
@@ -82,8 +97,16 @@ div#grille td.pas-de-chambre{
 						<div data-sejour-id="{{$_sejour->sejour_id}}"
 						  data-entree="{{$_sejour->entree_prevue}}"
 						  data-sortie="{{$_sejour->sortie_prevue}}"
-							onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}')" class="patient" id="{{$_sejour->_id}}">
-				       	 {{$_patient}}
+							 class=" draggable " id="{{$_sejour->_id}}">
+				       	 <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">{{$_patient->nom}} {{$_patient->prenom}}</span>
+									 
+									 <div class="ssr-sejour-bar" title="arrivée il y a {{$_sejour->_entree_relative}}j et départ prévu dans {{$_sejour->_sortie_relative}}j ">
+									  <div style="width: {{if $_sejour->_duree}}{{math equation='100*(-entree / (duree))' entree=$_sejour->_entree_relative duree=$_sejour->_duree format='%.2f'}}{{else}}100{{/if}}%;"></div>
+									</div>
+								 <div class="libelle">
+								 	  {{$_sejour->libelle|lower}}
+								    <div style="float:right;">({{$_patient->_age}})</div>
+								 </div>
 						</div>
 			  {{/foreach}}
 			</div>
@@ -112,7 +135,17 @@ div#grille td.pas-de-chambre{
 						  {{if $_affectation->_ref_lit->_ref_chambre->nom==$_zone}}
 						    {{assign var=_sejour value=$_affectation->_ref_sejour}}
 						    {{assign var=_patient   value=$_sejour->_ref_patient}}
-						    <div onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}');" class="patient" id="{{$_sejour->_id}}">{{$_patient}}  </div>
+						    <div class="patient" id="{{$_sejour->_id}}">
+						    	<span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');" >{{$_patient->nom}} {{$_patient->prenom}}</span>
+                  
+                   <div class="ssr-sejour-bar" title="arrivée il y a {{$_sejour->_entree_relative}}j et départ prévu dans {{$_sejour->_sortie_relative}}j ">
+                    <div style="width: {{if $_sejour->_duree}}{{math equation='100*(-entree / (duree))' entree=$_sejour->_entree_relative duree=$_sejour->_duree format='%.2f'}}{{else}}100{{/if}}%;"></div>
+                  </div>
+                 <div class="libelle">
+                    {{$_sejour->libelle|lower}}
+                    <div style="float:right;">({{$_patient->_age}})</div>
+                 </div>
+								</div>
 						  {{/if}}
 						{{/foreach}}	
 					</td> 
