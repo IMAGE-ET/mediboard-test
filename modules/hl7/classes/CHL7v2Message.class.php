@@ -50,11 +50,11 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   
   function __construct() { }
   
-  function toXML() {
+  function toXML($event_code = null) {
     $field = $this->children[0]->fields[8]->items[0];
     $name = $field->children[0]->data."_".$field->children[1]->data;
-    
-    $dom = CHL7v2MessageXML::getEventType($name);
+
+    $dom = CHL7v2MessageXML::getEventType($event_code);
     $root = $dom->addElement($dom, $name);
     $dom->addNameSpaces($name);
    

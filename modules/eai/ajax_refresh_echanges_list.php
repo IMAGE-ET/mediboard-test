@@ -45,8 +45,11 @@ if ($statut_acquittement) {
 if ($type) {
   $where["type"] = " = '".$type."'";
 }
-if ($evenement) {
+if ($evenement && $exchange instanceof CEchangeXML) {
   $where["sous_type"] = " = '".$evenement."'";
+}
+if ($evenement && $exchange instanceof CExchangeTabular) {
+  $where["code"] = " = '".$evenement."'";
 }
 if (isset($t["message_invalide"])) {
   $where["message_valide"] = " = '0'";

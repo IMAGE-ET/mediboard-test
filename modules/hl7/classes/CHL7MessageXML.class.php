@@ -17,6 +17,8 @@
  */
 interface CHL7MessageXML {
   function getContentsXML();
+  
+  function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data);
 }
 
 ?>

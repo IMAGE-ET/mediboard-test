@@ -19,9 +19,18 @@
 class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   var $_ref_exchange_ihe     = null;
   
-  static function getEventType($event_name) {
-    return new CHL7v2RecordPatient();
-    return new CHL7v2MessageXML();
+  static function getEventType($event_code = null) {
+    switch ($event_code) {
+      // Création d'un nouveau patient - Mise à jour d'information du patient
+      case "CHL7v2EventADTA28" : 
+      case "CHL7v2EventADTA31" :
+        return new CHL7v2RecordPerson();
+      // Fusion de deux patients
+      case "CHL7v2EventADTA40" : 
+        return new CHL7v2MergePersons();
+      default : 
+        return new CHL7v2MessageXML();
+    }
   }
   
   function __construct() {
@@ -53,24 +62,44 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     return $data;
   }
   
-  function getContentsXML() {
+  function getPatientIdentifiers(DOMNode $node) {
     $data = array();
-
+    
+    $xpath = new CHL7v2MessageXPath($this);
+    // PID/PID.3
+    foreach ($xpath->query("PID.3", $node) as $_PID3) {
+      // RI - Resource identifier 
+      if (($xpath->queryTextNode("CX.5", $_PID3) == "RI") && 
+          ($xpath->queryTextNode("CX.4/HD.2", $_PID3) == CAppUI::conf("hl7 assigningAuthorityUniversalID"))) {
+        $data["RI"] = $xpath->queryTextNode("CX.1", $_PID3);
+      }
+      // PI - Patient internal identifier
+      if ($xpath->queryTextNode("CX.5", $_PID3) == "PI") {
+        $data["PI"] = $xpath->queryTextNode("CX.1", $_PID3);
+      }
+      // INS-C - Identifiant national de santé calculé
+      if ($xpath->queryTextNode("CX.5", $_PID3) == "INS-C") {
+        $data["INSC"] = $xpath->queryTextNode("CX.1", $_PID3);
+      }
+    }
+   
+    return $data;
+  }
+  
+  function getContentsXML() {
+    $data  = array();
     $xpath = new CHL7v2MessageXPath($this);
     
     $data["PID"] = $PID = $xpath->queryUniqueNode("//PID");
     
     $data["patientIdentifiers"] = $this->getPatientIdentifiers($PID);
     
-    $data["PD1"] = $PD1 = $xpath->queryUniqueNode("//PD1");
+    $data["PD1"] = $xpath->queryUniqueNode("//PD1");
+    
+    return $data;
   }
   
-  function mergePersons(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
-    // Traitement du message des erreurs
-    $comment = $warning = "";
-    
-    
-  }
+  function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {}
 }
 
 ?>

@@ -21,7 +21,7 @@ class COperatorIHE extends CEAIOperator {
     $evt = $data_format->_family_message;
 
     // Récupération des informations du message - CHL7v2MessageXML
-    $dom_evt = $evt->handle($msg);
+    $dom_evt = $evt->handle($msg, $evt->code);
 
     try {
       // Création de l'échange
@@ -111,13 +111,13 @@ class COperatorIHE extends CEAIOperator {
       case "CHL7v2EventADTA31" :
         $data                       = array_merge($data, $dom_evt->getContentsXML());
         $exchange_ihe->id_permanent = array_key_exists("PI", $data['patientIdentifiers']) ? $data['patientIdentifiers']['PI'] : null;
-        $msgAck                     = $dom_evt->recordPerson($ack, $newPatient, $data);
+        $msgAck                     = $dom_evt->handle($ack, $newPatient, $data);
         break;
       // Fusion de deux patients
       case "CHL7v2EventADTA40" : 
         $data                       = array_merge($data, $dom_evt->getContentsXML());
         $exchange_ihe->id_permanent = array_key_exists("PI", $data['patientIdentifiers']) ? $data['patientIdentifiers']['PI'] : null;
-        $msgAck                     = $dom_evt->mergePersons($ack, $newPatient, $data);
+        $msgAck                     = $dom_evt->handle($ack, $newPatient, $data);
         break;
       // Aucun des événements - retour d'erreur
       default :

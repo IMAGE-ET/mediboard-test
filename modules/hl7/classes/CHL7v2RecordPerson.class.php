@@ -1,7 +1,7 @@
 <?php /* $Id:$ */
 
 /**
- * Record patient, message XML
+ * Record person, message XML
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,21 +12,15 @@
  */
 
 /**
- * Class CHL7v2RecordPatient 
- * Record patient, message XML HL7
+ * Class CHL7v2RecordPerson 
+ * Record person, message XML HL7
  */
 
-class CHL7v2RecordPatient extends CHL7v2MessageXML {
+class CHL7v2RecordPerson extends CHL7v2MessageXML {
   function getContentsXML() {
-    $data = array();
+    $data = parent::getContentsXML();
 
     $xpath = new CHL7v2MessageXPath($this);
-    
-    $data["PID"] = $PID = $xpath->queryUniqueNode("//PID");
-    
-    $data["patientIdentifiers"] = $this->getPatientIdentifiers($PID);
-    
-    $data["PD1"] = $PD1 = $xpath->queryUniqueNode("//PD1");
     
     $NK1 = $xpath->query("//NK1");
     foreach ($NK1 as $_NK1) {
@@ -40,32 +34,8 @@ class CHL7v2RecordPatient extends CHL7v2MessageXML {
     
     return $data;
   }
-  
-  function getPatientIdentifiers(DOMNode $node) {
-    $data = array();
-    
-    $xpath = new CHL7v2MessageXPath($this);
-    // PID/PID.3
-    foreach ($xpath->query("PID.3", $node) as $_PID3) {
-      // RI - Resource identifier 
-      if (($xpath->queryTextNode("CX.5", $_PID3) == "RI") && 
-          ($xpath->queryTextNode("CX.4/HD.2", $_PID3) == CAppUI::conf("hl7 assigningAuthorityUniversalID"))) {
-        $data["RI"] = $xpath->queryTextNode("CX.1", $_PID3);
-      }
-      // PI - Patient internal identifier
-      if ($xpath->queryTextNode("CX.5", $_PID3) == "PI") {
-        $data["PI"] = $xpath->queryTextNode("CX.1", $_PID3);
-      }
-      // INS-C - Identifiant national de santé calculé
-      if ($xpath->queryTextNode("CX.5", $_PID3) == "INS-C") {
-        $data["INSC"] = $xpath->queryTextNode("CX.1", $_PID3);
-      }
-    }
-   
-    return $data;
-  }
  
-  function recordPerson(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
+  function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
     // Traitement du message des erreurs
     $comment = $warning = "";
     $_modif_patient = false;
@@ -74,18 +44,9 @@ class CHL7v2RecordPatient extends CHL7v2MessageXML {
     $exchange_ihe->_ref_sender->loadConfigValues();
     $sender       = $exchange_ihe->_ref_sender;
     
-    $patientRI = $patientPI = null;
-    foreach ($data['patientIdentifiers'] as $identifier_type => $_patient_identifier) {
-      switch ($identifier_type) {
-        case "RI":
-          $patientRI = $_patient_identifier;  
-          break;
-        case "PI":
-          $patientPI = $_patient_identifier;  
-          break;
-      }
-    }
-    
+    $patientRI = CValue::read($data['patientIdentifiers'], "RI");
+    $patientPI = CValue::read($data['patientIdentifiers'], "PI");
+
     // Acquittement d'erreur : identifiants RI et PI non fournis
     if (!$patientRI && !$patientPI) {
       return $exchange_ihe->setAckAR($ack, "E003", null, $newPatient);

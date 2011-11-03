@@ -39,7 +39,7 @@ class CHL7v2Event extends CHL7Event {
     $this->message = new CHL7v2Message();
     $this->message->parse($msg_hl7);
     
-    return $this->message->toXML();
+    return $this->message->toXML(get_class($this));
   }
   
   function flatten() {
