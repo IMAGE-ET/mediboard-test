@@ -67,6 +67,7 @@
 		        <th>CdARR</th>
           {{/if}}
           <th class="narrow">{{tr}}CConstanteItem.all{{/tr}}</th>
+          <th>Ressources</th>
 		      <th></th>
 		    </tr>
 				{{foreach from=$category->_ref_elements_prescription item=_element}}
@@ -93,6 +94,7 @@
   		      </td>
 		      {{/if}}
           <td style="text-align: right;">{{$_element->_count_constantes_items}}</td>
+          <td style="text-align: right;">{{$_element->_count_indices_cout}}</td>
 		      <td style="width: 1em; {{if $_element->color}}background-color: #{{$_element->color}}{{/if}}">
 		    </tr>
 		    {{foreachelse}}

@@ -14,6 +14,7 @@ $module->registerTab("vw_edit_protocole"           , TAB_EDIT);
 $module->registerTab("vw_edit_pack_protocole"      , TAB_EDIT);
 $module->registerTab("vw_edit_liaison_admission"   , TAB_EDIT);
 $module->registerTab("vw_edit_category"            , TAB_ADMIN);
+$module->registerTab("vw_edit_ressources"          , TAB_ADMIN);
 $module->registerTab("vw_edit_categories_group"    , TAB_ADMIN);
 $module->registerTab("vw_edit_associations_moments", TAB_ADMIN);
 $module->registerTab("vw_edit_moments_unitaires"   , TAB_ADMIN);

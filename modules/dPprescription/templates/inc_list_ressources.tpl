@@ -1,0 +1,29 @@
+<table class="tbl">
+  <tr>
+    <th class="title" colspan="2">
+      {{tr}}CRessourceSoin-list{{/tr}}
+    </th>
+  </tr>
+  <tr>
+    <th class="category">{{mb_label class=CRessourceSoin field=libelle}}</th>
+    <th class="category">{{mb_label class=CRessourceSoin field=cout}}</th>
+  </tr>
+  {{foreach from=$ressources_soins item=_ressource_soin}}
+    <tr>
+      <td>
+        <a href="#{{$_ressource_soin->_id}}" onclick="Ressource.edit('{{$_ressource_soin->_id}}')">
+          {{mb_value object=$_ressource_soin field=libelle}}
+        </a>
+      </td>
+      <td>
+        {{mb_value object=$_ressource_soin field=cout}}
+      </td>
+    </tr>
+  {{foreachelse}}
+    <tr>
+      <td colspan="2" class="empty">
+        {{tr}}CRessourceSoin.none{{/tr}}
+      </td>
+    </tr>
+  {{/foreach}}
+</table>

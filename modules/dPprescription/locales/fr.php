@@ -1804,6 +1804,7 @@ $locales['mod-dPprescription-tab-vw_edit_moments_unitaires'] = 'Moments unitaire
 $locales['mod-dPprescription-tab-vw_edit_pack_protocole'] = 'Packs de protocoles';
 $locales['mod-dPprescription-tab-vw_edit_prescription'] = 'Prescriptions';
 $locales['mod-dPprescription-tab-vw_edit_protocole'] = 'Protocoles';
+$locales['mod-dPprescription-tab-vw_edit_ressources'] = 'Ressources';
 $locales['mod-dPprescription-tab-vw_full_alertes'] = 'Alertes';
 $locales['mod-dPprescription-tab-vw_line_history'] = 'Historique d\'une ligne';
 $locales['mod-dPprescription-tab-vw_plan_soin_pdf'] = 'Plan de soins';

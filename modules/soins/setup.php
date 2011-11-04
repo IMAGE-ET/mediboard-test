@@ -30,8 +30,29 @@ class CSetupsoins extends CSetup {
 		
 		$query = "ALTER TABLE `sejour_task` ADD INDEX (`sejour_id`);";
 		$this->addQuery($query);	
-						
-    $this->mod_version = '0.11';
+		
+    $this->makeRevision("0.11");
+    $query = "CREATE TABLE `ressource_soin` (
+              `ressource_soin_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `libelle` TEXT NOT NULL,
+              `cout` FLOAT
+            ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "CREATE TABLE `indice_cout` (
+              `indice_cout_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `nb` INT (11) NOT NULL,
+              `ressource_soin_id` INT (11) UNSIGNED NOT NULL,
+              `element_prescription_id` INT (11) UNSIGNED NOT NULL
+             ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `indice_cout` 
+              ADD INDEX (`ressource_soin_id`),
+              ADD INDEX (`element_prescription_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = '0.12';
 		
   }
 }

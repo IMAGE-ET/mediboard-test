@@ -28,6 +28,7 @@ Main.add( function(){
 	{{if $element_prescription_id}}
 	  table_cdarr_const.show();
     refreshListCdarr('{{$element_prescription_to_cdarr_id}}','{{$element_prescription_id}}');
+    refreshListIndices('{{$element_prescription_id}}');
     refreshListConstantesItems('{{$element_prescription_id}}');
 	{{/if}}
 	  Control.Tabs.create('elements-tabs');
@@ -82,6 +83,7 @@ onSelectCategory = function(category_prescription_id, selected_tr){
 	refreshFormCategory(category_prescription_id);
 	refreshListElement(null, category_prescription_id);
 	refreshListCdarr();
+  refreshListIndices();
 	$('categories-list').select('tr').invoke('removeClassName', 'selected'); 
 	if(selected_tr){
 	  selected_tr.addClassName('selected');
@@ -118,6 +120,7 @@ onSelectElement = function(element_prescription_id, category_prescription_id, se
   refreshFormElement(element_prescription_id, category_prescription_id);
   refreshListConstantesItems(null, element_prescription_id);
   refreshListCdarr(null, element_prescription_id);
+  refreshListIndices(null, element_prescription_id);
 	$('elements-list').select('tr').invoke('removeClassName', 'selected'); 
 	if(selected_tr){
     selected_tr.addUniqueClassName('selected');
@@ -151,6 +154,28 @@ onSelectCdarr = function(element_prescription_to_cdarr_id, element_prescription_
       selected_tr.addUniqueClassName('selected');
     }
   {{/if}}
+}
+
+refreshListIndices = function(indice_cout_id, element_prescription_id) {
+  var url = new Url("dPprescription", "ajax_list_indices");
+  url.addParam("indice_cout_id", indice_cout_id);
+  url.addParam("element_prescription_id", element_prescription_id);
+  url.requestUpdate("indices-list", { onComplete: refreshFormIndice.curry(indice_cout_id, element_prescription_id)});
+}
+
+refreshFormIndice = function(indice_cout_id, element_prescription_id) {
+  var url = new Url("dPprescription", "ajax_form_indice");
+  url.addParam("indice_cout_id", indice_cout_id);
+  url.addParam("element_prescription_id", element_prescription_id);
+  url.requestUpdate("indice-form");
+}
+
+onSelectIndice = function(indice_cout_id, element_prescription_id, selected_tr) {
+  refreshFormIndice(indice_cout_id, element_prescription_id);
+  $('cdarrs-list').select('tr').invoke('removeClassName', 'selected'); 
+  if(selected_tr){
+    selected_tr.addUniqueClassName('selected');
+  }
 }
 
 // refresh des executants
@@ -205,6 +230,9 @@ refreshFormExecutant = function(executant_prescription_line_id, category_id){
         <li>
           <a href="#constantes_items-area">{{tr}}CConstanteItem{{/tr}}</a>
         </li>
+        <li>
+          <a href="#indices-area">{{tr}}CRessourceSoin{{/tr}}</a>
+        </li>
         {{if 'ssr'|module_active}}
           <li>
             <a href="#cdarrs-area">{{tr}}CCdARRObject{{/tr}}</a>
@@ -217,6 +245,14 @@ refreshFormExecutant = function(executant_prescription_line_id, category_id){
           <tr>
             <td id="constantes_items-list" style="width: 50%"></td>
             <td id="constantes_items-form" style="width: 50%"></td>
+          </tr>
+        </table>
+      </div>
+      <div id="indices-area">
+        <table class="main">
+          <tr>
+            <td id="indices-list" style="width: 50%"></td>
+            <td id="indice-form" style="width: 50%"></td>
           </tr>
         </table>
       </div>

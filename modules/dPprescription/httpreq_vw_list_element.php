@@ -42,7 +42,8 @@ if($category_prescription_id){
 		$_element->loadBackRefs("cdarrs");
 		$_element->countRefsConstantesItems();
 		$_element->_count["cdarrs"] = count($_element->_back["cdarrs"]);
-		
+		$_element->countRefsIndicesCout();
+   
 		if(is_array($_element->_back["cdarrs"])){
 			foreach($_element->_back["cdarrs"] as $_acte_cdarr){
 		    $_acte_cdarr->loadRefActiviteCdarr();
