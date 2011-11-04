@@ -83,6 +83,16 @@
       </td>
     </tr>
     <tr>
+       <th class="category" colspan="2">
+         Autres paramètres
+       </th>
+    </tr>
+    <tr>
+       <td colspan="2">
+         {{mb_include module=system template=inc_config_bool var=show_charge_soins}}
+       </td>
+    </tr>
+    <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
       </td>

@@ -9,6 +9,7 @@
 *}}
 
 {{mb_script module="mediusers" script="color_selector"}}
+{{assign var=show_charge_soins value=$conf.soins.show_charge_soins}}
 
 <script type="text/javascript">
 
@@ -28,7 +29,9 @@ Main.add( function(){
 	{{if $element_prescription_id}}
 	  table_cdarr_const.show();
     refreshListCdarr('{{$element_prescription_to_cdarr_id}}','{{$element_prescription_id}}');
-    refreshListIndices('{{$element_prescription_id}}');
+    {{if $show_charge_soins}}
+      refreshListIndices('{{$element_prescription_id}}');
+    {{/if}}
     refreshListConstantesItems('{{$element_prescription_id}}');
 	{{/if}}
 	  Control.Tabs.create('elements-tabs');
@@ -83,7 +86,9 @@ onSelectCategory = function(category_prescription_id, selected_tr){
 	refreshFormCategory(category_prescription_id);
 	refreshListElement(null, category_prescription_id);
 	refreshListCdarr();
-  refreshListIndices();
+  {{if $show_charge_soins}}
+    refreshListIndices();
+  {{/if}}
 	$('categories-list').select('tr').invoke('removeClassName', 'selected'); 
 	if(selected_tr){
 	  selected_tr.addClassName('selected');
@@ -120,7 +125,9 @@ onSelectElement = function(element_prescription_id, category_prescription_id, se
   refreshFormElement(element_prescription_id, category_prescription_id);
   refreshListConstantesItems(null, element_prescription_id);
   refreshListCdarr(null, element_prescription_id);
-  refreshListIndices(null, element_prescription_id);
+  {{if $show_charge_soins}}
+    refreshListIndices(null, element_prescription_id);
+  {{/if}}
 	$('elements-list').select('tr').invoke('removeClassName', 'selected'); 
 	if(selected_tr){
     selected_tr.addUniqueClassName('selected');
@@ -230,9 +237,11 @@ refreshFormExecutant = function(executant_prescription_line_id, category_id){
         <li>
           <a href="#constantes_items-area">{{tr}}CConstanteItem{{/tr}}</a>
         </li>
-        <li>
-          <a href="#indices-area">{{tr}}CRessourceSoin{{/tr}}</a>
-        </li>
+        {{if $show_charge_soins}}
+          <li>
+            <a href="#indices-area">{{tr}}CRessourceSoin{{/tr}}</a>
+          </li>
+        {{/if}}
         {{if 'ssr'|module_active}}
           <li>
             <a href="#cdarrs-area">{{tr}}CCdARRObject{{/tr}}</a>
@@ -248,14 +257,16 @@ refreshFormExecutant = function(executant_prescription_line_id, category_id){
           </tr>
         </table>
       </div>
-      <div id="indices-area">
-        <table class="main">
-          <tr>
-            <td id="indices-list" style="width: 50%"></td>
-            <td id="indice-form" style="width: 50%"></td>
-          </tr>
-        </table>
-      </div>
+      {{if $show_charge_soins}}
+        <div id="indices-area">
+          <table class="main">
+            <tr>
+              <td id="indices-list" style="width: 50%"></td>
+              <td id="indice-form" style="width: 50%"></td>
+            </tr>
+          </table>
+        </div>
+      {{/if}}
       {{if 'ssr'|module_active}}
         <div id="cdarrs-area" style="display: none;">
           <table class="main">
