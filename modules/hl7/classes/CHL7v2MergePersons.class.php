@@ -61,7 +61,7 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
     if ($mbPatient->load($patientPI)) {
       if ($mbPatient->_id != $id400Patient->object_id) {
         $comment = "L'identifiant source fait référence au patient : $id400Patient->object_id et l'identifiant cible au patient : $mbPatient->_id.";
-        return $exchange_ihe->setAckAR($ack, "E004", $comment, $newPatient);
+        return $exchange_ihe->setAckAR($ack, "E130", $comment, $newPatient);
       }
     } 
     if (!$mbPatient->_id) {
@@ -72,7 +72,7 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
     if ($mbPatientElimine->load($data['idCiblePatientElimine'])) {
       if ($mbPatientElimine->_id != $id400PatientElimine->object_id) {
         $comment = "L'identifiant source fait référence au patient : $id400PatientElimine->object_id et l'identifiant cible au patient : $mbPatientElimine->_id.";
-        return $exchange_ihe->setAckAR($ack, "E041", $comment, $newPatient);
+        return $exchange_ihe->setAckAR($ack, "E131", $comment, $newPatient);
       }
     }
     if (!$mbPatientElimine->_id) {
@@ -81,7 +81,7 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
     
     if (!$mbPatient->_id || !$mbPatientElimine->_id) {
       $comment = !$mbPatient->_id ? "Le patient $mbPatient->_id est inconnu dans Mediboard." : "Le patient $mbPatientElimine->_id est inconnu dans Mediboard.";
-      return $exchange_ihe->setAckAR($ack, "E012", $comment, $newPatient);
+      return $exchange_ihe->setAckAR($ack, "E120", $comment, $newPatient);
     }
 
     // Passage en trash de l'IPP du patient a éliminer
@@ -97,12 +97,12 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
     // Erreur sur le check du merge
     if ($checkMerge) {
       $comment = "La fusion de ces deux patients n'est pas possible à cause des problèmes suivants : $checkMerge";
-      return $exchange_ihe->setAckAR($ack, "E010", $comment, $newPatient);
+      return $exchange_ihe->setAckAR($ack, "E121", $comment, $newPatient);
     }
     
     if ($msg = $mbPatient->mergePlainFields($patientsElimine_array)) {
       $comment = "La fusion des données des patients a échoué : $msg";
-      return $exchange_ihe->setAckAR($ack, "E011", $comment, $newPatient);
+      return $exchange_ihe->setAckAR($ack, "E122", $comment, $newPatient);
     }
     
     $mbPatientElimine_id = $mbPatientElimine->_id;
@@ -113,17 +113,15 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
     // Notifier les autres destinataires
     $mbPatient->_eai_initiateur_group_id = $sender->group_id;
     $mbPatient->_merging = CMbArray::pluck($patientsElimine_array, "_id");
-    $msg = $mbPatient->merge($patientsElimine_array);
-    
-    $codes = array ($msg ? "A010" : "I010");
-      
-    if ($msg) {
-      $avertissement = $msg." ";
-    } else {
-      $comment = "Le patient $mbPatient->_id a été fusionné avec le patient $mbPatientElimine_id.";
+    if ($msg = $mbPatient->merge($patientsElimine_array)) {
+      return $exchange_ihe->setAckAR($ack, "E103", null, $mbPatient);
     }
+
+    $mbPatient->_mbPatientElimine_id = $mbPatientElimine_id;
     
-    return $exchange_ihe->setAckAA($ack, $codes, $avertissement, $comment, $newPatient);
+    $comment = CEAIPatient::getComment($mbPatient);
+    
+    return $exchange_ihe->setAckAA($ack, "I103", $comment, $mbPatient);
   }
 }
 
