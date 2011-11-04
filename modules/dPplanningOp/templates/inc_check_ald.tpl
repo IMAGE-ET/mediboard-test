@@ -18,7 +18,7 @@
   <td colspan="3">
     {{if $patient && $patient->_id}}
     <input name="__cmu_pat" onclick="setAldCmu(this.form);" type="checkbox" {{if $patient->cmu}}checked="checked"{{/if}}>
-    <input name="_cmu_pat" value="{{$patient->cmu}}" type="text">
+    <input name="_cmu_pat" value="{{$patient->cmu}}" type="hidden">
     {{else}}
     <input name="__cmu_pat" onclick="setAldCmu(this.form);" type="checkbox" disabled="disabled">
     <input name="_cmu_pat" value="0" type="hidden">
