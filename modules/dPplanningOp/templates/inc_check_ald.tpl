@@ -21,7 +21,7 @@
     <input name="_cmu_pat" value="{{$patient->cmu}}" type="text">
     {{else}}
     <input name="__cmu_pat" onclick="setAldCmu(this.form);" type="checkbox" disabled="disabled">
-    <input name="_cmu_pat" value="0" type="text">
+    <input name="_cmu_pat" value="0" type="hidden">
     {{/if}}
   </td>
 </tr>
