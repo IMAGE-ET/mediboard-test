@@ -138,6 +138,7 @@ $locales['config-dPbloc-CPlageOp-locked'] = 'Blocage de plages opératoires plein
 $locales['config-dPbloc-CPlageOp-minutes_interval'] = 'Intervalles en minutes';
 $locales['config-dPbloc-CPlageOp-minutes_interval-desc'] = 'Intervalles en minutes par défaut';
 $locales['mod-dPbloc-tab-configure'] = 'Configuration';
+$locales['mod-dPbloc-tab-inc_edit_planning'] = 'Editer plage d\'opération';
 $locales['mod-dPbloc-tab-legende'] = 'Légende';
 $locales['mod-dPbloc-tab-print_materiel'] = 'Impression du matériel';
 $locales['mod-dPbloc-tab-print_planning'] = 'Impression des plannings';

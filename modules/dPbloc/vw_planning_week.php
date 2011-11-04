@@ -91,9 +91,11 @@ foreach($listDays as $keyDate => $valDate){
   // Détermination des bornes de chaque plage
   foreach($listPlages[$keyDate] as $plage){
     $plage->loadRefsFwd();
+    $plage->loadRefsNotes();
     $plage->_ref_chir->loadRefsFwd();
     $plage->getNbOperations();
     $nbIntervNonPlacees += $plage->_nb_operations - $plage->_nb_operations_placees;
+   $plage->loadAffectationsPersonnel();
   
     $plage->fin = min($plage->fin, $max);
     $plage->debut = max($plage->debut, $min);
