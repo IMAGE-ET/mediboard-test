@@ -32,6 +32,12 @@ class CRessourceSoin extends CMbObject {
     return $specs;
   }
   
+	function updateFormFields(){
+		parent::updateFormFields();
+	
+	  $this->_view = $this->libelle;	
+	}
+	
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["indices_couts"]   = "CIndiceCout ressource_soin_id";
