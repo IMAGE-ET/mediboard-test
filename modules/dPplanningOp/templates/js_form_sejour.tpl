@@ -411,24 +411,32 @@ function setAldCmu(oCurrForm) {
   $V(oPatForm.patient_id  , $V(oSejourForm.patient_id));
   $V(oSejourForm._ald_pat , $V(oCurrForm.__ald_pat)?1:0);
   $V(oSejourForm.__ald_pat, $V(oCurrForm.__ald_pat)?1:0);
-  $V(oEasyForm._ald_pat   , $V(oCurrForm.__ald_pat)?1:0);
-  $V(oEasyForm.__ald_pat  , $V(oCurrForm.__ald_pat)?1:0);
+  if(oEasyForm) {
+    $V(oEasyForm._ald_pat   , $V(oCurrForm.__ald_pat)?1:0);
+    $V(oEasyForm.__ald_pat  , $V(oCurrForm.__ald_pat)?1:0);
+  }
   if($V(oCurrForm.__ald_pat)) {
     oSejourForm.__ald.disabled = "";
-    oEasyForm.__ald.disabled   = "";
+    if(oEasyForm) {
+      oEasyForm.__ald.disabled   = "";
+    }
   } else {
     $V(oSejourForm.__ald, 0);
     $V(oSejourForm.ald, 0);
     oSejourForm.__ald.disabled = "disabled";
-    $V(oEasyForm.__ald, 0);
-    $V(oEasyForm.ald, 0);
-    oEasyForm.__ald.disabled = "disabled";
+    if(oEasyForm) {
+      $V(oEasyForm.__ald, 0);
+      $V(oEasyForm.ald, 0);
+      oEasyForm.__ald.disabled = "disabled";
+    }
   }
   $V(oPatForm.ald, $V(oSejourForm._ald_pat));
   $V(oSejourForm._cmu_pat , $V(oCurrForm.__cmu_pat)?1:0);
   $V(oSejourForm.__cmu_pat, $V(oCurrForm.__cmu_pat)?1:0);
-  $V(oEasyForm._cmu_pat   , $V(oCurrForm.__cmu_pat)?1:0);
-  $V(oEasyForm.__cmu_pat  , $V(oCurrForm.__cmu_pat)?1:0);
+  if(oEasyForm) {
+    $V(oEasyForm._cmu_pat   , $V(oCurrForm.__cmu_pat)?1:0);
+    $V(oEasyForm.__cmu_pat  , $V(oCurrForm.__cmu_pat)?1:0);
+  }
   $V(oPatForm.cmu         , $V(oSejourForm._cmu_pat));
   return onSubmitFormAjax(oPatForm);
 }
