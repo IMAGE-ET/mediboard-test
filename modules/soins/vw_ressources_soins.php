@@ -8,9 +8,11 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$service_id = CValue::getOrSession("service_id");
+$service_id  = CValue::getOrSession("service_id");
 $date        = CValue::getOrSession("date", mbDate());
 $date_max    = CValue::getOrSession("date_max", mbDate("+ 7 DAY", $date));
+$nb_unites   = CValue::getOrSession("nb_unites", 1);
+$cout_euro   = CValue::getOrSession("cout_euro", 1);
 
 $nb_days = mbDaysRelative($date, $date_max);
 $dates = array();
@@ -72,13 +74,18 @@ foreach($affectations as $_affectation){
 	$sejours[$sejour->_id] = $sejour;
 }
 
+$total_sejour = array();
+$total_date = array();
+$total = array();
 $charge = array();
+
 // Parcours des planifications et calcul de la charge
 foreach($planifications as &$_planifs){
 	foreach($_planifs as &$_planif){
 		if(!isset($charge[$_planif->sejour_id])){
 			foreach($dates as $_date){
 				$charge[$_planif->sejour_id][$_date] = array();
+        $total_date[$_date] = array();
 			}
 		}
 		
@@ -89,6 +96,10 @@ foreach($planifications as &$_planifs){
 			$_indice_cout->loadRefRessourceSoin();
 			$ressources[$_indice_cout->_ref_ressource_soin->_id] = $_indice_cout->_ref_ressource_soin;
       @$charge[$_planif->sejour_id][mbDate($_planif->dateTime)][$_indice_cout->_ref_ressource_soin->_id] += $_indice_cout->nb;
+      
+      @$total_sejour[$_planif->sejour_id][$_indice_cout->_ref_ressource_soin->_id] += $_indice_cout->nb;
+      @$total_date[mbDate($_planif->dateTime)][$_indice_cout->_ref_ressource_soin->_id] += $_indice_cout->nb;
+      @$total[$_indice_cout->_ref_ressource_soin->_id] += $_indice_cout->nb;
 		}
 	}
 }
@@ -105,4 +116,9 @@ $smarty->assign("planifications", $planifications);
 $smarty->assign("ressources", $ressources);
 $smarty->assign("charge", $charge);
 $smarty->assign("dates", $dates);
+$smarty->assign("nb_unites", $nb_unites);
+$smarty->assign("cout_euro", $cout_euro);
+$smarty->assign("total_date", $total_date);
+$smarty->assign("total_sejour", $total_sejour);
+$smarty->assign("total", $total);
 $smarty->display('vw_ressources_soins.tpl');

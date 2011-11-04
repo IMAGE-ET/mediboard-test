@@ -24,6 +24,14 @@
     </tr>
     <tr>
       <th>
+        {{mb_label object=$ressource_soin field=code}}
+      </th>
+      <td>
+        {{mb_field object=$ressource_soin field=code}}
+      </td>
+    </tr>
+    <tr>
+      <th>
         {{mb_label object=$ressource_soin field=cout}}
       </th>
       <td>
