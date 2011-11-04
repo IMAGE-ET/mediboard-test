@@ -263,9 +263,10 @@
 
 <td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}" class="button">
   {{if $_sejour->_couvert_cmu}}
-    <img src="images/icons/tick.png" title="Droits CMU en cours" />
-  {{else}}
-    -
+  <div><strong>CMU</strong></div>
+  {{/if}}
+  {{if $_sejour->_couvert_ald}}
+  <div><strong {{if $_sejour->ald}}style="color: red;"{{/if}}>ALD</strong></div>
   {{/if}}
 </td>
 

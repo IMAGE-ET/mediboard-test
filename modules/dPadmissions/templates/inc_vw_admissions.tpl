@@ -78,8 +78,8 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
         {{tr}}CSejour-saisi_SHS-tous{{/tr}}
       {{/if}}
     </th>
-    <th>Anesth</th>
-    <th>CMU</th>
+    <th>Anesth.</th>
+    <th>Couv.</th>
     {{if $conf.dPadmissions.show_dh}}
     <th>DH</th>
     {{/if}}

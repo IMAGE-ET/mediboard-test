@@ -44,7 +44,7 @@
         <div><strong>CMU</strong></div>
         {{/if}}
         {{if $sejour->_couvert_ald}}
-        <div><strong>ALD</strong></div>
+        <div><strong {{if $sejour->ald}}style="color: red;"{{/if}}>ALD</strong></div>
         {{/if}}
         {{if $conf.dPhospi.CLit.alt_icons_sortants}}
           {{assign var=suffixe_icons value="2"}}
