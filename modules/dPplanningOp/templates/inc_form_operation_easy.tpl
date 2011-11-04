@@ -213,11 +213,16 @@
     </td>
   </tr>
   
+  <!-- ALD et CMU -->
+  <tbody id="ald_patient_easy" {{if !$conf.dPplanningOp.CSejour.easy_ald_cmu}} style="display: none;"{{/if}}>
+    {{mb_include module=dPplanningOp template=inc_check_ald patient=$sejour->_ref_patient}}
+  </tbody>
   
+  
+  <!-- Selection du type de chambre et du régime alimentaire-->
   {{if $conf.dPplanningOp.CSejour.easy_chambre_simple || $conf.dPplanningOp.COperation.easy_regime}}
   <tr>
     {{if $conf.dPplanningOp.CSejour.easy_chambre_simple}}
-      <!-- Selection du type de chambre -->
       <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
       <td>
         {{mb_field object=$sejour field="chambre_seule" onchange="checkChambreSejourEasy()"}}
@@ -236,6 +241,7 @@
   </tr>
   {{/if}}
 
+  <!-- Consultation d'accompagnement -->
   {{if $conf.dPplanningOp.CSejour.consult_accomp}}
   <tr>
     <th>{{mb_label object=$sejour field=consult_accomp}}</th>

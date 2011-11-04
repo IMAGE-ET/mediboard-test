@@ -197,14 +197,6 @@ PatSelector.init = function(){
   this.pop();
 }
 
-checkCorrespondantMedical = function(form){
-  var url = new Url("dPplanningOp", "ajax_check_correspondant_medical");
-  url.addParam("patient_id", $V(form.patient_id));
-  url.addParam("object_id" , $V(form.sejour_id));
-  url.addParam("object_class", '{{$sejour->_class}}');
-  url.requestUpdate("correspondant_medical");
-}
-
 CIM10Selector.init = function(){
   this.sForm = "editSejour";
   this.sView = "DP";
@@ -324,6 +316,15 @@ Main.add( function(){
 
 <!-- div de confirmation de changement de patient lorsqu'on a un sejour_id -->
 {{mb_include template=inc_modal_change_patient}}
+
+<form name="patAldForm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this)">
+  <input type="hidden" name="m" value="dPpatients" />
+  <input type="hidden" name="dosql" value="do_patients_aed" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="patient_id" value="">
+  <input type="hidden" name="ald" value="">
+  <input type="hidden" name="cmu" value="">
+</form>
 
 
 <form name="editSejour" action="?m={{$m}}" method="post" onsubmit="return checkSejour()">
@@ -461,7 +462,7 @@ Main.add( function(){
 			}
   	</script>
     <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" value="{{$patient->_id}}" 
-		  onchange="changePat(); checkSejoursToReload(); checkCorrespondantMedical(this.form); reloadSejours();" />
+		  onchange="changePat(); reloadSejours();" />
     {{mb_label object=$sejour field="patient_id"}}
   </th>
   <td colspan="3">
@@ -517,6 +518,10 @@ Main.add( function(){
     <input type="hidden" name="DP" value="{{$sejour->DP}}" onchange="$V(this.form.keywords_code, this.value); if(getForm('editOp')) {synchroService(this)};"/>
   </td>
 </tr>
+
+<tbody id="ald_patient">
+  {{mb_include module=dPplanningOp template=inc_check_ald patient=$sejour->_ref_patient}}
+</tbody>
 
 {{if $conf.dPplanningOp.CSejour.accident}}
 <tr>

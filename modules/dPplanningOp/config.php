@@ -16,6 +16,7 @@ $dPconfig["dPplanningOp"]= array(
 	  "easy_regime"        => "1",
     "easy_accident"      => "0",
     "easy_assurances"    => "0",
+    "easy_ald_cmu"       => "0",
 	  "duree_deb"          => "0",
 	  "duree_fin"          => "10",
 	  "hour_urgence_deb"   => "0",

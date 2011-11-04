@@ -1164,7 +1164,16 @@ class CSetupdPplanningOp extends CSetup {
     $this->getFieldRenameQueries("CSejour", "service_entree_mutation_id", "service_entree_id");
     $this->getFieldRenameQueries("CSejour", "service_mutation_id", "service_sortie_id");
     
-    $this->mod_version = "1.25";
+    $this->makeRevision("1.25");
+    $query = "ALTER TABLE `sejour` 
+              ADD `ald` ENUM ('0','1') DEFAULT '0' AFTER discipline_id;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `sejour`
+              CHANGE `recuse` `recuse` ENUM ('-1','0','1') DEFAULT '-1';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.26";
   }
 }
 ?>

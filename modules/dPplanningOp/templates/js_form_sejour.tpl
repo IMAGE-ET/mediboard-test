@@ -335,6 +335,18 @@ function applyNewSejour() {
 
 function changePat() {
   bChangePat = 1;
+  checkSejoursToReload();
+  checkCorrespondantMedical();
+  checkAld();
+}
+
+checkCorrespondantMedical = function(){
+  var oForm = getForm("editSejour");
+  var url = new Url("dPplanningOp", "ajax_check_correspondant_medical");
+  url.addParam("patient_id", $V(oForm.patient_id));
+  url.addParam("object_id" , $V(oForm.sejour_id));
+  url.addParam("object_class", '{{$sejour->_class}}');
+  url.requestUpdate("correspondant_medical");
 }
 
 var OccupationServices =  {
@@ -390,6 +402,43 @@ function syncRegimes(hormone_croissance, repas_sans_sel, repas_sans_porc, repas_
   $V(oForm.repas_sans_porc   , repas_sans_porc);
   $V(oForm.repas_diabete     , repas_diabete);
   $V(oForm.repas_sans_residu , repas_sans_residu);
+}
+
+function setAldCmu(oCurrForm) {
+  oSejourForm   = getForm("editSejour");
+  oEasyForm     = getForm("editOpEasy");
+  oPatForm      = getForm("patAldForm");
+  $V(oPatForm.patient_id  , $V(oSejourForm.patient_id));
+  $V(oSejourForm._ald_pat , $V(oCurrForm.__ald_pat)?1:0);
+  $V(oSejourForm.__ald_pat, $V(oCurrForm.__ald_pat)?1:0);
+  $V(oEasyForm._ald_pat   , $V(oCurrForm.__ald_pat)?1:0);
+  $V(oEasyForm.__ald_pat  , $V(oCurrForm.__ald_pat)?1:0);
+  if($V(oCurrForm.__ald_pat)) {
+    oSejourForm.__ald.disabled = "";
+    oEasyForm.__ald.disabled   = "";
+  } else {
+    $V(oSejourForm.__ald, 0);
+    $V(oSejourForm.ald, 0);
+    oSejourForm.__ald.disabled = "disabled";
+    $V(oEasyForm.__ald, 0);
+    $V(oEasyForm.ald, 0);
+    oEasyForm.__ald.disabled = "disabled";
+  }
+  $V(oPatForm.ald, $V(oSejourForm._ald_pat));
+  $V(oSejourForm._cmu_pat , $V(oCurrForm.__cmu_pat)?1:0);
+  $V(oSejourForm.__cmu_pat, $V(oCurrForm.__cmu_pat)?1:0);
+  $V(oEasyForm._cmu_pat   , $V(oCurrForm.__cmu_pat)?1:0);
+  $V(oEasyForm.__cmu_pat  , $V(oCurrForm.__cmu_pat)?1:0);
+  $V(oPatForm.cmu         , $V(oSejourForm._cmu_pat));
+  return onSubmitFormAjax(oPatForm);
+}
+
+checkAld = function(){
+  var oForm = getForm("editSejour");
+  var url = new Url("dPplanningOp", "ajax_check_ald");
+  url.addParam("patient_id", $V(oForm.patient_id));
+  url.addParam("sejour_id", $V(oForm.sejour_id));
+  url.requestUpdate(SystemMessage.id, {insertion: function(receiver, text){$("ald_patient").update(text); $("ald_patient_easy").update(text);}});
 }
 
 var bChangePat = 0;

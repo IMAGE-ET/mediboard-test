@@ -57,6 +57,8 @@
   {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var"   value="easy_assurances"}}
   {{mb_include module=system template=inc_config_bool var=$var }}
+  {{assign var="var"   value="easy_ald_cmu"}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
   
   <tr>
     <td class="button" colspan="2">
