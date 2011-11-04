@@ -33,8 +33,12 @@
     <tr>
       <td style="text-align: center" colspan="2">
         <button type="button" class="modify" onclick="Ressource.onSubmit(this.form);">
-        {{tr}}Create{{/tr}}  
-        </button>
+        {{if $ressource_soin->_id}}
+				  {{tr}}Modify{{/tr}}  
+        {{else}}
+				  {{tr}}Create{{/tr}}  
+        {{/if}}
+				</button>
         {{if $ressource_soin->_id}}
           <button type="button" class="trash" onclick="Ressource.confirmDeletion(this.form);">
             {{tr}}Delete{{/tr}}

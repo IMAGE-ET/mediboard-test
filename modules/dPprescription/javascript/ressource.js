@@ -9,8 +9,13 @@
  */
 
 Ressource = {
-  edit: function(ressource_soin_id) {
-    var url = new Url('dPprescription', 'ajax_form_ressource');
+  edit: function(ressource_soin_id, obj, selected_tr) {		
+		if(!Object.isUndefined(selected_tr)){
+			selected_tr.up('table').select('tr').invoke('removeClassName', 'selected'); 
+		  selected_tr.addClassName('selected');
+    }
+	  
+	  var url = new Url('dPprescription', 'ajax_form_ressource');
     url.addParam('ressource_soin_id', ressource_soin_id);
     url.requestUpdate("edit_ressource");
   },

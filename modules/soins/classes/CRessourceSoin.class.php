@@ -26,7 +26,7 @@ class CRessourceSoin extends CMbObject {
   
   function getProps() {
     $specs = parent::getProps();
-    $specs["libelle"] = "text notNull";
+    $specs["libelle"] = "str notNull";
     $specs["cout"]    = "float";
     
     return $specs;

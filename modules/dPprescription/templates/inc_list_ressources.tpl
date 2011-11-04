@@ -9,9 +9,9 @@
     <th class="category">{{mb_label class=CRessourceSoin field=cout}}</th>
   </tr>
   {{foreach from=$ressources_soins item=_ressource_soin}}
-    <tr>
+    <tr {{if $_ressource_soin->_id == $ressource_soin_id}}class="selected"{{/if}}>
       <td>
-        <a href="#{{$_ressource_soin->_id}}" onclick="Ressource.edit('{{$_ressource_soin->_id}}')">
+        <a href="#{{$_ressource_soin->_id}}" onclick="Ressource.edit('{{$_ressource_soin->_id}}', null, this.up('tr'))">
           {{mb_value object=$_ressource_soin field=libelle}}
         </a>
       </td>

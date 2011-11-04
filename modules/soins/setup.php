@@ -52,8 +52,12 @@ class CSetupsoins extends CSetup {
               ADD INDEX (`element_prescription_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = '0.12';
+		$this->makeRevision("0.12");
+		$query = "ALTER TABLE `ressource_soin` 
+              CHANGE `libelle` `libelle` VARCHAR (255) NOT NULL;";
+		$this->addQuery($query);
 		
+    $this->mod_version = '0.13';
   }
 }
 
