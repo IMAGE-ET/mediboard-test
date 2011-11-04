@@ -418,4 +418,16 @@ $library->versionString = "0.10.0_rc2";
 
 CLibrary::$all[$library->name] = $library;
 
+$library = new CLibrary;
+$library->name = "iCalcreator";
+$library->url = "http://sourceforge.net/projects/icalcreator/";
+$library->fileName = "iCalcreator-2.10.15.zip";
+$library->description = "Html To PDF converter";
+$library->sourceDir = "iCalcreator-2.10.15";
+$library->targetDir = "iCalcreator";
+$library->versionFile = "releaseNotes-2.10.15.txt";
+$library->versionString = "2.10.15";
+
+CLibrary::$all[$library->name] = $library;
+
 ?>

@@ -22,5 +22,6 @@ if(CModule::getActive("dPprescription")){
 }
 
 $module->registerTab("vw_stats", TAB_READ);
+$module->registerTab("vw_agenda", TAB_READ);
 
 ?>
