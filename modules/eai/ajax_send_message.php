@@ -56,18 +56,16 @@ if (!$source->_id) {
 $source->setData(utf8_encode($exchange->_message));
 $source->send();
 
-//mbTrace(utf8_decode($source->getACQ()));
-
-if ($acq = $source->getACQ()) {
+if ($ack_data = $source->getACQ()) {
   if ($exchange instanceof CEchangeHprim) {
-    $dom_acq = CHPrimXMLAcquittements::getAcquittementEvenementXML($data_format);
-    $dom_acq->loadXML($acq);
-    $doc_valid = $dom_acq->schemaValidate();
+    $ack = CHPrimXMLAcquittements::getAcquittementEvenementXML($data_format);
+    $ack->loadXML($ack_data);
+    $doc_valid = $ack->schemaValidate();
     if ($doc_valid) {
-      $exchange->statut_acquittement = $dom_acq->getStatutAcquittement();
+      $exchange->statut_acquittement = $ack->getStatutAcquittement();
     }
     $exchange->acquittement_valide = $doc_valid ? 1 : 0;
-    $exchange->_acquittement = $acq;
+    $exchange->_acquittement = $ack_data;
     $exchange->store();
   }
 
