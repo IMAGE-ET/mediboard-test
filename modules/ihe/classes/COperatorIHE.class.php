@@ -21,7 +21,7 @@ class COperatorIHE extends CEAIOperator {
     $evt = $data_format->_family_message;
 
     // Récupération des informations du message - CHL7v2MessageXML
-    $dom_evt = $evt->handle($msg, $evt->code);
+    $dom_evt = $evt->handle($msg);
 
     try {
       // Création de l'échange

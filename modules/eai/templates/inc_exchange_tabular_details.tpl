@@ -50,6 +50,7 @@
       <ul class="control_tabs" id="msg-message-tab">
         <li><a href="#msg-message-tree">Arbre</a></li>
         <li><a href="#msg-message-er7">ER7</a></li>
+        <li><a href="#msg-message-xml">XML</a></li>
         <li><a href="#msg-message-warnings" class="{{if $exchange->_doc_warnings_msg}}wrong{{else}}empty{{/if}}">Avertissements</a></li>
         <li><a href="#msg-message-errors" class="{{if $exchange->_doc_errors_msg}}wrong{{else}}empty{{/if}}">Erreurs</a></li>
       </ul>
@@ -62,6 +63,10 @@
       
       <div id="msg-message-er7" style="display: none;">
         {{$msg_segment_group->flatten(true)|smarty:nodefaults}}
+      </div>
+      
+      <div id="msg-message-xml" style="display: none;">
+        {{$msg_segment_group->_xml|smarty:nodefaults}}
       </div>
       
       <div id="msg-message-warnings" style="display: none;">
@@ -88,6 +93,7 @@
       <ul class="control_tabs" id="ack-message-tab">
         <li><a href="#ack-message-tree">Arbre</a></li>
         <li><a href="#ack-message-er7">ER7</a></li>
+        <li><a href="#ack-message-xml">XML</a></li>
         <li><a href="#ack-message-warnings" class="{{if $exchange->_doc_warnings_ack}}wrong{{else}}empty{{/if}}">Avertissements</a></li>
         <li><a href="#ack-message-errors" class="{{if $exchange->_doc_errors_ack}}wrong{{else}}empty{{/if}}">Erreurs</a></li>
       </ul>
@@ -100,6 +106,10 @@
       
       <div id="ack-message-er7" style="display: none;">
         {{$ack_segment_group->flatten(true)|smarty:nodefaults}}
+      </div>
+      
+      <div id="ack-message-xml" style="display: none;">
+        {{$ack_segment_group->_xml|smarty:nodefaults}}
       </div>
       
       <div id="ack-message-warnings" style="display: none;">

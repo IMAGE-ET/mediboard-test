@@ -10,6 +10,8 @@
  * @link     http://www.mediboard.org
  */
 
+CAppUI::requireLibraryFile("geshi/geshi");
+
 CCanDo::checkRead();
 
 $exchange_guid = CValue::get("exchange_guid");
@@ -30,8 +32,24 @@ $smarty = new CSmartyDP();
 $smarty->assign("exchange", $exchange);
 
 if ($exchange instanceof CExchangeTabular) {
-  $smarty->assign("msg_segment_group", $exchange->getMessage());
-  $smarty->assign("ack_segment_group", $exchange->getACK());
+  $msg_segment_group = $exchange->getMessage();
+  
+  $geshi = new Geshi($msg_segment_group->toXML()->saveXML(), "xml");
+  $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
+  $geshi->set_overall_style("max-height: 100%; white-space:pre-wrap;");
+  $geshi->enable_classes();
+  $msg_segment_group->_xml = $geshi->parse_code();
+  
+  $ack_segment_group = $exchange->getACK();
+  
+  $geshi = new Geshi($ack_segment_group->toXML()->saveXML(), "xml");
+  $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
+  $geshi->set_overall_style("max-height: 100%; white-space:pre-wrap;");
+  $geshi->enable_classes();
+  $ack_segment_group->_xml = $geshi->parse_code();
+  
+  $smarty->assign("msg_segment_group", $msg_segment_group);
+  $smarty->assign("ack_segment_group", $ack_segment_group);
   $smarty->display("inc_exchange_tabular_details.tpl");
 } 
 elseif ($exchange instanceof CEchangeXML) {

@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
+CAppUI::requireLibraryFile("geshi/geshi");
+
 CCanDo::checkRead();
 
 // Envoi à la source créée 'HL7 v.2'
