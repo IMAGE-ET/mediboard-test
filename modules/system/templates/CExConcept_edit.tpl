@@ -15,6 +15,9 @@ toggleListCustom = function(radio) {
   if (input) {
     input.up(".dropdown").down(".dropdown-trigger").setVisibility(enableList);
     input.disabled = input.readOnly = !enableList;
+    
+    var multiple = form._multiple;
+    multiple.disabled = multiple.readOnly = !enableList;
   }
   
   if (enableList) {
@@ -32,7 +35,7 @@ toggleListCustom = function(radio) {
 
 selectList = function(input) {
   ExConceptSpec.edit(input.form);
-	
+  
   if (!$V(input.form.elements.name)) {
     $V(input.form.elements.name, input.form.ex_list_id_autocomplete_view.value);
   }
@@ -75,6 +78,9 @@ Main.add(function(){
       <td>
         {{if !$object->_id}}
           {{mb_field object=$object field=ex_list_id form="edit-`$object->_guid`" autocomplete="true,1,50,false,true" onchange="selectList(this)"}}
+          <label>
+            <input type="checkbox" name="_multiple" value="1" onclick="ExConceptSpec.edit(this.form)" /> Multiple 
+          </label>
         {{else}}
           {{mb_value object=$object field=ex_list_id}}
           {{mb_field object=$object field=ex_list_id hidden=true}}
@@ -166,7 +172,7 @@ Main.add(function(){
       </tr>
     {{foreachelse}}
       <tr>
-        <td class="empty" colspan="2">{{tr}}CExClassField.none{{/tr}}</td>
+        <td class="empty" colspan="3">{{tr}}CExClassField.none{{/tr}}</td>
       </tr>
     {{/foreach}}
   </table>

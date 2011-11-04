@@ -429,6 +429,11 @@ class CExClassField extends CExListItemsOwner {
     if (!$this->_id && $this->concept_id) {
       $this->prop = $this->loadRefConcept()->prop;
     }
+		
+		// pour la valeur par defaut des enums
+		if ($this->prop !== null) {
+		  $this->prop = str_replace("\\", "\\\\", $this->prop);
+		}
     
     if (!$this->_id) {
       $this->name = self::getUniqueName();

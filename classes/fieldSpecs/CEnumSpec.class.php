@@ -49,7 +49,7 @@ class CEnumSpec extends CMbFieldSpec {
   function getOptions(){
     return array(
       'list' => 'list',
-      'typeEnum' => array('select', 'radio'),
+      'typeEnum' => array('radio', 'select'),
       'vertical' => 'bool',
     ) + parent::getOptions();
   }

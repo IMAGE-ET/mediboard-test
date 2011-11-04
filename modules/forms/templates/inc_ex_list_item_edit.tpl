@@ -40,11 +40,11 @@ Main.add(function(){
 
 <form name="CExListItem-create" method="post" action="?" 
       onsubmit="return onSubmitFormAjax(this, {onComplete: 
-			  {{if $context instanceof CExClassField}} 
-				  (function(){ if(!$V(this.elements.ex_list_item_id)) { (function(){ $('save-to-take-effect').show(); }).delay(1); } ExField.edit('{{$context->_id}}') }).bind(this) 
-				{{else}} 
-				  MbObject.edit.curry('{{$context->_guid}}') 
-				{{/if}} })">
+        {{if $context instanceof CExClassField}} 
+          (function(){ if(!$V(this.elements.ex_list_item_id)) { (function(){ $('save-to-take-effect').show(); }).delay(1); } ExField.edit('{{$context->_id}}') }).bind(this) 
+        {{else}} 
+          MbObject.edit.curry('{{$context->_guid}}') 
+        {{/if}} })">
         
   {{mb_class class=CExListItem}}
   <input type="hidden" name="ex_list_item_id" value="" class="ref" />
@@ -77,7 +77,7 @@ Main.add(function(){
       <td>
         <button class="add notext" style="margin: -1px;">{{tr}}Add{{/tr}}</button>
       </td>
-      <td class="code" {{if !$coded}}style="display: none"{{/if}}>{{mb_field class=CExListItem field=code size=6}}</td>
+      <td class="code" {{if !$coded}} style="display: none" {{/if}}>{{mb_field class=CExListItem field=code size=6}}</td>
       <td {{if $context instanceof CExClassField}}colspan="2"{{/if}}>
         {{mb_field class=CExListItem field=name style="width: 99%;"}}
       </td>
@@ -96,14 +96,14 @@ Main.add(function(){
     
     {{foreach from=$context->_back.list_items item=_item}}
       {{assign var=_item_id value=$_item->_id}}
-			
+      
       <tr data-id="{{$_item->_id}}" data-name="{{$_item->name}}" data-code="{{$_item->code}}">
         <td>
           <button class="edit notext" type="button" style="margin: -1px;" onclick="editListItem($(this).up('tr'))">
             {{tr}}Edit{{/tr}}
           </button>
         </td>
-        <td class="code" {{if !$coded}}style="display: none"{{/if}}>{{mb_value object=$_item field=code}}</td>
+        <td class="code" {{if !$coded}} style="display: none" {{/if}}>{{mb_value object=$_item field=code}}</td>
         <td class="text">{{mb_value object=$_item field=name}}</td>
         
         {{if $context instanceof CExClassField}}

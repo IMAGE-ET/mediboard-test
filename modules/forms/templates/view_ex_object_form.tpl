@@ -87,7 +87,7 @@ if (window.opener && !window.opener.closed && window.opener !== window && window
   
   {{if !$print}}
     <iframe id="printIframe" width="0" height="0" style="display: none;"></iframe>
-    <button type="button" class="print" onclick="ExObjectForms.{{$ex_form_hash}}.confirmSavePrint(this.form)" style="float: right;">
+    <button type="button" class="print singleclick" onclick="ExObjectForms.{{$ex_form_hash}}.confirmSavePrint(this.form)" style="float: right;">
       {{tr}}Print{{/tr}}
     </button>
   {{/if}}
@@ -252,7 +252,7 @@ if (window.opener && !window.opener.closed && window.opener !== window && window
     <tr>
       <td colspan="4" class="button">
         {{if $ex_object->_id}}
-          <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
+          <button class="modify singleclick" type="submit">{{tr}}Save{{/tr}}</button>
           
           {{if $forms_admin}}
             <button type="button" class="trash" onclick="confirmDeletion(this.form,{callback: onSubmitFormAjax.curry(this.form), typeName:'', objName:'{{$ex_object->_view|smarty:nodefaults|JSAttribute}}'})">
@@ -260,7 +260,7 @@ if (window.opener && !window.opener.closed && window.opener !== window && window
             </button>
           {{/if}}
         {{else}}
-          <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
+          <button class="submit singleclick" type="submit">{{tr}}Save{{/tr}}</button>
         {{/if}}
       </td>
     </tr>
@@ -299,7 +299,7 @@ function switchMode(){
     <button class="change" onclick="switchMode()">
       Tous les champs
     </button>
-    <button class="print" onclick="window.print()">{{tr}}Print{{/tr}}</button>
+    <button class="print singleclick" onclick="window.print()">{{tr}}Print{{/tr}}</button>
   </div>
 {{/if}}
 

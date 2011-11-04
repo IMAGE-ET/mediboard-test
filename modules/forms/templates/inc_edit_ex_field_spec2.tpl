@@ -19,16 +19,17 @@ updateFieldSpec = function(){
   
   var data = form.serialize(true);
   var fields = {};
-  var str = "{{$spec->getSpecType()}}";
-	
-	var newData = {};
+  var specType = "{{$spec->getSpecType()}}";
+  var str = specType;
+  
+  var newData = {};
   Object.keys(data).each(function(k){
-	  if (data[k] !== "0" || booleanSpecs.indexOf(k) == -1) {
-		  newData[k] = data[k];
-		}
-	});
-	data = newData;
-	
+    if (data[k] !== "0" || booleanSpecs.indexOf(k) == -1) {
+      newData[k] = data[k];
+    }
+  });
+  data = newData;
+  
   Object.keys(data).each(function(k){
     if (k.indexOf("__") === 0) return;
     
@@ -41,12 +42,21 @@ updateFieldSpec = function(){
       }
       
       str += " "+(k.split("[")[0]);
-      if (Object.isArray(d))
-        str += "|"+d.invoke("replace", /\s/g, "\\x20").invoke("replace", /\|/g, "\\x7C").join("|");
+      if (Object.isArray(d)) {
+        var arr = d;
+        if (k != "default" || ["set", "enum"].indexOf(specType) == -1) {
+          arr = arr.invoke("replace", /\s/g, "\\x20").invoke("replace", /\|/g, "\\x7C");
+        }
+        str += "|"+arr.join("|");
+      }
       else {
         var v = d.strip();
         if (booleanSpecs.indexOf(k) == -1 && (ExFieldSpec.options[k] != "bool" || v != "1")) {
-          str += "|"+v.replace(/\s/g, "\\x20").replace(/\|/g, "\\x7C");
+          if (k != "default" || ["set", "enum"].indexOf(specType) == -1) {
+            v = v.replace(/\s/g, "\\x20").replace(/\|/g, "\\x7C");
+          }
+        
+          str += "|"+v;
         }
       }
       
@@ -83,17 +93,17 @@ confirmDelEnum = function(button) {
 
 updateTriggerData = function(trigger, value) {
   var fieldForm = getForm("{{$form_name}}");
-	var trigger_data = $V(fieldForm._triggered_data);
-	var trigger_object = trigger_data ? trigger_data.evalJSON() : {};
-	
-	if (trigger_object.length === 0) {
-	  trigger_object = {};
-	}
-	
+  var trigger_data = $V(fieldForm._triggered_data);
+  var trigger_object = trigger_data ? trigger_data.evalJSON() : {};
+  
+  if (trigger_object.length === 0) {
+    trigger_object = {};
+  }
+  
   trigger_object[value] = trigger;
-	
-	$V(fieldForm._triggered_data, Object.toJSON(trigger_object));
-	
+  
+  $V(fieldForm._triggered_data, Object.toJSON(trigger_object));
+  
   $("save-to-take-effect").show();
 }
 
@@ -130,8 +140,8 @@ Main.add(function(){
     {{/if}}
     
     <tr {{if ($_name == "default" && $spec instanceof CEnumSpec) || 
-		         ($_name == "notNull" && $context instanceof CExConcept) || 
-						 $smarty.foreach.specs.index >= $advanced_controls_limit}}class="advanced" style="display: none;"{{/if}}>
+             ($_name == "notNull" && $context instanceof CExConcept) || 
+             $smarty.foreach.specs.index >= $advanced_controls_limit}}class="advanced" style="display: none;"{{/if}}>
       <th><label for="{{$_name}}" title="{{$_name}}">{{tr}}CMbFieldSpec.{{$_name}}{{/tr}}</label></th>
       <td>
         {{assign var=spec_value value=$spec->$_name}}
@@ -143,19 +153,19 @@ Main.add(function(){
             
           {{* num *}}
           {{elseif $_type == "num"}}
-					  <script type="text/javascript">
-					  	Main.add(function(){
-							  getForm("editFieldSpec")["{{$_name}}"].addSpinner();
-							});
-						</script>
+            <script type="text/javascript">
+              Main.add(function(){
+                getForm("editFieldSpec")["{{$_name}}"].addSpinner();
+              });
+            </script>
             <input type="text" name="{{$_name}}" value="{{$spec_value}}" class="float" size="2" />
             
           {{* bool *}}
           {{elseif $_type == "bool"}}
-					  {{if !in_array($_name, $boolean)}}
+            {{if !in_array($_name, $boolean)}}
               <label><input type="radio" name="{{$_name}}" value=""  {{if $spec_value === null || $spec_value === ""}}checked="checked"{{/if}} /> {{tr}}Undefined{{/tr}}</label>
-						{{/if}}
-						
+            {{/if}}
+            
             <label><input type="radio" name="{{$_name}}" value="0" {{if $spec_value === 0 || $spec_value === "0" || (($spec_value === null || $spec_value === "") && in_array($_name, $boolean))}}checked="checked"{{/if}} /> {{tr}}No{{/tr}}</label>
             <label><input type="radio" name="{{$_name}}" value="1" {{if $spec_value == 1}}checked="checked"{{/if}} /> {{tr}}Yes{{/tr}}</label>
             
@@ -220,15 +230,15 @@ Main.add(function(){
             
               {{if $context && $context->_id}}
                 {{if $context == $list_owner}}
-								
-								  {{if $list_owner instanceof CExClassField}}
-										{{foreach from=$context->_back.list_items item=_item}}
-										  <input type="hidden" name="{{$_name}}[]" class="internal" value="{{$_item->_id}}" />
-										{{/foreach}}
+                
+                  {{if $list_owner instanceof CExClassField}}
+                    {{foreach from=$context->_back.list_items item=_item}}
+                      <input type="hidden" name="{{$_name}}[]" class="internal" value="{{$_item->_id}}" />
+                    {{/foreach}}
                   {{else}}
-	                  {{foreach from=$spec->_list item=_value}}
-	                    <input type="hidden" name="{{$_name}}[]" class="internal" value="{{$_value}}" />
-	                  {{/foreach}}
+                    {{foreach from=$spec->_list item=_value}}
+                      <input type="hidden" name="{{$_name}}[]" class="internal" value="{{$_value}}" />
+                    {{/foreach}}
                   {{/if}}
                 {{/if}}
                 <em>Voir "{{tr}}CExList-back-list_items{{/tr}}"</em>
@@ -250,9 +260,9 @@ Main.add(function(){
           
         {{else}}
         
-				  {{if !($_type == "list" || $_type == "bool" && $_name == "default" || $_type == "bool" && $_name == "notNull")}}
+          {{if !($_type == "list" || $_type == "bool" && $_name == "default" || $_type == "bool" && $_name == "notNull")}}
             <input type="hidden" name="{{$_name}}" value="{{$spec_value}}" />
-					{{/if}}
+          {{/if}}
         
           {{* str *}}
           {{if $_type == "str"}}
@@ -266,19 +276,19 @@ Main.add(function(){
           {{elseif $_type == "bool"}}
             {{if $_name == "notNull"}}
               {{if !in_array($_name, $boolean)}}
-	              <label><input type="radio" name="{{$_name}}" value=""  {{if $spec_value === null || $spec_value === ""}}checked="checked"{{/if}} /> {{tr}}Undefined{{/tr}}</label>
-							{{/if}}
-							
-	            <label><input type="radio" name="{{$_name}}" value="0" {{if $spec_value === 0 || $spec_value === "0" || (($spec_value === null || $spec_value === "") && in_array($_name, $boolean))}}checked="checked"{{/if}} /> {{tr}}No{{/tr}}</label>
-	            <label><input type="radio" name="{{$_name}}" value="1" {{if $spec_value == 1}}checked="checked"{{/if}} /> {{tr}}Yes{{/tr}}</label>
+                <label><input type="radio" name="{{$_name}}" value=""  {{if $spec_value === null || $spec_value === ""}}checked="checked"{{/if}} /> {{tr}}Undefined{{/tr}}</label>
+              {{/if}}
+              
+              <label><input type="radio" name="{{$_name}}" value="0" {{if $spec_value === 0 || $spec_value === "0" || (($spec_value === null || $spec_value === "") && in_array($_name, $boolean))}}checked="checked"{{/if}} /> {{tr}}No{{/tr}}</label>
+              <label><input type="radio" name="{{$_name}}" value="1" {{if $spec_value == 1}}checked="checked"{{/if}} /> {{tr}}Yes{{/tr}}</label>
             {{else}}
-						  {{if !in_array($_name, $boolean)}}
-							  {{if $spec_value === null || $spec_value === ""}}{{tr}}Undefined{{/tr}}{{/if}}
-							{{/if}}
-							
-	            {{if $spec_value === 0 || $spec_value === "0" || (($spec_value === null || $spec_value === "") && in_array($_name, $boolean))}}{{tr}}No{{/tr}}{{/if}}
-	            {{if $spec_value == 1}}{{tr}}Yes{{/tr}}{{/if}}
-						{{/if}}
+              {{if !in_array($_name, $boolean)}}
+                {{if $spec_value === null || $spec_value === ""}}{{tr}}Undefined{{/tr}}{{/if}}
+              {{/if}}
+              
+              {{if $spec_value === 0 || $spec_value === "0" || (($spec_value === null || $spec_value === "") && in_array($_name, $boolean))}}{{tr}}No{{/tr}}{{/if}}
+              {{if $spec_value == 1}}{{tr}}Yes{{/tr}}{{/if}}
+            {{/if}}
             
           {{* enum *}}
           {{elseif is_array($_type)}}

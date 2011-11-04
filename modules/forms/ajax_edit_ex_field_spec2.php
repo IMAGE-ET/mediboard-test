@@ -15,12 +15,25 @@ $spec_type       = CValue::get("_spec_type");
 
 $form_name       = CValue::get("form_name");
 $context_guid    = CValue::get("context_guid");
+$ex_concept_id   = CValue::get("ex_concept_id");
+
+// Cas du choix d'une liste
+$concept_type    = CValue::get("_concept_type");
+$ex_list_id      = CValue::get("ex_list_id");
+$multiple        = CValue::get("_multiple");
 
 $context = CMbObject::loadFromGuid($context_guid);
 $context->loadView();
 
 $list_owner = $context->getRealListOwner();
 $list_owner->loadView();
+
+if($concept_type == "list" && !$ex_concept_id && $context instanceof CExConcept) {
+  $ex_list = new CExList;
+  $ex_list->load($ex_list_id);
+  $ex_list_items = $ex_list->loadRefItems();
+  $prop = ($multiple ? "set" : "enum") . " list|" . implode("|", CMbArray::pluck($ex_list_items, "_id"));
+}
 
 $prop = str_replace("\\\\x", "\\x", $prop);
 $prop_type = explode(" ", $prop);
@@ -43,8 +56,8 @@ if ($spec_type) {
 $spec = CExConcept::getConceptSpec($prop);
 
 if (!$spec->prop) {
-	CAppUI::stepMessage(UI_MSG_ALERT, "Enregistrez le champ avant de pouvoir changer les propriétés");
-	return;
+  CAppUI::stepMessage(UI_MSG_ALERT, "Enregistrez le champ avant de pouvoir changer les propriétés");
+  return;
 }
 
 // UGLY hack because of the default value of the Boolspec
@@ -52,8 +65,10 @@ if ($spec instanceof CBoolSpec && strpos($prop, "default|") === false) {
   $spec->default = null;
 }
 
-if ($spec instanceof CEnumSpec && ($spec->typeEnum === null || !in_array($spec->typeEnum, $spec->_options["typeEnum"]))) {
-	$spec->typeEnum = reset($spec->_options["typeEnum"]);
+if ($spec instanceof CEnumSpec) {
+  if ($spec->typeEnum === null || !in_array($spec->typeEnum, $spec->_options["typeEnum"])) {
+    $spec->typeEnum = reset($spec->_options["typeEnum"]);
+  }
 }
 
 $exclude = array(
