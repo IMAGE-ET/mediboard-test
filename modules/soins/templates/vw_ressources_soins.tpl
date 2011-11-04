@@ -38,10 +38,6 @@ Main.add(function(){
 				<input type="hidden" name="date_max" class="date" value="{{$date_max}}" onchange="this.form.submit()" />
         <span style="float: right;">
           <label>
-            <input type="checkbox" name="nb_unites_view" {{if $nb_unites == 1}}checked="checked"{{/if}} onchange="$V(this.form.nb_unites, this.checked ? 1 : 0); this.form.submit()"> Nombre d'unités
-            <input type="hidden" name="nb_unites" value="{{$nb_unites}}" />
-          </label>
-          <label>
             <input type="checkbox" name="cout_euro_view" {{if $cout_euro == 1}}checked="checked"{{/if}}/ onchange="$V(this.form.cout_euro, this.checked ? 1 : 0); this.form.submit()"> Coût
             <input type="hidden" name="cout_euro" value="{{$cout_euro}}" />
           </label> 
