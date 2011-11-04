@@ -20,11 +20,13 @@ function popPlanning(debut) {
 {{mb_script module=dPbloc script=edit_planning}}
 <tr>
   <th>
-  	<button class="print" onclick="popPlanning('{{$curr_day}}');" style="float:left;margin-right:-23px;"> </button>
+  	<button class="print notext" onclick="popPlanning('{{$curr_day}}');"          style="float:left;margin-right:-23px;">{{tr}}Print{{/tr}}</button>
+  	{{if $can->edit}}
+    <button class="new notext"   onclick="EditPlanning.edit('','{{$curr_day}}');" style="float:right;margin-left:-23px;">{{tr}}Edit{{/tr}}</button>
+    {{/if}}
     <a href="?m=dPbloc&amp;tab=vw_edit_planning&amp;date={{$curr_day}}" >
       <strong>{{$curr_day|date_format:"%a %d %b"}}</strong>
     </a>
-		<button class="new"  onclick="EditPlanning.edit('','{{$curr_day}}');" style="float:right;margin-left:-23px;"></button>
   </th>
   {{foreach from=$listHours|smarty:nodefaults item=curr_hours}}
   <th colspan="4" class="heure">{{$curr_hours}}:00</th>
