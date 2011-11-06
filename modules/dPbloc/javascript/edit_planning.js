@@ -14,8 +14,8 @@ EditPlanning  = {
 	onSubmit: function(form) {
 		return onSubmitFormAjax(form, { 
 			onComplete: function() {
-			EditPlanning.refreshList();
-			EditPlanning.modal.close();
+			  EditPlanning.refreshList();
+			  EditPlanning.modal.close();
 			}
 		})
 	},
@@ -25,7 +25,7 @@ EditPlanning  = {
 		url.requestUpdate('modif_planning');
 	},
   
-	resfreshImageStatus : function(element){
+	resfreshImageStatus: function(element){
 		if (!element.get('id')) {
 			return;
 		}
@@ -37,5 +37,21 @@ EditPlanning  = {
 		url.requestJSON(function(status) {
 			element.src = EditPlanning.status_images[status.reachable];
 			});
-	}
+	},
+	
+	popPlanning: function(date) {
+    var url = new Url("dPbloc", "view_planning");
+    url.addParam("_date_min", date);
+    url.addParam("_date_max", date);
+    url.addParam("salle"    , 0);
+    url.popup(900, 550, "Planning");
+	},
+	
+	showAlerte: function(date, bloc_id, type) {
+    var url = new Url("dPbloc", "vw_alertes");
+    url.addParam("date"   , date);
+    url.addParam("type"   , type);
+    url.addParam("bloc_id", bloc_id);
+    url.requestModal(800, 500);
+  }
 };

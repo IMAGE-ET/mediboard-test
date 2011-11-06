@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_script module=dPbloc script=edit_planning}}
+
 <script type="text/javascript">
 
 {{if $can->edit}}
@@ -20,14 +22,6 @@ function showAlerte() {
   url.popup(600, 500, "Alerte");
 }
 
-function popPlanning(debut) {
-  var url = new Url("dPbloc", "view_planning");
-  url.addParam("_date_min", debut);
-  url.addParam("_date_max", debut);
-  url.addParam("salle"    , 0);
-  url.popup(900, 550, "Planning");
-}
-
 {{/if}}
 </script>
 <table class="main">
@@ -36,7 +30,7 @@ function popPlanning(debut) {
       {{if $can->edit}}
       {{if $nbIntervNonPlacees || $nbIntervHorsPlage || $nbAlertesInterv}}
         <div class="warning" style="float: right; text-align:left;">
-          <a href="#nothing" onclick="showAlerte()">
+          <a href="#nothing" onclick="EditPlanning.showAlerte('{{$date}}', '{{$bloc->_id}}', 'jour')">
           {{if $nbAlertesInterv}}
             {{$nbAlertesInterv}} alerte(s) sur des interventions
             <br />
@@ -52,7 +46,7 @@ function popPlanning(debut) {
           </a>
         </div>
       {{/if}}
-      <button class="print" onclick="popPlanning('{{$date}}');" style="font-weight: bold;">
+      <button class="print" onclick="EditPlanning.popPlanning('{{$date}}');" style="font-weight: bold;">
         {{$date|date_format:"%A %d %B"}}
       </button>
       {{/if}}

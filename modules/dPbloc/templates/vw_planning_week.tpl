@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_script module=dPbloc script=edit_planning}}
+
 <script type="text/javascript">
 
 function showAlerte() {
@@ -25,7 +27,7 @@ function showAlerte() {
     <td>
       {{if $nbIntervNonPlacees || $nbIntervHorsPlage || $nbAlertesInterv}}
         <div class="warning" style="float: right;">
-          <a href="#nothing" onclick="showAlerte()">
+          <a href="#nothing" onclick="EditPlanning.showAlerte('{{$date}}', '{{$bloc->_id}}', 'semaine');">
           {{if $nbAlertesInterv}}
             {{$nbAlertesInterv}} alerte(s) sur des interventions
             <br />

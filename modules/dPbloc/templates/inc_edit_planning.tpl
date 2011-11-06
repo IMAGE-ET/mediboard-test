@@ -51,21 +51,6 @@ Main.add(function(){
       </th>
     </tr>
     <tr>
-      <td colspan="6" class="text">
-        <div class="small-info">
-          <strong>La gestion des plages a évolué :</strong>
-          <ul>
-            <li>La répétition est maintenant indiquée en nombre de semaines et plus en nombre de plages</li>
-            <li>
-              la supression d'une plage est intégrée au formulaire principal : il faut utiliser le nombre
-              de semaines et le type de répétitions pour indiquer les supressions à effectuer, puis cliquer
-              directement sur le bouton supprimer
-            </li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr>
      <th>{{mb_label object=$plagesel field="chir_id"}}</th>
      <td>
       <select name="chir_id" class="{{$plagesel->_props.chir_id}}" style="width: 15em;">

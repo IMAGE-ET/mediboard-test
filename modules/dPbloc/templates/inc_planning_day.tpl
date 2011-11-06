@@ -7,22 +7,12 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
-<script type="text/javascript">
-function popPlanning(debut) {
-  var url = new Url("dPbloc", "view_planning");
-  url.addParam("_date_min", debut);
-  url.addParam("_date_max", debut);
-  url.addParam("salle"    , 0);
-  url.popup(900, 550, "Planning");
-}
-</script>
 
-{{mb_script module=dPbloc script=edit_planning}}
 <tr>
   <th>
-  	<button class="print notext" onclick="popPlanning('{{$curr_day}}');"          style="float:left;margin-right:-23px;">{{tr}}Print{{/tr}}</button>
+  	<button class="print notext" onclick="EditPlanning.popPlanning('{{$curr_day}}');" style="float:left;">{{tr}}Print{{/tr}}</button>
   	{{if $can->edit}}
-    <button class="new notext"   onclick="EditPlanning.edit('','{{$curr_day}}');" style="float:right;margin-left:-23px;">{{tr}}Edit{{/tr}}</button>
+    <button class="new notext"   onclick="EditPlanning.edit('','{{$curr_day}}');"     style="float:right;">{{tr}}Edit{{/tr}}</button>
     {{/if}}
     <a href="?m=dPbloc&amp;tab=vw_edit_planning&amp;date={{$curr_day}}" >
       <strong>{{$curr_day|date_format:"%a %d %b"}}</strong>
