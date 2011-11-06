@@ -213,32 +213,25 @@ Main.add(function () {
           {{/foreach}}  
         {{/foreach}}
       </table>
-      
-    <table >
       <div class="small-info">
-      <strong>L'affichage du semainier a évolué</strong>. Maintenant, vous pouvez utiliser les boutons qui apparaissent au survol de la plage de consultation pour :
-      <ul>
-      <li>
-        <button type="button" class="notext list">Liste</button> :
-        Afficher la liste des patients sur la droite
-      </li>
-      <li>
-        <button type="button" class="notext edit">Edit</button> :
-        Modifier la plage selectionnée
-      </li>
-      <li>
-        <button type="button" class="notext clock">RDV</button> :
-        Prendre un nouveau rendez-vous dans cette plage
-      </li>
-      </ul>
-      <br />
-      Les anciennes commandes fonctionnent encore mais seront supprimées prochainement.
+        <strong>L'affichage du semainier a évolué</strong>. Maintenant, vous pouvez utiliser les boutons qui apparaissent au survol de la plage de consultation pour :
+        <ul>
+          <li>
+            <button type="button" class="notext list">Liste</button> :
+            Afficher la liste des patients sur la droite
+          </li>
+          <li>
+            <button type="button" class="notext edit">Edit</button> :
+            Modifier la plage selectionnée
+          </li>
+          <li>
+            <button type="button" class="notext clock">RDV</button> :
+            Prendre un nouveau rendez-vous dans cette plage
+          </li>
+        </ul>
+        <br />
+        Les anciennes commandes fonctionnent encore mais seront supprimées prochainement.
     </div>
-    </table>
-        <td id="consultations">
-          {{mb_include module=dPcabinet template=inc_consultations}}
-    
-        </td>
-      </tr>
-      
-    </table>
+    <td id="consultations">{{mb_include module=dPcabinet template=inc_consultations}}</td>
+  </tr>
+</table>
