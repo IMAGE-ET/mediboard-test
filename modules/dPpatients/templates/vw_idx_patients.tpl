@@ -4,13 +4,10 @@
 
 <script type="text/javascript">
 	
-markAsSelected = function(element) {
-  removeSelectedTr();
-  $(element).up(1).addClassName('selected');
-}
-
-removeSelectedTr = function(){
-  $("list_patients").select('.selected').each(function (e) {e.removeClassName('selected')});
+markAsSelected = function(anchor) {
+  if (anchor) {
+    $(anchor).up('tr').addUniqueClassName('selected');
+  }
 }
 
 {{if $patient->_id}}

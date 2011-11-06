@@ -60,11 +60,13 @@
 
 reloadPatient = function(patient_id, link){
 	{{if $board}}
-    window.location="?m=dPpatients&tab=vw_full_patients&patient_id="+patient_id;
-  {{else}}
-    var url = new Url("dPpatients", "httpreq_vw_patient");
+    var url = new Url('dPpatients', 'vw_full_patients');
     url.addParam("patient_id", patient_id);
-    url.requestUpdate("vwPatient", { onComplete: function(){ if(link){ markAsSelected(link); } }  } );
+    url.redirect();
+  {{else}}
+    var url = new Url('dPpatients', 'httpreq_vw_patient');
+    url.addParam('patient_id', patient_id);
+    url.requestUpdate('vwPatient', { onComplete: markAsSelected.curry(link) } );
   {{/if}}
 }
 
