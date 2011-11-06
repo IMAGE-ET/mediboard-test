@@ -10,18 +10,6 @@
 
 {{mb_script module=dPbloc script=edit_planning}}
 
-<script type="text/javascript">
-
-function showAlerte() {
-  var url = new Url("dPbloc", "vw_alertes");
-  url.addParam("date", "{{$date}}");
-  url.addParam("type", "semaine");
-  url.addParam("bloc_id", "{{$bloc->_id}}");
-  url.popup(600, 500, "Alerte");
-}
-
-</script>
-
 <table class="main">
   <tr>
     <td>

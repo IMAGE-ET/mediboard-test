@@ -10,19 +10,6 @@
 
 {{mb_script module=dPbloc script=edit_planning}}
 
-<script type="text/javascript">
-
-{{if $can->edit}}
-
-function showAlerte() {
-  var url = new Url("dPbloc", "vw_alertes");
-  url.addParam("date", "{{$date}}");
-  url.addParam("type", "jour");
-  url.addParam("bloc_id", "{{$bloc->_id}}");
-  url.popup(600, 500, "Alerte");
-}
-
-{{/if}}
 </script>
 <table class="main">
   <tr>
@@ -71,9 +58,9 @@ function showAlerte() {
       {{include file="inc_planning_day.tpl"}}
       </table>
       {{if $can->edit}}
-      <a class="button new" style="float: left;" onclick="EditPlanning.edit('','');"href="#">
+      <button type="button" class="new" style="float: left;" onclick="EditPlanning.edit('','{{$date}}');">
         {{tr}}CPlageOp-title-create{{/tr}}
-      </a>
+      </button>
 			
     </form>
     {{/if}}
