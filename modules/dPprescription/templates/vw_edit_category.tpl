@@ -232,6 +232,10 @@ refreshFormExecutant = function(executant_prescription_line_id, category_id){
 </table>
 <table class="main" style="display: none;" id="cdarr_constantes_area">
   <tr>
+    <td><hr /></td>
+    <td><hr /></td>
+  </tr>
+  <tr>
     <td>
       <ul id="elements-tabs" class="control_tabs">
         <li>

@@ -5,29 +5,23 @@
   {{mb_key object=$ressource_soin}}
   
   <table class="form">
-    <tr>
-      <th colspan="2" class="title {{if $ressource_soin->_id}}modify{{/if}}"">
-        {{if !$ressource_soin->_id}}
-          {{tr}}CRessourceSoin-title-create{{/tr}}
-        {{else}}
-        {{tr}}CRessourceSoin-title-modify{{/tr}}
-        {{/if}}
-      </th>
-    </tr>
-    <tr>
-      <th>
-        {{mb_label object=$ressource_soin field=libelle}}
-      </th>
-      <td>
-        {{mb_field object=$ressource_soin field=libelle}}
-      </td>
-    </tr>
+    {{mb_include module=system template=inc_form_table_header object=$ressource_soin}}
+
     <tr>
       <th>
         {{mb_label object=$ressource_soin field=code}}
       </th>
       <td>
         {{mb_field object=$ressource_soin field=code}}
+      </td>
+    </tr>
+
+    <tr>
+      <th>
+        {{mb_label object=$ressource_soin field=libelle}}
+      </th>
+      <td>
+        {{mb_field object=$ressource_soin field=libelle}}
       </td>
     </tr>
     <tr>

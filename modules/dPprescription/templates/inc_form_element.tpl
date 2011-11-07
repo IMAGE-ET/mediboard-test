@@ -19,23 +19,14 @@
 		<input type="hidden" name="cancelled" value="{{$element_prescription->cancelled}}" />
 		<input type="hidden" name="callback" value="refreshListElement" />
 		<table class="form">
-		 <tr>
-		   {{if $element_prescription->_id}}
-			   <th class="title text modify" colspan="2">
-           {{mb_include module=system template=inc_object_notes      object=$element_prescription}}
-           {{mb_include module=system template=inc_object_idsante400 object=$element_prescription}}
-			     {{mb_include module=system template=inc_object_history    object=$element_prescription}}
-			     Modification de l'element &lsquo;{{$element_prescription->libelle}}&rsquo;
-		   {{else}}
-			   <th class="title text" colspan="2">
-			     Création d'un élément
-		   {{/if}}
-		   </th>
-		 </tr>
+ 
+     {{mb_include module=system template=inc_form_table_header object=$element_prescription}}
+
 		 <tr>
 		   <th>{{mb_label object=$element_prescription field="libelle"}}</th>
 		   <td>{{mb_field object=$element_prescription field="libelle"}}</td>
 		 </tr>
+
 		 <tr>
 		   <th>{{mb_label object=$element_prescription field="description"}}</th>
 		   <td>{{mb_field object=$element_prescription field="description"}}</td>

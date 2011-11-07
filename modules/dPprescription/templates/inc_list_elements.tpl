@@ -16,7 +16,7 @@
 	</script>
 	
 	<hr />	
-	<ul class="control_tabs small" id="elements_executants_tab">
+	<ul class="control_tabs" id="elements_executants_tab">
 	  <li>
 	   	<a href="#elements">
 	      Eléments <small>({{$category->_ref_elements_prescription|@count}})</small>
@@ -99,7 +99,7 @@
 		    </tr>
 		    {{foreachelse}}
 		     <tr>
-		      <td colspan="{{if 'ssr'|module_active}}5{{else}}4{{/if}}">
+		      <td class="empty" colspan="{{if 'ssr'|module_active}}5{{else}}4{{/if}}">
 		        Aucun élément dans cette catégorie
 		      </td>
 		     </tr>
@@ -134,7 +134,7 @@
         </tr>
       {{foreachelse}}
 			  <tr>
-			  	<td>Aucun exécutant</td>
+			  	<td class="empty">Aucun exécutant</td>
 			  </tr>
 			{{/foreach}}
     </table>
@@ -165,7 +165,7 @@
         </tr>
       {{foreachelse}}
 			  <tr>
-			  	<td colspan="2">Aucun exécutant</td>
+			  	<td class="empty" colspan="2">Aucun exécutant</td>
 			  </tr>
 			{{/foreach}}
      </table>
@@ -192,7 +192,7 @@
        </tr>
      {{foreachelse}}
        <tr>
-         <td colspan="2">Aucun protocole</td>
+         <td class="empty" colspan="2">Aucun protocole</td>
        </tr>
      {{/foreach}}
    </table>

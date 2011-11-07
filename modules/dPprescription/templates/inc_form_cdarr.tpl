@@ -21,7 +21,6 @@
 		});
 	</script>
 	
-	<hr />
 	<form name="editCdarr" action="" method="post" onsubmit="return onSubmitFormAjax(this);">
 	 <input type="hidden" name="m" value="ssr" />
 	 <input type="hidden" name="dosql" value="do_element_prescription_to_cdarr_aed" />
@@ -30,19 +29,7 @@
 	 <input type="hidden" name="element_prescription_to_cdarr_id" value="{{$element_prescription_to_cdarr->_id}}" />
 	 <input type="hidden" name="callback" value="refreshListCdarr" />
 	 <table class="form">
-	   <tr>
-	     {{if $element_prescription_to_cdarr->_id}}
-	       <th class="title text modify" colspan="2">
-	         {{mb_include module=system template=inc_object_idsante400 object=$element_prescription_to_cdarr}}
-	         {{mb_include module=system template=inc_object_history object=$element_prescription_to_cdarr}}
-	         Modification du code CdARR pour '{{$element_prescription->_view}}'
-	       </th>
-	     {{else}}
-	       <th class="title text" colspan="2">
-	         Ajout d'un code CdARR pour '{{$element_prescription->_view}}'
-	       </th>
-	     {{/if}}
-	    </tr>
+      {{mb_include module=system template=inc_form_table_header object=$element_prescription_to_cdarr}}
 	    <tr>
 	      <th>{{mb_label object=$element_prescription_to_cdarr field="code"}}</th>
 	      <td>

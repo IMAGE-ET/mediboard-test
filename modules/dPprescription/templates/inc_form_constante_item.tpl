@@ -1,5 +1,4 @@
 {{if $element_prescription_id}}
-  <hr />
   <form name="editConstanteItem" method="post" action="?" onsubmit="return onSubmitFormAjax(this)">
     <input type="hidden" name="m" value="dPprescription" />
     <input type="hidden" name="dosql" value="do_constante_item_aed" />

@@ -6,15 +6,8 @@
   {{mb_field object=$indice_cout field=element_prescription_id hidden=true}}
   
   <table class="form">
-    <tr>
-      <th colspan="2" class="title {{if $indice_cout->_id}}modify{{/if}}"">
-        {{if !$indice_cout->_id}}
-          {{tr}}CRessourceSoin-title-create{{/tr}}
-        {{else}}
-          {{tr}}CRessourceSoin-title-modify{{/tr}}
-        {{/if}}
-      </th>
-    </tr>
+    {{mb_include module=system template=inc_form_table_header object=$indice_cout}}
+
     <tr>
       <th>
         {{mb_label object=$indice_cout field=nb}}

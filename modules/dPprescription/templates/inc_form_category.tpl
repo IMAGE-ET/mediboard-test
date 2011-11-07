@@ -15,19 +15,8 @@
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="callback" value="refreshListCategoriesCallback" />
 	<table class="form">
-	  <tr>
-	    {{if $category->_id}}
-	    <th class="title text modify" colspan="2">
-        {{mb_include module=system template=inc_object_notes      object=$category}}
-        {{mb_include module=system template=inc_object_idsante400 object=$category}}
-	      {{mb_include module=system template=inc_object_history    object=$category}}
-	      Modification de la catégorie &lsquo;{{$category}}&rsquo;
-	    {{else}}
-	    <th class="title text" colspan="2">
-	      Création d'une catégorie
-	    {{/if}}
-	    </th>
-	  </tr>
+	  {{mb_include module=system template=inc_form_table_header object=$category}}
+    
 	  <tr>
 	    <th>{{mb_label object=$category field="chapitre"}}</th>
 	    <td>{{mb_field object=$category field="chapitre" emptyLabel="Choose"}}</td>

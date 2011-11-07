@@ -9,7 +9,6 @@
 *}}
 
 {{if $element_prescription->_id}}
-  <hr />
 	<a href="#1" onclick="onSelectCdarr('0','{{$element_prescription->_id}}');" class="button new">
 	  Ajouter un code CdARR
 	</a>
@@ -41,7 +40,7 @@
 			{{/foreach}}
 			{{foreachelse}}
 			<tr>
-				<td colspan="2">
+				<td class="empty" colspan="2">
 					Aucun code CdARR
 				</td>
 			</tr>

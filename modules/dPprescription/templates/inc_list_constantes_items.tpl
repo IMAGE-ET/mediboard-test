@@ -1,5 +1,4 @@
 {{if $element_prescription->_id}}
-  <hr />
   <a href="#1" onclick="onSelectConstanteItem('', '{{$element_prescription->_id}}')" class="button new">
     {{tr}}CConstanteItem.create{{/tr}}
   </a>
@@ -26,7 +25,7 @@
         </tr>
       {{foreachelse}}
       <tr>
-        <td colspan="2">
+        <td class="empty" colspan="2">
           {{tr}}CConstanteItem.none{{/tr}}
         </td>
       </tr>
