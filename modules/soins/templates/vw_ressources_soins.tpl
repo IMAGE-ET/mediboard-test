@@ -24,7 +24,14 @@ Main.add(function(){
       <form name="updateChargeSoins" action="?" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="{{$actionType}}" value="{{$action}}" />
-        
+
+        <span style="float: right;">
+          <label>
+            <input type="checkbox" name="cout_euro_view" {{if $cout_euro == 1}}checked="checked"{{/if}}/ onchange="$V(this.form.cout_euro, this.checked ? 1 : 0); this.form.submit()"> Coût
+            <input type="hidden" name="cout_euro" value="{{$cout_euro}}" />
+          </label> 
+        </span>
+				        
         Charge en soins du service
         <select name="service_id" onchange="this.form.submit();">
           <option value="">&mdash; Service</option>
@@ -36,12 +43,7 @@ Main.add(function(){
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
 				au
 				<input type="hidden" name="date_max" class="date" value="{{$date_max}}" onchange="this.form.submit()" />
-        <span style="float: right;">
-          <label>
-            <input type="checkbox" name="cout_euro_view" {{if $cout_euro == 1}}checked="checked"{{/if}}/ onchange="$V(this.form.cout_euro, this.checked ? 1 : 0); this.form.submit()"> Coût
-            <input type="hidden" name="cout_euro" value="{{$cout_euro}}" />
-          </label> 
-        </span>
+
       </form>
     </th>
   </tr>
