@@ -66,9 +66,9 @@ Main.add(function(){
   			  {{mb_include module=soins template=inc_detail_ressources list_ressources=$_ressources}}
   			</td>
   	  {{/foreach}}
-      <td>
+      <th>
         {{mb_include module=soins template=inc_detail_ressources list_ressources=$total_sejour.$_sejour_id}}
-      </td>
+      </th>
 		</tr>
 	{{foreachelse}}
 	<tr>
@@ -80,7 +80,7 @@ Main.add(function(){
   <tr>
     <th class="title">Total</th>
   {{foreach from=$total_date item=_total}}
-    <th class="title">
+    <th>
       {{mb_include module=soins template=inc_detail_ressources list_ressources=$_total}}
     </th>
   {{/foreach}}
