@@ -43,6 +43,8 @@
   {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var"   value="easy_chambre_simple"}}
   {{mb_include module=system template=inc_config_bool var=$var }}
+  {{assign var="var"   value="easy_ald_cmu"}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
     
   {{assign var="class" value="COperation"}}
   {{assign var="var"   value="easy_horaire_voulu"}}
@@ -56,8 +58,6 @@
   {{assign var="var"   value="easy_accident"}}
   {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var"   value="easy_assurances"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
-  {{assign var="var"   value="easy_ald_cmu"}}
   {{mb_include module=system template=inc_config_bool var=$var }}
   
   <tr>
