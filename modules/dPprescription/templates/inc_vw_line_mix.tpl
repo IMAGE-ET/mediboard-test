@@ -141,9 +141,9 @@ Main.add( function(){
 					{{/if}}
           {{if $prescription->type != "externe"}}
 						{{if $line->signature_pharma}}
-					    <img src="images/icons/signature_pharma.png" title="Signée par le pharmacien" />
+					    <img src="images/icons/signature_pharma.png" title="Validée par le pharmacien" />
 					  {{else}}
-						  <img src="images/icons/signature_pharma_barre.png" title="Non signée par le pharmacien" />
+						  <img src="images/icons/signature_pharma_barre.png" title="Non validée par le pharmacien" />
 				  	{{/if}}
 			  	{{/if}}
         </div>

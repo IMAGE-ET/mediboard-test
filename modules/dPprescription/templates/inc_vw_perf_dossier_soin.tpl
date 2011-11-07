@@ -180,8 +180,8 @@
 <td style="width: 200px;" class="text compact">
    {{foreach from=$_prescription_line_mix->_ref_lines item=_line}}
      <div style="margin: 5px 0;">
-		   <strong>{{$_line->_ucd_view}}</strong>
-		   <div>
+		   {{$_line->_ucd_view}}
+		   <div style="font-weight: bold; font-size: 1.1em;">
          {{$_line->_posologie}}
 	       {{if $_line->_unite_administration && $_line->_unite_administration != "ml"}}
 	         [{{$_line->_unite_administration}}]
@@ -451,8 +451,8 @@
 </td>
 <td style="text-align: center">
  {{if $_prescription_line_mix->signature_pharma}}
- <img src="images/icons/tick.png" title="Signée par le pharmacien" />
+ <img src="images/icons/tick.png" title="Validée par le pharmacien" />
  {{else}}
- <img src="images/icons/cross.png" title="Non signée par le pharmacien" />
+ <img src="images/icons/cross.png" title="Non validée par le pharmacien" />
  {{/if}}
 </td>

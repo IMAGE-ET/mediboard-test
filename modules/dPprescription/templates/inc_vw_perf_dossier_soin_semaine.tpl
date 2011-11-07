@@ -81,9 +81,9 @@
 	 </td>
 	 <td style="text-align: center">
 	   {{if $_prescription_line_mix->signature_pharma}}
-	   <img src="images/icons/tick.png" title="Signée par le pharmacien" />
+	   <img src="images/icons/tick.png" title="Validée par le pharmacien" />
 	   {{else}}
-	   <img src="images/icons/cross.png" title="Non signée par le pharmacien" />
+	   <img src="images/icons/cross.png" title="Non validée par le pharmacien" />
 	   {{/if}}
 	 </td>
  

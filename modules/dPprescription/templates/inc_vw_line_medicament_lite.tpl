@@ -189,9 +189,9 @@
           {{/if}}
           {{if $prescription->type == "sejour"}}
             {{if $line->valide_pharma}}
-              <img src="images/icons/signature_pharma.png" title="Signée par le pharmacien" />
+              <img src="images/icons/signature_pharma.png" title="Validée par le pharmacien" />
             {{else}}
-              <img src="images/icons/signature_pharma_barre.png" title="Non signée par le pharmacien" />
+              <img src="images/icons/signature_pharma_barre.png" title="Non validée par le pharmacien" />
             {{/if}}
           {{/if}}
          <label title="{{$line->_ref_praticien->_view}}">{{$line->_ref_praticien->_shortview}}</label>

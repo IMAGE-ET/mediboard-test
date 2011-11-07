@@ -74,12 +74,14 @@
         <img src="images/icons/medicament_barre.gif" title="Produit supprimé" />
       {{/if}}
       
-      <a href="#produit{{$_perf_line->_id}}" onclick="Prescription.viewProduit(null,'{{$_perf_line->code_ucd}}','{{$_perf_line->code_cis}}');" style="font-weight: bold; display: inline;">
+      <a href="#produit{{$_perf_line->_id}}" onclick="Prescription.viewProduit(null,'{{$_perf_line->code_ucd}}','{{$_perf_line->code_cis}}');" style="display: inline;">
         {{$_perf_line->_ucd_view}}
-        {{if $_perf_line->_posologie}}
+        <span style="font-weight: bold">
+				{{if $_perf_line->_posologie}}
         : <span  {{if $_prescription_line_mix->_fin < $now && !$_prescription_line_mix->_protocole}}style="text-decoration:line-through"{{/if}}>
         {{$_perf_line->_posologie}}</span>
         {{/if}}
+				</span>
       </a>
       {{if !$smarty.foreach.lines.last}}<br />{{/if}}
     {{/foreach}}
@@ -167,9 +169,9 @@
         {{/if}}
         {{if $prescription->type != "externe"}}
           {{if $_prescription_line_mix->signature_pharma}}
-            <img src="images/icons/signature_pharma.png" title="Signée par le pharmacien" />
+            <img src="images/icons/signature_pharma.png" title="Validée par le pharmacien" />
           {{else}}
-            <img src="images/icons/signature_pharma_barre.png" title="Non signée par le pharmacien" />
+            <img src="images/icons/signature_pharma_barre.png" title="Non validée par le pharmacien" />
           {{/if}} 
         {{/if}}
         <label title="{{$_prescription_line_mix->_ref_praticien->_view}}">{{$_prescription_line_mix->_ref_praticien->_shortview}}</label>

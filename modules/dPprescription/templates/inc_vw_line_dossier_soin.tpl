@@ -391,9 +391,9 @@
  <td style="text-align: center">
 	  {{if $line_class == "CPrescriptionLineMedicament"}}
 	    {{if $line->valide_pharma}}
-	    <img src="images/icons/tick.png" title="Signée par le pharmacien" />
+	    <img src="images/icons/tick.png" title="Validée par le pharmacien" />
 	    {{else}}
-	    <img src="images/icons/cross.png" title="Non signée par le pharmacien" />
+	    <img src="images/icons/cross.png" title="Non validée par le pharmacien" />
 	    {{/if}}
 	  {{else}}
 	    - 
