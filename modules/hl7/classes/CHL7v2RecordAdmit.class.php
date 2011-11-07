@@ -17,8 +17,8 @@
  */
 
 class CHL7v2RecordAdmit extends CHL7v2MessageXML {
-  function getContentsXML() {
-    $data  = parent::getContentsXML();
+  function getContentNodes() {
+    $data  = parent::getContentNodes();
     
     $xpath = new CHL7v2MessageXPath($this);
     

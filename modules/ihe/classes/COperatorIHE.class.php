@@ -104,18 +104,18 @@ class COperatorIHE extends CEAIOperator {
                               CHL7v2MessageXML $dom_evt, CHL7Acknowledgment $ack) {
     $newPatient = new CPatient();
     $newPatient->_eai_exchange_initiator_id = $exchange_ihe->_id;
-
+    
+    $data = array_merge($data, $dom_evt->getContentNodes());
+    
     switch (get_class($evt)) {
       // Création d'un nouveau patient - Mise à jour d'information du patient
       case "CHL7v2EventADTA28" : 
       case "CHL7v2EventADTA31" :
-        $data                       = array_merge($data, $dom_evt->getContentsXML());
         $exchange_ihe->id_permanent = array_key_exists("PI", $data['patientIdentifiers']) ? $data['patientIdentifiers']['PI'] : null;
         $msgAck                     = $dom_evt->handle($ack, $newPatient, $data);
         break;
       // Fusion de deux patients
       case "CHL7v2EventADTA40" : 
-        $data                       = array_merge($data, $dom_evt->getContentsXML());
         $exchange_ihe->id_permanent = array_key_exists("PI", $data['patientIdentifiers']) ? $data['patientIdentifiers']['PI'] : null;
         $msgAck                     = $dom_evt->handle($ack, $newPatient, $data);
         break;

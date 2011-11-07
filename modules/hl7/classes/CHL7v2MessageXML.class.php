@@ -50,14 +50,40 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     return parent::addElement($elParent, $elName, $elValue, $elNS);
   }
   
+  function query($nodeName, $contextNode = null) {
+    $xpath = new CHL7v2MessageXPath($this);   
+    
+    return $xpath->query($nodeName, $contextNode);
+  }
+  
+  function queryNode($nodeName, $contextNode = null, &$data = null) {
+    $xpath = new CHL7v2MessageXPath($this);   
+
+    return $data[$nodeName] = $xpath->queryUniqueNode("//$nodeName", $contextNode);
+  }
+  
+  function queryNodes($nodeName, $contextNode = null, &$data = null) {
+    $xpath = new CHL7v2MessageXPath($this);   
+    
+    $nodeList = $xpath->query("//$nodeName");
+    foreach ($nodeList as $_node) {
+      $data[$nodeName][] = $_node;
+    }
+  }
+  
+  function queryTextNode($nodeName, $contextNode) {
+    $xpath = new CHL7v2MessageXPath($this);   
+    
+    return $xpath->queryTextNode($nodeName, $contextNode);
+  }
+  
   function getMSHEvenementXML() {
     $data = array();
     
-    $xpath = new CHL7v2MessageXPath($this);   
-    $MSH = $xpath->queryUniqueNode("//MSH");
+    $MSH = $this->queryNode("MSH");
     
-    $data['dateHeureProduction'] = mbDateTime($xpath->queryTextNode("MSH.7/TS.1", $MSH));
-    $data['identifiantMessage']  = $xpath->queryTextNode("MSH.10", $MSH);
+    $data['dateHeureProduction'] = mbDateTime($this->queryTextNode("MSH.7/TS.1", $MSH));
+    $data['identifiantMessage']  = $this->queryTextNode("MSH.10", $MSH);
     
     return $data;
   }
@@ -65,36 +91,34 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   function getPatientIdentifiers(DOMNode $node) {
     $data = array();
     
-    $xpath = new CHL7v2MessageXPath($this);
     // PID/PID.3
-    foreach ($xpath->query("PID.3", $node) as $_PID3) {
+    foreach ($this->query("PID.3", $node) as $_PID3) {
       // RI - Resource identifier 
-      if (($xpath->queryTextNode("CX.5", $_PID3) == "RI") && 
-          ($xpath->queryTextNode("CX.4/HD.2", $_PID3) == CAppUI::conf("hl7 assigningAuthorityUniversalID"))) {
-        $data["RI"] = $xpath->queryTextNode("CX.1", $_PID3);
+      if (($this->queryTextNode("CX.5", $_PID3) == "RI") && 
+          ($this->queryTextNode("CX.4/HD.2", $_PID3) == CAppUI::conf("hl7 assigningAuthorityUniversalID"))) {
+        $data["RI"] = $this->queryTextNode("CX.1", $_PID3);
       }
       // PI - Patient internal identifier
-      if ($xpath->queryTextNode("CX.5", $_PID3) == "PI") {
-        $data["PI"] = $xpath->queryTextNode("CX.1", $_PID3);
+      if ($this->queryTextNode("CX.5", $_PID3) == "PI") {
+        $data["PI"] = $this->queryTextNode("CX.1", $_PID3);
       }
       // INS-C - Identifiant national de santé calculé
-      if ($xpath->queryTextNode("CX.5", $_PID3) == "INS-C") {
-        $data["INSC"] = $xpath->queryTextNode("CX.1", $_PID3);
+      if ($this->queryTextNode("CX.5", $_PID3) == "INS-C") {
+        $data["INSC"] = $this->queryTextNode("CX.1", $_PID3);
       }
     }
    
     return $data;
   }
   
-  function getContentsXML() {
+  function getContentNodes() {
     $data  = array();
-    $xpath = new CHL7v2MessageXPath($this);
     
-    $data["PID"] = $PID = $xpath->queryUniqueNode("//PID");
+    $data["PID"] = $PID = $this->queryNode("PID", null, $data);
     
     $data["patientIdentifiers"] = $this->getPatientIdentifiers($PID);
     
-    $data["PD1"] = $xpath->queryUniqueNode("//PD1");
+    $data["PD1"] = $this->queryNode("PD1", null, $data);
     
     return $data;
   }

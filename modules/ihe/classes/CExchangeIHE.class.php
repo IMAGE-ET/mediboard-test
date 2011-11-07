@@ -130,7 +130,7 @@ class CExchangeIHE extends CExchangeTabular {
     $msgAck = $ack->event_ack->msg_hl7;
     
     $this->statut_acquittement = $ack->ack_code;
-    $this->acquittement_valide = $ack->event_ack->message->isOK(CHL7v2Error::E_ERROR) ? 0 : 1;
+    $this->acquittement_valide = $ack->event_ack->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
     if ($mbObject) {
       $this->setObjectIdClass($mbObject);
     }

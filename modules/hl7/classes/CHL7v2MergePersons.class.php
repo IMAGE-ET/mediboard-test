@@ -17,11 +17,10 @@
  */
 
 class CHL7v2MergePersons extends CHL7v2MessageXML {
-  function getContentsXML() {
+  function getContentNodes() {
     $data  = array();
-    $xpath = new CHL7v2MessageXPath($this);
     
-    $data["PID"] = $PID = $xpath->queryUniqueNode("//PID");
+    /*$data["PID"] = $PID = $xpath->queryUniqueNode("//PID");
     
     $data["patientIdentifiers"] = $this->getPatientIdentifiers($PID);
     
@@ -29,7 +28,7 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
     
     $data["MRG"] = $MRG = $xpath->queryUniqueNode("//MRG");
     
-    $data["patientElmineIdentifiers"] = $this->getPatientIdentifiers($MRG);
+    $data["patientElmineIdentifiers"] = $this->getPatientIdentifiers($MRG);*/
     
     return $data;
   }

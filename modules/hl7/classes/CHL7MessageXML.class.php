@@ -16,7 +16,7 @@
  * Message XML HL7
  */
 interface CHL7MessageXML {
-  function getContentsXML();
+  function getContentNodes();
   
   function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data);
 }

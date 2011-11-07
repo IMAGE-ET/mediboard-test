@@ -56,7 +56,7 @@ class CEAIPatient extends CEAIMbObject {
     return $newPatient->store();
   }
   
-  static function getComment(CMbObject $object, CMbObject $otherObject) {
+  static function getComment(CMbObject $object, CMbObject $otherObject = null) {
     $modified_fields = self::getModifiedFields($object);
     
     if ($object instanceof CPatient) {
