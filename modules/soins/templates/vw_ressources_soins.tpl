@@ -17,7 +17,6 @@ Main.add(function(){
 
 </script>
 
-
 <table class="main tbl">
   <tr>
     <th class="title" colspan="{{math equation=x+2 x=$dates|@count}}">

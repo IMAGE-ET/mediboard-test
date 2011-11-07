@@ -79,13 +79,16 @@ $total_date = array();
 $total = array();
 $charge = array();
 
+foreach($dates as $_date){
+  $total_date[$_date] = array();
+}
+			
 // Parcours des planifications et calcul de la charge
 foreach($planifications as &$_planifs){
 	foreach($_planifs as &$_planif){
 		if(!isset($charge[$_planif->sejour_id])){
 			foreach($dates as $_date){
 				$charge[$_planif->sejour_id][$_date] = array();
-        $total_date[$_date] = array();
 			}
 		}
 		
