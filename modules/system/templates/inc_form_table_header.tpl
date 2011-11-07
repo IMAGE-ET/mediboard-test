@@ -18,6 +18,7 @@
     {{mb_include module=system template=inc_object_idsante400}}
     {{mb_include module=system template=inc_object_history   }}
     {{tr}}{{$object->_class}}-title-modify{{/tr}} 
+    <br />
     '{{$object}}'
   </th>
   {{else}}

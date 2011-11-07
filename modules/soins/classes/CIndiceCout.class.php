@@ -38,8 +38,7 @@ class CIndiceCout extends CMbObject {
   }
   
   function loadRefRessourceSoin() {
-    $this->_ref_ressource_soin = new CRessourceSoin;
-    return $this->_ref_ressource_soin->load($this->ressource_soin_id);
+    return $this->loadFwdRef("ressource_soin_id", true);
   }
 }
 ?>

@@ -182,6 +182,15 @@ function smarty_modifier_iso_datetime($datetime) {
 }
 
 /**
+ * @abstract Week number in month to ISO DATETIME
+ * Example:  {$datetime|week_number_month}
+ * @param datetime $datetime The date to format
+ */
+function smarty_modifier_week_number_month($datetime) {
+  return CMbDate::weekNumberInMonth($datetime);
+}
+
+/**
  * @abstract Format to relative datetime 
  * Example:  {$datetime|rel_datetime:$now}
  * @param datetime $datetime The date to format
@@ -743,6 +752,8 @@ class CSmartyDP extends Smarty {
     $this->register_modifier("iso_time"          , "smarty_modifier_iso_time");
     $this->register_modifier("iso_datetime"      , "smarty_modifier_iso_datetime");
     $this->register_modifier("rel_datetime"      , "smarty_modifier_rel_datetime");
+    $this->register_modifier("week_number_month" , "smarty_modifier_week_number_month");
+    
     $this->register_modifier("const"             , "smarty_modifier_const");
     $this->register_modifier("static"            , "smarty_modifier_static");
     $this->register_modifier("static_call"       , "smarty_modifier_static_call");

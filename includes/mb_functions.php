@@ -436,6 +436,36 @@ class CMbDate {
     
     return $week_number;
   }
+  
+  /**
+   * Give a Dirac hash of given ISO DATETIME
+   * @param enum $period One of minute, hour, day, week, month or year 
+   * @return ISO DATETIMEhash
+   */
+  static function dirac($period, $datetime) {
+    switch ($period) {
+      case "min":
+        return mbTransformTime(null, $datetime, "%Y-%m-%d %H:%M:00");
+        break;
+      case "hour":
+        return mbTransformTime(null, $datetime, "%Y-%m-%d %H:00:00");
+        break;
+      case "day":
+        return mbTransformTime(null, $datetime, "%Y-%m-%d 00:00:00");
+        break;
+      case "week":
+        return mbTransformTime("last sunday +1 day", $datetime, "%Y-%m-%d 00:00:00");
+        break;
+      case "month":
+        return mbTransformTime(null, $datetime, "%Y-%m-01 00:00:00");
+        break;
+      case "year":
+        return mbTransformTime(null, $datetime, "%Y-01-01 00:00:00");
+        break;
+      default:
+        trigger_error("Can't make a Dirak hash for unknown '$period' period", E_USER_WARNING);
+    }
+  }
 }
 
 CMbDate::$xmlDateTime = CMbDate::$xmlDate."T".CMbDate::$xmlTime;

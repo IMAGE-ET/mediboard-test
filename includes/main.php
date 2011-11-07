@@ -158,7 +158,11 @@ if (null == $m) {
 }
 
 if (null == $module = CModule::getInstalled($m)) {
-  CAppUI::redirect("m=system&a=module_missing&mod=$m");
+  // dP remover super hack
+  if (null == $module = CModule::getInstalled("dP$m")) {
+    CAppUI::redirect("m=system&a=module_missing&mod=$m");
+  }
+  $m = "dP$m";
 }
 
 // Get current module permissions
