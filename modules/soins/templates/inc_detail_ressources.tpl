@@ -6,7 +6,7 @@
   
   {{$ressource->code}}
   {{if $cout_euro}}
-    = {{math equation=x*y x=$nb y=$ressource->cout}} &euro;
+    = {{math equation=x*y x=$nb y=$ressource->cout}} {{$conf.currency_symbol}}
   {{/if}}
   <br />  
 {{/foreach}}
