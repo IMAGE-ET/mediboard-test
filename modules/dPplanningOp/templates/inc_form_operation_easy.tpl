@@ -214,7 +214,7 @@
   </tr>
   
   <!-- ALD et CMU -->
-  <tbody id="ald_patient_easy" {{if !$conf.dPplanningOp.CSejour.easy_ald_cmu}} style="display: none;"{{/if}}>
+  <tbody id="ald_patient_easy" {{if !$conf.dPplanningOp.COperation.easy_ald_cmu}} style="display: none;"{{/if}}>
     {{mb_include module=dPplanningOp template=inc_check_ald patient=$sejour->_ref_patient}}
   </tbody>
   
