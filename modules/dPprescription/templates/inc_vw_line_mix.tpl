@@ -47,11 +47,13 @@ Main.add( function(){
 		} );
 	}
 	
-	{{if $line->_protocole}}
-	changePonctualProt(editPerfForm.__ponctual.checked, editPerfForm);
-	{{else}}
-	changePonctual(editPerfForm.__ponctual.checked, editPerfForm);
-  {{/if}}
+	{{if $line->_perm_edit && $line->type_line != 'oxygene'}}
+		{{if $line->_protocole}}
+		changePonctualProt(editPerfForm.__ponctual.checked, editPerfForm);
+		{{else}}
+		changePonctual(editPerfForm.__ponctual.checked, editPerfForm);
+	  {{/if}}
+	{{/if}}
 } );
 
 </script>
@@ -274,11 +276,12 @@ Main.add( function(){
 										 {{/if}}
                    {{/if}}
 									 
+									 {{if $line->type_line != 'oxygene'}}
 								   <span style="float: right">
                       {{mb_field object=$line field=ponctual typeEnum="checkbox" onchange="changePonctualProt(this.form.__ponctual.checked, this.form); return onSubmitFormAjax(this.form);"}}
                       {{mb_label object=$line field=ponctual}}
-                    </span>
-										 
+                   </span>
+									 {{/if}}
 								{{else}}
 
 										<input type="hidden" name="jour_decalage" value="{{$line->jour_decalage}}" />
@@ -299,11 +302,17 @@ Main.add( function(){
                         {{mb_field object=$line field=unite_duree onchange="return onSubmitFormAjax(this.form);"}}
 										  </span>
 											
+											{{if $line->type_line != 'oxygene'}}
 											<span style="float: right">
 		                    {{mb_field object=$line field=ponctual typeEnum="checkbox" onchange="changePonctual(this.form.__ponctual.checked, this.form); return onSubmitFormAjax(this.form);"}}
 		                    {{mb_label object=$line field=ponctual}}
 		                  </span>
+											{{/if}}
 										{{else}}
+										  {{if $line->ponctual}}
+											<strong style="float: right">1 fois</strong>
+											{{/if}}
+										
 		                  {{mb_value object=$line field=date_debut}}
 		                  {{mb_value object=$line field=time_debut}}
 											
@@ -311,10 +320,7 @@ Main.add( function(){
 											{{mb_value object=$line field=duree}}
                       {{mb_value object=$line field=unite_duree}}
 		                {{/if}}
-										
 		              {{/if}}
-									
-									
 							</fieldset> 					
              
 						  <fieldset>
@@ -384,6 +390,7 @@ Main.add( function(){
 											{{/if}}
 										{{/if}}
 	                </span>
+								
 	                <span style="display: none;" id="discontinue-{{$line->_id}}">
 	                  {{if $line->type_line == "perfusion"}}
 	                    {{if $line->_can_modify_prescription_line_mix}}
@@ -500,23 +507,32 @@ Main.add( function(){
 									{{mb_label object=$line field="mode_bolus"}}
 		              {{if $line->_perm_edit}}
 		                {{mb_field object=$line field="mode_bolus" onchange="changeModeBolus(this.form); return onSubmitFormAjax(this.form);"}}
-		              {{else}}
-		                {{mb_value object=$line field="mode_bolus"}}
+		              {{elseif $line->mode_bolus}}
+		                <strong>{{mb_value object=$line field="mode_bolus"}}</strong>
 		              {{/if}}
 		          
 		              {{mb_label object=$line field="dose_bolus"}}
 		              {{if $line->_perm_edit}}
 		                {{mb_field object=$line field="dose_bolus" onchange="return onSubmitFormAjax(this.form);" size="2" increment=1 min=0 form="editPerf-$prescription_line_mix_id"}} mg
-		              {{else}}
-		                {{mb_value object=$line field="dose_bolus"}} mg
+		              {{elseif $line->dose_bolus}}
+		                <strong>{{mb_value object=$line field="dose_bolus"}} mg</strong>
 		              {{/if}}
 		         
 		              {{mb_label object=$line field="periode_interdite"}}
 		              {{if $line->_perm_edit}}
 		                {{mb_field object=$line field="periode_interdite" onchange="return onSubmitFormAjax(this.form);" size="2" increment=1 min=0 form="editPerf-$prescription_line_mix_id"}} min
-		              {{else}}
-		                {{mb_value object=$line field="periode_interdite"}} min
+		              {{elseif $line->periode_interdite}}
+		                <strong>{{mb_value object=$line field="periode_interdite"}} min</strong>
 		              {{/if}}
+									
+									<br />
+                  {{if $line->_perm_edit}}
+									  Dose max {{mb_field object=$line field="quantite_dose_max" size="2" increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}} mg
+                    en {{mb_field object=$line field="duree_dose_max" size="2" increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}} h
+                  {{elseif $line->quantite_dose_max && $line->duree_dose_max}}
+									  Dose max <strong>{{mb_value object=$line field="quantite_dose_max"}} mg</strong>
+                    en <strong>{{mb_value object=$line field="duree_dose_max"}} h</strong>
+									{{/if}}
 								</span>	
 						  </fieldset>
 						</td>

@@ -2140,7 +2140,13 @@ class CSetupdPprescription extends CSetup {
               CHANGE `type` `type` ENUM ('classique','seringue','PCA','PCEA','masque','lunettes','sonde','nebuliseur_ultrasonique','nebuliseur_pneumatique','doseur','inhalateur');";
 		$this->addQuery($query);
 		
-		$this->mod_version = "1.61";
+		$this->makeRevision("1.61");
+		$query = "ALTER TABLE `prescription_line_mix` 
+              ADD `duree_dose_max` INT (11),
+              ADD `quantite_dose_max` INT (11);";
+		$this->addQuery($query);
+		
+		$this->mod_version = "1.62";
   }
 }
 

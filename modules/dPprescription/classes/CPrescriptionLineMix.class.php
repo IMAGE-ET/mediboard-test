@@ -80,6 +80,11 @@ class CPrescriptionLineMix extends CMbObject {
   var $unite_decalage_fin = null;
    
   var $ponctual           = null;
+	
+	var $duree_dose_max = null;
+	var $quantite_dose_max = null;
+  
+	
   
   var $_date_fin          = null;
 
@@ -226,6 +231,10 @@ class CPrescriptionLineMix extends CMbObject {
     $specs["perop"]                  = "bool default|0"; 
     $specs["_debit"]                 = "num pos";
     $specs["_quantite_totale"]       = "num";
+		
+		$specs["duree_dose_max"]         = "num";
+		$specs["quantite_dose_max"]      = "num";
+    
     return $specs;
   }
 

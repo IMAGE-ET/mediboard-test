@@ -441,13 +441,20 @@ toggleContinuiteLineMix = function(radioButton, prescription_line_mix_id){
       debit.show();
     } 
   });
+	
+	var line_mix =  $('lines-'+prescription_line_mix_id);
+	
   if(sValueContinuite == "continue"){
-    $('lines-'+prescription_line_mix_id).select('.calcul_debit').invoke('show');
+	  if(line_mix){
+		  line_mix.select('.calcul_debit').invoke('show');
+    }
     $('discontinue-'+prescription_line_mix_id).hide();
   }
   if(sValueContinuite == "discontinue"){
-    $('lines-'+prescription_line_mix_id).select('.calcul_debit').invoke('hide');
-    $('continue-'+prescription_line_mix_id).hide();
+    if(line_mix){
+		  line_mix.select('.calcul_debit').invoke('hide');
+    }
+		$('continue-'+prescription_line_mix_id).hide();
   }
   $(sValueContinuite+'-'+prescription_line_mix_id).show();
 }
