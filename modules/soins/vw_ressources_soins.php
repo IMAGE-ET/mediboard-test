@@ -63,7 +63,7 @@ foreach($affectations as $_affectation){
 	$where["planification_systeme.sejour_id"] = " = '$sejour->_id'";
 	$where["dateTime"] = " BETWEEN '$date' AND '$date_max'";
   $where["chambre.service_id"] = " = '$service_id'";
-	
+	$where["object_class"] = " = 'CPrescriptionLineElement'";
 	$planifs = $planif->loadList($where, null, null, null, $ljoin);
   
 	if(isset($sejours[$sejour->_id])){
