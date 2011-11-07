@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 // Check params
 if (null == $exchange_source_name = CValue::get("exchange_source_name")) {
@@ -21,6 +19,10 @@ $exchange_source = CExchangeSource::get($exchange_source_name);
 
 if (!$exchange_source) {
   CAppUI::stepAjax("Aucune source d'échange disponible pour ce nom : '$exchange_source_name'", UI_MSG_ERROR);
+}
+
+if (!$exchange_source->host) {
+  CAppUI::stepAjax("Aucun hôte pour la source d'échange : '$exchange_source_name'", UI_MSG_ERROR);
 }
 
 $client = CMbSOAPClient::make($exchange_source->host, $exchange_source->user, $exchange_source->password, $exchange_source->type_echange);
