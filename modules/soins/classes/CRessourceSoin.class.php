@@ -14,8 +14,8 @@ class CRessourceSoin extends CMbObject {
   var $ressource_soin_id  = null;
   
   // DB Fields
-  var $libelle = null;
   var $cout = null;
+  var $libelle = null;
   var $code = null;
   
   function getSpec() {
@@ -26,11 +26,11 @@ class CRessourceSoin extends CMbObject {
   }
   
   function getProps() {
-    $specs = parent::getProps();
-    $specs["libelle"] = "str notNull";
-    $specs["code"]    = "str notNull";
-    $specs["cout"]    = "currency";
-    return $specs;
+    $props = parent::getProps();
+    $props["code"]    = "str notNull";
+    $props["libelle"] = "str notNull";
+    $props["cout"]    = "currency";
+    return $props;
   }
   
 	function updateFormFields(){

@@ -53,7 +53,7 @@ Main.add(function(){
   </tr>
 
   <tr>
-    <th>Patient</th>
+    <td></td>
 
     {{foreach from=$datetimes item=_datetime}}
     {{mb_include template=inc_period_table_cell}}
@@ -89,7 +89,7 @@ Main.add(function(){
 	{{/foreach}}
   
   <tr>
-    <th>Patient</th>
+    <td></td>
 
     {{foreach from=$datetimes item=_datetime}}
     {{mb_include template=inc_period_table_cell}}
