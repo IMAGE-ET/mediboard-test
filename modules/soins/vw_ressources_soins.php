@@ -58,6 +58,8 @@ foreach ($affectations as $_affectation){
   $sejour = $_affectation->loadRefSejour(1);
   $sejour->_ref_current_affectation = $_affectation;
 	$sejour->loadRefPatient();
+  $sejour->entree = CMbDate::dirac($period, $sejour->entree);
+  $sejour->sortie = CMbDate::dirac($period, $sejour->sortie);
   $sejours[$sejour->_id] = $sejour;
 	
 	// Chargement des planification système

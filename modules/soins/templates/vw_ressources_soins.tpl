@@ -72,11 +72,11 @@ Main.add(function(){
         </strong>
       </td>
   		{{foreach from=$_indices_by_datetime key=_datetime item=_ressources}}
-  		  <td>
+  		  <td {{if $sejour->entree > $_datetime || $_datetime > $sejour->sortie}} class="arretee" {{/if}} >
   			  {{mb_include template=inc_detail_ressources list_ressources=$_ressources total=0}}
   			</td>
   	  {{/foreach}}
-      <th>
+      <th style="text-align: right;">
         {{mb_include template=inc_detail_ressources list_ressources=$total_sejour.$_sejour_id total=1}}
       </th>
 		</tr>
@@ -87,6 +87,17 @@ Main.add(function(){
 		</td>
 	</tr>
 	{{/foreach}}
+  
+  <tr>
+    <th>Patient</th>
+
+    {{foreach from=$datetimes item=_datetime}}
+    {{mb_include template=inc_period_table_cell}}
+    {{/foreach}}
+
+    <th>Total</th>
+  </tr>
+      
   <tr>
     <th>Total</th>
   {{foreach from=$total_datetime item=_total}}
