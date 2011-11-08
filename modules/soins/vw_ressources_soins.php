@@ -58,31 +58,31 @@ foreach ($affectations as $_affectation){
   // Chargement du séjour
   $sejour = $_affectation->loadRefSejour(1);
   $sejour->_ref_current_affectation = $_affectation;
-	$sejour->loadRefPatient();
+  $sejour->loadRefPatient();
   $sejour->entree = CMbDate::dirac($period, $sejour->entree);
   $sejour->sortie = CMbDate::dirac($period, $sejour->sortie);
   $sejours[$sejour->_id] = $sejour;
-	
-	// Chargement des planification système
-	$planif = new CPlanificationSysteme();
-	$ljoin = array();
-	$ljoin["affectation"] = "affectation.sejour_id = planification_systeme.sejour_id";
-	$ljoin["lit"        ] = "lit.lit_id = affectation.lit_id";
-	$ljoin["chambre"    ] = "chambre.chambre_id = lit.chambre_id";
+  
+  // Chargement des planification système
+  $planif = new CPlanificationSysteme();
+  $ljoin = array();
+  $ljoin["affectation"] = "affectation.sejour_id = planification_systeme.sejour_id";
+  $ljoin["lit"        ] = "lit.lit_id = affectation.lit_id";
+  $ljoin["chambre"    ] = "chambre.chambre_id = lit.chambre_id";
   
   $where = array();
-	$where["planification_systeme.sejour_id"] = " = '$sejour->_id'";
-	$where["dateTime"          ] = " BETWEEN '$datetime_min' AND '$datetime_max'";
+  $where["planification_systeme.sejour_id"] = " = '$sejour->_id'";
+  $where["dateTime"          ] = " BETWEEN '$datetime_min' AND '$datetime_max'";
   $where["chambre.service_id"] = " = '$service_id'";
-	$where["object_class"      ] = " = 'CPrescriptionLineElement'";
-	$planifs = $planif->loadList($where, null, null, null, $ljoin);
+  $where["object_class"      ] = " = 'CPrescriptionLineElement'";
+  $planifs = $planif->loadList($where, null, null, null, $ljoin);
   
   // Classement par séjour
-	if (!isset($planifications[$sejour->_id])) {
-		$planifications[$sejour->_id] = array();
-	} 
-	
-	$planifications[$sejour->_id] += $planifs;
+  if (!isset($planifications[$sejour->_id])) {
+    $planifications[$sejour->_id] = array();
+  } 
+  
+  $planifications[$sejour->_id] += $planifs;
 }
 
 $total_sejour = array();
@@ -93,31 +93,36 @@ $charge = array();
 foreach ($datetimes as $_datetime) {
   $total_datetime[$_datetime] = array();
 }
-			
+      
 // Parcours des planifications et calcul de la charge
 foreach ($planifications as &$_planifs){
-	foreach ($_planifs as &$_planif){
-		if (!isset($charge[$_planif->sejour_id])){
-			foreach ($datetimes as $_datetime) {
-				$charge[$_planif->sejour_id][$_datetime] = array();
-			}
-		}
-		
-		$line_element = $_planif->loadTargetObject();
-	  $element_prescription = $line_element->_ref_element_prescription;
-		$element_prescription->loadRefsIndicesCout();
-		foreach ($element_prescription->_ref_indices_cout as $_indice_cout) {
-			$ressource = $_indice_cout->loadRefRessourceSoin();
-			$planif_date_time = CMbDate::dirac($period, $_planif->dateTime);
-			
-			$ressources[$ressource->_id] = $ressource;
+  foreach ($_planifs as &$_planif){
+    $line_element = $_planif->loadTargetObject();
+    $element_prescription = $line_element->_ref_element_prescription;
+    $element_prescription->loadRefsIndicesCout();
+    
+    if (!count($element_prescription->_ref_indices_cout)) {
+      continue;
+    }
+    if (!isset($charge[$_planif->sejour_id])){
+      foreach ($datetimes as $_datetime) {
+        $charge[$_planif->sejour_id][$_datetime] = array();
+      }
+    }
+    
+    foreach ($element_prescription->_ref_indices_cout as $_indice_cout) {
+      $ressource = $_indice_cout->loadRefRessourceSoin();
+      
+      $planif_date_time = CMbDate::dirac($period, $_planif->dateTime);
+      
+      $ressources[$ressource->_id] = $ressource;
       @$charge[$_planif->sejour_id][$planif_date_time][$ressource->_id] += $_indice_cout->nb;
 
       @$total_sejour[$_planif->sejour_id][$ressource->_id] += $_indice_cout->nb;
       @$total_datetime[$planif_date_time][$ressource->_id] += $_indice_cout->nb;
       @$total[$ressource->_id] += $_indice_cout->nb;
-		}
-	}
+    }
+  }
 }
 
 $bank_holidays = mbBankHolidays();
