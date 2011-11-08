@@ -13,10 +13,17 @@ CCanDo::checkRead();
 // Initialisation de la variable permettant de ne pas passer par les alertes manuelles
 CPrescriptionLine::$contexte_recent_modif = 'ssr';
 
+$group_id = CGroups::loadCurrent()->_id;
+
 $sejour_id = CValue::getOrSession("sejour_id");
 
 $user = CAppUI::$instance->_ref_user;
 $prats = $user->loadPraticiens(PERM_READ);
+
+$service  = new CService();
+$where    = array("group_id" => "= '$group_id'");
+$order = "nom";
+$services = $service->loadListWithPerms(PERM_READ, $where, $order);
 
 $sejour = new CSejour;
 $sejour->load($sejour_id);
@@ -67,7 +74,7 @@ if ($sejour->_id) {
 	}
 } 
 else {
-	$sejour->group_id = CGroups::loadCurrent()->_id;
+	$sejour->group_id = $group_id;
   $sejour->praticien_id = $user->_id;
   $sejour->entree_prevue = mbDate()." 08:00:00";
   $sejour->sortie_prevue = mbDate()." 18:00:00";
@@ -77,7 +84,6 @@ else {
 $categories = array();
 $category = new CCategoryPrescription();
 $where[] = "chapitre = 'kine'";
-$group_id = CGroups::loadCurrent()->_id;
 $where[] = "group_id = '$group_id' OR group_id IS NULL";
 
 $order = "nom";
@@ -110,6 +116,7 @@ $smarty->assign("fiche_autonomie"     , $fiche_autonomie);
 $smarty->assign("bilan"               , $bilan);
 $smarty->assign("patient"             , $patient);
 $smarty->assign("prats"               , $prats);
+$smarty->assign("services"            , $services);
 $smarty->assign("categories"          , $categories);
 $smarty->assign("prescription_SSR"    , $prescription_SSR);
 $smarty->assign("lines"               , $lines);

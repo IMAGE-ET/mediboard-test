@@ -140,7 +140,7 @@ function cancelSejourSSR() {
 	    <tr>
 	      <th>{{mb_label object=$sejour field=praticien_id}}</th>
 	      <td>
-	        <select name="praticien_id" class="{{$sejour->_props.praticien_id}}" tabindex="1">
+	        <select name="praticien_id" class="{{$sejour->_props.praticien_id}}" style="width: 15em" tabindex="1">
 	          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
 	          {{foreach from=$prats item=_user}}
 	          <option value="{{$_user->_id}}" class="mediuser" 
@@ -152,7 +152,7 @@ function cancelSejourSSR() {
 	      </td>
 	
 	      <th>{{mb_label object=$sejour field=entree_prevue}}</th>
-	      <td colspan="2">{{mb_field object=$sejour field="entree_prevue" form="editSejour" tabindex="4" register=true canNull=false onchange="updateDureePrevue();"}}</td>
+	      <td colspan="2">{{mb_field object=$sejour field="entree_prevue" form="editSejour" tabindex="5" register=true canNull=false onchange="updateDureePrevue();"}}</td>
 	    </tr>
 	  
 	    <tr>
@@ -161,13 +161,13 @@ function cancelSejourSSR() {
 	        {{mb_label object=$sejour field="patient_id"}}
 	      </th>
 	      <td>
-	        <input type="text" name="patient_view" size="20" value="{{$patient->_view}}" tabindex="2" 
+	        <input type="text" name="patient_view" style="width: 15em" value="{{$patient->_view}}" tabindex="2" 
 	          {{if !$sejour->_id || $app->user_type == 1}} 
-	          ondblclick="PatSelector.init()" 
+	          onclick="PatSelector.init()" 
 	          {{/if}}
 	          readonly="readonly" />
 	        {{if !$sejour->_id || $app->user_type == 1}} 
-	          <button type="button" class="search" onclick="PatSelector.init()">
+	          <button type="button" class="search notext" onclick="PatSelector.init()">
 	            {{tr}}Choose{{/tr}}
 	          </button>
 	        {{/if}}
@@ -187,13 +187,35 @@ function cancelSejourSSR() {
 	    
 	    <tr>
 	      <th>{{mb_label object=$sejour field=libelle}}</th>
-	      <td>{{mb_field object=$sejour field=libelle form=editSejour tabindex="3"}}</td>
+	      <td>{{mb_field object=$sejour field=libelle form=editSejour tabindex="3" style="width: 12em"}}</td>
 	      <th>{{mb_label object=$sejour field=_duree_prevue}}</th>
 	      <td>
-	        <input type="text" name="_duree_prevue" class="num min|0" value="{{if $sejour->_id}}{{$sejour->_duree_prevue}}{{else}}0{{/if}}" tabindex="6" size="4" onchange="updateSortiePrevue()" />
-	        nuits
+          {{mb_field object=$sejour field="_duree_prevue" increment=true form=editSejour prop="num min|0" size=2 tabindex="7" onchange="updateSortiePrevue(); checkDureeHospi('syncType');" value=$sejour->sejour_id|ternary:$sejour->_duree_prevue:0}}
+          nuits
 	      </td>
 	      <td id="dureeEst"></td>
+	    </tr>
+	    
+	    <tr>
+	      <th>{{mb_label object=$sejour field=service_id}}</th>
+	      <td>
+          <select name="service_id" class="{{$sejour->_props.service_id}}" style="width: 15em" tabindex="4">
+            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+            {{foreach from=$services item=_service}}
+            <option value="{{$_service->_id}}"
+              {{if $_service->_id == $sejour->service_id}}selected="selected"{{/if}}>
+              {{$_service->_view}}
+            </option>
+            {{/foreach}}
+          </select>
+	      </td>
+	      {{if $conf.ssr.recusation.use_recuse}}
+        <th>{{mb_label object=$sejour field=recuse}}</th>
+        <td colspan="2">{{mb_field object=$sejour field=recuse value=0}}</td>
+	      {{else}}
+	      <th></th>
+	      <td colspan="2"><input name="recuse" type="hidden" value="0" /></td>
+	      {{/if}}
 	    </tr>
 	    
 	    {{if !$dialog}} 

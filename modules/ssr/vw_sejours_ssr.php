@@ -11,12 +11,12 @@
 CCanDo::checkRead();
 
 // Plateaux disponibles
-$show_cancelled_services = CValue::getOrSession("show_cancelled_services");
-$date = CValue::getOrSession("date", mbDate());
+$show_cancelled_services = CValue::getOrSession("show_cancelled_services", "1");
+$date      = CValue::getOrSession("date", mbDate());
 $order_way = CValue::getOrSession("order_way", "ASC");
 $order_col = CValue::getOrSession("order_col", "patient_id");
-$show = CValue::getOrSession("show", "all");
-$group_by = CValue::get("group_by");
+$show      = CValue::getOrSession("show", "all");
+$group_by  = CValue::get("group_by");
 
 // Filtre
 $filter = new CSejour;
@@ -27,9 +27,9 @@ $filter->referent_id  = CValue::getOrSession("referent_id");
 // Chargement des sejours SSR pour la date selectionnée
 $group = CGroups::loadCurrent();
 $group_id = $group->_id;
-$where["type"] = "= 'ssr'";
+$where["type"]            = "= 'ssr'";
 $where["sejour.group_id"] = "= '$group_id'";
-$where["sejour.annule"] = "= '0'";
+$where["sejour.recuse"]   = "= '0'";
 $order = null;
 
 if ($order_col == "entree") {
@@ -58,9 +58,9 @@ if ($order_col == "service_id") {
 }
 
 $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
-$ljoin["lit"]     = "lit.lit_id = affectation.lit_id";
-$ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
-$ljoin["service"] = "chambre.service_id = service.service_id";
+$ljoin["lit"]         = "lit.lit_id = affectation.lit_id";
+$ljoin["chambre"]     = "lit.chambre_id = chambre.chambre_id";
+$ljoin["service"]     = "chambre.service_id = service.service_id";
 
 if ($order_col == "lit_id") {
   $order = "service.nom $order_way, chambre.nom $order_way, lit.nom $order_way, patients.nom, patients.prenom";
@@ -178,20 +178,22 @@ $colors = CColorLibelleSejour::loadAllFor(CMbArray::pluck($sejours, "libelle"));
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("date", $date);
-$smarty->assign("filter", $filter);
-$smarty->assign("colors", $colors);
+
+$smarty->assign("date"   , $date);
+$smarty->assign("filter" , $filter);
+$smarty->assign("colors" , $colors);
 $smarty->assign("sejours", $sejours);
 
-$smarty->assign("sejours_by_kine", $sejours_by_kine);
-$smarty->assign("kines", $kines);
-$smarty->assign("praticiens", $praticiens);
-$smarty->assign("services", $services);
-$smarty->assign("show", $show);
-$smarty->assign("group_by", $group_by);
+$smarty->assign("sejours_by_kine"        , $sejours_by_kine);
+$smarty->assign("kines"                  , $kines);
+$smarty->assign("praticiens"             , $praticiens);
+$smarty->assign("services"               , $services);
+$smarty->assign("show"                   , $show);
+$smarty->assign("group_by"               , $group_by);
 $smarty->assign("show_cancelled_services", $show_cancelled_services);
-$smarty->assign("order_way", $order_way);
-$smarty->assign("order_col", $order_col);
+$smarty->assign("order_way"              , $order_way);
+$smarty->assign("order_col"              , $order_col);
+
 $smarty->display("vw_sejours_ssr.tpl");
 
 ?>

@@ -30,6 +30,10 @@
     {{assign var=class value=repartition}}
     {{mb_include module=system template=inc_config_category}}
     {{mb_include module=system template=inc_config_bool var=show_tabs}}
+    
+    {{assign var=class value=recusation}}
+    {{mb_include module=system template=inc_config_category}}
+    {{mb_include module=system template=inc_config_bool var=use_recuse}}
 		
     <tr>
       <td class="button" colspan="100">

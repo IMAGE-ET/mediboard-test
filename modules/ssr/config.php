@@ -17,6 +17,9 @@ $dPconfig["ssr"] = array (
     "faible" => "50",
     "eleve"  => "200",
   ),
+  "recusation" => array (
+    "use_recuse" => "0",
+  ),
 	"repartition" => array (
     "show_tabs" => "1",
 	),
