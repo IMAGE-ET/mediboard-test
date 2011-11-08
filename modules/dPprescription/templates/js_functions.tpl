@@ -421,15 +421,6 @@ updateFieldsMedicament = function(selected) {
   $('searchProd_produit').value = "";
 }
 
-modifUniteDecal = function(oFieldJour, oFieldUnite){
-  if(oFieldJour.value != "I" && oFieldJour.value != "A"){
-    $V(oFieldUnite,"jour");
-    oFieldUnite.disabled = "disabled";
-  } else {
-    oFieldUnite.disabled = "";
-  }
-}
-
 toggleContinuiteLineMix = function(radioButton, prescription_line_mix_id){
   var sValueContinuite = $V(radioButton);
   $$(".debit_produit").each(function(debit) {

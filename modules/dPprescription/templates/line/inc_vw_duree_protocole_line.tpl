@@ -30,11 +30,17 @@
 	     
 		      Durée de 
 		      {{mb_field object=$line field=duree increment=1 min=1 form=editDuree-$typeDate-$line_id size="3" 
-		      					onchange="if(this.form.jour_decalage){ this.form.jour_decalage_fin.value = ''; this.form.decalage_line_fin.value = ''; this.form.time_fin.value = '';} $onchange"}} jour(s)
+		      					onchange="if(this.form.jour_decalage){ this.form.jour_decalage_fin.value = ''; this.form.decalage_line_fin.value = ''; this.form.time_fin.value = '';} $onchange"}} 
+				  
+					<select name="unite_duree" onchange="{{$onchange}}">
+						<option value="jour" {{if $line->unite_duree == "jour"}}selected="selected"{{/if}}>jour(s)</option>
+            <option value="heure" {{if $line->unite_duree == "heure"}}selected="selected"{{/if}}>heure(s)</option>
+          </select>
+					
 					à partir de 
 			
 				{{if $prescription->object_class == "CSejour"}}
-				  {{mb_field object=$line field=jour_decalage onchange="modifUniteDecal(this, this.form.unite_decalage); $onchange" emptyLabel="Choose"}}
+				  {{mb_field object=$line field=jour_decalage onchange="$onchange" emptyLabel="Choose"}}
 				{{else}}
 				J
 				{{/if}}
@@ -49,7 +55,7 @@
 				{{if $prescription->object_class == "CSejour"}}
 					{{if $typeDate == "mode_grille"}}<br />{{/if}}
 					Jusqu'à 
-					{{mb_field object=$line field=jour_decalage_fin onchange="modifUniteDecal(this, this.form.unite_decalage_fin); this.form.duree.value = ''; $onchange" emptyLabel="Choose"}}
+					{{mb_field object=$line field=jour_decalage_fin onchange="this.form.duree.value = ''; $onchange" emptyLabel="Choose"}}
 					{{mb_field showPlus=1 object=$line field=decalage_line_fin increment=1 form=editDuree-$typeDate-$line_id onchange="this.form.duree.value = '';  $onchange" size="3"}}
 					 {{mb_field showPlus=1 object=$line field=unite_decalage_fin onchange="$onchange"}} à 
 					{{mb_field object=$line field=time_fin form=editDuree-$typeDate-$line_id onchange="this.form.duree.value = '';  $onchange"}}			
@@ -58,7 +64,7 @@
 	    {{else}}
 	 	
 			{{if $line->duree}}
-	     Durée de {{mb_value object=$line field=duree}} jour(s) 
+	     Durée de {{mb_value object=$line field=duree}} {{mb_value object=$line field=unite_duree}} 
 	    {{/if}}
 	    {{if $line->jour_decalage && $line->unite_decalage}} 
 		    A partir de

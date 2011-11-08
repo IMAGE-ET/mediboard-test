@@ -28,7 +28,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
   var $jour_decalage       = null;  // Jour de decalage: I/E/S/N
   var $decalage_line       = null;  // Permet de definir le decalage de la ligne par rapport au jour de decalage specifié
   var $unite_decalage      = null;
-  var $jour_decalage_fin   = null;  // Jour de fin: I/S
+  var $jour_decalage_fin   = null;  // Jour de fin: I/S/N
   var $decalage_line_fin   = null;  // Decalage de la ligne
   var $unite_decalage_fin  = null;
   
@@ -112,7 +112,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $specs["jour_decalage"]     = "enum list|E|I|S|N|A show|0";
     $specs["fin"]               = "date";
     $specs["valide_infirmiere"] = "bool";
-    $specs["jour_decalage_fin"] = "enum list|I|S|A show|0";
+    $specs["jour_decalage_fin"] = "enum list|I|S|N|A show|0";
     $specs["decalage_line_fin"] = "num show|0";
     $specs["time_fin"]          = "time show|0";
     $specs["conditionnel"]      = "bool";

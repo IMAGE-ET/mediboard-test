@@ -292,11 +292,6 @@ class CPrescription extends CMbObject implements IPatientRelated {
 		 
     $_line->_id = "";
 		
-		if (!($_line instanceof CPrescriptionLineMix)) {
-		  $_line->unite_duree = "jour";
-    }
-    
-		
 		$time_debut = "";
   
 	  $_line->prescription_id = $this->_id;
@@ -319,7 +314,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
         }
         break;
       case 'S': $date_debut = ($debut_sejour) ? $debut_sejour : $sejour->sortie; break;
-      case 'N': $date_debut = mbDate(); break;
+      case 'N': $date_debut = mbDateTime(); break;
 			case 'A':
 				 $date_debut = mbDate($operation->_datetime); 
 				 // Si l'heure d'induction n'est pas encore precisée, on utilise la date prévue de l'intervention
@@ -348,6 +343,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
         $time_fin = $operation->induction_debut ? $operation->induction_debut : mbTime($operation->_datetime);
 				break;
       case 'S': $date_fin = ($fin_sejour) ? $fin_sejour : $sejour->_sortie; break;
+			case 'N': $date_fin = mbDateTime(); break;
     }
     
     $unite_decalage_debut = $_line->unite_decalage === "heure" ? "HOURS" : "DAYS";
@@ -367,19 +363,22 @@ class CPrescription extends CMbObject implements IPatientRelated {
        $_line->decalage_line_fin = 0;
      }
 		 
-		// Decalage du debut
-    $signe = ($_line->decalage_line >= 0) ? "+" : "";
-    if($unite_decalage_debut === "DAYS"){
+		$signe = ($_line->decalage_line >= 0) ? "+" : "";
+    // Decalage du debut en jour   
+		if($unite_decalage_debut === "DAYS"){
     	$_time_debut = mbTime($date_debut);
 			
-			if($_time_debut != "00:00:00" && !$_line->time_debut){
+			/*
+			if($_time_debut != "00:00:00" && !$_line->time_debut && $_line->decalage_line == 0){
 		    $_line->time_debut = $_time_debut; 
-      }
+      }*/
 		  $date_debut = mbDate("$signe $_line->decalage_line DAYS", $date_debut); 
-    } else {  
-      $date_time_debut = mbDateTime("$signe $_line->decalage_line HOURS", "$date_debut $time_debut");
+    } 
+		// Decalage du debut en heure
+		else {  
+		  $date_time_debut = mbDateTime("$signe $_line->decalage_line HOURS", "$date_debut $time_debut");
       $date_debut = mbDate($date_time_debut);
-      $_line->time_debut = mbTime($date_time_debut);        
+      $_line->time_debut = mbTime($date_time_debut);    
 		}
   
     if($date_debut){
@@ -394,16 +393,17 @@ class CPrescription extends CMbObject implements IPatientRelated {
     if($_line->jour_decalage_fin){
       $signe_fin = ($_line->decalage_line_fin >= 0) ? "+" : "";
 			
-			// Decalage en jour
+			// Decalage de la fin en jour
       if($unite_decalage_fin === "DAYS"){
         $date_fin = mbDate("$signe_fin $_line->decalage_line_fin DAYS", $date_fin); 
+				
 				$_debut = ($_line instanceof CPrescriptionLineMix) ? $_line->date_debut : $_line->debut;
 				$_line->unite_duree = "jour";
 				$_line->duree = mbDaysRelative($_debut, $date_fin);
 				$_line->duree++;
 			} 
 			
-			// Decalage en heure
+			// Decalage de la fin en heure
 			else {
       	$date_time_fin = mbDateTime("$signe_fin $_line->decalage_line_fin HOURS", "$date_fin $time_fin");
 				$date_fin = mbDate($date_time_fin);
@@ -420,13 +420,18 @@ class CPrescription extends CMbObject implements IPatientRelated {
           $_line->duree = $duree_hours;
 				} else {
 					$_line->unite_duree = "jour";
-					$_line->duree = mbDaysRelative($_line->date_debut, $date_fin);
+					
+					if($_line instanceof CPrescriptionLineMix){
+					  $_line->duree = mbDaysRelative($_line->date_debut, $date_fin);
+					} else {
+					  $_line->duree = mbDaysRelative($_line->debut, $date_fin);
+          }
+					
 					$_line->duree++;
 					if($_line instanceof CPrescriptionLineMedicament || $_line instanceof CPrescriptionLineElement){
 	          $_line->time_fin = $time_fin;
 	        }
 				}
-		
       }
     }
 		
@@ -467,7 +472,6 @@ class CPrescription extends CMbObject implements IPatientRelated {
     $msg = $_line->store();
 	
     CAppUI::displayMsg($msg, "{$_line->_class}-msg-create");  
-		
 		
 		if($_line instanceof CPrescriptionLineMix){
 			// Parcours des lignes

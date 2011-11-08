@@ -124,35 +124,71 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
 			 // Modification de la date de debut en fonction de la date d'entree
        if($_line->jour_decalage == "E"){  
          $signe = ($_line->decalage_line >= 0) ? "+" : "";
-				 $date_debut =  mbDate("$signe $_line->decalage_line DAYS", $sejour->entree);
+				 $datetime_debut = mbDateTime("$signe $_line->decalage_line $unite_decalage_debut", $sejour->entree);
+
 				 if($_line instanceof CPrescriptionLineMix){
-				   $_line->date_debut = $date_debut;
+				   $_line->date_debut = mbDate($datetime_debut);
          } else {
-				 	 $_line->debut = $date_debut;
+				 	 $_line->debut = mbDate($datetime_debut);
          }
-				 $_line->time_debut = mbTime($sejour->entree);
- 	     } 
+				 if($_line->unite_decalage == "heure"){
+				 	 $_line->time_debut = mbTime($datetime_debut);
+         }
+			 }
+				
 			 // Modification de la date de fin en fonction de la date de sortie
        if($_line->jour_decalage == "S"){
          $signe_debut = ($_line->decalage_line >= 0) ? "+" : "";
-				 $date_debut = mbDate("$signe_debut $_line->decalage_line DAYS", mbDate($sejour->sortie));
+				 $datetime_debut = mbDateTime("$signe_debut $_line->decalage_line $unite_decalage_debut", $sejour->sortie);
 				 if($_line instanceof CPrescriptionLineMix){
-				   $_line->date_debut = $date_debut;  
+				   $_line->date_debut = mbDate($datetime_debut);
          } else {
-				   $_line->debut = $date_debut; 
+				   $_line->debut = mbDate($datetime_debut);
        	 }
-				 $_line->time_debut = mbTime($sejour->sortie);
+				 if($_line->unite_decalage == "heure"){
+				   $_line->time_debut = mbTime($datetime_debut);
+				 }
  	     }
 			 
-			 // modification de la fin
-       if($_line->jour_decalage_fin == "S"){
-       	 $_debut = ($_line instanceof CPrescriptionLineMix) ? $_line->date_debut : $_line->debut;
-         $signe_fin = ($_line->decalage_line_fin >= 0) ? "+" : "";
- 	       $date_fin = mbDate("$signe_fin $_line->decalage_line_fin DAYS", mbDate($sejour->_sortie));   	
-         $_line->duree = mbDaysRelative($_debut, $date_fin);
-         $_line->duree++;
-       }
-			 
+			 // Modification de la fin 
+			  if($_line->jour_decalage_fin == "S"){
+          $signe_fin = ($_line->decalage_line_fin >= 0) ? "+" : "";
+          
+          if($_line->unite_decalage_fin == "jour"){
+            $date_fin = mbDate("$signe_fin $_line->decalage_line_fin DAYS", $sejour->sortie);
+            $_debut = ($_line instanceof CPrescriptionLineMix) ? $_line->date_debut : $_line->debut;
+            $_line->duree = mbDaysRelative($_debut, $date_fin);
+            $_line->duree++;
+          } else {
+            $date_time_fin = mbDateTime("$signe_fin $_line->decalage_line_fin HOURS", $sejour->sortie);
+            $date_fin = mbDate($date_time_fin);
+            $time_fin = mbTime($date_time_fin);
+
+            if($_line instanceof CPrescriptionLineMix){
+              $duree_hours = mbHoursRelative("$_line->date_debut $_line->time_debut", $date_time_fin);
+            } else {
+              $duree_hours = mbHoursRelative("$_line->debut $_line->time_debut", $date_time_fin);
+            }
+    
+            if(($duree_hours <= 24) || ($unite_decalage_debut == "HOURS" && $unite_decalage_fin == "HOURS")){
+              $_line->unite_duree = "heure";
+              $_line->duree = $duree_hours;
+            } else {
+              $_line->unite_duree = "jour";
+              if ($_line instanceof CPrescriptionLineMedicament || $_line instanceof CPrescriptionLineElement) {
+                $_line->duree = mbDaysRelative($_line->debut, $date_fin);
+              }
+              else {
+                $_line->duree = mbDaysRelative($_line->date_debut, $date_fin);
+              }
+              $_line->duree++;
+              if($_line instanceof CPrescriptionLineMedicament || $_line instanceof CPrescriptionLineElement){
+                $_line->time_fin = $time_fin;
+              }
+            }
+          }
+        }
+
        if($_line->jour_decalage == "I" || $_line->jour_decalage_fin == "I" || $_line->jour_decalage == "A" || $_line->jour_decalage_fin == "A"){
          // Si la ligne possede deja une operation_id 
          if($_line->operation_id){
@@ -167,7 +203,7 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
             } else {
               continue;
             }
-          }  
+          }
           
 					$date_operation = mbDate($operation->_datetime);
 

@@ -2146,7 +2146,16 @@ class CSetupdPprescription extends CSetup {
               ADD `quantite_dose_max` INT (11);";
 		$this->addQuery($query);
 		
-		$this->mod_version = "1.62";
+		$this->makeRevision("1.62");
+		$query = "ALTER TABLE `prescription_line_medicament` 
+              CHANGE `jour_decalage_fin` `jour_decalage_fin` ENUM ('I','S','N','A');";
+		$this->addQuery($query);
+		
+		$query = "ALTER TABLE `prescription_line_element` 
+              CHANGE `jour_decalage_fin` `jour_decalage_fin` ENUM ('I','S','N','A');";
+		$this->addQuery($query);
+		
+		$this->mod_version = "1.63";
   }
 }
 

@@ -134,14 +134,14 @@
 		{{else}}
 		 <td style="width: 20%" class="text">
 			 <!-- Duree de la prise --> 
-	     {{if $line->duree && $line->duree != "1"}}
-	       Durée de {{mb_value object=$line field=duree}} jour(s) 
+	     {{if $line->duree}}
+	       Durée de {{mb_value object=$line field=duree}} {{mb_value object=$line field=unite_duree}}
 	     {{/if}}
 	    
 	     <!-- Date de debut de la ligne -->
 	    {{if $line->jour_decalage && $line->unite_decalage}} 
 	      {{if $line->duree > 1 || $line->jour_decalage_fin}} à partir de{{else}} à {{/if}}
-	      {{if $prescription->object_class == "CSejour"}} {{$line->jour_decalage}} {{else}} J {{/if}}
+	      {{if $prescription->object_class == "CSejour"}} {{mb_value object=$line field=jour_decalage}} {{else}} J {{/if}}
 	      {{if ($line->unite_decalage == "jour" && $line->decalage_line != 0) || ($line->unite_decalage == "heure")}}
 	        {{if $line->decalage_line >= 0}}+{{/if}} 
 	        {{mb_value object=$line field=decalage_line size="3"}}
@@ -157,7 +157,7 @@
 	     {{/if}}
 	     <!-- Date de fin -->
 	     {{if $line->jour_decalage_fin && $line->unite_decalage_fin}}
-	       jusqu'à {{$line->jour_decalage_fin}}
+	       jusqu'à {{mb_value object=$line field=jour_decalage_fin}}
 	       {{if ($line->unite_decalage_fin == "jour" && $line->decalage_line_fin != 0) || ($line->unite_decalage_fin == "heure")}}
 	         {{if $line->decalage_line_fin >= 0}}+{{/if}} {{mb_value object=$line field=decalage_line_fin increment=1 }}
 	         {{mb_value object=$line field=unite_decalage_fin }}
