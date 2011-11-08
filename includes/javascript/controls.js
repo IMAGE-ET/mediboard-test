@@ -82,7 +82,7 @@ Element.addMethods(['input', 'textarea'], {
     }
     else {
       if (forceFocus) el.tryFocus();
-			
+      
       range = document.selection.createRange();
 
       // check if the element has focus
@@ -608,7 +608,9 @@ Element.addMethods('input', {
       step: null,
       decimals: null,
       showPlus: false,
-      fraction: false
+      fraction: false,
+      deferEvent: false,
+      deferDelay: Prototype.Browser.IE ? 300 : 200
     }, options);
     
     element.spinner = {
@@ -649,17 +651,18 @@ Element.addMethods('input', {
         }
         result = ((options.showPlus && result >= 0)?'+':'')+result;
         
-        $V(element, result, true);
-        
-        // WIP : onchange differé sur les numeric fields
-        /*$V(element, result, false);
-        clearTimeout(this.timer);
-        
-        this.timer = setTimeout((function(){
-          (element.onchange || Prototype.emptyFunction).bindAsEventListener(element)();
-          element.fire("ui:change");
-        }).bind(this), 200);
-        */
+        if (options.deferEvent) {
+          element.value = result;
+          clearTimeout(this.timer);
+          
+          this.timer = setTimeout((function(){
+            (element.onchange || Prototype.emptyFunction).bindAsEventListener(element)();
+            element.fire("ui:change");
+          }).bind(this), options.deferDelay);
+        }
+        else {
+          $V(element, result, true);
+        }
         
         element.select();
       },
@@ -679,7 +682,19 @@ Element.addMethods('input', {
         }
         result = ((options.showPlus && result >= 0)?'+':'')+result;
         
-        $V(element, result, true);
+        if (options.deferEvent) {
+          element.value = result;
+          clearTimeout(this.timer);
+          
+          this.timer = setTimeout((function(){
+            (element.onchange || Prototype.emptyFunction).bindAsEventListener(element)();
+            element.fire("ui:change");
+          }).bind(this), options.deferDelay);
+        }
+        else {
+          $V(element, result, true);
+        }
+        
         element.select();
       }
     };

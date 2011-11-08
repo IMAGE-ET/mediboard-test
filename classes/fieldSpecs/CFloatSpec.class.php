@@ -81,12 +81,13 @@ class CFloatSpec extends CMbFieldSpec {
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
-    $form      = CMbArray::extract($params, "form");
-    $increment = CMbArray::extract($params, "increment");
-    $showPlus  = CMbArray::extract($params, "showPlus");
-    $fraction  = CMbArray::extract($params, "fraction");
-    $field     = htmlspecialchars($this->fieldName);
-    $maxLength = 8;
+    $form       = CMbArray::extract($params, "form");
+    $increment  = CMbArray::extract($params, "increment");
+    $showPlus   = CMbArray::extract($params, "showPlus");
+    $fraction   = CMbArray::extract($params, "fraction");
+    $deferEvent = CMbArray::extract($params, "deferEvent");
+    $field      = htmlspecialchars($this->fieldName);
+    $maxLength  = 8;
     CMbArray::defaultValue($params, "size", $maxLength);
     CMbArray::defaultValue($params, "maxlength", $maxLength);
     $fieldId = $form.'_'.$field;
@@ -125,6 +126,7 @@ class CFloatSpec extends CMbFieldSpec {
 				
         element.addSpinner({';
           if ($step)       $sHtml .= "step: $step,";
+          if ($deferEvent) $sHtml .= "deferEvent: true,";
           if ($this->pos)  $sHtml .= "min: 0,";
           elseif(isset($min))     $sHtml .= "min: $min,";
           if (isset($max)) $sHtml .= "max: $max,";

@@ -169,12 +169,13 @@ class CNumSpec extends CMbFieldSpec {
   }
 
   function getFormHtmlElement($object, $params, $value, $className) {
-    $form      = CMbArray::extract($params, "form");
-    $increment = CMbArray::extract($params, "increment");
-    $showPlus  = CMbArray::extract($params, "showPlus");
-    $field     = htmlspecialchars($this->fieldName);
-    $maxLength = CValue::first($this->length, $this->maxLength, 11);
-    $fieldId = $form.'_'.$field;
+    $form       = CMbArray::extract($params, "form");
+    $increment  = CMbArray::extract($params, "increment");
+    $showPlus   = CMbArray::extract($params, "showPlus");
+    $deferEvent = CMbArray::extract($params, "deferEvent");
+    $field      = htmlspecialchars($this->fieldName);
+    $maxLength  = CValue::first($this->length, $this->maxLength, 11);
+    $fieldId    = $form.'_'.$field;
     
     $min = CMbArray::extract($params, "min");
     if ($min === null) {
@@ -204,6 +205,7 @@ class CNumSpec extends CMbFieldSpec {
         
         element.addSpinner({';
           if ($step)       $sHtml .= "step: $step,";
+          if ($deferEvent) $sHtml .= "deferEvent: true,";
           if ($this->pos)  $sHtml .= "min: 0,";
           elseif(isset($min)) $sHtml .= "min: $min,";
           if (isset($max)) $sHtml .= "max: $max,";
