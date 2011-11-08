@@ -340,6 +340,7 @@ $locales['minute'] = 'minute';
 $locales['minutes'] = 'minutes';
 $locales['modele-choice'] = 'Choisir un modèle';
 $locales['modele-none'] = 'Aucun modèle disponible';
+$locales['mod--tab-'] = 'Connexion';
 $locales['module--court'] = 'Connexion';
 $locales['module-all-court'] = 'Tous';
 $locales['modules'] = 'Modules';

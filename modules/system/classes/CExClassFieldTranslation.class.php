@@ -60,9 +60,12 @@ class CExClassFieldTranslation extends CMbObject {
     $trans = new self;
     $trans->lang = $lang;
     $trans->ex_class_field_id = $field_id;
-    $trans->loadMatchingObject();
     
-    return self::$cache[$lang][$field_id] = $trans;
+		if ($trans->loadMatchingObject()) {
+			self::$cache[$lang][$field_id] = $trans;
+		}
+    
+    return $trans;
   }
   
   function updateFormFields(){
