@@ -112,6 +112,7 @@ $locales['Count'] = 'Compter';
 $locales['Create'] = 'Créer';
 $locales['Date'] = 'Date';
 $locales['Dates'] = 'Dates';
+$locales['Day']   = 'Jour';
 $locales['Day-after'] = 'Le jour suivant';
 $locales['Day-before'] = 'Le jour précédent';
 $locales['Day view'] = 'Vue de la journée';
