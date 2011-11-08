@@ -35,11 +35,11 @@ class CUser extends CMbObject {
   var $user_login_errors= null;
   var $template         = null;
   var $profile_id       = null;
-	var $dont_log_connection = null;
+  var $dont_log_connection = null;
 
-	// Derived fields
+  // Derived fields
   var $_user_password        = null;
-	var $_user_password_weak   = null;
+  var $_user_password_weak   = null;
   var $_user_password_strong = null;
   var $_login_locked         = null;
   var $_ldap_linked          = null;
@@ -101,7 +101,7 @@ class CUser extends CMbObject {
   }
 
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
     
     $specs["user_username"]   = "str notNull maxLength|20";
@@ -123,7 +123,7 @@ class CUser extends CMbObject {
     $specs["user_login_errors"]= "num";
     $specs["template"]        = "bool notNull default|0";
     $specs["profile_id"]      = "ref class|CUser";
-		$specs["dont_log_connection"] = "bool default|0";
+    $specs["dont_log_connection"] = "bool default|0";
       
     // The different levels of security are stored to be usable in JS
     $specs["_user_password_weak"]   = "password minLength|4";
@@ -149,9 +149,9 @@ class CUser extends CMbObject {
     $remote = 0;
     
     if ($user->isInstalled()) {
-	    if ($result = $user->load($this->user_id)) {
-	    	 $remote = $user->remote;
-	    }
+      if ($result = $user->load($this->user_id)) {
+         $remote = $user->remote;
+      }
     }
     
     $strongPassword = ((CAppUI::conf("admin CUser strong_password") == "1") && ($remote == 0));
@@ -174,21 +174,21 @@ class CUser extends CMbObject {
    * @return CUser
    */
   static function get($user_id = null) {
-		$user = new CUser;
-		return $user->getCached(CValue::first($user_id, CAppUI::$instance->user_id));
+    $user = new CUser;
+    return $user->getCached(CValue::first($user_id, CAppUI::$instance->user_id));
   }
-	
-	/**
-	 * @return CMediusers
-	 */
+  
+  /**
+   * @return CMediusers
+   */
   function loadRefMediuser() {
     $user = new CMediusers();
     if ($user->isInstalled()) {
-	    $user->load($this->_id);
-	    $this->_ref_mediuser = $user;
+      $user->load($this->_id);
+      $this->_ref_mediuser = $user;
     }
     
-		return $user;
+    return $user;
   }
   
   /**
@@ -262,13 +262,33 @@ class CUser extends CMbObject {
   }
   
   function store() {
-  	$this->updateSpecs();
-		
-  	if ($msg = $this->purgeConnections()) {
-  	  return $msg;
-  	}
-  	
-  	return parent::store();
+    $this->updateSpecs();
+    
+    if ($msg = $this->purgeConnections()) {
+      return $msg;
+    }
+    
+    return parent::store();
+  }
+  
+	/**
+	 * We need to delete the CMediusers
+	 * @return 
+	 */
+  function delete(){
+    if ($msg = $this->canDeleteEx()) {
+      return $msg;
+    }
+    
+    $mediuser = $this->loadRefMediuser();
+    
+    if ($mediuser->_id) {
+      if ($msg = $mediuser->delete()) {
+        return $msg;
+      }
+    }
+    
+    return parent::delete();
   }
   
   /**
