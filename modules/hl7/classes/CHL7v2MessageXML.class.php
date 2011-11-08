@@ -59,13 +59,13 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   function queryNode($nodeName, DOMNode $contextNode = null, &$data = null) {
     $xpath = new CHL7v2MessageXPath($this);   
 
-    return $data[$nodeName] = $xpath->queryUniqueNode("//$nodeName", $contextNode);
+    return $data[$nodeName] = $xpath->queryUniqueNode("$nodeName", $contextNode);
   }
   
   function queryNodes($nodeName, DOMNode $contextNode = null, &$data = null) {
     $xpath = new CHL7v2MessageXPath($this);   
     
-    $nodeList = $xpath->query("//$nodeName");
+    $nodeList = $xpath->query("$nodeName");
     foreach ($nodeList as $_node) {
       $data[$nodeName][] = $_node;
     }
@@ -80,7 +80,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   function getMSHEvenementXML() {
     $data = array();
     
-    $MSH = $this->queryNode("MSH");
+    $MSH = $this->queryNode("//MSH");
     
     $data['dateHeureProduction'] = mbDateTime($this->queryTextNode("MSH.7/TS.1", $MSH));
     $data['identifiantMessage']  = $this->queryTextNode("MSH.10", $MSH);
@@ -147,11 +147,11 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   function getContentNodes() {
     $data  = array();
     
-    $PID = $this->queryNode("PID", null, $data);
+    $PID = $this->queryNode("//PID", null, $data);
     
     $data["personIdentifiers"] = $this->getPersonIdentifiers("PID.3", $PID);
 
-    $this->queryNode("PD1", null, $data);
+    $this->queryNode("//PD1", null, $data);
     
     return $data;
   }

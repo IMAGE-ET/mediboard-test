@@ -15,15 +15,6 @@ class CMbXPath extends DOMXPath {
   function __construct(DOMDocument $doc) {
     parent::__construct($doc);
   }
-
-  function nodePath(DOMNode $node) {    
-    $name = "hprim:$node->nodeName";
-    while(($node = $node->parentNode) && ($node->nodeName != "#document")) {
-      $name = "hprim:$node->nodeName/$name";
-    }
-    
-    return "'/$name'";
-  }
   
   function queryUniqueNode($query, DOMNode $contextNode = null, $optional = true) {
     $query = utf8_encode($query);
@@ -31,6 +22,9 @@ class CMbXPath extends DOMXPath {
     
     $erreur = null;
     if ($nodeList->length > 1) {
+      foreach ($nodeList as $_node) {
+        mbLog($_node->nodeName);
+      }
       throw new Exception("Queried node is not unique, found $nodeList->length occurence(s) for '$query'");
     }
 

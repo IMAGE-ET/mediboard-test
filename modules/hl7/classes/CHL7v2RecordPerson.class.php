@@ -20,10 +20,10 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
   function getContentNodes() {
     $data = parent::getContentNodes();
     
-    $this->queryNodes("NK1", null, $data);
+    $this->queryNodes("//NK1", null, $data);
     
-    $this->queryNodes("ROL", null, $data);
-    
+    $this->queryNodes("//ROL", null, $data);
+
     return $data;
   }
  

@@ -14,6 +14,15 @@ class CHPrimXPath extends CMbXPath {
     
     $this->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
   }
+
+  function nodePath(DOMNode $node) {    
+    $name = "hprim:$node->nodeName";
+    while(($node = $node->parentNode) && ($node->nodeName != "#document")) {
+      $name = "hprim:$node->nodeName/$name";
+    }
+    
+    return "'/$name'";
+  }
   
   function queryTextNode($query, DOMNode $contextNode = null, $purgeChars = "", $addslashes = false) {
     $text = "";
