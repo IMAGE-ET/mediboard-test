@@ -151,18 +151,13 @@ submitSuivi = function(oForm, del) {
   } });
 }
 
-updateNbTrans = function(sejour_id) {
+function updateNbTrans(sejour_id) {
   var url = new Url("dPhospi", "ajax_count_transmissions");
   url.addParam("sejour_id", sejour_id);
-  url.requestJSON(function(elt)  {
+  url.requestJSON(function(count)  {
     var nb_trans = $("nb_trans");
-    if (!elt) {
-      nb_trans.up().addClassName("empty");
-    }
-    else {
-      nb_trans.up().removeClassName("empty")
-    }
-    nb_trans.update("("+elt+")");
+    nb_trans.up("a").setClassName("empty", !count);
+    nb_trans.update("("+count+")");
   });
 }
 

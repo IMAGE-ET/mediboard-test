@@ -12,6 +12,9 @@ Options -Indexes
 </IfModule>
 
 <IfModule mod_headers.c>
+  # P3P header fixing logout issues in IE 
+  Header set P3P 'CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"'
+
   # 1 day cache for CSS and JS
   <FilesMatch "\.(js|css)$">
   Header set Cache-Control "max-age=86400, public"

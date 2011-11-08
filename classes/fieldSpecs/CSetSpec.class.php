@@ -65,6 +65,7 @@ class CSetSpec extends CEnumSpec {
     $cycle         = CMbArray::extract($params, "cycle", 1);
     $alphabet      = CMbArray::extract($params, "alphabet", false);
     $size          = CMbArray::extract($params, "size", min(3, count($locales)));
+    $onchange      = CMbArray::get($params, "onchange");
     $form          = CMbArray::extract($params, "form"); // needs to be extracted
     
     $extra         = CMbArray::makeXmlAttributes($params);
@@ -79,7 +80,7 @@ class CSetSpec extends CEnumSpec {
       Main.add(function(){
       	var cont = \$('set-container-$uid'),
       	    element = cont.down('input'),
-            tokenField = new TokenField(element);
+            tokenField = new TokenField(element, {" .($onchange ? "onChange: function(){ $onchange }.bind(element)" : "")."});
 
         cont.select('input').invoke('observe', 'click', function(event){
           var elt = Event.element(event);

@@ -64,60 +64,11 @@ class CConfigService extends CConfigServiceAbstract {
    * Calcul de la totalité des configs pour les stocker dans la SHM
    */
   static function getAllConfigs(){
-    // Chargement des etablissements
-    $group = new CGroups();
-    $groups = $group->loadList();
-
-    // Chargement des services
-    $service = new CService();
-    $services = $service->loadList();
-    
-    // Chargement de toutes les configs
-    $config_service = new CConfigService();
-    $all_configs = $config_service->loadList();
-    
-    if ($all_configs == null) {
-      return;
-    }
-    
-    // Creation du tableau de valeur par defaut (quelque soit l'etablissement)
-    foreach($all_configs as $_config){
-      if(!$_config->service_id && !$_config->group_id){
-		    $configs_default[$_config->name] = $_config;
-		  } else {
-		    if($_config->service_id){
-		      $configs_service[$_config->service_id][$_config->name] = $_config->value;
-		    } else {
-		      $configs_group[$_config->group_id][$_config->name] = $_config->value;
-		    }
-		  }
-    }
-    
-    // Parcours des etablissements
-    foreach($groups as $group_id => $group){
-      $group->loadRefsService();
-      // Parcours des services
-	    foreach($group->_ref_services as $service_id => $_service){
-		    foreach($configs_default as $_config_default){
-		      $configs[$group_id][$service_id][$_config_default->name] = $_config_default->value;
-          if(isset($configs_group[$group_id][$_config_default->name])){
-            $configs[$group_id][$service_id][$_config_default->name] = $configs_group[$group_id][$_config_default->name];
-          }
-          if(isset($configs_service[$service_id][$_config_default->name])){
-            $configs[$group_id][$service_id][$_config_default->name] = $configs_service[$service_id][$_config_default->name];
-          }
-		    }
-	    }
-	    // Si aucun service
-	    foreach($configs_default as $_config_default){
-		    if(isset($configs_group[$group_id][$_config_default->name])){
-		      $configs[$group_id]["none"][$_config_default->name] = $configs_group[$group_id][$_config_default->name];
-		    } else {
-		      $configs[$group_id]["none"][$_config_default->name] = $_config_default->value;
-		    }
-	    }
-    }
-    return $configs;
+    return self::_getAllConfigs("CConfigService", "name", "value");
+  }
+  
+  static function emptySHM(){
+    self::_emptySHM("CConfigService", "conf-service");
   }
 }
   

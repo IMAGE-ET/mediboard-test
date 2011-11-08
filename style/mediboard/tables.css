@@ -598,3 +598,16 @@ td.redefined {
   max-width:80px;
   white-space :normal;
 }
+
+/**
+ * Dans les tableaux de constantes, les cumuls ont des bords, qui se chavauchent dans certains cas quand border-collapse:collapse
+ */
+table.constantes {
+  border-collapse: separate !important;
+}
+
+table.constantes td, 
+table.constantes th {
+  border-right: none !important;
+  border-bottom: none !important;
+}

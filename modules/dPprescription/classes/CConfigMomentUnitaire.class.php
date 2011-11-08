@@ -23,7 +23,7 @@ class CConfigMomentUnitaire extends CConfigServiceAbstract {
   }
   
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["moment_unitaire_id"] = "ref class|CMomentUnitaire notNull";
     $specs["heure"] = "time";
     return $specs;
@@ -33,10 +33,10 @@ class CConfigMomentUnitaire extends CConfigServiceAbstract {
    * Chargement des configs en fonction du service
    */
   static function getAllFor($service_id = "none", $group_id = ""){
-  	if(!$group_id){
-  	  $group_id = CGroups::loadCurrent()->_id;
+    if(!$group_id){
+      $group_id = CGroups::loadCurrent()->_id;
     }
-		
+    
     if(!isset(self::$configs_SHM)){
       self::$configs_SHM = $configs = self::getSHM("conf-moment");
     } else {
@@ -61,60 +61,11 @@ class CConfigMomentUnitaire extends CConfigServiceAbstract {
    * Calcul de la totalité des configs pour les stocker dans la SHM
    */
   static function getAllConfigs(){
-    // Chargement des etablissements
-    $group = new CGroups();
-    $groups = $group->loadList();
-
-    // Chargement des services
-    $service = new CService();
-    $services = $service->loadList();
-    
-    // Chargement de toutes les configs
-    $config_moment = new CConfigMomentUnitaire();
-    $all_configs = $config_moment->loadList();
-    
-    if ($all_configs == null) {
-      return;
-    }
-    
-    // Creation du tableau de valeur par defaut (quelque soit l'etablissement)
-    foreach($all_configs as $_config){
-      if(!$_config->service_id && !$_config->group_id){
-		    $configs_default[$_config->moment_unitaire_id] = $_config;
-		  } else {
-		    if($_config->service_id){
-		      $configs_service[$_config->service_id][$_config->moment_unitaire_id] = $_config->heure;
-		    } else {
-		      $configs_group[$_config->group_id][$_config->moment_unitaire_id] = $_config->heure;
-		    }
-		  }
-    }
-    
-    // Parcours des etablissements
-    foreach($groups as $group_id => $group){
-      $group->loadRefsService();
-      // Parcours des services
-	    foreach($group->_ref_services as $service_id => $_service){
-		    foreach($configs_default as $_config_default){
-		      $configs[$group_id][$service_id][$_config_default->moment_unitaire_id] = $_config_default->heure;
-          if(isset($configs_group[$group_id][$_config_default->moment_unitaire_id])){
-            $configs[$group_id][$service_id][$_config_default->moment_unitaire_id] = $configs_group[$group_id][$_config_default->moment_unitaire_id];
-          }
-          if(isset($configs_service[$service_id][$_config_default->moment_unitaire_id])){
-            $configs[$group_id][$service_id][$_config_default->moment_unitaire_id] = $configs_service[$service_id][$_config_default->moment_unitaire_id];
-          }
-		    }
-	    }
-	    // Si aucun service
-	    foreach($configs_default as $_config_default){
-		    if(isset($configs_group[$group_id][$_config_default->moment_unitaire_id])){
-		      $configs[$group_id]["none"][$_config_default->moment_unitaire_id] = $configs_group[$group_id][$_config_default->moment_unitaire_id];
-		    } else {
-		      $configs[$group_id]["none"][$_config_default->moment_unitaire_id] = $_config_default->heure;
-		    }
-	    }
-    }
-    return $configs;
+    return self::_getAllConfigs("CConfigMomentUnitaire", "moment_unitaire_id", "heure");
+  }
+  
+  static function emptySHM(){
+    self::_emptySHM("CConfigMomentUnitaire", "conf-moment");
   }
 }
   

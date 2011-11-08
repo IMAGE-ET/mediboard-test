@@ -16,5 +16,4 @@ if ($can) {
   $can->needsAdmin();
 }
 
-CConfigService::emptySHM();
-CConfigMomentUnitaire::emptySHM();
+CConfigConstantesMedicales::emptySHM();

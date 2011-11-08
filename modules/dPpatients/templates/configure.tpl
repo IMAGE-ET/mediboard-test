@@ -7,6 +7,7 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
   <li><a href="#CAntecedent"    >{{tr}}CAntecedent{{/tr}}    </a></li>
   <li><a href="#CTraitement"    >{{tr}}CTraitement{{/tr}}    </a></li>
   <li><a href="#CDossierMedical">{{tr}}CDossierMedical{{/tr}}</a></li>
+  <li><a href="#CConstantesMedicales">{{tr}}CConstantesMedicales{{/tr}}</a></li>
   <li><a href="#CMedecin"       >{{tr}}CMedecin{{/tr}}       </a></li>
   <li><a href="#LogicMax"       >{{tr}}LogicMax{{/tr}}       </a></li>
   <li><a href="#INSEE"          >{{tr}}INSEE{{/tr}}          </a></li>
@@ -29,6 +30,10 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
 
 <div id="CDossierMedical" style="display: none;">
 {{mb_include template=CDossierMedical_configure}}
+</div>
+
+<div id="CConstantesMedicales" style="display: none;">
+{{mb_include template=CConstantesMedicales_configure}}
 </div>
 
 <div id="CMedecin" style="display: none;">

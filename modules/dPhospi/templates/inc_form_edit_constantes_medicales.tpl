@@ -2,6 +2,11 @@
 {{mb_default var=callback_administration value=0}}
 {{mb_default var=display_graph value=1}}
 
+{{assign var=show_cat_tabs value=false}}
+{{if "CConstantesMedicales::getConfig"|static_call:"show_cat_tabs"}}
+  {{assign var=show_cat_tabs value=true}}
+{{/if}}
+
 <script type="text/javascript">
 calculImcVst = function(form) {
   var imcInfo, imc, vst,
@@ -49,6 +54,10 @@ Main.add(function () {
   if (window.toggleAllGraphs) {
     toggleAllGraphs();
   }
+  
+	{{if $show_cat_tabs}}
+    Control.Tabs.create("constantes-by-type");
+	{{/if}}
 });
 </script>
 
@@ -77,104 +86,117 @@ Main.add(function () {
   {{/if}}
   {{assign var=const value=$latest_constantes.0}}
   {{assign var=dates value=$latest_constantes.1}}
+  {{assign var=all_constantes value="CConstantesMedicales"|static:"list_constantes_type"}}
   
   <input type="hidden" name="_poids" value="{{$const->poids}}" />
   
-  <table class="main form constantes" style="width: 1%;">
+	{{if $show_cat_tabs}}
+  <ul id="constantes-by-type" class="control_tabs small" style="min-width: 200px;">
+    {{foreach from=$all_constantes key=_type item=_list}}
+      <li>
+        <a href="#type-{{$_type}}">{{tr}}CConstantesMedicales.type.{{$_type}}{{/tr}}</a>
+      </li>
+    {{/foreach}}
+  </ul>
+  <hr class="control_tabs" />
+	{{/if}}
+  
+  <table class="main form constantes">
     <tr>
-      <th class="category">Constantes</th>
-      {{if $real_context}}<th class="category">Nouvelles</th>{{/if}}
+      <th class="category"></th>
+      {{if $real_context}}<th class="category">Saisie</th>{{/if}}
       <th class="category" colspan="{{if $display_graph}}2{{else}}1{{/if}}">Dernières</th>
       <th class="category"></th>
     </tr>
     
-    {{assign var=all_constantes value="CConstantesMedicales"|static:"list_constantes"}}
     {{assign var=at_least_one_hidden value=false}}
     
-    {{foreach from=$all_constantes key=_constante item=_params}}
-    <tbody {{if !array_key_exists($_constante, $selection) && $const->$_constante == ""}}
-      style="display: none;" class="secondary"
-      {{assign var=at_least_one_hidden value=true}}
-    {{/if}}>
-      <tr>
-        <th>
-          {{* a mb_title doesn't have a "for" attribute which speeds up prepareForm in IE
-          {{mb_title object=$constantes field=$_constante for=$_constante}} 
-          *}}
-          <label for="{{$_constante}}">{{tr}}CConstantesMedicales-{{$_constante}}-court{{/tr}}</label>
-
-          {{if $_params.unit}}
-            {{if in_array($_constante, " "|explode:"ta ta_gauche ta_droit")}}
-              {{$conf.dPpatients.CConstantesMedicales.unite_ta}}
-            {{else}}
-            ({{$_params.unit}})
-            {{/if}}
-          {{/if}}
-        </th>
-        
-        {{if array_key_exists("formfields", $_params)}}
-          {{if $real_context}}
-            <td>
-              {{mb_field object=$constantes field=$_params.formfields.0 size="2" style="width:2em;"}} / 
-              {{mb_field object=$constantes field=$_params.formfields.1 size="2" style="width:2em;"}}
-              {{*  increment=true form="edit-constantes-medicales" *}}
-            </td>
-          {{/if}}
-          <td style="text-align: center" title="{{$dates.$_constante|date_format:$conf.datetime}}">
-            {{if $const->$_constante}}
-              {{mb_value object=$const field=$_params.formfields.0}} /
-              {{mb_value object=$const field=$_params.formfields.1}}
-            {{/if}}
-          </td>
-        {{else}}
-          {{if $_constante.0 == "_"}}
-            {{assign var=_readonly value="readonly"}}
-          {{else}}
-            {{assign var=_readonly value=null}}
-          {{/if}}
-          {{if $real_context}}
-            <td>
-              {{if array_key_exists("callback", $_params)}}
-                {{assign var=_callback value=$_params.callback}}
-              {{else}}
-                {{assign var=_callback value=null}}
-              {{/if}}
-              
-              {{mb_field object=$constantes field=$_constante size="4" 
-                         onchange=$_callback|ternary:"$_callback(this.form)":null readonly=$_readonly 
-                         }}
-              {{* increment=$_readonly|ternary:false:true form="edit-constantes-medicales" *}}
-            </td>
-          {{/if}}
-          <td style="text-align: center" title="{{$dates.$_constante|date_format:$conf.datetime}}">
-            {{mb_value object=$const field=$_constante}}
-            <input type="hidden" name="_last_{{$_constante}}" value="{{$const->$_constante}}" />
-          </td>
-        {{/if}}
-        {{if $display_graph}}
-          <td class="narrow">
-            {{if $_constante.0 != "_" || !empty($_params.plot|smarty:nodefaults)}}
-              <input type="checkbox" name="checkbox-constantes-medicales-{{$_constante}}" onclick="toggleGraph('{{$_constante}}', this.checked)" tabIndex="100" />
-            {{/if}}
-          </td>
-        {{/if}}
-        <td>
-          {{if $_readonly !="readonly" && $real_context == 1 && $constantes->$_constante != ""}}
+    {{foreach from=$all_constantes key=_type item=_list}}
+      <tbody id="type-{{$_type}}" {{if $show_cat_tabs}} {{if $_type != "vital"}} style="display: none;" {{/if}} {{/if}}>
+      {{foreach from=$_list key=_constante item=_params}}
+        <tr {{if !array_key_exists($_constante, $selection) && $const->$_constante == ""}}
+          style="display: none;" class="secondary"
+          {{assign var=at_least_one_hidden value=true}}
+        {{/if}}>
+            <th style="text-align: left;">
+              {{* a mb_title doesn't have a "for" attribute which speeds up prepareForm in IE
+              {{mb_title object=$constantes field=$_constante for=$_constante}} 
+              *}}
+              <label for="{{$_constante}}" title="{{tr}}CConstantesMedicales-{{$_constante}}-desc{{/tr}}">
+                {{tr}}CConstantesMedicales-{{$_constante}}-court{{/tr}}
+                
+                {{if $_params.unit}}
+                  <small class="opacity-50">
+                    {{if in_array($_constante, " "|explode:"ta ta_gauche ta_droit")}}
+                      ({{$conf.dPpatients.CConstantesMedicales.unite_ta}})
+                    {{else}}
+                      ({{$_params.unit}})
+                    {{/if}}
+                  </small>
+                {{/if}}
+              </label>
+            </th>
+            
             {{if array_key_exists("formfields", $_params)}}
-              <button type="button" class="cancel notext" style="margin: -1px;" onclick="emptyAndSubmit(['{{$_params.formfields.0}}', '{{$_params.formfields.1}}']);"></button>
+              {{if $real_context}}
+                <td>
+                  {{mb_field object=$constantes field=$_params.formfields.0 size="2" style="width:1.7em;"}} / 
+                  {{mb_field object=$constantes field=$_params.formfields.1 size="2" style="width:1.7em;"}}
+                  {{*  increment=true form="edit-constantes-medicales" *}}
+                </td>
+              {{/if}}
+              <td style="text-align: center" title="{{$dates.$_constante|date_format:$conf.datetime}}">
+                {{if $const->$_constante}}
+                  {{mb_value object=$const field=$_params.formfields.0}} /
+                  {{mb_value object=$const field=$_params.formfields.1}}
+                {{/if}}
+              </td>
             {{else}}
-              <button type="button" class="cancel notext" style="margin: -1px;" onclick="emptyAndSubmit(['{{$_constante}}']);"></button>
-            {{/if}} 
-          {{/if}}
-        </td>
-      </tr>
-      
-      {{if $_constante == "_imc"}}
-        <tr>
-          <td colspan="4" id="constantes_medicales_imc" style="color:#F00; text-align: center;"></td>
-        </tr>
-      {{/if}}
-    </tbody>
+              {{if $_constante.0 == "_"}}
+                {{assign var=_readonly value="readonly"}}
+              {{else}}
+                {{assign var=_readonly value=null}}
+              {{/if}}
+              {{if $real_context}}
+                <td>
+                  {{if array_key_exists("callback", $_params)}}
+                    {{assign var=_callback value=$_params.callback}}
+                  {{else}}
+                    {{assign var=_callback value=null}}
+                  {{/if}}
+                  
+                  {{mb_field object=$constantes field=$_constante size="3" onchange=$_callback|ternary:"$_callback(this.form)":null readonly=$_readonly}}
+                  {{* increment=$_readonly|ternary:false:true form="edit-constantes-medicales" *}}
+          
+                  {{if $_constante == "_imc"}}
+                    <div id="constantes_medicales_imc" style="color:#F00;"></div>
+                  {{/if}}
+                </td>
+              {{/if}}
+              <td style="text-align: center" title="{{$dates.$_constante|date_format:$conf.datetime}}">
+                {{mb_value object=$const field=$_constante}}
+                <input type="hidden" name="_last_{{$_constante}}" value="{{$const->$_constante}}" />
+              </td>
+            {{/if}}
+            {{if $display_graph}}
+              <td class="narrow">
+                {{if $_constante.0 != "_" || !empty($_params.plot|smarty:nodefaults)}}
+                  <input type="checkbox" name="checkbox-constantes-medicales-{{$_constante}}" onclick="toggleGraph('{{$_constante}}', this.checked)" tabIndex="100" />
+                {{/if}}
+              </td>
+            {{/if}}
+            <td>
+              {{if $_readonly !="readonly" && $real_context == 1 && $constantes->$_constante != ""}}
+                {{if array_key_exists("formfields", $_params)}}
+                  <button type="button" class="cancel notext" style="margin: -1px;" onclick="emptyAndSubmit(['{{$_params.formfields.0}}', '{{$_params.formfields.1}}']);"></button>
+                {{else}}
+                  <button type="button" class="cancel notext" style="margin: -1px;" onclick="emptyAndSubmit(['{{$_constante}}']);"></button>
+                {{/if}} 
+              {{/if}}
+            </td>
+          </tr>
+        {{/foreach}}
+      </tbody>
     {{/foreach}}
     
     {{if $real_context}}

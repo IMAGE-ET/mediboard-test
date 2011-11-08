@@ -34,7 +34,16 @@ $dPconfig["dPpatients"] = array (
   "CConstantesMedicales" => array(
     "important_constantes" => "poids|pouls|ta_gauche|temperature",
     "unite_ta" => "cmHg",
-    "diuere_24_reset_hour" => "6",
+    "diuere_24_reset_hour" => "8",
+    "redon_cumul_reset_hour" => "8",
+    "sng_cumul_reset_hour" => "8",
+    "lame_cumul_reset_hour" => "8",
+    "drain_cumul_reset_hour" => "8",
+    "drain_thoracique_cumul_reset_hour" => "8",
+    "drain_pleural_cumul_reset_hour" => "8",
+    "drain_mediastinal_cumul_reset_hour" => "8",
+    "sonde_ureterale_cumul_reset_hour" => "8",
+    "sonde_vesicale_cumul_reset_hour" => "8",
   ),
   
   "CMedecin" => array(

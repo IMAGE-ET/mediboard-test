@@ -1386,7 +1386,83 @@ class CSetupdPpatients extends CSetup {
       AND `remarques` IS NULL;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.23";
+    $this->makeRevision("1.23");
+    $query = "ALTER TABLE `constantes_medicales` 
+      ADD `redon_4` FLOAT UNSIGNED AFTER `redon_3`,
+      ADD `sng` FLOAT UNSIGNED,
+      ADD `lame_1` FLOAT UNSIGNED,
+      ADD `lame_2` FLOAT UNSIGNED,
+      ADD `lame_3` FLOAT UNSIGNED,
+      ADD `drain_1` FLOAT UNSIGNED,
+      ADD `drain_2` FLOAT UNSIGNED,
+      ADD `drain_3` FLOAT UNSIGNED,
+      ADD `drain_thoracique_1` FLOAT UNSIGNED,
+      ADD `drain_thoracique_2` FLOAT UNSIGNED,
+      ADD `drain_pleural_1` FLOAT UNSIGNED,
+      ADD `drain_pleural_2` FLOAT UNSIGNED,
+      ADD `drain_mediastinal` FLOAT UNSIGNED,
+      ADD `sonde_ureterale_1` FLOAT UNSIGNED,
+      ADD `sonde_ureterale_2` FLOAT UNSIGNED,
+      ADD `sonde_vesicale` FLOAT UNSIGNED";
+    $this->addQuery($query);
+		
+		$this->makeRevision("1.24");
+		$query = "CREATE TABLE `config_constantes_medicales` (
+              `service_id` INT (11) UNSIGNED,
+              `group_id` INT (11) UNSIGNED,
+              `config_constantes_medicales_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `important_constantes` TEXT,
+              `diuere_24_reset_hour` TINYINT (4) UNSIGNED,
+              `redon_cumul_reset_hour` TINYINT (4) UNSIGNED,
+              `sng_cumul_reset_hour` TINYINT (4) UNSIGNED,
+              `lame_cumul_reset_hour` TINYINT (4) UNSIGNED,
+              `drain_cumul_reset_hour` TINYINT (4) UNSIGNED,
+              `drain_thoracique_cumul_reset_hour` TINYINT (4) UNSIGNED,
+              `drain_pleural_cumul_reset_hour` TINYINT (4) UNSIGNED,
+              `drain_mediastinal_cumul_reset_hour` TINYINT (4) UNSIGNED,
+              `sonde_ureterale_cumul_reset_hour` TINYINT (4) UNSIGNED,
+              `sonde_vesicale_cumul_reset_hour` TINYINT (4) UNSIGNED,
+							`show_cat_tabs` ENUM ('0','1')
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `config_constantes_medicales` 
+              ADD INDEX (`service_id`),
+              ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+		
+		$conf = CAppUI::conf("dPpatients CConstantesMedicales");
+    $query = $this->ds->prepare("INSERT INTO `config_constantes_medicales` (
+								`important_constantes` ,
+								`diuere_24_reset_hour` ,
+								`redon_cumul_reset_hour` ,
+								`sng_cumul_reset_hour` ,
+								`lame_cumul_reset_hour` ,
+								`drain_cumul_reset_hour` ,
+								`drain_thoracique_cumul_reset_hour` ,
+								`drain_pleural_cumul_reset_hour` ,
+								`drain_mediastinal_cumul_reset_hour` ,
+								`sonde_ureterale_cumul_reset_hour` ,
+								`sonde_vesicale_cumul_reset_hour` ,
+								`show_cat_tabs` 
+							)
+							VALUES (
+							%1 , %2 , %3 , %4 , %5 , %6 , %7 , %8 , %9 , %10 , %11 , '0'
+							);", 
+	              $conf["important_constantes"],
+	              $conf["diuere_24_reset_hour"],
+	              $conf["redon_cumul_reset_hour"],
+	              $conf["sng_cumul_reset_hour"],
+	              $conf["lame_cumul_reset_hour"],
+	              $conf["drain_cumul_reset_hour"],
+	              $conf["drain_thoracique_cumul_reset_hour"],
+	              $conf["drain_pleural_cumul_reset_hour"],
+	              $conf["drain_mediastinal_cumul_reset_hour"],
+	              $conf["sonde_ureterale_cumul_reset_hour"],
+	              $conf["sonde_vesicale_cumul_reset_hour"]
+							);
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.25";
   }
 }
 

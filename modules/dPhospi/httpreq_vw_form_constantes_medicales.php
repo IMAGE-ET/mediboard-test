@@ -15,7 +15,7 @@ $selection    = CValue::get('selection');
 
 if (!$selection) {
   //$selection = CConstantesMedicales::$list_constantes;
-  $conf_constantes = explode("|", CAppUI::conf("dPpatients CConstantesMedicales important_constantes"));
+  $conf_constantes = explode("|", CConstantesMedicales::getConfig("important_constantes"));
   $selection = array_intersect_key(CConstantesMedicales::$list_constantes, array_flip($conf_constantes));
 }
 else {

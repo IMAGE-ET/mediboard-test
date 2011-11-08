@@ -26,11 +26,11 @@ $selection             = CValue::get('selection');
 $date_min              = CValue::get('date_min');
 $date_max              = CValue::get('date_max');
 $print                 = CValue::get('print');
-$limit                 = CValue::get('limit', 100);
+$limit                 = CValue::get('limit', 50);
 
 if (!$selection || $selected_context_guid === 'all') {
   //$selection = CConstantesMedicales::$list_constantes;
-  $conf_constantes = explode("|", CAppUI::conf("dPpatients CConstantesMedicales important_constantes"));
+  $conf_constantes = explode("|", CConstantesMedicales::getConfig("important_constantes"));
   $selection = array_intersect_key(CConstantesMedicales::$list_constantes, array_flip($conf_constantes));
 }
 else {
@@ -140,7 +140,7 @@ if ($date_max) {
 $list_constantes = $constantes->loadList($where, "datetime DESC", $limit);
 $list_constantes = array_reverse($list_constantes, true);
 
-$constantes_medicales_grid = CConstantesMedicales::buildGrid($list_constantes);
+$constantes_medicales_grid = CConstantesMedicales::buildGrid($list_constantes, false);
 
 $standard_struct = array(
   "series" => array(
@@ -218,7 +218,6 @@ foreach ($constants_to_draw as $name => $params) {
 }
 
 $cumuls_day = array();
-$diuere_24_reset_hour = CAppUI::conf("dPpatients CConstantesMedicales diuere_24_reset_hour");
 
 // Si le séjour a des constantes médicales
 if ($list_constantes) {
@@ -226,9 +225,6 @@ if ($list_constantes) {
     $comment = utf8_encode($cst->comment);
     $dates[] = mbTransformTime($cst->datetime, null, '%d/%m/%y');
     $hours[] = mbTransformTime($cst->datetime, null, '%Hh%M');
-    
-    $day_24h = mbTransformTime("-$diuere_24_reset_hour hours", $cst->datetime, '%d/%m/%y');
-    
     $comments[] = $comment;
     $const_ids[] = $cst->_id;
     $cst->loadLogs();
@@ -277,10 +273,14 @@ if ($list_constantes) {
             utf8_encode($params['unit']),
           );
           
-          if ($name == "diurese") {
+          if (isset($params["cumul_reset_config"])) {
+            $reset_hour = CConstantesMedicales::getResetHour($name);
+            $day_24h = mbTransformTime("-$reset_hour hours", $cst->datetime, '%d/%m/%y');
+    
             if (!isset($cumuls_day[$name][$day_24h])) {
               $cumuls_day[$name][$day_24h] = array("n" => 0, "value" => 0);
             }
+            
             $cumuls_day[$name][$day_24h]["value"] += $ya;
             $cumuls_day[$name][$day_24h]["n"]++;
           }

@@ -61,9 +61,9 @@ function reloadDiagnostic(sejour_id, modeDAS) {
 }
 
 {{if $isPrescriptionInstalled}}
-	function reloadPrescription(prescription_id){
-	  Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null,'',null, false, '0');
-	}
+  function reloadPrescription(prescription_id){
+    Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null,'',null, false, '0');
+  }
 {{/if}}
 
 function reloadAntAllergie(sejour_id){
@@ -75,55 +75,86 @@ function reloadAntAllergie(sejour_id){
 }
 
 function addSejourIdToSession(sejour_id){
-	var url = new Url("system", "httpreq_set_value_to_session");
-	url.addParam("module","{{$m}}");
-	url.addParam("name","sejour_id");
-	url.addParam("value",sejour_id);
-	url.requestUpdate("systemMsg");
+  var url = new Url("system", "httpreq_set_value_to_session");
+  url.addParam("module","{{$m}}");
+  url.addParam("name","sejour_id");
+  url.addParam("value",sejour_id);
+  url.requestUpdate("systemMsg");
 }
+
+// Cet objet doit contenir des entrée clé/valeur dont la clé est l'ID du 
+// conteneur du volet et en valeur la fonction appelée pour charger ce volet.
+window.tabLoaders = {
+  "suivi_clinique": function(sejour_id, praticien_id, date){
+    if(!$("suivi_clinique").visible()) return;
+    
+    loadSuiviClinique(sejour_id);
+  },
+  "constantes-medicales": function(sejour_id, praticien_id, date){
+    if(!$("constantes-medicales").visible()) return;
+    
+    refreshConstantesMedicales("CSejour-"+sejour_id);
+  },
+  
+  {{if $isPrescriptionInstalled}}
+    "dossier_traitement": function(sejour_id, praticien_id, date){
+      if(!$("dossier_traitement").visible()) return;
+      
+      PlanSoins.loadTraitement(sejour_id, date,'','administration');
+    },
+    "prescription_sejour": function(sejour_id, praticien_id, date){
+      if(!$("prescription_sejour").visible()) return;
+      
+      Prescription.reloadPrescSejour('', sejour_id, null, null, null, null, null, null, null, false, '0');
+    },
+  {{/if}}
+       
+  {{if $app->user_prefs.ccam_sejour == 1 }}
+    "Actes": function(sejour_id, praticien_id, date){
+      if($('listActesNGAP')){
+        loadActesNGAP(sejour_id);
+      }
+      if($('ccam')){
+        ActesCCAM.refreshList(sejour_id, praticien_id);
+      }
+      if($('cim')){
+        reloadDiagnostic(sejour_id, '1');
+      }
+    },
+  {{/if}}
+  
+  {{if $isImedsInstalled}}
+    "Imeds": function(sejour_id, praticien_id, date){
+      loadResultLabo(sejour_id);
+    },
+  {{/if}}
+  
+  "documents": function(sejour_id, praticien_id, date){
+    loadDocuments(sejour_id);
+  },
+  
+  {{if $isPrescriptionInstalled && $can_view_dossier_medical}}
+    "antecedents": function(sejour_id, praticien_id, date){
+      loadAntecedents(sejour_id);
+    },
+  {{/if}} 
+};
 
 function loadViewSejour(sejour_id, praticien_id, patient_id, date){
   document.form_prescription.sejour_id.value = sejour_id;
-
-  // Affichage de la prescription
-  {{if $isPrescriptionInstalled}}
-    if($('prescription_sejour') && $('prescription_sejour').visible()){
-	    Prescription.reloadPrescSejour('', sejour_id, null, null, null, null, null, null, null, false, '0');
-	  }
-  {{/if}}
   
-  loadSuiviClinique(sejour_id);
-  loadDocuments(sejour_id);
+  var loaders = $H(window.tabLoaders);
+  var activeTab = window.tab_sejour.activeContainer.id;
   
-  {{if $isImedsInstalled}}
-    if($('Imeds')){
-      loadResultLabo(sejour_id);
+  // Chargement du volet actif en premier
+  window.tabLoaders[activeTab](sejour_id, praticien_id, date);
+  
+  // Chargement des autres
+  loaders.each(function(pair){
+    if (pair.key != activeTab && $(pair.key)) {
+      pair.value(sejour_id, praticien_id, date);
     }
-  {{/if}}
-	
-  if($('listActesNGAP')){
-    loadActesNGAP(sejour_id);
-  }
-  if($('ccam')){
-    ActesCCAM.refreshList(sejour_id, praticien_id);
-  }
-  if($('cim')){
-    reloadDiagnostic(sejour_id, '1');
-  }
-  if($('dossier_traitement')){
-    if($('dossier_traitement').visible()) {
-      PlanSoins.loadTraitement(sejour_id, date,'','administration');
-    }
-  }
-  if($('constantes-medicales')){
-    constantesMedicalesDrawn = false;
-    refreshConstantesHack(sejour_id);
-  }
-  {{if $can_view_dossier_medical}}
-  if($('antecedents')){
-    loadAntecedents(sejour_id);    
-  }
-  {{/if}}
+  });
 }
 
 {{if $can_view_dossier_medical}}
@@ -140,18 +171,14 @@ function loadResultLabo(sejour_id) {
   url.requestUpdate('Imeds');
 }
 
+// Cette fonction est dupliquée
 function updateNbTrans(sejour_id) {
   var url = new Url("dPhospi", "ajax_count_transmissions");
   url.addParam("sejour_id", sejour_id);
-  url.requestJSON(function(elt)  {
+  url.requestJSON(function(count)  {
     var nb_trans = $("nb_trans");
-    if (!elt) {
-      nb_trans.up().addClassName("empty");
-    }
-    else {
-      nb_trans.up().removeClassName("empty")
-    }
-    nb_trans.update("("+elt+")");
+    nb_trans.up("a").setClassName("empty", !count);
+    nb_trans.update("("+count+")");
   });
 }
 
@@ -162,7 +189,7 @@ function loadSuivi(sejour_id, user_id, cible, show_obs, show_trans, show_const) 
   var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
   urlSuivi.addParam("sejour_id", sejour_id);
   urlSuivi.addParam("user_id", user_id);
-	urlSuivi.addParam("cible", cible);
+  urlSuivi.addParam("cible", cible);
   if (!Object.isUndefined(show_obs)) {
     urlSuivi.addParam("_show_obs", show_obs);
   }
@@ -195,16 +222,6 @@ function submitSuivi(oForm) {
   } });
 }
 
-var constantesMedicalesDrawn = false;
-refreshConstantesHack = function(sejour_id) {
-  (function(){
-    if (constantesMedicalesDrawn == false && $('constantes-medicales').visible() && sejour_id) {
-      refreshConstantesMedicales('CSejour-'+sejour_id);
-      constantesMedicalesDrawn = true;
-    }
-  }).delay(0.5);
-}
-
 function refreshConstantesMedicales(context_guid) {
   if(context_guid) {
     var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
@@ -232,8 +249,9 @@ var tab_sejour = null;
 Main.add(function () {
   Calendar.regField(getForm("changeDate").date, null, {noView: true});
 
-  /* Tab initialization */
-  tab_sejour = Control.Tabs.create('tab-sejour', true);
+  // Tab initialization
+  window.tab_sejour = Control.Tabs.create('tab-sejour', true);
+  
   // Activation d'un onglet
   {{if $_active_tab}}
     tab_sejour.setActiveTab('{{$_active_tab}}');
@@ -252,13 +270,12 @@ Main.add(function () {
   {{/if}}
   
   updatePatientsListHeight();
+  
+  Event.observe(window, "resize", updatePatientsListHeight);
 });
 
 function markAsSelected(element) {
-  // Suppression des selected
-  $("left-column").select('.selected').each(function (e) {e.removeClassName('selected')});
-  // Ajout du selected sur le tr
-  $(element).up(1).addClassName('selected');
+  element.up("tr").addUniqueClassName("selected");
 }
 
 viewBilanService = function(service_id, date){
@@ -270,21 +287,22 @@ viewBilanService = function(service_id, date){
 
 printDossierComplet = function(){
   var url = new Url("soins", "print_dossier_soins");
-	url.addParam("sejour_id", $V(document.form_prescription.sejour_id));
-	url.popup(850, 600, "Dossier complet");
+  url.addParam("sejour_id", $V(document.form_prescription.sejour_id));
+  url.popup(850, 600, "Dossier complet");
 }
 
 </script>
 
+<form name="form_prescription" action="" method="get">
+  <input type="hidden" name="sejour_id" value="{{$object->_id}}" />
+</form>
+      
 <table class="main">
   <tr>
-    <td rowspan="3">
-      <form name="form_prescription" action="" method="get">
-        <input type="hidden" name="sejour_id" value="{{$object->_id}}" />
-      </form>
+    <td>
       <table class="form" id="left-column" style="width:240px;">
         <tr>
-          <th class="title" colspan="2">
+          <th class="title">
             {{$date|date_format:$conf.longdate}}
             <form action="?" name="changeDate" method="get">
               <input type="hidden" name="m" value="{{$m}}" />
@@ -293,83 +311,89 @@ printDossierComplet = function(){
             </form>
           </th>
         </tr>
+        
         <tr>
-          <th></th>
           <td>
-            {{include file="../../dPhospi/templates/inc_mode_hospi.tpl"}}
+            <form name="selService" action="?m={{$m}}" method="get">
+              <input type="hidden" name="m" value="{{$m}}" />
+              <input type="hidden" name="sejour_id" value="" />
+             
+              <table class="main form">
+                <tr>
+                  <th></th>
+                  <td>
+                    <select name="mode" onchange="this.form.submit()" style="width:135px">
+                      <option value="0" {{if $mode == 0}}selected="selected"{{/if}}>{{tr}}Instant view{{/tr}}</option>
+                      <option value="1" {{if $mode == 1}}selected="selected"{{/if}}>{{tr}}Day view{{/tr}}</option>
+                    </select>
+                  </td>
+                </tr>
+                
+                <tr>
+                  <th><label for="service_id">Service</label></th>
+                  <td>
+                    <select name="service_id" onchange="this.form.submit()" style="max-width: 135px;">
+                      <option value="">&mdash; Service</option>
+                      {{foreach from=$services item=curr_service}}
+                      <option value="{{$curr_service->_id}}" {{if $curr_service->_id == $service_id}} selected="selected" {{/if}}>{{$curr_service->nom}}</option>
+                      {{/foreach}}
+                      <option value="NP" {{if $service_id == "NP"}} selected="selected" {{/if}}>Non placés</option>
+                    </select>
+                    {{if $service_id && $isPrescriptionInstalled && $service_id != "NP"}}
+                      <button type="button" class="search" onclick="viewBilanService('{{$service_id}}','{{$date}}');" style="margin:-1px;">Bilan</button>
+                    {{/if}}
+                  </td>
+                </tr>
+                
+                <tr>
+                  <th><label for="praticien_id">Praticien</label></th>
+                  <td>
+                    <select name="praticien_id" onchange="this.form.submit();" style="width: 135px;">
+                      <option value="">&mdash; Choix du praticien</option>
+                      {{foreach from=$praticiens item=_prat}}
+                        <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}" {{if $_prat->_id == $praticien_id}}selected="selected"{{/if}}>
+                          {{$_prat->_view}}
+                        </option>
+                      {{/foreach}}
+                    </select>
+                  </td>
+                </tr>
+                
+                <tr>
+                  <th>{{mb_title class=CSejour field="type"}}</th>
+                  <td>
+                    {{assign var=type_admission value=$object->_specs.type}} 
+                    <select name="type" onchange="this.form.submit();" style="width: 135px;">
+                      <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+                      {{foreach from=$type_admission->_locales key=key item=_type}} 
+                      {{if $key != "urg" && $key != "exte"}}
+                      <option value="{{$key}}" {{if $key == $object->type}}selected="selected"{{/if}}>{{$_type}}</option>
+                      {{/if}}
+                      {{/foreach}}
+                    </select>
+                  </td>
+                </tr>
+              </table>
+            </form>
           </td>
         </tr>
-        {{if 1 || !$praticien || $anesthesiste}}
-        <tr>
-          <th>
-            <form name="selService" action="?m={{$m}}" method="get">
-              <label for="service_id">Service</label>
-              <input type="hidden" name="m" value="{{$m}}" />
-           </th>
-					 <td>
-              <select name="service_id" onchange="this.form.submit()" style="max-width: 135px;">
-                <option value="">&mdash; Service</option>
-                {{foreach from=$services item=curr_service}}
-                <option value="{{$curr_service->_id}}" {{if $curr_service->_id == $service_id}} selected="selected" {{/if}}>{{$curr_service->nom}}</option>
-                {{/foreach}}
-                <option value="NP" {{if $service_id == "NP"}} selected="selected" {{/if}}>Non placés</option>
-              </select>
-              {{if $service_id && $isPrescriptionInstalled && $service_id != "NP"}}
-                <button type="button" class="search" onclick="viewBilanService('{{$service_id}}','{{$date}}');" style="margin:-1px;">Bilan</button>
-        			{{/if}}
-            </td>
-				 </tr>
-				 <tr>
-           <th>
-             <label for="praticien_id">Praticien</label>
-             <input type="hidden" name="m" value="{{$m}}" />
-						 <input type="hidden" name="sejour_id" value="" />
-					</th>
-						<td>
-              <select name="praticien_id" onchange="this.form.submit();" style="width: 135px;">
-                <option value="">&mdash; Choix du praticien</option>
-                {{foreach from=$praticiens item=_prat}}
-                  <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}" {{if $_prat->_id == $praticien_id}}selected="selected"{{/if}}>
-                    {{$_prat->_view}}
-                  </option>
-                {{/foreach}}
-              </select>
-							</td>
-					 </tr>
-					 <tr>
-						 <th>
-						   {{mb_title class=CSejour field="type"}}
-						 </th>
-						 <td>
-						   {{assign var=type_admission value=$object->_specs.type}} 
-               <select name="type" onchange="this.form.submit();" style="width: 135px;">
-                 <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-                 {{foreach from=$type_admission->_locales key=key item=_type}} 
-                 {{if $key != "urg" && $key != "exte"}}
-                 <option value="{{$key}}" {{if $key == $object->type}}selected="selected"{{/if}}>{{$_type}}</option>
-                 {{/if}}
-                 {{/foreach}}
-               </select>
-						 </td>
-				     </form>
-          </tr>
-        {{/if}}
+        
         {{if $praticien && ($current_date == $date)}}
           <tr>
-	          <td class="button" colspan="2">
-	            <script type="text/javascript">
-	            function createNotifications(){
-								var sejours = {{$visites.non_effectuee|@json}};
-							  var url = new Url("soins", "httpreq_notifications_visite");
-							  url.addParam("sejours[]", sejours);
-							  url.requestUpdate("systemMsg", { onComplete: function() { 
-							    $("tooltip-visite-{{$app->user_id}}-{{$date}}").update(DOM.div( {className: 'small-info'}, "Visites validées"));
-							  } } );
-							}
-	            </script>
-	            
+            <td class="button">
+              <script type="text/javascript">
+              function createNotifications(){
+                var sejours = {{$visites.non_effectuee|@json}};
+                var url = new Url("soins", "httpreq_notifications_visite");
+                url.addParam("sejours[]", sejours);
+                url.requestUpdate("systemMsg", { onComplete: function() { 
+                  $("tooltip-visite-{{$app->user_id}}-{{$date}}").update(DOM.div( {className: 'small-info'}, "Visites validées"));
+                } } );
+              }
+              </script>
+              
             <a href="#Create-Notifications" class="button search" onmouseover='ObjectTooltip.createDOM(this, "tooltip-visite-{{$app->user_id}}-{{$date}}")'>
-            	Mes visites
+              Mes visites
             </a>
             
             <table class="form" id="tooltip-visite-{{$app->user_id}}-{{$date}}" style="display: none;">
@@ -387,27 +411,27 @@ printDossierComplet = function(){
                 <td>{{$visites.non_effectuee|@count}}</td>
               </tr>
               
-							<tr>
-							  <td colspan="2" class="button">
-									<button type="button tick" class="tick" onclick="createNotifications();" />
-									  Valider les visites
-									</button>
-							  </td>
-							</tr>
+              <tr>
+                <td colspan="2" class="button">
+                  <button type="button tick" class="tick" onclick="createNotifications();">
+                    Valider les visites
+                  </button>
+                </td>
+              </tr>
               {{/if}} 
               
-							{{if !$visites.effectuee|@count && !$visites.non_effectuee|@count}}
-							<tr>
-							  <td colspan="2" class="empty">Aucune visite dans la sélection courante</td>
-							</tr>
-							{{/if}}
-							
+              {{if !$visites.effectuee|@count && !$visites.non_effectuee|@count}}
+              <tr>
+                <td colspan="2" class="empty">Aucune visite dans la sélection courante</td>
+              </tr>
+              {{/if}}
+              
             </table>
           </td>
         </tr>
         {{/if}}
         <tr>
-          <td style="padding: 0;" colspan="2">
+          <td style="padding: 0;">
             <div style="{{if $smarty.session.browser.name == 'msie' && $smarty.session.browser.majorver < 8}}overflow:visible; overflow-x:hidden; overflow-y:auto; padding-right:15px;{{else}}overflow: auto;{{/if}} height: 500px;" class="scroller">
             <table class="tbl" id="list_sejours">
             {{foreach from=$sejoursParService key=_service_id item=service}}
@@ -430,7 +454,7 @@ printDossierComplet = function(){
               </tr> 
               {{foreach from=$curr_lit->_ref_affectations item=curr_affectation}}
               {{if $curr_affectation->_ref_sejour->_id != ""}}
-              <tr {{if $object->_id == $curr_affectation->_ref_sejour->_id}}class="selected '{{$curr_affectation->_ref_sejour->type }}'" {{else}} class='{{$curr_affectation->_ref_sejour->type }}' {{/if}}>
+              <tr class="{{if $object->_id == $curr_affectation->_ref_sejour->_id}}selected{{/if}} {{$curr_affectation->_ref_sejour->type}}">
                 <td style="padding: 0;">
                   <button class="lookup notext" style="margin:0;" onclick="popEtatSejour({{$curr_affectation->_ref_sejour->_id}});">
                     {{tr}}Lookup{{/tr}}
@@ -452,15 +476,15 @@ printDossierComplet = function(){
                 </td>
 
                 <td style="padding: 1px;" onclick="markAsSelected(this); addSejourIdToSession('{{$sejour->_id}}'); loadViewSejour('{{$sejour->_id}}', {{$sejour->praticien_id}}, {{$sejour->patient_id}}, '{{$date}}'); tab_sejour.setActiveTab('Imeds')">
-								  {{if $isImedsInstalled}}
+                  {{if $isImedsInstalled}}
                     {{mb_include module=dPImeds template=inc_sejour_labo link="#"}}
-					        {{/if}}
+                  {{/if}}
                 </td>
                 
                 <td class="action" style="padding: 1px;">
                   <div class="mediuser" style="border-color:#{{$sejour->_ref_praticien->_ref_function->color}}">
-	                  <label title="{{$sejour->_ref_praticien->_view}}">
-	                  {{$sejour->_ref_praticien->_shortview}}          
+                    <label title="{{$sejour->_ref_praticien->_view}}">
+                    {{$sejour->_ref_praticien->_shortview}}          
                     </label>
                   </div>
                 </td>
@@ -494,28 +518,28 @@ printDossierComplet = function(){
 
             <!-- Cas de l'affichage par praticien -->
             {{if $praticien_id}}
-            {{if array_key_exists('NP', $sejoursParService)}}
-            <tr>
-             <th class="title" colspan="6">Non placés</th>
-            </tr>
-              {{foreach from=$sejoursParService.NP item=_sejour_NP}}
-                {{include file="../../dPhospi/templates/inc_vw_sejour_np.tpl" curr_sejour=$_sejour_NP}}
-              {{/foreach}}
+              {{if array_key_exists('NP', $sejoursParService)}}
+                <tr>
+                  <th class="title" colspan="6">Non placés</th>
+                </tr>
+                {{foreach from=$sejoursParService.NP item=_sejour_NP}}
+                  {{include file="../../dPhospi/templates/inc_vw_sejour_np.tpl" curr_sejour=$_sejour_NP}}
+                {{/foreach}}
               {{/if}}
             {{/if}}
             
             <!-- Cas de l'affichage par service -->
             {{if $service_id}}
-	            {{foreach from=$groupSejourNonAffectes key=group_name item=sejourNonAffectes}}
-	              <tr>
-	                <th class="title" colspan="6">
-	                  {{tr}}CSejour.groupe.{{$group_name}}{{/tr}}
-	                </th>
-	              </tr>
-	              {{foreach from=$sejourNonAffectes item=curr_sejour}}
-	                {{include file="../../dPhospi/templates/inc_vw_sejour_np.tpl"}}
-	              {{/foreach}}
-	            {{/foreach}}
+              {{foreach from=$groupSejourNonAffectes key=group_name item=sejourNonAffectes}}
+                <tr>
+                  <th class="title" colspan="6">
+                    {{tr}}CSejour.groupe.{{$group_name}}{{/tr}}
+                  </th>
+                </tr>
+                {{foreach from=$sejourNonAffectes item=curr_sejour}}
+                  {{include file="../../dPhospi/templates/inc_vw_sejour_np.tpl"}}
+                {{/foreach}}
+              {{/foreach}}
             {{/if}}
             </table>
             </div>
@@ -530,7 +554,7 @@ printDossierComplet = function(){
           <button type="button" class="hslip notext" onclick="$('left-column').toggle();" title="Afficher/cacher la colonne de gauche"></button>
         </li>
         <li><a href="#suivi_clinique" onmousedown="loadSuiviClinique(document.form_prescription.sejour_id.value)">{{tr}}CSejour.suivi_clinique{{/tr}}</a></li>
-        <li onmousedown="refreshConstantesHack(document.form_prescription.sejour_id.value)"><a href="#constantes-medicales">{{tr}}CPatient.surveillance{{/tr}}</a></li>
+        <li onmousedown="refreshConstantesMedicales('CSejour-'+document.form_prescription.sejour_id.value)"><a href="#constantes-medicales">{{tr}}CPatient.surveillance{{/tr}}</a></li>
         {{if $isPrescriptionInstalled}}
         <li onmousedown="PlanSoins.loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')"><a href="#dossier_traitement">{{tr}}CSejour.suivi_soins{{/tr}}</a></li>
         <li onmousedown="$('prescription_sejour').update(''); Prescription.reloadPrescSejour('', document.form_prescription.sejour_id.value, null, null, null, null, null, '', null, false);">
@@ -547,11 +571,11 @@ printDossierComplet = function(){
         {{if $isPrescriptionInstalled && $can_view_dossier_medical}}
         <li onmousedown="DossierMedical.reloadDossierSejour();"><a href="#antecedents">Antécédents</a></li>
         {{/if}} 
-				<li style="float: right">
+        <li style="float: right">
           <button type="button" class="button print" onclick="printDossierComplet();">Dossier soins</button>
         </li>
       </ul>
-			
+      
       <hr class="control_tabs" />
       
       <!-- Tabs -->

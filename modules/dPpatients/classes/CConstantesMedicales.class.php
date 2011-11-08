@@ -17,26 +17,6 @@ class CConstantesMedicales extends CMbObject {
   var $context_class         = null;
   var $context_id            = null;
   var $comment               = null;
-  
-  // The other fields are built in the contructor
-  /*
-  var $poids                 = null;
-  var $taille                = null;
-  var $ta                    = null;
-  var $ta_droit              = null;
-  var $pouls                 = null;
-  var $spo2                  = null;
-  var $temperature           = null;
-  var $score_sensibilite     = null;
-  var $score_motricite       = null;
-  var $EVA                   = null;
-  var $score_sedation        = null;
-  var $frequence_respiratoire = null;
-  var $glycemie              = null;
-  var $redon                 = null;
-  var $diurese               = null;
-  var $injection             = null;
-  */
 
   // Object References
   //    Single
@@ -44,15 +24,6 @@ class CConstantesMedicales extends CMbObject {
   var $_ref_patient          = null;
   
   // Forms fields
-  /*
-  var $_ta_systole           = null;
-  var $_ta_diastole          = null;
-  var $_ta_droit_systole     = null;
-  var $_ta_droit_diastole    = null;
-  var $_inj                  = null;
-  var $_inj_essai            = null;
-  var $_imc                  = null;
-  */
   var $_imc_valeur           = null;
   var $_vst                  = null;
   var $_new_constantes_medicales = null;
@@ -65,22 +36,26 @@ class CConstantesMedicales extends CMbObject {
   
   static $list_constantes = array (
     "poids"             => array(
+      "type" => "physio",
       "unit" => "kg", 
       "callback" => "calculImcVst", 
       "min" => "@-2", "max" => "@+2",
     ), 
     "taille"            => array(
+      "type" => "physio",
       "unit" => "cm", 
       "callback" => "calculImcVst", 
       "min" => "@-5", "max" => "@+5",
     ),
     "pouls"             => array(
+      "type" => "physio",
       "unit" => "puls./min", 
       "min" => 50, "max" => 120,
       "standard" => 60,
       "colors" => array("black")
     ), 
     "ta"                => array(
+      "type" => "physio",
       "unit" => "cmHg", 
       "formfields" => array("_ta_systole", "_ta_diastole"), 
       "min" => -4, "max" => 25,
@@ -90,6 +65,7 @@ class CConstantesMedicales extends CMbObject {
       "candles" => true,
     ),
     "ta_gauche"         => array(
+      "type" => "physio",
       "unit" => "cmHg", 
       "formfields" => array("_ta_gauche_systole", "_ta_gauche_diastole"), 
       "min" => -4, "max" => 25,
@@ -99,6 +75,7 @@ class CConstantesMedicales extends CMbObject {
       "candles" => true,
     ),
     "ta_droit"          => array(
+      "type" => "physio",
       "unit" => "cmHg", 
       "formfields" => array("_ta_droit_systole", "_ta_droit_diastole"), 
       "min" => -4, "max" => 25,
@@ -108,104 +85,225 @@ class CConstantesMedicales extends CMbObject {
       "candles" => true,
     ),
     "_vst"              => array(
+      "type" => "physio",
       "unit" => "ml",
       "min" => 5000,
       "max" => 7000,
     ),
     "_imc"              => array(
+      "type" => "physio",
       "unit" => "",
       "min" => 12, "max" => 40,
       "plot" => true,
     ),
     "temperature"       => array(
+      "type" => "physio",
       "unit" => "°C", 
       "min" => 36, "max" => 40,
       "standard" => 37.5,
       "colors" => array("orange")
     ), 
     "spo2"              => array(
+      "type" => "physio",
       "unit" => "%", 
       "min" => 70, "max" => 100
     ), 
     "score_sensibilite" => array(
+      "type" => "physio",
       "unit" => "", 
       "min" => 0, "max" => 5
     ),
     "score_motricite"   => array(
+      "type" => "physio",
       "unit" => "", 
       "min" => 0, "max" => 5
     ),
     "score_sedation"    => array(
+      "type" => "physio",
       "unit" => "", 
       "min" => 70, "max" => 100
     ),
     "frequence_respiratoire"=> array(
+      "type" => "physio",
       "unit" => "", 
       "min" => 0, "max" => 60
     ),
     "EVA"               => array(
+      "type" => "physio",
       "unit" => "", 
       "min" => 0, "max" => 10
     ),
     "glycemie"          => array(
+      "type" => "physio",
       "unit" => "g/l", 
       "min" => 0, "max" => 4
     ),
-    "redon"             => array(
-      "unit" => "ml", 
-      "min" => 0, "max" => 500
-    ),
-    "redon_2"           => array(
-      "unit" => "ml", 
-      "min" => 0, "max" => 500
-    ),
-    "redon_3"           => array(
-      "unit" => "ml", 
-      "min" => 0, "max" => 500
-    ),
-    "diurese"           => array(
-      "unit" => "ml", 
-      "min" => 0, "max" => 2000
-    ),
-    "_diurese_24h"      => array(
-      "unit" => "ml",
-      "min" => 0, "max" => 2000,
-      "cumul" => ""
-    ),
-    /*"diurese_miction"   => array(
-      "unit" => "ml",
-      "min" => 0, "max" => 2000
-    ),*/
-    "injection"         => array(
-      "unit" => "", 
-      "formfields" => array("_inj", "_inj_essai"), 
-      "min" => 0, "max" => 10
-    ),
     "PVC"               => array(
+      "type" => "physio",
       "unit" => "cm H2O",
       "min" => 4, "max" => 16
     ),
     "perimetre_abdo"    => array(
+      "type" => "physio",
       "unit" => "cm",
       "min" => 20, "max" => 200
     ),
     "perimetre_cuisse" => array(
+      "type" => "physio",
       "unit" => "cm",
       "min" => 20, "max" => 100
     ),
     "perimetre_cou"    => array(
+      "type" => "physio",
       "unit" => "cm",
       "min" => 20, "max" => 50
     ),
     "perimetre_thoracique"=>array(
+      "type" => "physio",
       "unit" => "cm",
       "min" => 20, "max" => 150
     ),
+    "injection"         => array(
+      "type" => "physio",
+      "unit" => "", 
+      "formfields" => array("_inj", "_inj_essai"), 
+      "min" => 0, "max" => 10
+    ),
+		
+		
+		/// DRAINS ///
+    "sng"           => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 2000,
+      "cumul_reset_config" => "sng_cumul_reset_hour",
+    ),
+    "redon"             => array(
+		  "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 500,
+      "cumul_reset_config" => "redon_cumul_reset_hour",
+    ),
+    "redon_2"           => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 500,
+      "cumul_reset_config" => "redon_cumul_reset_hour",
+    ),
+    "redon_3"           => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 500,
+      "cumul_reset_config" => "redon_cumul_reset_hour",
+    ),
+    "redon_4"           => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 500,
+      "cumul_reset_config" => "redon_cumul_reset_hour",
+    ),
+    "diurese"           => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 2000,
+      "cumul_reset_config" => "diuere_24_reset_hour",
+    ),
+    "lame_1"           => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 2000,
+      "cumul_reset_config" => "lame_cumul_reset_hour",
+    ),
+    "lame_2"           => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 2000,
+      "cumul_reset_config" => "lame_cumul_reset_hour",
+    ),
+    "lame_3"           => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 2000,
+      "cumul_reset_config" => "lame_cumul_reset_hour",
+    ),
+    "drain_1"           => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 2000,
+      "cumul_reset_config" => "drain_cumul_reset_hour",
+    ),
+    "drain_2"           => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 2000,
+      "cumul_reset_config" => "drain_cumul_reset_hour",
+    ),
+    "drain_3"           => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 2000,
+      "cumul_reset_config" => "drain_cumul_reset_hour",
+    ),
+    "drain_thoracique_1" => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 2000,
+      "cumul_reset_config" => "drain_thoracique_cumul_reset_hour",
+    ),
+    "drain_thoracique_2" => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 2000,
+      "cumul_reset_config" => "drain_thoracique_cumul_reset_hour",
+    ),
+    "drain_pleural_1"   => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 2000,
+      "cumul_reset_config" => "drain_pleural_cumul_reset_hour",
+    ),
+    "drain_pleural_2"   => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 2000,
+      "cumul_reset_config" => "drain_pleural_cumul_reset_hour",
+    ),
+    "drain_mediastinal" => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 2000,
+      "cumul_reset_config" => "drain_mediastinal_cumul_reset_hour",
+    ),
+    "sonde_ureterale_1" => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 2000,
+      "cumul_reset_config" => "sonde_ureterale_cumul_reset_hour",
+    ),
+    "sonde_ureterale_2" => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 2000,
+      "cumul_reset_config" => "sonde_ureterale_cumul_reset_hour",
+    ),
+    "sonde_vesicale"    => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 2000,
+      "cumul_reset_config" => "sonde_vesicale_cumul_reset_hour",
+    ),
   );
+	
+	static $list_constantes_type = array(
+    "physio" => array(),
+    "drain" => array(),
+	);
   
   function __construct() {
     foreach(self::$list_constantes as $_constant => $_params) {
       $this->$_constant = null;
+      
+      // Champs "composites"
       if (isset($_params["formfields"])) {
         foreach ($_params["formfields"] as $_formfield) {
           $this->$_formfield = null;
@@ -271,9 +369,19 @@ class CConstantesMedicales extends CMbObject {
     
     $specs['poids']                  = 'float pos';
     $specs['taille']                 = 'float pos';
+		
     $specs['ta']                     = 'str maxLength|10';
+    $specs['_ta_systole']            = 'num pos max|50';
+    $specs['_ta_diastole']           = 'num pos max|50';
+		
     $specs['ta_gauche']              = 'str maxLength|10';
+    $specs['_ta_gauche_systole']     = 'num pos max|50';
+    $specs['_ta_gauche_diastole']    = 'num pos max|50';
+		
     $specs['ta_droit']               = 'str maxLength|10';
+    $specs['_ta_droit_systole']      = 'num pos max|50';
+    $specs['_ta_droit_diastole']     = 'num pos max|50';
+		
     $specs['pouls']                  = 'num pos';
     $specs['spo2']                   = 'float min|0 max|100';
     $specs['temperature']            = 'float min|20 max|50'; // Au cas ou il y aurait des malades très malades
@@ -283,28 +391,39 @@ class CConstantesMedicales extends CMbObject {
     $specs['score_sedation']         = 'float';
     $specs['frequence_respiratoire'] = 'float pos';
     $specs['glycemie']               = 'float pos max|10';
+    $specs['PVC']                    = 'float min|0';
+    $specs['perimetre_abdo']         = 'float min|0';
+    $specs['perimetre_cuisse']       = 'float min|0';
+    $specs['perimetre_cou']          = 'float min|0';
+    $specs['perimetre_thoracique']   = 'float min|0';
+    $specs['_imc']                   = 'float pos';
+    $specs['_vst']                   = 'float pos';
+		
+    $specs['injection']              = 'str maxLength|10';
+    $specs['_inj']                   = 'num pos';
+    $specs['_inj_essai']             = 'num pos moreEquals|_inj';
+		
+		
     $specs['redon']                  = 'float pos min|0 max|1000';
     $specs['redon_2']                = 'float pos min|0 max|1000';
     $specs['redon_3']                = 'float pos min|0 max|1000';
+    $specs['redon_4']                = 'float pos min|0 max|1000';
     $specs['diurese']                = 'float min|0';
-    $specs['_diurese_24h']           = 'float min|0';
-    /*$specs['diurese_miction']        = 'float min|0';*/
-    $specs['injection']              = 'str maxLength|10';
-    $specs["PVC"]                    = "float min|0";
-    $specs["perimetre_abdo"]         = "float min|0";
-    $specs["perimetre_cuisse"]       = "float min|0";
-    $specs["perimetre_cou"]          = "float min|0";
-    $specs["perimetre_thoracique"]   = "float min|0";
-    $specs['_imc']                   = 'float pos';
-    $specs['_vst']                   = 'float pos';
-    $specs['_ta_systole']            = 'num pos max|50';
-    $specs['_ta_diastole']           = 'num pos max|50';
-    $specs['_ta_gauche_systole']     = 'num pos max|50';
-    $specs['_ta_gauche_diastole']    = 'num pos max|50';
-    $specs['_ta_droit_systole']      = 'num pos max|50';
-    $specs['_ta_droit_diastole']     = 'num pos max|50';
-    $specs['_inj']                   = 'num pos';
-    $specs['_inj_essai']             = 'num pos moreEquals|_inj';
+    $specs['sng']                    = 'float pos min|0 max|1000';
+    $specs['lame_1']                 = 'float pos min|0 max|1000';
+    $specs['lame_2']                 = 'float pos min|0 max|1000';
+    $specs['lame_3']                 = 'float pos min|0 max|1000';
+    $specs['drain_1']                = 'float pos min|0 max|1000';
+    $specs['drain_2']                = 'float pos min|0 max|1000';
+    $specs['drain_3']                = 'float pos min|0 max|1000';
+    $specs['drain_thoracique_1']     = 'float pos min|0 max|1000';
+    $specs['drain_thoracique_2']     = 'float pos min|0 max|1000';
+    $specs['drain_pleural_1']        = 'float pos min|0 max|1000';
+    $specs['drain_pleural_2']        = 'float pos min|0 max|1000';
+    $specs['drain_mediastinal']      = 'float pos min|0 max|1000';
+    $specs['sonde_ureterale_1']      = 'float pos min|0 max|1000';
+    $specs['sonde_ureterale_2']      = 'float pos min|0 max|1000';
+    $specs['sonde_vesicale']         = 'float pos min|0 max|1000';
     
     return $specs;
   }
@@ -521,31 +640,31 @@ class CConstantesMedicales extends CMbObject {
     if(!$patient_id) {
       return array($constante, array());
     }
-		
+    
     $constante->patient_id = $patient_id;
     $constante->datetime = mbDateTime();
     $constante->loadRefPatient();
     
-		$where = array(
-		  "patient_id" => "= '$patient_id'"
-		);
-		
+    $where = array(
+      "patient_id" => "= '$patient_id'"
+    );
+    
     $list_datetimes = array();
-		foreach (CConstantesMedicales::$list_constantes as $type => $params) {
-			$list_datetimes[$type] = null;
-			
-			if ($type[0] == "_") continue;
-			
-			$_where = $where;
-			$_where[$type] = "IS NOT NULL";
-			$_list = $constante->loadList($_where, "datetime DESC", 1);
-			
-			if (count($_list)) {
-				$_const = reset($_list);
+    foreach (CConstantesMedicales::$list_constantes as $type => $params) {
+      $list_datetimes[$type] = null;
+      
+      if ($type[0] == "_") continue;
+      
+      $_where = $where;
+      $_where[$type] = "IS NOT NULL";
+      $_list = $constante->loadList($_where, "datetime DESC", 1);
+      
+      if (count($_list)) {
+        $_const = reset($_list);
         $constante->$type = $_const->$type;
         $list_datetimes[$type] = $_const->datetime;
-			}
-		}
+      }
+    }
     
     $constante->updateFormFields();
     
@@ -557,37 +676,48 @@ class CConstantesMedicales extends CMbObject {
     $selection = array_keys(CConstantesMedicales::$list_constantes);
     $cumuls_day = array();
     
-    $diuere_24_reset_hour = CAppUI::conf("dPpatients CConstantesMedicales diuere_24_reset_hour");
-    
     if (!$full) {
-      $conf_constantes = explode("|", CAppUI::conf("dPpatients CConstantesMedicales important_constantes"));
+      $conf_constantes = explode("|", CConstantesMedicales::getConfig("important_constantes"));
       $selection = $conf_constantes;
+      
+      foreach ($list as $_constante_medicale) {
+        foreach (CConstantesMedicales::$list_constantes as $_name => $_params) {
+          if ($_constante_medicale->$_name != '' && isset($_params["cumul_reset_config"])) {
+            $selection[] = "_{$_name}_cumul";
+          }
+        }
+      }
+      
+      $selection = array_unique($selection);
     }
     
     $names = $selection;
     
     foreach ($list as $_constante_medicale) {
-      if (!isset($grid[$_constante_medicale->datetime])) {
+      if (!isset($grid["$_constante_medicale->datetime $_constante_medicale->_id"])) {
         $grid["$_constante_medicale->datetime $_constante_medicale->_id"] = array(
           "comment" => $_constante_medicale->comment, 
           "values"  => array(),
         );
       }
       
-      $day_24h = mbTransformTime("-$diuere_24_reset_hour hours", $_constante_medicale->datetime, '%y-%m-%d');
-      
       foreach (CConstantesMedicales::$list_constantes as $_name => $_params) {
         if (in_array($_name, $selection) || $_constante_medicale->$_name != '') {
           $value = null;
           
-          if ($_name == "_diurese_24h") {
+          // cumul
+          if (isset($_params["cumul_for"])) {
+            $cumul_for  = $_params["cumul_for"];
+            $reset_hour = self::getResetHour($_name);
+            $day_24h = mbTransformTime("-$reset_hour hours", $_constante_medicale->datetime, '%y-%m-%d');
+            
             $span = ($_constante_medicale->comment ? 1 : 0);
             
             if (!isset($cumuls_day[$_name][$day_24h])) {
               $cumuls_day[$_name][$day_24h] = array(
                 "id"    => $_constante_medicale->_id,
                 "datetime" => $_constante_medicale->datetime,
-                "value" => 0,
+                "value" => null,
                 "span"  => 0, 
                 "span_com"  => $span, // when comments add lines
                 "pair"  => (@count($cumuls_day[$_name]) % 2 ? "odd" : "even"),
@@ -595,12 +725,17 @@ class CConstantesMedicales extends CMbObject {
               );
             }
             
-            $cumuls_day[$_name][$day_24h]["value"] += $_constante_medicale->diurese;
+            if ($_constante_medicale->$cumul_for !== null) {
+              $cumuls_day[$_name][$day_24h]["value"] += $_constante_medicale->$cumul_for;
+            }
+            
             $cumuls_day[$_name][$day_24h]["span"]++;
             $cumuls_day[$_name][$day_24h]["span_com"] += ($span + 1);
             
             $value = "__empty__";
           }
+          
+          // valeur normale
           else {
             $spec = self::$list_constantes[$_name];
             $value = $_constante_medicale->$_name;
@@ -631,10 +766,24 @@ class CConstantesMedicales extends CMbObject {
       }
     }
     
+    $names = self::sortConstNames($names);
+    
     return array(
       $names, "names" => $names, 
       $grid,  "grid"  => $grid,
     );
+  }
+  
+  static function sortConstNames($names) {
+    $new_names = array();
+    
+    foreach(self::$list_constantes as $key => $params) {
+      if (in_array($key, $names)) {
+        $new_names[] = $key;
+      }
+    }
+    
+    return $new_names;
   }
   
   static function getRelated($selection, CPatient $patient, CMbObject $context = null, $date_min = null, $date_max = null, $limit = null) {
@@ -665,5 +814,43 @@ class CConstantesMedicales extends CMbObject {
     $constantes = new self;
     return array_reverse($constantes->loadList($where, "datetime DESC", $limit), true);
   }
+  
+  static function initParams(){
+    // make a copy of the array as it will be modified
+    $list_constantes = CConstantesMedicales::$list_constantes;
+    
+    foreach($list_constantes as $_constant => &$_params) {
+    	self::$list_constantes_type[$_params["type"]][$_constant] = &$_params;
+			
+      // Champs de cumuls
+      if (isset($_params["cumul_reset_config"])) {
+        CMbArray::insertAfterKey(CConstantesMedicales::$list_constantes, $_constant, "_{$_constant}_cumul", array(
+          "cumul_for"  => $_constant,
+          "unit"       => $_params["unit"],
+        ));
+      }
+    }
+  }
+	
+	static function getConfig($name, $group_id = null) {
+    $service_id = isset($_SESSION["soins"]["service_id"]) && $_SESSION["soins"]["service_id"] ?
+    $_SESSION["soins"]["service_id"] : "none";
+		$configs = CConfigConstantesMedicales::getAllFor($service_id, $group_id);
+		return $configs[$name];
+	}
+	
+	static function getResetHour($name, $group_id = null) {
+		$list = CConstantesMedicales::$list_constantes;
+		
+		if (isset($list[$name]["cumul_reset_config"])) {
+		  $confname = $list[$name]["cumul_reset_config"];
+		}
+		else {
+			$confname = $list[$list[$name]["cumul_for"]]["cumul_reset_config"];
+		}
+		
+		return self::getConfig($confname, $group_id);
+	}
 }
-?>
+
+CConstantesMedicales::initParams();
