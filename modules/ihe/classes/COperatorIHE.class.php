@@ -87,7 +87,7 @@ class COperatorIHE extends CEAIOperator {
       }
     } catch(Exception $e) {
       $exchange_ihe->populateExchange($data_format, $evt);
-      
+
       $ack = new CHL7v2Acknowledgment($evt);
       $ack->message_control_id = isset($data['identifiantMessage']) ? $data['identifiantMessage'] : "000000000";
       $ack->_ref_exchange_ihe = $exchange_ihe;
@@ -111,12 +111,12 @@ class COperatorIHE extends CEAIOperator {
       // Création d'un nouveau patient - Mise à jour d'information du patient
       case "CHL7v2EventADTA28" : 
       case "CHL7v2EventADTA31" :
-        $exchange_ihe->id_permanent = array_key_exists("PI", $data['patientIdentifiers']) ? $data['patientIdentifiers']['PI'] : null;
+        $exchange_ihe->id_permanent = array_key_exists("PI", $data['personIdentifiers']) ? $data['personIdentifiers']['PI'] : null;
         $msgAck                     = $dom_evt->handle($ack, $newPatient, $data);
         break;
       // Fusion de deux patients
       case "CHL7v2EventADTA40" : 
-        $exchange_ihe->id_permanent = array_key_exists("PI", $data['patientIdentifiers']) ? $data['patientIdentifiers']['PI'] : null;
+        $exchange_ihe->id_permanent = array_key_exists("PI", $data['personIdentifiers']) ? $data['personIdentifiers']['PI'] : null;
         $msgAck                     = $dom_evt->handle($ack, $newPatient, $data);
         break;
       // Aucun des événements - retour d'erreur

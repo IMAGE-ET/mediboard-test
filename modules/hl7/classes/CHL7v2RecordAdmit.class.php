@@ -20,9 +20,17 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   function getContentNodes() {
     $data  = parent::getContentNodes();
     
-    $xpath = new CHL7v2MessageXPath($this);
+    $this->queryNodes("NK1", null, $data);
     
+    $this->queryNodes("ROL", null, $data);    
     
+    $this->queryNodes("PV1", null, $data); 
+    
+    $data["admitIdentifiers"] = $this->getAdmitIdentifiers();
+    
+    $this->queryNodes("PV2", null, $data); 
+    
+    $this->queryNodes("ZBE", null, $data);
     
     return $data;
   }
@@ -31,6 +39,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Traitement du message des erreurs
     $comment = $warning = "";
     
+    $exchange_ihe = $this->_ref_exchange_ihe;
+    $exchange_ihe->_ref_sender->loadConfigValues();
+    $sender       = $exchange_ihe->_ref_sender;
   } 
 }
 

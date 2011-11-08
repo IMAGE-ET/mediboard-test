@@ -50,19 +50,19 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     return parent::addElement($elParent, $elName, $elValue, $elNS);
   }
   
-  function query($nodeName, $contextNode = null) {
+  function query($nodeName, DOMNode $contextNode = null) {
     $xpath = new CHL7v2MessageXPath($this);   
     
     return $xpath->query($nodeName, $contextNode);
   }
   
-  function queryNode($nodeName, $contextNode = null, &$data = null) {
+  function queryNode($nodeName, DOMNode $contextNode = null, &$data = null) {
     $xpath = new CHL7v2MessageXPath($this);   
 
     return $data[$nodeName] = $xpath->queryUniqueNode("//$nodeName", $contextNode);
   }
   
-  function queryNodes($nodeName, $contextNode = null, &$data = null) {
+  function queryNodes($nodeName, DOMNode $contextNode = null, &$data = null) {
     $xpath = new CHL7v2MessageXPath($this);   
     
     $nodeList = $xpath->query("//$nodeName");
@@ -71,7 +71,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     }
   }
   
-  function queryTextNode($nodeName, $contextNode) {
+  function queryTextNode($nodeName, DOMNode $contextNode) {
     $xpath = new CHL7v2MessageXPath($this);   
     
     return $xpath->queryTextNode($nodeName, $contextNode);
@@ -88,37 +88,70 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     return $data;
   }
   
-  function getPatientIdentifiers(DOMNode $node) {
+  function getPIIdentifier(DOMNode $node, &$data) {
+    if ($this->queryTextNode("CX.5", $node) == "PI") {
+      $data["PI"] = $this->queryTextNode("CX.1", $node);
+    }
+  }
+  
+  function getANIdentifier(DOMNode $node, &$data) {
+    if ($this->queryTextNode("CX.5", $node) == "AN") {
+      $data["AN"] = $this->queryTextNode("CX.1", $node);
+    }
+  }
+  
+  function getRIIdentifiers(DOMNode $node, &$data) {
+    /* @todo On gère que l'identifiant de MB dans un premier temps */
+    
+    if (($this->queryTextNode("CX.5", $node) == "RI") && 
+        ($this->queryTextNode("CX.4/HD.2", $node) == CAppUI::conf("hl7 assigningAuthorityUniversalID"))) {
+      $data["RI"] = $this->queryTextNode("CX.1", $node);
+    }
+  }
+  
+  function getNPAIdentifiers(DOMNode $node, &$data) {
+    
+  }
+  
+  function getPersonIdentifiers($nodeName, DOMNode $contextNode) {
     $data = array();
     
-    // PID/PID.3
-    foreach ($this->query("PID.3", $node) as $_PID3) {
+    foreach ($this->query($nodeName, $contextNode) as $_node) {
       // RI - Resource identifier 
-      if (($this->queryTextNode("CX.5", $_PID3) == "RI") && 
-          ($this->queryTextNode("CX.4/HD.2", $_PID3) == CAppUI::conf("hl7 assigningAuthorityUniversalID"))) {
-        $data["RI"] = $this->queryTextNode("CX.1", $_PID3);
-      }
+      $this->getRIIdentifiers($_node, $data);
+      
       // PI - Patient internal identifier
-      if ($this->queryTextNode("CX.5", $_PID3) == "PI") {
-        $data["PI"] = $this->queryTextNode("CX.1", $_PID3);
-      }
+      $this->getPIIdentifier($_node, $data);
+      
       // INS-C - Identifiant national de santé calculé
-      if ($this->queryTextNode("CX.5", $_PID3) == "INS-C") {
-        $data["INSC"] = $this->queryTextNode("CX.1", $_PID3);
+      if ($this->queryTextNode("CX.5", $_node) == "INS-C") {
+        $data["INSC"] = $this->queryTextNode("CX.1", $_node);
       }
     }
    
     return $data;
   }
   
+  function getAdmitIdentifiers() {    
+    // RI - Resource identifier 
+    $this->getRIIdentifiers($_node, $data);
+      
+    // PA - Preadmit Number
+    //$this->getNPAIdentifiers($_node, $data);
+    
+    // AN - Patient Account Number
+    //$PID18 = $this->queryNode("//PID/PID.18");
+    //$this->getANIdentifier($_node, $data);
+  }
+  
   function getContentNodes() {
     $data  = array();
     
-    $data["PID"] = $PID = $this->queryNode("PID", null, $data);
+    $PID = $this->queryNode("PID", null, $data);
     
-    $data["patientIdentifiers"] = $this->getPatientIdentifiers($PID);
-    
-    $data["PD1"] = $this->queryNode("PD1", null, $data);
+    $data["personIdentifiers"] = $this->getPersonIdentifiers("PID.3", $PID);
+
+    $this->queryNode("PD1", null, $data);
     
     return $data;
   }

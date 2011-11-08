@@ -47,7 +47,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $data[] = null;
     
     // PID-3: Patient Identifier List (CX) (repeating)
-    $data[] = $this->getPatientIdentifiers($patient, $group);
+    $data[] = $this->getPersonIdentifiers($patient, $group);
     
     // PID-4: Alternate Patient ID - PID (CX) (optional repeating)
     $data[] = null;

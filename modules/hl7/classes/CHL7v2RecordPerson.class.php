@@ -36,12 +36,12 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $exchange_ihe->_ref_sender->loadConfigValues();
     $sender       = $exchange_ihe->_ref_sender;
     
-    $patientRI = CValue::read($data['patientIdentifiers'], "RI");
-    $patientPI = CValue::read($data['patientIdentifiers'], "PI");
+    $patientRI = CValue::read($data['personIdentifiers'], "RI");
+    $patientPI = CValue::read($data['personIdentifiers'], "PI");
 
     // Acquittement d'erreur : identifiants RI et PI non fournis
     if (!$patientRI && !$patientPI) {
-      return $exchange_ihe->setAckAR($ack, "E003", null, $newPatient);
+      return $exchange_ihe->setAckAR($ack, "E100", null, $newPatient);
     }
         
     $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
@@ -143,8 +143,8 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
   
   function mappingPatient($data, CPatient $newPatient) {
     // Mapping de l'INS-C
-    if (array_key_exists("INSC", $data["patientIdentifiers"])) {
-      $newPatient->INSC = $data["patientIdentifiers"]["INSC"];
+    if (array_key_exists("INSC", $data["personIdentifiers"])) {
+      $newPatient->INSC = $data["personIdentifiers"]["INSC"];
     }
     
     // Segment PID

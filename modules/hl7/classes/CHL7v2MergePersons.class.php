@@ -20,15 +20,15 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
   function getContentNodes() {
     $data  = array();
     
-    /*$data["PID"] = $PID = $xpath->queryUniqueNode("//PID");
+    $data["PID"] = $PID = $xpath->queryUniqueNode("//PID");
     
-    $data["patientIdentifiers"] = $this->getPatientIdentifiers($PID);
+    $data["personIdentifiers"] = $this->getPersonIdentifiers("PID.3", $PID);
     
     $data["PD1"] = $xpath->queryUniqueNode("//PD1");
     
     $data["MRG"] = $MRG = $xpath->queryUniqueNode("//MRG");
     
-    $data["patientElmineIdentifiers"] = $this->getPatientIdentifiers($MRG);*/
+    $data["personElmineIdentifiers"] = $this->getPersonIdentifiers("MRG.1", $MRG);
     
     return $data;
   }
@@ -44,16 +44,16 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
     $exchange_ihe->_ref_sender->loadConfigValues();
     $sender       = $exchange_ihe->_ref_sender;
     
-    $patientRI = CValue::read($data['patientIdentifiers'], "RI");
-    $patientPI = CValue::read($data['patientIdentifiers'], "PI");
+    $patientRI = CValue::read($data['personIdentifiers'], "RI");
+    $patientPI = CValue::read($data['personIdentifiers'], "PI");
     
-    $patientElimineRI = CValue::read($data['patientElimineIdentifiers'], "RI");
-    $patientEliminePI = CValue::read($data['patientElimineIdentifiers'], "PI");
+    $patientElimineRI = CValue::read($data['personElimineIdentifiers'], "RI");
+    $patientEliminePI = CValue::read($data['personElimineIdentifiers'], "PI");
     
     // Acquittement d'erreur : identifiants RI et PI non fournis
     if (!$patientRI && !$patientPI && 
         !$patientElimineRI && !$patientEliminePI) {
-      return $exchange_ihe->setAckAR($ack, "E003", null, $newPatient);
+      return $exchange_ihe->setAckAR($ack, "E100", null, $newPatient);
     }
             
     $id400Patient = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientRI);

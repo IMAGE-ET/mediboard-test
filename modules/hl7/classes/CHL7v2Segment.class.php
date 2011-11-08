@@ -241,7 +241,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     );
   }
   
-  function getPatientIdentifiers(CPatient $patient, CGroups $group) {
+  function getPersonIdentifiers(CPatient $patient, CGroups $group) {
     // Table - 0203
     // RI - Resource identifier
     // PI - Patient internal identifier

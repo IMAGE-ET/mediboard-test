@@ -33,7 +33,7 @@ class CHL7v2SegmentMRG extends CHL7v2Segment {
     $data = array();
     
     // MRG-1: Prior Patient Identifier List (CX) (repeating)
-    $data[] = $this->getPatientIdentifiers($patient_eliminee, $group);
+    $data[] = $this->getPersonIdentifiers($patient_eliminee, $group);
     
     // MRG-2: Prior Alternate Patient ID (CX) (optional repeating)
     $data[] = null;
