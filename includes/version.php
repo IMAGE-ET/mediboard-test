@@ -12,11 +12,11 @@
 $version = array (
   // Manual numbering
   "major" => 0,
-  "minor" => 4,
+  "minor" => 5,
   "patch" => 0,
   
   // Automated numbering (should be incremented at each commit)
-  "build" => 1000,
+  "build" => 1,
 );
 
 $version["string"] = implode(".", $version);

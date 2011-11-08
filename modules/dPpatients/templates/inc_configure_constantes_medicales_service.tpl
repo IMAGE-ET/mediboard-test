@@ -2,6 +2,7 @@
 
 <script>
 updateObjectId{{$uid}} = function(id){
+  if (!id || id == 0) return;
   $V(getForm("configure-constantes-{{$entity->_guid}}").config_constantes_medicales_id, id);
 }
 </script>

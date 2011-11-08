@@ -507,7 +507,7 @@ var TokenField = Class.create({
     aToken.push(value);
     if(!multiple) aToken = aToken.uniq();
     
-    this.onComplete(this.setValues(aToken));
+    this.setValues(aToken);
     return true;
   },
   remove: function(value) {
@@ -515,7 +515,7 @@ var TokenField = Class.create({
       return false;
     }
 
-    this.onComplete(this.setValues(this.getValues().without(value)));
+    this.setValues(this.getValues().without(value));
     return true;
   },
   contains: function(value) {
