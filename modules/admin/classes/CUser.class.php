@@ -283,6 +283,7 @@ class CUser extends CMbObject {
     $mediuser = $this->loadRefMediuser();
     
     if ($mediuser->_id) {
+    	$mediuser->_keep_user = true;
       if ($msg = $mediuser->delete()) {
         return $msg;
       }

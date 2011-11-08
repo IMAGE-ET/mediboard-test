@@ -69,6 +69,7 @@ class CMediusers extends CMbObject {
   var $_is_urgentiste              = null;
   var $_force_merge                = false;
   var $_user_id                    = null;
+	var $_keep_user                  = null;
   
   // Distant fields
   var $_group_id                   = null;
@@ -277,13 +278,18 @@ class CMediusers extends CMbObject {
 
   function delete() {
     $msg = null;
-    // Delete corresponding dP user first
-    if (!$msg = $this->canDeleteEx()) {
-      $user = $this->createUser();
-      if ($msg = $user->delete()) {
-        return $msg;
-      }
-    }
+		
+		if (!isset($this->_keep_user)) {
+	    // Delete corresponding dP user first
+	    if (!$msg = $this->canDeleteEx()) {
+	      $user = $this->createUser();
+	      if ($msg = $user->delete()) {
+	        return $msg;
+	      }
+	    }
+		}
+		
+		$this->_keep_user = null;
 
     return parent::delete();
   }
