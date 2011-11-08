@@ -220,7 +220,7 @@ Main.add( function(){
           {{foreach from=$_bons key=line_id item=_bon}}
             {{assign var=line value=$lines.$line_id}}
             <tr>
-              <td>
+              <td class="text">
                 {{$_bon.quantite}} {{$line->_unite_prise}} {{$line->_view}}
                 {{if array_key_exists('urgence', $_bon)}}
                   <strong>(Urgence)</strong>
