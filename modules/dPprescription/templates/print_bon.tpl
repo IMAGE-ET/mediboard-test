@@ -154,7 +154,7 @@ Main.add( function(){
 <br />
 
 {{if $print}}
-<div id="header">
+<div class="header">
   <table>
     <tr>
       <td style="width: 75%" class="text">
@@ -195,7 +195,7 @@ Main.add( function(){
   </table>
 </div>
 
-<div id="footer">
+<div class="footer">
 </div>
 
 {{foreach from=$bons key=chapitre item=_bons_by_hour name=foreach_chap}}
