@@ -66,7 +66,9 @@
       </div>
       
       <div id="msg-message-xml" style="display: none;">
-        {{$msg_segment_group->_xml|smarty:nodefaults}}
+        {{if $msg_segment_group->_xml}}
+          {{$msg_segment_group->_xml|smarty:nodefaults}}
+        {{/if}}
       </div>
       
       <div id="msg-message-warnings" style="display: none;">
@@ -109,7 +111,9 @@
       </div>
       
       <div id="ack-message-xml" style="display: none;">
-        {{$ack_segment_group->_xml|smarty:nodefaults}}
+        {{if $ack_segment_group->_xml}}
+          {{$ack_segment_group->_xml|smarty:nodefaults}}
+        {{/if}}
       </div>
       
       <div id="ack-message-warnings" style="display: none;">
