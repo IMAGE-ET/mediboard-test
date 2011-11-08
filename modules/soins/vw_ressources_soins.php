@@ -39,7 +39,8 @@ $ljoin["service"] = "chambre.service_id = service.service_id";
 $where = array();
 
 $datetime_min = mbDateTime($datetime);
-$datetime_max = mbDateTime("+$nb_periods $period +1 $period", $datetime);
+$datetime_max = mbDateTime("+$nb_periods $period", $datetime);
+
 $where["sortie"] = ">= '$datetime_min'";
 $where["entree"] = "<= '$datetime_max'";
 $where["service.service_id"] = " = '$service_id'";
