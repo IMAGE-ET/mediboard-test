@@ -31,7 +31,7 @@ class CExListItemsOwner extends CMbObject {
     $where = array(
       $this->getBackRefField() => "= '$this->_id'"
     );
-    return $item->loadIds($where, "code, name"); // Natural sort, sort of ...
+    return $item->loadIds($where, "LPAD(code, 20, '0'), name"); // Natural sort, sort of ...
   }
   
   function getRealListOwner(){
