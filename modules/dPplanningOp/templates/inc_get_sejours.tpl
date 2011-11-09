@@ -12,9 +12,9 @@ Main.add( function(){
   <option value="" selected="selected">
     &mdash; Selectionner un séjour existant
   </option>
-  {{foreach from=$sejours item=curr_sejour}}
-  <option value="{{$curr_sejour->sejour_id}}">
-    {{$curr_sejour->_view}}
+  {{foreach from=$sejours item=_sejour}}
+  <option value="{{$_sejour->sejour_id}}">
+    {{$_sejour->_view}}
   </option>
   {{/foreach}}
 </select>

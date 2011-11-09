@@ -337,9 +337,6 @@ function applyNewSejour() {
 }
 
 function changePat() {
-  if (window.bChangePat == 1) {
-    return;
-  }
   window.bChangePat = 1;
   checkSejoursToReload();
   checkCorrespondantMedical();

@@ -223,10 +223,10 @@ Medecin = {
 // Declaration d'un objet Sejour
 var Sejour = {
   sejours_collision: null,
-  
+  preselected: false,
   // Preselectionne un sejour existant en fonction de la date d'intervention choisie
   preselectSejour: function(date_plage){
-    if (!date_plage){
+    if (!date_plage || this.preselected){
       return;
     }
     
@@ -248,7 +248,9 @@ var Sejour = {
                     Date.fromDATE(sortie).toLocaleDate());
                     
           if (confirm(msg)){
+            this.preselected = true;
             $V(oForm.sejour_id, sejour_id);
+            return;
           }
         }
       }
