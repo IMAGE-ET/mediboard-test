@@ -10,7 +10,9 @@
 
 require("includes/config_all.php");
 
-switch($_GET["reason"]) {
+$reason = isset($_GET["reason"]) ? $_GET["reason"] : null;
+
+switch($reason) {
   case "bdd" :
     $msg = "La base de données n'est pas accessible.";
     break;
@@ -22,11 +24,14 @@ switch($_GET["reason"]) {
   	$msg = "Le système est désactivé pour cause de maintenance.";
 }
 
+$path = "images/pictures";
+$logo = (file_exists("$path/logo_custom.png") ? "$path/logo_custom.png" : "$path/logo.png");
+
 header("Content-type: text/html; charset=iso-8859-1");
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+<!DOCTYPE html>
+<html>
 
 <head>
   <title>Mediboard SIH &mdash; Service inaccessible</title>
@@ -40,7 +45,7 @@ header("Content-type: text/html; charset=iso-8859-1");
 
 <body style="padding-top: 3em; text-align: center;">
   <h1>MEDIBOARD EST INACCESSIBLE POUR LE MOMENT</h1>
-  <img src="images/pictures/logo.png" width="350" />
+  <img src="<?php echo $logo; ?>" width="350" />
   <h2>
     <?php echo $msg; ?>
     <br />

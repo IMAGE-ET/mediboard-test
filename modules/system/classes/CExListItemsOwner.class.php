@@ -11,12 +11,10 @@
 class CExListItemsOwner extends CMbObject {
   var $_ref_items = null;
   
-  function loadRefItems($cache = true) {
-    if ($cache && isset($this->_ref_items)) {
-      return $this->_ref_items;
-    }
-    
-    return $this->_ref_items = $this->loadBackRefs("list_items", "code, name");
+  function loadRefItems() {
+    $items = $this->loadBackRefs("list_items");
+    self::naturalSort($items, array("code"));
+    return $this->_ref_items = $items;
   }
   
   function getBackRefField(){
@@ -33,7 +31,7 @@ class CExListItemsOwner extends CMbObject {
     $where = array(
       $this->getBackRefField() => "= '$this->_id'"
     );
-    return $item->loadIds($where, "code, name");
+    return $item->loadIds($where, "code, name"); // Natural sort, sort of ...
   }
   
   function getRealListOwner(){

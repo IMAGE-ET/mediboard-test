@@ -20,6 +20,7 @@ class CStoredObject extends CModelObject {
   static $objectCounts   = array();
   static $objectCache    = array();
   static $cachableCounts = array();
+  private static $sortField = null;
 
   /**
    * @var CCanDo
@@ -1910,5 +1911,24 @@ class CStoredObject extends CModelObject {
     }
     
     return $this->loadObject($where);
+  }
+  
+  protected static function _cmpFieldNatural($a, $b) {
+    $sort_field = self::$sortField;
+    return strnatcasecmp($a->$sort_field, $b->$sort_field);
+  }
+  
+  static function naturalSort($objects, $fields) {
+    if (empty($objects)) {
+      return $objects;
+    }
+    
+    foreach($fields as $field) {
+      self::$sortField = $field;
+      usort($objects, array(__CLASS__, "_cmpFieldNatural"));
+    }
+    
+    // Restore original keys
+    return array_combine(CMbArray::pluck($objects, "_id"), $objects);
   }
 }
