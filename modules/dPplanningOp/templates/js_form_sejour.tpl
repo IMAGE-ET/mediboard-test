@@ -341,7 +341,6 @@ function changePat() {
     return;
   }
   window.bChangePat = 1;
-  console.log("reload list sejours");
   checkSejoursToReload();
   checkCorrespondantMedical();
   checkAld();
