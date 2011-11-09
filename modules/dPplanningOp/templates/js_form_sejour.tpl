@@ -337,6 +337,9 @@ function applyNewSejour() {
 }
 
 function changePat() {
+  if (window.bChangePat == 1) {
+    return;
+  }
   window.bChangePat = 1;
   console.log("reload list sejours");
   checkSejoursToReload();
