@@ -195,11 +195,12 @@
     }
   }
   
-  static function getMatch($object_class, $tag, $id400) {
+  static function getMatch($object_class, $tag, $id400, $object_id = null) {
     $id_ext               = new self;
     $id_ext->object_class = $object_class;
     $id_ext->tag          = $tag;
     $id_ext->id400        = $id400;
+    $id_ext->object_id    = $object_id;
     $id_ext->loadMatchingObject();
     
     return $id_ext;
