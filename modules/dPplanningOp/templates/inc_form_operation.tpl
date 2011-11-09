@@ -214,7 +214,7 @@ CCAMSelector.init = function(){
   	          {{$op->_datetime|date_format:"%d/%m/%Y"}} (inchangée)
   	        </option>
   	        {{/if}}
-  	        <option value="{{$today}}">elodie86
+  	        <option value="{{$today}}">
             
   	          {{$today|date_format:"%d/%m/%Y"}} (aujourd'hui)
   	        </option>

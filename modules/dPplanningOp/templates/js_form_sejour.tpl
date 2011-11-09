@@ -210,22 +210,25 @@ function checkSejoursToReload() {
   }
   
   var oForm = document.editSejour;
-  if(bChangePat) {
-    bChangePat = 0;
-    if(bOldPat && oForm.sejour_id.value) {
+  if(window.bChangePat) {
+    window.bChangePat = 0;
+    if(window.bOldPat && oForm.sejour_id.value) {
       if (confirm('Voulez-vous créer un nouveau sejour pour ce patient ?')) {
         if($("selectSejours")) {
           reloadListSejours();
         }
       }
     } else {
+    
       reloadListSejours();
     }
-    bOldPat = 1;
+    window.bOldPat = 1;
   }
 }
 
 function reloadListSejours() {
+
+  
   var oForm = document.editSejour;
   var iPatient_id = oForm.patient_id.value;
   var sejoursUrl = new Url("dPplanningOp", "httpreq_get_sejours");
@@ -334,7 +337,8 @@ function applyNewSejour() {
 }
 
 function changePat() {
-  bChangePat = 1;
+  window.bChangePat = 1;
+  console.log("reload list sejours");
   checkSejoursToReload();
   checkCorrespondantMedical();
   checkAld();
@@ -449,7 +453,7 @@ checkAld = function(){
   url.requestUpdate(SystemMessage.id, {insertion: function(receiver, text){$("ald_patient").update(text); $("ald_patient_easy").update(text);}});
 }
 
-var bChangePat = 0;
-var bOldPat = 0;
+window.bChangePat = 0;
+window.bOldPat = 0;
 
 </script>

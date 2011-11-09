@@ -184,7 +184,7 @@ function printFormSejour() {
 }
 
 PatSelector.init = function(){
-  bOldPat = $V(getForm("editSejour").patient_id);
+  window.bOldPat = $V(getForm("editSejour").patient_id);
   this.sForm     = "editSejour";
   this.sFormEasy = "editOpEasy";
 
@@ -223,20 +223,18 @@ Medecin = {
 // Declaration d'un objet Sejour
 var Sejour = {
   sejours_collision: null,
-  modalOpen: false,
   
   // Preselectionne un sejour existant en fonction de la date d'intervention choisie
   preselectSejour: function(date_plage){
-    if (!date_plage || Sejour.modalOpen){
+    if (!date_plage){
       return;
     }
-    Sejour.modalOpen = true; 
+    
     var sejours_collision = this.sejours_collision;
     var oForm = getForm("editSejour");
     var sejour_courant_id = $V(oForm.sejour_id);
     // Liste des sejours
     if(sejours_collision instanceof Array) {
-      Sejour.modalOpen = false;
       return;
     }
     for (sejour_id in sejours_collision){
@@ -255,7 +253,6 @@ var Sejour = {
         }
       }
     }
-    Sejour.modalOpen = false;
   }
 }
 
