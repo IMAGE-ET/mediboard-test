@@ -306,6 +306,7 @@ CApp::$performance["objets"]         = CMbObject::$objectCount;
 CApp::$performance["cachableCount"]  = array_sum(CMbObject::$cachableCounts);
 CApp::$performance["cachableCounts"] = CMbObject::$cachableCounts;
 CApp::$performance["objectCounts"]   = CMbObject::$objectCounts;
+CApp::$performance["ip"]  = $_SERVER["SERVER_ADDR"];
 
 CApp::$performance["size"] = CMbString::toDecaBinary(ob_get_length());
 CApp::$performance["ccam"] = array (

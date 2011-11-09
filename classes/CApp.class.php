@@ -25,6 +25,7 @@ class CApp {
     "memoire" => null,
     "size" => null,
     "objets" => 0,
+    "ip" => null,
     
     // Errors
     "error" => 0,

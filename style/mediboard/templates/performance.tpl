@@ -12,7 +12,8 @@
   PHP : 
     {{$performance.genere}} sec. &ndash;
     Poids de la page : {{$performance.size}} &ndash;
-    Mémoire {{$performance.memoire}}
+    Mémoire {{$performance.memoire}} &ndash;
+    IP du serveur : {{$performance.ip}}
   
   {{*
   <br />
