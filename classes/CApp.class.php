@@ -222,7 +222,7 @@ class CApp {
     foreach ($classes as $key => $class) {
       // Escaped instanciation in case of DSN errors
       $object = @new $class;
-      
+     
       // Classe instanci�e ?
       if (!$object->_class) {
         unset($classes[$key]);

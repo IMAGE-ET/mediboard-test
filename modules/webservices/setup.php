@@ -136,7 +136,13 @@ function __construct() {
                 ADD INDEX (`purge`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.23";      
+    $this->makeRevision("0.23");
+    
+    $query = "ALTER TABLE `source_soap` 
+                ADD `encoding` ENUM ('UTF-8','ISO-8859-1','ISO-8859-15') DEFAULT 'UTF-8';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.24";      
   }
 }
 ?>

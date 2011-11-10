@@ -50,6 +50,10 @@
             <td>{{mb_field object=$source field="wsdl_mode"}}</td>
           </tr>
           <tr>
+            <th>{{mb_label object=$source field="encoding"}}</th>
+            <td>{{mb_field object=$source field="encoding"}}</td>
+          </tr>
+          <tr>
             <td class="button" colspan="2">
               {{if $source->_id}}
                 <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

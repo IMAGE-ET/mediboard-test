@@ -16,6 +16,7 @@ class CSourceSOAP extends CExchangeSource {
   var $wsdl_mode        = null;
 	var $evenement_name   = null;
 	var $single_parameter = null;
+  var $encoding         = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -29,9 +30,16 @@ class CSourceSOAP extends CExchangeSource {
     $specs["wsdl_mode"]        = "bool default|1";
 		$specs["evenement_name"]   = "str";
 		$specs["single_parameter"] = "str";
+		$specs["encoding"]         = "enum list|UTF-8|ISO-8859-1|ISO-8859-15 default|UTF-8";
+
     return $specs;
   }
   
+  function __call($function, $arguments) { 
+    $this->setData(reset($arguments));
+    $this->send($function);
+  }
+ 
   function send($evenement_name = null, $flatten = false) {
     if (!$this->_id) {
       throw new CMbException("CSourceSOAP-no-source", $this->name);
@@ -45,7 +53,11 @@ class CSourceSOAP extends CExchangeSource {
 		  throw new CMbException("CSourceSOAP-no-evenement", $this->name);
 		}   
 		
-		$this->_client = CMbSOAPClient::make($this->host, $this->user, $this->password, $this->type_echange);
+		$options = array(
+		  "encoding" => $this->encoding
+		);
+		
+		$this->_client = CMbSOAPClient::make($this->host, $this->user, $this->password, $this->type_echange, $options);
     if ($this->_client->soap_client_error) {
       throw new CMbException("CSourceSOAP-unreachable-source", $this->name);
     }
@@ -90,8 +102,12 @@ class CSourceSOAP extends CExchangeSource {
   }
   
   function isAuthentificate() {
+    $options = array(
+      "encoding" => $this->encoding
+    );
+    
     try {
-      CMbSOAPClient::make($this->host, $this->user, $this->password, $this->type_echange);
+      CMbSOAPClient::make($this->host, $this->user, $this->password, $this->type_echange, $options);
     } catch (Exception $e) {
       $this->_reachable = 1;
       $this->_message   = $e->getMessage();

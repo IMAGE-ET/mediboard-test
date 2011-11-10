@@ -21,10 +21,11 @@ class CMbSOAPClient extends SoapClient {
   var $soap_client_error = false;
   var $flatten           = null;
   var $loggable          = null;
+  var $encoding          = null;
   
   function __construct($rooturl, $type = null, $options = array(), $loggable = null) {
     $this->wsdl = $rooturl;
-    
+
     if ($loggable) {
       $this->loggable = $loggable;
     }
@@ -44,9 +45,10 @@ class CMbSOAPClient extends SoapClient {
     }
     
     $options = array_merge($options, array("connexion_timeout" => CAppUI::conf("webservices connection_timeout")));
-    if (CAppUI::conf("webservices trace"))
+    if (CAppUI::conf("webservices trace")) {
       $options = array_merge($options, array("trace" => true));
-    
+    }
+
     parent::__construct($this->wsdl, $options);
   }
   

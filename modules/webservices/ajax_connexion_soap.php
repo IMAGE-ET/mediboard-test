@@ -25,7 +25,11 @@ if (!$exchange_source->host) {
   CAppUI::stepAjax("Aucun hôte pour la source d'échange : '$exchange_source_name'", UI_MSG_ERROR);
 }
 
-$client = CMbSOAPClient::make($exchange_source->host, $exchange_source->user, $exchange_source->password, $exchange_source->type_echange);
+$options = array(
+  "encoding" => $exchange_source->encoding
+);
+
+$client = CMbSOAPClient::make($exchange_source->host, $exchange_source->user, $exchange_source->password, $exchange_source->type_echange, $options);
 if (!$client || $client->soap_client_error) {
   CAppUI::stepAjax("Impossible de joindre la source de donnée : '$exchange_source_name'", UI_MSG_ERROR);
 } 
