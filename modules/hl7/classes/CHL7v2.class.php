@@ -142,8 +142,8 @@ abstract class CHL7v2 {
    * @param string $str
    * @return void
    */
-  static function d($str) {
+  static function d($str, $color = null) {
     if (!self::$debug) return;
-    mbTrace($str);
+    echo "<pre style='color:$color;'>$str</pre>";
   }
 }

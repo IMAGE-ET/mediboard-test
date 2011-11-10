@@ -11,7 +11,7 @@
             {{assign var=_field_pos value=$_field_pos+1}}
             
             <li>
-              <span class="field-name">{{$_child->name}}-{{$_field_pos}}</span>
+              <span class="field-name">{{$_field->getPathString(".")}}</span>
               <span class="field-description">{{$_field->description}}</span>
               <span class="type">{{$_field->getTypeTitle()}}</span>
               

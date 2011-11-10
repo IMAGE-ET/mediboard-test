@@ -16,7 +16,7 @@ class CHL7v2SimpleXMLElement extends CMbSimpleXMLElement {
   function reset(){
     $this->attributes()->mbOccurences = 0;
     $this->attributes()->mbOpen = 0;
-    $this->attributes()->mbUsed = 0;
+    //$this->attributes()->mbEmpty = 0;
   }
   
   function isRequired(){
@@ -39,8 +39,8 @@ class CHL7v2SimpleXMLElement extends CMbSimpleXMLElement {
     if (!isset($this->attributes()->mbOpen))
       $this->addAttribute("mbOpen", 0);
       
-    if (!isset($this->attributes()->mbUsed))
-      $this->addAttribute("mbUsed", 0);
+    if (!isset($this->attributes()->mbEmpty))
+      $this->addAttribute("mbEmpty", 0);
   }
   
   /**
@@ -67,7 +67,11 @@ class CHL7v2SimpleXMLElement extends CMbSimpleXMLElement {
    * @return bool
    */
   function isUsed(){
-    return (bool)$this->attributes()->mbUsed;
+    return $this->getOccurences() > 0;
+  }
+  
+  function isEmpty(){
+    return (string)$this->attributes()->mbEmpty !== "0";
   }
   
   /** 
@@ -75,9 +79,6 @@ class CHL7v2SimpleXMLElement extends CMbSimpleXMLElement {
    */
   function markOpen(){
     $this->init();
-    
-    // @todo a mon avis ce n'est pas ici qu'il faut incrementer
-    $this->attributes()->mbOccurences = $this->getOccurences()+1;
     $this->attributes()->mbOpen = 1;
     
     $parent = $this->getParent();
@@ -88,11 +89,34 @@ class CHL7v2SimpleXMLElement extends CMbSimpleXMLElement {
   }
   
   /** 
-   * Marque l'element comme ouvert, et tous ses parents
+   * Marque l'element comme utilisé
    */
   function markUsed(){
     $this->init();
-    $this->attributes()->mbUsed = 1;
+    $this->markOpen();
+    $this->attributes()->mbOccurences = $this->getOccurences()+1;
+  }
+  
+  /** 
+   * Marque l'element comme utilisé
+   */
+  function markNotEmpty(){
+    $this->init();
+    $this->attributes()->mbEmpty = 0;
+    
+    $parent = $this->getParent();
+    
+    if ($parent && $parent->getName() !== "message") {
+      $parent->markNotEmpty();
+    }
+  }
+  
+  /** 
+   * Marque l'element comme utilisé
+   */
+  function markEmpty(){
+    $this->init();
+    $this->attributes()->mbEmpty = 1;
   }
   
   function getSegmentHeader(){
@@ -107,5 +131,9 @@ class CHL7v2SimpleXMLElement extends CMbSimpleXMLElement {
       $items[] = $field;
     }
     return $items;
+  }
+  
+  function state(){
+    return "[occ:".$this->getOccurences().", open:".($this->isOpen()?"true":"false").", empty:".($this->isEmpty()?"true":"false")."]";
   }
 }

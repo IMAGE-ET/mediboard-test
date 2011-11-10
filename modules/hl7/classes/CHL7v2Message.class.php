@@ -210,8 +210,9 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     return CValue::read($this->lines, $this->current_line+$offset, null);
   }
   
-  static function getNext($current_node, $current_group) {
+  static function getNext(CHL7v2SimpleXMLElement $current_node, CHL7v2Entity $current_group) {
     // On remet les compteurs d'utilisation a zero
+    CHL7v2::d("RESET", "green");
     $current_node->reset();
     
     $next = $current_node->getNextSibling();
@@ -220,10 +221,9 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
       $current_node = $next;
     }
     else {
-      CHL7v2::d(" --> Suivant = suivant du parent");
       $parent = $current_node->getParent();
       
-      if ($parent && (!$parent->isUnbounded() || $parent->getOccurences() == 0)) {
+      if ($parent && (!$parent->isOpen() || $parent->isEmpty())) {
         CHL7v2::d(" --> Suivant = suivant du parent");
         return self::getNext($parent, $current_group->parent);
       }
@@ -236,9 +236,9 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     return array($current_node, $current_group);
   }
   
-  function handleLine($current_node, $current_group) {
-    // On est dans le bon groupe
-    $current_node->markOpen();
+  function handleLine(CHL7v2SimpleXMLElement $current_node, CHL7v2Entity $current_group) {
+    // Increment du nb d'occurences
+    $current_node->markUsed();
     
     // On enregistre le segment dans le groupe courant
     $_segment = new CHL7v2Segment($current_group);
@@ -276,13 +276,14 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
         
         // SEGMENT //
         case "segment":
-          CHL7v2::d($current_node->getSegmentHeader(), "Segment");
+          CHL7v2::d($current_node->getSegmentHeader()." ".$current_node->state(), "red");
           
           $handled = false;
           
           // Si la spec correspond a la ligne courante
           if ($this->getCurrentLineHeader() == $current_node->getSegmentHeader()) {
             $this->handleLine($current_node, $current_group);
+            $current_node->markNotEmpty();
             $handled = true;
           }
           
@@ -317,16 +318,17 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
           
         // GROUP //
         case "group":
-          CHL7v2::d((string)$current_node->attributes()->name);
+          CHL7v2::d($current_group->name." ".$current_node->state(), "red");
+          $current_node->markEmpty();
           
-          if ($current_node->isUnbounded() || $current_node->getOccurences() == 0) {
-            CHL7v2::d(" --> Groupe multiple ou pas encore utilisé, on entre dedans (occurences = ".$current_node->getOccurences().")");
+          if ($current_node->isUnbounded() || !$current_node->isUsed()) {
+            CHL7v2::d(" --> Groupe multiple ou pas encore utilisé, on entre dedans");
             $current_group = new CHL7v2SegmentGroup($current_group, $current_node);
             
             $current_node = $current_node->getFirstChild();
           }
           else {
-            CHL7v2::d(" --> Groupe utilisé ou pas multiple, on prend le parent ou frere (occurences = ".$current_node->getOccurences().")");
+            CHL7v2::d(" --> Groupe utilisé ou pas multiple, on prend le parent ou frere");
             list($current_node, $current_group) = self::getNext($current_node, $current_group);
           }
           

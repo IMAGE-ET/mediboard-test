@@ -1,6 +1,6 @@
 {{assign var=segment value=$component->getSegment()}}
 
-<span class="field-name {{if $component->invalid}}invalid{{/if}}">{{$segment->name}}.{{$component->getPathString(".")}}</span>
+<span class="field-name {{if $component->invalid}}invalid{{/if}}">{{$component->getPathString(".")}}</span>
 <span class="field-description">{{$component->description}}</span>
 <span class="type">{{$component->getTypeTitle()}}</span>
             

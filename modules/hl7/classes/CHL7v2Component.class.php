@@ -316,7 +316,7 @@ class CHL7v2Component extends CHL7v2Entity {
       
       $xpath = ($this->getSegment()->name)."/".$this->getPathString("/", ".", true);
       
-      $str = "<span class='entity {$this->separator[1]} ".($this->invalid ? 'invalid' : '')."' id='entity-er7-$this->id' data-title='$title' data-xpath='$xpath' onclick='Event.stop(event);prompt(null,this.get(\"xpath\"))'>$str</span>";
+      $str = "<span class='entity {$this->separator[1]} ".($this->invalid ? 'invalid' : '')."' id='entity-er7-$this->id' data-title='$title' data-xpath='$xpath' onclick='/*Event.stop(event);prompt(null,this.get(\"xpath\"))*/'>$str</span>";
     }
       
     return $str;
