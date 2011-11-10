@@ -130,6 +130,10 @@ Main.add(function(){
   .draggable.hr {
     padding: 6px;
   }
+	
+	.message_text {
+	  min-height: 1.8em;
+	}
 
   div.ex-message-title {
     font-weight: bold;
@@ -169,18 +173,34 @@ Main.add(function(){
   .cell:hover div.cell-layout-wrapper {
     /*display: block;*/
   }
+  
+  form[name="form-grid-layout"].pickmode .draggable {
+    cursor: pointer;
+  }
+  
+  form[name="form-grid-layout"].pickmode .draggable.picked {
+    outline: 2px solid red;
+  }
+  
+  form[name="form-grid-layout"].pickmode .drop-grid .droppable:hover {
+    outline: 2px solid green;
+  }
 </style>
 
 <ul class="control_tabs" id="field_groups_layout" style="font-size: 0.9em;">
   {{foreach from=$ex_class->_ref_groups item=_group}}
-  {{if $_group->_ref_fields|@count > 0}}
     <li>
       <a href="#group-layout-{{$_group->_guid}}" style="padding: 2px 4px;">
         {{$_group->name}} <small>({{$_group->_ref_fields|@count}})</small>
       </a>
     </li>
-  {{/if}}
   {{/foreach}}
+  <li style="font-size: 1.2em; font-weight: bold;">
+    <label title="Plutôt que glisser-déposer">
+      <input type="checkbox" onclick="ExClass.setPickMode(this.checked)" />
+      Disposer par clic
+    </label>
+  </li>
 </ul>
 <hr class="control_tabs" />
 
@@ -190,7 +210,6 @@ Main.add(function(){
   
 {{foreach from=$grid key=_group_id item=_grid}}
 
-{{if $groups.$_group_id->_ref_fields|@count > 0}}
 <div id="group-layout-{{$groups.$_group_id->_guid}}" style="display: none;" class="group-layout">
   
 <div class="out-of-grid droppable">
@@ -209,14 +228,17 @@ Main.add(function(){
     </li>
   </ul>
   <hr class="control_tabs" />
+	
+	<table class="main tbl" style="table-layout: fixed;">
+    <tr>
+      <th>Libellés</th>
+      <th>Champs</th>
+    </tr>
+	</table>
   
-  <table class="main tbl" style="table-layout: fixed;">
+  <table class="main layout" style="table-layout: fixed;">
     <!-- Fields -->
     <tbody id="outofgrid-class-fields-{{$_group_id}}" style="display: none;">
-      <tr>
-        <th>Libellés</th>
-        <th>Champs</th>
-      </tr>
       <tr>
         <td class="label-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
           {{foreach from=$out_of_grid.$_group_id.label item=_field}}
@@ -278,20 +300,20 @@ Main.add(function(){
   </table>
 </div>
 
-<table class="main tbl drop-grid" style="border-collapse: collapse;">
+<table class="main drop-grid" style="border-collapse: collapse;">
   <tr>
-    <th colspan="10" class="title">Disposition</th>
+    <th colspan="5" class="title">Disposition</th>
   </tr>
   <tr>
-    <th></th>
+    <th style="background: #ddd;"></th>
     {{foreach from=$_grid|@reset key=_x item=_field}}
-      <th>{{$_x}}</th>
+      <th style="background: #ddd;">{{$_x}}</th>
     {{/foreach}}  
   </tr>
   
   {{foreach from=$_grid key=_y item=_line}}
   <tr>
-    <th style="padding: 4px; width: 2em; text-align: right;">{{$_y}}</th>
+    <th style="padding: 4px; width: 2em; text-align: right; background: #ddd;">{{$_y}}</th>
     {{foreach from=$_line key=_x item=_group}}
       <td style="border: 1px dotted #aaa; min-width: 2em; padding: 0;" class="cell">
       
@@ -337,7 +359,6 @@ Main.add(function(){
 </table>
 
 </div>
-{{/if}}
 
 {{/foreach}}
 

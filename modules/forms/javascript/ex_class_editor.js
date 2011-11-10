@@ -3,6 +3,11 @@ exClassTabs = null;
 ExClass = {
   id: null,
   layourEditorReady: false,
+	pickMode: false,
+	setPickMode: function(active){
+		this.pickMode = active;
+		getForm('form-grid-layout').setClassName("pickmode", active);
+	},
   edit: function(id) {
     this.id = id || this.id;
     var url = new Url("forms", "ajax_edit_ex_class");
@@ -178,15 +183,35 @@ ExClass = {
   },
   initLayoutEditor: function(){
     $$(".draggable:not(.hostfield)").each(function(d){
+      d.observe("mousedown", function(event){
+        if (!ExClass.pickMode) return;
+        
+        Event.stop(event);
+        
+        var element = Event.element(event);
+        if (!element.hasClassName("draggable")) {
+          element = element.up(".draggable");
+        }
+        
+        var has = element.hasClassName("picked");
+        $$(".draggable.picked").invoke("removeClassName", "picked");
+        
+        if (!has){
+          element.toggleClassName("picked");
+        }
+      });
+			
       new Draggable(d, {
         revert: 'failure', 
         scroll: window, 
         ghosting: true,
         onStart: function(draggable){
           var element = draggable.element;
-          if (element.up(".out-of-grid")) {
+					
+          if (!ExClass.pickMode && element.up(".out-of-grid")) {
             element.up(".group-layout").down(".drop-grid").scrollTo();
           }
+					
           $$(".out-of-grid").invoke("addClassName", "dropactive");
         },
         onEnd: function(){
@@ -205,45 +230,62 @@ ExClass = {
         ghosting: true
       });
     });*/
-    
-    $$(".droppable").each(function(d){
-      Droppables.add(d, {
-        hoverclass: 'dropover',
-        onDrop: function(drag, drop) {
-          drag.style.position = ''; // a null value doesn't work on IE
-          
-          // prevent multiple fields in the same cell
-          if (drop.hasClassName('grid') && drop.select('.draggable').length) return;
-            
-          // grid to trash for ExFields
-          if (drop.hasClassName("out-of-grid") && !drag.hasClassName('hostfield')) {
-            if (drag.hasClassName('field')) {
-              drop = drop.down(".field-list");
-            }
-            
-            if (drag.hasClassName('label')) {
-              drop = drop.down(".label-list");
-            }
-            
-            if (drag.hasClassName('message_title')) {
-              drop = drop.down(".message_title-list");
-            }
-            
-            if (drag.hasClassName('message_text')) {
-              drop = drop.down(".message_text-list");
-            }
-          }
-          
-          if (drag.hasClassName('hostfield')) {
-            ExClass.submitLayoutHostField(drag, drop);
-          }
-          else if (drag.hasClassName('field') || drag.hasClassName('label')) {
-            ExClass.submitLayout(drag, drop);
-          }
-          else {
-            ExClass.submitLayoutMessage(drag, drop);
-          }
+		
+		function dropCallback(drag, drop) {
+      drag.style.position = ''; // a null value doesn't work on IE
+      
+      // prevent multiple fields in the same cell
+      if (drop.hasClassName('grid') && drop.select('.draggable').length) return;
+        
+      // grid to trash for ExFields
+      if (drop.hasClassName("out-of-grid") && !drag.hasClassName('hostfield')) {
+        if (drag.hasClassName('field')) {
+          drop = drop.down(".field-list");
         }
+        
+        if (drag.hasClassName('label')) {
+          drop = drop.down(".label-list");
+        }
+        
+        if (drag.hasClassName('message_title')) {
+          drop = drop.down(".message_title-list");
+        }
+        
+        if (drag.hasClassName('message_text')) {
+          drop = drop.down(".message_text-list");
+        }
+      }
+      
+      if (drag.hasClassName('hostfield')) {
+        ExClass.submitLayoutHostField(drag, drop);
+      }
+      else if (drag.hasClassName('field') || drag.hasClassName('label')) {
+        ExClass.submitLayout(drag, drop);
+      }
+      else {
+        ExClass.submitLayoutMessage(drag, drop);
+      }
+    }
+    
+    $$(".droppable").each(function(drop){
+      drop.observe("mousedown", function(event){
+        if (!ExClass.pickMode) return;
+				
+        Event.stop(event);
+				
+				if (drop.childElements().length) return;
+        
+				var drag = $$(".picked")[0];
+				
+				if (!drag) return;
+				
+				dropCallback(drag, drop);
+				drop.insert(drag.removeClassName("picked"));
+      });
+			
+      Droppables.add(drop, {
+        hoverclass: 'dropover',
+        onDrop: dropCallback
       });
     });
     
