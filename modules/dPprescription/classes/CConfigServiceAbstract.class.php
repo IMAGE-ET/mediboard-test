@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-abstract class CConfigServiceAbstract extends CMbObject {
+class CConfigServiceAbstract extends CMbObject {
   var $service_id  = null;
   var $group_id = null;
   
@@ -89,7 +89,9 @@ abstract class CConfigServiceAbstract extends CMbObject {
     return $configs;
   }
   
-  abstract static function emptySHM();
+  static function emptySHM() {
+  	
+  }
   
   protected static function _emptySHM($class, $key) {
     if (!SHM::get($key)) {
