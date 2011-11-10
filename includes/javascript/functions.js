@@ -1082,16 +1082,17 @@ Object.extend(Control.Modal,{
             overlay.style.zIndex = this.container.style.zIndex - 1;
             this.container.insert({before: overlay}); // move the overlay before the modal element (zIndex trick)
             //Event.stopObserving(window,'scroll',this.positionHandler);
+            Control.Overlay.positionIFrameShim();
         },
         afterClose: function(){
           Control.Modal.stack.pop().close();
+          var overlay = Control.Overlay.container;
           
           if (Control.Modal.stack.length == 0) {
             $$("body")[0].insert(overlay); // put it back at the end of body
             Control.Overlay.hide(this.options.fade ? this.options.fadeDuration : false);
           }
           else {
-            var overlay = Control.Overlay.container;
             var lastModal = Control.Modal.stack.last().container;
             overlay.style.zIndex = lastModal.style.zIndex - 2;
             lastModal.insert({before: overlay}); // move the overlay before the modal element (zIndex trick)

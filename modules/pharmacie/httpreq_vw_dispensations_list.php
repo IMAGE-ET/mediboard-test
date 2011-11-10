@@ -82,6 +82,8 @@ if($prescriptions) {
     $sejour =& $_prescription->_ref_object;
     $sejour->loadRefPatient();
     $patient =& $sejour->_ref_patient;
+    $patient->loadRefsAffectations();
+    $patient->_ref_curr_affectation->loadRefLit()->loadRefChambre();
     
     // Calcul des planifs systemes si elles ne sont pas deja calculées
     $_prescription->calculAllPlanifSysteme();

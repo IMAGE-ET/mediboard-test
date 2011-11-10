@@ -63,18 +63,26 @@ toggleDoneDispensations = function(){
 {{assign var=infinite_service value=$conf.dPstock.CProductStockService.infinite_quantity}}
 
 <label>
-  <input type="checkbox" onclick="toggleDoneDispensations()" id="showDoneDispensations" /> Afficher les préparations réalisées
+  <input type="checkbox" onclick="toggleDoneDispensations()" id="showDoneDispensations" /> 
+	Afficher les préparations réalisées
 </label>
 
 <table class="tbl">
   <tr>
     <th colspan="10" class="title">
-      Préparation pour 
-			 {{if $mode_nominatif}}
-			   {{$prescription->_ref_object->_ref_patient->_view}}
-			 {{else}}
-			   {{$service->_view}}
-			 {{/if}}
+			{{if $mode_nominatif}}
+			  {{assign var=patient value=$prescription->_ref_object->_ref_patient}}
+			  {{$patient}}
+      
+         {{if $patient->_ref_curr_affectation}}
+           &mdash; 
+					<span style="font-weight: normal">
+           	{{$patient->_ref_curr_affectation->_ref_lit}}
+					</span>
+         {{/if}}
+			{{else}}
+			  {{$service->_view}}
+			{{/if}}
     </th>
   </tr>
   <tr>

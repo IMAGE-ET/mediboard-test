@@ -600,7 +600,7 @@ Main.add( function(){
   </tr>  
 </table>
   
-<table class="form" id="modal-outils" style="display: none; max-width: 400px;">
+<table class="form" id="modal-outils" style="display: none; width: 400px;">
 	<tr>
     <th class="title">
         <button class="cancel notext" onclick="modalWindowTools.close();" style="float: right"></button>
