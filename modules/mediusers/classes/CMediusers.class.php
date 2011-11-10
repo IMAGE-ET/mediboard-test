@@ -565,6 +565,11 @@ class CMediusers extends CMbObject {
     if ($this->_bind_cps && $this->_id) {
       return $this->bindCPS();
     }
+    
+    $this->loadOldObject();
+    
+    // Trigger event
+    $this->notify("AfterStore");
   }
 
   function delFunctionPermission() {
