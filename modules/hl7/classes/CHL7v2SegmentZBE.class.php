@@ -53,7 +53,16 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     parent::build($event);
 
     // ZBE-1: Movement ID (EI) (optional)
-    $data[] = $uf->_ref_last_log->id;
+    $data[] = array (
+      // Entity identifier
+      $uf->_ref_last_log->id,
+      // Namespace ID
+      "Mediboard",
+      // Universal ID
+      CAppUI::conf("hl7 assigningAuthorityUniversalID"),
+      // Universal ID Type
+      "OX"
+    );
     
     // ZBE-2: Start of Movement Date/Time (TS)
     $data[] = $sejour->entree_prevue;
