@@ -99,7 +99,8 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     $data[] = null;
     
     // ZBE-9: Nature of this movement (CWE)
-    $data[] = null;
+    /* @todo Voir comment gérer ceci... */
+    $data[] = "S";
     
     $this->fill($data);
   }
