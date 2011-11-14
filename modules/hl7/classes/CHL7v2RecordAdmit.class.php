@@ -27,6 +27,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $this->queryNodes("PV1", null, $data); 
     
     $data["admitIdentifiers"] = $this->getAdmitIdentifiers();
+    //$this->getANIdentifier($data["PID"], $data["admitIdentifiers"]);
     
     $this->queryNodes("PV2", null, $data); 
     
@@ -42,6 +43,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $exchange_ihe = $this->_ref_exchange_ihe;
     $exchange_ihe->_ref_sender->loadConfigValues();
     $sender       = $exchange_ihe->_ref_sender;
+    
+    mbLog($data);
   } 
 }
 

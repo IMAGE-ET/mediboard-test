@@ -17,34 +17,49 @@
  */
 
 class CHL7v2SegmentZBE extends CHL7v2Segment {
-  var $name        = "ZBE";
+  static $action = array(
+    "INSERT" => array(
+      "A05", "A01", "A14", "A04", "A06", "A07", "A54", "A02", "A15", 
+      "A03", "A16", "A21", "A22", "Z80", "Z83", "Z84", "Z86", "Z88"
+    ),
+    "UPDATE" => array(
+      "Z99"
+    ),
+    "CANCEL" => array(
+      "A38", "A11", "A27", "A06", "A07", "A55", "A12", "A26", "A13", 
+      "A25", "A52", "A53", "Z81", "Z83", "Z85", "Z87", "Z89"
+    ),
+  );
+  
+  var $name   = "ZBE";
   
   /**
    * @var CSejour
    */
-  var $sejour      = null;
+  var $sejour = null;
   
   /**
-   * @var CAffectation
+   * @var CUniteFonctionnelle
    */
-  var $affectation = null;
+  var $uf     = null;
   
   function build(CHL7v2Event $event) {
     $data[] = null;
-    
-    $sejour = new CSejour();
+    mbLog($event);
     $sejour = $this->sejour;
+    $uf     = $this->uf;
+    $uf->loadLastLog();
     
     parent::build($event);
 
-    // ZBE-1: Movement ID (EI) <b>optional </b>
-    $data[] = null;
+    // ZBE-1: Movement ID (EI) (optional)
+    $data[] = $uf->_ref_last_log->id;
     
     // ZBE-2: Start of Movement Date/Time (TS)
-    $data[] = null;
+    $data[] = $sejour->entree_prevue;
     
-    // ZBE-3: End of Movement Date/Time (TS) <b>optional </b>
-    $data[] = null;
+    // ZBE-3: End of Movement Date/Time (TS) (optional)
+    $data[] = $sejour->sortie_prevue;
     
     // ZBE-4: Action on the Movement (ID)
     $data[] = null;
@@ -52,13 +67,13 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     // ZBE-5: Indicator "Historical Movement" (ID) 
     $data[] = null;
     
-    // ZBE-6: Original trigger event code (ID) <b>optional </b>
+    // ZBE-6: Original trigger event code (ID) (optional)
     $data[] = null;
     
-    // ZBE-7: Ward of medical responsibility in the period starting with this movement (XON) <b>optional </b>
+    // ZBE-7: Ward of medical responsibility in the period starting with this movement (XON) (optional)
     $data[] = null;
     
-    // ZBE-8: Ward of care responsibility in the period starting with this movement (XON) <b>optional </b>
+    // ZBE-8: Ward of care responsibility in the period starting with this movement (XON) (optional)
     $data[] = null;
     
     // ZBE-9: Nature of this movement (CWE)
