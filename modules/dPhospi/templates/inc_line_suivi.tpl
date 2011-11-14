@@ -60,6 +60,9 @@
         {{/if}} {{$_field.unit}},
       {{/if}}
     {{/foreach}}
+		{{if $_suivi->comment}}
+		({{$_suivi->comment}})
+		{{/if}}
   </td>
   <td></td>
 {{/if}}
