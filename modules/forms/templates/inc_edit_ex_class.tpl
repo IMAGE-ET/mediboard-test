@@ -13,6 +13,10 @@ Main.add(function(){
   ExClass.id = "{{$ex_class->_id}}";
   ExClass.layourEditorReady = false;
   $("exClassList").select("tr[data-ex_class_id]").invoke("removeClassName", "selected");
+  
+  var form = getForm("editExClass");
+  var auto = !!form._event.options[form._event.selectedIndex].get("auto");
+  ExClass.toggleConditional(auto);
 });
 </script>
 
@@ -40,15 +44,11 @@ Main.add(function(){
                 {{foreach from=$classes item=_events key=_class}}
                   <optgroup label="{{tr}}{{$_class}}{{/tr}}">
                     {{foreach from=$_events item=_params key=_event_name}}
-                      <option value="{{$_class}}.{{$_event_name}}" 
+                      <option value="{{$_class}}.{{$_event_name}}" {{if @$_params.auto}} data-auto="true" {{/if}}
                               {{if $_class == $ex_class->host_class && $_event_name == $ex_class->event}} selected="selected" {{/if}}
-                              {{if $_event_name == "administration"}} disabled="disabled" {{/if}}
                               >
                         {{tr}}{{$_class}}{{/tr}} - {{tr}}{{$_class}}-event-{{$_event_name}}{{/tr}}
-                        
-                        {{if $_event_name == "administration"}}
-                          (Utiliser "Administration - Validation" à la place)
-                        {{/if}}
+                        {{if @$_params.auto}} (déclench. auto){{/if}}
                       </option>
                     {{/foreach}}
                   </optgroup>
@@ -64,7 +64,7 @@ Main.add(function(){
           
           <tr>
             <th>{{mb_label object=$ex_class field=name}}</th>
-            <td>{{mb_field object=$ex_class field=name style="width: 20em;"}}</td>
+            <td>{{mb_field object=$ex_class field=name style="width: 95%;"}}</td>
             
             <th>{{mb_label object=$ex_class field=conditional}}</th>
             <td>{{mb_field object=$ex_class field=conditional typeEnum=checkbox}}</td>
@@ -83,14 +83,8 @@ Main.add(function(){
               </select>
             </td>
             
-            <th>{{mb_label object=$ex_class field=required}}</th>
-            <td>{{mb_field object=$ex_class field=required typeEnum=checkbox}}</td>
-            
-            <td class="compact text" style="vertical-align: middle;">{{tr}}CExClass-required-desc{{/tr}}</td>
-          </tr>
-          <tr>
             <th rowspan="2">{{mb_label object=$ex_class field=unicity}}</th>
-            <td rowspan="2">
+            <td rowspan="2" colspan="2">
               {{if $ex_class->_id}}
                 {{mb_field object=$ex_class field=unicity typeEnum=radio}}
               {{else}}
@@ -100,14 +94,11 @@ Main.add(function(){
               {{/if}}
             </td>
             
-            <th></th>
-            <td></td>
-            
             <td class="compact text" style="vertical-align: middle;"></td>
           </tr>
           
           <tr>
-            <td colspan="3" style="vertical-align: bottom;">
+            <td colspan="3" style="vertical-align: bottom; text-align: right;">
               {{if $ex_class->_id}}
                 <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
                 <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'{{tr}}CExClass.one{{/tr}}',objName:'{{$ex_class->_view|smarty:nodefaults|JSAttribute}}'})">

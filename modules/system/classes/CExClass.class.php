@@ -557,16 +557,20 @@ class CExClass extends CMbObject {
     if (is_string($object)) {
       $object = CMbObject::loadFromGuid($object);
     }
+		
+		if ($type == "required" && !CValue::read($object->_spec[$event], "auto", false)) {
+			return array();
+		}
     
     $ex_class = new self;
     $ex_class->host_class = $object->_class;
     $ex_class->event = $event;
     $ex_class->disabled = 0;
-    $ex_class->required = 0;
+    //$ex_class->required = 0;
     $ex_class->conditional = 0;
     
     switch($type) {
-      case "required":    $ex_class->required = 1;    break;
+      //case "required":    $ex_class->required = 1;    break;
       case "disabled":    $ex_class->disabled = 1;    break;
       case "conditional": $ex_class->conditional = 1; break;
     }

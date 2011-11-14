@@ -24,7 +24,7 @@ $where = array(
   "event"       => $ds->prepare("=%", $event),
   "disabled"    => $ds->prepare("=%", 0),
   "conditional" => $ds->prepare("=%", 0),
-  "required"    => $ds->prepare("=%", 1),
+  //"required"    => $ds->prepare("=%", 1),
   "group_id"    => $ds->prepare("=% OR group_id IS NULL", $group_id),
 );
 $ex_classes = $ex_class->loadList($where);

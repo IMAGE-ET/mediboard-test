@@ -38,7 +38,6 @@ Main.add(function(){
 		      <td class="text" style="min-width: 16em;">
             <div style="float: right;">
               <span {{if $_ex_class->conditional}}style="background: #7e7;" title="{{tr}}CExClass-conditional{{/tr}}"{{/if}}>&nbsp;
-              </span><span {{if $_ex_class->required}}style="background: #e77;" title="{{tr}}CExClass-required{{/tr}}"{{/if}}>&nbsp;
 							</span><span {{if $_ex_class->disabled}}style="background: #aaa;" title="{{tr}}CExClass-disabled{{/tr}}"{{/if}}>&nbsp;&nbsp;
 							</span>
             </div>

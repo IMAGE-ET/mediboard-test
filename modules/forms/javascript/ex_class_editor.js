@@ -3,11 +3,11 @@ exClassTabs = null;
 ExClass = {
   id: null,
   layourEditorReady: false,
-	pickMode: false,
-	setPickMode: function(active){
-		this.pickMode = active;
-		getForm('form-grid-layout').setClassName("pickmode", active);
-	},
+  pickMode: false,
+  setPickMode: function(active){
+    this.pickMode = active;
+    getForm('form-grid-layout').setClassName("pickmode", active);
+  },
   edit: function(id) {
     this.id = id || this.id;
     var url = new Url("forms", "ajax_edit_ex_class");
@@ -28,11 +28,25 @@ ExClass = {
     var url = new Url("forms", "ajax_list_ex_class");
     url.requestUpdate("exClassList");
   },
+  toggleConditional: function(auto) {
+    var form = getForm("editExClass");
+    
+    if (auto) {
+      $V(form.conditional, false);
+      $V(form.__conditional, false);
+    }
+    
+    form.conditional.disabled = form.__conditional.disabled = auto;
+  },
   setEvent: function(select) {
     var form = select.form;
+    var selected = select.options[select.selectedIndex];
     var parts = $V(select).split(".");
     $V(form.host_class, parts[0]);
     $V(form.event, parts[1]);
+    
+    var auto = !!selected.get("auto");
+    ExClass.toggleConditional(auto);
   },
   submitLayout: function(drag, drop) {
     var coord_x = drop.get("x"),
@@ -200,18 +214,18 @@ ExClass = {
           element.toggleClassName("picked");
         }
       });
-			
+      
       new Draggable(d, {
         revert: 'failure', 
         scroll: window, 
         ghosting: true,
         onStart: function(draggable){
           var element = draggable.element;
-					
+          
           if (!ExClass.pickMode && element.up(".out-of-grid")) {
             element.up(".group-layout").down(".drop-grid").scrollTo();
           }
-					
+          
           $$(".out-of-grid").invoke("addClassName", "dropactive");
         },
         onEnd: function(){
@@ -230,8 +244,8 @@ ExClass = {
         ghosting: true
       });
     });*/
-		
-		function dropCallback(drag, drop) {
+    
+    function dropCallback(drag, drop) {
       drag.style.position = ''; // a null value doesn't work on IE
       
       // prevent multiple fields in the same cell
@@ -270,19 +284,19 @@ ExClass = {
     $$(".droppable").each(function(drop){
       drop.observe("mousedown", function(event){
         if (!ExClass.pickMode) return;
-				
-        Event.stop(event);
-				
-				if (drop.childElements().length) return;
         
-				var drag = $$(".picked")[0];
-				
-				if (!drag) return;
-				
-				dropCallback(drag, drop);
-				drop.insert(drag.removeClassName("picked"));
+        Event.stop(event);
+        
+        if (drop.childElements().length) return;
+        
+        var drag = $$(".picked")[0];
+        
+        if (!drag) return;
+        
+        dropCallback(drag, drop);
+        drop.insert(drag.removeClassName("picked"));
       });
-			
+      
       Droppables.add(drop, {
         hoverclass: 'dropover',
         onDrop: dropCallback
@@ -399,13 +413,13 @@ ExFormula = {
   },
   toggleInsertButtons: function(value, type, field_id){
     value = value && ExFormula.form;
-		
-		if (!value) {
+    
+    if (!value) {
       $$(".insert-formula").invoke("hide");
-		}
-		else {
+    }
+    else {
       $$("tr.ex-class-field:not([data-ex_class_field_id='"+field_id+"']) .insert-formula."+type).invoke("show");
-		}
+    }
   },
   insertText: function(text){
     var field = ExFormula.form._formula;
