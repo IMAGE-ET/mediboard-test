@@ -53,14 +53,14 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
         // W - Warning - Transaction successful, but there may issues 
         // I - Information - Transaction was successful but includes information e.g., inform patient
         // E - Error - Transaction was unsuccessful 
-         $data[] = "E";
-         // ERR-5: Application Error Code (CWE) (optional)
-         $data[] = array(
-           array (
-             "E002",
-             CAppUI::tr("CHL7EventADT-AE-E002")
-           )
-         );
+        $data[] = "E";
+        // ERR-5: Application Error Code (CWE) (optional)
+        $data[] = array(
+          array (
+            "E002",
+            CAppUI::tr("CHL7EventADT-AR-E002")
+          )
+        );
       }
       else {
         $data[] = "W";

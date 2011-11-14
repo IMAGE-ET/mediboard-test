@@ -234,11 +234,7 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
   
   function getGroupAssigningAuthority(CGroups $group) {
-    return array(
-      null,
-      "1.2.250.1.x.x.xx.x",
-      "ISO"
-    );
+    return $this->getAssigningAuthority("FINESS", $group->finess);
   }
   
   function getPersonIdentifiers(CPatient $patient, CGroups $group) {

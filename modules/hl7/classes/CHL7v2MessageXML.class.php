@@ -69,6 +69,8 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     foreach ($nodeList as $_node) {
       $data[$nodeName][] = $_node;
     }
+    
+    return $nodeList;
   }
   
   function queryTextNode($nodeName, DOMNode $contextNode) {
@@ -132,7 +134,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     return $data;
   }
   
-  function getAdmitIdentifiers() {    
+  function getAdmitIdentifiers($nodeName, DOMNode $contextNode) {    
     // RI - Resource identifier 
     $this->getRIIdentifiers($_node, $data);
       

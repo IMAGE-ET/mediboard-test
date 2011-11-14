@@ -116,8 +116,30 @@ class COperatorIHE extends CEAIOperator {
         break;
       // Fusion de deux patients
       case "CHL7v2EventADTA40" : 
-        $exchange_ihe->id_permanent = array_key_exists("PI", $data['personIdentifiers']) ? $data['personIdentifiers']['PI'] : null;
-        $msgAck                     = $dom_evt->handle($ack, $newPatient, $data);
+        $datas = $data;
+        foreach ($datas["merge"] as $data) {
+          $exchange_ihe->id_permanent = array_key_exists("PI", $data['personIdentifiers']) ? $data['personIdentifiers']['PI'] : null;
+          $msgAck                     = $dom_evt->handle($ack, $newPatient, $data);
+        }
+        break;
+      // Création d'une venue - Mise à jour d'information de la venue
+      case "CHL7v2EventADTA01" : 
+      case "CHL7v2EventADTA02" :
+      case "CHL7v2EventADTA03" :
+      case "CHL7v2EventADTA04" :
+      case "CHL7v2EventADTA05" :
+      case "CHL7v2EventADTA06" :
+      case "CHL7v2EventADTA07" :
+      case "CHL7v2EventADTA11" :
+      case "CHL7v2EventADTA12" :
+      case "CHL7v2EventADTA13" :
+      case "CHL7v2EventADTA38" :
+      case "CHL7v2EventADTA44" :
+      case "CHL7v2EventADTA54" :
+      case "CHL7v2EventADTA55" : 
+      case "CHL7v2EventADTZ99" : 
+        $exchange_ihe->id_permanent = array_key_exists("AN", $data['admitIdentifiers']) ? $data['admitIdentifiers']['AN'] : null;
+        $msgAck                     = $dom_evt->handle($ack, $newPatient, $data);  
         break;
       // Aucun des événements - retour d'erreur
       default :

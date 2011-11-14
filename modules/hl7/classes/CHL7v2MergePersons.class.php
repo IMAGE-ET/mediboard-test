@@ -18,18 +18,22 @@
 
 class CHL7v2MergePersons extends CHL7v2MessageXML {
   function getContentNodes() {
-    $data  = array();
+    $data = array();
+
+    foreach ($this->queryNodes("ADT_A40.PATIENT") as $_patient_group) {
+      $sub_data["PID"] = $PID = $this->queryNode("PID", $_patient_group);
     
-    $data["PID"] = $PID = $xpath->queryUniqueNode("//PID");
-    
-    $data["personIdentifiers"] = $this->getPersonIdentifiers("PID.3", $PID);
-    
-    $data["PD1"] = $xpath->queryUniqueNode("//PD1");
-    
-    $data["MRG"] = $MRG = $xpath->queryUniqueNode("//MRG");
-    
-    $data["personElmineIdentifiers"] = $this->getPersonIdentifiers("MRG.1", $MRG);
-    
+      $sub_data["personIdentifiers"] = $this->getPersonIdentifiers("PID.3", $PID);
+      
+      $sub_data["PD1"] = $this->queryNode("PD1", $_patient_group);
+      
+      $sub_data["MRG"] = $MRG = $this->queryNode("MRG", $_patient_group);
+      
+      $sub_data["personElmineIdentifiers"] = $this->getPersonIdentifiers("MRG.1", $MRG);  
+      
+      $data["merge"][] = $sub_data;
+    }
+
     return $data;
   }
   
@@ -43,7 +47,7 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
     $exchange_ihe = $this->_ref_exchange_ihe;
     $exchange_ihe->_ref_sender->loadConfigValues();
     $sender       = $exchange_ihe->_ref_sender;
-    
+
     $patientRI = CValue::read($data['personIdentifiers'], "RI");
     $patientPI = CValue::read($data['personIdentifiers'], "PI");
     
