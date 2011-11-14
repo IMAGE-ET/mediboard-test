@@ -17,7 +17,7 @@
  */
 
 class CHL7v2SegmentZBE extends CHL7v2Segment {
-  static $action = array(
+  static $actions = array(
     "INSERT" => array(
       "A05", "A01", "A14", "A04", "A06", "A07", "A54", "A02", "A15", 
       "A03", "A16", "A21", "A22", "Z80", "Z83", "Z84", "Z86", "Z88"
@@ -45,7 +45,7 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
   
   function build(CHL7v2Event $event) {
     $data[] = null;
-    mbLog($event);
+
     $sejour = $this->sejour;
     $uf     = $this->uf;
     $uf->loadLastLog();
@@ -62,16 +62,31 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     $data[] = $sejour->sortie_prevue;
     
     // ZBE-4: Action on the Movement (ID)
-    $data[] = null;
+    $action_movement = null;
+    foreach (self::$actions as $action => $events) {
+      if (in_array($event->code, $events)) {
+        $action_movement = $action;
+      }
+    };
+    $data[] = $action_movement;
     
     // ZBE-5: Indicator "Historical Movement" (ID) 
-    $data[] = null;
+    $data[] = "N";
     
     // ZBE-6: Original trigger event code (ID) (optional)
-    $data[] = null;
+    $data[] = ($action_movement == "UPDATE" || $action_movement == "UPDATE") ? null : null;
     
     // ZBE-7: Ward of medical responsibility in the period starting with this movement (XON) (optional)
-    $data[] = null;
+    $data[] = array(
+      // ZBE-7.1 : Libellé de l'UF
+      $uf->libelle,
+      // ZBE-7.6 : Identifiant de l'autorité d'affectation  qui a attribué l'identifiant de l'UF de responsabilité médicale
+      $this->getAssigningAuthority("mediboard"),
+      // ZBE-7.7 : La seule valeur utilisable de la table 203 est "UF"
+      "UF",
+      // ZBE-7.10 : Identifiant de l'UF de responsabilité médicale
+      $uf->code
+    );
     
     // ZBE-8: Ward of care responsibility in the period starting with this movement (XON) (optional)
     $data[] = null;
