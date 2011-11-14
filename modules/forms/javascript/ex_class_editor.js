@@ -195,7 +195,124 @@ ExClass = {
       }
     });
   },
+  
+  getSpanningCells: function(cell, span) {
+    span = span || {};
+    
+    var rowspan = parseInt(span.rowspan || parseInt(cell.getAttribute("rowspan")) || 1);
+    var colspan = parseInt(span.colspan || parseInt(cell.getAttribute("colspan")) || 1);
+    
+    var cellPosition = cell.previousSiblings().length;
+    var row = cell.up("tr");
+    
+    // get rows
+    var rowSiblings = row.nextSiblings();
+    rowSiblings.unshift(row);
+    rowSiblings = rowSiblings.slice(0, rowspan);
+    
+    // get cells in each row
+    var grid = [];
+    rowSiblings.each(function(r){
+      var cells = r.childElements().slice(cellPosition, cellPosition+colspan);
+      grid.push(cells);
+    });
+    
+    return grid;
+  },
+  
+  getMaxSpanning: function(grid) {
+    var maxEmpty = function(line, j) {
+      for (var i = 0; i < line.length; i++) {
+        if (i + j == 0) continue;
+        
+        if (line[i].down(".draggable")) {
+          return i;
+        }
+      }
+      return i;
+    }
+    
+    var linesMax = [];
+    for(var y = 0; y < grid.length; y++) {
+      var line = grid[y];
+      var maxX = maxEmpty(line, y);
+      if (maxX == 0) break;
+      linesMax.push(maxX);
+    }
+    
+    var max = {
+      x: linesMax.max(),
+      y: linesMax.length
+    };
+    
+    var newGrid = [];
+    grid.each(function(row, y){
+      if (y < max.y) {
+        newGrid.push(row.slice(0, max.x));
+      }
+    });
+    
+    return {grid: newGrid, width: max.x, height: max.y};
+  },
+	
+	changeSpan: function(button) {
+		var value = button.value;
+		var input = button.up(".arrows").down("input");
+		var newValue = Math.max(1, parseInt(input.value) + parseInt(value));
+		input.value = newValue;
+		input.fire("ui:change");
+	},
+	
+  setRowSpan: function(cell, rowspan){
+    var currentGrid = ExClass.getSpanningCells(cell);
+    currentGrid.invoke("invoke", "show");
+    
+    var newGrid = ExClass.getMaxSpanning(ExClass.getSpanningCells(cell, {rowspan: rowspan}));
+    newGrid.grid.invoke("invoke", "hide");
+    cell.show();
+    
+    var max = newGrid.height;
+    cell.writeAttribute("rowspan", max);
+    return max;
+  },
+  
+  setColSpan: function(cell, colspan){
+    var currentGrid = ExClass.getSpanningCells(cell);
+    currentGrid.invoke("invoke", "show");
+    
+    var newGrid = ExClass.getMaxSpanning(ExClass.getSpanningCells(cell, {colspan: colspan}));
+    newGrid.grid.invoke("invoke", "hide");
+    cell.show();
+    
+    var max = newGrid.width;
+    cell.writeAttribute("colspan", max);
+    return max;
+  },
+  
+  setSpan: function(input) {
+    var type = input.className;
+    var cell = input.up(".cell");
+    
+    if (type == "rowspan") {
+      $V(input, ExClass.setRowSpan(cell, input.value));
+    }
+    else {
+      $V(input, ExClass.setColSpan(cell, input.value));
+    }
+  },
+  
   initLayoutEditor: function(){
+    /*$$(".draggable .size").each(function(size) {
+      size.observe("mousedown", Event.stop);
+    });*/
+    
+    $$(".size input").each(function(select) {
+      select.observe("ui:change", function(event){
+        var elt = Event.element(event);
+        ExClass.setSpan(elt);
+      });
+    });
+    
     $$(".draggable:not(.hostfield)").each(function(d){
       d.observe("mousedown", function(event){
         if (!ExClass.pickMode) return;

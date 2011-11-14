@@ -12,6 +12,19 @@
     {{else}}
       {{mb_label object=$ex_object field=$_field->name}}
     {{/if}}
-    <div class="overlay opacity-0"></div>
+    <div class="overlay"></div>
+    <div class="size" ondblclick="Event.stop(event)">
+			<div class="row arrows">
+				<input type="hidden" class="rowspan" value="1" />
+	      <button class="up notext"   value="-1" onclick="ExClass.changeSpan(this)">Une ligne en moins</button>
+	      <button class="down notext" value="1"  onclick="ExClass.changeSpan(this)">Une ligne en plus</button>
+			</div>
+			
+      <div class="col arrows">
+        <input type="hidden" class="colspan" value="1" />
+        <button class="left notext"  value="-1" onclick="ExClass.changeSpan(this)">Une colonne en moins</button>
+        <button class="right notext" value="1"  onclick="ExClass.changeSpan(this)">Une colonne en plus</button>
+      </div>
+    </div>
   </div>
 </div>

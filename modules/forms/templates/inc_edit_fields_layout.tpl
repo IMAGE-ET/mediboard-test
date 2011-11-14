@@ -104,7 +104,12 @@ Main.add(function(){
     max-height: 2.5em;
   }
   
-  .grid .field .field-content {
+  .cell[rowspan] .grid .field .field-content {
+    max-height: none;
+  }
+  
+  .grid .field .field-content,
+  .cell[rowspan="1"] .grid .field .field-content {
     max-height: 3.5em;
   }
   
@@ -114,7 +119,34 @@ Main.add(function(){
     left:0;
     bottom:0;
     right:0;
-    background: white;
+  }
+  
+  .draggable .size .arrows {
+    position: absolute;
+  }
+  
+  .draggable .size .col {
+    right: 0;
+		top: 50%;
+		margin-top: -8px;
+  }
+  
+  .draggable .size .row {
+    left: 50%;
+    bottom: 0;
+  }
+	
+  .draggable .size button {
+    background: none;
+		border: none;
+  }
+  
+  .draggable .size {
+    display: none;
+  }
+  
+  .drop-grid .draggable:hover .size {
+    /*display: block;*/
   }
   
   .grid .hostfield .field-name, 
@@ -130,10 +162,10 @@ Main.add(function(){
   .draggable.hr {
     padding: 6px;
   }
-	
-	.message_text {
-	  min-height: 1.8em;
-	}
+  
+  .message_text {
+    min-height: 1.8em;
+  }
 
   div.ex-message-title {
     font-weight: bold;
@@ -228,13 +260,13 @@ Main.add(function(){
     </li>
   </ul>
   <hr class="control_tabs" />
-	
-	<table class="main tbl" style="table-layout: fixed;">
+  
+  <table class="main tbl" style="table-layout: fixed;">
     <tr>
       <th>Libellés</th>
       <th>Champs</th>
     </tr>
-	</table>
+  </table>
   
   <table class="main layout" style="table-layout: fixed;">
     <!-- Fields -->
