@@ -4,12 +4,6 @@
   Main.add(window.print);
 </script>
 
-<style type="text/css">
-  table {
-    font-size: 1em;
-  }
-</style>
-
 <table class="tbl">
   <tr class="clear">
     <th colspan="10">
@@ -28,10 +22,9 @@
       </h1>
     </th>
   </tr>
-  
   {{foreach from=$listPlage item=curr_plage}}
   <tr class="clear">
-    <td colspan="10">
+    <td colspan="10" class="text">
       <h2>
       	{{$curr_plage->date|date_format:$conf.longdate}}
       	- 
