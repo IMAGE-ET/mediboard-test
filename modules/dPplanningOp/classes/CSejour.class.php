@@ -793,14 +793,10 @@ class CSejour extends CCodable implements IPatientRelated {
     // Annulation / Récusation
     $this->completeField("annule", "recuse");
     $annule = $this->annule;
-    $recuse = $this->recuse;
     if ($this->fieldModified("recuse", "1"))  $annule = "1";
     if ($this->fieldModified("recuse", "0"))  $annule = "0";
     if ($this->fieldModified("recuse", "-1")) $annule = "0";
-    if ($this->fieldModified("annule", "0"))  $recuse = "0";
-    
     $this->annule = $annule;
-    $this->recuse = $recuse;
 
     // Détail heure d'entrée
     // @todo Passer au TimePicker
