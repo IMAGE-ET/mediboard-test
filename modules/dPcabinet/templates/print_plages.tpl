@@ -4,6 +4,12 @@
   Main.add(window.print);
 </script>
 
+<style type="text/css">
+  table {
+    font-size: 1em;
+  }
+</style>
+
 <table class="tbl">
   <tr class="clear">
     <th colspan="10">
