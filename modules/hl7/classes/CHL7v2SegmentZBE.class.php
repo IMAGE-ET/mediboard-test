@@ -44,14 +44,12 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
   var $uf     = null;
   
   function build(CHL7v2Event $event) {
-    $data[] = null;
-
+    parent::build($event);
+    
     $sejour = $this->sejour;
     $uf     = $this->uf;
     $uf->loadLastLog();
     
-    parent::build($event);
-
     // ZBE-1: Movement ID (EI) (optional)
     $data[] = array (
       // Entity identifier
