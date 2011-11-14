@@ -342,6 +342,8 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
       }
     }
     
+    $this->purgeEmptyGroups();
+    
     // pas forcément utile : mais ceci donne tous les segments dans 
     // l'ordre de parcours, comme si on le faisait recursivement
     // $c = $specs->xpath("//segment | //group");

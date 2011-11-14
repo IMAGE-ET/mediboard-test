@@ -83,6 +83,36 @@ class CHL7v2SegmentGroup extends CHL7v2Entity {
     return $this->children[] = $child;
   }
   
+  function purgeEmptyGroups(){
+    foreach($this->children as $i => $child) {
+      if (!$child instanceof CHL7v2SegmentGroup) continue;
+      
+      $child->purgeEmptyGroups();
+      
+      if ($child->isEmpty()) {
+        unset($this->children[$i]);
+      }
+    }
+  }
+  
+  function isEmpty(){
+    foreach($this->children as $child) {
+      if (!$child instanceof CHL7v2SegmentGroup) {
+        return false;
+      }
+      
+      if (empty($child->children)) {
+        return true;
+      }
+      
+      if (!$child->isEmpty()) {
+        return false;
+      }
+    }
+    
+    return true;
+  }
+  
   function __toString(){
     $str = implode((CHL7v2Message::$decorateToString ? "" : $this->getMessage()->segmentTerminator), $this->children);
     
