@@ -137,6 +137,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   function addZBE(CSejour $sejour = null) {
     $ZBE = CHL7v2Segment::create("ZBE", $this->message);
     $ZBE->sejour = $sejour;
+    $ZBE->uf     = new CUniteFonctionnelle();
     $ZBE->build($this);
   }
   
