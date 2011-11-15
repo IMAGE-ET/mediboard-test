@@ -66,9 +66,9 @@ class CExClass extends CMbObject {
     $props["host_class"] = "str notNull protected";
     $props["event"]      = "str notNull protected canonical";
     $props["name"]       = "str notNull seekable";
-    $props["disabled"]   = "bool default|1";
+    $props["disabled"]   = "bool notNull default|1";
     $props["conditional"]= "bool notNull default|0";
-    $props["required"]   = "bool notNull default|0";
+    $props["required"]   = "bool default|0";
     $props["unicity"]    = "enum notNull list|no|host default|no vertical"; //"enum notNull list|no|host|reference1|reference2 default|no vertical";
     $props["group_id"]   = "ref class|CGroups";
     return $props;
