@@ -80,14 +80,16 @@
         {{$_user->_view}}
       </a>
     </td>
-    <td class="text">
-      {{assign var="type" value=$_user->user_type}}
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id={{$_user->_id}}">
-      	{{if $_user->template}}
-				{{mb_label object=$_user field=template}} : 
-				{{/if}}
-        {{$utypes.$type}}
-      </a>
+    <td class="text {{if !$_user->user_type}}empty{{/if}}">
+    	{{if $_user->user_type}}
+	      {{assign var="type" value=$_user->user_type}}
+	      	{{if $_user->template}}
+					  {{mb_label object=$_user field=template}} : 
+					{{/if}}
+	        {{$utypes.$type}}
+			{{else}}
+			  Aucun type
+			{{/if}}
     </td>
     
     <td class="button" style="white-space: nowrap; text-align: left;">
