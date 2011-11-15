@@ -152,10 +152,24 @@ function cancelSejourSSR() {
 	      </td>
 	
 	      <th>{{mb_label object=$sejour field=entree_prevue}}</th>
-	      <td colspan="2">{{mb_field object=$sejour field="entree_prevue" form="editSejour" tabindex="5" register=true canNull=false onchange="updateDureePrevue();"}}</td>
+	      <td colspan="2">
+          {{mb_field object=$sejour field="entree_prevue" form="editSejour" tabindex="5" register=true canNull=false onchange="updateDureePrevue();"}}
+        </td>
 	      
-	      <th rowspan="4">{{mb_label object=$sejour field=rques}}</th>
-	      <td rowspan="4">{{mb_field object=$sejour field=rques}}</td>
+        <td rowspan="4">
+          {{mb_label object=$sejour field=rques}}<br />
+          {{mb_field object=$sejour field=rques}}
+          <script type="text/javascript">
+            Main.add(function() {
+              new AideSaisie.AutoComplete(getForm("editSejour").elements.rques, {
+                objectClass: "{{$sejour->_class}}",
+                contextUserId: "{{$app->user_id}}"
+              });
+            });
+          </script>
+        </td>
+          
+        </td>
 	    </tr>
 	  
 	    <tr>
@@ -185,7 +199,11 @@ function cancelSejourSSR() {
 	      </td>
 	      
 	      <th>{{mb_label object=$sejour field=sortie_prevue}}</th>
-	      <td colspan="2">{{mb_field object=$sejour field="sortie_prevue" form="editSejour"  tabindex="6" register=true canNull=false onchange="updateDureePrevue();"}}</td>
+	      
+        <td colspan="2">
+          {{mb_field object=$sejour field="sortie_prevue" form="editSejour"  tabindex="6" register=true canNull=false onchange="updateDureePrevue();"}}
+        </td>
+
 	    </tr>
 	    
 	    <tr>

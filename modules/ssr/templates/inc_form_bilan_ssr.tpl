@@ -335,27 +335,30 @@ duplicateSSRLine = function(element_prescription_id, category_id){
 				<input type="hidden" name="callback" value="updateBilanId" />
 				{{mb_key object=$bilan}}
         {{mb_field object=$bilan field=sejour_id hidden=1}}
+        
 	    	<table class="form">
           <tr>
             <th class="title" style="width: 50%">{{tr}}CBilanSSR{{/tr}}</th>
           </tr>
 
-	    	  <tr>
-				    <th class="category">{{mb_label object=$bilan field=entree}}</th>
-				  </tr>
 					<tr>
 						<td>
-		          {{mb_field object=$bilan field=entree rows=6 onblur="this.form.onsubmit()"}}
-		        </td>
+              <fieldset>
+                <legend>{{mb_label object=$bilan field=entree}}</legend>
+                {{mb_field object=$bilan field=entree rows=6 onblur="this.form.onsubmit()"}}
+              </fieldset>
+  	        </td>
 					</tr>
-	        <tr>
-	          <th class="category">{{mb_label object=$bilan field=sortie}}</th>
-	        </tr>			
-				  <tr>
-				    <td>
-				      {{mb_field object=$bilan field=sortie rows=6 onblur="this.form.onsubmit()"}}
-				    </td> 
-				  </tr>
+
+          <tr>
+            <td>
+              <fieldset>
+                <legend>{{mb_label object=$bilan field=sortie}}</legend>
+                {{mb_field object=$bilan field=sortie rows=6 onblur="this.form.onsubmit()"}}
+              </fieldset>
+            </td>
+          </tr>
+
 			  </table>
 			</form>
 
