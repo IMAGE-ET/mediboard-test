@@ -28,6 +28,7 @@ $services = $service->loadListWithPerms(PERM_READ, $where, $order);
 $sejour = new CSejour;
 $sejour->load($sejour_id);
 $sejour->loadRefsNotes();
+$sejour->loadRefsDocItems();
 
 if ($sejour_id && !$sejour->_id) {
   CAppUI::setMsg(CAppUI::tr("CSejour-unavailable"), UI_MSG_WARNING);
