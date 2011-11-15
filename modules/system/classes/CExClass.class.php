@@ -57,7 +57,7 @@ class CExClass extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = "ex_class";
     $spec->key   = "ex_class_id";
-    $spec->uniques["ex_class"] = array("host_class", "event", "name");
+    $spec->uniques["ex_class"] = array("group_id", "host_class", "event", "name");
     return $spec;
   }
 
@@ -66,7 +66,7 @@ class CExClass extends CMbObject {
     $props["host_class"] = "str notNull protected";
     $props["event"]      = "str notNull protected canonical";
     $props["name"]       = "str notNull seekable";
-    $props["disabled"]   = "bool notNull default|1";
+    $props["disabled"]   = "bool default|1";
     $props["conditional"]= "bool notNull default|0";
     $props["required"]   = "bool notNull default|0";
     $props["unicity"]    = "enum notNull list|no|host default|no vertical"; //"enum notNull list|no|host|reference1|reference2 default|no vertical";
