@@ -32,8 +32,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
   <meta name="format-detection" content="telephone=no" />
   
-  <!-- IE9 specific JumpLists -->
   {{if $browser.name == "msie"}}
+    <!-- IE9 specific JumpLists -->
     <meta name="application-name" content="{{$conf.page_title}}" />
     <meta name="application-tooltip" content="{{$conf.page_title}}" />
     <meta name="msapplication-starturl" content="./" />
@@ -85,19 +85,26 @@
   
   {{$mediboardScript|smarty:nodefaults}}
   
-  {{if $dialog}}
-    <script type="text/javascript">
+  <script type="text/javascript">
+    {{if $dialog}}
       Event.observe(document, 'keydown', closeWindowByEscape);
-    </script>
-  {{/if}}
-  
-  {{if @$conf.weinre_debug_host}}
-    <script type="text/javascript">
+    {{/if}}
+    
+  	{{if @$conf.weinre_debug_host}}
       setTimeout(function() {
         $$('head')[0].insert(DOM.script({src: 'http://{{$conf.weinre_debug_host}}/target/target-script-min.js'}));
       }, 0);
-    </script>
-  {{/if}}
+    {{/if}}
+    
+    {{if $allInOne}}
+      {{* any ajax method > /dev/null *}}
+      Class.extend(Url, {
+        requestUpdate: function(){},
+        requestJSON: function(){},
+        periodicalUpdate: function(){}
+      });
+    {{/if}}
+  </script>
 </head>
 
 <body class="{{if @$app->user_prefs.touchscreen == 1 || $browser.name == 'ipad'}} touchscreen {{/if}} {{if $browser.name == 'ipad'}} ipad {{/if}}">
