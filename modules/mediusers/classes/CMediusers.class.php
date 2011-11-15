@@ -957,11 +957,10 @@ class CMediusers extends CMbObject {
     );
   }
   
-  function makeUsernamePassword($first_name, $last_name, $id = null, $number = false) {
+  function makeUsernamePassword($first_name, $last_name, $id = null, $number = false, $prepass = "mdp") {
     $length = 20 - strlen($id);
-    $lp = substr(preg_replace($number ? "/[^a-z0-9]/i" : "/[^a-z]/i", "", strtolower(CMbString::removeDiacritics(($first_name ? $first_name[0] : '').$last_name))),0,$length) . $id;
-    $this->_user_username = $lp;
-    $this->_user_password = $lp;
+    $this->_user_username = substr(preg_replace($number ? "/[^a-z0-9]/i" : "/[^a-z]/i", "", strtolower(CMbString::removeDiacritics(($first_name ? $first_name[0] : '').$last_name))),0,$length) . $id;
+    $this->_user_password = $prepass . substr(preg_replace($number ? "/[^a-z0-9]/i" : "/[^a-z]/i", "", strtolower(CMbString::removeDiacritics($last_name))),0,$length) . $id;
   }
   
   function getNbJoursPlanningSSR($date){

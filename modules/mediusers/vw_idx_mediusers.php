@@ -9,10 +9,10 @@
 
 CCanDo::checkRead();
 
-$page       = intval(CValue::get('page', 0));
-$pro_sante  = CValue::get("pro_sante", array());
-$inactif    = CValue::get("inactif", array());
-$ldap_bound = CValue::get("ldap_bound", array());
+$page       = intval(CValue::getOrSession('page', 0));
+$pro_sante  = CValue::get("pro_sante", false);
+$inactif    = CValue::get("inactif", false);
+$ldap_bound = CValue::get("ldap_bound", false);
 $filter     = CValue::getOrSession("filter", "");
 $order_way  = CValue::getOrSession("order_way", "ASC");
 $order_col  = CValue::getOrSession("order_col", "function_id");

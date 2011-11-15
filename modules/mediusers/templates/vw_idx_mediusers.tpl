@@ -1,5 +1,11 @@
 <script type="text/javascript">
 
+function popupImport() {
+  var url = new Url("mediusers", "user_import_csv");
+  url.popup(800, 600, "Import des utilisateurs");
+  return false;
+}
+
 function loadProfil(type){
   var tabProfil = {{$tabProfil|@json}};
 
@@ -72,6 +78,7 @@ function changePage(page) {
   {{/if}}
   <tr>
   	<td>
+  	  <button type="button" style="float:right;" onclick="return popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button>
       <form name="listFilter" action="?m={{$m}}" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
@@ -91,16 +98,13 @@ function changePage(page) {
           <tr>
             <th>Afficher seulement</th>
             <td>
-              <label>
-                <input onchange="$V(this.form.page, 0)" type="checkbox" name="pro_sante" {{if $pro_sante}}checked="checked"{{/if}} /> Professionnel de santé
-              </label>
-              <label>
-                <input onchange="$V(this.form.page, 0)" type="checkbox" name="inactif" {{if $inactif}}checked="checked"{{/if}} /> Inactif
-              </label>
+              <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="pro_sante" {{if $pro_sante}}checked="checked"{{/if}} />
+              <label for="pro_sante">Professionnel de santé</label>
+              <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="inactif" {{if $inactif}}checked="checked"{{/if}} />
+              <label for="inactif">Inactif</label>
               {{if $configLDAP}}
-              <label>
-                <input onchange="$V(this.form.page, 0)" type="checkbox" name="ldap_bound" {{if $ldap_bound}}checked="checked"{{/if}} /> Associé au LDAP
-              </label>
+              <input onchange="$V(this.form.page, 0, false)" type="checkbox" name="ldap_bound" {{if $ldap_bound}}checked="checked"{{/if}} />
+              <label>Associé au LDAP</label>
               {{/if}}
             </td>
           </tr>
