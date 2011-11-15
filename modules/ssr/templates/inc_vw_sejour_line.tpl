@@ -24,11 +24,13 @@
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="dosql" value="do_sejour_aed" />
   <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
-  <input type="hidden" name="patient_id" value="{{$_sejour->_ref_patient->_id}}" />
+  <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
   <input type="hidden" name="recuse" value="{{$_sejour->recuse}}" />
   
+  {{assign var="_fiche" value=$_sejour->_ref_fiche_autonomie}}
+  
   {{if $_sejour->recuse == "-1"}}
-    Non&nbsp;validé <br />
+    <div style="white-space: nowrap;" onmouseover="ObjectTooltip.createEx(this, '{{$_fiche->_guid}}')">Non validé</div>
     <button type="button" class="tick notext" onclick="$V(this.form.recuse, '0'); submitAdmission(this.form);">
       {{tr}}OK{{/tr}}
     </button>
@@ -36,12 +38,12 @@
       {{tr}}Cancel{{/tr}}
     </button>
   {{elseif $_sejour->recuse == "1"}}
-    Récusé <br />
+    <div style="white-space: nowrap;" onmouseover="ObjectTooltip.createEx(this, '{{$_fiche->_guid}}')">Récusé</div>
     <button type="button" class="cancel notext" onclick="$V(this.form.recuse, '-1'); submitAdmission(this.form);">
       {{tr}}Cancel{{/tr}}
     </button>
   {{else}}
-    Validé <br />
+    <div style="white-space: nowrap;" onmouseover="ObjectTooltip.createEx(this, '{{$_fiche->_guid}}')">Validé</div>
     <button type="button" class="cancel notext" onclick="$V(this.form.recuse, '-1'); submitAdmission(this.form);">
       {{tr}}Cancel{{/tr}}
     </button>

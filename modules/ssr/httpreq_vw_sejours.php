@@ -86,7 +86,7 @@ $functions  = CMbObject::massLoadFwdRef($praticiens, "function_id");
 
 foreach ($sejours as $sejour_id => $_sejour) {
   $_sejour->loadRefPraticien(1);
-	$praticien =& $_sejour->_ref_praticien;
+  $_sejour->loadRefFicheAutonomie();
   
 	if ($filterFunction && $filterFunction != $praticien->function_id) {
     unset($sejours[$sejour_id]);

@@ -85,7 +85,7 @@ function cancelSejourSSR() {
   <table class="form">
     <tr>
       {{if $sejour->_id}}
-      <th class="title modify text" colspan="6">
+      <th class="title modify text" colspan="8">
         {{mb_include module=system template=inc_object_notes      object=$sejour}}
         {{mb_include module=system template=inc_object_idsante400 object=$sejour}}
         {{mb_include module=system template=inc_object_history    object=$sejour}}
@@ -97,7 +97,7 @@ function cancelSejourSSR() {
         {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}
       </th>
       {{else}}
-      <th class="title" colspan="5">
+      <th class="title" colspan="8">
         {{tr}}CSejour-title-create{{/tr}} 
         {{if $sejour->_NDA}}
           pour le dossier
@@ -153,6 +153,9 @@ function cancelSejourSSR() {
 	
 	      <th>{{mb_label object=$sejour field=entree_prevue}}</th>
 	      <td colspan="2">{{mb_field object=$sejour field="entree_prevue" form="editSejour" tabindex="5" register=true canNull=false onchange="updateDureePrevue();"}}</td>
+	      
+	      <th rowspan="4">{{mb_label object=$sejour field=rques}}</th>
+	      <td rowspan="4">{{mb_field object=$sejour field=rques}}</td>
 	    </tr>
 	  
 	    <tr>
@@ -209,9 +212,12 @@ function cancelSejourSSR() {
             {{/foreach}}
           </select>
 	      </td>
-	      {{if $conf.ssr.recusation.use_recuse}}
+	      {{if $conf.ssr.recusation.use_recuse && $sejour->_id}}
         <th>{{mb_label object=$sejour field=recuse}}</th>
-        <td colspan="2">{{mb_field object=$sejour field=recuse value=0}}</td>
+        <td colspan="2">{{mb_value object=$sejour field=recuse}}</td>
+	      {{elseif $conf.ssr.recusation.use_recuse}}
+        <th></th>
+        <td colspan="2"><input name="recuse" type="hidden" value="-1" /></td>
 	      {{else}}
 	      <th></th>
 	      <td colspan="2"><input name="recuse" type="hidden" value="0" /></td>
@@ -220,24 +226,24 @@ function cancelSejourSSR() {
 	    
 	    {{if !$dialog}} 
 	    <tr>
-	      <td class="button" colspan="5">
+	      <td class="button" colspan="8">
 	        {{if $sejour->_id}}
 	          {{if 0}}
-	            <button class="modify default" type="submit" tabindex="21">{{tr}}Save{{/tr}}</button>
+	            <button class="modify default" type="submit" tabindex="23">{{tr}}Save{{/tr}}</button>
 	            
-	            <button class="{{$sejour->annule|ternary:'change':'cancel'}}" type="button" tabindex="22" onclick="cancelSejourSSR();">
+	            <button class="{{$sejour->annule|ternary:'change':'cancel'}}" type="button" tabindex="24" onclick="cancelSejourSSR();">
 	               {{tr}}{{$sejour->annule|ternary:'Restore':'Cancel'}}{{/tr}}
 	            </button>
 	            
 	            {{if $can->admin}}
-	              <button class="trash" type="button" tabindex="22" onclick="confirmDeletion(this.form,{typeName:'le séjour ',objName:'{{$sejour->_view|smarty:nodefaults|JSAttribute}}'})">
+	              <button class="trash" type="button" tabindex="25" onclick="confirmDeletion(this.form,{typeName:'le séjour ',objName:'{{$sejour->_view|smarty:nodefaults|JSAttribute}}'})">
 	                {{tr}}Delete{{/tr}}
 	              </button>
 	            {{/if}}
 	          {{/if}}
 	              
 	        {{else}}
-	          <button class="submit default" tabindex="23" type="submit">{{tr}}Create{{/tr}}</button>
+	          <button class="submit default" tabindex="26" type="submit">{{tr}}Create{{/tr}}</button>
 	        {{/if}}
 	      </td>
 	    </tr>
