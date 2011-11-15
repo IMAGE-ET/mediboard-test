@@ -21,32 +21,38 @@
     <td class="narrow">
     
 <script type="text/javascript">
-Main.add(Control.Tabs.create.curry('tabs-rhss', true));
+Main.add(Control.Tabs.create.curry('tabs-rhss', true, {
+  afterChange: function(newContainer){
+    var rhs_id = newContainer.get("rhs_id");
+    DependancesRHSGraphs[rhs_id]();
+    DependancesRHSGraphs[rhs_id] = function(){}
+  }
+}));
 </script>
 
 <ul id="tabs-rhss" class="control_tabs_vertical" style="width: 14em;">
   {{foreach from=$rhss item=_rhs}}
   <li>
-  	<a href="#cotation-{{if $_rhs->_id}}{{$_rhs->_id}}{{else}}{{$_rhs->date_monday}}{{/if}}" 
+    <a href="#cotation-{{if $_rhs->_id}}{{$_rhs->_id}}{{else}}{{$_rhs->date_monday}}{{/if}}" 
       {{if !$_rhs->_id}}class="empty"{{/if}}
       {{if !$_rhs->_in_bounds}}class="wrong"{{/if}}
-			>
-  		{{$_rhs}}
+      >
+      {{$_rhs}}
     <br />
-		<small>
+    <small>
       du {{mb_value object=$_rhs field=date_monday}}
       au {{mb_value object=$_rhs field=_date_sunday}}
     </small>
-		</a>
-	</li>
+    </a>
+  </li>
   {{/foreach}}
 </ul>
 
     </td>
-		<td>
-			
+    <td>
+      
 {{foreach from=$rhss item=_rhs}}
-<div id="cotation-{{if $_rhs->_id}}{{$_rhs->_id}}{{else}}{{$_rhs->date_monday}}{{/if}}" style="display: none;">
+<div id="cotation-{{if $_rhs->_id}}{{$_rhs->_id}}{{else}}{{$_rhs->date_monday}}{{/if}}" style="display: none;" data-rhs_id="{{$_rhs->_id}}">
   {{mb_include template=inc_edit_rhs rhs=$_rhs}}
 </div>
 {{/foreach}}

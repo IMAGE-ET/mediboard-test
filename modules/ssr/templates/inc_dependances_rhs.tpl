@@ -19,7 +19,9 @@
 </table>
 
 <script>
-Main.add(function(){
+DependancesRHSGraphs = window.DependancesRHSGraphs || {};
+
+DependancesRHSGraphs["{{$rhs->_id}}"] = function(){
   Flotr.draw("radar-dependances-{{$dependances->_guid}}", 
   [[
     [0, {{$dependances->habillage}}],
@@ -42,9 +44,13 @@ Main.add(function(){
     ]},
     yaxis: {min: 0, max: 4}
   });
-});
-</script>
+};
 
+try {
+  DependancesRHSGraphs["{{$rhs->_id}}"]();
+} catch(e) {}
+
+</script>
 
 <div id="radar-dependances-{{$dependances->_guid}}" style="width: 300px; height: 300px; cursor: pointer;"
      onclick="CotationRHS.editDependancesRHS({{$rhs->_id}})" title="{{tr}}Edit{{/tr}}"></div>
