@@ -36,11 +36,11 @@ CotationRHS = {
   
   printRHS: function(rhs_date_monday) {
     var form = getForm('editRHS-'+rhs_date_monday);
-		var url = new Url("ssr", "print_sejour_rhs_no_charge");
+    var url = new Url("ssr", "print_sejour_rhs_no_charge");
     url.addParam("sejour_ids", form.select('input.rhs:checked').pluck('value').join("-"));
     url.addParam("all_rhs", $V(form.all_rhs) ? "1" : "0");
     url.addElement(form.date_monday);
-		url.popup(700, 500, "Impression RHS à facturer");
+    url.popup(700, 500, "Impression RHS à facturer");
   },
 
   chargeRHS: function(rhs_date_monday) {
@@ -48,8 +48,8 @@ CotationRHS = {
   },
 
   restoreRHS: function(rhs_date_monday) {
-		var form = getForm('editRHS-'+rhs_date_monday);
-		$V(form.facture, '0');
+    var form = getForm('editRHS-'+rhs_date_monday);
+    $V(form.facture, '0');
     form.onsubmit();
   },
   
@@ -110,28 +110,39 @@ CotationRHS = {
     } else {
       $V(oForm.code_activite_cdarr, dn[0].firstChild.nodeValue);
     }
+  },
+  
+  editDependancesRHS: function(rhs_id) {
+    var url = new Url('ssr', 'ajax_edit_dependances_rhs');
+    url.addParam('rhs_id', rhs_id);
+    url.modal({
+      width: 300,
+      height: 200
+    });
+    
+    url.modalObject.observe("afterClose", CotationRHS.refreshRHS.curry(rhs_id));
   }
 };
 
 Charged = {
   refresh: function(rhs_date_monday) {
-		var form = getForm('editRHS-'+rhs_date_monday);
+    var form = getForm('editRHS-'+rhs_date_monday);
     var label = form.down("label.rhs-charged");
     var count = form.select('tr.charged').length;
     label.setVisibility(count != 0);
     label.down("span").update(count);
   },
   
-	addSome: function(rhs_date_monday) {
+  addSome: function(rhs_date_monday) {
     var form = getForm('editRHS-'+rhs_date_monday);
-		var max = 10;
-		form.select('input.rhs').each(function (checkbox) {
-			if (!checkbox.checked && $(checkbox).up('tr').visible()) {
-				if (max-- > 0) {
-					checkbox.checked = true;
-				}
-			}
-		});
+    var max = 10;
+    form.select('input.rhs').each(function (checkbox) {
+      if (!checkbox.checked && $(checkbox).up('tr').visible()) {
+        if (max-- > 0) {
+          checkbox.checked = true;
+        }
+      }
+    });
   },
   toggle: function(checkbox) {
     $$('tr.charged').invoke('setVisible', !checkbox.checked);
