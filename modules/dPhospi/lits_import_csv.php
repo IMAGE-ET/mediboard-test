@@ -2,7 +2,7 @@
 
 /**
  * @package Mediboard
- * @subpackage mediusers
+ * @subpackage dPhospi
  * @version $Revision: 6153 $
  * @author SARL OpenXtrem
  * @license GNU GPL

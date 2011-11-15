@@ -2,21 +2,20 @@
 
 {{*
  * @package Mediboard
- * @subpackage dPhospi
+ * @subpackage dPbloc
  * @version $Revision: 6287 $
  * @author SARL OpenXtrem
  * @license GNU GPL
 *}}
 
-<h2>Import de lits Mediboard.</h2>
+<h2>Import de salles de bloc Mediboard.</h2>
 
 <div class="small-info">
   Veuillez indiquez les champs suivants dans un fichier CSV dont les champs sont séparés par
   <strong>;</strong> et les textes par <strong>"</strong>, la première ligne étant sautée :
   <ul>
-    <li>Nom du service *</li>
-    <li>Nom de la chambre *</li>
-    <li>Nom du lit *</li>
+    <li>Nom de la salle *</li>
+    <li>Nom ddu bloc *</li>
   </ul>
   <em>* : champs obligatoires</em>
 </div>
@@ -34,17 +33,16 @@
 {{if $results|@count}}
 <table class="tbl">
   <tr>
-    <th class="title" colspan="3">{{$results|@count}} lits trouvés</th>
+    <th class="title" colspan="3">{{$results|@count}} salles trouvés</th>
   </tr>
   <tr>
-    <th>Service</th>
-    <th>Chambre</th>
-    <th>Lit</th>
+    <th>Bloc</th>
+    <th>Salle</th>
   </tr>
-  {{foreach from=$results item=_lit}}
+  {{foreach from=$results item=_salle}}
   <tr>
-    <td>{{$_lit.service}}</td>
-    <td>{{$_lit.chambre}}</td>
+    <td>{{$_salle.bloc}}</td>
+    <td>{{$_salle.nom}}</td>
     <td>{{$_lit.nom}}</td>
   </tr>
   {{/foreach}}

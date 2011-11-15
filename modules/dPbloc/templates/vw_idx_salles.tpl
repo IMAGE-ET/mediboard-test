@@ -8,10 +8,20 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+
+function popupImport() {
+  var url = new Url("dPbloc", "salles_import_csv");
+  url.popup(800, 600, "Import des Salles");
+  return false;
+}
+</script>
+
 <table class="main">
   <tr>
     <td class="halfPane">
       <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;salle_id=0">{{tr}}CSalle-title-create{{/tr}}</a>
+      <button type="button" style="float:right;" onclick="return popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button></li>
       <table class="tbl">
         {{foreach from=$blocs_list item=_bloc}}
           <tr>
