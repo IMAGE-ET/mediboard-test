@@ -191,6 +191,16 @@ $library->versionString = "Version 5.1";
 
 CLibrary::$all[$library->name] = $library;
 
+/*$library = new CLibrary;
+$library->name = "Scriptaculous";
+$library->url = "http://script.aculo.us/";
+$library->fileName = "scriptaculous-js-1.9.0.zip";
+$library->description = "Composant Javascript d'effets spéciaux, accompagné du framework prototype.js";
+$library->sourceDir = "scriptaculous-js-1.9.0";
+$library->targetDir = "scriptaculous";
+$library->versionFile = "CHANGELOG";
+$library->versionString = "*V1.9.0*";*/
+
 $library = new CLibrary;
 $library->name = "Scriptaculous";
 $library->url = "http://script.aculo.us/";
@@ -317,7 +327,7 @@ $library->description = "Création de graphiques en JS";
 $library->sourceDir = "flotr";
 $library->targetDir = "flotr";
 $library->versionFile = "flotr.js";
-$library->versionString = 'draw:function(a,b,c,d){d=d||';
+$library->versionString = 'bind(this))},setOptions';
 
 CLibrary::$all[$library->name] = $library;
 

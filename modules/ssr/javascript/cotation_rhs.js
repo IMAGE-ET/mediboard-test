@@ -19,7 +19,9 @@ CotationRHS = {
   refreshRHS: function(rhs_id) {
     new Url('ssr', 'ajax_edit_rhs') .
       addParam('rhs_id', rhs_id) .
-      requestUpdate('cotation-' + rhs_id);
+      requestUpdate('cotation-' + rhs_id, {
+				onComplete: CotationRHS.launchDrawDependancesGraph.curry(rhs_id)
+			});
   },
   
   recalculatehRHS: function(rhs_id) {
@@ -115,14 +117,57 @@ CotationRHS = {
   editDependancesRHS: function(rhs_id) {
     var url = new Url('ssr', 'ajax_edit_dependances_rhs');
     url.addParam('rhs_id', rhs_id);
-    url.modal({
-      width: 300,
-      height: 200
-    });
-    
+    url.requestModal(300, 200);
     url.modalObject.observe("afterClose", CotationRHS.refreshRHS.curry(rhs_id));
+  },
+  
+  drawDependancesGraph: function(container, rhs_id, data) {
+    CotationRHS.dependancesGraphs[rhs_id] = (function(container, data){
+      Flotr.draw(
+        container, 
+        data,
+        {
+          radar: {show: true},
+          grid: {circular: true, minorHorizontalLines: true},
+          xaxis: {ticks:[
+            [0, $T("CDependancesRHS-habillage-court")],
+            [1, $T("CDependancesRHS-deplacement-court")],
+            [2, $T("CDependancesRHS-alimentation-court")],
+            [3, $T("CDependancesRHS-continence-court")],
+            [4, $T("CDependancesRHS-comportement-court")],
+            [5, $T("CDependancesRHS-relation-court")]
+          ]},
+          yaxis: {min: 0, max: 4},
+					colors: [
+            "#c1f1ff",
+            "#8cdcff",
+            "#00A8F0",
+            "#86e8aa",
+					  "#91f798"
+					],
+					legend: {
+            labelBoxMargin: 4,
+            labelBoxHeight: 5,
+            labelBoxWidth: 4,
+						margin: 4
+					},
+					HtmlText: false
+        }
+      );
+    }).curry(container, data);
+		
+		CotationRHS.launchDrawDependancesGraph(rhs_id);
+  },
+  
+  launchDrawDependancesGraph: function(rhs_id) {
+    try { // sometimes, the container is invisible, flotr doesn'r support it
+      CotationRHS.dependancesGraphs[rhs_id]();
+      CotationRHS.dependancesGraphs[rhs_id] = function(){};
+    } catch(e) {}
   }
 };
+
+CotationRHS.dependancesGraphs = CotationRHS.dependancesGraphs || {};
 
 Charged = {
   refresh: function(rhs_date_monday) {

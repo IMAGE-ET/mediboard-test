@@ -35,6 +35,8 @@ if($rhs->_id) {
   if(!$rhs->_ref_dependances->_id) {
     $rhs->_ref_dependances->store();
   }
+  $rhs->loadDependancesChronology();
+	
   $rhs->loadBackRefs("lines");
   $_line = new CLigneActivitesRHS();
   foreach($rhs->_back["lines"] as $_line) {

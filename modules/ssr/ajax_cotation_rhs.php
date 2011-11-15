@@ -38,16 +38,21 @@ $_rhs = new CRHS();
 $rhss = CRHS::getAllRHSsFor($sejour);
 foreach($rhss as $_rhs) {
   if($_rhs->_id) {
+		
     $totaux[$_rhs->_id] = array();
     foreach($types_activite as $_type) {
       $totaux[$_rhs->_id][$_type->code] = 0;
     }
+    
+    $_rhs->loadRefsNotes();
     $_rhs->loadRefSejour();
     $_rhs->loadRefDependances();
-    $_rhs->loadRefsNotes();
+    $_rhs->loadDependancesChronology();
+		
     if(!$_rhs->_ref_dependances->_id) {
       $_rhs->_ref_dependances->store();
     }
+		
     $_rhs->loadBackRefs("lines");
     foreach($_rhs->_back["lines"] as $_line) {
       $_line->loadRefActiviteCdARR();

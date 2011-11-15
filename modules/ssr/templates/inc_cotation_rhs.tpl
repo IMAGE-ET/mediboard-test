@@ -24,8 +24,7 @@
 Main.add(Control.Tabs.create.curry('tabs-rhss', true, {
   afterChange: function(newContainer){
     var rhs_id = newContainer.get("rhs_id");
-    DependancesRHSGraphs[rhs_id]();
-    DependancesRHSGraphs[rhs_id] = function(){}
+    CotationRHS.launchDrawDependancesGraph(rhs_id);
   }
 }));
 </script>

@@ -19,38 +19,32 @@
 </table>
 
 <script>
-DependancesRHSGraphs = window.DependancesRHSGraphs || {};
-
-DependancesRHSGraphs["{{$rhs->_id}}"] = function(){
-  Flotr.draw("radar-dependances-{{$dependances->_guid}}", 
-  [[
-    [0, {{$dependances->habillage}}],
-    [1, {{$dependances->deplacement}}],
-    [2, {{$dependances->alimentation}}],
-    [3, {{$dependances->continence}}],
-    [4, {{$dependances->comportement}}],
-    [5, {{$dependances->relation}}]
-  ]],
-  {
-    radar: {show: true},
-    grid: {circular: true, minorHorizontalLines: true},
-    xaxis: {ticks:[
-      [0, "{{tr}}CDependancesRHS-habillage-court{{/tr}}"],
-      [1, "{{tr}}CDependancesRHS-deplacement-court{{/tr}}"],
-      [2, "{{tr}}CDependancesRHS-alimentation-court{{/tr}}"],
-      [3, "{{tr}}CDependancesRHS-continence-court{{/tr}}"],
-      [4, "{{tr}}CDependancesRHS-comportement-court{{/tr}}"],
-      [5, "{{tr}}CDependancesRHS-relation-court{{/tr}}"]
-    ]},
-    yaxis: {min: 0, max: 4}
-  });
-};
-
-try {
-  DependancesRHSGraphs["{{$rhs->_id}}"]();
-} catch(e) {}
-
+CotationRHS.drawDependancesGraph(
+  $("radar-dependances-{{$dependances->_guid}}"), 
+	"{{$rhs->_id}}", 
+	[
+	  {{foreach from=$rhs->_ref_dependances_chonology item=_dep key=_date name=_deps}}
+	    {
+			  label: "S{{$_date}}",
+				{{if $_date != "+0"}} 
+          radar: {
+						fillOpacity: 0.1,
+	          lineWidth: 0.5
+					},
+				{{/if}}
+				data: [
+					[0, {{$_dep->habillage}}],
+			    [1, {{$_dep->deplacement}}],
+			    [2, {{$_dep->alimentation}}],
+			    [3, {{$_dep->continence}}],
+			    [4, {{$_dep->comportement}}],
+			    [5, {{$_dep->relation}}]
+				]
+			}{{if !$smarty.foreach._deps.last}},{{/if}}
+		{{/foreach}}
+  ]
+);
 </script>
 
-<div id="radar-dependances-{{$dependances->_guid}}" style="width: 300px; height: 300px; cursor: pointer;"
+<div id="radar-dependances-{{$dependances->_guid}}" style="width: 250px; height: 250px; cursor: pointer;"
      onclick="CotationRHS.editDependancesRHS({{$rhs->_id}})" title="{{tr}}Edit{{/tr}}"></div>

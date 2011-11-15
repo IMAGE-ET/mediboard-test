@@ -39,7 +39,7 @@ printOffline = function(element) {
 
 <table id="sejours-ssr" class="tbl" style="page-break-after: always;">
   <tr>
-    <th class="title" colspan="10">
+    <th class="title" colspan="11">
       {{if @$offline}}
         <button class="print not-printable" style="float: right;" onclick="printOffline($(this).up('table'))">{{tr}}Print{{/tr}}</button>
       {{/if}}
@@ -238,7 +238,7 @@ printOffline = function(element) {
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="10" class="empty">
+    <td colspan="11" class="empty">
       {{tr}}CSejour.none{{/tr}}
     </td>
   </tr>

@@ -53,6 +53,7 @@ class CRHS extends CMbObject {
   // Object References
   var $_ref_sejour           = null;
   var $_ref_dependances      = null;
+  var $_ref_dependances_chonology = null;
   var $_ref_lignes_activites = null;
 
   function getSpec() {
@@ -203,6 +204,39 @@ class CRHS extends CMbObject {
     $this->_ref_dependances = new CDependancesRHS();
     $this->_ref_dependances->rhs_id = $this->_id;
     $this->_ref_dependances->loadMatchingObject($order);
+  }
+  
+  function loadDependancesChronology(){
+    $sejour = $this->loadRefSejour();
+    $all_rhs = CRHS::getAllRHSsFor($sejour);
+    
+		$empty = new CDependancesRHS;
+		$empty->habillage = 0;
+    $empty->deplacement = 0;
+    $empty->alimentation = 0;
+    $empty->continence = 0;
+    $empty->comportement = 0;
+    $empty->relation = 0;
+		
+    $chrono = array(
+      "-2" => $empty,
+      "-1" => $empty,
+      "+0" => $empty,
+      "+1" => $empty,
+      "+2" => $empty,
+    );
+    
+    foreach($chrono as $ref => &$dep) {
+      $date = mbDate("$ref WEEKS", $this->date_monday);
+      
+      if (array_key_exists($date, $all_rhs)) {
+      	$_rhs = $all_rhs[$date];
+        $_rhs->loadRefDependances();
+        $dep = $_rhs->_ref_dependances;
+      }
+    }
+    
+    return $this->_ref_dependances_chonology = $chrono;
   }
   
   function loadRefLignesActivites() {

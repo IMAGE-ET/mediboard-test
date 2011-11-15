@@ -17,21 +17,17 @@ class CDependancesRHS extends CMbObject {
   
   // DB Fields
   var $rhs_id = null;
-	
-	var $habillage    = null;
-	var $deplacement  = null;
-	var $alimentation = null;
-	var $continence   = null;
-	var $comportement = null;
-	var $relation     = null;
+  
+  var $habillage    = null;
+  var $deplacement  = null;
+  var $alimentation = null;
+  var $continence   = null;
+  var $comportement = null;
+  var $relation     = null;
 
-  // Form fields
-	
-	// Distant fields
-
-	// References
-	var $_ref_rhs = null;
-	
+  // References
+  var $_ref_rhs = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'dependances_rhs';
@@ -45,7 +41,7 @@ class CDependancesRHS extends CMbObject {
     // DB Fields
     $props["rhs_id"] = "ref notNull class|CRHS";
 
-		$degre = "enum list|1|2|3|4";
+    $degre = "enum list|1|2|3|4";
     $props["habillage"]    = $degre;
     $props["deplacement"]  = $degre;
     $props["alimentation"] = $degre;
@@ -55,10 +51,13 @@ class CDependancesRHS extends CMbObject {
 
     return $props;
   }
-  	
-	function loadRefRHS() {
-		$this->_ref_rhs = $this->loadFwdRef("rhs_id");
-	}
+  
+  /**
+   * @return CRHS
+   */
+  function loadRefRHS() {
+    return $this->_ref_rhs = $this->loadFwdRef("rhs_id");
+  }
 }
 
 ?>
