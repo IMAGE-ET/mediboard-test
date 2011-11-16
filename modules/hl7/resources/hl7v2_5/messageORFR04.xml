@@ -8,21 +8,21 @@
         <segment>MSA</segment>
         <segment>QRD</segment>
         <segment minOccurs="0">QRF</segment>
-        <group maxOccurs="unbounded" name="QUERY_RESPONSE">
-            <group minOccurs="0" name="PATIENT">
+        <group maxOccurs="unbounded">
+            <group minOccurs="0">
                 <segment>PID</segment>
                 <segment minOccurs="0" maxOccurs="unbounded">NTE</segment>
             </group>
-            <group maxOccurs="unbounded" name="ORDER">
+            <group maxOccurs="unbounded">
                 <segment minOccurs="0">ORC</segment>
                 <segment>OBR</segment>
                 <segment minOccurs="0" maxOccurs="unbounded">NTE</segment>
-                <group maxOccurs="unbounded" minOccurs="0" name="TIMING_QTY">
+                <group maxOccurs="unbounded" minOccurs="0">
                     <segment>TQ1</segment>
                     <segment minOccurs="0" maxOccurs="unbounded">TQ2</segment>
                 </group>
                 <segment minOccurs="0">CTD</segment>
-                <group maxOccurs="unbounded" name="OBSERVATION">
+                <group maxOccurs="unbounded">
                     <segment minOccurs="0">OBX</segment>
                     <segment minOccurs="0" maxOccurs="unbounded">NTE</segment>
                 </group>
