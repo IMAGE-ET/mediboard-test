@@ -25,14 +25,15 @@ class CHL7v2Exception extends Exception {
   const UNEXPECTED_DATA_TYPE       = 17;
   const DATA_TOO_LONG              = 18;
   const UNKNOWN_TABLE_ENTRY        = 19;
+  const EVENT_UNKNOWN              = 20;
   
   // argument 2 must be named "code" ...
-  /*public function __construct($id, $code = 0) {
+  public function __construct($id, $code = 0) {
     $args = func_get_args();
     $args[0] = "CHL7v2Exception-$id";
 
     $message = call_user_func_array(array("CAppUI", "tr"), $args);
 
     parent::__construct($message, $id); 
-  }*/
+  }
 }

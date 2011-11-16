@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * A06 - Change an outpatient to an inpatient - HL7
+ *  
+ * @category HL7
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version  SVN: $Id:$ 
+ * @link     http://www.mediboard.org
+ */
+
+/**
+ * Class CHL7v2EventADTA06_FR
+ * A06 - Change an outpatient to an inpatient
+ */
+class CHL7v2EventADTA06_FR extends CHL7v2EventADTA06 {
+  function __construct() {
+    parent::__construct();
+        
+    $this->transaction = CPAMFr::getTransaction($this->code);
+  }
+  
+  function build($sejour) {
+    parent::build($sejour);
+   
+    // Movement segment
+    $this->addZBE($sejour);
+  }
+  
+}
+
+?>

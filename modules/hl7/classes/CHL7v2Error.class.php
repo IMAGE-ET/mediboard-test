@@ -14,27 +14,27 @@
 /**
  * Class CHL7v2Error 
  */
-class CHL7v2Error extends CHL7v2Exception {
+class CHL7v2Error {
   const E_ERROR = 2;
   const E_WARNING = 1;
 	
 	static $errorMap = array(
-    self::EMPTY_MESSAGE              => 100,
-    self::INVALID_SEPARATOR          => 102,
-    self::SEGMENT_INVALID_SYNTAX     => 102,
-    self::TOO_FEW_SEGMENT_FIELDS     => 101,
-    self::TOO_MANY_FIELDS            => 102,
-    self::SPECS_FILE_MISSING         => 207,
-    self::VERSION_UNKNOWN            => 203,
-    self::INVALID_DATA_FORMAT        => 102,
-    self::FIELD_EMPTY                => 101,
-    self::TOO_MANY_FIELD_ITEMS       => 102,
-    self::SEGMENT_MISSING            => 100,
-    self::MSG_CODE_MISSING           => 201,
-    self::UNKNOWN_AUTHORITY          => 207,
-    self::UNEXPECTED_DATA_TYPE       => 207,
-    self::DATA_TOO_LONG              => 102,
-    self::UNKNOWN_TABLE_ENTRY        => 103,
+    CHL7v2Exception::EMPTY_MESSAGE              => 100,
+    CHL7v2Exception::INVALID_SEPARATOR          => 102,
+    CHL7v2Exception::SEGMENT_INVALID_SYNTAX     => 102,
+    CHL7v2Exception::TOO_FEW_SEGMENT_FIELDS     => 101,
+    CHL7v2Exception::TOO_MANY_FIELDS            => 102,
+    CHL7v2Exception::SPECS_FILE_MISSING         => 207,
+    CHL7v2Exception::VERSION_UNKNOWN            => 203,
+    CHL7v2Exception::INVALID_DATA_FORMAT        => 102,
+    CHL7v2Exception::FIELD_EMPTY                => 101,
+    CHL7v2Exception::TOO_MANY_FIELD_ITEMS       => 102,
+    CHL7v2Exception::SEGMENT_MISSING            => 100,
+    CHL7v2Exception::MSG_CODE_MISSING           => 201,
+    CHL7v2Exception::UNKNOWN_AUTHORITY          => 207,
+    CHL7v2Exception::UNEXPECTED_DATA_TYPE       => 207,
+    CHL7v2Exception::DATA_TOO_LONG              => 102,
+    CHL7v2Exception::UNKNOWN_TABLE_ENTRY        => 103,
 	);
   
   /**

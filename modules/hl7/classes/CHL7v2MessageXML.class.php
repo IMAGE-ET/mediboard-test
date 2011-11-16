@@ -28,8 +28,25 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
       // Fusion de deux patients
       case "CHL7v2EventADTA40" : 
         return new CHL7v2MergePersons();
+      // Création d'une venue - Mise à jour d'information de la venue
+      case "CHL7v2EventADTA01" : 
+      case "CHL7v2EventADTA02" :
+      case "CHL7v2EventADTA03" :
+      case "CHL7v2EventADTA04" :
+      case "CHL7v2EventADTA05" :
+      case "CHL7v2EventADTA06" :
+      case "CHL7v2EventADTA07" :
+      case "CHL7v2EventADTA11" :
+      case "CHL7v2EventADTA12" :
+      case "CHL7v2EventADTA13" :
+      case "CHL7v2EventADTA38" :
+      case "CHL7v2EventADTA44" :
+      case "CHL7v2EventADTA54" :
+      case "CHL7v2EventADTA55" : 
+      case "CHL7v2EventADTZ99" : 
+        return new CHL7v2RecordAdmit();     
       default : 
-        return new CHL7v2MessageXML();
+        throw new CHL7v2Exception(CHL7v2Exception::EVENT_UNKNOWN, $event_code);
     }
   }
   
@@ -97,8 +114,10 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   }
   
   function getANIdentifier(DOMNode $node, &$data) {
-    if ($this->queryTextNode("CX.5", $node) == "AN") {
-      $data["AN"] = $this->queryTextNode("CX.1", $node);
+    $PID_18 = $this->queryNode("PID.18", $node);
+    
+    if ($this->queryTextNode("CX.5", $PID_18) == "AN") {
+      $data["AN"] = $this->queryTextNode("CX.1", $PID_18);
     }
   }
   
@@ -112,7 +131,13 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   }
   
   function getNPAIdentifiers(DOMNode $node, &$data) {
+    $PV1_5 = $this->queryNode("PV1.5", $node);
+    /* @todo On gère que l'identifiant de MB dans un premier temps */
     
+    if (($this->queryTextNode("CX.5", $PV1_5) == "RI") && 
+        ($this->queryTextNode("CX.4/HD.2", $PV1_5) == CAppUI::conf("hl7 assigningAuthorityUniversalID"))) {
+      $data["RI"] = $this->queryTextNode("CX.1", $PV1_5);
+    }
   }
   
   function getPersonIdentifiers($nodeName, DOMNode $contextNode) {
@@ -134,16 +159,20 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     return $data;
   }
   
-  function getAdmitIdentifiers($nodeName, DOMNode $contextNode) {    
+  function getAdmitIdentifiers(DOMNode $nodePID, DOMNode $nodePV1) {    
+    $data = array();
+    
     // RI - Resource identifier 
-    $this->getRIIdentifiers($_node, $data);
+    $PV1_19 = $this->queryNode("PV1.19", $nodePV1);
+    $this->getRIIdentifiers($PV1_19, $data);
       
     // PA - Preadmit Number
-    //$this->getNPAIdentifiers($_node, $data);
+    $this->getNPAIdentifiers($nodePV1, $data);
     
     // AN - Patient Account Number
-    //$PID18 = $this->queryNode("//PID/PID.18");
-    //$this->getANIdentifier($_node, $data);
+    $this->getANIdentifier($nodePID, $data);
+    
+    return $data;
   }
   
   function getContentNodes() {
