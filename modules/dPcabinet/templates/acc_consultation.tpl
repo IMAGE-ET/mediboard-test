@@ -118,7 +118,7 @@ Main.add(function () {
   
   {{if $consult->_is_dentiste}}
     <li><a href="#etat_dentaire">Etat dentaire</a></li>
-    <li><a href="#devenir_dentaire">Devenir dentaire</a></li>
+    <li><a href="#devenir_dentaire">Projet thérapeutique</a></li>
   {{/if}}
   
   <li><a href="#fdrConsult">Docs et Règlements</a></li>

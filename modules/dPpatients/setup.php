@@ -1462,7 +1462,21 @@ class CSetupdPpatients extends CSetup {
 							);
     $this->addQuery($query);
     
-    $this->mod_version = "1.25";
+    $this->makeRevision("1.25");
+    $query = "ALTER TABLE `devenir_dentaire` 
+              ADD `etudiant_id` INT (11) UNSIGNED, 
+              ADD INDEX (`etudiant_id`),
+              ADD `description` TEXT NOT NULL;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `acte_dentaire` 
+              ADD `ICR` INT (11) UNSIGNED, 
+              ADD `consult_id` INT (11) UNSIGNED,
+              ADD INDEX (`consult_id`),
+              ADD `rank` INT (11) UNSIGNED NOT NULL;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.26";
   }
 }
 

@@ -15,9 +15,13 @@ $devenir_dentaire->load($devenir_dentaire_id);
 
 $actes_dentaires = $devenir_dentaire->loadRefsActesDentaires();
 
+foreach ($actes_dentaires as $_acte_dentaire) {
+  $devenir_dentaire->_total_ICR += $_acte_dentaire->ICR;
+}
+
 $smarty = new CSmartyDP;
 
-$smarty->assign("actes_dentaires", $actes_dentaires);
+$smarty->assign("devenir_dentaire", $devenir_dentaire);
 
 $smarty->display("inc_list_actes_dentaires.tpl");
 

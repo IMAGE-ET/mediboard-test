@@ -71,6 +71,7 @@ class CConsultation extends CCodable {
   var $_types_examen   = null;
   var $_precode_acte   = null;
   var $_exam_fields    = null;
+  var $_acte_dentaire_id = null;
   var $_type           = null;  // Type de la consultation
   
   // Fwd References
@@ -145,15 +146,15 @@ class CConsultation extends CCodable {
   
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["consult_anesth"] = "CConsultAnesth consultation_id";
-    $backProps["examaudio"]      = "CExamAudio consultation_id";
-    $backProps["examcomp"]       = "CExamComp consultation_id";
-    $backProps["examnyha"]       = "CExamNyha consultation_id";
-    $backProps["exampossum"]     = "CExamPossum consultation_id";
-    $backProps["examigs"]        = "CExamIgs consultation_id";
-    $backProps["prescriptions"]  = "CPrescription object_id";
-    $backProps["reglements"]     = "CReglement consultation_id";
-    
+    $backProps["consult_anesth"]  = "CConsultAnesth consultation_id";
+    $backProps["examaudio"]       = "CExamAudio consultation_id";
+    $backProps["examcomp"]        = "CExamComp consultation_id";
+    $backProps["examnyha"]        = "CExamNyha consultation_id";
+    $backProps["exampossum"]      = "CExamPossum consultation_id";
+    $backProps["examigs"]         = "CExamIgs consultation_id";
+    $backProps["prescriptions"]   = "CPrescription object_id";
+    $backProps["reglements"]      = "CReglement consultation_id";
+    $backProps["actes_dentaires"] = "CActeDentaire consult_id";
     return $backProps;
   }
   
@@ -167,7 +168,7 @@ class CConsultation extends CCodable {
     
     $specs["motif"]             = "text helped seekable";
     $specs["heure"]             = "time notNull show|0";
-    $specs["duree"]             = "numchar maxLength|1 show|0";
+    $specs["duree"]             = "num min|1 max|9 notNull default|1 show|0";
     $specs["secteur1"]          = "currency min|0 show|0";
     $specs["secteur2"]          = "currency show|0";
     $specs["chrono"]            = "enum notNull list|16|32|48|64 show|0";
@@ -229,7 +230,7 @@ class CConsultation extends CCodable {
     $specs["_somme"]            = "currency";		
     $specs["_type"]             = "enum list|urg|anesth";
     $specs["_prat_id"]          = "";
-    
+    $specs["_acte_dentaire_id"] = "ref class|CActeDentaire";
     return $specs;
   }
   

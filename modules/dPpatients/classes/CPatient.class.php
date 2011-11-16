@@ -222,7 +222,7 @@ class CPatient extends CMbObject {
   var $_ref_cp_by_relation          = null;
   
   var $_ref_dossier_medical         = null;
-  var $_ref_devenir_dentaire        = null;
+  var $_refs_devenirs_dentaires        = null;
   var $_ref_IPP                     = null;
   var $_ref_vitale_idsante400       = null;
   var $_ref_constantes_medicales    = null;
@@ -252,7 +252,7 @@ class CPatient extends CMbObject {
     $backProps["echanges_hprim"]        = "CEchangeHprim object_id";
     $backProps["echanges_hprim21"]      = "CEchangeHprim21 object_id";
     $backProps["echanges_ihe"]          = "CExchangeIHE object_id";
-    $backProps["devenir_dentaire"]      = "CDevenirDentaire patient_id";
+    $backProps["devenirs_dentaires"]    = "CDevenirDentaire patient_id";
     return $backProps;
   }  
   
@@ -1056,8 +1056,8 @@ class CPatient extends CMbObject {
     return $this->_ref_dossier_medical;
   }
   
-  function loadRefDevenirDentaire() {
-    return $this->_ref_devenir_dentaire = $this->loadUniqueBackRef("devenir_dentaire");
+  function loadRefsDevenirDentaire() {
+    return $this->_refs_devenirs_dentaires = $this->loadBackRefs("devenirs_dentaires");
   }
   
   function loadRefsAffectations($date = null) {

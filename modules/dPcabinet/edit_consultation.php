@@ -291,10 +291,15 @@ $smarty->assign("listPrats"      , $listPrats);
 $smarty->assign("line"           , new CPrescriptionLineMedicament());
 
 if ($consult->_is_dentiste) {
-  $devenir_dentaire = $consult->_ref_patient->loadRefDevenirDentaire();
-  $actes_dentaires = $devenir_dentaire->loadRefsActesDentaires();
-  $smarty->assign("acte_dentaire"  , new CActeDentaire);
-  $smarty->assign("actes_dentaires", $actes_dentaires);
+  $devenirs_dentaires = $consult->_ref_patient->loadRefsDevenirDentaire();
+  
+  foreach ($devenirs_dentaires as &$devenir_dentaire) {
+    $etudiant = $devenir_dentaire->loadRefEtudiant();
+    $etudiant->loadRefFunction();
+    $actes_dentaires  = $devenir_dentaire->countRefsActesDentaires();
+  }
+  
+  $smarty->assign("devenirs_dentaires", $devenirs_dentaires);
 }
 
 if($consult->_is_anesth) {

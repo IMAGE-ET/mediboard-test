@@ -14,10 +14,22 @@ class CDevenirDentaire extends CMbObject {
 
   // DB Fields
   var $patient_id           = null;
-
+  var $etudiant_id          = null;
+  var $description          = null;
+  
   // Back references
   var $_ref_actes_dentaires = null;
-
+  var $_ref_patient         = null;
+  var $_ref_etudiant        = null;
+  
+  // Form fields
+  var $_total_ICR           = 0;
+  var $_count_ref_actes_dentaires = 0;
+  
+  // Distant fields
+  var $_nb_actes_planifies  = 0;
+  var $_nb_actes_realises   = 0;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'devenir_dentaire';
@@ -28,7 +40,8 @@ class CDevenirDentaire extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs["patient_id"]  = "ref notNull class|CPatient";
-    
+    $specs["etudiant_id"] = "ref class|CMediusers";
+    $specs["description"] = "text notNull";
     return $specs;
   }
   
@@ -38,24 +51,24 @@ class CDevenirDentaire extends CMbObject {
     return $backProps;
   }
   
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view = $this->description; 
+  }
+  
   function loadRefsActesDentaires() {
-    return $this->_ref_actes_dentaires = $this->loadBackRefs("actes_dentaires");
+    return $this->_ref_actes_dentaires = $this->loadBackRefs("actes_dentaires", "rank");
   }
   
-  /**
-   * Identifiant du devenir dentaire du patient. 
-   * Crée le devenir dentaire si nécessaire si nécessaire
-   * @param $patient_id ref Identifiant du patient
-   * @return ref|CDossierMedical
-   */
-  static function devenirDentairelId($patient_id) {
-    $devenir = new CDevenirDentaire();
-    $devenir->patient_id    = $patient_id;
-    $devenir->loadMatchingObject();
-    if(!$devenir->_id) {
-      $devenir->store();
-    }
-    return $devenir->_id;
+  function countRefsActesDentaires() {
+    return $this->_count_ref_actes_dentaires = $this->countBackRefs("actes_dentaires");
   }
   
+  function loadRefEtudiant() {
+    return $this->_ref_etudiant = $this->loadFwdRef("etudiant_id");
+  }
+  
+  function loadRefPatient() {
+    return $this->_ref_patient = $this->loadFwdRef("patient_id");
+  }
 }

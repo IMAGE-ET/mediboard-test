@@ -526,6 +526,14 @@ class CCodeCCAM {
   
     return($master);
   }
+  
+  function getActeRadio() {
+    $ds =& $this->_spec->ds;
+    $query = "SELECT code
+      FROM ccam_radio
+      WHERE code_saisi LIKE '%".$this->code."%'";
+    return $ds->loadResult($query);
+  }
 }
 
 

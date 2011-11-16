@@ -1305,6 +1305,7 @@ $locales['dPcabinet-stats-others'] = 'Nombre de consultations connexes';
 $locales['dPcabinet-stats-patients'] = 'Nombre de patients';
 $locales['dPcabinet-stats-sejours'] = 'Nombre de séjours';
 $locales['mod-dPcabinet-tab-ajax_bind_operation'] = 'Associer à une intervention';
+$locales['mod-dPcabinet-tab-ajax_choose_etudiant'] = 'Choisir un étudiant';
 $locales['mod-dPcabinet-tab-ajax_short_consult'] = 'Consultation immédiate';
 $locales['mod-dPcabinet-tab-configure'] = 'Configuration';
 $locales['mod-dPcabinet-tab-edit_consultation'] = 'Consultation';
