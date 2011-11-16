@@ -42,6 +42,11 @@
 </tr>
 
 <tr>
+  <th>{{mb_label object=$object field="cps"}}</th>
+  <td>{{mb_field object=$object field="cps"}}</td>
+</tr>
+
+<tr>
   <th>{{mb_label object=$object field="secteur"}}</th>
   <td>{{mb_field object=$object field="secteur" emptyLabel="Choose"}}</td>
 </tr>
