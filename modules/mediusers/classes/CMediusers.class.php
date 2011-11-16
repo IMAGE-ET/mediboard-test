@@ -18,6 +18,7 @@ class CMediusers extends CMbObject {
   var $remote                      = null;
   var $adeli                       = null;
   var $rpps                        = null;
+  var $cps                         = null;
   var $titres                      = null;
   var $commentaires                = null;
   var $actif                       = null;
@@ -124,6 +125,7 @@ class CMediusers extends CMbObject {
     $specs["remote"]                 = "bool default|1 show|0";
     $specs["adeli"]                  = "numchar length|9 confidential mask|99S9S99999S9 control|luhn";
     $specs["rpps"]                   = "numchar length|11 confidential mask|99999999999 control|luhn";
+    $specs["cps"]                    = "numchar";
     $specs["function_id"]            = "ref notNull class|CFunctions seekable";
     $specs["discipline_id"]          = "ref class|CDiscipline";
     $specs["titres"]                 = "text";
