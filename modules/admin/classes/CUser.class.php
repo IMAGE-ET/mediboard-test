@@ -44,6 +44,7 @@ class CUser extends CMbObject {
   var $_login_locked         = null;
   var $_ldap_linked          = null;
   var $_user_actif           = null;
+  var $_user_cps             = null;
   var $_user_deb_activite    = null;
   var $_user_fin_activite    = null;
   var $_count_connections    = null;
