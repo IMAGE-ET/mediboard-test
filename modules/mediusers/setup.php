@@ -463,8 +463,13 @@ class CSetupmediusers extends CSetup {
      $query = "ALTER TABLE `users_mediboard` 
                 ADD `cps` BIGINT ZEROFILL AFTER `rpps`;";
      $this->addQuery($query);
+     
+     $this->makeRevision("0.37");
+     $query = "ALTER TABLE `users_mediboard` 
+                 CHANGE `cps` `cps` VARCHAR (255);";
+     $this->addQuery($query);
 		 
-     $this->mod_version = "0.37";
+     $this->mod_version = "0.38";
   }
 }
 

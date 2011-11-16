@@ -125,7 +125,7 @@ class CMediusers extends CMbObject {
     $specs["remote"]                 = "bool default|1 show|0";
     $specs["adeli"]                  = "numchar length|9 confidential mask|99S9S99999S9 control|luhn";
     $specs["rpps"]                   = "numchar length|11 confidential mask|99999999999 control|luhn";
-    $specs["cps"]                    = "numchar";
+    $specs["cps"]                    = "str";
     $specs["function_id"]            = "ref notNull class|CFunctions seekable";
     $specs["discipline_id"]          = "ref class|CDiscipline";
     $specs["titres"]                 = "text";
