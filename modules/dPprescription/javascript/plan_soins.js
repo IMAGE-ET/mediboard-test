@@ -469,7 +469,7 @@ PlanSoins = {
             var dateTime = td.get("datetime");
             var prescription_line_mix_id = element.get("prescription_line_mix_id");
             var planif_id = element.get("planif_id");
-            var original_dateTime = element.get("original_dateTime");
+            var original_dateTime = element.get("original_datetime");
 						
             PlanSoins.addPlanificationPerf(planif_id, dateTime, prescription_line_mix_id, original_dateTime);
             // Suppression des zones droppables

@@ -336,7 +336,7 @@
                     class="administration {{$etat}} perfusion {{if $nb_prevue && ($conf.dPprescription.CPrescription.manual_planif || $_prescription_line_mix->_continuite == "discontinue")}}draggablePlanif{{/if}}
 										      {{if $original_dateTime}} planification{{/if}}"
 										data-prescription_line_mix_id="{{$_prescription_line_mix->_id}}"
-										data-original_dateTime="{{$_date}} {{$_hour}}:00:00">
+										data-original_datetime="{{$_date}} {{$_hour}}:00:00">
 				
 								 {{* Affichage des prises prevues et des administrations *}}
 								 {{if $nb_adm}}
