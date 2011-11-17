@@ -232,7 +232,7 @@ PlanSoins = {
     }
   },
   loadTraitement: function(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre, without_check_date, hide_close) {
-    var url = new Url("dPprescription", "httpreq_vw_dossier_soin");
+		var url = new Url("dPprescription", "httpreq_vw_dossier_soin");
     url.addParam("sejour_id", sejour_id);
     
     url.addParam("date", date);
@@ -259,8 +259,8 @@ PlanSoins = {
         } } );
       }
       else {
-        unite_prise = unite_prise.replace(/[^a-z0-9_-]/gi, '_');
-   
+        unite_prise = (unite_prise+"").replace(/[^a-z0-9_-]/gi, '_');
+        
         var first_td = $('first_'+object_id+"_"+object_class+"_"+unite_prise);
         var last_td = $('last_'+object_id+"_"+object_class+"_"+unite_prise);
         
@@ -470,8 +470,7 @@ PlanSoins = {
             var prescription_line_mix_id = element.get("prescription_line_mix_id");
             var planif_id = element.get("planif_id");
             var original_dateTime = element.get("original_dateTime");
-            
-            // Ajout de la planification
+						
             PlanSoins.addPlanificationPerf(planif_id, dateTime, prescription_line_mix_id, original_dateTime);
             // Suppression des zones droppables
             Droppables.drops.clear(); 
@@ -580,5 +579,20 @@ PlanSoins = {
     var url = new Url("soins", "ajax_update_task_icon");
     url.addParam("prescription_line_element_id", prescription_line_element_id);
     url.requestUpdate("show_task_"+prescription_line_element_id);
-  }
+  },
+
+	moveAllPlanifs: function(prise_id, object_id, object_class, datetime, nb_hours, quantite) {
+		if(confirm("Voulez vous décaler les prises suivantes de "+nb_hours+" heures ?")){
+			var oForm = getForm("movePlanifs");
+			$V(oForm.prise_id, prise_id);
+			$V(oForm.object_id, object_id);
+			$V(oForm.object_class, object_class);
+			$V(oForm.datetime, datetime);
+			$V(oForm.nb_hours, nb_hours);
+			$V(oForm.quantite, quantite);
+      return onSubmitFormAjax(oForm, { onComplete: function(){         
+			  PlanSoins.loadTraitement(null,PlanSoins.date, $V(getForm("click").nb_decalage), 'planification', object_id, object_class, prise_id);
+			} });
+		}
+	}
 };

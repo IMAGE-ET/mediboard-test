@@ -216,7 +216,6 @@
   {{/foreach}}
 {{else}}
   <!-- Affichage des planifications manuelles -->
-
   {{assign var=nb_prevue value=""}}
 	{{if $conf.dPprescription.CPrescription.manual_planif}}
 	  <td id="manual_planifs_{{$_prescription_line_mix->_guid}}">
@@ -228,7 +227,6 @@
 					      data-datetime="{{$_planif_systeme->dateTime}}"
 								data-planif_id="{{$_planif_systeme->_id}}" 
 								data-prescription_line_mix_id="{{$_prescription_line_mix->_id}}"
-             
 								class="draggable administration manual_planif"
 								id="drag_{{$_planif_systeme->_id}}">
 	           {{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line name="lines_planif"}}
@@ -273,11 +271,15 @@
 					       {{assign var=nb_adm value=""}}
 					     {{/if}}
 
+               {{assign var=original_dateTime value=""}}
 							 {{if isset($_prescription_line_mix->_prises_prevues.$_date.$_hour|smarty:nodefaults)}} 
 							   {{if array_key_exists('real_hour', $_prescription_line_mix->_prises_prevues.$_date.$_hour)}}
 								   {{assign var=count_prises value=$_prescription_line_mix->_prises_prevues.$_date.$_hour.real_hour|@count}}
 	                 {{assign var=nb_prevue value=$_perf_line->_quantite_administration*$count_prises}} 
 	                 {{assign var=hour_prevue value=$_prescription_line_mix->_prises_prevues.$_date.$_hour.real_hour}}
+									 {{if array_key_exists('original_dateTime', $_prescription_line_mix->_prises_prevues.$_date.$_hour)}} 
+									   {{assign var=original_dateTime value=$_prescription_line_mix->_prises_prevues.$_date.$_hour.original_dateTime}}
+                   {{/if}}
 								 {{else}}
 								   {{assign var=perf_line_id value=$_perf_line->_id}}
 									 {{if array_key_exists($perf_line_id, $_prescription_line_mix->_prises_prevues.$_date.$_hour.manual)}}
@@ -306,7 +308,7 @@
 								 {{/if}}
                {{/if}}
 							 
-							 {{if $nb_prevue && $conf.dPprescription.CPrescription.manual_planif}}
+							 {{if $nb_prevue && ($conf.dPprescription.CPrescription.manual_planif || $_prescription_line_mix->_continuite == "discontinue")}}
 			          <script type="text/javascript">
 			            // Pour empecher de deplacer une case ou il y a plusieurs prises
 			            drag = new Draggable("drag-{{$_perf_line->_id}}-{{$_date}}-{{$_hour}}", PlanSoins.oDragOptions);
@@ -323,7 +325,7 @@
 										{{else}}
 											ondblclick='
 											  var planifs = $("manual_planifs_{{$_prescription_line_mix->_guid}}") ? $("manual_planifs_{{$_prescription_line_mix->_guid}}").select("div.planif_poste") : "";
-												if (($V(getForm("mode_dossier_soin").mode_dossier) == "planification") && planifs && (planifs.length >= 1) && {{$conf.dPprescription.CPrescription.manual_planif}} && "{{$nb_prevue}}" == ""){
+												if (($V(getForm("mode_dossier_soin").mode_dossier) == "planification") && planifs && (planifs.length >= 1) && "{{$nb_prevue}}" == ""){
 												  var last_planif = planifs.last();
 													PlanSoins.addPlanificationPerf(last_planif.get("planif_id"), "{{$_date}} {{$_hour}}:00:00", "{{$_prescription_line_mix->_id}}", last_planif.get("datetime"));
 										    } else {
@@ -331,7 +333,8 @@
 	                    	}'
 										{{/if}}
 										{{/if}}
-                    class="administration {{$etat}} perfusion {{if $nb_prevue && $conf.dPprescription.CPrescription.manual_planif}}draggablePlanif{{/if}}"
+                    class="administration {{$etat}} perfusion {{if $nb_prevue && ($conf.dPprescription.CPrescription.manual_planif || $_prescription_line_mix->_continuite == "discontinue")}}draggablePlanif{{/if}}
+										      {{if $original_dateTime}} planification{{/if}}"
 										data-prescription_line_mix_id="{{$_prescription_line_mix->_id}}"
 										data-original_dateTime="{{$_date}} {{$_hour}}:00:00">
 				
@@ -354,7 +357,16 @@
 						
 						{{if isset($_prescription_line_mix->_prises_prevues.$_date.$_hour.real_hour|smarty:nodefaults)}}
 						  <div id="tooltip-content-prises-{{$_prescription_line_mix->_guid}}-{{$_date}}-{{$_hour}}" style="display: none;">
-							  	{{foreach from=$_prescription_line_mix->_prises_prevues.$_date.$_hour.real_hour item=_prises}}
+							  	{{if $original_dateTime}}
+									<table class="tbl">
+							  		<tr>
+							  		 <td>	
+									      <strong>Date d'origine:</strong> {{$original_dateTime|date_format:$conf.datetime}}<br />
+			                </td>
+									  </tr>
+						      </table>
+									 {{/if}}
+									{{foreach from=$_prescription_line_mix->_prises_prevues.$_date.$_hour.real_hour item=_prises}}
 									  {{foreach from=$_prises item=_prise}}
 										  <table class="tbl">
 										    <tr>

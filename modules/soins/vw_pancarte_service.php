@@ -197,21 +197,23 @@ foreach($prescriptions as $_prescription){
 				continue;
 			}
 			
-			if (CAppUI::conf("dPprescription CPrescription manual_planif")){
-				if($_planif->_ref_object->_ref_prescription_line_mix->_continuite == "discontinue"){
-					$planification = new CAdministration();
-		      $where = array();
-		      $where["object_class"] = " = 'CPrescriptionLineMixItem'";
-		      $where["object_id"] = " = '{$_planif->_ref_object->_id}'";
-		      $where["original_dateTime"] = " = '$_planif->dateTime'";
-		      $where["planification"] = " = '1'";
-		      $count_planif = $planification->countList($where);
-		      if($count_planif){
-		        continue;
-		      }	
-				} else {
-					continue;
-				}
+			if($_planif->_ref_object->_ref_prescription_line_mix->_continuite == "discontinue"){
+				$planification = new CAdministration();
+	      $where = array();
+	      $where["object_class"] = " = 'CPrescriptionLineMixItem'";
+	      $where["object_id"] = " = '$_planif->object_id'";
+				
+				$_line_mix_datetime = mbTransformTime(null, $_planif->dateTime, "%Y-%m-%d %H:00:00");
+				
+	      $where[] = "original_dateTime = '$_line_mix_datetime'";
+	      $where["planification"] = " = '1'";
+	      $count_planif = $planification->countList($where);
+
+	      if($count_planif){
+	        continue;
+	      }	
+			} elseif (CAppUI::conf("dPprescription CPrescription manual_planif")) {
+				continue;
 			}
 				
       $_planif->_ref_object->updateQuantiteAdministration();

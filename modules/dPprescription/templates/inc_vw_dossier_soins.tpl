@@ -222,6 +222,18 @@ Main.add(function () {
 
 </script>
 
+<form name="movePlanifs" action="" method="post">
+	<input type="hidden" name="dosql" value="do_move_planifs_aed" />
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="object_id" value="" />
+  <input type="hidden" name="object_class" value="" />
+  <input type="hidden" name="prise_id" value="" />
+  <input type="hidden" name="datetime" value="" />
+  <input type="hidden" name="nb_hours" value="" />
+	<input type="hidden" name="quantite" value="" />
+</form>
+			
 {{if $multiple_prescription|@count > 1}}
   <div class="big-error">
     {{tr}}CPrescription.merge_prescription_message{{/tr}}

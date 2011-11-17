@@ -638,10 +638,43 @@ class CPrescriptionLineMix extends CMbObject {
       foreach($planifs as $_planif){
         $_date = mbDate($_planif->dateTime);
         $_hour = mbTransformTime(null, $_planif->dateTime, "%H");
+				
+				$_datetime = $_planif->dateTime;
+				// Recherche des planifs manuelles
+				$_manual_planif = new CAdministration();
+				$where = array();
+				$where["prescription_line_mix_item.prescription_line_mix_id"] = " = '$this->_id'";
+        $where["original_dateTime"] = " LIKE '$_date $_hour%'";
+        $where["planification"] = " = '1'";
+        
+				$ljoin = array();
+				$ljoin["prescription_line_mix_item"] = "prescription_line_mix_item.prescription_line_mix_item_id = administration.object_id
+				                                        AND administration.object_class = 'CPrescriptionLineMixItem'";
+				
+				$_count_planifs = $_manual_planif->countList($where, null, $ljoin);
+
+				if($_count_planifs < 1){
+				  $this->_prises_prevues[$_date][$_hour]["real_hour"][] = mbTime($_planif->dateTime);
+          $this->_prises_prevues[$_date][$_hour]["plan_hour"] = "$_hour:00:00";
+        }
+      }
+
+      $manual_planif = new CAdministration();
+      $where = array();
+      $where["object_id"] = " = '$line_perf->_id'";
+      $where["object_class"] = " = '$line_perf->_class'";
+      $where["dateTime"] = " LIKE '$date%'";
+      $where["planification"] = " = '1'";
+      $planifs = $manual_planif->loadList($where);
+			
+      foreach($planifs as $_planif){
+				$_date = mbDate($_planif->dateTime);
+        $_hour = mbTransformTime(null, $_planif->dateTime, "%H");
         $this->_prises_prevues[$_date][$_hour]["real_hour"][] = mbTime($_planif->dateTime);
         $this->_prises_prevues[$_date][$_hour]["plan_hour"] = "$_hour:00:00";
+				$this->_prises_prevues[$_date][$_hour]["original_dateTime"] = $_planif->original_dateTime;
       }
-    }    
+    }
   }
   
   /*
