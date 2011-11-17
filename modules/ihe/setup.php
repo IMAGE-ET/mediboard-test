@@ -102,7 +102,14 @@ class CSetupihe extends CSetup {
                 ADD `identifiant_emetteur` VARCHAR (255);";
     $this->addQuery($query); 
     
-    $this->mod_version = "0.06";
+    $this->makeRevision("0.06");
+    
+    $query = "ALTER TABLE `receiver_ihe_config` 
+                CHANGE `ITI30_HL7_version` `ITI30_HL7_version` ENUM ('2.1','2.2','2.3','2.3.1','2.4','2.5','fr_2.1','fr_2.2','fr_2.3') DEFAULT '2.5',
+                CHANGE `ITI31_HL7_version` `ITI31_HL7_version` ENUM ('2.1','2.2','2.3','2.3.1','2.4','2.5','fr_2.1','fr_2.2','fr_2.3') DEFAULT '2.5';";
+    $this->addQuery($query); 
+    
+    $this->mod_version = "0.07";
   }
 }
 
