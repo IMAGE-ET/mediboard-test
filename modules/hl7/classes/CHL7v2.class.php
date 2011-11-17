@@ -17,12 +17,18 @@ abstract class CHL7v2 {
   const PREFIX_COMPOSITE_NAME = "composite";
   
   static $versions = array(
+    // International
     "2.1",
     "2.2",
     "2.3",
     "2.3.1",
     "2.4",
-    "2.5"
+    "2.5",
+    
+    // Extension française
+    "FR_2.1", 
+    "FR_2.2", 
+    "FR_2.3"
   );
   
   static $keep_original = array("MSH.1", "MSH.2", "NTE.3", "OBX.5");

@@ -19,7 +19,7 @@ class CHL7v2EventADTA40_FR extends CHL7v2EventADTA40 {
   function __construct() {
     parent::__construct();
         
-    $this->transaction = CPAMFr::getTransaction($this->code);
+    $this->transaction = CPAMFR::getTransaction($this->code);
   }
 }
 

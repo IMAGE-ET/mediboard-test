@@ -19,7 +19,7 @@
 class CExchangeIHE extends CExchangeTabular {
   static $messages = array(
     "PAM"   => "CPAM",
-    "PAMFr" => "CPAMFr",
+    "PAMFr" => "CPAMFR",
   );
   
   // DB Table key

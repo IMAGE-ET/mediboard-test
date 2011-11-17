@@ -15,7 +15,7 @@
  * Class CITI30DelegatedHandler 
  * ITI30 Delegated Handler
  */
-class CITI30DelegatedHandler extends CIHEDelegatedHandler {
+class CITI30DelegatedHandler extends CITIDelegatedHandler {
   static $handled        = array ("CPatient");
   protected $profil      = "PAM";
   protected $transaction = "ITI30";

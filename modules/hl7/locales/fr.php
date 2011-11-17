@@ -42,6 +42,7 @@ $locales['CHL7v2Exception-16'] = 'Autorité inconnue';
 $locales['CHL7v2Exception-17'] = 'Type de données inattendu';
 $locales['CHL7v2Exception-18'] = 'Chaîne trop longue';
 $locales['CHL7v2Exception-19'] = 'Valeur inconnue dans la table';
+$locales['CHL7v2Exception-20'] = 'Événement inconnu';
 $locales['CHL7v2TableDescription'] = 'Table HL7v2';
 $locales['CHL7v2TableDescription-_count_entries-court'] = 'Entrées associées';
 $locales['CHL7v2TableDescription-_count_entries-desc'] = 'Entrées associées';

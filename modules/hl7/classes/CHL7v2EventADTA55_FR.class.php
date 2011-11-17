@@ -19,7 +19,7 @@ class CHL7v2EventADTA55_FR extends CHL7v2EventADTA55 {
   function __construct() {
     parent::__construct();
         
-    $this->transaction = CPAMFr::getTransaction($this->code);
+    $this->transaction = CPAMFR::getTransaction($this->code);
   }
   
   function build($sejour) {

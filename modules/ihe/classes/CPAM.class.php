@@ -16,6 +16,10 @@
  * Patient Administration Management
  */
 class CPAM {
+  static $versions = array (
+    "2.1", "2.2", "2.3", "2.4", "2.5"  
+  );
+  
   static $transaction_iti30 = array(
     "A28", "A31", "A40"
   );

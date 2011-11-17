@@ -20,17 +20,15 @@ class CReceiverIHE extends CInteropReceiver {
   // DB Table key
   var $receiver_ihe_id  = null;
   
+  var $_extension       = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'receiver_ihe';
     $spec->key   = 'receiver_ihe_id';
     $spec->messages = array(
-      "PAM" => array ( 
-        "evenementsPatient" 
-      ),
-      "PAMFr" => array ( 
-        "evenementsPatient" 
-      ),
+      "PAM"   => array ("evenementsPatient"),
+      "PAMFr" => array ("evenementsPatient"),
     );
     return $spec;
   }
@@ -41,6 +39,14 @@ class CReceiverIHE extends CInteropReceiver {
     $backProps['echanges']       = "CExchangeIHE receiver_id";
     
     return $backProps;
+  }
+  
+  function updateFormFields() {
+    parent::updateFormFields();
+    
+    if (!$this->_configs) {
+      $this->loadConfigValues();
+    }
   }
   
   function loadRefsExchangesSources() {
