@@ -12,10 +12,10 @@
  */
 
 /**
- * Class CPAMFr 
+ * Class CPAMFR 
  * Patient Administration Management - National extension France
  */
-class CPAMFr extends CPAM {
+class CPAMFR extends CPAM {
   static $transaction_iti30 = array(
     "A28", "A31", "A40"
   );
