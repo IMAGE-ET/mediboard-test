@@ -19,6 +19,7 @@ class CCorrespondantPatient extends CMbObject {
   // DB Fields
   var $patient_id = null;
   var $relation   = null;
+  var $relation_autre = null;
   var $nom        = null;
   var $prenom     = null;
   var $adresse    = null;
@@ -27,6 +28,7 @@ class CCorrespondantPatient extends CMbObject {
   var $tel        = null;
   var $urssaf     = null;
   var $parente    = null;
+  var $parente_autre = null;
   var $email      = null;
   var $remarques  = null;
   
@@ -45,7 +47,8 @@ class CCorrespondantPatient extends CMbObject {
     $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
     
     $specs["patient_id"] = "ref notNull class|CPatient";
-    $specs["relation"]   = "enum list|confiance|prevenir|employeur";
+    $specs["relation"]   = "enum list|assurance|autre|confiance|employeur|inconnu|prevenir";
+    $specs["relation_autre"] = "str";
     $specs["nom"]        = "str confidential";
     $specs["prenom"]     = "str";
     $specs["adresse"]    = "text";
@@ -53,7 +56,8 @@ class CCorrespondantPatient extends CMbObject {
     $specs["ville"]      = "str confidential";
     $specs["tel"]        = "numchar confidential length|10 mask|$phone_number_format";
     $specs["urssaf"]     = "numchar length|11 confidential";
-    $specs["parente"]    = "enum list|conjoint|enfant|ascendant|colateral|divers";
+    $specs["parente"]    = "enum list|ami|ascendant|autre|beau_fils|colateral|collegue|compagnon|conjoint|directeur|divers|employeur|employe|enfant|enfant_adoptif|entraineur|epoux|frere|grand_parent|mere|pere|petits_enfants|proche|proprietaire|soeur|tuteur";
+    $specs["parente_autre"] = "str";
     $specs["email"]      = "str maxLength|255";
     $specs["remarques"]  = "text";
     

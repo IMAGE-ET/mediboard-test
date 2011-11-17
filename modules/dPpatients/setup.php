@@ -1476,7 +1476,16 @@ class CSetupdPpatients extends CSetup {
               ADD `rank` INT (11) UNSIGNED NOT NULL;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.26";
+    $this->makeRevision("1.26");
+    $query = "ALTER TABLE `correspondant_patient` 
+              CHANGE `relation` `relation` ENUM ('assurance','autre','confiance','employeur','inconnu','prevenir'),
+              ADD `relation_autre` VARCHAR (255),
+              CHANGE `parente` `parente` ENUM ('ami','ascendant','autre','beau_fils','colateral','collegue','compagnon','conjoint','directeur','divers','employeur','employe','enfant','enfant_adoptif','entraineur','epoux','frere','grand_parent','mere','pere','petits_enfants','proche','proprietaire','soeur','tuteur'),
+              ADD `parente_autre` VARCHAR (255);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.27";
+    
   }
 }
 

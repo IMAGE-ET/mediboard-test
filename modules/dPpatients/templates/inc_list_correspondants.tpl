@@ -24,7 +24,11 @@
         <td>{{mb_value object=$_correspondant field=tel}}</td>
         <td>
           {{if $_correspondant->relation != "employeur"}}
-            {{mb_value object=$_correspondant field=parente}}
+            {{if $_correspondant->parente == "autre"}}
+              {{mb_value object=$_correspondant field=parente_autre}}
+            {{else}}
+              {{mb_value object=$_correspondant field=parente}}
+            {{/if}}
           {{/if}}
         </td>
         <td>

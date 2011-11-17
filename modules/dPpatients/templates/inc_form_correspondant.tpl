@@ -7,12 +7,35 @@
     if ($V(elt) == "employeur") {
       $("urssaf").setStyle({display: "table-row"});
       $("parente").setStyle({display: "none"});
+      $("parente_autre").setStyle({display: "none"});
+      var form = getForm("editCorrespondant");
+      $V(form.parente_autre, "");
+      $V(form.relation_autre, "");
       elt.form.parente.selectedIndex = 0;
     }
     else {
       $("parente").setStyle({display: "table-row"});
       $("urssaf").setStyle({display: "none"});
       $V(elt.form.urrsaf, "");
+    }
+  }
+  
+  toggleRelationAutre = function(elt) {
+    if ($V(elt) == "autre") {
+      $('relation_autre').setStyle({display: "inline"});
+    }
+    else {
+      $('relation_autre').setStyle({display: "none"});
+    }
+  }
+  
+  toggleParenteAutre = function(elt) {
+    if ($V(elt) == "autre") {
+      $('parente_autre').setStyle({display: "table-row"});
+    }
+    else {
+      $("parente_autre").setStyle({display: "none"});
+      $V(getForm("editCorrespondant").parente_autre, '');
     }
   }
 </script>
@@ -31,8 +54,12 @@
           {{tr}}CCorrespondantPatient-title-modify{{/tr}}
         {{else}}
           {{tr}}CCorrespondantPatient-title-create{{/tr}}
-          <span style="float: right;">
-            {{mb_field object=$correspondant field=relation onchange=toggleUrrsafParente(this)}}
+          <span style="float: right; {{if $correspondant->relation != "autre"}}display: none;{{/if}}" id="relation_autre">
+            {{mb_label object=$correspondant field=relation_autre}} :
+              <input type="text" name="relation_autre" value="{{$correspondant->relation_autre}}" />
+          </span>
+          <span style="float: left;">
+            {{mb_field object=$correspondant field=relation onchange="toggleRelationAutre(this); toggleUrrsafParente(this)"}}
           </span>
         {{/if}}
       </th>
@@ -67,7 +94,11 @@
     </tr>
     <tr {{if $correspondant->relation == "employeur"}}style="display: none;"{{/if}} id="parente">
       <th>{{mb_label object=$correspondant field="parente"}}</th>
-      <td>{{mb_field object=$correspondant field="parente" emptyLabel="Choose"}}</td>
+      <td>{{mb_field object=$correspondant field="parente" emptyLabel="Choose" onchange="toggleParenteAutre(this);"}}</td>
+    </tr>
+    <tr {{if $correspondant->parente != "autre"}} style="display: none;"{{/if}} id="parente_autre">
+      <th>{{mb_label object=$correspondant field="parente_autre"}}</th>
+      <td>{{mb_field object=$correspondant field="parente_autre"}}</td>
     </tr>
     <tr {{if $correspondant->relation != "employeur"}}style="display: none;"{{/if}} id="urssaf">
       <th>{{mb_label object=$correspondant field="urssaf"}}</th>
