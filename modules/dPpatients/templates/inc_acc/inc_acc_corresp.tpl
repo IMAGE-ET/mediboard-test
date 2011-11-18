@@ -7,18 +7,18 @@
   <table style="width: 100%;" class="tbl">
     <thead>
       <tr>
-        <th class="category">{{mb_label class=CCorrespondantPatient field=nom}}</th>
-        <th class="category">{{mb_label class=CCorrespondantPatient field=prenom}}</th>
-        <th class="category">{{mb_label class=CCorrespondantPatient field=adresse}}</th>
-        <th class="category">
+        <th class="title">{{mb_label class=CCorrespondantPatient field=nom}}</th>
+        <th class="title">{{mb_label class=CCorrespondantPatient field=prenom}}</th>
+        <th class="title">{{mb_label class=CCorrespondantPatient field=adresse}}</th>
+        <th class="title">
           {{mb_label class=CCorrespondantPatient field=cp}} / {{mb_label class=CCorrespondantPatient field=ville}}
         </th>
-        <th class="category">{{mb_label class=CCorrespondantPatient field=tel}}</th>
-        <th class="category">{{mb_label class=CCorrespondantPatient field=parente}}</th>
-        <th class="category">{{mb_label class=CCorrespondantPatient field=urssaf}}</th>
-        <th class="category">{{mb_label class=CCorrespondantPatient field=email}}</th>
-        <th class="category">{{mb_label class=CCorrespondantPatient field=remarques}}</th>
-        <th class="category" style="width: 1%"></th>
+        <th class="title">{{mb_label class=CCorrespondantPatient field=tel}}</th>
+        <th class="title">{{mb_label class=CCorrespondantPatient field=parente}}</th>
+        <th class="title">{{mb_label class=CCorrespondantPatient field=urssaf}}</th>
+        <th class="title">{{mb_label class=CCorrespondantPatient field=email}}</th>
+        <th class="title">{{mb_label class=CCorrespondantPatient field=remarques}}</th>
+        <th class="title" style="width: 1%"></th>
       </tr>
     </thead>
     <tbody id="list-correspondants">
