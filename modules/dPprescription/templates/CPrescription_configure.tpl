@@ -53,6 +53,7 @@ Main.add(Control.Tabs.create.curry('tab-{{$class}}', true));
       {{mb_include module=system template=inc_config_bool var=display_cat_for_elt}}
 		  {{mb_include module=system template=inc_config_bool var=show_PCEA}}
       {{mb_include module=system template=inc_config_bool var=duration_in_hours}}
+      {{mb_include module=system template=inc_config_bool var=show_ccam_bons}}
 		</tbody>
 
     <tbody style="display: none" id="chapters_visible">

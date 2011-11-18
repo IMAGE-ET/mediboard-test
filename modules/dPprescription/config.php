@@ -25,6 +25,7 @@ $dPconfig["dPprescription"] = array (
     "display_cat_for_elt" => "0",
 		"show_PCEA" => "0",
 		"duration_in_hours" => "0",
+    "show_ccam_bons" => "1",
     "scores" => array(
       "interaction" => array(
         "niv1" => "1",

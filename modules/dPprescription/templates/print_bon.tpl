@@ -167,15 +167,17 @@ Main.add( function(){
         {{assign var=operation value=$sejour->_ref_last_operation}}
         Intervention le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}}
         <strong>(I{{if $operation->_compteur_jour >=0}}+{{/if}}{{$operation->_compteur_jour}})</strong> - côté {{$operation->cote}}<br /><br />
-        <strong>{{$operation->libelle}}</strong> 
-        <div style="text-align: left" class="codes_ccam">
-        {{if !$operation->libelle}}
-          {{foreach from=$operation->_ext_codes_ccam item=curr_ext_code}}
-            <strong>{{$curr_ext_code->code}}</strong> :
-            {{$curr_ext_code->libelleLong}}<br />
-            {{/foreach}}
+        <strong>{{$operation->libelle}}</strong>
+        {{if $conf.dPprescription.CPrescription.show_ccam_bons}}
+          <div style="text-align: left" class="codes_ccam">
+          {{if !$operation->libelle}}
+            {{foreach from=$operation->_ext_codes_ccam item=curr_ext_code}}
+              <strong>{{$curr_ext_code->code}}</strong> :
+              {{$curr_ext_code->libelleLong}}<br />
+              {{/foreach}}
+          {{/if}}
+          </div>
         {{/if}}
-        </div>
       </td>
       <td style="vertical-align: top;">
         {{foreach from=$prescription->_ref_object->_ref_affectations item=_affectation}}
@@ -230,7 +232,7 @@ Main.add( function(){
               {{/if}}
             </td>
             <td style="width: 20%">
-              Prescripteur: {{$line->_ref_praticien->_view}} ({{$line->_ref_praticien->adeli}})
+              Prescripteur: {{$line->_ref_praticien->_view}} (ADELI : {{$line->_ref_praticien->adeli}} &mdash; RPPS : {{$line->_ref_praticien->rpps}})
             </td>
           </tr>
           {{if $line->commentaire}}
