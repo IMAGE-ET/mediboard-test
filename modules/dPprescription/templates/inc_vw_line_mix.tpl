@@ -42,7 +42,7 @@ Main.add( function(){
 		  updateElement: updateFieldsAerosol,
 		  callback: 
 		    function(input, queryString){
-		      return (queryString + "&inLivret="+($V(addLineAerosolForm._recherche_livret)?'1':'0')+"&hors_specialite=0"); 
+		      return (queryString + "&inLivret="+($V(addLineAerosolForm._recherche_livret)?'1':'0')+"&hors_specialite=0{{if $line->type_line == 'perfusion'}}&perfusable=1{{/if}}"); 
 		    }
 		} );
 	}
@@ -541,7 +541,7 @@ Main.add( function(){
 			<fieldset>
 				<legend>Produits</legend>			
 	      <table class="main layout line_mix_items" id="lines-{{$line->_id}}">
-	      	{{if $line->type_line == "aerosol" && $line->_perm_edit}}
+	      	{{if $line->type_line == "aerosol" || $line->type_line == "perfusion" && $line->_perm_edit}}
 	          <!-- Formulaire d'ajout de ligne dans l'aerosol -->
 						<tr>
 	            <td>

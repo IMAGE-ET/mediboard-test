@@ -157,6 +157,19 @@ class CPrescriptionLineMixItem extends CMbObject implements IPatientRelated {
       $this->code_ucd = $produit->code_ucd;
       $this->code_cis = $produit->code_cis;
     }
+		
+		if(!$this->_id && !$this->unite){
+			$produit_livret_thera = new CProduitLivretTherapeutique();
+			$where = array();
+			$group_id = CGroups::loadCurrent()->_id;
+			$where["code_cis"] = " = '$this->code_cis'";
+			$where["group_id"] = " = '$group_id'";
+			$where["unite_prise"] = " IS NOT NULL";
+			$produit_livret_thera->loadObject($where);
+			if($produit_livret_thera->_id){
+			  $this->unite = $produit_livret_thera->unite_prise;
+			}
+		}
   }
 	
   /**
@@ -328,7 +341,7 @@ class CPrescriptionLineMixItem extends CMbObject implements IPatientRelated {
 		
 	  if($msg = parent::store()){
 	  	return $msg;
-	  }	
+	  }
 		
     if($calculPlanif || $mode_creation){
     	$this->loadRefPerfusion();

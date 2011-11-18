@@ -21,7 +21,7 @@ $group_id            = CValue::post("group_id");
 $type                = CValue::post("type", "");
 $livret_cabinet      = CValue::post("livret_cabinet", 0);
 $function_guid       = CValue::post("function_guid");
-  
+$perfusable          = CValue::post("perfusable", 0);
 	
 $mbProduit = new CBcbProduit();
 $code = '';
@@ -42,7 +42,7 @@ if($inLivret){
   }
 }
 
-$search_by_name = $mbProduit->searchProduitAutocomplete($tokens, "50", $inLivret, $code, $search_libelle_long, $hors_specialite, $search_by_cis);
+$search_by_name = $mbProduit->searchProduitAutocomplete($tokens, "50", $inLivret, $code, $search_libelle_long, $hors_specialite, $search_by_cis, $perfusable);
 
 // Recherche des produits en se basant sur les DCI
 $dci = new CBcbDCI();
