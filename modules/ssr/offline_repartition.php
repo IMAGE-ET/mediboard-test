@@ -10,6 +10,9 @@
 
 CCanDo::checkRead();
 
+set_min_memory_limit("256M");
+
+
 // Chargement de l'etablissement courant
 $group = CGroups::loadCurrent();
 $date = mbDate();
