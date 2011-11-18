@@ -67,8 +67,8 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     // T - Training
     $data[] = (CAppUI::conf("instance_role") == "prod") ? "P" : "D";
      
-    // MSH-12: Version ID (VID) 
-    $data[] = $event->version; 
+    // MSH-12: Version ID (VID)     
+    $data[] = CHL7v2::prepareHL7Version($event->version); 
     
     // MSH-13: Sequence Number (NM) (optional)
     $data[] = null; 
@@ -116,9 +116,6 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     
     // Message type
     $fields[8] = $message->name;
-    
-    // Version Id
-    $fields[11] = $message->version;
     
     return parent::fill($fields);
   }

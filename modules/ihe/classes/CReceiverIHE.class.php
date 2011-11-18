@@ -77,6 +77,16 @@ class CReceiverIHE extends CInteropReceiver {
     }
   }
   
+  function getInternationalizationCode($transaction) {
+    $iti_hl7_version = $this->_configs[$transaction."_HL7_version"];
+    
+    if (preg_match("/([A-Z]{2})_(.*)/", $iti_hl7_version, $matches)) {
+      return $matches[1];
+    }
+    
+    return null;
+  }
+  
   function sendEvent($evenement, CMbObject $mbObject) {
     $evenement->_receiver = $this;
     

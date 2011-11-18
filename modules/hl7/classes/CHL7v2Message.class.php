@@ -49,8 +49,13 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   var $current_line = 0;
   var $errors       = array();
   
-  function __construct($extension = null) {
-	  $this->extension = $extension;
+  function __construct($version = null) {
+    if (preg_match("/([A-Z]{2})_(.*)/", $version, $matches)) {
+      $this->extension = $version;
+      $this->version   = "2.5";
+    } else {
+      $this->version = $version;
+    }  
 	}
   
   function toXML($event_code = null) {

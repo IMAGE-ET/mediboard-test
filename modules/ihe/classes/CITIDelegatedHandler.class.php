@@ -25,30 +25,25 @@ class CITIDelegatedHandler {
       throw new CMbException("CITI-code-none");
     }
     
-    $extension = null;
-    if ($receiver->_configs["extension"]) {
-      $extension = "_{$receiver->_configs["extension"]}";
+    $internationalization_code = $receiver->getInternationalizationCode($transaction);
+    if ($internationalization_code) {
+      $internationalization_code = "_$internationalization_code";
+      $profil = $profil.$internationalization_code;
     }
 
-    if (!$receiver->isMessageSupported("CHL7EventADT{$code}{$extension}")) {
+    if (!$receiver->isMessageSupported("CHL7EventADT{$code}{$internationalization_code}")) {
       return;
     }
     
     $hl7_version = $receiver->getHL7Version($transaction);
-    $class       = "CHL7".$hl7_version."EventADT".$code.$extension;
+    $class       = "CHL7".$hl7_version."EventADT".$code.$internationalization_code;
     if (!class_exists($class)) {
-      trigger_error("class-CHL7".$hl7_version."EventADT".$code.$extension."-not-found", UI_MSG_ERROR);
+      trigger_error("class-CHL7".$hl7_version."EventADT".$code.$internationalization_code."-not-found", UI_MSG_ERROR);
       return;  
-    }
-    
-    if ($extension) {
-      $profil = $profil.$extension;
     }
 
     $event              = new $class;
     $event->profil      = $profil;
-    $event->transaction = $transaction;
-    $event->extension   = $receiver->_configs["extension"];
 
     $receiver->sendEvent($event, $mbObject);
   }

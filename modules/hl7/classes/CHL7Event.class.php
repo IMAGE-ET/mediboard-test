@@ -21,7 +21,6 @@ class CHL7Event {
   var $last_log      = null;
   var $profil        = null;
   var $transaction   = null;
-  var $extension     = null;
   var $code          = null;
   var $version       = null;
   
