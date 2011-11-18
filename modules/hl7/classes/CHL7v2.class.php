@@ -108,11 +108,13 @@ abstract class CHL7v2 {
   static function prepareHL7Version($version) {
     if (preg_match("/([A-Z]{2})_(.*)/", $version, $matches)) {
       return array(
-        "2.5",
-        // Internationalization Code
-        $matches[1],
-        // International Version ID
-        $matches[2],
+        array (
+          "2.5",
+          // Internationalization Code
+          $matches[1],
+          // International Version ID
+          $matches[2],
+        )
       );
     }
     
