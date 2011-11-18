@@ -237,7 +237,7 @@ class CModule extends CMbObject {
   }
   
   function getValidTab($tab){
-    if (!$this->checkActive()) {
+    if (!$this->mod_active) {
       return;
     }
     
