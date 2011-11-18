@@ -124,12 +124,10 @@ abstract class CHL7v2 {
       $this->error(CHL7v2Exception::VERSION_UNKNOWN, $version);
     }
     
-    if ($extension && $extension !== "noext") {
-      if (preg_match("/([A-Z]{2})_(.*)/", $extension, $matches)) {
-        $lang = strtolower($matches[1]);
-        $v    = "v".str_replace(".", "_", $matches[2]);
-        $version_dir = "extensions/$lang/$v";
-      }
+    if ($extension && $extension !== "noext" && preg_match("/([A-Z]{2})_(.*)/", $extension, $matches)) {
+      $lang = strtolower($matches[1]);
+      $v    = "v".str_replace(".", "_", $matches[2]);
+      $version_dir = "extensions/$lang/$v";
     }
     else {
       $version_dir = "hl7v".preg_replace("/[^0-9]/", "_", $version);
