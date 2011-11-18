@@ -846,8 +846,11 @@ class CSetupsystem extends CSetup {
               ADD `archive` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.86";
-    
-    $this->mod_version = "1.0.86";
+    $this->makeRevision("1.0.86");
+    $query = "ALTER TABLE `view_sender` 
+      CHANGE `period` `period` ENUM ('1','2','3','4','5','6','10','15','20','30','60');";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.0.87";
   }
 }
