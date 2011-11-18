@@ -71,7 +71,7 @@ Main.add(function(){
   {{if $line->_class == "CPrescriptionLineMedicament" && $type != "mode_grille"}}
   <select name="unite_prise" style="width: 80px;">
     {{foreach from=$line->_unites_prise item=_unite}}
-      <option value="{{$_unite}}">{{$_unite}}</option>
+      <option value="{{$_unite}}" {{if $unite_prise_defaut == $_unite}}selected="selected"{{/if}}>{{$_unite}}</option>
     {{/foreach}}
   </select>
   {{/if}}

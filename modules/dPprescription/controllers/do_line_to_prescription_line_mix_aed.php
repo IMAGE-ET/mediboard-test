@@ -95,9 +95,19 @@ $prescription_line_mix_item->prescription_line_mix_id = $prescription_line_mix_i
 $prescription_line_mix_item->code_cip = $line_med->code_cip;
 $prescription_line_mix_item->code_ucd = $line_med->code_ucd;
 $prescription_line_mix_item->code_cis = $line_med->code_cis;
-if($line_med->unite_duree == "heure"){
-  // $prescription_line_mix_item->duree = $line_med->duree; FIXME: CPrescriptionLineMixItem n'a pas de durée
+
+// Chargement de l'unite de prise par defaut
+$produit_livret_thera = new CProduitLivretTherapeutique();
+$where = array();
+$group_id = CGroups::loadCurrent()->_id;
+$where["code_cis"] = " = '$prescription_line_mix_item->code_cis'";
+$where["group_id"] = " = '$group_id'";
+$where["unite_prise"] = " IS NOT NULL";
+$produit_livret_thera->loadObject($where);
+if($produit_livret_thera->_id){
+  $prescription_line_mix_item->unite = $produit_livret_thera->unite_prise;
 }
+
 $msg = $prescription_line_mix_item->store();
 CAppUI::displayMsg($msg, "CPrescriptionLineMixItem-msg-create");
 

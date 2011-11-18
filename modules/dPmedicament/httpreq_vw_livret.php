@@ -29,6 +29,11 @@ if($lettre == "hors_T2A"){
 	$produits_livret = CBcbProduit::loadRefLivretTherapeutique($function_guid, $lettre, 200);
 }
 
+// Chargement des unités de prises par defaut
+foreach($produits_livret as $_produit_livret){
+	$_produit_livret->loadUnitePrise();
+}
+
 $tabLettre = range('A', 'Z');
 
 // Création du template

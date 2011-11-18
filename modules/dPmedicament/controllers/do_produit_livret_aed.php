@@ -18,6 +18,21 @@ $date_prix_ville   = CValue::post("date_prix_ville");
 $code_interne      = CValue::post("code_interne");
 $commentaire       = CValue::post("commentaire");
 $function_guid     = CValue::post("_function_guid", null);
+$unite_prise       = CValue::post("_unite_prise");
+
+// Recherche du produit dans la table du livret therapeutique et sauvegarde de l'unite de prise
+$produit_livret_thera = new CProduitLivretTherapeutique();
+$produit_livret_thera->code_cip = $code_cip;
+$produit_livret_thera->group_id = CGroups::loadCurrent()->_id;
+$produit_livret_thera->loadMatchingObject();
+
+// Chargement du code cis et code ucd du produit
+$produit_livret_thera->loadRefProduit();
+$produit_livret_thera->code_ucd = $produit_livret_thera->_ref_produit->code_ucd;
+$produit_livret_thera->code_cis = $produit_livret_thera->_ref_produit->code_cis;
+
+$produit_livret_thera->unite_prise = $unite_prise;
+$produit_livret_thera->store();
 
 if (isset($function_guid)) {
   $crc = $function_guid;

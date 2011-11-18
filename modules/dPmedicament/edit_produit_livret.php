@@ -31,7 +31,15 @@ $produit_livret = new CBcbProduitLivretTherapeutique();
 $produit_livret->load($code_cip, $crc);
 $produit_livret->loadRefProduit();
 
+// Chargement des unites de prises possibles pour le produit
+$line_med = new CPrescriptionLineMedicament();
+$line_med->code_cip = $code_cip;
+$line_med->loadRefProduit();
+$line_med->loadRefsFwd();
+$produit_livret->_unites_prise = $line_med->_unites_prise;
+
 $produit_livret->updateFormFields();
+$produit_livret->loadUnitePrise();
 
 // Création du template
 $smarty = new CSmartyDP();

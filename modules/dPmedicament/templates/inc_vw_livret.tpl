@@ -59,19 +59,22 @@ Main.add(function(){
 {{if $lettre}}	
 <table class="tbl">
   <tr>
-    <th colspan="10" class="title">{{$produits_livret|@count}} produits dans le livret</th>
+    <th colspan="11" class="title">{{$produits_livret|@count}} produits dans le livret</th>
   </tr>  
   <tr>
     <th>Actions</th>
     <th>Libelle</th>
     <th>Code CIP</th>
     <th>Code UCD</th>
+		<!--
     <th>Prix Hôpital</th>
     <th>Prix Ville</th>
     <th>Date Prix Hôpital</th>
     <th>Date Prix Ville</th>
     <th>Code Interne</th>
+		    -->
     <th>Alias</th>
+		<th>Unité de prise</th>
   </tr>
   {{foreach from=$produits_livret item=produit_livret}}
   <tr>
@@ -105,7 +108,8 @@ Main.add(function(){
     </td>
     <td>{{$produit_livret->_ref_produit->code_cip}}</td>
     <td>{{$produit_livret->_ref_produit->code_ucd}}</td>
-    <td>
+    <!--
+		<td>
       {{if $produit_livret->prix_hopital}}
         {{$produit_livret->prix_hopital|currency}}
       {{/if}}
@@ -118,7 +122,9 @@ Main.add(function(){
     <td>{{$produit_livret->date_prix_hopital|date_format:"%d/%m/%Y"}}</td>
     <td>{{$produit_livret->date_prix_ville|date_format:"%d/%m/%Y"}}</td>
     <td>{{$produit_livret->code_interne}}</td> 
+		-->
     <td class="text">{{$produit_livret->commentaire}}</td> 
+		<td>{{$produit_livret->_unite_prise}}</td>
   </tr>
   {{/foreach}}
 </table>

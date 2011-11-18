@@ -72,9 +72,25 @@ class CSetupdPmedicament extends CSetup {
             ADD `unite_dispensation` VARCHAR (255) NOT NULL;";
 		$this->addQuery($query);
     
-    $this->makeRevision("0.16");
+    $this->makeRevision("0.17");
+
+    $query = "ALTER TABLE `produit_livret_therapeutique` 
+              ADD `unite_prise` VARCHAR (255);";
+    $this->addquery($query);
+    
+		$query = "ALTER TABLE `produit_livret_therapeutique` 
+              ADD INDEX (`group_id`),
+              ADD INDEX (`date_prix_hopital`),
+              ADD INDEX (`date_prix_ville`);";		
+		$this->addquery($query);
+
+    $this->makeRevision("0.18");
+		$query = "ALTER TABLE `produit_livret_therapeutique`
+              ADD `code_ucd` INT (7) UNSIGNED ZEROFILL,
+              ADD `code_cis` INT (8) UNSIGNED ZEROFILL;";
+		$this->addQuery($query);
 		
-    $this->mod_version = "0.17";
+    $this->mod_version = "0.19";
   }  
 }
 

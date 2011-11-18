@@ -161,6 +161,7 @@ function loadViewSejour(sejour_id, praticien_id, patient_id, date){
 function loadAntecedents(sejour_id){
   var url = new Url("dPcabinet","httpreq_vw_antecedents");
   url.addParam("sejour_id", sejour_id);
+	url.addParam("show_header", 1);
   url.requestUpdate('antecedents')
 }
 {{/if}}

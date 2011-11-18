@@ -149,7 +149,23 @@ Main.add(function () {
 </script>
 
 <table class="main">
-  <tr>
+	{{mb_default var=show_header value=0}}
+  {{if $show_header}} 
+		<tr>
+			<th class="title" colspan="2">
+				<a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
+		      {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" size=42}}
+		    </a>
+		   
+		    <h2 style="color: #fff; font-weight: bold;">
+		      {{$sejour->_ref_patient->_view}}
+		      <span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
+		    </h2> 
+			</th>
+		</tr>   
+  {{/if}}   
+	
+	<tr>
     <td class="halfPane">
       
 <table class="form">

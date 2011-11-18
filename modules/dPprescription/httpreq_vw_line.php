@@ -42,6 +42,8 @@ $patient->loadRefConstantesMedicales();
 
 $sejour = new CSejour;
 
+$unite_prise_defaut = "";
+
 if($line->_ref_prescription->type == "sejour"){
   $patient->loadRefDossierMedical();
 	  
@@ -91,6 +93,19 @@ if($line instanceof CPrescriptionLineMedicament){
         $_prescription_line_mix->loadRefsLines();
         $_prescription_line_mix->loadVoies();
       }
+	 }
+	 
+	 // Chargement de l'unite par defaut
+	 $produit_livret_thera = new CProduitLivretTherapeutique();
+   $where = array();
+	 $group_id = CGroups::loadCurrent()->_id;
+	 $where["code_cis"] = " = '$line->code_cis'";
+	 $where["group_id"] = " = '$group_id'";
+   $where["unite_prise"] = " IS NOT NULL";
+   
+	 $produit_livret_thera->loadObject($where);
+	 if($produit_livret_thera->_id){
+	 	  $unite_prise_defaut = $produit_livret_thera->unite_prise;
 	 }
 }
 
@@ -157,6 +172,7 @@ if ($advanced_prot) {
 $smarty->assign("executants", $executants);
 $smarty->assign("category_id", $category_id);
 $smarty->assign("sejour", $sejour);
+$smarty->assign("unite_prise_defaut", $unite_prise_defaut);
 
 // Selection du template en fonction du type de ligne
 switch ($line->_class) {

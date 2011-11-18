@@ -78,6 +78,17 @@ Main.add(function() {
         <textarea cols="7" rows="2" name="commentaire">{{$produit_livret->commentaire}}</textarea>
       </td>
     </tr>
+		<tr>
+      <td>Unité de prise par défaut</td>
+      <td>
+      	<select name="_unite_prise" style="width:200px;">
+			    <option value="">&mdash; Choix d'une unité</option>
+					{{foreach from=$produit_livret->_unites_prise item=_unite}}
+			      <option value="{{$_unite}}" {{if $produit_livret->_unite_prise == $_unite}}selected="selected"{{/if}}>{{$_unite}}</option>
+			    {{/foreach}}
+			  </select>
+      </td>
+    </tr>
     <tr>
       <td colspan="2" style="text-align: center">
         <button type="button" class="submit" onclick="submitProduitLivret('{{$lettre}}','{{$codeATC}}','{{$code_cip}}');">Enregistrer</button>
