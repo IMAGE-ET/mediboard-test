@@ -28,7 +28,7 @@ MbObject.editCallback = function(){
 		
 		<tr>
       <th>{{mb_label object=$object field=parent_id}}</th>
-      <td>{{mb_field object=$object field=parent_id form="edit-`$object->_guid`" autocomplete="true,1,50,false,true"}}</td>
+      <td>{{mb_field object=$object field=parent_id form="edit-`$object->_guid`" autocomplete="true,1,50,true,true"}}</td>
     </tr>
     
     <tr>

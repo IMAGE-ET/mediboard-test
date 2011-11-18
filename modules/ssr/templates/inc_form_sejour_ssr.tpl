@@ -30,9 +30,8 @@ function updateSortiePrevue() {
   dDate.addDays(nDuree);
 
   // Update fields
-  $V(oForm.sortie_prevue, dDate.toDATETIME());
-  oView = getForm('editSejour').sortie_prevue_da;
-  $V(oView, dDate.toLocaleDateTime());
+  $V(oForm.sortie_prevue,    dDate.toDATETIME());
+  $V(oForm.sortie_prevue_da, dDate.toLocaleDateTime());
 }
 
 function updateDureePrevue() {

@@ -173,7 +173,7 @@ Main.add(function(){
         </th>
         
         <td>
-          {{mb_field object=$ex_field field=concept_id form="editField" autocomplete="true,1,50,false,true" 
+          {{mb_field object=$ex_field field=concept_id form="editField" autocomplete="true,1,50,true,true" 
                      onchange="selectConcept(this)"}}
         </td>
       

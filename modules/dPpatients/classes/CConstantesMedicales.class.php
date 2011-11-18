@@ -175,121 +175,121 @@ class CConstantesMedicales extends CMbObject {
     "sng"           => array(
       "type" => "drain",
       "unit" => "ml", 
-      "min" => 0, "max" => 2000,
+      "min" => 0, "max" => 1000,
       "cumul_reset_config" => "sng_cumul_reset_hour",
     ),
     "redon"             => array(
 		  "type" => "drain",
       "unit" => "ml", 
-      "min" => 0, "max" => 500,
+      "min" => 0, "max" => 100,
       "cumul_reset_config" => "redon_cumul_reset_hour",
     ),
     "redon_2"           => array(
       "type" => "drain",
       "unit" => "ml", 
-      "min" => 0, "max" => 500,
+      "min" => 0, "max" => 100,
       "cumul_reset_config" => "redon_cumul_reset_hour",
     ),
     "redon_3"           => array(
       "type" => "drain",
       "unit" => "ml", 
-      "min" => 0, "max" => 500,
+      "min" => 0, "max" => 100,
       "cumul_reset_config" => "redon_cumul_reset_hour",
     ),
     "redon_4"           => array(
       "type" => "drain",
       "unit" => "ml", 
-      "min" => 0, "max" => 500,
+      "min" => 0, "max" => 100,
       "cumul_reset_config" => "redon_cumul_reset_hour",
     ),
     "diurese"           => array(
       "type" => "drain",
       "unit" => "ml", 
-      "min" => 0, "max" => 2000,
+      "min" => 0, "max" => 1000,
       "cumul_reset_config" => "diuere_24_reset_hour",
     ),
     "lame_1"           => array(
       "type" => "drain",
       "unit" => "ml", 
-      "min" => 0, "max" => 2000,
+      "min" => 0, "max" => 100,
       "cumul_reset_config" => "lame_cumul_reset_hour",
     ),
     "lame_2"           => array(
       "type" => "drain",
       "unit" => "ml", 
-      "min" => 0, "max" => 2000,
+      "min" => 0, "max" => 100,
       "cumul_reset_config" => "lame_cumul_reset_hour",
     ),
     "lame_3"           => array(
       "type" => "drain",
       "unit" => "ml", 
-      "min" => 0, "max" => 2000,
+      "min" => 0, "max" => 100,
       "cumul_reset_config" => "lame_cumul_reset_hour",
     ),
     "drain_1"           => array(
       "type" => "drain",
       "unit" => "ml", 
-      "min" => 0, "max" => 2000,
+      "min" => 0, "max" => 100,
       "cumul_reset_config" => "drain_cumul_reset_hour",
     ),
     "drain_2"           => array(
       "type" => "drain",
       "unit" => "ml", 
-      "min" => 0, "max" => 2000,
+      "min" => 0, "max" => 100,
       "cumul_reset_config" => "drain_cumul_reset_hour",
     ),
     "drain_3"           => array(
       "type" => "drain",
       "unit" => "ml", 
-      "min" => 0, "max" => 2000,
+      "min" => 0, "max" => 100,
       "cumul_reset_config" => "drain_cumul_reset_hour",
     ),
     "drain_thoracique_1" => array(
       "type" => "drain",
       "unit" => "ml", 
-      "min" => 0, "max" => 2000,
+      "min" => 0, "max" => 100,
       "cumul_reset_config" => "drain_thoracique_cumul_reset_hour",
     ),
     "drain_thoracique_2" => array(
       "type" => "drain",
       "unit" => "ml", 
-      "min" => 0, "max" => 2000,
+      "min" => 0, "max" => 100,
       "cumul_reset_config" => "drain_thoracique_cumul_reset_hour",
     ),
     "drain_pleural_1"   => array(
       "type" => "drain",
       "unit" => "ml", 
-      "min" => 0, "max" => 2000,
+      "min" => 0, "max" => 100,
       "cumul_reset_config" => "drain_pleural_cumul_reset_hour",
     ),
     "drain_pleural_2"   => array(
       "type" => "drain",
       "unit" => "ml", 
-      "min" => 0, "max" => 2000,
+      "min" => 0, "max" => 100,
       "cumul_reset_config" => "drain_pleural_cumul_reset_hour",
     ),
     "drain_mediastinal" => array(
       "type" => "drain",
       "unit" => "ml", 
-      "min" => 0, "max" => 2000,
+      "min" => 0, "max" => 100,
       "cumul_reset_config" => "drain_mediastinal_cumul_reset_hour",
     ),
     "sonde_ureterale_1" => array(
       "type" => "drain",
       "unit" => "ml", 
-      "min" => 0, "max" => 2000,
+      "min" => 0, "max" => 100,
       "cumul_reset_config" => "sonde_ureterale_cumul_reset_hour",
     ),
     "sonde_ureterale_2" => array(
       "type" => "drain",
       "unit" => "ml", 
-      "min" => 0, "max" => 2000,
+      "min" => 0, "max" => 100,
       "cumul_reset_config" => "sonde_ureterale_cumul_reset_hour",
     ),
     "sonde_vesicale"    => array(
       "type" => "drain",
       "unit" => "ml", 
-      "min" => 0, "max" => 2000,
+      "min" => 0, "max" => 200,
       "cumul_reset_config" => "sonde_vesicale_cumul_reset_hour",
     ),
   );
@@ -404,26 +404,26 @@ class CConstantesMedicales extends CMbObject {
     $specs['_inj_essai']             = 'num pos moreEquals|_inj';
 		
 		
-    $specs['redon']                  = 'float pos min|0 max|1000';
-    $specs['redon_2']                = 'float pos min|0 max|1000';
-    $specs['redon_3']                = 'float pos min|0 max|1000';
-    $specs['redon_4']                = 'float pos min|0 max|1000';
+    $specs['redon']                  = 'float pos min|0';
+    $specs['redon_2']                = 'float pos min|0';
+    $specs['redon_3']                = 'float pos min|0';
+    $specs['redon_4']                = 'float pos min|0';
     $specs['diurese']                = 'float min|0';
-    $specs['sng']                    = 'float pos min|0 max|1000';
-    $specs['lame_1']                 = 'float pos min|0 max|1000';
-    $specs['lame_2']                 = 'float pos min|0 max|1000';
-    $specs['lame_3']                 = 'float pos min|0 max|1000';
-    $specs['drain_1']                = 'float pos min|0 max|1000';
-    $specs['drain_2']                = 'float pos min|0 max|1000';
-    $specs['drain_3']                = 'float pos min|0 max|1000';
-    $specs['drain_thoracique_1']     = 'float pos min|0 max|1000';
-    $specs['drain_thoracique_2']     = 'float pos min|0 max|1000';
-    $specs['drain_pleural_1']        = 'float pos min|0 max|1000';
-    $specs['drain_pleural_2']        = 'float pos min|0 max|1000';
-    $specs['drain_mediastinal']      = 'float pos min|0 max|1000';
-    $specs['sonde_ureterale_1']      = 'float pos min|0 max|1000';
-    $specs['sonde_ureterale_2']      = 'float pos min|0 max|1000';
-    $specs['sonde_vesicale']         = 'float pos min|0 max|1000';
+    $specs['sng']                    = 'float pos min|0';
+    $specs['lame_1']                 = 'float pos min|0';
+    $specs['lame_2']                 = 'float pos min|0';
+    $specs['lame_3']                 = 'float pos min|0';
+    $specs['drain_1']                = 'float pos min|0';
+    $specs['drain_2']                = 'float pos min|0';
+    $specs['drain_3']                = 'float pos min|0';
+    $specs['drain_thoracique_1']     = 'float pos min|0';
+    $specs['drain_thoracique_2']     = 'float pos min|0';
+    $specs['drain_pleural_1']        = 'float pos min|0';
+    $specs['drain_pleural_2']        = 'float pos min|0';
+    $specs['drain_mediastinal']      = 'float pos min|0';
+    $specs['sonde_ureterale_1']      = 'float pos min|0';
+    $specs['sonde_ureterale_2']      = 'float pos min|0';
+    $specs['sonde_vesicale']         = 'float pos min|0';
     
     return $specs;
   }

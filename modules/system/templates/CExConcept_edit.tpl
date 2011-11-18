@@ -77,7 +77,7 @@ Main.add(function(){
       </th>
       <td>
         {{if !$object->_id}}
-          {{mb_field object=$object field=ex_list_id form="edit-`$object->_guid`" autocomplete="true,1,50,false,true" onchange="selectList(this)"}}
+          {{mb_field object=$object field=ex_list_id form="edit-`$object->_guid`" autocomplete="true,1,50,true,true" onchange="selectList(this)"}}
           <label>
             <input type="checkbox" name="_multiple" value="1" onclick="ExConceptSpec.edit(this.form)" /> Multiple 
           </label>

@@ -713,6 +713,16 @@ Object.extend(Date, {
 
     return new Date(match[1], match[2] - 1, match[3], match[4], match[5], match[6]); // Js months are 0-11!!
   },
+  
+  // sTime must be: HH:MM:SS
+  fromTIME: function(sTime) {
+    var match;
+
+    if (!(match = /^(\d{2}):(\d{2}):(\d{2})$/.exec(sTime)))
+      Assert.that(match, "'%s' is not a valid TIME", sTime);
+
+    return new Date(0, 0, 0, match[1], match[2], match[3]);
+  },
 
   fromLocaleDate : function(sDate) {
     var match, re = /^(\d{2})\/(\d{2})\/(\d{4})$/;
