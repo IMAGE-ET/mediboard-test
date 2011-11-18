@@ -73,10 +73,12 @@ class CHL7v2DataType extends CHL7v2 {
   
   protected $type;
   protected $version;
+  protected $extension;
   
-  protected function __construct($datatype, $version) {
+  protected function __construct($datatype, $version, $extension) {
     $this->type = (string)$datatype;
     $this->version = $version;
+    $this->extension = $extension;
   }
   
   static function init(){
@@ -112,7 +114,7 @@ class CHL7v2DataType extends CHL7v2 {
    * @param string $type
    * @return CHL7v2DataType
    */
-  static function load($type, $version) {
+  static function load($type, $version, $extension) {
     static $cache = array();
     
     if ($type == "TS") {
@@ -127,11 +129,11 @@ class CHL7v2DataType extends CHL7v2 {
     
     if (in_array($class_type, self::$typesBase)) {
       $class = "CHL7v2DataType$class_type";
-      $instance = new $class($class_type, $version);
+      $instance = new $class($class_type, $version, $extension);
       //$instance->getSpecs();
     }
     else {
-      $instance = new CHL7v2DataTypeComposite($type, $version);
+      $instance = new CHL7v2DataTypeComposite($type, $version, $extension);
     }
     
     return $cache[$version][$type] = $instance;
@@ -204,7 +206,7 @@ class CHL7v2DataType extends CHL7v2 {
   }
   
   function getSpecs(){
-    return $this->getSchema(self::PREFIX_COMPOSITE_NAME, $this->type);
+    return $this->getSchema(self::PREFIX_COMPOSITE_NAME, $this->type, $this->extension);
   }
   
   function getVersion(){

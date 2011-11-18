@@ -109,22 +109,32 @@ abstract class CHL7v2 {
   
   abstract function getVersion();
   
-  function getSchema($type, $name) {
+  function getSchema($type, $name, $extension = "noext") {
     /*if (empty(self::$schemas)) {
       self::$schemas = SHM::get("hl7-v2-schemas");
     }*/
     
     $version = $this->getVersion();
     
-    if (isset(self::$schemas[$version][$type][$name])) {
-      return self::$schemas[$version][$type][$name];
+    if (isset(self::$schemas[$version][$type][$name][$extension])) {
+      return self::$schemas[$version][$type][$name][$extension];
     }
 
     if (!in_array($version, self::$versions)) {
       $this->error(CHL7v2Exception::VERSION_UNKNOWN, $version);
     }
     
-    $version_dir = "hl7v".preg_replace("/[^0-9]/", "_", $version);
+    if ($extension && $extension !== "noext") {
+      if (preg_match("/([A-Z]{2})_(.*)/", $extension, $matches)) {
+        $lang = strtolower($matches[1]);
+        $v    = "v".str_replace(".", "_", $matches[2]);
+        $version_dir = "extensions/$lang/$v";
+      }
+    }
+    else {
+      $version_dir = "hl7v".preg_replace("/[^0-9]/", "_", $version);
+    }
+    
     $name_dir = preg_replace("/[^A-Z0-9_]/", "", $name);
     
     $this->spec_filename = self::LIB_HL7."/$version_dir/$type$name_dir.xml";
@@ -135,7 +145,7 @@ abstract class CHL7v2 {
 
     $schema = simplexml_load_file($this->spec_filename, "CHL7v2SimpleXMLElement");
     
-    self::$schemas[$version][$type][$name] = $schema;
+    self::$schemas[$version][$type][$name][$extension] = $schema;
     
     //SHM::put("hl7-v2-schemas", self::$schemas);
     

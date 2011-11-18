@@ -49,7 +49,9 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   var $current_line = 0;
   var $errors       = array();
   
-  function __construct() { }
+  function __construct($extension = null) {
+	  $this->extension = $extension;
+	}
   
   function toXML($event_code = null) {
     $field = $this->children[0]->fields[8]->items[0];
@@ -371,7 +373,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
    * @return CHL7v2SimpleXMLElement
    */
   function getSpecs(){
-    return $this->getSchema(self::PREFIX_MESSAGE_NAME, $this->name);
+    return $this->getSchema(self::PREFIX_MESSAGE_NAME, $this->name, $this->getMessage()->extension);
   }
   
   /**

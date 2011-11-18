@@ -126,7 +126,7 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
   
   function getSpecs(){
-    return $this->getSchema(self::PREFIX_SEGMENT_NAME, $this->name);
+    return $this->getSchema(self::PREFIX_SEGMENT_NAME, $this->name, $this->getMessage()->extension);
   }
   
   function getPath($separator = ".", $with_name = false){

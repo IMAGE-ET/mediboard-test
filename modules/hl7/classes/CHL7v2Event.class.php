@@ -30,8 +30,7 @@ class CHL7v2Event extends CHL7Event {
     $this->generateExchange();
  
     // Création du message HL7
-    $this->message            = new CHL7v2Message();
-    $this->message->extension = $this->extension;
+    $this->message            = new CHL7v2Message($this->extension);
     $this->message->version   = $this->version;
     $this->message->name      = $this->msg_codes;
   }

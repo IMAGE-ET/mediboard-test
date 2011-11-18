@@ -80,7 +80,7 @@ class CHL7v2Component extends CHL7v2Entity {
     $this->description = (string)$specs->description;
     $this->self_pos    = $self_pos;
     
-    $this->props = CHL7v2DataType::load($this->datatype, $this->getVersion());
+    $this->props = CHL7v2DataType::load($this->datatype, $this->getVersion(), $this->getMessage()->extension);
   }
   
   function _toXML(DOMNode $node) {
@@ -192,7 +192,7 @@ class CHL7v2Component extends CHL7v2Entity {
    * @return CHL7v2DataType
    */
   function getSpecs(){
-    return $this->getSchema(self::PREFIX_COMPOSITE_NAME, $this->datatype);
+    return $this->getSchema(self::PREFIX_COMPOSITE_NAME, $this->datatype, $this->getMessage()->extension);
   }
   
   /**
