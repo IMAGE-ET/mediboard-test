@@ -247,8 +247,9 @@
       <ul>
         <li>Carte d'identité</li>
         <li>
-          Carte Vitale et attestation de sécurité sociale, 
-          carte de mutuelle accompagnée de la prise en charge le cas échéant.
+          Carte vitale et attestation de sécurité sociale,
+          carte de mutuelle et prise en charge complète auprès de votre mutuelle
+          à transmettre au personnel des admissions lors de votre entrée.
         </li>
         <li>Tous examens en votre possession (analyse, radio, carte de groupe sanguin...).</li>
         <li>Prévoir linge et nécessaire de toilette.</li>
