@@ -46,7 +46,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
       case "CHL7v2EventADTZ99" : 
         return new CHL7v2RecordAdmit();     
       default : 
-        throw new CHL7v2Exception(CHL7v2Exception::EVENT_UNKNOWN, $event_code);
+        return new CHL7v2MessageXML();
     }
   }
   
