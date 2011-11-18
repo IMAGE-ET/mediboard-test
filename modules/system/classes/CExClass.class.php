@@ -558,7 +558,7 @@ class CExClass extends CMbObject {
       $object = CMbObject::loadFromGuid($object);
     }
 		
-		if ($type == "required" && !CValue::read($object->_spec[$event], "auto", false)) {
+		if ($type == "required" && !CValue::read($object->_spec->events[$event], "auto", false)) {
 			return array();
 		}
     
