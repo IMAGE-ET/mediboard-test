@@ -176,8 +176,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $first_line = CHL7v2::split($this->fieldSeparator, reset($this->lines));
     
     // version
-    preg_match('/^([\d\._]+)/', $first_line[11], $version_matches);
-    $this->version = $version_matches[1];
+    $this->parseRawVersion($first_line[11]);
     
     // message type
     $message_type = explode($this->componentSeparator, $first_line[8]);
@@ -197,6 +196,16 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
       $this->readSegments();
     }
   }
+	
+	private function parseRawVersion($raw){
+		$parts = explode($this->componentSeparator, $raw);
+		
+		$this->version = $parts[0];
+		
+		if (count($parts) > 1) {
+			$this->extension = "$parts[1]_$parts[2]";
+		}
+	}
   
   function readHeader(){
     $first_line = $this->lines[0];
