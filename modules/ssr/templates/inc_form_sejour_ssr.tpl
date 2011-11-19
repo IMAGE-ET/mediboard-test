@@ -70,6 +70,7 @@ function cancelSejourSSR() {
 </script>
 
 <form name="editSejour" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+  {{if $conf.ssr.recusation.sejour_readonly}}<input type="hidden" name="_locked" value="1" />{{/if}}
   <input type="hidden" name="m" value="ssr" />
   <input type="hidden" name="dosql" value="do_sejour_ssr_aed" />
   <input type="hidden" name="del" value="0" />
@@ -154,8 +155,7 @@ function cancelSejourSSR() {
 	      <td colspan="2">
           {{mb_field object=$sejour field="entree_prevue" form="editSejour" tabindex="5" register=true canNull=false onchange="updateDureePrevue();"}}
         </td>
-	      
-        <td rowspan="4">
+        <td rowspan="3">
           {{mb_label object=$sejour field=rques}}<br />
           {{mb_field object=$sejour field=rques}}
           <script type="text/javascript">
@@ -178,11 +178,11 @@ function cancelSejourSSR() {
 	      </th>
 	      <td>
 	        <input type="text" name="patient_view" style="width: 15em" value="{{$patient->_view}}" tabindex="2" 
-	          {{if !$sejour->_id || $app->user_type == 1}} 
+	          {{if (!$sejour->_id || $app->user_type == 1) && !$conf.ssr.recusation.sejour_readonly}} 
 	          onclick="PatSelector.init()" 
 	          {{/if}}
 	          readonly="readonly" />
-	        {{if !$sejour->_id || $app->user_type == 1}} 
+	        {{if (!$sejour->_id || $app->user_type == 1) && !$conf.ssr.recusation.sejour_readonly}} 
 	          <button type="button" class="search notext" onclick="PatSelector.init()">
 	            {{tr}}Choose{{/tr}}
 	          </button>
@@ -198,11 +198,7 @@ function cancelSejourSSR() {
 	      </td>
 	      
 	      <th>{{mb_label object=$sejour field=sortie_prevue}}</th>
-	      
-        <td colspan="2">
-          {{mb_field object=$sejour field="sortie_prevue" form="editSejour"  tabindex="6" register=true canNull=false onchange="updateDureePrevue();"}}
-        </td>
-
+	      <td colspan="2">{{mb_field object=$sejour field="sortie_prevue" form="editSejour"  tabindex="6" register=true canNull=false onchange="updateDureePrevue();"}}</td>
 	    </tr>
 	    
 	    <tr>
@@ -216,49 +212,21 @@ function cancelSejourSSR() {
 	      <td id="dureeEst"></td>
 	    </tr>
 	    
-	    <tr>
-	      <th>{{mb_label object=$sejour field=service_id}}</th>
-	      <td>
-          <select name="service_id" class="{{$sejour->_props.service_id}}" style="width: 15em" tabindex="4">
-            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-            {{foreach from=$services item=_service}}
-            <option value="{{$_service->_id}}"
-              {{if $_service->_id == $sejour->service_id}}selected="selected"{{/if}}>
-              {{$_service->_view}}
-            </option>
-            {{/foreach}}
-          </select>
-	      </td>
-	      {{if $conf.ssr.recusation.use_recuse && $sejour->_id}}
-        <th>{{mb_label object=$sejour field=recuse}}</th>
-        <td colspan="2">{{mb_value object=$sejour field=recuse}}</td>
-	      {{elseif $conf.ssr.recusation.use_recuse}}
-        <th></th>
-        <td colspan="2"><input name="recuse" type="hidden" value="-1" /></td>
-	      {{else}}
-	      <th></th>
-	      <td colspan="2"><input name="recuse" type="hidden" value="0" /></td>
-	      {{/if}}
-	    </tr>
-	    
-	    {{if !$dialog}} 
+	    {{if !$dialog && !$conf.ssr.recusation.sejour_readonly}} 
 	    <tr>
 	      <td class="button" colspan="8">
 	        {{if $sejour->_id}}
-	          {{if 0}}
+	          {{if $can->edit}}
 	            <button class="modify default" type="submit" tabindex="23">{{tr}}Save{{/tr}}</button>
-	            
+              {{if $can->admin}}
 	            <button class="{{$sejour->annule|ternary:'change':'cancel'}}" type="button" tabindex="24" onclick="cancelSejourSSR();">
 	               {{tr}}{{$sejour->annule|ternary:'Restore':'Cancel'}}{{/tr}}
 	            </button>
-	            
-	            {{if $can->admin}}
 	              <button class="trash" type="button" tabindex="25" onclick="confirmDeletion(this.form,{typeName:'le séjour ',objName:'{{$sejour->_view|smarty:nodefaults|JSAttribute}}'})">
 	                {{tr}}Delete{{/tr}}
 	              </button>
 	            {{/if}}
 	          {{/if}}
-	              
 	        {{else}}
 	          <button class="submit default" tabindex="26" type="submit">{{tr}}Create{{/tr}}</button>
 	        {{/if}}

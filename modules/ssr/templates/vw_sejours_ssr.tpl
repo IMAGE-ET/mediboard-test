@@ -13,7 +13,7 @@
 {{if $dialog}}
   {{mb_include style=mediboard template=open_printable}}
 {{else}}
-	{{if $modules.dPplanningOp->_can->edit}} 
+	{{if $can->edit && !$conf.ssr.recusation.sejour_readonly}} 
 	<a class="button new" href="?m=ssr&amp;tab=vw_aed_sejour_ssr&amp;sejour_id=0">
 	  Créer une demande de prise en charge
 	</a>

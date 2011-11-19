@@ -141,8 +141,14 @@ Main.add(function () {
   <td>
     <a href="#" onclick="showLegend()" class="button search">Légende</a>
   </td>
-  <td style="float: right">
-    <form action="?" name="selType" method="get">
+  <td>
+    {{if $can->edit}} 
+    <a class="button new" style="float: left;" href="?m=ssr&amp;tab=vw_aed_sejour_ssr&amp;sejour_id=0">
+      Créer une demande de prise en charge
+    </a>
+    {{/if}}
+    <a href="#" onclick="printPlanning()" class="button print" style="float: right">Imprimer</a>
+    <form action="?" name="selType" method="get" style="float: right">
       <select name="service_id" onchange="reloadFullAdmissions();">
         <option value="">&mdash; Tous les services</option>
         {{foreach from=$services item=_service}}
@@ -156,7 +162,6 @@ Main.add(function () {
         {{/foreach}}
       </select>
     </form>
-    <a href="#" onclick="printPlanning()" class="button print">Imprimer</a>
   </td>
 </tr>
   <tr>

@@ -33,6 +33,8 @@
     
     {{assign var=class value=recusation}}
     {{mb_include module=system template=inc_config_category}}
+    {{mb_include module=system template=inc_config_bool var=sejour_readonly}}
+    {{mb_include module=system template=inc_config_bool var=view_services_inactifs}}
     {{mb_include module=system template=inc_config_bool var=use_recuse}}
 		
     <tr>

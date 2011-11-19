@@ -13,14 +13,14 @@
 {{elseif $_sejour->type == 'exte'}} {{assign var=background value="#afa"}}
 {{elseif $_sejour->type == 'consult'}} {{assign var=background value="#cfdfff"}}
 {{else}}
-{{assign var=background value="#ccc"}}
+{{assign var=background value="#ddd"}}
 {{/if}}
 
 {{assign var="patient" value=$_sejour->_ref_patient}}
 
 <td class="button" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-  {{if $canAdmissions->edit}}
-  <form name="editAdmFrm{{$_sejour->_id}}" action="?" method="post">
+  {{if $can->edit}}
+  <form name="editAdmFrm{{$_sejour->_id}}" action="?m={{$m}}" method="post">
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="dosql" value="do_sejour_aed" />
   <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
@@ -30,33 +30,35 @@
   {{assign var="_fiche" value=$_sejour->_ref_fiche_autonomie}}
   
   {{if $_sejour->recuse == "-1"}}
-    <div style="white-space: nowrap;" onmouseover="ObjectTooltip.createEx(this, '{{$_fiche->_guid}}')">Non validé</div>
-    <button type="button" class="tick notext" onclick="$V(this.form.recuse, '0'); submitAdmission(this.form);">
+    <div style="white-space: nowrap;" onmouseover="ObjectTooltip.createEx(this, '{{$_fiche->_guid}}')">En attente</div>
+    <button type="button" class="tick notext" onclick="$V(this.form.recuse, '0'); this.form.submit();">
       {{tr}}OK{{/tr}}
     </button>
-    <button type="button" class="cancel notext" onclick="$V(this.form.recuse, '1'); submitAdmission(this.form);">
+    <button type="button" class="cancel notext" onclick="$V(this.form.recuse, '1'); this.form.submit();">
       {{tr}}Cancel{{/tr}}
     </button>
   {{elseif $_sejour->recuse == "1"}}
     <div style="white-space: nowrap;" onmouseover="ObjectTooltip.createEx(this, '{{$_fiche->_guid}}')">Récusé</div>
-    <button type="button" class="cancel notext" onclick="$V(this.form.recuse, '-1'); submitAdmission(this.form);">
+    <button type="button" class="cancel notext" onclick="$V(this.form.recuse, '-1');  this.form.submit();">
       {{tr}}Cancel{{/tr}}
     </button>
   {{else}}
     <div style="white-space: nowrap;" onmouseover="ObjectTooltip.createEx(this, '{{$_fiche->_guid}}')">Validé</div>
-    <button type="button" class="cancel notext" onclick="$V(this.form.recuse, '-1'); submitAdmission(this.form);">
+    <button type="button" class="cancel notext" onclick="$V(this.form.recuse, '-1');  this.form.submit();">
       {{tr}}Cancel{{/tr}}
     </button>
   {{/if}}
-  
+  </form>
   {{/if}}
 </td>
 
 <td colspan="2" class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-  {{if $canPlanningOp->read}}
-  <a class="action" style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
+  {{if $can->edit}}
+  <a class="action" style="float: right" title="Modifier le séjour" href="?m=ssr&amp;tab=vw_aed_sejour_ssr&amp;sejour_id={{$_sejour->_id}}">
     <img src="images/icons/planning.png" />
   </a>
+  {{/if}}
+  {{if $canPlanningOp->read}}
   <a class="action" style="float: right" title="Imprimer la DHE du séjour" href="#1" onclick="printDHE('sejour_id', {{$_sejour->_id}}); return false;">
     <img src="images/icons/print.png" />
   </a>

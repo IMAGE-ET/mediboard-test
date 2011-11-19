@@ -18,7 +18,9 @@ $dPconfig["ssr"] = array (
     "eleve"  => "200",
   ),
   "recusation" => array (
-    "use_recuse" => "0",
+    "sejour_readonly"        => "0",
+    "use_recuse"             => "1",
+    "view_services_inactifs" => "1",
   ),
 	"repartition" => array (
     "show_tabs" => "1",

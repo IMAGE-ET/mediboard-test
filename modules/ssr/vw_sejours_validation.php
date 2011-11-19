@@ -38,6 +38,15 @@ $sejour = new CSejour();
 $sejour->_type_admission = "ssr";
 $sejour->service_id      = $service_id;
 $sejour->praticien_id    = $prat_id;
+
+// Liste des séjours en attente de validation
+$where = array();
+$where["recuse"]   = "= '-1'";
+$where["type"]     = "= 'ssr'";
+$where["entree"]   = ">= '".mbDate()."'";
+$nb_sejours_attente = $sejour->countList($where);
+mbTrace($nb_sejours_attente, "Nombre de patients en attente de placement");
+
 // Création du template
 $smarty = new CSmartyDP();
 
