@@ -66,7 +66,7 @@ printOffline = function(element) {
   </tr>
   <tr>
     {{assign var=url value="?m=$m&$actionType=$action&dialog=$dialog"}}
-    <th>{{mb_colonne class="CAffectation" field="lit_id" order_col=$order_col order_way=$order_way url=$url}}</th>
+    <th style="width:  8em;">{{mb_colonne class="CAffectation" field="lit_id" order_col=$order_col order_way=$order_way url=$url}}</th>
     <th style="width: 20em;">{{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url=$url}}</th>
     <th class="narrow">
       <input type="text" size="6" class="not-printable" onkeyup="SejoursSSR.filter(this)" id="filter-patient-name" />
@@ -137,7 +137,7 @@ printOffline = function(element) {
   {{/if}}
 
   <tr class="{{$ssr_class}}">
-    <td>
+    <td class="text">
       {{if @$offline}}
         <button class="search notext not-printable" onclick="modalwindow = modal($('modal-view-{{$_sejour->_id}}'));" style="float: left;"></button>
       {{/if}}
