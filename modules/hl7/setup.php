@@ -257,8 +257,255 @@ class CSetuphl7 extends CSetup {
               ADD INDEX (`sender_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.05";
+    $this->makeRevision("0.05");
     
+    // Table - 0063
+    // Collègue
+    $set = array(
+      "code_hl7_to"   => "ASC",
+      "code_mb_from"  => "collegue",
+      "code_mb_to"    => "collegue"
+    );
+    $and = array(
+      "code_hl7_from" => "ASC"
+    );
+    $this->updateTableEntry("63", $set, $and);
+    // Frère
+    $set = array(
+      "code_hl7_to"   => "BRO",
+      "code_mb_from"  => "frere",
+      "code_mb_to"    => "frere"
+    );
+    $and = array(
+      "code_hl7_from" => "BRO"
+    );
+    $this->updateTableEntry("63", $set, $and);
+    // Enfant
+    $set = array(
+      "code_hl7_to"   => "CHD",
+      "code_mb_from"  => "enfant",
+      "code_mb_to"    => "enfant"
+    );
+    $and = array(
+      "code_hl7_from" => "CHD"
+    );
+    $this->updateTableEntry("63", $set, $and);
+    // Frère
+    $set = array(
+      "code_hl7_to"   => "DOM",
+      "code_mb_from"  => "compagnon",
+      "code_mb_to"    => "compagnon"
+    );
+    $and = array(
+      "code_hl7_from" => "DOM"
+    );
+    $this->updateTableEntry("63", $set, $and);
+    // Employé
+    $set = array(
+      "code_hl7_to"   => "EME",
+      "code_mb_from"  => "employe",
+      "code_mb_to"    => "employe"
+    );
+    $and = array(
+      "code_hl7_from" => "EME"
+    );
+    $this->updateTableEntry("63", $set, $and);
+    // Employeur
+    $set = array(
+      "code_hl7_to"   => "EMR",
+      "code_mb_from"  => "employeur",
+      "code_mb_to"    => "employeur"
+    );
+    $and = array(
+      "code_hl7_from" => "EMR"
+    );
+    $this->updateTableEntry("63", $set, $and);
+    // Proche
+    $set = array(
+      "code_hl7_to"   => "EXF",
+      "code_mb_from"  => "proche",
+      "code_mb_to"    => "proche"
+    );
+    $and = array(
+      "code_hl7_from" => "EXF"
+    );
+    $this->updateTableEntry("63", $set, $and);
+    // Enfant adoptif
+    $set = array(
+      "code_hl7_to"   => "FCH",
+      "code_mb_from"  => "enfant_adoptif",
+      "code_mb_to"    => "enfant_adoptif"
+    );
+    $and = array(
+      "code_hl7_from" => "FCH"
+    );
+    $this->updateTableEntry("63", $set, $and);
+    // Ami
+    $set = array(
+      "code_hl7_to"   => "FND",
+      "code_mb_from"  => "ami",
+      "code_mb_to"    => "ami"
+    );
+    $and = array(
+      "code_hl7_from" => "FND"
+    );
+    $this->updateTableEntry("63", $set, $and);
+    // Père
+    $set = array(
+      "code_hl7_to"   => "FTH",
+      "code_mb_from"  => "pere",
+      "code_mb_to"    => "pere"
+    );
+    $and = array(
+      "code_hl7_from" => "FTH"
+    );
+    $this->updateTableEntry("63", $set, $and);
+    // Petits-enfants
+    $set = array(
+      "code_hl7_to"   => "GCH",
+      "code_mb_from"  => "petits_enfants",
+      "code_mb_to"    => "petits_enfants"
+    );
+    $and = array(
+      "code_hl7_from" => "GCH"
+    );
+    $this->updateTableEntry("63", $set, $and);
+    // Tuteur
+    $set = array(
+      "code_hl7_to"   => "GRD",
+      "code_mb_from"  => "tuteur",
+      "code_mb_to"    => "tuteur"
+    );
+    $and = array(
+      "code_hl7_from" => "GRD"
+    );
+    $this->updateTableEntry("63", $set, $and);
+    // Mère
+    $set = array(
+      "code_hl7_to"   => "MTH",
+      "code_mb_from"  => "mere",
+      "code_mb_to"    => "mere"
+    );
+    $and = array(
+      "code_hl7_from" => "MTH"
+    );
+    $this->updateTableEntry("63", $set, $and);
+    // Autre
+    $set = array(
+      "code_hl7_to"   => "OTH",
+      "code_mb_from"  => "autre",
+      "code_mb_to"    => "autre"
+    );
+    $and = array(
+      "code_hl7_from" => "OTH"
+    );
+    $this->updateTableEntry("63", $set, $and);
+    // Propriétaire
+    $set = array(
+      "code_hl7_to"   => "OWN",
+      "code_mb_from"  => "proprietaire",
+      "code_mb_to"    => "proprietaire"
+    );
+    $and = array(
+      "code_hl7_from" => "OWN"
+    );
+    $this->updateTableEntry("63", $set, $and);
+    // Beau-fils
+    $set = array(
+      "code_hl7_to"   => "SCH",
+      "code_mb_from"  => "beau_fils",
+      "code_mb_to"    => "beau_fils"
+    );
+    $and = array(
+      "code_hl7_from" => "SCH"
+    );
+    $this->updateTableEntry("63", $set, $and);
+    // Soeur
+    $set = array(
+      "code_hl7_to"   => "SIS",
+      "code_mb_from"  => "soeur",
+      "code_mb_to"    => "soeur"
+    );
+    $and = array(
+      "code_hl7_from" => "SIS"
+    );
+    $this->updateTableEntry("63", $set, $and);
+    // Époux
+    $set = array(
+      "code_hl7_to"   => "SPO",
+      "code_mb_from"  => "epoux",
+      "code_mb_to"    => "epoux"
+    );
+    $and = array(
+      "code_hl7_from" => "SPO"
+    );
+    $this->updateTableEntry("63", $set, $and);
+    // Entraineur
+    $set = array(
+      "code_hl7_to"   => "TRA",
+      "code_mb_from"  => "entraineur",
+      "code_mb_to"    => "entraineur"
+    );
+    $and = array(
+      "code_hl7_from" => "TRA"
+    );
+    $this->updateTableEntry("63", $set, $and);
+    
+    // Table - 0131
+    // Personne à prévenir
+    $set = array(
+      "code_hl7_to"   => "C",
+      "code_mb_from"  => "prevenir",
+      "code_mb_to"    => "prevenir"
+    );
+    $and = array(
+      "code_hl7_from" => "C"
+    );
+    $this->updateTableEntry("131", $set, $and);
+    // Employeur
+    $set = array(
+      "code_hl7_to"   => "E",
+      "code_mb_from"  => "employeur",
+      "code_mb_to"    => "employeur"
+    );
+    $and = array(
+      "code_hl7_from" => "E"
+    );
+    $this->updateTableEntry("131", $set, $and);
+    // Assurance
+    $set = array(
+      "code_hl7_to"   => "I",
+      "code_mb_from"  => "assurance",
+      "code_mb_to"    => "assurance"
+    );
+    $and = array(
+      "code_hl7_from" => "I"
+    );
+    $this->updateTableEntry("131", $set, $and);
+    // Autre
+    $set = array(
+      "code_hl7_to"   => "O",
+      "code_mb_from"  => "autre",
+      "code_mb_to"    => "autre"
+    );
+    $and = array(
+      "code_hl7_from" => "O"
+    );
+    $this->updateTableEntry("131", $set, $and);
+    // Inconnu
+    $set = array(
+      "code_hl7_to"   => "U",
+      "code_mb_from"  => "inconnu",
+      "code_mb_to"    => "inconnu"
+    );
+    $and = array(
+      "code_hl7_from" => "U"
+    );
+    $this->updateTableEntry("131", $set, $and);
+    // Personne de confiance
+    $this->insertTableEntry("131", "K", "K", "confiance", "confiance", "Personne de confiance");
+    
+    $this->mod_version = "0.06";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
