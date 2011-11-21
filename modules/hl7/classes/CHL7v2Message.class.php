@@ -81,6 +81,14 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     return $doc;
   }
   
+  function getI18NEventName() {
+    if ($this->i18n_code) {
+      return "{$this->event_name}_{$this->i18n_code}";
+    }
+    
+    return $this->event_name;
+  }
+  
   static function isWellFormed($data) {
     // remove all chars before MSH
     $msh_pos = strpos($data, "MSH");
@@ -186,12 +194,8 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $this->name        = ($message_type[0] == "ACK") ? $message_type[0] : preg_replace("/[^A-Z0-9]/", "", $type);
     $this->event_name  = ($message_type[0] == "ACK") ? $message_type[0] : $message_type[0].$message_type[1];
     
-    if ($this->extension) {
-      $this->event_name .= "_$this->i18n_code";
-    }
-    
     $this->description = (string)$this->getSpecs()->description;
-       
+    
     $this->readHeader();
     
     if ($parse_body) {
