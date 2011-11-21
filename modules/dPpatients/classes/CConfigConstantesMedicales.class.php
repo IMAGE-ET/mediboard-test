@@ -108,7 +108,7 @@ class CConfigConstantesMedicales extends CConfigServiceAbstract {
       $group_id = CGroups::loadCurrent()->_id;
     }
 		
-		if (!$service_id) {
+		if (!$service_id || $service_id == "NP") {
 			$service_id = "none";
 		}
 		
