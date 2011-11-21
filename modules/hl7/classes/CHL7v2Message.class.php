@@ -106,11 +106,6 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     // we extract the first line info "by hand"
     $first_line = CHL7v2::split($fieldSeparator, reset($lines));
     
-    // version
-    if (!preg_match('/^([\d\._]+)/', $first_line[11])) {
-      throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $first_line);
-    }
-    
     // validation de la syntaxe : chaque ligne doit commencer par 3 lettre + un separateur + au moins une donnée
     $sep_preg = preg_quote($fieldSeparator);
     
