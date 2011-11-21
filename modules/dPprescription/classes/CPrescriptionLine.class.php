@@ -151,6 +151,10 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     
     $this->_fin = "";
     
+		if(!$this->unite_duree){
+			$this->unite_duree = "jour";
+		}
+		
     if($this->duree && $this->debut){
       switch ($this->unite_duree) {
         case "minute":
