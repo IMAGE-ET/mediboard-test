@@ -20,9 +20,9 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
   function getContentNodes() {
     $data = parent::getContentNodes();
     
-    $this->queryNodes("//NK1", null, $data);
+    $this->queryNodes("NK1", null, $data, true);
     
-    $this->queryNodes("//ROL", null, $data);
+    $this->queryNodes("ROL", null, $data, true);
 
     return $data;
   }
@@ -35,19 +35,23 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $exchange_ihe = $this->_ref_exchange_ihe;
     $exchange_ihe->_ref_sender->loadConfigValues();
     $sender       = $exchange_ihe->_ref_sender;
-    
-    $patientRI = CValue::read($data['personIdentifiers'], "RI");
-    $patientPI = CValue::read($data['personIdentifiers'], "PI");
 
     // Acquittement d'erreur : identifiants RI et PI non fournis
-    if (!$patientRI && !$patientPI) {
+    if (!$data['personIdentifiers']) {
       return $exchange_ihe->setAckAR($ack, "E100", null, $newPatient);
     }
-        
-    $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
-
+    
+    $patientRI       = CValue::read($data['personIdentifiers'], "RI");
+    $patientRISender = CValue::read($data['personIdentifiers'], "RI_Sender");
+    $patientPI       = CValue::read($data['personIdentifiers'], "PI");
+   
+    $IPP = new CIdSante400();
+    if ($patientPI) {
+      $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
+    }
+    
     // PI non connu
-    if (!$IPP->_id) {
+    if (!$patientPI || !$IPP->_id) {
       // RI fourni
       if ($patientRI) {
         // Recherche du patient par son RI
@@ -69,13 +73,20 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
           $code_IPP = "I120";
         }
       } else {
-        $code_IPP = "I122";
+        // Aucun IPP fourni
+        if (!$patientPI) {
+          $code_IPP = "I125";
+        } 
+        // Association de l'IPP
+        else {
+          $code_IPP = "I122";
+        }        
       }      
       
       if (!$newPatient->_id) {
         // Mapping du patient
         $this->mappingPatient($data, $newPatient);
-        
+
         // Patient retrouvé
         if ($newPatient->loadMatchingPatient()) {
           // Mapping du patient
@@ -300,7 +311,14 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
   }
   
   function getNK1(DOMNode $node, CPatient $newPatient) {    
-    /* @todo voir quand on aura les tables de correspondances */
+    $corres_patient = new CCorrespondantPatient();
+    $corres_patient->patient_id = $newPatient->_id;
+    
+    $NK1_2 = $this->queryNode("NK1.2", $node);
+    /*
+    $nom    = $this->queryTextNode("XPN.1/FN.1", $NK1_2);
+    $prenom = $this->queryTextNode("XCN.2/FN.1", $NK1_2);
+    $xcn3   = $this->queryTextNode("XCN.3", $node);*/
   }
   
   function getMedecin(DOMNode $node) {    

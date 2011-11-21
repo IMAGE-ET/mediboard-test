@@ -43,6 +43,11 @@ class CEAIPatient extends CEAIMbObject {
   }
   
   static function storeIPP(CIdSante400 $IPP, CPatient $newPatient) {
+    /* @todo Gestion du numéroteur !!! */
+    if (!$IPP->id400) {
+      return null;
+    }
+    
     if ($newPatient)
       $IPP->object_id   = $newPatient->_id;
     $IPP->last_update = mbDateTime();
@@ -78,6 +83,10 @@ class CEAIPatient extends CEAIMbObject {
       return $comment;
     }
     if ($object instanceof CIdSante400) {
+      if (!$object->_id) {
+        return;
+      }
+      
       return "L'IPP créé est : $object->id400";
     }
   }

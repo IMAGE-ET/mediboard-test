@@ -9,7 +9,8 @@
  */
 
 class CEAIObjectHandler extends CMbObjectHandler {
-  static $handled = array ();
+  static $handled               = array ();
+  var $_eai_initiateur_group_id = null;
 
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);
@@ -50,11 +51,21 @@ class CEAIObjectHandler extends CMbObjectHandler {
     }
   }
   
+  function onBeforeStore(CMbObject $mbObject) {
+    if (!$this->isHandled($mbObject)) {
+      return false;
+    }
+    
+    $this->_eai_initiateur_group_id = $mbObject->_eai_initiateur_group_id;
+  }
+  
   function onAfterStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
-
+    
+    $mbObject->_eai_initiateur_group_id = $this->_eai_initiateur_group_id;
+    
     if (!$mbObject->_ref_last_log) {
       return false;
     }

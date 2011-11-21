@@ -108,10 +108,13 @@
   </td>
   <td class="{{if !$object->statut_acquittement || 
                   ($object->statut_acquittement == 'erreur') || 
-                  ($object->statut_acquittement == 'err')}}error
+                  ($object->statut_acquittement == 'AR') || 
+                  ($object->statut_acquittement == 'err')}}error 
              {{elseif ($object->statut_acquittement == 'avertissement') || 
-                      ($object->statut_acquittement == 'avt')
-             }}warning{{/if}} narrow">
+                      ($object->statut_acquittement == 'avt') || 
+                      ($object->statut_acquittement == 'AE')}}warning
+             {{/if}} 
+             narrow">
     {{mb_value object=$object field="statut_acquittement"}}
   </td>
   <td class="narrow {{if !$object->_observations}}warning{{/if}}">

@@ -73,13 +73,13 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     return $xpath->query($nodeName, $contextNode);
   }
   
-  function queryNode($nodeName, DOMNode $contextNode = null, &$data = null) {
+  function queryNode($nodeName, DOMNode $contextNode = null, &$data = null, $root = false) {
     $xpath = new CHL7v2MessageXPath($this);   
-
-    return $data[$nodeName] = $xpath->queryUniqueNode("$nodeName", $contextNode);
+        
+    return $data[$nodeName] = $xpath->queryUniqueNode($root ? "//$nodeName" : "$nodeName", $contextNode);
   }
   
-  function queryNodes($nodeName, DOMNode $contextNode = null, &$data = null) {
+  function queryNodes($nodeName, DOMNode $contextNode = null, &$data = null, $root = false) {
     $xpath = new CHL7v2MessageXPath($this);   
     
     $nodeList = $xpath->query("$nodeName");
@@ -90,7 +90,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     return $nodeList;
   }
   
-  function queryTextNode($nodeName, DOMNode $contextNode) {
+  function queryTextNode($nodeName, DOMNode $contextNode, $root = false) {
     $xpath = new CHL7v2MessageXPath($this);   
     
     return $xpath->queryTextNode($nodeName, $contextNode);
@@ -99,7 +99,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   function getMSHEvenementXML() {
     $data = array();
     
-    $MSH = $this->queryNode("//MSH");
+    $MSH = $this->queryNode("MSH", null, $foo, true);
     
     $data['dateHeureProduction'] = mbDateTime($this->queryTextNode("MSH.7/TS.1", $MSH));
     $data['identifiantMessage']  = $this->queryTextNode("MSH.10", $MSH);
@@ -121,12 +121,25 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     }
   }
   
-  function getRIIdentifiers(DOMNode $node, &$data) {
-    /* @todo On gère que l'identifiant de MB dans un premier temps */
-    
+  function getRIIdentifiers(DOMNode $node, &$data, CInteropSender $sender) {
+    // Notre propre RI
     if (($this->queryTextNode("CX.5", $node) == "RI") && 
         ($this->queryTextNode("CX.4/HD.2", $node) == CAppUI::conf("hl7 assigningAuthorityUniversalID"))) {
       $data["RI"] = $this->queryTextNode("CX.1", $node);
+      return;
+    }
+
+    // RI de l'expéditeur
+    if (($this->queryTextNode("CX.5", $node) == "RI") && 
+        ($this->queryTextNode("CX.4/HD.2", $node) == $sender->_configs["assigning_authority_universal_id"])) {
+      $data["RI_Sender"] = $this->queryTextNode("CX.1", $node);
+      return;
+    }
+    
+    // RI des autres systèmes
+    if (($this->queryTextNode("CX.5", $node) == "RI")) {
+      $data["RI_Others"] = $this->queryTextNode("CX.1", $node);
+      return;
     }
   }
   
@@ -140,12 +153,12 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     }
   }
   
-  function getPersonIdentifiers($nodeName, DOMNode $contextNode) {
+  function getPersonIdentifiers($nodeName, DOMNode $contextNode, CInteropSender $sender) {
     $data = array();
     
     foreach ($this->query($nodeName, $contextNode) as $_node) {
       // RI - Resource identifier 
-      $this->getRIIdentifiers($_node, $data);
+      $this->getRIIdentifiers($_node, $data, $sender);
       
       // PI - Patient internal identifier
       $this->getPIIdentifier($_node, $data);
@@ -178,11 +191,15 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   function getContentNodes() {
     $data  = array();
     
-    $PID = $this->queryNode("//PID", null, $data);
+    $exchange_ihe = $this->_ref_exchange_ihe;
+    $sender       = $exchange_ihe->_ref_sender;
+    $sender->loadConfigValues();
     
-    $data["personIdentifiers"] = $this->getPersonIdentifiers("PID.3", $PID);
+    $PID = $this->queryNode("PID", null, $data, true);
+    
+    $data["personIdentifiers"] = $this->getPersonIdentifiers("PID.3", $PID, $sender);
 
-    $this->queryNode("//PD1", null, $data);
+    $this->queryNode("PD1", null, $data, true);
     
     return $data;
   }

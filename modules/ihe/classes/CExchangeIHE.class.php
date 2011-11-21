@@ -61,6 +61,17 @@ class CExchangeIHE extends CExchangeTabular {
     return CHL7v2Message::isWellFormed($data);
   }
   
+  function getConfigs($actor_guid) {
+    list($sender_class, $sender_id) = explode("-", $actor_guid);
+    
+    $sender_hl7_config = new CHL7Config();
+    $sender_hl7_config->sender_class = $sender_class;
+    $sender_hl7_config->sender_id    = $sender_id;
+    $sender_hl7_config->loadMatchingObject();
+    
+    return $this->_configs_format = $sender_hl7_config;
+  }
+  
   function understand($data, CInteropActor $actor = null) {
     if (!$this->isWellFormed($data)) {
       return false;

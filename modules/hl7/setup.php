@@ -9,6 +9,35 @@
  */
 
 class CSetuphl7 extends CSetup {
+  function insertTableEntry($number, $code_hl7_from, $code_hl7_to, $code_mb_from, $code_mb_to, $description) {
+    $description = $this->ds->escape($description);
+    
+    $query = "INSERT INTO `hl7v2`.`table_entry` (
+              `table_entry_id`, `number`, `code_hl7_from`, `code_hl7_to`, `code_mb_from`, `code_mb_to`, `description`, `user`
+              ) VALUES (
+                NULL , '$number', '$code_hl7_from', '$code_hl7_to', '$code_mb_from', '$code_mb_to', '$description', '1'
+              );";
+    
+    $this->addQuery($query, false, "hl7v2");
+  }
+  
+  function updateTableEntry($number, $update, $where) {
+    foreach ($update as $field => $value) {
+      $set[] = "`$field` = '$value'";
+    }
+    
+    $and = "";
+    foreach ($where as $field => $value) {
+      $and .= "AND `$field` = '$value' ";
+    }
+    $query = "UPDATE `hl7v2`.`table_entry`
+              SET ".implode(", ", $set)."
+              WHERE `number` = '$number'
+              $and;";
+
+    $this->addQuery($query, false, "hl7v2");
+    
+  }
   
   function __construct() {
     parent::__construct();
@@ -211,37 +240,28 @@ class CSetuphl7 extends CSetup {
     $this->insertTableEntry("430", null, "8", "ambu_vsl", null, "VSL");
     // 9 - Autre
     $this->insertTableEntry("430", null, "9", "perso", null, "Autre");
-    
-    $this->mod_version = "0.04";
-  }
-  
-  function insertTableEntry($number, $code_hl7_from, $code_hl7_to, $code_mb_from, $code_mb_to, $description) {
-    $description = $this->ds->escape($description);
-    
-    $query = "INSERT INTO `hl7v2`.`table_entry` (
-              `table_entry_id`, `number`, `code_hl7_from`, `code_hl7_to`, `code_mb_from`, `code_mb_to`, `description`, `user`
-              ) VALUES (
-                NULL , '$number', '$code_hl7_from', '$code_hl7_to', '$code_mb_from', '$code_mb_to', '$description', '1'
-              );";
-    
-    $this->addQuery($query, false, "hl7v2");
-  }
-  
-  function updateTableEntry($number, $update, $where) {
-    foreach ($update as $field => $value) {
-      $set[] = "`$field` = '$value'";
-    }
-    
-    $and = "";
-    foreach ($where as $field => $value) {
-      $and .= "AND `$field` = '$value' ";
-    }
-    $query = "UPDATE `hl7v2`.`table_entry`
-              SET ".implode(", ", $set)."
-              WHERE `number` = '$number'
-              $and;";
 
-    $this->addQuery($query, false, "hl7v2");
+    $this->makeRevision("0.04");
+    
+    $query = "CREATE TABLE `hl7_config` (
+                `hl7_config_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `assigning_authority_namespace_id` VARCHAR (255),
+                `assigning_authority_universal_id` VARCHAR (255),
+                `assigning_authority_universal_type_id` VARCHAR (255),
+                `sender_id` INT (11) UNSIGNED,
+                `sender_class` ENUM ('CSenderFTP','CSenderSOAP')
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `hl7_config` 
+              ADD INDEX (`sender_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.05";
+    
+    
+    $query = "SHOW TABLES LIKE 'table_description'";
+    $this->addDatasource("hl7v2", $query);
   }
 }
 

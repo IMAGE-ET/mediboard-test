@@ -30,6 +30,10 @@ if ($receiver instanceof CReceiverIHE) {
     $evenement   = "evenementsPatient";
     $data_format = CPAM::getPAMEvent($exchange->code, $exchange->version);
   }
+  if ($exchange->type == "PAM_FR") {
+    $evenement   = "evenementsPatient";
+    $data_format = CPAMFR::getPAMEvent($exchange->code, $exchange->version);
+  }
 }
 
 if ($receiver instanceof CDestinataireHprim) {
