@@ -12,6 +12,6 @@
     </form>
   </li>
   {{foreachelse}}
-  <li>Pas de technique complémentaire</li>
+  <li class="empty">Pas de technique complémentaire</li>
   {{/foreach}}
 </ul>

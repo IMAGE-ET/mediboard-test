@@ -51,13 +51,25 @@ Main.add(function () {
           });
 });
 
+guessScoreApfel = function() {
+  var url = new Url("dPcabinet", "ajax_guess_score_apfel");
+  url.addParam("patient_id", "{{$consult->patient_id}}");
+  url.addParam("consult_id", "{{$consult_anesth->_id}}");
+  url.requestUpdate("score_apfel_area", {onComplete: function() {
+    return getForm('editScoreApfel').onsubmit();
+  }});
+}
+
+afterStoreScore = function(id, obj) {
+  $("score_apfel").update(obj._score_apfel);
+} 
 </script>
 
 {{assign var=operation value=$consult_anesth->_ref_operation}}
 
 <table class="form">
   <tr>
-    <td>
+    <td colspan="2">
       <fieldset>
         <legend>Intervention</legend>
         <table class="layout main">
@@ -162,7 +174,9 @@ Main.add(function () {
           </tr>
         </table>
       </fieldset>
-			
+	</tr>
+  <tr>
+    <td style="width: 50%;">
       <form name="editRquesConsultFrm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
   
       <input type="hidden" name="m" value="dPcabinet" />
@@ -174,6 +188,14 @@ Main.add(function () {
         {{mb_field object=$consult field="rques" rows="4" onblur="this.form.onsubmit()"}}
       </fieldset>
       </form>
+    </td>
+    <td>
+      <fieldset>
+        <legend>Score APFEL <button type="button" class="tick" onclick="guessScoreApfel()">Evaluer</button></legend>
+        <div id="score_apfel_area">
+          {{mb_include module=dPcabinet template=inc_guess_score_apfel}}
+        </div>
+      </fieldset>
     </td>
   </tr>
 </table>

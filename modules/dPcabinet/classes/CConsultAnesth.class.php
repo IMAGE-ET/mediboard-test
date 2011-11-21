@@ -60,7 +60,14 @@ class CConsultAnesth extends CMbObject {
   var $ht_final       = null;
   var $result_ecg     = null;
   var $result_rp      = null;
-
+  
+  // Check sur les codes cim10 de préfixe pour non-fumeur:
+  //  F17 - T652 - Z720 - Z864 - Z587
+  var $apfel_femme   = null;
+  var $apfel_non_fumeur = null;
+  var $apfel_atcd_nvp   = null;
+  var $apfel_morphine   = null;
+  
   // Form fields
   var $_date_consult    = null;
   var $_date_op         = null;
@@ -71,7 +78,8 @@ class CConsultAnesth extends CMbObject {
   var $_intub_difficile = null;
   var $_clairance       = null;
   var $_psa             = null;
-
+  var $_score_apfel     = null;
+  
   // Object References
   var $_ref_consultation       = null;
   var $_ref_chir               = null;
@@ -136,7 +144,11 @@ class CConsultAnesth extends CMbObject {
     $specs["premedication"]    = "text helped";
     $specs["prepa_preop"]      = "text helped";
     $specs["date_analyse"]     = "date show|0";
-
+    $specs["apfel_femme"]      = "bool show|0";
+    $specs["apfel_non_fumeur"] = "bool show|0";
+    $specs["apfel_atcd_nvp"]   = "bool show|0";
+    $specs["apfel_morphine"]   = "bool show|0";
+    
     // Champs pour les conditions d'intubation
     $specs["mallampati"]       = "enum list|classe1|classe2|classe3|classe4";
     $specs["bouche"]           = "enum list|m20|m35|p35";
@@ -151,7 +163,8 @@ class CConsultAnesth extends CMbObject {
     $specs["_intub_difficile"] = "";
     $specs["_clairance"]       = "";
     $specs["_psa"]             = "";
-
+    $specs["_score_apfel"]     = "";
+    
     return $specs;
   }
 
@@ -166,6 +179,8 @@ class CConsultAnesth extends CMbObject {
      
     $this->_sec_tsivy = intval(substr($this->tsivy, 6, 2));
     $this->_min_tsivy = intval(substr($this->tsivy, 3, 2));
+    
+    $this->_score_apfel = $this->apfel_femme + $this->apfel_non_fumeur + $this->apfel_atcd_nvp + $this->apfel_morphine;
   }
    
   function updatePlainFields() {

@@ -1374,8 +1374,16 @@ class CSetupdPcabinet extends CSetup {
       SET chrono = '16'
       WHERE annule = '1'";
     $this->addQuery($query);
-        
-    $this->mod_version = "1.37";
+    
+    $this->makeRevision("1.37");
+    $query = "ALTER TABLE `consultation_anesth`
+              ADD `apfel_femme` ENUM ('0','1') DEFAULT '0',
+              ADD `apfel_non_fumeur` ENUM ('0','1') DEFAULT '0',
+              ADD `apfel_atcd_nvp` ENUM ('0','1') DEFAULT '0',
+              ADD `apfel_morphine` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.38";
   }
 }
 ?>
