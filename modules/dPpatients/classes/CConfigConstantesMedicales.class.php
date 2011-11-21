@@ -89,10 +89,10 @@ class CConfigConstantesMedicales extends CConfigServiceAbstract {
 			$locales["CConfigConstantesMedicales.important_constantes.$name"] = CAppUI::tr("CConstantesMedicales-$name"); 
 		}
 		
-    $list_all = array_keys(CConstantesMedicales::$list_constantes);
+    $list_all = CConstantesMedicales::$list_constantes;
     $list = array();
-    foreach($list_all as $_const) {
-      if ($_const[0] !== "_") {
+    foreach($list_all as $_const => $_params) {
+      if (!isset($_params["cumul_for"])) {
         $list[] = $_const;
       }
     }

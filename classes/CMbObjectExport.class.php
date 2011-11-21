@@ -128,9 +128,10 @@ class CMbObjectExport {
   
   function stream($mimetype){
     $xml = $this->toDOM()->saveXML();
+    $date = mbDateTime();
     
     header("Content-Type: $mimetype");
-    header("Content-Disposition: attachment;filename=\"{$this->object->_guid}.xml\"");
+    header("Content-Disposition: attachment;filename=\"{$this->object->_guid} - $date.xml\"");
     header("Content-Length: ".strlen($xml));
     
     echo $xml;

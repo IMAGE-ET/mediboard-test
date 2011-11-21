@@ -9,7 +9,7 @@
 
 CCanDo::Admin();
 
-$types_antecedents_active = explode('|', CAppUI::conf("dPpatients CAntecedent types"));
+$types_antecedents_active     = explode('|', CAppUI::conf("dPpatients CAntecedent types"));
 $appareils_antecedents_active = explode('|', CAppUI::conf("dPpatients CAntecedent appareils"));
 
 $departements = array();

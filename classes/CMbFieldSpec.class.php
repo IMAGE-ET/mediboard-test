@@ -655,18 +655,18 @@ class CMbFieldSpec {
     // Tab index in display input
     $tabindex = CMbArray::extract($params, "tabindex");
   
-    $id    = $form.'_'.$field;
     $extra = CMbArray::makeXmlAttributes($params);
     $html = array();
     $html[] = '<input name="'.$field.'_da" type="text" value="'.$date.'" class="'.$class.'" 
                       readonly="readonly" '.(isset($tabindex) ? 'tabindex="'.$tabindex.'" ' : '').'/>';
     $html[] = '<input name="'.$field.'" type="hidden" value="'.$value.'" class="'.$class.'" '.$extra.' />';
 
-    if ($register || $this instanceof CTimeSpec) {
+    if ($form && ($register || $this instanceof CTimeSpec)) {
       $html[] = '<script type="text/javascript">
         Main.add(function(){Calendar.reg'.($this instanceof CDateSpec && $this->progressive ? 'Progressive' : '').'Field(getForm("'.$form.'").elements["'.$field.'"])})
       </script>';
     }
+    
     return implode("\n", $html);
   }
 

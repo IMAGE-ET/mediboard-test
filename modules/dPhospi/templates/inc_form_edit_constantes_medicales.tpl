@@ -55,9 +55,9 @@ Main.add(function () {
     toggleAllGraphs();
   }
   
-	{{if $show_cat_tabs}}
+  {{if $show_cat_tabs}}
     Control.Tabs.create("constantes-by-type");
-	{{/if}}
+  {{/if}}
 });
 </script>
 
@@ -90,7 +90,7 @@ Main.add(function () {
   
   <input type="hidden" name="_poids" value="{{$const->poids}}" />
   
-	{{if $show_cat_tabs}}
+  {{if $show_cat_tabs}}
   <ul id="constantes-by-type" class="control_tabs small" style="min-width: 200px;">
     {{foreach from=$all_constantes key=_type item=_list}}
       <li>
@@ -99,7 +99,7 @@ Main.add(function () {
     {{/foreach}}
   </ul>
   <hr class="control_tabs" />
-	{{/if}}
+  {{/if}}
   
   <table class="main form constantes">
     <tr>
@@ -152,11 +152,18 @@ Main.add(function () {
                 {{/if}}
               </td>
             {{else}}
+              {{assign var=_hidden value=false}}
+                
               {{if $_constante.0 == "_"}}
                 {{assign var=_readonly value="readonly"}}
+                
+                {{if array_key_exists("formula", $_params)}}
+                  {{assign var=_hidden value=true}}
+                {{/if}}
               {{else}}
                 {{assign var=_readonly value=null}}
               {{/if}}
+              
               {{if $real_context}}
                 <td>
                   {{if array_key_exists("callback", $_params)}}
@@ -165,7 +172,7 @@ Main.add(function () {
                     {{assign var=_callback value=null}}
                   {{/if}}
                   
-                  {{mb_field object=$constantes field=$_constante size="3" onchange=$_callback|ternary:"$_callback(this.form)":null readonly=$_readonly}}
+                  {{mb_field object=$constantes field=$_constante size="3" onchange=$_callback|ternary:"$_callback(this.form)":null readonly=$_readonly hidden=$_hidden}}
                   {{* increment=$_readonly|ternary:false:true form="edit-constantes-medicales" *}}
           
                   {{if $_constante == "_imc"}}

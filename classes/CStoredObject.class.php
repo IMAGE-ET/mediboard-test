@@ -1903,6 +1903,10 @@ class CStoredObject extends CModelObject {
     // @todo only the first unique is used
     $first_unique = reset($spec->uniques);
     
+    if (empty($first_unique)) {
+      return null;
+    }
+    
     $where = array();
     foreach($first_unique as $field_name) {
       if (!array_key_exists($field_name, $values)) return;
@@ -1910,7 +1914,7 @@ class CStoredObject extends CModelObject {
       $where[$field_name] = $spec->ds->prepare("=%", $values[$field_name]);
     }
     
-    return $this->loadObject($where);
+    return $this->loadList($where);
   }
   
   protected static function _cmpFieldNatural($a, $b) {

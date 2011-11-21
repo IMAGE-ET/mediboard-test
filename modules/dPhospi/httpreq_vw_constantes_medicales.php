@@ -200,7 +200,7 @@ $data      = array();
 $graphs    = array();
 
 foreach ($constants_to_draw as $name => $params) {
-  if ($name[0] === "_" && empty($params["plot"])) continue;
+  if ($name[0] === "_" && empty($params["plot"]) && empty($params["formula"])) continue;
   
   $data[$name] = $standard_struct;
   
@@ -230,7 +230,7 @@ if ($list_constantes) {
     $cst->loadLogs();
     
     foreach ($constants_to_draw as $name => $params) {
-      if ($name[0] === "_" && empty($params["plot"])) continue;
+      if ($name[0] === "_" && empty($params["plot"]) && empty($params["formula"])) continue;
       
       $candles = isset($params["candles"]);
       
@@ -281,7 +281,26 @@ if ($list_constantes) {
               $cumuls_day[$name][$day_24h] = array("n" => 0, "value" => 0);
             }
             
-            $cumuls_day[$name][$day_24h]["value"] += $ya;
+            if (isset($params["formula"])) {
+              $formula = $params["formula"];
+              
+              foreach($formula as $_field => $_sign) {
+                $_value = $cst->$_field;
+                
+                if ($_value !== null) {
+                  if ($_sign === "+") {
+                    $cumuls_day[$name][$day_24h]["value"] += $_value;
+                  }
+                  else {
+                    $cumuls_day[$name][$day_24h]["value"] -= $_value;
+                  }
+                }
+              }
+            }
+            else {
+              $cumuls_day[$name][$day_24h]["value"] += $ya;
+            }
+            
             $cumuls_day[$name][$day_24h]["n"]++;
           }
         }
@@ -337,6 +356,7 @@ $unite_ta = CAppUI::conf("dPpatients CConstantesMedicales unite_ta");
 
 foreach($cumuls_day as $name => $days) {
   $_data = &$data[$name];
+  $_params = CConstantesMedicales::$list_constantes[$name];
   
   $offset = 0;
   foreach($days as $day => $values) {
@@ -346,7 +366,7 @@ foreach($cumuls_day as $name => $days) {
         $values["value"], 
         utf8_encode(CAppUI::tr("CConstantesMedicales-$name-desc")), 
         null,
-        utf8_encode(CValue::read(CConstantesMedicales::$list_constantes[$name], "unit")),
+        utf8_encode(CValue::read($_params, "unit")),
       )),
       "cumul" => $day,
       "lines" => array("show" => false),
@@ -361,7 +381,7 @@ foreach($cumuls_day as $name => $days) {
         "centered" => false,
         "lineWidth" => 1,
       ),
-      "color" => "#4DA74D",
+      "color" => CValue::read($_params, "color", "#4DA74D"),
       "mouse" => array(
         "relative" => false,
         "position" => "nw",

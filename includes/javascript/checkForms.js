@@ -36,7 +36,7 @@ var ElementChecker = {
     this.oProperties = oElement.getProperties();
     
     this.oLabel = Element.getLabel(oElement);
-    this.sLabel = this.oLabel ? this.oLabel.innerHTML : oElement.name;
+    this.sLabel = this.oLabel ? this.oLabel.getText() : oElement.name;
     
     if (this.oProperties.mask) {
       this.oProperties.mask = this.oProperties.mask.gsub('S', ' ').gsub('P', '|');
@@ -179,7 +179,7 @@ Object.extend(ElementChecker, {
       
       if (this.oCompare && this.oCompare.source && this.oCompare.target && (this.oCompare.source != this.oCompare.target)) {
         var oTargetLabel = Element.getLabel(this.oTargetElement);
-        var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : this.oTargetElement.name;
+        var sTargetLabel = oTargetLabel ? oTargetLabel.getText() : this.oTargetElement.name;
         this.addError("sameAs", printf("Doit être identique à [%s]", sTargetLabel.strip()));
       }
     },
@@ -191,7 +191,7 @@ Object.extend(ElementChecker, {
 
       if (this.oCompare && this.oCompare.source && this.oCompare.target && this.oCompare.source.match(this.oCompare.target)) {
         var oTargetLabel = Element.getLabel(this.oTargetElement);
-        var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : '"'+this.oCompare.target+'"';
+        var sTargetLabel = oTargetLabel ? oTargetLabel.getText() : '"'+this.oCompare.target+'"';
         this.addError("notContaining", printf("Ne doit pas contenir [%s]", sTargetLabel.strip()));
       }
     },
@@ -203,7 +203,7 @@ Object.extend(ElementChecker, {
       
       if (this.oCompare && this.oCompare.source && this.oCompare.target && levenshtein(this.oCompare.target, this.oCompare.source) < 3) {
         var oTargetLabel = Element.getLabel(this.oTargetElement);
-        var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : '"'+this.oCompare.target+'"';
+        var sTargetLabel = oTargetLabel ? oTargetLabel.getText() : '"'+this.oCompare.target+'"';
         this.addError("notNear", printf("Ressemble trop à [%s]", sTargetLabel.strip()));
       }
     },
@@ -608,7 +608,7 @@ function checkForm(oForm) {
       if (!element) return;
       xorFieldsInForm++;
       var label = Element.getLabel(element);
-      listLabels.push(label ? label.innerHTML : xorField);
+      listLabels.push(label ? label.getText() : xorField);
       if ($V(element)) n++;
     });
     if (n != 1 && xorFieldsInForm > 0) {
