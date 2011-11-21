@@ -137,7 +137,7 @@ if (count($prescription->_ref_lines_elements_comments)) {
 
 ksort($dossier);
 
-$constantes_grid = CConstantesMedicales::buildGrid($sejour->_list_constantes_medicales, true);
+$constantes_grid = CConstantesMedicales::buildGrid($sejour->_list_constantes_medicales, false);
 
 $praticien = new CMediusers();
 

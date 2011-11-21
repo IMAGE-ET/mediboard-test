@@ -130,7 +130,7 @@ foreach ($sejours as &$_sejour) {
       $_ccam->loadRefExecutant();
     }
 
-    $csteByTimeAll[$_sejour->_id] = CConstantesMedicales::buildGrid($_sejour->_list_constantes_medicales);
+    $csteByTimeAll[$_sejour->_id] = CConstantesMedicales::buildGrid($_sejour->_list_constantes_medicales, false);
   }
 }
 

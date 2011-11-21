@@ -189,7 +189,7 @@ abstract class CMbPath {
         return "application/x-shockwave-flash";
         
       case "nfs" :
-      	return "application/vnd.lotus-notes";
+        return "application/vnd.lotus-notes";
         
       case "spl" :
       case "rlb" :
@@ -235,42 +235,42 @@ abstract class CMbPath {
     return $nbFiles;
   }
   
-	/**
-	 * Clears out any file or sub-directory from target path
-	 * @return boolean jobdone-value */
-	static function emptyDir($dir) {
-	  if (!($dir = dir($dir))) {
-	    return false;
-	  }
-	  
-	  while (false !== $item = $dir->read()) {
-	    if ($item !== '.' && $item !== '..' && !self::remove($dir->path . DIRECTORY_SEPARATOR . $item)) {
-	      $dir->close();
-	      return false;
-	    }
-	  }
-	  
-	  $dir->close();
-	  return true;
-	}
-	
-	/**
-	 * Recursively removes target path
-	 * @return boolean jobdone-value */
-	static function remove($path) {
-	  if (!$path) {
-	    trigger_error("Path undefined", E_USER_WARNING);
-	  }
-	  
-	  if (is_dir ($path)) {
-	    if (self::emptyDir($path)) {
-	      return rmdir ($path);
-	    }
-	    return false;
-	  }
-	  
-	  return unlink($path);
-	}
+  /**
+   * Clears out any file or sub-directory from target path
+   * @return boolean jobdone-value */
+  static function emptyDir($dir) {
+    if (!($dir = dir($dir))) {
+      return false;
+    }
+    
+    while (false !== $item = $dir->read()) {
+      if ($item !== '.' && $item !== '..' && !self::remove($dir->path . DIRECTORY_SEPARATOR . $item)) {
+        $dir->close();
+        return false;
+      }
+    }
+    
+    $dir->close();
+    return true;
+  }
+  
+  /**
+   * Recursively removes target path
+   * @return boolean jobdone-value */
+  static function remove($path) {
+    if (!$path) {
+      trigger_error("Path undefined", E_USER_WARNING);
+    }
+    
+    if (is_dir ($path)) {
+      if (self::emptyDir($path)) {
+        return rmdir ($path);
+      }
+      return false;
+    }
+    
+    return unlink($path);
+  }
   
   
   /**
@@ -285,7 +285,7 @@ abstract class CMbPath {
     }
     return $path;
   }
-	
+  
   /**
    * Count the files under $path
    * @param string The path to read
@@ -295,69 +295,80 @@ abstract class CMbPath {
     return count(glob("$path/*")) - count(glob("$path/*", GLOB_ONLYDIR));
   }
 
-	/**
-	 * Get the path tree under a given directory
-	 * @param string $dir
+  /**
+   * Get the path tree under a given directory
+   * @param string $dir
    * @param array  $ignored    Ignored patterns
    * @param array  $extensions Restricted extensions, if not null
-	 * @return array recursive   Recursive array of basenames
-	 */
-	static function getPathTreeUnder($dir, $ignored = array(), $extensions = null) {
+   * @return array recursive   Recursive array of basenames
+   */
+  static function getPathTreeUnder($dir, $ignored = array(), $extensions = null) {
     // Restricted extensions
-		if (!is_dir($dir) && is_array($extensions) && !in_array(self::getExtension($dir), $extensions)) {
+    if (!is_dir($dir) && is_array($extensions) && !in_array(self::getExtension($dir), $extensions)) {
       return;
-		}
-		
-		// Ignored patterns
-		foreach ($ignored as $_ignored) {
+    }
+    
+    // Ignored patterns
+    foreach ($ignored as $_ignored) {
       $replacements = array(
-			  "*" => ".*",
-				"." => "[.]",
-			);
-			
+        "*" => ".*",
+        "." => "[.]",
+      );
+      
       $_ignored = strtr($_ignored, $replacements);
       
       if (preg_match("|{$_ignored}|i", $dir) === 1) {
         return;
       }
     }
-        		
-		// File case
-		if (!is_dir($dir)) {
-			return true;
-		}
+            
+    // File case
+    if (!is_dir($dir)) {
+      return true;
+    }
 
     // Directory case
-		$tree = array();
-		foreach (glob("$dir/*") as $file) {
-			$branch = self::getPathTreeUnder($file, $ignored, $extensions);
-			if ($branch == null || (is_array($branch) && !count($branch))) {
-				continue;
-			}
+    $tree = array();
+    foreach (glob("$dir/*") as $file) {
+      $branch = self::getPathTreeUnder($file, $ignored, $extensions);
+      if ($branch == null || (is_array($branch) && !count($branch))) {
+        continue;
+      }
       $tree[basename($file)] = $branch;
-		}
-		
-		return $tree;
-	}
-	
-	/**
-	 * Add a directory to include path
-	 * @param string $dir Directory to add
-	 * @return string The former include path
-	 */
-	static function addInclude($dir) {
-		if (!is_dir($dir)) {
-			trigger_error("'$dir' is not an actual directory", E_USER_WARNING);
-		}
-		
-		$paths = explode(PATH_SEPARATOR, get_include_path());
-		$paths[] = $dir;
-		return set_include_path(implode(PATH_SEPARATOR, array_unique($paths)));
-	}
-	
-	static function getFiles($path) {
-	  return array_diff(glob("$path/*"), glob("$path/*", GLOB_ONLYDIR));
-	}
+    }
+    
+    return $tree;
+  }
+  
+  /**
+   * Add a directory to include path
+   * @param string $dir Directory to add
+   * @return string The former include path
+   */
+  static function addInclude($dir) {
+    if (!is_dir($dir)) {
+      trigger_error("'$dir' is not an actual directory", E_USER_WARNING);
+    }
+    
+    $paths = explode(PATH_SEPARATOR, get_include_path());
+    $paths[] = $dir;
+    return set_include_path(implode(PATH_SEPARATOR, array_unique($paths)));
+  }
+  
+  static function getFiles($path) {
+    return array_diff(glob("$path/*"), glob("$path/*", GLOB_ONLYDIR));
+  }
+  
+  static function getTempFile() {
+    // PHP 5.1+
+    $f = @fopen("php://temp", "rb+");
+    
+    if (!$f) {
+      $f = fopen(tempnam(sys_get_temp_dir(), "mb_"), "rb+");
+    }
+    
+    return $f;
+  }
 }
 
 ?>

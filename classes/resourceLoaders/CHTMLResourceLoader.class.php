@@ -10,7 +10,12 @@
 
 abstract class CHTMLResourceLoader {
   static $build;
+  
   private static $_stylesheet_path = null;
+  
+  private static $_aio = null;
+  private static $_fp_in = null;
+  private static $_fp_out = null;
   
   /** 
    * IE Conditional comments
@@ -78,6 +83,48 @@ abstract class CHTMLResourceLoader {
     return $tag;
   }
   
+  static function initOutput($aio){
+    self::$_aio = !!$aio;
+		
+    if (self::$_aio) {
+      self::$_fp_in = CMbPath::getTempFile();
+      ob_start(array("CHTMLResourceLoader", "outputToFile"), 8192);
+    }
+    else {
+      ob_start();
+    }
+  }
+  
+  static function output(){
+    if (self::$_aio) {
+      self::allInOne();
+    }
+    else {
+      ob_end_flush();
+    }
+  }
+  
+  static function outputToFile($str, $flags) {
+    fwrite(self::$_fp_in, $str);
+    return "";
+  }
+  
+  static function getOutputMemory($real = false){
+    if ($real || !self::$_aio) {
+      return CMbString::toDecaBinary(memory_get_peak_usage(true));
+    }
+    
+    return "[[AIO-memory]]";
+  }
+  
+  static function getOutputLength(){
+    if (!self::$_aio) {
+      return CMbString::toDecaBinary(ob_get_length());
+    }
+    
+    return "[[AIO-length]]";
+  }
+  
   private static function getFileContents($filename) {
     if (file_exists($filename)) 
       return file_get_contents($filename);
@@ -93,11 +140,46 @@ abstract class CHTMLResourceLoader {
   private static function replaceImgSrc($matches) {
     $src = $matches[2];
     $src = preg_replace('/(\?.*)$/', '', $src);
-    if ($src[0] == "/")
-      $src = $_SERVER['DOCUMENT_ROOT'] . $src;
-    $ext = CMbPath::getExtension($src);
-    $img = self::getFileContents($src);
-    $img = " src=\"data:image/$ext;base64,".base64_encode($img)."\" ";
+    
+    if ($src) {
+      if ($src[0] == "/") {
+        $src = $_SERVER['DOCUMENT_ROOT'] . $src;
+      }
+      
+      $ext = CMbPath::getExtension($src);
+      $mime = "image/$ext";
+      $img = self::getFileContents($src);
+    }
+    
+    // Url avec des arguments (phpthumb par exemple)
+    else {
+      return null;
+      
+      /* // Ne fonctionne pas bien
+      $session_name = CAppUI::$instance->session_name;
+      $session_id = session_id();
+      $src = CApp::getBaseUrl()."/".$matches[2];
+      $context = stream_context_create(array(
+        "http" => array(
+          "method" => "GET",
+          "header" => "Cookie: $session_name=$session_id\r\n"
+        )
+      ));
+
+      
+      $mime = "image/png";
+      $img = file_get_contents($src, false, $context);
+      
+      foreach($http_response_header as $header) {
+        if (preg_match("/^Content-Type: ([a-z\/]+)/", $header, $matches)) {
+          $mime = $matches[1];
+          break;
+        }
+      }*/
+    }
+    
+    $matches[3] = rtrim($matches[3], " /");
+    $img = " src=\"data:$mime;base64,".base64_encode($img)."\" ";
     return '<img '.$matches[1].$img.$matches[3].' />';
   }
   
@@ -136,77 +218,40 @@ abstract class CHTMLResourceLoader {
     return '<style type="text/css">'.$stylesheet.'</style>';
   }
   
-  protected static function getSectionRegexp($name, $match_all = true) {
-    if ($match_all) {
-      return "@(\<\!--\[$name\]--\>.*\<\!--\[/$name\]--\>)@s";
+  private static function allInOne() {
+    set_min_memory_limit("256M");
+    
+    self::$_fp_out = CMbPath::getTempFile();
+    
+    // End Output Buffering
+    ob_end_clean();
+    
+    rewind(self::$_fp_in);
+    while(!feof(self::$_fp_in)) {
+      $line = fgets(self::$_fp_in);
+      
+      $line = preg_replace_callback("/<img([^>]*)src\s*=\s*[\"']([^\"']+)[\"']([^>]*)/i", array('self', 'replaceImgSrc'), $line);
+      $line = preg_replace_callback("/<link[^>]*rel=\"stylesheet\"[^>]*href\s*=\s*[\"']([^\"']+)[\"'][^>]*>/i", array('self', 'replaceStylesheet'), $line);
+      $line = preg_replace_callback("/<script[^>]*src\s*=\s*[\"']([^\"']+)[\"'][^>]*>\s*<\/script>/i", array('self', 'replaceScriptSrc'), $line);
+      
+      fwrite(self::$_fp_out, $line);
     }
     
-    return "@\<\!--\[$name\]--\>(.*)\<\!--\[/$name\]--\>@s";
-  }
-  
-  protected static function getSectionString($name) {
-    return "<!--$name-->";
-  }
-  
-  protected static function embed($html) {
-    $html = preg_replace_callback("/<img([^>]*)src\s*=\s*[\"']([^\"']+)[\"']([^>]*)>/i", array('self', 'replaceImgSrc'), $html);
-    $html = preg_replace_callback("/<link[^>]*rel=\"stylesheet\"[^>]*href\s*=\s*[\"']([^\"']+)[\"'][^>]*>/i", array('self', 'replaceStylesheet'), $html);
-    $html = preg_replace_callback("/<script[^>]*src\s*=\s*[\"']([^\"']+)[\"'][^>]*>\s*<\/script>/i", array('self', 'replaceScriptSrc'), $html);
-    return $html;
-  }
-  
-  protected static function embedSections($html, $sections) {
-    $sections_embedded = array();
-    
-    foreach($sections as $name => $shm) {
-      $source = SHM::get("aio-$shm");
+    $length = 0;
+    rewind(self::$_fp_out);
+    while(!feof(self::$_fp_out)) {
+      $str = fread(self::$_fp_out, 4096);
+      $length += strlen($str);
       
-      if (!$source) {
-        preg_match(self::getSectionRegexp($name, false), $html, $matches);
-        $orig_source = $matches[1];
-        $source = self::embed($orig_source);
-        SHM::put("aio-$shm", $source);
+      $str = str_replace("[[AIO-length]]", CMbString::toDecaBinary($length), $str);
+      
+      if (strpos($str, "[[AIO-memory]]") !== false) {
+        $str = str_replace("[[AIO-memory]]", self::getOutputMemory(true), $str);
       }
       
-      $html = preg_replace(self::getSectionRegexp($name, true), self::getSectionString($name), $html);
-      
-      $sections_embedded[$name] = $source;
+      echo $str;
     }
-    
-    $html = self::embed($html);
-    
-    
-    foreach($sections_embedded as $name => $source) {
-      $html = str_replace(self::getSectionString($name), $source, $html);
-    }
-
-    return $html;
   }
-  
-  static function allInOne($html) {
-    set_min_memory_limit("256M");
-    $html = preg_replace_callback("/<img([^>]*)src\s*=\s*[\"']([^\"']+)[\"']([^>]*)>/i", array('self', 'replaceImgSrc'), $html);
-    $html = preg_replace_callback("/<link[^>]*rel=\"stylesheet\"[^>]*href\s*=\s*[\"']([^\"']+)[\"'][^>]*>/i", array('self', 'replaceStylesheet'), $html);
-    $html = preg_replace_callback("/<script[^>]*src\s*=\s*[\"']([^\"']+)[\"'][^>]*>\s*<\/script>/i", array('self', 'replaceScriptSrc'), $html);
-    return $html;
-  }
-  
-  /*
-  static function allInOne($html, $shm = true) {
-    set_min_memory_limit("256M");
-    
-    if ($shm) {
-      $html = self::embedSections($html, array(
-        "HEAD_CSS" => "css-".CAppUI::pref("UISTYLE"),
-        "HEAD_JS"  => "js",
-      ));
-    }
-    else {
-      $html = self::embed($html);
-    }
-    
-    return $html;
-  }*/
 }
 
 global $version;

@@ -296,19 +296,18 @@ if ($tab !== null) {
 
 $phpChrono->stop();
 
-$memory_peak = memory_get_peak_usage();
 arsort(CMbObject::$cachableCounts);
 arsort(CMbObject::$objectCounts);
 
 CApp::$performance["genere"]         = number_format($phpChrono->total, 3);
-CApp::$performance["memoire"]        = CMbString::toDecaBinary($memory_peak);
+CApp::$performance["memoire"]        = CHTMLResourceLoader::getOutputMemory();
 CApp::$performance["objets"]         = CMbObject::$objectCount;
 CApp::$performance["cachableCount"]  = array_sum(CMbObject::$cachableCounts);
 CApp::$performance["cachableCounts"] = CMbObject::$cachableCounts;
 CApp::$performance["objectCounts"]   = CMbObject::$objectCounts;
 CApp::$performance["ip"]  = $_SERVER["SERVER_ADDR"];
 
-CApp::$performance["size"] = CMbString::toDecaBinary(ob_get_length());
+CApp::$performance["size"] = CHTMLResourceLoader::getOutputLength();
 CApp::$performance["ccam"] = array (
   "cacheCount" => class_exists('CCodeCCAM') ? CCodeCCAM::$cacheCount : 0,
   "useCount"   => class_exists('CCodeCCAM') ? CCodeCCAM::$useCount : 0

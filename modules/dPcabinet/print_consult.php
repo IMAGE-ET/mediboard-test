@@ -39,7 +39,7 @@ $dossier_medical->countAntecedents();
 $dossier_medical->loadRefPrescription();
 $dossier_medical->loadRefsTraitements();
 
-$constantes_medicales_grid = CConstantesMedicales::buildGrid($sejour->_list_constantes_medicales);
+$constantes_medicales_grid = CConstantesMedicales::buildGrid($sejour->_list_constantes_medicales, false);
 
 // Création du template
 $smarty = new CSmartyDP();

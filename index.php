@@ -182,7 +182,8 @@ if ($user->isInstalled()) {
   CAppUI::$instance->_ref_user =& CAppUI::$user;
 }
 
-ob_start();
+// Init output filter
+CHTMLResourceLoader::initOutput(CValue::get("_aio"));
 
 // We check if the mobile feature is available and if the user agent is a mobile
 if (is_file("./mobile/main.php") && !empty($_SESSION["browser"]["mobile"])) {
@@ -194,11 +195,7 @@ else {
 
 require "./includes/access_log.php";
 
-if (CValue::get("_aio")) {
-  echo CHTMLResourceLoader::allInOne(ob_get_clean());
-} 
-else {
-  ob_end_flush();
-}
+// Output HTML
+CHTMLResourceLoader::output();
 
 CApp::rip();

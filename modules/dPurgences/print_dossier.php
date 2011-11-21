@@ -43,7 +43,7 @@ foreach ($consult->_ref_actes_ccam as $_ccam) {
 }
 
 
-$constantes_medicales_grid = CConstantesMedicales::buildGrid($sejour->_list_constantes_medicales);
+$constantes_medicales_grid = CConstantesMedicales::buildGrid($sejour->_list_constantes_medicales, false);
 
 // Création du template
 $smarty = new CSmartyDP();

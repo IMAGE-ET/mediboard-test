@@ -83,9 +83,11 @@
     checkbox._loaded = true;
   }
 
+{{if !@$offline}}
   Main.add(function() {
     window.print();
   });
+{{/if}}
 </script>
 
 <table class="tbl print_patient">
