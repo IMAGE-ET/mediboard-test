@@ -89,7 +89,13 @@ cecho ()
       ;;
   esac
 
-  echo -e "$color$message"
+  undashed=$(ls -l /bin/sh | grep bash)
+  if [ $undashed ]; then
+    echo "$color$message"
+  else
+    echo -e "$color$message"
+  fi
+
   tput sgr0                    # Reset to normal.
 }
 
