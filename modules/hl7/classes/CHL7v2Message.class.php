@@ -122,7 +122,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     try {
       self::isWellFormed($data);
     } catch(CHL7v2Exception $e) {
-      $this->error($e);
+      $this->error($e, $data);
       return false;
     }
 
