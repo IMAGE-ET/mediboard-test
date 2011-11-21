@@ -22,9 +22,6 @@ class CMbXPath extends DOMXPath {
     
     $erreur = null;
     if ($nodeList->length > 1) {
-      foreach ($nodeList as $_node) {
-        mbLog($_node->nodeName);
-      }
       throw new Exception("Queried node is not unique, found $nodeList->length occurence(s) for '$query'");
     }
 
