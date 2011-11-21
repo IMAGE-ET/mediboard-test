@@ -19,6 +19,7 @@ $patient->load($patient_id);
 
 $dossier_medical = $patient->loadRefDossierMedical();
 
+$consult_anesth->apfel_femme      = 0;
 $consult_anesth->apfel_atcd_nvp   = 0;
 $consult_anesth->apfel_morphine   = 0;
 $consult_anesth->apfel_non_fumeur = 1;
