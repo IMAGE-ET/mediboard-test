@@ -365,11 +365,14 @@ class CHL7v2Segment extends CHL7v2Entity {
     $names = array();
     
     if ($object instanceof CPatient) {
+      $prenoms = array($object->prenom_2, $object->prenom_3, $object->prenom_4);
+      CMbArray::removeValue("", $prenoms);
+ 
       // Nom usuel
       $patient_usualname = array(
         $object->nom,
         $object->prenom,
-        "$object->prenom_2,$object->prenom_3,$object->prenom_4",
+        implode(",", $prenoms),
         null,
         $object->civilite,
         null,
