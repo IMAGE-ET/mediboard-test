@@ -41,6 +41,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   var $unescape_sequences = null;
 
   var $extension    = null;
+  var $i18n_code    = null;
   var $version      = '2.5';
   var $event_name   = null;
   var $name         = null;
@@ -52,11 +53,12 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   function __construct($version = null) {
     if (preg_match("/([A-Z]{2})_(.*)/", $version, $matches)) {
       $this->extension = $version;
+      $this->i18n_code = $matches[2];
       $this->version   = "2.5";
     } else {
       $this->version = $version;
     }  
-	}
+  }
   
   function toXML($event_code = null) {
     $field = $this->children[0]->fields[8]->items[0];
@@ -188,6 +190,11 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     }
     $this->name        = ($message_type[0] == "ACK") ? $message_type[0] : preg_replace("/[^A-Z0-9]/", "", $type);
     $this->event_name  = ($message_type[0] == "ACK") ? $message_type[0] : $message_type[0].$message_type[1];
+    
+    if ($this->extension) {
+      $this->event_name .= "_$this->i18n_code";
+    }
+    
     $this->description = (string)$this->getSpecs()->description;
        
     $this->readHeader();
@@ -196,16 +203,17 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
       $this->readSegments();
     }
   }
-	
-	private function parseRawVersion($raw){
-		$parts = explode($this->componentSeparator, $raw);
-		
-		$this->version = $parts[0];
-		
-		if (count($parts) > 1) {
-			$this->extension = "$parts[1]_$parts[2]";
-		}
-	}
+  
+  private function parseRawVersion($raw){
+    $parts = explode($this->componentSeparator, $raw);
+    
+    $this->version = $parts[0];
+    
+    if (count($parts) > 1) {
+      $this->i18n_code = $parts[1];
+      $this->extension = "$parts[1]_$parts[2]";
+    }
+  }
   
   function readHeader(){
     $first_line = $this->lines[0];
