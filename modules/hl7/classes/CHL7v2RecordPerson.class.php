@@ -311,14 +311,45 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
   }
   
   function getNK1(DOMNode $node, CPatient $newPatient) {    
+    $NK1_2  = $this->queryNode("NK1.2", $node);
+    $nom    = $this->queryTextNode("XPN.1/FN.1", $NK1_2);
+    $prenom = $this->queryTextNode("XPN.2", $NK1_2);
+    
+    $parente = $this->queryTextNode("NK1.3/CE.1", $node);
+    $parente_autre = null;
+    if ($parente == "OTH") {
+      $parente_autre = $this->queryTextNode("NK1.3/CE.2", $node);
+    }
+    
+    $NK1_4   = $this->queryNode("NK1.4", $node);
+    $adresse = $this->queryTextNode("XAD.1/SAD.1", $NK1_4);
+    $cp      = $this->queryTextNode("XAD.5", $NK1_4);
+    $ville   = $this->queryTextNode("XAD.3", $NK1_4); 
+    
+    $tel     = $this->queryTextNode("NK1.5/XTN.1", $node); 
+    
+    $relation = $this->queryTextNode("NK1.7/CE.1", $node);
+    $parente_autre = null;
+    if ($relation == "O") {
+      $relation_autre = $this->queryTextNode("NK1.7/CE.2", $node);
+    }
+    
     $corres_patient = new CCorrespondantPatient();
     $corres_patient->patient_id = $newPatient->_id;
+    $corres_patient->nom        = $nom;
+    $corres_patient->prenom     = $prenom;
+    $corres_patient->loadMatchingObject();
     
-    $NK1_2 = $this->queryNode("NK1.2", $node);
-    /*
-    $nom    = $this->queryTextNode("XPN.1/FN.1", $NK1_2);
-    $prenom = $this->queryTextNode("XCN.2/FN.1", $NK1_2);
-    $xcn3   = $this->queryTextNode("XCN.3", $node);*/
+    $corres_patient->adresse  = $adresse;
+    $corres_patient->cp       = $cp;
+    $corres_patient->ville    = $ville;
+    $corres_patient->tel      = $tel;
+    $corres_patient->parente = CHL7v2TableEntry::mapFrom("63", $parente);
+    $corres_patient->parente_autre = $parente_autre; 
+    $corres_patient->relation = CHL7v2TableEntry::mapFrom("131", $relation);
+    $corres_patient->relation_autre = $relation_autre;
+    
+    $corres_patient->store();
   }
   
   function getMedecin(DOMNode $node) {    

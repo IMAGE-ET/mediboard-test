@@ -32,6 +32,8 @@ class CCorrespondantPatient extends CMbObject {
   var $email      = null;
   var $remarques  = null;
   
+  var $_eai_initiateur_group_id = null;
+  
   // Form fields
   var $_ref_patient = null;
   

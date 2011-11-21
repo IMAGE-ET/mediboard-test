@@ -24,11 +24,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     $this->queryNodes("ROL", null, $data);    
     
-    $this->queryNodes("PV1", null, $data); 
-    
-    $data["admitIdentifiers"] = $this->getAdmitIdentifiers();
-    //$this->getANIdentifier($data["PID"], $data["admitIdentifiers"]);
-    
+    $PV1 = $this->queryNodes("PV1", null, $data); 
+    mbTrace($data);
+    $data["admitIdentifiers"] = $this->getAdmitIdentifiers($data["PID"], $PV1);
+    mbLog($data);    
     $this->queryNodes("PV2", null, $data); 
     
     $this->queryNodes("ZBE", null, $data);
