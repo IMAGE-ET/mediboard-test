@@ -9,7 +9,7 @@
  */
 
 class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
-  static $handled = array ("CPatient");
+  static $handled = array ("CPatient", "CCorrespondantPatient");
   
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);
@@ -21,6 +21,11 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     }
     
     $receiver = $mbObject->_receiver;
+    
+    if ($mbObject instanceof CCorrespondantPatient) {
+      $mbObject = $mbObject->loadRefPatient();
+    }
+    
     // Si Serveur
     if (CAppUI::conf('sip server')) {  
       $echange_hprim = new CEchangeHprim();

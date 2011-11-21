@@ -9,7 +9,7 @@
  */
 
 class CSipObjectHandler extends CEAIObjectHandler {
-  static $handled = array ("CPatient");
+  static $handled = array ("CPatient", "CCorrespondantPatient");
   
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);

@@ -38,7 +38,12 @@ class CHL7v2SegmentNK1 extends CHL7v2Segment {
     
     // NK1-3: Relationship (CE) (optional)
     // Table 0063 - Relationship
-    $data[] = CHL7v2TableEntry::mapTo("63", $correspondant->parente);
+    $data[] = array(
+      array(
+        CHL7v2TableEntry::mapTo("63", $correspondant->parente),
+        ($correspondant->parente == "autre") ? $correspondant->parente_autre : null, 
+      )
+    );
     
     // NK1-4: Address (XAD) (optional repeating)
     $data[] = array(
@@ -83,7 +88,12 @@ class CHL7v2SegmentNK1 extends CHL7v2Segment {
     
     // NK1-7: Contact Role (CE) (optional)
     // Table - 0131
-    $data[] = CHL7v2TableEntry::mapTo("131", $correspondant->relation);
+    $data[] = array(
+      array(
+        CHL7v2TableEntry::mapTo("131", $correspondant->relation),
+        ($correspondant->relation == "autre") ? $correspondant->relation_autre : null, 
+      )
+    );
     
     // NK1-8: Start Date (DT) (optional)
     $data[] = null;

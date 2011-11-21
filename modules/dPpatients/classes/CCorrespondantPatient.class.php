@@ -63,4 +63,8 @@ class CCorrespondantPatient extends CMbObject {
     
     return $specs;
   }
+  
+  function loadRefPatient() {
+    return $this->_ref_patient = $this->loadFwdRef("patient_id");
+  }
 }

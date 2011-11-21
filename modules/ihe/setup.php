@@ -115,7 +115,12 @@ class CSetupihe extends CSetup {
                 ADD `extension` ENUM ('FR');";
     $this->addQuery($query); 
     
-    $this->mod_version = "0.08";
+    $this->makeRevision("0.08");
+    
+    $query = "ALTER TABLE `receiver_ihe_config` 
+                DROP `extension`;";
+    
+    $this->mod_version = "0.09";
   }
 }
 

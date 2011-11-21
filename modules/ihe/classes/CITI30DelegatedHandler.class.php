@@ -16,7 +16,7 @@
  * ITI30 Delegated Handler
  */
 class CITI30DelegatedHandler extends CITIDelegatedHandler {
-  static $handled        = array ("CPatient");
+  static $handled        = array ("CPatient", "CCorrespondantPatient");
   protected $profil      = "PAM";
   protected $transaction = "ITI30";
   
@@ -30,28 +30,36 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     }
     
     $receiver = $mbObject->_receiver;
-    if (!$mbObject->_IPP) {
-      $IPP = new CIdSante400();
-      $IPP->loadLatestFor($mbObject, $receiver->_tag_patient);
-      
-      $mbObject->_IPP = $IPP->id400;
+    
+    if ($mbObject instanceof CCorrespondantPatient) {
+      $mbObject = $mbObject->loadRefPatient();
+      $mbObject->_receiver = $receiver;
     }
 
-    // Envoi pas les patients qui n'ont pas d'IPP
-    if (!$receiver->_configs["send_all_patients"] && !$mbObject->_IPP) {
-      return;
-    }
-
-    switch ($mbObject->loadLastLog()->type) {
-      case "create":
-        $code = "A28";
-        break;
-      case "store":
-        $code = "A31";
-        break;
-      default:
-        $code = null;
-        break;
+    if ($mbObject instanceof CPatient) {
+      if (!$mbObject->_IPP) {
+        $IPP = new CIdSante400();
+        $IPP->loadLatestFor($mbObject, $receiver->_tag_patient);
+        
+        $mbObject->_IPP = $IPP->id400;
+      }
+  
+      // Envoi pas les patients qui n'ont pas d'IPP
+      if (!$receiver->_configs["send_all_patients"] && !$mbObject->_IPP) {
+        return;
+      }
+  
+      switch ($mbObject->loadLastLog()->type) {
+        case "create":
+          $code = "A28";
+          break;
+        case "store":
+          $code = "A31";
+          break;
+        default:
+          $code = null;
+          break;
+      }
     }
     
     $this->sendITI($this->profil, $this->transaction, $code, $mbObject);
