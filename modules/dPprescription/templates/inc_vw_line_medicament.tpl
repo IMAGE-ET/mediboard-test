@@ -277,6 +277,14 @@
 			<fieldset {{if $line->_can_modify_poso}}style="float: right; width: 48%;"{{/if}}>
         <legend>
           Posologie selectionnée
+					{{if $line->_can_modify_poso}}
+					<form name="removeAllPosos-{{$line->_guid}}" action="?" method="post">
+						<input type="hidden" name="m" value="dPprescription" />
+						<input type="hidden" name="dosql" value="do_remove_posos_aed" />
+            <input type="hidden" name="line_guid" value="{{$line->_guid}}" />
+          <button type="button" class="trash notext" onclick="return onSubmitFormAjax(this.form, { onComplete: reloadPrises.curry('{{$line->_id}}','{{$typeDate}}') })">{{tr}}Delete{{/tr}}</button>
+          </form>
+					{{/if}}
         </legend>
 	      {{if $line->_can_modify_poso}}
 	        <!-- Affichage des prises (modifiables) -->
