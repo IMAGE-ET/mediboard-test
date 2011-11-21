@@ -59,6 +59,7 @@
   loadAntecedents = function() {
     var url = new Url("dPcabinet","httpreq_vw_antecedents");
     url.addParam("sejour_id", '{{$sejour->_id}}');
+		url.addParam("show_header", 1);
     url.requestUpdate('antecedents')
   }
 
