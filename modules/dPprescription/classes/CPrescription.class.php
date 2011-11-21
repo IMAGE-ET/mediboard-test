@@ -2300,6 +2300,34 @@ class CPrescription extends CMbObject implements IPatientRelated {
   function docsEditable() {
     return true;
   }
+	
+	function delete(){
+	  // Suppression des references aux protocoles
+		$this->completeField("object_id");
+		if (!$this->object_id) {
+			$query = "UPDATE `prescription_line_medicament` 
+			          SET `protocole_id` = NULL
+								WHERE `protocole_id` = '$this->_id';";
+			$this->_spec->ds->exec($query);
+
+			$query = "UPDATE `prescription_line_element` 
+                SET `protocole_id` = NULL
+                WHERE `protocole_id` = '$this->_id';";
+      $this->_spec->ds->exec($query);
+      
+			$query = "UPDATE `prescription_line_comment` 
+                SET `protocole_id` = NULL
+                WHERE `protocole_id` = '$this->_id';";
+      $this->_spec->ds->exec($query);
+      
+			$query = "UPDATE `prescription_line_mix`
+                SET `protocole_id` = NULL
+                WHERE `protocole_id` = '$this->_id';";
+      $this->_spec->ds->exec($query);
+		}
+	
+ 	  return parent::delete();	
+	}
 }
 
 ?>
