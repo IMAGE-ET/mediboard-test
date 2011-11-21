@@ -691,7 +691,10 @@ class CSetupdPcompteRendu extends CSetup {
       ADD date_print DATETIME DEFAULT NULL";
     $this->addQuery($query);
     
-    $this->mod_version = "0.68";
+    $this->makeRevision("0.68");
+    $this->addPrefQuery("choice_factory", "CDomPDFConverter");
+    
+    $this->mod_version = "0.69";
   }
 }
 ?>

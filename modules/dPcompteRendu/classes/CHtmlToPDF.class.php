@@ -53,7 +53,7 @@ class CHtmlToPDF {
   );
   
   function __construct() {
-    $factory = CAppUI::conf("dPcompteRendu CCompteRendu choice_factory");
+    $factory = CAppUI::pref("choice_factory");
     CHtmlToPDFConverter::init($factory);
   }
 

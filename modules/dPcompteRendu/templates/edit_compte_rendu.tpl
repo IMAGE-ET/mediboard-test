@@ -1,5 +1,5 @@
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
-{{assign var=choice_factory value=$conf.dPcompteRendu.CCompteRendu.choice_factory}}
+{{assign var=choice_factory value=$app->user_prefs.choice_factory}}
 {{mb_script module=dPcompteRendu script=thumb}}
 
 <script type="text/javascript">
