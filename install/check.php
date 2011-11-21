@@ -188,12 +188,6 @@ $extension->reasons[] = "Accélération globale du système";
 $extensions[] = $extension;
 
 $extension = new CPHPExtension;
-$extension->name = "eAccelerator";
-$extension->description = "Extension d'optimsation d'OPCODE et de mémoire partagée";
-$extension->reasons[] = "Accélération globale du système";
-$extensions[] = $extension;
-
-$extension = new CPHPExtension;
 $extension->name = "GnuPG";
 $extension->description = "GNU Privacy Guard (GPG ou GnuPG)";
 $extension->reasons[] = "Transmettre des messages signés et/ou chiffrés";
