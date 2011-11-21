@@ -46,6 +46,8 @@ class CHL7v2Event extends CHL7Event {
     $this->message->validate();
     
     $this->updateExchange();
+    
+    return $this->msg_hl7;
   }
   
   function generateExchange() {

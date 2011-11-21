@@ -102,12 +102,12 @@ class CReceiverIHE extends CInteropReceiver {
         } catch (Exception $e) {
           throw new CMbException("CExchangeSource-no-response");
         }
-        $ack = $source->getACQ();
+        $ack_data = $source->getACQ();
                 
         $exchange = $evenement->_exchange_ihe;
         $exchange->date_echange = mbDateTime();
           
-        if ($ack) {
+        if ($ack_data) {
           if ($exchange->type == "PAM") {
             $data_format = CPAM::getPAMEvent($exchange->code, $exchange->version);
           }
