@@ -84,6 +84,7 @@ else {
 // Chargement des categories de prescription
 $categories = array();
 $category = new CCategoryPrescription();
+$where = array();
 $where[] = "chapitre = 'kine'";
 $where[] = "group_id = '$group_id' OR group_id IS NULL";
 
