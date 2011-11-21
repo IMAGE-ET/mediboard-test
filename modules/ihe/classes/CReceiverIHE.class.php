@@ -93,6 +93,40 @@ class CReceiverIHE extends CInteropReceiver {
     $evenement->build($mbObject);    
     $msg = $evenement->flatten();
     
+    if ($this->actif && $msg) {
+      $source = CExchangeSource::get("$this->_guid-evenementsPatient");
+      if ($source->_id) {
+        $source->setData($msg);
+        try {
+          $source->send();
+        } catch (Exception $e) {
+          throw new CMbException("CExchangeSource-no-response");
+        }
+        $ack = $source->getACQ();
+                
+        $exchange = $evenement->_exchange_ihe;
+        $exchange->date_echange = mbDateTime();
+          
+        if ($ack) {
+          if ($exchange->type == "PAM") {
+            $data_format = CPAM::getPAMEvent($exchange->code, $exchange->version);
+          }
+          if ($exchange->type == "PAM_FR") {
+            $data_format = CPAMFR::getPAMEvent($exchange->code, $exchange->version);
+          }
+          
+          $ack = new CHL7v2Acknowledgment($data_format);
+          $ack->handle($ack_data);
+          $exchange->date_echange        = mbDateTime();   
+          $exchange->statut_acquittement = $ack->getStatutAcknowledgment();
+          $exchange->acquittement_valide = $ack->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
+          $exchange->_acquittement       = $ack_data;
+          $exchange->store();
+        } 
+        
+        $exchange->store();
+      }      
+    }
   }
 }
 ?>
