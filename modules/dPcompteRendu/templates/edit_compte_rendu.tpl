@@ -255,7 +255,7 @@ Main.add(function(){
       g.options.pie.explode = 0;
       var f = new Flotr.Graph($('graph-container'), g.data, g.options);
       g.dataURL = f.canvas.toDataURL();
-      oFCKeditor.value = htmlarea.value = htmlarea.value.replace('<span class="field">'+g.name+'</span>', '<img src="'+g.dataURL+'" width="450" height="300" />');
+      oFCKeditor.value = htmlarea.value = htmlarea.value.replace('<'+'span class="field">'+g.name+'</'+'span>', '<'+'img src="'+g.dataURL+'" width="450" height="300" /'+'>');
     });
   }
   
