@@ -49,7 +49,32 @@ class CSourceMLLP extends CExchangeSource {
     return $this->_socket_client;
   }
   
+  function getData($path = null) {
+    return $this->_socket_client->recv();
+  }
+  
   function send($evenement_name = null){
     $this->getSocketClient()->send(self::LEADING.$this->_data.self::TRAILING);
+  }
+  
+  function isReachableSource() {
+    try {
+      $this->getSocketClient();
+    } 
+    catch (CMbException $e) {
+      $this->_reachable = 0;
+      $this->_message   = $e->getMessage();
+      return false;
+    }
+        
+    return true;
+  }
+  
+  function isAuthentificate() {
+    return $this->isReachableSource();
+  }
+  
+  function getResponseTime() {
+    $this->_response_time = url_response_time($this->host, $this->port);
   }
 }

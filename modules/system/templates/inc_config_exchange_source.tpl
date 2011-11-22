@@ -75,5 +75,13 @@
       {{/if}}
       {{mb_include module=system template=CExchangeSource_inc_config mod=system class="CSourceFileSystem"}}  
     </div>
+    
+    <div id="CSourceMLLP-{{$sourcename}}" class="source" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceMLLP)}}block{{else}}none{{/if}};">
+      {{if !"hl7"|module_active}}
+        {{mb_include module=system template=module_missing mod=hl7}}  
+      {{else}}
+        {{mb_include module=system template=CExchangeSource_inc_config mod=hl7 class="CSourceMLLP"}}  
+      {{/if}}
+    </div>
   </div>
 {{/if}}

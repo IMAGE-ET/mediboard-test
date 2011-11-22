@@ -20,7 +20,7 @@ class CExchangeSource extends CMbObject {
     "ftp"         => "CSourceFTP",
     "soap"        => "CSourceSOAP",
     "smtp"        => "CSourceSMTP",
-    "file_system" => "CSourceFileSystem"
+    "file_system" => "CSourceFileSystem",
   );
   
   // DB Fields
@@ -170,5 +170,9 @@ class CExchangeSource extends CMbObject {
   function isAuthentificate() {}
   
   function getResponseTime() {}
+}
+
+if (CModule::getActive("hl7")) {
+  CExchangeSource::$typeToClass = CExchangeSource::$typeToClass + array("mllp" => "CSourceMLLP");
 }
 ?>
