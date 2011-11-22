@@ -56,7 +56,9 @@ class CEAIObjectHandler extends CMbObjectHandler {
       return false;
     }
     
-    $this->_eai_initiateur_group_id = $mbObject->_eai_initiateur_group_id;
+    if (isset($mbObject->_eai_initiateur_group_id)) {
+      $this->_eai_initiateur_group_id = $mbObject->_eai_initiateur_group_id;
+    }
   }
   
   function onAfterStore(CMbObject $mbObject) {
