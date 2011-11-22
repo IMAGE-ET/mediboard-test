@@ -399,7 +399,11 @@ if($prescription->_id){
 	      foreach($cat_by_chap as $name_cat => $lines_by_cat){
 	        foreach($lines_by_cat as $type_elt => $lines_by_type){
 	          foreach($lines_by_type as $key => $_line){
-	          	if($hide_old_lines && $_line->_fin_reelle && mbDate($_line->_fin_reelle) < mbDate()){
+	          	if($_line->child_id){
+	          		unset($prescription->_ref_lines_elements_comments[$name_chap][$name_cat][$type_elt][$key]);
+	          	}
+							
+							if($hide_old_lines && $_line->_fin_reelle && mbDate($_line->_fin_reelle) < mbDate()){
 				        unset($prescription->_ref_lines_elements_comments[$name_chap][$name_cat][$type_elt][$key]);
 								$hidden_lines_count++;
 				      }
