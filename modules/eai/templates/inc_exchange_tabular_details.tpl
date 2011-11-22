@@ -82,6 +82,7 @@
     
     
     <div id="ack" style="display: none;">
+      {{if $ack_segment_group}}
       <script>
         Main.add(function(){
           Control.Tabs.create("ack-message-tab");
@@ -123,6 +124,9 @@
       <div id="ack-message-errors" style="display: none;">
         {{mb_include module=hl7 template=inc_hl7v2_errors errors=$ack_segment_group->errors level=2}}
       </div>
+      {{else}}
+        <div class="big-info">{{tr}}CExchange-no-acquittement{{/tr}}</div>
+      {{/if}}
     </div>
   </td>
 </tr> 
