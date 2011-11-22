@@ -505,7 +505,22 @@ class CSetuphl7 extends CSetup {
     // Personne de confiance
     $this->insertTableEntry("131", "K", "K", "confiance", "confiance", "Personne de confiance");
     
-    $this->mod_version = "0.06";
+    $this->makeRevision("0.06");
+    $query = "CREATE TABLE `source_mllp` (
+              `source_mllp_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `port` INT (11) DEFAULT '7001',
+              `name` VARCHAR (255) NOT NULL,
+              `role` ENUM ('prod','qualif') NOT NULL DEFAULT 'qualif',
+              `host` TEXT NOT NULL,
+              `user` VARCHAR (255),
+              `password` VARCHAR (50),
+              `type_echange` VARCHAR (255),
+              `active` ENUM ('0','1') NOT NULL DEFAULT '1',
+              `loggable` ENUM ('0','1') NOT NULL DEFAULT '1'
+    ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+        
+    $this->mod_version = "0.07";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
