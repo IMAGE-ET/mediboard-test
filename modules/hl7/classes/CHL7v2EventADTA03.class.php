@@ -16,8 +16,8 @@
  * A03 - Discharge/end visit
  */
 class CHL7v2EventADTA03 extends CHL7v2EventADT implements CHL7EventADTA03 {
-  function __construct() {
-    parent::__construct();
+  function __construct($i18n = null) {
+    parent::__construct($i18n);
         
     $this->code        = "A03";
     $this->transaction = CPAM::getTransaction($this->code);

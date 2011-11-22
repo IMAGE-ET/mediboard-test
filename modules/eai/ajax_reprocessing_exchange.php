@@ -25,6 +25,8 @@ if (!$ack_data = CEAIDispatcher::dispatch($exchange->_message, $sender, $exchang
   CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' ne peut retraité", UI_MSG_ERROR);
 }
 
+$exchange->load($exchange->_id);
+
 if ($exchange instanceof CEchangeHprim) {
   $ack = CHPrimXMLAcquittements::getAcquittementEvenementXML($sender->_data_format->_family_message);
   $ack->loadXML($ack_data);

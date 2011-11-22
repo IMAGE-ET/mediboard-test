@@ -23,27 +23,44 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     switch ($event_code) {
       // Création d'un nouveau patient - Mise à jour d'information du patient
       case "CHL7v2EventADTA28" : 
+      case "CHL7v2EventADTA28_FR" :   
       case "CHL7v2EventADTA31" :
+      case "CHL7v2EventADTA31_FR" :
         return new CHL7v2RecordPerson();
       // Fusion de deux patients
       case "CHL7v2EventADTA40" : 
+      case "CHL7v2EventADTA40_FR" : 
         return new CHL7v2MergePersons();
       // Création d'une venue - Mise à jour d'information de la venue
-      case "CHL7v2EventADTA01" : 
+      case "CHL7v2EventADTA01" :
+      case "CHL7v2EventADTA01_FR" : 
       case "CHL7v2EventADTA02" :
+      case "CHL7v2EventADTA02_FR" :
       case "CHL7v2EventADTA03" :
+      case "CHL7v2EventADTA03_FR" :
       case "CHL7v2EventADTA04" :
+      case "CHL7v2EventADTA04_FR" :
       case "CHL7v2EventADTA05" :
+      case "CHL7v2EventADTA05_FR" :
       case "CHL7v2EventADTA06" :
+      case "CHL7v2EventADTA06_FR" :
       case "CHL7v2EventADTA07" :
+      case "CHL7v2EventADTA07_FR" :
       case "CHL7v2EventADTA11" :
+      case "CHL7v2EventADTA11_FR" :
       case "CHL7v2EventADTA12" :
+      case "CHL7v2EventADTA12_FR" :
       case "CHL7v2EventADTA13" :
+      case "CHL7v2EventADTA13_FR" :
       case "CHL7v2EventADTA38" :
+      case "CHL7v2EventADTA38_FR" :  
       case "CHL7v2EventADTA44" :
+      case "CHL7v2EventADTA44_FR" :
       case "CHL7v2EventADTA54" :
+      case "CHL7v2EventADTA54_FR" :
       case "CHL7v2EventADTA55" : 
-      case "CHL7v2EventADTZ99" : 
+      case "CHL7v2EventADTA55_FR" :
+      case "CHL7v2EventADTZ99_FR" : 
         return new CHL7v2RecordAdmit();     
       default : 
         return new CHL7v2MessageXML();

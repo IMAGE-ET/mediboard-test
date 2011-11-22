@@ -16,7 +16,7 @@
  * Event HL7
  */
 class CHL7v2Event extends CHL7Event {
-  function __construct() {}
+  function __construct($i18n = null) {}
   
   function build($object) {
     // Traitement sur le mbObject

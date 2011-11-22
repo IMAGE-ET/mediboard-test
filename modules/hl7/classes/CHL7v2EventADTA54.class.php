@@ -16,8 +16,8 @@
  * A54 - Change attending doctor
  */
 class CHL7v2EventADTA54 extends CHL7v2EventADT implements CHL7EventADTA54 {
-  function __construct() {
-    parent::__construct();
+  function __construct($i18n = null) {
+    parent::__construct($i18n);
         
     $this->code        = "A54";
     $this->transaction = CPAM::getTransaction($this->code);

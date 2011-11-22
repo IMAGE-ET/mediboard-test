@@ -16,8 +16,8 @@
  * A04 - Register a patient
  */
 class CHL7v2EventADTA04_FR extends CHL7v2EventADTA04 {
-  function __construct() {
-    parent::__construct();
+  function __construct($i18n = null) {
+    parent::__construct($i18n);
 
     $this->transaction = CPAMFR::getTransaction($this->code);
   }

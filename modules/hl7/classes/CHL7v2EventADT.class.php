@@ -16,10 +16,10 @@
  * Admit Discharge Transfer
  */
 class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
-  function __construct() {
-    parent::__construct();
+  function __construct($i18n = null) {
+    parent::__construct($i18n);
     
-    $this->profil      = "PAM";
+    $this->profil      = $i18n ? "PAM_$i18n" : "PAM";
     $this->event_type  = "ADT";
   }
   

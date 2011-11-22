@@ -62,15 +62,16 @@ class COperatorIHE extends CEAIOperator {
 
         return $msgAck;
       }
-
+      
+      $exchange_ihe->populateExchange($data_format, $evt);
+      
       // Gestion des notifications ? 
       if (!$exchange_ihe->_id) {
-        $exchange_ihe->populateExchange($data_format, $evt);
+        $exchange_ihe->date_production      = mbDateTime();
         $exchange_ihe->identifiant_emetteur = $data['identifiantMessage'];
         $exchange_ihe->message_valide       = 1;
       }
       
-      $exchange_ihe->date_production = mbDateTime();
       $exchange_ihe->store();
 
       $exchange_ihe->loadRefsInteropActor();
@@ -83,7 +84,7 @@ class COperatorIHE extends CEAIOperator {
 
       // Message événement patient
       if ($evt instanceof CHL7EventADT) {
-        return self::eventPatient($data, $exchange_ihe, $evt, $dom_evt, $ack);
+        return self::eventPatient($data, $exchange_ihe, $dom_evt, $ack);
       }
     } catch(Exception $e) {
       $exchange_ihe->populateExchange($data_format, $evt);
@@ -100,54 +101,15 @@ class COperatorIHE extends CEAIOperator {
     }
   }
   
-  static function eventPatient($data = array(), CExchangeIHE $exchange_ihe, CHL7Event $evt,
-                              CHL7v2MessageXML $dom_evt, CHL7Acknowledgment $ack) {
+  static function eventPatient($data = array(), CExchangeIHE $exchange_ihe, CHL7v2MessageXML $dom_evt, CHL7Acknowledgment $ack) {
     $newPatient = new CPatient();
     $newPatient->_eai_exchange_initiator_id = $exchange_ihe->_id;
     
     $data = array_merge($data, $dom_evt->getContentNodes());
     
-    switch (get_class($evt)) {
-      // Création d'un nouveau patient - Mise à jour d'information du patient
-      case "CHL7v2EventADTA28" : 
-      case "CHL7v2EventADTA31" :
-        $exchange_ihe->id_permanent = array_key_exists("PI", $data['personIdentifiers']) ? $data['personIdentifiers']['PI'] : null;
-        $msgAck                     = $dom_evt->handle($ack, $newPatient, $data);
-        break;
-      // Fusion de deux patients
-      case "CHL7v2EventADTA40" : 
-        $datas = $data;
-        foreach ($datas["merge"] as $data) {
-          $exchange_ihe->id_permanent = array_key_exists("PI", $data['personIdentifiers']) ? $data['personIdentifiers']['PI'] : null;
-          $msgAck                     = $dom_evt->handle($ack, $newPatient, $data);
-        }
-        break;
-      // Création d'une venue - Mise à jour d'information de la venue
-      case "CHL7v2EventADTA01" : 
-      case "CHL7v2EventADTA02" :
-      case "CHL7v2EventADTA03" :
-      case "CHL7v2EventADTA04" :
-      case "CHL7v2EventADTA05" :
-      case "CHL7v2EventADTA06" :
-      case "CHL7v2EventADTA07" :
-      case "CHL7v2EventADTA11" :
-      case "CHL7v2EventADTA12" :
-      case "CHL7v2EventADTA13" :
-      case "CHL7v2EventADTA38" :
-      case "CHL7v2EventADTA44" :
-      case "CHL7v2EventADTA54" :
-      case "CHL7v2EventADTA55" : 
-      case "CHL7v2EventADTZ99" : 
-        $exchange_ihe->id_permanent = array_key_exists("AN", $data['admitIdentifiers']) ? $data['admitIdentifiers']['AN'] : null;
-        $msgAck                     = $dom_evt->handle($ack, $newPatient, $data);  
-        break;
-      // Aucun des événements - retour d'erreur
-      default :
-        $msgAck = $ack->generateAcknowledgment("AR", "E004", "200");
-        break;
-    }
+    //$exchange_ihe->id_permanent = array_key_exists("PI", $data['personIdentifiers']) ? $data['personIdentifiers']['PI'] : null;
     
-    return $msgAck;
+    return $dom_evt->handle($ack, $newPatient, $data);
   }
 }
 

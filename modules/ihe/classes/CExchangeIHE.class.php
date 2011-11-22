@@ -85,9 +85,17 @@ class CExchangeIHE extends CExchangeTabular {
     foreach ($this->getFamily() as $_message) {
       $message_class = new $_message;
       $evenements = $message_class->getEvenements();
+
       if (in_array($hl7_message_evt, $evenements)) {
-        $this->_family_message_class = $_message;
-        $this->_family_message       = CHL7Event::getEventVersion($hl7_message->version, $hl7_message->event_name);
+        if (!$hl7_message->i18n_code) {
+          $this->_family_message_class = $_message;
+          $this->_family_message       = CHL7Event::getEventVersion($hl7_message->version, $hl7_message->event_name);
+        }
+        else {
+          $this->_family_message_class = $_message.$hl7_message->i18n_code;
+          $this->_family_message       = CHL7Event::getEventVersion($hl7_message->version, $hl7_message->getI18NEventName());
+        }
+        
         return true;
       }
     }
@@ -118,11 +126,10 @@ class CExchangeIHE extends CExchangeTabular {
   }
  
   function populateExchange(CExchangeDataFormat $data_format, CHL7Event $event) {
-    $this->date_production = mbDateTime();
     $this->group_id        = $data_format->group_id;
     $this->sender_id       = $data_format->sender_id;
     $this->sender_class    = $data_format->sender_class;
-    $this->version         = $event->message->version;
+    $this->version         = $event->message->extension ? $event->message->extension : $event->message->version;
     $this->type            = $event->profil;
     $this->sous_type       = $event->transaction;
     $this->code            = $event->code;

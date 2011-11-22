@@ -16,8 +16,8 @@
  * A11 - Cancel admit/visit notification
  */
 class CHL7v2EventADTA11_FR extends CHL7v2EventADTA11 {
-  function __construct() {
-    parent::__construct();
+  function __construct($i18n = null) {
+    parent::__construct($i18n);
         
     $this->transaction = CPAMFR::getTransaction($this->code);
   }

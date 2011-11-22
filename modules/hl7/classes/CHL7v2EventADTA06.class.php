@@ -16,8 +16,8 @@
  * A06 - Change an outpatient to an inpatient
  */
 class CHL7v2EventADTA06 extends CHL7v2EventADT implements CHL7EventADTA06 {
-  function __construct() {
-    parent::__construct();
+  function __construct($i18n = null) {
+    parent::__construct($i18n);
         
     $this->code        = "A06";
     $this->transaction = CPAM::getTransaction($this->code);

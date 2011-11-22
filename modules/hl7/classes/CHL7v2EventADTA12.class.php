@@ -16,8 +16,8 @@
  * A12 - Cancel transfer
  */
 class CHL7v2EventADTA12 extends CHL7v2EventADT implements CHL7EventADTA09 {
-  function __construct() {
-    parent::__construct();
+  function __construct($i18n = null) {
+    parent::__construct($i18n);
         
     $this->code        = "A12";
     $this->transaction = CPAM::getTransaction($this->code);

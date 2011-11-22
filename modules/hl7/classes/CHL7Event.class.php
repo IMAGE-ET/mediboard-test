@@ -33,7 +33,7 @@ class CHL7Event {
   var $_sender       = null;
   var $_exchange_ihe = null;  
   
-  function __construct() {}
+  function __construct($i18n = null) {}
   
   function build($object) {}
   

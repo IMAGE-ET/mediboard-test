@@ -16,8 +16,8 @@
  * A40 - Merge patient
  */
 class CHL7v2EventADTA40 extends CHL7v2EventADT implements CHL7EventADTA39 {
-  function __construct() {
-    parent::__construct();
+  function __construct($i18n = null) {
+    parent::__construct($i18n);
         
     $this->code        = "A40";
     $this->transaction = CPAM::getTransaction($this->code);

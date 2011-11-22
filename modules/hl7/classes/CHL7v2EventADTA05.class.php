@@ -16,8 +16,8 @@
  * A05 - Pre-admit a patient
  */
 class CHL7v2EventADTA05 extends CHL7v2EventADT implements CHL7EventADTA05 {
-  function __construct() {
-    parent::__construct();
+  function __construct($i18n = null) {
+    parent::__construct($i18n);
         
     $this->code        = "A05";
     $this->transaction = CPAM::getTransaction($this->code);

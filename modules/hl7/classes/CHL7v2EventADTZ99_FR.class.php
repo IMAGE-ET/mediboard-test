@@ -15,15 +15,40 @@
  * Class CHL7v2EventADTZ99_FR
  * Z99 - Change admit
  */
-class CHL7v2EventADTZ99_FR extends CHL7v2EventADTZ99 {
-  function __construct() {
-    parent::__construct();
+class CHL7v2EventADTZ99_FR extends CHL7v2EventADT implements CHL7EventADTZ99 {
+  function __construct($i18n = null) {
+    parent::__construct($i18n);
         
+    $this->code        = "Z99";
     $this->transaction = CPAMFR::getTransaction($this->code);
+    $this->msg_codes   = array ( 
+      array(
+        $this->event_type, $this->code
+      )
+    );
   }
   
   function build($sejour) {
     parent::build($sejour);
+    
+    $patient = $sejour->_ref_patient;
+    // Patient Identification
+    $this->addPID($patient);
+    
+    // Patient Additional Demographic
+    $this->addPD1($patient);
+    
+    // Doctors
+    $this->addROLs($patient);
+    
+    // Next of Kin / Associated Parties
+    $this->addNK1s($patient);
+    
+    // Patient Visit
+    $this->addPV1($sejour);
+    
+    // Patient Visit - Additionale Info
+    $this->addPV2($sejour);
     
     // Movement segment
     $this->addZBE($sejour);

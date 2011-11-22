@@ -16,8 +16,8 @@
  * A31 - Add person information
  */
 class CHL7v2EventADTA31 extends CHL7v2EventADT implements CHL7EventADTA05 {
-  function __construct() {
-    parent::__construct();
+  function __construct($i18n = null) {
+    parent::__construct($i18n);
         
     $this->code        = "A31";
     $this->transaction = CPAM::getTransaction($this->code);

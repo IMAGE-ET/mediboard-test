@@ -329,7 +329,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $tel     = $this->queryTextNode("NK1.5/XTN.1", $node); 
     
     $relation = $this->queryTextNode("NK1.7/CE.1", $node);
-    $parente_autre = null;
+    $relation_autre = null;
     if ($relation == "O") {
       $relation_autre = $this->queryTextNode("NK1.7/CE.2", $node);
     }

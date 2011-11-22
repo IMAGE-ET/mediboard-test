@@ -16,8 +16,8 @@
  * A13 - Cancel discharge/end visit
  */
 class CHL7v2EventADTA13 extends CHL7v2EventADT implements CHL7EventADTA01 {
-  function __construct() {
-    parent::__construct();
+  function __construct($i18n = null) {
+    parent::__construct($i18n);
         
     $this->code        = "A13";
     $this->transaction = CPAM::getTransaction($this->code);
