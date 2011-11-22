@@ -27,7 +27,7 @@ if (!$exchange_source->host) {
 
 try {
   $exchange_source->getSocketClient();
-  CAppUI::stepAjax("Connexion au serveur MLLP réussi : ");
+  CAppUI::stepAjax("Connexion au serveur MLLP réussi");
   if ($ack = $exchange_source->getData()) {
     CAppUI::stepAjax($ack);
   }

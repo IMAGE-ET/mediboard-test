@@ -53,6 +53,12 @@
             url.addParam("exchange_source_name", exchange_source_name);
             url.requestUpdate("utilities-source-mllp-connexion-" + exchange_source_name);
           },
+
+          send: function (exchange_source_name) {
+            var url = new Url("hl7", "ajax_send_mllp");
+            url.addParam("exchange_source_name", exchange_source_name);
+            url.requestUpdate("utilities-source-mllp-send-" + exchange_source_name);
+          },
         }
       </script>
       <table class="tbl">
@@ -70,8 +76,22 @@
             </button>
           </td>
         </tr>
+        
         <tr>
           <td id="utilities-source-mllp-connexion-{{$source->name}}" class="text"></td>
+        </tr>
+        
+        <!-- Test d'envoi -->
+        <tr>
+          <td>
+            <button type="button" class="search" onclick="MLLP.send('{{$source->name}}');">
+              {{tr}}utilities-source-mllp-send{{/tr}}
+            </button>
+          </td>
+        </tr>
+        
+        <tr>
+          <td id="utilities-source-mllp-send-{{$source->name}}" class="text"></td>
         </tr>
       </table>
     </td>
