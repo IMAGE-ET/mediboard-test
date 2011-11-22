@@ -32,9 +32,12 @@
     <th colspan="8" class="{{if $line->perop}}perop{{/if}}">
       <div style="position: absolute">
       	<a title="Historique" class="button list notext" href="#1"
-           onclick="Prescription.showLineHistory('{{$line->_guid}}')">
+           onclick="Prescription.showLineHistory('{{$line->_guid}}')" 
+           {{if !$line->inscription && $line->_ref_parent_line->_id}}
+           onmouseover="ObjectTooltip.createEx(this, '{{$line->_ref_parent_line->_guid}}')"
+           {{/if}}>
         </a>
-				
+							
         <!-- Formulaire ALD -->
         {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}} 
         
@@ -237,15 +240,14 @@
 	{{if !$line->_protocole}}
 	<tr>
 		<td>
-			{{if (($category->chapitre == "biologie" || $category->chapitre == "kine" || $category->chapitre == "soin" || $category->chapitre == "dm" || $category->chapitre == "med_elt") && $prescription->type != "sortie") && !$line->_protocole }}
-        {{if ($prescription->type == "sejour" || $prescription->type == "pre_admission") && !$line->_protocole && $line->signee && !$line->recusee}}
-          <fieldset style="float: left; width: 48%;">
-				    <legend>Evolution</legend>
-						<div id="stop-CPrescriptionLineElement-{{$line->_id}}"> 
-		          {{include file="../../dPprescription/templates/line/inc_vw_stop_line.tpl" object_class="CPrescriptionLineElement"}}
-		        </div>
-			    </fieldset>
-		     {{/if}}
+			{{if $line->_can_vw_form_add_line_contigue}}
+        <fieldset style="float: left; width: 48%;">
+			    <legend>Evolution</legend>
+					<span id="stop-CPrescriptionLineElement-{{$line->_id}}"> 
+	          {{include file="../../dPprescription/templates/line/inc_vw_stop_line.tpl" object_class="CPrescriptionLineElement"}}
+	        </span>
+					{{include file="../../dPprescription/templates/line/inc_vw_form_add_line_contigue.tpl"}}
+		    </fieldset>
 		  {{/if}}
 
       {{if ($line->_can_delete_line || ($line->signee && ($app->user_id == $line->praticien_id || $line->inscription) || !$line->signee)) && !$advanced_prot}}

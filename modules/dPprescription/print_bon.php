@@ -27,7 +27,7 @@ if(count($list_bons)){
 
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
-$prescription->loadRefsLinesElementByCat();
+$prescription->loadRefsLinesElementByCat("1");
 
 $prescription->calculPlanSoin(array($debut));
 

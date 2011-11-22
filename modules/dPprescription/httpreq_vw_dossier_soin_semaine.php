@@ -40,7 +40,7 @@ if($prescription_id){
 		$_line_med->loadRefProduitPrescription();
 		$_line_med->loadRefLogSignee();
 	}
-  $prescription->loadRefsLinesElementByCat("1","","service");
+  $prescription->loadRefsLinesElementByCat("1","1","","service");
   $prescription->loadRefsPrescriptionLineMixes("","1");
   foreach($prescription->_ref_prescription_line_mixes as &$_line_mix){
     $_line_mix->loadRefsLines();

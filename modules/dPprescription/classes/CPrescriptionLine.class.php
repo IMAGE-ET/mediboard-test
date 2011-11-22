@@ -398,7 +398,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $prescription->load($prescription_id);
     
     // Chargement de la ligne de prescription
-    $new_line = new CPrescriptionLineMedicament();
+    $new_line = new $this->_class;
     $new_line->load($this->_id);
     
     if($new_line->date_arret){
@@ -428,21 +428,23 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     
     $new_line->praticien_id = $praticien_id;
     $new_line->signee = 0;
-    $new_line->valide_pharma = 0;
+		if($new_line instanceof CPrescriptionLineMedicament){
+		  $new_line->valide_pharma = 0;
+    }
     $new_line->valide_infirmiere = 0;
     $new_line->creator_id = CAppUI::$user->_id;
     $msg = $new_line->store();
-    CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
+    CAppUI::displayMsg($msg, "$this->_class-msg-create");
     
     foreach($new_line->_ref_prises as &$prise){
       $prise->_id = "";
       $prise->object_id = $new_line->_id;
-      $prise->object_class = "CPrescriptionLineMedicament";
+      $prise->object_class = $this->_class;
       $msg = $prise->store();
       CAppUI::displayMsg($msg, "CPrisePosologie-msg-create");
     }
     
-    $old_line = new CPrescriptionLineMedicament();
+    $old_line = new $this->_class();
     $old_line->load($this->_id);
     
     $old_line->child_id = $new_line->_id;

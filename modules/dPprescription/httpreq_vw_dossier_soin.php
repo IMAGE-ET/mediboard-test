@@ -248,7 +248,7 @@ else {
       $prescription->loadRefsLinesMedByCat("1","1");
       
       // Chargement des lignes d'elements
-      $prescription->loadRefsLinesElementByCat("1",null);
+      $prescription->loadRefsLinesElementByCat("1","1",null);
       
       if(@!CAppUI::conf("object_handlers CPrescriptionAlerteHandler")){
         // Calcul des modifications recentes par chapitre
@@ -258,7 +258,7 @@ else {
     
     } else {
       // Chargement des lignes d'elements  avec pour chapitre $chapitre
-      $prescription->loadRefsLinesElementByCat("1",$chapitre);
+      $prescription->loadRefsLinesElementByCat("1","1",$chapitre);
     }
     
     $with_calcul = $chapitre ? true : false; 

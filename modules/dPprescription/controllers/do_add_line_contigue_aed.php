@@ -17,13 +17,13 @@ CCanDo::checkRead();
 
 $user = CUser::get();
 
-$prescription_line_id = CValue::post("prescription_line_id");
+$line_guid            = CValue::post("line_guid");
 $prescription_id      = CValue::post("prescription_id");
 $praticien_id         = CValue::post("praticien_id", $user->_id);
 $mode_pharma          = CValue::post("mode_pharma");
 
-$prescriptionLine = new CPrescriptionLineMedicament();
-$prescriptionLine->load($prescription_line_id);
+
+$prescriptionLine = CMbObject::loadFromGuid($line_guid);
 $new_line_guid = $prescriptionLine->duplicateLine($praticien_id, $prescription_id);
 
 echo "<script type='text/javascript'>Prescription.reloadLine('$new_line_guid','','$mode_pharma')</script>";

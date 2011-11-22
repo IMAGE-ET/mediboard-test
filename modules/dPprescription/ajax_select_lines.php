@@ -36,7 +36,7 @@ $prescription = new CPrescription;
 if ($protocole_id) {
   $prescription->load($prescription_id);
   $prescription->loadRefsLinesMedComments("1", "", $protocole_id);
-  $prescription->loadRefsLinesElementsComments("1", "", "", $protocole_id);
+  $prescription->loadRefsLinesElementsComments("0", "1", "", "", $protocole_id);
   $prescription->loadRefsPrescriptionLineMixes("", 1, 1, $protocole_id);
   $prescription->countLinesMedsElements(null, null, $protocole_id);
   
@@ -69,7 +69,7 @@ elseif ($pack_id) {
         $lines_med_comments = array_merge_recursive($lines_med_comments, $prescription->_ref_lines_med_comments);
       }
       
-      $prescription->loadRefsLinesElementsComments("1", "", "", $protocole_id);
+      $prescription->loadRefsLinesElementsComments("0", "1", "", "", $protocole_id);
       if (is_array($prescription->_ref_lines_elements_comments)) {
         $lines_elt_comments = array_merge_recursive($lines_elt_comments, $prescription->_ref_lines_elements_comments);
       }

@@ -25,6 +25,7 @@ if($line instanceof CPrescriptionLineElement){
   $where["prescription_id"] = " = '$line->prescription_id'";
   $where["element_prescription_id"] = " = '$line->element_prescription_id'";
   $where["prescription_line_element_id"] = " != '$line->_id'";
+	$where["child_id"] = " IS NULL";
 	$equivalents =  $_line->loadList($where);
 }
 

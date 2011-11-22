@@ -15,6 +15,7 @@ $prescription = new CPrescription();
 $prescription->load($prescription_id);
 
 $prescription->loadRefsLinesMed();
+$prescription->loadRefsLinesElement();
 $prescription->loadRefsPrescriptionLineMixes();
 
 // Tableau d'historique des lignes
@@ -23,6 +24,7 @@ $lines = array();
 
 $med_lines = array();
 $med_lines["med"] = $prescription->_ref_prescription_lines;
+$med_lines["elt"] = $prescription->_ref_prescription_lines_element;
 if($type == "historique"){
   $med_lines["perf"] = $prescription->_ref_prescription_line_mixes;
 }

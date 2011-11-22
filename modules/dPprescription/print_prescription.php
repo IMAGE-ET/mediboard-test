@@ -78,7 +78,7 @@ $categories = CCategoryPrescription::loadCategoriesByChap();
 
 // Chargement des lignes de prescriptions
 $prescription->loadRefsLinesMedComments("1", "debut ASC", "", $in_progress);
-$prescription->loadRefsLinesElementsComments("1","","debut ASC", "", $in_progress);
+$prescription->loadRefsLinesElementsComments("0", "1","","debut ASC", "", $in_progress);
 
 // Chargement des prescription_line_mixes
 $prescription->loadRefsPrescriptionLineMixes("", 0, 1, "", $in_progress);

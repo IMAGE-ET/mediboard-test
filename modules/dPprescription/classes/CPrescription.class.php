@@ -719,7 +719,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
 		
 		// Chargement de toutes les lignes
     $this->loadRefsLinesMed("1","1");
-    $this->loadRefsLinesElementByCat("1");
+    $this->loadRefsLinesElementByCat("1","1");
     $this->loadRefsPrescriptionLineMixes();
 	}
 	
@@ -1146,6 +1146,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
     $where = array();
     $where["prescription_id"] = " = '$this->_id'";
     $where["inscription"] = " = '0'";
+		$where["child_id"] = "IS NULL";
 		if ($praticien_sortie_id){
       $where["praticien_id"] = " = '$praticien_sortie_id'";
     }
@@ -1260,13 +1261,13 @@ class CPrescription extends CMbObject implements IPatientRelated {
     if($this->type === "sejour" || $this->type === "sortie"){
       $prescription_pre_adm =& $this->_ref_object->_ref_prescriptions["pre_admission"];
       $prescription_pre_adm->loadRefsLinesMedComments("0");
-      $prescription_pre_adm->loadRefsLinesElementsComments("0");
+      $prescription_pre_adm->loadRefsLinesElementsComments("0", "0");
       $historique["pre_admission"] = $prescription_pre_adm;
       
       if($this->type === "sortie"){
         $prescription_sejour =& $this->_ref_object->_ref_prescriptions["sejour"];
         $prescription_sejour->loadRefsLinesMedComments("0");
-        $prescription_sejour->loadRefsLinesElementsComments("0");
+        $prescription_sejour->loadRefsLinesElementsComments("0", "0");
         $historique["sejour"] = $prescription_sejour;
       }
     }
@@ -1548,11 +1549,15 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Chargement des lignes d'element
    */
-  function loadRefsLinesElement($chapitre = "", $withRefs = "1", $emplacement="", $order="", $protocole_id = "", $in_progress=0){
+  function loadRefsLinesElement($with_child = "0", $chapitre = "", $withRefs = "1", $emplacement="", $order="", $protocole_id = "", $in_progress=0){
     $line = new CPrescriptionLineElement();
     $where = array();
     $ljoin = array();
     
+		if($with_child != "1"){
+      $where["child_id"] = "IS NULL";
+    }
+		
     if($chapitre){
       $ljoin["element_prescription"] = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";
       $ljoin["category_prescription"] = "element_prescription.category_prescription_id = category_prescription.category_prescription_id";
@@ -1593,12 +1598,12 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Chargement des lignes d'elements par catégorie
    */
-  function loadRefsLinesElementByCat($withRefs = "1", $chapitre = "", $emplacement="", $order="", $protocole_id = "", $in_progress=0){
+  function loadRefsLinesElementByCat($with_child = "0", $withRefs = "1", $chapitre = "", $emplacement="", $order="", $protocole_id = "", $in_progress=0){
     if ($this->_ref_prescription_lines_element_by_cat) {
       return;
     }
     
-    $this->loadRefsLinesElement($chapitre, $withRefs, $emplacement, $order, $protocole_id, $in_progress);
+    $this->loadRefsLinesElement($with_child, $chapitre, $withRefs, $emplacement, $order, $protocole_id, $in_progress);
     $this->_ref_prescription_lines_element_by_cat = array();
     
     if(count($this->_ref_prescription_lines_element)){
@@ -1674,8 +1679,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Chargement des lignes d'elements (Elements + commentaires)
    */
-  function loadRefsLinesElementsComments($withRefs = "1", $chapitre="", $order="", $protocole_id="", $in_progress=0){
-    $this->loadRefsLinesElementByCat($withRefs, $chapitre, "", $order, $protocole_id, $in_progress);
+  function loadRefsLinesElementsComments($with_child = "0", $withRefs = "1", $chapitre="", $order="", $protocole_id="", $in_progress=0){
+    $this->loadRefsLinesElementByCat($with_child, $withRefs, $chapitre, "", $order, $protocole_id, $in_progress);
     $this->loadRefsLinesComment("", $withRefs, $protocole_id);
     
     // Suppression des ligne de medicaments
@@ -1943,7 +1948,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
 		
     // Chargement de toutes les lignes
     $this->loadRefsLinesMedByCat("1","1");
-    $this->loadRefsLinesElementByCat("1");
+    $this->loadRefsLinesElementByCat("1","1");
     $this->loadRefsPrescriptionLineMixes(); 
 		  
 	  // Paroucrs des lignes de medicaments

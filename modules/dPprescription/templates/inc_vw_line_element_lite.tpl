@@ -49,6 +49,13 @@
           });
   			{{/if}}
       </script>
+			
+			{{if !$line->inscription && $line->_ref_parent_line->_id}}
+          <a title="Ligne possédant un historique" class="button list notext" href="#1"
+             onclick="Prescription.showLineHistory('{{$line->_guid}}')" 
+             onmouseover="ObjectTooltip.createEx(this, '{{$line->_ref_parent_line->_guid}}')"></a>
+      {{/if}}
+				
     {{/if}}
     {{if $line->date_arret && $line->time_arret}}      
       <img src="style/mediboard/images/buttons/stop.png" title="{{tr}}CPrescriptionLineElement-date_arret{{/tr}} : {{$line->date_arret|date_format:$conf.date}} {{$line->time_arret|date_format:$conf.time}}"/>

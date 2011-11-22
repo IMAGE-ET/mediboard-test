@@ -47,7 +47,8 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   var $_can_modify_poso                    = null;
   var $_can_modify_comment                 = null;
   var $_can_modify_dates                   = null; 
-  
+  var $_can_vw_form_add_line_contigue      = null;
+	
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'prescription_line_element';
@@ -80,7 +81,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["parent_line"]     = "CPrescriptionLineElement child_id";  
+    $backProps["parent_line"]     = "CPrescriptionLineElement child_id";
     $backProps["transmissions"]   = "CTransmissionMedicale object_id";
     $backProps["administration"]  = "CAdministration object_id";
     $backProps["prise_posologie"] = "CPrisePosologie object_id";
@@ -361,9 +362,13 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     if ($perm_edit){
     	$this->_can_select_executant = 1;
     	$this->_can_modify_comment = 1;
-    } 
+    }
+		
+		// Affichage du bouton "Modifier une ligne"
+    if(!$this->_protocole && $this->_ref_prescription->type == "sejour" && $this->signee && !$this->recusee){
+      $this->_can_vw_form_add_line_contigue = 1;
+    }
 	}
-  
 	
 	function canModify(){
 		$chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;

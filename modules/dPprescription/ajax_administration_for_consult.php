@@ -16,7 +16,7 @@ $prescription->object_id = $sejour_id;
 $prescription->type = "sejour";
 
 $prescription->loadMatchingObject();
-$prescription->loadRefsLinesElement("consult", 1, "", "", "", 1);
+$prescription->loadRefsLinesElement("0","consult", 1, "", "", "", 1);
 
 $lines = $prescription->_ref_prescription_lines_element;
 

@@ -113,6 +113,7 @@ if($line instanceof CPrescriptionLineElement){
   $category_id = $line->_ref_element_prescription->_ref_category_prescription->_id;
   $line->loadRefsPrises();
   $line->loadRefDM();
+	$line->loadRefParentLine(); 
 }
 
 if ($line instanceof CPrescriptionLineComment) {

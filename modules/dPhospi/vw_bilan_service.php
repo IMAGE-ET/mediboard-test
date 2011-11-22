@@ -266,7 +266,7 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
 	  // Chargement des lignes
 	  $_prescription->loadRefsLinesMed("1","1","service");
 		if ($do_elements) {
-	    $_prescription->loadRefsLinesElementByCat("1","","service");
+	    $_prescription->loadRefsLinesElementByCat("1","1","","service");
 	  }
 	  if($do_perfusions || $do_aerosols || $do_stupefiants){
 	    $_prescription->loadRefsPrescriptionLineMixes();

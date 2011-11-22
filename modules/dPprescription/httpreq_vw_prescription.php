@@ -199,7 +199,6 @@ if($prescription->_id){
 	  	    $_line_med->countBackRefs("administration");
 	  	    $_line_med->loadRefsVariantes();
 					$_line_med->loadRefParentLine();
-					
 	  	  }
 	  	}
 	  }
@@ -394,7 +393,7 @@ if($prescription->_id){
 	  }
 	  
 	  // Chargement des elements et commentaires d'elements
-	  $prescription->loadRefsLinesElementsComments("1", $chapitre);
+	  $prescription->loadRefsLinesElementsComments("0", "1", $chapitre);
 	  if(count($prescription->_ref_lines_elements_comments)){
 	    foreach($prescription->_ref_lines_elements_comments as $name_chap => $cat_by_chap){
 	      foreach($cat_by_chap as $name_cat => $lines_by_cat){
@@ -408,6 +407,7 @@ if($prescription->_id){
 	          	if($_line->_class == "CPrescriptionLineElement"){
                 $_line->loadRefsPrises();
 								$_line->loadRefDM();
+								$_line->loadRefParentLine();
               }
 							$_line->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma, $operation_id);
 	          }
