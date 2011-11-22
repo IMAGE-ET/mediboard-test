@@ -447,7 +447,7 @@ $library->fileName = "phpsocket.tar.gz";
 $library->description = "A PHP socket server / client";
 $library->sourceDir = "phpsocket";
 $library->targetDir = "phpsocket";
-$library->versionFile = "socketServer.php";
+$library->versionFile = "SocketServer.php";
 $library->versionString = "http://blog.ixti.ru/?p=116";
 
 CLibrary::$all[$library->name] = $library;
