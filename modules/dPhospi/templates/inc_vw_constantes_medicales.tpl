@@ -117,7 +117,7 @@ initializeGraph = function (src, data) {
     mouse: src.options.mouse || {},
     points: src.options.points || {},
     lines: src.options.lines || {},
-    grids: src.options.grids || {},
+    grid: src.options.grid || {},
     legend: src.options.legend || {},
     colors: src.options.colors || {},
     selection: src.options.selection || {}

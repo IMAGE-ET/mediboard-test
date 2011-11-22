@@ -373,7 +373,7 @@ foreach($cumuls_day as $name => $days) {
       "points" => array("show" => false),
       "markers" => array(
         "show" => true,
-        "position" => "rm",
+        "position" => "rt",
       ),
       "bars" => array(
         "show" => true,
@@ -403,7 +403,7 @@ foreach($data as $name => &$_data) {
     $_data["standard"] = $params["standard"];
   }
   
-  $margin_ratio = 0.1;
+  $margin_ratio = 0.2;
   
   if (in_array($name, array("ta", "ta_gauche", "ta_droit"))) {
     if (isset($params["conversion"][$unite_ta]) && ($unite_ta != $params["conversion"][$unite_ta])) {
@@ -426,7 +426,7 @@ foreach($data as $name => &$_data) {
   $_data["options"] = array(
     "title" => utf8_encode(CAppUI::tr("CConstantesMedicales-$name-desc").($params['unit'] ? " ({$params['unit']})" : "")),
     "yaxis" => array(
-      "min" => getMin($params["min"], $y_values) - $margin, // min
+      "min" => getMin($params["min"], $y_values)/* - $margin*/, // min
       "max" => getMax($params["max"], $y_values) + $margin, // max
     )
   );
