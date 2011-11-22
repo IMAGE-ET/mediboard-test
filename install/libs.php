@@ -440,4 +440,16 @@ $library->versionString = "2.10.15";
 
 CLibrary::$all[$library->name] = $library;
 
+$library = new CLibrary;
+$library->name = "phpsocket";
+$library->url = "http://blog.ixti.ru/?p=116";
+$library->fileName = "phpsocket.tar.gz";
+$library->description = "A PHP socket server / client";
+$library->sourceDir = "phpsocket";
+$library->targetDir = "phpsocket";
+$library->versionFile = "socketServer.php";
+$library->versionString = "http://blog.ixti.ru/?p=116";
+
+CLibrary::$all[$library->name] = $library;
+
 ?>
