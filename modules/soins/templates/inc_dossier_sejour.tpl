@@ -102,6 +102,16 @@
     }
   }
   
+  updateNbTrans = function (sejour_id) {
+    var url = new Url("dPhospi", "ajax_count_transmissions");
+    url.addParam("sejour_id", sejour_id);
+    url.requestJSON(function(count)  {
+      var nb_trans = $("nb_trans");
+      nb_trans.up("a").setClassName("empty", !count);
+      nb_trans.update("("+count+")");
+    });
+  }
+  
 	printDossierSoins = function(){
 	  var url = new Url;
 	  url.setModuleAction("soins", "print_dossier_soins");
