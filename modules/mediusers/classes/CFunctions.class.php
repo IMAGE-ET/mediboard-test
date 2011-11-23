@@ -71,6 +71,7 @@ class CFunctions extends CMbObject {
 	  $backProps["tarifs"]                         = "CTarif function_id";
 	  $backProps["sigems_skipped"]                 = "CSigemsSkippedFunction function_id";
 	  $backProps["printers"]                       = "CPrinter function_id";
+    $backProps["protocoles"]                     = "CProtocole function_id";
 	  return $backProps;
 	}
 	
@@ -132,6 +133,12 @@ class CFunctions extends CMbObject {
       $this->_ref_users = new CMediusers;
       $this->_ref_users = $this->_ref_users->loadListFromType($type, PERM_READ, $this->function_id);
     }
+  }
+
+  function loadProtocoles() {
+    $where = array("function_id" => "= '$this->_id'");
+    $protocoles = new CProtocole();
+    $this->_ref_protocoles = $protocoles->loadList($where, "libelle_sejour, libelle, codes_ccam");
   }
   
   // @todo : ameliorer le choix des spécialités

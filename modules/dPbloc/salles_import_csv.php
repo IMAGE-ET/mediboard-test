@@ -25,8 +25,11 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       continue;
     }
     
-    $results[$i]["nom"]     = trim(CMbString::removeDiacritics($line[1]));
-    $results[$i]["bloc"] = trim(CMbString::removeDiacritics($line[0]));
+    // Parsing
+    $results[$i]["bloc"]    = addslashes(trim($line[0]));
+    $results[$i]["nom"]     = addslashes(trim($line[1]));
+    
+    $results[$i]["error"] = 0;
     
     // Bloc
     $bloc = new CBlocOperatoire();
@@ -37,9 +40,11 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       $msg = $bloc->store();
       if($msg) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
-      } else {
-        CAppUI::setMsg("Bloc créé", UI_MSG_OK);
+        $results[$i]["error"] = $msg;
+        $i++;
+        continue;
       }
+      CAppUI::setMsg("Bloc créé", UI_MSG_OK);
     }
     
     // Salle
@@ -47,16 +52,23 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $salle->nom = $results[$i]["nom"];
     $salle->bloc_id = $bloc->_id;
     $salle->loadMatchingObject();
-    if(!$chambre->_id) {
-      $salle->stats = 1;
-      $salle->dh    = 0;
-      $msg = $salle->store();
-      if($msg) {
-        CAppUI::setMsg($msg, UI_MSG_ERROR);
-      } else {
-        CAppUI::setMsg("Salle créée", UI_MSG_OK);
-      }
+    if($salle->_id) {
+      $msg = "Salle existante";
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
+      $results[$i]["error"] = $msg;
+      $i++;
+      continue;
     }
+    $salle->stats = 1;
+    $salle->dh    = 0;
+    $msg = $salle->store();
+    if($msg) {
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
+      $results[$i]["error"] = $msg;
+      $i++;
+      continue;
+    }
+    CAppUI::setMsg("Salle créée", UI_MSG_OK);
     
     $i++;
   }

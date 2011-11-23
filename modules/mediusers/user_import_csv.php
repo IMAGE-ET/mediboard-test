@@ -25,19 +25,14 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       continue;
     }
     
-    $results[$i]["lastname"]      = trim(CMbString::removeDiacritics($line[0]));
-    $results[$i]["firstname"]     = trim(CMbString::removeDiacritics($line[1]));
-    $results[$i]["type"]          = trim($line[2]);
-    $results[$i]["function_name"] = trim(ucfirst(strtolower(CMbString::removeDiacritics($line[3]))));
-    $results[$i]["profil_name"]   = trim(ucfirst(strtolower(CMbString::removeDiacritics($line[4]))));
+    // Parsing
+    $results[$i]["lastname"]      = addslashes(trim($line[0]));
+    $results[$i]["firstname"]     = addslashes(trim($line[1]));
+    $results[$i]["type"]          = addslashes(trim($line[2]));
+    $results[$i]["function_name"] = addslashes(trim($line[3]));
+    $results[$i]["profil_name"]   = addslashes(trim($line[4]));
     
-    $user = new CMediusers();
-    $user->_user_last_name  = $results[$i]["lastname"];
-    $user->_user_first_name = $results[$i]["firstname"];
-    $user->_user_type       = $results[$i]["type"];
-    $user->makeUsernamePassword($results[$i]["firstname"], $results[$i]["lastname"]);
-    $user->actif  = 1;
-    $user->remote = 0;
+    $results[$i]["error"] = 0;
     
     // Fonction
     $function = new CFunctions();
@@ -45,30 +40,61 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $function->text     = $results[$i]["function_name"];
     $function->loadMatchingObject();
     if(!$function->_id) {
-      $function->type               = "administratif";
+      if(in_array($results[$i]["type"], array("3", "4", "13")) {
+        $function->type = "cabinet";
+      } else {
+        $function->type = "administratif";
+      }
       $function->color              = "ffffff";
       $function->compta_partagee    = 0;
       $function->consults_partagees = 1;
       $msg = $function->store();
       if($msg) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
+        $results[$i]["error"] = $msg;
+        $results[$i]["username"] = "";
+        $results[$i]["password"] = "";
+        $i++;
+        continue;
       }
     }
-    $user->function_id = $function->_id;
     
     // Profil
     // @TODO : relier un profil
+    $profil = new CUser();
+    $profil->user_username = $results[$i]["profil_name"];
+    $profil->loadMatchingObject();
+    
+    
+    // User
+    $user = new CMediusers();
+    $user->_user_last_name  = $results[$i]["lastname"];
+    $user->_user_first_name = $results[$i]["firstname"];
+    $user->_user_type       = $results[$i]["type"];
+    if($profil->_id) {
+      $user->_profile_id       = $profil->_id;
+    } else {
+      $results[$i]["profil_name"] .= " : Non trouvé";
+    }
+    $user->makeUsernamePassword($results[$i]["firstname"], $results[$i]["lastname"]);
+    $user->actif  = 1;
+    $user->remote = 0;
+    $user->function_id = $function->_id;
     
     $msg = $user->store();
     if($msg) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
-      $results[$i]["username"] = "Utilisateur déjà existant";
-      $results[$i]["password"] = "Utilisateur déjà existant";
-    } else {
-      CAppUI::setMsg("Utilisateur créé", UI_MSG_OK);
-      $results[$i]["username"] = $user->_user_username;
-      $results[$i]["password"] = $user->_user_password;
+      $results[$i]["error"] = $msg;
+      $results[$i]["username"] = "";
+      $results[$i]["password"] = "";
+      $i++;
+      continue;
     }
+    CAppUI::setMsg("Utilisateur créé", UI_MSG_OK);
+    $results[$i]["result"] = 0;
+    $results[$i]["username"] = $user->_user_username;
+    $results[$i]["password"] = $user->_user_password;
+    
     $i++;
   }
   fclose($fp);

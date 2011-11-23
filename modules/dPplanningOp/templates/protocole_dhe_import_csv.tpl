@@ -2,23 +2,24 @@
 
 {{*
  * @package Mediboard
- * @subpackage mediusers
+ * @subpackage dPhospi
  * @version $Revision: 6287 $
  * @author SARL OpenXtrem
  * @license GNU GPL
 *}}
 
-<h2>Import d'utilisateurs Mediboard.</h2>
+<h2>Import de lits Mediboard.</h2>
 
 <div class="small-info">
   Veuillez indiquez les champs suivants dans un fichier CSV (<strong>au format ISO</strong>) dont les champs sont séparés par
-  <strong>;</strong> et les textes par <strong>"</strong>, la première ligne étant ignorée :
+  <strong>;</strong> et les textes par <strong>"</strong>, la première ligne étant sautée :
   <ul>
-    <li>Nom *</li>
-    <li>Prénom *</li>
-    <li>Type (code numérique) *</li>
-    <li>Fonction (nom) *</li>
-    <li>Profil (username)</li>
+    <li>Nom de la fonction *</li>
+    <li>Motif d'hospitalisation *</li>
+    <li>Durée d'intervention (HH:MM) *</li>
+    <li>Acte(s) CCAM (séparés par des |)</li>
+    <li>Type d'hospitalisation (comp, ambu, exte, seances, ssr, psy, urg ou consult) *</li>
+    <li>Durée d'hospitalisation en nuits *</li>
   </ul>
   <em>* : champs obligatoires</em>
 </div>
@@ -36,34 +37,32 @@
 {{if $results|@count}}
 <table class="tbl">
   <tr>
-    <th class="title" colspan="8">{{$results|@count}} utilisateurs trouvés</th>
+    <th class="title" colspan="7">{{$results|@count}} protocoles trouvés</th>
   </tr>
   <tr>
     <th>Etat</th>
-    <th>Nom</th>
-    <th>Prénom</th>
-    <th>Nom d'utilisateur</th>
-    <th>Mot de passe</th>
-    <th>Type</th>
     <th>Fonction</th>
-    <th>Profil</th>
+    <th>Motif d'hospitalisation</th>
+    <th>Durée d'intervention</th>
+    <th>Actes</th>
+    <th>Type d'hospi</th>
+    <th>Durée d'hospi</th>
   </tr>
-  {{foreach from=$results item=_user}}
+  {{foreach from=$results item=_protocole}}
   <tr>
     <td class="text">
-      {{if $_user.error}}
-        {{$_user.error}}
+      {{if $_protocole.error}}
+        {{$_protocole.error}}
       {{else}}
         OK
       {{/if}}
     </td>
-    <td>{{$_user.lastname}}</td>
-    <td>{{$_user.firstname}}</td>
-    <td>{{$_user.username}}</td>
-    <td>{{$_user.password}}</td>
-    <td>{{$_user.type}}</td>
-    <td>{{$_user.function_name}}</td>
-    <td>{{$_user.profil_name}}</td>
+    <td>{{$_protocole.function}}</td>
+    <td>{{$_protocole.motif}}</td>
+    <td>{{$_protocole.temps_op}}</td>
+    <td>{{$_protocole.actes}}</td>
+    <td>{{$_protocole.type_hospi}}</td>
+    <td>{{$_protocole.duree_hospi}}</td>
   </tr>
   {{/foreach}}
 </table>

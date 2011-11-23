@@ -1,10 +1,17 @@
 <!-- $Id$ -->
 
 <script type="text/javascript">
-  var aProtocoles = {
-    sejour: {},
-    interv: {}
-  };
+
+function popupImport() {
+  var url = new Url("dPplanningOp", "protocole_dhe_import_csv");
+  url.popup(800, 600, "Import des Protocoles de DHE");
+  return false;
+}
+
+var aProtocoles = {
+  sejour: {},
+  interv: {}
+};
   
 {{if $dialog}}
   Main.add(function(){
@@ -115,6 +122,16 @@ Main.add(function(){
                 </option>
                 {{/foreach}}
               </select>
+              {{if $can->admin}}
+              <select name="function_id" onchange="reloadPage(this.form)">
+                {{foreach from=$listFunc item=curr_function}}
+                <option class="mediuser" style="border-color: #{{$curr_function->color}}; {{if !$curr_function->_ref_protocoles|@count}}color: #999;{{/if}}"
+                        value="{{$curr_function->_id}}">
+                  {{$curr_function->_view}} ({{$curr_function->_ref_protocoles|@count}})
+                </option>
+                {{/foreach}}
+              </select>
+              {{/if}}
             </td>
             <th>Recherche</th>
             <td>
@@ -132,6 +149,9 @@ Main.add(function(){
       <ul id="tabs-protocoles" class="control_tabs">
         <li><a href="#interv">Chirurgicaux <small>(0)</small></a></li>
         <li><a href="#sejour">Médicaux <small>(0)</small></a></li>
+        {{if !$dialog}}
+        <li><button type="button" style="float:right;" onclick="return popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button></li>
+        {{/if}}
       </ul>
       
       <script type="text/javascript">

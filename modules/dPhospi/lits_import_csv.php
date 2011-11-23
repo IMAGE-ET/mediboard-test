@@ -25,9 +25,12 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       continue;
     }
     
-    $results[$i]["nom"]     = trim(CMbString::removeDiacritics($line[2]));
-    $results[$i]["chambre"] = trim(CMbString::removeDiacritics($line[1]));
-    $results[$i]["service"] = trim(CMbString::removeDiacritics($line[0]));
+    // Parsing
+    $results[$i]["service"] = addslashes(trim($line[0]));
+    $results[$i]["chambre"] = addslashes(trim($line[1]));
+    $results[$i]["nom"]     = addslashes(trim($line[2]));
+    
+    $results[$i]["error"] = 0;
     
     // Service
     $service = new CService();
@@ -43,14 +46,16 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       $msg = $service->store();
       if($msg) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
-      } else {
-        CAppUI::setMsg("Service créé", UI_MSG_OK);
+        $results[$i]["error"] = $msg;
+        $i++;
+        continue;
       }
+      CAppUI::setMsg("Service créé", UI_MSG_OK);
     }
     
     // Chambre
     $chambre = new CChambre();
-    $chambre->nom = $results[$i]["chambre"];
+    $chambre->nom        = $results[$i]["chambre"];
     $chambre->service_id = $service->_id;
     $chambre->loadMatchingObject();
     if(!$chambre->_id) {
@@ -59,25 +64,35 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       $msg = $chambre->store();
       if($msg) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
-      } else {
-        CAppUI::setMsg("Chambre créée", UI_MSG_OK);
+        $results[$i]["error"] = $msg;
+        $i++;
+        continue;
       }
+      CAppUI::setMsg("Chambre créée", UI_MSG_OK);
     }
     
     // Lit
     
     $lit = new CLit();
-    $lit->nom  = $results[$i]["nom"];
+    $lit->nom        = $results[$i]["nom"];
     $lit->chambre_id = $chambre->_id;
     $lit->loadMatchingObject();
-    if(!$lit->_id) {
-      $msg = $lit->store();
-      if($msg) {
-        CAppUI::setMsg($msg, UI_MSG_ERROR);
-      } else {
-        CAppUI::setMsg("Lit créé", UI_MSG_OK);
-      }
+    if($lit->_id) {
+      $msg = "Lit existant";
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
+      $results[$i]["error"] = $msg;
+      $i++;
+      continue;
     }
+    $msg = $lit->store();
+    if($msg) {
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
+      $results[$i]["error"] = $msg;
+      $i++;
+      continue;
+    }
+    CAppUI::setMsg("Lit créé", UI_MSG_OK);
+    
     $i++;
   }
   fclose($fp);
