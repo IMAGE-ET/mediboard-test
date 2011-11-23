@@ -40,7 +40,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $function->text     = $results[$i]["function_name"];
     $function->loadMatchingObject();
     if(!$function->_id) {
-      if(in_array($results[$i]["type"], array("3", "4", "13")) {
+      if(in_array($results[$i]["type"], array("3", "4", "13"))) {
         $function->type = "cabinet";
       } else {
         $function->type = "administratif";
