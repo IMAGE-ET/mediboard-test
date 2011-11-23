@@ -23,10 +23,10 @@ $fin = mbDate("+1 MONTH", $debut);
 $fin = mbDate("-1 DAY", $fin);
 
 // map Graph occupation salle
-CAppUI::requireModuleFile("dPstats", "graph_occupation_salle");
+CAppUI::requireModuleFile("dPstats", "graph_temps_salle");
 
 $graphs = array(
-  graphOccupationSalle($debut, $fin, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi, $hors_plage, 'DAY')
+  graphTempsSalle($debut, $fin, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi, $hors_plage, 'DAY')
 );
 
 // Création du template

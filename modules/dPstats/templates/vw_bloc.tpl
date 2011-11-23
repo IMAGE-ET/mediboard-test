@@ -10,53 +10,81 @@
 
 {{mb_script module="dPplanningOp" script="ccam_selector"}}
 
-
 <script type="text/javascript">
-
-function zoomGraph(date){
-  {{if $type_view_bloc == "nbInterv"}}
+  
+var Details = {
+  activite: function(date){
+    var form = getForm("filter-bloc");
+    
     var url = new Url("dPstats", "vw_graph_activite_zoom");
-  {{else}}
+    url.addParam("date"      , date);
+    url.addParam("hors_plage", $V(form.hors_plage));
+    url.mergeParams(detailOptions);
+    url.popup(760, 500, "ZoomMonth");
+  },
+  occupation_total: function(date){
+    var form = getForm("filter-bloc");
+    
     var url = new Url("dPstats", "vw_graph_occupation_zoom");
-  {{/if}}
-  url.addParam("date"         , date);
-  url.addParam("salle_id"     , "{{$filter->salle_id}}");
-  url.addParam("prat_id"      , "{{$filter->_prat_id}}");
-  url.addParam("codes_ccam"   , "{{$filter->codes_ccam|smarty:nodefaults|escape:"javascript"}}");
-  url.addParam("discipline_id", "{{$filter->_specialite}}");
-  {{if $type_view_bloc != "nbInterv"}}
-  url.addParam("type_hospi"   , $V(getForm("bloc").type_hospi));
-  {{/if}}
-  url.addParam("size"         , 2);
-  url.addParam("hors_plage"   , $("bloc_hors_plage").value);
-  url.popup(760, 400, "ZoomMonth");
-}
+    url.addParam("date"      , date);
+    url.addParam("hors_plage", $V(form.hors_plage));
+    url.addParam("type_hospi", $V(form.type_hospi));
+    url.mergeParams(detailOptions);
+    url.popup(760, 500, "ZoomMonth");
+  },
+  temps_salle: function(date){
+    var form = getForm("filter-bloc");
+    
+    var url = new Url("dPstats", "vw_graph_temps_salle_zoom");
+    url.mergeParams(detailOptions);
+    url.addParam("date"      , date);
+    url.addParam("hors_plage", $V(form.hors_plage));
+    url.addParam("type_hospi", $V(form.type_hospi));
+    url.popup(760, 500, "ZoomMonth");
+  }
+};
 
+var detailOptions = {
+  salle_id     : "{{$filter->salle_id}}",
+  prat_id      : "{{$filter->_prat_id}}",
+  codes_ccam   : "{{$filter->codes_ccam|smarty:nodefaults|escape:'javascript'}}",
+  discipline_id: "{{$filter->_specialite}}",
+  size         : 2
+};
 
 var graphs = {{$graphs|@json}};
+
 Main.add(function(){
   drawGraphs(true);
 });
 
 function drawGraphs(showLegend){
-  var zoomSelect = $("graph-zoom-date");
-  $("graph-0").insert({before: zoomSelect});
-  
-  graphs.each(function(g, i){
-    Flotr.draw($('graph-'+i), g.series, Object.extend(g.options, {legend: {show: showLegend}}));
+  $H(graphs).each(function(pair){
+    var g = pair.value;
+    Flotr.draw($('graph-'+pair.key), g.series, Object.extend(g.options, {legend: {show: showLegend}}));
   });
   
-  if (zoomSelect.options.length == 1) {
-    graphs[0].options.xaxis.ticks.each(function(tick){
-      zoomSelect.insert(new Element('option', {value: tick[1]}).update(tick[1]));
+  Object.keys(Details).each(function(d){
+    if (!$('graph-'+d)) return;
+    
+    var select = DOM.select({}, 
+      DOM.option({value: ""}, "&ndash; Vue sur un mois &ndash;")
+    );
+    
+    graphs[d].options.xaxis.ticks.each(function(tick){
+      select.insert(DOM.option({value: tick[1]}, tick[1]));
     });
-  }
-  
-  $('graph-0').select('.flotr-tabs-group').first().insert(zoomSelect.show());
+    
+    select.observe("change", function(event){
+      Details[d]($V(Event.element(event)));
+    });
+    
+    $('graph-'+d).down('.flotr-tabs-group').insert(select);
+  });
 }
 </script>
 
-<form name="bloc" action="?" method="get" onsubmit="return checkForm(this)">
+<form name="filter-bloc" action="?" method="get" onsubmit="return checkForm(this)">
 <input type="hidden" name="m" value="dPstats" />
 <input type="hidden" name="_chir" value="{{$app->user_id}}" />
 <input type="hidden" name="_class" value="" />
@@ -65,14 +93,14 @@ function drawGraphs(showLegend){
     <th colspan="6" class="category">
       Activité du bloc opératoire
       <select name="type_view_bloc" onchange="this.form.submit()">
-        <option value="nbInterv" {{if $type_view_bloc == "nbInterv"}}selected = "selected"{{/if}}>Nombre d'interventions</option>
-        <option value="dureeInterv" {{if $type_view_bloc == "dureeInterv"}}selected = "selected"{{/if}}>Occupation du bloc</option>
+        <option value="nbInterv"    {{if $type_view_bloc == "nbInterv"}}    selected="selected" {{/if}}>Nombre d'interventions</option>
+        <option value="dureeInterv" {{if $type_view_bloc == "dureeInterv"}} selected="selected" {{/if}}>Occupation du bloc</option>
       </select>
     </th>
   </tr>
   <tr>
     <th>{{mb_label object=$filter field="_date_min"}}</th>
-    <td>{{mb_field object=$filter field="_date_min" form="bloc" canNull="false" register=true}}</td>
+    <td>{{mb_field object=$filter field="_date_min" form="filter-bloc" canNull="false" register=true}}</td>
     <th>{{mb_label object=$filterSejour field="type"}}</th>
     <td>
       <select name="type_hospi">
@@ -98,7 +126,7 @@ function drawGraphs(showLegend){
   </tr>
   <tr>
     <th>{{mb_label object=$filter field="_date_max"}}</th>
-    <td>{{mb_field object=$filter field="_date_max" form="bloc" canNull="false" register=true}} </td>
+    <td>{{mb_field object=$filter field="_date_max" form="filter-bloc" canNull="false" register=true}} </td>
     <th>{{mb_label object=$filter field="_prat_id"}}</th>
     <td>
       <select name="prat_id">
@@ -135,7 +163,7 @@ function drawGraphs(showLegend){
       <button class="search" type="button" onclick="CCAMSelector.init()">Rechercher</button>   
       <script type="text/javascript">
         CCAMSelector.init = function(){
-          this.sForm = "bloc";
+          this.sForm = "filter-bloc";
           this.sView = "codes_ccam";
           this.sChir = "_chir";
           this.sClass = "_class";
@@ -167,11 +195,6 @@ function drawGraphs(showLegend){
 </table>
 </form>
 
-
-<select id="graph-zoom-date" onchange="zoomGraph($V(this))" style="display: none;">
-  <option selected="selected" disabled="disabled">&ndash; Vue sur un mois &ndash;</option>
-</select>
-
 {{foreach from=$graphs item=graph key=key}}
-	<div style="width: 480px; height: 350px; float: left; margin: 1em;" id="graph-{{$key}}"></div>
+  <div style="width: 480px; height: 350px; float: left; margin: 1em;" id="graph-{{$key}}"></div>
 {{/foreach}}

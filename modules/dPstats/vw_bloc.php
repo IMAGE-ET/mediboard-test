@@ -77,18 +77,17 @@ $listDisciplines = $listDisciplines->loadUsedDisciplines();
 
 $graphs = array();
 if($type_view_bloc == "nbInterv") {
-  $graphs[] = graphActivite($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi, $hors_plage);
-  $graphs[] = graphOpAnnulees($debutact, $finact, $prat_id, $salle_id, $bloc_id, $codes_ccam, $type_hospi, $hors_plage);
+  $graphs["activite"]    = graphActivite($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi, $hors_plage);
+  $graphs["op_annulees"] = graphOpAnnulees($debutact, $finact, $prat_id, $salle_id, $bloc_id, $codes_ccam, $type_hospi, $hors_plage);
   if($discipline_id) {
-    $graphs[] = graphPraticienDiscipline($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi, $hors_plage);
+    $graphs["praticien_discipline"] = graphPraticienDiscipline($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi, $hors_plage);
   }
 } else {
   $listOccupation = graphOccupationSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi, $hors_plage, 'MONTH');
-  $graphs[] = $listOccupation["total"];
-  $graphs[] = $listOccupation["moyenne"];
-  $graphs[] = graphTempsSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi, $hors_plage);
-  $graphs[] = graphPatJourSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $hors_plage);
-  
+  $graphs["occupation_total"]   = $listOccupation["total"];
+  $graphs["occupation_moyenne"] = $listOccupation["moyenne"];
+  $graphs["temps_salle"]        = graphTempsSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi, $hors_plage, 'MONTH');
+  $graphs["pat_jour_salle"]     = graphPatJourSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $hors_plage);
 }
 
 // Création du template

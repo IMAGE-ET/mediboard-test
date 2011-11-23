@@ -8,9 +8,20 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-function graphTempsSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = null, $codeCCAM = "", $type_hospi = "", $hors_plage) {
+function graphTempsSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = null, $codeCCAM = "", $type_hospi = "", $hors_plage, $type_duree) {
 
   $ds = CSQLDataSource::get("std");
+  
+  if ($type_duree == "MONTH") {
+    $type_duree_fr = "mois";
+    $date_format = "%m/%Y";
+    $order_key = "%Y%m";
+  }
+  else {
+    $type_duree_fr = "jour";
+    $date_format = "%d/%m/%Y";
+    $order_key = "%Y%m%d";
+  }
   
   if (!$debut) $debut = mbDate("-1 YEAR");
   if (!$fin) $fin = mbDate();
@@ -28,8 +39,8 @@ function graphTempsSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
   $discipline->load($discipline_id);
   
   $ticks = array();
-  for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
-    $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", $i, "%m/%Y"));
+  for($i = $debut; $i <= $fin; $i = mbDate("+1 $type_duree", $i)) {
+    $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", $i, $date_format));
   }
 
   $where = array();
@@ -52,8 +63,8 @@ function graphTempsSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
   );
   
   $query = "SELECT SUM(TIME_TO_SEC(affectation_personnel.fin) - TIME_TO_SEC(affectation_personnel.debut)) as total,
-    DATE_FORMAT(plagesop.date, '%m/%Y') AS mois,
-    DATE_FORMAT(plagesop.date, '%Y%m') AS orderitem
+    DATE_FORMAT(plagesop.date, '$date_format') AS $type_duree_fr,
+    DATE_FORMAT(plagesop.date, '$order_key') AS orderitem
     FROM plagesop
     LEFT JOIN operations ON plagesop.plageop_id = operations.plageop_id
     LEFT JOIN users_mediboard ON plagesop.chir_id = users_mediboard.user_id
@@ -78,8 +89,8 @@ function graphTempsSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
   
   if ($hors_plage) {
     $query_hors_plage = "SELECT SUM(TIME_TO_SEC(affectation_personnel.fin) - TIME_TO_SEC(affectation_personnel.debut)) as total,
-    DATE_FORMAT(operations.date, '%m/%Y') AS mois,
-    DATE_FORMAT(operations.date, '%Y%m') AS orderitem
+    DATE_FORMAT(operations.date, '$date_format') AS $type_duree_fr,
+    DATE_FORMAT(operations.date, '$order_key') AS orderitem
     FROM operations
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
     LEFT JOIN affectation_personnel ON operations.operation_id = affectation_personnel.object_id ";
@@ -101,17 +112,17 @@ function graphTempsSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
     if($codeCCAM)      $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
     
     $query_hors_plage .=  "\nAND operations.date BETWEEN '$debut' AND '$fin'
-      GROUP BY mois HAVING total > 0 ORDER BY orderitem";
+      GROUP BY $type_duree_fr HAVING total > 0 ORDER BY orderitem";
     
     $result_hors_plage = $ds->loadlist($query_hors_plage);
   }
   
   $calcul_temp = array();
   foreach($result as $r) {
-    if (!isset($calcul_temp[$r['mois']])) {
-      $calcul_temp[$r['mois']] = 0;
+    if (!isset($calcul_temp[$r[$type_duree_fr]])) {
+      $calcul_temp[$r[$type_duree_fr]] = 0;
     }
-    $calcul_temp[$r['mois']] += $r['total'];
+    $calcul_temp[$r[$type_duree_fr]] += $r['total'];
   }
   
   foreach($ticks as $i => $tick) {
@@ -120,7 +131,7 @@ function graphTempsSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
       if($tick[1] == $key) {
         if ($hors_plage) {
           foreach($result_hors_plage as &$_r_h) {
-            if ($tick[1] == $_r_h["mois"]) {
+            if ($tick[1] == $_r_h[$type_duree_fr]) {
               $r += $_r_h["total"];
               unset($_r_h);
               break;
@@ -147,8 +158,8 @@ function graphTempsSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
   );
   
   $query = "SELECT MAX(TIME_TO_SEC(operations.sortie_salle)) - MIN(TIME_TO_SEC(operations.entree_salle)) as total,
-    DATE_FORMAT(plagesop.date, '%m/%Y') AS mois,
-    DATE_FORMAT(plagesop.date, '%Y%m') AS orderitem
+    DATE_FORMAT(plagesop.date, '$date_format') AS $type_duree_fr,
+    DATE_FORMAT(plagesop.date, '$order_key') AS orderitem
     FROM plagesop
     LEFT JOIN operations ON plagesop.plageop_id = operations.plageop_id
     LEFT JOIN users_mediboard ON plagesop.chir_id = users_mediboard.user_id ";
@@ -170,10 +181,10 @@ function graphTempsSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
   
   $calcul_temp = array();
   foreach($result as $r) {
-    if (!isset($calcul_temp[$r['mois']])) {
-      $calcul_temp[$r['mois']] = 0;
+    if (!isset($calcul_temp[$r[$type_duree_fr]])) {
+      $calcul_temp[$r[$type_duree_fr]] = 0;
     }
-    $calcul_temp[$r['mois']] += $r['total'];
+    $calcul_temp[$r[$type_duree_fr]] += $r['total'];
   }
   
   foreach($ticks as $i => $tick) {
@@ -198,8 +209,8 @@ function graphTempsSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
     'label' => utf8_encode("Vacations attribuées")
   );
   $query = "SELECT SUM(TIME_TO_SEC(plagesop.fin) - TIME_TO_SEC(plagesop.debut)) AS total,
-    DATE_FORMAT(plagesop.date, '%m/%Y') AS mois,
-    DATE_FORMAT(plagesop.date, '%Y%m') AS orderitem
+    DATE_FORMAT(plagesop.date, '$date_format') AS $type_duree_fr,
+    DATE_FORMAT(plagesop.date, '$order_key') AS orderitem
     FROM plagesop
     LEFT JOIN users_mediboard ON plagesop.chir_id = users_mediboard.user_id ";
   
@@ -214,13 +225,13 @@ function graphTempsSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
   if($prat_id)       $query .= "\nAND plagesop.chir_id = '$prat_id'";
   if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   $query .=  "\nAND plagesop.date BETWEEN '$debut' AND '$fin'
-    GROUP BY mois ORDER BY orderitem";
+    GROUP BY $type_duree_fr ORDER BY orderitem";
   $result = $ds->loadList($query);
 
   foreach($ticks as $i => $tick) {
     $f = true;
     foreach($result as $r) {
-      if($tick[1] == $r["mois"]) {
+      if($tick[1] == $r[$type_duree_fr]) {
         $serieTot['data'][] = array($i, $r["total"]/(60*60));
         $totalTot += $r["total"]/(60*60);
         $f = false;
