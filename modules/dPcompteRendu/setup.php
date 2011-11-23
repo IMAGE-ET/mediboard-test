@@ -586,8 +586,10 @@ class CSetupdPcompteRendu extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("0.66");
-    $this->addDependency("dPcabinet"   , "0.29");
-    $this->addDependency("dPplanningOp", "0.36");
+    // Table consultation_anesth
+    $this->addDependency("dPcabinet"   , "0.31");
+    // Table sejour
+    $this->addDependency("dPplanningOp", "0.37");
     
     $query = "ALTER TABLE `compte_rendu`
       ADD `author_id` INT(11) UNSIGNED AFTER `function_id`;";
