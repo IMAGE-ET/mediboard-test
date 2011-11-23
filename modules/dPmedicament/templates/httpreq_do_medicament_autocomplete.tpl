@@ -47,7 +47,7 @@
 			</small>
 			{{* /if *}}
 			{{if $produit->Commentaire}}
-			<div style="padding-left: 1em">
+			<div style="padding-left: 1em; white-space: normal;">
 			  ({{$produit->Commentaire|emphasize:$tokens}})
 			</div>
 			{{/if}}
