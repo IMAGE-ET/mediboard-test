@@ -133,6 +133,8 @@ Main.add(function () {
   InseeFields.initCPVille("editFrm", "cp_naissance", "lieu_naissance","_pays_naissance_insee");
   InseeFields.initCPVille("editFrm", "assure_cp", "assure_ville","assure_pays_insee");
   InseeFields.initCPVille("editFrm", "assure_cp_naissance", "assure_lieu_naissance","_assure_pays_naissance_insee");
+
+  InseeFields.initCSP("editFrm", "_csp_view");
 	
   initPaysField("editFrm", "_assure_pays_naissance_insee", "assure_profession");
   initPaysField("editFrm", "assure_pays", "assure_tel");

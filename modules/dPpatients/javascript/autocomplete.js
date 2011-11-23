@@ -1,23 +1,23 @@
 // $Id$
 
 var InseeFields = {
-	initCPVille: function(sFormName, sFieldCP, sFieldCommune, sFieldFocus) {
-  	var oForm = getForm(sFormName);
-  	
-		// Populate div creation for CP
-    var oField = oForm.elements[sFieldCP];
-		
-    // Autocomplete for CP
-		var url = new Url("dPpatients", "autocomplete_cp_commune");
-		url.addParam("column", "code_postal");
-		url.autoComplete(oField, null, {
-			width: "250px",
-			minChars: 2,
-			updateElement: function(selected) {
-				InseeFields.updateCPVille(selected, sFormName, sFieldCP, sFieldCommune, sFieldFocus);
-			}
-		} );
-		
+  initCPVille: function(sFormName, sFieldCP, sFieldCommune, sFieldFocus) {
+    var oForm = getForm(sFormName);
+	  	
+    // Populate div creation for CP
+	var oField = oForm.elements[sFieldCP];
+			
+	// Autocomplete for CP
+	var url = new Url("dPpatients", "autocomplete_cp_commune");
+	url.addParam("column", "code_postal");
+	url.autoComplete(oField, null, {
+		width: "250px",
+		minChars: 2,
+		updateElement: function(selected) {
+			InseeFields.updateCPVille(selected, sFormName, sFieldCP, sFieldCommune, sFieldFocus);
+		}
+	});
+			
     // Populate div creation for Commune
     var oField = oForm.elements[sFieldCommune];
 		
@@ -30,23 +30,40 @@ var InseeFields = {
       updateElement: function(selected) {
         InseeFields.updateCPVille(selected, sFormName, sFieldCP, sFieldCommune, sFieldFocus);
       }
-    } );
-	},
+    });
+  },
 	
-	updateCPVille: function(selected, sFormName, sFieldCP, sFieldCommune, sFieldFocus) {
+  updateCPVille: function(selected, sFormName, sFieldCP, sFieldCommune, sFieldFocus) {
     var oForm = getForm(sFormName);
-		var cp = selected.down(".cp");
+	var cp = selected.down(".cp");
     var commune = selected.down(".commune");
     
-		// Valuate CP and Commune
-		$V(oForm.elements[sFieldCP     ], cp.getText().strip(), true);
+	// Valuate CP and Commune
+	$V(oForm.elements[sFieldCP     ], cp.getText().strip(), true);
     $V(oForm.elements[sFieldCommune], commune.getText().strip(), true);
 	  
-		// Give focus
-	  if (sFieldFocus) {
-	    $(oForm.elements[sFieldFocus]).tryFocus();
-	  }
+	// Give focus
+	if (sFieldFocus) {
+	  $(oForm.elements[sFieldFocus]).tryFocus();
 	}
+  },
+  
+  initCSP: function(sFormName, sFieldCSP) {
+    var oForm = getForm(sFormName);
+    
+    // Populate div creation for CSP
+	var oField = oForm.elements[sFieldCSP];
+	
+	var url = new Url("dPpatients", "ajax_csp_autocomplete");
+	url.autoComplete(oField, null, {
+	  width: "250px",
+      minChars: 3,
+      dropdown: true,
+      afterUpdateElement: function(input, selected) {
+        $V(oForm.csp, selected.get("id"));
+      }
+	});	
+  },
 }
 
 function updateFields(selected, sFormName, sFieldFocus, sFirstField, sSecondField) {

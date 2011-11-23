@@ -1498,8 +1498,15 @@ class CSetupdPpatients extends CSetup {
               SET `show_enable_all_button` = '1' WHERE `group_id` IS NULL AND `service_id` IS NULL";
     $this->addQuery($query);
     
-    $this->mod_version = "1.29";
+    $this->makeRevision("1.29");
+    $query = "ALTER TABLE `patients` 
+                ADD `csp` TINYINT (2) UNSIGNED ZEROFILL;";
+    $this->addQuery($query);
     
+    $this->mod_version = "1.30";
+    
+    $query = "SHOW TABLES LIKE 'categorie_socioprofessionnelle'";
+    $this->addDatasource("INSEE", $query);
   }
 }
 

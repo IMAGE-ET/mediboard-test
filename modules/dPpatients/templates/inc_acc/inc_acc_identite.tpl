@@ -221,6 +221,13 @@ Main.add(function() {
           <th>{{mb_label object=$patient field="profession"}}</th>
           <td>{{mb_field object=$patient field="profession" form=editFrm onchange="copyIdentiteAssureValues(this)"}}</td>
       	</tr>
+      	<tr>
+          <th>{{mb_label object=$patient field="csp"}}</th>
+          <td>
+            <input type="text" name="_csp_view" size="25" value="{{$patient->_csp_view}}"/>
+            {{mb_field object=$patient field="csp" hidden=true}}
+          </td>
+        </tr>
         <tr>
           <th>{{mb_label object=$patient field="matricule"}}</th>
           <td>{{mb_field object=$patient field="matricule" onchange="copyIdentiteAssureValues(this)"}}</td>

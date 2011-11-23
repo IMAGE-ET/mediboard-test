@@ -130,7 +130,8 @@ class CPatient extends CMbObject {
   var $cp_naissance         = null;
   var $pays_naissance_insee = null;
   var $profession           = null;
-
+  var $csp                  = null; // Catégorie socioprofessionnelle
+  
   // Assuré
   var $assure_nom                   = null;
   var $assure_nom_jeune_fille       = null;
@@ -177,6 +178,7 @@ class CPatient extends CMbObject {
   var $_type_exoneration = null;
   var $_exoneration = null;
   var $_can_see_photo = null;
+  var $_csp_view      = null;
   
   var $_age_min       = null;
   var $_age_max       = null;
@@ -322,6 +324,7 @@ class CPatient extends CMbObject {
     $specs["cp_naissance"]         = "numchar minLength|4 maxLength|5";
     $specs["pays_naissance_insee"] = "str";
     $specs["profession"]           = "str autocomplete";
+    $specs["csp" ]                 = "numchar length|2";
     
     $specs["assure_nom"]                  = "str confidential";
     $specs["assure_prenom"]               = "str";
@@ -697,7 +700,11 @@ class CPatient extends CMbObject {
 
     if ($this->pays_insee && !$this->pays) {
       $this->pays = $this->updatePatNomPays($this->pays_insee);
-    }    
+    }   
+
+    if ($this->csp) {
+      $this->_csp_view = $this->getCSPName();
+    }
   }
   
   /**
@@ -1709,6 +1716,17 @@ class CPatient extends CMbObject {
     $pays->loadObject($where);
     
     return $pays->nom_fr;
+  }
+  
+  function getCSPName() {
+    // Query
+    $select = "SELECT LIBELLE FROM categorie_socioprofessionnelle";
+    $where  = "WHERE CODE = '$this->csp'";
+    $query  = "$select $where";
+    
+    $ds = CSQLDataSource::get("INSEE");
+
+    return $ds->loadResult($query);
   }
   
   function updatePatNumPaysInsee($nomPays) {
