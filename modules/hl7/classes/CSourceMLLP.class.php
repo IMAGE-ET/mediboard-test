@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireLibraryFile("phpsocket/SocketClient");
-
 class CSourceMLLP extends CExchangeSource {
   const TRAILING = "\x0B";
   const LEADING  = "\x1C\x0D";
@@ -42,6 +40,8 @@ class CSourceMLLP extends CExchangeSource {
    */
   function getSocketClient(){
     if ($this->_socket_client) return $this->_socket_client;
+		
+    CAppUI::requireLibraryFile("phpsocket/SocketClient");
     
     $this->_socket_client = new SocketClient;
     $this->_socket_client->open($this->host, $this->port);
