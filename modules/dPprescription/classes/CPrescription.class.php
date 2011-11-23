@@ -279,8 +279,10 @@ class CPrescription extends CMbObject implements IPatientRelated {
   
   function applyDateProtocole(&$_line, $praticien_id, $date_sel, $time_sel, $operation_id, $debut_sejour, $fin_sejour, $date_operation, 
                               $hour_operation, $operation, $sejour, $protocole_id){
-    
-		$_line->unite_duree = "jour";
+    if (!$_line->unite_duree) {
+		  $_line->unite_duree = "jour";
+    }
+   
     $_line->protocole_id = $protocole_id;
 		// Chargement des lignes ou des prises suivant le type d'objet    
 		if($_line instanceof CPrescriptionLineMix){
