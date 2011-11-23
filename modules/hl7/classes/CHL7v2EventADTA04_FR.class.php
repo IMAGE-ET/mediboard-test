@@ -27,6 +27,18 @@ class CHL7v2EventADTA04_FR extends CHL7v2EventADTA04 {
     
     // Movement segment
     $this->addZBE($sejour);
+    
+    // Situation professionnelle
+    $this->addZFP($sejour);
+    
+    // Compléments sur la rencontre
+    $this->addZFV($sejour);
+    
+    // Mouvement PMSI
+    $this->addZFM($sejour);
+    
+    // Complément démographique
+    $this->addZFD($sejour);
   }
   
 }

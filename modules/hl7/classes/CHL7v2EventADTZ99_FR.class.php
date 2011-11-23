@@ -52,6 +52,23 @@ class CHL7v2EventADTZ99_FR extends CHL7v2EventADT implements CHL7EventADTZ99 {
     
     // Movement segment
     $this->addZBE($sejour);
+    
+    // Situation professionnelle
+    // Si A01, A04, A05, A14
+    $this->addZFP($sejour);
+    
+    // Compléments sur la rencontre
+    // Si A01, A02, A03, A04, A05, A14, A21
+    $this->addZFV($sejour);
+    
+    // Mouvement PMSI
+    // Si A01, A02, A03, A04, A05, A14, 
+    // Z80, Z81, Z82, Z83, Z84, Z85, Z86, Z87 
+    $this->addZFM($sejour);
+    
+    // Complément démographique
+    // Si A01, A04, A05, A14
+    $this->addZFD($sejour);
   }
   
 }

@@ -66,7 +66,7 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     $data[] = $sejour->entree_prevue;
     
     // ZBE-3: End of Movement Date/Time (TS) (optional)
-    $data[] = $sejour->sortie_prevue;
+    $data[] = null;
     
     // ZBE-4: Action on the Movement (ID)
     $action_movement = null;

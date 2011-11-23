@@ -27,6 +27,9 @@ class CHL7v2EventADTA03_FR extends CHL7v2EventADTA03 {
 
     // Movement segment
     $this->addZBE($sejour);
+    
+    // Compléments sur la rencontre
+    $this->addZFV($sejour);
   }
   
 }

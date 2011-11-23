@@ -132,6 +132,15 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   }
   
   /*
+   * Represents an HL7 MRG message segment (Merge Patient Information)
+   */
+  function addMRG(CPatient $patient_eliminee) {
+    $MRG = CHL7v2Segment::create("MRG", $this->message);
+    $MRG->patient_eliminee = $patient_eliminee;
+    $MRG->build($this);
+  }
+  
+  /*
    * Represents an HL7 ZBE message segment (Movement)
    */
   function addZBE(CSejour $sejour = null) {
@@ -140,14 +149,41 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     $ZBE->uf     = $sejour->getCurrentUF();
     $ZBE->build($this);
   }
+
+  /*
+   * Represents an HL7 ZFP message segment (Situation professionnelle)
+   */
+  function addZFP(CSejour $sejour = null) {
+    $ZFP = CHL7v2Segment::create("ZFP", $this->message);
+    $ZFP->sejour = $sejour;
+    $ZFP->build($this);
+  }
   
   /*
-   * Represents an HL7 MRG message segment (Merge Patient Information)
+   * Represents an HL7 ZFV message segment (Compléments d'information sur la venue)
    */
-  function addMRG(CPatient $patient_eliminee) {
-    $MRG = CHL7v2Segment::create("MRG", $this->message);
-    $MRG->patient_eliminee = $patient_eliminee;
-    $MRG->build($this);
+  function addZFV(CSejour $sejour = null) {
+    $ZFV = CHL7v2Segment::create("ZFV", $this->message);
+    $ZFV->sejour = $sejour;
+    $ZFV->build($this);
+  }
+  
+  /*
+   * Represents an HL7 ZFM message segment (Mouvement PMSI)
+   */
+  function addZFM(CSejour $sejour = null) {
+    $ZFM = CHL7v2Segment::create("ZFM", $this->message);
+    $ZFM->sejour = $sejour;
+    $ZFM->build($this);
+  }
+  
+  /*
+   * Represents an HL7 ZFD message segment (Complément démographique)
+   */
+  function addZFD(CSejour $sejour = null) {
+    $ZFD = CHL7v2Segment::create("ZFD", $this->message);
+    $ZFD->patient = $sejour->_ref_patient;
+    $ZFD->build($this);
   }
 }
 

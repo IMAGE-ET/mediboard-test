@@ -82,21 +82,6 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         // Admission hospitalisé
         return "A01";
       }
-
-      // Modification de l'admission 
-      // Externe devient hospitalisé
-      if ($sejour->fieldModified("type") && 
-          in_array($sejour->type, self::$inpatient) && 
-          in_array($sejour->_old->type, self::$outpatient)) {
-        return "A06";
-      } 
-
-      // Hospitalisé devient externe
-      if ($sejour->fieldModified("type") && 
-          in_array($sejour->type, self::$outpatient) && 
-          in_array($sejour->_old->type, self::$inpatient)) {
-        return "A07";
-      }
       
       // Cas d'une mutation ? 
       if ($sejour->fieldModified("service_entree_id")) {
