@@ -7,6 +7,11 @@
   {{assign var=show_cat_tabs value=true}}
 {{/if}}
 
+{{assign var=show_enable_all_button value=false}}
+{{if "CConstantesMedicales::getConfig"|static_call:"show_enable_all_button"}}
+  {{assign var=show_enable_all_button value=true}}
+{{/if}}
+
 <script type="text/javascript">
 calculImcVst = function(form) {
   var imcInfo, imc, vst,
@@ -223,11 +228,7 @@ Main.add(function () {
         {{if !$hide_save_button}}
           <td colspan="5" class="button">
             <button class="modify oneclick" onclick="return submitConstantesMedicales(this.form);">
-              {{if !$constantes->datetime}}
-                {{tr}}Create{{/tr}}
-              {{else}}
-                {{tr}}Save{{/tr}}
-              {{/if}}
+              {{tr}}Save{{/tr}}
             </button>
             {{if $constantes->datetime}}
               <button class="new oneclick" type="button" onclick="$V(this.form.constantes_medicales_id, ''); $V(this.form._new_constantes_medicales, 1); return submitConstantesMedicales(this.form);">
@@ -243,7 +244,7 @@ Main.add(function () {
       </tr>
     {{/if}}
     
-    {{if $at_least_one_hidden}}
+    {{if $show_enable_all_button && $at_least_one_hidden}}
     <tr>
       <td colspan="5" class="button">
         <button class="down" type="button" onclick="$$('.constantes .secondary').invoke('toggle')">Afficher toutes les valeurs</button>

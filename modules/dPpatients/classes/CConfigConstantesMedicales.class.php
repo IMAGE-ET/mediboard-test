@@ -12,9 +12,10 @@
 class CConfigConstantesMedicales extends CConfigServiceAbstract {
   // DB Fields
   var $config_constantes_medicales_id = null;
-	
-	var $important_constantes  = null;
-	
+  
+  var $show_cat_tabs  = null;
+  var $show_enable_all_button  = null;
+  
   var $diuere_24_reset_hour  = null;
   var $redon_cumul_reset_hour  = null;
   var $sng_cumul_reset_hour  = null;
@@ -25,15 +26,17 @@ class CConfigConstantesMedicales extends CConfigServiceAbstract {
   var $drain_mediastinal_cumul_reset_hour  = null;
   var $sonde_ureterale_cumul_reset_hour  = null;
   var $sonde_vesicale_cumul_reset_hour  = null;
-	
-  var $show_cat_tabs  = null;
+  
+  var $important_constantes  = null;
   
   static $configs_SHM = null;
   static $_const_names = array();
-	
-	static $_conf_names = array(
-		"show_cat_tabs",
-		"diuere_24_reset_hour",
+  
+  static $_conf_names = array(
+    "show_cat_tabs",
+    "show_enable_all_button",
+    
+    "diuere_24_reset_hour",
     "redon_cumul_reset_hour",
     "sng_cumul_reset_hour",
     "lame_cumul_reset_hour",
@@ -43,8 +46,9 @@ class CConfigConstantesMedicales extends CConfigServiceAbstract {
     "drain_mediastinal_cumul_reset_hour",
     "sonde_ureterale_cumul_reset_hour",
     "sonde_vesicale_cumul_reset_hour",
+    
     "important_constantes",
-	);
+  );
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -54,25 +58,28 @@ class CConfigConstantesMedicales extends CConfigServiceAbstract {
     $spec->uniques["service"] = array("service_id");
     return $spec;
   }
-	
-	function getProps(){
-		$list = implode("|", self::$_const_names);
-		
+  
+  function getProps(){
+    $list = implode("|", self::$_const_names);
+    
     $props = parent::getProps();
-		$props["important_constantes"]               = "set list|$list vertical";
-	  $props["diuere_24_reset_hour"]               = "num min|0 max|23";
-	  $props["redon_cumul_reset_hour"]             = "num min|0 max|23";
-	  $props["sng_cumul_reset_hour"]               = "num min|0 max|23";
-	  $props["lame_cumul_reset_hour"]              = "num min|0 max|23";
-	  $props["drain_cumul_reset_hour"]             = "num min|0 max|23";
-	  $props["drain_thoracique_cumul_reset_hour"]  = "num min|0 max|23";
-	  $props["drain_pleural_cumul_reset_hour"]     = "num min|0 max|23";
-	  $props["drain_mediastinal_cumul_reset_hour"] = "num min|0 max|23";
-	  $props["sonde_ureterale_cumul_reset_hour"]   = "num min|0 max|23";
+    $props["show_cat_tabs"]                      = "bool";
+    $props["show_enable_all_button"]             = "bool";
+    
+    $props["diuere_24_reset_hour"]               = "num min|0 max|23";
+    $props["redon_cumul_reset_hour"]             = "num min|0 max|23";
+    $props["sng_cumul_reset_hour"]               = "num min|0 max|23";
+    $props["lame_cumul_reset_hour"]              = "num min|0 max|23";
+    $props["drain_cumul_reset_hour"]             = "num min|0 max|23";
+    $props["drain_thoracique_cumul_reset_hour"]  = "num min|0 max|23";
+    $props["drain_pleural_cumul_reset_hour"]     = "num min|0 max|23";
+    $props["drain_mediastinal_cumul_reset_hour"] = "num min|0 max|23";
+    $props["sonde_ureterale_cumul_reset_hour"]   = "num min|0 max|23";
     $props["sonde_vesicale_cumul_reset_hour"]    = "num min|0 max|23";
-    $props["show_cat_tabs"] = "bool";
+    
+    $props["important_constantes"]               = "set list|$list vertical";
     return $props;
-	}
+  }
   
   function store(){
     if ($msg = parent::store()) {
@@ -80,15 +87,15 @@ class CConfigConstantesMedicales extends CConfigServiceAbstract {
     }
     
     SHM::rem("conf-constantes_medicales");
-		self::setConfigInSHM();
+    self::setConfigInSHM();
   }
-	
-	static function init(){
-		global $locales;
-		foreach(CConstantesMedicales::$list_constantes as $name => $params) {
-			$locales["CConfigConstantesMedicales.important_constantes.$name"] = CAppUI::tr("CConstantesMedicales-$name"); 
-		}
-		
+  
+  static function init(){
+    global $locales;
+    foreach(CConstantesMedicales::$list_constantes as $name => $params) {
+      $locales["CConfigConstantesMedicales.important_constantes.$name"] = CAppUI::tr("CConstantesMedicales-$name"); 
+    }
+    
     $list_all = CConstantesMedicales::$list_constantes;
     $list = array();
     foreach($list_all as $_const => $_params) {
@@ -96,9 +103,9 @@ class CConfigConstantesMedicales extends CConfigServiceAbstract {
         $list[] = $_const;
       }
     }
-		
-		self::$_const_names = $list;
-	}
+    
+    self::$_const_names = $list;
+  }
   
   /**
    * Chargement des configs en fonction du service
@@ -107,22 +114,23 @@ class CConfigConstantesMedicales extends CConfigServiceAbstract {
     if(!$group_id){
       $group_id = CGroups::loadCurrent()->_id;
     }
-		
-		if (!$service_id || $service_id == "NP") {
-			$service_id = "none";
-		}
-		
+    
+    if (!$service_id || $service_id == "NP") {
+      $service_id = "none";
+    }
+    
     if(!isset(self::$configs_SHM)){
      self::$configs_SHM = $configs = self::getSHM("conf-constantes_medicales");
     } else {
       $configs = self::$configs_SHM;
     }
+		
     // Si la config n'existe pas en SHM
     if($configs == null){
       $configs = self::setConfigInSHM();
       self::$configs_SHM = $configs;
     }
-		
+    
     return $configs[$group_id][$service_id];
   }
   
@@ -134,15 +142,15 @@ class CConfigConstantesMedicales extends CConfigServiceAbstract {
     self::setSHM("conf-constantes_medicales", $configs);
     return $configs;
   }
-	
-	protected static function mapConfig(&$array, $object) {
-		$values = (array)$object;
-		
+  
+  protected static function mapConfig(&$array, $object) {
+    $values = (array)$object;
+    
     foreach(self::$_conf_names as $confname) {
-    	if (!isset($values[$confname])) continue;
+      if (!isset($values[$confname])) continue;
       $array[$confname] = $values[$confname];
     }
-	}
+  }
   
   /**
    * Calcul de la totalité des configs pour les stocker dans la SHM
@@ -172,52 +180,52 @@ class CConfigConstantesMedicales extends CConfigServiceAbstract {
     // Creation du tableau de valeur par defaut (quelque soit l'etablissement)
     foreach($all_configs as $_config){
       if($_config->service_id){
-      	self::mapConfig($configs_service[$_config->service_id], $_config);
+        self::mapConfig($configs_service[$_config->service_id], $_config);
       } 
-			elseif ($_config->group_id) {
-      	self::mapConfig($configs_group[$_config->group_id], $_config);
+      elseif ($_config->group_id) {
+        self::mapConfig($configs_group[$_config->group_id], $_config);
       }
-			else {
-				self::mapConfig($configs_default, $_config);
-			}
+      else {
+        self::mapConfig($configs_default, $_config);
+      }
     }
     
     // Parcours des etablissements
     foreach($groups as $group_id => $group){
       $group->loadRefsService();
-			
+      
       // Parcours des services
       foreach($group->_ref_services as $service_id => $_service){
         self::mapConfig($configs[$group_id][$service_id], $configs_default);
-				
-				if (isset($configs_group[$group_id])) {
-					self::mapConfig($configs[$group_id][$service_id], $configs_group[$group_id]);
-				}
-				
-				if (isset($configs_service[$service_id])) {
-					self::mapConfig($configs[$group_id][$service_id], $configs_service[$service_id]);
-				}
+        
+        if (isset($configs_group[$group_id])) {
+          self::mapConfig($configs[$group_id][$service_id], $configs_group[$group_id]);
+        }
+        
+        if (isset($configs_service[$service_id])) {
+          self::mapConfig($configs[$group_id][$service_id], $configs_service[$service_id]);
+        }
       }
-			
+      
       // Si aucun service
       foreach($configs_default as $_config_default){
-		    foreach(self::$_conf_names as $confname) {
-		      if (isset($configs_group[$group_id][$confname])) {
-		      	$configs[$group_id]["none"][$confname] = $configs_group[$group_id][$confname];
-		      }
-					else {
+        foreach(self::$_conf_names as $confname) {
+          if (isset($configs_group[$group_id][$confname])) {
+            $configs[$group_id]["none"][$confname] = $configs_group[$group_id][$confname];
+          }
+          else {
             $configs[$group_id]["none"][$confname] = $configs_default[$confname];
-					}
-		    }
+          }
+        }
       }
     }
-		
+    
     return $configs;
   }
-	
-	static function emptySHM(){
+  
+  static function emptySHM(){
     self::_emptySHM("CConfigConstantesMedicales", "conf-constantes_medicales");
-	}
+  }
 }
 
 CConfigConstantesMedicales::init();

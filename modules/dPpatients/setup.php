@@ -1489,8 +1489,16 @@ class CSetupdPpatients extends CSetup {
               ADD `catheter_suspubien` FLOAT UNSIGNED,
               ADD `entree_lavage` FLOAT UNSIGNED";
     $this->addQuery($query);
+		
+    $this->makeRevision("1.28");
+    $query = "ALTER TABLE `config_constantes_medicales` 
+              ADD `show_enable_all_button` ENUM ('0','1');";
+    $this->addQuery($query);
+    $query = "UPDATE `config_constantes_medicales` 
+              SET `show_enable_all_button` = '1' WHERE `group_id` IS NULL AND `service_id` IS NULL";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.28";
+    $this->mod_version = "1.29";
     
   }
 }

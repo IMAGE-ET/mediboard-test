@@ -214,7 +214,9 @@ class CViewSender extends CMbObject {
           $_sender_source->last_count = $this->archiveFile($ftp, $basename, $can_zip);
 
           $ftp->close();
-        } catch (Exception $e) {}
+        } catch (Exception $e) {
+        	mbLog($e);
+        }
       }
       
       $chrono->stop();

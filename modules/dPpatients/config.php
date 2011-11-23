@@ -44,6 +44,7 @@ $dPconfig["dPpatients"] = array (
     "drain_mediastinal_cumul_reset_hour" => "8",
     "sonde_ureterale_cumul_reset_hour" => "8",
     "sonde_vesicale_cumul_reset_hour" => "8",
+    "show_enable_all_button" => "1",
   ),
   
   "CMedecin" => array(
