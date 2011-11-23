@@ -155,7 +155,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    */
   function addZFP(CSejour $sejour = null) {
     $ZFP = CHL7v2Segment::create("ZFP", $this->message);
-    $ZFP->sejour = $sejour;
+    $ZFP->patient = $sejour->_ref_patient;
     $ZFP->build($this);
   }
   

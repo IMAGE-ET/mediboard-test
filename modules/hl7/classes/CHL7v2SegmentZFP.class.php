@@ -20,20 +20,20 @@ class CHL7v2SegmentZFP extends CHL7v2Segment {
   var $name   = "ZFP";
   
   /**
-   * @var CSejour
+   * @var CPatient
    */
-  var $sejour = null;
+  var $patient = null;
   
   function build(CHL7v2Event $event) {
     parent::build($event);
     
-    $sejour = $this->sejour;
+    $patient = $this->patient;
     
     // ZFP-1: Activité socio-professionnelle (nomemclature INSEE)
-    $data[] = null;
+    $data[] = $patient->csp ? substr($patient->csp, 0, 1) : null;
     
     // ZFP-2: Catégorie socio-professionnelle (nomemclature INSEE)
-    $data[] = null;
+    $data[] = $patient->csp;
     
     $this->fill($data);
   }
