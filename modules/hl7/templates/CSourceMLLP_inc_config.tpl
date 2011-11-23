@@ -15,7 +15,7 @@
         onsubmit="return onSubmitFormAjax(this, { onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}') } )">
         <input type="hidden" name="m" value="hl7" />
         <input type="hidden" name="dosql" value="do_source_mll_aed" />
-        <input type="hidden" name="source_soap_id" value="{{$source->_id}}" />
+        <input type="hidden" name="source_mllp_id" value="{{$source->_id}}" />
         <input type="hidden" name="del" value="0" /> 
         <input type="hidden" name="name" value="{{$source->name}}" />  
         

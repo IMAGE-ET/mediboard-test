@@ -16,7 +16,7 @@ try {
   $exchange_source->send();
   CAppUI::stepAjax("Données transmises au serveur MLLP");
   if ($ack = $exchange_source->getData()) {
-    CAppUI::stepAjax($ack);
+    echo "<pre>$ack</pre>";
   }
 } catch (Exception $e) {
   CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);

@@ -29,7 +29,7 @@ try {
   $exchange_source->getSocketClient();
   CAppUI::stepAjax("Connexion au serveur MLLP réussi");
   if ($ack = $exchange_source->getData()) {
-    CAppUI::stepAjax($ack);
+    echo "<pre>$ack</pre>";
   }
 } catch (Exception $e) {
   CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
