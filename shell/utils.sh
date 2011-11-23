@@ -90,7 +90,7 @@ cecho ()
   esac
 
   undashed=$(ls -l /bin/sh | grep bash)
-  if [ -z $undashed ]; then
+  if [ -z "$undashed" ]; then
     echo "$color$message"
   else
     echo -e "$color$message"
