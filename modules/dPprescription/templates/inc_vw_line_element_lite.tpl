@@ -117,7 +117,7 @@
 	  <td style="width: 20%" class="text">
 	  	<!-- Duree de la prise --> 
       {{if $line->duree}}
-        Durée de {{mb_value object=$line field=duree}} jour(s) 
+        Durée de {{mb_value object=$line field=duree}} {{mb_value object=$line field=unite_duree}}
       {{/if}}
 		
       <!-- Date de debut de la ligne -->
