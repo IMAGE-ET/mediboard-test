@@ -933,6 +933,7 @@ $locales['CSourceFileSystem-active'] = 'Active';
 $locales['CSourceFileSystem-active-court'] = 'Active';
 $locales['CSourceFileSystem-active-desc'] = 'Active';
 $locales['CSourceFileSystem-file-not-readable'] = 'Le fichier \'%s\' n\'est pas accessible en lecture';
+$locales['CSourceFileSystem-file-not-writable'] = 'Le fichier \'%s\' n\'est pas accessible en écriture';
 $locales['CSourceFileSystem-host'] = 'Répertoire racine';
 $locales['CSourceFileSystem-host-court'] = 'Répertoire';
 $locales['CSourceFileSystem-host-desc'] = 'Répertoire racine';

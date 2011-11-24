@@ -14,12 +14,13 @@ class CSourceFileSystem extends CExchangeSource {
    
   // Form fields
   var $_path  = null;
+  var $_file_path = null;
   var $_files = array();
   
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = 'source_file_system';
-    $spec->key   = 'source_file_system_id';
+    $spec->table = "source_file_system";
+    $spec->key   = "source_file_system_id";
     return $spec;
   }
 
@@ -55,13 +56,31 @@ class CSourceFileSystem extends CExchangeSource {
     return $this->_files = CMbPath::getFiles($path);
   }
   
+  function send($evenement_name = null) {
+    $this->init();
+    
+    $path = rtrim($this->getFullPath($this->_path), "\\/");
+    $file_path = $path.$this->_file_path;
+    
+    if (!is_writable($file_path)) {
+      throw new CMbException("CSourceFileSystem-file-not-writable", $file_path);
+    }
+    
+    return file_put_contents($file_path, $this->_data);
+  }
+  
   function getData($path) {
-    if (is_readable($path)) {
-      return file_get_contents($path);
+    if (!is_readable($path)) {
+    	throw new CMbException("CSourceFileSystem-file-not-readable", $path);
     }
-    else {
-      throw new CMbException("CSourceFileSystem-file-not-readable", $path);
-    }
+    
+    return file_get_contents($path);
+  }
+  
+  function setData($data, $argsList = false, $file_path) {
+    parent::setData($data, $argsList);
+    
+    $this->_file_path = $file_path;
   }
   
   public function getFullPath($path = ""){
