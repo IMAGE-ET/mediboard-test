@@ -89,22 +89,29 @@ class CReceiverIHE extends CInteropReceiver {
   
   function sendEvent($evenement, CMbObject $mbObject) {
     $evenement->_receiver = $this;
-    
+
     $evenement->build($mbObject);    
     $msg = $evenement->flatten();
     
     if ($this->actif && $msg) {
       $source = CExchangeSource::get("$this->_guid-evenementsPatient");
       if ($source->_id) {
-        $source->setData($msg);
+        $exchange = $evenement->_exchange_ihe;
+        
+        // Dans le cas d'une source file system on passe le nom du fichier en paramètre
+        if ($souce instanceof CSourceFileSystem) {
+          $source->setData($msg, false, "MB-$evenement->event_type-$evenement->code-$exchange->_id".$source->fileextension);
+        }
+        else {
+          $source->setData($msg);
+        }
         try {
           $source->send();
         } catch (Exception $e) {
           throw new CMbException("CExchangeSource-no-response");
         }
         $ack_data = $source->getACQ();
-                
-        $exchange = $evenement->_exchange_ihe;
+
         $exchange->date_echange = mbDateTime();
           
         if ($ack_data) {
