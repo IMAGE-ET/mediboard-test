@@ -191,7 +191,7 @@ $library->versionString = "Version 5.1";
 
 CLibrary::$all[$library->name] = $library;
 
-/*$library = new CLibrary;
+$library = new CLibrary;
 $library->name = "Scriptaculous";
 $library->url = "http://script.aculo.us/";
 $library->fileName = "scriptaculous-js-1.9.0.zip";
@@ -199,8 +199,9 @@ $library->description = "Composant Javascript d'effets spéciaux, accompagné du f
 $library->sourceDir = "scriptaculous-js-1.9.0";
 $library->targetDir = "scriptaculous";
 $library->versionFile = "CHANGELOG";
-$library->versionString = "*V1.9.0*";*/
+$library->versionString = "*V1.9.0*";
 
+/*
 $library = new CLibrary;
 $library->name = "Scriptaculous";
 $library->url = "http://script.aculo.us/";
@@ -209,7 +210,7 @@ $library->description = "Composant Javascript d'effets spéciaux, accompagné du f
 $library->sourceDir = "scriptaculous-js-1.8.3";
 $library->targetDir = "scriptaculous";
 $library->versionFile = "CHANGELOG";
-$library->versionString = "*V1.8.3*";
+$library->versionString = "*V1.8.3*";*/
 
 $patch = new CLibraryPatch;
 $patch->dirName = "scriptaculous";
