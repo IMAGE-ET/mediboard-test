@@ -44,7 +44,8 @@ class CITIDelegatedHandler {
 
     $event              = new $class;
     $event->profil      = $profil;
-
+    $event->transaction = $transaction;
+     
     $receiver->sendEvent($event, $mbObject);
   }
   

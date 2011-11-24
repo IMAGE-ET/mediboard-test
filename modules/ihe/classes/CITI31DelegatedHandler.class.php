@@ -67,6 +67,12 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if ($sejour->fieldModified("annule", "1")) {
         return "A38";
       }
+
+      // Annulation de l'admission
+      if ($sejour->_old->entree_reelle && !$sejour->entree_reelle) {
+        return "A11";
+      }
+      
       // Simple modification ? 
       return "Z99";
     }
@@ -81,6 +87,12 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         } 
         // Admission hospitalisé
         return "A01";
+      }
+      
+      // Modification de la sortie (date de sortie, mode de sortie)
+      /* @todo _sortie_autorisee ? */
+      if ($sejour->fieldModified("mode_sortie")) {
+        return "A16";
       }
       
       // Cas d'une mutation ? 
@@ -98,7 +110,8 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       }
       
       // Annulation du médecin responsable
-      if ($sejour->fieldModified("praticien_id", "")) {
+      if ($sejour->fieldModified("praticien_id") && 
+         ($sejour->praticien_id != $sejour->_old->praticien_id)) {
         return "A55";
       }
       
@@ -111,7 +124,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       
       /* @todo Changement d'UF de Soins */
       
-      // Cas d'une annulation ? 
+      // Cas d'une annulation
       if ($sejour->fieldModified("annule", "1")) {
         return "A11";
       }

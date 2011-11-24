@@ -53,7 +53,8 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     // ZBE-1: Movement ID (EI) (optional)
     $data[] = array (
       // Entity identifier
-      $uf->_ref_last_log->id,
+      1,
+      //$uf->_ref_last_log->id,
       // Namespace ID
       "Mediboard",
       // Universal ID
