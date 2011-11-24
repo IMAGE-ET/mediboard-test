@@ -850,7 +850,19 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `view_sender` 
       CHANGE `period` `period` ENUM ('1','2','3','4','5','6','10','15','20','30','60');";
     $this->addQuery($query);
-
-    $this->mod_version = "1.0.87";
+    
+    $this->makeRevision("1.0.87");
+    $query = "ALTER TABLE `source_file_system` 
+              ADD `fileextension` VARCHAR (255)";
+    $this->addQuery($query);
+    
+    /* // pour plus tard
+    $query = "ALTER TABLE `ex_class_field` 
+              ADD `coord_field_colspan` TINYINT (4) UNSIGNED NOT NULL DEFAULT '1' AFTER `coord_field_y`,
+              ADD `coord_field_rowspan` TINYINT (4) UNSIGNED NOT NULL DEFAULT '1' AFTER `coord_field_colspan`";
+    $this->addQuery($query);
+    */
+        
+    $this->mod_version = "1.0.88";
   }
 }

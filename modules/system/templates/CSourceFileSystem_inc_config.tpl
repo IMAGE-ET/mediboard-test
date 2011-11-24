@@ -24,7 +24,14 @@
               {{tr}}config-source-file_system{{/tr}}
             </th>
           </tr>
+          
           {{mb_include module=system template=CExchangeSource_inc}}
+          
+          <tr>
+            <th>{{mb_label object=$source field="fileextension"}}</th>
+            <td>{{mb_field object=$source field="fileextension"}}</td>
+          </tr>
+
           <tr>
             <td class="button" colspan="2">
               {{if $source->_id}}

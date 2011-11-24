@@ -11,7 +11,9 @@
 class CSourceFileSystem extends CExchangeSource {
   // DB Table key
   var $source_file_system_id = null;
-   
+  
+  var $fileextension = null;
+  
   // Form fields
   var $_path  = null;
   var $_file_path = null;
@@ -22,6 +24,12 @@ class CSourceFileSystem extends CExchangeSource {
     $spec->table = "source_file_system";
     $spec->key   = "source_file_system_id";
     return $spec;
+  }
+
+  function getProps() {
+    $specs = parent::getProps();
+    $specs["fileextension"] = "str";
+    return $specs;
   }
 
   function updateFormFields() {
@@ -71,7 +79,7 @@ class CSourceFileSystem extends CExchangeSource {
   
   function getData($path) {
     if (!is_readable($path)) {
-    	throw new CMbException("CSourceFileSystem-file-not-readable", $path);
+      throw new CMbException("CSourceFileSystem-file-not-readable", $path);
     }
     
     return file_get_contents($path);
