@@ -19,7 +19,8 @@
     <tr>
       <th class="narrow">{{tr}}{{$_message_supported->message}}{{/tr}}</th>
       <td>
-        <form name="editActorMessageSupported-{{$_message_supported->_guid}}" 
+      	{{unique_id var=uid}}
+        <form name="editActorMessageSupported-{{$uid}}" 
           action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
           <input type="hidden" name="m" value="eai" />
           <input type="hidden" name="dosql" value="do_message_supported" />
