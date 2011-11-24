@@ -26,11 +26,19 @@ class CHL7v2SegmentZFV extends CHL7v2Segment {
   
   function build(CHL7v2Event $event) {
     parent::build($event);
-    
+    $sejour = new CSejour();
     $sejour = $this->sejour;
     
-    // ZFV-1: Etablissement de provenance
-    $data[] = null;
+    // ZFV-1: Etablissement de provenance (DLD)
+    if ($sejour->etablissement_entree_id) {
+      $etab_provenance = $sejour->loadRefEtablissementProvenance();
+      $data[] = array(
+        $etab_provenance->finess
+      );
+    }
+    else {
+      $data[] = null;
+    }
     
     // ZFV-2: Mode de transport de sortie
     $data[] = null;
@@ -44,8 +52,32 @@ class CHL7v2SegmentZFV extends CHL7v2Segment {
     // ZFV-5: Date de fin de placement (psy)
     $data[] = null;
     
-    // ZFV-6: Adresse de la provenance ou de la destination
-    $data[] = null;
+    // ZFV-6: Adresse de la provenance ou de la destination (XAD)
+    $adresses = array();
+    if ($sejour->etablissement_entree_id) {
+      $adresses[] = array(
+        $etab_provenance->adresse,
+        null,
+        $etab_provenance->ville,
+        null,
+        $etab_provenance->cp,
+        null,
+        "ORI"
+      );
+    }
+    if ($sejour->etablissement_sortie_id) {
+      $etab_destination = $sejour->loadRefEtablissementTransfert();
+      $adresses[] = array(
+        $etab_destination->adresse,
+        null,
+        $etab_destination->ville,
+        null,
+        $etab_destination->cp,
+        null,
+        "DST"
+      );
+    }
+    $data[] = $adresses;
     
     // ZFV-7: NDA de l'établissement de provenance
     $data[] = null;
