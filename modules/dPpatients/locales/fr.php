@@ -480,6 +480,7 @@ $locales['CDevenirDentaire-patient_id-court'] = 'Patient';
 $locales['CDevenirDentaire-patient_id-desc'] = 'Patient';
 $locales['CDevenirDentaire-title-create'] = 'Création de projet thérapeutique';
 $locales['CDevenirDentaire-title-modify'] = 'Modification de projet thérapeutique';
+$locales['CDevenirDentaire.alert_new_project'] = 'Veuillez enregistrer le projet thérapeutique pour choisir un étudiant.';
 $locales['CDevenirDentaire.all'] = 'Tous les projets thérapeutiques';
 $locales['CDevenirDentaire.none'] = 'Aucun projet thérapeutique';
 $locales['CDevenirDentaire.one'] = 'Un projet thérapeutique';

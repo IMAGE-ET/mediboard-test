@@ -170,7 +170,7 @@ PlageConsult.addPlaceAfter = function(plage_id) {
       {{assign var=time value=$_place.time}}
       {{if $display_nb_consult == "cab" || $display_nb_consult == "etab"}}
         <td>
-          {{mb_include module=dPcabinet template=inc_vw_jeton nb=$utilisation_func.$time}}
+          {{mb_include module=dPcabinet template=inc_vw_jeton nb=$utilisation_func.$time quotas=$quotas}}
         </td>
       {{/if}}
       {{if $display_nb_consult == "etab"}}

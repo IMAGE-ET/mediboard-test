@@ -31,6 +31,7 @@ class CFunctions extends CMbObject {
   var $compta_partagee    = null;
   var $admission_auto     = null;
   var $consults_partagees = null;
+  var $quotas    = null;
   
   // Object References
   var $_ref_group = null;
@@ -93,6 +94,7 @@ class CFunctions extends CMbObject {
     $specs["consults_partagees"] = "bool default|1 notNull";
     $specs["admission_auto"]     = "bool";
     $specs["actif"]              = "bool default|1";
+    $specs["quotas"]             = "num pos";
     return $specs;
   }
     

@@ -87,6 +87,10 @@
       <td>{{mb_field object=$function field="fax"}}</td>
     </tr>
     <tr>
+      <th>{{mb_label object=$function field="quotas"}}</th>
+      <td>{{mb_field object=$function field="quotas"}}</td>
+    </tr>
+    <tr>
       <th>{{mb_label object=$function field="actif"}}</th>
       <td>{{mb_field object=$function field="actif"}}</td>
     </tr>

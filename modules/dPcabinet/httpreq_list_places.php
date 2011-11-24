@@ -13,6 +13,7 @@ $ds = CSQLDataSource::get("std");
 // Initialisation des variables
 $plageconsult_id = CValue::get("plageconsult_id");
 $display_nb_consult = CAppUI::conf("dPcabinet display_nb_consult");
+$quotas = 0;
 
 // Récupération des consultations de la plage séléctionnée
 $plage = new CPlageconsult;
@@ -116,6 +117,10 @@ if ($plageconsult_id) {
   // Pour ceux de la même fonction
   $user = new CMediusers;
   $user->load($plage->chir_id);
+  $function = $user->loadRefFunction();
+  if ($function->quotas)
+    $quotas = $function->quotas;
+  }
   
   if(CAppUI::pref("pratOnlyForConsult", 1)) {
     $listPrat = $user->loadPraticiens(PERM_EDIT, $user->function_id, null, true);
@@ -150,6 +155,7 @@ $smarty->assign("plage"          , $plage);
 $smarty->assign("listPlace"      , $listPlace);
 $smarty->assign("listBefore"     , $listBefore);
 $smarty->assign("listAfter"      , $listAfter);
+$smarty->assign("quotas"         , $quotas);
 
 if ($display_nb_consult == "cab" || $display_nb_consult == "etab") {
   $smarty->assign("utilisation_func", $utilisation_func);

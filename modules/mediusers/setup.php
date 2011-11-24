@@ -469,7 +469,12 @@ class CSetupmediusers extends CSetup {
                  CHANGE `cps` `cps` VARCHAR (255);";
      $this->addQuery($query);
 		 
-     $this->mod_version = "0.38";
+     $this->makeRevision("0.38");
+     $query = "ALTER TABLE `functions_mediboard`
+               ADD `quotas` INT (11) UNSIGNED;";
+     $this->addQuery($query);
+     
+     $this->mod_version = "0.39";
   }
 }
 

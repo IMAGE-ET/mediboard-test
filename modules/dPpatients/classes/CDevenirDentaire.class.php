@@ -24,6 +24,7 @@ class CDevenirDentaire extends CMbObject {
   
   // Form fields
   var $_total_ICR           = 0;
+  var $_max_ICR             = 0;
   var $_count_ref_actes_dentaires = 0;
   
   // Distant fields

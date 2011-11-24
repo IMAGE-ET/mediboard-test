@@ -22,12 +22,16 @@
             <td style="width: 50%">
               <fieldset>
                 <legend>Etudiant</legend>
-                <button type="button" style="float: right;" class="search" onclick="chooseEtudiant()">Choisir un étudiant</button>
-                <strong>Etudiant choisi :</strong>
-                {{if $devenir_dentaire->etudiant_id}}
-                  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$devenir_dentaire->_ref_etudiant}}
+                {{if $devenir_dentaire->_id}}
+                  <button type="button" style="float: right;" class="search" onclick="chooseEtudiant('{{$devenir_dentaire->_id}}')">Choisir un étudiant</button>
+                  <strong>Etudiant choisi :</strong>
+                  {{if $devenir_dentaire->etudiant_id}}
+                    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$devenir_dentaire->_ref_etudiant}}
+                  {{else}}
+                    Aucun
+                  {{/if}}
                 {{else}}
-                  Aucun
+                  {{tr}}CDevenirDentaire.alert_new_project{{/tr}}
                 {{/if}}
               </fieldset>
             </td>

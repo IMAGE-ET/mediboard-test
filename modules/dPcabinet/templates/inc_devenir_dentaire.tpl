@@ -10,8 +10,9 @@
     refreshListDevenirs('{{$consult->patient_id}}', obj.devenir_dentaire_id);
   }
   
-  chooseEtudiant = function() {
+  chooseEtudiant = function(devenir_dentaire_id) {
     var url = new Url('dPcabinet', 'ajax_choose_etudiant');
+    url.addParam("devenir_dentaire_id", devenir_dentaire_id);
     url.modal();
   }
   
