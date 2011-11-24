@@ -51,11 +51,6 @@ class CHL7v2Segment extends CHL7v2Entity {
       $this->error(CHL7v2Exception::TOO_MANY_FIELDS, $this->data);
     }*/
     
-    // valid fields number, at least two
-    if (count(array_filter($fields, "stringNotEmpty")) < 1) {
-      $this->error(CHL7v2Exception::TOO_FEW_SEGMENT_FIELDS, $this->data);
-    }
-    
     $this->description = (string)$specs->description;
     
     if ($this->name === "MSH") {

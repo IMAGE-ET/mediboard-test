@@ -22,7 +22,6 @@ class CHL7v2Error {
     CHL7v2Exception::EMPTY_MESSAGE              => 100,
     CHL7v2Exception::INVALID_SEPARATOR          => 102,
     CHL7v2Exception::SEGMENT_INVALID_SYNTAX     => 102,
-    CHL7v2Exception::TOO_FEW_SEGMENT_FIELDS     => 101,
     CHL7v2Exception::TOO_MANY_FIELDS            => 102,
     CHL7v2Exception::SPECS_FILE_MISSING         => 207,
     CHL7v2Exception::VERSION_UNKNOWN            => 203,
