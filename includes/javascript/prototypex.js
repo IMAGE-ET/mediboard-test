@@ -244,6 +244,12 @@ Class.extend(Autocompleter.Base, {
   }
 });
 
+// Fix a bug in IE9 where whitespace between cells adds empty cells *sometimes*
+if (Prototype.Browser.IE && document.documentMode && document.documentMode == 9) {
+  Object.toHTML = function(object) {
+    return (object && object.toHTML ? object.toHTML() : String.interpret(object)).replace(/>\s+<(t[dh])/gi, "><$1");
+  }
+}
 
 // FIX in Scriptaculous
 Droppables.isAffected = function(point, element, drop) {
@@ -330,6 +336,55 @@ Class.extend(Element.ClassNames, {
   }
 });
 
+function NoClickDelay(el) {
+  this.element = typeof el == 'object' ? el : document.getElementById(el);
+  if( window.Touch ) this.element.addEventListener('touchstart', this, false);
+}
+
+NoClickDelay.prototype = {
+  handleEvent: function(e) {
+    var callback = {
+      touchstart: this.onTouchStart,
+      touchmove:  this.onTouchMove,
+      touchend:   this.onTouchEnd
+    }[e.type];
+    
+    if (callback) {
+      callback(e);
+    }
+  },
+
+  onTouchStart: function(e) {
+    e.preventDefault();
+    this.moved = false;
+
+    this.theTarget = document.elementFromPoint(e.targetTouches[0].clientX, e.targetTouches[0].clientY);
+    if(this.theTarget.nodeType == 3) this.theTarget = theTarget.parentNode;
+    this.theTarget.className+= ' pressed';
+
+    this.element.addEventListener('touchmove', this, false);
+    this.element.addEventListener('touchend', this, false);
+  },
+
+  onTouchMove: function(e) {
+    this.moved = true;
+    this.theTarget.className = this.theTarget.className.replace(/ ?pressed/gi, '');
+  },
+
+  onTouchEnd: function(e) {
+    this.element.removeEventListener('touchmove', this, false);
+    this.element.removeEventListener('touchend', this, false);
+
+    if( !this.moved && this.theTarget ) {
+      this.theTarget.className = this.theTarget.className.replace(/ ?pressed/gi, '');
+      var theEvent = document.createEvent('MouseEvents');
+      theEvent.initEvent('click', true, true);
+      this.theTarget.dispatchEvent(theEvent);
+    }
+
+    this.theTarget = undefined;
+  }
+};
 
 // Makes an element to be in the viewport instead of overflow
 Element.addMethods({
@@ -459,6 +514,10 @@ Element.addMethods({
     /*root.select("label").each(function(label){
       label.observe("touchstart", Event.stop);
     });*/
+  
+    /*root.select("*[onclick], .control_tabs a, .control_tabs_vertical a").each(function(element) {
+      new NoClickDelay(element);
+    });*/
     
     root.select("*[onmouseover]").each(function(element){
       if (element.touchEventsPrepared) return;
@@ -494,21 +553,11 @@ Element.addMethods({
 });
 
 /** Get the element's "data-" attributes value */
-// If HTML5 compliant browser (only Chrome, 02/2011)
-if ("dataset" in document.createElement('div')) {
-  Element.addMethods({
-    "get": function(element, data) {
-      return element.dataset[data];
-    }
-  });
-}
-else {
-  Element.addMethods({
-    "get": function(element, data) {
-      return element.getAttribute("data-"+data);
-    }
-  });
-}
+Element.addMethods({
+  "get": function(element, data) {
+    return element.getAttribute("data-"+data);
+  }
+});
 
 Element.addMethods(['input', 'textarea'], {
   emptyValue: function (element) {
