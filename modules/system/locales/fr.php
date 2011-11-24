@@ -933,7 +933,7 @@ $locales['CSourceFileSystem-active'] = 'Active';
 $locales['CSourceFileSystem-active-court'] = 'Active';
 $locales['CSourceFileSystem-active-desc'] = 'Active';
 $locales['CSourceFileSystem-file-not-readable'] = 'Le fichier \'%s\' n\'est pas accessible en lecture';
-$locales['CSourceFileSystem-file-not-writable'] = 'Le fichier \'%s\' n\'est pas accessible en écriture';
+$locales['CSourceFileSystem-path-not-writable'] = 'Le fichier \'%s\' n\'est pas accessible en écriture';
 $locales['CSourceFileSystem-fileextension'] = 'Extension des fichiers';
 $locales['CSourceFileSystem-fileextension-court'] = 'Ext. fichiers';
 $locales['CSourceFileSystem-fileextension-desc'] = 'Extension des fichiers';
@@ -1490,5 +1490,6 @@ $locales['system-msg-unlocalized_warning'] = 'Il reste des textes non localisés 
 $locales['system-title-unlocalized'] = 'Donc je traduis ces textes !';
 $locales['utilities-exchange-source-receive'] = 'Récupérer et dispatcher les fichiers';
 $locales['utilities-source-file_system-connexion'] = 'Test d\'accessibilité';
+$locales['utilities-source-file_system-sendFile'] = 'Dépôt d\'un fichier';
 $locales['utilities-source-file_system-getFiles'] = 'Liste des fichiers';
 ?>

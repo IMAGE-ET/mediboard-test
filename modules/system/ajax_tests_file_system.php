@@ -21,6 +21,7 @@ if (null == $type_action = CValue::get("type_action")) {
 
 $exchange_source = CExchangeSource::get($exchange_source_name);
 
+// Connexion
 if ($type_action == "connexion") {
   try {
     $exchange_source->init();
@@ -30,6 +31,19 @@ if ($type_action == "connexion") {
   
   CAppUI::stepAjax("CSourceFileSystem-host-is-a-dir", UI_MSG_OK, $exchange_source->host);
 }
+
+// Envoi d'un fichier
+else if ($type_action == "sendFile") {
+  try {
+    $exchange_source->setData("Test source file system in Mediboard", false, "testSendFile$exchange_source->fileextension");
+    $exchange_source->send();
+  } catch (CMbException $e) {
+    $e->stepAjax(UI_MSG_ERROR);
+  }
+  
+  CAppUI::stepAjax("Le fichier 'testSendFile$exchange_source->fileextension' a été copié dans le dossier '$exchange_source->host'");
+}  
+// Récupération des fichiers
 else if ($type_action == "getFiles") {
   try {
     $files = $exchange_source->receive();

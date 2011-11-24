@@ -68,10 +68,10 @@ class CSourceFileSystem extends CExchangeSource {
     $this->init();
     
     $path = rtrim($this->getFullPath($this->_path), "\\/");
-    $file_path = $path.$this->_file_path;
+    $file_path = "$path/$this->_file_path";
     
-    if (!is_writable($file_path)) {
-      throw new CMbException("CSourceFileSystem-file-not-writable", $file_path);
+    if (!is_writable($path)) {
+      throw new CMbException("CSourceFileSystem-path-not-writable", $path);
     }
     
     return file_put_contents($file_path, $this->_data);

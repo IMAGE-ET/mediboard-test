@@ -56,7 +56,14 @@
             url.addParam("type_action", "connexion");
             url.requestUpdate("utilities-source-file_system-connexion-" + exchange_source_name);
           },
-          
+
+          sendFile: function (exchange_source_name) {
+            var url = new Url("system", "ajax_tests_file_system");
+            url.addParam("exchange_source_name", exchange_source_name);
+            url.addParam("type_action", "sendFile");
+            url.requestUpdate("utilities-source-file_system-sendFile-" + exchange_source_name);
+          },
+        
           getFiles: function (exchange_source_name) {
             var url = new Url("system", "ajax_tests_file_system");
             url.addParam("exchange_source_name", exchange_source_name);
@@ -80,6 +87,16 @@
             </button>
           </td>
           <td id="utilities-source-file_system-connexion-{{$source->name}}" class="text"></td>
+        </tr>
+        
+        <!-- Dépôt d'un fichier -->
+        <tr>
+          <td>
+            <button type="button" class="search" onclick="FileSystem.sendFile('{{$source->name}}');">
+              {{tr}}utilities-source-file_system-sendFile{{/tr}}
+            </button> 
+          </td>
+          <td id="utilities-source-file_system-sendFile-{{$source->name}}" class="text"></td>
         </tr>
         
         <!-- Liste des fichiers -->
