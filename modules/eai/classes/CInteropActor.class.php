@@ -124,7 +124,7 @@ class CInteropActor extends CMbObject {
     $msg_supported->message      = $message;
     $msg_supported->active       = 1;
 
-    return $msg_supported->loadMatchingObject();
+    return $msg_supported->countMatchingList() > 0;
   }
   
   function getMessagesSupportedByFamily() {    
@@ -140,11 +140,13 @@ class CInteropActor extends CMbObject {
       return $this->_ref_msg_supported_family;
     }
     
+    $supported = $this->loadRefsMessagesSupported();
+		
     foreach($family as $_family => $_root_class) {
       $root  = new $_root_class;   
 
       foreach ($root->getEvenements() as $_evt => $_evt_class) {
-        foreach ($this->loadRefsMessagesSupported() as $_msg_supported) {
+        foreach ($supported as $_msg_supported) {
           if (!$_msg_supported->active) {
             continue;
           }
