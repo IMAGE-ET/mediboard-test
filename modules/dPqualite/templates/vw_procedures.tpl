@@ -13,6 +13,7 @@ function refreshProceduresList() {
   var form = getForm("filter-procedures");
   var url = new Url("dPqualite", "httpreq_vw_list_procedures");
   $(form).getElements().each(function(e) {
+	  if (!e.name) return;
     url.addParam(e.name, $V(e));
   });
   url.requestUpdate('list_procedures');

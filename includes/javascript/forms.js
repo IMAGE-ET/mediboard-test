@@ -614,7 +614,7 @@ Element.addMethods('form', {
   getElementsEx: function (form) {
     var list = [], present = {};
     form.getElements().each(function (element) {
-      if (present[element.name]) return;
+      if (!element.name || present[element.name]) return;
       list.push(form.elements[element.name]);
       present[element.name] = true;
     });
