@@ -26,14 +26,30 @@ class CHL7v2SegmentZFM extends CHL7v2Segment {
   
   function build(CHL7v2Event $event) {
     parent::build($event);
-    
+    $sejour = new CSejour();
     $sejour = $this->sejour;
     
     // ZFM-1: Mode d'entrée PMSI
-    $data[] = null;
+    $data[] = $sejour->mode_entree;
     
     // ZFM-2: Mode de sortie PMSI
-    $data[] = null;
+    // normal - transfert - mutation - deces
+    $mode_sortie = null;
+    switch ($sejour->mode_sortie) {
+      case "transfert" :
+        $mode_sortie = 7;
+        break;
+      case "mutation" :
+        $mode_sortie = 6;
+        break;
+      case "deces" :
+        $mode_sortie = 9;
+        break;
+      default :
+        $mode_sortie = 5;
+        break;
+    }
+    $data[] = $mode_sortie;
     
     // ZFM-3: Mode de provenance PMSI
     $data[] = null;
