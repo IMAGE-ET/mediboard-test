@@ -182,7 +182,7 @@ a *[onmouseover] {
 button,
 a.button {
   font-size: 11px;
-  line-height: 1.0em;
+  line-height: 16px;
   text-decoration: none;
   cursor: pointer;
   text-align: left;
@@ -203,11 +203,18 @@ a.button {
   padding: 1px;
   padding-right: 3px;
   margin: 1px;
-	
-	text-shadow: none;
-  /*
-  -moz-appearance: button;
-  -webkit-appearance: button;*/
+  text-shadow: none;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+button:before, 
+a.button:before,
+button img {
+  display: inline-block;
+  line-height: 16px;
+  margin-right: 1px;
+  vertical-align: middle;
 }
 
 button::-moz-focus-inner, 
@@ -228,60 +235,31 @@ form button:not([type]) {
   font-weight: bold;
 }
 
-a.button {
-  height: 16px;
-}
-
 button.notext, 
 a.button.notext {
-  font-size: 0;
+  font-size: 0 !important;
   color: rgba(0,0,0,0);
   overflow: hidden;
-}
-
-button.notext {
   width: 20px;
   padding-right: 0;
 }
 
-a.button.notext {
-  width: 16px;
-  padding-right: 1px;
-}
-
-button:before, 
-a.button:before,
-button img {
-  line-height: 8px;
-  margin-right: 1px;
-  vertical-align: text-bottom;
-}
-
 button.rtl,
 a.button.rtl {
-  padding-left: 3px;
+  padding-left: 2px;
   padding-right: 1px;
-  padding-top: 4px;
-}
-
-a.button.rtl {
-  height: 13px;
-}
-
-button.rtl {
-  padding-top: 4px;
+  line-height: 18px;
 }
 
 button.rtl:before,
 a.button.rtl:before {
   float: right;
   margin-right: 0;
-  margin-left: 3px;
-  margin-top: -3px;
+  margin-left: 1px;
 }
 
-a.button:hover,
-button:hover {
+button:hover,
+a.button:hover {
   background-image: url(images/buttons/button-over.png);
   border-color: #333;
 }

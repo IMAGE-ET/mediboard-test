@@ -278,7 +278,7 @@ class CConstantesMedicales extends CMbObject {
       "color" => "#00A8F0",
       "cumul_reset_config" => "diuere_24_reset_hour",
       "formula" => array(
-        "diurese"            => "+", 
+        "diurese"            => "+",  // Miction naturelle
         "sonde_ureterale_1"  => "+", 
         "sonde_ureterale_2"  => "+", 
         "sonde_vesicale"     => "+", 
@@ -735,12 +735,12 @@ class CConstantesMedicales extends CMbObject {
       foreach (CConstantesMedicales::$list_constantes as $_name => $_params) {
         if (in_array($_name, $selection) || $_constante_medicale->$_name != '') {
           $value = null;
-          
+					
           // cumul
           if (isset($_params["cumul_for"]) || isset($_params["formula"])) {
             $reset_hour = self::getResetHour($_name);
             $day_24h = mbTransformTime("-$reset_hour hours", $_constante_medicale->datetime, '%y-%m-%d');
-            $span = ($_constante_medicale->comment ? 1 : 0);
+            
               
             if (!isset($cumuls_day[$_name][$day_24h])) {
               $cumuls_day[$_name][$day_24h] = array(
@@ -748,7 +748,6 @@ class CConstantesMedicales extends CMbObject {
                 "datetime" => $_constante_medicale->datetime,
                 "value" => null,
                 "span"  => 0, 
-                "span_com"  => $span, // when comments add lines
                 "pair"  => (@count($cumuls_day[$_name]) % 2 ? "odd" : "even"),
                 "day"   => mbTransformTime($day_24h, null, "%a"),
               );
@@ -782,7 +781,6 @@ class CConstantesMedicales extends CMbObject {
             }
               
             $cumuls_day[$_name][$day_24h]["span"]++;
-            $cumuls_day[$_name][$day_24h]["span_com"] += ($span + 1);
             
             $value = "__empty__";
           }

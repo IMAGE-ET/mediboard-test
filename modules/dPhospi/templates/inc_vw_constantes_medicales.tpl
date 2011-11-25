@@ -402,7 +402,7 @@ loadConstantesMedicales  = function(context_guid) {
       <td>
         <script type="text/javascript">
           Main.add(function(){
-            Control.Tabs.create("tabs-constantes-graph-table");
+            Control.Tabs.create("tabs-constantes-graph-table", true);
           });
         </script>
         
@@ -430,7 +430,15 @@ loadConstantesMedicales  = function(context_guid) {
         </div>
         
         <div id="constantes-table" style="display: none;">
+				  <button class="change" onclick="$('constantes-table').down('.contantes-horizontal').toggle(); $('constantes-table').down('.contantes-vertical').toggle()">
+				  	Changer orientation
+				  </button>
+          <div class="contantes-horizontal" style="display: none;">
           {{mb_include module=dPpatients template=print_constantes}}
+          </div>
+				  <div class="contantes-vertical">
+          {{mb_include module=dPpatients template=print_constantes_vert}}
+					</div>
         </div>
       </td>
     </tr>

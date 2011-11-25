@@ -2,16 +2,8 @@
   display: inline;
 }
 
-button, a.button {
-  line-height: 1.0em;
-}
-
-button:before,
-a.button:before {
-  vertical-align: top;
-}
-
-button img, a.button img {
+button img, 
+a.button img {
   vertical-align: middle;
   margin-top: 0 2px;
 }
@@ -27,13 +19,6 @@ form button[type="submit"] {
 a.button img,
 button img {
   margin-left: 0;
-}
-
-.touchscreen button.notext,
-.touchscreen button.notext:hover {
-  font-size: 0;
-  width: 24px;
-  height: 24px;
 }
 
 select {

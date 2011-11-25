@@ -185,9 +185,20 @@ ul#nav-vert {
   vertical-align: middle;
 }
 
-.touchscreen button {
-  height: auto;
-  min-height: 26px;
+.touchscreen button,
+.touchscreen a.button {
+  height: 28px;
+  line-height: 28px;
+}
+
+.touchscreen button:before,
+.touchscreen a.button:before {
+  margin: 4px;
+}
+
+.touchscreen button.notext,
+.touchscreen a.button.notext {
+  width: 28px;
 }
 
 .touchscreen input {
@@ -202,36 +213,6 @@ ul#nav-vert {
 
 .touchscreen optgroup option {
   padding-left: 16px;
-}
-
-.touchscreen button {
-  padding-top: 3px;
-}
-
-.touchscreen a.button {
-  min-height: 19px;
-  padding-top: 4px;
-}
-
-.touchscreen a.button:before {
-  margin: 6px 4px;
-}
-
-.touchscreen button:before {
-  margin: 6px;
-  margin-left: 3px;
-}
-
-.touchscreen .notext {
-  font-size: 0;
-}
-
-.touchscreen button.notext {
-  width: 26px;
-}
-
-.touchscreen a.button.notext {
-  width: 24px;
 }
 
 .touchscreen input.autocomplete {

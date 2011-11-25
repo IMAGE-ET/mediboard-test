@@ -2,7 +2,7 @@
 {{unique_id var=uniq_ditto}}
 {{assign var=cste_grid value=$constantes_medicales_grid}}
 
-<table class="tbl constantes" style="width: 100%;">
+<table class="tbl constantes" style="width: 1%;">
   {{if $offline && isset($sejour|smarty:nodefaults)}}
     <thead>
       <tr>
@@ -20,7 +20,7 @@
     <tr>
       <th class="narrow"></th>
       {{foreach from=$cste_grid.names item=_cste_name}}
-        <th class="narrow" style="vertical-align: bottom;">
+        <th class="narrow" style="vertical-align: bottom; font-weight: normal;">
           {{vertical}}
             {{if array_key_exists("cumul_for", $list_constantes.$_cste_name)}}
               Cumul {{tr}}CConstantesMedicales-{{$list_constantes.$_cste_name.cumul_for}}-court{{/tr}}
@@ -38,8 +38,13 @@
       {{assign var=_datetime value=$_datetime|substr:0:18}}
       
       <tr class="comment-line">
-        <th {{if $_constante.comment}} rowspan="2" {{/if}}>
-          {{mb_ditto name="datetime$uniq_ditto" value=$_datetime|date_format:$conf.datetime}}
+        <th>
+          {{$_datetime|date_format:$conf.datetime}}
+          {{if $_constante.comment}}
+            <div style="min-width: 120px; font-weight: normal; background: #eee; background: rgba(255,255,255,0.6); white-space: normal; text-align: left; padding: 2px; border: 1px solid #ddd;">
+              {{$_constante.comment|nl2br}}
+						</div>
+          {{/if}}
         </th>
         {{foreach from=$cste_grid.names item=_cste_name}}
           {{assign var=_value value=null}}
@@ -50,10 +55,10 @@
             
           {{if is_array($_value)}}
             {{if $_value.value === null}}
-              <td {{if $_value.span_com > 0}} rowspan="{{$_value.span_com}}" {{/if}}></td>
+              <td {{if $_value.span > 0}} rowspan="{{$_value.span}}" {{/if}}></td>
             {{else}}
               <td style="text-align: center; font-size: 0.9em; border-left: 2px solid {{if $_value.pair == "odd"}} #36c {{else}} #3c9 {{/if}}; border-top: 1px solid #999;" 
-                  {{if $_value.span_com > 0}} rowspan="{{$_value.span_com}}" {{/if}}>
+                  {{if $_value.span > 0}} rowspan="{{$_value.span}}" {{/if}}>
                 <strong>{{$_value.value}}</strong> <br />
                 <small>{{$_value.day}}</small>
               </td>
@@ -67,14 +72,6 @@
           {{/if}}
         {{/foreach}}
       </tr>
-      {{if $_constante.comment}}
-        <tr>
-          <td colspan="{{$cste_grid.names|@count}}">
-            {{tr}}CConstantesMedicales-comment-court{{/tr}}:
-            {{$_constante.comment}}
-          </td>
-        </tr>
-      {{/if}}
     {{/foreach}}
   
   {{else}}

@@ -3,7 +3,7 @@
 {{assign var=cste_grid value=$constantes_medicales_grid}}
 {{assign var=list_constantes value="CConstantesMedicales"|static:list_constantes}}
 
-<table class="tbl constantes" style="width: 40%;">
+<table class="tbl constantes" style="width: 1%;">
   <tr>
     <th></th>
     {{foreach from=$cste_grid.grid item=_constante key=_datetime}}
@@ -11,8 +11,9 @@
         {{$_datetime|substr:0:18|date_format:$conf.datetime}}
         
         {{if $_constante.comment}}
-          <hr />
-          {{$_constante.comment}}
+          <div style="min-width: 120px; font-weight: normal; background: #eee; background: rgba(255,255,255,0.6); white-space: normal; text-align: left; padding: 2px; border: 1px solid #ddd;">
+            {{$_constante.comment}}
+					</div>
         {{/if}}
       </th>
     {{/foreach}}
@@ -39,11 +40,11 @@
         
         {{if is_array($_value)}}
           {{if $_value.value === null}}
-            <td {{if $_value.span_com > 0}} colspan="{{$_value.span_com}}" {{/if}} style="border-left: 1px solid #999;"></td>
+            <td {{if $_value.span > 0}} colspan="{{$_value.span}}" {{/if}} style="border-left: 1px solid #999;"></td>
           {{else}}
             <td style="text-align: center; border-top: 2px solid {{if $_value.pair == "odd"}} #36c {{else}} #3c9 {{/if}}; border-left: 1px solid #999;" 
                 {{if $_value.span > 0}} colspan="{{$_value.span}}" {{/if}}>
-              <strong>{{$_value.value}}</strong> <br />
+              <strong>{{$_value.value}}</strong> - 
               <small>{{$_value.day}}</small>
             </td>
           {{/if}}
