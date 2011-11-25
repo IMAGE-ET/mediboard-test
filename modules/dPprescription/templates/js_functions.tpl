@@ -77,7 +77,7 @@ selDivPoso = function(type, line_id, type_elt){
                         document.moment_unitaire.moment_unitaire_id;
   
                         
-  oFormPrise.getElements().each (function (e) {
+  oFormPrise.select("input,select").each (function (e) {
     if ((e.type != "hidden") && (e.name != "unite_prise") && (e.name != "quantite")) {
       e.hide().writeAttribute("disabled", "disabled").value = "";
     }
