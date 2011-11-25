@@ -118,7 +118,7 @@ if ($plageconsult_id) {
   $user = new CMediusers;
   $user->load($plage->chir_id);
   $function = $user->loadRefFunction();
-  if ($function->quotas)
+  if ($function->quotas) {
     $quotas = $function->quotas;
   }
   
