@@ -132,7 +132,8 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_ref_last_affectation        = null;
   var $_ref_GHM                     = array();
   var $_ref_group                   = null;
-  var $_ref_etablissement_transfert = null;
+  var $_ref_etablissement_transfert  = null;
+  var $_ref_etablissement_provenance = null;
   var $_ref_service_mutation        = null;
   var $_ref_dossier_medical         = null;
   var $_ref_rpu                     = null;
@@ -1033,6 +1034,13 @@ class CSejour extends CCodable implements IPatientRelated {
    */
   function loadRefDossierMedical() {
     return $this->_ref_dossier_medical = $this->loadUniqueBackRef("dossier_medical");;
+  }
+  
+  /**
+   * @return CEtabExterne
+   */
+  function loadRefEtablissementProvenance($cache = true){
+    return $this->_ref_etablissement_provenance = $this->loadFwdRef("etablissement_entree_id", $cache);
   }
   
   /**

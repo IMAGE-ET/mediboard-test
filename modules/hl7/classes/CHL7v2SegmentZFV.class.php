@@ -26,7 +26,7 @@ class CHL7v2SegmentZFV extends CHL7v2Segment {
   
   function build(CHL7v2Event $event) {
     parent::build($event);
-    $sejour = new CSejour();
+
     $sejour = $this->sejour;
     
     // ZFV-1: Etablissement de provenance (DLD)
@@ -81,7 +81,7 @@ class CHL7v2SegmentZFV extends CHL7v2Segment {
     
     // ZFV-7: NDA de l'établissement de provenance
     $data[] = null;
-    
+
     $this->fill($data);
   }
 }
