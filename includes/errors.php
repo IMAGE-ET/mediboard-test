@@ -170,6 +170,10 @@ function mbExport($var, $label = null, $log = false) {
   return processLog(var_export($var, true), $label, $log);
 }
 
+function hideUrlPassword($str) {
+  return preg_replace("/(.*)password=([^&]+)(.*)/", '$1password=***$3', $str);
+}
+
 function print_infos($var, $name = '') {
   if (empty($var)) {
     return; 

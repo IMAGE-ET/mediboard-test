@@ -45,7 +45,7 @@
         });
       </script>
       
-      <h1>{{$msg_segment_group->description}} ({{$msg_segment_group->version}}) <span class="type">{{$msg_segment_group->name}}</span></h1>
+      <h1>{{$msg_segment_group->description}} ({{$msg_segment_group->version}} {{if $msg_segment_group->extension}}{{$msg_segment_group->extension}}{{/if}}) <span class="type">{{$msg_segment_group->name}}</span></h1>
       
       <ul class="control_tabs" id="msg-message-tab">
         <li><a href="#msg-message-tree">Arbre</a></li>
@@ -91,7 +91,7 @@
         });
       </script>
       
-      <h1>{{$ack_segment_group->description}} ({{$ack_segment_group->version}}) <span class="type">{{$ack_segment_group->name}}</span></h1>
+      <h1>{{$ack_segment_group->description}} ({{$ack_segment_group->version}} {{if $ack_segment_group->extension}}{{$ack_segment_group->extension}}{{/if}}) <span class="type">{{$ack_segment_group->name}}</span></h1>
       
       <ul class="control_tabs" id="ack-message-tab">
         <li><a href="#ack-message-tree">Arbre</a></li>

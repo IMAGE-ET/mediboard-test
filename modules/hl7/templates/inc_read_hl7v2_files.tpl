@@ -11,7 +11,11 @@
         {{foreach from=$messages item=_message key=_key}}
           <li>
             <a href="#message-{{$_key}}" {{if $_message->errors}} class="wrong" {{/if}} title="{{$_message->filename}}">
-              <strong style="float: left; margin-right: 1em;">{{$_message->name}}</strong> {{$_message->version}}
+              <strong style="float: left; margin-right: 1em;">{{$_message->name}}</strong> 
+							{{$_message->version}} 
+							{{if $_message->extension}}
+							  ({{$_message->extension}})
+						  {{/if}}
             </a>
           </li>
         {{/foreach}}

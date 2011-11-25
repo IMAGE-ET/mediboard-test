@@ -15,7 +15,7 @@ class CHL7v2Reader {
    * @param $fileName Filename
    */
   function readFile($fileName) {
-    $message = new CHL7v2Message("FR_2.3");
+    $message = new CHL7v2Message();
     
     try {
       $fileContents = file_get_contents($fileName);

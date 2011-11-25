@@ -185,14 +185,15 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     
     // message type
     $message_type = explode($this->componentSeparator, $first_line[8]);
-    if (isset($message_type[2])) {
-      $type = $message_type[2];
+    
+    if ($message_type[0]) {
+      $this->name        = $message_type[0].$message_type[1];
+      $this->event_name  = $message_type[0];
     }
     else {
-      $type = implode("", $message_type);
+      $this->name        = preg_replace("/[^A-Z0-9]/", "", $message_type[2]);
+      $this->event_name  = substr($message_type[2], 0, 3);
     }
-    $this->name        = ($message_type[0] == "ACK") ? $message_type[0] : preg_replace("/[^A-Z0-9]/", "", $type);
-    $this->event_name  = ($message_type[0] == "ACK") ? $message_type[0] : $message_type[0].$message_type[1];
     
     $this->description = (string)$this->getSpecs()->description;
     
@@ -205,7 +206,9 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   
   private function parseRawVersion($raw){
     $parts = explode($this->componentSeparator, $raw);
-    
+		
+		CMbArray::removeValue("", $parts);
+		
     $this->version = $parts[0];
     
     if (count($parts) > 1) {
