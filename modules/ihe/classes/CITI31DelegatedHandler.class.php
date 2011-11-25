@@ -139,11 +139,18 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if ($sejour->fieldModified("sortie_reelle") && !$sejour->_old->sortie_reelle) {
         return "A03";
       }
-      // Modification de l'admission 
+      
+      // Modification de l'admission
       // Cas d'une annulation ? 
       if ($sejour->fieldModified("annule", "1")) {
         return "A13";
       }
+      
+      // Annulation de la sortie
+      if ($sejour->_old->sortie_reelle && !$sejour->sortie_reelle) {
+        return "A13";
+      }
+      
       // Simple modification ? 
       return "Z99";
     }
