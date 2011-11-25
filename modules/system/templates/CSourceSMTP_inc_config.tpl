@@ -59,6 +59,14 @@ guessDataFormEmail = function(element){
             <th>{{mb_label object=$source field="ssl"}}</th>
             <td>{{mb_field object=$source field="ssl"}}</td>
           </tr>
+          <tr>
+            <th>{{mb_label object=$source field="timeout"}}</th>
+            <td>{{mb_field object=$source field="timeout"}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$source field="debug"}}</th>
+            <td>{{mb_field object=$source field="debug"}}</td>
+          </tr>
           
           <tr>
             <td class="button" colspan="2">

@@ -19,6 +19,8 @@ class CSourceSMTP extends CExchangeSource {
   var $port     = null;
   var $email    = null;
   var $ssl      = null;
+  var $timeout  = null;
+  var $debug    = null;
   
   var $_mail    = null;
   
@@ -30,13 +32,14 @@ class CSourceSMTP extends CExchangeSource {
   }
 
   function getProps() {
-    $specs = parent::getProps();
-    $specs["port"]     = "num default|25";
-    $specs["email"]    = "email";
-    $specs["ssl"]      = "bool";
-    $specs["password"] = "password";
-    
-    return $specs;
+    $props = parent::getProps();
+    $props["port"]     = "num default|25";
+    $props["email"]    = "email";
+    $props["ssl"]      = "bool";
+    $props["password"] = "password";
+    $props["timeout"]  = "num default|5";
+    $props["debug"]    = "bool default|0";
+    return $props;
   }
   
   function updatePlainFields() {
@@ -57,16 +60,20 @@ class CSourceSMTP extends CExchangeSource {
   function init() {
   	$this->_mail = new PHPMailer(true);
   	$this->_mail->IsSMTP();
-    if($this->ssl) {
-      $this->_mail->SMTPSecure = "ssl"; // sets the prefix to the server
+  	
+  	// Sets the prefix to the server
+    if ($this->ssl) {
+      $this->_mail->SMTPSecure = "ssl";
     }
-    $this->_mail->Host       = $this->host;      // SMTP server
-    $this->_mail->SMTPDebug  = false;            // enables SMTP debug information (for testing)
-    $this->_mail->SMTPAuth   = true;             // enable SMTP authentication
-    $this->_mail->Port       = $this->port;      // set the SMTP port for the GMAIL server
-    $this->_mail->Username   = $this->user;      // SMTP account username
-    $this->_mail->Password   = $this->password;  // SMTP account password
-
+    
+    $this->_mail->Host       = $this->host;        
+    $this->_mail->SMTPAuth   = true;
+    $this->_mail->Port       = $this->port;
+    $this->_mail->Username   = $this->user;
+    $this->_mail->Password   = $this->password;
+    $this->_mail->SMTPDebug  = $this->debug ? 2 : 0;
+    $this->_mail->Timeout    = $this->timeout;
+    
     $this->_mail->SetFrom($this->email, '', 0);
   }
   
