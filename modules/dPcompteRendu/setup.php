@@ -696,7 +696,25 @@ class CSetupdPcompteRendu extends CSetup {
     $this->makeRevision("0.68");
     $this->addPrefQuery("choice_factory", "CDomPDFConverter");
     
-    $this->mod_version = "0.69";
+    $this->makeRevision("0.69");
+    $query = "CREATE TABLE `correspondant_courrier` (
+              `correspondant_courrier_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `compte_rendu_id` INT (11) UNSIGNED NOT NULL,
+              `nom` VARCHAR (255),
+              `adresse` TEXT,
+              `cp_ville` VARCHAR (255),
+              `email` VARCHAR (255),
+              `active` ENUM ('0','1') DEFAULT '0',
+              `tag` VARCHAR (255), 
+              `object_class` VARCHAR (255)
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `correspondant_courrier` 
+              ADD INDEX (`compte_rendu_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.70";
   }
 }
 ?>

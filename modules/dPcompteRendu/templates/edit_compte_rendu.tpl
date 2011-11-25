@@ -212,6 +212,13 @@ function openModalPrinters() {
   }
 {{/if}}
 
+function saveAndMerge() {
+  Control.Modal.close();
+  var form = getForm('editFrm');
+  $V(form.do_merge, 1);
+  form.onsubmit();
+}
+
 Main.add(function(){
   if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
     PageFormat.init(getForm("editFrm"));
@@ -344,6 +351,7 @@ Main.add(function(){
   <input type="hidden" name="fast_edit_pdf" value="0"/>
   <input type="hidden" name="switch_mode" value='{{$switch_mode}}'/>
   <input type="hidden" name="date_print" value="{{$compte_rendu->date_print}}" />
+  <input type="hidden" name="do_merge" value="0" />
   <input type="hidden" name="callback" value="refreshZones" />
   
   {{mb_key object=$compte_rendu}}

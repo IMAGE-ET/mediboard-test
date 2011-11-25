@@ -57,12 +57,14 @@ class CCompteRendu extends CDocumentItem {
   var $_ref_header       = null;
   var $_ref_footer       = null;
   var $_ref_file         = null;
-	var $_ref_content      = null;
-
-	// Other fields
-	var $_is_pack          = false;
-	var $_entire_doc       = null;
-	var $_ids_corres       = null;
+  var $_ref_content      = null;
+  var $_refs_correspondants_courrier = null;
+  var $_refs_correspondants_courrier_by_class = null;
+  
+  // Other fields
+  var $_is_pack          = false;
+  var $_entire_doc       = null;
+  var $_ids_corres       = null;
   static $_page_formats = array(
     'a3'      => array(29.7 , 42),
     'a4'      => array(21   , 29.7),
@@ -89,6 +91,7 @@ class CCompteRendu extends CDocumentItem {
     $backProps["modeles_headed"] = "CCompteRendu header_id";
     $backProps["modeles_footed"] = "CCompteRendu footer_id";
     $backProps["pack_links"]     = "CModeleToPack modele_id";
+    $backProps["correspondants_courrier"] = "CCorrespondantCourrier compte_rendu_id";
     return $backProps;
   }
   
@@ -129,26 +132,26 @@ class CCompteRendu extends CDocumentItem {
   }
   
   function getBinaryContent() {
-  	// Content from PDF preview
+    // Content from PDF preview
     $this->makePDFpreview();
-	  $file = $this->_ref_file;
-		if ($file->_id) {
-			return $file->getBinaryContent();
-		}
-		
-		// Or acutal HTML source
-		$this->loadContent();
-	  return $this->_source;
+    $file = $this->_ref_file;
+    if ($file->_id) {
+      return $file->getBinaryContent();
+    }
+    
+    // Or acutal HTML source
+    $this->loadContent();
+    return $this->_source;
   }
   
   function getExtensioned() {
     $file = $this->loadFile();
-		if ($file->_id) {
-			$this->_extensioned = $file->_extensioned;
-		}
+    if ($file->_id) {
+      $this->_extensioned = $file->_extensioned;
+    }
     return parent::getExtensioned();
   }
-	
+  
   function loadModeles($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
     if (!isset($where["object_id"])) {
       $where["object_id"] = "IS NULL";
@@ -211,57 +214,57 @@ class CCompteRendu extends CDocumentItem {
   function updatePlainFields() {
     parent::updatePlainFields();
     
-		// Valeur par défaut pour private
+    // Valeur par défaut pour private
     $this->completeField("private");
     if($this->private === "") {
       $this->private = 0;
     }
   }
   
-	function loadContent($field_source = true) {
-		$this->_ref_content = $this->loadFwdRef("content_id", true);
-		if ($field_source) {
-		  $this->_source = $this->_ref_content->content;
-		  $this->_source = preg_replace("/<meta[^>]+>/", '', $this->_source);
-		  $this->_source = preg_replace("/<\/meta>/", '', $this->_source);
-		  
-		  // Suppression des commentaires, provenant souvent de Word
-		  $this->_source =  preg_replace("/<!--.+?-->/s", "", $this->_source);
-		  if (preg_match("/mso-style/", $this->_source)) {
-  		  $xml = new DOMDocument('1.0', 'iso-8859-1');
+  function loadContent($field_source = true) {
+    $this->_ref_content = $this->loadFwdRef("content_id", true);
+    if ($field_source) {
+      $this->_source = $this->_ref_content->content;
+      $this->_source = preg_replace("/<meta[^>]+>/", '', $this->_source);
+      $this->_source = preg_replace("/<\/meta>/", '', $this->_source);
+      
+      // Suppression des commentaires, provenant souvent de Word
+      $this->_source =  preg_replace("/<!--.+?-->/s", "", $this->_source);
+      if (preg_match("/mso-style/", $this->_source)) {
+        $xml = new DOMDocument('1.0', 'iso-8859-1');
         $str = "<div>".CMbString::convertHTMLToXMLEntities($this->_source)."</div>";
-  		  @$xml->loadXML(utf8_encode($str));
-  		  
-  		  $xpath = new DOMXpath($xml);
-  		  $elements = $xpath->query("*/style");
-  		  
-  		  if ($elements != null) {
-    		  foreach($elements as $_element) {
-    		    if (preg_match("/(header|footer)/",$_element->nodeValue) == 0) {
-    		      $_element->parentNode->removeChild($_element);
-    		    }
-    		  }
-  		  }
-  		  $this->_source = substr($xml->saveHTML(), 5, -7);
-  		  
-  		  // La fonction saveHTML ne ferme pas les tags br, hr et img
+        @$xml->loadXML(utf8_encode($str));
+        
+        $xpath = new DOMXpath($xml);
+        $elements = $xpath->query("*/style");
+        
+        if ($elements != null) {
+          foreach($elements as $_element) {
+            if (preg_match("/(header|footer)/",$_element->nodeValue) == 0) {
+              $_element->parentNode->removeChild($_element);
+            }
+          }
+        }
+        $this->_source = substr($xml->saveHTML(), 5, -7);
+        
+        // La fonction saveHTML ne ferme pas les tags br, hr et img
         $this->_source = str_replace("<br>", "<br/>",  $this->_source);
         $this->_source = str_replace("<hr>", "<hr/>",  $this->_source);
         $this->_source = preg_replace("/<hr class=\"pagebreak\">/", "<hr class=\"pagebreak\"/>", $this->_source);
         $this->_source = preg_replace("/<img([^>]+)>/", "<img$1/>", $this->_source);
-		  }
-		}
-	}
-	
+      }
+    }
+  }
+  
   function loadComponents() {
     $this->_ref_header = $this->loadFwdRef("header_id", true);
     $this->_ref_footer = $this->loadFwdRef("footer_id", true);
   }
 
   function loadFile() {
-		return $this->_ref_file = $this->loadUniqueBackRef("files");
+    return $this->_ref_file = $this->loadUniqueBackRef("files");
   }
-	
+  
   function loadRefsFwd() {
     parent::loadRefsFwd();
 
@@ -330,6 +333,19 @@ class CCompteRendu extends CDocumentItem {
       $documents = $resultDoc->loadList($where,$order);
     }
     return $documents;
+  }
+  
+  function loadRefsCorrespondantsCourrier() {
+    return $this->_refs_correspondants_courrier = $this->loadBackRefs("correspondants_courrier");
+  }
+  
+  function loadRefsCorrespondantsCourrierByClass() {
+    if (!$this->_refs_correspondants_courrier) {
+      $this->loadRefsCorrespondantsCourrier();
+    }
+    foreach ($this->_refs_correspondants_courrier as $_corres) {
+      $this->_refs_correspondants_courrier_by_class[$_corres->object_class][] = $_corres;
+    }
   }
   
   /**
@@ -425,8 +441,8 @@ class CCompteRendu extends CDocumentItem {
   }
   
   function loadView() {
-  	parent::loadView();
-		$this->loadContent();
+    parent::loadView();
+    $this->loadContent();
     $this->loadFile();
     $this->_date = $this->loadFirstLog()->date;
   }
@@ -484,33 +500,33 @@ class CCompteRendu extends CDocumentItem {
   
   function store() {
     $this->completeField("content_id", "_source");
-		
+    
     // Prevent source modified wben sending, comparison is working when editing
     $this->loadContent($this->_send);
 
-		$source_modified = 
-			$this->_ref_content->content != $this->_source || 
-		  $this->fieldModified("margin_top") || 
-		  $this->fieldModified("margin_left") || 
-		  $this->fieldModified("margin_right") || 
-		  $this->fieldModified("margin_bottom") || 
-		  $this->fieldModified("page_height") || 
-		  $this->fieldModified("page_width") || 
-		  $this->fieldModified("header_id") || 
-		  $this->fieldModified("footer_id");
-	  
+    $source_modified = 
+      $this->_ref_content->content != $this->_source || 
+      $this->fieldModified("margin_top") || 
+      $this->fieldModified("margin_left") || 
+      $this->fieldModified("margin_right") || 
+      $this->fieldModified("margin_bottom") || 
+      $this->fieldModified("page_height") || 
+      $this->fieldModified("page_width") || 
+      $this->fieldModified("header_id") || 
+      $this->fieldModified("footer_id");
+    
     if ($source_modified) {
       
       // Bug IE : delete id attribute
       $this->_source = CCompteRendu::restoreId($this->_source);
       
-    	// Empty PDF File
+      // Empty PDF File
       foreach($this->loadBackRefs("files") as $_file) {
         $_file->file_empty();
       }
-			
-			// Send status to obsolete
-			$this->completeField("etat_envoi");
+      
+      // Send status to obsolete
+      $this->completeField("etat_envoi");
       if ($source_modified && $this->etat_envoi == "oui") {
         $this->etat_envoi = "obsolete";
       }
@@ -526,37 +542,37 @@ class CCompteRendu extends CDocumentItem {
 
     return parent::store();
   }
-	
+  
   function delete() {
     $this->completeField("content_id");
     $this->loadContent(false);
-		$this->loadRefsFiles();
+    $this->loadRefsFiles();
 
     // Remove PDF preview
     foreach($this->_ref_files as $_file) {
       $_file->delete();
     }
     
-		if ($msg = parent::delete()) { 
-		  return $msg; 
-		}
+    if ($msg = parent::delete()) { 
+      return $msg; 
+    }
     
-		// Remove content
-		return $this->_ref_content->delete();
+    // Remove content
+    return $this->_ref_content->delete();
   }
-	
+  
   function handleSend() {
     if (!$this->_send) {
       return;
     }
 
     $this->loadFile();
-		
+    
     $this->completeField("nom", "_source");
     
     return parent::handleSend();
   }
-	
+  
   /**
    * Tell whether object has a document with the same name has this one
    * @param CMbObject $object
@@ -575,12 +591,12 @@ class CCompteRendu extends CDocumentItem {
       return self::$templated_classes;
     }
     
-		$all_classes = array(
-		  "CBloodSalvage", "CConsultAnesth", "CConsultation", "CDossierMedical", "CRPU",
-			"CFunctions", "CGroups", "CMediusers", "COperation", "CPatient", "CPrescription", "CSejour"
-		);
+    $all_classes = array(
+      "CBloodSalvage", "CConsultAnesth", "CConsultation", "CDossierMedical", "CRPU",
+      "CFunctions", "CGroups", "CMediusers", "COperation", "CPatient", "CPrescription", "CSejour"
+    );
     $installed = CApp::getInstalledClasses(null, $all_classes);
-		
+    
     foreach ($installed as $key => $class) {
       if (is_method_overridden($class, 'fillTemplate') || is_method_overridden($class, 'fillLimitedTemplate')) {
         $classes[$class] = CAppUI::tr($class);
@@ -673,18 +689,18 @@ class CCompteRendu extends CDocumentItem {
   
   function makePDFpreview($force_generating = 0) {
     if ((!CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") || !CAppUI::pref("pdf_and_thumbs")) && !$force_generating) {
-      return;    	
+      return;      
     } 
   
     $this->loadRefsFwd();
     $file = $this->loadFile();
-		
-		// Fichier existe déjà et rempli
-		if ($file->_id && filesize($file->_file_path)) {
-			return;
-		}
-		
-		// Création du CFile si inexistant
+    
+    // Fichier existe déjà et rempli
+    if ($file->_id && filesize($file->_file_path)) {
+      return;
+    }
+    
+    // Création du CFile si inexistant
     if (!$file->_id) {
       $file->setObject($this);
       $file->private = 0;
@@ -696,12 +712,12 @@ class CCompteRendu extends CDocumentItem {
       $file->forceDir();
     } 
 
-		// Génération du contenu PDF 
-		$margins = array(
-			$this->margin_top, 
-			$this->margin_right, 
-			$this->margin_bottom, 
-			$this->margin_left);
+    // Génération du contenu PDF 
+    $margins = array(
+      $this->margin_top, 
+      $this->margin_right, 
+      $this->margin_bottom, 
+      $this->margin_left);
     $this->loadContent();
     $content = $this->loadHTMLcontent($this->_source, '','','','','','', $margins);
     $htmltopdf = new CHtmlToPDF;
@@ -715,12 +731,12 @@ class CCompteRendu extends CDocumentItem {
   function generateDocFromModel($other_source = null, $header_id = null, $footer_id = null) {
     $source = $this->_source;
     if ($other_source) {
-    	$source = $other_source;
+      $source = $other_source;
     }
 
     if ($this->header_id || $this->footer_id || $this->_is_pack) {
       if (!$this->_is_pack) {
-    	  $this->loadComponents();
+        $this->loadComponents();
       }
       $header = isset($this->_ref_header) ? $this->_ref_header : new CCompteRendu;
       $footer = isset($this->_ref_footer) ? $this->_ref_footer : new CCompteRendu;

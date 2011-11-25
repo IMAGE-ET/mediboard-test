@@ -61,7 +61,9 @@ if (isset($_POST["_texte_libre"])) {
 }
 
 $destinataires = array();
+$correspondants_courrier = array();
 $ids_corres    = "";
+$do_merge = CValue::post("do_merge", 0);
 
 if (isset($_POST["_source"])) {
   // Ajout d'entête / pied de page à la volée
@@ -99,20 +101,37 @@ if (isset($_POST["_source"])) {
   }
   
   $_POST["_source"] = str_ireplace($fields, $values, $_POST["_source"]);
-
-  // Application des destinataires
-  foreach($_POST as $key => $value) {
-    // Remplacement des destinataires
-    if(preg_match("/_dest_([\w]+)_([0-9]+)/", $key, $dest)) {
-      $destinataires[] = $dest;
+  
+  // Pour un nouveau document
+  if (!$_POST["compte_rendu_id"]) {
+    // Application des destinataires
+    foreach($_POST as $key => $value) {
+      // Remplacement des destinataires
+      if(preg_match("/_dest_([\w]+)_([0-9]+)/", $key, $dest)) {
+        $destinataires[] = $dest;
+      }
+    }
+  }
+  else {
+    $compte_rendu = new CCompteRendu;
+    $compte_rendu->load($_POST["compte_rendu_id"]);
+    $correspondants_courrier = $compte_rendu->loadRefsCorrespondantsCourrier();
+    foreach ($correspondants_courrier as $_corres) {
+      $_corres->active = CValue::post("_corres_{$_corres->_id}");
+      if ($msg = $_corres->store()) {
+        CAppUI::setMsg($msg, UI_MSG_ERROR);
+      }
     }
   }
   
-  if (count($destinataires)) {
+  if ((count($destinataires) || count($correspondants_courrier)) && $do_merge) {
+    
     $object = new $_POST["object_class"];
     $object->load($_POST["object_id"]);
+    
     CDestinataire::makeAllFor($object);
     $allDest = CDestinataire::$destByClass;
+    
     $bodyTag = '<div id="body">';
 
     // On sort l'en-tête et le pied de page
@@ -139,7 +158,15 @@ if (isset($_POST["_source"])) {
     $has_object_id = $do->_obj->object_id;
     $doc_id = $do->_obj->_id;
 
-    foreach($destinataires as &$curr_dest) {
+    // Si c'est un modèle existant, on utilise les correspondants courrier
+    if ($_POST["compte_rendu_id"]) {
+      $destinataires = $correspondants_courrier;
+    }
+
+    foreach ($destinataires as &$curr_dest) {
+      // Si le correspondant n'est pas actif, on continue
+      if ($_POST["compte_rendu_id"] && !$curr_dest->active) continue;
+      
       $fields = array(
         htmlentities("[Courrier - nom destinataire]"),
         htmlentities("[Courrier - adresse destinataire]"),
@@ -152,21 +179,40 @@ if (isset($_POST["_source"])) {
       $copyTo = "";
       $copyToComplet = "";
       
-      foreach($destinataires as $_dest) {
-        if ($curr_dest[0] == $_dest[0]) continue;  
-        $copyTo .= $allDest[$_dest[1]][$_dest[2]]->nom."; ";
-        $copyToComplet .= $allDest[$_dest[1]][$_dest[2]]->nom. " - " .
-                          $allDest[$_dest[1]][$_dest[2]]->adresse. " ".
-                          $allDest[$_dest[1]][$_dest[2]]->cpville. "; ";
+      // Pour un nouveau modèle
+      if (!$_POST["compte_rendu_id"]) {
+        foreach ($destinataires as $_dest) {
+          if ($curr_dest[0] == $_dest[0]) continue;  
+          $copyTo .= $allDest[$_dest[1]][$_dest[2]]->nom."; ";
+          $copyToComplet .= $allDest[$_dest[1]][$_dest[2]]->nom. " - " .
+                            $allDest[$_dest[1]][$_dest[2]]->adresse. " ".
+                            $allDest[$_dest[1]][$_dest[2]]->cpville. "; ";
+        }
+        
+        $values = array(
+          $allDest[$curr_dest[1]][$curr_dest[2]]->nom,
+          $allDest[$curr_dest[1]][$curr_dest[2]]->adresse,
+          $allDest[$curr_dest[1]][$curr_dest[2]]->cpville,
+          $copyTo,
+          $copyToComplet
+        );
       }
-      
-      $values = array(
-        $allDest[$curr_dest[1]][$curr_dest[2]]->nom,
-        $allDest[$curr_dest[1]][$curr_dest[2]]->adresse,
-        $allDest[$curr_dest[1]][$curr_dest[2]]->cpville,
-        $copyTo,
-        $copyToComplet
-      );
+      // Pour un modèle existant
+      else {
+        foreach ($destinataires as &$_dest) {
+          if ($_dest == $curr_dest || !$_dest->active) continue;
+          $copyTo .= $_dest->nom."; ";
+          $copyToComplet .= "$_dest->nom - $_dest->adresse - $_dest->cp_ville";
+        }
+        
+        $values = array(
+          $curr_dest->nom,
+          $curr_dest->adresse,
+          $curr_dest->cp_ville,
+          $copyTo,
+          $copyToComplet
+        );
+      }
       
       if (!CAppUI::conf("dPcompteRendu CCompteRendu multiple_doc_correspondants")) {
         $allSources[] = str_ireplace($fields, $values, $body);
@@ -198,8 +244,12 @@ if (isset($_POST["_source"])) {
         }
         
         $compte_rendu->_source = $content;
-        $compte_rendu->nom    .= " à {$allDest[$curr_dest[1]][$curr_dest[2]]->nom}";
-        
+        if ($_POST["compte_rendu_id"]) {
+          $compte_rendu->nom .= " à $curr_dest->nom";
+        }
+        else {
+          $compte_rendu->nom    .= " à {$allDest[$curr_dest[1]][$curr_dest[2]]->nom}";
+        }
         $do->doStore();
         $ids_corres .= "{$do->_obj->_id}-";
       }
@@ -216,10 +266,15 @@ if (isset($_POST["_source"])) {
         $_POST["_source"] = implode("<hr class=\"pageBreak\" />", $allSources);
       }
     }
+    
+    // Suppression des correspondants courrier
+    foreach ($correspondants_courrier as $_corres) {
+      $_corres->delete();
+    }
   }
 }
 
-if (!count($destinataires) || !CAppUI::conf("dPcompteRendu CCompteRendu multiple_doc_correspondants")) {
+if (!CAppUI::conf("dPcompteRendu CCompteRendu multiple_doc_correspondants") || !$do_merge) {
   $do->doBind();
   if (intval(CValue::post("del"))) {
     $do->doDelete();
@@ -233,6 +288,46 @@ if (!count($destinataires) || !CAppUI::conf("dPcompteRendu CCompteRendu multiple
       $do->_obj->margin_bottom,
       $do->_obj->margin_left);
     $do->_obj->_entire_doc = CCompteRendu::loadHTMLcontent($do->_obj->_source, "doc",'','','','','',$margins);
+  }
+}
+
+// Gestion des CCorrespondantCourrier
+if (!$do_merge && !intval(CValue::post("del")) && strpos($do->_obj->_source, "[Courrier -")) {
+  // Nouveau modèle
+
+  if (!$do->_objBefore->_id) {
+    $object = new $_POST["object_class"];
+    $object->load($_POST["object_id"]);
+    CDestinataire::makeAllFor($object);
+    $allDest = CDestinataire::$destByClass;
+    
+    foreach ($allDest as $class => $_dest_by_class) {
+      foreach ($_dest_by_class as $i => $_dest) {
+        $corres = new CCorrespondantCourrier;
+        $corres->compte_rendu_id = $do->_obj->_id;
+        $corres->nom = $_dest->nom;
+        $corres->adresse = $_dest->adresse;
+        $corres->cp_ville = $_dest->cpville;
+        $corres->email = $_dest->email;
+        $corres->tag = $_dest->tag;
+        $corres->object_class = $class;
+        $corres->active = isset($_POST["_dest_{$class}_$i"]) ? 1 : 0;
+        
+        if ($msg = $corres->store()) {
+          CAppUI::setMsg($msg, UI_MSG_ERROR);
+        }
+      }
+    }
+  }
+  // Modèle existant
+  else {
+    $correspondants_courrier = $do->_obj->loadRefsCorrespondantsCourrier();
+    foreach ($correspondants_courrier as $_corres) {
+      $_corres->active = CValue::post("_corres_{$_corres->_id}");
+      if ($msg = $_corres->store()) {
+        CAppUI::setMsg($msg, UI_MSG_ERROR);
+      }
+    }
   }
 }
 
