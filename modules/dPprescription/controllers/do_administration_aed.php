@@ -32,7 +32,7 @@ else {
 		
 		$nb_hours = mbHoursRelative($datetime, $do->_obj->dateTime);
 		
-		if ($prise->nb_tous_les) {
+		if ($prise->nb_tous_les && $prise->unite_tous_les == "heure") {
 			CAppUI::callbackAjax("PlanSoins.moveAllPlanifs", $prise_id, $do->_obj->object_id, $do->_obj->object_class, $datetime, $nb_hours, $prise->quantite);
 		}
 	}
