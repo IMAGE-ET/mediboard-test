@@ -10,10 +10,16 @@
 
 CCanDo::checkRead();
 
-$version = CValue::getOrSession("version", "2.5");
+$version = CValue::getOrSession("version", "hl7v2_5");
 
-$version_dir = "hl7v".preg_replace("/[^0-9]/", "_", $version);
-$schema_path = CHL7v2::LIB_HL7."/$version_dir/";
+if (preg_match('/^([a-z]{2})_(v[\d_]+)$/', $version, $matches)) {
+	$version_dir = "/extensions/$matches[1]/$matches[2]/";
+}
+else {
+  $version_dir = "/$version/";
+}
+
+$schema_path = CHL7v2::LIB_HL7.$version_dir;
 
 $schemas = array(
   "message" => null,
@@ -41,10 +47,28 @@ foreach($schemas as $type => $composite) {
   }
 }
 
+$versions = array(
+  "int" => array(),
+  "ext" => array(),
+);
+
+$versions_int_paths = glob(CHL7v2::LIB_HL7."/hl7v*");
+foreach($versions_int_paths as $path) {
+	$versions["int"][] = basename($path);
+}
+
+$versions_int_paths = glob(CHL7v2::LIB_HL7."/extensions/*/*");
+foreach($versions_int_paths as $path) {
+	$_version = basename($path);
+  $_language = basename(dirname($path));
+  $versions["ext"][] = "{$_language}_{$_version}";
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("schemas", $schemas);
 $smarty->assign("version", $version);
+$smarty->assign("versions", $versions);
 $smarty->display("vw_hl7v2_schemas.tpl");
 
 ?>
