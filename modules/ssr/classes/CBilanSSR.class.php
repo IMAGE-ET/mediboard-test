@@ -26,10 +26,13 @@ class CBilanSSR extends CMbObject {
   var $hospit_de_jour = null;
   var $demi_journee_1 = null;
   var $demi_journee_2 = null;
-	
-	// Form fields
+  
+  // Form fields
   var $_demi_journees = null;
-
+  var $_premier_jour = null; 
+  var $_dernier_jour = null; 
+  var $_encours      = null; 
+  
   // References
   var $_ref_technicien = null;
 
@@ -66,7 +69,7 @@ class CBilanSSR extends CMbObject {
 		
     // DB Fields
     $props["sejour_id"    ] = "ref notNull class|CSejour show|0";
-		$props["technicien_id"] = "ref class|CTechnicien";
+    $props["technicien_id"] = "ref class|CTechnicien";
     $props["entree"       ] = "text helped";
     $props["sortie"       ] = "text helped";
     $props["planification"] = "bool default|1";
@@ -78,7 +81,9 @@ class CBilanSSR extends CMbObject {
 
     // Form fields
     $props["_demi_journees"] = "enum list|none|am|pm|all";
-
+    $props["_premier_jour"] = "date";
+    $props["_dernier_jour"] = "date";
+        
     // Distant Fields
     $props["_kine_referent_id" ]   = "ref class|CMediusers";
     $props["_kine_journee_id"  ]   = "ref class|CMediusers";
@@ -106,10 +111,25 @@ class CBilanSSR extends CMbObject {
 	
   /**
    * Chargement du séjour 
+   * Calcul les premier et dernier jours ouvrés de rééducation 
    * @return CSejour sejour
    */
   function loadRefSejour() {
-    return $this->_ref_sejour = $this->loadFwdRef("sejour_id", true);
+    $sejour = $this->loadFwdRef("sejour_id", true);
+    
+    // Premier et dernier jour ouvré (exclusion des week-end)
+    $premier_jour = mbDate($sejour->entree);
+    $dernier_jour = mbDate($sejour->sortie);
+    if (!$this->hospit_de_jour) {
+      $numero_premier_decalage = mbTransformTime(null, $premier_jour, "%w");
+      $numero_dernier_decalage = mbTransformTime(null, $dernier_jour, "%w");
+      $premier_jour = mbDate(in_array($numero_premier_decalage, array(5, 6)) ? "next monday" : "+1 day", $premier_jour);
+      $dernier_jour = mbDate(in_array($numero_dernier_decalage, array(1, 7)) ? "last friday" : "-1 day", $dernier_jour);
+    }
+    $this->_premier_jour = $premier_jour;
+    $this->_dernier_jour = $dernier_jour;
+    
+    return $this->_ref_sejour = $sejour;
   }
 	
   /**
@@ -225,6 +245,28 @@ class CBilanSSR extends CMbObject {
 	  $leftjoin["bilan_ssr"] = "bilan_ssr.sejour_id = sejour.sejour_id";
 	  return CSejour::loadListForDate($date, $where, "entree_reelle", null, null, $leftjoin);
 	}
+	
+  /**
+   * Calcul si la réeducation est en cours au jour donné au regard des jours ouvrés
+   * @param $date Date de référence
+   * @return bool
+   */
+  function getDateEnCours($date) {
+  	$this->loadRefSejour();
+  	return $this->_encours = CMbRange::in($date, $this->_premier_jour, $this->_dernier_jour);
+  }
+  
+  /**
+   * Calcul si la réeducation est en cours au jour donné au regard des jours ouvrés
+   * @param $date_min Date minimale 
+   * @param $date_max Date maximale
+   * @return bool
+   */
+  function getDatesEnCours($date_min, $date_max) {
+  	$this->loadRefSejour();
+  	return $this->_encours = CMbRange::collides($date_min, $date_max, $this->_premier_jour, $this->_dernier_jour);
+  }
+  
 }
 
 

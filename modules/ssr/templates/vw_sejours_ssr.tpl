@@ -55,8 +55,8 @@
   {{foreach from=$kines item=_kine name=kines}}
   	{{assign var=kine_id value=$_kine->_id}}
     <h1 {{if $smarty.foreach.kines.first}} class="no-break" {{/if}}>
-    	{{$_kine}}
-		</h1>
+      {{$_kine}}
+    </h1>
     {{mb_include template=inc_sejours_ssr sejours=$sejours_by_kine.$kine_id}}
   {{/foreach}}   
   

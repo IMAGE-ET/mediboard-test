@@ -14,8 +14,9 @@
 </div>
 {{/if}}
   
+{{assign var=bilan value=$sejour->_ref_bilan_ssr}}
 {{assign var=patient value=$sejour->_ref_patient}}
-<span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
+<span {{if $bilan->_encours}} class="encours" {{/if}} onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
   {{$patient->nom}} {{$patient->prenom}}
 </span> 
 
@@ -24,7 +25,6 @@
 	  ({{$patient->_age}})
 	</div>
 
-  {{assign var=bilan value=$sejour->_ref_bilan_ssr}}
   {{if $bilan->hospit_de_jour}} 
     <img style="float: right;" title="{{mb_value object=$bilan field=_demi_journees}}" src="modules/ssr/images/dj-{{$bilan->_demi_journees}}.png" />
   {{/if}}

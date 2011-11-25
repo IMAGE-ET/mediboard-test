@@ -10,10 +10,7 @@
 
 <script type="text/javascript">
 Main.add(function() {
-  var count = {{$sejours|@count}};
-  var link = $('tabs-sejours').down('a[href=#board-sejours-{{$mode}}]');
-  link.down('small').update('('+count+')');
-  link.setClassName('empty', count == 0);
+  Control.Tabs.setTabCount.curry('board-sejours-{{$mode}}', '{{$sejours|@count}}');
 })	
 </script>
 <table class="tbl">
@@ -29,9 +26,10 @@ Main.add(function() {
   </tr>
 	
 {{foreach from=$sejours item=_sejour}}
-{{assign var=patient value=$_sejour->_ref_patient}}
+  {{assign var=patient value=$_sejour->_ref_patient}}
+  {{assign var=bilan value=$_sejour->_ref_bilan_ssr}}
   <tr {{if $_sejour->_count_evenements_ssr_week}} style="font-weight: bold;" {{/if}}>
-    <td class="text">
+    <td class="text {{if !$bilan->_encours}}arretee{{/if}}">
       {{if $_sejour->_ref_prescription_sejour->_count_recent_modif_presc}}
       <img style="float: right" src="images/icons/ampoule.png" title="Prescription recemment modifiée"/>
       {{/if}}
@@ -45,7 +43,6 @@ Main.add(function() {
 			{{mb_value object=$patient field=_age}}    
     </td>
     <td class="text">
-  {{assign var=bilan value=$_sejour->_ref_bilan_ssr}}
 		  {{if $bilan->hospit_de_jour}} 
 		    <img style="float: right;"title="{{mb_value object=$bilan field=_demi_journees}}" src="modules/ssr/images/dj-{{$bilan->_demi_journees}}.png" />
 		  {{/if}}
