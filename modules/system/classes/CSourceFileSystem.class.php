@@ -97,4 +97,24 @@ class CSourceFileSystem extends CExchangeSource {
     $path = $host.($path ? "/$path" : "");
     return str_replace("\\", "/", $path);
   }
+  
+  function isReachableSource() {
+    if (is_dir($this->host)) {
+      return true;
+    } else {
+      $this->_reachable = 0;
+      $this->_message   = CAppUI::tr("CSourceFileSystem-path-not-found", $this->host);
+      return false;
+    }
+  }
+  
+  function isAuthentificate() {
+    if (is_writable($this->host)) {
+      return true;
+    } else {
+      $this->_reachable = 1;
+      $this->_message   = CAppUI::tr("CSourceFileSystem-path-not-writable", $this->host);
+      return false;
+    }
+  }
 }
