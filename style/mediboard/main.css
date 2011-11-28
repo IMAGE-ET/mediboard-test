@@ -1585,7 +1585,7 @@ td.ssr-repartition {
   line-height: 110%;
 }
 
-td.ssr-repartition span {
+td.ssr-repartition span.encours {
   font-weight: bold;
 }
 

@@ -440,7 +440,7 @@ class CMbDate {
   /**
    * Give a Dirac hash of given ISO DATETIME
    * @param enum $period One of minute, hour, day, week, month or year 
-   * @return ISO DATETIMEhash
+   * @return ISO DATETIME hash
    */
   static function dirac($period, $datetime) {
     switch ($period) {
