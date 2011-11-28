@@ -1173,7 +1173,18 @@ class CSetupdPplanningOp extends CSetup {
               CHANGE `recuse` `recuse` ENUM ('-1','0','1') DEFAULT '-1';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.26";
+    $this->makeRevision("1.26");
+    $query = "UPDATE `sejour`
+      SET `etablissement_entree_id` = `sejour`.`adresse_par_etab_id`
+      WHERE `etablissement_entree_id` IS NULL;";
+    
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `sejour`
+      DROP `adresse_par_etab_id`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.27";
   }
 }
 ?>

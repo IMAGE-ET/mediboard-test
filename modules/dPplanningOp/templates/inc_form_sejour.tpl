@@ -753,9 +753,9 @@ Main.add( function(){
 
 {{if $listEtab|@count}}
 <tr>
-  <th>{{mb_label object=$sejour field=adresse_par_etab_id}}</th>
+  <th>{{mb_label object=$sejour field=etablissement_entree_id}}</th>
   <td colspan="3">
-	{{mb_field object=$sejour field=adresse_par_etab_id form="editSejour" autocomplete="true,1,50,true,true"}}
+	{{mb_field object=$sejour field=etablissement_entree_id form="editSejour" autocomplete="true,1,50,true,true"}}
 	</td>
 </tr>
 {{/if}}

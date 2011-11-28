@@ -202,8 +202,8 @@ $medecin_adresse_par->load($sejour->adresse_par_prat_id);
 $sejour->_adresse_par_prat = $medecin_adresse_par->_view;
 
 $etab = new CEtabExterne();
-$etab->load($sejour->adresse_par_etab_id);
-$sejour->_adresse_par_etab = $etab->_view;
+$etab->load($sejour->etablissement_entree_id);
+$sejour->_ref_etablissement_provenance = $etab->_view;
 
 if($service_id){
 	// Chargement des séjours à afficher

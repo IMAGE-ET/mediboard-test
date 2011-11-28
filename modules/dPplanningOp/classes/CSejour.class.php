@@ -67,7 +67,6 @@ class CSejour extends CCodable implements IPatientRelated {
   var $prestation_id       = null;
   var $facturable          = null; 
   var $adresse_par_prat_id = null;
-  var $adresse_par_etab_id = null;
   var $libelle             = null;  
   var $forfait_se          = null;
   var $commentaires_sortie = null;
@@ -106,7 +105,6 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_protocole_prescription_chir_id   = null;
   var $_adresse_par        = null;
   var $_adresse_par_prat   = null;
-  var $_adresse_par_etab   = null;
   var $_etat               = null;
   var $_entree_relative    = null;
   var $_sortie_relative    = null;
@@ -286,7 +284,6 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["service_entree_id"]        = "ref class|CService autocomplete|nom dependsOn|group_id|cancelled";
     $props["service_sortie_id"]        = "ref class|CService autocomplete|nom dependsOn|group_id|cancelled";
     $props["adresse_par_prat_id"]      = "ref class|CMedecin";
-    $props["adresse_par_etab_id"]      = "ref class|CEtabExterne autocomplete|nom";
     $props["libelle"]                  = "str seekable autocomplete dependsOn|praticien_id";
     $props["facture"]                  = "bool default|0";
     $props["forfait_se"]               = "bool default|0";
@@ -323,7 +320,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["_coordonnees"]      = "bool default|0";
     $props["_adresse_par"]      = "bool";
     $props["_adresse_par_prat"] = "str";
-    $props["_adresse_par_etab"] = "str";
+    $props["_etablissement_provenance"] = "str";
     $props["_etat"]             = "enum list|preadmission|encours|cloture";
     
     $props["_duree_prevue"]                     = "num";
@@ -760,7 +757,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $this->_acte_execution = mbAddDateTime($this->entree_prevue);
     $this->_praticien_id = $this->praticien_id;
         
-    $this->_adresse_par = ($this->adresse_par_etab_id || $this->adresse_par_prat_id);
+    $this->_adresse_par = ($this->etablissement_entree_id || $this->adresse_par_prat_id);
     
     if ($this->_adresse_par) {
       $medecin_adresse_par = new CMedecin();
@@ -768,8 +765,8 @@ class CSejour extends CCodable implements IPatientRelated {
       $this->_adresse_par_prat = $medecin_adresse_par->_view;
       
       $etab = new CEtabExterne();
-      $etab->load($this->adresse_par_etab_id);
-      $this->_adresse_par_etab = $etab->_view;
+      $etab->load($this->etablissement_entree_id);
+      $this->_ref_etablissement_provenance = $etab->_view;
     }
     
     // Etat d'un sejour : encours, clôturé ou preadmission

@@ -35,7 +35,6 @@ class CEtabExterne extends CMbObject {
     $backProps = parent::getBackProps();
     $backProps["transferts_sortie"] = "CSejour etablissement_sortie_id";
     $backProps["transferts_entree"] = "CSejour etablissement_entree_id";
-    $backProps["sejours_adresses"]  = "CSejour adresse_par_etab_id";
     return $backProps;
   }
   
