@@ -269,6 +269,13 @@ CCAMSelector.init = function(){
     {{/if}}
   </tr>
 
+  {{if !$modurgence && $conf.dPplanningOp.COperation.horaire_voulu}}
+  <tr>
+    <th>Horaire souhaité</th>
+    <td colspan="2" class="text"><div class="small-warning">Fonctionnalité déplacée dans le selecteur de vacation situé plus haut</div></td>
+  </tr>
+  {{/if}}
+  
   <tr>
     <td class="text">{{mb_label object=$op field="examen"}}</td>
     <td class="text">{{mb_label object=$op field="materiel"}}</td>
