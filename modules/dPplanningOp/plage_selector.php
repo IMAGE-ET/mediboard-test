@@ -88,6 +88,16 @@ $mins                = range(0, 59, $config["min_intervalle"]);
 $heure_entree_veille = $config["heure_entree_veille"];
 $heure_entree_jour   = $config["heure_entree_jour"];
 
+// Horaire souhaité
+$list_hours_voulu   = range(7, 20);
+$list_minutes_voulu = range(0, 59, $config["min_intervalle"]);
+foreach ($list_hours_voulu as &$hour){
+  $hour = str_pad($hour, 2, '0', STR_PAD_LEFT);
+}
+foreach ($list_minutes_voulu as &$minute){
+  $minute = str_pad($minute, 2, '0', STR_PAD_LEFT);
+}
+
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -107,6 +117,8 @@ $smarty->assign("hours"              , $hours);
 $smarty->assign("mins"               , $mins);
 $smarty->assign("heure_entree_veille", $heure_entree_veille);
 $smarty->assign("heure_entree_jour"  , $heure_entree_jour);
+$smarty->assign("list_hours_voulu"   , $list_hours_voulu);
+$smarty->assign("list_minutes_voulu" , $list_minutes_voulu);
 
 $smarty->assign("resp_bloc", $resp_bloc);
 

@@ -5,6 +5,7 @@ PlageOpSelector = {
   sPlage_id           : null,  // Identifiant de la plage
   sSalle_id           : null,  // Identifiant de la salle
   sDate               : null,  // Date de la plage
+  sHoraireVoulu       : null,  // Horaire de passage au bloc souhaité
   sPlage_id_easy      : null,
   sSalle_id_easy      : null,
   sDateEasy           : null,
@@ -13,10 +14,11 @@ PlageOpSelector = {
   s_date_entree_prevue: null,
   
   prepared: {
-    plage_id: null,
-    sDate: null,
-    bAdm: null,
-    dAdm : null
+    plage_id     : null,
+    sDate        : null,
+    bAdm         : null,
+    dAdm         : null,
+    sHoraireVoulu: null
   },
   
   options : {},
@@ -35,7 +37,7 @@ PlageOpSelector = {
     }
   },
 
-  set: function(plage_id, salle_id, sDate, bAdm, typeHospi, hour_entree, min_entree) {
+  set: function(plage_id, salle_id, sDate, bAdm, typeHospi, hour_entree, min_entree, hour_voulu, min_voulu) {
     // Declaration de formulaires
     var oOpForm     = getForm("editOp");
     var oSejourForm = getForm("editSejour");
@@ -79,11 +81,14 @@ PlageOpSelector = {
     }  
     
     // Sauvegarde des valeurs dans l'objet prepared
-    this.prepared.dAdm = dAdm;
+    this.prepared.dAdm     = dAdm;
     this.prepared.plage_id = plage_id;
     this.prepared.salle_id = salle_id;
-    this.prepared.sDate = sDate;
-    this.prepared.bAdm = bAdm;
+    this.prepared.bAdm     = bAdm;
+    this.prepared.sDate    = sDate;
+    if(hour_voulu && min_voulu) {
+      this.prepared.sHoraireVoulu = hour_voulu+":"+min_voulu+":00";
+    }
     
     // Lancement de l'execution du set
     window.setTimeout( window.PlageOpSelector.doSet , 1);
@@ -94,9 +99,10 @@ PlageOpSelector = {
     var oOpForm     = getForm("editOp");
     var oSejourForm = getForm("editSejour");
    
-    $V(oOpForm[PlageOpSelector.sPlage_id], PlageOpSelector.prepared.plage_id);
-    $V(oOpForm[PlageOpSelector.sSalle_id], PlageOpSelector.prepared.salle_id);
-    $V(oOpForm[PlageOpSelector.sDate]    , PlageOpSelector.prepared.sDate);
+    $V(oOpForm[PlageOpSelector.sPlage_id]    , PlageOpSelector.prepared.plage_id);
+    $V(oOpForm[PlageOpSelector.sSalle_id]    , PlageOpSelector.prepared.salle_id);
+    $V(oOpForm[PlageOpSelector.sHoraireVoulu], PlageOpSelector.prepared.sHoraireVoulu);
+    $V(oOpForm[PlageOpSelector.sDate]        , PlageOpSelector.prepared.sDate);
    
     if(PlageOpSelector.prepared.bAdm != "aucune"){ 
       $V(oSejourForm[PlageOpSelector.s_hour_entree_prevue], PlageOpSelector.prepared.dAdm.getHours());

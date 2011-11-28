@@ -15,10 +15,11 @@ PlageOpSelector.init = function(){
   var oOpForm     = document.editOp;
   var oSejourForm = document.editSejour;
   
-  this.sPlage_id = "plageop_id";
-  this.sSalle_id = "salle_id";
-  this.sDate     = "_date";
-  this.sType     = "type";
+  this.sPlage_id     = "plageop_id";
+  this.sSalle_id     = "salle_id";
+  this.sDate         = "_date";
+  this.sType         = "type";
+  this.sHoraireVoulu = "horaire_voulu";
   
   this.s_hour_entree_prevue = "_hour_entree_prevue";
   this.s_min_entree_prevue  = "_min_entree_prevue";
@@ -60,6 +61,7 @@ CCAMSelector.init = function(){
 <input type="hidden" name="_protocole_prescription_anesth_id" value="" />
 <input type="hidden" name="_protocole_prescription_chir_id" value="" />
 {{mb_field object=$op field="_count_actes" hidden=1}}
+<input type="hidden" name="horaire_voulu" value="{{$op->horaire_voulu}}" />
 
 <table class="form">
   <tr>
@@ -237,22 +239,26 @@ CCAMSelector.init = function(){
 	    </td>
     {{else}}
 	    <th>
-	      <input type="hidden" name="plageop_id" class="notNull {{$op->_props.plageop_id}}" onchange="Value.synchronize(this);" ondblclick="PlageOpSelector.init()" value="{{$plage->plageop_id}}" />
+	      <input type="hidden" name="plageop_id" class="notNull {{$op->_props.plageop_id}}"
+	        value="{{$plage->plageop_id}}"
+	        onchange="Value.synchronize(this);"
+	        ondblclick="PlageOpSelector.init()" />
 	      {{mb_label object=$op field="plageop_id"}}
 	      <input type="hidden" name="date" value="" />
 	      <input type="hidden" name="_date" value="{{$plage->date}}" 
 	      onchange="Value.synchronize(this); 
 	                if(this.value){ 
-	                  this.form._locale_date.value = Date.fromDATE(this.value).toLocaleDate();
+	                  $V(this.form._locale_date, Date.fromDATE(this.value).toLocaleDate() + ' ' + this.form.horaire_voulu.value.substr(0, 5));
 	                } else { 
-	                  this.form._locale_date.value = '';
+	                  $V(this.form._locale_date, '');
 	                }; 
 	                Sejour.preselectSejour(this.value);" />
 	    </th>
 	    <td colspan="2">
 	      <input type="text" name="_locale_date" readonly="readonly"
 	        onfocus="PlageOpSelector.init()"
-	        value="{{$plage->date|date_format:"%d/%m/%Y"}}"
+	        value="{{$op->_datetime|date_format:$conf.datetime}}"
+	        onchange="Value.synchronize(this);"
 	        style="width: 15em" />
 	      <button type="button" class="search notext" onclick="PlageOpSelector.init()">Choisir une date</button>
         {{if $op->_ref_salle && $op->_ref_salle->_id}}
@@ -262,26 +268,6 @@ CCAMSelector.init = function(){
 	    </td>
     {{/if}}
   </tr>
-  
-  {{if !$modurgence && $conf.dPplanningOp.COperation.horaire_voulu}}
-  <tr>
-    <th>Horaire souhaité</th>
-    <td colspan="2">
-      <select name="_hour_voulu" onchange="setMinVoulu(this.form); Value.synchronize(this);">
-        <option value="">-</option>
-      {{foreach from=$list_hours_voulu|smarty:nodefaults item=hour}}
-        <option value="{{$hour}}" {{if $hour == $op->_hour_voulu}} selected="selected" {{/if}}>{{$hour}}</option>
-      {{/foreach}}
-      </select> h
-      <select name="_min_voulu" onchange="Value.synchronize(this);">
-      <option value="">-</option>
-      {{foreach from=$list_minutes_voulu|smarty:nodefaults item=min}}
-        <option value="{{$min}}" {{if $min == $op->_min_voulu}} selected="selected" {{/if}}>{{$min}}</option>
-      {{/foreach}}
-      </select> min
-    </td>
-  </tr>
-  {{/if}}
 
   <tr>
     <td class="text">{{mb_label object=$op field="examen"}}</td>

@@ -167,18 +167,14 @@
       {{mb_label object=$op field="plageop_id"}}
       <input type="hidden" name="date" value="" />
       <input type="hidden" name="_date" value="{{$plage->date}}" 
-      onchange="Value.synchronize(this); 
-                if(this.value){ 
-                  this.form._locale_date.value = Date.fromDATE(this.value).toLocaleDate() 
-                } else { 
-                  this.form._locale_date.value = '' 
-                }; 
+      onchange="Value.synchronize(this);
                 Sejour.preselectSejour(this.value);" />
     </th>
     <td colspan="2">
       <input type="text" name="_locale_date" readonly="readonly"
         style="width: 15em;"
-        onfocus="PlageOpSelector.init()" value="{{$plage->date|date_format:"%d/%m/%Y"}}" />
+        onfocus="PlageOpSelector.init()"
+        value="{{$op->_datetime|date_format:$conf.datetime}}" />
       <button type="button" class="search notext" onclick="PlageOpSelector.init()">Choisir une date</button>
     </td>
   </tr>
@@ -246,26 +242,6 @@
   <tr>
     <th>{{mb_label object=$sejour field=consult_accomp}}</th>
     <td colspan="3">{{mb_field object=$sejour field=consult_accomp typeEnum=radio onchange="checkConsultAccompSejourEasy()"}}</td>
-  </tr>
-  {{/if}}
-  
-  {{if !$modurgence && $conf.dPplanningOp.COperation.horaire_voulu && $conf.dPplanningOp.COperation.easy_horaire_voulu}}
-  <tr>
-    <th>Horaire souhaité</th>
-    <td colspan="2">
-      <select name="_hour_voulu" onchange="setMinVoulu(this.form); Value.synchronize(this);">
-        <option value="">-</option>
-      {{foreach from=$list_hours_voulu|smarty:nodefaults item=hour}}
-        <option value="{{$hour}}" {{if $hour == $op->_hour_voulu}} selected="selected" {{/if}}>{{$hour}}</option>
-      {{/foreach}}
-      </select> h
-      <select name="_min_voulu" onchange="Value.synchronize(this);">
-      <option value="">-</option>
-      {{foreach from=$list_minutes_voulu|smarty:nodefaults item=min}}
-        <option value="{{$min}}" {{if $min == $op->_min_voulu}} selected="selected" {{/if}}>{{$min}}</option>
-      {{/foreach}}
-      </select> mn
-    </td>
   </tr>
   {{/if}}
   

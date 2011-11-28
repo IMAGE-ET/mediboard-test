@@ -648,7 +648,15 @@ class COperation extends CCodable implements IPatientRelated {
     $this->_compteur_jour = mbDaysRelative($date, mbDate());
     
     // Horaire global
-    $this->_datetime          = "$date $this->time_operation";
+    if($this->time_operation && $this->time_operation != "00:00:00") {
+      $this->_datetime = "$date $this->time_operation";
+    } elseif($this->horaire_voulu && $this->horaire_voulu != "00:00:00") {
+      $this->_datetime = "$date $this->horaire_voulu"; 
+    } elseif($this->_ref_plageop->_id) {
+      $this->_datetime = "$date ".$this->_ref_plageop->debut;
+    } else {
+      $this->_datetime = "$date 00:00:00";
+    }
     $this->_datetime_reel     = "$date $this->debut_op";
     $this->_datetime_reel_fin = "$date $this->fin_op";
     
