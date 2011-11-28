@@ -269,11 +269,7 @@ switch ($axe) {
   
   // Sur le RPU
   case "ccmu":
-  case "provenance":
-  case "destination":
   case "orientation":
-  case "transport":
-  	
     $data[$axe] = array(
       "options" => array(
         "title" => utf8_encode(CAppUI::tr("CRPU-$axe"))
@@ -299,6 +295,9 @@ switch ($axe) {
     break;
     
   // Sur le séjour
+  case "provenance":
+  case "destination":
+  case "transport":
   case "mode_entree":
   case "mode_sortie":
     $data[$axe] = array(

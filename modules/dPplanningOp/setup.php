@@ -1184,7 +1184,42 @@ class CSetupdPplanningOp extends CSetup {
       DROP `adresse_par_etab_id`;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.27";
+    $this->makeRevision("1.27");
+    
+    $this->addDependency("dPcompteRendu", "0.1");
+    $query = CSetupdPcompteRendu::renameTemplateFieldQuery("RPU - Provenance", "Sejour - Provenance");
+    $this->addQuery($query);
+    
+    $query = CSetupdPcompteRendu::renameTemplateFieldQuery("RPU - Destination", "Sejour - Destination");
+    $this->addQuery($query);
+    
+    $query = CSetupdPcompteRendu::renameTemplateFieldQuery("RPU - Tranport", "Sejour - Transport");
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `sejour`
+      ADD `provenance` ENUM('1','2','3','4','5','6', '7', '8'),
+      ADD `destination` ENUM('1','2','3','4','6','7'),
+      ADD `transport` ENUM('perso','perso_taxi','ambu','ambu_vsl','vsab','smur','heli','fo') NOT NULL;";
+    $this->addQuery($query);
+    
+    // Déplacer les champs que si le module dPurgences est actif
+    if (CModule::getActive("dPurgences")) {      
+      $query = "UPDATE sejour, rpu
+      SET `sejour`.`provenance` = `rpu`.`provenance`
+      WHERE `rpu`.`sejour_id` = `sejour`.`sejour_id`";
+      $this->addQuery($query);
+      
+      $query = "UPDATE sejour, rpu
+      SET `sejour`.`destination` = `rpu`.`destination`
+      WHERE `rpu`.`sejour_id` = `sejour`.`sejour_id`";
+      $this->addQuery($query);
+      
+      $query = "UPDATE sejour, rpu
+        SET `sejour`.`transport` = `rpu`.`transport`
+        WHERE `rpu`.`sejour_id` = `sejour`.`sejour_id`";
+      $this->addQuery($query);
+    }
+    $this->mod_version = "1.28";
   }
 }
 ?>

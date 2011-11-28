@@ -78,14 +78,14 @@ class CRPUXMLDocument extends CMbXMLDocument {
     
     $this->addElement($elParent, "ENTREE", mbTransformTime($mbObject->_entree, null, "%d/%m/%Y %H:%M"));
     $this->addElement($elParent, "MODE_ENTREE", $mbObject->_ref_sejour->mode_entree);
-    $this->addElement($elParent, "PROVENANCE", $mbObject->provenance);
-    if ($mbObject->transport == "perso_taxi") {
-      $mbObject->transport = "perso";
+    $this->addElement($elParent, "PROVENANCE", $mbObject->_ref_sejour->provenance);
+    if ($mbObject->_ref_sejour->transport == "perso_taxi") {
+      $mbObject->_ref_sejour->transport = "perso";
     }
-    if ($mbObject->transport == "ambu_vsl") {
-      $mbObject->transport = "ambu";
+    if ($mbObject->_ref_sejour->transport == "ambu_vsl") {
+      $mbObject->_ref_sejour->transport = "ambu";
     }
-    $this->addElement($elParent, "TRANSPORT", strtoupper($mbObject->transport));
+    $this->addElement($elParent, "TRANSPORT", strtoupper($mbObject->_ref_sejour->transport));
     $this->addElement($elParent, "TRANSPORT_PEC", strtoupper($mbObject->pec_transport));
     
     $motif = htmlspecialchars($mbObject->motif);
@@ -123,7 +123,7 @@ class CRPUXMLDocument extends CMbXMLDocument {
     
     $this->addElement($elParent, "SORTIE", mbTransformTime($mbObject->_sortie, null, "%d/%m/%Y %H:%M"));
     $this->addElement($elParent, "MODE_SORTIE", $mbObject->_mode_sortie);
-    $this->addElement($elParent, "DESTINATION", $mbObject->destination);
+    $this->addElement($elParent, "DESTINATION", $mbObject->_ref_sejour->destination);
     $this->addElement($elParent, "ORIENT", strtoupper($mbObject->orientation));
   }
   

@@ -190,14 +190,14 @@ function showEtabEntreeTransfert(mode) {
             </tr>
             {{else}}
             <tr>
-              <th>{{mb_label object=$rpu field="provenance"}}</th>
-              <td>{{mb_field object=$rpu field="provenance" emptyLabel="Choose" onchange="this.form.onsubmit();"}}</td>
+              <th>{{mb_label object=$rpu field="_provenance"}}</th>
+              <td>{{mb_field object=$rpu field="_provenance" emptyLabel="Choose" onchange="this.form.onsubmit();"}}</td>
             </tr>
             {{/if}}    
             
             <tr>   
-              <th>{{mb_label object=$rpu field="transport"}}</th>
-              <td>{{mb_field object=$rpu field="transport" emptyLabel="Choose" onchange="this.form.onsubmit();"}}</td>
+              <th>{{mb_label object=$rpu field="_transport"}}</th>
+              <td>{{mb_field object=$rpu field="_transport" emptyLabel="Choose" onchange="this.form.onsubmit();"}}</td>
             </tr>
             
             <tr>
@@ -267,6 +267,8 @@ function showEtabEntreeTransfert(mode) {
           <input type="hidden" name="m" value="dPurgences" />
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
+          <input type="hidden" name="sejour_id" value="{{$rpu->sejour_id}}" />
+          <input type="hidden" name="_bind_sejour" value="1" />
           <table class="layout" style="width: 100%">
             <tr>
               <th style="width: 120px;">{{mb_label object=$rpu field="gemsa"}}</th>
@@ -295,8 +297,8 @@ function showEtabEntreeTransfert(mode) {
               <td>{{mb_field object=$rpu field="orientation" emptyLabel="Choose" onchange="this.form.onsubmit();"}}</td>
             </tr>
             <tr> 
-              <th>{{mb_label object=$rpu field="destination"}}</th>
-              <td>{{mb_field object=$rpu field="destination" emptyLabel="Choose" onchange="this.form.onsubmit();"}}</td> 
+              <th>{{mb_label object=$rpu field="_destination"}}</th>
+              <td>{{mb_field object=$rpu field="_destination" emptyLabel="Choose" onchange="this.form.onsubmit();"}}</td> 
             </tr>
             {{/if}}      
             

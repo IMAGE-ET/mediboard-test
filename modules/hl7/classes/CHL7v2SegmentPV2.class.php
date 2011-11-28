@@ -196,7 +196,7 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
     // 8 - VSL
     // 9 - Autre
     if ($sejour->type == "urg") {
-      $data[] = CHL7v2TableEntry::mapTo("0430", $sejour->loadRefRPU()->transport);
+      $data[] = CHL7v2TableEntry::mapTo("0430", $sejour->transport);
     } else {
       $data[] = null;
     }

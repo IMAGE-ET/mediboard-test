@@ -72,13 +72,13 @@
     <th>{{mb_label object=$sejour field="mode_entree"}}</th>
     <td>{{mb_value object=$sejour field="mode_entree"}}</td>
 		
-		<th>{{mb_label object=$rpu field="provenance"}}</th>
-    <td>{{mb_value object=$rpu field="provenance"}}</td>
+		<th>{{mb_label object=$sejour field="provenance"}}</th>
+    <td>{{mb_value object=$sejour field="provenance"}}</td>
   </tr>
   
   <tr>   
-    <th>{{mb_label object=$rpu field="transport"}}</th>
-    <td>{{mb_value object=$rpu field="transport"}}</td>
+    <th>{{mb_label object=$sejour field="transport"}}</th>
+    <td>{{mb_value object=$sejour field="transport"}}</td>
 
     <th>{{mb_label object=$rpu field="pec_transport"}}</th>
     <td>{{mb_value object=$rpu field="pec_transport"}}</td>
@@ -118,8 +118,8 @@
   </tr>
   
   <tr>
-    <th>{{mb_label object=$rpu field="destination"}}</th>
-    <td>{{mb_value object=$rpu field="destination"}}</td>
+    <th>{{mb_label object=$sejour field="destination"}}</th>
+    <td>{{mb_value object=$sejour field="destination"}}</td>
   </tr>
 </table>
 

@@ -288,7 +288,15 @@ class CSetupdPurgences extends CSetup {
       DROP `mode_entree`;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.34";
+    $this->makeRevision("0.34");
+    $this->addDependency("dPplanningOp", "1.28");
+    $query = "ALTER TABLE `rpu`
+      DROP `provenance`,
+      DROP `destination`,
+      DROP `transport`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.35";
   }  
 }
 

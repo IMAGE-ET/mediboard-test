@@ -97,9 +97,9 @@
       {{if !$rpu->urmuta         }}<div class="warning" style="display: block;">Champ manquant {{mb_label object=$rpu field=urmuta         }}</div>{{/if}}
       {{/if}}
 
-      {{if $rpu->destination}}
-         <strong>{{tr}}CRPU-destination{{/tr}}:</strong>
-         {{mb_value object=$rpu field="destination"}} <br />
+      {{if $sejour->destination}}
+         <strong>{{tr}}CSejour-destination{{/tr}}:</strong>
+         {{mb_value object=$sejour field="destination"}} <br />
       {{/if}}
       {{if $rpu->orientation}}
          <strong>{{tr}}CRPU-orientation{{/tr}}:</strong>

@@ -327,8 +327,8 @@
 	    <th>{{mb_label object=$rpu field="urprov"}}</th>
 	    <td>{{mb_field object=$rpu field="urprov" emptyLabel="Choose" style="width: 15em;"}}</td>
 	    {{else}}
-	    <th>{{mb_label object=$rpu field="provenance"}}</th>
-	    <td>{{mb_field object=$rpu field="provenance" emptyLabel="Choose" style="width: 15em;"}}</td>
+	    <th>{{mb_label object=$rpu field="_provenance"}}</th>
+	    <td>{{mb_field object=$rpu field="_provenance" emptyLabel="Choose" style="width: 15em;"}}</td>
 	    {{/if}}
 	  </tr>
 	  
@@ -340,8 +340,8 @@
 			<th></th>
 	    <td></td>
 		  {{/if}}
-		  <th>{{mb_label object=$rpu field="transport"}}</th>
-	    <td>{{mb_field object=$rpu field="transport" emptyLabel="Choose" style="width: 15em;"}}</td>
+		  <th>{{mb_label object=$rpu field="_transport"}}</th>
+	    <td>{{mb_field object=$rpu field="_transport" emptyLabel="Choose" style="width: 15em;"}}</td>
 	  </tr>
 	  
 	   <!-- Selection du service -->

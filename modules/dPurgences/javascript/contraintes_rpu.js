@@ -4,7 +4,7 @@ ContraintesRPU = {
   contraintesOrientation: [],
   
 	updateProvenance: function(mode_entree, clearField) {
-		var oSelect = document.editRPU.provenance;
+		var oSelect = document.editRPU._provenance;
 	
 		// Le champ peut être caché
 		if (!oSelect) {
@@ -38,7 +38,7 @@ ContraintesRPU = {
   },
   
 	updateDestination: function(mode_sortie, clearField) {
-		var oSelect = document.editRPUDest.destination;
+		var oSelect = document.editRPUDest._destination;
 
 		// Le champ peut être caché
 		if (!oSelect) {

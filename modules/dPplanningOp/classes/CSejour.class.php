@@ -51,6 +51,10 @@ class CSejour extends CCodable implements IPatientRelated {
   var $septique            = null;
   var $convalescence       = null;
 
+  var $provenance          = null;
+  var $destination         = null;
+  var $transport           = null;
+  
   var $rques               = null;
   var $ATNC                = null;
   var $consult_accomp      = null;
@@ -290,6 +294,10 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["commentaires_sortie"]      = "text helped";
     $props["discipline_id"]            = "ref class|CDisciplineTarifaire autocomplete|description show|0";
     $props["ald"]                      = "bool default|0";
+    
+    $props["provenance"]               = "enum list|1|2|3|4|5|6|7|8";
+    $props["destination"]              = "enum list|1|2|3|4|6|7";
+    $props["transport"]                = "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo notNull";
     
     $props["assurance_maladie"]        = "str autocomplete";
     $props["rques_assurance_maladie"]  = "text helped";  
@@ -1684,6 +1692,19 @@ class CSejour extends CCodable implements IPatientRelated {
     $template->addProperty("Sejour - Service de sortie"       , $this->getFormattedValue("service_sortie_id"));
     $template->addProperty("Sejour - Etablissement de sortie" , $this->getFormattedValue("etablissement_sortie_id"));
     $template->addProperty("Sejour - Commentaires de sortie"  , $this->getFormattedValue("commentaires_sortie"));
+    
+    $template->addProperty("Sejour - Transport"               , $this->getFormattedValue("transport"));
+    
+    if(CAppUI::conf("dPurgences old_rpu") == "1"){
+      if (CModule::getActive("sherpa")) {
+        $rpu = $this->loadRefRPU();
+        $template->addProperty("Sejour - Provenance"         , $rpu->_id ? $rpu->getFormattedValue("urprov") : "");
+      }
+    }
+    else {
+      $template->addProperty("Sejour - Provenance"           , $this->getFormattedValue("provenance"));
+      $template->addProperty("Sejour - Destination"          , $this->getFormattedValue("destination"));
+    }
     
     $this->loadRefPraticien();
     $template->addProperty("Hospitalisation - Praticien"    , "Dr ".$this->_ref_praticien->_view);

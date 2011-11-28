@@ -198,29 +198,29 @@ printDossier = function(rpu_id) {
   </tr>
   <tr>
     <td>
-      <strong>{{mb_label object=$rpu field="provenance"}}</strong>
-      {{if $rpu->provenance}}
-        {{mb_value object=$rpu field=provenance}}
+      <strong>{{mb_label object=$object field="provenance"}}</strong>
+      {{if $object->provenance}}
+        {{mb_value object=$object field=provenance}}
       {{/if}}
     </td>
     <td>
       <strong>{{mb_label object=$rpu field="_etablissement_sortie_id"}}</strong>
-      {{if $rpu->provenance}}
+      {{if $object->provenance}}
         {{mb_value object=$rpu field=_etablissement_sortie_id}}
       {{/if}}
     </td>
   </tr>
     <tr>
     <td>
-      <strong>{{mb_label object=$rpu field="transport"}}</strong>
-      {{if $rpu->transport}}
-        {{mb_value object=$rpu field=transport}}
+      <strong>{{mb_label object=$object field="transport"}}</strong>
+      {{if $object->transport}}
+        {{mb_value object=$object field=transport}}
       {{/if}}
     </td>
     <td>
-      <strong>{{mb_label object=$rpu field="destination"}}</strong>
-      {{if $rpu->destination}}
-        {{mb_value object=$rpu field=destination}}
+      <strong>{{mb_label object=$object field="destination"}}</strong>
+      {{if $object->destination}}
+        {{mb_value object=$object field=destination}}
       {{/if}}
     </td>
   </tr>
