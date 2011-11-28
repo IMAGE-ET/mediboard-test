@@ -61,7 +61,7 @@ require "./includes/autoload.php";
 // Shutdown function
 register_shutdown_function(array("CApp", "checkPeace"));
 
-if (!CSQLDataSource::get("std")) {
+if (!@CSQLDataSource::get("std")) {
   header("Location: offline.php?reason=bdd");
   die("La base de données n'est pas connectée");
 }
