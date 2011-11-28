@@ -2,6 +2,7 @@
 <script type="text/javascript">
 Main.add(function(){
   Control.Tabs.create("field_groups_layout");
+  //ExClass.putCellSpans($$(".drop-grid")[0]);
 });
 </script>
 
@@ -229,7 +230,7 @@ Main.add(function(){
   {{/foreach}}
   <li style="font-size: 1.2em; font-weight: bold;">
     <label title="Plutôt que glisser-déposer">
-      <input type="checkbox" onclick="ExClass.setPickMode(this.checked)" />
+      <input type="checkbox" onclick="ExClass.setPickMode(this.checked)" checked="checked" />
       Disposer par clic
     </label>
   </li>
@@ -238,7 +239,7 @@ Main.add(function(){
 
 {{assign var=groups value=$ex_class->_ref_groups}}
 
-<form name="form-grid-layout" method="post" onsubmit="return false" class="prepared">
+<form name="form-grid-layout" method="post" onsubmit="return false" class="prepared pickmode">
   
 {{foreach from=$grid key=_group_id item=_grid}}
 
@@ -347,7 +348,7 @@ Main.add(function(){
   <tr>
     <th style="padding: 4px; width: 2em; text-align: right; background: #ddd;">{{$_y}}</th>
     {{foreach from=$_line key=_x item=_group}}
-      <td style="border: 1px dotted #aaa; min-width: 2em; padding: 0;" class="cell">
+      <td style="border: 1px dotted #aaa; min-width: 2em; padding: 0; vertical-align: middle;" class="cell">
       
         {{*
         <div style="position: relative;" class="cell-layout-wrapper">

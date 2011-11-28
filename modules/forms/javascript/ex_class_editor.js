@@ -3,7 +3,7 @@ exClassTabs = null;
 ExClass = {
   id: null,
   layourEditorReady: false,
-  pickMode: false,
+  pickMode: true,
   setPickMode: function(active){
     this.pickMode = active;
     getForm('form-grid-layout').setClassName("pickmode", active);
