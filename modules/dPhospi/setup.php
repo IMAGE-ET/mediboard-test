@@ -382,7 +382,21 @@ class CSetupdPhospi extends CSetup {
                 ADD  `code` VARCHAR(12)";
     $this->addQuery($query);
     
-    $this->mod_version = "0.47";
+    $this->makeRevision("0.47");
+    
+    $query = "ALTER TABLE  `affectation`   
+                ADD `uf_hebergement_id` INT (11) UNSIGNED,
+                ADD `uf_medicale_id` INT (11) UNSIGNED,
+                ADD `uf_soins_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE  `affectation`   
+                ADD INDEX (`uf_hebergement_id`),
+                ADD INDEX (`uf_medicale_id`),
+                ADD INDEX (`uf_soins_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.48";
   }
 }
 ?>

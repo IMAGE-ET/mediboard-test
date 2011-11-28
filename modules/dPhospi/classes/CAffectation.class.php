@@ -25,6 +25,10 @@ class CAffectation extends CMbObject {
   var $confirme = null;
   var $effectue = null;
   var $rques    = null;
+  
+  var $uf_hebergement_id = null; // UF de responsabilité d'hébergement
+  var $uf_medicale_id    = null; // UF de responsabilité médicale
+  var $uf_soins_id       = null; // UF de responsabilité de soins
 
   // Form Fields
   var $_entree_relative = null;
@@ -69,6 +73,10 @@ class CAffectation extends CMbObject {
     $specs["confirme"]     = "bool";
     $specs["effectue"]     = "bool";
     $specs["rques"]        = "text";
+    
+    $specs["uf_hebergement_id"] = "ref class|CUniteFonctionnelle";
+    $specs["uf_medicale_id"]    = "ref class|CUniteFonctionnelle";
+    $specs["uf_soins_id"]       = "ref class|CUniteFonctionnelle";
 
     $specs["_duree"]       = "num";
     $specs["_mode_sortie"] = "enum list|normal|mutation|transfert|deces default|normal";
