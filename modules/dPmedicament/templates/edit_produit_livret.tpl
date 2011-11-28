@@ -32,10 +32,7 @@ Main.add(function() {
   <input type="hidden" name="m" value="dPmedicament" />
   <input type="hidden" name="dosql" value="do_produit_livret_aed" />
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="code_cip" value="{{$produit_livret->code_cip}}" />
-  {{if isset($function_guid|smarty:nodefaults)}}
-    <input type="hidden" name="_function_guid" value="{{$function_guid}}" />
-  {{/if}}
+  <input type="hidden" name="produit_livret_id" value="{{$produit_livret->_id}}" />
   <table class="tbl">
     <tr>
       <th colspan="2">{{$produit_livret->_ref_produit->libelle}}</th>
@@ -81,10 +78,10 @@ Main.add(function() {
 		<tr>
       <td>Unité de prise par défaut</td>
       <td>
-      	<select name="_unite_prise" style="width:200px;">
+      	<select name="unite_prise" style="width:200px;">
 			    <option value="">&mdash; Choix d'une unité</option>
 					{{foreach from=$produit_livret->_unites_prise item=_unite}}
-			      <option value="{{$_unite}}" {{if $produit_livret->_unite_prise == $_unite}}selected="selected"{{/if}}>{{$_unite}}</option>
+			      <option value="{{$_unite}}" {{if $produit_livret->unite_prise == $_unite}}selected="selected"{{/if}}>{{$_unite}}</option>
 			    {{/foreach}}
 			  </select>
       </td>
@@ -96,4 +93,3 @@ Main.add(function() {
     </tr>
   </table>
 </form>
-

@@ -98,9 +98,11 @@ if($line instanceof CPrescriptionLineMedicament){
 	 // Chargement de l'unite par defaut
 	 $produit_livret_thera = new CProduitLivretTherapeutique();
    $where = array();
+	 $owner_crc = CBcbProduit::getHash(CGroups::loadCurrent()->_guid);
+	 
 	 $group_id = CGroups::loadCurrent()->_id;
 	 $where["code_cis"] = " = '$line->code_cis'";
-	 $where["group_id"] = " = '$group_id'";
+	 $where["owner_crc"] = " = '$owner_crc'";
    $where["unite_prise"] = " IS NOT NULL";
    
 	 $produit_livret_thera->loadObject($where);

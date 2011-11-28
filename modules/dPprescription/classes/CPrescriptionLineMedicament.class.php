@@ -266,10 +266,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     }
     
     if (CAppUI::conf("dPprescription CPrescription use_libelle_livret")){
-      $this->_ref_produit->updateLibelleProduit();
-      if($this->_ref_produit->_libelle_livret){
-        $this->_ucd_view = $this->_ref_produit->_libelle_livret;
-      }
+      $this->updateLibelleProduit();
     }
     
     $this->_forme_galenique = $this->_ref_produit->forme;
@@ -325,6 +322,22 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $this->_long_view .= $this->_duree_prise;
   }
   
+	
+	function updateLibelleProduit(){
+    $owner_crc = CBcbProduit::getHash(CProductStockGroup::getHostGroup(false)->_guid);
+  
+	  $produit = new CProduitLivretTherapeutique();
+		$where = array();
+		$where["commentaire"] = " != ''";
+    $where["code_cis"] = " = '$this->code_cis'";
+		$where["owner_crc"] = " = '$owner_crc'";
+    $produit->loadObject($where);
+		
+		if($produit->_id){
+			$this->_ucd_view = $produit->commentaire;
+		}
+	}
+	
   /*
    * Calcul des droits
    */

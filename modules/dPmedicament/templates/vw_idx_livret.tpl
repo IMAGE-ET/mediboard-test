@@ -76,12 +76,13 @@ var Livret = {
   },
   
   // Suppression d'un produit du livret
-  delProduit: function(code_cip, lettre, codeATC) {
+  delProduit: function(code_cip, lettre, codeATC, produit_livret_id) {
     // Submit du formulaire de suppression du produit
     var oForm = getForm("addProduit");
-    oForm.code_cip.value = code_cip;
-    oForm.del.value = 1;
-    submitFormAjax(oForm, 'systemMsg', { 
+    $V(oForm.code_cip, code_cip);
+		$V(oForm.produit_livret_id, produit_livret_id);
+    $V(oForm.del, 1);
+    return onSubmitFormAjax(oForm, { 
       onComplete : function() {
         Livret.reloadAlpha(lettre, code_cip);
         Livret.reloadATC(codeATC, code_cip);

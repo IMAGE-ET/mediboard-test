@@ -42,7 +42,7 @@ if($inLivret){
   }
 }
 
-$search_by_name = $mbProduit->searchProduitAutocomplete($tokens, "50", $inLivret, $code, $search_libelle_long, $hors_specialite, $search_by_cis, $perfusable);
+$search_by_name = $mbProduit->searchProduitAutocomplete($tokens, "100", $inLivret, $code, $search_libelle_long, $hors_specialite, $search_by_cis, $perfusable);
 
 // Recherche des produits en se basant sur les DCI
 $dci = new CBcbDCI();

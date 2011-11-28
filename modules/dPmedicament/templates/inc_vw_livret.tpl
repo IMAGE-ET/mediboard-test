@@ -36,12 +36,11 @@ Main.add(function(){
   <input type="hidden" name="m" value="dPmedicament" />
   <input type="hidden" name="dosql" value="do_produit_livret_aed" />
   <input type="hidden" name="del" value="0" />
+	<input type="hidden" name="produit_livret_id" value="" />
   {{if isset($function_guid|smarty:nodefaults)}}
     <input type="hidden" name="_function_guid" value="{{$function_guid}}"/>
   {{/if}}
-  
   <input type="hidden" name="code_cip" value=""/>
-  
 </form>
 
 <div style="font-size: 1.1em; text-align: center" class="pagination">
@@ -66,20 +65,15 @@ Main.add(function(){
     <th>Libelle</th>
     <th>Code CIP</th>
     <th>Code UCD</th>
-		<!--
-    <th>Prix Hôpital</th>
-    <th>Prix Ville</th>
-    <th>Date Prix Hôpital</th>
-    <th>Date Prix Ville</th>
-    <th>Code Interne</th>
-		    -->
+		<th>Code CIS</th>
     <th>Alias</th>
 		<th>Unité de prise</th>
   </tr>
   {{foreach from=$produits_livret item=produit_livret}}
+	  {{assign var=produit_livret_mb value=$produit_livret->_ref_produit_livret_therapeutique}}
   <tr>
     <td>
-      <button type="button" class="trash notext" onclick="Livret.delProduit('{{$produit_livret->code_cip}}','{{$lettre}}','')">
+      <button type="button" class="trash notext" onclick="Livret.delProduit('{{$produit_livret->code_cip}}','{{$lettre}}','','{{$produit_livret_mb->_id}}')">
         {{tr}}Delete{{/tr}}
       </button>
       <button type="button" class="edit notext" onclick="Livret.editProduit('{{$produit_livret->code_cip}}','{{$lettre}}','')">
@@ -106,25 +100,11 @@ Main.add(function(){
         {{$produit_livret->_ref_produit->libelle_long}}
       </a>
     </td>
-    <td>{{$produit_livret->_ref_produit->code_cip}}</td>
-    <td>{{$produit_livret->_ref_produit->code_ucd}}</td>
-    <!--
-		<td>
-      {{if $produit_livret->prix_hopital}}
-        {{$produit_livret->prix_hopital|currency}}
-      {{/if}}
-    </td>
-    <td>
-      {{if $produit_livret->prix_ville}}
-        {{$produit_livret->prix_ville|currency}}
-      {{/if}}
-    </td>
-    <td>{{$produit_livret->date_prix_hopital|date_format:"%d/%m/%Y"}}</td>
-    <td>{{$produit_livret->date_prix_ville|date_format:"%d/%m/%Y"}}</td>
-    <td>{{$produit_livret->code_interne}}</td> 
-		-->
-    <td class="text">{{$produit_livret->commentaire}}</td> 
-		<td>{{$produit_livret->_unite_prise}}</td>
+    <td>{{$produit_livret_mb->code_cip}}</td>
+    <td>{{$produit_livret_mb->code_ucd}}</td>
+		<td>{{$produit_livret_mb->code_cis}}</td>
+    <td class="text">{{$produit_livret_mb->commentaire}}</td> 
+		<td>{{$produit_livret_mb->unite_prise}}</td>
   </tr>
   {{/foreach}}
 </table>

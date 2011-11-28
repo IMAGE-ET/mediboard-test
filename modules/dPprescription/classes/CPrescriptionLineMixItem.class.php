@@ -161,9 +161,10 @@ class CPrescriptionLineMixItem extends CMbObject implements IPatientRelated {
 		if(!$this->_id && !$this->unite){
 			$produit_livret_thera = new CProduitLivretTherapeutique();
 			$where = array();
-			$group_id = CGroups::loadCurrent()->_id;
+			$owner_crc = CBcbProduit::getHash(CGroups::loadCurrent()->_guid);
+			
 			$where["code_cis"] = " = '$this->code_cis'";
-			$where["group_id"] = " = '$group_id'";
+			$where["owner_crc"] = " = '$owner_crc'";
 			$where["unite_prise"] = " IS NOT NULL";
 			$produit_livret_thera->loadObject($where);
 			if($produit_livret_thera->_id){

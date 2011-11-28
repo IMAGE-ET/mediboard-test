@@ -14,9 +14,16 @@ $function_guid = CValue::get("function_guid", null);
 $produits_livret = array();
 
 // Chargement des produits du livret therapeutique
-$produits_livret_temp = CBcbProduit::loadRefLivretTherapeutique($function_guid, '%', 2000, false);
+$produit_livret = new CProduitLivretTherapeutique();
+
+$crc = isset($function_guid) ? $function_guid : CProductStockGroup::getHostGroup(false)->_guid;
+$crc = CBcbProduit::getHash($crc);
+
+$produit_livret->owner_crc = $crc;
+$produits_livret_temp = $produit_livret->loadMatchingList();
 
 foreach($produits_livret_temp as $_produit_livret){
+	$_produit_livret->loadRefProduit();
   $_produit_livret->_ref_produit->isInT2A();
   $_produit = $_produit_livret->_ref_produit;
   
