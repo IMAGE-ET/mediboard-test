@@ -66,6 +66,14 @@ ExClass = {
     
     // source parent
     var oldParent = drag.up();
+    /*
+    var cell = oldParent.up(".cell");
+    ExClass.setRowSpan(cell, 1);
+    ExClass.setColSpan(cell, 1);
+      
+    drag.down(".size input").each(function(input){
+      input.value = 1;
+    });*/
     
     if (drop.hasClassName("grid")) {
       drop.update(drag);
@@ -254,15 +262,19 @@ ExClass = {
     
     return {grid: newGrid, width: max.x, height: max.y};
   },
-	
-	changeSpan: function(button) {
-		var value = button.value;
-		var input = button.up(".arrows").down("input");
-		var newValue = Math.max(1, parseInt(input.value) + parseInt(value));
-		input.value = newValue;
-		input.fire("ui:change");
-	},
-	
+  
+  putCellSpans: function(grid) {
+    grid.select(".size input").each(ExClass.setSpan);
+  },
+  
+  changeSpan: function(button) {
+    var value = button.value;
+    var input = button.up(".arrows").down("input");
+    var newValue = Math.max(1, parseInt(input.value) + parseInt(value));
+    input.value = newValue;
+    input.fire("ui:change");
+  },
+  
   setRowSpan: function(cell, rowspan){
     var currentGrid = ExClass.getSpanningCells(cell);
     currentGrid.invoke("invoke", "show");
@@ -313,7 +325,10 @@ ExClass = {
       });
     });
     
-    $$(".draggable:not(.hostfield)").each(function(d){
+		// :not pseudo element is slow in IE
+		var draggables = $$(".draggable").notMatch(".hostfield");
+		
+    draggables.each(function(d){
       d.observe("mousedown", function(event){
         if (!ExClass.pickMode) return;
         

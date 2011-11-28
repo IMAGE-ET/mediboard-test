@@ -270,6 +270,14 @@ Class.extend(Ajax.Request, {
   }
 });
 
+Class.extend(Array, {
+  notMatch: function(css) {
+    return this.reject(function(e){
+      return e.match(css);
+    });
+  }
+});
+
 // Fix to get better window size ( document.documentElement instead of document.body )
 // Needs to be done after everything
 (function(){
