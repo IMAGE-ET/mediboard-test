@@ -5,7 +5,7 @@
 <!-- saved from url=(0014)about:internet --> 
 {{/if}}
  
-<html lang="{{$localeInfo.alpha2}}">
+<html lang="{{$localeInfo.alpha2}}" class="ua-{{$browser.name}} ua-{{$browser.name}}-{{$browser.majorver}}">
 <head>
   <!-- Content-Type meta tags need to be the first in the page (even before title) -->
   <meta http-equiv="Content-Type" content="text/html;charset={{$localeInfo.charset}}" />

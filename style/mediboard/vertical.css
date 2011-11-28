@@ -1,6 +1,5 @@
 /* Vertical text */
 span.vertical {
-  -ms-writing-mode: tb-rl;
   width: 1.1em;
   display: inline-block;
   -webkit-transform: rotate(180deg);
@@ -27,4 +26,31 @@ span.vertical .nowm {
 
 span.vertical .orig {
   display: none;
+}
+
+/* MSIE supports writing-mode */
+.ua-msie span.vertical {
+  -ms-writing-mode: tb-rl;
+  width: auto;
+}
+
+.ua-msie span.vertical .orig {
+  display: inline;
+}
+
+.ua-msie span.vertical .nowm {
+  display: none !important; /* doesn't work when contentEditable=true !!! */
+  visibility: hidden;
+  font-size: 0;
+  line-height: 0;
+  letter-spacing: -1px;
+  filter: alpha(opacity=0);
+  -ms-filter: "alpha(opacity=0)";
+}
+
+@media screen {
+  .ua-msie span.vertical {
+    filter: flipv fliph;
+    background-color: inherit;
+  }
 }
