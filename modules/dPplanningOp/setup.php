@@ -1219,7 +1219,13 @@ class CSetupdPplanningOp extends CSetup {
         WHERE `rpu`.`sejour_id` = `sejour`.`sejour_id`";
       $this->addQuery($query);
     }
-    $this->mod_version = "1.28";
+    
+    $this->makeRevision("1.28");
+    $query = "ALTER TABLE `sejour`
+      CHANGE `transport` `transport` ENUM('perso','perso_taxi','ambu','ambu_vsl','vsab','smur','heli','fo');";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.29";
   }
 }
 ?>
