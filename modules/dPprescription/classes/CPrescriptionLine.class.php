@@ -695,7 +695,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $where["dateTime"] = " LIKE '$date%'";
     
     $planifs = $planif->loadList($where, "dateTime");
-      
+    
     foreach($this->_ref_prises as &$_prise) {
       // Mise a jour de la quantite (en fonction du poids et de l'unite d'administration)
       $_prise->updateQuantite();
@@ -734,7 +734,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
         $_heure = substr(mbTime($_planif->dateTime), 0, 2);
         $_planif->_quantite = $_prise->_quantite_administrable;
             
-        if($manual_planif && !preg_match("/[0-9]{1,2}h/i", $_prise->_ref_moment->libelle) && !$_prise->urgence_datetime){
+        if($manual_planif && !preg_match("/[0-9]{1,2}h/i", $_prise->_ref_moment->libelle) && !$_prise->urgence_datetime && !$_prise->heure_prise){
           // On n'ajoute a la liste que les planifs qui ne sont pas deja planifiées
           $_manual_planification = new CAdministration();    
           if(is_numeric($key_tab)){
