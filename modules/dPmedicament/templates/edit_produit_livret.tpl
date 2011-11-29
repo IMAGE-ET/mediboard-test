@@ -10,12 +10,13 @@
 
 <script type="text/javascript">
 
-function submitProduitLivret(lettre, codeATC, code_cip){
-  var oForm = document.editProduitLivret;
-  submitFormAjax(oForm, 'systemMsg', { 
+submitProduitLivret = function(lettre, codeATC, code_cip){
+  var oForm = getForm("editProduitLivret");	
+  return onSubmitFormAjax(oForm, { 
     onComplete : function(){ 
-      window.opener.Livret.reloadAlpha(lettre, code_cip); 
-      window.opener.Livret.reloadATC(codeATC, code_cip)  
+		  Control.Modal.close();
+      Livret.reloadAlpha(lettre, code_cip); 
+      Livret.reloadATC(codeATC, code_cip);
     } 
   });
 }
@@ -28,7 +29,7 @@ Main.add(function() {
 
 </script>
 
-<form name="editProduitLivret" action="?" method="post">
+<form name="editProduitLivret" action="?" method="post" onsubmit="return submitProduitLivret('{{$lettre}}','{{$codeATC}}','{{$code_cip}}');">
   <input type="hidden" name="m" value="dPmedicament" />
   <input type="hidden" name="dosql" value="do_produit_livret_aed" />
   <input type="hidden" name="del" value="0" />
@@ -88,7 +89,7 @@ Main.add(function() {
     </tr>
     <tr>
       <td colspan="2" style="text-align: center">
-        <button type="button" class="submit" onclick="submitProduitLivret('{{$lettre}}','{{$codeATC}}','{{$code_cip}}');">Enregistrer</button>
+        <button type="submit" class="submit">Enregistrer</button>
       </td>
     </tr>
   </table>

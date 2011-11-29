@@ -98,7 +98,7 @@ var Livret = {
     {{if isset($livret_cabinet|smarty:nodefaults)}}
       this.urlEditProd.addParam("function_guid", "{{$function_guid}}");
     {{/if}}
-    this.urlEditProd.popup(385, 230, "Modification d'un élément");
+    this.urlEditProd.requestModal(400, 300, "Modification d'un élément");
   },
   
   // Refresh de la liste des produits dans le livret

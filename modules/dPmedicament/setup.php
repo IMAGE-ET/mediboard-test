@@ -170,7 +170,15 @@ class CSetupdPmedicament extends CSetup {
     
     $this->addFunction("synchronizeLivret");
     
-    $this->mod_version = "0.21";
+		$this->makeRevision("0.21");
+		$query = "ALTER TABLE `produit_livret_therapeutique` 
+							ADD INDEX (`code_cip`),
+							ADD INDEX (`code_ucd`),
+							ADD INDEX (`code_cis`),
+							ADD INDEX (`commentaire`);";
+		$this->addQuery($query);
+		
+    $this->mod_version = "0.22";
   }  
 }
 
