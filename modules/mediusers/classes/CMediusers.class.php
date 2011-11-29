@@ -393,10 +393,17 @@ class CMediusers extends CMbObject {
     return CPermObject::getPermObject($this, $permType, $this->_ref_function);
   }
 
-  function loadProtocoles() {
-    $where = array("protocole.chir_id = '$this->_id' OR protocole.function_id = '$this->function_id'");
-    $protocoles = new CProtocole();
-    $this->_ref_protocoles = $protocoles->loadList($where, "libelle_sejour, libelle, codes_ccam");
+  function loadProtocoles($type = null) {
+    $where = array(
+		  "protocole.chir_id = '$this->_id' OR protocole.function_id = '$this->function_id'"
+		);
+		
+		if ($type) {
+			$where["type"] = "= '$type'";
+		}
+		
+    $protocole = new CProtocole();
+    $this->_ref_protocoles = $protocole->loadList($where, "libelle_sejour, libelle, codes_ccam");
   }
   
   function getOwners() {

@@ -25,18 +25,24 @@ ProtocoleSelector = {
   sRques_sej       : null,
   sProtoPrescAnesth: null,
   sProtoPrescChir  : null,
-  sServiceId	     : null,
+  sServiceId       : null,
   sServiceId_easy  : null,
+  sForceType       : null,
   options : {},
 
   pop: function() {
     var oForm     = (this.sForm && getForm(this.sForm)) || getForm("editOp");
     var oFormEasy = getForm("editOpEasy");
     var oSejourForm = getForm("editSejour");
+    
     var url = new Url("dPplanningOp", "vw_protocoles");
     url.addParam("chir_id", oForm[this.sChir_id].value);
+    
+    if (this.sForceType) {
+      url.addParam("sejour_type", this.sForceType);
+    }
+    
     url.setFragment(this.sForSejour == 1 ? 'sejour': 'interv');
-    //url.popup(this.options.width, this.options.height, "Protocole");
     url.modal(this.options);
   },
   
@@ -80,18 +86,20 @@ ProtocoleSelector = {
     // Champs du séjour
     if(!oSejourForm.sejour_id.value || oSejourForm[this.sDuree_prevu].value < protocole.duree_hospi) {
       $V(oSejourForm[this.sDuree_prevu], protocole.duree_hospi);
-      oSejourForm[this.sType].value = protocole.type;
+      if (this.sType) {
+        oSejourForm[this.sType].value = protocole.type;
+      }
     }
-    if(!oSejourForm.sejour_id.value || !oSejourForm[this.sServiceId].value) {
+    if(this.sServiceId && (!oSejourForm.sejour_id.value || !oSejourForm[this.sServiceId].value)) {
       $V(oSejourForm[this.sServiceId], protocole.service_id);
     }
-    if(!oSejourForm.sejour_id.value || !oSejourForm[this.sDP].value) {
+    if(this.sDP && (!oSejourForm.sejour_id.value || !oSejourForm[this.sDP].value)) {
       $V(oSejourForm[this.sDP], protocole.DP);
     }
     if(!oSejourForm.sejour_id.value || !oSejourForm[this.sLibelle_sejour].value) {
       $V(oSejourForm[this.sLibelle_sejour], protocole.libelle_sejour);
     }
-    if(oSejourForm.sejour_id.value && oSejourForm[this.sConvalescence].value) {
+    if(this.sConvalescence && (oSejourForm.sejour_id.value && oSejourForm[this.sConvalescence].value)) {
       $V(oSejourForm[this.sConvalescence], oSejourForm[this.sConvalescence].value+"\n"+protocole.convalescence);
     } else {
       $V(oSejourForm[this.sConvalescence], protocole.convalescence);
@@ -106,6 +114,7 @@ ProtocoleSelector = {
       refreshListCCAM("expert");
       refreshListCCAM("easy");
     }
+    
     if (oSejourForm[this.sProtoPrescChir] && protocole.protocole_prescription_chir_id != 'prot-') {
       $V(oSejourForm[this.sProtoPrescChir], protocole.protocole_prescription_chir_id);
       $V(oSejourForm.libelle_protocole, protocole.libelle_protocole_prescription_chir);
@@ -115,6 +124,8 @@ ProtocoleSelector = {
       $V(oSejourForm[this.sProtoPrescChir], "");
     } 
     
-    refreshViewProtocoleAnesth(protocole.protocole_prescription_anesth_id);
+    if (window.refreshViewProtocoleAnesth) {
+      refreshViewProtocoleAnesth(protocole.protocole_prescription_anesth_id);
+    }
   }
 };

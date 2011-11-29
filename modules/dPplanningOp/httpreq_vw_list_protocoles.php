@@ -23,6 +23,7 @@ $chir->load($chir_id);
 
 $type         = CValue::getOrSession("type", "interv"); 
 $page         = CValue::get("page");
+$sejour_type  = CValue::get("sejour_type");
 
 $protocole = new CProtocole;
 $where = array();
@@ -36,6 +37,10 @@ if ($type == 'interv') {
 }
 else {
 	$where["for_sejour"] = "= '1'";
+}
+
+if ($sejour_type) {
+  $where["type"] = "= '$sejour_type'";
 }
 
 $ljoin = array(

@@ -11,7 +11,27 @@
 {{mb_script module=dPpatients script=pat_selector}}
 
 <script type="text/javascript">
+ProtocoleSelector.init = function(){
+  this.sForSejour      = true;
+  this.sForm           = "editSejour";
+  this.sChir_id        = "praticien_id";
+  //this.sServiceId      = "service_id";
+  //this.sDP             = "DP";
+  //this.sDepassement    = "depassement";
   
+  this.sLibelle_sejour = "libelle";
+  //this.sType           = "type";
+  this.sForceType      = "ssr";
+  this.sDuree_prevu    = "_duree_prevue";
+  //this.sConvalescence  = "convalescence";
+  this.sRques_sej      = "rques";
+
+  //this.sProtoPrescAnesth = "_protocole_prescription_anesth_id";
+  //this.sProtoPrescChir   = "_protocole_prescription_chir_id";
+  
+  this.pop();
+}
+
 function updateSortiePrevue() {
   var oForm = document.editSejour;
     
@@ -98,6 +118,10 @@ function cancelSejourSSR() {
       </th>
       {{else}}
       <th class="title" colspan="8">
+        <button type="button" class="search" style="float: left;" onclick="ProtocoleSelector.init()">
+          {{tr}}button-COperation-choixProtocole{{/tr}}
+        </button>
+				
         {{tr}}CSejour-title-create{{/tr}} 
         {{if $sejour->_NDA}}
           pour le dossier
@@ -206,7 +230,7 @@ function cancelSejourSSR() {
 	      <td>{{mb_field object=$sejour field=libelle form=editSejour tabindex="3" style="width: 12em"}}</td>
 	      <th>{{mb_label object=$sejour field=_duree_prevue}}</th>
 	      <td>
-          {{mb_field object=$sejour field="_duree_prevue" increment=true form=editSejour prop="num min|0" size=2 tabindex="7" onchange="updateSortiePrevue(); checkDureeHospi('syncType');" value=$sejour->sejour_id|ternary:$sejour->_duree_prevue:0}}
+          {{mb_field object=$sejour field="_duree_prevue" increment=true form=editSejour prop="num min|0" size=2 tabindex="7" onchange="updateSortiePrevue();" value=$sejour->sejour_id|ternary:$sejour->_duree_prevue:0}}
           nuits
 	      </td>
 	      <td id="dureeEst"></td>

@@ -137,10 +137,17 @@ class CFunctions extends CMbObject {
     }
   }
 
-  function loadProtocoles() {
-    $where = array("function_id" => "= '$this->_id'");
-    $protocoles = new CProtocole();
-    $this->_ref_protocoles = $protocoles->loadList($where, "libelle_sejour, libelle, codes_ccam");
+  function loadProtocoles($type = null) {
+    $where = array(
+		  "function_id" => "= '$this->_id'"
+		);
+    
+    if ($type) {
+      $where["type"] = "= '$type'";
+    }
+		
+    $protocole = new CProtocole();
+    $this->_ref_protocoles = $protocole->loadList($where, "libelle_sejour, libelle, codes_ccam");
   }
   
   // @todo : ameliorer le choix des spécialités

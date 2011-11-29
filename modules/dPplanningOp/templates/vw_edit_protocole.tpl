@@ -232,19 +232,20 @@ Main.add(function () {
             <button class="add notext" type="button" onclick="oCcamField.add($V(this.form._codes_ccam), true)">{{tr}}Add{{/tr}}</button>
             <button class="search notext" type="button" onclick="CCAMSelector.init()">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>
             <script type="text/javascript">
-              var oForm = getForm('editFrm');
               Main.add(function() {
+							  var oForm = getForm("editFrm");
                 var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");
                 url.autoComplete(oForm._codes_ccam, '', {
                   minChars: 1,
                   dropdown: true,
                   width: "250px",
                   updateElement: function(selected) {
-                    $V(oForm._codes_ccam, selected.down("strong").innerHTML);
+                    $V(oForm._codes_ccam, selected.down("strong").getText());
                     oCcamField.add($V(oForm._codes_ccam), true);
                   }
                 });
               });
+							
               CCAMSelector.init = function(){
                 this.sForm  = "editFrm";
                 this.sView  = "_codes_ccam";

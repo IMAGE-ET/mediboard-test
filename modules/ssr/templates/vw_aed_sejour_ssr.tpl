@@ -10,6 +10,7 @@
 
 {{mb_script module="dPpatients" script="pat_selector"}}
 {{mb_script module="dPplanningOp" script="cim10_selector"}}
+{{mb_script module="dPplanningOp" script="protocole_selector"}}
 {{mb_script module="dPmedicament" script="medicament_selector"}}
 {{mb_script module="dPmedicament" script="equivalent_selector"}}
 {{mb_script module="ssr" script="cotation_rhs"}}
@@ -22,17 +23,16 @@
 
 {{if $sejour->_id && $can->read}}
 <script type="text/javascript">
-
+  
 Main.add(function() {
   var tabs = Control.Tabs.create('tab-sejour', true);
   (tabs.activeLink.onmousedown || Prototype.emptyFunction)();
-} );
+});
 
 var constantesMedicalesDrawn = false;
 refreshConstantesMedicales = function (force) {
   if (!constantesMedicalesDrawn || force) {
-    var url = new Url();
-    url.setModuleAction("dPhospi", "httpreq_vw_constantes_medicales");
+    var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
     url.addParam("patient_id", {{$sejour->_ref_patient->_id}});
     url.addParam("context_guid", "{{$sejour->_guid}}");
     url.addParam("selection[]", ["poids", "taille"]);
