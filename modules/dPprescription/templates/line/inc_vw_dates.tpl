@@ -93,7 +93,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 			       </div>	       
 	       {{else}}
 	         {{if $typeDate != "mode_grille"}}
-		         {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="removeRelativesDates(this.form); submitFormAjax(this.form, 'systemMsg');"}}  
+		         {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="\$V(this.form.time_debut, ''); \$V(this.form.time_debut_da,''); removeRelativesDates(this.form); submitFormAjax(this.form, 'systemMsg');"}}  
 	         {{else}}
 	           {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}  
 	         {{/if}}
