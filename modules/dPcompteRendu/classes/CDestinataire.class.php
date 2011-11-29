@@ -13,12 +13,13 @@
  * Cette classe n'est pas un MbObject et les objets ne sont pas enregistrés en base
  */
 class CDestinataire {
-   var $nom = null;
+  var $nom = null;
   var $adresse = null;
   var $cpville = null;
   var $email = null;
   var $tag = null;
-
+  var $_guid_object = null;
+  
   static $destByClass = array();
 
   /**
@@ -52,6 +53,7 @@ class CDestinataire {
       $dest->adresse = $patient->adresse;
       $dest->cpville = "$patient->cp $patient->ville";
       $dest->email   = $patient->email;
+      $dest->_guid_object = $patient->_guid;
       self::$destByClass[$mbObject->_class][] = $dest;
       
       // Assuré
@@ -60,6 +62,7 @@ class CDestinataire {
       $dest->nom     = "$patient->assure_nom $patient->assure_prenom";
       $dest->adresse = $patient->assure_adresse;
       $dest->cpville = "$patient->assure_cp $patient->assure_ville";
+      $dest->_guid_object = $patient->_guid;
       $dest->email   = "";
       self::$destByClass[$mbObject->_class][] = $dest;
       
@@ -72,6 +75,7 @@ class CDestinataire {
         $dest->adresse = $_corres->adresse;
         $dest->cpville = "$_corres->cp $_corres->ville";
         $dest->email = $_corres->email;
+        $dest->_guid_object = $_corres->_guid;
         self::$destByClass[$mbObject->_class][] = $dest;
       }
     }
@@ -84,6 +88,7 @@ class CDestinataire {
       $dest->adresse = $medecin->adresse;
       $dest->cpville = "$medecin->cp $medecin->ville";
       $dest->email   = $medecin->email;
+      $dest->_guid = $medecin->_guid;
       self::$destByClass[$mbObject->_class][] = $dest;
     }
     

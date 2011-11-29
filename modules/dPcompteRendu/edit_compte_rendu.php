@@ -104,7 +104,7 @@ else {
 }
 
 $compte_rendu->loadRefsFwd();
-$compte_rendu->loadRefsCorrespondantsCourrierByClass();
+$compte_rendu->loadRefsCorrespondantsCourrierByTagGuid();
 
 $compte_rendu->_ref_object->loadRefsFwd();
 $object =& $compte_rendu->_ref_object;  

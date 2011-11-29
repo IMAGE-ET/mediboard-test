@@ -59,7 +59,7 @@ class CCompteRendu extends CDocumentItem {
   var $_ref_file         = null;
   var $_ref_content      = null;
   var $_refs_correspondants_courrier = null;
-  var $_refs_correspondants_courrier_by_class = null;
+  var $_refs_correspondants_courrier_by_tag_guid = null;
   
   // Other fields
   var $_is_pack          = false;
@@ -339,12 +339,12 @@ class CCompteRendu extends CDocumentItem {
     return $this->_refs_correspondants_courrier = $this->loadBackRefs("correspondants_courrier");
   }
   
-  function loadRefsCorrespondantsCourrierByClass() {
+  function loadRefsCorrespondantsCourrierByTagGuid() {
     if (!$this->_refs_correspondants_courrier) {
       $this->loadRefsCorrespondantsCourrier();
     }
     foreach ($this->_refs_correspondants_courrier as $_corres) {
-      $this->_refs_correspondants_courrier_by_class[$_corres->object_class][] = $_corres;
+      $this->_refs_correspondants_courrier_by_tag_guid[$_corres->tag][$_corres->object_guid] = $_corres;
     }
   }
   

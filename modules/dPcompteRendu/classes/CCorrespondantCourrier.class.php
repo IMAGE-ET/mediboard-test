@@ -15,13 +15,8 @@ class CCorrespondantCourrier extends CMbObject {
   var $compte_rendu_id = null;
   
   // DB Fields
-  var $nom      = null;
-  var $adresse  = null;
-  var $cp_ville = null;
-  var $email    = null;
-  var $active   = null;
-  var $tag      = null;
-  var $object_class = null;
+  var $object_guid  = null;
+  var $tag          = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -34,13 +29,8 @@ class CCorrespondantCourrier extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs["compte_rendu_id"] = "ref class|CCompteRendu notNull cascade";
-    $specs["nom"]      = "str";
-    $specs["adresse"]  = "text";
-    $specs["cp_ville"] = "str";
-    $specs["email"]    = "str";
-    $specs["active"]   = "bool default|0";
-    $specs["tag"]      = "str";
-    $specs["object_class"] = "str";
+    $specs["object_guid"]  = "str";
+    $specs["tag"]          = "str";
     
     return $specs;
   }

@@ -2,54 +2,40 @@
 {{assign var=check_to_empty_field value=$conf.dPcompteRendu.CCompteRendu.check_to_empty_field}}
 
 <table>
-  {{if $destinataires|@count || $compte_rendu->_refs_correspondants_courrier_by_class|@count}}
+  {{assign var=correspondants value=$compte_rendu->_refs_correspondants_courrier_by_tag_guid}}
+  {{if $destinataires|@count || $correspondants|@count}}
     <tr>
       <td class="destinataireCR text" id="destinataire" colspan="2">
         <button type="button" class="mail" onclick="modal('correspondants_courrier')">Correspondants</button>
         <div class="modal" id="correspondants_courrier" style="display: none; width: 50%">
           <table class="tbl">
-            {{if !$compte_rendu->_id}}
-              {{foreach from=$destinataires key=_class item=_destinataires}}
+            <tr>
+              <th class="title" colspan="2">
+                Correspondants
+              </th>
+            </tr>
+            {{foreach from=$destinataires key=_class item=_destinataires}}
+              <tr>
+                <th class="category" colspan="2">
+                  {{tr}}{{$_class}}{{/tr}}
+                </th>
+              </tr>
+              {{foreach from=$_destinataires key=_index item=_destinataire}}
+                {{assign var=object_guid value=$_destinataire->_guid_object}}
+                {{assign var=tag value=$_destinataire->tag}}
                 <tr>
-                  <th class="category" colspan="2">
-                    {{tr}}{{$_class}}{{/tr}}
-                  </th>
+                  <td class="narrow">
+                    <input type="checkbox" name="_dest_{{$_class}}_{{$_index}}" id="editFrm__dest_{{$_class}}_{{$_index}}"
+                      {{if @isset($correspondants.$tag.$object_guid|smarty:nodefaults)}}checked="checked"{{/if}}/>
+                  </td>
+                  <td>
+                    <label for="editFrm__dest_{{$_class}}_{{$_index}}">
+                      {{$_destinataire->nom}} ({{tr}}CDestinataire.tag.{{$tag}}{{/tr}})
+                    </label>
+                  </td>
                 </tr>
-                {{foreach from=$_destinataires key=_index item=_destinataire}}
-                  <tr>
-                    <td class="narrow">
-                      <input type="checkbox" name="_dest_{{$_class}}_{{$_index}}" />
-                    </td>
-                    <td>
-                      <label for="_dest_{{$_class}}_{{$_index}}">
-                        {{$_destinataire->nom}} ({{tr}}CDestinataire.tag.{{$_destinataire->tag}}{{/tr}})
-                      </label>
-                    </td>
-                  </tr>
-                {{/foreach}}
               {{/foreach}}
-            {{else}}
-              {{foreach from=$compte_rendu->_refs_correspondants_courrier_by_class key=_class item=_correspondants}}
-                <tr>
-                  <th class="category" colspan="2">
-                    {{tr}}{{$_class}}{{/tr}}
-                  </th>
-                </tr>
-                {{foreach from=$_correspondants item=_corres}}
-                  <tr>
-                    <td clas="narrow">
-                      <input type="checkbox" id="editFrm__view_corres_{{$_corres->_id}}" name="_view_corres_{{$_corres->_id}}" onchange="$V(this.form._corres_{{$_corres->_id}}, this.checked ? 1 : 0)"
-                        {{if $_corres->active}}checked="checked"{{/if}}/>
-                    </td>
-                    <td>
-                      <label for="editFrm__view_corres_{{$_corres->_id}}">
-                        {{$_corres->nom}} ({{tr}}CDestinataire.tag.{{$_corres->tag}}{{/tr}})
-                      </label>
-                      <input type="hidden" name="_corres_{{$_corres->_id}}" value="{{$_corres->active}}" />
-                    </td>
-                {{/foreach}}
-              {{/foreach}}
-            {{/if}}
+            {{/foreach}}
           </table>
           <p style="text-align: center;">
             <button type="button" class="tick" onclick="saveAndMerge();">Fusionner</button>

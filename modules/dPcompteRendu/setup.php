@@ -714,7 +714,18 @@ class CSetupdPcompteRendu extends CSetup {
               ADD INDEX (`compte_rendu_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.70";
+    $this->makeRevision("0.70");
+    $query = "ALTER TABLE `correspondant_courrier`
+      DROP `nom`,
+      DROP `adresse`,
+      DROP `cp_ville`,
+      DROP `email`,
+      DROP `active`,
+      DROP `object_class`,
+      ADD `object_guid` VARCHAR (255);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.71";
   }
 }
 ?>
