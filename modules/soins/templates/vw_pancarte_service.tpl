@@ -198,4 +198,4 @@ Main.add(function () {
 	</div>
 </div>
 
-<div id="dossier_sejour" style="width: 80%; height: 600px; overflow: auto; display: none;"></div>	
+<div id="dossier_sejour" style="width: 95%; height: 90%; overflow: auto; display: none;"></div>	
