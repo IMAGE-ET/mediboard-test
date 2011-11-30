@@ -970,7 +970,7 @@ class CPrescriptionLineMix extends CMbObject {
    * Chargement des lignes de la prescription_line_mix
    */
   function loadRefsLines(){
-    $this->_ref_lines = $this->loadBackRefs("lines_mix");  
+    $this->_ref_lines = $this->loadBackRefs("lines_mix", "solvant");  
     if(!$this->_short_view){
       foreach($this->_ref_lines as $_perf_line){
         $this->_short_view .= $_perf_line->_ref_produit->libelle_abrege.", ";
