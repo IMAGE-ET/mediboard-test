@@ -183,7 +183,10 @@ Prescription = {
 
       // Rechargement de la modale de protocole avancé
       if (advanced_prot) {
-        window.save_checkboxes = $$("input[type=checkbox]");
+        window.save_checkboxes = {};
+        var checkboxes = getForm("selLines").select("input[type=checkbox]");
+        window.save_checkboxes.ids = checkboxes.pluck("id");
+        window.save_checkboxes.checked = checkboxes.pluck("checked");
         window.selectLines.modalObject.container.down(".change").click();
         return;
       }

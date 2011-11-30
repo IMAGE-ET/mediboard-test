@@ -5,12 +5,12 @@
     // Si la sauvegarde des checkboxes est présente,
     // alors on restaure leur état
     if (window.save_checkboxes) {
-     window.save_checkboxes.each(function(elt) {
-       if (elt.id) {
-         var new_elt=$(elt.id);
-         if (new_elt && elt.form && elt.form.name === "selLines") {
-           new_elt.checked = elt.checked;
-           $V(new_elt.next('input'), elt.checked == true ? 1 : 0);
+     window.save_checkboxes.ids.each(function(elt_id, index) {
+       if (elt_id) {
+         var new_elt = $(elt_id);
+         if (new_elt) {
+           new_elt.checked = window.save_checkboxes.checked[index];
+           $V(new_elt.next('input'), new_elt.checked ? 1 : 0);
          }
        }
      });
