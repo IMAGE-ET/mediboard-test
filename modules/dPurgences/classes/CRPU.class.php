@@ -306,7 +306,6 @@ class CRPU extends CMbObject {
     
     $this->loadRefsFwd();
     $sejour =& $this->_ref_sejour;
-    mbLog($sejour->_id);
     $sejour->patient_id = $this->_patient_id;
     $sejour->group_id = CGroups::loadCurrent()->_id;
     $sejour->praticien_id = $this->_responsable_id;
