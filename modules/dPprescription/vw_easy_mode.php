@@ -78,6 +78,7 @@ $smarty->assign("mode_pharma", $mode_pharma);
 $smarty->assign("chapitre", $chapitre);
 $smarty->assign("today"      , mbDate());
 $smarty->assign("is_praticien", CAppUI::$user->isPraticien());
+$smarty->assign("role_propre", CAppUI::conf("dPprescription CPrescription role_propre"));
 $smarty->display("../../dPprescription/templates/vw_easy_mode.tpl");
 
 ?>

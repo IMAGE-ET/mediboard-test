@@ -45,6 +45,7 @@ if($token_elt){
 $prescription = new CPrescription;
 $prescription->load($prescription_id);
 $is_praticien = CAppUI::$user->isPraticien();
+$role_propre = CAppUI::conf("dPprescription CPrescription role_propre");
 
 // Ajout des elements dans la prescription
 foreach($elements as $element_id){
@@ -54,7 +55,7 @@ foreach($elements as $element_id){
 	$line_element->praticien_id = $praticien_id;
 	$line_element->creator_id = $user->_id;
   $line_element->commentaire = $commentaire;
-  if ($prescription->object_id && $is_praticien) {
+  if ($prescription->object_id && ($is_praticien || $role_propre)) {
     $line_element->signee = 1;
   }
 	$msg = $line_element->store();
