@@ -35,20 +35,20 @@ $packs =
 if($praticien_id){
   $packPraticien = new CPrescriptionProtocolePack();
   $packPraticien->praticien_id = $praticien_id;
-  $_packs['prat'] = $packPraticien->loadMatchingList();
+  $_packs['prat'] = $packPraticien->loadMatchingList("libelle");
 }
 
 // Chargement des packs du cabinet selectionné ou du cabinet du praticien
 $_function_id = $function_id ? $function_id : $praticien->function_id;
 $packFunction = new CPrescriptionProtocolePack();
 $packFunction->function_id = $_function_id;
-$_packs['func'] = $packFunction->loadMatchingList();
+$_packs['func'] = $packFunction->loadMatchingList("libelle");
 
 // Chargement des packs de l'établissement selectionné ou du courant
 $_group_id = $group_id ? $group_id : CGroups::loadCurrent()->_id;
 $packGroup = new CPrescriptionProtocolePack();
 $packGroup->group_id = $_group_id;
-$_packs["group"] = $packGroup->loadMatchingList();
+$_packs["group"] = $packGroup->loadMatchingList("libelle");
 
 // Classement des packs par object_class
 foreach($_packs as $owner_pack => $_packs_by_owner){
