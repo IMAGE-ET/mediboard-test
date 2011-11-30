@@ -261,7 +261,8 @@ if (!$do_merge && !intval(CValue::post("del")) && strpos($do->_obj->_source, "[C
       $corres = new CCorrespondantCourrier;
       $corres->compte_rendu_id = $do->_obj->_id;
       $corres->tag = $_dest->tag;
-      $corres->object_guid = $_dest->_guid_object;
+      $corres->object_id = $_dest->_id;
+      $corres->object_class = $_dest->_class;
       
       if ($msg = $corres->store()) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);

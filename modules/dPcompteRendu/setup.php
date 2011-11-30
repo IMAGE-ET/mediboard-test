@@ -725,7 +725,26 @@ class CSetupdPcompteRendu extends CSetup {
       ADD `object_guid` VARCHAR (255);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.71";
+    $this->makeRevision("0.71");
+    $query = "ALTER TABLE `correspondant_courrier`
+      ADD `object_class` ENUM ('CMedecin','CPatient','CCorrespondantPatient') NOT NULL,
+      ADD `object_id` INT (11) UNSIGNED NOT NULL;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `correspondant_courrier` 
+      ADD INDEX (`object_id`);";
+    $this->addQuery($query);
+    
+    $query = "UPDATE `correspondant_courrier`
+      SET `object_class` = SUBSTRING_INDEX(`object_guid`, '-', 1),
+          `object_id` = SUBSTR(`object_guid`, LOCATE('-', `object_guid`, 2)+1);";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `correspondant_courrier`
+      DROP `object_guid`";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.72";
   }
 }
 ?>

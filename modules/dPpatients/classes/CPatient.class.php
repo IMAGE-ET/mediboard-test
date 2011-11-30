@@ -255,6 +255,7 @@ class CPatient extends CMbObject {
     $backProps["echanges_hprim21"]      = "CEchangeHprim21 object_id";
     $backProps["echanges_ihe"]          = "CExchangeIHE object_id";
     $backProps["devenirs_dentaires"]    = "CDevenirDentaire patient_id";
+    $backProps["correspondants_courrier"] = "CCorrespondantCourrier object_id";
     return $backProps;
   }  
   

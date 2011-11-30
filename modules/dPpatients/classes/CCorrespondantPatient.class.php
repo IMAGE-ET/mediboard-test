@@ -66,6 +66,12 @@ class CCorrespondantPatient extends CMbObject {
     return $specs;
   }
   
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["correspondants_courrier"] = "CCorrespondantCourrier object_id";
+    return $backProps;
+  }  
+  
   function loadRefPatient() {
     return $this->_ref_patient = $this->loadFwdRef("patient_id");
   }

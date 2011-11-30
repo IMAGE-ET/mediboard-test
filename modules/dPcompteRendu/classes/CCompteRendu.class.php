@@ -344,7 +344,7 @@ class CCompteRendu extends CDocumentItem {
       $this->loadRefsCorrespondantsCourrier();
     }
     foreach ($this->_refs_correspondants_courrier as $_corres) {
-      $this->_refs_correspondants_courrier_by_tag_guid[$_corres->tag][$_corres->object_guid] = $_corres;
+      $this->_refs_correspondants_courrier_by_tag_guid[$_corres->tag]["$_corres->object_class-$_corres->object_id"] = $_corres;
     }
   }
   

@@ -7,7 +7,7 @@
  * @author
  */
 
-class CCorrespondantCourrier extends CMbObject {
+class CCorrespondantCourrier extends CMbMetaObject {
   // DB Table key
   var $correspondant_courrier_id = null;
 
@@ -15,8 +15,7 @@ class CCorrespondantCourrier extends CMbObject {
   var $compte_rendu_id = null;
   
   // DB Fields
-  var $object_guid  = null;
-  var $tag          = null;
+  var $tag             = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -29,7 +28,7 @@ class CCorrespondantCourrier extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs["compte_rendu_id"] = "ref class|CCompteRendu notNull cascade";
-    $specs["object_guid"]  = "str";
+    $specs["object_class"] = "enum list|CMedecin|CPatient|CCorrespondantPatient notNull";
     $specs["tag"]          = "str";
     
     return $specs;
