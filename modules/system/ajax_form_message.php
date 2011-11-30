@@ -24,8 +24,8 @@ $message->loadRefsNotes();
 
 // Création du possible
 if ($update_moment) {
-  $message->deb = mbDateTime("-1 DAY", $update_moment);
-  $message->fin = mbDateTime("-0 DAY", $update_moment);
+  $message->deb = mbDateTime("-8 hours", $update_moment);
+  $message->fin = mbDateTime("+5 minutes", $update_moment);
   $message->titre = CAppUI::tr("CMessage-create_update-titre");
   $message->corps = CAppUI::tr("CMessage-create_update-corps", 
     mbTransformTime(null, $update_moment, CAppUI::conf("datetime")));
