@@ -37,7 +37,7 @@
               </tr>
               <tr>
                 <td class="button">
-                  <form name="modifyAlert-{{$_prescription_line_mix->_ref_alerte->_id}}" action="?" method="post" class="form-alerte"
+                  <form name="modifyAlert-{{$_prescription_line_mix->_ref_alerte->_id}}" action="?" method="post" class="form-alerte-_{{$_prescription_line_mix->type_line}}"
                         onsubmit="return onSubmitFormAjax(this, { 
                                     onComplete: function() { $('alert_manuelle_{{$_prescription_line_mix->_ref_alerte->_id}}').hide(); if(alerte_prescription) { alerte_prescription.hide(); } } });">
                     <input type="hidden" name="m" value="system" />

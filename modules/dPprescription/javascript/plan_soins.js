@@ -555,17 +555,23 @@ PlanSoins = {
     url.popup(900, 600, "Impression des bons");
   },
   
-  closeAllAlertes: function(chapitre, ampoule, urgence){
-    // Application de toutes les alertes du chapitre
+  closeAllAlertes: function(chapitre, ampoule, urgence, chapitre_plan_soins){
+		// Si le chapitre n'est pas visibe
+		if(!$(chapitre_plan_soins).visible()) {
+		  return;
+    }
+		
+		// Application de toutes les alertes du chapitre
     var form_name = urgence ? 'form-alerte-urgence-' : 'form-alerte-';
-        form_name += chapitre;
-    $$("form."+form_name).each(function(oForm){
+    form_name += chapitre;
+    
+		$$("form."+form_name).each(function(oForm){
       onSubmitFormAjax(oForm, { onComplete: function(){ 
         // On masque les ampoules pour chaque lignes
         $('alert_manuelle_'+$V(oForm.alert_id)).hide();
+				ampoule.hide();
       }});
     });
-    ampoule.hide();
   },
   
   editTask: function(sejour_id, prescription_line_element_id){
