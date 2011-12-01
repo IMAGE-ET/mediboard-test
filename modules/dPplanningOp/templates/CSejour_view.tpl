@@ -33,10 +33,14 @@
 			<button type="button" class="search" onclick="Sejour.admission('{{$sejour->_date_entree_prevue}}');">
 				{{tr}}Admission{{/tr}}
 			</button>
+      {{/if}}
+			
+			{{if $sejour->type != "urg" && $sejour->type != "ssr" && @$modules.soins->_can->read}}
+      <br />
       <button type="button" class="search" onclick="Sejour.showDossierSoins('{{$sejour->_id}}')">
         {{tr}}module-soins-court{{/tr}}
       </button>
-			{{/if}}
+      {{/if}}
 
       {{if $sejour->type == "ssr" && @$modules.ssr->_can->read}}
 			<br />
