@@ -31,11 +31,12 @@ $where["sortie"] = " <= '$sejour->entree'";
 $sejours = new CSejour();
 $sejours = $sejours->loadList($where);
 
-foreach($sejours as $_sejour){
-	$_sejour->loadRefBilanSSR()->loadRefPraticienDemandeur();
-	
-	$prescription = $_sejour->loadRefPrescriptionSejour();
-	$prescription->loadRefsLinesElementByCat();
+foreach ($sejours as $_sejour){
+  $_sejour->loadRefBilanSSR()->loadRefPraticienDemandeur();
+  $_sejour->loadRefPraticien(1);
+
+  $prescription = $_sejour->loadRefPrescriptionSejour();
+  $prescription->loadRefsLinesElementByCat();
   $prescription->countRecentModif();
 }
 
