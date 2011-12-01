@@ -138,9 +138,10 @@ if ($date_max) {
 
 // Les constantes qui correspondent (dans le contexte cette fois)
 $list_constantes = $constantes->loadList($where, "datetime DESC", $limit);
-$list_constantes = array_reverse($list_constantes, true);
 
 $constantes_medicales_grid = CConstantesMedicales::buildGrid($list_constantes, false);
+
+$list_constantes = array_reverse($list_constantes, true);
 
 $standard_struct = array(
   "series" => array(

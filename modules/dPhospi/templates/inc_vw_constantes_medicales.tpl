@@ -430,9 +430,15 @@ loadConstantesMedicales  = function(context_guid) {
         </div>
         
         <div id="constantes-table" style="display: none;">
+				  <div class="small-info">
+				  	<strong>L'ordre chronologique du tableau a changé !</strong><br />
+						Les relevés les plus récents sont maintenant en haut ou à gauche selon l'orientation.
+				  </div>
+					
 				  <button class="change" onclick="$('constantes-table').down('.contantes-horizontal').toggle(); $('constantes-table').down('.contantes-vertical').toggle()">
-				  	Changer orientation
+				  	Changer l'orientation
 				  </button>
+					
           <div class="contantes-horizontal" style="display: none;">
           {{mb_include module=dPpatients template=print_constantes}}
           </div>
