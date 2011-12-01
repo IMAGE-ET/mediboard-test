@@ -429,7 +429,7 @@ loadConstantesMedicales  = function(context_guid) {
           <div id="constantes-medicales-graph" style="margin-left: 5px; text-align: center; clear: both;"></div>
         </div>
         
-        <div id="constantes-table" style="display: none;">
+        <div id="constantes-table" style="display: none; text-align: left;">
 				  <div class="small-info">
 				  	<strong>L'ordre chronologique du tableau a changé !</strong><br />
 						Les relevés les plus récents sont maintenant en haut ou à gauche selon l'orientation.
