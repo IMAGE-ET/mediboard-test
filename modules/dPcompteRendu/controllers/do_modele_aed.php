@@ -64,14 +64,15 @@ $destinataires = array();
 $correspondants_courrier = array();
 $ids_corres    = "";
 $do_merge = CValue::post("do_merge", 0);
+$do->doBind();
 
-if (isset($_POST["_source"])) {
+if (isset($do->_obj->_source)) {
   // Ajout d'entête / pied de page à la volée
   $header_id = CValue::post("header_id");
   $footer_id = CValue::post("footer_id");
   if (($header_id || $footer_id) && isset($_POST["object_id"]) && $_POST["object_id"] != null) {
     $cr = new CCompteRendu;
-    $_POST["_source"] = $cr->generateDocFromModel($_POST["_source"], $header_id, $footer_id);
+    $do->_obj->_source = $cr->generateDocFromModel($do->_obj->_source, $header_id, $footer_id);
   }
   
   // Application des listes de choix
@@ -100,7 +101,7 @@ if (isset($_POST["_source"])) {
     }
   }
   
-  $_POST["_source"] = str_ireplace($fields, $values, $_POST["_source"]);
+  $do->_obj->_source = str_ireplace($fields, $values, $do->_obj->_source);
 
   // Application des destinataires
   foreach($_POST as $key => $value) {
@@ -118,21 +119,16 @@ if (isset($_POST["_source"])) {
     $bodyTag = '<div id="body">';
 
     // On sort l'en-tête et le pied de page
-    $posBody      = strpos($_POST["_source"], $bodyTag);
+    $posBody      = strpos($do->_obj->_source, $bodyTag);
 
     if($posBody) {
-      $headerfooter = substr($_POST["_source"], 0, $posBody);
-      $index_div    = strrpos($_POST["_source"], "</div>")-($posBody+strlen($bodyTag));
-      $body         = substr($_POST["_source"], $posBody+strlen($bodyTag), $index_div);
+      $headerfooter = substr($do->_obj->_source, 0, $posBody);
+      $index_div    = strrpos($do->_obj->_source, "</div>")-($posBody+strlen($bodyTag));
+      $body         = substr($do->_obj->_source, $posBody+strlen($bodyTag), $index_div);
     }
     else {
       $headerfooter = "";
-      $body         = $_POST["_source"];
-    }
-    
-    // On fait le doBind avant le foreach si la config est à 1.
-    if (CAppUI::conf("dPcompteRendu CCompteRendu multiple_doc_correspondants")) {
-      $do->doBind();
+      $body         = $do->_obj->_source;
     }
     
     $allSources = array();
@@ -209,20 +205,19 @@ if (isset($_POST["_source"])) {
     if (!CAppUI::conf("dPcompteRendu CCompteRendu multiple_doc_correspondants")) {
       // On concatène les en-tête, pieds de page et body's
       if ($headerfooter) {
-        $_POST["_source"] = $headerfooter;
-        $_POST["_source"] .= "<div id=\"body\">";
-        $_POST["_source"] .= implode("<hr class=\"pageBreak\" />", $allSources);
-        $_POST["_source"] .= "</div>";
+        $do->_obj->_source = $headerfooter;
+        $do->_obj->_source .= "<div id=\"body\">";
+        $do->_obj->_source .= implode("<hr class=\"pageBreak\" />", $allSources);
+        $do->_obj->_source .= "</div>";
       }
       else {
-        $_POST["_source"] = implode("<hr class=\"pageBreak\" />", $allSources);
+        $do->_obj->_source = implode("<hr class=\"pageBreak\" />", $allSources);
       }
     }
   }
 }
 
 if (!$do_merge || !CAppUI::conf("dPcompteRendu CCompteRendu multiple_doc_correspondants")) {
-  $do->doBind();
   if (intval(CValue::post("del"))) {
     $do->doDelete();
   }
