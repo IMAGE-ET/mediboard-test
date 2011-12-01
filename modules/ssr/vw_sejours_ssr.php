@@ -81,7 +81,10 @@ $sejours = CSejour::loadListForDate($date, $where, $order, null, null, $ljoin);
 $services = array();
 $praticiens = array();
 $kines = array();
-$sejours_by_kine = array();
+$sejours_by_kine = array(
+  // Séjours sans kinés
+  "" => array(),
+);
 
 // Chargement du détail des séjour
 foreach ($sejours as $_sejour) {
@@ -135,7 +138,7 @@ foreach ($sejours as $_sejour) {
   $sejours_by_kine[$kine_referent->_id][] = $_sejour;
   if ($kine_journee->_id && $kine_journee->_id != $kine_referent->_id) {
   	$sejours_by_kine[$kine_journee->_id ][] = $_sejour;
-	}
+  }
 	
   // Détail du séjour
   $_sejour->checkDaysRelative($date);
@@ -165,6 +168,7 @@ unset($services[""]);
 // Ajustements kinés
 $kine = new CMediusers;
 $kine->load($filter->referent_id);
+$kine->loadRefFunction();
 $kines[$kine->_id] = $kine;
 unset($kines[""]);
 
