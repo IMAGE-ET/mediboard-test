@@ -20,6 +20,20 @@ class CConstanteItem extends CMbObject {
   // Ref Fields
   var $_ref_element_prescription = null;
   
+	static function init(){
+    global $locales;
+		
+    foreach(CConstantesMedicales::$list_constantes as $name => $params) {
+      $locales["CConstanteItem.field_constante.$name"] = CAppUI::tr("CConstantesMedicales-$name"); 
+    }
+	}
+	
+	function updateFormFields(){
+		parent::updateFormFields();
+		
+		$this->_view = $this->_specs["field_constante"]->_locales[$this->field_constante];
+	}
+	
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'constante_item';
@@ -40,3 +54,5 @@ class CConstanteItem extends CMbObject {
     return $this->_ref_element_prescription = $element_prescription->load($this->element_prescription_id);
   }
 }
+
+CConstanteItem::init();

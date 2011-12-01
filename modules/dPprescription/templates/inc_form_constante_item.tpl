@@ -22,7 +22,17 @@
         <tr>
           <th>{{mb_label object=$constante_item field="field_constante"}}</th>
           <td>
-            {{mb_field object=$constante_item field=field_constante class="autocomplete"}}
+          	<select name="field_constante" class="{{$constante_item->_props.field_constante}}">
+						  {{foreach from=$list_constantes key=_type item=_constantes}}
+							  <optgroup label="{{tr}}CConstantesMedicales.type.{{$_type}}{{/tr}}">
+							  	{{foreach from=$_constantes item=_const}}
+									  <option value="{{$_const}}" {{if $_const == $constante_item->field_constante}} selected="selected" {{/if}}>
+									  	{{tr}}CConstanteItem.field_constante.{{$_const}}{{/tr}}
+										</option>
+									{{/foreach}}
+							  </optgroup>
+							{{/foreach}}
+						</select>
           </td>
         </tr>
         <tr>
@@ -33,7 +43,7 @@
         <td class="button" colspan="2">
           <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
           {{if $constante_item->_id}}
-          <button class="trash" type="button" name="delete" onclick="confirmDeletion(this.form,{ ajax: true, typeName:'le champ de constante',objName:'{{$constante_item->field_constante|smarty:nodefaults|JSAttribute}}'})">
+          <button class="trash" type="button" name="delete" onclick="confirmDeletion(this.form,{ ajax: true, typeName:'le champ de constante',objName:'{{$constante_item->_view|smarty:nodefaults|JSAttribute}}'})">
             {{tr}}Delete{{/tr}}
           </button>
           {{/if}}
