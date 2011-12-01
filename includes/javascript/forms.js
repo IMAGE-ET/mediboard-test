@@ -303,12 +303,12 @@ function prepareForm(oForm) {
     }
     
     // Focus on first text input
-		// Conditions : 
-		//  - Focus not give yet
-		//  - input text and not autocomplete
-		//  -    OR textearea
-		//  - not disabled and not readonly
-		//  - element is on screen
+    // Conditions : 
+    //  - Focus not give yet
+    //  - input text and not autocomplete
+    //  -    OR textearea
+    //  - not disabled and not readonly
+    //  - element is on screen
     if (bGiveFormFocus && (sType === "textarea" || sType === "text" && !/autocomplete/.test(oElement.className)) && 
         !oElement.getAttribute("disabled") && !oElement.getAttribute("readonly") && 
         oElement.clientWidth > 0) {
@@ -433,6 +433,61 @@ function makeReadOnly(element) {
     });
   }).defer();
 }
+ 
+// In IE, width:100% makes scrollbars+cursor crazy
+// http://dev.ckeditor.com/attachment/ticket/4762/4762_2.patch
+var IEShim = {
+  // Restore all the 100% width
+  textareaPass1: function(root){
+    var elements = root.select(".textarea-container > textarea");
+    
+    // Only helped fields
+    elements = elements.filter(function(textarea){
+      return textarea.className.indexOf("helped") !== -1 && textarea.clientWidth;
+    });
+    
+    elements.each(function(textarea){
+      textarea.parentNode.style.width = "";
+      textarea.style.width = "";
+    });
+    
+    return elements;
+  },
+  
+  // Fix the width with pixels
+  textareaPass2: function(elements){
+    elements.each(function(textarea){
+      textarea._origWidth = textarea.getWidth();
+    });
+  },
+  
+  // Fix the width with pixels
+  textareaPass3: function(elements){
+    elements.each(function(textarea){
+      var width = textarea._origWidth;
+      
+      textarea.parentNode.style.width = width+"px";
+      textarea.style.width = width+"px";
+    });
+  },
+  
+  // Do all this
+  fixTextareas: function(root){
+    root = $(root || document.documentElement);
+    
+    var elements = IEShim.textareaPass1(root);
+    IEShim.textareaPass2(elements);
+    IEShim.textareaPass3(elements);
+  }
+};
+
+if (Prototype.Browser.IE && document.documentMode < 9) {
+  Event.observe(window, "resize", function(){
+    IEShim.fixTextareas(); // no args !!
+  });
+  
+  IEShim.fixTextareas.defer();
+}
 
 function prepareForms(root) {
   root = $(root || document.documentElement);
@@ -445,7 +500,7 @@ function prepareForms(root) {
     root.select("form:not(.prepared)").each(prepareForm);
     
     root.select("button.singleclick").each(function(button) {
-      button.observe('click', function(event) {
+      button.observe("click", function(event) {
         var element = Event.element(event);
         Form.Element.disable.defer(element);
         Form.Element.enable.delay(2, element);
@@ -461,6 +516,8 @@ function prepareForms(root) {
     root.select("button.notext:not([title])").each(function(button) {
       button.title = button.getText().strip();
     });
+    
+    IEShim.fixTextareas(root);
   } catch (e) {}
 }
 

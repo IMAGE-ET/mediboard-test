@@ -547,33 +547,6 @@ Element.addMethods({
       .observe("blur",      function(){ container.removeClassName("input-focus"); })
       .observe("mouseover", function(){ container.addClassName("input-hover"); })
       .observe("mouseout",  function(){ container.removeClassName("input-hover"); });
-      
-    // In IE, width:100% makes scrollbars+cursor crazy
-    // http://dev.ckeditor.com/attachment/ticket/4762/4762_2.patch
-    if (Prototype.Browser.IE && document.documentMode < 9 && element.hasClassName("helped")) {
-      var updateWidth = (function(element, container){
-        return function(){
-          var oldWidth = element.clientWidth;
-          
-          if (!oldWidth) {
-            return;
-          }
-          
-          element.style.width = (oldWidth - 20) + "px";
-          
-          var width = container.clientWidth;
-          
-          if (!width) {
-            return;
-          }
-          
-          element.style.width = (width - 2) + "px";
-        };
-      })(element, container);
-      
-      Event.observe(window, "resize", updateWidth);
-      updateWidth.defer();
-    }
     
     // Loads the height maybe saved in a cookie
     function loadHeight() {
