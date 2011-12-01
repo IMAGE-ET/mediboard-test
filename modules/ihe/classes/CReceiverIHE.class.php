@@ -27,8 +27,8 @@ class CReceiverIHE extends CInteropReceiver {
     $spec->table = 'receiver_ihe';
     $spec->key   = 'receiver_ihe_id';
     $spec->messages = array(
-      "PAM"   => array ("evenementsPatient"),
-      "PAMFr" => array ("evenementsPatient"),
+      "PAM"    => array ("evenementsPatient"),
+      "PAM_FR" => array ("evenementsPatient"),
     );
     return $spec;
   }
