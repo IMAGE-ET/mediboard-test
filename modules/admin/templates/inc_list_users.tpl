@@ -41,14 +41,14 @@
    </tr>
 
    <tr>
-	   <th colspan="3"><label for="template" title="Statut">Statut</label></th>
+     <th colspan="3"><label for="template" title="Statut">Statut</label></th>
 
-	   <td class="text">
-			<select name="template">
-				<option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-				<option value="0" {{if $template == "0"}}selected="selected"{{/if}}>Utilisateur</option>
-				<option value="1" {{if $template == "1"}}selected="selected"{{/if}}>Profil</option>
-			</select>
+     <td class="text">
+      <select name="template">
+        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+        <option value="0" {{if $template == "0"}}selected="selected"{{/if}}>Utilisateur</option>
+        <option value="1" {{if $template == "1"}}selected="selected"{{/if}}>Profil</option>
+      </select>
     </td>
   </tr>
     
@@ -81,27 +81,27 @@
       </a>
     </td>
     <td class="text {{if !$_user->user_type}}empty{{/if}}">
-    	{{if $_user->user_type}}
-	      {{assign var="type" value=$_user->user_type}}
-	      	{{if $_user->template}}
-					  {{mb_label object=$_user field=template}} : 
-					{{/if}}
-	        {{$utypes.$type}}
-			{{else}}
-			  Aucun type
-			{{/if}}
+      {{if $_user->user_type}}
+        {{assign var="type" value=$_user->user_type}}
+          {{if $_user->template}}
+            {{mb_label object=$_user field=template}} : 
+          {{/if}}
+          {{$utypes.$type}}
+      {{else}}
+        Aucun type
+      {{/if}}
     </td>
     
     <td class="button" style="white-space: nowrap; text-align: left;">
       <button class="search" onclick="location.href='?m={{$m}}&amp;tab=edit_perms&amp;user_id={{$_user->_id}}'">
-      	Droits
+        Droits
       </button>
       <button class="search" onclick="location.href='?m={{$m}}&amp;tab=edit_prefs&amp;user_id={{$_user->_id}}'">
-      	Préférences
+        Préférences
       </button>
       {{assign var="loginas_user" value=$_user}}
-      {{include file="loginas.tpl"}}
-      {{include file="unlock.tpl"}}
+      {{mb_include template=loginas}}
+      {{mb_include template=unlock}}
     </td>
   </tr>
   {{foreachelse}}
