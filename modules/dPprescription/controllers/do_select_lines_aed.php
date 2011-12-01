@@ -11,7 +11,7 @@
 $prescription_id = CValue::post("prescription_id");
 $pratSel_id      = CValue::post("pratSel_id");
 $praticien_id    = CValue::post("praticien_id");
-$lines           = CValue::post("lines");
+$lines           = CValue::post("lines", array());
 
 $user_id = CMediusers::get()->_id;
 
