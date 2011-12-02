@@ -103,6 +103,7 @@ Main.add( function(){
 				</table>
 			 </td>
 		{{/foreach}}
+		</tr>
 		<tr>
 			<td colspan="2" class="button">
 				<button type="button" class="submit" onclick="return onSubmitFormAjax(this.form, { onComplete: Control.Modal.close } );">Prescrire les éléments sélectionnés</button>
