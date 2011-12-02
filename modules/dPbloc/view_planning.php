@@ -27,6 +27,7 @@ $filter->_ccam_libelle = CValue::get("_ccam_libelle", CAppUI::conf("dPbloc CPlag
 $filter->_planning_perso = CValue::get("planning_perso");
 $_coordonnees   = CValue::get("_coordonnees");
 $_print_numdoss = CValue::get("_print_numdoss");
+$_print_annulees = CValue::get("_print_annulees");
 
 $filterSejour = new CSejour;
 $filterSejour->type = CValue::get("type");
@@ -126,8 +127,10 @@ $ljoin = array();
 $ljoin["sejour"] = "operations.sejour_id = sejour.sejour_id";
 $where = array();
 $where["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($praticiens));
-$where["operations.annulee"] = "= '0'";
-$whereOperations["operations.annulee"] = "= '0'";
+if(!$_print_annulees) {
+  $where["operations.annulee"] = "= '0'";
+  $whereOperations["operations.annulee"] = "= '0'";
+}
 
 switch ($filter->_intervention) {
   case "1" : $where["operations.rank"] = "!= '0'"; break;

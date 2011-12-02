@@ -33,9 +33,10 @@ function popPlanning() {
   url.addElement(form._bloc_id);
   url.addElement(form.salle_id);
   url.addElement(form.type);
-  url.addParam("_ccam_libelle", $V(form._ccam_libelle));
-  url.addParam("_coordonnees", $V(form._coordonnees));
-  url.addParam("_print_numdoss", $V(form._print_numdoss));
+  url.addParam("_ccam_libelle"  , $V(form._ccam_libelle));
+  url.addParam("_coordonnees"   , $V(form._coordonnees));
+  url.addParam("_print_numdoss" , $V(form._print_numdoss));
+  url.addParam("_print_annulees", $V(form._print_annulees));
 	if(form.planning_perso.checked){// pour l'affichage du planning perso d'un anesthesiste
 	  url.addParam("planning_perso", true);
 	}
@@ -295,6 +296,17 @@ function showCheckboxAnesth(element){
             <input type="radio" name="_ccam_libelle" value="1" {{if $conf.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
             <label for="_ccam_libelle">Non</label>
             <input type="radio" name="_ccam_libelle" value="0" {{if $conf.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="print_annulees_1" title="Afficher ou cacher les interventions annulées">Afficher les interventions annulées</label>
+          </th>
+          <td>  
+            <label for="_print_annulees_1">Oui</label>
+            <input type="radio" name="_print_annulees" value="1" /> 
+            <label for="_print_annulees_0">Non</label>
+            <input type="radio" name="_print_annulees" value="0" checked="checked"/> 
           </td>
         </tr>
         <tr>
