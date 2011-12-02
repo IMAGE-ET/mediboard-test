@@ -123,7 +123,12 @@ class CSetupihe extends CSetup {
     $this->makeRevision("0.09");
     
     $query = "ALTER TABLE `receiver_ihe_config` 
+                DROP `extension`;";
+    $this->addQuery($query); 
+    
+    $query = "ALTER TABLE `receiver_ihe_config` 
                 ADD `send_default_affectation` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query); 
     
     $this->mod_version = "0.10";
   }
