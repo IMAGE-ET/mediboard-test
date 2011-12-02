@@ -150,6 +150,9 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     $receiver = $this->_receiver;
     if (!$ZBE->curr_affectation->_id && $receiver->_configs["send_default_affectation"]) {
       $ZBE->other_affectation = CAffectation::getDefaultAffectation($sejour);
+      // Dans le cas de l'entrée, il est possible qu'on ai pas d'affectation et dans ce cas la, le mvt porte le guid du séjour préfixé par "e" comme "entrée"
+      // Dans le cas de la sortie, on utilise systématiquement le guid du séjour préfixé par "s" comme "sortie"
+      $ZBE->other_affectation->_id = ($sejour->sortie_reelle) ? "s_$sejour->_guid" : "e_$sejour->_guid";
     }
 
     $ZBE->build($this);
