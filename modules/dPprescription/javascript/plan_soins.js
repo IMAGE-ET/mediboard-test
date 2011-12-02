@@ -36,7 +36,7 @@ PlanSoins = {
   oDragOptions: {
     constraint: 'horizontal',
     revert: true,
-    ghosting: true,
+    //ghosting: true,
     starteffect : function(element) { 
       new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 }); 
      // element.hide();
@@ -412,7 +412,7 @@ PlanSoins = {
     
     $(draggable).up('tr').select('td').each(function(td) {
       if(td.hasClassName("canDrop")){
-        Droppables.add(td.id, {
+        Droppables.add(td, {
           onDrop: function(element) {
             // Replanifications multiples
             if (element.up("tbody").select("div.administration-selected").length) {
