@@ -1766,7 +1766,9 @@ class CPrescription extends CMbObject implements IPatientRelated {
 					$element->_count = $curr_fav["total"];
           $listFavoris[$key][$element->_view] = $element;
         }
-				ksort($listFavoris[$key]);
+				if(isset($listFavoris[$key])){
+				  ksort($listFavoris[$key]);
+				}
       }
     }
     return $listFavoris;    
