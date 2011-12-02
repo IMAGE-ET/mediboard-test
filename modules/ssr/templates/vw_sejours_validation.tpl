@@ -137,33 +137,46 @@ Main.add(function () {
 </script>
 
 <table class="main">
-<tr>
-  <td>
-    <a href="#" onclick="showLegend()" class="button search">Légende</a>
-  </td>
-  <td>
-    {{if $can->edit}} 
-    <a class="button new" style="float: left;" href="?m=ssr&amp;tab=vw_aed_sejour_ssr&amp;sejour_id=0">
-      Créer une demande de prise en charge
-    </a>
-    {{/if}}
-    <a href="#" onclick="printPlanning()" class="button print" style="float: right">Imprimer</a>
-    <form action="?" name="selType" method="get" style="float: right">
-      <select name="service_id" onchange="reloadFullAdmissions();">
-        <option value="">&mdash; Tous les services</option>
-        {{foreach from=$services item=_service}}
-          <option value="{{$_service->_id}}"{{if $_service->_id == $sejour->service_id}}selected="selected"{{/if}}}>{{$_service}}</option>
-        {{/foreach}}
-      </select>
-      <select name="prat_id" onchange="reloadFullAdmissions();">
-        <option value="">&mdash; Tous les praticiens</option>
-        {{foreach from=$prats item=_prat}}
-          <option value="{{$_prat->_id}}"{{if $_prat->_id == $sejour->praticien_id}}selected="selected"{{/if}}>{{$_prat}}</option>
-        {{/foreach}}
-      </select>
-    </form>
-  </td>
-</tr>
+  <tr>
+    <td>
+      <a href="#" onclick="showLegend()" class="button search">Légende</a>
+    </td>
+    <td>
+      {{if $can->edit}} 
+      <a class="button new" style="float: left;" href="?m=ssr&amp;tab=vw_aed_sejour_ssr&amp;sejour_id=0">
+        Créer une demande de prise en charge
+      </a>
+      {{/if}}
+      <a href="#" onclick="printPlanning()" class="button print" style="float: right">Imprimer</a>
+      <form action="?" name="selType" method="get" style="float: right">
+        <select name="service_id" onchange="reloadFullAdmissions();">
+          <option value="">&mdash; Tous les services</option>
+          {{foreach from=$services item=_service}}
+            <option value="{{$_service->_id}}"{{if $_service->_id == $sejour->service_id}}selected="selected"{{/if}}}>{{$_service}}</option>
+          {{/foreach}}
+        </select>
+        <select name="prat_id" onchange="reloadFullAdmissions();">
+          <option value="">&mdash; Tous les praticiens</option>
+          {{foreach from=$prats item=_prat}}
+            <option value="{{$_prat->_id}}"{{if $_prat->_id == $sejour->praticien_id}}selected="selected"{{/if}}>{{$_prat}}</option>
+          {{/foreach}}
+        </select>
+      </form>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      {{if $nb_sejours_attente}}
+      <div class="small-warning">
+        Il y a {{$nb_sejours_attente}} patients à venir en attente de validation
+      </div>
+      {{else}}
+      <div class="small-info">
+        Il n'y a  pas de patients à venir en attente de validation
+      </div>
+      {{/if}}
+    </td>
+  </tr>
   <tr>
     <td id="allAdmissions" style="width: 250px">
     </td>
