@@ -45,22 +45,22 @@ $where["recuse"]   = "= '-1'";
 $where["type"]     = "= 'ssr'";
 $where["entree"]   = ">= '".mbDate()."'";
 $nb_sejours_attente = $sejour->countList($where);
-mbTrace($nb_sejours_attente, "Nombre de patients en attente de placement");
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("sejour"       , $sejour);
-$smarty->assign("date_demain"  , $date_demain);
-$smarty->assign("date_actuelle", $date_actuelle);
-$smarty->assign("date"         , $date);
-$smarty->assign("recuse"       , $recuse);
-$smarty->assign("order_way"    , $order_way);
-$smarty->assign("order_col"    , $order_col);
-$smarty->assign("services"     , $services);
-$smarty->assign("prats"        , $prats);
-$smarty->assign("hier"         , $hier);
-$smarty->assign("demain"       , $demain);
+$smarty->assign("sejour"            , $sejour);
+$smarty->assign("date_demain"       , $date_demain);
+$smarty->assign("date_actuelle"     , $date_actuelle);
+$smarty->assign("date"              , $date);
+$smarty->assign("recuse"            , $recuse);
+$smarty->assign("order_way"         , $order_way);
+$smarty->assign("order_col"         , $order_col);
+$smarty->assign("services"          , $services);
+$smarty->assign("prats"             , $prats);
+$smarty->assign("hier"              , $hier);
+$smarty->assign("demain"            , $demain);
+$smarty->assign("nb_sejours_attente", $nb_sejours_attente);
 
 $smarty->display("vw_sejours_validation.tpl");
 
