@@ -145,8 +145,13 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    */
   function addZBE(CSejour $sejour = null) {
     $ZBE = CHL7v2Segment::create("ZBE", $this->message);
-    $ZBE->sejour = $sejour;
-    $ZBE->uf     = $sejour->getCurrentUF();
+    $ZBE->sejour      = $sejour;
+    $ZBE->curr_affectation = $sejour->getCurrAffectation();
+    $receiver = $this->_receiver;
+    if (!$ZBE->curr_affectation->_id && $receiver->_configs["send_default_affectation"]) {
+      $ZBE->other_affectation = CAffectation::getDefaultAffectation($sejour);
+    }
+
     $ZBE->build($this);
   }
 

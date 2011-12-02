@@ -39,34 +39,38 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
   var $sejour = null;
   
   /**
-   * @var CUniteFonctionnelle
+   * @var CAffectation
    */
-  var $uf     = null;
+  var $curr_affectation = null;
+  
+  /**
+   * @var CAffectation
+   */
+  var $other_affectation = null;
   
   function build(CHL7v2Event $event) {
     parent::build($event);
     
-    $sejour = $this->sejour;
-    $uf     = $this->uf;
-    $uf->loadLastLog();
-    
+    $sejour      = $this->sejour;
+    $affectation = $this->curr_affectation;
+    if ($this->other_affectation) {
+      $affectation = $this->other_affectation;
+    }
+
     // ZBE-1: Movement ID (EI) (optional)
     $data[] = array (
       // Entity identifier
-      1,
-      //$uf->_ref_last_log->id,
-      // Namespace ID
-      "Mediboard",
-      // Universal ID
-      CAppUI::conf("hl7 assigningAuthorityUniversalID"),
-      // Universal ID Type
-      "OX"
+      // Dans le cas où on pas d'identifiant on envoi -1
+      isset($affectation->_id) ? $affectation->_id : -1,
+      // Autorité assignement
+      $this->getAssigningAuthority("mediboard")
     );
     
     // ZBE-2: Start of Movement Date/Time (TS)
-    $data[] = $sejour->entree_prevue;
+    $data[] = $affectation->entree;
     
     // ZBE-3: End of Movement Date/Time (TS) (optional)
+    // Forbidden (IHE France)
     $data[] = null;
     
     // ZBE-4: Action on the Movement (ID)
@@ -79,29 +83,48 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     $data[] = $action_movement;
     
     // ZBE-5: Indicator "Historical Movement" (ID) 
-    $data[] = "N";
+    $data[] = $this->other_affectation ? "Y" : "N";
     
     // ZBE-6: Original trigger event code (ID) (optional)
-    $data[] = ($action_movement == "UPDATE" || $action_movement == "UPDATE") ? null : null;
+    $data[] = ($action_movement == "UPDATE" || $action_movement == "CANCEL") ? $affectation->_id : null;
     
     // ZBE-7: Ward of medical responsibility in the period starting with this movement (XON) (optional)
+    $data[] = null;
+    /*$uf = $affectation->_ref_uf;
     $data[] = array(
       // ZBE-7.1 : Libellé de l'UF
       $uf->libelle,
+      null,
+      null,
+      null,
+      null,
       // ZBE-7.6 : Identifiant de l'autorité d'affectation  qui a attribué l'identifiant de l'UF de responsabilité médicale
       $this->getAssigningAuthority("mediboard"),
       // ZBE-7.7 : La seule valeur utilisable de la table 203 est "UF"
       "UF",
+      null,
+      null,
       // ZBE-7.10 : Identifiant de l'UF de responsabilité médicale
       $uf->code
-    );
+    )*/
     
     // ZBE-8: Ward of care responsibility in the period starting with this movement (XON) (optional)
     $data[] = null;
     
     // ZBE-9: Nature of this movement (CWE)
+    // S - Changement de responsabilité de soins uniquement
+    // H - Changement de  responsabilité  d'hébergement  soins uniquement
+    // M - Changement de responsabilité médicale uniquement
+    // L - Changement de lit uniquement
+    // D - Changement de prise en charge médico-administrative laissant les responsabilités et la localisation du patient inchangées 
+    //     (ex : changement de tarif du séjour en unité de soins)
+    // SM - Changement de responsabilité soins + médicale
+    // SH - Changement de responsabilité soins + hébergement
+    // MH - Changement de responsabilité hébergement + médicale
+    // LD - Changement de prise en charge médico-administrative et de lit, laissant les responsabilités inchangées
+    // HMS - Changement conjoint des trois responsabilités.
     /* @todo Voir comment gérer ceci... */
-    $data[] = "S";
+    $data[] = "L";
     
     $this->fill($data);
   }
