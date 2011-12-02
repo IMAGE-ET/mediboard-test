@@ -1725,7 +1725,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
     foreach($favoris as $_fav){
       $produit = new CBcbProduit();
       $produit->load($_fav["code_cip"],"0");
-      $listFavoris[$produit->libelle] = $produit;
+			$produit->_count = $_fav["total"];
+      $listFavoris[$produit->ucd_view] = $produit;
     }
     ksort($listFavoris);
     return $listFavoris;
@@ -1741,7 +1742,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
     foreach($favoris_inj as $_fav_inj){
       $produit = new CBcbProduit();
       $produit->load($_fav_inj["code_cip"],"0");
-      $listFavoris[$produit->libelle] = $produit;
+			$produit->_count = $_fav_inj["total"];
+      $listFavoris[$produit->ucd_view] = $produit;
     }
     ksort($listFavoris);
     return $listFavoris;
@@ -1753,8 +1755,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
   static function getFavorisPraticien($praticien_id, $chapitreSel){
     $listFavoris = array();
     if($chapitreSel == "med"){
-      $listFavoris["medicament"] = CPrescription::getFavorisMedPraticien($praticien_id);
-      $listFavoris["injectable"] = CPrescription::getFavorisInjectablePraticien($praticien_id);
+      $listFavoris["med"] = CPrescription::getFavorisMedPraticien($praticien_id);
+      $listFavoris["inj"] = CPrescription::getFavorisInjectablePraticien($praticien_id);
     } else {
       $favoris[$chapitreSel] = CElementPrescription::getFavoris($praticien_id, $chapitreSel);
     }
@@ -1763,8 +1765,10 @@ class CPrescription extends CMbObject implements IPatientRelated {
         foreach($typeFavoris as $curr_fav){
           $element = new CElementPrescription();
           $element->load($curr_fav["element_prescription_id"]);
-          $listFavoris[$key][] = $element;
+					$element->_count = $curr_fav["total"];
+          $listFavoris[$key][$element->_view] = $element;
         }
+				ksort($listFavoris[$key]);
       }
     }
     return $listFavoris;    

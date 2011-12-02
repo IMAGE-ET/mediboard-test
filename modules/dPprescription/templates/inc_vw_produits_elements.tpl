@@ -44,16 +44,6 @@ if($('alertes')){
   Prescription.reloadAlertes({{$prescription->_id}});
 }
 
-updateFavoris = function (praticien_id, chapitre, select){
-  // Suppression du onclick du select
-	select.onclick="";
-  var url = new Url("dPprescription", "httpreq_vw_favoris_prescription");
-  url.addParam("praticien_id", praticien_id);
-  url.addParam("chapitre", chapitre);
-	url.addParam("prescription_id", '{{$prescription->_id}}');
-  url.requestUpdate(select);
-}
-
 updateSelectTP = function(patient_id, select){
   // Suppression du onclick du select
   select.onclick="";

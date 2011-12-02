@@ -128,11 +128,13 @@ if ($line instanceof CPrescriptionLineElement || $line instanceof CPrescriptionL
   $executants["users"] = CFunctionCategoryPrescription::getAllUserExecutants();
 }
 
+/*
 if($line instanceof CPrescriptionLineElement || $line instanceof CPrescriptionLineMedicament){
   // Chargement des posos statistiques
   $_prat_id = !$line->_ref_prescription->object_id ? $line->_ref_prescription->praticien_id : null;
   $line->loadMostUsedPoso(null, $_prat_id);
 }
+*/
 
 if($line instanceof CPrescriptionLineMix){
   // Chargement des ref de la ligne

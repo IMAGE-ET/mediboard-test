@@ -33,6 +33,8 @@
   };
 </script>
 
+{{mb_default var=count_past_lines value=0}}
+
 {{if $count_past_lines > 0}}
   <div class="small-warning">
     Il y a {{$count_past_lines}} ligne{{if $count_past_lines > 1}}s{{/if}} dont le début est antérieur à la date courante.

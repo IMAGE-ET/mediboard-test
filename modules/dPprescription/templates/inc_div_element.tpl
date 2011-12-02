@@ -83,10 +83,7 @@ Main.add( function(){
 			<form action="?" method="get" name="search{{$element}}" onsubmit="return false;">
 			  <!-- Affichage des produits les plus utilises -->
 				{{if $is_praticien || $mode_protocole || @$operation_id || $can->admin || ($current_user->isExecutantPrescription() && !$conf.dPprescription.CPrescription.role_propre)}}
-        <select name="favoris" onchange="Prescription.addLineElement(this.value,'{{$element}}'); this.value = '';" 
-				        style="width: 140px;" onclick="updateFavoris('{{$favoris_praticien_id}}','{{$element}}', this); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">
-          <option value="">&mdash; les plus utilisés</option>
-        </select>
+				  <button type="button" class="add" onclick="Prescription.showFavoris('{{$favoris_praticien_id}}','{{$element}}','{{$prescription->_id}}','{{$mode_protocole}}','{{$mode_pharma}}');">Les plus utilisés</button>
 				{{/if}}
 			  
 				{{if $is_praticien || $mode_protocole || @$operation_id || $can->admin || ($current_user->isExecutantPrescription() && !$conf.dPprescription.CPrescription.role_propre)}}

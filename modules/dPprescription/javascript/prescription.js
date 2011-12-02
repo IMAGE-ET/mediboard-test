@@ -478,5 +478,20 @@ Prescription = {
     window.selectLines = new Url("dPprescription", "ajax_merge_prescriptions");
     window.selectLines.addParam("prescriptions_ids[]", prescriptions_ids);
     window.selectLines.requestModal(1000,700);
-  }
+  },
+	showFavoris: function(praticien_id, chapitre, prescription_id, mode_protocole, mode_pharma){
+	  if(document.forms.selPraticienLine){
+			var oFormPraticien = window.document.forms.selPraticienLine;
+	    praticien_id = $V(oFormPraticien.praticien_id)
+	  }
+		
+		var url = new Url("dPprescription", "ajax_vw_favoris_prescription");
+		url.addParam("praticien_id", praticien_id);
+    url.addParam("chapitre", chapitre);
+    url.addParam("prescription_id", prescription_id);
+		url.addParam("mode_protocole", mode_protocole);
+    url.addParam("mode_pharma", mode_pharma);
+    
+	  url.requestModal(800,600);
+	}
 };

@@ -320,10 +320,7 @@ updateModaleAfterAddLine = function(line_id){
 			<!-- Affichage des div des medicaments et autres produits -->
 			  <form action="?" method="get" name="searchProd" onsubmit="return false;">
 					<!-- Affichage des produits les plus utilises -->
-					<select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';" style="width: 120px;" onclick="updateFavoris('{{$favoris_praticien_id}}','med', this); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">
-				 	  <option value="">&mdash; les plus utilisés</option>
-					</select>
-					
+					<button type="button" class="add" onclick="Prescription.showFavoris('{{$favoris_praticien_id}}','med','{{$prescription->_id}}','{{$mode_protocole}}','{{$mode_pharma}}');">Les plus utilisés</button>
 					{{if $prescription->object_class == "CSejour" && $prescription->object_id}}
 					  <button type="button" class="add" onclick="transfertAllTP(); return onSubmitFormAjax(getForm('addAllTP'));">Traitements personnels</button>
 					{{/if}}
