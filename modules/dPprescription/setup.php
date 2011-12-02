@@ -2155,7 +2155,12 @@ class CSetupdPprescription extends CSetup {
               CHANGE `jour_decalage_fin` `jour_decalage_fin` ENUM ('I','S','N','A');";
 		$this->addQuery($query);
 		
-		$this->mod_version = "1.63";
+		$this->makeRevision("1.63");
+		$query = "ALTER TABLE `prescription` 
+              ADD `QSP` TEXT;";
+		$this->addQuery($query);
+		
+		$this->mod_version = "1.64";
   }
 }
 

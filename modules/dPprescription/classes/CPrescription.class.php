@@ -17,18 +17,15 @@ class CPrescription extends CMbObject implements IPatientRelated {
   var $praticien_id    = null;
   var $function_id     = null;
   var $group_id        = null;
-  
   var $object_class    = null;
   var $object_id       = null;
   var $libelle         = null;
   var $type            = null;
-
-	var $fast_access    = null;
-	var $planif_removed = null;
-	
-	var $score = null;
-	
-	var $checked_lines      = null;
+  var $fast_access     = null;
+	var $planif_removed  = null;
+	var $score           = null;
+	var $checked_lines   = null;
+	var $QSP             = null;
 	
   // Form fields
   var $_owner          = null;
@@ -166,6 +163,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
     $specs["fast_access"]   = "bool default|0";
     $specs["checked_lines"] = "bool default|0";
 		$specs["planif_removed"]= "bool default|0";
+		$specs["QSP"]           = "text";
 		$specs["_type_sejour"]  = "enum notNull list|pre_admission|sejour|sortie";
     $specs["_dateTime_min"] = "dateTime";
     $specs["_dateTime_max"] = "dateTime";

@@ -352,6 +352,14 @@ p.duplicata {
 			  </li>
 			{{/foreach}}
     </ul>
+		
+		{{if $prescription->QSP}}
+    <br />
+    <strong style="padding-left: 40px;">
+      QSP {{$prescription->QSP}}
+    </strong>
+    {{/if}}
+		
     <div class="middle"></div>
     <!-- Affichage des no_ald -->
 		<div style="border: 1px dotted #555; padding-right: 10px; text-align: center;">
@@ -377,8 +385,15 @@ p.duplicata {
 			 {{/if}}
 			 </li>
      {{/foreach}}
-			
     </ul>
+		
+		{{if $prescription->QSP}}
+    <br />
+    <strong style="padding-left: 40px;">
+      QSP {{$prescription->QSP}}
+    </strong>
+    {{/if}}
+		
 <!-- Affichage en mode normal -->
 {{else}}
     <!-- Affichage des no_ald -->
@@ -437,6 +452,9 @@ p.duplicata {
 	        {{/if}}  
         {{/if}}
       {{/if}}  
+			
+			
+			
     {{/foreach}}
       {{foreach from=$lines.medicaments.comment.no_ald item=line_medicament_comment_no_ald}}
         {{include file="inc_print_commentaire.tpl" comment=$line_medicament_comment_no_ald nodebug=true}}
@@ -450,6 +468,13 @@ p.duplicata {
       {{/foreach}}
 			
     </ul>
+		
+		{{if $prescription->QSP}}
+		<br />
+		<strong style="padding-left: 40px;">
+		  QSP {{$prescription->QSP}}
+		</strong>
+		{{/if}}
 {{/if}}
  </div>
 {{/if}}

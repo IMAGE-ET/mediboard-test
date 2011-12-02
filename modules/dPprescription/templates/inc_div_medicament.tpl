@@ -262,16 +262,19 @@ updateModaleAfterAddLine = function(line_id){
   {{/if}}  	
   </div>
 
-
   {{assign var=perm_add_med value=0}}
 	{{if (!$prescription->_protocole_locked &&
 	     ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isExecutantPrescription() && $conf.dPprescription.CPrescription.droits_infirmiers_med && !$conf.dPprescription.CPrescription.role_propre)))}} 
 	  {{assign var=perm_add_med value=1}} 		 
   {{/if}}
 	
-	{{if $perm_add_med}} 
+	{{if $perm_add_med}}
   <tr>
     <th class="title">
+      {{if $prescription->type != "sejour"}}
+      <button type="button" class="add" style="float: right;" onclick="this.toggleClassName('add').toggleClassName('remove'); $('QSP').toggle();">QSP</button>
+      {{/if}}
+
     	{{if $app->user_prefs.easy_mode}}
       <button type="button" class="add notext" onclick="toggleSearchOptions('searchProd','med');" style="float: left">Détails</button>
 			{{/if}}
@@ -362,6 +365,28 @@ updateModaleAfterAddLine = function(line_id){
     {{/if}}
 	 </td>
   </tr>
+	{{if $prescription->type != "sejour"}}
+	<tbody id="QSP" style="display: none">
+		<tr>
+			<th class="title">QSP</th>
+		</tr>
+		<tr>
+			<td>
+				{{if $is_praticien}}
+				<form name="QSP-{{$prescription->_id}}" action="?" method="post">
+	        <input type="hidden" name="m" value="dPprescription" />
+	        <input type="hidden" name="dosql" value="do_prescription_aed" />
+	        <input type="hidden" name="del" value="" />
+					<input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+	        {{mb_field object=$prescription field=QSP onchange="return onSubmitFormAjax(this.form);"}}        
+	      </form>
+				{{else}}
+				  {{mb_value object=$prescription field=QSP}}  
+				{{/if}}
+			</td>
+		</tr>
+	</tbody>
+	{{/if}}
   <tbody id="add_line_comment_med" style="display: none">
   <tr>
 	  <th colspan="2" class="category">{{mb_title class=CPrescriptionLineComment field=commentaire}}</th>
