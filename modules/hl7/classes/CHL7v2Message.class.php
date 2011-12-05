@@ -187,12 +187,12 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $message_type = explode($this->componentSeparator, $first_line[8]);
     
     if ($message_type[0]) {
-      $this->name        = $message_type[0].$message_type[1];
-      $this->event_name  = $message_type[0];
+      $this->event_name = $message_type[0].$message_type[1];
+      $this->name       = $message_type[0];
     }
     else {
-      $this->name        = preg_replace("/[^A-Z0-9]/", "", $message_type[2]);
-      $this->event_name  = substr($message_type[2], 0, 3);
+      $this->event_name = preg_replace("/[^A-Z0-9]/", "", $message_type[2]);
+      $this->name       = substr($message_type[2], 0, 3);
     }
     
     $this->description = (string)$this->getSpecs()->description;
