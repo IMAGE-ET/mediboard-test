@@ -194,6 +194,10 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
       $this->event_name = preg_replace("/[^A-Z0-9]/", "", $message_type[2]);
       $this->name       = substr($message_type[2], 0, 3);
     }
+
+    if ($this->name === "ACK") {
+      $this->event_name = substr($this->event_name, 0, 3);
+    }
     
     $this->description = (string)$this->getSpecs()->description;
     
@@ -397,7 +401,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
    * @return CHL7v2SimpleXMLElement
    */
   function getSpecs(){
-    return $this->getSchema(self::PREFIX_MESSAGE_NAME, $this->name, $this->getMessage()->extension);
+    return $this->getSchema(self::PREFIX_MESSAGE_NAME, $this->event_name, $this->getMessage()->extension);
   }
   
   /**
