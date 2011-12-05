@@ -408,7 +408,12 @@ class CSetupssr extends CSetup {
       ADD `demi_journee_2` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-		$this->mod_version = "0.35";
+    $this->makeRevision("0.35");
+    $query = "ALTER TABLE `replacement`
+      ADD UNIQUE INDEX replacement (sejour_id, conge_id)";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.36";
     
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";

@@ -44,7 +44,7 @@ refreshReplacement = function(sejour_id, conge_id, type){
   var url = new Url("ssr", "ajax_vw_replacement");
   url.addParam("sejour_id", sejour_id);
   url.addParam("conge_id", conge_id);
-	url.addParam("type", type);
+  url.addParam("type", type);
   url.requestUpdate("replacement-"+type);
 }
 

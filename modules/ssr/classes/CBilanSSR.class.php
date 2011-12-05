@@ -18,11 +18,11 @@ class CBilanSSR extends CMbObject {
   // DB Fields
   var $sejour_id     = null;
   var $technicien_id = null;
-	var $entree        = null;
+  var $entree        = null;
   var $sortie        = null;
   var $planification = null;
   var $brancardage   = null;
-	
+  
   var $hospit_de_jour = null;
   var $demi_journee_1 = null;
   var $demi_journee_2 = null;
@@ -47,7 +47,7 @@ class CBilanSSR extends CMbObject {
   var $_ref_kine_journee     = null;
   var $_ref_prat_demandeur   = null;
   var $_ref_sejour_demandeur = null;
-	
+  
   /**
    * Surcharge de la spécification d'objet
    * @return CMbObjectSpec
@@ -66,7 +66,7 @@ class CBilanSSR extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-		
+    
     // DB Fields
     $props["sejour_id"    ] = "ref notNull class|CSejour show|0";
     $props["technicien_id"] = "ref class|CTechnicien";
@@ -74,7 +74,7 @@ class CBilanSSR extends CMbObject {
     $props["sortie"       ] = "text helped";
     $props["planification"] = "bool default|1";
     $props["brancardage"  ] = "bool default|0";
-		
+    
     $props["hospit_de_jour"] = "bool default|0";
     $props["demi_journee_1"] = "bool default|0";
     $props["demi_journee_2"] = "bool default|0";
@@ -88,27 +88,27 @@ class CBilanSSR extends CMbObject {
     $props["_kine_referent_id" ]   = "ref class|CMediusers";
     $props["_kine_journee_id"  ]   = "ref class|CMediusers";
     $props["_prat_demandeur_id"]   = "ref class|CMediusers";
-		
+    
     return $props;
   }
-	
-	function updateFormFields() {
-		parent::updateFormFields();
-		if ($this->hospit_de_jour) {
-			static $demi_journees = array(
-		    "0" => array(
+  
+  function updateFormFields() {
+    parent::updateFormFields();
+    if ($this->hospit_de_jour) {
+      static $demi_journees = array(
+        "0" => array(
           "0" => "none",
           "1" => "pm",
-				),
+        ),
         "1" => array(
           "0" => "am",
           "1" => "all",
         ),
-			);
-			$this->_demi_journees = $demi_journees[$this->demi_journee_1][$this->demi_journee_2];
-		}
-	}
-	
+      );
+      $this->_demi_journees = $demi_journees[$this->demi_journee_1][$this->demi_journee_2];
+    }
+  }
+  
   /**
    * Chargement du séjour 
    * Calcul les premier et dernier jours ouvrés de rééducation 
@@ -131,56 +131,56 @@ class CBilanSSR extends CMbObject {
     
     return $this->_ref_sejour = $sejour;
   }
-	
+  
   /**
    * Chargement du technicien 
    * @return CTechnicien technicien
    */
-	function loadRefTechnicien() {
-		return $this->_ref_technicien = $this->loadFwdRef("technicien_id", true);
-	}
-	
+  function loadRefTechnicien() {
+    return $this->_ref_technicien = $this->loadFwdRef("technicien_id", true);
+  }
+  
   /**
    * Chargement du kiné référent
    * @return CMediusers Kiné référent
    */
-	function loadRefKineReferent() {
+  function loadRefKineReferent() {
     $this->loadRefTechnicien();
     $technicien =& $this->_ref_technicien;
     $technicien->loadRefKine();
     $this->_ref_kine_referent = $technicien->_ref_kine;
-		$this->_kine_referent_id = $this->_ref_kine_referent->_id;
-		return $this->_ref_kine_referent;
-	}
-	
-	/**
-	 * Chargement du kiné référent et kiné journée pour une date donnée
-	 * @param date $date Date courante if null;
-	 * @return CMediusers Kiné journée
-	 */
-	function loadRefKineJournee($date = null) {
+    $this->_kine_referent_id = $this->_ref_kine_referent->_id;
+    return $this->_ref_kine_referent;
+  }
+  
+  /**
+   * Chargement du kiné référent et kiné journée pour une date donnée
+   * @param date $date Date courante if null;
+   * @return CMediusers Kiné journée
+   */
+  function loadRefKineJournee($date = null) {
     $this->loadRefKineReferent();
     $this->_ref_kine_journee = $this->_ref_kine_referent;
 
     // Recherche d'un remplacement
-		$sejour = $this->loadRefSejour();
-		foreach ($sejour->loadRefReplacements() as $_replacement) {
-	    if ($_replacement->_id) {
-	      $_replacement->loadRefConge();
-	      $conge = $_replacement->_ref_conge;
-	      if (CMbRange::in(CValue::first($date, mbDate()), $conge->date_debut, $conge->date_fin)) {
-	        $_replacement->loadRefReplacer();
-	        $replacer =& $_replacement->_ref_replacer;
-	        $replacer->loadRefFunction();
-	        $this->_ref_kine_journee = $_replacement->_ref_replacer;
-					break;
-	      }
-	    }
-		}
-		
-		$this->_kine_journee_id = $this->_ref_kine_journee->_id;
-		return $this->_ref_kine_journee;
-	}
+    $sejour = $this->loadRefSejour();
+    foreach ($sejour->loadRefReplacements() as $_replacement) {
+      if ($_replacement->_id) {
+        $_replacement->loadRefConge();
+        $conge = $_replacement->_ref_conge;
+        if (CMbRange::in(CValue::first($date, mbDate()), $conge->date_debut, $conge->date_fin)) {
+          $_replacement->loadRefReplacer();
+          $replacer =& $_replacement->_ref_replacer;
+          $replacer->loadRefFunction();
+          $this->_ref_kine_journee = $_replacement->_ref_replacer;
+          break;
+        }
+      }
+    }
+    
+    $this->_kine_journee_id = $this->_ref_kine_journee->_id;
+    return $this->_ref_kine_journee;
+  }
 
   /**
    * Chargement du séjour probablement demandeur du séjour SSR
@@ -188,24 +188,24 @@ class CBilanSSR extends CMbObject {
    * @return CSejour
    */
   function loadRefSejourDemandeur() {
-  	// Effet de cache
-  	if ($this->_ref_sejour_demandeur) {
-  		return;
-  	}
-		
-		// Requête
-  	$sejour_ssr = $this->loadRefSejour();
-		$tolerance = CAppUI::conf("ssr CBilanSSR tolerance_sejour_demandeur");
-		$date_min = mbDate("- $tolerance DAYS", $sejour_ssr->entree);
+    // Effet de cache
+    if ($this->_ref_sejour_demandeur) {
+      return;
+    }
+    
+    // Requête
+    $sejour_ssr = $this->loadRefSejour();
+    $tolerance = CAppUI::conf("ssr CBilanSSR tolerance_sejour_demandeur");
+    $date_min = mbDate("- $tolerance DAYS", $sejour_ssr->entree);
     $date_max = mbDate("+ $tolerance DAYS", $sejour_ssr->entree);
-		$where["sortie"]     = "BETWEEN '$date_min' AND '$date_max'";
-		$where["patient_id"] = "= '$sejour_ssr->patient_id'";
+    $where["sortie"]     = "BETWEEN '$date_min' AND '$date_max'";
+    $where["patient_id"] = "= '$sejour_ssr->patient_id'";
     $where["annule"]     = " = '0'";
     $where["type"]       = " != 'ssr'";
-		
-		// Chargement
-		$sejour = new CSejour;
-		$sejour->loadObject($where);
+    
+    // Chargement
+    $sejour = new CSejour;
+    $sejour->loadObject($where);
     return $this->_ref_sejour_demandeur = $sejour;
   }
 
@@ -214,46 +214,46 @@ class CBilanSSR extends CMbObject {
    * @return CMediusers
    */
   function loadRefPraticienDemandeur() {
-  	$sejour = $this->loadRefSejourDemandeur();
-		$praticien = $sejour->loadRefPraticien(1);
-		
-		$this->_prat_demandeur_id = $praticien->_id;
-		return $this->_ref_prat_demandeur = $praticien;
+    $sejour = $this->loadRefSejourDemandeur();
+    $praticien = $sejour->loadRefPraticien(1);
+    
+    $this->_prat_demandeur_id = $praticien->_id;
+    return $this->_ref_prat_demandeur = $praticien;
   }
 
 
-	/**
-	 * Load Sejour for technicien at a date
-	 * @return array<CSejour>
-	 **/ 
-	static function loadSejoursSSRfor($technicien_id, $date, $show_cancelled_services = true) {
+  /**
+   * Load Sejour for technicien at a date
+   * @return array<CSejour>
+   **/ 
+  static function loadSejoursSSRfor($technicien_id, $date, $show_cancelled_services = true) {
     $group = CGroups::loadCurrent();
 
-		// Masquer les services inactifs
-		if (!$show_cancelled_services) {
-		  $service = new CService;
-		  $service->group_id = $group->_id;
-		  $service->cancelled = "1";
-		  $services = $service->loadMatchingList();
-		  $where["service_id"] = CSQLDataSource::prepareNotIn(array_keys($services));
-		}
-		
-	  $where["type"] = "= 'ssr'";
-	  $where["group_id"] = "= '$group->_id'";
-	  $where["annule"] = "= '0'";
-	  $where["bilan_ssr.technicien_id"] = $technicien_id ? "= '$technicien_id'" : "IS NULL";
-	  $leftjoin["bilan_ssr"] = "bilan_ssr.sejour_id = sejour.sejour_id";
-	  return CSejour::loadListForDate($date, $where, "entree_reelle", null, null, $leftjoin);
-	}
-	
+    // Masquer les services inactifs
+    if (!$show_cancelled_services) {
+      $service = new CService;
+      $service->group_id = $group->_id;
+      $service->cancelled = "1";
+      $services = $service->loadMatchingList();
+      $where["service_id"] = CSQLDataSource::prepareNotIn(array_keys($services));
+    }
+    
+    $where["type"] = "= 'ssr'";
+    $where["group_id"] = "= '$group->_id'";
+    $where["annule"] = "= '0'";
+    $where["bilan_ssr.technicien_id"] = $technicien_id ? "= '$technicien_id'" : "IS NULL";
+    $leftjoin["bilan_ssr"] = "bilan_ssr.sejour_id = sejour.sejour_id";
+    return CSejour::loadListForDate($date, $where, "entree_reelle", null, null, $leftjoin);
+  }
+  
   /**
    * Calcul si la réeducation est en cours au jour donné au regard des jours ouvrés
    * @param $date Date de référence
    * @return bool
    */
   function getDateEnCours($date) {
-  	$this->loadRefSejour();
-  	return $this->_encours = CMbRange::in($date, $this->_premier_jour, $this->_dernier_jour);
+    $this->loadRefSejour();
+    return $this->_encours = CMbRange::in($date, $this->_premier_jour, $this->_dernier_jour);
   }
   
   /**
@@ -263,8 +263,29 @@ class CBilanSSR extends CMbObject {
    * @return bool
    */
   function getDatesEnCours($date_min, $date_max) {
-  	$this->loadRefSejour();
-  	return $this->_encours = CMbRange::collides($date_min, $date_max, $this->_premier_jour, $this->_dernier_jour);
+    $this->loadRefSejour();
+    return $this->_encours = CMbRange::collides($date_min, $date_max, $this->_premier_jour, $this->_dernier_jour);
+  }
+  
+  static function loadSejoursSurConges(CPlageConge $plage, $date_min, $date_max) {
+    $group_id = CGroups::loadCurrent()->_id;
+  	
+    $date_min = max($date_min, $plage->date_debut);
+    $date_max = min($date_max, $plage->date_fin);
+    $date_max = mbDate("+1 DAY", $date_max);
+    
+    $sejour = new CSejour();
+    $ljoin["bilan_ssr" ] = "bilan_ssr.sejour_id     = sejour.sejour_id";
+    $ljoin["technicien"] = "bilan_ssr.technicien_id = technicien.technicien_id";
+    
+    $where = array();
+    $where["type"] = "= 'ssr'";
+    $where["group_id"] = "= '$group_id'";
+    $where["sejour.annule"] = "!= '1'";
+    $where["sejour.entree"] = "<= '$date_max'";
+    $where["sejour.sortie"] = ">= '$date_min'";
+    $where["technicien.kine_id"] = " = '$plage->user_id'";
+    return $sejour->loadList($where, null, null, null, $ljoin);
   }
   
 }

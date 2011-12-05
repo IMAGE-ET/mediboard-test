@@ -10,43 +10,43 @@
 
 class CEvenementSSR extends CMbObject {
   // DB Table key
-	var $evenement_ssr_id        = null;
-	
-	// DB Fields
-	var $prescription_line_element_id = null;
-	var $sejour_id               = null;
-	var $debut                   = null; // DateTime
-	var $duree                   = null; // Durée en minutes
-	var $therapeute_id           = null;
-	var $equipement_id           = null;
+  var $evenement_ssr_id        = null;
+  
+  // DB Fields
+  var $prescription_line_element_id = null;
+  var $sejour_id               = null;
+  var $debut                   = null; // DateTime
+  var $duree                   = null; // Durée en minutes
+  var $therapeute_id           = null;
+  var $equipement_id           = null;
   var $realise                 = null;
   var $annule                  = null;
-	var $remarque                = null;
+  var $remarque                = null;
 
-	// Seances collectives
-	var $seance_collective_id    = null; // Evenement lié a une seance collective
-	var $_ref_element_prescription = null;
+  // Seances collectives
+  var $seance_collective_id    = null; // Evenement lié a une seance collective
+  var $_ref_element_prescription = null;
   //var $element_prescription_id = null; // Une seance est liée à un element de prescription et non pas une ligne d'element
-	var $_ref_seance_collective = null;
-	
-	// Form Fields
+  var $_ref_seance_collective = null;
+  
+  // Form Fields
   var $_traite                  = null;
   var $_heure_fin               = null; // Time
-	var $_heure_deb               = null; // Time
-	var $_nb_decalage_min_debut   = null;
-	var $_nb_decalage_heure_debut = null;
+  var $_heure_deb               = null; // Time
+  var $_nb_decalage_min_debut   = null;
+  var $_nb_decalage_heure_debut = null;
   var $_nb_decalage_jour_debut  = null;
   var $_nb_decalage_duree       = null;
-	
-	var $_ref_equipement        = null;
-	var $_ref_sejour            = null;
-	var $_ref_therapeute        = null;
-	var $_ref_actes_cdarr       = null;
-	var $_ref_evenements_seance = null;
-	
-	// Behaviour field
-	var $_traitement = null;
-	
+  
+  var $_ref_equipement        = null;
+  var $_ref_sejour            = null;
+  var $_ref_therapeute        = null;
+  var $_ref_actes_cdarr       = null;
+  var $_ref_evenements_seance = null;
+  
+  // Behaviour field
+  var $_traitement = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table       = 'evenement_ssr';
@@ -65,91 +65,91 @@ class CEvenementSSR extends CMbObject {
     $props["_heure_fin"]    = "time show|1";
     $props["duree"]         = "num min|0";
 
-		$props["therapeute_id"] = "ref class|CMediusers";
-		$props["equipement_id"] = "ref class|CEquipement";
-	  $props["realise"]       = "bool default|0";
+    $props["therapeute_id"] = "ref class|CMediusers";
+    $props["equipement_id"] = "ref class|CEquipement";
+    $props["realise"]       = "bool default|0";
     $props["annule"]        = "bool default|0";
-  	$props["remarque"]      = "str";
-		$props["seance_collective_id"] = "ref class|CEvenementSSR";
-		
+    $props["remarque"]      = "str";
+    $props["seance_collective_id"] = "ref class|CEvenementSSR";
+    
     $props["_traite"]       = "bool";
     $props["_nb_decalage_min_debut"]   = "num";
-		$props["_nb_decalage_heure_debut"] = "num";
+    $props["_nb_decalage_heure_debut"] = "num";
     $props["_nb_decalage_jour_debut"]  = "num";
-		$props["_nb_decalage_duree"]   = "num";
+    $props["_nb_decalage_duree"]   = "num";
     return $props;
   }
-	
-	function getBackProps() {
+  
+  function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["actes_cdarr"] = "CActeCdARR evenement_ssr_id";
-		$backProps["evenements_ssr"] = "CEvenementSSR seance_collective_id";
+    $backProps["evenements_ssr"] = "CEvenementSSR seance_collective_id";
     return $backProps;
   }
-	
-	function updateFormFields() {
-		parent::updateFormFields();
-		$this->_traite = $this->realise || $this->annule;
+  
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_traite = $this->realise || $this->annule;
     $this->_heure_deb = mbTime($this->debut);
     $this->_heure_fin = mbTime("+ $this->duree MINUTES", $this->debut);
-	}
-	
-	function check(){
-		if ($this->_forwardRefMerging) {
-			return;
-		}
-		
-		// Vérouillage d'un événement traité
+  }
+  
+  function check(){
+    if ($this->_forwardRefMerging) {
+      return;
+    }
+    
+    // Vérouillage d'un événement traité
     $this->completeField("realise");
     $this->completeField("annule");
     $this->_traite = $this->realise || $this->annule;
-		if ($this->_traite && !$this->_traitement) {
-			return "Evénément déjà traité (réalisé ou annulé)";
-		}
+    if ($this->_traite && !$this->_traitement) {
+      return "Evénément déjà traité (réalisé ou annulé)";
+    }
 
     // Evénement dans les bornes du séjour
     $this->completeField("sejour_id");
     $this->loadRefSejour();
-		$sejour = $this->_ref_sejour;
-		
+    $sejour = $this->_ref_sejour;
+    
     $this->completeField("debut");
-		
-		// Vérifier seulement les jours car les sorties peuvent être imprécises pour les hospit de jours
-		if ($sejour->_id && $this->debut) {
+    
+    // Vérifier seulement les jours car les sorties peuvent être imprécises pour les hospit de jours
+    if ($sejour->_id && $this->debut) {
       $date_debut = mbDate($this->debut);
       $date_entree = mbDate(mbDate($sejour->entree));
       $date_sortie = mbDate(mbDate($sejour->sortie));
-			if (!CMbRange::in($date_debut, $date_entree, $date_sortie)) {
+      if (!CMbRange::in($date_debut, $date_entree, $date_sortie)) {
         return "Evenement SSR en dehors des dates du séjour";
-			}
-		}
+      }
+    }
     
-		// Cas de la réalisation des événements SSR
-	  $this->loadRefTherapeute();
-		
-		// Si le therapeute n'est pas defini, c'est 
-		if($this->therapeute_id){
-		  $therapeute = $this->_ref_therapeute;
+    // Cas de la réalisation des événements SSR
+    $this->loadRefTherapeute();
+    
+    // Si le therapeute n'est pas defini, c'est 
+    if($this->therapeute_id){
+      $therapeute = $this->_ref_therapeute;
     } 
-		else {
-			// Chargement du therapeute de la seance
+    else {
+      // Chargement du therapeute de la seance
       $evt_seance = new CEvenementSSR();
       $evt_seance->load($this->seance_collective_id);
       $evt_seance->loadRefTherapeute();
-		  $therapeute = $evt_seance->_ref_therapeute;
+      $therapeute = $evt_seance->_ref_therapeute;
     }
-		
-	  if ($this->fieldModified("realise", "1")) {
-		  // Si le thérapeute n'a pas d'identifiant CdARR
-		  if (!$therapeute->code_intervenant_cdarr) {
-		    return CAppUI::tr("CMediusers-code_intervenant_cdarr-none");
-		  }
-		  $therapeute->loadRefCodeIntervenantCdARR();
+    
+    if ($this->fieldModified("realise", "1")) {
+      // Si le thérapeute n'a pas d'identifiant CdARR
+      if (!$therapeute->code_intervenant_cdarr) {
+        return CAppUI::tr("CMediusers-code_intervenant_cdarr-none");
+      }
+      $therapeute->loadRefCodeIntervenantCdARR();
       $code_intervenant_cdarr = $therapeute->_ref_code_intervenant_cdarr->code;
       
-			
-			// Création du RHS au besoins
-		  $rhs = $this->getRHS();
+      
+      // Création du RHS au besoins
+      $rhs = $this->getRHS();
       if (!$rhs->_id) {
         $rhs->store();
       }
@@ -158,7 +158,7 @@ class CEvenementSSR extends CMbObject {
         CAppUI::stepAjax(CAppUI::tr("CRHS.charged"), UI_MSG_WARNING);
       }
       
-			// Complétion de la ligne RHS    
+      // Complétion de la ligne RHS    
       $this->loadRefsActesCdARR();
       foreach ($this->_ref_actes_cdarr as $_acte_cdarr) {
         $ligne_activite_rhs = new CLigneActivitesRHS();
@@ -179,104 +179,104 @@ class CEvenementSSR extends CMbObject {
         
         $ligne_activite_rhs->store();
       }
-		}
-		
-		return parent::check();
-	}
-	
-	function canDeleteEx() {
+    }
+    
+    return parent::check();
+  }
+  
+  function canDeleteEx() {
     if ($msg = parent::canDeleteEx()){
       return $msg;
     }
-  	
-		// Impossible de supprmier un événement réalisé	
+    
+    // Impossible de supprmier un événement réalisé  
     $this->completeField("realise");
     $this->completeField("annule");
     $this->_traite = $this->realise || $this->annule;
-		if ($this->realise) {
-			return "CEvenementSSR-msg-delete-failed-traite";
-		}
-		
-	}
-	
-	function loadView() {
-		parent::loadView();
-		$this->loadRefSejour();
-		$sejour =& $this->_ref_sejour;
-		$sejour->loadRefPatient();
-		$patient = $sejour->_ref_patient;
-		
-		if ($this->seance_collective_id){
-			$this->loadRefSeanceCollective();
-			$this->debut = $this->_ref_seance_collective->debut;
-			$this->duree = $this->_ref_seance_collective->duree;
-		}
-		$this->_view = "$patient->_view - ". mbDateToLocale(mbDate($this->debut));
-		$this->loadRefsActesCdARR();
-		
-		if(!$this->sejour_id){
-		  $this->loadRefsEvenementsSeance();
-			foreach($this->_ref_evenements_seance as $_evt_seance){
-				$_evt_seance->loadRefSejour();
-				$_evt_seance->_ref_sejour->loadRefPatient();
-			}
-		}
-	}
-	
-	/**
-	 * Load prescription line and associated element
-	 * 
-	 * @return CPrescriptionLineElement
-	 */
-	function loadRefPrescriptionLineElement($cache = true){
-		$this->_ref_prescription_line_element = $this->loadFwdRef("prescription_line_element_id", $cache);
-		$this->_ref_prescription_line_element->loadRefElement();
-		return $this->_ref_prescription_line_element;
-	}
-	
+    if ($this->realise) {
+      return "CEvenementSSR-msg-delete-failed-traite";
+    }
+    
+  }
+  
+  function loadView() {
+    parent::loadView();
+    $this->loadRefSejour();
+    $sejour =& $this->_ref_sejour;
+    $sejour->loadRefPatient();
+    $patient = $sejour->_ref_patient;
+    
+    if ($this->seance_collective_id){
+      $this->loadRefSeanceCollective();
+      $this->debut = $this->_ref_seance_collective->debut;
+      $this->duree = $this->_ref_seance_collective->duree;
+    }
+    $this->_view = "$patient->_view - ". mbDateToLocale(mbDate($this->debut));
+    $this->loadRefsActesCdARR();
+    
+    if(!$this->sejour_id){
+      $this->loadRefsEvenementsSeance();
+      foreach($this->_ref_evenements_seance as $_evt_seance){
+        $_evt_seance->loadRefSejour();
+        $_evt_seance->_ref_sejour->loadRefPatient();
+      }
+    }
+  }
+  
+  /**
+   * Load prescription line and associated element
+   * 
+   * @return CPrescriptionLineElement
+   */
+  function loadRefPrescriptionLineElement($cache = true){
+    $this->_ref_prescription_line_element = $this->loadFwdRef("prescription_line_element_id", $cache);
+    $this->_ref_prescription_line_element->loadRefElement();
+    return $this->_ref_prescription_line_element;
+  }
+  
   /**
    * Load sejour
    * 
    * @return CSejour
    */
-	function loadRefSejour($cache = true){
-		return $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
-	}
-	
+  function loadRefSejour($cache = true){
+    return $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
+  }
+  
   /**
    * Load equipement
    * 
    * @return CEquipement
    */
-	function loadRefEquipement($cache = true){
-		return $this->_ref_equipement = $this->loadFwdRef("equipement_id", $cache);
-	}
-	
-	function loadRefTherapeute($cache = true){
-	  return $this->_ref_therapeute = $this->loadFwdRef("therapeute_id", $cache);
-	}
-	
-	function loadRefSeanceCollective($cache = true){
+  function loadRefEquipement($cache = true){
+    return $this->_ref_equipement = $this->loadFwdRef("equipement_id", $cache);
+  }
+  
+  function loadRefTherapeute($cache = true){
+    return $this->_ref_therapeute = $this->loadFwdRef("therapeute_id", $cache);
+  }
+  
+  function loadRefSeanceCollective($cache = true){
     return $this->_ref_seance_collective = $this->loadFwdRef("seance_collective_id", $cache);
   }
   
-	function loadRefsActesCdARR(){
-		return $this->_ref_actes_cdarr = $this->loadBackRefs("actes_cdarr");
-	}
-	
-	function loadRefsEvenementsSeance(){
-		return $this->_ref_evenements_seance = $this->loadBackRefs("evenements_ssr");
-	}
-	
-	function getRHS() {
-	  $rhs = new CRHS();
+  function loadRefsActesCdARR(){
+    return $this->_ref_actes_cdarr = $this->loadBackRefs("actes_cdarr");
+  }
+  
+  function loadRefsEvenementsSeance(){
+    return $this->_ref_evenements_seance = $this->loadBackRefs("evenements_ssr");
+  }
+  
+  function getRHS() {
+    $rhs = new CRHS();
     $rhs->sejour_id = $this->sejour_id;
     $rhs->date_monday = mbDate("last monday", mbDate("+1 day", mbDate($this->debut)));
     $rhs->loadMatchingObject();
     
     return $rhs;
-	}
-	
+  }
+  
   static function getNbJoursPlanning($user_id, $date){
     $sunday = mbDate("next sunday", mbDate("- 1 DAY", $date));
     $saturday = mbDate("-1 DAY", $sunday);
@@ -301,16 +301,16 @@ class CEvenementSSR extends CMbObject {
     }
     return $nb_days;
   }
-	
-	/**
-	 * Find all therapeutes for a patient 
-	 * 
-	 * @param ref[CPatient]  $patient_id  Patient
-	 * @param ref[CFunction] $function_id May restrict to a function
-	 * 
-	 * @return array[CMediusers]
-	 */
-	static function getAllTherapeutes($patient_id, $function_id = null) {
+  
+  /**
+   * Find all therapeutes for a patient 
+   * 
+   * @param ref[CPatient]  $patient_id  Patient
+   * @param ref[CFunction] $function_id May restrict to a function
+   * 
+   * @return array[CMediusers]
+   */
+  static function getAllTherapeutes($patient_id, $function_id = null) {
     // Filter on patient
     $join["sejour"] = "sejour.sejour_id = evenement_ssr.sejour_id";
     $where["patient_id"] =  "= '$patient_id'";
@@ -322,18 +322,18 @@ class CEvenementSSR extends CMbObject {
     }
     
     // Load grouped
-		$group = "therapeute_id";
+    $group = "therapeute_id";
     $evenement = new self;
-		$evenements = $evenement->loadList($where, null, null, $group, $join);
-		
-		// Load therapeutes
-		$therapeutes = CMbObject::massLoadFwdRef($evenements, "therapeute_id");
-		foreach ($therapeutes as $_therapeute) {
-			$_therapeute->loadRefFunction();
-		}
-		
-		return $therapeutes;
-	}
+    $evenements = $evenement->loadList($where, null, null, $group, $join);
+    
+    // Load therapeutes
+    $therapeutes = CMbObject::massLoadFwdRef($evenements, "therapeute_id");
+    foreach ($therapeutes as $_therapeute) {
+      $_therapeute->loadRefFunction();
+    }
+    
+    return $therapeutes;
+  }
 
   /**
    * Find all therapeutes having planned events 
@@ -344,7 +344,7 @@ class CEvenementSSR extends CMbObject {
    * @return array[CMediusers]
    */
   static function getActiveTherapeutes($min, $max) {
-  	$max = mbDate("+1 DAY", $max);
+    $max = mbDate("+1 DAY", $max);
     $query = "SELECT DISTINCT therapeute_id FROM `evenement_ssr` 
       WHERE debut BETWEEN '$min' AND '$max'";
     $that = new self;
@@ -354,7 +354,7 @@ class CEvenementSSR extends CMbObject {
     $therapeute = new CMediusers();
     return $therapeute->loadAll($therapeute_ids);
   }
-	
+  
 }
 
 ?>
