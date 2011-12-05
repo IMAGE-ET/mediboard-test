@@ -24,6 +24,7 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     
     if ($mbObject instanceof CCorrespondantPatient) {
       $mbObject = $mbObject->loadRefPatient();
+      $mbObject->_receiver = $receiver;
     }
     
     // Si Serveur
@@ -48,11 +49,6 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     }
     // Si Client
     else {
-      if ($mbObject instanceof CCorrespondantPatient) {
-        $mbObject = $mbObject->loadRefPatient();
-        $mbObject->_receiver = $receiver;
-      }
-    
       if ($mbObject->_eai_initiateur_group_id || !$receiver->isMessageSupported("CHPrimXMLEnregistrementPatient")) {
         return;
       }
