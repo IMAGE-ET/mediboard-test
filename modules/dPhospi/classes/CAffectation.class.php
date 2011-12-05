@@ -302,5 +302,28 @@ class CAffectation extends CMbObject {
       $repas[$keyType] = $repasDuJour;
     }
   }
+  
+  static function getDefaultAffectation(CSejour $sejour) {
+    $service = new CService();
+    $service->load(CAppUI::conf("dPhospi default_service_types_sejour $sejour->type"));
+    if (!$service->_id) {
+      // envoi par défaut le premier de la liste si pas défini
+      $service->loadObject();  
+    }
+
+    $affectation = new CAffectation();
+    $affectation->entree = $sejour->entree;
+    $affectation->sortie = $sejour->sortie;
+    $affectation->loadRefLit();
+    $affectation->_ref_lit->loadRefChambre();
+    $affectation->_ref_lit->_ref_chambre->_ref_service = $service;
+    $affectation->sejour_id = $sejour->_id;
+    $affectation->loadRefSejour();
+    $affectation->_ref_sejour->loadNDA();
+    $affectation->_ref_sejour->loadRefPatient();
+    $affectation->_ref_sejour->loadRefPraticien();
+    
+    return $affectation;
+  }
 }
 ?>
