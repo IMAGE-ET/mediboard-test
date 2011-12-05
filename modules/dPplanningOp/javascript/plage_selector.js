@@ -86,7 +86,7 @@ PlageOpSelector = {
     this.prepared.salle_id = salle_id;
     this.prepared.bAdm     = bAdm;
     this.prepared.sDate    = sDate;
-    if(hour_voulu && min_voulu) {
+    if(!Object.isUndefined(hour_voulu) && hour_voulu != "" && !Object.isUndefined(min_voulu) && min_voulu != "") {
       this.prepared.sHoraireVoulu = hour_voulu+":"+min_voulu+":00";
     }
     
@@ -101,7 +101,9 @@ PlageOpSelector = {
    
     $V(oOpForm[PlageOpSelector.sPlage_id]    , PlageOpSelector.prepared.plage_id);
     $V(oOpForm[PlageOpSelector.sSalle_id]    , PlageOpSelector.prepared.salle_id);
-    $V(oOpForm[PlageOpSelector.sHoraireVoulu], PlageOpSelector.prepared.sHoraireVoulu);
+    if (PlageOpSelector.prepared.sHoraireVoulu) {
+      $V(oOpForm[PlageOpSelector.sHoraireVoulu], PlageOpSelector.prepared.sHoraireVoulu);
+    }
     $V(oOpForm[PlageOpSelector.sDate]        , PlageOpSelector.prepared.sDate);
    
     if(PlageOpSelector.prepared.bAdm != "aucune"){ 
