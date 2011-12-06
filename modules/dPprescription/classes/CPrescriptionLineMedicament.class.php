@@ -279,7 +279,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       if($this->debut && (mbDate($this->debut) == mbDate($this->_fin))){
         $this->_duree_prise .= "le ".mbTransformTime(null, $this->debut, "%d/%m/%Y");
       } else {
-        if ($this->debut){
+        if ($this->debut && !($this->_ref_prescription->type == "sortie" && $this->debut == mbDate())){
           $this->_duree_prise .= "à partir du ".mbTransformTime(null, $this->debut, "%d/%m/%Y");
         }
         if ($this->duree && $this->unite_duree){

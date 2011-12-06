@@ -105,13 +105,11 @@
 				{{/if}} 
 			{{/if}}
 			
-			
 			 <!-- Heure de debut -->
 			 {{if $med->time_debut}}
 				 à {{mb_value object=$med field=time_debut}}
 			 {{/if}}
 		 {{/if}}
-		 
 		 
 		 {{if $med->jour_decalage_fin && $med->unite_decalage_fin}}
 		   {{assign var=line_jour_decalage_fin value=$med->jour_decalage_fin}}

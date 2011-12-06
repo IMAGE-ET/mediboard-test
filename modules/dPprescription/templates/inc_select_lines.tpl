@@ -67,7 +67,7 @@
 <form name="selLines" method="post" action="?">
   <input type="hidden" name="m" value="dPprescription"/>
 	
-	{{if $mode == "validation" || $mode == "tp"}}
+	{{if $mode == "validation" || $mode == "tp" || $mode == "duplicate"}}
     <input type="hidden" name="dosql" value="do_select_lines_aed"/>
 	{{else}}
 	  <input type="hidden" name="dosql" value="do_duplicate_lines_aed"/>
@@ -172,9 +172,15 @@
       <button type="button" class="cancel oneclick" onclick="cancelProtocole(this)">Annuler l'ajout des traitements personnels</button>
     {{/if}}
   
-	  {{if $mode == "validation"}}
+	  {{if $mode == "validation" || $mode == "duplicate"}}
       <button type="button" class="save oneclick" onclick="submitChangedLines()">{{tr}}CPrescription.apply_advanced_protocole{{/tr}} {{if $app->user_id == $praticien_id}}et signer{{/if}}</button>
-      <button type="button" class="cancel oneclick" onclick="cancelProtocole(this)">{{tr}}CPrescription.cancel_advanced_protocole{{/tr}}</button>
+      <button type="button" class="cancel oneclick" onclick="cancelProtocole(this)">
+      	{{if $mode == "duplicate"}}
+				  Supprimer toutes les lignes
+				{{else}}
+				  {{tr}}CPrescription.cancel_advanced_protocole{{/tr}}
+				{{/if}}
+			</button>
     {{/if}}
 		
 		{{if $mode == "stopped_lines"}}

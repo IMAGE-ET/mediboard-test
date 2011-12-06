@@ -33,13 +33,18 @@ $count_past_lines = 0;
 $current_date = mbDate();
 $prescription = new CPrescription;
 
-if ($protocole_id) {
+$mode = $tp ? "tp" : "validation";
+if(!$pack_id && !$tp){
+  $mode	= "duplicate";
+}
+
+if ($protocole_id || (!$pack_id && !$tp)) {
   $prescription->load($prescription_id);
   $prescription->loadRefsLinesMedComments("1", "", $protocole_id);
   $prescription->loadRefsLinesElementsComments("0", "1", "", "", $protocole_id);
   $prescription->loadRefsPrescriptionLineMixes("", 1, 1, $protocole_id);
   $prescription->countLinesMedsElements(null, null, $protocole_id);
-  
+  	
   // On instancie le protocole utilisé pour récupérer
   // le champ checked_lines (lignes cochées dans la modale)
   $protocole = new CPrescription;
@@ -180,8 +185,9 @@ $smarty->assign("prescription_id", $prescription_id);
 $smarty->assign("checked_lines_tab"  , $checked_lines_tab);
 $smarty->assign("sejour"         , $prescription->_ref_object);
 $smarty->assign("now", mbDate());
-$smarty->assign("mode"           , $tp ? "tp" : "validation");
 $smarty->assign("count_past_lines", $count_past_lines);
+$smarty->assign("mode"         , $mode);
+
 $smarty->display("inc_select_lines.tpl");
 
 ?>

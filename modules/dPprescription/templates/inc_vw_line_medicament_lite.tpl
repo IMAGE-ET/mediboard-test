@@ -108,7 +108,7 @@
     </td>
     {{if !$line->_protocole}}
       {{if $line->fin}}
-          <td colspan="2" style="width: 25%" class="text">
+          <td colspan="2" style="width: 20%" class="text">
             A partir de la fin du séjour jusqu'au {{mb_value object=$line field=fin}}
           </td>
       {{else}}
