@@ -339,7 +339,11 @@ p.duplicata {
 		
 		<ul>
       {{foreach from=$lines.medicaments.med.ald item=line_medicament_element_ald}}
-        {{include file="inc_print_medicament.tpl" med=$line_medicament_element_ald nodebug=true}}
+			  {{if $line_medicament_element_ald instanceof CPrescriptionLineMedicament}}
+          {{include file="inc_print_medicament.tpl" med=$line_medicament_element_ald nodebug=true}}
+				{{else}}
+				  {{include file="inc_print_prescription_line_mix.tpl" perf=$line_medicament_element_ald nodebug=true}}
+				{{/if}}
       {{/foreach}}
       {{foreach from=$lines.medicaments.comment.ald item=line_medicament_comment_ald}}
 		      {{include file="inc_print_commentaire.tpl" comment=$line_medicament_comment_ald nodebug=true}}

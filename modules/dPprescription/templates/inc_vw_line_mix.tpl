@@ -74,15 +74,17 @@ Main.add( function(){
 			 
 				{{if $line->_ref_prescription->type != "externe"}}
 				  {{if $line->_perm_edit}}
-					  <form name="editCondPerf-{{$line->_id}}" action="?" method="post">
-					  	<input type="hidden" name="m" value="dPprescription" />
-							<input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
-							<input type="hidden" name="prescription_line_mix_id" value="{{$line->_id}}" />
-				      {{mb_field object=$line field=conditionnel onchange="submitFormAjax(this.form, 'systemMsg');" typeEnum=checkbox}}
-				      {{mb_label object=$line field="conditionnel"}}
-						</form>
+					  {{if $prescription->type != "sejour"}}
+            <form name="editALDPerf-{{$line->_id}}" action="?" method="post">
+              <input type="hidden" name="m" value="dPprescription" />
+              <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
+              <input type="hidden" name="prescription_line_mix_id" value="{{$line->_id}}" />
+              {{mb_field object=$line field=ald onchange="submitFormAjax(this.form, 'systemMsg');" typeEnum=checkbox}}
+              {{mb_label object=$line field="ald"}}
+            </form>
+						{{/if}}
 						
-						<form name="editPeropPerf-{{$line->_id}}" action="?" method="post">
+            <form name="editPeropPerf-{{$line->_id}}" action="?" method="post">
               <input type="hidden" name="m" value="dPprescription" />
               <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
               <input type="hidden" name="prescription_line_mix_id" value="{{$line->_id}}" />
@@ -90,6 +92,14 @@ Main.add( function(){
               {{mb_label object=$line field="perop"}}
             </form>
             
+					  <form name="editCondPerf-{{$line->_id}}" action="?" method="post">
+					  	<input type="hidden" name="m" value="dPprescription" />
+							<input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
+							<input type="hidden" name="prescription_line_mix_id" value="{{$line->_id}}" />
+				      {{mb_field object=$line field=conditionnel onchange="submitFormAjax(this.form, 'systemMsg');" typeEnum=checkbox}}
+				      {{mb_label object=$line field="conditionnel"}}
+						</form>
+				
 					{{else}}
 				    {{mb_label object=$line field="conditionnel"}}:
 				    {{if $line->conditionnel}}Oui{{else}}Non{{/if}} 

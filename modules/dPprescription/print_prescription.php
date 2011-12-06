@@ -238,7 +238,12 @@ foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
     continue;
   }
 	
-  $lines["medicaments"]["med"]["no_ald"][] = $_prescription_line_mix;
+	if($_prescription_line_mix->ald){
+    $_ald = true;
+    $lines["medicaments"]["med"]["ald"][] = $_prescription_line_mix;
+  } else {
+    $lines["medicaments"]["med"]["no_ald"][] = $_prescription_line_mix;
+  }
 }
 
 

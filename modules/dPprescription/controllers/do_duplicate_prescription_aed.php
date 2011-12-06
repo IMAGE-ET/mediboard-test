@@ -121,9 +121,4 @@ foreach($lines as $cat => $lines_by_type){
 CAppUI::callbackAjax("selectLines", $prescription->_id);
 CApp::rip();
 
-/*
-echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription->_id, $prescription->object_id, null, null, null, null, null,'');</script>";
-echo CAppUI::getMsg();
-CApp::rip();
-*/
 ?>

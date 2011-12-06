@@ -86,6 +86,8 @@
       {{if !$smarty.foreach.lines.last}}<br />{{/if}}
     {{/foreach}}
     
+
+
     {{if $_prescription_line_mix->commentaire || $_prescription_line_mix->conditionnel}}
       <br />
     {{/if}}  
@@ -101,6 +103,8 @@
       {{$_prescription_line_mix->commentaire|spancate:50|smarty:nodefaults}}
       </span>
     {{/if}}
+		{{if $_prescription_line_mix->ald}}{{mb_label object=$_prescription_line_mix field="ald"}}&nbsp;{{/if}}
+
   </td> 
   
   {{if $_prescription_line_mix->type_line == "aerosol"}}

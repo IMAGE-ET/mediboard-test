@@ -83,7 +83,8 @@ class CPrescriptionLineMix extends CMbObject {
 	
 	var $duree_dose_max = null;
 	var $quantite_dose_max = null;
-  
+  var $ald                 = null;
+
 	
   
   var $_date_fin          = null;
@@ -124,18 +125,19 @@ class CPrescriptionLineMix extends CMbObject {
   var $_short_view = null;
 
   // Can fields
-  var $_perm_edit                        = null;
-  var $_can_modify_prescription_line_mix             = null;
-  var $_can_modify_prescription_line_mix_item        = null;
-  var $_can_vw_form_signature_praticien  = null;
-  var $_can_vw_form_signature_pharmacien = null;
-  var $_can_vw_form_signature_infirmiere = null;
-  var $_can_vw_signature_praticien       = null;
-  var $_can_delete_prescription_line_mix             = null;
-  var $_can_delete_prescription_line_mix_item        = null;
-  var $_can_vw_form_add_perf_contigue    = null;
-  var $_can_vw_form_stop_perf            = null;
-  
+  var $_perm_edit                             = null;
+  var $_can_modify_prescription_line_mix      = null;
+  var $_can_modify_prescription_line_mix_item = null;
+  var $_can_vw_form_signature_praticien       = null;
+  var $_can_vw_form_signature_pharmacien      = null;
+  var $_can_vw_form_signature_infirmiere      = null;
+  var $_can_vw_signature_praticien            = null;
+  var $_can_delete_prescription_line_mix      = null;
+  var $_can_delete_prescription_line_mix_item = null;
+  var $_can_vw_form_add_perf_contigue         = null;
+  var $_can_vw_form_stop_perf                 = null;
+  var $_can_view_form_ald                     = null;
+
   var $_quantite_totale                  = null;
   var $_prises_prevues                   = null;
 
@@ -234,7 +236,8 @@ class CPrescriptionLineMix extends CMbObject {
 		
 		$specs["duree_dose_max"]         = "num";
 		$specs["quantite_dose_max"]      = "num";
-    
+    $specs["ald"]                    = "bool";
+
     return $specs;
   }
 
@@ -375,10 +378,10 @@ class CPrescriptionLineMix extends CMbObject {
     if(!$this->_protocole){
       $this->_can_vw_signature_praticien = 1;
     }
-    // Suppression de la ligne
     if ($perm_edit){
       $this->_can_delete_prescription_line_mix = 1;
       $this->_can_delete_prescription_line_mix_item = 1;
+      $this->_can_view_form_ald = 1;
     }
   }
   

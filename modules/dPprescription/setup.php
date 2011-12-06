@@ -2160,7 +2160,12 @@ class CSetupdPprescription extends CSetup {
               ADD `QSP` TEXT;";
 		$this->addQuery($query);
 		
-		$this->mod_version = "1.64";
+		$this->makeRevision("1.64");
+		$query = "ALTER TABLE `prescription_line_mix` 
+              ADD `ald` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($query);
+		
+		$this->mod_version = "1.65";
   }
 }
 
