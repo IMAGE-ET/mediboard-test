@@ -90,11 +90,17 @@
       <br />
     {{/if}}  
     {{if $_prescription_line_mix->commentaire}}
+		  {{if $_prescription_line_mix->conditionnel}}
+        {{if $_prescription_line_mix->condition_active}}
+          <img src="images/icons/cond.png" title="Ligne conditionnelle activée">
+        {{else}}
+          <img src="images/icons/cond_barre.png" title="Ligne conditionnelle désactivée">
+        {{/if}}
+      {{/if}}
       <span style="font-size: 0.8em;" class="opacity-70">
       {{$_prescription_line_mix->commentaire|spancate:50|smarty:nodefaults}}
       </span>
     {{/if}}
-    {{if $_prescription_line_mix->conditionnel}}{{mb_label object=$_prescription_line_mix field="conditionnel"}}&nbsp;{{/if}}
   </td> 
   
   {{if $_prescription_line_mix->type_line == "aerosol"}}

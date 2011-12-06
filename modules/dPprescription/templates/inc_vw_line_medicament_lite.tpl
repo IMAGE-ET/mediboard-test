@@ -82,9 +82,6 @@
           - {{$line->voie}}
         {{/if}}
       </span>
-      
-      
-      {{if $line->conditionnel}}{{mb_label object=$line field="conditionnel"}}&nbsp;{{/if}}
       {{if $line->perop}}{{mb_label object=$line field="perop"}}&nbsp;{{/if}}
       {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}
     </td>
@@ -99,8 +96,18 @@
         Aucune posologie
       {{/if}}
       </span>
+			
+			
+			
       {{if $line->commentaire}}
         <br />
+				{{if $line->conditionnel}}
+	        {{if $line->condition_active}}
+	          <img src="images/icons/cond.png" title="Ligne conditionnelle activée">
+	        {{else}}
+	          <img src="images/icons/cond_barre.png" title="Ligne conditionnelle désactivée">
+	        {{/if}}
+        {{/if}}
         <span style="font-size: 0.8em;" class="opacity-70">
         {{$line->commentaire|spancate:50|smarty:nodefaults}}
         </span>

@@ -38,6 +38,18 @@
 		    {{else}}
 		      {{$_lines_by_guid->_posologie}} {{$_lines_by_guid->_ref_prescription_line_mix->_frequence}}
 		    {{/if}}
+				
+        <br />
+        {{if $_lines_by_guid->conditionnel}}
+          {{if $_lines_by_guid->condition_active}}
+            <img src="images/icons/cond.png" title="Ligne conditionnelle activée">
+          {{else}}
+            <img src="images/icons/cond_barre.png" title="Ligne conditionnelle désactivée">
+          {{/if}}
+        {{/if}}
+        <span style="font-size: 0.8em;" class="opacity-70">
+        {{$_lines_by_guid->commentaire|spancate:50|smarty:nodefaults}}
+        </span>
 		  </span>
 		  <br />
 		{{/foreach}}
