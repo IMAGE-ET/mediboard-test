@@ -260,7 +260,7 @@ Main.add( function(){
 		              <input type="hidden" name="unite_prise" value="{{$_planif->unite_prise}}" />
 		              <input type="hidden" name="prise_id" value="{{$_planif->prise_id}}" />
 		              <input type="hidden" name="administrateur_id" value="{{$app->user_id}}" />
-		              <input type="hidden" name="dateTime" value="current" />
+		              <input type="hidden" name="dateTime" value="{{$_planif->dateTime}}" />
 		              <input type="text" name="quantite" value="{{$quantite}}" size=3/>
 		              <button type="button" class="tick notext" onclick="return onSubmitFormAjax(this.form, { onComplete: Prescription.updatePerop.curry('{{$sejour_id}}') });">Administrer</button>
 								</form>
