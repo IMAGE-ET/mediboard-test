@@ -13,9 +13,9 @@
 {{if $prescription_line_mix->perop}}
 // Submit du debut ou de la fin de la perf
 submitTiming = function(){
-  var oForm = document.forms['editPerf{{$prescription_line_mix->_id}}'];
+  var oForm = getForm('editPerf{{$prescription_line_mix->_id}}');
   submitFormAjax(oForm, "systemMsg", { onComplete: function() {
-    window.opener.Prescription.updatePerop('{{$sejour_id}}');
+    window.opener.Prescription.updatePerop('{{$prescription_line_mix->_ref_prescription->object_id}}');
 		window.close();
   } } );
 }
