@@ -54,7 +54,7 @@ class CPrescriptionAlerteHandler extends CMbObjectHandler {
     $alerte = new CAlert();
 		
     $object = $this->getAlerteObject($mbObject);
-    if($object->_protocole){
+    if($object->_protocole || $object->fieldModified("condition_active")){
     	return;
     }
 		
