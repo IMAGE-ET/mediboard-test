@@ -254,12 +254,12 @@ CLibrary::$all[$library->name] = $library;
 $library = new CLibrary;
 $library->name = "CKEditor";
 $library->url = "http://ckeditor.com/";
-$library->fileName = "ckeditor_3.6.1.tar.gz";
+$library->fileName = "ckeditor_3.6.2.tar.gz";
 $library->description = "Composant Javascript d'édition de texte au format HTML";
 $library->sourceDir = "ckeditor";
 $library->targetDir = "ckeditor";
 $library->versionFile = "ckeditor.js";
-$library->versionString = "version:'3.6.1'";
+$library->versionString = "version:'3.6.2'";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "ckeditor";
@@ -425,7 +425,7 @@ $library->description = "Html To PDF converter";
 $library->sourceDir = "wkhtmltopdf";
 $library->targetDir = "wkhtmltopdf";
 $library->versionFile = "version.txt";
-$library->versionString = "0.10.0_rc2";
+$library->versionString = "0.11.0_rc1";
 
 CLibrary::$all[$library->name] = $library;
 
