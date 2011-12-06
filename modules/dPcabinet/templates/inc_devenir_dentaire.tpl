@@ -78,17 +78,17 @@
 </script>
 <style type="text/css">
   .hr_rank {
-    border: 1px dotted #777;
-    border-width: 1px 0;
-    background: #777;
-    height: 10px;
+    border: none;
+    background: #ccc;
+    height: 8px;
+    margin: 0;
   }
   .rank-selected {
-    border: 1px dotted #777;
-    border-width: 1px 0;
-    background: #777;
-    height: 10px;
-    outline: 3px #800 solid;
+    border: none;
+    background: #ccc;
+    height: 8px;
+    margin: 0;
+    outline: 3px #f88 solid;
   }
 </style>
 

@@ -29,10 +29,12 @@
   {{foreach from=$actes_dentaires item=_acte_dentaire}}
     <tr>
       <td>
-        <div id="acte_{{$_acte_dentaire->_id}}" data-id="{{$_acte_dentaire->_id}}" class="draggable">
+        <div id="acte_{{$_acte_dentaire->_id}}" style="width:100%;" data-id="{{$_acte_dentaire->_id}}" class="draggable">
           <span style="float: right;">
-            Commentaire : {{mb_value object=$_acte_dentaire field=commentaire}} &mdash;
-            ICR : {{$_acte_dentaire->ICR}}</span>
+            ICR : {{$_acte_dentaire->ICR}}
+          </span>
+          
+          <div style="float: left;">
           <form name="delCode-{{$_acte_dentaire->_id}}" method="post"
             onsubmit="return onSubmitFormAjax(this, { onComplete: function() {
               afterActeDentaire(null, {devenir_dentaire_id: '{{$devenir_dentaire->_id}}'});
@@ -45,9 +47,23 @@
             {{mb_field object=$_acte_dentaire field=code hidden=true}}
             <span>
               <button type="button" class="notext trash" onclick="this.form.onsubmit();" title="Supprimer"></button>
-              {{$_acte_dentaire->rank}}. <a style="display: inline;" onclick="CodeCCAM.show('{{$_acte_dentaire->code}}', 'CConsultation')" href="#1">{{$_acte_dentaire->code}}</a>
+              
+			  <big style="border: 2px solid #888; background: #fff; width: 2em; border-radius: 1em;">&nbsp;{{$_acte_dentaire->rank}}&nbsp;</big>
+              <a style="display: inline;" onclick="CodeCCAM.show('{{$_acte_dentaire->code}}', 'CConsultation')" href="#1">
+                {{$_acte_dentaire->code}}
+              </a>
             </span>
           </form>
+
+          {{if $_acte_dentaire->commentaire}}          
+          <span>
+          {{$_acte_dentaire->commentaire|nl2br}}
+          </span>
+          {{/if}} 
+
+          </div>
+          
+          
           
           <script type="text/javascript">
             new Draggable($('acte_{{$_acte_dentaire->_id}}'), dragOptions);
