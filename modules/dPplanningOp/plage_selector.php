@@ -89,6 +89,7 @@ $heure_entree_veille = $config["heure_entree_veille"];
 $heure_entree_jour   = $config["heure_entree_jour"];
 
 // Horaire souhaité
+$config = CAppUI::conf("dPplanningOp COperation");
 $list_hours_voulu   = range(7, 20);
 $list_minutes_voulu = range(0, 59, $config["min_intervalle"]);
 foreach ($list_hours_voulu as &$hour){
