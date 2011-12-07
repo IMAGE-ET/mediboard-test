@@ -61,7 +61,9 @@ class COracleDataSource extends CSQLDataSource {
 
   function query($query) {
     $stid = oci_parse($this->link, $query);
-    oci_execute($stid);
+    if (!oci_execute($stid)) {
+    	mbLog($query);
+    }
     return $stid;
   }
 
