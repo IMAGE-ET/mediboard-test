@@ -16,9 +16,9 @@ $filter_class   = CValue::getOrSession("filter_class");
 $start          = CValue::getOrSession("start");
 $keywords       = CValue::getOrSession("keywords");
 
-$userSel = CMediusers::get($filter_user_id);
-$userSel->loadRefs();
-$userSel->_ref_function->loadRefGroup();
+$userSel = new CMediusers;
+$userSel->load($filter_user_id);
+$userSel->loadRefFunction()->loadRefGroup();
 
 if ($userSel->isPraticien()) {
   CValue::setSession("filter_user_id", $userSel->user_id);
@@ -46,7 +46,6 @@ $aidesCount = array(
 );
 
 if ($userSel->user_id) {
-  $userSel->loadRefFunction();
   $_aide = new CAideSaisie();
   
   $where["user_id"] = "= '$userSel->user_id'";
