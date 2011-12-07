@@ -90,6 +90,10 @@ class COracleDataSource extends CSQLDataSource {
   }
   
   private function readLOB($hash) {
+    if (empty($hash)) {
+      return $hash;
+    }
+    
     foreach($hash as &$value) {
       if (is_a($value, "OCI-Lob")) {
         $value = $value->read($value->size());
