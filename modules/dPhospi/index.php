@@ -10,6 +10,9 @@
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
 $module->registerTab("vw_affectations"            , TAB_READ);
+if (CAppUI::conf("dPhospi show_mouvements") == 1) {
+  $module->registerTab("vw_mouvements"              , TAB_READ);
+}
 $module->registerTab("edit_sorties"               , TAB_READ);
 $module->registerTab("vw_recherche"               , TAB_READ);
 $module->registerTab("vw_suivi_bloc"              , TAB_READ);

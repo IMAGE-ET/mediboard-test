@@ -446,26 +446,41 @@ class CMbDate {
     switch ($period) {
       case "min":
         return mbTransformTime(null, $datetime, "%Y-%m-%d %H:%M:00");
-        break;
       case "hour":
         return mbTransformTime(null, $datetime, "%Y-%m-%d %H:00:00");
-        break;
       case "day":
         return mbTransformTime(null, $datetime, "%Y-%m-%d 00:00:00");
-        break;
       case "week":
         return mbTransformTime("last sunday +1 day", $datetime, "%Y-%m-%d 00:00:00");
-        break;
       case "month":
         return mbTransformTime(null, $datetime, "%Y-%m-01 00:00:00");
-        break;
       case "year":
         return mbTransformTime(null, $datetime, "%Y-01-01 00:00:00");
-        break;
       default:
-        trigger_error("Can't make a Dirak hash for unknown '$period' period", E_USER_WARNING);
+        trigger_error("Can't make a Dirac hash for unknown '$period' period", E_USER_WARNING);
     }
   }
+  
+  /**
+   * Give a position to a ISO DATETIME relative to a reference
+   * @param dateTime $datetime
+   * @param dateTime $reference 
+   * @param enum $period One of 1hour, 6hours, 1day
+   * @return float
+   */
+  static function position($datetime, $reference, $period) {
+    $diff = strtotime($datetime) - strtotime($reference);
+    switch ($period) {
+      case "1hour":
+        return $diff / CMbDate::$secs_per["hour"]; 
+      case "6hours":
+      	return $diff / (CMbDate::$secs_per["hour"] * 6);
+      case "1day":
+      	return $diff / CMbDate::$secs_per["day"];
+      default:
+        trigger_error("Can't make a relative position for unknown '$period' period", E_USER_WARNING);
+    }
+  } 
 }
 
 CMbDate::$xmlDateTime = CMbDate::$xmlDate."T".CMbDate::$xmlTime;

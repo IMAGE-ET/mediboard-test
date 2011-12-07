@@ -14,6 +14,7 @@ $dPconfig["dPhospi"] = array (
     "urg"        => "",
     "consult"    => ""
   ),
+  "show_mouvements" => "0",
   "CLit" => array(
     "prefixe"         => "",
     "show_in_tableau" => 0,

@@ -155,7 +155,7 @@ function loadSejourNonAffectes($where, $order = null, $praticien_id = null) {
   );
 
   if($praticien_id){
-    $where["sejour.praticien_id"] = " = '$praticien_id'";	
+    $where["sejour.praticien_id"] = " = '$praticien_id'";
   }
 
   $where["sejour.group_id"] = "= '$g'";

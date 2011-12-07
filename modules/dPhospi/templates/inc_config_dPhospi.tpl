@@ -19,7 +19,9 @@
   {{mb_include module=system template=inc_config_bool var=pathologies}}
   
   {{mb_include module=system template=inc_config_str var=nb_hours_trans}}
- 
+   
+  {{mb_include module=system template=inc_config_bool var=show_mouvements}}
+  
   <tr>
     <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
