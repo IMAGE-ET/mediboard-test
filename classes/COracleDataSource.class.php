@@ -16,7 +16,7 @@ class COracleDataSource extends CSQLDataSource {
       return;
     }
       
-    if (false === $this->link = oci_connect($user, $pass, "$host/$name")) {
+    if (false === $this->link = oci_connect($user, $pass, "$host/$name", "WE8ISO8859P1")) {
       $error = $this->error();
       trigger_error( "FATAL ERROR: Connection to Oracle database '$host/$name' failed.\n".$error['message'], E_USER_ERROR );
       return;
@@ -98,8 +98,6 @@ class COracleDataSource extends CSQLDataSource {
       if (is_a($value, "OCI-Lob") && ($size = $value->size())) {
         $value = $value->read($size);
       }
-			
-			$value = mb_convert_encoding($value, "iso-8859-1");
     }
     
     return $hash;
