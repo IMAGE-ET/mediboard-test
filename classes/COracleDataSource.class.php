@@ -9,13 +9,13 @@
  */
 
 class COracleDataSource extends CSQLDataSource {
-		
+    
   function connect($host, $name, $user, $pass) {
     if (!function_exists( "oci_connect" )) {
       trigger_error( "FATAL ERROR: Oracle support not available.  Please check your configuration.", E_USER_ERROR );
       return;
     }
-	    
+      
     if (false === $this->link = oci_connect($user, $pass, "$host/$name")) {
       $error = $this->error();
       trigger_error( "FATAL ERROR: Connection to Oracle database '$host/$name' failed.\n".$error['message'], E_USER_ERROR );
@@ -62,7 +62,7 @@ class COracleDataSource extends CSQLDataSource {
   function query($query) {
     $stid = oci_parse($this->link, $query);
     if (!oci_execute($stid)) {
-    	mbLog($query);
+      mbLog($query);
     }
     return $stid;
   }
@@ -89,16 +89,26 @@ class COracleDataSource extends CSQLDataSource {
     return "SELECT COUNT(*) as total";
   }
   
+  private function readLOB($hash) {
+    foreach($hash as &$value) {
+      if (is_a($value, "OCI-Lob")) {
+        $value = $value->read($value->size());
+      }
+    }
+    
+    return $hash;
+  }
+  
   function fetchRow($result) {
-	  return oci_fetch_row($result);
+    return $this->readLOB(oci_fetch_row($result));
   }
 
   function fetchAssoc($result) {
-    return oci_fetch_assoc($result);
+    return $this->readLOB(oci_fetch_assoc($result));
   }
 
   function fetchArray($result) {
-    return oci_fetch_array($result);
+    return $this->readLOB(oci_fetch_array($result));
   }
 
   function fetchObject($result, $class = null, $params = array()) {
