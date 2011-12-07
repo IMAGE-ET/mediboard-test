@@ -95,14 +95,14 @@ class COracleDataSource extends CSQLDataSource {
     }
     
     foreach($hash as &$value) {
-      if (is_a($value, "OCI-Lob")) {
-        $value = $value->read($value->size());
+      if (is_a($value, "OCI-Lob") && ($size = $value->size())) {
+        $value = $value->read($size);
       }
-			
-			$value = utf8_decode($value);
+      
+      $value = utf8_decode($value);
     }
-		
-		mbLog($value);
+    
+    mbLog($hash);
     
     return $hash;
   }
