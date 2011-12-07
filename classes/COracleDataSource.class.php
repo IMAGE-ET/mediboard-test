@@ -99,7 +99,7 @@ class COracleDataSource extends CSQLDataSource {
         $value = $value->read($size);
       }
 			
-			$value = mb_convert_encoding($value, "iso-8859-1", "utf-16");
+			$value = mb_convert_encoding($value, "iso-8859-1");
     }
     
     return $hash;
