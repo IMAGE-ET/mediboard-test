@@ -1,5 +1,7 @@
 <script type="text/javascript">
 
+Main.add(Control.Tabs.setTabCount.curry("out", "{{$listOperations|@count}}"));
+
 submitSortieForm = function(oFormSortie) {
   submitFormAjax(oFormSortie,'systemMsg', {onComplete: function(){ refreshTabsReveil() }});
 }
@@ -95,7 +97,3 @@ submitSortieForm = function(oFormSortie) {
   <tr><td colspan="20" class="empty">{{tr}}COperation.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>
-
-<script type="text/javascript">
-  $('liout').innerHTML = {{$listOperations|@count}};
-</script>

@@ -1,3 +1,7 @@
+<script type="text/javascript">
+Main.add(Control.Tabs.setTabCount.curry("encours", "{{$listOperations|@count}}"));
+</script>
+
 <table class="tbl">
   <tr>
     <th>{{tr}}SSPI.Salle{{/tr}}</th>
@@ -33,7 +37,3 @@
   <tr><td colspan="20" class="empty">{{tr}}COperation.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>
-
-<script type="text/javascript">
-  $('liencours').innerHTML = {{$listOperations|@count}};
-</script>

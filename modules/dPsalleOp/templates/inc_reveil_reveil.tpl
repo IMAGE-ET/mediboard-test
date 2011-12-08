@@ -1,5 +1,7 @@
 <script type="text/javascript">
 
+Main.add(Control.Tabs.setTabCount.curry("reveil", "{{$listOperations|@count}}"));
+
 submitReveilForm = function(oFormOperation) {
   submitFormAjax(oFormOperation,'systemMsg', {onComplete: function(){refreshTabsReveil()}});
 }
@@ -156,7 +158,3 @@ submitReveilForm = function(oFormOperation) {
   <tr><td colspan="20" class="empty">{{tr}}COperation.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>
-
-<script type="text/javascript">
-  $('lireveil').innerHTML = {{$listOperations|@count}};
-</script>

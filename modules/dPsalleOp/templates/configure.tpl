@@ -82,12 +82,6 @@
   </tr>
   {{mb_include module=system template=inc_config_bool var=DAS}}  
   
-  {{assign var="class" value="CReveil"}}
-  <tr>
-    <th class="title" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
-  </tr>
-  {{mb_include module=system template=inc_config_bool var=multi_tabs_reveil}}  
-
   {{assign var="class" value="CDailyCheckList"}}
   <tr>
     <th class="title" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>

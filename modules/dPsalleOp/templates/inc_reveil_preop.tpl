@@ -1,5 +1,7 @@
 <script type="text/javascript">
 
+Main.add(Control.Tabs.setTabCount.curry("preop", "{{$listOperations|@count}}"));
+
 submitPrepaForm = function(oFormPrepa) {
   submitFormAjax(oFormPrepa,'systemMsg', {onComplete: function(){ refreshTabsReveil() }});
 }
@@ -98,7 +100,3 @@ submitPrepaForm = function(oFormPrepa) {
   <tr><td colspan="20" class="empty">{{tr}}COperation.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>
-
-<script type="text/javascript">
-  $('lipreop').innerHTML = {{$listOperations|@count}};
-</script>

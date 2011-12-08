@@ -1,5 +1,7 @@
 <script type="text/javascript">
 
+Main.add(Control.Tabs.setTabCount.curry("ops", "{{$listOperations|@count}}"));
+
 // faire le submit de formOperation dans le onComplete de l'ajax
 checkPersonnel = function(oFormAffectation, oFormOperation){
   oFormOperation.entree_reveil.value = 'current';
@@ -152,6 +154,5 @@ submitOperationForm = function(oFormOperation) {
 </table>
 
 <script type="text/javascript">
-  $('liops').innerHTML = {{$listOperations|@count}};
   $('heure').innerHTML = "{{$hour|date_format:$conf.time}}";
 </script>
