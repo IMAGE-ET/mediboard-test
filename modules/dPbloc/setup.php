@@ -233,7 +233,12 @@ class CSetupdPbloc extends CSetup {
      SET days_locked = '" . CAppUI::conf("dPbloc CPlageOp days_locked") . "'";
     $this->addQuery($query);
     
-    $this->mod_version = "0.28";
+    $this->makeRevision("0.28");
+    $query = "ALTER TABLE `plagesop` 
+      ADD `verrouillage` ENUM ('defaut','non','oui') DEFAULT 'defaut' AFTER max_intervention;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.29";
   }  
 }
 ?>

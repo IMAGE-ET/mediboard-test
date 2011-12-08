@@ -182,6 +182,12 @@ Main.add(function(){
     </td>
   </tr>
   <tr>
+    <th>{{mb_label object=$plagesel field="verrouillage"}}</th>
+    <td>{{mb_field object=$plagesel field="verrouillage"}}</td>
+    <th></th>
+    <td></td>
+  </tr>
+  <tr>
     <td colspan="4" class="text">
       <div class="small-info">
         Pour modifier plusieurs plages (nombre de semaines > 1),

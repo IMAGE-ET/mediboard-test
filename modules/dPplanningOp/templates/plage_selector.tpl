@@ -134,19 +134,16 @@ Main.add(function () {
           <td>
             {{assign var="pct" value=$_plage->_fill_rate}}
             {{if $pct > 100}}
-              {{assign var="over" value=1}}
               {{assign var="pct" value=100}}
-            {{else}}
-              {{assign var="over" value=0}}
             {{/if}}
             
             {{if $pct < 100}}
               {{assign var="backgroundClass" value="normal"}}
-            {{elseif !$over}}
+            {{elseif $pct == 100}}
               {{assign var="backgroundClass" value="booked"}}
             {{else}}
               {{assign var="backgroundClass" value="full"}}
-            {{/if}} 
+            {{/if}}
             
             {{if $_plage->spec_id}}
             <img src="images/icons/user-function.png" style="float: left" />
@@ -158,13 +155,11 @@ Main.add(function () {
               <div class="text" style="text-align: left">
                 <label 
                   for="list_{{$_plage->_id}}"
-                  {{if $resp_bloc ||
-                    (
-                     (!$over || !$conf.dPbloc.CPlageOp.locked)
-                     && ($_plage->date >= $date_min)
-                     && (($_plage->_nb_operations < $_plage->max_intervention) || ($_plage->max_intervention == 0) || ($_plage->max_intervention == ""))
-                    )
-                  }}ondblclick="setClose('{{$_plage->date}}', '{{$_plage->salle_id}}')"{{/if}}
+                  {{if $resp_bloc || !$_plage->_verrouillee}}
+                    ondblclick="setClose('{{$_plage->date}}', '{{$_plage->salle_id}}')"
+                  {{else}}
+                    onclick="showProgramme({{$_plage->_id}})"
+                  {{/if}}
                 >
                   {{$_plage->date|date_format:"%a %d"}} -
                   {{$_plage->debut|date_format:$conf.time}} -
@@ -178,18 +173,12 @@ Main.add(function () {
             </div>
          	 </td>
           <td style="text-align: center;" class="narrow">
-            {{if $resp_bloc ||
-              (
-               (!$over || !$conf.dPbloc.CPlageOp.locked)
-               && ($_plage->date >= $date_min)
-               && (($_plage->_nb_operations < $_plage->max_intervention) || ($_plage->max_intervention == 0) || ($_plage->max_intervention == ""))
-              )
-            }}
+            {{if $resp_bloc || !$_plage->_verrouillee}}
             <input type="radio" name="list" value="{{$_plage->plageop_id}}"
                ondblclick="setClose('{{$_plage->date}}', '{{$_plage->salle_id}}')"
                onclick="showProgramme({{$_plage->_id}}); getForm('plageSelectorFrm')._date.value='{{$_plage->date}}'; getForm('plageSelectorFrm')._salle_id.value='{{$_plage->salle_id}}';"/>
             {{else}}
-              <img src="images/icons/warning.png" 
+              <img src="style/mediboard/images/icons/lock.png" 
                 {{if $_plage->max_intervention && $_plage->_nb_operations >= $_plage->max_intervention}}
                   title="Nombre d'interventions maximum atteint ({{$_plage->_nb_operations}}/{{$_plage->max_intervention}})"
                 {{elseif $_plage->date < $date_min}}

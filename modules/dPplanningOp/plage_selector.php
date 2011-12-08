@@ -44,7 +44,7 @@ $bloc = new CBlocOperatoire();
 $blocs = $bloc->loadGroupList(null, "nom");
 foreach($blocs as $_bloc) {
   $_bloc->loadRefsSalles();
-  $_bloc->_date_min = mbDate("+ " . $_bloc->days_locked . "DAYS");
+  $_bloc->_date_min = mbDate("+ " . $_bloc->days_locked . " DAYS");
 }
 
 // Chargement des plages pour le chir ou sa spécialité par bloc
@@ -70,12 +70,12 @@ foreach($blocs as $_bloc) {
 
 $nb_secondes = $curr_op_hour*3600 + $curr_op_min*60;
 
+$_plage = new CPlageOp();
 foreach ($listPlages as &$_bloc) {
   foreach($_bloc as &$_plage){
     $_plage->loadRefSalle();
     $_plage->getNbOperations($nb_secondes, false);
     $_plage->loadRefSpec(1);
-    $_plage->loadRefsBack(0);
   }
 }
 

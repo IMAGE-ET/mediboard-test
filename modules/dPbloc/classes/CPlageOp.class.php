@@ -32,6 +32,7 @@ class CPlageOp extends CMbObject {
   var $unique_chir      = null;
   var $temps_inter_op   = null;
   var $max_intervention = null;
+  var $verrouillage     = null;
   var $delay_repl       = null;
   var $actes_locked     = null;
     
@@ -45,6 +46,9 @@ class CPlageOp extends CMbObject {
   var $_minutefin    = null;
   var $_duree_prevue = null;
   var $_type_repeat  = null;
+  
+  // Behaviour Fields
+  var $_verrouillee = null;
   
   // Object References
   var $_ref_chir       = null;
@@ -84,6 +88,7 @@ class CPlageOp extends CMbObject {
     $specs["unique_chir"]      = "bool default|1";
     $specs["temps_inter_op"]   = "time";
     $specs["max_intervention"] = "num min|0";
+    $specs["verrouillage"]     = "enum list|defaut|non|oui default|defaut";
     $specs["delay_repl"]       = "num min|0";
     $specs["actes_locked"]     = "bool";
 
@@ -101,7 +106,7 @@ class CPlageOp extends CMbObject {
     $this->loadRefsBack($annulee);
   }
   
-  function loadRefChir($cache = 0) {
+  function loadRefChir($cache = 1) {
     $this->_ref_chir = new CMediusers;
     if($cache) {
       $this->_ref_chir = $this->_ref_chir->getCached($this->chir_id);
@@ -110,7 +115,7 @@ class CPlageOp extends CMbObject {
     }
   }
   
-  function loadRefAnesth($cache = 0) {
+  function loadRefAnesth($cache = 1) {
     $this->_ref_anesth = new CMediusers;
     if($cache) {
       $this->_ref_anesth = $this->_ref_anesth->getCached($this->anesth_id);
@@ -119,7 +124,7 @@ class CPlageOp extends CMbObject {
     }
   }
     
-  function loadRefSpec($cache = 0) {
+  function loadRefSpec($cache = 1) {
     $this->_ref_spec = new CFunctions;
     if($cache) {
       $this->_ref_spec = $this->_ref_spec->getCached($this->spec_id);
@@ -128,7 +133,7 @@ class CPlageOp extends CMbObject {
     }
   }
     
-  function loadRefSpecRepl($cache = 0) {
+  function loadRefSpecRepl($cache = 1) {
     $this->_ref_spec_repl = new CFunctions;
     if($cache) {
       $this->_ref_spec_repl = $this->_ref_spec->getCached($this->spec_repl_id);
@@ -137,7 +142,7 @@ class CPlageOp extends CMbObject {
     }
   }
   
-  function loadRefSalle($cache = 0) {
+  function loadRefSalle($cache = 1) {
     $this->_ref_salle = new CSalle;
     if($cache) {
       $this->_ref_salle = $this->_ref_salle->getCached($this->salle_id);
@@ -404,7 +409,7 @@ class CPlageOp extends CMbObject {
     $this->updateFormFields();
     return $week_jumped;
   }
-  
+
   function getNbOperations($addedTime = null, $useTimeInterOp = true) {
     if($useTimeInterOp == true){
       $select_time = "\nSUM(TIME_TO_SEC(`operations`.`temp_operation`) + TIME_TO_SEC(`plagesop`.`temps_inter_op`)) AS time";
@@ -432,6 +437,21 @@ class CPlageOp extends CMbObject {
         AND `operations`.`annulee` = '0'";
     $result = $this->_spec->ds->loadHash($sql);
     $this->_nb_operations_placees = $result["total"];
+    
+    if($this->verrouillage == "oui") {
+      $this->_verrouillee = 1;
+    } elseif($this->verrouillage == "non") {
+      $this->_verrouillee = 0;
+    } else {
+      $this->loadRefSalle();
+      $this->_ref_salle->loadRefBloc();
+      $date_min = mbDate("+ " . $this->_ref_salle->_ref_bloc->days_locked . " DAYS");
+      $check_datemin      = $this->date < $date_min;
+      $check_fill         = ($this->_fill_rate > 100) && CAppUI::conf("dPbloc CPlageOp locked");
+      $check_max          = $this->max_intervention && $this->_nb_operations >= $this->max_intervention;
+      $this->_verrouillee = $check_datemin || $check_fill || $check_max;
+    }
+    
   }
   
   function getPerm($permType) {
