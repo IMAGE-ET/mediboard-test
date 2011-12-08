@@ -13,9 +13,9 @@ class COracleDataSource extends CSQLDataSource {
   function connect($host, $name, $user, $pass) {
     // Charset options
     //putenv("NLS_LANGUAGE=French_France.WE8ISO8859P1");
-    putenv("NLS_CHARACTERSET=WE8ISO8859P1");
-    putenv("NLS_NCHAR_CHARACTERSET=WE8ISO8859P1");
-		
+    //putenv("NLS_CHARACTERSET=WE8ISO8859P1");
+    //putenv("NLS_NCHAR_CHARACTERSET=WE8ISO8859P1");
+    
     if (!function_exists( "oci_connect" )) {
       trigger_error( "FATAL ERROR: Oracle support not available.  Please check your configuration.", E_USER_ERROR );
       return;
@@ -26,12 +26,12 @@ class COracleDataSource extends CSQLDataSource {
       trigger_error( "FATAL ERROR: Connection to Oracle database '$host/$name' failed.\n".$error['message'], E_USER_ERROR );
       return;
     }
-		
-		// Date formats
+    
+    // Date formats
     $this->exec("ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD'");
     $this->exec("ALTER SESSION SET NLS_TIMESTAMP_FORMAT = 'YYYY-MM-DD HH24:MI:SS'");
     $this->exec("ALTER SESSION SET NLS_TIME_FORMAT = 'HH24:MI:SS'");
-		
+    
     //$this->exec("ALTER SESSION SET NLS_CHARACTERSET = 'WE8ISO8859P15'");
     //$this->exec("ALTER SESSION SET NLS_NCHAR_CHARACTERSET = 'WE8ISO8859P15'");
 
@@ -109,12 +109,12 @@ class COracleDataSource extends CSQLDataSource {
     
     foreach($hash as &$value) {
       if (is_a($value, "OCI-Lob")) {
-      	if ($size = $value->size()) {
+        if ($size = $value->size()) {
           $value = $value->read($size);
-				}
-				else {
-					$value = "";
-				}
+        }
+        else {
+          $value = "";
+        }
       }
     }
     
