@@ -10,7 +10,7 @@
 
 CCanDo::checkRead();
 
-$factureitem = new CFactureitem();
+$factureitem = new CFactureItem();
 
 // Récupération de la liste des factures
 $itemFacture = new CFacture;

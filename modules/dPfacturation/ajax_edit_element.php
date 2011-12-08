@@ -13,7 +13,7 @@ $factureitem_id = CValue::getOrSession("factureItem_id");
 $facture_id = CValue::getOrSession("facture_id");
 $catalogue_item_id = CValue::get("catalogue_item_id");
 
-$factureitem = new CFactureitem();
+$factureitem = new CFactureItem();
 $catalogue_item = new CFacturecatalogueitem();	
 
 if ($catalogue_item_id) {

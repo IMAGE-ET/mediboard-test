@@ -24,7 +24,7 @@ $facture = new CFacture();
 $facture->load($facture_id);
 
 // Chargement des éléments d'une facture demandé
-$factureitem = new CFactureitem();
+$factureitem = new CFactureItem();
 $factureitem->load($factureitem_id);
 
 // Chargement des donnees de la facture
