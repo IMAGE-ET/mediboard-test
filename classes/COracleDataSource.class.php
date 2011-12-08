@@ -28,8 +28,8 @@ class COracleDataSource extends CSQLDataSource {
     }
     
     // Date formats
-    $this->exec("ALTER SESSION SET NLS_DATE_FORMAT = 'IYYY-MM-DD'");
-    $this->exec("ALTER SESSION SET NLS_TIMESTAMP_FORMAT = 'IYYY-MM-DD HH24:MI:SS'");
+    $this->exec("ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD'");
+    $this->exec("ALTER SESSION SET NLS_TIMESTAMP_FORMAT = 'YYYY-MM-DD HH24:MI:SS'");
     $this->exec("ALTER SESSION SET NLS_TIME_FORMAT = 'HH24:MI:SS'");
     
     //$this->exec("ALTER SESSION SET NLS_CHARACTERSET = 'WE8ISO8859P15'");
