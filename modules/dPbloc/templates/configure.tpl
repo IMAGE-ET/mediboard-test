@@ -120,15 +120,6 @@ function doReaffectation(mode_real) {
       <label for="{{$m}}[{{$class}}][{{$var}}]_0">Non</label>
     </td>          
   </tr>
-  <tr>
-    {{assign var="var" value="days_locked"}}
-    <th colspan="2">
-      <label for="{{$m}}[{{$class}}][{{$var}}]">{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}</label>
-    </th>
-    <td colspan="2">
-      <input type="text" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$conf.$m.$class.$var}}" size="2" /> jours
-    </td>          
-  </tr>
 
   {{assign var="var" value="chambre_operation"}} 
   <tr>

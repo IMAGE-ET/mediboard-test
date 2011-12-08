@@ -217,7 +217,8 @@ if ($praticien_id && (!$patient_ok || $sejour_id)) {
   if($sejour_intervention && $intervention->_datetime && $intervention->temp_operation && $intervention->cote) {
     $intervention->chir_id = $praticien_id;
     // Est-ce que la date permet de planifier
-    if(mbDaysRelative(mbDate(), mbDate($intervention->_datetime)) > CAppUI::conf("dPbloc CPlageOp days_locked")) {
+    $bloc = $intervention->updateSalle()->loadRefBloc();
+    if(mbDaysRelative(mbDate(), mbDate($intervention->_datetime)) > $bloc->days_locked) {
       $plage_op = new CPlageOp();
       $plage_op->date = mbDate($intervention->_datetime);
       $plage_op->chir_id = $praticien_id;

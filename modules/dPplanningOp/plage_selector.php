@@ -18,8 +18,6 @@ $operation_id = CValue::get("operation_id" , null);
 $curr_op_hour = CValue::get("curr_op_hour" , "25");
 $curr_op_min  = CValue::get("curr_op_min"  , "00");
 
-$date_min = mbDate("+ ".CAppUI::conf("dPbloc CPlageOp days_locked")." DAYS");
-
 $resp_bloc = CModule::getInstalled("dPbloc")->canEdit();
 
 // Liste des mois selectionnables
@@ -47,6 +45,7 @@ $bloc = new CBlocOperatoire();
 $blocs = $bloc->loadGroupList(null, "nom");
 foreach($blocs as $_bloc) {
   $_bloc->loadRefsSalles();
+  $_bloc->_date_min = mbDate("+ " . $_bloc->days_locked . "DAYS");
 }
 
 // Chargement des plages pour le chir ou sa spécialité par bloc
@@ -104,7 +103,6 @@ foreach ($list_minutes_voulu as &$minute){
 $smarty = new CSmartyDP();
 
 $smarty->assign("date"        , $date);
-$smarty->assign("date_min"    , $date_min);
 $smarty->assign("listMonthes" , $listMonthes);
 $smarty->assign("operation_id", $operation_id);
 $smarty->assign("chir"        , $chir);

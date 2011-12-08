@@ -60,7 +60,10 @@
             <th>{{mb_label object=$bloc field="nom"}}</th>
             <td>{{mb_field object=$bloc field="nom"}}</td>
           </tr>
-          
+          <tr>
+            <th>{{mb_label object=$bloc field="days_locked"}}</th>
+            <td>{{mb_field object=$bloc field="days_locked"}}</td>
+          </tr>
           <tr>
             <td class="button" colspan="2">
               {{if $bloc->_id}}

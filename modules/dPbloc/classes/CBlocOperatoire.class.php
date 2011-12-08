@@ -13,15 +13,18 @@ class CBlocOperatoire extends CMbObject {
 	var $bloc_operatoire_id = null;
   
   // DB references
-  var $group_id   = null;
+  var $group_id    = null;
 	
   // DB Fields
-  var $nom        = null;
-  
-  var $_ref_group = null;
+  var $nom         = null;
+  var $days_locked = null;
   
   // Object references
   var $_ref_salles = null;
+  var $_ref_group  = null;
+  
+  // Form field
+  var $_date_min   = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -42,6 +45,8 @@ class CBlocOperatoire extends CMbObject {
   	$specs = parent::getProps();
     $specs["group_id"] = "ref notNull class|CGroups";
     $specs["nom"]      = "str notNull seekable";
+    $specs["days_locked"] = "num pos default|0";
+    $specs["_date_min"] = "date";
     return $specs;
   }
   

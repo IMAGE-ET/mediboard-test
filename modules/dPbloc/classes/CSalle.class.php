@@ -86,10 +86,7 @@ class CSalle extends CMbObject {
   }
   
   function loadRefBloc(){
-  	if (!$this->_ref_bloc) {
-	    $bloc = new CBlocOperatoire();
-	    $this->_ref_bloc = $bloc->getCached($this->bloc_id);
-    }
+    return $this->_ref_bloc = $this->loadFwdRef("bloc_id", true);
   }
   
   function loadRefsFwd(){

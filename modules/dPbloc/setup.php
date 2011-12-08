@@ -224,7 +224,16 @@ class CSetupdPbloc extends CSetup {
               ADD `dh` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
    
-    $this->mod_version = "0.27";
+    $this->makeRevision("0.27");
+    $query = "ALTER TABLE `bloc_operatoire`
+      ADD `days_locked` INT (11) UNSIGNED DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $query = "UPDATE `bloc_operatoire`
+     SET days_locked = '" . CAppUI::conf("dPbloc CPlageOp days_locked") . "'";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.28";
   }  
 }
 ?>

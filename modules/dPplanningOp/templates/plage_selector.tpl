@@ -121,6 +121,7 @@ Main.add(function () {
       <hr class="control_tabs" />
       {{foreach from=$listPlages key=_key_bloc item=_blocplage}}
       {{assign var=_bloc value=$blocs.$_key_bloc}}
+      {{assign var=date_min value=$_bloc->_date_min}}
       <div id="bloc-{{$_bloc->_id}}" style="display:none">
       <table class="tbl">
         <tr>

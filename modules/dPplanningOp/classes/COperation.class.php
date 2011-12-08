@@ -614,11 +614,11 @@ class COperation extends CCodable implements IPatientRelated {
     
     // Evite de recharger la salle quand ce n'est pas nécessaire  
     if ($this->plageop_id && !$this->_deplacee) {
-      $this->_ref_salle =& $this->_ref_plageop->_ref_salle;
+      return $this->_ref_salle =& $this->_ref_plageop->_ref_salle;
     }
     else {
       $salle = new CSalle;
-      $this->_ref_salle = $salle->getCached($this->salle_id);
+      return $this->_ref_salle = $salle->getCached($this->salle_id);
     }
   }
   
