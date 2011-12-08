@@ -53,12 +53,16 @@ abstract class CMbRange {
 	 * @param object $upper1
 	 * @param object $lower2
 	 * @param object $upper2
+	 * @param boolean permissive
 	 * @return boolean
 	 */
-	static function collides($lower1, $upper1, $lower2, $upper2) {
+	static function collides($lower1, $upper1, $lower2, $upper2, $permissive = true) {
 		return 
-		  ($lower1 <= $upper2 || $lower1 === null || $upper2 === null) && 
-			($upper1 >= $lower2 || $upper1 === null || $lower2 === null);
+		  $permissive ?
+        ($lower1 < $upper2 || $lower1 === null || $upper2 === null) && 
+			  ($upper1 > $lower2 || $upper1 === null || $lower2 === null) :
+        ($lower1 <= $upper2 || $lower1 === null || $upper2 === null) && 
+        ($upper1 >= $lower2 || $upper1 === null || $lower2 === null);
 	}
 
   /**
@@ -156,6 +160,32 @@ abstract class CMbRange {
   	$value = max($value, $lower);
   	$value = min($value, $upper);
   	return $value;
+  }
+  
+  /**
+   * 
+   * @param $intervals key => array(lower, upper);
+   * @param object $permissive [optional]
+   * @return array lignes avec les keys positionned
+   */
+  static function rearrange($intervals, $permissive = true) {
+    $lines = array();
+    
+    foreach ($intervals as $_interval_id => $_interval) {
+      foreach ($lines as &$_line) {
+        foreach ($_line as $_positioned_id) {
+          $positioned = $intervals[$_positioned_id];
+          if (CMbRange::collides($_interval["lower"], $_interval["upper"], $positioned["lower"], $positioned["upper"], $permissive)) {
+            continue 2; // Next line
+          }
+        }
+          
+        $_line[] = $_interval_id;
+        continue 2; // Next interval
+      }
+      $lines[count($lines)] = array($_interval_id);
+    }
+    return $lines;
   }
 }
 ?>
