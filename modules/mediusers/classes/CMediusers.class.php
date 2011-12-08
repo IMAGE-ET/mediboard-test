@@ -394,8 +394,15 @@ class CMediusers extends CMbObject {
   }
 
   function loadProtocoles($type = null) {
+    $this->loadRefFunction();
+    $functions = array($this->function_id);
+    $this->loadBackRefs("secondary_functions");
+    foreach($this->_back["secondary_functions"] as $curr_sec_func) {
+      $functions[] = $curr_sec_func->function_id;
+    }
+    $list_functions = implode(",", $functions);
     $where = array(
-		  "protocole.chir_id = '$this->_id' OR protocole.function_id = '$this->function_id'"
+		  "protocole.chir_id = '$this->_id' OR protocole.function_id IN ($list_functions)"
 		);
 		
 		if ($type) {

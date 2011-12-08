@@ -7,13 +7,12 @@
 * @author Romain Ollivier
 */
 
-global $can, $m, $g;
-$can->needsRead();
+CCanDo::checkRead();
 $ds = CSQLDataSource::get("std");
 
 $chir         = CValue::get("chir"         , 0);
 $date         = CValue::getOrSession("date_plagesel", mbDate());
-$group_id     = CValue::get("group_id"     , $g);
+$group_id     = CValue::get("group_id"     , CGroups::loadCurrent()->_id);
 $operation_id = CValue::get("operation_id" , null);
 $curr_op_hour = CValue::get("curr_op_hour" , "25");
 $curr_op_min  = CValue::get("curr_op_min"  , "00");

@@ -29,30 +29,28 @@ $protocole = new CProtocole;
 $where = array();
 
 if($chir->_id) {
-  $where[] = "protocole.chir_id = '$chir->_id' OR protocole.function_id = '$chir->function_id'";
+  $chir->loadRefFunction();
+  $functions = array($chir->function_id);
+  $chir->loadBackRefs("secondary_functions");
+  foreach($chir->_back["secondary_functions"] as $curr_sec_func) {
+    $functions[] = $curr_sec_func->function_id;
+  }
+  $list_functions = implode(",", $functions);
+  $where [] = "protocole.chir_id = '$chir->_id' OR protocole.function_id IN ($list_functions)";
 }
 
-if ($type == 'interv') {
-  $where["for_sejour"] = "= '0'";
-}
-else {
-	$where["for_sejour"] = "= '1'";
-}
+$where["for_sejour"] = $type == 'interv' ? "= '0'" : "= '1'";
 
 if ($sejour_type) {
   $where["type"] = "= '$sejour_type'";
 }
 
-$ljoin = array(
-  "users" => "users.user_id = protocole.chir_id"
-);
+$order = "libelle_sejour, libelle, codes_ccam";
 
-$order = "libelle, libelle_sejour, codes_ccam";
+$list_protocoles       = $protocole->loadList($where, $order, "{$page[$type]},40");
+$list_protocoles_total = $protocole->loadList($where, $order);
 
-$list_protocoles       = $protocole->loadList($where, $order, "{$page[$type]},40", null, $ljoin);
-$list_protocoles_total = $protocole->loadList($where, $order, null, null, $ljoin);
-
-$total_protocoles = $protocole->countList($where, null, $ljoin);
+$total_protocoles = $protocole->countList($where);
 
 foreach ($list_protocoles as $_prot){
   $_prot->loadRefsFwd();
