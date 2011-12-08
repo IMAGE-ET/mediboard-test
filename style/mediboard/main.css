@@ -1872,7 +1872,8 @@ div.fin_sejour {
 }
 
 th.lit_hover {
-  border: 3px solid #800 !important;
+  z-index: 1;
+  outline: 3px solid #800;
 }
 
 div.sejour_non_affecte {

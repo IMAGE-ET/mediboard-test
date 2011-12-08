@@ -1,4 +1,4 @@
-<?php /* $Id: ajax_edit_affectations.php $ */
+<?php /* $Id: ajax_select_affectation_aed.php $ */
 
 /**
  * @package Mediboard
@@ -10,21 +10,18 @@
 
 $affectation_id = CValue::get("affectation_id");
 $lit_id         = CValue::get("lit_id");
+$sejour_id      = CValue::get("sejour_id");
 
 $affectation = new CAffectation;
 $affectation->load($affectation_id);
-$lit = new CLit;
-$lit->load($affectation->lit_id);
-
-if (!$affectation->_id) {
-  $affectation->lit_id = $lit_id;
-  $lit = $lit->load($lit_id);
-}
 
 $smarty = new CSmartyDP;
 
-$smarty->assign("affectation", $affectation);
-$smarty->assign("lit", $lit);
-$smarty->assign("lit_id", $lit_id);
-$smarty->display("inc_edit_affectation.tpl");
+$smarty->assign("affectation"   , $affectation);
+$smarty->assign("affectation_id", $affectation_id);
+$smarty->assign("lit_id"        , $lit_id);
+$smarty->assign("sejour_id"     , $sejour_id);
+
+$smarty->display("inc_select_action_affectation.tpl");
+
 ?>

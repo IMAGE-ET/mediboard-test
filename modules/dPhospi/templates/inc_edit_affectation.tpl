@@ -3,9 +3,8 @@
   <input type="hidden" name="dosql" value="do_affectation_aed" />
   <input type="hidden" name="del" value="0" />
   {{mb_key object=$affectation}}
-  {{if !$affectation->_id}}
-    {{mb_field object=$affectation field=lit_id hidden=true}}
-  {{/if}}
+  {{mb_field object=$affectation field=lit_id hidden=true}}
+  
   <table class="form">
     <tr>
       <th>
@@ -36,3 +35,6 @@
     </tr>
   </table>
 </form>
+{{if $affectation->_id}}
+  {{mb_include module=dPhospi template=inc_cut_affectation}}
+{{/if}}

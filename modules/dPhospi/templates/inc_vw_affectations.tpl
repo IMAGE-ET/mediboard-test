@@ -52,7 +52,9 @@
       {{assign var=praticien value=$_sejour->_ref_praticien}}
       <div class="draggable text sejour_non_affecte" style="border-left: 4px solid #{{$praticien->_ref_function->color}}"
         id="sejour_{{$_sejour->_id}}" data-patient_id="{{$patient->_id}}" data-sejour_id="{{$_sejour->_id}}">
-        {{$patient->nom}} {{$patient->prenom}}
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
+            {{$patient->nom}} {{$patient->prenom}}
+          </span>
       </div>
       
       <script type="text/javascript">

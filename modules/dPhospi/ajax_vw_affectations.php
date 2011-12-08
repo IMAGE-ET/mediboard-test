@@ -72,13 +72,13 @@ foreach ($sejours_non_affectes as $_sejours_by_period) {
   foreach ($_sejours_by_period as $_sejour) {
     $_sejour->loadRefPatient();
     $_sejour->loadRefPraticien()->loadRefFunction();
-    $_sejour->getDroitsCMU();
+    /*$_sejour->getDroitsCMU();
     $_sejour->loadRefPrestation();
     $_sejour->loadNDA();
     $sejour->loadRefsOperations();
     foreach($sejour->_ref_operations as &$operation) {
       $operation->loadExtCodesCCAM();
-    }
+    }*/
   }
 }
 

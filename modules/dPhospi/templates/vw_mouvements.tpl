@@ -25,20 +25,51 @@
      if (!Object.isUndefined(lit_id)) {
        url.addParam("lit_id", lit_id);
      }
-     var modal = url.requestModal(null, null, {showReload: false});
+     var modal = url.requestModal(500, null, {showReload: false});
      modal.modalObject.observe("afterClose", function() { refreshMouvements(loadNonPlaces);});
    }
    
-   Main.add(function() {
-     Calendar.regField(getForm('filterMouv').date);
-     var view_affectations = $("view_affectations");
-      view_affectations.setStyle(
-        { width: document.viewport.getWidth()*(87/100)+"px",
-          height: document.viewport.getHeight()*(2/3)+"px"
-        });
-     refreshMouvements();
-     loadNonPlaces();
-   });
+   moveAffectation = function(affectation_id, lit_id, sejour_id) {
+    var url = new Url("dPhospi", "ajax_move_affectation");
+    if (!Object.isUndefined(affectation_id)) {
+      url.addParam("affectation_id", affectation_id);
+    }
+    url.addParam("lit_id", lit_id);
+    
+    if (!Object.isUndefined(sejour_id)) {
+      url.addParam("sejour_id", sejour_id);
+    }
+    url.requestUpdate("systemMsg", {onComplete: function() {
+      var after_mouv = null;
+      
+      // Pas d'affectation_id, on recharge la liste des affectations (placement d'un patient)
+      if (!affectation_id) {
+        after_mouv = loadNonPlaces;
+      }
+      refreshMouvements(after_mouv);
+    }});
+  }
+  
+  // Fonction appelée lors d'un drop avec la touche ctrl
+  selectAction = function(affectation_id, lit_id, sejour_id) {
+    var url = new Url("dPhospi", "ajax_select_action_affectation");
+    url.addParam("affectation_id", affectation_id);
+    url.addParam("lit_id", lit_id);
+    url.addParam("sejour_id", sejour_id);
+    var modal = url.requestModal(500, null, {showReload: false});
+    modal.modalObject.observe("afterClose", refreshMouvements);
+  }
+  
+  Main.add(function() {
+    Calendar.regField(getForm('filterMouv').date);
+    var view_affectations = $("view_affectations");
+     view_affectations.setStyle(
+       { width: document.viewport.getWidth()*(87/100)+"px",
+         height: document.viewport.getHeight()*(2/3)+"px"
+       });
+    refreshMouvements();
+    loadNonPlaces();
+  });
 </script>
 
 <form name="filterMouv" action="?" method="get" onsubmit="return false;">

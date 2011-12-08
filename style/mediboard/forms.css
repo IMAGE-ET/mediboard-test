@@ -294,6 +294,10 @@ a.button.big {
   border-radius: 6px;
 }
 
+button.cut:before, a.button.cut:before {
+  content: url(images/buttons/cut.png);
+}
+
 button.edit:before, a.button.edit:before {
   content: url(images/buttons/edit.png);
 }

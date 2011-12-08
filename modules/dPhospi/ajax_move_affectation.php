@@ -10,7 +10,6 @@
 
 $affectation_id = CValue::get("affectation_id");
 $lit_id         = CValue::get("lit_id");
-$patient_id     = CValue::get("patient_id");
 $sejour_id      = CValue::get("sejour_id");
 
 $affectation = new CAffectation;
@@ -31,4 +30,5 @@ if ($msg = $affectation->store()) {
   CAppUI::setMsg($msg, UI_MSG_ERROR);
 }
 
+echo CAppUI::getMsg();
 ?>

@@ -434,6 +434,7 @@ $locales['config-synchro_sejour_affectation'] = 'Synchronisation séjours en affe
 $locales['mod-dPhospi-tab-ajax_edit_affectation'] = 'Edition d\'affectation';
 $locales['mod-dPhospi-tab-ajax_observation'] = 'Ajout d\'observation';
 $locales['mod-dPhospi-tab-ajax_prescription_lite'] = 'Ajout d\'élément de prescription';
+$locales['mod-dPhospi-tab-ajax_select_action_affectation'] = 'Choix d\'une action';
 $locales['mod-dPhospi-tab-ajax_transmission'] = 'Ajout de transmission';
 $locales['mod-dPhospi-tab-configure'] = 'Configuration';
 $locales['mod-dPhospi-tab-edit_sorties'] = 'Déplacements / Sorties';

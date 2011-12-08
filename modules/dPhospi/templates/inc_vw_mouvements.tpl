@@ -1,38 +1,29 @@
 <script type="text/javascript">
-  moveAffectation = function(affectation_id, lit_id, patient_id, sejour_id) {
-    var url = new Url("dPhospi", "ajax_move_affectation");
-    if (!Object.isUndefined(affectation_id)) {
-      url.addParam("affectation_id", affectation_id);
-    }
-    url.addParam("lit_id", lit_id);
-    if (!Object.isUndefined(patient_id)) {
-      url.addParam("patient_id", patient_id);
-    }
-    if (!Object.isUndefined(sejour_id)) {
-      url.addParam("sejour_id", sejour_id);
-    }
-    url.requestUpdate("systemMsg", {onComplete: function() {
-      var after_mouv = null;
-      
-      if (!affectation_id) {
-        after_mouv = loadNonPlaces;
-      }
-      refreshMouvements(after_mouv);
-    }});
-  }
-  
   Main.add(function() {
     var view_affectations = $("view_affectations");
     view_affectations.select(".droppable").each(function(th) {
        Droppables.add(th, {
-        onDrop: function(div, th) {
+        onDrop: function(div, th, event) {
+          var lit_id = th.get("lit_id");
+          
           // Création d'une affectation pour bloquer un lit
           if (div.id == "lit_bloque") {
-            editAffectation(null, th.get("lit_id"));
+            editAffectation(null, lit_id);
           }
           else {
-            // Déplacement de l'affectation
-            moveAffectation(div.get("affectation_id"), th.get("lit_id"), div.get("patient_id"), div.get("sejour_id"));
+            var ctrl_pressed = event.ctrlKey;
+            // Si la touche ctrl est pressée dans le déplacement et que l'affectation existe,
+            // ouverture de la modale pour demander quoi faire
+            var affectation_id = div.get("affectation_id");
+            var sejour_id = div.get("sejour_id");
+            
+            if (ctrl_pressed && affectation_id) {
+              selectAction(affectation_id, lit_id, sejour_id);
+            }
+            // Sinon déplacement de l'affectation
+            else if (lit_id != div.get("lit_id")) {
+              moveAffectation(affectation_id, lit_id, sejour_id);
+            }
           }
         },
         hoverclass: "lit_hover"
@@ -123,7 +114,7 @@
                     {{assign var=_affectation value=$affectations.$_affectation_id}}
                     {{assign var=_sejour value=$_affectation->_ref_sejour}}
                     {{assign var=_patient value=$_sejour->_ref_patient}}
-                    <div id="affectation_{{$_affectation->_id}}" data-affectation_id="{{$_affectation->_id}}"
+                    <div id="affectation_{{$_affectation->_id}}" data-affectation_id="{{$_affectation->_id}}" data-lit_id="{{$_affectation->lit_id}}"
                      class="affectation{{if $vue == "compacte"}}_compact{{/if}} opacity-90 draggable
                       {{if !$_sejour->_id}}clit_bloque{{else}}clit{{/if}}
                       {{if $_affectation->entree == $_sejour->entree && $_affectation->entree >= $date_min}}debut_sejour{{/if}}
