@@ -230,15 +230,17 @@ Main.add(function () {
   	  <tr>
         <td>
   				  <table class="form">
+  				  	<tr>
+  				  	  <th colspan="3" class="title">Création d'une prescription</th>
+							</tr>	
   				    <tr>
                 {{if $operations|@count > 1}}
                   <th class="title">Intervention</th>
                 {{/if}}
-  				      <th class="title" >{{mb_title object=$prescription field="type"}}</th>
-  				      <th class="title" >Protocole</th>
+  				      <th class="title">{{mb_title object=$prescription field="type"}}</th>
+  				      <th class="title">{{if $is_praticien}}Protocole{{/if}}</th>
   				    </tr>
   				    <tr>
-							  <input type="hidden" id="choix_prat" value="{{$app->user_id}}" />
                 {{if $operations|@count > 1}}
   	              <td>
   		              <select name="operation_id" onchange="$V(getForm('applyProtocoleFirst').operation_id, this.value);">
@@ -250,7 +252,8 @@ Main.add(function () {
   		              </select>
   	              </td>
                 {{/if}}
-  				      <td>
+  				      <td class="narrow">
+  				      	<input type="hidden" id="choix_prat" value="{{$app->user_id}}" />
   							  <select name="type" id="type_prescription" onchange="emptyProtocole();">
   					        <option value="pre_admission">Pré-admission</option>
   					        <option value="sejour" selected="selected">Séjour</option>
@@ -283,7 +286,9 @@ Main.add(function () {
   				          <input type="hidden" name="object_class" value="CSejour" />
   				          <input type="hidden" name="type" value="sejour"/>
   				          <input type="hidden" name="callback" value="addProtocole" />
-  	                <button type="button" class="submit singleclick" onclick="onSubmitFormAjax(this.form);">Créer</button>         
+  	                <button type="button" class="submit singleclick" onclick="onSubmitFormAjax(this.form);">
+  	                	{{if $is_praticien}}Ouvrir / Appliquer{{else}}Créer la prescription{{/if}}
+										</button>         
                   </form>
   				      </td>
   				    </tr>
