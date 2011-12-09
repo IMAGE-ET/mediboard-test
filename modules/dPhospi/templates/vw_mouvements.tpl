@@ -1,10 +1,25 @@
 <script type="text/javascript">
   dragOptions = {
-    starteffect : function(element) { 
-      new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 }); 
+    starteffect: function(element) {
+      new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 });
+      // Si le patient n'est pas placé, on redimensionne la div à la largeur du séjour
+      if (!element.get("lit_id")) {
+        element.setStyle({width: (element.get("width")*45 - 5)+"px"});
+      } 
+    },
+    endeffect: function(element) {
+      var toOpacity = Object.isNumber(element._opacity) ? element._opacity : 1.0;
+      new Effect.Opacity(element, {duration:0.2, from:0.7, to:toOpacity,
+        queue: {scope:'_draggable', position:'end'},
+        afterFinish: function(){
+          Draggable._dragging[element] = false
+        }
+      });
+      if (!element.get("lit_id")) {
+        element.setStyle({width: "15em"});
+      }
     },
     revert: true,
-    ghosting: false
   };
 
    loadNonPlaces = function() {
@@ -27,6 +42,12 @@
      }
      var modal = url.requestModal(500, null, {showReload: false});
      modal.modalObject.observe("afterClose", function() { refreshMouvements(loadNonPlaces);});
+   }
+   
+   delAffectation = function(affectation_id) {
+     var form = getForm("delAffect");
+     $V(form.affectation_id, affectation_id);
+     return onSubmitFormAjax(form, {onComplete: function(){ refreshMouvements(loadNonPlaces); }});
    }
    
    moveAffectation = function(affectation_id, lit_id, sejour_id) {
@@ -71,6 +92,14 @@
     loadNonPlaces();
   });
 </script>
+
+<!-- Formulaire de suppression d'affectation -->
+<form name="delAffect" method="post" action="?">
+  <input type="hidden" name="m" value="dPhospi" />
+  <input type="hidden" name="dosql" value="do_affectation_aed" />
+  <input type="hidden" name="del" value="1" />
+  <input type="hidden" name="affectation_id" value="" />
+</form>
 
 <form name="filterMouv" action="?" method="get" onsubmit="return false;">
   <input type="hidden" name="m" value="hospi" />
@@ -139,5 +168,5 @@
   
 </form>
 
-<div style="overflow: scroll;" id="view_affectations"></div>
+<div style="overflow: auto;" id="view_affectations"></div>
 <div id="list_affectations"></div>

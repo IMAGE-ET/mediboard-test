@@ -12,15 +12,15 @@
           }
           else {
             var ctrl_pressed = event.ctrlKey;
-            // Si la touche ctrl est pressée dans le déplacement et que l'affectation existe,
-            // ouverture de la modale pour demander quoi faire
             var affectation_id = div.get("affectation_id");
             var sejour_id = div.get("sejour_id");
             
+            // Si la touche ctrl est pressée dans le déplacement et que l'affectation existe,
+            // ouverture de la modale pour demander quoi faire
             if (ctrl_pressed && affectation_id) {
               selectAction(affectation_id, lit_id, sejour_id);
             }
-            // Sinon déplacement de l'affectation
+            // Sinon déplacement de l'affectation si c'est vers un autre lit
             else if (lit_id != div.get("lit_id")) {
               moveAffectation(affectation_id, lit_id, sejour_id);
             }
@@ -47,13 +47,18 @@
   
   {{foreach from=$services item=_service}}
     <tr>
-      <th></th>
+      <th class="title" colspan="{{$colspan}}">{{$_service}}</th>
+    </tr>
+    <tr>
+      
       {{if $granularite == "day"}}
-        <th colspan="{{$nb_ticks}}">
+        <th colspan="{{$colspan}}">
           {{$date|date_format:$conf.longdate}}
         </th>
       {{else}}
+        <th></th>
         {{foreach from=$days item=_day key=_datetime}}
+        
           <th colspan="{{if $granularite == "week"}}4{{else}}7{{/if}}">
             {{if $granularite == "week"}}
               {{$_day|date_format:"%a"}} {{$_day|date_format:$conf.date}}
@@ -77,82 +82,96 @@
       {{/if}}
       </th>
     </tr>
+   {{if $granularite == "day"}}
+     {{assign var=td_width value=37}}
+   {{else}}
+     {{assign var=td_width value=45}}
+   {{/if}}
     <tr>
       <th></th>
       {{foreach from=$datetimes item=_date}}
-        <th style="min-width: 40px;">
-          {{if $granularite == "day"}}
-            {{$_date|date_format:$conf.time}}
-          {{elseif $granularite == "week"}}
-            {{$_date|date_format:"%H"}}h
-          {{else}}
+        <th style="min-width: {{$td_width}}px;">
+          {{if $granularite == "4weeks"}}
             {{$_date|date_format:"%a %d"}}
+          {{else}}
+            {{$_date|date_format:"%H"}}h
           {{/if}}
         </th>
       {{/foreach}}
     </tr>
-    <tr>
-      <th class="title" colspan="{{$colspan}}">{{$_service}}</th>
-    </tr>
     
     {{foreach from=$_service->_ref_chambres item=_chambre}}     
       {{foreach from=$_chambre->_ref_lits item=_lit}}
-        <tr id="{{$_lit->_guid}}">
-          <th class="text droppable" data-lit_id="{{$_lit->_id}}">{{$_lit}}</th>
-        {{foreach from=0|range:$nb_ticks_r item=_i}}
-          <td class="mouvement_lit" data-date="{{$datetimes.$_i}}">
-            {{if $_i == 0 && isset($_lit->_lines|smarty:nodefaults)}}
-             
-              {{*  Parcours des affectations *}}
-              {{foreach from=$_lit->_lines item=_lines_by_level key=_level}}
-                
-                <div class="wrapper_line{{if $vue == "compacte"}}_compact{{/if}}">
+        <tr data-lit_id="{{$_lit->_id}}" id="{{$_lit->_guid}}" class="droppable">
+          <th class="text">{{$_lit}}</th>
+          {{foreach from=0|range:$nb_ticks_r item=_i}}
+            <td class="mouvement_lit" data-date="{{$datetimes.$_i}}">
+              {{if $_i == 0 && isset($_lit->_lines|smarty:nodefaults)}}
+               
+                {{*  Parcours des affectations *}}
+                {{foreach from=$_lit->_lines item=_lines_by_level key=_level}}
                   
-                {{foreach from=$_lines_by_level item=_affectations_ids}}
-                  
-                  {{foreach from=$_affectations_ids item=_affectation_id}}
-                    {{assign var=_affectation value=$affectations.$_affectation_id}}
-                    {{assign var=_sejour value=$_affectation->_ref_sejour}}
-                    {{assign var=_patient value=$_sejour->_ref_patient}}
-                    <div id="affectation_{{$_affectation->_id}}" data-affectation_id="{{$_affectation->_id}}" data-lit_id="{{$_affectation->lit_id}}"
-                     class="affectation{{if $vue == "compacte"}}_compact{{/if}} opacity-90 draggable
-                      {{if !$_sejour->_id}}clit_bloque{{else}}clit{{/if}}
-                      {{if $_affectation->entree == $_sejour->entree && $_affectation->entree >= $date_min}}debut_sejour{{/if}}
-                      {{if $_affectation->sortie == $_sejour->sortie && $_affectation->sortie <= $date_max}}fin_sejour{{/if}}
-                      {{if $_affectation->entree > $date_min && $_sejour->_id}}affect_left{{/if}}
-                      {{if $_affectation->sortie < $date_max && $_sejour->_id}}affect_right{{/if}}"
-                      data-width="{{$_affectation->_width}}" data-offset="{{$_affectation->_entree_offset}}"
-                      style="left: {{$_affectation->_entree_offset*45}}px; width: {{$_affectation->_width*45-5}}px;">
-                      {{if $_sejour->_id && $vue == "classique"}}
-                        <span style="float: left; padding-right: 1px;">
-                        {{mb_include module=dPpatients template=inc_vw_photo_identite mode=read patient=$_sejour->_ref_patient size=22}}
-                        </span>
-                      {{/if}}
+                  <div class="wrapper_line{{if $vue == "compacte"}}_compact{{/if}}">
+                    
+                  {{foreach from=$_lines_by_level item=_affectations_ids}}
+                    
+                    {{foreach from=$_affectations_ids item=_affectation_id}}
+                      {{assign var=_affectation value=$affectations.$_affectation_id}}
+                      {{assign var=_sejour value=$_affectation->_ref_sejour}}
+                      {{assign var=_patient value=$_sejour->_ref_patient}}
+                      {{math equation=x*(y+4) x=$_affectation->_entree_offset y=$td_width assign=offset}}
+                      {{math equation=x*(y+5) x=$_affectation->_width y=$td_width assign=width}} 
                       
-                      <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');">
-                        {{if $_sejour->_id}}
-                          {{$_patient->nom}} {{$_patient->prenom}}
-                          {{if $vue == "classique"}}
-                            <br />
-                            <span class="compact">
-                              {{$_sejour->libelle}}
-                            </span>
-                          {{/if}}
-                        {{else}}
-                          BLOQUE
+                      <div id="affectation_{{$_affectation->_id}}" data-affectation_id="{{$_affectation->_id}}" data-lit_id="{{$_affectation->lit_id}}"
+                       class="affectation{{if $vue == "compacte"}}_compact{{/if}} opacity-90 draggable
+                        {{if !$_sejour->_id}}clit_bloque{{else}}clit{{/if}}
+                        {{if $_affectation->entree == $_sejour->entree && $_affectation->entree >= $date_min}}debut_sejour{{/if}}
+                        {{if $_affectation->sortie == $_sejour->sortie && $_affectation->sortie <= $date_max}}fin_sejour{{/if}}
+                        {{if $_affectation->entree > $date_min && $_sejour->_id}}affect_left{{/if}}
+                        {{if $_affectation->sortie < $date_max && $_sejour->_id}}affect_right{{/if}}"
+                        data-width="{{$_affectation->_width}}" data-offset="{{$_affectation->_entree_offset}}"
+                        style="left: {{$offset}}px; width: {{$width}}px;">
+                        {{if $_sejour->_id && $vue == "classique"}}
+                          <span style="float: left; padding-right: 1px;">
+                          {{mb_include module=dPpatients template=inc_vw_photo_identite mode=read patient=$_sejour->_ref_patient size=22}}
+                          </span>
                         {{/if}}
-                      </span>
-                    </div>
-                    <script type="text/javascript">
-                      new Draggable($('affectation_{{$_affectation->_id}}'), dragOptions);
-                    </script>
+                        
+                        <div id="wrapper_op">
+                          <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');">
+                            {{if $_sejour->_id}}
+                              {{$_patient->nom}} {{$_patient->prenom}}
+                              {{if $vue == "classique"}}
+                                <br />
+                                <span class="compact">
+                                  {{$_sejour->libelle}}
+                                </span>
+                              {{/if}}
+                            {{else}}
+                              BLOQUE
+                            {{/if}}
+                          </span>
+                          {{foreach from=$_sejour->_ref_operations item=_operation}}
+                            {{math equation=x*(y+4) x=$_operation->_debut_offset y=$td_width assign=offset_op}}
+                            {{math equation=x*(y+5) x=$_operation->_width y=$td_width assign=width_op}}
+                            <div class="operation_in_mouv"
+                              style="left: {{$offset_op}}px; width: {{$width_op}}px; top: {{if $vue == "classique"}}0.8{{else}}0.2{{/if}}em;"
+                              onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}');">
+                              </div>
+                          {{/foreach}}
+                        </div>
+                       
+                      </div>
+                      <script type="text/javascript">
+                        new Draggable($('affectation_{{$_affectation->_id}}'), dragOptions);
+                      </script>
+                    {{/foreach}}
                   {{/foreach}}
+                  </div>
                 {{/foreach}}
-                </div>
-              {{/foreach}}
-            {{/if}}
-          </td>
-        {{/foreach}}
+              {{/if}}
+            </td>
+          {{/foreach}}
         </tr>
       {{/foreach}}
     {{/foreach}}

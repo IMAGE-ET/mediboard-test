@@ -135,13 +135,59 @@ $affectations = $affectation->loadList($where);
 $sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
 $patients = CMbObject::massLoadFwdRef($sejours, "patient_id");
 
+$operations = array();
+
 foreach ($affectations as $_affectation) {
-  $_affectation->loadRefSejour()->loadRefPatient()->loadRefPhotoIdentite();
+  $sejour = $_affectation->loadRefSejour();
+  $sejour->loadRefPatient()->loadRefPhotoIdentite();
   $lits[$_affectation->lit_id]->_ref_affectations[$_affectation->_id] = $_affectation;
   $_affectation->_entree_offset = CMbDate::position(max($date_min, $_affectation->entree), $date_min, $period);
   $_affectation->_sortie_offset = CMbDate::position(min($date_max, $_affectation->sortie), $date_min, $period);
   $_affectation->_width = $_affectation->_sortie_offset - $_affectation->_entree_offset;
+  //$operations = array_merge($operations, $_affectation->_ref_sejour->loadRefsOperations());
+  
+  if (isset($operations[$sejour->_id])) {
+    $_operations = $operations[$sejour->_id];
+  }
+  else {
+    $operations[$sejour->_id] = $_operations = $sejour->loadRefsOperations();
+  }
+  
+  foreach ($_operations as $key=>$_operation) {
+    $_operation->loadRefPlageOp(1);
+    
+    /*if (mbDate($_operation->_datetime) < $_affectation->entree || mbDate($_operation->_datetime) > $_affectation->sortie) {
+      unset($_operations[$key]);
+      continue;
+    }*/
+    
+    
+    $hour_operation = mbTransformTime(null, $_operation->temp_operation, "%H");
+    $min_operation = mbTransformTime(null, $_operation->temp_operation, "%M");
+    
+    $_operation->_debut_offset = CMbDate::position($_operation->_datetime, $_affectation->entree, $period);
+    
+    $_operation->_fin_offset = CMbDate::position(mbDateTime("+$hour_operation hours +$min_operation minutes",$_operation->_datetime), $_affectation->entree, $period);
+    $_operation->_width = $_operation->_fin_offset - $_operation->_debut_offset;
+  }
 }
+
+//CMbObject::massLoadFwdRef($operations, "plageop_id");
+
+/*foreach ($operations as $_operation) {
+  //$_begin = CMbObject::first($_operation->debut_prepa_preop, $_operation->entree_bloc, $_operation->pose_garrot, $_operation->debut_op, $_operation->horaire_voulu);
+  //$_end   = CMbObject::first($_operation->fin_op, $_operation->retrait_garrot, $_operation->sortie_salle);
+  $_operation->loadRefPlageOp(1);
+  $sejour = $_operation->loadRefSejour(1);
+  
+  $hour_operation = mbTransformTime(null, $_operation->temp_operation, "%H");
+  $min_operation = mbTransformTime(null, $_operation->temp_operation, "%M");
+  
+  $_operation->_debut_offset = CMbDate::position($_operation->_datetime, $date_min, $period);
+  
+  $_operation->_fin_offset = CMbDate::position(mbDateTime("+$hour_operation hours +$min_operation minutes",$_operation->_datetime), $date_min, $period);
+  $_operation->_width = $_operation->_fin_offset - $_operation->_debut_offset;
+}*/
 
 foreach ($lits as $_lit) {
   $intervals = array();

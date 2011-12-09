@@ -13,6 +13,7 @@ $triAdm          = CValue::getOrSession("triAdm", "praticien");
 $_type_admission = CValue::getOrSession("_type_admission", "ambucomp");
 $filter_function = CValue::getOrSession("filter_function");
 $date            = CValue::getOrSession("date");
+$granularite     = CValue::getOrSession("granularite");
 
 $heureLimit = "16:00:00";
 $group_id = CGroups::loadCurrent()->_id;
@@ -65,6 +66,34 @@ $where["sejour.entree"] = "<= '$twoDaysBefore 23:59:59'";
 $where["sejour.sortie"] = ">= '$date 00:00:00'";
 $sejours_non_affectes["avant"] = $sejour->loadList($where, $order, null, null, $ljoin);
 
+$period = "";
+
+switch($granularite) {
+  case "day":
+    $period = "1hour";
+    $unite = "hour";
+    $nb_unite = 1;
+    $nb_ticks = 24;
+    $date_min = mbDateTime($date);
+    break;
+  case "week":
+  	$period = "6hours";
+    $unite = "hour";
+    $nb_unite = 6;
+    $nb_ticks = 28;
+    $date_min = mbDateTime("-2 days", $date);
+    break;
+  case "4weeks":
+  	$period = "1day";
+    $unite = "day";
+    $nb_unite = 1;
+    $nb_ticks = 28;
+    $date_min = mbDateTime("-1 week", CMbDate::dirac("week", $date));
+}
+
+$offset = $nb_ticks * $nb_unite;
+$date_max = mbDateTime("+ $offset $unite", $date_min);
+
 foreach ($sejours_non_affectes as $_sejours_by_period) {
   $praticiens = CMbObject::massLoadFwdRef($_sejours_by_period, "praticien_id");
   CMbObject::massLoadFwdRef($_sejours_by_period, "patient_id");
@@ -88,6 +117,11 @@ foreach($sejours_non_affectes as $_keyGroup => $_group) {
     $functions_filter[$_sejour->_ref_praticien->function_id] = $_sejour->_ref_praticien->_ref_function;
     if ($filter_function && $filter_function != $_sejour->_ref_praticien->function_id) {
       unset($sejours_non_affectes[$_keyGroup][$_key]);
+    }
+    else {
+      $_sejour->_entree_offset = CMbDate::position(max($date_min, $_sejour->entree), $date_min, $period);
+      $_sejour->_sortie_offset = CMbDate::position(min($date_max, $_sejour->sortie), $date_min, $period);
+      $_sejour->_width = $_sejour->_sortie_offset - $_sejour->_entree_offset;
     }
   }
 }

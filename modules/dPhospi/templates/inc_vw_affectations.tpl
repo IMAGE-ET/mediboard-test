@@ -45,13 +45,14 @@
 <hr class="control_tabs" />
 
 {{foreach from=$sejours_non_affectes key=group_name item=_sejours}}
-  <div id="{{$group_name}}" {{if !$_sejours|@count}}class="empty"{{/if}}>
+  <div id="{{$group_name}}" class="droppable {{if !$_sejours|@count}}empty{{/if}}" style="display: none;">
     
     {{foreach from=$_sejours item=_sejour}}
       {{assign var=patient value=$_sejour->_ref_patient}}
       {{assign var=praticien value=$_sejour->_ref_praticien}}
       <div class="draggable text sejour_non_affecte" style="border-left: 4px solid #{{$praticien->_ref_function->color}}"
-        id="sejour_{{$_sejour->_id}}" data-patient_id="{{$patient->_id}}" data-sejour_id="{{$_sejour->_id}}">
+        id="sejour_{{$_sejour->_id}}" data-patient_id="{{$patient->_id}}" data-sejour_id="{{$_sejour->_id}}"
+        data-width="{{$_sejour->_width}}">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
             {{$patient->nom}} {{$patient->prenom}}
           </span>
@@ -65,4 +66,14 @@
     {{/foreach}}
 
   </div>
+  <script type="text/javascript">
+    Droppables.add($('{{$group_name}}'), {
+      onDrop: function(drag, drop) {
+        if (affectation_id = drag.get("affectation_id")) {
+          delAffectation(affectation_id);
+        }
+      },
+      hoverclass: "non_affectes_hover"
+    });
+  </script>
 {{/foreach}}
