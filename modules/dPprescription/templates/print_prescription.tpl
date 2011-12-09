@@ -127,7 +127,7 @@ p.duplicata {
              {{/if}}
              
              {{assign var=i value=$smarty.foreach.lines.iteration}}
-             <td>
+             <td class="text">
                <input type="checkbox" name="selected_lines[]" value="{{$_line->_guid}}" {{if in_array($_line->_guid, $selected_lines)}}checked="checked"{{/if}} /> {{$_line->_view}}
              </td>
              {{if (($i % $numCols) == 0)}}</tr>
