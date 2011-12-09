@@ -48,7 +48,7 @@
       {{/if}}
     </td>
     
-    <td style="width: 25%" class="text {{if $line->traitement_personnel}}traitement{{/if}} {{if $line->perop}}perop{{/if}}">
+    <td style="width: 25%" class="text {{if $line->traitement_personnel}}traitement{{/if}} {{if $line->perop}}perop{{/if}} {{if $line->premedication}}premedication{{/if}}">
       {{if !$advanced_prot}}
         <script type="text/javascript">
           {{if !$line->_protocole && !$line->inscription}}

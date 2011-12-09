@@ -1180,6 +1180,10 @@ table.tbl th.perop, table.tbl td.perop, table.tbl tr:hover td.perop {
   background-color: #fcc;
 }
 
+table.tbl th.premedication, table.tbl td.premedication, table.tbl tr:hover td.premedication {
+  background-color: #ffa;
+}
+
 .administration {
   border: 1px dotted #aaa;
   min-height: 15px;

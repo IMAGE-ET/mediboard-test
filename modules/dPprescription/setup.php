@@ -2165,7 +2165,24 @@ class CSetupdPprescription extends CSetup {
               ADD `ald` ENUM ('0','1') DEFAULT '0';";
 		$this->addQuery($query);
 		
-		$this->mod_version = "1.65";
+		$this->makeRevision("1.65");
+		$query = "ALTER TABLE `prescription_line_medicament` 
+              ADD `premedication` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($query);
+		
+		$query = "ALTER TABLE `prescription_line_element` 
+              ADD `premedication` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `prescription_line_comment` 
+              ADD `premedication` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+		$query = "ALTER TABLE `prescription_line_mix` 
+              ADD `premedication` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+		
+		$this->mod_version = "1.66";
   }
 }
 

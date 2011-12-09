@@ -40,7 +40,7 @@
     {{/if}}
 	</td>	
 	
-	<td style="width:20%;" class="text {{if $line->perop}}perop{{/if}}">
+	<td style="width:20%;" class="text {{if $line->perop}}perop{{/if}} {{if $line->premedication}}premedication{{/if}}">
     {{if !$advanced_prot}}
       <script type="text/javascript">
       	{{if !$line->inscription}}

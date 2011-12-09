@@ -23,7 +23,7 @@
 
 <table class="tbl {{if $line->traitement_personnel}}traitement{{else}}med{{/if}}" id="full_line_medicament_{{$line->_id}}">  
   <tr>
-    <th colspan="2" class="text category {{if $line->traitement_personnel}}traitement{{/if}} {{if $line->perop}}perop{{/if}}">
+    <th colspan="2" class="text category {{if $line->traitement_personnel}}traitement{{/if}} {{if $line->perop}}perop{{/if}} {{if $line->premedication}}premedication{{/if}}">
       
       <div style="float:left;">
         <a title="Historique" class="button list notext" href="#1"
@@ -41,15 +41,30 @@
         {{if $line->_perm_edit}}
           <input name="perop" type="checkbox" {{if $line->perop}}checked="checked"{{/if}} onchange="submitPerop('{{$line->_class}}','{{$line->_id}}',this.checked)"  />
           {{mb_label object=$line field="perop"}}
-        {{elseif !$line->_protocole}}
-          {{mb_label object=$line field="perop"}}:
-          {{if $line->perop}}Oui{{else}}Non{{/if}} 
+        {{elseif !$line->_protocole && $line->perop}}
+           <strong>{{mb_label object=$line field="perop"}}</strong>
         {{/if}}
         
         {{include file="../../dPprescription/templates/line/inc_vw_form_conditionnel.tpl"}}
         {{if $line->_can_vw_form_traitement}} 
           {{include file="../../dPprescription/templates/line/inc_vw_form_traitement.tpl"}}
-        {{/if}} 
+        {{elseif $line->traitement_personnel}}
+			    <strong>{{mb_label object=$line field=traitement_personnel}}</strong>
+			  {{/if}}
+											
+				{{if $prescription->type == "sejour"}}
+				  {{if $line->_perm_edit}}
+            <form name="editPremedMed-{{$line->_id}}" action="?" method="post">
+              <input type="hidden" name="m" value="dPprescription" />
+              <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
+              <input type="hidden" name="prescription_line_medicament_id" value="{{$line->_id}}" />
+              {{mb_field object=$line field=premedication onchange="submitFormAjax(this.form, 'systemMsg');" typeEnum=checkbox}}
+							{{mb_label object=$line field="premedication"}}
+            </form>
+					{{elseif $line->premedication}}
+					  <strong>{{mb_label object=$line field="premedication"}}</strong>
+					{{/if}}	
+        {{/if}}
         <br />
         <div style="float: left">
         {{include file="../../dPprescription/templates/inc_vw_info_line_medicament.tpl"}}

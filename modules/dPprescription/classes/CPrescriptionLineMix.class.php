@@ -70,7 +70,8 @@ class CPrescriptionLineMix extends CMbObject {
   var $duree_debit      = null; // En heures
 
   var $protocole_id     = null;
-  
+  var $premedication       = null;
+
   // Dates relatives
   var $jour_decalage      = null;
   var $decalage_line      = null;
@@ -231,6 +232,8 @@ class CPrescriptionLineMix extends CMbObject {
     $specs["duree_passage"]          = "num";
     $specs["unite_duree_passage"]    = "enum list|minute|heure default|minute";
     $specs["perop"]                  = "bool default|0"; 
+		$specs["premedication"]          = "bool default|0";
+
     $specs["_debit"]                 = "num pos";
     $specs["_quantite_totale"]       = "num";
 		

@@ -18,7 +18,7 @@
              {{if $_prescription_line_mix->_fin|iso_date < $now|iso_date}}opacity-50{{/if}}
            {{/if}}">
 
-  <td style="width: 5%; text-align: center;" class="text {{if $_prescription_line_mix->perop}}perop{{/if}}">
+  <td style="width: 5%; text-align: center;" class="text">
     {{if !$advanced_prot}}
       {{if $_prescription_line_mix->_can_delete_prescription_line_mix}}
          <form name="editPerfLite-{{$_prescription_line_mix->_id}}" action="" method="post">
@@ -52,7 +52,7 @@
       <input type="hidden" value="{{$checked_lines}}" name="lines[{{$_prescription_line_mix->_guid}}]" />
     {{/if}}
   </td>
-  <td style="width: 45%" class="text">
+  <td style="width: 45%" class="text {{if $_prescription_line_mix->perop}}perop{{/if}} {{if $_prescription_line_mix->premedication}}premedication{{/if}}">
     {{if $_prescription_line_mix->date_arret && $_prescription_line_mix->time_arret}}      
       <img src="style/mediboard/images/buttons/stop.png" title="{{tr}}CPrescriptionLineElement-date_arret{{/tr}} : {{$_prescription_line_mix->date_arret|date_format:$conf.date}} {{$_prescription_line_mix->time_arret|date_format:$conf.time}}"/>
     {{/if}}

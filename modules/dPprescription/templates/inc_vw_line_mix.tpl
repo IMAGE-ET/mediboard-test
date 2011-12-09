@@ -63,7 +63,7 @@ Main.add( function(){
 <table class="tbl" id="prescription_line_mix-{{$line->_id}}"> 
 
   <tr>
-    <th id="th-perf-{{$line->_id}}" class="text {{if $line->perop}}perop{{/if}}">
+    <th id="th-perf-{{$line->_id}}" class="text {{if $line->perop}}perop{{/if}} {{if $line->premedication}}premedication{{/if}}">
       <div style="float: left">
       	 <a title="Historique" class="button list notext" href="#1"
          onclick="Prescription.showLineHistory('{{$line->_guid}}')" 
@@ -73,17 +73,20 @@ Main.add( function(){
          </a>
 			 
 				{{if $line->_ref_prescription->type != "externe"}}
-				  {{if $line->_perm_edit}}
-					  {{if $prescription->type != "sejour"}}
-            <form name="editALDPerf-{{$line->_id}}" action="?" method="post">
-              <input type="hidden" name="m" value="dPprescription" />
-              <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
-              <input type="hidden" name="prescription_line_mix_id" value="{{$line->_id}}" />
-              {{mb_field object=$line field=ald onchange="submitFormAjax(this.form, 'systemMsg');" typeEnum=checkbox}}
-              {{mb_label object=$line field="ald"}}
-            </form>
+					 {{if $prescription->type != "sejour"}}
+						  {{if $line->_perm_edit}}
+		            <form name="editALDPerf-{{$line->_id}}" action="?" method="post">
+		              <input type="hidden" name="m" value="dPprescription" />
+		              <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
+		              <input type="hidden" name="prescription_line_mix_id" value="{{$line->_id}}" />
+		              {{mb_field object=$line field=ald onchange="submitFormAjax(this.form, 'systemMsg');" typeEnum=checkbox}}
+		            </form>
+						  {{else}}
+							   <strong>{{mb_label object=$line field="ald"}}</strong>
+							{{/if}}
 						{{/if}}
 						
+						{{if $line->_perm_edit}}
             <form name="editPeropPerf-{{$line->_id}}" action="?" method="post">
               <input type="hidden" name="m" value="dPprescription" />
               <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
@@ -91,7 +94,11 @@ Main.add( function(){
               {{mb_field object=$line field=perop onchange="submitFormAjax(this.form, 'systemMsg');" typeEnum=checkbox}}
               {{mb_label object=$line field="perop"}}
             </form>
+						{{elseif $line->perop}}
+						  <strong>{{mb_label object=$line field="perop"}}</strong>
+            {{/if}}
             
+						{{if $line->_perm_edit}}
 					  <form name="editCondPerf-{{$line->_id}}" action="?" method="post">
 					  	<input type="hidden" name="m" value="dPprescription" />
 							<input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
@@ -99,11 +106,23 @@ Main.add( function(){
 				      {{mb_field object=$line field=conditionnel onchange="submitFormAjax(this.form, 'systemMsg');" typeEnum=checkbox}}
 				      {{mb_label object=$line field="conditionnel"}}
 						</form>
-				
-					{{else}}
-				    {{mb_label object=$line field="conditionnel"}}:
-				    {{if $line->conditionnel}}Oui{{else}}Non{{/if}} 
-				  {{/if}}
+						{{elseif $line->conditionnel}}
+						  <strong>{{mb_label object=$line field="conditionnel"}}</strong>
+						{{/if}}
+						
+						{{if $prescription->type == "sejour"}}
+						  {{if $line->_perm_edit}}
+            <form name="editPremedPerf-{{$line->_id}}" action="?" method="post">
+              <input type="hidden" name="m" value="dPprescription" />
+              <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
+              <input type="hidden" name="prescription_line_mix_id" value="{{$line->_id}}" />
+              {{mb_field object=$line field=premedication onchange="submitFormAjax(this.form, 'systemMsg');" typeEnum=checkbox}}
+              {{mb_label object=$line field="premedication"}}
+            </form>
+						 {{elseif $line->premedication}}
+						   <strong>{{mb_label object=$line field="premedication"}}</strong>
+             {{/if}}
+            {{/if}}	
 				{{/if}}
 				
       </div>

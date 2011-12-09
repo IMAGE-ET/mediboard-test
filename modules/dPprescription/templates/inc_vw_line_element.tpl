@@ -29,7 +29,7 @@
 <table class="tbl elt" id="full_line_element_{{$line->_id}}">
   <!-- Header de la ligne d'element -->
   <tr>    
-    <th colspan="8" class="{{if $line->perop}}perop{{/if}}">
+    <th colspan="8" class="{{if $line->perop}}perop{{/if}} {{if $line->premedication}}premedication{{/if}}">
       <div style="position: absolute">
       	<a title="Historique" class="button list notext" href="#1"
            onclick="Prescription.showLineHistory('{{$line->_guid}}')" 
@@ -44,15 +44,28 @@
         {{if $line->_perm_edit}}
           <input name="perop" type="checkbox" {{if $line->perop}}checked="checked"{{/if}} onchange="submitPerop('{{$line->_class}}','{{$line->_id}}',this.checked)"  />
           {{mb_label object=$line field="perop"}}
-        {{elseif !$line->_protocole}}
-          {{mb_label object=$line field="perop"}}:
-          {{if $line->perop}}Oui{{else}}Non{{/if}} 
+        {{elseif !$line->_protocole && $line->perop}}
+          <strong>{{mb_label object=$line field="perop"}}</strong>
         {{/if}}
         
         <!-- Formulaire conditionnel -->
         {{include file="../../dPprescription/templates/line/inc_vw_form_conditionnel.tpl"}} 
        {{if $category->chapitre == "soin"}}
          {{include file="../../dPprescription/templates/line/inc_vw_form_ide_domicile.tpl"}} 
+       {{/if}}
+			 
+			 {{if $prescription->type == "sejour"}}
+			 {{if $line->_perm_edit}}
+        <form name="editPremedElt-{{$line->_id}}" action="?" method="post">
+          <input type="hidden" name="m" value="dPprescription" />
+          <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
+          <input type="hidden" name="prescription_line_element_id" value="{{$line->_id}}" />
+          {{mb_field object=$line field=premedication onchange="submitFormAjax(this.form, 'systemMsg');" typeEnum=checkbox}}
+          {{mb_label object=$line field="premedication"}}
+        </form>
+				{{elseif $line->premedication}}
+				  <strong>{{mb_label object=$line field="premedication"}}</strong>
+				{{/if}}
        {{/if}}
       </div>
       <div class="div_signature mediuser" {{if !$line->_protocole}}style="border-color: #{{$line->_ref_praticien->_ref_function->color}};"{{/if}}>

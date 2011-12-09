@@ -14,6 +14,7 @@ $date_max      = mbDate("+ 1 DAY", $date);
 $service_id    = CValue::getOrSession("service_id", "none");
 $nb_decalage   = CValue::get("nb_decalage");
 $mode_dossier  = CValue::get("mode_dossier", "administration");
+$premedication = CValue::get("premedication");
 
 $composition_dossier = array();
 $bornes_composition_dossier = array();
@@ -62,6 +63,10 @@ $where["element_prescription_id"] =  CSQLDataSource::prepareIn($categories_id);
 $where[] = "'$date' <= sejour.sortie && '$date_max' >= sejour.entree";
 $where["service.service_id"] = " = '$service_id'";
 $where["inscription"] = " = '0'";
+
+if ($premedication){
+	$where["premedication"] = " = '1'";
+}
 $lines = $line->loadList($where, null, null, null, $ljoin);
 
 // Chargement du patient pour chaque sejour

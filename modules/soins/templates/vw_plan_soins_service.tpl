@@ -15,10 +15,12 @@
 
 // Refresh du plan de soin
 updatePlanSoinsPatients = function(){
+  var oForm = getForm("selectElts");
   if($('content_plan_soins_service')){
     var url = new Url("soins", "ajax_vw_content_plan_soins_service");
 	  url.addParam("categories_id[]", $V(getForm("selectElts").elts), true);
 	  url.addParam("date", "{{$date}}");
+		url.addParam("premedication", $V(oForm.premedication) ? 1 : 0);
 	  url.requestUpdate("content_plan_soins_service");
 	}
 }
@@ -169,6 +171,9 @@ Main.add(function(){
 				<table class="tbl" >
 					<tr>
 						<th class="title">
+							<small style="float: right">
+                <input type="checkbox" name="premedication" /> {{mb_label class="CPrescriptionLineElement" field="premedication"}}
+              </small>
 							<button type="button" class="cancel notext" style="float: left" onclick="resetCheckbox();">{{tr}}Reset{{/tr}}</button>
 	            Activités
 						</th>
