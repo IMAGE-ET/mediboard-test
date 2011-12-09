@@ -97,7 +97,8 @@
 	
   {{if $line->inscription || $smarty.foreach.$last_foreach.first}}
   <td {{if $conf.dPprescription.CPrescription.show_categories_plan_soins && $line->inscription}}colspan="2"{{/if}}
-      class="text" rowspan="{{$nb_line}}" {{if $line instanceof CPrescriptionLineMedicament && $line->traitement_personnel}}style="background-color: #BDB"{{/if}}>
+      class="text {{if $line instanceof CPrescriptionLineMedicament && $line->traitement_personnel}}traitement{{/if}}
+			       {{if $line->premedication}} premedication{{/if}}" rowspan="{{$nb_line}}" >
 		{{if $line->commentaire}}
       <img src="images/icons/postit.png" title="" style="float: right; margin: 2px;" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-comment-{{$line->_guid}}');" />
 			<table class="tbl" id="tooltip-content-comment-{{$line->_guid}}" style="display: none;">

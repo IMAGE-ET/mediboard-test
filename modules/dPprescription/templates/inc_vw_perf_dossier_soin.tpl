@@ -11,7 +11,7 @@
 {{assign var=transmissions value=$prescription->_transmissions}}
 {{assign var=prescription_line_mix_id value=$_prescription_line_mix->_id}}
 	
-<td {{if $conf.dPprescription.CPrescription.show_categories_plan_soins}}colspan="2"{{/if}} class="text">
+<td {{if $conf.dPprescription.CPrescription.show_categories_plan_soins}}colspan="2"{{/if}} class="text {{if $_prescription_line_mix->premedication}} premedication{{/if}}">
   {{if $move_dossier_soin}}
 	  <script type="text/javascript">
 	    Main.add(function () {
