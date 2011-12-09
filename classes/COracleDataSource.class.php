@@ -12,16 +12,16 @@ class COracleDataSource extends CSQLDataSource {
     
   function connect($host, $name, $user, $pass) {
     // Charset options
-    //putenv("NLS_LANGUAGE=French_France.WE8ISO8859P1");
-    //putenv("NLS_CHARACTERSET=WE8ISO8859P1");
-    //putenv("NLS_NCHAR_CHARACTERSET=WE8ISO8859P1");
+    putenv("NLS_LANGUAGE=French_France.AL16UTF16");
+    putenv("NLS_CHARACTERSET=AL16UTF16");
+    putenv("NLS_NCHAR_CHARACTERSET=AL16UTF16");
     
     if (!function_exists( "oci_connect" )) {
       trigger_error( "FATAL ERROR: Oracle support not available.  Please check your configuration.", E_USER_ERROR );
       return;
     }
       
-    if (false === $this->link = oci_connect($user, $pass, "$host/$name", "WE8ISO8859P1")) {
+    if (false === $this->link = oci_connect($user, $pass, "$host/$name", "AL16UTF16")) {
       $error = $this->error();
       trigger_error( "FATAL ERROR: Connection to Oracle database '$host/$name' failed.\n".$error['message'], E_USER_ERROR );
       return;
