@@ -89,8 +89,9 @@
                       ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}');
                     }
                     {{/if}}
-                    submitFormAjax(this.form, 'systemMsg',{onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}}) });">
-                    Coder cet acte
+                    submitFormAjax(this.form, 'systemMsg',{onComplete: function() {
+                      ActesCCAM.notifyChange({{$subject->_id}},{{$subject->_praticien_id}});
+                      ActesNGAP.refreshList();}});"> Coder cet acte
                   </button>
               
                   {{else}}

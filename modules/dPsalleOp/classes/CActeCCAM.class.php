@@ -806,6 +806,28 @@ class CActeCCAM extends CActe {
     
     return $this->_tarif;
   }
+  
+  static function getNGAP($code) {
+    $ds = CSQLDataSource::get("ccamV2");
+    $query = $ds->prepare("SELECT * FROM ccam_ngap WHERE code_ccam = %", $code);
+    $result = $ds->exec($query);
+    
+    if($ds->numRows($result)) {
+      $row = $ds->fetchArray($result);
+      return array(
+        "fd" => array(
+          "montant_enfant" => $row["montant_enfant"],
+          "montant_adulte" => $row["montant_adulte"]
+        ),
+        "ngap" => array(
+          array("code_ngap_1"   => $row["code_ngap_1"],
+                "coefficient_1" => $row["coefficient_1"]),
+          array("code_ngap_2"   => $row["code_ngap_2"],
+                "coefficient_2" => $row["coefficient_2"]),
+          array("code_ngap_3"   => $row["code_ngap_3"],
+                "coefficient_3" => $row["coefficient_3"])));
+    }
+  }
 }
 
 ?>
