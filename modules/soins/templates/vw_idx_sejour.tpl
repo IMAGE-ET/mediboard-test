@@ -93,7 +93,7 @@ window.tabLoaders = {
   "constantes-medicales": function(sejour_id, praticien_id, date){
     if(!$("constantes-medicales").visible()) return;
     
-    refreshConstantesMedicales("CSejour-"+sejour_id);
+    refreshConstantesMedicales("CSejour-"+sejour_id, 1);
   },
   
   {{if $isPrescriptionInstalled}}
@@ -161,7 +161,7 @@ function loadViewSejour(sejour_id, praticien_id, patient_id, date){
 function loadAntecedents(sejour_id){
   var url = new Url("dPcabinet","httpreq_vw_antecedents");
   url.addParam("sejour_id", sejour_id);
-	url.addParam("show_header", 1);
+  url.addParam("show_header", 1);
   url.requestUpdate('antecedents')
 }
 {{/if}}
@@ -223,10 +223,14 @@ function submitSuivi(oForm) {
   } });
 }
 
-function refreshConstantesMedicales(context_guid) {
+function refreshConstantesMedicales(context_guid, paginate, count) {
   if(context_guid) {
     var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
     url.addParam("context_guid", context_guid);
+    url.addParam("paginate", paginate || 0);
+    if (count) {
+      url.addParam("count", count);
+    }
     url.requestUpdate("constantes-medicales");
   }
 }
@@ -555,7 +559,7 @@ printDossierComplet = function(){
           <button type="button" class="hslip notext" onclick="$('left-column').toggle();" title="Afficher/cacher la colonne de gauche"></button>
         </li>
         <li><a href="#suivi_clinique" onmousedown="loadSuiviClinique(document.form_prescription.sejour_id.value)">{{tr}}CSejour.suivi_clinique{{/tr}}</a></li>
-        <li onmousedown="refreshConstantesMedicales('CSejour-'+document.form_prescription.sejour_id.value)"><a href="#constantes-medicales">{{tr}}CPatient.surveillance{{/tr}}</a></li>
+        <li onmousedown="refreshConstantesMedicales('CSejour-'+document.form_prescription.sejour_id.value, 1)"><a href="#constantes-medicales">{{tr}}CPatient.surveillance{{/tr}}</a></li>
         {{if $isPrescriptionInstalled}}
         <li onmousedown="PlanSoins.loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')"><a href="#dossier_traitement">{{tr}}CSejour.suivi_soins{{/tr}}</a></li>
         <li onmousedown="$('prescription_sejour').update(''); Prescription.reloadPrescSejour('', document.form_prescription.sejour_id.value, null, null, null, null, null, '', null, false);">

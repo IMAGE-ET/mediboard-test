@@ -32,11 +32,11 @@ ExClass = {
     var form = getForm("editExClass");
     
     if (auto) {
-      $V(form.conditional, false);
+      $V(form.conditional, "0");
       $V(form.__conditional, false);
     }
     
-    form.conditional.disabled = form.__conditional.disabled = auto;
+    form.__conditional.disabled = auto;
   },
   setEvent: function(select) {
     var form = select.form;
@@ -325,9 +325,9 @@ ExClass = {
       });
     });
     
-		// :not pseudo element is slow in IE
-		var draggables = $$(".draggable").notMatch(".hostfield");
-		
+    // :not pseudo element is slow in IE
+    var draggables = $$(".draggable").notMatch(".hostfield");
+    
     draggables.each(function(d){
       d.observe("mousedown", function(event){
         if (!ExClass.pickMode) return;
@@ -498,10 +498,17 @@ ExConcept.editCallback = function(id, obj) {
 ExFieldSpec = {
   options: {},
   edit: function(form){
+    var form_name = form.getAttribute("name");
+    
+    // stupid IE hack
+    if (Prototype.Browser.IE) {
+      form_name = form.cloneNode(false).getAttribute("name");
+    }
+    
     var url = new Url("forms", "ajax_edit_ex_field_spec2");
     url.addFormData(form);
     url.addParam("m", "forms"); // needed
-    url.addParam("form_name", form.getAttribute("name"));
+    url.addParam("form_name", form_name);
     url.addParam("context_guid", form.get("object_guid"));
     url.requestUpdate("fieldSpecEditor");
   }

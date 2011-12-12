@@ -70,7 +70,7 @@ class CMediusers extends CMbObject {
   var $_is_urgentiste              = null;
   var $_force_merge                = false;
   var $_user_id                    = null;
-	var $_keep_user                  = null;
+  var $_keep_user                  = null;
   
   // Distant fields
   var $_group_id                   = null;
@@ -280,18 +280,18 @@ class CMediusers extends CMbObject {
 
   function delete() {
     $msg = null;
-		
-		if (!isset($this->_keep_user)) {
-	    // Delete corresponding dP user first
-	    if (!$msg = $this->canDeleteEx()) {
-	      $user = $this->createUser();
-	      if ($msg = $user->delete()) {
-	        return $msg;
-	      }
-	    }
-		}
-		
-		$this->_keep_user = null;
+    
+    if (!isset($this->_keep_user)) {
+      // Delete corresponding dP user first
+      if (!$msg = $this->canDeleteEx()) {
+        $user = $this->createUser();
+        if ($msg = $user->delete()) {
+          return $msg;
+        }
+      }
+    }
+    
+    $this->_keep_user = null;
 
     return parent::delete();
   }
@@ -346,14 +346,23 @@ class CMediusers extends CMbObject {
     $this->updateSpecs();
   }
 
+  /**
+   * @return CBanque
+   */
   function loadRefBanque() {
     return $this->_ref_banque = $this->loadFwdRef("banque_id", true);
   }
 
+  /**
+   * @return CUser
+   */
   function loadRefProfile(){
     return $this->_ref_profile = $this->loadFwdRef("_profile_id", true);
   }
   
+  /**
+   * @return CFunction
+   */
   function loadRefFunction() {
     $this->_ref_function = $this->loadFwdRef("function_id", true);
     $this->_group_id     = $this->_ref_function->group_id;
@@ -402,13 +411,13 @@ class CMediusers extends CMbObject {
     }
     $list_functions = implode(",", $functions);
     $where = array(
-		  "protocole.chir_id = '$this->_id' OR protocole.function_id IN ($list_functions)"
-		);
-		
-		if ($type) {
-			$where["type"] = "= '$type'";
-		}
-		
+      "protocole.chir_id = '$this->_id' OR protocole.function_id IN ($list_functions)"
+    );
+    
+    if ($type) {
+      $where["type"] = "= '$type'";
+    }
+    
     $protocole = new CProtocole();
     $this->_ref_protocoles = $protocole->loadList($where, "libelle_sejour, libelle, codes_ccam");
   }

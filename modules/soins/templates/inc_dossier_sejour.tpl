@@ -18,8 +18,8 @@
 {{assign var=prescription_id value=$sejour->_ref_prescription_sejour->_id}}
 
 <script type="text/javascript">
-	
-	loadResultLabo = function(sejour_id) {
+  
+  loadResultLabo = function(sejour_id) {
     var url = new Url("dPImeds", "httpreq_vw_sejour_results");
     url.addParam("sejour_id", sejour_id);
     url.requestUpdate('Imeds');
@@ -47,6 +47,7 @@
   loadConstantes = function() {
     var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
     url.addParam("context_guid", '{{$sejour->_guid}}');
+    url.addParam("paginate", 1);
     url.requestUpdate("constantes");
   }
 
@@ -59,7 +60,7 @@
   loadAntecedents = function() {
     var url = new Url("dPcabinet","httpreq_vw_antecedents");
     url.addParam("sejour_id", '{{$sejour->_id}}');
-		url.addParam("show_header", 1);
+    url.addParam("show_header", 1);
     url.requestUpdate('antecedents')
   }
 
@@ -68,15 +69,19 @@
     if (window.refreshLinePancarte){
       refreshLinePancarte('{{$prescription_id}}');
     }
-		if(window.refreshLineSejour){ 
-		  refreshLineSejour('{{$sejour->_id}}'); 
-		}
+    if(window.refreshLineSejour){ 
+      refreshLineSejour('{{$sejour->_id}}'); 
+    }
   }
 
-  refreshConstantesMedicales = function(context_guid) {
+  refreshConstantesMedicales = function(context_guid, paginate, count) {
     if(context_guid) {
       var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
       url.addParam("context_guid", context_guid);
+      url.addParam("paginate", paginate || 0);
+      if (count) {
+        url.addParam("count", count);
+      }
       url.requestUpdate("constantes");
     }
   }
@@ -112,22 +117,22 @@
     });
   }
   
-	printDossierSoins = function(){
-	  var url = new Url;
-	  url.setModuleAction("soins", "print_dossier_soins");
-	  url.addParam("sejour_id", "{{$sejour->_id}}");
-	  url.popup("850", "500", "Dossier complet");
-	}
-	
+  printDossierSoins = function(){
+    var url = new Url;
+    url.setModuleAction("soins", "print_dossier_soins");
+    url.addParam("sejour_id", "{{$sejour->_id}}");
+    url.popup("850", "500", "Dossier complet");
+  }
+  
   Main.add(function() {
     tab_sejour = Control.Tabs.create('tab-sejour');
     tab_sejour.setActiveTab('{{$default_tab}}');
-		
-		{{if $default_tab == "dossier_traitement"}}
+    
+    {{if $default_tab == "dossier_traitement"}}
     loadSuiviSoins();
     {{/if}}
-		
-		{{if $default_tab == "prescription_sejour"}}
+    
+    {{if $default_tab == "prescription_sejour"}}
     loadPrescription();
     {{/if}}
     
@@ -152,11 +157,11 @@
   <li><a href="#docs" onmousedown="loadDocuments();">{{tr}}CMbObject-back-documents{{/tr}}</a></li>
   <li><a href="#antecedents" onmousedown="loadAntecedents();">{{tr}}IDossierMedical-back-antecedents{{/tr}}</a></li>
   <li style="float: right">
-  	<button type="button" class="button print" onclick="printDossierSoins();">Dossier soins</button>
+    <button type="button" class="button print" onclick="printDossierSoins();">Dossier soins</button>
     {{if !$popup}}
-	    <button type="button" class="cancel" onclick="closeModal();">{{tr}}Close{{/tr}}</button>
+      <button type="button" class="cancel" onclick="closeModal();">{{tr}}Close{{/tr}}</button>
     {{/if}}
-	</li>
+  </li>
 </ul>
 
 <hr class="control_tabs" />

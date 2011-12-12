@@ -7,9 +7,10 @@ comments = {{$comments|@json}};
 const_ids = {{$const_ids|@json}};
 keys_selection = {{$selection|@array_keys|@json}};
 last_date = null;
+paginate = {{$paginate|@json}};
 
-var xRange = {min: -0.5, max: Math.max(dates.length-1, 12)+0.5};
-var xOffset = ((xRange.max+0.5) - 15);
+var xRange = {min: -0.5, max: Math.max(dates.length, 14)-0.5};
+var xOffset = ((xRange.max+0.5) - 14);
 window.globalXOffset = 0;
 
 if (xOffset > 0) {
@@ -19,16 +20,17 @@ if (xOffset > 0) {
 submitConstantesMedicales = function(oForm) {
   return onSubmitFormAjax(oForm, {
     onComplete: function () {
-      refreshConstantesMedicales($V(oForm.context_class)+'-'+$V(oForm.context_id));
+      refreshConstantesMedicales($V(oForm.context_class)+'-'+$V(oForm.context_id), 1);
     }
   });
 }
 
-editConstantes = function (const_id, context_guid){
+editConstantes = function (const_id, context_guid, start){
   var url = new Url('dPhospi', 'httpreq_vw_form_constantes_medicales');
-  url.addParam('const_id', const_id);
-  url.addParam('context_guid', context_guid);
-  url.addParam('readonly', '{{$readonly}}');
+  url.addParam("const_id", const_id);
+  url.addParam("context_guid", context_guid);
+  url.addParam("readonly", '{{$readonly}}');
+  url.addParam("start", start || 0);
   url.addParam("selection[]", keys_selection);
   url.requestUpdate('constantes-medicales-form');
 }
@@ -222,8 +224,8 @@ drawGraph = function() {
     width = "700px";
     height = "160px";
   {{else}}
-    width = "500px";
-    height = "130px";
+    width = "550px";
+    height = "140px";
   {{/if}}
   
   $H(data).each(function(pair){
@@ -318,6 +320,7 @@ loadConstantesMedicales  = function(context_guid) {
   url.addParam("readonly", '{{$readonly}}');
   url.addParam("selection[]", keys_selection);
   url.addParam("selected_context_guid", context_guid);
+  url.addParam("paginate", window.paginate || 0);
   url.requestUpdate(container);
 };
 </script>
@@ -372,7 +375,7 @@ loadConstantesMedicales  = function(context_guid) {
 </table>
 
 {{if $print}}
-  <div id="constantes-medicales-graph" style="margin-left: 5px; text-align: center;"></div>
+  <div id="constantes-medicales-graph" style="text-align: center;"></div>
 {{else}}
   {{if "forms"|module_active && $context instanceof CSejour}}
     <script type="text/javascript">
@@ -400,24 +403,44 @@ loadConstantesMedicales  = function(context_guid) {
         {{include file="inc_form_edit_constantes_medicales.tpl" context_guid=$context_guid}}
       </td>
       <td>
+        {{unique_id var=uniq_id_constantes}}
+         
         <script type="text/javascript">
           Main.add(function(){
             Control.Tabs.create("tabs-constantes-graph-table", true);
           });
         </script>
         
+        {{* {{if $paginate}}
+          {{mb_include module=system template=inc_pagination total=$total_constantes current=$start change_page="changePage$uniq_id_constantes" step=$count}}
+        {{/if}} *}}
+        
         <ul class="control_tabs small" id="tabs-constantes-graph-table">
           <li><a href="#constantes-graph">Graphiques</a></li>
           <li><a href="#constantes-table">Tableau</a></li>
+          {{if $paginate}}
+            <li>
+              <label>
+                Afficher les 
+                <select name="count_constantes" onchange="refreshConstantesMedicales('{{$context_guid}}', 1, $V(this))" style="margin: 0;">
+                  {{assign var=_counts value=","|@explode:"50,100,200,500"}}
+                  {{foreach from=$_counts item=_count}}
+                    <option value="{{$_count}}" {{if $count == $_count}} selected {{/if}}>{{$_count}}</option>
+                  {{/foreach}}
+                </select>
+                derniers ({{$total_constantes}} au total)
+              </label>
+            </li>
+          {{/if}}
         </ul>
         <hr class="control_tabs" />
         
-				{{if $const_ids|@count == $limit}}
-	        <div class="small-warning">
-	          Le nombre de constantes affichées est limité à {{$limit}}.
-	        </div>
-				{{/if}}
-					
+        {{if $const_ids|@count == $count}}
+          <div class="small-warning">
+            Le nombre de constantes affichées est limité à {{$count}}.
+          </div>
+        {{/if}}
+          
         <div id="constantes-graph">
           <button class="hslip notext" style="float: left;" title="Afficher/Cacher le formulaire" onclick="$('constantes-medicales-form').toggle();" type="button">
             Formulaire constantes
@@ -426,25 +449,25 @@ loadConstantesMedicales  = function(context_guid) {
           <button id="constantes-medicales-graph-before" class="left" style="float: left;"       onclick="shiftGraphs('before');">Avant</button>
           <button id="constantes-medicales-graph-after"  class="right rtl" style="float: right;" onclick="shiftGraphs('after');">Après</button>
           
-          <div id="constantes-medicales-graph" style="margin-left: 5px; text-align: center; clear: both;"></div>
+          <div id="constantes-medicales-graph" style="text-align: center; clear: both;"></div>
         </div>
         
         <div id="constantes-table" style="display: none; text-align: left;">
-				  <div class="small-info">
-				  	<strong>L'ordre chronologique du tableau a changé !</strong><br />
-						Les relevés les plus récents sont maintenant en haut ou à gauche selon l'orientation.
-				  </div>
-					
-				  <button class="change" onclick="$('constantes-table').down('.contantes-horizontal').toggle(); $('constantes-table').down('.contantes-vertical').toggle()">
-				  	Changer l'orientation
-				  </button>
-					
+          <div class="small-info">
+            <strong>L'ordre chronologique du tableau a changé !</strong><br />
+            Les relevés les plus récents sont maintenant en haut ou à gauche selon l'orientation.
+          </div>
+          
+          <button class="change" onclick="$('constantes-table').down('.contantes-horizontal').toggle(); $('constantes-table').down('.contantes-vertical').toggle()">
+            Changer l'orientation
+          </button>
+          
           <div class="contantes-horizontal" style="display: none;">
           {{mb_include module=dPpatients template=print_constantes}}
           </div>
-				  <div class="contantes-vertical">
+          <div class="contantes-vertical">
           {{mb_include module=dPpatients template=print_constantes_vert}}
-					</div>
+          </div>
         </div>
       </td>
     </tr>

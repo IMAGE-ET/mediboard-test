@@ -10,9 +10,8 @@
 
 <script type="text/javascript">
 toggleListCustom = function(form) {
-  var concept_type = $V(form._concept_type);
-  
-  if (concept_type) {
+  if (form._concept_type) {
+    var concept_type = $V(form._concept_type);
     var enableList = (concept_type == "concept");
     
     var input = form.concept_id_autocomplete_view;
@@ -42,8 +41,8 @@ selectConcept = function(input) {
   ExFieldSpec.edit(input.form);
 
   if (!$V(input.form._locale)) {
-	  $V(input.form._locale, input.form.concept_id_autocomplete_view.value);
-	}
+    $V(input.form._locale, input.form.concept_id_autocomplete_view.value);
+  }
 }
 
 Main.add(function(){
@@ -55,7 +54,7 @@ Main.add(function(){
 
   {{assign var=_can_formula_arithmetic value=false}}
   {{assign var=_can_formula_concat value=false}}
-		
+    
   {{if $ex_field->_id}}
     {{assign var=_spec_type value=$ex_field->_spec_object->getSpecType()}}
     {{assign var=_can_formula_arithmetic value="CExClassField::formulaCanArithmetic"|static_call:$_spec_type}}
@@ -258,17 +257,17 @@ Main.add(function(){
   <li><a href="#fieldSpecEditor">Propriétés</a></li>
 
   {{if $ex_field->_id}}
-	  {{assign var=_spec_type value=$ex_field->_spec_object->getSpecType()}}
-	  {{assign var=_can_formula value="CExClassField::formulaCanResult"|static_call:$_spec_type}}
-	  
-	  {{if $_can_formula}}
-	    <li>
-	      <a href="#fieldFormulaEditor" {{if !$ex_field->formula}} class="empty" {{/if}} 
-	         style="background-image: url(style/mediboard/images/buttons/formula.png); background-repeat: no-repeat; background-position: 2px 2px; padding-left: 18px;">
-	        Formule / concaténation
-	      </a>
-	    </li>
-	  {{/if}}
+    {{assign var=_spec_type value=$ex_field->_spec_object->getSpecType()}}
+    {{assign var=_can_formula value="CExClassField::formulaCanResult"|static_call:$_spec_type}}
+    
+    {{if $_can_formula}}
+      <li>
+        <a href="#fieldFormulaEditor" {{if !$ex_field->formula}} class="empty" {{/if}} 
+           style="background-image: url(style/mediboard/images/buttons/formula.png); background-repeat: no-repeat; background-position: 2px 2px; padding-left: 18px;">
+          Formule / concaténation
+        </a>
+      </li>
+    {{/if}}
   {{/if}}
 </ul>
 <hr class="control_tabs" />

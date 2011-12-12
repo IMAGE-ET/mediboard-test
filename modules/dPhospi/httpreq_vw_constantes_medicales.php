@@ -26,7 +26,20 @@ $selection             = CValue::get('selection');
 $date_min              = CValue::get('date_min');
 $date_max              = CValue::get('date_max');
 $print                 = CValue::get('print');
-$limit                 = CValue::get('limit', 50);
+$paginate              = CValue::get('paginate', 0);
+$start                 = CValue::get('start', 0);
+$count                 = CValue::get('count', 50);
+
+if (!$start) {
+  $start = 0;
+}
+
+if ($paginate) {
+	$limit = "$start,$count";
+}
+else {
+	$limit = $count;
+}
 
 if (!$selection || $selected_context_guid === 'all') {
   //$selection = CConstantesMedicales::$list_constantes;
@@ -138,6 +151,7 @@ if ($date_max) {
 
 // Les constantes qui correspondent (dans le contexte cette fois)
 $list_constantes = $constantes->loadList($where, "datetime DESC", $limit);
+$total_constantes = $constantes->countList($where);
 
 $constantes_medicales_grid = CConstantesMedicales::buildGrid($list_constantes, false);
 
@@ -279,7 +293,7 @@ if ($list_constantes) {
             $day_24h = mbTransformTime("-$reset_hour hours", $cst->datetime, '%d/%m/%y');
     
             if (!isset($cumuls_day[$name][$day_24h])) {
-              $cumuls_day[$name][$day_24h] = array("n" => 0, "value" => 0);
+              $cumuls_day[$name][$day_24h] = array("n" => 0, "value" => null);
             }
             
             if (isset($params["formula"])) {
@@ -288,7 +302,7 @@ if ($list_constantes) {
               foreach($formula as $_field => $_sign) {
                 $_value = $cst->$_field;
                 
-                if ($_value !== null) {
+                if ($_value !== null && $_value !== "") {
                   if ($_sign === "+") {
                     $cumuls_day[$name][$day_24h]["value"] += $_value;
                   }
@@ -299,7 +313,9 @@ if ($list_constantes) {
               }
             }
             else {
-              $cumuls_day[$name][$day_24h]["value"] += $ya;
+              if ($ya !== null && $ya !== "") {
+                $cumuls_day[$name][$day_24h]["value"] += $ya;
+              }
             }
             
             $cumuls_day[$name][$day_24h]["n"]++;
@@ -428,7 +444,7 @@ foreach($data as $name => &$_data) {
     "title" => utf8_encode(CAppUI::tr("CConstantesMedicales-$name-desc").($params['unit'] ? " ({$params['unit']})" : "")),
     "yaxis" => array(
       "min" => getMin($params["min"], $y_values)/* - $margin*/, // min
-      "max" => getMax($params["max"], $y_values) + $margin, // max
+      "max" => getMax($params["max"], $y_values) * 1.25, // max
     )
   );
   
@@ -457,7 +473,10 @@ $smarty->assign('latest_constantes', $latest_constantes);
 $smarty->assign('selection',     $selection);
 $smarty->assign('print',         $print);
 $smarty->assign('graphs',        $graphs);
-$smarty->assign('limit',         $limit);
+$smarty->assign('start',         $start);
+$smarty->assign('count',         $count);
+$smarty->assign('total_constantes', $total_constantes);
+$smarty->assign('paginate',      $paginate);
 $smarty->assign('constantes_medicales_grid', $constantes_medicales_grid);
 $smarty->display('inc_vw_constantes_medicales.tpl');
 

@@ -475,6 +475,15 @@ class CConstantesMedicales extends CMbObject {
       $this->_imc = round($this->poids / ($this->taille * $this->taille * 0.0001), 2);
     }
     
+    // Afficher le champ diurèse dans le formulaire si une des valeurs n'est pas vide 
+    // FIXME Utiliser "cumul_in"
+    foreach(self::$list_constantes["_diurese"]["formula"] as $_field => $_sign) {
+      if ($this->{$_field}) {
+        $this->_diurese = " ";
+        break;
+      }
+    }
+    
     // Détermination valeur IMC
     if ($this->poids && $this->taille) {
       $seuils = ($this->_ref_patient->sexe != 'm') ? 
@@ -713,8 +722,8 @@ class CConstantesMedicales extends CMbObject {
       
       foreach ($list as $_constante_medicale) {
         foreach (CConstantesMedicales::$list_constantes as $_name => $_params) {
-          if ($_constante_medicale->$_name != '' && isset($_params["cumul_reset_config"])) {
-            $selection[] = "_{$_name}_cumul";
+          if ($_constante_medicale->$_name != '' && !empty($_params["cumul_in"])) {
+            $selection = array_merge($selection, $_params["cumul_in"]);
           }
         }
       }
@@ -735,7 +744,7 @@ class CConstantesMedicales extends CMbObject {
       foreach (CConstantesMedicales::$list_constantes as $_name => $_params) {
         if (in_array($_name, $selection) || $_constante_medicale->$_name != '') {
           $value = null;
-					
+          
           // cumul
           if (isset($_params["cumul_for"]) || isset($_params["formula"])) {
             $reset_hour = self::getResetHour($_name);
@@ -874,11 +883,22 @@ class CConstantesMedicales extends CMbObject {
       
       // Champs de cumuls
       if (isset($_params["cumul_reset_config"])) {
+        if (!isset(CConstantesMedicales::$list_constantes[$_constant]["cumul_in"])) {
+          CConstantesMedicales::$list_constantes[$_constant]["cumul_in"] = array();
+        }
+        
         if (empty($_params["formula"])) {
           CMbArray::insertAfterKey(CConstantesMedicales::$list_constantes, $_constant, "_{$_constant}_cumul", array(
             "cumul_for" => $_constant,
             "unit"      => $_params["unit"],
           ));
+          
+          CConstantesMedicales::$list_constantes[$_constant]["cumul_in"][] = "_{$_constant}_cumul";
+        }
+        else {
+          foreach($_params["formula"] as $_const => $_sign) {
+            CConstantesMedicales::$list_constantes[$_const]["cumul_in"][] = $_constant;
+          }
         }
       }
     }

@@ -104,6 +104,9 @@ Main.add(function(){
                 <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'{{tr}}CExClass.one{{/tr}}',objName:'{{$ex_class->_view|smarty:nodefaults|JSAttribute}}'})">
                   {{tr}}Delete{{/tr}}
                 </button>
+                <!--<button type="button" class="change" onclick="MbObject.export('{{$ex_class->_guid}}')">
+                  {{tr}}Export{{/tr}}
+                </button>-->
               {{else}}
                 <button type="submit" class="submit">{{tr}}Create{{/tr}}</button>
               {{/if}}
@@ -130,7 +133,11 @@ Main.add(function(){
   });
   
   exFieldGroupsTabs = Control.Tabs.create("field_groups", true);
-  $("exClassList").down("tr[data-ex_class_id={{$ex_class->_id}}]").addClassName("selected");
+  
+  var selected = $("exClassList").down("tr[data-ex_class_id={{$ex_class->_id}}]");
+  if (selected) {
+    selected.addClassName("selected");
+  }
 });
 
 toggleGroupLabelEdit = function(link) {
