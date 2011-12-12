@@ -73,6 +73,8 @@ class CFunctions extends CMbObject {
 	  $backProps["sigems_skipped"]                 = "CSigemsSkippedFunction function_id";
 	  $backProps["printers"]                       = "CPrinter function_id";
     $backProps["protocoles"]                     = "CProtocole function_id";
+    $backProps["ufs"]                            = "CAffectationUniteFonctionnelle object_id";
+    $backProps["destination_brancardage"]        = "CDestinationBrancardage object_id";
 	  return $backProps;
 	}
 	

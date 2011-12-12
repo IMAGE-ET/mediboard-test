@@ -274,6 +274,7 @@ class COperation extends CCodable implements IPatientRelated {
     $backProps["echanges_hprim"]           = "CEchangeHprim object_id";
     $backProps["echanges_ihe"]             = "CExchangeIHE object_id";
     $backProps["product_orders"]           = "CProductOrder object_id";
+    $backProps["op_brancardardage"]        = "CBrancardage operation_id";
     return $backProps;
   }
 
