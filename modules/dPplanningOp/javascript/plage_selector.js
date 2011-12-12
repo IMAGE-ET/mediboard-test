@@ -86,8 +86,12 @@ PlageOpSelector = {
     this.prepared.salle_id = salle_id;
     this.prepared.bAdm     = bAdm;
     this.prepared.sDate    = sDate;
+    
     if(!Object.isUndefined(hour_voulu) && hour_voulu != "" && !Object.isUndefined(min_voulu) && min_voulu != "") {
       this.prepared.sHoraireVoulu = hour_voulu+":"+min_voulu+":00";
+    }
+    else {
+      this.prepared.sHoraireVoulu = "";
     }
     
     // Lancement de l'execution du set
@@ -101,9 +105,10 @@ PlageOpSelector = {
    
     $V(oOpForm[PlageOpSelector.sPlage_id]    , PlageOpSelector.prepared.plage_id);
     $V(oOpForm[PlageOpSelector.sSalle_id]    , PlageOpSelector.prepared.salle_id);
-    if (PlageOpSelector.prepared.sHoraireVoulu) {
-      $V(oOpForm[PlageOpSelector.sHoraireVoulu], PlageOpSelector.prepared.sHoraireVoulu);
-    }
+    $V(oOpForm[PlageOpSelector.sHoraireVoulu], PlageOpSelector.prepared.sHoraireVoulu);
+    // Si seul l'horaire voulu est changé, le onchange sur la date n'est pas fait.
+    // Il faut donc le forcer
+    $V(oOpForm[PlageOpSelector.sDate],"");
     $V(oOpForm[PlageOpSelector.sDate]        , PlageOpSelector.prepared.sDate);
    
     if(PlageOpSelector.prepared.bAdm != "aucune"){ 
