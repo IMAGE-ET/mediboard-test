@@ -14,7 +14,7 @@ function getCurrentLit($sejour, $_date, $_hour, &$lits, &$affectations){
   if(!isset($affectations[$sejour->_id]["$_date $_hour:00:00"])){
     $sejour->loadRefCurrAffectation("$_date $_hour:00:00");
     $lit =& $sejour->_ref_curr_affectation->_ref_lit;
-		if($lit){
+    if($lit){
       $lits[$lit->_ref_chambre->nom] = $lit;
       $affectations[$sejour->_id]["$_date $_hour:00:00"] = $sejour->_ref_curr_affectation;
     }
@@ -26,7 +26,7 @@ function getCurrentLit($sejour, $_date, $_hour, &$lits, &$affectations){
     $lit->loadCompleteView();
   }
   return $lit;
-}			            
+}                  
 
 $periode       = CValue::get("periode");
 $service_id    = CValue::getOrSession("service_id");
@@ -38,12 +38,12 @@ $date          = CValue::getOrSession("date", mbDate());
 $do            = CValue::get("do");
 
 if($offline){
-	$by_patient = true;
-	$do = 1;
+  $by_patient = true;
+  $do = 1;
   $dateTime_min = mbDateTime(" - 12 HOURS");
-	$dateTime_max = mbDateTime(" + 24 HOURS");
+  $dateTime_max = mbDateTime(" + 24 HOURS");
 } else {
-	$dateTime_min = CValue::getOrSession("_dateTime_min", "$date 00:00:00");
+  $dateTime_min = CValue::getOrSession("_dateTime_min", "$date 00:00:00");
   $dateTime_max = CValue::getOrSession("_dateTime_max", "$date 23:59:59");
 }
 
@@ -101,27 +101,26 @@ $_transmissions = array();
 $_observations = array();
 $_constantes = array();
 
-$transmissions = array();
-$observations = array();
-$trans_obs = array();
+$trans_and_obs = array();
+$sejours_cache = array();
 
 if($do_trans){
   $where = array();
   $ljoin = array();
 
   $ljoin["sejour"] = "transmission_medicale.sejour_id = sejour.sejour_id";
-	$ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
+  $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
   $ljoin["lit"] = "affectation.lit_id = lit.lit_id";
   $ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
   $ljoin["service"] = "chambre.service_id = service.service_id";
   
   $where[] = "(degre = 'high') OR (date >= '$dateTime_min' AND date <= '$dateTime_max')";
-
-  $where[] = "(sejour.entree <= '$dateTime_min' OR sejour.entree BETWEEN '$dateTime_min' AND '$dateTime_max') AND
-                ((sejour.sortie BETWEEN '$dateTime_min' AND '$dateTime_max') OR (sejour.sortie >= '$dateTime_max'))";
-  $where[] = "(affectation.entree <= '$dateTime_min' OR affectation.entree BETWEEN '$dateTime_min' AND '$dateTime_max') AND
-                ((affectation.sortie BETWEEN '$dateTime_min' AND '$dateTime_max') OR (affectation.sortie >= '$dateTime_max'))";
-
+  
+  $where["sejour.entree"] = "<= '$dateTime_max'";
+  $where["sejour.sortie"] = " >= '$dateTime_min'";              
+  
+  $where["affectation.entree"] = "<= '$dateTime_max'";
+  $where["affectation.sortie"] = ">= '$dateTime_min'";
   $where["service.service_id"] = " = '$service_id'";
   
   if ($_present_only) {
@@ -132,8 +131,8 @@ if($do_trans){
 
   $transmission = new CTransmissionMedicale();
   $_transmissions = $transmission->loadList($where, $order_by, null, null, $ljoin);
-	
-	$ljoin["sejour"] = "observation_medicale.sejour_id = sejour.sejour_id";
+  
+  $ljoin["sejour"] = "observation_medicale.sejour_id = sejour.sejour_id";
   $observation = new CObservationMedicale();
   $_observations = $observation->loadList($where, $order_by, null, null, $ljoin);
   
@@ -148,88 +147,84 @@ if($do_trans){
   $_constantes = $constante->loadlist($where, $order_by, null, null, $ljoin);
 }
 
-$patients = array();
-$trans_and_obs = array();
+$sejours_massload = CMbObject::massLoadFwdRef($_transmissions, "sejour_id");
+CMbObject::massLoadFwdRef($sejours_massload, "patient_id");
+CMbObject::massLoadFwdRef($_transmissions, "user_id");
+
+$sejours_massload = CMbObject::massLoadFwdRef($_observations , "sejour_id");
+CMbObject::massLoadFwdRef($sejours_massload, "patient_id");
+CMbObject::massLoadFwdRef($_observations , "user_id");
+
+CMbObject::massLoadFwdRef($_constantes, "context_id", "CSejour");
 
 foreach($_transmissions as $_trans){
-	$_trans->loadRefSejour();
-	$sejour =& $_trans->_ref_sejour;
-	$sejour->loadRefsOperations();
-  $sejour->_ref_last_operation->loadRefPlageOp();
-  $sejour->_ref_last_operation->loadRefChir();
-  $sejour->loadRefsAffectations();
+  $_trans->loadRefsFwd();
+  $sejour = $_trans->_ref_sejour;
   
-  foreach($sejour->_ref_affectations as $_affectation) {
-    $_affectation->loadView();
+  if (!isset($sejours_cache[$sejour->_id])) {
+    $sejour->loadRefsOperations();
+    $sejour->_ref_last_operation->loadRefPlageOp(1);
+    $sejour->_ref_last_operation->loadRefChir(1);
+    $sejour->loadRefsAffectations();
+    $sejour->loadRefPatient()->loadRefConstantesMedicales();
+  
+    foreach($sejour->_ref_affectations as $_affectation) {
+      $_affectation->loadView();
+    }
+    
+    $sejour->_ref_last_operation->loadExtCodesCCAM();
+    $sejours_cache[$sejour->_id] = $sejour;
+  }
+  if($_trans->object_id){
+    $_trans->_ref_object->loadRefsFwd();
   }
   
-  $sejour->_ref_last_operation->loadExtCodesCCAM();
-		
-	$patient_id = $sejour->patient_id;
-
-	if(!array_key_exists($patient_id, $patients)){
-    $sejour->loadRefPatient();
-    $sejour->_ref_patient->loadRefConstantesMedicales();
-		$patients[$patient_id] = $sejour->_ref_patient;
-	}
-	$_trans->loadRefsFwd();
-	if($_trans->object_id){
-	  $_trans->_ref_object->loadRefsFwd();
-	}
-	
-	$trans_and_obs[$patient_id][$_trans->date][] = $_trans;
+  $trans_and_obs[$sejour->patient_id][$_trans->date][] = $_trans;
 }
 
 foreach($_observations as $_obs){
-  $_obs->loadRefSejour();
-	$sejour =& $_obs->_ref_sejour;
-  $sejour->loadRefsOperations();
-
-  $sejour->_ref_last_operation->loadRefPlageOp();
-  $sejour->_ref_last_operation->loadRefChir();
-  $sejour->loadRefsAffectations();
-  
-  foreach($sejour->_ref_affectations as $_affectation) {
-    $_affectation->loadView();
-  }
-  
-  $sejour->_ref_last_operation->loadExtCodesCCAM();
-  
-  $patient_id = $sejour->patient_id;
-  
-  if(!array_key_exists($patient_id, $patients)){
-    $sejour->loadRefPatient();
-    $sejour->_ref_patient->loadRefConstantesMedicales();
-    $patients[$patient_id] = $sejour->_ref_patient;
-  }
-
   $_obs->loadRefsFwd();
-
-	$trans_and_obs[$patient_id][$_obs->date][] = $_obs;
+  $sejour = $_obs->_ref_sejour;
+  
+  if (!isset($sejours_cache[$sejour->_id])) {
+    $sejour->loadRefsOperations();
+    $sejour->_ref_last_operation->loadRefPlageOp(1);
+    $sejour->_ref_last_operation->loadRefChir(1);
+    $sejour->loadRefsAffectations();
+    $sejour->loadRefPatient()->loadRefConstantesMedicales();
+    
+    foreach($sejour->_ref_affectations as $_affectation) {
+      $_affectation->loadView();
+    }
+    
+    $sejour->_ref_last_operation->loadExtCodesCCAM();
+    $sejours_cache[$sejour->_id] = $sejour;
+  }
+  
+  $trans_and_obs[$sejour->patient_id][$_obs->date][] = $_obs;
 }
 
 foreach($_constantes as $_constante) {
-  $_constante->loadRefsFwd();
+  $_constante->loadRefContext();
   $_constante->loadRefUser();
-  $sejour =& $_constante->_ref_context;
-  $sejour->loadRefsOperations();
-  $sejour->_ref_last_operation->loadRefPlageOp();
-  $sejour->_ref_last_operation->loadRefChir();
-  $sejour->loadRefsAffectations();
+  $sejour = $_constante->_ref_context;
   
-  foreach($sejour->_ref_affectations as $_affectation) {
-    $_affectation->loadView();
+  if (!isset($sejours_cache[$sejour->_id])) {
+    $sejour->loadRefsOperations();
+    $sejour->_ref_last_operation->loadRefPlageOp(1);
+    $sejour->_ref_last_operation->loadRefChir(1);
+    $sejour->loadRefsAffectations();
+    $sejour->loadRefPatient()->loadRefConstantesMedicales();
+    
+    foreach($sejour->_ref_affectations as $_affectation) {
+      $_affectation->loadView();
+    }
+    
+    $sejour->_ref_last_operation->loadExtCodesCCAM();
+    $sejours_cache[$sejour->_id] = $sejour;
   }
   
-  $sejour->_ref_last_operation->loadExtCodesCCAM();
-
-  $patient_id = $sejour->patient_id;
-  if(!array_key_exists($patient_id, $patients)){
-    $sejour->loadRefPatient();
-    $sejour->_ref_patient->loadRefConstantesMedicales();
-    $patients[$patient_id] = $sejour->_ref_patient;
-  }
-  $trans_and_obs[$patient_id][$_constante->datetime][] = $_constante;
+  $trans_and_obs[$sejour->patient_id][$_constante->datetime][] = $_constante;
 }
 
 // Tri des transmission, observations et constantes par date décroissante
@@ -238,78 +233,78 @@ foreach($trans_and_obs as &$_trans) {
 }
 
 if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols || $do_elements || $do_stupefiants)) {
-	// Chargement de toutes les prescriptions
-	$where = array();
-	$ljoin = array();
-	$ljoin["sejour"] = "prescription.object_id = sejour.sejour_id";
-	$ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
-	$ljoin["lit"] = "affectation.lit_id = lit.lit_id";
-	$ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
-	$ljoin["service"] = "chambre.service_id = service.service_id";
-	$where["prescription.type"] = " = 'sejour'";
+  // Chargement de toutes les prescriptions
+  $where = array();
+  $ljoin = array();
+  $ljoin["sejour"] = "prescription.object_id = sejour.sejour_id";
+  $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
+  $ljoin["lit"] = "affectation.lit_id = lit.lit_id";
+  $ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
+  $ljoin["service"] = "chambre.service_id = service.service_id";
+  $where["prescription.type"] = " = 'sejour'";
   $where["sejour.entree"]      = " <= '$date_max 23:59:59'";
   $where["sejour.sortie"]      = " >= '$date_min 00:00:00'"; 
 
   if ($_present_only == "true") {
     $where["sejour.sortie_reelle"] = 'IS NULL';
   }
-	
-	$where["service.service_id"] = " = '$service_id'";
-	$orderby = "chambre.nom";
-	$prescription = new CPrescription();
-	$prescriptions = $prescription->loadList($where, $orderby, null, null, $ljoin);
-	
-	$lines = array();
-	$lines["med"] = array();
-	$lines["elt"] = array();
-	foreach($prescriptions as $_prescription){
-	  // Chargement des lignes
-	  $_prescription->loadRefsLinesMed("1","1","service");
-		if ($do_elements) {
-	    $_prescription->loadRefsLinesElementByCat("1","1","","service");
-	  }
-	  if($do_perfusions || $do_aerosols || $do_stupefiants){
-	    $_prescription->loadRefsPrescriptionLineMixes();
-	  }
-		// Calcul du plan de soin
-	  $_prescription->calculPlanSoin($dates);
-	  
-	  // Chargement du sejour et du patient
-	  $sejour =& $_prescription->_ref_object;
-	  
-	  // Si les transmissions ont été requêtées,
-	  // alors le loadRefsOperations peut avoir déjà été fait
-	  if (!isset($sejour->_ref_operations)) {
-	    $sejour->loadRefsOperations();
-	    $sejour->_ref_last_operation->loadRefPlageOp();
-	    $sejour->_ref_last_operation->loadExtCodesCCAM();
-	  }
-
-	  // Stockage de la liste des patients
-	  $sejours[$sejour->_id] = $sejour;
-	  $sejour->loadRefPatient();
-	  $patient =& $sejour->_ref_patient;
-	  $patient->loadRefConstantesMedicales();
-	  
-	  if($do_medicaments || $do_injections || $do_perfusions || $do_aerosols || $do_stupefiants){
-	    if($do_perfusions || $do_aerosols || $do_stupefiants){
-				// Parcours et stockage des prescription_line_mixes
-		    if($_prescription->_ref_prescription_line_mixes_for_plan){
-		      foreach($_prescription->_ref_prescription_line_mixes_for_plan as $_prescription_line_mix){
-		      	if($_prescription_line_mix->type_line == "aerosol" && !$do_aerosols && !$do_stupefiants){
-		      		continue;
-		      	}
-						if($_prescription_line_mix->type_line == "perfusion" && !$do_perfusions && !$do_stupefiants){
+  
+  $where["service.service_id"] = " = '$service_id'";
+  $orderby = "chambre.nom";
+  $prescription = new CPrescription();
+  $prescriptions = $prescription->loadList($where, $orderby, null, null, $ljoin);
+  
+  $lines = array();
+  $lines["med"] = array();
+  $lines["elt"] = array();
+  
+  foreach($prescriptions as $_prescription){
+    // Chargement des lignes
+    $_prescription->loadRefsLinesMed("1","1","service");
+    if ($do_elements) {
+      $_prescription->loadRefsLinesElementByCat("1","1","","service");
+    }
+    if($do_perfusions || $do_aerosols || $do_stupefiants){
+      $_prescription->loadRefsPrescriptionLineMixes();
+    }
+    // Calcul du plan de soin
+    $_prescription->calculPlanSoin($dates);
+    
+    // Chargement du sejour et du patient, si nécessaire
+    $sejour = $_prescription->_ref_object;
+    
+    if (!isset($sejours_cache[$sejour->_id])) {
+      $sejour->loadRefsOperations();
+      $sejour->_ref_last_operation->loadRefPlageOp(1);
+      $sejour->_ref_last_operation->loadExtCodesCCAM();
+      $sejour->loadRefPatient()->loadRefConstantesMedicales();
+    }
+    else {
+      $sejour = $sejours_cache[$sejour->_id];
+    }
+    
+    // Stockage de la liste des patients
+    $sejours[$sejour->_id] = $sejour;
+    
+    if($do_medicaments || $do_injections || $do_perfusions || $do_aerosols || $do_stupefiants){
+      if($do_perfusions || $do_aerosols || $do_stupefiants){
+        // Parcours et stockage des prescription_line_mixes
+        if($_prescription->_ref_prescription_line_mixes_for_plan){
+          foreach($_prescription->_ref_prescription_line_mixes_for_plan as $_prescription_line_mix){
+            if($_prescription_line_mix->type_line == "aerosol" && !$do_aerosols && !$do_stupefiants){
               continue;
             }
-						if($_prescription_line_mix->type_line == "oxygene"){
-							continue;
-						}
+            if($_prescription_line_mix->type_line == "perfusion" && !$do_perfusions && !$do_stupefiants){
+              continue;
+            }
+            if($_prescription_line_mix->type_line == "oxygene"){
+              continue;
+            }
             
             $list_lines[$_prescription_line_mix->_class][$_prescription_line_mix->_id] = $_prescription_line_mix;
-		        // Prises prevues
-		        if(is_array($_prescription_line_mix->_prises_prevues)){
-	            foreach($_prescription_line_mix->_prises_prevues as $_date => $_prises_prevues_by_hour){
+            // Prises prevues
+            if(is_array($_prescription_line_mix->_prises_prevues)){
+              foreach($_prescription_line_mix->_prises_prevues as $_date => $_prises_prevues_by_hour){
                 foreach($_prises_prevues_by_hour as $_hour => $_prise_prevue){
                   $dateTimePrise = "$_date $_hour:00:00";
                   if($dateTimePrise < $dateTime_min || $dateTimePrise > $dateTime_max){
@@ -590,14 +585,10 @@ foreach($cat_groups as $_cat_group){
     $all_groups[$_cat_group->_id][] = $_item->category_prescription_id ? $_item->category_prescription_id : $_item->type_produit;
   }
 }
+
 // Chargement du service
 $service = new CService();
 $service->load($service_id);
-
-
-
-
-
 
 $smarty = new CSmartyDP();
 $smarty->assign("trans_and_obs"   , $trans_and_obs);
