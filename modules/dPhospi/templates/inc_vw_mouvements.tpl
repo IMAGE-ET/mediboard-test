@@ -1,10 +1,10 @@
 <script type="text/javascript">
   Main.add(function() {
     var view_affectations = $("view_affectations");
-    view_affectations.select(".droppable").each(function(th) {
-       Droppables.add(th, {
-        onDrop: function(div, th, event) {
-          var lit_id = th.get("lit_id");
+    view_affectations.select(".droppable").each(function(tr) {
+       Droppables.add(tr, {
+        onDrop: function(div, tr, event) {
+          var lit_id = tr.get("lit_id");
           
           // Création d'une affectation pour bloquer un lit
           if (div.id == "lit_bloque") {
@@ -119,8 +119,8 @@
                       {{assign var=_affectation value=$affectations.$_affectation_id}}
                       {{assign var=_sejour value=$_affectation->_ref_sejour}}
                       {{assign var=_patient value=$_sejour->_ref_patient}}
-                      {{math equation=x*(y+4) x=$_affectation->_entree_offset y=$td_width assign=offset}}
-                      {{math equation=x*(y+5) x=$_affectation->_width y=$td_width assign=width}} 
+                      {{math equation=x*(y+4.6) x=$_affectation->_entree_offset y=$td_width assign=offset}}
+                      {{math equation=x*(y+4.6) x=$_affectation->_width y=$td_width assign=width}} 
                       
                       <div id="affectation_{{$_affectation->_id}}" data-affectation_id="{{$_affectation->_id}}" data-lit_id="{{$_affectation->lit_id}}"
                        class="affectation{{if $vue == "compacte"}}_compact{{/if}} opacity-90 draggable
@@ -152,8 +152,8 @@
                             {{/if}}
                           </span>
                           {{foreach from=$_sejour->_ref_operations item=_operation}}
-                            {{math equation=x*(y+4) x=$_operation->_debut_offset y=$td_width assign=offset_op}}
-                            {{math equation=x*(y+5) x=$_operation->_width y=$td_width assign=width_op}}
+                            {{math equation=x*(y+4.6) x=$_operation->_debut_offset y=$td_width assign=offset_op}}
+                            {{math equation=x*(y+4.6) x=$_operation->_width y=$td_width assign=width_op}}
                             <div class="operation_in_mouv"
                               style="left: {{$offset_op}}px; width: {{$width_op}}px; top: {{if $vue == "classique"}}0.8{{else}}0.2{{/if}}em;"
                               onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}');">

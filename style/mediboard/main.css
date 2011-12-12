@@ -1823,24 +1823,21 @@ div.clit_bloque {
   color: #fff;
 }
 
-div.wrapper_line {
+div.wrapper_line, div.wrapper_op {
   position: relative;
   height: 2em;
   margin-bottom: 8px;
-  z-index: 1;
 }
 
 div.wrapper_line_compact {
   position: relative;
   height: 1.1em;
   margin-bottom: 8px;
-  z-index: 1;
 }
 
 td.mouvement_lit {
   padding-bottom: 2px;
   padding-top: 0;
-  border-right: 1px solid #aaa;
 }
 
 div.affectation, div.affect_legend {
@@ -1875,9 +1872,12 @@ div.fin_sejour {
   border-right: 4px solid #5a5 !important;
 }
 
-th.lit_hover {
-  z-index: 1;
-  outline: 3px solid #800;
+tr.lit_hover td {
+  background: #ccc !important;
+}
+
+div.non_affectes_hover {
+  background: #ccc !important;
 }
 
 div.sejour_non_affecte {
@@ -1886,5 +1886,14 @@ div.sejour_non_affecte {
   margin: 2px;
   height: 2.5em;
   border: 1px solid #aaa;
+  overflow: hidden;
   vertical-align: top; 
+}
+
+div.operation_in_mouv {
+  position: absolute;
+  height: 0.5em;
+  border: 1px solid #000;
+  background: #bbb;
+  margin: 2px;
 }

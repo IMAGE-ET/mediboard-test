@@ -3,9 +3,13 @@
     starteffect: function(element) {
       new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 });
       // Si le patient n'est pas placé, on redimensionne la div à la largeur du séjour
-      if (!element.get("lit_id")) {
-        element.setStyle({width: (element.get("width")*45 - 5)+"px"});
-      } 
+      var width = element.get("width");
+      var lit_id = element.get("lit_id");
+      
+      // Pour les admissions de la veille, la width est négative.
+      if (!lit_id && width > 0) {
+        element.setStyle({width: (width*45 - 5)+"px"});
+      }
     },
     endeffect: function(element) {
       var toOpacity = Object.isNumber(element._opacity) ? element._opacity : 1.0;
@@ -19,7 +23,9 @@
         element.setStyle({width: "15em"});
       }
     },
-    revert: true,
+    revert: "true",
+    // Permet de scroller en draggant une affectation sur le haut ou le bas de la div contenant le planning
+    scroll: "view_affectations"
   };
 
    loadNonPlaces = function() {
@@ -143,7 +149,7 @@
     Granularité :
     {{foreach from=$granularites item=_granularite}}
       <label>    
-        <input type="radio" name="granularite" value="{{$_granularite}}" onchange="refreshMouvements();"
+        <input type="radio" name="granularite" value="{{$_granularite}}" onclick="refreshMouvements();"
           {{if $_granularite == $granularite}}checked="checked"{{/if}} />
           {{tr}}CService-granularite-{{$_granularite}}{{/tr}}
       </label>
@@ -153,7 +159,7 @@
     
     Date :
     <input type="hidden" class="date" name="date" value="{{$date}}"
-      onchange="$V(this.form.date_da, new Date($V(this)).toLocaleDate()); refreshMouvements(loadNonPlaces); ">
+      onchange="$V(this.form.date_da, new Date(Date.fromDATE($V(this))).toLocaleDate()); refreshMouvements(loadNonPlaces); ">
     <input type="text" readonly="readonly" name="date_da" />
     
     &mdash;
