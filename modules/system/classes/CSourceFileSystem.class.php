@@ -12,7 +12,8 @@ class CSourceFileSystem extends CExchangeSource {
   // DB Table key
   var $source_file_system_id = null;
   
-  var $fileextension = null;
+  var $fileextension           = null;
+  var $fileextension_write_end = null;
   
   // Form fields
   var $_path  = null;
@@ -28,7 +29,8 @@ class CSourceFileSystem extends CExchangeSource {
 
   function getProps() {
     $specs = parent::getProps();
-    $specs["fileextension"] = "str";
+    $specs["fileextension"]           = "str";
+    $specs["fileextension_write_end"] = "str";
     return $specs;
   }
 
@@ -74,7 +76,16 @@ class CSourceFileSystem extends CExchangeSource {
       throw new CMbException("CSourceFileSystem-path-not-writable", $path);
     }
     
-    return file_put_contents($file_path, $this->_data);
+    if ($this->fileextension_write_end) {
+      file_put_contents($file_path, $this->_data);
+      
+      $pos = strrpos($file_path, ".");
+      
+      return file_put_contents(substr($file_path, 0, $pos).$this->fileextension_write_end, "");
+    }
+    else {
+      return file_put_contents($file_path, $this->_data);
+    }
   }
   
   function getData($path) {

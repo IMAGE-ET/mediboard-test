@@ -18,7 +18,7 @@
 
 class CExchangeIHE extends CExchangeTabular {
   static $messages = array(
-    "PAM"   => "CPAM",
+    "PAM"    => "CPAM",
     "PAM_FR" => "CPAMFR",
   );
   
@@ -81,7 +81,7 @@ class CExchangeIHE extends CExchangeTabular {
     $hl7_message->parse($data, false);
     
     $hl7_message_evt = "CHL7Event$hl7_message->event_name";
-
+    
     foreach ($this->getFamily() as $_message) {
       $message_class = new $_message;
       $evenements = $message_class->getEvenements();

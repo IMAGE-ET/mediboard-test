@@ -871,7 +871,13 @@ class CSetupsystem extends CSetup {
               ADD `coord_field_rowspan` TINYINT (4) UNSIGNED NOT NULL DEFAULT '1' AFTER `coord_field_colspan`";
     $this->addQuery($query);
     */
+    
+    $this->makeRevision("1.0.89");
+    
+    $query = "ALTER TABLE `source_file_system` 
+                ADD `fileextension_write_end` VARCHAR (255);";
+    $this->addQuery($query);
         
-    $this->mod_version = "1.0.89";
+    $this->mod_version = "1.0.90";
   }
 }

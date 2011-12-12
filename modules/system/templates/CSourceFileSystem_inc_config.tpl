@@ -31,6 +31,11 @@
             <th>{{mb_label object=$source field="fileextension"}}</th>
             <td>{{mb_field object=$source field="fileextension"}}</td>
           </tr>
+          
+          <tr>
+            <th>{{mb_label object=$source field="fileextension_write_end"}}</th>
+            <td>{{mb_field object=$source field="fileextension_write_end"}}</td>
+          </tr>
 
           <tr>
             <td class="button" colspan="2">
