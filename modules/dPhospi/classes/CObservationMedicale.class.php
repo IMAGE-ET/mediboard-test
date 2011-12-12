@@ -54,14 +54,13 @@ class CObservationMedicale extends CMbObject {
   }
 	
   function loadRefSejour(){
-    $this->_ref_sejour = new CSejour;
-    $this->_ref_sejour = $this->_ref_sejour->getCached($this->sejour_id);
+    return $this->_ref_sejour = $this->loadFwdRef("sejour_id", true);
   }
   
   function loadRefUser(){
-    $this->_ref_user = new CMediusers;
-    $this->_ref_user = $this->_ref_user->getCached($this->user_id);
-		$this->_ref_user->loadRefFunction();
+    $this->_ref_user = $this->loadFwdRef("user_id", true);
+    $this->_ref_user->loadRefFunction();
+    return $this->_ref_user;
   }
   
   function loadRefsFwd() {
