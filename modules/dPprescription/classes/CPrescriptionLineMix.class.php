@@ -506,20 +506,20 @@ class CPrescriptionLineMix extends CMbObject {
       $max_debit = $current_debit ? $current_debit : 1;
       
       $variation_id = "perf";
-      
-      if($this->_debut != $_date){
+      		
+			if($this->_debut != $_date){
         $_variations[$_date][mbTime($_date)]["debit"] = '';
         $_variations[$_date][mbTime($_date)]["variation_id"] = "perf";
-        
         $_variations[$_date][mbTime($this->_debut)]["debit"] = $this->_debit;
         $_variations[$_date][mbTime($this->_debut)]["variation_id"] = "perf";
-        
-        $_date = mbDateTime("+ 1 hour", $_date);
       }
       
       while($_date <= $this->_fin){
-        $_variations[$_date][mbTime($_date)]["debit"] = $current_debit;
-        $_variations[$_date][mbTime($_date)]["variation_id"] = $variation_id;
+        if(!isset($_variations[$_date][mbTime($_date)])){
+          $_variations[$_date][mbTime($_date)]["debit"] = $current_debit;
+          $_variations[$_date][mbTime($_date)]["variation_id"] = $variation_id;
+        }
+				
         foreach($this->_ref_variations as $_variation){
            if($_variation->dateTime >= $_date && $_variation->dateTime < mbDateTime("+ 1 hour", $_date)){
               $current_debit = $_variation->debit;
@@ -560,7 +560,6 @@ class CPrescriptionLineMix extends CMbObject {
       }
       $this->_variations = $_variations;
     } 
-    
   }
   
   function loadView() {
