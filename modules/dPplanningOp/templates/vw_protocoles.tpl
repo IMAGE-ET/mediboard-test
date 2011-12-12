@@ -51,6 +51,7 @@ refreshList = function(form, types, reset) {
   url.addParam("page[sejour]", $V(form["page[sejour]"]));
   url.addParam("chir_id", $V(form.chir_id));
   url.addParam("dialog", $V(form.dialog));
+  url.addParam("function_id", $V(form.function_id));
   url.addParam("sejour_type", "{{$sejour_type}}");
   
   types.each(function(type){
@@ -115,19 +116,24 @@ Main.add(function(){
           <tr>
             <th><label for="chir_id" title="Filtrer les protocoles d'un praticien">Praticien</label></th>
             <td>
-              <select name="chir_id" onchange="reloadPage(this.form)">
+              <select name="chir_id" onchange="if (this.form.function_id) {this.form.function_id.selectedIndex=0;} reloadPage(this.form);">
+                <option value="0">&mdash; Choisissez un praticien</option>
                 {{foreach from=$listPrat item=curr_prat}}
                 <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}}; {{if !$curr_prat->_ref_protocoles|@count}}color: #999;{{/if}}"
-                        value="{{$curr_prat->user_id}}" {{if $chir_id == $curr_prat->user_id}} selected="selected" {{/if}}>
+                        value="{{$curr_prat->user_id}}" {{if ($chir_id == $curr_prat->user_id) && !$function_id}} selected="selected" {{/if}}>
                   {{$curr_prat->_view}} ({{$curr_prat->_ref_protocoles|@count}})
                 </option>
                 {{/foreach}}
               </select>
+            </td>
+            <th><label for="prat_id" title="Filtrer les protocoles d'une fonction">Fonction</label></th>
+            <td>
               {{if $can->admin}}
-              <select name="function_id" onchange="reloadPage(this.form)">
+              <select name="function_id" onchange="if (this.form.chir_id) { this.form.selectedIndex=0; } reloadPage(this.form);">
+                <option value="0">&mdash; Choisissez une fonction</option>
                 {{foreach from=$listFunc item=curr_function}}
                 <option class="mediuser" style="border-color: #{{$curr_function->color}}; {{if !$curr_function->_ref_protocoles|@count}}color: #999;{{/if}}"
-                        value="{{$curr_function->_id}}">
+                        value="{{$curr_function->_id}}" {{if $curr_function->_id == $function_id}}selected="selected"{{/if}}>
                   {{$curr_function->_view}} ({{$curr_function->_ref_protocoles|@count}})
                 </option>
                 {{/foreach}}

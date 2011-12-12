@@ -20,7 +20,7 @@ $mediuser = CMediusers::get();
 $chir_id  = CValue::getOrSession("chir_id", $mediuser->isPraticien() ? $mediuser->user_id : null);
 $chir     = new CMediusers();
 $chir->load($chir_id);
-
+$function_id  = CValue::getOrSession("function_id");
 $type         = CValue::getOrSession("type", "interv"); 
 $page         = CValue::get("page");
 $sejour_type  = CValue::get("sejour_type");
@@ -37,6 +37,9 @@ if($chir->_id) {
   }
   $list_functions = implode(",", $functions);
   $where [] = "protocole.chir_id = '$chir->_id' OR protocole.function_id IN ($list_functions)";
+}
+else {
+  $where["function_id"] = " = '$function_id'";
 }
 
 $where["for_sejour"] = $type == 'interv' ? "= '0'" : "= '1'";

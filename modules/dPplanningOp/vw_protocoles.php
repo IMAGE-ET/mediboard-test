@@ -20,6 +20,7 @@ $mediuser      = CAppUI::$instance->_ref_user;
 $is_praticien  = $mediuser->isPraticien();
 $listPrat      = $mediuser->loadPraticiens(PERM_EDIT);
 $chir_id       = CValue::getOrSession("chir_id", $is_praticien ? $mediuser->user_id : reset($listPrat)->_id);
+$function_id   = CValue::getOrSession("function_id");
 $_function     = new CFunctions();
 $listFunc      = $_function->loadSpecialites(PERM_EDIT);
 $type          = CValue::getOrSession("type", "interv");
@@ -48,7 +49,7 @@ $smarty->assign("chir_id"     , $chir_id);
 $smarty->assign("mediuser"    , $mediuser);
 $smarty->assign("sejour_type" , $sejour_type);
 $smarty->assign("is_praticien", $is_praticien);
-
+$smarty->assign("function_id" , $function_id);
 $smarty->display("vw_protocoles.tpl");
 
 ?>
