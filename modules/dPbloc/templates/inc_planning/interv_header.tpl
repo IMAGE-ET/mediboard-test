@@ -9,7 +9,6 @@
 *}}
 
 <!-- Intervention -->
-<th>Heure</th>
 <th>Intervention</th>
 <th>Coté</th>
 <th>Anesthésie</th>

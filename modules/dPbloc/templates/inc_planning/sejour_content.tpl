@@ -28,6 +28,6 @@
 		    {{if $affectation->_id}}
 		    {{$affectation->_ref_lit->_view}}
 		    {{else}}
-		    Non placé
+		    &mdash;
 		    {{/if}}
 		  </td>

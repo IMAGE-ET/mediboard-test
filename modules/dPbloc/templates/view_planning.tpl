@@ -67,6 +67,7 @@
     </td>
   </tr>
   <tr>
+    <th class="title"></th>
     {{assign var="col1" value=$conf.dPbloc.CPlageOp.planning.col1}}
     {{assign var="col2" value=$conf.dPbloc.CPlageOp.planning.col2}}
     {{assign var="col3" value=$conf.dPbloc.CPlageOp.planning.col3}}
@@ -78,6 +79,7 @@
   </tr>
   <tr>
     {{assign var=suffixe value="_header.tpl"}}
+    <th>Heure</th>
     {{include file=inc_planning/$col1$suffixe}}
     {{include file=inc_planning/$col2$suffixe}}
     {{include file=inc_planning/$col3$suffixe}}
@@ -89,6 +91,18 @@
   {{/if}}
   {{foreach from=$listOperations item=curr_op}}
   <tr>
+    {{if $curr_op->annulee}}
+      <td class="cancelled">ANNULEE</td>
+    {{elseif $curr_op->rank || !$curr_op->plageop_id}}
+      <td class="text">
+        {{if $curr_plageop|is_array && $curr_op->salle_id}}
+          {{$curr_op->_ref_salle->_view}} à
+        {{/if}}
+        {{$curr_op->time_operation|date_format:$conf.time}}
+      </td>
+    {{else}}
+      <td>NP</td>
+    {{/if}}
     {{assign var=sejour value=$curr_op->_ref_sejour}}
     {{assign var=patient value=$sejour->_ref_patient}}
     {{assign var=suffixe value="_content.tpl"}}
