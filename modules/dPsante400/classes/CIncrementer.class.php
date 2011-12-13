@@ -84,7 +84,8 @@ class CIncrementer extends CMbObject {
   static function getVars(CMbObject $object) {
     $vars = $object->getIncrementVars();
     $default_vars = array(
-      "year" => mbTransformTime(null, null, "%Y"),
+      "YYYY" => mbTransformTime(null, null, "%Y"),
+      "YY"   => mbTransformTime(null, null, "%y"),
     );
     $vars = array_merge($vars, $default_vars);
     
@@ -95,7 +96,7 @@ class CIncrementer extends CMbObject {
     $vars = self::getVars($object);
     
     foreach ($vars as $_var => $_value) {
-      $value = str_replace("[$_var]", $_value, $value); 
+      $pattern = str_replace("[$_var]", $_value, $pattern); 
     } 
     
     return sprintf($pattern, $value);
