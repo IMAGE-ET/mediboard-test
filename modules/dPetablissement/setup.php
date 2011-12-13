@@ -133,7 +133,15 @@ class CSetupdPetablissement extends CSetup {
       CHANGE `codage_prat` `codage_prat` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.25";
+    $this->makeRevision("0.25");
+    $query = "ALTER TABLE `groups_config` 
+                ADD `sip_notify_all_actors` ENUM ('0','1') DEFAULT '0',
+                ADD `sip_idex_generator` ENUM ('0','1') DEFAULT '0',
+                ADD `smp_notify_all_actors` ENUM ('0','1') DEFAULT '0',
+                ADD `smp_idex_generator` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.26";
   } 
 }
 

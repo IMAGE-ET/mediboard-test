@@ -17,9 +17,17 @@ class CGroupsConfig extends CMbObject {
   var $max_comp    = null;
   var $max_ambu    = null;
   var $codage_prat = null;
+  
   var $dPpatients_CPatient_nom_jeune_fille_mandatory = null;
-  var $dPplanningOp_COperation_DHE_mode_simple = null;
+  
+  var $dPplanningOp_COperation_DHE_mode_simple       = null;
+  
   var $ecap_CRPU_notes_creation = null;
+  
+  var $sip_notify_all_actors = null;
+  var $sip_idex_generator    = null;
+  var $smp_notify_all_actors = null;
+  var $smp_idex_generator    = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -36,9 +44,18 @@ class CGroupsConfig extends CMbObject {
     $specs["max_comp"]    = "num min|0";
     $specs["max_ambu"]    = "num min|0";
     $specs["codage_prat"] = "bool default|0";
+    
     $specs["dPpatients_CPatient_nom_jeune_fille_mandatory"] = "bool default|0";
+    
     $specs["dPplanningOp_COperation_DHE_mode_simple"]       = "bool default|0";
-    $specs["ecap_CRPU_notes_creation"]                      = "bool default|0";
+    
+    $specs["ecap_CRPU_notes_creation"] = "bool default|0";
+    
+    $specs["sip_notify_all_actors"] = "bool default|0";
+    $specs["sip_idex_generator"]    = "bool default|0";
+    $specs["smp_notify_all_actors"] = "bool default|0";
+    $specs["smp_idex_generator"]    = "bool default|0";
+    
     return $specs;
   }
 }
