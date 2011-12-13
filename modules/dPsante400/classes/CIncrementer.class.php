@@ -69,12 +69,12 @@ class CIncrementer extends CMbObject {
     $id400->tag          = $tag;
     $id400->id400        = $format_value;
     $id400->last_update  = mbDateTime();
-    mbLog($id400->store());
+    $id400->store();
     
     // Incrementation de l'idex
     $incrementer->value++;
     $incrementer->last_update = mbDateTime();
-    mbLog($incrementer->store());
+    $incrementer->store();
 
     $mutex->release();
 
