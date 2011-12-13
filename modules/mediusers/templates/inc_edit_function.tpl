@@ -22,7 +22,8 @@
         {{mb_include module=system template=inc_object_notes      object=$function}}
         {{mb_include module=system template=inc_object_idsante400 object=$function}}
         {{mb_include module=system template=inc_object_history    object=$function}}
-        {{tr}}CFunctions-title-modify{{/tr}} '{{$function}}'
+        {{mb_include module=system template=inc_object_uf         object=$function}}
+        {{tr}}CFunctions-title-modify{{/tr}} '{{$function}}'  
       </th>
       {{else}}
       <th class="title" colspan="2">

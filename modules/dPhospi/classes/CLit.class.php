@@ -45,6 +45,7 @@ class CLit extends CMbObject {
     $backProps = parent::getBackProps();
     $backProps["affectations"]     = "CAffectation lit_id";
     $backProps["affectations_rpu"] = "CRPU box_id";
+    $backProps["ufs"]              = "CAffectationUniteFonctionnelle object_id";
     return $backProps;
   }
 

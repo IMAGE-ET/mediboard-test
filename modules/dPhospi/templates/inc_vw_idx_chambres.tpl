@@ -69,6 +69,7 @@
         {{mb_include module=system object=$chambre template=inc_object_notes     }}
         {{mb_include module=system object=$chambre template=inc_object_idsante400}}
         {{mb_include module=system object=$chambre template=inc_object_history   }}
+        {{mb_include module=system object=$chambre template=inc_object_uf        }}
         {{tr}}CChambre-title-modify{{/tr}} '{{$chambre}}'
       {{else}}
       <th class="title text" colspan="2">
@@ -132,9 +133,10 @@
     {{foreach from=$chambre->_ref_lits item=_lit}}
     <tr {{if $lit->_id == $_lit->_id}} class="selected" {{/if}}>
       <td>
-        {{mb_include module=system template=inc_object_notes object=$_lit}}
+        {{mb_include module=system template=inc_object_notes      object=$_lit}}
         {{mb_include module=system template=inc_object_idsante400 object=$_lit}}
         {{mb_include module=system template=inc_object_history    object=$_lit}}
+        {{mb_include module=system template=inc_object_uf         object=$_lit }}
         <a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$_lit->chambre_id}}&amp;lit_id={{$_lit->_id}}">
           {{$_lit}}
         </a>

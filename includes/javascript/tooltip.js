@@ -242,6 +242,12 @@ Object.extend(ObjectTooltip, {
       action: "httpreq_vw_object_notes",
       sClass: "tooltip postit"
     },
+
+    objectUFs: {
+      module: "dPhospi",
+      action: "httpreq_vw_object_ufs",
+      sClass: "tooltip"
+    },
     dom: {
       sClass: "tooltip"
     }

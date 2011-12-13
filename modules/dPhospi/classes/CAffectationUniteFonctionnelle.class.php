@@ -15,8 +15,6 @@ class CAffectationUniteFonctionnelle extends CMbMetaObject {
   
   // DB Fields
   var $uf_id = null;
-  var $debut = null;
-  var $fin   = null;
   
   // References
   var $_ref_uf = null;
@@ -25,6 +23,7 @@ class CAffectationUniteFonctionnelle extends CMbMetaObject {
     $spec = parent::getSpec();
     $spec->table = 'affectation_uf';
     $spec->key   = 'affectation_uf_id';
+    $spec->uniques['unique']= array("object_class", "object_id", "uf_id");
     return $spec;
   }
 
@@ -32,14 +31,12 @@ class CAffectationUniteFonctionnelle extends CMbMetaObject {
   	$props = parent::getProps();
     $props["uf_id"]        = "ref class|CUniteFonctionnelle notNull";
     $props["object_id"]    = "ref class|CMbObject meta|object_class cascade notNull";
-  	$props["object_class"] = "enum list|CSejour|Clit|CMediuser show|0 notNull";
-    $props["debut"]        = "dateTime";
-    $props["fin"]          = "dateTime";
+  	$props["object_class"] = "enum list|CService|CChambre|CLit|CMediusers|CFunctions show|0 notNull";
     return $props;
   }
   
   function loadRefUniteFonctionnelle(){
-    return $this->_ref_uf = $this->loadFwdRef("unite_fonctionnelle_id", true);
+    return $this->_ref_uf = $this->loadFwdRef("uf_id", true);
   }
   
   function loadRefsFwd() {

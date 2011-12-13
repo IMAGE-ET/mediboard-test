@@ -396,7 +396,15 @@ class CSetupdPhospi extends CSetup {
                 ADD INDEX (`uf_soins_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.48";
+    $this->makeRevision("0.48");
+    
+    $query = "ALTER TABLE `affectation_uf`
+                DROP `debut`,
+                DROP `fin`,
+                CHANGE `object_class` `object_class` ENUM ('CService','CChambre','CLit','CMediusers','CFunctions') NOT NULL;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.49";
   }
 }
 ?>

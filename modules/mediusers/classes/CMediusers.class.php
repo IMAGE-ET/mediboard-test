@@ -251,6 +251,7 @@ class CMediusers extends CMbObject {
     $backProps["frais_divers"]                    = "CFraisDivers executant_id";
     $backProps["expediteur_ftp"]                  = "CSenderFTP user_id";
     $backProps["expediteur_soap"]                 = "CSenderSOAP user_id";
+    $backProps["ufs"]                             = "CAffectationUniteFonctionnelle object_id";
     return $backProps;
   }
    

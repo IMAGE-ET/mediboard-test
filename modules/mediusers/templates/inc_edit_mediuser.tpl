@@ -59,7 +59,8 @@ Main.add(function () {
       {{if $object->_id}}
       <th class="title modify text" colspan="2">
         {{mb_include module=system template=inc_object_idsante400 object=$object}}
-        {{mb_include module=system template=inc_object_history object=$object}}
+        {{mb_include module=system template=inc_object_history    object=$object}}
+        {{mb_include module=system template=inc_object_uf         object=$object}}
         {{tr}}CMediusers-title-modify{{/tr}} 
         '{{$object->_user_username}}'
       </th>

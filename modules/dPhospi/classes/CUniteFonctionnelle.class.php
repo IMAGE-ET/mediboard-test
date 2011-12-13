@@ -26,7 +26,8 @@ class CUniteFonctionnelle extends CMbObject {
   // Distant references
   var $_ref_praticiens = null;
   var $_ref_lits       = null;
-  var $_ref_sejours    = null;
+  var $_ref_chambre    = null;
+  var $_ref_service    = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -47,6 +48,9 @@ class CUniteFonctionnelle extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["affectations_uf"] = "CAffectationUniteFonctionnelle uf_id";
+    $backProps["affectations_hebergement"]  = "CAffectation uf_hebergement_id";
+    $backProps["affectations_medical"]  = "CAffectation uf_medicale_id";
+    $backProps["affectations_soin"]  = "CAffectation uf_soins_id";
     return $backProps;
   }
   
