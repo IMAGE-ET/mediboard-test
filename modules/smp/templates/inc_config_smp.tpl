@@ -8,15 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if $conf.smp.server}}
-  <script type="text/javascript">
-    ElementChecker.check.dontMatch = function(){
-      this.assertMultipleArgs("dontMatch");
-      if (this.sValue.match(new RegExp(this.oProperties["dontMatch"])))
-        this.addError("dontMatch", "Doit pas contenir $g en mode SMP");
-    }.bind(ElementChecker);
-  </script>
-{{/if}}
+<script type="text/javascript">
+  ElementChecker.check.dontMatch = function(){
+    this.assertMultipleArgs("dontMatch");
+    if (this.sValue.match(new RegExp(this.oProperties["dontMatch"])))
+      this.addError("dontMatch", "Doit pas contenir $g en mode SMP");
+  }.bind(ElementChecker);
+</script>
 
 <form name="editConfigSMP" action="?" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="dosql" value="do_configure" />
@@ -35,11 +33,7 @@
         
     {{mb_include module=system template=inc_config_bool var=server}}
     
-    {{if $conf.smp.server}}
-      {{mb_include module=system template=inc_config_str var=tag_dossier cssClass="str dontMatch"}}
-      
-      {{mb_include module=system template=inc_config_bool var=notify_all_destinataires"}}
-    {{/if}}
+    {{mb_include module=system template=inc_config_str var=tag_dossier cssClass="str dontMatch"}}
 
     <tr>
       <td class="button" colspan="10">

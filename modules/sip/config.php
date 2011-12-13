@@ -12,7 +12,6 @@ $dPconfig["sip"] = array (
   "batch_count"              => "10",
   "pat_no_ipp"               => "0",
   "tag_ipp"                  => "",
-  "notify_all_destinataires" => "1",
 );
 
 ?>

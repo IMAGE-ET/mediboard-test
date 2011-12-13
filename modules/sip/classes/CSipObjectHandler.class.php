@@ -25,7 +25,7 @@ class CSipObjectHandler extends CEAIObjectHandler {
       throw new CMbException("no_tag_defined");
     }
 
-    // Si serveur et pas d'IPP sur le patient ou de numéro de dossier sur le séjour
+    // Si serveur et pas d'IPP sur le patient
     if ((isset($mbObject->_no_ipp) && ($mbObject->_no_ipp == 1)) &&
         CAppUI::conf('sip server')) {
       return;

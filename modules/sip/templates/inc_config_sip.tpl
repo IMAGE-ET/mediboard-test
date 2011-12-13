@@ -8,7 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if $conf.sip.server}}
 <script type="text/javascript">
 ElementChecker.check.dontMatch = function(){
   this.assertMultipleArgs("dontMatch");
@@ -16,7 +15,6 @@ ElementChecker.check.dontMatch = function(){
     this.addError("dontMatch", "Doit pas contenir $g en mode SIP");
 }.bind(ElementChecker);
 </script>
-{{/if}}
 
 <form name="editConfigSip" action="?" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="dosql" value="do_configure" />
@@ -35,11 +33,7 @@ ElementChecker.check.dontMatch = function(){
         
     {{mb_include module=system template=inc_config_bool var=server}}
     
-    {{if $conf.sip.server}}
-      {{mb_include module=system template=inc_config_str var=tag_ipp cssClass="str dontMatch"}}
-      
-      {{mb_include module=system template=inc_config_bool var=notify_all_destinataires"}}
-    {{/if}}
+    {{mb_include module=system template=inc_config_str var=tag_ipp cssClass="str dontMatch"}}      
 
     <tr>
       <td class="button" colspan="10">

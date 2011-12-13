@@ -16,7 +16,6 @@ $dPconfig["smp"] = array (
   "repair_date_min"   => "",
   "repair_date_max"   => "",
   "tag_dossier"       => "",
-  "notify_all_destinataires" => "1",
   "send_mvt"          => "0",
 );
 
