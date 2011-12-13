@@ -11,16 +11,11 @@
 class COracleDataSource extends CSQLDataSource {
     
   function connect($host, $name, $user, $pass) {
-    // Charset options
-    //putenv("NLS_LANGUAGE=French_France.WE8ISO8859P1");
-    //putenv("NLS_CHARACTERSET=WE8ISO8859P1");
-    //putenv("NLS_NCHAR_CHARACTERSET=WE8ISO8859P1");
-    
     if (!function_exists( "oci_connect" )) {
       trigger_error( "FATAL ERROR: Oracle support not available.  Please check your configuration.", E_USER_ERROR );
       return;
     }
-      
+    
     if (false === $this->link = oci_connect($user, $pass, "$host/$name", "AL32UTF8")) {
       $error = $this->error();
       trigger_error( "FATAL ERROR: Connection to Oracle database '$host/$name' failed.\n".$error['message'], E_USER_ERROR );
@@ -28,12 +23,9 @@ class COracleDataSource extends CSQLDataSource {
     }
     
     // Date formats
-    $this->exec("ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD'");
+    //$this->exec("ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD'");
     $this->exec("ALTER SESSION SET NLS_TIMESTAMP_FORMAT = 'YYYY-MM-DD HH24:MI:SS'");
     $this->exec("ALTER SESSION SET NLS_TIME_FORMAT = 'HH24:MI:SS'");
-    
-    //$this->exec("ALTER SESSION SET NLS_CHARACTERSET = 'WE8ISO8859P1'");
-    //$this->exec("ALTER SESSION SET NLS_NCHAR_CHARACTERSET = 'WE8ISO8859P1'");
 
     return $this->link;
   }  
