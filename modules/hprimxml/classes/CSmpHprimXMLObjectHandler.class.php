@@ -41,8 +41,12 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
 
         $initiateur = ($receiver->_id == $echange_hprim->sender_id) ? $echange_hprim->_id : null;
         
-        if (!$initiateur && !CAppUI::conf('sip notify_all_destinataires')) {
-          return;
+        $group = new CGroups();
+        $group->load($receiver->group_id);
+        $group->loadConfigValues();
+        
+        if (!$initiateur && !$group->_configs["sip_notify_all_actors"]) {
+          
         }
         
         $mbObject->_id400 = null;

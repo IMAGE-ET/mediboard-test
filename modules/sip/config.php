@@ -11,7 +11,7 @@ $dPconfig["sip"] = array (
   "export_date_max"          => "",
   "batch_count"              => "10",
   "pat_no_ipp"               => "0",
-  "tag_ipp"                  => "",
+  "tag_ipp"                  => "mb_sip",
 );
 
 ?>
