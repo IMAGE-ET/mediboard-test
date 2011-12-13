@@ -52,7 +52,11 @@
   {{/if}}
 {{/if}}
 
-<img src="{{$src}}" style="width: {{$size}}px; height: {{$size}}px; border: 2px solid #777" alt="Identité" {{if $file->_id}}onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-patient-{{$patient->_id}}')"{{/if}} />
+{{assign var=border_photo value="#f88"}}
+{{if $patient->sexe == "m"}}
+  {{assign var=border_photo value="#88f"}}
+{{/if}}
+<img src="{{$src}}" style="width: {{$size}}px; height: {{$size}}px; border: 2px solid {{$border_photo}}" alt="Identité" {{if $file->_id}}onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-patient-{{$patient->_id}}')"{{/if}} />
      
 {{if $file->_id}}     
 <div id="tooltip-content-patient-{{$patient->_id}}" style="display: none;">
