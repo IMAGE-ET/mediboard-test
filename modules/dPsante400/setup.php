@@ -108,8 +108,23 @@ class CSetupdPsante400 extends CSetup {
     $query = "ALTER TABLE `id_sante400` 
                 CHANGE `object_class` `object_class` VARCHAR (40) NOT NULL;";
     $this->addQuery($query);
-		
-    $this->mod_version = "0.22";
+	   
+    $this->makeRevision("0.22");
+    $query = "CREATE TABLE `incrementer` (
+                `incrementer_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `type` ENUM ('IPP','NDA') NOT NULL,
+                `group_id` INT (11) UNSIGNED NOT NULL,
+                `last_update` DATETIME NOT NULL,
+                `value` VARCHAR (255) NOT NULL DEFAULT '1',
+                `pattern` VARCHAR (255) NOT NULL
+               ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `incrementer` 
+                ADD INDEX (`last_update`);";
+    $this->addQuery($query);
+              
+    $this->mod_version = "0.23";
   } 
 }
 ?>

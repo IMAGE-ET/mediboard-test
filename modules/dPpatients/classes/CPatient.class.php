@@ -1358,13 +1358,19 @@ class CPatient extends CMbObject {
       $group_id = $group->_id;
     }
     
+    // Si on est dans le cas d'un établissement gérant la numérotation
+    $group->loadConfigValues();
+    if ($group->_configs["sip_idex_generator"]) {
+      $tag_ipp = CAppUI::conf("sip tag_ipp");
+    }
+    
     // Préférer un identifiant externe de l'établissement
     if ($tag_group_idex = CAppUI::conf("dPpatients CPatient tag_ipp_group_idex")) {
       $idex = new CIdSante400();
       $idex->loadLatestFor($group, $tag_group_idex);
       $group_id = $idex->id400;
     }
-    
+
     return str_replace('$g', $group_id, $tag_ipp);
   }
 
@@ -1960,6 +1966,10 @@ class CPatient extends CMbObject {
         $dec = bcadd($dec, bcmul(hexdec($hex[$i - 1]), bcpow('16', $len - $i)));
     }
     return $dec;
+  }
+  
+  function getIncrementVars() {
+    return array();
   }
 }
 

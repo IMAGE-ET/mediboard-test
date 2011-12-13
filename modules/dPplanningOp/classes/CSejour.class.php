@@ -2040,5 +2040,11 @@ class CSejour extends CCodable implements IPatientRelated {
   function getCurrentUF() {
     return new CUniteFonctionnelle();
   }
+  
+  function getIncrementVars() {
+    return array(
+      "typeHospi" => $this->type
+    );
+  }
 }
 ?>
