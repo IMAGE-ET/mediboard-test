@@ -10,37 +10,65 @@
 
 CAppUI::requireLibraryFile("iCalcreator/iCalcreator.class");
 
+if (!class_exists("vcalendar", false)) {
+  return;
+}
+
 class CMbCalendar extends vcalendar {
-	private $calendrier=null;
-	
-  function __construct(){
-		//Création de l'icalendar
-		parent::__construct();
-		
-		//Ajout de quelques proporiétés
-		$this->setProperty( 'method', 'PUBLISH' ); // required of some calendar software
-		$this->setProperty( "x-wr-calname", "Calendar Sample" );
-		$this->setProperty( "X-WR-CALDESC", "Calendar Description" );
-		$this->setProperty( "X-WR-TIMEZONE", "Europe/London" );
-		
+  function __construct($name, $description = ""){
+    parent::__construct();
+    
+    //Ajout de quelques proporiétés
+    $this->setProperty("method", "PUBLISH");
+    $this->setProperty("x-wr-calname", $name);
+    
+    if ($description) {
+      $this->setProperty("X-WR-CALDESC", $description);
+    }
+    
+    $this->setProperty("X-WR-TIMEZONE", CAppUI::conf("timezone"));
   }
   
   //fonction permettant de créer un evènement de calendrier de façon simplifiée
-  function addevent($lieu, $summary, $description, $comment,$guid,
-      $start_year,$start_month,$start_day,$start_hour,$start_min,
-      $finish_year,$finish_month,$finish_day,$finish_hour,$finish_min )
-  {
-    $vevent = $this->newComponent( 'vevent' );
-    $start = array( 'year'=>$start_year, 'month'=>$start_month, 'day'=>$start_day, 'hour'=>$start_hour, 'min'=>$start_min, 'sec'=>0 );
-    $vevent->setProperty( 'dtstart', $start );
-    $end = array( 'year'=>$finish_year, 'month'=>$finish_month, 'day'=>$finish_day, 'hour'=>$finish_hour, 'min'=>$finish_min, 'sec'=>0 );
-    $vevent->setProperty( 'dtend', $end );
-    $vevent->setProperty( 'LOCATION', $lieu );
-    $vevent->setProperty( 'UID', $guid );
-    $vevent->setProperty( 'summary', $summary );
-    $vevent->setProperty( 'description',$description );
-    $vevent->setProperty( 'comment', $comment );
-    $this->setComponent ( $vevent ,$guid ); // add event to calendar
+  function addEvent($location, $summary, $description, $comment, $guid, $start, $end) {
+    $date_re = "/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/";
+    
+    preg_match($date_re, $start, $matches_start);
+    $start = array(
+      "year"  => $matches_start[1], 
+      "month" => $matches_start[2], 
+      "day"   => $matches_start[3], 
+      "hour"  => $matches_start[4], 
+      "min"   => $matches_start[5], 
+      "sec"   => 0
+    );
+    
+    preg_match($date_re, $end, $matches_end);
+    $end = array(
+      "year"  => $matches_end[1], 
+      "month" => $matches_end[2], 
+      "day"   => $matches_end[3], 
+      "hour"  => $matches_end[4], 
+      "min"   => $matches_end[5], 
+      "sec"   => 0
+    );
+    
+    $vevent = $this->newComponent("vevent");
+    
+    $vevent->setProperty("dtstart", $start);
+    $vevent->setProperty("dtend", $end);
+    $vevent->setProperty("LOCATION", $location);
+    $vevent->setProperty("UID", $guid);
+    $vevent->setProperty("summary", $summary);
+    
+    if ($description) {
+      $vevent->setProperty("description", $description);
+    }
+    
+    if ($comment) {
+      $vevent->setProperty("comment", $comment);
+    }
+    
+    $this->setComponent($vevent, $guid);
   }
 }
-?>

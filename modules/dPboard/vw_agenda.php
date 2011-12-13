@@ -18,7 +18,7 @@ $prat_id      = CUser::get()->_id;
   $param["a"]               = "export_ical";
   $param["suppressHeaders"] = "1";
  
-  $url .= http_build_query($param);
+  $url .= http_build_query($param, null, "&");
 
 // Variables de templates
 $smarty = new CSmartyDP();
