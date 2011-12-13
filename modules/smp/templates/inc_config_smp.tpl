@@ -33,7 +33,7 @@
         
     {{mb_include module=system template=inc_config_bool var=server}}
     
-    {{mb_include module=system template=inc_config_str var=tag_dossier cssClass="str dontMatch"}}
+    {{mb_include module=system template=inc_config_str var=tag_nda cssClass="str dontMatch"}}
 
     <tr>
       <td class="button" colspan="10">

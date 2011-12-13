@@ -1479,17 +1479,23 @@ class CSejour extends CCodable implements IPatientRelated {
       $tag_NDA = CAppUI::conf("dPplanningOp CSejour $type_tag") . $tag_NDA;
     }
     
-    // Pas de tag Num dossier
-    if (null == $tag_NDA) {
-      return;
-    }
-    
     // Permettre des IPP en fonction de l'établissement
     $group = CGroups::loadCurrent();
     if (!$group_id) {
       $group_id = $group->_id;
     }
     
+    // Si on est dans le cas d'un établissement gérant la numérotation
+    $group->loadConfigValues();
+    if ($group->_configs["smp_idex_generator"]) {
+      $tag_NDA = CAppUI::conf("smp tag_nda");
+    }
+    
+    // Pas de tag Num dossier
+    if (null == $tag_NDA) {
+      return;
+    }
+
     // Préférer un identifiant externe de l'établissement
     if ($tag_group_idex = CAppUI::conf("dPplanningOp CSejour tag_dossier_group_idex")) {
       $idex = new CIdSante400();
