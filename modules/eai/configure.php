@@ -20,9 +20,16 @@ $object_servers = array(
   "sa"  => "CSaObjectHandler",
 );
 
+$group = new CGroups();
+$groups = $group->loadList();
+foreach ($groups as $_group) {
+  $_group->loadConfigValues(); 
+}      
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("object_servers", $object_servers);
+$smarty->assign("groups"        , $groups);
 $smarty->display("configure.tpl");
 
 ?>

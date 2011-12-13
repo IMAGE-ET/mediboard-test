@@ -27,3 +27,42 @@
     </tr>
   </table>
 </form>
+
+<hr/>
+
+<table class="tbl">
+  <tr>
+    <th class="title" colspan="10">{{tr}}{{$mod}}-resume{{/tr}}</th>
+  </tr>
+  <tr>
+    <th>{{tr}}CGroups{{/tr}}</th>
+    <th colspan="2">Numéroteur</th>
+    <th colspan="2">Serveur</th>
+    <th colspan="2">Notifieur</th>
+  </tr>
+  <tr>  
+    <th></th>
+    <th>IPP</th>
+    <th>NDA</th>
+    <th>SIP</th>
+    <th>SMP</th>
+    <th>SIP</th>
+    <th>SMP</th>
+  </tr>
+  {{foreach from=$groups item=_group}} 
+    {{assign var=config value=$_group->_configs}}
+    <tr>
+      <td>{{$_group}}</td>
+      <td class="{{if $config.sip_idex_generator}}ok{{else}}error{{/if}}">
+        {{tr}}bool.{{$config.sip_idex_generator}}{{/tr}}</td>
+      <td class="{{if $config.smp_idex_generator}}ok{{else}}error{{/if}}">
+        {{tr}}bool.{{$config.smp_idex_generator}}{{/tr}}</td>
+      <td></td>
+      <td></td>
+      <td class="{{if $config.sip_notify_all_actors}}ok{{else}}error{{/if}}">
+        {{tr}}bool.{{$config.sip_notify_all_actors}}{{/tr}}</td>
+      <td class="{{if $config.smp_notify_all_actors}}ok{{else}}error{{/if}}">
+        {{tr}}bool.{{$config.smp_notify_all_actors}}{{/tr}}</td>
+    </tr>
+  {{/foreach}}
+</table>
