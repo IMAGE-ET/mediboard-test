@@ -44,7 +44,11 @@ Main.add(function () {
       <option value="{{$service->_id}}" {{if $selService == $service->_id}}selected="selected"{{/if}}>{{$service->_view}}</option>
     {{/foreach}}
   </select>
-  <input type="hidden" name="date_recherche" class="dateTime" value="{{$date_recherche}}" onchange="this.form.submit()" />
+  {{if $typeVue == 0}}
+    <input type="hidden" name="date_recherche" class="dateTime" value="{{$date_recherche}}" onchange="this.form.submit()" />
+  {{else}}
+    <input type="hidden" name="date_recherche" class="date" value="{{$date_recherche}}" onchange="this.form.submit()" />
+  {{/if}}
 </form>
 {{/if}}
 
