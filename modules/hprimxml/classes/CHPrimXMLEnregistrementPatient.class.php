@@ -123,7 +123,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             $newPatient->_no_ipp = 1;
             $msgPatient = $newPatient->store();
             
-            $msgIPP = CEAIPatient::storeIPP($IPP, $newPatient);
+            $msgIPP = CEAIPatient::storeIPP($IPP, $newPatient, $sender);
             
             $newPatient->_IPP = $IPP->id400;
             // Si serveur et on a un IPP sur le patient
@@ -385,7 +385,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           }
         }
 
-        $msgIPP = CEAIPatient::storeIPP($IPP, $newPatient);
+        $msgIPP = CEAIPatient::storeIPP($IPP, $newPatient, $sender);
         
         $codes = array ($msgPatient ? ($_modif_patient ? "A003" : "A002") : ($_modif_patient ? "I002" : "I001"), $msgIPP ? "A005" : $_code_IPP);
         

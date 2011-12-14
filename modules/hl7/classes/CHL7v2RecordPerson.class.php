@@ -29,7 +29,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
  
   function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
     // Traitement du message des erreurs
-    $comment = $warning = "";
+    $comment = $warning = $code_IPP = "";
     $_modif_patient = false;
     
     $exchange_ihe = $this->_ref_exchange_ihe;
@@ -49,8 +49,8 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     if ($patientPI) {
       $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
     }
-    
-    // PI non connu
+
+    // PI non connu (non fourni ou non retrouvé)
     if (!$patientPI || !$IPP->_id) {
       // RI fourni
       if ($patientRI) {
@@ -95,7 +95,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
           $code_IPP      = "A121";
           $_modif_patient = true; 
         }
-        
+
         // Notifier les autres destinataires autre que le sender
         $newPatient->_eai_initiateur_group_id = $sender->group_id;
         if ($msgPatient = $newPatient->store()) {
@@ -103,7 +103,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
         }
       }
 
-      if ($msgIPP = CEAIPatient::storeIPP($IPP, $newPatient)) {
+      if ($msgIPP = CEAIPatient::storeIPP($IPP, $newPatient, $sender)) {
         return $exchange_ihe->setAckAR($ack, "E102", $msgIPP, $newPatient);
       }
       

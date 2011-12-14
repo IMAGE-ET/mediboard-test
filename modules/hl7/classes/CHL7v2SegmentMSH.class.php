@@ -88,13 +88,15 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     $data[] = null; 
     
     // MSH-17: Country Code (ID) (optional)
-    $data[] = null; 
+    $data[] = CHL7v2TableEntry::mapTo("399", "FRA"); 
     
     // MSH-18: Character Set (ID) (optional repeating)
     $data[] = "8859/1"; 
     
     // MSH-19: Principal Language Of Message (CE) (optional)
-    $data[] = null; 
+    $data[] = array(
+      "FR"
+    ); 
     
     // MSH-20: Alternate Character Set Handling Scheme (ID) (optional)
     $data[] = null; 

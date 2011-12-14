@@ -36,23 +36,48 @@ class CEAIPatient extends CEAIMbObject {
       $IPP->object_id  = $idPatientSIP;
   }
   
-  static function IPPSIPIncrement(CIdSante400 $IPP) {
-    $IPP->id400++;
-    $IPP->id400 = str_pad($IPP->id400, 6, '0', STR_PAD_LEFT);
-    $IPP->_id   = null;
+  static function incrementIPPSIP(CPatient $patient,  CInteropSender $sender) {
+    
   }
   
-  static function storeIPP(CIdSante400 $IPP, CPatient $newPatient) {
-    /* @todo Gestion du numéroteur !!! */
-    if (!$IPP->id400) {
-      return null;
+  static function storeIPP(CIdSante400 $IPP, CPatient $patient, CInteropSender $sender) {
+    $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, null, $patient->_id);
+    if ($IPP->_id) {
+      return;
     }
     
-    if ($newPatient)
-      $IPP->object_id   = $newPatient->_id;
-    $IPP->last_update = mbDateTime();
-    
-    return $IPP->store();   
+    /* Gestion du numéroteur */
+    $group = new CGroups();
+    $group->load($sender->group_id);
+    $group->loadConfigValues();
+      
+    // Génération de l'IPP ? 
+    // Non
+    if (!$group->_configs["sip_idex_generator"]) {
+      if (!$IPP->id400) {
+        return null;
+      }
+      
+      if ($patient)
+        $IPP->object_id   = $patient->_id;
+      $IPP->last_update = mbDateTime();
+      
+      return $IPP->store();  
+    }
+    else {
+      // Pas d'IPP passé
+      if (!$IPP->id400) {
+        if (!CIncrementer::generateIdex($patient, $sender->_tag_patient, $sender->group_id)) {
+          return CAppUI::tr("CEAIPatient-error-generate-idex");
+        }
+        
+        return null;
+      }
+      else {
+        /* @todo Gestion des plages d'identifiants */
+        return CAppUI::tr("CEAIPatient-idex-not-in-the-range");
+      }
+    }  
   }
   
   static function storePatient(CPatient $newPatient, $IPP) {

@@ -519,8 +519,12 @@ class CSetuphl7 extends CSetup {
               `loggable` ENUM ('0','1') NOT NULL DEFAULT '1'
     ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-        
-    $this->mod_version = "0.07";
+
+    $this->makeRevision("0.07");
+    
+    $this->insertTableEntry("399", "FRA", "FRA", "FRA", "FRA", "Française");
+    
+    $this->mod_version = "0.08";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
