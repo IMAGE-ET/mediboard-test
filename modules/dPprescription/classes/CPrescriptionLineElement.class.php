@@ -129,8 +129,13 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     if(!$this->duree && $this->_ref_prescription->type == "sejour"){
       if(!$this->_fin_reelle){
       	if(CAppUI::conf("dPprescription CCategoryPrescription $chapitre fin_sejour")){
-      		$this->_fin_reelle = $this->_ref_prescription->_ref_object->sortie;
-        } else {
+      		$prolongation_time = CAppUI::conf("dPprescription CPrescription prolongation_time");
+				  if($this->_ref_prescription->_ref_object->sortie_reelle || !$prolongation_time){
+	          $this->_fin_reelle = $this->_ref_prescription->_ref_object->sortie;
+	        } else {
+	          $this->_fin_reelle = mbDateTime("+$prolongation_time Hours",$this->_ref_prescription->_ref_object->sortie);
+	        }	
+				} else {
           $this->_fin_reelle = $this->_fin ? "$this->_fin $time_fin" : "$this->debut 23:59:00";    
         }
 			}

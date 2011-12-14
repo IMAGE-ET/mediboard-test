@@ -389,11 +389,15 @@ class CPrisePosologie extends CMbMetaObject {
 			$dates = array();
 	    $date = mbDate($sejour->_entree);
 	    $dates[$sejour->_id][] = $date;
-	    while(($date = mbDate("+ 1 DAY", $date)) <= $sejour->_sortie){
+			
+			$prolongation_time = CAppUI::conf("dPprescription CPrescription prolongation_time");
+			$sortie_sejour = ($sejour->sortie_reelle || !$prolongation_time) ?  $sejour->sortie : mbDateTime("+ $prolongation_time HOURS", $sejour->sortie);
+			
+	    while(($date = mbDate("+ 1 DAY", $date)) <= $sortie_sejour){
 				$dates[$sejour->_id][] = $date;
 	    }
-			$bornes[$sejour->_id]["min"] = $sejour->_entree;
-      $bornes[$sejour->_id]["max"] = $sejour->_sortie;
+			$bornes[$sejour->_id]["min"] = $sejour->entree;
+      $bornes[$sejour->_id]["max"] = $sortie_sejour;
 		} else {
 			foreach($sejour->_ref_affectations as $curr_affectation){
 				$curr_affectation->loadRefLit();
@@ -402,6 +406,12 @@ class CPrisePosologie extends CMbMetaObject {
 				
 				$date = mbDate($curr_affectation->entree);
 	      $dates[$curr_affectation->_id][] = $date;
+				
+				if($curr_affectation->sortie == $sejour->sortie){
+					$prolongation_time = CAppUI::conf("dPprescription CPrescription prolongation_time");
+					$curr_affectation->sortie = ($sejour->sortie_reelle || !$prolongation_time) ? $sejour->sortie : mbDateTime("+ $prolongation_time HOURS", $sejour->sortie);
+				}
+				
 	      while(($date = mbDate("+ 1 DAY", $date)) <= $curr_affectation->sortie){
 	        $dates[$curr_affectation->_id][] = $date;
 	      }
@@ -410,7 +420,7 @@ class CPrisePosologie extends CMbMetaObject {
 			}
 		}
 		
-    $this->updateQuantite();
+		$this->updateQuantite();
 		
     $planifs = array();
 		
@@ -418,7 +428,7 @@ class CPrisePosologie extends CMbMetaObject {
 		foreach($dates as $key => $_dates){
       $planifs = array_merge($this->getPlanifs($_dates, $servicesId[$key], $bornes[$key]), $planifs);
 		}
-		
+
 		// Heure de prises specifié (I+x heures)
     if($this->heure_prise ){
       $dateTimePrise = mbAddDateTime($this->heure_prise, mbDate($this->_ref_object->_debut_reel));
@@ -456,7 +466,7 @@ class CPrisePosologie extends CMbMetaObject {
     }
 
     // Tous les avec comme unite les jours
-     if($this->unite_tous_les == "jour"){
+    if($this->unite_tous_les == "jour"){
      	if(!$this->nb_tous_les){
      		$this->nb_tous_les = 1;
      	}
@@ -550,17 +560,23 @@ class CPrisePosologie extends CMbMetaObject {
     
     if($this->_ref_object instanceof CPrescriptionLineMedicament){
        if(!$this->_ref_object->_fin_reelle){
-        $this->_ref_object->_fin_reelle = $this->_ref_object->_ref_prescription->_ref_object->_sortie;
+       	 $prolongation_time = CAppUI::conf("dPprescription CPrescription prolongation_time");
+
+       	 if($this->_ref_object->_ref_prescription->_ref_object->sortie_reelle || !$prolongation_time){
+       	 	 $this->_ref_object->_fin_reelle = $this->_ref_object->_ref_prescription->_ref_object->sortie;
+         } else {
+       	   $this->_ref_object->_fin_reelle = mbDateTime("+ $prolongation_time HOURS", $this->_ref_object->_ref_prescription->_ref_object->sortie);
+         }
       }
     }
-		
+				
     // Moment unitaire
     if($this->moment_unitaire_id && !array_key_exists($this->unite_tous_les, $jours) &&
       !in_array($this->unite_tous_les, array("jour", "semaine", "quinzaine", "mois", "trimestre", "semestre", "an"))) {
       foreach($dates as $_date){
       	$this->loadRefMoment($service_id);
-        $dateTimePrise = mbAddDateTime(mbTime($this->_ref_moment->heure), $_date);
-        if(($bornes["min"] <= $dateTimePrise) && ($bornes["max"] >= $dateTimePrise)){
+        $dateTimePrise = mbAddDateTime(mbTime($this->_ref_moment->heure), $_date);				
+				if(($bornes["min"] <= $dateTimePrise) && ($bornes["max"] >= $dateTimePrise)){
 					if((($this->_ref_object->_debut_reel <= $dateTimePrise) && ($this->_ref_object->_fin_reelle >= $dateTimePrise))){
 	          $_planifs[] = array("unite_prise" => $this->unite_prise, "prise_id" => $this->_id, "dateTime" => $dateTimePrise);
 	        }

@@ -209,8 +209,8 @@ Main.add(function () {
   
 	var dates = {};
   dates.limit = {
-    start: '{{$sejour->entree_prevue|date_format:"%Y-%m-%d"}}',
-    stop: '{{$sejour->sortie_prevue|date_format:"%Y-%m-%d"}}'
+    start: '{{$sejour->entree|date_format:"%Y-%m-%d"}}',
+    stop: '{{$sortie_sejour|date_format:"%Y-%m-%d"}}'
   };
   
   var oFormDate = getForm("changeDateDossier");
@@ -356,8 +356,8 @@ Main.add(function () {
            <input type="hidden" name="date" class="date" value="{{$date}}" onchange="PlanSoins.loadTraitement('{{$sejour->_id}}',this.value,'','administration', null, null, null, null, '1', '{{$hide_close}}');"/>
          </form>
   			 <button type="button"
-  			         class="right notext {{if $sejour->_sortie <= $bornes_composition_dossier|@end|@end}}opacity-50{{/if}}"
-  							 {{if $sejour->_sortie > $bornes_composition_dossier|@end|@end}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration', null, null, null, null, '1', '{{$hide_close}}');"{{/if}}
+  			         class="right notext {{if $sortie_sejour <= $bornes_composition_dossier|@end|@end}}opacity-50{{/if}}"
+  							 {{if $sortie_sejour > $bornes_composition_dossier|@end|@end}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration', null, null, null, null, '1', '{{$hide_close}}');"{{/if}}
   							 ></button>
   		</h1>
   		

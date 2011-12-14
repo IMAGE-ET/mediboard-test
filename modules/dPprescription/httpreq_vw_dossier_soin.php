@@ -287,7 +287,7 @@ else {
           $operations["$date_operation $hour_operation object"] = $_operation;
         }
       }
-    }   
+    }
   }
   // Calcul du nombre de produits (rowspan)
   $prescription->calculNbProduit();
@@ -296,8 +296,12 @@ else {
 }
 $signe_decalage = ($nb_decalage < 0) ? "-" : "+";
 
+$prolongation_time = CAppUI::conf("dPprescription CPrescription prolongation_time");
+$sortie_sejour = ($sejour->sortie_reelle || !$prolongation_time) ? $sejour->sortie : mbDateTime("+ $prolongation_time HOURS", $sejour->sortie);
+
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("sortie_sejour"       , $sortie_sejour);
 $smarty->assign("signe_decalage"      , $signe_decalage);
 $smarty->assign("nb_decalage"         , abs($nb_decalage));
 $smarty->assign("poids"               , $poids);

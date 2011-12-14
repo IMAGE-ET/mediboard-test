@@ -54,6 +54,8 @@ Main.add(Control.Tabs.create.curry('tab-{{$class}}', true));
 		  {{mb_include module=system template=inc_config_bool var=show_PCEA}}
       {{mb_include module=system template=inc_config_bool var=duration_in_hours}}
       {{mb_include module=system template=inc_config_bool var=show_ccam_bons}}
+			{{mb_include module=system template=inc_config_enum var=prolongation_time values=$hours_prolongation_time skip_locales=1}}
+      
 		</tbody>
 
     <tbody style="display: none" id="chapters_visible">

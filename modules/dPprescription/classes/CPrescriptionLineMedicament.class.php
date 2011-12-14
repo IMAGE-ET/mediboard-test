@@ -302,7 +302,12 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     if(!$this->duree && $this->_ref_prescription->type == "sejour"){
       $this->_duree = mbDaysRelative($this->debut, mbDate($this->_ref_prescription->_ref_object->sortie))+1;
       if(!$this->_fin_reelle){
-        $this->_fin_reelle = $this->_ref_prescription->_ref_object->sortie;
+      	$prolongation_time = CAppUI::conf("dPprescription CPrescription prolongation_time");
+      	if($this->_ref_prescription->_ref_object->sortie_reelle || !$prolongation_time){
+      		$this->_fin_reelle = $this->_ref_prescription->_ref_object->sortie;
+      	} else {
+      		$this->_fin_reelle = mbDateTime("+$prolongation_time Hours",$this->_ref_prescription->_ref_object->sortie);
+      	}
       }
     }
     
