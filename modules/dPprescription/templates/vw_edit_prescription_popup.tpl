@@ -245,7 +245,7 @@ Main.add(function () {
   	              <td>
   		              <select name="operation_id" onchange="$V(getForm('applyProtocoleFirst').operation_id, this.value);">
   		                {{foreach from=$operations item=_operation name=operations}}
-  		                  <option value="{{$_operation->_id}}" {{if $smarty.foreach.operations.index == $smarty.foreach.operations.last}}selected="selected"{{/if}}>
+  		                  <option value="{{$_operation->_id}}" {{if $operation_id == $_operation->_id}}selected="selected"{{/if}}>
                           {{$_operation->_view}}
                         </option>
   		                {{/foreach}}

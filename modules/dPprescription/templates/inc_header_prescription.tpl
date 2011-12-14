@@ -572,8 +572,8 @@ Main.add( function(){
 						{{else}}
 						Intervention
 	 				  <select name="operation_id">
-	 				    {{foreach from=$prescription->_dates_dispo key=operation_id item=_date_operation}}
-	 				      <option value="{{$operation_id}}">{{$_date_operation|date_format:$conf.datetime}}</option>
+	 				    {{foreach from=$prescription->_dates_dispo key=_operation_id item=_date_operation}}
+	 				      <option value="{{$_operation_id}}" {{if $operation_id == $_operation_id}}selected == "selected"{{/if}}>{{$_date_operation|date_format:$conf.datetime}}</option>
 	 				    {{/foreach}}
 							</select>
 						{{/if}}
