@@ -37,7 +37,7 @@ class COperatorIHE extends CEAIOperator {
       $ack->message_control_id = $data['identifiantMessage'];
     
       // Message non supporté pour cet utilisateur
-      $evt_class = CHL7Event::getEventClass($evt->event_type, $evt->code);
+      $evt_class = CHL7Event::getEventClass($evt);
       if (!in_array($evt_class, $data_format->_messages_supported_class)) {
         $exchange_ihe->populateExchange($data_format, $evt);
         $exchange_ihe->loadRefsInteropActor();
