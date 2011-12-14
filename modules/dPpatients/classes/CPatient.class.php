@@ -1486,6 +1486,8 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - âge"               , $this->_age       );
     $template->addDateProperty("Patient - date de naissance", $this->naissance);
     $template->addProperty("Patient - lieu de naissance" , $this->lieu_naissance);
+    $template->addProperty("Patient - sexe"              , strtolower($this->getFormattedValue("sexe")));
+    $template->addProperty("Patient - sexe court"        , substr(strtolower($this->getFormattedValue("sexe")), 0, 1));
     $template->addProperty("Patient - numéro d'assuré"   , $this->getFormattedValue("matricule"));
     $template->addProperty("Patient - téléphone"         , $this->getFormattedValue("tel"));
     $template->addProperty("Patient - mobile"            , $this->getFormattedValue("tel2"));
