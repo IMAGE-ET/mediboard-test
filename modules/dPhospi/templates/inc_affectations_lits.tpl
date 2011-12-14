@@ -1,4 +1,3 @@
-{{mb_script module=dPhospi script=affectation_uf}}
 <tr {{if !$conf.dPhospi.CLit.show_in_tableau}}class="lit"{{/if}} id="lit-{{$curr_lit->_id}}">
   <td>
     {{if $curr_lit->_overbooking}}
@@ -247,13 +246,10 @@
     <tr class="dates">
       <td colspan="3"><strong>Age</strong>: {{$patient->_age}} ans ({{mb_value object=$patient field=naissance}})
 			<a style="float: right;" href="#1" title=""
-        onclick="AffectationUf.affecter('{{$curr_affectation->_guid}}','{{$curr_lit->_guid}}')"  
-        onmouseover="ObjectTooltip.createEx(this,'{{$curr_affectation->_guid}}')">
-        <img src="images/icons/uf.png" width="16" height="16" />
+        onclick="AffectationUf.affecter('{{$curr_affectation->_guid}}','{{$curr_lit->_guid}}')"  >
+        <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF"/>
       </a></td>
 			
-			
-
     </tr>
 
     {{if $sejour->prestation_id}}
