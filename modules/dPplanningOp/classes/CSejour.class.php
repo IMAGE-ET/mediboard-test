@@ -1699,6 +1699,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $template->addProperty("Sejour - Etablissement de sortie" , $this->getFormattedValue("etablissement_sortie_id"));
     $template->addProperty("Sejour - Commentaires de sortie"  , $this->getFormattedValue("commentaires_sortie"));
     
+    $template->addProperty("Sejour - Libelle"                 , $this->getFormattedValue("libelle"));
     $template->addProperty("Sejour - Transport"               , $this->getFormattedValue("transport"));
     
     if(CAppUI::conf("dPurgences old_rpu") == "1"){
