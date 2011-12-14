@@ -40,9 +40,9 @@ class CHL7Event {
   function handle() {}
   
   static function getEventClass($event) {
-    $classname = "CHL7Event".$evt->event_type.$evt->code;
-    if ($evt->message->i18n_code) {
-      $classname .= "_".$evt->message->i18n_code;
+    $classname = "CHL7Event".$event->event_type.$event->code;
+    if ($event->message->i18n_code) {
+      $classname .= "_".$event->message->i18n_code;
     }
       
     return $classname;
