@@ -47,7 +47,7 @@ if ($prescription->_ref_lines_elements_comments) {
 }
 
 foreach ($prescription->_ref_prescription_line_mixes as $key=>$_line_mix) {
-  if($_line_mix->date_arret || !$_line_mix->signee) {
+  if($_line_mix->date_arret || !$_line_mix->signature_prat) {
     $prescription->_counts_by_chapitre["med"] -= $_line_mix->countBackRefs("lines_mix");
     unset($prescription->_ref_prescription_line_mixes[$key]);
   }
