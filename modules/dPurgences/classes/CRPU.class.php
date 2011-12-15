@@ -211,8 +211,10 @@ class CRPU extends CMbObject {
     $this->_service_sortie_id = $sejour->service_sortie_id;
     
     // @todo: A supprimer du updateFormFields
-    $consult = $this->loadRefConsult();
-    $consult->countDocItems();
+    $this->loadRefConsult();
+    if ($this->_ref_consult->_id) {
+      $this->_ref_consult->countDocItems();
+    }
     
     // Récupération du libellé de la circonstance si actif dans la configuration
     if (CAppUI::conf("dPurgences gerer_circonstance")) {
