@@ -130,11 +130,9 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     }
   }
   
-  function getANIdentifier(DOMNode $node, &$data) {
-    $PID_18 = $this->queryNode("PID.18", $node);
-    
-    if ($this->queryTextNode("CX.5", $PID_18) == "AN") {
-      $data["AN"] = $this->queryTextNode("CX.1", $PID_18);
+  function getANIdentifier(DOMNode $node, &$data) {    
+    if ($this->queryTextNode("CX.5", $node) == "AN") {
+      $data["AN"] = $this->queryTextNode("CX.1", $node);
     }
   }
   
@@ -161,12 +159,9 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   }
   
   function getNPAIdentifiers(DOMNode $node, &$data) {
-    $PV1_5 = $this->queryNode("PV1.5", $node);
-    /* @todo On gère que l'identifiant de MB dans un premier temps */
-    
-    if (($this->queryTextNode("CX.5", $PV1_5) == "RI") && 
-        ($this->queryTextNode("CX.4/HD.2", $PV1_5) == CAppUI::conf("hl7 assigningAuthorityUniversalID"))) {
-      $data["RI"] = $this->queryTextNode("CX.1", $PV1_5);
+    if (($this->queryTextNode("CX.5", $node) == "RI") && 
+        ($this->queryTextNode("CX.4/HD.2", $node) == CAppUI::conf("hl7 assigningAuthorityUniversalID"))) {
+      $data["NPA"] = $this->queryTextNode("CX.1", $node);
     }
   }
   
@@ -183,25 +178,30 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
       // INS-C - Identifiant national de santé calculé
       if ($this->queryTextNode("CX.5", $_node) == "INS-C") {
         $data["INSC"] = $this->queryTextNode("CX.1", $_node);
-      }
+      } 
     }
+    
+    // AN - Patient Account Number (NDA)
+    if ($PID_18 = $this->queryNode("PID.18", $contextNode)) {
+      $this->getANIdentifier($PID_18, $data);
+    }    
    
     return $data;
   }
   
-  function getAdmitIdentifiers(DOMNode $nodePID, DOMNode $nodePV1) {    
+  function getAdmitIdentifiers(DOMNode $contextNode, CInteropSender $sender) {
     $data = array();
     
     // RI - Resource identifier 
-    $PV1_19 = $this->queryNode("PV1.19", $nodePV1);
-    $this->getRIIdentifiers($PV1_19, $data);
+    if ($PV1_19 = $this->queryNode("PV1.19", $contextNode)) {
+      $this->getRIIdentifiers($PV1_19, $data, $sender);
+    }
       
     // PA - Preadmit Number
-    $this->getNPAIdentifiers($nodePV1, $data);
-    
-    // AN - Patient Account Number
-    $this->getANIdentifier($nodePID, $data);
-    
+    if ($PV1_5 = $this->queryNode("PV1.5", $contextNode)) {
+      $this->getNPAIdentifiers($PV1_5, $data);
+    }
+        
     return $data;
   }
   

@@ -20,17 +20,29 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   function getContentNodes() {
     $data  = parent::getContentNodes();
     
-    $this->queryNodes("NK1", null, $data);
+    $exchange_ihe = $this->_ref_exchange_ihe;
+    $sender       = $exchange_ihe->_ref_sender;
+    $sender->loadConfigValues();
     
-    $this->queryNodes("ROL", null, $data);    
+    $this->queryNodes("NK1", null, $data, true);
     
-    $PV1 = $this->queryNodes("PV1", null, $data); 
-    mbTrace($data);
-    $data["admitIdentifiers"] = $this->getAdmitIdentifiers($data["PID"], $PV1);
-    mbLog($data);    
-    $this->queryNodes("PV2", null, $data); 
+    $this->queryNodes("ROL", null, $data, true);    
     
-    $this->queryNodes("ZBE", null, $data);
+    $PV1 = $this->queryNode("PV1", null, $data, true);
+
+    $data["admitIdentifiers"] = $this->getAdmitIdentifiers($PV1, $sender);
+
+    $this->queryNode("PV2", null, $data, true);
+    
+    $this->queryNode("ZBE", null, $data, true);
+    
+    $this->queryNode("ZFP", null, $data, true);
+    
+    $this->queryNode("ZFV", null, $data, true);
+    
+    $this->queryNode("ZFM", null, $data, true);
+    
+    $this->queryNode("ZFD", null, $data, true);
     
     return $data;
   }
@@ -43,7 +55,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $exchange_ihe->_ref_sender->loadConfigValues();
     $sender       = $exchange_ihe->_ref_sender;
     
-    mbLog($data);
+    
   } 
 }
 
