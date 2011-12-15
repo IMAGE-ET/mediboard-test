@@ -1533,7 +1533,7 @@ class CStoredObject extends CModelObject {
    * @param CMbObject[] Array of objects
    * @return CMbObject[] Loaded collection 
    */
-  static function massLoadFwdRef($objects, $field) {
+  static function massLoadFwdRef($objects, $field, $object_class = null) {
     if (!count($objects)) {
       return array();
     }
@@ -1546,7 +1546,7 @@ class CStoredObject extends CModelObject {
       return;
     }
 
-    if ($spec->meta) {
+    if ($spec->meta && !$object_class) {
       trigger_error("Can't mass load (yet!) ref '$field' with meta field '$spec->meta' for object class '$object->_class'", E_USER_WARNING);
       return;
     }
@@ -1561,7 +1561,12 @@ class CStoredObject extends CModelObject {
 
     $fwd = new $spec->class;
     
-    $where[$fwd->_spec->key] = CSQLDataSource::prepareIn($fwd_ids);
+    if ($object_class) {
+      $where[$object_class] = CSQLDataSource::prepareIn($fwd_ids);
+    }
+    else {
+      $where[$fwd->_spec->key] = CSQLDataSource::prepareIn($fwd_ids);
+    }
     return $fwd->loadList($where);
   }
 
