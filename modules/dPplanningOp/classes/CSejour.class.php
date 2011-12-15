@@ -2044,8 +2044,25 @@ class CSejour extends CCodable implements IPatientRelated {
     return !$fix_edit_doc ? true : $this->sortie_reelle === null;
   }
   
-  function getCurrentUF() {
-    return new CUniteFonctionnelle();
+  function getCurrentUF($date = null) {
+    if(!$date) {
+      $date = mbDateTime();
+    }
+  	if($affectation = $this->getCurrAffectation($date)){
+  	 return $affectation->getUFs();
+    }
+    $affectation_uf = new CAffectationUniteFonctionnelle();
+    //service
+    
+    if($service_id){
+      if($affectation_uf->loadObject("object_id = '$service_id' and object_class = 'CService'")){
+        return array("hebergement" => $affectation_uf->loadRefUniteFonctionnelle());	
+      }
+    }
+    //praticien
+    if($affectation_uf->loadObject("object_id = '$_ref_praticien' and object_class = 'CMediusers'")){
+      return  array("hebergement" => $affectation_uf->loadRefUniteFonctionnelle());  
+    }
   }
   
   function getIncrementVars() {
