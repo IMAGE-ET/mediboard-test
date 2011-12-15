@@ -9,6 +9,7 @@ window.nb_printers = {{$nb_printers|@json}};
 window.modal_mode_play = null;
 window.documentGraphs = {{$templateManager->graphs|@json}};
 window.choice_factory = {{$choice_factory|@json}};
+
 function playField(element, class_name, editor_element, name) {
   var modal = $("play_modal");
   var field_area = modal.select("td.field_aera")[0];
@@ -294,7 +295,7 @@ Main.add(function(){
 </div>
 
 <!-- Modale pour le mode play -->
-<div style="display: none; width: 260px; height: 130px;" id="play_modal">
+<div style="display: none; width: 500px; height: 450px;" id="play_modal">
   <table class="form">
   <tr>
     <th class="title">

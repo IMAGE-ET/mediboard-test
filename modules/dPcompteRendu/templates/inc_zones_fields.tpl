@@ -51,8 +51,9 @@
         <!-- The div is required because of a Webkit float issue -->
         <div class="listeChoixCR">
           {{foreach from=$lists item=curr_list}}
+            {{math equation=min(x,y) x=$curr_list->_valeurs|@count y=25 assign=size}}
             <select name="_{{$curr_list->_class}}[{{$curr_list->_id}}][]" data-nom="{{$curr_list->nom}}"
-            {{if $mode_play}}size="4" multiple="true"{{/if}}
+            {{if $mode_play}}size="{{$size}}" multiple="true"{{/if}}
             {{if !$check_to_empty_field}}onchange="this.form.elements['_empty_list[{{$curr_list->_id}}]'].checked='checked'"{{/if}}>
               <option value="undef">&mdash; {{$curr_list->nom}}</option>
               {{foreach from=$curr_list->_valeurs item=curr_valeur}}
