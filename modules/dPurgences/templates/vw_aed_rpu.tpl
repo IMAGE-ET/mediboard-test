@@ -518,7 +518,7 @@
 		  <li><a href="#antecedents">Antécédents &amp; Traitements</a></li>
 		  <li onmouseup="loadSuivi({{$rpu->sejour_id}});"><a href="#suivisoins">Suivi soins</a></li>
 		  <li onmouseup="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">{{tr}}CPatient.surveillance{{/tr}}</a></li>
-		  <li onmouseup="showExamens('{{$consult->_id}}')"><a href="#examens">Consultation médicale</a></li>
+		  <li onmouseup="showExamens('{{$consult->_id}}')"><a href="#examens">Dossier médical</a></li>
 		  {{if $app->user_prefs.ccam_sejour == 1 }}
 		    <li onmouseup="loadActes('{{$rpu->sejour_id}}')"><a href="#actes">Cotation infirmière</a></li>
 		  {{/if}}

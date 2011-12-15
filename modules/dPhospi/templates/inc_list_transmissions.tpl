@@ -62,7 +62,7 @@
   </tr>  
   <tbody {{if !$readonly}} id="transmissions" {{/if}}>
   {{foreach from=$list_transmissions item=_suivi}}
-	<tr 
+	<tr class="{{if is_array($_suivi)}}{{$_suivi.0->_ref_object->_guid}}{{else}}{{$_suivi->_guid}}{{/if}}"
 	    {{if ($_suivi instanceof CPrescriptionLineElement || $_suivi instanceof CPrescriptionLineComment) && !$readonly}}
 			  onmouseover="highlightTransmissions('{{$_suivi->_guid}}');" onmouseout="removeHighlightTransmissions();"
 			{{/if}}>

@@ -86,7 +86,7 @@
 		{{/if}}
 		
 		{{if $_suivi instanceof CPrescriptionLineElement}}
-		<strong>{{$_suivi->_view}}</strong>
+		<strong onmouseover="ObjectTooltip.createEx(this, '{{$_suivi->_ref_element_prescription->_guid}}');">{{$_suivi->_view}}</strong>
 		{{/if}}
     {{mb_value object=$_suivi field="commentaire"}}
 	</td>
@@ -250,7 +250,7 @@
     {{mb_ditto name=date value=$_suivi[0]->date|date_format:$conf.date}}
   </td>
   <td class="narrow">{{$_suivi[0]->date|date_format:$conf.time}}</td>
-  <td class="text" style="height: 22px;">
+  <td class="text libelle_trans" style="height: 22px;">
     {{if $_suivi[0]->object_id && $_suivi[0]->object_class}}
       {{assign var=classes value=' '|explode:"CPrescriptionLineMedicament CPrescriptionLineElement CAdministration CPrescriptionLineMix"}}
       {{if in_array($_suivi[0]->object_class, $classes)}}
