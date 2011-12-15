@@ -24,7 +24,7 @@
   
   submitChangedLines = function() {
     return onSubmitFormAjax(getForm('selLines'), {onComplete: function() {
-      {{if $mode == "stopped_lines"}}
+      {{if $mode == "stopped_lines" || $mode == "stop_lines"}}
 			modalWindowTools.close();
 			{{/if}}
 		  Control.Modal.close();
@@ -69,8 +69,10 @@
 	
 	{{if $mode == "validation" || $mode == "tp" || $mode == "duplicate"}}
     <input type="hidden" name="dosql" value="do_select_lines_aed"/>
-	{{else}}
+	{{elseif $mode == "stopped_lines"}}
 	  <input type="hidden" name="dosql" value="do_duplicate_lines_aed"/>
+  {{elseif $mode == "stop_lines"}}
+	  <input type="hidden" name="dosql" value="do_stop_all_lines_aed"/>
   {{/if}}
   {{mb_key object=$prescription}}
   
@@ -187,5 +189,11 @@
 		  <button type="button" class="save oneclick" onclick="submitChangedLines()">Reprendre les lignes</button>
       <button type="button" class="cancel oneclick" onclick="Control.Modal.close();">{{tr}}Cancel{{/tr}}</button>
     {{/if}}
+		
+		{{if $mode == "stop_lines"}}
+      <button type="button" class="save oneclick" onclick="submitChangedLines()">Arrêter les lignes</button>
+      <button type="button" class="cancel oneclick" onclick="Control.Modal.close();">{{tr}}Cancel{{/tr}}</button>
+    {{/if}}
+    
 	</div>
 </form>

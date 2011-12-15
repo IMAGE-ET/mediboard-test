@@ -92,6 +92,12 @@ selectStoppedLines = function(prescription_id){
 	url.requestModal(900, 500, {showClose: false, showReload: false});
 }
 
+selectValidatedLines = function(prescription_id){
+  var url = new Url("dPprescription", "ajax_validated_lines");
+  url.addParam("prescription_id", prescription_id);
+  url.requestModal(900, 500, {showClose: false, showReload: false});
+}
+
 popupTransmission = function(sejour_id){
   var url = new Url;
   url.setModuleAction("dPprescription", "httpreq_vw_transmissions");
@@ -678,16 +684,7 @@ Main.add( function(){
 	</tr>
 	<tr>
 	  <td class="button">
-	  	<form name="stopAllLines" action="?" method="post">
-	  		<input type="hidden" name="m" value="dPprescription" />
-	  		<input type="hidden" name="dosql" value="do_stop_all_lines_aed" />
-				<input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
-				<button type="button" class="cancel singleclick" onclick="return onSubmitFormAjax(this.form, { onComplete: function(){ 
-				Prescription.reload('{{$prescription->_id}}', '', 'medicament', '0', '{{$mode_pharma}}');
-				modalWindowTools.close();
-				}	})">Tout arrêter</button>
-	  	</form>
-	  	
+			<button type="button" class="cancel" onclick="selectValidatedLines('{{$prescription->_id}}')">Tout arrêter</button>
 			{{if $is_praticien}}
 			  <button type="button" class="tick" onclick="selectStoppedLines('{{$prescription->_id}}');">Tout reprendre</button>
       {{/if}}

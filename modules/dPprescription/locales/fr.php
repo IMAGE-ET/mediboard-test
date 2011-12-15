@@ -1746,6 +1746,7 @@ $locales['mod-dPprescription-tab-ajax_administration_for_consult'] = 'Validation
 $locales['mod-dPprescription-tab-ajax_merge_prescriptions'] = 'Modale de fusion de prescriptions';
 $locales['mod-dPprescription-tab-ajax_select_lines'] = 'Mode avancé';
 $locales['mod-dPprescription-tab-ajax_stopped_lines'] = 'Reprise des lignes arretes';
+$locales['mod-dPprescription-tab-ajax_validated_lines'] = 'Arrêt des lignes de prescription';
 $locales['mod-dPprescription-tab-ajax_vw_favoris_prescription'] = 'Favoris';
 $locales['mod-dPprescription-tab-ajax_vw_import_protocole'] = 'Import de protocole';
 $locales['mod-dPprescription-tab-configure'] = 'Configurer';
