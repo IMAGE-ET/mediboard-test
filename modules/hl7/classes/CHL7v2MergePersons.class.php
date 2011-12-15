@@ -41,13 +41,16 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
     // Traitement du message des erreurs
     $comment = $warning = "";
     
+    return $exchange_ihe->setAckAR($ack, "E122", $comment, $newPatient);
     $mbPatient        = new CPatient();
     $mbPatientElimine = new CPatient();
    
     $exchange_ihe = $this->_ref_exchange_ihe;
     $exchange_ihe->_ref_sender->loadConfigValues();
     $sender       = $exchange_ihe->_ref_sender;
-
+    
+    return $exchange_ihe->setAckAR($ack, "E005", null, $newPatient);
+    
     $patientRI = CValue::read($data['personIdentifiers'], "RI");
     $patientPI = CValue::read($data['personIdentifiers'], "PI");
     
