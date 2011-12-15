@@ -39,7 +39,7 @@ class CElementPrescription extends CMbObject {
   var $_count_constantes_items    = null;
   var $_ref_indices_cout          = null;
   var $_count_indices_cout        = null;
-  
+	
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'element_prescription';
@@ -124,6 +124,15 @@ class CElementPrescription extends CMbObject {
   function countRefsConstantesItems() {
     return $this->_count_constantes_items = $this->countBackRefs("constantes_items");
   }
+	
+  function loadRefsConstantesItems() {
+    return $this->_ref_constantes_items = $this->loadBackRefs("constantes_items");
+  }
+  
+	function loadView(){
+		parent::loadView();
+    $this->loadRefsConstantesItems();
+	}
 }
 
 ?>
