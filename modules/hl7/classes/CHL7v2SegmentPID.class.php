@@ -126,10 +126,10 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
         // O   - Office
         // P   - Permanent 
         // RH  - Registry home
-        "BR",
+        "BDL",
       );
     }
-    $data[] =  $address;
+    $data[] = $address;
     
     // PID-12: County Code (IS) (optional)
     $data[] = null;
