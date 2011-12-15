@@ -80,7 +80,7 @@
   	{{mb_ditto name=date value=$_suivi->debut|date_format:$conf.date}}
 	</td>
 	<td>{{mb_value object=$_suivi field="time_debut"}}</td>
-  <td colspan="2">
+  <td colspan="2" {{if $_suivi->_count.transmissions}}class="arretee"{{/if}}>
   	{{if !$readonly}}
 		  <button type="button" class="tick" onclick="addTransmissionAdm('{{$_suivi->_id}}','{{$_suivi->_class}}');" style="float: right;">Réaliser ({{$_suivi->_count.transmissions}})</button>
 		{{/if}}
