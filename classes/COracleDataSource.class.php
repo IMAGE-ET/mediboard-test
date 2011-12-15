@@ -26,6 +26,8 @@ class COracleDataSource extends CSQLDataSource {
     //$this->exec("ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD'");
     $this->exec("ALTER SESSION SET NLS_TIMESTAMP_FORMAT = 'YYYY-MM-DD HH24:MI:SS'");
     $this->exec("ALTER SESSION SET NLS_TIME_FORMAT = 'HH24:MI:SS'");
+    $this->exec("ALTER SESSION SET NLS_COMP = LINGUISTIC");
+    $this->exec("ALTER SESSION SET NLS_SORT = BINARY_AI"); // accent-insensitive and case-insensitive binary sort
 
     return $this->link;
   }  
