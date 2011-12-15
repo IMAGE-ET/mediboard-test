@@ -56,8 +56,16 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       if ($patientRI) {
         // Recherche du patient par son RI
         if ($newPatient->load($patientRI)) {
+          $recoveredPatient = clone $newPatient;
+          
           // Mapping du patient
           $this->mappingPatient($data, $newPatient);
+          
+          // Le patient retrouvé est-il différent que celui du message ?
+          if (!$this->checkSimilarPatient($recoveredPatient, $newPatient)) {
+            $commentaire = "Le nom ($newPatient->nom / $recoveredPatient->nom) et/ou le prénom ($newPatient->prenom / $recoveredPatient->prenom) sont très différents."; 
+            return $exchange_ihe->setAckAR($ack, "E123", $commentaire, $newPatient);
+          }
           
           // Notifier les autres destinataires autre que le sender
           $newPatient->_eai_initiateur_group_id = $sender->group_id;
@@ -116,8 +124,16 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     else {
       $newPatient->load($IPP->object_id);
       
+      $recoveredPatient = clone $newPatient;
+          
       // Mapping du patient
       $this->mappingPatient($data, $newPatient);
+      
+      // Le patient retrouvé est-il différent que celui du message ?
+      if (!$this->checkSimilarPatient($recoveredPatient, $newPatient)) {
+        $commentaire = "Le nom ($newPatient->nom / $recoveredPatient->nom) et/ou le prénom ($newPatient->prenom / $recoveredPatient->prenom) sont très différents."; 
+        return $exchange_ihe->setAckAR($ack, "E124", $commentaire, $newPatient);
+      }
                       
       // RI non fourni
       if (!$patientRI) {
@@ -178,6 +194,10 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
         $this->getNK1($_NK1, $newPatient);
       }
     }
+  }
+  
+  function checkSimilarPatient(CPatient $recoveredPatient, CPatient $newPatient) {
+    return $recoveredPatient->checkSimilar($newPatient->nom, $newPatient->prenom);
   }
   
   function getPID(DOMNode $node, CPatient $newPatient) {    
