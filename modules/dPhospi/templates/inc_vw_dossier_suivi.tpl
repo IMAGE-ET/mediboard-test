@@ -119,9 +119,7 @@ addTransmissionAdm = function(line_id, line_class){
 }
 
 highlightTransmissions = function(cible_guid){
-  $('transmissions').select("."+cible_guid).each(function(e){
-    e.down('.libelle_trans').addClassName('highlight');
-  });
+  $('transmissions').select("."+cible_guid+" .libelle_trans").invoke("addClassName", "highlight");
 }
 
 removeHighlightTransmissions = function(){
