@@ -425,7 +425,13 @@ class CSetupdPhospi extends CSetup {
                 ADD INDEX (`object_class`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.50";
+    $this->makeRevision("0.50");
+    
+    $query = "ALTER TABLE `lit` 
+              ADD `nom_complet` VARCHAR (255);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.51";
   }
 }
 ?>

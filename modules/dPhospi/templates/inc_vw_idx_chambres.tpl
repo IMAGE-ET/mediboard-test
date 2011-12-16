@@ -43,7 +43,10 @@
         <td>
           {{foreach from=$_chambre->_ref_lits item=_lit}}
             <a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$_lit->chambre_id}}&amp;lit_id={{$_lit->_id}}">
-              {{$_lit}}
+              {{$_lit->nom}}
+              {{if $_lit->nom_complet}}
+                ({{$_lit->nom_complet}})
+              {{/if}}
             </a>
           {{/foreach}}
         </td>
@@ -138,7 +141,10 @@
         {{mb_include module=system template=inc_object_history    object=$_lit}}
         {{mb_include module=system template=inc_object_uf         object=$_lit }}
         <a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$_lit->chambre_id}}&amp;lit_id={{$_lit->_id}}">
-          {{$_lit}}
+          {{$_lit->nom}}
+          {{if $_lit->nom_complet}}
+            ({{$_lit->nom_complet}})
+          {{/if}}
         </a>
       </td>
     </tr>
@@ -156,8 +162,8 @@
     <table class="form">
     <tr>
       <th>{{mb_label object=$lit field=nom}}</th>
-      <td>
-        {{mb_field object=$lit field=nom}}
+      <td>{{mb_field object=$lit field=nom}}</td>
+      <td rowspan="2">
         {{if $lit->_id}}
         <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
         <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le lit', objName: $V(this.form.nom)})">
@@ -167,6 +173,10 @@
         <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
         {{/if}}
       </td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$lit field=nom_complet}}</th>
+      <td>{{mb_field object=$lit field=nom_complet}}</td>
     </tr>
     </table>
   </form>

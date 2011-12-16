@@ -22,7 +22,8 @@ class CLit extends CMbObject {
   var $chambre_id = null;
 
   // DB Fields
-  var $nom = null;
+  var $nom         = null;
+  var $nom_complet = null;
   
   // Form Fields
   var $_overbooking = null;
@@ -51,8 +52,9 @@ class CLit extends CMbObject {
 
   function getProps() {
   	$specs = parent::getProps();
-    $specs["chambre_id"] = "ref notNull class|CChambre seekable";
-    $specs["nom"]        = "str notNull seekable";
+    $specs["chambre_id"]  = "ref notNull class|CChambre seekable";
+    $specs["nom"]         = "str notNull seekable";
+    $specs["nom_complet"] = "str seekable";
     return $specs;
   }
   
@@ -74,7 +76,7 @@ class CLit extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_shortview = self::$_prefixe . $this->nom;
-    $this->_view      = $this->_shortview;
+    $this->_view      = $this->nom_complet ? self::$_prefixe . $this->nom_complet : $this->_shortview;
   }
   
   function loadCompleteView() {
@@ -82,13 +84,12 @@ class CLit extends CMbObject {
     
     $chambre =& $this->_ref_chambre;
     $chambre->loadRefsFwd();
-    
-    $this->_view = "{$chambre->_ref_service->_view} $chambre->_view $this->_shortview";
+    $this->_view = $this->nom_complet ? self::$_prefixe . $this->nom_complet : "{$chambre->_ref_service->_view} $chambre->_view $this->_shortview";
   }
   
   function loadRefChambre() {
-    $this->_ref_chambre =  $this->loadFwdRef("chambre_id", true);	
-    $this->_view = "{$this->_ref_chambre->_view} - $this->_shortview";
+    $this->_ref_chambre =  $this->loadFwdRef("chambre_id", true);
+    $this->_view = $this->nom_complet ? self::$_prefixe . $this->nom_complet : "{$this->_ref_chambre->_view} - $this->_shortview";
     return $this->_ref_chambre;
   }
 
