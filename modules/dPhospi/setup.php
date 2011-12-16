@@ -404,7 +404,27 @@ class CSetupdPhospi extends CSetup {
                 CHANGE `object_class` `object_class` ENUM ('CService','CChambre','CLit','CMediusers','CFunctions') NOT NULL;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.49";
+    $this->makeRevision("0.49");
+    
+    $query = "CREATE TABLE `movement` (
+                `movement_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `movement_type` ENUM ('PADM','ADMI','MUTA','SATT','SORT') NOT NULL,
+                `original_trigger_code` CHAR (3),
+                `last_update` DATETIME NOT NULL,
+                `object_id` INT (11) UNSIGNED NOT NULL,
+                `object_class` VARCHAR (80) NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `movement` 
+                ADD INDEX (`movement_type`),
+                ADD INDEX (`original_trigger_code`),
+                ADD INDEX (`last_update`),
+                ADD INDEX (`object_id`),
+                ADD INDEX (`object_class`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.50";
   }
 }
 ?>
