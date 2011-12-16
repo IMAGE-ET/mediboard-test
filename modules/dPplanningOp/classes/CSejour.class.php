@@ -2045,24 +2045,29 @@ class CSejour extends CCodable implements IPatientRelated {
   }
   
   function getCurrentUF($date = null) {
-    if(!$date) {
+    if (!$date) {
       $date = mbDateTime();
     }
-  	if($affectation = $this->getCurrAffectation($date)){
+    $affectation = $this->getCurrAffectation($date);
+  	if ($affectation->_id) {
   	 return $affectation->getUFs();
     }
-    $affectation_uf = new CAffectationUniteFonctionnelle();
-    //service
     
-    if($service_id){
-      if($affectation_uf->loadObject("object_id = '$service_id' and object_class = 'CService'")){
-        return array("hebergement" => $affectation_uf->loadRefUniteFonctionnelle());	
-      }
+    $affectation_uf = new CAffectationUniteFonctionnelle();
+    // Service
+    if ($this->service_id){
+      $affectation_uf->object_id    = $this->service_id;
+      $affectation_uf->object_class = "CService";
+    } 
+    // Praticien
+    else {
+      $affectation_uf->object_id    = $this->_ref_praticien->_id;
+      $affectation_uf->object_class = "CMediusers";
     }
-    //praticien
-    if($affectation_uf->loadObject("object_id = '$_ref_praticien' and object_class = 'CMediusers'")){
-      return  array("hebergement" => $affectation_uf->loadRefUniteFonctionnelle());  
-    }
+    
+    $affectation_uf->loadMatchingObject();
+    
+    return array("hebergement" => $affectation_uf->loadRefUniteFonctionnelle());  
   }
   
   function getIncrementVars() {
