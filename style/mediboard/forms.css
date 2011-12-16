@@ -166,18 +166,6 @@ label:hover {
   cursor: pointer;
 }
 
-label[title]:hover,
-*[onmouseover] {
-  border-bottom: 1px dotted #bbb;
-  margin-bottom: -1px;
-  cursor: help;
-}
-
-a[onmouseover],
-a *[onmouseover] {
-  cursor: pointer;
-}
-
 /** Buttons **/
 button,
 a.button {
