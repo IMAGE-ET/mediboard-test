@@ -73,17 +73,16 @@
       <td class="text">
       {{/if}}
         {{if !$sejour->entree_reelle || ($aff_prev->_id && $aff_prev->effectue == 0)}}
-        <font class="patient-not-arrived">
+          <span class="patient-not-arrived">
+        {{elseif $sejour->septique}}
+          <span class="septique">
         {{else}}
-          {{if $sejour->septique}}
-        <font class="septique">
-          {{else}}
-        <font>
-          {{/if}}
-        {{/if}} 
+          <span>
+        {{/if}}
+        
         <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
           {{if $sejour->type == "ambu"}}
-					<strong><em>{{$patient}}</em></strong>
+          <strong><em>{{$patient}}</em></strong>
           {{else}}
           <strong>{{$patient}}</strong>
           {{/if}}
@@ -92,7 +91,7 @@
         {{if (!$sejour->entree_reelle) || ($aff_prev->_id && $aff_prev->effectue == 0)}}
           {{$curr_affectation->entree|date_format:"%d/%m %Hh%M"}}
         {{/if}}
-        </font>
+        </span>
       </td>
       <td class="action" style="background:#{{$sejour->_ref_praticien->_ref_function->color}}" 
         onmouseover="ObjectTooltip.createTimeHospi(this, '{{$sejour->praticien_id}}', '{{$sejour->_codes_ccam_operations}}' );">
@@ -245,11 +244,11 @@
 
     <tr class="dates">
       <td colspan="3"><strong>Age</strong>: {{$patient->_age}} ans ({{mb_value object=$patient field=naissance}})
-			<a style="float: right;" href="#1" title=""
+      <a style="float: right;" href="#1" title=""
         onclick="AffectationUf.affecter('{{$curr_affectation->_guid}}','{{$curr_lit->_guid}}')"  >
         <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF"/>
       </a></td>
-			
+      
     </tr>
 
     {{if $sejour->prestation_id}}
@@ -262,9 +261,9 @@
     
     <tr class="dates">
       <td class="text" colspan="3">
-	      <strong>
-	        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
-	      </strong>
+        <strong>
+          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
+        </strong>
       </td>
     </tr>
 
@@ -336,8 +335,8 @@
         {{if $can->edit}}
         <form name="editChFrm{{$sejour->_id}}" action="?m=dPhospi" method="post">
           <input type="hidden" name="m" value="dPplanningOp" />
-	        <input type="hidden" name="dosql" value="do_sejour_aed" />
-	        <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+          <input type="hidden" name="dosql" value="do_sejour_aed" />
+          <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
           {{if $sejour->chambre_seule}}
           <input type="hidden" name="chambre_seule" value="0" />
           <button class="change" type="submit" style="color: #f22;">

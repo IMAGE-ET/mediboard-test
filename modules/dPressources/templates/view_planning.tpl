@@ -46,24 +46,23 @@ Main.add(function () {
                 {{else}}
                 <td style="vertical-align:middle; text-align:center; background-color:{{$curr_plage->_state}}" rowspan="{{$curr_plage->_hour_fin-$curr_plage->_hour_deb}}">
                 {{/if}}
-                  {{if $curr_plage->prat_id == $app->user_id}}
-                  <font style="font-weight: bold; color: #060;">
-                  {{/if}}
-                  {{if $curr_plage->libelle}}
-                    {{$curr_plage->libelle}}
-                    <br />
-                  {{/if}}
-                  {{$curr_plage->tarif|currency}}
+								
+                  <span {{if $curr_plage->prat_id == $app->user_id}} style="font-weight: bold; color: #060;" {{/if}}>
+	                  {{if $curr_plage->libelle}}
+	                    {{$curr_plage->libelle}}<br />
+	                  {{/if}}
+										
+	                  {{$curr_plage->tarif|currency}}<br />
+	                  {{$curr_plage->debut|date_format:"%H"}}h - {{$curr_plage->fin|date_format:"%H"}}h
+										
+	                  {{if $curr_plage->prat_id}}
+	                    <br />
+	                    Dr {{$curr_plage->_ref_prat->_view}}
+	                  {{/if}}
+                  </span>
+									
                   <br />
-                  {{$curr_plage->debut|date_format:"%H"}}h - {{$curr_plage->fin|date_format:"%H"}}h
-                  {{if $curr_plage->prat_id}}
-                    <br />
-                    Dr {{$curr_plage->_ref_prat->_view}}
-                  {{/if}}
-                  {{if $curr_plage->prat_id == $app->user_id}}
-                  </font>
-                  {{/if}}
-                  <br />
+									
                   {{if $isprat && (($curr_plage->_state == $curr_plage|const:'FREE') || (($curr_plage->_state == $curr_plage|const:'BUSY') && ($curr_plage->prat_id == $app->user_id)))}}
                   <form name="editPlage{{$curr_plage->plageressource_id}}" action="?m={{$m}}" method="post" onSubmit=" return alertAction()">
                   <input type='hidden' name='dosql' value='do_plageressource_aed' />

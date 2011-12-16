@@ -47,39 +47,37 @@ Main.add(function () {
             <div><strong>ALD</strong></div>
             {{/if}}
             {{if $_sejour->type == "ambu"}}
-            <img src="images/icons/X.png" alt="X" title="Sortant ce soir" />
+            <img src="modules/dPhospi/images/X.png" alt="X" title="Sortant ce soir" />
             {{elseif $_aff->sortie|iso_date == $demain}}
               {{if $_aff_next->_id}}
-            <img src="images/icons/OC.png" alt="OC" title="Sortant demain" />
+            <img src="modules/dPhospi/images/OC.png" alt="OC" title="Sortant demain" />
               {{else}}
-            <img src="images/icons/O.png" alt="O" title="Sortant demain" />
+            <img src="modules/dPhospi/images/O.png" alt="O" title="Sortant demain" />
               {{/if}}
             {{elseif $_aff->sortie|iso_date == $date}}
               {{if $_aff_next->_id}}
-            <img src="images/icons/OoC.png" alt="OoC" title="Sortant aujourd'hui" />
+            <img src="modules/dPhospi/images/OoC.png" alt="OoC" title="Sortant aujourd'hui" />
               {{else}}
-            <img src="images/icons/Oo.png" alt="Oo" title="Sortant aujourd'hui" />
+            <img src="modules/dPhospi/images/Oo.png" alt="Oo" title="Sortant aujourd'hui" />
               {{/if}}
             {{/if}}
           </td>
           <td class="text" {{if $_aff->confirme}}style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"{{/if}}>
             {{if !$_sejour->entree_reelle || ($_aff_prev->_id && $_aff_prev->effectue == 0)}}
-            <font class="patient-not-arrived">
+              <span class="patient-not-arrived">
+            {{elseif $_sejour->septique}}
+              <span class="septique">
             {{else}}
-              {{if $_sejour->septique}}
-            <font class="septique">
-              {{else}}
-            <font>
-              {{/if}}
+              <span>
             {{/if}} 
-            <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
-              {{if $_sejour->type == "ambu"}}
-              <strong><em>{{$_patient}}</em></strong>
-              {{else}}
-              <strong>{{$_patient}}</strong>
-              {{/if}}
+	            <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
+	              {{if $_sejour->type == "ambu"}}
+	              <strong><em>{{$_patient}}</em></strong>
+	              {{else}}
+	              <strong>{{$_patient}}</strong>
+	              {{/if}}
+	            </span>
             </span>
-            </font>
           </td>
           <td style="width: 1%; background:#{{$_sejour->_ref_praticien->_ref_function->color}}">
             {{$_sejour->_ref_praticien->_shortview}}
