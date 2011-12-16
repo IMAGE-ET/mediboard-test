@@ -36,8 +36,12 @@ class CConsultAnesth extends CMbObject {
   var $bouche         = null;
   var $distThyro      = null;
   var $etatBucco      = null;
+	
   var $examenCardio   = null;
   var $examenPulmo    = null;
+  var $examenDigest   = null;
+  var $examenAutre    = null;
+	
   var $conclusion     = null;
   var $position       = null;
   var $premedication  = null;
@@ -154,8 +158,12 @@ class CConsultAnesth extends CMbObject {
     $specs["bouche"]           = "enum list|m20|m35|p35";
     $specs["distThyro"]        = "enum list|m65|p65";
     $specs["etatBucco"]        = "text helped";
+		
     $specs["examenCardio"]     = "text helped";
     $specs["examenPulmo"]      = "text helped";
+    $specs["examenDigest"]     = "text helped";
+    $specs["examenAutre"]      = "text helped";
+		
     $specs["conclusion"]       = "text helped seekable";
     $specs["position"]         = "enum list|DD|DV|DL|GP|AS|TO|GYN";
 
@@ -393,6 +401,8 @@ class CConsultAnesth extends CMbObject {
     $template->addProperty("Anesthésie - Résultats Radio pulmonaier", $this->result_rp);
     $template->addProperty("Anesthésie - Examen cardiovasculaire"   , $this->examenCardio);
     $template->addProperty("Anesthésie - Examen pulmonaire"         , $this->examenPulmo);
+    $template->addProperty("Anesthésie - Examen digestif"           , $this->examenDigest);
+    $template->addProperty("Anesthésie - Examen autre"              , $this->examenAutre);
     
     $template->addProperty("Anesthésie - Ouverture de la bouche"    , $this->getFormattedValue('bouche'));
     $template->addProperty("Anesthésie - Distance thyro-mentonnière", $this->getFormattedValue('distThyro'));

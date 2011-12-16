@@ -442,6 +442,7 @@
             {{/if}}
           </td>
         </tr>
+				
         <tr>
           <th class="category">Examen Pulmonaire</th>
         </tr>
@@ -462,6 +463,39 @@
             {{/if}}
           </td>
         </tr>
+				
+        <tr>
+          <th class="category">Examen Digestif</th>
+        </tr>
+        <tr>
+          <td>
+            {{$consult_anesth->examenDigest}}
+            {{if $dossier_medical->_ref_antecedents_by_type && array_key_exists('digestif', $dossier_medical->_ref_antecedents_by_type)}}
+            <ul>
+            {{foreach from=$dossier_medical->_ref_antecedents_by_type.digestif item=currAnt}}
+              <li> 
+                {{if $currAnt->date}}
+                  {{mb_value object=$currAnt field=date}} :
+                {{/if}}
+                {{$currAnt->rques}} 
+              </li>
+            {{/foreach}}
+            </ul>
+            {{/if}}
+          </td>
+        </tr>
+				
+				{{if $consult_anesth->examenAutre}}
+        <tr>
+          <th class="category">Examen Autre</th>
+        </tr>
+        <tr>
+          <td>
+            {{$consult_anesth->examenAutre}}
+          </td>
+        </tr>
+				{{/if}}
+				
         <tr>
           <th class="category">Uro-nephrologie</th>
         </tr>
@@ -570,7 +604,7 @@
       </table>
     </td>
   </tr>
-  <!-- Non impression de la biologie pour l'instant
+  {{* Non impression de la biologie pour l'instant
   <tr>
     <td colspan="2">
       <!-- Biologie -->
@@ -582,7 +616,7 @@
       </table>
     </td>
   </tr>
-  -->
+	*}}
 
   {{if $conf.dPcabinet.CConsultAnesth.show_facteurs_risque}}
   <tr>

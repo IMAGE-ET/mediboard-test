@@ -1383,7 +1383,13 @@ class CSetupdPcabinet extends CSetup {
               ADD `apfel_morphine` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.38";
+    $this->makeRevision("1.38");
+    $query = "ALTER TABLE `consultation_anesth` 
+      ADD `examenAutre` TEXT NULL AFTER `examenPulmo` ,
+      ADD `examenDigest` TEXT NULL AFTER `examenPulmo` ;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.39";
   }
 }
 ?>

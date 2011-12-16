@@ -1,25 +1,23 @@
 <script type="text/javascript">
 Main.add(function () {
-  
   var oExamCliniqueForm = getForm("editAnesthExamenClinique");
-  new AideSaisie.AutoComplete(oExamCliniqueForm.examenCardio, {
-            objectClass: "CConsultAnesth",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur:0
-          });
-
-  new AideSaisie.AutoComplete(oExamCliniqueForm.examenPulmo, {
-            objectClass: "CConsultAnesth",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur:0
-          });
+  var options = {
+    objectClass: "CConsultAnesth",
+    timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+    validateOnBlur: false
+  };
+  
+  new AideSaisie.AutoComplete(oExamCliniqueForm.examenCardio, options);
+  new AideSaisie.AutoComplete(oExamCliniqueForm.examenPulmo,  options);
+  new AideSaisie.AutoComplete(oExamCliniqueForm.examenDigest, options);
+  new AideSaisie.AutoComplete(oExamCliniqueForm.examenAutre,  options);
           
   var oExamForm = getForm("editFrmExamenConsult");
   new AideSaisie.AutoComplete(oExamForm.examen, {
-            objectClass: "CConsultation",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur:0
-          });
+    objectClass: "CConsultation",
+    timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+    validateOnBlur: false
+  });
   
 });
 </script>
@@ -49,6 +47,20 @@ Main.add(function () {
               <fieldset>
                 <legend>{{mb_label object=$consult_anesth field="examenPulmo"}}</legend>
                 {{mb_field object=$consult_anesth field="examenPulmo" rows="4" onchange="this.form.onsubmit()"}}
+              </fieldset>
+            </td>
+          </tr>
+          <tr>
+            <td class="halfPane">
+              <fieldset>
+                <legend>{{mb_label object=$consult_anesth field="examenDigest"}}</legend>
+                {{mb_field object=$consult_anesth field="examenDigest" rows="4" onchange="this.form.onsubmit()"}}
+              </fieldset>
+            </td>
+            <td class="halfPane">
+              <fieldset>
+                <legend>{{mb_label object=$consult_anesth field="examenAutre"}}</legend>
+                {{mb_field object=$consult_anesth field="examenAutre" rows="4" onchange="this.form.onsubmit()"}}
               </fieldset>
             </td>
           </tr>
