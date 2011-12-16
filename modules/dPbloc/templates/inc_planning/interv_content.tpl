@@ -15,7 +15,7 @@
     <br />
   {{/if}}
   {{if $curr_op->libelle}}
-    <em>[{{$curr_op->libelle}}]</em>
+    {{$curr_op->libelle}}
     <br />
   {{/if}}
   {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
@@ -30,8 +30,8 @@
     {{if !$curr_code->_code7}}</strong>{{/if}}
   {{/foreach}}
 </td>
-<td>{{$curr_op->cote|truncate:1:""|capitalize}}</td>
-<td class="text">
+<td class="button">{{$curr_op->cote|truncate:1:""|capitalize}}</td>
+<td class="{{if $curr_op->type_anesth != null}}text{{else}}button{{/if}}">
   {{if $curr_op->type_anesth != null}}
   {{$curr_op->_lu_type_anesth}}
   {{else}}

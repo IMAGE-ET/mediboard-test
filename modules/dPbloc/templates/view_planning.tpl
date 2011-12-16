@@ -36,21 +36,21 @@
       {{else}}
         <h2>
           <strong>
+            {{$curr_plageop->_ref_salle->nom}}
+            -
             {{if $curr_plageop->chir_id}}
               Dr {{$curr_plageop->_ref_chir->_view}}
             {{else}}
               {{$curr_plageop->_ref_spec->_view}}
             {{/if}}
             {{if $curr_plageop->anesth_id}}
-              &mdash; Anesthesiste : Dr {{$curr_plageop->_ref_anesth->_view}}
+              - Anesthesiste : Dr {{$curr_plageop->_ref_anesth->_view}}
             {{/if}}
           </strong>
-          <div style="font-size: 80%">
+          <div style="font-size: 70%">
+            {{$curr_plageop->date|date_format:"%d/%m/%Y"}}
             {{$curr_plageop->_ref_salle->_view}}
             de {{$curr_plageop->debut|date_format:$conf.time}} à {{$curr_plageop->fin|date_format:$conf.time}}
-            le {{$curr_plageop->date|date_format:"%d/%m/%Y"}}
-          </div>
-          <div style="font-size: 70%">
             {{assign var="plageOp_id" value=$curr_plageop->_id}}
             <!-- Affichage du personnel prevu pour la plage operatoire -->
             {{foreach from=$affectations_plage.$plageOp_id key=type_affect item=_affectations}}
