@@ -40,7 +40,7 @@
 			  <input type="hidden" name="dosql" value="do_affectation_uf_aed" />
 			  <input type="hidden" name="object_class" value="{{$object->_class}}" />
 			  <input type="hidden" name="object_id" value="{{$object->_id}}" />
-        <button class="add notext" type="submit">{{tr}}Add{{/tr}}</button>
+        <button class="add notext" type="submit" {{if !is_array($ufs) || count($ufs) ==0 }}disabled{{/if}}>{{tr}}Add{{/tr}}</button>
 				<select name="uf_id" >
           <option value="">&mdash; {{tr}}CUniteFonctionnelle{{/tr}}</option>
             {{foreach from=$ufs item=uf}}                 
