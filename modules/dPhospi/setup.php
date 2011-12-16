@@ -412,7 +412,8 @@ class CSetupdPhospi extends CSetup {
                 `original_trigger_code` CHAR (3),
                 `last_update` DATETIME NOT NULL,
                 `object_id` INT (11) UNSIGNED NOT NULL,
-                `object_class` VARCHAR (80) NOT NULL
+                `object_class` VARCHAR (80) NOT NULL,
+                `cancel` ENUM ('0','1') DEFAULT '0'
               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
