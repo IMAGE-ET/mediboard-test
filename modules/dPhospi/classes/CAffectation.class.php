@@ -146,9 +146,9 @@ class CAffectation extends CMbObject {
 
   function delete() {
     $this->completeField("sejour_id");
-    if($this->sejour_id){
+    if ($this->sejour_id){
       $this->loadRefSejour();
-      if($this->_ref_sejour->type != "seances") {
+      if ($this->_ref_sejour->type != "seances") {
         return $this->_ref_sejour->delAffectations();
       }
     }

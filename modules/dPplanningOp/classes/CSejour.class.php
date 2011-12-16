@@ -697,13 +697,14 @@ class CSejour extends CCodable implements IPatientRelated {
   
   function delAffectations() {
     $this->loadRefsAffectations();
+    $msg = null;
     // dPhospi might not be active
     if($this->_ref_affectations) {
       foreach($this->_ref_affectations as $key => $value) {
-        $this->_ref_affectations[$key]->deleteOne();
+        $msg .= $this->_ref_affectations[$key]->deleteOne();
       }
     }
-    return null;
+    return $msg;
   }
   
   function cancelOperations(){
@@ -1610,6 +1611,7 @@ class CSejour extends CCodable implements IPatientRelated {
       $where["sortie"] = $this->_spec->ds->prepare(">= %", $date);
     }
     $curr_affectation->loadObject($where, $order);
+    
     return $curr_affectation;
   }
   
