@@ -47,12 +47,14 @@ function refreshList(order_col, order_way, type) {
   <tr>
     <th>
         <form name="typeVue" action="?" method="get">
+          <input type="hidden" name="m" value="dPhospi" />
+          <input type="hidden" name="tab" value="edit_sorties" />
           <label for="vue" title="Choisir un type de vue">Type de vue</label>
-          <select name="vue" onchange="refreshList()">
+          <select name="vue" onchange="this.form.submit()">
             <option value="0" {{if $vue == 0}} selected="selected"{{/if}}>Tout afficher</option>
             <option value="1" {{if $vue == 1}} selected="selected"{{/if}}>Ne pas afficher les validés</option>
           </select>
-          <input type="hidden" name="date" class="date" value="{{$date}}" onchange="refreshList()" />
+          <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
         </form>
     </th>
   </tr>
@@ -60,20 +62,24 @@ function refreshList(order_col, order_way, type) {
 
 <ul id="tabs-edit-sorties" class="control_tabs">
   {{foreach from=$sorties item=_sorties key=type}}
-  <li onmousedown="refreshList(null, null, '{{$type}}')">
-    <a href="#{{$type}}">Sorties {{tr}}CSejour.type.{{$type}}{{/tr}} prévues (<span id="count_{{$type}}">-</span>)</a>
-  </li>
+    {{if $_sorties}}
+    <li onmousedown="refreshList(null, null, '{{$type}}')">
+      <a href="#{{$type}}">Sorties {{tr}}CSejour.type.{{$type}}{{/tr}} prévues (<span id="count_{{$type}}">{{$_sorties}}</span>)</a>
+    </li>
+    {{/if}}
   {{/foreach}}
   <li onmousedown="refreshList(null, null, 'deplacements')">
-    <a href="#deplacements">Déplacements prévus (<span id="count_deplacements">-</span>)</a>
+    <a href="#deplacements">Déplacements prévus (<span id="count_deplacements">{{$deplacements}}</span>)</a>
   </li>
 </ul>
 
 <hr class="control_tabs" />
 
 {{foreach from=$sorties item=_sorties key=type}}
-<div id="{{$type}}" style="display: none;"></div>
-</div>
+  {{if $_sorties}}
+  <div id="{{$type}}" style="display: none;"></div>
+  </div>
+  {{/if}}
 {{/foreach}}
 
 <div id="deplacements" style="display: none;">

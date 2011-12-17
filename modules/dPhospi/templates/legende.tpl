@@ -33,16 +33,16 @@
     <td class="text">Hospitalisation déplacée aujourd'hui</td>
   </tr>
   <tr>
-    <td style="text-align: right;"><i><strong>M. X y</strong></i></td>
-    <td class="text">Patient en ambulatoire</td>
+    <td style="text-align: right; font-weight: bold;" class="septique">M. X y</td>
+    <td class="text">Patient septique</td>
   </tr>
   <tr>
     <td style="text-align: right; font-weight: bold;" class="patient-not-arrived">M. X y 27/03 17h00</td>
     <td class="text">Patient qui doit arriver dans cette chambre à 17h00 le 27/03</td>
   </tr>
   <tr>
-    <td style="text-align: right; font-weight: bold;" class="septique">M. X y</td>
-    <td class="text">Patient septique</td>
+    <td style="text-align: right;"><strong>M. X y</strong></td>
+    <td class="text">Patient présent</td>
   </tr>
   <tr>
     <td style="background-image:url(images/icons/ray.gif); background-repeat:repeat; text-align: right; font-weight: bold;">M. X y</td>

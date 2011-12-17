@@ -11,7 +11,6 @@
 
 $type      = CValue::get("type");
 $vue       = CValue::getOrSession("vue"      , 0);
-
 $order_way = CValue::getOrSession("order_way", "ASC");
 $order_col = CValue::getOrSession("order_col", "_patient");
 
@@ -23,7 +22,7 @@ $where = array();
 $where["externe"] = "= '0'";
 $where["group_id"] = "= '$group->_id'";
 
-$service = new CService();
+$service  = new CService();
 $services = $service->loadListWithPerms(PERM_READ, $where);
 
 $whereDeplacement = array();
@@ -47,9 +46,11 @@ $ljoin["service"]            = "service.service_id = chambre.service_id";
 $where["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
 $where["sejour.type"]        = "!= 'exte'";
 $where["service.group_id"]   = "= '$group->_id'";
+$where["service.service_id"] = CSQLDataSource::prepareIn(array_keys($services));
 
 if ($type == "deplacements") {
   $where["service.externe"] = "= '0'";
+  $where["sejour.sortie"] = "!= affectation.sortie";
   
   if ($vue) {
     $where["effectue"] = "= '0'";
@@ -80,28 +81,18 @@ if ($type == "deplacements") {
   
   foreach($deplacements as $_deplacement) {
     $_deplacement->loadRefsFwd();
-    
-    if(!$_deplacement->_ref_next->_id) {
-      unset($deplacements[$_deplacement->_id]);
-      continue;
-    }
     $sejour = $_deplacement->_ref_sejour; 
     $sejour->loadRefPatient(1);
     $sejour->loadRefPraticien(1);
     $_deplacement->_ref_next->loadRefLit()->loadCompleteView();
-    
-    $service_actuel    = $_deplacement->_ref_lit->_ref_chambre->service_id;
-    $service_transfert = $_deplacement->_ref_next->_ref_lit->_ref_chambre->service_id;
-    
-    if (!array_key_exists($service_actuel, $services) && !array_key_exists($service_transfert, $services)){
-      unset($deplacements[$_deplacement->_id]);
-    }
   }
 }
 else {
   if ($vue) {
     $where["confirme"] = " = '0'";
   }
+  
+  $where["sejour.sortie"] = "= affectation.sortie";
   
   $order = null;
 
@@ -119,27 +110,16 @@ else {
   }
   
   // Récupération des sorties du jour
-  $where["type"] = " = '$type'";
+  $where["sejour.type"] = " = '$type'";
   $sorties = $affectation->loadList($where, $order, null, null, $ljoin);
   
   // Chargements des détails des séjours
   foreach($sorties as $_sortie) {
     $_sortie->loadRefsFwd();
-    if($_sortie->_ref_next->_id) {
-      unset($sorties[$_sortie->_id]);
-      continue;
-    }
-    
     $sejour = $_sortie->_ref_sejour;
     $sejour->loadRefPatient(1);
     $sejour->loadRefPraticien(1);
     $_sortie->_ref_next->loadRefLit(1)->loadCompleteView();
-    
-    // Filtre sur les service
-    $service_id = $_sortie->_ref_lit->_ref_chambre->service_id;
-    if (!array_key_exists($service_id, $services)) {
-        unset($sorties[$_sortie->_id]);
-    }
   }
 }
 

@@ -22,8 +22,12 @@ Main.add(function () {
         {{if !$_lit->_ref_affectations|@count}}
         <tr>
           <th class="opacity-70" colspan="3">
-            <span style="float: left">{{$_chambre->_shortview}}</span>
-            <span style="float: right">{{$_lit->_shortview}}</span>
+            {{if $_lit->nom_complet}}
+              <span style="float: left">{{$_lit->nom_complet}}</span>
+            {{else}}
+              <span style="float: left">{{$_chambre->_shortview}}</span>
+              <span style="float: right">{{$_lit->_shortview}}</span>
+            {{/if}}
           </th>
         </tr>
         {{else}}
@@ -47,18 +51,18 @@ Main.add(function () {
             <div><strong>ALD</strong></div>
             {{/if}}
             {{if $_sejour->type == "ambu"}}
-            <img src="modules/dPhospi/images/X.png" alt="X" title="Sortant ce soir" />
+            <img src="modules/dPhospi/images/X{{$suffixe_icons}}.png" alt="X" title="Ambulatoire" />
             {{elseif $_aff->sortie|iso_date == $demain}}
               {{if $_aff_next->_id}}
-            <img src="modules/dPhospi/images/OC.png" alt="OC" title="Sortant demain" />
+            <img src="modules/dPhospi/images/OC{{$suffixe_icons}}.png" alt="OC" title="Déplacé demain" />
               {{else}}
-            <img src="modules/dPhospi/images/O.png" alt="O" title="Sortant demain" />
+            <img src="modules/dPhospi/images/O{{$suffixe_icons}}.png" alt="O" title="Sortant demain" />
               {{/if}}
             {{elseif $_aff->sortie|iso_date == $date}}
               {{if $_aff_next->_id}}
-            <img src="modules/dPhospi/images/OoC.png" alt="OoC" title="Sortant aujourd'hui" />
+            <img src="modules/dPhospi/images/OoC{{$suffixe_icons}}.png" alt="OoC" title="Déplacé aujourd'hui" />
               {{else}}
-            <img src="modules/dPhospi/images/Oo.png" alt="Oo" title="Sortant aujourd'hui" />
+            <img src="modules/dPhospi/images/Oo{{$suffixe_icons}}.png" alt="Oo" title="Sortant aujourd'hui" />
               {{/if}}
             {{/if}}
           </td>

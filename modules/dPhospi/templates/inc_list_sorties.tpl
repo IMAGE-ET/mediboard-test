@@ -4,6 +4,12 @@
 
 {{if $type == "deplacements"}}
    <table class="tbl">
+    <tr class="only-printable">
+      <th class="title" colspan="100">
+        Déplacements prévus (<span id="count_{{$type}}">{{$deplacements|@count}}</span>)
+        &mdash; {{$date|date_format:$conf.longdate}}
+      </th>
+    </tr>
     <tr>
       <th class="not-printable">
         <button class="print notext" style="float:left;" onclick="$('deplacements').print()">{{tr}}Print{{/tr}}</button>
@@ -69,6 +75,12 @@
   </table>
 {{else}}
   <table class="tbl">
+    <tr class="only-printable">
+      <th class="title" colspan="100">
+        Sorties {{tr}}CSejour.type.{{$type}}{{/tr}} prévues (<span id="count_{{$type}}">{{$sorties|@count}}</span>)
+        &mdash; {{$date|date_format:$conf.longdate}}
+      </th>
+    </tr>
     <tr>
       <th class="not-printable">
         <button class="print notext" style="float:left;" onclick="$('{{$type}}').print()">{{tr}}Print{{/tr}}</button>

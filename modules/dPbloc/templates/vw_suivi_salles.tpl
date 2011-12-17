@@ -13,9 +13,9 @@ Main.add(function () {
   Calendar.regField(getForm("changeDate").date, null, {noView: true});
 });
 
-function printFicheBloc(oper_id) {
+function printFicheBloc(interv_id) {
   var url = new Url("dPsalleOp", "print_feuille_bloc");
-  url.addParam("operation_id", oper_id);
+  url.addParam("operation_id", interv_id);
   url.popup(700, 600, 'FeuilleBloc');
 }
 

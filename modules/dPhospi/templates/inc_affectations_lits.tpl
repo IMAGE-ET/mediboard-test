@@ -52,16 +52,16 @@
           {{assign var=suffixe_icons value=""}}
         {{/if}}
         {{if $sejour->type == "ambu"}}
-        <img src="modules/dPhospi/images/X{{$suffixe_icons}}.png" alt="X" title="Sortant ce soir" />
+        <img src="modules/dPhospi/images/X{{$suffixe_icons}}.png" alt="X" title="Ambulatoire" />
         {{elseif $curr_affectation->sortie|iso_date == $demain}}
           {{if $aff_next->_id}}
-        <img src="modules/dPhospi/images/OC{{$suffixe_icons}}.png" alt="OC" title="Sortant demain" />
+        <img src="modules/dPhospi/images/OC{{$suffixe_icons}}.png" alt="OC" title="Déplacé demain" />
           {{else}}
         <img src="modules/dPhospi/images/O{{$suffixe_icons}}.png" alt="O" title="Sortant demain" />
           {{/if}}
         {{elseif $curr_affectation->sortie|iso_date == $date}}
           {{if $aff_next->_id}}
-        <img src="modules/dPhospi/images/OoC{{$suffixe_icons}}.png" alt="OoC" title="Sortant aujourd'hui" />
+        <img src="modules/dPhospi/images/OoC{{$suffixe_icons}}.png" alt="OoC" title="Déplacé aujourd'hui" />
           {{else}}
         <img src="modules/dPhospi/images/Oo{{$suffixe_icons}}.png" alt="Oo" title="Sortant aujourd'hui" />
           {{/if}}
@@ -81,11 +81,7 @@
         {{/if}}
         
         <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
-          {{if $sejour->type == "ambu"}}
-          <strong><em>{{$patient}}</em></strong>
-          {{else}}
           <strong>{{$patient}}</strong>
-          {{/if}}
         </span>
 
         {{if (!$sejour->entree_reelle) || ($aff_prev->_id && $aff_prev->effectue == 0)}}
