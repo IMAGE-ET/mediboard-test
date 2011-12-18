@@ -939,7 +939,7 @@ span.listeCurrent a {
    color:red ;
 }
 
-div.effectue{
+div.effectue, td.effectue{
   text-decoration: line-through;  
 }
 

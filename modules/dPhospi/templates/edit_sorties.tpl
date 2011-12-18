@@ -71,6 +71,9 @@ function refreshList(order_col, order_way, type) {
   <li onmousedown="refreshList(null, null, 'deplacements')">
     <a href="#deplacements">Déplacements prévus (<span id="count_deplacements">{{$deplacements}}</span>)</a>
   </li>
+  <li onmousedown="refreshList(null, null, 'presents')">
+    <a href="#presents">Patients présents (<span id="count_presents">{{$presents}}</span>)</a>
+  </li>
 </ul>
 
 <hr class="control_tabs" />
@@ -83,4 +86,7 @@ function refreshList(order_col, order_way, type) {
 {{/foreach}}
 
 <div id="deplacements" style="display: none;">
+</div>
+
+<div id="presents" style="display: none;">
 </div>

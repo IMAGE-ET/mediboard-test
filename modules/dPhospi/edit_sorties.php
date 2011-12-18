@@ -38,12 +38,26 @@ $ljoin["users"]              = "sejour.praticien_id = users.user_id";
 $ljoin["lit"]                = "lit.lit_id = affectation.lit_id";
 $ljoin["chambre"]            = "chambre.chambre_id = lit.chambre_id";
 $ljoin["service"]            = "service.service_id = chambre.service_id";
-$where["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
 $where["service.group_id"]   = "= '$group->_id'";
 $where["service.service_id"] = CSQLDataSource::prepareIn(array_keys($services));
+$where["sejour.type"]        = "NOT IN ('exte', 'seances')";
+
+if ($vue) {
+  $where["confirme"] = " = '0'";
+}
+
+// Comptage des patients présents
+$wherePresents   = $where;
+$wherePresents[] = "'$date' BETWEEN DATE(affectation.entree) AND DATE(affectation.sortie)";
+$presents = $affectation->countList($wherePresents, null, $ljoin);
+
+$where["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
 
 // Comptage des déplacements
-$where["sejour.type"]        = "!= 'exte'";
+if ($vue) {
+  unset($where["confirme"]);
+  $where["effectue"] = "= '0'";
+}
 $where["sejour.sortie"]      = "!= affectation.sortie";
 $deplacements = $affectation->countList($where, null, $ljoin);
 
@@ -55,6 +69,7 @@ foreach($sorties as $type => &$_sortie) {
 }
 
 $smarty = new CSmartyDP;
+$smarty->assign("presents"    , $presents);
 $smarty->assign("sorties"     , $sorties);
 $smarty->assign("deplacements", $deplacements);
 $smarty->assign("vue"         , $vue);

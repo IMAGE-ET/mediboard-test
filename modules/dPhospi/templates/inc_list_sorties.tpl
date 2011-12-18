@@ -77,7 +77,11 @@
   <table class="tbl">
     <tr class="only-printable">
       <th class="title" colspan="100">
-        Sorties {{tr}}CSejour.type.{{$type}}{{/tr}} prévues (<span id="count_{{$type}}">{{$sorties|@count}}</span>)
+        {{if $type == "presents"}}
+          Patients présents  (<span id="count_{{$type}}">{{$sorties|@count}}</span>)
+        {{else}}
+          Sorties {{tr}}CSejour.type.{{$type}}{{/tr}} prévues (<span id="count_{{$type}}">{{$sorties|@count}}</span>)
+        {{/if}}
         &mdash; {{$date|date_format:$conf.longdate}}
       </th>
     </tr>
@@ -127,15 +131,21 @@
       <td class="text">
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
       </td>
-      <td class="text">
+      <td class="text {{if $sejour->sortie_reelle}}effectue{{/if}}">
         {{$_sortie->_ref_lit}}
       </td>
       <td>
-        {{if $_sortie->confirme}}
-          {{$_sortie->sortie|date_format:$conf.time}}
-        {{else}}
-          {{assign var=sejour_guid value=$sejour->_guid}}
-          <form name="editSortiePrevue-{{$sejour_guid}}" method="post" action="?"
+        <div {{if !$_sortie->confirme && !$sejour->sortie_reelle}}class="only-printable"{{/if}}>
+          {{if $type == 'presents'}}
+            {{$_sortie->sortie|date_format:$conf.datetime}}
+          {{else}}
+            {{$_sortie->sortie|date_format:$conf.time}}
+          {{/if}}
+          </div>
+        {{if !$_sortie->confirme && !$sejour->sortie_reelle}}
+          <div class="not-printable">
+          {{assign var=aff_guid value=$_sortie->_guid}}
+          <form name="editSortiePrevue-{{$type}}-{{$aff_guid}}" method="post" action="?"
             onsubmit="return onSubmitFormAjax(this, { onComplete: function() { refreshList(); } })">
             <input type="hidden" name="m" value="dPplanningOp" />
             <input type="hidden" name="dosql" value="do_sejour_aed" />
@@ -143,8 +153,9 @@
             {{mb_key object=$sejour}}
             {{mb_field object=$sejour field=entree_prevue hidden=true}}
             <button class="add" type="button" onclick="addDays(this, 1)">1J</button>
-            {{mb_field object=$sejour field=sortie_prevue register=true form="editSortiePrevue-$sejour_guid" onchange="this.form.onsubmit()"}}
+            {{mb_field object=$sejour field=sortie_prevue register=true form="editSortiePrevue-$type-$aff_guid" onchange="this.form.onsubmit()"}}
           </form>
+          </div>
         {{/if}}
       </td>
     </tr>
