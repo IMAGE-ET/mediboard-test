@@ -25,6 +25,7 @@ $module->registerTab("vw_bilan_prescription"      , TAB_READ);
 }
 */
 $module->registerTab("vw_idx_chambres"            , TAB_ADMIN);
+$module->registerTab("vw_prestations"             , TAB_ADMIN);
 $module->registerTab("vw_etiquettes"              , TAB_READ);
 if (CModule::getInstalled("printing")) {
   $module->registerTab("vw_printers"              , TAB_READ);

@@ -132,9 +132,10 @@ function fillClass(element_id, element_class) {
 }
 
 Main.add(function () {
+  var form = getForm('editFrm');
   refreshListCCAM();
-  setOperationActive($V(getForm('editFrm').for_sejour) == 0);
-  oCcamField = new TokenField(document.editFrm.codes_ccam, { 
+  setOperationActive($V(form.for_sejour) == 0);
+  oCcamField = new TokenField(form.codes_ccam, { 
     onChange : refreshListCCAM,
     sProps : "notNull code ccam"
   } );
@@ -392,6 +393,12 @@ Main.add(function () {
           <td>{{mb_field object=$protocole field="type" style="width: 15em;"}}</td>
         </tr>
         
+        {{if $conf.dPplanningOp.CSejour.show_type_pec}}
+          <tr>
+            <th>{{mb_label object=$protocole field="type_pec"}}</th>
+            <td>{{mb_field object=$protocole field="type_pec" style="width: 15em;" emptyLabel="Choose" }}</td>
+          </tr>
+        {{/if}}
         <tr>
           <td colspan="2"><hr /></td>
         </tr>

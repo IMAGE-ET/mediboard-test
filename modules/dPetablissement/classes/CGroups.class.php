@@ -106,6 +106,8 @@ class CGroups extends CMbObject {
     $backProps["unites_fonctionnelles"]   = "CUniteFonctionnelle group_id";
     $backProps["ex_classes"]              = "CExClass group_id";
     $backProps["config_constantes_medicales"] = "CConfigConstantesMedicales group_id";
+    $backProps["prestations_journalieres"] = "CPrestationJournaliere group_id";
+    $backProps["prestations_ponctuelles"] = "CPrestationPonctuelle group_id";
     return $backProps;
   }
   

@@ -659,6 +659,14 @@ Main.add( function(){
     </select>
   </td>
 </tr>
+{{if $conf.dPplanningOp.CSejour.show_type_pec}}
+  <tr>
+    <th>{{mb_label object=$sejour field="type_pec"}}</th>
+    <td colspan="3">
+      {{mb_field object=$sejour field="type_pec" emptyLabel="Choose"}}
+    </td>
+  </tr>
+{{/if}}
 <tr class="reanimation">
   <th>{{mb_label object=$sejour field="reanimation"}}</th>
   <td colspan="3">
@@ -836,7 +844,14 @@ Main.add( function(){
   {{/if}}
 </tr>
 {{/if}}
-
+{{if $sejour->_id}}
+<tr>
+  <td></td>
+  <td>
+    <button type="button" class="search" onclick="editPrestations('{{$sejour->_id}}')">Prestations</button>
+  </td>
+</tr>
+{{/if}}
 <!-- Si on est pas en mode operation, on affiche la suite -->
 {{if !$mode_operation}}
 <tr>

@@ -68,7 +68,8 @@ $dPconfig["dPplanningOp"]= array(
 	  "max_cancel_time"     => "0",
 	  "hours_sejour_proche" => "48",
 	  "show_modal_identifiant"    => "0",
-	  "show_discipline_tarifaire" => "0"
+	  "show_discipline_tarifaire" => "0",
+    "show_type_pec" => "0"
 	),
 );
 

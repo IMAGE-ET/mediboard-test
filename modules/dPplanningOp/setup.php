@@ -1225,7 +1225,16 @@ class CSetupdPplanningOp extends CSetup {
       CHANGE `transport` `transport` ENUM('perso','perso_taxi','ambu','ambu_vsl','vsab','smur','heli','fo');";
     $this->addQuery($query);
     
-    $this->mod_version = "1.29";
+    $this->makeRevision("1.29");
+    $query = "ALTER TABLE `sejour`
+      ADD `type_pec` ENUM ('M','C','O');";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `protocole`
+      ADD `type_pec` ENUM ('M','C','O');";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.30";
   }
 }
 ?>

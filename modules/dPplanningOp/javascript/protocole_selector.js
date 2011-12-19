@@ -20,6 +20,7 @@ ProtocoleSelector = {
   sRques_op        : null,
   sLibelle_sejour  : null,
   sType            : null,
+  sTypePec         : null,
   sConvalescence   : null,
   sDP              : null,
   sRques_sej       : null,
@@ -89,6 +90,9 @@ ProtocoleSelector = {
       if (this.sType) {
         oSejourForm[this.sType].value = protocole.type;
       }
+    }
+    if (this.sTypePec) {
+      oSejourForm[this.sTypePec].value = protocole.type_pec; 
     }
     if(this.sServiceId && (!oSejourForm.sejour_id.value || !oSejourForm[this.sServiceId].value)) {
       $V(oSejourForm[this.sServiceId], protocole.service_id);

@@ -145,6 +145,8 @@
   {{mb_include module=system template=inc_config_str  var=$var  size="2" suffix="h"}}
   {{assign var="var"   value="fix_doc_edit"}}
   {{mb_include module=system template=inc_config_bool var=$var }}
+  {{assign var="var"   value="show_type_pec"}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
   <tr>
     <th class="title" colspan="2">Heure par defaut du séjour</th>
   </tr>

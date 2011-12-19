@@ -113,6 +113,9 @@ ProtocoleSelector.init = function(){
   this.sServiceId     = "service_id";
   
   this.sType          = "type";
+  {{if $conf.dPplanningOp.CSejour.show_type_pec == 1}}
+    this.sTypePec       = "type_pec";
+  {{/if}}
   this.sDuree_prevu   = "_duree_prevue";
   this.sConvalescence = "convalescence";
   this.sDP            = "DP";

@@ -32,6 +32,7 @@
       forfait          : "{{$_protocole->forfait}}",
       fournitures      : "{{$_protocole->fournitures}}",
       type             : "{{$_protocole->type}}",
+      type_pec         : "{{$_protocole->type_pec}}",
       duree_hospi      : {{$_protocole->duree_hospi}},
       rques_sejour     : "{{$_protocole->rques_sejour|smarty:nodefaults|escape:"javascript"}}",
       rques_operation  : "{{$_protocole->rques_operation|smarty:nodefaults|escape:"javascript"}}",

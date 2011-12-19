@@ -64,7 +64,7 @@
   {{foreach from=$list_transmissions item=_suivi}}
 	<tr class="{{if is_array($_suivi)}}{{$_suivi.0->_ref_object->_guid}}{{else}}{{$_suivi->_guid}}{{/if}}"
 	    {{if ($_suivi instanceof CPrescriptionLineElement || $_suivi instanceof CPrescriptionLineComment) && !$readonly}}
-			  onmouseover="highlightTransmissions('{{$_suivi->_guid}}');" onmouseout="removeHighlightTransmissions();"
+			  onmouseover="console.log('test');highlightTransmissions('{{$_suivi->_guid}}');" onmouseout="removeHighlightTransmissions();"
 			{{/if}}>
  	  {{mb_include module=dPhospi template=inc_line_suivi show_patient=false nodebug=true}}
 		</tr>

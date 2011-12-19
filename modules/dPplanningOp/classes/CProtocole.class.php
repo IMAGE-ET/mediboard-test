@@ -26,7 +26,8 @@ class CProtocole extends CMbObject {
   var $rques_sejour  = null; // Sejour->rques
   var $pathologie    = null;
   var $septique      = null;
-
+  var $type_pec      = null;
+  
   // DB Fields Operation
   var $codes_ccam        = null;
   var $libelle           = null;
@@ -97,6 +98,8 @@ class CProtocole extends CMbObject {
     $specs["septique"]        = "bool";
     $specs["codes_ccam"]      = "str seekable";
     $specs["temp_operation"]  = "time";
+    $specs["type_pec"]        = "enum list|M|C|O";
+    
     $specs["protocole_prescription_chir_id"]      = "ref class|CMbObject meta|protocole_prescription_chir_class";
     $specs["protocole_prescription_chir_class"]   = "enum list|CPrescription|CPrescriptionProtocolePack";
     $specs["protocole_prescription_anesth_id"]    = "ref class|CMbObject meta|protocole_prescription_anesth_class";

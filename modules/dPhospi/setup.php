@@ -431,7 +431,67 @@ class CSetupdPhospi extends CSetup {
               ADD `nom_complet` VARCHAR (255);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.51";
+    $this->makeRevision("0.51");
+    
+    $query = "CREATE TABLE `prestation_journaliere` (
+               `prestation_journaliere_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+               `nom` VARCHAR (255) NOT NULL,
+               `group_id` INT (11) UNSIGNED NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `prestation_journaliere` 
+      ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+    
+    $query = "CREATE TABLE `prestation_ponctuelle` (
+                `prestation_ponctuelle_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `nom` VARCHAR (255) NOT NULL,
+                `group_id` INT (11) UNSIGNED NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `prestation_ponctuelle` 
+      ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+    
+    $query = "CREATE TABLE `item_prestation` (
+                `item_prestation_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `nom` VARCHAR (255) NOT NULL,
+                `rank` INT (11) UNSIGNED DEFAULT '1',
+                `object_id` INT (11) UNSIGNED NOT NULL,
+                `object_class` ENUM ('CPrestationPonctuelle','CPrestationJournaliere')
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `item_prestation` 
+      ADD INDEX (`object_id`);";
+    $this->addQuery($query);
+    
+    $query = "CREATE TABLE `item_liaison` (
+               `item_liaison_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+               `affectation_id` INT (11) UNSIGNED NOT NULL,
+               `item_prestation_id` INT (11) UNSIGNED NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `item_liaison` 
+      ADD INDEX (`affectation_id`),
+      ADD INDEX (`item_prestation_id`);";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `item_liaison` 
+      ADD `item_prestation_realise_id` INT (11) UNSIGNED,
+      ADD `date` DATE,
+      ADD `quantite` INT (11) DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `item_liaison` 
+      ADD INDEX (`item_prestation_realise_id`),
+      ADD INDEX (`date`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.52";
   }
 }
 ?>

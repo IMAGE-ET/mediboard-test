@@ -455,4 +455,10 @@ checkAld = function(){
 window.bChangePat = 0;
 window.bOldPat = 0;
 
+function editPrestations(sejour_id) {
+  var url = new Url("dPplanningOp", "ajax_vw_prestations");
+  url.addParam("sejour_id", sejour_id);
+  url.requestModal(800);
+}
+
 </script>

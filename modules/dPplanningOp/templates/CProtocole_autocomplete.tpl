@@ -40,6 +40,7 @@
     forfait          : "{{$match->forfait}}",
     fournitures      : "{{$match->fournitures}}",
     type             : "{{$match->type}}",
+    type_pec         : "{{$match->type_pec}}",
     duree_hospi      : {{$match->duree_hospi}},
     rques_sejour     : "{{$match->rques_sejour|smarty:nodefaults|escape:"javascript"}}",
     rques_operation  : "{{$match->rques_operation|smarty:nodefaults|escape:"javascript"}}",
