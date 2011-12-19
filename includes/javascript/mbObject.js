@@ -55,6 +55,8 @@ var MbObject = {
     url.pop(10, 10, "export", null, null, {}, Element.getTempIframe());
   },
   merge: function(object_class, ids) {
+    if (ids.length == 0) return;
+    
     var url = new Url("system", "object_merger");
     url.addParam("objects_class", object_class);
     url.addParam("objects_id", ids.join("-"));

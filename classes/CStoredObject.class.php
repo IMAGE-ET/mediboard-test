@@ -798,8 +798,16 @@ class CStoredObject extends CModelObject {
       
       foreach ($names as $name) {
         $this->completeField($name);
-        $other->$name = $value = addslashes($this->$name);
-        $values[] = "'$value'";
+        $other->$name = addslashes($this->$name);
+        
+        if ($this->_specs[$name] instanceof CRefSpec) {
+          $value = $this->loadFwdRef($name)->_view;
+        }
+        else {
+          $value = $this->$name;
+        }
+        
+        $values[] = $value;
       }
       
       $other->loadMatchingObject();
