@@ -44,11 +44,7 @@ Main.add(function () {
       <option value="{{$service->_id}}" {{if $selService == $service->_id}}selected="selected"{{/if}}>{{$service->_view}}</option>
     {{/foreach}}
   </select>
-  {{if $typeVue == 0}}
-    <input type="hidden" name="date_recherche" class="dateTime" value="{{$date_recherche}}" onchange="this.form.submit()" />
-  {{else}}
-    <input type="hidden" name="date_recherche" class="date" value="{{$date_recherche}}" onchange="this.form.submit()" />
-  {{/if}}
+  <input type="hidden" name="date_recherche" class="dateTime" value="{{$date_recherche}}" onchange="this.form.submit()" />
 </form>
 {{/if}}
 
@@ -80,7 +76,7 @@ Main.add(function () {
       {{if $selPrat}}
         Dr {{$listPrat.$selPrat->_view}} -
       {{/if}}
-      {{$date_recherche|date_format:$conf.date}} : {{$listAff.Aff|@count}} patient(s) placé(s)
+      {{$date_recherche|date_format:$conf.datetime}} : {{$listAff.Aff|@count}} patient(s) placé(s)
       {{if $listAff.NotAff|@count}}- {{$listAff.NotAff|@count}} patient(s) non placé(s){{/if}}
     </th>
   </tr>

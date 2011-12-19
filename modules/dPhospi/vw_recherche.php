@@ -19,16 +19,6 @@ $selService = CValue::getOrSession("selService");
 
 $date_recherche = CValue::getOrSession("date_recherche", mbDateTime());
 
-if ($typeVue == "1") {
-  $date_recherche = mbDate($date_recherche);
-}
-else {
-  // On complête pour faire un datetime si l'heure n'est pas présente
-  if (!preg_match("/:/", $date_recherche)) {
-    $date_recherche = $date_recherche . " " . mbTime();
-  }
-}
-
 // Liste des chirurgiens
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
