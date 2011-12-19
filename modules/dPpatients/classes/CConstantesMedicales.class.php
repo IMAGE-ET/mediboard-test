@@ -432,29 +432,29 @@ class CConstantesMedicales extends CMbObject {
     $specs['_inj']                   = 'num pos';
     $specs['_inj_essai']             = 'num pos moreEquals|_inj';
     
-    $specs['redon']                  = 'float pos min|0';
-    $specs['redon_2']                = 'float pos min|0';
-    $specs['redon_3']                = 'float pos min|0';
-    $specs['redon_4']                = 'float pos min|0';
+    $specs['redon']                  = 'float min|0';
+    $specs['redon_2']                = 'float min|0';
+    $specs['redon_3']                = 'float min|0';
+    $specs['redon_4']                = 'float min|0';
     $specs['diurese']                = 'float min|0'; // Miction naturelle
     $specs['_diurese']               = 'float min|0'; // Vraie diurèse (calculée)
-    $specs['sng']                    = 'float pos min|0';
-    $specs['lame_1']                 = 'float pos min|0';
-    $specs['lame_2']                 = 'float pos min|0';
-    $specs['lame_3']                 = 'float pos min|0';
-    $specs['drain_1']                = 'float pos min|0';
-    $specs['drain_2']                = 'float pos min|0';
-    $specs['drain_3']                = 'float pos min|0';
-    $specs['drain_thoracique_1']     = 'float pos min|0';
-    $specs['drain_thoracique_2']     = 'float pos min|0';
-    $specs['drain_pleural_1']        = 'float pos min|0';
-    $specs['drain_pleural_2']        = 'float pos min|0';
-    $specs['drain_mediastinal']      = 'float pos min|0';
-    $specs['sonde_ureterale_1']      = 'float pos min|0';
-    $specs['sonde_ureterale_2']      = 'float pos min|0';
-    $specs['sonde_vesicale']         = 'float pos min|0';
-    $specs['catheter_suspubien']     = 'float pos min|0';
-    $specs['entree_lavage']          = 'float pos min|0';
+    $specs['sng']                    = 'float min|0';
+    $specs['lame_1']                 = 'float min|0';
+    $specs['lame_2']                 = 'float min|0';
+    $specs['lame_3']                 = 'float min|0';
+    $specs['drain_1']                = 'float min|0';
+    $specs['drain_2']                = 'float min|0';
+    $specs['drain_3']                = 'float min|0';
+    $specs['drain_thoracique_1']     = 'float min|0';
+    $specs['drain_thoracique_2']     = 'float min|0';
+    $specs['drain_pleural_1']        = 'float min|0';
+    $specs['drain_pleural_2']        = 'float min|0';
+    $specs['drain_mediastinal']      = 'float min|0';
+    $specs['sonde_ureterale_1']      = 'float min|0';
+    $specs['sonde_ureterale_2']      = 'float min|0';
+    $specs['sonde_vesicale']         = 'float min|0';
+    $specs['catheter_suspubien']     = 'float min|0';
+    $specs['entree_lavage']          = 'float min|0';
     
     return $specs;
   }

@@ -280,7 +280,7 @@ if (!$suppressHeaders) {
   $tplHeader->assign("svnStatus"            , $svnStatus);
   $tplHeader->assign("allInOne"             , CValue::get("_aio"));
   $tplHeader->assign("portal"               , array (
-    "help" => mbPortalURL($m, $tab),
+    "help"    => mbPortalURL($m, $tab),
     "tracker" => mbPortalURL("tracker"),
   ));
   

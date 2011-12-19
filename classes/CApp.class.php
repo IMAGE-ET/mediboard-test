@@ -14,6 +14,7 @@
 class CApp {
   static $inPeace = false;
   static $encoding = "utf-8";
+  static $classPaths = array();
   
   /* 
    * The order of the keys is important (only the first keys 

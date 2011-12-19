@@ -205,6 +205,10 @@ ul#nav-vert {
   height: 18px;
 }
 
+.touchscreen input[type=text] {
+	min-width: 2em;
+}
+
 .touchscreen input,
 .touchscreen option,
 .touchscreen form label {
@@ -337,11 +341,12 @@ ul.control_tabs_vertical li a {
   margin-bottom: -1px;
 }
 
+/*
 ul.control_tabs li a[data-count]:after, 
 ul.control_tabs_vertical li a[data-count]:after {
   content: " (" attr(data-count) ")";
   font-size: smaller;
-}
+}*/
 
 ul.control_tabs li a:focus, 
 ul.control_tabs_vertical li a:focus {

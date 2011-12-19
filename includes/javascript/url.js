@@ -698,7 +698,7 @@ var Url = Class.create({
       prepareForms(element);
       Note.refresh();
       onComplete();
-      element.prepareTouchEvents();
+      //element.prepareTouchEvents();
       Element.warnDuplicates();
     });
     
@@ -802,7 +802,7 @@ var Url = Class.create({
       prepareForms(element);
       Note.refresh();
       onComplete();
-      element.prepareTouchEvents();
+      //element.prepareTouchEvents();
       Element.warnDuplicates();
     });
     
