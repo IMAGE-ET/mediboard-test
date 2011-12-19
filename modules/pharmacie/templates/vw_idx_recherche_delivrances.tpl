@@ -36,14 +36,18 @@ deliveryTraceInfo = function(delivery_trace_id) {
         </select>
       </td>
       <th><strong>OU</strong> {{mb_label object=$delivery_trace field=delivery_trace_id}}</th>
-      <td>{{mb_field object=$delivery_trace field=delivery_trace_id}}</td>
-			<td><button type="submit" class="search">{{tr}}Search{{/tr}}</button></td>
+      <td>{{mb_field object=$delivery_trace field=delivery_trace_id size=20}}</td>
+			<td>
+        <button type="submit" class="search">{{tr}}Search{{/tr}}</button>
+			</td>
 		</tr>
 	</table>
 	
-	<div class="small-info">
-		Seuls les 1000 premières délivrances sont affichées
-	</div>
+	{{if $delivery_traces|@count == 1000}}
+		<div class="small-info">
+			Seuls les 1000 premières délivrances sont affichées
+		</div>
+	{{/if}}
 </form>
 
 <h3>
@@ -52,9 +56,17 @@ deliveryTraceInfo = function(delivery_trace_id) {
 	{{/if}}
 	{{mb_value object=$delivery field=_datetime_min}} - {{mb_value object=$delivery field=_datetime_max}}
 	({{$delivery_traces|@count}} délivrances)
+	
+	<button type="button" class="change not-printable" onclick="$('table-nodetails').toggle(); $('table-details').toggle(); ">
+		Afficher / cacher les détails
+	</button>
+	
+  <button type="button" class="print not-printable" onclick="window.print()">
+    {{tr}}Print{{/tr}}
+  </button>
 </h3>
 
-<table class="main tbl">
+<table class="main tbl" id="table-details">
 	<tr>
 		{{* <th class="narrow"></th> *}}
     <th class="narrow">{{mb_title class=CProductDeliveryTrace field=date_delivery}}</th>
@@ -71,7 +83,7 @@ deliveryTraceInfo = function(delivery_trace_id) {
 	
   {{foreach from=$products item=_product}}
 		<tr>
-			<th class="title" colspan="{{$delivery->service_id|ternary:5:6}}">{{$_product}}</th>
+			<th class="title" style="text-align: left;" colspan="{{$delivery->service_id|ternary:5:6}}">{{$_product}}</th>
 			<th class="title" style="text-align: left;">
 				{{$_product->_total}}
 				{{$_product->_unit_title|truncate:30}}
@@ -94,5 +106,21 @@ deliveryTraceInfo = function(delivery_trace_id) {
 				</td>
 			</tr>
 		{{/foreach}}
+  {{/foreach}}
+</table>
+
+<table class="main tbl" id="table-nodetails" style="display: none;">
+  <tr>
+    <th></th>
+    <th>{{mb_title class=CProductDeliveryTrace field=quantity}}</th>
+  </tr>
+  
+  {{foreach from=$products item=_product}}
+    <tr>
+      <td><strong>{{$_product}}</strong></th>
+      <td>
+        {{$_product->_total}} {{$_product->_unit_title|truncate:30}}
+      </td>
+    </tr>
   {{/foreach}}
 </table>
