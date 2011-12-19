@@ -11,7 +11,7 @@ export LANG=fr_FR.utf-8
 # Update
 sh $BASH_PATH/update.sh $1 $2 $3
 
-# Rsyncing -- Parsing updatersync.conf
+# Rsyncing -- Parsing rsyncupdate.conf
 
 while read line
 do
@@ -23,6 +23,6 @@ do
     rsync -avzCP $BASH_PATH/.. $line --exclude includes/config_overload.php --exclude tmp --exclude lib
     check_errs $? "Failed to rsync $line" "Succesfully rsync-ed $line"
   fi
-done < $BASH_PATH/updatersync.conf
+done < $BASH_PATH/rsyncupdate.conf
 
 exit 1
