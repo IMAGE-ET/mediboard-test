@@ -40,7 +40,7 @@ class CPriseDispensation extends CMbMetaObject {
 		
     $specs['quantite_adm']  = 'float notNull';
     $specs['unite_adm']     = 'str notNull';
-    $specs['quantite_disp'] = 'num notNull';
+    $specs['quantite_disp'] = 'float notNull';
 		
     $specs['object_class']  = 'enum notNull list|CPrescriptionLineMixItem|CPrescriptionLineMedicament';
     return $specs;

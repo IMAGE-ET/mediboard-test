@@ -170,7 +170,6 @@ foreach($services as $_service_id => $_service) {
     foreach($_delivery->_ref_prises_dispensation_med as $_prise_disp){
       $lines[$_delivery->_id] = "$_prise_disp->object_class-$_prise_disp->object_id";
       
-      
       $time = mbTransformTime($_prise_disp->datetime,null,"%H");
       @$_delivery->_pilulier[mbDate($_prise_disp->datetime)][$moments[$time]] += $_prise_disp->quantite_disp;
       

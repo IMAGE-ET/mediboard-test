@@ -38,7 +38,12 @@ class CSetuppharmacie extends CSetup {
                 ADD INDEX (`object_class`);";
     $this->addQuery($query);
     
-    $this->mod_version = '0.11';
+		$this->makeRevision("0.11");
+		$query = "ALTER TABLE `prise_dispensation` 
+              CHANGE `quantite_disp` `quantite_disp` FLOAT NOT NULL;";
+		$this->addQuery($query);
+		
+    $this->mod_version = '0.12';
   }
 }
 
