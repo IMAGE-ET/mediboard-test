@@ -11,7 +11,7 @@
 $bilan = new CBilanSSR;
 if ($bilan->sejour_id = CValue::post("sejour_id")) {
 	if ($bilan->loadMatchingObject()) {
-		$_POST["_id"] = $bilan->_id;
+		$_POST["bilan_id"] = $bilan->_id;
 	}
 }
 

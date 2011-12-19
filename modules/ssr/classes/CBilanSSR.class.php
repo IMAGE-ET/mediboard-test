@@ -110,6 +110,32 @@ class CBilanSSR extends CMbObject {
   }
   
   /**
+   * @see parent::store() 
+   */
+  function store() {
+    // Transférer les événéments de l'ancien référent vers le nouveau
+  	if ($this->technicien_id && $this->fieldAltered("technicien_id")) {
+      $technicien = $this->loadRefTechnicien();
+      $old_technicien = new CTechnicien;
+      $old_technicien->load($this->_old->technicien_id);
+  	  $evenement = new CEvenementSSR();
+      $evenement->therapeute_id = $old_technicien->kine_id;
+      $evenement->sejour_id = $this->sejour_id;
+      foreach ($evenement->loadMatchingList() as $_evenement) {
+      	if (!$_evenement->_traite) {
+          $_evenement->therapeute_id = $technicien->kine_id;
+          $_evenement->store();
+          CAppUI::setMsg("{$_evenement->_class}-msg-modify", UI_MSG_OK);
+       	}
+      }
+    }
+    
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+  }
+
+  /**
    * Chargement du séjour 
    * Calcul les premier et dernier jours ouvrés de rééducation 
    * @return CSejour sejour
@@ -269,7 +295,7 @@ class CBilanSSR extends CMbObject {
   
   static function loadSejoursSurConges(CPlageConge $plage, $date_min, $date_max) {
     $group_id = CGroups::loadCurrent()->_id;
-  	
+    
     $date_min = max($date_min, $plage->date_debut);
     $date_max = min($date_max, $plage->date_fin);
     $date_max = mbDate("+1 DAY", $date_max);
