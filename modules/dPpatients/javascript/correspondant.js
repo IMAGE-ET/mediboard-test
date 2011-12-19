@@ -12,7 +12,7 @@ Correspondant = {
         Correspondant.refreshList($V(form.patient_id));
         Control.Modal.close();
       }
-    })
+    });
   },
 
   confirmDeletion: function(form) {
@@ -20,14 +20,14 @@ Correspondant = {
       typeName:'correspondant', 
       objName: $V(form.nom),
       ajax: 1
-    }
+    };
     
     var ajax = {
       onComplete: function() {
         Correspondant.refreshList($V(form.patient_id));
         Control.Modal.close();
       }
-    }
+    };
     
     confirmDeletion(form, options, ajax);
   },
