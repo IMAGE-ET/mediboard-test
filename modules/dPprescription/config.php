@@ -27,6 +27,7 @@ $dPconfig["dPprescription"] = array (
 		"duration_in_hours" => "0",
     "show_ccam_bons" => "1",
 		"prolongation_time" => "0",
+		"nb_days_relative_end" => "3",
     "scores" => array(
       "interaction" => array(
         "niv1" => "1",

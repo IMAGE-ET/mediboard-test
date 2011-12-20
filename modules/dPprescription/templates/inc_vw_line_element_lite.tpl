@@ -124,7 +124,7 @@
 				{{/if}}
       {{/if}}
 			
-			 {{if $line->_ref_prescription->type == "sejour" && $line->_fin_relative != ""}}
+			 {{if $line->_ref_prescription->type == "sejour" && $line->_fin_relative != "" && $line->_fin_relative <= $conf.dPprescription.CPrescription.nb_days_relative_end}}
 	     <br />
 	     <strong>
 	     (Fin{{if $line->_fin_relative > 0}} - {{$line->_fin_relative}} j){{else $line->_fin_relative === 0}}){{/if}}

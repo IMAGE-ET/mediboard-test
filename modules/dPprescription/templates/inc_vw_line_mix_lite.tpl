@@ -146,7 +146,7 @@
       {{mb_value object=$_prescription_line_mix field=duree}} {{mb_value object=$_prescription_line_mix field="unite_duree"}}
     {{/if}}
 
-		{{if $_prescription_line_mix->_ref_prescription->type == "sejour" && $_prescription_line_mix->_fin_relative != ""}}
+		{{if $_prescription_line_mix->_ref_prescription->type == "sejour" && $_prescription_line_mix->_fin_relative != "" && $_prescription_line_mix->_fin_relative <= $conf.dPprescription.CPrescription.nb_days_relative_end}}
      <br />
      <strong>
      (Fin{{if $_prescription_line_mix->_fin_relative > 0}} - {{$_prescription_line_mix->_fin_relative}} j){{else $_prescription_line_mix->_fin_relative === 0}}){{/if}}
