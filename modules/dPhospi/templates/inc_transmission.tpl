@@ -202,14 +202,14 @@ completeTrans = function(type, button){
             <div style="display:none; width: 350px; white-space: normal; text-align: left;" class="autocomplete" id="cible_auto_complete"></div>
             <br />
           {{/if}}
-          {{mb_label object=$transmission field=degre}} : {{mb_field object=$transmission field=degre typeEnum="radio"}}
-          {{tr}}CTransmissionMedicale-date{{/tr}} : {{mb_field object=$transmission field=date}}
+          {{mb_label object=$transmission field=degre}} : {{mb_field object=$transmission field=degre}} &mdash;
+          {{mb_label object=$transmission field=date}} : {{mb_field object=$transmission field=date}}
           
           {{if $transmission->_id && !$transmission->type}}
-            {{tr}}CTransmissionMedicale-type{{/tr}} : {{mb_field object=$transmission field="type" typeEnum="radio"}}
+            {{mb_label object=$transmission field=type}} : {{mb_field object=$transmission field="type" typeEnum="radio"}}
             <button type="button" onclick="$V(this.form.type, '')" class="cancel notext"></button>
           {{elseif $transmission->_id}}
-            {{tr}}CTransmissionMedicale-type{{/tr}} : {{mb_value object=$transmission field="type"}}
+            {{mb_label object=$transmission field=type}} : {{mb_value object=$transmission field="type"}}
           {{/if}}
         </fieldset>
       </td>

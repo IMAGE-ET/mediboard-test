@@ -35,6 +35,7 @@ else if ($data_id || $action_id || $result_id){
     $transmission->_text_data = $trans->text;
     $transmission->user_id    = $trans->user_id;
     $transmission->date       = $trans->date;
+    $transmission->degre      = $trans->degre;
     if ($trans->object_id && $trans->object_class) {
       $transmission->object_id = $trans->object_id;
       $transmission->object_class = $trans->object_class;
@@ -50,6 +51,7 @@ else if ($data_id || $action_id || $result_id){
     $transmission->_text_action = $trans->text;
     $transmission->user_id      = $trans->user_id;
     $transmission->date         = $trans->date;
+    $transmission->degre        = $trans->degre;
     if ($trans->object_id && $trans->object_class) {
       $transmission->object_id = $trans->object_id;
       $transmission->object_class = $trans->object_class;
@@ -65,6 +67,7 @@ else if ($data_id || $action_id || $result_id){
     $transmission->_text_result = $trans->text;
     $transmission->user_id      = $trans->user_id;
     $transmission->date         = $trans->date;
+    $transmission->degre        = $trans->degre;
     if ($trans->object_id && $trans->object_class) {
       $transmission->object_id = $trans->object_id;
       $transmission->object_class = $trans->object_class;

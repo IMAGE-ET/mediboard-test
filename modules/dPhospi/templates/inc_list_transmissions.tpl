@@ -62,28 +62,19 @@
   </tr>  
   <tbody {{if !$readonly}} id="transmissions" {{/if}}>
   {{foreach from=$list_transmissions item=_suivi}}
-	<tr class="{{if is_array($_suivi)}}
-               {{if $_suivi.0->degre == "high"}}
-                 tr.transmission_haute
-               {{/if}}
-             {{$_suivi.0->_ref_object->_guid}}
-             {{else}}
-               {{if $_suivi->degre == "high"}}
-                 tr.transmission_haute
-               {{/if}}
-               {{$_suivi->_guid}}
-             {{/if}}
-             {{if $_suivi instanceof CConsultation && $_suivi->type == "entree"}}
+	<tr class="{{if is_array($_suivi) && $_suivi.0->degre == "high"}}
+                 transmission_haute
+             {{elseif $_suivi instanceof CTransmission && $_suivi->degre == "high"}}
+                 transmission_haute
+             {{elseif $_suivi instanceof CConsultation && $_suivi->type == "entree"}}
                consultation_entree
-             {{/if}}
-             {{if $_suivi instanceof CObservationMedicale}}
+             {{elseif $_suivi instanceof CObservationMedicale}}
                {{if $_suivi->degre == "info"}}
                  observation_info
                {{elseif $_suivi->degre == "high"}}
                  observation_urgente
                {{/if}}
-             {{/if}}
-             "
+             {{/if}}"
 	    {{if ($_suivi instanceof CPrescriptionLineElement || $_suivi instanceof CPrescriptionLineComment) && !$readonly}}
 			  onmouseover="console.log('test');highlightTransmissions('{{$_suivi->_guid}}');" onmouseout="removeHighlightTransmissions();"
 			{{/if}}>

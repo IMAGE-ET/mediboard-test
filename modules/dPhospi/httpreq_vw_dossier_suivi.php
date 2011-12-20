@@ -26,9 +26,7 @@ $sejour->load($sejour_id);
 $sejour->loadSuiviMedical();
 $sejour->loadRefPraticien();
 
-if ($_show_obs) {
-  $sejour->loadRefsConsultations();
-}
+$sejour->loadRefsConsultations();
 
 $sejour->loadRefPrescriptionSejour();
 $prescription =& $sejour->_ref_prescription_sejour;
