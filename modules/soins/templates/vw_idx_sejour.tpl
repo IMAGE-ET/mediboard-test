@@ -50,7 +50,7 @@ function loadDocuments(sejour_id) {
 function popEtatSejour(sejour_id) {
   var url = new Url("dPhospi", "vw_parcours");
   url.addParam("sejour_id",sejour_id);
-  url.pop(1000, 550, 'Etat du Séjour');
+  url.pop(1000, 650, 'Etat du Séjour');
 }
 
 function reloadDiagnostic(sejour_id, modeDAS) {

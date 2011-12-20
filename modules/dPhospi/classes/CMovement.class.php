@@ -40,4 +40,15 @@ class CMovement extends CMbMetaObject {
     
     return parent::store();
   }
+  
+  function listeMvtSejour($sejour_id){
+		$date         = CValue::get("date", mbDateTime());
+		$debut        = mbDate("-1 day", $date);
+  	
+  	$where["object_class"] = "= 'CSejour'";
+  	$where["object_id"]    = "= '$sejour_id'";
+  	$where["last_update"]  = ">= '$debut'";
+  	
+  	return $this->loadList($where);
+  }
 }

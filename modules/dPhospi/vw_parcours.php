@@ -169,14 +169,19 @@ if ($operation) {
 	$diagramme['bloc'] = null;
 }
 
+$mvt = new CMovement();
+$mvts_recents = $mvt->listeMvtSejour($sejour_id);
+
 // Création du template
 $smarty = new CSmartyDP();
 
 
-$smarty->assign("sejour"		, $sejour);
-$smarty->assign("operations", $operations);
-$smarty->assign("affectations", $affectations);
-$smarty->assign("diagramme",  $diagramme);
+$smarty->assign("sejour"		    , $sejour);
+$smarty->assign("operations"    , $operations);
+$smarty->assign("affectations"  , $affectations);
+$smarty->assign("diagramme"     ,  $diagramme);
+$smarty->assign("mvts_recents"  , $mvts_recents);
+
 $smarty->display("vw_parcours.tpl");
 
 ?>
