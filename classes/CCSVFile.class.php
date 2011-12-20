@@ -18,13 +18,13 @@ class CCSVFile {
       "delimiter" => ',',
       "enclosure" => '"',
     ),
-    "msword"     => array(
+    "excel"     => array(
       "delimiter" => ';',
       "enclosure" => '"',
     ),
   );
   
-  function __construct($f = null, $profile_name = "msword"){
+  function __construct($f = null, $profile_name = "excel"){
     $this->f = $f;
     
     if ($profile_name) {
