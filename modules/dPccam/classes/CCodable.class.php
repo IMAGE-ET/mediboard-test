@@ -9,7 +9,7 @@
  */
 
 class CCodable extends CMbObject {
-	
+  
   // DB Fields
   var $codes_ccam          = null;
   var $facture             = null; // Séjour facturé ou non
@@ -109,7 +109,7 @@ class CCodable extends CMbObject {
     $this->loadRefsActesCCAM();
     $this->loadExtCodesCCAM(true);
   }
-	
+  
   function getActeExecution() {
     $this->_acte_execution = mbDateTime();
   }
@@ -119,7 +119,7 @@ class CCodable extends CMbObject {
   }
   
   function updateFormFields() {
-  	parent::updateFormFields();
+    parent::updateFormFields();
     
     $this->codes_ccam = strtoupper($this->codes_ccam);
     $this->_text_codes_ccam = str_replace("|", ", ", $this->codes_ccam);
@@ -152,7 +152,7 @@ class CCodable extends CMbObject {
 
   /*
   function loadRefPrescription() {
-  	$this->_ref_prescription = $this->loadUniqueBackRef("prescriptions");
+    $this->_ref_prescription = $this->loadUniqueBackRef("prescriptions");
   }
   */
   function getAssociationCodesActes() {
@@ -228,8 +228,8 @@ class CCodable extends CMbObject {
   }
   
   function loadRefsActes(){
-  	$this->_ref_actes = array();
-  	
+    $this->_ref_actes = array();
+    
     $this->loadRefsActesCCAM();
     $this->loadRefsActesNGAP();  
     
@@ -251,17 +251,17 @@ class CCodable extends CMbObject {
       return;
     }
 
-  	$order = array();
-  	$order[] = "code_association";
-  	$order[] = "code_acte";
-  	$order[] = "code_activite";
-  	$order[] = "code_phase";
-  	$order[] = "acte_id";
-  	
+    $order = array();
+    $order[] = "code_association";
+    $order[] = "code_acte";
+    $order[] = "code_activite";
+    $order[] = "code_phase";
+    $order[] = "acte_id";
+    
     if (null === $this->_ref_actes_ccam = $this->loadBackRefs("actes_ccam", $order)) {
       return;
     }
-  	
+    
     $this->_temp_ccam = array();
     foreach ($this->_ref_actes_ccam as $_acte_ccam) {
       $this->_temp_ccam[] = $_acte_ccam->makeFullCode();
@@ -274,10 +274,10 @@ class CCodable extends CMbObject {
    * Charge les actes NGAP codés
    */
   function loadRefsActesNGAP() {
-  	/** ajout d'un paramètre d'ordre à passer, ici "lettre_cle" qui vaut 0 ou 1
-  	 * la valeur 1 étant pour les actes principaux et O pour les majorations
-  	 * on souhaite que les actes principaux soient proritaires( donc '1' avant '0')
-  	 * */
+    /** ajout d'un paramètre d'ordre à passer, ici "lettre_cle" qui vaut 0 ou 1
+     * la valeur 1 étant pour les actes principaux et O pour les majorations
+     * on souhaite que les actes principaux soient proritaires( donc '1' avant '0')
+     * */
     if (null === $this->_ref_actes_ngap = $this->loadBackRefs("actes_ngap", "lettre_cle DESC")) {
       return;
     }
@@ -317,35 +317,35 @@ class CCodable extends CMbObject {
     }
 
     $oldObject = new $this->_class;
-	  $oldObject->load($this->_id);
-	  $oldObject->codes_ccam = $this->codes_ccam;
-	  $oldObject->updateFormFields();
-	    
-	  $oldObject->loadRefsActesCCAM();
-			    
+    $oldObject->load($this->_id);
+    $oldObject->codes_ccam = $this->codes_ccam;
+    $oldObject->updateFormFields();
+      
+    $oldObject->loadRefsActesCCAM();
+          
     // Creation du tableau minimal de codes ccam
     $codes_ccam_minimal = array();
     foreach ($oldObject->_ref_actes_ccam as $key => $acte) {
       $codes_ccam_minimal[$acte->code_acte] = true;
     }
 
-	  // Transformation du tableau de codes ccam
-	  $codes_ccam = array();
-	  foreach($oldObject->_codes_ccam as $key => $code) {
-	    if (strlen($code) > 7){
-	      // si le code est de la forme code-activite-phase
+    // Transformation du tableau de codes ccam
+    $codes_ccam = array();
+    foreach($oldObject->_codes_ccam as $key => $code) {
+      if (strlen($code) > 7){
+        // si le code est de la forme code-activite-phase
         $detailCode = explode("-", $code);
         $code = $detailCode[0];
-	    }
-	    $codes_ccam[$code] = true;
-	  }
-	  
-	  // Test entre les deux tableaux
-	  foreach(array_keys($codes_ccam_minimal) as $_code ){
-	    if (!array_key_exists($_code, $codes_ccam)){
-	      return "Impossible de supprimer le code";
-	    }
-	  }
+      }
+      $codes_ccam[$code] = true;
+    }
+    
+    // Test entre les deux tableaux
+    foreach(array_keys($codes_ccam_minimal) as $_code ){
+      if (!array_key_exists($_code, $codes_ccam)){
+        return "Impossible de supprimer le code";
+      }
+    }
   }
   
   function checkCodeCcam() {
@@ -363,22 +363,56 @@ class CCodable extends CMbObject {
       return $msg;
     }
     
-  	//@todo: why not use $this->_old ?
+    //@todo: why not use $this->_old ?
     $oldObject = new $this->_class;
     if($this->_id) {
       $oldObject->load($this->_id);
     }
     
     if(CAppUI::conf("dPccam CCodable use_getMaxCodagesActes")){
-	    if($this->codes_ccam != $oldObject->codes_ccam){
-	      if ($msg = $this->getMaxCodagesActes()) {
-	        return $msg;
-	      }
-	    }   
+      if($this->codes_ccam != $oldObject->codes_ccam){
+        if ($msg = $this->getMaxCodagesActes()) {
+          return $msg;
+        }
+      }   
     }
     return parent::check();
   }
+  
+  function checkModificateur($code, $heure) {
+    $keys = array("A", "E",  "P", "S", "U");
     
+    if (!in_array($code, $keys)) return;
+    
+    $patient   = $this->_ref_patient;
+    $discipline = $this->_ref_praticien->_ref_discipline;
+    // Il faut une date complête pour la comparaison
+    $date_ref = "1970-01-05";
+    $date = "$date_ref $heure";
+    
+    switch ($code) {
+      case "A":
+        return ($patient->_age < 4 || $patient->_age > 80); 
+        break;
+      case "E":
+        return $patient->_age < 5;
+        break;
+      case "P":
+        return in_array($discipline->text, array("MEDECINE GENERALE", "PEDIATRIE")) &&
+          (($date > "$date_ref 20:00:00" && $date <= "$date_ref 23:59:59") ||
+           ($date > "$date_ref 06:00:00" && $date < "$date_ref 08:00:00"));
+        break;
+      case "S":
+        return in_array($discipline->text, array("MEDECINE GENERALE", "PEDIATRIE")) &&
+          ($date >= "$date_ref 00:00:01" && $date < "$date_ref 06:00:00");
+        break;
+      case "U":
+      	$date_tomorrow = mbDate("+1 day", $date_ref)." 08:00:00";
+        return !in_array($discipline->text, array("MEDECINE GENERALE", "PEDIATRIE")) &&
+          ($date > "$date_ref 20:00:00" && $date < $date_tomorrow);
+    }
+  }
+  
   /**
    * Charge les actes CCAM codables en fonction des code CCAM fournis
    */
@@ -389,10 +423,14 @@ class CCodable extends CMbObject {
     // existing acts may only be affected once to possible acts
     $used_actes = array();
     
+    $this->loadRefPatient()->evalAge();
+    $this->loadRefPraticien()->loadRefDiscipline();
+    
     $this->loadExtCodesCCAM(true);
     foreach ($this->_ext_codes_ccam as $code_ccam) {
       foreach ($code_ccam->activites as &$activite) {
         foreach ($activite->phases as &$phase) {
+          
           $possible_acte = new CActeCCAM;
           $possible_acte->montant_depassement = "";
           $possible_acte->code_acte = $code_ccam->code;
@@ -405,7 +443,7 @@ class CCodable extends CMbObject {
           
           // Affectation du dépassement au premier acte de chirugie
           if (!$depassement_affecte and $possible_acte->code_activite == 1) {
-            $depassement_affecte = true;     	
+            $depassement_affecte = true;       
             $possible_acte->montant_depassement = $this->_acte_depassement;
           }
           
@@ -438,13 +476,9 @@ class CCodable extends CMbObject {
           
           // Keep references !
           $phase->_connected_acte = $possible_acte;
-          
+
           foreach ($phase->_modificateurs as &$modificateur) {
-            if (strpos($phase->_connected_acte->modificateurs, $modificateur->code) !== false) {
-              $modificateur->_value = $modificateur->code;
-            } else {
-              $modificateur->_value = "";              
-            }
+            $modificateur->_checked = $this->checkModificateur($modificateur->code, mbTime($phase->_connected_acte->execution));
           }
         }
       }
