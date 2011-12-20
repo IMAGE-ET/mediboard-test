@@ -1,13 +1,14 @@
 {{include file="../../mediboard/templates/common.tpl" nodebug=true}}
 
-<div id="login" {{if $dialog}}style="height: 50px; margin: auto; position: relative; top: 0; left: 0;"{{/if}}>
-  <h2>{{$conf.company_name}}</h2>
+<div id="login" {{if $dialog}} class="dialog" {{/if}}>
   {{if !$dialog}}
     <a href="{{$conf.system.website_url}}">
       {{mb_include style="mediboard" template="logo" alt=$conf.company_name title=$conf.company_name width="400"}}
       <br />
     </a>
   {{/if}}
+  
+  <h2>{{$conf.company_name}}</h2>
 
   <form name="loginFrm" action="?" method="post" onsubmit="return checkForm(this)">
     <input type="hidden" name="login" value="{{$time}}" />

@@ -391,15 +391,25 @@ table.main th.title.modify {
   -webkit-border-radius: 8px;
   border-radius: 8px;
   background: #ddd;
-  padding: 4px;
+  padding: 10px;
   width: 450px;
-  height: 260px;
   margin-left: -225px;
   margin-top: -130px;
   position: absolute;
   top: 40%;
   left: 50%;
   text-align: center;
+  box-shadow: 0 0 60px rgba(0,0,0,0.5);
+}
+
+#login.dialog {
+  margin: 2em auto; 
+  position: static;
+}
+
+#login.dialog h2 {
+  margin: 0;
+  background: #ccc;
 }
 
 #login table {
@@ -415,21 +425,12 @@ table.main th.title.modify {
 
 #login h2 {
   color: #666;
-  margin: 0;
-  padding: 0;
-  position: absolute;
-  background: #ddd;
-  padding: 12px;
-  padding-top: 4px;
-  padding-bottom: 10px;
-  /*display: block;
-  width: 100%;*/
-  -moz-border-radius: 8px 8px 0 0;
-  -webkit-border-top-left-radius: 8px;
-  -webkit-border-top-right-radius: 8px;
-  border-radius: 8px 8px 0 0;
-  top: -1.6em;
-  left: 8px;
+  margin: 10px 0 4px;
+  padding: 4px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1) ;
 }
 
 #version {
