@@ -117,12 +117,12 @@ class CConfigConstantesMedicales extends CConfigServiceAbstract {
       $group_id = CGroups::loadCurrent()->_id;
     }
     
-    if (!$service_id || $service_id == "NP") {
+    if (!$service_id || $service_id === "NP") {
       $service_id = "none";
     }
     
     if(!isset(self::$configs_SHM)){
-     self::$configs_SHM = $configs = self::getSHM("conf-constantes_medicales");
+      self::$configs_SHM = $configs = self::getSHM("conf-constantes_medicales");
     } else {
       $configs = self::$configs_SHM;
     }

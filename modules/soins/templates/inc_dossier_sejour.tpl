@@ -174,6 +174,6 @@
 {{if $isImedsInstalled}}
   <div id="Imeds" style="display: none;"></div>
 {{/if}}
-<div id="constantes" style="display: none;"></div>
+<div id="constantes" style="display: none; text-align: left;"></div>
 <div id="docs" style="display: none;"></div>
 <div id="antecedents" style="display: none;"></div>

@@ -905,8 +905,14 @@ class CConstantesMedicales extends CMbObject {
   }
   
   static function getConfig($name, $group_id = null) {
-    $service_id = isset($_SESSION["soins"]["service_id"]) && $_SESSION["soins"]["service_id"] ?
-    $_SESSION["soins"]["service_id"] : "none";
+    $service_id = "none";
+    if (isset($_SESSION["soins"]["service_id"])) {
+      $service_id = $_SESSION["soins"]["service_id"];
+    }
+    elseif (isset($_SESSION["ecap"]["service_id"])) {
+      $service_id = $_SESSION["ecap"]["service_id"];
+    }
+    
     $configs = CConfigConstantesMedicales::getAllFor($service_id, $group_id);
     return $configs[$name];
   }
