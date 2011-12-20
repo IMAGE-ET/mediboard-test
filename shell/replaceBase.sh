@@ -21,14 +21,16 @@ then
   echo " [-s ] to make a safe copy of existing target database first"
   echo " [-m <mysql_directory>] is the directory where databases are stored, ie /var/lib/mysql"
   echo " [-p <port>] is the ssh port af the target remote location, 22"
+  echo " [-l ] to do a local copy (default scp)"
   exit 1
 fi
 
 port=22
 restart=0
 safe=0
-args=`getopt m:p:rs $*`
+args=`getopt m:p:lrs $*`
 mysql_directory=/var/lib/mysql
+distant=1
 
 if [ $? != 0 ] ; then
   echo "Invalid argument. Check your command line"; exit 0;
@@ -38,6 +40,7 @@ set -- $args
 for i; do
   case "$i" in
     -r) restart=1; shift;;
+    -l) distant=0; shift;;
     -s) safe=1; shift;;
     -p) port=$2; shift 2;;
     -m) mysql_directory=$2; shift 2;;
@@ -67,12 +70,12 @@ fi
 
 # Retrieve archive 
 archive="archive.tar.gz"
-if [ "foo" = "foo" ]; then
-  cp -s $source_directory/$source_database-db/$source_database-latest.tar.gz $target_directory/$archive
-  check_errs $? "Failed to symlink local archive" "Succesfully symlinked local archive!"
-else
+if [ $distant  -eq 1 ]; then
   scp $source_location:$source_directory/$source_database-db/$source_database-latest.tar.gz $target_directory/$archive
   check_errs $? "Failed to retrieve remote archive" "Succesfully retrieved remote archive!"
+else
+  cp -s $source_directory/$source_database-db/$source_database-latest.tar.gz $target_directory/$archive
+  check_errs $? "Failed to symlink local archive" "Succesfully symlinked local archive!"
 fi
 
 
