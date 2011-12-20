@@ -19,24 +19,28 @@
       <tr>
         <th class="title" colspan="{{$colspan}}">{{tr}}CPrestationJournaliere.all{{/tr}}</th>
       </tr>
-      <tr>
-        <td colspan="2"></td>
-        <td colspan="{{$colspan}}">
-          {{foreach from=$affectations item=_affectation}}
-            <div style="width: {{$_affectation->_width}}%; display: inline-block; background: #afa;">
-              <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}')">
-                Affectation du {{$_affectation->entree|date_format:$conf.date}} au {{$_affectation->sortie|date_format:$conf.date}}
-              </span>
-            </div>
+      {{if $prestations_j|@count}}
+        <tr>
+          <td colspan="2"></td>
+          <td colspan="{{$colspan}}">
+            {{foreach from=$affectations item=_affectation}}
+              <div style="width: {{$_affectation->_width}}%; display: inline-block;">
+                <strong>
+                  <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}')">
+                    {{$_affectation->_ref_lit}} &mdash; {{$_affectation->entree|date_format:$conf.date}} au {{$_affectation->sortie|date_format:$conf.date}}
+                  </span>
+                </strong>
+              </div>
+            {{/foreach}}
+          </td>
+        </tr>
+        <tr>
+          <th colspan="2"></th>
+          {{foreach from=$dates item=_affectation_id key=_date}}
+            <th>{{$_date|date_format:$conf.date}}</th>
           {{/foreach}}
-        </td>
-      </tr>
-      <tr>
-        <th colspan="2"></th>
-        {{foreach from=$dates item=_affectation_id key=_date}}
-          <th>{{$_date|date_format:$conf.date}}</th>
-        {{/foreach}}
-      </tr>
+        </tr>
+      {{/if}}
       {{foreach from=$prestations_j item=_prestation}}
         {{assign var=prestation_id value=$_prestation->_id}}
         <tr>
@@ -73,6 +77,10 @@
         <tr>
           <th></th>
           <th>Réel</th>
+        </tr>
+      {{foreachelse}}
+        <tr>
+          <td colspan="{{$colspan}}" class="empty">{{tr}}CPrestationJournaliere.none{{/tr}}</td>
         </tr>
       {{/foreach}}
       </table>
@@ -111,27 +119,29 @@
           </script>
         </th>
       </tr>
-      
-      <tr>
-        <td colspan="2"></td>
-        <td colspan="{{$colspan}}">
-          {{foreach from=$affectations item=_affectation}}
-            <div style="width: {{$_affectation->_width}}%; display: inline-block; background: #afa;">
-              <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}')">
-                Affectation du {{$_affectation->entree|date_format:$conf.date}} au {{$_affectation->sortie|date_format:$conf.date}}
-              </span>
-            </div>
+      {{if $prestations_p|@count}}
+        <tr>
+          <td colspan="2"></td>
+          <td colspan="{{$colspan}}">
+            {{foreach from=$affectations item=_affectation}}
+              <div style="width: {{$_affectation->_width}}%; display: inline-block;">
+                <strong>
+                  <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}')">
+                    {{$_affectation->_ref_lit}} &mdash; {{$_affectation->entree|date_format:$conf.date}} au {{$_affectation->sortie|date_format:$conf.date}}
+                  </span>
+                </strong>
+              </div>
+            {{/foreach}}
+          </td>
+        </tr>
+        
+        <tr>
+          <th colspan="2"></th>
+          {{foreach from=$dates item=_affectation_id key=_date}}
+            <th>{{$_date|date_format:$conf.date}}</th>
           {{/foreach}}
-        </td>
-      </tr>
-      
-      <tr>
-        <th colspan="2"></th>
-        {{foreach from=$dates item=_affectation_id key=_date}}
-          <th>{{$_date|date_format:$conf.date}}</th>
-        {{/foreach}}
-      </tr>
-      
+        </tr>
+      {{/if}}
       {{foreach from=$prestations_p item=_items_liaisons_by_prestation_id key=_prestation_id}}
         {{assign var=prestation value=$prestations_p.$_prestation_id}}
         <tr>
@@ -166,9 +176,9 @@
         {{/foreach}}
         </tr>
       {{foreachelse}}
-        <tr>
-          <td class="empty" colspan="{{$colspan}}">{{tr}}CPrestationPonctuelle.none{{/tr}}</td>
-        </tr>
+          <tr>
+            <td class="empty" colspan="{{$colspan}}">{{tr}}CPrestationPonctuelle.none{{/tr}}</td>
+          </tr>
       {{/foreach}}
       
       <tr>

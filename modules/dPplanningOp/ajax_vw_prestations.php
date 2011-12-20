@@ -36,7 +36,10 @@ $tableau_prestations_p = array();
 $prestations_p         = array();
 
 if (count($affectations)) {
+  $lits = CMbObject::massLoadFwdRef($affectations, "lit_id");
+  CMbObject::massLoadFwdRef($lits, "chambre_id");
   foreach ($affectations as $_affectation) {
+    $_affectation->loadRefLit()->loadCompleteView();
     $dif = strtotime($_affectation->sortie) - strtotime($_affectation->entree);
     $_affectation->_width = ($dif / $duree)*100;
     $date_temp = mbDate($_affectation->entree);
