@@ -105,6 +105,11 @@
 	        à {{mb_value object=$line field=time_debut}}
 	      {{/if}}
 	    {{/if}}
+			
+      {{if $line->_avancement && $line->_ref_prescription->type == "sejour"}}
+        <br />
+        <strong class="compact">({{$line->_avancement}}/{{$line->_duree_avancement}})</strong>
+      {{/if}}
 		</td>
 	  <td style="width:10%;">
 	    <!-- Duree de la ligne -->
@@ -118,6 +123,13 @@
 				  1 Jour(s)
 				{{/if}}
       {{/if}}
+			
+			 {{if $line->_ref_prescription->type == "sejour" && $line->_fin_relative != ""}}
+	     <br />
+	     <strong>
+	     (Fin{{if $line->_fin_relative > 0}} - {{$line->_fin_relative}} j){{else $line->_fin_relative === 0}}){{/if}}
+	     </strong>
+	    {{/if}}
 	  </td>
   {{else}}
 	  <td style="width: 20%" class="text">

@@ -150,6 +150,8 @@ class CPrescriptionLineMix extends CMbObject {
   var $_count_locked_planif = null;
   var $_planifs_systeme = null;
   var $_is_past = false;
+  var $_fin_relative = null;
+	var $_avancement = null;
   
   static $type_by_line = array(
     "perfusion"    => array("classique", "seringue", "PCA"),
@@ -316,6 +318,18 @@ class CPrescriptionLineMix extends CMbObject {
     if(($this->nb_tous_les || $this->duree_passage) && $this->type_line != "oxygene"){
       $this->_continuite = "discontinue";
     }
+				
+		if(mbDate() >= $this->date_debut && mbDate() <= $this->_date_fin){
+      $this->_fin_relative = mbDaysRelative(mbDate("+1 DAY"), $this->_date_fin);
+      $this->_avancement = mbDaysRelative($this->date_debut, mbDate("+ 1 DAY"));
+      $this->_duree_avancement = mbDaysRelative($this->date_debut, $this->_date_fin);
+			
+			if($this->_avancement > $this->_duree_avancement){
+				$this->_avancement = "";
+				$this->_fin_relative = "";
+			}
+    }
+		
   }
     
   function getBackProps() {

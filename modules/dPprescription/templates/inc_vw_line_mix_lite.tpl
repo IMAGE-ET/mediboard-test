@@ -86,8 +86,6 @@
       {{if !$smarty.foreach.lines.last}}<br />{{/if}}
     {{/foreach}}
     
-
-
     {{if $_prescription_line_mix->commentaire || $_prescription_line_mix->conditionnel}}
       <br />
     {{/if}}  
@@ -104,7 +102,6 @@
       </span>
     {{/if}}
 		{{if $_prescription_line_mix->ald}}{{mb_label object=$_prescription_line_mix field="ald"}}&nbsp;{{/if}}
-
   </td> 
   
   {{if $_prescription_line_mix->type_line == "aerosol"}}
@@ -138,10 +135,22 @@
     {{if $_prescription_line_mix->time_debut}} 
       à {{mb_value object=$_prescription_line_mix field=time_debut}}
     {{/if}}
+		
+		{{if $_prescription_line_mix->_avancement && $_prescription_line_mix->_ref_prescription->type == "sejour"}}
+      <br />
+      <strong class="compact">({{$_prescription_line_mix->_avancement}}/{{$_prescription_line_mix->_duree_avancement}})</strong>
+    {{/if}}
   </td>
   <td style="width: 10%;" class="text">
     {{if $_prescription_line_mix->duree}}
       {{mb_value object=$_prescription_line_mix field=duree}} {{mb_value object=$_prescription_line_mix field="unite_duree"}}
+    {{/if}}
+
+		{{if $_prescription_line_mix->_ref_prescription->type == "sejour" && $_prescription_line_mix->_fin_relative != ""}}
+     <br />
+     <strong>
+     (Fin{{if $_prescription_line_mix->_fin_relative > 0}} - {{$_prescription_line_mix->_fin_relative}} j){{else $_prescription_line_mix->_fin_relative === 0}}){{/if}}
+     </strong>
     {{/if}}
   </td>  
   {{else}}

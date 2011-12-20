@@ -163,10 +163,10 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_quantite_administration            = null;
   var $_quantite_dispensation              = null;
   var $_unite_prise                        = null;
-  var $_long_view = null;
-
-  static $_load_lite = false;
-
+  var $_long_view                          = null;
+  var $_fin_relative                       = null;
+  var $_avancement                         = null;
+  static $_load_lite                       = false;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -316,6 +316,17 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       $this->_fin_reelle = $this->date_arret;
       $this->_fin_reelle .= $this->time_arret ? " $this->time_arret" : " 23:59:00";
     }
+		
+		if(mbDate() >= $this->debut && mbDate() <= $this->_fin_reelle){
+			$this->_fin_relative = mbDaysRelative(mbDate("+1 DAY"), $this->_fin_reelle);
+			$this->_avancement = mbDaysRelative($this->debut, mbDate("+ 1 DAY"));
+			$this->_duree_avancement = mbDaysRelative($this->debut, $this->_fin_reelle);
+      
+			if($this->_avancement > $this->_duree_avancement){
+        $this->_avancement = "";
+        $this->_fin_relative = "";
+      }
+		}
   }
     
   function updateLongView(){
