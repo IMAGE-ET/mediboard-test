@@ -59,12 +59,42 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
             }
           }
           
-          $mbObject->_NDA = $NDA->id400;
+          $sejour->_NDA = $NDA->id400;
         }
         
+        $insert = in_array($code, CHL7v2SegmentZBE::$actions["INSERT"]);
+        $update = in_array($code, CHL7v2SegmentZBE::$actions["UPDATE"]);
+        $cancel = in_array($code, CHL7v2SegmentZBE::$actions["CANCEL"]);
+        
+        $movement                = new CMovement();
+        $movement->object_class  = $mbObject->_class;
+        $movement->object_id     = $mbObject->_id;
+        $movement->movement_type = $mbObject->getMovementType();
+        if ($insert) {
+          $movement->original_trigger_code = $code;
+          $movement->loadMatchingObject();
+        }
+        elseif ($update || $cancel) {
+          $movement->cancel = 0;
+          $movement->loadMatchingObject();
+          
+          if ($cancel) {
+            $movement->cancel = 1;
+          }         
+        }
+        
+        $movement->store();
+
         // Envoi de l'événement
         $this->sendITI($this->profil, $this->transaction, $code, $sejour);
       }
+    }
+    
+     // Traitement Affectation
+    if ($mbObject instanceof CAffectation) {
+      $affectation = $mbObject;
+      
+      
     }
   }
   
@@ -109,9 +139,9 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       
       // Modification de la sortie (date de sortie, mode de sortie)
       /* @todo _sortie_autorisee ? */
-      if ($sejour->fieldModified("mode_sortie")) {
-        return "A16";
-      }
+      //if ($sejour->fieldModified("mode_sortie")) {
+      //  return "A16";
+      //}
       
       // Cas d'une mutation ? 
       if ($sejour->fieldModified("service_entree_id")) {
@@ -120,6 +150,20 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Annulation de la mutation ? 
       if ($sejour->fieldModified("service_entree_id", "")) {
         return "A12";
+      }
+      
+      // Bascule externe devient hospitalisé (outpatient > inpatient)
+      if ($sejour->fieldModified("type") 
+        && (in_array($sejour->type, self::$inpatient)) 
+        && in_array($sejour->_old->type, self::$outpatient)) {
+        return "A06";
+      }
+      
+      // Bascule d'hospitalisé à externe (inpatient > outpatient)
+      if ($sejour->fieldModified("type") 
+        && (in_array($sejour->type, self::$outpatient)) 
+        && in_array($sejour->_old->type, self::$inpatient)) {
+        return "A07";
       }
       
       // Changement du médecin responsable

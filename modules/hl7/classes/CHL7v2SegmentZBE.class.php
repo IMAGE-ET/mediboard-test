@@ -26,7 +26,7 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
       "Z99"
     ),
     "CANCEL" => array(
-      "A38", "A11", "A27", "A06", "A07", "A55", "A12", "A26", "A13", 
+      "A38", "A11", "A27", /* "A06", "A07", */ "A55", "A12", "A26", "A13", 
       "A25", "A52", "A53", "Z81", "Z83", "Z85", "Z87", "Z89"
     ),
   );
@@ -37,6 +37,11 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
    * @var CSejour
    */
   var $sejour = null;
+  
+  /**
+   * @var CMovement
+   */
+  var $movement = null;
   
   /**
    * @var CAffectation
@@ -52,6 +57,7 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     parent::build($event);
     
     $sejour      = $this->sejour;
+    $movement    = $this->movement;
     $affectation = $this->curr_affectation;
     if ($this->other_affectation) {
       $affectation = $this->other_affectation;
@@ -60,14 +66,13 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     // ZBE-1: Movement ID (EI) (optional)
     $data[] = array (
       // Entity identifier
-      // Dans le cas où on pas d'identifiant on envoi -1
-      isset($affectation->_id) ? $affectation->_id : -1,
+      $movement->_view,
       // Autorité assignement
       $this->getAssigningAuthority("mediboard")
     );
     
     // ZBE-2: Start of Movement Date/Time (TS)
-    $data[] = $affectation->entree;
+    $data[] = $movement->last_update;
     
     // ZBE-3: End of Movement Date/Time (TS) (optional)
     // Forbidden (IHE France)
@@ -83,34 +88,57 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     $data[] = $action_movement;
     
     // ZBE-5: Indicator "Historical Movement" (ID) 
-    $data[] = $this->other_affectation ? "Y" : "N";
+    $data[] = $movement->_current ? "Y" : "N";
     
     // ZBE-6: Original trigger event code (ID) (optional)
-    /* @todo Comment avoir l'événement déclencheur ? */
-    $data[] = ($action_movement == "UPDATE" || $action_movement == "CANCEL") ? null : null;
+    $data[] = ($action_movement == "UPDATE" || $action_movement == "CANCEL") ? $movement->original_trigger_code : null;
     
+    $affectation->loadRefUfs();
     // ZBE-7: Ward of medical responsibility in the period starting with this movement (XON) (optional)
-    $data[] = null;
-    /*$uf = $affectation->_ref_uf;
-    $data[] = array(
-      // ZBE-7.1 : Libellé de l'UF
-      $uf->libelle,
-      null,
-      null,
-      null,
-      null,
-      // ZBE-7.6 : Identifiant de l'autorité d'affectation  qui a attribué l'identifiant de l'UF de responsabilité médicale
-      $this->getAssigningAuthority("mediboard"),
-      // ZBE-7.7 : La seule valeur utilisable de la table 203 est "UF"
-      "UF",
-      null,
-      null,
-      // ZBE-7.10 : Identifiant de l'UF de responsabilité médicale
-      $uf->code
-    )*/
+    if ($uf_medicale = $affectation->_ref_uf_medicale) {
+      $data[] = array(
+        // ZBE-7.1 : Libellé de l'UF
+        $uf_medicale->libelle,
+        null,
+        null,
+        null,
+        null,
+        // ZBE-7.6 : Identifiant de l'autorité d'affectation  qui a attribué l'identifiant de l'UF de responsabilité médicale
+        $this->getAssigningAuthority("mediboard"),
+        // ZBE-7.7 : La seule valeur utilisable de la table 203 est "UF"
+        "UF",
+        null,
+        null,
+        // ZBE-7.10 : Identifiant de l'UF de responsabilité médicale
+        $uf_medicale->code
+      );
+    } 
+    else {
+      $data[] = null;
+    }
     
     // ZBE-8: Ward of care responsibility in the period starting with this movement (XON) (optional)
-    $data[] = null;
+    if ($uf_soins = $affectation->_ref_uf_soins) {
+      $data[] = array(
+        // ZBE-7.1 : Libellé de l'UF
+        $uf_soins->libelle,
+        null,
+        null,
+        null,
+        null,
+        // ZBE-7.6 : Identifiant de l'autorité d'affectation  qui a attribué l'identifiant de l'UF de responsabilité médicale
+        $this->getAssigningAuthority("mediboard"),
+        // ZBE-7.7 : La seule valeur utilisable de la table 203 est "UF"
+        "UF",
+        null,
+        null,
+        // ZBE-7.10 : Identifiant de l'UF de responsabilité médicale
+        $uf_soins->code
+      );
+    } 
+    else {
+      $data[] = null;
+    }
     
     // ZBE-9: Nature of this movement (CWE)
     // S - Changement de responsabilité de soins uniquement
@@ -125,7 +153,7 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     // LD - Changement de prise en charge médico-administrative et de lit, laissant les responsabilités inchangées
     // HMS - Changement conjoint des trois responsabilités.
     /* @todo Voir comment gérer ceci... */
-    $data[] = "L";
+    $data[] = "HMS";
     
     $this->fill($data);
   }

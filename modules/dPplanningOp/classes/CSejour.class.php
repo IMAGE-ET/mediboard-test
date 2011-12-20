@@ -2079,5 +2079,27 @@ class CSejour extends CCodable implements IPatientRelated {
       "typeHospi" => $this->type
     );
   }
+  
+  function getMovementType() {
+    // Cas d'une pré-admission
+    if ($this->_etat == "preadmission") {
+      return "PADM";
+    }
+    
+    // Cas d'une admission
+    if ($this->_etat == "encours") {
+      return "ADMI";
+    }
+    
+    // Cas d'une mutation
+    if ($this->_etat == "encours" && $this->service_entree_id) {
+      return "MUTA";
+    }
+    
+    // Cas d'une sortie
+    if ($this->_etat == "cloture") {
+      return "SORT";
+    }
+  }
 }
 ?>

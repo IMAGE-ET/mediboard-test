@@ -423,5 +423,11 @@ class CAffectation extends CMbObject {
       "soins"       => $this->_ref_uf_soins,
   	);
   }
+  
+  function getMovementType() {
+    $sejour = $this->loadRefSejour();
+    
+    return $sejour->getMovementType();
+  }
 }
 ?>

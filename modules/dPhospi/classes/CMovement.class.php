@@ -16,6 +16,9 @@ class CMovement extends CMbMetaObject {
   var $movement_type         = null;
   var $original_trigger_code = null;
   var $last_update           = null;
+  var $cancel                = null;
+  
+  var $_current              = true;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -29,8 +32,27 @@ class CMovement extends CMbMetaObject {
     $props["movement_type"]         = "enum notNull list|PADM|ADMI|MUTA|SATT|SORT";
     $props["original_trigger_code"] = "str length|3";
     $props["last_update"]           = "dateTime notNull";
+    $props["cancel"]                = "bool default|0";
     
     return $props;
+  }
+  
+  function updateFormFields() {
+    parent::updateFormFields();
+    
+    $this->_view = "$this->movement_type-$this->_id";
+  }
+  
+  function loadMatchingObject($order = null, $group = null, $ljoin = null) {
+    $order = "last_update DESC";
+
+    return parent::loadMatchingObject($order, $group, $ljoin);
+  }
+  
+  function loadMatchingList($order = null, $limit = null, $group = null, $ljoin = null) {
+    $order = "last_update DESC";
+
+    return parent::loadMatchingList($order, $limit, $group, $ljoin);
   }
   
   function store() {
@@ -40,15 +62,11 @@ class CMovement extends CMbMetaObject {
     
     return parent::store();
   }
-  
-  function listeMvtSejour($sejour_id){
-		$date         = CValue::get("date", mbDateTime());
-		$debut        = mbDate("-1 day", $date);
-  	
-  	$where["object_class"] = "= 'CSejour'";
-  	$where["object_id"]    = "= '$sejour_id'";
-  	$where["last_update"]  = ">= '$debut'";
-  	
-  	return $this->loadList($where);
+    
+  function getMovement(CMbObject $object) {
+    $this->object_class  = $object->_class;
+    $this->object_id     = $object->_id;
+    $this->movement_type = $object->getMovementType();
+    $this->loadMatchingObject();
   }
 }
