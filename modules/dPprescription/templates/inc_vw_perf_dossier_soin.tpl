@@ -348,7 +348,7 @@
 								 {{if $nb_prevue && $_prescription_line_mix->_active && ($nb_prevue != $nb_adm)}}/{{$nb_prevue}}{{/if}}
 								 
 								 {{if !$nb_prevue && !$nb_adm}}
-									 {{if (($_prescription_line_mix->_fin && ($_prescription_line_mix->_fin|date_format:"%Y-%m-%d %H:00:00" < $_date_hour)) || $_prescription_line_mix->_debut|date_format:"%Y-%m-%d %H:00:00" > $_date_hour) && $_prescription_line_mix->_active}}
+									 {{if (($_prescription_line_mix->_fin && ($_prescription_line_mix->_fin|date_format:"%Y-%m-%d %H:00:00" < $_date_hour)) || $_prescription_line_mix->_debut|date_format:"%Y-%m-%d %H:00:00" > $_date_hour)}}
 	                 <small>{{if $_prescription_line_mix->_fin > $_date_hour}}&raquo;{{else}}&laquo;{{/if}} </small>
 	                 {{/if}}
 								 {{/if}}

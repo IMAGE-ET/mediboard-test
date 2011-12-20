@@ -194,7 +194,7 @@
 								 {{/if}}
 						   {{/if}}
 							 
-							 {{if (($line->_fin_reelle && ($line->_fin_reelle|date_format:"%Y-%m-%d %H:00:00" < $_date_hour)) || $line->_debut_reel|date_format:"%Y-%m-%d %H:00:00" > $_date_hour) && $line->_active && !$line->inscription && $quantite=="-"}}
+							 {{if (($line->_fin_reelle && ($line->_fin_reelle|date_format:"%Y-%m-%d %H:00:00" < $_date_hour)) || $line->_debut_reel|date_format:"%Y-%m-%d %H:00:00" > $_date_hour) && !$line->inscription && $quantite=="-"}}
 		             <small>{{if $line->_fin_reelle > $_date_hour}}&raquo;{{else}}&laquo;{{/if}} </small>
 		           {{/if}}
 							
