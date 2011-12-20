@@ -294,7 +294,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $this->isPerfusable();
     $this->isInjectable();
     
-		if($this->duree && $this->unite_duree == "jour" && CAppUI::conf("dPprescription CPrescription duration_in_hours")){
+		if($this->duree && $this->unite_duree == "jour" && CAppUI::conf("dPprescription CPrescription duration_in_hours") && !$this->time_fin){
 			$duree = $this->duree * 24;
 			$this->_fin_reelle = mbDateTime("+ $duree HOURS", $this->_debut_reel);
 		}
