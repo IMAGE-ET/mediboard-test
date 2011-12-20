@@ -1389,7 +1389,12 @@ class CSetupdPcabinet extends CSetup {
       ADD `examenDigest` TEXT NULL AFTER `examenPulmo` ;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.39";
+    $this->makeRevision("1.39");
+    $query = "ALTER TABLE `consultation` 
+      ADD `type` ENUM ('classique','entree') DEFAULT 'classique'";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.40";
   }
 }
 ?>

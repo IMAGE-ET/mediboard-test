@@ -19,6 +19,7 @@ $patient_id    = CValue::post("patient_id");
 $_operation_id = CValue::post("_operation_id");
 $_datetime     = CValue::post("_datetime");
 $callback      = CValue::post("callback");
+$type          = CValue::post("type");
 
 if (!$_datetime || $_datetime == "now") {
   $_datetime = mbDateTime();
@@ -124,9 +125,14 @@ $consult->duree = 1;
 $consult->chrono = CConsultation::PATIENT_ARRIVE;
 $consult->date_at = CValue::post("date_at");
 
+if ($type) {
+  $consult->type = $type;
+}
 // Cas standard
 $consult->motif = CValue::post("motif", "Consultation immédiate");
-
+if ($type == "entree") {
+  $consult->motif = "Observation d'entrée";
+}
 // Cas des urgences
 if ($sejour->type == "urg") {
   // Motif de la consultation

@@ -209,6 +209,12 @@ createConsult = function() {
   {{/if}}
 }
 
+createConsultEntree = function() {
+  var form = getForm('addConsultation');
+  $V(form.type, 'entree');
+  onSubmitFormAjax(getForm('addConsultation'));
+}
+
 {{if $count_trans > 0}}
   Main.add(showListTransmissions.curry(0, {{$count_trans}}));
 {{/if}}
@@ -233,6 +239,7 @@ createConsult = function() {
   <input type="hidden" name="patient_id" value="{{$sejour->patient_id}}" />
   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
   <input type="hidden" name="_operation_id" value="" />
+  <input type="hidden" name="type" value="" />
   <input type="hidden" name="callback" value="modalConsult" />
 </form>
 
@@ -246,6 +253,8 @@ createConsult = function() {
   {{if @isset($modules.dPcabinet|smarty:nodefaults)}}
     <a class="button new" href="#1" id="newConsult"
       onclick="validateAdministration('{{$sejour->_id}}');">Nouvelle consultation</a>
+    <button type="button" class="new" id="newConsultEntree" {{if $has_obs_entree}}disabled="disabled"{{/if}}
+      onclick="createConsultEntree();">Nouvelle observation d'entrée</button>
   {{/if}}
 {{/if}}
 

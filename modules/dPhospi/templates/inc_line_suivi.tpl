@@ -17,9 +17,7 @@
     </strong>
   </td>
   <td>{{$_suivi->date|date_format:$conf.time}}</td>
-  <td class="text" colspan="2"
-    {{if $_suivi->degre == "high"}} style="background-color: #faa" {{/if}} 
-    {{if $_suivi->degre == "info"}} style="background-color: #aaf" {{/if}}>
+  <td class="text" colspan="2">
     <div>
 	    <strong>{{mb_value object=$_suivi field=text}}</strong>
     </div>
@@ -111,54 +109,54 @@
   {{/if}}
 
 {{if $_suivi instanceof CConsultation}}
-  <tr>
-    <td>
+  <td>
+    <strong onmouseover="ObjectTooltip.createEx(this, '{{$_suivi->_guid}}')">
       {{if $_suivi->_ref_consult_anesth->_id}}
-        <strong>{{tr}}CConsultAnesth{{/tr}}</strong>
+        {{tr}}CConsultAnesth{{/tr}}
       {{else}}
-        <strong>{{tr}}CConsultation{{/tr}}</strong>
+        {{tr}}CConsultation{{/tr}}
       {{/if}}
-    </td>
-    <td>
-      <strong>
-        <div class="mediuser" style="border-color: #{{$_suivi->_ref_praticien->_ref_function->color}};">
-          {{mb_value object=$_suivi field="_praticien_id"}}
-        </div>
-      </strong>
-    </td>
-    <td style="text-align: center">
-      {{mb_ditto name=date value=$_suivi->_datetime|date_format:$conf.date}}
-    </td>
-    <td>{{$_suivi->_datetime|date_format:$conf.time}}</td>
-    <td></td>
-    <td class="text">
-      {{if $_suivi->_ref_consult_anesth->_id}}
-        {{assign var=consult_anesth value=$_suivi->_ref_consult_anesth}}
-        {{if $consult_anesth->ASA}}
-          {{tr}}CConsultAnesth.ASA.{{$consult_anesth->ASA}}{{/tr}} -
-        {{/if}}
-        {{if $consult_anesth->position}}
-          {{$consult_anesth->position}} -
-        {{/if}}
-        {{if $consult_anesth->prepa_preop}}
-          {{$consult_anesth->prepa_preop}} -
-        {{/if}}
-        {{if $consult_anesth|@count}}
-          {{foreach from=$consult_anesth->_ref_techniques item=_technique}}
-            {{$_technique->technique}} -
-          {{/foreach}}
-        {{/if}}
-        {{$_suivi->rques}}
-      {{else}}
-        {{$_suivi->conclusion}}
+    </strong>
+  </td>
+  <td>
+    <strong>
+      <div class="mediuser" style="border-color: #{{$_suivi->_ref_praticien->_ref_function->color}};">
+        {{mb_value object=$_suivi field="_praticien_id"}}
+      </div>
+    </strong>
+  </td>
+  <td style="text-align: center">
+    {{mb_ditto name=date value=$_suivi->_datetime|date_format:$conf.date}}
+  </td>
+  <td>{{$_suivi->_datetime|date_format:$conf.time}}</td>
+  <td></td>
+  <td class="text">
+    {{if $_suivi->_ref_consult_anesth->_id}}
+      {{assign var=consult_anesth value=$_suivi->_ref_consult_anesth}}
+      {{if $consult_anesth->ASA}}
+        {{tr}}CConsultAnesth.ASA.{{$consult_anesth->ASA}}{{/tr}} -
       {{/if}}
-    </td>
-    <td>
-      {{if !$readonly && $_suivi->_canEdit}}
-        <button type="button" class="edit notext" onclick="modalConsult('{{$_suivi->_id}}')"></button>
+      {{if $consult_anesth->position}}
+        {{$consult_anesth->position}} -
       {{/if}}
-    </td>
-  </tr>
+      {{if $consult_anesth->prepa_preop}}
+        {{$consult_anesth->prepa_preop}} -
+      {{/if}}
+      {{if $consult_anesth|@count}}
+        {{foreach from=$consult_anesth->_ref_techniques item=_technique}}
+          {{$_technique->technique}} -
+        {{/foreach}}
+      {{/if}}
+      {{$_suivi->rques}}
+    {{else}}
+      {{$_suivi->conclusion}}
+    {{/if}}
+  </td>
+  <td>
+    {{if !$readonly && $_suivi->_canEdit}}
+      <button type="button" class="edit notext" onclick="modalConsult('{{$_suivi->_id}}')"></button>
+    {{/if}}
+  </td>
 {{/if}}
 
 {{if $_suivi instanceof CTransmissionMedicale}}
@@ -212,7 +210,7 @@
       <a href="#1" onclick="if (window.addTransmission) { addTransmission('{{$_suivi->sejour_id}}', '{{$_suivi->user_id}}', null, null, null, '{{$_suivi->libelle_ATC|smarty:nodefaults|JSAttribute}}'); }">{{$_suivi->libelle_ATC}}</a>
     {{/if}}
   </td>
-  <td class="text {{if $_suivi->type}}trans-{{$_suivi->type}}{{/if}} libelle_trans" {{if $_suivi->degre == "high"}} style="background-color: #faa" {{/if}}>
+  <td class="text {{if $_suivi->type}}trans-{{$_suivi->type}}{{/if}} libelle_trans">
     {{mb_value object=$_suivi field=text}}
   </td>
   
@@ -289,7 +287,7 @@
       <a href="#1" onclick="if (window.addTransmission) { addTransmission('{{$_suivi[0]->sejour_id}}', '{{$_suivi[0]->user_id}}', null, null, null, '{{$_suivi[0]->libelle_ATC|smarty:nodefaults|JSAttribute}}'); }">{{$_suivi[0]->libelle_ATC}}</a>
     {{/if}}
   </td>
-  <td class="text" {{if $_suivi[0]->degre == "high"}} style="background-color: #faa" {{/if}}>
+  <td class="text">
     {{foreach from=$_suivi item=_trans}}
       <strong>
         {{if $_trans->type == "data"}}

@@ -202,7 +202,7 @@ completeTrans = function(type, button){
             <div style="display:none; width: 350px; white-space: normal; text-align: left;" class="autocomplete" id="cible_auto_complete"></div>
             <br />
           {{/if}}
-          {{tr}}CTransmissionMedicale-degre{{/tr}} : {{mb_field object=$transmission field=degre}}
+          {{mb_label object=$transmission field=degre}} : {{mb_field object=$transmission field=degre typeEnum="radio"}}
           {{tr}}CTransmissionMedicale-date{{/tr}} : {{mb_field object=$transmission field=date}}
           
           {{if $transmission->_id && !$transmission->type}}

@@ -20,7 +20,7 @@ Main.add(function() {
   <input type="hidden" name="user_id" value="{{$observation->user_id}}" />
   <input type="hidden" name="date" value="now" /> 
   <div style="text-align: left;">
-    {{tr}}CObservationMedicale-degre{{/tr}} : {{mb_field object=$observation field="degre"}}
+    {{mb_label object=$observation field=degre}} : {{mb_field object=$observation field="degre" typeEnum="radio"}}
     <br />
   </div>
   {{mb_field object=$observation field="text" rows=6}}

@@ -33,7 +33,8 @@ if ($_show_obs) {
 $sejour->loadRefPrescriptionSejour();
 $prescription =& $sejour->_ref_prescription_sejour;
 
-$is_praticien = $user->isPraticien();
+$is_praticien   = $user->isPraticien();
+$has_obs_entree = 0;
 
 $cibles = array();
 $users = array();
@@ -127,8 +128,12 @@ foreach($sejour->_ref_suivi_medical as $_trans_const) {
   }
 }
 
-if ($_show_obs) {
-  foreach ($sejour->_ref_consultations as $_consult) {
+
+foreach ($sejour->_ref_consultations as $_consult) {
+  if ($_consult->type == "entree") {
+    $has_obs_entree = 1;
+  }
+  if ($_show_obs) {
     $_consult->canEdit();
     $_consult_anesth = $_consult->loadRefConsultAnesth();
     if ($_consult_anesth->_id) {
@@ -140,6 +145,7 @@ if ($_show_obs) {
     $list_trans_const[$_consult->_datetime] = $_consult;
   }
 }
+
 
 krsort($list_trans_const);
 
@@ -162,6 +168,7 @@ $smarty->assign("cibles"      , $cibles);
 $smarty->assign("cible"       , $cible);
 $smarty->assign("users"       , $users);
 $smarty->assign("user_id"     , $user_id);
+$smarty->assign("has_obs_entree", $has_obs_entree);
 $smarty->assign("_show_obs"   , $_show_obs);
 $smarty->assign("_show_trans" , $_show_trans);
 $smarty->assign("_show_const" , $_show_const);

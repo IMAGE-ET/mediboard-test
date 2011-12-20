@@ -1897,3 +1897,19 @@ div.operation_in_mouv {
   background: #bbb;
   margin: 2px;
 }
+
+tr.consultation_entree td {
+  background: #fc8 !important;
+}
+
+tr.observation_urgente td {
+  background: #faa !important;
+}
+
+tr.observation_info td {
+  background: #ccf !important;
+}
+
+tr.transmission_haute td {
+  background: #faa !important;
+}

@@ -22,6 +22,7 @@ class CConsultation extends CCodable {
   var $sejour_id       = null;
   
   // DB fields
+  var $type            = null;
   var $heure           = null;
   var $duree           = null;
   var $secteur1        = null;
@@ -167,6 +168,7 @@ class CConsultation extends CCodable {
 		$specs["_praticien_id"]     ="ref class|CMediusers seekable show|1"; //is put here for view
     
     $specs["motif"]             = "text helped seekable";
+    $specs["type"]              = "enum list|classique|entree default|classique";
     $specs["heure"]             = "time notNull show|0";
     $specs["duree"]             = "num min|1 max|9 notNull default|1 show|0";
     $specs["secteur1"]          = "currency min|0 show|0";
