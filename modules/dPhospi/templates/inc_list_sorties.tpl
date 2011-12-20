@@ -8,6 +8,11 @@
 </script>
 
 {{if $type == "deplacements"}}
+  <script type="text/javascript">
+    refreshList_deplacements = function(order_col, order_way) {
+      refreshList(order_col, order_way, 'deplacements');
+    }
+  </script>
   <table class="tbl">
     <tr class="only-printable">
       <th class="title" colspan="100">
@@ -21,11 +26,11 @@
         Déplacement
       </th>
       {{assign var=url value="?m=$m&tab=$tab"}}
-      <th>{{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way function=refreshList}}</th>
-      <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList}}</th>
-      <th>{{mb_colonne class="CAffectation" field="_chambre"   order_col=$order_col order_way=$order_way function=refreshList}}</th>
+      <th>{{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
+      <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
+      <th>{{mb_colonne class="CAffectation" field="_chambre"   order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
       <th>Destination</th>
-      <th>{{mb_colonne class="CAffectation" field="sortie"     order_col=$order_col order_way=$order_way function=refreshList}}</th>
+      <th>{{mb_colonne class="CAffectation" field="sortie"     order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
     </tr>
     {{foreach from=$deplacements item=_sortie}}
       {{mb_include module=dPhospi template=inc_check_deplacement_line}}
@@ -34,6 +39,11 @@
     {{/foreach}}
   </table>
 {{else}}
+  <script type="text/javascript">
+    refreshList_{{$type}} = function(order_col, order_way) {
+      refreshList(order_col, order_way, '{{$type}}');
+    }
+  </script>
   <ul id="tabs-edit-sorties-{{$type}}" class="control_tabs">
     <li>
       <a href="#places-{{$type}}">Placés (<span id="count_deplacements">{{$sorties|@count}}</span>)</a>
@@ -60,13 +70,13 @@
         <button class="print notext" style="float:left;" onclick="$('places-{{$type}}').print()">{{tr}}Print{{/tr}}</button>
         Sortie
       </th>
-      <th>{{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way function=refreshList}}</th>
-      <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList}}</th>
-      <th>{{mb_colonne class="CAffectation" field="_chambre"   order_col=$order_col order_way=$order_way function=refreshList}}</th>
+      <th>{{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way function=refreshList_$type}}</th>
+      <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_$type}}</th>
+      <th>{{mb_colonne class="CAffectation" field="_chambre"   order_col=$order_col order_way=$order_way function=refreshList_$type}}</th>
       {{if $type == "presents"}}
       <th>Entree</th>
       {{/if}}
-      <th>{{mb_colonne class="CAffectation" field="sortie"     order_col=$order_col order_way=$order_way function=refreshList}}</th>
+      <th>{{mb_colonne class="CAffectation" field="sortie"     order_col=$order_col order_way=$order_way function=refreshList_$type}}</th>
     </tr>
     {{foreach from=$sorties item=_sortie}}
       {{mb_include module=dPhospi template=inc_check_sortie_line}}
@@ -80,13 +90,13 @@
       <tr>
         <th>
           <button class="print notext not-printable" style="float:left;" onclick="$('non-places-{{$type}}').print()">{{tr}}Print{{/tr}}</button>
-          {{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way function=refreshList}}
+          {{mb_colonne class="CAffectation" field="_patient" order_col=$order_col order_way=$order_way function=refreshList_$type}}
         </th>
-        <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList}}</th>
+        <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_$type}}</th>
         {{if $type == "presents"}}
         <th>Entree</th>
         {{/if}}
-        <th>{{mb_colonne class="CAffectation" field="sortie" order_col=$order_col order_way=$order_way function=refreshList}}</th>
+        <th>{{mb_colonne class="CAffectation" field="sortie" order_col=$order_col order_way=$order_way function=refreshList_$type}}</th>
       </tr>
       {{foreach from=$sortiesNP item=_sortie}}
         {{mb_include module=dPhospi template=inc_check_sortieNP_line}}
