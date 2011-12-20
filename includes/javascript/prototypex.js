@@ -529,36 +529,33 @@ Element.addMethods({
     
     if (App.onMouseOverPrepared) return;
     
-    document.observe("touchstart", function(event){
-      var element = Event.element(event);
+    var touchstart = document.on("touchstart", "[onmouseover]", function(event, element){
+      element.mouseOverTriggered = false;
       
-      if (element.onmouseover) {
-        Event.stop(event);
-        element.mouseOverTriggered = false;
-        
-        element.timer = setTimeout(function(){
-          element.onmouseover(event);
-          element.mouseOverTriggered = true;
-        }, 300);
-      }
+      element.timer = setTimeout(function(){
+        element.onmouseover();
+        element.mouseOverTriggered = true;
+      }, 300);
     });
     
-    document.observe("touchend", function(event){
-      var element = Event.element(event);
+    document.on("touchmove", "[onmouseover]", function(event, element){
+      clearTimeout(element.timer);
+      element.timer = null;
+    });
+    
+    document.on("touchend", "[onmouseover]", function(event, element){
+      if (!element.timer) return;
       
-      if (element.onmouseover) {
-        Event.stop(event);
-        clearTimeout(element.timer);
+      clearTimeout(element.timer);
+      
+      if (!element.mouseOverTriggered) {
+        // event bubbling
+        var bubble = (element.onclick || element.href) ? element : element.up("[onclick], :link");
         
-        if (!element.mouseOverTriggered) {
-          // event bubbling
-          var bubble = (element.onclick || element.href) ? element : element.up("[onclick], :link");
-          
-          // simulate event firing
-          if ((!bubble.onclick || bubble.onclick() !== false) && bubble.href) {
-            location.href = bubble.href;
-            return;
-          }
+        // simulate event firing
+        if ((!bubble.onclick || bubble.onclick() !== false) && bubble.href) {
+          location.href = bubble.href;
+          return;
         }
       }
     });
