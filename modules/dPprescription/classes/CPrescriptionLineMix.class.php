@@ -863,7 +863,13 @@ class CPrescriptionLineMix extends CMbObject {
     
   function store(){
     if($this->_add_perf_contigue){
-      if($msg = $this->duplicatePerf()){
+    	$this->completeField("date_arret");
+			$this->completeField("time_arret");
+      
+			$_date_arret = $this->date_arret ? $this->date_arret : mbDate();
+			$_time_arret = $this->time_arret ? $this->time_arret : mbTime();
+      
+      if($msg = $this->duplicatePerf($_date_arret, $_time_arret)){
         return $msg;
       }
     }
