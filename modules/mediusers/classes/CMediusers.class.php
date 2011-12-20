@@ -305,7 +305,7 @@ class CMediusers extends CMbObject {
     if ($this->_force_merge) {
       return parent::merge($objects, $fast);
     }
-    return "CMediusers-merge-impossible";
+    return CAppUI::tr("CMediusers-merge-impossible");
   }
 
   function updateFormFields() {

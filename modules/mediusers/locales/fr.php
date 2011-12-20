@@ -191,6 +191,7 @@ $locales['CMediusers-function_id-desc'] = 'Fonction de l\'utilisateur au sein de
 $locales['CMediusers-ik'] = 'IK';
 $locales['CMediusers-ik-court'] = 'IK';
 $locales['CMediusers-ik-desc'] = 'IK';
+$locales['CMediusers-merge-impossible'] = 'Merci d\'utiliser la fusion sur la classe CUser';
 $locales['CMediusers-msg-create'] = 'Utilisateur créé';
 $locales['CMediusers-msg-delete'] = 'Utilisateur supprimé';
 $locales['CMediusers-msg-modify'] = 'Utilisateur modifié';
