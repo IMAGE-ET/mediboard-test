@@ -21,20 +21,20 @@ InteropActor = {
   },
   
   refreshActors : function(parent_class) {
-	var url = new Url("eai", "ajax_refresh_actors");
-	url.addParam("actor_class", parent_class);
-	url.requestUpdate(parent_class+"s");
+    var url = new Url("eai", "ajax_refresh_actors");
+    url.addParam("actor_class", parent_class);
+    url.requestUpdate(parent_class+"s");
   },
   
   refreshActorsAndActor : function(actor_id){
-	InteropActor.refreshActor(InteropActor.actor_guid.split('-')[0]+"-"+actor_id);  
-	InteropActor.refreshActors($V(getForm("edit"+InteropActor.actor_guid).parent_class));
+    InteropActor.refreshActor(InteropActor.actor_guid.split('-')[0]+"-"+actor_id);  
+    InteropActor.refreshActors($V(getForm("edit"+InteropActor.actor_guid).parent_class));
   },
   
   receive : function(actor_guid) {
     var url = new Url("eai", "ajax_receive_files");
-	url.addParam("actor_guid", actor_guid);
-	url.requestUpdate("utilities-exchange-source-receive");
+    url.addParam("actor_guid", actor_guid);
+    url.requestUpdate("utilities-exchange-source-receive");
   },
   
   refreshFormatsAvailable : function(actor_guid) {
@@ -45,25 +45,25 @@ InteropActor = {
   
   refreshExchangesSources : function(actor_guid, message) {
     var url = new Url("eai", "ajax_refresh_exchanges_sources");
-	url.addParam("actor_guid", actor_guid);
-	url.addParam("message", message);
+    url.addParam("actor_guid", actor_guid);
+    url.addParam("message", message);
     url.requestUpdate("exchanges_sources_"+actor_guid);  
   },
   
   viewMessagesSupported : function(actor_guid, exchange_class) {
-	var url = new Url("eai", "ajax_vw_messages_supported");
-	url.addParam("actor_guid", actor_guid);
-	url.addParam("exchange_class", exchange_class);
+    var url = new Url("eai", "ajax_vw_messages_supported");
+    url.addParam("actor_guid", actor_guid);
+    url.addParam("exchange_class", exchange_class);
     url.requestModal(800, 350);
     InteropActor.modal = url.modalObject;
     InteropActor.modal.observe("afterClose", function(){ 
       InteropActor.refreshFormatsAvailable(actor_guid); 
-  	});
+    });
   },
   
   callbackConfigsFormats : function(config_id, object) {
-	  var actor_guid = object.sender_class+"-"+object.sender_id;
-	  InteropActor.refreshConfigsFormats(actor_guid);
+    var actor_guid = object.sender_class+"-"+object.sender_id;
+    InteropActor.refreshConfigsFormats(actor_guid);
   },
   
   refreshConfigsFormats : function(actor_guid) {
@@ -73,10 +73,10 @@ InteropActor = {
   },
   
   viewConfigsFormat : function(actor_guid, config_guid) {
-	var url = new Url("eai", "ajax_vw_configs_format");
-	url.addParam("actor_guid", actor_guid);
-	url.addParam("config_guid", config_guid);
-	url.requestUpdate("format_"+config_guid);
+    var url = new Url("eai", "ajax_vw_configs_format");
+    url.addParam("actor_guid", actor_guid);
+    url.addParam("config_guid", config_guid);
+    url.requestUpdate("format_"+config_guid);
   },
   
   refreshConfigObjectValues : function(object_id, object_configs_guid) {
@@ -84,5 +84,5 @@ InteropActor = {
     url.addParam("object_id", object_id);
     url.addParam("object_configs_guid", object_configs_guid);
     url.requestUpdate("actor_config_"+object_id);
-  },
+  }
 };

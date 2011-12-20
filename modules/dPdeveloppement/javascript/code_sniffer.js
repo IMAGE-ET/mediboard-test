@@ -15,5 +15,5 @@ CodeSniffer = {
 		new Url('dPdeveloppement', 'sniff_file') .
 		  addParam("file", file) .
 			requestModal(800, 400);
-  },
+  }
 }

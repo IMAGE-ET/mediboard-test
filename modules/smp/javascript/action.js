@@ -27,5 +27,5 @@ var Action = {
     var url = new Url(this.module, "ajax_delete_mvt");
     url.addParam("action", sAction);
     url.requestUpdate("delete-mvt");
-  },
+  }
 }

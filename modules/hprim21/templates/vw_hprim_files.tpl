@@ -22,7 +22,7 @@ var Action = {
   link: function () {
     var url = new Url(this.module, "httpreq_link_hprim_objects");
     url.requestUpdate("link_hprim_objects");
-  },
+  }
 }
 
 </script>

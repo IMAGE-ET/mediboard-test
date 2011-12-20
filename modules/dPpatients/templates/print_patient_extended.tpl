@@ -9,7 +9,7 @@ var lists = {
   consultation: {
     labels: ["Dernière consultation", "Consultations"],
     all: true
-  },
+  }
 };
 
 function toggleList(list, button) {

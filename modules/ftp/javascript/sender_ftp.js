@@ -10,16 +10,16 @@
  */
 
 SenderFTP = {
-  actor_guid : null,
+  actor_guid: null,
   
-  dispatch : function(actor_guid) {
+  dispatch: function(actor_guid) {
     var url = new Url("ftp", "ajax_dispatch_files");
-	url.addParam("actor_guid", actor_guid);
-	url.requestUpdate("CSenderFTP-utilities_dispatch");
+    url.addParam("actor_guid", actor_guid);
+    url.requestUpdate("CSenderFTP-utilities_dispatch");
   },
   
-  readFilesSenders  : function() {
+  readFilesSenders: function() {
     var url = new Url("ftp", "ajax_read_ftp_files");
-	url.requestUpdate("CSenderFTP-utilities_read-files-senders");
-  },
+    url.requestUpdate("CSenderFTP-utilities_read-files-senders");
+  }
 };

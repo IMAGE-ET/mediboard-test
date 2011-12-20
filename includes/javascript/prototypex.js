@@ -527,10 +527,12 @@ Element.addMethods({
       new NoClickDelay(element);
     });*/
     
-    root.select("*[onmouseover]").each(function(element){
-      if (element.touchEventsPrepared) return;
+    if (App.onMouseOverPrepared) return;
+    
+    document.observe("touchstart", function(event){
+      var element = Event.element(event);
       
-      element.observe("touchstart", function(event){
+      if (element.onmouseover) {
         Event.stop(event);
         element.mouseOverTriggered = false;
         
@@ -538,9 +540,14 @@ Element.addMethods({
           element.onmouseover(event);
           element.mouseOverTriggered = true;
         }, 300);
-      });
+      }
+    });
+    
+    document.observe("touchend", function(event){
+      var element = Event.element(event);
       
-      element.observe("touchend", function(event){
+      if (element.onmouseover) {
+        Event.stop(event);
         clearTimeout(element.timer);
         
         if (!element.mouseOverTriggered) {
@@ -553,10 +560,10 @@ Element.addMethods({
             return;
           }
         }
-      });
-      
-      element.touchEventsPrepared = true;
+      }
     });
+    
+    App.onMouseOverPrepared = true;
   }
 });
 

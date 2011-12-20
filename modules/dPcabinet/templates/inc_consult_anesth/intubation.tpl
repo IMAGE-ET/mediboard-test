@@ -13,7 +13,7 @@ Main.add(function () {
     new AideSaisie.AutoComplete(oFormIntubation.etatBucco, {
               objectClass: "CConsultAnesth",
               timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-              validateOnBlur:0,
+              validateOnBlur:0
             });
     new AideSaisie.AutoComplete(oFormIntubation.conclusion, {
               objectClass: "CConsultAnesth",

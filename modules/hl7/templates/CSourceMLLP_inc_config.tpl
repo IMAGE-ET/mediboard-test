@@ -58,7 +58,7 @@
             var url = new Url("hl7", "ajax_send_mllp");
             url.addParam("exchange_source_name", exchange_source_name);
             url.requestUpdate("utilities-source-mllp-send-" + exchange_source_name);
-          },
+          }
         }
       </script>
       <table class="tbl">

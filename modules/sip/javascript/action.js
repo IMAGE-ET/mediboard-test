@@ -15,5 +15,5 @@ var Action = {
     var url = new Url(this.module, "ajax_export_"+type);
     url.addParam("action", sAction);
     url.requestUpdate("export-"+type);
-  },
+  }
 }

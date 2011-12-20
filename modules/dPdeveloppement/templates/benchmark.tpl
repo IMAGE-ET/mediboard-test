@@ -59,17 +59,15 @@ var Benchmark = {
     
     var oOptions = {
       onLoading: oChrono.start.bind(oChrono),
-      onComplete: oChrono.stop.bind(oChrono),
-    }
+      onComplete: oChrono.stop.bind(oChrono)
+    };
   
-    var url = new Url;
-    url.setModuleAction(this.module, this.action);
+    var url = new Url(this.module, this.action);
     url.requestUpdate("response", oOptions);
   },
   
   sendEvery: function(fMilliseconds) {
   	fMilliseconds = parseFloat(fMilliseconds);
-  	
     
     if (this.executer) {
       this.executer.stop();
