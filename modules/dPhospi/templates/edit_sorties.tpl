@@ -62,9 +62,9 @@ function refreshList(order_col, order_way, type) {
 
 <ul id="tabs-edit-sorties" class="control_tabs">
   {{foreach from=$sorties item=_sorties key=type}}
-    {{if $_sorties}}
+    {{if $_sorties.place || $_sorties.non_place}}
     <li onmousedown="refreshList(null, null, '{{$type}}')">
-      <a href="#{{$type}}">Sorties {{tr}}CSejour.type.{{$type}}{{/tr}} prévues (<span id="count_{{$type}}">{{$_sorties}}</span>)</a>
+      <a href="#{{$type}}">Sorties {{tr}}CSejour.type.{{$type}}{{/tr}} prévues (<span id="count_{{$type}}">{{$_sorties.place}}/{{$_sorties.non_place}}</span>)</a>
     </li>
     {{/if}}
   {{/foreach}}
@@ -72,7 +72,7 @@ function refreshList(order_col, order_way, type) {
     <a href="#deplacements">Déplacements prévus (<span id="count_deplacements">{{$deplacements}}</span>)</a>
   </li>
   <li onmousedown="refreshList(null, null, 'presents')">
-    <a href="#presents">Patients présents (<span id="count_presents">{{$presents}}</span>)</a>
+    <a href="#presents">Patients présents (<span id="count_presents">{{$presents}}/{{$presentsNP}}</span>)</a>
   </li>
 </ul>
 

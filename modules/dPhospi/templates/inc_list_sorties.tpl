@@ -1,9 +1,14 @@
 <script type="text/javascript">
   $("count_{{$type}}").update("{{$update_count}}");
+  {{if $type != "deplacements"}}
+  Main.add(function () {
+    controlTabs = new Control.Tabs.create('tabs-edit-sorties-{{$type}}', true);
+  });
+  {{/if}}
 </script>
 
 {{if $type == "deplacements"}}
-   <table class="tbl">
+  <table class="tbl">
     <tr class="only-printable">
       <th class="title" colspan="100">
         Déplacements prévus (<span id="count_{{$type}}">{{$deplacements|@count}}</span>)
@@ -23,144 +28,71 @@
       <th>{{mb_colonne class="CAffectation" field="sortie"     order_col=$order_col order_way=$order_way function=refreshList}}</th>
     </tr>
     {{foreach from=$deplacements item=_sortie}}
-    <tr>
-      <td class="not-printable">
-      <form name="Edit-{{$_sortie->_guid}}" action="?m={{$m}}" method="post"
-        onsubmit="saveSortie(getForm('Sortie-{{$_sortie->_guid}}'), this); return onSubmitFormAjax(this, { onComplete: refreshList })">
-      <input type="hidden" name="m" value="{{$m}}" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_affectation_aed" />
-      {{mb_key object=$_sortie}}
-      {{mb_field object=$_sortie field=sortie hidden=1}}
-
-      {{if $_sortie->effectue}}
-     
-      <input type="hidden" name="effectue" value="0" />
-      <button type="submit" class="cancel">
-      Annuler
-      </button>
-      {{else}}
-      <input type="hidden" name="effectue" value="1" />
-      <button type="submit" class="tick">
-      Effectuer
-      </button>
-      {{/if}}
-      </form>
-      </td>
-      {{if $_sortie->effectue}}
-      <td class="text" class="arretee">
-      {{else}}
-      <td class="text">
-      {{/if}}
-      {{assign var=sejour value=$_sortie->_ref_sejour}}
-      {{assign var=patient value=$sejour->_ref_patient}}
-        <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">{{$patient}}</strong>
-      </td>
-      <td class="text">
-        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
-      </td>
-      <td class="text">
-        {{$_sortie->_ref_lit}}
-      </td>
-      <td class="text">
-        {{$_sortie->_ref_next->_ref_lit}}
-      </td>
-      <td>
-        {{$_sortie->sortie|date_format:$conf.time}}
-      </td>
-    </tr>
+      {{mb_include module=dPhospi template=inc_check_deplacement_line}}
     {{foreachelse}}
-    <tr><td colspan="6" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
+      <tr><td colspan="6" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
     {{/foreach}}
   </table>
 {{else}}
+  <ul id="tabs-edit-sorties-{{$type}}" class="control_tabs">
+    <li>
+      <a href="#places-{{$type}}">Placés (<span id="count_deplacements">{{$sorties|@count}}</span>)</a>
+    </li>
+    <li>
+      <a href="#non-places-{{$type}}">Non placés (<span id="count_presents">{{$sortiesNP|@count}}</span>)</a>
+    </li>
+  </ul>
+  <hr class="control_tabs" />
+  <div id="places-{{$type}}" style="display: none;">
   <table class="tbl">
     <tr class="only-printable">
       <th class="title" colspan="100">
         {{if $type == "presents"}}
-          Patients présents  (<span id="count_{{$type}}">{{$sorties|@count}}</span>)
+          Patients présents (<span id="count_{{$type}}">{{$sorties|@count}}/{{$sortiesNP|@count}}</span>)
         {{else}}
-          Sorties {{tr}}CSejour.type.{{$type}}{{/tr}} prévues (<span id="count_{{$type}}">{{$sorties|@count}}</span>)
+          Sorties {{tr}}CSejour.type.{{$type}}{{/tr}} prévues (<span id="count_{{$type}}">{{$sorties|@count}}/{{$sortiesNP|@count}}</span>)
         {{/if}}
         &mdash; {{$date|date_format:$conf.longdate}}
       </th>
     </tr>
     <tr>
       <th class="not-printable">
-        <button class="print notext" style="float:left;" onclick="$('{{$type}}').print()">{{tr}}Print{{/tr}}</button>
+        <button class="print notext" style="float:left;" onclick="$('places-{{$type}}').print()">{{tr}}Print{{/tr}}</button>
         Sortie
       </th>
       <th>{{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way function=refreshList}}</th>
       <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList}}</th>
       <th>{{mb_colonne class="CAffectation" field="_chambre"   order_col=$order_col order_way=$order_way function=refreshList}}</th>
+      {{if $type == "presents"}}
+      <th>Entree</th>
+      {{/if}}
       <th>{{mb_colonne class="CAffectation" field="sortie"     order_col=$order_col order_way=$order_way function=refreshList}}</th>
     </tr>
     {{foreach from=$sorties item=_sortie}}
-    <tr>
-      <td class="not-printable">
-        <form name="Sortie-{{$_sortie->_guid}}" action="?m={{$m}}" method="post"
-          onsubmit="return onSubmitFormAjax(this, {onComplete: refreshList})">
-          <input type="hidden" name="m" value="{{$m}}" />
-          <input type="hidden" name="del" value="0" />
-          <input type="hidden" name="dosql" value="do_affectation_aed" />
-          {{mb_key object=$_sortie}}
-          {{if $_sortie->confirme}}
-            <input type="hidden" name="confirme" value="0" />
-            <button type="submit" class="cancel">
-              Annuler
-            </button>
-          {{else}}
-            <input type="hidden" name="confirme" value="1" />
-            <button type="submit" class="tick">
-              Autoriser
-            </button>
-          {{/if}}
-        </form>
-      </td>
-      
-      <td class="text {{if $_sortie->confirme}} arretee {{/if}}">
-       {{assign var=sejour value=$_sortie->_ref_sejour}}
-       {{if $canPlanningOp->read}}
-       <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
-         <img src="images/icons/planning.png" alt="modifier" />
-       </a>
-       {{/if}}
-        {{assign var=patient value=$sejour->_ref_patient}}
-        <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">{{$patient}}</strong>
-      </td>
-      <td class="text">
-        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
-      </td>
-      <td class="text {{if $sejour->sortie_reelle}}effectue{{/if}}">
-        {{$_sortie->_ref_lit}}
-      </td>
-      <td>
-        <div {{if !$_sortie->confirme && !$sejour->sortie_reelle}}class="only-printable"{{/if}}>
-          {{if $type == 'presents'}}
-            {{$_sortie->sortie|date_format:$conf.datetime}}
-          {{else}}
-            {{$_sortie->sortie|date_format:$conf.time}}
-          {{/if}}
-          </div>
-        {{if !$_sortie->confirme && !$sejour->sortie_reelle}}
-          <div class="not-printable">
-          {{assign var=aff_guid value=$_sortie->_guid}}
-          <form name="editSortiePrevue-{{$type}}-{{$aff_guid}}" method="post" action="?"
-            onsubmit="return onSubmitFormAjax(this, { onComplete: function() { refreshList(); } })">
-            <input type="hidden" name="m" value="dPplanningOp" />
-            <input type="hidden" name="dosql" value="do_sejour_aed" />
-            <input type="hidden" name="del" value="0" />
-            {{mb_key object=$sejour}}
-            {{mb_field object=$sejour field=entree_prevue hidden=true}}
-            <button class="add" type="button" onclick="addDays(this, 1)">1J</button>
-            {{mb_field object=$sejour field=sortie_prevue register=true form="editSortiePrevue-$type-$aff_guid" onchange="this.form.onsubmit()"}}
-          </form>
-          </div>
-        {{/if}}
-      </td>
-    </tr>
+      {{mb_include module=dPhospi template=inc_check_sortie_line}}
     {{foreachelse}}
-    <tr><td colspan="5" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
+      <tr><td colspan="5" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
     {{/foreach}}
   </table>
+  </div>
+  <div id="non-places-{{$type}}" style="display: none;">
+    <table class="tbl">
+      <tr>
+        <th>
+          <button class="print notext not-printable" style="float:left;" onclick="$('non-places-{{$type}}').print()">{{tr}}Print{{/tr}}</button>
+          {{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way function=refreshList}}
+        </th>
+        <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList}}</th>
+        {{if $type == "presents"}}
+        <th>Entree</th>
+        {{/if}}
+        <th>{{mb_colonne class="CAffectation" field="sortie" order_col=$order_col order_way=$order_way function=refreshList}}</th>
+      </tr>
+      {{foreach from=$sortiesNP item=_sortie}}
+        {{mb_include module=dPhospi template=inc_check_sortieNP_line}}
+      {{foreachelse}}
+        <tr><td colspan="5" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
+    {{/foreach}}
+    </table>
+  </div>
 {{/if}}

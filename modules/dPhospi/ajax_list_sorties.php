@@ -27,36 +27,50 @@ $services = $service->loadListWithPerms(PERM_READ, $where);
 
 // Récupération de la journée à afficher
 $date  = CValue::getOrSession("date" , mbDate());
-$affectation  = new CAffectation;
-
-$where = array();
-$ljoin = array();
 $limit1 = $date." 00:00:00";
 $limit2 = $date." 23:59:59";
 
+// Patients placés
+$affectation                 = new CAffectation();
+$ljoin                       = array();
 $ljoin["sejour"]             = "sejour.sejour_id = affectation.sejour_id";
 $ljoin["patients"]           = "sejour.patient_id = patients.patient_id";
 $ljoin["users"]              = "sejour.praticien_id = users.user_id";
 $ljoin["lit"]                = "lit.lit_id = affectation.lit_id";
 $ljoin["chambre"]            = "chambre.chambre_id = lit.chambre_id";
 $ljoin["service"]            = "service.service_id = chambre.service_id";
+$where                       = array();
 $where["service.group_id"]   = "= '$group->_id'";
 $where["service.service_id"] = CSQLDataSource::prepareIn(array_keys($services));
 $where["sejour.type"]        = "NOT IN ('exte', 'seances')";
-  
-$order = null;
+
+// Patients non placés
+$sejour                                = new CSejour();
+$ljoinNP                               = array();
+$ljoinNP["affectation"]                = "sejour.sejour_id    = affectation.sejour_id";
+$ljoinNP["patients"]                   = "sejour.patient_id   = patients.patient_id";
+$ljoinNP["users"]                      = "sejour.praticien_id = users.user_id";
+$whereNP                               = array();
+$whereNP["sejour.group_id"]            = "= '$group->_id'";
+$whereNP["sejour.type"]                = "NOT IN ('exte', 'seances')";
+$whereNP["affectation.affectation_id"] = "IS NULL";
+
+$order = $orderNP = null;
 if($order_col == "_patient"){
-  $order = "patients.nom $order_way, patients.prenom, sejour.entree_prevue";
+  $order = $orderNP = "patients.nom $order_way, patients.prenom, sejour.entree";
 }
 if($order_col == "_praticien"){
-  $order = "users.user_last_name $order_way, users.user_first_name";
+  $order = $orderNP = "users.user_last_name $order_way, users.user_first_name";
 }
 if($order_col == "_chambre"){
   $order = "chambre.nom $order_way, patients.nom, patients.prenom";
+  $orderNP = "patients.nom ASC, patients.prenom, sejour.entree";
 }
 if($order_col == "sortie"){
-  $order = "affectation.sortie $order_way, patients.nom, patients.prenom";
+  $order   = "affectation.sortie $order_way, patients.nom, patients.prenom";
+  $orderNP = "sejour.sortie $order_way, patients.nom, patients.prenom";
 }
+
 // Récupération des présents du jour
 if($type == 'presents' ) {
   $where[] = "'$date' BETWEEN DATE(affectation.entree) AND DATE(affectation.sortie)";
@@ -64,6 +78,9 @@ if($type == 'presents' ) {
     $where["confirme"] = " = '0'";
   }
   $presents = $affectation->loadList($where, $order, null, null, $ljoin);
+  
+  $whereNP[]  = "'$date' BETWEEN DATE(sejour.entree) AND DATE(sejour.sortie)";
+  $presentsNP = $sejour->loadList($whereNP, $orderNP, null, null, $ljoinNP);
   
   // Chargements des détails des séjours
   foreach($presents as $_sortie) {
@@ -73,13 +90,16 @@ if($type == 'presents' ) {
     $sejour->loadRefPraticien(1);
     $_sortie->_ref_next->loadRefLit(1)->loadCompleteView();
   }
+  foreach($presentsNP as $sejour) {
+    $sejour->loadRefPatient(1);
+    $sejour->loadRefPraticien(1);
+  }
   
 // Récupération des déplacements du jour
 } elseif ($type == "deplacements") {
   $where["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
-  $where["service.externe"] = "= '0'";
-  $where["sejour.sortie"] = "!= affectation.sortie";
-  
+  $where["service.externe"]    = "= '0'";
+  $where["sejour.sortie"]      = "!= affectation.sortie";
   if ($vue) {
     $where["effectue"] = "= '0'";
   }
@@ -102,12 +122,10 @@ if($type == 'presents' ) {
 } else {
   $where["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
   $where["sejour.sortie"] = "= affectation.sortie";
-  
+  $where["sejour.type"] = " = '$type'";
   if ($vue) {
     $where["confirme"] = " = '0'";
   }
-  
-  $where["sejour.type"] = " = '$type'";
   $sorties = $affectation->loadList($where, $order, null, null, $ljoin);
   
   // Chargements des détails des séjours
@@ -117,6 +135,16 @@ if($type == 'presents' ) {
     $sejour->loadRefPatient(1);
     $sejour->loadRefPraticien(1);
     $_sortie->_ref_next->loadRefLit(1)->loadCompleteView();
+  }
+  
+  $whereNP["sejour.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
+  $whereNP["sejour.type"]   = " = '$type'";
+  $sortiesNP = $sejour->loadList($whereNP, $orderNP, null, null, $ljoinNP);
+  
+  // Chargements des détails des séjours
+  foreach($sortiesNP as $sejour) {
+    $sejour->loadRefPatient(1);
+    $sejour->loadRefPraticien(1);
   }
 }
 
@@ -133,11 +161,13 @@ if ($type == "deplacements") {
   $smarty->assign("update_count", count($deplacements));
 }
 elseif($type == "presents") {
-  $smarty->assign("sorties"    , $presents);
-  $smarty->assign("update_count", count($presents));
+  $smarty->assign("sorties"     , $presents);
+  $smarty->assign("sortiesNP"   , $presentsNP);
+  $smarty->assign("update_count", count($presents)."/".count($presentsNP));
 } else {
   $smarty->assign("sorties"      , $sorties);
-  $smarty->assign("update_count", count($sorties));
+  $smarty->assign("sortiesNP"    , $sortiesNP);
+  $smarty->assign("update_count", count($sorties)."/".count($sortiesNP));
 }
 $smarty->assign("vue"          , $vue);
 $smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));
