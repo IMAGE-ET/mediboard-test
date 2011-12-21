@@ -5,6 +5,10 @@
 {{mb_script module="dPcabinet" script="edit_consultation"}}
 
 <script type="text/javascript">
+{{if !$consult->_canEdit}}
+  App.readonly = true;
+{{/if}}
+
 function printAllDocs() {
   var url = new Url("dPcabinet", "print_select_docs"); 
   url.addElement(document.editFrmFinish.consultation_id);

@@ -10,8 +10,6 @@
 
 global $m;
 
-CCanDO::checkEdit();
-
 $user = CUser::get();
 
 $date  = CValue::getOrSession("date", mbDate());
@@ -99,8 +97,6 @@ if ((!$userSel->isMedical()) && ($current_m != "dPurgences")) {
   CAppUI::setMsg("Vous devez selectionner un professionnel de santé", UI_MSG_ALERT);
   CAppUI::redirect("m=dPcabinet&tab=0");
 }
-
-$canUserSel->needsEdit(array("chirSel"=>0));
 
 $anesth = new CTypeAnesth;
 $orderanesth = "name";
@@ -254,6 +250,9 @@ if ($consult->_id) {
   	}
 	}
 }
+
+// Tout utilisateur peut consulter en lecture seule une consultation de séjour
+$consult->canEdit();
 
 // Création du template
 $smarty = new CSmartyDP();

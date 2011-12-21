@@ -8,7 +8,12 @@ newExam = function(sAction, consultation_id) {
     url.popup(900, 600, "Examen");  
   }
 }
-
+printFiche = function() {
+  var url = new Url("dPcabinet", "print_fiche"); 
+  url.addParam("consultation_id", '{{$object->_id}}');
+  url.addParam("print", true);
+  url.popup(700, 500, "printFiche");
+}
 </script>
 
 <table class="form">
@@ -17,7 +22,11 @@ newExam = function(sAction, consultation_id) {
       {{mb_include module=system template=inc_object_idsante400 object=$object}}
       {{mb_include module=system template=inc_object_history    object=$object}}
       {{mb_include module=system template=inc_object_notes      object=$object}}
-
+      
+      <button class="print" type="button" style="float: right;" onclick="printFiche();">
+        Imprimer la fiche
+      </button>
+      
       {{$object->_view}}
     </th>
   </tr>

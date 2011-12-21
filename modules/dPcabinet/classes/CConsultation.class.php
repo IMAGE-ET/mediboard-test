@@ -61,7 +61,7 @@ class CConsultation extends CCodable {
   var $pec_at           = null;
   var $reprise_at       = null;
   var $concerne_ALD     = null;
-	
+  
   // Form fields
   var $_etat           = null;
   var $_hour           = null;
@@ -73,6 +73,7 @@ class CConsultation extends CCodable {
   var $_precode_acte   = null;
   var $_exam_fields    = null;
   var $_acte_dentaire_id = null;
+  var $_function_secondary_id = null;
   var $_type           = null;  // Type de la consultation
   
   // Fwd References
@@ -120,9 +121,9 @@ class CConsultation extends CCodable {
   var $_facturable               = null;
   
   // Filter Fields
-  var $_date_min	 	           = null;
-  var $_date_max 		           = null;
-  var $_prat_id 		           = null;
+  var $_date_min                = null;
+  var $_date_max                = null;
+  var $_prat_id                = null;
   var $_etat_reglement_patient = null;
   var $_etat_reglement_tiers   = null;
   var $_type_affichage         = null;
@@ -160,13 +161,13 @@ class CConsultation extends CCodable {
   }
   
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["sejour_id"]         = "ref class|CSejour";
     $specs["plageconsult_id"]   = "ref notNull class|CPlageconsult seekable show|1";
     $specs["patient_id"]        = "ref class|CPatient purgeable seekable show|1";
     $specs["categorie_id"]      = "ref class|CConsultationCategorie show|1";
-		$specs["_praticien_id"]     ="ref class|CMediusers seekable show|1"; //is put here for view
-    
+    $specs["_praticien_id"]     ="ref class|CMediusers seekable show|1"; //is put here for view
+    $specs["_function_secondary_id"] = "ref class|CFunctions";
     $specs["motif"]             = "text helped seekable";
     $specs["type"]              = "enum list|classique|entree default|classique";
     $specs["heure"]             = "time notNull show|0";
@@ -191,12 +192,12 @@ class CConsultation extends CCodable {
     $specs["tarif"]               = "str show|0";
     $specs["arrivee"]             = "dateTime show|0";
     $specs["concerne_ALD"]        = "bool";
-		
+    
     $specs["patient_date_reglement"]    = "date show|0";
     $specs["tiers_date_reglement"]      = "date show|0";
     $specs["du_patient"]                = "currency show|0";
     $specs["du_tiers"  ]                = "currency show|0";
-		
+    
     $specs["date_at"]  = "date";
     $specs["fin_at"]   = "dateTime";
     $specs["pec_at"]   = "enum list|soins|arret";
@@ -221,7 +222,7 @@ class CConsultation extends CCodable {
     $specs["_date"]             = "date";
     $specs["_datetime"]         = "dateTime show|1";
     $specs["_date_min"]         = "date";
-    $specs["_date_max"] 	      = "date moreEquals|_date_min";
+    $specs["_date_max"]         = "date moreEquals|_date_min";
     $specs["_type_affichage"]   = "enum list|complete|totaux";
     $specs["_coordonnees"]      = "bool default|0";
     $specs["_plages_vides"]     = "bool default|1";
@@ -229,7 +230,7 @@ class CConsultation extends CCodable {
     
     $specs["_check_premiere"]   = "";
     $specs["_check_adresse"]    = "";
-    $specs["_somme"]            = "currency";		
+    $specs["_somme"]            = "currency";    
     $specs["_type"]             = "enum list|urg|anesth";
     $specs["_prat_id"]          = "";
     $specs["_acte_dentaire_id"] = "ref class|CActeDentaire";
@@ -267,7 +268,7 @@ class CConsultation extends CCodable {
   
   function updateFormFields() {
     parent::updateFormFields();
-  	$this->_somme = $this->secteur1 + $this->secteur2;
+    $this->_somme = $this->secteur1 + $this->secteur2;
     if($this->patient_date_reglement === "0000-00-00") {
       $this->patient_date_reglement = null;
     }
@@ -294,7 +295,7 @@ class CConsultation extends CCodable {
     
     // Nom de tarif manuel
     if ($this->tarif === "manuel") {
-			// Get all acts
+      // Get all acts
       $this->loadRefsActes();
       foreach ($this->_ref_actes as $acte) {
         $this->tarif.= " $acte->_shortview";
@@ -307,10 +308,10 @@ class CConsultation extends CCodable {
     }
     
     // Cas du paiement d'un séjour
-  	if ($this->sejour_id !== null && $this->sejour_id && $this->secteur1 !== null && $this->secteur2 !== null){
-  		$this->du_tiers = $this->secteur1 + $this->secteur2;
-  		$this->du_patient = 0;
-  	}
+    if ($this->sejour_id !== null && $this->sejour_id && $this->secteur1 !== null && $this->secteur2 !== null){
+      $this->du_tiers = $this->secteur1 + $this->secteur2;
+      $this->du_patient = 0;
+    }
   }
 
   function check() {
@@ -360,7 +361,7 @@ class CConsultation extends CCodable {
   }
   
   function loadView() {
-  	parent::loadView();
+    parent::loadView();
     $this->loadRefsFichesExamen(); 
     $this->loadRefsActesNGAP();
   }
@@ -425,17 +426,17 @@ class CConsultation extends CCodable {
     $tarif->load($this->_tarif_id);
  
     // Cas de la cotation poursuivie
-		if ($this->tarif == "pursue") {
-	    $this->secteur1 += $tarif->secteur1;
-	    $this->secteur2 += $tarif->secteur2;
-	    $this->tarif     = "composite";
-	 	}
+    if ($this->tarif == "pursue") {
+      $this->secteur1 += $tarif->secteur1;
+      $this->secteur2 += $tarif->secteur2;
+      $this->tarif     = "composite";
+     }
     // Cas de la cotation normale
-		else {
-	    $this->secteur1 = $tarif->secteur1;
-	    $this->secteur2 = $tarif->secteur2;
+    else {
+      $this->secteur1 = $tarif->secteur1;
+      $this->secteur2 = $tarif->secteur2;
       $this->tarif    = $tarif->description;
- 		}
+     }
 
     $this->du_patient   = $this->secteur1 + $this->secteur2;
     
@@ -473,45 +474,45 @@ class CConsultation extends CCodable {
     // Ajout des actes NGAP
     $this->loadRefsActesNGAP();
     foreach ($this->_ref_actes_ngap as $acte_ngap) {
-	    $acteNumber = count($this->_fse_intermax)+1;
-	    $this->_fse_intermax["ACTE_$acteNumber"] = array(
+      $acteNumber = count($this->_fse_intermax)+1;
+      $this->_fse_intermax["ACTE_$acteNumber"] = array(
         "PRE_ACTE_TYPE"   => 0,
-	      "PRE_DEPASSEMENT" => $acte_ngap->montant_depassement,
-	      "PRE_CODE"        => $acte_ngap->code,
-	      "PRE_COEFFICIENT" => $acte_ngap->demi ? $acte_ngap->coefficient/2 : $acte_ngap->coefficient,
-	      "PRE_QUANTITE"    => $acte_ngap->quantite,
-	      "PRE_DEMI"        => $acte_ngap->demi,
-	    );
+        "PRE_DEPASSEMENT" => $acte_ngap->montant_depassement,
+        "PRE_CODE"        => $acte_ngap->code,
+        "PRE_COEFFICIENT" => $acte_ngap->demi ? $acte_ngap->coefficient/2 : $acte_ngap->coefficient,
+        "PRE_QUANTITE"    => $acte_ngap->quantite,
+        "PRE_DEMI"        => $acte_ngap->demi,
+      );
     }
     
     // Ajout des actes CCAM
     $this->loadRefsActesCCAM();
     foreach ($this->_ref_actes_ccam as $acte_ccam) {
-	    $acteNumber = count($this->_fse_intermax)+1;
-	    $ACTE = array(
+      $acteNumber = count($this->_fse_intermax)+1;
+      $ACTE = array(
         "PRE_ACTE_TYPE"     => 1,
-	      "PRE_DEPASSEMENT"   => $acte_ccam->montant_depassement,
-	      "PRE_CODE_CCAM"     => $acte_ccam->code_acte,
-	      "PRE_CODE_ACTIVITE" => $acte_ccam->code_activite,
-	      "PRE_CODE_PHASE"    => $acte_ccam->code_phase,
-	      "PRE_ASSOCIATION"   => $acte_ccam->code_association,
-	      "PRE_RMB_EXCEP"     => $acte_ccam->_rembex ? "O" : "N",
-	      );
-	    
-	    // Ajout des modificateurs
-	    for ($i = 1; $i <= 4; $i++) {
-	      $ACTE["PRE_MODIF_$i"] = @$acte_ccam->_modificateurs[$i-1];
-	    }
+        "PRE_DEPASSEMENT"   => $acte_ccam->montant_depassement,
+        "PRE_CODE_CCAM"     => $acte_ccam->code_acte,
+        "PRE_CODE_ACTIVITE" => $acte_ccam->code_activite,
+        "PRE_CODE_PHASE"    => $acte_ccam->code_phase,
+        "PRE_ASSOCIATION"   => $acte_ccam->code_association,
+        "PRE_RMB_EXCEP"     => $acte_ccam->_rembex ? "O" : "N",
+        );
+      
+      // Ajout des modificateurs
+      for ($i = 1; $i <= 4; $i++) {
+        $ACTE["PRE_MODIF_$i"] = @$acte_ccam->_modificateurs[$i-1];
+      }
 
-	    $this->_fse_intermax["ACTE_$acteNumber"] = $ACTE;
+      $this->_fse_intermax["ACTE_$acteNumber"] = $ACTE;
     }
 
     // Section FSE
     $this->_fse_intermax["FSE"] = array();
 
     if ($this->date_at) {
-		  $this->_fse_intermax["FSE"]["FSE_NATURE_ASSURANCE"] = "AT";
-		  $this->_fse_intermax["FSE"]["FSE_DATE_AT"] = mbDateToLocale($this->date_at);
+      $this->_fse_intermax["FSE"]["FSE_NATURE_ASSURANCE"] = "AT";
+      $this->_fse_intermax["FSE"]["FSE_DATE_AT"] = mbDateToLocale($this->date_at);
     }
     
     if ($this->concerne_ALD) {
@@ -660,9 +661,9 @@ class CConsultation extends CCodable {
       
       // si le code ccam est composé de 3 elements, on le precode
       if($acte->code_activite != "" && $acte->code_phase != ""){
-      	// Permet de sauvegarder le montant de base de l'acte CCAM
-      	$acte->_calcul_montant_base = 1;
-      	
+        // Permet de sauvegarder le montant de base de l'acte CCAM
+        $acte->_calcul_montant_base = 1;
+        
         // Mise a jour de codes_ccam suivant les _tokens_ccam du tarif
         $acte->object_id = $this->_id;
         $acte->object_class = $this->_class;
@@ -679,19 +680,19 @@ class CConsultation extends CCodable {
     $listCodesNGAP = explode("|",$this->_tokens_ngap);
     foreach($listCodesNGAP as $key => $code_ngap){
       if($code_ngap) {
-	      $acte = new CActeNGAP();
-	      $acte->_preserve_montant = true;
+        $acte = new CActeNGAP();
+        $acte->_preserve_montant = true;
         $acte->setFullCode($code_ngap);
 
         $acte->object_id = $this->_id;
-	      $acte->object_class = $this->_class;
+        $acte->object_class = $this->_class;
         $acte->executant_id = $this->getExecutantId();
-	      if (!$acte->countMatchingList()) {
-	        if ($msg = $acte->store()) {
-	          return $msg;
-	        }
-	      }
-	    }
+        if (!$acte->countMatchingList()) {
+          if ($msg = $acte->store()) {
+            return $msg;
+          }
+        }
+      }
     } 
   }
   
@@ -813,9 +814,11 @@ TESTS A EFFECTUER
 
       // Si pas de séjour et config alors le créer en type consultation
       if (!$sejour->_id && CAppUI::conf("dPcabinet CConsultation create_consult_sejour")) {
+        $function = new CFunctions;
+        $function->load($this->_function_secondary_id);
         $sejour->patient_id = $this->patient_id;
         $sejour->praticien_id = $this->_ref_chir->_id;
-        $sejour->group_id = CGroups::loadCurrent()->_id;
+        $sejour->group_id = $function->group_id;
         $sejour->type = "consult";
         $sejour->facturable = $facturable;
         $datetime = ($this->_date && $this->heure) ? "$this->_date $this->heure" : NULL;
@@ -844,9 +847,9 @@ TESTS A EFFECTUER
 
       // Si le séjour est de type consult
       if ($this->_ref_sejour->type == 'consult') {
-      	$this->_ref_sejour->loadRefsConsultations();
-      	$nb_consults_dans_sejour = count($this->_ref_sejour->_ref_consultations);
-      	$this->_ref_sejour->_hour_entree_prevue = null;
+        $this->_ref_sejour->loadRefsConsultations();
+        $nb_consults_dans_sejour = count($this->_ref_sejour->_ref_consultations);
+        $this->_ref_sejour->_hour_entree_prevue = null;
         $this->_ref_sejour->_min_entree_prevue  = null;
         $this->_ref_sejour->_hour_sortie_prevue = null;
         $this->_ref_sejour->_min_sortie_prevue  = null;
@@ -864,25 +867,25 @@ TESTS A EFFECTUER
         
         // Si on a une sortie réelle et que la date de la consultation est après la sortie réelle, on sort du store
         if($this->_ref_sejour->sortie_reelle && $date_consult > mbDate($this->_ref_sejour->sortie_reelle)) {
-      	  return CAppUI::tr("CConsultation-denyDayChange-exit");
+          return CAppUI::tr("CConsultation-denyDayChange-exit");
         }
 
         // S'il y a d'autres consultations dans le séjour, on étire l'entrée et la sortie
         // en parcourant la liste des consultations
         foreach ($this->_ref_sejour->_ref_consultations as $_consultation) {
-      		if ($_consultation->_id != $this->_id) {
-      		  $_consultation->loadRefPlageConsult();
-      		  
-        		if ($_consultation->_datetime < $entree)
-        		  $entree = $_consultation->_datetime;
-        		  
-        		if ($_consultation->_datetime > $sortie)
+          if ($_consultation->_id != $this->_id) {
+            $_consultation->loadRefPlageConsult();
+            
+            if ($_consultation->_datetime < $entree)
+              $entree = $_consultation->_datetime;
+              
+            if ($_consultation->_datetime > $sortie)
                $sortie = mbDate($_consultation->_datetime) . " 23:59:59";
           }
-      	}
+        }
 
         $this->_ref_sejour->entree_prevue = $entree;
-	      $this->_ref_sejour->sortie_prevue = $sortie;
+        $this->_ref_sejour->sortie_prevue = $sortie;
         $this->_ref_sejour->updateFormFields();
         $this->_ref_sejour->_check_bounds = 0;
         $this->_ref_sejour->store();
@@ -1072,31 +1075,31 @@ TESTS A EFFECTUER
   }
   
   function loadRefPraticien(){
-  	$this->loadRefPlageConsult();
+    $this->loadRefPlageConsult();
     return $this->_ref_praticien =& $this->_ref_chir;
   }
   
   function getType() {
     $this->loadRefPraticien();
-		$praticien =& $this->_ref_praticien;
-		
+    $praticien =& $this->_ref_praticien;
+    
     $this->loadRefSejour();
-		$sejour =& $this->_ref_sejour;
+    $sejour =& $this->_ref_sejour;
     $sejour->loadRefRPU();
-		
+    
     // Consultations d'urgences
     if ($praticien->isUrgentiste() && $sejour->_ref_rpu && $sejour->_ref_rpu->_id) {
       $this->_type = "urg";
     }
-		
-		// Consultation d'anesthésie
+    
+    // Consultation d'anesthésie
     if ($praticien->isAnesth()) {
       $this->_type = "anesth";
     }
   }
   
   function preparePossibleActes() {
-  	$this->loadRefPlageConsult();
+    $this->loadRefPlageConsult();
   }
   
   function loadRefsFwd($cache = 1) {
@@ -1112,8 +1115,8 @@ TESTS A EFFECTUER
     parent::loadRefsDocs();
     
     // On ajoute les documents de la consultation d'anesthésie
-  	$this->loadRefConsultAnesth();
-  	$consult_anesth =& $this->_ref_consult_anesth;
+    $this->loadRefConsultAnesth();
+    $consult_anesth =& $this->_ref_consult_anesth;
     if ($consult_anesth->_id) {
       $consult_anesth->loadRefsDocs();
       $this->_ref_documents = CMbArray::mergeKeys($this->_ref_documents, $consult_anesth->_ref_documents);
@@ -1123,12 +1126,12 @@ TESTS A EFFECTUER
   }
   
   function getExecutantId($code_activite = null) {
-  	$this->loadRefPlageConsult();
+    $this->loadRefPlageConsult();
     return $this->_praticien_id;
   }
   
   function countDocItems($permType = null){
-  	if (!$this->_nb_files_docs) {
+    if (!$this->_nb_files_docs) {
       parent::countDocItems($permType);
     }
     
@@ -1140,9 +1143,9 @@ TESTS A EFFECTUER
   
   function countDocs(){
     $nbDocs = parent::countDocs();
-		
+    
     // Ajout des documents de la consultation d'anesthésie     
-   	$this->loadRefConsultAnesth();
+     $this->loadRefConsultAnesth();
     if ($this->_ref_consult_anesth->_id) {
       $nbDocs += $this->_ref_consult_anesth->countDocs();
     }
@@ -1151,14 +1154,14 @@ TESTS A EFFECTUER
   }
 
   function loadRefConsultAnesth() {
-  	return $this->_ref_consult_anesth = $this->loadUniqueBackRef("consult_anesth");
+    return $this->_ref_consult_anesth = $this->loadUniqueBackRef("consult_anesth");
   }
   
   function loadRefsExamAudio(){
-  	// @todo Ne pas utiliser la backref => ne fonctionne pas 
-  	//$this->_ref_examaudio = $this->loadUniqueBackRef("examaudio");
+    // @todo Ne pas utiliser la backref => ne fonctionne pas 
+    //$this->_ref_examaudio = $this->loadUniqueBackRef("examaudio");
 
-  	$this->_ref_examaudio = new CExamAudio;
+    $this->_ref_examaudio = new CExamAudio;
     $where = array();
     $where["consultation_id"] = "= '$this->consultation_id'";
     $this->_ref_examaudio->loadObject($where);
@@ -1190,16 +1193,16 @@ TESTS A EFFECTUER
   
   // Chargement des prescriptions liées à la consultation
   function loadRefsPrescriptions() {
-  	$prescriptions = $this->loadBackRefs("prescriptions");
+    $prescriptions = $this->loadBackRefs("prescriptions");
     // Cas du module non installé
     if(!is_array($prescriptions)){
       $this->_ref_prescriptions = null;
       return;
-  	}
-  	$this->_count_prescriptions = count($prescriptions);
-  	
+    }
+    $this->_count_prescriptions = count($prescriptions);
+    
     foreach($prescriptions as &$prescription){
-    	$this->_ref_prescriptions[$prescription->type] = $prescription;
+      $this->_ref_prescriptions[$prescription->type] = $prescription;
     }
   }
 
@@ -1253,7 +1256,7 @@ TESTS A EFFECTUER
   }
   
   function loadExamsComp(){
-  	$this->_ref_examcomp = new CExamComp;
+    $this->_ref_examcomp = new CExamComp;
     $where = array();
     $where["consultation_id"] = "= '$this->consultation_id'";
     $order = "examen";
@@ -1293,29 +1296,29 @@ TESTS A EFFECTUER
   
   function fillTemplate(&$template) {
     $this->updateFormFields();
-  	$this->loadRefsFwd();
+    $this->loadRefsFwd();
     $this->_ref_plageconsult->loadRefsFwd();
-		$this->_ref_plageconsult->_ref_chir->fillTemplate($template);
+    $this->_ref_plageconsult->_ref_chir->fillTemplate($template);
     $this->_ref_patient->fillTemplate($template);
     $this->fillLimitedTemplate($template);
     if (CModule::getActive('dPprescription')) {
       // Chargement du fillTemplate de la prescription
-	    $this->loadRefsPrescriptions();
-	    $prescription = isset($this->_ref_prescriptions["externe"]) ? $this->_ref_prescriptions["externe"] : new CPrescription();
-	    $prescription->type = "externe";
-	    $prescription->fillLimitedTemplate($template);
+      $this->loadRefsPrescriptions();
+      $prescription = isset($this->_ref_prescriptions["externe"]) ? $this->_ref_prescriptions["externe"] : new CPrescription();
+      $prescription->type = "externe";
+      $prescription->fillLimitedTemplate($template);
     }
     
-		$sejour = $this->loadRefSejour();
+    $sejour = $this->loadRefSejour();
     
-		if ($sejour->_id) {
-			$sejour->fillLimitedTemplate($template);
-			$rpu = $sejour->loadRefRPU();
-			if ($rpu && $rpu->_id) {
-			  $rpu->fillLimitedTemplate($template);
-			}
-		}
-	
+    if ($sejour->_id) {
+      $sejour->fillLimitedTemplate($template);
+      $rpu = $sejour->loadRefRPU();
+      if ($rpu && $rpu->_id) {
+        $rpu->fillLimitedTemplate($template);
+      }
+    }
+  
   }
   
   function fillLimitedTemplate(&$template) {
@@ -1334,13 +1337,13 @@ TESTS A EFFECTUER
       "conclusion"       => "conclusion"
     );
     foreach($this->_exam_fields as $field) {
-    	$loc_field = $locExamFields[$field];
+      $loc_field = $locExamFields[$field];
       $template->addProperty("Consultation - $loc_field", $this->$field);
     }
     if(!in_array("traitement", $this->_exam_fields)) {
       $template->addProperty("Consultation - traitement", $this->traitement);
     }
-		
+    
     $medecin = new CMedecin();
     $medecin->load($this->adresse_par_prat_id);
     $nom = "{$medecin->nom} {$medecin->prenom}";
@@ -1407,7 +1410,6 @@ TESTS A EFFECTUER
   }
   
   function docsEditable() {
-
     if (parent::docsEditable()) {
       return true;
     }
@@ -1422,6 +1424,33 @@ TESTS A EFFECTUER
     $this->loadRefPlageConsult();
 
     return (mbDateTime("+ 24 HOUR", "{$this->_date} {$this->heure}") > mbDateTime());
+  }
+  
+  function canEdit() {
+    if (!$this->sejour_id || CCanDo::admin()) {
+      return parent::canEdit();
+    }
+    
+    // Si sortie réelle, mode lecture seule
+    $sejour = $this->loadRefSejour(1);
+    
+    if ($sejour->entree_reelle) {
+      return $this->_canEdit = 0;
+    }
+    
+    // Modification possible seulement pour les utilisateurs de la même fonction
+    $this->loadRefPlageConsult(1);
+    $users_ids = array_keys(CAppUI::$user->_ref_function->loadRefsUsers());
+    
+    return $this->_canEdit = in_array($this->_ref_chir->_id, $users_ids);
+  }
+  
+  function canRead() {
+    if (!$this->sejour_id || CCanDo::admin()) {
+      return parent::canRead();
+    }
+    // Tout utilisateur peut consulter une consultation de séjour en lecture seule
+    return 1;
   }
 }
 

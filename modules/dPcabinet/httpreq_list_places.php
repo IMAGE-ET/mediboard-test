@@ -13,7 +13,7 @@ $ds = CSQLDataSource::get("std");
 // Initialisation des variables
 $plageconsult_id = CValue::get("plageconsult_id");
 $display_nb_consult = CAppUI::conf("dPcabinet display_nb_consult");
-$quotas = 0;
+$quotas = null;
 
 // Récupération des consultations de la plage séléctionnée
 $plage = new CPlageconsult;

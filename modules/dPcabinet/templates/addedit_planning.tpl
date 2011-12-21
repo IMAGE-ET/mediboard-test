@@ -35,6 +35,12 @@ function refreshListCategorie(praticien_id){
   url.requestUpdate("listCategorie");
 }
 
+function refreshFunction(chir_id) {
+  var url = new Url("dPcabinet", "ajax_refresh_secondary_functions");
+  url.addParam("chir_id", chir_id);
+  url.requestUpdate("secondary_functions");
+}
+
 function changePause(){
   var oForm = getForm("editFrm");
   if(oForm._pause.checked){
@@ -235,10 +241,10 @@ Main.add(function () {
                 <label for="chir_id" title="Praticien pour la consultation">Praticien</label>
               </th>
               <td>
-                <select name="chir_id" style="width: 15em;" class="notNull" onChange="ClearRDV(); refreshListCategorie(this.value); if (this.value != '') $V(this.form._function_id, '');">
+                <select name="chir_id" style="width: 15em;" class="notNull" onChange="ClearRDV(); refreshListCategorie(this.value); refreshFunction(this.value); if (this.value != '') $V(this.form._function_id, '');">
                   <option value="">&mdash; Choisir un praticien</option>
                   {{foreach from=$listPraticiens item=curr_praticien}}
-                  <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
+                  <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
                     {{$curr_praticien->_view}}
                   </option>
                  {{/foreach}}
@@ -247,7 +253,16 @@ Main.add(function () {
                 <label for="_pause" title="Planification d'une pause">Pause</label>
               </td>
             </tr>
-    
+            {{if !$consult->_id && $conf.dPcabinet.CConsultation.create_consult_sejour}}
+              <tr>
+                <th>
+                  {{mb_label object=$consult field=_function_secondary_id}}
+                </th>
+                <td id="secondary_functions">
+                  {{mb_include module=dPcabinet template=inc_refresh_secondary_functions}}
+                </td>
+              </tr>
+            {{/if}}
             <tr id="viewPatient" {{if $consult->_id && $consult->patient_id==0}}style="display:none;"{{/if}}>
               <th>
                 {{mb_label object=$consult field="patient_id"}}

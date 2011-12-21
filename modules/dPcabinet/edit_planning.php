@@ -51,6 +51,7 @@ if (!$consultation_id) {
     // A t'on fourni l'id du praticien
     $chir_id = CAppUI::conf("dPcabinet keepchir") ? CValue::getOrSession("chir_id") : CValue::get("chir_id");
     if ($chir_id) {
+      $chir = new CMediusers();
       $chir->load($chir_id);
     }
 
@@ -134,7 +135,14 @@ if ($consult->_id) {
   if ($consult->valide) {
     $consult->_locks[] = "valide";
   }
+}
+$_functions_ids = array();
+
+if ($chir->_id) {
+  $chir->loadRefFunction();
+  $_functions = $chir->loadBackRefs("secondary_functions");
 }
+
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -144,6 +152,7 @@ $smarty->assign("categories"            , $categories);
 $smarty->assign("plageConsult"     	    , $plageConsult);
 $smarty->assign("consult"               , $consult);
 $smarty->assign("chir"                  , $chir);
+$smarty->assign("_functions"            , $_functions);
 $smarty->assign("pat"                   , $pat);
 $smarty->assign("listPraticiens"        , $listPraticiens);
 $smarty->assign("listFunctions"         , $listFunctions);

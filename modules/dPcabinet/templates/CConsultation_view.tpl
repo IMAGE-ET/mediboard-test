@@ -12,21 +12,20 @@
   {{/if}}
   <tr>
   
-{{if $can->edit}}
   <tr>
     <td class="button">
       {{mb_script module="dPcabinet" script="consultation" ajax="true"}}
-
       <button type="button" class="edit" onclick="Consultation.edit('{{$consultation->_id}}')">
         {{tr}}Modify{{/tr}}
       </button>
-
-      <button type="button" class="change" onclick="Consultation.plan('{{$consultation->_id}}')">
-        {{tr}}Rendez-vous{{/tr}}
-      </button>
+      
+      {{if $can->edit}} 
+        <button type="button" class="change" onclick="Consultation.plan('{{$consultation->_id}}')">
+          {{tr}}Rendez-vous{{/tr}}
+        </button>
+      {{/if}}
     </td>
   </tr>
-{{/if}}
 </table>
 
 {{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$consultation vue=view}}

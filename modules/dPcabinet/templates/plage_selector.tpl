@@ -86,9 +86,9 @@ Main.add(function () {
         
         <td>
     		  <label for="hide_finished">Masquer terminées :</label>
-    		  <input type="radio" name="hide_finished" value="0" onchange="this.form.submit()" {{if $hide_finished == "0"}}checked="checked" {{/if}} />
+    		  <input type="radio" name="hide_finished" value="0" onclick="this.form.submit()" {{if $hide_finished == "0"}}checked="checked" {{/if}} />
     		  <label for="hide_finished_0">Non</label>
-    		  <input type="radio" name="hide_finished" value="1" onchange="this.form.submit()" {{if $hide_finished == "1"}}checked="checked" {{/if}} />
+    		  <input type="radio" name="hide_finished" value="1" onclick="this.form.submit()" {{if $hide_finished == "1"}}checked="checked" {{/if}} />
     		  <label for="hide_finished_1">Oui</label>
         </td>
       </tr>

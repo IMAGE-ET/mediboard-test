@@ -8,6 +8,9 @@
 {{mb_script module="dPcabinet" script="edit_consultation"}}
 
 <script type="text/javascript">
+{{if !$consult->_canEdit}}
+  App.readonly = true;
+{{/if}}
 
 function reloadDiagnostic(sejour_id, modeDAS) {
   var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
