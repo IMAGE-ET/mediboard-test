@@ -1434,7 +1434,7 @@ TESTS A EFFECTUER
     // Si sortie réelle, mode lecture seule
     $sejour = $this->loadRefSejour(1);
     
-    if ($sejour->entree_reelle) {
+    if ($sejour->sortie_reelle) {
       return $this->_canEdit = 0;
     }
     
