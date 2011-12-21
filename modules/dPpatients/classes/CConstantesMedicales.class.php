@@ -281,23 +281,42 @@ class CConstantesMedicales extends CMbObject {
         "diurese"            => "+",  // Miction naturelle
         "sonde_ureterale_1"  => "+", 
         "sonde_ureterale_2"  => "+", 
+        "sonde_nephro_1"     => "+", 
+        "sonde_nephro_2"     => "+", 
         "sonde_vesicale"     => "+", 
         "catheter_suspubien" => "+", 
         "entree_lavage"      => "-",
       ),
     ),
-    "sonde_ureterale_1" => array(
+		
+		// Ureteral
+    "sonde_ureterale_1" => array( // gauche
       "type" => "drain",
       "unit" => "ml", 
       "min" => 0, "max" => 100,
       "cumul_reset_config" => "sonde_ureterale_cumul_reset_hour",
     ),
-    "sonde_ureterale_2" => array(
+    "sonde_ureterale_2" => array( // droite
       "type" => "drain",
       "unit" => "ml", 
       "min" => 0, "max" => 100,
       "cumul_reset_config" => "sonde_ureterale_cumul_reset_hour",
     ),
+		
+		// Nephrostomie
+    "sonde_nephro_1"    => array( // gauche
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 100,
+      "cumul_reset_config" => "sonde_nephro_cumul_reset_hour",
+    ),
+    "sonde_nephro_2"    => array( // droite
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 100,
+      "cumul_reset_config" => "sonde_nephro_cumul_reset_hour",
+    ),
+		
     "sonde_vesicale"    => array(
       "type" => "drain",
       "unit" => "ml", 
@@ -308,6 +327,7 @@ class CConstantesMedicales extends CMbObject {
       "type" => "drain",
       "unit" => "ml", 
       "min" => 0, "max" => 200,
+      "cumul_reset_config" => "sonde_vesicale_cumul_reset_hour",
     ),
     "diurese"           => array( // Miction naturelle
       "type" => "drain",
@@ -452,6 +472,8 @@ class CConstantesMedicales extends CMbObject {
     $specs['drain_mediastinal']      = 'float min|0';
     $specs['sonde_ureterale_1']      = 'float min|0';
     $specs['sonde_ureterale_2']      = 'float min|0';
+    $specs['sonde_nephro_1']         = 'float min|0';
+    $specs['sonde_nephro_2']         = 'float min|0';
     $specs['sonde_vesicale']         = 'float min|0';
     $specs['catheter_suspubien']     = 'float min|0';
     $specs['entree_lavage']          = 'float min|0';

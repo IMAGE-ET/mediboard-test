@@ -25,6 +25,7 @@ class CConfigConstantesMedicales extends CConfigServiceAbstract {
   var $drain_pleural_cumul_reset_hour  = null;
   var $drain_mediastinal_cumul_reset_hour  = null;
   var $sonde_ureterale_cumul_reset_hour  = null;
+  var $sonde_nephro_cumul_reset_hour  = null;
   var $sonde_vesicale_cumul_reset_hour  = null;
   
   var $important_constantes  = null;
@@ -45,6 +46,7 @@ class CConfigConstantesMedicales extends CConfigServiceAbstract {
     "drain_pleural_cumul_reset_hour",
     "drain_mediastinal_cumul_reset_hour",
     "sonde_ureterale_cumul_reset_hour",
+		"sonde_nephro_cumul_reset_hour",
     "sonde_vesicale_cumul_reset_hour",
     
     "important_constantes",
@@ -75,6 +77,7 @@ class CConfigConstantesMedicales extends CConfigServiceAbstract {
     $props["drain_pleural_cumul_reset_hour"]     = "num min|0 max|23";
     $props["drain_mediastinal_cumul_reset_hour"] = "num min|0 max|23";
     $props["sonde_ureterale_cumul_reset_hour"]   = "num min|0 max|23";
+		$props["sonde_nephro_cumul_reset_hour"]      = "num min|0 max|23";
     $props["sonde_vesicale_cumul_reset_hour"]    = "num min|0 max|23";
     
     $props["important_constantes"]               = "set list|$list vertical";

@@ -1503,7 +1503,19 @@ class CSetupdPpatients extends CSetup {
                 ADD `csp` TINYINT (2) UNSIGNED ZEROFILL;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.30";
+    $this->makeRevision("1.30");
+    $query = "ALTER TABLE `constantes_medicales` 
+              ADD `sonde_nephro_2` FLOAT UNSIGNED AFTER `sonde_ureterale_2`,
+              ADD `sonde_nephro_1` FLOAT UNSIGNED AFTER `sonde_ureterale_2`";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `config_constantes_medicales` 
+              ADD `sonde_nephro_cumul_reset_hour` TINYINT (4) UNSIGNED AFTER `sonde_ureterale_cumul_reset_hour`;";
+    $this->addQuery($query);
+    $query = "UPDATE `config_constantes_medicales` 
+              SET `sonde_nephro_cumul_reset_hour` = '8' WHERE `group_id` IS NULL AND `service_id` IS NULL";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.31";
     
     $query = "SHOW TABLES LIKE 'categorie_socioprofessionnelle'";
     $this->addDatasource("INSEE", $query);
