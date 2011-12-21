@@ -447,7 +447,9 @@ class CPrescriptionLineMix extends CMbObject {
     
     $new_perf->date_arret = "";
     $new_perf->time_arret = "";
-    
+		$new_perf->date_pose = "";
+		$new_perf->time_pose = "";
+		
     if($date_debut){
       $new_perf->date_debut = $date_debut;
     }
