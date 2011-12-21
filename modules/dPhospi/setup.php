@@ -491,7 +491,21 @@ class CSetupdPhospi extends CSetup {
       ADD INDEX (`date`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.52";
+    $this->makeRevision("0.52");
+    
+    $query = "ALTER TABLE `movement` 
+                ADD `sejour_id` INT (11) UNSIGNED NOT NULL,
+                ADD `affectation_id` INT (11) UNSIGNED,
+                DROP `object_id`,
+                DROP `object_class`;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `movement` 
+                ADD INDEX (`sejour_id`),
+                ADD INDEX (`affectation_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.53";
   }
 }
 ?>

@@ -170,9 +170,12 @@ if ($operation) {
 }
 
 $movement = new CMovement();
-$movement->object_class = "CSejour";
-$movement->object_id    = $sejour_id;
+$movement->sejour_id    = $sejour_id;
 $movements = $movement->loadMatchingList();
+foreach ($movements as $_movement) {
+  $_movement->loadRefSejour();
+  $_movement->loadRefAffectation();
+}
 
 // Création du template
 $smarty = new CSmartyDP();
