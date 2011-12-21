@@ -1646,8 +1646,8 @@ class CSejour extends CCodable implements IPatientRelated {
     
     // Motif complet
     if(!$this->libelle) {
+      $motif = array();
       foreach($this->_ref_operations as $_op) {
-        $motif = array();
         if($_op->libelle) {
           $motif[] = $_op->libelle;
         } else {
