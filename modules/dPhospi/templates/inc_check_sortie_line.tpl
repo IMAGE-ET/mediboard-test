@@ -20,7 +20,7 @@
     </form>
   </td>
   
-  <td class="text {{if $_sortie->confirme}} arretee {{/if}}">
+  <td class="text {{if $_sortie->confirme}}arretee{{/if}}">
    {{assign var=sejour value=$_sortie->_ref_sejour}}
    {{if $canPlanningOp->read}}
    <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
@@ -36,13 +36,23 @@
   <td class="text">
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
   </td>
+  <td class="text">
+    <strong onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">{{$sejour->_motif_complet}}</strong>
+  </td>
   <td class="text {{if $sejour->sortie_reelle}}effectue{{/if}}">
     {{$_sortie->_ref_lit}}
   </td>
   {{if $type == "presents"}}
-  <td>{{$sejour->sortie|date_format:$conf.datetime}}</td>
+  <td class="button">
+    {{$sejour->entree|date_format:$conf.datetime}}
+    <div style="position: relative;">
+    <div class="sejour-bar" title="arrivée il y a {{$sejour->_entree_relative}}j et départ prévu dans {{$sejour->_sortie_relative}}j ">
+      <div style="width: {{if $sejour->_duree}}{{math equation='100*(-entree / (duree))' entree=$sejour->_entree_relative duree=$sejour->_duree format='%.2f'}}{{else}}100{{/if}}%;"></div>
+    </div>
+    </div>
+  </td>
   {{/if}}
-  <td>
+  <td class="button">
     <div {{if !$_sortie->confirme && !$sejour->sortie_reelle}}class="only-printable"{{/if}}>
       {{if $type == 'presents'}}
         {{$_sortie->sortie|date_format:$conf.datetime}}

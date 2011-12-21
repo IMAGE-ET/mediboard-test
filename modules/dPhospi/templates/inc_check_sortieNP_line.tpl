@@ -15,10 +15,20 @@
   <td class="text">
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
   </td>
+  <td class="text">
+    <strong onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">{{$sejour->_motif_complet}}</strong>
+  </td>
   {{if $type == "presents"}}
-  <td>{{$sejour->sortie|date_format:$conf.datetime}}</td>
+  <td class="button">
+    {{$sejour->entree|date_format:$conf.datetime}}
+    <div style="position: relative;">
+    <div class="ecap-sejour-bar" title="arrivée il y a {{$sejour->_entree_relative}}j et départ prévu dans {{$sejour->_sortie_relative}}j ">
+      <div style="width: {{if $sejour->_duree}}{{math equation='100*(-entree / (duree))' entree=$sejour->_entree_relative duree=$sejour->_duree format='%.2f'}}{{else}}100{{/if}}%;"></div>
+    </div>
+    </div>
+  </td>
   {{/if}}
-  <td>
+  <td class="button">
     <div {{if !$sejour->sortie_reelle}}class="only-printable"{{/if}}>
       {{if $type == 'presents'}}
         {{$sejour->sortie|date_format:$conf.datetime}}

@@ -73,12 +73,14 @@ if($order_col == "sortie"){
 
 // Récupération des présents du jour
 if($type == 'presents' ) {
+  // Patients placés
   $where[] = "'$date' BETWEEN DATE(affectation.entree) AND DATE(affectation.sortie)";
   if ($vue) {
     $where["confirme"] = " = '0'";
   }
   $presents = $affectation->loadList($where, $order, null, null, $ljoin);
   
+  // Patients non placés
   $whereNP[]  = "'$date' BETWEEN DATE(sejour.entree) AND DATE(sejour.sortie)";
   $presentsNP = $sejour->loadList($whereNP, $orderNP, null, null, $ljoinNP);
   
@@ -88,11 +90,15 @@ if($type == 'presents' ) {
     $sejour = $_sortie->_ref_sejour;
     $sejour->loadRefPatient(1);
     $sejour->loadRefPraticien(1);
+    $sejour->checkDaysRelative($date);
+    $sejour->loadRefsOperations();
     $_sortie->_ref_next->loadRefLit(1)->loadCompleteView();
   }
   foreach($presentsNP as $sejour) {
     $sejour->loadRefPatient(1);
     $sejour->loadRefPraticien(1);
+    $sejour->loadRefsOperations();
+    $sejour->checkDaysRelative($date);
   }
   
 // Récupération des déplacements du jour
@@ -120,6 +126,7 @@ if($type == 'presents' ) {
 
 // Récupération des sorties du jour
 } else {
+  // Patients placés
   $where["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
   $where["sejour.sortie"] = "= affectation.sortie";
   $where["sejour.type"] = " = '$type'";
@@ -134,9 +141,11 @@ if($type == 'presents' ) {
     $sejour = $_sortie->_ref_sejour;
     $sejour->loadRefPatient(1);
     $sejour->loadRefPraticien(1);
+    $sejour->loadRefsOperations();
     $_sortie->_ref_next->loadRefLit(1)->loadCompleteView();
   }
   
+  // Patients non placés
   $whereNP["sejour.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
   $whereNP["sejour.type"]   = " = '$type'";
   $sortiesNP = $sejour->loadList($whereNP, $orderNP, null, null, $ljoinNP);
@@ -145,6 +154,7 @@ if($type == 'presents' ) {
   foreach($sortiesNP as $sejour) {
     $sejour->loadRefPatient(1);
     $sejour->loadRefPraticien(1);
+    $sejour->loadRefsOperations();
   }
 }
 

@@ -115,6 +115,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_sortie_relative    = null;
   var $_not_collides       = array ("urg", "consult", "seances", "exte"); // Séjour dont on ne test pas la collision
   var $_is_proche          = null;
+  var $_motif_complet      = null;
   
   // Behaviour fields
   var $_check_bounds  = true;
@@ -788,6 +789,9 @@ class CSejour extends CCodable implements IPatientRelated {
     if ($this->sortie_reelle) {
       $this->_etat = "cloture";
     }
+    
+    // Motif complet du séjour
+    $this->_motif_complet = $this->libelle;
   }
 
   function checkDaysRelative($date) {
@@ -1639,6 +1643,19 @@ class CSejour extends CCodable implements IPatientRelated {
 
     $operations = new COperation;
     $this->_ref_operations = $operations->loadList($where, $order);
+    
+    // Motif complet
+    if(!$this->libelle) {
+      foreach($this->_ref_operations as $_op) {
+        $motif = array();
+        if($_op->libelle) {
+          $motif[] = $_op->libelle;
+        } else {
+           $motif[] = implode("; ", $_op->_codes_ccam);
+        }
+      }
+      $this->_motif_complet = implode("; ", $motif);
+    }
     
     // Agrégats des codes CCAM des opérations
     $this->_codes_ccam_operations = CMbArray::pluck($this->_ref_operations, "codes_ccam");

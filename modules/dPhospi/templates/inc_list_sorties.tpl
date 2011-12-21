@@ -72,6 +72,7 @@
       </th>
       <th>{{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way function=refreshList_$type}}</th>
       <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_$type}}</th>
+      <th>Motif</th>
       <th>{{mb_colonne class="CAffectation" field="_chambre"   order_col=$order_col order_way=$order_way function=refreshList_$type}}</th>
       {{if $type == "presents"}}
       <th>Entree</th>
@@ -93,6 +94,7 @@
           {{mb_colonne class="CAffectation" field="_patient" order_col=$order_col order_way=$order_way function=refreshList_$type}}
         </th>
         <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_$type}}</th>
+        <th>Motif</th>
         {{if $type == "presents"}}
         <th>Entree</th>
         {{/if}}
