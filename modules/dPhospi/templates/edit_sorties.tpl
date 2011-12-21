@@ -45,18 +45,29 @@ function refreshList(order_col, order_way, type) {
 
 <table class="main">
   <tr>
-    <th>
+    <td>
         <form name="typeVue" action="?" method="get">
           <input type="hidden" name="m" value="dPhospi" />
           <input type="hidden" name="tab" value="edit_sorties" />
-          <label for="vue" title="Choisir un type de vue">Type de vue</label>
-          <select name="vue" onchange="this.form.submit()">
-            <option value="0" {{if $vue == 0}} selected="selected"{{/if}}>Tout afficher</option>
+          <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+          <select name="service_id" style="width: 12em;" onchange="this.form.submit()">
+            <option value="">&mdash; Service</option>
+            {{foreach from=$services item=_service}}
+            <option value="{{$_service->_id}}" {{if $_service->_id == $service_id}}selected="selected"{{/if}}>{{$_service}}</option>
+            {{/foreach}}
+          </select>
+          <select name="praticien_id" style="width: 12em;" onchange="this.form.submit()">
+            <option value="">&mdash; Praticien</option>
+            {{foreach from=$praticiens item=_prat}}
+            <option value="{{$_prat->_id}}" {{if $_prat->_id == $praticien_id}}selected="selected"{{/if}}>{{$_prat}}</option>
+            {{/foreach}}
+          </select>
+          <select name="vue" style=" width: 12em;" onchange="this.form.submit()">
+            <option value="0" {{if $vue == 0}} selected="selected"{{/if}}>Afficher les validés</option>
             <option value="1" {{if $vue == 1}} selected="selected"{{/if}}>Ne pas afficher les validés</option>
           </select>
-          <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
         </form>
-    </th>
+    </td>
   </tr>
 </table>
 

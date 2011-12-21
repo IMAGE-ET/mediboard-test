@@ -1551,6 +1551,26 @@ table.tbl tr td.ssr-today div {
   display: none;
 }
 
+div.sejour-bar {
+  position: absolute; 
+  top: 0; 
+  right: 0; 
+  border: 1px solid #aaa; 
+  height: 3px; 
+  width: 90%;  
+  background-color: #fff;
+}
+
+div.sejour-bar {
+  position: absolute; 
+  top: 0; 
+  right: 0; 
+  border: 1px solid #aaa; 
+  height: 3px; 
+  width: 90%;  
+  background-color: #fff;
+}
+
 div.ssr-sejour-bar {
   position: absolute; 
   top: -2px; 
@@ -1572,13 +1592,9 @@ div.ecap-sejour-bar {
   margin: 2px;
 }
 
-
+div.sejour-bar div,
+div.ecap-sejour-bar div,
 div.ssr-sejour-bar div {
-  background: #444;
-  height: 4px; 
-}
-
-div.ecap-sejour-bar div {
   background: #444;
   height: 4px; 
 }

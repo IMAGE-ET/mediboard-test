@@ -9,10 +9,12 @@
  */
 
 
-$type      = CValue::get("type");
-$vue       = CValue::getOrSession("vue"      , 0);
-$order_way = CValue::getOrSession("order_way", "ASC");
-$order_col = CValue::getOrSession("order_col", "_patient");
+$type         = CValue::get("type");
+$vue          = CValue::getOrSession("vue"      , 0);
+$praticien_id = CValue::getOrSession("praticien_id", null);
+$service_id   = CValue::getOrSession("service_id"  , null);
+$order_way    = CValue::getOrSession("order_way"   , "ASC");
+$order_col    = CValue::getOrSession("order_col"   , "_patient");
 
 $group = CGroups::loadCurrent();
 
@@ -41,8 +43,11 @@ $ljoin["chambre"]            = "chambre.chambre_id = lit.chambre_id";
 $ljoin["service"]            = "service.service_id = chambre.service_id";
 $where                       = array();
 $where["service.group_id"]   = "= '$group->_id'";
-$where["service.service_id"] = CSQLDataSource::prepareIn(array_keys($services));
+$where["service.service_id"] = CSQLDataSource::prepareIn(array_keys($services), $service_id);
 $where["sejour.type"]        = "NOT IN ('exte', 'seances')";
+if($praticien_id) {
+  $where["sejour.praticien_id"] = "= '$praticien_id'";
+}
 
 // Patients non placés
 $sejour                                = new CSejour();
@@ -54,6 +59,12 @@ $whereNP                               = array();
 $whereNP["sejour.group_id"]            = "= '$group->_id'";
 $whereNP["sejour.type"]                = "NOT IN ('exte', 'seances')";
 $whereNP["affectation.affectation_id"] = "IS NULL";
+if($service_id) {
+  $whereNP["sejour.service_id"] = "= '$service_id'";
+}
+if($praticien_id) {
+  $whereNP["sejour.praticien_id"] = "= '$praticien_id'";
+}
 
 $order = $orderNP = null;
 if($order_col == "_patient"){

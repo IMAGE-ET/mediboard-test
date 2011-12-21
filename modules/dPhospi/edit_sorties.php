@@ -18,13 +18,20 @@ $sorties = array("comp" => array("place" => 0, "non_place" => 0),
 
 $group = CGroups::loadCurrent();
 
-// Récupération de la liste des services
-$where = array();
-$where["externe"] = "= '0'";
-$where["group_id"] = "= '$group->_id'";
+// Récupération de la liste des services et du service selectionné
+$where = array(
+           "externe"  => "= '0'",
+           "group_id" => "= '$group->_id'"
+         );
+$order = "nom";
+$service    = new CService();
+$services   = $service->loadListWithPerms(PERM_READ, $where, $order);
+$service_id = CValue::getOrSession("service_id", null);
 
-$service  = new CService();
-$services = $service->loadListWithPerms(PERM_READ, $where);
+// Récupération de la liste des praticiens et du praticien selectionné
+$praticien    = new CMediusers();
+$praticiens   = $praticien->loadPraticiens(PERM_READ);
+$praticien_id = CValue::getOrSession("praticien_id", null);
 
 $date  = CValue::getOrSession("date" , mbDate());
 
@@ -42,10 +49,13 @@ $ljoin["chambre"]            = "chambre.chambre_id = lit.chambre_id";
 $ljoin["service"]            = "service.service_id = chambre.service_id";
 $where                       = array();
 $where["service.group_id"]   = "= '$group->_id'";
-$where["service.service_id"] = CSQLDataSource::prepareIn(array_keys($services));
+$where["service.service_id"] = CSQLDataSource::prepareIn(array_keys($services), $service_id);
 $where["sejour.type"]        = "NOT IN ('exte', 'seances')";
 if ($vue) {
   $where["confirme"] = " = '0'";
+}
+if($praticien_id) {
+  $where["sejour.praticien_id"] = "= '$praticien_id'";
 }
 
 // Patients non placés
@@ -56,11 +66,17 @@ $whereNP                               = array();
 $whereNP["sejour.group_id"]            = "= '$group->_id'";
 $whereNP["sejour.type"]                = "NOT IN ('exte', 'seances')";
 $whereNP["affectation.affectation_id"] = "IS NULL";
+if($service_id) {
+  $whereNP["sejour.service_id"] = "= '$service_id'";
+}
+if($praticien_id) {
+  $whereNP["sejour.praticien_id"] = "= '$praticien_id'";
+}
 
 // Comptage des patients présents
-$wherePresents   = $where;
-$wherePresents[] = "'$date' BETWEEN DATE(affectation.entree) AND DATE(affectation.sortie)";
-$presents        = $affectation->countList($wherePresents, null, $ljoin);
+$wherePresents     = $where;
+$wherePresents[]   = "'$date' BETWEEN DATE(affectation.entree) AND DATE(affectation.sortie)";
+$presents          = $affectation->countList($wherePresents, null, $ljoin);
 
 $wherePresentsNP   = $whereNP;
 $wherePresentsNP[] = "'$date' BETWEEN DATE(sejour.entree) AND DATE(sejour.sortie)";
@@ -90,6 +106,11 @@ $smarty->assign("presents"    , $presents);
 $smarty->assign("presentsNP"  , $presentsNP);
 $smarty->assign("sorties"     , $sorties);
 $smarty->assign("deplacements", $deplacements);
+$smarty->assign("services"    , $services);
+$smarty->assign("service_id"  , $service_id);
+$smarty->assign("praticiens"  , $praticiens);
+$smarty->assign("praticien_id", $praticien_id);
+$smarty->assign("vue"         , $vue);
 $smarty->assign("vue"         , $vue);
 $smarty->assign("date"        , $date);
 
