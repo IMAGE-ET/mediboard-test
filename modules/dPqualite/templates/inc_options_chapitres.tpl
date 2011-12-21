@@ -11,7 +11,7 @@
 {{*1er niveau*}}
 {{foreach from=$chapitres item=_chapitre}}
 <option style="padding-left: 0em;" value="{{$_chapitre->_id}}" {{if $chapitre_id == $_chapitre->_id}}selected="selected"{{/if}} >
-  {{$_chapitre->_view}} Test
+  {{$_chapitre->_view}}
 </option>
 {{*2ème niveau*}}
 {{foreach from=$_chapitre->_ref_chapitres_doc item=_chapitre2}}
