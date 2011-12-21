@@ -31,15 +31,33 @@ ExObject = {
       onTriggered: function(){}
     }, options);
     
-    var url = new Url("forms", "ajax_trigger_ex_classes");
-    url.addParam("object_guid", object_guid);
-    url.addParam("event", event);
-    url.requestJSON(function(ex_classes_id){
-      ex_classes_id.each(function(id){
-        showExClassForm(id, object_guid, /*object_guid+"_"+*/event+"_"+id, "", event);
+    // Multiple objects
+    if (Object.isArray(object_guid)) {
+      var url = new Url("forms", "ajax_trigger_ex_classes_multiple");
+      url.addParam("object_guids[]", object_guid, true);
+      url.addParam("event", event);
+      url.requestJSON(function(datas){
+        datas.each(function(data){
+          showExClassForm(data.ex_class_id, data.object_guid, /*data.object_guid+"_"+*/data.event+"_"+data.ex_class_id, "", data.event);
+        });
+        
+        options.onTriggered(datas, event);
       });
-      options.onTriggered(object_guid, event);
-    });
+    }
+    
+    // Single objects
+    else {
+      var url = new Url("forms", "ajax_trigger_ex_classes");
+      url.addParam("object_guid", object_guid);
+      url.addParam("event", event);
+      url.requestJSON(function(ex_classes_id){
+        ex_classes_id.each(function(id){
+          showExClassForm(id, object_guid, /*object_guid+"_"+*/event+"_"+id, "", event);
+        });
+        
+        options.onTriggered(object_guid, event);
+      });
+    }
   },
   
   triggerMulti: function(forms) {
