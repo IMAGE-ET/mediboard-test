@@ -51,14 +51,6 @@ $package->reasons[] = "Import des fonctions de GHM";
 $packages[] = $package;
 
 $package = new CPearPackage;
-$package->name = "Archive/Zip";
-$package->description = "Package de manipulation d'archives au format ZIP";
-$package->mandatory = true;
-$package->status = "beta";
-$package->reasons[] = "Installation de Mediboard";
-$packages[] = $package;
-
-$package = new CPearPackage;
 $package->name = "Config";
 $package->description = "Package de manipulation de fichiers de configuration";
 $package->mandatory = true;
@@ -121,6 +113,13 @@ $extension->description = "Extension de compression au format GNU ZIP (gz)";
 $extension->mandatory = true;
 $extension->reasons[] = "Installation de Mediboard";
 $extension->reasons[] = "Accelération substancielle de l'application via une communication web compressée";
+$extensions[] = $extension;
+
+$extension = new CPHPExtension;
+$extension->name = "Zip";
+$extension->description = "Extension de compression au format zip";
+$extension->mandatory = true;
+$extension->reasons[] = "Installation de Mediboard";
 $extensions[] = $extension;
 
 $extension = new CPHPExtension;

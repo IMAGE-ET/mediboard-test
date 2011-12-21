@@ -7,15 +7,15 @@
       <label for="indexFile_1">Fichier index.html</label>
     </th>
     <td>
-      <input type="radio" name="indexFile" value="1" checked="checked" /> Oui
-      <input type="radio" name="indexFile" value="0" /> Non
+      <label><input type="radio" name="indexFile" value="1" checked="checked" /> Oui</label>
+      <label><input type="radio" name="indexFile" value="0" /> Non</label>
     </td>
     <th>
       <label for="style_1">Fichier Style</label>
     </th>
     <td>
-      <input type="radio" name="style" value="1" checked="checked" /> Oui
-      <input type="radio" name="style" value="0" /> Non
+      <label><input type="radio" name="style" value="1" checked="checked" /> Oui</label>
+      <label><input type="radio" name="style" value="0" /> Non</label>
     </td>
   </tr>
   <tr>
@@ -23,15 +23,15 @@
       <label for="image_1">Dossier images</label>
     </th>
     <td>
-      <input type="radio" name="image" value="1" checked="checked" /> Oui
-      <input type="radio" name="image" value="0" /> Non
+      <label><input type="radio" name="image" value="1" checked="checked" /> Oui</label>
+      <label><input type="radio" name="image" value="0" /> Non</label>
     </td>
     <th>
       <label for="javascript_1">Fichiers Javascripts</label>
     </th>
     <td>
-      <input type="radio" name="javascript" value="1" checked="checked" /> Oui
-      <input type="radio" name="javascript" value="0" /> Non
+      <label><input type="radio" name="javascript" value="1" checked="checked" /> Oui</label>
+      <label><input type="radio" name="javascript" value="0" /> Non</label>
     </td>
   </tr>
   <tr>
@@ -39,15 +39,15 @@
       <label for="lib_1">Libairies</label>
     </th>
     <td>
-      <input type="radio" name="lib" value="1" checked="checked" /> Oui
-      <input type="radio" name="lib" value="0" /> Non
+      <label><input type="radio" name="lib" value="1" checked="checked" /> Oui</label>
+      <label><input type="radio" name="lib" value="0" /> Non</label>
     </td>
     <th>
       <label for="typeArch_zip">Archive</label>
     </th>
     <td>
-      <input type="radio" name="typeArch" value="zip" checked="checked" /> Zip
-      <input type="radio" name="typeArch" value="tar" /> Tar
+      <label><input type="radio" name="typeArch" value="zip" checked="checked" /> Zip</label>
+      <label><input type="radio" name="typeArch" value="tar" /> Tar</label>
     </td>
   </tr>
   <tr>

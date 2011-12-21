@@ -24,16 +24,19 @@ $typeArch   = CValue::post("typeArch"   , "zip");
 if(file_exists("tmp/mediboard_repas.zip")){unlink("tmp/mediboard_repas.zip");}
 if(file_exists("tmp/mediboard_repas.tar.gz")){unlink("tmp/mediboard_repas.tar.gz");}
 
-if($typeArch == "zip"){
-  $zipFile = new Archive_Zip("tmp/mediboard_repas.zip");
-}elseif($typeArch == "tar"){
+if ($typeArch == "zip") {
+  $zipFile = new ZipArchive();
+  $zipFile->open("tmp/mediboard_repas.zip", ZIPARCHIVE::CREATE);
+}
+elseif ($typeArch == "tar"){
   $zipFile = new Archive_Tar("tmp/mediboard_repas.tar.gz", true);
-}else{
- return; 
+}
+else {
+  return; 
 }
 
 
-if($indexFile){
+if ($indexFile) {
   // Création du fichier index.html
   $plats     = new CPlat;  
   
@@ -66,44 +69,75 @@ if($indexFile){
   ob_end_clean();
   file_put_contents("tmp/index.html", $indexFile);
   
-  if($typeArch == "zip"){
-    $zipFile->add("tmp/index.html", array("remove_path"=>"tmp/"));
-  }elseif($typeArch == "tar"){
+  if ($typeArch == "zip") {
+    $zipFile->addFile("tmp/index.html", "index.html");
+  }
+  elseif ($typeArch == "tar"){
     $zipFile->addModify("tmp/index.html", null, "tmp/");
   }
 }
 
-
 function delSvnAndSmartyDir($action,$fileProps){
- if(preg_match("/.svn/",$fileProps["filename"]) 
- || preg_match("/templates/",$fileProps["filename"]) 
- || preg_match("/templates_c/",$fileProps["filename"])){
-  return false;
- }else{
+  if (preg_match("/.svn/",$fileProps["filename"]) 
+   || preg_match("/templates/",$fileProps["filename"]) 
+   || preg_match("/templates_c/",$fileProps["filename"])) {
+    return false;
+  }
+  else {
    return true;
- }
+  }
 }
 
-
-if($style){
-  $zipFile->add("style/" , array("callback_pre_add"=>"delSvnAndSmartyDir"));
+function addFiles($src, &$zipFile, $typeArch) {
+  if ($typeArch == "tar") {
+    return $zipFile->add("$src/", array("callback_pre_add" => "delSvnAndSmartyDir"));
+  }
+  $values = array(".", "..", ".svn", "templates", "templates_c");
+  $dir = opendir($src);
+  while (false !== ($file = readdir($dir))) {
+    if ((!in_array($file, $values))) {
+      if (is_dir("$src/$file")) {
+        addFiles("$src/$file", $zipFile, $typeArch);
+      }
+      else {
+        $zipFile->addFile("$src/$file", "$src/$file");
+      }
+    }
+  }
 }
 
-if($image) {
-  $zipFile->add("images/" , array("callback_pre_add"=>"delSvnAndSmartyDir"));
+if ($style) {
+  addFiles("style", $zipFile, $typeArch);
 }
 
-if($lib){
-  $zipFile->add("lib/dojo");
-  $zipFile->add("lib/datepicker");
-  $zipFile->add("lib/scriptaculous");
+if ($image) {
+  addFiles("images", $zipFile, $typeArch);
 }
 
-if($javascript){
-  $zipFile->add("includes/javascript/"        , array("callback_pre_add"=>"delSvnAndSmartyDir"));
-  $zipFile->add("modules/dPrepas/javascript/" , array("callback_pre_add"=>"delSvnAndSmartyDir"));
+if ($lib) {
+  addFiles("lib/dojo", $zipFile, $typeArch);
+  addFiles("lib/datepicker", $zipFile, $typeArch);
+  addFiles("lib/scriptaculous", $zipFile, $typeArch);
 }
 
-mbtrace($zipFile->listContent(), "Contenu de l'archive");
+if ($javascript) {
+  addFiles("includes/javascript", $zipFile, $typeArch);
+  addFiles("modules/dPrepas/javascript", $zipFile, $typeArch);
+}
+
+if ($typeArch == "tar") {
+  mbTrace($zipFile->listContent(), "Contenu de l'archive");
+}
+else {
+  for( $i = 0; $i < $zipFile->numFiles; $i++ ){ 
+    $stat = $zipFile->statIndex( $i ); 
+    mbTrace(basename( $stat['name'])); 
+  }
+}
+
+if ($typeArch == "zip") {
+  $zipFile->close();
+}
+
 CApp::rip();
 ?>

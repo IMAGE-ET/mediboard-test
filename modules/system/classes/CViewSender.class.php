@@ -177,7 +177,7 @@ class CViewSender extends CMbObject {
       if ($source_ftp->_id && $source_ftp->active) {
         $basename = $this->name;
         $destination_basename = $source_ftp->fileprefix.$basename;
-        $can_zip = $_sender_source->_ref_source->archive && class_exists("ZipArchive");
+        $can_zip = $_sender_source->_ref_source->archive;
         
         try {
           $ftp = $source_ftp->init($source_ftp);
