@@ -754,22 +754,23 @@ class CPrescriptionLineMix extends CMbObject {
         foreach($this->_ref_variations as $_variation){
           $duree_variation = mbHoursRelative($prec_variation, $_variation->dateTime);
           $volume_variation += round($prec_debit * $duree_variation);
-          
+
           if($volume_restant){
             if($prec_debit){
               $_duree_volume_restant = round(($volume_restant / $prec_debit) * 60);
               $current_date = mbDateTime("$_duree_volume_restant minutes", $prec_variation);
-              $dates_planif[] = $current_date;
-            }
+							if($current_date < $_variation->dateTime){
+								$dates_planif[] = $current_date;
+							}
+						}
             $volume_restant = 0;
           }
-        
+          
           if($volume_variation < $qte_restante){
             $volume_restant = $qte_restante - $volume_variation;
             $_duree_variation = round($duree_variation * 60);
             $current_date = mbDateTime("$_duree_variation minutes", $current_date);
           }
-          
           // si le volume de la variation est plus grand que le contenu de la perf (plusieurs remplissages dans la meme variation)
           else {
             while($volume_variation >= $qte_restante){
@@ -783,7 +784,7 @@ class CPrescriptionLineMix extends CMbObject {
               if($_duree){
                 $increment = round($_duree * 60);
                 $current_date = mbDateTime("$increment minutes", $current_date);
-              }
+						  }
               
               // Si la quantité restant dans la prescription_line_mix est superieure au volume de la variation, on calcule le volume restant 
               if($volume_variation <= $qte_restante){
