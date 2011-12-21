@@ -1,9 +1,9 @@
 <?php /* $Id$ */
 
 /**
- *	@package Mediboard
- *	@subpackage mediusers
- *	@version $Revision$
+ *  @package Mediboard
+ *  @subpackage mediusers
+ *  @version $Revision$
  *  @author Romain Ollivier
 */
 
@@ -12,16 +12,16 @@
  */
 class CFunctions extends CMbObject {
   // DB Table key
-	var $function_id = null;
+  var $function_id = null;
 
   // DB References
   var $group_id = null;
 
   // DB Fields
   var $type      = null;
-	var $text      = null;
+  var $text      = null;
   var $soustitre = null;
-	var $color     = null;
+  var $color     = null;
   var $adresse   = null;
   var $cp        = null;
   var $ville     = null;
@@ -36,7 +36,7 @@ class CFunctions extends CMbObject {
   // Object References
   var $_ref_group = null;
   var $_ref_users = null;
-	
+  
   // Filter fields
   var $_skipped = null;
   
@@ -47,31 +47,31 @@ class CFunctions extends CMbObject {
     return $spec;
   }
   
-	function getBackProps() {
-	  $backProps = parent::getBackProps();
-	  $backProps["users"]                          = "CMediusers function_id";
-	  $backProps["secondary_functions"]            = "CSecondaryFunction function_id";
-	  $backProps["aides"]                          = "CAideSaisie function_id";
-	  $backProps["catalogues_labo"]                = "CCatalogueLabo function_id";
-	  $backProps["compte_rendu"]                   = "CCompteRendu function_id";
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["users"]                          = "CMediusers function_id";
+    $backProps["secondary_functions"]            = "CSecondaryFunction function_id";
+    $backProps["aides"]                          = "CAideSaisie function_id";
+    $backProps["catalogues_labo"]                = "CCatalogueLabo function_id";
+    $backProps["compte_rendu"]                   = "CCompteRendu function_id";
     $backProps["packs"]                          = "CPack function_id";
-	  $backProps["consultation_cats"]              = "CConsultationCategorie function_id";
-	  $backProps["employes"]                       = "CEmployeCab function_id";
-	  $backProps["executants_prescription"]        = "CFunctionCategoryPrescription function_id";
-	  $backProps["fiches_compta"]                  = "CGestionCab function_id";
-	  $backProps["services_urgence_pour"]          = "CGroups service_urgences_id";
+    $backProps["consultation_cats"]              = "CConsultationCategorie function_id";
+    $backProps["employes"]                       = "CEmployeCab function_id";
+    $backProps["executants_prescription"]        = "CFunctionCategoryPrescription function_id";
+    $backProps["fiches_compta"]                  = "CGestionCab function_id";
+    $backProps["services_urgence_pour"]          = "CGroups service_urgences_id";
     $backProps["pharmacie_pour"]                 = "CGroups pharmacie_id";
-	  $backProps["listes_choix"]                    = "CListeChoix function_id";
-	  $backProps["paiements"]                      = "CModePaiement function_id";
-	  $backProps["pack_examens"]                   = "CPackExamensLabo function_id";
-	  $backProps["plages_op"]                      = "CPlageOp spec_id";
-	  $backProps["plages_op_repl"]                 = "CPlageOp spec_repl_id";
-	  $backProps["prescriptions"]                  = "CPrescription function_id";
-	  $backProps["packs_prescription_protocole"]   = "CPrescriptionProtocolePack function_id";
-	  $backProps["rubriques"]                      = "CRubrique function_id";
-	  $backProps["tarifs"]                         = "CTarif function_id";
-	  $backProps["sigems_skipped"]                 = "CSigemsSkippedFunction function_id";
-	  $backProps["printers"]                       = "CPrinter function_id";
+    $backProps["listes_choix"]                    = "CListeChoix function_id";
+    $backProps["paiements"]                      = "CModePaiement function_id";
+    $backProps["pack_examens"]                   = "CPackExamensLabo function_id";
+    $backProps["plages_op"]                      = "CPlageOp spec_id";
+    $backProps["plages_op_repl"]                 = "CPlageOp spec_repl_id";
+    $backProps["prescriptions"]                  = "CPrescription function_id";
+    $backProps["packs_prescription_protocole"]   = "CPrescriptionProtocolePack function_id";
+    $backProps["rubriques"]                      = "CRubrique function_id";
+    $backProps["tarifs"]                         = "CTarif function_id";
+    $backProps["sigems_skipped"]                 = "CSigemsSkippedFunction function_id";
+    $backProps["printers"]                       = "CPrinter function_id";
     $backProps["protocoles"]                     = "CProtocole function_id";
     $backProps["ufs"]                            = "CAffectationUniteFonctionnelle object_id";
     $backProps["destination_brancardage"]        = "CDestinationBrancardage object_id";
@@ -79,7 +79,7 @@ class CFunctions extends CMbObject {
 	}
 	
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
     
     $specs["group_id"]           = "ref notNull class|CGroups";
@@ -101,10 +101,10 @@ class CFunctions extends CMbObject {
   }
     
   function updateFormFields() {
-		parent::updateFormFields();
+    parent::updateFormFields();
     $this->_view = $this->text;
     $this->_shortview = CMbString::truncate($this->text);
- 	}
+   }
   
   // Forward references
   function loadRefsFwd() {
@@ -131,23 +131,23 @@ class CFunctions extends CMbObject {
       );
       $order = "`users`.`user_last_name`, `users`.`user_first_name`";
       $this->_ref_users = new CMediusers;
-      $this->_ref_users = $this->_ref_users->loadList($where, $order, null, null, $ljoin);
+      return $this->_ref_users = $this->_ref_users->loadList($where, $order, null, null, $ljoin);
     } 
-		else {
+    else {
       $this->_ref_users = new CMediusers;
-      $this->_ref_users = $this->_ref_users->loadListFromType($type, PERM_READ, $this->function_id);
+      return $this->_ref_users = $this->_ref_users->loadListFromType($type, PERM_READ, $this->function_id);
     }
   }
 
   function loadProtocoles($type = null) {
     $where = array(
-		  "function_id" => "= '$this->_id'"
-		);
+      "function_id" => "= '$this->_id'"
+    );
     
     if ($type) {
       $where["type"] = "= '$type'";
     }
-		
+    
     $protocole = new CProtocole();
     $this->_ref_protocoles = $protocole->loadList($where, "libelle_sejour, libelle, codes_ccam");
   }
