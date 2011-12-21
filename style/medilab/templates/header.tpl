@@ -41,12 +41,18 @@ var Menu = {
 
   <div id="menubar" class="iconed">
     <div id="menuTools">
-      <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">
-        <img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />
-      </a>
-      <a href="{{$portal.tracker}}" title="{{tr}}portal-tracker{{/tr}}" target="_blank">
-        <img src="style/{{$uistyle}}/images/icons/modif.png" alt="{{tr}}portal-tracker{{/tr}}" />
-      </a>
+      {{if $portal.help}}
+        <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">
+          <img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />
+        </a>
+      {{/if}}
+      
+      {{if $portal.tracker}}
+        <a href="{{$portal.tracker}}" title="{{tr}}portal-tracker{{/tr}}" target="_blank">
+          <img src="style/{{$uistyle}}/images/icons/modif.png" alt="{{tr}}portal-tracker{{/tr}}" />
+        </a>
+      {{/if}}
+      
       <a href="#1" onclick="popChgPwd()" title="{{tr}}menu-changePassword{{/tr}}">
         <img src="style/{{$uistyle}}/images/icons/passwd.png" alt="{{tr}}menu-changePassword{{/tr}}" />
       </a>
@@ -129,7 +135,6 @@ var Menu = {
             <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$conf.datetime}}">
             {{$app->user_first_name}} {{$app->user_last_name}}
             </span>
-
           </td>
         </tr>
       </table>
@@ -138,12 +143,16 @@ var Menu = {
   {{if !$offline}}
   <tr>
     <td id="menubar">
-      <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">{{tr}}portal-help{{/tr}}</a>
-      {{foreach from=$modules key=mod_name item=currModule}}    
-      {{if $currModule->mod_ui_active && $currModule->_can->view}}
-      <a href="?m={{$mod_name}}" class="{{if $mod_name==$m}}textSelected{{else}}textNonSelected{{/if}}">
-        {{tr}}module-{{$mod_name}}-court{{/tr}}</a>
+      {{if $portal.help}}
+        <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">{{tr}}portal-help{{/tr}}</a>
       {{/if}}
+      
+      {{foreach from=$modules key=mod_name item=currModule}}    
+        {{if $currModule->mod_ui_active && $currModule->_can->view}}
+        <a href="?m={{$mod_name}}" class="{{if $mod_name==$m}}textSelected{{else}}textNonSelected{{/if}}">
+          {{tr}}module-{{$mod_name}}-court{{/tr}}
+        </a>
+        {{/if}}
       {{/foreach}}
       <a href="#" onclick="popChgPwd()">{{tr}}menu-changePassword{{/tr}}</a>
       <a href="?m=mediusers&amp;a=edit_infos">{{tr}}menu-myInfo{{/tr}}</a>

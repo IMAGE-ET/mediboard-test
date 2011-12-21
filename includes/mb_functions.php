@@ -474,9 +474,9 @@ class CMbDate {
       case "1hour":
         return $diff / CMbDate::$secs_per["hour"]; 
       case "6hours":
-      	return $diff / (CMbDate::$secs_per["hour"] * 6);
+        return $diff / (CMbDate::$secs_per["hour"] * 6);
       case "1day":
-      	return $diff / CMbDate::$secs_per["day"];
+        return $diff / CMbDate::$secs_per["day"];
       default:
         trigger_error("Can't make a relative position for unknown '$period' period", E_USER_WARNING);
     }
@@ -484,11 +484,11 @@ class CMbDate {
 }
 
 CMbDate::$xmlDateTime = CMbDate::$xmlDate."T".CMbDate::$xmlTime;
+
 /**
  * Return the std variance of an array
  * @return float: ecart-type
- **/
-
+ */
 function mbMoyenne($array) {
   if (is_array($array)) {
     return array_sum($array) / count($array);
@@ -501,7 +501,6 @@ function mbMoyenne($array) {
  * Return the std variance of an array
  * @return float: ecart-type
  **/
-
 function mbEcartType($array) {
   if (is_array($array)) {
     $moyenne = mbMoyenne($array);
@@ -520,8 +519,7 @@ function mbEcartType($array) {
  * Inserts a CSV file into a mysql table 
  * Not a generic function : used for import of specials files
  * @todo : become a generic function
- **/
-
+ */
 function mbInsertCSV( $fileName, $tableName, $oldid = false ) {
     $ds = CSQLDataSource::get("std");
     $file = fopen( $fileName, 'rw' );
@@ -586,13 +584,22 @@ function mbInsertCSV( $fileName, $tableName, $oldid = false ) {
 
 /**
  * URL to the mediboard.org documentation page 
- * @return string: the link to mediboard.org  */
-function mbPortalURL($page = "Accueil", $tab = null) {
-  $url = "http://www.mediboard.org/public/";
+ * @return string The URL to the requested page
+ */
+function mbPortalURL($page, $a = null) {
+  if ($page == "tracker") {
+    return CAppUI::conf("issue_tracker_url");
+  }
   
-  $url .= ($page == "tracker") ? "tracker4" : "mod-$page";
-  $url .= $tab ? "-tab-$tab" : "";
-  return $url;
+  $url = CAppUI::conf("help_page_url");
+  if (!$url || strpos($url, "%m") === false || strpos($url, "%a") === false) {
+    return null;
+  }
+  
+  return strtr($url, array(
+    "%m" => $page,
+    "%a" => $a,
+  ));
 }
 
 function stringNotEmpty($s){

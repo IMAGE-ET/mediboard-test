@@ -152,24 +152,27 @@ td#mainHeader td.welcome {
   background-color: #68c;
   color: #fff;
   width: 130px;
+  text-align: center;
 }
 
 #leftMenu #menubar a {
   border: 1px solid transparent;
   margin-top: -1px;
-  text-align: center;
   display: block;
 }
 
 #leftMenu #menubar #menuTools {
   height: 14px;
+  /* Hack to remove the whitespace between the buttons */
+  font-size: 1px; /* for browsers not supporting 0px fonts */
+  font-size: 0px;
 }
 
 #leftMenu #menubar #menuTools a {
   text-decoration: none;
   height: 16px;
   width: 16px;
-  float: left;
+  display: inline-block;
 }
 
 #leftMenu #menubar a.textSelected {
@@ -190,8 +193,7 @@ td#mainHeader td.welcome {
 }
 
 #leftMenu #menubar #menuTools a#toggleIcons {
-  position: absolute;
-  margin-top: 23px;
+  float: left;
 }
 
 #leftMenu #menubar.iconed #menuTools a#toggleIcons {

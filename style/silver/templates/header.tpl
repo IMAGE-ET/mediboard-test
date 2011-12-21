@@ -68,13 +68,19 @@ var Menu = {
       -  
       {{mb_include module=mediboard template=change_group}}
       {{mb_include module=mediboard template=svnstatus}}
-        
-      <a title="{{tr}}portal-help{{/tr}}" href="{{$portal.help}}" target="_blank">
-        <img src="style/mediboard/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />
-      </a>
-      <a title="{{tr}}portal-tracker{{/tr}}" href="{{$portal.tracker}}" target="_blank">
-        <img src="style/mediboard/images/icons/modif.png" alt="{{tr}}portal-tracker{{/tr}}" />
-      </a>
+      
+      {{if $portal.help}}
+        <a title="{{tr}}portal-help{{/tr}}" href="{{$portal.help}}" target="_blank">
+          <img src="style/mediboard/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />
+        </a>
+      {{/if}}
+      
+      {{if $portal.tracker}}
+        <a title="{{tr}}portal-tracker{{/tr}}" href="{{$portal.tracker}}" target="_blank">
+          <img src="style/mediboard/images/icons/modif.png" alt="{{tr}}portal-tracker{{/tr}}" />
+        </a>
+      {{/if}}
+      
       <a title="{{tr}}menu-changePassword{{/tr}}" href="#1" onclick="popChgPwd()">
         <img src="style/mediboard/images/icons/passwd.png" alt="{{tr}}menu-changePassword{{/tr}}" />
       </a>

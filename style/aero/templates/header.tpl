@@ -22,14 +22,20 @@
     <td class="menuTitle" id="toolMenu" onmouseover="$(this).down().show()" onmouseout="$(this).down().hide()">
       Outils
       <div class="dropdown" style="display: none; position: absolute;">
+        {{if $portal.help}}
         <a href="{{$portal.help}}" target="_blank">
           <img src="style/aero/images/icons/help.png" title="{{tr}}portal-help{{/tr}}" />
           {{tr}}portal-help{{/tr}}
         </a>
+        {{/if}}
+        
+        {{if $portal.tracker}}
         <a href="{{$portal.tracker}}" target="_blank">
           <img src="style/aero/images/icons/modif.png" title="{{tr}}portal-tracker{{/tr}}" />
           {{tr}}portal-tracker{{/tr}}
         </a>
+        {{/if}}
+        
         <a href="#1" onclick="popChgPwd()">
           <img src="style/aero/images/icons/passwd.png" title="{{tr}}menu-changePassword{{/tr}}" />
           {{tr}}menu-changePassword{{/tr}}

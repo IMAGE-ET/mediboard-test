@@ -15,6 +15,8 @@
   <table class="form" style="table-layout: fixed;">
     {{mb_include module=system template=inc_config_str var=page_title}}
     {{mb_include module=system template=inc_config_str var=company_name}}
+    {{mb_include module=system template=inc_config_str var=issue_tracker_url size=60}}
+    {{mb_include module=system template=inc_config_str var=help_page_url size=60}}
     {{mb_include module=system template=inc_config_str var=currency_symbol}}
     {{mb_include module=system template=inc_config_bool var=hide_confidential}}
     {{mb_include module=system template=inc_config_bool var=locale_warn}}

@@ -40,6 +40,8 @@ $dPconfig["shared_memory"]     = "none";
 $dPconfig["session_handler"]   = "files";
 $dPconfig["log_js_errors"]     = "1";
 $dPconfig["weinre_debug_host"] = "";
+$dPconfig["issue_tracker_url"] = "http://www.mediboard.org/public/tracker4";
+$dPconfig["help_page_url"]     = "http://www.mediboard.org/public/mod-%m-tab-%a";
 
 // Object merge
 $dPconfig["alternative_mode"]  = "0";

@@ -59,12 +59,18 @@ var Menu = {
 
   <div id="menubar" class="iconed">
     <div id="menuTools">
+      {{if $portal.help}}
       <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">
         <img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />
       </a>
+      {{/if}}
+      
+      {{if $portal.tracker}}
       <a href="{{$portal.tracker}}" title="{{tr}}portal-tracker{{/tr}}" target="_blank">
         <img src="style/{{$uistyle}}/images/icons/modif.png" alt="{{tr}}portal-tracker{{/tr}}" />
       </a>
+      {{/if}}
+      
       <a href="#1" onclick="popChgPwd()" title="{{tr}}menu-changePassword{{/tr}}">
         <img src="style/{{$uistyle}}/images/icons/passwd.png" alt="{{tr}}menu-changePassword{{/tr}}" />
       </a>
@@ -157,12 +163,18 @@ var Menu = {
       {{/if}}
       {{/foreach}}
       
-      <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">
-        <img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />
-      </a>
-      <a href="{{$portal.tracker}}" title="{{tr}}portal-tracker{{/tr}}" target="_blank">
-        <img src="style/{{$uistyle}}/images/icons/modif.png" alt="{{tr}}portal-tracker{{/tr}}" />
-      </a>
+      {{if $portal.help}}
+        <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">
+          <img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />
+        </a>
+      {{/if}}
+      
+      {{if $portal.tracker}}
+        <a href="{{$portal.tracker}}" title="{{tr}}portal-tracker{{/tr}}" target="_blank">
+          <img src="style/{{$uistyle}}/images/icons/modif.png" alt="{{tr}}portal-tracker{{/tr}}" />
+        </a>
+      {{/if}}
+      
       <a href="#1" onclick="popChgPwd()" title="{{tr}}menu-changePassword{{/tr}}">
         <img src="style/{{$uistyle}}/images/icons/passwd.png" alt="{{tr}}menu-changePassword{{/tr}}" />
       </a>

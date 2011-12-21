@@ -15,8 +15,14 @@
         {{mb_include module=mediboard template=svnstatus}}    
         
         <div class="menu">
-          <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank"><img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" /></a>
-          <a href="{{$portal.tracker}}" title="{{tr}}portal-tracker{{/tr}}" target="_blank"><img src="style/{{$uistyle}}/images/icons/modif.png" alt="{{tr}}portal-tracker{{/tr}}" /></a>
+          {{if $portal.help}}
+            <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank"><img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" /></a>
+          {{/if}}
+          
+          {{if $portal.tracker}}
+            <a href="{{$portal.tracker}}" title="{{tr}}portal-tracker{{/tr}}" target="_blank"><img src="style/{{$uistyle}}/images/icons/modif.png" alt="{{tr}}portal-tracker{{/tr}}" /></a>
+          {{/if}}
+          
           <a href="#1" onclick="popChgPwd()" title="{{tr}}menu-changePassword{{/tr}}"><img src="style/{{$uistyle}}/images/icons/passwd.png" alt="{{tr}}menu-changePassword{{/tr}}" /></a>
           <a href="?m=mediusers&amp;a=edit_infos" title="{{tr}}menu-myInfo{{/tr}}"><img src="style/{{$uistyle}}/images/icons/myinfos.png" alt="{{tr}}menu-myInfo{{/tr}}" /></a>
           <a href="#1" onclick="UserSwitch.popup()" title="{{tr}}menu-switchUser{{/tr}}"><img src="./images/icons/switch.png" alt="{{tr}}menu-switchUser{{/tr}}" /></a>

@@ -35,7 +35,11 @@
   </tr>
   <tr>
     <td id="menubar">
-      | <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">{{tr}}portal-help{{/tr}}</a>
+      | 
+      {{if $portal.help}}
+        <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">{{tr}}portal-help{{/tr}}</a>
+      {{/if}}
+      
       {{foreach from=$modules key=mod_name item=currModule}}
       {{if $currModule->_can->view && $currModule->mod_ui_active}}
       <a href="?m={{$mod_name}}" class="{{if $mod_name==$m}}textSelected{{else}}textNonSelected{{/if}}">

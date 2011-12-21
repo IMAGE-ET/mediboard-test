@@ -1359,6 +1359,8 @@ $locales['config-dsn-create'] = 'Création de la base et permissions sur l\'utili
 $locales['config-dsn-test'] = 'Test';
 $locales['config-exchange-source'] = 'Configuration source d\'échange';
 $locales['config-formats'] = 'Formats d\'affichage';
+$locales['config-help_page_url'] = 'URL vers la page d\'aide (%m = nom du module, %a = tabulation)';
+$locales['config-help_page_url-desc'] = 'URL vers la page d\'aide';
 $locales['config-hide_confidential'] = 'Mode confidentiel';
 $locales['config-hide_confidential-desc'] = 'Brouiller les données confidentielles. Utile pour le mode de démonstration';
 $locales['config-http_redirections'] = 'Redirections HTTP';
@@ -1373,6 +1375,8 @@ $locales['config-interop-base_url'] = 'URL de compatibilité. OBSOLETE';
 $locales['config-interop-base_url-desc'] = 'URL de compatibilité pour les intégrations tierces. OBSOLETE';
 $locales['config-interop-mode_compat'] = 'Mode de compatibilité. OBSOLETE';
 $locales['config-interop-mode_compat-desc'] = 'Mode de compatibilié pour les intégrations tierces. OBSOLETE.';
+$locales['config-issue_tracker_url'] = 'URL vers la page de retour utilisateur';
+$locales['config-issue_tracker_url-desc'] = 'URL vers la page de retour utilisateur';
 $locales['config-locale_alert'] = 'Format d\'alerte de localisation';
 $locales['config-locale_alert-desc'] = 'Format d\'alerte de localisation';
 $locales['config-locale_warn'] = 'Alertes localisation';
