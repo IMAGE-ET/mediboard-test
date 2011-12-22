@@ -568,6 +568,11 @@ class COperation extends CCodable implements IPatientRelated {
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
   
+  function loadView() {
+    parent::loadView();
+    $this->loadRefPatient();
+  }
+  
   function loadComplete() {
     parent::loadComplete();
     $this->loadRefPatient();
