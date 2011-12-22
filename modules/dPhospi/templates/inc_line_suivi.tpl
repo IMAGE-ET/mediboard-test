@@ -113,6 +113,8 @@
     <strong onmouseover="ObjectTooltip.createEx(this, '{{$_suivi->_guid}}')">
       {{if $_suivi->_ref_consult_anesth->_id}}
         {{tr}}CConsultAnesth{{/tr}}
+      {{elseif $_suivi->type == "entree"}}
+        {{tr}}CConsultation.type.entree{{/tr}}
       {{else}}
         {{tr}}CConsultation{{/tr}}
       {{/if}}
