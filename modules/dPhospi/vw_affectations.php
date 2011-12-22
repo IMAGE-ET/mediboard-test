@@ -110,6 +110,7 @@ if ($can->edit) {
 	if ($where_service) {
     $where[] = $where_service;
 	}
+	$order = null;
   switch ($triAdm) {
     case "date_entree" :
       $order = "entree_prevue ASC";
@@ -119,6 +120,7 @@ if ($can->edit) {
       break;
     case "patient" :
       $order = "patients.nom, patients.prenom";
+      break;
   }
   
   switch ($_type_admission) {

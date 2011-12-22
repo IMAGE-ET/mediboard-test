@@ -22,12 +22,17 @@ $where["annule"] = "= '0'";
 $where["sejour.group_id"] = "= '$group_id'";
 $where[] = "(sejour.type != 'seances' && affectation.affectation_id IS NULL) || sejour.type = 'seances'";
 
+$order = null;
 switch ($triAdm) {
   case "date_entree":
     $order = "entree_prevue ASC";
     break;
   case "praticien":
     $order = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
+    break;
+  case "patient" :
+    $order = "patients.nom, patients.prenom";
+    break;
 }
 
 switch ($_type_admission) {
