@@ -287,9 +287,10 @@ class CConstantesMedicales extends CMbObject {
         "catheter_suspubien" => "+", 
         "entree_lavage"      => "-",
       ),
+      "alert_low" => array(0, "#ff3232"),
     ),
-		
-		// Ureteral
+    
+    // Ureteral
     "sonde_ureterale_1" => array( // gauche
       "type" => "drain",
       "unit" => "ml", 
@@ -302,8 +303,8 @@ class CConstantesMedicales extends CMbObject {
       "min" => 0, "max" => 100,
       "cumul_reset_config" => "sonde_ureterale_cumul_reset_hour",
     ),
-		
-		// Nephrostomie
+    
+    // Nephrostomie
     "sonde_nephro_1"    => array( // gauche
       "type" => "drain",
       "unit" => "ml", 
@@ -316,7 +317,7 @@ class CConstantesMedicales extends CMbObject {
       "min" => 0, "max" => 100,
       "cumul_reset_config" => "sonde_nephro_cumul_reset_hour",
     ),
-		
+    
     "sonde_vesicale"    => array(
       "type" => "drain",
       "unit" => "ml", 
@@ -733,6 +734,30 @@ class CConstantesMedicales extends CMbObject {
     return self::$_latest_values[$patient_id] = array($constante, $list_datetimes);
   }
   
+  static function getColor($value, $params, $default_color = "#4DA74D") {
+    $color = CValue::read($_params, "color", $default_color);
+    
+    // Low value alert
+    if (isset($params["alert_low"])) {
+      list($_low, $_low_color) = $params["alert_low"];
+      
+      if ($value < $_low) {
+        $color = $_low_color;
+      }
+    }
+    
+    // High value alert
+    if (isset($params["alert_high"])) {
+      list($_high, $_high_color) = $params["alert_high"];
+      
+      if ($value > $_high) {
+        $color = $_high_color;
+      }
+    }
+    
+    return $color;
+  }
+  
   static function buildGrid($list, $full = true) {
     $grid = array();
     $selection = array_keys(CConstantesMedicales::$list_constantes);
@@ -772,7 +797,6 @@ class CConstantesMedicales extends CMbObject {
             $reset_hour = self::getResetHour($_name);
             $day_24h = mbTransformTime("-$reset_hour hours", $_constante_medicale->datetime, '%y-%m-%d');
             
-              
             if (!isset($cumuls_day[$_name][$day_24h])) {
               $cumuls_day[$_name][$day_24h] = array(
                 "id"    => $_constante_medicale->_id,
@@ -841,8 +865,13 @@ class CConstantesMedicales extends CMbObject {
       }
     }
     
-    foreach($cumuls_day as $_name => $_days) {
-      foreach($_days as $_day => $_values) {
+    foreach($cumuls_day as $_name => &$_days) {
+      $_params = CConstantesMedicales::$list_constantes[$_name];
+      
+      foreach($_days as $_day => &$_values) {
+        $_color = CConstantesMedicales::getColor($_values["value"], $_params, null);
+        $_values["color"] = $_color;
+        
         $grid[$_values["datetime"]." ".$_values["id"]]["values"][$_name] = $_values;
       }
     }

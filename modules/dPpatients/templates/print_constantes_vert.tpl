@@ -40,9 +40,9 @@
         
         {{if is_array($_value)}}
           {{if $_value.value === null}}
-            <td {{if $_value.span > 0}} colspan="{{$_value.span}}" {{/if}} style="border-left: 1px solid #999;"></td>
+            <td style="border-left: 1px solid #999; {{if $_value.color}}background-color: {{$_value.color}};{{/if}}" {{if $_value.span > 0}} colspan="{{$_value.span}}" {{/if}}></td>
           {{else}}
-            <td style="text-align: center; border-top: 2px solid {{if $_value.pair == "odd"}} #36c {{else}} #3c9 {{/if}}; border-left: 1px solid #999;" 
+            <td style="text-align: center; border-top: 2px solid {{if $_value.pair == "odd"}} #36c {{else}} #3c9 {{/if}}; border-left: 1px solid #999; {{if $_value.color}}background-color: {{$_value.color}};{{/if}}" 
                 {{if $_value.span > 0}} colspan="{{$_value.span}}" {{/if}}>
               <strong>{{$_value.value}}</strong> - 
               <small>{{$_value.day}}</small>

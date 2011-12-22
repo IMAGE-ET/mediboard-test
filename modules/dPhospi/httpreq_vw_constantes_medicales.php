@@ -35,10 +35,10 @@ if (!$start) {
 }
 
 if ($paginate) {
-	$limit = "$start,$count";
+  $limit = "$start,$count";
 }
 else {
-	$limit = $count;
+  $limit = $count;
 }
 
 if (!$selection || $selected_context_guid === 'all') {
@@ -377,6 +377,8 @@ foreach($cumuls_day as $name => $days) {
   
   $offset = 0;
   foreach($days as $day => $values) {
+    $_color = CConstantesMedicales::getColor($values["value"], $_params, "#4DA74D");
+    
     $_data["series"][] = array(
       "data" => array(array(
         $offset-0.5, 
@@ -398,7 +400,7 @@ foreach($cumuls_day as $name => $days) {
         "centered" => false,
         "lineWidth" => 1,
       ),
-      "color" => CValue::read($_params, "color", "#4DA74D"),
+      "color" => $_color,
       "mouse" => array(
         "relative" => false,
         "position" => "nw",
@@ -429,6 +431,11 @@ foreach($data as $name => &$_data) {
     
     $margin_ratio = 0.3;
     $params['unit'] = $unite_ta;
+  }
+  
+  // On cache les valeurs, qui sont a zero à cause du " " de la valeur de _diurese (pour forcer son affichage)
+  if (isset($params["formula"])) {
+    $_data["series"][count($_data["series"])-1]["hide"] = true;
   }
   
   $all_y_values = CMbArray::pluck($_data["series"], "data");
