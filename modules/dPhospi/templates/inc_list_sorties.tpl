@@ -82,7 +82,7 @@
     {{foreach from=$sorties item=_sortie}}
       {{mb_include module=dPhospi template=inc_check_sortie_line}}
     {{foreachelse}}
-      <tr><td colspan="5" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
+      <tr><td colspan="100" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
     {{/foreach}}
   </table>
   </div>
@@ -103,7 +103,7 @@
       {{foreach from=$sortiesNP item=_sortie}}
         {{mb_include module=dPhospi template=inc_check_sortieNP_line}}
       {{foreachelse}}
-        <tr><td colspan="5" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
+        <tr><td colspan="100" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
     {{/foreach}}
     </table>
   </div>

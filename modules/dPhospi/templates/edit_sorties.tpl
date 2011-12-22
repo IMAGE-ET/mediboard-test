@@ -50,13 +50,21 @@ function refreshList(order_col, order_way, type) {
           <input type="hidden" name="m" value="dPhospi" />
           <input type="hidden" name="tab" value="edit_sorties" />
           <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
-          <select name="service_id" style="width: 12em;" onchange="this.form.submit()">
+          <select name="type_hospi" style="width: 13em;" onchange="this.form.submit()">
+            <option value="">&mdash; Type d'hospitalisation</option>
+            {{foreach from=$sorties item=_sortie key=type}}
+            <option value="{{$type}}" {{if $type == $type_hospi}}selected="selected"{{/if}}>
+              {{tr}}CSejour._type_admission.{{$type}}{{/tr}}
+            </option>
+            {{/foreach}}
+          </select>
+          <select name="service_id" style="width: 13em;" onchange="this.form.submit()">
             <option value="">&mdash; Service</option>
             {{foreach from=$services item=_service}}
             <option value="{{$_service->_id}}" {{if $_service->_id == $service_id}}selected="selected"{{/if}}>{{$_service}}</option>
             {{/foreach}}
           </select>
-          <select name="praticien_id" style="width: 12em;" onchange="this.form.submit()">
+          <select name="praticien_id" style="width: 13em;" onchange="this.form.submit()">
             <option value="">&mdash; Praticien</option>
             {{foreach from=$praticiens item=_prat}}
             <option value="{{$_prat->_id}}" {{if $_prat->_id == $praticien_id}}selected="selected"{{/if}}>{{$_prat}}</option>

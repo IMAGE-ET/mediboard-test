@@ -18,6 +18,8 @@ $order_col    = CValue::getOrSession("order_col"   , "_patient");
 
 $group = CGroups::loadCurrent();
 
+$types_hospi = array("comp","ambu","ssr","psy");
+$type_hospi  = CValue::getOrSession("type_hospi", null);
 
 // Récupération de la liste des services
 $where = array();
@@ -43,8 +45,8 @@ $ljoin["chambre"]            = "chambre.chambre_id = lit.chambre_id";
 $ljoin["service"]            = "service.service_id = chambre.service_id";
 $where                       = array();
 $where["service.group_id"]   = "= '$group->_id'";
-$where["service.service_id"] = CSQLDataSource::prepareIn(array_keys($services), $service_id);
-$where["sejour.type"]        = "NOT IN ('exte', 'seances')";
+$where["service.service_id"] = CSQLDataSource::prepareIn(array_keys($services)   , $service_id);
+$where["sejour.type"]        = CSQLDataSource::prepareIn($types_hospi, $type_hospi);
 if($praticien_id) {
   $where["sejour.praticien_id"] = "= '$praticien_id'";
 }
@@ -57,7 +59,7 @@ $ljoinNP["patients"]                   = "sejour.patient_id   = patients.patient
 $ljoinNP["users"]                      = "sejour.praticien_id = users.user_id";
 $whereNP                               = array();
 $whereNP["sejour.group_id"]            = "= '$group->_id'";
-$whereNP["sejour.type"]                = "NOT IN ('exte', 'seances')";
+$whereNP["sejour.type"]                = CSQLDataSource::prepareIn($types_hospi, $type_hospi);
 $whereNP["affectation.affectation_id"] = "IS NULL";
 if($service_id) {
   $whereNP["sejour.service_id"] = "= '$service_id'";
@@ -83,7 +85,7 @@ if($order_col == "sortie"){
 }
 
 // Récupération des présents du jour
-if($type == 'presents' ) {
+if($type == 'presents') {
   // Patients placés
   $where[] = "'$date' BETWEEN DATE(affectation.entree) AND DATE(affectation.sortie)";
   if ($vue) {
@@ -174,11 +176,12 @@ if($type == 'presents' ) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("type"         , $type);
+$smarty->assign("type_hospi"   , $type_hospi);
 $smarty->assign("order_way"    , $order_way);
 $smarty->assign("order_col"    , $order_col);
 $smarty->assign("date"         , $date);
 if ($type == "deplacements") {
-  $smarty->assign("deplacements" , $deplacements);
+  $smarty->assign("deplacements", $deplacements);
   $smarty->assign("update_count", count($deplacements));
 }
 elseif($type == "presents") {

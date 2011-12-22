@@ -9,8 +9,10 @@
 
 CCanDo::checkRead();
 
-$vue  = CValue::getOrSession("vue", 0);
-$date = CValue::getOrSession("date", mbDate());
+$date       = CValue::getOrSession("date", mbDate());
+$type_hospi = CValue::getOrSession("type_hospi", null);
+$vue        = CValue::getOrSession("vue", 0);
+
 $sorties = array("comp" => array("place" => 0, "non_place" => 0),
                  "ambu" => array("place" => 0, "non_place" => 0),
                  "ssr"  => array("place" => 0, "non_place" => 0),
@@ -50,7 +52,7 @@ $ljoin["service"]            = "service.service_id = chambre.service_id";
 $where                       = array();
 $where["service.group_id"]   = "= '$group->_id'";
 $where["service.service_id"] = CSQLDataSource::prepareIn(array_keys($services), $service_id);
-$where["sejour.type"]        = "NOT IN ('exte', 'seances')";
+$where["sejour.type"]        = CSQLDataSource::prepareIn(array_keys($sorties) , $type_hospi);
 if ($vue) {
   $where["confirme"] = " = '0'";
 }
@@ -64,7 +66,7 @@ $ljoinNP                               = array();
 $ljoinNP["affectation"]                = "sejour.sejour_id = affectation.sejour_id";
 $whereNP                               = array();
 $whereNP["sejour.group_id"]            = "= '$group->_id'";
-$whereNP["sejour.type"]                = "NOT IN ('exte', 'seances')";
+$whereNP["sejour.type"]                = CSQLDataSource::prepareIn(array_keys($sorties), $type_hospi);
 $whereNP["affectation.affectation_id"] = "IS NULL";
 if($service_id) {
   $whereNP["sejour.service_id"] = "= '$service_id'";
@@ -96,9 +98,11 @@ $deplacements = $affectation->countList($where, null, $ljoin);
 $where["sejour.sortie"]      = "= affectation.sortie";
 $whereNP["sejour.sortie"]    = "BETWEEN '$limit1' AND '$limit2'";
 foreach($sorties as $type => &$_sortie) {
-  $where["sejour.type"] = $whereNP["sejour.type"] = " = '$type'";
-  $_sortie["place"]     = $affectation->countList($where, null, $ljoin);
-  $_sortie["non_place"] = $sejour->countList($whereNP, null, $ljoinNP);
+  if(!$type_hospi || $type_hospi == $type) {
+    $where["sejour.type"] = $whereNP["sejour.type"] = " = '$type'";
+    $_sortie["place"]     = $affectation->countList($where, null, $ljoin);
+    $_sortie["non_place"] = $sejour->countList($whereNP, null, $ljoinNP);
+  }
 }
 
 $smarty = new CSmartyDP;
@@ -110,7 +114,7 @@ $smarty->assign("services"    , $services);
 $smarty->assign("service_id"  , $service_id);
 $smarty->assign("praticiens"  , $praticiens);
 $smarty->assign("praticien_id", $praticien_id);
-$smarty->assign("vue"         , $vue);
+$smarty->assign("type_hospi"  , $type_hospi);
 $smarty->assign("vue"         , $vue);
 $smarty->assign("date"        , $date);
 
