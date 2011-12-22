@@ -72,6 +72,7 @@ if($perop){
 if (count($protocoles) <= CAppUI::conf("dPprescription CPrescription max_details_result"))  { 
   foreach($protocoles as $_protocole){
   	$_protocole->countLinesMedsElements();
+				
   	foreach($_protocole->_counts_by_chapitre as $chapitre => $_count_chapitre){
   		if(!$_count_chapitre){
   			unset($_protocole->_counts_by_chapitre[$chapitre]);

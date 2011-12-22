@@ -22,6 +22,7 @@ $operation_id    = CValue::post("operation_id");
 $pratSel_id      = CValue::post("pratSel_id");
 $advanced_prot   = CValue::post("advanced_prot", 1);
 $perop           = CValue::post("perop", 0);
+$datetime_now    = CValue::post("datetime_now", mbDateTime());
 
 // Si aucun pack/protocole selectionne, on ne fait rien
 if (!$pack_protocole_id){
@@ -132,7 +133,7 @@ if ($prescription_id) {
 }
 
 // On applique le protocole ou le pack
-$prescription->applyPackOrProtocole($pack_protocole_id, $praticien_id, $date_sel, $time_sel, $operation_id);
+$prescription->applyPackOrProtocole($pack_protocole_id, $praticien_id, $date_sel, $time_sel, $operation_id, $datetime_now);
 
 if ($advanced_prot) {
   // Lancement du refresh des lignes de la prescription

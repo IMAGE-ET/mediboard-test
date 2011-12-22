@@ -53,8 +53,8 @@ addProtocole = function(prescription_id) {
   }
   else {
 	  $V(oFormProtocole.praticien_id, $('choix_prat').value);
-	  onSubmitFormAjax(oFormProtocole);
-  }
+		checkRelativeDate();
+	}
 }
 
 emptyProtocole = function() {
@@ -86,6 +86,23 @@ selectLines = function(prescription_id, protocole_id, ids) {
   window.selectLines.addParam("ids[]", ids);
   window.selectLines.requestModal(900, 500, {showClose: false, showReload: false});
 }
+
+checkRelativeDate = function(){
+  var url = new Url("dPprescription", "ajax_check_relative_date");
+  url.addParam("pack_protocole_id", $V(oFormProtocole.pack_protocole_id));
+  url.requestJSON(function(count) {
+    // S'il y a des N dans le protocole, ouverture de la modale puis submitProtocole
+    if(count){
+      modal("datetime_now_modal");
+      Calendar.regField(oFormProtocole.datetime_now)
+    }
+    // Sinon, application du protocole directement
+    else {
+      onSubmitFormAjax(oFormProtocole);
+    }
+  }); 
+}
+
 
 prescriptions_ids = {{$multiple_prescription|@json}};
 
@@ -269,6 +286,23 @@ Main.add(function () {
                     <input type="hidden" name="pratSel_id" value="{{$praticien_sejour}}" />
                     <input type="hidden" name="praticien_id" value="" />
                     <input type="hidden" name="pack_protocole_id" value="" />
+										
+										<span id="datetime_now_modal" style="display: none;">
+						          <table class="form">
+						            <tr>
+						              <th class="title">
+						                Sélection de la date relative de prescription (M)
+						              </th>
+						            </tr>
+						            <tr>
+						              <td>
+						                <input type="hidden" name="datetime_now" value="{{$now}}" class="dateTime" />
+						                <button type="button" onclick="onSubmitFormAjax(this.form, { onComplete: Control.Modal.close });" class="submit">Appliquer</button>
+						              </td>
+						            </tr>
+						          </table>  
+						        </span>
+										
                     {{assign var=last_operation value=$operations|@end}}
                     {{if $operations|@count >= 1}}
                       <input type="hidden" name="operation_id" value="{{$last_operation->_id}}" />

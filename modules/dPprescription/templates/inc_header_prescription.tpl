@@ -10,6 +10,25 @@
 
 <script type="text/javascript">
 
+
+checkRelativeDate = function(){
+  var oFormApplyProtocole = getForm("applyProtocole");
+  var url = new Url("dPprescription", "ajax_check_relative_date");
+	url.addParam("pack_protocole_id", $V(oFormApplyProtocole.pack_protocole_id));
+	url.requestJSON(function(count) {
+	  // S'il y a des N dans le protocole, ouverture de la modale puis submitProtocole
+		if(count){
+		  modal("datetime_now_modal");
+			Calendar.regField(oFormApplyProtocole.datetime_now)
+		}
+		// Sinon, application du protocole directement
+		else {
+		  submitProtocole();
+		}
+	});	
+}
+
+
 // refresh de la liste des protocoles dans le cas des protocoles
 refreshListProtocole = function(oForm){
   var oFormFilter = document.selPrat;
@@ -567,6 +586,22 @@ Main.add( function(){
 	      <input type="hidden" name="pack_protocole_id" value="" />
 				<input type="hidden" name="time_debut" value="" />
         
+				<span id="datetime_now_modal" style="display: none;">
+				  <table class="form">
+				  	<tr>
+				  		<th class="title">
+				  			Sélection de la date relative de prescription (M)
+				  		</th>
+						</tr>
+						<tr>
+							<td>
+								<input type="hidden" name="datetime_now" value="{{$now}}" class="dateTime" />
+							  <button type="button" onclick="submitProtocole(); Control.Modal.close();" class="submit">Appliquer</button>
+						  </td>
+					  </tr>
+          </table> 	
+        </span>
+				
 	      <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" class="autocomplete" style="font-weight: bold; font-size: 1.3em; width: 300px;" />
 	      <div style="display:none; width: 350px;" class="autocomplete" id="protocole_auto_complete"></div>
  				{{if $prescription->type != "externe"}}
@@ -599,7 +634,7 @@ Main.add( function(){
 	          } );
 	 				</script>				 				
  				{{/if}}
-        <button type="button" class="submit oneclick" onclick="submitProtocole();">Ouvrir/Appliquer</button>
+        <button type="button" class="submit oneclick" onclick="checkRelativeDate();">Ouvrir/Appliquer</button>
 		 </form>
     </td>  
   {{/if}}
