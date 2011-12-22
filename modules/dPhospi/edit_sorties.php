@@ -13,11 +13,16 @@ $date       = CValue::getOrSession("date", mbDate());
 $type_hospi = CValue::getOrSession("type_hospi", null);
 $vue        = CValue::getOrSession("vue", 0);
 
-$sorties = array("comp" => array("place" => 0, "non_place" => 0),
-                 "ambu" => array("place" => 0, "non_place" => 0),
-                 "ssr"  => array("place" => 0, "non_place" => 0),
-                 "psy"  => array("place" => 0, "non_place" => 0));
-
+$mouvements = array("comp" => array("entrees" => array("place" => 0, "non_place" => 0),
+                                    "sorties" => array("place" => 0, "non_place" => 0)),
+                    "ambu" => array("entrees" => array("place" => 0, "non_place" => 0),
+                                    "sorties" => array("place" => 0, "non_place" => 0)),
+                    "urg"  => array("entrees" => array("place" => 0, "non_place" => 0),
+                                    "sorties" => array("place" => 0, "non_place" => 0)),
+                    "ssr"  => array("entrees" => array("place" => 0, "non_place" => 0),
+                                    "sorties" => array("place" => 0, "non_place" => 0)),
+                    "psy"  => array("entrees" => array("place" => 0, "non_place" => 0),
+                                    "sorties" => array("place" => 0, "non_place" => 0)));
 $group = CGroups::loadCurrent();
 
 // Récupération de la liste des services et du service selectionné
@@ -25,7 +30,7 @@ $where = array(
            "externe"  => "= '0'",
            "group_id" => "= '$group->_id'"
          );
-$order = "nom";
+$order      = "nom";
 $service    = new CService();
 $services   = $service->loadListWithPerms(PERM_READ, $where, $order);
 $service_id = CValue::getOrSession("service_id", null);
@@ -52,7 +57,7 @@ $ljoin["service"]            = "service.service_id = chambre.service_id";
 $where                       = array();
 $where["service.group_id"]   = "= '$group->_id'";
 $where["service.service_id"] = CSQLDataSource::prepareIn(array_keys($services), $service_id);
-$where["sejour.type"]        = CSQLDataSource::prepareIn(array_keys($sorties) , $type_hospi);
+$where["sejour.type"]        = CSQLDataSource::prepareIn(array_keys($mouvements) , $type_hospi);
 if ($vue) {
   $where["confirme"] = " = '0'";
 }
@@ -66,7 +71,7 @@ $ljoinNP                               = array();
 $ljoinNP["affectation"]                = "sejour.sejour_id = affectation.sejour_id";
 $whereNP                               = array();
 $whereNP["sejour.group_id"]            = "= '$group->_id'";
-$whereNP["sejour.type"]                = CSQLDataSource::prepareIn(array_keys($sorties), $type_hospi);
+$whereNP["sejour.type"]                = CSQLDataSource::prepareIn(array_keys($mouvements), $type_hospi);
 $whereNP["affectation.affectation_id"] = "IS NULL";
 if($service_id) {
   $whereNP["sejour.service_id"] = "= '$service_id'";
@@ -94,21 +99,46 @@ if ($vue) {
 $where["sejour.sortie"]      = "!= affectation.sortie";
 $deplacements = $affectation->countList($where, null, $ljoin);
 
-// Comptage des sorties
-$where["sejour.sortie"]      = "= affectation.sortie";
-$whereNP["sejour.sortie"]    = "BETWEEN '$limit1' AND '$limit2'";
-foreach($sorties as $type => &$_sortie) {
-  if(!$type_hospi || $type_hospi == $type) {
-    $where["sejour.type"] = $whereNP["sejour.type"] = " = '$type'";
-    $_sortie["place"]     = $affectation->countList($where, null, $ljoin);
-    $_sortie["non_place"] = $sejour->countList($whereNP, null, $ljoinNP);
+// Comptage des entrées/sorties
+foreach($mouvements as $type => &$_mouvement) {
+  if(($type_hospi && $type_hospi != $type) || ($type_hospi == "ambu")) {
+    continue;
+  }
+  $where["sejour.type"] = $whereNP["sejour.type"] = " = '$type'";
+  foreach($_mouvement as $type_mouvement => &$_liste) {
+    if($type == "ambu" && $type_mouvement == "sorties") {
+      $_liste["place"]     = 0;
+      $_liste["non_place"] = 0;
+      continue;
+    }
+    if($type_mouvement == "entrees") {
+      if(isset($where["sejour.sortie"])) {
+        unset($where["sejour.sortie"]);
+      }
+      if(isset($whereNP["sejour.sortie"])) {
+        unset($whereNP["sejour.sortie"]);
+      }
+      $where["sejour.entree"]      = "= affectation.entree";
+      $whereNP["sejour.entree"]    = "BETWEEN '$limit1' AND '$limit2'";
+    } else {
+      if(isset($where["sejour.entree"])) {
+        unset($where["sejour.entree"]);
+      }
+      if(isset($whereNP["sejour.entree"])) {
+        unset($whereNP["sejour.entree"]);
+      }
+      $where["sejour.sortie"]      = "= affectation.sortie";
+      $whereNP["sejour.sortie"]    = "BETWEEN '$limit1' AND '$limit2'";
+    }
+    $_liste["place"]     = $affectation->countList($where, null, $ljoin);
+    $_liste["non_place"] = $sejour->countList($whereNP, null, $ljoinNP);
   }
 }
 
 $smarty = new CSmartyDP;
 $smarty->assign("presents"    , $presents);
 $smarty->assign("presentsNP"  , $presentsNP);
-$smarty->assign("sorties"     , $sorties);
+$smarty->assign("mouvements"  , $mouvements);
 $smarty->assign("deplacements", $deplacements);
 $smarty->assign("services"    , $services);
 $smarty->assign("service_id"  , $service_id);

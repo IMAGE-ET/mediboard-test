@@ -2,8 +2,10 @@
 
 Main.add(function () {
   Calendar.regField(getForm("typeVue").date, null);
-  controlTabs = new Control.Tabs.create('tabs-edit-sorties', true);
-  refreshList(null, null, controlTabs.activeContainer.id);
+  controlTabs = new Control.Tabs.create('tabs-edit-mouvements', true);
+  var type           = controlTabs.activeContainer.id.split('_')[0];
+  var type_mouvement = controlTabs.activeContainer.id.split('_')[1];
+  refreshList(null, null, type, type_mouvement);
 });
 
 function saveSortie(oFormSortie, oFormAffectation){
@@ -17,7 +19,7 @@ function addDays(button, days) {
   $V(sortie, Date.fromDATETIME($V(sortie)).addDays(days).toDATETIME());
 }
 
-function refreshList(order_col, order_way, type) {
+function refreshList(order_col, order_way, type, type_mouvement) {
   var oForm = getForm("typeVue");
   var url = new Url("dPhospi", "ajax_list_sorties");
   if (order_col) {
@@ -28,6 +30,9 @@ function refreshList(order_col, order_way, type) {
   }
   if (type) {
     url.addParam("type", type);
+    if (type_mouvement) {
+      url.addParam("type_mouvement", type_mouvement);
+    }
   }
   else {
     url.addParam("type", controlTabs.activeContainer.id);
@@ -35,7 +40,11 @@ function refreshList(order_col, order_way, type) {
   url.addParam("vue", $V(oForm.vue));
   url.addParam("date", $V(oForm.date));
   if (type) {
-    url.requestUpdate(type);
+    if(type_mouvement) {
+      url.requestUpdate(type+"_"+type_mouvement);
+    } else {
+      url.requestUpdate(type+"_");
+    }
   }
   else {
     url.requestUpdate(controlTabs.activeContainer.id);
@@ -52,7 +61,7 @@ function refreshList(order_col, order_way, type) {
           <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
           <select name="type_hospi" style="width: 13em;" onchange="this.form.submit()">
             <option value="">&mdash; Type d'hospitalisation</option>
-            {{foreach from=$sorties item=_sortie key=type}}
+            {{foreach from=$mouvements item=_mouvement key=type}}
             <option value="{{$type}}" {{if $type == $type_hospi}}selected="selected"{{/if}}>
               {{tr}}CSejour._type_admission.{{$type}}{{/tr}}
             </option>
@@ -79,40 +88,48 @@ function refreshList(order_col, order_way, type) {
   </tr>
 </table>
 
-<ul id="tabs-edit-sorties" class="control_tabs">
-  {{foreach from=$sorties item=_sorties key=type}}
-    {{if $_sorties.place || $_sorties.non_place}}
-    <li onmousedown="refreshList(null, null, '{{$type}}')">
-      <a href="#{{$type}}">
+<ul id="tabs-edit-mouvements" class="control_tabs">
+  {{foreach from=$mouvements item=_mouvement key=type}}
+  {{foreach from=$_mouvement item=_liste key=type_mouvement}}
+    {{if $_liste.place || $_liste.non_place}}
+    <li onmousedown="refreshList(null, null, '{{$type}}', '{{$type_mouvement}}')">
+      <a href="#{{$type}}_{{$type_mouvement}}">
         {{if $type == "ambu"}}
           {{tr}}CSejour.type.{{$type}}{{/tr}}
         {{else}}
-          Sorties {{tr}}CSejour.type.{{$type}}{{/tr}}
+          {{tr}}CSejour.type_mouvement.{{$type_mouvement}}{{/tr}} {{tr}}CSejour.type.{{$type}}{{/tr}}
         {{/if}}
-        (<span id="count_{{$type}}">{{$_sorties.place}}/{{$_sorties.non_place}}</span>)
+        (<span id="count_{{$type}}_{{$type_mouvement}}">{{$_liste.place}}/{{$_liste.non_place}}</span>)
       </a>
     </li>
     {{/if}}
   {{/foreach}}
+  {{/foreach}}
   <li onmousedown="refreshList(null, null, 'deplacements')">
-    <a href="#deplacements">Déplacements(<span id="count_deplacements">{{$deplacements}}</span>)</a>
+    <a href="#deplacements_">Déplacements(<span id="count_deplacements_">{{$deplacements}}</span>)</a>
   </li>
+  {{if $type != "ambu"}}
   <li onmousedown="refreshList(null, null, 'presents')">
-    <a href="#presents">Patients présents (<span id="count_presents">{{$presents}}/{{$presentsNP}}</span>)</a>
+    <a href="#presents_">Patients présents (<span id="count_presents_">{{$presents}}/{{$presentsNP}}</span>)</a>
   </li>
+  {{/if}}
 </ul>
 
 <hr class="control_tabs" />
 
-{{foreach from=$sorties item=_sorties key=type}}
-  {{if $_sorties}}
-  <div id="{{$type}}" style="display: none;"></div>
+{{foreach from=$mouvements item=_mouvement key=type}}
+{{foreach from=$_mouvement item=_liste key=type_mouvement}}
+  {{if $_liste}}
+  <div id="{{$type}}_{{$type_mouvement}}" style="display: none;"></div>
   </div>
   {{/if}}
 {{/foreach}}
+{{/foreach}}
 
-<div id="deplacements" style="display: none;">
+<div id="deplacements_" style="display: none;">
 </div>
 
-<div id="presents" style="display: none;">
+{{if $type != "ambu"}}
+<div id="presents_" style="display: none;">
 </div>
+{{/if}}}

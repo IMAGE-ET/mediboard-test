@@ -18,7 +18,6 @@
   <td class="text">
     <strong onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">{{$sejour->_motif_complet}}</strong>
   </td>
-  {{if $type == "presents"}}
   <td class="button">
     {{$sejour->entree|date_format:$conf.datetime}}
     <div style="position: relative;">
@@ -27,7 +26,6 @@
     </div>
     </div>
   </td>
-  {{/if}}
   <td class="button">
     <div {{if !$sejour->sortie_reelle}}class="only-printable"{{/if}}>
       {{if $type == 'presents'}}
@@ -40,7 +38,7 @@
       <div class="not-printable">
       {{assign var=sejour_guid value=$sejour->_guid}}
       <form name="editSortiePrevue-{{$type}}-{{$sejour_guid}}" method="post" action="?"
-        onsubmit="return onSubmitFormAjax(this, { onComplete: function() { refreshList(null, null, '{{$type}}');} })">
+        onsubmit="return onSubmitFormAjax(this, { onComplete: function() { refreshList(null, null, '{{$type}}', '{{$type_mouvement}}');} })">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_sejour_aed" />
         <input type="hidden" name="del" value="0" />

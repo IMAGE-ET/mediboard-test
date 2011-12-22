@@ -1,8 +1,8 @@
 <script type="text/javascript">
-  $("count_{{$type}}").update("{{$update_count}}");
+  $("count_{{$type}}_{{$type_mouvement}}").update("{{$update_count}}");
   {{if $type != "deplacements"}}
   Main.add(function () {
-    controlTabs = new Control.Tabs.create('tabs-edit-sorties-{{$type}}', true);
+    controlTabs = new Control.Tabs.create('tabs-edit-mouvements-{{$type}}_{{$type_mouvement}}', true);
   });
   {{/if}}
 </script>
@@ -16,7 +16,7 @@
   <table class="tbl">
     <tr class="only-printable">
       <th class="title" colspan="100">
-        Déplacements prévus (<span id="count_{{$type}}">{{$deplacements|@count}}</span>)
+        Déplacements ({{$deplacements|@count}})
         &mdash; {{$date|date_format:$conf.longdate}}
       </th>
     </tr>
@@ -40,67 +40,63 @@
   </table>
 {{else}}
   <script type="text/javascript">
-    refreshList_{{$type}} = function(order_col, order_way) {
-      refreshList(order_col, order_way, '{{$type}}');
+    refreshList_{{$type}}{{$type_mouvement}} = function(order_col, order_way) {
+      refreshList(order_col, order_way, '{{$type}}', '{{$type_mouvement}}');
     }
   </script>
-  <ul id="tabs-edit-sorties-{{$type}}" class="control_tabs">
+  <ul id="tabs-edit-mouvements-{{$type}}_{{$type_mouvement}}" class="control_tabs">
     <li>
-      <a href="#places-{{$type}}">Placés (<span id="count_deplacements">{{$sorties|@count}}</span>)</a>
+      <a href="#places-{{$type}}_{{$type_mouvement}}">Placés (<span id="count_deplacements">{{$mouvements|@count}}</span>)</a>
     </li>
     <li>
-      <a href="#non-places-{{$type}}">Non placés (<span id="count_presents">{{$sortiesNP|@count}}</span>)</a>
+      <a href="#non-places-{{$type}}_{{$type_mouvement}}">Non placés (<span id="count_presents">{{$mouvementsNP|@count}}</span>)</a>
     </li>
   </ul>
   <hr class="control_tabs" />
-  <div id="places-{{$type}}" style="display: none;">
+  <div id="places-{{$type}}_{{$type_mouvement}}" style="display: none;">
   <table class="tbl">
     <tr class="only-printable">
       <th class="title" colspan="100">
         {{if $type == "presents"}}
-          Patients présents (<span id="count_{{$type}}">{{$sorties|@count}}/{{$sortiesNP|@count}}</span>)
+          Patients présents ({{$mouvements|@count}}/{{$mouvementsNP|@count}})
         {{else}}
-          Sorties {{tr}}CSejour.type.{{$type}}{{/tr}} prévues (<span id="count_{{$type}}">{{$sorties|@count}}/{{$sortiesNP|@count}}</span>)
+          {{tr}}CSejour.type_mouvement.{{$type_mouvement}}{{/tr}} {{tr}}CSejour.type.{{$type}}{{/tr}} ({{$mouvements|@count}}/{{$mouvementsNP|@count}})
         {{/if}}
         &mdash; {{$date|date_format:$conf.longdate}}
       </th>
     </tr>
     <tr>
       <th class="not-printable">
-        <button class="print notext" style="float:left;" onclick="$('places-{{$type}}').print()">{{tr}}Print{{/tr}}</button>
+        <button class="print notext" style="float:left;" onclick="$('places-{{$type}}_{{$type_mouvement}}').print()">{{tr}}Print{{/tr}}</button>
         Sortie
       </th>
-      <th>{{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way function=refreshList_$type}}</th>
-      <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_$type}}</th>
+      <th>{{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}</th>
+      <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}</th>
       <th>Motif</th>
-      <th>{{mb_colonne class="CAffectation" field="_chambre"   order_col=$order_col order_way=$order_way function=refreshList_$type}}</th>
-      {{if $type == "presents"}}
+      <th>{{mb_colonne class="CAffectation" field="_chambre"   order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}</th>
       <th>Entree</th>
-      {{/if}}
-      <th>{{mb_colonne class="CAffectation" field="sortie"     order_col=$order_col order_way=$order_way function=refreshList_$type}}</th>
+      <th>{{mb_colonne class="CAffectation" field="sortie"     order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}</th>
     </tr>
-    {{foreach from=$sorties item=_sortie}}
+    {{foreach from=$mouvements item=_sortie}}
       {{mb_include module=dPhospi template=inc_check_sortie_line}}
     {{foreachelse}}
       <tr><td colspan="100" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
     {{/foreach}}
   </table>
   </div>
-  <div id="non-places-{{$type}}" style="display: none;">
+  <div id="non-places-{{$type}}_{{$type_mouvement}}" style="display: none;">
     <table class="tbl">
       <tr>
         <th>
-          <button class="print notext not-printable" style="float:left;" onclick="$('non-places-{{$type}}').print()">{{tr}}Print{{/tr}}</button>
-          {{mb_colonne class="CAffectation" field="_patient" order_col=$order_col order_way=$order_way function=refreshList_$type}}
+          <button class="print notext not-printable" style="float:left;" onclick="$('non-places-{{$type}}{{$type_mouvement}}').print()">{{tr}}Print{{/tr}}</button>
+          {{mb_colonne class="CAffectation" field="_patient" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}
         </th>
-        <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_$type}}</th>
+        <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}</th>
         <th>Motif</th>
-        {{if $type == "presents"}}
         <th>Entree</th>
-        {{/if}}
-        <th>{{mb_colonne class="CAffectation" field="sortie" order_col=$order_col order_way=$order_way function=refreshList_$type}}</th>
+        <th>{{mb_colonne class="CAffectation" field="sortie" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}</th>
       </tr>
-      {{foreach from=$sortiesNP item=_sortie}}
+      {{foreach from=$mouvementsNP item=_sortie}}
         {{mb_include module=dPhospi template=inc_check_sortieNP_line}}
       {{foreachelse}}
         <tr><td colspan="100" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>

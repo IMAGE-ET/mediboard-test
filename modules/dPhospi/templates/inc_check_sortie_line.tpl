@@ -42,7 +42,6 @@
   <td class="text {{if $sejour->sortie_reelle}}effectue{{/if}}">
     {{$_sortie->_ref_lit}}
   </td>
-  {{if $type == "presents"}}
   <td class="narrow">
     {{$sejour->entree|date_format:$conf.datetime}}
     <div style="position: relative;">
@@ -51,7 +50,6 @@
     </div>
     </div>
   </td>
-  {{/if}}
   <td class="narrow">
     <div {{if !$_sortie->confirme && !$sejour->sortie_reelle}}class="only-printable"{{/if}}>
       {{if $type == 'presents'}}
@@ -64,7 +62,7 @@
       <div class="not-printable">
       {{assign var=aff_guid value=$_sortie->_guid}}
       <form name="editSortiePrevue-{{$type}}-{{$aff_guid}}" method="post" action="?"
-        onsubmit="return onSubmitFormAjax(this, { onComplete: function() { refreshList(null, null, '{{$type}}'); } })">
+        onsubmit="return onSubmitFormAjax(this, { onComplete: function() { refreshList(null, null, '{{$type}}', {{$type_mouvement}}); } })">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_sejour_aed" />
         <input type="hidden" name="del" value="0" />

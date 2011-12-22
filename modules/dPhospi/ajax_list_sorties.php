@@ -9,17 +9,21 @@
  */
 
 
-$type         = CValue::get("type");
-$vue          = CValue::getOrSession("vue"      , 0);
-$praticien_id = CValue::getOrSession("praticien_id", null);
-$service_id   = CValue::getOrSession("service_id"  , null);
-$order_way    = CValue::getOrSession("order_way"   , "ASC");
-$order_col    = CValue::getOrSession("order_col"   , "_patient");
+$type           = CValue::get("type");
+$type_mouvement = CValue::get("type_mouvement");
+$vue            = CValue::getOrSession("vue"         , 0);
+$praticien_id   = CValue::getOrSession("praticien_id", null);
+$service_id     = CValue::getOrSession("service_id"  , null);
+$order_way      = CValue::getOrSession("order_way"   , "ASC");
+$order_col      = CValue::getOrSession("order_col"   , "_patient");
 
 $group = CGroups::loadCurrent();
 
-$types_hospi = array("comp","ambu","ssr","psy");
+$types_hospi = array("comp","ambu","urg","ssr","psy");
 $type_hospi  = CValue::getOrSession("type_hospi", null);
+
+$entrees = array();
+$sorties = array();
 
 // Récupération de la liste des services
 $where = array();
@@ -98,20 +102,20 @@ if($type == 'presents') {
   $presentsNP = $sejour->loadList($whereNP, $orderNP, null, null, $ljoinNP);
   
   // Chargements des détails des séjours
-  foreach($presents as $_sortie) {
-    $_sortie->loadRefsFwd();
-    $sejour = $_sortie->_ref_sejour;
+  foreach($presents as $_present) {
+    $_present->loadRefsFwd();
+    $sejour = $_present->_ref_sejour;
     $sejour->loadRefPatient(1);
     $sejour->loadRefPraticien(1);
     $sejour->checkDaysRelative($date);
     $sejour->loadRefsOperations();
-    $_sortie->_ref_next->loadRefLit(1)->loadCompleteView();
+    $_present->_ref_next->loadRefLit(1)->loadCompleteView();
   }
   foreach($presentsNP as $sejour) {
     $sejour->loadRefPatient(1);
     $sejour->loadRefPraticien(1);
-    $sejour->loadRefsOperations();
     $sejour->checkDaysRelative($date);
+    $sejour->loadRefsOperations();
   }
   
 // Récupération des déplacements du jour
@@ -137,6 +141,37 @@ if($type == 'presents') {
     $_deplacement->_ref_next->loadRefLit()->loadCompleteView();
   }
 
+// Récupération des entrées du jour
+} elseif($type_mouvement == "entrees") {
+  // Patients placés
+  $where["affectation.entree"] = "BETWEEN '$limit1' AND '$limit2'";
+  $where["sejour.entree"] = "= affectation.entree";
+  $where["sejour.type"] = " = '$type'";
+  $mouvements = $affectation->loadList($where, $order, null, null, $ljoin);
+  
+  // Chargements des détails des séjours
+  foreach($mouvements as $_mouvement) {
+    $_mouvement->loadRefsFwd();
+    $sejour = $_mouvement->_ref_sejour;
+    $sejour->loadRefPatient(1);
+    $sejour->loadRefPraticien(1);
+    $sejour->checkDaysRelative($date);
+    $sejour->loadRefsOperations();
+    $_mouvement->_ref_next->loadRefLit(1)->loadCompleteView();
+  }
+  
+  // Patients non placés
+  $whereNP["sejour.entree"] = "BETWEEN '$limit1' AND '$limit2'";
+  $whereNP["sejour.type"]   = " = '$type'";
+  $mouvementsNP = $sejour->loadList($whereNP, $orderNP, null, null, $ljoinNP);
+  
+  // Chargements des détails des séjours
+  foreach($mouvementsNP as $sejour) {
+    $sejour->loadRefPatient(1);
+    $sejour->loadRefPraticien(1);
+    $sejour->checkDaysRelative($date);
+    $sejour->loadRefsOperations();
+  }
 // Récupération des sorties du jour
 } else {
   // Patients placés
@@ -146,27 +181,29 @@ if($type == 'presents') {
   if ($vue) {
     $where["confirme"] = " = '0'";
   }
-  $sorties = $affectation->loadList($where, $order, null, null, $ljoin);
+  $mouvements = $affectation->loadList($where, $order, null, null, $ljoin);
   
   // Chargements des détails des séjours
-  foreach($sorties as $_sortie) {
-    $_sortie->loadRefsFwd();
+  foreach($mouvements as $_mouvement) {
+    $_mouvement->loadRefsFwd();
     $sejour = $_sortie->_ref_sejour;
     $sejour->loadRefPatient(1);
     $sejour->loadRefPraticien(1);
+    $sejour->checkDaysRelative($date);
     $sejour->loadRefsOperations();
-    $_sortie->_ref_next->loadRefLit(1)->loadCompleteView();
+    $_mouvement->_ref_next->loadRefLit(1)->loadCompleteView();
   }
   
   // Patients non placés
   $whereNP["sejour.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
   $whereNP["sejour.type"]   = " = '$type'";
-  $sortiesNP = $sejour->loadList($whereNP, $orderNP, null, null, $ljoinNP);
+  $mouvementsNP = $sejour->loadList($whereNP, $orderNP, null, null, $ljoinNP);
   
   // Chargements des détails des séjours
-  foreach($sortiesNP as $sejour) {
+  foreach($mouvementsNP as $sejour) {
     $sejour->loadRefPatient(1);
     $sejour->loadRefPraticien(1);
+    $sejour->checkDaysRelative($date);
     $sejour->loadRefsOperations();
   }
 }
@@ -175,23 +212,24 @@ if($type == 'presents') {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("type"         , $type);
-$smarty->assign("type_hospi"   , $type_hospi);
-$smarty->assign("order_way"    , $order_way);
-$smarty->assign("order_col"    , $order_col);
-$smarty->assign("date"         , $date);
+$smarty->assign("type"          , $type);
+$smarty->assign("type_mouvement", $type_mouvement);
+$smarty->assign("type_hospi"    , $type_hospi);
+$smarty->assign("order_way"     , $order_way);
+$smarty->assign("order_col"     , $order_col);
+$smarty->assign("date"          , $date);
 if ($type == "deplacements") {
   $smarty->assign("deplacements", $deplacements);
   $smarty->assign("update_count", count($deplacements));
 }
 elseif($type == "presents") {
-  $smarty->assign("sorties"     , $presents);
-  $smarty->assign("sortiesNP"   , $presentsNP);
+  $smarty->assign("mouvements"  , $presents);
+  $smarty->assign("mouvementsNP", $presentsNP);
   $smarty->assign("update_count", count($presents)."/".count($presentsNP));
 } else {
-  $smarty->assign("sorties"      , $sorties);
-  $smarty->assign("sortiesNP"    , $sortiesNP);
-  $smarty->assign("update_count", count($sorties)."/".count($sortiesNP));
+  $smarty->assign("mouvements"  , $mouvements);
+  $smarty->assign("mouvementsNP", $mouvementsNP);
+  $smarty->assign("update_count", count($mouvements)."/".count($mouvementsNP));
 }
 $smarty->assign("vue"          , $vue);
 $smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));
