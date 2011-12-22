@@ -862,10 +862,7 @@ class CSetupsystem extends CSetup {
       ADD `debug` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
     
-    
     /* 
-    // pour plus tard
-    // TD: pas convaincu...
     $query = "ALTER TABLE `ex_class_field` 
               ADD `coord_field_colspan` TINYINT (4) UNSIGNED NOT NULL DEFAULT '1' AFTER `coord_field_y`,
               ADD `coord_field_rowspan` TINYINT (4) UNSIGNED NOT NULL DEFAULT '1' AFTER `coord_field_colspan`";
@@ -873,11 +870,15 @@ class CSetupsystem extends CSetup {
     */
     
     $this->makeRevision("1.0.89");
-    
     $query = "ALTER TABLE `source_file_system` 
-                ADD `fileextension_write_end` VARCHAR (255);";
+              ADD `fileextension_write_end` VARCHAR (255);";
+    $this->addQuery($query);
+		
+    $this->makeRevision("1.0.90");
+    $query = "ALTER TABLE `ex_class_field` 
+              CHANGE `report_level` `report_level` ENUM ('1','2','host')";
     $this->addQuery($query);
         
-    $this->mod_version = "1.0.90";
+    $this->mod_version = "1.0.91";
   }
 }

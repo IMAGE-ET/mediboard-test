@@ -146,17 +146,27 @@ class CExClass extends CMbObject {
   function getLatestExObject(CMbObject $object, $level = 1){
     $ex_object = $this->getExObjectInstance();
 
-    if ($level == 1) {
-      $where = array(
-        "reference_class" => "= '$object->_class'",
-        "reference_id"    => "= '$object->_id'",
-      );
-    }
-    else {
-      $where = array(
-        "reference2_class" => "= '$object->_class'",
-        "reference2_id"    => "= '$object->_id'",
-      );
+    switch($level) {
+      case 1:
+        $where = array(
+          "reference_class" => "= '$object->_class'",
+          "reference_id"    => "= '$object->_id'",
+        );
+        break;
+        
+      case 2:
+        $where = array(
+          "reference2_class" => "= '$object->_class'",
+          "reference2_id"    => "= '$object->_id'",
+        );
+        break;
+        
+      case "host":
+        $where = array(
+          "object_class" => "= '$object->_class'",
+          "object_id"    => "= '$object->_id'",
+        );
+        break;
     }
     
     $ex_object->loadObject($where, "ex_object_id DESC");
@@ -557,10 +567,10 @@ class CExClass extends CMbObject {
     if (is_string($object)) {
       $object = CMbObject::loadFromGuid($object);
     }
-		
-		if ($type == "required" && !CValue::read($object->_spec->events[$event], "auto", false)) {
-			return array();
-		}
+    
+    if ($type == "required" && !CValue::read($object->_spec->events[$event], "auto", false)) {
+      return array();
+    }
     
     $ex_class = new self;
     $ex_class->host_class = $object->_class;

@@ -140,6 +140,7 @@ class CExObject extends CMbMetaObject {
     
     $latest_1 = $ex_class->getLatestExObject($this->_ref_reference_object_1, 1);
     $latest_2 = $ex_class->getLatestExObject($this->_ref_reference_object_2, 2);
+    $latest_host = $ex_class->getLatestExObject($this->_ref_object, "host");
     
     $fields = $this->_ref_ex_class->loadRefsAllFields(true);
     
@@ -168,15 +169,13 @@ class CExObject extends CMbMetaObject {
         
         // on regarde tous les champs du concept
         foreach($_concept_fields as $_concept_field) {
-          
           $_ex_class = $_concept_field->loadRefExClass();
           
           // en fonction du niveau
-          if ($_level == 1) {
-            $_concept_latest = $_ex_class->getLatestExObject($this->_ref_reference_object_1, 1);
-          }
-          else {
-            $_concept_latest = $_ex_class->getLatestExObject($this->_ref_reference_object_2, 2);
+          switch($_level) {
+            case 1:      $_concept_latest = $_ex_class->getLatestExObject($this->_ref_reference_object_1, 1); break;
+            case 2:      $_concept_latest = $_ex_class->getLatestExObject($this->_ref_reference_object_2, 2); break;
+            case "host": $_concept_latest = $_ex_class->getLatestExObject($this->_ref_object, "host");
           }
           
           // si pas d'objet precedemment enregistré
@@ -210,7 +209,11 @@ class CExObject extends CMbMetaObject {
         // ceux de la meme exclass
         if (!$latest_1->_id && !$latest_2->_id) continue;
         
-        $_base = (($_level == 1) ? $latest_1 : $latest_2);
+        switch($_level) {
+          case 1:      $_base = $latest_1;    break;
+          case 2:      $_base = $latest_2;    break;
+          case "host": $_base = $latest_host; break;
+        }
         
         if ($_base->$field_name == "") continue;
         

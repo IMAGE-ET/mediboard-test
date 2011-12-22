@@ -200,10 +200,17 @@ Main.add(function(){
       <th>Report de valeur</th>
       <td>
         {{assign var=class_options value=$ex_field->_ref_ex_group->_ref_ex_class->_host_class_options}}
+        {{assign var=_host_class value=$ex_field->_ref_ex_group->_ref_ex_class->host_class}}
       
         {{if $ex_field->_id}}
           <label><input type="radio" name="report_level" value="" {{if $ex_field->report_level == ""}}  checked="checked" {{/if}} /> Aucun </label>
-          {{assign var=_host_class value=$ex_field->_ref_ex_group->_ref_ex_class->host_class}}
+          
+          {{if $_host_class != "CMbObject"}}
+            <label>
+              <input type="radio" name="report_level" value="host" {{if $ex_field->report_level == "host"}} checked="checked" {{/if}} />
+              {{tr}}{{$_host_class}}{{/tr}}
+            </label>
+          {{/if}}
           
           {{if $class_options.reference1.0}}
             <label>

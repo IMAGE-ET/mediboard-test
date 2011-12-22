@@ -20,10 +20,13 @@ class CExClassField extends CExListItemsOwner {
   var $formula = null;
   var $_formula = null;
   
-  var $coord_label_x = null; 
-  var $coord_label_y = null; 
   var $coord_field_x = null; 
   var $coord_field_y = null; 
+  //var $coord_field_colspan = null; 
+  //var $coord_field_rowspan = null; 
+  
+  var $coord_label_x = null; 
+  var $coord_label_y = null; 
   
   var $_locale = null;
   var $_locale_desc = null;
@@ -117,7 +120,7 @@ class CExClassField extends CExListItemsOwner {
     $props["ex_group_id"] = "ref class|CExClassFieldGroup cascade";
     $props["concept_id"]  = "ref class|CExConcept autocomplete|name";
     $props["name"]        = "str notNull protected canonical";
-    $props["report_level"]= "enum list|1|2";
+    $props["report_level"]= "enum list|1|2|host";
     $props["prop"]        = "text notNull";
     
     $props["formula"]     = "text"; // canonical tokens
@@ -125,6 +128,9 @@ class CExClassField extends CExListItemsOwner {
     
     $props["coord_field_x"] = "num min|0 max|100";
     $props["coord_field_y"] = "num min|0 max|100";
+    //$props["coord_field_colspan"] = "num min|1 max|100";
+    //$props["coord_field_rowspan"] = "num min|1 max|100";
+    
     $props["coord_label_x"] = "num min|0 max|100";
     $props["coord_label_y"] = "num min|0 max|100";
     
@@ -279,6 +285,13 @@ class CExClassField extends CExListItemsOwner {
       return $msg;
     }
     
+    // verification des coordonnées
+    /*$where = array(
+      $this->_spec->key => "!= '$this->_id'",
+      "coord_field_x" => "NOT BETWEEN coord_field_x AND coord_field_x + coord_field_colspan",
+      "coord_field_y" => "NOT BETWEEN coord_field_y AND coord_field_y + coord_field_rowspan",
+    );*/
+    
     $this->formulaToDB(true);
     
     return parent::check();
@@ -399,13 +412,21 @@ class CExClassField extends CExListItemsOwner {
   }
   
   function updatePlainFields(){
+    //$coord_modified = $this->fieldModified("coord_field_x") || $this->fieldModified("coord_field_y");
+    $group_modified = $this->fieldModified("ex_group_id");
+    
     // If we change its group, we need to reset its coordinates
-    if ($this->fieldModified("ex_group_id")) {
+    if ($group_modified) {
       $this->coord_field_x = "";
       $this->coord_field_y = "";
       $this->coord_label_x = "";
       $this->coord_label_y = "";
     }
+    
+    /*if ($group_modified || $coord_modified) {
+      $this->coord_field_colspan = "";
+      $this->coord_field_rowspan = "";
+    }*/
     
     return parent::updatePlainFields();
   }
@@ -429,11 +450,11 @@ class CExClassField extends CExListItemsOwner {
     if (!$this->_id && $this->concept_id) {
       $this->prop = $this->loadRefConcept()->prop;
     }
-		
-		// pour la valeur par defaut des enums
-		if ($this->prop !== null) {
-		  $this->prop = str_replace("\\", "\\\\", $this->prop);
-		}
+    
+    // pour la valeur par defaut des enums
+    if ($this->prop !== null) {
+      $this->prop = str_replace("\\", "\\\\", $this->prop);
+    }
     
     if (!$this->_id) {
       $this->name = self::getUniqueName();
