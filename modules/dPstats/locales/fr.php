@@ -1,7 +1,7 @@
 <?php
 $locales['CTempsHospi'] = 'Temps d\'hospitalisation';
 $locales['CTempsHospi.type.ambu'] = 'Ambulatoire';
-$locales['CTempsHospi.type.comp'] = 'Hospitalisation complète';
+$locales['CTempsHospi.type.comp'] = 'Hospi. complète';
 $locales['CTempsHospi.type.psy'] = 'Psychiatrie';
 $locales['CTempsHospi.type.seances'] = 'Séances';
 $locales['CTempsHospi.type.ssr'] = 'Soins de suite';

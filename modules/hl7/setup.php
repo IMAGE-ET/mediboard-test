@@ -180,7 +180,7 @@ class CSetuphl7 extends CSetup {
     $this->updateTableEntry("4", $set, $and);
     
     // Table 0032 - Charge price indicator
-    // 03 - Hospitalisation complète
+    // 03 - Hospi. complète
     $set = array(
       "code_hl7_to"   => "03",
       "code_mb_from"  => "comp",
