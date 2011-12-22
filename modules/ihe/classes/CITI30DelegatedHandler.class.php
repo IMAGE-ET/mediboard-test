@@ -28,16 +28,29 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
-    
-    if ($mbObject->_eai_initiateur_group_id) {
-      return;
-    }
-    
+
     $receiver = $mbObject->_receiver;
+    $receiver->getInternationalizationCode($this->transaction);
     
     if ($mbObject instanceof CCorrespondantPatient) {
       $mbObject = $mbObject->loadRefPatient();
       $mbObject->_receiver = $receiver;
+    }
+    
+    switch ($mbObject->loadLastLog()->type) {
+      case "create":
+        $code = "A28";
+        break;
+      case "store":
+        $code = "A31";
+        break;
+      default:
+        $code = null;
+        break;
+    }
+    
+    if ($mbObject->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
+      return;
     }
    
     if (!$mbObject->_IPP) {
@@ -62,18 +75,6 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     if (!$receiver->_configs["send_all_patients"] && !$mbObject->_IPP) {
       return;
     }
-
-    switch ($mbObject->loadLastLog()->type) {
-      case "create":
-        $code = "A28";
-        break;
-      case "store":
-        $code = "A31";
-        break;
-      default:
-        $code = null;
-        break;
-    }
     
     $this->sendITI($this->profil, $this->transaction, $code, $mbObject);
     
@@ -97,6 +98,7 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
       $patient->updateFormFields();
       
       $receiver = $mbObject->_receiver; 
+      $receiver->getInternationalizationCode($this->transaction);
       
       foreach ($mbObject->_fusion as $group_id => $infos_fus) {
         if ($receiver->group_id != $group_id) {
@@ -117,7 +119,11 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
         if ((!$patient1_ipp && $patient2_ipp) || ($patient1_ipp && !$patient2_ipp)) {
           if ($patient2_ipp)
             $patient->_IPP = $patient2_ipp;
-  
+          
+          if (!$this->isMessageSupported($this->transaction, "A31", $receiver)) {
+            return;
+          }
+            
           $this->sendITI($this->profil, $this->transaction, "A31", $patient);
           continue;
         }
@@ -125,6 +131,10 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
         // Cas 2 IPPs : Message de fusion
         if ($patient1_ipp && $patient2_ipp) {
           $patient->_patient_elimine = $patient_eliminee;
+          
+          if (!$this->isMessageSupported($this->transaction, "A40", $receiver)) {
+            return;
+          }
           
           $this->sendITI($this->profil, $this->transaction, "A40", $patient);
           continue;

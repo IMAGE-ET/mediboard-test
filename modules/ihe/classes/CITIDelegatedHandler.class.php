@@ -18,27 +18,40 @@
 class CITIDelegatedHandler {
   static $handled     = array ();
   
+  function getI18nCode($receiver) {
+    $i18n_code = $receiver->_i18n_code;
+    if ($i18n_code) {
+      $i18n_code = "_$i18n_code";
+    }
+    
+    return $i18n_code;
+  }
+  
+  function isMessageSupported($transaction, $code, $receiver) {
+    $i18n_code = $this->getI18nCode($receiver);
+    if (!$receiver->isMessageSupported("CHL7EventADT{$code}{$i18n_code}")) {
+      return false;
+    }
+    
+    return true;
+  }
+  
   function sendITI($profil, $transaction, $code, CMbObject $mbObject) {
     $receiver = $mbObject->_receiver;
 
     if (!$code) {
       throw new CMbException("CITI-code-none");
     }
-    
-    $internationalization_code = $receiver->getInternationalizationCode($transaction);
-    if ($internationalization_code) {
-      $internationalization_code = "_$internationalization_code";
-      $profil = $profil.$internationalization_code;
-    }
 
-    if (!$receiver->isMessageSupported("CHL7EventADT{$code}{$internationalization_code}")) {
-      return;
+    $i18n_code = $this->getI18nCode($receiver);
+    if ($i18n_code) {
+      $profil = $profil.$i18n_code;
     }
     
     $hl7_version = $receiver->getHL7Version($transaction);
-    $class       = "CHL7".$hl7_version."EventADT".$code.$internationalization_code;
+    $class       = "CHL7".$hl7_version."EventADT".$code.$i18n_code;
     if (!class_exists($class)) {
-      trigger_error("class-CHL7".$hl7_version."EventADT".$code.$internationalization_code."-not-found", UI_MSG_ERROR);
+      trigger_error("class-CHL7".$hl7_version."EventADT".$code.$i18n_code."-not-found", UI_MSG_ERROR);
       return;  
     }
 

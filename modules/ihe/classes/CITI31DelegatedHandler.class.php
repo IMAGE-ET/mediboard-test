@@ -31,12 +31,14 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
-    
-    $receiver = $mbObject->_receiver;  
-    
+
+    $receiver = $mbObject->_receiver;
+    $receiver->getInternationalizationCode($this->transaction);  
+
     // Traitement Sejour
     if ($mbObject instanceof CSejour) {
       $sejour = $mbObject;
+      $sejour->loadRefPatient();
       
       // Si Serveur
       if (CAppUI::conf('smp server')) {} 
@@ -44,6 +46,13 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       else {
         $code = $this->getCode($sejour);
         
+        // Cas où : 
+        // * on est l'initiateur du message 
+        // * le destinataire ne supporte pas le message
+        if ($sejour->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver) || $sejour->_no_synchro) {
+          return;
+        }
+
         if (!$sejour->_NDA) {
           $NDA = new CIdSante400();
           $NDA->loadLatestFor($sejour, $receiver->_tag_sejour);
@@ -62,28 +71,13 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
           $sejour->_NDA = $NDA->id400;
         }
         
-        $insert = in_array($code, CHL7v2SegmentZBE::$actions["INSERT"]);
-        $update = in_array($code, CHL7v2SegmentZBE::$actions["UPDATE"]);
-        $cancel = in_array($code, CHL7v2SegmentZBE::$actions["CANCEL"]);
-        
-        $movement                = new CMovement();
-        $movement->object_class  = $mbObject->_class;
-        $movement->object_id     = $mbObject->_id;
-        $movement->movement_type = $mbObject->getMovementType();
-        if ($insert) {
-          $movement->original_trigger_code = $code;
-          $movement->loadMatchingObject();
+        $current_affectation = null;
+        // Cas où lors de l'entrée réelle j'ai une affectation qui n'a pas été envoyée
+        if ($sejour->fieldModified("entree_reelle") && !$sejour->_old->entree_reelle) {
+          $current_affectation = $sejour->getCurrAffectation();
         }
-        elseif ($update || $cancel) {
-          $movement->cancel = 0;
-          $movement->loadMatchingObject();
-          
-          if ($cancel) {
-            $movement->cancel = 1;
-          }         
-        }
-        
-        $movement->store();
+
+        $this->createMovement($code, $sejour, $current_affectation);
 
         // Envoi de l'événement
         $this->sendITI($this->profil, $this->transaction, $code, $sejour);
@@ -94,8 +88,87 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if ($mbObject instanceof CAffectation) {
       $affectation = $mbObject;
       
+      $last_log = $affectation->loadLastLog();
+      if (!in_array($last_log->type, array("create", "store"))) {
+        return null;
+      }
+
+      $sejour = $affectation->loadRefSejour();
+      $sejour->loadRefPatient();
+      $sejour->_receiver = $receiver;
       
+      $current_affectation = $sejour->getCurrAffectation();
+      
+      // Création d'une affectation
+      if ($last_log->type == "create") {
+        // Création d'un nouveau mouvement ?
+        if ($affectation->_id != $current_affectation->_id) {
+          return;
+        }
+      }
+      
+      // Modifcation d'une affectation
+      if ($last_log->type == "store") {
+        // Affectation effectuée on passe à la suivante ? 
+        if (!$affectation->fieldModified("effectue", 1)) {
+          return;
+        }
+        
+        // Dans le cas où l'affectation est effectuée avant la date, on charge la suivante
+        if ($affectation->_id == $current_affectation->_id) {
+          $sejour->loadSurrAffectations();
+          $affectation = $sejour->_ref_next_affectation;
+        }
+      }
+      
+      $code = "A02";
+      
+      // Cas où : 
+      // * on est l'initiateur du message 
+      // * le destinataire ne supporte pas le message
+      if ($sejour->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
+        return;
+      }
+
+      $this->createMovement($code, $sejour, $affectation);
+              
+      // Envoi de l'événement
+      $this->sendITI($this->profil, $this->transaction, $code, $sejour);
     }
+  }
+  
+  function createMovement($code, CSejour $sejour, CAffectation $affectation = null) {
+    $insert = in_array($code, CHL7v2SegmentZBE::$actions["INSERT"]);
+    $update = in_array($code, CHL7v2SegmentZBE::$actions["UPDATE"]);
+    $cancel = in_array($code, CHL7v2SegmentZBE::$actions["CANCEL"]);
+    
+    $movement = new CMovement();
+    // Initialise le mouvement 
+    $movement->sejour_id     = $sejour->_id;
+    $movement->movement_type = $sejour->getMovementType();
+
+    $last_log = $sejour->loadLastLog();
+  
+    if ($affectation) {
+      $movement->affectation_id = $affectation->_id;  
+    }
+    
+    if ($insert) {
+      $movement->original_trigger_code = $code;
+      $movement->loadMatchingObject();
+    }
+    elseif ($update || $cancel) {
+      $movement->cancel = 0;
+      $movement->loadMatchingObject();
+      
+      if ($cancel) {
+        $movement->cancel = 1;
+      }         
+    }
+      
+    $movement->store();
+    
+    return $sejour->_ref_hl7_movement = $movement;
   }
   
   function getCode(CSejour $sejour) {
@@ -144,13 +217,14 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       //}
       
       // Cas d'une mutation ? 
-      if ($sejour->fieldModified("service_entree_id")) {
+      /*if ($sejour->fieldModified("service_entree_id")) {
         return "A02";
       }
+      
       // Annulation de la mutation ? 
       if ($sejour->fieldModified("service_entree_id", "")) {
         return "A12";
-      }
+      }*/
       
       // Bascule externe devient hospitalisé (outpatient > inpatient)
       if ($sejour->fieldModified("type") 

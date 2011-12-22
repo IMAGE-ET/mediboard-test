@@ -83,11 +83,11 @@ class CMovement extends CMbObject {
       $this->sejour_id = $object->_id;
     }
     if ($object instanceof CAffectation) {
-      $sejour = $object->_ref_sejour;
+      $sejour = $object->loadRefSejour();
       $this->sejour_id      = $sejour->_id;
       $this->affectation_id = $object->_id;
     }
-    
+
     $this->movement_type = $object->getMovementType();
     $this->loadMatchingObject();
   }

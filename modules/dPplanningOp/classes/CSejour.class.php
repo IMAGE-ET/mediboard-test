@@ -159,6 +159,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_ref_tasks_not_created       = null;
 	var $_ref_transmissions           = null;
 	var $_ref_observations            = null;
+	var $_ref_hl7_movement            = null;
   
   // External objects
   var $_ext_diagnostic_principal = null;
@@ -2082,7 +2083,7 @@ class CSejour extends CCodable implements IPatientRelated {
     } 
     // Praticien
     else {
-      $affectation_uf->object_id    = $this->_ref_praticien->_id;
+      $affectation_uf->object_id    = $this->loadRefPraticien()->_id;
       $affectation_uf->object_class = "CMediusers";
     }
     

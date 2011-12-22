@@ -21,6 +21,7 @@ class CReceiverIHE extends CInteropReceiver {
   var $receiver_ihe_id  = null;
   
   var $_extension       = null;
+  var $_i18n_code       = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -81,10 +82,10 @@ class CReceiverIHE extends CInteropReceiver {
     $iti_hl7_version = $this->_configs[$transaction."_HL7_version"];
     
     if (preg_match("/([A-Z]{2})_(.*)/", $iti_hl7_version, $matches)) {
-      return $matches[1];
+      $this->_i18n_code = $matches[1];
     }
     
-    return null;
+    return $this->_i18n_code;
   }
   
   function sendEvent($evenement, CMbObject $mbObject) {

@@ -146,22 +146,12 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   function addZBE(CSejour $sejour = null) {
     $ZBE = CHL7v2Segment::create("ZBE", $this->message);
     $ZBE->sejour = $sejour;
-    $ZBE->curr_affectation = $sejour->getCurrAffectation();
-    $movement = new CMovement();
-    $movement->cancel = 0;
-    if (in_array($this->code, CHL7v2SegmentZBE::$actions["CANCEL"])) {
-      $movement->cancel = 1;
+    $movement = $sejour->_ref_hl7_movement;
+    $affectation = new CAffectation();
+    if ($movement->affectation_id) {
+      $affectation->load($movement->affectation_id);
     }
-        
-    if (!$ZBE->curr_affectation->_id) {
-      // Récupération du mouvement du séjour
-      $movement->getMovement($sejour);
-    } 
-    else {
-      // Récupération du mouvement de l'affectation
-      $movement->getMovement($ZBE->curr_affectation);
-    }
-
+    $ZBE->curr_affectation = $affectation;
     $ZBE->movement = $movement;
     $ZBE->build($this);
   }
