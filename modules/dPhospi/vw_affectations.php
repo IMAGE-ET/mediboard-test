@@ -117,6 +117,8 @@ if ($can->edit) {
     case "praticien" :  
       $order = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
       break;
+    case "patient" :
+      $order = "patients.nom, patients.prenom";
   }
   
   switch ($_type_admission) {
