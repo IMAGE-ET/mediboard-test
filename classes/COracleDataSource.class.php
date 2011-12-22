@@ -16,7 +16,7 @@ class COracleDataSource extends CSQLDataSource {
       return;
     }
     
-    if (false === $this->link = oci_connect($user, $pass, "$host/$name", "AL32UTF8")) {
+    if (false === $this->link = oci_connect($user, $pass, "$host/$name")) {
       $error = $this->error();
       trigger_error( "FATAL ERROR: Connection to Oracle database '$host/$name' failed.\n".$error['message'], E_USER_ERROR );
       return;
