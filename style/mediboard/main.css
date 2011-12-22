@@ -59,7 +59,8 @@ div.text {
 
 td.compact,
 th.compact,
-div.compact {
+div.compact,
+span.compact {
   line-height: 1;
   font-size: 0.9em; 
   color: #666;

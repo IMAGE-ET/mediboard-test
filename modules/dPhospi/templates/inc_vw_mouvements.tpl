@@ -144,7 +144,7 @@
                               {{if $vue == "classique"}}
                                 <br />
                                 <span class="compact">
-                                  {{$_sejour->libelle}}
+                                  {{$_sejour->_motif_complet}}
                                 </span>
                               {{/if}}
                             {{else}}
@@ -154,7 +154,7 @@
                           {{foreach from=$_sejour->_ref_operations item=_operation}}
                             {{math equation=x*(y+4.6) x=$_operation->_debut_offset y=$td_width assign=offset_op}}
                             {{math equation=x*(y+4.6) x=$_operation->_width y=$td_width assign=width_op}}
-                            <div class="operation_in_mouv"
+                            <div class="operation_in_mouv opacity-60"
                               style="left: {{$offset_op}}px; width: {{$width_op}}px; top: {{if $vue == "classique"}}0.8{{else}}0.2{{/if}}em;"
                               onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}');">
                               </div>
