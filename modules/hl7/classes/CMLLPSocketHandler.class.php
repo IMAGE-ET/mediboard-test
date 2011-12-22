@@ -46,6 +46,8 @@ class CMLLPSocketHandler {
    */
   var $server = null;
   
+  private static $buffer = "";
+  
   function __construct($call_url, $username, $password, $port){
     $this->call_url = $call_url;
     $this->username = $username;
@@ -55,7 +57,29 @@ class CMLLPSocketHandler {
   }
   
   function handle($request, $id) {
-    $this->http_request_post($this->call_url."/index.php?login=$this->username:$this->password&m=eai&a=void&suppressHeaders=1", array("message" => $request));
+    // Verification qu'on ne recoit pas un en-tete de message en ayant deja des données en buffer
+    if (self::$buffer && strpos($request, "\x0B")) {
+      echo sprintf("!!! Got a header, while having data in the buffer from %d\n", $id);
+    }
+    
+    // Mise en buffer du message
+    self::$buffer .= "$request\n";
+    
+    // Si on recoit le flag de fin de message, on effectue la requete web
+    if (strrpos($request, "\x1C") === strlen($request)-1) {
+      echo sprintf("*** Got a full message from %d\n", $id);
+      
+      $post = array(
+        "m"       => "eai",
+        "dosql"   => "do_receive_mllp",
+        "port"    => $this->port,
+        "message" => self::$buffer,
+      );
+      
+      $this->http_request_post($this->call_url."/index.php?login={$this->username}:{$this->password}", $post);
+      
+      self::$buffer = "";
+    }
     
     echo sprintf("*** Got %d bytes from %d\n", strlen($request), $id);
     return md5($request);
