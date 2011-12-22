@@ -29,6 +29,7 @@ $where = array(
   "(product_order_item_reception.lapsing_date > '".mbDate()."' OR product_order_item_reception.lapsing_date IS NULL)",
   "(product_order_item_reception.code != '' AND product_order_item_reception.code IS NOT NULL)",
   "product.category_id" => "= '$dmi_category_id'",
+  "product.cancelled" => "= '0'",
 );
 
 $ljoin = array(
@@ -88,6 +89,7 @@ foreach($lots as $_id => $_lot) {
   
   $where = array(
     "product.category_id" => "= '$dmi_category_id'",
+    "product.cancelled" => "= '0'",
   );
   foreach ($values as $field => $value) {
     if (!$value) continue;
@@ -98,6 +100,7 @@ foreach($lots as $_id => $_lot) {
   
   $where = array(
     "product.category_id" => "= '$dmi_category_id'",
+    "product.cancelled" => "= '0'",
     "dmi.product_id" => "IS NOT NULL",
     "product_order_item_reception.code != '' AND product_order_item_reception.code IS NOT NULL",
     "product_order_item_reception.cancelled" => "= '0'",
