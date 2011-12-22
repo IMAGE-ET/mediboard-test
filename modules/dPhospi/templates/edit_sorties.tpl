@@ -83,12 +83,19 @@ function refreshList(order_col, order_way, type) {
   {{foreach from=$sorties item=_sorties key=type}}
     {{if $_sorties.place || $_sorties.non_place}}
     <li onmousedown="refreshList(null, null, '{{$type}}')">
-      <a href="#{{$type}}">Sorties {{tr}}CSejour.type.{{$type}}{{/tr}} prévues (<span id="count_{{$type}}">{{$_sorties.place}}/{{$_sorties.non_place}}</span>)</a>
+      <a href="#{{$type}}">
+        {{if $type == "ambu"}}
+          {{tr}}CSejour.type.{{$type}}{{/tr}}
+        {{else}}
+          Sorties {{tr}}CSejour.type.{{$type}}{{/tr}}
+        {{/if}}
+        (<span id="count_{{$type}}">{{$_sorties.place}}/{{$_sorties.non_place}}</span>)
+      </a>
     </li>
     {{/if}}
   {{/foreach}}
   <li onmousedown="refreshList(null, null, 'deplacements')">
-    <a href="#deplacements">Déplacements prévus (<span id="count_deplacements">{{$deplacements}}</span>)</a>
+    <a href="#deplacements">Déplacements(<span id="count_deplacements">{{$deplacements}}</span>)</a>
   </li>
   <li onmousedown="refreshList(null, null, 'presents')">
     <a href="#presents">Patients présents (<span id="count_presents">{{$presents}}/{{$presentsNP}}</span>)</a>

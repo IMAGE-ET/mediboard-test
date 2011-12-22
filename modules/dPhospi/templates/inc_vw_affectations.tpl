@@ -57,6 +57,10 @@
         data-width="{{$_sejour->_width}}">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
             {{$patient->nom}} {{$patient->prenom}}
+            <br />
+            <span class="compact">
+              {{$_sejour->_motif_complet}}
+            </span>
           </span>
       </div>
       

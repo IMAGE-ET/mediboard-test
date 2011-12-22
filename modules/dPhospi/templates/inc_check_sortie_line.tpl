@@ -43,7 +43,7 @@
     {{$_sortie->_ref_lit}}
   </td>
   {{if $type == "presents"}}
-  <td class="button">
+  <td class="narrow">
     {{$sejour->entree|date_format:$conf.datetime}}
     <div style="position: relative;">
     <div class="sejour-bar" title="arrivée il y a {{$sejour->_entree_relative}}j et départ prévu dans {{$sejour->_sortie_relative}}j ">
@@ -52,7 +52,7 @@
     </div>
   </td>
   {{/if}}
-  <td class="button">
+  <td class="narrow">
     <div {{if !$_sortie->confirme && !$sejour->sortie_reelle}}class="only-printable"{{/if}}>
       {{if $type == 'presents'}}
         {{$_sortie->sortie|date_format:$conf.datetime}}
