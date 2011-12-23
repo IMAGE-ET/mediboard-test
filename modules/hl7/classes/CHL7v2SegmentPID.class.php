@@ -197,14 +197,17 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     if ($this->sejour) {
       $sejour = $this->sejour;
       $sejour->loadNDA($group->_id);
-      $data[] = $sejour->_NDA ? array(
+      $sejour->_NDA ?
+        $data[] = array( 
+                  array(
                     $sejour->_NDA,
                     null,
                     null,
                     // PID-3-4 Autorité d'affectation
                     $this->getAssigningAuthority("FINESS", $group->finess),
-                    "AN") :
-                  null;
+                    "AN")
+                ) 
+        : null;
     } else {
       $data[] = null;
     }

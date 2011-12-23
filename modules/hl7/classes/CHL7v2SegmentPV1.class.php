@@ -72,12 +72,14 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     // PV1-5: Preadmit Number (CX) (optional)
     $sejour->loadNPA($group->_id);
     $data[] = $sejour->_NPA ? array(
-                $sejour->_NPA,
-                null,
-                null,
-                // PID-3-4 Autorité d'affectation
-                $this->getAssigningAuthority("FINESS", $group->finess),
-                "RI"
+                array(
+                  $sejour->_NPA,
+                  null,
+                  null,
+                  // PID-3-4 Autorité d'affectation
+                  $this->getAssigningAuthority("FINESS", $group->finess),
+                  "RI"
+                )
               ) : null;
     
     // PV1-6: Prior Patient Location (PL) (optional)
