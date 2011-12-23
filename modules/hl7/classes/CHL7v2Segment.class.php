@@ -441,7 +441,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       // Table - 0116
       // O - Occupé
       // U - Libre
-      "0"
+      "O"
     );
   }
 }
