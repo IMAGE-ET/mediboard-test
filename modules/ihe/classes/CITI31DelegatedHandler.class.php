@@ -49,7 +49,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         // Cas où : 
         // * on est l'initiateur du message 
         // * le destinataire ne supporte pas le message
-        if ($sejour->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver) || $sejour->_no_synchro) {
+        if ($sejour->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
           return;
         }
 
@@ -101,8 +101,12 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       
       // Création d'une affectation
       if ($last_log->type == "create") {
-        // Création d'un nouveau mouvement ?
+        // Pas de création de mouvement s'il s'agit d'une affectation dans le futur
         if ($affectation->_id != $current_affectation->_id) {
+          return;
+        }
+        // Pas de création de mouvement si le séjour est encore en pré-admission
+        if ($sejour->_etat == "preadmission") {
           return;
         }
       }
@@ -111,6 +115,10 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if ($last_log->type == "store") {
         // Affectation effectuée on passe à la suivante ? 
         if (!$affectation->fieldModified("effectue", 1)) {
+          return;
+        }
+        
+        if ($sejour->sortie_reelle) {
           return;
         }
         

@@ -96,7 +96,7 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     $affectation->loadRefUfs();
     // ZBE-7: Ward of medical responsibility in the period starting with this movement (XON) (optional)
     $uf_medicale = $affectation->_ref_uf_medicale;
-    if ($uf_medicale->_id) {
+    if (isset($uf_medicale->_id)) {
       $data[] = array(
         // ZBE-7.1 : Libellé de l'UF
         $uf_medicale->libelle,
@@ -120,7 +120,7 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     
     // ZBE-8: Ward of care responsibility in the period starting with this movement (XON) (optional)
     $uf_soins = $affectation->_ref_uf_soins;
-    if ($uf_soins->_id) {
+    if (isset($uf_soins->_id)) {
       $data[] = array(
         // ZBE-7.1 : Libellé de l'UF
         $uf_soins->libelle,
