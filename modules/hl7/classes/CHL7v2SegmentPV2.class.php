@@ -91,10 +91,10 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
     $data[] = null;
     
     // PV2-8: Expected Admit Date/Time (TS) (optional)
-    $data[] = null;
+    $data[] = $sejour->entree_prevue;
     
     // PV2-9: Expected Discharge Date/Time (TS) (optional)
-    $data[] = null;
+    $data[] = $sejour->sortie_prevue;
     
     // PV2-10: Estimated Length of Inpatient Stay (NM) (optional)
     $data[] = null;
