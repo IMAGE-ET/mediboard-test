@@ -524,7 +524,19 @@ class CSetuphl7 extends CSetup {
     
     $this->insertTableEntry("399", "FRA", "FRA", "FRA", "FRA", "Française");
     
-    $this->mod_version = "0.08";
+    $this->makeRevision("0.08");
+    
+    // Circonstance de sortie
+    $this->insertTableEntry("112", "2", "2", "2", "2", "Mesures disciplinaires");
+    $this->insertTableEntry("112", "3", "3", "3", "3", "Décision médicale (valeur par défaut");
+    $this->insertTableEntry("112", "4", "4", "4", "4", "Contre avis médicale");
+    $this->insertTableEntry("112", "5", "5", "5", "5", "En attente d'examen");
+    $this->insertTableEntry("112", "6", "6", "6", "6", "Convenances personnelles");
+    $this->insertTableEntry("112", "R", "R", "R", "R", "Essai (contexte psychiatrique)");
+    $this->insertTableEntry("112", "E", "E", "E", "E", "Evasion");
+    $this->insertTableEntry("112", "F", "F", "F", "F", "Fugue");
+    
+    $this->mod_version = "0.09";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
