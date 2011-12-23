@@ -3,67 +3,78 @@
 var Process = {
   running: false,
   step: null,
-	pass: {{$pass|json}},
-	
+  pass: {{$pass|json}},
+  
   total: {
-  	medecins: 0,
-  	time: 0.0,
-  	updates: 0.0,
-  	errors: 0
+    medecins: 0,
+    time: 0.0,
+    updates: 0.0,
+    errors: 0
   },
-  		
-	doStep: function() {
-		var form = document.import;
-		
-	  this.step =  $V(form.step);
-	  		
-	  var url = new Url("dPpatients", "import_medecin");
-	  url.addElement(form.step);	  
-	  url.addParam("mode", $V(form.mode));
-	  url.addParam("pass", this.pass);
+      
+  doStep: function() {
+    var form = document.import;
+    
+    this.step =  $V(form.step);
+        
+    var url = new Url("dPpatients", "import_medecin");
+    url.addElement(form.step);    
+    url.addParam("mode", $V(form.mode));
+    url.addParam("pass", this.pass);
     url.addParam("departement", $V(form.departement));
     url.addParam("mode_import", $V(form.mode_import));
-	  url.requestUpdate("process");
-	},
-	
-	updateScrewed: function(medecins, time, updates, errors) {
-		var tr = document.createElement("tr");
-	  td = document.createElement("td"); td.textContent = this.step; tr.appendChild(td);
-	  td = document.createElement("td"); td.textContent = "XPAth Screwed, try again"; tr.appendChild(td);
-	  $("results").appendChild(tr);
-	},
-	
-	updateTotal: function(medecins, time, updates, errors) {
-	  this.total.medecins += medecins;
-	  this.total.time     += time;
-	  this.total.updates  += updates;
-	  this.total.errors   += errors;	  
+    url.requestUpdate("process");
+  },
+  
+  updateScrewed: function(medecins, time, updates, errors) {
+    var tr = document.createElement("tr");
+    td = document.createElement("td"); td.textContent = this.step; tr.appendChild(td);
+    td = document.createElement("td"); td.textContent = "XPAth Screwed, try again"; tr.appendChild(td);
+    $("results").appendChild(tr);
+  },
+  
+  updateTotal: function(medecins, time, updates, errors) {
+    this.total.medecins += medecins;
+    this.total.time     += time;
+    this.total.updates  += updates;
+    this.total.errors   += errors;    
 
-	  var tr = document.createElement("tr");
-	  td = document.createElement("td"); td.textContent = this.step; tr.appendChild(td);
-	  td = document.createElement("td"); td.textContent = medecins ; tr.appendChild(td);
-	  td = document.createElement("td"); td.textContent = time.toFixed(2)     ; tr.appendChild(td);
-	  td = document.createElement("td"); td.textContent = updates  ; tr.appendChild(td);
-	  td = document.createElement("td"); td.textContent = errors   ; tr.appendChild(td);
-	  
-	  var node = { tr: { td : [this.step, medecins, time, updates, errors] } };
+    var tr = document.createElement("tr");
+    td = document.createElement("td"); td.textContent = this.step; tr.appendChild(td);
+    td = document.createElement("td"); td.textContent = medecins ; tr.appendChild(td);
+    td = document.createElement("td"); td.textContent = time.toFixed(2)     ; tr.appendChild(td);
+    td = document.createElement("td"); td.textContent = updates  ; tr.appendChild(td);
+    td = document.createElement("td"); td.textContent = errors   ; tr.appendChild(td);
+    
+    var node = { tr: { td : [this.step, medecins, time, updates, errors] } };
 
-	  $("results").appendChild(tr);
-	  
-	  $("total-medecins").innerHTML = this.total.medecins;
-	  $("total-time"    ).innerHTML = this.total.time.toFixed(2);
-	  $("total-updates" ).innerHTML = this.total.updates;
-	  $("total-errors"  ).innerHTML = this.total.errors;	  
-	},
-	
-	endStep: function() {
-		var form = document.import
-		var step = form.step;
-	  $V(step, parseInt($V(step))+1);
-	  if ($V(form.auto)) {
-	  	Process.doStep.bind(Process).defer();
-	  }
-	}
+    $("results").appendChild(tr);
+    
+    $("total-medecins").innerHTML = this.total.medecins;
+    $("total-time"    ).innerHTML = this.total.time.toFixed(2);
+    $("total-updates" ).innerHTML = this.total.updates;
+    $("total-errors"  ).innerHTML = this.total.errors;    
+  },
+  
+  endStep: function() {
+    var form = getForm("import");
+    var step = form.step;
+    $V(step, parseInt($V(step))+1);
+    if ($V(form.auto)) {
+      Process.doStep.bind(Process).defer();
+    }
+  },
+  
+  nextDep: function() {
+    var form = getForm("import");
+    // Tester si on est sur le dernier département
+    if (form.departement.selectedIndex == form.departement.length) {
+      return;
+    }
+    $V(form.step, 0);
+    form.departement.selectedIndex++;
+    this.endStep();
+  }
 }
 
 </script>
@@ -90,27 +101,27 @@ var Process = {
 <h2>Import de la base données de médecins</h2>
 
 <table class="tbl">
-	<tr>
-	  <th colspan="3" style="width: 50%">{{tr}}Action{{/tr}}</th>
-	  <th colspan="2" style="width: 50%">{{tr}}Status{{/tr}}</th>
-	</tr>
-	  
-	<tr>
-	  <td colspan="3">
-	    <form name="import" action="#" onsubmit="return false">
-	    
+  <tr>
+    <th colspan="3" style="width: 50%">{{tr}}Action{{/tr}}</th>
+    <th colspan="2" style="width: 50%">{{tr}}Status{{/tr}}</th>
+  </tr>
+    
+  <tr>
+    <td colspan="3">
+      <form name="import" action="#" method="get" onsubmit="return false">
+      
       <label>
-	      <input type="radio" name="mode" value="get" />Import distant
+        <input type="radio" name="mode" value="get" />Import distant
       </label>
       <label>
-	      <input type="radio" name="mode" value="xml" />Fichiers XML
+        <input type="radio" name="mode" value="xml" />Fichiers XML
       </label>
       <label>
-	      <input type="radio" name="mode" value="csv" checked="checked" />Fichiers CSV
+        <input type="radio" name="mode" value="csv" checked="checked" />Fichiers CSV
       </label>
-	    
-	    <input type="checkbox" name="auto" />
-	    <label for="auto">Automatique</label>
+      
+      <input type="checkbox" name="auto" />
+      <label for="auto">Automatique</label>
       &mdash;
       Département :
       <select name="departement">
@@ -124,30 +135,30 @@ var Process = {
         <option value="comp">Import complet</option>
         <option value="rpps">Mise à jour RPPS</option>
       </select>
-	    <br/>
+      <br/>
 
-	    <label for="step">Etape</label>
-	    <input type="text" name="step" value="1" size="2" />
+      <label for="step">Etape</label>
+      <input type="text" name="step" value="1" size="2" />
 
-			<button class="tick" id="start-process" onclick="Process.doStep()">
-			  Traiter étape
-			</button>
-			
-			</form>
-	  </td>
-	  <td id="process" colspan="3">
-	  </td>
-	</tr>
+      <button class="tick" id="start-process" onclick="Process.doStep()">
+        Traiter étape
+      </button>
+      
+      </form>
+    </td>
+    <td id="process" colspan="3">
+    </td>
+  </tr>
 
-	<tbody id="results" style="text-align: right">
-	  <tr>
-	    <th>Etape #</th>
-	    <th>Nombre de médecins</th>
-	    <th>Temps pris</th>
-	    <th>Mises à jour</th>
-	    <th>Erreurs</th>
-	  </tr>
-	</tbody>
+  <tbody id="results" style="text-align: right">
+    <tr>
+      <th>Etape #</th>
+      <th>Nombre de médecins</th>
+      <th>Temps pris</th>
+      <th>Mises à jour</th>
+      <th>Erreurs</th>
+    </tr>
+  </tbody>
 
   <tr id="total" style="text-align: right">
     <th>Total</th>

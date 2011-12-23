@@ -13,7 +13,7 @@ $types_antecedents_active     = explode('|', CAppUI::conf("dPpatients CAnteceden
 $appareils_antecedents_active = explode('|', CAppUI::conf("dPpatients CAntecedent appareils"));
 
 $departements = array();
-for ($i = 1 ; $i < 100 ; $i++) {
+for ($i = 1 ; $i < 96 ; $i++) {
   $departements[] = str_pad($i, 2, "0", STR_PAD_LEFT);
 }
 

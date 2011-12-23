@@ -41,6 +41,8 @@
 {{/if}}
 {{if !$last_page}}
   Process.endStep();
+{{else}}
+  Process.nextDep();
 {{/if}}
 </script>
 {{/if}}
