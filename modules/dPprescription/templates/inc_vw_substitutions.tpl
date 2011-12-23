@@ -1,7 +1,10 @@
 <table class="tbl">
 	<tr>
 		<th>
-			Substitutions pour {{$line->_ref_substitute_for->_view}}
+			Substitutions pour 
+			<span onmouseover="ObjectTooltip.createEx(this, '{{$line->_ref_substitute_for->_guid}}');">
+				{{$line->_ref_substitute_for->_view}}
+			</span>
 		</th>
 	</tr>
 	{{foreach from=$line->_ref_substitute_for->_back.substitution item=_subst}}

@@ -37,10 +37,12 @@ Main.add(function () {
 </script>
 
 {{if $line->_count_administrations > 0}}
-  <div class="big-warning">
-  	Cette ligne de prescription a déjà donné lieu à des administrations dans le plan de soins, il n'est donc plus possible de la substituer par un équivalent.
+  <div class="small-info">
+  	Cette ligne de prescription a déjà donné lieu à des administrations dans le plan de soins, 
+		si vous décidez de la substituer, cela arrêtera la ligne courante pour la faire évoluer et créer ensuite la substitution.
   </div>
-{{else}}
+{{/if}}
+
 	<table class="tbl">
 	  <tr>
 	    <th class="title">
@@ -132,4 +134,3 @@ Main.add(function () {
 	    <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
 	  </form>
 	</div>
-{{/if}}

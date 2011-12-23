@@ -19,6 +19,21 @@ $mode_protocole = CValue::get("mode_protocole");
 $line = new CPrescriptionLineMedicament();
 $line->load($line_id);
 
+// Calcul du nombre d'administrations
+$line->countAdministrations();
+
+if($line->_count_administrations){
+	// Creation de l'evolution de la ligne et signature de l'evolution
+	$new_line_guid = $line->duplicateLine($line->praticien_id, $line->prescription_id);
+	$line = CMbObject::loadFromGuid($new_line_guid);
+	$line->signee = 1;
+	$line->store();
+	
+	// La substitution est ensuite faite sur cette nouvelle ligne
+	$line_id = $line->_id;
+	$line->signee = 0;
+}
+
 // Chargement des variantes possibles de la ligne
 $line->loadRefsVariantes();
 
@@ -52,6 +67,7 @@ $old_line->substituted = "1";
 //$old_line->time_arret = mbTime();
 $msg = $old_line->store();
 CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-store");
+
 
 // Le passage de la ligne au reload permet de realiser le testPharma (pre-cochage de la case "Accord du praticien")
 echo "<script type='text/javascript'>Prescription.reloadLine('$line->_guid','$mode_protocole', '$mode_pharma')</script>";
