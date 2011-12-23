@@ -195,7 +195,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     
     // PID-18: Patient Account Number (CX) (optional)
     if ($this->sejour) {
-      $this->sejour->loadNDA();
+      $this->sejour->loadNDA($group->_id);
       $data[] = $sejour->_NDA ? array(
                     $sejour->_NDA,
                     null,

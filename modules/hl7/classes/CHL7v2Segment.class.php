@@ -241,6 +241,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     // PI - Patient internal identifier
     // INS-C - Identifiant national de santé calculé
     $identifiers = array();
+    $patient->loadIPP($group->_id);
     if ($patient->_IPP) {
       $identifiers[] = array(
         $patient->_IPP,

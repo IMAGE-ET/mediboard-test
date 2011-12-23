@@ -70,7 +70,7 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     $data[] = "R";
     
     // PV1-5: Preadmit Number (CX) (optional)
-    $sejour->loadNPA();
+    $sejour->loadNPA($group->_id);
     $data[] = $sejour->_NPA ? array(
                 $sejour->_NPA,
                 null,
