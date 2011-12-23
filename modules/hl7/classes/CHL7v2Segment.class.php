@@ -429,19 +429,21 @@ class CHL7v2Segment extends CHL7v2Entity {
     $current_uf  = $sejour->getCurrentUF();
 
     return array(
-      // PL-1 - Code UF hébergement
-      $current_uf["hebergement"]->code,
-      // PL-2 - Chambre
-      ($affectation->_id && $affectation->_ref_lit) ? $affectation->_ref_lit->_ref_chambre->nom : null,
-      // PL-3 - Lit
-      ($affectation->_id && $affectation->_ref_lit) ? $affectation->_ref_lit->nom : null,
-      // PL-4 - Etablissement hospitalier
-      $this->getGroupAssigningAuthority($sejour->loadRefEtablissement()),
-      // PL-5 - Statut du lit
-      // Table - 0116
-      // O - Occupé
-      // U - Libre
-      "O"
+      array(
+        // PL-1 - Code UF hébergement
+        $current_uf["hebergement"]->code,
+        // PL-2 - Chambre
+        ($affectation->_id && $affectation->_ref_lit) ? $affectation->_ref_lit->_ref_chambre->nom : null,
+        // PL-3 - Lit
+        ($affectation->_id && $affectation->_ref_lit) ? $affectation->_ref_lit->nom : null,
+        // PL-4 - Etablissement hospitalier
+        $this->getGroupAssigningAuthority($sejour->loadRefEtablissement()),
+        // PL-5 - Statut du lit
+        // Table - 0116
+        // O - Occupé
+        // U - Libre
+        "O"
+      )
     );
   }
 }
