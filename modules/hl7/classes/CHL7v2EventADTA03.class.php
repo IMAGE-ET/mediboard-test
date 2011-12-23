@@ -33,7 +33,7 @@ class CHL7v2EventADTA03 extends CHL7v2EventADT implements CHL7EventADTA03 {
     
     $patient = $sejour->_ref_patient;
     // Patient Identification
-    $this->addPID($patient);
+    $this->addPID($patient, $sejour);
     
     // Patient Additional Demographic
     $this->addPD1($patient);

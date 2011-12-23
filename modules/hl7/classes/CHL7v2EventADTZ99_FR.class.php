@@ -33,7 +33,7 @@ class CHL7v2EventADTZ99_FR extends CHL7v2EventADT implements CHL7EventADTZ99 {
     
     $patient = $sejour->_ref_patient;
     // Patient Identification
-    $this->addPID($patient);
+    $this->addPID($patient, $sejour);
     
     // Patient Additional Demographic
     $this->addPD1($patient);

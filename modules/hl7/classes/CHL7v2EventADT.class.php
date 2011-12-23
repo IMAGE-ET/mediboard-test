@@ -54,9 +54,10 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   /*
    * Represents an HL7 PID message segment (Patient Identification)
    */
-  function addPID(CPatient $patient) {
+  function addPID(CPatient $patient, CSejour $sejour = null) {
     $PID = CHL7v2Segment::create("PID", $this->message);
     $PID->patient = $patient;
+    $PID->sejour = $sejour;
     $PID->set_id  = 1;
     $PID->build($this);
   }
