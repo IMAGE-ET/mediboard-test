@@ -179,8 +179,10 @@ if (in_array($mode, array("get", "xml"))) {
 	      
 	    case 1:
   	    // Disciplines qualifiantes
+        // Le champ discipline exercée peut ne pas être renseigné.
   	    $query = "td[2]/strong";
-  	    $medecin->disciplines = $xpath2->query($query, $nodeMainTr)->item(0)->nextSibling->nodeValue;
+  	    $medecin->disciplines = $xpath2->query($query, $nodeMainTr)->item(0)->nextSibling ?
+          $xpath2->query($query, $nodeMainTr)->item(0)->nextSibling->nodeValue : "";
   	    
   	    break;
 	    
