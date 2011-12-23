@@ -7,9 +7,9 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
-<table class="tb"> 
+<table class="form"> 
 <tr>
-	<th>UFs</th>
+	<th class="category">UFs</th>
 </tr>
 {{foreach from=$affectations_uf item=_affectation_uf}}
    <tr>
