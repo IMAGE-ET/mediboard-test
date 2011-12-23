@@ -25,7 +25,7 @@ class CHL7v2SegmentACC extends CHL7v2Segment {
   var $sejour = null;
   
   function build(CHL7v2Event $event) {
-    $data[] = null;
+    $data = array();
     
     $sejour = new CSejour();
     $sejour = $this->sejour;

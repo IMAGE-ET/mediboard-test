@@ -25,7 +25,7 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
   var $sejour = null;
     
   function build(CHL7v2Event $event) {
-    $data[] = null;
+    $data = array();
     
     $sejour = $this->sejour;
     
