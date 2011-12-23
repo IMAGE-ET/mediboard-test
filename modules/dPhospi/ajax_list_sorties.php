@@ -17,6 +17,12 @@ $service_id     = CValue::getOrSession("service_id"  , null);
 $order_way      = CValue::getOrSession("order_way"   , "ASC");
 $order_col      = CValue::getOrSession("order_col"   , "_patient");
 
+$praticien = new CMediusers();
+$praticien->load($praticien_id);
+
+$service = new CService();
+$service->load($service_id);
+
 $group = CGroups::loadCurrent();
 
 $types_hospi = array("comp","ambu","urg","ssr","psy");
@@ -30,7 +36,6 @@ $where = array();
 $where["externe"] = "= '0'";
 $where["group_id"] = "= '$group->_id'";
 
-$service  = new CService();
 $services = $service->loadListWithPerms(PERM_READ, $where);
 
 // Récupération de la journée à afficher
@@ -49,10 +54,10 @@ $ljoin["chambre"]            = "chambre.chambre_id = lit.chambre_id";
 $ljoin["service"]            = "service.service_id = chambre.service_id";
 $where                       = array();
 $where["service.group_id"]   = "= '$group->_id'";
-$where["service.service_id"] = CSQLDataSource::prepareIn(array_keys($services)   , $service_id);
+$where["service.service_id"] = CSQLDataSource::prepareIn(array_keys($services)   , $service->_id);
 $where["sejour.type"]        = CSQLDataSource::prepareIn($types_hospi, $type_hospi);
 if($praticien_id) {
-  $where["sejour.praticien_id"] = "= '$praticien_id'";
+  $where["sejour.praticien_id"] = "= '$praticien->_id'";
 }
 
 // Patients non placés
@@ -65,11 +70,11 @@ $whereNP                               = array();
 $whereNP["sejour.group_id"]            = "= '$group->_id'";
 $whereNP["sejour.type"]                = CSQLDataSource::prepareIn($types_hospi, $type_hospi);
 $whereNP["affectation.affectation_id"] = "IS NULL";
-if($service_id) {
-  $whereNP["sejour.service_id"] = "= '$service_id'";
+if($service->_id) {
+  $whereNP["sejour.service_id"] = "= '$service->_id'";
 }
-if($praticien_id) {
-  $whereNP["sejour.praticien_id"] = "= '$praticien_id'";
+if($praticien->_id) {
+  $whereNP["sejour.praticien_id"] = "= '$praticien->_id'";
 }
 
 $order = $orderNP = null;
@@ -145,8 +150,8 @@ if($type == 'presents') {
 } elseif($type_mouvement == "entrees") {
   // Patients placés
   $where["affectation.entree"] = "BETWEEN '$limit1' AND '$limit2'";
-  $where["sejour.entree"] = "= affectation.entree";
-  $where["sejour.type"] = " = '$type'";
+  $where["sejour.entree"]      = "= affectation.entree";
+  $where["sejour.type"]        = " = '$type'";
   $mouvements = $affectation->loadList($where, $order, null, null, $ljoin);
   
   // Chargements des détails des séjours
@@ -176,8 +181,8 @@ if($type == 'presents') {
 } else {
   // Patients placés
   $where["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
-  $where["sejour.sortie"] = "= affectation.sortie";
-  $where["sejour.type"] = " = '$type'";
+  $where["sejour.sortie"]      = "= affectation.sortie";
+  $where["sejour.type"]        = " = '$type'";
   if ($vue) {
     $where["confirme"] = " = '0'";
   }
@@ -186,7 +191,7 @@ if($type == 'presents') {
   // Chargements des détails des séjours
   foreach($mouvements as $_mouvement) {
     $_mouvement->loadRefsFwd();
-    $sejour = $_sortie->_ref_sejour;
+    $sejour = $_mouvement->_ref_sejour;
     $sejour->loadRefPatient(1);
     $sejour->loadRefPraticien(1);
     $sejour->checkDaysRelative($date);
@@ -212,6 +217,8 @@ if($type == 'presents') {
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("service"       , $service);
+$smarty->assign("praticien"     , $praticien);
 $smarty->assign("type"          , $type);
 $smarty->assign("type_mouvement", $type_mouvement);
 $smarty->assign("type_hospi"    , $type_hospi);

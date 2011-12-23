@@ -89,13 +89,12 @@ $wherePresentsNP   = $whereNP;
 $wherePresentsNP[] = "'$date' BETWEEN DATE(sejour.entree) AND DATE(sejour.sortie)";
 $presentsNP        = $sejour->countList($wherePresentsNP, null, $ljoinNP);
 
-$where["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
-
 // Comptage des déplacements
 if ($vue) {
   unset($where["confirme"]);
   $where["effectue"] = "= '0'";
 }
+$where["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
 $where["sejour.sortie"]      = "!= affectation.sortie";
 $deplacements = $affectation->countList($where, null, $ljoin);
 
@@ -112,6 +111,8 @@ foreach($mouvements as $type => &$_mouvement) {
       continue;
     }
     if($type_mouvement == "entrees") {
+      unset($where["affectation.sortie"]);
+      $where["affectation.entree"] = "BETWEEN '$limit1' AND '$limit2'";
       if(isset($where["sejour.sortie"])) {
         unset($where["sejour.sortie"]);
       }
@@ -121,6 +122,8 @@ foreach($mouvements as $type => &$_mouvement) {
       $where["sejour.entree"]      = "= affectation.entree";
       $whereNP["sejour.entree"]    = "BETWEEN '$limit1' AND '$limit2'";
     } else {
+      unset($where["affectation.entree"]);
+      $where["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
       if(isset($where["sejour.entree"])) {
         unset($where["sejour.entree"]);
       }

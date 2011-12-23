@@ -132,4 +132,4 @@ function refreshList(order_col, order_way, type, type_mouvement) {
 {{if $type != "ambu"}}
 <div id="presents_" style="display: none;">
 </div>
-{{/if}}}
+{{/if}}

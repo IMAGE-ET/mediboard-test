@@ -15,8 +15,14 @@
   </script>
   <table class="tbl">
     <tr class="only-printable">
-      <th class="title" colspan="100">
+      <th class="title text" colspan="100">
         Déplacements ({{$deplacements|@count}})
+        {{if $service->_id}}
+          &mdash; {{$service}}
+        {{/if}}
+        {{if $praticien->_id}}
+          &mdash; Dr {{$praticien}}
+        {{/if}}
         &mdash; {{$date|date_format:$conf.longdate}}
       </th>
     </tr>
@@ -56,11 +62,21 @@
   <div id="places-{{$type}}_{{$type_mouvement}}" style="display: none;">
   <table class="tbl">
     <tr class="only-printable">
-      <th class="title" colspan="100">
+      <th class="title text" colspan="100">
         {{if $type == "presents"}}
-          Patients présents ({{$mouvements|@count}}/{{$mouvementsNP|@count}})
+          Patients présents
+        {{elseif $type == "ambu"}}
+          {{tr}}CSejour.type.{{$type}}{{/tr}}
         {{else}}
-          {{tr}}CSejour.type_mouvement.{{$type_mouvement}}{{/tr}} {{tr}}CSejour.type.{{$type}}{{/tr}} ({{$mouvements|@count}}/{{$mouvementsNP|@count}})
+          {{tr}}CSejour.type_mouvement.{{$type_mouvement}}{{/tr}} {{tr}}CSejour.type.{{$type}}{{/tr}}
+        {{/if}}
+        placé
+        ({{$mouvements|@count}})
+        {{if $service->_id}}
+          &mdash; {{$service}}
+        {{/if}}
+        {{if $praticien->_id}}
+          &mdash; Dr {{$praticien}}
         {{/if}}
         &mdash; {{$date|date_format:$conf.longdate}}
       </th>
@@ -86,9 +102,29 @@
   </div>
   <div id="non-places-{{$type}}_{{$type_mouvement}}" style="display: none;">
     <table class="tbl">
+      <tr class="only-printable">
+        <th class="title text" colspan="100">
+          {{if $type == "presents"}}
+            Patients présents
+          {{elseif $type == "ambu"}}
+            {{tr}}CSejour.type.{{$type}}{{/tr}}
+          {{else}}
+            {{tr}}CSejour.type_mouvement.{{$type_mouvement}}{{/tr}} {{tr}}CSejour.type.{{$type}}{{/tr}}
+          {{/if}}
+          non placé
+          ({{$mouvementsNP|@count}})
+        {{if $service->_id}}
+          &mdash; {{$service}}
+        {{/if}}
+        {{if $praticien->_id}}
+          &mdash; Dr {{$praticien}}
+        {{/if}}
+          &mdash; {{$date|date_format:$conf.longdate}}
+        </th>
+      </tr>
       <tr>
         <th>
-          <button class="print notext not-printable" style="float:left;" onclick="$('non-places-{{$type}}{{$type_mouvement}}').print()">{{tr}}Print{{/tr}}</button>
+          <button class="print notext not-printable" style="float:left;" onclick="$('non-places-{{$type}}_{{$type_mouvement}}').print()">{{tr}}Print{{/tr}}</button>
           {{mb_colonne class="CAffectation" field="_patient" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}
         </th>
         <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}</th>
