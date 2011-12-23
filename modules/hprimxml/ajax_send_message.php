@@ -29,7 +29,7 @@ if (!$echange_hprim_id) {
   $where['date_production']         = "BETWEEN '".mbDateTime("-3 DAYS")."' AND '".mbDateTime("+1 DAYS")."'"; 
   
   $notifications = $echange_hprim->loadList($where, null, $limit);
-  mbLog($echange_hprim->countList($where));
+
   // Effectue le traitement d'enregistrement des notifications sur lequel le cron vient de passer
   // ce qui permet la gestion des doublons
   foreach ($notifications as $notification) {
