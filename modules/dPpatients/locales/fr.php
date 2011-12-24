@@ -512,6 +512,7 @@ $locales['CDevenirDentaire.alert_new_project'] = 'Veuillez enregistrer le projet
 $locales['CDevenirDentaire.all'] = 'Tous les projets thérapeutiques';
 $locales['CDevenirDentaire.none'] = 'Aucun projet thérapeutique';
 $locales['CDevenirDentaire.one'] = 'Un projet thérapeutique';
+$locales['CDiagnostic.none'] = 'Aucun diagnostic';
 $locales['CDossierMedical'] = 'Dossier médical';
 $locales['CDossierMedical-back-antecedents'] = 'Antécedents du dossier médical';
 $locales['CDossierMedical-back-antecedents.empty'] = 'Aucun antécédent';

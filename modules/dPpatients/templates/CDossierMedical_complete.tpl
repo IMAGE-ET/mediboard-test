@@ -16,15 +16,15 @@
   
   <tr>
     <td class="text top">
-      {{foreach from=$object->_ref_antecedents_by_type_appareil key=curr_type item=antecedents_by_appareil}}
+      {{foreach from=$object->_ref_antecedents_by_type_appareil key=_type item=antecedents_by_appareil}}
         {{if $antecedents_by_appareil|@count}}
           <strong>
-            {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
+            {{tr}}CAntecedent.type.{{$_type}}{{/tr}}
           </strong>
           <div style="margin-left: 1em;">
             <ul>
-              {{foreach from=$antecedents_by_appareil key=curr_appareil item=antecedents name=foreach_atcd}}
-                <li><strong>{{tr}}CAntecedent.appareil.{{$curr_appareil}}{{/tr}}</strong></li>
+              {{foreach from=$antecedents_by_appareil key=_appareil item=antecedents name=foreach_atcd}}
+                <li><strong>{{tr}}CAntecedent.appareil.{{$_appareil}}{{/tr}}</strong></li>
                 <ul>
                   {{foreach from=$antecedents item=_antecedent}}
                     <li>
@@ -49,15 +49,15 @@
       <td class="text top">
         {{if is_array($object->_ref_traitements)}}
           {{if $object->_ref_traitements|@count}}<ul>{{/if}}
-            {{foreach from=$object->_ref_traitements item=curr_traitement}}
+            {{foreach from=$object->_ref_traitements item=_traitement}}
               <li>
-                {{if $curr_traitement->fin}}
-                  Depuis {{mb_value object=$curr_traitement field="debut"}}
-                  jusqu'à {{mb_value object=$curr_traitement field="fin"}} :
-                {{elseif $curr_traitement->debut}}
-                  Depuis {{mb_value object=$curr_traitement field="debut"}} :
+                {{if $_traitement->fin}}
+                  Depuis {{mb_value object=$_traitement field="debut"}}
+                  jusqu'à {{mb_value object=$_traitement field="fin"}} :
+                {{elseif $_traitement->debut}}
+                  Depuis {{mb_value object=$_traitement field="debut"}} :
                 {{/if}}
-                {{mb_value object=$curr_traitement field="traitement"}}
+                {{mb_value object=$_traitement field="traitement"}}
               </li>
             {{/foreach}}
           {{if $object->_ref_traitements|@count}}</ul>{{/if}}
@@ -101,12 +101,12 @@
     
     <td class="text top">
       {{if $object->_ext_codes_cim|@count}}<ul>{{/if}}
-      {{foreach from=$object->_ext_codes_cim item=curr_code}}
+      {{foreach from=$object->_ext_codes_cim item=_code}}
         <li>
-          <strong>{{$curr_code->code}}:</strong> {{$curr_code->libelle}}
+          <strong>{{$_code->code}}:</strong> {{$_code->libelle}}
         </li>
       {{foreachelse}}
-        <div class="empty">{{tr}}Aucun diagnostic{{/tr}}</div>
+        <div class="empty">{{tr}}CDiagnostic.none{{/tr}}</div>
       {{/foreach}}
       {{if $object->_ext_codes_cim|@count}}</ul>{{/if}}
     </td>

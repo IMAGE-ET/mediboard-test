@@ -1270,31 +1270,32 @@ class CPatient extends CMbObject {
     }
 
     // Sejours
-    foreach ($this->_ref_sejours as $keySejour => $valueSejour) {
-      $sejour =& $this->_ref_sejours[$keySejour];
-      $sejour->loadNDA();
-      $sejour->loadRefsAffectations();
-      $sejour->loadRefsOperations();
-      $sejour->countDocItems($permType);
-      $sejour->loadRefsFwd(1);
-      $this->_ref_praticiens[$sejour->praticien_id] = $sejour->_ref_praticien;
-      $sejour->canRead();
-      $sejour->canEdit();
-      $sejour->countDocItems($permType);
-      foreach ($sejour->_ref_operations as $keyOp => $valueOp) {
-        $operation =& $sejour->_ref_operations[$keyOp];
-        $operation->loadRefsFwd(1);
-        $this->_ref_praticiens[$operation->chir_id] = $operation->_ref_chir;
-        $operation->countDocItems($permType);
-        $operation->canRead();
-        $operation->canEdit();
+    foreach ($this->_ref_sejours as $_sejour) {
+      $_sejour->loadNDA();
+      $_sejour->loadRefsAffectations();
+      $_sejour->loadRefsOperations();
+      $_sejour->countDocItems($permType);
+      $_sejour->loadRefsFwd(1);
+      $this->_ref_praticiens[$_sejour->praticien_id] = $_sejour->_ref_praticien;
+      $_sejour->canRead();
+      $_sejour->canEdit();
+      $_sejour->countDocItems($permType);
+      
+      foreach ($_sejour->_ref_operations as $_operation) {
+        $_operation->loadRefsFwd(1);
+        $_operation->_ref_chir->loadRefFunction();
+        $this->_ref_praticiens[$_operation->chir_id] = $_operation->_ref_chir;
+        $_operation->countDocItems($permType);
+        $_operation->canRead();
+        $_operation->canEdit();
       }
-      $sejour->loadRefRPU();
-      if($sejour->_ref_rpu && $sejour->_ref_rpu->_id) {
-        $sejour->_ref_rpu->countDocItems($permType);
+      
+      $_sejour->loadRefRPU();
+      if ($_sejour->_ref_rpu && $_sejour->_ref_rpu->_id) {
+        $_sejour->_ref_rpu->countDocItems($permType);
       }
-      $sejour->loadRefsConsultations();
-      foreach ($sejour->_ref_consultations as $_consult) {
+      $_sejour->loadRefsConsultations();
+      foreach ($_sejour->_ref_consultations as $_consult) {
         $_consult->loadRefConsultAnesth();
         $_consult->loadRefsFichesExamen();
         $_consult->loadExamsComp();
