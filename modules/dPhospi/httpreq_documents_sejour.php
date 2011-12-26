@@ -7,12 +7,10 @@
 * @author Thomas Despoix
 */
 
-global $can;
-$can->needsRead();
-
 $sejour = new CSejour();
 $sejour->load(CValue::get("sejour_id"));
 $sejour->loadRefsOperations();
+$sejour->canRead();
 $consult_anesth = $sejour->loadRefsConsultAnesth();
 $consult_anesth->loadRefsFwd();
 
