@@ -1935,14 +1935,21 @@ class CStoredObject extends CModelObject {
     return strnatcasecmp($a->$sort_field, $b->$sort_field);
   }
   
-  static function naturalSort($objects, $fields) {
+  protected static function _cmpFieldNaturalAccents($a, $b) {
+    $sort_field = self::$sortField;
+    return strnatcasecmp(CMbString::removeDiacritics($a->$sort_field), CMbString::removeDiacritics($b->$sort_field));
+  }
+  
+  static function naturalSort($objects, $fields, $accents = false) {
     if (empty($objects)) {
       return $objects;
     }
     
+    $callback = $accents ? "_cmpFieldNaturalAccents" : "_cmpFieldNatural";
+    
     foreach($fields as $field) {
       self::$sortField = $field;
-      usort($objects, array(__CLASS__, "_cmpFieldNatural"));
+      usort($objects, array(__CLASS__, $callback));
     }
     
     // Restore original keys
