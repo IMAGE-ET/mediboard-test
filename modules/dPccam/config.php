@@ -3,6 +3,7 @@
 $dPconfig["dPccam"] = array (
   "CCodeCCAM" => array(
     "use_cache" => "1",
+    "use_cotation_ccam" =>"1"
   ),
   "CCodable" => array (
     "use_getMaxCodagesActes" => "1",
