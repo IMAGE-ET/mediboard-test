@@ -4,6 +4,7 @@ $dPconfig["dPhospi"] = array (
   "pathologies" => 1,
   "tag_service" => "",
   "nb_hours_trans" => 1,
+  "hour_limit" => "16:00:00",
   "default_service_types_sejour" => array(
     "comp"       => "",
     "ambu"       => "",

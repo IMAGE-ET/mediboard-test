@@ -18,7 +18,8 @@ $pathos = new CDiscipline();
 $g = CGroups::loadCurrent()->_id;
 
 // A passer en variable de configuration
-$heureLimit = "16:00:00";
+
+$heureLimit = CAppUI::conf("dPhospi hour_limit");
 $date            = CValue::getOrSession("date", mbDate()); 
 $mode            = CValue::getOrSession("mode", 0); 
 $list_services   = CValue::getOrSession("list_services", array());

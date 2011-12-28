@@ -19,7 +19,9 @@
   {{mb_include module=system template=inc_config_bool var=pathologies}}
   
   {{mb_include module=system template=inc_config_str var=nb_hours_trans}}
-   
+  
+  {{mb_include module=system template=inc_config_str var=hour_limit}}
+  
   {{mb_include module=system template=inc_config_bool var=show_mouvements}}
   
   <tr>
