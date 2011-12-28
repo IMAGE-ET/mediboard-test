@@ -94,5 +94,5 @@ $smarty->assign("prestation"    , $prestation);
 $smarty->assign("praticiens"    , $praticiens);
 $smarty->assign("etablissements", $etablissements);
 
-$smarty->display("vw_idx_chambres.tpl");
+$smarty->display("vw_idx_infrastructure.tpl");
 ?>

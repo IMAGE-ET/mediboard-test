@@ -24,7 +24,7 @@ if(CModule::getActive("dPprescription")){
 $module->registerTab("vw_bilan_prescription"      , TAB_READ);
 }
 */
-$module->registerTab("vw_idx_chambres"            , TAB_ADMIN);
+$module->registerTab("vw_idx_infrastructure"      , TAB_ADMIN);
 $module->registerTab("vw_prestations"             , TAB_ADMIN);
 $module->registerTab("vw_etiquettes"              , TAB_ADMIN);
 if (CModule::getInstalled("printing")) {

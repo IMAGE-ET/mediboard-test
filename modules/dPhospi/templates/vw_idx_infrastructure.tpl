@@ -10,6 +10,19 @@ Main.add(function () {
   PairEffect.initGroup("serviceEffect");
   Control.Tabs.create('tabs-chambres', true);
 });
+
+function showInfrastructure(type_id, valeur_id, update_name){
+  var url = new Url("dPhospi", "inc_vw_infrastructure");
+  url.addParam(type_id, valeur_id);
+  url.requestUpdate(update_name);
+}
+function showLit(type_id, valeur_id, type_id2, valeur_id2, update_name){
+  var url = new Url("dPhospi", "inc_vw_infrastructure");
+  url.addParam(type_id, valeur_id);
+  url.addParam(type_id2, valeur_id2);
+  url.requestUpdate(update_name);
+}
+
 </script>
 
 
