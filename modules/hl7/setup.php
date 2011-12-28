@@ -539,29 +539,41 @@ class CSetuphl7 extends CSetup {
     $this->makeRevision("0.09");
     
     // Type d'activité, mode de traitement
-    
     // Hospi. complète
     $this->insertTableEntry("32", "CM", "CM", "comp_m", "comp_m", "Hospi. complète en médecine");
     $this->insertTableEntry("32", "CM", "CM", "comp_c", "comp_c", "Hospi. complète en chirurgie");
     $this->insertTableEntry("32", "MATER", "MATER", "comp_o", "comp_o", "Hospi. complète en obstétrique");
-    
+    // Ambu
     $this->insertTableEntry("32", "AMBU", "AMBU", "ambu_m", "ambu_m", "Ambulatoire en médecine");
     $this->insertTableEntry("32", "AMBU", "AMBU", "ambu_c", "ambu_c", "Ambulatoire en chirurgie");
     $this->insertTableEntry("32", "MATERAMBU", "MATERAMBU", "ambu_o", "ambu_o", "Ambulatoire en obstétrique");
-    
+    // Externe
     $this->insertTableEntry("32", "EXT", "EXT", "exte_m", "exte_m", "Soins externes");
     $this->insertTableEntry("32", "EXT", "EXT", "exte_c", "exte_c", "Soins externes chirugicaux");
     $this->insertTableEntry("32", "MATEREXT", "MATEREXT", "exte_o", "exte_o", "Soins externes ");
-    
+    /// Seances
     $this->insertTableEntry("32", "CHIMIO", "CHIMIO", "seances_m", "seances_m", "Séance de chimiothérapie");
     $this->insertTableEntry("32", "CHIMIO", "CHIMIO", "seances_c", "seances_c", "Séance de chimiothérapie");
     $this->insertTableEntry("32", "CHIMIO", "CHIMIO", "seances_o", "seances_o", "Séance de chimiothérapie");
-    
+    // Urgence
     $this->insertTableEntry("32", "URGENCE", "URGENCE", "urg_m", "urg_m", "Passage aux ugences médicales sans hosp.");
     $this->insertTableEntry("32", "URGENCE", "URGENCE", "urg_c", "urg_c", "Passage aux ugences chirurgicales sans hosp.");
     $this->insertTableEntry("32", "URGENCE", "URGENCE", "urg_o", "urg_o", "Passage aux ugences");
     
-    $this->mod_version = "0.10";
+    $this->makeRevision("0.10");
+    
+    // Inconnu
+    $set = array(
+      "code_hl7_to"   => "I",
+      "code_hl7_from" => "I",
+      "code_mb_to"    => "ambu"
+    );
+    $and = array(
+      "code_mb_from" => "ambu"
+    );
+    $this->updateTableEntry("4", $set, $and);
+    
+    $this->mod_version = "0.11";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
