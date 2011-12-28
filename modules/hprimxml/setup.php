@@ -359,8 +359,14 @@ class CSetuphprimxml extends CSetup {
                 ADD INDEX (`acquittement_content_id`),
                 DROP INDEX `emetteur_id`;"; 
     $this->addQuery($query);
+    
+    $this->makeRevision("0.36");
+    
+    $query = "ALTER TABLE `destinataire_hprim_config` 
+              ADD `uppercase_fields` ENUM ('0','1') DEFAULT '0';"; 
+    $this->addQuery($query);
         
-    $this->mod_version = "0.36";
+    $this->mod_version = "0.37";
   }
 }
 

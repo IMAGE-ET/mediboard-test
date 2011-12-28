@@ -19,6 +19,7 @@ class CDestinataireHprimConfig extends CMbObject {
   var $send_debiteurs_venue = null;
   var $send_mvt_patients    = null;
   var $send_default_serv_with_type_sej = null;
+  var $uppercase_fields     = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -38,6 +39,7 @@ class CDestinataireHprimConfig extends CMbObject {
     $props["send_debiteurs_venue"]            = "bool default|1";
     $props["send_mvt_patients"]               = "bool default|0";
     $props["send_default_serv_with_type_sej"] = "bool default|0";
+    $props["uppercase_fields"]                = "bool default|0";
     
     return $props;
   }

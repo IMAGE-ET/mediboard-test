@@ -460,13 +460,24 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       }
     }
     
+    if ($this->_ref_receiver->_configs["uppercase_fields"]) {
+     $personne['nom']          = CMbString::upper($personne['nom']);
+     $personne['nomNaissance'] = CMbString::upper($personne['nomNaissance']);
+    }
+    
     $this->addTexte($elParent, "nomUsuel", $personne['nom']);
     $this->addTexte($elParent, "nomNaissance", $personne['nomNaissance']);
     $prenoms = $this->addElement($elParent, "prenoms");
     foreach ($personne['prenoms'] as $key => $prenom) {
       if ($key == 0) {
+        if ($this->_ref_receiver->_configs["uppercase_fields"]) {
+          $prenom = CMbString::upper($prenom ? $prenom : $personne['nom']);
+        }
         $this->addTexte($prenoms, "prenom", $prenom ? $prenom : $personne['nom']);
       } else {
+        if ($this->_ref_receiver->_configs["uppercase_fields"]) {
+          $prenom = CMbString::upper($prenom);
+        }
         $this->addTexte($prenoms, "prenom", $prenom);
       }
     }
