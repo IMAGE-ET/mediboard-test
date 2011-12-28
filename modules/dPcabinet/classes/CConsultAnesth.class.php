@@ -200,15 +200,25 @@ class CConsultAnesth extends CMbObject {
     parent::updatePlainFields();
   }
 
+  /**
+   * @return CConsultation
+   */
   function loadRefConsultation() {
     $this->_ref_consultation = $this->loadFwdRef("consultation_id", false);
     $this->_view = $this->_ref_consultation->_view;
+    return $this->_ref_consultation;
   }
-  
+
+  /**
+   * @return CMediusers
+   */
   function loadRefChir() {
     return $this->_ref_chir = $this->loadFwdRef("chir_id", true);
   }
 
+  /**
+   * @return COperation
+   */
   function loadRefOperation() {
     $this->_ref_operation = $this->loadFwdRef("operation_id", false);
     
@@ -225,9 +235,13 @@ class CConsultAnesth extends CMbObject {
 		return $this->_ref_operation;
   }
 
+  /**
+   * @return CSejour
+   */
   function loadRefSejour() {
     $this->_ref_sejour = $this->loadFwdRef("sejour_id", true);
     $this->_ref_sejour->loadRefsFwd(true);
+    return $this->_ref_sejour;
   }
 
   function loadRefsFiles(){
