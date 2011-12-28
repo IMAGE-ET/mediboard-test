@@ -9,18 +9,15 @@
 
 CCanDo::checkEdit();
 
-$module = CValue::getOrSession("module" , "system");
+$module = CValue::getOrSession("module", "system");
 $classes = CModule::getClassesFor($module);
 global $language;
-$language = CValue::getOrSession("language",'fr');
+$language = CValue::getOrSession("language", "fr");
 
 // Hack to have CModule in system locale file
 if ($module == "system") {
   $classes[] = "CModule";
 }
-
-// If the locale files are in the module's "locales" directory
-$in_module = (is_dir("modules/$module/locales"));
 
 // liste des dossiers modules + common et styles
 $modules = array_keys(CModule::getInstalled());
@@ -28,16 +25,10 @@ sort($modules);
 
 // Dossier des traductions
 $localesDirs = array();
-if ($in_module) {
-  $files = glob("modules/$module/locales/*");
-  foreach ($files as $file) {
-    $name = basename($file, ".php");
-    $localesDirs[$name] = $name;
-  }
-}
-else {
-  $localesDirs = CAppUI::readDirs("locales");
-  CMbArray::removeValue(".svn",$localesDirs);
+$files = glob("modules/$module/locales/*");
+foreach ($files as $file) {
+  $name = basename($file, ".php");
+  $localesDirs[$name] = $name;
 }
 
 // Récupération du fichier demandé pour toutes les langues
@@ -46,7 +37,7 @@ $translateModule->sourcePath = null;
 $contenu_file = array();
 foreach($localesDirs as $locale){
   $translateModule->options = array("name" => "locales");
-  $translateModule->targetPath = ($in_module ? "modules/$module/locales/$locale.php" : "locales/$locale/$module.php");
+  $translateModule->targetPath = "modules/$module/locales/$locale.php";
   $translateModule->load();
   $contenu_file[$locale] = $translateModule->values;
 }
@@ -60,16 +51,20 @@ foreach($localesDirs as $locale){
 	}
 }
 
-global $items, $completions;
+
+global $items, $completions, $all_locales;
 $items = array();
 $completions = array();
+$all_locales = $contenu_file[$locale];
 
 // Ajoute un item de localisation
 function addLocale($class, $cat, $name) {
-  global $trans, $items, $completions, $language;
-  $items[$class][$cat][$name] = array_key_exists($name, $trans) ? @$trans[$name][$language] : "";
+  global $trans, $items, $completions, $language, $all_locales;
   
+  $items[$class][$cat][$name] = array_key_exists($name, $trans) ? @$trans[$name][$language] : "";
   $items[$class][$cat][$name] = str_replace('\n', "\n", $items[$class][$cat][$name]);
+  
+  unset($all_locales[$name]);
   
   // Stats
   @$completions[$class]["total"]++;
@@ -162,7 +157,6 @@ function addConfigConfigCategory($chapter, $category, $values) {
   foreach ($values as $key => $value) {
     addLocale("Config", $category, "config-$prefix-$key");
     addLocale("Config", $category, "config-$prefix-$key-desc");
-    
   }
 }
 
@@ -182,6 +176,9 @@ if ($module == "system") {
 
 $files = CAppUI::readFiles("modules/$module", '\.php$');
 
+addLocale("Module", "Name", "module-$module-court");
+addLocale("Module", "Name", "module-$module-long");
+
 foreach($files as $_file) {
   $_tab = substr($_file, 0, -4);
   
@@ -190,6 +187,8 @@ foreach($files as $_file) {
   
   addLocale("Module", "Tabs", "mod-$module-tab-$_tab");
 }
+
+$empty_locales = array_fill(0, 5, null);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -201,6 +200,8 @@ $smarty->assign("modules"  		, $modules);
 $smarty->assign("module"   		, $module);
 $smarty->assign("trans"    		, $trans);
 $smarty->assign("language"    , $language);
+$smarty->assign("other_locales", $all_locales);
+$smarty->assign("empty_locales", $empty_locales);
 
 $smarty->display("mnt_traduction_classes.tpl");
 ?>

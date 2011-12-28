@@ -23,11 +23,11 @@ $user = CUser::get();
 $can->edit |= ($user->user_type != 1);
 $can->needsEdit();
 
-$module = CValue::post("module", null);
-$tableau = CValue::post("tableau", null);
-$language = CValue::post("language", null);
+$module   = CValue::post("module");
+$strings  = CValue::post("s");
+$language = CValue::post("language");
 
-if(!$module || !$tableau || !is_array($tableau)){
+if(!$module || !$strings || !is_array($strings)){
   CAppUI::setMsg( "Certaines informations sont manquantes au traitement de la traduction.", UI_MSG_ERROR );
   redirect();
   return;
@@ -36,24 +36,23 @@ if(!$module || !$tableau || !is_array($tableau)){
 $translateModule = new CMbConfig;
 $translateModule->sourcePath = null;
 
-//Ecriture du fichier
+// Ecriture du fichier
 $translateModule->options = array("name" => "locales");
-if (is_file("locales/$language/$module.php")) {
-  $translateModule->targetPath = "locales/$language/$module.php";
-} else {
-  $translateModule->targetPath = "modules/$module/locales/$language.php";
-}
+$translateModule->targetPath = "modules/$module/locales/$language.php";
 
 if (!is_file($translateModule->targetPath)) {
   CMbPath::forceDir(dirname($translateModule->targetPath));
-  file_put_contents($translateModule->targetPath, '<?php $locales["module-'.$module.'-court"] = ""; ?>');
+  file_put_contents($translateModule->targetPath, '<?php $locales["module-'.$module.'-court"] = "'.$module.'"; ?>');
 }
 
 $translateModule->load();
 
-foreach ($tableau as $key => $valChaine){
-  if ($valChaine && $tableau[$key] !== ""){
-    $translateModule->values[$key] = stripslashes($tableau[$key]);
+foreach ($strings as $key => $valChaine){
+  if ($valChaine && $valChaine !== ""){
+    $translateModule->values[$key] = stripslashes($valChaine);
+  }
+  elseif ($valChaine === "") {
+    unset($translateModule->values[$key]);
   }
 }
 
@@ -66,7 +65,7 @@ SHM::rem("locales-$language");
 if ($error instanceof PEAR_Error) {
   CAppUI::setMsg("Error while saving locales file : {$error->message}", UI_MSG_ERROR);
 } else {
-  CAppUI::setMsg( "Locales file saved", UI_MSG_OK );
+  CAppUI::setMsg("Locales file saved", UI_MSG_OK );
   redirect();
 }
 

@@ -48,12 +48,17 @@ Main.add(function () {
 <ul id="tab-classes" class="control_tabs">
   {{foreach from=$items key=class item=_item}}
   <li>
-  	<a href="#class-{{$class}}" {{if $completions.$class.percent < 100}}class="wrong"{{/if}}>
+  	<a href="#class-{{$class}}" {{if $completions.$class.percent < 100}} class="wrong" {{/if}}>
   	  {{tr}}{{$class}}{{/tr}}
   	  <small>({{$completions.$class.percent}}%)</small>
   	</a>
-	{{/foreach}}
 	</li>
+  {{/foreach}}
+  <li>
+    <a href="#other-locales" {{if $other_locales|@count == 0}} class="empty" {{/if}}>
+      Autres <small>({{$other_locales|@count}})</small>
+    </a>
+  </li>
 </ul>
 
 <hr class="control_tabs" />
@@ -122,9 +127,9 @@ Main.add(function () {
         	<td>{{$chaine}}</td>
         	<td>
             {{if $trad|strpos:"\n"}}
-              <textarea name="tableau[{{$chaine}}]">{{$trad}}</textarea>
+              <textarea name="s[{{$chaine}}]">{{$trad}}</textarea>
             {{else}}
-              <input style="width: 100%" type="text" name="tableau[{{$chaine}}]" value="{{$trad}}" />
+              <input style="width: 100%" type="text" name="s[{{$chaine}}]" value="{{$trad}}" />
             {{/if}}
           </td>
         	<td>
@@ -139,6 +144,55 @@ Main.add(function () {
        {{foreachelse}}
        <div class="small-info">Aucune classe à traduire pour ce module</div>
        {{/foreach}}
+       
+       <table id="other-locales" class="tbl" style="display: none;">
+         <tr>
+           <th colspan="2" class="title">
+             Autres
+           </th>
+           <th class="title">
+             <button type="submit" class="modify notext">{{tr}}Save{{/tr}}</button>
+           </th>
+         </tr>
+      
+         <tr>
+           <th>Nom</th>
+           <th>{{tr}}language.{{$language}}{{/tr}}</th>
+           <th>{{tr}}Save{{/tr}}</th>
+         </tr>
+        
+        {{foreach from=$other_locales key=_key item=_trad}}
+          <tr>
+            <td>{{$_key}}</td>
+            <td>
+              {{if $_trad|strpos:"\n"}}
+                <textarea name="s[{{$_key}}]">{{$_trad}}</textarea>
+              {{else}}
+                <input style="width: 100%" type="text" name="s[{{$_key}}]" value="{{$_trad}}" />
+              {{/if}}
+            </td>
+            <td>
+              <button type="button" class="down notext" tabIndex="1000" onclick="$(this).up().previous().down('input,textarea').switchMultiline()"></button>
+            </td>
+          </tr>
+        {{/foreach}}
+        
+        {{foreach from=$empty_locales key=_key item=_trad}}
+          <tr>
+            <td><input type="text" name="empty_locales" value="" onkeypress="$(this).up().next().select('input,textarea').each(function(i){i.name='s['+this.value+']'}.bind(this))" /></td>
+            <td>
+              {{if $_trad|strpos:"\n"}}
+                <textarea name="_"></textarea>
+              {{else}}
+                <input style="width: 100%" type="text" name="_" value="" />
+              {{/if}}
+            </td>
+            <td>
+              <button type="button" class="down notext" tabIndex="1000" onclick="$(this).up().previous().down('input,textarea').switchMultiline()"></button>
+            </td>
+          </tr>
+        {{/foreach}}
+       </table>
 	  </td>
   </tr>
 </table>
