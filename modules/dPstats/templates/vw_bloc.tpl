@@ -61,6 +61,7 @@ Main.add(function(){
 function drawGraphs(showLegend){
   $H(graphs).each(function(pair){
     var g = pair.value;
+    $('graph-'+pair.key).update();
     Flotr.draw($('graph-'+pair.key), g.series, Object.extend(g.options, {legend: {show: showLegend}}));
   });
   
