@@ -14,7 +14,7 @@ $chambre_id    = CValue::get("chambre_id");
 $lit_id        = CValue::get("lit_id");
 $uf_id         = CValue::get("uf_id");
 $prestation_id = CValue::get("prestation_id");
-echo "-".$service_id."-".$chambre_id."-".$lit_id."-".$uf_id."-".$prestation_id;
+
 $group = CGroups::loadCurrent();
 
 // Liste des Etablissements
