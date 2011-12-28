@@ -3,12 +3,18 @@
 // CLI or die
 PHP_SAPI === "cli" or die;
 
-// Read arguments
+// Ignores user logout
+ignore_user_abort(true);
+set_time_limit(0);
+
+require dirname(__FILE__)."/../classes/CMLLPSocketHandler.class.php";
+
+// ---- Read arguments
 $argv = $_SERVER["argv"];
 $argc = $_SERVER["argc"];
 
 if (count($argv) < 5) {
-	echo <<<EOT
+  echo <<<EOT
 Usage: {$argv[0]} <root_url> <username> <password> "<params>" [--port port]
   <root_url>      The root url for mediboard, ie https://localhost/mediboard
   <username>      The name of the user requesting, ie cron
@@ -16,30 +22,29 @@ Usage: {$argv[0]} <root_url> <username> <password> "<params>" [--port port]
   [--port <port>] The port to listen on
 
 EOT;
-	exit(0);
+  exit(0);
 }
 
 $options = array(
   "url"      => $argv[1],
   "username" => $argv[2],
   "password" => $argv[3],
-	"debug"    => false,
+  "debug"    => false,
   "port"     => 7001,
 );
 
 for($i = 3; $i < $argc; $i++) {
   switch($argv[$i]){
     case "--debug":
-		  $options["debug"] = true;
-		break;
-		
-		case "--port":
-		  $options["port"] = $argv[++$i];
-		break;
+      $options["debug"] = true;
+    break;
+    
+    case "--port":
+      $options["port"] = $argv[++$i];
+    break;
   }
 }
-
-require dirname(__FILE__)."/../classes/CMLLPSocketHandler.class.php";
+// ---- End read arguments
 
 try {
   $stdout = fopen("php://stdout", "w");
@@ -55,5 +60,6 @@ try {
 catch(Exception $e) {
   $stderr = fopen("php://stderr", "w");
   fwrite($stderr, $e->getMessage().PHP_EOL);
+  
   exit(1);
 }
