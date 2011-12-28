@@ -165,7 +165,7 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     
     // PV1-21: Charge Price Indicator (IS) (optional)
     // Table - 0032
-    $data[] = CHL7v2TableEntry::mapTo("32", $sejour->type);
+    $data[] = $this->getModeTraitement($sejour);
     
     // PV1-22: Courtesy Code (IS) (optional)
     // Table - 0045

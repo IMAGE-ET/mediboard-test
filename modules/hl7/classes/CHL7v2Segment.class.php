@@ -446,6 +446,13 @@ class CHL7v2Segment extends CHL7v2Entity {
       )
     );
   }
+  
+  function getModeTraitement(CSejour $sejour) {
+    $code  = $sejour->type;
+    $code .= $sejour->type_pec ? "_$sejour->type_pec" : null;
+
+    return CHL7v2TableEntry::mapTo("32", CMbString::lower($code));
+  }
 }
 
 ?>
