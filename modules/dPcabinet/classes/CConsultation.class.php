@@ -698,11 +698,21 @@ class CConsultation extends CCodable {
   
   function doUpdateMontants(){
     // Initialisation des montants
-    $secteur1_NGAP = 0;
-    $secteur1_CCAM = 0;
-    $secteur2_NGAP = 0;
-    $secteur2_CCAM = 0;
+    $secteur1_NGAP    = 0;
+    $secteur1_CCAM    = 0;
+    $secteur1_TARMED  = 0;
+    $secteur2_NGAP    = 0;
+    $secteur2_CCAM    = 0;
+    $secteur2_TARMED  = 0;
     
+    // Chargement des actes Tarmed
+    if(CModule::getInstalled("tarmed")){
+	    $this->loadRefsActesTarmed();
+	    foreach ($this->_ref_actes_tarmed as $actetarmed) { 
+	      $secteur1_TARMED += $actetarmed->montant_base;
+	      $secteur2_TARMED += $actetarmed->montant_depassement;
+	    }
+    }
     // Chargement des actes NGAP
     $this->loadRefsActesNGAP();
     foreach ($this->_ref_actes_ngap as $acteNGAP) { 
@@ -718,8 +728,8 @@ class CConsultation extends CCodable {
     }
     
     // Remplissage des montant de la consultation
-    $this->secteur1 = $secteur1_NGAP + $secteur1_CCAM;
-    $this->secteur2 = $secteur2_NGAP + $secteur2_CCAM;
+    $this->secteur1 = $secteur1_NGAP + $secteur1_CCAM + $secteur1_TARMED;
+    $this->secteur2 = $secteur2_NGAP + $secteur2_CCAM + $secteur2_TARMED;
     
     return $this->store();
     

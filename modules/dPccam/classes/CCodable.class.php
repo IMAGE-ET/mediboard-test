@@ -40,6 +40,11 @@ class CCodable extends CMbObject {
   var $_codes_ngap     = null;
   var $_tokens_ngap    = null;
 
+  // Actes Tarmed
+  var $_codes_tarmed      = null;
+  var $_ref_actes_tarmed  = null;
+  var $_tokens_tarmed     = null;
+  
   // Back references
   var $_ref_actes = null;
   var $_ref_prescriptions = null;
@@ -76,6 +81,17 @@ class CCodable extends CMbObject {
       }
     }
     $this->_tokens_ngap = "";
+    
+    // Suppression des anciens actes Tarmed
+    if(CModule::getInstalled("tarmed")){
+	    $this->loadRefsActesTarmed();
+	    foreach ($this->_ref_actes_tarmed as $acte) { 
+	      if ($msg = $acte->delete()) {
+	        return $msg;
+	      }
+	    }
+	    $this->_tokens_tarmed = "";
+    }
   }  
   
   /**
@@ -133,10 +149,12 @@ class CCodable extends CMbObject {
     $props["codes_ccam"]   = "str show|0";
     $props["facture"]      = "bool default|0";
 
-    $props["_tokens_ccam"] = "";
-    $props["_tokens_ngap"] = "";
-    $props["_codes_ccam"]  = "";
-    $props["_codes_ngap"]  = "";
+    $props["_tokens_ccam"]    = "";
+    $props["_tokens_ngap"]    = "";
+    $props["_tokens_tarmed"]  = "";
+    $props["_codes_ccam"]     = "";
+    $props["_codes_ngap"]     = "";
+    $props["_codes_tarmed"]   = "";
 
     $props["_count_actes"] = "num min|0";
     return $props;
@@ -146,6 +164,7 @@ class CCodable extends CMbObject {
     $backProps = parent::getBackProps();
     $backProps["actes_ngap"]    = "CActeNGAP object_id";
     $backProps["actes_ccam"]    = "CActeCCAM object_id";
+    $backProps["actes_tarmed"]  = "CActeTarmed object_id";
     $backProps["frais_divers"]  = "CFraisDivers object_id";
     return $backProps;
   }
@@ -213,7 +232,7 @@ class CCodable extends CMbObject {
   }
   
   function countActes() {
-    $this->_count_actes = $this->countBackRefs("actes_ngap") + $this->countBackRefs("actes_ccam");
+    $this->_count_actes = $this->countBackRefs("actes_ngap") + $this->countBackRefs("actes_ccam") + $this->countBackRefs("actes_tarmed");
   }
 
   function correctActes() {
@@ -232,12 +251,19 @@ class CCodable extends CMbObject {
     
     $this->loadRefsActesCCAM();
     $this->loadRefsActesNGAP();  
-    
+    if(CModule::getInstalled("tarmed")){
+      $this->loadRefsActesTarmed();
+    }
     foreach($this->_ref_actes_ccam as $acte_ccam){
       $this->_ref_actes[] = $acte_ccam;
     }
     foreach($this->_ref_actes_ngap as $acte_ngap){
       $this->_ref_actes[] = $acte_ngap;
+    }
+    if($this->_ref_actes_tarmed){
+	    foreach($this->_ref_actes_tarmed as $acte_tarmed){
+	      $this->_ref_actes[] = $acte_tarmed;
+	    }
     }
     
     $this->_count_actes = count($this->_ref_actes);
@@ -289,6 +315,24 @@ class CCodable extends CMbObject {
       $_acte_ngap->getLibelle();
     }
     $this->_tokens_ngap = implode("|", $this->_codes_ngap);
+  }
+  
+  /**
+   * Charge les actes Tarmed codés
+   */
+  function loadRefsActesTarmed(){
+  	if (null === $this->_ref_actes_tarmed = $this->loadBackRefs("actes_tarmed", "code ASC")) {
+      return;
+    }
+    
+    $this->_codes_tarmed = array();
+    foreach ($this->_ref_actes_tarmed as $_acte_tarmed){
+      $this->_codes_tarmed[] = $_acte_tarmed->makeFullCode(); 
+      $_acte_tarmed->loadRefExecutant();
+      $_acte_tarmed->getLibelle();
+      $_acte_tarmed->countActesAssocies();
+    }
+    $this->_tokens_tarmed = implode("|", $this->_codes_tarmed);
   }
   
   /**

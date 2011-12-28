@@ -38,9 +38,18 @@ $acte_ngap->quantite = 1;
 $acte_ngap->coefficient = 1;
 $acte_ngap->loadListExecutants();
 
+$acte_tarmed = null;
+if(CModule::getInstalled("tarmed")){
+	//Initialisation d'un acte Tarmed
+	$acte_tarmed = new CActeTarmed();
+	$acte_tarmed->quantite = 1;
+	$acte_tarmed->loadListExecutants();
+	$acte_tarmed->loadRefExecutant();
+}
 // Création du template
 $smarty = new CSmartyDP("modules/dPsalleOp");
 $smarty->assign("acte_ngap"  , $acte_ngap      );
+$smarty->assign("acte_tarmed", $acte_tarmed      );
 $smarty->assign("subject"    , $operation      );
 $smarty->assign("listAnesths", $listAnesths    );
 $smarty->assign("listChirs"  , $listChirs      );

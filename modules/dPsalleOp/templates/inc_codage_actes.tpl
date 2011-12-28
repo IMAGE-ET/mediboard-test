@@ -10,8 +10,13 @@
 </script>
 
 <ul id="codage_tab_group" class="control_tabs">
-  <li><a href="#ccam_tab">CCAM</a></li>
-  <li><a href="#ngap_tab">NGAP</a></li>
+  {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
+    <li><a href="#ccam_tab">CCAM</a></li>
+    <li><a href="#ngap_tab">NGAP</a></li>
+  {{/if}}
+  {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
+    <li><a href="#tarmed_tab">TARMED</a></li>
+  {{/if}}
 </ul>
 
 <hr class="control_tabs" />
@@ -27,3 +32,10 @@
     {{mb_include module=dPcabinet template=inc_codage_ngap}}
   </div>
 </div>
+{{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
+<div id="tarmed_tab" style="display:none">
+  <div id="listActesTarmed">
+    {{mb_include module=tarmed template=inc_codage_tarmed}}
+  </div>
+</div>
+{{/if}}

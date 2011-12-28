@@ -21,12 +21,14 @@ class CTarif extends CMbObject {
   var $secteur2    = null;
   var $codes_ccam  = null;
   var $codes_ngap  = null;
+  var $codes_tarmed = null;
   
   // Form fields
   var $_type       = null;
   var $_somme      = null;
   var $_codes_ngap = array();
   var $_codes_ccam = array();
+  var $_codes_tarmed = array();
   var $_new_actes  = array();
   
   // Remote fields
@@ -62,6 +64,7 @@ class CTarif extends CMbObject {
     $specs["secteur2"]    = "currency";
     $specs["codes_ccam"]  = "str";
     $specs["codes_ngap"]  = "str";
+    $specs["codes_tarmed"]= "str";
     $specs["_somme"]      = "currency";
     $specs["_type"]       = "";
     
@@ -77,8 +80,10 @@ class CTarif extends CMbObject {
     $this->_type = $this->chir_id == null ? "chir" : "function";
     $this->_codes_ngap = explode("|", $this->codes_ngap);
     $this->_codes_ccam = explode("|", $this->codes_ccam);
+    $this->_codes_tarmed = explode("|", $this->codes_tarmed);
     CMbArray::removeValue("", $this->_codes_ngap);
     CMbArray::removeValue("", $this->_codes_ccam);
+    CMbArray::removeValue("", $this->_codes_tarmed);
     $this->_somme = $this->secteur1 + $this->secteur2;
   }
   
@@ -105,6 +110,9 @@ class CTarif extends CMbObject {
     $consult->loadRefPlageConsult();
     $consult->loadRefsActesNGAP();
     $consult->loadRefsActesCCAM();
+    if(CModule::getInstalled("tarmed")){
+      $consult->loadRefsActesTarmed();
+    }
     
     // Affectation des valeurs au tarif
     $this->secteur1    = $consult->secteur1;
@@ -112,6 +120,7 @@ class CTarif extends CMbObject {
     $this->description = $consult->tarif;
     $this->codes_ccam  = $consult->_tokens_ccam;
     $this->codes_ngap  = $consult->_tokens_ngap;
+    $this->codes_tarmed= $consult->_tokens_tarmed;
     $this->chir_id     = $consult->_ref_chir->_id;
     $this->function_id = "";
   }
@@ -165,12 +174,30 @@ class CTarif extends CMbObject {
 			$_code = $acte->makeFullCode();
     }
     $this->codes_ngap = implode("|", $this->_codes_ngap);
-
+    
+    if(CModule::getInstalled("tarmed")){
+	    // Actes Tarmed 
+	    $this->completeField("codes_tarmed");
+	    $this->_codes_tarmed = explode("|", $this->codes_tarmed);
+	    CMbArray::removeValue("", $this->_codes_tarmed);
+			foreach ($this->_codes_tarmed as &$_code) {
+		    $acte = new CActeTarmed;
+		    $acte->setFullCode($_code);
+	      $this->secteur1 += $acte->updateMontantBase();	
+				
+	      // Affectation du secteur 2  au dépassement du premier acte trouvé
+	      $acte->montant_depassement = $secteur2 ? $secteur2 : 0;
+	      $secteur2 = 0;
+	
+				$_code = $acte->makeFullCode();
+	    }
+	    $this->codes_tarmed = implode("|", $this->_codes_tarmed);
+    }
 		return $this->secteur1;
 	}
 	
 	function getSecteur1Uptodate() {
-		if (!$this->codes_ngap && !$this->codes_ccam) {
+		if ((!$this->codes_ngap && !$this->codes_ccam) || !$this->codes_tarmed) {
 			return $this->_secteur1_uptodate = "1";
 		}
 		
@@ -178,6 +205,7 @@ class CTarif extends CMbObject {
 		$secteur1   = $this->secteur1;
     $codes_ccam = $this->_codes_ccam;
     $codes_ngap = $this->_codes_ngap;
+    $codes_tarmed = $this->_codes_tarmed;
     
 		// Compute...
     $this->_update_montants = true;
@@ -187,6 +215,7 @@ class CTarif extends CMbObject {
     $this->secteur1 = $secteur1;
     $this->_codes_ccam = $codes_ccam;
     $this->_codes_ngap = $codes_ngap;
+    $this->_codes_tarmed = $codes_tarmed;
 
     return $this->_secteur1_uptodate = CFloatSpec::equals($secteur1, $new_secteur1, $this->_specs["secteur1"]) ? "1" : "0";
 	}
@@ -195,7 +224,7 @@ class CTarif extends CMbObject {
     $this->_has_mto = '0';
     $this->_new_actes = array();
     
-    if (count($this->_codes_ccam) + count($this->_codes_ngap) == 0) {
+    if (count($this->_codes_ccam) + count($this->_codes_ngap) + count($this->_codes_tarmed) == 0) {
       return $this->_precode_ready = '0';
     }
     
@@ -219,6 +248,16 @@ class CTarif extends CMbObject {
       if (in_array($acte->code, array("MTO", "MPJ"))) {
         $this->_has_mto = '1';
       }
+    }
+    if(CModule::getInstalled("tarmed")){
+	    foreach ($this->_codes_tarmed as $code) {
+	      $acte = new CActeTarmed();
+	      $acte->setFullCode($code);
+	      $this->_new_actes["$code"] = $acte;
+	      if (!$acte->getPrecodeReady()) {
+	        return $this->_precode_ready = '0';
+	      }
+	    }
     }
     
     return $this->_precode_ready = '1';

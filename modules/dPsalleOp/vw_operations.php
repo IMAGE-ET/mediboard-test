@@ -152,6 +152,14 @@ $acte_ngap->quantite = 1;
 $acte_ngap->coefficient = 1;
 $acte_ngap->loadListExecutants();
 
+$acte_tarmed = null;
+if(CModule::getInstalled("tarmed")){
+	//Initialisation d'un acte Tarmed
+	$acte_tarmed = new CActeTarmed();
+	$acte_tarmed->quantite = 1;
+	$acte_tarmed->loadListExecutants();
+	$acte_tarmed->loadRefExecutant();
+}
 // Vérification de la check list journalière
 $daily_check_list = CDailyCheckList::getList($salle, $date);
 $daily_check_list->loadItemTypes();
@@ -201,6 +209,7 @@ $listValidateurs = CPersonnel::loadListPers(array("op", "op_panseuse"), true, tr
 $smarty->assign("anesth_perop"           , new CAnesthPerop());
 $smarty->assign("unites"                 , $unites);
 $smarty->assign("acte_ngap"              , $acte_ngap);
+$smarty->assign("acte_tarmed"            , $acte_tarmed);
 $smarty->assign("op"                     , $op);
 $smarty->assign("salle"                  , $salle_id);
 $smarty->assign("currUser"               , $currUser);

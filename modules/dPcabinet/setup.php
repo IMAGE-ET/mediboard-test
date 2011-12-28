@@ -1394,7 +1394,13 @@ class CSetupdPcabinet extends CSetup {
       ADD `type` ENUM ('classique','entree') DEFAULT 'classique'";
     $this->addQuery($query);
     
-    $this->mod_version = "1.40";
+    $this->makeRevision("1.40");
+   
+    $query = "ALTER TABLE `tarifs` ADD `codes_tarmed` VARCHAR(255);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.41";
+    
   }
 }
 ?>

@@ -246,6 +246,7 @@ Main.add( function(){
                 {{/if}}
               </td>
             </tr>
+            {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
             <tr>
               <th>Codes CCAM</th>
               <td>{{mb_field object=$consult field="_tokens_ccam" readonly="readonly" hidden=1}}
@@ -262,7 +263,16 @@ Main.add( function(){
                 {{/foreach}}
               </td>
             </tr>
-    
+            {{elseif @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
+            <tr>
+              <th>Codes Tarmed</th>
+              <td>{{mb_field object=$consult field="_tokens_tarmed" readonly="readonly" hidden=1}}
+                {{foreach from=$consult->_ref_actes_tarmed item=acte_tarmed}}
+                  <span onmouseover="ObjectTooltip.createEx(this, '{{$acte_tarmed->_guid}}');">{{$acte_tarmed->_shortview}}</span>
+                {{/foreach}}
+              </td>
+            </tr>
+            {{/if}}
             {{if $consult->tarif && $consult->patient_date_reglement == "" && $consult->valide == "1"}}
             <tr>
               <td colspan="2" class="button">

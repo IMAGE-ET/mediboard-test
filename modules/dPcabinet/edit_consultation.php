@@ -223,7 +223,15 @@ $acte_ngap->quantite = 1;
 $acte_ngap->coefficient = 1;
 $acte_ngap->loadListExecutants();
 
-
+$acte_tarmed = null;
+//Si le module Tarmed est installé chargement d'un acte
+if(CModule::getInstalled("tarmed")){
+	//Initialisation d'un acte Tarmed
+	$acte_tarmed = new CActeTarmed();
+	$acte_tarmed->quantite = 1;
+	$acte_tarmed->loadListExecutants();
+	$acte_tarmed->loadRefExecutant();
+}
 // Tableau de contraintes pour les champs du RPU
 // Contraintes sur le mode d'entree / provenance
 //$contrainteProvenance[6] = array("", 1, 2, 3, 4);
@@ -250,7 +258,9 @@ if ($consult->_id) {
   	}
 	}
 }
-
+if(CModule::getInstalled("tarmed")){
+  $consult->loadRefsActesTarmed();
+}
 // Tout utilisateur peut consulter en lecture seule une consultation de séjour
 $consult->canEdit();
 
@@ -266,6 +276,7 @@ $smarty->assign("listEtab"           , $listEtab           );
 $smarty->assign("listServicesUrgence", $listServicesUrgence);
 
 $smarty->assign("acte_ngap"      , $acte_ngap);
+$smarty->assign("acte_tarmed"    , $acte_tarmed);
 $smarty->assign("tabSejour"      , $tabSejour);
 $smarty->assign("banques"        , $banques);
 $smarty->assign("listAnesths"    , $listAnesths);
