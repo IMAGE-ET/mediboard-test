@@ -573,7 +573,7 @@ class CSetuphl7 extends CSetup {
     );
     $this->updateTableEntry("4", $set, $and);
     
-    $this->makeRevision("0.10");
+    $this->makeRevision("0.11");
     
     // Type d'activité, mode de traitement
     // Hospi. complète
