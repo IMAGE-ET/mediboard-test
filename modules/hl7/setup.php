@@ -573,7 +573,21 @@ class CSetuphl7 extends CSetup {
     );
     $this->updateTableEntry("4", $set, $and);
     
-    $this->mod_version = "0.11";
+    $this->makeRevision("0.10");
+    
+    // Type d'activité, mode de traitement
+    // Hospi. complète
+    $this->insertTableEntry("32", "CM", "CM", "comp", "comp", "Hospi. complète en médecine");
+    // Ambu
+    $this->insertTableEntry("32", "MATERAMBU", "MATERAMBU", "ambu", "ambu", "Ambulatoire en obstétrique");
+    // Externe
+    $this->insertTableEntry("32", "EXT", "EXT", "exte", "exte", "Soins externes chirugicaux");
+    /// Seances
+    $this->insertTableEntry("32", "CHIMIO", "CHIMIO", "seances", "seances", "Séance de chimiothérapie");
+    // Urgence
+    $this->insertTableEntry("32", "URGENCE", "URGENCE", "urg", "urg", "Passage aux ugences chirurgicales sans hosp.");
+    
+    $this->mod_version = "0.12";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
