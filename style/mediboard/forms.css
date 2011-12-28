@@ -78,6 +78,18 @@ input[type=checkbox].disabled {
   filter:alpha(opacity=70); /* IE patch */
 }
 
+/** <Two rules required> !! Don't merge them 
+ *  http://stackoverflow.com/a/2610741/92315
+ */
+:-moz-placeholder {
+  color: #999 !important;
+}
+
+::-webkit-input-placeholder {
+  color: #999 !important;
+}
+/** </Two rules required> **/
+
 textarea {
   padding-left: 2px;
   width: 99%;
