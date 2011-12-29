@@ -706,13 +706,12 @@ class CConsultation extends CCodable {
     $secteur2_TARMED  = 0;
     
     // Chargement des actes Tarmed
-    if(CModule::getInstalled("tarmed")){
-	    $this->loadRefsActesTarmed();
-	    foreach ($this->_ref_actes_tarmed as $actetarmed) { 
-	      $secteur1_TARMED += $actetarmed->montant_base;
-	      $secteur2_TARMED += $actetarmed->montant_depassement;
-	    }
+    $this->loadRefsActesTarmed();
+    foreach ($this->_ref_actes_tarmed as $actetarmed) { 
+      $secteur1_TARMED += $actetarmed->montant_base;
+      $secteur2_TARMED += $actetarmed->montant_depassement;
     }
+    
     // Chargement des actes NGAP
     $this->loadRefsActesNGAP();
     foreach ($this->_ref_actes_ngap as $acteNGAP) { 

@@ -111,9 +111,7 @@ $reglement->montant = round($consult->_du_patient_restant, 2);
 
 // Codes et actes NGAP
 $consult->loadRefsActesNGAP();
-if(CModule::getInstalled("tarmed")){
-  $consult->loadRefsActesTarmed();
-}
+$consult->loadRefsActesTarmed();
 
 // Création du template
 $smarty = new CSmartyDP();

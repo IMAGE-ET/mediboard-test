@@ -110,9 +110,7 @@ class CTarif extends CMbObject {
     $consult->loadRefPlageConsult();
     $consult->loadRefsActesNGAP();
     $consult->loadRefsActesCCAM();
-    if(CModule::getInstalled("tarmed")){
-      $consult->loadRefsActesTarmed();
-    }
+    $consult->loadRefsActesTarmed();
     
     // Affectation des valeurs au tarif
     $this->secteur1    = $consult->secteur1;

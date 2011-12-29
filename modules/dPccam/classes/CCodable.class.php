@@ -83,15 +83,13 @@ class CCodable extends CMbObject {
     $this->_tokens_ngap = "";
     
     // Suppression des anciens actes Tarmed
-    if(CModule::getInstalled("tarmed")){
-	    $this->loadRefsActesTarmed();
-	    foreach ($this->_ref_actes_tarmed as $acte) { 
-	      if ($msg = $acte->delete()) {
-	        return $msg;
-	      }
-	    }
-	    $this->_tokens_tarmed = "";
+    $this->loadRefsActesTarmed();
+    foreach ($this->_ref_actes_tarmed as $acte) { 
+      if ($msg = $acte->delete()) {
+        return $msg;
+      }
     }
+    $this->_tokens_tarmed = "";
   }  
   
   /**
@@ -251,9 +249,7 @@ class CCodable extends CMbObject {
     
     $this->loadRefsActesCCAM();
     $this->loadRefsActesNGAP();  
-    if(CModule::getInstalled("tarmed")){
-      $this->loadRefsActesTarmed();
-    }
+    $this->loadRefsActesTarmed();
     foreach($this->_ref_actes_ccam as $acte_ccam){
       $this->_ref_actes[] = $acte_ccam;
     }
@@ -321,18 +317,20 @@ class CCodable extends CMbObject {
    * Charge les actes Tarmed codés
    */
   function loadRefsActesTarmed(){
-  	if (null === $this->_ref_actes_tarmed = $this->loadBackRefs("actes_tarmed", "code ASC")) {
-      return;
+    if(CModule::getInstalled("tarmed")){
+	  	if (null === $this->_ref_actes_tarmed = $this->loadBackRefs("actes_tarmed", "code ASC")) {
+	      return;
+	    }
+	    
+	    $this->_codes_tarmed = array();
+	    foreach ($this->_ref_actes_tarmed as $_acte_tarmed){
+	      $this->_codes_tarmed[] = $_acte_tarmed->makeFullCode(); 
+	      $_acte_tarmed->loadRefExecutant();
+	      $_acte_tarmed->getLibelle();
+	      $_acte_tarmed->countActesAssocies();
+	    }
+	    $this->_tokens_tarmed = implode("|", $this->_codes_tarmed);
     }
-    
-    $this->_codes_tarmed = array();
-    foreach ($this->_ref_actes_tarmed as $_acte_tarmed){
-      $this->_codes_tarmed[] = $_acte_tarmed->makeFullCode(); 
-      $_acte_tarmed->loadRefExecutant();
-      $_acte_tarmed->getLibelle();
-      $_acte_tarmed->countActesAssocies();
-    }
-    $this->_tokens_tarmed = implode("|", $this->_codes_tarmed);
   }
   
   /**

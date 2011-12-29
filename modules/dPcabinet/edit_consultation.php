@@ -258,9 +258,9 @@ if ($consult->_id) {
   	}
 	}
 }
-if(CModule::getInstalled("tarmed")){
-  $consult->loadRefsActesTarmed();
-}
+
+$consult->loadRefsActesTarmed();
+
 // Tout utilisateur peut consulter en lecture seule une consultation de séjour
 $consult->canEdit();
 
