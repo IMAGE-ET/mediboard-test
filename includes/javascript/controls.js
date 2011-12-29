@@ -641,7 +641,7 @@ Element.addMethods('input', {
         if (element.disabled || element.readOnly) return;
         
         var step = Number(element.spinner.getStep(0.1));
-        var result = (parseInt(Number(element.value) / step) + 1) * step;
+        var result = (Math.round(parseFloat(Number(element.value)) / step) + 1) * step;
         
         if (options.max != null) {
           result = (result <= options.max) ? result : options.max;
@@ -672,7 +672,7 @@ Element.addMethods('input', {
         if (element.disabled || element.readOnly) return;
         
         var step = Number(element.spinner.getStep(-0.1));
-        var result = (parseInt(Number(element.value) / step) - 1) * step;
+        var result = (Math.round(parseFloat(Number(element.value)) / step) - 1) * step;
         
         if (options.min != null) {
           result = (result >= options.min) ? result : options.min;
