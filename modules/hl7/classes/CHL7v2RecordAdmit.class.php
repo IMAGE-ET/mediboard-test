@@ -48,15 +48,115 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
+    $event_temp = $ack->event;
+    
     // Traitement du message des erreurs
     $comment = $warning = "";
     
     $exchange_ihe = $this->_ref_exchange_ihe;
     $exchange_ihe->_ref_sender->loadConfigValues();
     $sender       = $exchange_ihe->_ref_sender;
+        
+    // Traitement du patient
+    $hl7v2_record_person = new CHL7v2RecordPerson();
+    $hl7v2_record_person->_ref_exchange_ihe = $exchange_ihe;
+    $msg_ack = $hl7v2_record_person->handle($ack, $newPatient, $data);
     
+    // Retour de l'acquittement si erreur sur le traitement du patient
+    if ($exchange_ihe->statut_acquittement == "AR") {
+      return $msg_ack;
+    }
+        
+    // Traitement du séjour
+    $ack = new CHL7v2Acknowledgment($event_temp);
+    $ack->message_control_id = $data['identifiantMessage'];
+    $ack->_ref_exchange_ihe  = $exchange_ihe;
+   
+    $newVenue = new CSejour();
     
+    $function_handle = "handle$exchange_ihe->code";
+    if (!method_exists($this, $function_handle)) {
+      return $exchange_ihe->setAckAR($ack, "E006", null, $newVenue);
+    }
+    
+    $this->$function_handle($ack, $newVenue, $data);
   } 
+  
+  function handleA01(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    
+  }
+  
+  function handleA02(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    
+  }
+  
+  function handleA03(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    
+  }
+  
+  function handleA04(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    
+  }
+  
+  function handleA05(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    
+  }
+  
+  function handleA06(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    
+  }
+  
+  function handleA07(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    
+  }
+  
+  function handleA11(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    
+  }
+  
+  function handleA12(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    
+  }
+  
+  function handleA13(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    
+  }
+  
+  function handleA28(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    
+  }
+  
+  function handleA31(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    
+  }
+  
+  function handleA38(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    
+  }
+  
+  function handleA40(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    
+  }
+  
+  function handleA44(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    
+  }
+  
+  function handleA45(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    
+  }
+  
+  function handleA54(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    
+  }
+  
+  function handleA55(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    
+  }
+  
+  function handleZ99(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    
+  }
 }
 
 ?>

@@ -31,7 +31,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     // Traitement du message des erreurs
     $comment = $warning = $code_IPP = "";
     $_modif_patient = false;
-    
+
     $exchange_ihe = $this->_ref_exchange_ihe;
     $exchange_ihe->_ref_sender->loadConfigValues();
     $sender       = $exchange_ihe->_ref_sender;
