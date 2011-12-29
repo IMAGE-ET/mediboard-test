@@ -38,6 +38,7 @@ $locales['CHL7EventADT-AR-E123'] = 'Le patient retrouvé sur le système par son R
 $locales['CHL7EventADT-AR-E124'] = 'Le patient retrouvé sur le système par son PI est différent de celui du message';
 $locales['CHL7EventADT-AR-E130'] = 'Discordance entre l\'identifiant source et l\'identifiant cible du patient';
 $locales['CHL7EventADT-AR-E131'] = 'Discordance entre l\'identifiant source et l\'identifiant cible du patient à éliminer';
+$locales['CHL7EventADT-AR-E200'] = 'Aucun identifiants du séjour fournis.';
 $locales['CHL7v2Exception-1'] = 'Fichier vide ou trop court';
 $locales['CHL7v2Exception-3'] = 'Format de séparateur invalide';
 $locales['CHL7v2Exception-4'] = 'Syntaxe de segment invalide';

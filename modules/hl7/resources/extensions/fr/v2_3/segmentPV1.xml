@@ -103,7 +103,7 @@
             <description>Financial Class</description>
             <datatype>FC</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="2" table="0032">
+        <field minOccurs="0" maxOccurs="0" length="10" table="0032">
             <name>PV1.21</name>
             <description>Charge Price Indicator</description>
             <datatype>IS</datatype>
