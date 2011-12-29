@@ -562,7 +562,7 @@ class CSetuphl7 extends CSetup {
     
     $this->makeRevision("0.10");
     
-    // Inconnu
+    // Ambu
     $set = array(
       "code_hl7_to"   => "I",
       "code_hl7_from" => "I",
@@ -587,7 +587,18 @@ class CSetuphl7 extends CSetup {
     // Urgence
     $this->insertTableEntry("32", "URGENCE", "URGENCE", "urg", "urg", "Passage aux ugences chirurgicales sans hosp.");
     
-    $this->mod_version = "0.12";
+    $this->makeRevision("0.12");
+    
+    $set = array(
+      "code_hl7_to"   => "AMBU",
+      "code_hl7_from" => "AMBU",
+    );
+    $and = array(
+      "code_mb_from" => "ambu"
+    );
+    $this->updateTableEntry("32", $set, $and);
+    
+    $this->mod_version = "0.13";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
