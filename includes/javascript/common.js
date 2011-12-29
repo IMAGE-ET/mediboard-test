@@ -240,7 +240,7 @@ Localize = {
     }
     
     // Add a row in form
-    var name = 'tableau['+string+']';
+    var name = 's['+string+']';
     var form = getForm('UnlocForm');
     if (form) {
       var tbody = form.down('tbody');
