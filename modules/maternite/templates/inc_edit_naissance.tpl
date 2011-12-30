@@ -19,7 +19,7 @@
         {{mb_label object=$patient field="sexe"}}
       </th>
       <td>
-        {{mb_field object=$patient field="sexe" emptyLabel="indéterminé"}}
+        {{mb_field object=$patient field="sexe" emptyLabel="Indéterminé"}}
       </td>
     </tr>
     <tr>
@@ -90,7 +90,7 @@
        {{mb_label object=$constantes field=taille}}
       </th>
       <td>
-        {{mb_field object=$constantes field=taille size="3"}} {{$list_constantes.poids.unit}}
+        {{mb_field object=$constantes field=taille size="3"}} {{$list_constantes.taille.unit}}
       </td>
     </tr>
     <tr>

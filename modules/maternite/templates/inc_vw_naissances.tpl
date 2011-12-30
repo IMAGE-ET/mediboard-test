@@ -31,7 +31,7 @@
     </tr>
   {{foreachelse}}
     <tr>
-      <td class="empty" colspan="3">
+      <td class="empty" colspan="4">
         {{tr}}CNaissance.none{{/tr}}
       </td>
     </tr>
