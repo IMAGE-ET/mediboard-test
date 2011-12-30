@@ -319,8 +319,12 @@
           <td style="font-weight: bold; white-space: nowrap;">
             {{if $const_med->ta_gauche}}
               {{$const_med->_ta_gauche_systole}} / {{$const_med->_ta_gauche_diastole}} cm Hg
+            {{elseif $const_med->ta_droit}}
+              {{$const_med->_ta_droit_systole}} / {{$const_med->_ta_droit_diastole}} cm Hg
+            {{elseif $const_med->ta}}
+              {{$const_med->_ta_systole}} / {{$const_med->_ta_diastole}} cm Hg
             {{else}}
-            ?
+              ?
             {{/if}}
           </td>
           <th style="font-weight: normal;">Spo2</th>
