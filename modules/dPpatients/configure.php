@@ -17,6 +17,19 @@ for ($i = 1 ; $i < 96 ; $i++) {
   $departements[] = str_pad($i, 2, "0", STR_PAD_LEFT);
 }
 
+// Ajout des DOM-TOM
+$departements[] = "CS"; // Corse du Sud
+$departements[] = "GD"; // Guadeloupe
+$departements[] = "GY"; // Guyanne
+$departements[] = "HC"; // Haute Corse
+$departements[] = "MA"; // Martinique
+$departements[] = "MY"; // Mayotte
+$departements[] = "PS"; // Nouvelle Calédonie
+$departements[] = "PF"; // Polynésie française
+$departements[] = "RE"; // Réunion
+$departements[] = "PM"; // Saitn Pierre et Miquelon
+$departements[] = "WF"; // Wallis et Futuna
+
 $service = new CService;
 $services = $service->loadGroupList();
 
