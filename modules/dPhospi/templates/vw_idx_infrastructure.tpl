@@ -22,10 +22,15 @@ function showLit(type_id, valeur_id, type_id2, valeur_id2, update_name){
   url.addParam(type_id2, valeur_id2);
   url.requestUpdate(update_name);
 }
-
+function submitForm(form, update_name){
+  var url = new Url("dPhospi", "ajax_list_infrastructure");
+  url.addParam("type_name", update_name);
+  url.requestUpdate(SystemMessage.id);
+}
 </script>
 
 
+{{mb_script module=dPhospi script=affectation_uf}}
 
 <ul id="tabs-chambres" class="control_tabs">
   <li><a href="#services">{{tr}}CService{{/tr}}</a></li>
