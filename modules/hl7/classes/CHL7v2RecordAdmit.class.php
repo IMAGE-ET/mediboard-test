@@ -49,13 +49,20 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
     $event_temp = $ack->event;
-    
-    // Traitement du message des erreurs
-    $comment = $warning = "";
-    
+
     $exchange_ihe = $this->_ref_exchange_ihe;
     $exchange_ihe->_ref_sender->loadConfigValues();
     $sender       = $exchange_ihe->_ref_sender;
+    
+    // Acquittement d'erreur : identifiants RI et NA non fournis
+    if (!$data['admitIdentifiers'] || !isset($data['personIdentifiers']["NA"])) {
+      return $exchange_ihe->setAckAR($ack, "E200", null, $newPatient);
+    }
+
+    $IPP = new CIdSante400();
+    if ($patientPI) {
+      $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
+    }
         
     // Traitement du patient
     $hl7v2_record_person = new CHL7v2RecordPerson();
@@ -74,87 +81,161 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
    
     $newVenue = new CSejour();
     
+    // Affectation du patient
+    $newVenue->patient_id = $newPatient->_id; 
+    // Affectation de l'établissement
+    $newVenue->group_id = $sender->group_id;
+    
     $function_handle = "handle$exchange_ihe->code";
     if (!method_exists($this, $function_handle)) {
       return $exchange_ihe->setAckAR($ack, "E006", null, $newVenue);
     }
     
-    $this->$function_handle($ack, $newVenue, $data);
+    return $this->$function_handle($ack, $newVenue, $data); 
   } 
   
+  function mappingVenue($data, CSejour $newVenue) {
+    
+  }
+  
   function handleA01(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    // Mapping venue - création possible
     
   }
   
   function handleA02(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
-    
+    // Mapping venue - création impossible
   }
   
   function handleA03(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
-    
+    // Mapping venue - création impossible
   }
   
   function handleA04(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    // Mapping venue - création possible
     
   }
   
   function handleA05(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    // Mapping venue - création possible
     
+    // Traitement du message des erreurs
+    $comment = $warning = "";
+    
+    $exchange_ihe = $this->_ref_exchange_ihe;
+    $exchange_ihe->_ref_sender->loadConfigValues();
+    $sender       = $exchange_ihe->_ref_sender;
+    
+    $venueRI       = CValue::read($data['admitIdentifiers'], "RI");
+    $venueRISender = CValue::read($data['admitIdentifiers'], "RI_Sender");
+    $venueNPA      = CValue::read($data['admitIdentifiers'], "NPA");
+    $venueNA       = CValue::read($data['personIdentifiers'], "PI");
+    
+    $NDA = new CIdSante400();
+    if ($venueNA) {
+      $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueNA);
+    }
+    
+    // NDA non connu (non fourni ou non retrouvé)
+    if (!$venueNA || !$NDA->_id) {
+      // NPA fourni
+      if ($venueNPA) {
+        
+      }
+      
+      // RI fourni
+      if ($venueRI) {
+        
+      }
+      else {
+        
+      }
+    }
+    // NDA connu
+    else {
+      $newVenue->load($NDA->object_id);
+      
+      $recoveredVenue = clone $newVenue;
+          
+      // Mapping de la venue
+      $this->mappingVenue($data, $newVenue);
+      
+      // RI non fourni
+      if (!$venueRI) {
+        $code_IPP = "I123"; 
+      } else {
+        $tmpVenue = new CSejour();
+        // RI connu
+        if ($tmpVenue->load($venueRI)) {
+          if ($tmpVenue->_id != $NDA->object_id) {
+            $comment = "L'identifiant source fait référence au séjour : $NDA->object_id et l'identifiant cible au séjour : $tmpVenue->_id.";
+            return $exchange_ihe->setAckAR($ack, "E100", $comment, $newVenue);
+          }
+          $code_NDA = "I124"; 
+        }
+        // RI non connu
+        else {
+          $code_NDA = "A120";
+        }
+      }
+      
+      // Notifier les autres destinataires autre que le sender
+      $newVenue->_eai_initiateur_group_id = $sender->group_id;
+      if ($msgVenue = $newVenue->store()) {
+        return $exchange_ihe->setAckAR($ack, "E101", $msgVenue, $newVenue);
+      }
+            
+      $codes = array ("I102", $code_NDA);
+      
+      $comment = CEAISejour::getComment($newVenue);
+    }
+    
+    return $exchange_ihe->setAckAA($ack, $codes, $comment, $newVenue);
   }
   
   function handleA06(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
-    
+    // Mapping venue - création impossible
   }
   
   function handleA07(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
-    
+    // Mapping venue - création impossible
   }
   
   function handleA11(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
-    
+    // Mapping venue - création impossible
   }
   
   function handleA12(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
-    
+    // Mapping venue - création impossible
   }
   
   function handleA13(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
-    
-  }
-  
-  function handleA28(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
-    
-  }
-  
-  function handleA31(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
-    
+    // Mapping venue - création impossible
   }
   
   function handleA38(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
-    
-  }
-  
-  function handleA40(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
-    
+    // Mapping venue - création impossible
   }
   
   function handleA44(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
-    
+    // Mapping venue - création impossible
   }
   
   function handleA45(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
-    
+    // Mapping venue - création impossible
   }
   
   function handleA54(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
-    
+    // Mapping venue - création impossible
   }
   
   function handleA55(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
-    
+    // Mapping venue - création impossible
   }
   
   function handleZ99(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    // Mapping venue - création impossible
+    
     
   }
 }
