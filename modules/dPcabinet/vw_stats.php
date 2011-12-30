@@ -61,7 +61,7 @@ if ($filter->_function_id) {
   $query = "CREATE TEMPORARY TABLE consultation_patient
 		SELECT praticien_id, patient_id
 		FROM consultation_prime
-		GROUP BY patient_id;";
+		GROUP BY patient_id, praticien_id;";
   $ds->exec($query);
   
   // Patients counts
