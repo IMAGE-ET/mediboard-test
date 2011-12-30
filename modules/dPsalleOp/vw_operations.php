@@ -239,6 +239,10 @@ $smarty->assign("daily_check_item_categories"    , $daily_check_item_categories)
 $smarty->assign("operation_check_lists"          , $operation_check_lists);
 $smarty->assign("operation_check_item_categories", $operation_check_item_categories);
 
+if (CModule::getActive("maternite") && $selOp->_id) {
+  $smarty->assign("naissance"            , new CNaissance);
+}
+
 $smarty->display("vw_operations.tpl");
 
 ?>
