@@ -2,7 +2,7 @@
 
 submitPersonnel = function(oForm){
   submitFormAjax(oForm, 'systemMsg', { onComplete : function() {
-    reloadPersonnel(document.forms["affectationPers-aideop"].object_id.value);
+    reloadPersonnel(oForm.object_id.value);
   } });
 }
 
@@ -17,7 +17,7 @@ submitPersonnel = function(oForm){
 <tr>
   <th class="category" style="width: 50%;">Personnel prévu</th>
   <th class="category" style="width: 50%;">Personnel ajouté<br />
-	  <form name="affectationPers-aideop" action="?m={{$m}}" method="post">
+	  <form name="affectationPers-iade" action="?m={{$m}}" method="post">
       <input type="hidden" name="m" value="dPpersonnel" />
       <input type="hidden" name="dosql" value="do_affectation_aed" />
       <input type="hidden" name="del" value="0" />

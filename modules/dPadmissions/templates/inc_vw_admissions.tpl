@@ -44,7 +44,7 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
 	
 	{{assign var=url value="?m=$m&tab=vw_idx_admission&selAdmis=$selAdmis&selSaisis=$selSaisis"}}
   <tr>
-    <th class="narrow">Admettre</th>
+    <th class="narrow">{{tr}}CSejour-admit{{/tr}}</th>
     <th>
       {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url=$url}}
     </th>

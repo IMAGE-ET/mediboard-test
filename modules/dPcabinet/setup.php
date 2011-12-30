@@ -1399,7 +1399,13 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `tarifs` ADD `codes_tarmed` VARCHAR(255);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.41";
+    $this->makeRevision("1.41");
+    
+    $query = "ALTER TABLE `consultation` 
+      ADD `grossesse_id` INT (11) UNSIGNED";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.42";
     
   }
 }

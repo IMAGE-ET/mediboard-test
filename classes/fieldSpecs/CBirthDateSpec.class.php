@@ -40,10 +40,6 @@ class CBirthDateSpec extends CMbFieldSpec {
     if ($match[1] < 1850) {
       return "Année inférieure a 1850";
     }
-    
-    if ($object->{$this->fieldName} > mbDate()) {
-      return "La date de naissance ne doit pas être dans le futur";
-    }
   }
   
   function sample(&$object, $consistent = true){

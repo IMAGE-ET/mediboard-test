@@ -26,6 +26,16 @@
         </script>
         <button type="button" class="cut" onclick="this.form.onsubmit();">Scinder</button>
       </form>
+      <br />
+      <form name="dissociateAffectation" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {onComplete: Control.Modal.close})">
+        <input type="hidden" name="m" value="dPhospi" />
+        <input type="hidden" name="dosql" value="do_dissociate_affectation_aed" />
+        <input type="hidden" name="affectation_id" value="{{$affectation->_id}}" />
+        {{if $lit_id}}
+          <input type="hidden" name="lit_id" value="{{$lit_id}}" />
+        {{/if}}
+        <button type="button" class="hslip" onclick="this.form.onsubmit();">Désolidariser</button>
+      </form>
     </td>
   </tr>
 </table>

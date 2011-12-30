@@ -121,6 +121,7 @@ class COperation extends CCodable implements IPatientRelated {
   var $_ref_actes_ccam     = array();
   var $_ref_echange_hprim  = null;
   var $_ref_anesth_perops  = null;
+  var $_ref_naissances     = null;
   
   // External references
   var $_ext_codes_ccam = null;
@@ -607,6 +608,10 @@ class COperation extends CCodable implements IPatientRelated {
     $this->_ref_affectation->loadRefsFwd();
     $this->_ref_affectation->_ref_lit->loadRefsFwd();
     $this->_ref_affectation->_ref_lit->_ref_chambre->loadRefsFwd();
+  }
+  
+  function loadRefsNaissances() {
+    return $this->_ref_naissances = $this->loadBackRefs("naissances");
   }
   
   /**

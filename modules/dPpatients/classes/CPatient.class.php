@@ -167,18 +167,19 @@ class CPatient extends CMbObject {
   var $_anonyme                     = null;
   
   // Form fields
-  var $_age         = null;
-  var $_age_assure  = null;
-  var $_civilite    = null;
+  var $_age           = null;
+  var $_age_assure    = null;
+  var $_civilite      = null;
   var $_civilite_long = null;
   var $_assure_civilite = null;
   var $_assure_civilite_long = null;
-  var $_longview    = null;
-  var $_art115      = null;
+  var $_longview      = null;
+  var $_art115        = null;
   var $_type_exoneration = null;
   var $_exoneration = null;
   var $_can_see_photo = null;
   var $_csp_view      = null;
+  var $_nb_enfants    = null;
   
   var $_age_min       = null;
   var $_age_max       = null;
@@ -207,6 +208,8 @@ class CPatient extends CMbObject {
   var $_ref_sejours                 = null;
   var $_ref_consultations           = null;
   var $_ref_prescriptions           = null;
+  var $_ref_grossesses              = null;
+  var $_ref_first_constantes        = null;
   
   /**
    * @var CAffectation
@@ -224,7 +227,7 @@ class CPatient extends CMbObject {
   var $_ref_cp_by_relation          = null;
   
   var $_ref_dossier_medical         = null;
-  var $_refs_devenirs_dentaires        = null;
+  var $_refs_devenirs_dentaires     = null;
   var $_ref_IPP                     = null;
   var $_ref_vitale_idsante400       = null;
   var $_ref_constantes_medicales    = null;
@@ -256,6 +259,7 @@ class CPatient extends CMbObject {
     $backProps["echanges_ihe"]          = "CExchangeIHE object_id";
     $backProps["devenirs_dentaires"]    = "CDevenirDentaire patient_id";
     $backProps["correspondants_courrier"] = "CCorrespondantCourrier object_id";
+    $backProps["grossesses"]            = "CGrossesse parturiente_id";
     return $backProps;
   }  
   
@@ -1122,7 +1126,11 @@ class CPatient extends CMbObject {
     
     return $latest;
   }
-
+  
+  function loadRefsGrossesses($order="terme_prevu desc") {
+    return $this->_ref_grossesses = $this->loadBackRefs("grossesses", $order);
+  }
+  
   function loadRefsBack() {
     parent::loadRefsBack();
     $this->loadRefsFiles();
@@ -1130,6 +1138,7 @@ class CPatient extends CMbObject {
     $this->loadRefsConsultations();
     $this->loadRefsAffectations();
     $this->loadRefsPrescriptions();
+    $this->loadRefsGrossesses();
   }
 
   // Forward references
@@ -1245,7 +1254,9 @@ class CPatient extends CMbObject {
     if(!$pat_id) {
       return;
     }
-
+    
+    $maternite_active = CModule::getActive("maternite");
+    
     // Consultations
     foreach ($this->_ref_consultations as $keyConsult => $valueConsult) {
       if ($valueConsult->sejour_id) {
@@ -1267,6 +1278,10 @@ class CPatient extends CMbObject {
       $consult->_ref_chir->_ref_function->loadRefGroup();
       $consult->canRead();
       $consult->canEdit();
+      if ($maternite_active && $consult->grossesse_id) {
+        $consult->_semaine_grossesse = ceil((mbDaysRelative($this->_ref_grossesses[$consult->grossesse_id]->_date_fecondation, $consult->_date))/7);
+        $this->_ref_grossesses[$consult->grossesse_id]->_ref_consultations[$consult->_id] = $consult;
+      }
     }
 
     // Sejours
@@ -1280,7 +1295,9 @@ class CPatient extends CMbObject {
       $_sejour->canRead();
       $_sejour->canEdit();
       $_sejour->countDocItems($permType);
-      
+      if ($maternite_active && $_sejour->grossesse_id) {
+        $this->_ref_grossesses[$_sejour->grossesse_id]->_ref_sejours[$_sejour->_id] = $_sejour;
+      }
       foreach ($_sejour->_ref_operations as $_operation) {
         $_operation->loadRefsFwd(1);
         $_operation->_ref_chir->loadRefFunction();
@@ -1291,7 +1308,7 @@ class CPatient extends CMbObject {
       }
       
       $_sejour->loadRefRPU();
-      if ($_sejour->_ref_rpu && $_sejour->_ref_rpu->_id) {
+      if($_sejour->_ref_rpu && $_sejour->_ref_rpu->_id) {
         $_sejour->_ref_rpu->countDocItems($permType);
       }
       $_sejour->loadRefsConsultations();
@@ -1457,6 +1474,13 @@ class CPatient extends CMbObject {
     $tab['COperation'] = 0;
     
     return $tab;
+  }
+  
+  function getFirstConstantes() {
+    $constantes = new CConstantesMedicales;
+    $constantes->patient_id = $this->_id;
+    $constantes->loadMatchingObject("datetime ASC");
+    return $this->_ref_first_constantes = $constantes;
   }
   
   function fillLimitedTemplate(&$template) {
@@ -1805,6 +1829,14 @@ class CPatient extends CMbObject {
   function loadView() {
     parent::loadView();
     $this->loadIPP();
+  }
+  
+  function countNbEnfants() {
+    $this->_nb_enfants = 0;
+    foreach ($this->loadRefsGrossesses() as $_grossesse) {
+      $this->_nb_enfants += $_grossesse->countBackRefs("naissances");
+    }
+    return $this->_nb_enfants;
   }
   
   function completeLabelFields() {

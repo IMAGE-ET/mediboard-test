@@ -1,7 +1,7 @@
 <!-- $Id: $ -->
 
 {{mb_default var=selected_guid value=""}}
-
+{{mb_default var=show_semaine_grossesse value=0}}
 {{if $object instanceof CSejour}}
 
 {{if $object->group_id == $g || $conf.dPpatients.CPatient.multi_group == "full"}}
@@ -110,6 +110,9 @@
     {{/if}}
     <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
       Le {{$object->_datetime|date_format:$conf.datetime}} - {{$object->_etat}}
+      {{if "maternite"|module_active && $show_semaine_grossesse}}
+        ({{$object->_semaine_grossesse}}ème semaine)
+      {{/if}}
     </span>
     </a>
   </td>

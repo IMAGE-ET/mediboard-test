@@ -36,5 +36,5 @@
   </table>
 </form>
 {{if $affectation->_id}}
-  {{mb_include module=dPhospi template=inc_cut_affectation}}
+  {{mb_include module=dPhospi template=inc_other_actions}}
 {{/if}}

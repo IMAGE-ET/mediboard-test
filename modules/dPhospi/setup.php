@@ -505,7 +505,12 @@ class CSetupdPhospi extends CSetup {
                 ADD INDEX (`affectation_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.53";
+    $this->makeRevision("0.53");
+    $query = "ALTER TABLE `affectation` 
+      ADD `parent_affectation_id` INT (11) UNSIGNED AFTER `sortie`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.54";
   }
 }
 ?>

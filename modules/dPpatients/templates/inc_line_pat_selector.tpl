@@ -40,7 +40,7 @@
       {{tr}}Update{{/tr}} avec Vitale
     </button>
     {{/if}}
-    <button class="tick" type="button" onclick="Patient.select({{$_patient->_id}}, '{{$_patient->_view|smarty:nodefaults|JSAttribute}}')">
+    <button class="tick" type="button" onclick="Patient.select({{$_patient->_id}}, '{{$_patient->_view|smarty:nodefaults|JSAttribute}}', '{{$_patient->sexe}}')">
       {{tr}}Select{{/tr}}
     </button>
   </td>
@@ -62,7 +62,7 @@
       {{tr}}Edit{{/tr}}
     </button>
     {{/if}}
-    <button class="tick" type="button" onclick="Patient.select({{$_patient->_id}}, '{{$_patient->_view|smarty:nodefaults|JSAttribute}}')">
+    <button class="tick" type="button" onclick="Patient.select({{$_patient->_id}}, '{{$_patient->_view|smarty:nodefaults|JSAttribute}}', '{{$_patient->sexe}}')">
       {{tr}}Select{{/tr}}
     </button>
   </td>

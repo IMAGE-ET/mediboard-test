@@ -18,7 +18,8 @@ class CAffectation extends CMbObject {
   // DB References
   var $lit_id    = null;
   var $sejour_id = null;
-
+  var $parent_affectation_id = null;
+  
   // DB Fields
   var $entree   = null;
   var $sortie   = null;
@@ -51,7 +52,7 @@ class CAffectation extends CMbObject {
   var $_ref_uf_hebergement = null; 
   var $_ref_uf_medicale    = null; 
   var $_ref_uf_soins       = null; 
-  
+  var $_ref_parent_affectation = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -66,6 +67,7 @@ class CAffectation extends CMbObject {
     $backProps["echanges_ihe"]   = "CExchangeIHE object_id";
     $backProps["repas"]          = "CRepas affectation_id";
     $backProps["items_liaisons"] = "CItemLiaison affectation_id";
+    $backProps["affectations_enfant"] = "CAffectation parent_affectation_id";
     
     return $backProps;
   }
@@ -74,6 +76,7 @@ class CAffectation extends CMbObject {
   	$specs = parent::getProps();
     $specs["lit_id"]       = "ref notNull class|CLit";
     $specs["sejour_id"]    = "ref class|CSejour cascade";
+    $specs["parent_affectation_id"] = "ref class|CAffectation";
     $specs["entree"]       = "dateTime notNull";
     $specs["sortie"]       = "dateTime notNull";
     $specs["confirme"]     = "bool";
@@ -97,6 +100,7 @@ class CAffectation extends CMbObject {
   function loadView() {
     $this->loadRefLit()->loadCompleteView();
     $this->_view = $this->_ref_lit->_view;
+    $this->loadRefParentAffectation();
   }
 
   function updateFormFields() {
@@ -266,7 +270,11 @@ class CAffectation extends CMbObject {
     $this->_ref_next = new CAffectation;
     $this->_ref_next->loadObject($where);
   }
-
+  
+  function loadRefsAffectationsEnfant() {
+    return $this->_ref_affectations_enfant = $this->loadBackRefs("affectations_enfant");
+  }
+  
   function getPerm($permType) {
     if(!$this->_ref_lit) {
       $this->loadRefLit();
@@ -309,6 +317,10 @@ class CAffectation extends CMbObject {
       $repasDuJour->loadObject($where);
       $repas[$keyType] = $repasDuJour;
     }
+  }
+  
+  function loadRefParentAffectation() {
+    return $this->_ref_parent_affectation = $this->loadFwdRef("parent_affectation_id", true);
   }
   
   static function getDefaultAffectation(CSejour $sejour) {

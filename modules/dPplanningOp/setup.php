@@ -1234,7 +1234,15 @@ class CSetupdPplanningOp extends CSetup {
       ADD `type_pec` ENUM ('M','C','O');";
     $this->addQuery($query);
     
-    $this->mod_version = "1.30";
+    $this->makeRevision("1.30");
+    $query = "DROP TABLE `naissance`;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `sejour`
+    ADD `grossesse_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.31";
   }
 }
 ?>

@@ -129,5 +129,29 @@ Document.refreshList = function() {
     {{mb_include module=dPpatients template=inc_vw_elem_dossier}}
   {{/foreach}}
   {{/if}}
+  
+  {{if "maternite"|module_active && $patient->_ref_grossesses}}
+    {{foreach from=$patient->_ref_grossesses item=grossesse}}
+      <tr>
+        <th colspan="2" class="category">Grossesse (terme prévu : {{$grossesse->terme_prevu|date_format:$conf.date}})</th>
+      </tr>
+      <tr>
+        <td colspan="2">Séjours</td>
+      </tr>
+      {{foreach from=$grossesse->_ref_sejours item=object}}
+        {{mb_include module=dPpatients template=inc_vw_elem_dossier}}
+      {{foreachelse}}
+        <td colspan="2" class="empty">{{tr}}CSejour.none{{/tr}}</td>
+      {{/foreach}}
+      <tr>
+        <td colspan="2">Consultations</td>
+      </tr>
+      {{foreach from=$grossesse->_ref_consultations item=object}}
+        {{mb_include module=dPpatients template=inc_vw_elem_dossier show_semaine_grossesse=1}}
+      {{foreachelse}}
+        <td colspan="2" class="empty">{{tr}}CConsultation.none{{/tr}}</td>
+      {{/foreach}}
+    {{/foreach}}
+  {{/if}}
 </table>
 {{/if}}

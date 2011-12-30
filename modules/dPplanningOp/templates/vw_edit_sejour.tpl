@@ -69,7 +69,7 @@ function reloadSejours(checkCollision) {
 {{if $app->user_prefs.mode_dhe == 0}}
   Main.add(toggleMode);
 {{/if}}
-</script> 
+</script>
 
 <table class="main">
 

@@ -5,6 +5,7 @@ var PatSelector = {
   sFormEasy : null,
   sId       : null,
   sView     : null,
+  sSexe     : null,
   sId_easy  : null,
   sView_easy: null,
   options : {
@@ -14,7 +15,8 @@ var PatSelector = {
   },
   prepared : {
     id: null,
-    view : null
+    view: null,
+    sexe: null
   },
   pop: function() {
     var url = new Url("dPpatients", "pat_selector");
@@ -22,10 +24,10 @@ var PatSelector = {
     url.modal(this.options);
   },
   
-  set: function(id, view) {
+  set: function(id, view, sexe) {
     this.prepared.id = id;
     this.prepared.view = view;
-    
+    this.prepared.sexe = sexe;
     // Lancement de l'execution du set
     window.setTimeout(window.PatSelector.doSet , 1);
   },
@@ -36,6 +38,7 @@ var PatSelector = {
     
     $V(oForm[PatSelector.sId]             , PatSelector.prepared.id);
     $V(oForm[PatSelector.sView]           , PatSelector.prepared.view);
+    $V(oForm[PatSelector.sSexe]           , PatSelector.prepared.sexe);
     if(oFormEasy) {
       $V(oFormEasy[PatSelector.sId_easy]  , PatSelector.prepared.id);
       $V(oFormEasy[PatSelector.sView_easy], PatSelector.prepared.view);

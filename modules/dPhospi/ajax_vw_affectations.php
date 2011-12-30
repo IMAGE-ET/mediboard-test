@@ -72,6 +72,7 @@ $where["sejour.sortie"] = ">= '$date 00:00:00'";
 $sejours_non_affectes["avant"] = $sejour->loadList($where, $order, null, null, $ljoin);
 
 $period = "";
+$nb_unite = 0;
 
 switch($granularite) {
   case "day":

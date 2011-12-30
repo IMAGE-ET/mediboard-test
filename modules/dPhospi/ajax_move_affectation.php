@@ -15,6 +15,12 @@ $sejour_id      = CValue::get("sejour_id");
 $affectation = new CAffectation;
 if ($affectation_id) {
   $affectation->load($affectation_id);
+  
+  // On déplace l'affectation parente si nécessaire
+  if (null != $affectation_id = $affectation->parent_affectation_id) {
+    $affectation = new CAffectation;
+    $affectation->load($affectation_id);
+  }
 }
 else {
   $affectation->sejour_id = $sejour_id;

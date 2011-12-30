@@ -97,6 +97,12 @@ Main.add(function () {
   // Initialisation des onglets
 	if ($('main_tab_group')){
     Control.Tabs.create('main_tab_group', true);
+    var tabName = Control.Tabs.loadTab('main_tab_group');
+    {{if "maternite"|module_active}}
+      if (tabName && tabName == "grossesse") {
+        refreshGrossesse('{{$selOp->_id}}');
+      }
+    {{/if}}      
 	}
 
   // Effet sur le programme

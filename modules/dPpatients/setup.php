@@ -1515,7 +1515,12 @@ class CSetupdPpatients extends CSetup {
               SET `sonde_nephro_cumul_reset_hour` = '8' WHERE `group_id` IS NULL AND `service_id` IS NULL";
     $this->addQuery($query);
     
-    $this->mod_version = "1.31";
+    $this->makeRevision("1.31");
+    $query = "ALTER TABLE `constantes_medicales`
+      ADD `perimetre_cranien` FLOAT UNSIGNED;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.32";
     
     $query = "SHOW TABLES LIKE 'categorie_socioprofessionnelle'";
     $this->addDatasource("INSEE", $query);

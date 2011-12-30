@@ -106,6 +106,14 @@ function reloadPrescription(prescription_id){
 }
 {{/if}}
 
+{{if "maternite"|module_active}}
+function refreshGrossesse(operation_id) {
+  var url = new Url("maternite", "ajax_vw_grossesse");
+  url.addParam('operation_id', operation_id);
+  url.requestUpdate('grossesse');
+}
+{{/if}}
+
 </script>
 
 <!-- Informations générales sur l'intervention et le patient -->
@@ -247,6 +255,12 @@ function reloadPrescription(prescription_id){
     <li><a href="#Imeds_tab">Labo</a></li>
   {{/if}}
   <li style="float: right"><button type="button" class="print" onclick="printFicheBloc('{{$selOp->_id}}}');">Feuille de bloc</button></li>
+  
+  {{if "maternite"|module_active && $sejour->grossesse_id}}
+    <li onmouseup="refreshGrossesse('{{$selOp->_id}}')">
+      <a href="#grossesse">{{tr}}CGrossesse{{/tr}}</a>
+    </li>
+  {{/if}}
 </ul>
   
 <hr class="control_tabs" />
@@ -383,4 +397,8 @@ function reloadPrescription(prescription_id){
 {{if $isImedsInstalled}}
   <!-- Affichage de la prescription -->
   <div id="Imeds_tab" style="display:none"></div>
+{{/if}}
+
+{{if "maternite"|module_active && $sejour->grossesse_id}}
+  <div id="grossesse" style="display: none;"></div>
 {{/if}}

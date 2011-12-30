@@ -43,7 +43,7 @@
   {{if !$_sejour->entree_reelle}}
     <input type="hidden" name="entree_reelle" value="now" />
     <button class="tick" type="button" onclick="{{if (($date_actuelle > $_sejour->entree_prevue) || ($date_demain < $_sejour->entree_prevue))}}confirmation(this.form);{{else}}submitAdmission(this.form);{{/if}};">
-      Admettre
+      {{tr}}CSejour-admit{{/tr}}
     </button>
     
   {{else}}

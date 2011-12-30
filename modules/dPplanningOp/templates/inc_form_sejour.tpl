@@ -11,7 +11,16 @@
 {{mb_script module="dPpatients" script="pat_selector"}}
 {{mb_script module="dPplanningOp" script="cim10_selector"}}
 
+
+{{if "maternite"|module_active}}
+  {{assign var=maternite_active value="1"}}
+{{else}}
+  {{assign var=maternite_active value="0"}}
+{{/if}}
+
 <script type="text/javascript">
+fill_grossesse = 0;
+
 function checkHeureSortie(){
   var oForm = getForm("editSejour");
   var heure_entree = parseInt(oForm._hour_entree_prevue.value, 10);
@@ -35,6 +44,29 @@ function changeModeSortie(mode_sortie){
   loadServiceMutation(mode_sortie);
 }
 
+function toggleGrossesse(sexe) {
+  var form = getForm("editSejour");
+  form._grossesse_view.disabled = sexe == "f" ? "" : "disabled";
+}
+
+function bindGrossesse() {
+  var form = getForm('editSejour');
+  if (!$V(form._grossesse) || fill_grossesse) {
+    return checkDureeHospi() && checkModeSortie() && OccupationServices.testOccupation() && checkForm(form);
+  }
+  var url = new Url("maternite","ajax_bind_grossesse");
+  url.addParam("patient_id", $V(form.patient_id));
+  url.requestModal();
+  return false;
+}
+
+function submitAfterGrossesse(grossesse_id) {
+  fill_grossesse = 1;
+  var form = getForm('editSejour');
+  $V(form.grossesse_id, grossesse_id);
+  form.submit();
+}
+
 function checkModeSortie(){
   var oForm = getForm("editSejour");
   
@@ -48,7 +80,11 @@ function checkModeSortie(){
 
 function checkSejour() {
   var oForm = getForm("editSejour");
-  return checkDureeHospi() && checkModeSortie() && OccupationServices.testOccupation() && checkForm(oForm);
+  {{if $maternite_active}}
+    return bindGrossesse();
+  {{else}}
+    return checkDureeHospi() && checkModeSortie() && OccupationServices.testOccupation() && checkForm(oForm);
+  {{/if}}
 }
 
 function checkPresta(){
@@ -193,7 +229,7 @@ PatSelector.init = function(){
 
   this.sId   = "patient_id";
   this.sView = "_patient_view";
-
+  this.sSexe = "_patient_sexe";
   this.pop();
 }
 
@@ -336,6 +372,10 @@ Main.add( function(){
 <input type="hidden" name="del" value="0" />
 {{if $sejour->sortie_reelle && !$can->admin}}
 <!-- <input type="hidden" name="_locked" value="1" /> -->
+{{/if}}
+<input type="hidden" name="grossesse_id" value="{{$sejour->grossesse_id}}" />
+{{if $maternite_active && !$sejour->_id}}
+  <input type="hidden" name="_patient_sexe" value="" onchange="toggleGrossesse(this.value)"/>
 {{/if}}
 
 {{mb_field object=$sejour field="codes_ccam" hidden=1}}
@@ -585,7 +625,19 @@ Main.add( function(){
   </td>
 </tr>
 {{/if}}
-
+{{if $maternite_active && !$mode_operation && !$sejour->_id}}
+  <tr>
+    <th>{{mb_label object=$sejour field=_grossesse}}</th>  
+    <td>
+      <input type="checkbox" name="_grossesse_view" disabled="disabled"
+        onchange="$V(this.form._grossesse, this.checked ? 1 : 0);
+          {{if $conf.dPplanningOp.CSejour.show_type_pec}}
+            if (this.checked) { $V(this.form.type_pec, 'O'); }
+          {{/if}}" />
+      {{mb_field object=$sejour field="_grossesse" hidden="hidden"}}
+    </td>
+  </tr>
+{{/if}}
 {{if $sejour->annule}}
 <tr>
   <th>{{mb_label object=$sejour field="recuse"}}</th>

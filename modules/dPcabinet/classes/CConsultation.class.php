@@ -20,6 +20,7 @@ class CConsultation extends CCodable {
   var $plageconsult_id = null;
   var $patient_id      = null;
   var $sejour_id       = null;
+  var $grossesse_id    = null;
   
   // DB fields
   var $type            = null;
@@ -74,6 +75,8 @@ class CConsultation extends CCodable {
   var $_exam_fields    = null;
   var $_acte_dentaire_id = null;
   var $_function_secondary_id = null;
+  var $_grossesse      = null;
+  var $_semaine_grossesse = null;
   var $_type           = null;  // Type de la consultation
   
   // Fwd References
@@ -166,6 +169,7 @@ class CConsultation extends CCodable {
     $specs["plageconsult_id"]   = "ref notNull class|CPlageconsult seekable show|1";
     $specs["patient_id"]        = "ref class|CPatient purgeable seekable show|1";
     $specs["categorie_id"]      = "ref class|CConsultationCategorie show|1";
+    $specs["grossesse_id"]      = "ref class|CGrossesse show|0";
     $specs["_praticien_id"]     ="ref class|CMediusers seekable show|1"; //is put here for view
     $specs["_function_secondary_id"] = "ref class|CFunctions";
     $specs["motif"]             = "text helped seekable";
@@ -234,6 +238,7 @@ class CConsultation extends CCodable {
     $specs["_type"]             = "enum list|urg|anesth";
     $specs["_prat_id"]          = "";
     $specs["_acte_dentaire_id"] = "ref class|CActeDentaire";
+    $specs["_grossesse"]        = "ref class|CGrossesse";
     return $specs;
   }
   

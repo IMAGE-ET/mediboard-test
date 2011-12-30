@@ -42,8 +42,8 @@ var Patient = {
     Patient.select(patient_id, oForm.nom.value);
   },
   
-  select: function(patient_id, patient_view) {
-		window.launcher.PatSelector.set(patient_id, patient_view);
+  select: function(patient_id, patient_view, sexe) {
+		window.launcher.PatSelector.set(patient_id, patient_view, sexe);
     window._close();
   }
 }

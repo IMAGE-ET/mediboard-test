@@ -10,6 +10,7 @@ $locales['CSejour.type.ambu.short'] = 'Ambu';
 $locales['CSejour.type.comp.short'] = 'Hospi';
 $locales['CSejour.type.consult.short'] = 'Cons';
 $locales['CSejour.type.exte.short'] = 'Ext';
+$locales['CSejour-admit'] = 'Admettre';
 $locales['config-dPadmissions-fiche_admission'] = 'Modèle de fiche d\'admission';
 $locales['config-dPadmissions-fiche_admission-desc'] = 'Modèle d\'impression pour les fiches d\'admission';
 $locales['config-dPadmissions-show_dh'] = 'Afficher dépassement honoraire';

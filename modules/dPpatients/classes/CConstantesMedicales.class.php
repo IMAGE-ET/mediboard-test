@@ -148,6 +148,11 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "cm",
       "min" => 20, "max" => 200
     ),
+    "perimetre_cranien" => array(
+      "type" => "physio",
+      "unit" => "cm",
+      "min"  => 30, "max" => 60
+    ),
     "perimetre_cuisse" => array(
       "type" => "physio",
       "unit" => "cm",
@@ -443,6 +448,7 @@ class CConstantesMedicales extends CMbObject {
     $specs['glycemie']               = 'float pos max|10';
     $specs['PVC']                    = 'float min|0';
     $specs['perimetre_abdo']         = 'float min|0';
+    $specs['perimetre_cranien']      = 'float min|0';
     $specs['perimetre_cuisse']       = 'float min|0';
     $specs['perimetre_cou']          = 'float min|0';
     $specs['perimetre_thoracique']   = 'float min|0';

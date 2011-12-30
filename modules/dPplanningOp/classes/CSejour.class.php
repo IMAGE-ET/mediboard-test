@@ -19,6 +19,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $patient_id          = null;
   var $praticien_id        = null; 
   var $group_id            = null;
+  var $grossesse_id        = null;
   
   var $etablissement_entree_id = null;
   var $etablissement_sortie_id = null;
@@ -116,6 +117,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_not_collides       = array ("urg", "consult", "seances", "exte"); // Séjour dont on ne test pas la collision
   var $_is_proche          = null;
   var $_motif_complet      = null;
+  var $_grossesse          = null;
   
   // Behaviour fields
   var $_check_bounds  = true;
@@ -157,9 +159,10 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_ref_replacement             = null;
   var $_ref_tasks                   = null;
   var $_ref_tasks_not_created       = null;
-	var $_ref_transmissions           = null;
-	var $_ref_observations            = null;
-	var $_ref_hl7_movement            = null;
+  var $_ref_transmissions           = null;
+  var $_ref_observations            = null;
+  var $_ref_hl7_movement            = null;
+  var $_ref_grossesse               = null;
   
   // External objects
   var $_ext_diagnostic_principal = null;
@@ -242,6 +245,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $backProps["echanges_ihe"]          = "CExchangeIHE object_id";
     $backProps["tasks"]                 = "CSejourTask sejour_id";
     $backProps["sejour_brancard"]       = "CBrancardage sejour_id";
+    $backProps["naissances"]            = "CNaissance sejour_enfant_id";
     return $backProps;
   }
 
@@ -250,6 +254,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["patient_id"]               = "ref notNull class|CPatient seekable";
     $props["praticien_id"]             = "ref notNull class|CMediusers seekable";
     $props["group_id"]                 = "ref notNull class|CGroups";
+    $props["grossesse_id"]             = "ref class|CGrossesse";
     $props["type"]                     = "enum notNull list|comp|ambu|exte|seances|ssr|psy|urg|consult default|ambu";
     $props["modalite"]                 = "enum notNull list|office|libre|tiers default|libre show|0";
     $props["annule"]                   = "bool show|0";
@@ -334,6 +339,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["_adresse_par_prat"] = "str";
     $props["_ref_etablissement_provenance"] = "str";
     $props["_etat"]             = "enum list|preadmission|encours|cloture";
+    $props["_grossesse"]        = "ref class|CGrossesse";
     
     $props["_duree_prevue"]                     = "num";
     $props["_duree_reelle"]                     = "num";
@@ -552,9 +558,9 @@ class CSejour extends CCodable implements IPatientRelated {
   }
   
   function applyProtocolesPrescription($operation_id = null) {
-  	if(!$this->_protocole_prescription_chir_id){
-  		return;
-  	}
+    if(!$this->_protocole_prescription_chir_id){
+      return;
+    }
     // Application du protocole de prescription
     $prescription = new CPrescription;
     $prescription->object_class = $this->_class;
@@ -564,7 +570,7 @@ class CSejour extends CCodable implements IPatientRelated {
       return $msg;
     }
     
-		/*
+    /*
     if($this->_protocole_prescription_anesth_id){
       $prescription->applyPackOrProtocole($this->_protocole_prescription_anesth_id, $this->praticien_id, mbDate(), null, $operation_id);
     }
@@ -1369,6 +1375,10 @@ class CSejour extends CCodable implements IPatientRelated {
     return $this->_ref_replacement;
   }
   
+  function loadRefGrossesse() {
+    return $this->_ref_grossesse = $this->loadFwdRef("grossesse_id");
+  }
+  
   function isReplacer($replacer_id) {
     $replacement = new CReplacement;
     $replacement->sejour_id   = $this->_id;
@@ -1383,7 +1393,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $where['context_class'] = " = '$this->_class'";
     $where['context_id']    = " = '$this->_id'";
     $where['patient_id']    = " = '$this->patient_id'";
-		
+    
     $this->_list_constantes_medicales = $constantes->loadList($where, 'datetime ASC');
   }
   
@@ -2071,8 +2081,8 @@ class CSejour extends CCodable implements IPatientRelated {
       $date = mbDateTime();
     }
     $affectation = $this->getCurrAffectation($date);
-  	if ($affectation->_id) {
-  	 return $affectation->getUFs();
+    if ($affectation->_id) {
+     return $affectation->getUFs();
     }
     
     $affectation_uf = new CAffectationUniteFonctionnelle();

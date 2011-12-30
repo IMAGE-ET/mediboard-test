@@ -12,7 +12,15 @@
 {{/if}}
 
 {{assign var=attach_consult_sejour value=$conf.dPcabinet.CConsultation.attach_consult_sejour}}
+
+{{if "maternite"|module_active}}
+  {{assign var=maternite_active value="1"}}
+{{else}}
+  {{assign var=maternite_active value="0"}}
+{{/if}}
+
 <script type="text/javascript">
+fill_grossesse = 0;
 
 Medecin = {
   form: null,
@@ -94,8 +102,30 @@ function checkFormRDV(form){
     if (checkedOperation) {
       form._operation_id.value = checkedOperation.value;
     }
+    {{if $maternite_active}}
+      return bindGrossesse();
+    {{else}}
+      return checkForm(form);
+    {{/if}}
+  }
+}
+
+function bindGrossesse() {
+  var form = getForm('editFrm');
+  if (!$V(form._grossesse) || fill_grossesse) {
     return checkForm(form);
   }
+  var url = new Url("maternite","ajax_bind_grossesse");
+  url.addParam("patient_id", $V(form.patient_id));
+  url.requestModal();
+  return false;
+}
+
+function submitAfterGrossesse(grossesse_id) {
+  fill_grossesse = 1;
+  var form = getForm('editFrm');
+  $V(form.grossesse_id, grossesse_id);
+  form.submit();
 }
 
 function printForm() {
@@ -118,12 +148,17 @@ function printDocument(iDocument_id) {
 }
 
 checkCorrespondantMedical = function(){
-  form = getForm("editFrm");
+  var form = getForm("editFrm");
   var url = new Url("dPplanningOp", "ajax_check_correspondant_medical");
   url.addParam("patient_id", $V(form.patient_id));
   url.addParam("object_id" , $V(form.consultation_id));
   url.addParam("object_class", '{{$consult->_class}}');
   url.requestUpdate("correspondant_medical");
+}
+
+toggleGrossesse = function(sexe) {
+  var form = getForm("editFrm");
+  form._grossesse_view.disabled = sexe == "f" ? "" : "disabled";
 }
 
 Main.add(function () {
@@ -156,7 +191,10 @@ Main.add(function () {
 <input type="hidden" name="arrivee" value="" />
 <input type="hidden" name="chrono" value="{{$consult|const:'PLANIFIE'}}" />
 <input type="hidden" name="_operation_id" value="" />
-
+<input type="hidden" name="grossesse_id" value="{{$consult->grossesse_id}}" />
+{{if $maternite_active && !$consult->_id}}
+  <input type="hidden" name="_patient_sexe" value="" onchange="toggleGrossesse(this.value)"/>
+{{/if}}
 
 <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;consultation_id=0">
   {{tr}}CConsultation-title-create{{/tr}}
@@ -276,6 +314,9 @@ Main.add(function () {
     	              this.sForm = "editFrm";
     	              this.sId   = "patient_id";
     	              this.sView = "_pat_name";
+                    {{if "maternite"|module_active && !$consult->_id}}
+                      this.sSexe = "_patient_sexe";
+                    {{/if}}
     	              this.pop();
     	            }
     	          </script>
@@ -383,6 +424,18 @@ Main.add(function () {
               {{mb_field object=$consult field="adresse" hidden="hidden"}}
             </td>
           </tr>
+          
+          {{if $maternite_active}}
+            <tr>
+              <th>{{mb_label object=$consult field=_grossesse}}</th>  
+              <td>
+                <input type="checkbox" name="_grossesse_view"
+                  {{if $pat->_id && $pat->sexe == "m"}}disabled="disabled"{{/if}}
+                  onchange="$V(this.form._grossesse, this.checked ? 1 : 0);" />
+                {{mb_field object=$consult field="_grossesse" hidden="hidden"}}
+              </td>
+            </tr>
+          {{/if}}
           
           <tr id="correspondant_medical" {{if !$consult->_check_adresse}}style="display: none;"{{/if}}>
             {{assign var="object" value=$consult}}
