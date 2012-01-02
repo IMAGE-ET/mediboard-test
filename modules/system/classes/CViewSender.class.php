@@ -122,7 +122,7 @@ class CViewSender extends CMbObject {
   function makeUrl($user) {
     $base = CAppUI::conf("base_url");
     $params = array();
-    parse_str(strtr($this->params, array("\r\n" => "&", "\n" => "&")), $params);
+    parse_str(strtr($this->params, array("\r\n" => "&", "\n" => "&", " " => "")), $params);
     $params["login"] = "1";
     $params["username"] = $user->user_username;
     $params["password"] = $user->user_password;
