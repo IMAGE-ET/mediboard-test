@@ -20,6 +20,7 @@ class CGrossesse extends CMbObject{
   
   // DB Fields
   var $terme_prevu    = null;
+  var $active         = null;
   
   // DB References
   var $_ref_parturiente = null;
@@ -46,6 +47,7 @@ class CGrossesse extends CMbObject{
     $specs = parent::getProps();
     $specs["parturiente_id"] = "ref notNull class|CPatient";
     $specs["terme_prevu"]    = "date notNull";
+    $specs["active"]         = "bool default|1";
     return $specs;
   }
   

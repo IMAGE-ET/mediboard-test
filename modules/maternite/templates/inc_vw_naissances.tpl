@@ -1,7 +1,7 @@
 <table class="tbl">
   <tr>
     <th class="title" colspan="5">
-      <button type="button" class="add" style="float: left;"
+      <button type="button" class="add" style="float: left;" {{if !$grossesse->active}}disabled="disabled"{{/if}}
         onclick="Naissance.edit(0, '{{$operation->_id}}')">Naissance</button>
       Naissances
     </th>

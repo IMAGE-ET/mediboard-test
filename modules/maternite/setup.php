@@ -36,14 +36,20 @@ class CSetupmaternite extends CSetup {
       ADD INDEX (`sejour_enfant_id`);";
     $this->addQuery($query);
     
-    $query="CREATE TABLE `grossesse` (
+    $query = "CREATE TABLE `grossesse` (
       `grosssesse_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
       `parturiente_id` INT (11) UNSIGNED NOT NULL,
       `terme_prevu` DATE NOT NULL
     ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.01";
+    $this->makeRevision("0.01");
+    
+    $query = "ALTER TABLE `grossesse`
+      ADD `active` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.02";
   }
 }
 ?>

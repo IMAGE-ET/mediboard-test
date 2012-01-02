@@ -16,6 +16,8 @@ $operation_id = CValue::get("operation_id");
 $operation = new COperation;
 $operation->load($operation_id);
 
+$grossesse = $operation->loadRefSejour(1)->loadRefGrossesse();
+
 $naissances = $operation->loadRefsNaissances();
 $sejours = CMbObject::massLoadFwdRef($naissances, "sejour_enfant_id");
 CMbObject::massLoadFwdRef($sejours, "patient_id");
@@ -26,6 +28,7 @@ foreach ($naissances as $_naissance) {
 
 $smarty = new CSmartyDP;
 
+$smarty->assign("grossesse", $grossesse);
 $smarty->assign("operation", $operation);
 
 $smarty->display("inc_vw_naissances.tpl");
