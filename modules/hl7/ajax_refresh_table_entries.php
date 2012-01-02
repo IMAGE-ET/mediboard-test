@@ -10,7 +10,7 @@
 
 CCanDo::checkAdmin();
 
-$table_number = CValue::get("table_number");
+$table_number = CValue::getOrSession("table_number");
 
 $table_entry         = new CHL7v2TableEntry();
 $table_entry->number = $table_number;

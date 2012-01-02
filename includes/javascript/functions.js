@@ -1118,6 +1118,11 @@ Class.extend(Control.Modal, {
     e.style.cssText = null;
     e.removeClassName("modal");
     e.print();
+  },
+  
+  // Redefine this method to ...
+  bringToFront: function(){
+    // ... do nothing!
   }
 });
 
