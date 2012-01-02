@@ -97,6 +97,15 @@ checkDoublon = function() {
 	}
 }
 
+refreshInfoTutelle = function(tutelle) {
+  var url = new Url("dPpatients", "ajax_check_correspondant_tutelle");
+  {{if $patient->_id}}
+    url.addParam("patient_id", '{{$patient->_id}}');
+  {{/if}}
+  url.addParam("tutelle", tutelle);
+  url.requestUpdate('alert_tutelle');
+}
+
 Main.add(function() {
   var i, 
       list = $("patient_identite").select(".prenoms_list input"),
@@ -109,10 +118,16 @@ Main.add(function() {
   }
   changeCiviliteForSexe(document.forms.editFrm.elements.sexe);
   changeCiviliteForSexe(document.forms.editFrm.elements.assure_sexe, true);
+  {{if $patient->_id}}
+    refreshInfoTutelle('{{$patient->tutelle}}');
+  {{/if}}
 }); 
 </script>
 
 <table style="width: 100%">
+  <tr>
+    <td colspan="2" id="alert_tutelle"></td>
+  </tr>
   <tr>
     <td style="width: 50%">
       <table class="form" id="patient_identite">
@@ -236,6 +251,10 @@ Main.add(function() {
           <th>{{mb_label object=$patient field="qual_beneficiaire"}}</th>
           <td>{{mb_field object=$patient field="qual_beneficiaire" onchange=showCopieIdentite() style="width:20em;"}}</td>
       	</tr>
+        <tr>
+          <th>{{mb_label object=$patient field="tutelle"}}</th>
+          <td colspan="2">{{mb_field object=$patient field="tutelle" onchange="refreshInfoTutelle(this.value);"}}</td>
+        </tr>
         <tr>
           <th>{{mb_label object=$patient field="vip"}}</th>
           <td colspan="2">{{mb_field object=$patient field="vip" typeEnum="checkbox"}}</td>

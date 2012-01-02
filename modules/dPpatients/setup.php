@@ -1520,7 +1520,12 @@ class CSetupdPpatients extends CSetup {
       ADD `perimetre_cranien` FLOAT UNSIGNED;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.32";
+    $this->makeRevision("1.32");
+    $query = "ALTER TABLE `patients`
+       ADD `tutelle` ENUM ('aucune','tutelle','curatelle') DEFAULT 'aucune';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.33";
     
     $query = "SHOW TABLES LIKE 'categorie_socioprofessionnelle'";
     $this->addDatasource("INSEE", $query);

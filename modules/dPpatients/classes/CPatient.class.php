@@ -92,6 +92,7 @@ class CPatient extends CMbObject {
   var $tel_autre        = null;
   var $email            = null;
   var $vip              = null;
+  var $tutelle          = null;
   
   var $medecin_traitant_declare = null;
   var $medecin_traitant = null;
@@ -296,6 +297,7 @@ class CPatient extends CMbObject {
     $specs["tel_autre"]         = "str maxLength|20";
     $specs["email"]             = "str confidential";
     $specs["vip"]               = "bool default|0";
+    $specs["tutelle"]           = "enum list|aucune|tutelle|curatelle default|aucune";
     $specs["incapable_majeur"]  = "bool";
     $specs["ATNC"]              = "bool";
     

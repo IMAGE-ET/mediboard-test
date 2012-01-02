@@ -36,5 +36,6 @@ Correspondant = {
     var url = new Url('dPpatients', 'ajax_list_correspondants');
     url.addParam("patient_id", patient_id);
     url.requestUpdate('list-correspondants');
+    refreshInfoTutelle($V(getForm('editFrm').tutelle));
   }
 };
