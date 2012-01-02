@@ -659,7 +659,7 @@ class CConstantesMedicales extends CMbObject {
         break;
       }
     }
-    if (!$ok) return 'Au moins une des valeurs doit être renseignée';
+    if (!$ok) return CAppUI::tr("CConstantesMedicales-min_one_constant");
   }
   
   function store () {

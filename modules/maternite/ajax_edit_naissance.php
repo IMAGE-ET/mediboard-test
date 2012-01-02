@@ -16,12 +16,15 @@ $operation_id = CValue::get("operation_id");
 
 $naissance  = new CNaissance;
 $constantes = new CConstantesMedicales;
+
 $patient    = new CPatient;
 $patient->naissance = mbDate();
 
 $operation = new COperation();
 $operation->load($operation_id);
+
 $parturiente = $operation->loadRefSejour()->loadRefGrossesse()->loadRefParturiente();
+$anonmymous = is_numeric($parturiente->nom);
 
 if ($naissance_id) {
   $naissance->load($naissance_id);
@@ -30,6 +33,10 @@ if ($naissance_id) {
 }
 else {
   $naissance->operation_id = $operation_id;
+  
+  if (!$anonmymous) {
+    $patient->nom = $parturiente->nom;
+  }
 }
 
 $smarty = new CSmartyDP;

@@ -229,6 +229,7 @@ $locales['CConstantesMedicales-_ta_systole-desc'] = 'Systole';
 $locales['CConstantesMedicales-_vst'] = 'VST';
 $locales['CConstantesMedicales-_vst-court'] = 'VST';
 $locales['CConstantesMedicales-_vst-desc'] = 'Volume Sanguin Total';
+$locales['CConstantesMedicales-min_one_constant'] = 'Au moins une des constantes doit être renseignée';
 $locales['CConstantesMedicales-catheter_suspubien'] = 'Cathéter sus-pubien';
 $locales['CConstantesMedicales-catheter_suspubien-court'] = 'Cath. sus-pub.';
 $locales['CConstantesMedicales-catheter_suspubien-desc'] = 'Cathéter sus-pubien';

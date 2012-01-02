@@ -3,6 +3,19 @@
     <th class="title" colspan="5">
       <button type="button" class="add" style="float: left;" {{if !$grossesse->active}}disabled="disabled"{{/if}}
         onclick="Naissance.edit(0, '{{$operation->_id}}')">Naissance</button>
+      <form name="closeGrossesse" method="post"
+        onsubmit="return onSubmitFormAjax(this, {onComplete: function() { refreshGrossesse('{{$operation->_id}}'); } });">
+        <input type="hidden" name="m" value="maternite" />
+        <input type="hidden" name="dosql" value="do_grossesse_aed" />
+        {{mb_key object=$grossesse}}
+        {{if $grossesse->active}}
+          <input type="hidden" name="active" value="0" />
+          <button type="button" class="tick" onclick="this.form.onsubmit()" style="float: right;">{{tr}}CGrossesse-stop_grossesse{{/tr}}</button>
+        {{else}}
+          <input type="hidden" name="active" value="1" />
+          <button type="button" class="cancel" onclick="this.form.onsubmit()" style="float: right;">{{tr}}CGrossesse-reactive_grossesse{{/tr}}</button>
+        {{/if}}
+      </form>
       Naissances
     </th>
   </tr>

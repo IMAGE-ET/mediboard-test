@@ -9,20 +9,12 @@
   });
 </script>
 
+{{if $patient->nom|is_numeric}}
+  <div class="big-info">
+     {{tr}}CGrossesse-born_under_x{{/tr}}
+  </div>
+{{/if}}
 
-<form name="closeGrossesse" method="post"
-  onsubmit="return onSubmitFormAjax(this, {onComplete: function() { refreshGrossesse('{{$operation->_id}}'); } });">
-  <input type="hidden" name="m" value="maternite" />
-  <input type="hidden" name="dosql" value="do_grossesse_aed" />
-  {{mb_key object=$grossesse}}
-  {{if $grossesse->active}}
-    <input type="hidden" name="active" value="0" />
-    <button type="button" class="tick" onclick="this.form.onsubmit()">{{tr}}CGrossesse-stop_grossesse{{/tr}}</button>
-  {{else}}
-    <input type="hidden" name="active" value="1" />
-    <button type="button" class="cancel" onclick="this.form.onsubmit()">{{tr}}CGrossesse-reactive_grossesse{{/tr}}</button>
-  {{/if}}
-</form>
 <h1 style="text-align: center;">
   Semaine {{$grossesse->_semaine_grossesse}} &mdash; Terme {{$grossesse->_terme_vs_operation}}j
 </h1>

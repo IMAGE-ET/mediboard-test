@@ -4,6 +4,7 @@ $locales['CGrossesse-active'] = 'Active';
 $locales['CGrossesse-active-desc'] = 'Active';
 $locales['CGrossesse-back-naissances'] = 'Naissances';
 $locales['CGrossesse-back-naissances.empty'] = 'Naissances';
+$locales['CGrossesse-born_under_x'] = ' La mère est une patiente anonyme, il s\'agit d\'un <strong>accouchement sous X</strong>.';
 $locales['CGrossesse-grosssesse_id'] = 'Identifiant';
 $locales['CGrossesse-grosssesse_id-court'] = 'Identifiant';
 $locales['CGrossesse-grosssesse_id-desc'] = 'Identifiant';

@@ -1,5 +1,6 @@
 <form name="newNaissance" method="post" action="?"
-  onsubmit="return onSubmitFormAjax(this, {onComplete: function() { Control.Modal.close(); Naissance.reloadNaissances('{{$naissance->operation_id}}'); }})">
+  onsubmit="if (!$V(this.poids) && !$V(this.taille) && !$V(this.perimetre_cranien)) return alert('{{tr}}CConstantesMedicales-min_one_constant{{/tr}}'); 
+    return onSubmitFormAjax(this, {onComplete: function() { Control.Modal.close(); Naissance.reloadNaissances('{{$naissance->operation_id}}'); }})">
   <input type="hidden" name="m" value="maternite" />
   <input type="hidden" name="dosql" value="do_create_naissance_aed" />
   
@@ -30,26 +31,22 @@
         {{mb_field object=$patient field="naissance" form="newNaissance" register="true"}}
       </td>
     </tr>
-    {{if $patient->_id || $parturiente->prenom == "Anonyme"}}
-      <tr>
-        <th>
-          {{mb_label object=$patient field="nom"}}
-        </th>
-        <td>
-          {{mb_field object=$patient field="nom"}}
-        </td>
-      </tr>
-    {{/if}}
-    {{if $patient->_id}}
-      <tr>
-        <th>
-          {{mb_label object=$patient field="prenom"}}
-        </th>
-        <td>
-          {{mb_field object=$patient field="prenom"}}
-        </td>
-      </tr>
-    {{/if}}
+    <tr>
+      <th>
+        {{mb_label object=$patient field="nom"}}
+      </th>
+      <td>
+        {{mb_field object=$patient field="nom"}}
+      </td>
+    </tr>
+    <tr>
+      <th>
+        {{mb_label object=$patient field="prenom"}}
+      </th>
+      <td>
+        {{mb_field object=$patient field="prenom"}}
+      </td>
+    </tr>
     <tr>
       <th>
        {{mb_label object=$naissance field="hors_etab"}}

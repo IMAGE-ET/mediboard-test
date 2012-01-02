@@ -35,15 +35,16 @@ $curr_affect = $sejour->loadRefCurrAffectation();
 
 $datetime = mbDateTime();
 $date     = mbDate($datetime);
-$anonymous = $parturiente->prenom == "Anonyme";
 
-function storeObject($object) { 
+function storeObject($object) {
+  $title = $object->_id ? "-msg-modify" : "-msg-create";
   if ($msg = $object->store()) {
     CAppUI::setMsg($msg, UI_MSG_ERROR);
     echo CAppUI::getMsg();
     CApp::rip();
   }
-  CAppUI::setMsg(CAppUI::tr(get_class($object)."-msg-create"), UI_MSG_OK);
+  
+  CAppUI::setMsg(CAppUI::tr(get_class($object) . $title), UI_MSG_OK);
 }
 
 // Cinq étapes pour la création de la naissance :
@@ -57,8 +58,8 @@ if (!$naissance_id) {
   // Etape 1 (patient)
   $patient = new CPatient;
   
-  $patient->nom = $anonymous ? $nom : $parturiente->nom;
-  $patient->prenom = $sejour->_id;
+  $patient->nom = $nom;
+  $patient->prenom = $prenom;
   $patient->sexe = $sexe;
   $patient->naissance = $date;
   storeObject($patient);
@@ -81,10 +82,6 @@ if (!$naissance_id) {
   $sejour_enfant->group_id = $sejour->group_id;
   storeObject($sejour_enfant);
   
-  // Modification du prénom du patient
-  $patient->prenom = $sejour_enfant->_id;
-  $patient->store();
-  
   // Etape 4 (affectation)
   $affectation = new CAffectation;
   $affectation->entree = $sejour_enfant->entree_reelle;
@@ -97,10 +94,8 @@ if (!$naissance_id) {
   // Etape 5 (naissance)
   $naissance = new CNaissance;
   $naissance->sejour_enfant_id = $sejour_enfant->_id;
-  if (!$anonymous) {
-    $naissance->operation_id = $operation_id;
-    $naissance->grossesse_id = $grossesse->_id;
-  }
+  $naissance->operation_id = $operation_id;
+  $naissance->grossesse_id = $grossesse->_id;
   $naissance->rang         = $rang;
   $naissance->heure        = $heure;
   storeObject($naissance);
@@ -125,7 +120,6 @@ else {
   $constantes->poids = $poids;
   $constantes->taille = $taille;
   $constantes->perimetre_cranien = $perimetre_cranien;
-  mbLog($constantes->_id);
   storeObject($constantes);
 }
 echo CAppUI::getMsg();
