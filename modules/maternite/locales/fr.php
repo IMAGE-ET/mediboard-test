@@ -1,5 +1,7 @@
 <?php
 $locales['CGrossesse'] = 'Grossesse';
+$locales['CGrossesse-active'] = 'Active';
+$locales['CGrossesse-active-desc'] = 'Active';
 $locales['CGrossesse-back-naissances'] = 'Naissances';
 $locales['CGrossesse-back-naissances.empty'] = 'Naissances';
 $locales['CGrossesse-grosssesse_id'] = 'Identifiant';

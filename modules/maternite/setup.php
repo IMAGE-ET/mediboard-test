@@ -46,7 +46,7 @@ class CSetupmaternite extends CSetup {
     $this->makeRevision("0.01");
     
     $query = "ALTER TABLE `grossesse`
-      ADD `active` ENUM ('0','1') DEFAULT '0';";
+      ADD `active` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
     
     $this->mod_version = "0.02";

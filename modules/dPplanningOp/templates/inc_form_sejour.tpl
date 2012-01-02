@@ -11,7 +11,7 @@
 {{mb_script module="dPpatients" script="pat_selector"}}
 {{mb_script module="dPplanningOp" script="cim10_selector"}}
 
-
+{{assign var=grossesse value=$sejour->_ref_grossesse}}
 {{if "maternite"|module_active}}
   {{assign var=maternite_active value="1"}}
 {{else}}
@@ -349,6 +349,9 @@ Main.add( function(){
   OccupationServices.initOccupation();
   OccupationServices.configBlocage = ({{$conf.dPplanningOp.CSejour.blocage_occupation|@json}} == "1") && !{{$modules.dPcabinet->_can->edit|@json}};
   
+  {{if $maternite_active && !$grossesse}}
+    toggleGrossesse($V(form._patient_sexe));
+  {{/if}}
 });
 </script>
 
@@ -374,8 +377,8 @@ Main.add( function(){
 <!-- <input type="hidden" name="_locked" value="1" /> -->
 {{/if}}
 <input type="hidden" name="grossesse_id" value="{{$sejour->grossesse_id}}" />
-{{if $maternite_active && !$sejour->_id}}
-  <input type="hidden" name="_patient_sexe" value="" onchange="toggleGrossesse(this.value)"/>
+{{if $maternite_active}}
+  <input type="hidden" name="_patient_sexe" value="{{if $patient}}{{$patient->sexe}}{{/if}}" onchange="toggleGrossesse(this.value)"/>
 {{/if}}
 
 {{mb_field object=$sejour field="codes_ccam" hidden=1}}
@@ -625,16 +628,20 @@ Main.add( function(){
   </td>
 </tr>
 {{/if}}
-{{if $maternite_active && !$mode_operation && !$sejour->_id}}
+{{if $maternite_active && !$mode_operation}}
   <tr>
-    <th>{{mb_label object=$sejour field=_grossesse}}</th>  
+    <th>{{mb_label object=$sejour field=_ref_grossesse}}</th>  
     <td>
-      <input type="checkbox" name="_grossesse_view" disabled="disabled"
-        onchange="$V(this.form._grossesse, this.checked ? 1 : 0);
-          {{if $conf.dPplanningOp.CSejour.show_type_pec}}
-            if (this.checked) { $V(this.form.type_pec, 'O'); }
-          {{/if}}" />
-      {{mb_field object=$sejour field="_grossesse" hidden="hidden"}}
+      {{if $grossesse}}
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$grossesse->_guid}}')">{{$grossesse}}</span>
+      {{else}}
+        <input type="checkbox" name="_ref_grossesse_view" disabled="disabled"
+          onchange="$V(this.form._grossesse, this.checked ? 1 : 0);
+            {{if $conf.dPplanningOp.CSejour.show_type_pec}}
+              if (this.checked) { $V(this.form.type_pec, 'O'); }
+            {{/if}}" />
+        {{mb_field object=$sejour field="_grossesse" hidden="hidden"}}
+      {{/if}}
     </td>
   </tr>
 {{/if}}

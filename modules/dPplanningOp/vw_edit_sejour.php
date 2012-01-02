@@ -60,6 +60,9 @@ if ($sejour_id) {
     CAppUI::redirect("m=$m&tab=$tab&sejour_id=0");
   }
 
+  if (CModule::getActive("maternite")) {
+    $sejour->loadRefGrossesse();
+  }
   
   foreach ($sejour->_ref_operations as &$operation) {
     $operation->loadRefsFwd();
