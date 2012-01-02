@@ -75,7 +75,6 @@ class CConsultation extends CCodable {
   var $_exam_fields    = null;
   var $_acte_dentaire_id = null;
   var $_function_secondary_id = null;
-  var $_grossesse      = null;
   var $_semaine_grossesse = null;
   var $_type           = null;  // Type de la consultation
   
@@ -107,7 +106,8 @@ class CConsultation extends CCodable {
   var $_ref_reglements         = null;
   var $_ref_reglements_patient = null;
   var $_ref_reglements_tiers   = null;
-
+  var $_ref_grossesse          = null;
+  
   var $_ref_prescription = null; 
   var $_ref_categorie    = null;
   
@@ -238,7 +238,7 @@ class CConsultation extends CCodable {
     $specs["_type"]             = "enum list|urg|anesth";
     $specs["_prat_id"]          = "";
     $specs["_acte_dentaire_id"] = "ref class|CActeDentaire";
-    $specs["_grossesse"]        = "ref class|CGrossesse";
+    $specs["_ref_grossesse"]    = "ref class|CGrossesse";
     return $specs;
   }
   
@@ -1064,6 +1064,10 @@ TESTS A EFFECTUER
     }
     
     return $this->_ref_sejour;
+  }
+  
+  function loadRefGrossesse() {
+    return $this->_ref_grossesse = $this->loadFwdRef("grossesse_id");
   }
   
   function getActeExecution() {

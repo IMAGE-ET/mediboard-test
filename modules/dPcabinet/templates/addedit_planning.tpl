@@ -426,13 +426,18 @@ Main.add(function () {
           </tr>
           
           {{if $maternite_active}}
+            {{assign var=grossesse value=$consult->_ref_grossesse}}
             <tr>
-              <th>{{mb_label object=$consult field=_grossesse}}</th>  
+              <th>{{mb_label object=$consult field=_ref_grossesse}}</th>  
               <td>
-                <input type="checkbox" name="_grossesse_view"
-                  {{if $pat->_id && $pat->sexe == "m"}}disabled="disabled"{{/if}}
-                  onchange="$V(this.form._grossesse, this.checked ? 1 : 0);" />
-                {{mb_field object=$consult field="_grossesse" hidden="hidden"}}
+                {{if $grossesse}}
+                  <span onmouseover="ObjectTooltip.createEx(this, '{{$grossesse->_guid}}')">{{$grossesse}}</span>
+                {{else}}
+                  <input type="checkbox" name="_ref_grossesse_view"
+                    {{if $pat->_id && $pat->sexe == "m"}}disabled="disabled"{{/if}}
+                    onchange="$V(this.form._grossesse, this.checked ? 1 : 0);" />
+                  <input type="hidden" name="_grossesse" value="" />
+                {{/if}}
               </td>
             </tr>
           {{/if}}

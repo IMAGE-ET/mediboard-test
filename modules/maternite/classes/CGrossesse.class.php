@@ -73,6 +73,8 @@ class CGrossesse extends CMbObject{
   
   function updateFormFields() {
     parent::updateFormFields();
+    $this->loadRefParturiente();
+    $this->_view = "Grossesse du " . mbDateToLocale($this->terme_prevu);
     $this->_date_fecondation = mbDate("-42 weeks", $this->terme_prevu);
   }
   

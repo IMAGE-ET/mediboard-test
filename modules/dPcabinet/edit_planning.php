@@ -96,6 +96,10 @@ else {
     $medecin_adresse_par->load($consult->adresse_par_prat_id);
     $consult->_ref_adresse_par_prat = $medecin_adresse_par;
   }
+  
+  if (CModule::getActive("maternite")) {
+    $consult->loadRefGrossesse();
+  }
 }
 
 // Chargement des categories
