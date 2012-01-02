@@ -349,7 +349,7 @@ Main.add( function(){
   OccupationServices.initOccupation();
   OccupationServices.configBlocage = ({{$conf.dPplanningOp.CSejour.blocage_occupation|@json}} == "1") && !{{$modules.dPcabinet->_can->edit|@json}};
   
-  {{if $maternite_active && !$grossesse}}
+  {{if $maternite_active && !$grossesse && !$mode_operation}}
     toggleGrossesse($V(form._patient_sexe));
   {{/if}}
 });
@@ -635,12 +635,12 @@ Main.add( function(){
       {{if $grossesse}}
         <span onmouseover="ObjectTooltip.createEx(this, '{{$grossesse->_guid}}')">{{$grossesse}}</span>
       {{else}}
-        <input type="checkbox" name="_ref_grossesse_view" disabled="disabled"
+        <input type="checkbox" name="_grossesse_view" disabled="disabled"
           onchange="$V(this.form._grossesse, this.checked ? 1 : 0);
             {{if $conf.dPplanningOp.CSejour.show_type_pec}}
               if (this.checked) { $V(this.form.type_pec, 'O'); }
             {{/if}}" />
-        {{mb_field object=$sejour field="_grossesse" hidden="hidden"}}
+        <input type="hidden" name="_grossesse" value=""/>
       {{/if}}
     </td>
   </tr>
@@ -726,6 +726,10 @@ Main.add( function(){
     </td>
   </tr>
 {{/if}}
+<tr>
+  <th>{{mb_label object=$sejour field=duree_uscpo}}</th>
+  <td>{{mb_field object=$sejour field=duree_uscpo increment=true form=editSejour size=2}}</td>
+</tr>
 <tr class="reanimation">
   <th>{{mb_label object=$sejour field="reanimation"}}</th>
   <td colspan="3">

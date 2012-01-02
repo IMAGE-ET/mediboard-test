@@ -387,7 +387,12 @@ Main.add(function () {
           <th>{{mb_label object=$protocole field="duree_hospi"}}</th>
           <td>{{mb_field object=$protocole field="duree_hospi" size="2"}} nuits</td>
         </tr>
-
+        
+        <tr>
+          <th>{{mb_label object=$protocole field="duree_uscpo"}}</th>
+          <td>{{mb_field object=$protocole field="duree_uscpo" increment=true form=editFrm size="2"}} nuits</td>
+        </tr>
+        
         <tr>
           <th>{{mb_label object=$protocole field="type"}}</th>
           <td>{{mb_field object=$protocole field="type" style="width: 15em;"}}</td>

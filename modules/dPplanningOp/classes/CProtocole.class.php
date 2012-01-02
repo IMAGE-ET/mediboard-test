@@ -42,7 +42,8 @@ class CProtocole extends CMbObject {
   var $fournitures       = null;
   var $service_id        = null;
   var $libelle_sejour    = null;
-
+  var $duree_uscpo       = null;
+  
   // DB fields linked protocols
   var $protocole_prescription_chir_id      = null;
   var $protocole_prescription_chir_class   = null;
@@ -99,6 +100,7 @@ class CProtocole extends CMbObject {
     $specs["codes_ccam"]      = "str seekable";
     $specs["temp_operation"]  = "time";
     $specs["type_pec"]        = "enum list|M|C|O";
+    $specs["duree_uscpo"]     = "num min|0 default|0";
     
     $specs["protocole_prescription_chir_id"]      = "ref class|CMbObject meta|protocole_prescription_chir_class";
     $specs["protocole_prescription_chir_class"]   = "enum list|CPrescription|CPrescriptionProtocolePack";

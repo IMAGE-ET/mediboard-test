@@ -78,6 +78,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $discipline_id       = null;
   var $ald                 = null;
   var $type_pec            = null;
+  var $duree_uscpo         = null;
   
   var $assurance_maladie        = null;
   var $rques_assurance_maladie  = null;  
@@ -307,7 +308,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["destination"]              = "enum list|1|2|3|4|6|7";
     $props["transport"]                = "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo";
     $props["type_pec"]                 = "enum list|M|C|O";
-    
+    $props["duree_uscpo"]              = "num min|0 default|0";
     $props["assurance_maladie"]        = "str autocomplete";
     $props["rques_assurance_maladie"]  = "text helped";  
     $props["assurance_accident"]       = "str autocomplete";
