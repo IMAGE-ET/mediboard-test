@@ -41,11 +41,13 @@ if (count($affectations)) {
   foreach ($affectations as $_affectation) {
     $_affectation->loadRefLit()->loadCompleteView();
     $dif = strtotime($_affectation->sortie) - strtotime($_affectation->entree);
-    $_affectation->_width = ($dif / $duree)*100;
+    $_affectation->_rowspan = mbDaysRelative($_affectation->entree, $_affectation->sortie)+1;
     $date_temp = mbDate($_affectation->entree);
     
     while ($date_temp <= mbDate($_affectation->sortie)) {
-      $dates[$date_temp] = $_affectation->_id;
+      if (!isset($dates[$date_temp])) {
+        $dates[$date_temp] = $_affectation->_id;
+      }
       $date_temp = mbDate("+1 day", $date_temp);
     }
     
