@@ -178,6 +178,22 @@ Main.add( function(){
           {{/if}}
           </div>
         {{/if}}
+				
+				{{if isset($antecedents.alle|smarty:nodefaults)}}
+				  {{assign var=allergies value=$antecedents.alle}}
+				  {{if $allergies|@count}}
+				    <strong>Allergies</strong>:
+				    {{foreach from=$allergies item=allergie name="allergies"}}
+				      {{if $allergie->date}}
+				        {{$allergie->date|date_format:"%d/%m/%Y"}}:
+				      {{/if}} 
+				      {{$allergie->rques}}
+				      {{if !$smarty.foreach.allergies.last}},{{/if}}
+						{{/foreach}}
+				  {{/if}}
+				{{/if}}
+
+
       </td>
       <td style="vertical-align: top;">
         {{foreach from=$prescription->_ref_object->_ref_affectations item=_affectation}}

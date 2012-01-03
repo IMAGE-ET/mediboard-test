@@ -42,6 +42,11 @@ $sejour->loadRefCurrAffectation($debut);
 $sejour->loadRefsOperations();
 $sejour->_ref_last_operation->loadRefPlageOp();
 $sejour->_ref_last_operation->loadExtCodesCCAM();
+
+$patient->loadRefDossierMedical();
+$dossier_medical =& $patient->_ref_dossier_medical;
+$dossier_medical->loadRefsAntecedents();
+
 $bons = array();
 $all_bons = array();
 $lines = array();
@@ -201,7 +206,8 @@ $categories = CCategoryPrescription::loadCategoriesByChap();
 $filter_line = new CPrescriptionLineElement();
 $filter_line->debut = $debut;
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
+$smarty->assign("antecedents", $dossier_medical->_ref_antecedents_by_type);
 $smarty->assign("all_bons", $all_bons);
 $smarty->assign("bons", $bons);
 $smarty->assign("lines", $lines);
