@@ -56,7 +56,7 @@
         id="sejour_{{$_sejour->_id}}" data-patient_id="{{$patient->_id}}" data-sejour_id="{{$_sejour->_id}}"
         data-width="{{$_sejour->_width}}">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
-            {{$patient->nom}} {{$patient->prenom}}
+            {{$patient->nom}} {{$patient->prenom}} ({{$patient->_age}} ans)
             <br />
             <span class="compact">
               {{$_sejour->_motif_complet}}
