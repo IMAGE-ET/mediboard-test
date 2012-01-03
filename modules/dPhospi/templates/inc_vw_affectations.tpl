@@ -46,6 +46,7 @@
 
 <hr class="control_tabs" />
 
+{{assign var=show_age_patient value=$conf.dPhospi.show_age_patient}}
 {{foreach from=$sejours_non_affectes key=group_name item=_sejours}}
   <div id="{{$group_name}}" class="droppable {{if !$_sejours|@count}}empty{{/if}}" style="display: none;">
     
@@ -56,7 +57,7 @@
         id="sejour_{{$_sejour->_id}}" data-patient_id="{{$patient->_id}}" data-sejour_id="{{$_sejour->_id}}"
         data-width="{{$_sejour->_width}}">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
-            {{$patient->nom}} {{$patient->prenom}} ({{$patient->_age}} ans)
+            {{$patient->nom}} {{$patient->prenom}} {{if $show_age_patient}}({{$patient->_age}} ans){{/if}}
             <br />
             <span class="compact">
               {{$_sejour->_motif_complet}}

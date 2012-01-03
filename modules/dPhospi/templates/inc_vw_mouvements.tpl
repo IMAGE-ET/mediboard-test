@@ -100,6 +100,7 @@
       {{/foreach}}
     </tr>
     
+    {{assign var=show_age_patient value=$conf.dPhospi.show_age_patient}}
     {{foreach from=$_service->_ref_chambres item=_chambre}}     
       {{foreach from=$_chambre->_ref_lits item=_lit}}
         <tr data-lit_id="{{$_lit->_id}}" id="{{$_lit->_guid}}" class="droppable">
@@ -140,7 +141,7 @@
                         <div id="wrapper_op">
                           <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');">
                             {{if $_sejour->_id}}
-                              {{$_patient->nom}} {{$_patient->prenom}} ({{$_patient->_age}} ans)
+                              {{$_patient->nom}} {{$_patient->prenom}} {{if $show_age_patient}}({{$_patient->_age}} ans){{/if}}
                               {{if $vue == "classique"}}
                                 <br />
                                 <span class="compact">

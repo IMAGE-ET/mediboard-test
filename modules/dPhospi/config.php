@@ -16,6 +16,7 @@ $dPconfig["dPhospi"] = array (
     "consult"    => ""
   ),
   "show_mouvements" => "0",
+  "show_age_patient" => "0",
   "CLit" => array(
     "prefixe"         => "",
     "show_in_tableau" => 0,

@@ -24,6 +24,8 @@
   
   {{mb_include module=system template=inc_config_bool var=show_mouvements}}
   
+  {{mb_include module=system template=inc_config_bool var=show_age_patient}}
+  
   <tr>
     <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
