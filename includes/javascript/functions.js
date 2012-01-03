@@ -1052,56 +1052,71 @@ window.modal = Modal.open;
 
 // Multiple mocals
 Object.extend(Control.Modal,{
-    stack: [],
-    close: function() {
-      if (!Control.Modal.stack.length) return;
-      Control.Modal.stack.last().close();
+  stack: [],
+  close: function() {
+    if (!Control.Modal.stack.length) return;
+    Control.Modal.stack.last().close();
+  },
+  
+  position: function() {
+    if (!Control.Modal.stack.length) return;
+    Control.Modal.stack.last().position();
+  },
+  
+  Observers: {
+    beforeOpen: function(){
+      if(!this.overlayFinishedOpening && Control.Modal.stack.length == 0){
+        Control.Overlay.observeOnce('afterShow',function(){
+          this.overlayFinishedOpening = true;
+          this.open();
+        }.bind(this));
+        Control.Overlay.show(this.options.overlayOpacity,this.options.fade ? this.options.fadeDuration : false);
+        throw $break;
+      }/*else
+      Control.Window.windows.without(this).invoke('close');*/
     },
     
-    position: function() {
-      if (!Control.Modal.stack.length) return;
-      Control.Modal.stack.last().position();
+    afterOpen: function(){
+      //Control.Modal.current = this;
+      var overlay = Control.Overlay.container;
+      Control.Modal.stack.push(this);
+      overlay.style.zIndex = this.container.style.zIndex - 1;
+      
+      // move the overlay before the modal element (zIndex trick)
+      this.container.insert({before: overlay});
+      overlay.insert({after: Control.Overlay.iFrameShim.element});
+      
+      //Event.stopObserving(window,'scroll',this.positionHandler);
+      Control.Overlay.positionIFrameShim();
     },
     
-    Observers: {
-        beforeOpen: function(){
-            if(!this.overlayFinishedOpening && Control.Modal.stack.length == 0){
-                Control.Overlay.observeOnce('afterShow',function(){
-                    this.overlayFinishedOpening = true;
-                    this.open();
-                }.bind(this));
-                Control.Overlay.show(this.options.overlayOpacity,this.options.fade ? this.options.fadeDuration : false);
-                throw $break;
-            }/*else
-            Control.Window.windows.without(this).invoke('close');*/
-        },
-        afterOpen: function(){
-            //Control.Modal.current = this;
-            var overlay = Control.Overlay.container;
-            Control.Modal.stack.push(this);
-            overlay.style.zIndex = this.container.style.zIndex - 1;
-            this.container.insert({before: overlay}); // move the overlay before the modal element (zIndex trick)
-            //Event.stopObserving(window,'scroll',this.positionHandler);
-            Control.Overlay.positionIFrameShim();
-        },
-        afterClose: function(){
-          Control.Modal.stack.pop().close();
-          var overlay = Control.Overlay.container;
-          
-          if (Control.Modal.stack.length == 0) {
-            $$("body")[0].insert(overlay); // put it back at the end of body
-            Control.Overlay.hide(this.options.fade ? this.options.fadeDuration : false);
-          }
-          else {
-            var lastModal = Control.Modal.stack.last().container;
-            overlay.style.zIndex = lastModal.style.zIndex - 2;
-            lastModal.insert({before: overlay}); // move the overlay before the modal element (zIndex trick)
-            Control.Overlay.positionIFrameShim();
-          }
-            //Control.Modal.current = false;
-            this.overlayFinishedOpening = false;
-        }
+    afterClose: function(){
+      Control.Modal.stack.pop().close();
+      var overlay = Control.Overlay.container;
+      
+      if (Control.Modal.stack.length == 0) {
+        // put it back at the end of body
+        var body = $(document.body);
+        body.insert(overlay);
+        body.insert(Control.Overlay.iFrameShim.element);
+        
+        Control.Overlay.hide(this.options.fade ? this.options.fadeDuration : false);
+      }
+      else {
+        var lastModal = Control.Modal.stack.last().container;
+        overlay.style.zIndex = lastModal.style.zIndex - 2;
+        
+        // move the overlay before the modal element (zIndex trick)
+        lastModal.insert({before: overlay}); 
+        overlay.insert({after: Control.Overlay.iFrameShim.element});
+        
+        Control.Overlay.positionIFrameShim();
+      }
+      
+      //Control.Modal.current = false;
+      this.overlayFinishedOpening = false;
     }
+  }
 });
 
 Class.extend(Control.Modal, {
@@ -1120,8 +1135,9 @@ Class.extend(Control.Modal, {
     e.print();
   },
   
+  // Redefine this method to ...
   bringToFront: function(){
-    Control.Overlay.positionIFrameShim();
+    // ... do nothing!
   }
 });
 
