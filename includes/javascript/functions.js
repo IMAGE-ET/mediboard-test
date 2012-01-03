@@ -1120,9 +1120,8 @@ Class.extend(Control.Modal, {
     e.print();
   },
   
-  // Redefine this method to ...
   bringToFront: function(){
-    // ... do nothing!
+    Control.Overlay.positionIFrameShim();
   }
 });
 

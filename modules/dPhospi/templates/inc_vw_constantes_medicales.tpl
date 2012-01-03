@@ -64,9 +64,9 @@ tickFormatter = function (n) {
           ' onclick="editConstantes('+const_ids[n]+', \'{{$context_guid}}\')">';
   
   if (dates[n] && dates[n] == last_date) {
-    s += hours[n];
+    s += '<strong>'+hours[n]+'</strong>';
   } else if (dates[n] && hours[n]) {
-    s += hours[n]+'<br />'+dates[n]+(new Array(50).join(" ")); // argh, flotr checks the length of the longest string, not the biggest element
+    s += '<strong>'+hours[n]+'</strong><br />'+dates[n].substr(0, 5)+(new Array(50).join(" ")); // argh, flotr checks the length of the longest string, not the biggest element
     last_date = dates[n];
   }
   
@@ -75,12 +75,6 @@ tickFormatter = function (n) {
 
 yTickFormatter = function (n) {
   return "<span style='display: inline-block; width: 3em;'>"+n+"</span>";
-};
-
-tickFormatterSpreadsheet = function (n) {
-  n = parseInt(n);
-  if (!dates[n] || !hours[n]) return " ";
-  return dates[n]+' '+hours[n];
 };
 
 trackFormatter = function (obj) {
@@ -185,15 +179,7 @@ options = {
   legend: {
     position: 'nw',
     backgroundOpacity: 0
-  }/*,
-  spreadsheet: {
-    show: true,
-    tabGraphLabel: 'Graphique',
-    tabDataLabel: 'Données',
-    toolbarDownload: 'Télécharger les données (CSV)',
-    toolbarSelectAll: 'Tout sélectionner',
-    tickFormatter: tickFormatterSpreadsheet
-  }*/
+  }
 };
 
 if (Prototype.Browser.IE) {
@@ -202,7 +188,6 @@ if (Prototype.Browser.IE) {
 
 {{if $print}}
   options.resolution = 2;
-  options.spreadsheet.show = false;
   options.mouse.track = false;
   options.markers = {show: true};
   options.grid.outlineWidth = 1;
@@ -233,23 +218,6 @@ drawGraph = function() {
     
     data[pair.key].draw = function(){(function(c, d, id, width, height){
       var graph = insertGraph(c, d, id, width, height);
-      
-      {{if !$print}}
-        /*var tabs = graph.spreadsheet.tabs;
-        
-        tabs.data.observe('click', function(e){
-          g.each(function(graph2){
-            graph2.spreadsheet.showTab('data');
-          });
-        });
-        
-        tabs.graph.observe('click', function(e){
-          g.each(function(graph2){
-            graph2.spreadsheet.showTab('graph');
-          });
-        });*/
-      {{/if}}
-      
       last_date = null;
     })(c, pair.value, id, width, height)};
     
