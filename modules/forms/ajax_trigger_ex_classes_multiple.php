@@ -29,7 +29,7 @@ foreach($object_guids as $object_guid) {
     "conditional" => $ds->prepare("=%", 0),
     //"required"    => $ds->prepare("=%", 1),
     "group_id"    => $ds->prepare("=% OR group_id IS NULL", $group_id),
-    "ex_class_id" => $ds->prepareNotIn(array_keys($ex_classes)), // On exclut les formulaires deja dans le tableau
+    //"ex_class_id" => $ds->prepareNotIn(array_keys($ex_classes)), // On exclut les formulaires deja dans le tableau
   );
   
   $_ex_classes = $ex_class->loadList($where);
@@ -37,14 +37,14 @@ foreach($object_guids as $object_guid) {
   foreach($_ex_classes as $_id => $_ex_class) {
     if ($_ex_class->checkConstraints($object)) {
       $_ex_class->_host_object = $object;
-      $ex_classes[$_id] = $_ex_class;
+      $ex_classes[] = $_ex_class;
     }
   }
 }
 
 $ex_classes_struct = array();
 
-foreach($ex_classes as $_key => $_ex_class) {
+foreach($ex_classes as $_ex_class) {
   $ex_classes_struct[] = array(
     "ex_class_id" => $_ex_class->_id,
     "event"       => $event,

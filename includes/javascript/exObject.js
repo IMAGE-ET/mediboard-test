@@ -37,8 +37,8 @@ ExObject = {
       url.addParam("object_guids[]", object_guid, true);
       url.addParam("event", event);
       url.requestJSON(function(datas){
-        datas.each(function(data){
-          showExClassForm(data.ex_class_id, data.object_guid, /*data.object_guid+"_"+*/data.event+"_"+data.ex_class_id, "", data.event);
+        datas.reverse(false).each(function(data){
+          showExClassForm(data.ex_class_id, data.object_guid, data.object_guid+"_"+data.event+"_"+data.ex_class_id, "", data.event);
         });
         
         options.onTriggered(datas, event);
