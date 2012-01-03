@@ -111,10 +111,10 @@
 {{if $_suivi instanceof CConsultation}}
   <td>
     <strong onmouseover="ObjectTooltip.createEx(this, '{{$_suivi->_guid}}')">
-      {{if $_suivi->_ref_consult_anesth->_id}}
-        {{tr}}CConsultAnesth{{/tr}}
-      {{elseif $_suivi->type == "entree"}}
+      {{if $_suivi->type == "entree"}}
         {{tr}}CConsultation.type.entree{{/tr}}
+      {{elseif $_suivi->_ref_consult_anesth->_id}}
+        {{tr}}CConsultAnesth{{/tr}}
       {{else}}
         {{tr}}CConsultation{{/tr}}
       {{/if}}

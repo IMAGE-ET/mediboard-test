@@ -7,7 +7,12 @@
     onSubmitFormAjax(oForm);
   }
   Main.add(function() {
-    new Control.Tabs.create('tabs_consult');
+    var tabs = Control.Tabs.create('tabs_consult');
+    {{if $consult_anesth->_id}}
+      tabs.setActiveTab("exam_clinique");
+    {{else}}
+      tabs.setActiveTab("exams");
+    {{/if}}
   });
   
   refreshVisite = function(operation_id) {
