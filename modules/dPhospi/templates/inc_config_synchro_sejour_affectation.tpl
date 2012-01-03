@@ -17,7 +17,7 @@
   }
 </script>
 
-<form name="synchronizeFrm">
+<form name="synchronizeFrm" method="get">
   <table class="form">
     <tr>
       <th colspan="2" class="title">
