@@ -144,7 +144,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
         if ($tmpPatient->load($patientRI)) {
           if ($tmpPatient->_id != $IPP->object_id) {
             $comment = "L'identifiant source fait référence au patient : $IPP->object_id et l'identifiant cible au patient : $tmpPatient->_id.";
-            return $exchange_ihe->setAckAR($ack, "E100", $comment, $newPatient);
+            return $exchange_ihe->setAckAR($ack, "E101", $comment, $newPatient);
           }
           $code_IPP = "I124"; 
         }

@@ -13,6 +13,8 @@
   <input type="hidden" name="m" value="system" />
   <table class="form">
     {{mb_include module=system template=inc_config_str var=assigningAuthorityUniversalID}}
+    
+    {{mb_include module=system template=inc_config_bool var=strictSejourMatch}}
 
     <tr>
       <td class="button" colspan="10">

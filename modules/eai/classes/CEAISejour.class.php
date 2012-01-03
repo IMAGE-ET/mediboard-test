@@ -42,18 +42,50 @@ class CEAISejour extends CEAIMbObject {
     $NDA->_id   = null;
   }
   
-  static function storeNDA(CIdSante400 $NDA, CSejour $newSejour) {
-    if ($newSejour)
-      $NDA->object_id   = $newSejour->_id;
-    $NDA->last_update = mbDateTime();
-    
-    return $NDA->store();   
-  }
-  
   static function storeSejour(CSejour $newSejour, $NDA) {
     $newSejour->_NDA = $NDA;
     
     return $newSejour->store();
+  }
+  
+  static function storeNDA(CIdSante400 $NDA, CSejour $sejour, CInteropSender $sender) {
+    $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, null, $sejour->_id);
+    if ($NDA->_id) {
+      return;
+    }
+    
+    /* Gestion du numéroteur */
+    $group = new CGroups();
+    $group->load($sender->group_id);
+    $group->loadConfigValues();
+      
+    // Génération du NDA ? 
+    // Non
+    if (!$group->_configs["smp_idex_generator"]) {
+      if (!$NDA->id400) {
+        return null;
+      }
+      
+      if ($sejour)
+        $NDA->object_id   = $sejour->_id;
+      $NDA->last_update = mbDateTime();
+      
+      return $NDA->store();  
+    }
+    else {
+      // Pas de NDA passé
+      if (!$NDA->id400) {
+        if (!CIncrementer::generateIdex($sejour, $sender->_tag_sejour, $sender->group_id)) {
+          return CAppUI::tr("CEAISejour-error-generate-idex");
+        }
+        
+        return null;
+      }
+      else {
+        /* @todo Gestion des plages d'identifiants */
+        return CAppUI::tr("CEAISejour-idex-not-in-the-range");
+      }
+    }  
   }
 }
 

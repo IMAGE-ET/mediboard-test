@@ -85,36 +85,6 @@ class CEAIPatient extends CEAIMbObject {
     
     return $newPatient->store();
   }
-  
-  static function getComment(CMbObject $object, CMbObject $otherObject = null) {
-    $modified_fields = self::getModifiedFields($object);
-    
-    if ($object instanceof CPatient) {
-      switch ($object->_ref_last_log->type) {
-         // Enregistrement du patient
-        case "create" :
-          $comment = "Le patient a été créé dans Mediboard avec l'IC $object->_id.";
-          break;
-         // Modification du patient
-        case "store" :
-          $comment = "Le patient avec l'IC '$object->_id' dans Mediboard a été modifié.";
-          $comment .= ($modified_fields) ? "Les champs mis à jour sont les suivants : $modified_fields." : null;
-          break;
-        // Fusion du patient
-        case "merge" : 
-          $comment  = "Le patient avec l'IC '$mbPatient->_id' a été fusionné avec le patient dont l'IC est '$mbPatient->_mbPatientElimine_id'.";
-      }     
-      
-      return $comment;
-    }
-    if ($object instanceof CIdSante400) {
-      if (!$object->_id) {
-        return;
-      }
-      
-      return "L'IPP créé est : $object->id400";
-    }
-  }
 }
 
 ?>
