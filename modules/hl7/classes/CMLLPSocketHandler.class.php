@@ -57,17 +57,25 @@ class CMLLPSocketHandler {
   }
   
   function handle($request, $id) {
+    // Commands
+    switch($request) {
+      case "__STOP__": 
+        return false;
+    }
+    
     // Verification qu'on ne recoit pas un en-tete de message en ayant deja des données en buffer
     if (self::$buffer && strpos($request, "\x0B")) {
-      echo sprintf("!!! Got a header, while having data in the buffer from %d\n", $id);
+      echo sprintf(" !!! Got a header, while having data in the buffer from %d\n", $id);
     }
     
     // Mise en buffer du message
     self::$buffer .= "$request\n";
     
+    echo sprintf(" > Got %d bytes from %d\n", strlen($request), $id);
+    
     // Si on recoit le flag de fin de message, on effectue la requete web
     if (strrpos($request, "\x1C") === strlen($request)-1) {
-      echo sprintf("*** Got a full message from %d\n", $id);
+      echo sprintf(" > Got a full message from %d\n", $id);
       
       $post = array(
         "m"       => "eai",
@@ -76,30 +84,32 @@ class CMLLPSocketHandler {
         "message" => self::$buffer,
       );
       
+      $start = microtime(true);
       $this->http_request_post($this->call_url."/index.php?login={$this->username}:{$this->password}", $post);
+      $time = microtime(true) - $start;
+      echo sprintf(" > Request done in %f s\n", $time);
       
       self::$buffer = "";
     }
     
-    echo sprintf("*** Got %d bytes from %d\n", strlen($request), $id);
     return md5($request);
   }
   
   function open($id, $addr, $port = null) {
-    echo sprintf("New connection [%d] arrived from %s:%d\n", $id, $addr, $port);
+    echo sprintf(" > New connection [%d] arrived from %s:%d\n", $id, $addr, $port);
     return ("127.0.0.1" == $addr);
   }
   
   function cleanup($id) {
-    echo sprintf("Connection [%d] cleaned-up\n", $id);
+    echo sprintf(" > Connection [%d] cleaned-up\n", $id);
   }
   
   function close($id) {
-    echo sprintf("Connection [%d] closed\n", $id);
+    echo sprintf(" > Connection [%d] closed\n", $id);
   }
   
   function write_error($id) {
-    echo sprintf("Write error to [%d]\n", $id);
+    echo sprintf(" !!! Write error to [%d]\n", $id);
   }
   
   /**
