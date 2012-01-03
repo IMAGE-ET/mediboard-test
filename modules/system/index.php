@@ -11,7 +11,6 @@ $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
 $module->registerTab("view_modules"        , TAB_ADMIN);
 $module->registerTab("idx_messages"        , TAB_READ);
-$module->registerTab("view_translate"      , TAB_EDIT);
 $module->registerTab("object_merger"       , TAB_ADMIN);
 $module->registerTab("view_history"        , TAB_EDIT);
 $module->registerTab("view_access_logs"    , TAB_READ);

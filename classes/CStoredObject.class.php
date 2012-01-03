@@ -453,6 +453,20 @@ class CStoredObject extends CModelObject {
   }
   
   /**
+   * Loads the first object matching defined properties, escaping the values
+   * @param array|string $order Order SQL statement
+   * @param array|string $group Group by SQL statement
+   * @param array        $ljoin Left join SQL statement collection
+   * @return integer The found object's ID
+   */
+  function loadMatchingObjectEsc($order = null, $group = null, $ljoin = null) {
+    $this->escapeValues();
+    $ret = $this->loadMatchingObject($order, $group, $ljoin);
+    $this->unescapeValues();
+    return $ret;
+  }
+  
+  /**
    * Loads the list of objects matching the $this properties
    * @param array|string $order Order SQL statement
    * @param string       $limit Limit SQL statement
@@ -479,6 +493,21 @@ class CStoredObject extends CModelObject {
   }
   
   /**
+   * Loads the list of objects matching the $this properties, escaping the values
+   * @param array|string $order Order SQL statement
+   * @param string       $limit Limit SQL statement
+   * @param array|string $group Group by SQL statement
+   * @param array        $ljoin Left join SQL statement collection
+   * @return array The list of objects
+   */
+  function loadMatchingListEsc($order = null, $limit = null, $group = null, $ljoin = null) {
+    $this->escapeValues();
+    $ret = $this->loadMatchingList($order, $limit, $group, $ljoin);
+    $this->unescapeValues();
+    return $ret;
+  }
+  
+  /**
    * Size of the list of objects matching the $this properties
    * @param array|string $group Group by SQL statement
    * @param array        $ljoin Left join SQL statement collection
@@ -497,6 +526,19 @@ class CStoredObject extends CModelObject {
       }
     }
     return $this->countList($request->where, $request->group, $request->ljoin);
+  }
+  
+  /**
+   * Size of the list of objects matching the $this properties, escaping the values
+   * @param array|string $group Group by SQL statement
+   * @param array        $ljoin Left join SQL statement collection
+   * @return integer The count
+   */
+  function countMatchingListEsc($group = null, $ljoin = null) {
+    $this->escapeValues();
+    $ret = $this->countMatchingList($group, $ljoin);
+    $this->unescapeValues();
+    return $ret;
   }
   
   /**
@@ -1317,6 +1359,11 @@ class CStoredObject extends CModelObject {
     if (!$backSpec = $this->makeBackSpec($backName)) {
       return null;
     }
+    
+    // Empty object
+    if (!$this->_id) {
+      return array();
+    }
 
     // Cas du module non installé
     $backObject = new $backSpec->class;
@@ -1328,20 +1375,16 @@ class CStoredObject extends CModelObject {
     $fwdSpec =& $backObject->_specs[$backField];
     $backMeta = $fwdSpec->meta;
     
-    // Empty object
-    if (!$this->_id) {
-      return array();
-    }
-
-    // Vérification de la possibilité de supprimer chaque backref
-    $backObject->$backField = $this->_id;
+    $where = array(
+      $backField => "= '$this->_id'"
+    );
 
     // Cas des meta objects
     if ($backMeta) {
-      $backObject->$backMeta = $this->_class;
+      $where[$backMeta] = "= '$this->_class'";
     }
     
-    return $this->_back[$backName] = $backObject->loadMatchingList($order, $limit, $group, $ljoin);
+    return $this->_back[$backName] = $backObject->loadList($where, $order, $limit, $group, $ljoin);
   }
 
   /**
