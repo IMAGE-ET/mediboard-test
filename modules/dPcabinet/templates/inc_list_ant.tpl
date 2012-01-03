@@ -136,9 +136,9 @@ Traitement = {
           {{if $_antecedent->appareil}} {{mb_value object=$_antecedent field=appareil}} {{/if}}
         </strong>
         {{if $_antecedent->date}}
-          [{{mb_value object=$_antecedent field=date}}] : 
+          {{mb_value object=$_antecedent field=date}} : 
         {{/if}}
-        {{$_antecedent->rques}}
+        {{$_antecedent->rques|nl2br}}
       </span>
     </li>
     {{/foreach}}
@@ -165,11 +165,7 @@ Traitement = {
             {{tr}}Add{{/tr}}
           </button>
         {{/if}}
-        {{if $_line->fin}}
-          Du {{$_line->debut|date_format:"%d/%m/%Y"}} au {{$_line->fin|date_format:"%d/%m/%Y"}} :
-        {{elseif $_line->debut}}
-          Depuis le {{$_line->debut|date_format:"%d/%m/%Y"}} :
-        {{/if}}
+        {{mb_include module=system template=inc_interval_date from=$_line->debut to=$_line->fin}} :
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView')">
           <a href=#1 onclick="Prescription.viewProduit(null,'{{$_line->code_ucd}}','{{$_line->code_cis}}');">
             {{$_line->_ucd_view}}
@@ -214,13 +210,9 @@ Traitement = {
       {{tr}}Add{{/tr}}
     </button>
     {{/if}}
-    
-    {{if $_traitement->fin}}
-      Depuis {{mb_value object=$_traitement field=debut}} 
-      jusqu'à {{mb_value object=$_traitement field=fin}} :
-    {{elseif $_traitement->debut}}
-      Depuis {{mb_value object=$_traitement field=debut}} :
-    {{/if}}
+
+    {{mb_include module=system template=inc_interval_date_progressive object=$_traitement from_field=debut to_field=fin}}
+
     <span onmouseover="ObjectTooltip.createEx(this, '{{$_traitement->_guid}}', 'objectViewHistory')">
       {{$_traitement->traitement}}
     </span>

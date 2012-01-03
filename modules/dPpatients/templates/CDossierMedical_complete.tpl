@@ -18,24 +18,22 @@
     <td class="text top">
       {{foreach from=$object->_ref_antecedents_by_type_appareil key=_type item=antecedents_by_appareil}}
         {{if $antecedents_by_appareil|@count}}
-          <strong>
-            {{tr}}CAntecedent.type.{{$_type}}{{/tr}}
-          </strong>
-          <div style="margin-left: 1em;">
+          {{foreach from=$antecedents_by_appareil key=_appareil item=antecedents name=foreach_atcd}}
+            <strong>
+              {{tr}}CAntecedent.type.{{$_type}}{{/tr}} &ndash;
+              {{tr}}CAntecedent.appareil.{{$_appareil}}{{/tr}}
+            </strong>
             <ul>
-              {{foreach from=$antecedents_by_appareil key=_appareil item=antecedents name=foreach_atcd}}
-                <li><strong>{{tr}}CAntecedent.appareil.{{$_appareil}}{{/tr}}</strong></li>
-                <ul>
-                  {{foreach from=$antecedents item=_antecedent}}
-                    <li>
-                      {{mb_value object=$_antecedent field="date"}}
-                      {{mb_value object=$_antecedent field="rques"}}
-                    </li>
-                  {{/foreach}}
-                </ul>
+              {{foreach from=$antecedents item=_antecedent}}
+                <li>
+                  {{if $_antecedent->date}} 
+                    {{mb_value object=$_antecedent field="date"}} :
+                  {{/if}}
+                  {{$_antecedent->rques}}
+                </li>
               {{/foreach}}
             </ul>
-          </div>
+          {{/foreach}}
         {{/if}}
       {{/foreach}}
       {{if !count($object->_all_antecedents)}}
@@ -51,13 +49,8 @@
           {{if $object->_ref_traitements|@count}}<ul>{{/if}}
             {{foreach from=$object->_ref_traitements item=_traitement}}
               <li>
-                {{if $_traitement->fin}}
-                  Depuis {{mb_value object=$_traitement field="debut"}}
-                  jusqu'à {{mb_value object=$_traitement field="fin"}} :
-                {{elseif $_traitement->debut}}
-                  Depuis {{mb_value object=$_traitement field="debut"}} :
-                {{/if}}
-                {{mb_value object=$_traitement field="traitement"}}
+                {{mb_include module=system template=inc_interval_date_progressive object=$_traitement from_field=debut to_field=fin}}:
+                {{$_traitement->traitement}}
               </li>
             {{/foreach}}
           {{if $object->_ref_traitements|@count}}</ul>{{/if}}
@@ -72,16 +65,14 @@
           <ul>
             {{foreach from=$prescription->_ref_prescription_lines item=_line}}
               <li>
-                {{if $_line->fin}}
-                  Du {{$_line->debut|date_format:"%d/%m/%Y"}} au {{$_line->fin|date_format:"%d/%m/%Y"}} :
-                {{elseif $_line->debut}}
-                  Depuis le {{$_line->debut|date_format:"%d/%m/%Y"}} :
+                {{if $_line->debut || $_line->fin}} 
+                  {{mb_include module=system template=inc_interval_date from=$_line->debut to=$_line->fin}} :
                 {{/if}}
-                <span onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView')">
-                  <a href=#1 onclick="Prescription.viewProduit(null,'{{$_line->code_ucd}}','{{$_line->code_cis}}');">
+                <a href=#1 onclick="Prescription.viewProduit(null,'{{$_line->code_ucd}}','{{$_line->code_cis}}');">
+                  <span onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView');">
                     {{$_line->_ucd_view}}
-                  </a>
-                </span>
+                  </span>
+                </a>
                 {{if $_line->_ref_prises|@count}}
                   ({{foreach from=`$_line->_ref_prises` item=_prise name=foreach_prise}}
                     {{$_prise}}
