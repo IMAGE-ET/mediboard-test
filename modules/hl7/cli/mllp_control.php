@@ -57,6 +57,55 @@ function send($port, $message) {
   }
 }
 
+function get_ps_status(){
+  global $tmp_dir;
+  
+  $pid_files = glob("$tmp_dir/pid.*");
+  $processes = array();
+  
+  foreach($pid_files as $_file) {
+    $_pid = substr($_file, strrpos($_file, ".")+1);
+    $processes[$_pid] = array(
+      "port" => file_get_contents($_file),
+    );
+  }
+  
+  if (PHP_OS == "WINNT") {
+    exec("tasklist", $out);
+    $out = array_slice($out, 2); 
+    
+    foreach($out as $_line) {
+      $_pid = (int)substr($_line, 26, 8);
+      if (!isset($processes[$_pid])) continue;
+      
+      $_ps_name = trim(substr($_line, 0, 25));
+      $processes[$_pid]["ps_name"] = $_ps_name;
+    }
+  }
+  else {
+    exec("ps -e", $out);
+    $out = array_slice($out, 1); 
+    
+    foreach($out as $_line) {
+      $_pid = (int)substr($_line, 0, 5);
+      if (!isset($processes[$_pid])) continue;
+    
+      $_ps_name = trim(substr($_line, 24));
+      $processes[$_pid]["ps_name"] = $_ps_name;
+    }
+  }
+  
+  return $processes;
+}
+
+$msg_ok    = "OK    ";
+$msg_error = "ERROR ";
+
+if (PHP_OS != "WINNT") {
+  $msg_ok    = "\033[1;32m$msg_ok\033[0m";
+  $msg_error = "\033[1;31m$msg_error\033[0m";
+}
+
 switch($command) {
   case "stop":
   //case "restart": 
@@ -67,34 +116,16 @@ switch($command) {
     send($port, "\x0B$test_message\x1C\x0D");
     break;
     
-  case "list": 
-    if (PHP_OS != "WINNT") {
-      echo "Not supported on Unix yet\n"; 
-      exit(0);
-    }
-
-    $pid_files = glob("$tmp_dir/pid.*");
-    $pids = array();
-    foreach($pid_files as $_file) {
-      $_pid = substr($_file, strrpos($_file, ".")+1);
-      $pids[$_pid] = file_get_contents($_file);
-    }
-    
-    exec("tasklist", $out);
-    $out = array_slice($out, 2); 
-    $processes = array();
-    foreach($out as $_line) {
-      $_pid = (int)substr($_line, 26, 8);
-      $_ps_name = trim(substr($_line, 0, 25));
-      $processes[$_pid] = $_ps_name;
-    }
+  case "list":
+    $processes = get_ps_status();
     
     echo "--------------------------------------\n";
     echo "   PID |  PORT | STATUS | PS NAME     \n";
     echo "--------------------------------------\n";
-    foreach($pids as $_pid => $_port) {
-      $_status = isset($processes[$_pid]) && stripos($processes[$_pid], "php") !== false;
-      printf(" %5.d | %5.d | %6.s | %s \n", $_pid, $_port, $_status ? "OK" : "ERROR", $processes[$_pid]);
+    foreach($processes as $_pid => $_status) {
+      $_ok = isset($_status["ps_name"]) && stripos($_status["ps_name"], "php") !== false;
+      
+      printf(" %5.d | %5.d | %s | %s \n", $_pid, $_status["port"], $_ok ? $msg_ok : $msg_error, $_ok ? $_status["ps_name"] : "");
     }
     
     break;

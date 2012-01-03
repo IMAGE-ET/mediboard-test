@@ -57,14 +57,15 @@ class CMLLPSocketHandler {
   }
   
   function handle($request, $id) {
-    // Commands
-    switch($request) {
-      case "__STOP__": 
-        return false;
-    }
-    
     $client = $this->clients[$id];
     $buffer = &$this->clients[$id]["buffer"];
+    
+    // Commands
+    switch($request) {
+      case "__STOP__":
+        $buffer = "";
+        return false;
+    }
     
     // Verification qu'on ne recoit pas un en-tete de message en ayant deja des données en buffer
     if ($buffer && strpos($request, "\x0B")) {

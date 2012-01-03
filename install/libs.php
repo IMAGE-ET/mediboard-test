@@ -433,7 +433,7 @@ $library = new CLibrary;
 $library->name = "iCalcreator";
 $library->url = "http://sourceforge.net/projects/icalcreator/";
 $library->fileName = "iCalcreator-2.10.15.zip";
-$library->description = "Html To PDF converter";
+$library->description = "iCal formatted files creator";
 $library->sourceDir = "iCalcreator-2.10.15";
 $library->targetDir = "iCalcreator";
 $library->versionFile = "releaseNotes-2.10.15.txt";
@@ -449,7 +449,7 @@ $library->description = "A PHP socket server / client";
 $library->sourceDir = "phpsocket";
 $library->targetDir = "phpsocket";
 $library->versionFile = "SocketServer.php";
-$library->versionString = "http://blog.ixti.ru/?p=116";
+$library->versionString = "SO_REUSEADDR";
 
 CLibrary::$all[$library->name] = $library;
 

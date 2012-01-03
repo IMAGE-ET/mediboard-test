@@ -97,6 +97,7 @@ catch(Exception $e) {
   $message = $e->getMessage();
   
   if ($message == "Address already in use") {
+    echo "$message\n";
     quit(0);
   }
   
