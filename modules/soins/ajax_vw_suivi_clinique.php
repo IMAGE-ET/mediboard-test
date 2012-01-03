@@ -30,7 +30,7 @@ if ($dossier_medical->_id) {
 
 $sejour->loadRefPraticien();
 $sejour->loadRefsOperations();
-$sejour->loadRefsTransmissions(true);
+$sejour->loadRefsTransmissions(null, true);
 $sejour->loadRefsObservations(true);
 $sejour->loadRefsTasks();
 $sejour->loadRefsNotes();
@@ -49,7 +49,7 @@ $transmissions = array();
 
 foreach ($sejour->_ref_transmissions as $_trans) {
   $_trans->loadTargetObject();
-  $nom = $_trans->_ref_object->nom;
+  $nom = get_class($_trans->_ref_object) == "CCategoryPrescription" ? $_trans->_ref_object->nom : "Autres";
   if (!isset($transmissions[$nom])) {
     $transmissions[$nom] = array();
   }
