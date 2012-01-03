@@ -27,14 +27,44 @@ EOT;
 @list($self, $command, $port) = $argv;
 // ---- End read arguments
 
+$test_message = <<<EOT
+MSH|^~\&||GA0000||VAERS PROCESSOR|20010331||ORU^R01|20010422GA03|D|2.3.1|||AL|
+PID|||1234^^^^SR~1234-12^^^^LR~00725^^^^MR||Doe^John^Fitzgerald^JR^^^L||20001007|M||2106-3^White^HL70005|123 Peachtree St^APT 3B^Atlanta^GA^30210^^M^^GA067||(678) 555-1212^^PRN|
+NK1|1|Jones^Jane^Lee^^RN|VAB^Vaccine administered by (Name)^HL70063|
+NK1|2|Jones^Jane^Lee^^RN|FVP^Form completed by (Name)-Vaccine provider^HL70063|101 Main Street^^Atlanta^GA^38765^^O^^GA121||(404) 554-9097^^WPN|
+ORC|CN|||||||||||1234567^Welby^Marcus^J^Jr^Dr.^MD^L|||||||||Peachtree Clinic|101 Main Street^^Atlanta^GA^38765^^O^^GA121|(404) 554-9097^^WPN|101 Main Street^^Atlanta^GA^38765^^O^^GA121
+OBR|1|||^CDC VAERS-1 (FDA) Report|||20010316|
+OBX|1|NM|21612-7^Reported Patient Age^LN||05|mo^month^ANSI|
+OBX|1|TS|30947-6^Date form completed^LN||20010316|
+OBX|2|FT|30948-4^Vaccination adverse events and treatment, if any^LN|1|fever of 106F, with vomiting, seizures, persistent crying lasting over 3 hours, loss of appetite|
+OBX|3|CE|30949-2^Vaccination adverse event outcome^LN|1|E^required emergency room/doctor visit^NIP005|
+OBX|4|CE|30949-2^Vaccination adverse event outcome^LN|1|H^required hospitalization^NIP005|
+OBX|5|NM|30950-0^Number of days hospitalized due to vaccination adverse event^LN|1|02|d^day^ANSI|
+OBX|6|CE|30951-8^Patient recovered^LN||Y^Yes^ HL70239|
+OBX|7|TS|30952-6^Date of vaccination^LN||20010216|
+OBX|8|TS|30953-4^Adverse event onset date and time^LN||200102180900|
+OBX|9|FT|30954-2^Relevant diagnostic tests/lab data^LN||Electrolytes, CBC, Blood culture|
+EOT;
+
+function send($port, $message) {
+  try {
+    $client = new SocketClient();
+    $client->connect("localhost", $port);
+    echo $client->sendandrecive($message);
+  }
+  catch(Exception $e) {
+    echo $e->getMessage()."\n";
+  }
+}
+
 switch($command) {
   case "stop":
   //case "restart": 
-    $client = new SocketClient();
-    $client->connect("localhost", $port);
-    $message = "__".strtoupper($command)."__\n";
+    send($port, "__".strtoupper($command)."__\n");
+    break;
     
-    echo $client->sendandrecive($message);
+  case "test":
+    send($port, "\x0B$test_message\x1C\x0D");
     break;
     
   case "list": 
@@ -59,12 +89,12 @@ switch($command) {
       $processes[$_pid] = $_ps_name;
     }
     
-    echo "======  ========\n";
-    echo "   PID  STATUS\n";
-    echo "======  ========\n";
+    echo "--------------------------------------\n";
+    echo "   PID |  PORT | STATUS | PS NAME     \n";
+    echo "--------------------------------------\n";
     foreach($pids as $_pid => $_port) {
       $_status = isset($processes[$_pid]) && stripos($processes[$_pid], "php") !== false;
-      printf(" %5.d  %s\n", $_pid, $_status ? "OK" : "ERROR");
+      printf(" %5.d | %5.d | %6.s | %s \n", $_pid, $_port, $_status ? "OK" : "ERROR", $processes[$_pid]);
     }
     
     break;

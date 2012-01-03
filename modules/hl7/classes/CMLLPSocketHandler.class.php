@@ -46,7 +46,7 @@ class CMLLPSocketHandler {
    */
   var $server = null;
   
-  private static $buffer = "";
+  private $clients = array();
   
   function __construct($call_url, $username, $password, $port){
     $this->call_url = $call_url;
@@ -63,13 +63,16 @@ class CMLLPSocketHandler {
         return false;
     }
     
+    $client = $this->clients[$id];
+    $buffer = &$this->clients[$id]["buffer"];
+    
     // Verification qu'on ne recoit pas un en-tete de message en ayant deja des données en buffer
-    if (self::$buffer && strpos($request, "\x0B")) {
+    if ($buffer && strpos($request, "\x0B")) {
       echo sprintf(" !!! Got a header, while having data in the buffer from %d\n", $id);
     }
     
     // Mise en buffer du message
-    self::$buffer .= "$request\n";
+    $buffer .= "$request\n";
     
     echo sprintf(" > Got %d bytes from %d\n", strlen($request), $id);
     
@@ -81,7 +84,9 @@ class CMLLPSocketHandler {
         "m"       => "eai",
         "dosql"   => "do_receive_mllp",
         "port"    => $this->port,
-        "message" => self::$buffer,
+        "message" => $buffer,
+        "client_addr" => $client["addr"],
+        "client_port" => $client["port"],
       );
       
       $start = microtime(true);
@@ -89,15 +94,23 @@ class CMLLPSocketHandler {
       $time = microtime(true) - $start;
       echo sprintf(" > Request done in %f s\n", $time);
       
-      self::$buffer = "";
+      $buffer = "";
     }
     
-    return md5($request);
+    return md5($request)."\n";
   }
   
   function open($id, $addr, $port = null) {
+    if (!isset($this->clients[$id])) {
+      $this->clients[$id] = array(
+        "buffer" => "",
+        "addr"   => $addr,
+        "port"   => $port,
+      );
+    }
+    
     echo sprintf(" > New connection [%d] arrived from %s:%d\n", $id, $addr, $port);
-    return ("127.0.0.1" == $addr);
+    return true;
   }
   
   function cleanup($id) {
