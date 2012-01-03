@@ -18,6 +18,9 @@
   <td class="text">
     <strong onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">{{$sejour->_motif_complet}}</strong>
   </td>
+  <td style="text-align: center;">
+    -
+  </td>
   <td class="button">
     {{$sejour->entree|date_format:$conf.datetime}}
     <div style="position: relative;">
@@ -26,7 +29,7 @@
     </div>
     </div>
   </td>
-  <td class="button">
+  <td class="narrow">
     <div {{if !$sejour->sortie_reelle}}class="only-printable"{{/if}}>
       {{if $type == 'presents'}}
         {{$sejour->sortie|date_format:$conf.datetime}}

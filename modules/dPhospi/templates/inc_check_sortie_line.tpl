@@ -1,25 +1,4 @@
 <tr>
-  <td class="not-printable">
-    <form name="Sortie-{{$_sortie->_guid}}" action="?m={{$m}}" method="post"
-      onsubmit="return onSubmitFormAjax(this, {onComplete: function() { refreshList(null, null, '{{$type}}'); } })">
-      <input type="hidden" name="m" value="{{$m}}" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_affectation_aed" />
-      {{mb_key object=$_sortie}}
-      {{if $_sortie->confirme}}
-        <input type="hidden" name="confirme" value="0" />
-        <button type="submit" class="cancel">
-          Annuler
-        </button>
-      {{else}}
-        <input type="hidden" name="confirme" value="1" />
-        <button type="submit" class="tick">
-          Autoriser
-        </button>
-      {{/if}}
-    </form>
-  </td>
-  
   <td class="text {{if $_sortie->confirme}}arretee{{/if}}">
    {{assign var=sejour value=$_sortie->_ref_sejour}}
    {{if $canPlanningOp->read}}
@@ -57,12 +36,12 @@
       {{else}}
         {{$_sortie->sortie|date_format:$conf.time}}
       {{/if}}
-      </div>
-    {{if !$_sortie->confirme && !$sejour->sortie_reelle}}
-      <div class="not-printable">
+    </div>
+    <div class="not-printable">
+      {{if !$_sortie->confirme && !$sejour->sortie_reelle}}
       {{assign var=aff_guid value=$_sortie->_guid}}
       <form name="editSortiePrevue-{{$type}}-{{$aff_guid}}" method="post" action="?"
-        onsubmit="return onSubmitFormAjax(this, { onComplete: function() { refreshList(null, null, '{{$type}}', {{$type_mouvement}}); } })">
+        onsubmit="return onSubmitFormAjax(this, { onComplete: function() { refreshList(null, null, '{{$type}}', '{{$type_mouvement}}'); } })">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_sejour_aed" />
         <input type="hidden" name="del" value="0" />
@@ -71,7 +50,27 @@
         <button class="add" type="button" onclick="addDays(this, 1)">1J</button>
         {{mb_field object=$sejour field=sortie_prevue register=true form="editSortiePrevue-$type-$aff_guid" onchange="this.form.onsubmit()"}}
       </form>
-      </div>
-    {{/if}}
+      {{/if}}
+    </td>
+    <td class="narrow">
+      <form name="Sortie-{{$_sortie->_guid}}" action="?m={{$m}}" method="post"
+        onsubmit="return onSubmitFormAjax(this, {onComplete: function() { refreshList(null, null, '{{$type}}', '{{$type_mouvement}}'); } })">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="dosql" value="do_affectation_aed" />
+        {{mb_key object=$_sortie}}
+        {{if $_sortie->confirme}}
+          <input type="hidden" name="confirme" value="0" />
+          <button type="submit" class="cancel">
+            Annuler
+          </button>
+        {{else}}
+          <input type="hidden" name="confirme" value="1" />
+          <button type="submit" class="tick">
+            Autoriser
+          </button>
+        {{/if}}
+      </form>
+    </div>
   </td>
 </tr>
