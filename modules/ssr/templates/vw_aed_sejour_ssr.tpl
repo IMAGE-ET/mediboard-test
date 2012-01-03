@@ -56,12 +56,19 @@ loadDocuments = function(sejour_id) {
 </script>
 
 <ul id="tab-sejour" class="control_tabs">
-  {{if $can_view_dossier_medical}}
+  {{if $conf.ssr.recusation.use_recuse}}
+  <li>
+    <a href="#hebergement">
+      Hebergement
+    </a>
+  </li>
+  {{/if}}
   <li>
     <a href="#autonomie">
       {{tr}}CFicheAutonomie{{/tr}}
     </a>
   </li>
+  {{if $can_view_dossier_medical}}
   
     {{if !$sejour->annule}}
     <li>
@@ -94,17 +101,21 @@ loadDocuments = function(sejour_id) {
         Cotation
       </a>
     </li>
-    <li>
-      <a href="#docs" onmousedown="loadDocuments('{{$sejour->_id}}')"$>
-        Documents
-      </a>
-    </li>
     {{/if}}
 
   {{/if}}
+  <li>
+    <a href="#docs" onmousedown="loadDocuments('{{$sejour->_id}}')"$>
+      Documents
+    </a>
+  </li>
 </ul>
 
-<hr class="control_tabs" />  
+<hr class="control_tabs" /> 
+
+<div id="hebergement" style="display: none;">
+  {{mb_include template=inc_form_hebergement}}
+</div> 
 
 <div id="autonomie" style="display: none;">
   {{mb_include template=inc_form_fiche_autonomie}}
@@ -120,10 +131,10 @@ function loadAntecedents(sejour_id){
 
 // Main.add(loadAntecedents.curry({{$sejour->_id}}));
 </script>
+{{/if}}
 
 <div id="antecedents" style="display: none;">
 </div>
-{{/if}}
 
 <div id="bilan" style="display: none;">
   {{mb_include template=inc_form_bilan_ssr}}

@@ -87,6 +87,14 @@ function cancelSejourSSR() {
   }
 }
 
+function printFormSejour() {
+  var url = new Url;
+  url.setModuleAction("dPplanningOp", "view_planning"); 
+  url.addParam("sejour_id", $V(getForm("editSejour").sejour_id));
+  url.popup(700, 500, "printSejour");
+  return;
+}
+
 </script>
 
 <form name="editSejour" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -177,21 +185,7 @@ function cancelSejourSSR() {
 	
 	      <th>{{mb_label object=$sejour field=entree_prevue}}</th>
 	      <td colspan="2">
-          {{mb_field object=$sejour field="entree_prevue" form="editSejour" tabindex="5" register=true canNull=false onchange="updateDureePrevue();"}}
-        </td>
-        <td rowspan="3">
-          {{mb_label object=$sejour field=rques}}<br />
-          {{mb_field object=$sejour field=rques}}
-          <script type="text/javascript">
-            Main.add(function() {
-              new AideSaisie.AutoComplete(getForm("editSejour").elements.rques, {
-                objectClass: "{{$sejour->_class}}",
-                contextUserId: "{{$app->user_id}}"
-              });
-            });
-          </script>
-        </td>
-          
+          {{mb_field object=$sejour field="entree_prevue" form="editSejour" tabindex="5" register=true canNull=false onchange="updateSortiePrevue();"}}
         </td>
 	    </tr>
 	  
@@ -251,6 +245,7 @@ function cancelSejourSSR() {
 	              </button>
 	            {{/if}}
 	          {{/if}}
+	          <button class="print" type="button" onclick="printFormSejour();">{{tr}}Print{{/tr}}</button>
 	        {{else}}
 	          <button class="submit default" tabindex="26" type="submit">{{tr}}Create{{/tr}}</button>
 	        {{/if}}

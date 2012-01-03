@@ -92,7 +92,7 @@ $order = "nom";
 $categories = $category->loadList($where, $order);
 
 // Dossier médical visibile ?
-$can_view_dossier_medical = 
+$can_view_dossier_medical = false &&
   $user->isMedical();
 
 $can_edit_prescription = 
