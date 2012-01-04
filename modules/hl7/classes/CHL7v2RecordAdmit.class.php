@@ -411,6 +411,26 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     // Type de l'admission
     $this->getAdmissionType($node, $newVenue);
+    
+    // Médecin responsable
+    $this->getAttendingDoctor($node, $newVenue);
+    
+    // Médecin adressant
+    $this->getReferringDoctor($node, $newVenue);
+    
+    // Discipline médico-tarifaire
+    $this->getHospitalService($node, $newVenue);
+    
+    // Mode d'entrée
+    $this->getAdmitSource($node, $newVenue);
+    
+    // Code tarif su séjour
+    $this->getFinancialClass($node, $newVenue);
+    
+    // Demande de chambre particulière
+    $this->getCourtesyCode($node, $newVenue);
+    
+    mbLog($newVenue);
   }
   
   function getPatientClass(DOMNode $node, CSejour $newVenue) {
@@ -420,22 +440,153 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getPL(DOMNode $node, CSejour $newVenue) {
-    
+    /* @todo Gestion des mouvements / affectations */
   }
   
   function getAdmissionType(DOMNode $node, CSejour $newVenue) {
     /* @todo Gérer par la suite avec les naissances */
   }
   
-  function getMedecinResponsable(DOMNode $node, CSejour $newVenue) {
-    $PV17 = $this->query("PID.7", $node);
+  function getAttendingDoctor(DOMNode $node, CSejour $newVenue) {
+    $PV17 = $this->query("PV1.7", $node);
+    
+    $mediuser = new CMediusers();
     foreach ($PV17 as $_PV17) {
-      
+      $newVenue->praticien_id = $this->getDoctor($_PV17, $mediuser);
+    }
+    
+    // Dans le cas ou la venue ne contient pas de medecin responsable
+    // Attribution d'un medecin indeterminé
+    if (!$newVenue->praticien_id) {
+      $newVenue->praticien_id = $this->createIndeterminateDoctor();
     }
   }
   
-  function getMedecin() {
+  function getDoctor(DOMNode $node, CMbObject $object) {
+    $type_id    = $this->queryTextNode("XCN.13", $node);
+    $id         = $this->queryTextNode("XCN.1", $node);
+    $last_name  = $this->queryTextNode("XCN.2/FN.1", $node);
+    $first_name = $this->queryTextNode("XCN.3", $node);
     
+    switch ($type_id) {
+      case "RPPS" :
+        $object->rpps = $id;
+        break;
+      case "ADELI" :
+        $object->adeli = $id;
+        break;
+      case "RI" :
+        // Notre propre RI
+        if (($this->queryTextNode("XCN.9/HD.2", $node) == CAppUI::conf("hl7 assigningAuthorityUniversalID"))) {
+          $object->id = $id;
+          break;
+        }
+      default :
+        if ($object instanceof CMediusers) {
+          $object->_user_first_name = $first_name;
+          $object->_user_last_name  = $last_name;
+        }
+        if ($object instanceof CMedecin) {
+          $object->prenom = $first_name;
+          $object->nom    = $last_name;
+        }
+        break;
+    }
+    
+    // Cas où l'on a aucune information sur le médecin
+    if (!$object->rpps &&
+        !$object->adeli &&
+        !$object->id && 
+        ($object instanceof CMediusers && (!$object->_user_first_name || $object->_user_last_name)) &&
+        ($object instanceof CMedecin && (!$object->prenom || $object->nom))) {
+      return null;      
+    }
+    
+    if ($object->loadMatchingObject()) {
+      return $object->_id;
+    }
+    
+    if ($object instanceof CMediusers) {
+      $object->_user_first_name = $first_name;
+      $object->_user_last_name  = $last_name;
+      
+      return $this->createDoctor($object);
+    }
+  }
+  
+  function createDoctor(CMediusers $mediuser) {
+    $sender = $this->_ref_exchange_ihe->_ref_sender;
+    
+    $function = new CFunctions();
+    $function->text = CAppUI::conf("hl7 importFunctionName");
+    $function->group_id = $sender->group_id;
+    $function->loadMatchingObject();
+    if (!$function->_id) {
+      $function->type = "cabinet";
+      $function->compta_partagee = 0;
+      $function->store();
+    }
+    $mediuser->function_id = $function->_id;
+    $mediuser->makeUsernamePassword($mediuser->_user_first_name, $mediuser->_user_last_name, null, true);
+    $mediuser->_user_type = 13; // Medecin
+    $mediuser->actif = CAppUI::conf("hl7 doctorActif") ? 1 : 0; 
+    
+    $user = new CUser();
+    $user->user_last_name   = $mediuser->_user_last_name;
+    $user->user_first_name  = $mediuser->_user_first_name;
+    $users = $user->seek("$user->user_last_name $user->user_first_name");
+    if (count($users) == 1) {
+      $user = reset($users);
+      $user->loadRefMediuser();
+      $mediuser = $user->_ref_mediuser;
+    } else {
+      $mediuser->store();
+    }
+    
+    return $mediuser->_id;
+  }
+  
+  function createIndeterminateDoctor() {
+    $sender = $this->_ref_exchange_ihe->_ref_sender;
+    
+    $user    = new CUser();
+    $user->user_last_name = CAppUI::conf("hl7 indeterminateDoctor")." $sender->group_id";
+    if (!$user->loadMatchingObject()) {
+      $mediuser = new CMediusers();
+      $mediuser->_user_last_name = $user->user_last_name;
+      
+      return $this->createDoctor($mediuser);
+    } 
+      
+    return $user->loadRefMediuser()->_id;
+  }
+  
+  function getReferringDoctor(DOMNode $node, CSejour $newVenue) {
+    $PV18 = $this->query("PV1.8", $node);
+    
+    $medecin = new CMedecin();
+    foreach ($PV18 as $_PV18) {
+      $newVenue->adresse_par_prat_id = $this->getDoctor($_PV18, $medecin);
+    }
+  }
+  
+  function getHospitalService(DOMNode $node, CSejour $newVenue) {
+    $newVenue->discipline_id = $this->queryTextNode("PV1.10", $node);
+  }
+  
+  function getAdmitSource(DOMNode $node, CSejour $newVenue) {
+    $admit_source = $this->queryTextNode("PV1.14", $node);
+    
+    /* @todo Voir comment gérer */
+    
+  }
+  
+  function getFinancialClass(DOMNode $node, CSejour $newVenue) {
+    /* @todo Voir comment gérer */
+  }
+  
+  function getCourtesyCode(DOMNode $node, CSejour $newVenue) {
+    $newVenue->chambre_seule = $this->getBoolean($this->queryTextNode("PV1.22", $node));
   }
   
   function getPV2(DOMNode $node, CSejour $newVenue) {    

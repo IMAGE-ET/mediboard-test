@@ -221,6 +221,10 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     return $data;
   }
   
+  function getBoolean($value) {
+    return ($value == "Y") ? 1 : 0;
+  }
+  
   function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {}
 }
 

@@ -183,13 +183,13 @@ class CUser extends CMbObject {
    * @return CMediusers
    */
   function loadRefMediuser() {
-    $user = new CMediusers();
-    if ($user->isInstalled()) {
-      $user->load($this->_id);
-      $this->_ref_mediuser = $user;
+    $mediuser = new CMediusers();
+    if ($mediuser->isInstalled()) {
+      $mediuser->load($this->_id);
+      $this->_ref_mediuser = $mediuser;
     }
     
-    return $user;
+    return $mediuser;
   }
   
   /**

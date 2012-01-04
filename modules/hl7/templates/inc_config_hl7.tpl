@@ -15,6 +15,11 @@
     {{mb_include module=system template=inc_config_str var=assigningAuthorityUniversalID}}
     
     {{mb_include module=system template=inc_config_bool var=strictSejourMatch}}
+    
+    {{mb_include module=system template=inc_config_str var=indeterminateDoctor}}
+    {{mb_include module=system template=inc_config_bool var=doctorActif}}
+    
+    {{mb_include module=system template=inc_config_str var=importFunctionName}}
 
     <tr>
       <td class="button" colspan="10">
