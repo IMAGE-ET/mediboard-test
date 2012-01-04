@@ -205,6 +205,11 @@ function printFormSejour() {
 	            {{tr}}Choose{{/tr}}
 	          </button>
 	        {{/if}}
+          <button id="button-edit-patient" type="button" 
+                  onclick="location.href='?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id='+this.form.patient_id.value" 
+                  class="edit notext" {{if !$patient->_id || $conf.ssr.recusation.sejour_readonly}}style="display: none;"{{/if}}>
+            {{tr}}Edit{{/tr}}
+          </button>
 	        <script type="text/javascript">
 	          PatSelector.init = function(){
 	            this.sForm = "editSejour";
