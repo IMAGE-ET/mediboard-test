@@ -14,9 +14,9 @@ $service_id     = CValue::getOrSession("service_id");
 $use_chambre    = CValue::get("chambre_id");
 $chambre_id     = CValue::getOrSession("chambre_id");
 $lit_id         = CValue::getOrSession("lit_id");
-$use_uf         = CValue::get("service_id");
+$use_uf         = CValue::get("uf_id");
 $uf_id          = CValue::getOrSession("uf_id");
-$use_prestation = CValue::get("service_id");
+$use_prestation = CValue::get("prestation_id");
 $prestation_id  = CValue::getOrSession("prestation_id");
 
 $group = CGroups::loadCurrent();

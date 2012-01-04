@@ -1,5 +1,5 @@
 
-    <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+    <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="submit_Ajax(this, 'prestations')">
 
     <input type="hidden" name="dosql" value="do_prestation_aed" />
     <input type="hidden" name="del" value="0" />
@@ -46,12 +46,12 @@
     <tr>
       <td class="button" colspan="2">
         {{if $prestation->_id}}
-        <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+        <button class="modify" type="submit" >{{tr}}Modify{{/tr}}</button>
         <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'la prestation ',objName:$V(this.form.nom)})">
           {{tr}}Delete{{/tr}}
         </button>
         {{else}}
-        <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+        <button class="submit" type="submit" >{{tr}}Create{{/tr}}</button>
         {{/if}}
       </td>
     </tr>

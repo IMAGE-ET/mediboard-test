@@ -1,4 +1,5 @@
-  <form name="Edit-CChambre" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+  
+  <form name="Edit-CChambre" action="?m={{$m}}" method="post" onsubmit="submit_Ajax(this, 'chambres')">
     <input type="hidden" name="dosql" value="do_chambre_aed" />
     <input type="hidden" name="del" value="0" />
     {{mb_key object=$chambre}}
@@ -89,7 +90,7 @@
     {{/foreach}}
   </table>
   
-  <form name="Edit-CLit" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+  <form name="Edit-CLit" action="?m={{$m}}" method="post" onsubmit="submit_Ajax(this, 'chambres')">
     
   <input type="hidden" name="dosql" value="do_lit_aed" />
   <input type="hidden" name="del" value="0" />

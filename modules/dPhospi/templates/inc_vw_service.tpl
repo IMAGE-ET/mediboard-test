@@ -1,5 +1,5 @@
         <!-- Formulaire d'un service -->
-    <form name="Edit-CService" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+    <form name="Edit-CService" action="" method="post" onsubmit="submit_Ajax(this, 'services')">
 
     <input type="hidden" name="dosql" value="do_service_aed" />
     <input type="hidden" name="del" value="0" />
