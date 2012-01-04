@@ -93,16 +93,8 @@ Main.add(function () {
 		      {{mb_field object=$transmission field="degre"}}
 		      {{mb_field object=$transmission field="type" typeEnum=radio}}
 		      <br />
-		      {{mb_field object=$transmission field="text"}}
-          <script type="text/javascript">
-            Main.add(function() {
-              new AideSaisie.AutoComplete(getForm("editTrans").elements.text, {
-                objectClass: "{{$transmission->_class}}",
-                timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-                validateOnBlur: 0
-              });
-            });
-          </script>
+		      {{mb_field object=$transmission field="text" form="editTrans"
+            aidesaisie="timestamp: '`$conf.dPcompteRendu.CCompteRendu.timestamp`', validateOnBlur: 0"}}
 		      <br />
 		      <button type="button" class="add" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: refreshTransmission } );">{{tr}}Add{{/tr}}</button>
 	      </form>

@@ -791,20 +791,6 @@ Main.add( function(){
 	        {{assign var=_line_praticien_id value=$line->praticien_id}}
 	      {{/if}}
         
-	      {{if $line->_perm_edit}}
-  	      <script type="text/javascript">
-  	        Main.add( function(){
-  	          var oFormCommentaireElement = getForm("editCommentaire-{{$line->_guid}}");
-  	          new AideSaisie.AutoComplete(oFormCommentaireElement.commentaire, {
-  	            objectClass: "{{$line->_class}}", 
-  	            contextUserId: "{{$_line_praticien_id}}",
-  	            resetSearchField: false,
-  	            validateOnBlur: false
-  	          });
-  	        })
-  	      </script>
-	      {{/if}}
-        
 	      <form name="editCommentaire-{{$line->_guid}}" method="post" action="?" onsubmit="testPharma({{$line->_id}}); return onSubmitFormAjax(this);">
 	        <input type="hidden" name="m" value="dPprescription" />
 	        <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
@@ -817,7 +803,8 @@ Main.add( function(){
 						</legend>
 	
 		        {{if $line->_perm_edit}}                 
-		          {{mb_field object=$line field="commentaire" onblur="this.form.onsubmit();"}}
+		          {{mb_field object=$line field="commentaire" onblur="this.form.onsubmit();" form="editCommentaire-`$line->_guid`"
+                aidesaisie="contextUserId: '`$_line_praticien_id`', resetSearchField: 0, validateOnBlur: 0"}}
 		        {{else}}
 		          {{if $line->commentaire}}
 		            {{mb_value object=$line field="commentaire"}}

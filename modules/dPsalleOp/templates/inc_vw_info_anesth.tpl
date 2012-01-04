@@ -44,17 +44,7 @@ reloadAnesth = function() {
 
 Main.add(function(){
   
-  var oFormAnestPerop = getForm("addAnesthPerop");
-  aidePeropAnesth = new AideSaisie.AutoComplete(oFormAnestPerop.libelle, {
-            objectClass: "CAnesthPerop",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            {{if $selOp->_ref_anesth->_id}}
-            contextUserId: {{$selOp->_ref_anesth->_id}},
-            {{/if}}
-            validateOnBlur:1
-          });
-	
-	if ($('anesth_tab_group')){
+  if ($('anesth_tab_group')){
     Control.Tabs.create('anesth_tab_group', true);
   }
 	
@@ -191,7 +181,8 @@ Main.add(function(){
             </tr>
             <tr>  
               <td>
-                {{mb_field object=$anesth_perop field="libelle"}}
+                {{mb_field object=$anesth_perop field="libelle" form="addAnesthPerop"
+                  aidesaisie="contextUserId: '`$selOp->_ref_anesth->_id`'"}}
               </td>
 	          </tr>
 	          <tr>

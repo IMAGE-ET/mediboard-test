@@ -121,33 +121,24 @@ function showEtabEntreeTransfert(mode) {
             <col class="narrow" />
             <tr>
               <td colspan="2">
-                <script type="text/javascript">
-                  Main.add(function() {
-                    var form = getForm("editRPU");
-                    var options = {
-                      objectClass: "{{$rpu->_class}}",
-                      contextUserId: "{{$userSel->_id}}",
-                      contextUserView: "{{$userSel->_view}}",
-                      timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-                      validate: function() { form.onsubmit(); },
-                      resetSearchField: false,
-                      resetDependFields: false,
-                      validateOnBlur: false
-                    }
-                    
-                    new AideSaisie.AutoComplete(form.elements.diag_infirmier, options);
-                    new AideSaisie.AutoComplete(form.elements.pec_douleur   , options);
-                    });
-                </script>
-
                 <table class="layout" style="width: 100%">
                   <tr>
                     <td style="width: 50%">{{mb_label object=$rpu field="diag_infirmier"}}</td>
                     <td style="width: 50%">{{mb_label object=$rpu field="pec_douleur"}}</td>
                   </tr>
                   <tr>
-                    <td>{{mb_field object=$rpu field="diag_infirmier" onchange="this.form.onsubmit();" class="autocomplete"}}</td>
-                    <td>{{mb_field object=$rpu field="pec_douleur"    onchange="this.form.onsubmit();" class="autocomplete"}}</td>
+                    <td>
+                      {{mb_field object=$rpu field="diag_infirmier" onchange="this.form.onsubmit();" class="autocomplete" form="editRPU"
+                        aidesaisie="validate: function() { form.onsubmit() },
+                                    validateOnBlur: 0,
+                                    resetSearchField: 0,
+                                    resetDependFields: 0"}}
+                    </td>
+                    <td>{{mb_field object=$rpu field="pec_douleur"    onchange="this.form.onsubmit();" class="autocomplete" form="editRPU"
+                        aidesaisie="validate: function() { form.onsubmit() },
+                                    validateOnBlur: 0,
+                                    resetSearchField: 0,
+                                    resetDependFields: 0"}}</td>
                   </tr>
                 </table>
                 
@@ -234,23 +225,11 @@ function showEtabEntreeTransfert(mode) {
               </tr>
               <tr>
                 <td colspan="2">
-                {{main}}
-                  var form = getForm("editRPUMotif");
-                  var options = {
-                    objectClass: "{{$rpu->_class}}",
-                    contextUserId: "{{$userSel->_id}}",
-                    contextUserView: "{{$userSel->_view}}",
-                    timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-                    validate: function() { form.onsubmit(); },
-                    resetSearchField: false,
-                    resetDependFields: false,
-                    validateOnBlur: false
-                  }
-                  
-                  new AideSaisie.AutoComplete(form.elements.motif, options);
-                {{/main}}
-                
-                {{mb_field object=$rpu field="motif" onchange="this.form.onsubmit();" class="autocomplete"}}
+                {{mb_field object=$rpu field="motif" onchange="this.form.onsubmit();" class="autocomplete" form="editRPUMotif"
+                        aidesaisie="validate: function() { form.onsubmit() },
+                                    validateOnBlur: 0,
+                                    resetSearchField: 0,
+                                    resetDependFields: 0"}}
                 </td>
              </tr>
            </table>

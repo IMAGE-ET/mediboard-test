@@ -331,30 +331,14 @@ Main.add(function () {
             <tr>
               <th>{{mb_label object=$consult field="motif"}}</th> 
               <td>
-                {{mb_field object=$consult field="motif" class="autocomplete" rows=5}}
-                <script type="text/javascript">
-                  Main.add(function() {
-                	  new AideSaisie.AutoComplete(getForm("editFrm").motif, {
-              		    objectClass: "{{$consult->_class}}", 
-              		    contextUserId: "{{$app->user_id}}"
-              		  });
-                  });
-                </script>
+                {{mb_field object=$consult field="motif" class="autocomplete" rows=5 form="editFrm"}}
               </td>
             </tr>
       
             <tr>
               <th>{{mb_label object=$consult field="rques"}}</th> 
               <td>
-                {{mb_field object=$consult field="rques" class="autocomplete" rows=5}}
-                <script type="text/javascript">
-                  Main.add(function() {
-                    new AideSaisie.AutoComplete(getForm("editFrm").rques, {
-                      objectClass: "{{$consult->_class}}", 
-                      contextUserId: "{{$app->user_id}}"
-                    });
-                  });
-                </script>
+                {{mb_field object=$consult field="rques" class="autocomplete" rows=5 form="editFrm"}}
               </td>
             </tr>
           </table>

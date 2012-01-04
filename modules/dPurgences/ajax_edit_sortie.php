@@ -32,7 +32,6 @@ if (!$sejour->sortie_reelle) {
 $smarty = new CSmartyDP();
 $smarty->assign("rpu", $rpu);
 $smarty->assign("sejour", $sejour);
-$smarty->assign("userSel"  , CAppUI::$user);
 
 $smarty->display("inc_edit_sortie.tpl");
 ?>

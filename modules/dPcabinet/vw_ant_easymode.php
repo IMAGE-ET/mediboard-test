@@ -13,13 +13,11 @@ global $can;
 // En l'état on ne peut pas vérifier les droits sur dPcabinet
 //$can->needsRead();
 
-$user_id = CValue::get("user_id", CAppUI::$user->_id);
 $patient_id = CValue::get("patient_id");
 $consult_id = CValue::get("consult_id");
 
 // On charge le praticien
-$user = new CMediusers;
-$user->load($user_id);
+$user = CAppUI::$user;
 $user->loadRefs();
 $canUser = $user->canDo();
 
@@ -68,7 +66,6 @@ $smarty->assign("antecedent", $antecedent);
 $smarty->assign("traitement", $traitement);
 $smarty->assign("applied_antecedents", $applied_antecedents);
 $smarty->assign("applied_traitements", $applied_traitements);
-$smarty->assign("user", $user);
 $smarty->assign("patient", $patient);
 $smarty->assign("consult", $consult);
 

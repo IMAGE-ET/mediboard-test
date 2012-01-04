@@ -15,6 +15,5 @@ $rpu->load($rpu_id);
 
 $smarty = new CSmartyDP;
 $smarty->assign("rpu" , $rpu);
-$smarty->assign("user", CAppUI::$user);
 $smarty->display("inc_edit_diag.tpl");
 ?>

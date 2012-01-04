@@ -415,33 +415,19 @@
   	  <tr>
   	    <th>{{mb_label object=$rpu field="diag_infirmier"}}</th> 
   	    <td>
-  	      {{mb_field object=$rpu field="diag_infirmier" class="autocomplete"}}
+  	      {{mb_field object=$rpu field="diag_infirmier" class="autocomplete" form="editRPU"
+                        aidesaisie="validate: function() { form.onsubmit() },
+                                    validateOnBlur: 0,
+                                    resetSearchField: 0,
+                                    resetDependFields: 0"}}
   	    </td>
   	    <th>{{mb_label object=$rpu field="pec_douleur"}}</th>
   	    <td>
-  	     {{mb_field object=$rpu field="pec_douleur" class="autocomplete"}}
-  	     <script type="text/javascript">
-            Main.add(function() {
-                new AideSaisie.AutoComplete(getForm("editRPU").elements.diag_infirmier, {
-                    objectClass: "{{$rpu->_class}}",
-                    contextUserId: "{{$userSel->_id}}",
-                    contextUserView: "{{$userSel->_view}}",
-                    timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-                    resetSearchField: false,
-                    resetDependFields: false,
-                    validateOnBlur: false
-                  });
-                new AideSaisie.AutoComplete(getForm("editRPU").elements.pec_douleur, {
-                    objectClass: "{{$rpu->_class}}",
-                    contextUserId: "{{$userSel->_id}}",
-                    contextUserView: "{{$userSel->_view}}",
-                    timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-                    resetSearchField: false,
-                    resetDependFields: false,
-                    validateOnBlur: false
-                  });
-              });
-          </script>
+  	     {{mb_field object=$rpu field="pec_douleur" class="autocomplete" form="editRPU"
+                        aidesaisie="validate: function() { form.onsubmit() },
+                                    validateOnBlur: 0,
+                                    resetSearchField: 0,
+                                    resetDependFields: 0"}}
   	    </td>
   	  </tr>
 	  {{/if}}

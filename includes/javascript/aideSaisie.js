@@ -4,6 +4,7 @@
 
 var AideSaisie = {
   AutoComplete: Class.create({
+    timestamp: "",
     initialize: function(element, options){
       this.element = $(element);
       
@@ -32,7 +33,7 @@ var AideSaisie = {
         updateDF: true,
         property: '',
         strict: true,
-        timestamp: "-- %n %p - dd/MM/y HH:mm",
+        timestamp: AideSaisie.timestamp,
         height: "auto"
       }, options);
       this.init();

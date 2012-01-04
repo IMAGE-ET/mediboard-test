@@ -41,7 +41,6 @@ $smarty->assign("administration", $administration );
 $smarty->assign("transmission"  , $transmission);
 $smarty->assign("date"          , mbDate());
 $smarty->assign("hour"          , mbTransformTime(null, mbTime(), "%H"));
-$smarty->assign("user_id"       , CUser::get()->_id);
 
 $smarty->display("inc_form_administration.tpl");
 

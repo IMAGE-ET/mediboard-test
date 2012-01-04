@@ -80,16 +80,8 @@
       {{mb_label object=$prescriptionItem field="commentaire"}}
     </th>
     <td>
-      {{mb_field object=$prescriptionItem field="commentaire"}}
-      <script type="text/javascript">
-        Main.add(function() {
-          new AideSaisie.AutoComplete(getForm("editPrescriptionItem").elements.commentaire, {
-            objectClass: "{{$prescriptionItem->_class}}",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur: 0
-          });
-        });
-      </script>
+      {{mb_field object=$prescriptionItem field="commentaire" form="editPrescriptionItem"
+        aidesaisie="validateOnBlur: 0"}}
     </td>
   </tr>
   <tr>

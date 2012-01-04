@@ -5,22 +5,8 @@
 SchemaDentaire.oListEtats = {{$list_etat_dents|@json}};
 
 Main.add(function () {
-  
   var states = [0, 'bridge', 'pivot', 'mobile', 'appareil'];
   SchemaDentaire.initialize("dents-schema", states);
-  {{if !$_is_dentiste}}
-    var oFormIntubation = getForm("editFrmIntubation");
-    new AideSaisie.AutoComplete(oFormIntubation.etatBucco, {
-              objectClass: "CConsultAnesth",
-              timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-              validateOnBlur:0
-            });
-    new AideSaisie.AutoComplete(oFormIntubation.conclusion, {
-              objectClass: "CConsultAnesth",
-              timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-              validateOnBlur:0
-            });
-  {{/if}}
 } );
 </script>
 
@@ -163,7 +149,8 @@ Main.add(function () {
           </tr>
           <tr>
             <td colspan="2">
-              {{mb_field object=$consult_anesth field="etatBucco" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+              {{mb_field object=$consult_anesth field="etatBucco" onchange="submitFormAjax(this.form, 'systemMsg')" form="editFrmIntubation"
+                aidesaisie="validateOnBlur: 0"}}
             </td>
           </tr>
           <tr>
@@ -173,7 +160,8 @@ Main.add(function () {
           </tr>
           <tr>
             <td colspan="2">
-              {{mb_field object=$consult_anesth field="conclusion" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+              {{mb_field object=$consult_anesth field="conclusion" onchange="submitFormAjax(this.form, 'systemMsg')" form="editFrmIntubation"
+                aidesaisie="validateOnBlur: 0"}}
             </td>
           </tr>
           <tr>

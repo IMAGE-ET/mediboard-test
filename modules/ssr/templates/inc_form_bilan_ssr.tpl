@@ -104,18 +104,6 @@ Main.add( function(){
 	  {{/foreach}}
 	{{/if}}
 	
-  var oFormBilanSSR = getForm("Edit-CBilanSSR");
-	
-  new AideSaisie.AutoComplete(oFormBilanSSR.entree, {
-    objectClass: "CBilanSSR", 
-    contextUserId: "{{$app->user_id}}"
-  });
-  
-  new AideSaisie.AutoComplete(oFormBilanSSR.sortie, {
-    objectClass: "CBilanSSR", 
-    contextUserId: "{{$app->user_id}}"
-  });
-	
   var oFormProtocole = getForm("applyProtocole");
   if(oFormProtocole){
     var url = new Url("dPprescription", "httpreq_vw_select_protocole");
@@ -345,7 +333,7 @@ duplicateSSRLine = function(element_prescription_id, category_id){
 						<td>
               <fieldset>
                 <legend>{{mb_label object=$bilan field=entree}}</legend>
-                {{mb_field object=$bilan field=entree rows=6 onblur="this.form.onsubmit()"}}
+                {{mb_field object=$bilan field=entree rows=6 onblur="this.form.onsubmit()" form="Edit-CBilanSSR"}}
               </fieldset>
   	        </td>
 					</tr>
@@ -354,7 +342,7 @@ duplicateSSRLine = function(element_prescription_id, category_id){
             <td>
               <fieldset>
                 <legend>{{mb_label object=$bilan field=sortie}}</legend>
-                {{mb_field object=$bilan field=sortie rows=6 onblur="this.form.onsubmit()"}}
+                {{mb_field object=$bilan field=sortie rows=6 onblur="this.form.onsubmit()" form="Edit-CBilanSSR"}}
               </fieldset>
             </td>
           </tr>

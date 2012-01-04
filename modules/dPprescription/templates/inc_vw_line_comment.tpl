@@ -76,25 +76,14 @@
 		     {{else}}
 		       {{assign var=_line_praticien_id value=$line->praticien_id}}
 		     {{/if}}
-				
-				 <script type="text/javascript">
-		        Main.add( function(){
-		          var oFormCommentaireCommentLine = getForm("editCommentaire-{{$line->_guid}}");
-		          new AideSaisie.AutoComplete(oFormCommentaireCommentLine.commentaire, {
-		            objectClass: "{{$line->_class}}", 
-		            contextUserId: "{{$_line_praticien_id}}",
-		            resetSearchField: false,
-		            validateOnBlur: false
-		          });
-		        });
-	       </script>
-
+         
 	       <form name="editCommentaire-{{$line->_guid}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
 	         <input type="hidden" name="m" value="dPprescription" />
 		       <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
 		       <input type="hidden" name="del" value="0" />
 		       <input type="hidden" name="prescription_line_comment_id" value="{{$line->_id}}" />
-	         {{mb_field object=$line field=commentaire onblur="this.form.onsubmit();"}}
+	         {{mb_field object=$line field=commentaire onblur="this.form.onsubmit();" form="editCommentaire-`$line->_guid`"
+             aidesaisie="contextUserId: '`$_line_praticien_id`', resetSearchField: 0, validateOnBlur: 0"}}
 	       </form>
        {{else}}
          {{mb_value object=$line field=commentaire}}

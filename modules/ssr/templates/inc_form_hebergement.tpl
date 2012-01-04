@@ -36,15 +36,7 @@
     <tr>
       <th>{{mb_label object=$sejour field=rques}}</th>
       <td>
-        {{mb_field object=$sejour field=rques}}
-        <script type="text/javascript">
-          Main.add(function() {
-            new AideSaisie.AutoComplete(getForm("editSejourHebergement").elements.rques, {
-              objectClass: "{{$sejour->_class}}",
-              contextUserId: "{{$app->user_id}}"
-            });
-          });
-        </script>
+        {{mb_field object=$sejour field=rques form="editSejourHebergement"}}
       </td>
     </tr>
     <tr>

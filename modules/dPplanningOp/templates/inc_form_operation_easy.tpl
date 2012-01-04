@@ -265,38 +265,21 @@
     {{/if}}
   </tr>
   <tr>
-  <td />
+  <td></td>
     {{if $conf.dPplanningOp.COperation.easy_materiel}}
     <td style="width: 33%;" {{if !$conf.dPplanningOp.COperation.easy_remarques}}colspan="2"{{/if}}>
-      <script type="text/javascript">
-        Main.add(function() {
-          new AideSaisie.AutoComplete(getForm("editOpEasy").elements.materiel, {
-            objectClass: "{{$op->_class}}",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur: 0
-          });
-        });
-      </script>
-      {{mb_field object=$op field="materiel" onchange="Value.synchronize(this);"}}
+      {{mb_field object=$op field="materiel" onchange="Value.synchronize(this);" form="editOpEasy"
+        aidesaisie="validateOnBlur: 0"}}
     </td>
     {{/if}}
     {{if $conf.dPplanningOp.COperation.easy_remarques}}
     <td style="width: 33%;" {{if !$conf.dPplanningOp.COperation.easy_materiel}}colspan="2"{{/if}}>
-      <script type="text/javascript">
-        Main.add(function() {
-          new AideSaisie.AutoComplete(getForm("editOpEasy").elements.rques, {
-            objectClass: "{{$op->_class}}",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur: 0
-          });
-        });
-      </script>
-      {{mb_field object=$op field="rques" onchange="Value.synchronize(this);"}}
+      {{mb_field object=$op field="rques" onchange="Value.synchronize(this);" form="editOpEasy"
+        aidesaisie="validateOnBlur: 0"}}
     </td>
     {{/if}}
   </tr>
   {{/if}}
-
   {{if $conf.dPplanningOp.CSejour.accident && $conf.dPplanningOp.COperation.easy_accident}}
   <tr>
     <th>{{mb_label object=$sejour field="date_accident"}}</th>
@@ -319,16 +302,8 @@
   <tr>
     <th>{{mb_label object=$sejour field="rques_assurance_maladie"}}</th>
     <td colspan="3">
-      <script type="text/javascript">
-        Main.add(function() {
-          new AideSaisie.AutoComplete(getForm("editOpEasy").elements.rques_assurance_maladie, {
-            objectClass: "{{$sejour->_class}}",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur: 0
-          });
-        });
-      </script>
-      {{mb_field object=$sejour field="rques_assurance_maladie" onchange="checkAssurancesEasy();"}}</td>
+      {{mb_field object=$sejour field="rques_assurance_maladie" onchange="checkAssurancesEasy();" form="editOpEasy"
+        aidesaisie="validateOnBlur: 0"}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$sejour field="assurance_accident"}}</th>
@@ -337,16 +312,8 @@
   <tr>
     <th>{{mb_label object=$sejour field="rques_assurance_accident"}}</th>
     <td colspan="3">
-      <script type="text/javascript">
-        Main.add(function() {
-          new AideSaisie.AutoComplete(getForm("editOpEasy").elements.rques_assurance_accident, {
-            objectClass: "{{$sejour->_class}}",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur: 0
-          });
-        });
-      </script>
-      {{mb_field object=$sejour field="rques_assurance_accident" onchange="checkAssurancesEasy();"}}</td>
+      {{mb_field object=$sejour field="rques_assurance_accident" onchange="checkAssurancesEasy();" form="editOpEasy"
+        aidesaisie="validateOnBlur: 0"}}</td>
   </tr>
   {{/if}}
 </table>

@@ -1,16 +1,3 @@
-<script type="text/javascript">
-Main.add(function() {
-  var oFormObs = getForm("editObs");
-  if(oFormObs){
-    new AideSaisie.AutoComplete(oFormObs.text, {
-      objectClass: "CObservationMedicale", 
-      timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-      validateOnBlur:0
-    });
-  }
-});
-</script>
-
 <form name="editObs" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="dosql" value="do_observation_aed" />
   <input type="hidden" name="del" value="0" />
@@ -23,7 +10,8 @@ Main.add(function() {
     {{mb_label object=$observation field=degre}} : {{mb_field object=$observation field="degre" typeEnum="radio"}}
     <br />
   </div>
-  {{mb_field object=$observation field="text" rows=6}}
+  {{mb_field object=$observation field="text" rows=6 form="editObs"
+    aidesaisie="validateOnBlur: 0"}}
   
   <button type="button" class="{{if $observation->_id}}save{{else}}add{{/if}}"
     onclick="submitSuivi(this.form);">

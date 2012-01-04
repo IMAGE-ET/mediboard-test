@@ -91,6 +91,7 @@ class CMbFieldSpec {
       'mask'          => 'str',
       'format'        => 'str',
       'autocomplete'  => 'bool',
+      'aidesaisie'    => 'bool',
       'dependsOn'     => 'field',
       'perm'          => 'str',
       'helped'        => 'bool',
@@ -632,9 +633,41 @@ class CMbFieldSpec {
     $field = htmlspecialchars($this->fieldName);
     $rows  = CMbArray::extract($params, "rows", "3");
     $form  = CMbArray::extract($params, "form"); // needs to be extracted
-    
+    $aidesaisie = CMbArray::extract($params, "aidesaisie");
     $extra = CMbArray::makeXmlAttributes($params);
     $sHtml = "<textarea name=\"$field\" rows=\"$rows\" class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra>".htmlspecialchars($value)."</textarea>";
+    
+    if ($form) {
+      $params_aidesaisie = array();
+      $params_aidesaisie[] = "objectClass: '".get_class($object) . "'";
+      $depend_fields = $object->_specs[$field]->helped;
+      
+      if (!isset($params["dependField1"])) {
+        if (isset($depend_fields["0"])) {
+          $params_aidesaisie[] = "dependField1: getForm('$form').elements['".$depend_fields["0"]."']";
+        }
+      }
+      if (!isset($params["dependField2"])) {
+        if (isset($depend_fields["1"])) {
+          $params_aidesaisie[] = "dependField2: getForm('$form').elements['".$depend_fields["1"]."']";
+        }
+      }
+      
+      $params_aidesaisie = "{".implode(",", $params_aidesaisie);
+      
+      if ($aidesaisie) {
+        $params_aidesaisie .= ", $aidesaisie";
+      }
+      $params_aidesaisie .= "}";
+      
+      $sHtml .=
+      "<script type='text/javascript'>
+        Main.add(function() {
+          new AideSaisie.AutoComplete(getForm('$form').elements['$field'], $params_aidesaisie);
+        });
+       </script>";
+    }
+    
     return $sHtml;
   }
 

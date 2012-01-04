@@ -952,28 +952,12 @@ Main.add( function(){
 </tr>
 <tr>
   <td>
-    <script type="text/javascript">
-      Main.add(function() {
-        new AideSaisie.AutoComplete(getForm("editSejour").elements.convalescence, {
-          objectClass: "{{$sejour->_class}}",
-          timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-          validateOnBlur: 0
-        });
-      });
-    </script>
-    {{mb_field object=$sejour field="convalescence" rows="3"}}
+    {{mb_field object=$sejour field="convalescence" rows="3" form="editSejour"
+        aidesaisie="validateOnBlur: 0"}}
   </td>
   <td colspan="3">
-    <script type="text/javascript">
-      Main.add(function() {
-        new AideSaisie.AutoComplete(getForm("editSejour").elements.rques, {
-          objectClass: "{{$sejour->_class}}",
-          timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-          validateOnBlur: 0
-        });
-      });
-    </script>
-    {{mb_field object=$sejour field="rques" rows="3"}}
+    {{mb_field object=$sejour field="rques" rows="3" form="editSejour"
+        aidesaisie="validateOnBlur: 0"}}
   </td>
 </tr>
 
@@ -988,16 +972,8 @@ Main.add( function(){
 <tr>
   <th>{{mb_label object=$sejour field="rques_assurance_maladie"}}</th>
   <td colspan="3">
-    <script type="text/javascript">
-      Main.add(function() {
-        new AideSaisie.AutoComplete(getForm("editSejour").elements.rques_assurance_maladie, {
-          objectClass: "{{$sejour->_class}}",
-          timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-          validateOnBlur: 0
-        });
-      });
-    </script>
-    {{mb_field object=$sejour field="rques_assurance_maladie" onchange="checkAssurances();"}}</td>
+    {{mb_field object=$sejour field="rques_assurance_maladie" onchange="checkAssurances();" form="editSejour"
+        aidesaisie="validateOnBlur: 0"}}</td>
 </tr>
 <tr>
   <th>{{mb_label object=$sejour field="assurance_accident"}}</th>
@@ -1006,16 +982,8 @@ Main.add( function(){
 <tr>
   <th>{{mb_label object=$sejour field="rques_assurance_accident"}}</th>
   <td colspan="3">
-    <script type="text/javascript">
-      Main.add(function() {
-        new AideSaisie.AutoComplete(getForm("editSejour").elements.rques_assurance_accident, {
-          objectClass: "{{$sejour->_class}}",
-          timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-          validateOnBlur: 0
-        });
-      });
-    </script>
-    {{mb_field object=$sejour field="rques_assurance_accident" onchange="checkAssurances();"}}</td>
+    {{mb_field object=$sejour field="rques_assurance_accident" onchange="checkAssurances();" form="editSejour"
+        aidesaisie="validateOnBlur: 0"}}</td>
 </tr>
 {{/if}}
 

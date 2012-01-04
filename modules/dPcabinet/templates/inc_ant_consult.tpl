@@ -60,7 +60,6 @@ onSubmitTraitement = function (oForm) {
 
 easyMode = function() {
   var url = new Url("dPcabinet", "vw_ant_easymode");
-  //url.addParam("user_id", "{{$userSel->_id}}");
   url.addParam("patient_id", "{{$patient->_id}}");
   {{if isset($consult|smarty:nodefaults)}}
     url.addParam("consult_id", "{{$consult->_id}}");
@@ -120,30 +119,6 @@ Main.add(function () {
 	if($('tab_traitements_perso')){
 	  Control.Tabs.create('tab_traitements_perso', false);
 	}
-	
-	var oAtcdForm = getForm("editAntFrm");
-  new AideSaisie.AutoComplete(oAtcdForm.rques, {
-            objectClass: "CAntecedent",
-            dependField1: oAtcdForm.type, 
-            dependField2: oAtcdForm.appareil, 
-            objectClass: "CAntecedent",
-            filterWithDependFields: false,
-            // Probleme dans dPurgence si on prend l'utilisateur de la consult
-            //contextUserId: "{{$userSel->_id}}",
-            //contextUserView: "{{$userSel->_view}}",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur:0
-          });
-  
-  var aTttForm = getForm("editTrmtFrm");
-  new AideSaisie.AutoComplete(aTttForm.traitement, {
-            objectClass: "CTraitement", 
-            // Probleme dans dPurgence si on prend l'utilisateur de la consult
-            //contextUserId: "{{$userSel->_id}}",
-            //contextUserView: "{{$userSel->_view}}",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur:0
-          });
 });
 
 </script>
@@ -201,7 +176,8 @@ Main.add(function () {
                 <td colspan="2" />
               {{/if}}
               <td rowspan="3" style="width: 100%">
-                {{mb_field object=$antecedent field="rques" rows="4"}}
+                {{mb_field object=$antecedent field="rques" rows="4" form="editAntFrm"
+                  aidesaisie="filterWithDependFields: false, validateOnBlur: 0"}}
               </td>
             </tr>
     
@@ -310,7 +286,7 @@ Main.add(function () {
                   
                   <tr>
                     <th>{{mb_label object=$line field="commentaire"}}</th>
-                    <td>{{mb_field object=$line field="commentaire" size=20}}</td>
+                    <td>{{mb_field object=$line field="commentaire" size=20 form=editLineTP}}</td>
                   </tr>
                   <tr>
                     <td colspan="3" class="button">
@@ -356,7 +332,8 @@ Main.add(function () {
                   <td colspan="2"></td>
                   {{/if}}
                   <td rowspan="2" style="width: 100%">
-                    <textarea name="traitement" rows=4></textarea>
+                    {{mb_field object=$traitement field=traitement rows=4 form=editTrmtFrm
+                      aidesaisie="validateOnBlur: 0"}}
                   </td>
                 </tr>
                 <tr>

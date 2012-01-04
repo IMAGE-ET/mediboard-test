@@ -36,30 +36,6 @@ function calculPSA () {
     $V(oFormExam._psa, "");
   }
 }
-
-Main.add(function () {
-  var oExamCompForm = getForm("addExamCompFrm");
-  new AideSaisie.AutoComplete(oExamCompForm.examen, {
-            objectClass: "CExamComp",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur:0
-          });
-
-  var oExamECGRPForm = getForm("editExamCompFrm");
-  new AideSaisie.AutoComplete(oExamECGRPForm.result_ecg, {
-            objectClass: "CConsultAnesth",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur:0
-          });
-          
-  new AideSaisie.AutoComplete(oExamECGRPForm.result_rp, {
-            objectClass: "CConsultAnesth",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur:0
-          });
-  
-});
-
 </script>
 
 <table class="form" style="width: 100%">
@@ -81,7 +57,8 @@ Main.add(function () {
             <tr>
               <td>
                 <input type="hidden" name="_hidden_examen" value="" />
-                {{mb_field object=$examComp field="examen" rows="4" onblur="if(!$(this).emptyValue()){ExamComp.submit(this.form);}"}}
+                {{mb_field object=$examComp field="examen" rows="4" onblur="if(!$(this).emptyValue()){ExamComp.submit(this.form);}" form="addExamCompFrm"
+                  aidesaisie="validateOnBlur: 0"}}
               </td>
             </tr>
             <tr>
@@ -217,13 +194,15 @@ Main.add(function () {
           <td class="halfPane">
             <fieldset>
               <legend>{{mb_label object=$consult_anesth field="result_ecg"}}</legend>
-              {{mb_field object=$consult_anesth field="result_ecg" rows="4" onblur="submitForm(this.form)"}}
+              {{mb_field object=$consult_anesth field="result_ecg" rows="4" onblur="submitForm(this.form)" form="editExamCompFrm"
+                  aidesaisie="validateOnBlur: 0"}}
             </fieldset>
           </td>
           <td class="halfPane">
             <fieldset>
               <legend>{{mb_label object=$consult_anesth field="result_rp"}}</legend>
-              {{mb_field object=$consult_anesth field="result_rp" rows="4" onblur="submitForm(this.form)"}}
+              {{mb_field object=$consult_anesth field="result_rp" rows="4" onblur="submitForm(this.form)" form="editExamCompFrm"
+                  aidesaisie="validateOnBlur: 0"}}
             </fieldset>
           </td>
         </tr>

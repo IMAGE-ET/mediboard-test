@@ -3,7 +3,7 @@
   <tr>
     <th class="title" colspan="6">
       <div style="float: left">
-        <form name="frmRecherche">
+        <form name="frmRecherche" method="post">
           <input type="text" name="search" />
         </form>
           <button class="search notext" onclick="search()">Recherche</button>

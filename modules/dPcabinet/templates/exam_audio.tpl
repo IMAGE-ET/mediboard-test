@@ -295,16 +295,8 @@ if(window.opener && window.opener.ExamDialog) {
       </tr>
       <tr>
         <td style="text-align:left;">
-          <textarea name="remarques" rows="2">{{$exam_audio->remarques}}</textarea>
-          <script type="text/javascript">
-            Main.add(function() {
-              new AideSaisie.AutoComplete(getForm("editFrm").elements.remarques, {
-                objectClass: "{{$exam_audio->_class}}",
-                timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-                validateOnBlur: 0
-              });
-            });
-          </script>
+          {{mb_field object=$exam_audio field=remarques rows=2 form="editFrm"
+            aidesaisie="validateOnBlur: 0"}}
         </td>
       </tr>
       <tr>

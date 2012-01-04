@@ -21,9 +21,9 @@
           <button type="button" class="save notext" onclick="this.form.onsubmit();"></button>
         </th>
         <th class="narrow"></th>
-        <th style="width: 45%">Ponctuelles</th>
+        <th style="width: 45%">Journalières</th>
         <th>
-          Journalières
+          Ponctuelles
           <div style="float: right;">
             <input type="text" class="autocomplete" name="prestation_ponctuelle_view"/>
             <div class="autocomplete" id="prestation_autocomplete" style="display: none; color: #000; text-align: left;"></div>

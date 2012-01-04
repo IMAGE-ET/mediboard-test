@@ -15,42 +15,6 @@ function reloadListTech() {
   UrllistTech.requestUpdate('listTech');
 }
 
-Main.add(function () {
-  var oOpForm = getForm("editOpAnesthFrm");
-  if(oOpForm){
-  new AideSaisie.AutoComplete(oOpForm.rques, {
-            objectClass: "COperation",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur:0
-          });
-  }
-  var oAnesthForm = getForm("editInfosAnesthFrm");
-  new AideSaisie.AutoComplete(oAnesthForm.prepa_preop, {
-            objectClass: "CConsultAnesth",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur:0
-          });
-  if(oAnesthForm.premedication) {
-    new AideSaisie.AutoComplete(oAnesthForm.premedication, {
-              objectClass: "CConsultAnesth",
-              timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-              validateOnBlur:0
-            });
-  }
-  var oTechCompForm = getForm("addEditTechCompFrm");
-  new AideSaisie.AutoComplete(oTechCompForm.technique, {
-            objectClass: "CTechniqueComp",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur:0
-          });
-  var oRquesConsultForm = getForm("editRquesConsultFrm");
-  new AideSaisie.AutoComplete(oRquesConsultForm.rques, {
-            objectClass: "CConsultation",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur:0
-          });
-});
-
 guessScoreApfel = function() {
   var url = new Url("dPcabinet", "ajax_guess_score_apfel");
   url.addParam("patient_id", "{{$consult->patient_id}}");
@@ -82,7 +46,8 @@ afterStoreScore = function(id, obj) {
               <input type="hidden" name="dosql" value="do_planning_aed" />
               {{mb_key object=$operation}}
               {{mb_label object=$operation field="rques"}}
-              {{mb_field object=$operation field="rques" rows="4" onblur="this.form.onsubmit()"}}
+              {{mb_field object=$operation field="rques" rows="4" onblur="this.form.onsubmit()" form="editOpAnesthFrm"
+                  aidesaisie="validateOnBlur: 0"}}
               </form>
               {{else}}
               <div class="small-info text">
@@ -129,12 +94,14 @@ afterStoreScore = function(id, obj) {
 	          <tr>
 	            <td class="halfPane">
 	              {{mb_label object=$consult_anesth field="prepa_preop"}}
-	              {{mb_field object=$consult_anesth field="prepa_preop" rows="4" onchange="this.form.onsubmit()"}}
+	              {{mb_field object=$consult_anesth field="prepa_preop" rows="4" onchange="this.form.onsubmit()" form="editInfosAnesthFrm"
+                  aidesaisie="validateOnBlur: 0"}}
 	            </td>
 	            <td class="halfPane">
 	              {{if !$isPrescriptionInstalled || ($conf.dPcabinet.CConsultAnesth.view_premedication && $app->user_prefs.displayPremedConsult)}}
 	                {{mb_label object=$consult_anesth field="premedication"}}
-	                {{mb_field object=$consult_anesth field="premedication" rows="4" onchange="this.form.onsubmit()"}}
+	                {{mb_field object=$consult_anesth field="premedication" rows="4" onchange="this.form.onsubmit()" form="editInfosAnesthFrm"
+                  aidesaisie="validateOnBlur: 0"}}
 	              {{else}}
 	                {{if $conf.dPcabinet.CPrescription.view_prescription}}
                     {{if $view_prescription}}
@@ -164,7 +131,8 @@ afterStoreScore = function(id, obj) {
 					      <input type="hidden" name="del" value="0" />
 					      <input type="hidden" name="dosql" value="do_technique_aed" />
 					      {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1}}
-	              {{mb_field object=$techniquesComp field="technique" rows="4"}}
+	              {{mb_field object=$techniquesComp field="technique" rows="4" form="addEditTechCompFrm"
+                  aidesaisie="validateOnBlur: 0"}}
 	              <button class="add" type="submit">{{tr}}Add{{/tr}}</button>
 							</form>
             </td>
@@ -185,7 +153,8 @@ afterStoreScore = function(id, obj) {
       {{mb_key object=$consult}}
       <fieldset>
         <legend>{{mb_label object=$consult field="rques"}}</legend>
-        {{mb_field object=$consult field="rques" rows="4" onblur="this.form.onsubmit()"}}
+        {{mb_field object=$consult field="rques" rows="4" onblur="this.form.onsubmit()" form="editRquesConsultFrm"
+                  aidesaisie="validateOnBlur: 0"}}
       </fieldset>
       </form>
     </td>

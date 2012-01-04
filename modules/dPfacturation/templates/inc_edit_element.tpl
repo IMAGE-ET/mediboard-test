@@ -71,16 +71,8 @@ updateFactureItem = function(select){
 	  <tr>
 	    <th>{{mb_label object=$factureitem field="libelle"}}</th>
 	    <td>
-        {{mb_field object=$factureitem field="libelle"}}
-        <script type="text/javascript">
-          Main.add(function() {
-            new AideSaisie.AutoComplete(getForm("editfactureitem").elements.libelle, {
-              objectClass: "{{$factureitem->_class}}",
-              timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-              validateOnBlur: 0
-            });
-          });
-        </script>
+        {{mb_field object=$factureitem field="libelle" form="editfactureitem"
+          aidesaisie="validateOnBlur: 0"}}
       </td>
 	  </tr>
 	  <tr>

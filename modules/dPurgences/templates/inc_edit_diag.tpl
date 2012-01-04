@@ -1,20 +1,3 @@
-<script type="text/javascript">
-  Main.add(function() {
-    var form = getForm("editDiag");
-    var options = {
-      objectClass: "{{$rpu->_class}}",
-      contextUserId: "{{$user->_id}}",
-      contextUserView: "{{$user->_view}}",
-      timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-      validate: function() { form.onsubmit(); },
-      resetSearchField: false,
-      resetDependFields: false,
-      validateOnBlur: false,
-      height: "100px"
-    };
-    new AideSaisie.AutoComplete(form.elements.diag_infirmier, options);
-  });
-</script>
 <form name="editDiag" method="post" action="?" onsubmit="return onSubmitFormAjax(this);">
   <input type="hidden" name="m" value="dPurgences" />
   <input type="hidden" name="dosql" value="do_rpu_aed" />
@@ -26,7 +9,12 @@
     </tr>
     <tr>
       <th>{{mb_label object=$rpu field=diag_infirmier}}</th>
-      <td>{{mb_field object=$rpu field=diag_infirmier onchange="this.form.onsubmit();" class="autocomplete"}}</th>
+      <td>{{mb_field object=$rpu field=diag_infirmier onchange="this.form.onsubmit();" class="autocomplete" form="editDiag"
+             aidesaisie="validate: function() { form.onsubmit();},
+                         resetSearchField: 0,
+                         resetDependFields: 0,
+                         validateOnBlur: 0,
+                         height: '100px'"}}</th>
     </tr>
   </table>
 </form>

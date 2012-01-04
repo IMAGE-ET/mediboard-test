@@ -86,6 +86,8 @@
   {{$mediboardScript|smarty:nodefaults}}
   
   <script type="text/javascript">
+    AideSaisie.timestamp = "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}";
+    
     {{if $dialog}}
       Event.observe(document, 'keydown', closeWindowByEscape);
     {{/if}}

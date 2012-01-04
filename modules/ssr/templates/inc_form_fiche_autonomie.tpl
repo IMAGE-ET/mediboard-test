@@ -1,21 +1,3 @@
-<script type="text/javascript">
-  
-Main.add(function () {
-  var oFormAutonomie = getForm("editFicheAutonomie");
-	var options = {
-    objectClass: "CFicheAutonomie", 
-    contextUserId: "{{$app->user_id}}"
-  }
-
-  new AideSaisie.AutoComplete(oFormAutonomie.soins_cutanes , options);
-  new AideSaisie.AutoComplete(oFormAutonomie.etat_psychique, options);  
-  new AideSaisie.AutoComplete(oFormAutonomie.antecedents   , options);  
-  new AideSaisie.AutoComplete(oFormAutonomie.traitements   , options);  
-});
-
-</script>
-
-
 <form name="editFicheAutonomie" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="ssr" />
   <input type="hidden" name="dosql" value="do_fiche_autonomie_aed" />
@@ -121,7 +103,7 @@ Main.add(function () {
     <tbody class="hoverable">
 	    <tr>
 	      <th>{{mb_label object=$fiche_autonomie field="soins_cutanes"}}</th>
-	      <td>{{mb_field object=$fiche_autonomie field="soins_cutanes"}}</td>
+	      <td>{{mb_field object=$fiche_autonomie field="soins_cutanes" form="editFicheAutonomie"}}</td>
 	    </tr>
     </tbody>
 
@@ -164,7 +146,7 @@ Main.add(function () {
     <tbody class="hoverable">
 	    <tr>
 	      <th>{{mb_label object=$fiche_autonomie field="etat_psychique"}}</th>
-	      <td>{{mb_field object=$fiche_autonomie field="etat_psychique"}}</td>
+	      <td>{{mb_field object=$fiche_autonomie field="etat_psychique" form="editFicheAutonomie"}}</td>
 	    </tr>
     </tbody>
 		
@@ -175,14 +157,14 @@ Main.add(function () {
     <tbody class="hoverable">
       <tr>
         <th>{{mb_label object=$fiche_autonomie field="antecedents"}}</th>
-        <td>{{mb_field object=$fiche_autonomie field="antecedents"}}</td>
+        <td>{{mb_field object=$fiche_autonomie field="antecedents" form="editFicheAutonomie"}}</td>
       </tr>
     </tbody>
 
     <tbody class="hoverable">
       <tr>
         <th>{{mb_label object=$fiche_autonomie field="traitements"}}</th>
-        <td>{{mb_field object=$fiche_autonomie field="traitements"}}</td>
+        <td>{{mb_field object=$fiche_autonomie field="traitements" form="editFicheAutonomie"}}</td>
       </tr>
     </tbody>
 

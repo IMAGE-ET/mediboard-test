@@ -286,40 +286,16 @@ CCAMSelector.init = function(){
 
   <tr>
     <td style="width: 33%;">
-      <script type="text/javascript">
-        Main.add(function() {
-          new AideSaisie.AutoComplete(getForm("editOp").elements.examen, {
-            objectClass: "{{$op->_class}}",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur: 0
-          });
-        });
-      </script>
-      {{mb_field object=$op field="examen"}}
+      {{mb_field object=$op field="examen" form="editOp"
+        aidesaisie="validateOnBlur: 0"}}
     </td>
     <td style="width: 33%;">
-      <script type="text/javascript">
-        Main.add(function() {
-          new AideSaisie.AutoComplete(getForm("editOp").elements.materiel, {
-            objectClass: "{{$op->_class}}",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur: 0
-          });
-        });
-      </script>
-      {{mb_field object=$op field="materiel" onchange="Value.synchronize(this);"}}
+      {{mb_field object=$op field="materiel" onchange="Value.synchronize(this);" form="editOp"
+        aidesaisie="validateOnBlur: 0"}}
     </td>
     <td style="width: 33%;">
-      <script type="text/javascript">
-        Main.add(function() {
-          new AideSaisie.AutoComplete(getForm("editOp").elements.rques, {
-            objectClass: "{{$op->_class}}",
-            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-            validateOnBlur: 0
-          });
-        });
-      </script>
-      {{mb_field object=$op field="rques" onchange="Value.synchronize(this);"}}
+      {{mb_field object=$op field="rques" onchange="Value.synchronize(this);" form="editOp"
+        aidesaisie="validateOnBlur: 0"}}
     </td>
   </tr>
   

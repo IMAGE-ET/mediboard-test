@@ -53,19 +53,6 @@
   }
   Main.add(function() {
     setTimeout("getForm('addAdministration').quantite.focus()", 1);
-    var oForm = getForm("editCommentaire");
-    new AideSaisie.AutoComplete(oForm.commentaire, {
-      objectClass: "{{$line->_class}}", 
-      contextUserId: "{{$user_id}}",
-      resetSearchField: false,
-      validateOnBlur: false,
-      strict: false,
-      {{if $line instanceof CPrescriptionLineMedicament}}
-        dependField1: oForm.code_ucd
-      {{else}}
-        dependField1: oForm.element_prescription_id
-      {{/if}}
-    });
   });
 </script>
 <table class="form">
@@ -124,7 +111,13 @@
           <legend>
             {{mb_label object=$line field=commentaire}}
           </legend>
-          {{mb_field object=$line field=commentaire}}
+          {{if $line instanceof CPrescriptionLineMedicament}}
+            {{assign var=depend_field_1 value="getForm('editLine').code_ucd"}}
+          {{else}}
+            {{assign var=depend_field_1 value="getForm('editLine').element_prescription_id"}}
+          {{/if}}
+          {{mb_field object=$line field=commentaire form="editLine"
+            aidesaisie="resetSearchField: 0, validateOnBlur: 0, strict: 0"}}
         </fieldset>
       </form>
     </td>

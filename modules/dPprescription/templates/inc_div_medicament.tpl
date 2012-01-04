@@ -392,7 +392,7 @@ updateModaleAfterAddLine = function(line_id){
 	  <th colspan="2" class="category">{{mb_title class=CPrescriptionLineComment field=commentaire}}</th>
 	</tr>
 	<tr>
-	  <td colspan="2" style="text-align:center;"> 		 
+	  <td colspan="2"> 		 
 		  <div>
 	    <form name="addLineCommentMed" method="post" action="" onsubmit="return onSubmitFormAjax(this, { onComplete: function(){ Prescription.reload('{{$prescription->_id}}',null,'medicament','{{$mode_protocole}}','{{$mode_pharma}}')} } )">
 	      <input type="hidden" name="m" value="dPprescription" />
@@ -403,7 +403,8 @@ updateModaleAfterAddLine = function(line_id){
 	      <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
 	      <input type="hidden" name="chapitre" value="medicament" />
 	      <input type="hidden" name="creator_id" value="{{$app->user_id}}" />
-	      {{mb_field class=CPrescriptionLineComment field=commentaire}}
+	      {{mb_field class=CPrescriptionLineComment field=commentaire form="addLineCommentMed"
+          aidesaisie="resetSearchField: 0, validateOnBlur: 0, strict: 0"}}
 	      <button class="submit" type="button" onclick="this.form.onsubmit();">Ajouter ce commentaire</button>
 	    </form>
 	    </div>

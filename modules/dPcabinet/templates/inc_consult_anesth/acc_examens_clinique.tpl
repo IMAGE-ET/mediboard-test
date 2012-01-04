@@ -1,27 +1,3 @@
-<script type="text/javascript">
-Main.add(function () {
-  var oExamCliniqueForm = getForm("editAnesthExamenClinique");
-  var options = {
-    objectClass: "CConsultAnesth",
-    timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-    validateOnBlur: false
-  };
-  
-  new AideSaisie.AutoComplete(oExamCliniqueForm.examenCardio, options);
-  new AideSaisie.AutoComplete(oExamCliniqueForm.examenPulmo,  options);
-  new AideSaisie.AutoComplete(oExamCliniqueForm.examenDigest, options);
-  new AideSaisie.AutoComplete(oExamCliniqueForm.examenAutre,  options);
-          
-  var oExamForm = getForm("editFrmExamenConsult");
-  new AideSaisie.AutoComplete(oExamForm.examen, {
-    objectClass: "CConsultation",
-    timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-    validateOnBlur: false
-  });
-  
-});
-</script>
-
 <table class="main form">
   <tr>
     <td>
@@ -40,13 +16,15 @@ Main.add(function () {
             <td class="halfPane">
               <fieldset>
                 <legend>{{mb_label object=$consult_anesth field="examenCardio"}}</legend>
-                {{mb_field object=$consult_anesth field="examenCardio" rows="4" onchange="this.form.onsubmit()"}}
+                {{mb_field object=$consult_anesth field="examenCardio" rows="4" onchange="this.form.onsubmit()" form="editAnesthExamenClinique"
+                  aidesaisie="validateOnBlur: 0"}}
               </fieldset>
             </td>
             <td class="halfPane">
               <fieldset>
                 <legend>{{mb_label object=$consult_anesth field="examenPulmo"}}</legend>
-                {{mb_field object=$consult_anesth field="examenPulmo" rows="4" onchange="this.form.onsubmit()"}}
+                {{mb_field object=$consult_anesth field="examenPulmo" rows="4" onchange="this.form.onsubmit()" form="editAnesthExamenClinique"
+                  aidesaisie="validateOnBlur: 0"}}
               </fieldset>
             </td>
           </tr>
@@ -54,13 +32,15 @@ Main.add(function () {
             <td class="halfPane">
               <fieldset>
                 <legend>{{mb_label object=$consult_anesth field="examenDigest"}}</legend>
-                {{mb_field object=$consult_anesth field="examenDigest" rows="4" onchange="this.form.onsubmit()"}}
+                {{mb_field object=$consult_anesth field="examenDigest" rows="4" onchange="this.form.onsubmit()" form="editAnesthExamenClinique"
+                  aidesaisie="validateOnBlur: 0"}}
               </fieldset>
             </td>
             <td class="halfPane">
               <fieldset>
                 <legend>{{mb_label object=$consult_anesth field="examenAutre"}}</legend>
-                {{mb_field object=$consult_anesth field="examenAutre" rows="4" onchange="this.form.onsubmit()"}}
+                {{mb_field object=$consult_anesth field="examenAutre" rows="4" onchange="this.form.onsubmit()" form="editAnesthExamenClinique"
+                  aidesaisie="validateOnBlur: 0"}}
               </fieldset>
             </td>
           </tr>
@@ -74,7 +54,8 @@ Main.add(function () {
         {{mb_key object=$consult}}
         <fieldset>
           <legend>{{mb_label object=$consult field="examen"}}</legend>
-          {{mb_field object=$consult field="examen" rows="4" onchange="this.form.onsubmit()"}}
+          {{mb_field object=$consult field="examen" rows="4" onchange="this.form.onsubmit()" form="editFrmExamenConsult"
+                  aidesaisie="validateOnBlur: 0"}}
         </fieldset>
       </form>
     </td>

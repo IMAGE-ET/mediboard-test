@@ -339,25 +339,8 @@
         {{assign var=_line_praticien_id value=$app->user_id}}
       {{else}}
         {{assign var=_line_praticien_id value=$line->praticien_id}}
-      {{/if}}    
+      {{/if}}
       
-       <script type="text/javascript">
-          Main.add( function(){
-            var oFormCommentaireElement = getForm("editCommentaire-{{$line->_guid}}");
-            if (!oFormCommentaireElement.commentaire) {
-              return;
-            }
-            new AideSaisie.AutoComplete(oFormCommentaireElement.commentaire, {
-              objectClass: "{{$line->_class}}", 
-              contextUserId: "{{$_line_praticien_id}}",
-              resetSearchField: false,
-              validateOnBlur: false,
-              strict: false,
-              dependField1: oFormCommentaireElement.code_ucd
-            });
-          });
-        </script>
-  
       <form name="editCommentaire-{{$line->_guid}}" method="post" action="?" onsubmit="testPharma({{$line->_id}}); return onSubmitFormAjax(this);">
         <input type="hidden" name="m" value="dPprescription" />
         <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
@@ -371,7 +354,12 @@
                {{mb_label object=$line field="commentaire"}}
              </legend>
              {{if $line->_can_modify_comment}}
-               {{mb_field object=$line field="commentaire" onblur="this.form.onsubmit();"}}
+               {{mb_field object=$line field="commentaire" onblur="this.form.onsubmit();" form="editCommentaire-`$line->_guid`"
+                 aidesaisie="contextuserId: '`$_line_praticien_id`',
+                             resetSearchField: 0,
+                             validateOnBlur: 0,
+                             strict: 0,
+                             dependField1: getForm('editCommentaire-`$line->_guid`').code_ucd"}}
              {{else}}
                {{if $line->commentaire}}
                  {{mb_value object=$line field="commentaire"}}

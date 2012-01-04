@@ -46,16 +46,8 @@ choosePatient = function() {
         {{tr}}CConsultation-motif{{/tr}}
       </th>
       <td>
-        {{mb_field object=$consult field=motif}}
-        <script type="text/javascript">
-          Main.add(function() {
-            new AideSaisie.AutoComplete(getForm("editConsult").elements.motif, {
-              objectClass: "{{$consult->_class}}",
-              timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-              validateOnBlur: 0
-            });
-          });
-        </script>
+        {{mb_field object=$consult field=motif form="editConsult"
+          autocomplete="timestamp: '`$conf.dPcompteRendu.CCompteRendu.timestamp`', validateOnBlur: 0"}}
       </td>
     </tr>
     <tr>

@@ -67,24 +67,11 @@
   <tr id="commentaires_sortie" {{if $sejour->mode_sortie == "" || $sejour->mode_sortie == "normal"}} style="display:none;" {{/if}}>
     <th>{{mb_label object=$sejour field="commentaires_sortie"}}</th>
     <td>
-      {{main}}
-        var form = getForm("editSejour");
-        var options = {
-          objectClass: "{{$sejour->_class}}",
-          contextUserId: "{{$userSel->_id}}",
-          contextUserView: "{{$userSel->_view}}",
-          timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-          validate: function() { form.onsubmit(); },
-          resetSearchField: false,
-          resetDependFields: false,
-          validateOnBlur: false
-        }
-        
-        new AideSaisie.AutoComplete(form.elements.commentaires_sortie, options);
-      {{/main}}
-    	
-			{{mb_field object=$sejour field="commentaires_sortie" onchange="this.form.onsubmit();"}}
-			
+    	{{mb_field object=$sejour field="commentaires_sortie" onchange="this.form.onsubmit();" form="editSejour"
+        aidesaisie="validate: function() { form.onsubmit();},
+                    resetSearchField: 0,
+                    resetDependFields: 0,
+                    validateOnBlur: 0" }}
 			</td>
   </tr>
   

@@ -94,17 +94,6 @@ Main.add(function () {
         {{/if}}
           {{* Beginning *}}
         
-          {{if !$readonly}}
-          <script type="text/javascript">
-            Main.add(function() {
-              new AideSaisie.AutoComplete(getForm("editFrmExams").elements.{{$field}}, {
-                objectClass: "{{$consult->_class}}",
-                timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-                validateOnBlur: 0
-              });
-            });
-          </script>
-          {{/if}}
           <fieldset>
             <legend>
               {{mb_label object=$consult field=$field}}
@@ -116,7 +105,8 @@ Main.add(function () {
             {{if $readonly}}
               {{mb_value object=$consult field=$field}}
             {{else}}
-              {{mb_field object=$consult field=$field rows=$text_rows onchange="this.form.onsubmit()"}}
+              {{mb_field object=$consult field=$field rows=$text_rows onchange="this.form.onsubmit()" form="editFrmExams"
+                aidesaisie="validateOnBlur: 0"}}
             {{/if}}
           </fieldset>
         {{* End *}}

@@ -9,16 +9,8 @@
   
   Main.add(function() {
     var oFormVisiteAnesth = getForm("visiteAnesth");
-    aideRquesAnesth = new AideSaisie.AutoComplete(oFormVisiteAnesth.rques_visite_anesth, {
-      objectClass: "COperation",
-      timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-      {{if $selOp->prat_visite_anesth_id}}
-      contextUserId: {{$selOp->prat_visite_anesth_id}},
-      {{/if}}
-      validateOnBlur:0
-    });
+    
     {{if !$selOp->date_visite_anesth}}
-      
       var dates = {};
       /*dates.limit = {
         start: '{{$smarty.now|@date_format:"%Y-%m-%d %H:%M:%S"}}',
@@ -88,7 +80,10 @@
       {{if $selOp->date_visite_anesth}}
         {{mb_value object=$selOp field="rques_visite_anesth"}}
       {{else}}
-        {{mb_field object=$selOp field="rques_visite_anesth"}}
+        {{mb_field object=$selOp field="rques_visite_anesth" form="visiteAnesth"
+          aidesaisie="validateOnBlur: 0,
+                      timestamp: '`$conf.dPcompteRendu.CCompteRendu.timestamp`',
+                      contextUserId: '`$selOp->prat_visite_anesth_id`'"}}
       {{/if}}
     </td>
   </tr>

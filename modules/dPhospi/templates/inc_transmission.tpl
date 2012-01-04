@@ -58,66 +58,12 @@ Main.add(function() {
   };
   Calendar.regField(oFormTrans.date, dates, options);
 
-  {{if !$transmission->_id}}
-    {{if !$data_id && !$result_id && !$action_id}}
-      //Initialisation du champ dates
-      oFormTrans.date_da.value = "Heure actuelle";
-      $V(oFormTrans.date, "now");
-    {{/if}}
-      
-    {{if !$action_id || !$result_id || $data_id}}
-      new AideSaisie.AutoComplete(oFormTrans._text_data, {
-        property: "text",
-        objectClass: "CTransmissionMedicale", 
-        timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-        dependField1: oFormTrans._type_data,
-        dependField2: oFormTrans.cible,
-        classDependField2: "CCategoryPrescription",
-        validateOnBlur:0,
-        updateDF: false,
-        strict: false
-      });
-    {{/if}}
-
-    {{if !$data_id || !$result_id || $action_id}}
-      new AideSaisie.AutoComplete(oFormTrans._text_action, {
-        property: "text",
-        objectClass: "CTransmissionMedicale", 
-        timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-        dependField1: oFormTrans._type_action,
-        dependField2: oFormTrans.cible,
-        classDependField2: "CCategoryPrescription",
-        validateOnBlur:0,
-        updateDF: false,
-        strict: false
-      });
-    {{/if}}
-
-    {{if !$data_id || !$action_id || $result_id}}
-      new AideSaisie.AutoComplete(oFormTrans._text_result, {
-        property: "text",
-        objectClass: "CTransmissionMedicale",
-        timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-        dependField1: oFormTrans._type_result,
-        dependField2: oFormTrans.cible,
-        classDependField2: "CCategoryPrescription",
-        validateOnBlur:0,
-        updateDF: false,
-        strict: false
-      });
-    {{/if}}
-  {{else}}
-    new AideSaisie.AutoComplete(oFormTrans.text, {
-      objectClass: "CTransmissionMedicale", 
-      timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-      dependField1: oFormTrans.type,
-      dependField2: oFormTrans.cible,
-      classDependField2: "CCategoryPrescription",
-      validateOnBlur:0,
-      updateDF: false,
-      strict: false
-    });
+  {{if !$transmission->_id && !$data_id && !$result_id && !$action_id}}
+    //Initialisation du champ dates
+    oFormTrans.date_da.value = "Heure actuelle";
+    $V(oFormTrans.date, "now");
   {{/if}}
+
  
   {{if $transmission->object_id}}
     updateListTransmissions('{{$transmission->object_id}}', '{{$transmission->object_class}}');
@@ -238,7 +184,14 @@ completeTrans = function(type, button){
             {{if $action_id && $result_id && !$data_id}}
               {{mb_field object=$transmission field="_text_data" rows=6 readonly="readonly"}}
             {{else}}
-              {{mb_field object=$transmission field="_text_data" rows=6}}
+              {{mb_field object=$transmission field="_text_data" rows=6 form="editTrans"
+                aidesaisie="property: 'text',
+                            dependField1: getForm('editTrans')._type_data,
+                            dependField2: getForm('editTrans').cible,
+                            classDependField2: 'CCategoryPrescription',
+                            validateOnBlur: 0,
+                            updateDF: 0,
+                            strict: 0"}}
             {{/if}}
           </fieldset>
         </td>
@@ -251,7 +204,14 @@ completeTrans = function(type, button){
             {{if $data_id && $result_id && !$action_id}}
               {{mb_field object=$transmission field="_text_action" rows=6 readonly="readonly"}}
             {{else}}
-              {{mb_field object=$transmission field="_text_action" rows=6}}
+              {{mb_field object=$transmission field="_text_action" rows=6 form="editTrans"
+                aidesaisie="property: 'text',
+                            dependField1: getForm('editTrans')._type_action,
+                            dependField2: getForm('editTrans').cible,
+                            classDependField2: 'CCategoryPrescription',
+                            validateOnBlur: 0,
+                            updateDF: 0,
+                            strict: 0"}}
             {{/if}}
             
           </fieldset>
@@ -265,7 +225,14 @@ completeTrans = function(type, button){
             {{if $data_id && $action_id && !$result_id}}
               {{mb_field object=$transmission field="_text_result" rows=6 readonly="readonly"}}
             {{else}}
-              {{mb_field object=$transmission field="_text_result" rows=6}}
+              {{mb_field object=$transmission field="_text_result" rows=6 form="editTrans"
+                aidesaisie="property: 'text',
+                            dependField1: getForm('editTrans')._type_result,
+                            dependField2: getForm('editTrans').cible,
+                            classDependField2: 'CCategoryPrescription',
+                            validateOnBlur: 0,
+                            updateDF: 0,
+                            strict: 0"}}
             {{/if}}
             
           </fieldset>
@@ -275,7 +242,14 @@ completeTrans = function(type, button){
           <legend>
             {{mb_label object=$transmission field="text"}}
           </legend>
-          {{mb_field object=$transmission field="text" rows=6}}
+          {{mb_field object=$transmission field="text" rows=6 form="editTrans"
+                aidesaisie="property: 'text',
+                            dependField1: getForm('editTrans').type,
+                            dependField2: getForm('editTrans').cible,
+                            classDependField2: 'CCategoryPrescription',
+                            validateOnBlur: 0,
+                            updateDF: 0,
+                            strict: 0"}}
         </fieldset>
       {{/if}}
     </tr>

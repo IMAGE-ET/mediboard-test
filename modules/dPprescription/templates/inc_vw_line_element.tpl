@@ -167,23 +167,6 @@
       {{else}}
         {{assign var=_line_praticien_id value=$line->praticien_id}}
       {{/if}}
-    
-      <script type="text/javascript">
-        Main.add( function(){
-          var oFormCommentaireElement = getForm("editCommentaire-{{$line->_guid}}");
-          if (!oFormCommentaireElement.commentaire) {
-            return;
-          }
-          new AideSaisie.AutoComplete(oFormCommentaireElement.commentaire, {
-            objectClass: "{{$line->_class}}", 
-            contextUserId: "{{$_line_praticien_id}}",
-            resetSearchField: false,
-            validateOnBlur: false,
-            strict: false,
-            dependField1: getForm("libelleProduit").element_prescription_id
-          });
-        });
-      </script>
       
      <!-- Input caché pour l'autocomplete -->
      <form name="libelleProduit" method="get" action="?">
@@ -202,7 +185,12 @@
 					</legend>
 			
 	        {{if $line->_can_modify_comment}}
-	          {{mb_field object=$line field="commentaire" onblur="this.form.onsubmit();"}}
+	          {{mb_field object=$line field="commentaire" onblur="this.form.onsubmit();" form="editCommentaire-`$line->_guid`"
+              aidesaisie="contextUserId:'`$_line_praticien_id`',
+                          resetSearchField: 0,
+                          validateOnBlur: 0,
+                          strict: 0,
+                          dependField1: getForm('libelleProduit').element_prescription_id"}}
 	        {{else}}
 	          {{if $line->commentaire}}
 	            {{mb_value object=$line field="commentaire"}}

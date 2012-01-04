@@ -188,7 +188,8 @@ Main.add( function(){
 				        {{/foreach}}
 				      </select>
 				      <br />
-				      {{mb_field class="CPrescriptionLineComment" field="commentaire"}}
+				      {{mb_field class="CPrescriptionLineComment" field="commentaire" form="addLineComment`$element`"
+                aidesaisie="resetSearchField: 0, validateOnBlur: 0, strict: 0"}}
 				      <br />
 				      <div style="text-align: center;">
 					      <button class="submit" type="button" 
