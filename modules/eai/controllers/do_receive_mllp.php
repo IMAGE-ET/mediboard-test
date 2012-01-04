@@ -14,3 +14,15 @@ $port        = CValue::post("port");
 $message     = CValue::post("message");
 
 mbLog($message, "FROM $client_addr:$client_port TO localhost:$port");
+
+$client = new CSourceMLLP;
+$client->port = $port;
+$client->host = $client_addr;
+$client->loadMatchingObject();
+mbLog($client, "CLIENT");
+
+$server = new CSourceMLLP;
+$server->port = $port;
+$server->host = "localhost";
+$server->loadMatchingObject();
+mbLog($server, "SERVER");

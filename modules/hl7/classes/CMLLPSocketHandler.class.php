@@ -159,7 +159,7 @@ class CMLLPSocketHandler {
     $motd = <<<EOT
 -------------------------------------------------------
 |   Welcome to the Mediboard MLLP Server v.$v   |
-|   $time                               |
+|   Started at $time                    |
 -------------------------------------------------------
 
 EOT;
