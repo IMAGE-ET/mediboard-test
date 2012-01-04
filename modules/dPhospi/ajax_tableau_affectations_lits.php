@@ -24,7 +24,7 @@ $heureLimit = "16:00:00";
 
 $date            = CValue::getOrSession("date", mbDate()); 
 $mode            = CValue::getOrSession("mode", 0); 
-$list_services   = CValue::getOrSession("list_services");
+$services_ids    = CValue::getOrSession("services_ids");
 $triAdm          = CValue::getOrSession("triAdm", "praticien");
 $_type_admission = CValue::getOrSession("_type_admission", "ambucomp");
 $filterFunction  = CValue::getOrSession("filterFunction");
@@ -41,22 +41,16 @@ $services = new CService;
 $order = "externe, nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 
-if(!$list_services){
-  foreach($services as $_service){
-    $list_services[] = $_service->_id;
-  }
-}
-
 $where_service = "";
-if (reset($list_services)) {
-  $where_service = "service_id IN (".join($list_services, ',').") OR service_id IS NULL"; 
+if (reset($services_ids)) {
+  $where_service = "service_id IN (".join($services_ids, ',').") OR service_id IS NULL"; 
 }
 
 global $phpChrono;
 
 // Chargement des services
 foreach ($services as &$service) {
-  if (!in_array($service->_id, $list_services)){
+  if (!in_array($service->_id, $services_ids)){
     continue;
   }
   
@@ -106,7 +100,7 @@ $affectation->sortie = mbAddDateTime("23:00:00",$date);
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("list_services"         , $list_services);
+$smarty->assign("services_ids"          , $services_ids);
 $smarty->assign("affectation"           , $affectation);
 $smarty->assign("date"                  , $date);
 $smarty->assign("demain"                , mbDate("+ 1 day", $date));

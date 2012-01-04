@@ -22,8 +22,6 @@
   
   {{mb_include module=system template=inc_config_str var=hour_limit}}
   
-  {{mb_include module=system template=inc_config_bool var=show_mouvements}}
-  
   {{mb_include module=system template=inc_config_bool var=show_age_patient}}
   
   <tr>

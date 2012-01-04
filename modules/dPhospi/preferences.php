@@ -11,5 +11,6 @@
 // Préférences par Module
 CPreferences::$modules["dPhospi"] = array (
   "ccam_sejour",
+  "services_ids_hospi"
 );
 ?>

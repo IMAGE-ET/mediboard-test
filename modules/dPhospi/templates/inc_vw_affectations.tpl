@@ -11,7 +11,7 @@
   {{mb_field object=$sejour field="_type_admission" style="width: 16em;" onchange="this.form.onsubmit()"}}
 
   
-  <select name="triAdm" style="width: 16em;" onchange="this.form.submit()">
+  <select name="triAdm" style="width: 16em;" onchange="this.form.onsubmit()">
     <option value="praticien"   {{if $triAdm == "praticien"}}  selected="selected"{{/if}}>Tri par praticien</option>
     <option value="date_entree" {{if $triAdm == "date_entree"}}selected="selected"{{/if}}>Tri par heure d'entrée</option>
     <option value="patient"     {{if $triAdm == "patient"}}    selected="selected"{{/if}}>Tri par patient</option>
@@ -54,7 +54,7 @@
       {{assign var=patient value=$_sejour->_ref_patient}}
       {{assign var=praticien value=$_sejour->_ref_praticien}}
       <div class="draggable text sejour_non_affecte" style="border-left: 4px solid #{{$praticien->_ref_function->color}}"
-        id="sejour_{{$_sejour->_id}}" data-patient_id="{{$patient->_id}}" data-sejour_id="{{$_sejour->_id}}"
+        id="sejour_temporel_{{$_sejour->_id}}" data-patient_id="{{$patient->_id}}" data-sejour_id="{{$_sejour->_id}}"
         data-width="{{$_sejour->_width}}">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
             {{$patient->nom}} {{$patient->prenom}} {{if $show_age_patient}}({{$patient->_age}} ans){{/if}}
@@ -66,7 +66,7 @@
       </div>
       
       <script type="text/javascript">
-        new Draggable($('sejour_{{$_sejour->_id}}'), dragOptions);
+        new Draggable($('sejour_temporel_{{$_sejour->_id}}'), dragOptions);
       </script>
     {{foreachelse}}
       {{tr}}CSejour.none{{/tr}}

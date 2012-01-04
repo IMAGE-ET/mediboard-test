@@ -9,3 +9,4 @@
 *}}
 
 {{mb_include template=inc_pref spec=enum var=ccam_sejour values="0|1"}}
+{{mb_include template=inc_pref spec=str var=services_ids_hospi readonly=1}}

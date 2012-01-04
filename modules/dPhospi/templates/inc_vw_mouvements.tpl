@@ -28,6 +28,8 @@
         },
         hoverclass: "lit_hover"
         });
+        // Bug de firefox
+        tr.setStyle({position: "static"});
      });
   });
 </script>
@@ -85,14 +87,14 @@
    {{if $granularite == "day"}}
      {{assign var=td_width value=37}}
    {{else}}
-     {{assign var=td_width value=45}}
+     {{assign var=td_width value=30}}
    {{/if}}
     <tr>
       <th></th>
       {{foreach from=$datetimes item=_date}}
         <th style="min-width: {{$td_width}}px;">
           {{if $granularite == "4weeks"}}
-            {{$_date|date_format:"%a %d"}}
+            {{$_date|date_format:"%a"|upper|substr:0:1}} {{$_date|date_format:"%d"}}
           {{else}}
             {{$_date|date_format:"%H"}}h
           {{/if}}
@@ -123,7 +125,7 @@
                       {{math equation=x*(y+4.6) x=$_affectation->_entree_offset y=$td_width assign=offset}}
                       {{math equation=x*(y+4.6) x=$_affectation->_width y=$td_width assign=width}} 
                       
-                      <div id="affectation_{{$_affectation->_id}}" data-affectation_id="{{$_affectation->_id}}" data-lit_id="{{$_affectation->lit_id}}"
+                      <div id="affectation_temporel_{{$_affectation->_id}}" data-affectation_id="{{$_affectation->_id}}" data-lit_id="{{$_affectation->lit_id}}"
                        class="affectation{{if $vue == "compacte"}}_compact{{/if}} opacity-90 draggable
                         {{if !$_sejour->_id}}clit_bloque{{else}}clit{{/if}}
                         {{if $_affectation->entree == $_sejour->entree && $_affectation->entree >= $date_min}}debut_sejour{{/if}}
@@ -164,7 +166,7 @@
                        
                       </div>
                       <script type="text/javascript">
-                        new Draggable($('affectation_{{$_affectation->_id}}'), dragOptions);
+                        new Draggable($('affectation_temporel_{{$_affectation->_id}}'), dragOptions);
                       </script>
                     {{/foreach}}
                   {{/foreach}}

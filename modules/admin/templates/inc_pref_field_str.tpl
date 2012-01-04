@@ -9,4 +9,4 @@
 *}}
 
 
-<input class="str" type="text" size="40" name="pref[{{$var}}]" value="{{$pref.user}}" />
+<input class="str" type="text" size="40" name="pref[{{$var}}]" value="{{$pref.user}}" {{if $readonly}}readonly="readonly"{{/if}}/>

@@ -3,7 +3,7 @@
     <th class="chambre" colspan="2" onclick="
         flipChambre({{$curr_chambre->_id}});
         {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}
-        Droppables.addLit({{$curr_lit->_id}});
+          Droppables.addLit({{$curr_lit->_id}});
         {{foreach from=$curr_lit->_ref_affectations item=curr_aff}}
         Calendar.setupAffectation({{$curr_aff->_id}}, {
           sejour: {
@@ -60,6 +60,6 @@
     </th>
   </tr>
   {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}
-    {{include file="inc_affectations_lits.tpl"}}
+    {{mb_include module=dPhospi template=inc_affectations_lits}}
   {{/foreach}}
 </table>

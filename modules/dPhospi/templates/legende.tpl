@@ -83,4 +83,9 @@
     <td style="text-align: right;"><img src="modules/dPhospi/images/annule.png" name="Chambre plus utilisée" /></td>
     <td class="text">Chambre plus utilisée</td>
   </tr>
+  <tr>
+    <td colspan="2" class="button">
+      <button type="button" class="cancel" onclick="Control.Modal.close();">{{tr}}Close{{/tr}}</button>
+    </td>
+  </tr>
 </table>

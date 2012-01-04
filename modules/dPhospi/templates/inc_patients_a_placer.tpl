@@ -1,17 +1,18 @@
 <div id="calendar-container"></div>
 {{if $can->edit}}
 
-<form name="chgFilter" action="?m={{$m}}" method="get">
-  <input type="hidden" name="m" value="{{$m}}" />
+<form name="chgFilter" method="get" onsubmit="return onSubmitFormAjax(this, null, 'tableau');">
+  <input type="hidden" name="m" value="dPhospi" />
+  <input type="hidden" name="a" value="vw_affectations" />
   <table class="form">
     <tr>
       <td>
-        {{mb_field object=$emptySejour field="_type_admission" style="width: 16em;" onchange="this.form.submit()"}}
+        {{mb_field object=$emptySejour field="_type_admission" style="width: 16em;" onchange="this.form.onsubmit()"}}
       </td>
     </tr>
     <tr>
       <td>
-        <select name="triAdm" style="width: 16em;" onchange="this.form.submit()">
+        <select name="triAdm" style="width: 16em;" onchange="this.form.onsubmit()">
           <option value="praticien"   {{if $triAdm == "praticien"}}  selected="selected"{{/if}}>Tri par praticien</option>
           <option value="date_entree" {{if $triAdm == "date_entree"}}selected="selected"{{/if}}>Tri par heure d'entrée</option>
           <option value="patient"     {{if $triAdm == "patient"}}    selected="selected"{{/if}}>Tri par patient</option>
@@ -20,7 +21,7 @@
     </tr>
     <tr>
       <td>
-        <select name="filterFunction" style="width: 16em;" onchange="this.form.submit()">
+        <select name="filterFunction" style="width: 16em;" onchange="this.form.onsubmit()">
           <option value=""> &mdash; Toutes les fonctions</option>
           {{foreach from=$functions_filter item=_function}}
             <option value="{{$_function->_id}}" {{if $_function->_id == $filterFunction}}selected="selected"{{/if}} class="mediuser" style="border-color: #{{$_function->color}};">{{$_function}}</option>
@@ -65,6 +66,6 @@
 </form>
 
 {{foreach from=$groupSejourNonAffectes key=group_name item=sejourNonAffectes}}
-  {{include file="inc_affectations_liste.tpl"}}
+  {{mb_include module=dPhospi template=inc_affectations_liste}}
 {{/foreach}}
 {{/if}}

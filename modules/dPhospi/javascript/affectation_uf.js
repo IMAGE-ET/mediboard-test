@@ -1,4 +1,3 @@
-
 AffectationUf  = {
 	modal: null,
 	
@@ -16,15 +15,14 @@ AffectationUf  = {
 		url.requestModal(450);
 		this.modal = url.modalObject;
 	},
+  
 	onSubmit: function(form) {
 		Control.Modal.close();
-		return onSubmitFormAjax(form);
-	
+		return onSubmitFormAjax(form);	
 	},
+  
 	onDeletion: function(form) {
 		Control.Modal.close();
 		return confirmDeletion(form);   
 	}
-
-	
 };
