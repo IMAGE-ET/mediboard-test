@@ -61,9 +61,9 @@
   </form>
   
   {{if $chambre->_id}}
-  <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$chambre->_id}}&amp;lit_id=0">
+  <button class="new" onclick="showLit('chambre_id', '{{$chambre->_id}}','lit_id', '0','infrastructure_chambre')">
     {{tr}}CLit-title-create{{/tr}}
-  </a>
+  </button>
   
   <table class="tbl">
     <tr>
@@ -78,7 +78,7 @@
         {{mb_include module=system template=inc_object_idsante400 object=$_lit}}
         {{mb_include module=system template=inc_object_history    object=$_lit}}
         {{mb_include module=system template=inc_object_uf         object=$_lit }}
-        <a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$_lit->chambre_id}}&amp;lit_id={{$_lit->_id}}">
+        <a href="#" onclick="showLit('chambre_id', '{{$_lit->chambre_id}}','lit_id', '{{$_lit->_id}}', 'infrastructure_chambre')">
           {{$_lit->nom}}
           {{if $_lit->nom_complet}}
             ({{$_lit->nom_complet}})

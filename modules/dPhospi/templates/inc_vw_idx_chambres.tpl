@@ -2,7 +2,7 @@
 <table class="main">
 <tr>
   <td class="halfPane">
-    <a class="button new" href="#" onclick="showInfrastructure('chambre_id', '0', 'infrastructure_chambre')">
+    <a class="button new" href="#" onclick="showLit('chambre_id', '0','lit_id', '0','infrastructure_chambre')">
       {{tr}}CChambre-title-create{{/tr}}
     </a>
     

@@ -9,11 +9,11 @@
 
 CCanDo::checkAdmin();
 
-$service_id    = CValue::get("service_id");
-$chambre_id    = CValue::get("chambre_id");
-$lit_id        = CValue::get("lit_id");
-$uf_id         = CValue::get("uf_id");
-$prestation_id = CValue::get("prestation_id");
+$service_id    = CValue::getOrSession("service_id");
+$chambre_id    = CValue::getOrSession("chambre_id");
+$lit_id        = CValue::getOrSession("lit_id");
+$uf_id         = CValue::getOrSession("uf_id");
+$prestation_id = CValue::getOrSession("prestation_id");
 
 $group = CGroups::loadCurrent();
 
