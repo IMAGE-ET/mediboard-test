@@ -9,25 +9,29 @@
 
 CCanDo::checkAdmin();
 
-$service_id    = CValue::getOrSession("service_id");
-$chambre_id    = CValue::getOrSession("chambre_id");
-$lit_id        = CValue::getOrSession("lit_id");
-$uf_id         = CValue::getOrSession("uf_id");
-$prestation_id = CValue::getOrSession("prestation_id");
+$use_service    = CValue::get("service_id");
+$service_id     = CValue::getOrSession("service_id");
+$use_chambre    = CValue::get("chambre_id");
+$chambre_id     = CValue::getOrSession("chambre_id");
+$lit_id         = CValue::getOrSession("lit_id");
+$use_uf         = CValue::get("service_id");
+$uf_id          = CValue::getOrSession("uf_id");
+$use_prestation = CValue::get("service_id");
+$prestation_id  = CValue::getOrSession("prestation_id");
 
 $group = CGroups::loadCurrent();
 
 // Liste des Etablissements
 $etablissements = CMediusers::loadEtablissements(PERM_READ);
 
-if($service_id != null){
+if($use_service != null){
 	// Chargement du service à ajouter/editer
 	$service = new CService();
 	$service->group_id = $group->_id;
 	$service->load($service_id);
 	$service->loadRefsNotes();
 }
-if($chambre_id != null){
+if($use_chambre != null){
 	// Récupération de la chambre à ajouter/editer
 	$chambre = new CChambre();
 	$chambre->load($chambre_id);
@@ -59,7 +63,7 @@ if($chambre_id != null){
 	  }
 	}
 }
-if($uf_id != null){
+if($use_uf != null){
 	// Chargement de l'uf à ajouter/éditer
 	$uf = new CUniteFonctionnelle();
 	$uf->group_id = $group->_id;
@@ -70,7 +74,7 @@ if($uf_id != null){
 	$order = "group_id, code";
 	$ufs = $uf->loadList(null, $order);
 }
-if($prestation_id != null){
+if($use_prestation != null){
 	// Chargement de la prestation à ajouter/éditer
 	$prestation = new CPrestation();
 	$prestation->group_id = $group->_id;
@@ -93,21 +97,21 @@ $smarty = new CSmartyDP();
 $smarty->assign("praticiens"    , $praticiens);
 $smarty->assign("etablissements", $etablissements);
 
-if($service_id != null){
+if($use_service != null){
 	$smarty->assign("service"       , $service);
   $smarty->display("inc_vw_service.tpl");
 }
-elseif($chambre_id != null){
+elseif($use_chambre != null){
   $smarty->assign("services"       , $services);
 	$smarty->assign("chambre"       , $chambre);
 	$smarty->assign("lit"           , $lit);
   $smarty->display("inc_vw_chambre.tpl");
 }
-elseif($uf_id != null){
+elseif($use_uf != null){
   $smarty->assign("uf"            , $uf);
   $smarty->display("inc_vw_uf.tpl");
 }
-elseif($prestation_id != null){
+elseif($use_prestation != null){
   $smarty->assign("prestation"    , $prestation);
   $smarty->display("inc_vw_prestation.tpl");
 }
