@@ -40,6 +40,7 @@ $patient = new CPatient;
 $bilan = new CBilanSSR;
 $prescription_SSR = new CPrescription();
 $lines = array();
+$medecin_adresse_par = "";
 
 if ($sejour->_id) {
   $sejour->loadRefPatient();
@@ -49,6 +50,11 @@ if ($sejour->_id) {
   $patient = $sejour->_ref_patient;
   $patient->loadStaticCIM10($user->_id);
   $patient->loadIPP();
+  $patient->loadRefsCorrespondants();
+  if ($sejour->adresse_par_prat_id && ($sejour->adresse_par_prat_id != $patient->_ref_medecin_traitant->_id)) {
+    $medecin_adresse_par = new CMedecin();
+    $medecin_adresse_par->load($sejour->adresse_par_prat_id);
+  }
 
   // Fiche autonomie  
   $fiche_autonomie->sejour_id = $sejour->_id;
@@ -103,7 +109,7 @@ $can_edit_prescription =
 if(!$can_edit_prescription){
 	foreach($categories as $_cat_id => $_category){
 		if(!array_key_exists($_cat_id, $lines)){
-		  unset($categories[$_cat_id]);	
+		  unset($categories[$_cat_id]);
 		}
 	}
 }
@@ -112,16 +118,18 @@ if(!$can_edit_prescription){
 $smarty = new CSmartyDP();
 
 $smarty->assign("can_view_dossier_medical", $can_view_dossier_medical);
-$smarty->assign("today"               , mbDate());
-$smarty->assign("sejour"              , $sejour);
-$smarty->assign("fiche_autonomie"     , $fiche_autonomie);
-$smarty->assign("bilan"               , $bilan);
-$smarty->assign("patient"             , $patient);
-$smarty->assign("prats"               , $prats);
-$smarty->assign("services"            , $services);
-$smarty->assign("categories"          , $categories);
-$smarty->assign("prescription_SSR"    , $prescription_SSR);
-$smarty->assign("lines"               , $lines);
-$smarty->assign("can_edit_prescription", $can_edit_prescription);
+$smarty->assign("today"                   , mbDate());
+$smarty->assign("sejour"                  , $sejour);
+$smarty->assign("fiche_autonomie"         , $fiche_autonomie);
+$smarty->assign("bilan"                   , $bilan);
+$smarty->assign("patient"                 , $patient);
+$smarty->assign("prats"                   , $prats);
+$smarty->assign("services"                , $services);
+$smarty->assign("categories"              , $categories);
+$smarty->assign("prescription_SSR"        , $prescription_SSR);
+$smarty->assign("lines"                   , $lines);
+$smarty->assign("medecin_adresse_par"     , $medecin_adresse_par);
+$smarty->assign("can_edit_prescription"   , $can_edit_prescription);
+
 $smarty->display("vw_aed_sejour_ssr.tpl");
 ?>

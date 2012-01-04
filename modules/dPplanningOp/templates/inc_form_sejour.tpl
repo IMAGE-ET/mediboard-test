@@ -9,6 +9,7 @@
 *}}
  
 {{mb_script module="dPpatients" script="pat_selector"}}
+{{mb_script module="dPpatients" script="medecin"}}
 {{mb_script module="dPplanningOp" script="cim10_selector"}}
 
 {{assign var=grossesse value=$sejour->_ref_grossesse}}
@@ -239,21 +240,6 @@ CIM10Selector.init = function(){
   this.sChir = "praticien_id";
   this.pop();
 }
-
-Medecin = {
-  form: null,
-  edit : function() {
-    this.form = getForm("editSejour");
-    var url = new Url("dPpatients", "vw_medecins");
-    url.popup(700, 450, "Medecin");
-  },
-  
-  set: function(id, view) {
-    $('_adresse_par_prat').show().update('Autres : '+view);
-    $V(this.form.adresse_par_prat_id, id);
-    $V(this.form._correspondants_medicaux, '', false);
-  }
-};
 
 {{if $mode_operation}}
 // Declaration d'un objet Sejour
@@ -811,7 +797,7 @@ Main.add( function(){
 
 <tr id="correspondant_medical">
   {{assign var="object" value=$sejour}}
-  {{include file="inc_check_correspondant_medical.tpl"}}
+  {{mb_include template="inc_check_correspondant_medical"}}
 </tr>
 <tr>
   <td></td>
@@ -826,7 +812,7 @@ Main.add( function(){
 <tr>
   <th>{{mb_label object=$sejour field=etablissement_entree_id}}</th>
   <td colspan="3">
-	{{mb_field object=$sejour field=etablissement_entree_id form="editSejour" autocomplete="true,1,50,true,true"}}
+	  {{mb_field object=$sejour field=etablissement_entree_id form="editSejour" autocomplete="true,1,50,true,true"}}
 	</td>
 </tr>
 {{/if}}

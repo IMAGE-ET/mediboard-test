@@ -56,7 +56,7 @@ loadDocuments = function(sejour_id) {
 </script>
 
 <ul id="tab-sejour" class="control_tabs">
-  {{if $conf.ssr.recusation.use_recuse}}
+  {{if !$conf.ssr.recusation.sejour_readonly}}
   <li>
     <a href="#hebergement">
       Hebergement
