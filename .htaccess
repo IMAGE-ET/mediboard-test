@@ -41,6 +41,11 @@ Options -Indexes
   deny from all
 </FilesMatch>
 
+<FilesMatch "pid\.(\d+)$">
+  order allow,deny
+  deny from all
+</FilesMatch>
+
 <IfModule mod_alias.c>
   RedirectMatch 403 (classes|includes|legacy|locales|modules|shell)/.*\.(php|tpl|sh|ttf)$
 </IfModule>

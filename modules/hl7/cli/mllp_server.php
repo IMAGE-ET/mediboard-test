@@ -8,6 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+// For sig_handler
+declare(ticks = 1);
+
 require dirname(__FILE__)."/mllp_utils.php";
 
 // Ignores user logout
@@ -30,7 +33,7 @@ function on_shutdown() {
   }
   else {
     outln("Server stopped normally");
-    unlink($pid_file);
+    @unlink($pid_file); // the file might have been already removed :(
   }
 }
 
@@ -38,6 +41,21 @@ function quit($new_exit_status){
   global $exit_status;
   $exit_status = $new_exit_status;
   exit($exit_status);
+}
+
+if (function_exists("pcntl_signal")) {
+  // SIG number manager
+  function sig_handler($signo) {
+    switch ($signo) {
+      case SIGTERM:
+      case SIGINT:
+        quit(0);
+        break;
+    }
+  }
+  
+  pcntl_signal(SIGTERM, "sig_handler");
+  pcntl_signal(SIGINT , "sig_handler"); // Sent when hitting ctrl+c in the cli
 }
 
 // ---- Read arguments
@@ -90,14 +108,13 @@ try {
   $handler->run();
   
   outln("MLLP Socket handler stopped");
-  
   quit(0);
 }
 catch(Exception $e) {
   $message = $e->getMessage();
   
   if ($message == "Address already in use") {
-    echo "$message\n";
+    outln($message);
     quit(0);
   }
   

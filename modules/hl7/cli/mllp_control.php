@@ -16,15 +16,19 @@ $argc = $_SERVER["argc"];
 
 if (count($argv) < 2) {
   echo <<<EOT
-Usage: {$argv[0]} <command> [<port>]
-  <port>    The port of the MLLP server to control
+Usage: {$argv[0]} <command> [<port>] [<host> = localhost]
   <command> The command to issue on the MLLP server
+  <port>    The port of the MLLP server to control
+  <host>    The host of the MLLP server to control (default localhost)
 
 EOT;
   exit(0);
 }
 
-@list($self, $command, $port) = $argv;
+@list($self, $command, $port, $host) = $argv;
+if (!$host) {
+  $host = "localhost";
+}
 // ---- End read arguments
 
 $test_message = <<<EOT
@@ -46,10 +50,10 @@ OBX|8|TS|30953-4^Adverse event onset date and time^LN||200102180900|
 OBX|9|FT|30954-2^Relevant diagnostic tests/lab data^LN||Electrolytes, CBC, Blood culture|
 EOT;
 
-function send($port, $message) {
+function send($host, $port, $message) {
   try {
     $client = new SocketClient();
-    $client->connect("localhost", $port);
+    $client->connect($host, $port);
     echo $client->sendandrecive($message);
   }
   catch(Exception $e) {
@@ -101,7 +105,7 @@ function get_ps_status(){
 $msg_ok    = "OK    ";
 $msg_error = "ERROR ";
 
-if (PHP_OS != "WINNT") {
+if (PHP_OS == "Linux") {
   $msg_ok    = "\033[1;32m$msg_ok\033[0m";
   $msg_error = "\033[1;31m$msg_error\033[0m";
 }
@@ -109,23 +113,37 @@ if (PHP_OS != "WINNT") {
 switch($command) {
   case "stop":
   //case "restart": 
-    send($port, "__".strtoupper($command)."__\n");
+    if (!$port) {
+      echo "No port specified\n";
+      exit(0);
+    }
+    send($host, $port, "__".strtoupper($command)."__\n");
     break;
     
   case "test":
-    send($port, "\x0B$test_message\x1C\x0D");
+    if (!$port) {
+      echo "No port specified\n";
+      exit(0);
+    }
+    send($host, $port, "\x0B$test_message\x1C\x0D");
     break;
     
   case "list":
+    if (!in_array($host, array("localhost", "127.0.0.1", "::1"))) {
+      outln("Specified host is not local, localhost will be used instead");
+    }
+    
     $processes = get_ps_status();
     
     echo "--------------------------------------\n";
     echo "   PID |  PORT | STATUS | PS NAME     \n";
     echo "--------------------------------------\n";
+    
     foreach($processes as $_pid => $_status) {
       $_ok = isset($_status["ps_name"]) && stripos($_status["ps_name"], "php") !== false;
+      $_msg = ($_ok ? $msg_ok : $msg_error);
       
-      printf(" %5.d | %5.d | %s | %s \n", $_pid, $_status["port"], $_ok ? $msg_ok : $msg_error, $_ok ? $_status["ps_name"] : "");
+      printf(" %5.d | %5.d | %s | %s \n", $_pid, $_status["port"], $_msg, @$_status["ps_name"]);
     }
     
     break;
