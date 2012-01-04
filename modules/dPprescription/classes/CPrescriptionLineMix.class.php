@@ -625,7 +625,7 @@ class CPrescriptionLineMix extends CMbObject {
     $where["dateTime"] = " LIKE '$date%'";
     $planifs = $planif->loadList($where, "dateTime ASC");
     
-    if($manual_planif){
+    if($manual_planif && $this->_continuite != "discontinue"){
       foreach($planifs as $_planif_id => $_planif){
         $planification = new CAdministration();
         $where = array();
