@@ -140,6 +140,15 @@
       <br />
       <strong class="compact">({{$_prescription_line_mix->_avancement}}/{{$_prescription_line_mix->_duree_avancement}})</strong>
     {{/if}}
+		
+		<div class="compact">
+			{{if $_prescription_line_mix->jour_decalage && $_prescription_line_mix->jour_decalage != "N"}}  
+	      à partir de
+	      {{$_prescription_line_mix->jour_decalage}} 
+	      {{if $_prescription_line_mix->decalage_line >= 0}}+{{/if}}
+	      {{mb_value object=$_prescription_line_mix field=decalage_line}} {{if $_prescription_line_mix->unite_decalage == "heure"}}H{{else}}J{{/if}}
+	    {{/if}} 
+		</div>
   </td>
   <td style="width: 10%;" class="text">
     {{if $_prescription_line_mix->duree}}
@@ -152,6 +161,15 @@
      (Fin{{if $_prescription_line_mix->_fin_relative > 0}} - {{$_prescription_line_mix->_fin_relative}} j){{else $_prescription_line_mix->_fin_relative === 0}}){{/if}}
      </strong>
     {{/if}}
+		
+		<div class="compact">
+			{{if $_prescription_line_mix->jour_decalage_fin}}
+      jusqu'à  
+      {{$_prescription_line_mix->jour_decalage_fin}} 
+      {{if $_prescription_line_mix->decalage_line_fin >= 0}}+{{/if}}
+      {{mb_value object=$_prescription_line_mix field=decalage_line_fin}} {{if $_prescription_line_mix->unite_decalage_fin == "heure"}}H{{else}}J{{/if}}
+    {{/if}} 
+		</div>
   </td>  
   {{else}}
   <td style="width: 20%" class="text">

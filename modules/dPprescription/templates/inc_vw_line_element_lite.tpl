@@ -110,6 +110,23 @@
         <br />
         <strong class="compact">({{$line->_avancement}}/{{$line->_duree_avancement}})</strong>
       {{/if}}
+			
+			<div class="compact">
+				{{if $line->jour_decalage && $line->unite_decalage && $line->jour_decalage != "N"}} 
+		      {{if $line->duree > 1 || $line->jour_decalage_fin}} à partir de {{else}} à {{/if}} 
+					<span style="letter-spacing:-1px">
+					{{if $prescription->object_class == "CSejour"}}{{$line->jour_decalage}}{{else}}J{{/if}}
+		      {{if ($line->unite_decalage == "jour" && $line->decalage_line != 0) || ($line->unite_decalage == "heure")}}
+		      {{if $line->decalage_line >= 0}}+{{/if}} {{mb_value object=$line field=decalage_line}}
+		      {{if $prescription->object_class == "CSejour"}}
+            {{if $line->unite_decalage == "heure"}}H{{else}}J{{/if}}
+		      {{else}}
+		        J
+		      {{/if}} 
+		      {{/if}}
+					</span>
+		     {{/if}}
+			</div>
 		</td>
 	  <td style="width:10%;">
 	    <!-- Duree de la ligne -->
@@ -130,6 +147,18 @@
 	     (Fin{{if $line->_fin_relative > 0}} - {{$line->_fin_relative}} j){{else $line->_fin_relative === 0}}){{/if}}
 	     </strong>
 	    {{/if}}
+			
+	    <div class="compact">
+       {{if $line->jour_decalage_fin && $line->unite_decalage_fin && $line->jour_decalage_fin != "N"}}
+         jusqu'à {{$line->jour_decalage_fin}}
+         <span style="letter-spacing:-1px">
+         {{if ($line->unite_decalage_fin == "jour" && $line->decalage_line_fin != 0) || ($line->unite_decalage_fin == "heure")}}
+           {{if $line->decalage_line_fin >= 0}}+{{/if}} {{mb_value object=$line field=decalage_line_fin increment=1 }}
+           {{if $line->unite_decalage_fin == "heure"}}H{{else}}J{{/if}}
+         {{/if}}
+         </span>
+       {{/if}}
+      </div>
 	  </td>
   {{else}}
 	  <td style="width: 20%" class="text">
