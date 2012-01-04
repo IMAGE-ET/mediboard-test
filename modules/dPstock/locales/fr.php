@@ -992,6 +992,7 @@ $locales['config-dPstock-host_group_id'] = 'Etablissement hôte des stocks';
 $locales['config-dPstock-host_group_id-desc'] = 'Etablissement hôte des stocks';
 $locales['mod-dPstock-tab-configure'] = 'Configuration';
 $locales['mod-dPstock-tab-httpreq_edit_order_item_unit_price'] = 'Mise à jour du prix unitaire';
+$locales['mod-dPstock-tab-httpreq_vw_orders_filter'] = 'Impression de commandes';
 $locales['mod-dPstock-tab-print_endowment'] = 'Impression des dotations';
 $locales['mod-dPstock-tab-print_reception'] = 'Bon de réception';
 $locales['mod-dPstock-tab-print_reception_barcodes'] = 'Codes barre de réception';

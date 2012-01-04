@@ -250,6 +250,17 @@ changePage.{{$type}} = function(page) {
 {{elseif $type=="received"}}
 
 <div style="text-align: right;">
+  <script>
+    printFilter = function(){
+      var invoiced = $("received-invoiced").checked;
+      var url = new Url("dPstock", "httpreq_vw_orders_filter");
+      url.addParam("invoiced", invoiced ? 1 : 0);
+      url.requestModal(300, 200);
+    }
+  </script>
+  <button class="print" onclick="printFilter()">
+    {{tr}}Print{{/tr}}
+  </button>
   <label>
     <input type="checkbox" {{if $invoiced}} checked="checked" {{/if}} id="received-invoiced"
            onclick="resetPages(getForm('orders-list-filter')); refreshListOrders('received', getForm('orders-list-filter'), this.checked)" /> Afficher les facturées
