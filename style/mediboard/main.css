@@ -464,7 +464,8 @@ table#weeklyPlanning td.hour_start {
 table#weeklyPlanning th.today {
   background-color: #ffd;
 }
-
+/*
+ * 
 #weeklyPlanning .toolbar {
   position: absolute; 
   top: -24px; 
@@ -478,6 +479,28 @@ table#weeklyPlanning th.today {
 #weeklyPlanning td:hover .toolbar {
   display: block;
 }
+ */
+
+#planningWeek .event:hover{
+  overflow:visible;
+  min-height:35px;
+}
+
+#planningWeek .toolbar {
+  position: absolute; 
+  top: -23px;
+  right: 0; 
+  height:20px;
+  background: #ddd;
+  display: none;
+  border: 1px solid #AAA;
+  border-radius: 3px;
+}
+
+#planningWeek div:hover .toolbar {
+  display: block;
+}
+
 .planning {
   visibility: hidden;
 }

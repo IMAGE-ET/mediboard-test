@@ -13,6 +13,12 @@ class CPlanningEvent  {
   var $internal_id = null;
   
   var $title  = null;
+  
+  var $type   = null;
+  var $plage  = array();
+  var $menu   = false;
+  var $elements_menu =  array();
+  
   var $start  = null;
   var $end    = null;
   var $length = null;

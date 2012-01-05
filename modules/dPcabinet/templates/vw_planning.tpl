@@ -4,12 +4,12 @@
 function showConsultations(oTd, plageconsult_id){
   oTd = $(oTd);
   
-  var selectedTd = oTd.up("table").down("td.selectedPlage");
-  if (selectedTd) {
-    selectedTd.removeClassName("selectedPlage");
-  }
+  elements=oTd.up("table").select('div.event-container');;
+  elements.each(function(e) {
+      e.down("div").style.border="1px solid #999";
+  });
   
-  oTd.up("td").addClassName("selectedPlage");
+  oTd.up("div").up("div").style.border="2px solid #444";
   
   var url = new Url("dPcabinet", "inc_consultation_plage");
   url.addParam("plageconsult_id", plageconsult_id);
@@ -67,15 +67,13 @@ function printPlage(plage_id) {
   }
 
 Main.add(function () {
+  var planning = window["planning-{{$planning->guid}}"];
   Calendar.regField(getForm("changeDate").debut, null, {noView: true});
 });
 </script>
 
-<style type="text/css">
-  
-</style>
-
 {{mb_script module=dPcabinet script=plage_consultation}}
+{{mb_script module=ssr script=planning}}
 <table class="main">
   <tr>
     <th style="width: 60%;">
@@ -138,81 +136,8 @@ Main.add(function () {
   </tr>
   <tr>
     <td>
-      
-      <table id="weeklyPlanning">
-        <tr>
-          <!-- Affichage du nom des jours -->
-          <th></th>
-          {{foreach from=$listDays key=curr_day item=plagesPerDay}}
-          <th style="width: {{math equation="100/x" x=$listDays|@count}}%" {{if $smarty.now|date_format:"%A %d" == $curr_day|date_format:"%A %d"}}class="today"{{/if}} scope="col">{{$curr_day|date_format:"%A %d"}}</th>
-          {{/foreach}}
-        </tr>       
-        <!-- foreach sur les heures -->
-        {{assign var=hours_start value=$conf.dPcabinet.CPlageconsult.hours_start}}
-        {{assign var=hours_stop value=$conf.dPcabinet.CPlageconsult.hours_stop}}
-        {{foreach from=$listHours item=curr_hour}}
-        <tr>
-          <th rowspan="{{$nb_intervals_hour}}" scope="row">{{$curr_hour}}h</th>
-          <!-- foreach sur les minutes -->
-          {{foreach from=$listMins item=curr_mins key=keyMins}}
-            {{if $keyMins}}
-              </tr><tr>
-            {{/if}}
+      {{mb_include module=ssr template=inc_vw_week}}
 
-            {{foreach from=$listDays item=curr_day}}
-              {{assign var="keyAff" value="$curr_day $curr_hour:$curr_mins:00"}}
-              {{assign var="affichage" value=$affichages.$keyAff}}
-             
-              {{if $affichage === "empty"}}
-                <td class="empty {{if $curr_mins == '00'}}hour_start{{/if}} 
-                {{if $curr_hour < $hours_start || $curr_hour > $hours_stop}}opacity-30{{/if}}"></td>
-              {{elseif $affichage == "hours"}}
-                <td class="empty hour_start" rowspan="{{$nb_intervals_hour}}"></td>
-              {{elseif $affichage === "full"}}
-              
-              {{else}}
-                {{assign var="_listPlages" value=$listPlages.$curr_day}}
-                {{assign var=plage value=$_listPlages.$affichage}}
-              
-                <td class="{{if $plageconsult_id == $plage->plageconsult_id}}selectedPlage{{else}}nonEmpty{{/if}} {{if $curr_mins == '00'}}hour_start{{/if}}" rowspan="{{$plage->_nb_intervals}}">
-                  <div style="position: relative;">
-                    <div class="toolbar">
-                      <a class="button list notext" onclick="showConsultations(this,'{{$plage->plageconsult_id}}');" href="#" title="Voir le contenu de la plage"></a>
-                      <a class="button edit notext" href="#" onclick="PlageConsultation.edit('{{$plage->plageconsult_id}}');" title="Modifier cette plage"></a>
-                      <a class="button clock notext" href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plage->plageconsult_id}}"  title="Planifier une consultation dans cette plage"></a>
-                    </div>
-  
-                    <a href="#" onclick="showConsultations(this,'{{$plage->plageconsult_id}}');" title="Voir le contenu de la plage" >
-                      {{if $plage->libelle}}{{$plage->libelle}}<br />{{/if}}
-                      {{$plage->debut|date_format:$conf.time}} - {{$plage->fin|date_format:$conf.time}}
-                    </a>
-                    {{assign var="pct" value=$plage->_fill_rate}}
-                    {{if $pct gt 100}}
-                      {{assign var="pct" value=100}}
-                    {{/if}}
-                    {{if $pct lt 50}}{{assign var="backgroundClass" value="empty"}}
-                    {{elseif $pct lt 90}}{{assign var="backgroundClass" value="normal"}}
-                    {{elseif $pct lt 100}}{{assign var="backgroundClass" value="booked"}}
-                    {{else}}{{assign var="backgroundClass" value="full"}}
-                    {{/if}} 
-                    <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plage->plageconsult_id}}" title="Planifier une consultation dans cette plage"> 
-                      <div class="progressBar">
-                        <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
-                        <div class="text">
-                          {{if $plage->locked}}
-                          <img style="float: right; height: 12px;" src="style/mediboard/images/buttons/lock.png" />
-                          {{/if}}
-                          {{$plage->_affected}} {{if $plage->_nb_patients != $plage->_affected}}({{$plage->_nb_patients}}){{/if}} / {{$plage->_total|string_format:"%.0f"}}
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                </td>
-              {{/if}}
-            {{/foreach}}
-          {{/foreach}}  
-        {{/foreach}}
-      </table>
       <div class="small-info">
         <strong>L'affichage du semainier a évolué</strong>.
         <div>Désormais, vous pouvez utiliser les boutons qui apparaissent au survol de la plage de consultation pour :</div>

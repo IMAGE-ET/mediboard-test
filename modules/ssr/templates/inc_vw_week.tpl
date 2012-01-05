@@ -26,9 +26,9 @@ Main.add(function() {
   planning.container.show();
   planning.setPlanningHeight(planning.container.up().getHeight());
   planning.setLoadData({{$planning->load_data|@json}}, {{$planning->maximum_load}});
-  
+    
+
   planning.scroll();
-  
 	window["planning-{{$planning->guid}}"] = planning;
 });
 
@@ -78,7 +78,7 @@ Main.add(function() {
   </table>
   
   <div style="overflow-y: scroll; overflow-x: hidden; {{if $planning->height}}height: {{$planning->height}}px;{{/if}}" class="week-container">
-    <table class="tbl hours" style="table-layout: fixed; overflow: hidden;">
+    <table class="tbl hours" style="table-layout: fixed; overflow: hidden;" id="planningWeek">
       <colgroup>
         <col style="width: 3.0em;" />
         <col span="{{$nb_days}}" />
@@ -131,10 +131,17 @@ Main.add(function() {
                           {{assign var=resizable value=resizable}}
                         {{/if}}
 
-                        <div id="{{$_event->internal_id}}" 
+                        <div id="{{$_event->internal_id}}"
       											 class="event {{$draggable}} {{$resizable}} {{if $disabled}}disabled{{/if}} {{$_event->css_class}} {{$_event->guid}}" 
-      											 style="background-color: {{$_event->color}}; {{if !$_event->important}}opacity: 0.6{{/if}}">
-      										
+      											 style="background-color: {{$_event->color}}; {{if !$_event->important}}opacity: 0.6;{{/if}} {{if $_event->type}}{{if $plageconsult_id && $plageconsult_id == $_event->plage.id}}border: 2px solid #444;{{else}}border:1px solid #999;{{/if}}text-align:center;{{/if}}">
+      										{{if $_event->menu}}
+                            <div class="{{$_event->elements_menu.class}}">
+                              {{assign var="elements" value=$_event->elements_menu.elements}}
+                              {{foreach from=$elements item=element}}
+                                <a class="{{$element.class}}" onclick="{{$element.onclick}}" href="{{$element.href}}" title="{{$element.title}}"></a>
+                              {{/foreach}}
+                            </div>
+                          {{/if}}
                           {{if $app->user_prefs.ssr_planning_dragndrop && $_event->draggable || $app->user_prefs.ssr_planning_resize && $_event->resizable}}
                             <div class="time-preview" style="display: none;"></div>
                           {{/if}}
@@ -149,7 +156,33 @@ Main.add(function() {
                           {{/if}}
       										
                           <div class="body">
-                            {{$_event->title|smarty:nodefaults|nl2br}}
+                            {{if $_event->type == "consultation" || $_event->type == "tableau_bord"}}
+                              {{assign var="plage" value=$_event->plage}}
+                              {{assign var="elements" value=$_event->elements_menu.elements}}
+                              {{foreach from=$elements key=num item=_plage}}
+                                {{if $num!=1}}
+                                  <a onclick="{{$_plage.onclick}}" href="{{$_plage.href}}" title="{{$_plage.title}}" >
+                                    {{if $num==2}}
+                                      <div class="progressBar">
+                                        <div class="bar normal" style="width: {{$plage.pct}}%;"></div>
+                                        <div class="text">
+                                         {{if $plage.locked}}
+                                          <img style="float: right; height: 12px;" src="style/mediboard/images/buttons/lock.png" />
+                                          {{/if}}
+                                          {{$plage._affected}} {{if $plage._nb_patients != $plage._affected}}({{$plage._nb_patients}}){{/if}} / {{$plage._total|string_format:"%.0f"}}
+                                        </div>
+                                      </div>
+                                    {{elseif $num==0}}
+                                      {{$_event->title|smarty:nodefaults|nl2br}}<br/>
+                                      {{$_event->start|date_format:$conf.time}} - {{$_event->end|date_format:$conf.time}}
+                                    {{/if}}
+                                  </a>
+                                {{/if}}
+                              {{/foreach}}
+                              
+                            {{else}}
+                              {{$_event->title|smarty:nodefaults|nl2br}}
+                            {{/if}}
                           </div>
                           
                           {{if $app->user_prefs.ssr_planning_resize && $_event->resizable}}

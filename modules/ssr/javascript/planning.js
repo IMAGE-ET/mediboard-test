@@ -159,8 +159,10 @@ WeekPlanning = Class.create({
 
   },
   scroll: function(scroll_top) {
-    var top = this.container.down(".hour-"+this.hour_min).offsetTop;
-    this.container.down('.week-container').scrollTop = (scroll_top !== null && !Object.isUndefined(scroll_top) ? scroll_top : top);
+	if(this.container.down(".hour-"+this.hour_min)){
+		var top = this.container.down(".hour-"+this.hour_min).offsetTop;
+	    this.container.down('.week-container').scrollTop = (scroll_top !== null && !Object.isUndefined(scroll_top) ? scroll_top : top);
+    }
   },
   setPlanningHeight: function(height) {
     var top = this.container.down("table").getHeight();

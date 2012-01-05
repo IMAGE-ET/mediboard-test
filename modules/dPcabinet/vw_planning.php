@@ -9,9 +9,6 @@
 
 CCanDo::checkRead();
 
-$_firstconsult_time  = null;
-$_lastconsult_time   = null;
-
 // L'utilisateur est-il praticien ?
 $chir = null;
 $mediuser = CMediusers::get();
@@ -62,11 +59,8 @@ $plageSel->loadRefsBack();
 
 if ($plageSel->_affected) {
   $firstconsult = reset($plageSel->_ref_consultations);
-  $_firstconsult_time = substr($firstconsult->heure, 0, 5);
   $lastconsult = end($plageSel->_ref_consultations);
-  $_lastconsult_time  = substr($lastconsult->heure, 0, 5);
 }
-
 // Détails sur les consultation affichées
 foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
   // Cache les payées
@@ -79,12 +73,11 @@ foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
     unset($plageSel->_ref_consultations[$keyConsult]);
     continue;
   }
-	$consultation->loadRefSejour(1);
+  $consultation->loadRefSejour(1);
   $consultation->loadRefPatient(1);
   $consultation->loadRefCategorie(1);
   $consultation->countDocItems();    
 }
-
 if ($plageSel->chir_id != $chirSel) {
   $plageconsult_id = null;
   $plageSel = new CPlageconsult();
@@ -101,11 +94,9 @@ if(CAppUI::pref("pratOnlyForConsult", 1)) {
 }
 
 $listDays = array();
-$listDaysSelect = array();
 for($i = 0; $i < 7; $i++) {
   $dateArr = mbDate("+$i day", $debut);
-  $listDays[$dateArr] = $dateArr;
-  $listDaysSelect[$dateArr] = $dateArr;    
+  $listDays[$dateArr] = $dateArr;   
 }
 
 // Liste des consultations a avancer si desistement
@@ -182,97 +173,95 @@ foreach($listDays as $keyDate=>$valDate){
   foreach($listPlages[$keyDate] as $plage){
     $plage->_nb_intervals = mbTimeCountIntervals($plage->debut, $plage->fin, "00:".CPlageconsult::$minutes_interval.":00");
     $j = 0;
-    for($time = $plage->debut; $time <= $plage->fin; $time = mbTime("+".CPlageconsult::$minutes_interval." minutes", $time) ){
-      // Si la plage se finit à 23h59, alors on sort losque tous les créneaux sont passés.
-      // time vaut alors 00:00:00, mais de la journée suivante.
-      if ($j == $plage->_nb_intervals) {
-        break;
-      }
-      $affichages["$keyDate $time"] = "full";
-      $j++;
-    } 
     $affichages["$keyDate $plage->debut"] = $plage->_id;
   }
 }
 
-// Recherche d'heure completement vides
-foreach($listDays as $keyDate=>$valDate){
-  foreach(CPlageconsult::$hours as $keyHours=>$valHours){
-    $heure_vide = 1;
-    foreach(CPlageconsult::$minutes as $kayMins=>$valMins){
-      // Vérification données
-      if(!is_string($affichages["$keyDate $valHours:$valMins:00"]) || (is_string($affichages["$keyDate $valHours:$valMins:00"]) && $affichages["$keyDate $valHours:$valMins:00"]!= "empty")){
-        $heure_vide = 0;
-      }
-    }
-    if($heure_vide==1){
-      $first = "hours";
-      foreach(CPlageconsult::$minutes as $kayMins=>$valMins){
-        // Mémorisation heure vide
-        $affichages["$keyDate $valHours:$valMins:00"] = $first;
-        $first = "full";
-      }
-    }
-  }
-}
-
-// Extension du semainier s'il y a des plages qui dépassent des bornes
-// de configuration hours_start et hours_stop
 $hours = CPlageconsult::$hours;
 
-$min_hour = sprintf("%01d", mbTransformTime($min, null, "%H"));
-$max_hour = sprintf("%01d", mbTransformTime($max, null, "%H"));
+//Planning au format  CPlanningWeek
+$debut = CValue::getOrSession("debut", $today);
+$debut = mbDate("-1 week", $debut);
+$debut = mbDate("next monday", $debut);
 
-if (!isset($hours[$min_hour])) {
-  for($i = $min_hour; $i < CPlageconsult::$hours_start; $i++) {
-    $hours[$i] = sprintf("%02d", $i);
+//Instanciation du planning
+$planning = new CPlanningWeek($debut, $debut, $fin, count($listDays), true, null, null, true);
+if($mediusers->load($chirSel)){
+  $planning->title = $mediusers->load($chirSel)->_view;
+}
+else{$planning->title = "";}
+$planning->guid = $mediuser->_guid;
+$planning->hour_min = "8";
+$planning->hour_max = "20";
+$planning->pauses = array("07", "12", "19");
+$planning->hours = $hours;
+
+$tab1 = array("class" => "button list notext", "href" => "#", "title" => "Voir le contenu de la plage" );
+$tab2 = array("class" => "button edit notext", "href" => "#", "title" => "Modifier cette plage" );
+$tab3 = array("class" => "button clock notext", "onclick" => "", "title" => "Planifier une consultation dans cette plage" );
+
+//Ajout de tous les évènements
+foreach($hours as $curr_hour){
+  foreach(CPlageconsult::$minutes as $keyMins => $curr_mins){
+    foreach($listDays as $curr_day){
+    	$keyAff = "$curr_day $curr_hour:$curr_mins:00";
+    	$affichage = $affichages["$keyAff"];
+	    	$_listPlages = $listPlages["$curr_day"];
+	    	if($_listPlages!=null && $affichage!="empty"){
+	    	$plage = $_listPlages["$affichage"];
+	    	$titre="";
+	    	if($plage->libelle){
+	        $titre = $plage->libelle;
+	    	}
+	    	$debute = $curr_day[8].$curr_day[9]."-".$curr_day[5].$curr_day[6]."-".$curr_day[0].$curr_day[1].$curr_day[2].$curr_day[3]." ".$plage->debut;
+        //Création de l'évènement
+	    	$event = new CPlanningEvent($titre, $debute, 15*$plage->_nb_intervals, $titre, "#CCC", true, null, null);
+	    	//Menu des évènements
+	    	$event->menu = true;
+	    	$event->elements_menu["class"] = "toolbar";
+	    	$event->elements_menu["elements"][0] = $tab1; 
+	    	$event->elements_menu["elements"][0]["onclick"] = "showConsultations(this,'$plage->_id');"; 
+	    	$event->elements_menu["elements"][1] = $tab2; 
+	    	$event->elements_menu["elements"][1]["onclick"] = "PlageConsultation.edit('$plage->_id');"; 
+	    	$event->elements_menu["elements"][2] = $tab3; 
+	    	$event->elements_menu["elements"][2]["href"] = "?m=dPcabinet&tab=edit_planning&consultation_id=0&plageconsult_id=$plage->_id"; 
+	    	//Paramètres de la plage de consultation
+	    	$event->type = "consultation";
+	    	$event->plage["id"] = $plage->plageconsult_id; 
+	    	$pct = $plage->_fill_rate;
+	    	if($pct>"100"){$pct="100";}
+	    	$event->plage["pct"] = $pct;
+	    	$event->plage["locked"] = $plage->locked;
+	    	$event->plage["_affected"] = $plage->_affected;
+	    	$event->plage["_nb_patients"] = $plage->_nb_patients;
+	    	$event->plage["_total"] = $plage->_total;
+	    	//Ajout de l'évènement au planning 
+			  $planning->addEvent($event);
+	    }
+    }  	
   }
 }
-
-if (!isset($hours[$max_hour])) {
-  for($i = CPlageconsult::$hours_stop + 1; $i < $max_hour + 1; $i++) {
-    $hours[$i] = sprintf("%02d", $i);
-  }
-}
-
-ksort($hours);
-
-foreach ($listDays as $keyDate=>$valDate){
-  foreach ($hours as $keyHours=>$valHours){
-    foreach (CPlageconsult::$minutes as $keyMins=>$valMins){
-      if (!isset($affichages["$keyDate $valHours:$valMins:00"])) {
-        $affichages["$keyDate $valHours:$valMins:00"] = "empty";
-      }
-    }
-  }
+foreach($planning->events as $_event){
+	$_event->width = 0.98;
+	$_event->offset = 0;
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("affichages"        , $affichages);  
-$smarty->assign("listPlages"        , $listPlages);
-$smarty->assign("_firstconsult_time", $_firstconsult_time);
-$smarty->assign("_lastconsult_time" , $_lastconsult_time);
+$smarty->assign("planning"          , $planning);  
 $smarty->assign("plageconsult_id"   , $plageconsult_id);
 $smarty->assign("hide_payees"       , $hide_payees);
 $smarty->assign("hide_annulees"     , $hide_annulees);
 $smarty->assign("chirSel"           , $chirSel);
 $smarty->assign("plageSel"          , $plageSel);
 $smarty->assign("listChirs"         , $listChirs);
-$smarty->assign("listDays"          , $listDays);
-$smarty->assign("listDaysSelect"    , $listDaysSelect);
 $smarty->assign("today"             , $today);
 $smarty->assign("debut"             , $debut);
 $smarty->assign("fin"               , $fin);
 $smarty->assign("prec"              , $prec);
 $smarty->assign("suiv"              , $suiv);
-$smarty->assign("listHours"         , $hours);
-$smarty->assign("listMins"          , CPlageconsult::$minutes);
-$smarty->assign("nb_intervals_hour" , intval(60/CPlageconsult::$minutes_interval));
 $smarty->assign("count_si_desistement", $count_si_desistement);
 
 $smarty->display("vw_planning.tpl");
-
-	
 ?>
