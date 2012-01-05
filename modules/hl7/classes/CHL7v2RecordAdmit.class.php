@@ -430,7 +430,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Demande de chambre particulière
     $this->getCourtesyCode($node, $newVenue);
     
-    mbLog($newVenue);
+    // Etablissement de destination
+    $this->getDischargedToLocation($node, $newVenue);
+    
+    // Entrée / Sortie réelle du séjour
+    $this->getAdmitDischarge($node, $newVenue);
   }
   
   function getPatientClass(DOMNode $node, CSejour $newVenue) {
@@ -496,7 +500,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Cas où l'on a aucune information sur le médecin
     if (!$object->rpps &&
         !$object->adeli &&
-        !$object->id && 
+        !$object->_id && 
         ($object instanceof CMediusers && (!$object->_user_first_name || $object->_user_last_name)) &&
         ($object instanceof CMedecin && (!$object->prenom || $object->nom))) {
       return null;      
@@ -587,6 +591,29 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function getCourtesyCode(DOMNode $node, CSejour $newVenue) {
     $newVenue->chambre_seule = $this->getBoolean($this->queryTextNode("PV1.22", $node));
+  }
+  
+  function getDischargeDisposition(DOMNode $node, CSejour $newVenue) {
+    /* @todo Festion des circonstances de sortie ? */
+  }
+  
+  function getDischargedToLocation(DOMNode $node, CSejour $newVenue) {
+    if (!$finess = $this->queryTextNode("PV1.37/DLD.1", $node)) {
+      return;
+    }
+    
+    $etab_ext = new CEtabExterne();
+    $etab_ext->finess = $finess;
+    if (!$etab_ext->loadMatchingObject()) {
+      return;
+    }
+    
+    $newVenue->etablissement_sortie_id = $etab_ext->_id;
+  }
+  
+  function getAdmitDischarge(DOMNode $node, CSejour $newVenue) {
+    $newVenue->entree_reelle = $this->queryTextNode("PV1.44", $node);
+    $newVenue->sortie_reelle = $this->queryTextNode("PV1.45", $node);
   }
   
   function getPV2(DOMNode $node, CSejour $newVenue) {    
