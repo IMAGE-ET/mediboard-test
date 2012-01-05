@@ -112,7 +112,7 @@ if (PHP_OS == "Linux") {
 
 switch($command) {
   case "stop":
-  //case "restart": 
+  case "restart": 
     if (!$port) {
       echo "No port specified\n";
       exit(0);

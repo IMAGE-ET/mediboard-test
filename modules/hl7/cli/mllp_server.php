@@ -18,29 +18,46 @@ ignore_user_abort(true);
 set_time_limit(0);
 
 global $exit_status, $pid_file, $handler;
-$exit_status = 1;
+$exit_status = "error";
+
+// restart the server
+function restart(){
+  if (!function_exists("pcntl_exec")) return;
+  
+  global $handler;
+
+  socket_close($handler->server->__socket);
+  
+  pcntl_exec($_SERVER["_"], $_SERVER["argv"]);
+}
 
 function on_shutdown() {
   global $exit_status, $pid_file, $handler;
   
-  if ($exit_status == 1) { // Error
-    outln("Server stopped unexpectedly");
-    socket_close($handler->server->__socket);
+  switch($exit_status) {
+    case "error":
+      outln("Server stopped unexpectedly, trying to restart.");
+      restart();
+      break;
     
-    // restart the server
-    $cmd = $_SERVER["_"]." ".implode(" ", $_SERVER["argv"]);
-    echo exec($cmd);
-  }
-  else {
-    outln("Server stopped normally");
-    @unlink($pid_file); // the file might have been already removed :(
+    case "restart":
+      outln("Restarting ...");
+      @unlink($pid_file); 
+      outln("Server stopped.");
+      restart();
+      break;
+    
+    default:
+      outln("Server stopped.");
+      @unlink($pid_file);
+      break;
   }
 }
 
-function quit($new_exit_status){
+function quit($new_exit_status = "ok"){
   global $exit_status;
   $exit_status = $new_exit_status;
-  exit($exit_status);
+  exit ($exit_status == "error" ? 1 : 0);
 }
 
 if (function_exists("pcntl_signal")) {
@@ -49,13 +66,18 @@ if (function_exists("pcntl_signal")) {
     switch ($signo) {
       case SIGTERM:
       case SIGINT:
-        quit(0);
+        quit();
+        break;
+        
+      case SIGHUP:
+        quit("restart");
         break;
     }
   }
   
   pcntl_signal(SIGTERM, "sig_handler");
   pcntl_signal(SIGINT , "sig_handler"); // Sent when hitting ctrl+c in the cli
+  pcntl_signal(SIGHUP , "sig_handler"); // Restart
 }
 
 // ---- Read arguments
@@ -102,24 +124,23 @@ $pid_file = "$tmp_dir/pid.".getmypid();
 file_put_contents($pid_file, $options["port"]);
 
 try {
-  outln("Starting MLLP Socket handler on port ".$options["port"]." with user '".$options["username"]."'");
+  outln("Starting MLLP Server on port ".$options["port"]." with user '".$options["username"]."'");
   
   $handler = new CMLLPSocketHandler($options["url"], $options["username"], $options["password"], $options["port"]);
   $handler->run();
   
-  outln("MLLP Socket handler stopped");
-  quit(0);
+  quit();
 }
 catch(Exception $e) {
   $message = $e->getMessage();
   
   if ($message == "Address already in use") {
     outln($message);
-    quit(0);
+    quit();
   }
   
   $stderr = fopen("php://stderr", "w");
   fwrite($stderr, $message.PHP_EOL);
 }
 
-exit($exit_status);
+quit();

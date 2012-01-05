@@ -573,19 +573,25 @@ class CExClass extends CMbObject {
     }
     
     $ex_class = new self;
-    $ex_class->host_class = $object->_class;
-    $ex_class->event = $event;
-    $ex_class->disabled = 0;
-    //$ex_class->required = 0;
-    $ex_class->conditional = 0;
+    
+    $group_id = CGroups::loadCurrent()->_id;
+    $ds = $ex_class->_spec->ds;
+    
+    $where = array(
+      "host_class"  => $ds->prepare("=%", $object->_class),
+      "event"       => $ds->prepare("=%", $event),
+      "disabled"    => $ds->prepare("=%", 0),
+      "conditional" => $ds->prepare("=%", 0),
+      "group_id"    => $ds->prepare("=% OR group_id IS NULL", $group_id),
+    );
     
     switch($type) {
-      //case "required":    $ex_class->required = 1;    break;
-      case "disabled":    $ex_class->disabled = 1;    break;
-      case "conditional": $ex_class->conditional = 1; break;
+      //case "required":    $where["required"] = 1;    break;
+      case "disabled":    $where["disabled"] = 1;    break;
+      case "conditional": $where["conditional"] = 1; break;
     }
     
-    $ex_classes = $ex_class->loadMatchingList();
+    $ex_classes = $ex_class->loadList($where);
     
     foreach($ex_classes as $_id => $_ex_class) {
       if (isset($exclude_ex_class_ids[$_id]) || !$_ex_class->checkConstraints($object)) {

@@ -65,6 +65,11 @@ class CMLLPSocketHandler {
       case "__STOP__":
         $buffer = "";
         return false;
+        
+      case "__RESTART__":
+        if (function_exists("quit")) {
+          quit("restart");
+        }
     }
     
     // Verification qu'on ne recoit pas un en-tete de message en ayant deja des données en buffer

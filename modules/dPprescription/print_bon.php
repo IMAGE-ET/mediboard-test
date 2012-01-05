@@ -153,10 +153,14 @@ $ex_objects = array();
 
 if ($print) {
   $ex_class = new CExClass;
-  $ex_class->host_class = 'CPrescriptionLineElement';
-  //$ex_class->event      = 'prescription';
+  $group_id = CGroups::loadCurrent()->_id;
+  $ds = $ex_class->_spec->ds;
+  $where = array(
+    "host_class"  => $ds->prepare("=%", 'CPrescriptionLineElement'),
+    "group_id"    => $ds->prepare("=% OR group_id IS NULL", $group_id),
+  );
+  $ex_classes = $ex_class->loadList($where);
   
-  $ex_classes = $ex_class->loadMatchingList();
   CExObject::$_multiple_load = true;
   //CExClassField::$_load_lite = true; // ne charge pas les noms des champs
   
