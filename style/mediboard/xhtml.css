@@ -31,6 +31,15 @@ pre {
   text-align: left;
 }
 
+pre.document {
+  border: none;
+  line-height: normal;
+  padding: 0;
+  margin: 0;
+  max-height: none;
+  white-space: pre-wrap;
+}
+
 table {
   font-family: inherit;
   font-size: 1em;

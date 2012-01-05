@@ -89,12 +89,34 @@ if($objectClass && $objectId && $elementClass && $elementId){
   }
 }
 
+$show_editor = true;
+
 // Gestion des pages pour les Fichiers PDF et fichiers TXT
 if($fileSel && $elementClass == "CFile" && !$acces_denied){
-  
-  if($fileSel->file_type == "text/plain" && file_exists($fileSel->_file_path)){
-    // Fichier texte, on récupére le contenu
-    $includeInfosFile = nl2br(htmlspecialchars(utf8_decode(file_get_contents($fileSel->_file_path))));
+  if (file_exists($fileSel->_file_path)) {
+    $raw_content = file_get_contents($fileSel->_file_path);
+    
+    switch($fileSel->file_type) {
+      case "text/osoft":
+        if (class_exists("COsoftHistorique")) {
+          $osoft_histo = new COsoftHistorique;
+          $includeInfosFile = $osoft_histo->toHTML($raw_content);
+          $show_editor = false;
+          break;
+        }
+        
+      case "application/osoft":
+        if (class_exists("COsoftDossier")) {
+          $osoft_dossier = new COsoftDossier;
+          $includeInfosFile = $osoft_dossier->toHTML($raw_content);
+          $show_editor = false;
+          break;
+        }
+        
+      case "text/plain": 
+        $includeInfosFile = nl2br(htmlspecialchars(utf8_decode($raw_content)));
+        break;
+    }
   }
 
   if ($fileSel->isPDFconvertible()) {
@@ -177,6 +199,7 @@ $smarty->assign("popup"           , $popup);
 $smarty->assign("acces_denied"    , $acces_denied);
 $smarty->assign("file_id"         , $file_id);
 $smarty->assign("isConverted"     , $isConverted);
+$smarty->assign("show_editor"     , $show_editor);
 
 if($popup==1){
   $listCat  = null;
