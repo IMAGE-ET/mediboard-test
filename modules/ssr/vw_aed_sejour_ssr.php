@@ -41,6 +41,7 @@ $bilan = new CBilanSSR;
 $prescription_SSR = new CPrescription();
 $lines = array();
 $medecin_adresse_par = "";
+$correspondantsMedicaux = array();
 
 if ($sejour->_id) {
   $sejour->loadRefPatient();
@@ -59,29 +60,37 @@ if ($sejour->_id) {
   // Fiche autonomie  
   $fiche_autonomie->sejour_id = $sejour->_id;
   $fiche_autonomie->loadMatchingObject();
-	
+  
   // Bilan SSR  
   $bilan->sejour_id = $sejour->_id;
   $bilan->loadMatchingObject();
   
-	// Prescription SSR
+  // Prescription SSR
   $prescription_SSR->object_id = $sejour->_id;
-	$presctiption_SSR->object_class = "CSejour";
-	$prescription_SSR->type = "sejour";
-	$prescription_SSR->loadMatchingObject();
-	
-	// Chargement des lignes de la prescription
-	if ($prescription_SSR->_id){
-		$line = new CPrescriptionLineElement();
-		$line->prescription_id = $prescription_SSR->_id;
-		$_lines = $line->loadMatchingList("debut ASC");
-		foreach($_lines as $_line) {
-			$lines[$_line->_ref_element_prescription->category_prescription_id][$_line->element_prescription_id][] = $_line;
-		}
-	}
+  $presctiption_SSR->object_class = "CSejour";
+  $prescription_SSR->type = "sejour";
+  $prescription_SSR->loadMatchingObject();
+  
+  // Chargement des lignes de la prescription
+  if ($prescription_SSR->_id){
+    $line = new CPrescriptionLineElement();
+    $line->prescription_id = $prescription_SSR->_id;
+    $_lines = $line->loadMatchingList("debut ASC");
+    foreach($_lines as $_line) {
+      $lines[$_line->_ref_element_prescription->category_prescription_id][$_line->element_prescription_id][] = $_line;
+    }
+  }
+  
+  if ($patient->_ref_medecin_traitant->_id) {
+    $correspondantsMedicaux["traitant"] = $patient->_ref_medecin_traitant;
+  }
+  
+  foreach($patient->_ref_medecins_correspondants as $correspondant) {
+    $correspondantsMedicaux["correspondants"][] = $correspondant->_ref_medecin;
+  }
 } 
 else {
-	$sejour->group_id = $group_id;
+  $sejour->group_id = $group_id;
   $sejour->praticien_id = $user->_id;
   $sejour->entree_prevue = mbDate()." 08:00:00";
   $sejour->sortie_prevue = mbDate()." 18:00:00";
@@ -103,15 +112,15 @@ $can_view_dossier_medical =
 
 $can_edit_prescription = 
   $user->isPraticien() || 
-	$user->isAdmin();
+  $user->isAdmin();
 
 // Suppression des categories vides
-if(!$can_edit_prescription){
-	foreach($categories as $_cat_id => $_category){
-		if(!array_key_exists($_cat_id, $lines)){
-		  unset($categories[$_cat_id]);
-		}
-	}
+if (!$can_edit_prescription) {
+  foreach($categories as $_cat_id => $_category){
+    if(!array_key_exists($_cat_id, $lines)){
+      unset($categories[$_cat_id]);
+    }
+  }
 }
 
 // Création du template
@@ -130,6 +139,7 @@ $smarty->assign("prescription_SSR"        , $prescription_SSR);
 $smarty->assign("lines"                   , $lines);
 $smarty->assign("medecin_adresse_par"     , $medecin_adresse_par);
 $smarty->assign("can_edit_prescription"   , $can_edit_prescription);
+$smarty->assign("correspondantsMedicaux"  , $correspondantsMedicaux);
 
 $smarty->display("vw_aed_sejour_ssr.tpl");
 ?>
