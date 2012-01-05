@@ -391,10 +391,10 @@ Element.addMethods('input', {
     
     //Paste events for IE and Mozilla thanks to Kristinn Sigmundsson
     if (Prototype.Browser.IE)
-      element.onpaste= function() {setTimeout(checkVal, 0);};     
+      element.onpaste = function() {setTimeout(checkVal, 0);};     
     
-    else if (Prototype.Browser.Gecko)
-      element.addEventListener("input", checkVal, false);
+    else 
+      element.observe("input", checkVal.curry(true));
       
     checkVal(); //Perform initial check for existing values
   }/*,
