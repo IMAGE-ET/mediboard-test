@@ -9,34 +9,20 @@
 *}}
 
 <script type="text/javascript">
-addPerms = function() {
-  var url = new Url("mediusers", "ajax_add_user_function_group_perms");
-  url.requestUpdate("resultDroits");
-}
+  Main.add(Control.Tabs.create.curry('tabs-configure', true));
 </script>
 
-<form name="editConfigMediusers" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
-  <input type="hidden" name="dosql" value="do_configure" />
-  <input type="hidden" name="m" value="system" />
-  <table class="form">    
-    <tr>
-      <th class="category" colspan="10">{{tr}}config-{{$m}}{{/tr}}</th>
-    </tr>
+<ul id="tabs-configure" class="control_tabs">
+  <li><a href="#config-mediusers">{{tr}}config-mediusers{{/tr}}</a></li>
+  <li><a href="#config-maintenance">{{tr}}Maintenance{{/tr}}</a></li>
+</ul>
 
-    {{mb_include module=system template=inc_config_str var=tag_mediuser}}
-      
-    <tr>
-      <td class="button" colspan="10">
-        <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-      </td>
-    </tr>
-    
-    <tr>
-      <th class="category" colspan="10">Ajout des droits utilisateurs sur sa fonction et son groupe</th>
-    </tr>
-    <tr>
-      <td class="button"><button type="button" onclick="addPerms();">Ajouter les droits</button></td>
-      <td colspan="9" id="resultDroits"></td>
-    </tr>
-  </table>
-</form>
+<hr class="control_tabs" />
+
+<div id="config-mediusers" style="display: none;">
+  {{mb_include module=mediusers template=inc_config_mediusers}}
+</div>
+
+<div id="config-maintenance" style="display: none;">
+  {{mb_include module=mediusers template=inc_config_maintenance}}
+</div>
