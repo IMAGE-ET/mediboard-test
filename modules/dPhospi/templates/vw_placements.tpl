@@ -50,9 +50,12 @@
   <li onmousedown="Placement.loadTemporel();">
     <a href="#temporel">Temporel</a>
   </li>
- 
-  <button type="button" onclick="Placement.selectServices();" class="search">Services</button>
-  <button type="button" onclick="Placement.showLegend();" class="search" style="float: right;">Légende</button>
+  <li>
+    <button type="button" onclick="Placement.selectServices();" class="search">Services</button>
+  </li>
+  <li style="float: right">
+    <button type="button" onclick="Placement.showLegend();" class="search">Légende</button>
+  </li>
 </ul>
 
 <hr class="control_tabs" />
