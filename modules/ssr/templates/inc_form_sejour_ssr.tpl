@@ -68,7 +68,7 @@ function updateDureePrevue() {
 
 function cancelSejourSSR() {
   var oForm = document.editSejour;
-  var oElement = oForm._annule;
+  var oElement = oForm.annule;
   
   if (oElement.value == "0") {
     if (confirm("Voulez-vous vraiment annuler le dossier ?")) {
