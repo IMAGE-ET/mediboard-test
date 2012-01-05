@@ -27,6 +27,12 @@ $triAdm          = CValue::getOrSession("triAdm", "praticien");
 $_type_admission = CValue::getOrSession("_type_admission", "ambucomp");
 $filterFunction  = CValue::getOrSession("filterFunction");
 
+if (!$services_ids) {
+  $smarty = new CSmartyDP;
+  $smarty->display("inc_no_services.tpl");
+  CApp::rip();
+}
+
 $emptySejour = new CSejour;
 $emptySejour->_type_admission = $_type_admission;
 
@@ -40,10 +46,6 @@ $services = new CService;
 $order = "externe, nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 
-$where_service = "";
-if (reset($services_ids)) {
-  $where_service = "service_id IN (".join($services_ids, ',').") OR service_id IS NULL"; 
-}
 global $phpChrono;
 
 // Chargement des services
@@ -76,9 +78,7 @@ if($_type_admission != "seances") {
   $where[] = "affectation.affectation_id IS NULL";
 }
 
-if ($where_service) {
-  $where[]                  = $where_service;
-}
+$where[] = "service_id IN (".join($services_ids, ',').") OR service_id IS NULL";
 $leftjoin["affectation"]  = "sejour.sejour_id = affectation.sejour_id";
 
 // Filtre sur les fonctions
@@ -98,9 +98,8 @@ $groupSejourNonAffectes = array();
 if ($can->edit) {
 	$where = array();
 	$where["sejour.annule"] = "= '0'";
-	if ($where_service) {
-    $where[] = $where_service;
-	}
+  $where[] = "service_id IN (".join($services_ids, ',').") OR service_id IS NULL";
+
 	$order = null;
   switch ($triAdm) {
     case "date_entree" :

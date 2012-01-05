@@ -103,10 +103,13 @@
     </tr>
     
     {{assign var=show_age_patient value=$conf.dPhospi.show_age_patient}}
-    {{foreach from=$_service->_ref_chambres item=_chambre}}     
+    {{foreach from=$_service->_ref_chambres item=_chambre}}
       {{foreach from=$_chambre->_ref_lits item=_lit}}
         <tr data-lit_id="{{$_lit->_id}}" id="{{$_lit->_guid}}" class="droppable">
-          <th class="text">{{$_lit}}</th>
+          <th class="text">
+            <input type="radio" name="lit_move" style="float: left;" id="lit_move_{{$_lit->_id}}" onchange="chooseLit('{{$_lit->_id}}');"/>
+            {{$_lit}}
+          </th>
           {{foreach from=0|range:$nb_ticks_r item=_i}}
             <td class="mouvement_lit" data-date="{{$datetimes.$_i}}">
               {{if $_i == 0 && isset($_lit->_lines|smarty:nodefaults)}}
@@ -133,7 +136,13 @@
                         {{if $_affectation->entree > $date_min && $_sejour->_id}}affect_left{{/if}}
                         {{if $_affectation->sortie < $date_max && $_sejour->_id}}affect_right{{/if}}"
                         data-width="{{$_affectation->_width}}" data-offset="{{$_affectation->_entree_offset}}"
-                        style="left: {{$offset}}px; width: {{$width}}px;">
+                        style="left: {{$offset}}px; width: {{$width}}px;"
+                        onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');">
+                        {{if $vue == "classique" && $_affectation->_width > 3}}
+                          <button type="button" class="trash notext opacity-40" style="float: right"
+                            onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"
+                            onclick="delAffectation('{{$_affectation->_id}}')"></button>
+                        {{/if}}
                         {{if $_sejour->_id && $vue == "classique"}}
                           <span style="float: left; padding-right: 1px;">
                             {{mb_include module=dPpatients template=inc_vw_photo_identite mode=read patient=$_patient size=22}}
@@ -141,7 +150,7 @@
                         {{/if}}
                         
                         <div id="wrapper_op">
-                          <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');">
+                          <span>
                             {{if $_sejour->_id}}
                               {{$_patient->nom}} {{$_patient->prenom}} {{if $show_age_patient}}({{$_patient->_age}} ans){{/if}}
                               {{if $vue == "classique"}}
@@ -157,8 +166,8 @@
                           {{foreach from=$_sejour->_ref_operations item=_operation}}
                             {{math equation=x*(y+4.6) x=$_operation->_debut_offset y=$td_width assign=offset_op}}
                             {{math equation=x*(y+4.6) x=$_operation->_width y=$td_width assign=width_op}}
-                            <div class="operation_in_mouv opacity-60"
-                              style="left: {{$offset_op}}px; width: {{$width_op}}px; top: {{if $vue == "classique"}}0.8{{else}}0.2{{/if}}em;"
+                            <div class="operation_in_mouv{{if $vue == "compacte"}}_compact{{/if}} opacity-40"
+                              style="left: {{$offset_op}}px; width: {{$width_op}}px;"
                               onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}');">
                               </div>
                           {{/foreach}}

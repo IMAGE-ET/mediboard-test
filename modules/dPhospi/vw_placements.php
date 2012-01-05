@@ -9,11 +9,20 @@
  */
 
 $services_ids = CValue::getOrSession("services_ids");
+$group_id     = CValue::get("g");
 
-if (!$services_ids) {
+// Détection du changement d'établissement
+if (!$services_ids || $group_id) {
+  $group_id = $group_id ? $group_id : CGroups::loadCurrent()->_id;
+  
+  $pref_services_ids = json_decode(CAppUI::pref("services_ids_hospi"));
+  
   // Si la préférence existe, alors on la charge
-  if ($pref_services_ids = CAppUI::pref("services_ids_hospi")) {
-    $services_ids = explode("|", $pref_services_ids);
+  if (isset($pref_services_ids->{"g$group_id"})) {
+    $services_ids = $pref_services_ids->{"g$group_id"};
+    if ($services_ids) {
+      $services_ids = explode("|", $services_ids); 
+    }
     CValue::setSession("services_ids", $services_ids);
   }
   // Sinon, chargement de la liste des services en accord avec le droit de lecture
@@ -21,8 +30,8 @@ if (!$services_ids) {
     $service = new CService;
     $where = array();
     $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
-    $services_allowed = $service->loadListWithPerms(PERM_READ, $where, "externe, nom");
-    CValue::setSession("services_ids", array_keys($services_allowed));
+    $services_ids = array_keys($service->loadListWithPerms(PERM_READ, $where, "externe, nom"));
+    CValue::setSession("services_ids", $services_ids);
   }
 }
 

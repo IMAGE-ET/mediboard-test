@@ -57,6 +57,9 @@
         id="sejour_temporel_{{$_sejour->_id}}" data-patient_id="{{$patient->_id}}" data-sejour_id="{{$_sejour->_id}}"
         data-width="{{$_sejour->_width}}">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
+            <span style="float: right;">
+              <input type="radio" name="sejour_move" id="sejour_move_{{$_sejour->_id}}" onchange="chooseSejour('{{$_sejour->_id}}');"/>
+            </span>
             {{$patient->nom}} {{$patient->prenom}} {{if $show_age_patient}}({{$patient->_age}} ans){{/if}}
             <br />
             <span class="compact">

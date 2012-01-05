@@ -15,7 +15,7 @@
     selectServices: function() {
       var url = new Url("dPhospi", "ajax_select_services");
       url.addParam("view", this.tabs.activeLink.key);
-      url.requestModal();
+      url.requestModal(null, null, {maxHeight: '600'});
     },
     loadActiveView: function() {
       switch (this.tabs.activeLink.key) {

@@ -77,7 +77,7 @@
     }});
   }
   
-  // Fonction appelée lors d'un drop avec la touche ctrl
+  // Drop d'une affectation avec la touche ctrl
   selectAction = function(affectation_id, lit_id, sejour_id) {
     var url = new Url("dPhospi", "ajax_select_action_affectation");
     url.addParam("affectation_id", affectation_id);
@@ -85,6 +85,39 @@
     url.addParam("sejour_id", sejour_id);
     var modal = url.requestModal(500, null, {showReload: false});
     modal.modalObject.observe("afterClose", refreshMouvements);
+  }
+  
+  var sejour_selected = null,
+      lit_selected    = null;
+  
+  chooseSejour = function(sejour_id) {
+    var sejour = $("sejour_move_"+sejour_id);
+    /*if (sejour.checked) {
+      sejour_selected = null;
+      sejour.checked = false;
+      return;
+    }*/
+    sejour_selected = sejour_id;
+    moveByRadio();
+  }
+  
+  chooseLit = function(lit_id) {
+    var lit = $("lit_move_"+lit_id);
+    /*if (lit.checked) {
+      lit_selected = null;
+      lit.checked = false;
+      return;
+    }*/
+    lit_selected = lit_id;
+    moveByRadio();
+  }
+  
+  // Placement par les boutons radio
+  moveByRadio = function() {
+    if (sejour_selected && lit_selected) {
+      moveAffectation(null, lit_selected, sejour_selected);
+      sejour_selected = lit_selected = null;
+    }
   }
   
   Main.add(function() {

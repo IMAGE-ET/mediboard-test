@@ -9,9 +9,16 @@
  */
 
 $services_ids = CValue::getOrSession("services_ids", null);
+$readonly     = CValue::get("readonly", 0);
 $granularite  = CValue::getOrSession("granularite", "day");
 $date         = CValue::getOrSession("date", mbDate());
 $vue          = CValue::getOrSession("vue", "classique");
+
+if (!$services_ids) {
+  $smarty = new CSmartyDP;
+  $smarty->display("inc_no_services.tpl");
+  CApp::rip();
+}
 
 $unite = "";
 $period = "";
@@ -19,7 +26,7 @@ $datetimes = array();
 $change_month = array();
 $granularites = array("day", "week", "4weeks");
 
-switch($granularite) {
+switch ($granularite) {
   case "day":
     $unite = "hour";
     $nb_unite = 1;
@@ -104,10 +111,13 @@ if ($granularite == "4weeks" && count($days) == 5) {
 }
 
 // Chargement des lits
+$group_id = CGroups::loadCurrent()->_id;
 $where = array();
 $where["chambre.service_id"] = CSQLDataSource::prepareIn($services_ids);
+$where["service.group_id"] = " = '$group_id'";
 $ljoin = array();
 $ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
+$ljoin["service"] = "chambre.service_id = service.service_id";
 $lit = new CLit;
 
 $lits     = $lit->loadList($where, null, null, null, $ljoin);
@@ -185,7 +195,6 @@ foreach ($lits as $_lit) {
 
 $smarty = new CSmartyDP;
 
-$smarty->assign("services_ids", $services_ids);
 $smarty->assign("services"    , $services);
 $smarty->assign("affectations", $affectations);
 $smarty->assign("date"        , $date);
@@ -200,6 +209,7 @@ $smarty->assign("datetimes"   , $datetimes);
 $smarty->assign("days"        , $days);
 $smarty->assign("change_month", $change_month);
 $smarty->assign("vue"         , $vue);
+$smarty->assign("readonly"    , $readonly);
 
 $smarty->display("inc_vw_mouvements.tpl");
 

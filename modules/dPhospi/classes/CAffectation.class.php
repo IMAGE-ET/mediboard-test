@@ -98,6 +98,15 @@ class CAffectation extends CMbObject {
   }
 
   function loadView() {
+    $sejour = $this->loadRefSejour();
+    $sejour->loadRefPraticien();
+    $sejour->loadRefPatient()->loadRefPhotoIdentite();
+    $sejour->loadRefsAffectations();
+    foreach ($sejour->loadRefsOperations() as $_operation) {
+      $_operation->loadRefPlageOp();
+    }
+    
+    $sejour->getDroitsCMU();
     $this->loadRefLit()->loadCompleteView();
     $this->_view = $this->_ref_lit->_view;
     $this->loadRefParentAffectation();

@@ -177,7 +177,6 @@ printTableau = function() {
   url.setModuleAction("dPhospi", "print_tableau");
   url.addParam("date", $V(oForm.date));
   url.addParam("mode", $V(oForm.mode));
-  url.addParam("services[]", $V(oForm["services_ids[]"]), true);
   url.popup(850, 600, "printAffService");
 }
 
@@ -196,7 +195,6 @@ reloadTableau = function() {
   var oForm  = getForm("chgAff");
   url = new Url;
   url.addElement(oForm.date);
-  url.addParam("services_ids[]", $V(oForm["services_ids[]"]), true);
   url.addElement(oForm.mode)
   url.setModuleAction("dPhospi", "ajax_tableau_affectations_lits");
   url.requestUpdate("tableauAffectations");

@@ -593,6 +593,8 @@ var Url = Class.create({
         overflowY: 'auto',
         overflowX: 'hidden',
         height: iHeight ? iHeight+'px' : '',
+        maxHeight: oOptions.maxHeight ? oOptions.maxHeight+'px' : '',
+        maxWidth : oOptions.maxWidth  ? oOptions.maxWidth+'px' : '',
         width: iWidth ? iWidth+'px' : ''
       })
     );

@@ -34,17 +34,12 @@ Main.add(function () {
     <td>
       <form name="chgAff" method="get" onsubmit="return onSubmitFormAjax(this, null, 'tableau')">
         <input type="hidden" name="m" value="dPhospi" />
-        <input type="hidden" name="tab" value="vw_affectations" />
+        <input type="hidden" name="a" value="vw_affectations" />
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.onsubmit()" />
         <select name="mode" onchange="this.form.onsubmit();" style="float: right;">
           <option value="0" {{if $mode == 0}}selected="selected"{{/if}}>{{tr}}Instant view{{/tr}}</option>
           <option value="1" {{if $mode == 1}}selected="selected"{{/if}}>{{tr}}Day view{{/tr}}</option>
         </select>
-      
-        {{foreach from=$services item=curr_service}}
-          <input type="checkbox" name="services_ids[{{$curr_service->_id}}]" value="{{$curr_service->_id}}" style="display: none;"
-            {{if in_array($curr_service->_id, $services_ids)}}checked="checked"{{/if}} />
-        {{/foreach}} 
       </form>
     </td>
   </tr>

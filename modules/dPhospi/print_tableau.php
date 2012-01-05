@@ -15,7 +15,7 @@ CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 $g        = CGroups::loadCurrent()->_id;
 $date     = CValue::get("date"    , mbDate());
 $mode     = CValue::get("mode"    , 0);
-$services = CValue::get("services", "");
+$services = CValue::getOrSession("services_ids", "");
 $g        = CGroups::loadCurrent()->_id;
 
 // Récupération des chambres/services

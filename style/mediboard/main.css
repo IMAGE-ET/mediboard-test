@@ -1909,10 +1909,16 @@ div.sejour_non_affecte {
 
 div.operation_in_mouv {
   position: absolute;
-  height: 0.5em;
-  border: 1px solid #000;
-  background: #bbb;
-  margin: 2px;
+  height: 25px;
+  top: 1px;
+  background: #6AE;
+}
+
+div.operation_in_mouv_compact {
+  position: absolute;
+  height: 11px;
+  top: 1px;
+  background: #6AE;
 }
 
 tr.consultation_entree td {
