@@ -15,10 +15,8 @@ $sejour->load($sejour_id);
 
 $userSel = CMediusers::get();
 
-$sejour->loadRefPatient();
-$patient =& $sejour->_ref_patient;
-$patient->loadStaticCIM10($userSel->user_id);
 
+$patient = $sejour->loadRefPatient();
 $patient->loadRefPhotoIdentite();
 
 // Création du template

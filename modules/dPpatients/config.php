@@ -28,7 +28,6 @@ $dPconfig["dPpatients"] = array (
   ),
   
   "CDossierMedical" => array (
-    "diags_static_cim" => "1",
   ),
   
   "CConstantesMedicales" => array(

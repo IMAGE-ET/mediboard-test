@@ -393,44 +393,6 @@ Main.add(function () {
           </script> 
         </form>
         
-        <table class="layout main">
-        {{foreach from=$patient->_static_cim10 key=cat item=curr_cat}}
-          <tr id="category{{$cat}}-trigger">
-            <td>{{$cat}}</td>
-          </tr>
-          <tbody id="category{{$cat}}">
-            <tr class="script">
-              <td>
-                <script type="text/javascript">new PairEffect("category{{$cat}}");</script>
-              </td>
-            </tr>
-            {{foreach from=$curr_cat item=curr_code key="key"}}
-            <tr>
-              <td class="text">
-              <form name="code_finder-{{$curr_code->sid}}" action="?" method="post">
-                <button class="tick notext" type="button" onclick="oCimField.add('{{$curr_code->code}}'); if(DossierMedical.sejour_id != '') { {{if $_is_anesth}}oCimAnesthField.add('{{$curr_code->code}}');{{/if}} }">
-                  Ajouter
-                </button>
-                
-                <input type="hidden" name="codeCim" value="{{$curr_code->code}}" />
-                <button class="down notext" type="button" onclick="CIM10Selector.initfind{{$curr_code->sid}}()">
-                  Parcourir
-                </button>
-                <script type="text/javascript">   
-                  CIM10Selector.initfind{{$curr_code->sid}} = function(){
-                    this.sForm = "code_finder-{{$curr_code->sid}}";
-                    this.sCode = "codeCim";
-                    this.find();
-                  }
-                </script> 
-                {{$curr_code->code}}: {{$curr_code->libelle}}
-                </form>
-              </td>
-            </tr>
-             {{/foreach}}
-          </tbody>
-        {{/foreach}}
-        </table>
       </fieldset>
     </td>
   </tr>

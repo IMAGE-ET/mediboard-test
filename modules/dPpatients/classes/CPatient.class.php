@@ -160,7 +160,6 @@ class CPatient extends CMbObject {
   // Other fields
   var $INSC_date                    = null;
   var $date_lecture_vitale          = null;
-  var $_static_cim10                = null;
   var $_pays_naissance_insee        = null;
   var $_assure_pays_naissance_insee = null;
   
@@ -1148,68 +1147,7 @@ class CPatient extends CMbObject {
     $this->loadRefsCorrespondants();
     $this->loadIdVitale();
   }
-  
-  // Liste statique des codes CIM10 initiaux
-  function loadStaticCIM10($user = 0) {
-    if (!CAppUI::conf("dPpatients CDossierMedical diags_static_cim")) {
-      return;
-    }
-    
-    // Liste des favoris
-    if($user) {
-      $favoris = new CFavoricim10;
-      $where = array();
-      $where["favoris_user"] = "= '$user'";
-      $order = "favoris_code";
-      if ($favoris = $favoris->loadList($where, $order)) {
-        foreach($favoris as $key => $value) {
-          $this->_static_cim10["favoris"][$value->favoris_code] = new CCodeCIM10($value->favoris_code, 1);
-        }
-      }
       
-      $ds = CSQLDataSource::get("std");
-      $sql = "SELECT DP, count(DP) as nb_code
-        FROM `sejour`
-        WHERE sejour.praticien_id = '$user'
-        AND DP IS NOT NULL
-        AND DP != ''
-        GROUP BY DP
-        ORDER BY nb_code DESC
-        LIMIT 20;";
-      $cimStat = $ds->loadlist($sql);
-      foreach($cimStat as $key => $value) {
-        $this->_static_cim10["favoris"][$value["DP"]] = new CCodeCIM10($value["DP"], 1);
-      }
-    }
-    
-    // Liste statique
-    //$this->_static_cim10["cardiovasculaire"][] = new CCodeCIM10("I20", 1);       // Angor
-    //$this->_static_cim10["cardiovasculaire"][] = new CCodeCIM10("I21", 1);       // Infarctus
-    $this->_static_cim10["cardiovasculaire"][] = new CCodeCIM10("(I20-I25)", 1); // Cardiopathies ischemiques
-    $this->_static_cim10["cardiovasculaire"][] = new CCodeCIM10("J81", 1);       // O.A.P ?
-    $this->_static_cim10["cardiovasculaire"][] = new CCodeCIM10("R60", 1);       // Oedemes
-    $this->_static_cim10["cardiovasculaire"][] = new CCodeCIM10("I776", 1);      // Artérite
-    $this->_static_cim10["cardiovasculaire"][] = new CCodeCIM10("R943", 1);      // ECG
-    $this->_static_cim10["cardiovasculaire"][] = new CCodeCIM10("I10", 1);       // HTA
-    $this->_static_cim10["respiratoire"][]     = new CCodeCIM10("A15", 1);       // Pleurésie1
-    $this->_static_cim10["respiratoire"][]     = new CCodeCIM10("A16", 1);       // Pleurésie2
-    $this->_static_cim10["respiratoire"][]     = new CCodeCIM10("(J10-J18)", 1); // Pneumonie
-    $this->_static_cim10["respiratoire"][]     = new CCodeCIM10("J45", 1);       // Asthme
-    $this->_static_cim10["respiratoire"][]     = new CCodeCIM10("J180", 1);      // BPCO
-    $this->_static_cim10["respiratoire"][]     = new CCodeCIM10("R230", 1);      // Cyanose
-    $this->_static_cim10["divers"][]           = new CCodeCIM10("Z88", 1);       // Allergies
-    $this->_static_cim10["divers"][]           = new CCodeCIM10("(B15-B19)", 1); // Hepatite
-    $this->_static_cim10["divers"][]           = new CCodeCIM10("(E10-E14)", 1); // Diabete
-    $this->_static_cim10["divers"][]           = new CCodeCIM10("H40", 1)      ; // Glaucome
-    
-    // Sommaire complet
-    $sommaire = new CCodeCIM10();
-    $sommaire = $sommaire->getSommaire();
-    foreach($sommaire as $key => $value) {
-      $this->_static_cim10["sommaire"][] = new CCodeCIM10($value["code"], 1);
-    }
-  }
-    
   function loadComplete(){
     parent::loadComplete();
     $this->loadIPP();

@@ -49,7 +49,6 @@ if ($sejour->_id) {
 
   // Chargement du patient
   $patient = $sejour->_ref_patient;
-  $patient->loadStaticCIM10($user->_id);
   $patient->loadIPP();
   $patient->loadRefsCorrespondants();
   if ($sejour->adresse_par_prat_id && ($sejour->adresse_par_prat_id != $patient->_ref_medecin_traitant->_id)) {

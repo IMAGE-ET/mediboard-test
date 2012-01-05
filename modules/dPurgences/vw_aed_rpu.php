@@ -43,7 +43,6 @@ if ($rpu->_id || $rpu->sejour_id) {
   
   $sejour  = $rpu->_ref_sejour;
   $patient = $sejour->_ref_patient;
-  $patient->loadStaticCIM10($user->_id);
   
   // Chargement de l'IPP ($_IPP)
   $patient->loadIPP();

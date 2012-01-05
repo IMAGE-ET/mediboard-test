@@ -7,12 +7,7 @@
 
 <table class="form">
   <col style="width: 50%" />
-  
-	<tr>
-		<th colspan="2" class="title">Diagnostics CIM</th>
-	</tr>
-  {{mb_include module=system template=inc_config_bool var=diags_static_cim}}
-	
+  	
   <tr>
     <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

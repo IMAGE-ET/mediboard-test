@@ -126,7 +126,6 @@ if ($consult->_id) {
   $patient->loadRefs();
   $patient->loadRefsNotes();  
   $patient->loadRefPhotoIdentite();
-  $patient->loadStaticCIM10($userSel->user_id);
   
   // Chargement de ses consultations
   foreach ($patient->_ref_consultations as &$_consultation) {
