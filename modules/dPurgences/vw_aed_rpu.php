@@ -88,6 +88,7 @@ $smarty->assign("group"               , $group);
 $smarty->assign("line"                , new CPrescriptionLineMedicament());
 $smarty->assign("listServicesUrgence" , $listServicesUrgence);
 $smarty->assign("contrainteProvenance", $contrainteProvenance);
+$smarty->assign("userSel"             , $user);
 $smarty->assign("today"               , mbDate());
 $smarty->assign("traitement"          , $traitement);
 $smarty->assign("antecedent"          , $antecedent);
