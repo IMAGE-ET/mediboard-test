@@ -179,7 +179,27 @@ foreach($listDays as $keyDate=>$valDate){
   }
 }
 
+
+// Extension du semainier s'il y a des plages qui d?passent des bornes
+// de configuration hours_start et hours_stop
 $hours = CPlageconsult::$hours;
+
+$min_hour = sprintf("%01d", mbTransformTime($min, null, "%H"));
+$max_hour = sprintf("%01d", mbTransformTime($max, null, "%H"));
+
+if (!isset($hours[$min_hour])) {
+  for($i = $min_hour; $i < CPlageconsult::$hours_start; $i++) {
+    $hours[$i] = sprintf("%02d", $i);
+  }
+}
+
+if (!isset($hours[$max_hour])) {
+  for($i = CPlageconsult::$hours_stop + 1; $i < $max_hour + 1; $i++) {
+    $hours[$i] = sprintf("%02d", $i);
+  }
+}
+
+ksort($hours);
 
 //Planning au format  CPlanningWeek
 $debut = CValue::getOrSession("debut", $today);
@@ -207,6 +227,7 @@ foreach($hours as $curr_hour){
   foreach(CPlageconsult::$minutes as $keyMins => $curr_mins){
     foreach($listDays as $curr_day){
     	$keyAff = "$curr_day $curr_hour:$curr_mins:00";
+    	if(isset($affichages["$keyAff"])){
     	$affichage = $affichages["$keyAff"];
 	    	$_listPlages = $listPlages["$curr_day"];
 	    	if($_listPlages != null && $affichage != "empty"){
@@ -241,6 +262,7 @@ foreach($hours as $curr_hour){
 	    	$event->plage["_total"] = $plage->_total;
 	    	//Ajout de l'évènement au planning 
 			  $planning->addEvent($event);
+	    	}
 	    }
     }  	
   }
