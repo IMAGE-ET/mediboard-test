@@ -93,6 +93,8 @@ if(CAppUI::pref("pratOnlyForConsult", 1)) {
   $listChirs = $mediusers->loadProfessionnelDeSante(PERM_EDIT);
 }
 
+/// TODO : Simplifer tout ça pour tirer partie au mieux de inc_vw_week
+
 $listDays = array();
 for($i = 0; $i < 7; $i++) {
   $dateArr = mbDate("+$i day", $debut);
@@ -207,7 +209,7 @@ foreach($hours as $curr_hour){
     	$keyAff = "$curr_day $curr_hour:$curr_mins:00";
     	$affichage = $affichages["$keyAff"];
 	    	$_listPlages = $listPlages["$curr_day"];
-	    	if($_listPlages!=null && $affichage!="empty"){
+	    	if($_listPlages != null && $affichage != "empty"){
 	    	$plage = $_listPlages["$affichage"];
 	    	$titre = "";
 	    	$guid = "";
@@ -215,9 +217,9 @@ foreach($hours as $curr_hour){
 	        $titre = $plage->libelle;
 	        $guid = $plage->_guid;
 	    	}
-	    	$debute = $curr_day[8].$curr_day[9]."-".$curr_day[5].$curr_day[6]."-".$curr_day[0].$curr_day[1].$curr_day[2].$curr_day[3]." ".$plage->debut;
+	    	$debute = "$curr_day $plage->debut";
         //Création de l'évènement
-	    	$event = new CPlanningEvent($guid, $debute, 15*$plage->_nb_intervals, $titre, "#CCC", true, null, null);
+	    	$event = new CPlanningEvent($guid, $debute, mbMinutesRelative($plage->debut, $plage->fin), $titre, "#CCC", true, null, null);
 	    	//Menu des évènements
 	    	$event->menu = true;
 	    	$event->elements_menu["class"] = "toolbar";
