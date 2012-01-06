@@ -186,7 +186,7 @@ $hours = CPlageconsult::$hours;
 
 $min_hour = sprintf("%01d", mbTransformTime($min, null, "%H"));
 $max_hour = sprintf("%01d", mbTransformTime($max, null, "%H"));
-
+$hours[$min_hour-1]=sprintf("%02d", $min_hour-1);
 if (!isset($hours[$min_hour])) {
   for($i = $min_hour; $i < CPlageconsult::$hours_start; $i++) {
     $hours[$i] = sprintf("%02d", $i);
@@ -214,7 +214,7 @@ if($mediusers->load($chirSel)){
 }
 else{$planning->title = "";}
 $planning->guid = $mediuser->_guid;
-$planning->hour_min = "8";
+$planning->hour_min = "7";
 $planning->hour_max = "20";
 $planning->pauses = array("07", "12", "19");
 $planning->hours = $hours;
