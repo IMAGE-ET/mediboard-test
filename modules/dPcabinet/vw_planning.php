@@ -209,8 +209,8 @@ foreach($hours as $curr_hour){
 	    	$_listPlages = $listPlages["$curr_day"];
 	    	if($_listPlages!=null && $affichage!="empty"){
 	    	$plage = $_listPlages["$affichage"];
-	    	$titre="";
-	    	$guid="";
+	    	$titre = "";
+	    	$guid = "";
 	    	if($plage->libelle){
 	        $titre = $plage->libelle;
 	        $guid = $plage->_guid;
