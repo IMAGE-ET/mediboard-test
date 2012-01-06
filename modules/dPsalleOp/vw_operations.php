@@ -152,6 +152,10 @@ $acte_ngap->quantite = 1;
 $acte_ngap->coefficient = 1;
 $acte_ngap->loadListExecutants();
 
+
+$soustotal_base = 0;
+$soustotal_dh   = 0;
+$ristourne = 0;
 $acte_tarmed = null;
 if(CModule::getInstalled("tarmed")){
 	//Initialisation d'un acte Tarmed
@@ -159,7 +163,19 @@ if(CModule::getInstalled("tarmed")){
 	$acte_tarmed->quantite = 1;
 	$acte_tarmed->loadListExecutants();
 	$acte_tarmed->loadRefExecutant();
+
+	foreach($selOp->_ref_actes_tarmed as $acte){
+	  $soustotal_base += $acte->montant_base;
+	  $soustotal_dh   += $acte->montant_depassement;  
+	  $ristourne = $acte->ristourne;
+	}
+	
 }
+
+$pct = 1-($ristourne/100);
+$total = ($soustotal_base + $soustotal_dh)*$pct;
+$total = round($total,2);
+
 // Vérification de la check list journalière
 $daily_check_list = CDailyCheckList::getList($salle, $date);
 $daily_check_list->loadItemTypes();
@@ -205,6 +221,11 @@ $group = CGroups::loadCurrent();
 $group->loadConfigValues();
 
 $listValidateurs = CPersonnel::loadListPers(array("op", "op_panseuse"), true, true);
+
+$smarty->assign("soustotal_base" , $soustotal_base);
+$smarty->assign("soustotal_dh"   , $soustotal_dh);
+$smarty->assign("total"          , $total);
+$smarty->assign("ristourne"      , $ristourne);
 
 $smarty->assign("anesth_perop"           , new CAnesthPerop());
 $smarty->assign("unites"                 , $unites);

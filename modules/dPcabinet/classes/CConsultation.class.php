@@ -466,6 +466,11 @@ class CConsultation extends CCodable {
     if ($msg = $this->precodeCCAM()){
       return $msg;
     }  
+    
+    $this->_tokens_tarmed = $tarif->codes_tarmed;
+    if ($msg = $this->precodeTARMED()){
+      return $msg;
+    }
   }
     
   /**
@@ -701,6 +706,26 @@ class CConsultation extends CCodable {
     } 
   }
   
+  function precodeTARMED() {
+    $listCodesTarmed = explode("|",$this->_tokens_tarmed);
+    foreach($listCodesTarmed as $key => $code_tarmed){
+      if($code_tarmed) {
+        $acte = new CActeTarmed();
+        $acte->_preserve_montant = true;
+        $acte->setFullCode($code_tarmed);
+
+        $acte->object_id = $this->_id;
+        $acte->object_class = $this->_class;
+        $acte->executant_id = $this->getExecutantId();
+        if (!$acte->countMatchingList()) {
+          if ($msg = $acte->store()) {
+            return $msg;
+          }
+        }
+      }
+    } 
+  }
+  
   function doUpdateMontants(){
     // Initialisation des montants
     $secteur1_NGAP    = 0;
@@ -713,8 +738,8 @@ class CConsultation extends CCodable {
     // Chargement des actes Tarmed
     $this->loadRefsActesTarmed();
     foreach ($this->_ref_actes_tarmed as $actetarmed) { 
-      $secteur1_TARMED += $actetarmed->montant_base;
-      $secteur2_TARMED += $actetarmed->montant_depassement;
+      $secteur1_TARMED += round($actetarmed->montant_base * (1-$actetarmed->ristourne/100), 2);
+      $secteur2_TARMED += round($actetarmed->montant_depassement * (1-$actetarmed->ristourne/100), 2);
     }
     
     // Chargement des actes NGAP

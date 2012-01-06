@@ -190,6 +190,7 @@ class CMediusers extends CMbObject {
     $backProps["secondary_functions"]             = "CSecondaryFunction user_id";
     $backProps["actes_ccam_executes"]             = "CActeCCAM executant_id";
     $backProps["actes_ngap_executes"]             = "CActeNGAP executant_id";
+    $backProps["actes_tarmed_executes"]           = "CActeTarmed executant_id";
     $backProps["administrations"]                 = "CAdministration administrateur_id";
     $backProps["aides_saisie"]                    = "CAideSaisie user_id";
     $backProps["modeles"]                         = "CCompteRendu user_id";
