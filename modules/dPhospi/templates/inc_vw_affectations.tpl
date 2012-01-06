@@ -1,16 +1,9 @@
-<script type="text/javascirpt">
-  Main.add(function() {
-    Control.Tabs.create("sejours_non_affectes", true);
-  });
-</script>
-
 <form name="chgFilter" action="?" method="get" onsubmit="return onSubmitFormAjax(this,null, 'list_affectations');">
   <input type="hidden" name="m" value="dPhospi" />
   <input type="hidden" name="a" value="ajax_vw_affectations" />
-
+  <input type="hidden" name="offset_th" value="{{$offset_th}}" />
   {{mb_field object=$sejour field="_type_admission" style="width: 16em;" onchange="this.form.onsubmit()"}}
 
-  
   <select name="triAdm" style="width: 16em;" onchange="this.form.onsubmit()">
     <option value="praticien"   {{if $triAdm == "praticien"}}  selected="selected"{{/if}}>Tri par praticien</option>
     <option value="date_entree" {{if $triAdm == "date_entree"}}selected="selected"{{/if}}>Tri par heure d'entrée</option>
@@ -29,61 +22,119 @@
 </div>
 
 <script type="text/javascript">
-  new Draggable($('lit_bloque'), dragOptions);
+  var container = $('lit_bloque');
+  new Draggable(container, {
+                ghosting: "true",
+                starteffect: function(element) {
+                  makeDragVisible(container,e);
+                  new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 });
+                },
+                revert: true});
 </script>
 
-</div>
-<ul id="sejours_non_affectes" class="control_tabs">
-  {{foreach from=$sejours_non_affectes key=group_name item=_sejours}}
-    <li>
-      <a {{if !$_sejours|@count}}class="empty"{{/if}} href="#{{$group_name}}">
-        {{tr}}CSejour.groupe.{{$group_name}}{{/tr}}
-        ({{$_sejours|@count}})
-      </a>
-    </li>
-  {{/foreach}}
-</ul>
-
-<hr class="control_tabs" />
-
-{{assign var=show_age_patient value=$conf.dPhospi.show_age_patient}}
-{{foreach from=$sejours_non_affectes key=group_name item=_sejours}}
-  <div id="{{$group_name}}" class="droppable {{if !$_sejours|@count}}empty{{/if}}" style="display: none;">
-    
-    {{foreach from=$_sejours item=_sejour}}
+{{if $granularite == "day"}}
+  {{assign var=td_width value=37}}
+{{else}}
+  {{assign var=td_width value=30}}
+{{/if}}
+{{math equation=x+1 x=$nb_ticks assign=colspan}}
+{{math equation=x-1 x=$nb_ticks assign=nb_ticks_r}}
+ <table class="tbl">
+   <tr>
+     <th class="title" colspan="{{$colspan}}">Non placés</th>
+   </tr>
+  <tr>
+    {{if $granularite == "day"}}
+      <th colspan="{{$colspan}}">
+        {{$date|date_format:$conf.longdate}}
+      </th>
+    {{else}}
+      <th></th>
+      {{foreach from=$days item=_day key=_datetime}}
+        <th colspan="{{if $granularite == "week"}}4{{else}}7{{/if}}">
+          {{if $granularite == "week"}}
+            {{$_day|date_format:"%a"}} {{$_day|date_format:$conf.date}}
+          {{else}}
+            {{if isset($change_month.$_day|smarty:nodefaults)}}
+              {{if isset($change_month.$_day.left|smarty:nodefaults)}}
+                <span style="float: left;">
+                  {{$change_month.$_day.left|date_format:"%B"}}
+                </span>
+              {{/if}}
+              {{if isset($change_month.$_day.right|smarty:nodefaults)}}
+                <span style="float: right;">
+                  {{$change_month.$_day.right|date_format:"%B"}}
+                </span>
+              {{/if}}
+            {{/if}}
+            Semaine {{$_day}}
+          {{/if}}
+        </th>
+      {{/foreach}}
+    {{/if}}
+    </th>
+  </tr>
+  <tr>
+    <th class="first_th"></th>
+    {{foreach from=$datetimes item=_date}}
+      <th style="min-width: {{$td_width}}px;">
+        {{if $granularite == "4weeks"}}
+          {{$_date|date_format:"%a"|upper|substr:0:1}} {{$_date|date_format:"%d"}}
+        {{else}}
+          {{$_date|date_format:"%H"}}h
+        {{/if}}
+      </th>
+    {{/foreach}}
+  </tr>
+  {{assign var=show_age_patient value=$conf.dPhospi.show_age_patient}}
+  {{foreach from=$sejours_non_affectes item=_sejour}}
+    <tr>
       {{assign var=patient value=$_sejour->_ref_patient}}
       {{assign var=praticien value=$_sejour->_ref_praticien}}
-      <div class="draggable text sejour_non_affecte" style="border-left: 4px solid #{{$praticien->_ref_function->color}}"
-        id="sejour_temporel_{{$_sejour->_id}}" data-patient_id="{{$patient->_id}}" data-sejour_id="{{$_sejour->_id}}"
-        data-width="{{$_sejour->_width}}">
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
-            <span style="float: right;">
-              <input type="radio" name="sejour_move" id="sejour_move_{{$_sejour->_id}}" onchange="chooseSejour('{{$_sejour->_id}}');"/>
-            </span>
-            {{$patient->nom}} {{$patient->prenom}} {{if $show_age_patient}}({{$patient->_age}} ans){{/if}}
-            <br />
-            <span class="compact">
-              {{$_sejour->_motif_complet}}
-            </span>
-          </span>
-      </div>
+      {{math equation=x*(y+4.6) x=$_sejour->_width y=$td_width assign=width}}
+      {{math equation=x*(y+4.6) x=$_sejour->_entree_offset y=$td_width assign=offset}}
+      <th style="width: {{$offset_th}}; height: 3em;"></th>
       
-      <script type="text/javascript">
-        new Draggable($('sejour_temporel_{{$_sejour->_id}}'), dragOptions);
-      </script>
-    {{foreachelse}}
+      {{foreach from=0|range:$nb_ticks_r item=_i}}
+        <td class="mouvement_lit">
+          {{if $_i == 0}}
+            
+            <div class="affectation clit draggable text sejour_non_affecte {{if $_sejour->entree >= $date_min}}debut_sejour{{/if}}
+              {{if $_sejour->sortie <= $date_max}}fin_sejour{{/if}}"
+              style="border: 1px solid #{{$praticien->_ref_function->color}}; width: {{$width}}px; left: {{$offset}}px;"
+              id="sejour_temporel_{{$_sejour->_id}}" data-patient_id="{{$patient->_id}}" data-sejour_id="{{$_sejour->_id}}">
+                <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
+                  <span style="float: left; padding-left: 1px; padding-right: 1px;">
+                    {{mb_include module=dPpatients template=inc_vw_photo_identite mode=read patient=$patient size=22}}
+                  </span>
+                  <span style="float: right;">
+                    <input type="radio" name="sejour_move" id="sejour_move_{{$_sejour->_id}}" onchange="chooseSejour('{{$_sejour->_id}}');"/>
+                  </span>
+                  {{$patient->nom}} {{$patient->prenom}} {{if $show_age_patient}}({{$patient->_age}} ans){{/if}}
+                  <br />
+                  <span class="compact">
+                    {{$_sejour->_motif_complet}}
+                  </span>
+                </span>
+            </div>
+            <script type="text/javascript">
+              var container = $('sejour_temporel_{{$_sejour->_id}}');
+              new Draggable(container, {
+                ghosting: "true",
+                constraint: "vertical",
+                starteffect: function(element) {
+                  makeDragVisible(container,e);
+                  new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 });
+                },
+                revert: true});
+            </script>
+          {{/if}}
+        </td>
+      {{/foreach}}
+    </tr>
+  {{foreachelse}}
+    <td class="empty" colspan="{{$colspan}}">
       {{tr}}CSejour.none{{/tr}}
-    {{/foreach}}
-
-  </div>
-  <script type="text/javascript">
-    Droppables.add($('{{$group_name}}'), {
-      onDrop: function(drag, drop) {
-        if (affectation_id = drag.get("affectation_id")) {
-          delAffectation(affectation_id);
-        }
-      },
-      hoverclass: "non_affectes_hover"
-    });
-  </script>
-{{/foreach}}
+    </td>
+  {{/foreach}}
+</table>

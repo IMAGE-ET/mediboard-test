@@ -17,6 +17,7 @@ $dPconfig["dPhospi"] = array (
   ),
   
   "show_age_patient" => "0",
+  "max_affectations_view" => "480",
   "CLit" => array(
     "prefixe"         => "",
     "show_in_tableau" => 0,

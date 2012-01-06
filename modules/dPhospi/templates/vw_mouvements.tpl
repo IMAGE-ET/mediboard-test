@@ -1,35 +1,7 @@
 <script type="text/javascript">
-  dragOptions = {
-    starteffect: function(element) {
-      new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 });
-      // Si le patient n'est pas placé, on redimensionne la div à la largeur du séjour
-      var width = element.get("width");
-      var lit_id = element.get("lit_id");
-      
-      // Pour les admissions de la veille, la width est négative.
-      if (!lit_id && width > 0) {
-        element.setStyle({width: (width*45 - 5)+"px"});
-      }
-    },
-    endeffect: function(element) {
-      var toOpacity = Object.isNumber(element._opacity) ? element._opacity : 1.0;
-      new Effect.Opacity(element, {duration:0.2, from:0.7, to:toOpacity,
-        queue: {scope:'_draggable', position:'end'},
-        afterFinish: function(){
-          Draggable._dragging[element] = false
-        }
-      });
-      if (!element.get("lit_id")) {
-        element.setStyle({width: "15em"});
-      }
-    },
-    revert: "true",
-    // Permet de scroller en draggant une affectation sur le haut ou le bas de la div contenant le planning
-    scroll: "view_affectations"
-  };
-
    loadNonPlaces = function() {
      var url = new Url("dPhospi", "ajax_vw_affectations");
+     url.addParam("offset_th", $$(".first_th")[0].getStyle("width"));
      url.requestUpdate("list_affectations");
    }
    
@@ -120,15 +92,31 @@
     }
   }
   
+  syncBars = function(pre) {
+    other = pre.id == 'view_affectations' ? $("list_affectations") : $("view_affectations");
+    other.scrollLeft = pre.scrollLeft;
+  }
+  
+  makeDragVisible = function(container,element) {
+    if(!container || !element) { return false; }
+        var i=$(container).getStyle('width');
+        i=i.replace('px','');
+        i=Math.round(i-20)+'px';
+        element.setStyle({'width':i,'z-index':2000,'position':'absolute','cursor':'move'});
+
+    $(container).setStyle({});
+  }
+  
   Main.add(function() {
     Calendar.regField(getForm('filterMouv').date);
     var view_affectations = $("view_affectations");
-     view_affectations.setStyle(
-       { width: document.viewport.getWidth()*(87/100)+"px",
-         height: document.viewport.getHeight()*(2/3)+"px"
-       });
-    refreshMouvements();
-    loadNonPlaces();
+    view_affectations.setStyle(
+      { width: document.viewport.getWidth()*(87/100)+"px",
+        height: document.viewport.getHeight()*(0.6)+"px"
+      });
+    var list_affectations = $("list_affectations");
+    list_affectations.setStyle({ height: document.viewport.getHeight()*(0.3)+"px"});
+    refreshMouvements(loadNonPlaces);
   });
 </script>
 
@@ -149,7 +137,7 @@
     Granularité :
     {{foreach from=$granularites item=_granularite}}
       <label>    
-        <input type="radio" name="granularite" value="{{$_granularite}}" onclick="refreshMouvements();"
+        <input type="radio" name="granularite" value="{{$_granularite}}" onclick="refreshMouvements(loadNonPlaces);"
           {{if $_granularite == $granularite}}checked="checked"{{/if}} />
           {{tr}}CService-granularite-{{$_granularite}}{{/tr}}
       </label>
@@ -165,13 +153,18 @@
     &mdash;
     
     Vue :
-    <select name="vue" onchange="refreshMouvements()">
-      <option value="classique" {{if $vue == "classique"}}selected="selected"{{/if}}>Classique</option>
-      <option value="compacte" {{if $vue == "compacte"}}selected="selected"{{/if}}>Compacte</option>
-    </select>
+    <label>
+      <input type="radio" name="vue" value="classique" onclick="refreshMouvements()"
+        {{if $vue == "classique"}}checked="checked"{{/if}}/> Classique
+    </label>
+    <label>
+      <input type="radio" name="vue" value="compacte" onclick="refreshMouvements()"
+        {{if $vue == "compacte"}}checked="checked"{{/if}}/> Compacte
+    </label>
   </div>
   
 </form>
 
-<div style="overflow: auto;" id="view_affectations"></div>
-<div id="list_affectations"></div>
+<div id="view_affectations" style="overflow-x: auto;" onscroll="syncBars(this)"></div>
+<hr />
+<div id="list_affectations" style="overflow-x: auto;" onscroll="syncBars(this)"></div>

@@ -16,7 +16,7 @@ $date         = CValue::getOrSession("date", mbDate());
 $granularites = array("day", "week", "4weeks");
 $triAdm       = CValue::getOrSession("triAdm", "praticien");
 $vue          = CValue::getOrSession("vue", "classique");
-
+$readonly     = CValue::get("readonly");
 $smarty = new CSmartyDP;
 
 $smarty->assign("date"        , $date);

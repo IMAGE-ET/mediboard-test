@@ -140,15 +140,24 @@ $where["entree"] = "<= '$date_max'";
 $where["sortie"] = ">= '$date_min'";
 
 $affectation = new CAffectation;
+$nb_affectations = $affectation->countList($where);
+if ($nb_affectations > CAppUI::conf("dPhospi max_affectations_view")) {
+  $smarty = new CSmartyDP;
+  $smarty->display("inc_vw_max_affectations.tpl");
+  CApp::rip();
+}
+
 $affectations = $affectation->loadList($where);
 
 $sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
 $patients = CMbObject::massLoadFwdRef($sejours, "patient_id");
-
+$praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
+CMbObject::massLoadFwdRef($praticiens, "function_id");
 $operations = array();
 
 foreach ($affectations as $_affectation) {
   $sejour = $_affectation->loadRefSejour();
+  $sejour->loadRefPraticien()->loadRefFunction();
   $sejour->loadRefPatient()->loadRefPhotoIdentite();
   $lits[$_affectation->lit_id]->_ref_affectations[$_affectation->_id] = $_affectation;
   $_affectation->_entree_offset = CMbDate::position(max($date_min, $_affectation->entree), $date_min, $period);
@@ -210,7 +219,7 @@ $smarty->assign("days"        , $days);
 $smarty->assign("change_month", $change_month);
 $smarty->assign("vue"         , $vue);
 $smarty->assign("readonly"    , $readonly);
-
+$smarty->assign("nb_affectations", $nb_affectations);
 $smarty->display("inc_vw_mouvements.tpl");
 
 ?>

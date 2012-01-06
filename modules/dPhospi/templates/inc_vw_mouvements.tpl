@@ -26,7 +26,8 @@
             }
           }
         },
-        hoverclass: "lit_hover"
+        hoverclass: "lit_hover",
+        accept:'draggable'
         });
         // Bug de firefox
         tr.setStyle({position: "static"});
@@ -37,6 +38,9 @@
   <a href="#1" onclick="$V(getForm('filterMouv').date, '{{$date_before}}');">
     &lt;&lt;&lt; {{$date_before|date_format:$conf.date}}
   </a>
+  {{if $can->admin}}
+    <span>{{$nb_affectations}} affectation(s)</span>
+  {{/if}}
   <a href="#1" style="float: right" onclick="$V(getForm('filterMouv').date, '{{$date_after}}');">
     {{$date_after|date_format:$conf.date}} &gt;&gt;&gt;
   </a>
@@ -90,7 +94,7 @@
      {{assign var=td_width value=30}}
    {{/if}}
     <tr>
-      <th></th>
+      <th class="first_th"></th>
       {{foreach from=$datetimes item=_date}}
         <th style="min-width: {{$td_width}}px;">
           {{if $granularite == "4weeks"}}
@@ -106,9 +110,8 @@
     {{foreach from=$_service->_ref_chambres item=_chambre}}
       {{foreach from=$_chambre->_ref_lits item=_lit}}
         <tr data-lit_id="{{$_lit->_id}}" id="{{$_lit->_guid}}" class="droppable">
-          <th class="text">
-            <input type="radio" name="lit_move" style="float: left;" id="lit_move_{{$_lit->_id}}" onchange="chooseLit('{{$_lit->_id}}');"/>
-            {{$_lit}}
+          <th class="text" style="text-align: left;" onclick="this.down().click();">
+            <input type="radio" name="lit_move" style="float: left;" id="lit_move_{{$_lit->_id}}" onchange="chooseLit('{{$_lit->_id}}');" /> {{$_lit}}
           </th>
           {{foreach from=0|range:$nb_ticks_r item=_i}}
             <td class="mouvement_lit" data-date="{{$datetimes.$_i}}">
@@ -125,6 +128,7 @@
                       {{assign var=_affectation value=$affectations.$_affectation_id}}
                       {{assign var=_sejour value=$_affectation->_ref_sejour}}
                       {{assign var=_patient value=$_sejour->_ref_patient}}
+                      {{assign var=praticien value=$_sejour->_ref_praticien}}
                       {{math equation=x*(y+4.6) x=$_affectation->_entree_offset y=$td_width assign=offset}}
                       {{math equation=x*(y+4.6) x=$_affectation->_width y=$td_width assign=width}} 
                       
@@ -136,7 +140,7 @@
                         {{if $_affectation->entree > $date_min && $_sejour->_id}}affect_left{{/if}}
                         {{if $_affectation->sortie < $date_max && $_sejour->_id}}affect_right{{/if}}"
                         data-width="{{$_affectation->_width}}" data-offset="{{$_affectation->_entree_offset}}"
-                        style="left: {{$offset}}px; width: {{$width}}px;"
+                        style="left: {{$offset}}px; width: {{$width}}px; border: 1px solid #{{$praticien->_ref_function->color}};"
                         onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');">
                         {{if $vue == "classique" && $_affectation->_width > 3}}
                           <button type="button" class="trash notext opacity-40" style="float: right"
@@ -175,7 +179,15 @@
                        
                       </div>
                       <script type="text/javascript">
-                        new Draggable($('affectation_temporel_{{$_affectation->_id}}'), dragOptions);
+                        var container = $('affectation_temporel_{{$_affectation->_id}}');
+                        new Draggable(container, {
+                          constraint: "vertical",
+                          starteffect: function(element) {
+                          makeDragVisible(container,e);
+                            new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 });
+                          },
+                          revert: true
+                          });
                       </script>
                     {{/foreach}}
                   {{/foreach}}

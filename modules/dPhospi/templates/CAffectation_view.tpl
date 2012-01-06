@@ -36,13 +36,13 @@
     <td>{{mb_value object=$sejour field=sortie}}</td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" class="text">
       {{mb_label object=$sejour field=libelle}} : {{mb_value object=$sejour field=_motif_complet}}
     </td>
   </tr>
   {{if $sejour->_couvert_cmu || $sejour->_couvert_ald}}
     <tr>
-      <td colspan="2">
+      <td colspan="3">
         {{if $sejour->_couvert_cmu}}CMU /{{/if}} {{if $sejour->_couvert_ald}}ALD{{/if}} 
       </td>
     </tr>

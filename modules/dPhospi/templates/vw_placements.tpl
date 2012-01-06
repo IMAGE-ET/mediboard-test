@@ -1,4 +1,5 @@
 <script type='text/javascript'>
+  Position.includeScrollOffsets = true;
   Placement = {
     tabs: null,
     loadTableau: function(services_ids) {

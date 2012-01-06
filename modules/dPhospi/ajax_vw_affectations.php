@@ -14,6 +14,7 @@ $_type_admission = CValue::getOrSession("_type_admission", "ambucomp");
 $filter_function = CValue::getOrSession("filter_function");
 $date            = CValue::getOrSession("date");
 $granularite     = CValue::getOrSession("granularite");
+$offset_th       = CValue::get("offset_th");
 
 $heureLimit = "16:00:00";
 $group_id = CGroups::loadCurrent()->_id;
@@ -52,29 +53,10 @@ $ljoin = array(
   "patients"        => "sejour.patient_id = patients.patient_id"
 );
 
-// Admissions de la veille
-$dayBefore = mbDate("-1 days", $date);
-$where["sejour.entree"] = "BETWEEN '$dayBefore 00:00:00' AND '$date 01:59:59'";
-$sejours_non_affectes["veille"] = $sejour->loadList($where, $order, null, null, $ljoin);
-
-// Admissions du matin
-$where["sejour.entree"] = "BETWEEN '$date 02:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."'";
-$sejours_non_affectes["matin"] = $sejour->loadList($where, $order, null, null, $ljoin);
-
-// Admissions du soir
-$where["sejour.entree"] = "BETWEEN '$date $heureLimit' AND '$date 23:59:59'";
-$sejours_non_affectes["soir"] = $sejour->loadList($where, $order, null, null, $ljoin);
-
-// Admissions antérieures
-$twoDaysBefore = mbDate("-2 days", $date);
-$where["sejour.entree"] = "<= '$twoDaysBefore 23:59:59'";
-$where["sejour.sortie"] = ">= '$date 00:00:00'";
-$sejours_non_affectes["avant"] = $sejour->loadList($where, $order, null, null, $ljoin);
-
 $period = "";
 $nb_unite = 0;
 
-switch($granularite) {
+switch ($granularite) {
   case "day":
     $period = "1hour";
     $unite = "hour";
@@ -100,35 +82,75 @@ switch($granularite) {
 $offset = $nb_ticks * $nb_unite;
 $date_max = mbDateTime("+ $offset $unite", $date_min);
 
-foreach ($sejours_non_affectes as $_sejours_by_period) {
-  $praticiens = CMbObject::massLoadFwdRef($_sejours_by_period, "praticien_id");
-  CMbObject::massLoadFwdRef($_sejours_by_period, "patient_id");
-  CMbObject::massLoadFwdRef($praticiens, "function_id");
-  foreach ($_sejours_by_period as $_sejour) {
-    $_sejour->loadRefPatient();
-    $_sejour->loadRefPraticien()->loadRefFunction();
-    /*$_sejour->getDroitsCMU();
-    $_sejour->loadRefPrestation();
-    $_sejour->loadNDA();
-    $sejour->loadRefsOperations();
-    foreach($sejour->_ref_operations as &$operation) {
-      $operation->loadExtCodesCCAM();
-    }*/
+$temp_datetime = mbDateTime(null, $date_min);
+
+for ($i = 0 ; $i < $nb_ticks ; $i++) {
+  $offset = $i * $nb_unite;
+  
+  $datetime = mbDateTime("+ $offset $unite", $date_min);
+  $datetimes[] = $datetime;
+  if ($granularite == "4weeks") {
+    $week_a = mbTransformTime($temp_datetime, null, "%W");
+    $week_b = mbTransformTime($datetime, null, "%W");
+    if ($week_a == "00") {
+      $week_a = "52";
+    }
+    if ($week_b == "00") {
+      $week_b = "52";
+    }
+    // les semaines
+    $days[$datetime] = $week_b;
+    
+    // On stocke le changement de mois s'il advient
+   if (mbTransformTime($datetime, null, "%m") != mbTransformTime($temp_datetime, null, "%m")) {
+     
+     // Entre deux semaines
+     if ($i%7 == 0) {
+       $change_month[$week_a] = array("right"=>$temp_datetime);
+       $change_month[$week_b] = array("left"=>$datetime);
+     }
+     // Dans la même semaine
+     else {
+       $change_month[$week_b] = array("left" => $temp_datetime, "right" => $datetime);
+     }
+   }
   }
+  else {
+    // le datetime, pour avoir soit le jour soit l'heure
+    $days[] = mbDate($datetime);
+  }
+  $temp_datetime = $datetime;
 }
 
+$days = array_unique($days);
+
+// Cas de la semaine 00
+if ($granularite == "4weeks" && count($days) == 5) {
+  array_pop($days);
+}
+
+$where["sejour.entree"] = "<= '$date_max'";
+$where["sejour.sortie"] = ">= '$date_min'";
+
+$sejours_non_affectes = $sejour->loadList($where, $order, null, null, $ljoin);
+
+$praticiens = CMbObject::massLoadFwdRef($sejours_non_affectes, "praticien_id");
+CMbObject::massLoadFwdRef($sejours_non_affectes, "patient_id");
+CMbObject::massLoadFwdRef($praticiens, "function_id");
+
 $functions_filter = array();
-foreach($sejours_non_affectes as $_keyGroup => $_group) {
-  foreach($_group as $_key => $_sejour) {
-    $functions_filter[$_sejour->_ref_praticien->function_id] = $_sejour->_ref_praticien->_ref_function;
-    if ($filter_function && $filter_function != $_sejour->_ref_praticien->function_id) {
-      unset($sejours_non_affectes[$_keyGroup][$_key]);
-    }
-    else {
-      $_sejour->_entree_offset = CMbDate::position(max($date_min, $_sejour->entree), $date_min, $period);
-      $_sejour->_sortie_offset = CMbDate::position(min($date_max, $_sejour->sortie), $date_min, $period);
-      $_sejour->_width = $_sejour->_sortie_offset - $_sejour->_entree_offset;
-    }
+foreach($sejours_non_affectes as $_key => $_sejour) {
+  $_sejour->loadRefPraticien()->loadRefFunction();
+  $functions_filter[$_sejour->_ref_praticien->function_id] = $_sejour->_ref_praticien->_ref_function;
+  if ($filter_function && $filter_function != $_sejour->_ref_praticien->function_id) {
+    unset($sejours_non_affectes[$_key]);
+  }
+  else {
+    $_sejour->_entree_offset = CMbDate::position(max($date_min, $_sejour->entree), $date_min, $period);
+    $_sejour->_sortie_offset = CMbDate::position(min($date_max, $_sejour->sortie), $date_min, $period);
+    $_sejour->_width = $_sejour->_sortie_offset - $_sejour->_entree_offset;
+    $_sejour->loadRefPatient()->loadRefPhotoIdentite();
+    $_sejour->loadRefsOperations();
   }
 }
 
@@ -142,6 +164,13 @@ $smarty->assign("sejour", $sejour);
 $smarty->assign("triAdm", $triAdm);
 $smarty->assign("functions_filter", $functions_filter);
 $smarty->assign("filter_function", $filter_function);
-
+$smarty->assign("granularite", $granularite);
+$smarty->assign("offset_th", $offset_th);
+$smarty->assign("date"     , $date);
+$smarty->assign("date_min", $date_min);
+$smarty->assign("date_max", $date_max);
+$smarty->assign("nb_ticks", $nb_ticks);
+$smarty->assign("days"    , $days);
+$smarty->assign("datetimes", $datetimes);
 $smarty->display("inc_vw_affectations.tpl");
 ?>
