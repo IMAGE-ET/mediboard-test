@@ -185,7 +185,7 @@ $debut = mbDate("-1 week", $debut);
 $debut = mbDate("next monday", $debut);
 
 //Instanciation du planning
-$planning = new CPlanningWeek($debut, $debut, $fin, count($listDays), true, null, null, true);
+$planning = new CPlanningWeek($debut, $debut, $fin, count($listDays), false, null, null, true);
 if($mediusers->load($chirSel)){
   $planning->title = $mediusers->load($chirSel)->_view;
 }
@@ -210,12 +210,14 @@ foreach($hours as $curr_hour){
 	    	if($_listPlages!=null && $affichage!="empty"){
 	    	$plage = $_listPlages["$affichage"];
 	    	$titre="";
+	    	$guid="";
 	    	if($plage->libelle){
 	        $titre = $plage->libelle;
+	        $guid = $plage->_guid;
 	    	}
 	    	$debute = $curr_day[8].$curr_day[9]."-".$curr_day[5].$curr_day[6]."-".$curr_day[0].$curr_day[1].$curr_day[2].$curr_day[3]." ".$plage->debut;
         //Création de l'évènement
-	    	$event = new CPlanningEvent($titre, $debute, 15*$plage->_nb_intervals, $titre, "#CCC", true, null, null);
+	    	$event = new CPlanningEvent($guid, $debute, 15*$plage->_nb_intervals, $titre, "#CCC", true, null, null);
 	    	//Menu des évènements
 	    	$event->menu = true;
 	    	$event->elements_menu["class"] = "toolbar";
