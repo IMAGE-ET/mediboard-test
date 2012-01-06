@@ -190,6 +190,7 @@ $max_hour = sprintf("%01d", mbTransformTime($max, null, "%H"));
 if (!isset($hours[$min_hour])) {
   for($i = $min_hour; $i < CPlageconsult::$hours_start; $i++) {
     $hours[$i] = sprintf("%02d", $i);
+    $hours[$i-1] = sprintf("%02d", $i-1);
   }
 }
 
