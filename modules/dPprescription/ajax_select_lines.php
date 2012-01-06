@@ -34,7 +34,7 @@ $current_date = mbDate();
 $prescription = new CPrescription;
 
 $mode = $tp ? "tp" : "validation";
-if(!$pack_id && !$tp){
+if(!$pack_protocole && !$tp){
   $mode	= "duplicate";
 }
 
