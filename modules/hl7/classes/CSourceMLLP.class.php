@@ -9,8 +9,15 @@
  */
 
 class CSourceMLLP extends CExchangeSource {
-  const TRAILING = "\x0B";
-  const LEADING  = "\x1C\x0D";
+  /**
+   * Start of an MLLP message
+   */
+  const TRAILING = "\x0B";     // \v Vertical Tab (VT, decimal 11)
+  
+  /**
+   * End of an MLLP message
+   */
+  const LEADING  = "\x1C\x0D"; // File separator (FS, decimal 28), \r Carriage return (CR, decimal 13)
   
   var $source_mllp_id     = null;
   var $port               = null;
@@ -54,7 +61,7 @@ class CSourceMLLP extends CExchangeSource {
   }
   
   function send($evenement_name = null){
-    $this->getSocketClient()->send(self::LEADING.$this->_data.self::TRAILING);
+    $this->getSocketClient()->send(self::TRAILING.$this->_data.self::LEADING);
   }
   
   function isReachableSource() {
