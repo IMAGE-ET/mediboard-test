@@ -15,7 +15,7 @@
 
 CApp::$performance["autoload"] = 0;
 
-$classPaths = SHM::get("class-paths");
+CApp::$classPaths = SHM::get("class-paths");
 
 /**
  * Mediboard class autoloader
@@ -24,27 +24,27 @@ $classPaths = SHM::get("class-paths");
  * @return bool
  */
 function mbAutoload($class) {
-  global $classPaths;
-  
   $file_exists = false;
   
   // Entry already in cache
-  if (isset($classPaths[$class])) {
+  if (isset(CApp::$classPaths[$class])) {
     // The class is known to not be in MB
-    if ($classPaths[$class] === false) {
+    if (CApp::$classPaths[$class] === false) {
       return false;
     }
     
     // Load it if we can
-    if ($file_exists = file_exists($classPaths[$class])) {
+    if ($file_exists = file_exists(CApp::$classPaths[$class])) {
       CApp::$performance["autoload"]++;
-      return include_once $classPaths[$class];
+      return include_once CApp::$classPaths[$class];
     }
   }
+	
+	//mbLog(CApp::$classPaths);
   
   // File moved ?
   if (!$file_exists) {
-    unset($classPaths[$class]);
+    unset(CApp::$classPaths[$class]);
   }
   
   // CSetup* class
@@ -58,6 +58,7 @@ function mbAutoload($class) {
       "classes/$class.class.php", 
       "classes/*/$class.class.php",
       "modules/*/classes/$class.class.php",
+      "modules/*/classes/*/$class.class.php",
     );
   }
   
@@ -75,16 +76,17 @@ function mbAutoload($class) {
   // The class was found
   if (class_exists($class, false) || interface_exists($class, false)) {
     $reflection = new ReflectionClass($class);
-    $classPaths[$class] = $reflection->getFileName();
+    CApp::$classPaths[$class] = $reflection->getFileName();
   }
   
   // Class not found, it is not in MB
   else {
-    $classPaths[$class] = false;
+    CApp::$classPaths[$class] = false;
     $mb_class = false;
   }
   
-  SHM::put("class-paths", $classPaths);
+	//mbLog($class, "put");
+  SHM::put("class-paths", CApp::$classPaths);
   
   return $mb_class;
 }

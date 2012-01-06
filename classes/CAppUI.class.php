@@ -83,41 +83,6 @@ class CAppUI {
   }
   
   /**
-   * Used to load a php class file from its name
-   * @param string $className The class name
-   */
-  static function loadClass($className) {
-    return;
-    if (!class_exists($className)) {
-      return mbAutoload($className);
-    }
-    return true;
-  }
-  
-  /**
-   * Used to include a php class file from the system classes directory
-   * @param string $name The class root file name (excluding .class.php)
-   */
-  static function requireSystemClass($name) {
-    return;
-    if ($root = self::conf("root_dir")) {
-      return require_once "$root/classes/$name.class.php";
-    }
-  }
-
-  /**
-   * Used to include a php class file from the legacy classes directory
-   * @param string $name The class file name (excluding .class.php)
-   * @return string The path to the include file
-   */
-  static function requireLegacyClass($name) {
-    return;
-    if ($root = self::conf("root_dir")) {
-      return require_once("$root/legacy/$name.class.php");
-    }
-  }
-  
-  /**
    * Used to include a php class file from the lib directory
    * @param string $name The class root file name (excluding .php)
    */
@@ -130,28 +95,6 @@ class CAppUI {
         self::setMsg("La librairie <strong>".ucwords(dirname($name))."</strong> n'est pas installée", UI_MSG_ERROR);
         CApp::rip();
       }
-    }
-  }
-  
-  /**
-   * Used to load a php class file from the module directory
-   * @param string $name The module name
-   * @param string $file The file name of the class to include
-   */
-  static function requireModuleClass($name = null, $file = null) {
-    return;
-    if ($name && $root = self::conf("root_dir")) {
-      $filename = $file ? $file : $name;
-        
-      $path = "$root/modules/$name/classes/$filename.class.php";
-      if (file_exists($path))
-        return require_once($path);
-      
-      $path = "$root/modules/$name/$filename.class.php";
-      if (file_exists($path))
-        return require_once($path);
-      
-      return false;
     }
   }
   
