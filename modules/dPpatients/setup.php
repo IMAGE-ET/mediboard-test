@@ -1525,7 +1525,62 @@ class CSetupdPpatients extends CSetup {
        ADD `tutelle` ENUM ('aucune','tutelle','curatelle') DEFAULT 'aucune';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.33";
+    $this->makeRevision("1.33");
+    $query = "CREATE TABLE `observation_result_set` (
+              `observation_result_set_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `patient_id` INT (11) UNSIGNED NOT NULL,
+              `datetime` DATETIME NOT NULL,
+              `context_class` CHAR (80) NOT NULL,
+              `context_id` INT (11) UNSIGNED
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `observation_result_set` 
+              ADD INDEX (`patient_id`),
+              ADD INDEX (`datetime`),
+              ADD INDEX (`context_id`);";
+    $this->addQuery($query);
+    
+    $query = "CREATE TABLE `observation_value_type` (
+              `observation_value_type_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `datatype` ENUM ('NM','ST','TX') NOT NULL,
+              `code` CHAR (40) NOT NULL,
+              `label` CHAR (255),
+              `coding_system` CHAR (40) NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `observation_value_type` 
+              ADD INDEX (`datatype`),
+              ADD INDEX (`code`),
+              ADD INDEX (`coding_system`);";
+    $this->addQuery($query);
+    
+    $query = "CREATE TABLE `observation_value_unit` (
+              `observation_value_unit_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `code` CHAR (40) NOT NULL,
+              `label` CHAR (255),
+              `coding_system` CHAR (40) NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `observation_value_type` 
+              ADD INDEX (`code`),
+              ADD INDEX (`coding_system`);";
+    $this->addQuery($query);
+    
+    $query = "CREATE TABLE `observation_result` (
+              `observation_result_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `observation_result_set_id` INT (11) UNSIGNED NOT NULL,
+              `value_type_id` INT (11) UNSIGNED NOT NULL,
+              `unit_id` INT (11) UNSIGNED NOT NULL,
+              `value` CHAR (255) NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `observation_result` 
+              ADD INDEX (`observation_result_set_id`),
+              ADD INDEX (`value_type_id`),
+              ADD INDEX (`unit_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.34";
     
     $query = "SHOW TABLES LIKE 'categorie_socioprofessionnelle'";
     $this->addDatasource("INSEE", $query);

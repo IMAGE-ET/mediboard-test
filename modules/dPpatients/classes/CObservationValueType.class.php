@@ -1,0 +1,32 @@
+<?php /* $Id$ */
+
+/**
+ * @package Mediboard
+ * @subpackage classes
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
+
+/**
+ * Observation value type, based on the HL7 OBX specification
+ * http://www.interfaceware.com/hl7-standard/hl7-segment-OBX.html
+ */
+class CObservationValueType extends CObservationValueCodingSystem {
+  var $observation_value_type_id = null;
+  
+  var $datatype                  = null;
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = "observation_value_type";
+    $spec->key   = "observation_value_type_id";
+    return $spec;
+  }
+  
+  function getProps() {
+    $props = parent::getProps();
+    $props["datatype"] = "enum notNull list|NM|ST|TX"; // AD|CF|CK|CN|CP|CWE|CX|DT|DTM|ED|FT|MO|NM|PN|RP|SN|ST|TM|TN|TX|XAD|XCN|XON|XPN|XTN
+    return $props;
+  }
+}
