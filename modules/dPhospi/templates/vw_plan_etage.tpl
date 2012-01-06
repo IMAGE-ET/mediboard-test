@@ -16,15 +16,15 @@
 }
 
 div#list-chambres-non-placees{
-	width:100px;
-	min-height:720px;
+  width:100px;
+  min-height:720px;
 }
 
 div#grille{
-	float:left;
-	margin-left:5px;
-	margin-right:5px;	
-	width:100%;
+  float:left;
+  margin-left:5px;
+  margin-right:5px; 
+  width:100%;
 }
 
 #grille td.conteneur-chambre{
@@ -43,36 +43,36 @@ div#grille{
   <tr>
     <td>
       
-	    <form action="?m=dPhospi&tab=vw_plan_etage" method="post">
-	        <select name="service_id" onchange="this.form.submit()">
-	          <option value="">&mdash; Service</option>
-	          {{foreach from=$services item=_service}}    
-	            <option value="{{$_service->_ref_service->_id}}" {{if $service_id!="" && $service_id==$_service->_ref_service->_id}}selected="selected"{{/if}}>{{ $_service->_ref_service->nom}}</option>
-	          {{/foreach}}
-	        </select>
-	    </form>
-			
-	    <div id="list-chambres-non-placees" >
-	    {{foreach from=$chambres_non_placees item=_chambre}}
-	        <div data-chambre-id="{{$_chambre->_id}}" class="chambre">{{$_chambre->nom}}</div>
-	    {{/foreach}}
-	    </div>
+      <form action="?m=dPhospi&tab=vw_plan_etage" method="post">
+          <select name="service_id" onchange="this.form.submit()">
+            <option value="">&mdash; Service</option>
+            {{foreach from=$services item=_service}}    
+              <option value="{{$_service->_ref_service->_id}}" {{if $service_id!="" && $service_id==$_service->_ref_service->_id}}selected="selected"{{/if}}>{{ $_service->_ref_service->nom}}</option>
+            {{/foreach}}
+          </select>
+      </form>
+      
+      <div id="list-chambres-non-placees" >
+      {{foreach from=$chambres_non_placees item=_chambre}}
+          <div data-chambre-id="{{$_chambre->_id}}" class="chambre">{{$_chambre->nom}}</div>
+      {{/foreach}}
+      </div>
     </td>
     <td> 
       <div id="grille" >
         <table class="main tbl">
         {{foreach from=$grille item=ligne key=y }}
-				 <tr style="height:35px;min-width:750px;">
-				  {{foreach from=$ligne item=_zone key=x}}
-					
-	          <td data-x="{{$x}}" data-y="{{$y}}" class="conteneur-chambre" >
-	            {{if $_zone!='0'}}
-							 <div data-chambre-id="{{$_zone->chambre_id}}" class="chambre">{{$_zone}}</div>
-	            {{/if}}
-						</td>
-						           
+         <tr style="height:35px;min-width:750px;">
+          {{foreach from=$ligne item=_zone key=x}}
+          
+            <td data-x="{{$x}}" data-y="{{$y}}" class="conteneur-chambre" >
+              {{if $_zone!='0'}}
+               <div data-chambre-id="{{$_zone->chambre_id}}" class="chambre">{{$_zone}}</div>
+              {{/if}}
+            </td>
+                       
          {{/foreach}}
-				</tr>
+        </tr>
         {{/foreach}}
         </tr>
         </table>

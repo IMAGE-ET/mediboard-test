@@ -24,7 +24,7 @@ Main.add(function(){
 
 function TraiterDrop(element, zoneDrop)
 {
-	element.className="patient";
+	element.addClassName("patient");
 	zoneDrop.appendChild(element);
 	savePlan(element, zoneDrop);
 	if(zoneDrop.select('div.patient').length==zoneDrop.getAttribute("data-nb-lits")){
@@ -33,6 +33,7 @@ function TraiterDrop(element, zoneDrop)
 }
 
 function savePlan(element, zoneDrop){
+	element.style.width="120px";
 	var url=new Url("dPhospi", "ajax_creation_affectation");
 	
 	url.addParam("sejour_id",element.getAttribute("data-sejour-id"));
