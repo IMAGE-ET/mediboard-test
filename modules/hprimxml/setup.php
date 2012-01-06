@@ -365,8 +365,14 @@ class CSetuphprimxml extends CSetup {
     $query = "ALTER TABLE `destinataire_hprim_config` 
               ADD `uppercase_fields` ENUM ('0','1') DEFAULT '0';"; 
     $this->addQuery($query);
+    
+    $this->makeRevision("0.37");
+    
+    $query = "ALTER TABLE `echange_hprim` 
+                CHANGE `sender_class` `sender_class` ENUM ('CSenderFTP','CSenderSOAP','CSenderMLLP');"; 
+    $this->addQuery($query);
         
-    $this->mod_version = "0.37";
+    $this->mod_version = "0.38";
   }
 }
 

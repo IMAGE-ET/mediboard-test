@@ -15,14 +15,18 @@ $message     = CValue::post("message");
 
 mbLog($message, "FROM $client_addr:$client_port TO localhost:$port");
 
-$client = new CSourceMLLP;
-$client->port = $port;
-$client->host = $client_addr;
-$client->loadMatchingObject();
-mbLog($client, "CLIENT");
+$source_mllp = new CSourceMLLP;
+$source_mllp->port = $port;
+$source_mllp->host = $client_addr;
+$source_mllp->loadMatchingObject();
 
-$server = new CSourceMLLP;
-$server->port = $port;
-$server->host = "localhost";
-$server->loadMatchingObject();
-mbLog($server, "SERVER");
+if (!$source_mllp->_id) {
+  return;
+}
+
+$sender_mllp = CMbObject::loadFromGuid($source_mllp->name);
+
+// Dispatch EAI 
+if (!$ack = CEAIDispatcher::dispatch($message, $sender_mllp)){
+  mbLog(utf8_encode(CEAIDispatcher::$xml_error));
+}

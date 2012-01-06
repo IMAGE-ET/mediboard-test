@@ -68,7 +68,7 @@ class CSourceMLLP extends CExchangeSource {
     try {
       $this->getSocketClient();
     } 
-    catch (CMbException $e) {
+    catch (Exception $e) {
       $this->_reachable = 0;
       $this->_message   = $e->getMessage();
       return false;

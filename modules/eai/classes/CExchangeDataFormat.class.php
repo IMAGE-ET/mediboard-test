@@ -68,7 +68,7 @@ class CExchangeDataFormat extends CMbMetaObject {
     
     $props["date_production"]     = "dateTime notNull";
     $props["sender_id"]           = "ref class|CInteropSender meta|sender_class";
-    $props["sender_class"]        = "enum list|CSenderFTP|CSenderSOAP show|0";
+    $props["sender_class"]        = "enum list|CSenderFTP|CSenderSOAP|CSenderMLLP show|0";
     $props["group_id"]            = "ref notNull class|CGroups autocomplete|text";
     $props["type"]                = "str";
     $props["sous_type"]           = "str";

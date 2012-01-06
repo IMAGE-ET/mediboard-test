@@ -395,6 +395,12 @@ class CSetuphprim21 extends CSetup {
                 ADD `identifiant_emetteur` VARCHAR (255);";
     $this->addQuery($query); 
     
-    $this->mod_version = "0.21";
+    $this->makeRevision("0.21");
+    
+    $query = "ALTER TABLE `echange_hprim21` 
+                CHANGE `sender_class` `sender_class` ENUM ('CSenderFTP','CSenderSOAP','CSenderMLLP');"; 
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.22";
   }
 }

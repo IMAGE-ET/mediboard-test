@@ -141,6 +141,7 @@ class CExchangeIHE extends CExchangeTabular {
     $this->statut_acquittement = null;
     $this->message_valide      = 0;
     $this->acquittement_valide = null;
+    $this->date_production     = mbDateTime();
     $this->date_echange        = mbDateTime();
     $this->store();
   }

@@ -130,7 +130,13 @@ class CSetupihe extends CSetup {
                 ADD `send_default_affectation` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query); 
     
-    $this->mod_version = "0.10";
+    $this->makeRevision("0.10");
+       
+    $query = "ALTER TABLE `exchange_ihe` 
+                CHANGE `sender_class` `sender_class` ENUM ('CSenderFTP','CSenderSOAP','CSenderMLLP');"; 
+    $this->addQuery($query);
+       
+    $this->mod_version = "0.11";
   }
 }
 

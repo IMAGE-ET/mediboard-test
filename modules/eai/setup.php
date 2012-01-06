@@ -77,7 +77,18 @@ class CSetupeai extends CSetup {
                 CHANGE `emetteur_id` `sender_id` INT (11) UNSIGNED;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.05";
+    $this->makeRevision("0.05");
+    
+    $query = "ALTER TABLE `echange_any` 
+                ADD `sender_class` ENUM ('CSenderFTP','CSenderSOAP','CSenderMLLP');";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `echange_any` 
+                ADD INDEX (`sender_id`),
+                ADD INDEX (`receiver_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.06";
   }
 }
 

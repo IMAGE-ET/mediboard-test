@@ -598,7 +598,24 @@ class CSetuphl7 extends CSetup {
     );
     $this->updateTableEntry("32", $set, $and);
     
-    $this->mod_version = "0.13";
+    $this->makeRevision("0.13");
+    
+    $query = "CREATE TABLE `sender_mllp` (
+                `sender_mllp_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `user_id` INT (11) UNSIGNED,
+                `nom` VARCHAR (255) NOT NULL,
+                `libelle` VARCHAR (255),
+                `group_id` INT (11) UNSIGNED NOT NULL,
+                `actif` ENUM ('0','1') NOT NULL DEFAULT '0'
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `sender_mllp` 
+                ADD INDEX (`user_id`),
+                ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.14";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
