@@ -1657,6 +1657,8 @@ class CSejour extends CCodable implements IPatientRelated {
     }
     
     $this->_sortie_autorisee = $this->_ref_last_affectation->confirme;
+    
+    return $this->_ref_affectations;
   }
   
   function loadRefsOperations($where = array()) {

@@ -21,17 +21,21 @@ if(!$sejour_id){
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 $sejour->loadComplete();
-$sejour->loadListConstantesMedicales();
-$sejour->loadRefsOperations();
 $sejour->canRead();
-$sejour->loadRefsTasks();
-$sejour->loadRefCurrAffectation();
-$sejour->_ref_curr_affectation->loadView();
 
-foreach ($sejour->_ref_tasks as $_task) {
+// Chargement des affectations
+$sejour->loadRefCurrAffectation()->loadRefLit();
+foreach ($sejour->loadRefsAffectations() as $_affectation) {
+  $_affectation->loadRefLit();
+}
+
+// Chargement des tâches
+foreach ($sejour->loadRefsTasks() as $_task) {
   $_task->loadRefPrescriptionLineElement();
 }
 
+// Chargement des opérations
+$sejour->loadRefsOperations();
 foreach($sejour->_ref_operations as $_interv) {
   $_interv->loadRefPraticien(true);
   $_interv->_ref_praticien->loadRefFunction();
@@ -48,15 +52,13 @@ foreach($sejour->_ref_operations as $_interv) {
 }
 
 // Chargement du patient
-$sejour->loadRefPatient();
-$patient =& $sejour->_ref_patient;
+
+$patient = $sejour->loadRefPatient();
 $patient->loadComplete();
 $patient->loadIPP();
 
-// Chargement des constantes medicales
-$patient->loadRefDossierMedical();
-
-$dossier_medical = $patient->_ref_dossier_medical;
+// Chargement du dossier medicale
+$dossier_medical = $patient->loadRefDossierMedical();
 $dossier_medical->countAntecedents();
 $dossier_medical->loadRefPrescription();
 $dossier_medical->loadRefsTraitements();
@@ -137,6 +139,8 @@ if (count($prescription->_ref_lines_elements_comments)) {
 
 ksort($dossier);
 
+// Constantes du séjour
+$sejour->loadListConstantesMedicales();
 $constantes_grid = CConstantesMedicales::buildGrid($sejour->_list_constantes_medicales, false);
 
 $praticien = new CMediusers();

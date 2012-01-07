@@ -21,9 +21,9 @@
     <td>{{mb_value object=$_affectation field=entree}}</td>
     <td>{{mb_value object=$_affectation field=sortie}}</td>
     <td>
-    	{{mb_include module=system template=inc_object_history object=$_affectation}}
-			{{mb_value object=$_affectation field=effectue}}
-		</td>
+      {{mb_include module=system template=inc_object_history object=$_affectation}}
+      {{mb_value object=$_affectation field=effectue}}
+  </td>
   </tr>
   {{foreachelse}}
   <tr>
