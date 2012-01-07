@@ -52,7 +52,7 @@
         </select>
       </form>
       
-      <table id="planningBloc">
+      <table class="planningBloc">
       {{assign var=typeVuePlanning value="day"}}
       {{assign var=curr_day value=$date}}
       {{include file="inc_planning_day.tpl"}}

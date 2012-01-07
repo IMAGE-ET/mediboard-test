@@ -20,13 +20,15 @@ Main.add(function () {
   <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
 </form>
 
-<table class="tbl">
+<table class="tbl planningBloc ">
   <tr>
   	<th>Liste des spécialités</th>
   </tr>
   {{foreach from=$listSpec item=curr_spec}}
   <tr>
-    <td class="text" style="background: #{{$curr_spec->color}};">{{$curr_spec->text}}</td>
+    <td class="plageop text" style="background: #{{$curr_spec->color}};">
+	  <strong>{{$curr_spec}}</strong>
+	</td>
   </tr>
   {{/foreach}}
 </table>

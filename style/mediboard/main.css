@@ -357,12 +357,12 @@ table.sejourcollapse td.selectsejour {
   display: table-cell;
 }
 
-table#planningBloc {
+table.planningBloc {
   width: 100%;
   border-spacing: 1px;
 }
 
-table#planningBloc th {
+table.planningBloc th {
   background-color: #888;
   padding: 2px;
   color: #fff;
@@ -371,31 +371,43 @@ table#planningBloc th {
   white-space: nowrap;
 }
 
-table#planningBloc th a {
+table.planningBloc th a {
   color: #fff;
 }
 
-table#planningBloc th.heure {
+table.planningBloc th.heure {
   text-align: left;
   width: 6%;
 }
 
-table#planningBloc td.salle {
+table.planningBloc td.salle {
   background-color: #eee;
   text-align: center;
 }
 
-table#planningBloc td {
+table.planningBloc td {
   vertical-align: middle;
   background-color: #888;
 }
-table#planningBloc td.empty {
+table.planningBloc td.empty {
   background: #eee;
   width: 1.5%;
 }
 
-table#planningBloc td.firsthour {
+table.planningBloc td.firsthour {
+  background: #ccc;
+}
+
+table.planningBloc td.plageop {
   background: #ddd;
+  vertical-align: top; 
+  text-align: center; 
+  white-space: nowrap;  
+  text-shadow:  0 0 0 transparent,
+               -1px  0  .0px rgba(255,255,255,.3), 
+                0   1px .0px rgba(255,255,255,.3), 
+                1px  0  .0px rgba(255,255,255,.3), 
+                0  -1px .0px rgba(255,255,255,.3);
 }
 
 /** dPpatients */

@@ -27,17 +27,17 @@
   }
   
   var reloadLeftList = function() {
-    var leftListUrl = new Url("dPbloc", "ajax_list_intervs");
-    leftListUrl.addParam("plageop_id", {{$plage->_id}});
-    leftListUrl.addParam("list_type" , "left");
-    leftListUrl.requestUpdate("left_list");
+    var url = new Url("dPbloc", "ajax_list_intervs");
+    url.addParam("plageop_id", {{$plage->_id}});
+    url.addParam("list_type" , "left");
+    url.requestUpdate("left_list");
   }
   
   var reloadRightList = function() {
-    var rightListUrl = new Url("dPbloc", "ajax_list_intervs");
-    rightListUrl.addParam("plageop_id", {{$plage->_id}});
-    rightListUrl.addParam("list_type" , "right");
-    rightListUrl.requestUpdate("right_list");
+    var url = new Url("dPbloc", "ajax_list_intervs");
+    url.addParam("plageop_id", {{$plage->_id}});
+    url.addParam("list_type" , "right");
+    url.requestUpdate("right_list");
   }
   
   var submitOrder = function(oForm, side) {
@@ -85,14 +85,9 @@
           entre chaque intervention
         </span>
         {{if $plage->chir_id}}
-        Dr {{$plage->_ref_chir->_view}}
-        {{if @$modules.messagerie}}
-        <a class="action" href="#nothing" onclick="MbMail.create({{$plage->chir_id}})">
-          <img src="images/icons/mbmail.png" title="Envoyer un message" />
-        </a>
-        {{/if}}
+          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$plage->_ref_chir}}
         {{else}}
-        {{$plage->_ref_spec->_view}}
+        {{$plage->_ref_spec}}
         {{/if}}
         - {{$plage->date|date_format:$conf.longdate}}
         <br />

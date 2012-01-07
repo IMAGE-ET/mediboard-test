@@ -48,7 +48,7 @@
   </tr>
   <tr>
     <td class="greedyPane">
-      <table id="planningBloc">
+      <table class="planningBloc">
       {{assign var=typeVuePlanning value="week"}}
       {{foreach from=$listDays key=curr_day item=plagesPerDay}}
         {{include file="inc_planning_day.tpl"}}

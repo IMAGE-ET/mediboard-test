@@ -10,38 +10,38 @@
 
 <tr>
   <th>
-  	<button class="print notext" onclick="EditPlanning.popPlanning('{{$curr_day}}');" style="float:left;">{{tr}}Print{{/tr}}</button>
-  	{{if $can->edit}}
+    <button class="print notext" onclick="EditPlanning.popPlanning('{{$curr_day}}');" style="float:left;">{{tr}}Print{{/tr}}</button>
+    {{if $can->edit}}
     <button class="new notext"   onclick="EditPlanning.edit('','{{$curr_day}}');"     style="float:right;">{{tr}}Edit{{/tr}}</button>
     {{/if}}
     <a href="?m=dPbloc&amp;tab=vw_edit_planning&amp;date={{$curr_day}}" >
-      <strong>{{$curr_day|date_format:"%a %d %b"}}</strong>
+      <strong>{{$curr_day|date_format:$conf.longdate}}</strong>
     </a>
   </th>
-  {{foreach from=$listHours|smarty:nodefaults item=curr_hours}}
-  <th colspan="4" class="heure">{{$curr_hours}}:00</th>
+  {{foreach from=$listHours item=_hour}}
+  <th colspan="4" class="heure">{{$_hour}}:00</th>
   {{/foreach}}
 </tr>
-{{foreach from=$listSalles item=curr_salle key=keySalle}}
-{{assign var="keyHorsPlage" value="$curr_day-s$keySalle-HorsPlage"}}
+{{foreach from=$listSalles item=_salle key=salle_id}}
+{{assign var="keyHorsPlage" value="$curr_day-s$salle_id-HorsPlage"}}
 <tr>
   <td class="salle" {{if $affichages.$keyHorsPlage|@count}}rowspan="2"{{/if}}>
-    {{$curr_salle->nom}}
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$_salle->_guid}}')">{{$_salle}}</span>
   </td>
-  {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
-  {{foreach from=$listMins|smarty:nodefaults item=curr_min key=keymin}}
-    {{assign var="keyAff" value="$curr_day-s$keySalle-$curr_hour:$curr_min:00"}}
-    {{assign var=affichage value=$affichages.$keyAff}}
+  {{foreach from=$listHours item=_hour}}
+  {{foreach from=$listMins item=_min}}
+    {{assign var="creneau" value="$curr_day-s$salle_id-$_hour:$_min:00"}}
+    {{assign var=affichage value=$affichages.$creneau}}
     
     {{if $affichage === "empty"}}
-      <td class="empty{{if !$keymin}} firsthour{{/if}}"></td>
+      <td class="empty{{if $_min == "00"}} firsthour{{/if}}"></td>
     {{elseif $affichage === "full"}}
    
     {{else}}
     {{assign var=_listPlages value=$listPlages.$curr_day}}
     {{assign var=plage value=$_listPlages.$affichage}}
  
-      {{mb_ternary var=colorCell test=$plage->chir_id value=$plage->_ref_chir->_ref_function->color other=$plage->_ref_spec->color}}
+      {{mb_ternary var=color test=$plage->chir_id value=$plage->_ref_chir->_ref_function->color other=$plage->_ref_spec->color}}
      
       {{assign var="pct" value=$plage->_fill_rate}}
       {{if $pct gt 100}}
@@ -52,7 +52,7 @@
       {{elseif $pct lt 100}}{{assign var="backgroundClass" value="booked"}}
       {{else}}{{assign var="backgroundClass" value="full"}}
       {{/if}}
-      <td nowrap="nowrap" style="vertical-align: top; text-align: center; white-space: normal; background-color:#{{$colorCell}};" colspan="{{$plage->_nbQuartHeure}}">
+      <td class="plageop" style="background:#{{$color}};" colspan="{{$plage->_nbQuartHeure}}">
         {{if $typeVuePlanning == "day"}}
         {{mb_include module=system template=inc_object_notes object=$plage}}
         {{/if}}
@@ -70,22 +70,24 @@
         <a onclick="EditPlanning.edit('{{$plage->plageop_id}}','{{$curr_day}}');" href="#">
           <img src="images/icons/edit.png" title="Editer la plage" border="0" height="16" width="16" />
         </a>
-        {{if ($plage->_ref_affectations_personnel.op|@count) || ($plage->_ref_affectations_personnel.op_panseuse|@count) || ($plage->_ref_affectations_personnel.iade|@count)}}
+        {{assign var=affectations value=$plage->_ref_affectations_personnel}}
+
+        {{if ($affectations.op|@count) || ($affectations.op_panseuse|@count) || ($affectations.iade|@count)}}
           <a href="?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$plage->plageop_id}}">
           <img src="images/icons/personnel.png" border="0" height="16" width="16" 
-					     onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-plage-{{$plage->_id}}")' />
+               onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-plage-{{$plage->_id}}")' />
           </a>
           <div id="tooltip-content-plage-{{$plage->_id}}" style="display: none; width: 200px;">
             <table class="tbl">
-							{{foreach from=$plage->_ref_affectations_personnel key=type_personnel item=_affectations}}
-							  {{if $type_personnel == "op" || $type_personnel == "op_panseuse" || $type_personnel == "iade"}} 
-							  <tr>
+              {{foreach from=$affectations key=type_personnel item=_affectations}}
+                {{if $type_personnel == "op" || $type_personnel == "op_panseuse" || $type_personnel == "iade"}} 
+                <tr>
                   <th>{{tr}}CPersonnel.emplacement.{{$type_personnel}}{{/tr}}</th>
                 </tr>
-                {{foreach from=$_affectations item=curr_aff}}
+                {{foreach from=$_affectations item=_affectation}}
                 <tr>
                   <td class="text">
-                  	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_aff->_ref_personnel->_ref_user}}
+                    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_affectation->_ref_personnel->_ref_user}}
                   </td>
                 </tr>
                 {{foreachelse}}
@@ -93,8 +95,8 @@
                   <td class="empty">{{tr}}None{{/tr}}</td>
                 </tr>
                 {{/foreach}} 
-								{{/if}}
-							{{/foreach}}
+                {{/if}}
+              {{/foreach}}
             </table>
           </div>
         

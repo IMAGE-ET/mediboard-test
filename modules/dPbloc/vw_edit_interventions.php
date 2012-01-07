@@ -26,6 +26,8 @@ if(!$plage->temps_inter_op) {
   $plage->temps_inter_op = "00:00:00";
 }
 $plage->loadRefsFwd();
+$plage->loadRefChir()->loadRefFunction();
+$plage->loadRefsNotes();
 
 // liste des anesthesistes
 $mediuser = new CMediusers();
@@ -35,8 +37,8 @@ $listAnesth = $mediuser->loadListFromType(array("Anesthésiste"));
 $plage->loadAffectationsPersonnel();
 
 // Chargement du personnel
-$listPersIADE = CPersonnel::loadListPers("iade");
-$listPersAideOp = CPersonnel::loadListPers("op");
+$listPersIADE     = CPersonnel::loadListPers("iade");
+$listPersAideOp   = CPersonnel::loadListPers("op");
 $listPersPanseuse = CPersonnel::loadListPers("op_panseuse");
 
 $affectations_plage["iade"] = $plage->_ref_affectations_personnel["iade"];
