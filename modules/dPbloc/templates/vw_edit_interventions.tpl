@@ -198,10 +198,10 @@
       <table class="tbl">
         <tr>
           <th>Anesthésiste</th>
-          {{if $plage->_ref_anesth->_view}}
-            <td>{{$plage->_ref_anesth->_view}}</td>
+          {{if $plage->anesth_id}}
+            <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$plage->_ref_anesth}}</td>
           {{else}}
-            <td>Aucun anesthésiste</td>
+            <td class="empty">Aucun anesthésiste</td>
           {{/if}}
         </tr>
         {{if $affectations_plage.iade}}

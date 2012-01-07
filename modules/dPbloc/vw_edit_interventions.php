@@ -27,6 +27,7 @@ if(!$plage->temps_inter_op) {
 }
 $plage->loadRefsFwd();
 $plage->loadRefChir()->loadRefFunction();
+$plage->loadRefAnesth()->loadRefFunction();
 $plage->loadRefsNotes();
 
 // liste des anesthesistes

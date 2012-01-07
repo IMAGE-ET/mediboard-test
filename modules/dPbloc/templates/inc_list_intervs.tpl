@@ -53,7 +53,8 @@
       {{mb_include module=system template=inc_object_history object=$_op}}
       <strong>
         {{if $_op->rank}}
-          {{$_op->rank}} - {{$_op->time_operation|date_format:$conf.time}}
+          <div class="rank" style="float: left;"> {{$_op->rank}} </div> 
+          {{$_op->time_operation|date_format:$conf.time}}
         {{/if}}
         <a href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$patient->id}}">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
@@ -62,18 +63,18 @@
         </a>
       </strong>
       <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}');" {{if !$sejour->entree_reelle}}style="color: red;"{{/if}}>
-        Admission le {{mb_value object=$sejour field=_entree}} ({{$sejour->type|truncate:1:""|capitalize}})
+       Admision. le {{mb_value object=$sejour field=_entree}} ({{$sejour->type|truncate:1:""|capitalize}})
       </span>
       {{if $_op->horaire_voulu}}
         <br />
         Passage souhaité à {{$_op->horaire_voulu|date_format:$conf.time}}
       {{/if}}
-      <br />
+      <div style="text-align: right;">
       <form name="edit-interv-{{$_op->operation_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="operation_id" value="{{$_op->operation_id}}" />
+        <input type="hidden" name="operation_id" value="{{$_op->_id}}" />
         {{mb_label object=$_op field="temp_operation"}}
         {{mb_field object=$_op field="temp_operation" hidden=true onchange="submitOrder(this.form, '$list_type');"}}
         {{if $_op->rank}}
@@ -92,6 +93,7 @@
           </select>
         {{/if}}
       </form>
+      </div>
     </td>
     <td class="text" style="vertical-algn: top;">
       <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$_op->_id}}">
