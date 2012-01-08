@@ -15,7 +15,7 @@
     <button class="new notext"   onclick="EditPlanning.edit('','{{$curr_day}}');"     style="float:right;">{{tr}}Edit{{/tr}}</button>
     {{/if}}
     <a href="?m=dPbloc&amp;tab=vw_edit_planning&amp;date={{$curr_day}}" >
-      <strong>{{$curr_day|date_format:$conf.longdate}}</strong>
+      <strong>{{$curr_day|date_format:"%a %d %b"}}</strong>
     </a>
   </th>
   {{foreach from=$listHours item=_hour}}
@@ -26,7 +26,7 @@
 {{assign var="keyHorsPlage" value="$curr_day-s$salle_id-HorsPlage"}}
 <tr>
   <td class="salle" {{if $affichages.$keyHorsPlage|@count}}rowspan="2"{{/if}}>
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$_salle->_guid}}')">{{$_salle}}</span>
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$_salle->_guid}}')">{{$_salle->nom}}</span>
   </td>
   {{foreach from=$listHours item=_hour}}
   {{foreach from=$listMins item=_min}}
