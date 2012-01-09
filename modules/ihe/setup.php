@@ -141,8 +141,15 @@ class CSetupihe extends CSetup {
     $query = "ALTER TABLE `receiver_ihe_config` 
                 ADD `encoding` ENUM ('UTF-8','ISO-8859-1') DEFAULT 'UTF-8';"; 
     $this->addQuery($query);
+    
+    $this->makeRevision("0.12");
+    
+    $query = "ALTER TABLE `receiver_ihe_config` 
+                ADD `receiving_application` VARCHAR (255),
+                ADD `receiving_facility` VARCHAR (255);";
+    $this->addQuery($query);
        
-    $this->mod_version = "0.12";
+    $this->mod_version = "0.13";
   }
 }
 

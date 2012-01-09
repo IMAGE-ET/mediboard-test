@@ -44,10 +44,10 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     $data[] = "Mediboard_$group->finess"; 
     
     // MSH-5: Receiving Application (HD) (optional)
-    $data[] = $actor ? $actor->nom : "no_actor"; 
+    $data[] = isset($actor->_configs["receiving_application"]) ? $actor->_configs["receiving_application"] : $actor->nom; 
     
     // MSH-6: Receiving Facility (HD) (optional)
-    $data[] = null; 
+    $data[] = isset($actor->_configs["receiving_facility"]) ? $actor->_configs["receiving_facility"] : $actor->nom; 
     
     // MSH-7: Date/Time Of Message (TS)
     $data[] = mbDateTime(); 

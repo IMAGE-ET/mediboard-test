@@ -23,10 +23,16 @@ class CReceiverIHEConfig extends CMbObject {
   
   // Object configs
   var $encoding                 = null;
+  
   var $ITI30_HL7_version        = null; 
   var $ITI31_HL7_version        = null; 
+  
   var $send_all_patients        = null;
   var $send_default_affectation = null;
+  
+  var $receiving_application    = null;
+  var $receiving_facility       = null;
+              
   var $assigning_authority_namespace_id      = null;
   var $assigning_authority_universal_id      = null;
   var $assigning_authority_universal_type_id = null;
@@ -47,6 +53,10 @@ class CReceiverIHEConfig extends CMbObject {
     
     $props["ITI30_HL7_version"]        = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5|FR_2.1|FR_2.2|FR_2.3 default|2.5";
     $props["ITI31_HL7_version"]        = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5|FR_2.1|FR_2.2|FR_2.3 default|2.5";
+    
+    $props["receiving_application"]    = "str";
+    $props["receiving_facility"]       = "str";
+    
     $props["send_all_patients"]        = "bool default|0";
     $props["send_default_affectation"] = "bool default|0";
     
