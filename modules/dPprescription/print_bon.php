@@ -183,13 +183,13 @@ if ($print) {
       $_ex_object = reset($_ex_objects);
       
       if ($_ex_object && $_ex_object->_id) {
-        CExClassField::$_load_lite = false;
+        //CExClassField::$_load_lite = false;
           $_ex_object->_ex_class_id = $_ex_class->_id;
           $_ex_object->setExClass();
           $_ex_object->load();
           $_ex_object->loadTargetObject();
           $_ex_object->_ref_object->loadComplete();
-        CExClassField::$_load_lite = true;
+        //CExClassField::$_load_lite = true;
         
         $ex_objects[$_line->_guid][] = $_ex_object;
       }
