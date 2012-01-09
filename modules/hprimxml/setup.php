@@ -371,8 +371,14 @@ class CSetuphprimxml extends CSetup {
     $query = "ALTER TABLE `echange_hprim` 
                 CHANGE `sender_class` `sender_class` ENUM ('CSenderFTP','CSenderSOAP','CSenderMLLP');"; 
     $this->addQuery($query);
+    
+    $this->makeRevision("0.38");
+    
+    $query = "ALTER TABLE `echange_hprim` 
+                CHANGE `sender_class` `sender_class` ENUM ('CSenderFTP','CSenderSOAP');"; 
+    $this->addQuery($query);
         
-    $this->mod_version = "0.38";
+    $this->mod_version = "0.39";
   }
 }
 

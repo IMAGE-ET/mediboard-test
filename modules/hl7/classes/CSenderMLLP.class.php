@@ -30,6 +30,7 @@ class CSenderMLLP extends CInteropSender {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["expediteur_ihe"]      = "CExchangeIHE sender_id";
+        
     return $backProps;
   }
   

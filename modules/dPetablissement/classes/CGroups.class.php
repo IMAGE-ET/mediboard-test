@@ -101,6 +101,7 @@ class CGroups extends CMbObject {
     $backProps["destinataires_phast"]     = "CPhastDestinataire group_id";  
     $backProps["senders_ftp"]             = "CSenderFTP group_id";
     $backProps["senders_soap"]            = "CSenderSOAP group_id";
+    $backProps["senders_mllp"]            = "CSenderMLLP group_id";
     $backProps["view_sender_sources"]     = "CViewSenderSource group_id";
     $backProps["modeles_etiquette"]       = "CModeleEtiquette group_id";
     $backProps["unites_fonctionnelles"]   = "CUniteFonctionnelle group_id";
