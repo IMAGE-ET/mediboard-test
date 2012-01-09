@@ -1,4 +1,5 @@
 <?php
+$locales['CExchangeIHE.sender_class.CSenderMLLP'] = 'Source MLLP';
 $locales['CHL7Config'] = 'Configuration HL7';
 $locales['CHL7Config-assigning_authority_namespace_id-court'] = 'Autorité d\'affectation - Nom';
 $locales['CHL7Config-assigning_authority_namespace_id-desc'] = 'Nom de l\'application';
@@ -131,6 +132,10 @@ $locales['CHL7v2TableEntry.all'] = 'Toutes les entrées dans la table HL7v2';
 $locales['CHL7v2TableEntry.none'] = 'Aucune entrée dans la table HL7v2';
 $locales['CHL7v2TableEntry.one'] = 'Une entrée dans la table HL7v2';
 $locales['CHL7v2Tables-missing'] = 'La base \'hl7v2\' doit être installée pour poursuivre l\'installation du module';
+$locales['CReceiverIHEConfig-encoding'] = 'Encodage';
+$locales['CReceiverIHEConfig-encoding-desc'] = 'Encodage';
+$locales['CReceiverIHEConfig.encoding.ISO-8859-1'] = 'ISO-8859-1';
+$locales['CReceiverIHEConfig.encoding.UTF-8'] = 'UTF-8';
 $locales['CSenderMLLP'] = 'Expéditeur MLLP';
 $locales['CSenderMLLP-_reachable'] = 'Accessible';
 $locales['CSenderMLLP-_reachable-court'] = 'Accessible';

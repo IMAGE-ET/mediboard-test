@@ -26,6 +26,7 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     // Dans le cas d'un segment MSH la création peut-être soit : receiver / sender (ack)
     $actor    = (isset($event->_sender->_id)) ? $event->_sender : $event->_receiver;
     $actor->loadRefGroup();
+    $actor->loadConfigValues();
     $group    = $actor->_ref_group;
     
     $data = array();
@@ -91,7 +92,7 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     $data[] = CHL7v2TableEntry::mapTo("399", "FRA"); 
     
     // MSH-18: Character Set (ID) (optional repeating)
-    $data[] = "8859/1"; 
+    $data[] = CHL7v2TableEntry::mapTo("211", $actor->_configs["encoding"]); 
     
     // MSH-19: Principal Language Of Message (CE) (optional)
     $data[] = array(

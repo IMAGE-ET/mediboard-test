@@ -135,8 +135,14 @@ class CSetupihe extends CSetup {
     $query = "ALTER TABLE `exchange_ihe` 
                 CHANGE `sender_class` `sender_class` ENUM ('CSenderFTP','CSenderSOAP','CSenderMLLP');"; 
     $this->addQuery($query);
+    
+    $this->makeRevision("0.11");
        
-    $this->mod_version = "0.11";
+    $query = "ALTER TABLE `receiver_ihe_config` 
+                ADD `encoding` ENUM ('UTF-8','ISO-8859-1') DEFAULT 'UTF-8';"; 
+    $this->addQuery($query);
+       
+    $this->mod_version = "0.12";
   }
 }
 

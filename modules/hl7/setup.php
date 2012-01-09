@@ -621,7 +621,31 @@ class CSetuphl7 extends CSetup {
                 CHANGE `sender_class` `sender_class` ENUM ('CSenderFTP','CSenderSOAP','CSenderMLLP');";
     $this->addQuery($query);
     
-    $this->mod_version = "0.15";
+    $this->makeRevision("0.15");
+    
+    // Character sets
+    // UTF-8
+    $set = array(
+      "code_hl7_to"   => "UNICODE UTF-8",
+      "code_mb_from"  => "UTF-8",
+      "code_mb_to"    => "UTF-8"
+    );
+    $and = array(
+      "code_hl7_from" => "UNICODE UTF-8"
+    );
+    $this->updateTableEntry("211", $set, $and);
+    // ISO-8859-1
+    $set = array(
+      "code_hl7_to"   => "8859/1 ",
+      "code_mb_from"  => "ISO-8859-1",
+      "code_mb_to"    => "ISO-8859-1"
+    );
+    $and = array(
+      "code_hl7_from" => "8859/1 "
+    );
+    $this->updateTableEntry("211", $set, $and);
+    
+    $this->mod_version = "0.16";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
