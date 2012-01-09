@@ -52,7 +52,7 @@ class CNumcharSpec extends CNumSpec {
     	// Luhn control
     	if($this->control == "luhn") {
 	    	if (!$this->checkLuhn($propValue)) {
-	        return "La clé est incorrect.";
+	        return "La clé est incorrecte.";
 	      }
     	}
     }

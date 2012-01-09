@@ -16,7 +16,7 @@
  * A05 - Pre-admit a patient
  */
 class CHL7v2EventADTA05_FR extends CHL7v2EventADTA05 {
-  function __construct($i18n = null) {
+  function __construct($i18n = "FR") {
     parent::__construct($i18n);
         
     $this->transaction = CPAMFR::getTransaction($this->code);

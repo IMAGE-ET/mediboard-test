@@ -16,7 +16,7 @@
  * A06 - Change an outpatient to an inpatient
  */
 class CHL7v2EventADTA06_FR extends CHL7v2EventADTA06 {
-  function __construct($i18n = null) {
+  function __construct($i18n = "FR") {
     parent::__construct($i18n);
         
     $this->transaction = CPAMFR::getTransaction($this->code);

@@ -16,7 +16,7 @@
  * A01 - Admit/visit notification
  */
 class CHL7v2EventADTA01_FR extends CHL7v2EventADTA01 {
-  function __construct($i18n = null) {
+  function __construct($i18n = "FR") {
     parent::__construct($i18n);
         
     $this->transaction = CPAMFR::getTransaction($this->code);

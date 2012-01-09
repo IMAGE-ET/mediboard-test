@@ -16,7 +16,7 @@
  * A38 - Cancel pre-admit 
  */
 class CHL7v2EventADTA38_FR extends CHL7v2EventADTA38 {
-  function __construct($i18n = null) {
+  function __construct($i18n = "FR") {
     parent::__construct($i18n);
         
     $this->transaction = CPAMFR::getTransaction($this->code);

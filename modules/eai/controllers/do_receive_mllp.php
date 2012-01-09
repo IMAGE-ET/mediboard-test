@@ -11,7 +11,7 @@
 $client_addr = CValue::post("client_addr");
 $client_port = CValue::post("client_port");
 $port        = CValue::post("port");
-$message     = CValue::post("message");
+$message     = stripslashes(CValue::post("message"));
 
 mbLog($message, "FROM $client_addr:$client_port TO localhost:$port");
 
@@ -27,6 +27,4 @@ if (!$source_mllp->_id) {
 $sender_mllp = CMbObject::loadFromGuid($source_mllp->name);
 
 // Dispatch EAI 
-if (!$ack = CEAIDispatcher::dispatch($message, $sender_mllp)){
-  mbLog(utf8_encode(CEAIDispatcher::$xml_error));
-}
+CEAIDispatcher::dispatch($message, $sender_mllp);

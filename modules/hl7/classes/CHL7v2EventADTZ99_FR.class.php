@@ -16,7 +16,7 @@
  * Z99 - Change admit
  */
 class CHL7v2EventADTZ99_FR extends CHL7v2EventADT implements CHL7EventADTZ99 {
-  function __construct($i18n = null) {
+  function __construct($i18n = "FR") {
     parent::__construct($i18n);
         
     $this->code        = "Z99";
