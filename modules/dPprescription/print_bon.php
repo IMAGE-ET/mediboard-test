@@ -201,7 +201,8 @@ if ($print) {
 $prescription->_ref_object->loadRefsAffectations();
 
 foreach($prescription->_ref_object->_ref_affectations as $_affectation) {
-  $_affectation->loadView();
+  $_affectation->loadRefLit()->loadCompleteView();
+  $_affectation->_view = $_affectation->_ref_lit->_view;
 }
 
 // Chargement de toutes les categories
