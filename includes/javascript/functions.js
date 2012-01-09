@@ -1086,8 +1086,27 @@ Object.extend(Control.Modal,{
       this.container.insert({before: overlay});
       overlay.insert({after: Control.Overlay.iFrameShim.element});
       
-      //Event.stopObserving(window,'scroll',this.positionHandler);
+      var parent = this.container.up('.modal');
+      if (parent) {
+        Event.stopObserving(window,'scroll',this.positionHandler);
+        Event.stopObserving(window,'resize',this.positionHandler);
+        Event.stopObserving(window,'resize',this.outOfBoundsPositionHandler);
+        
+        var cont = this.container;
+        cont.style.top  = (parseInt(cont.style.top)  - parseInt(parent.style.top)) + "px";
+        cont.style.left = (parseInt(cont.style.left) - parseInt(parent.style.left)) + "px";
+      }
+      
       Control.Overlay.positionIFrameShim();
+      
+      return;
+      
+      /////
+      Event.stopObserving(window,'scroll',this.positionHandler);
+      Event.stopObserving(window,'resize',this.positionHandler);
+      Event.stopObserving(window,'resize',this.outOfBoundsPositionHandler);
+      this.container.position = "fixed";
+      /////
     },
     
     afterClose: function(){
