@@ -1,9 +1,10 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-     "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-  <title></title>
+  <title>Votre navigateur n'est pas compatible avec Mediboard</title>
+  <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
   <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissements de Santé" />
+  <link rel="shortcut icon" type="image/ico" href="style/mediboard/images/icons/favicon.ico" />
 
 <style type="text/css">
 body {
@@ -97,7 +98,7 @@ hr {
     </td>
     <td>
       <a href="http://www.microsoft.com/windows/internet-explorer/default.aspx" target="_blank">
-        Internet Explorer 8
+        Internet Explorer 9
         <br />
         <img src="http://upload.wikimedia.org/wikipedia/fr/a/a0/Internet_Explorer_9_logo.png" height="140" alt="Internet Explorer" />
       </a>
