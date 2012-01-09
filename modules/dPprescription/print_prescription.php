@@ -54,9 +54,6 @@ $options = array(
         "class"  => "barcode",
         "title"  => CAppUI::tr("CMediusers-rpps"));
 
-$code_rpps = CTemplateManager::getBarcodeDataUri($praticien->rpps, $options);
-//$am        = CTemplateManager::getBarcodeDataUri($praticien->am, $options);
-
 // si le user courant est un praticien, on affiche ces lignes
 $mediuser = CMediusers::get();
 if($mediuser->isPraticien() && !$globale){
@@ -350,6 +347,8 @@ if(!$_ald){
 	  $footer_height = $footer->height;
 	}
 }
+
+$code_rpps = CTemplateManager::getBarcodeDataUri($praticien->rpps, $options);
 
 // Création du template
 $smarty = new CSmartyDP();
