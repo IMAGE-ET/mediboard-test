@@ -51,7 +51,8 @@ $affectations = $affectation->loadList($where, null, null, null, $ljoin);
 CMbObject::massLoadFwdRef($affectations, "sejour_id");
 
 foreach($affectations as $_affectation){
-  $_affectation->loadView();
+  $_affectation->loadRefLit()->loadCompleteView();
+  $_affectation->_view = $_affectation->_ref_lit->_view;
   
   $sejour = $_affectation->loadRefSejour(1);
   $sejour->_ref_current_affectation = $_affectation;
