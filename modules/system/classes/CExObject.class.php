@@ -207,7 +207,7 @@ class CExObject extends CMbMetaObject {
       }
       else {
         // ceux de la meme exclass
-        if (!$latest_1->_id && !$latest_2->_id) continue;
+        if (!$latest_1->_id && !$latest_2->_id && !$latest_host->_id) continue;
         
         switch($_level) {
           case 1:      $_base = $latest_1;    break;
