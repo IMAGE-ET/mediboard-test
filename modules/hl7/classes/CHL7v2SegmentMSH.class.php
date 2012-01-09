@@ -83,10 +83,15 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     // NE - Never  
     // ER - Error/reject conditions only 
     // SU - Successful completion only
-    $data[] = "AL"; 
+    $data[] = null;
     
     // MSH-16: Application Acknowledgment Type (ID) (optional)
-    $data[] = null; 
+    // Table 155
+    // AL - Always 
+    // NE - Never  
+    // ER - Error/reject conditions only 
+    // SU - Successful completion only
+    $data[] = "AL";
     
     // MSH-17: Country Code (ID) (optional)
     $data[] = CHL7v2TableEntry::mapTo("399", "FRA"); 
