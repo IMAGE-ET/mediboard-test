@@ -77,13 +77,12 @@ class CMLLPSocketHandler {
       echo sprintf(" !!! Got a header, while having data in the buffer from %d\n", $id);
     }
     
-    // Mise en buffer du message
-    $buffer .= "$request\n";
-    
     echo sprintf(" > Got %d bytes from %d\n", strlen($request), $id);
     
     // Si on recoit le flag de fin de message, on effectue la requete web
     if (strrpos($request, "\x1C") === strlen($request)-1) {
+      $buffer .= substr($request, 0, -1);
+      
       echo sprintf(" > Got a full message from %d\n", $id);
       
       $post = array(
@@ -101,6 +100,10 @@ class CMLLPSocketHandler {
       echo sprintf(" > Request done in %f s\n", $time);
       
       $buffer = "";
+    }
+    else {
+      // Mise en buffer du message
+      $buffer .= "$request\n";
     }
     
     return md5($request)."\n";
