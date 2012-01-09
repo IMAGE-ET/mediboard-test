@@ -10,7 +10,7 @@
 
 include_once('ajax_connexion_mllp.php');
 
-$exchange_source->setData("Hello world !\n");
+$exchange_source->setData("Hello world !");
 
 try {
   $exchange_source->send();

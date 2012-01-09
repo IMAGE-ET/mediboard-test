@@ -227,7 +227,7 @@ class CExConcept extends CExListItemsOwner {
     $spec = @CMbFieldSpecFact::getSpec($object, $field, $prop);
     $options = $spec->getOptions();
     
-    $invalid = array("moreThan", "moreEquals", "sameAs", "notContaining", "notNear", "dependsOn", "helped");
+    $invalid = array("moreThan", "moreEquals", "sameAs", "notContaining", "notNear", "dependsOn", "helped", "aidesaisie");
     foreach($invalid as $_invalid) {
       unset($options[$_invalid]);
     }

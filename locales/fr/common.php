@@ -66,6 +66,7 @@ $locales['CMbFieldSpec.type.date'] = 'Date';
 $locales['CMbFieldSpec.type.dateTime'] = 'Date/heure';
 $locales['CMbFieldSpec.type.email'] = 'Adresse e-mail';
 $locales['CMbFieldSpec.type.enum'] = 'Choix unique';
+$locales['CMbFieldSpec.type.er7'] = 'Source ER7';
 $locales['CMbFieldSpec.type.float'] = 'Nombre à virgule';
 $locales['CMbFieldSpec.type.html'] = 'Source HTML';
 $locales['CMbFieldSpec.type.ipAddress'] = 'Adresse IP';
