@@ -27,6 +27,7 @@ class CMbFieldSpec {
   var $mask           = null;
   var $format         = null;
   var $autocomplete   = null;
+  var $aidesaisie     = null;
   var $perm           = null; // Used by autocomplete
   var $dependsOn      = null;
   var $helped         = null;
