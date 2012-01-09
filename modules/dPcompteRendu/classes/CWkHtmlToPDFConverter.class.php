@@ -108,13 +108,13 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
     $this->html = preg_replace("/#body\s*\{\s*padding-top:\s*[0-9]*px;\s*\}/", "", $this->html);
     $this->html = preg_replace("/hr.pagebreak\s*{\s*padding-top:\s*[0-9]*px;\s*}/", "", $this->html);
     
-    // Supression de la balise script pour l'impression
-    $this->html = preg_replace("/(<script type=\"text\/javascript\">.*<\/script>)/s", "", $this->html);
+    // Suppression de la balise script pour l'impression
+    $this->html = preg_replace("/(<script type=[\'\"]text\/javascript[\'\"]>.*<\/script>)/msU", "", $this->html);
     
     // Suppression du position fixed du header et du footer
     if ($header_footer_common) {
       $header_footer_common = preg_replace("/position:\s*fixed;/", "", $header_footer_common);
-      $header_footer_common = preg_replace("/(<script type=\"text\/javascript\">.*<\/script>)/s", "", $header_footer_common);
+      $header_footer_common = preg_replace("/(<script type=[\'\"]text\/javascript[\'\"]>.*<\/script>)/msU", "", $header_footer_common);
     }
     
     // Store de l'entête / pied de page
@@ -180,6 +180,7 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
     exec($command.$options);
     
     $this->result = file_get_contents($result);
+    
     
     // Supression des fichiers temporaires
     @unlink($this->temp_name);
