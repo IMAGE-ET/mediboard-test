@@ -47,7 +47,7 @@
       <td>{{mb_value object=$_actor field="actif"}}</td>
       <td>
         {{foreach from=$_actor->_ref_exchanges_sources item=_exchange_source}}
-          {{if !$_actor instanceof CSenderSOAP}}
+          {{if !$_actor instanceof CSenderSOAP && !$_actor instanceof CSenderMLLP}}
             {{mb_include module=system template=inc_img_status_source exchange_source=$_exchange_source}}
           {{/if}}
         {{/foreach}}

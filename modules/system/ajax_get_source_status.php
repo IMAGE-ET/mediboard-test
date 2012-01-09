@@ -12,6 +12,9 @@
 
 CCanDo::checkRead();
 
+// Déverouiller la session pour rendre possible les requêtes concurrentes.
+session_write_close();
+
 $source_guid = CValue::get("source_guid");
 
 $status = null;

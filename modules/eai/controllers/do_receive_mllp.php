@@ -9,14 +9,9 @@
  */
 
 $client_addr = CValue::post("client_addr");
-$client_port = CValue::post("client_port");
-$port        = CValue::post("port");
 $message     = stripslashes(CValue::post("message"));
 
-mbLog($message, "FROM $client_addr:$client_port TO localhost:$port");
-
 $source_mllp = new CSourceMLLP;
-$source_mllp->port = $port;
 $source_mllp->host = $client_addr;
 $source_mllp->loadMatchingObject();
 

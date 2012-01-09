@@ -41,12 +41,13 @@ class COperatorIHE extends CEAIOperator {
       if (!in_array($evt_class, $data_format->_messages_supported_class)) {
         $exchange_ihe->populateExchange($data_format, $evt);
         $exchange_ihe->loadRefsInteropActor();
+        $exchange_ihe->populateErrorExchange(null, $evt);
         
         $ack->_ref_exchange_ihe = $exchange_ihe;
         $msgAck = $ack->generateAcknowledgment("AR", "E001", "201");
-
-        $exchange_ihe->populateErrorExchange($msgAck);
-
+        
+        $exchange_ihe->populateErrorExchange($ack);
+        
         return $msgAck;
       }
     
@@ -54,11 +55,12 @@ class COperatorIHE extends CEAIOperator {
       if (!$evt->message->isOK(CHL7v2Error::E_ERROR)) {        
         $exchange_ihe->populateExchange($data_format, $evt);
         $exchange_ihe->loadRefsInteropActor();
+        $exchange_ihe->populateErrorExchange(null, $evt);
         
         $ack->_ref_exchange_ihe = $exchange_ihe;
         $msgAck = $ack->generateAcknowledgment("AR", "E002", "207");
 
-        $exchange_ihe->populateErrorExchange($msgAck);
+        $exchange_ihe->populateErrorExchange($ack);
 
         return $msgAck;
       }
@@ -88,11 +90,12 @@ class COperatorIHE extends CEAIOperator {
       }
     } catch(Exception $e) {
       $exchange_ihe->populateExchange($data_format, $evt);
-
+      $exchange_ihe->populateErrorExchange(null, $evt);
+      
       $ack = new CHL7v2Acknowledgment($evt);
       $ack->message_control_id = isset($data['identifiantMessage']) ? $data['identifiantMessage'] : "000000000";
       $ack->_ref_exchange_ihe = $exchange_ihe;
-
+      
       $msgAck = $ack->generateAcknowledgment("AR", "E003", "207", "E", $e->getMessage());
       
       $exchange_ihe->populateErrorExchange($msgAck);

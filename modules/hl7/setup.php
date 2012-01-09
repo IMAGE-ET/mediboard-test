@@ -615,7 +615,13 @@ class CSetuphl7 extends CSetup {
                 ADD INDEX (`group_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.14";
+    $this->makeRevision("0.14");
+    
+    $query = "ALTER TABLE `hl7_config` 
+                CHANGE `sender_class` `sender_class` ENUM ('CSenderFTP','CSenderSOAP','CSenderMLLP');";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.15";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

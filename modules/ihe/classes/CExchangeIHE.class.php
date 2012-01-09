@@ -138,13 +138,19 @@ class CExchangeIHE extends CExchangeTabular {
     $this->_message        = $data_format->_message;;
   }
   
-  function populateErrorExchange($msgAck) {
-    $this->_acquittement       = $msgAck;
-    $this->statut_acquittement = null;
-    $this->message_valide      = 0;
-    $this->acquittement_valide = null;
-    $this->date_production     = mbDateTime();
-    $this->date_echange        = mbDateTime();
+  function populateErrorExchange(CHL7Acknowledgment $ack = null, CHL7Event $event = null) {
+    if ($ack) {
+      $msgAck = $ack->event_ack->msg_hl7;
+      $this->_acquittement       = $ack->event_ack->msg_hl7;;
+      /* @todo Comment gérer ces informations ? */
+      $this->statut_acquittement = null;
+      $this->acquittement_valide = $ack->event_ack->message->isOK(CHL7v2Error::E_ERROR);
+    } else {
+      $this->message_valide      = $event->message->isOK(CHL7v2Error::E_ERROR);
+      $this->date_production     = mbDateTime();
+      $this->date_echange        = mbDateTime();
+    }
+
     $this->store();
   }
   

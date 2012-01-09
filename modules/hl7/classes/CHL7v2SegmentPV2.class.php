@@ -136,7 +136,7 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
     // Table - 0136
     // Y - Oui - Accès protégé à l'information du patient
     // N - Non - Accès normal à l'information du patient
-    $data[] = ($sejour->loadRefPatient()->vip) ? "N" : "Y";
+    $data[] = ($sejour->loadRefPatient()->vip) ? "Y" : "N";
     
     // PV2-23: Clinic Organization Name (XON) (optional repeating)
     $data[] = null;

@@ -34,7 +34,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $spec = parent::getSpec();
     $spec->table = "hl7_config";
     $spec->key   = "hl7_config_id";
-    $spec->uniques["uniques"] = array("sender_id");
+    $spec->uniques["uniques"] = array("sender_id", "sender_class");
     return $spec;
   }
 
