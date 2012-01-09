@@ -162,20 +162,19 @@ foreach($plagesop as &$plage) {
   $listOp = new COperation;
   $listOp = $listOp->loadList($where, $order, null, null, $ljoin);
 
-  foreach($listOp as $keyOp => &$operation) {
-    $operation->loadRefsFwd(1);
-    $sejour =& $operation->_ref_sejour;
+  foreach ($listOp as $operation) {
+    $sejour = $operation->loadRefSejour(1);
     $sejour->loadRefsFwd(1);
-    if($_print_numdoss) {
+    if ($_print_numdoss) {
       $sejour->loadNDA();
     }  
+    
     // On utilise la first_affectation pour contenir l'affectation courante du patient
-    $sejour->_ref_first_affectation = $sejour->getCurrAffectation(mbDate($operation->_datetime));
-    $affectation =& $sejour->_ref_first_affectation;
+    $affectation = $sejour->getCurrAffectation(mbDate($operation->_datetime));
     if ($affectation->_id) {
-      $affectation->loadRefsFwd();
-      $affectation->_ref_lit->loadCompleteView();
+      $affectation->loadRefLit()->loadCompleteView();
     }
+    $sejour->_ref_first_affectation = $affectation;
   }
   if ((count($listOp) == 0) && !$filter->_plage) {
     unset($plagesop[$plage->_id]);
@@ -201,18 +200,24 @@ foreach($plagesop as &$plage) {
   $listDates[$plage->date][$plage->_id] = $plage;
 }
 
-foreach($operations as &$curr_op) {
-  $curr_op->loadRefsFwd(1);
-  $sejour =& $curr_op->_ref_sejour;
-  $sejour->loadRefsFwd(1);   
+foreach($operations as $operation) {
+  $sejour = $operation->loadRefSejour(1);
+  $operation->loadRefPraticien(1);
+  $operation->loadRefPlageOp(1);
+  $sejour->loadRefsFwd(1);
+  
+  if ($_print_numdoss) {
+    $sejour->loadNDA();
+  }  
+    
   // On utilise la first_affectation pour contenir l'affectation courante du patient
-  $sejour->_ref_first_affectation = $sejour->getCurrAffectation(mbDate($curr_op->_datetime));
-  $affectation =& $sejour->_ref_first_affectation;
+  $affectation = $sejour->getCurrAffectation(mbDate($operation->_datetime));
   if ($affectation->_id) {
-    $affectation->loadRefsFwd();
-    $affectation->_ref_lit->loadCompleteView();
+    $affectation->loadRefLit()->loadCompleteView();
   }
-  $listDates[$curr_op->date]["hors_plage"][] = $curr_op;
+  $sejour->_ref_first_affectation = $affectation;
+	
+  $listDates[$operation->date]["hors_plage"][] = $operation;
 }
 
 $numOp += count($operations);
