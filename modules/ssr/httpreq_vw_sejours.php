@@ -61,7 +61,9 @@ if ($prat_id) {
 $where["sejour.group_id"] = "= '$group->_id'";
 $where["sejour.entree"]   = "BETWEEN '$date' AND '$next'";
 $where["sejour.recuse"]   = "= '$recuse'";
-$where["sejour.annule"]   = "= '0'";
+if($recuse != 1) {
+  $where["sejour.annule"]   = "= '0'";
+}
 
 if ($order_col != "patient_id" && $order_col != "entree_prevue" && $order_col != "praticien_id"){
 	$order_col = "patient_id";	
