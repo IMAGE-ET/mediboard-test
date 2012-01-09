@@ -27,7 +27,9 @@ class CHL7v2SegmentEVN extends CHL7v2Segment {
     $data = array();
     
     // EVN-1: Event Type Code (ID) (optional)
-    $data[] = $event->code;
+    // This field has been retained for backward compatibility only
+    //$data[] = $event->code;
+    $data[] = null;
     
     // EVN-2: Recorded Date/Time (TS)
     $data[] = mbDateTime();
