@@ -50,6 +50,13 @@ $dossier_medical->loadRefsAntecedents();
 $bons = array();
 $all_bons = array();
 $lines = array();
+$rpps = array();
+
+$options = array(
+        "width"  => 220,
+        "height" => 60,
+        "class"  => "barcode",
+        "title"  => CAppUI::tr("CMediusers-rpps"));
 
 // Liste des chapitres concernés par l'impression des bons
 $chapitres = array("anapath", "biologie", "imagerie", "consult", "kine");
@@ -63,13 +70,16 @@ if(count($prescription->_ref_lines_elt_for_plan)){
     foreach($lines_by_cat as $_name_cat => $_lines){
       foreach($_lines as $lines_by_unite){
         foreach($lines_by_unite as $_line){
+          if (!isset($rpps[$_line->praticien_id])) {
+            $rpps[$_line->praticien_id] =  CTemplateManager::getBarcodeDataUri($_line->_ref_praticien->rpps, $options);
+          }
           if(is_array($_line->_quantity_by_date)){
             foreach($_line->_quantity_by_date as $unite => $_quantity_by_date){
               foreach($_quantity_by_date as $_date => $quantites){
                 foreach($quantites as $_quantites){
                   if(is_array($_quantites)){  
                     foreach($_quantites as $_hour => $_quantite){
-                    	$print_bon = false;
+                      $print_bon = false;
                       // Si le bon n'a pas ete selectionné
                       if(array_key_exists($_line->_id, $_list_bons) && in_array($_hour, $_list_bons[$_line->_id])){
                         $print_bon = true;
@@ -79,9 +89,9 @@ if(count($prescription->_ref_lines_elt_for_plan)){
                         $quantite = $_line->_administrations[$unite][$_date][$_hour]["quantite_planifiee"];
                         if($print_bon){
                           @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id]["quantite"] += $quantite;
-													if(isset($_quantite["urgence"]) && $_quantite["urgence"]){
-		                        @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id]["urgence"] = true;
-		                      }
+                          if(isset($_quantite["urgence"]) && $_quantite["urgence"]){
+                            @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id]["urgence"] = true;
+                          }
                         }
                         @$all_bons[$_name_chap][$_hour][$_name_cat][$_line->_id]["quantite"] += $quantite;
                       }
@@ -89,9 +99,9 @@ if(count($prescription->_ref_lines_elt_for_plan)){
                       if(isset($_quantite["total"]) && $_quantite["total"]){
                         if($print_bon){                      
                           @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id]["quantite"] += $_quantite["total"];
-													if(isset($_quantite["urgence"]) && $_quantite["urgence"]){
-		                        @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id]["urgence"] = true;
-		                      }
+                          if(isset($_quantite["urgence"]) && $_quantite["urgence"]){
+                            @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id]["urgence"] = true;
+                          }
                         }
                         @$all_bons[$_name_chap][$_hour][$_name_cat][$_line->_id]["quantite"] += $_quantite["total"];
                       }
@@ -227,6 +237,7 @@ $smarty->assign("debut", $debut);
 $smarty->assign("print", $print);
 $smarty->assign("list_bons", $list_bons);
 $smarty->assign("ex_objects", $ex_objects);
+$smarty->assign("rpps", $rpps);
 $smarty->display("print_bon.tpl");
 
 ?>

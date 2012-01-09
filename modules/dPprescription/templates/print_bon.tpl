@@ -248,7 +248,13 @@ Main.add( function(){
               {{/if}}
             </td>
             <td style="width: 20%">
-              Prescripteur: {{$line->_ref_praticien->_view}} (ADELI : {{$line->_ref_praticien->adeli}} &mdash; RPPS : {{$line->_ref_praticien->rpps}})
+              {{assign var=praticien_id value=$line->praticien_id}}
+              Prescripteur: {{$line->_ref_praticien->_view}}
+              {{if isset($rpps.$praticien_id|smarty:nodefaults)}}
+                <br /> RPPS : <br /> <img src="{{$rpps.$praticien_id}}" width="160" height="45"/>
+              {{else}}
+                (ADELI : {{$line->_ref_praticien->adeli}} &mdash; RPPS : {{$line->_ref_praticien->rpps}})
+              {{/if}}
             </td>
           </tr>
           {{if $line->commentaire}}
