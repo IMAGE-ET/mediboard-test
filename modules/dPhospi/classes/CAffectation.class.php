@@ -101,13 +101,14 @@ class CAffectation extends CMbObject {
     $sejour = $this->loadRefSejour();
     $sejour->loadRefPraticien();
     $sejour->loadRefPatient()->loadRefPhotoIdentite();
-    
-    foreach ($sejour->loadRefsAffectations() as $_affectation) {
-      $_affectation->loadRefLit()->loadCompleteView();
-      $_affectation->_view = $_affectation->_ref_lit->_view;
-      $_affectation->loadRefParentAffectation();
+    $affectations = $sejour->loadRefsAffectations();
+    if (is_array($affectations)) {
+      foreach ($affectations as $_affectation) {
+        $_affectation->loadRefLit()->loadCompleteView();
+        $_affectation->_view = $_affectation->_ref_lit->_view;
+        $_affectation->loadRefParentAffectation();
+      }
     }
-    
     foreach ($sejour->loadRefsOperations() as $_operation) {
       $_operation->loadRefChir();
       $_operation->loadRefPlageOp();
