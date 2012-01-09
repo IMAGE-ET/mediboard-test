@@ -56,7 +56,7 @@
           <div class="rank" style="float: left;"> {{$_op->rank}} </div> 
           {{$_op->time_operation|date_format:$conf.time}}
         {{/if}}
-        <a href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$patient->id}}">
+        <a href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$patient->_id}}">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
             {{$patient}} ({{$patient->_age}} ans)
           </span>
