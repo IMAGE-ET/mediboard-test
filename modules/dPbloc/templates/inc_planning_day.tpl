@@ -10,13 +10,17 @@
 
 <tr>
   <th>
-    <button class="print notext" onclick="EditPlanning.popPlanning('{{$curr_day}}');" style="float:left;">{{tr}}Print{{/tr}}</button>
     {{if $can->edit}}
     <button class="new notext"   onclick="EditPlanning.edit('','{{$curr_day}}');"     style="float:right;">{{tr}}Edit{{/tr}}</button>
     {{/if}}
+  </th>
+  <th>
     <a href="?m=dPbloc&amp;tab=vw_edit_planning&amp;date={{$curr_day}}" >
       <strong>{{$curr_day|date_format:"%a %d %b"}}</strong>
     </a>
+  </th>
+  <th>
+    <button class="print notext" onclick="EditPlanning.popPlanning('{{$curr_day}}');" style="float:left;">{{tr}}Print{{/tr}}</button>
   </th>
   {{foreach from=$listHours item=_hour}}
   <th colspan="4" class="heure">{{$_hour}}:00</th>
@@ -25,7 +29,7 @@
 {{foreach from=$listSalles item=_salle key=salle_id}}
 {{assign var="keyHorsPlage" value="$curr_day-s$salle_id-HorsPlage"}}
 <tr>
-  <td class="salle" {{if $affichages.$keyHorsPlage|@count}}rowspan="2"{{/if}}>
+  <td colspan="3" class="salle" {{if $affichages.$keyHorsPlage|@count}}rowspan="2"{{/if}}>
     <span onmouseover="ObjectTooltip.createEx(this, '{{$_salle->_guid}}')">{{$_salle->nom}}</span>
   </td>
   {{foreach from=$listHours item=_hour}}
