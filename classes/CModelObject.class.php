@@ -112,9 +112,8 @@ class CModelObject {
       self::$spec[$class] = $this->getSpec();
       self::$spec[$class]->init();
       
-      global $classPaths;
-      if (isset($classPaths[$class])) {
-        $module = self::getModuleName($classPaths[$class]);
+      if (isset(CApp::$classPaths[$class])) {
+        $module = self::getModuleName(CApp::$classPaths[$class]);
       }
       else {
         $reflection = new ReflectionClass($class);
