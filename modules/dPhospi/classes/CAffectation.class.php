@@ -110,6 +110,11 @@ class CAffectation extends CMbObject {
         $_affectation->loadRefParentAffectation();
       }
     }
+    else {
+      $this->loadRefLit()->loadCompleteView();
+      $this->_view = $_affectation->_ref_lit->_view;
+      $this->loadRefParentAffectation();
+    }
     foreach ($sejour->loadRefsOperations() as $_operation) {
       $_operation->loadRefChir();
       $_operation->loadRefPlageOp();
