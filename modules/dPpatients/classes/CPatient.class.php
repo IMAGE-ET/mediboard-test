@@ -260,6 +260,7 @@ class CPatient extends CMbObject {
     $backProps["devenirs_dentaires"]    = "CDevenirDentaire patient_id";
     $backProps["correspondants_courrier"] = "CCorrespondantCourrier object_id";
     $backProps["grossesses"]            = "CGrossesse parturiente_id";
+    $backProps["observation_result_sets"] = "CObservationResultSet patient_id";
     return $backProps;
   }  
   

@@ -21,4 +21,10 @@ class CObservationValueUnit extends CObservationValueCodingSystem {
     $spec->key   = "observation_value_unit_id";
     return $spec;
   }
+  
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["observation_results"] = "CObservationResult unit_id";
+    return $backProps;
+  }
 }

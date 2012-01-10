@@ -33,7 +33,7 @@ ExFormula.tokens = {{$field_names|@json}};
 	        <select onchange="ExFormula.insertText($V(this)); this.selectedIndex = 0;">
 	          <option value=""> &ndash; Fonction de dates </option>
 	          {{foreach from="CExClassField"|static:_formula_intervals key=_const item=_view}}
-	            <option value="{{$_const}}( ^ )">{{$_view}}</option>
+	            <option value="{{$_const}}( ¤ )">{{$_view}}</option>
 	          {{/foreach}}
 	        </select>
 				{{/if}}

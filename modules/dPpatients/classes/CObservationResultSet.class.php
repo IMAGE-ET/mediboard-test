@@ -36,8 +36,14 @@ class CObservationResultSet extends CMbObject {
     $props["patient_id"]    = "ref notNull class|CPatient";
     $props["datetime"]      = "dateTime notNull";
     $props["context_class"] = "str notNull";
-    $props["context_id"]    = "ref class|CMbObject meta|object_id";
+    $props["context_id"]    = "ref class|CMbObject meta|context_id";
     return $props;
+  }
+  
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["observation_results"] = "CObservationResult observation_result_set_id";
+    return $backProps;
   }
   
   /**

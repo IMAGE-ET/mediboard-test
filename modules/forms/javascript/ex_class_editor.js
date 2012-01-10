@@ -566,9 +566,9 @@ ExFormula = {
     field.replaceInputSelection(text);
     
     var value = $V(field);
-    var pos = value.indexOf('^');
+    var pos = value.indexOf('¤');
     if (pos != -1) {
-      $V(field, value.replace(/\^/g, ""));
+      $V(field, value.replace(/¤/g, ""));
       field.setInputSelection(pos, pos);
     }
   },

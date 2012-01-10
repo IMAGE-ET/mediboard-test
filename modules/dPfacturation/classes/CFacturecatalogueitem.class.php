@@ -38,6 +38,12 @@ class CFacturecatalogueitem extends CMbObject {
     return $specs;
   }
   
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["facture_items"] = "CFactureItem facture_catalogue_item_id";
+    return $backProps;
+  }
+  
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->libelle;
