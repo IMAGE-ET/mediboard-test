@@ -16,9 +16,10 @@ class CObservationResult extends CMbObject {
   var $observation_result_id = null;
   
   var $observation_result_set_id = null;
-  var $value_type_id         = null;
-  var $unit_id               = null;
-  var $value                 = null;
+  var $value_type_id         = null; // OBX.3
+  var $unit_id               = null; // OBX.6
+  var $value                 = null; // OBX.2
+  var $method                = null; // OBX.17
   
   var $_ref_context          = null;
   var $_ref_value_type       = null;
@@ -36,6 +37,7 @@ class CObservationResult extends CMbObject {
     $props["value_type_id"]             = "ref notNull class|CObservationValueType";
     $props["unit_id"]                   = "ref notNull class|CObservationValueUnit";
     $props["value"]                     = "str notNull";
+    $props["method"]                    = "str";
     return $props;
   }
   

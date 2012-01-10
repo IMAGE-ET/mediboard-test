@@ -1107,19 +1107,23 @@ table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
   outline: 1px solid #F00;
 }
 
-.bridge {
+.schema-dentaire .defaut {
+  background: red;
+}
+
+.schema-dentaire .bridge {
   background: #6699FF;
 }
 
-.pivot {
+.schema-dentaire .pivot {
   background: #FF6600;
 }
 
-.mobile {
+.schema-dentaire .mobile {
   background: #33CC00;
 }
 
-.appareil {
+.schema-dentaire .appareil {
   background: #FF66FF;
 }
 
@@ -1153,8 +1157,8 @@ table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
 
 .dent-legend, .dent-buttons {
   position: absolute;
-  top: 0;
-  margin: 0.5em;
+  top: -4px;
+  margin: 0;
 }
 
 .dent-legend {
@@ -1167,7 +1171,7 @@ table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
 
 .dent-legend a {
   padding: 2px;
-  margin: 2px;
+  margin: 1px;
 }
 
 .dent-legend a.none {
