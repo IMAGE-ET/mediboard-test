@@ -1086,7 +1086,7 @@ Object.extend(Control.Modal,{
       this.container.insert({before: overlay});
       overlay.insert({after: Control.Overlay.iFrameShim.element});
       
-      var parent = this.container.up('.modal');
+      /*var parent = this.container.up('.modal');
       if (parent) {
         Event.stopObserving(window,'scroll',this.positionHandler);
         Event.stopObserving(window,'resize',this.positionHandler);
@@ -1096,17 +1096,29 @@ Object.extend(Control.Modal,{
         cont.style.top  = (parseInt(cont.style.top)  - parseInt(parent.style.top)) + "px";
         cont.style.left = (parseInt(cont.style.left) - parseInt(parent.style.left)) + "px";
       }
-      
-      Control.Overlay.positionIFrameShim();
-      
-      return;
+      */
       
       /////
+      document.body.style.overflow = "hidden"; // Removes the body's scrollbar
       Event.stopObserving(window,'scroll',this.positionHandler);
       Event.stopObserving(window,'resize',this.positionHandler);
       Event.stopObserving(window,'resize',this.outOfBoundsPositionHandler);
-      this.container.position = "fixed";
+      this.container.style.position = "fixed";
+      
+      var centerModal = (function(event){
+        var container_dimensions = this.container.getDimensions();
+        var viewport_dimensions = document.viewport.getDimensions();
+        this.container.setStyle({
+          top: (viewport_dimensions.height - container_dimensions.height) / 2 + "px",
+          left: (viewport_dimensions.width - container_dimensions.width) / 2 + "px"
+        });
+      }).bindAsEventListener(this);
+      
+      centerModal();
+      Event.observe(window, 'resize', centerModal);
       /////
+      
+      Control.Overlay.positionIFrameShim();
     },
     
     afterClose: function(){
@@ -1116,6 +1128,7 @@ Object.extend(Control.Modal,{
       if (Control.Modal.stack.length == 0) {
         // put it back at the end of body
         var body = $(document.body);
+        body.style.overflow = "auto"; // Put back the body's scrollbar
         body.insert(overlay);
         body.insert(Control.Overlay.iFrameShim.element);
         

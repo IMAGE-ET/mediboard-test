@@ -873,12 +873,37 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `source_file_system` 
               ADD `fileextension_write_end` VARCHAR (255);";
     $this->addQuery($query);
-		
+    
     $this->makeRevision("1.0.90");
     $query = "ALTER TABLE `ex_class_field` 
               CHANGE `report_level` `report_level` ENUM ('1','2','host')";
     $this->addQuery($query);
+    
+    $this->makeRevision("1.0.91");
+    $query = "ALTER TABLE `ex_class_constraint` 
+              ADD INDEX (`field`)";
+    $this->addQuery($query);
+    function setup_system_addExReferenceFieldsIndex(){
+      set_time_limit(1800);
+      ignore_user_abort(1);
+      
+      $ds = CSQLDataSource::get("std");
+ 
+      // Changement des chirurgiens
+      $query = "SELECT ex_class_id FROM ex_class";
+      $list_ex_class = $ds->loadHashAssoc($query);
+      foreach($list_ex_class as $key => $hash) {
+        $query = "ALTER TABLE `ex_object_$key` 
+              ADD INDEX(`reference_id`),
+              ADD INDEX(`reference_class`),
+              ADD INDEX(`reference2_id`),
+              ADD INDEX(`reference2_class`)";
+        $ds->exec($query);
+      }
+      return true;
+    }
+    $this->addFunction("setup_system_addExReferenceFieldsIndex");
         
-    $this->mod_version = "1.0.91";
+    $this->mod_version = "1.0.92";
   }
 }

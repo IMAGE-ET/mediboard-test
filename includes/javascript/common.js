@@ -23,7 +23,7 @@ function errorHandler(errorMsg, url, lineNumber, exception) {
     
     var ignored = ["Script error."];
     
-    if (App.config.log_js_errors && ignored.indexOf(errorMsg) == -1) {
+    if (ignored.indexOf(errorMsg) == -1) {
       new Ajax.Request("index.php?m=system&a=js_error_handler&suppressHeaders=1&dialog=1", {
         method: 'post',
         parameters: 'm=system&a=js_error_handler&' +
@@ -99,27 +99,29 @@ function IEVersion(){
 
 var _IEAdditionalInfo = "";
 
-// TODO needs testing (doesn't throw console.error every time)
-if (Prototype.Browser.IE) {
-  try {
-    (function(){
-      var ieVersion = IEVersion();
-      _IEAdditionalInfo = " (Version:"+ieVersion.Version+" BrowserMode:"+ieVersion.BrowserMode+" DocMode:"+ieVersion.DocMode+")";
-      
-      // If DocMode is the same as the browser version (IE8 not in Compat mode) and IE8+
-      if (ieVersion.Version >= 8 && (ieVersion.Version == ieVersion.DocMode) && (ieVersion.BrowserMode != "Compat Mode")) {
-        window.onerror = errorHandler;
-      }
-    })();
-  } catch(e) {}
-}
-else {
-  window.onerror = errorHandler;
-}
-
-// Exclude HTTrack errors
-if (/httrack/i.test(navigator.userAgent)) {
-  errorHandler = function(){};
+if (App.config.log_js_errors) {
+  // TODO needs testing (doesn't throw console.error every time)
+  if (Prototype.Browser.IE) {
+    try {
+      (function(){
+        var ieVersion = IEVersion();
+        _IEAdditionalInfo = " (Version:"+ieVersion.Version+" BrowserMode:"+ieVersion.BrowserMode+" DocMode:"+ieVersion.DocMode+")";
+        
+        // If DocMode is the same as the browser version (IE8 not in Compat mode) and IE8+
+        if (ieVersion.Version >= 8 && (ieVersion.Version == ieVersion.DocMode) && (ieVersion.BrowserMode != "Compat Mode")) {
+          window.onerror = errorHandler;
+        }
+      })();
+    } catch(e) {}
+  }
+  else {
+    window.onerror = errorHandler;
+  }
+  
+  // Exclude HTTrack errors
+  if (/httrack/i.test(navigator.userAgent)) {
+    errorHandler = function(){};
+  }
 }
 
 /**

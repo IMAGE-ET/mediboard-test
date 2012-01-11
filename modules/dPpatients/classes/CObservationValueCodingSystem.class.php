@@ -15,17 +15,25 @@
 class CObservationValueCodingSystem extends CMbObject {
   var $code                      = null;
   var $label                     = null;
+  var $desc                      = null;
   var $coding_system             = null;
   
   function getProps() {
     $props = parent::getProps();
     $props["code"]          = "str notNull";
-    $props["label"]         = "str";
+    $props["label"]         = "str notNull";
+    $props["desc"]          = "str";
     $props["coding_system"] = "str notNull";
     return $props;
   }
   
-  function loadMatch($code, $coding_system, $label = null) {
+  function updateFormFields(){
+    parent::updateFormFields();
+    
+    $this->_view = $this->label;
+  }
+  
+  function loadMatch($code, $coding_system, $label, $desc = null) {
     $ds = $this->_spec->ds;
     
     $where = array(
@@ -35,6 +43,7 @@ class CObservationValueCodingSystem extends CMbObject {
     
     if (!$this->loadObject($where)) {
       $this->label = $label;
+      $this->desc = $desc;
       $this->store();
     }
     

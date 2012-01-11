@@ -18,9 +18,9 @@ Main.add(function(){
     }
 
     var data = [
-        { data: generate(0, 10, function (x) { return Math.sqrt(x)}), yaxis:1, shadowSize: 0, color: "blue", label:"foo" },
-        { data: generate(0, 10, function (x) { return Math.sin(x)}),  yaxis:2, shadowSize: 0, color: "green", label:"bar", points: { symbol: "diamond" } },
-        { data: generate(0, 10, function (x) { return Math.cos(x)}),  yaxis:3, shadowSize: 0, color: "red", label:"baz", points: { symbol: "triangle" } }
+        { data: generate(0, 10, function (x) { return Math.sqrt(x)}), yaxis:1, shadowSize: 0, color: "blue", label:"foo", points: { lineWidth: 1 } },
+        { data: generate(0, 10, function (x) { return Math.sin(x)}),  yaxis:2, shadowSize: 0, color: "green", label:"bar", points: { symbol: "diamond", lineWidth: 1 } },
+        { data: generate(0, 10, function (x) { return Math.cos(x)}),  yaxis:3, shadowSize: 0, color: "red", label:"baz", points: { symbol: "cross", lineWidth: 1 } }
     ]; 
     
     var ph = $("#placeholder");
@@ -74,17 +74,21 @@ Main.add(function(){
   }
   
   .geste > div .marking {
-     position: absolute; 
-     top: 0; 
-     bottom: 0; 
-     display: none;
-     background: rgba(0,0,0,0.1);
-     min-width: 2px;
+    position: absolute; 
+    top: 0; 
+    bottom: 0; 
+    display: none;
+    background: rgba(0,0,0,0.1);
+    -ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr=#10000000,endColorstr=#10000000)";
+    min-width: 2px;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-bottom: none;
+    margin: 0 -1px;
   }
   
   .geste > div:hover .marking {
-    content: "";
-    display: inline-block;
+    display: block;
   }
   
   .geste .label {
@@ -95,6 +99,7 @@ Main.add(function(){
     border: 1px solid #ccc;
     border-spacing: 0;
     border-collapse: collapse;
+    empty-cells: hide;
   }
   
   table.gestes td,
@@ -107,9 +112,34 @@ Main.add(function(){
     vertical-align: middle;
     background: #eee;
   }
+  
+  .yaxis-labels > div {
+    display: inline-block;
+    text-align: center;
+    font-size: 10px;
+    width: 33px;
+  }
+  
+  .yaxis-labels .symbol {
+    font-size: 16px;
+  }
 </style>
 
 <div style="position: relative;">
+<div class="yaxis-labels">
+  <div style="color: red;">
+    Pouls
+    <div class="symbol">x</div>
+  </div>
+  <div style="color: green;">
+    Temp.
+    <div class="symbol">&#x25C7;</div>
+  </div>
+  <div style="color: blue;">
+    TA
+    <div class="symbol">&#x25CB;</div>
+  </div>
+</div>
 <div id="placeholder" style="width:900px;height:300px;"></div>
 
 <table class="main gestes" style="table-layout: fixed; width: 900px;">

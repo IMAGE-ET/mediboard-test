@@ -1561,7 +1561,7 @@ class CSetupdPpatients extends CSetup {
               `coding_system` CHAR (40) NOT NULL
               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `observation_value_type` 
+    $query = "ALTER TABLE `observation_value_unit` 
               ADD INDEX (`code`),
               ADD INDEX (`coding_system`);";
     $this->addQuery($query);
@@ -1591,7 +1591,59 @@ class CSetupdPpatients extends CSetup {
               CHANGE `etat` `etat` ENUM ('bridge','pivot','mobile','appareil','defaut');";
     $this->addQuery($query);
     
-    $this->mod_version = "1.35";
+    $this->makeRevision("1.35");
+    $query = "ALTER TABLE `observation_value_type` 
+              CHANGE `code` `code` VARCHAR (40) NOT NULL,
+              CHANGE `label` `label` VARCHAR (255) NOT NULL,
+              CHANGE `coding_system` `coding_system` VARCHAR (40) NOT NULL,
+              ADD `desc` VARCHAR (255);";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `observation_value_unit` 
+              CHANGE `code` `code` VARCHAR (40) NOT NULL,
+              CHANGE `label` `label` VARCHAR (255) NOT NULL,
+              CHANGE `coding_system` `coding_system` VARCHAR (40) NOT NULL,
+              ADD `desc` VARCHAR (255);";
+    $this->addQuery($query);
+    
+    // Ajout des unités et paramètres standards dans les nouvelles constantes
+    $mdil_params = array(
+      "0002-4182" => array("HR", "Rythme cardiaque"),
+      "0002-4b60" => array("Tcore", "Température corporelle"),
+      "0002-4bb8" => array("SpO2", "SpO2"),
+      "0002-5900" => array("HC", "Périmètre cranien"),
+      "0002-f093" => array("Weight", "Poids"),
+      "0002-f094" => array("Height", "Taille"),
+      "0401-0adc" => array("Crea", "Créatinine"),
+      "0401-0bc8" => array("Age", "Age"),
+    );
+    $values = array();
+    foreach($mdil_params as $_code => $_labels) {
+      list($_label, $_desc) = $_labels;
+      $values[] = "('MDIL', '$_code', '$_label', '$_desc', 'NM')";
+    }
+    $query = "INSERT INTO `observation_value_type` (`coding_system`, `code`, `label`, `desc`, `datatype`) VALUES ".implode("\n, ", $values);
+    $this->addQuery($query);
+    
+    $mdil_units = array(
+      "0004-0220" => array("%", "%"),
+      "0004-0500" => array("m", "m"),
+      "0004-0511" => array("cm", "cm"),
+      "0004-0512" => array("mm", "mm"),
+      "0004-0652" => array("ml", "ml"),
+      "0004-06c3" => array("kg", "kg"),
+      "0004-0aa0" => array("bpm", "bpm"),
+      "0004-0ae0" => array("rpm", "rpm"),
+      "0004-0f20" => array("mmHg", "mmHg"),
+    );
+    $values = array();
+    foreach($mdil_units as $_code => $_labels) {
+      list($_label, $_desc) = $_labels;
+      $values[] = "('MDIL', '$_code', '$_label', '$_desc')";
+    }
+    $query = "INSERT INTO `observation_value_unit` (`coding_system`, `code`, `label`, `desc`) VALUES ".implode("\n, ", $values);
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.36";
     
     $query = "SHOW TABLES LIKE 'categorie_socioprofessionnelle'";
     $this->addDatasource("INSEE", $query);

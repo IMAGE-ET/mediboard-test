@@ -2181,8 +2181,14 @@ class CSetupdPprescription extends CSetup {
 		$query = "ALTER TABLE `prescription_line_mix` 
               ADD `premedication` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
+    
+    $this->makeRevision("1.66");
+    $query = "ALTER TABLE `element_prescription` 
+              ADD INDEX (`libelle`),
+              ADD INDEX (`cancelled`)";
+    $this->addQuery($query);
 		
-		$this->mod_version = "1.66";
+		$this->mod_version = "1.67";
   }
 }
 

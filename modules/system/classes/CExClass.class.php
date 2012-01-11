@@ -791,7 +791,11 @@ class CExClass extends CMbObject {
         `reference2_id` INT UNSIGNED NOT NULL,
         `reference2_class` VARCHAR(80) NOT NULL,
         INDEX ( `object_id` ),
-        INDEX ( `object_class` )
+        INDEX ( `object_class` ),
+        INDEX ( `reference_id` ),
+        INDEX ( `reference_class` ),
+        INDEX ( `reference2_id` ),
+        INDEX ( `reference2_class` )
       ) /*! ENGINE=MyISAM */;";
       
       $ds = $this->_spec->ds;
