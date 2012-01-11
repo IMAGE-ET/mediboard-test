@@ -488,6 +488,9 @@ if (Prototype.Browser.IE && document.documentMode < 9) {
   
   IEShim.fixTextareas.defer();
 }
+else {
+  IEShim.fixTextareas = function(){};
+}
 
 function prepareForms(root) {
   root = $(root || document.documentElement);
