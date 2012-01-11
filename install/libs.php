@@ -333,6 +333,18 @@ $library->versionString = 'bind(this))},setOptions';
 CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
+$library->name = "Flot plotting library";
+$library->url = "http://code.google.com/p/flot/";
+$library->fileName = "flot-0.7.tar.gz";
+$library->description = "Création de graphiques en JS";
+$library->sourceDir = "flot";
+$library->targetDir = "flot";
+$library->versionFile = "jquery.flot.js";
+$library->versionString = 'v. 0.7';
+
+CLibrary::$all[$library->name] = $library;
+
+$library = new CLibrary;
 $library->name = "GeSHi";
 $library->url = "http://qbnz.com/highlighter/";
 $library->fileName = "GeSHi-1.0.8.3.tar.gz";

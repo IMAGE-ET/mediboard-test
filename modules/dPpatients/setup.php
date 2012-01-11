@@ -1580,7 +1580,18 @@ class CSetupdPpatients extends CSetup {
               ADD INDEX (`unit_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.34";
+    $this->makeRevision("1.34");
+    $query = "ALTER TABLE `observation_result` 
+              ADD `method` VARCHAR (255)";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `observation_result` 
+              ADD INDEX (`method`)";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `etat_dent` 
+              CHANGE `etat` `etat` ENUM ('bridge','pivot','mobile','appareil','defaut');";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.35";
     
     $query = "SHOW TABLES LIKE 'categorie_socioprofessionnelle'";
     $this->addDatasource("INSEE", $query);
