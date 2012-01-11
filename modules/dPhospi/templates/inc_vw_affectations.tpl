@@ -26,7 +26,6 @@
   new Draggable(container, {
                 ghosting: "true",
                 starteffect: function(element) {
-                  makeDragVisible(container,e);
                   new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 });
                 },
                 revert: true});
@@ -39,7 +38,7 @@
 {{/if}}
 {{math equation=x+1 x=$nb_ticks assign=colspan}}
 {{math equation=x-1 x=$nb_ticks assign=nb_ticks_r}}
- <table class="tbl">
+ <table class="tbl" style="width: auto; table-layout: fixed;">
    <tr>
      <th class="title" colspan="{{$colspan}}">Non placés</th>
    </tr>
@@ -75,7 +74,7 @@
     </th>
   </tr>
   <tr>
-    <th class="first_th"></th>
+    <th class="first_th" style="min-width: {{$offset_th}};"></th>
     {{foreach from=$datetimes item=_date}}
       <th style="min-width: {{$td_width}}px;">
         {{if $granularite == "4weeks"}}
@@ -93,20 +92,21 @@
       {{assign var=praticien value=$_sejour->_ref_praticien}}
       {{math equation=x*(y+4.6) x=$_sejour->_width y=$td_width assign=width}}
       {{math equation=x*(y+4.6) x=$_sejour->_entree_offset y=$td_width assign=offset}}
-      <th style="width: {{$offset_th}}; height: 3em;"></th>
+      <th style="height: 3em;"></th>
       
       {{foreach from=0|range:$nb_ticks_r item=_i}}
         <td class="mouvement_lit">
           {{if $_i == 0}}
-            
-            <div class="affectation clit draggable text sejour_non_affecte {{if $_sejour->entree >= $date_min}}debut_sejour{{/if}}
-              {{if $_sejour->sortie <= $date_max}}fin_sejour{{/if}}"
-              style="border: 1px solid #{{$praticien->_ref_function->color}}; width: {{$width}}px; left: {{$offset}}px;"
-              id="sejour_temporel_{{$_sejour->_id}}" data-patient_id="{{$patient->_id}}" data-sejour_id="{{$_sejour->_id}}">
-                <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
-                  <span style="float: left; padding-left: 1px; padding-right: 1px;">
-                    {{mb_include module=dPpatients template=inc_vw_photo_identite mode=read patient=$patient size=22}}
-                  </span>
+            <div class="wrapper_line" id="wrapper_line_{{$_sejour->_id}}">
+              <div class="affectation clit draggable text sejour_non_affecte {{if $_sejour->entree >= $date_min}}debut_sejour{{/if}}
+                {{if $_sejour->sortie <= $date_max}}fin_sejour{{/if}}"
+                style="border: 1px solid #{{$praticien->_ref_function->color}}; width: {{$width}}px; left: {{$offset}}px;"
+                id="sejour_temporel_{{$_sejour->_id}}" data-patient_id="{{$patient->_id}}" data-sejour_id="{{$_sejour->_id}}"
+                onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
+                <span style="float: left; padding-left: 1px; padding-right: 1px;">
+                  {{mb_include module=dPpatients template=inc_vw_photo_identite mode=read patient=$patient size=22}}
+                </span>
+                <div class="wrapper_op">
                   <span style="float: right;">
                     <input type="radio" name="sejour_move" id="sejour_move_{{$_sejour->_id}}" onchange="chooseSejour('{{$_sejour->_id}}');"/>
                   </span>
@@ -115,18 +115,38 @@
                   <span class="compact">
                     {{$_sejour->_motif_complet}}
                   </span>
-                </span>
+                  {{foreach from=$_sejour->_ref_operations item=_operation}}
+                    {{math equation=x*(y+4.6) x=$_operation->_debut_offset y=$td_width assign=offset_op}}
+                    {{math equation=x*(y+4.6) x=$_operation->_width y=$td_width assign=width_op}}
+                    <div class="operation_in_mouv opacity-40"
+                      style="left: {{$offset_op}}px; width: {{$width_op}}px;"></div>
+                  {{/foreach}}
+                </div>
+              </div>
             </div>
             <script type="text/javascript">
               var container = $('sejour_temporel_{{$_sejour->_id}}');
               new Draggable(container, {
-                ghosting: "true",
-                constraint: "vertical",
+                constraint: 'vertical',
                 starteffect: function(element) {
-                  makeDragVisible(container,e);
                   new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 });
                 },
-                revert: true});
+                onStart: function(drgObj, mouseEvent){
+                  window.save_height_list = $("list_affectations").getStyle('height');
+                  var element = drgObj.element;
+                  element.setStyle({left: element.getOffsetParent().cumulativeOffset().left+parseInt(element.style.left)+'px'});
+                  $(document.body).insert(element);
+                },
+                onEnd: function(drbObj, mouseEvent) {
+                  var element = drbObj.element;
+                  $('wrapper_line_'+element.get('sejour_id')).insert(element);
+                  var list_affectations = $("list_affectations");
+                  /*list_affectations.setStyle({height: window.save_height_list+'px'});
+                  list_affectations.setStyle({overflow: 'no'});
+                  list_affectations.setStyle({overflow: 'scroll'});*/
+                },
+                revert: true,
+                ghosting: true});
             </script>
           {{/if}}
         </td>

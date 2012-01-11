@@ -4,6 +4,8 @@
     view_affectations.select(".droppable").each(function(tr) {
        Droppables.add(tr, {
         onDrop: function(div, tr, event) {
+          if ( !tr.isVisible(view_affectations)) return;
+          
           var lit_id = tr.get("lit_id");
           
           // Création d'une affectation pour bloquer un lit
@@ -135,6 +137,7 @@
                       <div id="affectation_temporel_{{$_affectation->_id}}" data-affectation_id="{{$_affectation->_id}}" data-lit_id="{{$_affectation->lit_id}}"
                        class="affectation{{if $vue == "compacte"}}_compact{{/if}} opacity-90 draggable
                         {{if !$_sejour->_id}}clit_bloque{{else}}clit{{/if}}
+                        {{if $_affectation->confirme}}affectation_sortie_autorisee{{/if}}
                         {{if $_affectation->entree == $_sejour->entree && $_affectation->entree >= $date_min}}debut_sejour{{/if}}
                         {{if $_affectation->sortie == $_sejour->sortie && $_affectation->sortie <= $date_max}}fin_sejour{{/if}}
                         {{if $_affectation->entree > $date_min && $_sejour->_id}}affect_left{{/if}}
@@ -171,9 +174,7 @@
                             {{math equation=x*(y+4.6) x=$_operation->_debut_offset y=$td_width assign=offset_op}}
                             {{math equation=x*(y+4.6) x=$_operation->_width y=$td_width assign=width_op}}
                             <div class="operation_in_mouv{{if $vue == "compacte"}}_compact{{/if}} opacity-40"
-                              style="left: {{$offset_op}}px; width: {{$width_op}}px;"
-                              onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}');">
-                              </div>
+                              style="left: {{$offset_op}}px; width: {{$width_op}}px;"></div>
                           {{/foreach}}
                         </div>
                        
@@ -183,7 +184,6 @@
                         new Draggable(container, {
                           constraint: "vertical",
                           starteffect: function(element) {
-                          makeDragVisible(container,e);
                             new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 });
                           },
                           revert: true

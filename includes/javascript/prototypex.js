@@ -476,6 +476,30 @@ Element.addMethods({
     return element;
   },
   
+  isVisible: function(element, parent) {
+    var element = $(element);
+    var parent = parent ? $(parent) : element.getOffsetParent();
+    
+    var offset_element = element.cumulativeOffset();
+    var offset_parent = parent.cumulativeOffset();
+    var scroll = element.cumulativeScrollOffset();
+    
+    var top_top = offset_parent.top;
+    var top_bottom = top_top + parent.getHeight();
+    var left_left = offset_parent.left;
+    var left_right = left_left + parent.getWidth();
+    
+    var scroll_top_a = offset_element.top - scroll.top;
+    var scroll_top_b = scroll_top_a + element.getHeight();
+    var scroll_left_a = offset_element.left - scroll.left;
+    var scroll_left_b = scroll_left_a + element.getWidth();
+    
+    return ((scroll_top_a >= top_top && scroll_top_a <= top_bottom) ||
+            (scroll_top_b >= top_top && scroll_top_b <= top_bottom))
+        && ((scroll_left_a >= left_left && scroll_left_a <= left_right) ||
+            (scroll_left_b >= left_left && scroll_left_b <= left_right));
+  },
+  
   setVisible: function(element, condition) {
     return element[condition ? "show" : "hide"]();
   },

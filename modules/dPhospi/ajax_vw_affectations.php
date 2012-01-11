@@ -139,6 +139,8 @@ CMbObject::massLoadFwdRef($sejours_non_affectes, "patient_id");
 CMbObject::massLoadFwdRef($praticiens, "function_id");
 
 $functions_filter = array();
+$operations = array();
+
 foreach($sejours_non_affectes as $_key => $_sejour) {
   $_sejour->loadRefPraticien()->loadRefFunction();
   $functions_filter[$_sejour->_ref_praticien->function_id] = $_sejour->_ref_praticien->_ref_function;
@@ -150,7 +152,28 @@ foreach($sejours_non_affectes as $_key => $_sejour) {
     $_sejour->_sortie_offset = CMbDate::position(min($date_max, $_sejour->sortie), $date_min, $period);
     $_sejour->_width = $_sejour->_sortie_offset - $_sejour->_entree_offset;
     $_sejour->loadRefPatient()->loadRefPhotoIdentite();
-    $_sejour->loadRefsOperations();
+  }
+  
+  if (isset($operations[$_sejour->_id])) {
+    $_operations = $operations[$_sejour->_id];
+  }
+  else {
+    $operations[$_sejour->_id] = $_operations = $_sejour->loadRefsOperations();
+  }
+  
+  foreach ($_operations as $key=>$_operation) {
+    $_operation->loadRefPlageOp(1);
+    
+    if (($_operation->_datetime < $date_min) || ($_operation->_datetime > $date_max)) {
+      unset($sejour->_ref_operations[$key]);
+      continue;
+    }
+    
+    $hour_operation = mbTransformTime(null, $_operation->temp_operation, "%H");
+    $min_operation = mbTransformTime(null, $_operation->temp_operation, "%M");
+    $_operation->_debut_offset = CMbDate::position($_operation->_datetime, max($date_min, $_sejour->entree), $period);
+    $_operation->_fin_offset = CMbDate::position(mbDateTime("+$hour_operation hours +$min_operation minutes",$_operation->_datetime), max($date_min, $_sejour->entree), $period);
+    $_operation->_width = $_operation->_fin_offset - $_operation->_debut_offset;
   }
 }
 

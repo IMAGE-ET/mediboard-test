@@ -1875,8 +1875,9 @@ div.clit {
 }
 
 div.clit_bloque {
-  background: #888;
-  color: #fff;
+  background: #fff;
+  color: #688;
+  border: 1px solid #688;
 }
 
 div.wrapper_line, div.wrapper_op {
@@ -1978,4 +1979,8 @@ tr.observation_info td {
 
 tr.transmission_haute td {
   background: #faa !important;
+}
+
+div.affectation_sortie_autorisee {
+  background-image: url(../../images/icons/ray.gif);
 }
