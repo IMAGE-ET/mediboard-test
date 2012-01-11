@@ -221,10 +221,18 @@ abstract class CMbPath {
       break;
       
       case "zip" : 
-      $archive = new ZipArchive();
-      $archive->open($archivePath);
-      $nbFiles = $archive->numFiles;
-      $extract = $archive->extractTo($destinationDir);
+      if (class_exists("ZipArchive")) {
+        $archive = new ZipArchive();
+        $archive->open($archivePath);
+        $nbFiles = $archive->numFiles;
+        $extract = $archive->extractTo($destinationDir);
+      }
+      else {
+        require_once ("Archive/Zip.php");
+        $archive = new Archive_Zip($archivePath);
+        $nbFiles = count($archive->listContent());
+        $extract = $archive->extract(array("add_path" => $destinationDir));
+      }
       break;
     }
     
