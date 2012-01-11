@@ -16,7 +16,7 @@
 <table class="tbl">
   <tr>
     <th colspan="3">
-      {{$object}} du {{$object->entree|date_format:$conf.date}} au {{$object->sortie|date_format:$conf.date}}
+      {{$object}} {{mb_include module=system template=inc_interval_datetime from=$object->entree to=$object->sortie}}
     </th>
   </tr>
     <td rowspan="3">
@@ -60,9 +60,17 @@
         <ul>
           {{foreach from=$affectations item=_affectation}}
             <li>
-              <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}')">
-                Affectation du {{$_affectation->entree|date_format:$conf.date}} au {{$_affectation->sortie|date_format:$conf.date}}
-              </span>
+              {{if $_affectation->_id == $object->_id}}
+                <strong>
+              {{else}}
+                <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}')">
+              {{/if}}
+                {{mb_include module=system template=inc_interval_datetime from=$_affectation->entree to=$_affectation->sortie}}
+              {{if $_affectation->_id == $object->_id}}
+                </strong>
+              {{else}}
+                </span>
+              {{/if}}
             </li>
           {{/foreach}}
         </ul>
@@ -73,7 +81,7 @@
           {{foreach from=$operations item=_operation}}
             <li>
               <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
-                Intervention du {{$_operation->_datetime|date_format:$conf.date}}
+                Intervention du {{mb_value object=$_operation field=_datetime}}
               </span>
             </li>
           {{/foreach}}

@@ -105,18 +105,19 @@ class CAffectation extends CMbObject {
     $sejour->loadRefsAffectations();
     $affectations = $sejour->_ref_affectations;
     
-    if (is_array($affectations)) {
+    if (is_array($affectations) && count($affectations) > 1) {
       foreach ($affectations as $_affectation) {
+        if ($_affectation->_id == $this->_id) continue;
         $_affectation->loadRefLit()->loadCompleteView();
         $_affectation->_view = $_affectation->_ref_lit->_view;
         $_affectation->loadRefParentAffectation();
       }
     }
-    else {
-      $this->loadRefLit()->loadCompleteView();
-      $this->_view = $this->_ref_lit->_view;
-      $this->loadRefParentAffectation();
-    }
+    
+    $this->loadRefLit()->loadCompleteView();
+    $this->_view = $this->_ref_lit->_view;
+    $this->loadRefParentAffectation();
+    
     foreach ($sejour->loadRefsOperations() as $_operation) {
       $_operation->loadRefChir();
       $_operation->loadRefPlageOp();
