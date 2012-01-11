@@ -70,6 +70,7 @@ $whereNP                               = array();
 $whereNP["sejour.group_id"]            = "= '$group->_id'";
 $whereNP["sejour.type"]                = CSQLDataSource::prepareIn($types_hospi, $type_hospi);
 $whereNP["affectation.affectation_id"] = "IS NULL";
+$whereNP["sejour.annule"]              = "= '0'";
 if($service->_id) {
   $whereNP["sejour.service_id"] = "= '$service->_id'";
 }

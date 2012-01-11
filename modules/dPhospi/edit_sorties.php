@@ -71,6 +71,7 @@ $ljoinNP                               = array();
 $ljoinNP["affectation"]                = "sejour.sejour_id = affectation.sejour_id";
 $whereNP                               = array();
 $whereNP["sejour.group_id"]            = "= '$group->_id'";
+$whereNP["sejour.annule"]              = "= '0'";
 $whereNP["sejour.type"]                = CSQLDataSource::prepareIn(array_keys($mouvements), $type_hospi);
 $whereNP["affectation.affectation_id"] = "IS NULL";
 if($service_id) {
