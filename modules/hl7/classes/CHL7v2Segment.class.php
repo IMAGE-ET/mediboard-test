@@ -426,8 +426,9 @@ class CHL7v2Segment extends CHL7v2Entity {
   
   function getPL(CSejour $sejour) {
     $affectation = $sejour->getCurrAffectation();
+    $affectation->loadRefLit()->loadRefChambre();
     $current_uf  = $sejour->getCurrentUF();
-
+      
     return array(
       array(
         // PL-1 - Code UF hébergement
