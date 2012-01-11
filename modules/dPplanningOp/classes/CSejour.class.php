@@ -740,15 +740,19 @@ class CSejour extends CCodable implements IPatientRelated {
     parent::updateFormFields();
     $this->updateEntreeSortie();
     
+    // Durées
     $this->_duree_prevue       = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
     $this->_duree_reelle       = mbDaysRelative($this->entree_reelle, $this->sortie_reelle);
     $this->_duree              = mbDaysRelative($this->_entree, $this->_sortie);
     
-    $this->_time_entree_prevue = mbTransformTime(null, $this->entree_prevue, "%H:%M:00");
-    $this->_time_sortie_prevue = mbTransformTime(null, $this->sortie_prevue, "%H:%M:00");
-
+    // Dates
     $this->_date_entree_prevue = mbDate(null, $this->entree_prevue);
     $this->_date_sortie_prevue = mbDate(null, $this->sortie_prevue);
+    
+    // Horaires
+    // @todo: A supprimer
+    $this->_time_entree_prevue = mbTransformTime(null, $this->entree_prevue, "%H:%M:00");
+    $this->_time_sortie_prevue = mbTransformTime(null, $this->sortie_prevue, "%H:%M:00");
     $this->_hour_entree_prevue = mbTransformTime(null, $this->entree_prevue, "%H");
     $this->_hour_sortie_prevue = mbTransformTime(null, $this->sortie_prevue, "%H");
     $this->_min_entree_prevue  = mbTransformTime(null, $this->entree_prevue, "%M");

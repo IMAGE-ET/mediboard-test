@@ -38,17 +38,17 @@ function toggleMode() {
 window.refreshingSejours = false;
 
 function reloadSejours(checkCollision) {
-	var oForm = getForm("editSejour");
-	var patient_id = $V(oForm.patient_id);
+  var oForm = getForm("editSejour");
+  var patient_id = $V(oForm.patient_id);
 
-	if (!patient_id) {
+  if (!patient_id) {
     return;
-	}
-		
+  }
+    
   // Changer l'entrée prévue d'un séjour change également la sortie prévue,
   // il faut donc éviter de lancer deux fois cette fonction.
   if (window.refreshingSejours) {
-	  return;
+    return;
   }
   window.refreshingSejours = true;
   var url = new Url("dPplanningOp", "ajax_list_sejours");
@@ -108,7 +108,8 @@ function reloadSejours(checkCollision) {
         {{tr}}button-COperation-modeExpert{{/tr}}
       </button>
       
-      Modification du séjour {{$sejour->_view}} {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+      Modification du séjour {{$sejour->_view}} 
+      {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}
     </th>
     {{else}}
     <th colspan="2" class="title">
@@ -145,23 +146,23 @@ function reloadSejours(checkCollision) {
         {{if $sejour->_id}} 
         <tr>
           <th class="title">
-          	{{tr}}CMbObject-back-documents{{/tr}}
-					</th>
+            {{tr}}CMbObject-back-documents{{/tr}}
+          </th>
         </tr>
         <tr>
           <td id="documents">
             {{mb_script module=dPcompteRendu script=document}}
             {{mb_script module=dPcompteRendu script=modele_selector}}
-				    <script type="text/javascript">
-				    Document.register('{{$sejour->_id}}','{{$sejour->_class}}','{{$sejour->praticien_id}}', 'documents');
-				    </script>
+            <script type="text/javascript">
+            Document.register('{{$sejour->_id}}','{{$sejour->_class}}','{{$sejour->praticien_id}}', 'documents');
+            </script>
           </td>
         </tr>
 
         <tr>
           <th class="title">
-          	{{tr}}CMbObject-back-files{{/tr}}
-					</th>
+            {{tr}}CMbObject-back-files{{/tr}}
+          </th>
         </tr>
         <tr>
           <td id="files">

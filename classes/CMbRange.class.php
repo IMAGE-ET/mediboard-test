@@ -60,7 +60,7 @@ abstract class CMbRange {
 		return 
 		  $permissive ?
         ($lower1 < $upper2 || $lower1 === null || $upper2 === null) && 
-			  ($upper1 > $lower2 || $upper1 === null || $lower2 === null) :
+	    ($upper1 > $lower2 || $upper1 === null || $lower2 === null) :
         ($lower1 <= $upper2 || $lower1 === null || $upper2 === null) && 
         ($upper1 >= $lower2 || $upper1 === null || $lower2 === null);
 	}

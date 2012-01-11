@@ -658,6 +658,9 @@ Main.add( function(){
       <option value="{{$min}}" {{if $sejour->_min_entree_prevue == $min}} selected="selected" {{/if}}>{{$min}}</option>
     {{/foreach}}
     </select> min
+    {{if $can->admin}}
+    (admin: {{mb_value object=$sejour field=entree_prevue}})
+    {{/if}}
   </td>
 </tr>
 
@@ -686,6 +689,9 @@ Main.add( function(){
       <option value="{{$min}}" {{if $sejour->_min_sortie_prevue == $min}} selected="selected" {{/if}}>{{$min}}</option>
     {{/foreach}}
     </select> min
+    {{if $can->admin}}
+    (admin: {{mb_value object=$sejour field=sortie_prevue}})
+    {{/if}}
   </td>
 </tr>
 
