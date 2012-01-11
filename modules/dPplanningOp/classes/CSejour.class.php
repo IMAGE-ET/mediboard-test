@@ -2094,9 +2094,10 @@ class CSejour extends CCodable implements IPatientRelated {
     if (!$date) {
       $date = mbDateTime();
     }
+    
     $affectation = $this->getCurrAffectation($date);
     if ($affectation->_id) {
-     return $affectation->getUFs();
+      return $affectation->getUFs();
     }
     
     $affectation_uf = new CAffectationUniteFonctionnelle();

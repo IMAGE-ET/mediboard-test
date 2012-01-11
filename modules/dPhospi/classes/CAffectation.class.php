@@ -369,7 +369,7 @@ class CAffectation extends CMbObject {
     return $affectation;
   }
   
-  function loadRefUfs($cache = 1){
+  function loadRefUfs($cache = 1, $store = true){
     $this->completeField("uf_hebergement_id", "uf_soins_id", "uf_medicale_id");
     
     $this->loadRefLit()->loadRefChambre()->loadRefService();
@@ -377,8 +377,10 @@ class CAffectation extends CMbObject {
     $chambre   = $lit->_ref_chambre;
     $service   = $chambre->_ref_service;
     
+    $modified = false;
+    
     $affectation_uf = new CAffectationUniteFonctionnelle();
-  	if (!$this->uf_hebergement_id){
+  	if (!$this->uf_hebergement_id) {
   		$where["object_id"]     = "= '{$lit->_id}'";
   		$where["object_class"]  = "= 'CLit'";
   		$affectation_uf->loadObject($where);
@@ -395,20 +397,28 @@ class CAffectation extends CMbObject {
         }
   		}
   		
+  		if ($affectation_uf->uf_id) {
+  		  $modified = true;
+  		}
+  		
       $this->uf_hebergement_id = $affectation_uf->uf_id;  		
   	}
   	
   	$affectation_uf = new CAffectationUniteFonctionnelle();
-    if (!$this->uf_soins_id){
+    if (!$this->uf_soins_id) {
       $where["object_id"]     = "= '{$service->_id}'";
       $where["object_class"]  = "= 'CService'";
       $affectation_uf->loadObject($where);
 		  
+      if ($affectation_uf->uf_id) {
+        $modified = true;
+      }
+      
       $this->uf_soins_id = $affectation_uf->uf_id;
     }
     
     $affectation_uf = new CAffectationUniteFonctionnelle();
-    if (!$this->uf_medicale_id){
+    if (!$this->uf_medicale_id) {
     	$praticien = $this->loadRefSejour()->loadRefPraticien();
       $where["object_id"]     = "= '{$praticien->_id}'";
       $where["object_class"]  = "= 'CMediusers'";
@@ -420,11 +430,17 @@ class CAffectation extends CMbObject {
 	      $affectation_uf->loadObject($where);
 	    }
 	    
+      if ($affectation_uf->uf_id) {
+        $modified = true;
+      }
+      
 	    $this->uf_medicale_id = $affectation_uf->uf_id;
     }
-    
-    if ($msg = $this->store()) {
-    	return $msg;
+      
+    if ($store) {
+      if ($modified && ($msg = $this->store())) {
+        return $msg;
+      }
     }
     
     $this->loadRefUFHebergement($cache);

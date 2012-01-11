@@ -93,7 +93,7 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     // ZBE-6: Original trigger event code (ID) (optional)
     $data[] = ($action_movement == "UPDATE" || $action_movement == "CANCEL") ? $movement->original_trigger_code : null;
     
-    $affectation->loadRefUfs();
+    $affectation->loadRefUfs(1, false);
     // ZBE-7: Ward of medical responsibility in the period starting with this movement (XON) (optional)
     $uf_medicale = $affectation->_ref_uf_medicale;
     if (isset($uf_medicale->_id)) {

@@ -87,59 +87,35 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
      // Traitement Affectation
     if ($mbObject instanceof CAffectation) {
       $affectation = $mbObject;
-      
-      $last_log = $affectation->loadLastLog();
-      if (!in_array($last_log->type, array("create", "store"))) {
+      $last_log = $affectation->_ref_current_log;
+     
+      if (!$last_log || !in_array($last_log->type, array("create", "store"))) {
         return null;
       }
 
-      $sejour = $affectation->loadRefSejour();
-      $sejour->loadRefPatient();
-      $sejour->_receiver = $receiver;
-      
-      $current_affectation = $sejour->getCurrAffectation();
-      
       // Création d'une affectation
       if ($last_log->type == "create") {
-        // Pas de création de mouvement s'il s'agit d'une affectation dans le futur
-        if ($affectation->_id != $current_affectation->_id) {
-          return;
-        }
-        // Pas de création de mouvement si le séjour est encore en pré-admission
-        if ($sejour->_etat == "preadmission") {
-          return;
-        }
+        $code = "A02";
       }
       
       // Modifcation d'une affectation
       if ($last_log->type == "store") {
-        // Affectation effectuée on passe à la suivante ? 
-        if (!$affectation->fieldModified("effectue", 1)) {
-          return;
-        }
-        
-        if ($sejour->sortie_reelle) {
-          return;
-        }
-        
-        // Dans le cas où l'affectation est effectuée avant la date, on charge la suivante
-        if ($affectation->_id == $current_affectation->_id) {
-          $sejour->loadSurrAffectations();
-          $affectation = $sejour->_ref_next_affectation;
-        }
+        $code = "Z99"; 
       }
-      
-      $code = "A02";
-      
+
       // Cas où : 
       // * on est l'initiateur du message 
       // * le destinataire ne supporte pas le message
-      if ($sejour->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
+      if ($affectation->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
         return;
       }
-
+      
+      $sejour = $affectation->loadRefSejour();
+      $sejour->loadRefPatient();
+      $sejour->_receiver = $receiver;
+      
       $this->createMovement($code, $sejour, $affectation);
-              
+   
       // Envoi de l'événement
       $this->sendITI($this->profil, $this->transaction, $code, $sejour);
     }
