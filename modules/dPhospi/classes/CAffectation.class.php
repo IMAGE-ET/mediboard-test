@@ -370,84 +370,78 @@ class CAffectation extends CMbObject {
   }
   
   function loadRefUfs($cache = 1){
-  	$affectation_uf = new CAffectationUniteFonctionnelle();
-  	
-  	$this->completeField("uf_hebergement_id", "uf_soins_id", "uf_medicale_id");
-  	
-    $this->loadRefLit();
-    $this->_ref_lit->loadRefChambre();
-    $this->_ref_lit->_ref_chambre->loadRefService();
-      
-  	if(!$this->uf_hebergement_id){
-  		$where["object_id"]     = "= '{$this->_ref_lit->_id}'";
+    $this->completeField("uf_hebergement_id", "uf_soins_id", "uf_medicale_id");
+    
+    $this->loadRefLit()->loadRefChambre()->loadRefService();
+    $lit       = $this->_ref_lit;
+    $chambre   = $lit->_ref_chambre;
+    $service   = $chambre->_ref_service;
+    
+    $affectation_uf = new CAffectationUniteFonctionnelle();
+  	if (!$this->uf_hebergement_id){
+  		$where["object_id"]     = "= '{$lit->_id}'";
   		$where["object_class"]  = "= 'CLit'";
   		$affectation_uf->loadObject($where);
-  		if($affectation_uf->_id){
-  			$this->uf_hebergement_id = $affectation_uf->uf_id;
-  			$this->store();
-  		}
-  		else {
-	      $where["object_id"]     = "= '{$this->_ref_lit->_ref_chambre->_id}'";
+
+  		if (!$affectation_uf->_id) {
+	      $where["object_id"]     = "= '{$chambre->_id}'";
 	      $where["object_class"]  = "= 'CChambre'";
 	      $affectation_uf->loadObject($where);
-	  		if($affectation_uf->_id){
-	        $this->uf_hebergement_id = $affectation_uf->uf_id;
-	        $this->store();
-	      }
-        else {
-		      $where["object_id"]     = "= '{$this->_ref_lit->_ref_chambre->_ref_service->_id}'";
+	  		
+        if (!$affectation_uf->_id) {
+		      $where["object_id"]     = "= '{$service->_id}'";
 		      $where["object_class"]  = "= 'CService'";
 	        $affectation_uf->loadObject($where);
-	        if($affectation_uf->_id){
-	          $this->uf_hebergement_id = $affectation_uf->uf_id;
-	          if(!$this->uf_medicale_id){
-              $this->uf_medicale_id = $aff->uf_id;
-            }
-	          $this->store();
-	        }
         }
   		}
+  		
+      $this->uf_hebergement_id = $affectation_uf->uf_id;  		
   	}
   	
-    if(!$this->uf_soins_id){
-      $where["object_id"]     = "= '{$this->_ref_lit->_ref_chambre->_ref_service->_id}'";
+  	$affectation_uf = new CAffectationUniteFonctionnelle();
+    if (!$this->uf_soins_id){
+      $where["object_id"]     = "= '{$service->_id}'";
       $where["object_class"]  = "= 'CService'";
       $affectation_uf->loadObject($where);
-      if($affectation_uf->_id){
-		     $this->uf_soins_id = $affectation_uf->uf_id;
-		     $this->store();
-      }
+		  
+      $this->uf_soins_id = $affectation_uf->uf_id;
     }
     
-    if(!$this->uf_medicale_id){
-    	$this->loadRefSejour();
-    	$this->_ref_sejour->loadRefPraticien();
-      $where["object_id"]     = "= '{$this->_ref_sejour->_ref_praticien->_id}'";
+    $affectation_uf = new CAffectationUniteFonctionnelle();
+    if (!$this->uf_medicale_id){
+    	$praticien = $this->loadRefSejour()->loadRefPraticien();
+      $where["object_id"]     = "= '{$praticien->_id}'";
       $where["object_class"]  = "= 'CMediusers'";
       $affectation_uf->loadObject($where);
-      if($affectation_uf->_id){
-        $this->uf_medicale_id = $affectation_uf->uf_id;
-        $this->store();
-      }
-	    else {
-	      $where["object_id"]     = "= '{$this->_ref_sejour->_ref_praticien->_ref_function->_id}'";
+
+	    if (!$affectation_uf->_id) {
+	      $where["object_id"]     = "= '{$praticien->_ref_function->_id}'";
 	      $where["object_class"]  = "= 'CFunctions'";
 	      $affectation_uf->loadObject($where);
-	      if($affectation_uf->_id){
-          $this->uf_medicale_id = $affectation_uf->uf_id;
-          $this->store();
-	      }
 	    }
+	    
+	    $this->uf_medicale_id = $affectation_uf->uf_id;
     }
     
     if ($msg = $this->store()) {
     	return $msg;
     }
     
-    $this->_ref_uf_hebergement  =  $this->loadFwdRef("uf_hebergement_id", $cache);
-    $this->_ref_uf_medicale     =  $this->loadFwdRef("uf_medicale_id", $cache);
-    $this->_ref_uf_soins        =  $this->loadFwdRef("uf_soins_id", $cache);
-    
+    $this->loadRefUFHebergement($cache);
+    $this->loadRefUFMedicale($cache);
+    $this->loadRefUFSoins($cache);
+  }
+  
+  function loadRefUFHebergement($cache = true) {
+    return $this->_ref_uf_hebergement = $this->loadFwdRef("uf_hebergement_id", $cache);
+  }
+  
+  function loadRefUFMedicale($cache = true) {
+    return $this->_ref_uf_medicale = $this->loadFwdRef("uf_medicale_id", $cache);
+  }
+  
+  function loadRefUFSoins($cache = true) {
+    return $this->_ref_uf_soins = $this->loadFwdRef("uf_soins_id", $cache);
   }
   
   function getUFs(){

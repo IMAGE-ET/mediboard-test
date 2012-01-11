@@ -29,6 +29,7 @@ class CMovement extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'movement';
     $spec->key   = 'movement_id';
+    $spec->uniques["uniques"] = array("affectation_id");
     return $spec;
   }
   
