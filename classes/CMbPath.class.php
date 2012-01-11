@@ -221,7 +221,7 @@ abstract class CMbPath {
       break;
       
       case "zip" : 
-      if (class_exists("ZipArchive")) {
+      if (class_exists("ZipArchive", false)) {
         $archive = new ZipArchive();
         $archive->open($archivePath);
         $nbFiles = $archive->numFiles;
