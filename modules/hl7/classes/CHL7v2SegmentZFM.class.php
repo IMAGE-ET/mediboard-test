@@ -52,10 +52,11 @@ class CHL7v2SegmentZFM extends CHL7v2Segment {
     $data[] = $mode_sortie;
     
     // ZFM-3: Mode de provenance PMSI
-    $data[] = null;
+    $provenance = ($sejour->provenance == "8") ? "5" : $sejour->provenance;  
+    $data[] = $provenance;
     
     // ZFM-4: Mode de destination PMSI
-    $data[] = null;
+    $data[] = $sejour->destination;
     
     $this->fill($data);
   }

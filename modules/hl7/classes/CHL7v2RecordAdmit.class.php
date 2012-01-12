@@ -640,11 +640,37 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getZFD(DOMNode $node, CSejour $newVenue) {    
-    
+    /* @todo Date lunaire du patient */
   }
   
-  function getZFM(DOMNode $node, CSejour $newVenue) {    
+  function getZFM(DOMNode $node, CSejour $newVenue) {   
+    // Mode entrée PMSI 
+    $this->getModeEntreePMSI($node, $newVenue);
     
+    // Mode de sortie PMSI
+    $this->getModeSortiePMSI($node, $newVenue);
+    
+    // Mode de provenance PMSI
+    $this->getModeProvenancePMSI($node, $newVenue);
+    
+    // Mode de destination PMSI
+    $this->getModeDestinationPMSI($node, $newVenue);
+  }
+  
+  function getModeEntreePMSI(DOMNode $node, CSejour $newVenue) {
+    $newVenue->mode_entree = $this->queryTextNode("ZFM.1", $node);
+  }
+  
+  function getModeSortiePMSI(DOMNode $node, CSejour $newVenue) {
+    $newVenue->mode_sortie = $this->queryTextNode("ZFM.2", $node);
+  }
+  
+  function getModeProvenancePMSI(DOMNode $node, CSejour $newVenue) {
+    $newVenue->provenance = $this->queryTextNode("ZFM.3", $node);
+  }
+  
+  function getModeDestinationPMSI(DOMNode $node, CSejour $newVenue) {
+    $newVenue->destination = $this->queryTextNode("ZFM.4", $node);
   }
   
   function getZFP(DOMNode $node, CSejour $newVenue) {    
