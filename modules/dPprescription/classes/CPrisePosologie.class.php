@@ -515,8 +515,31 @@ class CPrisePosologie extends CMbMetaObject {
     }
     
 		if(count($_planifs_by_step)){
+			// Suppression des planification manuelles superieures à la date actuelle
 		  $ds = CSQLDataSource::get("std");
 		  $ds->insertMulti('planification_systeme', $_planifs_by_step, 1000);
+			
+			 // Chargement des planifications manuelles
+      $where = array();
+      $where["object_id"] = " = '$this->object_id'";
+      $where["object_class"] = " = '$this->object_class'";
+      $where["planification"] = " = '1'";
+      $where["original_dateTime"] = " IS NOT NULL";
+      
+      $planification = new CAdministration();
+      $planifications = $planification->loadList($where); 
+      
+      // Parcours des planifications et recherche des planifications systemes associées
+      foreach($planifications as $_planification){
+        $planification_systeme = new CPlanificationSysteme();
+				$planification_systeme->object_id = $_planification->object_id;
+        $planification_systeme->object_class = $_planification->object_class;
+        $planification_systeme->dateTime = $_planification->original_dateTime;
+
+        if($planification_systeme->countMatchingList() < 1){
+          $_planification->delete();
+        }
+      }
 		}
   }
   

@@ -858,9 +858,33 @@ class CPrescriptionLineMix extends CMbObject {
       }
     }
     
-    if(count($_planifs_by_step)){
+    if(count($_planifs_by_step)){										
       $ds = CSQLDataSource::get("std");
       $ds->insertMulti('planification_systeme', $_planifs_by_step, 1000);
+			
+			// Chargement des planifications manuelles
+      $where = array();
+      $where["prescription_line_mix_item.prescription_line_mix_id"] = " = '$this->_id'";
+      $where["planification"] = " = '1'";
+      $where["original_dateTime"] = " IS NOT NULL";
+			
+			$ljoin = array();
+			$ljoin["prescription_line_mix_item"] = "administration.object_id = prescription_line_mix_item.prescription_line_mix_item_id AND administration.object_class = 'CPrescriptionLineMixItem'";
+			
+      $planification = new CAdministration();
+      $planifications = $planification->loadList($where, null, null, null, $ljoin); 
+      
+      // Parcours des planifications et recherche des planifications systemes associées
+      foreach($planifications as $_planification){
+        $planification_systeme = new CPlanificationSysteme();
+        $planification_systeme->object_id = $_planification->object_id;
+        $planification_systeme->object_class = $_planification->object_class;
+        $planification_systeme->dateTime = $_planification->original_dateTime;
+
+        if($planification_systeme->countMatchingList() < 1){
+          $_planification->delete();
+        }
+      }
     }
   }
     

@@ -101,7 +101,7 @@ resetSearchForm = function(){
 		        {{/foreach}}
 		      </select>
 		      <select name="function_id" onchange="this.form.praticien_id.value=''; this.form.group_id.value=''; Protocole.refreshListProt();" style="width: 23em;">
-	          <option value="">&mdash; Cabinet</option>
+	          <option value="">&mdash; Fonction médicale</option>
 	          {{foreach from=$functions item=_function}}
 	          <option class="mediuser" style="border-color: #{{$_function->color}}" value="{{$_function->_id}}" {{if $function_id == $_function->_id}}selected=selected{{/if}} title="{{$_function->_view}}">{{$_function->_view|spancate:40}}</option>
 	          {{/foreach}}
