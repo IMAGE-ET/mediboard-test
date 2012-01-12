@@ -164,10 +164,9 @@ if (count($adm_mix)) {
 $user_id = CAppUI::$user->_id;
 $transmission = new CTransmissionMedicale();
 
-if (count($adm) > 0) {
+if (count($adm) > 0 || count($adm_mix) > 0) {
   $transmission->sejour_id = $sejour->_id;
   $transmission->user_id = $user_id;
-  $tranmission->object_class = get_class($line);
 }
 
 // Création du template
