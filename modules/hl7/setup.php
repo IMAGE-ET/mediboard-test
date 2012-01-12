@@ -39,6 +39,19 @@ class CSetuphl7 extends CSetup {
     
   }
   
+  function deleteTableEntry($number, $where) {
+    $and = "";
+    foreach ($where as $field => $value) {
+      $and .= "AND `$field` = '$value' ";
+    }
+    
+    $query = "DELETE FROM `hl7v2`.`table_entry`
+              WHERE `number` = '$number'
+              $and;";
+
+    $this->addQuery($query, false, "hl7v2");
+  }
+  
   function __construct() {
     parent::__construct();
     
@@ -647,19 +660,31 @@ class CSetuphl7 extends CSetup {
     
     $this->makeRevision("0.16");
     
-    // I - Inpatient - Hospitalisation
-    // Erreur lors de l'initialisation
+    $this->makeRevision("0.17");
+    
+    // Externe
+    $and = array(
+      "code_hl7_to"  => "O",
+      "code_mb_from" => "exte"
+    );
+    $this->deleteTableEntry("4", $and);
+    
     $set = array(
-      "code_hl7_to"   => "I",
-      "code_mb_from"  => "comp",
-      "code_mb_to"    => "comp"
+      "code_hl7_to"   => "O",
+      "code_hl7_from" => "O",
+      "code_mb_from"  => "exte",
+      "code_mb_to"    => "exte"
     );
     $and = array(
-      "code_hl7_from" => "I"
+      "code_hl7_from" => "I",
+      "code_mb_from"  => "ambu"
     );
     $this->updateTableEntry("4", $set, $and);
     
-    $this->mod_version = "0.17";
+    // Ambu
+    $this->insertTableEntry("4", null, "I", "ambu", null, "Inpatient");
+
+    $this->mod_version = "0.18";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
