@@ -92,6 +92,12 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if (!$last_log || !in_array($last_log->type, array("create", "store"))) {
         return null;
       }
+      
+      $sejour = $affectation->loadRefSejour();
+      
+      if ($sejour->type == "preadmission") {
+        return;
+      }
 
       // Création d'une affectation
       if ($last_log->type == "create") {
@@ -110,7 +116,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return;
       }
       
-      $sejour = $affectation->loadRefSejour();
+      
       $sejour->loadRefPatient();
       $sejour->_receiver = $receiver;
       
