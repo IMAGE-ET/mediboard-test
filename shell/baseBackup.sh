@@ -67,7 +67,8 @@ force_dir $BASE_PATH
 cd ${BASE_PATH}
 
 ## If no enough free disk space (1.5 * size of database), send mail if provided and quit
-conf=`locate my.cnf|head -n 1`
+conf=`find /etc -name my.cnf 2>/dev/null|head -n 1`
+
 dir_mysql=`cat $conf|grep datadir|tr -s ' '|cut -d"=" -f 2`
 dir_mysql="$dir_mysql/$database"
 size_database=`du -k $dir_mysql|tail -n 1|sed -r 's/\s+/\ /g'|cut -d" " -f 1`
