@@ -617,7 +617,22 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getPV2(DOMNode $node, CSejour $newVenue) {    
+    // Entrée / Sortie prévue du séjour
+    $this->getExpectedAdmitDischarge($node, $newVenue);
     
+    // Mode de transport d'entrée
+    $this->getModeArrivalCode($node, $newVenue);
+  }
+  
+  function getExpectedAdmitDischarge(DOMNode $node, CSejour $newVenue) {
+    $newVenue->entree_reelle = $this->queryTextNode("PV2.8", $node);
+    $newVenue->sortie_reelle = $this->queryTextNode("PV2.9", $node);
+  }
+  
+  function getModeArrivalCode(DOMNode $node, CSejour $newVenue) {
+    $mode_arrival_code = $this->queryTextNode("PV2.38", $node);
+    
+    $newVenue->transport = CHL7v2TableEntry::mapFrom("0430", $mode_arrival_code);
   }
   
   function getZBE(DOMNode $node, CSejour $newVenue) {    

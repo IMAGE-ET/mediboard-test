@@ -97,7 +97,8 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     $data[] = CHL7v2TableEntry::mapTo("399", "FRA"); 
     
     // MSH-18: Character Set (ID) (optional repeating)
-    $data[] = CHL7v2TableEntry::mapTo("211", $actor->_configs["encoding"]); 
+    $encoding = isset($actor->_configs["encoding"]) ? $actor->_configs["encoding"] : "UTF-8";
+    $data[] = CHL7v2TableEntry::mapTo("211", $encoding); 
     
     // MSH-19: Principal Language Of Message (CE) (optional)
     $data[] = array(
