@@ -18,6 +18,11 @@ $keywords       = CValue::getOrSession("keywords");
 
 $userSel = new CMediusers;
 $userSel->load($filter_user_id);
+
+if (!$userSel->_id) {
+  $userSel = CMediusers::get();
+}
+
 $userSel->loadRefFunction()->loadRefGroup();
 
 if ($userSel->isPraticien()) {
