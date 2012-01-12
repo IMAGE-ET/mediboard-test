@@ -285,9 +285,9 @@ Main.add( function(){
                   <input type="hidden" name="del" value="0" />
                   <input type="hidden" name="administration_id" value="" />
                   <input type="hidden" name="administrateur_id" value="{{$app->user_id}}" />
-                  <input type="hidden" name="object_id" value="{{_line_mix_item->_id}}" />
+                  <input type="hidden" name="object_id" value="{{$_line_mix_item->_id}}" />
                   <input type="hidden" name="object_class" value="CPrescriptionLineMixItem" />
-                  <input type="hidden" name="unite_prise" value="{{_line_mix_item->_unite_administration|smarty:nodefaults|JSAttribute}}" />
+                  <input type="hidden" name="unite_prise" value="{{$_line_mix_item->_unite_administration|smarty:nodefaults|JSAttribute}}" />
                   <input type="hidden" name="dateTime" value="{{$_date}} {{$_hour}}:00:00" />
                   <input type="hidden" name="prise_id" value="" />
                   <input type="hidden" name="quantite_prevue" disabled="disabled" value="{{$_line_mix_item->_quantite_administration}}" />
