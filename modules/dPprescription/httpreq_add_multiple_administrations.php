@@ -9,11 +9,14 @@
  */
 
 $adm = CValue::post("adm");
+$adm_mix = CValue::post("adm_mix");
+
 $list_administrations = array();
 $mode_dossier = CValue::get("mode_dossier");
 $refresh_popup = CValue::get("refresh_popup", "0");
 
 $adm = json_decode(stripslashes(utf8_encode($adm)), true);
+$adm_mix = json_decode(stripslashes(utf8_encode($adm_mix)), true);
 
 $sejour = new CSejour();
 $date_sel = null;
@@ -121,6 +124,42 @@ if (count($adm) > 0) {
 		}
 	}
 }
+$lines_mix_item = array();
+$prises_lines_mix = array();
+if (count($adm_mix)) {
+	foreach ($adm_mix as $_adm_mix) {
+	  $line_id = $_adm_mix["line_id"];
+		$dateTime = $_adm_mix["dateTime"];
+    
+		$line_mix = new CPrescriptionLineMix();
+		$line_mix->load($line_id);
+		
+		if (!$sejour->_id) {
+      $sejour = $line_mix->_ref_prescription->_ref_object;
+      $sejour->loadRefPatient();
+      $sejour->_ref_patient->loadRefsAffectations();
+      $sejour->_ref_patient->_ref_curr_affectation->loadView();
+      $sejour_id = $sejour->_id;
+		}
+		
+		// Chargement des lignes
+		$line_mix->loadRefsLines();
+		
+		// Calcul des prises
+		$line_mix->calculPrisesPrevues(mbTransformTime(null, $dateTime, "%Y-%m-%d %H"),  CAppUI::conf("dPprescription CPrescription manual_planif"));
+		
+		foreach($line_mix->_ref_lines as $_line_mix_item){
+			$_line_mix_item->updateQuantiteAdministration();
+			$lines_mix_item[$_line_mix_item->_id] = $_line_mix_item;
+		}
+		$prises_lines_mix[] = $line_mix;
+		if (!$date_sel)  $date_sel = isset($_adm_mix['date_sel']) ? $_adm_mix['date_sel'] : null;
+
+		if(!isset($tabs_refresh[$line_mix->type_line])){
+			$tabs_refresh[$line_mix->type_line] = $line_mix->type_line;
+		}		
+	}
+}
 
 $user_id = CAppUI::$user->_id;
 $transmission = new CTransmissionMedicale();
@@ -133,7 +172,6 @@ if (count($adm) > 0) {
 
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->assign("administrations", $list_administrations);
 $smarty->assign("date_sel"       , $date_sel);
 $smarty->assign("sejour"        , $sejour);
@@ -144,6 +182,10 @@ $smarty->assign("user_id"       , $user_id);
 $smarty->assign("refresh_popup" , $refresh_popup);
 $smarty->assign("nb_patients"   , $nb_patients);
 $smarty->assign("new_adm"       , new CAdministration);
+$smarty->assign("prises_lines_mix", $prises_lines_mix);
+$smarty->assign("hour", mbTransformTime(null, mbTime(), "%H"));
+$smarty->assign("date", mbDate());
+$smarty->assign("lines_mix_item", $lines_mix_item);
 $smarty->display("inc_vw_add_multiple_administrations.tpl");
 
 ?>

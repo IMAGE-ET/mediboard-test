@@ -248,6 +248,7 @@ Main.add(function () {
 
   <form name="adm_multiple" action="?" method="get">
     <input type="hidden" name="_administrations">
+    <input type="hidden" name="_administrations_mix">
   </form>
   
   <form name="click" action="?" method="get">

@@ -31,8 +31,17 @@ PlanSoins = {
         }
       }
     });
+		
+		$('plan_soin').select('div.first_line_mix_item').each(function(oDiv){
+      if(oDiv.up("tbody").visible() && oDiv.up("td").hasClassName(hour)){
+        oDiv = oDiv.up("div");
+				if(Object.isFunction(oDiv.onclick)){
+          oDiv.onclick();
+        }
+      }
+    });
   },
-  
+	
   oDragOptions: {
     constraint: 'horizontal',
     revert: true,
@@ -231,6 +240,24 @@ PlanSoins = {
       };
     }
   },
+	
+	toggleSelectForAdministrationLineMix: function (element, line_id, dateTime) {
+	  element = $(element);
+
+    if (element._administration) {
+      element.removeClassName('administration-selected');
+      element._administration = null;
+    }
+    else {
+      element.addClassName('administration-selected');
+      element._administration = {
+        line_id: line_id,
+        dateTime: dateTime,
+        date_sel: PlanSoins.date
+      };
+    }
+  },
+	
   loadTraitement: function(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre, without_check_date, hide_close) {
 		var url = new Url("dPprescription", "httpreq_vw_dossier_soin");
     url.addParam("sejour_id", sejour_id);
@@ -518,16 +545,28 @@ PlanSoins = {
   },
   
   applyAdministrations: function () {
-    var administrations = {};
-     
+    // Initialisation des tableaux
+		var administrations = {};
+    var administrations_mix = {};
+    
+		// Parcours des administrations selectionnées  
     $$('div.administration-selected').each(function(element) { 
       if(!element.hasClassName('multiple_adm')){
-        var adm = element._administration;
-        administrations[adm.line_id+'_'+adm.key_tab+'_'+adm.dateTime] = adm; 
+				var adm = element._administration;
+				
+				// Medicament ou element
+				if(!Object.isUndefined(adm.key_tab)){
+					administrations[adm.line_id+'_'+adm.key_tab+'_'+adm.dateTime] = adm; 
+        } 
+				// Line mix
+				else {
+				  administrations_mix[adm.line_id+'_'+adm.dateTime] = adm; 
+        }
       }
     });
     
     $V(getForm("adm_multiple")._administrations, Object.toJSON(administrations));
+    $V(getForm("adm_multiple")._administrations_mix, Object.toJSON(administrations_mix));
     
     var url = new Url("dPprescription", "httpreq_add_multiple_administrations");
     url.addParam("mode_dossier", $V(document.mode_dossier_soin.mode_dossier));

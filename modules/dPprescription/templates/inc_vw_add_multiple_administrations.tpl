@@ -82,8 +82,8 @@ function submitAllPlanifications(){
 }
 
 function closeApplyAdministrations(dontClose) {
-  {{if $administrations|@count && $sejour->_id && $date_sel}}
-    if (anyFormSubmitted && window.opener) {
+  {{if ($administrations|@count || $prises_lines_mix|@count)&& $sejour->_id && $date_sel}}
+	  if (anyFormSubmitted && window.opener) {
       // refresh des chapitres concernés
       {{foreach from=$tabs_refresh key=chapitre item=_tab_refresh}}
         window.opener.PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}', null, null, null, '{{$chapitre}}');
@@ -118,8 +118,13 @@ Main.add( function(){
   menuTabs = Control.Tabs.create('administrations_multiple_tab_group', false);
   
   {{if $refresh_popup == 1}}
-    $V(getForm("all_adm").adm, $V(window.opener.getForm('adm_multiple')._administrations));
-  {{/if}}
+	  var oFormAdm         = getForm("all_adm");
+		var oFormAdmMultiple = window.opener.getForm("adm_multiple");
+    
+		$V(oFormAdm.adm    , $V(oFormAdmMultiple._administrations));
+		$V(oFormAdm.adm_mix, $V(oFormAdmMultiple._administrations_mix));
+    oFormAdm.submit();
+	{{/if}}
   
   if($("multiple_adm_button")){
    $("multiple_adm_button").focus();
@@ -129,7 +134,8 @@ Main.add( function(){
 </script>
 
 <form name="all_adm" method='post' action='?m={{$m}}&a={{$a}}&dialog={{$dialog}}&refresh_popup=0&mode_dossier={{$mode_dossier}}'>
-  <input type="hidden" name="adm" value="" onchange="this.form.submit();"/>
+  <input type="hidden" name="adm" value="" />
+	<input type="hidden" name="adm_mix" value="" />
 </form>
 
 {{if $sejour->_id}}
@@ -150,10 +156,7 @@ Main.add( function(){
 {{/if}}
 
 {{if $mode_dossier == "administration"}}
-  {{if $sejour->_id}}
-    <button type="button" class="cancel" onclick="closeApplyAdministrations()">{{tr}}Cancel{{/tr}}</button>
-    <button type="button" class="tick oneclick" onclick="submitAllAdministrations()" id="multiple_adm_button">Tout valider</button>
-    
+  {{if $sejour->_id}}    
     <table class="form" id="administrations">
     {{foreach from=$administrations item=adm key=line_id name=by_adm}}
       {{foreach from=$adm item=by_unite_prise key=unite_prise name=adm_by_unite_prise}}
@@ -164,7 +167,7 @@ Main.add( function(){
             {{assign var=key value="$line_id-$_unite-$_prise-$date-$hour"|md5}}
             {{if $smarty.foreach.adm_by_unite_prise.first}}
             <tr>
-              <th class="title" colspan="2">{{$by_hour.line->_view}}</th>
+              <th class="category" colspan="2">{{$by_hour.line->_view}}</th>
             </tr>
             {{/if}}
             <tr>
@@ -213,9 +216,105 @@ Main.add( function(){
           {{/foreach}}
         {{/foreach}}
       {{/foreach}}
-    {{foreachelse}}
-      <tr><td>Veuillez choisir au moins un soin à effectuer</td></tr>
     {{/foreach}}
+		
+		{{foreach from=$prises_lines_mix item=line_mix}}
+		  {{if $line_mix->_prises_prevues|@count}}
+			<tr>
+				<th class="category">
+					
+					{{foreach from=$line_mix->_ref_lines item=_line name=items}}
+					 {{$_line->_ucd_view}} {{if !$smarty.foreach.items.last}},{{/if}}
+					{{/foreach}}
+					<br />
+					<small>{{$line_mix->_view}}</small>
+	    	</th>
+			</tr>
+			{{foreach from=$line_mix->_prises_prevues key=_date item=prises_by_date}}
+			  {{foreach from=$prises_by_date key=_hour item=prises_by_hour}}
+				
+				  {{if array_key_exists("real_hour", $prises_by_hour)}}
+				
+			    {{foreach from=$prises_by_hour.real_hour item=prises_by_real_hour}}
+	      	  {{foreach from=$line_mix->_ref_lines item=_line_mix_item}}
+							<tr>
+			          <td>
+			          	 {{unique_id var="unique_id"}}
+									 <form name="addAdministration_{{$unique_id}}" method="post" action="?" onsubmit="return checkForm(this)" style="float: left;">
+                    <input type="hidden" name="dosql" value="do_administration_aed" />
+                    <input type="hidden" name="m" value="dPprescription" />
+                    <input type="hidden" name="del" value="0" />
+                    <input type="hidden" name="administration_id" value="" />
+                    <input type="hidden" name="administrateur_id" value="{{$app->user_id}}" />
+                    <input type="hidden" name="object_id" value="{{$_line_mix_item->_id}}" />
+                    <input type="hidden" name="object_class" value="{{$_line_mix_item->_class}}" />
+                    <input type="hidden" name="unite_prise" value="{{$_line_mix_item->_unite_administration|smarty:nodefaults|JSAttribute}}" />
+                    <input type="hidden" name="dateTime" value="{{$_date}} {{$prises_by_real_hour}}" />
+                    <input type="hidden" name="prise_id" value="" />
+                    <input type="hidden" name="quantite_prevue" disabled="disabled" value="{{$_line_mix_item->_quantite_administration}}" />
+                    <input type="hidden" name="_quantite_prevue" value="{{$_line_mix_item->_quantite_administration}}" />
+                    <input type="hidden" name="callback" value="saveAdministrationGuid" />
+                    
+                    <strong>{{$_date|date_format:$conf.date}}, {{$prises_by_real_hour|date_format:$conf.time}}</strong> : 
+                    {{mb_label class="CAdministration" field="quantite"}}
+								
+										<input type="text" name="quantite" value="{{$_line_mix_item->_quantite_administration}}" size="5" />
+                    {{$_line_mix_item->_unite_administration}}
+                    
+										<small>({{$_line_mix_item->_ucd_view}})</small>
+										
+                    <script type="text/javascript">
+                      var oForm = getForm("addAdministration_{{$unique_id}}");
+                      oForm.quantite.addSpinner({min:0});
+                    </script>
+                  </form>
+			          </td>
+			        </tr> 
+		        {{/foreach}} 
+			    {{/foreach}}
+					
+					{{elseif array_key_exists("manual", $prises_by_hour)}}
+					  {{foreach from=$prises_by_hour.manual key=_mix_item_id item=_prise}}
+						  {{assign var=_line_mix_item value=$lines_mix_item.$_mix_item_id}}
+							<tr>
+	              <td>
+                 {{unique_id var="unique_id"}}
+                 <form name="addAdministration_{{$unique_id}}" method="post" action="?" onsubmit="return checkForm(this)" style="float: left;">
+                  <input type="hidden" name="dosql" value="do_administration_aed" />
+                  <input type="hidden" name="m" value="dPprescription" />
+                  <input type="hidden" name="del" value="0" />
+                  <input type="hidden" name="administration_id" value="" />
+                  <input type="hidden" name="administrateur_id" value="{{$app->user_id}}" />
+                  <input type="hidden" name="object_id" value="{{_line_mix_item->_id}}" />
+                  <input type="hidden" name="object_class" value="CPrescriptionLineMixItem" />
+                  <input type="hidden" name="unite_prise" value="{{_line_mix_item->_unite_administration|smarty:nodefaults|JSAttribute}}" />
+                  <input type="hidden" name="dateTime" value="{{$_date}} {{$_hour}}:00:00" />
+                  <input type="hidden" name="prise_id" value="" />
+                  <input type="hidden" name="quantite_prevue" disabled="disabled" value="{{$_line_mix_item->_quantite_administration}}" />
+                  <input type="hidden" name="_quantite_prevue" value="{{$_line_mix_item->_quantite_administration}}" />
+                  <input type="hidden" name="callback" value="saveAdministrationGuid" />
+                  
+                  <strong>{{$_date|date_format:$conf.date}}, {{$_hour}}h00</strong> : 
+                  {{mb_label class="CAdministration" field="quantite"}}
+              
+                  <input type="text" name="quantite" value="{{$_prise}}" size="5" />
+                  {{$_line_mix_item->_unite_administration}}
+                  
+									<small>({{$_line_mix_item->_ucd_view}})</small>
+									
+                  <script type="text/javascript">
+                    var oForm = getForm("addAdministration_{{$unique_id}}");
+                    oForm.quantite.addSpinner({min:0});
+                  </script>
+                  </form>
+                </td>
+              </tr> 
+						{{/foreach}}
+					{{/if}}
+			  {{/foreach}}
+			{{/foreach}}
+			{{/if}}
+		{{/foreach}}
       <tr>
         <th class="title" colspan="2">{{tr}}CTransmissionMedicale{{/tr}}</th>
       </tr>
@@ -225,7 +324,14 @@ Main.add( function(){
           {{mb_include module=dPhospi template=inc_transmission refreshTrans=0}}
         </td>
       </tr>
+      <tr>
+      	<td class="button" colspan="2">
+      	  <button type="button" class="cancel" onclick="closeApplyAdministrations()">{{tr}}Cancel{{/tr}}</button>
+          <button type="button" class="tick oneclick" onclick="submitAllAdministrations()" id="multiple_adm_button">Tout valider</button>
+      	</td>
+      </tr>
     </table>
+		
   {{else}}
     <div class="small-info">
       Veuillez sélectionner des prises prevues pour ajouter des administrations

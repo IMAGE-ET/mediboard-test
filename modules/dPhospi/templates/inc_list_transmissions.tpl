@@ -86,7 +86,7 @@
              {{/if}}
            {{/if}}"
 	    {{if ($_suivi instanceof CPrescriptionLineElement || $_suivi instanceof CPrescriptionLineComment) && !$readonly}}
-			  onmouseover="console.log('test');highlightTransmissions('{{$_suivi->_guid}}');" onmouseout="removeHighlightTransmissions();"
+			  onmouseover="highlightTransmissions('{{$_suivi->_guid}}');" onmouseout="removeHighlightTransmissions();"
 			{{/if}}>
  	  {{mb_include module=dPhospi template=inc_line_suivi show_patient=false nodebug=true}}
 		</tr>
