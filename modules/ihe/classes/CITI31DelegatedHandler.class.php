@@ -88,9 +88,8 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if ($mbObject instanceof CAffectation) {
       $affectation = $mbObject;
       $last_log = $affectation->_ref_current_log;
-     
-      if (!$last_log || !in_array($last_log->type, array("create", "store"))) {
-        return null;
+      if (!$last_log || $affectation->_no_synchro || !in_array($last_log->type, array("create", "store"))) {
+        return;
       }
       
       $sejour = $affectation->loadRefSejour();
@@ -114,7 +113,6 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if ($affectation->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
         return;
       }
-      
       
       $sejour->loadRefPatient();
       $sejour->_receiver = $receiver;

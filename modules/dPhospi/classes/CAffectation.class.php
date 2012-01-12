@@ -192,6 +192,9 @@ class CAffectation extends CMbObject {
       $old->loadRefsAffectations();
     }
     
+    // Gestion des UFs
+    $this->makeUF();
+    
     // Enregistrement standard
     if ($msg = parent::store()) {
       return $msg;
@@ -371,7 +374,7 @@ class CAffectation extends CMbObject {
     return $affectation;
   }
   
-  function loadRefUfs($cache = 1, $store = true){
+  function makeUF() {
     $this->completeField("uf_hebergement_id", "uf_soins_id", "uf_medicale_id");
     
     $this->loadRefLit()->loadRefChambre()->loadRefService();
@@ -382,7 +385,6 @@ class CAffectation extends CMbObject {
     $modified = false;
     
     $affectation_uf = new CAffectationUniteFonctionnelle();
-    // @todo: Revoir tout ce code
     if (!$this->uf_hebergement_id) {
       $where["object_id"]     = "= '{$lit->_id}'";
       $where["object_class"]  = "= 'CLit'";
@@ -439,14 +441,9 @@ class CAffectation extends CMbObject {
       
       $this->uf_medicale_id = $affectation_uf->uf_id;
     }
-      
-    if ($store) {
-      if ($modified && ($msg = $this->store())) {
-        return $msg;
-      }
-    }
-    // @todo: fin de revue
-    
+  }
+  
+  function loadRefUfs($cache = 1) {     
     $this->loadRefUFHebergement($cache);
     $this->loadRefUFMedicale($cache);
     $this->loadRefUFSoins($cache);

@@ -24,6 +24,7 @@ class CContentTabular extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'content_tabular';
     $spec->key   = 'content_id';
+    $spec->loggable = false;
     return $spec;
   }
   
