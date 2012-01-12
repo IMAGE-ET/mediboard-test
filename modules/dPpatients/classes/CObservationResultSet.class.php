@@ -22,6 +22,7 @@ class CObservationResultSet extends CMbObject {
   
   var $_ref_context          = null;
   var $_ref_patient          = null;
+  var $_ref_results          = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -36,7 +37,7 @@ class CObservationResultSet extends CMbObject {
     $props["patient_id"]    = "ref notNull class|CPatient";
     $props["datetime"]      = "dateTime notNull";
     $props["context_class"] = "str notNull";
-    $props["context_id"]    = "ref class|CMbObject meta|context_id";
+    $props["context_id"]    = "ref class|CMbObject meta|context_class";
     return $props;
   }
   
@@ -44,6 +45,12 @@ class CObservationResultSet extends CMbObject {
     $backProps = parent::getBackProps();
     $backProps["observation_results"] = "CObservationResult observation_result_set_id";
     return $backProps;
+  }
+  
+  function updateFormFields(){
+    parent::updateFormFields();
+    
+    $this->_view = $this->getFormattedValue("datetime");
   }
   
   /**
@@ -58,5 +65,9 @@ class CObservationResultSet extends CMbObject {
    */
   function loadRefPatient($cache = true) {
     return $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
+  }
+  
+  function loadRefsResults(){
+    return $this->_ref_results = $this->loadBackRefs("observation_results");
   }
 }

@@ -27,4 +27,20 @@ class CObservationValueUnit extends CObservationValueCodingSystem {
     $backProps["observation_results"] = "CObservationResult unit_id";
     return $backProps;
   }
+  
+  /**
+   * @return CObservationValueUnit
+   */
+  static function get($unit_id) {
+    static $cache = array();
+    
+    if (isset($cache[$unit_id])) {
+      return $cache[$unit_id];
+    }
+    
+    $unit = new self;
+    $unit->load($unit_id);
+    
+    return $cache[$unit_id] = $unit;
+  }
 }

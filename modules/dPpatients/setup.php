@@ -1643,7 +1643,20 @@ class CSetupdPpatients extends CSetup {
     $query = "INSERT INTO `observation_value_unit` (`coding_system`, `code`, `label`, `desc`) VALUES ".implode("\n, ", $values);
     $this->addQuery($query);
     
-    $this->mod_version = "1.36";
+    $this->makeRevision("1.36");
+    $mdil_units = array(
+      "0004-1140" => array("°F", "°F"),
+      "0004-17a0" => array("°C", "°C"),
+    );
+    $values = array();
+    foreach($mdil_units as $_code => $_labels) {
+      list($_label, $_desc) = $_labels;
+      $values[] = "('MDIL', '$_code', '$_label', '$_desc')";
+    }
+    $query = "INSERT INTO `observation_value_unit` (`coding_system`, `code`, `label`, `desc`) VALUES ".implode("\n, ", $values);
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.37";
     
     $query = "SHOW TABLES LIKE 'categorie_socioprofessionnelle'";
     $this->addDatasource("INSEE", $query);

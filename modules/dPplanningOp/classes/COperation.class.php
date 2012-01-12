@@ -715,7 +715,7 @@ class COperation extends CCodable implements IPatientRelated {
    * Chargement des gestes perop
    */
   function loadRefsAnesthPerops(){
-    $this->_ref_anesth_perops = $this->loadBackRefs("anesth_perops", "datetime");
+    return $this->_ref_anesth_perops = $this->loadBackRefs("anesth_perops", "datetime");
   }
   
   

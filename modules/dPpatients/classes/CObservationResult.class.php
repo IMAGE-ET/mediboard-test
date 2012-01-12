@@ -23,6 +23,7 @@ class CObservationResult extends CMbObject {
   
   var $_ref_context          = null;
   var $_ref_value_type       = null;
+  var $_ref_value_unit       = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -46,5 +47,25 @@ class CObservationResult extends CMbObject {
    */
   function loadRefResultSet($cache = true) {
     return $this->_ref_result_set = $this->loadFwdRef("observation_result_set_id", $cache);
+  }
+  
+  /**
+   * @return CObservationValueType
+   */
+  function loadRefValueType($cache = true) {
+    return $this->_ref_value_type = $this->loadFwdRef("value_type_id", $cache);
+  }
+  
+  /**
+   * @return CObservationValueUnit
+   */
+  function loadRefValueUnit($cache = true) {
+    return $this->_ref_value_unit = CObservationValueUnit::get($this->unit_id);
+  }
+  
+  function updateFormFields(){
+    parent::updateFormFields();
+    
+    $this->_view = $this->value." ".CObservationValueUnit::get($this->unit_id)->_view;
   }
 }
