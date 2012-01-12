@@ -645,7 +645,21 @@ class CSetuphl7 extends CSetup {
     );
     $this->updateTableEntry("211", $set, $and);
     
-    $this->mod_version = "0.16";
+    $this->makeRevision("0.16");
+    
+    // I - Inpatient - Hospitalisation
+    // Erreur lors de l'initialisation
+    $set = array(
+      "code_hl7_to"   => "I",
+      "code_mb_from"  => "comp",
+      "code_mb_to"    => "comp"
+    );
+    $and = array(
+      "code_hl7_from" => "I"
+    );
+    $this->updateTableEntry("4", $set, $and);
+    
+    $this->mod_version = "0.17";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
