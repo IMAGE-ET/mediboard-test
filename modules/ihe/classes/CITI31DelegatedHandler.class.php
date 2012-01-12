@@ -94,8 +94,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       }
       
       $sejour = $affectation->loadRefSejour();
-      
-      if ($sejour->type == "preadmission") {
+      if ($sejour->_etat == "preadmission") {
         return;
       }
 
