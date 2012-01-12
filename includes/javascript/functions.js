@@ -1086,37 +1086,10 @@ Object.extend(Control.Modal,{
       this.container.insert({before: overlay});
       overlay.insert({after: Control.Overlay.iFrameShim.element});
       
-      /*var parent = this.container.up('.modal');
-      if (parent) {
-        Event.stopObserving(window,'scroll',this.positionHandler);
-        Event.stopObserving(window,'resize',this.positionHandler);
-        Event.stopObserving(window,'resize',this.outOfBoundsPositionHandler);
-        
-        var cont = this.container;
-        cont.style.top  = (parseInt(cont.style.top)  - parseInt(parent.style.top)) + "px";
-        cont.style.left = (parseInt(cont.style.left) - parseInt(parent.style.left)) + "px";
-      }
-      */
-      
-      /////
       document.body.style.overflow = "hidden"; // Removes the body's scrollbar
-      Event.stopObserving(window,'scroll',this.positionHandler);
-      Event.stopObserving(window,'resize',this.positionHandler);
-      Event.stopObserving(window,'resize',this.outOfBoundsPositionHandler);
       this.container.style.position = "fixed";
-      
-      var centerModal = (function(event){
-        var container_dimensions = this.container.getDimensions();
-        var viewport_dimensions = document.viewport.getDimensions();
-        this.container.setStyle({
-          top: (viewport_dimensions.height - container_dimensions.height) / 2 + "px",
-          left: (viewport_dimensions.width - container_dimensions.width) / 2 + "px"
-        });
-      }).bindAsEventListener(this);
-      
-      centerModal();
-      Event.observe(window, 'resize', centerModal);
-      /////
+      Event.stopObserving(window, 'scroll', this.positionHandler);
+      Event.stopObserving(window, 'resize', this.outOfBoundsPositionHandler);
       
       Control.Overlay.positionIFrameShim();
     },
@@ -1166,7 +1139,14 @@ Class.extend(Control.Modal, {
     e.removeClassName("modal");
     e.print();
   },
-  
+  position: function(){
+    var contDims = this.container.getDimensions();
+    var vpDims = document.viewport.getDimensions();
+    this.container.setStyle({
+      top: (vpDims.height - contDims.height) / 2 + "px",
+      left: (vpDims.width - contDims.width) / 2 + "px"
+    });
+  },
   // Redefine this method to ...
   bringToFront: function(){
     // ... do nothing!
