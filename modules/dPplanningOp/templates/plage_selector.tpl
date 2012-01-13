@@ -125,30 +125,31 @@ Main.add(function () {
       <div id="bloc-{{$_bloc->_id}}" style="display:none">
       <table class="tbl">
         <tr>
-          <th class="category" colspan="2">
+          <th class="category" colspan="3">
             Choisir une date
           </th>
         </tr>
         {{foreach from=$_blocplage item=_plage}}
         <tr>
+          <td style="width: 32px;">
+            {{mb_include module=system template=inc_object_notes object=$_plage}}
+            {{if $_plage->spec_id}}
+            <img src="images/icons/user-function.png" style="float: left;" />
+            {{else}}
+            <img src="images/icons/user.png" style="float: left;" />
+            {{/if}}
+          </td>
           <td>
             {{assign var="pct" value=$_plage->_fill_rate}}
             {{if $pct > 100}}
               {{assign var="pct" value=100}}
             {{/if}}
-            
             {{if $pct < 100}}
               {{assign var="backgroundClass" value="normal"}}
             {{elseif $pct == 100}}
               {{assign var="backgroundClass" value="booked"}}
             {{else}}
               {{assign var="backgroundClass" value="full"}}
-            {{/if}}
-            
-            {{if $_plage->spec_id}}
-            <img src="images/icons/user-function.png" style="float: left" />
-            {{else}}
-            <img src="images/icons/user.png" style="float: left" />
             {{/if}}
             <div class="progressBar" {{if $_plage->spec_id}}style="height: 25px;"{{/if}}>
               <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
