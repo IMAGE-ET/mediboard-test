@@ -25,6 +25,7 @@ $affectation_cut->entree = $_date_cut;
 $affectation_cut->lit_id = $affectation->lit_id;
 $affectation_cut->sejour_id = $affectation->sejour_id;
 $affectation_cut->sortie = $affectation->sortie;
+//$affectation_cut->effectue = 0;
 
 if ($lit_id) {
   $affectation_cut->lit_id = $lit_id;

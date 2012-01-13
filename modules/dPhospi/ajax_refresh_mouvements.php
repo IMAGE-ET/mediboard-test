@@ -2,7 +2,7 @@
 
 /**
  * @package Mediboard
- * @subpackage dPpersonnel
+ * @subpackage dPhospi
  * @version $Revision: $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -12,7 +12,8 @@ $services_ids = CValue::getOrSession("services_ids", null);
 $readonly     = CValue::get("readonly", 0);
 $granularite  = CValue::getOrSession("granularite", "day");
 $date         = CValue::getOrSession("date", mbDate());
-$vue          = CValue::getOrSession("vue", "classique");
+$mode_vue_tempo = CValue::getOrSession("mode_vue_tempo", "classique");
+$readonly     = CValue::getOrSession("readonly", 0);
 
 if (!$services_ids) {
   $smarty = new CSmartyDP;
@@ -156,6 +157,7 @@ CMbObject::massLoadFwdRef($praticiens, "function_id");
 $operations = array();
 
 foreach ($affectations as $_affectation) {
+  $_affectation->loadRefsAffectations();
   $sejour = $_affectation->loadRefSejour();
   $sejour->loadRefPraticien()->loadRefFunction();
   $sejour->loadRefPatient()->loadRefPhotoIdentite();
@@ -217,9 +219,11 @@ $smarty->assign("nb_ticks"    , $nb_ticks);
 $smarty->assign("datetimes"   , $datetimes);
 $smarty->assign("days"        , $days);
 $smarty->assign("change_month", $change_month);
-$smarty->assign("vue"         , $vue);
+$smarty->assign("mode_vue_tempo", $mode_vue_tempo);
 $smarty->assign("readonly"    , $readonly);
 $smarty->assign("nb_affectations", $nb_affectations);
+$smarty->assign("readonly"    , $readonly);
+
 $smarty->display("inc_vw_mouvements.tpl");
 
 ?>

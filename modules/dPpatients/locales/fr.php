@@ -1096,6 +1096,7 @@ $locales['CPatient.change_patient_id_0'] = 'Vous ne pouvez pas modifier le patie
 $locales['CPatient.change_patient_id_1'] = 'Attention, vous essayez de modifier le patient d\'un dossier déjà existant. Voulez-vous vraiment effectuer ce changement ?';
 $locales['CPatient.change_patient_id_2'] = 'Vous ne pouvez pas changer le patient d\'un dossier ayant une entrée réelle. Veuillez annuler son entrée ou contacter un administrateur pour effectuer cette modification.';
 $locales['CPatient.civilite.'] = 'Indéterminé';
+$locales['CPatient.civilite.-long'] = 'Indéterminé';
 $locales['CPatient.civilite.dr'] = 'Dr';
 $locales['CPatient.civilite.dr-long'] = 'Docteur';
 $locales['CPatient.civilite.enf'] = 'Enf.';

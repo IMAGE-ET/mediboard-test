@@ -16,6 +16,9 @@
 <table class="tbl">
   <tr>
     <th colspan="3">
+      {{mb_include module=system template=inc_object_notes     }}
+      {{mb_include module=system template=inc_object_idsante400}}
+      {{mb_include module=system template=inc_object_history   }}
       {{$object}} {{mb_include module=system template=inc_interval_datetime from=$object->entree to=$object->sortie}}
     </th>
   </tr>
@@ -65,7 +68,7 @@
               {{else}}
                 <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}')">
               {{/if}}
-                {{mb_include module=system template=inc_interval_datetime from=$_affectation->entree to=$_affectation->sortie}}
+              {{$_affectation}} {{mb_include module=system template=inc_interval_datetime from=$_affectation->entree to=$_affectation->sortie}}
               {{if $_affectation->_id == $object->_id}}
                 </strong>
               {{else}}

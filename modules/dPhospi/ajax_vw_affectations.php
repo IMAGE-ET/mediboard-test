@@ -2,7 +2,7 @@
 
 /**
  * @package Mediboard
- * @subpackage dPpersonnel
+ * @subpackage dPhospi
  * @version $Revision: $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -14,7 +14,7 @@ $_type_admission = CValue::getOrSession("_type_admission", "ambucomp");
 $filter_function = CValue::getOrSession("filter_function");
 $date            = CValue::getOrSession("date");
 $granularite     = CValue::getOrSession("granularite");
-$offset_th       = CValue::get("offset_th");
+$readonly        = CValue::getOrSession("readonly", 0);
 
 $heureLimit = "16:00:00";
 $group_id = CGroups::loadCurrent()->_id;
@@ -165,7 +165,7 @@ foreach($sejours_non_affectes as $_key => $_sejour) {
     $_operation->loadRefPlageOp(1);
     
     if (($_operation->_datetime < $date_min) || ($_operation->_datetime > $date_max)) {
-      unset($sejour->_ref_operations[$key]);
+      unset($_sejour->_ref_operations[$key]);
       continue;
     }
     
@@ -188,12 +188,12 @@ $smarty->assign("triAdm", $triAdm);
 $smarty->assign("functions_filter", $functions_filter);
 $smarty->assign("filter_function", $filter_function);
 $smarty->assign("granularite", $granularite);
-$smarty->assign("offset_th", $offset_th);
 $smarty->assign("date"     , $date);
 $smarty->assign("date_min", $date_min);
 $smarty->assign("date_max", $date_max);
 $smarty->assign("nb_ticks", $nb_ticks);
 $smarty->assign("days"    , $days);
 $smarty->assign("datetimes", $datetimes);
+$smarty->assign("readonly", $readonly);
 $smarty->display("inc_vw_affectations.tpl");
 ?>

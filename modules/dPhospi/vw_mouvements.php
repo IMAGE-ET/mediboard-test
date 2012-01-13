@@ -15,14 +15,15 @@ $granularite  = CValue::getOrSession("granularite", "day");
 $date         = CValue::getOrSession("date", mbDate());
 $granularites = array("day", "week", "4weeks");
 $triAdm       = CValue::getOrSession("triAdm", "praticien");
-$vue          = CValue::getOrSession("vue", "classique");
+$mode_vue_tempo = CValue::getOrSession("mode_vue_tempo", "classique");
 $readonly     = CValue::get("readonly");
+
 $smarty = new CSmartyDP;
 
 $smarty->assign("date"        , $date);
 $smarty->assign("granularites", $granularites);
 $smarty->assign("granularite" , $granularite);
-$smarty->assign("vue"         , $vue);
+$smarty->assign("mode_vue_tempo", $mode_vue_tempo);
 
 $smarty->display("vw_mouvements.tpl");
 ?>

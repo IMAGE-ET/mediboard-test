@@ -1,8 +1,21 @@
 <script type="text/javascript">
    loadNonPlaces = function() {
      var url = new Url("dPhospi", "ajax_vw_affectations");
-     url.addParam("offset_th", $$(".first_th")[0].getStyle("width"));
      url.requestUpdate("list_affectations");
+   }
+   
+   changeLit = function(affectation_id, sejour_id) {
+      var url = new Url('dPhospi', 'ajax_suggest_lit');
+      
+      if (affectation_id) {
+        url.addParam('affectation_id', affectation_id);
+      }
+      
+      if (sejour_id) {
+        url.addParam("sejour_id", sejour_id);
+      }
+      
+      url.requestModal(700, 400);
    }
    
    refreshMouvements = function(after_refresh) {
@@ -115,7 +128,10 @@
         height: document.viewport.getHeight()*(0.6)+"px"
       });
     var list_affectations = $("list_affectations");
-    list_affectations.setStyle({ height: document.viewport.getHeight()*(0.3)+"px"});
+    list_affectations.setStyle(
+      { width: document.viewport.getWidth()*(87/100)+"px",
+        height: document.viewport.getHeight()*(0.3)+"px"
+      });
     refreshMouvements(loadNonPlaces);
   });
 </script>
@@ -154,12 +170,12 @@
     
     Vue :
     <label>
-      <input type="radio" name="vue" value="classique" onclick="refreshMouvements()"
-        {{if $vue == "classique"}}checked="checked"{{/if}}/> Classique
+      <input type="radio" name="mode_vue_tempo" value="classique" onclick="refreshMouvements()"
+        {{if $mode_vue_tempo == "classique"}}checked="checked"{{/if}}/> Classique
     </label>
     <label>
-      <input type="radio" name="vue" value="compacte" onclick="refreshMouvements()"
-        {{if $vue == "compacte"}}checked="checked"{{/if}}/> Compacte
+      <input type="radio" name="mode_vue_tempo" value="compacte" onclick="refreshMouvements()"
+        {{if $mode_vue_tempo == "compacte"}}checked="checked"{{/if}}/> Compacte
     </label>
   </div>
   

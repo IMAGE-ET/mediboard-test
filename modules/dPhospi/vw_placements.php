@@ -10,6 +10,7 @@
 
 $services_ids = CValue::getOrSession("services_ids");
 $group_id     = CValue::get("g");
+$readonly     = CValue::getOrSession("readonly");
 
 // Détection du changement d'établissement
 if (!$services_ids || $group_id) {
@@ -36,6 +37,8 @@ if (!$services_ids || $group_id) {
 }
 
 $smarty = new CSmartyDP;
+
+$smarty->assign("readonly", $readonly);
 
 $smarty->display("vw_placements.tpl");
 ?>

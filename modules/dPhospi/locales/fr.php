@@ -51,6 +51,7 @@ $locales['CAffectation-parent_affectation_id-desc'] = 'Affectation parente';
 $locales['CAffectation-rques'] = 'Remarques';
 $locales['CAffectation-rques-court'] = 'Rques.';
 $locales['CAffectation-rques-desc'] = 'Remarques sur l\'affectation';
+$locales['CAffectation-search_lit'] = 'Chercher un lit';
 $locales['CAffectation-sejour_id'] = 'Séjour';
 $locales['CAffectation-sejour_id-court'] = 'Séjour';
 $locales['CAffectation-sejour_id-desc'] = 'Séjour de l\'affectation';
