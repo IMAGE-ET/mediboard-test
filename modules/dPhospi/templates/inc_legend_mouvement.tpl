@@ -55,11 +55,59 @@
   <tr>
     <td>
       <div class="wrapper_line">
-        <div class="affect_legend clit_bloque" style="width: 33px">&nbsp;</div>
+        <div class="affect_legend clit" style="width: 30px">
+          <div class="wrapper_op">
+            <div class="operation_in_mouv opacity-40" style="width: 15px; left: 7px; top: 0"></div>
+          </div>
+        </div>
+      </div>
+    </td>
+    <td>
+      Intervention
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <div class="wrapper_line">
+        <div class="affect_legend clit affectation_sortie_autorisee" style="width: 33px">&nbsp;</div>
+      </div>
+    </td>
+    <td>
+      Sortie autorisée
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <div class="wrapper_line">
+        <div class="affect_legend clit_bloque" style="width: 33px"><span style="font-size: xx-small;">BLOQUE</span></div>
       </div>
     </td>
     <td>
       Lit bloqué
+    </td>
+  </tr>
+  <tr>
+    <td>
+      M. X y
+    </td>
+    <td>
+      Patient présent
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <span style="color: #A33">M. X y</span>
+    </td>
+    <td>
+      Patient non présent (après déplacement ou première affectation)
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <span style="text-decoration: line-through">M. X y</span>
+    </td>
+    <td>
+      Patient sorti
     </td>
   </tr>
   <tr>
