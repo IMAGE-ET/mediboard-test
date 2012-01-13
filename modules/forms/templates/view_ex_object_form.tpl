@@ -254,7 +254,7 @@ if (window.opener && !window.opener.closed && window.opener !== window && window
         {{if $ex_object->_id}}
           <button class="modify singleclick" type="submit">{{tr}}Save{{/tr}}</button>
           
-          {{if $forms_admin}}
+          {{if $can_delete}}
             <button type="button" class="trash" onclick="confirmDeletion(this.form,{callback: onSubmitFormAjax.curry(this.form), typeName:'', objName:'{{$ex_object->_view|smarty:nodefaults|JSAttribute}}'})">
               {{tr}}Delete{{/tr}}
             </button>

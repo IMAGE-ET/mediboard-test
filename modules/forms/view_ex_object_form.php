@@ -95,7 +95,13 @@ foreach($fields as $_field) {
   );
 }
 
-$forms_admin = CModule::getInstalled("forms")->canAdmin();
+$can_delete = false;
+
+if ($ex_object->_id) {
+  $can_delete = ($ex_object->loadFirstLog()->user_id == CUser::get()->_id);
+}
+
+$can_delete = $can_delete || CModule::getInstalled("forms")->canAdmin();
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -110,7 +116,7 @@ $smarty->assign("grid",         $grid);
 $smarty->assign("out_of_grid",  $out_of_grid);
 $smarty->assign("groups",       $groups);
 $smarty->assign("formula_token_values", $formula_token_values);
-$smarty->assign("forms_admin",  $forms_admin);
+$smarty->assign("can_delete",   $can_delete);
 $smarty->assign("parent_view",  $parent_view);
 
 $smarty->assign("readonly",     $readonly);
