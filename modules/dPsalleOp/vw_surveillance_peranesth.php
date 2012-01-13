@@ -36,7 +36,9 @@ $data = array(
 $times = array();
 $time_min = $interv->entree_salle;
 $time_max = mbTime("+".mbMinutesRelative("00:00:00", $interv->temp_operation)." MINUTES", $interv->entree_salle);
+
 $time_debut_op = getTS("$date $time_min");
+$time_fin_op   = getTS("$date $time_max");
 
 $yaxes = array(
   array("used" => false, "position" => "left", "labelWidth" => 20, "color" => "red",   "symbol" => "circle",  "symbolChar" => "&#x25CB;"),
@@ -100,11 +102,12 @@ $xaxes = array(
   array("used" => true, "mode" => "time", "min" => $time_min, "max" => $time_max),
 );
 
-$interv->loadRefsAnesthPerops();
-
+// Gestes, Medicaments, Perfusions peranesth
 $gestes = array(
   "CAnesthPerop" => array(),
 );
+
+$interv->loadRefsAnesthPerops();
 
 foreach($interv->_ref_anesth_perops as $_perop) {
   $_ts = getTS($_perop->datetime);
@@ -112,8 +115,66 @@ foreach($interv->_ref_anesth_perops as $_perop) {
   $gestes["CAnesthPerop"][$_perop->_id] = array(
     "label" => $_perop->libelle,
     "alert" => $_perop->incident,
+    "datetime" => $_perop->datetime,
     "position" => 100 * ($_ts - $time_min) / ($time_max - $time_min),
   );
+}
+
+$sejour = $interv->loadRefSejour();
+
+$prescription = $sejour->loadRefPrescriptionSejour();
+
+if($prescription->_id){
+  $lines = $prescription->loadPeropLines();
+  
+  foreach($lines as $_guid => $_line_array) {
+    $_line = $_line_array["object"];
+    
+    if (!isset($gestes[$_line->_class])) {
+      $gestes[$_line->_class] = array();
+    }
+    
+    /*
+    foreach($_line_array["planifications"] as $_planifs) {
+      foreach($_planifs as $_planif) {
+        if ($_planif->_ref_object instanceof CPrescriptionLineMixItem) {
+          $quantite = $_planif->_ref_object->_quantite_administration;
+        }
+        else {
+          $quantite = $_planif->_ref_prise->_quantite_administrable;
+        }
+        
+        if ($_line instanceof CPrescriptionLineMedicament || $_line instanceof CPrescriptionLineMix) {
+          $unite = $_planif->_ref_object->_ref_produit->libelle_unite_presentation;
+        }
+        else {
+          $unite = $_line->_unite_prise;
+        }
+
+        $gestes[$_line->_class][] = array(
+          "label" => "$quantite $unite",
+          "alert" => false,
+          "datetime" => $_planif->dateTime,
+          "position" => 100 * (getTS($_planif->dateTime) - $time_min) / ($time_max - $time_min),
+        );
+      }
+    }*/
+   
+    foreach ($_line_array["administrations"] as $_adms) {
+      foreach ($_adms as $_adm) {
+        if ($_line instanceof CPrescriptionLineMedicament || $_line instanceof CPrescriptionLineMix) {
+          $unite = $_adm->_ref_object->_ref_produit->libelle_unite_presentation;
+        }
+        
+        $gestes[$_line->_class][] = array(
+          "label" => "$_adm->quantite $unite",
+          "alert" => false,
+          "datetime" => $_adm->dateTime,
+          "position" => 100 * (getTS($_adm->dateTime) - $time_min) / ($time_max - $time_min),
+        );
+      }
+    }
+  }
 }
 
 CJSLoader::$files = array(
@@ -135,6 +196,7 @@ $smarty->assign("yaxes",       $yaxes);
 $smarty->assign("xaxes",       $xaxes);
 $smarty->assign("gestes",      $gestes);
 $smarty->assign("time_debut_op", $time_debut_op);
+$smarty->assign("time_fin_op",   $time_fin_op);
 $smarty->assign("data",        array_values($data));
 
 $smarty->display("vw_surveillance_peranesth.tpl");

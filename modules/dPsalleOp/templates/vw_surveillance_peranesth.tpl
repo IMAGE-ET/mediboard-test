@@ -47,8 +47,13 @@ Main.add(function(){
 
     var plot = $.plot(ph, data, {
       grid: { hoverable: true, markings: [
+        // Debut op
         {xaxis: {from: 0, to: {{$time_debut_op}}}, color: "rgba(0,0,0,0.1)"},
-        {xaxis: {from: {{$time_debut_op}}, to: {{$time_debut_op+1000}}}, color: "black"}
+        {xaxis: {from: {{$time_debut_op}}, to: {{$time_debut_op+1000}}}, color: "black"},
+        
+        // Fin op
+        {xaxis: {from: {{$time_fin_op}}, to: Number.MAX_VALUE}, color: "rgba(0,0,0,0.1)"},
+        {xaxis: {from: {{$time_fin_op}}, to: {{$time_fin_op+1000}}}, color: "black"}
       ] },
       series: { points: { show: true, radius: 3 } },
       xaxes: {{$xaxes|@json}},
@@ -62,7 +67,7 @@ Main.add(function(){
 
 <style type="text/css">
   .geste {
-    border-bottom: 1px dotted #ccc;
+    margin-bottom: -5px;
   }
   
   .geste > div {
@@ -87,12 +92,21 @@ Main.add(function(){
     margin: 0 -1px;
   }
   
+  .geste > div .marking > span {
+    position: absolute; 
+    top: 300px;
+    background: #eee;
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-left: none;
+  }
+  
   .geste > div:hover .marking {
     display: block;
   }
   
   .geste .label {
-    padding: 1px 3px;
+    padding: 0 3px;
   }
   
   table.gestes {
@@ -111,6 +125,10 @@ Main.add(function(){
   table.gestes th {
     vertical-align: middle;
     background: #eee;
+  }
+  
+  table.gestes td {
+    padding-bottom: 10px;
   }
   
   .yaxis-labels > div {
@@ -145,15 +163,16 @@ Main.add(function(){
 <table class="main gestes" style="table-layout: fixed; width: 900px;">
   <col style="width: {{$width}}px;" />
   
-  
   {{foreach from=$gestes key=_label item=_gestes}}
     <tr>
-      <th>{{$_label}}</th>
+      <th>{{tr}}{{$_label}}{{/tr}}</th>
       <td>
       {{foreach from=$_gestes item=_geste}}
         <div style="padding-left: {{$_geste.position}}%; {{if $_geste.alert}} color: red; {{/if}}" class="geste">
           <div>
-            <div class="marking"></div>
+            <div class="marking">
+              <span>{{$_geste.datetime|date_format:$conf.datetime}}</span>
+            </div>
             <div class="label">{{$_geste.label}}</div>
           </div>
         </div>
@@ -161,39 +180,5 @@ Main.add(function(){
       </td>
     </tr>
   {{/foreach}}
-  
-  
-  <tr>
-    <th>Gestes</th>
-    <td>
-
-    </td>
-  </tr>
-  
-  <tr>
-    <th>Perfusions</th>
-    <td>
-      <div style="padding-left: 90px;" class="geste">
-        <div style="width: 20px;">
-          <div class="marking" style="width: 20px;"></div>
-          <div class="label">geste 1</div>
-        </div>
-      </div>
-      
-      <div style="padding-left: 170px;" class="geste">
-        <div>
-          <div class="marking"></div>
-          <div class="label">geste 2</div>
-        </div>
-      </div>
-      
-      <div style="padding-left: 290px;" class="geste">
-        <div style="width: 160px; background: #fc6;">
-          <div class="marking" style="width: 160px;"></div>
-          <div class="label">geste 3</div>
-        </div>
-      </div>
-    </td>
-  </tr>
 </table>
 </div>
