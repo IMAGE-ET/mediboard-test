@@ -9,17 +9,17 @@
 *}}
 
 <tr>
-  <th>
+  <th class="narrow">
     {{if $can->edit}}
     <button class="new notext"   onclick="EditPlanning.edit('','{{$curr_day}}');"     style="float:right;">{{tr}}Edit{{/tr}}</button>
     {{/if}}
   </th>
-  <th>
+  <th class="narrow">
     <a href="?m=dPbloc&amp;tab=vw_edit_planning&amp;date={{$curr_day}}" >
       <strong>{{$curr_day|date_format:"%a %d %b"}}</strong>
     </a>
   </th>
-  <th>
+  <th class="narrow">
     <button class="print notext" onclick="EditPlanning.popPlanning('{{$curr_day}}');" style="float:left;">{{tr}}Print{{/tr}}</button>
   </th>
   {{foreach from=$listHours item=_hour}}
@@ -57,9 +57,7 @@
       {{else}}{{assign var="backgroundClass" value="full"}}
       {{/if}}
       <td class="plageop" style="background:#{{$color}};" colspan="{{$plage->_nbQuartHeure}}">
-        {{if $typeVuePlanning == "day"}}
         {{mb_include module=system template=inc_object_notes object=$plage}}
-        {{/if}}
         <div class="progressBar" style="height: 3px;" title="{{$plage->_fill_rate}} % du temps occupé">
           <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;height: 3px;border-right: 2px solid #000;">
           </div>
