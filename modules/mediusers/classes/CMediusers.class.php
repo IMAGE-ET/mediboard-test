@@ -559,49 +559,84 @@ class CMediusers extends CMbObject {
 
     return parent::check();
   }
-   
+  
+  /**
+   * @todo Use CStoredObject->store()
+   */
   function store() {
+    // Properties checking
     $this->updatePlainFields();
-    $this->updateSpecs();
+
+    $this->loadOldObject();
+    
+    if (CAppUI::conf("readonly")) {
+      return CAppUI::tr($this->_class) . 
+        CAppUI::tr("CMbObject-msg-store-failed") .
+        CAppUI::tr("Mode-readonly-msg");
+    }
 
     if ($msg = $this->check()) {
       return CAppUI::tr($this->_class) .
       CAppUI::tr("CMbObject-msg-check-failed") .
       CAppUI::tr($msg);
     }
-
-    // Store corresponding dP user first
-    $user = $this->createUser();
-    if ($msg = $user->store()) {
-      return $msg;
-    }
-
-    // User might have been re-created
-    if ($this->user_id != $user->user_id) {
-      $this->user_id = null;
-    }
-
-    // Can't use parent::store cuz user_id don't auto-increment
-    if ($this->user_id) {
-      $ret = $this->_spec->ds->updateObject($this->_spec->table, $this, $this->_spec->key);
-    } else {
-      $this->user_id = $user->user_id;
-      $ret = $this->_spec->ds->insertObject($this->_spec->table, $this, $this->_spec->key);
-    }
-
-    if ($msg = $this->_spec->ds->error()) {
-      return $msg;
-    }
-
-    // Bind CPS
-    if ($this->_bind_cps && $this->_id) {
-      return $this->bindCPS();
-    }
     
-    $this->loadOldObject();
+    // Trigger before event
+    $this->notify("BeforeStore");
+
+    $spec = $this->_spec;
+
+    /// <diff>
+      // Store corresponding core user first
+      $user = $this->createUser();
+      if ($msg = $user->store()) {
+        return $msg;
+      }
+  
+      // User might have been re-created
+      if ($this->user_id != $user->user_id) {
+        $this->user_id = null;
+      }
+  
+      // Can't use parent::store cuz user_id don't auto-increment
+      if ($this->user_id) {
+        $ret = $spec->ds->updateObject($spec->table, $this, $spec->key, $spec->nullifyEmptyStrings);
+      } else {
+        $this->user_id = $user->user_id;
+        $keyToUpdate = $spec->incremented ? $spec->key : null;
+        $ret = $spec->ds->insertObject($spec->table, $this, $keyToUpdate);
+      }
+    /// </diff>
+
+    if (!$ret) {
+      return CAppUI::tr($this->_class) . 
+        CAppUI::tr("CMbObject-msg-store-failed") .
+        $spec->ds->error();
+    }
+  
+    /// <diff>
+      // Bind CPS
+      if ($this->_bind_cps && $this->_id) {
+        if ($msg = $this->bindCPS()) {
+          return $msg;
+        }
+      }
+    /// </diff>    
+    
+    // Préparation du log, doit être fait AVANT $this->load()
+    $this->prepareLog();
+    
+    // Load the object to get all properties
+    //$this->load(); // peut poser probleme, à tester
+    
+    // Enregistrement du log une fois le store terminé
+    $this->doLog();
     
     // Trigger event
     $this->notify("AfterStore");
+
+    $this->_old = null;
+    return null;
   }
 
   function delFunctionPermission() {

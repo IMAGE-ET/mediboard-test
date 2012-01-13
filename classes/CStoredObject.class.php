@@ -991,7 +991,7 @@ class CStoredObject extends CModelObject {
    * Prepare the user log before object persistence (store or delete)
    * @return void
    */
-  private function doLog() {
+  protected function doLog() {
     // Aucun log à produire (non loggable, pas de modifications, etc.)
     if (!$this->_ref_last_log) {
       return;
@@ -1183,7 +1183,7 @@ class CStoredObject extends CModelObject {
       return CAppUI::tr($this->_class) . 
         CAppUI::tr("CMbObject-msg-store-failed") .
         CAppUI::tr("Mode-readonly-msg");
-      }
+    }
     
     if ($msg = $this->check()) {
       return CAppUI::tr($this->_class) . 

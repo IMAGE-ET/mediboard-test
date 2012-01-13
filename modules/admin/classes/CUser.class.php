@@ -203,9 +203,13 @@ class CUser extends CMbObject {
   
   function updatePlainFields() {
     parent::updatePlainFields();
+    
+    $this->user_password = null;
 
     // Nullify no to empty in database
-    $this->user_password = $this->_user_password ? md5($this->_user_password) : null;
+    if ($this->_user_password && !preg_match('/^[0-9a-f]{32}$/i', $this->_user_password)) {
+      $this->user_password = md5($this->_user_password);
+    }
   }
 
   function updateFormFields () {
