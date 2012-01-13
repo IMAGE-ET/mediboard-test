@@ -123,6 +123,7 @@ function onSubmitCorrespondant(form) {
           <th>{{mb_colonne class=CMedecin field=cp    order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_medecins"}}</th>
           <th>{{mb_colonne class=CMedecin field=ville order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_medecins"}}</th>
           <th>{{mb_title class=CMedecin field=type}}</th>
+          <th>{{mb_title class=CMedecin field=disciplines}}</th>
           <th>{{mb_title class=CMedecin field=tel}}</th>
           {{if $dialog}}
           <th>{{tr}}Select{{/tr}}</th>
@@ -150,26 +151,12 @@ function onSubmitCorrespondant(form) {
               {{$_medecin}}
             </a>
           </td>
-          <td class="text">
-            {{$_medecin->adresse}}
-          </td>
-
-          <td>
-            {{mb_value object=$_medecin field=cp}}
-          </td>
-
-          <td class="text">
-            {{mb_value object=$_medecin field=ville}}
-          </td>
-
-          <td>
-            {{mb_value object=$_medecin field=type}}
-          </td>
-
-          <td>
-            {{mb_value object=$_medecin field=tel}}
-          </td>
-
+          <td class="text">{{$_medecin->adresse}}</td>
+          <td>{{mb_value object=$_medecin field=cp}}</td>
+          <td class="text">{{mb_value object=$_medecin field=ville}}</td>
+          <td>{{mb_value object=$_medecin field=type}}</td>
+          <td class="text">{{mb_value object=$_medecin field=disciplines}}</td>
+          <td>{{mb_value object=$_medecin field=tel}}</td>
           {{if $dialog}}
             <td>
               <button type="button" class="tick" onclick="setClose({{$_medecin->_id}}, '{{$_medecin->_view|smarty:nodefaults|JSAttribute}}' )">
