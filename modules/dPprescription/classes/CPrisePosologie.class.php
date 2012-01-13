@@ -532,11 +532,12 @@ class CPrisePosologie extends CMbMetaObject {
       // Parcours des planifications et recherche des planifications systemes associées
       foreach($planifications as $_planification){
         $planification_systeme = new CPlanificationSysteme();
-				$planification_systeme->object_id = $_planification->object_id;
-        $planification_systeme->object_class = $_planification->object_class;
-        $planification_systeme->dateTime = $_planification->original_dateTime;
-
-        if($planification_systeme->countMatchingList() < 1){
+				
+				$where = array();
+				$where["dateTime"] = " LIKE '".mbTransformTime(null, $_planification->original_dateTime, "%Y-%m-%d %H")."%'";
+				$where["object_id"] = " = '$_planification->object_id'";
+        $where["object_class"] = " = '$_planification->object_class'";;
+        if($planification_systeme->countList($where) < 1){
           $_planification->delete();
         }
       }
