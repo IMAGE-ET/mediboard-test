@@ -306,13 +306,10 @@ class CAffectation extends CMbObject {
   }
   
   function getPerm($permType) {
-    if(!$this->_ref_lit) {
-      $this->loadRefLit();
-    }
-    if(!$this->_ref_sejour) {
-      $this->loadRefSejour();
-    }
-    return ($this->_ref_lit->getPerm($permType) && $this->_ref_sejour->getPerm($permType));
+  	$lit = $this->loadRefLit();
+  	$sejour = $this->loadRefSejour();
+
+  	return $lit->getPerm($permType) && $sejour->getPerm($permType);
   }
 
   function checkDaysRelative($date) {
@@ -349,30 +346,7 @@ class CAffectation extends CMbObject {
   function loadRefParentAffectation() {
     return $this->_ref_parent_affectation = $this->loadFwdRef("parent_affectation_id", true);
   }
-  
-  static function getDefaultAffectation(CSejour $sejour) {
-    $service = new CService();
-    $service->load(CAppUI::conf("dPhospi default_service_types_sejour $sejour->type"));
-    if (!$service->_id) {
-      // envoi par défaut le premier de la liste si pas défini
-      $service->loadObject();  
-    }
-
-    $affectation = new CAffectation();
-    $affectation->entree = $sejour->entree;
-    $affectation->sortie = $sejour->sortie;
-    $affectation->loadRefLit();
-    $affectation->_ref_lit->loadRefChambre();
-    $affectation->_ref_lit->_ref_chambre->_ref_service = $service;
-    $affectation->sejour_id = $sejour->_id;
-    $affectation->loadRefSejour();
-    $affectation->_ref_sejour->loadNDA();
-    $affectation->_ref_sejour->loadRefPatient();
-    $affectation->_ref_sejour->loadRefPraticien();
     
-    return $affectation;
-  }
-  
   function makeUF() {
     $this->completeField("uf_hebergement_id", "uf_soins_id", "uf_medicale_id");
     
