@@ -34,7 +34,9 @@
     </select>
     <img id="iconeBackground" />
     {{else}}
+    <div class="empty">
       {{tr}}CConsultation-categorie_id.none{{/tr}}
+    </div>
     {{/if}}
   </td>
 </tr>

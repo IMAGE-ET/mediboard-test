@@ -6,5 +6,7 @@
     {{/foreach}}
   </select>
 {{else}}
-  {{tr}}CConsultation-choose_prat{{/tr}}
+  <div class="small-info">
+    {{tr}}CConsultation-choose_prat{{/tr}}
+  </div>
 {{/if}}
