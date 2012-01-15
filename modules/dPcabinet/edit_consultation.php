@@ -140,7 +140,7 @@ if ($consult->_id) {
     $_sejour->loadRefsOperations();
     foreach ($_sejour->_ref_operations as &$_operation) {
       $_operation->loadRefsFwd();
-			$_operation->_ref_chir->loadRefFunction();
+      $_operation->_ref_chir->loadRefFunction();
       // Tableaux de correspondances operation_id => sejour_id
       $tabSejour[$_operation->_id] = $_sejour->_id;
     }
@@ -262,10 +262,12 @@ $consult->loadRefsActesTarmed();
 $soustotal_base = 0;
 $soustotal_dh   = 0;
 $ristourne = 0;
-foreach($consult->_ref_actes_tarmed as $acte){
-  $soustotal_base += $acte->montant_base;
-  $soustotal_dh   += $acte->montant_depassement; 
-  $ristourne = $acte->ristourne; 
+if ($consult->_ref_actes_tarmed) {
+  foreach($consult->_ref_actes_tarmed as $acte){
+    $soustotal_base += $acte->montant_base;
+    $soustotal_dh   += $acte->montant_depassement; 
+    $ristourne = $acte->ristourne; 
+  }
 }
 $pct = 1-($ristourne/100);
 $total = ($soustotal_base + $soustotal_dh)*$pct;
