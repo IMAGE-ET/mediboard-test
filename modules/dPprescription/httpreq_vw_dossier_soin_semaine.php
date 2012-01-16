@@ -19,8 +19,8 @@ $sejour = new CSejour();
 $patient = new CPatient();
 
 // Chargement des dates de debut de semaine et de fin de semaine
-$monday = mbDate("last monday", $date);
-$sunday = mbDate("+ 7 DAYS", $monday);
+$monday = mbDate("last monday", mbDate("+1 day", $date));
+$sunday = mbDate("next sunday", $date);
 
 $next_week = mbDate("+1 week", $date);
 $prev_week = mbDate("-1 week", $date);
