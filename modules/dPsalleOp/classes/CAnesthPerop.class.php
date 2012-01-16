@@ -40,6 +40,7 @@ class CAnesthPerop extends CMbObject {
   }
   
 	function updateFormFields(){
+	  parent::updateFormFields();
 	  $this->_view = "$this->libelle à $this->datetime";
 	}
 	

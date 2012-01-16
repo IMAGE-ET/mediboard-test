@@ -40,11 +40,12 @@ $time_max = mbTime("+".mbMinutesRelative("00:00:00", $interv->temp_operation)." 
 $time_debut_op = getTS("$date $time_min");
 $time_fin_op   = getTS("$date $time_max");
 
+$default_yaxis = array("used" => false, "position" => "left", "labelWidth" => 20, "ticks" => 6);
 $yaxes = array(
-  array("used" => false, "position" => "left", "labelWidth" => 20, "color" => "red",   "symbol" => "circle",  "symbolChar" => "&#x25CB;"),
-  array("used" => false, "position" => "left", "labelWidth" => 20, "color" => "green", "symbol" => "cross",   "symbolChar" => "x"),
-  array("used" => false, "position" => "left", "labelWidth" => 20, "color" => "blue",  "symbol" => "diamond", "symbolChar" => "&#x25C7;"),
-  array("used" => false, "position" => "left", "labelWidth" => 20, "color" => "purle", "symbol" => "square",  "symbolChar" => "m"),
+  $default_yaxis + array("color" => "red",   "symbol" => "circle",  "symbolChar" => "&#x25CB;"),
+  $default_yaxis + array("color" => "green", "symbol" => "cross",   "symbolChar" => "x", "alignTicksWithAxis" => 1),
+  $default_yaxis + array("color" => "blue",  "symbol" => "diamond", "symbolChar" => "&#x25C7;", "alignTicksWithAxis" => 1),
+  $default_yaxis + array("color" => "purle", "symbol" => "square",  "symbolChar" => "m", "alignTicksWithAxis" => 1),
 );
 
 foreach($result_sets as $_set) {
@@ -82,6 +83,7 @@ foreach($result_sets as $_set) {
         "unit"  => utf8_encode($unit),
         "data"  => array(),
         "points" => array("symbol" => $yaxis["symbol"], "lineWidth" => 1),
+        "shadowSize" => 0,
       );
     }
     
@@ -113,10 +115,13 @@ foreach($interv->_ref_anesth_perops as $_perop) {
   $_ts = getTS($_perop->datetime);
   
   $gestes["CAnesthPerop"][$_perop->_id] = array(
+    "icon" => null,
     "label" => $_perop->libelle,
+    "unit"  => null,
     "alert" => $_perop->incident,
     "datetime" => $_perop->datetime,
     "position" => 100 * ($_ts - $time_min) / ($time_max - $time_min),
+    "object" => $_perop,
   );
 }
 
@@ -129,6 +134,20 @@ if($prescription->_id){
   
   foreach($lines as $_guid => $_line_array) {
     $_line = $_line_array["object"];
+    
+    $_view = "";
+    
+    if ($_line instanceof CPrescriptionLineElement) {
+      $_view = $_line->_view;
+    }
+    elseif ($_line instanceof CPrescriptionLineMix) {
+      foreach ($_line->_ref_lines as $_mix_item) {
+        $_view .= "$_mix_item->_ucd_view<br />";
+      }
+    }
+    else {
+      $_view = $_line->_ucd_view;
+    }
     
     if (!isset($gestes[$_line->_class])) {
       $gestes[$_line->_class] = array();
@@ -169,10 +188,13 @@ if($prescription->_id){
         }
         
         $gestes[$_line->_class][] = array(
-          "label" => "$_adm->quantite $unite",
+          "icon"  => $_line->_chapitre,
+          "label" => $_view,
+          "unit"  => "$_adm->quantite $unite",
           "alert" => false,
           "datetime" => $_adm->dateTime,
           "position" => 100 * (getTS($_adm->dateTime) - $time_min) / ($time_max - $time_min),
+          "object"   => $_line,
         );
       }
     }

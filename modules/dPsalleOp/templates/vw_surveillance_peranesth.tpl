@@ -48,11 +48,11 @@ Main.add(function(){
     var plot = $.plot(ph, data, {
       grid: { hoverable: true, markings: [
         // Debut op
-        {xaxis: {from: 0, to: {{$time_debut_op}}}, color: "rgba(0,0,0,0.1)"},
+        {xaxis: {from: 0, to: {{$time_debut_op}}}, color: "rgba(0,0,0,0.05)"},
         {xaxis: {from: {{$time_debut_op}}, to: {{$time_debut_op+1000}}}, color: "black"},
         
         // Fin op
-        {xaxis: {from: {{$time_fin_op}}, to: Number.MAX_VALUE}, color: "rgba(0,0,0,0.1)"},
+        {xaxis: {from: {{$time_fin_op}}, to: Number.MAX_VALUE}, color: "rgba(0,0,0,0.05)"},
         {xaxis: {from: {{$time_fin_op}}, to: {{$time_fin_op+1000}}}, color: "black"}
       ] },
       series: { points: { show: true, radius: 3 } },
@@ -66,6 +66,9 @@ Main.add(function(){
 </script>
 
 <style type="text/css">
+  @page {
+    size:landscape;
+  }
   .geste {
     margin-bottom: -5px;
   }
@@ -141,44 +144,62 @@ Main.add(function(){
   .yaxis-labels .symbol {
     font-size: 16px;
   }
+  
+  @media print {
+    .geste > div {
+      outline: 1px solid #ccc;
+    }
+  }
 </style>
 
-{{assign var=width value=0}}
+{{assign var=axes_count value=0}}
+{{assign var=images value="CPrescription"|static:"images"}}
 
 <div style="position: relative;">
-<div class="yaxis-labels">
-  {{foreach from=$yaxes|@array_reverse item=_yaxis}}
-    {{if $_yaxis.used}}
-      {{assign var=width value=$width+33.3}}
-      
-      <div style="color: {{$_yaxis.color}};">
-        {{$_yaxis.label}}
-        <div class="symbol">{{$_yaxis.symbolChar|smarty:nodefaults}}</div>
-      </div>
-    {{/if}}
-  {{/foreach}}
-</div>
-<div id="placeholder" style="width:900px;height:300px;"></div>
-
-<table class="main gestes" style="table-layout: fixed; width: 900px;">
-  <col style="width: {{$width}}px;" />
-  
-  {{foreach from=$gestes key=_label item=_gestes}}
-    <tr>
-      <th>{{tr}}{{$_label}}{{/tr}}</th>
-      <td>
-      {{foreach from=$_gestes item=_geste}}
-        <div style="padding-left: {{$_geste.position}}%; {{if $_geste.alert}} color: red; {{/if}}" class="geste">
-          <div>
-            <div class="marking">
-              <span>{{$_geste.datetime|date_format:$conf.datetime}}</span>
-            </div>
-            <div class="label">{{$_geste.label}}</div>
-          </div>
+  <div class="yaxis-labels">
+    {{foreach from=$yaxes|@array_reverse item=_yaxis}}
+      {{if $_yaxis.used}}
+        {{assign var=axes_count value=$axes_count+1}}
+        
+        <div style="color: {{$_yaxis.color}};">
+          {{$_yaxis.label}}
+          <div class="symbol">{{$_yaxis.symbolChar|smarty:nodefaults}}</div>
         </div>
-      {{/foreach}}
-      </td>
-    </tr>
-  {{/foreach}}
-</table>
+      {{/if}}
+    {{/foreach}}
+  </div>
+  
+  <div id="placeholder" style="width:900px;height:300px;"></div>
+  
+  <table class="main gestes" style="table-layout: fixed; width: 900px;">
+    <col style="width: {{$axes_count*38-14}}px;" />
+    
+    {{foreach from=$gestes key=_label item=_gestes}}
+      <tr>
+        <th>{{tr}}{{$_label}}{{/tr}}</th>
+        <td>
+        {{foreach from=$_gestes item=_geste}}
+          <div style="padding-left: {{$_geste.position}}%; {{if $_geste.alert}} color: red; {{/if}}" class="geste">
+            <div  onmouseover="ObjectTooltip.createEx(this, '{{$_geste.object->_guid}}');">
+              <div class="marking">
+                <span>{{$_geste.datetime|date_format:$conf.datetime}}</span>
+              </div>
+              <div class="label">
+                {{if $_geste.icon}}
+                  {{assign var=_icon value=$_geste.icon}}
+                  <img src="{{$images.$_icon}}" />
+                {{/if}}
+                {{if $_geste.unit}}
+                  <strong>{{$_geste.label}}</strong> {{$_geste.unit}}
+                {{else}}
+                  {{$_geste.label}}
+                {{/if}}
+              </div>
+            </div>
+          </div>
+        {{/foreach}}
+        </td>
+      </tr>
+    {{/foreach}}
+  </table>
 </div>
