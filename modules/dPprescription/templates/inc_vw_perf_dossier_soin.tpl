@@ -117,11 +117,11 @@
         <input type="hidden" name="time_retrait" value="{{$_prescription_line_mix->time_retrait}}" />
 
         {{if !$_prescription_line_mix->date_pose}}<a href="#1" style="display: inline; border: 0px;" onclick="submitPosePerf(document.forms['editPerfusion-{{$_prescription_line_mix->_id}}']);">{{/if}}
-         <img src="images/icons/play.png" title="Pose de la perfusion" style="{{if $_prescription_line_mix->date_pose}}opacity: 0.5{{/if}}" />
+         <img src="images/icons/play.png" title="Pose de la perfusion" {{if $_prescription_line_mix->date_pose}}class="opacity-50"{{/if}} />
         {{if !$_prescription_line_mix->date_pose}}</a>{{/if}}
 
         {{if !$_prescription_line_mix->date_retrait}}<a href="#1" style="display: inline; border: 0px;" onclick="submitRetraitPerf(document.forms['editPerfusion-{{$_prescription_line_mix->_id}}']);">{{/if}}
-         <img src="images/icons/stop.png" title="Retrait de la perfusion" style="{{if $_prescription_line_mix->date_retrait}}opacity: 0.5{{/if}}" />
+         <img src="images/icons/stop.png" title="Retrait de la perfusion" {{if $_prescription_line_mix->date_retrait}}class="opacity-50"{{/if}} />
         {{if !$_prescription_line_mix->date_retrait}}</a>{{/if}}
       </form>
 			
