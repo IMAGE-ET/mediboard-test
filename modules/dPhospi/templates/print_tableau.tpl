@@ -1,7 +1,13 @@
+{{if $conf.dPhospi.CLit.alt_icons_sortants}}
+  {{assign var=suffixe_icons value="2"}}
+{{else}}
+  {{assign var=suffixe_icons value=""}}
+{{/if}}
+
 <script type="text/javascript">
-Main.add(function () {
-  window.print();
-});
+  Main.add(function () {
+    window.print();
+  });
 </script>
 
 <table class="main layout affectations">
@@ -74,13 +80,13 @@ Main.add(function () {
             {{else}}
               <span>
             {{/if}} 
-	            <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
-	              {{if $_sejour->type == "ambu"}}
-	              <strong><em>{{$_patient}}</em></strong>
-	              {{else}}
-	              <strong>{{$_patient}}</strong>
-	              {{/if}}
-	            </span>
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
+                {{if $_sejour->type == "ambu"}}
+                <strong><em>{{$_patient}}</em></strong>
+                {{else}}
+                <strong>{{$_patient}}</strong>
+                {{/if}}
+              </span>
             </span>
           </td>
           <td style="width: 1%; background:#{{$_sejour->_ref_praticien->_ref_function->color}}">
