@@ -59,6 +59,7 @@ function mbAutoload($class) {
       "classes/*/$class.class.php",
       "modules/*/classes/$class.class.php",
       "modules/*/classes/*/$class.class.php",
+      "modules/*/classes/*/*/$class.class.php",
     );
   }
   
