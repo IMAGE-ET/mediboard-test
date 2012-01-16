@@ -215,7 +215,7 @@ class CViewSender extends CMbObject {
 
           $ftp->close();
         } catch (Exception $e) {
-        	mbLog($e);
+        	//mbLog($e);
         }
       }
       
