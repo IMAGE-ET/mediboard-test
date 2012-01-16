@@ -589,8 +589,7 @@ class COperation extends CCodable implements IPatientRelated {
   }
   
   function loadRefPraticien($cache = 0) {
-    $this->loadRefChir($cache);
-    return $this->_ref_praticien =& $this->_ref_chir;
+    return $this->_ref_praticien = $this->loadRefChir($cache);
   }
   
   function getActeExecution() {
