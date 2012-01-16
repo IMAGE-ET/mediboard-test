@@ -82,14 +82,16 @@ class CCodable extends CMbObject {
     }
     $this->_tokens_ngap = "";
     
-    // Suppression des anciens actes Tarmed
-    $this->loadRefsActesTarmed();
-    foreach ($this->_ref_actes_tarmed as $acte) { 
-      if ($msg = $acte->delete()) {
-        return $msg;
+    if(CModule::getInstalled("tarmed")){
+      // Suppression des anciens actes Tarmed
+      $this->loadRefsActesTarmed();
+      foreach ($this->_ref_actes_tarmed as $acte) { 
+        if ($msg = $acte->delete()) {
+          return $msg;
+        }
       }
+      $this->_tokens_tarmed = "";
     }
-    $this->_tokens_tarmed = "";
   }  
   
   /**
