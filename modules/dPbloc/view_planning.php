@@ -148,6 +148,7 @@ if($filterSejour->type) {
 $orderOperations = "date, salle_id, chir_id";
 
 $operations = $operation->loadList($whereOperations, $orderOperations, null, null, $ljoin);
+CMbObject::massLoadFwdRef($operations, "plageop_id");
 
 $order = "operations.rank, operations.horaire_voulu, sejour.entree_prevue";
 
@@ -163,6 +164,7 @@ foreach($plagesop as &$plage) {
   $listOp = $listOp->loadList($where, $order, null, null, $ljoin);
 
   foreach ($listOp as $operation) {
+    $operation->loadRefPlageOp(1);
   	$operation->loadRefPraticien(1);
     $sejour = $operation->loadRefSejour(1);
     $sejour->loadRefsFwd(1);
