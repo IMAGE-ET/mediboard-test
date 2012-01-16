@@ -95,9 +95,9 @@ function cacheLit($affectation) {
   $chambre_id = $lit->chambre_id;
   static $chambres = array();
   if (!array_key_exists($chambre_id, $chambres)) {
-  	$chambre = new CChambre();
-  	$chambre->load($chambre_id);
-  	$chambres[$chambre_id] = $chambre;
+    $chambre = new CChambre();
+    $chambre->load($chambre_id);
+    $chambres[$chambre_id] = $chambre;
   }
 
   $chambre =& $chambres[$chambre_id];
@@ -107,9 +107,9 @@ function cacheLit($affectation) {
   global $sejoursParService;
   $service_id = $chambre->service_id;
   if (!array_key_exists($service_id, $sejoursParService)) {
-  	$service = new CService();
-  	$service->load($service_id);
-  	$sejoursParService[$service_id] = $service;
+    $service = new CService();
+    $service->load($service_id);
+    $sejoursParService[$service_id] = $service;
   }
 
   $service =& $sejoursParService[$service_id];
@@ -118,70 +118,70 @@ function cacheLit($affectation) {
 
 // Si seulement le praticien est indiqué
 if($praticien_id && !$service_id){
-	$sejours = array();
-	$sejour = new CSejour();
-	$where = array();
-	$where["group_id"] = "= '$g'";
-	$where["praticien_id"] = " = '$praticien_id'";
-	$where["entree_prevue"] = " <= '$date 23:59:59'";
-	$where["sortie_prevue"] = " >= '$date 00:00:00'";
-	$where["annule"] = " = '0'";
-	$where[] = $type_admission ? "type = '$type_admission'" : "type != 'urg' AND type != 'exte'";
-	
-	$sejours = $sejour->loadList($where);
-	foreach($sejours as &$_sejour){
-	  if($praticien && $_sejour->praticien_id == $userCourant->user_id){
-	    $tab_sejour[$_sejour->_id]= $_sejour;
-	  }
-		$affectations = array();
-		$affectation = new CAffectation();
-		$where = array();
-  	$where["sejour_id"] = " = '$_sejour->_id'";
-		$where["entree"] = "<= '$date 23:59:59'";
+  $sejours = array();
+  $sejour = new CSejour();
+  $where = array();
+  $where["group_id"] = "= '$g'";
+  $where["praticien_id"] = " = '$praticien_id'";
+  $where["entree_prevue"] = " <= '$date 23:59:59'";
+  $where["sortie_prevue"] = " >= '$date 00:00:00'";
+  $where["annule"] = " = '0'";
+  $where[] = $type_admission ? "type = '$type_admission'" : "type != 'urg' AND type != 'exte'";
+  
+  $sejours = $sejour->loadList($where);
+  foreach($sejours as &$_sejour){
+    if($praticien && $_sejour->praticien_id == $userCourant->user_id){
+      $tab_sejour[$_sejour->_id]= $_sejour;
+    }
+    $affectations = array();
+    $affectation = new CAffectation();
+    $where = array();
+    $where["sejour_id"] = " = '$_sejour->_id'";
+    $where["entree"] = "<= '$date 23:59:59'";
     $where["sortie"] = ">= '$date 00:00:00'";
     $affectations = $affectation->loadList($where);
 
     if(count($affectations) >= 1){
-	    foreach($affectations as &$_affectation){
-	      cacheLit($_affectation);
-		  }
+      foreach($affectations as &$_affectation){
+        cacheLit($_affectation);
+      }
     } else {
       $_sejour->loadRefsPrescriptions();
-   		$_sejour->loadRefPatient();
-	    $_sejour->loadRefPraticien();
-	    $_sejour->_ref_praticien->loadRefFunction();
-	    $_sejour->loadNDA();
-		  $sejoursParService["NP"][$_sejour->_id] = $_sejour;
+       $_sejour->loadRefPatient();
+      $_sejour->loadRefPraticien();
+      $_sejour->_ref_praticien->loadRefFunction();
+      $_sejour->loadNDA();
+      $sejoursParService["NP"][$_sejour->_id] = $_sejour;
     }
-	}
+  }
 }
 
 foreach ($sejoursParService as $key => $_service) {
   if($key != "NP"){
     ksort($_service->_ref_chambres);
-	  foreach ($_service->_ref_chambres as $_chambre) {
-	    foreach ($_chambre->_ref_lits as $_lit) {
-	      foreach ($_lit->_ref_affectations as $_affectation) {
-	        $_affectation->loadRefSejour();
-	        $_sejour =& $_affectation->_ref_sejour;
-	        if($praticien && $_sejour->praticien_id == $userCourant->user_id){
-	          $tab_sejour[$_sejour->_id]= $_sejour;
-	        }
-	      	$_sejour->loadRefsPrescriptions();
-	    		$_sejour->loadRefPatient();
-			    $_sejour->loadRefPraticien();
-			    $_sejour->_ref_praticien->loadRefFunction();
-			    $_sejour->loadNDA();
-			
-					if($_sejour->_ref_prescriptions){
-					  if(array_key_exists('sejour', $_sejour->_ref_prescriptions)){
-						   $prescription_sejour =& $_sejour->_ref_prescriptions["sejour"];
-						   $prescription_sejour->countNoValideLines();
-						}
-					}
-	      }
-	    }
-		}
+    foreach ($_service->_ref_chambres as $_chambre) {
+      foreach ($_chambre->_ref_lits as $_lit) {
+        foreach ($_lit->_ref_affectations as $_affectation) {
+          $_affectation->loadRefSejour();
+          $_sejour =& $_affectation->_ref_sejour;
+          if($praticien && $_sejour->praticien_id == $userCourant->user_id){
+            $tab_sejour[$_sejour->_id]= $_sejour;
+          }
+          $_sejour->loadRefsPrescriptions();
+          $_sejour->loadRefPatient();
+          $_sejour->loadRefPraticien();
+          $_sejour->_ref_praticien->loadRefFunction();
+          $_sejour->loadNDA();
+      
+          if($_sejour->_ref_prescriptions){
+            if(array_key_exists('sejour', $_sejour->_ref_prescriptions)){
+               $prescription_sejour =& $_sejour->_ref_prescriptions["sejour"];
+               $prescription_sejour->countNoValideLines();
+            }
+          }
+        }
+      }
+    }
   }
 }
 
@@ -206,85 +206,86 @@ $etab->load($sejour->etablissement_entree_id);
 $sejour->_ref_etablissement_provenance = $etab->_view;
 
 if($service_id){
-	// Chargement des séjours à afficher
-	if($service_id == "NP") {
+  // Chargement des séjours à afficher
+  if($service_id == "NP") {
 
-		// Liste des patients à placer
-	  $order = "entree_prevue ASC";
-		  
-	  // Admissions de la veille
-	  $dayBefore = mbDate("-1 days", $date);
-	  $where = array(
-		  "entree_prevue" => "BETWEEN '$dayBefore 00:00:00' AND '$date 00:00:00'",
-		  "type" => $type_admission ? " = '$type_admission'" : "!= 'exte'",
-		  "annule" => "= '0'"
-		);
-		  
-		$groupSejourNonAffectes["veille"] = loadSejourNonAffectes($where, $order, $praticien_id);
-		  
-		// Admissions du matin
-		$where = array(
-		  "entree_prevue" => "BETWEEN '$date 00:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."'",
-		  "type" => $type_admission ? " = '$type_admission'" : "!= 'exte'",
-		  "annule" => "= '0'"
-		);
-		  
-		$groupSejourNonAffectes["matin"] = loadSejourNonAffectes($where, $order, $praticien_id);
-		  
-		// Admissions du soir
-		$where = array(
-		  "entree_prevue" => "BETWEEN '$date $heureLimit' AND '$date 23:59:59'",
-		  "type" => $type_admission ? " = '$type_admission'" : "!= 'exte'",
-		  "annule" => "= '0'"
-		);
-		  
-		$groupSejourNonAffectes["soir"] = loadSejourNonAffectes($where, $order, $praticien_id);
-		  
-		// Admissions antérieures
-		$twoDaysBefore = mbDate("-2 days", $date);
-		$where = array(
-		  "entree_prevue" => "<= '$twoDaysBefore 23:59:59'",
-		  "sortie_prevue" => ">= '$date 00:00:00'",
-		  //"'$twoDaysBefore' BETWEEN entree_prevue AND sortie_prevue",
-		  "annule" => "= '0'",
-		  "type" => $type_admission ? " = '$type_admission'" : "!= 'exte'"
-	  );
-		  
-		$groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where, $order, $praticien_id);
-	  if($praticien){
-			foreach($groupSejourNonAffectes as $sejours_by_moment){
-		    foreach($sejours_by_moment as $sejour){
-		      if($sejour->praticien_id == $userCourant->user_id){
-		        $tab_sejour[$sejour->_id] = $sejour;
-		      }
-		    }
-		  }
-	  }
-	} else {
-	  $service->load($service_id);
-	  loadServiceComplet($service, $date, $mode, $praticien_id, $type_admission);
-	}
-	
-	if($service->_id){
-		foreach($service->_ref_chambres as &$_chambre){
-			foreach($_chambre->_ref_lits as &$_lits){
-				foreach($_lits->_ref_affectations as &$_affectation){
-				  if($praticien && $_affectation->_ref_sejour->praticien_id == $userCourant->user_id){
-				    $tab_sejour[$_affectation->_ref_sejour->_id]= $_affectation->_ref_sejour;
-				  }
-					$_affectation->_ref_sejour->loadRefsPrescriptions();
-					$_affectation->_ref_sejour->_ref_praticien->loadRefFunction();
-					if($_affectation->_ref_sejour->_ref_prescriptions){
-						if(array_key_exists('sejour', $_affectation->_ref_sejour->_ref_prescriptions)){
-						  $prescription_sejour =& $_affectation->_ref_sejour->_ref_prescriptions["sejour"];
-							$prescription_sejour->countNoValideLines();
-						}
-					}
-				}
-			}
-		}
-	}
-	$sejoursParService[$service->_id] = $service;
+    // Liste des patients à placer
+    $order = "entree_prevue ASC";
+      
+    // Admissions de la veille
+    $dayBefore = mbDate("-1 days", $date);
+    $where = array(
+      "entree_prevue" => "BETWEEN '$dayBefore 00:00:00' AND '$date 00:00:00'",
+      "type" => $type_admission ? " = '$type_admission'" : "!= 'exte'",
+      "annule" => "= '0'"
+    );
+      
+    $groupSejourNonAffectes["veille"] = loadSejourNonAffectes($where, $order, $praticien_id);
+      
+    // Admissions du matin
+    $where = array(
+      "entree_prevue" => "BETWEEN '$date 00:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."'",
+      "type" => $type_admission ? " = '$type_admission'" : "!= 'exte'",
+      "annule" => "= '0'"
+    );
+      
+    $groupSejourNonAffectes["matin"] = loadSejourNonAffectes($where, $order, $praticien_id);
+      
+    // Admissions du soir
+    $where = array(
+      "entree_prevue" => "BETWEEN '$date $heureLimit' AND '$date 23:59:59'",
+      "type" => $type_admission ? " = '$type_admission'" : "!= 'exte'",
+      "annule" => "= '0'"
+    );
+      
+    $groupSejourNonAffectes["soir"] = loadSejourNonAffectes($where, $order, $praticien_id);
+      
+    // Admissions antérieures
+    $twoDaysBefore = mbDate("-2 days", $date);
+    $where = array(
+      "entree_prevue" => "<= '$twoDaysBefore 23:59:59'",
+      "sortie_prevue" => ">= '$date 00:00:00'",
+      //"'$twoDaysBefore' BETWEEN entree_prevue AND sortie_prevue",
+      "annule" => "= '0'",
+      "type" => $type_admission ? " = '$type_admission'" : "!= 'exte'"
+    );
+      
+    $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where, $order, $praticien_id);
+    if($praticien){
+      foreach($groupSejourNonAffectes as $sejours_by_moment){
+        foreach($sejours_by_moment as $sejour){
+          if($sejour->praticien_id == $userCourant->user_id){
+            $tab_sejour[$sejour->_id] = $sejour;
+          }
+        }
+      }
+    }
+  } else {
+    $service->load($service_id);
+    loadServiceComplet($service, $date, $mode, $praticien_id, $type_admission);
+  }
+  
+  if($service->_id){
+    foreach($service->_ref_chambres as &$_chambre){
+      foreach($_chambre->_ref_lits as &$_lits){
+        foreach($_lits->_ref_affectations as &$_affectation){
+          if($praticien && $_affectation->_ref_sejour->praticien_id == $userCourant->user_id){
+            $tab_sejour[$_affectation->_ref_sejour->_id]= $_affectation->_ref_sejour;
+          }
+          $_affectation->_ref_sejour->loadRefsPrescriptions();
+          $_affectation->_ref_sejour->_ref_praticien->loadRefFunction();
+          $_affectation->loadRefsAffectations();
+          if($_affectation->_ref_sejour->_ref_prescriptions){
+            if(array_key_exists('sejour', $_affectation->_ref_sejour->_ref_prescriptions)){
+              $prescription_sejour =& $_affectation->_ref_sejour->_ref_prescriptions["sejour"];
+              $prescription_sejour->countNoValideLines();
+            }
+          }
+        }
+      }
+    }
+  }
+  $sejoursParService[$service->_id] = $service;
 }
 
 // Chargement des visites pour les séjours courants
@@ -294,13 +295,13 @@ $visites = array(
 );
 
 if(count($tab_sejour)){
-	foreach($tab_sejour as $sejour_id => $sejour){
-	  if($sejour->countNotificationVisite($date)){
-	    $visites["effectuee"][] = $sejour->_id;
-	  } else {
-	    $visites["non_effectuee"][] = $sejour->_id; 
-	  }
-	}
+  foreach($tab_sejour as $sejour_id => $sejour){
+    if($sejour->countNotificationVisite($date)){
+      $visites["effectuee"][] = $sejour->_id;
+    } else {
+      $visites["non_effectuee"][] = $sejour->_id; 
+    }
+  }
 }
 
 $can_view_dossier_medical = 

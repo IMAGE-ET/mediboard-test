@@ -24,6 +24,11 @@
 {{assign var="do_subject_aed" value="do_sejour_aed"}}
 {{assign var="module" value="dPhospi"}}
 {{mb_include module=dPsalleOp template=js_codage_ccam}}
+{{if $conf.dPhospi.CLit.alt_icons_sortants}}
+  {{assign var=suffixe_icons value="2"}}
+{{else}}
+  {{assign var=suffixe_icons value=""}}
+{{/if}}
 
 <script type="text/javascript">
      
@@ -467,6 +472,7 @@ printDossierComplet = function(){
                 </td>
                 
                 <td class="text">
+                  {{assign var=aff_next value=$curr_affectation->_ref_next}}
                   {{assign var=sejour value=$curr_affectation->_ref_sejour}}
                   {{assign var=prescriptions value=$sejour->_ref_prescriptions}}
                   {{assign var=prescription_sejour value=$prescriptions.sejour}}
@@ -487,7 +493,24 @@ printDossierComplet = function(){
                 </td>
                 
                 <td class="action" style="padding: 1px;">
-                  <div class="mediuser" style="border-color:#{{$sejour->_ref_praticien->_ref_function->color}}">
+                  <span>
+                    {{if $sejour->type == "ambu"}}
+                      <img src="modules/dPhospi/images/X{{$suffixe_icons}}.png" alt="X" title="Ambulatoire" />
+                    {{elseif $curr_affectation->sortie|iso_date == $demain}}
+                      {{if $aff_next->_id}}
+                        <img src="modules/dPhospi/images/OC{{$suffixe_icons}}.png" alt="OC" title="Déplacé demain" />
+                      {{else}}
+                        <img src="modules/dPhospi/images/O{{$suffixe_icons}}.png" alt="O" title="Sortant demain" />
+                      {{/if}}
+                    {{elseif $curr_affectation->sortie|iso_date == $date}}
+                      {{if $aff_next->_id}}
+                        <img src="modules/dPhospi/images/OoC{{$suffixe_icons}}.png" alt="OoC" title="Déplacé aujourd'hui" />
+                      {{else}}
+                        <img src="modules/dPhospi/images/Oo{{$suffixe_icons}}.png" alt="Oo" title="Sortant aujourd'hui" />
+                      {{/if}}
+                    {{/if}}
+                  </span>
+                  <div class="mediuser" style="border-color:#{{$sejour->_ref_praticien->_ref_function->color}}; display: inline;">
                     <label title="{{$sejour->_ref_praticien->_view}}">
                     {{$sejour->_ref_praticien->_shortview}}          
                     </label>
