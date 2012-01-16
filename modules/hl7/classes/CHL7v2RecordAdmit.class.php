@@ -674,11 +674,12 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getZFP(DOMNode $node, CSejour $newVenue) {    
-    
+    /* @todo À associer sur le patient */
   }
   
   function getZFV(DOMNode $node, CSejour $newVenue) {    
-    
+    // Etablissement de provenance
+    $this->getEtablissementProvenance($node, $newVenue);
   }
 }
 ?>

@@ -50,9 +50,9 @@ class COperatorIHE extends CEAIOperator {
         
         return $msgAck;
       }
-    
+   
       // Acquittement d'erreur d'un document XML recu non valide
-      if (!$evt->message->isOK(CHL7v2Error::E_ERROR)) {        
+      if (!$evt->message->isOK(CHL7v2Error::E_ERROR)) {
         $exchange_ihe->populateExchange($data_format, $evt);
         $exchange_ihe->loadRefsInteropActor();
         $exchange_ihe->populateErrorExchange(null, $evt);
@@ -86,7 +86,12 @@ class COperatorIHE extends CEAIOperator {
 
       // Message événement patient
       if ($evt instanceof CHL7EventADT) {
-        return self::eventPatient($data, $exchange_ihe, $dom_evt, $ack);
+        return self::eventPerson($data, $exchange_ihe, $dom_evt, $ack);
+      }
+      
+      // Message événement observation
+      if ($evt instanceof CHL7EventDEC) {
+        return self::eventObservation($data, $exchange_ihe, $dom_evt, $ack);
       }
     } catch(Exception $e) {
       $exchange_ihe->populateExchange($data_format, $evt);
@@ -104,7 +109,7 @@ class COperatorIHE extends CEAIOperator {
     }
   }
   
-  static function eventPatient($data = array(), CExchangeIHE $exchange_ihe, CHL7v2MessageXML $dom_evt, CHL7Acknowledgment $ack) {
+  static function eventPerson($data = array(), CExchangeIHE $exchange_ihe, CHL7v2MessageXML $dom_evt, CHL7Acknowledgment $ack) {
     $newPatient = new CPatient();
     $newPatient->_eai_exchange_initiator_id = $exchange_ihe->_id;
     
@@ -113,6 +118,15 @@ class COperatorIHE extends CEAIOperator {
     //$exchange_ihe->id_permanent = array_key_exists("PI", $data['personIdentifiers']) ? $data['personIdentifiers']['PI'] : null;
     
     return $dom_evt->handle($ack, $newPatient, $data);
+  }
+  
+  static function eventObservation($data = array(), CExchangeIHE $exchange_ihe, CHL7v2MessageXML $dom_evt, CHL7Acknowledgment $ack) {
+    $patient = new CPatient();
+    $patient->_eai_exchange_initiator_id = $exchange_ihe->_id;
+    
+    $data = array_merge($data, $dom_evt->getContentNodes());
+    
+    return $dom_evt->handle($ack, $patient, $data);
   }
 }
 

@@ -44,13 +44,13 @@ EOT;
     $obx = array();
     
     // Tcore
-    $obx[] = "OBX|1|NM|0002-4b60^Température corporelle^MDIL||".(rand(350, 400)/10)."|0004-17a0^°C^MDIL|";
+    $obx[] = "OBX|1|NM|0002-4b60^Température corporelle^MDIL|1|".(rand(350, 400)/10)."|0004-17a0^°C^MDIL|||||F";
     
     // HR
-    $obx[] = "OBX|1|NM|0002-4182^Rythme cardiaque^MDIL||".rand(40, 90)."|0004-0aa0^bpm^MDIL|";
+    $obx[] = "OBX|1|NM|0002-4182^Rythme cardiaque^MDIL|1|".rand(40, 90)."|0004-0aa0^bpm^MDIL|||||F";
     
     // 
-    //$obx[] = "OBX|1|NM|0002-4182^Rythme cardiaque^MDIL||".rand(40, 90)."|0004-0aa0^bpm^MDIL|";
+    //$obx[] = "OBX|1|NM|0002-4182^Rythme cardiaque^MDIL|1|".rand(40, 90)."|0004-0aa0^bpm^MDIL|||||F";
     
     $er7 .= implode("\n", $obx);
     

@@ -1,4 +1,5 @@
 <?php
+$locales['CDEC'] = 'DEC - Device Enterprise Communication';
 $locales['CExchangeIHE.sender_class.CSenderMLLP'] = 'Source MLLP';
 $locales['CHL7Config'] = 'Configuration HL7';
 $locales['CHL7Config-assigning_authority_namespace_id-court'] = 'Autorité d\'affectation - Nom';
@@ -62,6 +63,7 @@ $locales['CHL7EventADT-AR-E223'] = 'Le séjour retrouvé sur le système par son RI
 $locales['CHL7EventADT-AR-E224'] = 'Le séjour retrouvé sur le système par son NA est différent de celui du message';
 $locales['CHL7EventADT-AR-E230'] = 'Discordance entre l\'identifiant source et l\'identifiant cible du séjour';
 $locales['CHL7EventADT-AR-E231'] = 'Discordance entre l\'identifiant source et l\'identifiant cible du séjour à éliminer';
+$locales['CHL7EventORUR01'] = 'PCD01 - ORU^R01';
 $locales['CHL7v2Exception-1'] = 'Fichier vide ou trop court';
 $locales['CHL7v2Exception-3'] = 'Format de séparateur invalide';
 $locales['CHL7v2Exception-4'] = 'Syntaxe de segment invalide';

@@ -61,7 +61,10 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
       case "CHL7v2EventADTA55" : 
       case "CHL7v2EventADTA55_FR" :
       case "CHL7v2EventADTZ99_FR" : 
-        return new CHL7v2RecordAdmit();     
+        return new CHL7v2RecordAdmit();  
+      // Création des résultats d'observations
+      case "CHL7v2EventORUR01" : 
+        return new CHL7v2RecordObservationResultSet();  
       default : 
         return new CHL7v2MessageXML();
     }

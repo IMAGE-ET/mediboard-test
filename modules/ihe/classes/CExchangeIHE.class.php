@@ -20,6 +20,7 @@ class CExchangeIHE extends CExchangeTabular {
   static $messages = array(
     "PAM"    => "CPAM",
     "PAM_FR" => "CPAMFR",
+    "DEC"    => "CDEC"
   );
   
   // DB Table key
@@ -144,9 +145,9 @@ class CExchangeIHE extends CExchangeTabular {
       $this->_acquittement       = $ack->event_ack->msg_hl7;;
       /* @todo Comment gérer ces informations ? */
       $this->statut_acquittement = null;
-      $this->acquittement_valide = $ack->event_ack->message->isOK(CHL7v2Error::E_ERROR);
+      $this->acquittement_valide = $ack->event_ack->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
     } else {
-      $this->message_valide      = $event->message->isOK(CHL7v2Error::E_ERROR);
+      $this->message_valide      = $event->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
       $this->date_production     = mbDateTime();
       $this->date_echange        = mbDateTime();
     }
