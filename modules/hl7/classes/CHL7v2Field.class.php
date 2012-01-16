@@ -166,7 +166,15 @@ class CHL7v2Field extends CHL7v2Entity {
       $rs = "<span class='rs'>$rs</span>";
     }
     
-    $str = implode($rs, $this->items);
+    if (empty($this->items)) {
+      $item = new CHL7v2FieldItem($this, $this->meta_spec, 0);
+      $items = array($item);
+    }
+    else {
+      $items = $this->items;
+    }
+    
+    $str = implode($rs, $items);
     
     if (CHL7v2Message::$decorateToString) {
       $str = "<span class='entity field' id='entity-er7-$this->id'>$str</span>";

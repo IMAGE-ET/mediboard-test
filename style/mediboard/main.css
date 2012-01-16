@@ -1435,6 +1435,11 @@ ul li a.chapitre_signe.active{
   content: none;
 }
 
+.er7 .field-item:empty:after {
+  content: "\00D8";
+  color: #ccc;
+}
+
 .er7 .field-item:hover {
   border-color: #CC0000;  /** outline bugs in Firefox **/
   padding: 6px 0;
