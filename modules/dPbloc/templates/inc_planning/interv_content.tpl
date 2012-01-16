@@ -11,7 +11,7 @@
 <!-- Intervention -->
 <td class="text">
   {{if $curr_plageop|is_array || $curr_plageop->spec_id}}
-    <strong>Dr {{$curr_op->_ref_chir->_view}}</strong>
+    <strong>Dr {{$curr_op->_ref_chir}}</strong>
     <br />
   {{/if}}
   {{if $curr_op->libelle}}

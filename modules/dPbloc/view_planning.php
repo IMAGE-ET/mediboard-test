@@ -163,6 +163,7 @@ foreach($plagesop as &$plage) {
   $listOp = $listOp->loadList($where, $order, null, null, $ljoin);
 
   foreach ($listOp as $operation) {
+  	$operation->loadRefPraticien(1);
     $sejour = $operation->loadRefSejour(1);
     $sejour->loadRefsFwd(1);
     if ($_print_numdoss) {
@@ -201,11 +202,11 @@ foreach($plagesop as &$plage) {
 }
 
 foreach($operations as $operation) {
-  $sejour = $operation->loadRefSejour(1);
-  $operation->loadRefPraticien(1);
   $operation->loadRefPlageOp(1);
-  $sejour->loadRefsFwd(1);
+  $operation->loadRefPraticien(1);
   
+  $sejour = $operation->loadRefSejour(1);
+  $sejour->loadRefsFwd(1);
   if ($_print_numdoss) {
     $sejour->loadNDA();
   }  
