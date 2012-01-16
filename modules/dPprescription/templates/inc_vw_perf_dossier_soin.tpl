@@ -58,6 +58,10 @@
         <img style="float: right" src="images/icons/ampoule.png" title="Ligne récemment modifiée"/>
       {{/if}}  
 		{{/if}}
+		
+	  {{if $_prescription_line_mix->date_arret && $_prescription_line_mix->time_arret}}
+      <img src="style/mediboard/images/buttons/stop.png" style="float: right" title="{{tr}}CPrescriptionLineElement-date_arret{{/tr}} : {{$_prescription_line_mix->date_arret|date_format:$conf.date}} {{$_prescription_line_mix->time_arret|date_format:$conf.time}}"/>
+    {{/if}}
 	
 	{{if $_prescription_line_mix->commentaire}}
     <img style="float: right; margin: 2px;" src="images/icons/postit.png" title="" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-comment-{{$_prescription_line_mix->_guid}}');" />
@@ -85,7 +89,7 @@
           <div style="white-space: nowrap;">[{{tr}}CPrescriptionLineMix.interface.{{$_prescription_line_mix->interface}}{{/tr}}]</div>
     {{/if}}
   </div>
-	
+	   	
 	{{if $_prescription_line_mix->_debit && $_prescription_line_mix->type_line != "oxygene"}}
 		<form style="white-space: nowrap" name="modifDebit-{{$prescription_line_mix_id}}" method="post" action="?" onsubmit="return onSubmitFormAjax(this, { onComplete: function() { 
                             PlanSoins.loadTraitement('{{$_prescription_line_mix->_ref_prescription->object_id}}','{{$date}}','','administration');} } )">
