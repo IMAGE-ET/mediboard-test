@@ -31,26 +31,24 @@ class ER7Message {
    * @return string An ORU message formatted in ER7
    */
   final static function ORU(){
+    $date = strftime("%Y%m%d%H%M%S");
     $er7 = <<<EOT
-MSH|^~\&||GA0000||VAERS PROCESSOR|20010331||ORU^R01|20010422GA03|T|2.3.1|||AL|
-PID|||1234^^^^SR~1234-12^^^^LR~00725^^^^MR||Doe^John^Fitzgerald^JR^^^L||20001007|M||2106-3^White^HL70005|123 Peachtree St^APT 3B^Atlanta^GA^30210^^M^^GA067||(678) 555-1212^^PRN|
-NK1|1|Jones^Jane^Lee^^RN|VAB^Vaccine administered by (Name)^HL70063|
-NK1|2|Jones^Jane^Lee^^RN|FVP^Form completed by (Name)-Vaccine provider^HL70063|101 Main Street^^Atlanta^GA^38765^^O^^GA121||(404) 554-9097^^WPN|
-ORC|CN|||||||||||1234567^Welby^Marcus^J^Jr^Dr.^MD^L|||||||||Peachtree Clinic|101 Main Street^^Atlanta^GA^38765^^O^^GA121|(404) 554-9097^^WPN|101 Main Street^^Atlanta^GA^38765^^O^^GA121|
-OBR|1|||^Mediboard test|||20010316|
+MSH|^~\&|||||||ORU^R01|HP104220879017992|P|2.3||||||8859/1
+PID|1||000038^^^&&^PI~323328^^^Mediboard&1.2.250.1.2.3.4&OX^RI||TEST^Obx^^^m^^L^A||19800101|M|||^^^^^^H|||||||12000041^^^&&^AN||||||||||||N||VALI|20120116161701||||||
+PV1|1|I|UF1^^^&&^O|R|12000041^^^&&^RI||929997607^FOO^Bar^^^^^^&1.2.250.1.71.4.2.1&ISO^L^^^ADELI^^^^^^^^^^|||||||90||P|929997607^FOO^Bar^^^^^^&1.2.250.1.71.4.2.1&ISO^L^^^ADELI^^^^^^^^^^||321120^^^Mediboard&1.2.250.1.2.3.4&OX^RI||AMBU|N||||||||||||||4||||||||||||||||
+OBR||||Mediboard test|||$date
 
 EOT;
     
     $obx = array();
+    $obx[] = "OBX||NM|0002-4b60^Tcore^MDIL|0|".(rand(350, 400)/10)."|0004-17a0^°C^MDIL|||||F";
+    $obx[] = "OBX||NM|0002-4bb8^SpO2^MDIL|0|".  rand(80, 100).     "|0004-0220^%^MDIL|||||F";
+    $obx[] = "OBX||NM|0002-5000^Resp^MDIL|0|".  rand(20, 50).      "|0004-0ae0^rpm^MDIL|||||F";
+    $obx[] = "OBX||NM|0002-4182^HR^MDIL|0|".    rand(40, 90).      "|0004-0aa0^bpm^MDIL|||||F";
     
-    // Tcore
-    $obx[] = "OBX|1|NM|0002-4b60^Température corporelle^MDIL|1|".(rand(350, 400)/10)."|0004-17a0^°C^MDIL|||||F";
-    
-    // HR
-    $obx[] = "OBX|1|NM|0002-4182^Rythme cardiaque^MDIL|1|".rand(40, 90)."|0004-0aa0^bpm^MDIL|||||F";
-    
-    // 
-    //$obx[] = "OBX|1|NM|0002-4182^Rythme cardiaque^MDIL|1|".rand(40, 90)."|0004-0aa0^bpm^MDIL|||||F";
+    $obx[] = "OBX||NM|0002-4a15^ABPs^MDIL|0|".    rand(90, 160).   "|0004-0f20^mmHg^MDIL|||||F";
+    $obx[] = "OBX||NM|0002-4a16^ABPd^MDIL|0|".    rand(30, 90).    "|0004-0f20^mmHg^MDIL|||||F";
+    $obx[] = "OBX||NM|0002-4a17^ABPm^MDIL|0|".    rand(80, 100).   "|0004-0f20^mmHg^MDIL|||||F";
     
     $er7 .= implode("\n", $obx);
     
