@@ -140,7 +140,7 @@ if ($consult->_id) {
     $consult->_locks[] = "valide";
   }
 }
-$_functions_ids = array();
+$_functions = array();
 
 if ($chir->_id) {
   $chir->loadRefFunction();
