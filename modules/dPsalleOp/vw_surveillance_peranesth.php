@@ -161,6 +161,8 @@ if($prescription->_id){
     }*/
    
     foreach ($_line_array["administrations"] as $_adms) {
+      $_adms = CStoredObject::naturalSort($_adms, array("dateTime"));
+      
       foreach ($_adms as $_adm) {
         if ($_line instanceof CPrescriptionLineMedicament || $_line instanceof CPrescriptionLineMix) {
           $unite = $_adm->_ref_object->_ref_produit->libelle_unite_presentation;

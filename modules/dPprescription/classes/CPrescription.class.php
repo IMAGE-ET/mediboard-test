@@ -1951,18 +1951,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
         $lines[$_mix->_guid]["object"] = $_mix;
       }
     }
-    
-    usort($lines, array($this, "sortLines"));
 
     return $lines;
-  }
-
-  function sortLines($line1, $line2){
-    if(isset($line1["planifications"]) && isset($line2["planifications"])){
-      reset($line1["planifications"]);
-      reset($line2["planifications"]);
-      return key($line1["planifications"]) < key($line2["planifications"]) ? -1 : 1;
-    }
   }
   
   /*
