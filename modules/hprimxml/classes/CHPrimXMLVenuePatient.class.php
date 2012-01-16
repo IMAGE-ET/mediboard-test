@@ -193,7 +193,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             $newVenue->_no_num_dos = 1;
             $msgVenue = $newVenue->store();
             
-            $msgNDA = CEAISejour::storeNDA($nda, $newVenue);
+            $msgNDA = CEAISejour::storeNDA($nda, $newVenue, $sender);
             
             $newVenue->_NDA = $nda->id400;
             // Si serveur et on a un num_dos sur la venue
@@ -567,7 +567,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           $nda->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$sender->_tag_sejour;
         }
         
-        $msgNDA = CEAISejour::storeNDA($nda, $newVenue);
+        $msgNDA = CEAISejour::storeNDA($nda, $newVenue, $sender);
         
         if (!isset($nda->_trash)) { 
           $codes = array ($msgVenue ? ($_code_Venue ? "A103" : "A102") : ($_code_Venue ? "I102" : "I101"), 
