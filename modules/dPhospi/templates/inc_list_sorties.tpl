@@ -28,7 +28,7 @@
     </tr>
     <tr>
       <th class="not-printable">
-        <button class="print notext" style="float:left;" onclick="$('deplacements').print()">{{tr}}Print{{/tr}}</button>
+        <button class="print notext" style="float:left;" onclick="$('deplacements_').print()">{{tr}}Print{{/tr}}</button>
         Déplacement
       </th>
       {{assign var=url value="?m=$m&tab=$tab"}}
