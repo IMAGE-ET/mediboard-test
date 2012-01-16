@@ -19,13 +19,13 @@ var Reglement = {
   reload: function(reload_acts) {
 	  var url = new Url("dPcabinet", "httpreq_vw_reglement");
     url.addParam("selConsult", document.editFrmFinish.consultation_id.value);
-	  url.requestUpdate('fdrConsult');
+	  url.requestUpdate('reglement');
     
     // Rafraichissement des actes CCAM et NGAP
     if (reload_acts && Preferences.ccam_consultation == "1" && Preferences.MODCONSULT == "1"){
       ActesCCAM.refreshList(Reglement.consultation_id, Reglement.user_id);
       ActesNGAP.refreshList();
-      ActesTarmed.refreshList();
+      //ActesTarmed.refreshList();
     }
   },
   effectuer: function(){
