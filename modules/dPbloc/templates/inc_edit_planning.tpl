@@ -1,5 +1,5 @@
 <script type="text/javascript">
-function checkPlage() {
+checkPlage : function() {
   var form = getForm('editFrm');
   
   if (!checkForm(form)) {
