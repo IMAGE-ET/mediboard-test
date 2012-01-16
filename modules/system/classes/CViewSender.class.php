@@ -216,6 +216,7 @@ class CViewSender extends CMbObject {
           $ftp->close();
         } catch (Exception $e) {
         	//mbLog($e);
+        	CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
         }
       }
       
