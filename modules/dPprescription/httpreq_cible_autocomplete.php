@@ -16,6 +16,9 @@ $category = new CCategoryPrescription();
 $where = array();
 $where["nom"] = "LIKE '%$libelle_cible%'";
 
+$group_id = CGroups::loadCurrent()->_id;
+$where[] = "group_id = '$group_id' OR group_id IS NULL";
+
 if (CAppUI::conf("dPprescription CCategoryPrescription show_only_cible")) {
   $where["only_cible"] = " = '1'";
 }
