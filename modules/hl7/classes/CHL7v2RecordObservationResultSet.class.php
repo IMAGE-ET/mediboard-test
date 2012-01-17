@@ -111,7 +111,6 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
         $result = new CObservationResult();
         $result->observation_result_set_id = $result_set->_id;
         $this->mappingObservationResult($_OBX, $result);
-        mbLog($result);
         /* @todo à voir si on envoi un message d'erreur ou si on continu ... */
         if ($msg = $result->store()) {
           return $exchange_ihe->setAckAR($ack, "E303", $msg, $operation);
@@ -137,6 +136,9 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     
     // OBX-5: Observation Value (Varies)
     $this->getObservationValue($node, $result);   
+    
+    // OBX-11: Observation Result Status
+    $this->getObservationResultStatus($node, $result);   
   }
   
   function getObservationIdentifier(DOMNode $node, CObservationResult $result) {
@@ -161,6 +163,8 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $result->value = $this->queryTextNode("OBX.5", $node);
   }
   
-  //status
+  function getObservationResultStatus(DOMNode $node, CObservationResult $result) {
+    $result->status = $this->queryTextNode("OBX.11", $node);
+  }   
 }
 ?>
