@@ -24,7 +24,14 @@ $where = array();
 if($chir_id) {
   $chir = new CMediusers();
   $chir->load($chir_id);
-  $where[] = "(protocole.chir_id = '$chir->_id' OR protocole.function_id = '$chir->function_id')";
+  $chir->loadRefFunction();
+  
+  $functions_ids = array($chir->function_id);
+  $chir->loadBackRefs("secondary_functions");
+  if (count($chir->_back["secondary_functions"])) {
+    $functions_ids = array_merge($functions_ids, CMbArray::pluck($chir->_back["secondary_functions"],"function_id"));
+  }
+  $where[] = "(protocole.chir_id = '$chir->_id' OR protocole.function_id ". CSQLDataSource::prepareIn($functions_ids).")";
 }
 
 if($for_sejour !== null) {
