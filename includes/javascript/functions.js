@@ -1086,8 +1086,10 @@ Object.extend(Control.Modal,{
       this.container.insert({before: overlay});
       overlay.insert({after: Control.Overlay.iFrameShim.element});
       
-      document.body.style.overflow = "hidden"; // Removes the body's scrollbar
-      this.container.style.position = "fixed";
+      var body = document.body;
+      body.style.overflow = "hidden"; // Removes the body's scrollbar
+      body.scrollTop = 0;
+      
       Event.stopObserving(window, 'scroll', this.positionHandler);
       Event.stopObserving(window, 'resize', this.outOfBoundsPositionHandler);
       
