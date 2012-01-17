@@ -295,6 +295,8 @@ var Url = Class.create({
       if (!options.closeOnEscape) {
         iframeWindow.document.stopObserving('keydown', iframeWindow.closeWindowByEscape);
       }
+      
+      document.body.scrollTop = 0;
     }.bind(this.modalObject));
   
     return this;
