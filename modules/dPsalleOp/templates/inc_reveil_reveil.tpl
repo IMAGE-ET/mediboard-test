@@ -38,11 +38,11 @@ submitReveilForm = function(oFormOperation) {
         <img src="images/icons/anesth.png" alt="Anesth" />
         </a>
       </div>
-      <a href="?m={{$m}}&amp;tab=vw_soins_reveil&amp;operation_id={{$_operation->_id}}">
-      <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
+      <a href="#" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">
+	      <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
             onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
         {{$_operation->_ref_patient->_view}}
-      </span>
+        </span>
       </a>
     </td>
     <td class="text">

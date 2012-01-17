@@ -12,6 +12,7 @@ $sejour_id   = CValue::get("sejour_id");
 $date        = CValue::get("date");
 $default_tab = CValue::get("default_tab", "dossier_traitement");
 $popup       = CValue::get("popup", 0);
+$operation_id = CValue::get("operation_id");
 
 $sejour = new CSejour;
 $sejour->load($sejour_id);
@@ -24,6 +25,7 @@ $smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::ge
 $smarty->assign("isPrescriptionInstalled" , CModule::getActive("dPprescription"));
 $smarty->assign("default_tab", $default_tab);
 $smarty->assign("popup", $popup);
+$smarty->assign("operation_id", $operation_id);
 $smarty->display("inc_dossier_sejour.tpl");
 
 ?>

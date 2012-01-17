@@ -141,6 +141,8 @@
         loadResultLabo('{{$sejour->_id}}');
       }
     {{/if}}
+		
+		window.DMI_operation_id = "{{$operation_id}}";
   });
 </script>
 

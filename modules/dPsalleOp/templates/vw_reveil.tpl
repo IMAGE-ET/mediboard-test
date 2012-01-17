@@ -1,4 +1,14 @@
 {{mb_script module="bloodSalvage" script="bloodSalvage"}}
+{{mb_script module="dPprescription" script="plan_soins"}}
+{{mb_script module="dPprescription" script="prescription"}}
+{{mb_script module="dPprescription" script="element_selector"}}
+{{mb_script module="dPmedicament" script="medicament_selector"}}
+{{mb_script module="dPmedicament" script="equivalent_selector"}}
+{{mb_script module="dPplanningOp" script="cim10_selector"}}
+{{mb_script module="dPcompteRendu" script="document"}}
+{{mb_script module="dPcompteRendu" script="modele_selector"}}
+{{mb_script module="dPcabinet" script="file"}}
+
 
 {{if $conf.dPsalleOp.CDailyCheckList.active_salle_reveil != '1' || 
      $date < $smarty.now|iso_date || 
@@ -59,6 +69,18 @@ codageCCAM = function(operation_id){
   url.popup(700,500,"Actes CCAM");
 }
 
+showDossierSoins = function(sejour_id, operation_id, default_tab){
+  $('dossier_sejour').update("");
+  var url = new Url("soins", "ajax_vw_dossier_sejour");
+  url.addParam("sejour_id", sejour_id);
+  url.addParam("operation_id", operation_id);
+  if(default_tab){
+    url.addParam("default_tab", default_tab);
+  }
+	url.requestUpdate($('dossier_sejour'));
+  modalWindow = modal($('dossier_sejour'));
+}
+
 </script>
 
      
@@ -91,3 +113,5 @@ codageCCAM = function(operation_id){
     
   {{include file=inc_edit_check_list.tpl personnel=$personnels}}
 {{/if}}
+
+<div id="dossier_sejour" style="width: 95%; height: 90%; overflow: auto; display: none;"></div> 
