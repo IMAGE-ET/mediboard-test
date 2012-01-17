@@ -1144,9 +1144,13 @@ Class.extend(Control.Modal, {
   position: function(){
     var contDims = this.container.getDimensions();
     var vpDims = document.viewport.getDimensions();
+    
+    var top = Math.max(0, vpDims.height - contDims.height) / 2;
+    var left = Math.max(0, vpDims.width - contDims.width) / 2;
+    
     this.container.setStyle({
-      top: (vpDims.height - contDims.height) / 2 + "px",
-      left: (vpDims.width - contDims.width) / 2 + "px"
+      top: top + "px",
+      left: left + "px"
     });
   },
   // Redefine this method to ...
