@@ -81,8 +81,15 @@ class CHL7v2Error {
     return $path;
   }
 	
-	function getHL7Code(){
+	function getHL7Code() {
 		return CValue::read(self::$errorMap, $this->code, 207);
+	}
+	
+	function getCodeLocation() {
+	  return array (
+	    $this->getLocation(),
+	    $this->getHL7Code()
+	  );
 	}
 }
 

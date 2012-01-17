@@ -36,11 +36,11 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
     $acknowledgment = $this->acknowledgment;
     
     $data = array();
-    
-    // ERR-1: Error Code and Location (ELD) (optional repeating)
-    $data[] = null; 
-    
+
     if ($error) {
+      // ERR-1: Error Code and Location (ELD) (optional repeating)
+      $data[] = $error->getCodeLocation();
+    
       // ERR-2: Error Location (ERL) (optional repeating)
       $data[] = $error->getLocation();
       
@@ -93,6 +93,20 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
       // ERR-12: Help Desk Contact Point (XTN) (optional repeating) 
       $data[] = null; 
     } else {
+      // ERR-1: Error Code and Location (ELD) (optional repeating)
+      $data[] = array(
+        null, 
+        null,
+        null,
+        array(
+          $acknowledgment->hl7_error_code,
+          null,
+          null,
+          $acknowledgment->_mb_error_code,
+          CAppUI::tr("CHL7EventADT-$acknowledgment->ack_code-$acknowledgment->_mb_error_code")
+        )
+      );
+      
       // ERR-2
       $data[] = null;
       // ERR-3

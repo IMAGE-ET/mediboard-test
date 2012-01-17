@@ -102,7 +102,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   function queryNodes($nodeName, DOMNode $contextNode = null, &$data = null, $root = false) {
     $xpath = new CHL7v2MessageXPath($contextNode ? $contextNode->ownerDocument : $this);   
     
-    $nodeList = $xpath->query("$nodeName");
+    $nodeList = $xpath->query("$nodeName", $contextNode);
     foreach ($nodeList as $_node) {
       $data[$nodeName][] = $_node;
     }

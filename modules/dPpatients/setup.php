@@ -1655,8 +1655,14 @@ class CSetupdPpatients extends CSetup {
     }
     $query = "INSERT INTO `observation_value_unit` (`coding_system`, `code`, `label`, `desc`) VALUES ".implode("\n, ", $values);
     $this->addQuery($query);
+   
+    $this->makeRevision("1.37");
     
-    $this->mod_version = "1.37";
+    $query = "ALTER TABLE `observation_result` 
+                ADD `status` ENUM ('C','D','F','I','N','O','P','R','S','U','W','X') DEFAULT 'F';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.38";
     
     $query = "SHOW TABLES LIKE 'categorie_socioprofessionnelle'";
     $this->addDatasource("INSEE", $query);

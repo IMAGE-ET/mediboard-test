@@ -20,6 +20,7 @@ class CObservationResult extends CMbObject {
   var $unit_id               = null; // OBX.6
   var $value                 = null; // OBX.2
   var $method                = null; // OBX.17
+  var $status                = null; // OBX.11
   
   var $_ref_context          = null;
   var $_ref_value_type       = null;
@@ -39,6 +40,7 @@ class CObservationResult extends CMbObject {
     $props["unit_id"]                   = "ref notNull class|CObservationValueUnit";
     $props["value"]                     = "str notNull";
     $props["method"]                    = "str";
+    $props["status"]                    = "enum list|C|D|F|I|N|O|P|R|S|U|W|X default|F";
     return $props;
   }
   

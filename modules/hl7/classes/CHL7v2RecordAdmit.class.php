@@ -133,15 +133,15 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $venueRI       = CValue::read($data['admitIdentifiers'], "RI");
     $venueRISender = CValue::read($data['admitIdentifiers'], "RI_Sender");
     $venueNPA      = CValue::read($data['admitIdentifiers'], "NPA");
-    $venueNA       = CValue::read($data['personIdentifiers'], "NA");
+    $venueAN       = CValue::read($data['personIdentifiers'], "AN");
     
     $NDA = new CIdSante400();
-    if ($venueNA) {
-      $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueNA);
+    if ($venueAN) {
+      $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
     }
     
     // NDA non connu (non fourni ou non retrouvé)
-    if (!$venueNA || !$NDA->_id) {
+    if (!$venueAN || !$NDA->_id) {
       // NPA fourni
       if ($venueNPA) {
         /* @todo Gérer ce cas */
@@ -175,7 +175,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       }
       else {
         // Aucun NDA fourni
-        if (!$venueNA) {
+        if (!$venueAN) {
           $code_NDA = "I225";
         } 
         // Association de l'IPP
@@ -352,11 +352,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $venueRI       = CValue::read($data['admitIdentifiers'], "RI");
     $venueRISender = CValue::read($data['admitIdentifiers'], "RI_Sender");
     $venueNPA      = CValue::read($data['admitIdentifiers'], "NPA");
-    $venueNA       = CValue::read($data['personIdentifiers'], "NA");
+    $venueAN       = CValue::read($data['personIdentifiers'], "NA");
     
     $NDA = new CIdSante400();
-    if ($venueNA) {
-      $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueNA);
+    if ($venueAN) {
+      $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
     }
     
     if ($NDA->_id) {

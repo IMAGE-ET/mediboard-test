@@ -37,13 +37,18 @@ class CObservationValueCodingSystem extends CMbObject {
     $ds = $this->_spec->ds;
     
     $where = array(
-      "code"          => $ds->escape("=%", $code),
-      "coding_system" => $ds->escape("=%", $coding_system),
+      "code"          => $ds->prepare("=%", $code),
+      "coding_system" => $ds->prepare("=%", $coding_system),
     );
     
     if (!$this->loadObject($where)) {
-      $this->label = $label;
-      $this->desc = $desc;
+      $this->code          = $code;
+      $this->coding_system = $coding_system;
+      $this->label         = $label;
+      $this->desc          = $desc;
+      if ($this instanceof CObservationValueType) {
+        $this->datatype = "NM";
+      }
       $this->store();
     }
     

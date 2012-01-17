@@ -1698,6 +1698,22 @@ class CSejour extends CCodable implements IPatientRelated {
     }
     return $this->_ref_operations;
   }
+ 
+  function getCurrOperation($date) {
+    $date = mbDate($date);
+    
+    $where["operations.sejour_id"] = "= '$this->_id'";
+    $where[]            = "plagesop.date = '$date' OR operations.date = '$date'";
+    
+    $leftjoin = array();
+    $leftjoin["plagesop"]   = "plagesop.plageop_id = operations.plageop_id";
+    
+    $operation = new COperation;
+    CSQLDataSource::$trace = true;
+    $operation->loadObject($where, null, null, $leftjoin);
+     CSQLDataSource::$trace = false;
+    return $operation;
+  }
   
   function loadRefsBack() {
     $this->loadRefsFiles();
