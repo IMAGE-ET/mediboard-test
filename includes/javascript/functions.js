@@ -1086,9 +1086,11 @@ Object.extend(Control.Modal,{
       this.container.insert({before: overlay});
       overlay.insert({after: Control.Overlay.iFrameShim.element});
       
-      var body = document.body;
-      body.style.overflow = "hidden"; // Removes the body's scrollbar
-      body.scrollTop = 0;
+      if (!Prototype.Browser.IE) {
+        var body = document.body;
+        body.style.overflow = "hidden"; // Removes the body's scrollbar
+        body.scrollTop = 0;
+      }
       
       Event.stopObserving(window, 'scroll', this.positionHandler);
       Event.stopObserving(window, 'resize', this.outOfBoundsPositionHandler);
@@ -1103,7 +1105,11 @@ Object.extend(Control.Modal,{
       if (Control.Modal.stack.length == 0) {
         // put it back at the end of body
         var body = $(document.body);
-        body.style.overflow = "auto"; // Put back the body's scrollbar
+        
+        if (!Prototype.Browser.IE) {
+          body.style.overflow = "auto"; // Put back the body's scrollbar
+        }
+        
         body.insert(overlay);
         body.insert(Control.Overlay.iFrameShim.element);
         
@@ -1145,8 +1151,8 @@ Class.extend(Control.Modal, {
     var contDims = this.container.getDimensions();
     var vpDims = document.viewport.getDimensions();
     
-    var top = Math.max(0, vpDims.height - contDims.height) / 2;
-    var left = Math.max(0, vpDims.width - contDims.width) / 2;
+    var top = Math.max(16, (vpDims.height - contDims.height) / 2);
+    var left = Math.max(0, (vpDims.width - contDims.width) / 2);
     
     this.container.setStyle({
       top: top + "px",
