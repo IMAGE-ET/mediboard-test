@@ -195,7 +195,7 @@ function deleteStyle() {
   
   if (!instance.document) return;
   var styleTag = instance.document.getBody().getFirst();
-  if (styleTag.$.tagName == "STYLE") {
+  if (styleTag && styleTag.$.tagName == "STYLE") {
     return styleTag.remove();
   }
 }
