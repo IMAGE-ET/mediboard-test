@@ -349,6 +349,7 @@ $locales['mod-dPsalleOp-tab-vw_reveil'] = 'Salle de reveil';
 $locales['mod-dPsalleOp-tab-vw_signature_actes'] = 'Bilan des actes';
 $locales['mod-dPsalleOp-tab-vw_soins_reveil'] = 'Soins reveil';
 $locales['mod-dPsalleOp-tab-vw_suivi_salles'] = 'Programme';
+$locales['mod-dPsalleOp-tab-vw_surveillance_peranesth'] = 'Feuille de surveillance per-anesthésique';
 $locales['mod-dPsalleOp-tab-vw_urgences'] = 'Hors plage';
 $locales['module-dPsalleOp-court'] = 'Salle d\'op';
 $locales['module-dPsalleOp-long'] = 'Gestion des salles d\'intervention';

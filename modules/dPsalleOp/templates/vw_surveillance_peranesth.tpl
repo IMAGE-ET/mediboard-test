@@ -190,7 +190,7 @@ Main.add(function(){
                   <img src="{{$images.$_icon}}" />
                 {{/if}}
                 {{if $_geste.unit}}
-                  <strong>{{$_geste.label}}</strong> {{$_geste.unit}}
+                  {{$_geste.unit}} <strong>{{$_geste.label}}</strong>
                 {{else}}
                   {{$_geste.label}}
                 {{/if}}

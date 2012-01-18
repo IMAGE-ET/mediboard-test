@@ -42,10 +42,14 @@ $time_fin_op   = getTS("$date $time_max");
 
 $default_yaxis = array("used" => false, "position" => "left", "labelWidth" => 20, "ticks" => 6);
 $yaxes = array(
-  $default_yaxis + array("color" => "red",   "symbol" => "circle",  "symbolChar" => "&#x25CB;"),
-  $default_yaxis + array("color" => "green", "symbol" => "cross",   "symbolChar" => "x", "alignTicksWithAxis" => 1),
-  $default_yaxis + array("color" => "blue",  "symbol" => "diamond", "symbolChar" => "&#x25C7;", "alignTicksWithAxis" => 1),
-  $default_yaxis + array("color" => "purle", "symbol" => "square",  "symbolChar" => "m", "alignTicksWithAxis" => 1),
+  $default_yaxis + array("color" => "red",        "symbol" => "circle",   "symbolChar" => "&#x25CB;"),
+  $default_yaxis + array("color" => "green",      "symbol" => "cross",    "symbolChar" => "&#x2A2F;", "alignTicksWithAxis" => 1),
+  $default_yaxis + array("color" => "blue",       "symbol" => "diamond",  "symbolChar" => "&#x25C7;", "alignTicksWithAxis" => 1),
+  $default_yaxis + array("color" => "purle",      "symbol" => "square",   "symbolChar" => "&#x25A1;", "alignTicksWithAxis" => 1),
+  $default_yaxis + array("color" => "orange",     "symbol" => "triangle", "symbolChar" => "&#x25B3;", "alignTicksWithAxis" => 1),
+  $default_yaxis + array("color" => "black",      "symbol" => "circle",   "symbolChar" => "&#x25CB;", "alignTicksWithAxis" => 1),
+  $default_yaxis + array("color" => "lightblue",  "symbol" => "circle",   "symbolChar" => "&#x25CB;", "alignTicksWithAxis" => 1),
+  $default_yaxis + array("color" => "lightgreen", "symbol" => "circle",   "symbolChar" => "&#x25CB;", "alignTicksWithAxis" => 1),
 );
 
 foreach($result_sets as $_set) {
@@ -130,7 +134,7 @@ $sejour = $interv->loadRefSejour();
 $prescription = $sejour->loadRefPrescriptionSejour();
 
 if($prescription->_id){
-  $lines = $prescription->loadPeropLines();
+  $lines = $prescription->loadPeropLines(false);
   
   foreach($lines as $_guid => $_line_array) {
     $_line = $_line_array["object"];
@@ -183,6 +187,7 @@ if($prescription->_id){
       $_adms = CStoredObject::naturalSort($_adms, array("dateTime"));
       
       foreach ($_adms as $_adm) {
+        $unite = "";
         if ($_line instanceof CPrescriptionLineMedicament || $_line instanceof CPrescriptionLineMix) {
           $unite = $_adm->_ref_object->_ref_produit->libelle_unite_presentation;
         }
