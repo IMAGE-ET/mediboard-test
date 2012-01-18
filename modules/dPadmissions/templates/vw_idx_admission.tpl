@@ -149,6 +149,14 @@ Main.add(function () {
   listUpdater.periodicalUpdate('listAdmissions', { frequency: 120 });
 });
 
+{{if $web100T_active}}
+  {{assign var=url_web100T value=$conf.web100T.url_application}}
+  openWeb100T = function(sejour_id) {
+    var url = new Url("web100T", "ajax_vw_sejour");
+    url.addParam("sejour_id", sejour_id);
+    url.requestModal(700,500);
+  }
+{{/if}}
 </script>
 
 <table class="main">

@@ -13,6 +13,7 @@
     </tr>
     <tr>
       {{mb_include module=system template=inc_config_str var=days_terme size=2 suffix="jours"}}
+    </tr>
     <tr>
       {{mb_include module=system template=configure_handler class_handler=CAffectationHandler}}
     </tr>

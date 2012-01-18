@@ -39,7 +39,9 @@
   <input type="hidden" name="dosql" value="do_sejour_aed" />
   <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
   <input type="hidden" name="patient_id" value="{{$_sejour->patient_id}}" />
-
+  {{if $web100T_active}}
+    <button type='button' class="web100T notext" onclick="openWeb100T('{{$_sejour->_id}}')" title="Consulter le séjour dans web100T"></button> 
+  {{/if}}
   {{if !$_sejour->entree_reelle}}
     <input type="hidden" name="entree_reelle" value="now" />
     <button class="tick" type="button" onclick="{{if (($date_actuelle > $_sejour->entree_prevue) || ($date_demain < $_sejour->entree_prevue))}}confirmation(this.form);{{else}}submitAdmission(this.form);{{/if}};">

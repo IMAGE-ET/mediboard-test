@@ -166,6 +166,7 @@ $smarty->assign("canPatients"   , CModule::getCanDo("dPpatients"));
 $smarty->assign("canPlanningOp" , CModule::getCanDo("dPplanningOp"));
 $smarty->assign("functions"     , $functions);
 $smarty->assign("filterFunction", $filterFunction);
+$smarty->assign("web100T_active", CModule::getActive("web100T"));
 
 $smarty->display("inc_vw_admissions.tpl");
 
