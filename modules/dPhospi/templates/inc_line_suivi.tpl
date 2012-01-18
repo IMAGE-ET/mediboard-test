@@ -155,8 +155,8 @@
     {{/if}}
   </td>
   <td>
-    {{if !$readonly && $_suivi->_canEdit}}
-      <button type="button" class="edit notext" onclick="modalConsult('{{$_suivi->_id}}')"></button>
+    {{if !$readonly}}
+      <button type="button" class="{{if $_suivi->_canEdit}}edit{{else}}search{{/if}} notext" onclick="modalConsult('{{$_suivi->_id}}')"></button>
     {{/if}}
   </td>
 {{/if}}

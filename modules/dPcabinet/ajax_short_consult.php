@@ -13,6 +13,7 @@ $sejour_id  = CValue::get("sejour_id");
 
 $consult = new CConsultation;
 $consult->load($consult_id);
+$consult->canEdit();
 
 if (!$consult->_id) {
   CAppUI::stepAjax(CAppUI::tr("CConsultation.none"));

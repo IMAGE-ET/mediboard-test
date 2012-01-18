@@ -19,5 +19,8 @@ $nb_trans_obs = $transmission->countList($where);
 $observation = new CObservationMedicale;
 $nb_trans_obs += $observation->countList($where);
 
+$consultation = new CConsultation;
+$nb_trans_obs += $consultation->countList($where);
+
 echo $nb_trans_obs;
 ?>

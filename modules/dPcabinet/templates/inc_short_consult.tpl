@@ -3,9 +3,14 @@
 {{mb_script module="dPcompteRendu" script="document"}}
 
 <script type="text/javascript">
+  {{if !$consult->_canEdit}}
+    App.readonly = true;
+  {{/if}}
+  
   function submitForm(oForm) {
     onSubmitFormAjax(oForm);
   }
+  
   Main.add(function() {
     var tabs = Control.Tabs.create('tabs_consult');
     {{if $consult_anesth->_id}}
