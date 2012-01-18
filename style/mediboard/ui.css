@@ -607,6 +607,17 @@ div.rank {
   border-top-left-radius: 0;
 }
 
+/** 
+ *  Quand les datepicker sont dans des modales (position:fixed) on ne met pas 
+ *  le "picker" a la fin de body mais a coté du input, il faut donc forcer 
+ *  le positionnement a coté du input
+ */
+.modal .datepickerControl {
+  position: absolute!important; 
+  top: auto!important; 
+  left: auto!important; 
+}
+
 .datepickerControl.inline {
   border:        none;
   padding: 0;

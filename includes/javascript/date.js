@@ -1,247 +1,247 @@
 DateFormat = Class.create();
 Object.extend(DateFormat, {
-	MONTH_NAMES: ['January','February','March','April','May','June','July','August','September','October','November','December','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-	DAY_NAMES: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
-	LZ: function(x) {
+  MONTH_NAMES: ['January','February','March','April','May','June','July','August','September','October','November','December','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+  DAY_NAMES: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+  LZ: function(x) {
     return (x < 0 || x > 9 ? "" : "0") + x;
   },
-	compareDates: function(date1, dateformat1, date2, dateformat2) {
-		var d1 = DateFormat.parseFormat(date1,dateformat1);
-		var d2 = DateFormat.parseFormat(date2,dateformat2);
-		if (d1 == 0 || d2 == 0) return -1;
-		else if (d1 > d2) return 1;
-		return 0;
-	},
-	format: function(date,format) {
+  compareDates: function(date1, dateformat1, date2, dateformat2) {
+    var d1 = DateFormat.parseFormat(date1,dateformat1);
+    var d2 = DateFormat.parseFormat(date2,dateformat2);
+    if (d1 == 0 || d2 == 0) return -1;
+    else if (d1 > d2) return 1;
+    return 0;
+  },
+  format: function(date,format) {
     if (!date) return;
     
-		format += "";
-		var result = "", 
-			i = 0, 
-			c="",
-			token="",
-			y=date.getFullYear()+"",
-			M=date.getMonth()+1,
-			d=date.getDate(),
-			E=date.getDay(),
-			H=date.getHours(),
-			m=date.getMinutes(),
-			s=date.getSeconds(),
-			h=(H == 0 ? 12 : (H>12 ? H-12 : H));
+    format += "";
+    var result = "", 
+      i = 0, 
+      c="",
+      token="",
+      y=date.getFullYear()+"",
+      M=date.getMonth()+1,
+      d=date.getDate(),
+      E=date.getDay(),
+      H=date.getHours(),
+      m=date.getMinutes(),
+      s=date.getSeconds(),
+      h=(H == 0 ? 12 : (H>12 ? H-12 : H));
 
-		// Convert real date parts into formatted versions
-		var value = {
-			y:   y+'', // Année
-			yy:  y.substring(2,4), // Année sur 2 chiffres
-			yyyy:y, // Année sur 4 chiffres
-			M:   M, // Mois sur un chiffre quand < à 10
-			MM:  DateFormat.LZ(M), // Mois sur deux chiffres
-			MMM: DateFormat.MONTH_NAMES[M-1], // Nom du mois
-			NNN: DateFormat.MONTH_NAMES[M+11], // Nom du mois en abbrégé
-			d:   d, // Numéro du jour dans le mois sur un chiffre quand < à 10
-			dd:  DateFormat.LZ(d), // Numéro du jour dans le mois
-			E:   DateFormat.DAY_NAMES[E+7], // Nom du jour en abbrégé
-			EE:  DateFormat.DAY_NAMES[E], // Nom du jour
-			H:   H, // Heure sur 24h sur un chiffre quand < à 10
-			HH:  DateFormat.LZ(H), // Heure sur 24h
-			h:   h, // Heure sur 12h sur un chiffre quand < à 10
-			hh:  DateFormat.LZ(h), // Heure sur 12h
-			K:   H % 12, // Heure sur 12h sur 1 chiffre quand < à 10
-			KK:  DateFormat.LZ(H % 12), // Heure sur 12h sur 2 chiffres
-			k:   H + 1, // Heure sur 12h sur 1 chiffre plus 1
-			kk:  DateFormat.LZ(H + 1), // Heure sur 12h sur 2 chiffres pours 1
-			a:   H > 11 ? 'PM' : 'AM', // Méridien
-			m:   m, // Minutes sur 1 chiffre quand < à 10
-			mm:  DateFormat.LZ(m), // Minutes
-			s:   s, // Secondes sur 1 chiffre quand < à 10
-			ss:  DateFormat.LZ(s) // Secondes
-		};
+    // Convert real date parts into formatted versions
+    var value = {
+      y:   y+'', // Année
+      yy:  y.substring(2,4), // Année sur 2 chiffres
+      yyyy:y, // Année sur 4 chiffres
+      M:   M, // Mois sur un chiffre quand < à 10
+      MM:  DateFormat.LZ(M), // Mois sur deux chiffres
+      MMM: DateFormat.MONTH_NAMES[M-1], // Nom du mois
+      NNN: DateFormat.MONTH_NAMES[M+11], // Nom du mois en abbrégé
+      d:   d, // Numéro du jour dans le mois sur un chiffre quand < à 10
+      dd:  DateFormat.LZ(d), // Numéro du jour dans le mois
+      E:   DateFormat.DAY_NAMES[E+7], // Nom du jour en abbrégé
+      EE:  DateFormat.DAY_NAMES[E], // Nom du jour
+      H:   H, // Heure sur 24h sur un chiffre quand < à 10
+      HH:  DateFormat.LZ(H), // Heure sur 24h
+      h:   h, // Heure sur 12h sur un chiffre quand < à 10
+      hh:  DateFormat.LZ(h), // Heure sur 12h
+      K:   H % 12, // Heure sur 12h sur 1 chiffre quand < à 10
+      KK:  DateFormat.LZ(H % 12), // Heure sur 12h sur 2 chiffres
+      k:   H + 1, // Heure sur 12h sur 1 chiffre plus 1
+      kk:  DateFormat.LZ(H + 1), // Heure sur 12h sur 2 chiffres pours 1
+      a:   H > 11 ? 'PM' : 'AM', // Méridien
+      m:   m, // Minutes sur 1 chiffre quand < à 10
+      mm:  DateFormat.LZ(m), // Minutes
+      s:   s, // Secondes sur 1 chiffre quand < à 10
+      ss:  DateFormat.LZ(s) // Secondes
+    };
 
-		while (i < format.length) {
-			c = format.charAt(i);
-			token = "";
-			while ((format.charAt(i)==c) && (i < format.length))
-				token += format.charAt(i++);
-			if (value[token] != null) result += value[token];
-			else result += token;
-		}
-		return result;
-	},
-	_isInteger: function(val) {
-		return parseInt(val) == val;
-	},
-	_getInt: function(str,i,minlength,maxlength) {
-		// A possible replacement of this function, to be tested
-		var sub = str.substring(i, i+maxlength);
-		if (!sub) return null;
-		return sub+'';
+    while (i < format.length) {
+      c = format.charAt(i);
+      token = "";
+      while ((format.charAt(i)==c) && (i < format.length))
+        token += format.charAt(i++);
+      if (value[token] != null) result += value[token];
+      else result += token;
+    }
+    return result;
+  },
+  _isInteger: function(val) {
+    return parseInt(val) == val;
+  },
+  _getInt: function(str,i,minlength,maxlength) {
+    // A possible replacement of this function, to be tested
+    var sub = str.substring(i, i+maxlength);
+    if (!sub) return null;
+    return sub+'';
 
-		for (var x=maxlength; x>=minlength; x--) {
-			var token=str.substring(i,i+x);
-			if (token.length < minlength) return null;
-			if (DateFormat._isInteger(token)) return token;
-		}
-		return null;
-	},
-	parseFormat: function(val,format) {
-		val=val+"";
-		format=format+"";
-		var i_val=0;
-		var i_format=0;
-		var c="";
-		var token="";
-		var token2="";
-		var x,y;
-		var now=new Date();
-		var year=now.getYear();
-		var month=now.getMonth()+1;
-		var date=1;
-		var hh=now.getHours();
-		var mm=now.getMinutes();
-		var ss=now.getSeconds();
-		var ampm="";
+    for (var x=maxlength; x>=minlength; x--) {
+      var token=str.substring(i,i+x);
+      if (token.length < minlength) return null;
+      if (DateFormat._isInteger(token)) return token;
+    }
+    return null;
+  },
+  parseFormat: function(val,format) {
+    val=val+"";
+    format=format+"";
+    var i_val=0;
+    var i_format=0;
+    var c="";
+    var token="";
+    var token2="";
+    var x,y;
+    var now=new Date();
+    var year=now.getYear();
+    var month=now.getMonth()+1;
+    var date=1;
+    var hh=now.getHours();
+    var mm=now.getMinutes();
+    var ss=now.getSeconds();
+    var ampm="";
 
-		while (i_format < format.length) {
-			// Get next token from format string
-			c=format.charAt(i_format);
-			token="";
+    while (i_format < format.length) {
+      // Get next token from format string
+      c=format.charAt(i_format);
+      token="";
       
-			while ((format.charAt(i_format)==c) && (i_format < format.length))
-				token += format.charAt(i_format++);
+      while ((format.charAt(i_format)==c) && (i_format < format.length))
+        token += format.charAt(i_format++);
 
-			// Extract contents of value based on format token
-			if (token=="yyyy" || token=="yy" || token=="y") {
-				if (token=="yyyy") x=4;y=4;
-				if (token=="yy") x=2;y=2;
-				if (token=="y") x=2;y=4;
-				year=DateFormat._getInt(val,i_val,x,y);
-				if (year==null) return 0;
-				i_val += year.length;
-				if (year.length==2) {
-					if (year > 70) year=1900+(year-0);
-					else year=2000+(year-0);
-				}
-			} else if (token=="MMM"||token=="NNN") {
-				month=0;
-				for (var i=0; i<DateFormat.MONTH_NAMES.length; i++) {
-					var month_name=DateFormat.MONTH_NAMES[i];
-					if (val.substring(i_val,i_val+month_name.length).toLowerCase()==month_name.toLowerCase()) {
-						if (token=="MMM"||(token=="NNN"&&i>11)) {
-							month=i+1;
-							if (month>12) month -= 12;
-							i_val += month_name.length;
-							break;
-						}
-					}
-				}
-				if ((month < 1)||(month>12)) return 0;
-			} else if (token=="EE"||token=="E") {
-				for (var i=0; i<DateFormat.DAY_NAMES.length; i++) {
-					var day_name=DateFormat.DAY_NAMES[i];
-					if (val.substring(i_val,i_val+day_name.length).toLowerCase()==day_name.toLowerCase()) {
-						i_val += day_name.length;
-						break;
-					}
-				}
-			} else if (token=="MM"||token=="M") {
-				month=DateFormat._getInt(val,i_val,token.length,2);
-				if(month==null||(month<1)||(month>12)) return 0;
-				i_val+=month.length;
-			} else if (token=="dd"||token=="d") {
-				date=DateFormat._getInt(val,i_val,token.length,2);
-				if(date==null||(date<1)||(date>31)) return 0;
-				i_val+=date.length;
-			} else if (token=="hh"||token=="h") {
-				hh=DateFormat._getInt(val,i_val,token.length,2);
-				if(hh==null||(hh<1)||(hh>12)) return 0;
-				i_val+=hh.length;
-			} else if (token=="HH"||token=="H") {
-				hh=DateFormat._getInt(val,i_val,token.length,2);
-				if(hh==null||(hh<0)||(hh>23)) return 0;
-				i_val+=hh.length;
-			} else if (token=="KK"||token=="K") {
-				hh=DateFormat._getInt(val,i_val,token.length,2);
-				if(hh==null||(hh<0)||(hh>11)) return 0;
-				i_val+=hh.length;
-			} else if (token=="kk"||token=="k") {
-				hh=DateFormat._getInt(val,i_val,token.length,2);
-				if(hh==null||(hh<1)||(hh>24)) return 0;
-				i_val+=hh.length;hh--;
-			} else if (token=="mm"||token=="m") {
-				mm=DateFormat._getInt(val,i_val,token.length,2);
-				if(mm==null||(mm<0)||(mm>59)) return 0;
-				i_val+=mm.length;
-			} else if (token=="ss"||token=="s") {
-				ss=DateFormat._getInt(val,i_val,token.length,2);
-				if(ss==null||(ss<0)||(ss>59)) return 0;
-				i_val+=ss.length;
-			} else if (token=="a") {
-				if (val.substring(i_val,i_val+2).toLowerCase()=="am") ampm="AM";
-				else if (val.substring(i_val,i_val+2).toLowerCase()=="pm") ampm="PM";
-				else return 0;
-				i_val+=2;
-			} else {
-				if (val.substring(i_val,i_val+token.length)!=token) return 0;
-				else i_val+=token.length;
-			}
-		}
-		// If there are any trailing characters left in the value, it doesn't match
-		if (i_val != val.length) return 0;
-		// Is date valid for month?
-		if (month==2) {
-			// Check for leap year
-			if (((year%4==0)&&(year%100 != 0)) || (year%400==0)) { // leap year
-				if (date > 29) return 0;
-			} else if (date > 28) {
-				return 0;
-			}
-		}
-		if ((month==4)||(month==6)||(month==9)||(month==11))
-			if (date > 30) return 0;
-		// Correct hours value
-		if (hh<12 && ampm=="PM") hh=hh-0+12;
-		else if (hh>11 && ampm=="AM") hh-=12;
-		return new Date(year,month-1,date,hh,mm,ss);
-	},
-	parse: function(val, format) {
-		if (format) {
-			return DateFormat.parseFormat(val, format);
-		} else {
-			var preferEuro = (arguments.length == 2) ? arguments[1] : false;
-			var generalFormats = ['y-M-d','MMM d, y','MMM d,y','y-MMM-d','d-MMM-y','MMM d'];
-			var monthFirst     = ['M/d/y','M-d-y','M.d.y','MMM-d','M/d','M-d'];
-			var dateFirst      = ['d/M/y','d-M-y','d.M.y','d-MMM','d/M','d-M'];
-			var checkList=[generalFormats, preferEuro?dateFirst:monthFirst, preferEuro?monthFirst:dateFirst];
-			var d=null;
-			for (var i=0; i<checkList.length; i++) {
-				var l=checkList[i];
-				for (var j=0; j<l.length; j++) {
-					d = DateFormat.parseFormat(val,l[j]);
-					if (d!=0) return new Date(d);
-				}
-			}
-			return null;
-		}
-	}
+      // Extract contents of value based on format token
+      if (token=="yyyy" || token=="yy" || token=="y") {
+        if (token=="yyyy") x=4;y=4;
+        if (token=="yy") x=2;y=2;
+        if (token=="y") x=2;y=4;
+        year=DateFormat._getInt(val,i_val,x,y);
+        if (year==null) return 0;
+        i_val += year.length;
+        if (year.length==2) {
+          if (year > 70) year=1900+(year-0);
+          else year=2000+(year-0);
+        }
+      } else if (token=="MMM"||token=="NNN") {
+        month=0;
+        for (var i=0; i<DateFormat.MONTH_NAMES.length; i++) {
+          var month_name=DateFormat.MONTH_NAMES[i];
+          if (val.substring(i_val,i_val+month_name.length).toLowerCase()==month_name.toLowerCase()) {
+            if (token=="MMM"||(token=="NNN"&&i>11)) {
+              month=i+1;
+              if (month>12) month -= 12;
+              i_val += month_name.length;
+              break;
+            }
+          }
+        }
+        if ((month < 1)||(month>12)) return 0;
+      } else if (token=="EE"||token=="E") {
+        for (var i=0; i<DateFormat.DAY_NAMES.length; i++) {
+          var day_name=DateFormat.DAY_NAMES[i];
+          if (val.substring(i_val,i_val+day_name.length).toLowerCase()==day_name.toLowerCase()) {
+            i_val += day_name.length;
+            break;
+          }
+        }
+      } else if (token=="MM"||token=="M") {
+        month=DateFormat._getInt(val,i_val,token.length,2);
+        if(month==null||(month<1)||(month>12)) return 0;
+        i_val+=month.length;
+      } else if (token=="dd"||token=="d") {
+        date=DateFormat._getInt(val,i_val,token.length,2);
+        if(date==null||(date<1)||(date>31)) return 0;
+        i_val+=date.length;
+      } else if (token=="hh"||token=="h") {
+        hh=DateFormat._getInt(val,i_val,token.length,2);
+        if(hh==null||(hh<1)||(hh>12)) return 0;
+        i_val+=hh.length;
+      } else if (token=="HH"||token=="H") {
+        hh=DateFormat._getInt(val,i_val,token.length,2);
+        if(hh==null||(hh<0)||(hh>23)) return 0;
+        i_val+=hh.length;
+      } else if (token=="KK"||token=="K") {
+        hh=DateFormat._getInt(val,i_val,token.length,2);
+        if(hh==null||(hh<0)||(hh>11)) return 0;
+        i_val+=hh.length;
+      } else if (token=="kk"||token=="k") {
+        hh=DateFormat._getInt(val,i_val,token.length,2);
+        if(hh==null||(hh<1)||(hh>24)) return 0;
+        i_val+=hh.length;hh--;
+      } else if (token=="mm"||token=="m") {
+        mm=DateFormat._getInt(val,i_val,token.length,2);
+        if(mm==null||(mm<0)||(mm>59)) return 0;
+        i_val+=mm.length;
+      } else if (token=="ss"||token=="s") {
+        ss=DateFormat._getInt(val,i_val,token.length,2);
+        if(ss==null||(ss<0)||(ss>59)) return 0;
+        i_val+=ss.length;
+      } else if (token=="a") {
+        if (val.substring(i_val,i_val+2).toLowerCase()=="am") ampm="AM";
+        else if (val.substring(i_val,i_val+2).toLowerCase()=="pm") ampm="PM";
+        else return 0;
+        i_val+=2;
+      } else {
+        if (val.substring(i_val,i_val+token.length)!=token) return 0;
+        else i_val+=token.length;
+      }
+    }
+    // If there are any trailing characters left in the value, it doesn't match
+    if (i_val != val.length) return 0;
+    // Is date valid for month?
+    if (month==2) {
+      // Check for leap year
+      if (((year%4==0)&&(year%100 != 0)) || (year%400==0)) { // leap year
+        if (date > 29) return 0;
+      } else if (date > 28) {
+        return 0;
+      }
+    }
+    if ((month==4)||(month==6)||(month==9)||(month==11))
+      if (date > 30) return 0;
+    // Correct hours value
+    if (hh<12 && ampm=="PM") hh=hh-0+12;
+    else if (hh>11 && ampm=="AM") hh-=12;
+    return new Date(year,month-1,date,hh,mm,ss);
+  },
+  parse: function(val, format) {
+    if (format) {
+      return DateFormat.parseFormat(val, format);
+    } else {
+      var preferEuro = (arguments.length == 2) ? arguments[1] : false;
+      var generalFormats = ['y-M-d','MMM d, y','MMM d,y','y-MMM-d','d-MMM-y','MMM d'];
+      var monthFirst     = ['M/d/y','M-d-y','M.d.y','MMM-d','M/d','M-d'];
+      var dateFirst      = ['d/M/y','d-M-y','d.M.y','d-MMM','d/M','d-M'];
+      var checkList=[generalFormats, preferEuro?dateFirst:monthFirst, preferEuro?monthFirst:dateFirst];
+      var d=null;
+      for (var i=0; i<checkList.length; i++) {
+        var l=checkList[i];
+        for (var j=0; j<l.length; j++) {
+          d = DateFormat.parseFormat(val,l[j]);
+          if (d!=0) return new Date(d);
+        }
+      }
+      return null;
+    }
+  }
 });
 
 DateFormat.prototype = {
-	initialize: function(format) { this.format = format; },
-	parse: function(value) { return DateFormat.parseFormat(value, this.format); },
-	format: function(value) { return DateFormat.format(value, this.format); }
+  initialize: function(format) { this.format = format; },
+  parse: function(value) { return DateFormat.parseFormat(value, this.format); },
+  format: function(value) { return DateFormat.format(value, this.format); }
 };
 
 Object.extend(Date.prototype, {
   format: function(format) {
-  	return DateFormat.format(this, format);
+    return DateFormat.format(this, format);
   },
   getWeekNumber: function() {
-  	var d = new Date(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
-  	d.setDate(d.getDate() - (d.getDay() + 6) % 7 + 3); // Nearest Thu
-  	var ms = d.valueOf(); // GMT
-  	d.setMonth(0);
-  	d.setDate(4); // Thu in Week 1
-  	return Math.round((ms - d.valueOf()) / (7 * 864e5)) + 1;
+    var d = new Date(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
+    d.setDate(d.getDate() - (d.getDay() + 6) % 7 + 3); // Nearest Thu
+    var ms = d.valueOf(); // GMT
+    d.setMonth(0);
+    d.setDate(4); // Thu in Week 1
+    return Math.round((ms - d.valueOf()) / (7 * 864e5)) + 1;
   }
 });
 
@@ -266,30 +266,30 @@ var ProgressiveCalendar = Class.create({
                          (parseInt(this.date.year) ? this.pad(this.date.year, 4) : ''));
     
     if (this.options.icon) {
-			var cont = new Element('div', {style: 'position:relative;border:none;padding:0;margin:0;display:inline'+(Prototype.Browser.IE&&document.documentMode<8?'':'-block')+';'});
-			this.elementView.wrap(cont);
-			var icon = new Element('img', {src: this.options.icon, className: 'inputExtension'});
+      var cont = new Element('div', {className:"datePickerWrapper", style: 'position:relative;border:none;padding:0;margin:0;display:inline'+(Prototype.Browser.IE&&document.documentMode<8?'':'-block')+';'});
+      this.elementView.wrap(cont);
+      var icon = new Element('img', {src: this.options.icon, className: 'inputExtension'});
 
-			// No icon padding specified, default to 3px and calculate dynamically on image load
-			var padding = 3;
-			icon.observe('load', function() {
+      // No icon padding specified, default to 3px and calculate dynamically on image load
+      var padding = 3;
+      icon.observe('load', function() {
         var elementDim = this.elementView.getDimensions();
         var iconDim = icon.getDimensions();
-				padding = parseInt(elementDim.height - iconDim.height) / 2;
-			}.bindAsEventListener(this)).setStyle({position: 'absolute', right: padding+'px', top: padding+'px'});
-			cont.insert(icon);
+        padding = parseInt(elementDim.height - iconDim.height) / 2;
+      }.bindAsEventListener(this)).setStyle({position: 'absolute', right: padding+'px', top: padding+'px'});
+      cont.insert(icon);
 
-			icon.observe('click', this.createPicker.bindAsEventListener(this));
-		} else {
-			this.elementView.observe('click', this.createPicker.bindAsEventListener(this));
-		}
+      icon.observe('click', this.createPicker.bindAsEventListener(this));
+    } else {
+      this.elementView.observe('click', this.createPicker.bindAsEventListener(this));
+    }
   },
   getDate: function(){
     var parts = this.element.value.split('-');
     return {
-    	year: parts[0] || 0,
-    	month: parts[1] || 0,
-    	day: parts[2] || 0
+      year: parts[0] || 0,
+      month: parts[1] || 0,
+      day: parts[2] || 0
     };
   },
   setDate: function(date){
@@ -486,7 +486,7 @@ var Calendar = {
     if (!$(element) || $V(element.form._locked) == 1) return;
 
     if (element.hasClassName('datepicker')) return;
-		
+    
     if (dates) {
       dates.spots = $A(dates.spots);
     }
@@ -505,6 +505,8 @@ var Calendar = {
 
     Calendar.prepareDates(dates);
     
+    var inModalWindow = !!element.up(".modal");
+    
     // Default options
     options = Object.extend({
       datePicker: true,
@@ -516,13 +518,13 @@ var Calendar = {
       timePickerAdjacent: !window.Mobile, 
       use24hrs: true,
       weekNumber: true,
-      container: $(document.body),
+      container: (inModalWindow ? null : $(document.body)),
       dateProperties: function(date){return Calendar.dateProperties(date, dates)},
       center: window.Mobile,
       editable: false
     }, options);
     
-		options.captureKeys = !options.inline;
+    options.captureKeys = !options.inline;
     options.emptyButton = (!options.noView && !element.hasClassName('notNull'));
     
     var elementView;
@@ -582,10 +584,16 @@ var Calendar = {
       }
       
       this.show.bind(datepicker)(e);
-      if(!this.datepicker.element) return;
       
-      $(this.datepicker.element).
-         setStyle({zIndex: ""}). // FIXME do not set it in datepicker.js
+      var dp = $(this.datepicker.element);
+      
+      if(!dp) return;
+      
+      if (inModalWindow) {
+        this.icon.insert({after: dp});
+      }
+      
+      dp.setStyle({zIndex: ""}). // FIXME do not set it in datepicker.js
          unoverflow();
          
     }.bindAsEventListener(datepicker);
@@ -645,8 +653,8 @@ var Calendar = {
         }
         else {
           $(element).
-					  setStyle({zIndex: ""}). // FIXME do not set it in datepicker.js
-					  unoverflow();
+            setStyle({zIndex: ""}). // FIXME do not set it in datepicker.js
+            unoverflow();
         }
       }.bindAsEventListener(datepicker));
     }
@@ -742,12 +750,12 @@ Class.extend(Date, {
         d = this.getDate();
     return printf("%04d-%02d-%02d", y, m, d);
   },
-	toTIME: function(){
+  toTIME: function(){
     var h = this.getHours(),
         m = this.getMinutes(),
         s = this.getSeconds();
-		return printf("%02d:%02d:%02d", h, m, s);		
-	},
+    return printf("%02d:%02d:%02d", h, m, s);    
+  },
   toDATETIME: function(useSpace) {
     var h = this.getHours(),
         m = this.getMinutes(),
@@ -794,7 +802,7 @@ Class.extend(Date, {
     this.setDate(this.getDate() + parseInt(iDays, 10));
     return this;
   },
-	addHours: function(iHours) {
+  addHours: function(iHours) {
     this.setHours(this.getHours() + parseInt(iHours, 10));
     return this;
   },
