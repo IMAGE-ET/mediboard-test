@@ -87,22 +87,23 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     return parent::addElement($elParent, $elName, $elValue, $elNS);
   }
   
-  function query($nodeName, $contextNode = null) {
+  function query($nodeName, DOMNode $contextNode = null) {
     $xpath = new CHL7v2MessageXPath($contextNode ? $contextNode->ownerDocument : $this);   
     
-    return $xpath->query($nodeName, $contextNode);
+    if ($contextNode)
+      return $xpath->query($nodeName, $contextNode);
+    else 
+      return $xpath->query($nodeName);
   }
   
-  function queryNode($nodeName, $contextNode = null, &$data = null, $root = false) {
+  function queryNode($nodeName, DOMNode $contextNode = null, &$data = null, $root = false) {
     $xpath = new CHL7v2MessageXPath($contextNode ? $contextNode->ownerDocument : $this);   
         
     return $data[$nodeName] = $xpath->queryUniqueNode($root ? "//$nodeName" : "$nodeName", $contextNode);
   }
   
-  function queryNodes($nodeName, $contextNode = null, &$data = null, $root = false) {
-    $xpath = new CHL7v2MessageXPath($contextNode ? $contextNode->ownerDocument : $this);   
-    
-    $nodeList = $xpath->query("$nodeName", $contextNode);
+  function queryNodes($nodeName, DOMNode $contextNode = null, &$data = null, $root = false) {    
+    $nodeList = $this->query("$nodeName", $contextNode);
     foreach ($nodeList as $_node) {
       $data[$nodeName][] = $_node;
     }
@@ -110,7 +111,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     return $nodeList;
   }
   
-  function queryTextNode($nodeName, $contextNode, $root = false) {
+  function queryTextNode($nodeName, DOMNode $contextNode, $root = false) {
     $xpath = new CHL7v2MessageXPath($contextNode ? $contextNode->ownerDocument : $this);   
     
     return $xpath->queryTextNode($nodeName, $contextNode);
