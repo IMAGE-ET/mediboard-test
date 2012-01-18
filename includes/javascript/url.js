@@ -296,7 +296,6 @@ var Url = Class.create({
         iframeWindow.document.stopObserving('keydown', iframeWindow.closeWindowByEscape);
       }
       
-      document.body.scrollTop = 0;
     }.bind(this.modalObject));
   
     return this;
