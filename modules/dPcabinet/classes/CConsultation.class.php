@@ -831,13 +831,23 @@ TESTS A EFFECTUER
     if (!$this->_id && !$this->sejour_id && 
         CAppUI::conf("dPcabinet CConsultation attach_consult_sejour") && $this->patient_id) {
       // Recherche séjour englobant
-      $function = new CFunctions;
-      $function->load($this->_function_secondary_id);
       $facturable = $this->_facturable;
       if ($facturable === null) {
         $facturable = 1;  
       }
       $this->loadRefPlageConsult();
+      
+      $function = new CFunctions;
+      
+      if ($this->_function_secondary_id) {
+        $function->load($this->_function_secondary_id);
+      }
+      else {
+        $user = new CMediusers;
+        $user->load($this->_ref_chir->_id);
+        $function->load($user->function_id);
+      }
+      
       $datetime = $this->_datetime;
       $minutes_before_consult_sejour = CAppUI::conf("dPcabinet CConsultation minutes_before_consult_sejour");
       $where = array();
