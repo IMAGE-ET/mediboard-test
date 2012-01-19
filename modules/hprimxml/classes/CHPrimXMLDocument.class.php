@@ -654,11 +654,15 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     $attrNatureVenueHprim = array (
       "comp"    => "hsp",
-      "ambu"    => (CAppUI::conf("hprimxml evt_patients version") == "1.053") ? "ambu" : "hsp",
+      "ambu"    => ((CAppUI::conf("hprimxml evt_patients version") == "1.053") || 
+                    (CAppUI::conf("hprimxml evt_patients version") == "1.07")) ? 
+                      "ambu" : "hsp",
       "urg"     => "hsp",
       "psy"     => "hsp",
       "ssr"     => "hsp",
-      "exte"    => (CAppUI::conf("hprimxml evt_patients version") == "1.053") ? "exte" : "hsp",
+      "exte"    => ((CAppUI::conf("hprimxml evt_patients version") == "1.053") || 
+                    (CAppUI::conf("hprimxml evt_patients version") == "1.07")) ?
+                      "exte" : "hsp",
       "consult" => "cslt",
       "seances" => "sc"
     );

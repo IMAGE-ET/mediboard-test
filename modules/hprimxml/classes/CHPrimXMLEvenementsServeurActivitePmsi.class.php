@@ -24,10 +24,14 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     }
     
     $version = CAppUI::conf("hprimxml $this->evenement version");
+    // Version 1.01 : schemaPMSI - schemaServeurActe
     if ($version == "1.01") {
       parent::__construct($dirschemaname, $schemafilename."101");
-    } else if ($version == "1.05") {
-      parent::__construct("serveurActivitePmsi", $schemafilename."105");
+    } 
+    // Version 1.04 - 1.05 - 1.06
+    else {
+      $version = str_replace(".", "", $version);
+      parent::__construct("serveurActivitePmsi_v$version", $schemafilename.$version);
     }   
   }
   

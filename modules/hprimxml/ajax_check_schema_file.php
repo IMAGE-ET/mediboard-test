@@ -21,29 +21,31 @@ $ext    = (CAppUI::conf("hprimxml concatenate_xsd")) ? "xml" : "xsd";
 if ($evenement == "evt_serveuractes") {
   if ($version == "1.01") {
     $file = $racine."serveurActes/msgEvenementsServeurActes101.$ext";
-  } else if ($version == "1.05") {
-    $file = $racine."serveurActivitePmsi/msgEvenementsServeurActes105.$ext";
+  } 
+  else {
+    $version = str_replace(".", "", $version);
+    $file = $racine."serveurActivitePmsi_v$version/msgEvenementsServeurActes$version.$ext";
   }
 }
 
 if ($evenement == "evt_pmsi") {
   if ($version == "1.01") {
     $file = $racine."evenementPmsi/msgEvenementsPmsi101.$ext";
-  } else if ($version == "1.05") {
-    $file = $racine."serveurActivitePmsi/msgEvenementsPmsi105.$ext";
+  } 
+  else {
+    $version = str_replace(".", "", $version);
+    $file = $racine."serveurActivitePmsi_v$version/msgEvenementsPmsi$version.$ext";
   }
 }
 
 if ($evenement == "evt_serveuretatspatient") {
-  if ($version == "1.05") {
-    $file = $racine."serveurActivitePmsi/msgEvenementsServeurEtatsPatient105.$ext";
-  }
+  $version = str_replace(".", "", $version);
+  $file = $racine."serveurActivitePmsi_v$version/msgEvenementsServeurEtatsPatient$version.$ext";
 }
 
 if ($evenement == "evt_frais_divers") {
-  if ($version == "1.05") {
-    $file = $racine."serveurActivitePmsi/msgEvenementsFraisDivers105.$ext";
-  }
+  $version = str_replace(".", "", $version);
+  $file = $racine."serveurActivitePmsi_v$version/msgEvenementsFraisDivers$version.$ext";
 }
 
 if ($evenement == "evt_patients") {

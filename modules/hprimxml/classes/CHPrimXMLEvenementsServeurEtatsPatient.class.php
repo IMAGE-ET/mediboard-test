@@ -30,7 +30,7 @@ class CHPrimXMLEvenementsServeurEtatsPatient extends CHPrimXMLEvenementsServeurA
     
     // Ajout de la venue, c'est-à-dire le séjour
     $venue = $this->addElement($evenementsServeurEtatsPatient, "venue");
-    $this->addVenue($venue, $mbSejour);
+    $this->addVenue($venue, $mbSejour, false, true);
     
     $dateObservation = $this->addElement($evenementsServeurEtatsPatient, "dateObservation");
     $this->addDateHeure($dateObservation, mbDateTime());

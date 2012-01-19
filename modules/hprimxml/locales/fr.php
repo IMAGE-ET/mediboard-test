@@ -400,6 +400,7 @@ $locales['evenementFraisDivers'] = 'Frais Divers';
 $locales['evenementPMSI'] = 'PMSI';
 $locales['evenementPatient'] = 'Patient - Séjour';
 $locales['evenementServeurActe'] = 'Serveur Acte';
+$locales['evenementServeurEtatsPatient'] = 'Serveur d\'Etats Patient';
 $locales['export_actes_pmsi-msg-mode-missing'] = 'Mode d\'export H\'XML absent. Merci d\'utiliser \'op\' pour un export d\'actes, ou \'sej\' pour un export de diagnostics';
 $locales['hprimxml-error-A001'] = 'IPP envoyé non existant sur le SIP, attribution IPP forcée.';
 $locales['hprimxml-error-A002'] = 'L\'enregistrement du patient a échoué.';

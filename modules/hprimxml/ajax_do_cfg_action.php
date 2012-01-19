@@ -17,29 +17,26 @@ switch ($evenement) {
   case "evt_serveuractes":
   	if ($version == "1.01") {
   	  extractFiles("serveurActes" , "schemaServeurActe_v101.zip");
-  	} else if ($version == "1.05") {
-  	  extractFiles("serveurActivitePmsi" , "schemaServeurActivitePmsi_v105.zip");
+  	} 
+  	else {
+  	  $version = str_replace(".", "", $version);
+  	  extractFiles("serveurActivitePmsi_v$version" , "schemaServeurActivitePmsi_v$version.zip", true);
   	}
     break;
   
   case "evt_pmsi":
   	if ($version == "1.01") {
       extractFiles("evenementPmsi", "schemaPMSI_v101.zip" );
-    } else if ($version == "1.05") {
-      extractFiles("serveurActivitePmsi" , "schemaServeurActivitePmsi_v105.zip");
+    } 
+    else {
+      $version = str_replace(".", "", $version);
+      extractFiles("serveurActivitePmsi_v$version" , "schemaServeurActivitePmsi_v$version.zip", true);
     }
     break;
 
-  case "evt_serveuretatspatient":
-    if ($version == "1.05") {
-      extractFiles("serveurActivitePmsi" , "schemaServeurActivitePmsi_v105.zip");
-    }
-    break;
-    
-  case "evt_frais_divers":
-    if ($version == "1.05") {
-      extractFiles("serveurActivitePmsi" , "schemaServeurActivitePmsi_v105.zip");
-    }
+  case "evt_serveuretatspatient":  case "evt_frais_divers":
+    $version = str_replace(".", "", $version);
+    extractFiles("serveurActivitePmsi_v$version" , "schemaServeurActivitePmsi_v$version.zip", true);
     break;
     
   case "evt_patients":
