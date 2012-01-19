@@ -44,19 +44,19 @@ $object_guid = '';
 
 if($pack->_id) {
   $pack->loadRefsFwd();
-  $pack->loadBackRefs("modele_links");
+  $pack->loadBackRefs("modele_links", "modele_to_pack_id");
   if ($pack->user_id) {
     $user = new CMediUsers;
     $user->load($pack->user_id);
     $object_guid = $user->_guid;
   } else if ($pack->function_id) {
-  	$function = new CFunctions;
-  	$function->load($pack->function_id);
-  	$object_guid = $function->_guid;
+    $function = new CFunctions;
+    $function->load($pack->function_id);
+    $object_guid = $function->_guid;
   } else {
-  	$group = new CGroups;
-  	$group->load($pack->group_id);
-  	$object_guid = $group->_guid;
+    $group = new CGroups;
+    $group->load($pack->group_id);
+    $object_guid = $group->_guid;
   }
 } else {
   $pack->user_id = $userSel->_id;

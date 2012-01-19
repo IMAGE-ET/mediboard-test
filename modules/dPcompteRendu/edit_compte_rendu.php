@@ -38,11 +38,11 @@ else if ($modele_id == 0 && !$pack_id) {
 }
 // Création à partir d'un modèle
 else {
-	$header = null;
-	$footer = null;
-	
+  $header = new CCompteRendu;
+  $footer = new CCompteRendu;
+  
   $compte_rendu->load($modele_id);
-	$compte_rendu->loadFile();
+  $compte_rendu->loadFile();
   $compte_rendu->loadContent();
   $compte_rendu->_id = null;
   $compte_rendu->function_id = null;
@@ -54,7 +54,7 @@ else {
   if ($compte_rendu->header_id || $compte_rendu->footer_id) {
     $compte_rendu->loadComponents();
     
-		$header = $compte_rendu->_ref_header;
+    $header = $compte_rendu->_ref_header;
     $footer = $compte_rendu->_ref_footer;
   }
   
@@ -79,14 +79,18 @@ else {
     
     // Parcours des modeles du pack pour trouver le premier header et footer
     foreach($pack->_back['modele_links'] as $mod) {
-    	if ($mod->_ref_modele->header_id || $mod->_ref_modele->footer_id) {
-    		$mod->_ref_modele->loadComponents();
-    	}
-    	if (!isset($header)) $header = $mod->_ref_modele->_ref_header;
-    	if (!isset($footer)) $footer = $mod->_ref_modele->_ref_footer;
-    	if ($header && $footer) break;
+      $modele = $mod->_ref_modele;
+      
+      if ($modele->header_id || $modele->footer_id) {
+        $modele->loadComponents();
+      }
+      if (!$header->_id) $header = $modele->_ref_header;
+      if (!$footer->_id) $footer = $modele->_ref_footer;
+      if ($header->_id && $footer->_id) {
+        break;
+      }
     }
-
+    
     // Marges et format
     $first_modele = reset($pack->_back['modele_links']);
     $compte_rendu->_ref_header   = $header;
@@ -121,12 +125,12 @@ $user->load(CAppUI::$user->_id);
 if (!$user->isPraticien()) {
   if ($object instanceof CConsultAnesth) {
     $operation = $object->loadRefOperation();
-		$anesth = $operation->_ref_anesth;
+    $anesth = $operation->_ref_anesth;
     $user->_id = null;
-		if ($operation->_id && $anesth->_id) {
+    if ($operation->_id && $anesth->_id) {
       $user->_id = $anesth->_id;
     }
-		
+    
     if ($user->_id == null)
       $user->_id = $object->_ref_consultation->_praticien_id;
   }
@@ -246,7 +250,7 @@ else if (!$compte_rendu_id && !$switch_mode && ($compte_rendu->fast_edit || ($co
   
   $smarty->assign("_source"     , $templateManager->document);
   $smarty->assign("printers"    , $printers);
-	$smarty->assign("object_guid" , CValue::get("object_guid"));
+  $smarty->assign("object_guid" , CValue::get("object_guid"));
   $smarty->assign("unique_id"   , CValue::get("unique_id"));
   
   $smarty->display("fast_mode.tpl");

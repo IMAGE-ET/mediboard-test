@@ -82,7 +82,7 @@ class CPack extends CMbObject {
   
   function loadContent() {
     $this->_source = "";
-    $this->loadBackRefs("modele_links");
+    $this->loadBackRefs("modele_links", "modele_to_pack_id");
 
     if (count($this->_back['modele_links']) > 0) {
     	$last_key = end(array_keys($this->_back['modele_links']));
