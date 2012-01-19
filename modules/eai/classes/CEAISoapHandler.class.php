@@ -17,7 +17,7 @@
  */
 
 class CEAISoapHandler extends CSoapHandler {
-  static $paramSpecs = array(
+  var $paramSpecs = array(
     "event" => array ( 
       "message" => "string"),
   );
@@ -45,7 +45,5 @@ class CEAISoapHandler extends CSoapHandler {
     return $acq;
   }
 }
-
-CEAISoapHandler::$paramSpecs += CSoapHandler::$paramSpecs;
 
 ?>

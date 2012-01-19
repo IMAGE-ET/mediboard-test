@@ -8,51 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-global $m, $a;
+/* @todo Ce fichier devra être supprimé ! Attention demander à Yohann avant de le faire */
 
-CCanDo::checkRead();
+$_REQUEST["class"] = "CHprimSoapHandler";
 
-$wsdl = CValue::get('wsdl');
+include_once('modules/webservices/soap_server.php');
 
-// première étape : désactiver le cache lors de la phase de test
-ini_set("soap.wsdl_cache_enabled", "0");
-
-$username = CValue::get('username');
-$password = CValue::get('password');
-  
-// Génération du fichier WSDL
-if(isset($wsdl)) {
-  header('Content-Type: application/xml; charset=UTF-8');
-  
-  $functions = CHprimSoapHandler::$paramSpecs;
-  
-  $wsdlFile = new CWsdlDocument();
-  $wsdlFile->addTypes();
-  $wsdlFile->addMessage($functions);
-  $wsdlFile->addPortType($functions);
-  $wsdlFile->addBinding($functions);
-  $wsdlFile->addService($username, $password, $m, $a);
-  
-  echo $wsdlFile->saveXML();
-} else {
-	// on indique au serveur à quel fichier de description il est lié
-	try {
-	  $serverSOAP = new SoapServer(CApp::getBaseUrl()."/index.php?login=1&username=$username&password=$password&m=$m&a=$a&wsdl");
-	} catch (Exception $e) {
-	  echo $e;
-	}
-	  
-	$serverSOAP->setClass("CHprimSoapHandler"); 
-	
-	// lancer le serveur
-	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	  $serverSOAP->handle();
-	} else {
-	   echo '<strong>This SOAP server can handle following functions : </strong>';    
-	   echo '<ul>';
-	   foreach($serverSOAP -> getFunctions() as $func)        
-	        echo '<li>' , $func , '</li>';
-	   echo '</ul>';
-	}
-}
 ?>

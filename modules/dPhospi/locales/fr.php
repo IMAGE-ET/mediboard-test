@@ -28,6 +28,7 @@ $locales['CAffectation-affectation_id-court'] = 'Id';
 $locales['CAffectation-affectation_id-desc'] = 'Identifiant';
 $locales['CAffectation-back-affectations_enfant'] = 'Affectations enfant';
 $locales['CAffectation-back-affectations_enfant.empty'] = 'Affectations enfant';
+$locales['CAffectation-back-movements'] = 'mouvements';
 $locales['CAffectation-choose_services'] = 'Choisissez au moins un service.';
 $locales['CAffectation-confirme'] = 'Sortie autorisée';
 $locales['CAffectation-confirme-court'] = 'Autorisée';

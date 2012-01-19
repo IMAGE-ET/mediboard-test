@@ -1,4 +1,5 @@
 <?php
+$locales['CDEC'] = 'DEC - International';
 $locales['CExchangeIHE'] = 'Échange IHE';
 $locales['CExchangeIHE-_acquittement'] = 'Acquittement';
 $locales['CExchangeIHE-_acquittement-court'] = 'ACK';
@@ -157,7 +158,7 @@ $locales['CHL7EventADTA55_FR'] = 'ITI31 - ADT^A55';
 $locales['CHL7EventADTZ99_FR'] = 'ITI31 - ADT^Z99';
 $locales['CITI30'] = 'ITI-30';
 $locales['CITI31'] = 'ITI-31';
-$locales['CDEC'] = 'DEC - International';
+$locales['CMbObject-back-echanges_ihe'] = 'échanges IHE';
 $locales['CPAM'] = 'PAM - International';
 $locales['CPAMFR'] = 'PAM - National extension France';
 $locales['CReceiverIHE'] = 'Destinataire IHE';

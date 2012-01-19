@@ -9,7 +9,7 @@
  */
 
 class CSoapHandler {
-  static $paramSpecs = array(
+  var $paramSpecs = array(
     "calculatorAuth" => array ( 
       "operation" => "string",
       "entier1"   => "int",

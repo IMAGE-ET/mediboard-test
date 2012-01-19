@@ -20,14 +20,27 @@ $wsdl = CValue::get('wsdl');
 // première étape : désactiver le cache lors de la phase de test
 ini_set("soap.wsdl_cache_enabled", "0");
 
-$username = CValue::get('username');
-$password = CValue::get('password');
+
+$username  = CValue::request('username');
+$password  = CValue::request('password');
+$classname = CValue::request('class');
   
 // Génération du fichier WSDL
 if (isset($wsdl)) {
+  if (!$classname || !is_subclass_of($classname, "CSoapHandler")) {
+    return;
+  }
+  
+  $class = new $classname;
+
   header('Content-Type: application/xml; charset=UTF-8');
   
-  $functions = CEAISoapHandler::$paramSpecs;
+  $functions = array();
+  if ($classname != "CSoapHandler") {
+    $soap_handler= new CSoapHandler();
+    $functions += $soap_handler->paramSpecs;
+  }
+  $functions += $class->paramSpecs;
   
   $wsdlFile = new CWsdlDocument();
   $wsdlFile->addTypes();
@@ -38,23 +51,29 @@ if (isset($wsdl)) {
   
   echo $wsdlFile->saveXML();
 } else {
+  if (!$classname || !is_subclass_of($classname, "CSoapHandler")) {
+    throw new SoapFault("1", "Error : classname is not valid");  
+  }
+    
   // on indique au serveur à quel fichier de description il est lié
   try {
-    $serverSOAP = new SoapServer(CApp::getBaseUrl()."/index.php?login=1&username=$username&password=$password&m=$m&a=$a&wsdl");
+    $serverSOAP = new SoapServer(CApp::getBaseUrl()."/?login=$username:$password&m=$m&a=$a&class=$classname&wsdl");
   } catch (Exception $e) {
     echo $e;
   }
     
-  $serverSOAP->setClass("CEAISoapHandler"); 
+  $serverSOAP->setClass($classname); 
   
-  // lancer le serveur
+  // Lance le serveur
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $serverSOAP->handle();
-  } else {
-     echo '<strong>This SOAP server can handle following functions : </strong>';    
+  } 
+  else {
+     echo '<strong>This Mediboard SOAP server can handle following functions : </strong>';    
      echo '<ul>';
-     foreach($serverSOAP->getFunctions() as $_function)        
-          echo '<li>' , $_function , '</li>';
+     foreach ($serverSOAP->getFunctions() as $_function) {
+       echo '<li>' , $_function , '</li>';
+     }     
      echo '</ul>';
   }
 }

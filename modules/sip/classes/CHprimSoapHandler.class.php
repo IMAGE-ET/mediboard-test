@@ -12,7 +12,7 @@
  * The CHprimSoapHandler class
  */
 class CHprimSoapHandler extends CSoapHandler {
-  static $paramSpecs = array(
+  var $paramSpecs = array(
     "evenementPatient" => array ( 
       "messagePatient" => "string"),
     "evenementServeurActes" => array ( 
@@ -141,7 +141,5 @@ class CHprimSoapHandler extends CSoapHandler {
     return $messageAcquittement;
   }
 }
-
-CHprimSoapHandler::$paramSpecs += CSoapHandler::$paramSpecs;
 
 ?>
