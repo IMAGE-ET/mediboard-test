@@ -60,6 +60,11 @@
           <option value="{{$_function->_id}}" {{if $_function->_id == $filter_function}}selected="selected"{{/if}} class="mediuser" style="border-color: #{{$_function->color}};">{{$_function}}</option>
         {{/foreach}}
       </select>
+      <label>
+        <input type="checkbox" name="duree_uscpo_view" {{if $duree_uscpo}}checked="checked"{{/if}} onchange="$V(this.form.duree_uscpo, this.checked ? 1 : 0);"/>
+        <input type="hidden" name="duree_uscpo" value="{{$duree_uscpo}}" onchange="this.form.onsubmit();"/>
+        Durée uscpo &mdash;
+      </label>
     </form>
     <div id="lit_bloque" class="clit_bloque draggable" style="display: inline-block;">
     <strong>[BLOQUER UN LIT]</strong>
@@ -201,4 +206,6 @@
       </tr>
     {{/foreach}}
   </table>
+{{else}}
+  <div class="empty">{{tr}}CSejour.none{{/tr}}</div>
 {{/if}}

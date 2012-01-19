@@ -15,6 +15,7 @@ $filter_function = CValue::getOrSession("filter_function");
 $date            = CValue::getOrSession("date");
 $granularite     = CValue::getOrSession("granularite");
 $readonly        = CValue::getOrSession("readonly", 0);
+$duree_uscpo     = CValue::getOrSession("duree_uscpo", "0");
 
 $heureLimit = "16:00:00";
 $group_id = CGroups::loadCurrent()->_id;
@@ -132,6 +133,10 @@ if ($granularite == "4weeks" && count($days) == 5) {
 $where["sejour.entree"] = "<= '$date_max'";
 $where["sejour.sortie"] = ">= '$date_min'";
 
+if ($duree_uscpo) {
+  $where["duree_uscpo"] = "> 0";
+}
+
 $sejours_non_affectes = $sejour->loadList($where, $order, null, null, $ljoin);
 
 $praticiens = CMbObject::massLoadFwdRef($sejours_non_affectes, "praticien_id");
@@ -195,5 +200,7 @@ $smarty->assign("nb_ticks", $nb_ticks);
 $smarty->assign("days"    , $days);
 $smarty->assign("datetimes", $datetimes);
 $smarty->assign("readonly", $readonly);
+$smarty->assign("duree_uscpo", $duree_uscpo);
+
 $smarty->display("inc_vw_affectations.tpl");
 ?>
