@@ -33,6 +33,7 @@ class CObservationValueType extends CObservationValueCodingSystem {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["observation_results"] = "CObservationResult value_type_id";
+    $backProps["supervison_graph_series"] = "CSupervisionGraphSeries value_type_id";
     return $backProps;
   }
 }

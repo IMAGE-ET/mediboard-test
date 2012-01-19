@@ -1662,7 +1662,54 @@ class CSetupdPpatients extends CSetup {
                 ADD `status` ENUM ('C','D','F','I','N','O','P','R','S','U','W','X') DEFAULT 'F';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.38";
+    $this->makeRevision("1.38");
+    $query = "CREATE TABLE `supervision_graph` (
+              `supervision_graph_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `owner_class` ENUM ('CGroups') NOT NULL,
+              `owner_id` INT (11) UNSIGNED NOT NULL,
+              `title` VARCHAR (255) NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `supervision_graph` 
+              ADD INDEX (`owner_id`),
+              ADD INDEX (`owner_class`);";
+    $this->addQuery($query);
+    $query = "CREATE TABLE `supervision_graph_axis` (
+              `supervision_graph_axis_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `supervision_graph_id` INT (11) UNSIGNED NOT NULL,
+              `title` VARCHAR (255) NOT NULL,
+              `limit_low` FLOAT,
+              `limit_high` FLOAT,
+              `display` ENUM ('points','lines','bars'),
+              `show_points` ENUM ('0','1') NOT NULL DEFAULT '0',
+              `symbol` ENUM ('circle','square','diamond','cross','triangle') NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `supervision_graph_axis` 
+              ADD INDEX (`supervision_graph_id`);";
+    $this->addQuery($query);
+    $query = "CREATE TABLE `supervision_graph_series` (
+              `supervision_graph_series_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `supervision_graph_axis_id` INT (11) UNSIGNED NOT NULL,
+              `title` VARCHAR (255),
+              `value_type_id` INT (11) UNSIGNED NOT NULL,
+              `value_unit_id` INT (11) UNSIGNED NOT NULL,
+              `color` CHAR (6) NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `supervision_graph_series` 
+              ADD INDEX (`supervision_graph_axis_id`),
+              ADD INDEX (`value_type_id`),
+              ADD INDEX (`value_unit_id`);";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `observation_result`
+              CHANGE `value` `value` VARCHAR (255) NOT NULL;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `observation_result_set`
+              CHANGE `context_class` `context_class` VARCHAR (80) NOT NULL;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.39";
     
     $query = "SHOW TABLES LIKE 'categorie_socioprofessionnelle'";
     $this->addDatasource("INSEE", $query);

@@ -40,16 +40,101 @@ $time_max = mbTime("+".mbMinutesRelative("00:00:00", $interv->temp_operation)." 
 $time_debut_op = getTS("$date $time_min");
 $time_fin_op   = getTS("$date $time_max");
 
-$default_yaxis = array("used" => false, "position" => "left", "labelWidth" => 20, "ticks" => 6);
+$default_yaxis = array("position" => "left", "labelWidth" => 20, "ticks" => 6, "reserveSpace" => true);
+$graph_object = new CSupervisionGraph;
+$graph_objects = $graph_object->loadList();
+
+$graphs = array(); // will contain all the data
+
+foreach($result_sets as $_set) {
+  $_set->loadRefsResults();
+  $times[] = getTS($_set->datetime);
+}
+
+foreach($graph_objects as $_go) {
+  $_curr_graph = array(
+    "yaxes"  => array(),
+  );
+  
+  $_axes = $_go->loadRefsAxes();
+  
+  foreach(array_values($_axes) as $yaxis_i => $_axis) {
+    /// AXIS DATA
+    $_axis_data = $default_yaxis + array(
+      "symbolChar" => $_axis->getSymbolChar(),
+      "label"      => $_axis->title,
+    );
+    
+    if (count($_curr_graph["yaxes"])) {
+      $_axis_data["alignTicksWithAxis"] = 1;
+    }
+    
+    if ($_axis->limit_low != null) {
+      $_axis_data["min"] = floatval($_axis->limit_low);
+    }
+    
+    if ($_axis->limit_high != null) {
+      $_axis_data["max"] = floatval($_axis->limit_high);
+    }
+    
+    $_curr_graph["yaxes"][] = $_axis_data;
+    /// END AXIS DATA
+  
+    $_series = $_axis->loadRefsSeries();
+    
+    // TODO OPTIMISER!!!!!!!!!
+    foreach($_series as $_serie) {
+      $_series_data = array(
+        "data"  => array(array(0, null)),
+        "yaxis" => $yaxis_i+1,
+        "label" => utf8_encode($_serie->title),
+        "unit"  => utf8_encode($_serie->loadRefValueUnit()->label),
+        "color" => "#$_serie->color",
+        "shadowSize" => 0,
+      );
+      
+      $_series_data["points"] = array("show" => false);
+      $_series_data[$_axis->display] = array("show" => true);
+      
+      if ($_axis->show_points || $_axis->display == "points") {
+        $_series_data["points"] = array("show" => true, "symbol" => $_axis->symbol, "lineWidth" => 1);
+      }
+      
+      foreach($result_sets as $_set) {
+        foreach($_set->_ref_results as $_result) {
+          $_value_type_id = $_result->value_type_id;
+          $_value_unit_id = $_result->unit_id;
+          
+          if ($_value_type_id != $_serie->value_type_id || 
+              $_value_unit_id != $_serie->value_unit_id) {
+            continue;
+          }
+          
+          $_series_data["data"][] = array(getTS($_set->datetime), floatval($_result->value));
+        }
+      }
+
+      $_curr_graph["series"][] = $_series_data;
+    }
+  }
+
+  $graphs[] = $_curr_graph;
+}
+
+/*
+mbTrace($graphs);
+
+return;
+
 $yaxes = array(
-  $default_yaxis + array("color" => "red",        "symbol" => "circle",   "symbolChar" => "&#x25CB;"),
-  $default_yaxis + array("color" => "green",      "symbol" => "cross",    "symbolChar" => "&#x2A2F;", "alignTicksWithAxis" => 1),
-  $default_yaxis + array("color" => "blue",       "symbol" => "diamond",  "symbolChar" => "&#x25C7;", "alignTicksWithAxis" => 1),
-  $default_yaxis + array("color" => "purle",      "symbol" => "square",   "symbolChar" => "&#x25A1;", "alignTicksWithAxis" => 1),
-  $default_yaxis + array("color" => "orange",     "symbol" => "triangle", "symbolChar" => "&#x25B3;", "alignTicksWithAxis" => 1),
-  $default_yaxis + array("color" => "black",      "symbol" => "circle",   "symbolChar" => "&#x25CB;", "alignTicksWithAxis" => 1),
-  $default_yaxis + array("color" => "lightblue",  "symbol" => "circle",   "symbolChar" => "&#x25CB;", "alignTicksWithAxis" => 1),
-  $default_yaxis + array("color" => "lightgreen", "symbol" => "circle",   "symbolChar" => "&#x25CB;", "alignTicksWithAxis" => 1),
+  $default_yaxis + array("color_" => "red",        "symbol" => "circle",   "symbolChar" => "&#x25CB;"),
+  $default_yaxis + array("color_" => "green",      "symbol" => "cross",    "symbolChar" => "&#x2A2F;", "alignTicksWithAxis" => 1),
+  $default_yaxis + array("color_" => "blue",       "symbol" => "diamond",  "symbolChar" => "&#x25C7;", "alignTicksWithAxis" => 1),
+  $default_yaxis + array("color_" => "purple",     "symbol" => "square",   "symbolChar" => "&#x25A1;", "alignTicksWithAxis" => 1),
+  $default_yaxis + array("color_" => "orange",     "symbol" => "triangle", "symbolChar" => "&#x25B3;", "alignTicksWithAxis" => 1),
+  $default_yaxis + array("color_" => "black",      "symbol" => "circle",   "symbolChar" => "&#x25CB;", "alignTicksWithAxis" => 1),
+  $default_yaxis + array("color_" => "lightblue",  "symbol" => "circle",   "symbolChar" => "&#x25CB;", "alignTicksWithAxis" => 1),
+  $default_yaxis + array("color_" => "lightgreen", "symbol" => "circle",   "symbolChar" => "&#x25CB;", "alignTicksWithAxis" => 1),
 );
 
 foreach($result_sets as $_set) {
@@ -57,8 +142,8 @@ foreach($result_sets as $_set) {
   
   $times[] = $_time;
   $_time_iso = mbTime($_set->datetime);
-  $time_min = min($_time_iso, $time_min);
-  $time_max = max($_time_iso, $time_max);
+  //$time_min = min($_time_iso, $time_min);
+  //$time_max = max($_time_iso, $time_max);
   
   $_results = $_set->loadRefsResults();
   
@@ -83,7 +168,7 @@ foreach($result_sets as $_set) {
       $data[$_key] = array(
         "yaxis" => $yaxis_i+1,
         "label" => utf8_encode($label),
-        "color" => $yaxis["color"],
+        "color" => $yaxis["color_"],
         "unit"  => utf8_encode($unit),
         "data"  => array(),
         "points" => array("symbol" => $yaxis["symbol"], "lineWidth" => 1),
@@ -93,7 +178,7 @@ foreach($result_sets as $_set) {
     
     $data[$_key]["data"][] = array($_time, $_result->value);
   }
-}
+}*/
 
 $round_minutes = 10;
 $round = $round_minutes * 60000;
@@ -105,7 +190,13 @@ $time_min = floor($time_min / $round) * $round;
 $time_max = ceil($time_max / $round) * $round;
 
 $xaxes = array(
-  array("used" => true, "mode" => "time", "min" => $time_min, "max" => $time_max),
+  array(
+    "used" => true, 
+    "mode" => "time",
+    "position" => "top", 
+    "min" => $time_min, 
+    "max" => $time_max,
+  ),
 );
 
 // Gestes, Medicaments, Perfusions peranesth
@@ -221,11 +312,10 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("interv",      $interv);
 $smarty->assign("result_sets", $result_sets);
-$smarty->assign("yaxes",       $yaxes);
+$smarty->assign("graphs",      $graphs);
 $smarty->assign("xaxes",       $xaxes);
 $smarty->assign("gestes",      $gestes);
 $smarty->assign("time_debut_op", $time_debut_op);
 $smarty->assign("time_fin_op",   $time_fin_op);
-$smarty->assign("data",        array_values($data));
 
 $smarty->display("vw_surveillance_peranesth.tpl");

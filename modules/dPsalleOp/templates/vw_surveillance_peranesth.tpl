@@ -1,66 +1,63 @@
 
 <script type="text/javascript">
-Main.add(function(){
-  (function ($) {
-    var data = {{$data|@json}}; 
-    
-    var ph = $("#placeholder");
-    
-    ph.bind("plothover", function (event, pos, item) {
-      /*$$(".yAxis").each(function(axis){
-        axis.style.fontWeight = "normal";
-        axis.style.background = "#ccc";
-      });
+var previousPoint = null;
+var plothover = function (event, pos, item) {
+  if (item) {
+    var key = item.dataIndex+"-"+item.seriesIndex;
+    if (previousPoint != key) {
+      previousPoint = key;
+      jQuery("#flot-tooltip").remove();
       
-      if (item) {
-        $$(".y"+item.series.yaxis.n+"Axis")[0].style.fontWeight="bold";
-      }*/
-     
-      if (item) {
-        var key = item.dataIndex+"-"+item.seriesIndex;
-        if (previousPoint != key) {
-          previousPoint = key;
-          $("#flot-tooltip").remove();
+      var x = item.datapoint[0],
+          y = item.datapoint[1];
+      
+      var date = new Date();
+      date.setTime(x);
+      
+      var contents = 
+      "<big style='font-weight:bold'>"+y+" "+item.series.unit+"</big>"+
+      "<hr />"+item.series.label+"<br />" + printf("%02d:%02d:%02d", date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+      
+      $$("body")[0].insert(DOM.div({className: "tooltip", id: "flot-tooltip"}, contents).setStyle({
+        position: 'absolute',
+        top:  item.pageY + 5 + "px",
+        left: item.pageX + 5 + "px"
+      }));
+    }
+  }
+  else {
+    jQuery("#flot-tooltip").remove();
+    previousPoint = null;            
+  }
+}
+  
+Main.add(function(){
+  
+  (function ($){
+    var ph, series;
+    
+    {{foreach from=$graphs item=_graph key=i}}
+      ph = $("#placeholder-{{$i}}");
+      series = {{$_graph.series|@json}};
+      
+      ph.bind("plothover", plothover);
+      
+      $.plot(ph, series, {
+        grid: { hoverable: true, markings: [
+          // Debut op
+          {xaxis: {from: 0, to: {{$time_debut_op}}}, color: "rgba(0,0,0,0.05)"},
+          {xaxis: {from: {{$time_debut_op}}, to: {{$time_debut_op+1000}}}, color: "black"},
           
-          var x = item.datapoint[0],
-              y = item.datapoint[1];
-          
-          var date = new Date();
-          date.setTime(x);
-          
-          var contents = 
-          "<big style='font-weight:bold'>"+y+" "+item.series.unit+"</big>"+
-          "<hr />"+item.series.label+"<br />" + printf("%02d:%02d:%02d", date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
-          
-          $$("body")[0].insert(DOM.div({className: "tooltip", id: "flot-tooltip"}, contents).setStyle({
-            position: 'absolute',
-            top:  item.pageY + 5 + "px",
-            left: item.pageX + 5 + "px"
-          }));
-        }
-      }
-      else {
-        $("#flot-tooltip").remove();
-        previousPoint = null;            
-      }
-    });
-
-    var plot = $.plot(ph, data, {
-      grid: { hoverable: true, markings: [
-        // Debut op
-        {xaxis: {from: 0, to: {{$time_debut_op}}}, color: "rgba(0,0,0,0.05)"},
-        {xaxis: {from: {{$time_debut_op}}, to: {{$time_debut_op+1000}}}, color: "black"},
-        
-        // Fin op
-        {xaxis: {from: {{$time_fin_op}}, to: Number.MAX_VALUE}, color: "rgba(0,0,0,0.05)"},
-        {xaxis: {from: {{$time_fin_op}}, to: {{$time_fin_op+1000}}}, color: "black"}
-      ] },
-      series: { points: { show: true, radius: 3 } },
-      xaxes: {{$xaxes|@json}},
-      yaxes: {{$yaxes|@json}}
-    });
-                      
-                      
+          // Fin op
+          {xaxis: {from: {{$time_fin_op}}, to: Number.MAX_VALUE}, color: "rgba(0,0,0,0.05)"},
+          {xaxis: {from: {{$time_fin_op}}, to: {{$time_fin_op+1000}}}, color: "black"}
+        ] },
+        series: { points: { show: true, radius: 3 } },
+        xaxes: {{$xaxes|@json}},
+        yaxes: {{$_graph.yaxes|@json}}
+      });
+    {{/foreach}}
+    
   })(jQuery);
 });
 </script>
@@ -138,7 +135,7 @@ Main.add(function(){
     display: inline-block;
     text-align: center;
     font-size: 10px;
-    width: 33px;
+    width: 34px;
   }
   
   .yaxis-labels .symbol {
@@ -152,24 +149,21 @@ Main.add(function(){
   }
 </style>
 
-{{assign var=axes_count value=0}}
+{{assign var=axes_count value=3}}
 {{assign var=images value="CPrescription"|static:"images"}}
 
 <div style="position: relative;">
-  <div class="yaxis-labels">
-    {{foreach from=$yaxes|@array_reverse item=_yaxis}}
-      {{if $_yaxis.used}}
-        {{assign var=axes_count value=$axes_count+1}}
-        
-        <div style="color: {{$_yaxis.color}};">
+  {{foreach from=$graphs item=_graph key=i}}
+    <div class="yaxis-labels">
+      {{foreach from=$_graph.yaxes|@array_reverse item=_yaxis}}
+        <div>
           {{$_yaxis.label}}
           <div class="symbol">{{$_yaxis.symbolChar|smarty:nodefaults}}</div>
         </div>
-      {{/if}}
-    {{/foreach}}
-  </div>
-  
-  <div id="placeholder" style="width:900px;height:300px;"></div>
+      {{/foreach}}
+    </div>
+    <div id="placeholder-{{$i}}" style="width:900px;height:300px;"></div>
+  {{/foreach}}
   
   <table class="main gestes" style="table-layout: fixed; width: 900px;">
     <col style="width: {{$axes_count*38-14}}px;" />
