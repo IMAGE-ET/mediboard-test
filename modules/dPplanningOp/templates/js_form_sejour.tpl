@@ -458,6 +458,7 @@ window.bOldPat = 0;
 function editPrestations(sejour_id) {
   var url = new Url("dPplanningOp", "ajax_vw_prestations");
   url.addParam("sejour_id", sejour_id);
+  url.addParam("vue_prestation", "sejour");
   url.requestModal(800, 700);
 }
 

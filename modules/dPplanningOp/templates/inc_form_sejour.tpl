@@ -714,13 +714,13 @@ Main.add( function(){
   <tr>
     <th>{{mb_label object=$sejour field="type_pec"}}</th>
     <td colspan="3">
-      {{mb_field object=$sejour field="type_pec" emptyLabel="Choose"}}
+      {{mb_field object=$sejour field="type_pec" emptyLabel="Choose" typeEnum="radio"}}
     </td>
   </tr>
 {{/if}}
 <tr>
   <th>{{mb_label object=$sejour field=duree_uscpo}}</th>
-  <td>{{mb_field object=$sejour field=duree_uscpo increment=true form=editSejour size=2}}</td>
+  <td colspan="3">{{mb_field object=$sejour field=duree_uscpo increment=true form=editSejour size=2}}h</td>
 </tr>
 <tr class="reanimation">
   <th>{{mb_label object=$sejour field="reanimation"}}</th>
@@ -886,7 +886,7 @@ Main.add( function(){
 {{if $prestations}}
 <tr>
 <th>{{mb_label object=$sejour field=prestation_id}}</th>
-  <td>
+  <td colspan="3">
   <select name="prestation_id" onchange="checkPresta();">
   <option value="">&mdash; Choix d'une prestation</option>
   {{foreach from=$prestations item="_prestation"}}
@@ -902,7 +902,7 @@ Main.add( function(){
 {{if $sejour->_id}}
 <tr>
   <td></td>
-  <td>
+  <td colspan="3">
     <button type="button" class="search" onclick="editPrestations('{{$sejour->_id}}')">Prestations</button>
   </td>
 </tr>

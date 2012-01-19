@@ -8,9 +8,15 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$sejour_id = CValue::get("sejour_id");
+$sejour_id      = CValue::get("sejour_id");
 $affectation_id = CValue::get("affectation_id");
+$vue_prestation = CValue::get("vue_prestation", "all");
+
 $prestations_j = CPrestationJournaliere::loadCurrentList();
+$dates         = array();
+$prestations_p = array();
+$liaisons_j    = array();
+$liaisons_p    = array();
 
 foreach ($prestations_j as $_prestation) {
   $_prestation->_ref_items = $_prestation->loadBackRefs("items", "rank");
@@ -28,12 +34,6 @@ $sejour->loadRefsAffectations("sortie ASC");
 
 $duree = strtotime($sejour->sortie) - strtotime($sejour->entree);
 $affectations = $sejour->_ref_affectations;
-
-$dates = array();
-
-$tableau_prestations_j = array();
-$tableau_prestations_p = array();
-$prestations_p         = array();
 
 if (count($affectations)) {
   $lits = CMbObject::massLoadFwdRef($affectations, "lit_id");
@@ -59,23 +59,25 @@ if (count($affectations)) {
       
       switch($_item->object_class) {
         case "CPrestationJournaliere":
-        	@$tableau_prestations_j[$_item_liaison->date][$_item->object_id]["souhait"] = $_item;
-          $_item_realise = $_item_liaison->loadRefItemRealise();
-          if ($_item_realise->_id) {
-            @$tableau_prestations_j[$_item_liaison->date][$_item->object_id]["realise"] = $_item_realise;
-          }
-        	break;
+          $liaisons_j[$_item_liaison->date][$_item->object_id] = $_item_liaison;
+          break;
         case "CPrestationPonctuelle":
-        	if (!isset($prestations_p[$_item->object_id])) {
-        	  $prestation = new CPrestationPonctuelle;
+          $liaisons_p[$_item_liaison->date][$_item->object_id] = $_item_liaison;
+          if (!isset($prestations_p[$_item->object_id])) {
+            $prestation = new CPrestationPonctuelle;
             $prestation->load($_item->object_id);
             $prestation->_ref_items = $prestation->loadBackRefs("items");
             $prestations_p[$_item->object_id] = $prestation;
-        	}
-          @$tableau_prestations_p[$_item_liaison->date][$_item->object_id][$_item->_id] = $_item_liaison->quantite;
+          }
       }
     }
   }  
+}
+
+$type_j = array("souhait");
+
+if ($vue_prestation == "all") {
+  $type_j[] = "realise";
 }
 
 $smarty = new CSmartyDP;
@@ -85,8 +87,11 @@ $smarty->assign("sejour"     , $sejour);
 $smarty->assign("affectations", $affectations);
 $smarty->assign("prestations_j", $prestations_j);
 $smarty->assign("prestations_p", $prestations_p);
-$smarty->assign("tableau_prestations_p", $tableau_prestations_p);
-$smarty->assign("tableau_prestations_j", $tableau_prestations_j);
+$smarty->assign("empty_liaison", new CItemLiaison);
+$smarty->assign("liaisons_p", $liaisons_p);
+$smarty->assign("liaisons_j", $liaisons_j);
+$smarty->assign("type_j"    , $type_j);
+$smarty->assign("vue_prestation", $vue_prestation);
 
 $smarty->display("inc_vw_prestations.tpl");
 ?>

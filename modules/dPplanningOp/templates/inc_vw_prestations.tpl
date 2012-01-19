@@ -1,12 +1,20 @@
+<script type="text/javascript">
+  uncheckPrestation = function(elts) {
+    elts.each(function(elt) {
+      elt.checked = "";
+    });
+  }
+</script>
 {{math equation=x+2 x=$dates|@count assign="colspan"}}
 
 <form name="add_prestation_ponctuelle" method="post" action="?"
   onsubmit="return onSubmitFormAjax(this, {onComplete: function() {
     getForm('add_prestation_ponctuelle').up('div').up('div').select('button.change')[0].onclick(); }})">
   <input type="hidden" name="m" value="dPhospi" />
-  <input type="hidden" name="dosql" value="do_fictive_ponctuelle_aed" />
+  <input type="hidden" name="dosql" value="do_add_item_ponctuelle_aed" />
   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
-  <input type="hidden" name="prestation_id" value="" />
+  <input type="hidden" name="item_prestation_id" value="" />
+  <input type="hidden" name="date" value="" />
 </form>
 
 <div style="height: 100%; overflow-y: auto;">
@@ -17,49 +25,65 @@
     
     <table class="tbl">
       <tr>
-        <th>
+        <th class="title">
           <button type="button" class="save notext" onclick="this.form.onsubmit();"></button>
         </th>
-        <th class="narrow"></th>
-        <th style="width: 45%">Journalières</th>
-        <th>
-          Ponctuelles
-          <div style="float: right;">
-            <input type="text" class="autocomplete" name="prestation_ponctuelle_view"/>
-            <div class="autocomplete" id="prestation_autocomplete" style="display: none; color: #000; text-align: left;"></div>
-          </div>
-          <script type="text/javascript">
-            Main.add(function() {
-              var form = getForm("edit_prestations");
-              var url = new Url("system", "httpreq_field_autocomplete");
-              url.addParam("class","CPrestationPonctuelle");
-              url.addParam("field", "nom");
-              url.addParam("limit", 30);
-              url.addParam("view_field", "name");
-              url.addParam("show_view", true);
-              url.addParam("input_field", "prestation_ponctuelle_view");
-              url.autoComplete(form.prestation_ponctuelle_view, "prestation_autocomplete", {
-                minChars: 3,
-                method: "get",
-                select: "view",
-                dropdown: true,
-                afterUpdateElement: function(field,selected){
-                  var prestation_id = selected.id.split("-").last();
-                  var form_prestation = getForm("add_prestation_ponctuelle");
-                  $V(form_prestation.prestation_id, prestation_id);
-                  form_prestation.onsubmit();
+        <th class="title narrow"></th>
+        <th class="title" style="width: 45%">Journalières</th>
+        {{if $vue_prestation == "all"}}
+          <th class="title">
+            Ponctuelles
+            <div>
+              <input type="hidden" name="date" class="date" value="{{$sejour->entree|date_format:"%Y-%m-%d"}}"/>
+              <input type="text" class="autocomplete" name="prestation_ponctuelle_view"/>
+              <div class="autocomplete" id="prestation_autocomplete" style="display: none; color: #000; text-align: left;"></div>
+            </div>
+            <script type="text/javascript">
+              Main.add(function() {
+                var form = getForm("edit_prestations");
+                var url = new Url("system", "httpreq_field_autocomplete");
+                url.addParam("class","CItemPrestation");
+                url.addParam("field", "nom");
+                url.addParam("limit", 30);
+                url.addParam("view_field", "name");
+                url.addParam("show_view", true);
+                url.addParam("input_field", "prestation_ponctuelle_view");
+                url.addParam("where[object_class]", "CPrestationPonctuelle");
+                url.autoComplete(form.prestation_ponctuelle_view, "prestation_autocomplete", {
+                  minChars: 3,
+                  method: "get",
+                  select: "view",
+                  dropdown: true,
+                  afterUpdateElement: function(field,selected){
+                    var item_prestation_id = selected.id.split("-").last();
+                    var form_prestation = getForm("add_prestation_ponctuelle");
+                    $V(form_prestation.item_prestation_id, item_prestation_id);
+                    $V(form_prestation.date, $V(form.date));
+                    form_prestation.onsubmit();
+                  }
+                });
+                var dates = {
+                  limit: {
+                    start: "{{$sejour->entree}}",
+                    stop:  "{{$sejour->sortie}}"
+                  }
                 }
+                new Calendar.regField(form.date, dates);
               });
-            });
-          </script>
-        </th>
+            </script>
+          </th>
+        {{/if}}
       </tr>
       {{assign var=affectation_id value=0}}
-      {{foreach from=$dates item=_affectation_id key=_date}}
+      {{assign var=count_prestations value=$prestations_j|@count}}
+      {{math equation=100/x x=$count_prestations assign=width_prestation}}
+      
+      {{foreach from=$dates item=_affectation_id key=_date name=foreach_date}}
+        {{assign var=first_date value=$smarty.foreach.foreach_date.first}}
       <tr>
         {{if $affectation_id != $_affectation_id}}
           {{assign var=affectation value=$affectations.$_affectation_id}}
-          <th rowspan="{{$affectation->_rowspan}}" class="narrow">
+          <th rowspan="{{$affectation->_rowspan}}" class="title narrow">
             <span onmouseover="ObjectTooltip.createEx(this, '{{$affectation->_guid}}')">
                {{vertical}}
                  {{$affectation->_ref_lit}}
@@ -74,82 +98,86 @@
           <td>
             <table class="tbl">
               <tr>
-                <th class="narrow"></th>
+                <th class="title narrow"></th>
                 {{foreach from=$prestations_j item=_prestation}}
-                  <th>{{$_prestation->nom}}</th>
+                  <th style="width: {{$width_prestation}}%" class="title">{{$_prestation->nom}}</th>
                 {{/foreach}}
               </tr>
-              <tr>
-                <th class="narrow">
-                  Souhait
-                </th>
-                {{foreach from=$prestations_j item=_prestation key=prestation_id}}
-                  <td class="narrow">
-                    <select name="prestations_j[{{$prestation_id}}][{{$_affectation_id}}][{{$_date}}][item_prestation_id]" style="width: 7em;">
-                      <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-                      {{foreach from=$_prestation->_ref_items item=_item}}
-                        <option value="{{$_item->_id}}"
-                        {{if isset($tableau_prestations_j.$_date.$prestation_id.souhait|smarty:nodefaults)}}
-                          {{assign var=item value=$tableau_prestations_j.$_date.$prestation_id.souhait}}
-                          {{if $item->_id == $_item->_id}}selected="selected"{{/if}}
-                        {{/if}}>{{$_item->nom}}</option>
-                      {{/foreach}}
-                    </select>
-                  </td>
-                {{/foreach}}
-              </tr>
-              <tr>
-                <th class="narrow">
-                  Réalisé
-                </th>
-                {{foreach from=$prestations_j item=_prestation key=_prestation_id}}
-                  <td>
-                    <select name="prestations_j[{{$_prestation_id}}][{{$_affectation_id}}][{{$_date}}][item_prestation_realise_id]" style="width: 7em;">
-                      <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-                      {{foreach from=$_prestation->_ref_items item=_item}}
-                        <option value="{{$_item->_id}}"
-                        {{if isset($tableau_prestations_j.$_date.$_prestation_id.realise|smarty:nodefaults)}}
-                          {{assign var=item value=$tableau_prestations_j.$_date.$_prestation_id.realise}}
-                          {{if $item->_id == $_item->_id}}selected="selected"{{/if}}
-                        {{/if}}>{{$_item->nom}}</option>
-                      {{/foreach}}
-                    </select> 
-                  </td>
-                {{/foreach}}
-              </tr>
+              {{foreach from=$type_j item=type}}
+                <tr>
+                  <th class="title narrow">
+                    {{tr}}CItemLiaison-{{$type}}{{/tr}}
+                  </th>
+                  {{foreach from=$prestations_j item=_prestation key=prestation_id}}
+                    <td>
+                      {{if $first_date || isset($liaisons_j.$_date.$prestation_id|smarty:nodefaults)}}
+                        {{if $first_date && !isset($liaisons_j.$_date.$prestation_id|smarty:nodefaults)}}
+                          {{assign var=liaison value=$empty_liaison}}
+                        {{else}}
+                          {{assign var=liaison value=$liaisons_j.$_date.$prestation_id}}
+                        {{/if}}
+                       {{* <button type="button" class="cancel notext" onclick="uncheckPrestation(this.next().select('input'))"></button>  *}}
+                        <span>
+                          {{foreach from=$_prestation->_ref_items item=_item}}
+                            <label>
+                              <input type="radio"
+                                name="liaisons_j[{{$_affectation_id}}][{{$prestation_id}}][{{$_date}}][{{$type}}][{{$liaison->_id}}]"
+                                onclick="var elt_hidden = this.next(); $V(elt_hidden, this.checked ? '{{$_item->_id}}' : 0);"
+                                {{if ($type == 'souhait' && $liaison->item_prestation_id == $_item->_id) ||
+                                  ($type == 'realise' && $liaison->item_prestation_realise_id == $_item->_id)}}checked="checked"{{/if}} value="{{$_item->_id}}"/>{{$_item->nom}}
+                            </label>
+                          {{/foreach}}
+                        </span>
+                      {{else}}
+                        <button type="button" class="tick" onclick="this.next().show(); this.remove();">Faire évoluer</button>
+                        <span style="display: none;">
+                          {{foreach from=$_prestation->_ref_items item=_item}}
+                            <label>
+                              <input type="radio"
+                                name="liaisons_j[{{$_affectation_id}}][{{$prestation_id}}][{{$_date}}][{{$type}}][new]"
+                                onclick="var elt_hidden = this.next(); $V(elt_hidden, this.checked ? '{{$_item->_id}}' : 0);" value="{{$_item->_id}}"/>{{$_item->nom}}
+                            </label>
+                          {{/foreach}}
+                        </span>
+                      {{/if}}
+                    </td>
+                  {{/foreach}}
+                </tr>
+              {{/foreach}}
             </table>
           </td>
-          <td>
-            {{if $prestations_p|@count}}
-              <table class="tbl">
-                {{foreach from=$prestations_p item=_prestation key=_prestation_id}}
+          {{if $vue_prestation == "all"}}
+            <td>
+              {{if isset($liaisons_p.$_date|smarty:nodefaults)}}
+                <table class="tbl">
                   <tr>
-                    <th>
-                      {{$_prestation->nom}}
-                    </th>
-                    <td>
-                    {{foreach from=$_prestation->_ref_items item=_item key=_item_id name=ref_items}}
-                      {{if isset($tableau_prestations_p.$_date.$_prestation_id.$_item_id|smarty:nodefaults)}}
-                        {{assign var=quantite value=$tableau_prestations_p.$_date.$_prestation_id.$_item_id}}
-                      {{else}}
-                        {{assign var=quantite value=0}}
-                      {{/if}}
-                      {{$_item->nom}} :
-                      <input type="text" name="prestations_p[{{$_prestation_id}}][{{$_affectation_id}}][{{$_date}}][{{$_item_id}}]"
-                        value="{{$quantite}}" style="width: 3em;"/>
-                      <script type="text/javascript">
-                        Main.add(function() {
-                           getForm('edit_prestations').elements['prestations_p[{{$_prestation_id}}][{{$_affectation_id}}][{{$_date}}][{{$_item_id}}]'].addSpinner(
-                           {step: 1, min: 0});
-                        });
-                      </script>
+                    {{foreach from=$liaisons_p.$_date item=_liaison key=prestation_id}}
+                      {{assign var=prestation value=$prestations_p.$prestation_id}}
+                      <th class="title">
+                        {{$prestation->nom}}
+                      </th>
                     {{/foreach}}
-                    </td>
                   </tr>
-                {{/foreach}}
-              </table>
-            {{/if}}
-          </td>
+                  <tr>
+                    {{foreach from=$liaisons_p.$_date item=_liaison key=prestation_id}}
+                      <td>
+                        {{assign var=prestation value=$prestations_p.$prestation_id}}
+                        {{assign var=_item value=$_liaison->_ref_item}}
+                        {{$_item->nom}} :
+                        <input type="text" name="liaisons_p[{{$_liaison->_id}}]" value="{{$_liaison->quantite}}" style="width: 3em;" />
+                        <script type="text/javascript">
+                          Main.add(function() {
+                             getForm('edit_prestations').elements['liaisons_p[{{$_liaison->_id}}]'].addSpinner(
+                             {step: 1, min: 0});
+                          });
+                        </script>
+                      </td>
+                    {{/foreach}}
+                  </tr>
+                </table>
+              {{/if}}
+            </td>
+          {{/if}}
         </tr>
         {{assign var=affectation_id value=$_affectation_id}}
       {{/foreach}}
