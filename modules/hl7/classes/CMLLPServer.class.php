@@ -20,7 +20,7 @@ if (!file_exists($socket_server_class)) {
 require $socket_server_class;
 require "$dir/includes/version.php";
 
-class CMLLPSocketHandler {
+class CMLLPServer {
   /**
    * @var string Root URL called when receiving data on the $port
    */
@@ -180,5 +180,72 @@ EOT;
                  ->setOnCloseHandler     (array($this, "close"))
                  ->setOnWriteErrorHandler(array($this, "write_error"))
                  ->run();
+  }
+  
+  static function send($host, $port, $message) {
+    $root_dir = dirname(__FILE__)."/../../..";
+    
+    require_once "$root_dir/lib/phpsocket/SocketClient.php";
+    
+    try {
+      $client = new SocketClient();
+      $client->connect($host, $port);
+      echo $client->sendandrecive($message);
+    }
+    catch(Exception $e) {
+      echo $e->getMessage()."\n";
+    }
+  }
+  
+  static function get_ps_status(){
+    $tmp_dir = self::getTmpDir();
+    
+    $pid_files = glob("$tmp_dir/pid.*");
+    $processes = array();
+    
+    foreach($pid_files as $_file) {
+      $_pid = substr($_file, strrpos($_file, ".")+1);
+      $processes[$_pid] = array(
+        "port" => file_get_contents($_file),
+      );
+    }
+    
+    if (PHP_OS == "WINNT") {
+      exec("tasklist", $out);
+      $out = array_slice($out, 2); 
+      
+      foreach($out as $_line) {
+        $_pid = (int)substr($_line, 26, 8);
+        if (!isset($processes[$_pid])) continue;
+        
+        $_ps_name = trim(substr($_line, 0, 25));
+        $processes[$_pid]["ps_name"] = $_ps_name;
+      }
+    }
+    else {
+      exec("ps -e", $out);
+      $out = array_slice($out, 1); 
+      
+      foreach($out as $_line) {
+        $_pid = (int)substr($_line, 0, 5);
+        if (!isset($processes[$_pid])) continue;
+      
+        $_ps_name = trim(substr($_line, 24));
+        $processes[$_pid]["ps_name"] = $_ps_name;
+      }
+    }
+    
+    return $processes;
+  }
+  
+  static function getTmpDir() {
+    $root_dir = dirname(__FILE__)."/../../..";
+    
+    require_once "$root_dir/classes/CMbPath.class.php";
+    
+    $tmp_dir = "$root_dir/tmp/socket_server";
+    CMbPath::forceDir($tmp_dir);
+    
+    return $tmp_dir;
   }
 }

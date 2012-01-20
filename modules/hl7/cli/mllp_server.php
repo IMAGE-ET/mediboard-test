@@ -126,7 +126,7 @@ file_put_contents($pid_file, $options["port"]);
 try {
   outln("Starting MLLP Server on port ".$options["port"]." with user '".$options["username"]."'");
   
-  $handler = new CMLLPSocketHandler($options["url"], $options["username"], $options["password"], $options["port"]);
+  $handler = new CMLLPServer($options["url"], $options["username"], $options["password"], $options["port"]);
   $handler->run();
   
   quit();

@@ -31,58 +31,6 @@ if (!$host) {
 }
 // ---- End read arguments
 
-function send($host, $port, $message) {
-  try {
-    $client = new SocketClient();
-    $client->connect($host, $port);
-    echo $client->sendandrecive($message);
-  }
-  catch(Exception $e) {
-    echo $e->getMessage()."\n";
-  }
-}
-
-function get_ps_status(){
-  global $tmp_dir;
-  
-  $pid_files = glob("$tmp_dir/pid.*");
-  $processes = array();
-  
-  foreach($pid_files as $_file) {
-    $_pid = substr($_file, strrpos($_file, ".")+1);
-    $processes[$_pid] = array(
-      "port" => file_get_contents($_file),
-    );
-  }
-  
-  if (PHP_OS == "WINNT") {
-    exec("tasklist", $out);
-    $out = array_slice($out, 2); 
-    
-    foreach($out as $_line) {
-      $_pid = (int)substr($_line, 26, 8);
-      if (!isset($processes[$_pid])) continue;
-      
-      $_ps_name = trim(substr($_line, 0, 25));
-      $processes[$_pid]["ps_name"] = $_ps_name;
-    }
-  }
-  else {
-    exec("ps -e", $out);
-    $out = array_slice($out, 1); 
-    
-    foreach($out as $_line) {
-      $_pid = (int)substr($_line, 0, 5);
-      if (!isset($processes[$_pid])) continue;
-    
-      $_ps_name = trim(substr($_line, 24));
-      $processes[$_pid]["ps_name"] = $_ps_name;
-    }
-  }
-  
-  return $processes;
-}
-
 $msg_ok    = "OK    ";
 $msg_error = "ERROR ";
 
@@ -98,7 +46,7 @@ switch($command) {
       echo "No port specified\n";
       exit(0);
     }
-    send($host, $port, "__".strtoupper($command)."__\n");
+    CMLLPServer::send($host, $port, "__".strtoupper($command)."__\n");
     break;
     
   case "test":
@@ -106,7 +54,12 @@ switch($command) {
       echo "No port specified\n";
       exit(0);
     }
-    send($host, $port, "\x0B".ER7Message::ORU()."\x1C\x0D");
+    $n = 30;
+    $secs = 60;
+    for($i = 0; $i < $n; $i++) {
+      CMLLPServer::send($host, $port, "\x0B".ER7Message::ORU()."\x1C\x0D");
+      usleep($secs * 1000000);
+    }
     break;
     
   case "list":
@@ -114,7 +67,7 @@ switch($command) {
       outln("Specified host is not local, localhost will be used instead");
     }
     
-    $processes = get_ps_status();
+    $processes = CMLLPServer::get_ps_status();
     
     echo "--------------------------------------\n";
     echo "   PID |  PORT | STATUS | PS NAME     \n";
