@@ -314,8 +314,8 @@
 							 
 							 {{if $nb_prevue && ($conf.dPprescription.CPrescription.manual_planif || $_prescription_line_mix->_continuite == "discontinue")}}
 			          <script type="text/javascript">
-			            // Pour empecher de deplacer une case ou il y a plusieurs prises
-			            drag = new Draggable("drag-{{$_perf_line->_id}}-{{$_date}}-{{$_hour}}", PlanSoins.oDragOptions);
+                  // Pour empecher de deplacer une case ou il y a plusieurs prises
+				          new Draggable("drag-{{$_perf_line->_id}}-{{$_date}}-{{$_hour}}", PlanSoins.oDragOptions);
 			          </script>
 			         {{/if}}
 							 
@@ -337,7 +337,7 @@
 	                        }
 												  {{/if}}'
 										{{/if}}
-                    class="administration {{$etat}} perfusion {{if $nb_prevue && ($conf.dPprescription.CPrescription.manual_planif || $_prescription_line_mix->_continuite == "discontinue")}}draggablePlanif{{/if}}
+                    class="administration {{$etat}} perfusion {{if $nb_prevue && ($conf.dPprescription.CPrescription.manual_planif || $_prescription_line_mix->_continuite == "discontinue")}}draggablePlanif {{/if}}
 										      {{if $original_dateTime}} planification{{/if}} {{if $smarty.foreach.foreach_perf_line.first && ($etat == "non_administre" || $etat == "a_administrer")}} first_line_mix_item{{/if}}"
 										data-prescription_line_mix_id="{{$_prescription_line_mix->_id}}"
 										data-original_datetime="{{$_date}} {{$_hour}}:00:00">
