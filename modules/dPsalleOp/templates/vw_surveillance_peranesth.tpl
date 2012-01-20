@@ -78,6 +78,7 @@ Main.add(function(){
           <div class="symbol">{{$_yaxis.symbolChar|smarty:nodefaults}}</div>
         </div>
       {{/foreach}}
+      <span class="title">{{$_graph.title}}</span>
     </div>
     <div id="placeholder-{{$i}}" style="width:900px;height:200px;"></div>
     <br />

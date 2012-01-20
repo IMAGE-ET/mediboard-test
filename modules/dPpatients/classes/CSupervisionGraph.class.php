@@ -71,6 +71,7 @@ class CSupervisionGraph extends CMbObject {
         "max"      => $time_max,
       )),
       "series" => array(),
+      "title"  => $this->title,
     );
     
     $_axes = $this->loadRefsAxes();

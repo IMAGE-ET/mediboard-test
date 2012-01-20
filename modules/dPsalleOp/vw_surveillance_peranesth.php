@@ -96,8 +96,9 @@ if($prescription->_id){
       $_view = $_line->_ucd_view;
     }
     
-    if (!isset($gestes[$_line->_class])) {
-      $gestes[$_line->_class] = array();
+    $key = "CPrescription._chapitres.$_line->_chapitre";
+    if (!isset($gestes[$key])) {
+      $gestes[$key] = array();
     }
     
     /*
@@ -135,7 +136,7 @@ if($prescription->_id){
           $unite = $_adm->_ref_object->_ref_produit->libelle_unite_presentation;
         }
         
-        $gestes[$_line->_class][] = array(
+        $gestes[$key][] = array(
           "icon"  => $_line->_chapitre,
           "label" => $_view,
           "unit"  => "$_adm->quantite $unite",
