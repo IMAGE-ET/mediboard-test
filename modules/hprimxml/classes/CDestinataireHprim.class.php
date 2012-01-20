@@ -80,7 +80,15 @@ class CDestinataireHprim extends CInteropReceiver {
     if ($this->actif && $msg) {
       $source = CExchangeSource::get("$this->_guid-evenementPatient");
       if ($source->_id) {
-        $source->setData($msg);
+        
+        // Dans le cas d'une source file system on passe le nom du fichier en paramètre
+        if ($source instanceof CSourceFileSystem) {
+          $source->setData($msg, false, "MB-$dom_evt->evenement-$exchange->_id".$source->fileextension);
+        }
+        else {
+          $source->setData($msg);
+        }
+        
         try {
           $source->send();
         } catch (Exception $e) {
@@ -112,7 +120,13 @@ class CDestinataireHprim extends CInteropReceiver {
     if ($this->actif && $msg) {
       $source = CExchangeSource::get("$this->_guid-$dom_evt->sous_type");
       if ($source->_id) {
-        $source->setData($msg);
+        // Dans le cas d'une source file system on passe le nom du fichier en paramètre
+        if ($source instanceof CSourceFileSystem) {
+          $source->setData($msg, false, "MB-$dom_evt->evenement-$exchange->_id".$source->fileextension);
+        }
+        else {
+          $source->setData($msg);
+        }
         try {
           $source->send();
         } catch (Exception $e) {
