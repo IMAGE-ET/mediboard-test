@@ -39,7 +39,7 @@ foreach($mediChir->_back["secondary_functions"] as $curr_sec_func) {
   $secondary_functions[] = $curr_sec_func->function_id;
 }
 
-// Chargement de la list des blocs opératoires
+// Chargement de la liste des blocs opératoires
 $bloc = new CBlocOperatoire();
 $blocs = $bloc->loadGroupList(null, "nom");
 foreach($blocs as $_bloc) {

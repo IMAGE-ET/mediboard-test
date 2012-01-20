@@ -125,18 +125,20 @@ Main.add(function () {
       <div id="bloc-{{$_bloc->_id}}" style="display:none">
       <table class="tbl">
         <tr>
-          <th class="category" colspan="3">
+          <th class="category" colspan="4">
             Choisir une date
           </th>
         </tr>
         {{foreach from=$_blocplage item=_plage}}
         <tr>
-          <td style="width: 32px;">
+          <td class="narrow">
             {{mb_include module=system template=inc_object_notes object=$_plage}}
+          </td>
+          <td class="narrow">
             {{if $_plage->spec_id}}
-            <img src="images/icons/user-function.png" style="float: left;" />
+            <img src="images/icons/user-function.png" />
             {{else}}
-            <img src="images/icons/user.png" style="float: left;" />
+            <img src="images/icons/user.png" />
             {{/if}}
           </td>
           <td>
@@ -151,7 +153,7 @@ Main.add(function () {
             {{else}}
               {{assign var="backgroundClass" value="full"}}
             {{/if}}
-            <div class="progressBar" {{if $_plage->spec_id}}style="height: 25px;"{{/if}}>
+            <div class="progressBar" style="width: 98%;{{if $_plage->spec_id}}height: 25px;{{/if}}">
               <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
               <div class="text" style="text-align: left">
                 <label 
