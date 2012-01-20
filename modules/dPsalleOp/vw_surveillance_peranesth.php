@@ -40,7 +40,14 @@ $time_max = mbTime("+".mbMinutesRelative("00:00:00", $interv->temp_operation)." 
 $time_debut_op = getTS("$date $time_min");
 $time_fin_op   = getTS("$date $time_max");
 
-$default_yaxis = array("position" => "left", "labelWidth" => 20, "ticks" => 6, "reserveSpace" => true);
+$default_yaxis = array(
+  "position" => "left", 
+  "labelWidth" => 20, 
+  "ticks" => 6, 
+  "reserveSpace" => true,
+  "label" => "",
+  "symbolChar" => "",
+);
 $graph_object = new CSupervisionGraph;
 $graph_objects = $graph_object->loadList();
 
@@ -54,16 +61,17 @@ foreach($result_sets as $_set) {
 foreach($graph_objects as $_go) {
   $_curr_graph = array(
     "yaxes"  => array(),
+    "series" => array(),
   );
   
   $_axes = $_go->loadRefsAxes();
   
   foreach(array_values($_axes) as $yaxis_i => $_axis) {
     /// AXIS DATA
-    $_axis_data = $default_yaxis + array(
+    $_axis_data = array(
       "symbolChar" => $_axis->getSymbolChar(),
       "label"      => $_axis->title,
-    );
+    ) + $default_yaxis;
     
     if (count($_curr_graph["yaxes"])) {
       $_axis_data["alignTicksWithAxis"] = 1;
@@ -119,6 +127,17 @@ foreach($graph_objects as $_go) {
   }
 
   $graphs[] = $_curr_graph;
+}
+
+$yaxes_count = 0;
+foreach($graphs as $_graph) {
+  $yaxes_count = max($yaxes_count, count($_graph["yaxes"]));
+}
+
+foreach($graphs as &$_graph) {
+  if (count($_graph["yaxes"]) < $yaxes_count) {
+    $_graph["yaxes"] = array_pad($_graph["yaxes"], $yaxes_count, $default_yaxis);
+  }
 }
 
 /*
@@ -191,9 +210,8 @@ $time_max = ceil($time_max / $round) * $round;
 
 $xaxes = array(
   array(
-    "used" => true, 
     "mode" => "time",
-    "position" => "top", 
+    "position" => "bottom", 
     "min" => $time_min, 
     "max" => $time_max,
   ),
@@ -317,5 +335,6 @@ $smarty->assign("xaxes",       $xaxes);
 $smarty->assign("gestes",      $gestes);
 $smarty->assign("time_debut_op", $time_debut_op);
 $smarty->assign("time_fin_op",   $time_fin_op);
+$smarty->assign("yaxes_count", $yaxes_count);
 
 $smarty->display("vw_surveillance_peranesth.tpl");

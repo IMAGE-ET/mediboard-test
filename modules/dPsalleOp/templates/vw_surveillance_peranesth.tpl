@@ -34,11 +34,16 @@ var plothover = function (event, pos, item) {
 Main.add(function(){
   
   (function ($){
-    var ph, series;
+    var ph, series, xaxes;
     
-    {{foreach from=$graphs item=_graph key=i}}
+    {{foreach from=$graphs item=_graph key=i name=graphs}}
       ph = $("#placeholder-{{$i}}");
       series = {{$_graph.series|@json}};
+      xaxes = {{$xaxes|@json}};
+      
+      {{if !$smarty.foreach.graphs.last}}
+        xaxes[0].tickFormatter = function(){return " "};
+      {{/if}}
       
       ph.bind("plothover", plothover);
       
@@ -53,7 +58,7 @@ Main.add(function(){
           {xaxis: {from: {{$time_fin_op}}, to: {{$time_fin_op+1000}}}, color: "black"}
         ] },
         series: { points: { show: true, radius: 3 } },
-        xaxes: {{$xaxes|@json}},
+        xaxes: xaxes,
         yaxes: {{$_graph.yaxes|@json}}
       });
     {{/foreach}}
@@ -94,7 +99,7 @@ Main.add(function(){
   
   .geste > div .marking > span {
     position: absolute; 
-    top: 300px;
+    bottom: 10px;
     background: #eee;
     padding: 4px;
     border: 1px solid #ccc;
@@ -113,7 +118,6 @@ Main.add(function(){
     border: 1px solid #ccc;
     border-spacing: 0;
     border-collapse: collapse;
-    empty-cells: hide;
   }
   
   table.gestes td,
@@ -135,11 +139,19 @@ Main.add(function(){
     display: inline-block;
     text-align: center;
     font-size: 10px;
+    line-height: 0.8;
     width: 34px;
   }
   
   .yaxis-labels .symbol {
     font-size: 16px;
+  }
+  
+  .xAxis .tickLabel {
+    background: #ddd;
+    color: black;
+    font-weight: bold;
+    font-size: 1.2em;
   }
   
   @media print {
@@ -149,7 +161,6 @@ Main.add(function(){
   }
 </style>
 
-{{assign var=axes_count value=3}}
 {{assign var=images value="CPrescription"|static:"images"}}
 
 <div style="position: relative;">
@@ -162,11 +173,12 @@ Main.add(function(){
         </div>
       {{/foreach}}
     </div>
-    <div id="placeholder-{{$i}}" style="width:900px;height:300px;"></div>
+    <div id="placeholder-{{$i}}" style="width:900px;height:200px;"></div>
+    <br />
   {{/foreach}}
   
   <table class="main gestes" style="table-layout: fixed; width: 900px;">
-    <col style="width: {{$axes_count*38-14}}px;" />
+    <col style="width: {{$yaxes_count*38-14}}px;" />
     
     {{foreach from=$gestes key=_label item=_gestes}}
       <tr>
@@ -176,9 +188,9 @@ Main.add(function(){
           <div style="padding-left: {{$_geste.position}}%; {{if $_geste.alert}} color: red; {{/if}}" class="geste">
             <div  onmouseover="ObjectTooltip.createEx(this, '{{$_geste.object->_guid}}');">
               <div class="marking">
-                <span>{{$_geste.datetime|date_format:$conf.datetime}}</span>
+                <!--<span>{{$_geste.datetime|date_format:$conf.datetime}}</span>-->
               </div>
-              <div class="label">
+              <div class="label" title="{{$_geste.datetime|date_format:$conf.datetime}}">
                 {{if $_geste.icon}}
                   {{assign var=_icon value=$_geste.icon}}
                   <img src="{{$images.$_icon}}" />
