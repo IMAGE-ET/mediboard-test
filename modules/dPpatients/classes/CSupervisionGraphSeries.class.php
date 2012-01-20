@@ -42,12 +42,13 @@ class CSupervisionGraphSeries extends CMbObject {
   
   function initSeriesData($yaxes_count){
     $axis = $this->loadRefAxis();
+    $unit = $this->loadRefValueUnit()->label;
     
     $series_data = array(
       "data"  => array(array(0, null)),
       "yaxis" => $yaxes_count,
-      "label" => utf8_encode($this->_view),
-      "unit"  => utf8_encode($this->loadRefValueUnit()->label),
+      "label" => utf8_encode($this->_view." ($unit)"),
+      "unit"  => utf8_encode($unit),
       "color" => "#$this->color",
       "shadowSize" => 0,
     );

@@ -15,12 +15,14 @@ Main.add(function(){
 
 <button onclick="SupervisionGraph.preview({{$supervision_graph_id}})" class="change">Rafraîchir l'aperçu</button>
 
-<div class="yaxis-labels">
-  {{foreach from=$data.yaxes|@array_reverse item=_yaxis}}
-    <div>
-      {{$_yaxis.label}}
-      <div class="symbol">{{$_yaxis.symbolChar|smarty:nodefaults}}</div>
-    </div>
-  {{/foreach}}
+<div style="margin: 6px;">
+  <div class="yaxis-labels">
+    {{foreach from=$data.yaxes|@array_reverse item=_yaxis}}
+      <div>
+        {{$_yaxis.label}}
+        <div class="symbol">{{$_yaxis.symbolChar|smarty:nodefaults}}</div>
+      </div>
+    {{/foreach}}
+  </div>
+  <div id="placeholder-preview" style="width:600px;height:180px;"></div>
 </div>
-<div id="placeholder-preview" style="width:600px;height:180px;margin: 6px"></div>
