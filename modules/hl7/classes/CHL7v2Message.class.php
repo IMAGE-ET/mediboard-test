@@ -17,7 +17,7 @@
  */
 
 class CHL7v2Message extends CHL7v2SegmentGroup {
-  const DEFAULT_SEGMENT_TERMINATOR      = "\n";
+  const DEFAULT_SEGMENT_TERMINATOR      = "\r";
   const DEFAULT_ESCAPE_CHARACTER        = "\\";
   const DEFAULT_FIELD_SEPARATOR         = "|";
   const DEFAULT_COMPONENT_SEPARATOR     = "^";
@@ -42,7 +42,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
 
   var $extension    = null;
   var $i18n_code    = null;
-  var $version      = '2.5';
+  var $version      = "2.5";
   var $event_name   = null;
   var $name         = null;
   var $description  = null;
@@ -89,13 +89,18 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     return $this->event_name;
   }
   
+  static function fixRawER7($data) {
+    $data = trim($data);
+    $data = str_replace("\r\n", "\r", $data);
+    $data = str_replace("\n", "\r", $data);
+    return $data;
+  }
+  
   static function isWellFormed($data) {
     // remove all chars before MSH
     $msh_pos = strpos($data, "MSH");
     $data = substr($data, $msh_pos);
-    $data = trim($data);
-    $data = str_replace("\r\n", "\n", $data);
-    $data = str_replace("\r", "\n", $data);
+    $data = self::fixRawER7($data);
   
     // first tokenize the segments
     if (($data == null) || (strlen($data) < 4)) {
@@ -137,9 +142,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
      // remove all chars before MSH
     $msh_pos = strpos($data, "MSH");
     $data = substr($data, $msh_pos);
-    $data = trim($data);
-    $data = str_replace("\r\n", "\n", $data);
-    $data = str_replace("\r", "\n", $data);
+    $data = self::fixRawER7($data);
     
     parent::parse($data);
     
@@ -469,7 +472,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   }
   
   function escape($str){
-    $str = str_replace("\r\n", "\n", $str);
+    //$str = str_replace("\r\n", "\n", $str);
     $this->initEscapeSequences();
     return strtr($str, $this->escape_sequences);
   }
@@ -521,7 +524,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   }
   
   static function highlight_er7($msg){
-    $msg = str_replace("\r\n", "\n", $msg);
+    $msg = str_replace("\r", "\n", $msg);
     
     preg_match("/.*MSH(.)(.)(.)(.)(.)/", $msg, $matches);
     
