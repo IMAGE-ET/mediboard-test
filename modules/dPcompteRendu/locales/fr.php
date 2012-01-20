@@ -73,6 +73,7 @@ $locales['CCompteRendu-_owner-court'] = 'Poss.';
 $locales['CCompteRendu-_owner-desc'] = 'Possesseur du modèle (utilisateur, fonction ou établissement)';
 $locales['CCompteRendu-_page_format'] = 'Format de page';
 $locales['CCompteRendu-_page_format-desc'] = 'Format de la page';
+$locales['CCompteRendu-alert_long_period'] = 'La période de recherche ne doit pas dépasser 10 jours.';
 $locales['CCompteRendu-already-access'] = 'Vous avez deja accès à ce modèle, souhaitez-vous confirmer la copie de ce modèle ?';
 $locales['CCompteRendu-apply_field'] = 'Appliquer';
 $locales['CCompteRendu-author_id'] = 'Propriétaire';

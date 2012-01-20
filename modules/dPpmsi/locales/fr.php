@@ -29,6 +29,7 @@ $locales['mod-dPpmsi-tab-form_print_planning'] = 'Impression planning';
 $locales['mod-dPpmsi-tab-labo_groupage'] = 'Groupage GHM';
 $locales['mod-dPpmsi-tab-print_planning'] = 'Impression planning';
 $locales['mod-dPpmsi-tab-vw_dossier'] = 'Dossiers patient';
+$locales['mod-dPpmsi-tab-vw_last_docs'] = 'Derniers documents';
 $locales['mod-dPpmsi-tab-vw_list_hospi'] = 'Liste des hospitalisations';
 $locales['mod-dPpmsi-tab-vw_list_interv'] = 'Liste des interventions';
 $locales['module-dPpmsi-court'] = 'PMSI';
