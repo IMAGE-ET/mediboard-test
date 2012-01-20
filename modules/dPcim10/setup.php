@@ -34,14 +34,18 @@ class CSetupdPcim10 extends CSetup {
     $query = "ALTER TABLE `cim10favoris` 
               ADD INDEX (`favoris_user`);";
     $this->addQuery($query);
-
-    $this->mod_version = "0.12";
-
+    
+    $this->makeRevision("0.12");
+    $this->addPrefQuery("new_search_cim10", "1");
+    
+    $this->mod_version = "0.13";
+    
     // Data source query
     $query = "SELECT * 
 			FROM `master` 
 			WHERE `SID` = '19550'";
     $this->addDatasource("cim10", $query);
+    
   }
 }
 ?>

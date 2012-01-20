@@ -16,7 +16,7 @@ $lang = CValue::getOrSession("lang", CCodeCIM10::LANG_FR);
 
 // Recherche des codes favoris
 
-$favoris = new CFavoricim10();
+$favoris = new CFavoriCIM10();
 $where = array();
 $where["favoris_user"] = "= '$user->_id'";
 $order = "favoris_code";

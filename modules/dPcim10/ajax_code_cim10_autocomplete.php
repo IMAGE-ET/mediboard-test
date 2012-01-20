@@ -13,7 +13,7 @@ $keywords = CValue::post("keywords_code");
 if ($keywords == '') $keywords = '%%';
 
 $code = new CCodeCIM10;
-$codes = $code->findCodes($keywords, '', CCodeCIM10::LANG_FR, 5);
+$codes = $code->findCodes($keywords, $keywords, CCodeCIM10::LANG_FR, 5);
 
 $smarty = new CSmartyDP();
 

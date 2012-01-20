@@ -317,7 +317,7 @@ class CCodeCIM10 {
   }
   
   // Recherche de codes
-  function findCodes($code, $keys, $lang = self::LANG_FR, $max_length = null) {
+  function findCodes($code, $keys, $lang = self::LANG_FR, $max_length = null, $where = null) {
     $ds =& $this->_spec->ds;
     $this->_lang = $lang;
   
@@ -325,26 +325,55 @@ class CCodeCIM10 {
               FROM libelle, master
               WHERE libelle.SID = master.SID";
     $hasWhere = false;
+    
     $keywords = explode(" ", $keys);
-    if($keys != "") {
+    $codes    = explode(" ", $code);
+    
+    if ($keys != "") {
       $listLike = array();
-      foreach($keywords as $key => $value) {
+      $codeLike = array();
+      foreach ($keywords as $key => $value) {
         $listLike[] = "libelle.$lang LIKE '%".addslashes($value)."%'";
       }
-      $query .= " AND ".implode(" AND ", $listLike);
+      if ($code != "") {
+        foreach ($codes as $key => $value) {
+          $codeLike[] = "master.abbrev LIKE '".addslashes($value) . "%'";
+        }
+        $query .= " AND ( (";
+        $query .= implode(" OR ", $codeLike);
+        $query .= ") OR (";
+      }
+      else {
+        $query .= " AND (";
+      }
+      $query .= implode(" AND ", $listLike);
+      if ($code != "") $query .= ") ) ";
       $hasWhere = true;
     }
-    if($code) {
-      $query .= " AND master.abbrev LIKE '".addslashes($code)."%'";
+    
+    if ($code && !$keys) {
+      
+      $codeLike = array();
+      foreach ($codes as $key => $value) {
+        $codeLike[] = "master.abbrev LIKE '".addslashes($value) . "%'";
+      }
+      $query .= " AND ". implode(" OR ", $codeLike);
       $hasWhere = true;
     }
+    if ($where) {
+      $query .= " AND $where";
+      $hasWhere = true;
+    }
+    
     if(!$hasWhere) {
       $query .= " AND 0";
     }
     if ($max_length) {
       $query .= " AND LENGTH(abbrev) < $max_length ";
     }
+    
     $query .= " ORDER BY master.SID LIMIT 0 , 100";
+    
     $result = $ds->exec($query);
     $master = array();
     $i = 0;

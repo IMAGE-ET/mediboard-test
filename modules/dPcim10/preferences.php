@@ -9,4 +9,7 @@
 
  
  // Préférences par Module
+ CPreferences::$modules["dPcim10"] = array (
+  "new_search_cim10"
+)
 ?>

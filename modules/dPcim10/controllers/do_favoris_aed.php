@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$do = new CDoObjectAddEdit("CFavoricim10", "favoris_id");
+$do = new CDoObjectAddEdit("CFavoriCIM10");
 
 // Amélioration des textes
 $user = new CMediusers;
@@ -20,5 +20,10 @@ $do->deleteMsg .= $for;
 
 $do->redirect = null;
 $do->doIt();
+
+if (CAppUI::pref("new_search_cim10") == 1) {
+  echo CAppUI::getMsg();
+  CApp::rip();
+}
 
 ?>

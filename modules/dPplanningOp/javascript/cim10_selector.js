@@ -20,13 +20,24 @@ CIM10Selector = {
 
   pop: function() {
     var oForm = getForm(this.sForm);
-    this.oUrl = new Url("dPplanningOp", "code_selector_ex");
-    
-    this.oUrl.addParam("chir", oForm[this.sChir].value);
-    this.oUrl.addParam("type", "cim10");
-    this.oUrl.addParam("mode", this.options.mode);
-    
-    this.oUrl.popup(this.options.width, this.options.height, "CIM10 Selector");
+    if (Preferences.new_search_cim10 == 0) {
+      this.oUrl = new Url("dPplanningOp", "code_selector_ex");
+      
+      this.oUrl.addParam("chir", oForm[this.sChir].value);
+      this.oUrl.addParam("type", "cim10");
+      this.oUrl.addParam("mode", this.options.mode);
+      
+      this.oUrl.popup(this.options.width, this.options.height, "CIM10 Selector");
+    }
+    else {
+      this.oUrl = new Url("dPcim10", "code_selector_cim10");
+      
+      this.oUrl.addParam("chir", oForm[this.sChir].value);
+      this.oUrl.addParam("type", "cim10");
+      this.oUrl.addParam("mode", this.options.mode);
+      
+      this.oUrl.requestModal(700,400);
+    }
   },
   
   // Code finder

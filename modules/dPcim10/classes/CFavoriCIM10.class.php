@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-class CFavoricim10 extends CMbObject {
+class CFavoriCIM10 extends CMbObject {
 	var $favoris_id   = null;
 	var $favoris_code = null;
 	var $favoris_user = null;

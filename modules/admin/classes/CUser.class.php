@@ -93,7 +93,7 @@ class CUser extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["favoris_CCAM"]       = "CFavoriCCAM favoris_user";
-    $backProps["favoris_CIM10"]      = "CFavoricim10 favoris_user";
+    $backProps["favoris_CIM10"]      = "CFavoriCIM10 favoris_user";
     $backProps["favoris_TARMED"]     = "CFavoriTarmed favoris_user";
     $backProps["permissions_module"] = "CPermModule user_id";
     $backProps["permissions_objet"]  = "CPermObject user_id";

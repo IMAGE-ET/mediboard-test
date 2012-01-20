@@ -231,8 +231,8 @@ Main.add( function(){
                   {{mb_value object=$consult field="secteur1"}} (S1) +
                   {{mb_value object=$consult field="secteur2"}} (S2)
                 {{else}}
-                  <input type="text" size="6" name="_somme" class="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" onchange="modifSecteur2()" /> 
-                  {{$conf.currency_symbol}}
+                  {{math equation="x+y" x=$consult->secteur1 y=$consult->secteur2 assign=somme}}
+                  {{mb_field size=6 object=$consult field="_somme" value="$somme" onchange="modifSecteur2()"}}
                   <br />
                   {{mb_label object=$consult field="secteur1"}}
                   {{mb_field object=$consult field="secteur1" onchange="modifTotal()"}} +
