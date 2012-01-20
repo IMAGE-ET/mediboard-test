@@ -31,6 +31,16 @@ foreach($graphs as $_graph) {
   }
 }
 
+CJSLoader::$files = array(
+  "lib/flot/jquery.min.js",
+  "lib/flot/jquery.flot.min.js",
+  "lib/flot/jquery.flot.symbol.min.js",
+  "lib/flot/jquery.flot.crosshair.min.js",
+  "lib/flot/jquery.flot.resize.min.js",
+);
+echo CJSLoader::loadFiles();
+CAppUI::JS('$.noConflict()');
+
 $smarty = new CSmartyDP();
 $smarty->assign("graph",  $graph);
 $smarty->assign("graphs", $graphs);

@@ -46,7 +46,7 @@
 </table>
 
 {{if $axes|@count < 4}}
-  <button class="new" onclick="SupervisionGraph.editAxis(0, {{$graph->_id}})">
+  <button class="new" onclick="SupervisionGraph.editAxis(0, {{$graph->_id}})" style="float: right;">
     {{tr}}CSupervisionGraphAxis-title-create{{/tr}}
   </button>
 {{/if}}

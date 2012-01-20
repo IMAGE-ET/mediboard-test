@@ -8,6 +8,8 @@ SupervisionGraph = {
     var url = new Url("dPpatients", "ajax_list_supervision_graph_axes");
     url.addParam("supervision_graph_id", graph_id);
     url.requestUpdate("supervision-graph-axes-list");
+    
+    SupervisionGraph.preview(SupervisionGraph.currentGraphId);
   },
   editAxis: function(id, graph_id) {
     
@@ -26,6 +28,7 @@ SupervisionGraph = {
   callbackEditAxis: function(id, obj) {
     SupervisionGraph.listAxes(obj.supervision_graph_id);
     SupervisionGraph.editAxis(id, obj.supervision_graph_id);
+    SupervisionGraph.preview(SupervisionGraph.currentGraphId);
   },
   
   // Series
@@ -51,5 +54,15 @@ SupervisionGraph = {
     SupervisionGraph.listAxes(SupervisionGraph.currentGraphId);
     Control.Modal.close();
     SupervisionGraph.editSeries(id, obj.supervision_graph_axis_id);
+  }, 
+  
+  preview: function(graph_id) {
+    if (!graph_id) {
+      return;
+    }
+    
+    var url = new Url("dPpatients", "ajax_preview_supervision_graph");
+    url.addParam("supervision_graph_id", graph_id);
+    url.requestUpdate("supervision-graph-preview");
   }
 };

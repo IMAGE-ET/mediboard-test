@@ -98,4 +98,22 @@ class CSupervisionGraphSeries extends CMbObject {
     
     $this->_view = $title;
   }
+  
+  function getSampleData($times) {
+    $axis  = $this->loadRefAxis();
+    
+    $low   = $axis->limit_low  != null ? $axis->limit_low  : 0;
+    $high  = $axis->limit_high != null ? $axis->limit_high : 100;
+    
+    $diff  = $high - $low;
+    $value = rand($low+$diff/4, $high-$diff/4);
+    
+    $data = array();
+    foreach($times as $_time) {
+      $data[] = array($_time, $value);
+      $value += rand(-$diff, $diff) / $diff;
+    }
+    
+    return $data;
+  }
 }

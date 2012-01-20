@@ -88,12 +88,14 @@ Main.add(function(){
         </tr>
       </table>
       
-      <table class="main layout">
+      <table class="main layout" style="height: 240px;">
         <tr>
           <td id="supervision-graph-axes-list" style="width: 40%;"></td>
           <td id="supervision-graph-axis-editor">&nbsp;</td>
         </tr>
       </table>
+      <hr />
+      <div id="supervision-graph-preview" class="supervision"></div>
     </td>
   </tr>
 </table>

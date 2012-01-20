@@ -1219,6 +1219,96 @@ span.countertip {
   background-position: 16px;
 }
 
+/** Supervision graphs */
+.supervision .geste {
+  margin-bottom: -5px;
+}
+
+.supervision .geste > div {
+  cursor: pointer;
+  white-space: nowrap;
+  display: block;
+  width: 2px;
+  background: #bbb;
+}
+
+.supervision .geste > div .marking {
+  position: absolute; 
+  top: 0; 
+  bottom: 0; 
+  display: none;
+  background: rgba(0,0,0,0.1);
+  -ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr=#10000000,endColorstr=#10000000)";
+  min-width: 2px;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-bottom: none;
+  margin: 0 -1px;
+}
+
+.supervision .geste > div .marking > span {
+  position: absolute; 
+  bottom: 10px;
+  background: #eee;
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-left: none;
+}
+
+.supervision .geste > div:hover .marking {
+  display: block;
+}
+
+.supervision .geste .label {
+  padding: 0 3px;
+}
+
+.supervision table.gestes {
+  border: 1px solid #ccc;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+.supervision table.gestes td,
+.supervision table.gestes th {
+  border: 1px solid #ccc;
+  padding: 0;
+}
+
+.supervision table.gestes th {
+  vertical-align: middle;
+  background: #eee;
+}
+
+.supervision table.gestes td {
+  padding-bottom: 10px;
+}
+
+.supervision .yaxis-labels > div {
+  display: inline-block;
+  text-align: center;
+  font-size: 10px;
+  line-height: 0.8;
+  width: 34px;
+}
+
+.supervision .yaxis-labels .symbol {
+  font-size: 16px;
+}
+
+.supervision .xAxis .tickLabel {
+  background: #ddd;
+  color: black;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+@media print {
+  .supervision .geste > div {
+    outline: 1px solid #ccc;
+  }
+}
+
 /* To disable text selection */
 *[unselectable] {
   -moz-user-select: -moz-none;

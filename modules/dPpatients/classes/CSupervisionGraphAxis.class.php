@@ -80,7 +80,7 @@ class CSupervisionGraphAxis extends CMbObject {
     $props["limit_low"]            = "float"; // null => auto
     $props["limit_high"]           = "float"; // null => auto
     $props["display"]              = "enum list|points|lines"; // |bars
-    $props["show_points"]          = "bool notNull default|0";
+    $props["show_points"]          = "bool notNull default|1";
     $props["symbol"]               = "enum notNull list|circle|square|diamond|cross|triangle";
     return $props;
   }
