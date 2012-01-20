@@ -70,4 +70,34 @@ class CObservationResultSet extends CMbObject {
   function loadRefsResults(){
     return $this->_ref_results = $this->loadBackRefs("observation_results");
   }
+  
+  static function getResultsFor(CMbObject $object) {
+    $request = new CRequest;
+    $request->addTable("observation_result");
+    $request->addSelect("*");
+    $request->addLJoin(array(
+      "observation_result_set" => "observation_result_set.observation_result_set_id = observation_result.observation_result_set_id",
+    ));
+    $request->addWhere(array(
+      "observation_result_set.context_class" => "= '$object->_class'",
+      "observation_result_set.context_id"    => "= '$object->_id'",
+    ));
+    
+    $results = $object->_spec->ds->loadList($request->getRequest());
+    
+    $times = array();
+    $data = array();
+    
+    foreach($results as $_result) {
+      $_time = CMbDate::toUTCTimestamp($_result["datetime"]);
+      $times[$_time] = $_time;
+      
+      $data[$_result["value_type_id"]][$_result["unit_id"]][] = array(
+        $_time,
+        floatval($_result["value"]),
+      );
+    }
+    
+    return array($data, array_values($times));
+  }
 }

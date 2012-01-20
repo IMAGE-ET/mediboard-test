@@ -60,4 +60,39 @@ class CSupervisionGraph extends CMbObject {
     
     $this->_view = $this->title;
   }
+  
+  function buildGraph($results, $time_min, $time_max) {
+    $graph = array(
+      "yaxes"  => array(),
+      "xaxes"  => array(array(
+        "mode"     => "time",
+        "position" => "bottom", 
+        "min"      => $time_min, 
+        "max"      => $time_max,
+      )),
+      "series" => array(),
+    );
+    
+    $_axes = $this->loadRefsAxes();
+    
+    foreach(array_values($_axes) as $yaxis_i => $_axis) {
+      $graph["yaxes"][] = $_axis->getAxisForFlot(count($graph["yaxes"]));
+    
+      $_series = $_axis->loadRefsSeries();
+      
+      foreach($_series as $_serie) {
+        $_series_data = $_serie->initSeriesData($yaxis_i+1);
+        
+        if (!isset($results[$_serie->value_type_id][$_serie->value_unit_id])) {
+          continue;
+        }
+        
+        $_series_data["data"] = $results[$_serie->value_type_id][$_serie->value_unit_id];
+  
+        $graph["series"][] = $_series_data;
+      }
+    }
+    
+    return $graph;
+  }
 }

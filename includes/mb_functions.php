@@ -480,7 +480,19 @@ class CMbDate {
       default:
         trigger_error("Can't make a relative position for unknown '$period' period", E_USER_WARNING);
     }
-  } 
+  }
+  
+  static function toUTCTimestamp($time) {
+    static $default_timezone;
+    
+    if (!$default_timezone) $default_timezone = date_default_timezone_get();
+    
+    date_default_timezone_set("UTC");
+    $time = strtotime($time) * 1000; // in ms;
+    date_default_timezone_set($default_timezone);
+    
+    return $time;
+  }
 }
 
 CMbDate::$xmlDateTime = CMbDate::$xmlDate."T".CMbDate::$xmlTime;

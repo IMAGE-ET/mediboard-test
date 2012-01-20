@@ -40,6 +40,32 @@ class CSupervisionGraphSeries extends CMbObject {
     return $props;
   }
   
+  function initSeriesData($yaxes_count){
+    $axis = $this->loadRefAxis();
+    
+    $series_data = array(
+      "data"  => array(array(0, null)),
+      "yaxis" => $yaxes_count,
+      "label" => utf8_encode($this->_view),
+      "unit"  => utf8_encode($this->loadRefValueUnit()->label),
+      "color" => "#$this->color",
+      "shadowSize" => 0,
+    );
+    
+    $series_data["points"] = array("show" => false);
+    $series_data[$axis->display] = array("show" => true);
+    
+    if ($axis->show_points || $axis->display == "points") {
+      $series_data["points"] = array(
+        "show"      => true, 
+        "symbol"    => $axis->symbol, 
+        "lineWidth" => 1,
+      );
+    }
+    
+    return $series_data;
+  }
+  
   /**
    * @return CSupervisionGraphAxis
    */

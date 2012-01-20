@@ -24,6 +24,15 @@ class CSupervisionGraphAxis extends CMbObject {
   
   var $_ref_series               = null;
   
+  static $default_yaxis = array(
+    "position" => "left", 
+    "labelWidth" => 20, 
+    "ticks" => 6, 
+    "reserveSpace" => true,
+    "label" => "",
+    "symbolChar" => "",
+  );
+  
   function getSymbolChar() {
     $this->completeField("symbol");
     
@@ -34,6 +43,27 @@ class CSupervisionGraphAxis extends CMbObject {
       "square"   => "&#x25A1;",
       "triangle" => "&#x25B3;",
     ), $this->symbol);
+  }
+  
+  function getAxisForFlot($count_yaxes){
+    $axis_data = array(
+      "symbolChar" => $this->getSymbolChar(),
+      "label"      => $this->title,
+    ) + self::$default_yaxis;
+    
+    if ($count_yaxes) {
+      $axis_data["alignTicksWithAxis"] = 1;
+    }
+    
+    if ($this->limit_low != null) {
+      $axis_data["min"] = floatval($this->limit_low);
+    }
+    
+    if ($this->limit_high != null) {
+      $axis_data["max"] = floatval($this->limit_high);
+    }
+    
+    return $axis_data;
   }
   
   function getSpec() {

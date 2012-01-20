@@ -39,7 +39,7 @@ Main.add(function(){
     {{foreach from=$graphs item=_graph key=i name=graphs}}
       ph = $("#placeholder-{{$i}}");
       series = {{$_graph.series|@json}};
-      xaxes = {{$xaxes|@json}};
+      xaxes  = {{$_graph.xaxes|@json}};
       
       {{if !$smarty.foreach.graphs.last}}
         xaxes[0].tickFormatter = function(){return " "};
