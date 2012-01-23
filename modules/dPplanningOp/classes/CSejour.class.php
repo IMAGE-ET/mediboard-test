@@ -2060,6 +2060,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $this->loadRefPraticien();
     $this->loadNDA();
     return array("DATE ENT" => mbDateToLocale($this->entree), "PRAT RESPONSABLE" => $this->_ref_praticien->_view,
+                 "HEURE ENT" => mbTime($this->entree),
                  "NDOS"     => $this->_NDA,
                  "CODE BARRE NDOS" => "@BARCODE_".$this->_NDA."@");
   }
