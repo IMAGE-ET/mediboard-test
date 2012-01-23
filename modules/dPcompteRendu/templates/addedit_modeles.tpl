@@ -59,7 +59,7 @@ var Modele = {
     var container = new Element("div", {style: "width: 17cm; padding: 0; margin: 0; position: absolute; left: -1500px; bottom: 200px;"}).insert(content);
     $$('body')[0].insert(container);
     // Calcul approximatif de la hauteur
-    $V(getForm("editFrm").height, (container.getHeight() * 1.4).round());
+    $V(getForm("editFrm").height, (container.getHeight()*0.85).round());
   }
 };
 
