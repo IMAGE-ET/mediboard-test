@@ -46,7 +46,7 @@ switch($command) {
       echo "No port specified\n";
       exit(0);
     }
-    CMLLPServer::send($host, $port, "__".strtoupper($command)."__\n");
+    echo CMLLPServer::send($host, $port, "__".strtoupper($command)."__\n");
     break;
     
   case "test":
@@ -57,7 +57,7 @@ switch($command) {
     $n = 30;
     $secs = 60;
     for($i = 0; $i < $n; $i++) {
-      CMLLPServer::send($host, $port, "\x0B".ER7Message::ORU()."\x1C\x0D");
+      echo CMLLPServer::send($host, $port, "\x0B".CMLLPServer::ORU()."\x1C\x0D");
       usleep($secs * 1000000);
     }
     break;

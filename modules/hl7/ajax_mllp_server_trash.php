@@ -1,0 +1,45 @@
+<?php /* $Id:$ */
+
+/**
+ * @package Mediboard
+ * @subpackage hl7
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
+
+$process_id = CValue::get("process_id");
+$uid        = CValue::get("uid");
+
+$tmp_dir    = CMLLPServer::getTmpDir();
+$pid_files  = glob("$tmp_dir/pid.*");
+
+foreach($pid_files as $_file) {
+  $_pid = substr($_file, strrpos($_file, ".") + 1);
+  if ($process_id != $_pid) {
+    continue;
+  }
+  
+  if (@unlink($_file) === true) {
+    CAppUI::displayAjaxMsg("Le fichier 'pid.$process_id'  a été supprimé");
+    return;
+  } 
+}
+
+CAppUI::displayAjaxMsg("Le fichier 'pid.$process_id'  a pu être supprimé", UI_MSG_ERROR);
+
+$processes = CMLLPServer::get_ps_status();
+if (!array_key_exists($process_id, $processes)) {
+  return;
+}
+
+// Création du template
+$smarty = new CSmartyDP();
+
+$smarty->assign("process_id", $process_id);
+$smarty->assign("uid"       , $uid);
+$smarty->assign("_process"  , $processes[$process_id]);
+$smarty->display("inc_server_mllp.tpl"); 
+    
+
+?>

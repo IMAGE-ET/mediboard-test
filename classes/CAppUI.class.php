@@ -260,7 +260,7 @@ class CAppUI {
     
     $class = self::getErrorClass($type);
     
-    self::callbackAjax('$("systemMsg").insert', "<div class='$class'>".htmlentities($msg)."</div>");
+    self::callbackAjax('$("systemMsg").show().insert', "<div class='$class'>".htmlentities($msg)."</div>");
   }
   
   static function isMsgOK() {

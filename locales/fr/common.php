@@ -235,6 +235,7 @@ $locales['Rendez-vous'] = 'Rendez-vous';
 $locales['Reprocess'] = 'Retraiter';
 $locales['Resend'] = 'Renvoyer';
 $locales['Reset'] = 'Réinitialiser';
+$locales['Restart'] = 'Redémarrer';
 $locales['Restore'] = 'Rétablir';
 $locales['Results'] = 'Résultats';
 $locales['Retry'] = 'Réessayer';

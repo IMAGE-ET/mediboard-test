@@ -46,6 +46,16 @@ class CMLLPServer {
    */
   var $server = null;
   
+  /**
+   * @var integer Request count
+   */
+  var $request_count = 0;
+  
+  /**
+   * @var SocketClient The SocketClient instance
+   */
+  static $client = null;
+  
   private $clients = array();
   
   function __construct($call_url, $username, $password, $port){
@@ -70,6 +80,8 @@ class CMLLPServer {
         if (function_exists("quit")) {
           quit("restart");
         }
+      case "__STATS__":
+        return $this->request_count;
     }
     
     // Verification qu'on ne recoit pas un en-tete de message en ayant deja des données en buffer
@@ -96,6 +108,7 @@ class CMLLPServer {
       
       $start = microtime(true);
       $this->http_request_post($this->call_url."/index.php?login={$this->username}:{$this->password}", $post);
+      $this->request_count++;
       $time = microtime(true) - $start;
       echo sprintf(" > Request done in %f s\n", $time);
       
@@ -171,7 +184,7 @@ class CMLLPServer {
 -------------------------------------------------------
 
 EOT;
-
+    
     $this->server->bind("0.0.0.0", $this->port)
                  ->setMotd($motd)
                  ->setRequestHandler     (array($this, "handle"))
@@ -188,12 +201,15 @@ EOT;
     require_once "$root_dir/lib/phpsocket/SocketClient.php";
     
     try {
-      $client = new SocketClient();
-      $client->connect($host, $port);
-      echo $client->sendandrecive($message);
+      if (!self::$client) {
+        self::$client = new SocketClient();
+        self::$client->connect($host, $port);
+      }
+      
+      return self::$client->sendandrecive($message);
     }
     catch(Exception $e) {
-      echo $e->getMessage()."\n";
+      throw $e;
     }
   }
   
@@ -205,8 +221,11 @@ EOT;
     
     foreach($pid_files as $_file) {
       $_pid = substr($_file, strrpos($_file, ".")+1);
+      $launched = strftime("%Y-%m-%d %H:%M:%S", filemtime($_file));
       $processes[$_pid] = array(
-        "port" => file_get_contents($_file),
+        "port"     => file_get_contents($_file),
+        "launched" => $launched,
+        "launched_rel" => CMbDate::relative($launched)
       );
     }
     
@@ -247,5 +266,48 @@ EOT;
     CMbPath::forceDir($tmp_dir);
     
     return $tmp_dir;
+  }
+
+  /**
+   * @return string An ORU message formatted in ER7
+   */
+  final static function ORU(){
+    $date = strftime("%Y%m%d%H%M%S");
+    $er7 = <<<EOT
+MSH|^~\&|||||||ORU^R01|HP104220879017992|P|2.3||||||8859/1
+PID|1||000038^^^&&^PI~323328^^^Mediboard&1.2.250.1.2.3.4&OX^RI||TEST^Obx^^^m^^L^A||19800101|M|||^^^^^^H|||||||12000041^^^&&^AN||||||||||||N||VALI|20120116161701||||||
+PV1|1|I|UF1^^^&&^O|R|12000041^^^&&^RI||929997607^FOO^Bar^^^^^^&1.2.250.1.71.4.2.1&ISO^L^^^ADELI^^^^^^^^^^|||||||90||P|929997607^FOO^Bar^^^^^^&1.2.250.1.71.4.2.1&ISO^L^^^ADELI^^^^^^^^^^||321120^^^Mediboard&1.2.250.1.2.3.4&OX^RI||AMBU|N||||||||||||||4||||||||||||||||
+OBR||||Mediboard test|||$date
+
+EOT;
+    
+    $obx = array();
+    $obx[] = "OBX||NM|0002-4b60^Tcore^MDIL|0|".(rand(350, 400)/10)."|0004-17a0^°C^MDIL|||||F";
+    $obx[] = "OBX||NM|0002-4bb8^SpO2^MDIL|0|".  rand(80, 100).     "|0004-0220^%^MDIL|||||F";
+    $obx[] = "OBX||NM|0002-5000^Resp^MDIL|0|".  rand(20, 50).      "|0004-0ae0^rpm^MDIL|||||F";
+    $obx[] = "OBX||NM|0002-4182^HR^MDIL|0|".    rand(40, 90).      "|0004-0aa0^bpm^MDIL|||||F";
+    
+    $obx[] = "OBX||NM|0002-4a15^ABPs^MDIL|0|".    rand(90, 160).   "|0004-0f20^mmHg^MDIL|||||F";
+    $obx[] = "OBX||NM|0002-4a16^ABPd^MDIL|0|".    rand(30, 90).    "|0004-0f20^mmHg^MDIL|||||F";
+    $obx[] = "OBX||NM|0002-4a17^ABPm^MDIL|0|".    rand(80, 100).   "|0004-0f20^mmHg^MDIL|||||F";
+    
+    $er7 .= implode("\n", $obx);
+    
+    return $er7;
+  }
+
+  /**
+   * @return array The list of available test messages
+   */
+  static function getList(){
+    $reflection = new ReflectionClass('CMLLPServer');
+    $list = $reflection->getMethods(ReflectionMethod::IS_FINAL);
+    
+    $types = array();
+    foreach($list as $_method) {
+      $types[] = $_method->name;
+    }
+    
+    return $types;
   }
 }
