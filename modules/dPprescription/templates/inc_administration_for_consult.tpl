@@ -23,11 +23,13 @@ afterAdministration = function() {
             {{mb_key object=$administration}}
             <input type="hidden" name="object_class" value="{{$_line->_class}}"/>
             <input type="hidden" name="object_id" value="{{$_line->_id}}" />
-						<input type="hidden" name="unite_prise" value="{{$_line->_chapitre}}" />
             {{if $_line->_prise_id}}
+              <input type="hidden" name="unite_prise" value="{{$_line->_chapitre}}" />
               <input type="hidden" name="prise_id" value="{{$_line->_prise_id}}" />
-						{{/if}}
-						{{mb_field object=$administration field=_date hidden=true}}
+            {{else}}
+              <input type="hidden" name="unite_prise" value="aucune_prise" />
+            {{/if}}
+            {{mb_field object=$administration field=_date hidden=true}}
             {{mb_field object=$administration field=administrateur_id hidden=true}}
             {{mb_field object=$administration field=quantite hidden=true}}
             {{mb_field object=$administration field=_time form=addAdministration-$line_guid register=true}}
