@@ -40,6 +40,26 @@ class CFloatSpec extends CMbFieldSpec {
     ) + parent::getOptions();
   }
   
+  function getValue($object, $smarty = null, $params = array()) {
+    $propValue = $object->{$this->fieldName};
+    
+    if ($propValue !== null) {
+      $decimals = CMbArray::extract($params, "decimals", $this->decimals);
+      
+      if ($decimals == null) {
+        $decimals = isset($this->precise) ? 4 : 2;
+      }
+      
+      return number_format($propValue, $decimals, ',', ' ');
+    }
+    
+    if ($propValue && $this->mask) {
+      $propValue = self::formattedToMasked($propValue, $this->mask, $this->format);
+    }
+    
+    return htmlspecialchars($propValue);
+  }
+  
   function checkProperty($object){
     $propValue = CMbFieldSpec::checkNumeric($object->{$this->fieldName}, false);
     if($propValue === null){
