@@ -19,7 +19,8 @@ class CService extends CMbObject {
   // DB references
   var $group_id       = null;
   var $responsable_id = null;
-
+  var $secteur_id     = null;
+  
   // DB Fields
   var $nom         = null;
   var $type_sejour = null;
@@ -69,7 +70,8 @@ class CService extends CMbObject {
   	$props = parent::getProps();
     $props["group_id"]       = "ref notNull class|CGroups";
     $props["responsable_id"] = "ref class|CMediusers";
-
+    $props["secteur_id"]     = "ref class|CSecteur";
+    
     $sejour = new CSejour;
     $props["type_sejour"] = CMbString::removeToken($sejour->_props["type"], " ", "notNull");
 

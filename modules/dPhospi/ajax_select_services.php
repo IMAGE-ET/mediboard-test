@@ -12,12 +12,27 @@
 $services_ids = CValue::getOrSession("services_ids");
 $view         = CValue::get("view");
 
+$group_id = CGroups::loadCurrent()->_id;
+
 $service = new CService;
 $where = array();
-$where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+$where["group_id"] = "= '$group_id'";
+$where["secteur_id"] = "IS NULL";
 $order = "externe, nom";
 $all_services = $service->loadList($where, $order);
+
+unset($where["secteur_id"]);
 $services_allowed = $service->loadListWithPerms(PERM_READ, $where, $order);
+
+$where = array();
+$where["group_id"] = "= '$group_id'";
+$secteur = new CSecteur;
+$secteurs = $secteur->loadList($where, "nom");
+
+foreach ($secteurs as $_secteur) {
+  $_secteur->loadRefsServices();
+  $_secteur->_all_checked = array_intersect(array_keys($_secteur->_ref_services), array_keys($services_ids)) === array_keys($_secteur->_ref_services);
+}
 
 $services_ids_hospi = CAppUI::pref("services_ids_hospi");
 
@@ -32,7 +47,8 @@ $smarty->assign("services_ids_hospi", $services_ids_hospi);
 $smarty->assign("services_ids", $services_ids);
 $smarty->assign("all_services", $all_services);
 $smarty->assign("services_allowed", $services_allowed);
-$smarty->assign("group_id", CGroups::loadCurrent()->_id);
+$smarty->assign("group_id"    , CGroups::loadCurrent()->_id);
+$smarty->assign("secteurs"    , $secteurs);
 
 $smarty->display("inc_select_services.tpl");
 

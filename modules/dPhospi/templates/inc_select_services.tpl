@@ -52,6 +52,28 @@
           {{tr}}CService-title-selection{{/tr}}
         </th>
       </tr>
+      {{foreach from=$secteurs item=_secteur}}
+        <tr>
+          <td>
+            <label>
+              <input type="checkbox" name="_secteur_{{$_secteur->_id}}" {{if $_secteur->_all_checked}}checked='checked'{{/if}}
+                onclick="$$('.secteur_{{$_secteur->_id}}').each(function(elt){ elt.down('input').checked=this.checked ? 'checked' : ''; }.bind(this))"/>
+              <strong>{{mb_value object=$_secteur field=nom}}</strong>
+            </label>
+          </td>
+        </tr>
+        {{foreach from=$_secteur->_ref_services item=_service}}
+          <tr class="secteur_{{$_secteur->_id}}">
+            <td>
+              <label>
+                <input style="margin-left: 1em;" type="checkbox" name="services_ids[{{$_service->_id}}]" value="{{$_service->_id}}"
+                  {{if !in_array($_service->_id, array_keys($services_allowed))}}disabled="disabled"{{/if}}
+                  {{if $services_ids && in_array($_service->_id, $services_ids)}}checked="checked"{{/if}}/> {{$_service}}
+              </label>
+            </td>
+          </tr>
+        {{/foreach}}
+      {{/foreach}}
       {{foreach from=$all_services item=_service}}
         <tr>
           <td>

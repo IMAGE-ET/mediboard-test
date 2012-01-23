@@ -32,6 +32,7 @@ function submit_Ajax(form, update_name){
 {{mb_script module=dPhospi script=affectation_uf}}
 
 <ul id="tabs-chambres" class="control_tabs">
+  <li><a href="#secteurs">{{tr}}CSecteur{{/tr}}</a></li>
   <li><a href="#services">{{tr}}CService{{/tr}}</a></li>
   <li><a href="#chambres">{{tr}}CChambre{{/tr}}</a></li>
   <li><a href="#UF">{{tr}}CUniteFonctionnelle{{/tr}}</a></li>
@@ -39,6 +40,10 @@ function submit_Ajax(form, update_name){
   <li><button type="button" style="float:right;" onclick="return popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button></li>
 </ul>
 <hr class="control_tabs" />
+
+<div id="secteurs" style="display: none;">
+  {{include file="inc_vw_idx_secteurs.tpl"}}
+</div>
 
 <div id="services" style="display: none;">
   {{include file="inc_vw_idx_services.tpl"}}

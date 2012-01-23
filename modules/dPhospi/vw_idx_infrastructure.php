@@ -9,6 +9,7 @@
 
 CCanDo::checkAdmin();
 
+$secteur_id    = CValue::getOrSession("secteur_id");
 $service_id    = CValue::getOrSession("service_id");
 $chambre_id    = CValue::getOrSession("chambre_id");
 $lit_id        = CValue::getOrSession("lit_id");
@@ -20,13 +21,20 @@ $group = CGroups::loadCurrent();
 // Liste des Etablissements
 $etablissements = CMediusers::loadEtablissements(PERM_READ);
 
-// Chargement du service à ajouter/editer
+// Chargement du secteur à ajouter / éditer
+$secteur = new CSecteur;
+$secteur->group_id = $group->_id;
+$secteur->load($secteur_id);
+$secteur->loadRefsNotes();
+$secteur->loadRefsServices();
+
+// Chargement du service à ajouter / éditer
 $service = new CService();
 $service->group_id = $group->_id;
 $service->load($service_id);
 $service->loadRefsNotes();
 
-// Récupération de la chambre à ajouter/editer
+// Récupération de la chambre à ajouter / éditer
 $chambre = new CChambre();
 $chambre->load($chambre_id);
 $chambre->loadRefsNotes();
@@ -39,12 +47,12 @@ if (!$chambre->_id) {
   CValue::setSession("lit_id", 0);
 }
 
-// Chargement du lit à ajouter/editer
+// Chargement du lit à ajouter / éditer
 $lit = new CLit();
 $lit->load($lit_id);
 $lit->loadRefChambre();
 
-// Récupération des chambres/services
+// Récupération des chambres/services/secteurs
 $where = array();
 $where["group_id"] = "= '$group->_id'";
 $order = "nom";
@@ -54,6 +62,8 @@ foreach ($services as $_service) {
 	  $_chambre->loadRefs();
 	}
 }
+
+$secteurs = $secteur->loadListWithPerms(PERM_READ, $where, $order);
 
 // Chargement de l'uf à ajouter/éditer
 $uf = new CUniteFonctionnelle();
@@ -85,6 +95,8 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("services"      , $services);
 $smarty->assign("service"       , $service);
+$smarty->assign("secteurs"      , $secteurs);
+$smarty->assign("secteur"       , $secteur);
 $smarty->assign("chambre"       , $chambre);
 $smarty->assign("lit"           , $lit);
 $smarty->assign("ufs"           , $ufs);

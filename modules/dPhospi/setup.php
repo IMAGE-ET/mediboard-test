@@ -510,7 +510,28 @@ class CSetupdPhospi extends CSetup {
       ADD `parent_affectation_id` INT (11) UNSIGNED AFTER `sortie`;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.54";
+    $this->makeRevision("0.54");
+    $query = "CREATE TABLE `secteur` (
+              `secteur_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `group_id` INT (11) UNSIGNED NOT NULL,
+              `nom` VARCHAR (255) NOT NULL,
+              `description` TEXT
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `secteur` 
+      ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `service` 
+      ADD `secteur_id` INT (11) UNSIGNED AFTER `service_id`;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `service` 
+      ADD INDEX (`secteur_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.55";
   }
 }
 ?>
