@@ -1297,6 +1297,12 @@ span.countertip {
   font-family: 'Lucida Sans Unicode', 'Arial Unicode MS', sans-serif; /** For IE : use a Unicode font **/
 }
 
+.supervision .yaxis-labels .title {
+  font-size: 1.3em;
+  line-height: 1.4;
+  padding: 1em;
+}
+
 .supervision .xAxis .tickLabel {
   background: #ddd;
   color: black;

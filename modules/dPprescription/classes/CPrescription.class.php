@@ -1865,7 +1865,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
     }
   }
   
-  function loadPeropLines() {
+  function loadPeropLines($load_planifs = true) {
     $lines = array();
     
     $this->calculAllPlanifSysteme(true);
@@ -1889,13 +1889,15 @@ class CPrescription extends CMbObject implements IPatientRelated {
     $lines_mix = $prescription_line_mix->loadMatchingList();
     
     foreach($lines_med as $_line_med){
-      $_line_med->loadBackRefs("planifications", "dateTime");
-      
-      foreach($_line_med->_back["planifications"] as $_planif){
-        $_planif->loadTargetObject();
-        $_planif->_ref_object->loadRefsFwd();
-        $_planif->loadRefPrise();
-        $lines[$_line_med->_guid]["planifications"][$_planif->dateTime.$_line_med->_id][$_planif->_id] = $_planif;
+      if ($load_planifs) {
+        $_line_med->loadBackRefs("planifications", "dateTime");
+        
+        foreach($_line_med->_back["planifications"] as $_planif){
+          $_planif->loadTargetObject();
+          $_planif->_ref_object->loadRefsFwd();
+          $_planif->loadRefPrise();
+          $lines[$_line_med->_guid]["planifications"][$_planif->dateTime.$_line_med->_id][$_planif->_id] = $_planif;
+        }
       }
       
       $_line_med->loadRefsAdministrations();
@@ -1911,11 +1913,13 @@ class CPrescription extends CMbObject implements IPatientRelated {
     }
     
     foreach($lines_elt as $_elt){
-      $_elt->loadBackRefs("planifications", "dateTime");
-  
-      foreach($_elt->_back["planifications"] as $_planif){
-        $_planif->loadRefPrise();
-        $lines[$_elt->_guid]["planifications"][$_planif->dateTime.$_elt->_id][$_planif->_id] = $_planif; 
+      if ($load_planifs) {
+        $_elt->loadBackRefs("planifications", "dateTime");
+    
+        foreach($_elt->_back["planifications"] as $_planif){
+          $_planif->loadRefPrise();
+          $lines[$_elt->_guid]["planifications"][$_planif->dateTime.$_elt->_id][$_planif->_id] = $_planif; 
+        }
       }
       
       $_elt->loadRefsAdministrations();
@@ -1930,13 +1934,16 @@ class CPrescription extends CMbObject implements IPatientRelated {
   
       foreach($_mix->_ref_lines as $_mix_item){
         $_mix_item->updateQuantiteAdministration();
-        $_mix_item->loadbackRefs("planifications", "dateTime");
-  
-        foreach($_mix_item->_back["planifications"] as $_planif){
-          $_planif->loadTargetObject();
-          $_planif->_ref_object->loadRefsFwd();
-          $_planif->loadRefPrise();
-          $lines[$_mix->_guid]["planifications"][$_planif->dateTime.$_mix_item->_id][$_planif->_id] = $_planif; 
+        
+        if ($load_planifs) {
+          $_mix_item->loadbackRefs("planifications", "dateTime");
+    
+          foreach($_mix_item->_back["planifications"] as $_planif){
+            $_planif->loadTargetObject();
+            $_planif->_ref_object->loadRefsFwd();
+            $_planif->loadRefPrise();
+            $lines[$_mix->_guid]["planifications"][$_planif->dateTime.$_mix_item->_id][$_planif->_id] = $_planif; 
+          }
         }
         
         $_mix_item->loadRefsAdministrations();
