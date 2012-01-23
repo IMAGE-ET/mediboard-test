@@ -22,7 +22,7 @@ $lines = $prescription->_ref_prescription_lines_element;
 
 foreach ($lines as $_line) {
   $_line->loadRefsPrises();
-  $line->_ref_prises = reset($line->_ref_prises);
+	$_line->_prise_id = count($_line->_ref_prises) ? reset($_line->_ref_prises)->_id : '';
 }
 
 $user = CAppUI::$user;

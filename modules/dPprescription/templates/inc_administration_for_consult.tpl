@@ -16,25 +16,23 @@ afterAdministration = function() {
           <strong onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}');">{{$_line->_ref_element_prescription->_view}}</strong>
         </td>
         <td class="narrow">
-          {{if $_line->_ref_prises|@count == 1}}
-            {{assign var=line_guid value=$_line->_guid}}
-            {{assign var=prise value=$_line->_ref_prises|@reset}}
-            <form name="addAdministration-{{$_line->_guid}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: afterAdministration});">
-              <input type="hidden" name="m" value="dPprescription" />
-              <input type="hidden" name="dosql" value="do_administration_aed" />
-              {{mb_key object=$administration}}
-              <input type="hidden" name="prise_id" value="{{$prise->_id}}" />
-              <input type="hidden" name="object_class" value="{{$_line->_class}}"/>
-              <input type="hidden" name="object_id" value="{{$_line->_id}}" />
-              {{mb_field object=$administration field=_date hidden=true}}
-              {{mb_field object=$administration field=administrateur_id hidden=true}}
-              {{mb_field object=$administration field=quantite hidden=true}}
-              {{mb_field object=$administration field=_time form=addAdministration-$line_guid register=true}}
-              <button type="button" class="add notext" onclick="this.form.onsubmit()"></button>
-            </form>
-          {{else}}
-            {{tr}}CPrisePosologie.none{{/tr}}
-          {{/if}}
+          {{assign var=line_guid value=$_line->_guid}}
+          <form name="addAdministration-{{$_line->_guid}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: afterAdministration});">
+            <input type="hidden" name="m" value="dPprescription" />
+            <input type="hidden" name="dosql" value="do_administration_aed" />
+            {{mb_key object=$administration}}
+            <input type="hidden" name="object_class" value="{{$_line->_class}}"/>
+            <input type="hidden" name="object_id" value="{{$_line->_id}}" />
+						<input type="hidden" name="unite_prise" value="{{$_line->_chapitre}}" />
+            {{if $_line->_prise_id}}
+              <input type="hidden" name="prise_id" value="{{$_line->_prise_id}}" />
+						{{/if}}
+						{{mb_field object=$administration field=_date hidden=true}}
+            {{mb_field object=$administration field=administrateur_id hidden=true}}
+            {{mb_field object=$administration field=quantite hidden=true}}
+            {{mb_field object=$administration field=_time form=addAdministration-$line_guid register=true}}
+            <button type="button" class="add notext" onclick="this.form.onsubmit()"></button>
+          </form>
         </td>
       </tr>
     {{foreachelse}}
