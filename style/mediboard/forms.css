@@ -562,10 +562,6 @@ button.clock:before, a.button.clock:before {
   content: url(images/buttons/planning.png);
 }
 
-button.web100T:before, a.button.web100T:before {
-  content: url(images/buttons/web100T.png);
-}
-
 button.selected {
   border: 2px solid #000;
 }

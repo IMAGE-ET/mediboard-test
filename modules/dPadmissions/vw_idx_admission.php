@@ -55,7 +55,6 @@ $smarty->assign("services"     , $services);
 $smarty->assign("prats"        , $prats);
 $smarty->assign("hier"         , $hier);
 $smarty->assign("demain"       , $demain);
-$smarty->assign("web100T_active", CModule::getActive("web100T"));
 
 $smarty->display("vw_idx_admission.tpl");
 
