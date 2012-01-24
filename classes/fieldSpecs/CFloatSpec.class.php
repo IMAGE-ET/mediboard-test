@@ -46,11 +46,9 @@ class CFloatSpec extends CMbFieldSpec {
     if ($propValue !== null) {
       $decimals = CMbArray::extract($params, "decimals", $this->decimals);
       
-      if ($decimals == null) {
-        $decimals = isset($this->precise) ? 4 : 2;
+      if ($decimals != null) {
+        return number_format($propValue, $decimals, ',', ' ');
       }
-      
-      return number_format($propValue, $decimals, ',', ' ');
     }
     
     if ($propValue && $this->mask) {
