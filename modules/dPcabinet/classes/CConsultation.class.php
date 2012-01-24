@@ -1463,8 +1463,7 @@ TESTS A EFFECTUER
   }
   
   function docsEditable() {
-    return true;
-    /*if (parent::docsEditable()) {
+    if (parent::docsEditable()) {
       return true;
     }
    
@@ -1477,7 +1476,7 @@ TESTS A EFFECTUER
     }
     $this->loadRefPlageConsult();
 
-    return (mbDateTime("+ 24 HOUR", "{$this->_date} {$this->heure}") > mbDateTime());*/
+    return (mbDateTime("+ 24 HOUR", "{$this->_date} {$this->heure}") > mbDateTime());
   }
   
   function canEdit() {
