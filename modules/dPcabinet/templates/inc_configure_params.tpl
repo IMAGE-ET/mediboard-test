@@ -75,6 +75,8 @@
   
   {{mb_include module=system template=inc_config_str var=hours_after_changing_prat size="3" suffix="h"}}
   
+  {{mb_include module=system template=inc_config_bool var=consult_readonly}}
+  
   {{mb_include module=system template=inc_config_bool var=fix_doc_edit}}
   
   <!-- CConsultAnesth -->  

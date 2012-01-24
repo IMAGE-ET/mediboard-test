@@ -25,7 +25,8 @@ $dPconfig["dPcabinet"] = array(
     "minutes_before_consult_sejour" => 1,
     "hours_after_changing_prat"     => 0,
     "fix_doc_edit"                  => 0,
-    "search_sejour_all_groups"      => 0
+    "search_sejour_all_groups"      => 0,
+    "consult_readonly"             => 0,
   ),
   "CConsultAnesth" => array(
     "feuille_anesthesie" => "print_fiche",

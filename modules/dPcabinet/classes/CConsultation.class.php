@@ -1463,7 +1463,8 @@ TESTS A EFFECTUER
   }
   
   function docsEditable() {
-    if (parent::docsEditable()) {
+    return true;
+    /*if (parent::docsEditable()) {
       return true;
     }
    
@@ -1476,11 +1477,11 @@ TESTS A EFFECTUER
     }
     $this->loadRefPlageConsult();
 
-    return (mbDateTime("+ 24 HOUR", "{$this->_date} {$this->heure}") > mbDateTime());
+    return (mbDateTime("+ 24 HOUR", "{$this->_date} {$this->heure}") > mbDateTime());*/
   }
   
   function canEdit() {
-    if (!$this->sejour_id || CCanDo::admin()) {
+    if (!$this->sejour_id || CCanDo::admin() || !CAppUI::conf("dPcabinet CConsultation consult_readonly")) {
       return parent::canEdit();
     }
     
