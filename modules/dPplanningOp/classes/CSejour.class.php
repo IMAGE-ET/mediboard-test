@@ -180,6 +180,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_cancel_alerts             = null;
   var $_ref_suivi_medical         = null;
   var $_diagnostics_associes      = null;
+  var $_ref_prestations           = null;
   
   // Filter Fields
   var $_date_min        = null;
@@ -2164,6 +2165,36 @@ class CSejour extends CCodable implements IPatientRelated {
     if ($this->_etat == "cloture") {
       return "SORT";
     }
+  }
+  
+  function getPrestations() {
+    $affectations = $this->loadRefsAffectations();
+    $this->_ref_prestations = array();
+    
+    foreach ($affectations as $_affectation) {
+      $items_liaisons = $_affectation->loadBackRefs("items_liaisons");
+      
+      CMbObject::massLoadFwdRef($items_liaisons, "item_prestation_id");
+      CMbObject::massLoadFwdRef($items_liaisons, "item_prestation_realise_id");
+      
+      foreach ($items_liaisons as $_item_liaison) {
+        
+        $_item = $_item_liaison->loadRefItem();
+        $_item_realise = $_item_liaison->loadRefItemRealise();
+        
+        if ($_item_realise->_id) {
+          $this->_ref_prestations[$_item_liaison->date][] = $_item_realise;
+          $_item_realise->_quantite = 1;
+          $_item_realise->loadRefObject();
+        }
+        elseif ($_item->object_class === "CPrestationPonctuelle"){
+          $this->_ref_prestations[$_item_liaison->date][] = $_item;
+          $_item_realise->_quantite = $_item_liaison->quantite;
+          $_item->loadRefObject();
+        }
+      }
+    }
+    return $this->_ref_prestations;
   }
 }
 ?>
