@@ -2177,9 +2177,8 @@ class CSejour extends CCodable implements IPatientRelated {
       
       CMbObject::massLoadFwdRef($items_liaisons, "item_prestation_id");
       CMbObject::massLoadFwdRef($items_liaisons, "item_prestation_realise_id");
-      
+
       foreach ($items_liaisons as $_item_liaison) {
-        
         $_item = $_item_liaison->loadRefItem();
         $_item_realise = $_item_liaison->loadRefItemRealise();
         
@@ -2188,9 +2187,9 @@ class CSejour extends CCodable implements IPatientRelated {
           $_item_realise->_quantite = 1;
           $_item_realise->loadRefObject();
         }
-        elseif ($_item->object_class === "CPrestationPonctuelle"){
+        elseif ($_item->object_class == "CPrestationPonctuelle"){
           $this->_ref_prestations[$_item_liaison->date][] = $_item;
-          $_item_realise->_quantite = $_item_liaison->quantite;
+          $_item->_quantite = $_item_liaison->quantite;
           $_item->loadRefObject();
         }
       }

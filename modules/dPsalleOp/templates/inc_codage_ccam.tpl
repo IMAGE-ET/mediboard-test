@@ -34,7 +34,7 @@
   {{if !$subject->_canRead}}
     <tr>
       <td colspan="10" class="text">
-        <div class="small-info">Vous n'avez pas les droits nescessaires pour coder les actes</div>
+        <div class="small-info">Vous n'avez pas les droits nécessaires pour coder les actes</div>
       </td>
     </tr>
   {{else}}
