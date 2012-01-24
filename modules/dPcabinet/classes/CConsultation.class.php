@@ -1503,7 +1503,7 @@ TESTS A EFFECTUER
       return parent::canRead();
     }
     // Tout utilisateur peut consulter une consultation de séjour en lecture seule
-    return 1;
+    return $this->_canRead = 1;
   }
 }
 
