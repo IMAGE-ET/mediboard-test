@@ -30,7 +30,7 @@ if ($dossier_medical->_id) {
 
 $sejour->loadRefPraticien();
 $sejour->loadRefsOperations();
-$sejour->loadRefsTransmissions(null, true);
+$sejour->loadRefsTransmissions(true, true);
 $sejour->loadRefsObservations(true);
 $sejour->loadRefsTasks();
 $sejour->loadRefsNotes();
