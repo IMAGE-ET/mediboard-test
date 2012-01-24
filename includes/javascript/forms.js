@@ -466,6 +466,8 @@ var IEShim = {
     elements.each(function(textarea){
       var width = textarea._origWidth;
       
+      if (width < 40) return;
+      
       textarea.parentNode.style.width = width+"px";
       textarea.style.width = width+"px";
     });
