@@ -241,9 +241,12 @@ Main.add(function () {
                   <tr>
                     <th>Recherche</th>
                     <td>
-                      <input type="text" name="produit" value="" size="12" class="autocomplete" />
+                      <div class="dropdown">
+                        <input type="text" name="produit" value="" size="12" class="autocomplete" />
+                        <div style="display:none; width: 350px;" class="autocomplete" id="_produit_auto_complete"></div>
+                      </div>
+                      
                       <button type="button" class="search notext" onclick="MedSelector.init('produit');"></button>
-                      <div style="display:none; width: 350px;" class="autocomplete" id="_produit_auto_complete"></div>
                       <script type="text/javascript">
                           MedSelector.init = function(onglet){
                             this.sForm = "editLineTP";

@@ -294,28 +294,30 @@ addAerosol = function(){
   <tr>
     <td>
       <form action="?" method="get" name="searchProd" onsubmit="return false;">
+        <div class="dropdown">
 			    <input type="text" name="produit" value="" size="12" />
-			    <input type="checkbox" name="_recherche_livret" {{if $prescription->type=="sejour"}}checked="checked"{{/if}} />
-			    Livret Thérap.
-			    <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
-			    <button type="button" class="search" onclick="MedSelector.init('produit');">Rechercher</button>
-					
-					<button  class="new" onclick="addAerosol();" type="button">Aérosol</button>
-					
-			    <input type="hidden" name="code_cip" onchange="addSubstitutionLine(this.value);"/>
-			    <script type="text/javascript">
-			      MedSelector.init = function(onglet){
-			        this.sForm = "searchProd";
-			        this.sView = "produit";
-			        this.sCode = "code_cip";
-			        this.sRechercheLivret = document.searchProd._recherche_livret.value;
-			        this.sSearch = document.searchProd.produit.value;
-			        this.sOnglet = onglet;
-			        this.selfClose = false;
-			        this.pop();
-			      }
+          <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
+        </div>
+		    <input type="checkbox" name="_recherche_livret" {{if $prescription->type=="sejour"}}checked="checked"{{/if}} />
+		    Livret Thérap.
+		    <button type="button" class="search" onclick="MedSelector.init('produit');">Rechercher</button>
+				
+				<button  class="new" onclick="addAerosol();" type="button">Aérosol</button>
+				
+		    <input type="hidden" name="code_cip" onchange="addSubstitutionLine(this.value);"/>
+		    <script type="text/javascript">
+		      MedSelector.init = function(onglet){
+		        this.sForm = "searchProd";
+		        this.sView = "produit";
+		        this.sCode = "code_cip";
+		        this.sRechercheLivret = document.searchProd._recherche_livret.value;
+		        this.sSearch = document.searchProd.produit.value;
+		        this.sOnglet = onglet;
+		        this.selfClose = false;
+		        this.pop();
+		      }
 			  </script>
-			  </form>
+			</form>
     </td>
   </tr>
   <tr>

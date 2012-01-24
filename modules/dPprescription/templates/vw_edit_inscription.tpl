@@ -91,12 +91,14 @@ Main.add(function () {
 					<input type="hidden" name="callback" value="updateAdministration" />
 				</form>
 	      <form action="?" method="get" name="searchProd">
-	        <input type="text" style="width: 350px;" name="produit" class="autocomplete" autofocus="autofocus"/>
+	        <div class="dropdown">
+  	        <input type="text" style="width: 350px;" name="produit" class="autocomplete" autofocus="autofocus"/>
+            <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
+          </div>
           <label title="Recherche dans le livret thérapeutique">
             <input type="checkbox" value="1" name="_recherche_livret"
               {{if $conf.dPprescription.CPrescription.preselect_livret}}checked="checked"{{/if}} /> Livret Thérap.
           </label>
-	        <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
 	      </form>
       </div>
 
@@ -115,8 +117,10 @@ Main.add(function () {
 					<input type="hidden" name="callback" value="updateAdministration" />
         </form>
         <form action="?" method="get" name="searchElt">
-        	<input type="text" style="width: 350px;" name="libelle" class="autocomplete" autofocus="autofocus"/>
-          <div style="display:none;" class="autocomplete" id="element_auto_complete"></div>      
+          <div class="dropdown">
+          	<input type="text" style="width: 350px;" name="libelle" class="autocomplete" autofocus="autofocus"/>
+            <div style="display:none;" class="autocomplete" id="element_auto_complete"></div>      
+          </div>
         </form>      	
       </div>
   	</td>

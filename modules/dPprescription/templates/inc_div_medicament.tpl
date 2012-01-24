@@ -333,8 +333,11 @@ updateModaleAfterAddLine = function(line_id){
 			    <button  class="new" onclick="addAerosol();" type="button">Aérosol</button>
           <br />
 					</span>
-			    <input type="text" name="produit" value="&mdash; {{tr}}CPrescription.select_produit{{/tr}}" size="20" style="font-weight: bold; font-size: 1.3em; width: 300px;" class="autocomplete" 
-					       onclick="this.value = ''; headerPrescriptionTabs.setActiveTab('div_ajout_lignes');" />
+					<div class="dropdown">
+  			    <input type="text" name="produit" value="&mdash; {{tr}}CPrescription.select_produit{{/tr}}" size="20" style="font-weight: bold; font-size: 1.3em; width: 300px;" class="autocomplete" 
+  					       onclick="this.value = ''; headerPrescriptionTabs.setActiveTab('div_ajout_lignes');" />
+            <div style="display:none; width: 350px;" class="autocomplete" id="produit_auto_complete"></div>
+          </div>
 			    <label title="Recherche dans le livret thérapeutique">
 			      <input type="checkbox" value="1" name="_recherche_livret"
             {{if ($prescription->type=="sejour" && $conf.dPprescription.CPrescription.preselect_livret) ||
@@ -345,7 +348,6 @@ updateModaleAfterAddLine = function(line_id){
 			      Livret Thérap.
 			    </label>
 			    
-			    <div style="display:none; width: 350px;" class="autocomplete" id="produit_auto_complete"></div>
 			    <button id="searchButton-med" type="button" class="search" onclick="MedSelector.initsearch('produit'); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">Rechercher</button>
 			    <input type="hidden" name="code_cip" onchange="Prescription.addLine(this.value);"/>
 			
