@@ -69,6 +69,21 @@ Main.add(function(){
 
 {{assign var=images value="CPrescription"|static:"images"}}
 
+<div style="font-size: 1.5em; table-layout: fixed;">
+  <span style="font-weight: bold;">{{$interv->_ref_sejour->_ref_patient}}</span> &mdash;
+  {{$interv->_ref_sejour->_ref_patient->_age}} ans &mdash;
+  {{$interv->_ref_sejour->_ref_patient->_ref_constantes_medicales->poids}} Kg &mdash;
+  Groupe sang. / Rh. : {{$consult_anesth->groupe}} / {{$consult_anesth->rhesus}}
+</div>
+
+<hr />
+
+<button>Incision</button>
+<button>Fermeture</button>
+<button>Intubation</button>
+<button>Extubation</button>
+<hr />
+
 <div style="position: relative;" class="supervision">
   {{foreach from=$graphs item=_graph key=i}}
     <div class="yaxis-labels">
@@ -114,5 +129,14 @@ Main.add(function(){
         </td>
       </tr>
     {{/foreach}}
+    
+    <tr>
+      <th></th>
+      <td style="padding: 1px;">
+        <div class="now opacity-50" style="padding-left: {{$now}}%;">
+          <div class="marking"></div>
+        </div>
+      </td>
+    </tr>
   </table>
 </div>

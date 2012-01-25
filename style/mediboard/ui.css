@@ -1232,7 +1232,8 @@ span.countertip {
   background: #bbb;
 }
 
-.supervision .geste > div .marking {
+.supervision .geste > div .marking,
+.supervision .now .marking {
   position: absolute; 
   top: 0; 
   bottom: 0; 
@@ -1244,6 +1245,13 @@ span.countertip {
   border-top: none;
   border-bottom: none;
   margin: 0 -1px;
+}
+
+.supervision .now .marking {
+  display: block;
+  background: red;
+  border: none;
+  min-width: 2px;
 }
 
 .supervision .geste > div .marking > span {

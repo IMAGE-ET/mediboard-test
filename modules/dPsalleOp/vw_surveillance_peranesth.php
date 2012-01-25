@@ -14,7 +14,10 @@ $operation_id = CValue::get("operation_id");
 
 $interv = new COperation;
 $interv->load($operation_id);
+$interv->loadRefSejour()->loadRefPatient()->loadRefConstantesMedicales();
 $interv->loadRefPlageOp();
+
+$consult_anesth = $interv->loadRefsConsultAnesth();
 
 list($results, $times) = CObservationResultSet::getResultsFor($interv);
 
@@ -32,7 +35,9 @@ $time_min = floor(CMbDate::toUTCTimestamp("$date $time_min") / $round) * $round;
 $time_max =  ceil(CMbDate::toUTCTimestamp("$date $time_max") / $round) * $round;
 
 $graph_object = new CSupervisionGraph;
-$graph_objects = $graph_object->loadList();
+$graph_objects = $graph_object->loadList(array(
+  "disabled" => "= '0'",
+));
 
 $graphs = array();
 foreach($graph_objects as $_go) {
@@ -150,6 +155,8 @@ if($prescription->_id){
   }
 }
 
+$now = 100 * (CMbDate::toUTCTimestamp(mbDateTime()) - $time_min) / ($time_max - $time_min);
+
 CJSLoader::$files = array(
   "lib/flot/jquery.min.js",
   "lib/flot/jquery.flot.min.js",
@@ -169,5 +176,7 @@ $smarty->assign("gestes",      $gestes);
 $smarty->assign("time_debut_op", $time_debut_op);
 $smarty->assign("time_fin_op",   $time_fin_op);
 $smarty->assign("yaxes_count", $yaxes_count);
+$smarty->assign("consult_anesth", $consult_anesth);
+$smarty->assign("now", $now);
 
 $smarty->display("vw_surveillance_peranesth.tpl");

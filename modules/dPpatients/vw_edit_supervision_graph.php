@@ -10,7 +10,7 @@
 
 CCanDo::checkAdmin();
 
-$supervision_graph_id = CValue::get("supervision_graph_id");
+$supervision_graph_id = CValue::getOrSession("supervision_graph_id");
 
 $graph = new CSupervisionGraph;
 $graph->load($supervision_graph_id);

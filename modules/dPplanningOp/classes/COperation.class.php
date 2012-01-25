@@ -706,6 +706,9 @@ class COperation extends CCodable implements IPatientRelated {
     return $this->_ref_consult_anesth;
   }
   
+  /**
+   * @return CSejour
+   */
   function loadRefSejour($cache = false) {
     return $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
   }

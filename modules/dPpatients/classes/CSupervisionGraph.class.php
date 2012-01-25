@@ -18,6 +18,7 @@ class CSupervisionGraph extends CMbObject {
   var $owner_id             = null;
   
   var $title                = null;
+  var $disabled             = null;
   
   var $_ref_owner           = null;
   var $_ref_axes            = null;
@@ -35,6 +36,7 @@ class CSupervisionGraph extends CMbObject {
     $props["owner_class"] = "enum notNull list|CGroups";
     $props["owner_id"]    = "ref notNull meta|owner_class class|CMbObject";
     $props["title"]       = "str notNull";
+    $props["disabled"]    = "bool notNull default|1";
     return $props;
   }
   

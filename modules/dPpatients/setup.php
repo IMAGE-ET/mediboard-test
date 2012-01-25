@@ -1709,7 +1709,13 @@ class CSetupdPpatients extends CSetup {
               CHANGE `context_class` `context_class` VARCHAR (80) NOT NULL;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.39";
+    $this->makeRevision("1.39");
+    $query = "ALTER TABLE `supervision_graph` 
+              ADD `disabled` ENUM ('0','1') NOT NULL DEFAULT '1',
+              ADD INDEX (`disabled`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.40";
     
     $query = "SHOW TABLES LIKE 'categorie_socioprofessionnelle'";
     $this->addDatasource("INSEE", $query);

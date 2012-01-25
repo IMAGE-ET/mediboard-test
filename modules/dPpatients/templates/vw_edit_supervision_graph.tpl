@@ -61,13 +61,14 @@ Main.add(function(){
         {{mb_key object=$graph}}
         
         <table class="main form">
-          {{mb_include module=system template=inc_form_table_header object=$graph}}
+          {{mb_include module=system template=inc_form_table_header object=$graph colspan=5}}
           
           <tr>
             <th>{{mb_label object=$graph field=title}}</th>
+            <td>{{mb_field object=$graph field=title}}</td>
+            <th>{{mb_label object=$graph field=disabled}}</th>
+            <td>{{mb_field object=$graph field=disabled}}</td>
             <td>
-              {{mb_field object=$graph field=title}}
-              
               <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
               
               {{if $graph->_id}}
@@ -80,6 +81,7 @@ Main.add(function(){
         </table>
       </form>
       
+      {{if $graph->_id}}
       <table class="main tbl">
         <tr>
           <th class="title" colspan="2">
@@ -87,6 +89,7 @@ Main.add(function(){
           </th>
         </tr>
       </table>
+      {{/if}}
       
       <table class="main layout" style="height: 240px;">
         <tr>
