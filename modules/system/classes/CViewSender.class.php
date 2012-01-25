@@ -145,14 +145,18 @@ class CViewSender extends CMbObject {
     
     // On récupère et écrit les données dans le fichier temporaire
     $contents = file_get_contents($this->_url);
+    
     if (file_put_contents($file, $contents) === false) {
       $chrono->stop();
       $phpChrono->start();
+      
+      $this->clearTempFiles();
+      
       throw new CMbException("CViewSender-ko-file_put_contents");
     }
+    
     $chrono->stop();
     $phpChrono->start();
-    
     
     $this->_file_download_duration = $chrono->total;
     $this->_file_download_size     = filesize($file);
@@ -215,8 +219,8 @@ class CViewSender extends CMbObject {
 
           $ftp->close();
         } catch (Exception $e) {
-        	//mbLog($e);
-        	CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
+          $this->clearTempFiles();
+          CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
         }
       }
       
@@ -225,12 +229,16 @@ class CViewSender extends CMbObject {
       $_sender_source->store();
     }
     
+    $this->clearTempFiles();
+  }
+
+  function clearTempFiles() {
     unlink($this->_file);
     
-    if (file_exists($this->_file_compressed)) {
+    if ($this->_file_compressed && file_exists($this->_file_compressed)) {
       unlink($this->_file_compressed);
     }
-  }
+  } 
   
   /**
    * Populate archive directory up to max_archives files
@@ -265,11 +273,11 @@ class CViewSender extends CMbObject {
       foreach ($list_files as $_file) {
         $ftp->delFile($_file);
       }
-      
-     }
-     catch (CMbException $e) {
-       $e->stepAjax();
-     }
+    }
+    catch (CMbException $e) {
+      $e->stepAjax();
+    }
+    
     return count($ftp->getListFiles($directory));
   }
 }
