@@ -47,6 +47,10 @@ resetCheckbox = function() {
 	$('categories').select('tr').each(function(tr){
     tr.removeClassName('selected');
   });
+	
+	$('categories').select('.counter').each(function(oSpan){
+	  oSpan.update('0');
+	});
 }
 
 // Mise a jour du compteur lors de la selection d'un element
@@ -190,7 +194,7 @@ Main.add(function(){
 				          <td>
 										<input type="checkbox" onclick="selectCategory(this);" value="{{$category->_guid}}" />
 			              <strong onclick="toggleElements('{{$category->_guid}}');">
-			              	<a href="#" style="display: inline;">{{$category}} (<span id="countSelected_{{$category->_guid}}">0</span>/{{$_elements|@count}})</a>
+			              	<a href="#" style="display: inline;">{{$category}} (<span id="countSelected_{{$category->_guid}}" class="counter">0</span>/{{$_elements|@count}})</a>
 										</strong>
 				          </td>
 				        </tr>
