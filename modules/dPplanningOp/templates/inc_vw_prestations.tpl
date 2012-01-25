@@ -122,7 +122,7 @@
                             <label>
                               <input type="radio"
                                 name="liaisons_j[{{$_affectation_id}}][{{$prestation_id}}][{{$_date}}][{{$type}}][{{$liaison->_id}}]"
-                                onclick="var elt_hidden = this.next(); $V(elt_hidden, this.checked ? '{{$_item->_id}}' : 0);"
+                                onclick="var elt_hidden = this.next(); $V(elt_hidden, this.checked ? '{{$_item->_id}}' : 0); this.form.onsubmit();"
                                 {{if ($type == 'souhait' && $liaison->item_prestation_id == $_item->_id) ||
                                   ($type == 'realise' && $liaison->item_prestation_realise_id == $_item->_id)}}checked="checked"{{/if}} value="{{$_item->_id}}"/>{{$_item->nom}}
                             </label>
@@ -135,7 +135,7 @@
                             <label>
                               <input type="radio"
                                 name="liaisons_j[{{$_affectation_id}}][{{$prestation_id}}][{{$_date}}][{{$type}}][new]"
-                                onclick="var elt_hidden = this.next(); $V(elt_hidden, this.checked ? '{{$_item->_id}}' : 0);" value="{{$_item->_id}}"/>{{$_item->nom}}
+                                onclick="var elt_hidden = this.next(); $V(elt_hidden, this.checked ? '{{$_item->_id}}' : 0); this.form.onsubmit();" value="{{$_item->_id}}"/>{{$_item->nom}}
                             </label>
                           {{/foreach}}
                         </span>
@@ -159,18 +159,20 @@
                     {{/foreach}}
                   </tr>
                   <tr>
-                    {{foreach from=$liaisons_p.$_date item=_liaison key=prestation_id}}
+                    {{foreach from=$liaisons_p.$_date item=_liaisons_by_prestation key=prestation_id}}
                       <td>
                         {{assign var=prestation value=$prestations_p.$prestation_id}}
-                        {{assign var=_item value=$_liaison->_ref_item}}
-                        {{$_item->nom}} :
-                        <input type="text" name="liaisons_p[{{$_liaison->_id}}]" value="{{$_liaison->quantite}}" style="width: 3em;" />
-                        <script type="text/javascript">
-                          Main.add(function() {
-                             getForm('edit_prestations').elements['liaisons_p[{{$_liaison->_id}}]'].addSpinner(
-                             {step: 1, min: 0});
-                          });
-                        </script>
+                        {{foreach from=$_liaisons_by_prestation item=_liaison}}
+                          {{assign var=_item value=$_liaison->_ref_item}}
+                          {{$_item->nom}} :
+                          <input type="text" name="liaisons_p[{{$_liaison->_id}}]" value="{{$_liaison->quantite}}" style="width: 3em;" onchange="this.form.onsubmit()"/>
+                          <script type="text/javascript">
+                            Main.add(function() {
+                               getForm('edit_prestations').elements['liaisons_p[{{$_liaison->_id}}]'].addSpinner(
+                               {step: 1, min: 0});
+                            });
+                          </script>
+                        {{/foreach}}
                       </td>
                     {{/foreach}}
                   </tr>

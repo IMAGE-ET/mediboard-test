@@ -62,7 +62,7 @@ if (count($affectations)) {
           $liaisons_j[$_item_liaison->date][$_item->object_id] = $_item_liaison;
           break;
         case "CPrestationPonctuelle":
-          $liaisons_p[$_item_liaison->date][$_item->object_id] = $_item_liaison;
+          $liaisons_p[$_item_liaison->date][$_item->object_id][] = $_item_liaison;
           if (!isset($prestations_p[$_item->object_id])) {
             $prestation = new CPrestationPonctuelle;
             $prestation->load($_item->object_id);
