@@ -1065,9 +1065,12 @@ Object.extend(Control.Modal,{
   
   Observers: {
     beforeOpen: function(){
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-      document.body.style.overflow = "hidden"; // Removes the body's scrollbar
+      /// FUCK APPLETS AND FIREFOX
+      if (!Prototype.Browser.Gecko || !$$("applet").length) {
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        document.body.style.overflow = "hidden"; // Removes the body's scrollbar
+      }
       
       if(!this.overlayFinishedOpening && Control.Modal.stack.length == 0){
         Control.Overlay.observeOnce('afterShow',function(){
