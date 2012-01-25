@@ -160,7 +160,12 @@ Main.add( function(){
 <div class="header">
   <table>
     <tr>
-      <td style="width: 75%" class="text">
+      <td style="width: 60%" class="text">
+        <span style="font-size: 1.2em;">
+          <strong>{{$etablissement->text}}</strong> - {{mb_value object=$etablissement field=tel}}
+        </span>
+        <hr />
+        
         <strong>{{$patient->_view}}</strong>
         Né(e) le {{mb_value object=$patient field=naissance}} - ({{$patient->_age}} ans) - ({{$patient->_ref_constantes_medicales->poids}} kg)
         <br />
