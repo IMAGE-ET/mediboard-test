@@ -41,7 +41,7 @@ selectCategory = function(oCheckboxCat){
 }
 
 resetCheckbox = function() {
-	($('categories').select('input[#checkbox]')).each(function(oCheckbox){
+	$('categories').select('input[type=checkbox]').each(function(oCheckbox){
     oCheckbox.checked = null;
   });
 	$('categories').select('tr').each(function(tr){
