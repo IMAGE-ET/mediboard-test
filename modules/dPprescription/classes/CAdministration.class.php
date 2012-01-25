@@ -26,6 +26,7 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
   
   // Form field
   var $_heure = null;
+  var $_less_24h = null;
   
   var $_quantite_prevue = null;
   

@@ -189,7 +189,7 @@ chooseSubmit = function() {
       {{assign var=log value=$_administration->_ref_log}}
       <tr>
         <td>
-          {{if $_administration->administrateur_id == $app->user_id || $can->admin}}
+          {{if $_administration->administrateur_id == $app->user_id || $can->admin || ($show_trash_24h && $_administration->_less_24h)}}
           <button class="trash notext" type="button" onclick="cancelAdministration('{{$_administration->_id}}')"></button>
           {{/if}}
           {{$log->_ref_object->quantite}} 

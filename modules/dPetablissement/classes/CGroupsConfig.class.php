@@ -29,6 +29,8 @@ class CGroupsConfig extends CMbObject {
   var $smp_notify_all_actors = null;
   var $smp_idex_generator    = null;
   
+  var $dPprescription_CPrescription_show_trash_24h   = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "groups_config";
@@ -55,6 +57,8 @@ class CGroupsConfig extends CMbObject {
     $specs["sip_idex_generator"]    = "bool default|0";
     $specs["smp_notify_all_actors"] = "bool default|0";
     $specs["smp_idex_generator"]    = "bool default|0";
+    
+    $specs["dPprescription_CPrescription_show_trash_24h"] = "bool default|0";
     
     return $specs;
   }

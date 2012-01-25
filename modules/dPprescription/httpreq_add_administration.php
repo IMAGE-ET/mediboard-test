@@ -57,6 +57,7 @@ if($list_administrations){
 			$line->loadRefProduitPrescription();
     }
     $administrations[$administration->_id] = $administration;
+    $administration->_less_24h = ((strtotime(mbDateTime()) - strtotime($administration->dateTime)) / 3600) <= 24;
   }
 }
 // Recherche d'administration
@@ -155,12 +156,17 @@ if ($line instanceof CPrescriptionLineMedicament && CAppUI::conf("pharmacie ask_
   $line->loadRefsProductsStocks();
 }
 
+$group = CGroups::loadCurrent();
+$group->loadConfigValues();
+$show_trash_24h = $group->_configs['dPprescription_CPrescription_show_trash_24h'];
+
 $new_adm = new CAdministration();
 $new_adm->_date = mbDate($dateTime);
 $new_adm->_time = mbTime($dateTime);
 
 // Création du template
 $smarty = new CSmartyDP();
+
 $smarty->assign("new_adm", $new_adm);
 $smarty->assign("key_tab", $key_tab);
 $smarty->assign("date_sel", $date_sel);
@@ -186,5 +192,7 @@ $smarty->assign("constantes", $constantes);
 $smarty->assign("latest_constantes", $latest_constantes);
 $smarty->assign("params", CConstantesMedicales::$list_constantes);
 $smarty->assign("is_praticien", CAppUI::$user->isPraticien());
+$smarty->assign("show_trash_24h", $show_trash_24h);
+
 $smarty->display("inc_vw_add_administration.tpl");
 ?>

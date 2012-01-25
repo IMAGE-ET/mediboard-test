@@ -2188,7 +2188,12 @@ class CSetupdPprescription extends CSetup {
               ADD INDEX (`cancelled`)";
     $this->addQuery($query);
 		
-		$this->mod_version = "1.67";
+    $this->makeRevision("1.67");
+    $query = "ALTER TABLE `groups_config`
+      ADD `dPprescription_CPrescription_show_trash_24h` ENUM ('0', '1') NOT NULL DEFAULT '0'";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.68";
   }
 }
 
