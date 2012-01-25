@@ -338,12 +338,13 @@ class CRPU extends CMbObject {
   
   function store() {
     if (!$this->_id) {
-      $sejour = new CSejour();
-      $sejour->patient_id = $this->_patient_id;
-      $sejour->type = "urg";
+      $sejour                = new CSejour();
+      $sejour->patient_id    = $this->_patient_id;
+      $sejour->type          = "urg";
       $sejour->entree_reelle = $this->_entree;
-      
-      $sortie_prevue = CAppUI::conf("dPurgences sortie_prevue") == "h24" ? 
+      $sejour->group_id      = CGroups::loadCurrent()->_id;
+            
+      $sortie_prevue         = CAppUI::conf("dPurgences sortie_prevue") == "h24" ? 
         mbDateTime("+1 DAY", $this->_entree) : 
         mbDate(null, $this->_entree)." 23:59:59";
       $sejour->sortie_prevue = $this->_sortie ? $this->_sortie : $sortie_prevue;
