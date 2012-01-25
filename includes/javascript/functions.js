@@ -1065,6 +1065,10 @@ Object.extend(Control.Modal,{
   
   Observers: {
     beforeOpen: function(){
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      document.body.style.overflow = "hidden"; // Removes the body's scrollbar
+      
       if(!this.overlayFinishedOpening && Control.Modal.stack.length == 0){
         Control.Overlay.observeOnce('afterShow',function(){
           this.overlayFinishedOpening = true;
@@ -1087,7 +1091,6 @@ Object.extend(Control.Modal,{
       overlay.insert({after: Control.Overlay.iFrameShim.element});
       
       this.container.style.position = "fixed";
-      document.body.style.overflow = "hidden"; // Removes the body's scrollbar
       
       Event.stopObserving(window, 'scroll', this.positionHandler);
       Event.stopObserving(window, 'resize', this.outOfBoundsPositionHandler);

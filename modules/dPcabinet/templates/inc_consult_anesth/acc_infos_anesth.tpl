@@ -142,6 +142,7 @@ afterStoreScore = function(id, obj) {
           </tr>
         </table>
       </fieldset>
+    </td>
 	</tr>
   <tr>
     <td style="width: 50%;">
