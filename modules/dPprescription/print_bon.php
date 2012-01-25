@@ -160,10 +160,11 @@ foreach($all_bons as $_chap => &$_all_bons){
 }
 
 $ex_objects = array();
+$etablissement = CGroups::loadCurrent();
 
 if ($print) {
   $ex_class = new CExClass;
-  $group_id = CGroups::loadCurrent()->_id;
+  $group_id = $etablissement->_id;
   $ds = $ex_class->_spec->ds;
   $where = array(
     "host_class"  => $ds->prepare("=%", 'CPrescriptionLineElement'),
@@ -238,6 +239,7 @@ $smarty->assign("print", $print);
 $smarty->assign("list_bons", $list_bons);
 $smarty->assign("ex_objects", $ex_objects);
 $smarty->assign("rpps", $rpps);
+$smarty->assign("etablissement", $etablissement);
 $smarty->display("print_bon.tpl");
 
 ?>
