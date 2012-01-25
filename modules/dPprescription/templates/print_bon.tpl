@@ -162,7 +162,9 @@ Main.add( function(){
     <tr>
       <td style="width: 60%" class="text">
         <span style="font-size: 1.2em;">
-          <strong>{{$etablissement->text}}</strong> - {{mb_value object=$etablissement field=tel}}
+          <strong>{{$etablissement->text}}</strong>
+          {{if $etablissement->tel}} &ndash; Tel: {{mb_value object=$etablissement field=tel}}{{/if}}
+          {{if $etablissement->fax}} &ndash; Fax: {{mb_value object=$etablissement field=fax}}{{/if}}
         </span>
         <hr />
         
