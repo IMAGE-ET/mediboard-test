@@ -143,6 +143,7 @@ if($praticien_id && !$service_id){
 
     if(count($affectations) >= 1){
       foreach($affectations as &$_affectation){
+        $_affectation->loadRefsAffectations();
         cacheLit($_affectation);
       }
     } else {
@@ -162,6 +163,7 @@ foreach ($sejoursParService as $key => $_service) {
     foreach ($_service->_ref_chambres as $_chambre) {
       foreach ($_chambre->_ref_lits as $_lit) {
         foreach ($_lit->_ref_affectations as $_affectation) {
+          $_affectation->loadRefsAffectations();
           $_affectation->loadRefSejour();
           $_sejour =& $_affectation->_ref_sejour;
           if($praticien && $_sejour->praticien_id == $userCourant->user_id){
