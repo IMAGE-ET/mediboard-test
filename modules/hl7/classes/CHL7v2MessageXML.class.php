@@ -17,7 +17,9 @@
  */
 
 class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
-  var $_ref_exchange_ihe     = null;
+  var $_ref_exchange_ihe = null;
+  var $_ref_sender       = null;
+  var $_ref_receiver     = null;
   
   static function getEventType($event_code = null) {
     switch ($event_code) {
@@ -215,6 +217,8 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     $exchange_ihe = $this->_ref_exchange_ihe;
     $sender       = $exchange_ihe->_ref_sender;
     $sender->loadConfigValues();
+    
+    $this->_ref_sender = $sender;
     
     $PID = $this->queryNode("PID", null, $data, true);
     

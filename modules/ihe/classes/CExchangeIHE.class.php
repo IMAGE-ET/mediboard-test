@@ -84,18 +84,20 @@ class CExchangeIHE extends CExchangeTabular {
     $hl7_message->parse($data, false);
     
     $hl7_message_evt = "CHL7Event$hl7_message->event_name";
-
+    if ($hl7_message->i18n_code) {
+      $hl7_message_evt = $hl7_message_evt."_".$hl7_message->i18n_code;
+    }
+    
     foreach ($this->getFamily() as $_message) {
       $message_class = new $_message;
       $evenements = $message_class->getEvenements();
-
       if (in_array($hl7_message_evt, $evenements)) {
         if (!$hl7_message->i18n_code) {
           $this->_family_message_class = $_message;
           $this->_family_message       = CHL7Event::getEventVersion($hl7_message->version, $hl7_message->event_name);
         }
         else {
-          $this->_family_message_class = $_message.$hl7_message->i18n_code;
+          $this->_family_message_class = $_message;
           $this->_family_message       = CHL7Event::getEventVersion($hl7_message->version, $hl7_message->getI18NEventName());
         }
         

@@ -107,7 +107,7 @@ class CHL7v2Component extends CHL7v2Entity {
       else {
         $str = $this->getMessage()->escape($this->data);
         
-        if (!$hl7_datatypes) {
+        if (!$hl7_datatypes && $str !== "") {
           $str = $this->props->toMB($str, $field);
         }
       }

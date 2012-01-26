@@ -164,6 +164,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       return null;
     }
     
+    $sejour->loadOldObject();
     // Cas d'une pré-admission
     if ($sejour->_etat == "preadmission") {
       // Création d'une pré-admission

@@ -60,7 +60,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     }  
   }
   
-  function toXML($event_code = null, $hl7_datatypes = false) {
+  function toXML($event_code = null, $hl7_datatypes = true) {
     $field = $this->children[0]->fields[8]->items[0];
     $name = $field->children[0]->data."_".$field->children[1]->data;
 
@@ -442,7 +442,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
       if ($_error->level > $min_level) {
         $_code  = CAppUI::tr("CHL7v2Exception-$_error->code");
         $_entity = ($_error->entity ? $_error->entity->getPathString().", " : "");
-        $errors[] = "Ligne $_error->line : $_code - $_field $_error->data";
+        $errors[] = "Ligne $_error->line : $_code - $_entity $_error->data";
       }
     }
     

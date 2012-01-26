@@ -75,7 +75,7 @@ class CSetuphl7 extends CSetup {
     $this->makeRevision("0.02");
   
     $query = "ALTER TABLE `table_description` 
-              ADD `user` ENUM ('0','1') NOT NULL DEFAULT '0';";
+                ADD `user` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query, false, "hl7v2");
     
     // Gestion du mode de placement en psychiatrie
@@ -683,8 +683,28 @@ class CSetuphl7 extends CSetup {
     
     // Ambu
     $this->insertTableEntry("4", null, "I", "ambu", null, "Inpatient");
-
-    $this->mod_version = "0.18";
+    
+    $this->makeRevision("0.18");
+    
+    // Gestion du mode de placement en psychiatrie
+    $query = "INSERT INTO `hl7v2`.`table_description` (
+              `table_description_id`, `number`, `description`, `user`
+              ) VALUES (
+                NULL , '9001', 'Mode de sortie PMSI', '1'
+              );";
+    $this->addQuery($query, false, "hl7v2");
+    
+    // Transfert
+    $this->insertTableEntry("9001", "7", "7", "transfert", "transfert", "Transfert");
+    // Mutation
+    $this->insertTableEntry("9001", "6", "6", "mutation", "mutation", "Mutation (même hopital)");
+    // Deces
+    $this->insertTableEntry("9001", "9", "9", "deces", "deces", "Décès");
+    // Normal
+    $this->insertTableEntry("9001", "5", "5", "normal", "normal", "Sorti à l'essai");
+    
+    
+    $this->mod_version = "0.19";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
