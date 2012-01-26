@@ -1107,7 +1107,10 @@ Object.extend(Control.Modal,{
       
       if (Control.Modal.stack.length == 0) {
         var body = $(document.body);
-        body.style.overflow = "auto"; // Put back the body's scrollbar
+        /// FUCK APPLETS AND FIREFOX
+        if (!Prototype.Browser.Gecko || !$$("applet").length) {
+          body.style.overflow = "auto"; // Put back the body's scrollbar
+        }
         
         // put it back at the end of body
         body.insert(overlay);
