@@ -229,8 +229,9 @@ class CSetupdPbloc extends CSetup {
       ADD `days_locked` INT (11) UNSIGNED DEFAULT '0';";
     $this->addQuery($query);
     
-    $days_locked = isset($conf["dPbloc"]["CPlageOp"]["days_locked"]) ?
-			  CAppUI::conf("dPbloc CPlageOp days_locked") : 0;
+    global $dPconfig;
+    $days_locked = (isset($dPconfig["dPbloc"]["CPlageOp"]["days_locked"]) ?
+			  CAppUI::conf("dPbloc CPlageOp days_locked") : 0);
     
     $query = "UPDATE `bloc_operatoire`
      SET days_locked = '$days_locked'";
