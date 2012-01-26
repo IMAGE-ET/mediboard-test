@@ -1405,7 +1405,12 @@ class CSetupdPcabinet extends CSetup {
       ADD `grossesse_id` INT (11) UNSIGNED";
     $this->addQuery($query);
     
-    $this->mod_version = "1.42";
+    $this->makeRevision("1.42");
+    $query = "ALTER TABLE `consultation`
+      CHANGE `type` `type` ENUM ('classique','entree','chimio') DEFAULT 'classique';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.43";
     
   }
 }
