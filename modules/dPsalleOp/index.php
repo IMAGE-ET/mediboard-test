@@ -31,4 +31,8 @@ if (!$user->_is_praticien || ($user->_is_praticien && $can->edit)){
   $module->registerTab("vw_daily_check_item_type"   , TAB_ADMIN);
 }
 
+if (CModule::getActive("vivalto")) {
+  $module->registerTab("vw_dmi", TAB_READ);
+}
+
 ?>
