@@ -467,9 +467,11 @@ class CConsultation extends CCodable {
       return $msg;
     }  
     
-    $this->_tokens_tarmed = $tarif->codes_tarmed;
-    if ($msg = $this->precodeTARMED()){
-      return $msg;
+    if (CModule::getInstalled("tarmed")) {
+      $this->_tokens_tarmed = $tarif->codes_tarmed;
+      if ($msg = $this->precodeTARMED()){
+        return $msg;
+      }
     }
   }
     
@@ -735,11 +737,13 @@ class CConsultation extends CCodable {
     $secteur2_CCAM    = 0;
     $secteur2_TARMED  = 0;
     
-    // Chargement des actes Tarmed
-    $this->loadRefsActesTarmed();
-    foreach ($this->_ref_actes_tarmed as $actetarmed) { 
-      $secteur1_TARMED += round($actetarmed->montant_base * (1-$actetarmed->ristourne/100), 2);
-      $secteur2_TARMED += round($actetarmed->montant_depassement * (1-$actetarmed->ristourne/100), 2);
+    if (CModule::getInstalled("tarmed")) {
+      // Chargement des actes Tarmed
+      $this->loadRefsActesTarmed();
+      foreach ($this->_ref_actes_tarmed as $actetarmed) { 
+        $secteur1_TARMED += round($actetarmed->montant_base * (1-$actetarmed->ristourne/100), 2);
+        $secteur2_TARMED += round($actetarmed->montant_depassement * (1-$actetarmed->ristourne/100), 2);
+      }
     }
     
     // Chargement des actes NGAP
