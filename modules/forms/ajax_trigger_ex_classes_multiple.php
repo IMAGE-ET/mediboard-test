@@ -10,7 +10,7 @@
 
 //CCanDo::checkAdmin();
 
-$object_guids = CValue::get("object_guids");
+$object_guids = CValue::get("object_guids", array());
 $event        = CValue::get("event");
 
 $ex_classes = array();
