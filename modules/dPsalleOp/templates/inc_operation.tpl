@@ -18,6 +18,8 @@ Main.add(function () {
   }
   {{/if}}
   
+  reloadSurveillancePerop();
+  
   if($('dossier_traitement')){
     PlanSoins.loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');
   }
@@ -105,6 +107,14 @@ function reloadPrescription(prescription_id){
   Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null);
 }
 {{/if}}
+
+function reloadSurveillancePerop(){
+  if($('surveillance_perop')){
+    var url = new Url("dPsalleOp", "ajax_vw_surveillance_perop");
+    url.addParam("operation_id","{{$selOp->_id}}");
+    url.requestUpdate("surveillance_perop");
+  }
+}
 
 {{if "maternite"|module_active}}
 function refreshGrossesse(operation_id) {
@@ -221,9 +231,13 @@ function refreshGrossesse(operation_id) {
 
 <!-- Tabulations -->
 <ul id="main_tab_group" class="control_tabs">
-	{{if !$conf.dPsalleOp.mode_anesth && (!$currUser->_is_praticien || $currUser->_is_praticien && $can->edit)}}
+  {{if !$conf.dPsalleOp.mode_anesth && (!$currUser->_is_praticien || $currUser->_is_praticien && $can->edit)}}
     <li><a href="#timing_tab">Timings</a></li>
-	{{/if}}
+  {{/if}}
+  
+  {{if $conf.dPsalleOp.enable_surveillance_perop}}
+    <li onmouseup="reloadSurveillancePerop();"><a href="#surveillance_perop">Perop</a></li>
+  {{/if}}
 
   {{if $isbloodSalvageInstalled && (!$currUser->_is_praticien || $currUser->_is_praticien && $can->edit)}}
     <li><a href="#bloodSalvage_tab">Cell Saver</a></li>
@@ -279,12 +293,15 @@ function refreshGrossesse(operation_id) {
   </div>
 </div>
 {{/if}}
+  
+{{if $conf.dPsalleOp.enable_surveillance_perop}}
+  <div id="surveillance_perop" style="display:none"></div>
+{{/if}}
 
 {{if $isbloodSalvageInstalled && (!$currUser->_is_praticien || $currUser->_is_praticien && $can->edit)}}
 <!--  Cell Saver -->
 <div id="bloodSalvage_tab" style="display:none"></div>
 {{/if}}
-
 
 {{if !$conf.dPsalleOp.mode_anesth}}
 

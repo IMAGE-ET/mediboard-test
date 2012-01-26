@@ -222,6 +222,19 @@ $group->loadConfigValues();
 
 $listValidateurs = CPersonnel::loadListPers(array("op", "op_panseuse"), true, true);
 
+// Lib Flot pour les graphiques de surveillance perop
+if (CAppUI::conf("dPsalleOp enable_surveillance_perop")) {
+  CJSLoader::$files = array(
+    "lib/flot/jquery.min.js",
+    "lib/flot/jquery.flot.min.js",
+    "lib/flot/jquery.flot.symbol.min.js",
+    "lib/flot/jquery.flot.crosshair.min.js",
+    "lib/flot/jquery.flot.resize.min.js",
+  );
+  echo CJSLoader::loadFiles();
+  CAppUI::JS('$.noConflict()');
+}
+
 $smarty->assign("soustotal_base" , $soustotal_base);
 $smarty->assign("soustotal_dh"   , $soustotal_dh);
 $smarty->assign("total"          , $total);

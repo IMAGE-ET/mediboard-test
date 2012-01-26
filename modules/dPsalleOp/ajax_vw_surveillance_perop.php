@@ -21,6 +21,8 @@ $consult_anesth = $interv->loadRefsConsultAnesth();
 
 list($results, $times) = CObservationResultSet::getResultsFor($interv);
 
+global $time_min, $time_max;
+
 $time_min = $interv->entree_salle;
 $time_max = mbTime("+".mbMinutesRelative("00:00:00", $interv->temp_operation)." MINUTES", $interv->entree_salle);
 
@@ -55,30 +57,76 @@ foreach($graphs as &$_graph) {
   }
 }
 
+function getPosition($datetime){
+  global $time_min, $time_max;
+  return 100 * (CMbDate::toUTCTimestamp($datetime) - $time_min) / ($time_max - $time_min);
+}
+
+function getWidth($datetime_start, $datetime_end){
+  global $time_min, $time_max;
+  $delta = strtotime($datetime_end) - strtotime($datetime_start);
+  return 100 * ($delta*1000) / ($time_max - $time_min);
+}
+
 // ---------------------------------------------------
 // Gestes, Medicaments, Perfusions peranesth
 $gestes = array(
   "CAnesthPerop" => array(),
+  "CAffectationPersonnel" => array(),
 );
 
 $interv->loadRefsAnesthPerops();
 
 foreach($interv->_ref_anesth_perops as $_perop) {
-  $_ts = CMbDate::toUTCTimestamp($_perop->datetime);
-  
   $gestes["CAnesthPerop"][$_perop->_id] = array(
     "icon" => null,
     "label" => $_perop->libelle,
     "unit"  => null,
     "alert" => $_perop->incident,
     "datetime" => $_perop->datetime,
-    "position" => 100 * ($_ts - $time_min) / ($time_max - $time_min),
+    "position" => getPosition($_perop->datetime),
     "object" => $_perop,
   );
 }
 
-$sejour = $interv->loadRefSejour();
+$interv->loadAffectationsPersonnel();
+foreach ($interv->_ref_affectations_personnel as $emplacement => $affectations) {
+  foreach($affectations as $_affectation) {
+    if (!$_affectation->debut || !$_affectation->fin) continue;
+    
+    $gestes["CAffectationPersonnel"][$_affectation->_id] = array(
+      "icon" => null,
+      "label" => $_affectation->_ref_personnel,
+      "unit"  => null,
+      "alert" => false,
+      "datetime" => $_affectation->debut,
+      "position" => getPosition($_affectation->debut),
+      "width" => getWidth($_affectation->debut, $_affectation->fin),
+      "object" => $_affectation,
+    );
+  }
+}
 
+$plageop = $interv->_ref_plageop;
+$plageop->loadAffectationsPersonnel();
+foreach ($plageop->_ref_affectations_personnel as $emplacement => $affectations) {
+  foreach($affectations as $_affectation) {
+    if (!$_affectation->debut || !$_affectation->fin) continue;
+    
+    $gestes["CAffectationPersonnel"][$_affectation->_id] = array(
+      "icon" => null,
+      "label" => $_affectation->_ref_personnel,
+      "unit"  => null,
+      "alert" => false,
+      "datetime" => $_affectation->debut,
+      "position" => getPosition($_affectation->debut),
+      "width" => getWidth($_affectation->debut, $_affectation->fin),
+      "object" => $_affectation,
+    );
+  }
+}
+
+$sejour = $interv->loadRefSejour();
 $prescription = $sejour->loadRefPrescriptionSejour();
 
 if($prescription->_id){
@@ -147,7 +195,7 @@ if($prescription->_id){
           "unit"  => "$_adm->quantite $unite",
           "alert" => false,
           "datetime" => $_adm->dateTime,
-          "position" => 100 * (CMbDate::toUTCTimestamp($_adm->dateTime) - $time_min) / ($time_max - $time_min),
+          "position" => getPosition($_adm->dateTime),
           "object"   => $_line,
         );
       }
@@ -156,16 +204,6 @@ if($prescription->_id){
 }
 
 $now = 100 * (CMbDate::toUTCTimestamp(mbDateTime()) - $time_min) / ($time_max - $time_min);
-
-CJSLoader::$files = array(
-  "lib/flot/jquery.min.js",
-  "lib/flot/jquery.flot.min.js",
-  "lib/flot/jquery.flot.symbol.min.js",
-  "lib/flot/jquery.flot.crosshair.min.js",
-  "lib/flot/jquery.flot.resize.min.js",
-);
-echo CJSLoader::loadFiles();
-CAppUI::JS('$.noConflict()');
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -179,4 +217,4 @@ $smarty->assign("yaxes_count", $yaxes_count);
 $smarty->assign("consult_anesth", $consult_anesth);
 $smarty->assign("now", $now);
 
-$smarty->display("vw_surveillance_peranesth.tpl");
+$smarty->display("inc_vw_surveillance_perop.tpl");

@@ -6,6 +6,7 @@
 <table class="form">
 
   {{mb_include module=system template=inc_config_bool var=mode_anesth}}  
+  {{mb_include module=system template=inc_config_bool var=enable_surveillance_perop}}  
 
   <tr>
     <th class="title" colspan="6">Listes déroulantes des timings</th>

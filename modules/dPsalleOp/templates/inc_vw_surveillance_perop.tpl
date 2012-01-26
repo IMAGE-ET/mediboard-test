@@ -1,7 +1,7 @@
 
 <script type="text/javascript">
-var previousPoint = null;
-var plothover = function (event, pos, item) {
+previousPoint = null;
+plothover = function (event, pos, item) {
   if (item) {
     var key = item.dataIndex+"-"+item.seriesIndex;
     if (previousPoint != key) {
@@ -29,6 +29,10 @@ var plothover = function (event, pos, item) {
     jQuery("#flot-tooltip").remove();
     previousPoint = null;            
   }
+}
+
+enChantier = function(){
+  Modal.alert("Fonctionnalité en cours de développement");
 }
   
 Main.add(function(){
@@ -68,20 +72,47 @@ Main.add(function(){
 </script>
 
 {{assign var=images value="CPrescription"|static:"images"}}
+{{assign var=width value=800}}
 
-<div style="font-size: 1.5em; table-layout: fixed;">
-  <span style="font-weight: bold;">{{$interv->_ref_sejour->_ref_patient}}</span> &mdash;
-  {{$interv->_ref_sejour->_ref_patient->_age}} ans &mdash;
-  {{$interv->_ref_sejour->_ref_patient->_ref_constantes_medicales->poids}} Kg &mdash;
-  Groupe sang. / Rh. : {{$consult_anesth->groupe}} / {{$consult_anesth->rhesus}}
+<div class="small-warning">
+  Cette vue est en cours de développement et n'est qu'un aperçu. 
 </div>
 
+<table class="main tbl">
+  <tr>
+    <td>
+      <strong>
+        {{$interv->_ref_sejour->_ref_patient->_ref_constantes_medicales->poids}} Kg &ndash;
+        {{$interv->_ref_sejour->_ref_patient->_ref_constantes_medicales->taille}} cm
+      </strong>
+    </td>
+    <td>Gr. sang. / Rh: <strong>{{mb_value object=$consult_anesth field=groupe}} {{mb_value object=$consult_anesth field=rhesus}}</strong></td>
+    <td>Mallampati: <strong>{{mb_value object=$consult_anesth field=mallampati}}</strong></td>
+    <td>ASA: <strong>{{mb_value object=$consult_anesth field=ASA}}</strong></td>
+  </tr>
+</table>
 <hr />
 
-<button>Incision</button>
-<button>Fermeture</button>
-<button>Intubation</button>
-<button>Extubation</button>
+<table class="main layout">
+  <tr>
+    <td class="narrow">
+      <button onclick="enChantier()" class="submit">Entrée</button><br />
+      <button onclick="enChantier()" class="submit">Sortie</button>
+    </td>
+    <td class="narrow">
+      <button onclick="enChantier()" class="submit">Intubation</button><br />
+      <button onclick="enChantier()" class="submit">Extubation</button>
+    </td>
+    <td class="narrow">
+      <button onclick="enChantier()" class="submit">Incision</button><br />
+      <button onclick="enChantier()" class="submit">Fermeture</button>
+    </td>
+    <td>
+      <button onclick="enChantier()" class="submit">Injection</button>
+      <button onclick="enChantier()" class="warning" style="border-color: red;">Incident</button>
+    </td>
+  </tr>
+</table>
 <hr />
 
 <div style="position: relative;" class="supervision">
@@ -95,11 +126,11 @@ Main.add(function(){
       {{/foreach}}
       <span class="title">{{$_graph.title}}</span>
     </div>
-    <div id="placeholder-{{$i}}" style="width:900px;height:200px;"></div>
+    <div id="placeholder-{{$i}}" style="width:{{$width}}px;height:200px;"></div>
     <br />
   {{/foreach}}
   
-  <table class="main gestes" style="table-layout: fixed; width: 900px;">
+  <table class="main gestes" style="table-layout: fixed; width: {{$width}}px;">
     <col style="width: {{$yaxes_count*38-14}}px;" />
     
     {{foreach from=$gestes key=_label item=_gestes}}
@@ -107,8 +138,13 @@ Main.add(function(){
         <th>{{tr}}{{$_label}}{{/tr}}</th>
         <td>
         {{foreach from=$_gestes item=_geste}}
-          <div style="padding-left: {{$_geste.position}}%; {{if $_geste.alert}} color: red; {{/if}}" class="geste">
-            <div  onmouseover="ObjectTooltip.createEx(this, '{{$_geste.object->_guid}}');">
+          {{assign var=geste_width value=""}}
+          {{if array_key_exists('width', $_geste)}} 
+            {{assign var=geste_width value="width: `$_geste.width`%;"}}
+          {{/if}}
+          
+          <div style="padding-left: {{$_geste.position}}%; {{if $_geste.alert}} color: red; {{/if}} {{if array_key_exists('width', $_geste)}} margin-bottom: 0; {{/if}}" class="geste">
+            <div onmouseover="ObjectTooltip.createEx(this, '{{$_geste.object->_guid}}');" style="{{$geste_width}}">
               <div class="marking">
                 <!--<span>{{$_geste.datetime|date_format:$conf.datetime}}</span>-->
               </div>
@@ -130,6 +166,7 @@ Main.add(function(){
       </tr>
     {{/foreach}}
     
+    {{if $now <= 100}}
     <tr>
       <th></th>
       <td style="padding: 1px;">
@@ -138,5 +175,12 @@ Main.add(function(){
         </div>
       </td>
     </tr>
+    {{/if}}
   </table>
 </div>
+
+<table class="main tbl">
+  <tr>
+    <th class="title" colspan="3">Historique</th>
+  </tr>
+</table>
