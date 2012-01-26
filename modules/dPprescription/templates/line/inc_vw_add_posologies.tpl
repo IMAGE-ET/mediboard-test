@@ -88,16 +88,22 @@ Main.add(function(){
 		
 		{{foreach from=$conf.dPprescription.CMomentUnitaire.poso_lite key=_moment_unitaire item=_show_moment}}
 		  {{if $_show_moment}}
-			<input type="checkbox" name="{{$_moment_unitaire}}" class="moment_poso_lite" />
-			<label for="{{$_moment_unitaire}}">
-				{{tr}}config-dPprescription-CMomentUnitaire-poso_lite-{{$_moment_unitaire}}{{/tr}}
-			</label>
-			{{/if}}
+			<fieldset style="display: inline; padding: 1px 3px;">
+				<input type="checkbox" name="{{$_moment_unitaire}}" class="moment_poso_lite" />
+				<label for="{{$_moment_unitaire}}">
+					{{tr}}config-dPprescription-CMomentUnitaire-poso_lite-{{$_moment_unitaire}}{{/tr}}
+				</label>
+			</fieldset>
+			{{/if}}	
     {{/foreach}}
 	  
-    <input type="checkbox" name="_urgent" onchange="changeUrgence(this.form, this.checked);" /><label for="_urgent"> Urg.</label>
-		<input type="checkbox" name="_now"  /><label for="_now"> 1 fois</label>
-    
+			<fieldset style="display: inline; padding: 1px 3px;">
+	      <input type="checkbox" name="_urgent" onchange="changeUrgence(this.form, this.checked);" /><label for="_urgent"> Urg.</label>
+			</fieldset>
+			
+			<fieldset style="display: inline; padding: 1px 3px;">
+			  <input type="checkbox" name="_now"  /><label for="_now"> 1 fois</label>
+	    </fieldset>
 	  {{/if}}
   </span>
 
