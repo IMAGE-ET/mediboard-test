@@ -72,5 +72,5 @@ abstract class CHL7v2Entity extends CHL7v2 {
     return implode($glue, $this->getPath($separator, $with_name));
   }
   
-  abstract function _toXML(DOMNode $node);
+  abstract function _toXML(DOMNode $node, $hl7_datatypes);
 }

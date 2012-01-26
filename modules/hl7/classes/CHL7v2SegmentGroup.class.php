@@ -31,13 +31,13 @@ class CHL7v2SegmentGroup extends CHL7v2Entity {
     $parent->appendChild($this);
   }
   
-  function _toXML(DOMNode $node) {
+  function _toXML(DOMNode $node, $hl7_datatypes) {
     $doc = $node->ownerDocument;
     $name = str_replace(" ", "_", $this->name);
     $new_node = $doc->createElement("{$doc->documentElement->nodeName}.$name");
     
     foreach($this->children as $_child) {
-      $_child->_toXML($new_node);
+      $_child->_toXML($new_node, $hl7_datatypes);
     }
     
     $node->appendChild($new_node);

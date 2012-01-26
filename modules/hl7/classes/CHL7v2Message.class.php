@@ -60,7 +60,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     }  
   }
   
-  function toXML($event_code = null) {
+  function toXML($event_code = null, $hl7_datatypes = false) {
     $field = $this->children[0]->fields[8]->items[0];
     $name = $field->children[0]->data."_".$field->children[1]->data;
 
@@ -68,14 +68,14 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $root = $dom->addElement($dom, $name);
     $dom->addNameSpaces($name);
    
-    return $this->_toXML($root);
+    return $this->_toXML($root, $hl7_datatypes);
   }
   
-  function _toXML(DOMNode $node) {
+  function _toXML(DOMNode $node, $hl7_datatypes) {
     $doc = $node->ownerDocument;
     
     foreach($this->children as $_child) {
-      $_child->_toXML($node);
+      $_child->_toXML($node, $hl7_datatypes);
     }
     
     return $doc;

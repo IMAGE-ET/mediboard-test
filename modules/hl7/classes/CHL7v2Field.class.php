@@ -46,11 +46,11 @@ class CHL7v2Field extends CHL7v2Entity {
     $this->unbounded   = $spec->isUnbounded();
   }
   
-  function _toXML(DOMNode $node) {
+  function _toXML(DOMNode $node, $hl7_datatypes) {
     $doc = $node->ownerDocument;
     
     foreach($this->items as $_item) {
-      $_item->_toXML($node);
+      $_item->_toXML($node, $hl7_datatypes);
     }
   }
   
