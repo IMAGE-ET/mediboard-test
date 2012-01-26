@@ -14,7 +14,7 @@ $file_id = CValue::get("file_id");
 $index   = CValue::get("index");
 
 $file = new CFile;
-$file = $file->load($file_id);
+$file->load($file_id);
 
 // Si le pdf a été supprimé ou vidé car on ferme la popup sans enregistrer
 // le document, alors on ne génère pas la vignette
