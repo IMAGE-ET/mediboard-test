@@ -15,7 +15,7 @@ $url_application = CAppUI::conf("vivalto url_application");
 
 $smarty = new CSmartyDP;
 
-$smarty->assign("url_application");
+$smarty->assign("url_application", $url_application);
 
 $smarty->display("vw_dmi.tpl");
 ?>
