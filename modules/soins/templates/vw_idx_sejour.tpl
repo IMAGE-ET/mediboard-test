@@ -229,7 +229,7 @@ function submitSuivi(oForm) {
 }
 
 function refreshConstantesMedicales(context_guid, paginate, count) {
-  if(context_guid) {
+  if(context_guid && context_guid.split("-")[1]) {
     var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
     url.addParam("context_guid", context_guid);
     url.addParam("paginate", paginate || 0);
