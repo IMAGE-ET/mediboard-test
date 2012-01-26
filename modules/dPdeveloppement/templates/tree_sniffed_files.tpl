@@ -7,16 +7,23 @@
       <button type="button" class="search notext" onclick="CodeSniffer.show(this);">{{tr}}Show{{/tr}}</button>
     {{/if}}
   </div>
+  {{assign var=fullpath value=$dir|replace:":":"/"}}
+  {{assign var=fullpath value=$fullpath|substr:9}}
+
   {{if !is_array($files)}}
-    {{assign var=fullpath value=$dir|replace:":":"/"}}
-    {{assign var=fullpath value=$fullpath|substr:9}}
-    {{if $reports[$fullpath]}}
-    <div class="sniffed ok"></div>
-    {{/if}}
+    {{assign var=report value=$reports.$fullpath}}
+    <div class="sniffed {{$report}}" title="{{tr}}tree-sniffed-report-{{$report}}{{/tr}}"></div>
   {{/if}}
-	<span class="basename" {{if is_array($files)}}style="font-weight: bold;"{{/if}}>
+
+  
+  {{assign var=fullpath value=$fullpath|default:"-root-"}}
+  {{assign var=stat value=$stats[$fullpath]}}
+  {{if $stat}} 
+    <span>{{*$stat.count*}}</span>
+  {{/if}}
+  <span class="basename" {{if is_array($files)}}style="font-weight: bold;"{{/if}}>
     {{$basename}}
-	</span>
+  </span>
 </div>
 {{if is_array($files)}}
 <div class="tree-content" id="{{$dir}}" style="display: block;">

@@ -38,4 +38,7 @@ $locales['test_mutex-process'] = 'Processus du test : \'%d\'';
 $locales['test_mutex-run'] = 'Vérouille et libère sans attendre';
 $locales['test_mutex-stall'] = 'Vérouille, attends 5 secondes et libère';
 $locales['test_mutex-try'] = 'Essai de l\'action \'%s\'';
+$locales['tree-sniffed-report-none'] = 'Aucun rapport d\'analyse';
+$locales['tree-sniffed-report-obsolete'] = 'Rapport d\'analyse obsolète';
+$locales['tree-sniffed-report-uptodate'] = 'Rapport d\'analyse à jour';
 ?>

@@ -19,7 +19,8 @@ $file = str_replace(":", "/", $file);
 
 $sniffer = new CMbCodeSniffer;
 $sniffer->process($file);
-$report = $sniffer->makeReportPath($file);
+$sniffer->report($file);
+$stats = $sniffer->stat($file);
 $errors = reset($sniffer->getFilesErrors());
 $alerts = $sniffer->getFlattenAlerts();
 
