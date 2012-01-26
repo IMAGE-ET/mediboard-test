@@ -347,7 +347,13 @@ class CCodeCIM10 {
         $query .= " AND (";
       }
       $query .= implode(" AND ", $listLike);
-      if ($code != "") $query .= ") ) ";
+      
+      if ($code != "") {
+        $query .= ") ) ";
+      }
+      else {
+        $query .= ")";
+      }
       $hasWhere = true;
     }
     
