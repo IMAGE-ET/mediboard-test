@@ -18,7 +18,7 @@ $file = $file->load($file_id);
 
 // Si le pdf a été supprimé ou vidé car on ferme la popup sans enregistrer
 // le document, alors on ne génère pas la vignette
-if (!file_exists($file->_file_path) || file_get_contents($file->_file_path) == "") {
+if (!$file->_id || !file_exists($file->_file_path) || file_get_contents($file->_file_path) == "") {
   return;
 }
 
