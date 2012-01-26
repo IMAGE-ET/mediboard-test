@@ -57,6 +57,10 @@ Main.add( function(){
 <style type="text/css">
 {{include file=../../dPcompteRendu/css/print.css header=10 footer=0 nodebug=true}}
 
+span.print_code {
+  display: none;
+}
+
 @media print {
   th.title {
     font-size: 1em;
@@ -69,6 +73,9 @@ Main.add( function(){
   }
   div.codes_ccam {
     font-size: 0.8em !important;
+  }
+  span.print_code {
+    display: inline;
   }
 }
 </style>
@@ -242,11 +249,13 @@ Main.add( function(){
                   <td style="width: 20%">
                     {{assign var=praticien_id value=$line->praticien_id}}
                     Prescripteur: {{$line->_ref_praticien->_view}}
+                    <span class="print_code">
                     {{if isset($rpps.$praticien_id|smarty:nodefaults)}}
                       <br /> RPPS : <br /> <img src="{{$rpps.$praticien_id}}" width="160" height="45"/>
                     {{else}}
                       (ADELI : {{$line->_ref_praticien->adeli}} &mdash; RPPS : {{$line->_ref_praticien->rpps}})
                     {{/if}}
+                    </span>
                   </td>
                 </tr>
                 {{if $line->commentaire}}
