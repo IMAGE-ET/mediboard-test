@@ -43,9 +43,19 @@ class CNaissance extends CMbObject {
     $specs["grossesse_id"]     = "ref class|CGrossesse";
     $specs["sejour_enfant_id"] = "ref notNull class|CSejour";
     $specs["hors_etab"]        = "bool default|0";
-    $specs["heure"]            = "time notNull";
-    $specs["rang"]             = "num pos notNull";
+    $specs["heure"]            = "time";
+    $specs["rang"]             = "num pos";
     return $specs;
+  }
+  
+  function updateFormFields() {
+    parent::updateFormFields();
+    if ($this->rang && $this->heure) {
+      $this->_view = "Naissance à ".$this->getFormattedValue("heure");
+    }
+    else {
+      $this->_view = "Dossier provisoire";
+    }
   }
   
   function loadRefsFwd() {

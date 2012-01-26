@@ -44,12 +44,21 @@ class CSetupmaternite extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("0.01");
-    
     $query = "ALTER TABLE `grossesse`
       ADD `active` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.02";
+    $this->makeRevision("0.02");
+    $query = "ALTER TABLE `naissance`
+      CHANGE `heure` `heure` TIME,
+      CHANGE `rang` `rang` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `grossesse`
+      ADD `date_dernieres_regles` DATE;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.03";
   }
 }
 ?>

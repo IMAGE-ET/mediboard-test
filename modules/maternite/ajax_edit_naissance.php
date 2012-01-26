@@ -32,8 +32,9 @@ if ($naissance_id) {
   $constantes = $patient->getFirstConstantes();
 }
 else {
+  $naissance->rang = $operation->countBackRefs("naissances") + 1;
   $naissance->operation_id = $operation_id;
-  
+  $naissance->heure = mbTime();
   if (!$anonmymous) {
     $patient->nom = $parturiente->nom;
   }

@@ -1,6 +1,5 @@
 <form name="newNaissance" method="post" action="?"
-  onsubmit="if (!$V(this.poids) && !$V(this.taille) && !$V(this.perimetre_cranien)) return alert('{{tr}}CConstantesMedicales-min_one_constant{{/tr}}'); 
-    return onSubmitFormAjax(this, {onComplete: function() { Control.Modal.close(); Naissance.reloadNaissances('{{$naissance->operation_id}}'); }})">
+  onsubmit="return onSubmitFormAjax(this, {onComplete: function() { Control.Modal.close(); Naissance.reloadNaissances('{{$naissance->operation_id}}'); }})">
   <input type="hidden" name="m" value="maternite" />
   <input type="hidden" name="dosql" value="do_create_naissance_aed" />
   
@@ -20,7 +19,7 @@
         {{mb_label object=$patient field="sexe"}}
       </th>
       <td>
-        {{mb_field object=$patient field="sexe" emptyLabel="Indéterminé"}}
+        {{mb_field object=$patient field="sexe" emptyLabel="CPatient.sexe."}}
       </td>
     </tr>
     <tr>

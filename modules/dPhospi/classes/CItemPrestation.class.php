@@ -19,6 +19,9 @@ class CItemPrestation extends CMbMetaObject{
   // Ref field
   var $_ref_object        = null;
   
+  // Form field
+  var $_quantite          = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "item_prestation";

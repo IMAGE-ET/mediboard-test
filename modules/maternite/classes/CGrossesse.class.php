@@ -21,6 +21,7 @@ class CGrossesse extends CMbObject{
   // DB Fields
   var $terme_prevu    = null;
   var $active         = null;
+  var $date_dernieres_regles = null;
   
   // DB References
   var $_ref_parturiente = null;
@@ -48,6 +49,7 @@ class CGrossesse extends CMbObject{
     $specs["parturiente_id"] = "ref notNull class|CPatient";
     $specs["terme_prevu"]    = "date notNull";
     $specs["active"]         = "bool default|1";
+    $specs["date_dernieres_regles"] = "date";
     return $specs;
   }
   
@@ -84,6 +86,17 @@ class CGrossesse extends CMbObject{
   
   function loadRefsConsultations() {
     return $this->_ref_consultations = $this->loadBackRefs("consultations");
+  }
+  
+  function loadView() {
+    $naissances = $this->loadRefsNaissances();
+    $sejours = CMbObject::massLoadFwdRef($naissances, "sejour_enfant_id");
+    CMbObject::massLoadFwdRef($sejours, "patient_id");
+    
+    foreach ($naissances as $_naissance) {
+      $_naissance->loadRefSejourEnfant()->loadRefPatient();
+    }
+    
   }
 }
 ?>

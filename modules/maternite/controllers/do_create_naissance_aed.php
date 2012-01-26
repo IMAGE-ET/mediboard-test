@@ -76,7 +76,7 @@ if (!$naissance_id) {
   // Etape 3 (séjour)
   $sejour_enfant = new CSejour;
   $sejour_enfant->entree_reelle = $datetime;
-  $sejour_enfant->sortie_prevue = mbDateTime("+1 month", $datetime);
+  $sejour_enfant->sortie_prevue = $curr_affect->sortie;
   $sejour_enfant->patient_id = $patient->_id;
   $sejour_enfant->praticien_id = $sejour->praticien_id;
   $sejour_enfant->group_id = $sejour->group_id;
@@ -120,6 +120,13 @@ else {
   $constantes->poids = $poids;
   $constantes->taille = $taille;
   $constantes->perimetre_cranien = $perimetre_cranien;
+  
+  // Depuis un dossier provisoire, les constantes médicales ne sont pas créées.
+  if (!$constantes->_id) {
+    $constantes->patient_id = $patient->_id;
+    $constantes->datetime = mbDateTime();
+  }
+  
   storeObject($constantes);
 }
 echo CAppUI::getMsg();

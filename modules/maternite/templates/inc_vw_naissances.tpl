@@ -1,8 +1,15 @@
+<form name="createProvisoire" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function() { refreshGrossesse('{{$operation->_id}}'); } });">
+  <input type="hidden" name="m" value="maternite" />
+  <input type="hidden" name="dosql" value="do_dossier_provisoire_aed" />
+  <input type="hidden" name="operation_id" value="{{$operation->_id}}"/>
+</form>
 <table class="tbl">
   <tr>
     <th class="title" colspan="5">
       <button type="button" class="add" style="float: left;" {{if !$grossesse->active}}disabled="disabled"{{/if}}
         onclick="Naissance.edit(0, '{{$operation->_id}}')">Naissance</button>
+        <button type="button" class="add" style="float: left;" {{if !$grossesse->active}}disabled="disabled"{{/if}}
+        onclick="getForm('createProvisoire').onsubmit()">Dossier provisoire</button>
       <form name="closeGrossesse" method="post"
         onsubmit="return onSubmitFormAjax(this, {onComplete: function() { refreshGrossesse('{{$operation->_id}}'); } });">
         <input type="hidden" name="m" value="maternite" />
@@ -33,8 +40,12 @@
         <button type="button" class="edit notext" onclick="Naissance.edit('{{$_naissance->_id}}')"></button>
       </td>
       <td>
-        Rang {{mb_value object=$_naissance field=rang}}
-        le {{$enfant->naissance|date_format:$conf.date}} à {{mb_value object=$_naissance field=heure}}
+        {{if $_naissance->heure && $_naissance->rang}}
+          Rang {{mb_value object=$_naissance field=rang}}
+          le {{$enfant->naissance|date_format:$conf.date}} à {{mb_value object=$_naissance field=heure}}
+        {{else}}
+          Dossier provisoire
+        {{/if}}
       </td>
       <td>
         <span onmouseover="ObjectTooltip.createEx(this, '{{$enfant->_guid}}')">{{$enfant}}</span>
