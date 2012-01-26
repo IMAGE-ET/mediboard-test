@@ -10,6 +10,8 @@
 
 {{assign var=col value="object_handlers"}}
 {{assign var=class value=$class_handler}}
+
+
 <tr>
   <th class="category" colspan="10">{{tr}}{{$class}}{{/tr}}</th>
 </tr>

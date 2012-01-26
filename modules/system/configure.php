@@ -68,11 +68,13 @@ $message_smtp = CExchangeSource::get("system-message", "smtp", true);
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("timezones", $timezones);
-$smarty->assign("php_config", $php_config_tree);
+$smarty->assign("timezones"           , $timezones);
+$smarty->assign("php_config"          , $php_config_tree);
 $smarty->assign("php_config_important", $php_config_important);
-$smarty->assign("browser_compat", $browser_compat);
-$smarty->assign("message_smtp", $message_smtp);
+$smarty->assign("browser_compat"      , $browser_compat);
+$smarty->assign("message_smtp"        , $message_smtp);
+CModelObject::makeHandlers();
+$smarty->assign("handlers"            , CModelObject::getHandlers());
 $smarty->display("configure.tpl");
 
 ?>

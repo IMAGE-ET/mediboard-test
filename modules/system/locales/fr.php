@@ -1359,6 +1359,7 @@ $locales['config-dsn-create'] = 'Création de la base et permissions sur l\'utili
 $locales['config-dsn-test'] = 'Test';
 $locales['config-exchange-source'] = 'Configuration source d\'échange';
 $locales['config-formats'] = 'Formats d\'affichage';
+$locales['config-handlers'] = 'Handlers';
 $locales['config-help_page_url'] = 'URL vers la page d\'aide (%m = nom du module, %a = tabulation)';
 $locales['config-help_page_url-desc'] = 'URL vers la page d\'aide';
 $locales['config-hide_confidential'] = 'Mode confidentiel';
