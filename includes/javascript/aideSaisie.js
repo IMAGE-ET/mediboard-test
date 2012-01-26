@@ -219,7 +219,6 @@ var AideSaisie = {
           if (update.select("li").length == 0) {
             autocomplete.active = false;
             autocomplete.hasFocus = false;
-            //update.hide();
             autocomplete.hide();
             return;
           }
@@ -243,10 +242,11 @@ var AideSaisie = {
       
       document.observe("click", function(e){
         // if click outside the container
-        if (!Event.element(e).descendantOf(container)) {
+        var element = Event.element(e); // Sometimes, element is null (maybe when it is <html>)
+        if (element && !element.descendantOf(container)) {
           autocomplete.hasFocus = false;
           autocomplete.active = false;
-          list.hide();
+          autocomplete.hide();
         }
       });
       
