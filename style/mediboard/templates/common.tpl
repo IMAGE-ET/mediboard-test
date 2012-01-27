@@ -4,8 +4,12 @@
 {{if $allInOne}}
 <!-- saved from url=(0014)about:internet --> 
 {{/if}}
- 
-<html lang="{{$localeInfo.alpha2}}" class="ua-{{$browser.name}} ua-{{$browser.name}}-{{$browser.majorver}}">
+
+{{* When AIO is active, UA is not detected server side, but IE needs it (for vertical text) *}}
+<!--[if IE 7]> <html lang="{{$localeInfo.alpha2}}" class="ua-msie ua-msie-7"> <![endif]-->
+<!--[if IE 8]> <html lang="{{$localeInfo.alpha2}}" class="ua-msie ua-msie-8"> <![endif]-->
+<!--[if IE 9]> <html lang="{{$localeInfo.alpha2}}" class="ua-msie ua-msie-9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="{{$localeInfo.alpha2}}" class="ua-{{$browser.name}} ua-{{$browser.name}}-{{$browser.majorver}}"> <!--<![endif]-->
 <head>
   <!-- Content-Type meta tags need to be the first in the page (even before title) -->
   <meta http-equiv="Content-Type" content="text/html;charset={{$localeInfo.charset}}" />
