@@ -2160,6 +2160,16 @@ class CPrescription extends CMbObject implements IPatientRelated {
       // La variable count permet d'incrément une seule fois le nombre de lignes
       // dans le cas de plusieurs journées
       foreach($this->_ref_prescription_lines as &$_line_med){
+      	if ($_line_med->date_arret){
+      	  $date_arret = "$_line_med->date_arret $_line_med->time_arret";
+					if ($date_arret < mbDateTime()){
+				    $_line_med->countAdministrations();
+						if (!$_line_med->_count_administrations){
+							continue;
+            }
+					}
+				}
+				
         $count = 0;
       	if($_line_med->perop){
       		continue;
@@ -2249,6 +2259,16 @@ class CPrescription extends CMbObject implements IPatientRelated {
           foreach($elements_chap as $name_cat => $elements_cat){
             foreach($elements_cat as &$_elements){
               foreach($_elements as &$_line_element){
+              	if ($_line_element->date_arret){
+				          $date_arret = "$_line_element->date_arret $_line_element->time_arret";
+				          if ($date_arret < mbDateTime()){
+				            $_line_element->countAdministrations();
+				            if (!$_line_element->_count_administrations){
+				              continue;
+				            }
+				          }
+				        }
+								
               	if($_line_element->perop){
 				          continue;
 				        }
@@ -2329,7 +2349,17 @@ class CPrescription extends CMbObject implements IPatientRelated {
 	      $this->_count_urgence["perfusion"] = false;
 			}
       foreach($this->_ref_prescription_line_mixes as &$_prescription_line_mix){
-         if($_prescription_line_mix->perop){
+         if ($_prescription_line_mix->date_arret){
+	         $date_arret = "$_prescription_line_mix->date_arret $_prescription_line_mix->time_arret";
+	         if ($date_arret < mbDateTime()){
+	           $_prescription_line_mix->countAdministrations();
+	           if (!$_prescription_line_mix->_count_administrations){
+	             continue;
+	           }
+	         }
+	       }
+					
+				 if($_prescription_line_mix->perop){
            continue;
          }
          if(!$_prescription_line_mix->signature_prat && !CAppUI::conf("dPprescription CPrescription show_unsigned_lines")){

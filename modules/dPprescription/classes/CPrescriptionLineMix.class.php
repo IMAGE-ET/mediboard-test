@@ -138,10 +138,10 @@ class CPrescriptionLineMix extends CMbObject {
   var $_can_vw_form_stop_perf                 = null;
   var $_can_view_form_ald                     = null;
 
-  var $_quantite_totale                  = null;
-  var $_prises_prevues                   = null;
+  var $_quantite_totale                       = null;
+  var $_prises_prevues                        = null;
 
-  var $_frequence = null;
+  var $_frequence                             = null;
   var $_continuite = null;  // continue, discontinue
   var $_last_debit = null;
   var $_variations = null;
@@ -151,6 +151,7 @@ class CPrescriptionLineMix extends CMbObject {
   var $_is_past = false;
   var $_fin_relative = null;
 	var $_avancement = null;
+  var $_count_administrations = null;
   
   static $type_by_line = array(
     "perfusion"    => array("classique", "seringue", "PCA"),
@@ -430,7 +431,20 @@ class CPrescriptionLineMix extends CMbObject {
       $this->_recent_modification = $this->hasRecentLog($nb_hours);
     }
   }
-    
+	
+	function countAdministrations(){		
+		$administration = new CAdministration();
+		$where = array();
+    $where["prescription_line_mix_item.prescription_line_mix_id"] = " = '$this->_id'";
+    $where["planification"] = " = '0'";
+        
+    $ljoin = array();
+    $ljoin["prescription_line_mix_item"] = "prescription_line_mix_item.prescription_line_mix_item_id = administration.object_id
+                                            AND administration.object_class = 'CPrescriptionLineMixItem'";
+        
+    $this->_count_administrations = $administration->countList($where, null, $ljoin);
+	}
+	
   /*
    * Duplication d'une prescription_line_mix
    */
