@@ -193,7 +193,12 @@ td#mainHeader td.welcome {
 }
 
 #leftMenu #menubar #menuTools a#toggleIcons {
-  float: left;
+/** Float takes room from menu item, very ugly
+ * float: left;
+ */
+  position: relative;
+  left: -55px;
+  top: 2px;
 }
 
 #leftMenu #menubar.iconed #menuTools a#toggleIcons {

@@ -1805,23 +1805,38 @@ div.sniffer {
 
 div.sniffed {
   float: left;
-	border: 1px solid #888;
-  width: 1em;
-  height: 1em;
-	margin: 0 5px;
-	margin-left: -20px;
+  border: 1px solid #888;
+  width: 12px;
+  height: 12px;
+  margin: 0 5px;
+  margin-left: -20px;
 }
 
-div.sniffed.ko {
-	background: #eee; 
+div.sniff-bar {
+  float: left; 
+  width: 100px; 
+  height: 10px; 
+  border: 1px solid #888; 
+  margin: 1px 10px 1px 0px; 
 }
 
-div.sniffed.ok {
-  background: #dfd; 
+div.sniff-bar div {
+  background: #f88; 
+  height: 10px;
+  font-size: 9px;
 }
 
-div.sniffed.old {
-  background: #ffd; 
+
+div.sniffed.none {
+  background: #eee; 
+}
+
+div.sniffed.obsolete {
+  background: #fda; 
+}
+
+div.sniffed.uptodate {
+  background: #bfb; 
 }
 
 div.jeton_dizaine {

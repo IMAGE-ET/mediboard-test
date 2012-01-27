@@ -59,6 +59,7 @@ class CNumcharSpec extends CNumSpec {
   }
   
   //Returns true if it's a valid Luhn number.
+  // @FIXME Why not use luhn() function ?
   function checkLuhn($number) {
     $split = array_reverse(str_split($number));
     for($i = 1; $i <= count($split); $i += 2) {

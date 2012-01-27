@@ -1,8 +1,8 @@
 <div id="{{$dir}}-header" class="tree-header">
-	<div id="{{$dir}}-trigger" class="tree-trigger">{{tr}}Toggle{{/tr}}</div>  
+  <div id="{{$dir}}-trigger" class="tree-trigger">{{tr}}Toggle{{/tr}}</div>  
   <div class="sniffer">
     {{if is_array($files)}}
-      <button type="button" class="down notext" onclick="CodeSniffer.run(this);">{{tr}}Run{{/tr}}</button>
+      <button type="button" class="change notext" onclick="CodeSniffer.run(this);">{{tr}}Run{{/tr}}</button>
     {{else}}
       <button type="button" class="search notext" onclick="CodeSniffer.show(this);">{{tr}}Show{{/tr}}</button>
     {{/if}}
@@ -19,12 +19,23 @@
   {{assign var=fullpath value=$fullpath|default:"-root-"}}
   {{assign var=stat value=$stats[$fullpath]}}
   {{if $stat}} 
-    <span>{{*$stat.count*}}</span>
+    {{math assign=width equation='100*log10(stat+1)/4' stat=$stat.count format="%.0f"}}
+    {{assign var=color value=yellow}}
+    {{if $width > 25}}{{assign var=color value=orange}}{{/if}}
+    {{if $width > 50}}{{assign var=color value=pink  }}{{/if}}
+    {{if $width > 75}}{{assign var=color value=red   }}{{/if}}
+    {{if $width > 99}}{{assign var=color value=black }}{{/if}}
+    
+    <div class="sniff-bar" title="{{$stat.count}} warnings">
+      <div style="width:{{$width}}%; background: {{$color}};"></div>
+    </div>
+    
   {{/if}}
   <span class="basename" {{if is_array($files)}}style="font-weight: bold;"{{/if}}>
     {{$basename}}
   </span>
 </div>
+
 {{if is_array($files)}}
 <div class="tree-content" id="{{$dir}}" style="display: block;">
   {{foreach from=$files key=_dir item=_files}}

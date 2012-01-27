@@ -248,7 +248,8 @@ table.titleblock td.titlecell {
 #tabmenu a {
   display: block;
   color: #000;
-}
+  line-height: 100%;
+  padding: 2px;}
 
 #tabmenu a:hover {
   text-decoration: none;
@@ -515,10 +516,8 @@ table.main th.title.modify {
   position: absolute;
   display: block;
   border: 1px #FF6600 solid;
-  /*right: -43px;
-  top: -14px;*/
-  left: 0;
-  top: 0;
+  top: -14px;
+  left: -4px;
   margin: 2px;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
@@ -560,8 +559,8 @@ table.main th.title.modify {
   margin: 0;
   padding: 0;
   border: 0;
-  /*left: 0;
-  top: 0;*/
+  left: 0;
+  top: 0;
 }
 
 /* User */

@@ -361,7 +361,7 @@ function smarty_modifier_ternary($value, $option1, $option2) {
  * @return void
  */
 function smarty_modifier_trace($value) {
-  mbTrace($value);
+  mbExport($value);
 }
 
 /**

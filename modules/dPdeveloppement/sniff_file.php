@@ -17,6 +17,11 @@ if (!class_exists("CMbCodeSniffer")) {
 $file = CValue::get("file");
 $file = str_replace(":", "/", $file);
 
+// Has to be a file, not a directory
+if (!is_file($file)) {
+  CAppUI::stepAjax("sniff-file-nofile-error", UI_MSG_ERROR, $file);
+}
+
 $sniffer = new CMbCodeSniffer;
 $sniffer->process($file);
 $sniffer->report($file);

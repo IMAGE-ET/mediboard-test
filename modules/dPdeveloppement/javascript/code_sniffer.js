@@ -1,7 +1,7 @@
 CodeSniffer = {
-	run: function(button) {
-		this.show(button);
-	},
+  run: function(button) {
+    this.show(button);
+  },
 
   show: function(button) {
     var basename = $(button).up('.tree-header').down('.basename').textContent.trim();
@@ -12,8 +12,8 @@ CodeSniffer = {
       file = file.split('/').slice(1).join('/');
     }
     
-		new Url('dPdeveloppement', 'sniff_file') .
-		  addParam("file", file) .
-			requestModal(800, 400);
+    new Url('dPdeveloppement', 'sniff_file') .
+      addParam("file", file) .
+      requestModal(800, 400);
   }
 }
