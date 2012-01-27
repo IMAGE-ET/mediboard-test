@@ -1902,6 +1902,10 @@ td.mouvement_lit {
   padding-top: 0;
 }
 
+td.current_hour {
+  background: #f33 !important;
+}
+
 div.affectation, div.affect_legend {
   border-right: none !important;
   border-left: none !important;

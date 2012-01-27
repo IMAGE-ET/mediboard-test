@@ -82,7 +82,7 @@ switch ($granularite) {
 
 $offset = $nb_ticks * $nb_unite;
 $date_max = mbDateTime("+ $offset $unite", $date_min);
-
+$current = CMbDate::dirac("hour", mbDateTime());
 $temp_datetime = mbDateTime(null, $date_min);
 
 for ($i = 0 ; $i < $nb_ticks ; $i++) {
@@ -91,6 +91,10 @@ for ($i = 0 ; $i < $nb_ticks ; $i++) {
   $datetime = mbDateTime("+ $offset $unite", $date_min);
   $datetimes[] = $datetime;
   if ($granularite == "4weeks") {
+    if (mbDate($current) == mbDate($temp_datetime) &&
+      mbTime($current) >= mbTime($temp_datetime) && mbTime($current) > mbTime($datetime)) {
+      $current = $temp_datetime;
+    }
     $week_a = mbTransformTime($temp_datetime, null, "%W");
     $week_b = mbTransformTime($datetime, null, "%W");
     if ($week_a == "00") {
@@ -117,6 +121,10 @@ for ($i = 0 ; $i < $nb_ticks ; $i++) {
    }
   }
   else {
+    if ($granularite == "week" && mbDate($current) == mbDate($temp_datetime) &&
+        mbTime($datetime) >= mbTime($temp_datetime) && mbTime($current) <= mbTime($datetime)) {
+      $current = $temp_datetime;
+    }
     // le datetime, pour avoir soit le jour soit l'heure
     $days[] = mbDate($datetime);
   }
@@ -201,6 +209,6 @@ $smarty->assign("days"    , $days);
 $smarty->assign("datetimes", $datetimes);
 $smarty->assign("readonly", $readonly);
 $smarty->assign("duree_uscpo", $duree_uscpo);
-
+$smarty->assign("current", $current);
 $smarty->display("inc_vw_affectations.tpl");
 ?>

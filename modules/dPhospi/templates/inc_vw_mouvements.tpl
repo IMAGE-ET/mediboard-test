@@ -151,7 +151,8 @@
             {{$_lit}}
           </th>
           {{foreach from=0|range:$nb_ticks_r item=_i}}
-            <td class="mouvement_lit" data-date="{{$datetimes.$_i}}" style="min-width: {{$td_width}}px;">
+            {{assign var=datetime value=$datetimes.$_i}}
+            <td class="mouvement_lit {{if $datetime == $current}}current_hour{{/if}}" data-date="{{$datetime}}" style="min-width: {{$td_width}}px;">
               {{if $_i == 0 && isset($_lit->_lines|smarty:nodefaults)}}
                
                 {{*  Parcours des affectations *}}

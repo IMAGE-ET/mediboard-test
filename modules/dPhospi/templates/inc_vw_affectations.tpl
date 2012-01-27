@@ -139,7 +139,8 @@
         <th style="height: 3em;" class="first_th"></th>
         
         {{foreach from=0|range:$nb_ticks_r item=_i}}
-          <td class="mouvement_lit" style="min-width: {{$td_width}}px;">
+          {{assign var=datetime value=$datetimes.$_i}}
+          <td class="mouvement_lit {{if $datetime == $current}}current_hour{{/if}}" style="min-width: {{$td_width}}px;">
             {{if $_i == 0}}
               <div class="wrapper_line" id="wrapper_line_{{$_sejour->_id}}">
                 <div class="affectation clit draggable text sejour_non_affecte {{if $_sejour->entree >= $date_min}}debut_sejour{{/if}}
