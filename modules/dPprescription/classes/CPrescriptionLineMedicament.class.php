@@ -38,7 +38,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $traitement_personnel = null;
   var $injection_ide = null;
   var $stupefiant = null;
-  
+  var $generiquable = null;
+	
   var $_most_used_poso = null;
   var $_debut_reel = null;
   var $_fin_reelle = null;
@@ -214,6 +215,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $specs["_fin_reelle"]            = "dateTime";
     $specs["_debut_reel"]            = "dateTime";
     $specs["commentaire"]            = "text helped|code_ucd";
+    $specs["generiquable"]           = "bool default|1";
     return $specs;
   }
   

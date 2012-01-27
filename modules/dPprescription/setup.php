@@ -2194,11 +2194,20 @@ class CSetupdPprescription extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("1.68");
-	$query = "INSERT INTO `config_service` (`config_service_id`,`name`,`value`,`service_id`,`group_id`) VALUES
+	  $query = "INSERT INTO `config_service` (`config_service_id`,`name`,`value`,`service_id`,`group_id`) VALUES
             ('','Delai administration','24',NULL,NULL);";
-	$this->addQuery($query);
+	  $this->addQuery($query);
 		
-	$this->mod_version = "1.69";
+		$this->makeRevision("1.69");
+		$query = "ALTER TABLE `prescription_line_medicament`
+              ADD `generiquable` ENUM ('0','1') DEFAULT '1';";
+		$this->addQuery($query);
+		
+		$query = "ALTER TABLE `prescription_line_mix` 
+              ADD `generiquable` ENUM ('0','1') DEFAULT '1';";
+		$this->addQuery($query);
+		
+	  $this->mod_version = "1.70";
   }
 }
 

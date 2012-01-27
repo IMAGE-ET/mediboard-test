@@ -82,12 +82,11 @@ class CPrescriptionLineMix extends CMbObject {
    
   var $ponctual           = null;
 	
-	var $duree_dose_max = null;
-	var $quantite_dose_max = null;
-  var $ald                 = null;
+	var $duree_dose_max     = null;
+	var $quantite_dose_max  = null;
+  var $ald                = null;
+  var $generiquable       = null;
 
-	
-  
   var $_date_fin          = null;
 
   // Fwd Refs
@@ -242,6 +241,7 @@ class CPrescriptionLineMix extends CMbObject {
 		$specs["duree_dose_max"]         = "num";
 		$specs["quantite_dose_max"]      = "num";
     $specs["ald"]                    = "bool";
+    $specs["generiquable"]           = "bool default|1";
 
     return $specs;
   }
