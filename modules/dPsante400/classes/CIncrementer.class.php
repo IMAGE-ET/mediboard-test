@@ -56,7 +56,6 @@ class CIncrementer extends CMbObject {
     // Chargement du dernier 'increment' s'il existe sinon on déclenche une erreur
     if (!$incrementer->loadMatchingObject()) {
       $mutex->release();
-      
       return;
     }
 

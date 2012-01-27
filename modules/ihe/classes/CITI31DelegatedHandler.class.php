@@ -56,18 +56,6 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         if (!$sejour->_NDA) {
           $NDA = new CIdSante400();
           $NDA->loadLatestFor($sejour, $receiver->_tag_sejour);
-          
-          $group = new CGroups();
-          $group->load($receiver->group_id);
-          $group->loadConfigValues();
-            
-          // Génération du NDA ? 
-          if (!$NDA->id400 && $group->_configs["smp_idex_generator"]) {
-            if (!$NDA = CIncrementer::generateIdex($sejour, $receiver->_tag_sejour, $receiver->group_id)) {
-              throw new CMbException("incrementer_undefined");
-            }
-          }
-          
           $sejour->_NDA = $NDA->id400;
         }
         

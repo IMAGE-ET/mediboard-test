@@ -61,7 +61,7 @@ class CSourceMLLP extends CExchangeSource {
   }
   
   function send($evenement_name = null){
-    $this->getSocketClient()->send(self::TRAILING.$this->_data.self::LEADING);
+    $this->getSocketClient()->sendandrecive(self::TRAILING.$this->_data.self::LEADING);
   }
   
   function isReachableSource() {

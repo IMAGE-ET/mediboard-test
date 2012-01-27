@@ -82,8 +82,8 @@ if ($ack_data = $source->getACQ()) {
     $exchange->_acquittement       = $ack_data;
     $exchange->store();
   }
-  
-  CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' a été retraité");
 }
+
+CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' a été retraité");
 
 ?>

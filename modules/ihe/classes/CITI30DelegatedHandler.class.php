@@ -56,18 +56,6 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     if (!$mbObject->_IPP) {
       $IPP = new CIdSante400();
       $IPP->loadLatestFor($mbObject, $receiver->_tag_patient);
-      
-      $group = new CGroups();
-      $group->load($receiver->group_id);
-      $group->loadConfigValues();
-        
-      // Génération de l'IPP ? 
-      if (!$IPP->id400 && $group->_configs["sip_idex_generator"]) {
-        if (!$IPP = CIncrementer::generateIdex($mbObject, $receiver->_tag_patient, $receiver->group_id)) {
-          throw new CMbException("incrementer_undefined");
-        }
-      }
-      
       $mbObject->_IPP = $IPP->id400;
     }
 

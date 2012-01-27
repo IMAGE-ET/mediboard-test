@@ -531,7 +531,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         break;
       case "RI" :
         // Notre propre RI
-        if (($this->queryTextNode("XCN.9/HD.2", $node) == CAppUI::conf("hl7 assigningAuthorityUniversalID"))) {
+        if (($this->queryTextNode("XCN.9/HD.2", $node) == CAppUI::conf("hl7 assigningAuthorityUniversalID"))) {mbLog("ixi");
           $object->id = $id;
           break;
         }
@@ -548,11 +548,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
     
     // Cas où l'on a aucune information sur le médecin
-    if (!$object->rpps &&
-        !$object->adeli &&
-        !$object->_id && 
-        ($object instanceof CMediusers && (!$object->_user_first_name || $object->_user_last_name)) &&
-        ($object instanceof CMedecin && (!$object->prenom || $object->nom))) {
+    if (!$object->rpps && !$object->adeli && !$object->_id &&
+        (($object instanceof CMediusers && (!$object->_user_first_name || $object->_user_last_name)) ||
+        ($object instanceof CMedecin && (!$object->prenom || $object->nom)))) {
       return null;      
     }
     
@@ -569,8 +567,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function createDoctor(CMediusers $mediuser) {
-    $sender = $this->_ref_exchange_ihe->_ref_sender;
-    
+    $sender = $this->_ref_sender;
+
     $function = new CFunctions();
     $function->text = CAppUI::conf("hl7 importFunctionName");
     $function->group_id = $sender->group_id;
@@ -601,7 +599,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function createIndeterminateDoctor() {
-    $sender = $this->_ref_exchange_ihe->_ref_sender;
+    $sender = $this->_ref_sender;
     
     $user    = new CUser();
     $user->user_last_name = CAppUI::conf("hl7 indeterminateDoctor")." $sender->group_id";
@@ -675,8 +673,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getExpectedAdmitDischarge(DOMNode $node, CSejour $newVenue) {
-    $newVenue->entree_reelle = $this->queryTextNode("PV2.8", $node);
-    $newVenue->sortie_reelle = $this->queryTextNode("PV2.9", $node);
+    $newVenue->entree_prevue = $this->queryTextNode("PV2.8", $node);
+    $newVenue->sortie_prevue = $this->queryTextNode("PV2.9", $node);
   }
   
   function getModeArrivalCode(DOMNode $node, CSejour $newVenue) {

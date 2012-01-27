@@ -466,6 +466,26 @@ class CPatient extends CMbObject {
     if ($msg = $this->bindVitale()) {
       return $msg;
     }
+    
+    // Génération de l'IPP ? 
+    if ($msg = $this->generateIPP()) {
+      return $msg;
+    }
+  }
+  
+  function generateIPP() {
+    $group = CGroups::loadCurrent();
+    $group->loadConfigValues();
+    if ($group->_configs["sip_idex_generator"]) {
+      $IPP = new CIdSante400();
+      $this->loadIPP($group->_id);
+      if ($this->_IPP) {
+        return;
+      }
+      if (!$IPP = CIncrementer::generateIdex($this, self::getTagIPP($group->_id), $group->_id)) {
+        return CAppUI::tr("CIncrementer_undefined");
+      }
+    }
   }
        
   /**

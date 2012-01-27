@@ -64,6 +64,7 @@ $locales['CIncrementer.object_class.CPatient'] = 'IPP';
 $locales['CIncrementer.object_class.CSejour'] = 'NDA';
 $locales['CIncrementer.one'] = 'Un incrémenteur';
 $locales['CIncrementer-failed-unique'] = 'Impossible d\'avoir deux incrémenteurs avec du même type et même établissement';
+$locales['CIncrementer_undefined'] = 'Aucun incrémenteur est défini';
 $locales['CMbObject-back-identifiants'] = 'Identifiants externes';
 $locales['CMbObject-back-identifiants.empty'] = 'Aucun indenfiant externe';
 $locales['CMouvement400-marked'] = 'Marquage';

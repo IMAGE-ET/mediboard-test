@@ -587,14 +587,14 @@ class CSejour extends CCodable implements IPatientRelated {
     $this->completeField("entree_reelle", "entree", "patient_id");
 
     // Vérification de la validité des codes CIM
-    if($this->DP != null) {
+    if ($this->DP != null) {
       $dp = new CCodeCIM10($this->DP, 1);
       if(!$dp->exist) {
         CAppUI::setMsg("Le code CIM saisi n'est pas valide", UI_MSG_WARNING);
         $this->DP = "";
       }
     }
-    if($this->DR != null) {
+    if ($this->DR != null) {
       $dr = new CCodeCIM10($this->DR, 1);
       if(!$dr->exist) {
         CAppUI::setMsg("Le code CIM saisi n'est pas valide", UI_MSG_WARNING);
@@ -706,6 +706,25 @@ class CSejour extends CCodable implements IPatientRelated {
       }
     }
     
+    // Génération du NDA ? 
+    if ($msg = $this->generateNDA()) {
+      return $msg;
+    }
+  }
+  
+  function generateNDA() {
+    $group = CGroups::loadCurrent();
+    $group->loadConfigValues();
+    if ($group->_configs["smp_idex_generator"]) {
+      $NDA = new CIdSante400();
+      $this->loadNDA($group->_id);
+      if ($this->_NDA) {
+        return;
+      }
+      if (!$NDA = CIncrementer::generateIdex($this, self::getTagNDA($group->_id), $group->_id)) {
+        return CAppUI::tr("CIncrementer_undefined");
+      }
+    }
   }
   
   function delAffectations() {

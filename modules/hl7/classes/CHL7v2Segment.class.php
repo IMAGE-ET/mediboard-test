@@ -84,7 +84,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       
       if (array_key_exists($i, $fields)) {
         $_data = $fields[$i];
-        if (empty($_data) && $_spec->isRequired()) {
+        if (($_data === null || $_data === "") && $_spec->isRequired()) {
           $this->error(CHL7v2Exception::FIELD_EMPTY, null, $field);
         }
         
