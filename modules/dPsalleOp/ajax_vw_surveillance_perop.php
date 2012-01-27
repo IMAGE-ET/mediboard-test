@@ -27,8 +27,12 @@ $time_min = $interv->entree_salle;
 $time_max = mbTime("+".mbMinutesRelative("00:00:00", $interv->temp_operation)." MINUTES", $interv->entree_salle);
 
 $date = mbDate($interv->_datetime);
-$time_debut_op = CMbDate::toUTCTimestamp("$date $time_min");
-$time_fin_op   = CMbDate::toUTCTimestamp("$date $time_max");
+
+$time_debut_op_iso = "$date $time_min";
+$time_debut_op     = CMbDate::toUTCTimestamp($time_debut_op_iso);
+
+$time_fin_op_iso   = "$date $time_max";
+$time_fin_op       = CMbDate::toUTCTimestamp($time_fin_op_iso);
 
 $round_minutes = 10;
 $round = $round_minutes * 60000;
@@ -71,24 +75,11 @@ function getWidth($datetime_start, $datetime_end){
 // ---------------------------------------------------
 // Gestes, Medicaments, Perfusions peranesth
 $gestes = array(
-  "CAnesthPerop" => array(),
   "CAffectationPersonnel" => array(),
+  "CAnesthPerop" => array(),
 );
 
-$interv->loadRefsAnesthPerops();
-
-foreach($interv->_ref_anesth_perops as $_perop) {
-  $gestes["CAnesthPerop"][$_perop->_id] = array(
-    "icon" => null,
-    "label" => $_perop->libelle,
-    "unit"  => null,
-    "alert" => $_perop->incident,
-    "datetime" => $_perop->datetime,
-    "position" => getPosition($_perop->datetime),
-    "object" => $_perop,
-  );
-}
-
+// Personnel de l'interv
 $interv->loadAffectationsPersonnel();
 foreach ($interv->_ref_affectations_personnel as $emplacement => $affectations) {
   foreach($affectations as $_affectation) {
@@ -107,6 +98,7 @@ foreach ($interv->_ref_affectations_personnel as $emplacement => $affectations) 
   }
 }
 
+// Personnel de la plage
 $plageop = $interv->_ref_plageop;
 $plageop->loadAffectationsPersonnel();
 foreach ($plageop->_ref_affectations_personnel as $emplacement => $affectations) {
@@ -126,6 +118,21 @@ foreach ($plageop->_ref_affectations_personnel as $emplacement => $affectations)
   }
 }
 
+// Gestes perop
+$interv->loadRefsAnesthPerops();
+foreach($interv->_ref_anesth_perops as $_perop) {
+  $gestes["CAnesthPerop"][$_perop->_id] = array(
+    "icon" => null,
+    "label" => $_perop->libelle,
+    "unit"  => null,
+    "alert" => $_perop->incident,
+    "datetime" => $_perop->datetime,
+    "position" => getPosition($_perop->datetime),
+    "object" => $_perop,
+  );
+}
+
+// Lignes de medicaments et d'elements
 $sejour = $interv->loadRefSejour();
 $prescription = $sejour->loadRefPrescriptionSejour();
 
@@ -216,5 +223,7 @@ $smarty->assign("time_fin_op",   $time_fin_op);
 $smarty->assign("yaxes_count", $yaxes_count);
 $smarty->assign("consult_anesth", $consult_anesth);
 $smarty->assign("now", $now);
+$smarty->assign("time_debut_op_iso", $time_debut_op_iso);
+$smarty->assign("time_fin_op_iso",   $time_fin_op_iso);
 
 $smarty->display("inc_vw_surveillance_perop.tpl");

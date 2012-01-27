@@ -108,6 +108,20 @@ Main.add(function(){
       <button onclick="enChantier()" class="submit">Fermeture</button>
     </td>
     <td>
+      {{if $can->admin}}
+        <form name="generate-sample-observation-results" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {onComplete: reloadSurveillancePerop})" style="float: right;">
+          <input type="hidden" name="m" value="dPpatients" />
+          <input type="hidden" name="dosql" value="do_sample_observation_results_generate" />
+          <input type="hidden" name="suppressHeaders" value="1" />
+          <input type="hidden" name="context_class" value="{{$interv->_class}}" />
+          <input type="hidden" name="context_id" value="{{$interv->_id}}" />
+          <input type="hidden" name="patient_id" value="{{$interv->_ref_sejour->patient_id}}" />
+          <input type="hidden" name="datetime_start" value="{{$time_debut_op_iso}}" />
+          <input type="hidden" name="datetime_end" value="{{$time_fin_op_iso}}" />
+          <button class="change">Générer un jeu de données aléatoires</button>
+        </form>
+      {{/if}}
+
       <button onclick="enChantier()" class="submit">Injection</button>
       <button onclick="enChantier()" class="warning" style="border-color: red;">Incident</button>
     </td>
@@ -143,7 +157,7 @@ Main.add(function(){
             {{assign var=geste_width value="width: `$_geste.width`%;"}}
           {{/if}}
           
-          <div style="padding-left: {{$_geste.position}}%; {{if $_geste.alert}} color: red; {{/if}} {{if array_key_exists('width', $_geste)}} margin-bottom: 0; {{/if}}" class="geste">
+          <div style="padding-left: {{$_geste.position}}%; {{if $_geste.alert}} color: red; {{/if}} {{if array_key_exists('width', $_geste)}} margin-bottom: 2px; {{/if}}" class="geste">
             <div onmouseover="ObjectTooltip.createEx(this, '{{$_geste.object->_guid}}');" style="{{$geste_width}}">
               <div class="marking">
                 <!--<span>{{$_geste.datetime|date_format:$conf.datetime}}</span>-->

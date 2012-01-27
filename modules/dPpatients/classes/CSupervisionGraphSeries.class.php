@@ -112,7 +112,7 @@ class CSupervisionGraphSeries extends CMbObject {
     $data = array();
     foreach($times as $_time) {
       $data[] = array($_time, $value);
-      $value += rand(-$diff, $diff) / $diff;
+      $value += rand(-$diff, +$diff) / $diff;
     }
     
     return $data;

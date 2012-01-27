@@ -26,7 +26,7 @@ Main.add(function(){
         </tr>
         
         {{foreach from=$graphs item=_graph}}
-          <tr {{if $_graph->_id == $graph->_id}} class="selected" {{/if}}>
+          <tr class="{{if $_graph->_id == $graph->_id}}selected{{/if}} {{if $_graph->disabled}} opacity-50 {{/if}}">
             <td>
               <a href="?m=dPpatients&amp;tab=vw_edit_supervision_graph&amp;supervision_graph_id={{$_graph->_id}}">
                 {{mb_value object=$_graph field=title}}
