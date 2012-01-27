@@ -542,7 +542,9 @@ Main.add(function () {
     <td class="halfPane" style="width: 50%;">
       <fieldSet>
         <legend>Infos patient</legend>
-        <div class="text" id="infoPat"></div>
+        <div class="text" id="infoPat">
+          <div class="empty">Aucun patient sélectionné</div>
+        </div>
       </fieldSet>
     </td>
     <td class="halfPane">

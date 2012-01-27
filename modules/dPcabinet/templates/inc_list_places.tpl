@@ -135,13 +135,6 @@ PlageConsult.addPlaceAfter = function(plage_id) {
           {{$_place.time|date_format:$conf.time}}
         {{/if}}
       </div>
-      <div style="float:right">
-      {{foreach from=$_place.consultations item=_consultation}}
-			  {{if $_consultation->categorie_id}}
-          <img src="./modules/dPcabinet/images/categories/{{$_consultation->_ref_categorie->nom_icone}}" alt="{{$_consultation->_ref_categorie->nom_categorie}}" title="{{$_consultation->_ref_categorie->nom_categorie}}" />
-				{{/if}}
-      {{/foreach}}
-      </div>
     </td>
     <td class="text">
       {{foreach from=$_place.consultations item=_consultation}}
@@ -154,6 +147,11 @@ PlageConsult.addPlaceAfter = function(plage_id) {
         {{assign var="style" value=""}}
       {{/if}}
       <div {{$style|smarty:nodefaults}}>
+        {{assign var=categorie value=$_consultation->_ref_categorie}}
+        {{if $categorie->_id}}
+          <img style="float: right;" src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" alt="{{$categorie->nom_categorie}}" title="{{$categorie->nom_categorie}}" />
+        {{/if}}
+
         {{$_consultation->patient_id|ternary:$_consultation->_ref_patient:"[PAUSE]"}}
         {{if $_consultation->duree > 1}}
           x{{$_consultation->duree}}
