@@ -158,30 +158,52 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
   function buildStats($files) {
     $this->stats = array();
     $this->buildStat("", $files);
+    
+    // Sum count arrays from recursive array count
+    function sumCounts($key, &$value) {
+      if ($key == "count" && is_array($value)) {
+        $value = array_sum($value);
+        return;
+	  }
+	  if (is_array($value)) {
+	  	foreach ($value as $_key => &$_value) {
+	  	  sumCounts($_key, $_value);
+	  	}
+	  }
+	}
+    
+    sumCounts(null, $this->stats);
+    
     return $this->stats;
   } 
   
   function buildStat($basedir, $file) {
+    $stat = array();
+  	
     // Directory case
     if (is_array($file)) {
-      foreach ($file as $dirname => $basename) {
-        $this->buildStat("$basedir/$dirname", $basename);
+      foreach ($file as $filename => $basename) {
+        $_stat = $this->buildStat("$basedir/$filename", $basename);
+        $stat = array_merge_recursive($stat, $_stat);
       }
 
-      $this->stats[CValue::first($basedir, "-root-")] = null;
-      return;
+      return $this->stats[CValue::first($basedir, "-root-")] = $stat;
     
     }
     
     // File case
     $subpath = "$basedir";
     $report = $this->makeReportPath($subpath, "json");
-    $stat = null;
     if (is_file($report)) {
       $stat = json_decode(file_get_contents($report), true);
+      $stat = CValue::first($stat, array());
+    }
+    
+    if (!is_array($stat)) {
+      $stat = array();
     }
 
-    $this->stats[$subpath] = $stat;
+    return $this->stats[$subpath] = $stat;
   }
   
   function getFlattenAlerts() {

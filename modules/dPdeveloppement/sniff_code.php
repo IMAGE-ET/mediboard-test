@@ -18,7 +18,7 @@ $sniffer = new CMbCodeSniffer;
 $files = $sniffer->getFilesTree();
 $reports = $sniffer->checkReports($files);
 $stats = $sniffer->buildStats($files);
-
+//mbTrace($stats);
 
 // Cuz sniffer changes work dir but restores it at destruction
 // Be aware that unset() won't call __destruct() anyhow
