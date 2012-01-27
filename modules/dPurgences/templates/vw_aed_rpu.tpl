@@ -470,7 +470,9 @@
       <td colspan="4">
         <fieldSet>
           <legend>Infos patient</legend>
-          <div class="text" id="infoPat"></div>
+          <div class="text" id="infoPat">
+          	<div class="empty">Aucun patient sélectionné</div>
+          </div>
         </fieldSet>
       </td>
     </tr>
