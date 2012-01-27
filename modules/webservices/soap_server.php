@@ -15,19 +15,17 @@ global $m, $a;
 
 CCanDo::checkRead();
 
-$wsdl = CValue::get('wsdl');
-
 // première étape : désactiver le cache lors de la phase de test
 ini_set("soap.wsdl_cache_enabled", "0");
 
-
+$wsdl      = CValue::get('wsdl');
 $username  = CValue::request('username');
 $password  = CValue::request('password');
-$classname = CValue::request('class');
-  
+$classname = CValue::get('class');
+
 // Génération du fichier WSDL
 if (isset($wsdl)) {
-  if (!$classname || !is_subclass_of($classname, "CSoapHandler")) {
+  if (!$classname || !class_exists($classname, true)) {
     return;
   }
   
@@ -47,11 +45,11 @@ if (isset($wsdl)) {
   $wsdlFile->addMessage($functions);
   $wsdlFile->addPortType($functions);
   $wsdlFile->addBinding($functions);
-  $wsdlFile->addService($username, $password, $m, $a);
+  $wsdlFile->addService($username, $password, $m, $a, $classname);
   
   echo $wsdlFile->saveXML();
 } else {
-  if (!$classname || !is_subclass_of($classname, "CSoapHandler")) {
+  if (!$classname || !class_exists($classname, true)) {
     throw new SoapFault("1", "Error : classname is not valid");  
   }
     

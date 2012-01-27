@@ -138,7 +138,7 @@ class CWsdlDocument extends CMbXMLDocument {
     }
   }
   
-  function addService($username, $password, $module, $tab) {
+  function addService($username, $password, $module, $tab, $classname) {
     $definitions = $this->documentElement;
     $partie7 = $this->createComment("partie 7 : Service");
     $definitions->appendChild($partie7);
@@ -155,7 +155,7 @@ class CWsdlDocument extends CMbXMLDocument {
     $this->addAttribute($port, "binding", "typens:MediboardBinding");
     
     $soapaddress = $this->addElement($port, "soap:address", null, "http://schemas.xmlsoap.org/wsdl/soap/");
-    $this->addAttribute($soapaddress, "location", CApp::getBaseUrl()."/index.php?login=1&username=$username&password=$password&m=$module&a=$tab&suppressHeaders=1");
+    $this->addAttribute($soapaddress, "location", CApp::getBaseUrl()."/?login=$username:$password&m=$module&a=$tab&class=$classname&suppressHeaders=1");
   }
   
   function saveFileXML() {
