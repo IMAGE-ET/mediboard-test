@@ -374,7 +374,7 @@ updateModaleAfterAddLine = function(line_id){
 		</tr>
 		<tr>
 			<td>
-				{{if $is_praticien}}
+				{{if $is_praticien || !$prescription->object_id}}
 				<form name="QSP-{{$prescription->_id}}" action="?" method="post">
 	        <input type="hidden" name="m" value="dPprescription" />
 	        <input type="hidden" name="dosql" value="do_prescription_aed" />
@@ -383,7 +383,11 @@ updateModaleAfterAddLine = function(line_id){
 	        {{mb_field object=$prescription field=QSP onchange="return onSubmitFormAjax(this.form);"}}        
 	      </form>
 				{{else}}
-				  {{mb_value object=$prescription field=QSP}}  
+				  {{if $prescription->QSP}}
+					  {{mb_value object=$prescription field=QSP}}   
+					{{else}}
+				    Aucun QSP
+					{{/if}} 	
 				{{/if}}
 			</td>
 		</tr>

@@ -171,7 +171,7 @@ Main.add( function(){
             </tr>
             {{/if}}
             <tr>
-              <td id="adm_{{$key}}" style="vertical-align: middle;">
+              <td id="adm_{{$key}}" style="vertical-align: middle;" class="text">
                 {{if $by_hour.line->_class == "CPrescriptionLineMedicament"}}
                   {{if $by_hour.line->_ref_produit_prescription->_id}}
                     {{assign var=unite_prise value=$by_hour.line->_ref_produit_prescription->unite_prise}}
@@ -181,7 +181,12 @@ Main.add( function(){
                 {{else}}
                   {{assign var=unite_prise value=$by_hour.line->_unite_prise}}
                 {{/if}}
-                {{if !$by_hour.notToday}}
+                {{if !$by_hour.locked || $can->admin}}
+								  {{if $by_hour.locked && $can->admin}}
+									<div class="small-warning">
+			              Délai d'administration dépassé ({{$delai_adm}} heures)
+			            </div>
+									{{/if}}
                   <form name="addAdministration_{{$key}}" method="post" action="?" onsubmit="return checkForm(this)" style="float: left;">
                     <input type="hidden" name="dosql" value="do_administration_aed" />
                     <input type="hidden" name="m" value="dPprescription" />
@@ -203,9 +208,8 @@ Main.add( function(){
                     {{$unite_prise}}
                   </form>
                 {{else}}
-                  <div class="small-info">
-                    Attention, cette prise de {{mb_value object=$by_hour.prise field=quantite}} {{$unite_prise}} est pour le {{$date|date_format:"%d/%m/%Y"}} à {{$hour|date_format:"%Hh%M"}}, 
-                    or nous sommes le {{$smarty.now|date_format:"%d/%m/%Y"}}.
+                  <div class="small-warning">
+                    Il n'est pas possible de valider cette administration, celle-ci peut seulement être validée à partir de {{$delai_adm}}h avant l'administration et jusqu'à {{$delai_adm}}h après.
                   </div>
                 {{/if}}
               </td>
@@ -230,6 +234,18 @@ Main.add( function(){
 					<small>{{$line_mix->_view}}</small>
 	    	</th>
 			</tr>
+			
+			{{if !$line_mix->_locked || $can->admin}}
+			  {{if $line_mix->_locked && $can->admin}}
+          <tr>
+          	<td>
+		          <div class="small-warning">
+		            Délai d'administration dépassé ({{$delai_adm}} heures)
+		          </div>
+          	</td>
+          </tr>
+				{{/if}}
+			
 			{{foreach from=$line_mix->_prises_prevues key=_date item=prises_by_date}}
 			  {{foreach from=$prises_by_date key=_hour item=prises_by_hour}}
 				
@@ -313,6 +329,12 @@ Main.add( function(){
 					{{/if}}
 			  {{/foreach}}
 			{{/foreach}}
+			
+			{{else}}
+			  <div class="small-warning text">
+          Il n'est pas possible de valider cette administration, celle-ci peut seulement être validée à partir de {{$delai_adm}} h avant l'administration et jusqu'à {{$delai_adm}} h après.
+        </div>
+			{{/if}}
 			{{/if}}
 		{{/foreach}}
       <tr>

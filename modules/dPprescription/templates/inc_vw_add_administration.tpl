@@ -234,6 +234,16 @@ chooseSubmit = function() {
     </table>
   {{/if}}
   
+	{{if $locked && !$can->admin}}
+	  <div class="small-warning">
+	  	Il n'est pas possible de valider cette administration, celle-ci peut seulement être validée à partir de {{$delai_adm}}h avant l'administration jusqu'à {{$delai_adm}}h après.
+	  </div>
+	{{else}}
+	  {{if $locked && $can->admin}}
+		  <div class="small-warning">
+		    Délai d'administration dépassé ({{$delai_adm}} heures)
+			</div>
+		{{/if}}
   <form name="addAdministration" method="post" action="?" onsubmit="return checkTransmission('{{$prise->quantite}}', this.quantite.value)">
     <input type="hidden" name="dosql" value="do_administration_aed" />
     <input type="hidden" name="m" value="dPprescription" />
@@ -243,8 +253,6 @@ chooseSubmit = function() {
     <input type="hidden" name="object_id" value="{{$line->_id}}" />
     <input type="hidden" name="object_class" value="{{$line->_class}}" />
     <input type="hidden" name="unite_prise" value="{{$unite_prise}}" />
-  
-    
     <input type="hidden" name="prise_id" value="{{$prise_id}}" />
     <input type="hidden" name="callback" value="submitTransmission" />
     <input type="hidden" name="_quantite_prevue" value="{{$prise->quantite}}" />
@@ -255,18 +263,6 @@ chooseSubmit = function() {
       </tr>
       <tr>
         <td style="vertical-align: middle;" class="narrow">
-          {{if $notToday}}
-            <div class="small-info">
-              {{if $mode_plan}}
-                Attention, vous êtes sur le point d'administrer pour le {{$dateTime|date_format:"%d/%m/%Y"}}, 
-                or nous sommes le {{$smarty.now|date_format:"%d/%m/%Y"}}.
-              {{else}}
-                Attention, cette prise est pour le {{$dateTime|date_format:"%d/%m/%Y à %H:%M"}}, 
-                or nous sommes le {{$smarty.now|date_format:"%d/%m/%Y"}}.
-              {{/if}}
-            </div>
-          {{/if}}
-          
           {{assign var=ratio_UI value=""}}
           {{if $line instanceof CPrescriptionLineMedicament}}
           {{assign var=ratio_UI value=$line->_ref_produit->_ratio_UI}}
@@ -305,7 +301,7 @@ chooseSubmit = function() {
       </tr>
     </table>
   </form>
-	
+	{{/if}}
 	<br />
 	
 	{{assign var=show_constantes value=false}}

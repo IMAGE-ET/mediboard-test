@@ -22,6 +22,13 @@ $prescription_line_mix->loadRefsLines();
 $prescription_line_mix->loadVoies();
 $prescription_line_mix->calculQuantiteTotal();
 
+$sejour = new CSejour();
+$sejour->load($sejour_id);
+$sejour->loadRefCurrAffectation();
+$service_id = $sejour->_ref_curr_affectation->_id ? $sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->service_id : "none";
+$configs = CConfigService::getAllFor($service_id);
+$delai_adm = $configs["Delai administration"];
+
 if($time_prevue){
   $_hour = mbTransformTime(null, $time_prevue, '%H');
   $dateTime = "$date $time_prevue";
@@ -75,8 +82,13 @@ foreach($administrations as $_administrations){
   }
 }
 
+$nb_hours = floor(abs(mbHoursRelative($dateTime, mbDateTime())));
+$locked = $nb_hours > $delai_adm;
+
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("locked", $locked);
+$smarty->assign("delai_adm", $delai_adm);
 $smarty->assign("prescription_line_mix", $prescription_line_mix);
 $smarty->assign("dateTime", $dateTime);
 $smarty->assign("administration", new CAdministration());

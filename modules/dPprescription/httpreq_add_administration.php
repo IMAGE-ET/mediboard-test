@@ -120,6 +120,10 @@ $patient =& $sejour->_ref_patient;
 $patient->loadRefsAffectations();
 $patient->_ref_curr_affectation->loadView();
 
+$service_id = $patient->_ref_curr_affectation->_id ? $patient->_ref_curr_affectation->_ref_lit->_ref_chambre->service_id : "none";
+$configs = CConfigService::getAllFor($service_id);
+$delai_adm = $configs["Delai administration"];
+
 // Heures disponibles pour l'administration
 $hours = range(0,23);
 foreach($hours as &$_hour){
@@ -164,9 +168,13 @@ $new_adm = new CAdministration();
 $new_adm->_date = mbDate($dateTime);
 $new_adm->_time = mbTime($dateTime);
 
+$nb_hours = floor(abs(mbHoursRelative($dateTime, mbDateTime())));
+$locked = $nb_hours > $delai_adm;
+
 // Création du template
 $smarty = new CSmartyDP();
-
+$smarty->assign("locked", $locked);
+$smarty->assign("delai_adm", $delai_adm);
 $smarty->assign("new_adm", $new_adm);
 $smarty->assign("key_tab", $key_tab);
 $smarty->assign("date_sel", $date_sel);
@@ -192,7 +200,5 @@ $smarty->assign("constantes", $constantes);
 $smarty->assign("latest_constantes", $latest_constantes);
 $smarty->assign("params", CConstantesMedicales::$list_constantes);
 $smarty->assign("is_praticien", CAppUI::$user->isPraticien());
-$smarty->assign("show_trash_24h", $show_trash_24h);
-
 $smarty->display("inc_vw_add_administration.tpl");
 ?>

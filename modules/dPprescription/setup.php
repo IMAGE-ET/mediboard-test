@@ -2187,13 +2187,18 @@ class CSetupdPprescription extends CSetup {
               ADD INDEX (`libelle`),
               ADD INDEX (`cancelled`)";
     $this->addQuery($query);
-		
+ 
     $this->makeRevision("1.67");
     $query = "ALTER TABLE `groups_config`
       ADD `dPprescription_CPrescription_show_trash_24h` ENUM ('0', '1') NOT NULL DEFAULT '0'";
     $this->addQuery($query);
     
-    $this->mod_version = "1.68";
+    $this->makeRevision("1.68");
+	$query = "INSERT INTO `config_service` (`config_service_id`,`name`,`value`,`service_id`,`group_id`) VALUES
+            ('','Delai administration','24',NULL,NULL);";
+	$this->addQuery($query);
+		
+	$this->mod_version = "1.69";
   }
 }
 

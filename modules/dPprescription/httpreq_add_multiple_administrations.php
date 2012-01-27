@@ -23,6 +23,7 @@ $date_sel = null;
 $tabs_refresh = array();
 $sejour_id = null;
 $nb_patients = 1;
+$delai_adm = "";
 
 if (count($adm) > 0) {
 	foreach ($adm as $ad) {
@@ -103,7 +104,6 @@ if (count($adm) > 0) {
 		$curr_adm['prise']->quantite = $ad['quantite'];
 		$curr_adm['prise_id'] = $ad['prise_id'];
 		$curr_adm['dateTime'] = "$date $time";
-		$curr_adm['notToday'] = ($date != mbDate());
 		
 		if (!$date_sel)  $date_sel  = isset($ad['date_sel']) ? $ad['date_sel'] : null;
 		
@@ -121,7 +121,14 @@ if (count($adm) > 0) {
 			$sejour->_ref_patient->loadRefsAffectations();
 			$sejour->_ref_patient->_ref_curr_affectation->loadView();
 			$sejour_id = $sejour->_id;
+			
+			$service_id = $sejour->_ref_patient->_ref_curr_affectation->_id ? $sejour->_ref_patient->_ref_curr_affectation->_ref_lit->_ref_chambre->service_id : "none";
+			$configs = CConfigService::getAllFor($service_id);
+			$delai_adm = $configs["Delai administration"];
 		}
+				
+		$nb_hours = floor(abs(mbHoursRelative("$date $time", mbDateTime())));
+    $curr_adm['locked'] = $nb_hours > $delai_adm;
 	}
 }
 $lines_mix_item = array();
@@ -140,8 +147,15 @@ if (count($adm_mix)) {
       $sejour->_ref_patient->loadRefsAffectations();
       $sejour->_ref_patient->_ref_curr_affectation->loadView();
       $sejour_id = $sejour->_id;
+			
+			$service_id = $sejour->_ref_patient->_ref_curr_affectation->_id ? $sejour->_ref_patient->_ref_curr_affectation->_ref_lit->_ref_chambre->service_id : "none";
+      $configs = CConfigService::getAllFor($service_id);
+      $delai_adm = $configs["Delai administration"];
 		}
 		
+		$nb_hours = floor(abs(mbHoursRelative($dateTime, mbDateTime())));
+    $line_mix->_locked = $nb_hours > $delai_adm;
+    
 		// Chargement des lignes
 		$line_mix->loadRefsLines();
 		
@@ -152,6 +166,7 @@ if (count($adm_mix)) {
 			$_line_mix_item->updateQuantiteAdministration();
 			$lines_mix_item[$_line_mix_item->_id] = $_line_mix_item;
 		}
+		
 		$prises_lines_mix[] = $line_mix;
 		if (!$date_sel)  $date_sel = isset($_adm_mix['date_sel']) ? $_adm_mix['date_sel'] : null;
 
@@ -171,6 +186,7 @@ if (count($adm) > 0 || count($adm_mix) > 0) {
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("delai_adm", $delai_adm);
 $smarty->assign("administrations", $list_administrations);
 $smarty->assign("date_sel"       , $date_sel);
 $smarty->assign("sejour"        , $sejour);
