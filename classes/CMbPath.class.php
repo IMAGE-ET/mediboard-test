@@ -304,6 +304,18 @@ abstract class CMbPath {
   }
 
   /**
+   * Coompare file names, with directory first
+   * @param $a
+   * @param $b
+   * @return int Comparison result as an integer, 0 being tie
+   */
+  static function cmpFiles($a, $b) {
+  	$dira = is_dir($a);
+  	$dirb = is_dir($b);
+  	return $dira == $dirb ? strcmp($a, $b) : $dirb - $dira;
+  }
+  
+  /**
    * Get the path tree under a given directory
    * @param string $dir
    * @param array  $ignored    Ignored patterns
@@ -337,7 +349,10 @@ abstract class CMbPath {
 
     // Directory case
     $tree = array();
-    foreach (glob("$dir/*") as $file) {
+    $files = glob("$dir/*");
+    usort($files, array("CMbPath", "cmpFiles"));
+    
+    foreach ($files as $file) {
       $branch = self::getPathTreeUnder($file, $ignored, $extensions);
       if ($branch == null || (is_array($branch) && !count($branch))) {
         continue;
