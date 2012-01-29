@@ -2,9 +2,9 @@
   <div id="{{$dir}}-trigger" class="tree-trigger">{{tr}}Toggle{{/tr}}</div>  
   <div class="sniffer">
     {{if is_array($files)}}
-      <button type="button" class="change notext" onclick="CodeSniffer.run(this);">{{tr}}Run{{/tr}}</button>
+      <button type="button" class="change notext singleclick" onclick="CodeSniffer.run(this);">{{tr}}Run{{/tr}}</button>
     {{else}}
-      <button type="button" class="search notext" onclick="CodeSniffer.show(this);">{{tr}}Show{{/tr}}</button>
+      <button type="button" class="search notext singleclick" onclick="CodeSniffer.show(this);">{{tr}}Show{{/tr}}</button>
     {{/if}}
   </div>
   {{assign var=fullpath value=$dir|replace:":":"/"}}
