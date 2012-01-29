@@ -19,11 +19,11 @@
   {{assign var=fullpath value=$fullpath|default:"-root-"}}
   {{assign var=stat value=$stats[$fullpath]}}
   {{if $stat}} 
-    {{math assign=width equation='100*log10(stat+1)/4' stat=$stat.count format="%.0f"}}
-    {{assign var=color value=yellow}}
+    {{math assign=width equation='100*min(1,(log10(stat+1)/4))' stat=$stat.count format="%.0f"}}
+    {{assign var=color value=gold}}
     {{if $width > 25}}{{assign var=color value=orange}}{{/if}}
-    {{if $width > 50}}{{assign var=color value=pink  }}{{/if}}
-    {{if $width > 75}}{{assign var=color value=red   }}{{/if}}
+    {{if $width > 50}}{{assign var=color value=red   }}{{/if}}
+    {{if $width > 75}}{{assign var=color value=brown }}{{/if}}
     {{if $width > 99}}{{assign var=color value=black }}{{/if}}
     
     <div class="sniff-bar" title="{{$stat.count}} warnings">

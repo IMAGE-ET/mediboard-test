@@ -46,12 +46,19 @@ CodeSniffer = {
 	});
 	
 	var run = $('sniff-run');
+	var count = run.down("th small.count");
+	var stats = [];
+	$H(this.stats).each(function(pair) { 
+      stats.push(pair.key + ': ' + pair.value);
+    });	
+	count.update('('+stats.join(', ')+')');
+	
 	var tbody = run.down('table tbody.files');
 	
 	this.files.each(function(file) {
       tbody.insert(
-        DOM.tr({ id: file.path.replace('/', ':') }, 
-          DOM.td({}, file.path),
+        DOM.tr({ id: file.path.replace(/\//g, ':') }, 
+          DOM.td({}, file.path.replace(/\//g, ' / ')),
           DOM.td({}, 
             DOM.div({ className: 'sniffed ' + file.tag }),
             DOM.div({ className: 'status' })
@@ -59,8 +66,6 @@ CodeSniffer = {
         )
       );
     });
-	
-	
   },
   
   start: function() {
@@ -70,7 +75,7 @@ CodeSniffer = {
 
 	var file = this.files[this.index];
 	
-	var status = $(file.path.replace('/', ':')).down('.status');
+	var status = $(file.path.replace(/\//g, ':')).down('.status');
 	status.update(DOM.div({ className: 'loading' }, 'Running'));
 	
 	if (file.tag == 'uptodate') {

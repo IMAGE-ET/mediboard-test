@@ -10,7 +10,7 @@ Main.add(function () {
   <div id="sniff-list" style="height: 200px; overflow: auto">
     <table class="tbl">
       <tr>
-        <th>Files to go</th>
+        <th>Files to go <small class="count">(&mdash;)</span></th>
         <th style="width: 8em;">Status</th>
       </tr>
       <tbody class="files">
