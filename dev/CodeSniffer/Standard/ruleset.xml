@@ -12,7 +12,6 @@
   <exclude-pattern>/libpkg/</exclude-pattern>
   <exclude-pattern>/locales/</exclude-pattern>
   <exclude-pattern>/templates/</exclude-pattern>
-  <exclude-pattern>/modules/</exclude-pattern>
   <exclude-pattern>/tmp/</exclude-pattern>
 
   <!-- Include some additional sniffs from the Generic standard -->
