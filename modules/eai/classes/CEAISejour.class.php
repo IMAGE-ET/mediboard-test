@@ -49,10 +49,10 @@ class CEAISejour extends CEAIMbObject {
   }
   
   static function storeNDA(CIdSante400 $NDA, CSejour $sejour, CInteropSender $sender) {
-    $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, null, $sejour->_id);
+    /*$NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, null, $sejour->_id);
     if ($NDA->_id) {
       return;
-    }
+    }*/
     
     /* Gestion du numéroteur */
     $group = new CGroups();
