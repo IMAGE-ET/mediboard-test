@@ -45,12 +45,6 @@ class CHL7v2Segment extends CHL7v2Entity {
     
     $specs = $this->getSpecs();
     
-    // check the number of fields
-    /*$fields_count = count($specs->elements->children());
-    if (count($fields)+1 > $fields_count) {
-      $this->error(CHL7v2Exception::TOO_MANY_FIELDS, $this->data);
-    }*/
-    
     $this->description = (string)$specs->description;
     
     if ($this->name === "MSH") {
@@ -58,6 +52,12 @@ class CHL7v2Segment extends CHL7v2Entity {
     }
     
     $_segment_specs = $specs->getItems();
+    
+    // Check the number of fields
+    if (count($fields) > count($_segment_specs)) {
+      $this->error(CHL7v2Exception::TOO_MANY_FIELDS, $this->data, $this, CHL7v2Error::E_WARNING);
+    }
+   
     foreach($_segment_specs as $i => $_spec){
       $field = new CHL7v2Field($this, $_spec);
       
@@ -122,13 +122,20 @@ class CHL7v2Segment extends CHL7v2Entity {
   function getVersion() {
     return $this->getMessage()->getVersion();
   }
-  
+
+  /**
+   * @return CHL7v2SimpleXMLElement
+   */
   function getSpecs(){
     return $this->getSchema(self::PREFIX_SEGMENT_NAME, $this->name, $this->getMessage()->extension);
   }
   
   function getPath($separator = ".", $with_name = false){
+    if (!$with_name) {
+      return array();
+    }
     
+    return array($this->name);
   }
   
   /**

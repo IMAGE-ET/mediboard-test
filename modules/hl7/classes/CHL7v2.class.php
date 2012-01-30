@@ -125,6 +125,9 @@ abstract class CHL7v2 {
   
   abstract function getVersion();
   
+  /**
+   * @return CHL7v2SimpleXMLElement
+   */
   function getSchema($type, $name, $extension = "noext") {
     /*if (empty(self::$schemas)) {
       self::$schemas = SHM::get("hl7-v2-schemas");

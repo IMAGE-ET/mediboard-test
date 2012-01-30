@@ -44,6 +44,14 @@ abstract class CHL7v2Entity extends CHL7v2 {
   
   function fill($items) {}
   
+  /**
+   * Appends an error object in the errors array
+   * 
+   * @param integer      The code of the error
+   * @param string       Additional info about the error
+   * @param CHL7v2Entity The entity where the error occured
+   * @param integer      The error level : CHL7v2Error::E_ERROR or CHL7v2Error::E_WARNING
+   */
   function error($code, $data, $entity = null, $level = CHL7v2Error::E_ERROR) {    
     $this->getMessage()->error($code, $data, $entity, $level);
   }
