@@ -10,6 +10,7 @@
 
 /**
  * Returns the CMbObject with given GET params keys, if it doesn't exist, a redirect is made
+ * 
  * @param string $class_key The class name of the object
  * @param string $id_key The object ID
  * @param string $guid_key The object GUID (classname-id)
@@ -29,14 +30,22 @@ function mbGetObjectFromGet($class_key, $id_key, $guid_key = null) {
   // Redirection
   if (!$object || !$object->_id) {
     global $ajax;
-    CAppUI::redirect("ajax=$ajax&suppressHeaders=1&m=system&a=object_not_found&object_guid=$object_guid");
+    CAppUI::redirect(
+        "ajax=$ajax" . 
+        "&suppressHeaders=1".
+        "&m=system".
+        "&a=object_not_found".
+        "&object_guid=$object_guid"
+    );
   }
   
   return $object;
 }
 
 /**
- * Returns the CMbObject with given GET or SESSION params keys, if it doesn't exist, a redirect is made
+ * Returns the CMbObject with given GET or SESSION params keys, 
+ * if it doesn't exist, a redirect is made
+ * 
  * @param string $class_key The class name of the object
  * @param string $id_key The object ID
  * @param string $guid_key The object GUID (classname-id)
@@ -56,14 +65,23 @@ function mbGetObjectFromGetOrSession($class_key, $id_key, $guid_key = null) {
   // Redirection
   if (!$object || !$object->_id) {
     global $ajax;
-    CAppUI::redirect("ajax=$ajax&suppressHeaders=1&m=system&a=object_not_found&object_guid=$object_guid");
+    CAppUI::redirect(
+        "ajax=$ajax".
+        "&suppressHeaders=1".
+        "&m=system".
+        "&a=object_not_found".
+        "&object_guid=$object_guid"
+    );
   }
   
   return $object;
 }
 
 function toBool($value) {
-  if (!$value) return false;
+  if (!$value) {
+  	return false;
+  }
+  
   return $value === true || preg_match('/^on|1|true|yes$/i', $value);
 }
 
@@ -73,8 +91,10 @@ function toBool($value) {
  * @return array List of bank holidays
  **/
 function mbBankHolidays($date = null) {
-  if(!$date)
+  if (!$date) {
     $date = mbDate();
+  }
+
   $year = mbTransformTime("+0 DAY", $date, "%Y");
 
   // Calcul du Dimanche de Pâques : http://fr.wikipedia.org/wiki/Computus
@@ -85,7 +105,7 @@ function mbBankHolidays($date = null) {
   $d = intval($n / 4);
   $e = ($n - $c + $d + 31) % 7;
   $P = 25 - $c - $e;
-  if($P > 0) {
+  if ($P > 0) {
     $P = "+".$P;
   }
   $paques = mbDate("$P DAYS", "$year-03-31");
@@ -114,8 +134,10 @@ function mbBankHolidays($date = null) {
  **/
 function mbWorkDaysInMonth($date = null) {
   $result = 0;
-  if(!$date)
+  if (!$date) {
     $date = mbDate();
+  }
+
   $year = mbTransformTime("+0 DAY", $date, "%Y");
   $debut = $date;
   $rectif = mbTransformTime("+0 DAY", $debut, "%d")-1;
@@ -126,12 +148,14 @@ function mbWorkDaysInMonth($date = null) {
   $fin = mbDate("+ 1 MONTH", $fin);
   $fin = mbDate("-1 DAY", $fin);
   $freeDays = mbBankHolidays($date);
-  for($i = $debut; $i <= $fin; $i = mbDate("+1 DAY", $i)) {
+  for ($i = $debut; $i <= $fin; $i = mbDate("+1 DAY", $i)) {
     $day = mbTransformTime("+0 DAY", $i, "%u");
-    if($day == 6 and !in_array($i, $freeDays))
+    if ($day == 6 && !in_array($i, $freeDays)) {
       $result += 0.5;
-    elseif($day != 7 and !in_array($i, $freeDays))
+    }
+    elseif ($day != 7 and !in_array($i, $freeDays)) {
       $result += 1;
+    }
   }
   return $result;
 }
@@ -143,7 +167,7 @@ function mbWorkDaysInMonth($date = null) {
  * @param string $format The data in which the date will be returned
  * @return string The transformed date
  **/
-function mbTransformTime($relative = null, $ref = null, $format) {
+function mbTransformTime($relative, $ref, $format) {
   if ($relative === "last sunday") {
     $relative .= " 12:00:00";
   }
@@ -186,9 +210,11 @@ function mbDateTimeFromXMLDuration($duration) {
     return null;
   }
   
-  return sprintf("%d-%d-%d %d:%d:%d", 
-    $matches[2], $matches[4], $matches[6], 
-    $matches[8], $matches[10], $matches[12]);
+  return sprintf(
+      "%d-%d-%d %d:%d:%d", 
+      $matches[2], $matches[4], $matches[6], 
+      $matches[8], $matches[10], $matches[12]
+  );
 }
 
 
@@ -229,12 +255,14 @@ function mbTimeGetNearestMinsWithInterval($reference, $mins_interval) {
   $div = intval($min_reference / $mins_interval);
   $borne_inf = $mins_interval * $div;
   $borne_sup = $mins_interval * ($div + 1);
-  $mins_replace = ($min_reference - $borne_inf) < ($borne_sup - $min_reference) ? $borne_inf : $borne_sup;
-  if($mins_replace == 60) {
-    $reference = sprintf('%02d:00:00',   mbTransformTime(null, $reference, "%H")+1);
-  } else {
-    $reference = sprintf('%02d:%02d:00', mbTransformTime(null, $reference, "%H"), $mins_replace);
-  }
+  $mins_replace = ($min_reference - $borne_inf) < ($borne_sup - $min_reference) ? 
+  	$borne_inf : 
+  	$borne_sup;
+  
+  $reference = ($mins_replace == 60) ?
+    sprintf('%02d:00:00',   mbTransformTime(null, $reference, "%H")+1) :
+    sprintf('%02d:%02d:00', mbTransformTime(null, $reference, "%H"), $mins_replace);
+
   return $reference;
 }
 
@@ -478,15 +506,16 @@ class CMbDate {
       case "1day":
         return $diff / CMbDate::$secs_per["day"];
       default:
-        trigger_error("Can't make a relative position for unknown '$period' period", E_USER_WARNING);
+        trigger_error("Can't proceed for unknown '$period' period", E_USER_WARNING);
     }
   }
   
   static function toUTCTimestamp($time) {
     static $default_timezone;
-    
-    if (!$default_timezone) $default_timezone = date_default_timezone_get();
-    
+    if (!$default_timezone) {
+      $default_timezone = date_default_timezone_get();
+    }
+        
     date_default_timezone_set("UTC");
     $time = strtotime($time) * 1000; // in ms;
     date_default_timezone_set($default_timezone);
@@ -517,81 +546,14 @@ function mbEcartType($array) {
   if (is_array($array)) {
     $moyenne = mbMoyenne($array);
     $sigma = 0;
-    foreach($array as $value) {
-      $sigma += pow((floatval($value)-$moyenne),2);
+    foreach ($array as $value) {
+      $sigma += pow((floatval($value)-$moyenne), 2);
     }
     $ecarttype = sqrt($sigma / count($array));
     return $ecarttype;
   } else {
     return false;
   }
-}
-
-/**
- * Inserts a CSV file into a mysql table 
- * Not a generic function : used for import of specials files
- * @todo : become a generic function
- */
-function mbInsertCSV( $fileName, $tableName, $oldid = false ) {
-    $ds = CSQLDataSource::get("std");
-    $file = fopen( $fileName, 'rw' );
-    if(! $file) {
-      echo "Fichier non trouvé<br>";
-      return;
-    }
-    $k = 0;
-    $reussite = 0;
-    $echec = 0;
-    $null = 0;
-    
-    //$contents = fread ($file, filesize ($fileName));
-    //$content = str_replace(chr(10), " ", $content);
-  
-    while (! feof($file)){
-        $k++;
-        $line = str_replace("NULL", "\"NULL\"", fgets( $file, 1024));
-        $size = strlen($line)-3;
-        $test1 = $line[$size] != "\"";
-        $test2 = 0;
-        $test3 = (! feof( $file ));
-        $test = ($test1 || (!$test1 && $test2)) && $test3;
-        while($test) {
-          $line .= str_replace("NULL", "\"NULL\"", fgets( $file, 1024));
-          $size = strlen($line)-3;
-          $test1 = $line[$size] != "\"";
-          $test2 = 0;
-          $test3 = (! feof( $file ));
-          $test = ($test1 || (!$test1 && $test2)) && $test3;
-        }
-
-        if ( strlen( $line ) > 2 )
-        {
-            $line = addslashes( $line );
-            $line = str_replace("\\\";\\\"", "', '", $line);
-            $line = str_replace("\\\"", "", $line);
-            $line = str_replace("'NULL'", "NULL", $line);
-            if($oldid)
-              $requete = 'INSERT INTO '.$tableName.' VALUES ( \''.$line.'\', \'\' ) ';
-            else
-              $requete = 'INSERT INTO '.$tableName.' VALUES ( \''.$line.'\' ) ';
-            if ( ! $ds->exec ( $requete ) ) {
-                echo 'Erreur Ligne '.$k.' : '.mysql_error().'<br>'.$requete.'<br>';
-                $echec++;
-            }  else {
-                //echo 'Ligne '.$k.' valide.<br>'.$requete.'<br>';
-                $reussite++;
-            }
-        } else {
-            //echo 'Ligne '.$k.' ignorée.<br>';
-            $null++;
-        }
-    }
-
-    echo '<p>Insertion du fichier '.$fileName.' terminé.</p>';
-    echo '<p>'.$k.' lignes trouvées, '.$reussite.' enregistrées, ';
-    echo $echec.' non conformes, '.$null.' ignorées.</p><hr>';
-
-    fclose( $file );
 }
 
 /**
@@ -798,7 +760,7 @@ function url_response_time($url, $port){
   if (!$file) {
     $response_time = -1;  // Site is down
   }
-  else{
+  else {
     fclose($file);
     $response_time = ($stoptime - $starttime) * 1000;
     $response_time = floor($response_time);
@@ -845,7 +807,7 @@ function make_url($components) {
  */
 function is_intranet_ip($ip) {
   // ipv6 en local
-  if ($ip === '::1' || $ip === '0:0:0:0:0:0:0:1'){
+  if ($ip === '::1' || $ip === '0:0:0:0:0:0:0:1') {
     return true;
   }
 
@@ -858,15 +820,21 @@ function is_intranet_ip($ip) {
 }
 
 function get_server_var($var_name) {
-  if (isset($_SERVER[$var_name]))
+  if (isset($_SERVER[$var_name])) {
     return $_SERVER[$var_name];
-  elseif (isset($_ENV[$var_name]))
+  }
+  
+  if (isset($_ENV[$var_name])) {
     return $_ENV[$var_name];
-  elseif (getenv($var_name))
+  }
+
+  if (getenv($var_name)) {
     return getenv($var_name);
-  elseif (function_exists('apache_getenv') && apache_getenv($var_name, true))
+  }
+  
+  if (function_exists('apache_getenv') && apache_getenv($var_name, true)) {
     return apache_getenv($var_name, true);
-  return null;
+  }
 }
 
 function get_remote_address(){
@@ -894,9 +862,10 @@ function get_remote_address(){
   
   $client = null;
   
-  foreach($forwarded as $name) {
-    if ($client = get_server_var($name))
+  foreach ($forwarded as $name) {
+    if ($client = get_server_var($name)) {
       break;
+    }
   }
   
   if ($client) {

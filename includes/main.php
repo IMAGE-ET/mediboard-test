@@ -10,13 +10,13 @@
 
 $debug = CAppUI::pref("INFOSYSTEM");
 
-// Http Redirections
+// HTTP Redirections
 if (CAppUI::conf("http_redirections")) {
   if (!CAppUI::$instance->user_id || CValue::get("login")) {
     $redirection = new CHttpRedirection();
     $redirections = $redirection->loadList(null, "priority DESC");
     $passThrough = false;
-    foreach($redirections as $_redirect) {
+    foreach ($redirections as $_redirect) {
       if (!$passThrough) {
         $passThrough = $_redirect->applyRedirection();
       }
@@ -92,7 +92,7 @@ CJSLoader::$files = array(
   "includes/javascript/exObject.js",
   "includes/javascript/tag.js",
   "includes/javascript/mbObject.js",
-	"includes/javascript/browserDetect.js",
+  "includes/javascript/browserDetect.js",
 
   "includes/javascript/mbmail.js",
 );
@@ -112,9 +112,10 @@ if (!CAppUI::$instance->user_id) {
     $tplAjax->display("ajax_errors.tpl");
   }
   else {
+  	$favicon = "style/$uistyle/images/icons/favicon.ico";
     $tplLogin = new CSmartyDP("style/$uistyle");
     $tplLogin->assign("localeInfo"           , $locale_info);
-    $tplLogin->assign("mediboardShortIcon"   , CFaviconLoader::loadFile("style/$uistyle/images/icons/favicon.ico"));
+    $tplLogin->assign("mediboardShortIcon"   , CFaviconLoader::loadFile($favicon));
     $tplLogin->assign("mediboardCommonStyle" , CCSSLoader::loadFiles());
     $tplLogin->assign("mediboardStyle"       , CCSSLoader::loadFiles($uistyle));
     $tplLogin->assign("mediboardScript"      , CJSLoader::loadFiles(!$debug));
@@ -198,11 +199,11 @@ if ($indexGroup->load($g) && !$indexGroup->canRead()) {
 if ($dosql) {
   // controller in controllers/ directory
   if (is_file("./modules/$m_post/controllers/$dosql.php")) {
-    require("./modules/$m_post/controllers/$dosql.php");
+    include "./modules/$m_post/controllers/$dosql.php";
   } 
   // otherwise... @FIXME to be removed
   else {
-    require("./modules/$m_post/$dosql.php");
+    include "./modules/$m_post/$dosql.php";
   }
 }
 
@@ -216,7 +217,7 @@ $obsolete_module = false;
 $user = CAppUI::$instance->_ref_user;
 
 // We check only when not in the "system" module, and not in an "action" (ajax, etc)
-if($m && $m != "system" && !$a && (!$user->_id || $user->isAdmin())){
+if ($m && $m != "system" && !$a && (!$user->_id || $user->isAdmin())) {
   $setupclass = "CSetup$m";
   $setup = new $setupclass;
   $module->compareToSetup($setup);
@@ -224,13 +225,14 @@ if($m && $m != "system" && !$a && (!$user->_id || $user->isAdmin())){
 }
 
 // Feed module with tabs
-include("./modules/{$module->mod_name}/index.php");
+require "./modules/{$module->mod_name}/index.php";
 if ($tab !== null) {
   $module->addConfigureTab();
 }
   
-if (!$a || $a === "index")
+if (!$a || $a === "index") {
   $tab = $module->getValidTab($tab);
+}
 
 if (!$suppressHeaders) {
   // Liste des Etablissements
@@ -315,7 +317,9 @@ CApp::$performance["ccam"] = array (
 
 // Data sources performances
 foreach (CSQLDataSource::$dataSources as $dsn => $ds) {
-  if (!$ds) continue;
+  if (!$ds) {
+  	continue;
+  }
   
   $chrono = $ds->chrono;
   CApp::$performance["dataSources"][$dsn] = array(
