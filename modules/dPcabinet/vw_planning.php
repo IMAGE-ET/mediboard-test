@@ -135,6 +135,9 @@ $i = 0;
 $min = CPlageconsult::$hours_start.":".reset(CPlageconsult::$minutes).":00";
 $max = CPlageconsult::$hours_stop.":".end(CPlageconsult::$minutes).":00";
 
+$sans_plage_samedi   = "";
+$sans_plage_dimanche = "";
+
 // Extraction des plagesconsult par date
 foreach($listDays as $keyDate=>$valDate){
   
@@ -147,8 +150,11 @@ foreach($listDays as $keyDate=>$valDate){
   $listPlages[$keyDate] = $listPlage->loadList($where,$order);
   
   // suppression des jours sans plage de consult (Samedi et dimanche)
-  if(!$listPlages[$keyDate] && ($i == 5 || $i == 6)){
-    unset($listDays[$keyDate]);
+  if (!$listPlages[$keyDate] && $i == 5) {
+    $sans_plage_samedi = $keyDate;
+  }
+  else if(!$listPlages[$keyDate] && $i == 6){
+    $sans_plage_dimanche = $keyDate;
   }
   
   $i++;
@@ -179,6 +185,12 @@ foreach($listDays as $keyDate=>$valDate){
   }
 }
 
+if ($sans_plage_dimanche) {
+  unset($listDays[$sans_plage_dimanche]);
+  if ($sans_plage_samedi) {
+    unset($listDays[$sans_plage_samedi]);
+  }
+}
 
 // Extension du semainier s'il y a des plages qui d?passent des bornes
 // de configuration hours_start et hours_stop
