@@ -20,8 +20,16 @@
   <rule ref="Generic.PHP.LowerCaseConstant"/>
   <rule ref="Generic.PHP.DisallowShortOpenTag"/>
   <rule ref="Generic.WhiteSpace.DisallowTabIndent"/>
+  <rule ref="Generic.WhiteSpace.ScopeIndent"/>
 
-  <!-- Lines can be 85 chars long, but never show errors -->
+  <!-- Use 2 spaces indent -->
+  <rule ref="Generic.WhiteSpace.ScopeIndent">
+    <properties>
+      <property name="indent" value="2"/>
+    </properties>
+  </rule>
+
+  <!-- Lines length -->
   <rule ref="Generic.Files.LineLength">
     <properties>
       <property name="lineLimit" value="100"/>
@@ -55,20 +63,16 @@
 
   <!-- Use all PEAR Sniffs -->
   <rule ref="PEAR">
-	  <!-- my_function() are allowed -->
-    <exclude name="PEAR.NamingConventions.ValidFunctionName.FunctionNoCaptial" />
-    <exclude name="PEAR.ControlStructures.ControlSignature" />
-    <exclude name="PEAR.Commenting.FileComment.MissingVersion" />
     <exclude name="PEAR.Classes.ClassDeclaration.OpenBraceNewLine" />
-    <exclude name="PEAR.Functions.FunctionDeclaration.BraceOnSameLine" />
+    <exclude name="PEAR.Commenting.ClassComment.MissingTag" />
+    <exclude name="PEAR.Commenting.FileComment.MissingVersion" />
     <exclude name="PEAR.Commenting.FunctionComment.SpacingAfterParams" />
-  </rule>
-
-  <!-- Use 2 spaces indent -->
-  <rule ref="PEAR.WhiteSpace.ScopeIndent">
-    <properties>
-      <property name="indent" value="2"/>
-    </properties>
+    <exclude name="PEAR.ControlStructures.ControlSignature" />
+    <exclude name="PEAR.ControlStructures.MultiLineCondition.StartWithBoolean" />
+    <exclude name="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket" />
+    <exclude name="PEAR.Functions.FunctionDeclaration.BraceOnSameLine" />
+    <exclude name="PEAR.NamingConventions.ValidFunctionName.FunctionNoCaptial" />
+    <exclude name="PEAR.WhiteSpace.ScopeIndent" />
   </rule>
 
 </ruleset>
