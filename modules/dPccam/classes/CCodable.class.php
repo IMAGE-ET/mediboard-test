@@ -431,7 +431,7 @@ class CCodable extends CMbObject {
     $patient   = $this->_ref_patient;
     $discipline = $this->_ref_praticien->_ref_discipline;
     // Il faut une date complête pour la comparaison
-    $date_ref = "1970-01-05";
+    $date_ref = mbDate();
     $date = "$date_ref $heure";
     
     switch ($code) {
@@ -520,9 +520,19 @@ class CCodable extends CMbObject {
           
           // Keep references !
           $phase->_connected_acte = $possible_acte;
-
-          foreach ($phase->_modificateurs as &$modificateur) {
-            $modificateur->_checked = $this->checkModificateur($modificateur->code, mbTime($phase->_connected_acte->execution));
+          if (!$possible_acte->_id) {
+            foreach ($phase->_modificateurs as &$modificateur) {
+              $modificateur->_checked = $this->checkModificateur($modificateur->code, mbTime($phase->_connected_acte->execution));
+            }
+          }
+          else {
+            foreach ($phase->_modificateurs as &$modificateur) {
+              if (strpos($phase->_connected_acte->modificateurs, $modificateur->code) !== false) {
+                $modificateur->_checked = $modificateur->code;
+              } else {
+                $modificateur->_checked = "";              
+              }
+            }
           }
         }
       }
