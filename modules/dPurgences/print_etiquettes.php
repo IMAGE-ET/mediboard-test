@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
+ignore_user_abort(true);
+
 // Chargement du rpu
 $rpu_id = CValue::get("rpu_id");
 $rpu = new CRPU();
