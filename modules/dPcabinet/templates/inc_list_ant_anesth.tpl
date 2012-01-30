@@ -80,7 +80,7 @@ toggleCancelledAnesth = function(list) {
       {{if $curr_antecedent->date}}
         [{{mb_value object=$curr_antecedent field=date}}] :
       {{/if}}
-      {{$curr_antecedent->rques}}
+      {{$curr_antecedent->rques|nl2br}}
     </span>
   </li>
   {{/foreach}}
@@ -111,7 +111,7 @@ toggleCancelledAnesth = function(list) {
       Depuis {{mb_value object=$curr_trmt field=debut}} :
     {{/if}}
      <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_trmt->_guid}}', 'objectViewHistory')">
-       {{$curr_trmt->traitement}}
+       {{$curr_trmt->traitement|nl2br}}
      </span>
     </form>
   </li>

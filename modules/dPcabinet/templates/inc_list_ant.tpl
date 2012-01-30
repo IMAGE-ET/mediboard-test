@@ -214,7 +214,7 @@ Traitement = {
     {{mb_include module=system template=inc_interval_date_progressive object=$_traitement from_field=debut to_field=fin}}
 
     <span onmouseover="ObjectTooltip.createEx(this, '{{$_traitement->_guid}}', 'objectViewHistory')">
-      {{$_traitement->traitement}}
+      {{$_traitement->traitement|nl2br}}
     </span>
 
     </form>
