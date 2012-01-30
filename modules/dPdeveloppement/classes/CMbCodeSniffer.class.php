@@ -182,13 +182,13 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
   	
     // Directory case
     if (is_array($file)) {
+      $stats = array();
       foreach ($file as $filename => $basename) {
-        $_stat = $this->buildStat("$basedir/$filename", $basename);
-        $stat = array_merge_recursive($stat, $_stat);
+        $stats[] = $this->buildStat("$basedir/$filename", $basename);
       }
 
+      $stat = call_user_func_array("array_merge_recursive", $stats);
       return $this->stats[CValue::first($basedir, "-root-")] = $stat;
-    
     }
     
     // File case
@@ -196,7 +196,6 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
     $report = $this->makeReportPath($subpath, "json");
     if (is_file($report)) {
       $stat = json_decode(file_get_contents($report), true);
-      $stat = CValue::first($stat, array());
     }
     
     if (!is_array($stat)) {

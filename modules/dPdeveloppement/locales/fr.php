@@ -23,6 +23,7 @@ $locales['mod-dPdeveloppement-tab-sniff_file'] = 'Analyse syntaxique d\'un fichi
 $locales['mod-dPdeveloppement-tab-version_control'] = 'Versions';
 $locales['mod-dPdeveloppement-tab-view_logs'] = 'Journal système';
 $locales['mod-dPdeveloppement-tab-view_metrique'] = 'Métrique';
+$locales['mod-developpement-tab-sniff_file'] = 'Analyse syntaxique de fichier source';
 $locales['module-dPdeveloppement-court'] = 'Outils';
 $locales['module-dPdeveloppement-long'] = 'Outils de développement';
 $locales['mutex_tester-info1'] = 'Les actions si dessous sont mutuellement exclues par un verrou posé et relâché par chacune d\'entre elle.';
