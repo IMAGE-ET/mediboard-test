@@ -5,23 +5,22 @@
  * @subpackage classes
  * @version $Revision$
  * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-require("includes/config_all.php");
+require "includes/config_all.php";
 
 $reason = isset($_GET["reason"]) ? $_GET["reason"] : null;
 
 switch($reason) {
-  case "bdd" :
-    $msg = "La base de données n'est pas accessible.";
-    break;
-  default :
-		if ($dPconfig["offline"] != 1) {
-		  header("Location: index.php");
-		}
-
-  	$msg = "Le système est désactivé pour cause de maintenance.";
+case "bdd":
+  $msg = "La base de données n'est pas accessible.";
+  break;
+default :
+  if ($dPconfig["offline"] != 1) {
+	  header("Location: index.php");
+  }
+  $msg = "Le système est désactivé pour cause de maintenance.";
 }
 
 $path = "images/pictures";
@@ -36,8 +35,9 @@ header("Content-type: text/html; charset=iso-8859-1");
 <head>
   <title>Mediboard SIH &mdash; Service inaccessible</title>
   <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
-  <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissements de Santé" />
-  
+  <meta name="Description"
+    content="Mediboard: Plateforme Open Source pour les Etablissements de Santé" />
+
   <link rel="shortcut icon" type="image/ico" href="style/mediboard/images/icons/favicon.ico" />
   <link rel="stylesheet" type="text/css" href="style/mediboard/main.css" media="all" />
   <link rel="stylesheet" type="text/css" href="style/e-cap/main.css" media="all" />

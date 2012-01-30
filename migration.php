@@ -5,11 +5,11 @@
  * @subpackage classes
  * @version $Revision$
  * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-require("includes/mb_functions.php");
-require("includes/config_all.php");
+require "includes/mb_functions.php";
+require "includes/config_all.php";
 
 $config = $dPconfig["migration"];
 
@@ -27,12 +27,13 @@ header("Content-type: text/html; charset=iso-8859-1");
 <head>
   <title>Mediboard a changé d'adresse</title>
   <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
-  <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissements de Santé" />
-  
+  <meta name="Description"
+    content="Mediboard: Plateforme Open Source pour les Etablissements de Santé" />
+
   <link rel="shortcut icon" type="image/ico" href="style/mediboard/images/icons/favicon.ico" />
   <link rel="stylesheet" type="text/css" href="style/mediboard/main.css" media="all" />
   <link rel="stylesheet" type="text/css" href="style/e-cap/main.css" media="all" />
-  
+
   <script type="text/javascript">
     function addBookmark(title, url) {
       if (window.sidebar) { // Firefox
@@ -46,19 +47,19 @@ header("Content-type: text/html; charset=iso-8859-1");
       }
     }
   </script>
-  
+
   <style type="text/css">
     body {
-      padding-top: 3em; 
-      text-align: center; 
+      padding-top: 3em;
+      text-align: center;
       font-size: 1.2em;
-      background: #fff; 
+      background: #fff;
     }
-    
+
     p.new-address {
-      background: #eee; 
-      width: 600px; 
-      margin: auto; 
+      background: #eee;
+      width: 600px;
+      margin: auto;
       padding: 0.5em;
       font-size: 1.3em;
       -moz-border-radius: 5px;
@@ -68,24 +69,31 @@ header("Content-type: text/html; charset=iso-8859-1");
 
 <body>
   <h1>Mediboard a changé d'adresse</h1>
-  
+
   <img src="images/pictures/logo.png" width="350" alt="Mediboard" />
-  
+
   <p>
     La nouvelle adresse de Mediboard est maintenant :
   </p>
-  
+
   <p class="new-address">
     <a href="<?php echo $url; ?>"><?php echo $url; ?></a>
   </p>
-  
+
   <p>
-    <strong>L'ancienne adresse n'existera plus à partir du <?php echo strftime("%A %d %B %Y", $limit_date); ?>.</strong>
+    <strong>
+      L'ancienne adresse n'existera plus à partir du
+      <?php echo strftime("%A %d %B %Y", $limit_date); ?>.
+    </strong>
     <br />Nous sommes le <?php echo strftime("%A %d %B %Y"); ?>
   </p>
-  
-  <button class="add" onclick="addBookmark('Mediboard', '<?php echo $url; ?>')">Ajouter à mes favoris</button>
-  <button class="right" onclick="location.href='<?php echo $url; ?>'">Accéder à la nouvelle adresse</button>
+
+  <button class="add" onclick="addBookmark('Mediboard', '<?php echo $url; ?>')">
+    Ajouter à mes favoris
+  </button>
+  <button class="right" onclick="location.href='<?php echo $url; ?>'">
+    Accéder à la nouvelle adresse
+  </button>
 </body>
 
 </html>
