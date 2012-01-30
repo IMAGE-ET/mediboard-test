@@ -90,7 +90,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     
     // Récupération de l'opération courante à la date du relevé
     $first_observation = $data["observations"][0];
-    $observation_dt = $this->getObservationDateTime($first_observation["OBR"]);
+    $observation_dt = $this->getOBRObservationDateTime($first_observation["OBR"]);
     $operation = $sejour->getCurrOperation($observation_dt);
     if (!$operation->_id) {
       return $exchange_ihe->setAckAR($ack, "E301", null, $operation);
@@ -102,12 +102,24 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
       $result_set->patient_id    = $patient->_id;
       $result_set->context_class = "COperation";
       $result_set->context_id    = $operation->_id;
-      $result_set->datetime      = mbDateTime($this->getObservationDateTime($_observation["OBR"]));
+      $result_set->datetime      = mbDateTime($this->getOBRObservationDateTime($_observation["OBR"]));
       if ($msg = $result_set->store()) {
         return $exchange_ihe->setAckAR($ack, "E302", $msg, $operation);
       }
       
       foreach ($_observation["OBX"] as $_OBX) {
+        $dateTimeOBX = $this->getOBXObservationDateTime($_OBX);
+        if ($dateTimeOBX) {
+          $result_set                = new CObservationResultSet();
+          $result_set->patient_id    = $patient->_id;
+          $result_set->context_class = "COperation";
+          $result_set->context_id    = $operation->_id;
+          $result_set->datetime      = mbDateTime($dateTimeOBX);
+          if ($msg = $result_set->store()) {
+            return $exchange_ihe->setAckAR($ack, "E302", $msg, $operation);
+          }
+        }
+        
         $result = new CObservationResult();
         $result->observation_result_set_id = $result_set->_id;
         $this->mappingObservationResult($_OBX, $result);
@@ -123,8 +135,12 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     return $exchange_ihe->setAckAA($ack, $codes, null, $patient);
   }
   
-  function getObservationDateTime(DOMNode $node) {
+  function getOBRObservationDateTime(DOMNode $node) {
     return $this->queryTextNode("OBR.7", $node);
+  }
+  
+  function getOBXObservationDateTime(DOMNode $node) {
+    return $this->queryTextNode("OBX.14/TS.1", $node);
   }
   
   function mappingObservationResult(DOMNode $node, CObservationResult $result) {
