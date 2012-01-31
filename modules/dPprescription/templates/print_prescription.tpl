@@ -326,6 +326,12 @@ p.duplicata {
   {{/if}}
   
 {{if $lines.medicaments.med.ald || $lines.medicaments.comment.ald || $lines.medicaments.dm.ald}}
+    <div style="outline: 0.1pt solid black; float: right; position: absolute; bottom: 10px; right: 5px; background-color:white" class="only-printable">
+      <div style="outline: 0.1pt solid black; width: 1cm; height: 1cm; margin: 0.15cm; font-weight: bold; font-size:2em; vertical-align: middle; line-height: 1cm; text-align: center;">
+        {{$count_med}}
+      </div>  
+    </div>
+		
     <!-- Affichage des ald -->
    <div style="border: 1px dotted #555; padding-right: 10px; text-align: center;">
      <strong>Prescriptions relatives au traitement de l'affection de longue durée reconnue (liste ou hors liste)</strong>
@@ -394,11 +400,19 @@ p.duplicata {
     </strong>
     {{/if}}
     
+
 <!-- Affichage en mode normal -->
 {{else}}
+    <div style="outline: 0.1pt solid black; float: right; position: absolute; bottom: 10px; right: 5px; background-color: white;" class="only-printable">
+      <div style="outline: 0.1pt solid black; width: 1cm; height: 1cm; margin: 0.15cm; font-weight: bold; font-size:2em; vertical-align: middle; line-height: 1cm; text-align: center;">
+        {{$count_med}}
+      </div>  
+    </div>
+
     <!-- Affichage des no_ald -->
     <ul>
     {{foreach from=$lines.medicaments.med.no_ald item=line_medicament_element_no_ald name="foreach_med"}}
+		  <!-- Carré sécurisé -->
       {{if !$smarty.foreach.foreach_med.first && $smarty.foreach.foreach_med.index%15 == 0 && $prescription->object_id}}
        </ul>
        </div>
@@ -452,9 +466,7 @@ p.duplicata {
           {{/if}}  
         {{/if}}
       {{/if}}  
-      
-      
-      
+			
     {{/foreach}}
       {{foreach from=$lines.medicaments.comment.no_ald item=line_medicament_comment_no_ald}}
         {{include file="inc_print_commentaire.tpl" comment=$line_medicament_comment_no_ald nodebug=true}}
@@ -480,6 +492,7 @@ p.duplicata {
 {{/if}}
 
 
+	
 <!-- Parcours des chapitres -->
 {{foreach from=$linesElt key=name_chap item=elementsChap name="foreachChap"}}
 {{if $i==1 || $name_chap=="med_elt"}}

@@ -91,6 +91,8 @@ $medicament = 0;
 $comment = 0;
 $_ald = false;
 
+$count_med = 0;
+
 // Parcours des medicaments, pas de gestion d'executant pour les medicaments
 $lines["medicaments"]["med"]["ald"] = array();
 $lines["medicaments"]["med"]["no_ald"] = array();
@@ -163,9 +165,13 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
     
 		
 		$all_lines["medicaments"][] = $line_medicament;
-    
+    		
 		if($partial_print && !in_array($line_medicament->_guid, $selected_lines)){
       continue;
+    }
+		
+		if($line_medicament instanceof CPrescriptionLineMedicament){
+      $count_med++;
     }
 		
 	  if($line_medicament->ald){
@@ -207,8 +213,7 @@ if (!$prescription->object_id){
 
 
 // Parcours des prescription_line_mixes
-foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
-  $_prescription_line_mix->loadRefPraticien();
+foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){  $_prescription_line_mix->loadRefPraticien();
   $_prescription_line_mix->loadRefsVariantes();
   foreach($_prescription_line_mix->_ref_variantes as $_subst_by_chap){
     foreach($_subst_by_chap as &$_subst_perf){
@@ -235,6 +240,8 @@ foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
     continue;
   }
 	
+	$count_med++;
+
 	if($_prescription_line_mix->ald){
     $_ald = true;
     $lines["medicaments"]["med"]["ald"][] = $_prescription_line_mix;
@@ -352,6 +359,7 @@ $code_rpps = CTemplateManager::getBarcodeDataUri($praticien->rpps, $options);
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("count_med", $count_med);
 $smarty->assign("_ald", $_ald);
 $smarty->assign("only_dmi", $only_dmi);
 $smarty->assign("header", $header_height);
@@ -375,7 +383,6 @@ $smarty->assign("code_rpps"      , $code_rpps);
 $smarty->assign("all_lines"      , $all_lines);
 $smarty->assign("selected_lines" , $selected_lines);
 $smarty->assign("partial_print", $partial_print);
-//$smarty->assign("am"             , $am);
 
 if (!$prescription->object_id && !$no_pdf) {
 	$smarty->assign("no_header", isset($no_header));
