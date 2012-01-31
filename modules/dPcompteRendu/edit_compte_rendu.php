@@ -84,8 +84,12 @@ else {
       if ($modele->header_id || $modele->footer_id) {
         $modele->loadComponents();
       }
-      if (!$header->_id) $header = $modele->_ref_header;
-      if (!$footer->_id) $footer = $modele->_ref_footer;
+      if (!$header->_id && $modele->header_id) {
+        $header = $modele->_ref_header;
+      }
+      if (!$footer->_id && $modele->footer_id) {
+        $footer = $modele->_ref_footer;
+      }
       if ($header->_id && $footer->_id) {
         break;
       }
