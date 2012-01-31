@@ -24,7 +24,7 @@
 <table class="sejourcollapse" id="sejour_{{$_sejour->_id}}">
   <tr>
     <td class="selectsejour" style="background:#{{$_sejour->_ref_praticien->_ref_function->color}}">
-      {{if !$conf.dPhospi.pathologies || $_sejour->pathologie}}  
+      {{if !$conf.dPhospi.pathologies || $_sejour->pathologie}}
       <input type="radio" id="hospitalisation{{$_sejour->_id}}" onclick="selectHospitalisation({{$_sejour->_id}})" />
       <script type="text/javascript">new Draggable('sejour_{{$_sejour->_id}}', {revert: true, scroll: window})</script>
       {{/if}}
@@ -51,18 +51,13 @@
           ALD
         </strong>
         {{/if}}
-        {{if $_sejour->chambre_seule}}
         <em style="color: #f00;" title="Chambre seule">
-          CS
+        {{if $_sejour->chambre_seule}}CS{{else}}CD{{/if}}
+        {{if $_sejour->prestation_id}}- {{$_sejour->_ref_prestation->code}}{{/if}}
         </em>
-        {{else}}
-        <em style="color: #f00;" title="Chambre double">
-          CD
-        </em>
-        {{/if}}
       </div>
     </td>
-  </tr> 
+  </tr>
   <tr>
     <td colspan="2">
       <a href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
@@ -73,11 +68,11 @@
       <strong>Sortie</strong> : {{$_sejour->_sortie|date_format:"%a %d %b %Hh%M"}}
     </td>
   </tr>
-	
+
   <tr>
     <td colspan="2"><strong>Age</strong> : {{$_sejour->_ref_patient->_age}} ans ({{mb_value object=$_sejour->_ref_patient field=naissance}}) </td>
   </tr>
-	
+
   <tr>
     <td colspan="2">
     	<strong>
@@ -85,13 +80,13 @@
     	</strong>
     </td>
   </tr>
-  
+
 	{{if $_sejour->prestation_id}}
   <tr>
     <td colspan="2"><strong>Prestation: </strong>{{$_sejour->_ref_prestation->_view}}</td>
   </tr>
   {{/if}}
-	
+
   <tr>
     <td colspan="2">
       {{foreach from=$_sejour->_ref_operations item=_operation}}
@@ -99,17 +94,17 @@
       {{/foreach}}
     </td>
   </tr>
-	
+
   <tr>
     <td colspan="2">
-    
+
     <form name="EditSejour{{$_sejour->_id}}" action="?m=dPhospi" method="post">
 
     <input type="hidden" name="m" value="dPplanningOp" />
     <input type="hidden" name="otherm" value="dPhospi" />
     <input type="hidden" name="dosql" value="do_sejour_aed" />
     <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
-    
+
     <strong>Pathologie:</strong>
     <select name="pathologie">
       <option value="">&mdash; Choisir</option>
@@ -126,12 +121,12 @@
     <label for="septique_1" title="Séjour septique">Septique</label>
 
     <button class="submit" onclick="submit()">Valider</button>
-    
+
     </form>
-    
+
     </td>
   </tr>
-	
+
   {{if $_sejour->rques}}
   <tr>
     <td class="highlight" colspan="2">

@@ -5,7 +5,7 @@
  * @subpackage dPbloc
  * @version $Revision$
  * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
 CCanDo::checkRead();
@@ -53,7 +53,7 @@ $user = CMediusers::get();
 $praticien = new CMediusers();
 $praticien->load($filter->_prat_id);
 
-//dans le cas d'un anesthesiste, vider le prat_id si l'anesthesiste veut voir tous 
+//dans le cas d'un anesthesiste, vider le prat_id si l'anesthesiste veut voir tous
 //les plannings sinon laisser son prat_id pour afficher son planning perso
 if($praticien->isFromType(array("Anesthésiste"))&& !$filter->_planning_perso) {
   $filter->_prat_id = null;
@@ -157,21 +157,22 @@ $listDates = array();
 // Operations de chaque plage
 foreach($plagesop as &$plage) {
   $plage->loadRefsFwd(1);
-  
+
   $where["operations.plageop_id"] = "= '$plage->_id'";
-  
+
   $listOp = new COperation;
   $listOp = $listOp->loadList($where, $order, null, null, $ljoin);
 
   foreach ($listOp as $operation) {
     $operation->loadRefPlageOp(1);
   	$operation->loadRefPraticien(1);
+    $operation->loadExtCodesCCAM();
     $sejour = $operation->loadRefSejour(1);
     $sejour->loadRefsFwd(1);
     if ($_print_numdoss) {
       $sejour->loadNDA();
-    }  
-    
+    }
+
     // On utilise la first_affectation pour contenir l'affectation courante du patient
     $affectation = $sejour->getCurrAffectation(mbDate($operation->_datetime));
     if ($affectation->_id) {
@@ -185,41 +186,41 @@ foreach($plagesop as &$plage) {
   }
   $plage->_ref_operations = $listOp;
   $numOp += count($listOp);
-  
+
   // Chargement des affectation de la plage
   $plage->loadAffectationsPersonnel();
-  
+
   // Initialisation des tableaux de stockage des affectation pour les op et les panseuses
   $affectations_plage[$plage->_id]["iade"]        = array();
 	$affectations_plage[$plage->_id]["op"]          = array();
   $affectations_plage[$plage->_id]["op_panseuse"] = array();
-  
+
   if (null !== $plage->_ref_affectations_personnel) {
   	$affectations_plage[$plage->_id]["iade"]        = $plage->_ref_affectations_personnel["iade"];
     $affectations_plage[$plage->_id]["op"]          = $plage->_ref_affectations_personnel["op"];
     $affectations_plage[$plage->_id]["op_panseuse"] = $plage->_ref_affectations_personnel["op_panseuse"];
   }
-  
+
   $listDates[$plage->date][$plage->_id] = $plage;
 }
 
 foreach($operations as $operation) {
   $operation->loadRefPlageOp(1);
   $operation->loadRefPraticien(1);
-  
+  $operation->loadExtCodesCCAM();
   $sejour = $operation->loadRefSejour(1);
   $sejour->loadRefsFwd(1);
   if ($_print_numdoss) {
     $sejour->loadNDA();
-  }  
-    
+  }
+
   // On utilise la first_affectation pour contenir l'affectation courante du patient
   $affectation = $sejour->getCurrAffectation(mbDate($operation->_datetime));
   if ($affectation->_id) {
     $affectation->loadRefLit()->loadCompleteView();
   }
   $sejour->_ref_first_affectation = $affectation;
-	
+
   $listDates[$operation->date]["hors_plage"][] = $operation;
 }
 
