@@ -33,6 +33,7 @@ em {
 {{foreach from=$listByProfile key=profile item=_profile}}
   {{assign var=list         value=$_profile.list}}
   {{assign var=list_favoris value=$_profile.favoris}}
+  {{assign var=list_stats   value=$_profile.stats}}
   <div id="{{$profile}}_code" style="display: none; height: 110%; overflow-y: scroll;">
     <table class="tbl">
       <tr>
@@ -56,7 +57,10 @@ em {
           </td>
           <td class="text">{{$curr_code->libelle|emphasize:$_keywords_code}}</td>
           <td>
-            {{if array_key_exists($curr_code->code, $list_favoris)}}
+            {{if array_key_exists($curr_code->code, $list_stats)}}
+              {{assign var=_code value=$curr_code->code}}
+              {{$list_stats.$_code->occ}}
+            {{elseif array_key_exists($curr_code->code, $list_favoris)}}
               Favoris
             {{else}}
               -

@@ -43,6 +43,27 @@ foreach ($profiles as $profile => $_user_id) {
   $users[$profile] = $_user;
   $list = array();
   
+  // Statistiques
+  $ds = CSQLDataSource::get("std");
+  $sql = "SELECT DP, count(DP) as nb_code
+          FROM `sejour`
+          WHERE sejour.praticien_id = '$_user_id'
+          AND DP IS NOT NULL
+          AND DP != ''
+          GROUP BY DP
+          ORDER BY count(DP) DESC
+          LIMIT 10;";
+  
+  $cimStat = $ds->loadlist($sql);
+   
+  $codes_stats = array();
+  foreach($cimStat as $key => $value) {
+    $codes_stats[$value["DP"]] = new CCodeCIM10($value["DP"]);
+    $codes_stats[$value["DP"]]->loadLite();
+    $codes_stats[$value["DP"]]->_favoris_id = "0";
+    $codes_stats[$value["DP"]]->occ = $value["nb_code"];
+  }
+  
   // Favoris
   $code = new CFavoriCIM10;
   $where = array();
@@ -58,9 +79,20 @@ foreach ($profiles as $profile => $_user_id) {
   $code = new CCodeCIM10();
   $where = null;
 
-  if (!$_all_codes && count($codes_favoris)) {
+  if (!$_all_codes && (count($codes_stats) || count($codes_favoris))) {
     $where = "master.abbrev IN (";
-
+    
+    foreach ($codes_stats as $key => $_code) {
+      $where .= "'" . $key . "'";
+      if ($_code != end($codes_stats)) {
+        $where .= ",";
+      }
+    }
+    
+    if (count($codes_favoris)) {
+      $where .= ",";
+    }
+    
     foreach ($codes_favoris as $key => $_code) {
       $where .= "'" . $key . "'";
       if ($_code != end($codes_favoris)) {
@@ -72,7 +104,7 @@ foreach ($profiles as $profile => $_user_id) {
   
   // Si pas de stat et pas de favoris, et que la recherche se fait sur ceux-ci,
   // alors le tableau de résultat est vide
-  if (!$_all_codes && count($codes_favoris) == 0) {
+  if (!$_all_codes && count($codes_stats) == 0 && count($codes_favoris) == 0) {
     $codes = array();
   }
   // Sinon recherche de codes
@@ -86,8 +118,10 @@ foreach ($profiles as $profile => $_user_id) {
     $code_cim10->CCodeCIM10($val_code, 1);
     $list[$val_code] = $code_cim10;
     $nb_code = 0;
-    
-    if (isset($codes_favoris[$val_code])) {
+    if (isset($codes_stats[$val_code])) {
+      $nb_code = $codes_stats[$val_code]->occ;
+    }
+    elseif (isset($codes_favoris[$val_code])) {
       $nb_code = 0.5;
     }
     $list[$val_code]->nb_acte = $nb_code;
@@ -98,6 +132,7 @@ foreach ($profiles as $profile => $_user_id) {
   array_multisort($sorter, SORT_DESC, $list);
   
   $listByProfile[$profile]["favoris"] = $codes_favoris;
+  $listByProfile[$profile]["stats"]   = $codes_stats;
   $listByProfile[$profile]["list"]    = $list;
 }
 

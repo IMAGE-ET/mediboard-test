@@ -73,6 +73,11 @@ foreach ($profiles as $profile => $_user_id) {
         $where .= ",";
       }
     }
+    
+    if (count($codes_favoris)) {
+      $where .= ",";
+    }
+    
     foreach ($codes_favoris as $key => $_code) {
       $where .= "'" . $key . "'";
       if ($_code != end($codes_favoris)) {
