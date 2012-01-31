@@ -1215,6 +1215,7 @@ class CSejour extends CCodable implements IPatientRelated {
   function loadSuiviMedical() {
     $this->loadBackRefs("observations");
     $this->loadBackRefs("transmissions");
+    $consultations = $this->loadRefsConsultations();
     
     $this->_ref_suivi_medical = array();
 
@@ -1241,6 +1242,16 @@ class CSejour extends CCodable implements IPatientRelated {
       }
     }
     
+    foreach ($consultations as $_consultation) {
+      $_consultation->canEdit();
+      $_consult_anesth = $_consultation->loadRefConsultAnesth();
+      if ($_consult_anesth->_id) {
+        $_consult_anesth->loadRefsTechniques();
+      }
+      $_consultation->loadRefPlageConsult();
+      $_consultation->loadRefPraticien()->loadRefFunction();
+      $this->_ref_suivi_medical[$_consultation->_datetime] = $_consultation;
+    }
     
     if($this->type == "urg" && CAppUI::conf("dPprescription CPrescription prescription_suivi_soins")){
       $this->loadRefPrescriptionSejour();

@@ -50,7 +50,7 @@ foreach($sejour->_ref_suivi_medical as $_suivi) {
     }
   }  
   // Transmissions et Observations
-  else {
+  elseif (!$_suivi instanceof CConsultation) {
     $users[$_suivi->user_id] = $_suivi->_ref_user;
     $type = ($_suivi instanceof CObservationMedicale) ? "obs" : "trans";
     if($user_id && $_suivi->user_id != $user_id){
@@ -81,15 +81,21 @@ foreach($sejour->_ref_suivi_medical as $_trans_const) {
   if (is_array($_trans_const)) {
     $_trans_const = $_trans_const[0];
   }
-  if ($_trans_const instanceof CObservationMedicale && !$_show_obs) {
+  if (($_trans_const instanceof CObservationMedicale || $_trans_const instanceof CConsultation) && !$_show_obs) {
     continue;
   }
   if ($_trans_const instanceof CTransmissionMedicale && !$_show_trans) {
     continue;
   }
-  if($_trans_const instanceof CConstantesMedicales) {
+  if ($_trans_const instanceof CConstantesMedicales) {
     $sort_key = "$_trans_const->datetime $_trans_const->_guid";
     $list_trans_const[$sort_key] = $_trans_const;
+  }
+  elseif ($_trans_const instanceof CConsultation) {
+    if ($_trans_const->type == "entree") {
+      $has_obs_entree = 1;
+    }
+    $list_trans_const[$_trans_const->_datetime] = $_trans_const;
   }
   elseif ($_trans_const instanceof CTransmissionMedicale) {
     $sort_key = "$_trans_const->date $_trans_const->_class $_trans_const->user_id $_trans_const->object_id $_trans_const->object_class $_trans_const->libelle_ATC";
@@ -125,25 +131,6 @@ foreach($sejour->_ref_suivi_medical as $_trans_const) {
     $list_trans_const[$sort_key] = $_trans_const;
   }
 }
-
-
-foreach ($sejour->_ref_consultations as $_consult) {
-  if ($_consult->type == "entree") {
-    $has_obs_entree = 1;
-  }
-  if ($_show_obs) {
-    $_consult->canEdit();
-    $_consult_anesth = $_consult->loadRefConsultAnesth();
-    if ($_consult_anesth->_id) {
-      $_consult_anesth->loadRefsTechniques();
-    }
-    $_consult->loadRefPlageConsult();
-    $prat = $_consult->loadRefPraticien();
-    $prat->loadRefFunction();
-    $list_trans_const[$_consult->_datetime] = $_consult;
-  }
-}
-
 
 krsort($list_trans_const);
 

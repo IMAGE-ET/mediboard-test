@@ -52,13 +52,13 @@ foreach($sejour->_ref_operations as $_interv) {
 }
 
 // Chargement du patient
-
 $patient = $sejour->loadRefPatient();
 $patient->loadComplete();
 $patient->loadIPP();
 
-// Chargement du dossier medicale
+// Chargement du dossier medical
 $dossier_medical = $patient->loadRefDossierMedical();
+$dossier_medical->canRead();
 $dossier_medical->countAntecedents();
 $dossier_medical->loadRefPrescription();
 $dossier_medical->loadRefsTraitements();
