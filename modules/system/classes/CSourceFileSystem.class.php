@@ -80,8 +80,9 @@ class CSourceFileSystem extends CExchangeSource {
       file_put_contents($file_path, $this->_data);
       
       $pos = strrpos($file_path, ".");
+      $file_path = substr($file_path, 0, $pos);
       
-      return file_put_contents(substr($file_path, 0, $pos).$this->fileextension_write_end, "");
+      return file_put_contents("$file_path.$this->fileextension_write_end", "");
     }
     else {
       return file_put_contents($file_path, $this->_data);
