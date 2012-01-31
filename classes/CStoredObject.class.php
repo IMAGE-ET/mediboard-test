@@ -950,6 +950,7 @@ class CStoredObject extends CModelObject {
     }
 
     if (!count($fields) && $type === "store") {
+      $this->_ref_last_log = null;
       return;
     }
    
