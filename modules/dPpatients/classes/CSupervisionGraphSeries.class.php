@@ -34,8 +34,8 @@ class CSupervisionGraphSeries extends CMbObject {
     $props = parent::getProps();
     $props["supervision_graph_axis_id"] = "ref notNull class|CSupervisionGraphAxis cascade";
     $props["title"]                = "str";
-    $props["value_type_id"]        = "ref notNull class|CObservationValueType autocomplete|label";
-    $props["value_unit_id"]        = "ref notNull class|CObservationValueUnit autocomplete|label";
+    $props["value_type_id"]        = "ref notNull class|CObservationValueType autocomplete|label|true";
+    $props["value_unit_id"]        = "ref notNull class|CObservationValueUnit autocomplete|label|true";
     $props["color"]                = "str notNull length|6";
     return $props;
   }
@@ -111,7 +111,7 @@ class CSupervisionGraphSeries extends CMbObject {
     
     $data = array();
     foreach($times as $_time) {
-      $data[] = array($_time, $value);
+      $data[] = array($_time, round($value, 2));
       $value += rand(-$diff, +$diff) / $diff;
     }
     

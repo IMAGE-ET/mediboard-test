@@ -31,6 +31,10 @@ class CObservationValueCodingSystem extends CMbObject {
     parent::updateFormFields();
     
     $this->_view = $this->label;
+    
+    if ($this->desc) {
+      $this->_view .= " [$this->desc]";
+    }
   }
   
   function loadMatch($code, $coding_system, $label, $desc = null) {
