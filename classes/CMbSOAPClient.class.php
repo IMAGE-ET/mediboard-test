@@ -81,7 +81,7 @@ class CMbSOAPClient extends SoapClient {
     $output = null;
     
     $echange_soap = new CEchangeSOAP();
-    $echange_soap->date_echange = mbDateTime();
+    
     $echange_soap->emetteur     = CAppUI::conf("mb_id");
     $echange_soap->destinataire = $this->wsdl;
     $echange_soap->type         = $this->type_echange_soap;
@@ -108,9 +108,10 @@ class CMbSOAPClient extends SoapClient {
         $echange_soap->last_response_headers = $this->__getLastResponseHeaders();
         $echange_soap->last_response         = $this->__getLastResponse();
       }
-    
-      $echange_soap->output    = $fault->faultstring;
-      $echange_soap->soapfault = 1;
+      
+      $echange_soap->date_echange = mbDateTime();
+      $echange_soap->output       = $fault->faultstring;
+      $echange_soap->soapfault    = 1;
       $echange_soap->store();
       
       $phpChrono->start();
@@ -119,7 +120,7 @@ class CMbSOAPClient extends SoapClient {
     }
     $chrono->stop();
     $phpChrono->start();
-    
+    $echange_soap->date_echange = mbDateTime();
     // trace
     if (CAppUI::conf("webservices trace")) {
       $echange_soap->trace                 = true;
