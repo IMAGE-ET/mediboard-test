@@ -21,6 +21,7 @@ CApp::$classPaths = SHM::get("class-paths");
  * Mediboard class autoloader
  * 
  * @param string $class Class to be loaded
+ * 
  * @return bool
  */
 function mbAutoload($class) {

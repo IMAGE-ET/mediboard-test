@@ -26,10 +26,10 @@ if (!defined("E_DEPRECATED")) {
 
 // Do not set to E_STRICT as it hides fatal errors to our error handler
 
-// developement
+// Developement
 //error_reporting(E_ALL | E_STRICT | E_USER_DEPRECATED | E_DEPRECATED);
 
-// production 
+// Production 
 error_reporting(E_ALL);
 
 ini_set("error_log", LOG_PATH);
@@ -38,22 +38,22 @@ ini_set("log_errors", true);
 ini_set("display_errors", $dPconfig["debug"]);
 
 $divClasses = array (
-  E_ERROR => "big-error",                // 1
-  E_WARNING => "big-warning",            // 2
-  E_PARSE => "big-info",                 // 4
-  E_NOTICE => "big-info",                // 8
-  E_CORE_ERROR => "big-error",           // 16
-  E_CORE_WARNING => "big-warning",       // 32
-  E_COMPILE_ERROR => "big-error",        // 64
-  E_COMPILE_WARNING => "big-warning",    // 128
-  E_USER_ERROR => "big-error",           // 256
-  E_USER_WARNING => "big-warning",       // 512
-  E_USER_NOTICE => "big-info",           // 1024
-  E_STRICT => "big-info",                // 2048
-  E_RECOVERABLE_ERROR => "big-error",    // 4096
-  E_DEPRECATED => "big-info",            // 8192
-  E_USER_DEPRECATED => "big-info",       // 16384
-                                 // E_ALL = 32767 (PHP 5.4)
+  E_ERROR             => "big-error",   // 1
+  E_WARNING           => "big-warning", // 2
+  E_PARSE             => "big-info",    // 4
+  E_NOTICE            => "big-info",    // 8
+  E_CORE_ERROR        => "big-error",   // 16
+  E_CORE_WARNING      => "big-warning", // 32
+  E_COMPILE_ERROR     => "big-error",   // 64
+  E_COMPILE_WARNING   => "big-warning", // 128
+  E_USER_ERROR        => "big-error",   // 256
+  E_USER_WARNING      => "big-warning", // 512
+  E_USER_NOTICE       => "big-info",    // 1024
+  E_STRICT            => "big-info",    // 2048
+  E_RECOVERABLE_ERROR => "big-error",   // 4096
+  E_DEPRECATED        => "big-info",    // 8192
+  E_USER_DEPRECATED   => "big-info",    // 16384
+                                        // E_ALL = 32767 (PHP 5.4)
   E_JS_ERROR => "big-warning javascript",// 0
 );
 
@@ -67,44 +67,51 @@ if (!$dPconfig["debug"]) {
 }
 
 $errorTypes = array (
-  E_ERROR => "Error",
-  E_WARNING => "Warning",
-  E_PARSE => "Parse",
-  E_NOTICE => "Notice",
-  E_CORE_ERROR => "Core error",
-  E_CORE_WARNING => "Core warning",
-  E_COMPILE_ERROR => "Compile error",
-  E_COMPILE_WARNING => "Compile warning",
-  E_USER_ERROR => "User error",
-  E_USER_WARNING => "User warning",
-  E_USER_NOTICE => "User notice",
-  E_STRICT => "Strict",
+  E_ERROR             => "Error",
+  E_WARNING           => "Warning",
+  E_PARSE             => "Parse",
+  E_NOTICE            => "Notice",
+  E_CORE_ERROR        => "Core error",
+  E_CORE_WARNING      => "Core warning",
+  E_COMPILE_ERROR     => "Compile error",
+  E_COMPILE_WARNING   => "Compile warning",
+  E_USER_ERROR        => "User error",
+  E_USER_WARNING      => "User warning",
+  E_USER_NOTICE       => "User notice",
+  E_STRICT            => "Strict",
   E_RECOVERABLE_ERROR => "Recoverable error",
-  E_DEPRECATED => "Deprecated",
-  E_USER_DEPRECATED => "User deprecated",
-  E_JS_ERROR => "Javascript error",
+  E_DEPRECATED        => "Deprecated",
+  E_USER_DEPRECATED   => "User deprecated",
+  E_JS_ERROR          => "Javascript error",
 );
 
 $errorCategories = array (
-  E_ERROR => "error",
-  E_WARNING => "warning",
-  E_PARSE => "error",
-  E_NOTICE => "notice",
-  E_CORE_ERROR => "error",
-  E_CORE_WARNING => "warning",
-  E_COMPILE_ERROR => "error",
-  E_COMPILE_WARNING => "warning",
-  E_USER_ERROR => "error",
-  E_USER_WARNING => "warning",
-  E_USER_NOTICE => "notice",
-  E_STRICT => "notice",
+  E_ERROR             => "error",
+  E_WARNING           => "warning",
+  E_PARSE             => "error",
+  E_NOTICE            => "notice",
+  E_CORE_ERROR        => "error",
+  E_CORE_WARNING      => "warning",
+  E_COMPILE_ERROR     => "error",
+  E_COMPILE_WARNING   => "warning",
+  E_USER_ERROR        => "error",
+  E_USER_WARNING      => "warning",
+  E_USER_NOTICE       => "notice",
+  E_STRICT            => "notice",
   E_RECOVERABLE_ERROR => "error",
-  E_DEPRECATED => "notice",
-  E_USER_DEPRECATED => "notice",
-  E_JS_ERROR => "warning",
+  E_DEPRECATED        => "notice",
+  E_USER_DEPRECATED   => "notice",
+  E_JS_ERROR          => "warning",
 );
 
-// To be put in mbFonctions
+/**
+ * Get the path relative to Mediboard root
+ * 
+ * @param string $absPath Absolute path
+ * 
+ * @return string Relative path
+ * @todo Move to CMbPath
+ */ 
 function mbRelativePath($absPath) {
   global $dPconfig;
   $mbPath = $dPconfig["root_dir"];
@@ -123,6 +130,10 @@ function mbRelativePath($absPath) {
 
 /**
  * Traces variable using preformated text prefixed with a label
+ * 
+ * @param mixed  $var   Data to dump
+ * @param string $label Add an optional label
+ * 
  * @return void 
  **/
 function mbDump($var, $label = null) {
@@ -134,6 +145,11 @@ function mbDump($var, $label = null) {
 
 /**
  * Process the exported data
+ * 
+ * @param string $export Data
+ * @param string $label  Add an optionnal label
+ * @param bool   $log    Log to file or echo data
+ * 
  * @return string|int The processed log or the size of the data written in the log file 
  **/
 function processLog($export, $label = null, $log = false) {
@@ -149,31 +165,61 @@ function processLog($export, $label = null, $log = false) {
 
 /**
  * Traces variable using preformated text prefixed with a label
- * @param any $var The variable you want to trace the value of
- * @param string $label Prefix with a label
- * @param bool $log Log the trace
+ * 
+ * @param mixed  $var   Data to dump
+ * @param string $label Add an optional label
+ * @param bool   $log   Log to file or echo data
+ * 
  * @return string|int The processed log or the size of the data written in the log file 
  **/
 function mbTrace($var, $label = null, $log = false) {
   return processLog(print_r($var, true), $label, $log);
 }
 
+/**
+ * Log shortcut to mbTrace
+ * 
+ * @param mixed  $var   Data to dump
+ * @param string $label Add an optional label
+ * 
+ * @return int The size of the data written in the log file 
+ **/
 function mbLog($var, $label = null) {
   return mbTrace($var, $label, true);
 }
 
 /**
  * Traces variable using preformated text prefixed with a label
+ * 
+ * @param mixed  $var   Data to dump
+ * @param string $label Add an optional label
+ * @param bool   $log   Log to file or echo data
+ * 
  * @return string|int The processed log or the size of the data written in the log file 
  **/
 function mbExport($var, $label = null, $log = false) {
   return processLog(var_export($var, true), $label, $log);
 }
 
+/**
+ * Hide password param in HTTP param string
+ * 
+ * @param string $str HTTP params
+ * 
+ * @return string Sanitized HTTP
+ **/
 function hideUrlPassword($str) {
   return preg_replace("/(.*)password=([^&]+)(.*)/", '$1password=***$3', $str);
 }
 
+/**
+ * Get HTML rendered information for serveur vars
+ * 
+ * @param array  $var  HTTP params
+ * @param string $name Optional var name
+ * 
+ * @return string HTML
+ **/
 function print_infos($var, $name = '') {
   if (empty($var)) {
     return; 
@@ -193,10 +239,18 @@ function print_infos($var, $name = '') {
 }
 
 /**
- * Custom herror handler with backtrace
- * @return null
+ * Custom error handler with backtrace
+ * 
+ * @param string $code      Error code
+ * @param string $text      Error text
+ * @param string $file      Error file path
+ * @param string $line      Error line number
+ * @param string $context   Error context
+ * @param string $backtrace Error backtrace
+ * 
+ * @return void
  */
-function errorHandler($code, $text, $file, $line, $context, $backTrace = null) {
+function errorHandler($code, $text, $file, $line, $context, $backtrace = null) {
   global $divClasses, $errorTypes, $errorCategories;
   
   // See ALL errors
@@ -214,7 +268,7 @@ function errorHandler($code, $text, $file, $line, $context, $backTrace = null) {
   $type = isset($errorTypes[$code]) ? $errorTypes[$code] : null;
   
   // Contextes 
-  $contexts = $backTrace ? $backTrace : debug_backtrace();
+  $contexts = $backtrace ? $backtrace : debug_backtrace();
   foreach ($contexts as &$ctx) {
     unset($ctx['args']);
     unset($ctx['object']);
@@ -283,6 +337,9 @@ set_error_handler("errorHandler");
 
 /**
  * Custom exception handler with backtrace
+ * 
+ * @param exception $exception Thrown exception
+ * 
  * @return null
  */
 function exceptionHandler($exception) {

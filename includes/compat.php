@@ -249,23 +249,59 @@ if (!function_exists('timezone_identifiers_list')) {
 }
 
 if (!function_exists('mb_strtoupper')) {
+  /**
+   * Make a string uppercase
+   * Multi-byte graceful fallback
+   * 
+   * @param string $string Input string
+   * 
+   * @return string the uppercased string
+   * @link http://php.net/manual/en/function.strtoupper.php
+   */
   function mb_strtoupper($string) {
     return strtoupper($string);
   }
 }
 
 if (!function_exists('mb_strtolower')) {
+  /**
+   * Make a string lowecase
+   * Multi-byte graceful fallback
+   * 
+   * @param string $string Input string
+   * 
+   * @return string the lowercased string
+   * @link http://php.net/manual/en/function.strtolower.php
+   */
   function mb_strtolower($string) {
     return strtolower($string);
   }
 }
 
 if (!function_exists('mb_convert_case')) {
+  /**
+   * Make a string with uppercased words
+   * Multi-byte graceful fallback
+   * 
+   * @param string $string Input string
+   * 
+   * @return string The word uppercased string
+   * @link http://php.net/manual/en/function.ucwords.php
+   */
   function mb_ucwords($string) {
     return ucwords($string);
   }
 }
 else {
+  /**
+   * Make a string with uppercased words
+   * Multi-byte graceful fallback
+   * 
+   * @param string $string Input string
+   * 
+   * @return string the word uppercased string
+   * @link http://php.net/manual/en/function.ucwords.php
+   */
   function mb_ucwords($string) {
     return mb_convert_case($string, MB_CASE_TITLE, CApp::$encoding);
   }
@@ -275,13 +311,17 @@ if (!defined('PHP_INT_MAX')) {
   define('PHP_INT_MAX', pow(2, 31)-1);
 }
 
-/**
- * (PHP 4, PHP 5)
- * bcmod Get modulus of an arbitrary precision number
- * 
- * cf. http://php.net/bcmod
- */
 if (!function_exists('bcmod')) {
+  /**
+   * (PHP 4, PHP 5)
+   * Get modulus of an arbitrary precision number
+   * 
+   * @param string $left_operand Any precision integer value
+   * @param int    $modulus      Integer modulus
+   * 
+   * @return int Rest of modulus
+   * @link http://php.net/bcmod
+   */
   function bcmod($left_operand, $modulus) {
     // how many numbers to take at once? carefull not to exceed (int)
     $take = 5;    
@@ -295,33 +335,44 @@ if (!function_exists('bcmod')) {
   }
 }
 
-/**
- * (PHP 5 >= 5.1.0)
- * date_default_timezone_set Sets the default timezone used by all date/time functions in a script 
- * @param object $timezone_identifier
- * @return 
- */
 if (!function_exists("date_default_timezone_set")) {
+  /**
+   * (PHP 5 >= 5.1.0)
+   * Sets the default timezone used by all date/time functions in a script 
+   * Void fallback
+   * 
+   * @param object $timezone_identifier Timezone identifier
+   * 
+   * @return void
+   */
   function date_default_timezone_set($timezone_identifier) {
     // void
   }
 }
 
-/**
- * (PHP 5 >= 5.1.0)
- * inet_pton Converts a human readable IP address to its packed in_addr representation
- */
 if (!function_exists("inet_pton")) {
+  /**
+   * (PHP 5 >= 5.1.0)
+   * Converts a human readable IP address to its packed in_addr representation
+   * 
+   * @param string $address Readable IP address
+   * 
+   * @return string Packed IP address
+   */
   function inet_pton($address) {
     // void
   }
 }
 
-/**
- * (PHP 5 >= 5.1.0)
- * inet_pton Converts a packed internet address to a human readable representation
- */
 if (!function_exists("inet_ntop")) {
+  /**
+   * (PHP 5 >= 5.1.0)
+   * Converts a packed in_addr IP address to a human readable IP address
+   * 
+   * @param string $in_addr Packed IP address
+   * 
+   * @return string Readable IP address
+   */
   function inet_ntop($in_addr) {
     return "";
   }
