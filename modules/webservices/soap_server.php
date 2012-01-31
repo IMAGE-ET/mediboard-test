@@ -21,7 +21,7 @@ ini_set("soap.wsdl_cache_enabled", "0");
 $wsdl      = CValue::get('wsdl');
 $username  = CValue::request('username');
 $password  = CValue::request('password');
-$classname = CValue::get('class');
+$classname = CValue::request('class');
 
 // Génération du fichier WSDL
 if (isset($wsdl)) {
