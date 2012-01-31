@@ -14,6 +14,7 @@ $granularite  = CValue::getOrSession("granularite", "day");
 $date         = CValue::getOrSession("date", mbDate());
 $mode_vue_tempo = CValue::getOrSession("mode_vue_tempo", "classique");
 $readonly     = CValue::getOrSession("readonly", 0);
+$prestation_id = CValue::getOrSession("prestation_id", 0);
 
 if (!$services_ids) {
   $smarty = new CSmartyDP;
@@ -139,6 +140,23 @@ foreach ($lits as $_lit) {
   $chambre->_ref_lits[$_lit->_id] = $_lit;
   $service = $chambre->loadRefService();
   $service->_ref_chambres[$chambre->_id] = $chambre;
+  $liaisons_items = $_lit->loadBackRefs("liaisons_items");
+  $items_prestations = CMbObject::massLoadFwdRef($liaisons_items, "item_prestation_id");
+  $prestations_ids = CMbArray::pluck($items_prestations, "object_id");
+  
+  if (in_array($prestation_id, $prestations_ids)) {
+    $inverse = array_flip($prestations_ids);
+    $item_prestation = $items_prestations[$inverse[$prestation_id]];
+    if ($item_prestation->_id) {
+      $_lit->_selected_item = $item_prestation;
+    }
+    else {
+      $_lit->_selected_item = new CItemPrestation;
+    }
+  }
+  else {
+    $_lit->_selected_item = new CItemPrestation;
+  }
 }
 
 array_multisort(CMbArray::pluck($services, "nom"), SORT_ASC, $services);
@@ -233,6 +251,7 @@ $smarty->assign("readonly"    , $readonly);
 $smarty->assign("nb_affectations", $nb_affectations);
 $smarty->assign("readonly"    , $readonly);
 $smarty->assign("current"     , $current);
+
 $smarty->display("inc_vw_mouvements.tpl");
 
 ?>

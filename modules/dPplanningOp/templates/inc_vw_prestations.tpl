@@ -21,7 +21,8 @@
   <form name="edit_prestations" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {onComplete: function() {
     getForm('add_prestation_ponctuelle').up('div').up('div').select('button.change')[0].onclick(); }})">
     <input type="hidden" name="m" value="dPhospi"/>
-    <input type="hidden" name="dosql" value="do_items_liaisons_aed"/>
+    <input type="hidden" name="dosql" value="do_items_liaisons_aed" />
+    <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
     
     <table class="tbl">
       <tr>
@@ -82,14 +83,19 @@
         {{assign var=first_date value=$smarty.foreach.foreach_date.first}}
       <tr>
         {{if $affectation_id != $_affectation_id}}
-          {{assign var=affectation value=$affectations.$_affectation_id}}
-          <th rowspan="{{$affectation->_rowspan}}" class="title narrow">
-            <span onmouseover="ObjectTooltip.createEx(this, '{{$affectation->_guid}}')">
-               {{vertical}}
-                 {{$affectation->_ref_lit}}
-               {{/vertical}}
-             </span>
-          </th>
+          {{assign var=affectation_id value=$_affectation_id}}
+          {{if $affectation_id != 0}}
+            {{assign var=affectation value=$affectations.$affectation_id}}
+            <th rowspan="{{$affectation->_rowspan}}" class="title narrow">
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$affectation->_guid}}')">
+                 {{vertical}}
+                   {{$affectation->_ref_lit}}
+                 {{/vertical}}
+               </span>
+            </th>
+          {{else}}
+            <th></th>
+          {{/if}}
         {{/if}}
         
           <td>
@@ -121,7 +127,7 @@
                           {{foreach from=$_prestation->_ref_items item=_item}}
                             <label>
                               <input type="radio"
-                                name="liaisons_j[{{$_affectation_id}}][{{$prestation_id}}][{{$_date}}][{{$type}}][{{$liaison->_id}}]"
+                                name="liaisons_j[{{$prestation_id}}][{{$_date}}][{{$type}}][{{$liaison->_id}}]"
                                 onclick="var elt_hidden = this.next(); $V(elt_hidden, this.checked ? '{{$_item->_id}}' : 0); this.form.onsubmit();"
                                 {{if ($type == 'souhait' && $liaison->item_prestation_id == $_item->_id) ||
                                   ($type == 'realise' && $liaison->item_prestation_realise_id == $_item->_id)}}checked="checked"{{/if}} value="{{$_item->_id}}"/>{{$_item->nom}}
@@ -134,7 +140,7 @@
                           {{foreach from=$_prestation->_ref_items item=_item}}
                             <label>
                               <input type="radio"
-                                name="liaisons_j[{{$_affectation_id}}][{{$prestation_id}}][{{$_date}}][{{$type}}][new]"
+                                name="liaisons_j[{{$prestation_id}}][{{$_date}}][{{$type}}][new]"
                                 onclick="var elt_hidden = this.next(); $V(elt_hidden, this.checked ? '{{$_item->_id}}' : 0); this.form.onsubmit();" value="{{$_item->_id}}"/>{{$_item->nom}}
                             </label>
                           {{/foreach}}
@@ -181,7 +187,6 @@
             </td>
           {{/if}}
         </tr>
-        {{assign var=affectation_id value=$_affectation_id}}
       {{/foreach}}
     </table>
     <tr>

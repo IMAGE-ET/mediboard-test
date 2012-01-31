@@ -27,71 +27,71 @@ $group = CGroups::loadCurrent();
 $etablissements = CMediusers::loadEtablissements(PERM_READ);
 
 if ($use_service != null) {
-	// Chargement du service à ajouter/editer
-	$service = new CService();
-	$service->group_id = $group->_id;
-	$service->load($service_id);
-	$service->loadRefsNotes();
+  // Chargement du service à ajouter/editer
+  $service = new CService();
+  $service->group_id = $group->_id;
+  $service->load($service_id);
+  $service->loadRefsNotes();
 }
 
 if ($use_chambre != null) {
-	// Récupération de la chambre à ajouter/editer
-	$chambre = new CChambre();
-	$chambre->load($chambre_id);
-	$chambre->loadRefsNotes();
-	$chambre->loadRefService();
-	foreach ($chambre->loadRefsLits() as $_lit) {
-	  $_lit->loadRefsNotes();
-	}
-	
-	if (!$chambre->_id) {
-	  CValue::setSession("lit_id", 0);
-	}
+  // Récupération de la chambre à ajouter/editer
+  $chambre = new CChambre();
+  $chambre->load($chambre_id);
+  $chambre->loadRefsNotes();
+  $chambre->loadRefService();
+  foreach ($chambre->loadRefsLits() as $_lit) {
+    $_lit->loadRefsNotes();
+  }
+  
+  if (!$chambre->_id) {
+    CValue::setSession("lit_id", 0);
+  }
 
-		// Chargement du lit à ajouter/editer
-		$lit = new CLit();
-		$lit->load($lit_id);
-		$lit->loadRefChambre();
-	
-	// Récupération des chambres/services
-	$where = array();
-	$where["group_id"] = "= '$group->_id'";
-	$order = "nom";
-	
+  // Chargement du lit à ajouter/editer
+  $lit = new CLit();
+  $lit->load($lit_id);
+  $lit->loadRefChambre();
+  
+  // Récupération des chambres/services
+  $where = array();
+  $where["group_id"] = "= '$group->_id'";
+  $order = "nom";
+  
   $service = new CService();
-	$services = $service->loadListWithPerms(PERM_READ,$where, $order);
-	foreach ($services as $_service) {
-	  foreach ($_service->loadRefsChambres() as $_chambre) {
-	    $_chambre->loadRefs();
-	  }
-	}
+  $services = $service->loadListWithPerms(PERM_READ,$where, $order);
+  foreach ($services as $_service) {
+    foreach ($_service->loadRefsChambres() as $_chambre) {
+      $_chambre->loadRefs();
+    }
+  }
 }
 
 if ($use_uf != null) {
-	// Chargement de l'uf à ajouter/éditer
-	$uf = new CUniteFonctionnelle();
-	$uf->group_id = $group->_id;
-	$uf->load($uf_id);
-	$uf->loadRefsNotes();
-	
-	// Récupération des ufs
-	$order = "group_id, code";
-	$ufs = $uf->loadList(null, $order);
+  // Chargement de l'uf à ajouter/éditer
+  $uf = new CUniteFonctionnelle();
+  $uf->group_id = $group->_id;
+  $uf->load($uf_id);
+  $uf->loadRefsNotes();
+  
+  // Récupération des ufs
+  $order = "group_id, code";
+  $ufs = $uf->loadList(null, $order);
 }
 
 if ($use_prestation != null) {
-	// Chargement de la prestation à ajouter/éditer
-	$prestation = new CPrestation();
-	$prestation->group_id = $group->_id;
-	$prestation->load($prestation_id);
-	$prestation->loadRefsNotes();
-	
-	// Récupération des prestations
-	$order = "group_id, nom";
-	$prestations = $prestation->loadList(null, $order);
-	foreach ($prestations as $_prestation){
-	  $_prestation->loadRefGroup();
-	}
+  // Chargement de la prestation à ajouter/éditer
+  $prestation = new CPrestation();
+  $prestation->group_id = $group->_id;
+  $prestation->load($prestation_id);
+  $prestation->loadRefsNotes();
+  
+  // Récupération des prestations
+  $order = "group_id, nom";
+  $prestations = $prestation->loadList(null, $order);
+  foreach ($prestations as $_prestation){
+    $_prestation->loadRefGroup();
+  }
 }
 
 if ($use_secteur != null) {
@@ -111,13 +111,13 @@ $smarty->assign("praticiens"    , $praticiens);
 $smarty->assign("etablissements", $etablissements);
 
 if ($use_service != null) {
-	$smarty->assign("service"       , $service);
+  $smarty->assign("service"       , $service);
   $smarty->display("inc_vw_service.tpl");
 }
 elseif ($use_chambre != null) {
   $smarty->assign("services"       , $services);
-	$smarty->assign("chambre"       , $chambre);
-	$smarty->assign("lit"           , $lit);
+  $smarty->assign("chambre"       , $chambre);
+  $smarty->assign("lit"           , $lit);
   $smarty->display("inc_vw_chambre.tpl");
 }
 elseif ($use_uf != null) {

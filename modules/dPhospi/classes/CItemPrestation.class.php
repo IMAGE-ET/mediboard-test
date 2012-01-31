@@ -31,7 +31,7 @@ class CItemPrestation extends CMbMetaObject{
   
   function getProps() {
     $specs = parent::getProps();
-    $specs["nom"]          = "str notNull";
+    $specs["nom"]          = "str notNull seekable";
     /*$specs["object_id"]    = "ref notNull class|CMbObject meta|object_class";*/
     $specs["object_class"] = "enum list|CPrestationPonctuelle|CPrestationJournaliere";
     $specs["rank"]         = "num pos default|1";
@@ -53,6 +53,6 @@ class CItemPrestation extends CMbMetaObject{
   
   function loadRefObject(){
     $this->_ref_object = new $this->object_class;
-    $this->_ref_object = $this->_ref_object->getCached($this->object_id);
+    return $this->_ref_object = $this->_ref_object->getCached($this->object_id);
   }
 }

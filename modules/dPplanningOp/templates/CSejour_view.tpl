@@ -2,6 +2,14 @@
 
 {{assign var=sejour value=$object}}
 
+<script type="text/javascript">
+  editPrestations = function (sejour_id) {
+    var url = new Url("dPplanningOp", "ajax_vw_prestations");
+    url.addParam("sejour_id", sejour_id);
+    url.requestModal(800, 700);
+  }
+</script>
+
 <table class="tbl tooltip">
   <tr>
     <th class="category {{if $sejour->sortie_reelle}}arretee{{/if}}" colspan="4">
@@ -26,31 +34,28 @@
 			<button type="button" class="edit" onclick="Sejour.edit('{{$sejour->_id}}');">
 				{{tr}}Modify{{/tr}}
 			</button>
+      <button type="button" class="search" onclick="editPrestations('{{$sejour->_id}}')">Prestations</button>
       {{/if}}
-
+      
       {{if $sejour->type != "urg" && @$modules.dPadmissions->_can->read}}
-      <br />
 			<button type="button" class="search" onclick="Sejour.admission('{{$sejour->_date_entree_prevue}}');">
 				{{tr}}Admission{{/tr}}
 			</button>
       {{/if}}
 			
 			{{if $sejour->type != "urg" && $sejour->type != "ssr" && @$modules.soins->_can->read}}
-      <br />
       <button type="button" class="search" onclick="Sejour.showDossierSoins('{{$sejour->_id}}')">
         {{tr}}module-soins-court{{/tr}}
       </button>
       {{/if}}
 
       {{if $sejour->type == "ssr" && @$modules.ssr->_can->read}}
-			<br />
       <button type="button" class="search" onclick="Sejour.showSSR('{{$sejour->_id}}');">
         {{tr}}module-ssr-long{{/tr}}
       </button>
       {{/if}}
 
       {{if $sejour->type == "urg" && @$modules.dPurgences->_can->read}}
-      <br />
       <button type="button" class="search" onclick="Sejour.showUrgences('{{$sejour->_id}}');">
         {{tr}}module-dPurgences-long{{/tr}}
       </button>
@@ -58,7 +63,6 @@
 	  
       {{if @$modules.brancardage->_can->read}}
         {{mb_script module=brancardage script=creation_brancardage ajax=true}}
-        <br />
         <button type="button" class="edit" onclick="CreationBrancard.edit('{{$sejour->_id}}');" style="width:80px;">
         {{tr}}module-Brancardage-long{{/tr}}
         </button>

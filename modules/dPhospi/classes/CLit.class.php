@@ -27,7 +27,8 @@ class CLit extends CMbObject {
   
   // Form Fields
   var $_overbooking = null;
-
+  var $_selected_item   = null;
+  
   // Object references
   var $_ref_chambre      = null;
   var $_ref_affectations = null;
@@ -47,6 +48,7 @@ class CLit extends CMbObject {
     $backProps["affectations"]     = "CAffectation lit_id";
     $backProps["affectations_rpu"] = "CRPU box_id";
     $backProps["ufs"]              = "CAffectationUniteFonctionnelle object_id";
+    $backProps["liaisons_items"]   = "CLitLiaisonItem lit_id";
     return $backProps;
   }
 
@@ -145,6 +147,10 @@ class CLit extends CMbObject {
     $this->_ref_next_dispo = new CAffectation;
     $this->_ref_next_dispo->loadObject($where, $order);
     $this->_ref_next_dispo->checkDaysRelative($date);
+  }
+  
+  function loadRefsLiaisonsItems() {
+    return $this->_ref_liaisons_items = $this->loadBackRefs("liaisons_items");
   }
 }
 

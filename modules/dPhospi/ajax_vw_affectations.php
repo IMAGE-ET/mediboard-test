@@ -16,6 +16,8 @@ $date            = CValue::getOrSession("date");
 $granularite     = CValue::getOrSession("granularite");
 $readonly        = CValue::getOrSession("readonly", 0);
 $duree_uscpo     = CValue::getOrSession("duree_uscpo", "0");
+$prestation_id   = CValue::getOrSession("prestation_id", "");
+$item_prestation_id = CValue::getOrSession("item_prestation_id");
 
 $heureLimit = "16:00:00";
 $group_id = CGroups::loadCurrent()->_id;
@@ -145,9 +147,15 @@ if ($duree_uscpo) {
   $where["duree_uscpo"] = "> 0";
 }
 
+if ($item_prestation_id && $prestation_id) {
+  $ljoin["item_liaison"] = "sejour.sejour_id = item_liaison.sejour_id";
+  $where["item_liaison.item_prestation_id"] = " = '$item_prestation_id'";
+}
+
 $sejours_non_affectes = $sejour->loadList($where, $order, null, null, $ljoin);
 
 $praticiens = CMbObject::massLoadFwdRef($sejours_non_affectes, "praticien_id");
+CMbObject::massLoadFwdRef($sejours_non_affectes, "prestation_id");
 CMbObject::massLoadFwdRef($sejours_non_affectes, "patient_id");
 CMbObject::massLoadFwdRef($praticiens, "function_id");
 
@@ -155,6 +163,7 @@ $functions_filter = array();
 $operations = array();
 
 foreach($sejours_non_affectes as $_key => $_sejour) {
+  $_sejour->loadRefPrestation();
   $_sejour->loadRefPraticien()->loadRefFunction();
   $functions_filter[$_sejour->_ref_praticien->function_id] = $_sejour->_ref_praticien->_ref_function;
   if ($filter_function && $filter_function != $_sejour->_ref_praticien->function_id) {
@@ -190,6 +199,14 @@ foreach($sejours_non_affectes as $_key => $_sejour) {
   }
 }
 
+$items_prestation = array();
+
+if ($prestation_id) {
+  $prestation = new CPrestationJournaliere;
+  $prestation->load($prestation_id);
+  $items_prestation = $prestation->loadBackRefs("items", "rank asc");
+}
+
 $sejour = new CSejour;
 $sejour->_type_admission = $_type_admission;
 
@@ -210,5 +227,8 @@ $smarty->assign("datetimes", $datetimes);
 $smarty->assign("readonly", $readonly);
 $smarty->assign("duree_uscpo", $duree_uscpo);
 $smarty->assign("current", $current);
+$smarty->assign("items_prestation", $items_prestation);
+$smarty->assign("item_prestation_id", $item_prestation_id);
+$smarty->assign("prestation_id", $prestation_id);
 $smarty->display("inc_vw_affectations.tpl");
 ?>

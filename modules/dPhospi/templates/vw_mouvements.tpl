@@ -177,6 +177,16 @@
       <input type="radio" name="mode_vue_tempo" value="compacte" onclick="refreshMouvements()"
         {{if $mode_vue_tempo == "compacte"}}checked="checked"{{/if}}/> Compacte
     </label>
+    
+    &mdash;
+    
+    Axe de prestation :
+    <select name="prestation_id" onchange="refreshMouvements(loadNonPlaces)">
+      <option value="">&mdash; Tous les niveaux</option>
+      {{foreach from=$prestations_journalieres item=_prestation}}
+        <option value="{{$_prestation->_id}}" {{if $_prestation->_id == $prestation_id}}selected="selected"{{/if}}>{{$_prestation->nom}}</option>
+      {{/foreach}}
+    </select>
   </div>
   
 </form>

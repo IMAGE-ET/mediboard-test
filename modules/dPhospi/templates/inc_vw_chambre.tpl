@@ -1,67 +1,66 @@
-  
-  <form name="Edit-CChambre" action="?m={{$m}}" method="post" onsubmit="submit_Ajax(this, 'chambres')">
-    <input type="hidden" name="dosql" value="do_chambre_aed" />
-    <input type="hidden" name="del" value="0" />
-    {{mb_key object=$chambre}}
+<form name="Edit-CChambre" action="?m={{$m}}" method="post" onsubmit="submit_Ajax(this, 'chambres')">
+  <input type="hidden" name="dosql" value="do_chambre_aed" />
+  <input type="hidden" name="del" value="0" />
+  {{mb_key object=$chambre}}
 
-    <table class="form">
-    <tr>
-      {{if $chambre->_id}}
-      <th class="title modify text" colspan="2">
-        {{mb_include module=system object=$chambre template=inc_object_notes     }}
-        {{mb_include module=system object=$chambre template=inc_object_idsante400}}
-        {{mb_include module=system object=$chambre template=inc_object_history   }}
-        {{mb_include module=system object=$chambre template=inc_object_uf        }}
-        {{tr}}CChambre-title-modify{{/tr}} '{{$chambre}}'
-      {{else}}
-      <th class="title text" colspan="2">
-        {{tr}}CChambre-title-create{{/tr}}
-      </th>
-      {{/if}}
-    </tr>
-    
-    <tr>
-      <th>{{mb_label object=$chambre field=nom}}</th>
-      <td>{{mb_field object=$chambre field=nom}}</td>
-    </tr>
-    
-    <tr>
-      <th>{{mb_label object=$chambre field=service_id}}</th>
-      <td>{{mb_field object=$chambre field=service_id options=$services}}</td>
-    </tr>    
-    
-    <tr>
-      <th>{{mb_label object=$chambre field=caracteristiques}}</th>
-      <td>{{mb_field object=$chambre field=caracteristiques}}</td>
-    </tr>
-    
-    <tr>
-      <th>{{mb_label object=$chambre field=lits_alpha}}</th>
-      <td>{{mb_field object=$chambre field=lits_alpha}}</td>
-    </tr>
-    
-    <tr>
-      <th>{{mb_label object=$chambre field=annule}}</th>
-      <td>{{mb_field object=$chambre field=annule}}</td>
-    </tr>
-    
-    <tr>
-      <td class="button" colspan="2">
-        {{if $chambre->_id}}
-        <button class="submit" type="submit">{{tr}}Validate{{/tr}}</button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la chambre',objName: $V(this.form.nom) })">
-          {{tr}}Delete{{/tr}}
-        </button>
-        {{else}}
-        <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
-        {{/if}}
-      </td>
-    </tr>
-    </table>
-    
-  </form>
+  <table class="form">
+  <tr>
+    {{if $chambre->_id}}
+    <th class="title modify text" colspan="2">
+      {{mb_include module=system object=$chambre template=inc_object_notes     }}
+      {{mb_include module=system object=$chambre template=inc_object_idsante400}}
+      {{mb_include module=system object=$chambre template=inc_object_history   }}
+      {{mb_include module=system object=$chambre template=inc_object_uf        }}
+      {{tr}}CChambre-title-modify{{/tr}} '{{$chambre}}'
+    {{else}}
+    <th class="title text" colspan="2">
+      {{tr}}CChambre-title-create{{/tr}}
+    </th>
+    {{/if}}
+  </tr>
   
-  {{if $chambre->_id}}
+  <tr>
+    <th>{{mb_label object=$chambre field=nom}}</th>
+    <td>{{mb_field object=$chambre field=nom}}</td>
+  </tr>
+  
+  <tr>
+    <th>{{mb_label object=$chambre field=service_id}}</th>
+    <td>{{mb_field object=$chambre field=service_id options=$services}}</td>
+  </tr>    
+  
+  <tr>
+    <th>{{mb_label object=$chambre field=caracteristiques}}</th>
+    <td>{{mb_field object=$chambre field=caracteristiques}}</td>
+  </tr>
+  
+  <tr>
+    <th>{{mb_label object=$chambre field=lits_alpha}}</th>
+    <td>{{mb_field object=$chambre field=lits_alpha}}</td>
+  </tr>
+  
+  <tr>
+    <th>{{mb_label object=$chambre field=annule}}</th>
+    <td>{{mb_field object=$chambre field=annule}}</td>
+  </tr>
+  
+  <tr>
+    <td class="button" colspan="2">
+      {{if $chambre->_id}}
+      <button class="submit" type="submit">{{tr}}Validate{{/tr}}</button>
+      <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la chambre',objName: $V(this.form.nom) })">
+        {{tr}}Delete{{/tr}}
+      </button>
+      {{else}}
+      <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+      {{/if}}
+    </td>
+  </tr>
+  </table>
+  
+</form>
+  
+{{if $chambre->_id}}
   <button class="new" onclick="showLit('chambre_id', '{{$chambre->_id}}','lit_id', '0','infrastructure_chambre')">
     {{tr}}CLit-title-create{{/tr}}
   </button>
@@ -119,4 +118,18 @@
     </tr>
     </table>
   </form>
-  {{/if}}   
+  {{if $lit->_id}}
+    <script type="text/javascript">
+      Main.add(function() {
+        editLitLiaisonItem('{{$lit->_id}}');
+      });
+      
+      editLitLiaisonItem = function(lit_id) {
+        var url = new Url("dPhospi","ajax_edit_liaisons_items");
+        url.addParam("lit_id", lit_id);
+        url.requestUpdate('edit_liaisons_items');
+      }
+    </script>
+    <div id="edit_liaisons_items"></div>
+  {{/if}}
+{{/if}}

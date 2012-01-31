@@ -141,7 +141,7 @@
     {{foreach from=$_service->_ref_chambres item=_chambre}}
       {{foreach from=$_chambre->_ref_lits item=_lit}}
         <tr data-lit_id="{{$_lit->_id}}" id="{{$_lit->_guid}}" class="droppable">
-          <th class="text" style="text-align: left;" onclick="this.down().click();">
+          <th class="text first_cell" style="text-align: left;" onclick="this.down().click();" data-rank="{{$_lit->_selected_item->rank}}">
             {{if isset($_lit->_lines|smarty:nodefaults) && $_lit->_lines|@count > 1}}
               <img src="modules/dPhospi/images/surb.png" title="Collision" style="float: right;">
             {{/if}}
@@ -152,7 +152,8 @@
           </th>
           {{foreach from=0|range:$nb_ticks_r item=_i}}
             {{assign var=datetime value=$datetimes.$_i}}
-            <td class="mouvement_lit {{if $datetime == $current}}current_hour{{/if}}" data-date="{{$datetime}}" style="min-width: {{$td_width}}px;">
+            <td class="mouvement_lit {{if $datetime == $current}}current_hour{{/if}}" style="min-width: {{$td_width}}px;"
+              data-date="{{$datetime}}"">
               {{if $_i == 0 && isset($_lit->_lines|smarty:nodefaults)}}
                
                 {{*  Parcours des affectations *}}
@@ -235,7 +236,7 @@
                               new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 });
                             },
                             revert: true
-                            });
+                          });
                         </script>
                       {{/if}}
                     {{/foreach}}

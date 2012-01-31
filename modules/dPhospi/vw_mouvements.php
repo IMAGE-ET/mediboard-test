@@ -17,6 +17,11 @@ $granularites = array("day", "week", "4weeks");
 $triAdm       = CValue::getOrSession("triAdm", "praticien");
 $mode_vue_tempo = CValue::getOrSession("mode_vue_tempo", "classique");
 $readonly     = CValue::get("readonly");
+$prestation_id = CValue::getOrSession("prestation_id", "0");
+
+$prestation_journaliere = new CPrestationJournaliere;
+
+$prestations_journalieres = $prestation_journaliere->loadList();
 
 $smarty = new CSmartyDP;
 
@@ -24,6 +29,8 @@ $smarty->assign("date"        , $date);
 $smarty->assign("granularites", $granularites);
 $smarty->assign("granularite" , $granularite);
 $smarty->assign("mode_vue_tempo", $mode_vue_tempo);
+$smarty->assign("prestations_journalieres", $prestations_journalieres);
+$smarty->assign("prestation_id", $prestation_id);
 
 $smarty->display("vw_mouvements.tpl");
 ?>

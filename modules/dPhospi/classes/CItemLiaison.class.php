@@ -13,7 +13,7 @@ class CItemLiaison extends CMbObject{
   var $item_liaison_id = null;
   
   // DB Fields
-  var $affectation_id  =  null;
+  var $sejour_id  =  null;
   var $item_prestation_id = null;
   var $item_prestation_realise_id = null;
   var $date            = null;
@@ -32,7 +32,7 @@ class CItemLiaison extends CMbObject{
   
   function getProps() {
     $specs = parent::getProps();
-    $specs["affectation_id"]     = "ref notNull class|CAffectation cascade";
+    $specs["sejour_id"]     = "ref notNull class|CSejour cascade";
     $specs["item_prestation_id"] = "ref notNull class|CItemPrestation cascade";
     $specs["item_prestation_realise_id"] = "ref class|CItemPrestation cascade";
     $specs["date"]               = "date";
@@ -49,8 +49,8 @@ class CItemLiaison extends CMbObject{
     return $this->_ref_item_realise = $this->loadFwdRef("item_prestation_realise_id", true);
   }
   
-  function loadRefAffectation() {
-    return $this->_ref_affectation = $this->loadFwdRef("sejour_id", true);
+  function loadRefSejour() {
+    return $this->_ref_sejour = $this->loadFwdRef("sejour_id", true);
   }
 }
 ?>

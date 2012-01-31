@@ -531,7 +531,35 @@ class CSetupdPhospi extends CSetup {
       ADD INDEX (`secteur_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.55";
+    $this->makeRevision("0.55");
+    $query = "CREATE TABLE `lit_liaison_item` (
+              `lit_liaison_item_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `lit_id` INT (11) UNSIGNED NOT NULL,
+              `item_prestation_id` INT (11) UNSIGNED NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `lit_liaison_item` 
+      ADD INDEX (`lit_id`),
+      ADD INDEX (`item_prestation_id`);";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `item_liaison` 
+      ADD `sejour_id` INT (11) UNSIGNED NOT NULL;";
+    $this->addQuery($query);
+    
+    $query = "UPDATE `item_liaison`
+      SET `sejour_id` = ( SELECT `sejour_id`
+                          FROM `affectation`
+                          WHERE `affectation`.`affectation_id` = `item_liaison`.`affectation_id`
+                          LIMIT 1 );";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `item_liaison`
+      DROP `affectation_id`";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.56";
   }
 }
 ?>

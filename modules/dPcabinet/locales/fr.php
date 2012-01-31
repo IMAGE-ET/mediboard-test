@@ -561,6 +561,7 @@ $locales['CConsultation.tiers_mode_reglement.cheque'] = 'Chèque';
 $locales['CConsultation.tiers_mode_reglement.especes'] = 'Espèces';
 $locales['CConsultation.tiers_mode_reglement.virement'] = 'Virement';
 $locales['CConsultation.type.'] = 'Aucun';
+$locales['CConsultation.type.chimio'] = 'Chimiothérapie';
 $locales['CConsultation.type.classique'] = 'Classique';
 $locales['CConsultation.type.entree'] = 'Observation d\'entrée';
 $locales['CConsultationCategorie'] = 'Catégorie de consultation';

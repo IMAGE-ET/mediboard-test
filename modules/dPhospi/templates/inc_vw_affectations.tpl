@@ -63,8 +63,18 @@
       <label>
         <input type="checkbox" name="duree_uscpo_view" {{if $duree_uscpo}}checked="checked"{{/if}} onchange="$V(this.form.duree_uscpo, this.checked ? 1 : 0);"/>
         <input type="hidden" name="duree_uscpo" value="{{$duree_uscpo}}" onchange="this.form.onsubmit();"/>
-        Durée uscpo &mdash;
+        Durée uscpo
       </label>
+      {{if $items_prestation|@count}}
+        &mdash;
+        Niveau de prestation :
+        <select name="item_prestation_id" onchange="this.form.onsubmit();">
+          <option value="">&mdash; Tous les niveaux</option>
+          {{foreach from=$items_prestation item=_item}}
+            <option value="{{$_item->_id}}" {{if $_item->_id == $item_prestation_id}}selected="selected"{{/if}}>{{$_item->rank}} - {{$_item}}</option>
+          {{/foreach}}
+        </select>
+      {{/if}}
     </form>
     <div id="lit_bloque" class="clit_bloque draggable" style="display: inline-block;">
     <strong>[BLOQUER UN LIT]</strong>
@@ -164,9 +174,17 @@
                       ({{$_sejour->type|truncate:1:""|capitalize}} - {{$_sejour->_ref_praticien->_shortview}})
                     {{/if}}
                     <br />
-                    <span class="compact">
-                      {{$_sejour->_motif_complet}}
-                    </span>
+                    <div>
+                      <span class="compact">
+                        {{$_sejour->_motif_complet}}
+                      </span>
+                      <span class="compact" style="float: right;">
+                      <em style="color: #f00;" title="Chambre seule">
+                        {{if $_sejour->chambre_seule}}CS{{else}}CD{{/if}}
+                        {{if $_sejour->prestation_id}}- {{$_sejour->_ref_prestation->code}}{{/if}}
+                      </em>
+                      </span>
+                    </div>
                     {{foreach from=$_sejour->_ref_operations item=_operation}}
                       {{math equation=x*(y+4.6) x=$_operation->_debut_offset y=$td_width assign=offset_op}}
                       {{math equation=x*(y+4.6) x=$_operation->_width y=$td_width assign=width_op}}
@@ -192,13 +210,37 @@
                         top: element.getOffsetParent().cumulativeOffset().top+parseInt(element.style.top)+'px'
                         });
                       $(document.body).insert(element);
+                      {{if $prestation_id && $item_prestation_id}}
+                        {{assign var=item_prestation value=$items_prestation.$item_prestation_id}}
+                        $$(".first_cell").each(function(elt) {
+                          var rank = {{$item_prestation->rank}};  
+                          var rank_elt = elt.get('rank');
+                          var color = "";
+                          
+                          // Vert
+                          if (rank_elt == rank) {
+                            color = "#9f8"
+                          }
+                          // Rouge
+                          else if (rank_elt < rank) {
+                            color = "#f89";
+                          }
+                          // Orange
+                          else if (rank_elt > rank) {
+                            color = "#fd9";
+                          }
+                          elt.setStyle({background: color});
+                        });
+                      {{/if}}
                     },
                     onEnd: function(drbObj, mouseEvent) {
+                      $$(".first_cell").each(function(elt) {
+                        elt.setStyle({background: ""});
+                      });
                       var element = drbObj.element;
                       $('wrapper_line_'+element.get('sejour_id')).insert(element);
                     },
-                    revert: true,
-                    ghosting: true});
+                    revert: true});
                 </script>
               {{/if}}
             {{/if}}

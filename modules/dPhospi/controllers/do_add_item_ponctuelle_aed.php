@@ -12,12 +12,9 @@ $sejour_id          = CValue::post("sejour_id");
 $item_prestation_id = CValue::post("item_prestation_id");
 $date               = CValue::post("date");
 
-$sejour = new CSejour;
-$sejour->load($sejour_id);
-
 $item_liaison = new CItemLiaison;
 $item_liaison->item_prestation_id = $item_prestation_id;
-$item_liaison->affectation_id = $sejour->getCurrAffectation($date)->_id;
+$item_liaison->sejour_id = $sejour_id;
 $item_liaison->date = $date;
 $item_liaison->quantite = 1;
 
