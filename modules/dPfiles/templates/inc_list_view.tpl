@@ -1,6 +1,11 @@
 {{mb_script module=dPcompteRendu script=document}}
-{{assign var=object_class value=$object->_class}}
-{{assign var=object_id value=$object->_id}}
+{{if $object}}
+  {{assign var=object_class value=$object->_class}}
+  {{assign var=object_id value=$object->_id}}
+{{else}}
+  {{assign var=object_class value=""}}
+  {{assign var=object_id value=""}}
+{{/if}}
 
 <script type="text/javascript">
 Main.add(function () {
