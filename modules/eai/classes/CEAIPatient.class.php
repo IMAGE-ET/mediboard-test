@@ -41,10 +41,10 @@ class CEAIPatient extends CEAIMbObject {
   }
   
   static function storeIPP(CIdSante400 $IPP, CPatient $patient, CInteropSender $sender) {
-    $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, null, $patient->_id);
+    /*$IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, null, $patient->_id);
     if ($IPP->_id) {
       return;
-    }
+    }*/
     
     /* Gestion du numéroteur */
     $group = new CGroups();
