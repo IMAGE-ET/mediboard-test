@@ -447,5 +447,11 @@ class CAffectation extends CMbObject {
     
     return $sejour->getMovementType();
   }
+  
+  function isLast() {
+    $this->loadRefsAffectations();
+    
+    return !$this->_ref_next->_id;
+  }
 }
 ?>
