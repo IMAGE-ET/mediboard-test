@@ -249,6 +249,14 @@ class CHL7v2Segment extends CHL7v2Entity {
     // INS-C - Identifiant national de santé calculé
     $identifiers = array();
     $patient->loadIPP($group->_id);
+    if (CHL7v2Message::$build_mode == "simple") {
+      $identifiers[] = array(
+        (!$patient->_IPP) ? 0 : $patient->_IPP
+      );
+      
+      return $identifiers;
+    }
+    
     if ($patient->_IPP) {
       $identifiers[] = array(
         $patient->_IPP,
@@ -259,6 +267,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         "PI"
       );
     }
+
     $identifiers[] = array(
       $patient->_id,
       null,

@@ -75,90 +75,93 @@ class CDestinataireHprim extends CInteropReceiver {
   }  
   
   function sendEvenementPatient(CHPrimXMLEvenementsPatients $dom_evt, CMbObject $mbObject, $referent = null, $initiateur = null) {
-    $msg = $dom_evt->generateTypeEvenement($mbObject, $referent, $initiateur);
-    
-    if ($this->actif && $msg) {
-      $source = CExchangeSource::get("$this->_guid-evenementPatient");
-      if ($source->_id) {
-        $exchange = $dom_evt->_ref_echange_hprim;
-        
-        // Dans le cas d'une source file system on passe le nom du fichier en paramètre
-        if ($source instanceof CSourceFileSystem) {
-          $source->setData($msg, false, "MB-$dom_evt->evenement-$exchange->_id.$source->fileextension");
-        }
-        else {
-          $source->setData($msg);
-        }
-        
-        try {
-          $source->send();
-        } catch (Exception $e) {
-          throw new CMbException("CExchangeSource-no-response");
-        }
-        $acq = $source->getACQ();
-
-        if ($acq) {
-          $echg_hprim = $dom_evt->_ref_echange_hprim;
-          $echg_hprim->date_echange = mbDateTime();
-          
-          $dom_acq = new CHPrimXMLAcquittementsPatients();
-          $dom_acq->loadXML($acq);
-          $dom_acq->_ref_echange_hprim = $echg_hprim;
-          $doc_valid = $dom_acq->schemaValidate();
-          
-          $echg_hprim->statut_acquittement = $dom_acq->getStatutAcquittementPatient();
-          $echg_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-          $echg_hprim->_acquittement = $acq;
-      
-          $echg_hprim->store();
-        } 
-      }      
+    if (!$msg = $dom_evt->generateTypeEvenement($mbObject, $referent, $initiateur)) {
+      return;
     }
+    
+    $source = CExchangeSource::get("$this->_guid-evenementPatient");
+    if ($source->_id || !$source->active) {
+      return;
+    }
+    
+    $exchange = $dom_evt->_ref_echange_hprim;
+    // Dans le cas d'une source file system on passe le nom du fichier en paramètre
+    if ($source instanceof CSourceFileSystem) {
+      $source->setData($msg, false, "MB-$dom_evt->evenement-$exchange->_id.$source->fileextension");
+    }
+    else {
+      $source->setData($msg);
+    }
+    
+    try {
+      $source->send();
+    } catch (Exception $e) {
+      throw new CMbException("CExchangeSource-no-response");
+    }
+    
+    $exchange->date_echange = mbDateTime();
+    
+    $acq = $source->getACQ();
+    if (!$acq) {
+      $exchange->store();
+      return;
+    }  
+    
+    $dom_acq = new CHPrimXMLAcquittementsPatients();
+    $dom_acq->loadXML($acq);
+    $dom_acq->_ref_echange_hprim = $exchange;
+    $doc_valid = $dom_acq->schemaValidate();
+    
+    $exchange->statut_acquittement = $dom_acq->getStatutAcquittementPatient();
+    $exchange->acquittement_valide = $doc_valid ? 1 : 0;
+    $exchange->_acquittement = $acq;
+
+    $exchange->store();
   }
   
   function sendEvenementPMSI(CHPrimXMLEvenementsServeurActivitePmsi $dom_evt, CMbObject $mbObject) {
-    $msg = $dom_evt->generateTypeEvenement($mbObject);
-    if ($this->actif && $msg) {
-      $source = CExchangeSource::get("$this->_guid-$dom_evt->sous_type");
-      if ($source->_id) {
-        $exchange = $dom_evt->_ref_echange_hprim;
-        
-        // Dans le cas d'une source file system on passe le nom du fichier en paramètre
-        if ($source instanceof CSourceFileSystem) {
-          $source->setData($msg, false, "MB-$dom_evt->evenement-$exchange->_id.$source->fileextension");
-        }
-        else {
-          $source->setData($msg);
-        }
-        try {
-          $source->send();
-        } catch (Exception $e) {
-          throw new CMbException("CExchangeSource-no-response");
-        }
-        $acq = $source->getACQ();
-        
-        $echg_hprim = $dom_evt->_ref_echange_hprim;
-        $echg_hprim->date_echange = mbDateTime();
-          
-        if ($acq) {
-          $dom_acq = CHPrimXMLAcquittementsServeurActivitePmsi::getEvtAcquittement($dom_evt);
-          if (!$dom_acq) {
-            $echg_hprim->_acquittement = $acq;
-            $echg_hprim->store();
-            return;
-          }
-          $dom_acq->loadXML($acq);
-          $dom_acq->_ref_echange_hprim = $echg_hprim;
-          $doc_valid = $dom_acq->schemaValidate();
-          
-          $echg_hprim->statut_acquittement = $dom_acq->getStatutAcquittementServeurActivitePmsi();
-          $echg_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-          $echg_hprim->_acquittement = $acq;
-        } 
-        
-        $echg_hprim->store();
-      }      
+    if (!$msg = $dom_evt->generateTypeEvenement($mbObject)) {
+      return;
     }
+    
+    $source = CExchangeSource::get("$this->_guid-$dom_evt->sous_type");
+    if ($source->_id || !$source->active) {
+      return;
+    }
+
+    $exchange = $dom_evt->_ref_echange_hprim;
+    
+    // Dans le cas d'une source file system on passe le nom du fichier en paramètre
+    if ($source instanceof CSourceFileSystem) {
+      $source->setData($msg, false, "MB-$dom_evt->evenement-$exchange->_id.$source->fileextension");
+    }
+    else {
+      $source->setData($msg);
+    }
+    try {
+      $source->send();
+    } catch (Exception $e) {
+      throw new CMbException("CExchangeSource-no-response");
+    }
+    
+    $exchange->date_echange = mbDateTime();
+
+    $acq = $source->getACQ();
+    if (!$acq) {
+      $exchange->store();
+      return;
+    }  
+     
+    $dom_acq = CHPrimXMLAcquittementsServeurActivitePmsi::getEvtAcquittement($dom_evt);
+    $dom_acq->loadXML($acq);
+    $dom_acq->_ref_echange_hprim = $exchange;
+    $doc_valid = $dom_acq->schemaValidate();
+    
+    $exchange->statut_acquittement = $dom_acq->getStatutAcquittementServeurActivitePmsi();
+    $exchange->acquittement_valide = $doc_valid ? 1 : 0;
+    $exchange->_acquittement = $acq;
+    
+    $exchange->store();
   }
   
   function lastMessage() {

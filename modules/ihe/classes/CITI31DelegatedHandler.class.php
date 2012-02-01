@@ -40,6 +40,10 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       $sejour = $mbObject;
       $sejour->loadRefPatient();
       
+      if ($sejour->_no_synchro) {
+        return;
+      }
+      
       // Si Serveur
       if (CAppUI::conf('smp server')) {} 
       // Si Client
@@ -75,8 +79,8 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
      // Traitement Affectation
     if ($mbObject instanceof CAffectation) {
       $affectation = $mbObject;
-      $last_log = $affectation->_ref_current_log;
-      if (!$last_log || $affectation->_no_synchro || !in_array($last_log->type, array("create", "store"))) {
+      $current_log = $affectation->_ref_current_log;
+      if (!$current_log || $affectation->_no_synchro || !in_array($current_log->type, array("create", "store"))) {
         return;
       }
       
@@ -86,12 +90,12 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       }
 
       // Création d'une affectation
-      if ($last_log->type == "create") {
+      if ($current_log->type == "create") {
         $code = "A02";
       }
       
       // Modifcation d'une affectation
-      if ($last_log->type == "store") {
+      if ($current_log->type == "store") {
         $code = "Z99"; 
       }
 
@@ -122,7 +126,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     $movement->sejour_id     = $sejour->_id;
     $movement->movement_type = $sejour->getMovementType();
 
-    $last_log = $sejour->loadLastLog();
+    $current_log = $sejour->loadLastLog();
   
     if ($affectation) {
       $movement->affectation_id = $affectation->_id;  
@@ -130,15 +134,19 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     
     if ($insert) {
       $movement->original_trigger_code = $code;
-      $movement->loadMatchingObject();
     }
     elseif ($update || $cancel) {
-      $movement->cancel = 0;
-      $movement->loadMatchingObject();
-      
-      if ($cancel) {
-        $movement->cancel = 1;
-      }         
+      $movement->cancel = 0;               
+    }
+
+    $order = "affectation_id DESC";
+    $movements = $movement->loadMatchingList($order);
+    if (!empty($movements)) {
+      $movement = reset($movements);
+    }
+    
+    if ($cancel) {
+      $movement->cancel = 1;
     }
       
     $movement->store();
@@ -147,8 +155,8 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
   }
   
   function getCode(CSejour $sejour) {
-    $last_log = $sejour->loadLastLog();
-    if (!in_array($last_log->type, array("create", "store"))) {
+    $current_log = $sejour->loadLastLog();
+    if (!in_array($current_log->type, array("create", "store"))) {
       return null;
     }
     
@@ -156,7 +164,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     // Cas d'une pré-admission
     if ($sejour->_etat == "preadmission") {
       // Création d'une pré-admission
-      if ($last_log->type == "create") {
+      if ($current_log->type == "create") {
         return "A05";
       } 
       // Modification d'une pré-admission

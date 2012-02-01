@@ -25,9 +25,11 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   const DEFAULT_SUBCOMPONENT_SEPARATOR  = "&";
   const DEFAULT_NULL_VALUE              = '""';
 
-  static $enteredHeaders = array("MSH", "FHS", "BHS");
+  static $enteredHeaders     = array("MSH", "FHS", "BHS");
   
-  static $decorateToString = false;
+  static $decorateToString   = false;
+  
+  static $build_mode         = "normal";
    
   var $segmentTerminator     = self::DEFAULT_SEGMENT_TERMINATOR;
   var $escapeCharacter       = self::DEFAULT_ESCAPE_CHARACTER;
@@ -58,6 +60,14 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     } else {
       $this->version = $version;
     }  
+  }
+  
+  static function setBuildMode($build_mode) {
+    self::$build_mode = $build_mode;
+  }
+  
+  static function resetBuildMode() {
+    self::$build_mode = "normal";
   }
   
   function toXML($event_code = null, $hl7_datatypes = true) {

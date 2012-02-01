@@ -97,50 +97,53 @@ class CReceiverIHE extends CInteropReceiver {
     CHL7v2Message::setBuildMode($this->_configs["build_mode"]); 
     $evenement->build($mbObject);  
     CHL7v2Message::resetBuildMode(); 
-      
-    $msg = $evenement->flatten();
-    
-    if ($this->actif && $msg) {
-      $source = CExchangeSource::get("$this->_guid-evenementsPatient");
-      if ($source->_id) {
-        $exchange = $evenement->_exchange_ihe;
-        
-        // Dans le cas d'une source file system on passe le nom du fichier en paramètre
-        if ($source instanceof CSourceFileSystem) {
-          $source->setData($msg, false, "MB-$evenement->event_type-$evenement->code-$exchange->_id.$source->fileextension");
-        }
-        else {
-          $source->setData($msg);
-        }
-        try {
-          $source->send();
-        } catch (Exception $e) {
-          throw new CMbException("CExchangeSource-no-response");
-        }
-        $ack_data = $source->getACQ();
 
-        $exchange->date_echange = mbDateTime();
-          
-        if ($ack_data) {
-          if ($exchange->type == "PAM") {
-            $data_format = CPAM::getPAMEvent($exchange->code, $exchange->version);
-          }
-          if ($exchange->type == "PAM_FR") {
-            $data_format = CPAMFR::getPAMEvent($exchange->code, $exchange->version);
-          }
-          
-          $ack = new CHL7v2Acknowledgment($data_format);
-          $ack->handle($ack_data);
-          $exchange->date_echange        = mbDateTime();   
-          $exchange->statut_acquittement = $ack->getStatutAcknowledgment();
-          $exchange->acquittement_valide = $ack->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
-          $exchange->_acquittement       = $ack_data;
-          $exchange->store();
-        } 
-        
-        $exchange->store();
-      }      
+    if ($msg = $evenement->flatten()) {
+      return;
     }
+    
+    $source = CExchangeSource::get("$this->_guid-evenementsPatient");
+    if (!$source->_id || !$source->active) {
+      return;
+    }
+    
+    $exchange = $evenement->_exchange_ihe;
+    
+    // Dans le cas d'une source file system on passe le nom du fichier en paramètre
+    if ($source instanceof CSourceFileSystem) {
+      $source->setData($msg, false, "MB-$evenement->event_type-$evenement->code-$exchange->_id.$source->fileextension");
+    }
+    else {
+      $source->setData($msg);
+    }
+    try {
+      $source->send();
+    } catch (Exception $e) {
+      throw new CMbException("CExchangeSource-no-response");
+    }
+    
+    $exchange->date_echange = mbDateTime();
+
+    $ack_data = $source->getACQ();
+    if (!$ack_data) {
+      $exchange->store();
+      return;
+    }  
+    
+    if ($exchange->type == "PAM") {
+      $data_format = CPAM::getPAMEvent($exchange->code, $exchange->version);
+    }
+    if ($exchange->type == "PAM_FR") {
+      $data_format = CPAMFR::getPAMEvent($exchange->code, $exchange->version);
+    }
+    
+    $ack = new CHL7v2Acknowledgment($data_format);
+    $ack->handle($ack_data);
+    $exchange->date_echange        = mbDateTime();   
+    $exchange->statut_acquittement = $ack->getStatutAcknowledgment();
+    $exchange->acquittement_valide = $ack->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
+    $exchange->_acquittement       = $ack_data;
+    $exchange->store();
   }
 }
 ?>

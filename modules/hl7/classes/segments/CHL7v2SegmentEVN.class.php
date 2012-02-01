@@ -23,13 +23,14 @@ class CHL7v2SegmentEVN extends CHL7v2Segment {
   
   function build(CHL7v2Event $event) {
     parent::build($event);
-
+    
+    $version = $event->message->version;
+    
     $data = array();
     
     // EVN-1: Event Type Code (ID) (optional)
     // This field has been retained for backward compatibility only
-    //$data[] = $event->code;
-    $data[] = null;
+    $data[] = ($version < "2.5") ? $event->code : null;
     
     // EVN-2: Recorded Date/Time (TS)
     $data[] = mbDateTime();

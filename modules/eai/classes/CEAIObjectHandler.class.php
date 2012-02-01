@@ -35,6 +35,11 @@ class CEAIObjectHandler extends CMbObjectHandler {
         
         $_receiver->loadConfigValues();
         $_receiver->loadRefsMessagesSupported();
+        // Destinataire non actif on envoi pas
+        if (!$_receiver->actif) {
+          continue;
+        }
+        
         // Affectation du receiver à l'objet
         $mbObject->_receiver = $_receiver;
         
