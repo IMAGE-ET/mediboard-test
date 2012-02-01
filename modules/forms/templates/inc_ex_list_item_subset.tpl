@@ -89,7 +89,10 @@ moveListItem = function(e, way){
     {{/if}}
     
     {{if !$context instanceof CExConcept}}
-      <th class="narrow">Coché <br />par défaut</th>
+      <th class="narrow">
+        Coché <br />par défaut
+        {{mb_include module=forms template=inc_ex_list_default_value value=""}}
+      </th>
     {{/if}}
   </tr>
   

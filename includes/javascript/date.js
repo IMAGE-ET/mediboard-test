@@ -647,7 +647,7 @@ var Calendar = {
         var element = this.datepicker ? this.datepicker.element : this.element;
         
         if (options.center){
-          var posIcon = datepicker.icon.cumulativeOffset();
+          var posIcon = this.icon.cumulativeOffset();
           $(element).centerHV(posIcon.top);
           Calendar.mobileHide(datepicker);
         }
@@ -655,6 +655,14 @@ var Calendar = {
           $(element).
             setStyle({zIndex: ""}). // FIXME do not set it in datepicker.js
             unoverflow();
+            
+          if (inModalWindow) {
+            this.datepicker.element.setStyle({
+              fontWeight: "normal",
+              fontStyle:  "normal"
+            });
+            this.icon.insert({after: this.datepicker.element});
+          }
         }
       }.bindAsEventListener(datepicker));
     }

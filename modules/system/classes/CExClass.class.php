@@ -36,6 +36,7 @@ class CExClass extends CMbObject {
     "COperation",
     "CSejour",
     "CConsultation",
+    "CConsultAnesth",
     "CAdministration",
   );
   

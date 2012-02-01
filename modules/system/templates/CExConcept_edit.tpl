@@ -1,6 +1,8 @@
-<button type="button" class="new" onclick="MbObject.edit('{{$object->_class}}-0')">
-  {{tr}}{{$object->_class}}-title-create{{/tr}}
-</button>
+{{if $object->_id}}
+  <button type="button" class="new" onclick="MbObject.edit('{{$object->_class}}-0')">
+    {{tr}}{{$object->_class}}-title-create{{/tr}}
+  </button>
+{{/if}}
 
 {{mb_script module=forms script=ex_class_editor ajax=true}}
 
@@ -71,6 +73,7 @@ Main.add(function(){
       <th>
         <label>
           {{if !$object->_id || $object->ex_list_id}}{{tr}}CExConcept-ex_list_id{{/tr}}{{/if}}
+          
           <input type="radio" name="_concept_type" value="list" {{if $object->_id}}style="display: none;"{{/if}}
                  {{if $object->ex_list_id}}checked="checked"{{/if}} onclick="toggleListCustom(this)" />
         </label>
@@ -78,8 +81,9 @@ Main.add(function(){
       <td>
         {{if !$object->_id}}
           {{mb_field object=$object field=ex_list_id form="edit-`$object->_guid`" autocomplete="true,1,50,true,true" onchange="selectList(this)"}}
+          <button class="new" onclick="ExList.createInModal()" type="button">{{tr}}CExList-title-create{{/tr}}</button>
           <label>
-            <input type="checkbox" name="_multiple" value="1" onclick="ExConceptSpec.edit(this.form)" /> Multiple 
+            <input type="checkbox" name="_multiple" value="1" onclick="ExConceptSpec.edit(this.form)" /> Choix multiple 
           </label>
         {{else}}
           {{mb_value object=$object field=ex_list_id}}
@@ -113,9 +117,11 @@ Main.add(function(){
         {{if !$object->_id}}
           <select name="_spec_type" onchange="ExConceptSpec.edit(this.form)">
             {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
-              <option value="{{$_key}}" {{if $_key == $spec_type && !$object->ex_list_id}}selected="selected"{{/if}}>
-                {{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}
-              </option>
+              {{if !$conf.forms.CExConcept.force_list || ($_key != "enum" && $_key != "set")}}
+                <option value="{{$_key}}" {{if $_key == $spec_type && !$object->ex_list_id}}selected="selected"{{/if}}>
+                  {{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}
+                </option>
+              {{/if}}
             {{/foreach}}
           </select>
         {{else}}

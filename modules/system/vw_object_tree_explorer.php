@@ -11,14 +11,16 @@
 CCanDo::checkRead();
 
 $object_class = CValue::get("object_class");
-$object_guid = CValue::get("object_guid");
+$object_guid  = CValue::get("object_guid");
+$hide_tree    = CValue::get("hide_tree");
+
 if (!$object_class && $object_guid) {
-	$parts = explode("-", $object_guid);
-	$object_class = $parts[0];
+  $parts = explode("-", $object_guid);
+  $object_class = $parts[0];
 }
 
 if (!$object_class || !is_subclass_of($object_class, "CMbObject")) {
-	CAppUI::stepAjax("Nom de classe invalide <strong>$object_class</strong>", UI_MSG_ERROR);
+  CAppUI::stepAjax("Nom de classe invalide <strong>$object_class</strong>", UI_MSG_ERROR);
 }
 
 if (!$object_guid) {
@@ -31,4 +33,5 @@ $smarty = new CSmartyDP("modules/system");
 $smarty->assign("object_class", $object_class);
 $smarty->assign("object_guid", $object_guid);
 $smarty->assign("columns", $columns);
+$smarty->assign("hide_tree", $hide_tree);
 $smarty->display("vw_object_tree_explorer.tpl");

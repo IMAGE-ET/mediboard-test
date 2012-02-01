@@ -113,35 +113,6 @@ Main.add(function(){
     </tr>
     
     <tr>
-      <th style="width: 8em;">{{mb_label object=$ex_field field=_locale}}</th>
-      <td>
-        {{if $ex_field->_id}}
-          {{mb_field object=$ex_field field=_locale size=30}}
-        {{else}}
-          {{mb_field object=$ex_field field=_locale size=30}}
-        {{/if}}
-      </td>
-      
-      <th>{{mb_label object=$ex_field field=_locale_court}}</th>
-      <td>{{mb_field object=$ex_field field=_locale_court tabIndex="3" size=30}}</td>
-    </tr>
-    
-    <tr>
-      <th>{{mb_label object=$ex_field field=_locale_desc}}</th>
-      <td>{{mb_field object=$ex_field field=_locale_desc tabIndex="2" size=30}}</td>
-      
-      <th><label for="ex_group_id">Groupe</label></th>
-      <td>
-        <select name="ex_group_id">
-          {{foreach from=$ex_class->_ref_groups item=_group}}
-            <option value="{{$_group->_id}}" {{if $_group->_id == $ex_field->ex_group_id}}selected="selected"{{/if}}>{{$_group}}</option>
-          {{/foreach}}
-        </select>
-      </td>
-    </tr>
-    
-    <tr>
-      
       {{if $ex_field->_id}}
       
         <th>
@@ -167,33 +138,67 @@ Main.add(function(){
         <th>
           <label>
             {{tr}}CExClassField-concept_id{{/tr}}
-            <input type="radio" onclick="toggleListCustom(this.form)" name="_concept_type" value="concept" checked="checked" />
+            {{if !$conf.forms.CExClassField.force_concept}}
+              <input type="radio" onclick="toggleListCustom(this.form)" name="_concept_type" value="concept" checked="checked" />
+            {{/if}}
           </label>
         </th>
         
         <td>
           {{mb_field object=$ex_field field=concept_id form="editField" autocomplete="true,1,50,true,true" 
                      onchange="selectConcept(this)"}}
+          <button class="new" onclick="ExConcept.createInModal()" type="button">{{tr}}CExConcept-title-create{{/tr}}</button>
         </td>
       
-        <th>
-          <label>
-            Type personnalisé
-            <input type="radio" onclick="toggleListCustom(this.form)" name="_concept_type" value="custom" />
-          </label>
-        </th>
-        
-        <td>
-          <select  name="_spec_type" onchange="ExFieldSpec.edit(this.form)">
-            {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
-              <option value="{{$_key}}" {{if $_key == $spec_type && !$ex_field->concept_id}}selected="selected"{{/if}}>
-                {{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}
-              </option>
-            {{/foreach}}
-          </select>
-        </td>
-        
+        {{if $conf.forms.CExClassField.force_concept}}
+          <td colspan="2"></td>
+        {{else}}
+          <th>
+            <label>
+              Type personnalisé
+              <input type="radio" onclick="toggleListCustom(this.form)" name="_concept_type" value="custom" />
+            </label>
+          </th>
+          
+          <td>
+            <select  name="_spec_type" onchange="ExFieldSpec.edit(this.form)">
+              {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
+                <option value="{{$_key}}" {{if $_key == $spec_type && !$ex_field->concept_id}}selected="selected"{{/if}}>
+                  {{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}
+                </option>
+              {{/foreach}}
+            </select>
+          </td>
+        {{/if}}
       {{/if}}
+    </tr>
+    
+    <tr>
+      <th style="width: 8em;">{{mb_label object=$ex_field field=_locale}}</th>
+      <td>
+        {{if $ex_field->_id}}
+          {{mb_field object=$ex_field field=_locale size=30}}
+        {{else}}
+          {{mb_field object=$ex_field field=_locale size=30}}
+        {{/if}}
+      </td>
+      
+      <th>{{mb_label object=$ex_field field=_locale_court}}</th>
+      <td>{{mb_field object=$ex_field field=_locale_court tabIndex="3" size=30}}</td>
+    </tr>
+    
+    <tr>
+      <th>{{mb_label object=$ex_field field=_locale_desc}}</th>
+      <td>{{mb_field object=$ex_field field=_locale_desc tabIndex="2" size=30}}</td>
+      
+      <th><label for="ex_group_id">Groupe</label></th>
+      <td>
+        <select name="ex_group_id">
+          {{foreach from=$ex_class->_ref_groups item=_group}}
+            <option value="{{$_group->_id}}" {{if $_group->_id == $ex_field->ex_group_id}}selected="selected"{{/if}}>{{$_group}}</option>
+          {{/foreach}}
+        </select>
+      </td>
     </tr>
     
     <tr>

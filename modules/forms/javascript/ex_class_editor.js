@@ -468,6 +468,17 @@ ExField = {
   }
 };
 
+
+
+ExList = {
+  createInModal: function(){
+    var url = new Url("forms", "view_ex_list");
+    url.addParam("object_guid", "CExList-0");
+    url.addParam("hide_tree", 1);
+    url.modal({width: 800, height: 600});
+  }
+};
+
 ExMessage = {
   edit: function(id, ex_group_id) {
     var url = new Url("forms", "ajax_edit_ex_message");
@@ -483,7 +494,7 @@ ExMessage = {
   }
 };
 
-ExConcept = ExField;
+ExConcept = Object.clone(ExField);
 
 ExConcept.refreshList =  function(){
   var url = new Url("forms", "ajax_list_ex_concept");
@@ -491,9 +502,29 @@ ExConcept.refreshList =  function(){
 };
 
 ExConcept.editCallback = function(id, obj) {
-  ExConcept.refreshList();
   ExConcept.edit(id, null, "exClassEditor");
+  ExConcept.refreshList();
 };
+
+ExConcept.createInModal = function(id, container){
+  var url = new Url("forms", "view_ex_concept");
+  url.addParam("object_guid", "CExConcept-"+(id || 0));
+  url.addParam("hide_tree", 1);
+  url.modal({width: 800, height: 600});
+  
+  /*
+  var callback = function(){
+    var cont = url.modalObject.container;
+    var iframe = cont.down('iframe');
+    iframe.contentWindow.MbObject.editCallback = function(id){
+      iframe.onload = callback;
+      iframe.src += "&object_guid=CExConcept-"+id;
+    }
+  }
+  
+  url.modal({width: 800, height: 600});
+  url.modalObject.observe("onRemoteContentLoaded", callback);*/
+}
 
 ExFieldSpec = {
   options: {},
