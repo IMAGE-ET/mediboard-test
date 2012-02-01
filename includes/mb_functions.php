@@ -12,9 +12,8 @@
  * Returns the CMbObject with given GET params keys, if it doesn't exist, a redirect is made
  * 
  * @param string $class_key The class name of the object
- * @param string $id_key    The object ID
- * @param string $guid_key  The object GUID (classname-id)
- * 
+ * @param string $id_key The object ID
+ * @param string $guid_key The object GUID (classname-id)
  * @return CMbObject The object loaded or nothing
  **/
 function mbGetObjectFromGet($class_key, $id_key, $guid_key = null) {
@@ -48,9 +47,8 @@ function mbGetObjectFromGet($class_key, $id_key, $guid_key = null) {
  * if it doesn't exist, a redirect is made
  * 
  * @param string $class_key The class name of the object
- * @param string $id_key    The object ID
- * @param string $guid_key  The object GUID (classname-id)
- * 
+ * @param string $id_key The object ID
+ * @param string $guid_key The object GUID (classname-id)
  * @return CMbObject The object loaded or nothing
  **/
 function mbGetObjectFromGetOrSession($class_key, $id_key, $guid_key = null) {
@@ -79,13 +77,6 @@ function mbGetObjectFromGetOrSession($class_key, $id_key, $guid_key = null) {
   return $object;
 }
 
-/**
- * String to bool swiss knife
- * 
- * @param mixed $value Any value, preferably string
- * 
- * @return bool
- */
 function toBool($value) {
   if (!$value) {
   	return false;
@@ -96,10 +87,8 @@ function toBool($value) {
 
 /**
  * Calculate the bank holidays in France
- * 
- * @param date $date The relative date, used to calculate the bank holidays of a specific year
- * 
- * @return array List of bank holidays as dates
+ * @param string The relative date, used to calculate the bank holidays of a specific year
+ * @return array List of bank holidays
  **/
 function mbBankHolidays($date = null) {
   if (!$date) {
@@ -140,9 +129,7 @@ function mbBankHolidays($date = null) {
 
 /**
  * Calculate the number of work days in the given month date
- * 
- * @param date $date The relative date of the months to get work days
- * 
+ * @param string $date The relative date of the months to get work days
  * @return integer Number of work days 
  **/
 function mbWorkDaysInMonth($date = null) {
@@ -175,11 +162,9 @@ function mbWorkDaysInMonth($date = null) {
 
 /**
  * Transforms absolute or relative time into a given format
- * 
  * @param string $relative A relative time
- * @param string $ref      An absolute time to transform
- * @param string $format   The data in which the date will be returned
- * 
+ * @param string $ref An absolute time to transform
+ * @param string $format The data in which the date will be returned
  * @return string The transformed date
  **/
 function mbTransformTime($relative, $ref, $format) {
@@ -196,10 +181,8 @@ function mbTransformTime($relative, $ref, $format) {
 
 /**
  * Transforms absolute or relative time into DB friendly DATETIME format
- * 
- * @param string   $relative Modifies the time (eg '+1 DAY')
- * @param datetime $ref      The reference date time fo transforms
- * 
+ * @param string $relative Modifies the time (eg '+1 DAY')
+ * @param datetime The reference date time fo transforms
  * @return string The transformed time 
  **/
 function mbDateTime($relative = null, $ref = null) {
@@ -208,10 +191,8 @@ function mbDateTime($relative = null, $ref = null) {
 
 /**
  * Transforms absolute or relative time into XML DATETIME format
- * 
- * @param string   $relative Modifies the time (eg '+1 DAY')
- * @param datetime $ref      The reference date time fo transforms
- * 
+ * @param string $relative Modifies the time (eg '+1 DAY')
+ * @param datetime The reference date time fo transforms
  * @return string The transformed time 
  **/
 function mbXMLDateTime($relative = null, $ref = null) {
@@ -220,10 +201,8 @@ function mbXMLDateTime($relative = null, $ref = null) {
 
 /**
  * Converts an xs;duration XML duration into a DB friendly DATETIME
- * 
- * @param string $duration Duration with format P1Y2M3DT10H30M0S
- *
- * @return string The DATETIME, null if failed
+ * @param string $duration where format is P1Y2M3DT10H30M0S
+ * @return string: the DATETIME, null if failed
  **/
 function mbDateTimeFromXMLDuration($duration) {
   $regexp = "/P((\d+)Y)?((\d+)M)?((\d+)D)?T((\d+)H)?((\d+)M)?((\d+)S)?/";
@@ -233,18 +212,16 @@ function mbDateTimeFromXMLDuration($duration) {
   
   return sprintf(
       "%d-%d-%d %d:%d:%d", 
-      $matches[ 2], $matches[ 4], $matches[ 6], 
-      $matches[ 8], $matches[10], $matches[12]
+      $matches[2], $matches[4], $matches[6], 
+      $matches[8], $matches[10], $matches[12]
   );
 }
 
 
 /**
  * Transforms absolute or relative time into DB friendly DATE format
- * 
- * @param String $relative The relative time vs the $ref (ex: "-1 MONTH")
- * @param Date   $ref      The reference date
- * 
+ * @param String $relative The relative time against the $ref (ex: "-1 MONTH")
+ * @param Date $ref The reference date
  * @return Date The transformed time
  **/
 function mbDate($relative = null, $ref = null) {
@@ -253,11 +230,7 @@ function mbDate($relative = null, $ref = null) {
 
 /**
  * Transforms absolute or relative time into DB friendly TIME format
- * 
- * @param string   $relative The relative time vs the $ref (ex: "-1 MONTH")
- * @param datetime $ref      The reference date
- * 
- * @return time The transformed time 
+ * @return string: the transformed time 
  **/
 function mbTime($relative = null, $ref = null) {
   return mbTransformTime($relative, $ref, "%H:%M:%S");
@@ -265,29 +238,18 @@ function mbTime($relative = null, $ref = null) {
 
 /**
  * Counts the number of intervals between reference and relative
- * 
- * @param time $from     From time
- * @param time $to       To time
- * @param time $interval Interval time
- * 
- * @return int Number of intervals
+ * @return int: number of intervals
  **/
-function mbTimeCountIntervals($from, $to, $interval) {
-  $zero     = strtotime("0:00:00");
-  $from     = strtotime($from    ) - $zero;
-  $to       = strtotime($to      ) - $zero;
-  $interval = strtotime($interval) - $zero;
-  return floatval($to - $from / $interval);
+function mbTimeCountIntervals($reference, $relative, $interval) {
+  $zero = strtotime("0:00:00");
+  $refStamp = strtotime($reference) - $zero;
+  $relStamp = strtotime($relative ) - $zero;
+  $intStamp = strtotime($interval ) - $zero;
+  $diffStamp = $relStamp - $refStamp;
+  $nbInterval = floatval($diffStamp / $intStamp);
+  return intval($nbInterval);
 }
 
-/**
- * Retrieve nearest time (Dirac-like) with intervals
- * 
- * @param time $reference     Reference time
- * @param time $mins_interval Minutes count
- * 
- * @return time Nearest time
- **/
 function mbTimeGetNearestMinsWithInterval($reference, $mins_interval) {
   $min_reference = mbTransformTime(null, $reference, "%M");
   $div = intval($min_reference / $mins_interval);
@@ -305,13 +267,8 @@ function mbTimeGetNearestMinsWithInterval($reference, $mins_interval) {
 }
 
 /**
- * Add a relative time to a reference time
- * 
- * @param time $relative The relative time to add
- * @param time $ref      The reference time 
- * 
- * @return string: the resulting time 
- **/
+ * Adds a relative time to a reference time
+ * @return string: the resulting time */
 function mbAddTime($relative, $ref = null) {
   $fragments = explode(":", $relative);
   $hours   = isset($fragments[0]) ? $fragments[0] : '00';
@@ -322,12 +279,7 @@ function mbAddTime($relative, $ref = null) {
 
 /**
  * Substract a relative time to a reference time
- * 
- * @param time $relative The relative time to substract
- * @param time $ref      The reference time 
- * 
- * @return string: the resulting time 
- **/
+ * @return string: the resulting time */
 function mbSubTime($relative, $ref = null) {
   $fragments = explode(":", $relative);
   $hours   = isset($fragments[0]) ? $fragments[0] : '00';
@@ -337,13 +289,8 @@ function mbSubTime($relative, $ref = null) {
 }
 
 /**
- * Add a relative time to a reference datetime
- * 
- * @param time     $relative The relative time to add
- * @param datetime $ref      The reference datetime
- * 
- * @return string: the resulting time 
- **/
+ * Adds a relative time to a reference datetime
+ * @return string: the resulting time */
 function mbAddDateTime($relative, $ref = null) {
   $fragments = explode(":", $relative);
   $hours   = isset($fragments[0]) ? $fragments[0] : '00';
@@ -353,68 +300,24 @@ function mbAddDateTime($relative, $ref = null) {
 }
 
 /**
- * Count days between two datetimes
- * 
- * @param datetime $from From datetime
- * @param datetime $to   To datetime
- * 
- * @return int Days count
+ * Returns the difference between two dates in days
+ * @return int: number of days
  **/
 function mbDaysRelative($from, $to) {
   if (!$from || !$to) {
     return null;
   }
-  
   $from = intval(strtotime($from) / 86400);
   $to   = intval(strtotime($to  ) / 86400);
-  return intval($to - $from);
+  $days = intval($to - $from);
+  return $days;
 }
 
 /**
- * Count hours between two datetimes
- * 
- * @param datetime $from From datetime
- * @param datetime $to   To datetime
- * 
- * @return int Days count
- **/
-function mbHoursRelative($from, $to) {
-  if (!$from || !$to) {
-    return null;
-  }
-
-  $from = intval(strtotime($from) / 3600);
-  $to   = intval(strtotime($to  ) / 3600);
-  return intval($to - $from);
-}
-
-/**
- * Count minutes between two datetimes
- * 
- * @param datetime $from From datetime
- * @param datetime $to   To datetime
- * 
- * @return int Days count
- **/
-function mbMinutesRelative($from, $to) {
-  if (!$from || !$to) {
-    return null;
-  }
-  $from = intval(strtotime($from) / 60);
-  $to   = intval(strtotime($to  ) / 60);
-  return intval($to - $from);;
-}
-
-/**
- * Compute time duration between two datetimes
- * 
- * @param datetime $from   From date
- * @param datetime $to     To date
- * @param string   $format Format for time (sprintf syntax)
- * 
+ * Returns the time difference between two times in time format
  * @return string hh:mm:ss diff duration
  **/
-function mbTimeRelative($from, $to, $format = "%02d:%02d:%02d") {
+function mbTimeRelative($from, $to, $format = '%02d:%02d:%02d') {
   $diff = strtotime($to) - strtotime($from); 
   $hours = intval($diff / 3600);
   $mins = intval(($diff % 3600) / 60);
@@ -423,11 +326,30 @@ function mbTimeRelative($from, $to, $format = "%02d:%02d:%02d") {
 }
 
 /**
- * Tell whether date is lunar
- * 
- * @param date $date Date to check
- * 
- * @return boolean 
+ * Returns the time difference between two times in time format
+ * @return float difference in hours
+ **/
+function mbHoursRelative($from, $to) {
+  if (!$from || !$to) {
+    return null;
+  }
+  $hours = (strtotime($to) / 3600) - (strtotime($from) / 3600);
+  return $hours;
+}
+
+function mbMinutesRelative($from, $to) {
+  if (!$from || !$to) {
+    return null;
+  }
+  $from = intval(strtotime($from) / 60);
+  $to   = intval(strtotime($to  ) / 60);
+  $minutes = intval($to - $from);
+  return $minutes;
+}
+
+/**
+ * Returns is a lunar date
+ * @return boolean true or false
  **/
 function isLunarDate($date) {
   $fragments = explode("-", $date);
@@ -451,19 +373,16 @@ class CMbDate {
 
    static $xmlDate     = "%Y-%m-%d";
    static $xmlTime     = "%H:%M:%S";
-   static $xmlDateTime = "%Y-%m-%dT%H:%M:%S";
+   static $xmlDateTime = null;
    
-  /** 
-   * Compute real relative achieved gregorian durations in years and months
-   * 
+  /** Compute real relative achieved gregorian durations in years and months
    * @param date $from Starting time
-   * @param date $to   Ending time, now if null
-   * 
-   * @return array[int] Number of years and months
+   * @param date $to Ending time, now if null
+   * return array[int] Number of years and months
    */
   static function achievedDurations($from, $to = null) {
     $achieved = array(
-      "year"  => "??",
+      "year" => "??",
       "month" => "??",
     );
     
@@ -489,11 +408,9 @@ class CMbDate {
   
   /**
    * Compute user friendly approximative duration between two date time
-   * 
-   * @param datetime $from      From time
-   * @param datetime $to        To time, now if null
-   * @param int      $min_count The minimum count to reach the upper unit, 2 if undefined
-   * 
+   * @param datetime $from Starting time
+   * @param datetime $to Ending time, now if null
+   * @param int $min_count The minimum count to reach the upper unit, 2 if undefined
    * @return array("unit" => string, "count" => int)
    */
   static function relative($from, $to = null, $min_count = 2) {
@@ -522,22 +439,17 @@ class CMbDate {
   }
   
   /**
-   * Get the month number for a given datetime
-   * 
-   * @param datetime $date Datetime
-   * 
+   * Returns the month number
+   * @param Date $date
    * @return int The month number
-   * @FIXME Useful ??
    */
   static function monthNumber($date) {
     return intval(mbTransformTime(null, $date, "%m"));
   }
   
   /**
-   * Get the week number in the month
-   * 
-   * @param datetime $date Date
-   * 
+   * Computes the week number in the month
+   * @param Date $date
    * @return int The week number
    */
   static function weekNumberInMonth($date) {
@@ -554,12 +466,9 @@ class CMbDate {
   }
   
   /**
-   * Give a Dirac hash of given datetime
-   * 
-   * @param enum     $period   One of minute, hour, day, week, month or year
-   * @param datetime $datetime Datetime
-   *  
-   * @return datetime Hash
+   * Give a Dirac hash of given ISO DATETIME
+   * @param enum $period One of minute, hour, day, week, month or year 
+   * @return ISO DATETIME hash
    */
   static function dirac($period, $datetime) {
     switch ($period) {
@@ -581,12 +490,10 @@ class CMbDate {
   }
   
   /**
-   * Give a position to a datetime relative to a reference
-   * 
-   * @param dateTime $datetime  Datetime
-   * @param dateTime $reference Reference
-   * @param enum     $period    One of 1hour, 6hours, 1day
-   * 
+   * Give a position to a ISO DATETIME relative to a reference
+   * @param dateTime $datetime
+   * @param dateTime $reference 
+   * @param enum $period One of 1hour, 6hours, 1day
    * @return float
    */
   static function position($datetime, $reference, $period) {
@@ -603,151 +510,109 @@ class CMbDate {
     }
   }
   
-  /**
-   * Turn a datetime to its UTC timestamp equivalent
-   * 
-   * @param dateTime $datetime Datetime
-   * 
-   * @return int
-   */
-  static function toUTCTimestamp($datetime) {
+  static function toUTCTimestamp($time) {
     static $default_timezone;
     if (!$default_timezone) {
       $default_timezone = date_default_timezone_get();
     }
-    
-    // Temporory change timezone to UTC
+        
     date_default_timezone_set("UTC");
-    $datetime = strtotime($datetime) * 1000; // in ms;
+    $time = strtotime($time) * 1000; // in ms;
     date_default_timezone_set($default_timezone);
     
-    return $datetime;
+    return $time;
   }
 }
 
+CMbDate::$xmlDateTime = CMbDate::$xmlDate."T".CMbDate::$xmlTime;
+
 /**
- * Return the standard average of an array
- * 
- * @param array $array Scalar values
- * 
+ * Return the std variance of an array
  * @return float: ecart-type
  */
 function mbMoyenne($array) {
-  if (!is_array($array)) {
-  	return;
+  if (is_array($array)) {
+    return array_sum($array) / count($array);
+  } else {
+    return false;
   }
-  
-  return array_sum($array) / count($array);
 }
 
 /**
- * Return the standard variance of an array
- * 
- * @param array $array Scalar values
- * 
+ * Return the std variance of an array
  * @return float: ecart-type
- */
+ **/
 function mbEcartType($array) {
-  if (!is_array($array)) {
-  	return;
+  if (is_array($array)) {
+    $moyenne = mbMoyenne($array);
+    $sigma = 0;
+    foreach ($array as $value) {
+      $sigma += pow((floatval($value)-$moyenne), 2);
+    }
+    $ecarttype = sqrt($sigma / count($array));
+    return $ecarttype;
+  } else {
+    return false;
   }
-
-  $moyenne = mbMoyenne($array);
-  $sigma = 0;
-  foreach ($array as $value) {
-    $sigma += pow((floatval($value)-$moyenne), 2);
-  }
-  
-  return sqrt($sigma / count($array));
 }
 
 /**
- * URL to the mediboard.org documentation page
- * 
- * @param string $module Module name
- * @param string $action Action name
- *  
+ * URL to the mediboard.org documentation page 
  * @return string The URL to the requested page
  */
-function mbPortalURL($module, $action = null) {
-  if ($module == "tracker") {
+function mbPortalURL($page, $a = null) {
+  if ($page == "tracker") {
     return CAppUI::conf("issue_tracker_url");
   }
   
   $url = CAppUI::conf("help_page_url");
   if (!$url || strpos($url, "%m") === false || strpos($url, "%a") === false) {
-    return;
+    return null;
   }
   
   return strtr($url, array(
-    "%m" => $module,
-    "%a" => $action,
+    "%m" => $page,
+    "%a" => $a,
   ));
 }
 
-/**
- * Check whether a string is NOT empty, to be used as a filter callback
- * 
- * @param string $string String to check
- *  
- * @return bool 
- * @deprecated cf. CMbArray
- */
-function stringNotEmpty($string){
-  return $string !== "";
+function stringNotEmpty($s){
+  return $s !== "";
 }
 
-/**
- * Get a string containing loaded Dojo components for storage purposes
- * 
- * @return string
- */
 function mbLoadScriptsStorage(){
-  $scripts = "";
-  $scripts .= CJSLoader::loadFile("lib/dojo/dojo.js");
-  $scripts .= CJSLoader::loadFile("lib/dojo/src/io/__package__.js");
-  $scripts .= CJSLoader::loadFile("lib/dojo/src/html/__package__.js");
-  $scripts .= CJSLoader::loadFile("lib/dojo/src/lfx/__package__.js");
-  $scripts .= CJSLoader::loadFile("includes/javascript/storage.js");
-  return $scripts;
+  $affichageScript = "";
+  $affichageScript .= CJSLoader::loadFile("lib/dojo/dojo.js");
+  $affichageScript .= CJSLoader::loadFile("lib/dojo/src/io/__package__.js");
+  $affichageScript .= CJSLoader::loadFile("lib/dojo/src/html/__package__.js");
+  $affichageScript .= CJSLoader::loadFile("lib/dojo/src/lfx/__package__.js");
+  $affichageScript .= CJSLoader::loadFile("includes/javascript/storage.js");
+  return $affichageScript;
 }
 
-/**
- * Set memory limit alternative with a minimal value approach
- * Shoud *always* be used
- * 
- * @param sring $limit Memory limit with ini_set() syntax
- * 
- * @return string The old value on success, false on failure
- */
-function set_min_memory_limit($limit) {
+/** Must be like "64M" */ 
+function set_min_memory_limit($min) {
   $actual = CMbString::fromDecaBinary(ini_get('memory_limit'));
-  $new    = CMbString::fromDecaBinary($limit);
+  $new    = CMbString::fromDecaBinary($min);
   if ($new > $actual) {
-    return ini_set('memory_limit', $limit);
+    ini_set('memory_limit', $min);
   }
-  
-  return ini_get('memory_limit');
 }
 
 /**
- * Check whether a method is overridden in a given class
- * 
- * @param mixed  $class  The class or object
+ * Check if a method is overridden in a given class
+ * @param mixed $class The class or object
  * @param string $method The method name
- * 
  * @return bool
  */
 function is_method_overridden($class, $method) {
-  $reflection = new ReflectionMethod($class, $method);
-  return $reflection->getDeclaringClass()->getName() == $class;
+  $rMethod = new ReflectionMethod($class, $method);
+  return $rMethod->getDeclaringClass()->getName() == $class;
 }
 
 /**
  * Strip slashes recursively if value is an array
- * 
- * @param mixed $value The value to be stripped
- * 
+ * @param mixed $value
  * @return mixed the stripped value
  **/
 function stripslashes_deep($value) {
@@ -758,12 +623,9 @@ function stripslashes_deep($value) {
 
 /**
  * Copy the hash array content into the object as properties
- * Only existing properties of are filled, when defined in hash
- * 
- * @param array  $hash    The input hash
- * @param object &$object The object to feed
- * 
- * @return void
+ * only existing properties of object are filled, when defined in hash
+ * @param array $hash the input array
+ * @param object $object to fill of any class
  **/
 function bindHashToObject($hash, &$object) {
 
@@ -780,9 +642,7 @@ function bindHashToObject($hash, &$object) {
 
 /**
  * Convert a date from ISO to locale format
- * 
  * @param string $date Date in ISO format
- * 
  * @return string Date in locale format
  */
 function mbDateToLocale($date) {
@@ -791,9 +651,7 @@ function mbDateToLocale($date) {
 
 /**
  * Convert a date from locale to ISO format
- * 
  * @param string $date Date in locale format
- * 
  * @return string Date in ISO format
  */
 function mbDateFromLocale($date) {
@@ -801,10 +659,8 @@ function mbDateFromLocale($date) {
 }
 
 /**
- * Convert a datetime from LDAP to ISO format
- * 
+ * Convert a date from LDAP to ISO format
  * @param string $dateLargeInt nano seconds (yes, nano seconds) since jan 1st 1601
- * 
  * @return string DateTime in ISO format
  */
 function mbDateTimeFromLDAP($dateLargeInt) {
@@ -818,13 +674,6 @@ function mbDateTimeFromLDAP($dateLargeInt) {
   return date("d-m-Y H:i:s", $unixTsLastLogon);
 }
 
-/**
- * Convert a datetime from ActiveDirecetory to ISO format
- * 
- * @param string $dateAD Datetime from AD since jan 1st 1601
- * 
- * @return string DateTime in ISO format
- */
 function mbDateTimeFromAD($dateAD) {
   return preg_replace("/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})\.0Z/", '$1-$2-$3 $4:$5:$6', $dateAD);
 }
@@ -832,9 +681,7 @@ function mbDateTimeFromAD($dateAD) {
 /**
  * Check if a number is a valid Luhn number
  * see http://en.wikipedia.org/wiki/Luhn
- * 
- * @param string $code String representing a potential Luhn number
- * 
+ * @param code string String representing a potential Luhn number
  * @return bool
  */
 function luhn ($code) {
@@ -863,9 +710,7 @@ function luhn ($code) {
 
 /**
  * Check wether a URL exists (200 HTTP Header)
- * 
  * @param string $url URL to check
- * 
  * @return bool
  */
 function url_exists($url) {
@@ -876,43 +721,30 @@ function url_exists($url) {
   return (preg_match("|200|", $headers[0])); 
 }
 
-/**
- * Forge an HTTP POST query
- * 
- * @param string $url  Destination URL
- * @param mixed  $data Array or object containing properties
- * 
- * @return bool
- */
 function http_request_post($url, $data) {
   $data_url = http_build_query($data);
-  $data_length = strlen($data_url);
-  $options = array(
-    "https" => array(
-      "method" => "POST",
-      "header"=> array(
-        "Content-Type: application/x-www-form-urlencoded",
-        "Content-Length: $data_length", 
-        "User-Agent: ".$_SERVER["HTTP_USER_AGENT"]
-      ),
-      "content" => $data_url
-    )
-  );
+  $data_len = strlen($data_url);
+  $ctx = stream_context_create(array(
+           'https' => array(
+             'method' => 'POST',
+             'header'=> array (
+                "Content-Type: application/x-www-form-urlencoded",
+                "Content-Length: $data_len", 
+                "User-Agent: ".$_SERVER['HTTP_USER_AGENT']),
+             'content' => $data_url
+           )
+         ));
+  $contents = file_get_contents($url, false, $ctx);
   
-  $context = stream_context_create($options);
-  $content = file_get_contents($url, false, $context);
-  return $content;
+  return $contents;
 }
 
 /**
- * Check response time from a web server
- * 
- * @param string $url  Server URL
- * @param string $port Server port
- * 
- * @return int Response time in milliseconds
+ * Check responsetime for a webbserver
+ * @param string $url URL to check
+ * @return int response time
  */
-function url_response_time($url, $port) {
+function url_response_time($url, $port){
   $parse_url = parse_url($url);
   if (isset($parse_url["port"])) {
     $port = $parse_url["port"];
@@ -939,10 +771,7 @@ function url_response_time($url, $port) {
 
 /**
  * Build a url string based on components in an array
- * (see PHP parse_url() documentation)
- * 
- * @param array $components Components, as of parse_url 
- * 
+ * @param array $components Components, as of parse_url (see PHP documentation)
  * @return string
  */
 function make_url($components) {
@@ -973,9 +802,7 @@ function make_url($components) {
 
 /**
  * Check wether a IP address is in intranet-like form
- * 
  * @param string $ip IP address to check
- * 
  * @return bool
  */
 function is_intranet_ip($ip) {
@@ -985,7 +812,6 @@ function is_intranet_ip($ip) {
   }
 
   $ip = explode('.', $ip);
-  
   return 
     ($ip[0] == 127) ||
     ($ip[0] == 10) ||
@@ -993,37 +819,25 @@ function is_intranet_ip($ip) {
     ($ip[0] == 192 && $ip[1] == 168);
 }
 
-/**
- * Retrieve a server value from multiple sources
- * 
- * @param string $key Value key
- * 
- * @return string
- */
-function get_server_var($key) {
-  if (isset($_SERVER[$key])) {
-    return $_SERVER[$key];
+function get_server_var($var_name) {
+  if (isset($_SERVER[$var_name])) {
+    return $_SERVER[$var_name];
   }
   
-  if (isset($_ENV[$key])) {
-    return $_ENV[$key];
+  if (isset($_ENV[$var_name])) {
+    return $_ENV[$var_name];
   }
 
-  if (getenv($key)) {
-    return getenv($key);
+  if (getenv($var_name)) {
+    return getenv($var_name);
   }
   
-  if (function_exists('apache_getenv') && apache_getenv($key, true)) {
-    return apache_getenv($key, true);
+  if (function_exists('apache_getenv') && apache_getenv($var_name, true)) {
+    return apache_getenv($var_name, true);
   }
 }
 
-/**
- * Get browser remote IPs using most of available methods
- * 
- * @return array Array with proxy, client and remote keys as IP adresses
- */
-function get_remote_address() {
+function get_remote_address(){
   $address = array(
     "proxy" => null, 
     "client" => null, 
@@ -1071,15 +885,8 @@ function get_remote_address() {
   return $address;
 }
 
-/**
- * CRC32 alternative handling 32bit platform limitations
- * 
- * @param string $data The data
- * 
- * @return int CRC32 checksum
- */
-function mb_crc32($data) {
-  $crc = crc32($data);
+function mb_crc32($str) {
+  $crc = crc32($str);
 
   // if 32bit platform
   if (PHP_INT_MAX <= pow(2, 31)-1 && $crc < 0) {
@@ -1089,11 +896,7 @@ function mb_crc32($data) {
   return $crc;
 }
 
-/**
- * Initialize custom error handler
- * 
- * @return void
- */
+// Initialize custom error handler
 function build_error_log() {
   if (!is_file(LOG_PATH)) {
     $initTime = date("Y-m-d H:i:s");
