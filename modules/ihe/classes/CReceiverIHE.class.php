@@ -102,7 +102,7 @@ class CReceiverIHE extends CInteropReceiver {
         
         // Dans le cas d'une source file system on passe le nom du fichier en paramètre
         if ($source instanceof CSourceFileSystem) {
-          $source->setData($msg, false, "MB-$evenement->event_type-$evenement->code-$exchange->_id".$source->fileextension);
+          $source->setData($msg, false, "MB-$evenement->event_type-$evenement->code-$exchange->_id.$source->fileextension");
         }
         else {
           $source->setData($msg);

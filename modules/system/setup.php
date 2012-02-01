@@ -904,6 +904,23 @@ class CSetupsystem extends CSetup {
     }
     $this->addFunction("setup_system_addExReferenceFieldsIndex");
         
-    $this->mod_version = "1.0.92";
+    $this->makeRevision("1.0.92");
+    
+    $query = "CREATE TABLE `sender_file_system` (
+                `sender_file_system_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `user_id` INT (11) UNSIGNED,
+                `nom` VARCHAR (255) NOT NULL,
+                `libelle` VARCHAR (255),
+                `group_id` INT (11) UNSIGNED NOT NULL,
+                `actif` ENUM ('0','1') NOT NULL DEFAULT '0'
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `sender_file_system` 
+              ADD INDEX (`user_id`),
+              ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.93";
   }
 }

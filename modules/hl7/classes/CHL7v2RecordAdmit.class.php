@@ -75,6 +75,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     // Affectation du patient
     $newVenue->patient_id = $newPatient->_id; 
+    $newVenue->loadRefPatient();
+    
     // Affectation de l'établissement
     $newVenue->group_id = $sender->group_id;
     
@@ -642,7 +644,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getDischargeDisposition(DOMNode $node, CSejour $newVenue) {
-    /* @todo Festion des circonstances de sortie ? */
+    /* @todo Gestion des circonstances de sortie ? */
   }
   
   function getDischargedToLocation(DOMNode $node, CSejour $newVenue) {
@@ -684,11 +686,23 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getZBE(DOMNode $node, CSejour $newVenue) {    
+    $movement_id       = $this->queryTextNode("ZBE.1/EI.1", $node);
+    $start_movement_dt = $this->queryTextNode("ZBE.2/TS.1", $node);
+    $action            = $this->queryTextNode("ZBE.4", $node);
+    $original_trigger  = $this->queryTextNode("ZBE.6", $node);
+    $uf_medicale       = $this->queryNode("ZBE.7", $node);
+    $uf_soins          = $this->queryNode("ZBE.8", $node);
+    
     
   }
   
   function getZFD(DOMNode $node, CSejour $newVenue) {  
-    /* @todo À associer sur le patient - Date lunaire du patient */
+    // Date lunaire
+    if ($date_lunaire = $this->queryTextNode("ZFD.1", $node)) {
+      $patient = $newVenue->_ref_patient;
+      $patient->naissance = $date_lunaire;
+      $patient->store();
+    }
   }
   
   function getZFM(DOMNode $node, CSejour $newVenue) {   
@@ -722,7 +736,12 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getZFP(DOMNode $node, CSejour $newVenue) {    
-    /* @todo À associer sur le patient */
+    // Catégorie socioprofessionnelle
+    if ($csp = $this->queryTextNode("ZFP.2", $node)) {
+      $patient = $newVenue->_ref_patient;
+      $patient->csp = $csp;
+      $patient->store();
+    }  
   }
   
   function getZFV(DOMNode $node, CSejour $newVenue) {    

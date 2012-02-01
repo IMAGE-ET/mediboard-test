@@ -1,7 +1,7 @@
 /**
- * JS function Sender FTP EAI
+ * JS function Sender FS
  *  
- * @category EAI
+ * @category system
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -9,17 +9,12 @@
  * @link     http://www.mediboard.org
  */
 
-SenderFTP = {
+SenderFS = {
   actor_guid: null,
   
   dispatch: function(actor_guid) {
-	var url = new Url("system", "ajax_dispatch_files");
+    var url = new Url("system", "ajax_dispatch_files");
     url.addParam("actor_guid", actor_guid);
-    url.requestUpdate("CSenderFTP-utilities_dispatch");
-  },
-  
-  readFilesSenders: function() {
-    var url = new Url("ftp", "ajax_read_ftp_files");
-    url.requestUpdate("CSenderFTP-utilities_read-files-senders");
+    url.requestUpdate("CSenderFileSystem-utilities_dispatch");
   }
 };

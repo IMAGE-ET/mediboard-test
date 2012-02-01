@@ -10,15 +10,15 @@
 
 class CSourceFileSystem extends CExchangeSource {
   // DB Table key
-  var $source_file_system_id = null;
+  var $source_file_system_id   = null;
   
   var $fileextension           = null;
   var $fileextension_write_end = null;
   
   // Form fields
-  var $_path  = null;
-  var $_file_path = null;
-  var $_files = array();
+  var $_path             = null;
+  var $_file_path        = null;
+  var $_files            = array();
   
   function getSpec() {
     $spec = parent::getSpec();

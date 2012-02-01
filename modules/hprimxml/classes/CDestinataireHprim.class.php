@@ -84,7 +84,7 @@ class CDestinataireHprim extends CInteropReceiver {
         
         // Dans le cas d'une source file system on passe le nom du fichier en paramètre
         if ($source instanceof CSourceFileSystem) {
-          $source->setData($msg, false, "MB-$dom_evt->evenement-$exchange->_id".$source->fileextension);
+          $source->setData($msg, false, "MB-$dom_evt->evenement-$exchange->_id.$source->fileextension");
         }
         else {
           $source->setData($msg);
@@ -125,7 +125,7 @@ class CDestinataireHprim extends CInteropReceiver {
         
         // Dans le cas d'une source file system on passe le nom du fichier en paramètre
         if ($source instanceof CSourceFileSystem) {
-          $source->setData($msg, false, "MB-$dom_evt->evenement-$exchange->_id".$source->fileextension);
+          $source->setData($msg, false, "MB-$dom_evt->evenement-$exchange->_id.$source->fileextension");
         }
         else {
           $source->setData($msg);

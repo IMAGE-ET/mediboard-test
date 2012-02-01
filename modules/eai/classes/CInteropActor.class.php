@@ -24,7 +24,7 @@ class CInteropActor extends CMbObject {
   
   // Form fields
   var $_reachable                = null;
-  var $_parent_class        = null;
+  var $_parent_class             = null;
   
   var $_tag_patient              = null;
   var $_tag_sejour               = null;

@@ -60,12 +60,14 @@ class CSourceFTP extends CExchangeSource {
     return $ftp;
   }
   
-  function send($evenement_name = null) {
+  function send($evenement_name = null, $destination_basename = null) {
     $ftp = $this->init($this);
     
     $this->counter++;
-      
-    $destination_basename = sprintf("%s%0".$this->filenbroll."d", $this->fileprefix, $this->counter % pow(10, $this->filenbroll));
+
+    if (!$destination_basename) {
+      $destination_basename = sprintf("%s%0".$this->filenbroll."d", $this->fileprefix, $this->counter % pow(10, $this->filenbroll));
+    }
     
     if ($ftp->connect()) {
       $ftp->sendContent($this->_data, "$destination_basename.$this->fileextension");

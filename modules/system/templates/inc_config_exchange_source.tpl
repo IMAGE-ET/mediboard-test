@@ -68,11 +68,6 @@
     </div>
     
     <div id="CSourceFileSystem-{{$sourcename}}" class="source" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceFileSystem)}}block{{else}}none{{/if}};">
-      {{if $source instanceof CSourceFileSystem && !$source->active}}
-      <div class="small-info">
-        {{tr}}CExchangeSource-not-active{{/tr}}
-      </div>
-      {{/if}}
       {{mb_include module=system template=CExchangeSource_inc_config mod=system class="CSourceFileSystem"}}  
     </div>
     

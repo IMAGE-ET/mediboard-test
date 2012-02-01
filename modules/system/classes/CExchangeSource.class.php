@@ -44,6 +44,7 @@ class CExchangeSource extends CMbObject {
   var $_message           = null;
   var $_response_time     = null;
   var $_all_source        = array();
+  var $_receive_filename  = null;
   
   function getProps() {
     $specs = parent::getProps();

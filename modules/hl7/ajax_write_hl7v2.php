@@ -53,14 +53,14 @@ $segment = CHL7v2Segment::create("PID", $msg);
 
 $data = array (
   0 => 1,
-  1 => NULL,
+  1 => null,
   2 => 
   array (
     0 => 
     array (
       0 => '323241',
-      1 => NULL,
-      2 => NULL,
+      1 => null,
+      2 => null,
       3 => 
       array (
         0 => 'Mediboard',
@@ -72,20 +72,20 @@ $data = array (
     1 => 
     array (
       0 => 'fgfg',
-      1 => NULL,
-      2 => NULL,
+      1 => null,
+      2 => null,
       3 => 
       array (
-        0 => NULL,
+        0 => null,
         1 => '1.2.250.1.213.1.4.2',
         2 => 'ISO',
       ),
       4 => 'INS-C',
-      5 => NULL,
+      5 => null,
       6 => '1946-10-17',
     ),
   ),
-  3 => NULL,
+  3 => null,
   4 => 
   array (
     0 => 
@@ -93,9 +93,9 @@ $data = array (
       0 => 'EZZHJ',
       1 => 'Rtaso',
       2 => 'qldax',
-      3 => NULL,
+      3 => null,
       4 => 'dr',
-      5 => NULL,
+      5 => null,
       6 => 'D',
       7 => 'A',
     ),
@@ -104,43 +104,43 @@ $data = array (
       0 => 'MEBJO',
       1 => 'Rtaso',
       2 => 'qldax',
-      3 => NULL,
+      3 => null,
       4 => 'dr',
-      5 => NULL,
+      5 => null,
       6 => 'L',
       7 => 'A',
     ),
   ),
-  5 => NULL,
+  5 => null,
   6 => '1987-09-24',
   7 => 'F',
-  8 => NULL,
-  9 => NULL,
+  8 => null,
+  9 => null,
   10 => 
   array (
     0 => 
     array (
       0 => "adresse test 
  \\ | & ^ ~",
-      1 => NULL,
+      1 => null,
       2 => 'rtckkljfgrw',
-      3 => NULL,
+      3 => null,
       4 => '4294967295',
-      5 => NULL,
+      5 => null,
       6 => 'H',
     ),
     1 => 
     array (
-      0 => NULL,
-      1 => NULL,
+      0 => null,
+      1 => null,
       2 => 'vlfxif',
-      3 => NULL,
+      3 => null,
       4 => '40048',
       5 => '000',
       6 => 'BR',
     ),
   ),
-  11 => NULL,
+  11 => null,
   12 => 
   array (
     0 => 
@@ -162,35 +162,35 @@ $data = array (
       2 => 'PH',
     ),
   ),
-  13 => NULL,
-  14 => NULL,
-  15 => NULL,
-  16 => NULL,
-  17 => NULL,
-  18 => NULL,
-  19 => NULL,
-  20 => NULL,
-  21 => NULL,
-  22 => NULL,
-  23 => NULL,
-  24 => NULL,
-  25 => NULL,
-  26 => NULL,
-  27 => NULL,
+  13 => null,
+  14 => null,
+  15 => null,
+  16 => null,
+  17 => null,
+  18 => null,
+  19 => null,
+  20 => null,
+  21 => null,
+  22 => null,
+  23 => null,
+  24 => null,
+  25 => null,
+  26 => null,
+  27 => null,
   28 => '1905-05-06',
   29 => 'Y',
-  /*30 => NULL,
+  /*30 => null,
   31 => 
   array (
     0 => 'VALI',
   ),
   31 => array('2011-09-01 15:34:27'),
-  32 => NULL,
-  33 => NULL,
-  34 => NULL,
-  35 => NULL,
-  36 => NULL,
-  37 => NULL,*/
+  32 => null,
+  33 => null,
+  34 => null,
+  35 => null,
+  36 => null,
+  37 => null,*/
 );
     
 $segment->fill($data);

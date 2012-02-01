@@ -17,8 +17,8 @@
  */
 
 class CEAIDispatcher {
-  static $errors    = null;
-  static $xml_error = null;
+  static $errors      = null;
+  static $xml_error   = null;
     
   static function dispatch($data, CInteropSender $actor = null, $exchange_id = null) {
     self::$errors = array();
@@ -69,10 +69,10 @@ class CEAIDispatcher {
     $data_format->_ref_sender  = $actor;
     $data_format->_message     = $data;
     $data_format->_exchange_id = $exchange_id;
-
+        
     // Traitement par le handler du format
     try {
-      return $data_format->handle();    
+      return $data_format->handle();
     } catch(CMbException $e) {
       self::$errors[] = $e->getMessage();
       return self::dispatchError($data);
@@ -103,8 +103,21 @@ class CEAIDispatcher {
     return false;
   }
   
-  static function createFileACQ($message, $sender_ftp) {
-    // création d'un acquittement en fichier (cas FTP)
+  /*
+   * Create ACK
+   */
+  static function createFileACK($msg, $sender) {    
+    $source       = reset($sender->_ref_exchanges_sources);
+    $filename_ack = "ACK_".$source->_receive_filename;
+    
+    if ($source instanceof CSourceFTP) {
+      $source->setData($msg);
+      $source->send(null, $filename_ack);
+    }
+    elseif ($source instanceof CSourceFileSystem) {
+      $source->setData($msg, false, "$filename_ack.$source->fileextension");
+      $source->send();
+    }
   }
 }
 

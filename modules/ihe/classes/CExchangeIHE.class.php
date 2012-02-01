@@ -61,7 +61,11 @@ class CExchangeIHE extends CExchangeTabular {
   }
   
   function isWellFormed($data) {
-    return CHL7v2Message::isWellFormed($data);
+    try {
+      return CHL7v2Message::isWellFormed($data);
+    } catch (Exception $e) {
+      return false;
+    }
   }
   
   function getConfigs($actor_guid) {
@@ -79,7 +83,7 @@ class CExchangeIHE extends CExchangeTabular {
     if (!$this->isWellFormed($data)) {
       return false;
     }
-    
+
     $hl7_message = new CHL7v2Message();
     $hl7_message->parse($data, false);
     
@@ -135,6 +139,7 @@ class CExchangeIHE extends CExchangeTabular {
     $this->sender_id       = $data_format->sender_id;
     $this->sender_class    = $data_format->sender_class;
     $this->version         = $event->message->extension ? $event->message->extension : $event->message->version;
+    $this->nom_fichier     = ""; 
     $this->type            = $event->profil;
     $this->sous_type       = $event->transaction;
     $this->code            = $event->code;
@@ -159,7 +164,7 @@ class CExchangeIHE extends CExchangeTabular {
   
   function populateExchangeACK(CHL7Acknowledgment $ack, $mbObject) {
     $msgAck = $ack->event_ack->msg_hl7;
-    
+
     $this->statut_acquittement = $ack->ack_code;
     $this->acquittement_valide = $ack->event_ack->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
     if ($mbObject) {
