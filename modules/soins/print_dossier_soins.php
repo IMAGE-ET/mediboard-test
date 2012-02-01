@@ -17,6 +17,8 @@ if(!$sejour_id){
   return;
 }
 
+$fiches_anesthesies = array();
+
 // Chargement du sejour
 $sejour = new CSejour();
 $sejour->load($sejour_id);
@@ -40,14 +42,26 @@ foreach($sejour->_ref_operations as $_interv) {
   $_interv->loadRefPraticien(true);
   $_interv->_ref_praticien->loadRefFunction();
   $_interv->loadRefsConsultAnesth();
-  $_interv->_ref_consult_anesth->loadRefConsultation();
+  $consult = $_interv->_ref_consult_anesth->loadRefConsultation();
   $check_lists = $_interv->loadBackRefs("check_lists", "date");
+  
   foreach($check_lists as $_check_list) {
     $_check_list->loadItemTypes();
     $_check_list->loadBackRefs('items');
     foreach($_check_list->_back['items'] as $_item) {
       $_item->loadRefsFwd();
     }
+  }
+  
+  if ($offline) {
+    $params =
+        array(
+          "consultation_id" => $consult->_id,
+          "operation_id" => $_interv->_id,
+          "offline" => 1,
+          "print" => 1
+        );
+    $fiches_anesthesies[$_interv->_id] = CApp::fetch("dPcabinet", "print_fiche", $params);
   }
 }
 
@@ -155,6 +169,7 @@ $smarty->assign("prescription", $prescription);
 $smarty->assign("praticien", $praticien);
 $smarty->assign("offline", $offline);
 $smarty->assign("in_modal", $in_modal);
+$smarty->assign("fiches_anesthesies", $fiches_anesthesies);
 $smarty->display("print_dossier_soins.tpl");
 
 ?>

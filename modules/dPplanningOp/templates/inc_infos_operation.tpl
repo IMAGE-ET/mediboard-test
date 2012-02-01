@@ -29,6 +29,8 @@ refreshListIntervs = function() {
 }
 </script>
 
+{{mb_default var=offline value=0}}
+
 {{if $sejour->_canRead}}
 	<table class="tbl">
 	  <tr>

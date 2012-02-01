@@ -36,6 +36,80 @@
   printOneDossier = function(sejour_id) {
     $("dossier-"+sejour_id).print();
   }
+  
+  togglePrintZone = function(name, sejour_id) {
+    var dossier_soin = $("dossier-"+sejour_id);
+    
+    dossier_soin.select("."+name).invoke("toggleClassName", "not-printable");
+    
+    // Si un seul bloc est à imprimer, il faut retirer le style page-break.
+    var patient = dossier_soin.select(".print_patient")[0];
+    var sejour  = dossier_soin.select(".print_sejour")[1];
+    var prescr  = dossier_soin.select(".print_prescription")[0];
+    var task    = dossier_soin.select(".print_tasks")[0];
+    var forms   = dossier_soin.select(".print_forms")[0];
+
+    if (!patient.hasClassName("not-printable") && 
+         sejour .hasClassName("not-printable") && 
+         prescr .hasClassName("not-printable") && 
+         task   .hasClassName("not-printable") && 
+         forms  .hasClassName("not-printable")) {
+      patient.setStyle({pageBreakAfter: "auto"});
+    }
+    else 
+    if ( patient.hasClassName("not-printable") && 
+        !sejour .hasClassName("not-printable") && 
+         prescr .hasClassName("not-printable") && 
+         task   .hasClassName("not-printable") && 
+         forms  .hasClassName("not-printable")) {
+      sejour.setStyle({pageBreakAfter: "auto"});
+    }
+    else 
+    if ( patient.hasClassName("not-printable") &&
+         sejour .hasClassName("not-printable") &&
+        !prescr .hasClassName("not-printable") && 
+         task   .hasClassName("not-printable") && 
+         forms  .hasClassName("not-printable")) {
+      prescr.setStyle({pageBreakAfter: "auto"});
+    }
+    else 
+    if ( patient.hasClassName("not-printable") &&
+         sejour .hasClassName("not-printable") &&
+         prescr .hasClassName("not-printable") && 
+        !task   .hasClassName("not-printable") && 
+         forms  .hasClassName("not-printable")) {
+      task.setStyle({pageBreakAfter: "auto"});
+    }
+    else {
+      patient.setStyle({pageBreakAfter: "always"});
+      sejour .setStyle({pageBreakAfter: "always"});
+      prescr .setStyle({pageBreakAfter: "always"});
+      task   .setStyle({pageBreakAfter: "always"});
+    }
+  }
+  
+  loadExForms = function(checkbox, sejour_id) {
+    if (checkbox._loaded) return;
+    
+    // Indication du chargement
+    $("forms-loading").setStyle({display: "inline-block"});
+    $$("button.print").each(function(e){ e.disabled = true; });
+    
+    ExObject.loadExObjects("CSejour", sejour_id, "ex-objects", 3, null, {print: 1, onComplete: function(){
+      $("forms-loading").hide();
+      $$("button.print").each(function(e){ e.disabled = null; });
+    }});
+    
+    checkbox._loaded = true;
+  }
+  
+  resetPrintable = function(sejour_id) {
+    var dossier_soin = $("dossier-"+sejour_id);
+    dossier_soin.select(".print_patient")[0].removeClassName("not-printable").setStyle({pageBreakAfter: "always"});
+    dossier_soin.select(".print_sejour")[1].removeClassName("not-printable").setStyle({pageBreakAfter: "always"});
+    dossier_soin.select(".print_prescription")[0].removeClassName("not-printable").setStyle({pageBreakAfter: "always"});
+    dossier_soin.select(".print_tasks")[0].removeClassName("not-printable").setStyle({pageBreakAfter: "auto"});
+  }
 </script>
 <table class="tbl table_print">
   <tr>

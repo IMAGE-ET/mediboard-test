@@ -46,7 +46,7 @@
         </tr>
 				{{if $consult_anesth->operation_id}}
 				<tr>
-          <td colspan="2">
+          <td colspan="2" class="text">
             Intervention le <strong>{{$consult_anesth->_ref_operation->_ref_plageop->date|date_format:"%A %d/%m/%Y"}}</strong>
             {{if $consult_anesth->_ref_operation->libelle}}
               - {{$consult_anesth->_ref_operation->libelle}}
@@ -63,7 +63,7 @@
         </tr>
 				{{/if}}
         <tr>
-          <td class="halfPane">
+          <td class="halfPane text">
             {{if $consult_anesth->operation_id}}
 	            <table>
 	              <tr>
@@ -83,7 +83,7 @@
             Position : <strong>{{tr}}CConsultAnesth.position.{{$consult_anesth->position}}{{/tr}}</strong>
             {{/if}}
           </td>
-          <td class="halfPane">
+          <td class="halfPane text">
             <strong>Techniques Complémentaires</strong>
             <ul>
               {{foreach from=$consult_anesth->_ref_techniques item=curr_tech}}
@@ -186,7 +186,7 @@
           <th class="category" colspan="2">Allergies</th>
         </tr>
         <tr>
-          <td style="font-weight: bold; white-space: normal; font-size:130%;">
+          <td style="font-weight: bold; white-space: normal; font-size:130%;" class="text">
           {{if $dossier_medical->_ref_antecedents_by_type && $dossier_medical->_ref_antecedents_by_type.alle|@count}}
             <div class="small-warning">
             {{foreach from=$dossier_medical->_ref_antecedents_by_type.alle item=currAnt}}

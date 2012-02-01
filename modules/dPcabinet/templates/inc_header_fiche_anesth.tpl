@@ -4,6 +4,9 @@
       <table width="100%">
         <tr>
           <th class="title" colspan="4">
+            {{if $offline}}
+              <button type="button" style="float: right;" class="cancel" onclick="Control.Modal.close();">{{tr}}Close{{/tr}}</button>
+            {{/if}}
             <a href="#" onclick="window.print()">
               Consultation pré-anesthésique
             </a>

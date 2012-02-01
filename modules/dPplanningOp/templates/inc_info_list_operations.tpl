@@ -30,7 +30,16 @@
   </td>
 	{{/if}}
   <td class="narrow button">
-    <button class="{{if $_operation->_ref_consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}" type="button" onclick="printFicheAnesth('{{$_operation->_ref_consult_anesth->_ref_consultation->_id}}', '{{$_operation->_id}}');">
+    <button class="{{if $_operation->_ref_consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}" type="button"
+    onclick="
+    {{if $offline}}
+      var fiche = $('fiche_anesth_{{$_operation->_id}}');
+      if (fiche) {
+        modal(fiche);
+      }
+    {{else}}
+      printFicheAnesth('{{$_operation->_ref_consult_anesth->_ref_consultation->_id}}', '{{$_operation->_id}}');
+    {{/if}}">
       Fiche d'anesthésie
     </button>
     <br />

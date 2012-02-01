@@ -270,9 +270,14 @@
       {{/foreach}}
     </td>
   </tr>
+  
+  <!-- Dossier Médical -->
+  {{if $object->_ref_dossier_medical->_canRead}}
+    <tr>
+      <td colspan="2">
+        {{mb_include module=dPpatients template=CDossierMedical_complete object=$object->_ref_dossier_medical}}
+      </td>
+    </tr>
+  {{/if}}
+  
 </table>
-
-<!-- Dossier Médical -->
-{{if $object->_ref_dossier_medical->_canRead}}
-  {{mb_include module=dPpatients template=CDossierMedical_complete object=$object->_ref_dossier_medical}}
-{{/if}}
