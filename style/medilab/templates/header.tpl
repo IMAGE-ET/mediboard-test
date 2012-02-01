@@ -41,6 +41,8 @@ var Menu = {
 
   <div id="menubar" class="iconed">
     <div id="menuTools">
+      <a id="toggleIcons" href="#1" onclick="Menu.toggle()" title="{{tr}}menu-toggleIcons{{/tr}}" />
+      
       {{if $portal.help}}
         <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">
           <img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />
@@ -68,8 +70,6 @@ var Menu = {
       <a href="?logout=-1" title="{{tr}}menu-logout{{/tr}}">
         <img src="style/{{$uistyle}}/images/icons/logout.png" alt="{{tr}}menu-logout{{/tr}}" />
       </a>
-      
-      <a id="toggleIcons" href="#1" onclick="Menu.toggle()" title="{{tr}}menu-toggleIcons{{/tr}}" />
     </div>
 
     <hr />

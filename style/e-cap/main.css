@@ -153,6 +153,7 @@ td#mainHeader td.welcome {
   color: #fff;
   width: 130px;
   text-align: center;
+  position: relative;
 }
 
 #leftMenu #menubar a {
@@ -193,12 +194,9 @@ td#mainHeader td.welcome {
 }
 
 #leftMenu #menubar #menuTools a#toggleIcons {
-/** Float takes room from menu item, very ugly
- * float: left;
- */
-  position: relative;
-  left: -55px;
-  top: 2px;
+  position: absolute;
+  top: 26px;
+  left: 2px;
 }
 
 #leftMenu #menubar.iconed #menuTools a#toggleIcons {
