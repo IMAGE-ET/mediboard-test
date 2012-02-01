@@ -91,8 +91,13 @@ class CReceiverIHE extends CInteropReceiver {
   
   function sendEvent($evenement, CMbObject $mbObject) {
     $evenement->_receiver = $this;
-
-    $evenement->build($mbObject);    
+    
+    // build_mode = Mode simplifié lors de la génération du message
+    $this->loadConfigValues();
+    CHL7v2Message::setBuildMode($this->_configs["build_mode"]); 
+    $evenement->build($mbObject);  
+    CHL7v2Message::resetBuildMode(); 
+      
     $msg = $evenement->flatten();
     
     if ($this->actif && $msg) {

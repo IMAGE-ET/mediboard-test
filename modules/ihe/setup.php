@@ -148,8 +148,14 @@ class CSetupihe extends CSetup {
                 ADD `receiving_application` VARCHAR (255),
                 ADD `receiving_facility` VARCHAR (255);";
     $this->addQuery($query);
+    
+    $this->makeRevision("0.13");
+    
+    $query = "ALTER TABLE `receiver_ihe_config` 
+                ADD `build_mode` ENUM ('normal','simple') DEFAULT 'normal';";
+    $this->addQuery($query);
        
-    $this->mod_version = "0.13";
+    $this->mod_version = "0.14";
   }
 }
 
