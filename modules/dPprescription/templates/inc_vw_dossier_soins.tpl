@@ -326,20 +326,9 @@ Main.add(function () {
   	</ul>
     
     <span style="float: right;">
-      {{if $prescription->type == "sejour"}}
-        <input type="checkbox" id="in_progress_plan" name="in_progress" checked="checked"/>
-        <label for="in_progress_plan" style="font-size: x-small;" title="{{tr}}CPrescription.print_in_progress{{/tr}}">En cours</label>
-      {{else}}
-      <input type="checkbox" id="in_progress_plan" name="in_progress" style="display: none;"/>
-      {{/if}}
-      <input type="checkbox" id="dci_plan" name="dci" {{if $prescription->type=="externe" && $app->user_prefs.dci_checked_externe}}checked="checked"{{/if}}/>
-      <label for="dci_plan" style="font-size: x-small" title="{{tr}}CPrescription.print_dci{{/tr}}">DCI</label>
-      <input type="checkbox" id="globale_plan" name="globale" />
-      <label for="globale_plan" style="font-size: 0.8em" title="{{tr}}CPrescription.print_globale{{/tr}}">Globale</label>
-      
       <button type="button" class="print"
-            onclick="Prescription.printPrescription('{{$prescription->_id}}', 0, '{{$prescription->object_id}}', null, $('dci_plan').checked ? 1: 0, $('globale_plan').checked ? 1 : 0, $('in_progress_plan').checked ? 1 : 0);" />Ordonnance</button>
-   </span>
+            onclick="Prescription.printOrdonnance('{{$prescription->_id}}');" />Ordonnance</button>
+    </span>
    
    <hr class="control_tabs" />
   	

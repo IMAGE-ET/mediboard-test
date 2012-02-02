@@ -9,13 +9,13 @@
  */
  
 Prescription = {
-	hide_header: false,
-	
-	init: function(options){
+  hide_header: false,
+  
+  init: function(options){
     Object.extend(Prescription, options);
   },
-	
-	// Multiples occurences de la même widget
+  
+  // Multiples occurences de la même widget
   suffixes: [],
   addEquivalent: function(code, line_id, mode_pharma, mode_protocole){
     var url = new Url("dPprescription", "httpreq_substitute_line");
@@ -30,25 +30,25 @@ Prescription = {
     var oFormDate = document.forms.selDateLine;
     
     if(oFormDate){
-			if(oFormDate.debut && oFormDate.debut.value){
-			  $V(oForm.debut, oFormDate.debut.value);  
-			}
-			if(oFormDate.time_debut && oFormDate.time_debut.value){
-			  $V(oForm.time_debut, oFormDate.time_debut.value);
-			}
-			if(oFormDate.jour_decalage && oFormDate.jour_decalage.value){
+      if(oFormDate.debut && oFormDate.debut.value){
+        $V(oForm.debut, oFormDate.debut.value);  
+      }
+      if(oFormDate.time_debut && oFormDate.time_debut.value){
+        $V(oForm.time_debut, oFormDate.time_debut.value);
+      }
+      if(oFormDate.jour_decalage && oFormDate.jour_decalage.value){
         $V(oForm.jour_decalage, oFormDate.jour_decalage.value);
-			}
+      }
       if(oFormDate.decalage_line && oFormDate.decalage_line.value){
-			  $V(oForm.decalage_line, oFormDate.decalage_line.value);
-			}
-			if(oFormDate.unite_decalage && oFormDate.unite_decalage.value){
-			  $V(oForm.unite_decalage, oFormDate.unite_decalage.value);
-		  }
-			if(oFormDate.operation_id && oFormDate.operation_id.value){
+        $V(oForm.decalage_line, oFormDate.decalage_line.value);
+      }
+      if(oFormDate.unite_decalage && oFormDate.unite_decalage.value){
+        $V(oForm.unite_decalage, oFormDate.unite_decalage.value);
+      }
+      if(oFormDate.operation_id && oFormDate.operation_id.value){
         $V(oForm.operation_id, oFormDate.operation_id.value);
       }
-		}
+    }
     oForm.code_cip.value = code;
     var mode_pharma = oForm.mode_pharma.value;
     return onSubmitFormAjax(oForm);
@@ -58,7 +58,7 @@ Prescription = {
     var oForm     = document.forms.addLineElement;
     var oFormDate = document.forms.selDateLine;
 
-		if(oFormDate){
+    if(oFormDate){
       if(oFormDate.debut && oFormDate.debut.value){
         $V(oForm.debut, oFormDate.debut.value);  
       }
@@ -132,7 +132,7 @@ Prescription = {
     submitFormAjax(oForm, 'systemMsg');
   },
   delLine: function(line_id, chapitre) {
-	  chapitre = chapitre || 'medicament';
+    chapitre = chapitre || 'medicament';
     var oForm = document.addLine;
     oForm.prescription_line_medicament_id.value = line_id;
     oForm.del.value = 1;
@@ -191,7 +191,7 @@ Prescription = {
         return;
       }
       
-			try {
+      try {
         window.opener.PrescriptionEditor.refresh(oForm.object_id.value, oForm.object_class.value);
       } catch (e){ }
       var urlPrescription = new Url("dPprescription", "httpreq_vw_prescription");
@@ -199,50 +199,50 @@ Prescription = {
       urlPrescription.addParam("element_id", element_id);
       urlPrescription.addParam("chapitre", chapitre);
       urlPrescription.addParam("mode_protocole", mode_protocole);
-			urlPrescription.addParam("mode_pharma", mode_pharma);
-			urlPrescription.addParam("hide_header", Prescription.hide_header ? 1 : 0);  
-			if (hide_old_lines) {
-	  	  urlPrescription.addParam("hide_old_lines", hide_old_lines);
-	    }
-			
+      urlPrescription.addParam("mode_pharma", mode_pharma);
+      urlPrescription.addParam("hide_header", Prescription.hide_header ? 1 : 0);  
+      if (hide_old_lines) {
+        urlPrescription.addParam("hide_old_lines", hide_old_lines);
+      }
+      
       if(mode_pharma == "1"){
           urlPrescription.requestUpdate("div_medicament", { onComplete: function(){ Prescription.testPharma(line_id) } });      
       } else {
-	      if(mode_protocole == "1"){
-	        urlPrescription.requestUpdate("vw_protocole");
-	      } else {
-		 	    if(chapitre){
-	          if (window[chapitre+'Loaded'] || chapitre == "medicament") {
-	            urlPrescription.requestUpdate("div_"+chapitre, { onComplete: function(){
-							  if(window.viewListPrescription){
-						      viewListPrescription();
-						    }
-							}} );
-	          } else {
-	            urlPrescription.requestUpdate("div_"+chapitre);
-	          }
-	        } else {
-	         // Dans le cas de la selection d'un protocole, rafraichissement de toute la prescription
-	         urlPrescription.requestUpdate("produits_elements");
-	        }
-	      }
+        if(mode_protocole == "1"){
+          urlPrescription.requestUpdate("vw_protocole");
+        } else {
+           if(chapitre){
+            if (window[chapitre+'Loaded'] || chapitre == "medicament") {
+              urlPrescription.requestUpdate("div_"+chapitre, { onComplete: function(){
+                if(window.viewListPrescription){
+                  viewListPrescription();
+                }
+              }} );
+            } else {
+              urlPrescription.requestUpdate("div_"+chapitre);
+            }
+          } else {
+           // Dans le cas de la selection d'un protocole, rafraichissement de toute la prescription
+           urlPrescription.requestUpdate("produits_elements");
+          }
+        }
       }
   },
   testPharma: function(line_id){  
     if(line_id){
-	    var oFormAccordPraticien = document.forms["editLineAccordPraticien-"+line_id];
-	    if(oFormAccordPraticien.accord_praticien.value == 0){
-	      if(confirm("Modifiez vous cette ligne en accord avec le praticien ?")){
-	        oFormAccordPraticien.__accord_praticien.checked = true;
-	        $V(oFormAccordPraticien.accord_praticien,"1");
-	      }
-	    }
+      var oFormAccordPraticien = document.forms["editLineAccordPraticien-"+line_id];
+      if(oFormAccordPraticien.accord_praticien.value == 0){
+        if(confirm("Modifiez vous cette ligne en accord avec le praticien ?")){
+          oFormAccordPraticien.__accord_praticien.checked = true;
+          $V(oFormAccordPraticien.accord_praticien,"1");
+        }
+      }
     }
   },
   reloadPrescSejour: function(prescription_id, sejour_id, praticien_sortie_id, mode_anesth, operation_id, chir_id, anesth_id, full_line_guid, pratSel_id, mode_sejour, praticien_for_prot_id){
     if(!$('prescription_sejour')){
-			return;
-		}
+      return;
+    }
     
     if(!mode_sejour){
       if(document.mode_affichage){
@@ -256,7 +256,7 @@ Prescription = {
         praticien_for_prot_id = document.forms.selPraticienLine.praticien_id.value;
       }
     }
-		
+    
     var url = new Url("dPprescription", "httpreq_vw_prescription");
     url.addParam("prescription_id", prescription_id);
     url.addParam("sejour_id", sejour_id);
@@ -264,8 +264,8 @@ Prescription = {
     if (window.DMI_operation_id) {
       url.addParam("operation_id", window.DMI_operation_id);
     }
-		url.addParam("hide_header", Prescription.hide_header ? 1 : 0);	
-		url.addParam("chir_id", chir_id);
+    url.addParam("hide_header", Prescription.hide_header ? 1 : 0);  
+    url.addParam("chir_id", chir_id);
     url.addParam("anesth_id", anesth_id);
     url.addParam("full_mode", "1");
     url.addParam("praticien_sortie_id", praticien_sortie_id);
@@ -275,36 +275,36 @@ Prescription = {
     url.addParam("pratSel_id", pratSel_id);
     url.addParam("praticien_for_prot_id", praticien_for_prot_id);
     url.requestUpdate("prescription_sejour", { onComplete: function(){
-		  if(window.viewListPrescription){
-				viewListPrescription();
-			}
-		} } );
+      if(window.viewListPrescription){
+        viewListPrescription();
+      }
+    } } );
   },
-	reloadLine: function(line_guid, mode_protocole, mode_pharma, operation_id, mode_substitution, advanced_prot){
-		if (window.modalPrescription) {
-			modalPrescription.close();
-	  }
-		
+  reloadLine: function(line_guid, mode_protocole, mode_pharma, operation_id, mode_substitution, advanced_prot){
+    if (window.modalPrescription) {
+      modalPrescription.close();
+    }
+    
     $('modalPrescriptionLine').update('');
-		
-		modalPrescription = modal($('modalPrescriptionLine')/*, {
-			afterClose: function() {
-				// trigger ex_classes
-				ExObject.trigger(line_guid, "fermeture");
-			}
-		}*/);
-		
-		var url = new Url("dPprescription", "httpreq_vw_line");
-		url.addParam("line_guid", line_guid);
-		url.addParam("mode_protocole", mode_protocole);
-		url.addParam("mode_pharma", mode_pharma);
-		url.addParam("advanced_prot", advanced_prot);
-		if (window.DMI_operation_id) {
-	  	url.addParam("operation_id", window.DMI_operation_id);
-	  }
-		url.addParam("mode_substitution", mode_substitution);
-		url.requestUpdate("modalPrescriptionLine", { onComplete: function(){ modalPrescription.position(); } });
-	},
+    
+    modalPrescription = modal($('modalPrescriptionLine')/*, {
+      afterClose: function() {
+        // trigger ex_classes
+        ExObject.trigger(line_guid, "fermeture");
+      }
+    }*/);
+    
+    var url = new Url("dPprescription", "httpreq_vw_line");
+    url.addParam("line_guid", line_guid);
+    url.addParam("mode_protocole", mode_protocole);
+    url.addParam("mode_pharma", mode_pharma);
+    url.addParam("advanced_prot", advanced_prot);
+    if (window.DMI_operation_id) {
+      url.addParam("operation_id", window.DMI_operation_id);
+    }
+    url.addParam("mode_substitution", mode_substitution);
+    url.requestUpdate("modalPrescriptionLine", { onComplete: function(){ modalPrescription.position(); } });
+  },
   reloadPrescPharma: function(prescription_id){
     var url = new Url("dPprescription", "httpreq_vw_prescription");
     url.addParam("prescription_id", prescription_id);
@@ -314,7 +314,7 @@ Prescription = {
     url.requestUpdate("prescription_pharma");
   },
   reloadPrescPerf: function(prescription_id, mode_protocole, mode_pharma){
-	  Prescription.reload(prescription_id,'','medicament',mode_protocole,mode_pharma);
+    Prescription.reload(prescription_id,'','medicament',mode_protocole,mode_pharma);
   },
   reloadAddProt: function(protocole_id) {
     Prescription.reload(protocole_id, '','', '1','0');
@@ -332,7 +332,7 @@ Prescription = {
       alert('Pas de prescription en cours');
     }
   },
-  printPrescription: function(prescription_id, print, object_id, no_pdf, dci, globale, in_progress) {
+  printPrescription: function(prescription_id, object_id, no_pdf, dci, globale, in_progress) {
     // Select de choix du praticien
     var praticien_sortie_id = "";
     if(document.forms.selPraticienLine && (globale == undefined || globale == 0)){
@@ -344,19 +344,31 @@ Prescription = {
     if (in_progress == undefined) {
       in_progress = 0;
     }
-    if(prescription_id){
+    if (prescription_id){
       var url = new Url("dPprescription", "print_prescription");
       url.addParam("prescription_id", prescription_id);
       if(!object_id && !no_pdf) {
-	  	  url.addParam("suppressHeaders", 1);
-	    }
+        url.addParam("suppressHeaders", 1);
+      }
       url.addParam("globale", globale);
       url.addParam("dci", dci);
       url.addParam("in_progress", in_progress);
       url.addParam("praticien_sortie_id", praticien_sortie_id);
-      url.addParam("print", print);
-			url.addParam("no_pdf", no_pdf);
+      url.addParam("no_pdf", no_pdf);
       url.popup(800, 600, "print_prescription");
+    }
+  },
+  printOrdonnance: function(prescription_id, praticien_sortie_id) {
+    if (prescription_id) {
+      var url = new Url("dPprescription", "ajax_print_ordonnance");
+      // Select de choix du praticien
+      var form = document.forms.selPraticienLine;
+      if (Object.isUndefined(praticien_sortie_id) && !Object.isUndefined(form)) {
+        var praticien_sortie_id = document.forms.selPraticienLine.praticien_id.value;
+      }
+      url.addParam("prescription_id", prescription_id);
+      url.addParam("praticien_sortie_id", praticien_sortie_id);
+      url.requestModal("600", "400");
     }
   },
   viewFullAlertes: function(prescription_id) {
@@ -376,8 +388,8 @@ Prescription = {
     var link = $('prescription_tab_group').select("a[href=#"+tabName+"]")[0];
 
     lineCountNonSignee > 0 ? link.addClassName("wrong") : link.removeClassName("wrong");
-		lineCount == 0 ? link.addClassName("empty") : link.removeClassName("empty");
-		
+    lineCount == 0 ? link.addClassName("empty") : link.removeClassName("empty");
+    
     link.select('span')[0].innerHTML = lineCount > 0 ? " ("+lineCount+")" : "";
   },
   viewAllergies: function(prescription_id){
@@ -394,10 +406,10 @@ Prescription = {
     url.popup(900, 640, "Descriptif produit");
   },
   viewHistorique: function(prescription_id, type){
-	  var url = new Url("dPprescription", "view_historique");
-	  url.addParam("prescription_id", prescription_id);
-	  url.addParam("type", type);
-	  url.popup(500, 400, type);
+    var url = new Url("dPprescription", "view_historique");
+    url.addParam("prescription_id", prescription_id);
+    url.addParam("type", type);
+    url.popup(500, 400, type);
   },
   popup: function(prescription_id, type){
     switch (type) {
@@ -418,11 +430,11 @@ Prescription = {
         break;
     }
   },
-	popupLabo : function(sejour_id){
+  popupLabo : function(sejour_id){
     var url = new Url("dPImeds", "httpreq_vw_sejour_results");
     url.addParam("sejour_id", sejour_id);
     url.popup(800,800,"Résultats Labo");
-	},
+  },
   viewSubstitutionLines: function(object_id, object_class, mode_pack){
     var url = new Url("dPprescription", "httpreq_add_substitution_line");
     url.addParam("object_id", object_id);
@@ -441,26 +453,26 @@ Prescription = {
     var url = new Url("dPprescription", "vw_stat_posologie");
     url.addParam("filter", filter);
     url.addParam("praticien_id", praticien_id);
-		url.addParam("object_class", object_class);
+    url.addParam("object_class", object_class);
     url.popup(800,400, "statistiques d'utilisation des posologies");
   },
-	updatePerop: function(sejour_id){
-		var url = new Url("dPprescription", "httpreq_vw_perop");
-		url.addParam("sejour_id", sejour_id);
-		url.addParam("operation_id", window.DMI_operation_id);
-		url.requestUpdate("perop");
-	},
-	updateDebit: function(line_id) {
-		var oForm = getForm("editPerf-"+line_id);
+  updatePerop: function(sejour_id){
+    var url = new Url("dPprescription", "httpreq_vw_perop");
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("operation_id", window.DMI_operation_id);
+    url.requestUpdate("perop");
+  },
+  updateDebit: function(line_id) {
+    var oForm = getForm("editPerf-"+line_id);
     var volume = $V(oForm.volume_debit);
     var duree = $V(oForm.duree_debit);
 
-		if(volume == 0 || duree == 0){
-			return;
-		}
-		
-		var debit = (volume / duree).toFixed(2);
-	  if (isNaN(debit)) {
+    if(volume == 0 || duree == 0){
+      return;
+    }
+    
+    var debit = (volume / duree).toFixed(2);
+    if (isNaN(debit)) {
       debit = "-";
     } 
     $("debitLineMix-"+line_id).update(debit);
@@ -479,19 +491,19 @@ Prescription = {
     window.selectLines.addParam("prescriptions_ids[]", prescriptions_ids);
     window.selectLines.requestModal(1000,700);
   },
-	showFavoris: function(praticien_id, chapitre, prescription_id, mode_protocole, mode_pharma){
-	  if(document.forms.selPraticienLine){
-			var oFormPraticien = window.document.forms.selPraticienLine;
-	    praticien_id = $V(oFormPraticien.praticien_id)
-	  }
-		
-		var url = new Url("dPprescription", "ajax_vw_favoris_prescription");
-		url.addParam("praticien_id", praticien_id);
+  showFavoris: function(praticien_id, chapitre, prescription_id, mode_protocole, mode_pharma){
+    if(document.forms.selPraticienLine){
+      var oFormPraticien = window.document.forms.selPraticienLine;
+      praticien_id = $V(oFormPraticien.praticien_id)
+    }
+    
+    var url = new Url("dPprescription", "ajax_vw_favoris_prescription");
+    url.addParam("praticien_id", praticien_id);
     url.addParam("chapitre", chapitre);
     url.addParam("prescription_id", prescription_id);
-		url.addParam("mode_protocole", mode_protocole);
+    url.addParam("mode_protocole", mode_protocole);
     url.addParam("mode_pharma", mode_pharma);
     
-	  url.requestModal(800,600);
-	}
+    url.requestModal(800,600);
+  }
 };

@@ -387,18 +387,8 @@ Main.add( function(){
         {{/if}}
 			 
       <div style="float: right; text-align: right;">
-        {{if $prescription->type == "sejour"}}
-        <input type="checkbox" id="in_progress" name="in_progress" checked="checked"/>
-        <label for="in_progress" style="font-size: x-small;" title="{{tr}}CPrescription.print_in_progress{{/tr}}">En cours</label>
-				{{else}}
-        <input type="checkbox" id="in_progress" name="in_progress" style="display: none;"/>
-        {{/if}}
-				<input type="checkbox" id="dci" name="dci" {{if $prescription->type=="externe" && $app->user_prefs.dci_checked_externe}}checked="checked"{{/if}}/>
-        <label for="dci" style="font-size: x-small" title="{{tr}}CPrescription.print_dci{{/tr}}">DCI</label>
-        <input type="checkbox" id="globale" name="globale" />
-        <label for="globale" style="font-size: 0.8em" title="{{tr}}CPrescription.print_globale{{/tr}}">Globale</label>
       	<button type="button" class="print"
-          onclick="Prescription.printPrescription('{{$prescription->_id}}', 0, '{{$prescription->object_id}}', null, $('dci').checked ? 1: 0, $('globale').checked ? 1 : 0, $('in_progress').checked ? 1 : 0);" />Ordonnance</button>
+          onclick="Prescription.printOrdonnance('{{$prescription->_id}}');" />Ordonnance</button>
         {{if !$hide_header}}
 				<br />
 				{{/if}}
@@ -705,7 +695,7 @@ Main.add( function(){
 	
 	<tr>
 		<td class="button">
-			<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}', 0, '{{$prescription->object_id}}', null, $('dci').cheched ? 1 : 0, $('globale').checked ? 1 : 0, $('in_progress').checked ? 1 : 0);" />Ordonnance</button>
+			<button type="button" class="print" onclick="Prescription.printOrdonnance('{{$prescription->_id}}');" />Ordonnance</button>
       {{if $prescription->object_id && $prescription->object_class == "CSejour"}}
         <button type="button" class="print" onclick="PlanSoins.printBons('{{$prescription->_id}}');" title="{{tr}}Print{{/tr}}">Bons</button>
       {{/if}}

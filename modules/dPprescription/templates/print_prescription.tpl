@@ -15,10 +15,6 @@
 {{/if}}
 
 {{if $prescription->object_id}}
-  <script type="text/javascript">
-  //Main.add(window.print);
-  </script> 
-  
   <!-- Fermeture des tableaux -->
       </td>
     </tr>
@@ -28,6 +24,12 @@
   <body>
 {{/if}}
 
+<script type="text/javascript">
+  Main.add(function() {
+    window.focus();
+    window.print();
+  });
+</script>
 <style type="text/css">
 {{include file=../../dPcompteRendu/css/print.css nodebug="true"}}
 
@@ -86,65 +88,6 @@ p.duplicata {
   text-align: center;
 }
 </style>
-
-{{if $prescription->object_id}}
-  <div class="action not-printable">
-    <button type="button" class="print" onclick="modalPrint = modal($('modal-print'));">
-      Impression partielle
-    </button>
-    {{if $partial_print}}
-    <div class="small-warning" style="display: inline">Ordonnance affichée partiellement</div>
-    {{/if}}
-  </div>
-  
-  <form name="printLinesOrdonnance" medhod="get" action="?" class="not-printable">
-    <input type="hidden" name="m" value="dPprescription" />
-    <input type="hidden" name="a" value="{{$a}}" />
-    <input type="hidden" name="dialog" value="{{$dialog}}" />
-    
-    {{assign var=numCols value=2}}
-    <div id="modal-print" style="display: none;">
-      <table class="form">
-        <tr>
-          <th class="title" colspan="{{$numCols}}">
-            <button type="button" class="cancel notext" onclick="modalPrint.close();" style="float: right;">{{tr}}Close{{/tr}}</button>
-            Impression partielle
-          </th>
-        </tr>
-        {{foreach from=$all_lines item=_lines_by_chap name=chaps}}
-           {{foreach from=$_lines_by_chap item=_line name="lines"}}
-             {{if $smarty.foreach.lines.first}}
-             <tr>
-               <th class="category" colspan="{{$numCols}}">
-                 {{if $_line instanceof CPrescriptionLineElement}}
-                 {{tr}}CCategoryPrescription.chapitre.{{$_line->_chapitre}}{{/tr}}
-                {{else}}
-                  Médicaments
-                {{/if}}
-                </th>
-             </tr>
-             <tr>
-             {{/if}}
-             
-             {{assign var=i value=$smarty.foreach.lines.iteration}}
-             <td class="text">
-               <input type="checkbox" name="selected_lines[]" value="{{$_line->_guid}}" {{if in_array($_line->_guid, $selected_lines)}}checked="checked"{{/if}} /> {{$_line->_view}}
-             </td>
-             {{if (($i % $numCols) == 0)}}</tr>
-               {{if !$smarty.foreach.lines.last && !$smarty.foreach.chaps.last}}
-                 <tr>
-               {{/if}}
-             {{/if}}
-             
-          {{/foreach}}
-        {{/foreach}}
-      </table>
-      <div class="button">
-        <button class="search">Filtrer</button>
-      </div>
-    </div>
-  </form>
-{{/if}}
 
 <div class="header" onclick="window.print();" style="cursor: pointer">
   {{if $_ald}}

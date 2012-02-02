@@ -14,13 +14,11 @@ $can->needsRead();
 
 $praticien_sortie_id = CValue::getOrSession("praticien_sortie_id");
 $only_dmi            = CValue::getOrSession("only_dmi");
-$print               = CValue::getOrSession("print", 0);
 $no_pdf              = CValue::getOrSession("no_pdf", 0);
 $operation_id        = CValue::getOrSession("operation_id");
 $globale             = CValue::getOrSession("globale");
 $in_progress         = CValue::getOrSession("in_progress");
 $selected_lines      = CValue::get("selected_lines", array());
-
 $partial_print = count($selected_lines) > 0; 
 
 $linesDMI = array();
@@ -101,7 +99,6 @@ $lines["medicaments"]["comment"]["no_ald"] = array();
 $lines["medicaments"]["dm"]["ald"] = array();
 $lines["medicaments"]["dm"]["no_ald"] = array();
 $linesElt = array();
-$all_lines = array();
 
 // Initialisation du tableau
 if(count($prescription->_ref_lines_elements_comments)){
@@ -162,9 +159,6 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 		if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$line_medicament->signee && $prescription->object_id){
 		  continue;
 		}
-    
-		
-		$all_lines["medicaments"][] = $line_medicament;
     		
 		if($partial_print && !in_array($line_medicament->_guid, $selected_lines)){
       continue;
@@ -235,7 +229,6 @@ foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
 	  continue;
   }
 
-  $all_lines["medicaments"][] = $_prescription_line_mix;
   if($partial_print && !in_array($_prescription_line_mix->_guid, $selected_lines)){
     continue;
   }
@@ -273,8 +266,6 @@ if(count($prescription->_ref_lines_elements_comments)){
 			      $executant = $element->_ref_executant->_guid;
 			    }
 					
-					$all_lines[$name_chap][] = $element;
-          
 					if($partial_print && !in_array($element->_guid, $selected_lines)){
 					  continue;
 					}
@@ -365,7 +356,6 @@ $smarty->assign("only_dmi", $only_dmi);
 $smarty->assign("header", $header_height);
 $smarty->assign("footer", $footer_height);
 $smarty->assign("traduction"     , $traduction);
-$smarty->assign("print"          , $print);
 $smarty->assign("praticien"      , $praticien);
 $smarty->assign("function"       , $praticien->_id ? $praticien->_ref_function : new CFunctions());
 $smarty->assign("date"           , mbDate());
@@ -380,7 +370,6 @@ $smarty->assign("dci"            , CValue::getOrSession("dci"));
 $smarty->assign("generated_header", @$header->_id ? $template_header->document : "");
 $smarty->assign("generated_footer", @$footer->_id ? $template_footer->document : "");
 $smarty->assign("code_rpps"      , $code_rpps);
-$smarty->assign("all_lines"      , $all_lines);
 $smarty->assign("selected_lines" , $selected_lines);
 $smarty->assign("partial_print", $partial_print);
 

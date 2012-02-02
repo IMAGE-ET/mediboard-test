@@ -1746,6 +1746,7 @@ $locales['config-dPprescription-CPrisePosologie-show_poso_bcb-desc'] = 'Affichag
 $locales['config-object_handlers-CPrescriptionLineHandler'] = 'Modification automatique des lignes';
 $locales['mod-dPprescription-tab-ajax_administration_for_consult'] = 'Validation d\'une administration';
 $locales['mod-dPprescription-tab-ajax_merge_prescriptions'] = 'Modale de fusion de prescriptions';
+$locales['mod-dPprescription-tab-ajax_print_ordonnance'] = 'Impression de l\'ordonnance';
 $locales['mod-dPprescription-tab-ajax_select_lines'] = 'Mode avancé';
 $locales['mod-dPprescription-tab-ajax_stopped_lines'] = 'Reprise des lignes arretes';
 $locales['mod-dPprescription-tab-ajax_validated_lines'] = 'Arrêt des lignes de prescription';

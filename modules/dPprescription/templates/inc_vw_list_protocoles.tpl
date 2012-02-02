@@ -65,7 +65,7 @@ Main.add(function(){
 		      {{if $can->admin}}
 				    <button class="tick notext" type="button" onclick="Protocole.exportProtocole('{{$protocole->_id}}')">{{tr}}CPrescription.export_protocole{{/tr}}</button>
 				  {{/if}}
-				  <button class="print notext" type="button" onclick="Prescription.printPrescription('{{$protocole->_id}}', 1)">{{tr}}Print{{/tr}}</button>
+				  <button class="print notext" type="button" onclick="Prescription.printPrescription('{{$protocole->_id}}')">{{tr}}Print{{/tr}}</button>
 					
 				  {{if $owner != "prat" || $app->user_id == $praticien_id || !$is_praticien}}
 				    <button class="trash notext" type="button" onclick="if (confirm('{{tr}}CProtocole-confirm-deletion{{/tr}}{{$protocole->libelle|smarty:nodefaults|JSAttribute}}?'))Protocole.remove('{{$protocole->_id}}')">Supprimer</button>

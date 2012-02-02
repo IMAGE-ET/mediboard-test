@@ -12,7 +12,7 @@
   	  </tr>
   	  <tr>
   	    <td style="text-align: center">
-  	      <button class="print" type="button" onclick="Prescription.printPrescription('{{$prescription_preadm->_id}}','0', '{{$prescription_preadm->object_id}}')">Imprimer</button>
+  	      <button class="print" type="button" onclick="Prescription.printOrdonnance('{{$prescription_preadm->_id}}')">Imprimer</button>
   	    </td>
   	  </tr>
   	</table>
@@ -25,7 +25,7 @@
       </tr>
       <tr>
        <td style="text-align: center">
-           <button class="print" type="button" onclick="Prescription.printPrescription('{{$prescription_sejour->_id}}','0', '{{$prescription_sejour->object_id}}')">Imprimer</button>
+           <button class="print" type="button" onclick="Prescription.printOrdonnance('{{$prescription_sejour->_id}}')">Imprimer</button>
        </td>
       </tr>
     </table>
@@ -38,7 +38,7 @@
 	  </tr>
 	  <tr>
 	   <td style="text-align: center">
-	       <button class="print" type="button" onclick="Prescription.printPrescription('{{$prescription_sortie->_id}}','0', '{{$prescription_preadm->object_id}}')">Imprimer</button>
+	       <button class="print" type="button" onclick="Prescription.printOrdonnance('{{$prescription_sortie->_id}}')">Imprimer</button>
 	   </td>
 	  </tr>
 	</table>

@@ -66,7 +66,7 @@
     </li>
     {{if $sejour->_ref_prescription_sejour->_id}}
     <li style="float: right">
-      <button type="button" class="print" onclick="Prescription.printPrescription('{{$sejour->_ref_prescription_sejour->_id}}', 0, null, null, 0, 1);">
+      <button type="button" class="print" onclick="Prescription.printOrdonnance('{{$sejour->_ref_prescription_sejour->_id}}');">
         Prescription
       </button>
     </li>

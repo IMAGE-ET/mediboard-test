@@ -40,22 +40,14 @@
 		  <!-- Remarque sur la prise -->
 		  {{if $med->_specif_prise && $med->_ref_prises|@count}}
 		    <br />
-				({{if $print}}
-          {{$med->_specif_prise|escape:"html"}}
-        {{else}}
-          {{$med->_specif_prise}}
-        {{/if}})
+				({{mb_value object=$med field=_specif_prise}})
 		  {{/if}}
     </li>
     {{/if}}
 		<!-- Commentaire -->
       {{if $med->commentaire}}
 	      <em>
-	      	{{if $print}}
-	          {{$med->commentaire|escape:"html"}}
-	        {{else}}
-	          {{$med->commentaire|nl2br}}
-	        {{/if}}
+	        {{mb_value object=$med field=commentaire}}
 				</em>
       {{/if}}
   </ul>
@@ -133,18 +125,13 @@
 		 {{/if}}
      {{if $med->commentaire}}
        ,
-       {{if $print}}
-        {{$med->commentaire|escape:"html"}}
-       {{else}}
-         {{$med->commentaire|nl2br}}
-       {{/if}}
+        {{mb_value object=$med field=commentaire}}
      {{/if}}
       
 		  
 		 <!-- Remarque sur la prise -->
 		 {{if $med->_specif_prise && $med->_ref_prises|@count}}
-		   <br />{{if $print}}({{$med->_specif_prise|escape:"html"}})
-		         {{else}}({{$med->_specif_prise}}{{/if}}
+		   <br />({{mb_value object=$med field=_specif_prise}})
 		 {{/if}}
     </li>
   </ul>
