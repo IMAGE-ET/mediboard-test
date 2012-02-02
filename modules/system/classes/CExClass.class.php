@@ -30,6 +30,8 @@ class CExClass extends CMbObject {
   
   static $_groups_cache = array();
   
+  static $_list_cache = array();
+  
   static $_extendable_classes = array(
     "CPrescriptionLineElement",
     "CPrescriptionLineMedicament",

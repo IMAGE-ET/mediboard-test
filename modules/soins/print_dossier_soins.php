@@ -18,6 +18,7 @@ if(!$sejour_id){
 }
 
 $fiches_anesthesies = array();
+$formulaires = null;
 
 // Chargement du sejour
 $sejour = new CSejour();
@@ -54,15 +55,27 @@ foreach($sejour->_ref_operations as $_interv) {
   }
   
   if ($offline) {
-    $params =
-        array(
-          "consultation_id" => $consult->_id,
-          "operation_id" => $_interv->_id,
-          "offline" => 1,
-          "print" => 1
-        );
+    $params = array(
+      "consultation_id" => $consult->_id,
+      "operation_id" => $_interv->_id,
+      "offline" => 1,
+      "print" => 1
+    );
+    
     $fiches_anesthesies[$_interv->_id] = CApp::fetch("dPcabinet", "print_fiche", $params);
   }
+}
+
+if ($offline && CModule::getActive("forms")) {
+  $params = array(
+    "detail" => 3,
+    "reference_id" => $sejour->_id,
+    "reference_class" => $sejour->_class,
+    "target_element" => "ex-objects-$sejour->_id",
+    "print" => 1,
+  );
+  
+  $formulaires = CApp::fetch("forms", "ajax_list_ex_object", $params);
 }
 
 // Chargement du patient
@@ -166,6 +179,7 @@ $smarty->assign("dossier"   , $dossier);
 $smarty->assign("list_lines", $list_lines);
 $smarty->assign("constantes_medicales_grid", $constantes_grid);
 $smarty->assign("prescription", $prescription);
+$smarty->assign("formulaires", $formulaires);
 $smarty->assign("praticien", $praticien);
 $smarty->assign("offline", $offline);
 $smarty->assign("in_modal", $in_modal);

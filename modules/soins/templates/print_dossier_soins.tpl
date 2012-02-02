@@ -18,13 +18,94 @@
 {{mb_default var=in_modal value=0}}
 {{assign var=object value=$sejour->_ref_patient}}
 
-{{if !@$offline}}
 <script type="text/javascript">
-  Main.add(function() {
-    window.print();
-  });
+  getDossierSoin = function(sejour_id) {
+    return $("dossier-"+sejour_id) || $(document.documentElement);
+  }
+  
+  printDossierFromSejour = function(sejour_id){
+    ($("dossier-"+sejour_id) || window).print();
+  }
+  
+  togglePrintZone = function(name, sejour_id) {
+    var dossier_soin = getDossierSoin(sejour_id);
+    
+    console.log(dossier_soin);
+    
+    dossier_soin.select("."+name).invoke("toggleClassName", "not-printable");
+    
+    // Si un seul bloc est à imprimer, il faut retirer le style page-break.
+    var patient = dossier_soin.select(".print_patient")[0];
+    var sejour  = dossier_soin.select(".print_sejour")[1];
+    var prescr  = dossier_soin.select(".print_prescription")[0];
+    var task    = dossier_soin.select(".print_tasks")[0];
+    var forms   = dossier_soin.select(".print_forms")[0];
+
+    if (!patient.hasClassName("not-printable") && 
+         sejour .hasClassName("not-printable") && 
+         prescr .hasClassName("not-printable") && 
+         task   .hasClassName("not-printable") && 
+         forms  .hasClassName("not-printable")) {
+      patient.setStyle({pageBreakAfter: "auto"});
+    }
+    else 
+    if ( patient.hasClassName("not-printable") && 
+        !sejour .hasClassName("not-printable") && 
+         prescr .hasClassName("not-printable") && 
+         task   .hasClassName("not-printable") && 
+         forms  .hasClassName("not-printable")) {
+      sejour.setStyle({pageBreakAfter: "auto"});
+    }
+    else 
+    if ( patient.hasClassName("not-printable") &&
+         sejour .hasClassName("not-printable") &&
+        !prescr .hasClassName("not-printable") && 
+         task   .hasClassName("not-printable") && 
+         forms  .hasClassName("not-printable")) {
+      prescr.setStyle({pageBreakAfter: "auto"});
+    }
+    else 
+    if ( patient.hasClassName("not-printable") &&
+         sejour .hasClassName("not-printable") &&
+         prescr .hasClassName("not-printable") && 
+        !task   .hasClassName("not-printable") && 
+         forms  .hasClassName("not-printable")) {
+      task.setStyle({pageBreakAfter: "auto"});
+    }
+    else {
+      patient.setStyle({pageBreakAfter: "always"});
+      sejour .setStyle({pageBreakAfter: "always"});
+      prescr .setStyle({pageBreakAfter: "always"});
+      task   .setStyle({pageBreakAfter: "always"});
+    }
+  }
+  
+  loadExForms = function(checkbox, sejour_id) {
+    if (checkbox._loaded) return;
+    
+    var loading = $("forms-loading-"+sejour_id);
+    
+    // Indication du chargement
+    loading.setStyle({display: "inline-block"});
+    $$("button.print").each(function(e){ e.disabled = true; });
+    
+    ExObject.loadExObjects("CSejour", sejour_id, "ex-objects-"+sejour_id, 3, null, {print: 1, onComplete: function(){
+      loading.hide();
+      $$("button.print").each(function(e){ e.disabled = null; });
+    }});
+    
+    checkbox._loaded = true;
+  }
+  
+  resetPrintable = function(sejour_id) {
+    var dossier_soin = getDossierSoin(sejour_id);
+    dossier_soin.select(".print_patient")[0].removeClassName("not-printable").setStyle({pageBreakAfter: "always"});
+    dossier_soin.select(".print_sejour")[1].removeClassName("not-printable").setStyle({pageBreakAfter: "always"});
+    dossier_soin.select(".print_prescription")[0].removeClassName("not-printable").setStyle({pageBreakAfter: "always"});
+    dossier_soin.select(".print_tasks")[0].removeClassName("not-printable").setStyle({pageBreakAfter: "auto"});
+  }
 </script>
-{{/if}}
+
 <table class="not-printable tbl">
   <tr>
     <td style="vertical-align: middle;">
@@ -35,11 +116,11 @@
       <label><input type="checkbox" checked="checked" onclick="togglePrintZone('print_tasks', '{{$sejour->_id}}')"/> Tâches</label>
       
       {{if "forms"|module_active}}
-        <label><input type="checkbox" onclick="loadExForms(this, '{{$sejour->_id}}'); togglePrintZone('print_forms', '{{$sejour->_id}}')" /> Formulaires</label>
-        <div class="loading" style="height: 16px; display: none;" id="forms-loading">Chargement des formulaires en cours</div>
+        <label><input type="checkbox" onclick="{{if !$offline}} loadExForms(this, '{{$sejour->_id}}'); {{/if}} togglePrintZone('print_forms', '{{$sejour->_id}}')" /> Formulaires</label>
+        <div class="loading" style="height: 16px; display: none;" id="forms-loading-{{$sejour->_id}}">Chargement des formulaires en cours</div>
       {{/if}}
       
-      <button class="print" type="button" onclick="$('dossier-{{$sejour->_id}}').print()">{{tr}}Print{{/tr}}</button>
+      <button class="print" type="button" onclick="printDossierFromSejour({{$sejour->_id}})">{{tr}}Print{{/tr}}</button>
     </td>
   </tr>
   <tr>
@@ -223,7 +304,7 @@
       <th class="title">Formulaires</th>
     </tr>
   </table>
-  <div id="ex-objects"></div>
+  <div id="ex-objects-{{$sejour->_id}}">{{if $offline}}{{$formulaires|smarty:nodefaults}}{{/if}}</div>
 </div>
 {{/if}}
 

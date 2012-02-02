@@ -41,7 +41,12 @@ if ($ex_class_id) {
 }
 
 $ex_class = new CExClass;
-$ex_classes = $ex_class->loadList($where);
+$from_cache = true;
+
+if (empty(CExClass::$_list_cache)) {
+  CExClass::$_list_cache = $ex_class->loadList($where);
+  $from_cache = false;
+}
 
 $all_ex_objects = array();
 $ex_objects_by_event = array();
@@ -75,10 +80,10 @@ if ($limit) {
 
 $ref_objects_cache = array();
   
-foreach($ex_classes as $_ex_class_id => $_ex_class) {
+foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
   $ex_class_key = $_ex_class->host_class."-event-".$_ex_class->event;
-    
-  if ($detail > 1) {
+  
+  if (!$from_cache && $detail > 1) {
     foreach($_ex_class->loadRefsGroups() as $_group) {
       $_group->loadRefsFields();
       foreach($_group->_ref_fields as $_field) {
@@ -101,27 +106,27 @@ foreach($ex_classes as $_ex_class_id => $_ex_class) {
   $_ex_objects_count = $_ex_object->countList($where);
   $total = max($_ex_objects_count, $total);
   
-	$count = $_ex_object->countList($where);
-	
-	if ($count) {
-    $ex_objects_counts_by_event[$ex_class_key][$_ex_class_id] = $_ex_object->countList($where);
-	}
+  $count = $_ex_object->countList($where);
   
-	if ($detail == 0) continue;
-	
+  if ($count) {
+    $ex_objects_counts_by_event[$ex_class_key][$_ex_class_id] = $_ex_object->countList($where);
+  }
+  
+  if ($detail == 0) continue;
+  
   foreach($_ex_objects as $_ex) {
     $_ex->_ex_class_id = $_ex_class_id;
     $_ex->load();
-		
-		$guid = "$_ex->object_class-$_ex->object_id";
-		
-		if (!isset($ref_objects_cache[$guid])) {
+    
+    $guid = "$_ex->object_class-$_ex->object_id";
+    
+    if (!isset($ref_objects_cache[$guid])) {
       $_ex->loadTargetObject()->loadComplete(); // to get the view
-			$ref_objects_cache[$guid] = $_ex->_ref_object;
-		}
-		else {
-			$_ex->_ref_object = $ref_objects_cache[$guid];
-		}
+      $ref_objects_cache[$guid] = $_ex->_ref_object;
+    }
+    else {
+      $_ex->_ref_object = $ref_objects_cache[$guid];
+    }
     
     $_ex->loadLogs();
     $_log = $_ex->_ref_first_log;
@@ -180,7 +185,7 @@ ksort($ex_objects_by_event);
 ksort($all_ex_objects);
 
 // Création du template
-$smarty = new CSmartyDP();
+$smarty = new CSmartyDP("modules/forms");
 $smarty->assign("reference_class", $reference_class);
 $smarty->assign("reference_id",    $reference_id);
 $smarty->assign("reference",       $reference);
@@ -191,7 +196,7 @@ $smarty->assign("limit",           $limit);
 $smarty->assign("step",            $step);
 $smarty->assign("total",           $total);
 $smarty->assign("ex_classes_creation", $ex_classes_creation);
-$smarty->assign("ex_classes",      $ex_classes);
+$smarty->assign("ex_classes",      CExClass::$_list_cache);
 $smarty->assign("detail",          $detail);
 $smarty->assign("ex_class_id",     $ex_class_id);
 $smarty->assign("target_element",  $target_element);
