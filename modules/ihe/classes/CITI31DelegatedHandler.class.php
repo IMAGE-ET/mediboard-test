@@ -96,7 +96,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       
       // Modifcation d'une affectation
       if ($current_log->type == "store") {
-        $code = "Z99"; 
+        $code = $this->getModificationAdmitCode($receiver);
       }
 
       // Cas où : 
@@ -179,7 +179,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       }
       
       // Simple modification ? 
-      return "Z99";
+      return $this->getModificationAdmitCode($sejour->_receiver);
     }
     
     // Cas d'un séjour en cours (entrée réelle)
@@ -255,7 +255,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       }
       
       // Simple modification ? 
-      return "Z99";
+      return $this->getModificationAdmitCode($sejour->_receiver);
     }
     
     // Cas d'un séjour clôturé (sortie réelle)
@@ -272,11 +272,24 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       }
       
       // Simple modification ? 
-      return "Z99";
+      return $this->getModificationAdmitCode($sejour->_receiver);
     }
   }
   
-  
+  function getModificationAdmitCode(CReceiverIHE $receiver) {
+    switch ($receiver->_i18n_code) {
+      // Cas de l'extension française : Z99
+      case "FR" :
+        $code = "Z99";
+        break;
+      // Cas internationnal : A08
+      default :
+        $code = "A08";
+        break;
+    }
+    
+    return $code;
+  }
 
   function onBeforeMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
