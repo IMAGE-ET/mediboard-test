@@ -99,51 +99,6 @@
   <td {{if $conf.dPprescription.CPrescription.show_categories_plan_soins && $line->inscription}}colspan="2"{{/if}}
       class="{{if $smarty.session.browser.name != "msie"}}text{{/if}} {{if $line instanceof CPrescriptionLineMedicament && $line->traitement_personnel}}traitement{{/if}}
 			       {{if $line->premedication}} premedication{{/if}}" rowspan="{{$nb_line}}" >	
-	  {{if $line->_recent_modification}}
-		  {{if @$conf.object_handlers.CPrescriptionAlerteHandler && $line->_ref_alerte->_id}}
-				<div id="alert_manuelle_{{$line->_ref_alerte->_id}}">
-					 {{assign var=img_src value="ampoule"}}
-					 {{if $line->_urgence}}
-					   {{assign var=img_src value="ampoule_urgence"}}
-					 {{/if}}
-					 <img style="float: right" src="images/icons/{{$img_src}}.png" onclick="alerte_prescription = ObjectTooltip.createDOM(this, 'editAlerte-{{$line->_ref_alerte->_id}}', { duration: 0}); "/>
-	         
-				  <div id="editAlerte-{{$line->_ref_alerte->_id}}" style="display: none;">
-					  <table class="form">
-					  	<tr>
-					  	  <th class="category">Alerte</th>
-							</tr>	
-					  	<tr>
-					  		<td class="text" style="width: 300px;">
-                  {{mb_value object=$line->_ref_alerte field=comments}}
-                </td>
-					  	</tr>
-							<tr>
-								<td class="button">
-									<form name="modifyAlert-{{$line->_ref_alerte->_id}}" action="?" method="post" class="form-alerte{{if $line->_urgence}}-urgence{{/if}}-_{{if $line instanceof CPrescriptionLineMedicament}}{{$type}}{{else}}{{$name_chap}}{{/if}}"
-									      onsubmit="return onSubmitFormAjax(this, { 
-												            onComplete: function() { $('alert_manuelle_{{$line->_ref_alerte->_id}}').hide(); if(alerte_prescription) { alerte_prescription.hide(); } } });">
-									  <input type="hidden" name="m" value="system" />
-										<input type="hidden" name="dosql" value="do_alert_aed" />
-										<input type="hidden" name="del" value="" />
-	                  <input type="hidden" name="alert_id" value="{{$line->_ref_alerte->_id}}" />
-										<input type="hidden" name="handled" value="1" />
-										<button type="submit" class="tick">
-		                  Traiter
-		                </button>
-									</form>
-								</td>
-							</tr>
-					  </table>
-					</div>
-				</div>
-			{{else}}
-		    <img style="float: right" src="images/icons/ampoule.png" title="Ligne récemment modifiée"/>
-				{{if is_array($line->_dates_urgences) && array_key_exists($date, $line->_dates_urgences)}}
-		      <img style="float: right" src="images/icons/ampoule_urgence.png" title="Urgence"/>
-		    {{/if}}
-    	{{/if}}
-		{{/if}}
 
     <!-- Gestion de la prise de RDV pour une ligne d'element -->
 		{{if $line instanceof CPrescriptionLineElement && $line->_ref_element_prescription->rdv}}
@@ -170,22 +125,72 @@
 						{{/if}}
 					</div>
 				{{/if}} 
-				  {{if $line->commentaire}}
-
-      <img src="images/icons/postit.png" title="" style="float: right; margin: 2px;" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-comment-{{$line->_guid}}');" />
-      <table class="tbl" id="tooltip-content-comment-{{$line->_guid}}" style="display: none;">
-        <tr>
-          <th>Commentaire - {{$line->_view}}</th>
-        </tr> 
-       <tr>
-        <td class="text" style="width: 300px;">
-           {{$line->commentaire}}
-        </td>
-       </tr>
-      </table>
-    
+	    </div>
+	
+		 <!-- Commentaire -->
+		 {{if $line->commentaire}}
+        <img src="images/icons/postit.png" title="" style="float: right; margin: 2px;" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-comment-{{$line->_guid}}');" />
+        <table class="tbl" id="tooltip-content-comment-{{$line->_guid}}" style="display: none;">
+          <tr>
+            <th>Commentaire - {{$line->_view}}</th>
+          </tr> 
+         <tr>
+          <td class="text" style="width: 300px;">
+             {{$line->commentaire}}
+          </td>
+         </tr>
+        </table>
+   {{/if}}
+				
+		 <!-- Alertes -->
+		 {{if $line->_recent_modification}}
+      {{if @$conf.object_handlers.CPrescriptionAlerteHandler && $line->_ref_alerte->_id}}
+        <div id="alert_manuelle_{{$line->_ref_alerte->_id}}">
+           {{assign var=img_src value="ampoule"}}
+           {{if $line->_urgence}}
+             {{assign var=img_src value="ampoule_urgence"}}
+           {{/if}}
+           <img style="float: right" src="images/icons/{{$img_src}}.png" onclick="alerte_prescription = ObjectTooltip.createDOM(this, 'editAlerte-{{$line->_ref_alerte->_id}}', { duration: 0}); "/>
+           
+          <div id="editAlerte-{{$line->_ref_alerte->_id}}" style="display: none;">
+            <table class="form">
+              <tr>
+                <th class="category">Alerte</th>
+              </tr> 
+              <tr>
+                <td class="text" style="width: 300px;">
+                  {{mb_value object=$line->_ref_alerte field=comments}}
+                </td>
+              </tr>
+              <tr>
+                <td class="button">
+                  <form name="modifyAlert-{{$line->_ref_alerte->_id}}" action="?" method="post" class="form-alerte{{if $line->_urgence}}-urgence{{/if}}-_{{if $line instanceof CPrescriptionLineMedicament}}{{$type}}{{else}}{{$name_chap}}{{/if}}"
+                        onsubmit="return onSubmitFormAjax(this, { 
+                                    onComplete: function() { $('alert_manuelle_{{$line->_ref_alerte->_id}}').hide(); if(alerte_prescription) { alerte_prescription.hide(); } } });">
+                    <input type="hidden" name="m" value="system" />
+                    <input type="hidden" name="dosql" value="do_alert_aed" />
+                    <input type="hidden" name="del" value="" />
+                    <input type="hidden" name="alert_id" value="{{$line->_ref_alerte->_id}}" />
+                    <input type="hidden" name="handled" value="1" />
+                    <button type="submit" class="tick">
+                      Traiter
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      {{else}}
+        <img style="float: right" src="images/icons/ampoule.png" title="Ligne récemment modifiée"/>
+        {{if is_array($line->_dates_urgences) && array_key_exists($date, $line->_dates_urgences)}}
+          <img style="float: right" src="images/icons/ampoule_urgence.png" title="Urgence"/>
+        {{/if}}
+      {{/if}}
     {{/if}}
-	  </div>
+		
+		
+		
 		
 		
 		
