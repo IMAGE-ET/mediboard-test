@@ -441,6 +441,7 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
   
   function getPL(CSejour $sejour) {
+    $group       = $sejour->loadRefEtablissement();
     $affectation = $sejour->getCurrAffectation();
     $affectation->loadRefLit()->loadRefChambre();
     $current_uf  = $sejour->getCurrentUF();
@@ -459,7 +460,11 @@ class CHL7v2Segment extends CHL7v2Entity {
         // Table - 0116
         // O - Occupé
         // U - Libre
-        "O"
+        "O",
+        // PL-6 - Person location type
+        null,
+        // PL-7 - Building
+        CHL7v2TableEntry::mapTo("307", $group->_id),
       )
     );
   }
