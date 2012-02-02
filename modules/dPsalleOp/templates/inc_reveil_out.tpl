@@ -19,7 +19,7 @@ submitSortieForm = function(oFormSortie) {
     <th>{{tr}}SSPI.SortieReveil{{/tr}}</th>
   </tr> 
   {{foreach from=$listOperations key=key item=_operation}}
-	{{assign var=_operation_id value=$_operation->_id}}
+  {{assign var=_operation_id value=$_operation->_id}}
   <tr>
     <td>{{$_operation->_ref_salle->_shortview}}</td>
     <td class="text">
@@ -27,7 +27,7 @@ submitSortieForm = function(oFormSortie) {
     </td>
     <td class="text">
      <a href="#" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">
-	   <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
+     <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
             onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
         {{$_operation->_ref_patient->_view}}
       </span>
@@ -57,17 +57,17 @@ submitSortieForm = function(oFormSortie) {
     </td>
     <td class="button">
       {{if $_operation->entree_reveil}}
-	      {{if $can->edit}}
-	      <form name="editEntreeReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
-	        <input type="hidden" name="m" value="dPplanningOp" />
-	        <input type="hidden" name="dosql" value="do_planning_aed" />
-	        <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
-	        <input type="hidden" name="del" value="0" />
-	        {{mb_field object=$_operation field=entree_reveil form="editEntreeReveilFrm$_operation_id" onchange="submitSortieForm(this.form);"}}
-	      </form>
-	      {{else}}
-	        {{mb_value object=$_operation field="entree_reveil"}}
-	      {{/if}}
+        {{if $can->edit}}
+        <form name="editEntreeReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
+          <input type="hidden" name="m" value="dPplanningOp" />
+          <input type="hidden" name="dosql" value="do_planning_aed" />
+          <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
+          <input type="hidden" name="del" value="0" />
+          {{mb_field object=$_operation field=entree_reveil form="editEntreeReveilFrm$_operation_id" onchange="submitSortieForm(this.form);"}}
+        </form>
+        {{else}}
+          {{mb_value object=$_operation field="entree_reveil"}}
+        {{/if}}
       {{else}}
         pas de passage SSPI
       {{/if}}
@@ -89,8 +89,8 @@ submitSortieForm = function(oFormSortie) {
           {{mb_value object=$_operation field="sortie_reveil"}}
         {{/if}}
       </form>
-			
-			{{mb_include module=forms template=inc_widget_ex_class_register object=$_operation event=checklist cssStyle="display: inline-block; font-size: 0.8em;"}}
+      
+      {{mb_include module=forms template=inc_widget_ex_class_register object=$_operation event=sortie_reveil cssStyle="display: inline-block; font-size: 0.8em;"}}
     </td>
   </tr>
   {{foreachelse}}
