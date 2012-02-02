@@ -33,6 +33,22 @@ ExObjectForms.{{$ex_form_hash}} = {
     this.updateId(id, obj);
     
     if (!(obj._ui_messages[3] || obj._ui_messages[4])) { // warning ou error
+      if (window.opener && !window.opener.closed && window.opener !== window && window.opener.ExObject) {
+        var element_id = "{{$_element_id}}";
+        
+        if (element_id.charAt(0) == "@") {
+          eval("window.opener."+element_id.substr(1)+"()"); // ARG
+        }
+        else {
+          window.opener.ExObject.register.defer("{{$_element_id}}", {
+            ex_class_id: "{{$ex_class_id}}", 
+            object_guid: "{{$object_guid}}", 
+            event: "{{$event}}", 
+            _element_id: "{{$_element_id}}"
+          });
+        }
+      }
+      
       window.close();
     }
   },
@@ -55,24 +71,6 @@ Main.add(function(){
   ExObject.current = {object_guid: "{{$object_guid}}", event: "{{$event}}"};
   new ExObjectFormula({{$formula_token_values|@json}}, getForm("editExObject_{{$ex_form_hash}}"));
 });
-
-if (window.opener && !window.opener.closed && window.opener !== window && window.opener.ExObject) {
-  window.onunload = function(){
-    var element_id = "{{$_element_id}}";
-    
-    if (element_id.charAt(0) == "@") {
-      window.opener[element_id.substr(1)]();
-    }
-    else {
-      window.opener.ExObject.register.defer("{{$_element_id}}", {
-        ex_class_id: "{{$ex_class_id}}", 
-        object_guid: "{{$object_guid}}", 
-        event: "{{$event}}", 
-        _element_id: "{{$_element_id}}"
-      });
-    }
-  }
-}
 </script>
 
 {{mb_form name="editExObject_$ex_form_hash" m="system" dosql="do_ex_object_aed" method="post" className="watched"
@@ -83,7 +81,7 @@ if (window.opener && !window.opener.closed && window.opener !== window && window
   {{mb_field object=$ex_object field=object_id hidden=true}}
   
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="callback" value='ExObjectForms.{{$ex_form_hash}}.closeOnSuccess' />
+  <input type="hidden" name="callback" value="ExObjectForms.{{$ex_form_hash}}.closeOnSuccess" />
   
   {{if !$print}}
     <iframe id="printIframe" width="0" height="0" style="display: none;"></iframe>
@@ -255,7 +253,7 @@ if (window.opener && !window.opener.closed && window.opener !== window && window
           <button class="modify singleclick" type="submit">{{tr}}Save{{/tr}}</button>
           
           {{if $can_delete}}
-            <button type="button" class="trash" onclick="confirmDeletion(this.form,{callback: onSubmitFormAjax.curry(this.form), typeName:'', objName:'{{$ex_object->_view|smarty:nodefaults|JSAttribute}}'})">
+            <button type="button" class="trash" onclick="confirmDeletion(this.form,{callback: (function(){ FormObserver.changes = 0; onSubmitFormAjax(this.form); }).bind(this), typeName:'', objName:'{{$ex_object->_view|smarty:nodefaults|JSAttribute}}'})">
               {{tr}}Delete{{/tr}}
             </button>
           {{/if}}

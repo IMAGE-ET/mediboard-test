@@ -1,6 +1,7 @@
 ExObject = {
   container: null,
   classes: {},
+  refreshSelf: {},
   register: function(container, options) {
     this.container = $(container);
     
@@ -96,11 +97,15 @@ ExObject = {
     });
   },
   
-  show: function(mode, ex_object_id, ex_class_id, object_guid){
+  show: function(mode, ex_object_id, ex_class_id, object_guid, element_id){
     var url = new Url("forms", "view_ex_object_form");
     url.addParam("ex_object_id", ex_object_id);
     url.addParam("ex_class_id", ex_class_id);
     url.addParam("object_guid", object_guid);
+    
+    if (element_id) {
+      url.addParam("_element_id", element_id);
+    }
     
     if (mode == "display" || mode == "print") {
       url.addParam("readonly", 1);
@@ -131,8 +136,8 @@ ExObject = {
     ExObject.show("display", ex_object_id, ex_class_id, object_guid);
   },
   
-  edit: function(ex_object_id, ex_class_id, object_guid){
-    ExObject.show("edit", ex_object_id, ex_class_id, object_guid);
+  edit: function(ex_object_id, ex_class_id, object_guid, element_id){
+    ExObject.show("edit", ex_object_id, ex_class_id, object_guid, element_id);
   },
   
   history: function(ex_object_id, ex_class_id){
@@ -155,12 +160,19 @@ ExObject = {
       onComplete: function(){}
     }, options);
     
+    target = $(target);
+    
+    target.writeAttribute("data-reference_class", object_class);
+    target.writeAttribute("data-reference_id",    object_id);
+    target.writeAttribute("data-ex_class_id",     ex_class_id);
+    target.writeAttribute("data-detail",          detail);
+    
     var url = new Url("forms", "ajax_list_ex_object");
     url.addParam("detail", detail);
     url.addParam("reference_id", object_id);
     url.addParam("reference_class", object_class);
     url.addParam("ex_class_id", ex_class_id);
-    url.addParam("target_element", target);
+    url.addParam("target_element", target.identify());
     url.mergeParams(options);
     url.requestUpdate(target, {onComplete: options.onComplete});
   }

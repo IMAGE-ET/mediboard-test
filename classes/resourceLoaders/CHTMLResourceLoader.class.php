@@ -85,7 +85,7 @@ abstract class CHTMLResourceLoader {
   
   static function initOutput($aio){
     self::$_aio = !!$aio;
-		
+    
     if (self::$_aio) {
       self::$_fp_in = CMbPath::getTempFile();
       ob_start(array("CHTMLResourceLoader", "outputToFile"), 8192);

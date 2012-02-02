@@ -136,17 +136,25 @@ Main.add(function(){
       {{else}}
         
         <th>
-          <label>
-            {{tr}}CExClassField-concept_id{{/tr}}
-            {{if !$conf.forms.CExClassField.force_concept}}
+          {{if !$conf.forms.CExClassField.force_concept}}
+            <label>
+              {{tr}}CExClassField-concept_id{{/tr}}
               <input type="radio" onclick="toggleListCustom(this.form)" name="_concept_type" value="concept" checked="checked" />
-            {{/if}}
-          </label>
+            </label>
+          {{else}}
+            <label for="concept_id">{{tr}}CExClassField-concept_id{{/tr}}</label>
+          {{/if}}
         </th>
         
         <td>
+          {{assign var=_prop value=$ex_field->_props.concept_id}}
+          
+          {{if $conf.forms.CExClassField.force_concept}}
+            {{assign var=_prop value="$_prop notNull"}}
+          {{/if}}
+          
           {{mb_field object=$ex_field field=concept_id form="editField" autocomplete="true,1,50,true,true" 
-                     onchange="selectConcept(this)"}}
+                     onchange="selectConcept(this)" prop=$_prop}}
           <button class="new" onclick="ExConcept.createInModal()" type="button">{{tr}}CExConcept-title-create{{/tr}}</button>
         </td>
       
@@ -159,9 +167,8 @@ Main.add(function(){
               <input type="radio" onclick="toggleListCustom(this.form)" name="_concept_type" value="custom" />
             </label>
           </th>
-          
           <td>
-            <select  name="_spec_type" onchange="ExFieldSpec.edit(this.form)">
+            <select name="_spec_type" onchange="ExFieldSpec.edit(this.form)">
               {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
                 <option value="{{$_key}}" {{if $_key == $spec_type && !$ex_field->concept_id}}selected="selected"{{/if}}>
                   {{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}

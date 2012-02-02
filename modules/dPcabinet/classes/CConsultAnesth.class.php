@@ -7,7 +7,7 @@
  * @author Romain Ollivier
  */
 
-class CConsultAnesth extends CMbObject {
+class CConsultAnesth extends CMbObject implements IPatientRelated {
   // DB Table key
   var $consultation_anesth_id = null;
 
@@ -97,6 +97,12 @@ class CConsultAnesth extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'consultation_anesth';
     $spec->key   = 'consultation_anesth_id';
+    $spec->events = array(
+      "examen" => array(
+        "reference1" => array("COperation", "operation_id"),
+        "reference2" => array("CSejour",  "sejour_id"),
+      ),
+    );
     return $spec;
   }
 
@@ -198,6 +204,13 @@ class CConsultAnesth extends CMbObject {
     }
 
     parent::updatePlainFields();
+  }
+  
+  /**
+   * @return CPatient
+   */
+  function loadRelPatient(){
+    return $this->loadRefConsultation()->loadRefPatient();
   }
 
   /**

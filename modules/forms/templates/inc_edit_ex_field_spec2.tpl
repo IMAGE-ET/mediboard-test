@@ -111,7 +111,7 @@ Main.add(function(){
   var form = getForm("editFieldSpec");
   
   form.select("input.nospace").invoke("observe", "keypress", avoidSpaces);
-  form.select("input, select").invoke("observe", "change", updateFieldSpec);
+  form.select("input, select").invoke("observe", "change", updateFieldSpec).invoke("observe", "ui:change", updateFieldSpec);
   
   updateFieldSpec();
 });

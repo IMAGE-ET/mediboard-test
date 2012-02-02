@@ -12,7 +12,17 @@ CCanDo::checkEdit();
 
 $class_tree = CExClass::getTree();
 
+$counts = array();
+
+foreach($class_tree as $_key => $_events) {
+  $counts[$_key] = 0;
+  foreach($_events as $_event) {
+    $counts[$_key] += count($_event);
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("class_tree", $class_tree);
+$smarty->assign("counts", $counts);
 $smarty->display("inc_list_ex_class.tpl");

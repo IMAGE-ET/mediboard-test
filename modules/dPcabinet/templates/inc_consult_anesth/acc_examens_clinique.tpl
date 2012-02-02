@@ -1,11 +1,37 @@
 <table class="main form">
   <tr>
     <td>
-      <!-- Fiches d'examens -->
-      {{mb_script module="dPcabinet" script="exam_dialog"}}
-      <script type="text/javascript">
-        ExamDialog.register('{{$consult->_id}}','{{$consult->_class}}');
-      </script>
+      <table class="main layout">
+        <tr>
+          <td style="width: 50%;">
+            <!-- Fiches d'examens -->
+            {{mb_script module="dPcabinet" script="exam_dialog"}}
+            <script type="text/javascript">
+              ExamDialog.register('{{$consult->_id}}','{{$consult->_class}}');
+            </script>
+          </td>
+          
+          {{if "forms"|module_active}}
+            <td>
+              {{unique_id var=unique_id_exam_forms}}
+              
+              <script type="text/javascript">
+                Main.add(function(){
+                  ExObject.loadExObjects("{{$consult_anesth->_class}}", "{{$consult_anesth->_id}}", "{{$unique_id_exam_forms}}", 1);
+                });
+              </script>
+              
+              <fieldset id="list-ex_objects">
+                <legend>Formulaires</legend>
+                <div id="{{$unique_id_exam_forms}}"></div>
+              </fieldset>
+            </td>
+          {{/if}}
+        </tr>
+      </table>
+      
+      
+      
       <form name="editAnesthExamenClinique" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
         <input type="hidden" name="m" value="dPcabinet" />
         <input type="hidden" name="del" value="0" />

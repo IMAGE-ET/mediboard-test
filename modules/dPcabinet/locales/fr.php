@@ -136,6 +136,7 @@ $locales['CConsultAnesth-ecbu-court'] = 'ECBU';
 $locales['CConsultAnesth-ecbu-desc'] = 'Examen Cytobactériologique des Urines';
 $locales['CConsultAnesth-etatBucco'] = 'Etat bucco-dentaire';
 $locales['CConsultAnesth-etatBucco-desc'] = 'Etat bucco-dentaire';
+$locales['CConsultAnesth-event-examen'] = 'Examen';
 $locales['CConsultAnesth-examenAutre'] = 'Examen autre';
 $locales['CConsultAnesth-examenAutre-court'] = 'Exam autre';
 $locales['CConsultAnesth-examenAutre-desc'] = 'Examen autre';

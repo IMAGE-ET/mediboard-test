@@ -67,7 +67,11 @@ toggleEmptyRows = function(){
   container.toggleClassName("hide-empty-rows", show);
 }
 
-refreshSelf = function(start){
+{{assign var=self_guid value="$reference_class-$reference_id $target_element $detail $ex_class_id"}}
+{{assign var=self_guid value=$self_guid|md5}}
+{{assign var=self_guid value="guid_$self_guid"}}
+
+ExObject.refreshSelf.{{$self_guid}} = function(start){
   start = start || 0;
   ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', '{{$target_element}}', '{{$detail}}', '{{$ex_class_id}}', {start: start});
 }
@@ -81,7 +85,7 @@ refreshSelf = function(start){
     {{assign var=align value=left}}
   {{/if}}
   
-  {{mb_include module=system template=inc_pagination change_page="refreshSelf" total=$total current=$start step=$step align=$align}}
+  {{mb_include module=system template=inc_pagination change_page="ExObject.refreshSelf.$self_guid" total=$total current=$start step=$step align=$align}}
 {{/if}}
 
 {{* FULL DETAIL = ALL *}}
@@ -182,7 +186,7 @@ refreshSelf = function(start){
         <tr>
           <td style="text-align: right;">Remplir un nouveau formulaire:</td>
           <td>
-            <select onchange="selectExClass(this, '{{$reference_class}}-{{$reference_id}}', '{{$_parts.2}}', '@refreshSelf')">
+            <select onchange="selectExClass(this, '{{$reference_class}}-{{$reference_id}}', '{{$_parts.2}}', '@ExObject.refreshSelf.{{$self_guid}}')">
               <option>&ndash; Formulaires disponibles</option>
               {{foreach from=$ex_classes_creation.$_host_event item=_ex_class key=_ex_class_id}}
                 <option value="{{$_ex_class->_id}}">{{$_ex_class->name}}</option>
@@ -202,7 +206,7 @@ refreshSelf = function(start){
       <h3 style="margin: 0.5em 1em;">
         {{if isset($ex_classes_creation.$_host_event.$_ex_class_id|smarty:nodefaults)}}
           <button style="margin: -1px; float: right;" class="new" 
-                  onclick="showExClassForm('{{$_ex_class_id}}', '{{$reference_class}}-{{$reference_id}}', '{{$_ex_class->host_class}}-{{$_ex_class->event}}', null, '{{$_ex_class->event}}', '@refreshSelf')">
+                  onclick="showExClassForm('{{$_ex_class_id}}', '{{$reference_class}}-{{$reference_id}}', '{{$_ex_class->host_class}}-{{$_ex_class->event}}', null, '{{$_ex_class->event}}', '@ExObject.refreshSelf.{{$self_guid}}')">
             {{tr}}New{{/tr}}
           </button>
         {{/if}}
@@ -215,7 +219,7 @@ refreshSelf = function(start){
            <tr>
              <td>
                <button style="margin: -1px;" class="edit notext" 
-                       onclick="ExObject.edit('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}')">
+                       onclick="ExObject.edit('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}', '@ExObject.refreshSelf.{{$self_guid}}')">
                  {{tr}}Edit{{/tr}}
                </button>
                
