@@ -98,17 +98,18 @@ class CReceiverIHE extends CInteropReceiver {
     $evenement->build($mbObject);  
     CHL7v2Message::resetBuildMode(); 
 
-    if ($msg = $evenement->flatten()) {
+    if (!$msg = $evenement->flatten()) {
       return;
     }
     
     $source = CExchangeSource::get("$this->_guid-evenementsPatient");
+   
     if (!$source->_id || !$source->active) {
       return;
     }
     
     $exchange = $evenement->_exchange_ihe;
-    
+
     // Dans le cas d'une source file system on passe le nom du fichier en paramètre
     if ($source instanceof CSourceFileSystem) {
       $source->setData($msg, false, "MB-$evenement->event_type-$evenement->code-$exchange->_id.$source->fileextension");

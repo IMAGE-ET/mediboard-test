@@ -80,7 +80,7 @@ class CDestinataireHprim extends CInteropReceiver {
     }
     
     $source = CExchangeSource::get("$this->_guid-evenementPatient");
-    if ($source->_id || !$source->active) {
+    if (!$source->_id || !$source->active) {
       return;
     }
     
@@ -125,7 +125,7 @@ class CDestinataireHprim extends CInteropReceiver {
     }
     
     $source = CExchangeSource::get("$this->_guid-$dom_evt->sous_type");
-    if ($source->_id || !$source->active) {
+    if (!$source->_id || !$source->active) {
       return;
     }
 
