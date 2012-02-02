@@ -15,7 +15,13 @@
   <exclude-pattern>/tmp/</exclude-pattern>
 
   <!-- Include some additional sniffs from the Generic standard -->
+  <rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>
+  <rule ref="Generic.CodeAnalysis.UselessOverridingMethod"/>
+  <rule ref="Generic.CodeAnalysis.EmptyStatement"/>
+  <rule ref="Generic.Commenting.Todo"/>
   <rule ref="Generic.Functions.FunctionCallArgumentSpacing"/>
+  <rule ref="Generic.Metrics.CyclomaticComplexity"/>
+  <rule ref="Generic.Metrics.NestingLevel"/>
   <rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
   <rule ref="Generic.PHP.LowerCaseConstant"/>
   <rule ref="Generic.PHP.DisallowShortOpenTag"/>
@@ -33,7 +39,7 @@
   <rule ref="Generic.Files.LineLength">
     <properties>
       <property name="lineLimit" value="115"/>
-      <property name="absoluteLineLimit" value="125"/>
+      <property name="absoluteLineLimit" value="115"/>
     </properties>
   </rule>
 
@@ -46,14 +52,9 @@
 
   <!-- Use warnings for inline control structures -->
   <rule ref="Generic.ControlStructures.InlineControlStructure">
-	  <properties>
-	    <property name="error" value="false"/>
-	  </properties>
-  </rule>
-
-  <!-- This message is not required as spaces are allowed for alignment -->
-  <rule ref="Generic.Functions.FunctionCallArgumentSpacing.TooMuchSpaceAfterComma">
-    <severity>0</severity>
+    <properties>
+      <property name="error" value="false"/>
+    </properties>
   </rule>
 
   <!-- This message is not required as spaces are allowed for alignment -->
@@ -61,17 +62,67 @@
     <severity>0</severity>
   </rule>
 
-  <!-- Use all PEAR Sniffs -->
+  <!-- By now, don't show up tasks -->
+  <rule ref="Generic.Commenting.Todo.TaskFound">
+    <severity>0</severity>
+  </rule>
+
+  <!-- Throws issues for params present only for overridable/inheritence purposes -->
+  <rule ref="Generic.CodeAnalysis.UnusedFunctionParameter.Found">
+    <severity>0</severity>
+  </rule>
+
+  <!-- PEAR Sniffs -->
   <rule ref="PEAR">
-    <exclude name="PEAR.Classes.ClassDeclaration.OpenBraceNewLine" />
-    <exclude name="PEAR.Commenting.ClassComment.MissingTag" />
-    <exclude name="PEAR.Commenting.FileComment.MissingVersion" />
     <exclude name="PEAR.ControlStructures.ControlSignature" />
-    <exclude name="PEAR.ControlStructures.MultiLineCondition.StartWithBoolean" />
-    <exclude name="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket" />
-    <exclude name="PEAR.Functions.FunctionDeclaration.BraceOnSameLine" />
-    <exclude name="PEAR.NamingConventions.ValidFunctionName.FunctionNoCaptial" />
     <exclude name="PEAR.WhiteSpace.ScopeIndent" />
   </rule>
 
+  <rule ref="PEAR.Classes.ClassDeclaration.OpenBraceNewLine">
+    <severity>0</severity>
+  </rule>
+
+  <rule ref="PEAR.Commenting.ClassComment.MissingTag">
+    <severity>0</severity>
+  </rule>
+
+  <rule ref="PEAR.Commenting.FileComment.InvalidSubpackage">
+    <severity>0</severity>
+  </rule>
+
+  <rule ref="PEAR.Commenting.FileComment.InvalidVersion">
+    <severity>0</severity>
+  </rule>
+  
+  <rule ref="PEAR.Commenting.FileComment.MissingVersion">
+    <severity>0</severity>
+  </rule>
+
+  <rule ref="PEAR.Commenting.FileComment.MissingTag">
+    <severity>0</severity>
+  </rule>
+
+  <rule ref="PEAR.ControlStructures.MultiLineCondition.StartWithBoolean">
+    <severity>0</severity>
+  </rule>
+
+  <rule ref="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket">
+    <severity>0</severity>
+  </rule>
+
+  <rule ref="PEAR.Functions.FunctionDeclaration.BraceOnSameLine">
+    <severity>0</severity>
+  </rule>
+
+  <rule ref="PEAR.NamingConventions.ValidFunctionName.FunctionNoCaptial">
+    <severity>0</severity>
+  </rule>
+
+  <rule ref="PEAR.NamingConventions.ValidVariableName.PublicUnderscore">
+    <severity>0</severity>
+  </rule>
+
+  <!-- To be implemented -->
+  <!-- MB.Functions.FunctionDeclaration.SpaceBeforeOpeningBracket -->
+  
 </ruleset>

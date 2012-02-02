@@ -50,7 +50,7 @@ class Standard_Sniffs_ControlStructures_ControlSignatureSniff
       'foreach (...) {EOL',
       '}EOLelse if (...) {EOL',
       '}EOLelseif (...) {EOL',
-      '}else {EOL',
+      '}EOLelse {EOL',
       'do {EOL',
     );
   }
