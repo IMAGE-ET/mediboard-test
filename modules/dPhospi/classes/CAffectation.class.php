@@ -23,7 +23,6 @@ class CAffectation extends CMbObject {
   // DB Fields
   var $entree   = null;
   var $sortie   = null;
-  var $confirme = null;
   var $effectue = null;
   var $rques    = null;
   
@@ -79,7 +78,6 @@ class CAffectation extends CMbObject {
     $specs["parent_affectation_id"] = "ref class|CAffectation";
     $specs["entree"]       = "dateTime notNull";
     $specs["sortie"]       = "dateTime notNull";
-    $specs["confirme"]     = "bool";
     $specs["effectue"]     = "bool";
     $specs["rques"]        = "text";
     

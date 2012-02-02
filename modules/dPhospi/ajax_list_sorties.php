@@ -99,7 +99,7 @@ if($type == 'presents') {
   // Patients placés
   $where[] = "'$date' BETWEEN DATE(affectation.entree) AND DATE(affectation.sortie)";
   if ($vue) {
-    $where["confirme"] = " = '0'";
+    $where["sejour.confirme"] = " = '0'";
   }
   $presents = $affectation->loadList($where, $order, null, null, $ljoin);
   
@@ -185,7 +185,7 @@ if($type == 'presents') {
   $where["sejour.sortie"]      = "= affectation.sortie";
   $where["sejour.type"]        = " = '$type'";
   if ($vue) {
-    $where["confirme"] = " = '0'";
+    $where["sejour.confirme"] = " = '0'";
   }
   $mouvements = $affectation->loadList($where, $order, null, null, $ljoin);
   

@@ -69,7 +69,7 @@
   <tr>
     <td>
       <div class="wrapper_line">
-        <div class="affect_legend clit affectation_sortie_autorisee" style="width: 33px">&nbsp;</div>
+        <div class="affect_legend clit sejour_sortie_autorisee" style="width: 33px">&nbsp;</div>
       </div>
     </td>
     <td>

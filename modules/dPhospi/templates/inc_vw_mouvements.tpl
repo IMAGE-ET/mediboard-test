@@ -174,7 +174,7 @@
                       <div id="affectation_temporel_{{$_affectation->_id}}" data-affectation_id="{{$_affectation->_id}}" data-lit_id="{{$_affectation->lit_id}}"
                        class="affectation{{if $mode_vue_tempo == "compacte"}}_compact{{/if}} opacity-90 draggable
                         {{if !$_sejour->_id}}clit_bloque{{else}}clit{{/if}}
-                        {{if $_affectation->confirme}}affectation_sortie_autorisee{{/if}}
+                        {{if $_sejour->confirme}}sejour_sortie_autorisee{{/if}}
                         {{if $_affectation->entree == $_sejour->entree && $_affectation->entree >= $date_min}}debut_sejour{{/if}}
                         {{if $_affectation->sortie == $_sejour->sortie && $_affectation->sortie <= $date_max}}fin_sejour{{/if}}
                         {{if $_affectation->entree > $date_min && $_sejour->_id}}affect_left{{/if}}

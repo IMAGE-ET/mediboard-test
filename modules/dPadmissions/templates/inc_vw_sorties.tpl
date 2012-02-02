@@ -166,7 +166,7 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
           {{$_sejour->sortie_prevue|date_format:$conf.time}}
         {{/if}}
       </span>
-      {{if $_sejour->_ref_last_affectation->confirme}}
+      {{if $_sejour->confirme}}
         <img src="images/icons/tick.png" title="Sortie confirmée par le praticien" />
       {{/if}}
         

@@ -72,7 +72,7 @@
               {{/if}}
             {{/if}}
           </td>
-          <td class="text" {{if $_aff->confirme}}style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"{{/if}}>
+          <td class="text" {{if $_sejour->confirme}}style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"{{/if}}>
             {{if !$_sejour->entree_reelle || ($_aff_prev->_id && $_aff_prev->effectue == 0)}}
               <span class="patient-not-arrived">
             {{elseif $_sejour->septique}}

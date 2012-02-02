@@ -223,7 +223,7 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     // E - Evasion 
     // F - Fugue
     $sejour->loadRefsAffectations();
-    $discharge_disposition = $sejour->_sortie_autorisee ? "3": "4";
+    $discharge_disposition = $sejour->confirme ? "3": "4";
     $data[] = CHL7v2TableEntry::mapTo("112", $discharge_disposition);
     
     // PV1-37: Discharged to Location (DLD) (optional)

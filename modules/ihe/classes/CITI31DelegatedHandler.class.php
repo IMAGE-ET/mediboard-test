@@ -195,7 +195,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       }
       
       // Modification de la sortie (date de sortie, mode de sortie)
-      /* @todo _sortie_autorisee ? */
+      /* @todo confirme ? */
       //if ($sejour->fieldModified("mode_sortie")) {
       //  return "A16";
       //}

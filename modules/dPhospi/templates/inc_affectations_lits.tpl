@@ -67,7 +67,7 @@
           {{/if}}
         {{/if}}
       </td>  
-      {{if $curr_affectation->confirme}}
+      {{if $sejour->confirme}}
       <td class="text" style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
       {{else}}
       <td class="text">

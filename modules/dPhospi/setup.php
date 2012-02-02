@@ -559,7 +559,15 @@ class CSetupdPhospi extends CSetup {
       DROP `affectation_id`";
     $this->addQuery($query);
     
-    $this->mod_version = "0.56";
+    $this->makeRevision("0.56");
+    $this->addDependency("dPplanningOp", "1.33");
+    
+    $query = "UPDATE `sejour`, `affectation`
+                SET `sejour`.`confirme` = `affectation`.`confirme` 
+                WHERE `affectation`.`sejour_id` = `sejour`.`sejour_id`
+                AND `affectation`.`confirme` = '1';";
+    
+    $this->mod_version = "0.57";
   }
 }
 ?>

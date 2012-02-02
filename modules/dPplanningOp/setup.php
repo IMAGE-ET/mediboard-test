@@ -1251,7 +1251,17 @@ class CSetupdPplanningOp extends CSetup {
       ADD `duree_uscpo` INT (11) UNSIGNED DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.32";
+    $this->makeRevision("1.32");
+    
+    $query = "ALTER TABLE `sejour`
+                ADD `confirme` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `sejour`
+                ADD INDEX ( `confirme` )";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.33";
   }
 }
 ?>

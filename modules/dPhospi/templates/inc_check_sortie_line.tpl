@@ -1,6 +1,6 @@
 <tr>
-  <td class="text {{if $_sortie->confirme}}arretee{{/if}}">
-   {{assign var=sejour value=$_sortie->_ref_sejour}}
+  {{assign var=sejour value=$_sortie->_ref_sejour}}
+  <td class="text {{if $sejour->confirme}}arretee{{/if}}">
    {{if $canPlanningOp->read}}
    <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
      <img src="images/icons/planning.png" alt="modifier" />
@@ -30,7 +30,7 @@
     </div>
   </td>
   <td class="narrow">
-    <div {{if !$_sortie->confirme && !$sejour->sortie_reelle}}class="only-printable"{{/if}}>
+    <div {{if !$sejour->confirme && !$sejour->sortie_reelle}}class="only-printable"{{/if}}>
       {{if $type == 'presents'}}
         {{$_sortie->sortie|date_format:$conf.datetime}}
       {{else}}
@@ -38,7 +38,7 @@
       {{/if}}
     </div>
     <div class="not-printable">
-      {{if !$_sortie->confirme && !$sejour->sortie_reelle}}
+      {{if !$sejour->confirme && !$sejour->sortie_reelle}}
       {{assign var=aff_guid value=$_sortie->_guid}}
       <form name="editSortiePrevue-{{$type}}-{{$aff_guid}}" method="post" action="?"
         onsubmit="return onSubmitFormAjax(this, { onComplete: function() { refreshList(null, null, '{{$type}}', '{{$type_mouvement}}'); } })">
@@ -53,13 +53,13 @@
       {{/if}}
     </td>
     <td class="narrow">
-      <form name="Sortie-{{$_sortie->_guid}}" action="?m={{$m}}" method="post"
+      <form name="sortie-{{$sejour->_guid}}" action="?m={{$m}}" method="post"
         onsubmit="return onSubmitFormAjax(this, {onComplete: function() { refreshList(null, null, '{{$type}}', '{{$type_mouvement}}'); } })">
-        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="dosql" value="do_affectation_aed" />
-        {{mb_key object=$_sortie}}
-        {{if $_sortie->confirme}}
+        <input type="hidden" name="dosql" value="do_sejour_aed" />
+        {{mb_key object=$sejour}}
+        {{if $sejour->confirme}}
           <input type="hidden" name="confirme" value="0" />
           <button type="submit" class="cancel">
             Annuler

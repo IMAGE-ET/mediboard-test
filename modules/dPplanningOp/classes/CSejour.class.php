@@ -69,6 +69,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $repas_sans_porc     = null;
   var $mode_entree         = null;
   var $mode_sortie         = null;
+  var $confirme            = null;
   var $prestation_id       = null;
   var $facturable          = null; 
   var $adresse_par_prat_id = null;
@@ -101,7 +102,6 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_hour_sortie_prevue = null;
   var $_min_entree_prevue  = null;
   var $_min_sortie_prevue  = null;
-  var $_sortie_autorisee   = null;
   var $_guess_NDA          = null;
   var $_at_midnight        = null;
   var $_couvert_cmu        = null;
@@ -293,6 +293,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["repas_sans_porc"]          = "bool";
     $props["mode_entree"]              = "enum list|6|7|8";
     $props["mode_sortie"]              = "enum list|normal|transfert|mutation|deces default|normal";
+    $props["confirme"]                 = "bool";
     $props["prestation_id"]            = "ref class|CPrestation";
     $props["facturable"]               = "bool notNull default|1 show|0";
     $props["etablissement_sortie_id"]  = "ref class|CEtabExterne autocomplete|nom";
@@ -350,7 +351,6 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["_duree"]                            = "num";
     $props["_date_entree_prevue"]               = "date";
     $props["_date_sortie_prevue"]               = "date moreEquals|_date_entree_prevue";
-    $props["_sortie_autorisee"]                 = "bool";
     $props["_protocole_prescription_anesth_id"] = "str";
     $props["_protocole_prescription_chir_id"]   = "str";
     $props["_motif_complet"]                    = "str";
@@ -1693,9 +1693,7 @@ class CSejour extends CCodable implements IPatientRelated {
       $this->_ref_first_affectation = new CAffectation;
       $this->_ref_last_affectation = new CAffectation;
     }
-    
-    $this->_sortie_autorisee = $this->_ref_last_affectation->confirme;
-    
+        
     return $this->_ref_affectations;
   }
   

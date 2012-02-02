@@ -59,7 +59,7 @@ $where["service.group_id"]   = "= '$group->_id'";
 $where["service.service_id"] = CSQLDataSource::prepareIn(array_keys($services), $service_id);
 $where["sejour.type"]        = CSQLDataSource::prepareIn(array_keys($mouvements) , $type_hospi);
 if ($vue) {
-  $where["confirme"] = " = '0'";
+  $where["sejour.confirme"] = " = '0'";
 }
 if($praticien_id) {
   $where["sejour.praticien_id"] = "= '$praticien_id'";
@@ -92,7 +92,7 @@ $presentsNP        = $sejour->countList($wherePresentsNP, null, $ljoinNP);
 
 // Comptage des déplacements
 if ($vue) {
-  unset($where["confirme"]);
+  unset($where["sejour.confirme"]);
   $where["effectue"] = "= '0'";
 }
 $where["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
