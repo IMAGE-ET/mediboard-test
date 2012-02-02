@@ -20,7 +20,8 @@ Main.add(function () {
   <table class="tbl">
     <tr>
       <td class="button" colspan="2">
-        <label><input type="checkbox" class="auto" onclick="CodeSniffer.setAuto(this)" />{{tr}}Auto{{/tr}}</label>
+        <label><input type="checkbox" class="auto" checked="checked" onclick="CodeSniffer.setAuto(this)"/>{{tr}}Auto{{/tr}}</label>
+        <label><input type="checkbox" class="force" onclick="CodeSniffer.setForce(this)" />Force</label>
         <button class="change" onclick="CodeSniffer.start()">{{tr}}Start{{/tr}}</button>
         <button class="cancel" onclick="CodeSniffer.close()">{{tr}}Close{{/tr}}</button>
       </td>

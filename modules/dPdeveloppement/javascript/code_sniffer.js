@@ -6,8 +6,12 @@ CodeSniffer = {
   },
   
   
-  auto: false,
-  
+  force: null,
+  setForce: function(input) {
+    this.force = input.checked;
+  },
+
+  auto: null,
   setAuto: function(input) {
     this.auto = input.checked;
   },
@@ -15,11 +19,11 @@ CodeSniffer = {
   index: 0,
   files: null,
   stats: null,
-
   run: function(button) {
 	$('sniff-file').update();
     $('sniff-run').down('button.change').enable();
-    $('sniff-run').down('input.auto').checked = this.auto = false;
+    $('sniff-run').down('input.auto').checked = this.auto = true;
+    $('sniff-run').down('input.force').checked = this.force = false;
     
 	var run = $('sniff-run');
 	var tbody = run.down('table tbody.files');
@@ -78,7 +82,7 @@ CodeSniffer = {
 	var status = $(file.path.replace(/\//g, ':')).down('.status');
 	status.update(DOM.div({ className: 'loading' }, 'Running'));
 	
-	if (file.tag == 'uptodate') {
+	if (file.tag == 'uptodate' && !this.force) {
       status.update(DOM.div({ className: 'info' }, 'Skipped'));
 	}
 	else {
@@ -101,7 +105,7 @@ CodeSniffer = {
       $('sniff-run').down('button.change').disable();
     }
 
-	if (file.tag == 'uptodate' && CodeSniffer.auto) {
+	if (file.tag == 'uptodate' && this.auto && !this.force) {
       CodeSniffer.start();
 	}
   },
