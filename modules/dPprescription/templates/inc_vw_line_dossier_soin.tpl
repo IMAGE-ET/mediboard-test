@@ -97,22 +97,8 @@
 	
   {{if $line->inscription || $smarty.foreach.$last_foreach.first}}
   <td {{if $conf.dPprescription.CPrescription.show_categories_plan_soins && $line->inscription}}colspan="2"{{/if}}
-      class="text {{if $line instanceof CPrescriptionLineMedicament && $line->traitement_personnel}}traitement{{/if}}
-			       {{if $line->premedication}} premedication{{/if}}" rowspan="{{$nb_line}}" >
-		{{if $line->commentaire}}
-      <img src="images/icons/postit.png" title="" style="float: right; margin: 2px;" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-comment-{{$line->_guid}}');" />
-			<table class="tbl" id="tooltip-content-comment-{{$line->_guid}}" style="display: none;">
-			  <tr>
-			  	<th>Commentaire - {{$line->_view}}</th>
-				</tr>	
-			 <tr>
-			 	<td class="text" style="width: 300px;">
-			 		 {{$line->commentaire}}
-			 	</td>
-			 </tr>
-			</table>
-    {{/if}}
-		
+      class="{{if $smarty.session.browser.name != "msie"}}text{{/if}} {{if $line instanceof CPrescriptionLineMedicament && $line->traitement_personnel}}traitement{{/if}}
+			       {{if $line->premedication}} premedication{{/if}}" rowspan="{{$nb_line}}" >	
 	  {{if $line->_recent_modification}}
 		  {{if @$conf.object_handlers.CPrescriptionAlerteHandler && $line->_ref_alerte->_id}}
 				<div id="alert_manuelle_{{$line->_ref_alerte->_id}}">
@@ -174,7 +160,7 @@
 	      {{if $line_class == "CPrescriptionLineMedicament"}}
 					{{$line->_ucd_view}}
 					<br />
-					{{if $line->traitement_personnel}} (Traitement perso){{/if}}
+					{{if $line->traitement_personnel}} <label title="Traitement personnel">(Tp)</label>{{/if}}
 	      {{else}}
 				  <div class="mediuser" style="border-color: #{{$line->_ref_element_prescription->_color}}">
 					  {{$line->_view}}
@@ -184,7 +170,24 @@
 						{{/if}}
 					</div>
 				{{/if}} 
+				  {{if $line->commentaire}}
+
+      <img src="images/icons/postit.png" title="" style="float: right; margin: 2px;" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-comment-{{$line->_guid}}');" />
+      <table class="tbl" id="tooltip-content-comment-{{$line->_guid}}" style="display: none;">
+        <tr>
+          <th>Commentaire - {{$line->_view}}</th>
+        </tr> 
+       <tr>
+        <td class="text" style="width: 300px;">
+           {{$line->commentaire}}
+        </td>
+       </tr>
+      </table>
+    
+    {{/if}}
 	  </div>
+		
+		
 		
 		{{if $line_class == "CPrescriptionLineMedicament"}}
       {{include file="../../dPprescription/templates/inc_vw_info_line_medicament.tpl"}}
