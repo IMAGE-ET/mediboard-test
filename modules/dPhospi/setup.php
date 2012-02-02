@@ -563,7 +563,7 @@ class CSetupdPhospi extends CSetup {
     $this->addDependency("dPplanningOp", "1.33");
     
     $query = "UPDATE `sejour`, `affectation`
-                SET `sejour`.`confirme` = `affectation`.`confirme` 
+                SET `sejour`.`confirme` = '1'
                 WHERE `affectation`.`sejour_id` = `sejour`.`sejour_id`
                 AND `affectation`.`confirme` = '1';";
     
