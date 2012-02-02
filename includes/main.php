@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage mediboard
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Main URL dispatcher in non mobile case
+ * 
+ * @package    Mediboard
+ * @subpackage includes
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Id$
  */
 
 $debug = CAppUI::pref("INFOSYSTEM");
@@ -181,9 +182,11 @@ $tab = $a == "index" ?
   CValue::get("tab");
 
 // Check whether the password is strong enough
-if (CAppUI::$instance->weak_password && 
+if (
+    CAppUI::$instance->weak_password && 
     !CAppUI::$instance->user_remote && 
-    !($m == "admin" && $tab == "chpwd")) {
+    !($m == "admin" && $tab == "chpwd")
+) {
   CAppUI::redirect("m=admin&tab=chpwd&forceChange=1");
 }
 
@@ -281,10 +284,13 @@ if (!$suppressHeaders) {
   $tplHeader->assign("Etablissements"       , $etablissements);
   $tplHeader->assign("svnStatus"            , $svnStatus);
   $tplHeader->assign("allInOne"             , CValue::get("_aio"));
-  $tplHeader->assign("portal"               , array (
-    "help"    => mbPortalURL($m, $tab),
-    "tracker" => mbPortalURL("tracker"),
-  ));
+  $tplHeader->assign(
+      "portal", 
+      array (
+        "help"    => mbPortalURL($m, $tab),
+        "tracker" => mbPortalURL("tracker"),
+      )
+  );
   
   $tplHeader->display("header.tpl");
 }

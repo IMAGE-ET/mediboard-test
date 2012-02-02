@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * Input arrays preperations
+ * 
+ * @package    Mediboard
  * @subpackage includes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Id$
  */
 
 // Emulates magic quotes when disabled
@@ -16,6 +17,7 @@ if (!get_magic_quotes_gpc()) {
   $_REQUEST = array_map_recursive("addslashes", $_REQUEST);
 }
 
+// UTF decode inputs from ajax requests
 if (isset($_REQUEST["ajax"])) {
   $_GET     = array_map_recursive("utf8_decode", $_GET);
   $_POST    = array_map_recursive("utf8_decode", $_POST);

@@ -1,14 +1,14 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * Global system version
+ * 
+ * @package    Mediboard
  * @subpackage includes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Id$
  */
 
-// Global system version
 $version = array (
   // Manual numbering
   "major" => 0,

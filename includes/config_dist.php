@@ -1,22 +1,19 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * Global system and modules
+ * WARNING: no config documentation in those files
+ * Use instead locales for UI documentation 
+ * 
+ * @package    Mediboard
  * @subpackage includes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Id$
  */
   
 // Needed for module config file inclusions 
 // Beginning of this file or installer will fail on config loading.
 global $dPconfig; 
-
-/**
- *  Global hosting settings
- *  WARNING: no config documentation in those files
- *  Use instead locales for UI documentation 
- */
 
 // No trailing slash, no backslashes for Win users (use slashes instead)
 $dPconfig["root_dir"]          = "/var/www/mediboard";  
