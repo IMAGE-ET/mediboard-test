@@ -16,6 +16,12 @@
 // you are using session configuration.
 // See http://kcfinder.sunhater.com/install for setting descriptions
 
+global $dPconfig;
+
+include "../../includes/config_all.php";
+
+$upload_directory = $dPconfig['dPfiles']['CFile']['upload_directory'];
+
 $_CONFIG = array(
 
     'disabled' => false,
@@ -24,7 +30,7 @@ $_CONFIG = array(
 
     'theme' => "oxygen",
 
-    'uploadURL' => "../../files/editor",
+    'uploadURL' => "../../$upload_directory/editor",
     'uploadDir' => "",
 
     'dirPerms' => 0755,

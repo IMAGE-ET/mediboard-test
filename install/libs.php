@@ -284,8 +284,8 @@ $library->fileName = "kcfinder-2.51.tar.gz";
 $library->description = "Gestionnaire de fichier en ajax";
 $library->sourceDir = "kcfinder-2.51";
 $library->targetDir = "kcfinder";
-$library->versionFile = "browse.php";
-$library->versionString = "@version 2.51";
+$library->versionFile = "config.php";
+$library->versionString = "config_all";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "kcfinder";
@@ -359,13 +359,12 @@ CLibrary::$all[$library->name] = $library;
 $library = new CLibrary;
 $library->name = "dompdf";
 $library->url = "http://code.google.com/p/dompdf";
-$library->fileName = "dompdf-19-07-11.tar.gz";
+$library->fileName = "dompdf-03-02-12.tar.gz";
 $library->description ="HTML to PDF Converter";
 $library->sourceDir = "dompdf";
 $library->targetDir = "dompdf";
-$library->versionFile = "include/page_frame_decorator.cls.php";
-$library->versionString = "/*if";
-
+$library->versionFile = "include/image_cache.cls.php";
+$library->versionString = "!\$base_path";
 CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
