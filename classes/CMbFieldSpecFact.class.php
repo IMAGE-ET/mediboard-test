@@ -1,16 +1,19 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * Field spec factory
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Id$
  */
 
 
 /**
- * @abstract Fabrique de CFieldSpec en fonction des spécifications de propriétés
+ * CFieldSpec factory for prop serialized definitions
+ * 
+ * @todo Memory caching
  */
 class CMbFieldSpecFact {
   
@@ -35,61 +38,51 @@ class CMbFieldSpecFact {
     "password"     => "CPasswordSpec",
     "html"         => "CHtmlSpec",
     "xml"          => "CXmlSpec",
-    "php"          => "CPhpSpec", /** @todo: Make a sourceCode spec */
+    "php"          => "CPhpSpec",       // @todo: Make a sourceCode spec/
     "er7"          => "CER7Spec",
     "ipAddress"    => "CIpAddressSpec",
   );
    
   /**
-   * Returns a spec object for an object's field
-   * @param $object CMbObject The object
-   * @param $fieldName string The field
-   * @param $strSpec string The spec as string
-   * @return CMbFieldSpec
+   * Returns a spec object for an object field's prop
+   * 
+   * @param CMbObject $object The object
+   * @param string    $field  The field name
+   * @param string    $prop   The prop string serializing the spec object options
+   * 
+   * @return CMbFieldSpec Corresponding spec instance
    */
-  static function getSpec(CMbObject $object, $fieldName, $strSpec = null) {
-    $className = $object->_class;
-        
-    $specFragments = explode(" ", $strSpec);
-    $specClassName = "CMbFieldSpec";
-    if ($specName = array_shift($specFragments)) {
-	    if (null == $specClassName = CMbArray::get(self::$classes, $specName)) {
-	      trigger_error("No spec class name for '$className'::'$fieldName' = '$strSpec'", E_USER_ERROR);
-	    }
-    }
-    
-    $specOptions = array();
-    foreach ($specFragments as $specFragment) {
-      $options = explode("|", $specFragment);
-      $specOptions[array_shift($options)] = count($options) ? implode("|", $options) : true;
-    }
-
-    return new $specClassName($className, $fieldName, $strSpec, $specOptions);
+  static function getSpec(CModelObject $object, $field, $prop) {
+  	return self::getSpecWithClassName($object->_class, $field, $prop);
   }
-	
+  
   /**
    * Returns a spec object for an object's field from a class name
-   * @param string $className
-   * @param string $fieldName
-   * @param string $strSpec [optional]
-   * @todo Merge this code with self::getSpec
+   * 
+   * @param string $class The class name
+   * @param string $field The field name
+   * @param string $prop  The prop string serializing the spec object options
+   * 
    * @return CMbFieldSpec
    */
-  static function getSpecWithClassName($className, $fieldName, $strSpec = null) {
-    $specFragments = explode(" ", $strSpec);
-    $specClassName = "CMbFieldSpec";
-    if ($specName = array_shift($specFragments)) {
-      if (null == $specClassName = CMbArray::get(self::$classes, $specName)) {
-        trigger_error("No spec class name for '$className'::'$fieldName' = '$strSpec'", E_USER_ERROR);
+  static function getSpecWithClassName($class, $field, $prop) {
+    $parts = explode(" ", $prop);
+    $specClass = "CMbFieldSpec";
+    
+    // Get spec class
+    if ($specType = array_shift($parts)) {
+      if (null == $specClass = CMbArray::get(self::$classes, $specType)) {
+        trigger_error("No spec class name for '$class'::'$field' = '$prop'", E_USER_ERROR);
       }
     }
     
+    // Get spec options
     $specOptions = array();
-    foreach ($specFragments as $specFragment) {
-      $options = explode("|", $specFragment);
+    foreach ($parts as $_part) {
+      $options = explode("|", $_part);
       $specOptions[array_shift($options)] = count($options) ? implode("|", $options) : true;
     }
 
-    return new $specClassName($className, $fieldName, $strSpec, $specOptions);
+    return new $specClass($class, $field, $prop, $specOptions);
   }
 }

@@ -1,20 +1,26 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
+/**
+ * Field spec object representation of serialized prop 
+ * as defined in Model objects
+ */
 class CMbFieldSpec {
   var $object         = null;
   var $spec           = null;
-  var $className      = null; // @TODO: rename to $owner
-  var $fieldName      = null; // @TODO: rename to $field
+  var $className      = null; // @todo: rename to $owner
+  var $fieldName      = null; // @todo: rename to $field
   var $prop           = null;
   
+  // Options
   var $default        = null;
   var $notNull        = null;
   var $confidential   = null;
@@ -53,18 +59,35 @@ class CMbFieldSpec {
 
   protected $_defaultLength = null;
 
-  function __construct($className, $field, $prop = null, $aProperties = array()) {
+  /**
+   * Standard constructor
+   * 
+   * @param string $className Class name of the owner object
+   * @param string $field     Field name 
+   * @param string $prop      Serialiazed prop
+   * @param array  $options   Options extracted from prop
+   * 
+   * @return unknown_type
+   */
+  function __construct($className, $field, $prop = null, $options = array()) {
     $this->className = $className;
     $this->fieldName = $field;
     $this->prop      = $prop;
 
-    $aObjProperties = get_object_vars($this);
-
-    foreach($aProperties as $k => $v) {
-      if (array_key_exists($k, $aObjProperties)){
+    $vars = get_object_vars($this);
+    foreach ($options as $k => $v) {
+      if (array_key_exists($k, $vars)) {
         $this->$k = $v;
-      } else {
-        trigger_error("La spécification '$k' trouvée dans '$className::$field' est inexistante dans la classe '".get_class($this)."'", E_USER_WARNING);
+      } 
+      else {
+        $error = sprintf(
+            "L'option '%s' trouvée dans '%s::%s' est inexistante dans la spec de classe '%s'",
+            $k,
+            $className,
+            $field,
+            get_class($this)
+        );
+        trigger_error($error, E_USER_WARNING);
       }
     }
 
@@ -75,9 +98,14 @@ class CMbFieldSpec {
       $this->helped = explode("|", $this->helped);
     }
     
-    $this->checkValues();
+    $this->checkOptions();
   }
   
+  /**
+   * Get spec options and there own meta-prop
+   * 
+   * @return array Array of default name => option meta-prop
+   */
   function getOptions(){
     return array(
       'default'       => 'str',
@@ -102,12 +130,18 @@ class CMbFieldSpec {
     );
   }
   
-  function __toString(){
+  /**
+   * Standard to string magic function
+   * 
+   * @return string 
+   */
+  function __toString() {
     return $this->prop;
   }
 
   /**
    * Check whether prop has been declared in parent class
+   * 
    * @return bool true if prop is inherited, false otherwise
    */
   function isInherited() {
@@ -120,6 +154,15 @@ class CMbFieldSpec {
     return false;
   }
   
+  /**
+   * Get the HTML formatted value for the field associated with this spec
+   * 
+   * @param object $object Object holding the field value
+   * @param Smarty $smarty Optional smarty instance
+   * @param array  $params Optional extra params
+   * 
+   * @return html Formatted value
+   */
   function getValue($object, $smarty = null, $params = array()) {
     $propValue = $object->{$this->fieldName};
     
@@ -130,24 +173,32 @@ class CMbFieldSpec {
     return htmlspecialchars($propValue);
   }
 
+  /**
+   * Check options (params) of the spec vs. the field value
+   * 
+   * @param object $object Object holding the field value
+   * 
+   * @return unknown_type
+   */
   function checkParams($object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
 
     // NotNull
-    if($this->notNull && !$this->default && ($propValue === null || $propValue === "")){
+    if ($this->notNull && !$this->default && ($propValue === null || $propValue === "")) {
       return "Ne peut pas avoir une valeur nulle";
     }
 
-    if ($propValue === null || $propValue === ""){
+    if ($propValue === null || $propValue === "") {
       return null;
     }
     
     // moreThan
-    if($field = $this->moreThan){
-      if($msg = $this->checkTargetPropValue($object, $field)){
+    if ($field = $this->moreThan) {
+      if ($msg = $this->checkTargetPropValue($object, $field)) {
         return $msg;
       }
+      
       $targetPropValue = $object->$field;
       if ($propValue <= $targetPropValue) {
         return "'$propValue' n'est pas strictement supérieur à '$targetPropValue'";
@@ -155,10 +206,11 @@ class CMbFieldSpec {
     }
 
     // moreEquals
-    if($field = $this->moreEquals){
-      if($msg = $this->checkTargetPropValue($object, $field)){
+    if ($field = $this->moreEquals) {
+      if ($msg = $this->checkTargetPropValue($object, $field)) {
         return $msg;
       }
+      
       $targetPropValue = $object->$field;
       if ($propValue < $targetPropValue) {
         return "'$propValue' n'est pas supérieur ou égal à '$targetPropValue'";
@@ -166,10 +218,11 @@ class CMbFieldSpec {
     }
 
     // sameAs
-    if($field = $this->sameAs){
-      if($msg = $this->checkTargetPropValue($object, $field)){
+    if ($field = $this->sameAs) {
+      if ($msg = $this->checkTargetPropValue($object, $field)) {
         return $msg;
       }
+      
       $targetPropValue = $object->$field;
       if ($propValue !== $targetPropValue) {
         return "Doit être identique à '$field->fieldName'";
@@ -177,10 +230,11 @@ class CMbFieldSpec {
     }
 
     // notContaining
-    if($field = $this->notContaining){
-      if($msg = $this->checkTargetPropValue($object, $field)){
+    if ($field = $this->notContaining) {
+      if ($msg = $this->checkTargetPropValue($object, $field)) {
         return $msg;
       }
+      
       $targetPropValue = $object->$field;
       if (stristr($propValue, $targetPropValue)) {
         return "Ne doit pas contenir '$field->fieldName'";
@@ -188,10 +242,11 @@ class CMbFieldSpec {
     }
     
       // notNear
-    if($field = $this->notNear){
-      if($msg = $this->checkTargetPropValue($object, $field)){
+    if ($field = $this->notNear) {
+      if ($msg = $this->checkTargetPropValue($object, $field)) {
         return $msg;
       }
+      
       $targetPropValue = $object->$field;  
       if (levenshtein($propValue, $targetPropValue) < 2) {
         return "Le mot de passe ressemble trop à '$field->fieldName'";
@@ -199,7 +254,7 @@ class CMbFieldSpec {
     }
 
     // alphaAndNum
-    if($this->alphaAndNum){
+    if ($this->alphaAndNum) {
       if (!preg_match("/[a-z]/", $propValue) || !preg_match("/\d+/", $propValue)) {
         return 'Doit contenir au moins un chiffre ET une lettre';
       }
@@ -215,32 +270,36 @@ class CMbFieldSpec {
         if (!preg_match($regex, $masked)) {
           return "La donnée '$propValue' ne respecte pas le masque '$this->mask'";
         } // else, that means the value is already the formatted value
-      } else {
+      } 
+      else {
         $object->{$this->fieldName} = $formatted;
       }
     }
 
     // pattern
-    if($this->pattern){
+    if ($this->pattern) {
       if (!preg_match('/^'.preg_quote($this->pattern).'$/', $propValue)) {
         return 'Ne correspond pas au format attendu';
       }
     }
-
-    return null;
   }
 
- /**
-  *  99/99/9999 >> 
-    array  (
-      array('[0-9]', 2),
-      '/',
-      array('[0-9]', 2),
-      '/',
-      array('[0-9]', 4)
-    )
-  * 
-  */
+  /**
+   * Turn a field mask into a Lexemes (?!) array
+   *  
+   * 99/99/9999 >> 
+   * array  (
+   *   array('[0-9]', 2),
+   *   '/',
+   *   array('[0-9]', 2),
+   *   '/',
+   *   array('[0-9]', 4)
+   * )
+   * 
+   * @param string $mask Field mask, see above
+   * 
+   * @return array See above
+   */
   static function maskToLexemes($mask) {
     $mask = str_replace(array('S', 'P'), array(' ', '|'), $mask);
     $lexemes = array();
@@ -254,9 +313,11 @@ class CMbFieldSpec {
         if (isset(self::$charmap[$prevChar])) {
           $lexemes[] = array(self::$charmap[$prevChar], $count);
         }
-        if($c !== null) {
+        
+        if ($c !== null) {
           $lexemes[] = $c;
         }
+        
         $prevChar = $c;
         $count = 0;
       }
@@ -279,9 +340,16 @@ class CMbFieldSpec {
     return $lexemes;
   }
   
- /**
-  *  99/99/9999 >> /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/ 
-  */
+  /**
+   * Turn a field mask into a regex
+   *  
+   * 99/99/9999 >> 
+   * /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/ 
+   * 
+   * @param string $mask Field mask, see above
+   * 
+   * @return array See above
+   */
   static function maskToRegex($mask) {
     $mask = str_replace(array('S', 'P'), array(' ', '|'), $mask);
     $regex = '/^';
@@ -297,10 +365,18 @@ class CMbFieldSpec {
     return $regex;
   }
   
- /** Removes the mask from the string 
-  *   Example : 06-85-98-45-26  >> 0685984526
-  *   Or        31/10/1985      >> 1985-10-31 with the format $3-$2-$1
-  */
+  /** 
+   * Remove a mask from a value and possibly reformat it
+   *  
+   * Example : 06-85-98-45-26 >> 0685984526 (with no format)
+   * Example : 31/10/1985     >> 1985-10-31 (with format "$3-$2-$1")
+   *   
+   * @param string $data   Data to format
+   * @param string $mask   The mask
+   * @param string $format Optional format
+   * 
+   * @return string Formatted data
+   */
   static function maskedToFormatted($data, $mask, $format = null) {
     $mask = str_replace(array('S', 'P'), array(' ', '|'), $mask);
     $formatted = '';
@@ -329,10 +405,18 @@ class CMbFieldSpec {
     return $formatted;
   }
 
- /** Applies the mask to the string 
-  *   Example : 0685984526 >> 06-85-98-45-26
-  *   Or        1985-10-31 >> 31/10/1985 with the format $3-$2-$1
-  */
+  /** 
+   * Apply a mask from a row value and possibly defining row format
+   *  
+   * Example : 0685984526 >> 06-85-98-45-26 (with no format)
+   * Example : 1985-10-31 >> 31/10/1985 (with format "$3-$2-$1")
+   *   
+   * @param string $rawdata Data to format
+   * @param string $mask    The mask
+   * @param string $format  Optional format
+   * 
+   * @return string Masked data
+   */
   static function formattedToMasked($rawdata, $mask, $format = null) {
     $mask = str_replace(array('S', 'P'), array(' ', '|'), $mask);
     $masked = '';
@@ -383,89 +467,158 @@ class CMbFieldSpec {
     return $masked;
   }
 
+  /**
+   * Check whether target field exists in object
+   * 
+   * @param object $object Object to scan
+   * @param string $field  Field name
+   * 
+   * @return string Error-like message
+   */
   function checkTargetPropValue($object, $field){
-    $aObjProperties = get_object_vars($object);
-    if(!$field || $field === true || !is_scalar($field) || !array_key_exists($field ,$aObjProperties)){
-      trigger_error("Elément cible '$field' invalide ou inexistant dans la classe '".get_class($this)."'", E_USER_WARNING);
+    $fields = get_object_vars($object);
+    if (!$field || $field === true || !is_scalar($field) || !array_key_exists($field, $fields)) {
+      $class = get_class($this);
+      trigger_error("Elément cible '$field' invalide ou inexistant dans la classe '$class'", E_USER_WARNING);
       return "Erreur système";
     }
-    return null;
   }
 
+  /**
+   * Check property value with regard to this specification
+   * 
+   * @param object $object Objcet holding de field
+   * 
+   * @return string Error-like message
+   * @todo rename to checkValue()
+   */
   function checkPropertyValue($object){
     $propValue = $object->{$this->fieldName};
 
-    if($msg = $this->checkParams($object)){
+    if ($msg = $this->checkParams($object)) {
       return $msg;
     }
 
     if ($propValue === null || $propValue === "") {
-      return null;
+      return;
     }
 
-    if($msg = $this->checkProperty($object)){
+    if ($msg = $this->checkProperty($object)) {
       return $msg;
     }
   }
 
+  /**
+   * Build a arbitrary length random string with given char set
+   * 
+   * @param array $array  Char set 
+   * @param int   $length Length of wanted string
+   * 
+   * @return string The random string
+   * @todo Should be part of CMBString
+   */
   static function randomString($array, $length) {
     $string = "";
     $count = count($array) - 1;
-    for($i = 0; $i < $length; $i++)  {
+    for ($i = 0; $i < $length; $i++) {
       $string .= $array[rand(0, $count)];
     }
+    
     return $string;
   }
 
+  /**
+   * Check whether a value is numeric, with dot/comma tolerance, then cast it
+   * 
+   * @param mixed &$value Given in-out value, gets cast on success
+   * @param bool  $int    Cast to int if true, float otherwise
+   * 
+   * @return mixed Cast value
+   * @todo Should be part of CValue
+   */
   static function checkNumeric(&$value, $int = true){
-    $value = preg_replace(array('/\s/', '/,/'), array('', '.'), $value);
-    if (!is_numeric($value)) return null;
+    // Dot/comma tolerance
+  	$value = preg_replace(array('/\s/', '/,/'), array('', '.'), $value);
+    if (!is_numeric($value)) {
+      return null;
+    }
     return $value = ($int ? intval($value) : floatval($value));
   }
 
+  /**
+   * Check a length strictly positive one-byte value
+   * 
+   * @param mixed $length Value to check
+   * 
+   * @return mixed Cast value, null on failure
+   */
   static function checkLengthValue($length){
-    if(!$length = CMbFieldSpec::checkNumeric($length)){
-      return null;
+    if (!$length = CMbFieldSpec::checkNumeric($length)) {
+      return;
     }
+    
     if ($length < 1 || $length > 255) {
-      return null;
+      return;
     }
+    
     return $length;
   }
 
-  function checkConfidential(&$object){
-    if(!$this->confidential || $object->{$this->fieldName} === null){
-      return null;
+  /**
+   * Scramble bound valued field for given object, if confidential
+   * 
+   * @param object $object Object holding the field
+   * 
+   * @return void
+   */
+  function checkConfidential($object){
+    if (!$this->confidential || $object->{$this->fieldName} === null) {
+      return;
     }
 
     $this->sample($object);
   }
 
+  /**
+   * Get an HTML form element corresponding to the bound object value
+   * 
+   * @param object $object Object holding the field
+   * @param array  $params Extra parameters
+   *  
+   * @return html HTML form string
+   */
   function getFormElement($object, $params){
     $hidden    = CMbArray::extract($params, "hidden");
     $className = CMbArray::extract($params, "class");
-    if($object->_locked) {
+    
+    // Forces readonly param for locked objcets
+    if ($object->_locked) {
       $params["readonly"] = "readonly";
     }
+    
+    // @todo Probably useless wrt to getValue() behaviour
     $value = $this->mask ? $this->getValue($object) : $object->{$this->fieldName};
+    
+    // Hidden case
     if ($hidden) {
       return $this->getFormHiddenElement($object, $params, $value, $className);
     }
+    
     return $this->getFormHtmlElement($object, $params, $value, $className);
   }
 
   /**
-   * Produit le code HTML pour une label de champ de formulaire
-   * pour le champ de la spécification
+   * Get an HTML label element corresponding to the bound object value
    *
-   * @param CMbObject $object Objet concerné
-   * @param array $params Extra parameters
+   * @param object $object Object holding the field
+   * @param array  $params Extra parameters
    *   - defaultFor : name of a radio option to associate label with
-   * @return string Rendered HTML
+   *   
+   * @return html HTML label string
    */
   function getLabelElement($object, $params = array()) {
     $defaultFor = CMbArray::extract($params, "defaultFor");
-    $forName = $defaultFor ? $defaultFor : $this->getLabelForElement($object, $params);
+    $forName = $defaultFor ? $defaultFor : $this->getLabelForAttribute($object, $params);
     $className = $object->_specs[$this->fieldName]->notNull ? "checkNull" : "";
     
     $extra  = CMbArray::makeXmlAttributes($params);
@@ -480,12 +633,12 @@ class CMbFieldSpec {
   }
 
   /**
-   * Produit le code HTML pour un titre de colonne
-   * pour le champ de la spécification
+   * Get an HTML title label element corresponding to the bound object value
    *
-   * @param CMbObject $object Objet concerné
-   * @param array $params Extra parameters
-   * @return string Rendered HTML
+   * @param object $object Object holding the field
+   * @param array  $params Extra parameters
+   * 
+   * @return html HTML title string
    */
   function getTitleElement($object, $params) {
     $desc  = CAppUI::tr("$object->_class-$this->fieldName-desc");
@@ -494,23 +647,59 @@ class CMbFieldSpec {
     return "<label title=\"$desc\" >$title</label>";
   }
 
-  function getLabelForElement($object, &$params){
+  /**
+   * Get the for attribute of label element
+   * 
+   * @param object $object  Object holding the field
+   * @param array  &$params Extra parameters
+   * 
+   * @return string HTML label for attribute
+   */
+  function getLabelForAttribute($object, &$params){
     return $this->fieldName;
   }
-
+  
+  /**
+   * Get an HTML form element hidden variant corresponding to the bound object value
+   * 
+   * @param object $object    Object holding the field
+   * @param array  $params    Extra parameters
+   * @param string $value     The actual value
+   * @param string $className Extra CSS class name
+   *  
+   * @return html HTML form string
+   */
   function getFormHiddenElement($object, $params, $value, $className) {
-    $field = $this->fieldName;
-    $form = CMbArray::extract($params, "form"); // needs to be extracted
-    $extra = CMbArray::makeXmlAttributes($params);
-    $sHtml = "<input type=\"hidden\" name=\"".htmlspecialchars($field)."\" value=\"".htmlspecialchars($value)."\"";
-    if($this->prop){
-      $sHtml .= " class=\"".htmlspecialchars($this->prop)."\"";
+    $field = htmlspecialchars($this->fieldName);
+    $value = htmlspecialchars($value);
+    
+    // Needs to be extracted
+    CMbArray::extract($params, "form"); 
+    
+    // Input 
+    $sHtml = "<input type=\"hidden\" name=\"$field\" value=\"$value\"";
+    if ($this->prop) {
+      $prop = htmlspecialchars(trim("$className $this->prop"));
+      $sHtml.= " class=\"$prop\"";
     }
-    $sHtml  .= " $extra/>";
+    
+    // Extra attributes
+    $extra = CMbArray::makeXmlAttributes($params);
+    $sHtml.= " $extra/>";
 
     return $sHtml;
   }
 
+  /**
+   * Get an HTML form text input corresponding to the bound object value
+   * 
+   * @param object $object    Object holding the field
+   * @param array  $params    Extra parameters
+   * @param string $value     The actual value
+   * @param string $className Extra CSS class name
+   *  
+   * @return html HTML form input string
+   */
   function getFormElementText($object, $params, $value, $className){
     $field        = htmlspecialchars($this->fieldName);
     $protected    = $value && $object->_id && isset($this->protected) && $this->protected;
@@ -530,10 +719,18 @@ class CMbFieldSpec {
     @list($activated, $minChars, $limit, $wholeString, $dropdown) = explode(',', $autocomplete);
     
     if ($this->autocomplete && $form && $activated === 'true') {
-      if ($minChars    === null || $minChars    === "")    $minChars = 2;
-      if ($limit       === null || $limit       === "")       $limit = 30;
-      if ($wholeString === null || $wholeString === "") $wholeString = false;
-      if ($dropdown    === null || $dropdown    === "" || $dropdown === "false") $dropdown = false;
+      if ($minChars    === null || $minChars    === "") {
+      	$minChars = 2;
+      }
+      if ($limit       === null || $limit       === "") {
+      	$limit = 30;
+      }
+      if ($wholeString === null || $wholeString === "") {
+      	$wholeString = false;
+      }
+      if ($dropdown    === null || $dropdown    === "" || $dropdown === "false") {
+      	$dropdown = false;
+      }
       
       $options = explode('|', $this->autocomplete);
       $view_field = reset($options);
@@ -547,7 +744,7 @@ class CMbFieldSpec {
         $sHtml  = "<input type=\"hidden\" name=\"$field\" value=\"".htmlspecialchars($value)."\" 
                     class=\"".htmlspecialchars("$className $this->prop")."\" $extra />";
         $sHtml .= "<input type=\"text\" name=\"{$field}_autocomplete_view\" value=\"".htmlspecialchars($view)."\" 
-                    class=\"autocomplete\" onchange='if(!this.value){this.form[\"".$field."\"].value=\"\"}' $extra />";
+                    class=\"autocomplete\" onchange='if(!this.value){this.form[\"$field\"].value=\"\"}' $extra />";
         $ref = true;
       }
       else {
@@ -585,7 +782,7 @@ class CMbFieldSpec {
           callback: function(element, query){
             var field;';
         
-        foreach($wheres as $_where) {
+        foreach ($wheres as $_where) {
           $sHtml .= "field = input.form.elements[\"".$_where."\"];
           if (field) query += \"&where[$_where]=\" + \$V(field);";
         }
@@ -602,18 +799,22 @@ class CMbFieldSpec {
         $has_CR = strpos($value, "\n") !== false;
         
         if ($has_CR) {
-          if (!isset($params["style"])) $params["style"] = "";
+          if (!isset($params["style"])) {
+          	$params["style"] = "";
+          }
+          
           $params["style"] .= "width: auto;";
           $extra = CMbArray::makeXmlAttributes($params);
-          
-          $sHtml = "<textarea name=\"$field\" class=\"".htmlspecialchars("$className $this->prop")." noresize\" $extra>".
+          $prop = htmlspecialchars(trim("$className $this->prop"));
+          $sHtml = "<textarea name=\"$field\" class=\"$prop noresize\" $extra>".
                       htmlspecialchars($value).
                    "</textarea>";
         }
-        else{
+        else {
           $sHtml = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
                     class=\"".htmlspecialchars("$className $this->prop")."\" $extra/>";
         }
+        
         $sHtml .= '<button type="button" class="'.($has_CR ? "singleline" : "multiline").' notext" tabIndex="10000"
                            onclick="$(this).previous(\'input,textarea\').switchMultiline(this)"></button>';
       }
@@ -624,19 +825,34 @@ class CMbFieldSpec {
     }
     
     if ($protected) {
-      $sHtml .= '<button type="button" onclick="var p=$(this).previous(\'input,textarea\');p.readOnly=!p.readOnly;" class="notext lock" title="'.CAppUI::tr("Unlock").'"></button>';
+      $onclick = "";
+      $sHtml .= 
+        '<button type="button" onclick="var p=$(this).previous(\'input,textarea\');p.readOnly=!p.readOnly;"'.
+        ' class="notext lock" title="'.CAppUI::tr("Unlock").'"></button>';
     }
     
     return $sHtml;
   }
 
-  function getFormElementTextarea($object, &$params, $value, $className){
+  /**
+   * Get an HTML form textarea corresponding to the bound object value
+   * 
+   * @param object $object    Object holding the field
+   * @param array  $params    Extra parameters
+   * @param string $value     The actual value
+   * @param string $className Extra CSS class name
+   *  
+   * @return html HTML form textarea string
+   */
+  function getFormElementTextarea($object, $params, $value, $className){
     $field = htmlspecialchars($this->fieldName);
     $rows  = CMbArray::extract($params, "rows", "3");
     $form  = CMbArray::extract($params, "form"); // needs to be extracted
     $aidesaisie = CMbArray::extract($params, "aidesaisie");
     $extra = CMbArray::makeXmlAttributes($params);
-    $sHtml = "<textarea name=\"$field\" rows=\"$rows\" class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra>".htmlspecialchars($value)."</textarea>";
+    $prop = htmlspecialchars(trim("$className $this->prop"));
+    $value = htmlspecialchars($value);
+    $sHtml = "<textarea name=\"$field\" rows=\"$rows\" class=\"$prop\" $extra>$value</textarea>";
     
     if ($form) {
       $params_aidesaisie = array();
@@ -672,16 +888,32 @@ class CMbFieldSpec {
     return $sHtml;
   }
 
-  function getFormElementDateTime($object, &$params, $value, $className, $format = "%d/%m/%Y %H:%M") {
+  /**
+   * Get an HTML form datetime input corresponding to the bound object value
+   * 
+   * @param object $object    Object holding the field
+   * @param array  $params    Extra parameters
+   * @param string $value     The actual value
+   * @param string $className Extra CSS class name
+   * @param string $format    Optional datetime format
+   *  
+   * @return html HTML form datetime string
+   */
+  function getFormElementDateTime($object, $params, $value, $className, $format = "%d/%m/%Y %H:%M") {
     if ($object->_locked) {
       $params["readonly"] = "readonly";
     }
 
     $class = htmlspecialchars(trim("$className $this->prop"));
     $field = htmlspecialchars($this->fieldName);
-    $date  = ($value && $value != '0000-00-00' && 
-                        $value != '00:00:00' && 
-                        $value != '0000-00-00 00:00:00') ? (($this instanceof CDateSpec && $this->progressive) ? $this->getValue($object, null, $params) : mbTransformTime(null, $value, $format)) : "";
+    
+    // Format the date
+    $date = "";
+    if ($value && $value != '0000-00-00' && $value != '00:00:00' && $value != '0000-00-00 00:00:00') {
+      $date =  ($this instanceof CDateSpec && $this->progressive) ? 
+        $this->getValue($object, null, $params) : 
+        mbTransformTime(null, $value, $format);
+    }
     
     $form     = CMbArray::extract($params, "form");
     $register = CMbArray::extract($params, "register");
@@ -696,38 +928,82 @@ class CMbFieldSpec {
     $html[] = '<input name="'.$field.'" type="hidden" value="'.$value.'" class="'.$class.'" '.$extra.' />';
 
     if ($form && ($register || $this instanceof CTimeSpec)) {
+      $register = $this instanceof CDateSpec && $this->progressive ? 'regProgressiveField' : 'regField';
       $html[] = '<script type="text/javascript">
-        Main.add(function(){Calendar.reg'.($this instanceof CDateSpec && $this->progressive ? 'Progressive' : '').'Field(getForm("'.$form.'").elements["'.$field.'"])})
+        Main.add(function(){Calendar.'.$register.'(getForm("'.$form.'").elements["'.$field.'"])})
       </script>';
     }
     
     return implode("\n", $html);
   }
 
+  /**
+   * Get an HTML form element corresponding to the bound object value
+   * 
+   * @param object $object    Object holding the field
+   * @param array  $params    Extra parameters
+   * @param string $value     The actual value
+   * @param string $className Extra CSS class name
+   *  
+   * @return html HTML form element string
+   */
   function getFormHtmlElement($object, $params, $value, $className){
     return $this->getFormElementText($object, $params, $value, $className);
   }
 
+  /**
+   * Get the type of this spec, reciprocally to the spec factory
+   * Has to be redefined in each and every subclass
+   * 
+   * @return string Spec type
+   * @todo could be abstract
+   */
   function getSpecType() {
     return "mbField";
   }
 
   /**
-   * Check whether property value bound to objects is compliant to the specification
-   * @param $object object bound to property
-   * @return string Store-like message
+   * Get the SQL implementation typeof this spec
+   * 
+   * @return string SQL type
+   * @todo could be abstract
    */
-  function checkProperty($object) {}
-
-  // Return a sample value.
-  // If consistent, the random value stay the same for a given initial value
-  function sample(&$object, $consistent = true){
-    if($consistent)
-      srand(crc32($object->{$this->fieldName}));
+  function getDBSpec() {
+  }
+  
+  /**
+   * Check whether property value bound to objects is compliant to the specification
+   * 
+   * @param object $object Object bound to property
+   * 
+   * @return string Store-like message
+   * @todo could be abstract
+   */
+  function checkProperty($object) {
   }
 
-  function getDBSpec(){}
-  
+  /**
+   * Produce an sample value according to this spec
+   * 
+   * @param object $object     Object bound to property
+   * @param bool   $consistent If true, random value stay the same for a given initial value
+   * 
+   * @return string Sample value
+   */
+  function sample($object, $consistent = true){
+    if ($consistent) {
+      srand(crc32($object->{$this->fieldName}));
+    }
+  }
+
+  /**
+   * Get SQL column properties out of SQL specification string
+   * 
+   * @param string $db_spec        Object bound to property
+   * @param bool   $reduce_strings If true, unquote strings and cast to integer when possible
+   * 
+   * @return array SQL column properties array
+   */
   static function parseDBSpec($db_spec, $reduce_strings = false) {
     $props = array(
       'type' => null,
@@ -747,11 +1023,8 @@ class CMbFieldSpec {
       $props['params'] = array_map('trim', $props['params']);
       
       if ($reduce_strings) {
-        foreach($props['params'] as &$v) {
-          if ($v[0] === "'") 
-            $v = trim($v, "'");
-          else 
-            $v = (int)$v;
+        foreach ($props['params'] as &$v) {
+          $v =  ($v[0] === "'")  ? trim($v, "'") : $v;
         }
       }
       
@@ -763,10 +1036,21 @@ class CMbFieldSpec {
     return $props;
   }
   
+  /**
+   * Tell whether this spec is a text-like spec
+   * 
+   * @return bool 
+   * @todo Should use inheritence
+   */
   function isTextBlob(){
     return in_array($this->getSpecType(), array("text", "html", "php", "xml", "set"));
   }
 
+  /**
+   * Get the full SQL implementation for this spec
+   * 
+   * @return string SQL column implementation unknown_type
+   */
   function getFullDBSpec(){
     $object = new $this->className;
     $is_key = $object->_spec->key == $this->fieldName;
@@ -793,14 +1077,27 @@ class CMbFieldSpec {
     return implode(' ', $props);
   }
 
-  function checkValues(){}
+  /**
+   * Check -- and repair when possible -- options completude for this specification
+   * 
+   * @return void
+   */
+  function checkOptions() {
+  }
   
-  function trim($value){
+  /**
+   * Spec specific trim function
+   * 
+   * @param string $value The value
+   * 
+   * @return string The trimmed value
+   */
+  function trim($value) {
     return trim($value);
   }
 }
 
-CMbFieldSpec::$chars  = range("a","z");
+CMbFieldSpec::$chars  = range("a", "z");
 CMbFieldSpec::$nums   = range(0, 9);
 CMbFieldSpec::$months = range(1, 12);
 CMbFieldSpec::$days   = range(1, 29);
