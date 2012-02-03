@@ -364,7 +364,7 @@ $library->description ="HTML to PDF Converter";
 $library->sourceDir = "dompdf";
 $library->targetDir = "dompdf";
 $library->versionFile = "include/image_cache.cls.php";
-$library->versionString = "!\$base_path";
+$library->versionString = "urldecode";
 CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
