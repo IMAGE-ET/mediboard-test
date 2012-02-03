@@ -16,6 +16,8 @@ class CDomPDFConverter extends CHtmlToPDFConverter {
     CAppUI::requireLibraryFile("dompdf/dompdf_config.inc");
     
     $this->dompdf = new dompdf();
+    $this->dompdf->set_base_path(dirname(__FILE__)."/../../../../");
+    $this->dompdf->set_protocol(null);
     $this->dompdf->set_paper($format, $orientation);
     $this->dompdf->set_protocol(isset($_SERVER["HTTPS"]) ? "https://" : "http://");
     $this->dompdf->set_host($_SERVER["SERVER_NAME"]);
