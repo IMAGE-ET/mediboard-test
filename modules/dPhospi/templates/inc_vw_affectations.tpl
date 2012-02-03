@@ -167,7 +167,9 @@
                         <input type="radio" name="sejour_move" id="sejour_move_{{$_sejour->_id}}" onchange="chooseSejour('{{$_sejour->_id}}');"/>
                       </span>
                     {{/if}}
-                    {{$patient->nom}} {{$patient->prenom}} {{if $show_age_patient}}({{$patient->_age}} ans){{/if}}
+                    <span {{if !$_sejour->entree_reelle}}class="patient-not-arrived"{{/if}} {{if $_sejour->septique}}class="septique"{{/if}}>
+                      {{$patient->nom}} {{$patient->prenom}}
+                    </span> {{if $show_age_patient}}({{$patient->_age}} ans){{/if}}
                     {{if $_sejour->type != "ambu" && $_sejour->type != "exte"}}
                       ({{$_sejour->_duree}}j - {{$_sejour->_ref_praticien->_shortview}})
                     {{else}}

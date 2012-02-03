@@ -95,6 +95,14 @@
     </td>
   </tr>
   <tr>
+    <td class="septique">
+      M. X y
+    </td>
+    <td>
+      Patient septique
+    </td>
+  </tr>
+  <tr>
     <td>
       <span style="color: #A33">M. X y</span>
     </td>
