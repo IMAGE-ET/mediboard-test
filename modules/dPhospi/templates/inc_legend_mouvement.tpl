@@ -103,6 +103,14 @@
     </td>
   </tr>
   <tr>
+    <td style="font-style: italic">
+      M. X y
+    </td>
+    <td>
+      Séjour de type ambulatoire
+    </td>
+  </tr>
+  <tr>
     <td>
       <span style="color: #A33">M. X y</span>
     </td>
