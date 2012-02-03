@@ -37,11 +37,21 @@
               {{foreach from=$pancarte.$_prescription_id.$_date_hour key="chapitre" item=quantites}}
                 <img src="{{$images.$chapitre}}" 
 						 	  {{if $_date_hour <= $smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}}
-						 		  {{if @$alertes.$_prescription_id.$_date_hour.$chapitre == '1'}}
-	                  style="border-bottom: 3px solid {{if !@$nb_adm.$_prescription_id.$_date_hour.$chapitre}}red{{else}}#FB4{{/if}}; height: 13px; margin: -1px;"
+						 		  style="
+									{{if @$alertes.$_prescription_id.$_date_hour.$chapitre == '1'}}
+	                  border-bottom: 3px solid 
+										{{if !@$nb_adm.$_prescription_id.$_date_hour.$chapitre}}
+										  {{if $cond.$_prescription_id.$_date_hour.$chapitre}}
+                        #aaa
+                      {{else}}
+											  red
+											{{/if}}
+										{{else}}
+										  #FB4
+										{{/if}}; height: 13px; margin: -1px;
 	                {{else}}
-	                  style="border-bottom: 3px solid #0F0; height: 13px; margin: -1px;"
-	                {{/if}}
+	                  border-bottom: 3px solid #0F0; height: 13px; margin: -1px;
+	                {{/if}}"
 							  {{/if}} />
               {{/foreach}}
             </span>

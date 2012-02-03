@@ -14,6 +14,8 @@ if($service_id == "NP"){
 	$service_id = "";
 }
 
+$cond = array();
+
 // Chargement du service
 $service = new CService();
 $service->load($service_id);
@@ -170,7 +172,14 @@ foreach($prescriptions as $_prescription){
 			if($_planif->_ref_object->_recent_modification){
         $new[$_prescription->_id]["$_date $time"] = 1;
         $pancarte[$_prescription->_id]["$_date $time"][$type][$_planif->object_id]["new"] = 1;
-      }				
+      }	
+			
+			if(!isset($cond[$_prescription->_id]["$_date $time"][$type])){
+				$cond[$_prescription->_id]["$_date $time"][$type] = true;
+			}
+			if(!$_planif->_ref_object->conditionnel || $_planif->_ref_object->condition_active){
+			  $cond[$_prescription->_id]["$_date $time"][$type] = false;
+			}
 			
 			$urg = false;
 			// Creation du tableau d'urgences
@@ -216,7 +225,14 @@ foreach($prescriptions as $_prescription){
 			} elseif (CAppUI::conf("dPprescription CPrescription manual_planif")) {
 				continue;
 			}
-				
+		  
+			if(!isset($cond[$_prescription->_id]["$_date $time"][$type_line])){
+        $cond[$_prescription->_id]["$_date $time"][$type_line] = true;
+      }
+      if(!$_planif->_ref_object->_ref_prescription_line_mix->conditionnel || $_planif->_ref_object->_ref_prescription_line_mix->condition_active){
+        $cond[$_prescription->_id]["$_date $time"][$type_line] = false;
+      }
+			
       $_planif->_ref_object->updateQuantiteAdministration();
 			$list_lines[$type_line][$_planif->_ref_object->_ref_prescription_line_mix->_id] = $_planif->_ref_object->_ref_prescription_line_mix;
       $list_lines["perf_line"][$_planif->_ref_object->_id] = $_planif->_ref_object; 
@@ -369,9 +385,6 @@ foreach($prescriptions as $_prescription){
   		}
   	}
   }
-  
-  
-  
 }
 
 // Classement par lit
@@ -402,7 +415,7 @@ $smarty->assign("composition_dossier", $composition_dossier);
 $smarty->assign("new", $new);
 $smarty->assign("urgences", $urgences);
 $smarty->assign("filter_line", $filter_line);
-
+$smarty->assign("cond", $cond);
 if($prescription_id){
 	$smarty->assign("_prescription_id", $prescription->_id);
   $smarty->assign("_prescription", $prescription);

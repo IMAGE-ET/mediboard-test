@@ -60,4 +60,12 @@
       Non effectué
     </td>
   </tr>
+	<tr>
+    <td style="background-color: #aaa; height: 100%;">
+      
+    </td>
+    <td>
+      Conditionnel non activé
+    </td>
+  </tr>
 </table>
