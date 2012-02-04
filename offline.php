@@ -1,11 +1,11 @@
-<?php /* $Id$ */
-
+<?php 
 /**
+ * Mediboard system offline page
+ * 
  * @package Mediboard
- * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
+ * @author  SARL OpenXtrem <dev@openxtrem.com>
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version SVN: $Id$
  */
 
 require "includes/config_all.php";
