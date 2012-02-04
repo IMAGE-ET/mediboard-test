@@ -1,15 +1,20 @@
-<?php /* $Id: ui.class.php 8520 2010-04-09 14:27:59Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id: CMbFieldSpec.class.php 14538 2012-02-03 17:59:27Z mytto $
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision: 8520 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision: 14538 $
  */
 
 /**
- * The true application class
+ * The actual application class
+ * Responsabilities:
+ *  - application kill
+ *  - class management
+ *  - memory and performance
  */
 class CApp {
   static $inPeace = false;
@@ -43,6 +48,8 @@ class CApp {
     
   /**
    * Will trigger an error for logging purpose whenever the application dies unexpectedly
+   * 
+   * @return void
    */
   static function checkPeace() {
     if (!self::$inPeace) {
@@ -56,6 +63,8 @@ class CApp {
   
   /**
    * Make application die properly
+   * 
+   * @return void
    */
   static function rip() {
     // If the client doesn't support cookies, we destroy its session
@@ -70,9 +79,11 @@ class CApp {
   }
   
   /**
-   * Changes to memory limit to $ratio * [current limit]
-   * @param float $ratio
-   * @return Old memory limit
+   * Apply a ratio multiplicator to current memory limit
+   * 
+   * @param float $ratio Ratio to apply
+   * 
+   * @return int Previous memory limit
    */
   static function memoryRatio($ratio) {
     $limit = CMbString::fromDecaSI(ini_get("memory_limit"), "") * $ratio;
@@ -81,9 +92,13 @@ class CApp {
   }
   
   /**
-   * This will make a redirect to empty the POST data, so 
-   * that it is not posted back when refreshing the page.
+   * Redirect to empty the POST data, 
+   * so that it is not posted back when refreshing the page.
    * Use it instead of CApp::rip() directly
+   * 
+   * @param bool $redirect Try to redirect if true
+   * 
+   * @return void
    */
   static function emptyPostData($redirect = true){
     if ($redirect && !empty($_POST) && !headers_sent()) {
@@ -94,8 +109,10 @@ class CApp {
   
   /**
    * Outputs JSON data after removing the Output Buffer, with a custom mime type
-   * @param object $data The data to output
+   * 
+   * @param object $data     The data to output
    * @param string $mimeType [optional] The mime type of the data, application/json by default
+   * 
    * @return void
    */
   static function json($data, $mimeType = "application/json") {
@@ -106,39 +123,50 @@ class CApp {
   }
   
   /**
+   * Fetch an HTML content of a module view, as a HTTP GET call would do
+   * Very useful to assemble multiple views
    * 
-   * @param object $module The module name or the file path
-   * @param object $file [optional] The file of the module, or null
+   * @param object $module    The module name or the file path
+   * @param object $file      [optional] The file of the module, or null
    * @param object $arguments [optional] The GET arguments
+   * 
    * @return string The fetched content
    */
   static function fetch($module, $file = null, $arguments = array()) {
     $save = array();
-    foreach($arguments as $_key => $_value) {
-      if (!isset($_GET[$_key])) continue;
+    foreach ($arguments as $_key => $_value) {
+      if (!isset($_GET[$_key])) {
+      	continue;
+      }
+      
       $save[$_key] = $_GET[$_key];
     }
     
-    foreach($arguments as $_key => $_value) {
+    foreach ($arguments as $_key => $_value) {
       $_GET[$_key] = $_value;
     }
     
     ob_start();
     if (isset($file)) {
-      include("./modules/$module/$file.php");
+      include "./modules/$module/$file.php";
     }
     else {
-      include($module);
+      include $module;
     }
     $output = ob_get_clean();
    
-    foreach($save as $_key => $_value) {
+    foreach ($save as $_key => $_value) {
       $_GET[$_key] = $_value;
     }
     
     return $output;
   }
   
+  /**
+   * Get the base application URL
+   * 
+   * @return string The URL
+   */
   static function getBaseUrl(){
     $scheme = "http".(isset($_SERVER["HTTPS"]) ? "s" : "");
     $host = $_SERVER["SERVER_NAME"];
@@ -149,31 +177,43 @@ class CApp {
   }
   
   /**
-   * Includes all the classes of the framework
+   * Include all the classes of the framework and modules
+   * 
    * @return void
    */
   static function getAllClasses() {
     $rootDir = CAppUI::conf("root_dir");
+    
+    // Ordered paths
     $dirs = array(
-      "classes/*/*.class.php", // Require all global classes
+       // Require all global classes
+      "classes/*/*.class.php",
       "classes/*.class.php", 
       "*/*/*.class.php",
-      "modules/*/classes/*.class.php", // Require all modules classes
-      "modules/*/setup.php", // Require all modules setups 
+      // Require all modules classes
+      "modules/*/classes/*.class.php",
+      // Require all modules setups 
+      "modules/*/setup.php",
     );
     
+    // Actual requires
     foreach ($dirs as $dir) {
       $files = glob("$rootDir/$dir");
       foreach ($files as $fileName) {
-        require_once($fileName);
+        include_once $fileName;
       }
     }
   }
   
   /**
-   * Return all child classe of a given class havin given properties
-   * @param array $properties No property checking if empty
-   * @return array
+   * Return all child classes of a given class having given properties
+   * 
+   * @param array $parent        [optional] Parent class
+   * @param array $properties    [optional] No property checking if empty
+   * @param bool  $active_module [optional] If true, filter on active modules
+   * 
+   * @return array Class names
+   * @todo Default parent class should probably be CModelObject
    */
   static function getChildClasses($parent = "CMbObject", $properties = array(), $active_module = false) {
     $childclasses = SHM::get("child-classes");
@@ -185,41 +225,48 @@ class CApp {
     
     self::getAllClasses();
     
-    $listClasses = get_declared_classes();
-    foreach ($listClasses as $key => $class) {
-      if ($parent and !is_subclass_of($class, $parent)) {
-        unset($listClasses[$key]);
+    $classes = get_declared_classes();
+    foreach ($classes as $key => $class) {
+      // Filter on parent class
+      if ($parent && !is_subclass_of($class, $parent)) {
+        unset($classes[$key]);
         continue;
       }
   
-      foreach($properties as $prop) {
+      // Filter on properties
+      foreach ($properties as $prop) {
         if (!array_key_exists($prop, get_class_vars($class))) {
-          unset($listClasses[$key]);
+          unset($classes[$key]);
         }
       }
       
+      // Filter on active module
       if ($active_module) {
         $object = new $class; 
         if (!isset($object->_ref_module)) {
-          unset($listClasses[$key]);
+          unset($classes[$key]);
         }
       }
     }
     
-    sort($listClasses);
+    sort($classes);
     
+    // Caching
     if ($parent && empty($properties)) {
-      $childclasses[$parent][$active_module] = $listClasses;
+      $childclasses[$parent][$active_module] = $classes;
       SHM::put("child-classes", $childclasses);
     }
     
-    return $listClasses;
+    return $classes;
   }
   
   /**
    * Return all CMbObject child classes
-   * @param array $properties
-   * @return array
+   * 
+   * @param array $properties [optional] Filter on properties
+   * @param array &$instances [optional] If not null, retrieve an array of all object instances
+   * 
+   * @return array Class names
    */
   static function getMbClasses($properties = array(), &$instances = null) {
     $classes = self::getChildClasses("CMbObject", $properties);
@@ -227,7 +274,8 @@ class CApp {
       // Escaped instanciation in case of DSN errors
       $object = @new $class;
      
-      // Classe instanci�e ?
+      // Instanciated class?
+      // @todo All class should be instanciable 
       if (!$object->_class) {
         unset($classes[$key]);
         continue;
@@ -240,9 +288,12 @@ class CApp {
   }
   
   /**
-   * Return all storable classes which module is installed
-   * @param array $properties
-   * @return array
+   * Return all storable CMbObject classes which module is installed
+   * 
+   * @param array $properties [optional] Filter on properties
+   * @param array $classes    [optional] Restrain to given classes
+   * 
+   * @return array Class names
    */
   static function getInstalledClasses($properties = array(), $classes = array()) {
     if (empty($classes)) {
