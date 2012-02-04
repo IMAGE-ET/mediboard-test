@@ -124,5 +124,6 @@
 
   <!-- To be implemented -->
   <!-- MB.Functions.FunctionDeclaration.SpaceBeforeOpeningBracket -->
+  <!-- MB.Functions.FonctionReturn.ReturnNull -->
   
 </ruleset>
