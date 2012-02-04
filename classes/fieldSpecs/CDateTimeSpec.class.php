@@ -31,7 +31,7 @@ class CDateTimeSpec extends CMbFieldSpec {
     
     $date = CMbArray::extract($params, "date");
     if ($date && mbDate($propValue) == $date) {
-      $format = CAppUI::conf("time");
+    	$format = CAppUI::conf("time");
     }
     
     return ($propValue && $propValue != "0000-00-00 00:00:00") ?
@@ -47,7 +47,7 @@ class CDateTimeSpec extends CMbFieldSpec {
         $propValue = mbDateTime();
         return null;
       } 
-      return "format de dateTime invalide : '$propValue'";
+    	return "format de dateTime invalide : '$propValue'";
     }
     
     $propValue = strtr($propValue, "+", " ");

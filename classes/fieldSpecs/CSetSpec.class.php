@@ -139,9 +139,9 @@ class CSetSpec extends CEnumSpec {
     return $sHtml;
   }
   
-  function getLabelForElement($object, &$params){
+  function getLabelForAttribute($object, &$params){
     // to extract the XHTML invalid attribute "typeEnum"
     $typeEnum = CMbArray::extract($params, "typeEnum");
-    return parent::getLabelForElement($object, $params);
+    return parent::getLabelForAttribute($object, $params);
   }
 }

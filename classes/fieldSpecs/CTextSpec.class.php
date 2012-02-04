@@ -31,7 +31,8 @@ class CTextSpec extends CMbFieldSpec {
   
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
-    $object->{$this->fieldName} = self::randomString(array_merge(CMbFieldSpec::$chars, array(' ', ' ', ', ', '. ')), 200);
+    $chars = array_merge(CMbFieldSpec::$chars, array(' ', ' ', ', ', '. '));
+    $object->{$this->fieldName} = self::randomString($chars, 200);
   }
   
   function getFormHtmlElement($object, $params, $value, $className){

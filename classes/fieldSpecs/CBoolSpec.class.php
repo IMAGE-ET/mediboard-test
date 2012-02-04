@@ -39,8 +39,8 @@ class CBoolSpec extends CMbFieldSpec {
     return CAppUI::tr("bool.".$object->{$this->fieldName});
   }
   
-  function checkValues(){
-    parent::checkValues();
+  function checkOptions(){
+    parent::checkOptions();
     
     if($this->default === null){
       $this->default = (self::$_default_no ? 0 : "");
@@ -148,7 +148,7 @@ class CBoolSpec extends CMbFieldSpec {
     }
   }
   
-  function getLabelForElement($object, &$params){
+  function getLabelForAttribute($object, &$params){
   	$typeEnum  = CMbArray::extract($params, "typeEnum", "radio");
     
     switch ($typeEnum) {

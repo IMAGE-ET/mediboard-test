@@ -60,8 +60,8 @@ class CEnumSpec extends CMbFieldSpec {
     return htmlspecialchars(CAppUI::tr("$object->_class.$fieldName.$propValue"));
   }
   
-  function checkValues(){
-    parent::checkValues();
+  function checkOptions(){
+    parent::checkOptions();
     if (!$this->list){
       trigger_error("Spécification 'list' manquante pour le champ '$this->fieldName' de la classe '$this->className'", E_USER_WARNING);
     }
@@ -165,9 +165,9 @@ class CEnumSpec extends CMbFieldSpec {
     }
   }
   
-  function getLabelForElement($object, &$params){
+  function getLabelForAttribute($object, &$params){
     // to extract the XHTML invalid attribute "typeEnum"
     $typeEnum = CMbArray::extract($params, "typeEnum");
-    return parent::getLabelForElement($object, $params);
+    return parent::getLabelForAttribute($object, $params);
   }
 }
