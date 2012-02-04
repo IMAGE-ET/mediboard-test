@@ -13,14 +13,16 @@ require "includes/config_all.php";
 $reason = isset($_GET["reason"]) ? $_GET["reason"] : null;
 
 switch($reason) {
-case "bdd":
-  $msg = "La base de données n'est pas accessible.";
-  break;
-default :
-  if ($dPconfig["offline"] != 1) {
-	  header("Location: index.php");
-  }
-  $msg = "Le système est désactivé pour cause de maintenance.";
+  case "bdd":
+    $msg = "La base de données n'est pas accessible.";
+      break;
+
+  default :
+    if ($dPconfig["offline"] != 1) {
+      header("Location: index.php");
+    }
+  
+    $msg = "Le système est désactivé pour cause de maintenance.";
 }
 
 $path = "images/pictures";
