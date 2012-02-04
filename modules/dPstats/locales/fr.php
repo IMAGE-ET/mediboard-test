@@ -16,6 +16,7 @@ $locales['mod-dPstats-tab-vw_personnel_salle'] = 'Personnel en salle';
 $locales['mod-dPstats-tab-vw_prescriptions'] = 'Prescriptions';
 $locales['mod-dPstats-tab-vw_reveil'] = 'Salle de réveil';
 $locales['mod-dPstats-tab-vw_time_op'] = 'Durée opératoire';
+$locales['mod-dPstats-tab-vw_user_logs'] = 'Activité utilisateurs';
 $locales['mod-dPstats-tab-vw_users'] = 'Activité utilisateur';
 $locales['module-dPstats-court'] = 'Stats';
 $locales['module-dPstats-long'] = 'Reporting';

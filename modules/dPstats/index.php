@@ -21,4 +21,5 @@ if(CModule::getActive("dPprescription")){
   $module->registerTab("vw_prescriptions"       , TAB_READ);
 }
 $module->registerTab("vw_users"               , TAB_ADMIN);
+$module->registerTab("vw_user_logs"           , TAB_ADMIN);
 ?>
