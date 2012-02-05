@@ -17,7 +17,7 @@ $group_id = CGroups::loadCurrent()->_id;
 
 $sejour_id = CValue::getOrSession("sejour_id");
 
-$user = CAppUI::$instance->_ref_user;
+$user = CMediusers::get();
 $prats = $user->loadPraticiens(PERM_READ);
 
 $service  = new CService();

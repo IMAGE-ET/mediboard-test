@@ -16,7 +16,7 @@ else {
 }
 
 // L'utilisateur est-il chirurgien ?
-$mediuser      = CAppUI::$instance->_ref_user;
+$mediuser      = CMediusers::get();
 $is_praticien  = $mediuser->isPraticien();
 $listPrat      = $mediuser->loadPraticiens(PERM_EDIT);
 $chir_id       = CValue::getOrSession("chir_id", $is_praticien ? $mediuser->user_id : reset($listPrat)->_id);

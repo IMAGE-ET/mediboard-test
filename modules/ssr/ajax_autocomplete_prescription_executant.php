@@ -13,7 +13,7 @@ CCanDo::checkRead();
 $libelle = CValue::post("libelle");
 
 // Recuperation de la fonction de l'utilisateur courant
-$function_id = CAppUI::$instance->_ref_user->function_id;
+$function_id = CMediusers::get()->function_id;
 
 // Recherche des elements que l'utilisateur courant a le droit de prescrire (executant de la categorie et categorie prescritible par executant)
 $ljoin = array();

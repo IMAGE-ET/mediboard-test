@@ -29,7 +29,7 @@ foreach($_lines[$category_id] as $_line){
   $lines[$category_id][$_line->element_prescription_id][] = $_line;	
 }
 
-$current_user = CAppUI::$instance->_ref_user;
+$current_user = CMediusers::get();
 $can_edit_prescription = $current_user->isPraticien() || $current_user->isAdmin();
 
 // Création du template
