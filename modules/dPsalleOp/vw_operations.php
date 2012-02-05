@@ -232,7 +232,7 @@ if (CAppUI::conf("dPsalleOp enable_surveillance_perop")) {
     "lib/flot/jquery.flot.resize.min.js",
   );
   echo CJSLoader::loadFiles();
-  CAppUI::JS('$.noConflict()');
+  CAppUI::js('$.noConflict()');
 }
 
 $smarty->assign("soustotal_base" , $soustotal_base);

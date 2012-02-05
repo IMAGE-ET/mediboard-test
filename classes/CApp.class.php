@@ -1,19 +1,20 @@
 <?php
 /**
- * $Id: CMbFieldSpec.class.php 14538 2012-02-03 17:59:27Z mytto $
+ * $Id: $
  * 
  * @package    Mediboard
  * @subpackage classes
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    $Revision: 14538 $
+ * @version    $Revision: $
  */
 
 /**
  * The actual application class
- * Responsabilities:
+ * Responsibilities:
  *  - application kill
  *  - class management
+ *  - file inclusion
  *  - memory and performance
  */
 class CApp {

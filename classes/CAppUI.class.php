@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 // Message No Constants
@@ -16,6 +17,12 @@ define("UI_MSG_ERROR"  , 4);
 
 /**
  * The Application UI weird Class
+ * (Target) Responsibilities:
+ *  - logging
+ *  - messaging
+ *  - localization
+ *  - user preferences
+ *  - system configuration
  *
  * @todo Is being split into CApp et CUI classes
  */
@@ -32,11 +39,11 @@ class CAppUI {
   
   var $user_id = 0;
   
-  var $_ref_user = null;
   var $_is_intranet = null;
 
-  // DEPRECATED Use $_ref_user instead
-  // @TODO Remove all calls to these variables
+  // DEPRECATED Use CAppUI::$user instead
+
+  // @todo Remove all calls to these variables
   var $user_first_name = null;
   var $user_last_name = null;
   var $user_email = null;
@@ -44,6 +51,11 @@ class CAppUI {
   var $user_group = null;
   var $user_last_login = null;
   var $user_remote = null;
+  
+  // @todo Remove many calls in templates
+  // @todo Handle the CMediusers::get() and CUser::get() cases
+  var $_ref_user = null;
+  
   // END DEPRECATED
 
   /** @var bool Weak password */
@@ -55,9 +67,6 @@ class CAppUI {
   /** @var string langage alert mask */
   static $unlocalized  = array();
   
-  /** @var int Global unique id */
-  static $unique_id = 0;
-
   // Global collections
   var $messages = array();
   var $user_prefs = array();
@@ -66,17 +75,20 @@ class CAppUI {
   /** @var string Default page for a redirect call*/
   var $defaultRedirect = "";
 
-  private function __construct() {
-  }
-
   /**
-   * Initializes the CAppUI instance
-   * @return CAppUI The instance
+   * Initializes the CAppUI singleton
+   * 
+   * @return CAppUI The singleton
    */
-  static function init(){
+  static function init() {
     return self::$instance = new CAppUI;
   }
   
+  /**
+   * Executed prior to any serialization of the object
+   * 
+   * @return array Array of field names to be serialized
+   */
   function __sleep() {
     unset($this->_ref_user);
     return array_keys(get_object_vars($this));
@@ -84,36 +96,48 @@ class CAppUI {
   
   /**
    * Used to include a php class file from the lib directory
+   * 
    * @param string $name The class root file name (excluding .php)
+   * 
+   * @return mixed Job-done bool or file return value
+   * @todo Migrate to CApp
    */
   static function requireLibraryFile($name) {
     if ($root = self::conf("root_dir")) {
       $file = "$root/lib/$name.php";
-      if (is_file($file))
-        return require_once($file);
-      else {
-        self::setMsg("La librairie <strong>".ucwords(dirname($name))."</strong> n'est pas installée", UI_MSG_ERROR);
-        CApp::rip();
+      if (is_file($file)) {
+        return include_once $file;
       }
+
+      $library = ucwords(dirname($name));
+      self::setMsg("La librairie <strong>$library</strong> n'est pas installée", UI_MSG_ERROR);
+      CApp::rip();
     }
   }
   
   /**
    * Used to include a php file from the module directory
-   * @param string $name The module name
-   * @param string $file The name of the file to include
+   * 
+   * @param string $name [optional] The module name
+   * @param string $file [optional] The name of the file to include
+   * 
+   * @return mixed Job-done bool or file return value
+   * @todo Migrate to CApp
    */
   static function requireModuleFile($name = null, $file = null) {
     if ($name && $root = self::conf("root_dir")) {
       $filename = $file ? $file : $name;
-      return require_once("$root/modules/$name/$filename.php");
+      return include_once "$root/modules/$name/$filename.php";
     }
   }
   
   /**
    * Used to store information in tmp directory
+   * 
    * @param string $subpath in tmp directory
+   * 
    * @return string The path to the include file
+   * @todo Migrate to CApp
    */
   static function getTmpPath($subpath) {
     if ($subpath && $root = self::conf("root_dir")) {
@@ -122,57 +146,64 @@ class CAppUI {
   }
   
   /**
-   * Utility function to read the "directories" under "path"
+   * Find directories in a root subpath, excluding source control files
    *
-   * This function is used to read the modules or locales installed on the file system
-   * @param string The path to read
+   * @param string $subpath The subpath to read
+   * 
    * @return array A named array of the directories (the key and value are identical)
    */
-  static function readDirs($path) {
+  static function readDirs($subpath) {
     $root_dir = self::conf("root_dir");
     $dirs = array();
-    $d = dir("$root_dir/$path");
-    
+    $d = dir("$root_dir/$subpath");
     while (false !== ($name = $d->read())) {
-      if(is_dir("$root_dir/$path/$name") && 
+      if (is_dir("$root_dir/$subpath/$name") && 
           $name !== "." && 
           $name !== ".." && 
           $name !== "CVS" && 
-          $name !== ".svn") {
+          $name !== ".svn"
+      ) {
         $dirs[$name] = $name;
       }
     }
+    
     $d->close();
     return $dirs;
   }
 
   /**
-   * Utility function to read the files under $path
-   * @param string The path to read
-   * @param string A regular expression to filter by
+   * Find files in a roo subpath, excluding a specific filter
+   * 
+   * @param string $subpath The path to read
+   * @param string $filter  Filter as a regular expression
+   * 
    * @return array A named array of the files (the key and value are identical)
    */
-  static function readFiles($path, $filter = ".") {
+  static function readFiles($subpath, $filter = ".") {
     $files = array();
 
-    if ($handle = opendir($path)) {
+    if ($handle = opendir($subpath)) {
       while (false !== ($file = readdir($handle))) { 
         if ($file !== "." && 
             $file !== ".." && 
-            preg_match("/$filter/", $file)) { 
+            preg_match("/$filter/", $file)
+        ) { 
           $files[$file] = $file; 
         } 
       }
       closedir($handle); 
     }
+    
     return $files;
   }
   
   /**
    * Utility function to check whether a file name is "safe"
-   * Prevents from access to relative directories (eg ../../dealyfile.php)
-   * @param string The file name
-   * @return array A named array of the files (the key and value are identical)
+   * Prevents from access to relative directories (eg ../../deadlyfile.php)
+   * 
+   * @param string $file The file name
+   * 
+   * @return string Sanitized file name
    */
   static function checkFileName($file) {
     // define bad characters and their replacement
@@ -183,26 +214,22 @@ class CAppUI {
     if (strpos(strtr($file, $bad_chars, $bad_replace), ".") !== false) {
       self::redirect("m=system&a=access_denied");
     }
-    else {
-      return $file;
-    }
+
+    return $file;
   }
 
-/**
-  * Redirects the browser to a new page.
-  *
-  * Mostly used in conjunction with the savePlace method. It is generally used
-  * to prevent nasties from doing a browser refresh after a db update.  The
-  * method deliberately does not use javascript to effect the redirect.
-  *
-  * @param string The URL query string to append to the URL
-  * @param string A marker for a historic "place", only -1 or an empty string is valid.
-  */
-  static function redirect($params="") {
+  /**
+   * Redirects the browser to a new page.
+   *
+   * @param string $params HTTP GET paramaters to apply
+   * 
+   * @return void
+   */
+  static function redirect($params = "") {
 
     session_write_close();
     
-    if(!CValue::get("dontRedirect")) {
+    if (!CValue::get("dontRedirect")) {
       if (CValue::get("dialog")) {
         $params .= "&dialog=1";
       }
@@ -221,66 +248,87 @@ class CAppUI {
   }
   
   /**
-   * Returns the class corresponding to a message type
-   * @param const $type
-   * @return string The corresponding class
+   * Returns the CSS class corresponding to a message type
+   * 
+   * @param int $type [optional] Message type as a UI constant
+   * 
+   * @return string The CSS class
    */
-  private static function getErrorClass($type) {
+  static function getErrorClass($type = UI_MSG_OK) {
     switch ($type) {
-    case UI_MSG_ERROR   : return "error" ;
-    case UI_MSG_WARNING : return "warning";
-    default:
-    case UI_MSG_OK      : 
-    case UI_MSG_ALERT   : return "info";
+      case UI_MSG_ERROR   : return "error" ;
+      case UI_MSG_WARNING : return "warning";
+      default:
+      case UI_MSG_OK      : 
+      case UI_MSG_ALERT   : return "info";
     }
   }
   
   /**
    * Add message to the the system UI
-   * @param string $msg The (translated) message
-   * @param int $type type of message (cf UI constants)
-   * @param any number of printf-like parameters to be applied 
+   * 
+   * @param string $msg  The internationalized message
+   * @param int    $type [optional] Message type as a UI constant
+   * @param mixed  $_    [optional] Any number of printf-like parameters to be applied
+   * 
+   * @return void
+   * @todo rename to addMsg()
    */
-  static function setMsg($msg, $type = UI_MSG_OK) {
+  static function setMsg($msg, $type = UI_MSG_OK, $_ = null) {
     $args = func_get_args();
     $msg = CAppUI::tr($msg, array_slice($args, 2));
-    
     @self::$instance->messages[$type][$msg]++;
   }
   
   /**
-  * Add message to the the system message
-  * @param string $msg The (translated) message
-  * @param int $type type of message (cf UI constants)
-  * @param any number of printf-like parameters to be applied 
-  */
-  static function displayAjaxMsg($msg, $type = UI_MSG_OK) {
+   * Add message to the the system UI from Ajax call
+   * 
+   * @param string $msg  The internationalized message
+   * @param int    $type [optional] Message type as a UI constant
+   * @param mixed  $_    [optional] Any number of printf-like parameters to be applied
+   * 
+   * @return void
+   * @todo rename to addAjaxMsg()
+   */
+  static function displayAjaxMsg($msg, $type = UI_MSG_OK, $_ = null) {
     $args = func_get_args();
     $msg = CAppUI::tr($msg, array_slice($args, 2));
-    
+    $msg = htmlentities($msg);
     $class = self::getErrorClass($type);
-    
-    self::callbackAjax('$("systemMsg").show().insert', "<div class='$class'>".htmlentities($msg)."</div>");
+    self::callbackAjax('$("systemMsg").show().insert', "<div class='$class'>$msg</div>");
   }
   
+  /**
+   * Check whether UI has any problem message
+   * 
+   * @return bool True if no alert/warning/error message
+   */
   static function isMsgOK() {
     $messages = self::$instance->messages;
-    $errors = count(@$messages[UI_MSG_ALERT]) + 
-              count(@$messages[UI_MSG_WARNING]) +
-              count(@$messages[UI_MSG_ERROR]);
+    $errors = 
+      count(@$messages[UI_MSG_ALERT  ]) + 
+      count(@$messages[UI_MSG_WARNING]) +
+      count(@$messages[UI_MSG_ERROR  ]);
     return $errors == 0;
   }
   
   /**
-   * Retourne le message résultant de la modification d'un objet
-   * @param string $msg résultat de la modification
-   * @param string $action message à afficher
+   * Add a action pair message
+   * Make an error is message is not null, ok otherwise
+   * 
+   * @param string $msg    The internationalized message
+   * @param string $action The internationalized action
+   * @param mixed  $_      [optional] Any number of printf-like parameters to be applied to action
+   * 
+   * @return void
+   * @todo rename to addActionMsg()
    */
-  static function displayMsg($msg, $action) {
+  static function displayMsg($msg, $action, $_ = null) {
     $args = func_get_args();
     $action = self::tr($action, array_slice($args, 2));
     if ($msg) {
       $msg = self::tr($msg);
+      // @todo Should probably not translate once again
       self::setMsg("$action: $msg", UI_MSG_ERROR);
       return;
     } 
@@ -289,8 +337,12 @@ class CAppUI {
   }
 
   /**
-   * Display the formatted message and icon
-   * @param boolean $reset If true the system UI is cleared
+   * Render HTML system message bloc corresponding to current messages
+   * Possibly clear messages, thus being shown only once
+   * 
+   * @param boolean $reset [optional] Clear messages if true
+   * 
+   * @return string HTML divs
    */
   static function getMsg($reset = true) {
     $return = "";
@@ -309,17 +361,21 @@ class CAppUI {
     if ($reset) {
       self::$instance->messages = array();
     }
-
     
     return $return;
   }
 
   /**
-   * Display an message step after translation
-   * @param enum $msgType Type of message [UI_MSG_OK|UI_MSG_WARNING|UI_MSG_ERROR]
-   * @param string $msg The message
+   * Display an AJAX message step after translation
+   * 
+   * @param int    $type [optional] Message type as a UI constant
+   * @param string $msg  The internationalized message
+   * @param mixed  $_    [optional] Any number of printf-like parameters to be applied
+   * 
+   * @return void
+   * @todo Rename to ajaxNotice()
    */
-  static function stepMessage($type, $msg) {
+  static function stepMessage($type, $msg, $_ = null) {
     $args = func_get_args();
     $msg = CAppUI::tr($msg, array_slice($args, 2));
     
@@ -328,12 +384,17 @@ class CAppUI {
   }
   
   /**
-   * Display an ajax step, and exit on error messages
-   * @TODO Switch parameter order, like stepMessage()
-   * @param string $msg : the message
-   * @param enum $type : type of message [UI_MSG_OK|UI_MSG_WARNING|UI_MSG_ERROR]
+   * Display an AJAX step, and exit on error messages
+   * 
+   * @param string $msg  The internationalized message
+   * @param int    $type [optional] Message type as a UI constant
+   * @param mixed  $_    [optional] Any number of printf-like parameters to be applied
+   * 
+   * @return void
+   * @todo Switch parameter order, like stepMessage()
+   * @todo Rename to ajaxNsg()
    */
-  static function stepAjax($msg, $type = UI_MSG_OK) {
+  static function stepAjax($msg, $type = UI_MSG_OK, $_ = null) {
     $args = func_get_args();
     $msg = CAppUI::tr($msg, array_slice($args, 2));
 
@@ -345,42 +406,48 @@ class CAppUI {
     }
   }
 
- /**
-  * Echo an ajax callback with given value
-  * 
-  * @param string $callback : name of the javascript function 
-  * @param string $args : value parameter(s) for javascript function
-  */
+  /**
+   * Echo an ajax callback with given value
+   * 
+   * @param string $callback Name of the javascript function 
+   * @param string $args     Value parameter(s) for javascript function
+   * 
+   * @return void
+   */
   static function callbackAjax($callback, $args = '') {
     $args = func_get_args();
-    $args = array_slice($args,1);
+    $args = array_slice($args, 1);
     
-    foreach ($args as $key=>$_arg) {
+    // JSON encode args
+    foreach ($args as $key => $_arg) {
       if (!is_numeric($_arg)) {
-        $args[$key] = json_encode(array_map_recursive("utf8_encode",$_arg));
+        $args[$key] = json_encode(array_map_recursive("utf8_encode", $_arg));
       }
     }
     
     $args = implode(",", $args); 
-    
-    self::JS("$callback($args);");
+    self::js("$callback($args);");
   }
   
-  static function JS($script) {
+  /**
+   * Echo an HTML javascript block
+   * 
+   * @param string $script Javascript code
+   * 
+   * @return void
+   */
+  static function js($script) {
     echo "\n<script>$script</script>";
   }
   
-/**
- * Login function
- *
- * Upon a successful username and password match, several fields from the user
- * table are loaded in this object for convenient reference.  The style, locales
- * and preferences are also loaded at this time.
- *
- * @param string The user login name
- * @param string The user password
- * @return boolean True if successful, false if not
- */
+  /**
+   * Login function, handling standard login, loginas, LDAP connection
+   * Preferences get loaded on success
+   *
+   * @param bool $force_login To allow admin users to login as someone else
+   * 
+   * @return boolean Job done
+   */
   static function login($force_login = false) {
     $ds = CSQLDataSource::get("std");
     
@@ -408,11 +475,13 @@ class CAppUI {
       if (!$username && !$password && $ldap_connection && $ldap_guid) {
         try {  
           $user = CLDAP::getFromLDAPGuid($ldap_guid);
-        } catch (Exception $e) {
+        } 
+        catch (Exception $e) {
           self::setMsg($e->getMessage(), UI_MSG_ERROR); 
           return false;
         }
-      } else {
+      } 
+      else {
         if (null == $user->user_username  = $username) {
           self::setMsg("Auth-failed-nousername", UI_MSG_ERROR);
           return false;
@@ -430,10 +499,12 @@ class CAppUI {
     // See CUser::updatePlainFields
     $user->loadMatchingObject();
     
+    // User template case
     if ($user->template) {
       return false;
     }
-        
+
+    // LDAP case
     if ($ldap_connection) {
       $user_ldap = new CUser();
       $user_ldap->user_username = $username;
@@ -451,9 +522,11 @@ class CAppUI {
             self::setMsg("Auth-failed-combination", UI_MSG_ERROR);
             return false;
           }
-        } catch (CMbException $e) {
+        } 
+        catch (CMbException $e) {
           // Maybe source unreachable ?
-          self::setMsg($e->getMessage(), UI_MSG_WARNING); // no UI_MSG_ERROR nor $e->stepAjax as it needs to continue !!!!
+          // No UI_MSG_ERROR nor $e->stepAjax as it needs to run through!
+          self::setMsg($e->getMessage(), UI_MSG_WARNING); 
         }
       }
     }
@@ -479,7 +552,9 @@ class CAppUI {
     }
     
     // Test if remote connection is allowed
-    self::$instance->_is_intranet = is_intranet_ip($_SERVER["REMOTE_ADDR"]) && ($_SERVER["REMOTE_ADDR"] != self::conf("system reverse_proxy"));
+    self::$instance->_is_intranet = 
+      is_intranet_ip($_SERVER["REMOTE_ADDR"]) && 
+      $_SERVER["REMOTE_ADDR"] != self::conf("system reverse_proxy");
     if (!self::$instance->_is_intranet && self::$instance->user_remote == 1 && $user->user_type != 1) {
       self::setMsg("Auth-failed-user-noremoteaccess", UI_MSG_ERROR);
       return false;
@@ -496,7 +571,7 @@ class CAppUI {
     // END DEPRECATED
     
     // save the last_login dateTime
-    if($ds->loadField("users", "user_last_login")) {
+    if ($ds->loadField("users", "user_last_login")) {
       // Nullify password or you md5 it once more
       $user->user_last_name = null;
       $user->user_last_login = mbDateTime();
@@ -510,10 +585,11 @@ class CAppUI {
   }
   
   /**
-   * Check password strength
+   * Check password weakness
    * 
-   * @param CUser $user
-   * @return bool
+   * @param CUser $user User whose password to check
+   * 
+   * @return bool True if password is too weak
    */
   static function checkPasswordWeakness(CUser $user) {
     if (null == $pwd = $user->_user_password) {
@@ -530,15 +606,17 @@ class CAppUI {
     // notContaining
     if ($pwdSpecs->notContaining) {
       $target = $pwdSpecs->notContaining;
-        if (($field = $user->$target) && stristr($pwd, $field))
-          return true;
+      if (($field = $user->$target) && stristr($pwd, $field)) {
+        return true;
+      }
     }
     
     // notNear
     if ($pwdSpecs->notNear) {
       $target = $pwdSpecs->notNear;
-        if (($field = $user->$target) && (levenshtein($pwd, $field) < 3))
-          return true;
+      if (($field = $user->$target) && (levenshtein($pwd, $field) < 3)) {
+        return true;
+      }
     }
 
     // alphaAndNum
@@ -551,10 +629,11 @@ class CAppUI {
   
   /**
    * Check wether login/password is found
-   * Handler password attempts count
+   * Handle password attempts count
    *
-   * @param CUser $user
-   * @return bool
+   * @param CUser $user User whose password attempt to check
+   * 
+   * @return bool True is attempt is successful
    */
   static function checkPasswordAttempt(CUser $user) {
     $sibling = new CUser;
@@ -573,8 +652,10 @@ class CAppUI {
       $today = mbDate();
       
       // Check if the user is in his activity period
-      if ($mediuser->fin_activite && $mediuser->fin_activite <= $today ||
-          $mediuser->deb_activite && $mediuser->deb_activite >  $today) {
+      if (
+          $mediuser->fin_activite && $mediuser->fin_activite <= $today ||
+          $mediuser->deb_activite && $mediuser->deb_activite >  $today
+      ) {
         self::setMsg("Auth-failed-user-deactivated", UI_MSG_ERROR);
         return false;
       }
@@ -605,11 +686,13 @@ class CAppUI {
     return true;
   }
 
-/**
- * Load the stored user preferences from the database into the internal
- * preferences variable.
- * @param int $uid User id number, 0 for default preferences
- */
+  /**
+   * Load the stored user preferences from the database into cache
+   * 
+   * @param ref|CUser $user_id User ID, 0 for default preferences
+   * 
+   * @return void
+   */
   static function loadPrefs($user_id = 0) {
     // Former pure SQL system
     $ds = CSQLDataSource::get("std");
@@ -628,7 +711,9 @@ class CAppUI {
   }
   
   /**
-   * Apply default / profile / user preferences
+   * Build preferences for connected user, with the default/profile/user strategy
+   * 
+   * @return void
    */
   static function buildPrefs() {
     // Default
@@ -646,50 +731,40 @@ class CAppUI {
   
   
   /**
-   * Get a named user preference
-   * @param string $name Name of the user preference
+   * Get a named user preference value
+   * 
+   * @param string $name    Name of the user preference
+   * @param string $default [optional] A default value when preference is not set
+   * 
    * @return string The value
    */
-  static function pref($name = null, $default = null) {
+  static function pref($name, $default = null) {
     $prefs = self::$instance->user_prefs;
-    if (!$name) return $prefs;
     return isset($prefs[$name]) ? $prefs[$name] : $default; 
   }
   
   /**
    * Returns the list of $locale files
-   * @param string $locale The locale of the paths to return
+   * 
+   * @param string $locale The locale name of the paths 
+   * 
    * @return array The paths
    */
   static function getLocaleFilesPaths($locale) {
     global $root_dir;
-    
-    /*$paths = array();
-    $paths[] = "$root_dir/locales/$locale/common.php";
-    
-    foreach (CModule::$installed as $_mod => $_module) {
-      $file = "$root_dir/locales/$locale/$_mod.php";
-      if (is_file($file)) {
-        $paths[] = $file;
-        continue;
-      }
-      
-      $file = "$root_dir/modules/$_mod/locales/$locale.php";
-      if (is_file($file)) {
-        $paths[] = $file;
-      }
-    }*/
-
     $paths = array_merge(
-      glob("$root_dir/locales/$locale/*.php"), 
-      glob("$root_dir/modules/*/locales/$locale.php")
+        glob("$root_dir/locales/$locale/*.php"), 
+        glob("$root_dir/modules/*/locales/$locale.php")
     );
+    
     return $paths;
   }
 
-   /**
+  /**
    * Check translated statement exists
+   * 
    * @param string $str statement to translate
+   * 
    * @return boolean if translated statement exists
    */
   static function isTranslated($str) {
@@ -705,7 +780,10 @@ class CAppUI {
   
   /**
    * Localize given statement
-   * @param string $str statement to translate
+   * 
+   * @param string $str  Statement to translate
+   * @param array  $args Array or any number of sprintf-like arguments
+   * 
    * @return string translated statement
    */
   static function tr($str, $args = null) {
@@ -747,8 +825,10 @@ class CAppUI {
 
   /**
    * Return the configuration setting for a given path
-   * @param $path string Tokenized path, eg "module class var";
-   * @return string|array scalar or array of values depending on the path
+   * 
+   * @param string $path Tokenized path, eg "module class var";
+   * 
+   * @return mixed String or array of values depending on the path
    */
   static function conf($path = '') {
     global $dPconfig;
@@ -761,14 +841,36 @@ class CAppUI {
     foreach ($items as $part) {
       $conf = $conf[$part];
     }
+    
     return $conf;
   }
   
+  
+  /** 
+   * @var int Global unique id 
+   **/
+  static $unique_id = 0;
+  
+  /**
+   * Produce a unique ID in the HTTP request scope
+   * 
+   * @return integer The ID
+   * @todo: $unique_id should be internal to function
+   */
   static function unique_id() {
     return self::$unique_id++;
   }
   
-  static function HtmlTable($array, $options = array()) {
+  /**
+   * Produce an HTML table for given array with options
+   * 
+   * @param array $array   Array of array of values for the table   
+   * @param array $options Array of options
+   * 
+   * @return html HTML table
+   * @todo TO BE REMOVED, should not exist, build a template instead
+   */
+  static function htmlTable($array, $options = array()) {
     $options += array(
       'tableClass' => '',
       'tableStyle' => 'width: 100%',
@@ -777,9 +879,9 @@ class CAppUI {
     );
     
     $output = '<table class="'.$options['tableClass'].'" style="'.$options['tableStyle'].'"><tbody>';
-    foreach($array as $y => $row) {
+    foreach ($array as $y => $row) {
       $output .= '<tr>';
-      foreach($row as $x => $cell) {
+      foreach ($row as $x => $cell) {
         $output .= ($options['firstRowHeader'] && $y == 0 || 
                     $options['firstColHeader'] && $x == 0) ? "<th>$cell</th>" : "<td>$cell</td>";
       }

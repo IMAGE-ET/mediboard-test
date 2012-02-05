@@ -39,7 +39,7 @@ CJSLoader::$files = array(
   "lib/flot/jquery.flot.resize.min.js",
 );
 echo CJSLoader::loadFiles();
-CAppUI::JS('$.noConflict()');
+CAppUI::js('$.noConflict()');
 
 $smarty = new CSmartyDP();
 $smarty->assign("graph",  $graph);

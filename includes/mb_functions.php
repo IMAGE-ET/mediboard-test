@@ -722,6 +722,7 @@ function mbLoadScriptsStorage(){
  * @param sring $limit Memory limit with ini_set() syntax
  * 
  * @return string The old value on success, false on failure
+ * @todo Should me moved to CApp::memoryLimit()
  */
 function set_min_memory_limit($limit) {
   $actual = CMbString::fromDecaBinary(ini_get('memory_limit'));

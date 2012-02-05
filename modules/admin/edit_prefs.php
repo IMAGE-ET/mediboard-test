@@ -55,13 +55,9 @@ foreach ($modules as $module) {
 }
 $user = $user_clone;
 
-// Chargement des languages
+// Locales and styles
 $locales = CAppUI::readDirs("locales");
-CMbArray::removeValue(".svn", $locales);
-
-// Chargement des styles
-$styles = CAppUI::readDirs("style");
-CMbArray::removeValue(".svn", $styles);
+$styles  = CAppUI::readDirs("style");
 
 // Création du template
 $smarty = new CSmartyDP();
