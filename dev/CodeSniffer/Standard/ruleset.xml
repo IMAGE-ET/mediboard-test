@@ -106,6 +106,10 @@
     <severity>0</severity>
   </rule>
 
+  <rule ref="PEAR.Formatting.MultiLineAssignment.EqualSignLine">
+    <severity>0</severity>
+  </rule>
+
   <rule ref="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket">
     <severity>0</severity>
   </rule>
