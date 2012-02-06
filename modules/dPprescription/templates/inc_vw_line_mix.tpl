@@ -80,8 +80,9 @@ Main.add( function(){
 		              <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
 		              <input type="hidden" name="prescription_line_mix_id" value="{{$line->_id}}" />
 		              {{mb_field object=$line field=ald onchange="submitFormAjax(this.form, 'systemMsg');" typeEnum=checkbox}}
+									{{mb_label object=$line field="ald"}}
 		            </form>
-						  {{else}}
+						  {{elseif $line->ald}}
 							   <strong>{{mb_label object=$line field="ald"}}</strong>
 							{{/if}}
 						{{/if}}
