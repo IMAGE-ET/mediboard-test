@@ -15,7 +15,7 @@
             <option class="mediuser" 
               style="border-color: #{{$_praticien->_ref_function->color}};" 
               value="{{$_praticien->_id}}"
-              {{if $_praticien->_id == $praticien_sortie_id}}selected="selected"{{/if}}>{{$_praticien->_view}}
+              {{if $_praticien->_id == $praticien_sortie_id || $_praticien->_id == $app->user_id}}selected="selected"{{/if}}>{{$_praticien->_view}}
             </option>
           {{/foreach}}
         </select>
