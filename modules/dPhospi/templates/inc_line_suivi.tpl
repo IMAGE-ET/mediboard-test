@@ -152,6 +152,11 @@
       {{$_suivi->rques}}
     {{else}}
       {{$_suivi->conclusion}}
+      {{if $_suivi->type == "entree"}}
+        {{$_suivi->rques}} &ndash;
+        {{$_suivi->examen}} &ndash;
+        {{$_suivi->traitement}}
+      {{/if}}
     {{/if}}
   </td>
   <td>
