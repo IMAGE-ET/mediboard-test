@@ -22,6 +22,8 @@ $search = false;
 
 // Recherche suivant des critères
 if($code_cis || $element_prescription_id || $libelle_protocole){
+  $group_id = CGroups::loadCurrent()->_id;
+
 	$search = true;
 	$protocole = new CPrescription();
 	$where = array();
@@ -44,6 +46,11 @@ if($code_cis || $element_prescription_id || $libelle_protocole){
     $where[] = "prescription_line_medicament.code_cis = '$code_cis' OR prescription_line_mix_item.code_cis = '$code_cis'";
 	}
 	
+	// Filtre par etablissement
+	$ljoin["users_mediboard"] = "prescription.praticien_id = users_mediboard.user_id";
+	$ljoin["functions_mediboard"] = "prescription.function_id = functions_mediboard.function_id OR users_mediboard.function_id = functions_mediboard.function_id";
+  $where[] = "prescription.group_id = '$group_id' OR functions_mediboard.group_id = '$group_id'";
+
 	$_protocoles = $protocole->loadList($where, null, null, null, $ljoin);
 	
 	$protocoles = array(
