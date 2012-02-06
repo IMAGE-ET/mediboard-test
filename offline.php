@@ -15,7 +15,7 @@ $reason = isset($_GET["reason"]) ? $_GET["reason"] : null;
 switch($reason) {
   case "bdd":
     $msg = "La base de données n'est pas accessible.";
-      break;
+    break;
 
   default :
     if ($dPconfig["offline"] != 1) {

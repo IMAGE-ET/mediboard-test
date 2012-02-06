@@ -33,11 +33,11 @@ function mbGetObjectFromGet($class_key, $id_key, $guid_key = null) {
   if (!$object || !$object->_id) {
     global $ajax;
     CAppUI::redirect(
-        "ajax=$ajax" . 
-        "&suppressHeaders=1".
-        "&m=system".
-        "&a=object_not_found".
-        "&object_guid=$object_guid"
+      "ajax=$ajax" . 
+      "&suppressHeaders=1".
+      "&m=system".
+      "&a=object_not_found".
+      "&object_guid=$object_guid"
     );
   }
   
@@ -69,11 +69,11 @@ function mbGetObjectFromGetOrSession($class_key, $id_key, $guid_key = null) {
   if (!$object || !$object->_id) {
     global $ajax;
     CAppUI::redirect(
-        "ajax=$ajax".
-        "&suppressHeaders=1".
-        "&m=system".
-        "&a=object_not_found".
-        "&object_guid=$object_guid"
+      "ajax=$ajax".
+      "&suppressHeaders=1".
+      "&m=system".
+      "&a=object_not_found".
+      "&object_guid=$object_guid"
     );
   }
   
@@ -233,9 +233,9 @@ function mbDateTimeFromXMLDuration($duration) {
   }
   
   return sprintf(
-      "%d-%d-%d %d:%d:%d", 
-      $matches[ 2], $matches[ 4], $matches[ 6], 
-      $matches[ 8], $matches[10], $matches[12]
+    "%d-%d-%d %d:%d:%d", 
+    $matches[ 2], $matches[ 4], $matches[ 6], 
+    $matches[ 8], $matches[10], $matches[12]
   );
 }
 

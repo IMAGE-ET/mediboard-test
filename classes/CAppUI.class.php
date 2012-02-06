@@ -753,8 +753,8 @@ class CAppUI {
   static function getLocaleFilesPaths($locale) {
     global $root_dir;
     $paths = array_merge(
-        glob("$root_dir/locales/$locale/*.php"), 
-        glob("$root_dir/modules/*/locales/$locale.php")
+      glob("$root_dir/locales/$locale/*.php"), 
+      glob("$root_dir/modules/*/locales/$locale.php")
     );
     
     return $paths;

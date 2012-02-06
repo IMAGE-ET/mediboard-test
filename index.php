@@ -188,7 +188,7 @@ CHTMLResourceLoader::initOutput(CValue::get("_aio"));
 // We check if the mobile feature is available and if the user agent is a mobile
 if (is_file("./mobile/main.php") && !empty($_SESSION["browser"]["mobile"])) {
   include "./mobile/main.php";
-}
+} 
 else {
   include "./includes/main.php";
 }

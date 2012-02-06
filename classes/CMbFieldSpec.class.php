@@ -81,11 +81,11 @@ class CMbFieldSpec {
       } 
       else {
         $error = sprintf(
-            "L'option '%s' trouvée dans '%s::%s' est inexistante dans la spec de classe '%s'",
-            $k,
-            $className,
-            $field,
-            get_class($this)
+          "L'option '%s' trouvée dans '%s::%s' est inexistante dans la spec de classe '%s'",
+          $k,
+          $className,
+          $field,
+          get_class($this)
         );
         trigger_error($error, E_USER_WARNING);
       }
