@@ -20,7 +20,7 @@
   {{assign var=stat value=$stats[$fullpath]}}
   {{if $stat}} 
     {{math assign=width equation='100*min(1,(log10(stat+1)/4))' stat=$stat.count format="%.0f"}}
-    {{assign var=color value=gold}}
+    {{assign var=color value=lightgreen}}
     {{if $width > 25}}{{assign var=color value=orange}}{{/if}}
     {{if $width > 50}}{{assign var=color value=red   }}{{/if}}
     {{if $width > 75}}{{assign var=color value=brown }}{{/if}}
