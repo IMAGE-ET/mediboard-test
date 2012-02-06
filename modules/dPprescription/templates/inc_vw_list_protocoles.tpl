@@ -9,7 +9,7 @@
 *}}
 
 <script type="text/javascript">
-	
+  
 markAsSelected = function(element) {
   removeSelectedTr();
   $(element).up(1).addClassName('selected');
@@ -27,9 +27,9 @@ Main.add(function(){
 </script>
 
 <ul id="list_protocoles_prescription" class="control_tabs small">
-	{{foreach from=$protocoles key=owner item=_protocoles_by_owner}}
-	<li><a href="#list_prot_{{$owner}}" {{if !$_protocoles_by_owner|@count}}class="empty"{{/if}}>{{tr}}CPrescription._owner.{{$owner}}{{/tr}}</a></li>
-	{{/foreach}}
+  {{foreach from=$protocoles key=owner item=_protocoles_by_owner}}
+  <li><a href="#list_prot_{{$owner}}" {{if !$_protocoles_by_owner|@count}}class="empty"{{/if}}>{{tr}}CPrescription._owner.{{$owner}}{{/tr}}</a></li>
+  {{/foreach}}
 </ul>
 <hr class="control_tabs" />
 
@@ -46,7 +46,7 @@ Main.add(function(){
 
 <table class="tbl" id="all_protocoles">
   {{foreach from=$protocoles key=owner item=_protocoles_by_owner}}
-	<tbody id="list_prot_{{$owner}}" style="display: none;">
+  <tbody id="list_prot_{{$owner}}" style="display: none;">
   {{if $_protocoles_by_owner|@count}}
   {{foreach from=$_protocoles_by_owner item=_protocoles_by_type key=class_protocole}}
   <tr>
@@ -60,45 +60,42 @@ Main.add(function(){
   <tr {{if $protocole->_id == $protocoleSel_id}}class="selected"{{/if}}>
     <td class="text">
       <div style="float:right">
-      	{{* On n'affiche pas les boutons sous ie, probleme de performance avec beaucoup de protocoles *}}
-      	{{if !($browser.name == "msie" && $browser.majorver <= 8)}}
-		      {{if $can->admin}}
-				    <button class="tick notext" type="button" onclick="Protocole.exportProtocole('{{$protocole->_id}}')">{{tr}}CPrescription.export_protocole{{/tr}}</button>
-				  {{/if}}
-				  <button class="print notext" type="button" onclick="Prescription.printPrescription('{{$protocole->_id}}')">{{tr}}Print{{/tr}}</button>
-					
-				  {{if $owner != "prat" || $app->user_id == $praticien_id || !$is_praticien}}
-				    <button class="trash notext" type="button" onclick="if (confirm('{{tr}}CProtocole-confirm-deletion{{/tr}}{{$protocole->libelle|smarty:nodefaults|JSAttribute}}?'))Protocole.remove('{{$protocole->_id}}')">Supprimer</button>
-				  {{/if}}
-				{{/if}}
+        {{* On n'affiche pas les boutons sous ie, probleme de performance avec beaucoup de protocoles *}}
+        {{if !($browser.name == "msie" && $browser.majorver <= 8)}}
+          <button class="print notext" type="button" onclick="Prescription.printPrescription('{{$protocole->_id}}')">{{tr}}Print{{/tr}}</button>
+          
+          {{if $owner != "prat" || $app->user_id == $praticien_id || !$is_praticien}}
+            <button class="trash notext" type="button" onclick="if (confirm('{{tr}}CProtocole-confirm-deletion{{/tr}}{{$protocole->libelle|smarty:nodefaults|JSAttribute}}?'))Protocole.remove('{{$protocole->_id}}')">Supprimer</button>
+          {{/if}}
+        {{/if}}
       </div>
       <a href="#{{$protocole->_id}}" onclick="markAsSelected(this); Protocole.edit('{{$protocole->_id}}','{{$protocole->praticien_id}}','{{$protocole->function_id}}')">
         {{$protocole->libelle}}
       </a>
 
-			{{if $search}}
-			  <div class="compact">
-			  {{if $protocole->praticien_id}}
-				  {{$protocole->_ref_praticien->_view}}
-				{{/if}}
-				{{if $protocole->function_id}}
+      {{if $search}}
+        <div class="compact">
+        {{if $protocole->praticien_id}}
+          {{$protocole->_ref_praticien->_view}}
+        {{/if}}
+        {{if $protocole->function_id}}
           {{$protocole->_ref_function->_view}}
         {{/if}}
-				{{if $protocole->group_id}}
+        {{if $protocole->group_id}}
           {{$protocole->_ref_group->_view}}
         {{/if}}
-				</div>
-			{{/if}}
+        </div>
+      {{/if}}
     </td>
   </tr>
   {{/foreach}}
   {{/foreach}}
   {{/foreach}}
   {{else}}
-	<tr>
-		<td>Aucun protocole</td>
-	</tr>
-	{{/if}}
-	</tbody>
+  <tr>
+    <td>Aucun protocole</td>
+  </tr>
+  {{/if}}
+  </tbody>
   {{/foreach}}
 </table>
