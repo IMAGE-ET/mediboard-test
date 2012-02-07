@@ -47,6 +47,10 @@ class CExClass extends CMbObject {
     $specs = array();
     
     foreach($classes as $_class) {
+      if (!class_exists($_class)) {
+        continue;
+      }
+      
       $instance = new $_class;
       if (!empty($instance->_spec->events) && $instance->_ref_module && $instance->_ref_module->mod_active) {
         $specs[$_class] = $instance->_spec->events;
