@@ -19,9 +19,9 @@ Main.add(function() {
     {{$planning->hour_divider}},
     window["planning-{{$planning->guid}}"] && window["planning-{{$planning->guid}}"].scrollTop,
     {{$planning->adapt_range|@json}},
-		'{{$planning->selectable}}'
+    '{{$planning->selectable}}'
   );
-	
+  
   planning.container.addClassName("drawn");
   planning.container.show();
   planning.setPlanningHeight(planning.container.up().getHeight());
@@ -29,7 +29,7 @@ Main.add(function() {
     
 
   planning.scroll();
-	window["planning-{{$planning->guid}}"] = planning;
+  window["planning-{{$planning->guid}}"] = planning;
 });
 
 </script>
@@ -43,17 +43,17 @@ Main.add(function() {
       <col style="width: 18px;"/>
     </colgroup>
     <tr>
-    	<th class="title {{if $planning->selectable}}selector{{/if}}" colspan="{{$nb_days+2}}" 
-			{{if $planning->selectable}} onclick="window['planning-{{$planning->guid}}'].selectAllEvents()" {{/if}}>
-    		<div class="nbSelectedEvents" style="float: left; font-size: smaller; width: 20px;">
-    		  (-) {{if @$date && $dialog}} {{$date|date_format:$conf.datetime}} {{/if}}
-    		</div>
-		    {{$planning->title}}
-		</th>
+      <th class="title {{if $planning->selectable}}selector{{/if}}" colspan="{{$nb_days+2}}" 
+      {{if $planning->selectable}} onclick="window['planning-{{$planning->guid}}'].selectAllEvents()" {{/if}}>
+        <div class="nbSelectedEvents" style="float: left; font-size: smaller; width: 20px;">
+          (-) {{if @$date && $dialog}} {{$date|date_format:$conf.datetime}} {{/if}}
+        </div>
+        {{$planning->title}}
+    </th>
     </tr>
     <tr>
        <th></th>
-    	 {{foreach from=$planning->days key=_day item=_events name=days}}
+       {{foreach from=$planning->days key=_day item=_events name=days}}
          {{if $_day < $planning->date_min_active || $_day > $planning->date_max_active}}
            {{assign var=disabled value=true}}
          {{else}}
@@ -63,16 +63,16 @@ Main.add(function() {
          <th class="day {{if $disabled}}disabled{{/if}} text day-{{$smarty.foreach.days.index}} {{if $planning->selectable}}selector{{/if}}"
            {{if $planning->selectable}} onclick="window['planning-{{$planning->guid}}'].selectDayEvents({{$smarty.foreach.days.index}})" {{/if}}>
            {{$_day|date_format:"%a %d"|nl2br}}
-					 {{if array_key_exists($_day, $planning->day_labels)}}
-	           {{assign var=_labels_for_day value=$planning->day_labels.$_day}}
-						 {{foreach from=$_labels_for_day item=_days_label}}
-		           <label style="background: {{$_days_label.color}};" title="{{$_days_label.detail}}">
-	               {{$_days_label.text}}
-	             </label>
-						 {{/foreach}}
-					 {{/if}}
-					</th>
-    	 {{/foreach}}
+           {{if array_key_exists($_day, $planning->day_labels)}}
+             {{assign var=_labels_for_day value=$planning->day_labels.$_day}}
+             {{foreach from=$_labels_for_day item=_days_label}}
+               <label style="background: {{$_days_label.color}};" title="{{$_days_label.detail}}">
+                 {{$_days_label.text}}
+               </label>
+             {{/foreach}}
+           {{/if}}
+          </th>
+       {{/foreach}}
        <th></th>
     </tr>
   </table>
@@ -120,21 +120,21 @@ Main.add(function() {
                     <div class="event-container">
                     {{foreach from=$_events item=_event}}
                       {{if $_event->hour == $_hour}}
-											
-											  {{assign var=draggable value=""}}
-												{{if $app->user_prefs.ssr_planning_dragndrop && $_event->draggable}}
-												  {{assign var=draggable value=draggable}}
-												{{/if}}
-												
+                      
+                        {{assign var=draggable value=""}}
+                        {{if $app->user_prefs.ssr_planning_dragndrop && $_event->draggable}}
+                          {{assign var=draggable value=draggable}}
+                        {{/if}}
+                        
                         {{assign var=resizable value=""}}
                         {{if $app->user_prefs.ssr_planning_resize && $_event->resizable}}
                           {{assign var=resizable value=resizable}}
                         {{/if}}
-
+                        
                         <div id="{{$_event->internal_id}}"
-      											 class="event {{$draggable}} {{$resizable}} {{if $disabled}}disabled{{/if}} {{$_event->css_class}} {{$_event->guid}}" 
-      											 style="background-color: {{$_event->color}}; {{if !$_event->important}}opacity: 0.6;{{/if}} {{if $_event->type}}{{if $plageconsult_id && $plageconsult_id == $_event->plage.id}}border: 2px solid #444;{{else}}border:1px solid #999;{{/if}}text-align:center;{{/if}}">
-      										{{if $_event->menu}}
+                             class="event {{$draggable}} {{$resizable}} {{if $disabled}}disabled{{/if}} {{$_event->css_class}} {{$_event->guid}}" 
+                             style="background-color: {{$_event->color}}; {{if !$_event->important}}opacity: 0.6;{{/if}} {{if $_event->type}}{{if $plageconsult_id && $plageconsult_id == $_event->plage.id}}border: 2px solid #444;{{else}}border:1px solid #999;{{/if}}text-align:center;{{/if}}">
+                          {{if $_event->menu}}
                             <div class="{{$_event->elements_menu.class}}">
                               {{assign var="elements" value=$_event->elements_menu.elements}}
                               {{foreach from=$elements item=element}}
@@ -146,25 +146,34 @@ Main.add(function() {
                             <div class="time-preview" style="display: none;"></div>
                           {{/if}}
                           
-      										{{if $planning->large}}
-      										<div class="time" title="{{$_event->start|date_format:"%H:%M"}}{{if $_event->length}} - {{$_event->end|date_format:"%H:%M"}}{{/if}}">
-      											{{$_event->start|date_format:"%H:%M"}}
+                          {{if $planning->large}}
+                          <div class="time" title="{{$_event->start|date_format:"%H:%M"}}{{if $_event->length}} - {{$_event->end|date_format:"%H:%M"}}{{/if}}">
+                            {{$_event->start|date_format:"%H:%M"}}
                             {{if $_event->length}}
                              - {{$_event->end|date_format:"%H:%M"}}
                             {{/if}}
                           </div>
                           {{/if}}
-      										
+                          
                           <div class="body">
                             {{if $_event->type == "consultation" || $_event->type == "tableau_bord"}}
                               {{assign var="plage" value=$_event->plage}}
                               {{assign var="elements" value=$_event->elements_menu.elements}}
                               {{foreach from=$elements key=num item=_plage}}
+                                {{if $plage.pct lt 50}}
+                                  {{assign var="backgroundClass" value="empty"}}
+                                {{elseif $plage.pct lt 90}}
+                                  {{assign var="backgroundClass" value="normal"}}
+                                {{elseif $plage.pct lt 100}}
+                                  {{assign var="backgroundClass" value="booked"}}
+                                {{else}}
+                                  {{assign var="backgroundClass" value="full"}}
+                                {{/if}} 
                                 {{if $num!=1}}
                                   <a onclick="{{$_plage.onclick}}" href="{{$_plage.href}}" title="{{$_plage.title}}" >
                                     {{if $num==2}}
                                       <div class="progressBar">
-                                        <div class="bar normal" style="width: {{$plage.pct}}%;"></div>
+                                        <div class="bar {{$backgroundClass}}" style="width: {{$plage.pct}}%;"></div>
                                         <div class="text">
                                          {{if $plage.locked}}
                                           <img style="float: right; height: 12px;" src="style/mediboard/images/buttons/lock.png" />
