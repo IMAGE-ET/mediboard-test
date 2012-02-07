@@ -8,8 +8,8 @@
 */
 
 class CFile extends CDocumentItem {
-	static $directory = null;
-	
+  static $directory = null;
+  
   // DB Table key
   var $file_id = null;
   
@@ -33,7 +33,7 @@ class CFile extends CDocumentItem {
   
   // Behavior fields
   var $_rotate      = null;
-	var $_rename      = null;
+  var $_rename      = null;
   var $_merge_files = null;
 
   // Other fields
@@ -65,9 +65,9 @@ class CFile extends CDocumentItem {
   }
   
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["file_date"]          = "dateTime notNull";
-    $specs["file_size"]          = "num pos";
+    $specs["file_size"]          = "num pos show|0";
     $specs["file_real_filename"] = "str notNull show|0";
     $specs["file_type"]          = "str";
     $specs["file_name"]          = "str notNull show|0";
@@ -79,7 +79,7 @@ class CFile extends CDocumentItem {
     $specs["_file_path"]    = "str";
     $specs["_file_size"]    = "str show|1";
     $specs["_old_file_path"]= "str";
-		// Behavior fields
+    // Behavior fields
     $specs["_rotate"]       = "enum list|left|right";
     $specs["_rename"]       = "str";
     $specs["_merge_files"]  = "bool";
@@ -137,7 +137,7 @@ class CFile extends CDocumentItem {
   
   function getPerm($permType) {
     // Delegate on target object
-		$this->loadTargetObject();
+    $this->loadTargetObject();
     return $this->_ref_object->_id ?
       $this->_ref_object->getPerm($permType) :
       false;
@@ -155,34 +155,34 @@ class CFile extends CDocumentItem {
       $this->_old->updateFormFields();
       $this->moveFile($this->_old->_file_path);
     }
-		
-		// Make sure filename is unique for an object
+    
+    // Make sure filename is unique for an object
     if (!$this->_id) {
-    	$this->completeField("file_name");
+      $this->completeField("file_name");
       $this->completeField("object_class");
       $this->completeField("object_id");
 
       $ds = $this->_spec->ds;
       $where["object_class"] = " = '$this->object_class'";
       $where["object_id"   ] = " = '$this->object_id'";
-    	$where["file_name"]    = $ds->prepare("= %", $this->file_name);
-    	if ($this->countList($where)) {
-	      $last_point = strrpos($this->file_name, '.');
-	      $base_name = substr($this->file_name, 0, $last_point);
-	      $extension = substr($this->file_name, $last_point+1);
+      $where["file_name"]    = $ds->prepare("= %", $this->file_name);
+      if ($this->countList($where)) {
+        $last_point = strrpos($this->file_name, '.');
+        $base_name = substr($this->file_name, 0, $last_point);
+        $extension = substr($this->file_name, $last_point+1);
         $indice = 1;
 
-				do {
-					$indice++;
-					$suffixe = sprintf(" %02s", $indice);
+        do {
+          $indice++;
+          $suffixe = sprintf(" %02s", $indice);
           $file_name = "$base_name$suffixe.$extension";
           $where["file_name"] = $ds->prepare("= %", $file_name);
-					
-				} 
-				while ($this->countList($where));
+          
+        } 
+        while ($this->countList($where));
         $this->file_name = $file_name;
-    	}
-    	
+      }
+      
     }
     if (!$this->_id && $this->rotation === null) {
       $this->loadNbPages();
@@ -209,12 +209,12 @@ class CFile extends CDocumentItem {
   }
   
   function delete() {
-  	// Remove previews
-		$this->loadRefsFiles();
+    // Remove previews
+    $this->loadRefsFiles();
     foreach($this->_ref_files as $_file) {
       $_file->delete();
     }
-		
+    
     if ($msg = parent::delete()) {
       return $msg;
     }
@@ -257,7 +257,7 @@ class CFile extends CDocumentItem {
     else
       // https://bugs.php.net/bug.php?id=50676
       // Problem while renaming across volumes : trigger the warning "Operation is not permitted" 
-			return @rename($file, $this->_file_path);
+      return @rename($file, $this->_file_path);
   }
     
   function oldImageMagick() {
@@ -344,7 +344,7 @@ class CFile extends CDocumentItem {
 
     //Ajout des fichiers dans le tableau
     foreach ($object->_ref_files as $keyFile=>&$_file) {
-    	$cat_id = $_file->file_category_id ? $_file->file_category_id : 0;
+      $cat_id = $_file->file_category_id ? $_file->file_category_id : 0;
       $affichageFile[$cat_id]["items"]["$_file->file_name-$_file->_guid"] =& $_file;
       if (!isset($affichageFile[$cat_id]["name"]))
         $affichageFile[$cat_id]["name"] = '';
@@ -352,7 +352,7 @@ class CFile extends CDocumentItem {
     
     //Ajout des document dans le tableau
     foreach ($object->_ref_documents as $keyDoc=>&$_doc) {
-    	$cat_id = $_doc->file_category_id ? $_doc->file_category_id : 0;
+      $cat_id = $_doc->file_category_id ? $_doc->file_category_id : 0;
       $affichageFile[$cat_id]["items"]["$_doc->nom-$_doc->_guid"] =& $_doc;
       if (!isset($affichageFile[$cat_id]["name"]))
         $affichageFile[$cat_id]["name"] = '';
@@ -367,7 +367,7 @@ class CFile extends CDocumentItem {
   }
   
   function handleSend() {
-  	$this->completeField("file_name");
+    $this->completeField("file_name");
     $this->completeField("file_real_filename");
     $this->completeField("file_type");
     $this->completeField("file_date");
@@ -375,7 +375,7 @@ class CFile extends CDocumentItem {
     
     return parent::handleSend();
   }
-	
+  
   function file_empty() {
     if (file_exists($this->_file_path)) {
       file_put_contents($this->_file_path, '');
@@ -470,47 +470,47 @@ class CFile extends CDocumentItem {
     
     return $res;
   }
-	
-	static function convertTifPagesToPDF($tif_files){
-		if (!class_exists("FPDF")){
-			CAppUI::requireLibraryFile("PDFMerger/fpdf/fpdf");
-		}
-		
-		$pngs = array();
-		foreach($tif_files as $tif) {
-		  $pngs[] = self::convertTifToPng($tif); // "C:\\ImageMagick6.6.0-Q16\\"
-		}
-		
-		$pdf = new FPDF();
-		
-		foreach($pngs as $png) {
-		  $pdf->AddPage();
-		  $pdf->Image($png, 5, 5, 200); // millimeters
-		}
-		
-		$out = $pdf->Output("", 'S');
-		
-		foreach($pngs as $png) {
-		  unlink($png);
-		}
-		
-		return $out;
-	}
-	
-	static function convertTifToPng($path) {
-	  $tmp_tmp = tempnam(sys_get_temp_dir(), "mb_");
-	  unlink($tmp_tmp);
-	  
-	  $tmp  = "$tmp_tmp.png";
-	  
-	  $from = escapeshellarg($path);
-	  $to   = escapeshellarg($tmp);
-	  $exec = "convert $from $to";
-	  
-	  exec($exec, $yaks);
-	  
-	  return $tmp;
-	}
+  
+  static function convertTifPagesToPDF($tif_files){
+    if (!class_exists("FPDF")){
+      CAppUI::requireLibraryFile("PDFMerger/fpdf/fpdf");
+    }
+    
+    $pngs = array();
+    foreach($tif_files as $tif) {
+      $pngs[] = self::convertTifToPng($tif); // "C:\\ImageMagick6.6.0-Q16\\"
+    }
+    
+    $pdf = new FPDF();
+    
+    foreach($pngs as $png) {
+      $pdf->AddPage();
+      $pdf->Image($png, 5, 5, 200); // millimeters
+    }
+    
+    $out = $pdf->Output("", 'S');
+    
+    foreach($pngs as $png) {
+      unlink($png);
+    }
+    
+    return $out;
+  }
+  
+  static function convertTifToPng($path) {
+    $tmp_tmp = tempnam(sys_get_temp_dir(), "mb_");
+    unlink($tmp_tmp);
+    
+    $tmp  = "$tmp_tmp.png";
+    
+    $from = escapeshellarg($path);
+    $to   = escapeshellarg($tmp);
+    $exec = "convert $from $to";
+    
+    exec($exec, $yaks);
+    
+    return $tmp;
+  }
   
   function loadPDFconverted() {
     $file = new CFile();
