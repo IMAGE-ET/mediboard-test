@@ -33,7 +33,7 @@ $dossier_medical->loadRefsAntecedents();
 $dossier_medical->loadRefsTraitements();
 $prescription = $dossier_medical->loadRefPrescription();
 
-if (is_array($prescription->_ref_prescription_lines)) {
+if ($prescription && is_array($prescription->_ref_prescription_lines)) {
   foreach($dossier_medical->_ref_prescription->_ref_prescription_lines as $_line) {
     $_line->loadRefsPrises();
   }
