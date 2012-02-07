@@ -89,11 +89,13 @@ foreach ($listSejours as &$sejour) {
   $sejour->loadRefPrescriptionSejour();
 
   $prescription = $sejour->_ref_prescription_sejour;
-  $prescription->loadRefsPrescriptionLineMixes();
-  $prescription->loadRefsLinesMedByCat();
-  $prescription->loadRefsLinesElementByCat();
-      
-  $sejour->_ref_prescription_sejour->countRecentModif();
+  if ($prescription){
+	  $prescription->loadRefsPrescriptionLineMixes();
+	  $prescription->loadRefsLinesMedByCat();
+	  $prescription->loadRefsLinesElementByCat();
+	      
+	  $sejour->_ref_prescription_sejour->countRecentModif();
+  }
 
   // Chargement de l'IPP
   $sejour->_ref_patient->loadIPP();
