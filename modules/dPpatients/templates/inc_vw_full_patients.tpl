@@ -89,9 +89,9 @@ onMergeComplete = function() {
       {{tr}}Merge{{/tr}}
     </button>
     {{/if}}
-  	{{tr}}CPatient-back-sejours{{/tr}}
-		<small>({{$patient->_ref_sejours|@count}})</small>
-	</th>
+    {{tr}}CPatient-back-sejours{{/tr}}
+    <small>({{$patient->_ref_sejours|@count}})</small>
+  </th>
 </tr>
 <tbody id="sejours">
 {{foreach from=$patient->_ref_sejours item=_sejour}}
@@ -100,7 +100,7 @@ onMergeComplete = function() {
       <td class="narrow">
         <button class="lookup notext" onclick="popEtatSejour({{$_sejour->_id}});">{{tr}}Lookup{{/tr}}</button>
       </td>
-			<td>
+      <td>
         {{if $can->admin}}
           <input type="checkbox" name="objects_id[]" value="{{$_sejour->_id}}" class="merge" style="float: left;"
             {{if $conf.alternative_mode}}onclick="checkOnlyTwoSelected(this)"{{/if}} />
@@ -192,12 +192,12 @@ onMergeComplete = function() {
     {{assign var="_consult" value=$consult_anesth->_ref_consultation}}
     <tr>
       <td colspan="2" style="padding-left: 20px;">
-        <span
-          {{if $consult_anesth->_id}}class="iconed-text anesth"{{/if}} 
-          onmouseover="ObjectTooltip.createEx(this, '{{$consult_anesth->_guid}}')"
-          onclick="viewCompleteItem('{{$consult_anesth->_guid}}'); ViewFullPatient.select(this)">
-          Consult le {{$_consult->_datetime|date_format:$conf.date}}
-        </span>
+        <a href="#{{$consult_anesth->_guid}}" class="iconed-text anesth" style="margin-left: 20px" 
+           onclick="viewCompleteItem('{{$consult_anesth->_guid}}'); ViewFullPatient.select(this)">
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$consult_anesth->_guid}}')">
+            Consult le {{$_consult->_datetime|date_format:$conf.date}}
+          </span>
+        </a>
       </td>
     
       {{assign var=praticien value=$_consult->_ref_chir}}
@@ -229,7 +229,7 @@ onMergeComplete = function() {
 {{/if}}
 {{foreachelse}}
 <tr>
-	<td colspan="10" class="empty">{{tr}}CPatient-back-sejours.empty{{/tr}}</td>
+  <td colspan="10" class="empty">{{tr}}CPatient-back-sejours.empty{{/tr}}</td>
 </tr>
 {{/foreach}}
 </tbody>
@@ -250,7 +250,8 @@ onMergeComplete = function() {
   {{if $_consult->_ref_chir->_ref_function->group_id == $g || $conf.dPpatients.CPatient.multi_group == "full"}}
   <tr>
     <td colspan="2">
-      <a href="#{{$_consult->_guid}}" class="iconed-text {{$_consult->_type}}"  onclick="viewCompleteItem('{{$_consult->_guid}}'); ViewFullPatient.select(this)">
+      <a href="#{{$_consult->_guid}}" class="iconed-text {{$_consult->_type}}"  
+         onclick="viewCompleteItem('{{$_consult->_guid}}'); ViewFullPatient.select(this)">
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}');">
           Consult. le {{$_consult->_datetime|date_format:$conf.date}}
         </span>
