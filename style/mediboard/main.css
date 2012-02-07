@@ -1918,7 +1918,7 @@ td.mouvement_lit {
 }
 
 td.current_hour {
-  background: #f33 !important;
+  background: #f88 !important;
 }
 
 div.affectation, div.affect_legend {
@@ -1989,6 +1989,20 @@ div.operation_in_mouv_compact {
   height: 11px;
   top: 1px;
   background: #6AE;
+}
+
+div.soins_uscpo {
+  position: absolute;
+  height: 25px;
+  top: 1px;
+  background: #fd7;
+}
+
+div.soins_uscpo_compact {
+  position: absolute;
+  height: 11px;
+  top: 1px;
+  background: #fd7;
 }
 
 tr.consultation_entree td {

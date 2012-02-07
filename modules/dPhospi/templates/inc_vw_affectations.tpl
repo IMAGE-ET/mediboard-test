@@ -13,10 +13,14 @@
   
     var time_line_temporelle_non_affectes = $("time_line_temporelle_non_affectes");
     var list_affectations = $("list_affectations");
-    var width_th = $("tableau_vue_temporel").down("tr", 1).down("th").getStyle("width");
+    var first_th = $("tableau_vue_temporel").down("tr", 1).down("th");
+    var width_th = parseInt(first_th.getStyle("width"));
+    if (first_th.next().hasClassName("first_cell")) {
+       width_th += parseInt(first_th.next().getStyle("width"))+5;
+    }
     list_affectations.scrollTop = 0;
     $$(".first_th").each(function(th) {
-      th.setStyle({width: width_th});
+      th.setStyle({minWidth: width_th+"px"});
     });
     
     if (Prototype.Browser.Gecko) {
@@ -34,12 +38,24 @@
   });
 </script>
 
-{{if $granularite == "day"}}
-  {{assign var=td_width value=37}}
+{{if $prestation_id}}
+  {{if $granularite == "day"}}
+    {{assign var=td_width value=36}}
+  {{else}}
+    {{assign var=td_width value=29}}
+  {{/if}}
 {{else}}
-  {{assign var=td_width value=30}}
+  {{if $granularite == "day"}}
+    {{assign var=td_width value=37}}
+  {{else}}
+    {{assign var=td_width value=30}}
+  {{/if}}
 {{/if}}
-{{math equation=x+1 x=$nb_ticks assign=colspan}}
+{{if $prestation_id}}
+  {{math equation=x+2 x=$nb_ticks assign=colspan}}
+{{else}}
+  {{math equation=x+1 x=$nb_ticks assign=colspan}}
+{{/if}}
 {{math equation=x-1 x=$nb_ticks assign=nb_ticks_r}}
 
 <div style="height: 5em; width: 100%">
@@ -113,11 +129,6 @@
       {{/if}}
       </th>
     </tr>
-   {{if $granularite == "day"}}
-     {{assign var=td_width value=37}}
-   {{else}}
-     {{assign var=td_width value=30}}
-   {{/if}}
     <tr>
       <th class="first_th"></th>
       {{foreach from=$datetimes item=_date}}

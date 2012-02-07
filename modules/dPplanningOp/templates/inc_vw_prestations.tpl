@@ -26,10 +26,12 @@
     
     <table class="tbl">
       <tr>
-        <th class="title">
+        <th class="title narrow">
           <button type="button" class="save notext" onclick="this.form.onsubmit();"></button>
         </th>
+        {{if $affectations|@count}}
         <th class="title narrow"></th>
+        {{/if}}
         <th class="title" style="width: 45%">Journalières</th>
         {{if $vue_prestation == "all"}}
           <th class="title">
@@ -86,7 +88,7 @@
           {{assign var=affectation_id value=$_affectation_id}}
           {{if $affectation_id != 0}}
             {{assign var=affectation value=$affectations.$affectation_id}}
-            <th rowspan="{{$affectation->_rowspan}}" class="title narrow">
+            <th rowspan="{{$affectation->_rowspan}}" class="narrow">
               <span onmouseover="ObjectTooltip.createEx(this, '{{$affectation->_guid}}')">
                  {{vertical}}
                    {{$affectation->_ref_lit}}
@@ -104,14 +106,14 @@
           <td>
             <table class="tbl">
               <tr>
-                <th class="title narrow"></th>
+                <th class="narrow"></th>
                 {{foreach from=$prestations_j item=_prestation}}
-                  <th style="width: {{$width_prestation}}%" class="title">{{$_prestation->nom}}</th>
+                  <th style="width: {{$width_prestation}}%">{{$_prestation->nom}}</th>
                 {{/foreach}}
               </tr>
               {{foreach from=$type_j item=type}}
                 <tr>
-                  <th class="title narrow">
+                  <th class=" narrow">
                     {{tr}}CItemLiaison-{{$type}}{{/tr}}
                   </th>
                   {{foreach from=$prestations_j item=_prestation key=prestation_id}}
@@ -159,7 +161,7 @@
                   <tr>
                     {{foreach from=$liaisons_p.$_date item=_liaison key=prestation_id}}
                       {{assign var=prestation value=$prestations_p.$prestation_id}}
-                      <th class="title">
+                      <th>
                         {{$prestation->nom}}
                       </th>
                     {{/foreach}}

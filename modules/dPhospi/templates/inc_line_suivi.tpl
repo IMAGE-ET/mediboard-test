@@ -153,9 +153,21 @@
     {{else}}
       {{$_suivi->conclusion}}
       {{if $_suivi->type == "entree"}}
-        {{$_suivi->rques}} &ndash;
-        {{$_suivi->examen}} &ndash;
-        {{$_suivi->traitement}}
+        {{if $_suivi->rques}}
+          {{$_suivi->rques}} <br />
+        {{/if}}
+        {{if $_suivi->examen}}
+          {{$_suivi->examen}} <br />
+        {{/if}}
+        {{if $_suivi->traitement}}
+          {{$_suivi->traitement}} <br />
+        {{/if}}
+        {{if $conf.dPcabinet.CConsultation.show_histoire_maladie && $_suivi->histoire_maladie}}
+          {{$_suivi->histoire_maladie}} <br />
+        {{/if}}
+        {{if $conf.dPcabinet.CConsultation.show_conclusion && $_suivi->show_consultation}}
+          {{$_suivi->conclusion}} <br />
+        {{/if}}
       {{/if}}
     {{/if}}
   </td>

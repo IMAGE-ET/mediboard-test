@@ -251,7 +251,7 @@ $smarty->assign("readonly"    , $readonly);
 $smarty->assign("nb_affectations", $nb_affectations);
 $smarty->assign("readonly"    , $readonly);
 $smarty->assign("current"     , $current);
-
+$smarty->assign("prestation_id", $prestation_id);
 $smarty->display("inc_vw_mouvements.tpl");
 
 ?>

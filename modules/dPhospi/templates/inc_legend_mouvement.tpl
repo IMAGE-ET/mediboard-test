@@ -69,6 +69,20 @@
   <tr>
     <td>
       <div class="wrapper_line">
+        <div class="affect_legend clit" style="width: 30px">
+          <div class="wrapper_op">
+            <div class="soins_uscpo opacity-40" style="width: 15px; left: 7px; top: 0"></div>
+          </div>
+        </div>
+      </div>
+    </td>
+    <td>
+      Soins USCPO
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <div class="wrapper_line">
         <div class="affect_legend clit sejour_sortie_autorisee" style="width: 33px">&nbsp;</div>
       </div>
     </td>

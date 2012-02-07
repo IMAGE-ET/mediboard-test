@@ -5,9 +5,15 @@
       var view_affectations = $("view_affectations");
       view_affectations.scrollTop = 0;
       time_line_temporelle.setStyle({width: (parseInt(view_affectations.getStyle("width")) - 15)+'px'});
-      var width_th = $("tableau_vue_temporel").down("tr", 1).down("th").getStyle("width");
+      var first_th = $("tableau_vue_temporel").down("tr", 1).down("th");
+      var width_th = parseInt(first_th.getStyle("width"));
+      
+      if (first_th.next().hasClassName("first_cell")) {
+        width_th += parseInt(first_th.next().getStyle("width"))+5;
+      }
+      
       $$(".first_th").each(function(th) {
-        th.setStyle({minWidth: width_th});
+        th.setStyle({minWidth: width_th+"px"});
       });
       
       if (Prototype.Browser.Gecko) {
@@ -60,7 +66,11 @@
   </script>
 {{/if}}
 
-{{math equation=x+1 x=$nb_ticks assign=colspan}}
+{{if $prestation_id}}
+  {{math equation=x+2 x=$nb_ticks assign=colspan}}
+{{else}}
+  {{math equation=x+1 x=$nb_ticks assign=colspan}}
+{{/if}}
 {{math equation=x-1 x=$nb_ticks assign=nb_ticks_r}}
 
 <div style="height: 4.6em; width: 100%">
@@ -78,7 +88,7 @@
     </strong>
     <table class="tbl" style="width: auto; table-layout: fixed;">
       <tr>
-      
+
       {{if $granularite == "day"}}
         <th colspan="{{$colspan}}">
           {{$date|date_format:$conf.longdate}}
@@ -110,11 +120,19 @@
       {{/if}}
       </th>
     </tr>
-   {{if $granularite == "day"}}
-     {{assign var=td_width value=37}}
-   {{else}}
-     {{assign var=td_width value=30}}
-   {{/if}}
+    {{if $prestation_id}}
+      {{if $granularite == "day"}}
+        {{assign var=td_width value=36}}
+      {{else}}
+        {{assign var=td_width value=29}}
+      {{/if}}
+    {{else}}
+      {{if $granularite == "day"}}
+        {{assign var=td_width value=37}}
+      {{else}}
+        {{assign var=td_width value=30}}
+      {{/if}}
+    {{/if}}
     <tr>
       <th class="first_th"></th>
       {{foreach from=$datetimes item=_date}}
@@ -141,6 +159,9 @@
     {{foreach from=$_service->_ref_chambres item=_chambre}}
       {{foreach from=$_chambre->_ref_lits item=_lit}}
         <tr data-lit_id="{{$_lit->_id}}" id="{{$_lit->_guid}}" class="droppable">
+          {{if $prestation_id}}
+            <th class="text">{{$_lit->_selected_item->nom}}</th>
+          {{/if}}
           <th class="text first_cell" style="text-align: left;" onclick="this.down().click();" data-rank="{{$_lit->_selected_item->rank}}">
             {{if isset($_lit->_lines|smarty:nodefaults) && $_lit->_lines|@count > 1}}
               <img src="modules/dPhospi/images/surb.png" title="Collision" style="float: right;">
@@ -224,6 +245,13 @@
                             <div class="operation_in_mouv{{if $mode_vue_tempo == "compacte"}}_compact{{/if}} opacity-40"
                               style="left: {{$offset_op}}px; width: {{$width_op}}px;"></div>
                           {{/foreach}}
+                          {{if $_sejour->duree_uscpo}}
+                            {{math equation=x+y+2 x=$offset_op y=$width_op assign=offset_uscpo}}
+                            {{math equation=x*(y+4.6) x=$_sejour->duree_uscpo y=$td_width assign=width_uscpo}}
+                            
+                            <div class="soins_uscpo{{if $mode_vue_tempo == "compacte"}}_compact{{/if}} opacity-40"
+                              style="left: {{$offset_uscpo}}px; width: {{$width_uscpo}}px;"></div>
+                          {{/if}}
                         </div>
                        
                       </div>
