@@ -9,5 +9,5 @@ Naissance = {
     var url = new Url('maternite', 'ajax_vw_naissances');
     url.addParam('operation_id', operation_id);
     url.requestUpdate('naissance_area');
-  },
+  }
 }
