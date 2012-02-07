@@ -14,6 +14,8 @@
           {{mb_label class=CCorrespondantPatient field=cp}} / {{mb_label class=CCorrespondantPatient field=ville}}
         </th>
         <th class="title">{{mb_label class=CCorrespondantPatient field=tel}}</th>
+        <th class="title">{{mb_label class=CCorrespondantPatient field=mob}}</th>
+        <th class="title">{{mb_label class=CCorrespondantPatient field=fax}}</th>
         <th class="title">{{mb_label class=CCorrespondantPatient field=parente}}</th>
         <th class="title">{{mb_label class=CCorrespondantPatient field=urssaf}}</th>
         <th class="title">{{mb_label class=CCorrespondantPatient field=email}}</th>

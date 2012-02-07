@@ -7,7 +7,7 @@
   {{foreach from=$correspondants_by_relation item=_correspondants key=relation}}
     {{if $_correspondants|@count}}
       <tr>
-        <th colspan="10">{{tr}}CCorrespondantPatient.relation.{{$relation}}{{/tr}}</th>
+        <th colspan="12">{{tr}}CCorrespondantPatient.relation.{{$relation}}{{/tr}}</th>
       </tr>
       {{foreach from=$_correspondants item=_correspondant}}
         <tr>
@@ -23,6 +23,8 @@
             {{mb_value object=$_correspondant field=ville}}
           </td>
           <td>{{mb_value object=$_correspondant field=tel}}</td>
+          <td>{{mb_value object=$_correspondant field=mob}}</td>
+          <td>{{mb_value object=$_correspondant field=fax}}</td>
           <td>
             {{if $_correspondant->relation != "employeur"}}
               {{if $_correspondant->parente == "autre"}}
@@ -45,13 +47,13 @@
         </tr>
       {{foreachelse}}
         <tr>
-          <td colspan="10" class="empty">{{tr}}CCorrespondantPatient.none{{/tr}}</td>
+          <td colspan="12" class="empty">{{tr}}CCorrespondantPatient.none{{/tr}}</td>
         </tr>
       {{/foreach}}
     {{/if}}
   {{/foreach}}
 {{else}}
   <tr>
-    <td colspan="10" class="empty">{{tr}}CCorrespondantPatient.none{{/tr}}</td>
+    <td colspan="12" class="empty">{{tr}}CCorrespondantPatient.none{{/tr}}</td>
   </tr>
 {{/if}}

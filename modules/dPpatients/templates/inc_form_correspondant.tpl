@@ -92,6 +92,14 @@
       <th>{{mb_label object=$correspondant field="tel"}}</th>
       <td>{{mb_field object=$correspondant field="tel"}}</td>
     </tr>
+    <tr>
+      <th>{{mb_label object=$correspondant field="mob"}}</th>
+      <td>{{mb_field object=$correspondant field="mob"}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$correspondant field="fax"}}</th>
+      <td>{{mb_field object=$correspondant field="fax"}}</td>
+    </tr>
     <tr {{if $correspondant->relation == "employeur"}}style="display: none;"{{/if}} id="parente">
       <th>{{mb_label object=$correspondant field="parente"}}</th>
       <td>{{mb_field object=$correspondant field="parente" emptyLabel="Choose" onchange="toggleParenteAutre(this);"}}</td>

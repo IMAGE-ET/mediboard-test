@@ -1489,7 +1489,7 @@ class CSetupdPpatients extends CSetup {
               ADD `catheter_suspubien` FLOAT UNSIGNED,
               ADD `entree_lavage` FLOAT UNSIGNED";
     $this->addQuery($query);
-		
+    
     $this->makeRevision("1.28");
     $query = "ALTER TABLE `config_constantes_medicales` 
               ADD `show_enable_all_button` ENUM ('0','1');";
@@ -1715,7 +1715,13 @@ class CSetupdPpatients extends CSetup {
               ADD INDEX (`disabled`);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.40";
+    $this->makeRevision("1.40");
+    $query = "ALTER TABLE `correspondant_patient`
+              ADD `fax` BIGINT (10) UNSIGNED ZEROFILL,
+              ADD `mob` BIGINT (10) UNSIGNED ZEROFILL";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.41";
     
     $query = "SHOW TABLES LIKE 'categorie_socioprofessionnelle'";
     $this->addDatasource("INSEE", $query);

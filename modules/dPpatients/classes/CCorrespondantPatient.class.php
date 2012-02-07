@@ -26,6 +26,8 @@ class CCorrespondantPatient extends CMbObject {
   var $cp         = null;
   var $ville      = null;
   var $tel        = null;
+  var $mob        = null;
+  var $fax        = null;
   var $urssaf     = null;
   var $parente    = null;
   var $parente_autre = null;
@@ -57,6 +59,8 @@ class CCorrespondantPatient extends CMbObject {
     $specs["cp"]         = "numchar minLength|4 maxLength|5";
     $specs["ville"]      = "str confidential";
     $specs["tel"]        = "numchar confidential length|10 mask|$phone_number_format";
+    $specs["mob"]        = "numchar confidential length|10 mask|$phone_number_format";
+    $specs["fax"]        = "numchar confidential length|10 mask|$phone_number_format";
     $specs["urssaf"]     = "numchar length|11 confidential";
     $specs["parente"]    = "enum list|ami|ascendant|autre|beau_fils|colateral|collegue|compagnon|conjoint|directeur|divers|employeur|employe|enfant|enfant_adoptif|entraineur|epoux|frere|grand_parent|mere|pere|petits_enfants|proche|proprietaire|soeur|tuteur";
     $specs["parente_autre"] = "str";
