@@ -21,7 +21,9 @@ $patient->loadRefPhotoIdentite();
 
 // Création du template
 $smarty = new CSmartyDP("modules/dPcabinet");
-$smarty->assign("line", new CPrescriptionLineMedicament());
+if (CModule::getActive("dPprescription")){
+  $smarty->assign("line", new CPrescriptionLineMedicament());
+}
 $smarty->assign("current_m", "dPcabinet");
 $smarty->assign("sejour_id", $sejour->_id);
 $smarty->assign("patient", $patient);

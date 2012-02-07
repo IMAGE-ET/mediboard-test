@@ -1,5 +1,8 @@
-{{mb_script module="dPprescription" script="prescription"}}
-{{mb_script module="dPprescription" script="prescription_editor"}}
+{{if "dPprescription"|module_active}}
+  {{mb_script module="dPprescription" script="prescription"}}
+  {{mb_script module="dPprescription" script="prescription_editor"}}
+{{/if}}
+
 {{mb_script module="dPcompteRendu" script="document"}}
 {{mb_script module="dPcompteRendu" script="modele_selector"}}
 {{mb_script module="dPcabinet" script="edit_consultation"}}

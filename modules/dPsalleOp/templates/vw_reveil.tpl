@@ -1,9 +1,16 @@
 {{mb_script module="bloodSalvage" script="bloodSalvage"}}
-{{mb_script module="dPprescription" script="plan_soins"}}
-{{mb_script module="dPprescription" script="prescription"}}
-{{mb_script module="dPprescription" script="element_selector"}}
-{{mb_script module="dPmedicament" script="medicament_selector"}}
-{{mb_script module="dPmedicament" script="equivalent_selector"}}
+
+{{if "dPprescription"|module_active}}
+  {{mb_script module="dPprescription" script="plan_soins"}}
+  {{mb_script module="dPprescription" script="prescription"}}
+  {{mb_script module="dPprescription" script="element_selector"}}
+{{/if}}
+
+{{if "dPmedicament"|module_active}}
+  {{mb_script module="dPmedicament" script="medicament_selector"}}
+  {{mb_script module="dPmedicament" script="equivalent_selector"}}
+{{/if}}
+
 {{mb_script module="dPplanningOp" script="cim10_selector"}}
 {{mb_script module="dPcompteRendu" script="document"}}
 {{mb_script module="dPcompteRendu" script="modele_selector"}}
@@ -70,6 +77,7 @@ codageCCAM = function(operation_id){
 }
 
 showDossierSoins = function(sejour_id, operation_id, default_tab){
+  {{if "dPprescription"|module_active}}
   $('dossier_sejour').update("");
   var url = new Url("soins", "ajax_vw_dossier_sejour");
   url.addParam("sejour_id", sejour_id);
@@ -79,6 +87,7 @@ showDossierSoins = function(sejour_id, operation_id, default_tab){
   }
 	url.requestUpdate($('dossier_sejour'));
   modalWindow = modal($('dossier_sejour'));
+	{{/if}}
 }
 
 </script>

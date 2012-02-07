@@ -1,4 +1,6 @@
-{{mb_script module="dPprescription" script="prescription"}}
+{{if "dPprescription"|module_active}}
+  {{mb_script module="dPprescription" script="prescription"}}
+{{/if}}
 
 {{if !$documents|@count && !$prescription_preadm->_id && !$prescription_sejour->_id && !$prescription_sortie->_id}}
   <div class="small-info">

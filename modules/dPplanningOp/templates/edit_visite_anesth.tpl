@@ -1,7 +1,13 @@
-{{mb_script module="dPmedicament" script="medicament_selector"}}
-{{mb_script module="dPmedicament" script="equivalent_selector"}}
-{{mb_script module="dPprescription" script="element_selector"}}
-{{mb_script module="dPprescription" script="prescription"}}
+{{if "dPmedicament"|module_active}}
+  {{mb_script module="dPmedicament" script="medicament_selector"}}
+  {{mb_script module="dPmedicament" script="equivalent_selector"}}
+{{/if}}
+
+{{if "dPprescription"|module_active}}
+  {{mb_script module="dPprescription" script="element_selector"}}
+  {{mb_script module="dPprescription" script="prescription"}}
+{{/if}}
+
 {{mb_script module="dPplanningOp" script="cim10_selector"}}
 {{mb_script module="dPcompteRendu" script="modele_selector"}}
 

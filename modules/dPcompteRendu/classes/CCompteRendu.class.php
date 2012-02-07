@@ -593,8 +593,11 @@ class CCompteRendu extends CDocumentItem {
     
     $all_classes = array(
       "CBloodSalvage", "CConsultAnesth", "CConsultation", "CDossierMedical", "CRPU",
-      "CFunctions", "CGroups", "CMediusers", "COperation", "CPatient", "CPrescription", "CSejour"
+      "CFunctions", "CGroups", "CMediusers", "COperation", "CPatient", "CSejour"
     );
+		if(CModule::getActive("dPprescription")){
+			$all_classes[] = "CPrescription";
+		}
     $installed = CApp::getInstalledClasses(null, $all_classes);
     
     foreach ($installed as $key => $class) {

@@ -6,7 +6,10 @@
 {{assign var="module" value="dPsalleOp"}}
 {{assign var="object" value=$selOp}}
 {{mb_include module=dPsalleOp template=js_codage_ccam}}
-{{mb_script module="dPprescription" script="plan_soins"}}
+
+{{if "dPprescription"|module_active}}
+  {{mb_script module="dPprescription" script="plan_soins"}}
+{{/if}}
 
 <script type="text/javascript">
 

@@ -1,7 +1,13 @@
-{{mb_script module="dPmedicament" script="medicament_selector"}}
-{{mb_script module="dPmedicament" script="equivalent_selector"}}
-{{mb_script module="dPprescription" script="element_selector"}}
-{{mb_script module="dPprescription" script="prescription"}}
+{{if "dPmedicament"|module_active}}
+  {{mb_script module="dPmedicament" script="medicament_selector"}}
+  {{mb_script module="dPmedicament" script="equivalent_selector"}}
+{{/if}}
+
+{{if "dPprescription"|module_active}}
+  {{mb_script module="dPprescription" script="element_selector"}}
+  {{mb_script module="dPprescription" script="prescription"}}
+{{/if}}
+
 {{mb_script module="bloodSalvage" script="bloodSalvage"}}
 
 {{assign var="sejour" value=$selOp->_ref_sejour}}
@@ -250,7 +256,7 @@ function refreshGrossesse(operation_id) {
 		{{/if}}
 		
 		{{if !$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && $currUser->_is_anesth)}}
-      <li onmouseup="reloadAnesth('{{$selOp->_id}}'); Prescription.updatePerop('{{$selOp->sejour_id}}');"><a href="#anesth_tab">Anesth.</a></li>
+      <li onmouseup="reloadAnesth('{{$selOp->_id}}'); {{if "dPprescription"|module_active}}Prescription.updatePerop('{{$selOp->sejour_id}}');{{/if}}"><a href="#anesth_tab">Anesth.</a></li>
 		{{/if}}
     {{if !$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && !$currUser->_is_anesth)}}
       <li><a href="#dossier_tab">Chir.</a></li>

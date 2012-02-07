@@ -1,8 +1,12 @@
 <!-- $Id$ -->
 
+{{if "dPprescription"|module_active}}
+  {{mb_script module="dPprescription" script="prescription_editor"}}
+  {{mb_script module="dPprescription" script="prescription"}}
+{{/if}}
+
 {{mb_script module="dPplanningOp" script="protocole_selector"}}
-{{mb_script module="dPprescription" script="prescription_editor"}}
-{{mb_script module="dPprescription" script="prescription"}}
+
 {{mb_script module="dPcompteRendu" script="document"}}
 {{mb_script module="dPcompteRendu" script="modele_selector"}}
 

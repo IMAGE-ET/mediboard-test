@@ -40,7 +40,6 @@ CValue::setSession("bloc_id", $salle->bloc_id);
 
 // Opération selectionnée
 $selOp = new COperation();
-$prescription = new CPrescription();
 $protocoles = array();
 $anesth_id = "";
 
@@ -112,10 +111,13 @@ if ($op) {
   $selOp->_ref_consult_anesth->_ref_consultation->loadRefPraticien()->loadRefFunction();
   
   // Chargement de la prescription de sejour
-  $prescription->object_id = $selOp->sejour_id;
-	$prescription->object_class = "CSejour";
-	$prescription->type = "sejour";
-	$prescription->loadMatchingObject();
+	if (CModule::getActive("dPprescription")){
+		$prescription = new CPrescription();
+	  $prescription->object_id = $selOp->sejour_id;
+		$prescription->object_class = "CSejour";
+		$prescription->type = "sejour";
+		$prescription->loadMatchingObject();
+  }
 	
 	$anesth_id = ($selOp->anesth_id) ? $selOp->anesth_id : $selOp->_ref_plageop->anesth_id;
 	if($anesth_id && CModule::getActive('dPprescription')){
@@ -259,7 +261,9 @@ $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"))
 $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
 $smarty->assign("isImedsInstalled"       , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("codage_prat"            , $group->_configs["codage_prat"]);
-$smarty->assign("prescription"           , $prescription);
+if (CModule::getActive("dPprescription")){
+  $smarty->assign("prescription"           , $prescription);
+}
 $smarty->assign("protocoles"             , $protocoles);
 $smarty->assign("anesth_id"              , $anesth_id);
 $smarty->assign("anesth"                 , $anesth);

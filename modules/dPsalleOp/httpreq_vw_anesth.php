@@ -14,7 +14,6 @@ $date         = CValue::getOrSession("date", mbDate());
 $modif_operation = CCanDo::edit() || $date >= mbDate();
 
 $operation = new COperation();
-$prescription = new CPrescription();
 $protocoles = array();
 $anesth_id = "";
 

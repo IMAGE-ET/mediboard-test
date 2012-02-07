@@ -17,10 +17,16 @@
 {{else}}
 	{{mb_script module="dPpatients" script="pat_selector"}}
 	{{mb_script module="dPurgences" script="contraintes_rpu"}}
-	{{mb_script module="dPprescription" script="prescription"}}
-	{{mb_script module="dPmedicament" script="medicament_selector"}}
-	{{mb_script module="dPmedicament" script="equivalent_selector"}}
-	{{mb_script module="dPprescription" script="element_selector"}}
+	
+	{{if "dPprescription"|module_active}}
+	  {{mb_script module="dPprescription" script="prescription"}}
+	  {{mb_script module="dPprescription" script="element_selector"}}
+  {{/if}}
+	
+	{{if "dPmedicament"|module_active}}
+	  {{mb_script module="dPmedicament" script="medicament_selector"}}
+	  {{mb_script module="dPmedicament" script="equivalent_selector"}}
+	{{/if}}
 	
 	{{mb_script module=dPcompteRendu script=modele_selector}}
   {{mb_script module=dPcompteRendu script=document}}
