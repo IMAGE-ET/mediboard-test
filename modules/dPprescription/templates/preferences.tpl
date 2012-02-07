@@ -16,3 +16,4 @@
 {{mb_include template=inc_pref spec=bool var=dci_checked_externe}}
 {{mb_include template=inc_pref spec=bool var=duplicata_checked_externe}}
 {{mb_include template=inc_pref spec=bool var=date_empty_externe}}
+{{mb_include template=inc_pref spec=bool var=options_ordo_checked}}

@@ -25,10 +25,12 @@
 {{/if}}
 
 <script type="text/javascript">
-  Main.add(function() {
-    window.focus();
-    window.print();
-  });
+  {{if !$preview}}
+    Main.add(function() {
+      window.focus();
+      window.print();
+    });
+  {{/if}}
 </script>
 <style type="text/css">
 {{include file=../../dPcompteRendu/css/print.css nodebug="true"}}
@@ -89,6 +91,12 @@ p.duplicata {
 }
 </style>
 
+{{if $preview}}
+  <div class="not-printable">
+    <button type="button" class="cancel" style="float: right;" onclick="window.parent.Control.Modal.close();">{{tr}}Close{{/tr}}</button>
+    <button type="button" class="print" onclick="window.focus(); window.print();" style="float: right;">{{tr}}Print{{/tr}}</button>
+  </div>
+{{/if}}
 <div class="header" onclick="window.print();" style="cursor: pointer">
   {{if $_ald}}
    <table class="main">

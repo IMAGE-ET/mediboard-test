@@ -19,6 +19,7 @@ $operation_id        = CValue::getOrSession("operation_id");
 $globale             = CValue::getOrSession("globale");
 $in_progress         = CValue::getOrSession("in_progress");
 $selected_lines      = CValue::get("selected_lines", array());
+$preview             = CValue::get("preview", 0);
 $partial_print = count($selected_lines) > 0; 
 
 $linesDMI = array();
@@ -371,7 +372,8 @@ $smarty->assign("generated_header", @$header->_id ? $template_header->document :
 $smarty->assign("generated_footer", @$footer->_id ? $template_footer->document : "");
 $smarty->assign("code_rpps"      , $code_rpps);
 $smarty->assign("selected_lines" , $selected_lines);
-$smarty->assign("partial_print", $partial_print);
+$smarty->assign("partial_print"  , $partial_print);
+$smarty->assign("preview"        , $preview);
 
 if (!$prescription->object_id && !$no_pdf) {
 	$smarty->assign("no_header", isset($no_header));

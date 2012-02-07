@@ -2207,7 +2207,10 @@ class CSetupdPprescription extends CSetup {
               ADD `generiquable` ENUM ('0','1') DEFAULT '1';";
 		$this->addQuery($query);
 		
-	  $this->mod_version = "1.70";
+    $this->makeRevision("1.70");
+    $this->addPrefQuery("options_ordo_checked", "0");
+    
+	  $this->mod_version = "1.71";
   }
 }
 

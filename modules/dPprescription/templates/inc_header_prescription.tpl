@@ -387,8 +387,18 @@ Main.add( function(){
         {{/if}}
 			 
       <div style="float: right; text-align: right;">
+        <label>
+          <input type="checkbox" id="options_print" name="options_print" {{if $app->user_prefs.options_ordo_checked}}checked="checked"{{/if}}/>
+          <span style="font-size: xx-small;">Options</span>
+        </label>
       	<button type="button" class="print"
-          onclick="Prescription.printOrdonnance('{{$prescription->_id}}');" />Ordonnance</button>
+          onclick="
+            if (!$('options_print').checked) {
+              Prescription.printPrescription('{{$prescription->_id}}', 0, '{{$prescription->object_id}}', null, {{if $prescription->type=="externe" && $app->user_prefs.dci_checked_externe}}1{{else}}0{{/if}}, 0 ,{{if $prescription->type!="sejour"}}1{{else}}0{{/if}});
+            }
+            else {
+              Prescription.printOrdonnance('{{$prescription->_id}}');
+            }" />Ordonnance</button>
         {{if !$hide_header}}
 				<br />
 				{{/if}}

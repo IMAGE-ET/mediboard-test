@@ -16,6 +16,7 @@ CPreferences::$modules["dPprescription"] = array (
 	"lt_checked_externe",
   "dci_checked_externe",
   "duplicata_checked_externe",
-  "date_empty_externe"
+  "date_empty_externe",
+  "options_ordo_checked",
 );
 ?>
