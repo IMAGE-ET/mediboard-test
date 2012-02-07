@@ -165,7 +165,7 @@
         {{if $conf.dPcabinet.CConsultation.show_histoire_maladie && $_suivi->histoire_maladie}}
           {{$_suivi->histoire_maladie}} <br />
         {{/if}}
-        {{if $conf.dPcabinet.CConsultation.show_conclusion && $_suivi->show_consultation}}
+        {{if $conf.dPcabinet.CConsultation.show_conclusion && $_suivi->conclusion}}
           {{$_suivi->conclusion}} <br />
         {{/if}}
       {{/if}}
