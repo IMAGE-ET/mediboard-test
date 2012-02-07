@@ -1469,10 +1469,11 @@ class CSejour extends CCodable implements IPatientRelated {
       $affectation->_ref_lit->loadCompleteView();
     }
     
-    foreach ($this->_ref_actes_ccam as &$acte_ccam) {
-      $acte_ccam->loadRefsFwd();
-    } 
-    
+    if ($this->_ref_actes_ccam) {
+      foreach ($this->_ref_actes_ccam as &$acte_ccam) {
+        $acte_ccam->loadRefsFwd();
+      } 
+    }
     $this->loadExtDiagnostics();
     
     // Chargement du RPU dans le cas des urgences
