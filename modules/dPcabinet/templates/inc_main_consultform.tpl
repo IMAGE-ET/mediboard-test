@@ -1,5 +1,6 @@
+{{if "dPmedicament"|module_active}}
 {{mb_script module="dPmedicament" script="medicament_selector"}}
-
+{{/if}}
 <script type="text/javascript">
 
 Main.add(function () {

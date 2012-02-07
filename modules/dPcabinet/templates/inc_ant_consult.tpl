@@ -1,5 +1,8 @@
 {{mb_script module="dPplanningOp" script="cim10_selector"}}
+
+{{if "dPmedicament"|module_active}}
 {{mb_script module="dPmedicament" script="medicament_selector"}}
+{{/if}}
 
 <script type="text/javascript">
 

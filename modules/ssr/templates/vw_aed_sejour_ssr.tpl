@@ -11,8 +11,12 @@
 {{mb_script module="dPpatients" script="pat_selector"}}
 {{mb_script module="dPplanningOp" script="cim10_selector"}}
 {{mb_script module="dPplanningOp" script="protocole_selector"}}
+
+{{if "dPmedicament"|module_active}}
 {{mb_script module="dPmedicament" script="medicament_selector"}}
 {{mb_script module="dPmedicament" script="equivalent_selector"}}
+{{/if}}
+
 {{mb_script module="ssr" script="cotation_rhs"}}
 {{mb_script module="dPcabinet" script="file"}}
 {{mb_script module="dPcompteRendu" script="document"}}

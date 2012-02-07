@@ -253,7 +253,7 @@ createConsultEntree = function() {
   <button class="add" onclick="addTransmission('{{$sejour->_id}}', '{{$user->_id}}', null, null, null, null, 1);">Ajouter une transmission</button>
 {{else}}
   <button class="add" onclick="addObservation('{{$sejour->_id}}', '{{$user->_id}}');">Ajouter une observation</button>
-  {{if $sejour->type == "urg" && $conf.dPprescription.CPrescription.prescription_suivi_soins}}
+  {{if $sejour->type == "urg" && $conf.dPprescription.CPrescription.prescription_suivi_soins && "dPprescription"|module_active}}
     <button class="add" onclick="addPrescription('{{$sejour->_id}}', '{{$user->_id}}')">Ajouter une prescription</button>
   {{/if}}
   {{if @isset($modules.dPcabinet|smarty:nodefaults)}}

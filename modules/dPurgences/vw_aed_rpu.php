@@ -84,7 +84,9 @@ $orumip_active = $module_orumip && $module_orumip->mod_active;
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("group"               , $group);
-$smarty->assign("line"                , new CPrescriptionLineMedicament());
+if (CModule::getActive("dPprescription")){
+  $smarty->assign("line"                , new CPrescriptionLineMedicament());
+}
 $smarty->assign("listServicesUrgence" , $listServicesUrgence);
 $smarty->assign("contrainteProvenance", $contrainteProvenance);
 $smarty->assign("userSel"             , $user);

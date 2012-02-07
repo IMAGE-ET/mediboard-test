@@ -1253,7 +1253,7 @@ class CSejour extends CCodable implements IPatientRelated {
       $this->_ref_suivi_medical[$_consultation->_datetime] = $_consultation;
     }
     
-    if($this->type == "urg" && CAppUI::conf("dPprescription CPrescription prescription_suivi_soins")){
+    if($this->type == "urg" && CAppUI::conf("dPprescription CPrescription prescription_suivi_soins") && CModule::getActive("dPprescription")){
       $this->loadRefPrescriptionSejour();
       $prescription = $this->_ref_prescription_sejour;
       
