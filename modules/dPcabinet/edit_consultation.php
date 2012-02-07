@@ -310,7 +310,10 @@ $smarty->assign("current_m"      , $current_m);
 $smarty->assign("list_etat_dents", $list_etat_dents);
 $smarty->assign("now"            , $now);
 $smarty->assign("listPrats"      , $listPrats);
-$smarty->assign("line"           , new CPrescriptionLineMedicament());
+
+if(CModule::getActive("dPprescription")){
+  $smarty->assign("line"           , new CPrescriptionLineMedicament());
+}
 
 $smarty->assign("soustotal_base" , $soustotal_base);
 $smarty->assign("soustotal_dh"   , $soustotal_dh);

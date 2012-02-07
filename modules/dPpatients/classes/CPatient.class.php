@@ -1180,7 +1180,7 @@ class CPatient extends CMbObject {
     $this->_ref_dossier_medical->loadRefsTraitements();
     $prescription = $this->_ref_dossier_medical->loadRefPrescription();
     
-    if (is_array($prescription->_ref_prescription_lines)) {
+    if ($prescription && is_array($prescription->_ref_prescription_lines)) {
       foreach($prescription->_ref_prescription_lines as $_line) {
         $_line->loadRefsPrises();
       }

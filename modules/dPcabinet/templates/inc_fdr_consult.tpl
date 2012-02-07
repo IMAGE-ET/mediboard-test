@@ -31,7 +31,7 @@
   </tr>
   <tr>
     <td colspan="2">
-      {{if $conf.dPcabinet.CPrescription.view_prescription}}
+      {{if "dPprescription"|module_active && $conf.dPcabinet.CPrescription.view_prescription}}
       <fieldset>
         <legend>{{tr}}CPrescription{{/tr}}</legend>
         <div id="prescription_register">

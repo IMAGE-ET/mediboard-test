@@ -43,7 +43,7 @@
     </td>
 
     {{if (is_array($object->_ref_traitements) && $object->_ref_traitements|@count) ||
-      ($object->_ref_prescription->_id && $object->_ref_prescription->_ref_prescription_lines|@count)}}
+      ($object->_ref_prescription && $object->_ref_prescription->_id && $object->_ref_prescription->_ref_prescription_lines|@count)}}
       <td class="text top">
         {{if is_array($object->_ref_traitements)}}
           {{if $object->_ref_traitements|@count}}<ul>{{/if}}

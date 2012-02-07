@@ -1388,6 +1388,9 @@ class CSejour extends CCodable implements IPatientRelated {
   }
   
   function loadRefPrescriptionSejour(){
+  	if(!CModule::getActive("dPprescription")){
+  		return;
+  	}
     $this->_ref_prescription_sejour = new CPrescription();
     $this->_ref_prescription_sejour->object_class = "CSejour";
     $this->_ref_prescription_sejour->object_id = $this->_id;

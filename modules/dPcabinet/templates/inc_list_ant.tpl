@@ -1,4 +1,8 @@
 {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
+{{assign var=prescription_sejour_id value=""}}
+{{if $sejour->_ref_prescription_sejour}}
+  {{assign var=prescription_sejour_id value=$sejour->_ref_prescription_sejour->_id}}
+{{/if}}
 
 <script type="text/javascript">
 
@@ -35,7 +39,7 @@ Antecedent = {
 };
 
 Traitement = {
-  prescription_sejour_id: {{$sejour->_ref_prescription_sejour->_id|@json}},
+  prescription_sejour_id: {{$prescription_sejour_id|@json}},
   remove: function(oForm, onComplete) {
     var oOptions = {
       typeName: 'ce traitement',
@@ -94,7 +98,7 @@ Traitement = {
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
   <input type="hidden" name="prescription_line_medicament_id" value="" />
   <input type="hidden" name="debut" value="{{$sejour->entree|date_format:'%Y-%m-%d'}}" />
-  <input type="hidden" name="prescription_id" value="{{$sejour->_ref_prescription_sejour->_id}}" />
+  <input type="hidden" name="prescription_id" value="{{$prescription_sejour_id}}" />
 </form>
 
 {{if $dossier_medical->_count_cancelled_antecedents}}

@@ -32,16 +32,12 @@ if ($dossier_medical->_ref_antecedents_by_type) {
 
 $dossier_medical->loadRefsTraitements();
 
-// Chargement des prescriptions du sejour
-$prescription = new CPrescription();
-$sejour->loadRefsPrescriptions();
-if($sejour->_ref_prescriptions && array_key_exists("sejour", $sejour->_ref_prescriptions)){
-  $prescription = $sejour->_ref_prescriptions["sejour"];
-}
+// Chargement de la prescription de sejour
+$prescription = $sejour->loadRefPrescriptionSejour();
 
 // Chargement des lignes de tp de la prescription
 $lines_tp = array();
-if($prescription->_id){
+if($prescription && $prescription->_id){
 	$line_tp = new CPrescriptionLineMedicament();
 	$line_tp->prescription_id = $prescription->_id;
 	$line_tp->traitement_personnel = 1;

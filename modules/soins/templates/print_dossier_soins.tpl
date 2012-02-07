@@ -112,7 +112,9 @@
       <strong>Choix des blocs à imprimer : </strong>
       <label><input type="checkbox" checked="checked" onclick="togglePrintZone('print_patient', '{{$sejour->_id}}')" /> {{tr}}CPatient{{/tr}}</label>
       <label><input type="checkbox" checked="checked" onclick="togglePrintZone('print_sejour', '{{$sejour->_id}}')" /> {{tr}}CSejour{{/tr}}</label>
-      <label><input type="checkbox" checked="checked" onclick="togglePrintZone('print_prescription', '{{$sejour->_id}}')"/> {{tr}}CPrescription{{/tr}}</label>
+			{{if "dPprescription"|module_active}}
+        <label><input type="checkbox" checked="checked" onclick="togglePrintZone('print_prescription', '{{$sejour->_id}}')"/> {{tr}}CPrescription{{/tr}}</label>
+			{{/if}}
       <label><input type="checkbox" checked="checked" onclick="togglePrintZone('print_tasks', '{{$sejour->_id}}')"/> Tâches</label>
       
       {{if "forms"|module_active}}
@@ -178,6 +180,7 @@
   </div>
 {{/if}}
 
+{{if "dPprescription"|module_active}}
 <table class="tbl print_prescription" style="page-break-after: always;">
   <thead>
     <tr>
@@ -294,6 +297,7 @@
     {{/if}}
   {{/foreach}}
 </table>
+{{/if}}
 
 {{mb_include module=soins template=inc_vw_tasks_sejour mode_realisation=0 readonly=1}}
 
