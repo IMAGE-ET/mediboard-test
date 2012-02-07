@@ -100,4 +100,6 @@ $locales['mod-soins-tab-vw_stocks_service'] = 'Commande / Réception';
 $locales['module-Brancardage-long'] = 'Brancarder';
 $locales['module-soins-court'] = 'Dossier de soins';
 $locales['module-soins-long'] = 'Dossier de soins';
+$locales['config-soins-max_time_modif_suivi_soins'] = 'Nombre d\'heures pendant lesquelles le suivi de soins peut être modifié';
+$locales['config-soins-max_time_modif_suivi_soins-desc'] = 'Nombre d\'heures pendant lesquelles le suivi de soins peut être modifié';
 ?>

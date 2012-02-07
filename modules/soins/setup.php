@@ -62,7 +62,10 @@ class CSetupsoins extends CSetup {
               ADD `code` VARCHAR (255) NOT NULL;";
     $this->addQuery($query);
     
-    $this->mod_version = '0.14';
+    $this->makeRevision("0.14");
+    $this->moveConf("dPprescription CPrescription max_time_modif_suivi_soins", "soins max_time_modif_suivi_soins");
+    
+    $this->mod_version = '0.15';
   }
 }
 
