@@ -72,7 +72,7 @@
           {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
           {{assign var=antecedents value=$dossier_medical->_ref_antecedents_by_type}}
           {{assign var=sejour_id value=$sejour->_id}}
-          {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl" nodebug=true}}
+          {{include file="../../soins/templates/inc_vw_antecedent_allergie.tpl" nodebug=true}}
         </h2>
       </form>
     </th>
@@ -296,9 +296,12 @@
       {{/if}}
       
     </td>
+		
+		
     <td style="vertical-align: top;" rowspan="2">
-      {{assign var=prescription value=$sejour->_ref_prescription_sejour}}
-      
+       
+		{{if "dPprescription"|module_active}}
+			 {{assign var=prescription value=$sejour->_ref_prescription_sejour}}
         <table class="tbl">
           <tr>
             <th class="title">
@@ -558,7 +561,7 @@
           </tr>
           {{/if}}
         </table>
-      
+      {{/if}}
       {{if "forms"|module_active}}
         <table class="main tbl">
           <tr>

@@ -218,7 +218,9 @@ function submitSuivi(oForm) {
       }
       // Refresh de la partie plan de soin
       if($('semaine').visible()){
+			  {{if $object->_ref_prescriptions}}
         calculSoinSemaine('{{$date}}', '{{$object->_ref_prescriptions.sejour->_id}}');
+				{{/if}}
       }
     }
     if ($('dossier_suivi').visible()) {

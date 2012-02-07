@@ -27,7 +27,9 @@ $tab_sejour = array();
 // Chargement de l'utilisateur courant
 $userCourant = CMediusers::get();
 
-$prescription_sejour = new CPrescription();
+if(CModule::getActive("dPprescription")){
+  $prescription_sejour = new CPrescription();
+}
 
 // Test du type de l'utilisateur courant
 $anesthesiste = $userCourant->isFromType(array("Anesthésiste"));
@@ -332,7 +334,9 @@ $smarty->assign("can_view_dossier_medical", $can_view_dossier_medical);
 $smarty->assign("demain"                  , mbDate("+ 1 day", $date));
 $smarty->assign("services"                , $services);
 $smarty->assign("sejoursParService"       , $sejoursParService);
-$smarty->assign("prescription_sejour"     , $prescription_sejour);
+if(CModule::getActive("dPprescription")){
+  $smarty->assign("prescription_sejour"     , $prescription_sejour);
+}
 $smarty->assign("service_id"              , $service_id);
 $smarty->assign("groupSejourNonAffectes"  , $groupSejourNonAffectes);
 $smarty->assign("tab_sejour"              , $tab_sejour);

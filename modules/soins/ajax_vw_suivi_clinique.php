@@ -30,7 +30,11 @@ if ($dossier_medical->_id) {
 
 $sejour->loadRefPraticien();
 $sejour->loadRefsOperations();
-$sejour->loadRefsTransmissions(true, true);
+
+// Gestion des macro-cible seulement si prescription disponible
+$cible_importante = CModule::getInstalled("dPprescription");
+$sejour->loadRefsTransmissions($cible_importante, true);
+
 $sejour->loadRefsObservations(true);
 $sejour->loadRefsTasks();
 $sejour->loadRefsNotes();
@@ -65,28 +69,31 @@ foreach ($sejour->_ref_operations as $_operation) {
 
 $sejour->loadRefsConsultAnesth();
 $sejour->_ref_consult_anesth->loadRefConsultation();
-$prescription_sejour = $sejour->loadRefPrescriptionSejour();
 
-// Chargement des lignes de prescriptions
-$prescription_sejour->loadRefsLinesMedComments();
-$prescription_sejour->loadRefsLinesElementsComments();
-
-// Chargement des prescription_line_mixes
-$prescription_sejour->loadRefsPrescriptionLineMixes();
-
-foreach ($prescription_sejour->_ref_prescription_line_mixes as $curr_prescription_line_mix){
-  $curr_prescription_line_mix->loadRefsLines();
-  $curr_prescription_line_mix->_compact_view = array();
-  foreach ($curr_prescription_line_mix->_ref_lines as $_line) {
-    if (!$_line->solvant) {
-      $curr_prescription_line_mix->_compact_view[] = $_line->_ref_produit->libelle_abrege;
-    }
-  }
-  if (count($curr_prescription_line_mix->_compact_view)) {
-    $curr_prescription_line_mix->_compact_view = implode(", ", $curr_prescription_line_mix->_compact_view);
-  }
-  else {
-    $curr_prescription_line_mix->_compact_view = "";
+if(CModule::getActive("dPprescription")){
+	$prescription_sejour = $sejour->loadRefPrescriptionSejour();
+	
+	// Chargement des lignes de prescriptions
+	$prescription_sejour->loadRefsLinesMedComments();
+	$prescription_sejour->loadRefsLinesElementsComments();
+	
+	// Chargement des prescription_line_mixes
+	$prescription_sejour->loadRefsPrescriptionLineMixes();
+	
+	foreach ($prescription_sejour->_ref_prescription_line_mixes as $curr_prescription_line_mix){
+	  $curr_prescription_line_mix->loadRefsLines();
+	  $curr_prescription_line_mix->_compact_view = array();
+	  foreach ($curr_prescription_line_mix->_ref_lines as $_line) {
+	    if (!$_line->solvant) {
+	      $curr_prescription_line_mix->_compact_view[] = $_line->_ref_produit->libelle_abrege;
+	    }
+	  }
+	  if (count($curr_prescription_line_mix->_compact_view)) {
+	    $curr_prescription_line_mix->_compact_view = implode(", ", $curr_prescription_line_mix->_compact_view);
+	  }
+	  else {
+	    $curr_prescription_line_mix->_compact_view = "";
+	  }
   }
 }
 
