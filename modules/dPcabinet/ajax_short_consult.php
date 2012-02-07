@@ -45,7 +45,9 @@ $smarty->assign("patient"        , $patient);
 $smarty->assign("_is_anesth"     , $user->isAnesth());
 $smarty->assign("antecedent"     , new CAntecedent);
 $smarty->assign("traitement"     , new CTraitement);
-$smarty->assign("line"           , new CPrescriptionLineMedicament);
+if(CModule::getActive("dPprescription")){
+  $smarty->assign("line"           , new CPrescriptionLineMedicament);
+}
 $smarty->assign("userSel"        , $user);
 $smarty->assign("sejour_id"      , $sejour_id);
 $smarty->assign("today"          , mbDate());

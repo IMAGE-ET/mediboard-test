@@ -94,7 +94,7 @@ Main.add(function () {
   
   <li><a href="#AntTrait">Antécédents</a></li>
  
-  {{if $consult->sejour_id && $modules.dPprescription->_can->read && !$conf.dPprescription.CPrescription.prescription_suivi_soins}}
+  {{if "dPprescription"|module_active && $consult->sejour_id && $modules.dPprescription->_can->read && !$conf.dPprescription.CPrescription.prescription_suivi_soins}}
   <li {{if !$mutation_id}}onmousedown="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'', null, false);"{{/if}}>
     <a href="#prescription_sejour">
       Prescription Séjour
