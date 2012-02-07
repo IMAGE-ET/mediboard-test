@@ -97,17 +97,22 @@ if(CModule::getActive("dPprescription")){
   }
 }
 
-$date = mbDateTime();
-$days_config = CAppUI::conf("dPprescription CPrescription nb_days_prescription_current");
-$date_before = mbDateTime("-$days_config DAY", $date);
-$date_after  = mbDateTime("+$days_config DAY", $date);
+if (CModule::getActive("dPprescription")){
+  $date = mbDateTime();
+  $days_config = CAppUI::conf("dPprescription CPrescription nb_days_prescription_current");
+  $date_before = mbDateTime("-$days_config DAY", $date);
+  $date_after  = mbDateTime("+$days_config DAY", $date);
+}
 
 $smarty = new CSmartyDP;
 $smarty->assign("sejour", $sejour);
-$smarty->assign("date"  , $date);
-$smarty->assign("days_config", $days_config);
-$smarty->assign("date_before"  , $date_before);
-$smarty->assign("date_after"   , $date_after);
+
+if (CModule::getActive("dPprescription")){
+	$smarty->assign("date"  , $date);
+	$smarty->assign("days_config", $days_config);
+	$smarty->assign("date_before"  , $date_before);
+	$smarty->assign("date_after"   , $date_after);
+}
 $smarty->display("inc_vw_suivi_clinique.tpl");
 
 ?>
