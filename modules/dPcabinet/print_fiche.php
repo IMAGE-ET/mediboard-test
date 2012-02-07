@@ -83,42 +83,44 @@ if ($consultation_id) {
     $consult_anesth = $consult->_ref_consult_anesth;
     $consult_anesth->loadRefs();
     
-		// Chargement de toutes les planifs systemes si celles-ci ne sont pas deja chargées
-    $consult_anesth->_ref_sejour->loadRefPrescriptionSejour();
-		$consult_anesth->_ref_sejour->_ref_prescription_sejour->calculAllPlanifSysteme();
-		
-    // Récupération des planifications systèmes antérieures à l'intervention
-    $planif_system = new CPlanificationSysteme();
-    $where  = array();
-    $where["sejour_id"] = " = '{$consult_anesth->_ref_sejour->_id}'";
-    $where["dateTime"] = " < '{$consult_anesth->_ref_operation->_datetime}'";
-    $where["object_class"] = " NOT LIKE 'CPrescriptionLineElement'";
-    
-    $list_planifs_system = $planif_system->loadlist($where);
-    
-    foreach($list_planifs_system as $_planif) {
-      $_planif->loadRefPrise();
-      $_planif->loadTargetObject();
-      $object = $_planif->_ref_object;
-      
-      if ($object instanceof CPrescriptionLineMedicament) {
-        $_planif->_ref_prise->loadRefsFwd();
-        $object->_ref_prises = array();
-        $object->_ref_prises[$_planif->_ref_prise->_id] = $_planif->_ref_prise;
-      }
-      
-      if ($object instanceof CPrescriptionLineMixItem) {
-        $object->loadRefPerfusion();
-        $object->_ref_prescription_line_mix->loadRefPraticien();
-        $object->_ref_prescription_line_mix->_ref_lines = array();
-        
-        // Il faut cloner $object pour casser la référence lors de l'écrasement à la ligne suivante
-        $object->_ref_prescription_line_mix->_ref_lines[$object->_id] = clone $object;
-        $object = $object->_ref_prescription_line_mix;
-      }
-      
-      $lines[$object->_guid] = $object;
-    }
+		if(Cmodule::getActive("dPprescription")){
+			// Chargement de toutes les planifs systemes si celles-ci ne sont pas deja chargées
+	    $consult_anesth->_ref_sejour->loadRefPrescriptionSejour();
+			$consult_anesth->_ref_sejour->_ref_prescription_sejour->calculAllPlanifSysteme();
+			
+	    // Récupération des planifications systèmes antérieures à l'intervention
+	    $planif_system = new CPlanificationSysteme();
+	    $where  = array();
+	    $where["sejour_id"] = " = '{$consult_anesth->_ref_sejour->_id}'";
+	    $where["dateTime"] = " < '{$consult_anesth->_ref_operation->_datetime}'";
+	    $where["object_class"] = " NOT LIKE 'CPrescriptionLineElement'";
+	    
+	    $list_planifs_system = $planif_system->loadlist($where);
+	    
+	    foreach($list_planifs_system as $_planif) {
+	      $_planif->loadRefPrise();
+	      $_planif->loadTargetObject();
+	      $object = $_planif->_ref_object;
+	      
+	      if ($object instanceof CPrescriptionLineMedicament) {
+	        $_planif->_ref_prise->loadRefsFwd();
+	        $object->_ref_prises = array();
+	        $object->_ref_prises[$_planif->_ref_prise->_id] = $_planif->_ref_prise;
+	      }
+	      
+	      if ($object instanceof CPrescriptionLineMixItem) {
+	        $object->loadRefPerfusion();
+	        $object->_ref_prescription_line_mix->loadRefPraticien();
+	        $object->_ref_prescription_line_mix->_ref_lines = array();
+	        
+	        // Il faut cloner $object pour casser la référence lors de l'écrasement à la ligne suivante
+	        $object->_ref_prescription_line_mix->_ref_lines[$object->_id] = clone $object;
+	        $object = $object->_ref_prescription_line_mix;
+	      }
+	      
+	      $lines[$object->_guid] = $object;
+	    }
+		}
   }
   
   $consult->_ref_consult_anesth->_ref_sejour->loadRefDossierMedical();

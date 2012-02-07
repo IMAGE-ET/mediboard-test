@@ -57,8 +57,10 @@
       </td>
       <td>
         <a class="button search" onclick="redirectOffline('sejour');">{{tr}}CSejour.all{{/tr}}</a>
-        <br/>
+        {{if "dPprescription"|module_active}}
+				<br/>
         <a class="button search" onclick="redirectOffline('bilan');">{{tr}}CService.bilan{{/tr}}</a>
+				{{/if}}
       </td>
     </tr>
 		

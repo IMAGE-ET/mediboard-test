@@ -38,11 +38,15 @@ foreach($service->_ref_chambres as &$_chambre){
       $patient = $sejour->loadRefPatient();
       $patient->loadIPP();
       
+			
       // Prescription
-      $prescription = $sejour->loadRefPrescriptionSejour();
-      $prescription->loadRefsLinesElementByCat();
-      $prescription->countFastRecentModif();
-      $params = array(
+      if(CModule::getActive("dPprescription")){
+        $prescription = $sejour->loadRefPrescriptionSejour();
+        $prescription->loadRefsLinesElementByCat();
+        $prescription->countFastRecentModif();
+      }
+			
+			$params = array(
         "sejour_id" => $sejour->_id,
         "dialog" => 1,
         "offline" => 1,

@@ -56,33 +56,36 @@
           {{if $object->_ref_traitements|@count}}</ul>{{/if}}
         {{/if}}
         
-        {{assign var=prescription value=$object->_ref_prescription}}
-        {{if $object->_ref_prescription->_id && $prescription->_ref_prescription_lines|@count}}
-          {{mb_script module=dPprescription script=prescription ajax=true}}
-          {{if (is_array($object->_ref_traitements) && $object->_ref_traitements|@count)}}
-            <hr style="width: 50%" />
-          {{/if}}
-          <ul>
-            {{foreach from=$prescription->_ref_prescription_lines item=_line}}
-              <li>
-                {{if $_line->debut || $_line->fin}} 
-                  {{mb_include module=system template=inc_interval_date from=$_line->debut to=$_line->fin}} :
-                {{/if}}
-                <a href=#1 onclick="Prescription.viewProduit(null,'{{$_line->code_ucd}}','{{$_line->code_cis}}');">
-                  <span onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView');">
-                    {{$_line->_ucd_view}}
-                  </span>
-                </a>
-                {{if $_line->_ref_prises|@count}}
-                  ({{foreach from=`$_line->_ref_prises` item=_prise name=foreach_prise}}
-                    {{$_prise}}
-                    {{if !$smarty.foreach.foreach_prise.last}},{{/if}}
-                  {{/foreach}})
-                {{/if}}
-              </li>
-            {{/foreach}}
-          </ul>
-        {{/if}}
+				{{if $object->_ref_prescription}}
+	        {{assign var=prescription value=$object->_ref_prescription}}
+	        {{if $object->_ref_prescription->_id && $prescription->_ref_prescription_lines|@count}}
+	          {{mb_script module=dPprescription script=prescription ajax=true}}
+	          {{if (is_array($object->_ref_traitements) && $object->_ref_traitements|@count)}}
+	            <hr style="width: 50%" />
+	          {{/if}}
+	          <ul>
+	            {{foreach from=$prescription->_ref_prescription_lines item=_line}}
+	              <li>
+	                {{if $_line->debut || $_line->fin}} 
+	                  {{mb_include module=system template=inc_interval_date from=$_line->debut to=$_line->fin}} :
+	                {{/if}}
+	                <a href=#1 onclick="Prescription.viewProduit(null,'{{$_line->code_ucd}}','{{$_line->code_cis}}');">
+	                  <span onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView');">
+	                    {{$_line->_ucd_view}}
+	                  </span>
+	                </a>
+	                {{if $_line->_ref_prises|@count}}
+	                  ({{foreach from=`$_line->_ref_prises` item=_prise name=foreach_prise}}
+	                    {{$_prise}}
+	                    {{if !$smarty.foreach.foreach_prise.last}},{{/if}}
+	                  {{/foreach}})
+	                {{/if}}
+	              </li>
+	            {{/foreach}}
+	          </ul>
+	        {{/if}}
+				{{/if}}
+				
       </td>
     {{else}}
       <td>
