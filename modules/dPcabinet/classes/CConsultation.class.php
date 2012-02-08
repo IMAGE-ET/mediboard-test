@@ -485,40 +485,43 @@ class CConsultation extends CCodable {
 
     // Ajout des actes NGAP
     $this->loadRefsActesNGAP();
-    foreach ($this->_ref_actes_ngap as $acte_ngap) {
-      $acteNumber = count($this->_fse_intermax)+1;
-      $this->_fse_intermax["ACTE_$acteNumber"] = array(
-        "PRE_ACTE_TYPE"   => 0,
-        "PRE_DEPASSEMENT" => $acte_ngap->montant_depassement,
-        "PRE_CODE"        => $acte_ngap->code,
-        "PRE_COEFFICIENT" => $acte_ngap->demi ? $acte_ngap->coefficient/2 : $acte_ngap->coefficient,
-        "PRE_QUANTITE"    => $acte_ngap->quantite,
-        "PRE_DEMI"        => $acte_ngap->demi,
-      );
+    if ($this->_ref_actes_ngap) {
+      foreach ($this->_ref_actes_ngap as $acte_ngap) {
+        $acteNumber = count($this->_fse_intermax)+1;
+        $this->_fse_intermax["ACTE_$acteNumber"] = array(
+          "PRE_ACTE_TYPE"   => 0,
+          "PRE_DEPASSEMENT" => $acte_ngap->montant_depassement,
+          "PRE_CODE"        => $acte_ngap->code,
+          "PRE_COEFFICIENT" => $acte_ngap->demi ? $acte_ngap->coefficient/2 : $acte_ngap->coefficient,
+          "PRE_QUANTITE"    => $acte_ngap->quantite,
+          "PRE_DEMI"        => $acte_ngap->demi,
+        );
+      }
     }
-    
     // Ajout des actes CCAM
     $this->loadRefsActesCCAM();
-    foreach ($this->_ref_actes_ccam as $acte_ccam) {
-      $acteNumber = count($this->_fse_intermax)+1;
-      $ACTE = array(
-        "PRE_ACTE_TYPE"     => 1,
-        "PRE_DEPASSEMENT"   => $acte_ccam->montant_depassement,
-        "PRE_CODE_CCAM"     => $acte_ccam->code_acte,
-        "PRE_CODE_ACTIVITE" => $acte_ccam->code_activite,
-        "PRE_CODE_PHASE"    => $acte_ccam->code_phase,
-        "PRE_ASSOCIATION"   => $acte_ccam->code_association,
-        "PRE_RMB_EXCEP"     => $acte_ccam->_rembex ? "O" : "N",
-        );
-      
-      // Ajout des modificateurs
-      for ($i = 1; $i <= 4; $i++) {
-        $ACTE["PRE_MODIF_$i"] = @$acte_ccam->_modificateurs[$i-1];
+    if ($this->_ref_actes_ccam) {
+      foreach ($this->_ref_actes_ccam as $acte_ccam) {
+        $acteNumber = count($this->_fse_intermax)+1;
+        $ACTE = array(
+          "PRE_ACTE_TYPE"     => 1,
+          "PRE_DEPASSEMENT"   => $acte_ccam->montant_depassement,
+          "PRE_CODE_CCAM"     => $acte_ccam->code_acte,
+          "PRE_CODE_ACTIVITE" => $acte_ccam->code_activite,
+          "PRE_CODE_PHASE"    => $acte_ccam->code_phase,
+          "PRE_ASSOCIATION"   => $acte_ccam->code_association,
+          "PRE_RMB_EXCEP"     => $acte_ccam->_rembex ? "O" : "N",
+          );
+        
+        // Ajout des modificateurs
+        for ($i = 1; $i <= 4; $i++) {
+          $ACTE["PRE_MODIF_$i"] = @$acte_ccam->_modificateurs[$i-1];
+        }
+  
+        $this->_fse_intermax["ACTE_$acteNumber"] = $ACTE;
       }
-
-      $this->_fse_intermax["ACTE_$acteNumber"] = $ACTE;
     }
-
+    
     // Section FSE
     $this->_fse_intermax["FSE"] = array();
 
