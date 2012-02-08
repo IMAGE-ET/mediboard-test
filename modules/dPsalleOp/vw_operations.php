@@ -262,6 +262,9 @@ $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
 $smarty->assign("isImedsInstalled"       , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("codage_prat"            , $group->_configs["codage_prat"]);
 if (CModule::getActive("dPprescription")){
+	if(!isset($prescription)){
+		$prescription = new CPrescription();
+	}
   $smarty->assign("prescription"           , $prescription);
 }
 $smarty->assign("protocoles"             , $protocoles);
