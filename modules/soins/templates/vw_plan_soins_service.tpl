@@ -8,8 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_script module="soins" script="plan_soins"}}
+
 {{if "dPprescription"|module_active}}
-  {{mb_script module="dPprescription" script="plan_soins"}}
   {{mb_script module="dPprescription" script="prescription"}}
 {{/if}}
 

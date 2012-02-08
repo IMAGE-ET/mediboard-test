@@ -51,7 +51,14 @@ class CSejourTask extends CMbObject {
   }
   
   function loadRefPrescriptionLineElement(){
-    $this->_ref_prescription_line_element = $this->loadFwdRef("prescription_line_element_id");
+  	static $active = null;
+		
+		if ($active === false) {
+			return;
+		}
+		if ($active === true || ($active = !!CModule::getActive("dPprescription"))) {
+			$this->_ref_prescription_line_element = $this->loadFwdRef("prescription_line_element_id");
+		}
   }
 }
   

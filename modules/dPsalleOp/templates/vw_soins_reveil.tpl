@@ -1,3 +1,5 @@
+{{mb_script module="soins" script="plan_soins"}}
+
 {{if "dPmedicament"|module_active}}
   {{mb_script module="dPmedicament" script="medicament_selector"}}
   {{mb_script module="dPmedicament" script="equivalent_selector"}}
@@ -5,7 +7,6 @@
 
 {{if "dPprescription"|module_active}}
 	{{mb_script module="dPprescription" script="element_selector"}}
-	{{mb_script module="dPprescription" script="plan_soins"}}
   {{mb_script module="dPprescription" script="prescription"}}
 {{/if}}
 

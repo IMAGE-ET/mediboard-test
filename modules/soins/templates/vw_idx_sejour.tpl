@@ -21,9 +21,10 @@
   {{mb_script module="dPmedicament" script="equivalent_selector"}}
 {{/if}}
 
+{{mb_script module="soins" script="plan_soins"}}
+	
 {{if "dPprescription"|module_active}}
   {{mb_script module="dPprescription" script="element_selector"}}
-  {{mb_script module="dPprescription" script="plan_soins"}}
   {{mb_script module="dPprescription" script="prescription"}}
 {{/if}}
 
@@ -108,12 +109,13 @@ window.tabLoaders = {
     refreshConstantesMedicales("CSejour-"+sejour_id, 1);
   },
   
-  {{if $isPrescriptionInstalled}}
     "dossier_traitement": function(sejour_id, praticien_id, date){
       if(!$("dossier_traitement").visible()) return;
       
       PlanSoins.loadTraitement(sejour_id, date,'','administration');
     },
+		
+  {{if "dPprescription"|module_active}}
     "prescription_sejour": function(sejour_id, praticien_id, date){
       if(!$("prescription_sejour").visible()) return;
       
@@ -592,9 +594,9 @@ printDossierComplet = function(){
         </li>
         <li><a href="#suivi_clinique" onmousedown="loadSuiviClinique(document.form_prescription.sejour_id.value)">{{tr}}CSejour.suivi_clinique{{/tr}}</a></li>
         <li onmousedown="refreshConstantesMedicales('CSejour-'+document.form_prescription.sejour_id.value, 1)"><a href="#constantes-medicales">{{tr}}CPatient.surveillance{{/tr}}</a></li>
-        {{if $isPrescriptionInstalled}}
         <li onmousedown="PlanSoins.loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')"><a href="#dossier_traitement">{{tr}}CSejour.suivi_soins{{/tr}}</a></li>
-        <li onmousedown="$('prescription_sejour').update(''); Prescription.reloadPrescSejour('', document.form_prescription.sejour_id.value, null, null, null, null, null, '', null, false);">
+        {{if "dPprescription"|module_active}}
+				<li onmousedown="$('prescription_sejour').update(''); Prescription.reloadPrescSejour('', document.form_prescription.sejour_id.value, null, null, null, null, null, '', null, false);">
           <a href="#prescription_sejour">Prescription</a>
         </li>
         {{/if}}
@@ -630,7 +632,6 @@ printDossierComplet = function(){
         </div>
       </div>
       
-      {{if $isPrescriptionInstalled}}
       <div id="dossier_traitement" style="display: none;">
         <div class="small-info">
           Veuillez sélectionner un séjour dans la liste de gauche pour afficher
@@ -638,6 +639,7 @@ printDossierComplet = function(){
         </div>
       </div>
       
+			{{if "dPprescription"|module_active}}
       <div id="prescription_sejour" style="display: none;">
         <div class="small-info">
           Veuillez sélectionner un séjour dans la liste de gauche pour afficher

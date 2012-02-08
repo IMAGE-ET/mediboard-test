@@ -1,7 +1,7 @@
 {{mb_script module="bloodSalvage" script="bloodSalvage"}}
+{{mb_script module="soins" script="plan_soins"}}
 
 {{if "dPprescription"|module_active}}
-  {{mb_script module="dPprescription" script="plan_soins"}}
   {{mb_script module="dPprescription" script="prescription"}}
   {{mb_script module="dPprescription" script="element_selector"}}
 {{/if}}
