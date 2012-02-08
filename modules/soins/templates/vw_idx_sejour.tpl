@@ -147,7 +147,7 @@ window.tabLoaders = {
     loadDocuments(sejour_id);
   },
   
-  {{if $isPrescriptionInstalled && $can_view_dossier_medical}}
+  {{if $can_view_dossier_medical}}
     "antecedents": function(sejour_id, praticien_id, date){
       loadAntecedents(sejour_id);
     },
@@ -607,7 +607,7 @@ printDossierComplet = function(){
           <li><a href="#Imeds">Labo</a></li>
         {{/if}}
         <li><a href="#documents">Documents</a></li>
-        {{if $isPrescriptionInstalled && $can_view_dossier_medical}}
+        {{if $can_view_dossier_medical}}
         <li onmousedown="DossierMedical.reloadDossierSejour();"><a href="#antecedents">Antécédents</a></li>
         {{/if}} 
         <li style="float: right">
