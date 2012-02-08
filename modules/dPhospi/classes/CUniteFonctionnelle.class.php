@@ -39,8 +39,8 @@ class CUniteFonctionnelle extends CMbObject {
   function getProps() {
   	$props = parent::getProps();
     $props["group_id"]    = "ref class|CGroups notNull";
-    $props["code"]        = "str notNull";
-    $props["libelle"]     = "str notNull";
+    $props["code"]        = "str notNull seekable";
+    $props["libelle"]     = "str notNull seekable";
     $props["description"] = "text";
     return $props;
   }

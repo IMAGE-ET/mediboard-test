@@ -81,9 +81,9 @@ class CAffectation extends CMbObject {
     $specs["effectue"]     = "bool";
     $specs["rques"]        = "text";
     
-    $specs["uf_hebergement_id"] = "ref class|CUniteFonctionnelle";
-    $specs["uf_medicale_id"]    = "ref class|CUniteFonctionnelle";
-    $specs["uf_soins_id"]       = "ref class|CUniteFonctionnelle";
+    $specs["uf_hebergement_id"] = "ref class|CUniteFonctionnelle seekable";
+    $specs["uf_medicale_id"]    = "ref class|CUniteFonctionnelle seekable";
+    $specs["uf_soins_id"]       = "ref class|CUniteFonctionnelle seekable";
 
     $specs["_duree"]       = "num";
     $specs["_mode_sortie"] = "enum list|normal|mutation|transfert|deces default|normal";
@@ -345,6 +345,7 @@ class CAffectation extends CMbObject {
   }
     
   function makeUF() {
+    
     $this->completeField("uf_hebergement_id", "uf_soins_id", "uf_medicale_id");
     
     $this->loadRefLit()->loadRefChambre()->loadRefService();

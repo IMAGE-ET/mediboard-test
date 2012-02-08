@@ -27,11 +27,53 @@
 					</tr>
 				{{/foreach}}
 	      <tr>
-	        <th></th><th></th>
+	        <th colspan="2"></th>
 	         <td>
-	        {{foreach from=$choixhebergment item=_choix}}
-	            <input type="radio" name="uf_hebergement_id" value="{{$_choix->_ref_uf->_id}}"{{if $affectation->uf_hebergement_id == $_choix->_ref_uf->_id}}checked{{/if}}>  {{$_choix->_ref_uf->libelle}}  
-	        {{/foreach}}
+	           <input type="hidden" name="uf_hebergement_id" value="{{$affectation->uf_hebergement_id}}"/>
+            {{assign var=found_checked value=0}}
+  	        {{foreach from=$choixhebergment item=_choix}}
+  	          <input type="radio" name="uf_hebergement_id_radio_view" value="{{$_choix->_ref_uf->_id}}"
+                {{if $affectation->uf_hebergement_id == $_choix->_ref_uf->_id}}
+                  checked="checked"
+                  {{assign var=found_checked value=1}}
+                {{/if}}
+                onclick="$V(this.form.uf_hebergement_id, this.value); $V(this.form.uf_hebergement_id_view, '')"> {{$_choix->_ref_uf->libelle}}
+  	        {{/foreach}}
+            &mdash; Autre :
+            <input type="text" class="autocomplete" name="uf_hebergement_id_view"
+            {{if !$found_checked}}value="{{$affectation->_ref_uf_hebergement->code}}{{/if}}"/>
+            
+            
+            <script type="text/javascript">
+              Main.add(function() {
+                var form = getForm("affect_uf");
+                var url = new Url("system", "httpreq_field_autocomplete");
+                url.addParam("class", "CUniteFonctionnelle");
+                url.addParam("field", "code");
+                url.addParam("limit", 30);
+                url.addParam("view_field", "code");
+                url.addParam("show_view", true);
+                url.addParam("input_field", "uf_hebergement_id_view");
+                url.addParam("wholeString", false);
+                url.autoComplete(form.uf_hebergement_id_view, null, {
+                  minChars: 1,
+                  method: "get",
+                  select: "view",
+                  dropdown: true,
+                  afterUpdateElement: function(field,selected){
+                    var form = field.form;
+                    $V(form.uf_hebergement_id, selected.getAttribute("id").split("-")[2]);
+                    if (form.uf_hebergement_id_radio_view.length) {
+                      $A(form.uf_hebergement_id_radio_view).each(function(elt) {
+                        elt.checked = "";
+                      });
+                    }
+                    else {
+                      form.uf_hebergement_id_radio_view.checked = "";
+                    }
+                  } });
+                } );
+            </script>
 	        </td>
 	      </tr>
       </table>
@@ -40,7 +82,7 @@
     <fieldset id="soins"  >
       <legend>{{tr}}CAffectation-uf_soins_id{{/tr}}</legend>
        <table class="form"> 
-        <tr >
+        <tr>
         	<th style="width: 20%">Service</th>
           <th style="width: 15%">{{$nomservice}}</th>
            <td>
@@ -50,12 +92,51 @@
           </td>
         </tr>
         <tr>
-          <th></th>
-					<th></th>
+          <th colspan="2"></th>
            <td>
-          {{foreach from=$choixsoins item=_choix}}
-              <input type="radio" name="uf_soins_id" value="{{$_choix->_ref_uf->_id}}" {{if $affectation->uf_soins_id == $_choix->_ref_uf->_id}}checked{{/if}}> {{$_choix->_ref_uf->libelle}}   
+             <input type="hidden" name="uf_soins_id" value="{{$affectation->uf_soins_id}}"/>
+             {{assign var=found_checked value=0}}
+             {{foreach from=$choixsoins item=_choix}}
+              <input type="radio" name="uf_soins_id_radio_view" value="{{$_choix->_ref_uf->_id}}"
+              {{if $affectation->uf_soins_id == $_choix->_ref_uf->_id}}
+              checked="checked"
+              {{assign var=found_checked value=1}}
+              {{/if}}> {{$_choix->_ref_uf->libelle}}   
           {{/foreach}}
+          &mdash; Autre :
+            <input type="text" class="autocomplete" name="uf_soins_id_view"
+            {{if !$found_checked}}value="{{$affectation->_ref_uf_soins->code}}{{/if}}"/>
+            
+            <script type="text/javascript">
+              Main.add(function() {
+                var form = getForm("affect_uf");
+                var url = new Url("system", "httpreq_field_autocomplete");
+                url.addParam("class", "CUniteFonctionnelle");
+                url.addParam("field", "code");
+                url.addParam("limit", 30);
+                url.addParam("view_field", "code");
+                url.addParam("show_view", true);
+                url.addParam("input_field", "uf_soins_id_view");
+                url.addParam("wholeString", false);
+                url.autoComplete(form.uf_soins_id_view, null, {
+                  minChars: 1,
+                  method: "get",
+                  select: "view",
+                  dropdown: true,
+                  afterUpdateElement: function(field,selected){
+                    var form = field.form;
+                    $V(form.uf_soins_id, selected.getAttribute("id").split("-")[2]);
+                    if (form.uf_soins_id_radio_view.length) {
+                      $A(form.uf_soins_id_radio_view).each(function(elt) {
+                        elt.checked = "";
+                      });
+                    }
+                    else {
+                      form.uf_soins_id_radio_view.checked = "";
+                    }
+                  } });
+                } );
+            </script>
           </td>
         </tr>
       </table>
@@ -76,15 +157,54 @@
           </tr>
         {{/foreach}}
       <tr>
-        <th></th>
-        <th></th>
+        <th colspan="2"></th>
          <td>
-        {{foreach from=$choixmedical item=_choix}}
-        <label>
-            <input type="radio" name="uf_medicale_id" value="{{$_choix->_ref_uf->_id}}" {{if $affectation->uf_medicale_id == $_choix->_ref_uf->_id}}checked{{/if}}> 
-            {{$_choix->_ref_uf->libelle}}
-            </label> 
-        {{/foreach}}
+           {{assign var=found_checked value=0}}
+           <input type="hidden" name="uf_medicale_id" value="{{$affectation->uf_medicale_id}}" />
+            {{foreach from=$choixmedical item=_choix}}
+              <label>
+                <input type="radio" name="uf_medicale_id_radio_view" value="{{$_choix->_ref_uf->_id}}"
+                {{if $affectation->uf_medicale_id == $_choix->_ref_uf->_id}}
+                  checked="checked"
+                  {{assign var=found_checked value=1}}
+                {{/if}}> 
+                {{$_choix->_ref_uf->libelle}}
+                </label>
+            {{/foreach}}
+            &mdash; Autre :
+            <input type="text" class="autocomplete" name="uf_medicale_id_view"
+            {{if !$found_checked}}value="{{$affectation->_ref_uf_medicale->code}}{{/if}}"/>
+            
+            <script type="text/javascript">
+              Main.add(function() {
+                var form = getForm("affect_uf");
+                var url = new Url("system", "httpreq_field_autocomplete");
+                url.addParam("class", "CUniteFonctionnelle");
+                url.addParam("field", "code");
+                url.addParam("limit", 30);
+                url.addParam("view_field", "code");
+                url.addParam("show_view", true);
+                url.addParam("input_field", "uf_medicale_id_view");
+                url.addParam("wholeString", false);
+                url.autoComplete(form.uf_medicale_id_view, null, {
+                  minChars: 1,
+                  method: "get",
+                  select: "view",
+                  dropdown: true,
+                  afterUpdateElement: function(field,selected){
+                    var form = field.form;
+                    $V(form.uf_medicale_id, selected.getAttribute("id").split("-")[2]);
+                    if (form.uf_medicale_id_radio_view.length) {
+                      $A(form.uf_medicale_id_radio_view).each(function(elt) {
+                        elt.checked = "";
+                      });
+                    }
+                    else {
+                      form.uf_medicale_id_radio_view.checked = "";
+                    }
+                  } });
+                } );
+            </script>
         </td>
       </tr>
       </table>
