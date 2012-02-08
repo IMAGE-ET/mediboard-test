@@ -6,7 +6,7 @@
     var services_ids_hospi = $V(services_ids_hospi_elt).evalJSON();
     
     services_ids_hospi.g{{$group_id}} = $V(form.select("input[checked]"));
-    console.log(services_ids_hospi.g{{$group_id}});
+    
     if (services_ids_hospi.g{{$group_id}} == null) {
       services_ids_hospi.g{{$group_id}} = "";
     }

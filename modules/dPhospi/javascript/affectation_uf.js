@@ -12,7 +12,7 @@ AffectationUf  = {
 		var url = new Url('dPhospi'				, 'ajax_vw_association_uf');
 		url.addParam('curr_affectation_guid'	, curr_affectation_guid);
 		url.addParam('lit_guid'	, lit_guid);
-		url.requestModal(450);
+		url.requestModal(600);
 		this.modal = url.modalObject;
 	},
   
