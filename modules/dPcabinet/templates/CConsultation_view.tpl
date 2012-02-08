@@ -10,7 +10,6 @@
     </th>
   </tr>
   {{/if}}
-  <tr>
   
   <tr>
     <td class="button">
@@ -35,11 +34,11 @@
 {{if $examaudio && $examaudio->_id}}
 <script type="text/javascript">
 newExam = function(sAction, consultation_id) {
-	if (sAction) {
-		var url = new Url("dPcabinet", sAction);
-		url.addParam("consultation_id", consultation_id);
-		url.popup(900, 600, "Examen");  
-	}
+  if (sAction) {
+    var url = new Url("dPcabinet", sAction);
+    url.addParam("consultation_id", consultation_id);
+    url.popup(900, 600, "Examen");  
+  }
 }
 </script>
 <a href="#{{$examaudio->_guid}}" onclick="newExam('exam_audio', '{{$consultation->_id}}')">
