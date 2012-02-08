@@ -1774,11 +1774,12 @@ class CSejour extends CCodable implements IPatientRelated {
   }
   
   function fillLimitedTemplate(&$template) {
+    $template->addProperty("Admission - Date longue"          , $this->getFormattedValue("entree_prevue"));
     $template->addDateProperty("Admission - Date"             , $this->entree_prevue);
     $template->addTimeProperty("Admission - Heure"            , $this->entree_prevue);
     $template->addProperty("Hospitalisation - Durée"          , $this->_duree_prevue);
     $template->addDateProperty("Hospitalisation - Date sortie", $this->sortie_prevue);
-    
+    $template->addProperty("Hospitalisation - Date sortie longue", $this->getFormattedValue("sortie_prevue"));
     $this->loadNDA();
     $template->addProperty("Sejour - Numéro de dossier"       , $this->_NDA );
     $template->addBarcode ("Sejour - Code barre ID"           , "SID$this->_id"     );
