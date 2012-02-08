@@ -5,7 +5,7 @@
  * @subpackage ssr
  * @version $Revision: $
  * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
 CCanDo::checkRead();
@@ -29,7 +29,7 @@ $group = CGroups::loadCurrent();
 $group_id = $group->_id;
 $where["type"]            = "= 'ssr'";
 $where["sejour.group_id"] = "= '$group_id'";
-$where["sejour.recuse"]   = "= '0'";
+$where["sejour.annule"]   = "= '0'";
 $order = null;
 
 if ($order_col == "entree") {
@@ -57,7 +57,7 @@ if ($order_col == "service_id") {
 	$order = "sejour.service_id $order_way, patients.nom, patients.prenom";
 }
 
-$ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
+$ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id AND '$date' BETWEEN affectation.entree AND affectation.sortie";
 $ljoin["lit"]         = "lit.lit_id = affectation.lit_id";
 $ljoin["chambre"]     = "lit.chambre_id = chambre.chambre_id";
 $ljoin["service"]     = "chambre.service_id = service.service_id";
@@ -111,7 +111,7 @@ foreach ($sejours as $_sejour) {
     unset($sejours[$_sejour->_id]);
     continue;
   }
-	
+
   // Bilan SSR
   $bilan = $_sejour->loadRefBilanSSR();
 
@@ -119,7 +119,7 @@ foreach ($sejours as $_sejour) {
   $bilan->loadRefKineJournee($date);
   $kine_journee = $bilan->_ref_kine_journee;
   $kines[$kine_journee->_id] = $kine_journee;
-	
+
   $kine_referent = $bilan->_ref_kine_referent;
 	if (!$kine_journee->_id) {
 	  $kines[$kine_referent->_id] = $kine_referent;
@@ -133,28 +133,28 @@ foreach ($sejours as $_sejour) {
     unset($sejours[$_sejour->_id]);
     continue;
   }
-  
+
   // Regroupement par kine
   $sejours_by_kine[$kine_referent->_id][] = $_sejour;
   if ($kine_journee->_id && $kine_journee->_id != $kine_referent->_id) {
   	$sejours_by_kine[$kine_journee->_id ][] = $_sejour;
   }
-	
+
   // Détail du séjour
   $_sejour->checkDaysRelative($date);
   $_sejour->loadNDA();
   $_sejour->loadRefsNotes();
-	
+
   // Patient
   $patient = $_sejour->loadRefPatient();
 	$patient->loadIPP();
-	
+
   // Modification des prescription
 	$prescription->countFastRecentModif();
 
   // Praticien demandeur
 	$bilan->loadRefPraticienDemandeur();
-	
+
 	// Chargement du lit
 	$_sejour->loadRefCurrAffectation();
 }
