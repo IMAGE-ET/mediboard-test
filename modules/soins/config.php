@@ -14,6 +14,7 @@ $dPconfig["soins"] = array (
   "cible_mandatory_trans" => "0",
   "show_charge_soins" => "0",
   "max_time_modif_suivi_soins" => "12",
+  "show_only_lit_bilan" => "0",
   "CLit" => array (
     "align_right" => "1")
 );

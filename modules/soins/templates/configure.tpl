@@ -98,6 +98,12 @@
       <td colspan="2">
         {{mb_include module=system template=inc_config_enum var=max_time_modif_suivi_soins values=$listHours skip_locales=1}}
       </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        {{mb_include module=system template=inc_config_bool var=show_only_lit_bilan}}
+      </td>
+    </tr>
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
