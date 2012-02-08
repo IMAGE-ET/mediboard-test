@@ -355,7 +355,7 @@ if($object_id && $object_class){
     $smarty->assign("administrations_line", $line->_administrations);
     $smarty->assign("unite_prise", $unite_prise);
     
-    $smarty->display("inc_vw_content_line_dossier_soin.tpl");
+    $smarty->display("../../dPprescription/templates/inc_vw_content_line_dossier_soin.tpl");
   }
 } 
 else {
@@ -364,7 +364,7 @@ else {
     $smarty->assign("move_dossier_soin", false);
     $smarty->assign("chapitre", $chapitre);
     $smarty->assign("nodebug", true);   
-    $smarty->display("inc_chapitre_dossier_soin.tpl");
+    $smarty->display("../../dPprescription/templates/inc_chapitre_dossier_soin.tpl");
   } 
   // Affichage du plan de soin complet
   else {
