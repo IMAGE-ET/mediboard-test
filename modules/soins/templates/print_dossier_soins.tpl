@@ -30,8 +30,6 @@
   togglePrintZone = function(name, sejour_id) {
     var dossier_soin = getDossierSoin(sejour_id);
     
-    console.log(dossier_soin);
-    
     dossier_soin.select("."+name).invoke("toggleClassName", "not-printable");
     
     // Si un seul bloc est à imprimer, il faut retirer le style page-break.
@@ -101,9 +99,9 @@
     var dossier_soin = getDossierSoin(sejour_id);
     dossier_soin.select(".print_patient")[0].removeClassName("not-printable").setStyle({pageBreakAfter: "always"});
     dossier_soin.select(".print_sejour")[1].removeClassName("not-printable").setStyle({pageBreakAfter: "always"});
-		{{if "dPprescription"|module_active}}
+    {{if "dPprescription"|module_active}}
     dossier_soin.select(".print_prescription")[0].removeClassName("not-printable").setStyle({pageBreakAfter: "always"});
-		{{/if}}
+    {{/if}}
     dossier_soin.select(".print_tasks")[0].removeClassName("not-printable").setStyle({pageBreakAfter: "auto"});
   }
 </script>
@@ -114,9 +112,9 @@
       <strong>Choix des blocs à imprimer : </strong>
       <label><input type="checkbox" checked="checked" onclick="togglePrintZone('print_patient', '{{$sejour->_id}}')" /> {{tr}}CPatient{{/tr}}</label>
       <label><input type="checkbox" checked="checked" onclick="togglePrintZone('print_sejour', '{{$sejour->_id}}')" /> {{tr}}CSejour{{/tr}}</label>
-			{{if "dPprescription"|module_active}}
+      {{if "dPprescription"|module_active}}
         <label><input type="checkbox" checked="checked" onclick="togglePrintZone('print_prescription', '{{$sejour->_id}}')"/> {{tr}}CPrescription{{/tr}}</label>
-			{{/if}}
+      {{/if}}
       <label><input type="checkbox" checked="checked" onclick="togglePrintZone('print_tasks', '{{$sejour->_id}}')"/> Tâches</label>
       
       {{if "forms"|module_active}}
