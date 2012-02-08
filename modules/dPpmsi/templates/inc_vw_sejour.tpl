@@ -64,7 +64,7 @@
         Dossier complet
       </button>
     </li>
-    {{if $sejour->_ref_prescription_sejour->_id}}
+    {{if $sejour->_ref_prescription_sejour && $sejour->_ref_prescription_sejour->_id}}
     <li style="float: right">
       <button type="button" class="print" onclick="Prescription.printOrdonnance('{{$sejour->_ref_prescription_sejour->_id}}');">
         Prescription
