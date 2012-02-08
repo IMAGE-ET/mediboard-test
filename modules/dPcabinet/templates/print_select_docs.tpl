@@ -2,50 +2,51 @@
   {{mb_script module="dPprescription" script="prescription"}}
 {{/if}}
 
-{{if !$documents|@count && !$prescription_preadm->_id && !$prescription_sejour->_id && !$prescription_sortie->_id}}
+{{if !$documents|@count && $count_prescription == 0}}
   <div class="small-info">
     Il n'y a aucun document pour cette consultation
   </div>
 {{else}}
-	{{if $prescription_preadm->_id}}
-  	<table class="form">
-  	  <tr>
-  	    <th class="title">Prescription de pre-admission</th>
-  	  </tr>
-  	  <tr>
-  	    <td style="text-align: center">
-  	      <button class="print" type="button" onclick="Prescription.printOrdonnance('{{$prescription_preadm->_id}}')">Imprimer</button>
-  	    </td>
-  	  </tr>
-  	</table>
+  {{if "dPprescription"|module_active}}
+		{{if $prescription_preadm->_id}}
+	  	<table class="form">
+	  	  <tr>
+	  	    <th class="title">Prescription de pre-admission</th>
+	  	  </tr>
+	  	  <tr>
+	  	    <td style="text-align: center">
+	  	      <button class="print" type="button" onclick="Prescription.printOrdonnance('{{$prescription_preadm->_id}}')">Imprimer</button>
+	  	    </td>
+	  	  </tr>
+	  	</table>
+		{{/if}}
+		
+	  {{if $prescription_sejour->_id}}
+	    <table class="form">
+	      <tr>
+	        <th class="title">Prescription de séjour</th>
+	      </tr>
+	      <tr>
+	       <td style="text-align: center">
+	           <button class="print" type="button" onclick="Prescription.printOrdonnance('{{$prescription_sejour->_id}}')">Imprimer</button>
+	       </td>
+	      </tr>
+	    </table>
+	  {{/if}}
+	  
+		{{if $prescription_sortie->_id}}
+		<table class="form">
+		  <tr>
+		    <th class="title">Prescription de sortie</th>
+		  </tr>
+		  <tr>
+		   <td style="text-align: center">
+		       <button class="print" type="button" onclick="Prescription.printOrdonnance('{{$prescription_sortie->_id}}')">Imprimer</button>
+		   </td>
+		  </tr>
+		</table>
+		{{/if}}
 	{{/if}}
-	
-  {{if $prescription_sejour->_id}}
-    <table class="form">
-      <tr>
-        <th class="title">Prescription de séjour</th>
-      </tr>
-      <tr>
-       <td style="text-align: center">
-           <button class="print" type="button" onclick="Prescription.printOrdonnance('{{$prescription_sejour->_id}}')">Imprimer</button>
-       </td>
-      </tr>
-    </table>
-  {{/if}}
-  
-	{{if $prescription_sortie->_id}}
-	<table class="form">
-	  <tr>
-	    <th class="title">Prescription de sortie</th>
-	  </tr>
-	  <tr>
-	   <td style="text-align: center">
-	       <button class="print" type="button" onclick="Prescription.printOrdonnance('{{$prescription_sortie->_id}}')">Imprimer</button>
-	   </td>
-	  </tr>
-	</table>
-	{{/if}}
-	
 	{{if $documents|@count}}
   <form name="selectDocsFrm" action="?" method="get">
 	  <input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
