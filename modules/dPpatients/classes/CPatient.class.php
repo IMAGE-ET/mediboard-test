@@ -1626,6 +1626,7 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - Pouls",  $const_med->pouls);
     $template->addProperty("Patient - IMC",    $const_med->_imc);
     $template->addProperty("Patient - VST",    $const_med->_vst);
+    $template->addProperty("Patient - température", $const_med->temperature."°");
     $template->addProperty("Patient - TA",     ($const_med->ta ? "$const_med->_ta_systole / $const_med->_ta_diastole" : ""));
     
     // Assuré social
