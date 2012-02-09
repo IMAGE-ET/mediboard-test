@@ -61,7 +61,12 @@ else
 $context->loadRefs();
 
 if ($context) {
-  $patient = $context->_ref_patient;
+  if ($context instanceof CPatient) {
+    $patient = $context;
+  }
+  else {
+    $patient = $context->_ref_patient;
+  }
 }
 
 if ($patient_id) {
