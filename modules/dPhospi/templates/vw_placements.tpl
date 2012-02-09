@@ -1,3 +1,5 @@
+{{mb_script module=dPhospi script=affectation_uf}}
+
 <script type='text/javascript'>
   Position.includeScrollOffsets = true;
   Placement = {

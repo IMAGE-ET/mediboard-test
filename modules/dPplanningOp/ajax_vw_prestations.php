@@ -53,9 +53,14 @@ if (count($affectations)) {
 
 $items_liaisons = $sejour->loadBackRefs("items_liaisons");
 CMbObject::massLoadFwdRef($items_liaisons, "item_prestation_id");
+CMbObject::massLoadFwdRef($items_liaisons, "item_prestation_realise_id");
 
 foreach ($items_liaisons as $_item_liaison) {
   $_item = $_item_liaison->loadRefItem();
+  
+  if (!$_item->_id) {
+    $_item = $_item_liaison->loadRefItemRealise();
+  }
   
   switch($_item->object_class) {
     case "CPrestationJournaliere":
@@ -80,6 +85,7 @@ if ($vue_prestation == "all") {
 
 $smarty = new CSmartyDP;
 
+$smarty->assign("today"      , mbDate());
 $smarty->assign("dates"      , $dates);
 $smarty->assign("sejour"     , $sejour);
 $smarty->assign("affectations", $affectations);

@@ -1,5 +1,5 @@
 {{mb_script module=dPhospi script=vw_affectations ajax=1}}
-{{mb_script module=dPhospi script=affectation_uf ajax=1}}
+
 <table class="main">
   <tr>
     <td class="greedyPane" id="tableauAffectations">

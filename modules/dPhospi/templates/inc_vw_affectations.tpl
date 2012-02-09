@@ -227,29 +227,31 @@
                       {{if $prestation_id && $item_prestation_id}}
                         {{assign var=item_prestation value=$items_prestation.$item_prestation_id}}
                         $$(".first_cell").each(function(elt) {
-                          var rank = {{$item_prestation->rank}};  
-                          var rank_elt = elt.get('rank');
-                          var color = "";
+                          var rank = {{$item_prestation->rank}};
+                          var rank_elt = parseInt(elt.get('rank'));
+                          var classItem = "";
                           
                           // Vert
-                          if (rank_elt == rank) {
-                            color = "#9f8"
-                          }
-                          // Rouge
-                          else if (rank_elt < rank) {
-                            color = "#f89";
+                          if (rank == rank_elt) {
+                            classItem = "item_egal";
                           }
                           // Orange
-                          else if (rank_elt > rank) {
-                            color = "#fd9";
+                          else if (rank < rank_elt) {
+                            classItem = "item_inferior";
                           }
-                          elt.setStyle({background: color});
+                          // Rouge
+                          else if (rank > rank_elt) {
+                            classItem = "item_superior";
+                          }
+                          
+                          elt.addClassName(classItem);
+                          elt.writeAttribute("data-classItem", classItem);
                         });
                       {{/if}}
                     },
                     onEnd: function(drbObj, mouseEvent) {
                       $$(".first_cell").each(function(elt) {
-                        elt.setStyle({background: ""});
+                        elt.removeClassName(elt.get('classItem'));
                       });
                       var element = drbObj.element;
                       $('wrapper_line_'+element.get('sejour_id')).insert(element);

@@ -13,6 +13,7 @@ $lit_id         = CValue::get("lit_id");
 $sejour_id      = CValue::get("sejour_id");
 
 $affectation = new CAffectation;
+
 if ($affectation_id) {
   $affectation->load($affectation_id);
   
@@ -34,6 +35,47 @@ $affectation->lit_id = $lit_id;
 
 if ($msg = $affectation->store()) {
   CAppUI::setMsg($msg, UI_MSG_ERROR);
+}
+
+// Niveaux de prestations réalisées à créer
+// pour une nouvelle affectation (par rapport aux niveaux de prestations du lit)
+if (!$affectation_id && isset($sejour)) {
+  $lit = new CLit;
+  $lit->load($lit_id);
+  $liaisons_lit = $lit->loadRefsLiaisonsItems();
+  CMbObject::massLoadFwdRef($liaisons_lit, "item_prestation_id");
+  
+  foreach ($liaisons_lit as $_liaison) {
+    // Chercher une éventuelle liaison, sinon la créer.
+    
+    $_item = $_liaison->loadRefItemPrestation();
+    
+    $item_liaison = new CItemLiaison;
+    $where = array();
+    $ljoin = array();
+    
+    $where["sejour_id"] = " = '$sejour->_id'";
+    $where["object_class"] = " = 'CPrestationJournaliere'";
+    $where["prestation.prestation_id"] = "= '$_item->object_id'";
+    $ljoin["item_prestation"] = "item_prestation.item_prestation_id = item_liaison.item_prestation_id";
+    $ljoin["prestation"] = "item_prestation.object_id = prestation.prestation_id";
+    
+    $item_liaison = reset($item_liaison->loadList($where, null, null, null, $ljoin));
+    
+    if (!$item_liaison) {
+      $item_liaison = new CItemLiaison;
+      $item_liaison->sejour_id = $sejour->_id;
+      $item_liaison->date = mbDate($sejour->entree);
+      $item_liaison->quantite = 0;
+    }
+    
+    $item_liaison->item_prestation_realise_id = $_liaison->item_prestation_id;
+    
+    if ($msg = $item_liaison->store()) {
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
+    }
+    
+  }
 }
 
 echo CAppUI::getMsg();

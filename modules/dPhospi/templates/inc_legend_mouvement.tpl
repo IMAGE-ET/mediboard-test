@@ -101,6 +101,30 @@
     </td>
   </tr>
   <tr>
+    <th class="item_egal">
+      Lit
+    </th>
+    <td>
+      Niveau de prestation souhaité égal à celui du lit
+    </td>
+  </tr>
+  <tr>
+    <th class="item_inferior">
+      Lit
+    </th>
+    <td>
+      Niveau de prestation souhaité supérieur à celui du lit
+    </td>
+  </tr>
+  <tr>
+    <th class="item_superior">
+      Lit
+    </th>
+    <td>
+      Niveau de prestation souhaité inférieur à celui du lit
+    </td>
+  </tr>
+  <tr>
     <td>
       M. X y
     </td>

@@ -567,7 +567,11 @@ class CSetupdPhospi extends CSetup {
                 WHERE `affectation`.`sejour_id` = `sejour`.`sejour_id`
                 AND `affectation`.`confirme` = '1';";
     
-    $this->mod_version = "0.57";
+    $this->makeRevision("0.57");
+    $query = "ALTER TABLE `item_liaison`
+      CHANGE `item_prestation_id` `item_prestation_id` INT (11) UNSIGNED DEFAULT NULL";
+    
+    $this->mod_version = "0.58";
   }
 }
 ?>

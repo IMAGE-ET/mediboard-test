@@ -40,7 +40,7 @@ class CLitLiaisonItem extends CMbObject {
   }
   
   function loadRefItemPrestation() {
-    return $this->_ref_item_prestation = $this->loadFwdRef("item_prestation_id");
+    return $this->_ref_item_prestation = $this->loadFwdRef("item_prestation_id", true);
   }
 }
 ?>

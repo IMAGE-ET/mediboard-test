@@ -10,18 +10,19 @@
 
 class CItemLiaison extends CMbObject{
   // DB Table key
-  var $item_liaison_id = null;
+  var $item_liaison_id  = null;
   
   // DB Fields
-  var $sejour_id  =  null;
+  var $sejour_id         =  null;
   var $item_prestation_id = null;
   var $item_prestation_realise_id = null;
-  var $date            = null;
-  var $quantite        = null;
+  var $date              = null;
+  var $quantite          = null;
   
   // Ref Fields
-  var $_ref_affectation = null;
-  var $_ref_item       = null;
+  var $_ref_affectation  = null;
+  var $_ref_item         = null;
+  var $_ref_item_realise = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -32,8 +33,8 @@ class CItemLiaison extends CMbObject{
   
   function getProps() {
     $specs = parent::getProps();
-    $specs["sejour_id"]     = "ref notNull class|CSejour cascade";
-    $specs["item_prestation_id"] = "ref notNull class|CItemPrestation cascade";
+    $specs["sejour_id"]          = "ref notNull class|CSejour cascade";
+    $specs["item_prestation_id"] = "ref class|CItemPrestation cascade";
     $specs["item_prestation_realise_id"] = "ref class|CItemPrestation cascade";
     $specs["date"]               = "date";
     $specs["quantite"]           = "num default|0";

@@ -189,6 +189,8 @@
                       {{assign var=_sejour value=$_affectation->_ref_sejour}}
                       {{assign var=_patient value=$_sejour->_ref_patient}}
                       {{assign var=praticien value=$_sejour->_ref_praticien}}
+                      {{assign var=offset_op value=0}}
+                      {{assign var=width_op value=0}}
                       {{math equation=x*(y+4.6) x=$_affectation->_entree_offset y=$td_width assign=offset}}
                       {{math equation=x*(y+4.6) x=$_affectation->_width y=$td_width assign=width}} 
                       
@@ -207,6 +209,11 @@
                           <button type="button" class="trash notext opacity-40" style="float: right"
                             onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"
                             onclick="delAffectation('{{$_affectation->_id}}')"></button>
+                          <a style="float: right; margin-top: 3px;" href="#1"
+                            onclick="AffectationUf.affecter('{{$_affectation->_guid}}','{{$_lit->_guid}}')">
+                            <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF" class="opacity-40"
+                              onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"/>
+                          </a>
                         {{/if}}
                         {{if $_sejour->_id && $mode_vue_tempo == "classique"}}
                           <span style="float: left; padding-right: 1px;">
@@ -245,12 +252,12 @@
                             <div class="operation_in_mouv{{if $mode_vue_tempo == "compacte"}}_compact{{/if}} opacity-40"
                               style="left: {{$offset_op}}px; width: {{$width_op}}px;"></div>
                           {{/foreach}}
-                          {{if $_sejour->duree_uscpo}}
+                          {{if $_sejour->duree_uscpo && $offset_op && $width_op}}
                             {{math equation=x+y+2 x=$offset_op y=$width_op assign=offset_uscpo}}
                             {{math equation=x*(y+4.6) x=$_sejour->duree_uscpo y=$td_width assign=width_uscpo}}
                             
                             <div class="soins_uscpo{{if $mode_vue_tempo == "compacte"}}_compact{{/if}} opacity-40"
-                              style="left: {{$offset_uscpo}}px; width: {{$width_uscpo}}px;"></div>
+                              style="left: {{$offset_uscpo}}px; width: {{$width_uscpo}}px;">{{$offset_op}} {{$width_op}}</div>
                           {{/if}}
                         </div>
                        

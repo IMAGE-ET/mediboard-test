@@ -100,7 +100,7 @@
           {{/if}}
         {{/if}}
         
-          <td>
+          <td {{if $_date == $today}}class="current_hour"{{/if}}>
             {{$_date|date_format:$conf.date}}
           </td>
           <td>
