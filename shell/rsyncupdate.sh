@@ -20,8 +20,10 @@ do
   if [ "$first_character" != "#" ] && [ "$first_character" != "" ]
   then
     echo "-- Rsync $line --"
-    rsync -apvzCP $BASH_PATH/.. --delete $line --exclude includes/config_overload.php --exclude tmp --include tmp/svnlog.txt --exclude lib --exclude includes/config.php
+    rsync -apvzCP $BASH_PATH/.. --delete $line --exclude includes/config_overload.php --exclude tmp --exclude lib --exclude includes/config.php --exclude files --exclude images/pictures/logo_custom.png
     check_errs $? "Failed to rsync $line" "Succesfully rsync-ed $line"
+    scp $BASH_PATH/../tmp/svnlog.txt $line/tmp/svnlog.txt
+    scp $BASH_PATH/../tmp/svnlog.txt $line/tmp/svnstatus.txt
   fi
 done < $BASH_PATH/rsyncupdate.conf
 
