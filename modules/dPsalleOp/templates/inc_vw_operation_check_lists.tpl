@@ -18,7 +18,7 @@
 {{/foreach}}
 
 <script type="text/javascript">
-var checkListTypes = ["normal", "endoscopie", "endoscopie-bronchique"];
+var checkListTypes = ["normal", "endoscopie", "endoscopie-bronchique", "radio"];
 
 function showCheckListType(element, type) {
   checkListTypes.each(function(t){
@@ -50,13 +50,14 @@ Main.add(function(){
         <option value="normal" {{if $active_list_type == "normal"}} selected="selected" {{/if}}>Au bloc opératoire (v. 2011-01)</option>
         <option value="endoscopie" {{if $active_list_type == "endoscopie"}} selected="selected" {{/if}}>En endoscopie digestive (v. 2010-01)</option>
         <option value="endoscopie-bronchique" {{if $active_list_type == "endoscopie-bronchique"}} selected="selected" {{/if}}>En endoscopie bronchique (v. 2011-01)</option>
+        <option value="radio" {{if $active_list_type == "radio"}} selected="selected" {{/if}}>En radiologie interv. (v. 2011-01)</option>
       </select>
-			
-			<img height="20" src="images/pictures/logo-has-small.png" />
-			
-			<button class="print" onclick="(new Url('dPsalleOp', 'print_check_list_operation')).addParam('operation_id', {{$selOp->_id}}).popup(800, 600, 'check_list')">{{tr}}Print{{/tr}}</button>
       
-			{{mb_include module=forms template=inc_widget_ex_class_register object=$selOp event=checklist cssStyle="display: inline-block; font-size: 0.8em;"}}
+      <img height="20" src="images/pictures/logo-has-small.png" />
+      
+      <button class="print" onclick="(new Url('dPsalleOp', 'print_check_list_operation')).addParam('operation_id', {{$selOp->_id}}).popup(800, 600, 'check_list')">{{tr}}Print{{/tr}}</button>
+      
+      {{mb_include module=forms template=inc_widget_ex_class_register object=$selOp event=checklist cssStyle="display: inline-block; font-size: 0.8em;"}}
     </th>
   </tr>
   
@@ -112,6 +113,27 @@ Main.add(function(){
       <h3 style="margin: 2px;">
         <img src="images/icons/{{$operation_check_lists.postendoscopie_bronchique->_readonly|ternary:"tick":"cross"}}.png" />
         Après l'endoscopie bronchique
+      </h3>
+    </td>
+  </tr>
+  
+  <tr class="radio" style="display: none;">
+    <td class="button" id="preanesth_radio-title">
+      <h3 style="margin: 2px;">
+        <img src="images/icons/{{$operation_check_lists.preanesth_radio->_readonly|ternary:"tick":"cross"}}.png" />
+        Avant anesthésie ou sédation
+      </h3>
+    </td>
+    <td class="button" id="preop_radio-title">
+      <h3 style="margin: 2px;">
+        <img src="images/icons/{{$operation_check_lists.preop_radio->_readonly|ternary:"tick":"cross"}}.png" />
+        Avant intervention
+      </h3>
+    </td>
+    <td class="button" id="postop_radio-title">
+      <h3 style="margin: 2px;">
+        <img src="images/icons/{{$operation_check_lists.postop_radio->_readonly|ternary:"tick":"cross"}}.png" />
+        Après intervention
       </h3>
     </td>
   </tr>
@@ -182,13 +204,40 @@ Main.add(function(){
       </td>
     </tr>
     
+    <tr class="radio" style="display: none;">
+      <td style="padding:1px;">
+        <div id="preanesth_radio">
+        {{assign var=check_list value=$operation_check_lists.preanesth_radio}}
+        {{mb_include module=dPsalleOp template=inc_edit_check_list 
+             check_item_categories=$operation_check_item_categories.preanesth_radio
+             personnel=$listValidateurs}}
+        </div>
+      </td>
+      <td style="padding:1px;">
+        <div id="preop_radio">
+        {{assign var=check_list value=$operation_check_lists.preop_radio}}
+        {{mb_include module=dPsalleOp template=inc_edit_check_list 
+             check_item_categories=$operation_check_item_categories.preop_radio
+             personnel=$listValidateurs}}
+        </div>
+      </td>
+      <td style="padding:1px;">
+        <div id="postop_radio">
+        {{assign var=check_list value=$operation_check_lists.postop_radio}}
+        {{mb_include module=dPsalleOp template=inc_edit_check_list 
+             check_item_categories=$operation_check_item_categories.postop_radio
+             personnel=$listValidateurs}}
+        </div>
+      </td>
+    </tr>
+    
     <tr>
-      <td colspan="3" class="button">
+      <td colspan="3" class="button text">
         <hr />
-				Le rôle du coordonnateur check-list sous la responsabilité du(es) chirurgien(s) et anesthésiste(s) responsables  <br />
-				de l'intervention est de ne cocher les items de la check list  que (1) si la vérification a bien été effectuée,  <br />
-				(2) si elle a été faite oralement en présence des membres de l'équipe concernée et (3) si les non conformités (marquées d'un *) <br />
-				ont fait l'objet d'une concertation en équipe et d'une décision qui doit le cas échéant être rapportée dans l'encart spécifique.
+        Le rôle du coordonnateur check-list sous la responsabilité du(es) chirurgien(s) et anesthésiste(s) responsables 
+        de l'intervention est de ne cocher les items de la check list  que (1) si la vérification a bien été effectuée,  
+        (2) si elle a été faite oralement en présence des membres de l'équipe concernée et (3) si les non conformités (marquées d'un *) 
+        ont fait l'objet d'une concertation en équipe et d'une décision qui doit le cas échéant être rapportée dans l'encart spécifique.
       </td>
     </tr>
   </tbody>

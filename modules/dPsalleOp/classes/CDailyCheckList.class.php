@@ -18,11 +18,15 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   var $type         = null;
   var $comments     = null;
   var $validator_id = null;
-	
+  
+  //var $specialist_id = null; // chir ou specialiste
+  //var $anesth_id    = null;
+  //var $coord_id     = null;
+  
   // Refs
   var $_ref_validator = null;
   var $_ref_object    = null;
-	
+  
   // Form fields
   var $_ref_item_types = null;
   var $_items          = null;
@@ -39,6 +43,9 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     "postendoscopie" => "endoscopie",
     "preendoscopie_bronchique"  => "endoscopie-bronchique", 
     "postendoscopie_bronchique" => "endoscopie-bronchique",
+    "preanesth_radio" => "radio",
+    "preop_radio" => "radio",
+    "postop_radio" => "radio",
   );
   
   function getSpec() {
@@ -53,7 +60,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     $specs['date']         = 'date notNull';
     $specs['object_class'] = 'enum list|CSalle|CBlocOperatoire|COperation notNull default|CSalle';
     $specs['object_id']    = 'ref class|CMbObject meta|object_class notNull autocomplete';
-    $specs['type']         = 'enum list|preanesth|preop|postop|preendoscopie|postendoscopie|preendoscopie_bronchique|postendoscopie_bronchique';
+    $specs['type']         = 'enum list|preanesth|preop|postop|preendoscopie|postendoscopie|preendoscopie_bronchique|postendoscopie_bronchique|preanesth_radio|preop_radio|postop_radio';
     $specs['validator_id'] = 'ref class|CMediusers';
     $specs['comments']     = 'text';
     $specs['_validator_password'] = 'password notNull';
@@ -61,8 +68,8 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     $specs['_date_max'] = 'date';
     return $specs;
   }
-	
-	function getBackProps() {
+  
+  function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['items'] = 'CDailyCheckItem list_id';
     return $backProps;
@@ -85,28 +92,28 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
 
     $this->_ref_validator = $this->loadFwdRef("validator_id", true); 
   }
-	
-	function store() {
-		// Est-ce un nouvel objet
-		$is_new = !$this->_id;
-		
-		if ($msg = parent::store()) return $msg;
+  
+  function store() {
+    // Est-ce un nouvel objet
+    $is_new = !$this->_id;
+    
+    if ($msg = parent::store()) return $msg;
 
-		if ($is_new || $this->validator_id) {
-			// Sauvegarde des items cochés
-	    $items = $this->_items ? $this->_items : array();
+    if ($is_new || $this->validator_id) {
+      // Sauvegarde des items cochés
+      $items = $this->_items ? $this->_items : array();
       
-			$this->loadItemTypes();
-		  foreach($this->_ref_item_types as $type) {
-				$check_item = new CDailyCheckItem;
-				$check_item->list_id = $this->_id;
-				$check_item->item_type_id = $type->_id;
-				$check_item->loadMatchingObject();
-				$check_item->checked = (isset($items[$type->_id]) ? $items[$type->_id] : "");
-				if ($msg = $check_item->store()) return $msg;
-			}
-			
-			// Vérification du mot de passe
+      $this->loadItemTypes();
+      foreach($this->_ref_item_types as $type) {
+        $check_item = new CDailyCheckItem;
+        $check_item->list_id = $this->_id;
+        $check_item->item_type_id = $type->_id;
+        $check_item->loadMatchingObject();
+        $check_item->checked = (isset($items[$type->_id]) ? $items[$type->_id] : "");
+        if ($msg = $check_item->store()) return $msg;
+      }
+      
+      // Vérification du mot de passe
       if (!$this->_validator_password) {
         return 'Veuillez taper votre mot de passe';
       }
@@ -119,12 +126,12 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
         $this->validator_id = "";
         $msg = 'Le mot de passe entré n\'est pas correct';
       }
-			
-			return $msg . parent::store();
-		}
-	}
-	
-	static function getList($object, $date = null, $type = null){
+      
+      return $msg . parent::store();
+    }
+  }
+  
+  static function getList($object, $date = null, $type = null){
     $list = new self;
     $list->object_class = $object->_class;
     $list->object_id = $object->_id;
@@ -133,10 +140,10 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     $list->loadRefsFwd();
     $list->loadMatchingObject();
     $list->isReadonly();
-		return $list;
-	}
-	
-	function loadItemTypes() {
+    return $list;
+  }
+  
+  function loadItemTypes() {
     $where = array(
       'active' => "= '1'",
       'daily_check_item_category.target_class' => "= '$this->object_class'"
@@ -157,19 +164,19 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
       $orderby .= "title";
     }
     $itemType = new CDailyCheckItemType();
-		$this->_ref_item_types = $itemType->loadGroupList($where, $orderby, null, null, $ljoin);
-		foreach($this->_ref_item_types as $type) {
-			$type->loadRefsFwd();
-		}
-		$this->loadBackRefs('items');
-		if ($this->_back['items']) {
-			foreach($this->_back['items'] as $item) {
-			  if (isset($this->_ref_item_types[$item->item_type_id])) {
-	        $this->_ref_item_types[$item->item_type_id]->_checked = $item->checked;
+    $this->_ref_item_types = $itemType->loadGroupList($where, $orderby, null, null, $ljoin);
+    foreach($this->_ref_item_types as $type) {
+      $type->loadRefsFwd();
+    }
+    $this->loadBackRefs('items');
+    if ($this->_back['items']) {
+      foreach($this->_back['items'] as $item) {
+        if (isset($this->_ref_item_types[$item->item_type_id])) {
+          $this->_ref_item_types[$item->item_type_id]->_checked = $item->checked;
           $this->_ref_item_types[$item->item_type_id]->_answer = $item->getAnswer();
         }
-	    }
-		}
-	}
+      }
+    }
+  }
 }
 ?>

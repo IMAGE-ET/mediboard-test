@@ -16,8 +16,8 @@ class CDailyCheckItemCategory extends CMbObject {
   var $desc     = null;
   var $target_class = null;
   var $type     = null;
-	
-	// Refs
+  
+  // Refs
   var $_ref_item_types = null;
   
   function getSpec() {
@@ -31,12 +31,12 @@ class CDailyCheckItemCategory extends CMbObject {
     $specs = parent::getProps();
     $specs['title'] = 'str notNull';
     $specs['target_class'] = 'enum list|CSalle|CBlocOperatoire|COperation notNull default|CSalle';
-    $specs['type']  = 'enum list|preanesth|preop|postop|preendoscopie|postendoscopie|preendoscopie_bronchique|postendoscopie_bronchique';
+    $specs['type']  = 'enum list|preanesth|preop|postop|preendoscopie|postendoscopie|preendoscopie_bronchique|postendoscopie_bronchique|preanesth_radio|preop_radio|postop_radio';
     $specs['desc']  = 'text';
     return $specs;
   }
-	
-	function getBackProps() {
+  
+  function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['item_types'] = 'CDailyCheckItemType category_id';
     return $backProps;

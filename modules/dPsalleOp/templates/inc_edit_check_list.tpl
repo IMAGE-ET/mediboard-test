@@ -122,36 +122,36 @@ Main.add(function(){
       <tr>
         <td class="text">
           <ul style="padding-left: 0; list-style-position: inside;">
-					  <li>{{mb_value object=$curr_type field=title}}</li>
-					</ul>
-					
-					{{if $curr_type->desc}}
-					  <br />
+            <li>{{mb_value object=$curr_type field=title}}</li>
+          </ul>
+          
+          {{if $curr_type->desc}}
+            <br />
             <small style="text-indent: 1em; color: #666;">{{mb_value object=$curr_type field=desc}}</small>
-					{{/if}}
+          {{/if}}
         </td>
         <td style="text-align: left;">
           {{assign var=attr value=$curr_type->attribute}}
           {{assign var=default_value value=$curr_type->default_value}}
           
-					{{if $default_value == "yes"}}
+          {{if $default_value == "yes"}}
             {{mb_include module=dPsalleOp template=inc_check_list_field_yes}}
             {{mb_include module=dPsalleOp template=inc_check_list_field_no}}
-					{{else}}
+          {{else}}
             {{mb_include module=dPsalleOp template=inc_check_list_field_no}}
             {{mb_include module=dPsalleOp template=inc_check_list_field_yes}}
-					{{/if}}
+          {{/if}}
           
           {{if $attr == "notrecommended"}}
             <div>
               {{mb_include module=dPsalleOp template=inc_check_list_field_notrecommended}}
-						</div>
+            </div>
           {{/if}}
           
           {{if $attr == "notapplicable"}}
             <div>
               {{mb_include module=dPsalleOp template=inc_check_list_field_notapplicable}}
-						</div>
+            </div>
           {{/if}}
         </td>
       </tr>
@@ -163,16 +163,16 @@ Main.add(function(){
       </tr>
     {{/foreach}}
     
-    {{if $check_list->object_class != "COperation" || $check_list->type == "postop" || $check_list->type == "postendoscopie" || $check_list->type == "postendoscopie_bronchique"}}
+    {{if $check_list->object_class != "COperation" || $check_list->type == "postop" || $check_list->type == "postendoscopie" || $check_list->type == "postendoscopie_bronchique" || $check_list->type == "postop_radio"}}
     <tr>
       <td colspan="10" style="white-space: normal;">
-			  <hr />
+        <hr />
         {{mb_label object=$check_list field=comments}}<br />
         {{mb_field object=$check_list field=comments}}
-				<div class="small-info">
-					Pour consulter les informations sur la version 2011 des check-lists, 
-					<a href="http://www.has-sante.fr/portail/jcms/c_1019445/la-version-2011-de-la-check-list-securite-du-patient-au-bloc-operatoire" target="_blank" style="display: inline;">rendez-vous sur le site de la HAS en cliquant ici</a>.
-				</div>
+        <div class="small-info">
+          Pour consulter les informations sur la version 2011 des check-lists, 
+          <a href="http://www.has-sante.fr/portail/jcms/c_1019445/la-version-2011-de-la-check-list-securite-du-patient-au-bloc-operatoire" target="_blank" style="display: inline;">rendez-vous sur le site de la HAS en cliquant ici</a>.
+        </div>
       </td>
     </tr>
     {{/if}}
