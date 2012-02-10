@@ -48,6 +48,10 @@
     <th class="category" colspan="2">{{tr}}config-dPcompteRendu-CCompteRendu-other_params{{/tr}}</th>
   </tr>
   <tr>
+    {{assign var="var" value="show_context_document"}}
+    {{mb_include module=system template=inc_config_bool}}
+  </tr>
+  <tr>
     {{assign var="var" value="header_footer_fly"}}
     {{mb_include module=system template=inc_config_bool}}
   </tr>

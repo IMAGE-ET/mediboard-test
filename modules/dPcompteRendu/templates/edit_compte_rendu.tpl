@@ -9,6 +9,11 @@ window.nb_printers = {{$nb_printers|@json}};
 window.modal_mode_play = null;
 window.documentGraphs = {{$templateManager->graphs|@json}};
 window.choice_factory = {{$choice_factory|@json}};
+window.name = "{{$compte_rendu->_ref_object}} - {{$compte_rendu->nom}}";
+
+{{if $conf.dPcompteRendu.CCompteRendu.show_context_document}}
+  document.title = "{{$compte_rendu->_ref_object}} - {{$compte_rendu->nom}}";
+{{/if}}
 
 function playField(element, class_name, editor_element, name) {
   var modal = $("play_modal");
