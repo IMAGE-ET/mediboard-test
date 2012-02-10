@@ -25,21 +25,25 @@ $chir = CValue::getOrSession("chir");
 // On selectionne les plages
 $plage = new CPlageconsult;
 $where = array();
-if($filter->plageconsult_id) {
+
+if ($filter->plageconsult_id) {
   $plage->load($filter->plageconsult_id);
   $filter->_date_min = $filter->_date_max = $plage->date;
   $filter->_ref_plageconsult = $plage;
 	$where["plageconsult_id"] = "= '$filter->plageconsult_id'";
-} else {
+} 
+else {
   $where["date"] = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
   
   // Liste des praticiens
   $mediusers = new CMediusers();
-  if(CAppUI::pref("pratOnlyForConsult", 1)) {
+  if (CAppUI::pref("pratOnlyForConsult", 1)) {
     $listPrat = $mediusers->loadPraticiens(PERM_EDIT);
-  } else {
+  }
+  else {
     $listPrat = $mediusers->loadProfessionnelDeSante(PERM_EDIT);
   }
+  
   $where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat), $chir);
 }
 
@@ -70,7 +74,7 @@ foreach ($listPlage as $plage_id => &$plage) {
     $consultation->loadRefCategorie(1);
     $consultation->loadRefConsultAnesth();
     $consult_anesth =& $consultation->_ref_consult_anesth;
-    if($consult_anesth->operation_id){
+    if ($consult_anesth->operation_id) {
       $consult_anesth->loadRefOperation();
       $consult_anesth->_ref_operation->loadRefPraticien(true);
       $consult_anesth->_ref_operation->loadRefPlageOp(true);
@@ -79,16 +83,8 @@ foreach ($listPlage as $plage_id => &$plage) {
     } 
     
     $keyPlace = mbTimeCountIntervals($plage->debut, $consultation->heure, $plage->freq);
-  
-    if($keyPlace < 0) {
-      $plage->listBefore[$keyPlace] =& $consultation;
-    }
     
-    if($consultation->heure >= $plage->fin) {
-      $plage->listAfter[$keyPlace] =& $consultation;
-    }
-    
-    for  ($i = 0;  $i < $consultation->duree; $i++) {
+    for ($i = 0;  $i < $consultation->duree; $i++) {
       if (isset($plage->listPlace[($keyPlace + $i)])) {
         $plage->listPlace[($keyPlace + $i)]["consultations"][] =& $consultation;
       }
