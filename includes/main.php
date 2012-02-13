@@ -285,11 +285,11 @@ if (!$suppressHeaders) {
   $tplHeader->assign("svnStatus"            , $svnStatus);
   $tplHeader->assign("allInOne"             , CValue::get("_aio"));
   $tplHeader->assign(
-      "portal", 
-      array (
-        "help"    => mbPortalURL($m, $tab),
-        "tracker" => mbPortalURL("tracker"),
-      )
+    "portal", 
+    array (
+      "help"    => mbPortalURL($m, $tab),
+      "tracker" => mbPortalURL("tracker"),
+    )
   );
   
   $tplHeader->display("header.tpl");
@@ -298,7 +298,8 @@ if (!$suppressHeaders) {
 // tabBox et inclusion du fichier demandé
 if ($tab !== null) {
   $module->showTabs();
-} else {
+}
+else {
   $module->showAction();
 }
 

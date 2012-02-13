@@ -466,7 +466,7 @@ class CAppUI {
       
       $username = $user->user_username = trim($loginas);
       $password = $user->_user_password = $ldap_connection ? CValue::request("passwordas") : null;
-    } 
+    }
     // Standard login
     else {
       $username  = trim(CValue::request("username"));
@@ -480,7 +480,7 @@ class CAppUI {
           self::setMsg($e->getMessage(), UI_MSG_ERROR); 
           return false;
         }
-      } 
+      }
       else {
         if (null == $user->user_username  = $username) {
           self::setMsg("Auth-failed-nousername", UI_MSG_ERROR);

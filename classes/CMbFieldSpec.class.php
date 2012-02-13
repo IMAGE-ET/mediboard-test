@@ -78,7 +78,7 @@ class CMbFieldSpec {
     foreach ($options as $k => $v) {
       if (array_key_exists($k, $vars)) {
         $this->$k = $v;
-      } 
+      }
       else {
         $error = sprintf(
           "L'option '%s' trouvée dans '%s::%s' est inexistante dans la spec de classe '%s'",
@@ -270,7 +270,7 @@ class CMbFieldSpec {
         if (!preg_match($regex, $masked)) {
           return "La donnée '$propValue' ne respecte pas le masque '$this->mask'";
         } // else, that means the value is already the formatted value
-      } 
+      }
       else {
         $object->{$this->fieldName} = $formatted;
       }
@@ -428,7 +428,7 @@ class CMbFieldSpec {
                      $rawdata[$n++] :
                      $mask[$i];
       }
-    } 
+    }
     else {
       $lexemes = self::maskToLexemes($mask);
       $areas = array();
