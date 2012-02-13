@@ -23,6 +23,8 @@ $praticien->load($praticien_id);
 $service = new CService();
 $service->load($service_id);
 
+$dmi_active = CModule::getActive("dmi");
+
 $group = CGroups::loadCurrent();
 
 $types_hospi = array("comp","ambu","urg","ssr","psy");
@@ -163,6 +165,13 @@ if($type == 'presents') {
     $sejour->loadRefPraticien(1);
     $sejour->checkDaysRelative($date);
     $sejour->loadRefsOperations();
+    
+    if ($dmi_active) {
+      foreach($sejour->_ref_operations as $_interv) {
+        $_interv->getDMIAlert();
+      }
+    }
+    
     $_mouvement->_ref_next->loadRefLit(1)->loadCompleteView();
   }
   
@@ -177,6 +186,12 @@ if($type == 'presents') {
     $sejour->loadRefPraticien(1);
     $sejour->checkDaysRelative($date);
     $sejour->loadRefsOperations();
+    
+    if ($dmi_active) {
+      foreach($sejour->_ref_operations as $_interv) {
+        $_interv->getDMIAlert();
+      }
+    }
   }
 // Récupération des sorties du jour
 } else {
@@ -197,6 +212,13 @@ if($type == 'presents') {
     $sejour->loadRefPraticien(1);
     $sejour->checkDaysRelative($date);
     $sejour->loadRefsOperations();
+    
+    if ($dmi_active) {
+      foreach($sejour->_ref_operations as $_interv) {
+        $_interv->getDMIAlert();
+      }
+    }
+    
     $_mouvement->_ref_next->loadRefLit(1)->loadCompleteView();
   }
   
@@ -211,6 +233,12 @@ if($type == 'presents') {
     $sejour->loadRefPraticien(1);
     $sejour->checkDaysRelative($date);
     $sejour->loadRefsOperations();
+    
+    if ($dmi_active) {
+      foreach($sejour->_ref_operations as $_interv) {
+        $_interv->getDMIAlert();
+      }
+    }
   }
 }
 
