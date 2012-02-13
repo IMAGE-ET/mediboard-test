@@ -11,6 +11,7 @@
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
 set_min_memory_limit("512M");
+set_time_limit(60);
 
 $service_id = CValue::get("service_id");
 $date       = CValue::get("date", mbDate());
@@ -38,15 +39,15 @@ foreach($service->_ref_chambres as &$_chambre){
       $patient = $sejour->loadRefPatient();
       $patient->loadIPP();
       
-			
+      
       // Prescription
       if(CModule::getActive("dPprescription")){
         $prescription = $sejour->loadRefPrescriptionSejour();
         $prescription->loadRefsLinesElementByCat();
         $prescription->countFastRecentModif();
       }
-			
-			$params = array(
+      
+      $params = array(
         "sejour_id" => $sejour->_id,
         "dialog" => 1,
         "offline" => 1,
