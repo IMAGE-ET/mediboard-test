@@ -65,10 +65,14 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
 
     // ZBE-1: Movement ID (EI) (optional)
     $data[] = array (
-      // Entity identifier
-      $movement->_view,
-      // Autorité assignement
-      $this->getAssigningAuthority("mediboard")
+      array (
+        // Entity identifier
+        $movement->_view,
+        // Autorité assignement
+        "Mediboard",
+        CAppUI::conf("hl7 assigningAuthorityUniversalID"),
+        "OX"
+      )
     );
     
     // ZBE-2: Start of Movement Date/Time (TS)
