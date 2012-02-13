@@ -18,6 +18,13 @@
   <td class="text">
     <strong onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">{{$sejour->_motif_complet}}</strong>
   </td>
+  {{if "dmi"|module_active}}
+    <td class="button">
+      {{foreach from=$sejour->_ref_operations item=_interv}}
+        {{mb_include module=dmi template=inc_dmi_alert interv=$_interv}}
+      {{/foreach}}
+    </td>
+  {{/if}}
   <td style="text-align: center;">
     -
   </td>

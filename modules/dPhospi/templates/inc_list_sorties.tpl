@@ -90,6 +90,9 @@
         {{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}
       </th>
       <th>Motif</th>
+      {{if "dmi"|module_active}}
+        <th class="narrow">{{tr}}CDMI{{/tr}}</th>
+      {{/if}}
       <th>
         {{mb_colonne class="CAffectation" field="_chambre"   order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}
       </th>
@@ -108,7 +111,7 @@
   <div id="non-places-{{$type}}_{{$type_mouvement}}" style="display: none;">
     <table class="tbl">
       <tr class="only-printable">
-        <th class="title text" colspan="100">
+        <th class="title text" colspan="10">
           {{if $type == "presents"}}
             Patients présents
           {{elseif $type == "ambu"}}
@@ -134,6 +137,9 @@
         </th>
         <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}</th>
         <th>Motif</th>
+        {{if "dmi"|module_active}}
+          <th class="narrow">{{tr}}CDMI{{/tr}}</th>
+        {{/if}}
         <th>
           {{mb_colonne class="CAffectation" field="_chambre"   order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}
         </th>
@@ -143,7 +149,7 @@
       {{foreach from=$mouvementsNP item=_sortie}}
         {{mb_include module=dPhospi template=inc_check_sortieNP_line}}
       {{foreachelse}}
-        <tr><td colspan="100" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
+        <tr><td colspan="10" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
     {{/foreach}}
     </table>
   </div>

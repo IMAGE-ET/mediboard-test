@@ -418,7 +418,7 @@ class CConstantesMedicales extends CMbObject {
     $specs = parent::getProps();
     $specs['patient_id']             = 'ref notNull class|CPatient';
     $specs['datetime']               = 'dateTime notNull';
-    $specs['context_class']          = 'str';
+    $specs['context_class']          = 'str'; // CConsultation|CSejour|CPatient (import)
     $specs['context_id']             = 'ref class|CMbObject meta|context_class cascade';
     $specs['comment']                = 'text';
     

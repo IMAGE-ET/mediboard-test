@@ -36,6 +36,10 @@ if ($order_id) {
       $_item->loadRefLot();
       $order->_has_lot_numbers = true;
     }
+    
+    if ($order->object_id) {
+      $_item->_ref_dmi = CDMI::getFromProduct($_item->loadReference()->loadRefProduct());
+    }
   }
 }
 

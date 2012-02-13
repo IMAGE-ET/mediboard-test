@@ -99,6 +99,7 @@ class COperation extends CCodable implements IPatientRelated {
   var $_move            = null;
   var $_password_visite_anesth = null;
   var $_patient_id      = null;
+  var $_dmi_alert       = null;
   
   // Distant fields
   var $_datetime          = null;
@@ -856,6 +857,26 @@ class COperation extends CCodable implements IPatientRelated {
       $property = implode(" - ", CMbArray::pluck($affectations, "_ref_personnel", "_ref_user", "_view"));
       $template->addProperty("Opération - personnel prévu - $locale", $property);
     }
+  }
+
+  function getDMIAlert(){
+    if (!CModule::getActive("dmi")) {
+      return;
+    }
+    
+    $lines = $this->loadBackRefs("prescription_dmis");
+    
+    if (empty($lines)) {
+      return $this->_dmi_alert = "none";
+    }
+    
+    foreach($lines as $_line) {
+      if (!$_line->isValidated()) {
+        return $this->_dmi_alert = "warning";
+      }
+    }
+    
+    return $this->_dmi_alert = "ok";
   }
   
   function docsEditable() {

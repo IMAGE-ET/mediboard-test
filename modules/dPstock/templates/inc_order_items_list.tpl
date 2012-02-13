@@ -13,6 +13,7 @@
     <tr>
       <th class="category">Code</th>
       {{if $order->object_id || $order->_has_lot_numbers}}
+        {{if "dmi"|module_active}}<th class="category">LPP</th>{{/if}}
         <th class="category">Lot</th>
         <th class="category">Date pér.</th>
       {{/if}}
@@ -40,9 +41,19 @@
     
     {{if $order->object_id || $order->_has_lot_numbers}}
       {{if $curr_item->_ref_lot}}
+        {{if "dmi"|module_active}}
+          <td>
+            {{if isset($curr_item->_ref_dmi|smarty:nodefaults)}}
+              {{$curr_item->_ref_dmi->code_lpp}}
+            {{/if}}
+          </td>
+        {{/if}}
         <td>{{mb_value object=$curr_item->_ref_lot field=code}}</td>
         <td>{{mb_value object=$curr_item->_ref_lot field=lapsing_date}}</td>
       {{else}}
+        {{if "dmi"|module_active}}
+          <td></td>
+        {{/if}}
         <td></td>
         <td></td>
       {{/if}}
@@ -69,7 +80,7 @@
   {{/foreach}}
   
   <tr>
-    <td colspan="10" style="padding: 0.5em; font-size: 1.1em;">
+    <td colspan="11" style="padding: 0.5em; font-size: 1.1em;">
       <span style="float: right; text-align: right;">
         <strong>{{tr}}Total{{/tr}} : {{mb_value object=$order field=_total}}</strong><br />
         <strong>{{tr}}CProductOrder-_total_tva{{/tr}} : {{mb_value object=$order field=_total_tva}}</strong><br />

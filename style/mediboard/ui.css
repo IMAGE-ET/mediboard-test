@@ -206,7 +206,7 @@ ul#nav-vert {
 }
 
 .touchscreen input[type=text] {
-	min-width: 2em;
+  min-width: 2em;
 }
 
 .touchscreen input,
@@ -594,7 +594,7 @@ div.rank {
   margin-top: -1px;
   cursor: default;
   z-index: 550 !important;
-	
+  
   -moz-box-shadow   : 0 4px 8px rgba(0,0,0,0.4);
   -webkit-box-shadow: 0 4px 8px rgba(0,0,0,0.4);
   box-shadow        : 0 4px 8px rgba(0,0,0,0.4);
@@ -624,7 +624,7 @@ div.rank {
   background-color:  transparent;
   width: auto;
   position: static !important;
-	
+  
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
   box-shadow: none;
@@ -1132,7 +1132,7 @@ span.countertip {
   width: 10px;
   text-align: center;
   color: #000;
-	font-weight: normal;
+  font-weight: normal;
 }
 
 .text-block {
@@ -1316,6 +1316,31 @@ span.countertip {
   color: black;
   font-weight: bold;
   font-size: 1.2em;
+}
+
+div.bullet {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  vertical-align: middle;
+  background-image: none;
+  padding: 0;
+}
+
+div.bullet.none {
+  display: none;
+}
+
+div.bullet.ok {
+  background-color: #6f6;
+}
+
+div.bullet.warning {
+  background-color: #f90;
+}
+
+div.bullet.error {
+  background-color: #f33;
 }
 
 @media print {
