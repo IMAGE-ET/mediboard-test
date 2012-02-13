@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_default var=bank_holidays value="|"|explode:""}}
+
 <script type="text/javascript">
 
 Main.add(function() {
@@ -61,7 +63,8 @@ Main.add(function() {
          {{/if}}
              
          <th class="day {{if $disabled}}disabled{{/if}} text day-{{$smarty.foreach.days.index}} {{if $planning->selectable}}selector{{/if}}"
-           {{if $planning->selectable}} onclick="window['planning-{{$planning->guid}}'].selectDayEvents({{$smarty.foreach.days.index}})" {{/if}}>
+           {{if $planning->selectable}} onclick="window['planning-{{$planning->guid}}'].selectDayEvents({{$smarty.foreach.days.index}})" {{/if}}
+           {{if in_array($_day, $bank_holidays)}}style="background: #fc0"{{/if}}>
            {{$_day|date_format:"%a %d"|nl2br}}
            {{if array_key_exists($_day, $planning->day_labels)}}
              {{assign var=_labels_for_day value=$planning->day_labels.$_day}}

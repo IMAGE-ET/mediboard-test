@@ -301,6 +301,7 @@ $smarty->assign("fin"               , $fin);
 $smarty->assign("prec"              , $prec);
 $smarty->assign("suiv"              , $suiv);
 $smarty->assign("count_si_desistement", $count_si_desistement);
+$smarty->assign("bank_holidays"     , mbBankHolidays($today));
 
 $smarty->display("vw_planning.tpl");
 ?>
