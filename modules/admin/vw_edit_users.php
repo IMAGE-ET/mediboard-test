@@ -16,8 +16,15 @@ $user = $user_id == "0" ? new CUser() : CUser::get($user_id);
 $user->loadRefMediuser();
 $user->loadRefsNotes();
 $user->isLDAPLinked();
+
+// Chargement des conexions
 if ($user->dont_log_connection) {
   $user->countConnections();
+}
+
+// Chargement des utilateurs associés
+if ($user->template) {
+  $user->loadRefProfiledUsers();
 }
 
 // Récuperation des utilisateurs recherchés

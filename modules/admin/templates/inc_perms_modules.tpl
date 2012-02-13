@@ -58,7 +58,7 @@
     <th colspan="2">
       {{mb_label object=$permModule field=permission}} - 
       {{mb_label object=$permModule field=view}} 
-		</th>
+    </th>
   </tr>
   
   
@@ -66,37 +66,52 @@
   <tbody class="hoverable">
     {{foreach from=$_permsModule key=owner item=_perm name=owner}}
     <tr>
-    	{{if $smarty.foreach.owner.first}} 
-      <td class="text" rowspan="{{$_permsModule|@count}}"> 
-        {{if $_perm->mod_id}}
-          {{assign var=module value=$_perm->_ref_db_module}}
-          <strong>{{tr}}module-{{$module->mod_name}}-court{{/tr}}</strong>
-          <br />
-          {{tr}}module-{{$module->mod_name}}-long{{/tr}}
+      {{if $smarty.foreach.owner.first}} 
+      <td class="text" rowspan="{{$_permsModule|@count}}">
+        {{assign var=module value=$_perm->_ref_db_module}}
+        {{if $module->_id}}
+          {{assign var=modname value=$module->mod_name}}
+          <button class="search singleclick" style="float: right;" onclick="ObjectTooltip.createDOM(this, 'module_classes_{{$modname}}');">
+            {{tr}}Classes{{/tr}}
+          </button>
+          <table class="tbl" id="module_classes_{{$modname}}" style="display: none;">
+            <tr>
+              <th>Nom interne</th>
+              <th>Nom visible</th>
+            </tr>
+            {{foreach from=$module_classes.$modname item=_class}}
+            <tr>
+              <td>{{$_class}}</td>
+              <td>{{tr}}{{$_class}}{{/tr}}</td>
+            </tr>
+            {{/foreach}}
+          </table>
+          <strong>{{tr}}module-{{$modname}}-court{{/tr}}</strong>
+          <div class="compact">{{tr}}module-{{$modname}}-long{{/tr}}</div>
         {{else}}
           <strong>{{tr}}CModule.all{{/tr}}</strong>
         {{/if}}
       </td>
-    	{{/if}}
-			
+      {{/if}}
+      
       <td>{{mb_value object=$_perm field=_owner}}</td>
-			
+      
       <td style="{{if count($_permsModule) > 1 && $owner == "profil"}} text-decoration: line-through; {{/if}}">
         <form name="Edit-{{$_perm->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
   
         <input type="hidden" name="dosql" value="do_perms_mod_aed" />
         <input type="hidden" name="del" value="0" />
-				{{mb_key object=$_perm}}
+        {{mb_key object=$_perm}}
         
-				<div style="width: 8em; display: inline-block;">
+        <div style="width: 8em; display: inline-block;">
         {{if $owner == "user"}}
           {{mb_field object=$_perm field=permission}}
         {{else}}
-				  <span style="padding: 0 6px;">
-	          {{mb_value object=$_perm field=permission}}
-   			  </span>
+          <span style="padding: 0 6px;">
+            {{mb_value object=$_perm field=permission}}
+           </span>
         {{/if}}
-				</div>
+        </div>
 
         <div style="width: 8em; display: inline-block;">
         {{if $owner == "user"}}
@@ -104,23 +119,26 @@
         {{else}}
           <span style="padding: 0 6px;">
           {{mb_value object=$_perm field=view}}
-					</span>
+          </span>
         {{/if}}
         </div>
 
         {{if $owner == "user"}}
-				<span style="margin: 0 1em;">
+        <span style="margin: 0 1em;">
          <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la permission sur',objName:'{{$module->mod_name|smarty:nodefaults|JSAttribute}}'})">{{tr}}Delete{{/tr}}</button>
-				</span>
+        </span>
         {{/if}}
  
        </form>
+       
       </td>
       <td class="narrow">{{mb_include module=system template=inc_object_history object=$_perm}}</td>
      </tr>
     {{/foreach}}
     </tbody>
+  {{foreachelse}}
+  <tr><td colspan="3" class="empty">{{tr}}CPermModule.none{{/tr}}</td></tr>
   {{/foreach}}
   
 </table>

@@ -14,7 +14,7 @@ $user = CUser::get(CValue::getOrSession("user_id"));
 
 $user_id = CValue::getOrSession("user_id", $user->_id);
 
-if(!$user_id) {
+if (!$user_id) {
   CAppUI::setMsg("Vous devez sélectionner un utilisateur");
   CAppUI::redirect("m=admin&tab=vw_edit_users");
 }
@@ -44,7 +44,7 @@ $permsModuleCount = 0;
 
 // Droit du profil sur les modules
 foreach ($permModule->loadList($whereProfil, $order) as $_perm) {
-	$permsModuleCount++;
+  $permsModuleCount++;
   $_perm->_owner = "template";
   $_perm->loadRefDBModule();
   $permsModule[$_perm->mod_id]["profil"] = $_perm;
@@ -88,29 +88,31 @@ foreach($permObject->loadList($whereUser, $order) as $_perm) {
 $profileUser = new CUser();
 $profilesList = array();
 if ($user->profile_id) {
-	$profileUser->profile_id = $user->profile_id;
-	$profilesList = $profileUser->loadMatchingList('user_last_name');
-} else if ($user->template) {
-	$profileUser->profile_id = $user->_id;
-	$profilesList = $profileUser->loadMatchingList('user_last_name');
+  $profileUser->profile_id = $user->profile_id;
+  $profilesList = $profileUser->loadMatchingList('user_last_name');
+} 
+if ($user->template) {
+  $profileUser->profile_id = $user->_id;
+  $profilesList = $profileUser->loadMatchingList('user_last_name');
 }
 
+$classes        = CApp::getInstalledClasses();
+$module_classes = CApp::groupClassesByModule($classes);
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("user"                     , $user                     );
-$smarty->assign("modulesInstalled"         , $modulesInstalled         );
-$smarty->assign("isAdminPermSet"           , $isAdminPermSet           );
-$smarty->assign("classes"                  , CApp::getInstalledClasses());
-
-$smarty->assign("permsModule"      , $permsModule      );
-$smarty->assign("permsObject"      , $permsObject      );
-$smarty->assign("permModule"               , $permModule               );
-$smarty->assign("permObject"               , $permObject               );
-
-$smarty->assign("profile"                  , $profile                  );
-$smarty->assign("profilesList"             , $profilesList             );
+$smarty->assign("user"            , $user            );
+$smarty->assign("modulesInstalled", $modulesInstalled);
+$smarty->assign("isAdminPermSet"  , $isAdminPermSet  );
+$smarty->assign("classes"         , $classes         );
+$smarty->assign("module_classes"  , $module_classes  );
+$smarty->assign("permsModule"     , $permsModule     );
+$smarty->assign("permsObject"     , $permsObject     );
+$smarty->assign("permModule"      , $permModule      );
+$smarty->assign("permObject"      , $permObject      );
+$smarty->assign("profile"         , $profile         );
+$smarty->assign("profilesList"    , $profilesList    );
 
 $smarty->display("edit_perms.tpl");
 

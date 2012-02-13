@@ -56,6 +56,9 @@ class CUser extends CMbObject {
   var $_ref_preferences = null;
   var $_ref_mediuser    = null;
   
+  // Object collections
+  var $_ref_profiled_users = null;
+  
   static $types = array(
     // DEFAULT USER (nothing special)
 //    0  => "-- Choisir un type",
@@ -435,6 +438,7 @@ class CUser extends CMbObject {
   
   /**
    * Tell whether user is linked to an LDAP account
+   * 
    * @return boolean 
    */
   function isLDAPLinked() {
@@ -447,6 +451,7 @@ class CUser extends CMbObject {
   
   /**
    * Count connections for user
+   * 
    * @return integer
    */
   function countConnections() {
@@ -455,6 +460,15 @@ class CUser extends CMbObject {
     $log->setObject($this);
     $log->fields = "user_last_login";
     return $this->_count_connections = $log->countMatchingList();
+  }
+  
+  /**
+   * Get the profiled users when this is a template
+   * 
+   * @return array<CUser> Profiled users collection
+   */
+  function loadRefProfiledUsers() {
+  	return $this->_ref_profiled_users = $this->loadBackRefs("profiled_users", "user_last_name, user_first_name");
   }
 }
 

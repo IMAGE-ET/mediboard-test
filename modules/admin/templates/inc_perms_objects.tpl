@@ -36,7 +36,7 @@ Main.add(function(){
   <tr>
     <th class="category" colspan="3">
       Ajouter une permission sur la classe :
-			<span style="text-align: left; font-weight: normal; color:#000;">
+      <span style="text-align: left; font-weight: normal; color:#000;">
       <select name="object_class">
         <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
         {{foreach from=$classes item=_class}}
@@ -45,7 +45,7 @@ Main.add(function(){
         </option>
         {{/foreach}}
       </select>
-			</span>
+      </span>
     </th>
   </tr>
   <tr>
@@ -95,7 +95,7 @@ Main.add(function(){
     <tbody class="hoverable">
     {{foreach from=$_permsObjectByClass item=_permsObject}}
     {{foreach from=$_permsObject key=owner item=_perm name=owner}}
-		{{assign var=object value=$_perm->_ref_db_object}}
+    {{assign var=object value=$_perm->_ref_db_object}}
     <tr>
       {{if $smarty.foreach.owner.first}} 
       <td class="text" rowspan="{{$_permsObject|@count}}"> 
@@ -103,9 +103,9 @@ Main.add(function(){
       </td>
       <td class="text" rowspan="{{$_permsObject|@count}}">
         {{if $object->_id}}
-				  <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
             {{$object}}
-				  </span>
+          </span>
         {{else}}
           <strong>Droits généraux</strong>
         {{/if}}      
@@ -136,14 +136,16 @@ Main.add(function(){
           <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
           <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la permission sur',objName:'{{$object->_view|smarty:nodefaults|JSAttribute}}'})">{{tr}}Delete{{/tr}}</button>
         </span>
-				{{/if}}
+        {{/if}}
 
         </form>
-		  </td>
-		  <td class="narrow">{{mb_include module=system template=inc_object_history object=$_perm}}</td>
-		</tr>
+      </td>
+      <td class="narrow">{{mb_include module=system template=inc_object_history object=$_perm}}</td>
+    </tr>
     {{/foreach}}
     {{/foreach}}
-	  </tbody>
+    </tbody>
+  {{foreachelse}}
+  <tr><td colspan="3" class="empty">{{tr}}CPermObject.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>

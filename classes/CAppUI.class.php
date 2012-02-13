@@ -501,7 +501,8 @@ class CAppUI {
     
     // User template case
     if ($user->template) {
-      return false;
+        self::setMsg("Auth-failed-template", UI_MSG_ERROR);
+    	return false;
     }
 
     // LDAP case

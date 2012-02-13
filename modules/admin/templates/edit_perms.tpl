@@ -18,9 +18,9 @@ Main.add(function () {
   <tr>
     <th class="title">
       {{if $user->template}}
-      Profil utilisateur '{{$user->_view}}' 
+      Profil utilisateur '{{$user}}' 
       {{else}}
-        Utilisateur '{{$user->_view}}' 
+        Utilisateur '{{$user}}' 
         &mdash; basé sur
         {{if $profile->_id}} 
         le profil 
@@ -40,7 +40,11 @@ Main.add(function () {
         <li><a href="#object">Droits sur les objets</a></li>
         {{assign var=usedProfile value=$user->template|ternary:$user:$profile}}
         {{if $usedProfile->_id}}
-        <li><a href="#profile">Utilisateurs basés sur le profil '{{$usedProfile->user_username}}'</a></li>
+        <li>
+          <a href="#profile">Utilisateurs basés sur le profil '{{$usedProfile->user_username}}' <small>(&ndash;)</small></a>
+          <script>Main.add(Control.Tabs.setTabCount.curry('profile', '{{$profilesList|@count}}'));</script>
+        </li>
+
         {{/if}}
       </ul>
       <hr class="control_tabs" />
@@ -53,28 +57,33 @@ Main.add(function () {
       </div>
       
       {{if $usedProfile->_id}}
-      {{assign var=numCols value=1}}
-      {{math equation="100/$numCols" assign=width format="%.1f"}}
       <table class="tbl main" id="profile" style="display: none;">
+        {{foreach from=$profilesList item=_user name="users"}}
         <tr>
-        {{foreach from=$profilesList item=curr_user name="users"}}
-          <td style="width: {{$width}}%; text-align: right;">
-            <a href="?m={{$m}}&amp;tab=vw_edit_users&amp;user_id={{$curr_user->_id}}" style="float: left;">
-              {{$curr_user->_view}}
+          {{if $user->_id == $_user->_id}}
+          <td colspan="2"><strong>{{$_user}}</strong></td>
+          {{else}}
+          <td>
+            <a href="?m={{$m}}&amp;tab=vw_edit_users&amp;user_id={{$_user->_id}}" style="float: left;">
+              {{$_user}}
             </a>
-            <button class="search" onclick="window.location='?m={{$m}}&amp;tab=edit_perms&amp;user_id={{$curr_user->_id}}'">
+          </td>
+          <td class="button narrow" style="white-space: nowrap;">
+            <button class="search" onclick="window.location='?m={{$m}}&amp;tab=edit_perms&amp;user_id={{$_user->_id}}'">
               Droits
             </button>
-            <button class="search" onclick="window.location='?m={{$m}}&amp;tab=edit_prefs&amp;user_id={{$curr_user->_id}}'">
+            <button class="search" onclick="window.location='?m={{$m}}&amp;tab=edit_prefs&amp;user_id={{$_user->_id}}'">
               Préférences
             </button>
-            {{include file="loginas.tpl" loginas_user=$curr_user}}
+            {{include file="loginas.tpl" loginas_user=$_user}}
           </td>
-          {{if ($smarty.foreach.users.index % $numCols) == ($numCols-1) && !$smarty.foreach.users.last}}</tr><tr>{{/if}}
-        {{foreachelse}}
-          <td class="empty">{{tr}}CMediusers.none{{/tr}}</td>
-        {{/foreach}}
+          {{/if}}
         </tr>
+        {{foreachelse}}
+        <tr>
+          <td class="empty">{{tr}}CUser.none{{/tr}}</td>
+        </tr>
+        {{/foreach}}
       </table>
       {{/if}}
     </td>

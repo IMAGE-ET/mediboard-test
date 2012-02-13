@@ -320,5 +320,23 @@ class CApp {
     
     return $classes;
   }
+  
+  /**
+   * Group installed classes by module names
+   * 
+   * @param array $classes Class names
+   * 
+   * @return array Array with module names as key and class names as values
+   */
+  static function groupClassesByModule($classes) {
+    $grouped = array();
+  	foreach ($classes as $class) {
+      $object = new $class;
+      if ($module = $object->_ref_module) {
+      	$grouped[$module->mod_name][] = $class;
+      }
+    }
+    return $grouped;
+  }
 }
 ?>
