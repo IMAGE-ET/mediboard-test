@@ -54,16 +54,15 @@ foreach($sejour->_ref_operations as $_interv) {
     }
   }
   
-  if ($offline) {
-    $params = array(
-      "consultation_id" => $consult->_id,
-      "operation_id" => $_interv->_id,
-      "offline" => 1,
-      "print" => 1
-    );
-    
-    $fiches_anesthesies[$_interv->_id] = CApp::fetch("dPcabinet", "print_fiche", $params);
-  }
+  
+  $params = array(
+    "consultation_id" => $consult->_id,
+    "operation_id" => $_interv->_id,
+    "offline" => 1,
+    "print" => 1
+  );
+  
+  $fiches_anesthesies[$_interv->_id] = CApp::fetch("dPcabinet", "print_fiche", $params);
 }
 
 if ($offline && CModule::getActive("forms")) {

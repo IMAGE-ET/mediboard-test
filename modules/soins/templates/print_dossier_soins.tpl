@@ -18,6 +18,22 @@
 {{mb_default var=in_modal value=0}}
 {{assign var=object value=$sejour->_ref_patient}}
 
+{{if !$offline}}
+  <style>
+    @media print {
+      div.modal_view {
+        display: block !important;
+        height: auto !important;
+        width: 100% !important;
+        font-size: 8pt !important;
+        left: auto !important;
+        top: auto !important;
+        position: static !important;
+      }
+    }
+  </style>
+{{/if}}
+
 <script type="text/javascript">
   getDossierSoin = function(sejour_id) {
     return $("dossier-"+sejour_id) || $(document.documentElement);
@@ -170,15 +186,14 @@
   </tr>
 </table>
 
-{{if $offline}}
-  <div class="print_sejour" style="page-break-after: always;">
-    {{foreach from=$fiches_anesthesies key=operation_id item=_fiche}}
-      <div style="display: none;" id="fiche_anesth_{{$operation_id}}" class="modal_view">
-        {{$_fiche|smarty:nodefaults}}
-      </div>
-    {{/foreach}}
-  </div>
-{{/if}}
+
+<div class="print_sejour" style="page-break-after: always;">
+  {{foreach from=$fiches_anesthesies key=operation_id item=_fiche}}
+    <div style="display: none;" id="fiche_anesth_{{$operation_id}}" class="modal_view">
+      {{$_fiche|smarty:nodefaults}}
+    </div>
+  {{/foreach}}
+</div>
 
 {{if "dPprescription"|module_active}}
 <table class="tbl print_prescription" style="page-break-after: always;">
