@@ -20,7 +20,7 @@ do
   if [ "$first_character" != "#" ] && [ "$first_character" != "" ]
   then
     echo "-- Rsync $line --"
-    rsync -apvzCP $BASH_PATH/.. --delete $line \
+    rsync -apvzP $BASH_PATH/.. --delete $line \
       --exclude includes/config_overload.php \
       --exclude tmp \
       --exclude lib \
