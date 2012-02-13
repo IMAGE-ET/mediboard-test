@@ -112,6 +112,11 @@ if (App.config.log_js_errors) {
     window.onerror = errorHandler;
   }
 }
+else {
+  window.onerror = function(){ 
+    return Preferences.INFOSYSTEM == 0; // true to ignore errors
+  }
+}
 
 /**
  * Main page initialization scripts
