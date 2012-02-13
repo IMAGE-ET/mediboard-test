@@ -56,19 +56,24 @@ editPerf = function(prescription_line_mix_id, date, mode_dossier, sejour_id){
 }
 
 submitPosePerf = function(oFormPerf){
-  $V(oFormPerf.date_pose, 'current');
-  $V(oFormPerf.time_pose, 'current');
-  submitFormAjax(oFormPerf, 'systemMsg', { onComplete: function(){ 
-    PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
-  } } )
+  if(confirm('Etes vous sur de vouloir poser la perfusion ?')){
+	  $V(oFormPerf.date_pose, 'current');
+	  $V(oFormPerf.time_pose, 'current');
+	  submitFormAjax(oFormPerf, 'systemMsg', { onComplete: function(){ 
+	    PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
+	  } } )
+  }
 }
 
+
 submitRetraitPerf = function(oFormPerf){
-  $V(oFormPerf.date_retrait, 'current');
-  $V(oFormPerf.time_retrait, 'current');
-  submitFormAjax(oFormPerf, 'systemMsg', { onComplete: function(){ 
-    PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
-  } } )
+  if(confirm('Etes vous sur de vouloir retirer définitivement la perfusion ?')){
+	  $V(oFormPerf.date_retrait, 'current');
+	  $V(oFormPerf.time_retrait, 'current');
+	  submitFormAjax(oFormPerf, 'systemMsg', { onComplete: function(){ 
+	    PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
+	  } } )
+	}
 }
 
 
