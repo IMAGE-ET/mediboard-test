@@ -257,7 +257,7 @@
                             {{math equation=x*(y+4.6) x=$_sejour->duree_uscpo y=$td_width assign=width_uscpo}}
                             
                             <div class="soins_uscpo{{if $mode_vue_tempo == "compacte"}}_compact{{/if}} opacity-40"
-                              style="left: {{$offset_uscpo}}px; width: {{$width_uscpo}}px;">{{$offset_op}} {{$width_op}}</div>
+                              style="left: {{$offset_uscpo}}px; width: {{$width_uscpo}}px;"></div>
                           {{/if}}
                         </div>
                        
