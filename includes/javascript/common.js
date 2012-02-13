@@ -12,18 +12,12 @@ Prototype.Browser.IPad = /iPad/i.test(navigator.userAgent);
 
 // Javascript error logging
 function errorHandler(errorMsg, url, lineNumber, exception) {
+  var ignored = ["Script error."];
+  
   try {
-    exception = exception || new Error(errorMsg, url, lineNumber);
-    
-    if (Prototype.Browser.IE) {
-      try {
-        console.error(exception);
-      } catch (e) {}
-    }
-    
-    var ignored = ["Script error."];
-    
     if (ignored.indexOf(errorMsg) == -1) {
+      exception = exception || new Error(errorMsg, url, lineNumber);
+      
       new Ajax.Request("index.php?m=system&a=js_error_handler&suppressHeaders=1&dialog=1", {
         method: 'post',
         parameters: 'm=system&a=js_error_handler&' +
@@ -38,7 +32,7 @@ function errorHandler(errorMsg, url, lineNumber, exception) {
     }
   } catch (e) {}
   
-  return Prototype.Browser.IE || Prototype.Browser.WebKit; // Webkit and IE handle this differently
+  return Preferences.INFOSYSTEM == 0; // true to ignore errors
 };
 
 /*
@@ -116,11 +110,6 @@ if (App.config.log_js_errors) {
   }
   else {
     window.onerror = errorHandler;
-  }
-  
-  // Exclude HTTrack errors
-  if (/httrack/i.test(navigator.userAgent)) {
-    errorHandler = function(){};
   }
 }
 
