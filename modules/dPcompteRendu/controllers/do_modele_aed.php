@@ -149,20 +149,28 @@ if (isset($_POST["_source"])) {
         htmlentities("[Courrier - nom destinataire]"),
         htmlentities("[Courrier - adresse destinataire]"),
         htmlentities("[Courrier - cp ville destinataire]"),
-        htmlentities("[Courrier - copie à]"),
-        htmlentities("[Courrier - copie à (complet)]")
+        htmlentities("[Courrier - copie à - simple]"),
+        htmlentities("[Courrier - copie à - simple (multiligne)]"),
+        htmlentities("[Courrier - copie à - complet]"),
+        htmlentities("[Courrier - copie à - complet (multiligne)]")
       );
       
       // Champ copie à : on reconstruit en omettant le destinataire.
       $copyTo = "";
+      $copyToMulti = "";
       $copyToComplet = "";
+      $copyToCompletMulti = "";
       
       foreach($destinataires as $_dest) {
         if ($curr_dest[0] == $_dest[0]) continue;  
         $copyTo .= $allDest[$_dest[1]][$_dest[2]]->nom."; ";
+        $copyToMulti .= $allDest[$_dest[1]][$_dest[2]]->nom."<br />";
         $copyToComplet .= $allDest[$_dest[1]][$_dest[2]]->nom. " - " .
                           nl2br($allDest[$_dest[1]][$_dest[2]]->adresse). " ".
                           $allDest[$_dest[1]][$_dest[2]]->cpville. "; ";
+        $copyToCompletMulti .= $allDest[$_dest[1]][$_dest[2]]->nom. "<br />" .
+                               nl2br($allDest[$_dest[1]][$_dest[2]]->adresse). "<br />".
+                               $allDest[$_dest[1]][$_dest[2]]->cpville. "<br />";
       }
       
       $values = array(
@@ -170,7 +178,9 @@ if (isset($_POST["_source"])) {
         nl2br($allDest[$curr_dest[1]][$curr_dest[2]]->adresse),
         $allDest[$curr_dest[1]][$curr_dest[2]]->cpville,
         $copyTo,
-        $copyToComplet
+        $copyToMulti,
+        $copyToComplet,
+        $copyToCompletMulti
       );
       
       if (!CAppUI::conf("dPcompteRendu CCompteRendu multiple_doc_correspondants")) {

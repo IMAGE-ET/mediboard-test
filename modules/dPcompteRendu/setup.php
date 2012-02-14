@@ -744,7 +744,14 @@ class CSetupdPcompteRendu extends CSetup {
       DROP `object_guid`";
     $this->addQuery($query);
     
-    $this->mod_version = "0.72";
+    $this->makeRevision("0.72");
+    $query = self::replaceTemplateQuery("[Courrier - copie à", "[Courrier - copie à - simple", true);
+    $this->addQuery($query);
+    
+    $query = self::replaceTemplateQuery("[Courrier - copie à (complet)", "[Courrier - copie à - complet", true);
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.73";
   }
 }
 ?>
