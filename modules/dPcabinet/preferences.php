@@ -24,6 +24,7 @@ CPreferences::$modules["dPcabinet"] = array (
   "pratOnlyForConsult",
   "displayDocsConsult",
   "displayPremedConsult",
-  "displayResultsConsult"
+  "displayResultsConsult",
+  "choosePatientAfterDate"
 );
 ?>

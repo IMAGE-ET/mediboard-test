@@ -26,3 +26,4 @@
 {{mb_include template=inc_pref spec=bool var=displayDocsConsult}}
 {{mb_include template=inc_pref spec=bool var=displayPremedConsult}}
 {{mb_include template=inc_pref spec=bool var=displayResultsConsult}}
+{{mb_include template=inc_pref spec=bool var=choosePatientAfterDate}}

@@ -1410,7 +1410,10 @@ class CSetupdPcabinet extends CSetup {
       CHANGE `type` `type` ENUM ('classique','entree','chimio') DEFAULT 'classique';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.43";
+    $this->makeRevision("1.43");
+    $this->addPrefQuery("choosePatientAfterDate", "0");
+    
+    $this->mod_version = "1.44";
     
   }
 }
