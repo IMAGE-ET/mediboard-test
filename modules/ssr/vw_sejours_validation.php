@@ -42,11 +42,11 @@ $sejour->praticien_id    = $prat_id;
 // Liste des séjours en attente de validation
 $g = CGroups::loadCurrent()->_id;
 $where = array();
-$where["groupe_id"] = "= '$g'";
-$where["recuse"]    = "= '-1'";
-$where["annule"]    = "= '0'";
-$where["type"]      = "= 'ssr'";
-$where["entree"]    = ">= '".mbDate()."'";
+$where["group_id"] = "= '$g'";
+$where["recuse"]   = "= '-1'";
+$where["annule"]   = "= '0'";
+$where["type"]     = "= 'ssr'";
+$where["entree"]   = ">= '".mbDate()."'";
 $nb_sejours_attente = $sejour->countList($where);
 
 // Création du template
