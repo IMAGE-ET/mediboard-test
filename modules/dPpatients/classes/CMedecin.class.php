@@ -57,8 +57,8 @@ class CMedecin extends CMbObject {
     $specs = parent::getProps();
     $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
     
-    $specs["nom"]             = "str notNull confidential seekable|begin";
-    $specs["prenom"]          = "str seekable|begin";
+    $specs["nom"]             = "str notNull confidential seekable";
+    $specs["prenom"]          = "str seekable";
     $specs["jeunefille"]      = "str confidential";
     $specs["adresse"]         = "text".(CAppUI::conf("dPpatients CMedecin medecin_strict") == 1 ? ' notNull' : '')." confidential";
     $specs["ville"]           = "str".(CAppUI::conf("dPpatients CMedecin medecin_strict") == 1 ? ' notNull' : '')." confidential seekable";

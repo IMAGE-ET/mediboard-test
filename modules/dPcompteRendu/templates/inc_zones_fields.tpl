@@ -2,46 +2,14 @@
 {{assign var=check_to_empty_field value=$conf.dPcompteRendu.CCompteRendu.check_to_empty_field}}
 
 <table>
-  {{assign var=correspondants value=$compte_rendu->_refs_correspondants_courrier_by_tag_guid}}
-  {{if $destinataires|@count || $correspondants|@count}}
+  {{if $isCourrier}}
     <tr>
       <td class="destinataireCR text" id="destinataire" colspan="2">
-        <button type="button" class="mail" onclick="modal('correspondants_courrier')">Correspondants</button>
-        <div class="modal" id="correspondants_courrier" style="display: none; width: 50%">
-          <table class="tbl">
-            <tr>
-              <th class="title" colspan="2">
-                Correspondants
-              </th>
-            </tr>
-            {{foreach from=$destinataires key=_class item=_destinataires}}
-              <tr>
-                <th class="category" colspan="2">
-                  {{tr}}{{$_class}}{{/tr}}
-                </th>
-              </tr>
-              {{foreach from=$_destinataires key=_index item=_destinataire}}
-                {{assign var=object_guid value=$_destinataire->_guid_object}}
-                {{assign var=tag value=$_destinataire->tag}}
-                <tr>
-                  <td class="narrow">
-                    <input type="checkbox" name="_dest_{{$_class}}_{{$_index}}" id="editFrm__dest_{{$_class}}_{{$_index}}"
-                      {{if @isset($correspondants.$tag.$object_guid|smarty:nodefaults)}}checked="checked"{{/if}}/>
-                  </td>
-                  <td>
-                    <label for="editFrm__dest_{{$_class}}_{{$_index}}">
-                      {{$_destinataire->nom}} ({{tr}}CDestinataire.tag.{{$tag}}{{/tr}})
-                    </label>
-                  </td>
-                </tr>
-              {{/foreach}}
-            {{/foreach}}
-          </table>
-          <p style="text-align: center;">
-            <button type="button" class="tick" onclick="saveAndMerge();">Fusionner</button>
-            <button type="button" class="cancel" onclick="Control.Modal.close();">Fermer</button>
-          </p>
-        </div>
+        <button type="button" class="mail"
+          onclick="openCorrespondants('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}', 1);">
+          Correspondants
+        </button>
+        <div class="modal" id="correspondants_courrier" style="display: none; width: 50%"></div>
       </td>
     </tr>
   {{/if}}

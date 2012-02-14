@@ -114,6 +114,12 @@ if (isset($_POST["_source"])) {
     $object->load($_POST["object_id"]);
     CDestinataire::makeAllFor($object);
     $allDest = CDestinataire::$destByClass;
+    
+    // Récupération des correspondants ajoutés par l'autocomplete
+    $cr_dest = new CCompteRendu;
+    $cr_dest->load($_POST["compte_rendu_id"]);
+    $cr_dest->mergeCorrespondantsCourrier(&$allDest);
+    
     $bodyTag = '<div id="body">';
 
     // On sort l'en-tête et le pied de page
@@ -137,7 +143,7 @@ if (isset($_POST["_source"])) {
     $allSources = array();
     $modele_base = clone $do->_obj;
     $source_base = $body;
-   
+    
     foreach($destinataires as &$curr_dest) {
       $fields = array(
         htmlentities("[Courrier - nom destinataire]"),
@@ -261,6 +267,22 @@ if (!$do_merge && !intval(CValue::post("del")) && strpos($do->_obj->_source, "[C
       $corres->tag = $_dest->tag;
       $corres->object_id = $object_id;
       $corres->object_class = $object_class;
+      
+      if ($msg = $corres->store()) {
+        CAppUI::setMsg($msg, UI_MSG_ERROR);
+      }
+      unset($_POST["_dest_{$class}_$i"]);
+    }
+  }
+  
+  // Correspondants courrier ajoutés par autocomplete
+  foreach ($_POST as $key => $value) {
+    if (preg_match("/_dest_([a-zA-Z]*)_([0-9]+)/", $key, $matches)) {
+      $corres = new CCorrespondantCourrier;
+      $corres->compte_rendu_id = $do->_obj->_id;
+      $corres->tag = "correspondant";
+      $corres->object_id = $matches[2];
+      $corres->object_class = $matches[1];
       
       if ($msg = $corres->store()) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);

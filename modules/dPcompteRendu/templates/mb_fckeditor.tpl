@@ -47,6 +47,8 @@ CKEDITOR.editorConfig = function(config) {
   config.disableNativeSpellChecker = false;
   config.resize_maxWidth = "100%";
   config.resize_minWidth = "100%";
+  config.font_defaultLabel = '{{$conf.dPcompteRendu.CCompteRendu.default_font}}';
+  config.fontSize_defaultLabel = 'small';
   // Suppression du redimensionnement manuel
   config.resize_enabled = false;
   // Suppression du bouton de masquage des barres d'outils

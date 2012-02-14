@@ -48,8 +48,8 @@
     <th class="category" colspan="2">{{tr}}config-dPcompteRendu-CCompteRendu-other_params{{/tr}}</th>
   </tr>
   <tr>
-    {{assign var="var" value="show_context_document"}}
-    {{mb_include module=system template=inc_config_bool}}
+    {{assign var="var" value="default_font"}}
+    {{mb_include module=system template=inc_config_enum values="Arial|Comic Sans MS|Courier New|Georgia|Lucida Sans Unicode|Tahoma|Times New Roman|Trebuchet MS|Verdana"}}
   </tr>
   <tr>
     {{assign var="var" value="header_footer_fly"}}

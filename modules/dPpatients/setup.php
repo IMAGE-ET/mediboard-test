@@ -1721,7 +1721,12 @@ class CSetupdPpatients extends CSetup {
               ADD `mob` BIGINT (10) UNSIGNED ZEROFILL";
     $this->addQuery($query);
     
-    $this->mod_version = "1.41";
+    $this->makeRevision("1.41");
+    $query = "ALTER TABLE `medecin`
+      CHANGE `cp` `cp` VARCHAR(8) DEFAULT ''";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.42";
     
     $query = "SHOW TABLES LIKE 'categorie_socioprofessionnelle'";
     $this->addDatasource("INSEE", $query);

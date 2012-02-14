@@ -348,6 +348,36 @@ class CCompteRendu extends CDocumentItem {
     }
   }
   
+  function mergeCorrespondantsCourrier($destinataires) {
+    $this->loadRefsCorrespondantsCourrierByTagGuid();
+    
+    if (!isset($this->_refs_correspondants_courrier_by_tag_guid["correspondant"])) {
+      return;
+    }
+    
+    $correspondants = $this->_refs_correspondants_courrier_by_tag_guid["correspondant"];
+    
+    if (!isset($destinataires["CMedecin"])) {
+      $destinataires["CMedecin"] = array();
+    }
+    
+    $keys_corres = array_keys($destinataires["CMedecin"]);
+    
+    foreach ($correspondants as $key => $_correspondant) {
+      if (!array_key_exists($key, $keys_corres)) {
+        $_medecin = $_correspondant->loadTargetObject();
+        $dest = new CDestinataire("correspondant");
+        $dest->nom = $_medecin->_view;
+        $dest->adresse = $_medecin->adresse;
+        $dest->cpville = "$_medecin->cp $_medecin->ville";
+        $dest->email   = $_medecin->email;
+        $dest->_guid_object = $_medecin->_guid;
+        
+        $destinataires["CMedecin"][$_medecin->_id] = $dest;
+      }
+    }
+  }
+  
   /**
    * Charge tous les modèles pour une classe d'objets associés à un utilisateur
    * @param $prat_id ref|CMediuser L'utilisateur concerné
@@ -610,6 +640,8 @@ class CCompteRendu extends CDocumentItem {
   }
 
   function loadHTMLcontent($htmlcontent, $mode = "modele", $type = "body", $header = "", $sizeheader = 0, $footer = "", $sizefooter = 0, $margins = array()) {
+    $default_font = CAppUI::conf("dPcompteRendu CCompteRendu default_font");
+    
     $style = file_get_contents("style/mediboard/htmlarea.css") .
       "@page {
          margin-top:    {$margins[0]}cm;
@@ -618,6 +650,7 @@ class CCompteRendu extends CDocumentItem {
          margin-left:   {$margins[3]}cm;
        }
        body {
+         font-family: $default_font;
          margin:  0;
          padding: 0;
        }";

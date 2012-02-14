@@ -9,11 +9,20 @@ window.nb_printers = {{$nb_printers|@json}};
 window.modal_mode_play = null;
 window.documentGraphs = {{$templateManager->graphs|@json}};
 window.choice_factory = {{$choice_factory|@json}};
-window.name = "{{$compte_rendu->_ref_object}} - {{$compte_rendu->nom}}";
 
-{{if $conf.dPcompteRendu.CCompteRendu.show_context_document}}
-  document.title = "{{$compte_rendu->_ref_object}} - {{$compte_rendu->nom}}";
-{{/if}}
+document.title = "{{$compte_rendu->_ref_object}} - {{$compte_rendu->nom}}";
+
+function openCorrespondants(compte_rendu_id, object_guid, show_modal) {
+  var url = new Url("dPcompteRendu", "ajax_edit_correspondants_courrier");
+  url.addParam("compte_rendu_id", compte_rendu_id);
+  url.addParam("object_guid", object_guid);
+  url.requestUpdate("correspondants_courrier", {onComplete: function() {
+    if (show_modal) {
+      modal($("correspondants_courrier"));
+    }
+  } });
+  
+}
 
 function playField(element, class_name, editor_element, name) {
   var modal = $("play_modal");
@@ -90,6 +99,11 @@ function submitCompteRendu(callback){
 function refreshZones(id, obj) {
   var form = getForm("editFrm");
   $V(form.date_print, obj.date_print);
+  
+  if (id) {
+    window.name = "cr_"+id;
+  }
+  
   var afterSetData = function() {
     // Dans le cas de la génération d'un document par correspondant,
     // mise à jour du nom du document dans la popup
@@ -236,6 +250,12 @@ Main.add(function(){
     Thumb.object_id = '{{$compte_rendu->object_id}}';
   }
   
+  // Les correspondants doivent être présent pour le store du compte-rendu
+  // Chargement en arrière-plan de la modale
+  {{if $isCourrier}}
+    openCorrespondants('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}', 0);
+  {{/if}}
+  
   window.onbeforeunload = function(e) {
     var e = e || window.event;
     
@@ -320,6 +340,17 @@ Main.add(function(){
     </tr>
   </table>
 </div>
+
+<!-- Formulaire d'ajout de correspondant courrier par autocomplete -->
+<form name="addCorrespondant" method="post">
+  <input type="hidden" name="m" value="dPcompteRendu" />
+  <input type="hidden" name="dosql" value="do_correspondant_courrier_aed" />
+  <input type="hidden" name="correspondant_courrier_id" />
+  <input type="hidden" name="compte_rendu_id" value="" />
+  <input type="hidden" name="object_class" value="CMedecin" />
+  <input type="hidden" name="tag" value="correspondant" />
+  <input type="hidden" name="object_id" />
+</form>
 
 <!-- Formulaire pour l'impression server side -->
 <form name="print-server" method="post" action="?m=dPcompteRendu&amp;ajax_print_server">
@@ -414,7 +445,7 @@ Main.add(function(){
   <tr>
     <td colspan="2">
       <div id="reloadzones">
-        {{mb_include template=inc_zones_fields}}
+        {{mb_include module=dPcompteRendu template=inc_zones_fields}}
       </div>
     </td>
   </tr>

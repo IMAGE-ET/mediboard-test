@@ -112,7 +112,6 @@ else {
 }
 
 $compte_rendu->loadRefsFwd();
-$compte_rendu->loadRefsCorrespondantsCourrierByTagGuid();
 
 $compte_rendu->_ref_object->loadRefsFwd();
 $object =& $compte_rendu->_ref_object;  
@@ -174,13 +173,8 @@ $userLists = new CListeChoix;
 $userLists = $userLists->loadList($where, $order);
 $lists = $templateManager->getUsedLists($userLists);
 
-// Récupération des éléments de destinataires de courrier
+// Afficher le bouton correpondant si on détecte un élément de publipostage
 $isCourrier = $templateManager->isCourrier();
-$destinataires = array();
-if($isCourrier) {
-  CDestinataire::makeAllFor($object);
-  $destinataires = CDestinataire::$destByClass;
-}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -189,7 +183,7 @@ $smarty->assign("listCategory"  , $listCategory);
 $smarty->assign("compte_rendu"  , $compte_rendu);
 $smarty->assign("modele_id"     , $modele_id);
 $smarty->assign("lists"         , $lists);
-$smarty->assign("destinataires" , $destinataires);
+$smarty->assign("isCourrier"    , $isCourrier);
 $smarty->assign("user_id"       , $user->_id);
 $smarty->assign("user_view"     , $user->_view);
 $smarty->assign("object_id"     , $object_id);

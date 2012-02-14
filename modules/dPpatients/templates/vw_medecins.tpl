@@ -148,7 +148,7 @@ function onSubmitCorrespondant(form) {
           
           <td class="text">
             <a {{if !$dialog}} href="{{$href}}"{{/if}}>
-              {{$_medecin}}
+              {{$_medecin->nom}} {{$_medecin->prenom|strtolower|ucfirst}}
             </a>
           </td>
           <td class="text">{{$_medecin->adresse}}</td>

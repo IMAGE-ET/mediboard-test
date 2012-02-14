@@ -26,7 +26,7 @@ Document = {
       url.addParam("switch_mode", switch_mode);
     }
     
-    url.popup(Document.popupSize.width, Document.popupSize.height, "Document");
+    url.popup(Document.popupSize.width, Document.popupSize.height);
   },
 
   createPack: function(pack_id, object_id, target_id, target_class, switch_mode) {
@@ -48,7 +48,7 @@ Document = {
       url.addParam("switch_mode", switch_mode);
     }
     
-    url.popup(Document.popupSize.width, Document.popupSize.height, "Document");
+    url.popup(Document.popupSize.width, Document.popupSize.height);
   },
   
   fastMode: function(object_class, modele_id, object_id, target_id, target_class, unique_id) {
@@ -73,7 +73,7 @@ Document = {
   edit: function(compte_rendu_id){
     var url = new Url("dPcompteRendu", "edit_compte_rendu");
     url.addParam("compte_rendu_id", compte_rendu_id);
-    url.popup(Document.popupSize.width, Document.popupSize.height, "Document");
+    url.popup(Document.popupSize.width, Document.popupSize.height, "cr_"+compte_rendu_id);
   },
   
   del: function(form, doc_view) {
