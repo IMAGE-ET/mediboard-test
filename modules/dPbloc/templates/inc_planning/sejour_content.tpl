@@ -11,6 +11,9 @@
 <!-- Sejour -->
       <td class="button">
         {{$sejour->type|truncate:1:""|capitalize}}
+        {{if $sejour->type == "comp"}}
+          - {{$sejour->_duree_prevue}}j
+        {{/if}}
       </td>
 		  <td class="text">
 		    <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}');">
