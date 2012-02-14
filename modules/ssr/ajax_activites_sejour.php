@@ -29,30 +29,33 @@ for ($i = 0; $i < 7; $i++) {
 }
 
 // Prescription
-$sejour->loadRefPrescriptionSejour();
-$prescription =& $sejour->_ref_prescription_sejour;
+$prescription = $sejour->loadRefPrescriptionSejour();
 $prescription->loadRefsLinesElementByCat();
 
 // Chargements des codes cdarrs des elements de prescription
 $categories = array();
-foreach ($prescription->_ref_prescription_lines_element_by_cat as $_lines_by_chap){
-  foreach ($_lines_by_chap as $_lines_by_cat){
-    foreach ($_lines_by_cat['element'] as $_line){
-    	$cat = $_line->_ref_element_prescription->_ref_category_prescription;
-    	if(!array_key_exists($cat->_id, $categories)){
-    	  $categories[$cat->_id] = $cat;
+foreach ($prescription->_ref_prescription_lines_element_by_cat as $chapter => $_lines_by_chap) {
+  if ($chapter != "kine") {
+  	unset($prescription->_ref_prescription_lines_element_by_cat[$chapter]);
+  }
+  
+  foreach ($_lines_by_chap as $_lines_by_cat) {
+    foreach ($_lines_by_cat['element'] as $_line) {
+      $cat = $_line->_ref_element_prescription->_ref_category_prescription;
+      if(!array_key_exists($cat->_id, $categories)){
+        $categories[$cat->_id] = $cat;
       }
-    	$_line->_ref_element_prescription->loadBackRefs("cdarrs");
-			$_line->_ref_element_prescription->_ref_cdarrs_by_type = array();
+      $_line->_ref_element_prescription->loadBackRefs("cdarrs");
+      $_line->_ref_element_prescription->_ref_cdarrs_by_type = array();
       
-			$cdarrs_by_type =& $_line->_ref_element_prescription->_ref_cdarrs_by_type;
+      $cdarrs_by_type =& $_line->_ref_element_prescription->_ref_cdarrs_by_type;
       foreach($_line->_ref_element_prescription->_back["cdarrs"] as $_acte_cdarr){
-			  $_acte_cdarr->loadRefActiviteCdarr();
-			  $_activite_cdarr =& $_acte_cdarr->_ref_activite_cdarr;
-			  $cdarrs_by_type[$_activite_cdarr->type][] = $_acte_cdarr;
-			}
+        $_acte_cdarr->loadRefActiviteCdarr();
+        $_activite_cdarr =& $_acte_cdarr->_ref_activite_cdarr;
+        $cdarrs_by_type[$_activite_cdarr->type][] = $_acte_cdarr;
+      }
     }
-	}
+  }
 }
 
 // Creation d'un nouveau tableau pour stocker les lignes par elements de prescription
@@ -60,9 +63,9 @@ $lines_by_element = array();
 foreach ($prescription->_ref_prescription_lines_element_by_cat as $chap => $_lines_by_chap){
   foreach ($_lines_by_chap as $cat => $_lines_by_cat){
     foreach ($_lines_by_cat['element'] as $line_id => $_line){
-    	$lines_by_element[$chap][$cat][$_line->element_prescription_id][$_line->_id] = $_line;
-		}
-	}
+      $lines_by_element[$chap][$cat][$_line->element_prescription_id][$_line->_id] = $_line;
+    }
+  }
 }
 
 
@@ -76,9 +79,9 @@ $bilan->_ref_technicien->loadRefKine();
 $technicien = new CTechnicien;
 $plateau = new CPlateauTechnique;
 if ($technicien->_id = $bilan->technicien_id) {
-	$technicien->loadMatchingObject();
-	$plateau = $technicien->loadFwdRef("plateau_id");
-	$plateau->loadRefsEquipements();
+  $technicien->loadMatchingObject();
+  $plateau = $technicien->loadFwdRef("plateau_id");
+  $plateau->loadRefsEquipements();
   $plateau->loadRefsTechniciens();
 }
 
@@ -86,8 +89,8 @@ if ($technicien->_id = $bilan->technicien_id) {
 $plateau_tech = new CPlateauTechnique();
 $plateau_tech->group_id = CGroups::loadCurrent()->_id;
 $plateaux = $plateau_tech->loadMatchingList();
-foreach($plateaux as $_plateau) {
-	$_plateau->loadRefsEquipements();
+foreach ($plateaux as $_plateau) {
+  $_plateau->loadRefsEquipements();
 }
 
 $executants = array();
@@ -96,26 +99,23 @@ $executants = array();
 $executants = array();
 $reeducateurs = array();
 $selected_cat = "";
-foreach($categories as $_category){
-	// Chargement des associations pour chaque catégorie
-  $function_categorie = new CFunctionCategoryPrescription();
-	$function_categorie->category_prescription_id = $_category->_id;
-	$associations[$_category->_id] = $function_categorie->loadMatchingList();
-  
-	// Parcours des associations trouvées et chargement des utilisateurs
-	foreach($associations[$_category->_id] as $_assoc){
-		$_assoc->loadRefFunction();
-		$function =& $_assoc->_ref_function;
-		$function->loadRefsUsers();
-		foreach($function->_ref_users as $_user){
-			$_user->_ref_function = $function;
-	 	  if ($_user->_id == $current_user_id && !$selected_cat){
+foreach ($categories as $_category) {
+  // Chargement des associations pour chaque catégorie
+  $associations[$_category->_id] = $_category->loadBackRefs("functions_category");
+    
+  // Parcours des associations trouvées et chargement des utilisateurs
+  foreach ($associations[$_category->_id] as $_association) {
+    $function = $_association->loadRefFunction();
+    $function->loadRefsUsers();
+    foreach($function->_ref_users as $_user){
+      $_user->_ref_function = $function;
+       if ($_user->_id == $current_user_id && !$selected_cat){
         $selected_cat = $_category;
-		  }
-		  $executants[$_category->_id][$_user->_id] = $_user;
-			$reeducateurs[$_user->_id] = $_user;
-		}
-	}
+      }
+      $executants[$_category->_id][$_user->_id] = $_user;
+      $reeducateurs[$_user->_id] = $_user;
+    }
+  }
 }
 
 $evenement = new CEvenementSSR();
