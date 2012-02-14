@@ -854,8 +854,9 @@ textarea#htmlarea {
   display: inline-block;
 }
 
-.numericField .arrows {
-  position: relative;
+.numericField td {
+  padding: 0!important;
+  border: none!important;
 }
 
 .numericField .arrows div {
@@ -864,8 +865,8 @@ textarea#htmlarea {
   background-repeat: no-repeat;
   background-position: center center;
   cursor: pointer;
-  position: absolute;
-  height: 8px;
+  margin: -1px;
+  height: 9px;
   width: 1.3em;
   right: -2px;
   border: 1px solid #999;
@@ -875,22 +876,27 @@ textarea#htmlarea {
   -moz-border-radius: 3px 3px 0 0;
   -webkit-border-radius: 3px 3px 0 0;
   border-radius: 3px 3px 0 0;
-  top: -1px;
-  height: 9px;
   background-image: url(../../images/buttons/up-small.gif);
   border-bottom: none;
+  margin-bottom: 0;
 }
 
 .numericField .arrows div.down {
   -moz-border-radius: 0 0 3px 3px;
   -webkit-border-radius: 0 0 3px 3px;
   border-radius: 0 0 3px 3px;
-  bottom: -1px;
   background-image: url(../../images/buttons/down-small.gif);
 }
 
 .numericField .arrows div:hover {
   background-color: #FFF;
+}
+
+.numericField .fraction {
+  color: #666;
+  padding: 0 3px !important;
+  line-height: 18px;
+  background: none;
 }
 
 .numericField input {

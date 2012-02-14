@@ -610,6 +610,7 @@ Element.addMethods('input', {
       showPlus: false,
       fraction: false,
       deferEvent: false,
+      showFraction: true,
       deferDelay: Prototype.Browser.IE ? 300 : 200
     }, options);
     
@@ -696,6 +697,22 @@ Element.addMethods('input', {
         }
         
         element.select();
+      },
+      
+      updateFraction: function(value) {
+        if (Math.abs(value) >= 1 || value == 0) {
+          value = "";
+        }
+        else {
+          value = String.dec2frac(value, " / ");
+        }
+        
+        element.up("table").down(".fraction").update(value);
+      },
+      
+      updateFractionEvent: function(event){
+        var element = Event.element(event);
+        element.spinner.updateFraction(element.value, " / ");
       }
     };
     
@@ -703,10 +720,16 @@ Element.addMethods('input', {
       element.value = Number(element.value).toFixed(options.decimals);
     }
     
-    var table = '<table class="control numericField"><tr><td style="padding:0;border:none;"></td><td class="arrows" style="padding:0;border:none;"><div class="up"></div><div class="down"></div></td></tr></table>';
+    var table = '<table class="control numericField"><tr><td></td><td class="arrows"><div class="up"></div><div class="down"></div></td><td class="fraction"></td></tr></table>';
     element.insert({before: table});
     table = element.previous();
     table.down('td').update(element);
+    
+    if (options.showFraction) {
+      element.spinner.updateFraction(element.value, " / ");
+      element.observe("ui:change", element.spinner.updateFractionEvent);
+      element.observe("change", element.spinner.updateFractionEvent);
+    }
 
     var arrows = table.select('.arrows div');
     arrows[0].observe('click', element.spinner.inc);

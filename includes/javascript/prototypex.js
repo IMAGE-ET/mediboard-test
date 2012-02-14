@@ -819,6 +819,27 @@ Object.extend(String, {
     "u": "שתûü",
     "y": "ÿ",
     "n": "ס"
+  },
+  dec2frac: function (dec, sep) {
+    sep = sep || "/";
+    
+    var df = 1,
+        top = 1,
+        bot = 1;
+
+    while (df != dec) {
+      if (df < dec) {
+        top++;
+      }
+      else {
+        bot++;
+        top = parseInt(dec * bot);
+      }
+      
+      df = top / bot;
+    }
+    
+    return top + sep + bot;
   }
 });
 
