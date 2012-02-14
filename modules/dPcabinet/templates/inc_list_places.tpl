@@ -9,8 +9,8 @@ PlageConsult.setClose = function(time) {
     "{{$plage->chir_id}}",
     "{{$plage->_ref_chir->_view|smarty:nodefaults|escape:"javascript"}}");
   window.close();
-  
-  if (Preferences.choosePatientAfterDate == 1 && !$V(window.parent.getForm(window.parent.PlageConsultSelector.sForm).patient_id)) {
+  var form = window.parent.getForm(window.parent.PlageConsultSelector.sForm);
+  if (Preferences.choosePatientAfterDate == 1 && !$V(form.patient_id) && !form._pause.checked) {
     window.parent.PatSelector.init();
   }
 };
