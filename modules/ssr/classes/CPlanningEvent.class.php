@@ -16,8 +16,7 @@ class CPlanningEvent  {
   
   var $type   = null;
   var $plage  = array();
-  var $menu   = false;
-  var $elements_menu =  array();
+  var $menu   = array();
   
   var $start  = null;
   var $end    = null;
@@ -64,5 +63,9 @@ class CPlanningEvent  {
     return ($event->start <  $this->end   && $event->end >  $this->end  ) || 
            ($event->start <  $this->start && $event->end >  $this->start) || 
            ($event->start >= $this->start && $event->end <= $this->end  );
+  }
+  function addMenuItem($type, $title){
+     $taille_menu = sizeof($this->menu);
+     $this->menu[$taille_menu] = array("class" => $type, "title" => $title);
   }
 }

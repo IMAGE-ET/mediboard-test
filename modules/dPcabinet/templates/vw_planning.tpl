@@ -4,12 +4,8 @@
 function showConsultations(oTd, plageconsult_id){
   oTd = $(oTd);
   
-  elements=oTd.up("table").select('div.event-container');;
-  elements.each(function(e) {
-      e.down("div").style.border="1px solid #999";
-  });
-  
-  oTd.up("div").up("div").style.border="2px solid #444";
+  oTd.up("table").select(".event").invoke("removeClassName", "selected");
+  oTd.up(".event").addClassName("selected");
   
   var url = new Url("dPcabinet", "inc_consultation_plage");
   url.addParam("plageconsult_id", plageconsult_id);
@@ -138,6 +134,24 @@ Main.add(function () {
     <td>
       {{mb_include module=ssr template=inc_vw_week}}
 
+      <script>
+        Main.add(function() {
+          window["planning-{{$planning->guid}}"].onMenuClick = function(event, plage, elem){
+            if(event == "list"){
+              showConsultations(elem,plage);
+            }
+            if(event == "edit"){
+              PlageConsultation.edit(plage);
+            }
+            if(event == "clock"){
+              var url=new Url("dPcabinet", "edit_planning");
+              url.addParam("consultation_id", 0);
+              url.addParam("plageconsult_id", plage);
+              url.redirectOpener();
+            }
+          }
+        });
+      </script>
       <div class="small-info">
         <strong>L'affichage du semainier a évolué</strong>.
         <div>Désormais, vous pouvez utiliser les boutons qui apparaissent au survol de la plage de consultation pour :</div>

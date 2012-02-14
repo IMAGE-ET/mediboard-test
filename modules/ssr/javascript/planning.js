@@ -143,25 +143,23 @@ WeekPlanning = Class.create({
     this.events = events;
     this.hour_divider = hour_divider;
     this.adapt_range = adapt_range;
-		this.selectable = selectable;
+    this.selectable = selectable;
 
     // Event observation
     if (this.selectable) {
-			this.observeEvent('click', function(event){
-				event.toggleClassName('selected');
-				this.updateNbSelectEvents();
-			}.bind(this));
-	  }
-		
+      this.observeEvent('click', function(event){
+        event.toggleClassName('selected');
+        this.updateNbSelectEvents();
+      }.bind(this));
+    }
+    
     this.observeEvent('mouseover', PlanningEvent.onMouseOver);
     this.observeEvent('dblclick', PlanningEvent.onDblClic);
-
-
   },
   scroll: function(scroll_top) {
-	if(this.container.down(".hour-"+this.hour_min)){
-		var top = this.container.down(".hour-"+this.hour_min).offsetTop;
-	    this.container.down('.week-container').scrollTop = (scroll_top !== null && !Object.isUndefined(scroll_top) ? scroll_top : top);
+  if(this.container.down(".hour-"+this.hour_min)){
+    var top = this.container.down(".hour-"+this.hour_min).offsetTop;
+      this.container.down('.week-container').scrollTop = (scroll_top !== null && !Object.isUndefined(scroll_top) ? scroll_top : top);
     }
   },
   setPlanningHeight: function(height) {
@@ -180,23 +178,23 @@ WeekPlanning = Class.create({
     var delta = parseInt(this.hour_max, 10) - parseInt(this.hour_min, 10) + 1;
     var visibleLines = this.countVisibleLines();
     var pauses = this.countPauses();
-		var pausesHeight = pauses * 3; // cf. CSS 3px border bottom
+    var pausesHeight = pauses * 3; // cf. CSS 3px border bottom
     this._tableHeight = null;
     weekContainer.style.height = ((viewportHeight - pauses * 3)/ delta) * visibleLines + "px";
   },
   updateEventsDimensions: function(){
     this.events.invoke("updateDimensions");
   },
-	selectAllEvents: function(){
-		this.container.select('.event:not(.now)').invoke('toggleClassName','selected');
-		this.updateNbSelectEvents();
-	},
+  selectAllEvents: function(){
+    this.container.select('.event:not(.now)').invoke('toggleClassName','selected');
+    this.updateNbSelectEvents();
+  },
   selectDayEvents: function(day){
     this.container.select('.day-'+day+' .event:not(.now)').invoke('toggleClassName','selected');
     this.updateNbSelectEvents();
   },
-	updateNbSelectEvents : function(){
-	  this.container.down('.nbSelectedEvents').update("("+this.container.select('.event.selected').length+")");
+  updateNbSelectEvents : function(){
+    this.container.down('.nbSelectedEvents').update("("+this.container.select('.event.selected').length+")");
   },
   getEventById: function(id) {
     return this.eventsById[id];
@@ -204,9 +202,9 @@ WeekPlanning = Class.create({
   countVisibleLines: function(){
     return this.container.select(".week-container tr").filter(Element.visible).length;
   },
-	countPauses: function() {
-		return this.container.select(".week-container tr.pause").length;
-	},
+  countPauses: function() {
+    return this.container.select(".week-container tr.pause").length;
+  },
   getCellHeight: function(){
     var tableHeight = this._tableHeight || this.container.down(".week-container table").getHeight();
     this._tableHeight = tableHeight;
@@ -241,15 +239,18 @@ WeekPlanning = Class.create({
       }, this);
     }, this);
   },
-	observeEvent: function(eventName, handler) {
-		if (!handler) return;
-		
-	  this.container.observe(eventName, function(event) {
-	    var element = event.element();
-	    if (element.tagName == "DIV") {
-	      var div = element.hasClassName("event") ? element : element.up("div.event");
-	      if (div) handler(div, event);
-	    }
-	  });
-	}
+  observeEvent: function(eventName, handler) {
+    if (!handler) return;
+    
+    this.container.observe(eventName, function(event) {
+      var element = event.element();
+      if (element.tagName == "DIV") {
+        var div = element.hasClassName("event") ? element : element.up("div.event");
+        if (div) handler(div, event);
+      }
+    });
+  },
+  /*Cette fonction (vide) permet d'instancier dans le semainier les évènements des menus*/
+  onMenuClick: function(event, data, elem){
+  }
 });

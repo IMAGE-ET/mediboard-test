@@ -135,16 +135,14 @@ Main.add(function() {
                         {{/if}}
                         
                         <div id="{{$_event->internal_id}}"
-                             class="event {{$draggable}} {{$resizable}} {{if $disabled}}disabled{{/if}} {{$_event->css_class}} {{$_event->guid}}" 
-                             style="background-color: {{$_event->color}}; {{if !$_event->important}}opacity: 0.6;{{/if}} {{if $_event->type}}{{if $plageconsult_id && $plageconsult_id == $_event->plage.id}}border: 2px solid #444;{{else}}border:1px solid #999;{{/if}}text-align:center;{{/if}}">
-                          {{if $_event->menu}}
-                            <div class="{{$_event->elements_menu.class}}">
-                              {{assign var="elements" value=$_event->elements_menu.elements}}
-                              {{foreach from=$elements item=element}}
-                                <a class="{{$element.class}}" onclick="{{$element.onclick}}" href="{{$element.href}}" title="{{$element.title}}"></a>
+                             class="event {{$draggable}} {{$resizable}} {{if $disabled}}disabled{{/if}} {{$_event->css_class}} {{$_event->guid}} {{$_event->type}} {{if !$_event->important}}opacity-60{{/if}} {{if $plageconsult_id && $plageconsult_id == $_event->plage.id}}selected{{/if}}" 
+                             style="background-color: {{$_event->color}}; {{if $_event->type}}text-align:center;{{/if}}">
+                          
+                            <div class="toolbar">
+                              {{foreach from=$_event->menu item=element}}
+                                <a class="button {{$element.class}} notext" onclick="window['planning-{{$planning->guid}}'].onMenuClick('{{$element.class}}','{{$_event->plage.id}}', this)" title="{{$element.title}}"></a>
                               {{/foreach}}
                             </div>
-                          {{/if}}
                           {{if $app->user_prefs.ssr_planning_dragndrop && $_event->draggable || $app->user_prefs.ssr_planning_resize && $_event->resizable}}
                             <div class="time-preview" style="display: none;"></div>
                           {{/if}}
@@ -161,7 +159,7 @@ Main.add(function() {
                           <div class="body">
                             {{if $_event->type == "consultation" || $_event->type == "tableau_bord"}}
                               {{assign var="plage" value=$_event->plage}}
-                              {{assign var="elements" value=$_event->elements_menu.elements}}
+                              {{assign var="elements" value=$_event->menu}}
                               {{foreach from=$elements key=num item=_plage}}
                                 {{if $plage.pct lt 50}}
                                   {{assign var="backgroundClass" value="empty"}}
@@ -173,7 +171,7 @@ Main.add(function() {
                                   {{assign var="backgroundClass" value="full"}}
                                 {{/if}} 
                                 {{if $num!=1}}
-                                  <a onclick="{{$_plage.onclick}}" href="{{$_plage.href}}" title="{{$_plage.title}}" >
+                                  <a onclick="window['planning-{{$planning->guid}}'].onMenuClick('{{$_plage.class}}','{{$plage.id}}', this)" href="#" title="{{$_plage.title}}" >
                                     {{if $num==2}}
                                       <div class="progressBar">
                                         <div class="bar {{$backgroundClass}}" style="width: {{$plage.pct}}%;"></div>
