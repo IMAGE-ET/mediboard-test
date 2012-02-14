@@ -13,7 +13,7 @@
         {{if $_constante.comment}}
           <div style="min-width: 120px; font-weight: normal; background: #eee; background: rgba(255,255,255,0.6); white-space: normal; text-align: left; padding: 2px; border: 1px solid #ddd;">
             {{$_constante.comment}}
-					</div>
+          </div>
         {{/if}}
       </th>
     {{/foreach}}
@@ -50,7 +50,7 @@
           {{/if}}
         {{elseif $_value != "__empty__"}}
           <td style="text-align: center;">
-            {{$_value}}
+            {{if $_value}}{{$_value}}{{else}}&nbsp;{{/if}}
           </td>
         {{/if}}
       {{/foreach}}

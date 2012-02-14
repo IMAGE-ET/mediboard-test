@@ -602,8 +602,10 @@ td.redefined {
 /**
  * Dans les tableaux de constantes, les cumuls ont des bords, qui se chavauchent dans certains cas quand border-collapse:collapse
  */
-table.constantes {
-  border-collapse: separate !important;
+@media screen {
+  table.constantes {
+    border-collapse: separate !important;
+  }
 }
 
 table.constantes td, 

@@ -505,7 +505,9 @@ var Calendar = {
 
     Calendar.prepareDates(dates);
     
-    var inModalWindow = !!element.up(".modal");
+    // desactivé car tres moche quand datepicker dans les modales tres peu hautes
+    // FIXME
+    var inModalWindow = false;//!!element.up(".modal");
     
     // Default options
     options = Object.extend({

@@ -40,7 +40,12 @@
   }
   
   printDossierFromSejour = function(sejour_id){
-    ($("dossier-"+sejour_id) || window).print();
+    if ($("dossier-"+sejour_id)) {
+      Element.print($("dossier-"+sejour_id).childElements());
+    }
+    else {
+      window.print();
+    }
   }
   
   togglePrintZone = function(name, sejour_id) {

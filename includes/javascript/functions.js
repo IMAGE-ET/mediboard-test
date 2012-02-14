@@ -1050,6 +1050,22 @@ else {
 
 window.modal = Modal.open;
 
+window.scrollToTop = function(){
+  window.scrollTopSave = document.documentElement.scrollTop || document.body.scrollTop;
+  
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+}
+
+window.scrollReset = function(){
+  if (!window.scrollTopSave) {
+    return;
+  }
+  
+  document.documentElement.scrollTop = window.scrollTopSave;
+  document.body.scrollTop = window.scrollTopSave;
+}
+
 // Multiple mocals
 Object.extend(Control.Modal,{
   stack: [],
@@ -1067,8 +1083,6 @@ Object.extend(Control.Modal,{
     beforeOpen: function(){
       /// FUCK APPLETS AND FIREFOX
       if (!Prototype.Browser.Gecko || !$$("applet").length) {
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
         document.body.style.overflow = "hidden"; // Removes the body's scrollbar
       }
       
@@ -1084,6 +1098,12 @@ Object.extend(Control.Modal,{
     },
     
     afterOpen: function(){
+      if (Control.Modal.stack.length == 0) {
+        // Forcer le scroll to top a cause des datepicker qui se positionnent mal
+        // (prescription, planning de la semaine du bloc, etc)
+        window.scrollToTop();
+      }
+      
       //Control.Modal.current = this;
       var overlay = Control.Overlay.container;
       Control.Modal.stack.push(this);
@@ -1107,6 +1127,9 @@ Object.extend(Control.Modal,{
       
       if (Control.Modal.stack.length == 0) {
         var body = $(document.body);
+        
+        window.scrollReset();
+        
         /// FUCK APPLETS AND FIREFOX
         if (!Prototype.Browser.Gecko || !$$("applet").length) {
           body.style.overflow = "auto"; // Put back the body's scrollbar
@@ -1232,7 +1255,7 @@ var UserSwitch = {
   reload: function(){
     this.window.close();
     location.reload();
-		location.href = location.href.match(/^(.*)#/)[1]; // When Mediboard is inside a showModalDialog window (url without what's after #)
+    location.href = location.href.match(/^(.*)#/)[1]; // When Mediboard is inside a showModalDialog window (url without what's after #)
   },
   login: function(form){
     if (!checkForm(form)) return false;
@@ -1320,7 +1343,7 @@ Element.addMethods({
       id:    "printFrame",
       name:  "printFrame", 
       src:   "about:blank",
-      style: "position:absolute;width:0px;height:0px;",
+      style: "position:absolute;width:1px;height:1px;",
       frameborder: 0
     }));
     
@@ -1328,14 +1351,43 @@ Element.addMethods({
     
     var win = iframe.contentWindow;
     var doc = win.document;
-    var styleTag = "<style type='text/css'>";
+    var bodyContent = "";
+    var parentHead = $$("head")[0];
+  
+    if (Prototype.Browser.IE) { // argh
+      parentHead.select("link").each(function(e){
+        // Si c'est une feuille de style
+        if (e.styleSheet) {
+          var css = e.styleSheet.cssText;
+          
+          // Si elle a un href (feuille de style externe)
+          if (e.href) {
+            var matchHref = e.href.match(/(.*\/)[^\/]+$/);
+            var pattern = /@import\s*(?:url\s*\(\s*)?["']?([^"'\)]+)\)?["']?/g;
+            var i = 50;
+            
+            if (matchHref) {
+              // on regarde tous ses @import pour les importer "à la main"
+              while(i-- && (match = pattern.exec(css))) {
+                bodyContent += "<" + "link type=\"text/css\" rel=\"stylesheet\" href=\"" + matchHref[1] + match[1] + "\" />";
+              }
+            }
+          }
+          
+          bodyContent += "<"+"style type='text/css'>"+css+"<"+"/style>";
+        }
+      });
+    }
     
-    document.documentElement.select("style").each(function(elt) {
-      styleTag += elt.innerHTML;
-    })
-    styleTag += "</style>";
+    bodyContent += "<"+"style type='text/css'>";
+    $$("body style").each(function(elt) {
+      bodyContent += elt.innerHTML;
+    });
+    bodyContent += "<"+"/style>";
 
-    doc.write("<html><head></head><body>"+styleTag+"</body></html>");
+    var htmlClass = $$("html")[0].className;
+    doc.open();
+    doc.write("<"+"html class='"+htmlClass+"'><"+"head><"+"/head><"+"body>"+bodyContent+"<"+"/body><"+"/html>");
 
     // !! Don't use PrototypeJS functions here, this is an iframe
     var head = doc.head || doc.getElementsByTagName('head')[0];
@@ -1354,43 +1406,27 @@ Element.addMethods({
       }
       var clone = $(e).clone(true);
       clone.select('script').invoke('remove');
-      body.appendChild(clone);
+      
+      if (Prototype.Browser.IE && document.documentMode && document.documentMode == 9) {
+        body.insertAdjacentHTML("beforeEnd", clone.outerHTML.replace(/>\s+<(t[dh])/gi, "><$1"));
+      }
+      else {
+        body.appendChild(clone); // Fx, IE8 and others
+      }
     });
     
-    var parentHead = document.head || document.getElementsByTagName('head')[0];
-    
     if (Prototype.Browser.IE) { // argh
-      $(parentHead).childElements().each(function(e){
-        // Si c'est une feuille de style
-        if (e.styleSheet) {
-          var css = e.styleSheet.cssText;
-          
-          // Si elle a un href (feuille de style externe)
-          if (e.href) {
-            var matchHref = e.href.match(/(.*\/)[^\/]+$/);
-            var pattern = /@import\s*(?:url\s*\(\s*)?["']?([^"'\)]+)\)?["']?/g;
-            var i = 50;
-            
-            if (matchHref) {
-              // on regarde tous ses @import pour les importer "à la main"
-              while(i-- && (match = pattern.exec(css))) {
-                doc.write("<" + "link type=\"text/css\" rel=\"stylesheet\" href=\"" + matchHref[1] + match[1] + "\" />");
-              }
-            }
-          }
-          
-          doc.write("<"+"style>"+css+"<"+"/style>");
-        }
-        else if (e.tagName === "SCRIPT") {
-          doc.write(e.outerHTML);
-        }
+      parentHead.select("script").each(function(e){
+        bodyContent += e.outerHTML;
       });
+    
+      doc.close();
       doc.execCommand('print', false, null);
     }
     else {
       if (Prototype.Browser.Gecko) {
-        $(parentHead).childElements().each(function(e) {
-          if (e.nodeName === "LINK" && /css/.test(e.getAttribute("href"))) {
+        parentHead.select("link").each(function(e) {
+          if (/css/.test(e.getAttribute("href"))) {
             var css = "";
             $A(e.sheet.cssRules).each(function(rule) {
               css += rule.cssText;

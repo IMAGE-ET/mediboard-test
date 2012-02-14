@@ -35,7 +35,7 @@
  // a du style supplémentaire, qu'il faut écraser lors de l'impression
  // d'un dossier seul.
   printOneDossier = function(sejour_id) {
-    $("dossier-"+sejour_id).print();
+    Element.print($("dossier-"+sejour_id).childElements());
   }
 </script>
 
