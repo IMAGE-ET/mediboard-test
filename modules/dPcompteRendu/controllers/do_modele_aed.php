@@ -161,13 +161,13 @@ if (isset($_POST["_source"])) {
         if ($curr_dest[0] == $_dest[0]) continue;  
         $copyTo .= $allDest[$_dest[1]][$_dest[2]]->nom."; ";
         $copyToComplet .= $allDest[$_dest[1]][$_dest[2]]->nom. " - " .
-                          $allDest[$_dest[1]][$_dest[2]]->adresse. " ".
+                          nl2br($allDest[$_dest[1]][$_dest[2]]->adresse). " ".
                           $allDest[$_dest[1]][$_dest[2]]->cpville. "; ";
       }
       
       $values = array(
         $allDest[$curr_dest[1]][$curr_dest[2]]->nom,
-        $allDest[$curr_dest[1]][$curr_dest[2]]->adresse,
+        nl2br($allDest[$curr_dest[1]][$curr_dest[2]]->adresse),
         $allDest[$curr_dest[1]][$curr_dest[2]]->cpville,
         $copyTo,
         $copyToComplet
