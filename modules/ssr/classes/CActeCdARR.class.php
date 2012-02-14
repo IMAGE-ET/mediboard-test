@@ -10,14 +10,14 @@
 
 class CActeCdARR extends CMbObject {
   // DB Table key
-	var $acte_cdarr_id = null;
-	
-	// DB Fields
+  var $acte_cdarr_id = null;
+  
+  // DB Fields
   var $evenement_ssr_id = null;
-	var $code = null;
-	
-	// References
-	var $_ref_activite_cdarr = null;
+  var $code = null;
+  
+  // References
+  var $_ref_activite_cdarr = null;
  
   function getSpec() {
     $spec = parent::getSpec();
@@ -34,17 +34,18 @@ class CActeCdARR extends CMbObject {
   }
 
   function updateFormFields(){
-  	parent::updateFormFields();
-		$this->_view = $this->code;
+    parent::updateFormFields();
+    $this->_view = $this->code;
   }
-	
-	function loadRefEvenementSSR(){
-		$this->_ref_evenement_ssr = $this->loadFwdRef("evenement_ssr_id", true);
-	}
+  
+  function loadRefEvenementSSR(){
+    $this->_ref_evenement_ssr = $this->loadFwdRef("evenement_ssr_id", true);
+  }
 
   function loadRefActiviteCdarr() {
-    $this->_ref_activite_cdarr = CActiviteCdARR::get($this->code);
-    $this->_ref_activite_cdarr->loadRefTypeActivite();
+    $activite = CActiviteCdARR::get($this->code);
+    $activite->loadRefTypeActivite();
+    return $this->_ref_activite_cdarr = $activite;
   }
   
   function loadView(){

@@ -11,16 +11,16 @@
 class CElementPrescriptionToCdarr extends CMbObject {
   // DB Table key
   var $element_prescription_to_cdarr_id = null;
-	
+  
   // DB Fields
-	var $element_prescription_id = null;
-	var $code = null;
-	var $commentaire = null;
-	
-	var $_ref_element_prescription = null;
-	var $_ref_activite_cdarr = null;
-	var $_count_cdarr_by_type = null;
-	
+  var $element_prescription_id = null;
+  var $code = null;
+  var $commentaire = null;
+  
+  var $_ref_element_prescription = null;
+  var $_ref_activite_cdarr = null;
+  var $_count_cdarr_by_type = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'element_prescription_to_cdarr';
@@ -35,35 +35,36 @@ class CElementPrescriptionToCdarr extends CMbObject {
     $props["commentaire"]             = "str";
     return $props;
   }
-	
-	function loadRefElementPrescription(){
-	  $element = new CElementPrescription();
+  
+  function loadRefElementPrescription(){
+    $element = new CElementPrescription();
     $this->_ref_element_prescription = $element->getCached($this->element_prescription_id);
   }
-	
-	function check(){
-		// Verification du code Cdarr saisi
-		$code_cdarr = CActiviteCdARR::get($this->code);
-		if(!$code_cdarr->code){
-			return "Ce code n'est pas un code Cdarr valide";
-		}
-		return parent::check();
-	}
-	
-	function updateFormFields(){
-		parent::updateFormFields();
-		$this->_view = "Code CdARR ".$this->code;
-	}
-	
-	function loadRefActiviteCdarr(){
-    $this->_ref_activite_cdarr = CActiviteCdARR::get($this->code);
-    $this->_ref_activite_cdarr->loadRefTypeActivite();
-	}
-	
-	function loadView(){
-		parent::loadView();
+  
+  function check(){
+    // Verification du code Cdarr saisi
+    $code_cdarr = CActiviteCdARR::get($this->code);
+    if(!$code_cdarr->code){
+      return "Ce code n'est pas un code Cdarr valide";
+    }
+    return parent::check();
+  }
+  
+  function updateFormFields(){
+    parent::updateFormFields();
+    $this->_view = "Code CdARR ".$this->code;
+  }
+  
+  function loadRefActiviteCdarr(){
+    $activite = CActiviteCdARR::get($this->code);
+    $activite->loadRefTypeActivite();
+    return $this->_ref_activite_cdarr = $activite;
+  }
+  
+  function loadView(){
+    parent::loadView();
     $this->loadRefActiviteCdarr();
-	}
+  }
 }
 
 ?>

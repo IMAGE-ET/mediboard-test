@@ -17,8 +17,6 @@ $sejour = new CSejour;
 $sejour->load(CValue::get("sejour_id"));
 $sejour->loadRefPatient();
 
-$current_user_id = CAppUI::$instance->user_id;
-
 $date = CValue::getOrSession("date", mbDate());
 
 $monday = mbDate("last monday", mbDate("+1 day", $date));
@@ -32,7 +30,7 @@ for ($i = 0; $i < 7; $i++) {
 $prescription = $sejour->loadRefPrescriptionSejour();
 $prescription->loadRefsLinesElementByCat();
 
-// Chargements des codes cdarrs des elements de prescription
+// Prescription lines and CdARRs
 $categories = array();
 foreach ($prescription->_ref_prescription_lines_element_by_cat as $chapter => $_lines_by_chap) {
   if ($chapter != "kine") {
@@ -41,17 +39,18 @@ foreach ($prescription->_ref_prescription_lines_element_by_cat as $chapter => $_
   
   foreach ($_lines_by_chap as $_lines_by_cat) {
     foreach ($_lines_by_cat['element'] as $_line) {
-      $cat = $_line->_ref_element_prescription->_ref_category_prescription;
-      if(!array_key_exists($cat->_id, $categories)){
-        $categories[$cat->_id] = $cat;
+      $element = $_line->_ref_element_prescription;
+      $category = $element->_ref_category_prescription;
+      if (!array_key_exists($category->_id, $categories)){
+        $categories[$category->_id] = $category;
       }
-      $_line->_ref_element_prescription->loadBackRefs("cdarrs");
-      $_line->_ref_element_prescription->_ref_cdarrs_by_type = array();
       
-      $cdarrs_by_type =& $_line->_ref_element_prescription->_ref_cdarrs_by_type;
-      foreach($_line->_ref_element_prescription->_back["cdarrs"] as $_acte_cdarr){
-        $_acte_cdarr->loadRefActiviteCdarr();
-        $_activite_cdarr =& $_acte_cdarr->_ref_activite_cdarr;
+      $element->loadBackRefs("cdarrs");
+      $element->_ref_cdarrs_by_type = array();
+      
+      $cdarrs_by_type =& $element->_ref_cdarrs_by_type;
+      foreach ($element->_back["cdarrs"] as $_acte_cdarr){
+        $_activite_cdarr = $_acte_cdarr->loadRefActiviteCdarr();
         $cdarrs_by_type[$_activite_cdarr->type][] = $_acte_cdarr;
       }
     }
@@ -70,8 +69,7 @@ foreach ($prescription->_ref_prescription_lines_element_by_cat as $chap => $_lin
 
 
 // Bilan
-$sejour->loadRefBilanSSR();
-$bilan =& $sejour->_ref_bilan_ssr;
+$bilan = $sejour->loadRefBilanSSR();
 $bilan->loadRefTechnicien();
 $bilan->_ref_technicien->loadRefKine();
 
@@ -99,6 +97,7 @@ $executants = array();
 $executants = array();
 $reeducateurs = array();
 $selected_cat = "";
+$user = CUser::get();
 foreach ($categories as $_category) {
   // Chargement des associations pour chaque catégorie
   $associations[$_category->_id] = $_category->loadBackRefs("functions_category");
@@ -109,7 +108,7 @@ foreach ($categories as $_category) {
     $function->loadRefsUsers();
     foreach($function->_ref_users as $_user){
       $_user->_ref_function = $function;
-       if ($_user->_id == $current_user_id && !$selected_cat){
+       if ($_user->_id == $user->_id && !$selected_cat){
         $selected_cat = $_category;
       }
       $executants[$_category->_id][$_user->_id] = $_user;
@@ -133,7 +132,7 @@ $smarty->assign("plateaux", $plateaux);
 $smarty->assign("executants", $executants);
 $smarty->assign("reeducateurs", $reeducateurs);
 $smarty->assign("selected_cat", $selected_cat);
-$smarty->assign("current_user_id", $current_user_id);
+$smarty->assign("user", $user);
 $smarty->assign("lines_by_element", $lines_by_element);
 $smarty->display("inc_activites_sejour.tpl");
 

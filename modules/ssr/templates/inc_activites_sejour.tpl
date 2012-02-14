@@ -310,7 +310,7 @@ Main.add(function(){
   
   {{if $selected_cat}}
     selectActivite('{{$selected_cat->_guid}}');
-    $("technicien-{{$selected_cat->_id}}-{{$current_user_id}}").onclick();
+    $("technicien-{{$selected_cat->_id}}-{{$user->_id}}").onclick();
   {{/if}}
 });
                   
@@ -546,10 +546,10 @@ Main.add(function(){
                    <div class="techniciens" id="techniciens-{{$category->_guid}}" style="display: none;">
                      {{if array_key_exists($category_id, $executants)}}
                        {{assign var=list_executants value=$executants.$category_id}}
-                       {{if array_key_exists($current_user_id, $list_executants)}}
+                       {{if array_key_exists($user->_id, $list_executants)}}
                        
-                       {{assign var=current_user value=$list_executants.$current_user_id}}
-                       <button title="{{$current_user->_view}}" id="technicien-{{$category_id}}-{{$current_user_id}}" class="none ressource" type="button" onclick="selectTechnicien('{{$current_user->_id}}', this)">
+                       {{assign var=current_user value=$list_executants[$user->_id]}}
+                       <button title="{{$current_user->_view}}" id="technicien-{{$category_id}}-{{$user->_id}}" class="none ressource" type="button" onclick="selectTechnicien('{{$current_user->_id}}', this)">
                          {{$current_user->_user_last_name}}
                        </button>     
                      {{/if}}
