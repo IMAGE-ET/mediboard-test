@@ -14,11 +14,12 @@ $date = CValue::getOrSession("date", mbDate());
 $prec = mbDate("-1 week", $date);
 $suiv = mbDate("+1 week", $date);
 $vue  = CValue::getOrSession("vue2", CAppUI::pref("AFFCONSULT", 0));
+$today = mbDate();
 
 global $smarty;
 
 //Planning au format  CPlanningWeek
-$debut = CValue::getOrSession("debut", $date);
+$debut = CValue::getOrSession("date", $date);
 $debut = mbDate("-1 week", $debut);
 $debut = mbDate("next monday", $debut);
 $fin   = mbDate("next sunday", $debut);
@@ -147,6 +148,8 @@ $planning->hours = $hours;
 
 // Variables de templates
 $smarty->assign("date", $date);
+$smarty->assign("today", $today);
+
 $smarty->assign("debut", $debut);
 $smarty->assign("fin", $fin);
 $smarty->assign("prec", $prec);

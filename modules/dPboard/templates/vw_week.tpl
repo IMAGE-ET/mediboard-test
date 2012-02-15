@@ -44,19 +44,18 @@ function viewItem(guid, id, date, oTd) {
 <table class="main">
   <tr>
     <th>
-      <form action="?" name="changeDate" method="get">
+      <form action="?m={{$m}}" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
-        <input type="hidden" name="plageconsult_id" value="0" />
         
-        <a href="#1" onclick="$V($(this).getSurroundingForm().debut, '{{$prec}}')">&lt;&lt;&lt;</a>
+        <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$prec}}" >&lt;&lt;&lt;</a>
         
         Semaine du {{$debut|date_format:"%A %d %b %Y"}} au {{$fin|date_format:"%A %d %b %Y"}}
-        <input type="hidden" name="debut" class="date" value="{{$debut}}" onchange="this.form.submit()" />
+        <input type="hidden" name="date" class="date" value="{{$debut}}" onchange="this.form.submit()" />
         
-        <a href="#1" onclick="$V($(this).getSurroundingForm().debut, '{{$suiv}}')">&gt;&gt;&gt;</a>
+        <a  href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$suiv}}">&gt;&gt;&gt;</a>
         <br />
-        <a href="#1" onclick="$V($(this).getSurroundingForm().debut, '{{$date}}')">Aujourd'hui</a>
+        <a  href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$today}}">Aujourd'hui</a>
       </form>
     </th>
   </tr>
