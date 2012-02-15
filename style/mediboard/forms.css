@@ -562,6 +562,34 @@ button.clock:before, a.button.clock:before {
   content: url(images/buttons/planning.png);
 }
 
+button.door-in:before, a.button.door-in:before {
+  content: url(images/buttons/door_in.png);
+}
+
+button.door-out:before, a.button.door-out:before {
+  content: url(images/buttons/door_out.png);
+}
+
+button.bistouri:before, a.button.bistouri:before {
+  content: url(images/buttons/bistouri.png);
+}
+
+button.fermeture-plaie:before, a.button.fermeture-plaie:before {
+  content: url(images/buttons/fermeture-plaie.png);
+}
+
+button.intubation:before, a.button.intubation:before {
+  content: url(images/buttons/intubation.png);
+}
+
+button.extubation:before, a.button.extubation:before {
+  content: url(images/buttons/extubation.png);
+}
+
+button.injection:before, a.button.injection:before {
+  content: url(images/buttons/injection.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }

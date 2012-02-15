@@ -106,16 +106,16 @@ editEvenementPerop = function(guid, operation_id, datetime) {
 <table class="main layout">
   <tr>
     <td class="narrow">
-      <button onclick="enChantier()" class="submit">Entrée</button><br />
-      <button onclick="enChantier()" class="submit">Sortie</button>
+      <button onclick="enChantier()" class="door-in">Entrée</button><br />
+      <button onclick="enChantier()" class="door-out">Sortie</button>
     </td>
     <td class="narrow">
-      <button onclick="enChantier()" class="submit">Intubation</button><br />
-      <button onclick="enChantier()" class="submit">Extubation</button>
+      <button onclick="enChantier()" class="intubation">Intubation</button><br />
+      <button onclick="enChantier()" class="extubation">Extubation</button>
     </td>
     <td class="narrow">
-      <button onclick="enChantier()" class="submit">Incision</button><br />
-      <button onclick="enChantier()" class="submit">Fermeture</button>
+      <button onclick="enChantier()" class="bistouri">Incision</button><br />
+      <button onclick="enChantier()" class="fermeture-plaie">Fermeture</button>
     </td>
     <td>
       {{if $can->admin}}
@@ -132,7 +132,7 @@ editEvenementPerop = function(guid, operation_id, datetime) {
         </form>
       {{/if}}
 
-      <button onclick="enChantier()" class="submit">Injection</button>
+      <button onclick="enChantier()" class="injection">Injection</button>
       <button onclick="editEvenementPerop('CAnesthPerop-0', '{{$interv->_id}}')" class="warning" style="border-color: red;">Incident</button>
     </td>
   </tr>
