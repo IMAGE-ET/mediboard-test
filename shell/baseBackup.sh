@@ -91,8 +91,6 @@ then
   check_errs 2 "Needed space ($needed_size) exceeds available space ($available_size)"
 fi
 
-exit 0
-
 ## Make MySQL medthod
 
 # removes previous hotcopy/dump if something went wrong
