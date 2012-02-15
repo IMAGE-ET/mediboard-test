@@ -26,6 +26,9 @@ $dPconfig["dPhospi"] = array (
   ),
   "CChambre" => array(
     "prefixe" => ""
+  ),
+  "CMovement" => array(
+    "tag" => ""
   )
 );
 

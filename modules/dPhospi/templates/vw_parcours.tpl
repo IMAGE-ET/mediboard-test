@@ -290,7 +290,7 @@ function editIntervention(op_id) {
 <div id="mouvements" style="display: none;">
   <table class="tbl">
     <tr> 
-      <th colspan="3" class="title">{{$sejour->_view}} </th>
+      <th colspan="4" class="title">{{$sejour->_view}} </th>
     </tr>
     <tr>
        <th> </th>
@@ -300,9 +300,8 @@ function editIntervention(op_id) {
     </tr>
     {{foreach from=$movements item=_movement}}
       <tr {{if $_movement->cancel}}class="arretee"{{/if}}>
-        
-        <td> <span onmouseover="ObjectTooltip.createEx(this, '{{$_movement->_guid}}')">
-          {{$_movement->_view}}</span>
+        <td> 
+          <span onmouseover="ObjectTooltip.createEx(this,'{{$_movement->_guid}}', 'identifiers')">{{$_movement->_view}}</span>
         </td>
         <td>{{mb_value object=$_movement field=movement_type}}</td>
         <td>{{mb_value object=$_movement field=original_trigger_code}}</td>

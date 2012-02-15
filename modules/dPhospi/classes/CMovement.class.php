@@ -92,4 +92,24 @@ class CMovement extends CMbObject {
     $this->movement_type = $object->getMovementType();
     $this->loadMatchingObject();
   }
+  
+  /**
+   * Construit le tag d'un mouvement en fonction des variables de configuration
+   * @param $group_id Permet de charger l'id externe d'un mouvement pour un établissement donné si non null
+   * @return string
+   */
+  static function getTagMovement($group_id = null) {
+    // Pas de tag mouvement
+    if (null == $tag_movement = CAppUI::conf("dPhospi CMovement tag")) {
+      return;
+    }
+
+    // Permettre des id externes en fonction de l'établissement
+    $group = CGroups::loadCurrent();
+    if (!$group_id) {
+      $group_id = $group->_id;
+    }
+    
+    return str_replace('$g', $group_id, $tag_movement);
+  }
 }

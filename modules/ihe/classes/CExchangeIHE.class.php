@@ -167,9 +167,10 @@ class CExchangeIHE extends CExchangeTabular {
 
     $this->statut_acquittement = $ack->ack_code;
     $this->acquittement_valide = $ack->event_ack->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
-    if ($mbObject) {
+    if ($mbObject && $mbObject->_id) {
       $this->setObjectIdClass($mbObject);
     }
+
     $this->_acquittement = $msgAck;
     $this->date_echange = mbDateTime();
     $this->store();
@@ -185,7 +186,7 @@ class CExchangeIHE extends CExchangeTabular {
   
   function setAckAR(CHL7Acknowledgment $ack, $mb_error_codes, $comments = null, CMbObject $mbObject = null) {
     $ack->generateAcknowledgment("AR", $mb_error_codes, "207", "E", $comments, $mbObject);
-    
+
     return $this->populateExchangeACK($ack, $mbObject);               
   }
 }
