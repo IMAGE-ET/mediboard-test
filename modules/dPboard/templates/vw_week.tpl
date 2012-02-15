@@ -9,96 +9,97 @@
 *}}
 
 <script type="text/javascript">
-function viewItem(oTd, guid, date) {
+function viewItem(guid, id, date, oTd) {
   oTd = $(oTd);
   
-  // Mise en surbrillance de la plage survolée
-  $$('td.selectedConsult').each(function(elem) { elem.className = "nonEmptyConsult";});
-  $$('td.selectedOp').each(function(elem) { elem.className = "nonEmptyOp";});
-  
-  var parts = guid.split('-'),
-      sClassName = parts[0],
-      id = parts[1];
-      
-  if(sClassName == "CPlageconsult"){
-    oTd.up().className = "selectedConsult";
-  }else if(sClassName == "CPlageOp"){
-    oTd.up().className = "selectedOp";
-  }
-  
-  // Affichage de la plage selectionnée et chargement si besoin
-  Dom.cleanWhitespace($('viewTooltip'));
-  $('viewTooltip').childElements().invoke('hide');
-
-  var oElement = $(guid).show();
-  
-  if(oElement.alt == "infos - cliquez pour fermer") {
-    return;
-  }
-  
+  oTd.up("table").select(".event").invoke("removeClassName", "selected");
+  oTd.up(".event").addClassName("selected");
+   
+  //Affichage de la partie droite correspondante
   var url = new Url;
   url.addParam("board"     , "1");
   url.addParam("boardItem" , "1");
-  url.addParam("pratSel" , "{{$prat->_id}}");
+  url.addParam("pratSel" , "{{$chirSel}}");
   url.addParam("date"    , date);
   
-  if(sClassName == "CPlageconsult"){
+  if(guid[6] == "c"){
     url.setModuleAction("dPcabinet", "httpreq_vw_list_consult");
     url.addParam("plageconsult_id", id);
     url.addParam("vue2"           , "{{$vue}}");
     url.addParam("selConsult"     , "");
   } 
-  else if(sClassName == "CPlageOp"){
+  else if(guid[6] == "O"){
     url.setModuleAction("dPplanningOp", "httpreq_vw_list_operations");
     url.addParam("urgences", "0");
   } else return;
 
-  url.requestUpdate(oElement);
-  oElement.alt = "infos - cliquez pour fermer";
+  url.requestUpdate('viewTooltip');
 }
-
-function updateSemainier() {
-  var url = new Url("dPboard", "httpreq_semainier");
-  url.addParam("pratSel" , "{{$prat->_id}}");
-  url.addParam("date"    , "{{$date}}");
-  url.addParam("board"   , "1");
-  url.requestUpdate("semainier");
-}
-
-Main.add(function () {
-  {{if $prat->_id}}
-		updateSemainier();
-  {{/if}}
-  
-  ViewPort.SetAvlHeight("semainier", 1);
-  Calendar.regField(getForm("changeDate").date, null, {noView: true});
-});
-
 </script>
 
 <!-- Script won't be evaled in Ajax inclusion. Need to force it -->
 {{mb_script script=intermax}}
 
+{{mb_script module=ssr script=planning}}
 <table class="main">
   <tr>
     <th>
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$prec}}">&lt;&lt;&lt;</a>
-      <form name="changeDate" action="?m={{$m}}" method="get">
+      <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
-        {{$date|date_format:$conf.longdate}}
-        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+        <input type="hidden" name="plageconsult_id" value="0" />
+        
+        <a href="#1" onclick="$V($(this).getSurroundingForm().debut, '{{$prec}}')">&lt;&lt;&lt;</a>
+        
+        Semaine du {{$debut|date_format:"%A %d %b %Y"}} au {{$fin|date_format:"%A %d %b %Y"}}
+        <input type="hidden" name="debut" class="date" value="{{$debut}}" onchange="this.form.submit()" />
+        
+        <a href="#1" onclick="$V($(this).getSurroundingForm().debut, '{{$suiv}}')">&gt;&gt;&gt;</a>
+        <br />
+        <a href="#1" onclick="$V($(this).getSurroundingForm().debut, '{{$date}}')">Aujourd'hui</a>
       </form>
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$suiv}}">&gt;&gt;&gt;</a>
     </th>
   </tr>
 
-  <tbody class="viewported">
-
-  <tr>
-    <td id="semainier" class="viewport" colspan="2"></td>
+  <tr >
+    <td  id="semainiertdb" style="height:400px;">{{mb_include module=ssr template=inc_vw_week}}</td>
+    <td id="viewTooltip" style="min-width:300px;width:33%;"></td>
   </tr>
   
-  </tbody>
-  
+   <script>
+     Main.add(function() {
+       window["planning-{{$planning->guid}}"].onMenuClick = function(guid, id, oTd){
+        if(oTd.title != "operation" && oTd.title != "consultation"){
+          viewItem(guid, id, oTd.title, oTd);
+        }
+        else{
+          var url;
+          
+          if(oTd.title == "operation"){
+            url = new Url("dPplanningOp", "vw_idx_planning", "tab");
+          }
+          else if(oTd.title == "consultation"){
+            url = new Url("dPcabinet", "edit_consultation", "tab");
+          }
+          url.addParam("date" , guid);
+          url.addParam("pratSel" , "{{$chirSel}}");
+          url.redirectOpener();
+        }
+       }
+     });
+   </script>
+   
 </table>
+<div style="width:100px;">
+  Légende:
+  <table id="weeklyPlanning" class="tbl">
+    <tr>
+      <td style="background-color:#9F9;">&nbsp;&nbsp;</td>
+      <td>Plage de consultation</td>
+    </tr>
+    <tr>
+      <td style="background-color:#ABE;">&nbsp;&nbsp;</td>
+      <td>Plage opératoire</td>
+    </tr>
+  </table>
+</div>

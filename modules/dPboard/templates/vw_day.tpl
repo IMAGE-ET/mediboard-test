@@ -66,14 +66,6 @@ function updateListHospi() {
   url.requestUpdate("hospi");
 }
 
-function updateSemainier() {
-  var url = new Url("dPboard", "httpreq_semainier");
-  url.addParam("chirSel" , "{{$prat->_id}}");
-  url.addParam("date"    , "{{$date}}");
-  url.addParam("board"   , "1");
-  url.requestUpdate("semainier");
-}
-
 Main.add(function () {
   hideIcon("consultations");
   hideIcon("operations");

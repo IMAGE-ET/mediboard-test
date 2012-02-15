@@ -135,14 +135,16 @@ Main.add(function() {
                         {{/if}}
                         
                         <div id="{{$_event->internal_id}}"
-                             class="event {{$draggable}} {{$resizable}} {{if $disabled}}disabled{{/if}} {{$_event->css_class}} {{$_event->guid}} {{$_event->type}} {{if !$_event->important}}opacity-60{{/if}} {{if $plageconsult_id && $plageconsult_id == $_event->plage.id}}selected{{/if}}" 
+                             class="event {{$draggable}} {{$resizable}} {{if $disabled}}disabled{{/if}} {{$_event->css_class}} {{$_event->guid}} {{$_event->type}} {{if !$_event->important}}opacity-60{{/if}} {{if  isset($plageconsult_id|smarty:nodefaults) && $plageconsult_id == $_event->plage.id }}selected{{/if}}" 
                              style="background-color: {{$_event->color}}; {{if $_event->type}}text-align:center;{{/if}}">
                           
+                           {{if $_event->menu|@count == 3}}
                             <div class="toolbar">
                               {{foreach from=$_event->menu item=element}}
                                 <a class="button {{$element.class}} notext" onclick="window['planning-{{$planning->guid}}'].onMenuClick('{{$element.class}}','{{$_event->plage.id}}', this)" title="{{$element.title}}"></a>
                               {{/foreach}}
                             </div>
+                            {{/if}}
                           {{if $app->user_prefs.ssr_planning_dragndrop && $_event->draggable || $app->user_prefs.ssr_planning_resize && $_event->resizable}}
                             <div class="time-preview" style="display: none;"></div>
                           {{/if}}
@@ -157,7 +159,7 @@ Main.add(function() {
                           {{/if}}
                           
                           <div class="body">
-                            {{if $_event->type == "consultation" || $_event->type == "tableau_bord"}}
+                            {{if $_event->type == "consultation" || $_event->type == "operation"}}
                               {{assign var="plage" value=$_event->plage}}
                               {{assign var="elements" value=$_event->menu}}
                               {{foreach from=$elements key=num item=_plage}}
@@ -179,7 +181,11 @@ Main.add(function() {
                                          {{if $plage.locked}}
                                           <img style="float: right; height: 12px;" src="style/mediboard/images/buttons/lock.png" />
                                           {{/if}}
-                                          {{$plage._affected}} {{if $plage._nb_patients != $plage._affected}}({{$plage._nb_patients}}){{/if}} / {{$plage._total|string_format:"%.0f"}}
+                                          {{if $_event->type == "consultation"}}
+                                            {{$plage._affected}} {{if $plage._nb_patients != $plage._affected}}({{$plage._nb_patients}}){{/if}} / {{$plage._total|string_format:"%.0f"}}
+                                          {{else}}
+                                            {{$plage._nb_operations}} Op
+                                          {{/if}}
                                         </div>
                                       </div>
                                     {{elseif $num==0}}
