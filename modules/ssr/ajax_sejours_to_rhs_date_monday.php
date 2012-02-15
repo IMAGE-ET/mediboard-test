@@ -22,7 +22,7 @@ $order = "nom, prenom";
 $sejours_rhs = $rhs->loadList($where, $order, null, null, $join);
 foreach ($sejours_rhs as $_rhs) {
   $sejour = $_rhs->loadRefSejour();
-	$sejour->_ref_patient->loadIPP();
+  $sejour->_ref_patient->loadIPP();
 }
 
 $where['rhs.facture'] = " = '0'";

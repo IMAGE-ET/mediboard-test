@@ -36,8 +36,7 @@ CotationRHS = {
       requestUpdate('totaux-' + rhs_id);
   },
   
-  printRHS: function(rhs_date_monday) {
-    var form = getForm('editRHS-'+rhs_date_monday);
+  printRHS: function(form) {
     var url = new Url("ssr", "print_sejour_rhs_no_charge");
     url.addParam("sejour_ids", form.select('input.rhs:checked').pluck('value').join("-"));
     url.addParam("all_rhs", $V(form.all_rhs) ? "1" : "0");
@@ -45,12 +44,11 @@ CotationRHS = {
     url.popup(700, 500, "Impression RHS à facturer");
   },
 
-  chargeRHS: function(rhs_date_monday) {
-    getForm('editRHS-'+rhs_date_monday).onsubmit();
+  chargeRHS: function(form) {
+    form.onsubmit();
   },
 
-  restoreRHS: function(rhs_date_monday) {
-    var form = getForm('editRHS-'+rhs_date_monday);
+  restoreRHS: function(form) {
     $V(form.facture, '0');
     form.onsubmit();
   },

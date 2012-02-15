@@ -1204,7 +1204,9 @@ table.tbl th.element a{
   margin-top: -3px;
 }
 
-table.tbl th.arretee, table.tbl td.arretee{    
+table.tbl th.arretee, 
+table.tbl td.arretee,
+div.arretee {    
   background-image: url(images/icons/ray.gif);
 }
 
