@@ -50,15 +50,15 @@ class CConstantesMedicales extends CMbObject {
     "pouls"             => array(
       "type" => "physio",
       "unit" => "puls./min", 
-      "min" => 50, "max" => 120,
-      "standard" => 60,
+      "min" => 70, "max" => 120,
+      "standard" => 90,
       "colors" => array("black")
     ), 
     "ta"                => array(
       "type" => "physio",
       "unit" => "cmHg", 
       "formfields" => array("_ta_systole", "_ta_diastole"), 
-      "min" => -4, "max" => 25,
+      "min" => 2, "max" => 16,
       "standard" => 8,
       "colors" => array("#00A8F0", "#C0D800"),
       "conversion" => array("mmHg" => 10),
@@ -68,7 +68,7 @@ class CConstantesMedicales extends CMbObject {
       "type" => "physio",
       "unit" => "cmHg", 
       "formfields" => array("_ta_gauche_systole", "_ta_gauche_diastole"), 
-      "min" => -4, "max" => 25,
+      "min" => 2, "max" => 16,
       "standard" => 8,
       "colors" => array("#00A8F0", "#C0D800"),
       "conversion" => array("mmHg" => 10),
@@ -78,7 +78,7 @@ class CConstantesMedicales extends CMbObject {
       "type" => "physio",
       "unit" => "cmHg", 
       "formfields" => array("_ta_droit_systole", "_ta_droit_diastole"), 
-      "min" => -4, "max" => 25,
+      "min" => 2, "max" => 16,
       "standard" => 8,
       "colors" => array("#00A8F0", "#C0D800"),
       "conversion" => array("mmHg" => 10),
@@ -380,6 +380,7 @@ class CConstantesMedicales extends CMbObject {
             continue;
           }
         }
+        
         $conv = $_params["conversion"][$unit];
         
         if (isset($_params["formfields"])) {
@@ -400,7 +401,11 @@ class CConstantesMedicales extends CMbObject {
           if (isset($spec->min)) $spec->min *= $conv;
           if (isset($spec->max)) $spec->max *= $conv;
         }
-        $_params["unit"] = $unit;
+        
+        $_params["unit"]      = $unit;
+        $_params["standard"] *= $conv;
+        $_params["min"]      *= $conv;
+        $_params["max"]      *= $conv;
       }
     }
     

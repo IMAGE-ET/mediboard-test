@@ -427,15 +427,10 @@ foreach($data as $name => &$_data) {
     $_data["standard"] = $params["standard"];
   }
   
-  $margin_ratio = 0.2;
+  $margin_ratio = 0;
   
   if (in_array($name, array("ta", "ta_gauche", "ta_droit"))) {
-    if (isset($params["conversion"][$unite_ta]) && ($unite_ta != $params["conversion"][$unite_ta])) {
-      $_data["standard"] *= $params["conversion"][$unite_ta];
-    }
-    
-    $margin_ratio = 0.3;
-    $params['unit'] = $unite_ta;
+    $margin_ratio = 0.25;
   }
   
   // On cache les valeurs, qui sont a zero à cause du " " de la valeur de _diurese (pour forcer son affichage)
@@ -452,11 +447,17 @@ foreach($data as $name => &$_data) {
   
   $margin = abs($params["min"] - $params["max"]) * $margin_ratio;
   
+  $margin_top = $margin_bottom = $margin;
+  
+  if (isset($params["cumul_reset_config"])) {
+    $margin_top = getMax($params["max"], $y_values) * 0.2;
+  }
+  
   $_data["options"] = array(
     "title" => utf8_encode(CAppUI::tr("CConstantesMedicales-$name-desc").($params['unit'] ? " ({$params['unit']})" : "")),
     "yaxis" => array(
-      "min" => getMin($params["min"], $y_values)/* - $margin*/, // min
-      "max" => getMax($params["max"], $y_values) * 1.25, // max
+      "min" => getMin($params["min"], $y_values) - $margin_bottom, // min
+      "max" => getMax($params["max"], $y_values) + $margin_top, // max
     )
   );
   

@@ -1,6 +1,5 @@
 /* Vertical text */
 span.vertical {
-  width: 1.1em;
   display: inline-block;
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg);
@@ -19,9 +18,11 @@ span.vertical i {
 }
 
 span.vertical .nowm {
+  width: 0.9em;
   padding: 0 2px;
   display: inline-block;
   font-family: "lucida console", "courier new", courier, monospace;
+  font-size: 0.9em;
 }
 
 span.vertical .orig {

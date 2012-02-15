@@ -36,7 +36,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
   <meta name="format-detection" content="telephone=no" />
   
-  {{if $browser.name == "msie"}}
+  {{if $browser.name == "msie" && $app->user_id}}
     <!-- IE9 specific JumpLists -->
     <meta name="application-name" content="{{$conf.page_title}}" />
     <meta name="application-tooltip" content="{{$conf.page_title}}" />
@@ -96,7 +96,7 @@
       Event.observe(document, 'keydown', closeWindowByEscape);
     {{/if}}
     
-  	{{if @$conf.weinre_debug_host}}
+    {{if @$conf.weinre_debug_host}}
       setTimeout(function() {
         $$('head')[0].insert(DOM.script({src: 'http://{{$conf.weinre_debug_host}}/target/target-script-min.js'}));
       }, 0);
