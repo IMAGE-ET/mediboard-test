@@ -77,6 +77,9 @@ function ClearRDV(){
   $V(oForm.plageconsult_id, "", true);
   $V(oForm._date, "");
   $V(oForm.heure, "");
+  if (Preferences.choosePatientAfterDate == 1) {
+    PlageConsultSelector.init();
+  }
 }
 
 function annuleConsult(form, value) {
