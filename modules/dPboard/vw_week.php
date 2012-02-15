@@ -13,7 +13,6 @@ CAppUI::requireModuleFile("dPboard", "inc_board");
 $date = CValue::getOrSession("date", mbDate());
 $prec = mbDate("-1 week", $date);
 $suiv = mbDate("+1 week", $date);
-$vue  = CValue::getOrSession("vue2", CAppUI::pref("AFFCONSULT", 0));
 $today = mbDate();
 
 global $smarty;
@@ -154,21 +153,9 @@ $smarty->assign("debut", $debut);
 $smarty->assign("fin", $fin);
 $smarty->assign("prec", $prec);
 $smarty->assign("suiv", $suiv);
-$smarty->assign("vue",  $vue);
 $smarty->assign("chirSel",  $chirSel);
 $smarty->assign("planning",  $planning);
 
 $smarty->display("vw_week.tpl");
 
 ?>
-
-
-
-
-
-
-
-
-
-
-

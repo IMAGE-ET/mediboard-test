@@ -19,22 +19,27 @@ function viewItem(guid, id, date, oTd) {
   var url = new Url;
   url.addParam("board"     , "1");
   url.addParam("boardItem" , "1");
-  url.addParam("pratSel" , "{{$chirSel}}");
+  url.addParam("chirSel" , "{{$chirSel}}");
   url.addParam("date"    , date);
+
+  var sClass = guid.split("-")[0];
   
-  if(guid[6] == "c"){
+  if(sClass == "CPlageconsult"){
     url.setModuleAction("dPcabinet", "httpreq_vw_list_consult");
     url.addParam("plageconsult_id", id);
-    url.addParam("vue2"           , "{{$vue}}");
     url.addParam("selConsult"     , "");
   } 
-  else if(guid[6] == "O"){
+  else if(sClass == "CPlageOp"){
     url.setModuleAction("dPplanningOp", "httpreq_vw_list_operations");
     url.addParam("urgences", "0");
   } else return;
 
   url.requestUpdate('viewTooltip');
 }
+
+Main.add(function () {
+  Calendar.regField(getForm("changeDate").date, null, {noView: true});
+});
 </script>
 
 <!-- Script won't be evaled in Ajax inclusion. Need to force it -->
@@ -44,19 +49,16 @@ function viewItem(guid, id, date, oTd) {
 <table class="main">
   <tr>
     <th>
-      <form action="?m={{$m}}" name="changeDate" method="get">
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$prec}}" >&lt;&lt;&lt;</a>
+      Semaine du {{$debut|date_format:"%A %d %b %Y"}} au {{$fin|date_format:"%A %d %b %Y"}}
+      <form name="changeDate" action="?m={{$m}}" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
-        
-        <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$prec}}" >&lt;&lt;&lt;</a>
-        
-        Semaine du {{$debut|date_format:"%A %d %b %Y"}} au {{$fin|date_format:"%A %d %b %Y"}}
         <input type="hidden" name="date" class="date" value="{{$debut}}" onchange="this.form.submit()" />
-        
-        <a  href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$suiv}}">&gt;&gt;&gt;</a>
-        <br />
-        <a  href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$today}}">Aujourd'hui</a>
       </form>
+      <a  href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$suiv}}">&gt;&gt;&gt;</a>
+      <br />
+      <a  href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$today}}">Aujourd'hui</a>
     </th>
   </tr>
 
