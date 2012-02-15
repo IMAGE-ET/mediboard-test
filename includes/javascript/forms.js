@@ -316,7 +316,7 @@ function prepareForm(oForm) {
 
       oElement.writeAttribute("autofocus", "autofocus");
       
-      var i, applets = document.applets;
+      var applets = document.applets;
       
       if (applets.length) {
         if (!window._focusElement) {
@@ -327,7 +327,7 @@ function prepareForm(oForm) {
             
         function waitForApplet() {
           inactiveApplets = applets.length;
-          for(i = 0; i < applets.length; i++) {
+          for(var i = 0; i < applets.length; i++) {
             if (Prototype.Browser.IE || "isActive" in applets[i] && 
                 Object.isFunction(applets[i].isActive) && 
                 applets[i].isActive()) inactiveApplets--;
