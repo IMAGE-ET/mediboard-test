@@ -20,14 +20,14 @@ then
   echo " Options:"
   echo "   [-t <time>] is time in days before removal of files, default 7"
   echo "   [-b ] to create mysql binary log index"
-  echo "   [-m <mail>] mail address to send if diskfull detected"
+  echo "   [-l <login>] user:pass login to send a mail when diskfull is detected"
   exit 1
 fi
 
-mail=''
+login=''
 time=7
 binary_log=0
-args=`getopt m:t:b $*`
+args=`getopt t:l:b $*`
 
 if [ $? != 0 ] ; then
   echo "Invalid argument. Check your command line"; exit 0;
@@ -38,7 +38,7 @@ set -- $args
 for i; do
   case "$i" in
     -t) time=$2; shift 2;;
-    -m) mail=$2; shift 2;;
+    -l) login=$2; shift 2;;
     -b) binary_log=1; shift;;
     --) shift ; break ;;
   esac
@@ -67,30 +67,31 @@ force_dir $BASE_PATH
 cd ${BASE_PATH}
 
 ## If no enough free disk space (1.5 * size of database), send mail if provided and quit
-conf=`find /etc -name my.cnf 2>/dev/null|head -n 1`
+mysql_conf=`find /etc -name my.cnf 2>/dev/null|head -n 1`
 
-dir_mysql=`cat $conf|grep datadir|tr -s ' '|cut -d"=" -f 2`
-dir_mysql="$dir_mysql/$database"
-size_database=`du -k $dir_mysql|tail -n 1|sed -r 's/\s+/\ /g'|cut -d" " -f 1`
+mysql_data_root=`cat $mysql_conf|grep datadir|tr -s ' '|cut -d"=" -f 2`
+mysql_data_base="$mysql_data_root/$database"
+database_size=`du -k $mysql_data_base|tail -n 1|sed -r 's/\s+/\ /g'|cut -d" " -f 1`
 
 # Expanded size (database + tar)
-size_expanded=`echo "$size_database*1.5"|bc -l`
-freedisk=`df -k $BACKUP_PATH|tail -n 1|sed -r 's/\s+/\ /g'|cut -d" " -f 4`
+needed_size=$((database_size*3/2))
+available_size=`df -k $BACKUP_PATH|tail -n 1|sed -r 's/\s+/\ /g'|cut -d" " -f 4`
+available_size=$((available_size))
 
-# The size expanded is float, so execute the test with bc command
-full=`echo "$freedisk < $size_expanded"|bc`
-
-if [ $full -eq 1 ]
+if [ $available_size -lt $needed_size ]
 then
-  if [ ${#mail} -gt 1 ]
+  if [ -n "$login" ]
   then
+    info_script "Send a mail using $login login"
     # Name of the instance of mediboard
     instance=$(cd $BASH_PATH/../; pwd);
     instance=${instance##*/}
-    wget "http://localhost/${instance}/index.php?login=1&username=cron&password=alltheway&m=system&a=ajax_send_mail_diskfull&mail=${mail}"
+    wget "http://localhost/${instance}/?login=${login}&m=system&a=ajax_send_mail_diskfull"
   fi
-  exit 0
+  check_errs 2 "Needed space ($needed_size) exceeds available space ($available_size)"
 fi
+
+exit 0
 
 ## Make MySQL medthod
 
