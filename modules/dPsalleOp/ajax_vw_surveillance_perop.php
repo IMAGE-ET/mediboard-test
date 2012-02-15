@@ -74,7 +74,7 @@ function getWidth($datetime_start, $datetime_end){
 
 // ---------------------------------------------------
 // Gestes, Medicaments, Perfusions peranesth
-$gestes = array(
+$evenements = array(
   "CAffectationPersonnel" => array(),
   "CAnesthPerop" => array(),
 );
@@ -85,7 +85,7 @@ foreach ($interv->_ref_affectations_personnel as $emplacement => $affectations) 
   foreach($affectations as $_affectation) {
     if (!$_affectation->debut || !$_affectation->fin) continue;
     
-    $gestes["CAffectationPersonnel"][$_affectation->_id] = array(
+    $evenements["CAffectationPersonnel"][$_affectation->_id] = array(
       "icon" => null,
       "label" => $_affectation->_ref_personnel,
       "unit"  => null,
@@ -94,6 +94,7 @@ foreach ($interv->_ref_affectations_personnel as $emplacement => $affectations) 
       "position" => getPosition($_affectation->debut),
       "width" => getWidth($_affectation->debut, $_affectation->fin),
       "object" => $_affectation,
+      "editable" => false,
     );
   }
 }
@@ -105,7 +106,7 @@ foreach ($plageop->_ref_affectations_personnel as $emplacement => $affectations)
   foreach($affectations as $_affectation) {
     if (!$_affectation->debut || !$_affectation->fin) continue;
     
-    $gestes["CAffectationPersonnel"][$_affectation->_id] = array(
+    $evenements["CAffectationPersonnel"][$_affectation->_id] = array(
       "icon" => null,
       "label" => $_affectation->_ref_personnel,
       "unit"  => null,
@@ -114,6 +115,7 @@ foreach ($plageop->_ref_affectations_personnel as $emplacement => $affectations)
       "position" => getPosition($_affectation->debut),
       "width" => getWidth($_affectation->debut, $_affectation->fin),
       "object" => $_affectation,
+      "editable" => false,
     );
   }
 }
@@ -121,7 +123,7 @@ foreach ($plageop->_ref_affectations_personnel as $emplacement => $affectations)
 // Gestes perop
 $interv->loadRefsAnesthPerops();
 foreach($interv->_ref_anesth_perops as $_perop) {
-  $gestes["CAnesthPerop"][$_perop->_id] = array(
+  $evenements["CAnesthPerop"][$_perop->_id] = array(
     "icon" => null,
     "label" => $_perop->libelle,
     "unit"  => null,
@@ -129,6 +131,7 @@ foreach($interv->_ref_anesth_perops as $_perop) {
     "datetime" => $_perop->datetime,
     "position" => getPosition($_perop->datetime),
     "object" => $_perop,
+    "editable" => true,
   );
 }
 
@@ -157,8 +160,8 @@ if($prescription->_id){
     }
     
     $key = "CPrescription._chapitres.$_line->_chapitre";
-    if (!isset($gestes[$key])) {
-      $gestes[$key] = array();
+    if (!isset($evenements[$key])) {
+      $evenements[$key] = array();
     }
     
     /*
@@ -178,7 +181,7 @@ if($prescription->_id){
           $unite = $_line->_unite_prise;
         }
 
-        $gestes[$_line->_class][] = array(
+        $evenements[$_line->_class][] = array(
           "label" => "$quantite $unite",
           "alert" => false,
           "datetime" => $_planif->dateTime,
@@ -196,7 +199,7 @@ if($prescription->_id){
           $unite = $_adm->_ref_object->_ref_produit->libelle_unite_presentation;
         }
         
-        $gestes[$key][] = array(
+        $evenements[$key][] = array(
           "icon"  => $_line->_chapitre,
           "label" => $_view,
           "unit"  => "$_adm->quantite $unite",
@@ -204,6 +207,7 @@ if($prescription->_id){
           "datetime" => $_adm->dateTime,
           "position" => getPosition($_adm->dateTime),
           "object"   => $_line,
+          "editable" => false,
         );
       }
     }
@@ -217,7 +221,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("interv",      $interv);
 $smarty->assign("graphs",      $graphs);
-$smarty->assign("gestes",      $gestes);
+$smarty->assign("evenements",   $evenements);
 $smarty->assign("time_debut_op", $time_debut_op);
 $smarty->assign("time_fin_op",   $time_fin_op);
 $smarty->assign("yaxes_count", $yaxes_count);

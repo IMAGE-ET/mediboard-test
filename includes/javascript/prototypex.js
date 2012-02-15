@@ -595,12 +595,14 @@ Element.addMethods({
     /*root.select("label").each(function(label){
       label.observe("touchstart", Event.stop);
     });*/
-  
-    /*root.select("*[onclick], .control_tabs a, .control_tabs_vertical a").each(function(element) {
-      new NoClickDelay(element);
-    });*/
     
-    if (App.onMouseOverPrepared) return;
+    if (root.onMouseOverPrepared) return;
+  
+    /*
+    root.select("*[onclick], .control_tabs a, .control_tabs_vertical a").each(function(element) {
+      new NoClickDelay(element);
+    });
+    */
     
     var touchstart = document.on("touchstart", "[onmouseover]", function(event, element){
       element.mouseOverTriggered = false;
@@ -633,7 +635,7 @@ Element.addMethods({
       }
     });
     
-    App.onMouseOverPrepared = true;
+    root.onMouseOverPrepared = true;
   }
 });
 

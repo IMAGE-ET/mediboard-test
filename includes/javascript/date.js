@@ -266,7 +266,7 @@ var ProgressiveCalendar = Class.create({
                          (parseInt(this.date.year) ? this.pad(this.date.year, 4) : ''));
     
     if (this.options.icon) {
-      var cont = new Element('div', {className:"datePickerWrapper", style: 'position:relative;border:none;padding:0;margin:0;display:inline'+(Prototype.Browser.IE&&document.documentMode<8?'':'-block')+';'});
+      var cont = new Element('div', {className:"datePickerWrapper", style: 'position:relative;border:none;padding:0;margin:0;display:inline-block;'});
       this.elementView.wrap(cont);
       var icon = new Element('img', {src: this.options.icon, className: 'inputExtension'});
 

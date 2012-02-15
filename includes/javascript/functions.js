@@ -139,7 +139,7 @@ var WaitingMessage = {
   
   cover: function(element) {
     // don't cover hidden elements in IE
-    if (Prototype.Browser.IE && (element.style && element.style.display === "none")) {
+    if (Prototype.Browser.IE && document.documentMode < 9 && (element.style && element.style.display === "none")) {
       return;
     }
   

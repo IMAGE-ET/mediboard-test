@@ -344,6 +344,7 @@ $locales['config-dPsalleOp-max_sub_minutes'] = 'Nombre de minutes en moins maxim
 $locales['config-dPsalleOp-max_sub_minutes-desc'] = 'Ajustage possible en minutes en moins pour les champs d\'horodatage';
 $locales['config-dPsalleOp-mode_anesth'] = 'Mode anesthésie';
 $locales['config-dPsalleOp-mode_anesth-desc'] = 'N\'affiche que les informations modifiables dans un contexte d\'anesthésue';
+$locales['mod-dPsalleOp-tab-ajax_edit_evenement_perop'] = 'Evénement per-opératoire';
 $locales['mod-dPsalleOp-tab-configure'] = 'Configuration';
 $locales['mod-dPsalleOp-tab-print_feuille_bloc'] = 'Impression feuille de bloc';
 $locales['mod-dPsalleOp-tab-print_intervention_anesth'] = 'Fiche d\'intervention d\'anesthésie';

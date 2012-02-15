@@ -1220,11 +1220,11 @@ span.countertip {
 }
 
 /** Supervision graphs */
-.supervision .geste {
+.supervision .evenement {
   margin-bottom: -5px;
 }
 
-.supervision .geste > div {
+.supervision .evenement > div {
   cursor: pointer;
   white-space: nowrap;
   display: block;
@@ -1232,7 +1232,7 @@ span.countertip {
   background: #bbb;
 }
 
-.supervision .geste > div .marking,
+.supervision .evenement > div .marking,
 .supervision .now .marking {
   position: absolute; 
   top: 0; 
@@ -1254,7 +1254,7 @@ span.countertip {
   min-width: 2px;
 }
 
-.supervision .geste > div .marking > span {
+.supervision .evenement > div .marking > span {
   position: absolute; 
   bottom: 10px;
   background: #eee;
@@ -1263,32 +1263,32 @@ span.countertip {
   border-left: none;
 }
 
-.supervision .geste > div:hover .marking {
+.supervision .evenement > div:hover .marking {
   display: block;
 }
 
-.supervision .geste .label {
+.supervision .evenement .label {
   padding: 0 3px;
 }
 
-.supervision table.gestes {
+.supervision table.evenements {
   border: 1px solid #ccc;
   border-spacing: 0;
   border-collapse: collapse;
 }
 
-.supervision table.gestes td,
-.supervision table.gestes th {
+.supervision table.evenements td,
+.supervision table.evenements th {
   border: 1px solid #ccc;
   padding: 0;
 }
 
-.supervision table.gestes th {
+.supervision table.evenements th {
   vertical-align: middle;
   background: #eee;
 }
 
-.supervision table.gestes td {
+.supervision table.evenements td {
   padding-bottom: 10px;
 }
 
@@ -1344,7 +1344,7 @@ div.bullet.error {
 }
 
 @media print {
-  .supervision .geste > div {
+  .supervision .evenement > div {
     outline: 1px solid #ccc;
   }
 }

@@ -583,12 +583,18 @@ class COperation extends CCodable implements IPatientRelated {
     }
   }
   
+  /**
+   * @return CMediusers
+   */
   function loadRefChir($cache = 0) {
     $this->_ref_chir = $this->loadFwdRef("chir_id", $cache);
     $this->_praticien_id = $this->_ref_chir->_id;
     return $this->_ref_chir;
   }
   
+  /**
+   * @return CMediusers
+   */
   function loadRefPraticien($cache = 0) {
     return $this->_ref_praticien = $this->loadRefChir($cache);
   }
@@ -597,6 +603,9 @@ class COperation extends CCodable implements IPatientRelated {
     $this->loadRefPlageOp();
   }
   
+  /**
+   * @return CAffectation
+   */
   function loadRefAffectation() {
     $this->loadRefPlageOp();
     $where = array();
@@ -608,6 +617,7 @@ class COperation extends CCodable implements IPatientRelated {
     $this->_ref_affectation->loadRefsFwd();
     $this->_ref_affectation->_ref_lit->loadRefsFwd();
     $this->_ref_affectation->_ref_lit->_ref_chambre->loadRefsFwd();
+    return $this->_ref_affectation;
   }
   
   function loadRefsNaissances() {
@@ -633,6 +643,9 @@ class COperation extends CCodable implements IPatientRelated {
     }
   }
   
+  /**
+   * @return CPlageOp
+   */
   function loadRefPlageOp($cache = 0) {
     $this->_ref_anesth        = $this->loadFwdRef("anesth_id"            , $cache);
     $this->_ref_anesth_visite = $this->loadFwdRef("prat_visite_anesth_id", $cache);
@@ -694,6 +707,9 @@ class COperation extends CCodable implements IPatientRelated {
     $this->loadRefPlageOp();
   }
   
+  /**
+   * @return CConsultAnesth
+   */
   function loadRefsConsultAnesth() {
     if ($this->_ref_consult_anesth) {
       return;
@@ -714,14 +730,16 @@ class COperation extends CCodable implements IPatientRelated {
     return $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
   }
   
-   /*
+  /**
    * Chargement des gestes perop
    */
   function loadRefsAnesthPerops(){
     return $this->_ref_anesth_perops = $this->loadBackRefs("anesth_perops", "datetime");
   }
   
-  
+  /**
+   * @return CPatient
+   */
   function loadRefPatient($cache = false) {
     $this->loadRefSejour($cache);
     $this->_ref_sejour->loadRefPatient($cache);
@@ -757,6 +775,9 @@ class COperation extends CCodable implements IPatientRelated {
     $this->_ref_echange_hprim = $this->loadBackRefs("echanges_hprim", $order);
   }
   
+  /**
+   * @return bool
+   */
   function isCoded() {
     $this->loadRefPlageOp();
     $this->_coded = (CAppUI::conf("dPsalleOp COperation modif_actes") == "never") ||

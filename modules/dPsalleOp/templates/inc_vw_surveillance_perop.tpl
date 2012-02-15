@@ -69,6 +69,16 @@ Main.add(function(){
     
   })(jQuery);
 });
+
+editEvenementPerop = function(guid, operation_id, datetime) {
+  var url = new Url("dPsalleOp", "ajax_edit_evenement_perop");
+  url.addParam("evenement_guid", guid);
+  url.addParam("operation", operation_id);
+  url.addParam("datetime", datetime);
+  url.requestModal(400, 200);
+  
+  return false;
+}
 </script>
 
 {{assign var=images value="CPrescription"|static:"images"}}
@@ -123,7 +133,7 @@ Main.add(function(){
       {{/if}}
 
       <button onclick="enChantier()" class="submit">Injection</button>
-      <button onclick="enChantier()" class="warning" style="border-color: red;">Incident</button>
+      <button onclick="editEvenementPerop('CAnesthPerop-0', '{{$interv->_id}}')" class="warning" style="border-color: red;">Incident</button>
     </td>
   </tr>
 </table>
@@ -144,37 +154,47 @@ Main.add(function(){
     <br />
   {{/foreach}}
   
-  <table class="main gestes" style="table-layout: fixed; width: {{$width}}px;">
+  <table class="main evenements" style="table-layout: fixed; width: {{$width}}px;">
     <col style="width: {{$yaxes_count*38-14}}px;" />
     
-    {{foreach from=$gestes key=_label item=_gestes}}
+    {{foreach from=$evenements key=_label item=_evenements}}
       <tr>
         <th>{{tr}}{{$_label}}{{/tr}}</th>
         <td>
-        {{foreach from=$_gestes item=_geste}}
-          {{assign var=geste_width value=""}}
-          {{if array_key_exists('width', $_geste)}} 
-            {{assign var=geste_width value="width: `$_geste.width`%;"}}
+        {{foreach from=$_evenements item=_evenement}}
+          {{if $_evenement.position <= 100}}
+          {{assign var=evenement_width value=""}}
+          {{if array_key_exists('width', $_evenement)}} 
+            {{assign var=evenement_width value="width: `$_evenement.width`%;"}}
           {{/if}}
           
-          <div style="padding-left: {{$_geste.position}}%; {{if $_geste.alert}} color: red; {{/if}} {{if array_key_exists('width', $_geste)}} margin-bottom: 2px; {{/if}}" class="geste">
-            <div onmouseover="ObjectTooltip.createEx(this, '{{$_geste.object->_guid}}');" style="{{$geste_width}}">
+          <div style="padding-left: {{$_evenement.position}}%; {{if $_evenement.alert}} color: red; {{/if}} {{if array_key_exists('width', $_evenement)}} margin-bottom: 2px; {{/if}}" class="evenement">
+            <div onmouseover="ObjectTooltip.createEx(this, '{{$_evenement.object->_guid}}');" style="{{$evenement_width}}">
               <div class="marking">
-                <!--<span>{{$_geste.datetime|date_format:$conf.datetime}}</span>-->
+                <!--<span>{{$_evenement.datetime|date_format:$conf.datetime}}</span>-->
               </div>
-              <div class="label" title="{{$_geste.datetime|date_format:$conf.datetime}}">
-                {{if $_geste.icon}}
-                  {{assign var=_icon value=$_geste.icon}}
-                  <img src="{{$images.$_icon}}" />
+              <div class="label" title="{{$_evenement.datetime|date_format:$conf.datetime}}">
+                {{if $_evenement.editable}} 
+                  <a href="#{{$_evenement.object->_guid}}" onclick="return editEvenementPerop('{{$_evenement.object->_guid}}', '{{$interv->_id}}')">
                 {{/if}}
-                {{if $_geste.unit}}
-                  {{$_geste.unit}} <strong>{{$_geste.label}}</strong>
-                {{else}}
-                  {{$_geste.label}}
+                
+                  {{if $_evenement.icon}}
+                    {{assign var=_icon value=$_evenement.icon}}
+                    <img src="{{$images.$_icon}}" />
+                  {{/if}}
+                  {{if $_evenement.unit}}
+                    {{$_evenement.unit}} <strong>{{$_evenement.label}}</strong>
+                  {{else}}
+                    {{$_evenement.label}}
+                  {{/if}}
+                
+                {{if $_evenement.editable}} 
+                  </a>
                 {{/if}}
               </div>
             </div>
           </div>
+          {{/if}}
         {{/foreach}}
         </td>
       </tr>

@@ -719,7 +719,7 @@ var Url = Class.create({
       }
       // Cover div
       else {
-        if (!Prototype.Browser.IE || oOptions.coverIE) 
+        if (!Prototype.Browser.IE || oOptions.coverIE || document.documentMode > 8) 
           WaitingMessage.cover(element);
       }
       
