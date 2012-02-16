@@ -15,7 +15,7 @@ var Action = {
   module: "hl7",
   
   read: function () {
-    var url = new Url(this.module, "ajax_read_hl7v2_file");
+    var url = new Url(this.module, "ajax_read_hl7v2_files");
     url.requestUpdate("read_hl7_file");
   },
   

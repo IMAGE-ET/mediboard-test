@@ -80,16 +80,16 @@ $vue = CValue::getOrSession("vue2", 0);
 foreach ($listPlage as &$plage) {
   $plage->_ref_chir =& $userSel;
   $plage->loadRefsConsultations(false, !$vue);
-	$plage->loadRefsNotes();
-	
-	// Mass preloading
+  $plage->loadRefsNotes();
+  
+  // Mass preloading
   CMbObject::massLoadFwdRef($plage->_ref_consultations, "patient_id");
   CMbObject::massLoadFwdRef($plage->_ref_consultations, "sejour_id");
   CMbObject::massLoadFwdRef($plage->_ref_consultations, "categorie_id");
 
   foreach ($plage->_ref_consultations as &$consultation) {
     $consultation->loadRefPatient(1);
-		$consultation->loadRefSejour(1);
+    $consultation->loadRefSejour(1);
     $consultation->loadRefCategorie(1);
     $consultation->countDocItems();
   }
