@@ -610,7 +610,7 @@ Element.addMethods('input', {
       showPlus: false,
       fraction: false,
       deferEvent: false,
-      showFraction: true,
+      showFraction: false,
       deferDelay: Prototype.Browser.IE ? 300 : 200
     }, options);
     
@@ -720,7 +720,9 @@ Element.addMethods('input', {
       element.value = Number(element.value).toFixed(options.decimals);
     }
     
-    var table = '<table class="control numericField"><tr><td></td><td class="arrows"><div class="up"></div><div class="down"></div></td><td class="fraction"></td></tr></table>';
+    var fractionCell = (options.showFraction ? '<td class="fraction"></td>'  : '');
+    var table = '<table class="control numericField"><tr><td></td><td class="arrows"><div class="up"></div><div class="down"></div></td>'+fractionCell+'</tr></table>';
+    
     element.insert({before: table});
     table = element.previous();
     table.down('td').update(element);
