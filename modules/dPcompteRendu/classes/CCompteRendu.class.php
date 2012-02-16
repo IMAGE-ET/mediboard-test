@@ -875,13 +875,10 @@ class CCompteRendu extends CDocumentItem {
       // Or footer id
       if (!$last_div) {
         $last_div = $xpath->query("//div[@id='footer']")->item(0);
-      }
-      
-      // First element to move to the <div id="body">,
-      // so next to the header / footer
-      $last_div = $last_div->nextSibling;
-      while ($last_div->nodeType != 1) {
         $last_div = $last_div->nextSibling;
+        while ($last_div->nodeType != 1) {
+          $last_div = $last_div->nextSibling;
+        }
       }
       
       $div_body = $xml->createElement("div");
