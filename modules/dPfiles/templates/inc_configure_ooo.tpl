@@ -41,6 +41,6 @@
 	</code>
   <br/>
   <code>
-    >	<em>[path]</em>/soffice -accept="socket,host=localhost,port=8100;urp;StarOffice.ServiceManager" -no-logo -headless -nofirststartwizard -no-restore >> /dev/null &
+    >	export HOME=/tmp; <em>[path]</em>/soffice -accept="socket,host=localhost,port=8100;urp;StarOffice.ServiceManager" -no-logo -headless -nofirststartwizard -no-restore >> /dev/null &
 	</code>
 </div>
