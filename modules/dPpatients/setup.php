@@ -1726,7 +1726,12 @@ class CSetupdPpatients extends CSetup {
       CHANGE `cp` `cp` VARCHAR(8) DEFAULT ''";
     $this->addQuery($query);
     
-    $this->mod_version = "1.42";
+    $this->makeRevision("1.42");
+    $query = "ALTER TABLE `constantes_medicales` 
+              ADD `bricker` FLOAT UNSIGNED";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.43";
     
     $query = "SHOW TABLES LIKE 'categorie_socioprofessionnelle'";
     $this->addDatasource("INSEE", $query);

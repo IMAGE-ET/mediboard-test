@@ -290,6 +290,7 @@ class CConstantesMedicales extends CMbObject {
         "sonde_nephro_2"     => "+", 
         "sonde_vesicale"     => "+", 
         "catheter_suspubien" => "+", 
+        "bricker"            => "+", 
         "entree_lavage"      => "-",
       ),
       "alert_low" => array(0, "#ff3232"),
@@ -330,6 +331,12 @@ class CConstantesMedicales extends CMbObject {
       "cumul_reset_config" => "sonde_vesicale_cumul_reset_hour",
     ),
     "catheter_suspubien" => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 200,
+      "cumul_reset_config" => "sonde_vesicale_cumul_reset_hour",
+    ),
+    "bricker" => array(
       "type" => "drain",
       "unit" => "ml", 
       "min" => 0, "max" => 200,
@@ -488,6 +495,7 @@ class CConstantesMedicales extends CMbObject {
     $specs['sonde_nephro_2']         = 'float min|0';
     $specs['sonde_vesicale']         = 'float min|0';
     $specs['catheter_suspubien']     = 'float min|0';
+    $specs['bricker']                = 'float min|0';
     $specs['entree_lavage']          = 'float min|0';
     
     return $specs;
