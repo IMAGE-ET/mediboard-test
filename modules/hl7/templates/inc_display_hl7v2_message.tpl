@@ -13,8 +13,8 @@
     <li><a href="#message-{{$key}}-er7-input">ER7 Input</a></li>
     <li><a href="#message-{{$key}}-er7-output">ER7 Output</a></li>
     <li><a href="#message-{{$key}}-xml">XML</a></li>
-    <li><a href="#message-{{$key}}-warnings" {{if $message->errors|@count}} class="wrong" {{/if}}>Avertissements</a></li>
-    <li><a href="#message-{{$key}}-errors" {{if $message->errors|@count}} class="wrong" {{/if}}>Erreurs</a></li>
+    <li><a href="#message-{{$key}}-warnings" {{if $message->_warnings_msg}} class="wrong"{{/if}}>Avertissements</a></li>
+    <li><a href="#message-{{$key}}-errors" {{if $message->_errors_msg}} class="wrong" {{/if}}>Erreurs</a></li>
   </ul>
   <hr class="control_tabs" />
    

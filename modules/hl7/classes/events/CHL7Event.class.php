@@ -31,9 +31,12 @@ class CHL7Event {
   
   var $_receiver     = null;
   var $_sender       = null;
-  var $_exchange_ihe = null;  
+  var $_exchange_ihe = null; 
+  var $_is_i18n      = null; 
   
-  function __construct($i18n = null) {}
+  function __construct($i18n = null) {
+    $this->_is_i18n = $i18n;
+  }
   
   function build($object) {}
   

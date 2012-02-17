@@ -25,6 +25,9 @@ CValue::setSession("message", $message_string);
 $message = new CHL7v2Message;
 $message->parse($message_string);
 
+$message->_errors_msg   = !$message->isOK(CHL7v2Error::E_ERROR);
+$message->_warnings_msg = !$message->isOK(CHL7v2Error::E_WARNING);
+
 $geshi = new Geshi($message->toXML()->saveXML(), "xml");
 $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
 $geshi->set_overall_style("max-height: 100%; white-space:pre-wrap;");
