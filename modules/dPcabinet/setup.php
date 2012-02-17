@@ -1413,8 +1413,13 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("1.43");
     $this->addPrefQuery("choosePatientAfterDate", "0");
     
-    $this->mod_version = "1.44";
+    $this->makeRevision("1.44");
     
+    $query = "ALTER TABLE `consultation` 
+      ADD `remise`  VARCHAR(10) NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.45";
   }
 }
 ?>

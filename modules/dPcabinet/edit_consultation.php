@@ -261,16 +261,13 @@ if ($consult->_id) {
 $consult->loadRefsActesTarmed();
 $soustotal_base = 0;
 $soustotal_dh   = 0;
-$ristourne = 0;
 if ($consult->_ref_actes_tarmed) {
   foreach($consult->_ref_actes_tarmed as $acte){
     $soustotal_base += $acte->montant_base;
     $soustotal_dh   += $acte->montant_depassement; 
-    $ristourne = $acte->ristourne; 
   }
 }
-$pct = 1-($ristourne/100);
-$total = ($soustotal_base + $soustotal_dh)*$pct;
+$total = $soustotal_base + $soustotal_dh;
 $total = round($total,2);
 
 // Tout utilisateur peut consulter en lecture seule une consultation de séjour
@@ -318,7 +315,6 @@ if(CModule::getActive("dPprescription")){
 $smarty->assign("soustotal_base" , $soustotal_base);
 $smarty->assign("soustotal_dh"   , $soustotal_dh);
 $smarty->assign("total"          , $total);
-$smarty->assign("ristourne"          , $ristourne);
 if ($consult->_is_dentiste) {
   $devenirs_dentaires = $consult->_ref_patient->loadRefsDevenirDentaire();
   

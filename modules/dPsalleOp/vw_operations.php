@@ -157,7 +157,6 @@ $acte_ngap->loadListExecutants();
 
 $soustotal_base = 0;
 $soustotal_dh   = 0;
-$ristourne = 0;
 $acte_tarmed = null;
 if(CModule::getInstalled("tarmed")){
 	//Initialisation d'un acte Tarmed
@@ -169,13 +168,9 @@ if(CModule::getInstalled("tarmed")){
 	foreach($selOp->_ref_actes_tarmed as $acte){
 	  $soustotal_base += $acte->montant_base;
 	  $soustotal_dh   += $acte->montant_depassement;  
-	  $ristourne = $acte->ristourne;
 	}
-	
 }
-
-$pct = 1-($ristourne/100);
-$total = ($soustotal_base + $soustotal_dh)*$pct;
+$total = $soustotal_base + $soustotal_dh;
 $total = round($total,2);
 
 // Vérification de la check list journalière
@@ -240,7 +235,6 @@ if (CAppUI::conf("dPsalleOp enable_surveillance_perop")) {
 $smarty->assign("soustotal_base" , $soustotal_base);
 $smarty->assign("soustotal_dh"   , $soustotal_dh);
 $smarty->assign("total"          , $total);
-$smarty->assign("ristourne"      , $ristourne);
 
 $smarty->assign("anesth_perop"           , new CAnesthPerop());
 $smarty->assign("unites"                 , $unites);
