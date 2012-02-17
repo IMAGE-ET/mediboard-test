@@ -7,8 +7,14 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
-{{mb_script module=dPhospi script=drag_patient}}
 
+
+<script>
+Main.add(function () {
+  Calendar.regField(getForm("changeDate").date, null, {noView: true});
+});
+</script>
+{{mb_script module=dPhospi script=drag_patient}}
 
 <style type="text/css">
   
@@ -81,7 +87,21 @@ div.ssr-sejour-bar {
 }
 
 </style>
-  
+
+<div style="text-align:center;">
+<br/>
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$prec}}" >&lt;&lt;&lt;</a>
+      {{$date|date_format:"%A %d %b %Y"}}
+      <form name="changeDate" action="?m={{$m}}" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="{{$tab}}" />
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+      </form>
+      <a  href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$suiv}}">&gt;&gt;&gt;</a>
+    
+<br/>
+</div>
+</table> 
 <table class="main">
   <tr>
     <th class="title" style="width:150px;">Patiens  </th>

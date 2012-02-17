@@ -13,13 +13,11 @@ CCanDo::checkRead();
 global $can, $g;
 
 $can->needsRead();
-$date           = CValue::getOrSession("date", mbDate());
-$ds = CSQLDataSource::get("std");
+$ds   = CSQLDataSource::get("std");
 
 // Récupération des paramètres
-$service_id 	= CValue::postOrSession("service_id");
-
-$date_recherche = CValue::getOrSession("date_recherche", mbDateTime());
+$service_id 	   = CValue::postOrSession("service_id");
+$date  = CValue::getOrSession("date", mbDateTime());
 
 //Chargement de tous les services
 $service_selectionne = new CService();
@@ -135,8 +133,8 @@ if($service_id){
     "sejour"  => "sejour.sejour_id   = affectation.sejour_id"
   );
   $where = array(
-    "affectation.entree"  => "< '$date_recherche'",
-    "affectation.sortie"  => "> '$date_recherche'",
+    "affectation.entree"  => "< '$date'",
+    "affectation.sortie"  => "> '$date'",
     "service.service_id"  => CSQLDataSource::prepareIn(array_keys($services), null),
     "sejour.group_id"     => "= '$g'"
   );
@@ -153,8 +151,8 @@ if($service_id){
     $sejour = new CSejour();
     
     $where = array(
-      "sejour.entree"  => "< '$date_recherche'",
-      "sejour.sortie"  => "> '$date_recherche'",
+      "sejour.entree"  => "< '$date'",
+      "sejour.sortie"  => "> '$date'",
       "sejour.group_id"     => "= '$g'"
     );
     $order = "sejour.entree, sejour.sortie";
@@ -179,7 +177,9 @@ $smarty->assign("les_services"          , $les_services);
 $smarty->assign("chambres"              , $chambres);
 $smarty->assign("service_id"            , $service_id);
 $smarty->assign("sejours"	              , $sejours);
-$smarty->assign("date_recherche"        , $date_recherche);
+$smarty->assign("date"                  , $date);
+$smarty->assign("suiv"                  , mbDate("+1 day", $date));
+$smarty->assign("prec"                  , mbDate("-1 day", $date));
 $smarty->assign("chambres_affectees"    , $listAff["Aff"]);
 $smarty->assign("chambre_non_affectees" , $listAff["NotAff"]);
 $smarty->assign("services"              , $services);
