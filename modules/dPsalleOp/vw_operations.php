@@ -164,11 +164,12 @@ if(CModule::getInstalled("tarmed")){
 	$acte_tarmed->quantite = 1;
 	$acte_tarmed->loadListExecutants();
 	$acte_tarmed->loadRefExecutant();
-
-	foreach($selOp->_ref_actes_tarmed as $acte){
-	  $soustotal_base += $acte->montant_base;
-	  $soustotal_dh   += $acte->montant_depassement;  
-	}
+  if($selOp->_ref_actes_tarmed){
+		foreach($selOp->_ref_actes_tarmed as $acte){
+		  $soustotal_base += $acte->montant_base;
+		  $soustotal_dh   += $acte->montant_depassement;  
+		}
+  }
 }
 $total = $soustotal_base + $soustotal_dh;
 $total = round($total,2);
