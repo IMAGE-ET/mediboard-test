@@ -323,12 +323,12 @@ CLibrary::$all[$library->name] = $library;
 $library = new CLibrary;
 $library->name = "Flotr plotting library";
 $library->url = "http://solutoire.com/flotr/";
-$library->fileName = "flotr.r301.tar.gz";
+$library->fileName = "flotr.r347.tar.gz";
 $library->description = "Création de graphiques en JS";
 $library->sourceDir = "flotr";
 $library->targetDir = "flotr";
 $library->versionFile = "flotr.js";
-$library->versionString = 'bind(this))},setOptions';
+$library->versionString = 'Revision: 347';
 
 CLibrary::$all[$library->name] = $library;
 
