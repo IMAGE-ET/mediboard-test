@@ -1578,6 +1578,22 @@ class CSejour extends CCodable implements IPatientRelated {
   }
   
   /**
+   * Construit le tag NPA en fonction des variables de configuration
+   * @param $group_id Permet de charger le NOA pour un établissement donné si non null
+   * @return string
+   */
+  static function getTagNPA($group_id = null, $type_tag = "tag_dossier_pa") {
+    $tag_NPA = CAppUI::conf("dPplanningOp CSejour tag_dossier_pa");
+
+    // Pas de tag NPA
+    if (null == $tag_NPA) {
+      return;
+    }
+    
+    return str_replace('$g', $group_id, $tag_NPA);
+  }
+  
+  /**
    * Charge le NDA du séjour pour l'établissement courant
    * @param $group_id Permet de charger le NDA pour un établissement donné si non null
    */
