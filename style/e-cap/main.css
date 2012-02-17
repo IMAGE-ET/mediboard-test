@@ -53,6 +53,10 @@ table.form th.category {
   border: #ccc 1px solid;
 }
 
+table.form th.section, table.tbl th.section {
+  background-color: #BDCEFA;
+}
+
 table.form th.category label {
   color: #000;
 }
