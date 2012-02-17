@@ -61,8 +61,14 @@ Main.add(function(){
 function drawGraphs(showLegend){
   $H(graphs).each(function(pair){
     var g = pair.value;
-    $('graph-'+pair.key).update();
-    Flotr.draw($('graph-'+pair.key), g.series, Object.extend(g.options, {legend: {show: showLegend}}));
+    $("graph-"+pair.key).update();
+    $("legend-"+pair.key).update();
+    
+    g.options.legend = {
+      show: true,
+      container: (showLegend ? null : $("legend-"+pair.key))
+    };
+    Flotr.draw($('graph-'+pair.key), g.series, g.options);
   });
   
   Object.keys(Details).each(function(d){
@@ -187,7 +193,7 @@ function drawGraphs(showLegend){
   <tr>
     <td colspan="6" class="button">
       <button class="search" type="submit">Afficher</button>
-      <label><input type="checkbox" onclick="drawGraphs(this.checked)" checked="checked" /> Légende</label>
+      <label><input type="checkbox" onclick="drawGraphs(this.checked)" checked="checked" /> Légende intégrée</label>
       <label><input type="checkbox" name="hors_plage_view" {{if $hors_plage}}checked="true"{{/if}}
         onchange="$V(this.form.hors_plage, this.checked ? 1 : 0)"/>Hors plage</label>
       <input type="hidden" name="hors_plage" value="{{$hors_plage}}" />
@@ -197,5 +203,10 @@ function drawGraphs(showLegend){
 </form>
 
 {{foreach from=$graphs item=graph key=key}}
-  <div style="width: 480px; height: 350px; float: left; margin: 1em;" id="graph-{{$key}}"></div>
+<table class="layout">
+  <tr>
+    <td><div style="width: 600px; height: 400px; float: left; margin: 1em;" id="graph-{{$key}}"></div></td>
+    <td style="vertical-align: top;" id="legend-{{$key}}"></td>
+  </tr>
+</table>
 {{/foreach}}
