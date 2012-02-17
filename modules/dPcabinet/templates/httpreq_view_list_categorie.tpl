@@ -5,16 +5,21 @@
   <td>
     <script type="text/javascript">
      listCat = {{$listCat|@json}};
-     reloadIcone = function(icone){
+     
+     reloadIcone = function(cat_id){
        var img = $('iconeBackground');
+       var form = getForm('editFrm');
        if (!img) return;
        
-       if (!listCat[icone]) {
+       if (!listCat[cat_id]) {
          img.hide();
        }
        else {
-         img.show().src = "./modules/dPcabinet/images/categories/"+listCat[icone];
+         img.show().src = "./modules/dPcabinet/images/categories/"+listCat[cat_id]['nom_icone'];
+         $V(form.duree, listCat[cat_id]['duree']);
+         $V(form.rques, ($V(form.rques) ? $V(form.rques) + '\n' : '' ) + listCat[cat_id]['commentaire']);
        }
+       $V(form.duree, listCat)
      }
 
      Main.add(function() {

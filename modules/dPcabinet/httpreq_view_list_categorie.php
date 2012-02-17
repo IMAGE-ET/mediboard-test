@@ -20,9 +20,14 @@ $categories = $categorie->loadList($whereCategorie,$orderCategorie);
 
 // Creation du tableau de categories simplifié pour le traitement en JSON
 $listCat = array();
-foreach($categories as $key => $cat){
-  $listCat[$cat->_id] = $cat->nom_icone;
+
+foreach ($categories as $key => $cat){
+  $listCat[$cat->_id] = array(
+    "nom_icone"   => $cat->nom_icone,
+    "duree"       => $cat->duree,
+    "commentaire" => utf8_encode($cat->commentaire));
 }
+
 
 
 // Création du template

@@ -1419,7 +1419,14 @@ class CSetupdPcabinet extends CSetup {
       ADD `remise`  VARCHAR(10) NOT NULL DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.45";
+    $this->makeRevision("1.45");
+    $query="ALTER TABLE `consultation_cat` 
+      CHANGE `function_id` `function_id` INT (11) UNSIGNED NOT NULL,
+      ADD `duree` TINYINT (4) UNSIGNED NOT NULL DEFAULT '1',
+      ADD `commentaire` TEXT;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.46";
   }
 }
 ?>

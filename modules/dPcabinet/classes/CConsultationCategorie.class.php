@@ -18,6 +18,8 @@ class CConsultationCategorie extends CMbObject {
   // DB fields
   var $nom_categorie = null;
   var $nom_icone     = null;
+  var $duree         = null;
+  var $commentaire   = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -31,6 +33,8 @@ class CConsultationCategorie extends CMbObject {
     $specs["function_id"]   = "ref notNull class|CFunctions";
     $specs["nom_categorie"] = "str notNull";
     $specs["nom_icone"]     = "str notNull";
+    $specs["duree"]         = "num min|1 max|9 notNull default|1 show|0";
+    $specs["commentaire"]   = "text helped seekable";
     return $specs;
   }
   
