@@ -20,7 +20,9 @@ $sejours = array();
 foreach ($ideces as $_idex) {
   $sejour = $_idex->loadTargetObject();
   $sejour->loadRefPatient()->loadIPP();
-  $sejour->loadBackRefs("rhss", "date_monday");
+  foreach ($sejour->loadBackRefs("rhss", "date_monday") as $_rhs) {
+  	$_rhs->loadRefsNotes();
+  }
   $sejours[$sejour->_id] = $sejour; 
 } 
 

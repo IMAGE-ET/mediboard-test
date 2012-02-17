@@ -14,8 +14,9 @@ CCanDo::checkEdit();
 $rhs = new CRHS();
 $rhs->load(CValue::get("rhs_id"));
 if (!$rhs->_id) {
-	CAppUI::stepAjax("RHS inexistant", UI_MSG_ERROR);
+  CAppUI::stepAjax("RHS inexistant", UI_MSG_ERROR);
 }
+$rhs->loadRefsNotes();
 
 // Liste des catégories d'activité
 $type_activite = new CTypeActiviteCdARR();
@@ -28,9 +29,8 @@ if($rhs->_id) {
     $totaux[$rhs->_id][$_type->code] = 0;
   }
   $rhs->loadRefSejour();
-  $rhs->loadBackRefs("lines");
   $_line = new CLigneActivitesRHS();
-  foreach($rhs->_back["lines"] as $_line) {
+  foreach($rhs->loadBackRefs("lines") as $_line) {
     $_line->loadRefActiviteCdARR();
     $_line->_ref_code_activite_cdarr->loadRefTypeActivite();
     $totaux[$rhs->_id][$_line->_ref_code_activite_cdarr->_ref_type_activite->code] += $_line->_qty_total;

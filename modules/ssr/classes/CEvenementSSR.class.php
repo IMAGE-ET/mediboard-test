@@ -168,7 +168,7 @@ class CEvenementSSR extends CMbObject {
         $where["code_intervenant_cdarr"] = "= '$code_intervenant_cdarr'";
         $ligne_activite_rhs->loadObject($where);
         
-        $this->realise ? $ligne_activite_rhs->incrementOrDecrementDay($this->debut, "inc") : $ligne_activite_rhs->incrementOrDecrementDay($this->debut, "dec");
+        $ligne_activite_rhs->crementDay($this->debut, $this->realise ? "inc" : "dec");
         
         if (!$ligne_activite_rhs->_id) {
           $ligne_activite_rhs->rhs_id                 = $rhs->_id;

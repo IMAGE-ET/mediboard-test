@@ -27,6 +27,8 @@
     {{foreach from=$days key=day item=litteral_day}}
     <th class="category narrow">{{mb_title object=$rhs_line field=qty_$litteral_day}}</th>
     {{/foreach}}
+    
+    <th class="narrow"></th>
   </tr>
   {{foreach from=$rhs->_back.lines item=_line name=backlines}}
     {{assign var=executant value=$_line->_fwd.executant_id}}
@@ -53,9 +55,9 @@
         {{/if}}
       </td>
       <td class="text">
-        {{$activite->_view}}
+        {{$activite}}
         <br />
-        <small>{{$activite->_ref_type_activite->_view}}</small>
+        <small>{{$activite->_ref_type_activite}}</small>
       </td>
       <td class="text">
         {{mb_include module="mediusers" template="inc_vw_mediuser" mediuser=$executant}}
@@ -66,6 +68,11 @@
       {{foreach from=$days key=day item=litteral_day}}
         {{mb_include template="inc_line_rhs"}}
       {{/foreach}}
+      
+      <td>
+        {{mb_include module=system template=inc_object_history object=$_line}}
+      </td>
+      
     </tr>
   {{foreachelse}}
   <tr>

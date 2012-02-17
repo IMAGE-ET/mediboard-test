@@ -72,64 +72,80 @@ class CLigneActivitesRHS extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->loadRefActiviteCdARR();
-    $this->_view = $this->_ref_code_activite_cdarr->_view;
-    $this->_qty_total = $this->qty_mon + $this->qty_tue + $this->qty_wed + $this->qty_thu +
-                        $this->qty_fri + $this->qty_sat + $this->qty_sun;
-    if(!$this->qty_mon) $this->qty_mon = "";
-    if(!$this->qty_tue) $this->qty_tue = "";
-    if(!$this->qty_wed) $this->qty_wed = "";
-    if(!$this->qty_thu) $this->qty_thu = "";
-    if(!$this->qty_fri) $this->qty_fri = "";
-    if(!$this->qty_sat) $this->qty_sat = "";
-    if(!$this->qty_sun) $this->qty_sun = "";
+    $this->_view = $this->loadRefActiviteCdARR()->_view;
+
+    $this->_qty_total = 
+      $this->qty_mon + 
+      $this->qty_tue + 
+      $this->qty_wed + 
+      $this->qty_thu +
+      $this->qty_fri + 
+      $this->qty_sat + 
+      $this->qty_sun;
+      
+    if (!$this->qty_mon) $this->qty_mon = "";
+    if (!$this->qty_tue) $this->qty_tue = "";
+    if (!$this->qty_wed) $this->qty_wed = "";
+    if (!$this->qty_thu) $this->qty_thu = "";
+    if (!$this->qty_fri) $this->qty_fri = "";
+    if (!$this->qty_sat) $this->qty_sat = "";
+    if (!$this->qty_sun) $this->qty_sun = "";
   }
   
   function updatePlainFields() {
     return parent::updatePlainFields();
-    if($this->qty_mon == "") $this->qty_mon = "0";
-    if($this->qty_tue == "") $this->qty_tue = "0";
-    if($this->qty_wed == "") $this->qty_wed = "0";
-    if($this->qty_thu == "") $this->qty_thu = "0";
-    if($this->qty_fri == "") $this->qty_fri = "0";
-    if($this->qty_sat == "") $this->qty_sat = "0";
-    if($this->qty_sun == "") $this->qty_sun = "0";
+    if ($this->qty_mon == "") $this->qty_mon = "0";
+    if ($this->qty_tue == "") $this->qty_tue = "0";
+    if ($this->qty_wed == "") $this->qty_wed = "0";
+    if ($this->qty_thu == "") $this->qty_thu = "0";
+    if ($this->qty_fri == "") $this->qty_fri = "0";
+    if ($this->qty_sat == "") $this->qty_sat = "0";
+    if ($this->qty_sun == "") $this->qty_sun = "0";
   }
   
   function loadRefActiviteCdARR() {
-    $this->_ref_code_activite_cdarr = CActiviteCdARR::get($this->code_activite_cdarr);
+    return $this->_ref_code_activite_cdarr = CActiviteCdARR::get($this->code_activite_cdarr);
   }
   
   function loadRefIntervenantCdARR() {
     return $this->_ref_code_intervenant_cdarr = CIntervenantCdARR::get($this->code_intervenant_cdarr);
   }
 	
-	function loadRefRHS() {
-		$this->_ref_rhs = $this->loadFwdRef("rhs_id");
-	}
-	
-	function incrementOrDecrementDay($datetime, $action) {
-	  $day = mbTransformTime($datetime, null, "%u");
-	  
-	  if($day == 1) ($action == "inc") ? $this->qty_mon++ : $this->qty_mon--;
-    if($day == 2) ($action == "inc") ? $this->qty_tue++ : $this->qty_tue--;
-    if($day == 3) ($action == "inc") ? $this->qty_wed++ : $this->qty_wed--;
-    if($day == 4) ($action == "inc") ? $this->qty_thu++ : $this->qty_thu--;
-    if($day == 5) ($action == "inc") ? $this->qty_fri++ : $this->qty_fri--;
-    if($day == 6) ($action == "inc") ? $this->qty_sat++ : $this->qty_sat--;
-    if($day == 7) ($action == "inc") ? $this->qty_sun++ : $this->qty_sun--;
-	}
-	
-	function store() {
-	  $this->completeField("qty_mon", "qty_tue", "qty_wed",
-	    "qty_thu", "qty_thu", "qty_fri", "qty_sat", "qty_sun");
-	  $this->updateFormFields();
-	  if ($this->_id && $this->_qty_total == 0) {
-	    return $this->delete();
-	  }
-	  
-	  return parent::store();
-	}
+  function loadRefRHS() {
+    $this->_ref_rhs = $this->loadFwdRef("rhs_id");
+  }
+  
+  function crementDay($datetime, $action) {
+    $day = mbTransformTime($datetime, null, "%u");
+    
+    if ($day == 1) ($action == "inc") ? $this->qty_mon++ : $this->qty_mon--;
+    if ($day == 2) ($action == "inc") ? $this->qty_tue++ : $this->qty_tue--;
+    if ($day == 3) ($action == "inc") ? $this->qty_wed++ : $this->qty_wed--;
+    if ($day == 4) ($action == "inc") ? $this->qty_thu++ : $this->qty_thu--;
+    if ($day == 5) ($action == "inc") ? $this->qty_fri++ : $this->qty_fri--;
+    if ($day == 6) ($action == "inc") ? $this->qty_sat++ : $this->qty_sat--;
+    if ($day == 7) ($action == "inc") ? $this->qty_sun++ : $this->qty_sun--;
+  }
+  
+  function store() {
+    $this->completeField(
+      "qty_mon", 
+      "qty_tue", 
+      "qty_wed",
+      "qty_thu", 
+      "qty_thu", 
+      "qty_fri", 
+      "qty_sat", 
+      "qty_sun"
+    );
+    
+    $this->updateFormFields();
+    if ($this->_id && $this->_qty_total == 0) {
+      return $this->delete();
+    }
+    
+    return parent::store();
+  }
 }
 
 ?>

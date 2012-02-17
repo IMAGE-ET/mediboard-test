@@ -48,7 +48,8 @@ Main.add(function() {
         <td>
           {{foreach from=$_sejour->_back.rhss item=_rhs name=rhss}}
             {{assign var=arretee value=$_rhs->facture|ternary:"arretee":""}}
-            <div class="{{$arretee}}">
+            <div class="{{$arretee}}" style="clear: both;">
+              {{mb_include module=system template=inc_object_notes object=$_rhs}}
               Semaine {{$_rhs->date_monday|date_format:"%U"}} 
               du {{mb_value object=$_rhs field=date_monday}}
             </div>

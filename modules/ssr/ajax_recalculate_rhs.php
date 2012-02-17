@@ -70,8 +70,7 @@ foreach ($evenements as $_evenement) {
     $where["code_activite_cdarr"]    = "= '$_acte_cdarr->code'";
     $where["code_intervenant_cdarr"] = "= '$code_intervenant_cdarr'";
     $ligne_activite_rhs->loadObject($where);
-    
-    $ligne_activite_rhs->incrementOrDecrementDay($_evenement->debut, "inc");
+    $ligne_activite_rhs->crementDay($_evenement->debut, "inc");
     
     if (!$ligne_activite_rhs->_id) {
       $ligne_activite_rhs->rhs_id                 = $rhs->_id;

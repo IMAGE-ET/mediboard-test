@@ -21,6 +21,7 @@ $where['date_monday'] = " = '$rhs_date_monday'";
 $order = "nom, prenom";
 $sejours_rhs = $rhs->loadList($where, $order, null, null, $join);
 foreach ($sejours_rhs as $_rhs) {
+  $_rhs->loadRefsNotes();
   $sejour = $_rhs->loadRefSejour();
   $sejour->_ref_patient->loadIPP();
 }

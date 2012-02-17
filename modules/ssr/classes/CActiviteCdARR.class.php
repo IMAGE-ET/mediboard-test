@@ -88,6 +88,10 @@ class CActiviteCdARR extends CCdARRObject {
 	 * @return CActiviteCdARR
 	 **/
   static function get($code) {
+  	if (!$code) {
+  	  return new CActiviteCdARR(); 
+  	}
+  	
     if (!isset(self::$cached[$code])) {
       $activite = new CActiviteCdARR();
       if ($activite->load($code)) {

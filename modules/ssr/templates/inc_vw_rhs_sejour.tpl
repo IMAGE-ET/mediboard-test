@@ -60,12 +60,14 @@ Main.add(function() {
          </td>
 
         <td class="{{$arretee}} text">
+          {{mb_include module=system template=inc_object_notes object=$_rhs float=right}}
           {{mb_include template=inc_view_patient patient=$_sejour->_ref_patient}}
         </td>
 
         <td class="{{$arretee}}">
           {{mb_value object=$_sejour field=entree format=$conf.date}}
         </td>
+        
         <td class="{{$arretee}}">
           {{mb_value object=$_sejour field=sortie format=$conf.date}}
         </td>
