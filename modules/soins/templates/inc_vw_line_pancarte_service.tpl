@@ -41,7 +41,7 @@
 									{{if @$alertes.$_prescription_id.$_date_hour.$chapitre == '1'}}
 	                  border-bottom: 3px solid 
 										{{if !@$nb_adm.$_prescription_id.$_date_hour.$chapitre}}
-										  {{if $cond.$_prescription_id.$_date_hour.$chapitre}}
+										  {{if @$cond.$_prescription_id.$_date_hour.$chapitre}}
                         #aaa
                       {{else}}
 											  red
