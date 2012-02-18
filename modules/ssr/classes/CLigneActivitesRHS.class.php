@@ -18,8 +18,9 @@ class CLigneActivitesRHS extends CMbObject {
   // DB Fields
   var $rhs_id                 = null;
   var $executant_id           = null;
+  var $auto                   = null;
   var $code_activite_cdarr    = null;
-	var $code_intervenant_cdarr = null;
+  var $code_intervenant_cdarr = null;
 	
   var $qty_mon = null;
   var $qty_tue = null;
@@ -53,6 +54,7 @@ class CLigneActivitesRHS extends CMbObject {
     // DB Fields
     $props["rhs_id"]                 = "ref notNull class|CRHS";
     $props["executant_id"]           = "ref notNull class|CMediusers";
+    $props["auto"]                   = "bool";
     $props["code_activite_cdarr"]    = "str notNull length|4";
     $props["code_intervenant_cdarr"] = "str length|2";
     $props["qty_mon"]                = "num length|1 min|0 max|9 default|0";
@@ -111,8 +113,13 @@ class CLigneActivitesRHS extends CMbObject {
     return $this->_ref_code_intervenant_cdarr = CIntervenantCdARR::get($this->code_intervenant_cdarr);
   }
 	
+  /**
+   * Load holding RHS
+   * 
+   * @return CRHS
+   */
   function loadRefRHS() {
-    $this->_ref_rhs = $this->loadFwdRef("rhs_id");
+    return $this->_ref_rhs = $this->loadFwdRef("rhs_id");
   }
   
   function crementDay($datetime, $action) {
@@ -128,6 +135,14 @@ class CLigneActivitesRHS extends CMbObject {
   }
   
   function store() {
+    // RHS already charged
+  	$this->completeField("rhs_id");
+  	$rhs = $this->loadRefRHS();
+  	if ($rhs->facture) {
+      return "$this->_class-failed-rhs-facture";
+  	}
+    
+  	// Delete if total is 0
     $this->completeField(
       "qty_mon", 
       "qty_tue", 
@@ -138,8 +153,7 @@ class CLigneActivitesRHS extends CMbObject {
       "qty_sat", 
       "qty_sun"
     );
-    
-    $this->updateFormFields();
+  	$this->updateFormFields();
     if ($this->_id && $this->_qty_total == 0) {
       return $this->delete();
     }
