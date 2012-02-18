@@ -39,7 +39,9 @@ if(!$rhs->_ref_dependances->_id) {
 // Suppression des lignes d'activités du RHS
 $rhs->loadBackRefs("lines");
 foreach($rhs->_back["lines"] as $_line) {
-  $_line->delete();
+  if ($_line->auto) {
+    $_line->delete();
+  }
 }
 $rhs->loadBackRefs("lines");
 
@@ -64,22 +66,15 @@ foreach ($evenements as $_evenement) {
   $actes_cdarr = $_evenement->_ref_actes_cdarr;
   
   foreach ($actes_cdarr as $_acte_cdarr) {
-    $ligne_activite_rhs = new CLigneActivitesRHS();
-    $where["rhs_id"]                 = "= '$rhs->_id'";
-    $where["executant_id"]           = "= '$therapeute->_id'";
-    $where["code_activite_cdarr"]    = "= '$_acte_cdarr->code'";
-    $where["code_intervenant_cdarr"] = "= '$code_intervenant_cdarr'";
-    $ligne_activite_rhs->loadObject($where);
-    $ligne_activite_rhs->crementDay($_evenement->debut, "inc");
-    
-    if (!$ligne_activite_rhs->_id) {
-      $ligne_activite_rhs->rhs_id                 = $rhs->_id;
-      $ligne_activite_rhs->executant_id           = $therapeute->_id;
-      $ligne_activite_rhs->code_activite_cdarr    = $_acte_cdarr->code;
-      $ligne_activite_rhs->code_intervenant_cdarr = $code_intervenant_cdarr;
-    }
-    
-    $ligne_activite_rhs->store();
+    $ligne = new CLigneActivitesRHS();
+    $ligne->rhs_id                 = $rhs->_id;
+    $ligne->executant_id           = $therapeute->_id;
+    $ligne->code_activite_cdarr    = $_acte_cdarr->code;
+    $ligne->code_intervenant_cdarr = $code_intervenant_cdarr;
+    $ligne->loadMatchingObject();
+    $ligne->crementDay($_evenement->debut, "inc");
+    $ligne->auto = "1";
+    $ligne->store();
   }
 }
 
