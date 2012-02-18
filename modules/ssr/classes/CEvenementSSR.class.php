@@ -169,9 +169,8 @@ class CEvenementSSR extends CMbObject {
         $ligne->loadMatchingObject();
         $ligne->crementDay($this->debut, $this->realise ? "inc" : "dec");
         $ligne->auto = "1";
-        mbTrace($ligne->getPlainFields());
         $msg = $ligne->store();
-        mbTrace($msg);
+        
       }
     }
     

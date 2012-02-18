@@ -43,8 +43,13 @@ class CLigneActivitesRHS extends CMbObject {
 	
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = 'ligne_activites_rhs';
-    $spec->key   = 'ligne_id';
+    $spec->table = "ligne_activites_rhs";
+    $spec->key   = "ligne_id";
+    $spec->uniques["ligne"] = array(
+      "rhs_id",
+      "executant_id",
+      "code_activite_cdarr"
+    );
     return $spec;
   }
 

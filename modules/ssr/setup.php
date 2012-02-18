@@ -418,7 +418,12 @@ class CSetupssr extends CSetup {
       ADD `auto` ENUM ('0','1') DEFAULT '0'";
     $this->addQuery($query);
 
-    $this->mod_version = "0.37";
+    $this->makeRevision("0.37");
+    $query = "ALTER TABLE `ligne_activites_rhs` 
+      ADD UNIQUE ligne (rhs_id, executant_id, code_activite_cdarr)";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.38";
 
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";
