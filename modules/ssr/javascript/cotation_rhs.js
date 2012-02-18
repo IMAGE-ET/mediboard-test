@@ -20,8 +20,8 @@ CotationRHS = {
     new Url('ssr', 'ajax_edit_rhs') .
       addParam('rhs_id', rhs_id) .
       requestUpdate('cotation-' + rhs_id, {
-				onComplete: CotationRHS.launchDrawDependancesGraph.curry(rhs_id)
-			});
+        onComplete: CotationRHS.launchDrawDependancesGraph.curry(rhs_id)
+      });
   },
   
   recalculatehRHS: function(rhs_id) {
@@ -53,26 +53,26 @@ CotationRHS = {
     form.onsubmit();
   },
   
-  onSubmitRHS: function(oForm) {
-    return onSubmitFormAjax(oForm, { 
-      onComplete: CotationRHS.refresh.curry($V(oForm.sejour_id))
+  onSubmitRHS: function(form) {
+    return onSubmitFormAjax(form, { 
+      onComplete: CotationRHS.refresh.curry($V(form.sejour_id))
     } );
   },
   
-  onSubmitLine: function(oForm) {
-     return onSubmitFormAjax(oForm, {
-       onComplete: CotationRHS.refreshRHS.curry($V(oForm.rhs_id)) 
+  onSubmitLine: function(form) {
+     return onSubmitFormAjax(form, {
+       onComplete: CotationRHS.refreshRHS.curry($V(form.rhs_id)) 
      } );
   },
   
-  onSubmitQuantity: function(oForm, sField) {
-    if($V(oForm[sField]) == '0' || $V(oForm[sField]) == '') {
-      oForm.parentNode.removeClassName("ok");
+  onSubmitQuantity: function(form, sField) {
+    if($V(form[sField]) == '0' || $V(form[sField]) == '') {
+      form.parentNode.removeClassName("ok");
     } else {
-      oForm.parentNode.addClassName("ok");
+      form.parentNode.addClassName("ok");
     }
-    return onSubmitFormAjax(oForm, {
-      onComplete : CotationRHS.refreshTotaux.curry($V(oForm.rhs_id))
+    return onSubmitFormAjax(form, {
+      onComplete : CotationRHS.refreshTotaux.curry($V(form.rhs_id))
     } );
   },
   
@@ -82,30 +82,30 @@ CotationRHS = {
     tab.down("a small").update("("+count+")");
   },
   
-  updateExecutant: function(selected, oForm) {
+  updateExecutant: function(selected, form) {
     Element.cleanWhitespace(selected);
     var dn = selected.childNodes;
   
     if(dn[0].className == 'informal') {
       // On vide les valeurs
-      $V(oForm._executant, '');
-      $V(oForm.executant_id, '');
-      $V(oForm.code_intervenant_cdarr, '');
+      $V(form._executant, '');
+      $V(form.executant_id, '');
+      $V(form.code_intervenant_cdarr, '');
       // Sinon, on rempli les valeurs
     } else {
-      $V(oForm.executant_id,           dn[0].firstChild.nodeValue);
-      $V(oForm.code_intervenant_cdarr, dn[1].firstChild.nodeValue);
-      $V(oForm._executant,             dn[2].firstChild.nodeValue);
+      $V(form.executant_id,           dn[0].firstChild.nodeValue);
+      $V(form.code_intervenant_cdarr, dn[1].firstChild.nodeValue);
+      $V(form._executant,             dn[2].firstChild.nodeValue);
     }
   },
   
-  updateActivite: function(selected, oForm) {
+  updateActivite: function(selected, form) {
     Element.cleanWhitespace(selected);
     var dn = selected.childNodes;
   
     if(dn[0].className == 'informal') {
       // On vide les valeurs
-      $V(oForm.code_activite_cdarr, '');
+      $V(form.code_activite_cdarr, '');
       // Sinon, on rempli les valeurs
     } else {
       $V(oForm.code_activite_cdarr, dn[0].firstChild.nodeValue);
@@ -136,25 +136,25 @@ CotationRHS = {
             [5, $T("CDependancesRHS-relation-court")]
           ]},
           yaxis: {min: 0, max: 4},
-					colors: [
+          colors: [
             "#c1f1ff",
             "#8cdcff",
             "#00A8F0",
             "#86e8aa",
-					  "#91f798"
-					],
-					legend: {
+            "#91f798"
+          ],
+          legend: {
             labelBoxMargin: 4,
             labelBoxHeight: 5,
             labelBoxWidth: 4,
-						margin: 4
-					},
-					HtmlText: false
+            margin: 4
+          },
+          HtmlText: false
         }
       );
     }).curry(container, data);
-		
-		CotationRHS.launchDrawDependancesGraph(rhs_id);
+    
+    CotationRHS.launchDrawDependancesGraph(rhs_id);
   },
   
   launchDrawDependancesGraph: function(rhs_id) {

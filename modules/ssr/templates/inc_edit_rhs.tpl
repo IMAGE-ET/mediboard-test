@@ -121,9 +121,6 @@ Main.add( function(){
             <button class="new" type="submit">
               {{tr}}CLigneActivitesRHS-title-create{{/tr}}
             </button>
-            <button class="change" type="button" onclick="CotationRHS.recalculatehRHS('{{$rhs->_id}}')">
-              {{tr}}CLigneActivitesRHS.recalculate{{/tr}}
-            </button>
           </td>
         </tr>
       </table>

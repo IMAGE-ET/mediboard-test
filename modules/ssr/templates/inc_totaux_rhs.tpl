@@ -4,7 +4,7 @@
       {{mb_include module=system template=inc_object_notes      object=$rhs}}
       {{mb_include module=system template=inc_object_idsante400 object=$rhs}}
       {{mb_include module=system template=inc_object_history    object=$rhs}}
-      Totaux RHS
+      Totaux RHS ({{$rhs->_guid}})
     </th>
   </tr>
   {{foreach from=$types_activite item=_type name=liste_types}}
@@ -28,4 +28,31 @@
   </tr>
   {{/if}}
   {{/foreach}}
+  <tr>
+    <td colspan="6" class="button">
+      <form name="Edit-{{$rhs->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitRHS(this);">
+
+      <input type="hidden" name="m" value="ssr" />
+      <input type="hidden" name="dosql" value="do_rhs_aed" />
+      <input type="hidden" name="del" value="0" />
+      {{mb_key object=$rhs}}
+      {{mb_field object=$rhs field=facture hidden=1}}
+      {{mb_field object=$rhs field=sejour_id hidden=1}}
+      
+      {{if $rhs->facture}}
+        <button class="cancel" type="button" onclick="$V(this.form.facture, '0'); this.form.onsubmit();">
+          {{tr}}Restore{{/tr}}
+        </button> 
+      {{else}}
+        <button class="change" type="button" onclick="CotationRHS.recalculatehRHS('{{$rhs->_id}}')">
+          {{tr}}CLigneActivitesRHS.recalculate{{/tr}}
+        </button>
+        <button class="tick"   type="button" onclick="$V(this.form.facture, '1'); this.form.onsubmit();">
+          {{tr}}Charge{{/tr}} 
+        </button> 
+      {{/if}}
+      
+      </form>
+    </td>
+  </tr>
 </table>
