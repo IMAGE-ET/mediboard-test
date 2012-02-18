@@ -38,7 +38,7 @@
     
     <tr>
       <td>
-        {{ if !$read_only}}
+        {{if !$read_only && !$_line->auto}}
         <form name="del-line-{{$_line->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitLine(this);">
           <input type="hidden" name="m" value="ssr" />
           <input type="hidden" name="dosql" value="do_line_rhs_aed" />

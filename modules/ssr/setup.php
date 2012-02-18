@@ -413,8 +413,13 @@ class CSetupssr extends CSetup {
       ADD UNIQUE INDEX replacement (sejour_id, conge_id)";
     $this->addQuery($query);
     
-    $this->mod_version = "0.36";
-    
+    $this->makeRevision("0.36");
+    $query = "ALTER TABLE `ligne_activites_rhs` 
+      ADD `auto` ENUM ('0','1') DEFAULT '0'";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.37";
+
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";
     $this->addDatasource("cdarr", $query);

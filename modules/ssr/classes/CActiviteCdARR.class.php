@@ -94,9 +94,8 @@ class CActiviteCdARR extends CCdARRObject {
   	
     if (!isset(self::$cached[$code])) {
       $activite = new CActiviteCdARR();
-      if ($activite->load($code)) {
-        self::$cached[$code] = $activite;
-      }
+      $activite->load($code);
+      self::$cached[$code] = $activite;
     }
     return self::$cached[$code];
   }

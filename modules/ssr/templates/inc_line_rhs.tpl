@@ -12,7 +12,7 @@
 {{assign var=bounds value="_in_bounds_$litteral_day"}}
 
 <td class="button {{if !$rhs->$bounds}}disabled{{elseif $_line->$qty}}ok{{/if}}">
-  {{if $rhs->$bounds && !$read_only}}
+  {{if $rhs->$bounds && !$read_only && !$_line->auto}}
     <form name="chg-{{$litteral_day}}-{{$_line->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitQuantity(this, '{{$qty}}');">
       <input type="hidden" name="m" value="ssr" />
       <input type="hidden" name="dosql" value="do_line_rhs_aed" />

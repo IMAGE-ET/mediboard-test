@@ -139,7 +139,7 @@ class CEvenementSSR extends CMbObject {
       $therapeute = $evt_seance->_ref_therapeute;
     }
     
-    if ($this->fieldModified("realise", "1")) {
+    if ($this->fieldModified("realise")) {
       // Si le thérapeute n'a pas d'identifiant CdARR
       if (!$therapeute->code_intervenant_cdarr) {
         return CAppUI::tr("CMediusers-code_intervenant_cdarr-none");
@@ -161,23 +161,17 @@ class CEvenementSSR extends CMbObject {
       // Complétion de la ligne RHS    
       $this->loadRefsActesCdARR();
       foreach ($this->_ref_actes_cdarr as $_acte_cdarr) {
-        $ligne_activite_rhs = new CLigneActivitesRHS();
-        $where["rhs_id"]                 = "= '$rhs->_id'";
-        $where["executant_id"]           = "= '$therapeute->_id'";
-        $where["code_activite_cdarr"]    = "= '$_acte_cdarr->code'";
-        $where["code_intervenant_cdarr"] = "= '$code_intervenant_cdarr'";
-        $ligne_activite_rhs->loadObject($where);
-        
-        $ligne_activite_rhs->crementDay($this->debut, $this->realise ? "inc" : "dec");
-        
-        if (!$ligne_activite_rhs->_id) {
-          $ligne_activite_rhs->rhs_id                 = $rhs->_id;
-          $ligne_activite_rhs->executant_id           = $therapeute->_id;
-          $ligne_activite_rhs->code_activite_cdarr    = $_acte_cdarr->code;
-          $ligne_activite_rhs->code_intervenant_cdarr = $code_intervenant_cdarr;
-        }
-        
-        $ligne_activite_rhs->store();
+        $ligne = new CLigneActivitesRHS();
+        $ligne->rhs_id                 = $rhs->_id;
+        $ligne->executant_id           = $therapeute->_id;
+        $ligne->code_activite_cdarr    = $_acte_cdarr->code;
+        $ligne->code_intervenant_cdarr = $code_intervenant_cdarr;
+        $ligne->loadMatchingObject();
+        $ligne->crementDay($this->debut, $this->realise ? "inc" : "dec");
+        $ligne->auto = "1";
+        mbTrace($ligne->getPlainFields());
+        $msg = $ligne->store();
+        mbTrace($msg);
       }
     }
     
