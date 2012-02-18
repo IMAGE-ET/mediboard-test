@@ -14,9 +14,15 @@
   {{if $smarty.foreach.liste_types.index % 3 == 0}}
   <tr>
   {{/if}}
-    <th>{{$_type->_shortview}}</th>
-    <td class="button">
-      {{if $total}}{{$total}}{{else}}-{{/if}}
+    {{assign var=weight value=$total|ternary:bold:normal}}
+
+    <th style="width: 20%; font-weight: {{$weight}};">
+      <span title="{{$_type}}">
+        {{$_type->_shortview}}
+      </span>
+    </th>
+    <td style="width: 10%; font-weight: {{$weight}};">
+      {{$total|ternary:$total:'-'}}
     </td>
   {{if $smarty.foreach.liste_types.index % 3 == 3}}
   </tr>
