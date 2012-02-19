@@ -1,13 +1,20 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
- * @subpackage {subpackage}
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id: $
+ * 
+ * @package    Mediboard
+ * @subpackage classes
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision: $
  */
 
+/**
+ * Barcode parser mostly used in pharmaceutic stocks management industry
+ * Responsibilities:
+ *  - analyse barcoding types and variants 
+ *  - parse data structure
+ */
 class CBarcodeParser {
   public static $code128separator = "@";
   
@@ -184,27 +191,58 @@ class CBarcodeParser {
     '%Z' => 127,
   );
   
+  /**
+   * Decode a barcode with the Code39 standard
+   * 
+   * @param string $barcode The raw barcode
+   * 
+   * @return string Decoded string
+   * @link http://fr.wikipedia.org/wiki/Code_39
+   */
   static function decodeCode39($barcode) {
     $chars = array_map("chr", self::$code39ext);
     return strtr($barcode, $chars);
   }
   
+  /**
+   * Renders a char code39 checksum of a given string
+   * 
+   * @param string $string String
+   * 
+   * @return char
+   * @todo Rename to checksum39 ?
+   */
   static function checksum($string) {
     $checksum = 0;
     $length   = strlen($string);
     $charset  = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%';
    
-    for($i = 0; $i < $length; ++$i) {
+    for ($i = 0; $i < $length; ++$i) {
       $checksum += strpos($charset, $string[$i]);
     }
    
     return substr($charset, ($checksum % 43), 1);
   }
   
+  /**
+   * Check a code39 barcodintegrity
+   * 
+   * @param string $barcode The raw barcode
+   * 
+   * @return bool 
+   */
   static function checkCode39($barcode) {
     return self::checksum(substr($barcode, 0, -1)) == substr($barcode, -1);
   }
   
+  /**
+   * Parse a date trying most date formats
+   * 
+   * @param string $date Raw date
+   * @param bool   $alt  Alternate semantic in some cases
+   * 
+   * @return date ISO date equivalent
+   */
   static function parsePeremptionDate($date, $alt = false) {
     // dates du type 18304 >> octobre 2018 (304 = jour dans l'année)
     
@@ -219,13 +257,13 @@ class CBarcodeParser {
     }
     
     // YYYYMM
-    if (preg_match('/^(20\d{2})(\d{2})$/', $date, $parts)){
+    if (preg_match('/^(20\d{2})(\d{2})$/', $date, $parts)) {
       $date = mbDate("+1 MONTH", $parts[1]."-".$parts[2]."-01");
       return mbDate("-1 DAY", $date);
     }
     
     // YYMMDD
-    if (preg_match('/^(\d{2})(\d{2})(\d{2})$/', $date, $parts)){
+    if (preg_match('/^(\d{2})(\d{2})(\d{2})$/', $date, $parts)) {
       if ($alt) {
         $date = mbDate("+1 MONTH", "20".$parts[3]."-".$parts[1]."-01");
       }
@@ -236,13 +274,13 @@ class CBarcodeParser {
     }
     
     // YYNNN
-    if (preg_match('/^(\d{2})(\d{3})$/', $date, $parts)){
+    if (preg_match('/^(\d{2})(\d{3})$/', $date, $parts)) {
       $date = mbDate("+{$parts[2]} DAYS", "20{$parts[1]}-01-01");
       return mbDate("-1 DAY", $date);
     }
     
     // MMYY
-    if (preg_match('/^(\d{2})(\d{2})$/', $date, $parts)){
+    if (preg_match('/^(\d{2})(\d{2})$/', $date, $parts)) {
       $date = mbDate("+1 MONTH", "20".$parts[2]."-".$parts[1]."-01");
       return mbDate("-1 DAY", $date);
     }
@@ -250,6 +288,14 @@ class CBarcodeParser {
     return null;
   }
   
+  /**
+   * Main parse function, trying all barcode standards sequentially
+   * 
+   * @param string $barcode Row barcode
+   * 
+   * @return array Array of data
+   * @todo Way too long, explode in smaller functions
+   */
   static function parse($barcode) {
     $orig_barcode = $barcode;
     $barcode = str_replace("    ", "\t", $barcode);
@@ -268,12 +314,13 @@ class CBarcodeParser {
     }
     
     // code 128 with sepataror char
-    if (preg_match('/^[0-9a-z]+'.self::$code128separator.'[0-9a-z]+[0-9a-z\\'.self::$code128separator.']*$/ims', $barcode)) {
+    $separator = self::$code128separator;
+    if (preg_match('/^[0-9a-z]+'.$separator.'[0-9a-z]+[0-9a-z\\'.$separator.']*$/ims', $barcode)) {
       $type = "code128";
-      $parts = explode(self::$code128separator, $barcode);
+      $parts = explode($separator, $barcode);
       
-      foreach($parts as $p) {
-        foreach(self::$code128prefixes as $code => $text) {
+      foreach ($parts as $p) {
+        foreach (self::$code128prefixes as $code => $text) {
           //if (strpos($p, $code) === 0) { // strpos won't work :(
           if (substr($p, 0, strlen($code)) == $code) {
             $comp[self::$code128table[$code]] = substr($p, strlen($code), strlen($p)-strlen($code));
@@ -289,17 +336,20 @@ class CBarcodeParser {
         preg_match('/^(?:(01)(\d{14}))?(17)(\d{6})(10)([a-z0-9\/-]{4,20})[^a-z0-9\/-]?$/ims', $barcode, $parts) ||
         preg_match('/^(?:(01)(\d{14}))?(17)(\d{6})(21)([a-z0-9]{6,20})(30)(\d{1,2})$/ims', $barcode, $parts) ||
         preg_match('/^(?:(01)(\d{14}))?(17)(\d{6})(21)([a-z0-9]{6,20})$/ims', $barcode, $parts) ||
-        preg_match('/^(01)(\d{14})$/i', $barcode, $parts)) {
+        preg_match('/^(01)(\d{14})$/i', $barcode, $parts)
+    ) {
       $type = "code128";
       $prop = null;
-      foreach($parts as $p){
+      foreach ($parts as $p) {
         if (array_key_exists($p, self::$code128table)) {
           $prop = $p;
         }
         else if ($prop) {
           $comp[self::$code128table[$prop]] = $p;
         }
-        else $prop = null;
+        else {
+          $prop = null;
+        } 
       }
     }
     
