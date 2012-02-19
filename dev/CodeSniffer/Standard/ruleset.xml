@@ -132,6 +132,10 @@
     <severity>0</severity>
   </rule>
 
+  <rule ref="PEAR.NamingConventions.ValidVariableName.PrivateNoUnderscore">
+    <severity>0</severity>
+  </rule>
+
   <rule ref="PEAR.WhiteSpace.ScopeClosingBrace">
     <properties>
       <property name="indent" value="2"/>
