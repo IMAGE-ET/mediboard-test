@@ -29,6 +29,7 @@ foreach($bloc->_alertes_intervs as &$_alerte) {
   $_alerte->_ref_object->loadExtCodesCCAM();
   $_alerte->_ref_object->loadRefPlageOp();
   $_alerte->_ref_object->loadRefPraticien();
+  $_alerte->_ref_object->loadRefPatient();
   $_alerte->_ref_object->updateSalle();
   $_alerte->_ref_object->_ref_chir->loadRefFunction();
 }
@@ -53,6 +54,7 @@ foreach($listNonValidees as &$op) {
   $op->loadExtCodesCCAM();
   $op->loadRefPlageOp();
   $op->loadRefPraticien();
+  $op->loadRefPatient();
   $op->updateSalle();
   $op->_ref_chir->loadRefFunction();
 }
@@ -73,6 +75,7 @@ foreach($listHorsPlage as &$op) {
   $op->loadRefPlageOp();
   $op->loadExtCodesCCAM();
   $op->loadRefPraticien();
+  $op->loadRefPatient();
   $op->updateSalle();
   $op->_ref_chir->loadRefFunction();
 }

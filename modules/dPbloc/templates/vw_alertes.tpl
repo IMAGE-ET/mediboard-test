@@ -2,12 +2,13 @@
   <tr>
     <th>Date</th>
     <th>Chirurgien</th>
+    <th>Patient</th>
     <th>Salle</th>
     <th>Intervention</th>
   </tr>
   {{if $listAlertes|@count}}
   <tr>
-    <th colspan="4">{{$listAlertes|@count}} alerte(s) sur des interventions</th>
+    <th colspan="10">{{$listAlertes|@count}} alerte(s) sur des interventions</th>
   </tr>
   {{/if}}
   {{foreach from=$listAlertes item=_alerte}}
@@ -16,7 +17,7 @@
   {{/foreach}}
   {{if $listNonValidees|@count}}
   <tr>
-    <th colspan="4">{{$listNonValidees|@count}} intervention(s) non validées</th>
+    <th colspan="10">{{$listNonValidees|@count}} intervention(s) non validées</th>
   </tr>
   {{/if}}
   {{foreach from=$listNonValidees item=_operation}}
@@ -24,7 +25,7 @@
   {{/foreach}}
   {{if $listHorsPlage|@count}}
   <tr>
-    <th colspan="4">{{$listHorsPlage|@count}} intervention(s) hors plage</th>
+    <th colspan="10">{{$listHorsPlage|@count}} intervention(s) hors plage</th>
   </tr>
   {{/if}}
   {{foreach from=$listHorsPlage item=_operation}}

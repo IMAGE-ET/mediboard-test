@@ -1,7 +1,8 @@
 <tr {{if $is_alerte}}id="{{$_alerte->_guid}}"{{/if}}>
   <td>{{$_operation->_datetime|date_format:$conf.date}}</td>
   <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}</td>
-  <td>{{$_operation->_ref_salle->_view}}</td>
+  <td>{{mb_include module=system template=inc_vw_mbobject object=$_operation->_ref_patient}}</td>
+  <td>{{mb_include module=system template=inc_vw_mbobject object=$_operation->_ref_salle}}</td>
   <td class="text">
     {{mb_include module=dPplanningOp template=inc_vw_operation}}
     <br />
