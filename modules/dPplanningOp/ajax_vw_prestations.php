@@ -58,8 +58,9 @@ CMbObject::massLoadFwdRef($items_liaisons, "item_prestation_realise_id");
 foreach ($items_liaisons as $_item_liaison) {
   $_item = $_item_liaison->loadRefItem();
   
+  $_item_liaison->loadRefItemRealise();
   if (!$_item->_id) {
-    $_item = $_item_liaison->loadRefItemRealise();
+    $_item = $_item_liaison->_ref_item_realise;
   }
   
   switch($_item->object_class) {
@@ -77,12 +78,74 @@ foreach ($items_liaisons as $_item_liaison) {
   }
 }
 
-$type_j = array("souhait");
+$date_temp = mbDate($sejour->entree);
 
-if ($vue_prestation == "all") {
-  $type_j[] = "realise";
+if (isset($liaisons_j[$date_temp])) {
+  $liaisons_j_date =& $liaisons_j[$date_temp];
+  $save_state = array();
+  
+  foreach ($prestations_j as $_prestation_id => $_prestation) {
+    $item_liaison = new CItemLiaison;
+    $item_liaison->_id = "new";
+    $item_liaison->loadRefItem();
+    $item_liaison->loadRefItemRealise();
+    
+    if (isset($liaisons_j_date[$_prestation_id])) {
+      $save_liaison = $liaisons_j_date[$_prestation_id];
+      $item_liaison->_ref_item->_id             = $save_liaison->item_prestation_id;
+      $item_liaison->_ref_item_realise->_id     = $save_liaison->item_prestation_realise_id;
+      $item_liaison->_ref_item->nom             = $save_liaison->_ref_item->nom;
+      $item_liaison->_ref_item_realise->nom     = $save_liaison->_ref_item_realise->nom;
+      $save_state[$_prestation_id] = $item_liaison;
+    }
+    else {
+      $save_state[$_prestation_id] = $liaisons_j_date[$_prestation_id] = $item_liaison;
+    }
+  }
+  
+  foreach ($dates as $_date => $_value) {
+    if ($_date == $date_temp) {
+      continue;
+    }
+    if (!isset($liaisons_j[$_date])) {
+      $liaisons_j[$_date] = array();
+    }
+    $liaisons_j_date =& $liaisons_j[$_date];
+    foreach ($prestations_j as $_prestation_id => $_prestation) {
+      $item_liaison = new CItemLiaison;
+      $item_liaison->_id = "new";
+      $item_liaison->loadRefItem();
+      $item_liaison->loadRefItemRealise();
+      
+      if (isset($liaisons_j_date[$_prestation_id])) {
+        $save_liaison = $liaisons_j_date[$_prestation_id];
+        $item_liaison->_ref_item->_id             = $save_liaison->_ref_item->_id;
+        $item_liaison->_ref_item_realise->_id     = $save_liaison->_ref_item_realise->_id;
+        $item_liaison->_ref_item->nom             = $save_liaison->_ref_item->nom;
+        $item_liaison->_ref_item_realise->nom     = $save_liaison->_ref_item_realise->nom;
+        $item_liaison->_ref_item->rank            = $save_liaison->_ref_item->rank;
+        $item_liaison->_ref_item_realise->rank    = $save_liaison->_ref_item_realise->rank;
+        $save_state[$_prestation_id] = $item_liaison;
+      }
+      else {
+        $save_liaison = $save_state[$_prestation_id];
+        
+        $item_liaison->_ref_item->_id             = $save_liaison->_ref_item->_id;
+        $item_liaison->_ref_item_realise->_id     = $save_liaison->_ref_item_realise->_id;
+        $item_liaison->_ref_item->nom             = $save_liaison->_ref_item->nom;
+        $item_liaison->_ref_item_realise->nom     = $save_liaison->_ref_item_realise->nom;
+        $item_liaison->_ref_item->rank            = $save_liaison->_ref_item->rank;
+        $item_liaison->_ref_item_realise->rank    = $save_liaison->_ref_item_realise->rank;
+        $liaisons_j_date[$_prestation_id] = $item_liaison;
+      }
+    }
+  }   
 }
 
+$empty_liaison = new CItemLiaison;
+$empty_liaison->_id = "new";
+$empty_liaison->loadRefItem();
+$empty_liaison->loadRefItemRealise();
 $smarty = new CSmartyDP;
 
 $smarty->assign("today"      , mbDate());
@@ -91,11 +154,10 @@ $smarty->assign("sejour"     , $sejour);
 $smarty->assign("affectations", $affectations);
 $smarty->assign("prestations_j", $prestations_j);
 $smarty->assign("prestations_p", $prestations_p);
-$smarty->assign("empty_liaison", new CItemLiaison);
+$smarty->assign("empty_liaison", $empty_liaison);
 $smarty->assign("liaisons_p", $liaisons_p);
 $smarty->assign("liaisons_j", $liaisons_j);
-$smarty->assign("type_j"    , $type_j);
 $smarty->assign("vue_prestation", $vue_prestation);
-
+$smarty->assign("bank_holidays"  , mbBankHolidays(mbDate()));
 $smarty->display("inc_vw_prestations.tpl");
 ?>

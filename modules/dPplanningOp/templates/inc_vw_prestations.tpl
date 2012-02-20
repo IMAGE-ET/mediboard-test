@@ -4,6 +4,20 @@
       elt.checked = "";
     });
   }
+  
+  openModal = function(id_div) {
+    var div = $(id_div);
+    window.save_checked = div.select("input").pluck("checked");
+    modal(id_div);
+  }
+  
+  closeModal = function(id_div) {
+    var div = $(id_div);
+    div.select("input").each(function(elt, index) {
+      elt.checked = window.save_checked[index];
+    });
+    Control.Modal.close();
+  }
 </script>
 {{math equation=x+2 x=$dates|@count assign="colspan"}}
 
@@ -26,16 +40,25 @@
     
     <table class="tbl">
       <tr>
-        <th class="title narrow">
-          <button type="button" class="save notext" onclick="this.form.onsubmit();"></button>
-        </th>
-        {{if $affectations|@count}}
         <th class="title narrow"></th>
-        {{/if}}
-        <th class="title" style="width: 45%">Journalières</th>
+        <th class="title" style="max-width: 45%" colspan="{{$prestations_j|@count}}">Journalières</th>
         {{if $vue_prestation == "all"}}
           <th class="title">
             Ponctuelles
+          </th>
+        {{/if}}
+      </tr>
+      
+      {{assign var=count_prestations value=$prestations_j|@count}}
+      {{math equation=45/x x=$count_prestations assign=width_prestation}}
+      
+      <tr>
+        <th class="narrow"></th>
+        {{foreach from=$prestations_j item=_prestation}}
+          <th style="width: {{$width_prestation}}%">{{$_prestation->nom}}</th>
+        {{/foreach}}
+        {{if $vue_prestation == "all"}}
+          <th>
             <div>
               <input type="hidden" name="date" class="date" value="{{$sejour->entree|date_format:"%Y-%m-%d"}}"/>
               <input type="text" class="autocomplete" name="prestation_ponctuelle_view"/>
@@ -77,83 +100,117 @@
           </th>
         {{/if}}
       </tr>
-      {{assign var=affectation_id value=0}}
-      {{assign var=count_prestations value=$prestations_j|@count}}
-      {{math equation=100/x x=$count_prestations assign=width_prestation}}
-      
       {{foreach from=$dates item=_affectation_id key=_date name=foreach_date}}
         {{assign var=first_date value=$smarty.foreach.foreach_date.first}}
-      <tr>
-        {{if $affectation_id != $_affectation_id}}
-          {{assign var=affectation_id value=$_affectation_id}}
-          {{if $affectation_id != 0}}
-            {{assign var=affectation value=$affectations.$affectation_id}}
-            <th rowspan="{{$affectation->_rowspan}}" class="narrow">
-              <span onmouseover="ObjectTooltip.createEx(this, '{{$affectation->_guid}}')">
-                 {{vertical}}
-                   {{$affectation->_ref_lit}}
-                 {{/vertical}}
-               </span>
-            </th>
-          {{else}}
-            <th></th>
-          {{/if}}
-        {{/if}}
-        
-          <td {{if $_date == $today}}class="current_hour"{{/if}}>
-            {{$_date|date_format:$conf.date}}
-          </td>
-          <td>
-            <table class="tbl">
-              <tr>
-                <th class="narrow"></th>
-                {{foreach from=$prestations_j item=_prestation}}
-                  <th style="width: {{$width_prestation}}%">{{$_prestation->nom}}</th>
-                {{/foreach}}
-              </tr>
-              {{foreach from=$type_j item=type}}
-                <tr>
-                  <th class=" narrow">
-                    {{tr}}CItemLiaison-{{$type}}{{/tr}}
-                  </th>
-                  {{foreach from=$prestations_j item=_prestation key=prestation_id}}
+        {{assign var=day value=$_date|date_format:"%A"|upper|substr:0:1}}
+        <tr>
+          <td {{if $_date == $today}}class="current_hour"{{/if}}
+            style="
+            {{if $day == "S" || $day == "D"}}
+              background: #ccc;
+            {{elseif in_array($day, $bank_holidays)}}
+              background: #fc0; 
+            {{/if}}">
+            
+            <span>
+              <button type="button" class="edit notext" onclick="openModal('edit_{{$_date}}');"></button>
+              <strong>{{$_date|date_format:"%d/%m"}} {{$day}}</strong>
+            </span>
+            
+            
+            
+            <div class="modal" id="edit_{{$_date}}" style="display: none;">
+              <table class="form">
+                <th class="title" colspan="2">
+                  {{$_date|date_format:$conf.date}}
+                </th>
+                {{foreach from=$prestations_j item=_prestation key=prestation_id}}
+                  {{if isset($liaisons_j.$_date.$prestation_id|smarty:nodefaults)}} 
+                    {{assign var=liaison value=$liaisons_j.$_date.$prestation_id}}
+                  {{else}}
+                    {{assign var=liaison value=$empty_liaison}}
+                  {{/if}}
+                  <tr>
+                    <th class="category" colspan="2">
+                      {{$liaison->_id}}
+                      {{$_prestation}}
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>
+                      Souhait
+                    </th>
                     <td>
-                      {{if $first_date || isset($liaisons_j.$_date.$prestation_id|smarty:nodefaults)}}
-                        {{if $first_date && !isset($liaisons_j.$_date.$prestation_id|smarty:nodefaults)}}
-                          {{assign var=liaison value=$empty_liaison}}
-                        {{else}}
-                          {{assign var=liaison value=$liaisons_j.$_date.$prestation_id}}
-                        {{/if}}
-                       {{* <button type="button" class="cancel notext" onclick="uncheckPrestation(this.next().select('input'))"></button>  *}}
-                        <span>
-                          {{foreach from=$_prestation->_ref_items item=_item}}
-                            <label>
-                              <input type="radio"
-                                name="liaisons_j[{{$prestation_id}}][{{$_date}}][{{$type}}][{{$liaison->_id}}]"
-                                onclick="var elt_hidden = this.next(); $V(elt_hidden, this.checked ? '{{$_item->_id}}' : 0); this.form.onsubmit();"
-                                {{if ($type == 'souhait' && $liaison->item_prestation_id == $_item->_id) ||
-                                  ($type == 'realise' && $liaison->item_prestation_realise_id == $_item->_id)}}checked="checked"{{/if}} value="{{$_item->_id}}"/>{{$_item->nom}}
-                            </label>
-                          {{/foreach}}
-                        </span>
-                      {{else}}
-                        <button type="button" class="tick" onclick="this.next().show(); this.remove();">Faire évoluer</button>
-                        <span style="display: none;">
-                          {{foreach from=$_prestation->_ref_items item=_item}}
-                            <label>
-                              <input type="radio"
-                                name="liaisons_j[{{$prestation_id}}][{{$_date}}][{{$type}}][new]"
-                                onclick="var elt_hidden = this.next(); $V(elt_hidden, this.checked ? '{{$_item->_id}}' : 0); this.form.onsubmit();" value="{{$_item->_id}}"/>{{$_item->nom}}
-                            </label>
-                          {{/foreach}}
-                        </span>
-                      {{/if}}
+                      {{foreach from=$_prestation->_ref_items item=_item}}
+                        <label>
+                          <input type="radio"
+                            name="liaisons_j[{{$prestation_id}}][{{$_date}}][souhait][{{$liaison->_id}}]"
+                            onclick="var elt_hidden = this.next(); $V(elt_hidden, this.checked ? '{{$_item->_id}}' : 0);"
+                            {{if $liaison->item_prestation_id == $_item->_id}}checked="checked"{{/if}} value="{{$_item->_id}}"/>{{$_item->nom}}
+                        </label>
+                      {{/foreach}}
                     </td>
-                  {{/foreach}}
+                  </tr>
+                  {{if $vue_prestation == "all"}}
+                    <tr>
+                      <th>
+                        Réalisé
+                      </th>
+                      <td>
+                        {{foreach from=$_prestation->_ref_items item=_item}}
+                          <label>
+                            <input type="radio"
+                              name="liaisons_j[{{$prestation_id}}][{{$_date}}][realise][{{$liaison->_id}}]"
+                              onclick="var elt_hidden = this.next(); $V(elt_hidden, this.checked ? '{{$_item->_id}}' : 0);"
+                              {{if $liaison->item_prestation_realise_id == $_item->_id}}checked="checked"{{/if}} value="{{$_item->_id}}"/>{{$_item->nom}}
+                          </label>
+                        {{/foreach}}
+                      </td>
+                    </tr>
+                  {{/if}}
+                {{/foreach}}
+                <tr>
+                  <td class="button" colspan="2">
+                    <button type="button" class="tick" onclick="Control.Modal.close(); this.form.onsubmit()">{{tr}}Validate{{/tr}}</button>
+                    <button type="button" class="cancel" onclick="closeModal('edit_{{$_date}}')">{{tr}}Close{{/tr}}</button>
+                  </td>
                 </tr>
-              {{/foreach}}
-            </table>
+              </table>
+            </div>
           </td>
+          
+          {{foreach from=$prestations_j item=_prestation key=prestation_id name=foreach_presta}}
+            {{if isset($liaisons_j.$_date.$prestation_id|smarty:nodefaults)}} 
+              {{assign var=liaison value=$liaisons_j.$_date.$prestation_id}}
+            {{else}}
+              {{assign var=liaison value=$empty_liaison}}
+            {{/if}}
+            {{assign var=item_presta value=$liaison->_ref_item}}
+            {{assign var=item_presta_realise value=$liaison->_ref_item_realise}}
+            
+            <td class="button
+              {{if $item_presta->_id && $item_presta_realise->_id}}
+                {{if $item_presta->rank == $item_presta_realise->rank}}
+                  item_egal
+                {{elseif $item_presta->rank > $item_presta_realise->rank}}
+                  item_inferior
+                {{else}}
+                  item_superior
+                {{/if}}
+              {{/if}}">
+              
+              {{if $item_presta->_id}}
+                {{if $item_presta_realise->_id && $item_presta->nom != $item_presta_realise->nom}}
+                  {{$item_presta_realise->nom}} <br />
+                  vs. <br />
+                  {{$item_presta->nom}}
+                {{else}}
+                  {{$item_presta->nom}}
+                {{/if}}
+              {{/if}}
+            </td>
+          {{/foreach}}
+          
           {{if $vue_prestation == "all"}}
             <td>
               {{if isset($liaisons_p.$_date|smarty:nodefaults)}}
@@ -190,12 +247,12 @@
           {{/if}}
         </tr>
       {{/foreach}}
-    </table>
-    <tr>
-        <td class="button" colspan="{{$colspan}}">
-          <button type="button" class="save" onclick="this.form.onsubmit();">{{tr}}Save{{/tr}}</button>
-          <button type="button" class="cancel" onclick="Control.Modal.close();">{{tr}}Close{{/tr}}</button>
-        </td>
-      </tr>
+      </table>
+      <tr>
+          <td class="button" colspan="{{$colspan}}">
+            <button type="button" class="save" onclick="this.form.onsubmit();">{{tr}}Save{{/tr}}</button>
+            <button type="button" class="cancel" onclick="Control.Modal.close();">{{tr}}Close{{/tr}}</button>
+          </td>
+        </tr>
   </form>
 </div>
