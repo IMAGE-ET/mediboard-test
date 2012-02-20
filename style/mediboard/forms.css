@@ -590,6 +590,10 @@ button.injection:before, a.button.injection:before {
   content: url(images/buttons/injection.png);
 }
 
+button.download:before, a.button.download:before {
+  content: url(images/buttons/download.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }
