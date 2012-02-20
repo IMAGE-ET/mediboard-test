@@ -1334,6 +1334,7 @@ $locales['config-dPcabinet-display_nb_consult-none'] = 'Aucun';
 $locales['config-dPcabinet-keepchir'] = 'Conserver le dernier praticien';
 $locales['config-dPcabinet-keepchir-desc'] = 'Conserver le dernier praticien en contexte du module Cabinet';
 $locales['dPcabinet-stats-consultations'] = 'Nombre de consultations';
+$locales['dPcabinet-stats-consultations_creation'] = 'Nombre de rendez-vous donnés';
 $locales['dPcabinet-stats-others'] = 'Nombre de consultations connexes';
 $locales['dPcabinet-stats-patients'] = 'Nombre de patients';
 $locales['dPcabinet-stats-sejours'] = 'Nombre de séjours';

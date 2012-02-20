@@ -4,7 +4,7 @@
   </tr>
   <tr>
     <th>{{mb_title class=CPlageOp field=chir_id}}</th>
-    <th>{{tr}}dPcabinet-stats-consultations{{/tr}}</th>
+    <th>{{tr}}dPcabinet-stats-consultations_creation{{/tr}}</th>
   </tr>
   {{foreach from=$stats_creation item=_stat}}
     {{assign var=praticien_id value=$_stat.user_id}}
