@@ -5,7 +5,7 @@ var IconeSelector = {
   sView   : null,
   options : {
     width : 330,
-    height: 70
+    height: 100
   },
 
   pop: function() {
