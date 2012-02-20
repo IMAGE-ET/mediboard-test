@@ -162,19 +162,23 @@ if (isset($_POST["_source"])) {
       $copyToCompletMulti = "";
       
       foreach($destinataires as $_dest) {
-        if ($curr_dest[0] == $_dest[0]) continue;  
-        $copyTo .= $allDest[$_dest[1]][$_dest[2]]->nom."; ";
-        $copyToMulti .= $allDest[$_dest[1]][$_dest[2]]->nom."<br />";
-        $copyToComplet .= $allDest[$_dest[1]][$_dest[2]]->nom. " - " .
-                          nl2br($allDest[$_dest[1]][$_dest[2]]->adresse). " ".
-                          $allDest[$_dest[1]][$_dest[2]]->cpville. "; ";
-        $copyToCompletMulti .= $allDest[$_dest[1]][$_dest[2]]->nom. "<br />" .
-                               nl2br($allDest[$_dest[1]][$_dest[2]]->adresse). "<br />".
-                               $allDest[$_dest[1]][$_dest[2]]->cpville. "<br />";
+        if ($curr_dest[0] == $_dest[0]) {
+          continue;
+        }
+        $_destinataire = $allDest[$_dest[1]][$_dest[2]];
+        $_destinataire->nom = preg_replace("/(.*)(\([^\)]+\))/", '$1', $_destinataire->nom);
+        $copyTo .= $_destinataire->nom."; ";
+        $copyToMulti .= $_destinataire->nom."<br />";
+        $copyToComplet .= $_destinataire->nom. " - " .
+                          nl2br($_destinataire->adresse). " ".
+                          $_destinataire->cpville. "; ";
+        $copyToCompletMulti .= $_destinataire->nom. "<br />" .
+                               nl2br($_destinataire->adresse). "<br />".
+                               $_destinataire->cpville. "<br />";
       }
       
       $values = array(
-        $allDest[$curr_dest[1]][$curr_dest[2]]->nom,
+        preg_replace("/(.*)(\([^\)]+\))/", '$1', $allDest[$curr_dest[1]][$curr_dest[2]]->nom),
         nl2br($allDest[$curr_dest[1]][$curr_dest[2]]->adresse),
         $allDest[$curr_dest[1]][$curr_dest[2]]->cpville,
         $copyTo,

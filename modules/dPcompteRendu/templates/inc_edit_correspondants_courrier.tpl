@@ -48,7 +48,7 @@
         </td>
         <td>
           <label for="editFrm__dest_{{$_class}}_{{$_index}}">
-            {{$_destinataire->nom}} {{if $tag != "patient"}}({{tr}}CDestinataire.tag.{{$tag}}{{/tr}}){{/if}}
+            {{$_destinataire->nom}} ({{tr}}CDestinataire.tag.{{$tag}}{{/tr}})
           </label>
         </td>
       </tr>
