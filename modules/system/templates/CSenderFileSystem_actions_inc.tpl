@@ -10,10 +10,20 @@
 
 {{mb_script module=system script=sender_fs ajax=true}}
 
-<table class="tbl">
+<table class="main">
   <tr>
     <th colspan="2" class="category">{{tr}}CSenderFileSystem-utilities{{/tr}}</th>
-  </tr>   
+  </tr>  
+  
+  <tr>
+    <td class="narrow">
+      <button type="button" class="tick" onclick="SenderFS.createExchanges('{{$actor->_guid}}');">
+        {{tr}}CSenderFileSystem-utilities_create_exchanges{{/tr}}
+      </button> 
+    </td>
+    <td id="CSenderFileSystem-create_exchanges"></td>
+  </tr> 
+   
   <tr>
     <td class="narrow">
       <button type="button" class="tick" onclick="SenderFS.dispatch('{{$actor->_guid}}');">

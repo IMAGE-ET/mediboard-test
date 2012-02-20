@@ -53,7 +53,13 @@ else if ($type_action == "getFiles") {
   
   CAppUI::stepAjax("Le dossier '$exchange_source->host' contient : ".CMbPath::countFiles($exchange_source->host)." fichier(s)");
   
-  mbTrace($files, "Fichiers");
+  // Création du template
+  $smarty = new CSmartyDP();
+  
+  $smarty->assign("exchange_source", $exchange_source);
+  $smarty->assign("files", $files);
+  
+  $smarty->display("inc_fs_files.tpl");
 }
 
 ?>

@@ -12,7 +12,8 @@
 
 CCanDo::checkRead();
 
-$actor_guid = CValue::get("actor_guid");
+$actor_guid   = CValue::get("actor_guid");
+$to_treatment = CValue::get("to_treatment", true);
 
 $sender = CMbObject::loadFromGuid($actor_guid);
 $sender->loadRefGroup();
@@ -60,7 +61,7 @@ foreach ($files as $_filepath) {
   $source->_receive_filename = $path_info["filename"];
   
   // Dispatch EAI 
-  if ($acq = CEAIDispatcher::dispatch($message, $sender)) {
+  if ($acq = CEAIDispatcher::dispatch($message, $sender, null, $to_treatment)) {
     try {
       CEAIDispatcher::createFileACK($acq, $sender);
     } catch (Exception $e) {

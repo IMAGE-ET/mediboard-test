@@ -951,6 +951,7 @@ $locales['CSenderFileSystem-user_id'] = 'Utilisateur associé';
 $locales['CSenderFileSystem-user_id-court'] = 'Utilisateur associé';
 $locales['CSenderFileSystem-user_id-desc'] = 'Utilisateur associé à l\'expéditeur';
 $locales['CSenderFileSystem-utilities'] = 'Utilitaires expéditeur FS';
+$locales['CSenderFileSystem-utilities_create_exchanges'] = 'Récupérer les fichiers et créer des échanges (pas de traitement)';
 $locales['CSenderFileSystem-utilities_dispatch'] = 'Récupérer et traiter les fichiers';
 $locales['CSenderFileSystem.all'] = 'Tous les expéditeurs système de fichiers';
 $locales['CSenderFileSystem.none'] = 'Aucun expéditeur système de fichiers';
