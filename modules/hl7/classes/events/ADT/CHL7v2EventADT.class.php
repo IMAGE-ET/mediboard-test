@@ -118,7 +118,6 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    */
   function addPV1(CSejour $sejour = null, $set_id = 1) {    
     $segment_name = $this->_is_i18n ? "PV1_FR" : "PV1";
-    mbLog($segment_name);
     $PV1 = CHL7v2Segment::create($segment_name, $this->message);
     $PV1->sejour = $sejour;
     $PV1->set_id = 1;
