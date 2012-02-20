@@ -2007,15 +2007,15 @@ div.soins_uscpo_compact {
   background: #fd7;
 }
 
-th.item_egal {
+.item_egal {
   background: #9f8 !important;
 }
 
-th.item_superior {
+.item_superior {
   background: #f89 !important;
 }
 
-th.item_inferior {
+.item_inferior {
   background: #fd9 !important;
 }
 
