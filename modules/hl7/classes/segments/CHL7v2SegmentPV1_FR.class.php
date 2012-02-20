@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Represents an HL7 PV1 message segment (Patient Visit) - HL7
+ * Represents an HL7 PV1 FR message segment (Patient Visit) - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,11 +12,11 @@
  */
 
 /**
- * Class CHL7v2SegmentPV1 
- * PV1 - Represents an HL7 PV1 message segment (Patient Visit)
+ * Class CHL7v2SegmentPV1_FR 
+ * PV1 - Represents an HL7 PV1 FR message segment (Patient Visit)
  */
 
-class CHL7v2SegmentPV1 extends CHL7v2Segment {
+class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
   var $name   = "PV1";
   var $set_id = null;
   
@@ -90,7 +90,7 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     }
     
     // PV1-6: Prior Patient Location (PL) (optional)
-    $data[] = $this->getPreviousPL($sejour);
+    $data[] = null;
     
     // PV1-7: Attending Doctor (XCN) (optional repeating)
     $sejour->loadRefPraticien();

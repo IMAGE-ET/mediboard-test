@@ -153,7 +153,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       $segment = new self($parent);
     }
     
-    $segment->name = $name;
+    $segment->name = substr($name, 0, 3);
     
     return $segment;
   }
@@ -440,11 +440,13 @@ class CHL7v2Segment extends CHL7v2Entity {
     return $names;
   }
   
-  function getPL(CSejour $sejour) {
+  function getPL(CSejour $sejour, CAffectation $affectation = null) {
     $group       = $sejour->loadRefEtablissement();
-    $affectation = $sejour->getCurrAffectation();
+    if (!$affectation) {
+      $affectation = $sejour->getCurrAffectation();
+    }
     $affectation->loadRefLit()->loadRefChambre();
-    $current_uf  = $sejour->getCurrentUF();
+    $current_uf  = $sejour->getUF();
       
     return array(
       array(
@@ -467,6 +469,13 @@ class CHL7v2Segment extends CHL7v2Entity {
         CHL7v2TableEntry::mapTo("307", $group->_id),
       )
     );
+  }
+  
+  function getPreviousPL(CSejour $sejour) {
+    $sejour->loadSurrAffectations();
+    $prev_affectation = $this->_ref_prev_affectation;
+    
+    return $this->getPL($sejour, $prev_affectation);
   }
   
   function getModeTraitement(CSejour $sejour) {

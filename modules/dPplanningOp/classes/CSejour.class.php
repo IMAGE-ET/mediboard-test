@@ -1015,6 +1015,7 @@ class CSejour extends CCodable implements IPatientRelated {
    * 
    * @return CAffectation
    */
+  /* @todo A dédoublonner avec getCurrAffectation  */
   function loadRefCurrAffectation($date = "") {
     if (!$date) {
       $date = mbDateTime();
@@ -1674,15 +1675,16 @@ class CSejour extends CCodable implements IPatientRelated {
     }
   }
   
+  /* @todo A dédoublonner avec loadRefCurrAffectation  */
   function getCurrAffectation($date = null) {
-    if(!$date) {
+    if (!$date) {
       $date = mbDateTime();
     }
     $curr_affectation = new CAffectation();
     $order = "entree";
     $where = array();
     $where["sejour_id"] = $this->_spec->ds->prepare("= %", $this->sejour_id);
-    if(mbTime(null, $date) == "00:00:00") {
+    if (mbTime(null, $date) == "00:00:00") {
       $where["entree"] = $this->_spec->ds->prepare("< %", mbDate(null, $date)." 23:59:59");
       $where["sortie"] = $this->_spec->ds->prepare(">= %", mbDate(null, $date)." 00:00:01");
     } else {
@@ -2156,12 +2158,19 @@ class CSejour extends CCodable implements IPatientRelated {
     return !$fix_edit_doc ? true : $this->sortie_reelle === null;
   }
   
-  function getCurrentUF($date = null) {
+  function getUF($date = null, $affectation_id = null) {
     if (!$date) {
       $date = mbDateTime();
     }
     
-    $affectation = $this->getCurrAffectation($date);
+    if ($affectation_id) {
+      $affectation = new CAffectation();
+      $affectation->load($affectation_id);
+    }
+    else {
+      $affectation = $this->getCurrAffectation($date);
+    }
+    
     if ($affectation->_id) {
       return $affectation->getUFs();
     }

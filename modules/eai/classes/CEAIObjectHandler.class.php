@@ -50,7 +50,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
           $format_object_handler->$action($mbObject);
         } 
         catch (Exception $e) {
-          CAppUI::setMsg($e, UI_MSG_ERROR);
+          CAppUI::setMsg($e->getMessage(), UI_MSG_ERROR);
         }
       }
     }
