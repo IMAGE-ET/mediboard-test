@@ -4,8 +4,8 @@ var IconeSelector = {
   sForm   : null,
   sView   : null,
   options : {
-    width : 330,
-    height: 100
+    width : 400,
+    height: 150
   },
 
   pop: function() {
