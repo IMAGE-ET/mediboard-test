@@ -452,107 +452,163 @@ class COperation extends CCodable implements IPatientRelated {
       $this->_move = null;
     }
   }
-
-  function store($reorder = true) {
-    
-    $this->completeField("annulee", "rank", "codes_ccam",
-                         "plageop_id", "chir_id", "materiel", "commande_mat");
-    $this->loadOldObject();
-    $oldIntervention = $this->_old;
-                         
+  
+  /**
+   * Prepare the alert before storage
+   * 
+   * @return string Alert comments if necessary, null if no alert
+   */
+  function prepareAlert() {
     // Création d'un alerte sur l'intervention
-    $msgAlerte = "";
-    $isAlerte = false;
-    if($this->_old->rank || ($this->materiel && $this->commande_mat)) {
+    $comments = null;
+    if ($this->_old->rank || ($this->materiel && $this->commande_mat)) {
       $this->loadRefPlageOp();
       $this->_old->loadRefPlageOp();
-      if($this->fieldModified("annulee", "1")) {
-        // Alerte sur l'annulation d'une intervention
-        $msgAlerte .= "L'intervention a été annulée pour le ".mbTransformTime(null, $this->_datetime, CAppUI::conf("datetime")).".";
-        $isAlerte = true;
-      } elseif(mbDate(null, $this->_datetime) != mbDate(null, $this->_old->_datetime)) {
-        // Alerte sur le déplacement d'une intervention
-        $msgAlerte .= "L'intervention a été déplacée du ".mbTransformTime(null, $this->_old->_datetime, CAppUI::conf("date"))." au ".mbTransformTime(null, $this->_datetime, CAppUI::conf("date")).".";
-        $isAlerte = true;
-      } elseif($this->fieldModified("materiel") && $this->commande_mat) {
-        $msgAlerte .= "Le materiel a été modifié \n - Ancienne valeur : ".$this->_old->materiel." \n - Nouvelle valeur : ".$this->materiel;
-        $isAlerte = true;
+
+      // Alerte sur l'annulation d'une intervention
+      if ($this->fieldModified("annulee", "1")) {
+        $comments .= "L'intervention a été annulée pour le ".mbTransformTime(null, $this->_datetime, CAppUI::conf("datetime")).".";
+      } 
+      
+      // Alerte sur le déplacement d'une intervention
+      elseif (mbDate(null, $this->_datetime) != mbDate(null, $this->_old->_datetime)) {
+        $comments .= "L'intervention a été déplacée du ".mbTransformTime(null, $this->_old->_datetime, CAppUI::conf("date"))." au ".mbTransformTime(null, $this->_datetime, CAppUI::conf("date")).".";
+      } 
+      
+      // Alerte sur la commande de matériel
+      elseif ($this->fieldModified("materiel") && $this->commande_mat) {
+        $comments .= "Le materiel a été modifié \n - Ancienne valeur : ".$this->_old->materiel." \n - Nouvelle valeur : ".$this->materiel;
       }
-      if($this->_old->rank) {
-        $msgAlerte .= "\nL'intervention avait été validée.";
+      
+      // Aucune alerte
+      else {
+      	return;
       }
-      if($this->materiel && $this->commande_mat) {
-        $msgAlerte .= "\nLe materiel avait été commandé.";
+      
+      // Complément d'alerte
+      if ($this->_old->rank) {
+        $comments .= "\nL'intervention avait été validée.";
+      }
+      if ($this->materiel && $this->commande_mat) {
+        $comments .= "\nLe materiel avait été commandé.";
       }
     }
     
+    return $comments;
+  }
+
+  /**
+   * Create an alert if comments is not empty
+   * 
+   * @param string $comments Comments of the alert
+   * 
+   * @return string Store-like message
+   */
+  function createAlert($comments) {
+    if (!$comments) { 
+      return;
+    }
+
+    $alerte = new CAlert();
+    $alerte->setObject($this);
+    $alerte->comments = $comments;
+    $alerte->tag = "mouvement_intervention";
+    $alerte->handled = "0";
+    $alerte->level = "medium";
+    return $alerte->store(); 
+  }
+  
+  function store($reorder = true) {
+    $this->loadOldObject();
+    $this->completeField(
+      "annulee", 
+      "rank", 
+      "codes_ccam",
+      "plageop_id", 
+      "chir_id", 
+      "materiel", 
+      "commande_mat"
+    );
+                         
+    // Si on choisit une plage, on copie la salle
+    if ($this->fieldValued("plageop_id")) {
+      $plage = $this->loadRefPlageOp();
+      $this->salle_id = $plage->salle_id;
+    }
+    
+    // Cas d'une plage que l'on quitte
+    $old_plage = null;
+    if ($this->fieldAltered("plageop_id") && $this->_old->rank) {
+      $old_plage = $this->_old->loadRefPlageOp();
+    }
+    
+    $comments = $this->prepareAlert();
+    
+    // Standard storage
     if ($msg = parent::store()) {
       return $msg;
     }
     
-    if($isAlerte) {
-      $alerte = new CAlert();
-      $alerte->setObject($this);
-      $alerte->comments = $msgAlerte;
-      $alerte->tag = "mouvement_intervention";
-      $alerte->handled = "0";
-      $alerte->level = "medium";
-      $alerte->store();
-    }
+    $this->createAlert($comments);
     
     // Cas d'une annulation
     if (!$this->annulee) {
       // Si pas une annulation on recupére le sejour
       // et on regarde s'il n'est pas annulé
       $this->loadRefSejour();
-      if($this->_ref_sejour->annule) {
+      if ($this->_ref_sejour->annule) {
         $this->_ref_sejour->annule = 0;
         $this->_ref_sejour->store();
       }
 
       // Application des protocoles de prescription en fonction de l'operation->_id
       if ($this->_protocole_prescription_chir_id || $this->_protocole_prescription_anesth_id) {
-        $this->_ref_sejour->_protocole_prescription_chir_id = $this->_protocole_prescription_chir_id;
+        $this->_ref_sejour->_protocole_prescription_chir_id   = $this->_protocole_prescription_chir_id  ;
         $this->_ref_sejour->_protocole_prescription_anesth_id = $this->_protocole_prescription_anesth_id;
         $this->_ref_sejour->applyProtocolesPrescription($this->_id);
         
         // On les nullify pour eviter de les appliquer 2 fois
         $this->_protocole_prescription_anesth_id = null;
-        $this->_protocole_prescription_chir_id = null;
-        $this->_ref_sejour->_protocole_prescription_chir_id = null;
+        $this->_protocole_prescription_chir_id   = null;
+        $this->_ref_sejour->_protocole_prescription_chir_id   = null;
         $this->_ref_sejour->_protocole_prescription_anesth_id = null;
       }
-    } elseif($this->rank != 0) {
+    } 
+    elseif ($this->rank != 0) {
       $this->rank = 0;
       $this->time_operation = "00:00:00";
     }
     
     // Vérification qu'on a pas des actes CCAM codés obsolètes
-    if($this->codes_ccam) {
+    if ($this->codes_ccam) {
       $this->loadRefsActesCCAM();
-      foreach($this->_ref_actes_ccam as $keyActe => $acte) {
-        if(strpos(strtoupper($this->codes_ccam), strtoupper($acte->code_acte)) === false) {
+      foreach ($this->_ref_actes_ccam as $keyActe => $acte) {
+        if (stripos($this->codes_ccam, $acte->code_acte) === false) {
           $this->_ref_actes_ccam[$keyActe]->delete();
         }
       }
     }
     
     // Cas de la création dans une plage de spécialité
-    if($this->plageop_id) {
+    if ($this->plageop_id) {
       $this->loadRefPlageOp();
-      if($this->_ref_plageop->spec_id && $this->_ref_plageop->unique_chir) {
+      if ($this->_ref_plageop->spec_id && $this->_ref_plageop->unique_chir) {
         $this->_ref_plageop->chir_id = $this->chir_id;
         $this->_ref_plageop->spec_id = "";
         $this->_ref_plageop->store();
       }
     }
+    
+    // Standard storage bis
     if ($msg = parent::store()) {
       return $msg;
     }
-    if($reorder) {
-      if($this->plageop_id && $oldIntervention->plageop_id && $oldIntervention->rank && ($this->plageop_id != $oldIntervention->plageop_id)) {
-        $oldIntervention->loadRefPlageOp();
-        $oldIntervention->_ref_plageop->reorderOp();
+    
+    // Réordonnancement post-store
+    if ($reorder) {
+      // Réordonner la plage que l'on quitte
+      if ($old_plage) {
+        $old_plage->reorderOp();
       }
       $this->_ref_plageop->reorderOp();
     }
