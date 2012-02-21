@@ -26,10 +26,18 @@
 	    break;
 	  }
   }
+
+  updateAll = function() {
+	  
+  }
 </script>
 
 {{if $installed}}
 <div style="text-align: right">
+  <button class="change" onclick="updateAll()">
+    Mettre à jour tous les modules
+  </button>
+
   <button class="tick" onclick="$('installed').select('button.cancel').invoke('enable');">
     Activer la suppression
   </button>
