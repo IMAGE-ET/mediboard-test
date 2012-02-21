@@ -7,36 +7,38 @@
   
 
   updateInstalledControlTabs = function() {
-	  if ($('installed').select('button.change').length == 0) {
-		  $$('a[href=#installed]')[0].removeClassName("wrong");
-	  }  
+    if ($('installed').select('button.change').length == 0) {
+      $$('a[href=#installed]')[0].removeClassName("wrong");
+    }  
   }
 
   moveRow = function(tr, cmd) {
-	  switch (cmd) {
-	    case "moveup" :
-		    if (tr.previous() == tr.up().firstDescendant()) {
-		      return;
-		    }
-	      tr.previous().insert({before:tr});
-		  break;		
-		  
-	    case "movedn" :
-	    	tr.next().insert({after:tr});
-	    break;
-	  }
+    switch (cmd) {
+      case "moveup" :
+        if (tr.previous() == tr.up().firstDescendant()) {
+          return;
+        }
+        tr.previous().insert({before:tr});
+      break;    
+      
+      case "movedn" :
+        tr.next().insert({after:tr});
+      break;
+    }
   }
 
   updateAll = function() {
-	  
+    $('installed').select('form.upgrade').sort(function(form){ return form.get("dependencies"); }).reverse().invoke("onsubmit");
   }
 </script>
 
 {{if $installed}}
 <div style="text-align: right">
-  <button class="change" onclick="updateAll()">
-    Mettre à jour tous les modules
-  </button>
+  {{if $upgradable}}
+    <button class="change" onclick="updateAll()">
+      Mettre à jour tous les modules
+    </button>
+  {{/if}}
 
   <button class="tick" onclick="$('installed').select('button.cancel').invoke('enable');">
     Activer la suppression

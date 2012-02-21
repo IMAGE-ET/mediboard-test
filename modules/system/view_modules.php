@@ -48,8 +48,11 @@ foreach($mbmodules as $typeModules) {
   foreach($typeModules as $module) {
     foreach($module->_dependencies as $version => $dependencies) {
       foreach($dependencies as $dependency) {
-      	$installed = $mbmodules["installed"];
+        $installed = $mbmodules["installed"];
         $dependency->verified = isset($installed[$dependency->module]) && $installed[$dependency->module]->mod_version >= $dependency->revision;
+        if (!$dependency->verified) {
+          $module->_dependencies_not_verified++;
+        }
       }
     }
   }

@@ -48,6 +48,7 @@ class CModule extends CMbObject {
   var $_configable    = null;
   var $_files_missing = null;
   var $_dependencies  = null;
+  var $_dependencies_not_verified = null;
   
   // Other fields
   var $_dsns = null;

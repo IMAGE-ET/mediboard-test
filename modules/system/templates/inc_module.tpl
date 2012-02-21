@@ -26,7 +26,7 @@
   </div>
   {{elseif $_mb_module->_upgradable && $can->admin}}
     <form name="formUpdateModule-{{$module_id}}" method="post" {{if $_mb_module->mod_type != "core"}} onsubmit="return onSubmitFormAjax(this, 
-      { onComplete: refreshModule.curry('{{$module_id}}') } )" {{/if}}>
+      { onComplete: refreshModule.curry('{{$module_id}}') } )" {{/if}} class="upgrade" data-dependencies="{{$_mb_module->_dependencies_not_verified}}">
       <input type="hidden" name="dosql" value="do_manage_module" />
       <input type="hidden" name="m" value="system" /> 
       {{if $_mb_module->mod_type != "core"}}       
@@ -35,7 +35,7 @@
       <input type="hidden" name="mod_id" value="{{$module_id}}" />
       <input type="hidden" name="cmd" value="upgrade" />
       
-      <button class="button change submit" type="submit">
+      <button class="button change submit upgrade" type="submit">
         {{tr}}Upgrade{{/tr}} &gt;
         {{$_mb_module->_latest}}
       </button>
@@ -53,7 +53,6 @@
         {{tr}}Remove{{/tr}}
       </button>
     </form>
-  </a>
   {{else}}
     <div class="info">
       {{tr}}Up to date{{/tr}}
