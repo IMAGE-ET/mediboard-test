@@ -1,15 +1,23 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id: $
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision: $
  */
 
+/**
+ * CSV Files general purpose wrapper class
+ * Responsibilities:
+ *  - read, write and stream CSV files
+ *  - delimiters, enclosures configuration
+ */
 class CCSVFile {
-  var $f = null;
+  var $path = null;
+  var $handle = null;
   var $delimiter = ',';
   var $enclosure = '"';
   
@@ -24,14 +32,28 @@ class CCSVFile {
     ),
   );
   
-  function __construct($f = null, $profile_name = "excel"){
-    $this->f = $f;
+  /**
+   * Standard constructor 
+   * 
+   * @param string $path         File path
+   * @param enum   $profile_name Profile name, one of openoffice and excel 
+   * 
+   * @return void
+   */
+  function __construct($path = null, $profile_name = "excel"){
+    $this->path = $path;
+    $this->handle = fopen($this->path, "r+");
     
-    if ($profile_name) {
-      $this->setProfile($profile_name);
-    }
+    $this->setProfile($profile_name);
   }
   
+  /**
+   * Set the profile parameters
+   * 
+   * @param enum $profile_name Profile name, one of openoffice and excel 
+   * 
+   * @return void
+   */
   function setProfile($profile_name) {
     if (!isset(self::$profiles[$profile_name])) {
       return;
@@ -43,25 +65,50 @@ class CCSVFile {
     $this->enclosure = $profile["enclosure"];
   }
   
-  function readLine(){
-    return fgetcsv($this->f, null, $this->delimiter, $this->enclosure);
+  /**
+   * Read a line of the file
+   * 
+   * @return array An indexed array containing the fields read
+   */
+  function readLine() {
+    return fgetcsv($this->path, null, $this->delimiter, $this->enclosure);
   }
   
-  function writeLine($line){
-    return fputcsv($this->f, $line, $this->delimiter, $this->enclosure);
+  /**
+   * Write a line into the file
+   * 
+   * @param array $values An array of string values
+   * 
+   * @return int The length of the written string, or false on failure
+   */
+  function writeLine($values) {
+    return fputcsv($this->path, $values, $this->delimiter, $this->enclosure);
   }
   
-  function getContent(){
-    rewind($this->f);
+  /**
+   * Get the full content of the file
+   * 
+   * @return string
+   * @todo duplicate of file_get_contents() ?
+   */
+  function getContent() {
+    rewind($this->path);
     
     $content = "";
-    while($s = fgets($this->f)) {
+    while ($s = fgets($this->path)) {
       $content .= $s;
     }
     
     return $content;
   }
   
+  /**
+   * Stream the content to the browser
+   * 
+   * @param string $file_name File name for the browser
+   * 
+   * @return unknown_type
+   */
   function stream($file_name) {
     $content = $this->getContent();
     
