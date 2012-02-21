@@ -12,6 +12,7 @@ Main.add(function(){
 <button type="button" class="new" onclick="ExClass.edit('0')">
   {{tr}}CExClass-title-create{{/tr}}
 </button>
+<br />
 
 <select onclick="toggleExClassCat($V(this))" id="ex-class-select" style="font-size: 1.2em;">
 {{foreach from=$class_tree item=_by_class key=_class}}
@@ -25,6 +26,7 @@ Main.add(function(){
   </option>
 {{/foreach}}
 </select>
+<br />
 
 {{foreach from=$class_tree item=_by_class key=_class}}
   <table class="main tbl ex-class-cat" id="ex-class-{{$_class}}" style="display: none;">
