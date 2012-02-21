@@ -1,5 +1,3 @@
-{{assign var=cmd value="?m=system&a=domodsql&mod_id=$module_id&cmd"}}
-
 <!-- Nom / Type -->
 {{if $_mb_module->_files_missing}}
   <td colspan="3" class="cancelled">
@@ -146,8 +144,8 @@
         
         <img src="./images/icons/updown.gif" usemap="#map-{{$_mb_module->_id}}" />
         <map name="map-{{$_mb_module->_id}}">
-          <area coords="0,0,10,7"  href="#" onclick="$V(this.up('form').cmd, 'moveup'); moveRow(this.up('tr'), 'moveup') ; this.up('form').onsubmit();" />
-          <area coords="0,8,10,14" href="#" onclick="$V(this.up('form').cmd, 'movedn'); moveRow(this.up('tr'), 'movedn') ; this.up('form').onsubmit();" />
+          <area coords="0,0,10,7"  href="#1" onclick="$V(this.up('form').cmd, 'moveup'); moveRow(this.up('tr'), 'moveup') ; this.up('form').onsubmit();" />
+          <area coords="0,8,10,14" href="#1" onclick="$V(this.up('form').cmd, 'movedn'); moveRow(this.up('tr'), 'movedn') ; this.up('form').onsubmit();" />
         </map>
       </form>
     {{/if}}
