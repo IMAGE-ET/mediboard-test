@@ -1463,6 +1463,7 @@ $locales['config-readonly-desc'] = 'Passe l\'application en lecture seule. Aucun
 $locales['config-root_dir'] = 'Répertoire racine de l\'application';
 $locales['config-root_dir-desc'] = 'Répertoire racine de l\'application pour rendre absolus les chemins d\'accès aux fichiers';
 $locales['config-shared_memory'] = 'Mémoire partagée';
+$locales['config-source-file_system'] = 'Configuration d\'un accès au système de fichiers ';
 $locales['config-shared_memory-desc'] = 'Type de mémoire partagée';
 $locales['config-source-ftp'] = 'Configuration d\'un compte FTP';
 $locales['config-source-smtp'] = 'Configuration d\'un compte SMTP';

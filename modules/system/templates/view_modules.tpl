@@ -21,7 +21,7 @@ Main.add(function () {
     Des erreurs risquent de s'afficher et le système ne fonctionnera pas correctement.<br />
     Veuillez les mettre à jour afin de supprimer ces erreurs résultantes et avoir accès aux autres modules
   </div>
-	{{include file="inc_module.tpl" object=$coreModules installed=true}}
+	{{mb_include template="inc_modules" object=$coreModules installed=true}}
 {{else}}
 	<ul id="tabs-modules" class="control_tabs">
 	  <li><a {{if $upgradable}}class="wrong"{{/if}} {{if !$mbmodules.installed|@count}}class="empty"{{/if}} href="#installed">{{tr}}CModule-modules-installed{{/tr}} ({{$mbmodules.installed|@count}})</a></li>
@@ -36,11 +36,11 @@ Main.add(function () {
 	<hr class="control_tabs" />
 	
 	<div id="installed" style="display: none;">
-		{{include file="inc_module.tpl" object=$mbmodules.installed installed=true}}
+		{{mb_include template="inc_modules" object=$mbmodules.installed installed=true}}
 	</div>
 	
 	<div id="notInstalled" style="display: none;">
-	  {{include file="inc_module.tpl" object=$mbmodules.notInstalled installed=false}}
+	  {{mb_include template="inc_modules" object=$mbmodules.notInstalled installed=false}}
 	</div>
   
   {{if $can->edit}}
@@ -137,6 +137,6 @@ Main.add(function () {
   </div>
   
   <div id="assistant" style="display: none;">
-    {{include file="view_install.tpl"}} 
+    {{mb_include template="view_install"}} 
   </div>
 {{/if}}
