@@ -151,23 +151,21 @@
       {{/if}}
       {{$_suivi->rques}}
     {{else}}
-      {{$_suivi->conclusion}}
-      {{if $_suivi->type == "entree"}}
-        {{if $_suivi->rques}}
-          {{$_suivi->rques}} <br />
-        {{/if}}
-        {{if $_suivi->examen}}
-          {{$_suivi->examen}} <br />
-        {{/if}}
-        {{if $_suivi->traitement}}
-          {{$_suivi->traitement}} <br />
-        {{/if}}
-        {{if $conf.dPcabinet.CConsultation.show_histoire_maladie && $_suivi->histoire_maladie}}
-          {{$_suivi->histoire_maladie}} <br />
-        {{/if}}
-        {{if $conf.dPcabinet.CConsultation.show_conclusion && $_suivi->conclusion}}
-          {{$_suivi->conclusion}} <br />
-        {{/if}}
+      {{$_suivi->conclusion}} <br />
+      {{if $_suivi->rques}}
+        {{$_suivi->rques}} <br />
+      {{/if}}
+      {{if $_suivi->examen}}
+        {{$_suivi->examen}} <br />
+      {{/if}}
+      {{if $_suivi->traitement}}
+        {{$_suivi->traitement}} <br />
+      {{/if}}
+      {{if $conf.dPcabinet.CConsultation.show_histoire_maladie && $_suivi->histoire_maladie}}
+        {{$_suivi->histoire_maladie}} <br />
+      {{/if}}
+      {{if $conf.dPcabinet.CConsultation.show_conclusion && $_suivi->conclusion}}
+        {{$_suivi->conclusion}} <br />
       {{/if}}
     {{/if}}
   </td>
