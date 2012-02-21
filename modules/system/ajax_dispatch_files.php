@@ -13,7 +13,7 @@
 CCanDo::checkRead();
 
 $actor_guid   = CValue::get("actor_guid");
-$to_treatment = CValue::get("to_treatment", true);
+$to_treatment = CValue::get("to_treatment", 1);
 
 $sender = CMbObject::loadFromGuid($actor_guid);
 $sender->loadRefGroup();
@@ -59,7 +59,7 @@ foreach ($files as $_filepath) {
   }
   
   $source->_receive_filename = $path_info["filename"];
-  
+
   // Dispatch EAI 
   if ($acq = CEAIDispatcher::dispatch($message, $sender, null, $to_treatment)) {
     try {
@@ -71,5 +71,6 @@ foreach ($files as $_filepath) {
   
   CAppUI::stepAjax("Message retraité");
 }
+
 
 ?>

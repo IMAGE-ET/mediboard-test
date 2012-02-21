@@ -65,6 +65,10 @@ class COperatorHprimXML extends CEAIOperator {
       $echg_hprim->date_production = mbDateTime();
       $echg_hprim->store();
       
+      if (!$data_format->_to_treatment) {
+        return;
+      }
+      
       $echg_hprim->loadRefsInteropActor();
 
       // Chargement des configs de l'expéditeur

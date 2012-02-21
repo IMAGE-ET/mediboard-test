@@ -21,7 +21,7 @@ SenderFS = {
   createExchanges: function(actor_guid) {
 	var url = new Url("system", "ajax_dispatch_files");
 	url.addParam("actor_guid"  , actor_guid);
-	url.addParam("to_treatment", false);
+	url.addParam("to_treatment", 0);
 	url.requestUpdate("CSenderFileSystem-create_exchanges");
-  },
+  }
 };

@@ -40,7 +40,7 @@ class CExchangeIHE extends CExchangeTabular {
   function getProps() {
     $props = parent::getProps();
     
-    $props["sender_class"]  = "enum list|CSenderFTP|CSenderSOAP|CSenderMLLP show|0";
+    $props["sender_class"]  = "enum list|CSenderFTP|CSenderSOAP|CSenderMLLP|CSenderFileSystem show|0";
     
     $props["receiver_id"]   = "ref class|CReceiverIHE"; 
     $props["object_class"]  = "enum list|CPatient|CSejour|COperation|CAffectation show|0";

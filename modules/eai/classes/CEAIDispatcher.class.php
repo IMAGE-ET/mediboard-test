@@ -20,7 +20,7 @@ class CEAIDispatcher {
   static $errors      = null;
   static $xml_error   = null;
     
-  static function dispatch($data, CInteropSender $actor = null, $exchange_id = null) {
+  static function dispatch($data, CInteropSender $actor = null, $exchange_id = null, $to_treatment = true) {
     self::$errors = array();
     // Accepte t-on des utilisateurs acteurs non enregistrés ?
     if (!$actor) {
@@ -61,14 +61,15 @@ class CEAIDispatcher {
     
     CAppUI::stepAjax("CEAIDispatcher-understand");
     
-    $actor->_data_format       = $data_format;
+    $actor->_data_format        = $data_format;
     
-    $data_format->sender_id    = $actor->_id;
-    $data_format->sender_class = $actor->_class;
-    $data_format->group_id     = $actor->group_id;
-    $data_format->_ref_sender  = $actor;
-    $data_format->_message     = $data;
-    $data_format->_exchange_id = $exchange_id;
+    $data_format->sender_id     = $actor->_id;
+    $data_format->sender_class  = $actor->_class;
+    $data_format->group_id      = $actor->group_id;
+    $data_format->_ref_sender   = $actor;
+    $data_format->_message      = $data;
+    $data_format->_exchange_id  = $exchange_id;
+    $data_format->_to_treatment = $to_treatment;
         
     // Traitement par le handler du format
     try {

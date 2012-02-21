@@ -185,9 +185,10 @@ class CFTP {
       $_file = str_replace("\\", "/", $_file);
     }
     
-    if (substr($folder, -1) != "/") {
+    if ($folder && (substr($folder, -1) != "/")) {
       $folder = "$folder/";
     }
+    
     foreach ($files as &$_file) {
       // Some FTP servers do not retrieve whole paths
       if ($folder && $folder != "." && strpos($_file, $folder) !== 0) {

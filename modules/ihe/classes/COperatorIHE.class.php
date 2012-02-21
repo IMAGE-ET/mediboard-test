@@ -76,6 +76,10 @@ class COperatorIHE extends CEAIOperator {
       
       $exchange_ihe->store();
 
+      if (!$data_format->_to_treatment) {
+        return;
+      }
+
       $exchange_ihe->loadRefsInteropActor();
 
       // Chargement des configs de l'expéditeur

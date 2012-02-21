@@ -154,8 +154,14 @@ class CSetupihe extends CSetup {
     $query = "ALTER TABLE `receiver_ihe_config` 
                 ADD `build_mode` ENUM ('normal','simple') DEFAULT 'normal';";
     $this->addQuery($query);
+    
+    $this->makeRevision("0.14");
+    
+    $query = "ALTER TABLE `exchange_ihe` 
+                CHANGE `sender_class` `sender_class` VARCHAR (80);";
+    $this->addQuery($query);
        
-    $this->mod_version = "0.14";
+    $this->mod_version = "0.15";
   }
 }
 
