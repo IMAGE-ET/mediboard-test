@@ -538,7 +538,7 @@ class CMbFieldSpec {
    */
   static function checkNumeric(&$value, $int = true){
     // Dot/comma tolerance
-  	$value = preg_replace(array('/\s/', '/,/'), array('', '.'), $value);
+    $value = preg_replace(array('/\s/', '/,/'), array('', '.'), $value);
     if (!is_numeric($value)) {
       return null;
     }
@@ -720,16 +720,16 @@ class CMbFieldSpec {
     
     if ($this->autocomplete && $form && $activated === 'true') {
       if ($minChars    === null || $minChars    === "") {
-      	$minChars = 2;
+        $minChars = 2;
       }
       if ($limit       === null || $limit       === "") {
-      	$limit = 30;
+        $limit = 30;
       }
       if ($wholeString === null || $wholeString === "") {
-      	$wholeString = false;
+        $wholeString = false;
       }
       if ($dropdown    === null || $dropdown    === "" || $dropdown === "false") {
-      	$dropdown = false;
+        $dropdown = false;
       }
       
       $options = explode('|', $this->autocomplete);
@@ -800,7 +800,7 @@ class CMbFieldSpec {
         
         if ($has_CR) {
           if (!isset($params["style"])) {
-          	$params["style"] = "";
+            $params["style"] = "";
           }
           
           $params["style"] .= "width: auto;";
@@ -854,7 +854,7 @@ class CMbFieldSpec {
     $value = htmlspecialchars($value);
     $sHtml = "<textarea name=\"$field\" rows=\"$rows\" class=\"$prop\" $extra>$value</textarea>";
     
-    if ($form) {
+    if ($form && $this->helped) {
       $params_aidesaisie = array();
       $params_aidesaisie[] = "objectClass: '".get_class($object) . "'";
       $depend_fields = $object->_specs[$field]->helped;
@@ -870,12 +870,12 @@ class CMbFieldSpec {
         }
       }
       
-      $params_aidesaisie = "{".implode(",", $params_aidesaisie);
+      $params_aidesaisie = '{'.implode(",", $params_aidesaisie);
       
       if ($aidesaisie) {
         $params_aidesaisie .= ", $aidesaisie";
       }
-      $params_aidesaisie .= "}";
+      $params_aidesaisie .= '}';
       
       $sHtml .=
       "<script type='text/javascript'>

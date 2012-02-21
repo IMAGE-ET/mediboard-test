@@ -12,14 +12,17 @@ class CExClassHostField extends CMbObject {
   var $ex_class_host_field_id = null;
   
   var $ex_group_id = null;
+  
+  var $host_type = null;
   var $field = null;
-	
+  
   var $coord_label_x = null;
   var $coord_label_y = null;
   var $coord_value_x = null;
   var $coord_value_y = null;
   
   var $_ref_ex_group = null;
+  var $_ref_host_object = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -31,8 +34,10 @@ class CExClassHostField extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
-    $props["ex_group_id"] = "ref notNull class|CExClassFieldGroup cascade";
-    $props["field"]       = "str notNull canonical";
+    $props["ex_group_id"]   = "ref notNull class|CExClassFieldGroup cascade";
+    
+    $props["host_type"]     = "enum list|host|reference1|reference2 default|host";
+    $props["field"]         = "str notNull canonical";
     
     $props["coord_value_x"] = "num min|0 max|100";
     $props["coord_value_y"] = "num min|0 max|100";
@@ -43,8 +48,8 @@ class CExClassHostField extends CMbObject {
   
   function updateFormFields(){
     parent::updateFormFields();
-		
-		$this->_view = $this->field; // FIXME
+    
+    $this->_view = $this->field; // FIXME
   }
   
   function loadRefExGroup($cache = true){

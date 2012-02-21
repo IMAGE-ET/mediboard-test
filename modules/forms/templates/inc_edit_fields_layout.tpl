@@ -19,22 +19,6 @@ Main.add(function(){
   <input type="hidden" name="coord_field_y" class="coord" value="" />
 </form>
 
-<form name="form-layout-hostfield" method="post" action="" onsubmit="return false">
-  <input type="hidden" name="m" value="system" />
-  <input type="hidden" name="dosql" value="do_ex_class_host_field_aed" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="ex_class_host_field_id" value="" />
-  <input type="hidden" name="ex_class_id" value="{{$ex_class->_id}}" />
-  <input type="hidden" name="ex_group_id" value="" />
-  <input type="hidden" name="field" value="" />
-  <input type="hidden" name="callback" value="" />
-  
-  <input type="hidden" name="coord_label_x" class="coord" value="" />
-  <input type="hidden" name="coord_label_y" class="coord" value="" />
-  <input type="hidden" name="coord_value_x" class="coord" value="" />
-  <input type="hidden" name="coord_value_y" class="coord" value="" />
-</form>
-
 <form name="form-layout-message" method="post" action="" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="dosql" value="do_ex_class_message_aed" />
@@ -44,6 +28,23 @@ Main.add(function(){
   <input type="hidden" name="coord_title_y" class="coord" value="" />
   <input type="hidden" name="coord_text_x" class="coord" value="" />
   <input type="hidden" name="coord_text_y" class="coord" value="" />
+</form>
+
+<form name="form-layout-hostfield" method="post" action="" onsubmit="return false">
+  <input type="hidden" name="m" value="system" />
+  <input type="hidden" name="dosql" value="do_ex_class_host_field_aed" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="ex_class_host_field_id" value="" />
+  <input type="hidden" name="ex_class_id" value="{{$ex_class->_id}}" />
+  <input type="hidden" name="ex_group_id" value="" />
+  <input type="hidden" name="host_type" value="" />
+  <input type="hidden" name="field" value="" />
+  <input type="hidden" name="callback" value="" />
+  
+  <input type="hidden" name="coord_label_x" class="coord" value="" />
+  <input type="hidden" name="coord_label_y" class="coord" value="" />
+  <input type="hidden" name="coord_value_x" class="coord" value="" />
+  <input type="hidden" name="coord_value_y" class="coord" value="" />
 </form>
 
 <style type="text/css">
@@ -128,18 +129,18 @@ Main.add(function(){
   
   .draggable .size .col {
     right: 0;
-		top: 50%;
-		margin-top: -8px;
+    top: 50%;
+    margin-top: -8px;
   }
   
   .draggable .size .row {
     left: 50%;
     bottom: 0;
   }
-	
+  
   .draggable .size button {
     background: none;
-		border: none;
+    border: none;
   }
   
   .draggable .size {
@@ -257,21 +258,26 @@ Main.add(function(){
       <a href="#outofgrid-class-fields-{{$_group_id}}">Champs</a>
     </li>
     <li>
-      <a href="#outofgrid-hostfields-and-messages-{{$_group_id}}">Champs de {{tr}}{{$ex_class->host_class}}{{/tr}} / Messages</a>
+      <a href="#outofgrid-messages-{{$_group_id}}">Textes / Messages</a>
     </li>
+    {{if $ex_class->host_class != "CMbObject"}}
+    <li>
+      <a href="#outofgrid-hostfields-{{$_group_id}}">Champs de Mediboard</a>
+    </li>
+    {{/if}}
   </ul>
   <hr class="control_tabs" />
   
-  <table class="main tbl" style="table-layout: fixed;">
-    <tr>
-      <th>Libellés</th>
-      <th>Champs</th>
-    </tr>
-  </table>
-  
-  <table class="main layout" style="table-layout: fixed;">
-    <!-- Fields -->
-    <tbody id="outofgrid-class-fields-{{$_group_id}}" style="display: none;">
+  <!-- Fields -->
+  <div id="outofgrid-class-fields-{{$_group_id}}" style="display: none;">
+    <table class="main tbl" style="table-layout: fixed;">
+      <tr>
+        <th>Libellés</th>
+        <th>Valeurs</th>
+      </tr>
+    </table>
+    
+    <table class="main layout" style="table-layout: fixed;">
       <tr>
         <td class="label-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
           {{foreach from=$out_of_grid.$_group_id.label item=_field}}
@@ -285,38 +291,20 @@ Main.add(function(){
           {{/foreach}}
         </td>
       </tr>
-    </tbody>
-    
-    <!-- Messages -->
-    <tbody id="outofgrid-hostfields-and-messages-{{$_group_id}}" style="display: none;">
+    </table>
+  </div>
+  
+  <!-- Messages -->
+  <div id="outofgrid-messages-{{$_group_id}}" style="display: none;">
+    <table class="main tbl" style="table-layout: fixed;">
       <tr>
-        <th>
-          {{if $ex_class->host_class != "CMbObject"}}
-            Champs de <strong>{{tr}}{{$ex_class->host_class}}{{/tr}}</strong>
-          {{/if}}
-        </th>
-        <th>Titres</th>
-        <th>Textes</th>
+        <th>Titres des messages (pas nécessaire de les placer)</th>
+        <th>Messages</th>
       </tr>
-      <tr>
-        <td class="hostfield-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
-          {{if $ex_class->host_class != "CMbObject"}}
-            <div style="height: 100%; overflow-y: scroll; min-height: 100px;">
-              <ul>
-              {{foreach from=$host_object->_specs item=_spec key=_field}}
-                {{if $_spec->show == 1 || $_field == "_view" || ($_spec->show == "" && $_field.0 !== "_")}}
-                  <li>
-                    {{mb_include module=forms template=inc_ex_host_field_draggable ex_group_id=$_group_id}}
-                  </li>
-                {{/if}}
-              {{/foreach}}
-              </ul>
-            </div>
-          {{else}}
-            <em>Veuillez lier le formulaire à un événement</em>
-          {{/if}}
-        </td>
+    </table>
     
+    <table class="main layout" style="table-layout: fixed;">
+      <tr>
         <td class="message_title-list" data-x="" data-y="" style="padding: 4px; vertical-align: top;">
           {{foreach from=$out_of_grid.$_group_id.message_title item=_field}}
             {{mb_include module=forms template=inc_ex_message_draggable _type="message_title"}}
@@ -329,8 +317,92 @@ Main.add(function(){
           {{/foreach}}
         </td>
       </tr>
-    </tbody>
-  </table>
+    </table>
+  </div>
+  
+  <!-- Host fields -->
+  {{if $ex_class->host_class != "CMbObject"}}
+  <div id="outofgrid-hostfields-{{$_group_id}}" style="display: none;">
+    <table class="main tbl" style="table-layout: fixed;">
+      {{assign var=class_options value=$ex_class->_host_class_options}}
+      {{assign var=_host_class value=$ex_class->host_class}}
+      
+      <tr>
+        <th>{{tr}}{{$ex_class->host_class}}{{/tr}}</th>
+
+        {{if $class_options.reference1.0}}
+          <th>
+            {{if $class_options.reference1.1|strpos:"." === false}}
+              {{tr}}{{$_host_class}}-{{$class_options.reference1.1}}{{/tr}}
+            {{else}}
+              {{tr}}{{$class_options.reference1.0}}{{/tr}}
+            {{/if}}
+          </th>
+        {{/if}}
+        
+        {{if $class_options.reference2.0}}
+          <th>
+            {{if $class_options.reference2.1|strpos:"." === false}}
+              {{tr}}{{$_host_class}}-{{$class_options.reference2.1}}{{/tr}}
+            {{else}}
+              {{tr}}{{$class_options.reference2.0}}{{/tr}}
+            {{/if}}
+          </th>
+        {{/if}}
+      </tr>
+    </table>
+    
+    <table class="main layout" style="table-layout: fixed;" >
+      <tr>
+        <td class="hostfield-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
+          <div style="height: 100%; overflow-y: scroll; min-height: 140px;">
+            <ul>
+            {{foreach from=$host_object->_specs item=_spec key=_field}}
+              {{if $_spec->show == 1 || $_field == "_view" || ($_spec->show == "" && $_field.0 !== "_")}}
+                <li>
+                  {{mb_include module=forms template=inc_ex_host_field_draggable ex_group_id=$_group_id host_object=$host_object host_type="host"}}
+                </li>
+              {{/if}}
+            {{/foreach}}
+            </ul>
+          </div>
+        </td>
+
+        {{if $class_options.reference1.0}}
+          <td class="hostfield-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
+            <div style="height: 100%; overflow-y: scroll; min-height: 140px;">
+              <ul>
+              {{foreach from=$reference1->_specs item=_spec key=_field}}
+                {{if $_spec->show == 1 || $_field == "_view" || ($_spec->show == "" && $_field.0 !== "_")}}
+                  <li>
+                    {{mb_include module=forms template=inc_ex_host_field_draggable ex_group_id=$_group_id host_object=$reference1 host_type="reference1"}}
+                  </li>
+                {{/if}}
+              {{/foreach}}
+              </ul>
+            </div>
+          </td>
+        {{/if}}
+        
+        {{if $class_options.reference2.0}}
+          <td class="hostfield-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
+            <div style="height: 100%; overflow-y: scroll; min-height: 140px;">
+              <ul>
+              {{foreach from=$reference2->_specs item=_spec key=_field}}
+                {{if $_spec->show == 1 || $_field == "_view" || ($_spec->show == "" && $_field.0 !== "_")}}
+                  <li>
+                    {{mb_include module=forms template=inc_ex_host_field_draggable ex_group_id=$_group_id host_object=$reference2 host_type="reference2"}}
+                  </li>
+                {{/if}}
+              {{/foreach}}
+              </ul>
+            </div>
+          </td>
+        {{/if}}
+      </tr>
+    </table>
+  </div>
+  {{/if}}
 </div>
 
 <table class="main drop-grid" style="border-collapse: collapse;">
@@ -375,11 +447,30 @@ Main.add(function(){
         <div class="droppable grid" data-x="{{$_x}}" data-y="{{$_y}}">
           {{if $_group.object}}
             {{if $_group.object instanceof CExClassField}}
-              {{mb_include module=forms template=inc_ex_field_draggable _field=$_group.object _type=$_group.type}}
+              {{mb_include module=forms template=inc_ex_field_draggable 
+                           _field=$_group.object 
+                           _type=$_group.type}}
             {{elseif $_group.object instanceof CExClassHostField}}
-              {{mb_include module=forms template=inc_ex_host_field_draggable _host_field=$_group.object ex_group_id=$_group_id _field=$_group.object->field _type=$_group.type}}
+              {{if $_group.object->host_type == "host"}}
+                {{assign var=_host_object value=$host_object}}
+              {{elseif $_group.object->host_type == "reference1"}}
+                {{assign var=_host_object value=$reference1}}
+              {{elseif $_group.object->host_type == "reference2"}}
+                {{assign var=_host_object value=$reference2}}
+              {{/if}}
+            
+              {{mb_include module=forms template=inc_ex_host_field_draggable 
+                           _host_field=$_group.object 
+                           ex_group_id=$_group_id 
+                           _field=$_group.object->field 
+                           _type=$_group.type 
+                           host_type=$_group.object->host_type
+                           host_object=$_host_object}}
             {{else}}
-              {{mb_include module=forms template=inc_ex_message_draggable _field=$_group.object ex_group_id=$_group_id _type=$_group.type}}
+              {{mb_include module=forms template=inc_ex_message_draggable 
+                           _field=$_group.object 
+                           ex_group_id=$_group_id 
+                           _type=$_group.type}}
             {{/if}}
           {{else}}
             &nbsp;

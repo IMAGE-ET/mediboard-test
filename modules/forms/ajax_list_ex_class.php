@@ -1,14 +1,19 @@
-<?php /* $Id: view_messages.php 7622 2009-12-16 09:08:41Z phenxdesign $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage forms
- * @version $Revision: 7622 $
+ * @version $Revision$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 CCanDo::checkEdit();
+
+$ex_class_id = CValue::getOrSession("ex_class_id");
+
+$ex_class = new CExClass;
+$ex_class->load($ex_class_id);
 
 $class_tree = CExClass::getTree();
 
@@ -25,4 +30,5 @@ foreach($class_tree as $_key => $_events) {
 $smarty = new CSmartyDP();
 $smarty->assign("class_tree", $class_tree);
 $smarty->assign("counts", $counts);
+$smarty->assign("ex_class", $ex_class);
 $smarty->display("inc_list_ex_class.tpl");

@@ -20,19 +20,19 @@ $ex_class->loadRefsNotes();
 
 // mise a jour des specs de l'unicité pour etre plus user friendly
 if ($ex_class->_id) {
-	$spec = $ex_class->_specs["unicity"];
+  $spec = $ex_class->_specs["unicity"];
   $spec->_locales["host"] = "Unique pour <strong>".CAppUI::tr($ex_class->host_class)."</strong>";
-	
-	$class_options = $ex_class->getHostClassOptions();
-	
-	/*foreach(array("reference1", "reference2") as $ref) {
-	  if (strpos($class_options[$ref][1], ".") === false) {
-	    $spec->_locales[$ref] = CAppUI::tr($ex_class->host_class."-".$class_options[$ref][1]);
-	  }
-	  else {
-	    $spec->_locales[$ref] = CAppUI::tr($class_options[$ref][0]);
-	  }
-	}*/
+  
+  $class_options = $ex_class->getHostClassOptions();
+  
+  /*foreach(array("reference1", "reference2") as $ref) {
+    if (strpos($class_options[$ref][1], ".") === false) {
+      $spec->_locales[$ref] = CAppUI::tr($ex_class->host_class."-".$class_options[$ref][1]);
+    }
+    else {
+      $spec->_locales[$ref] = CAppUI::tr($class_options[$ref][0]);
+    }
+  }*/
 }
 
 list($grid, $out_of_grid) = $ex_class->getGrid(4, 30, false);
@@ -49,9 +49,9 @@ if ($ex_class->_id)
 foreach($ex_class->_ref_constraints as $_ex_constraint) {
   $_ex_constraint->loadRefExClass();
   $_ex_constraint->loadTargetObject();
-	if ($_ex_constraint->_ref_target_object instanceof CMediusers) {
-		$_ex_constraint->_ref_target_object->loadRefFunction();
-	}
+  if ($_ex_constraint->_ref_target_object instanceof CMediusers) {
+    $_ex_constraint->_ref_target_object->loadRefFunction();
+  }
 }
 
 /*$classes = array();
@@ -78,6 +78,14 @@ if (!$ex_class->_id) {
   $ex_class->disabled = 1;
 }
 
+$reference1 = null;
+$reference2 = null;
+
+if ($ex_class->_id && $ex_class->host_class != "CMbObject") {
+  $reference1 = new $ex_class->_host_class_options["reference1"][0];
+  $reference2 = new $ex_class->_host_class_options["reference2"][0];
+}
+
 $groups = CGroups::loadGroups();
 
 // Création du template
@@ -85,6 +93,8 @@ $smarty = new CSmartyDP();
 $smarty->assign("ex_class", $ex_class);
 $smarty->assign("ex_object", $ex_object);
 $smarty->assign("host_object", $host_object);
+$smarty->assign("reference1", $reference1);
+$smarty->assign("reference2", $reference2);
 $smarty->assign("classes", $classes);
 $smarty->assign("grid", $grid);
 $smarty->assign("groups", $groups);

@@ -1,9 +1,9 @@
-<?php /* $Id: view_messages.php 7622 2009-12-16 09:08:41Z phenxdesign $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage forms
- * @version $Revision: 7622 $
+ * @version $Revision$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
@@ -30,10 +30,33 @@ if (!$ex_class_id) {
   return;
 }
 
-$object = CMbObject::loadFromGuid($object_guid);
-$object->loadComplete();
+$preview = $object_guid === "preview";
 
-$ex_object = new CExObject;
+if ($preview) {
+  $ex_class = new CExClass;
+  $ex_class->load($ex_class_id);
+  $object = new $ex_class->host_class;
+}
+else {
+  $object = CMbObject::loadFromGuid($object_guid);
+  $object->loadComplete();
+}
+
+if (!$ex_object_id) {
+  $ex_class = new CExClass;
+  $ex_class->load($ex_class_id);
+  $ex_objects = $ex_class->getExObjectForHostObject($object);
+  
+  $ex_object = reset($ex_objects);
+}
+else {
+  $ex_object = new CExObject;
+}
+
+if (!$ex_object) {
+  $ex_object = $ex_class->getExObjectInstance();
+}
+  
 $ex_object->setObject($object);
 $ex_object->_ex_class_id = $ex_class_id;
 $ex_object->setExClass();
@@ -46,7 +69,7 @@ list($grid, $out_of_grid, $groups) = $ex_object->_ref_ex_class->getGrid();
   }
 }*/
 
-if ($ex_object_id) {
+if ($ex_object_id || $ex_object->_id) {
   $ex_object->load($ex_object_id);
 }
 
@@ -63,23 +86,67 @@ foreach($ex_object->_specs as $_field => $_spec) {
   }
 }
 
+$ex_object->getReportedValues();
+$ex_object->loadRefReferenceObjects();
+
+if (!$ex_object->_id) {
+  if (!$ex_object->reference_id && !$ex_object->reference_class) {
+    $reference = $ex_class->resolveReferenceObject($object, 1);
+    $ex_object->setReferenceObject_1($reference);
+  }
+  
+  if (!$ex_object->reference2_id && !$ex_object->reference2_class) {
+    $reference = $ex_class->resolveReferenceObject($object, 2);
+    $ex_object->setReferenceObject_2($reference);
+  }
+}
+
 $fields = array();
 foreach($groups as $_group) {
   $fields = array_merge($_group->_ref_fields, $fields);
+  
+  foreach($_group->_ref_host_fields as $_host_field) {
+    switch ($_host_field->host_type) {
+      case "host":
+        $_host_field->_ref_host_object = $object; 
+      break;
+      
+      case "reference1":
+        $_host_field->_ref_host_object = $ex_object->_ref_reference_object_1;
+      break;
+      
+      case "reference2":
+        $_host_field->_ref_host_object = $ex_object->_ref_reference_object_2;
+      break;
+    }
+  }
 }
 
 foreach($fields as $_field) {
   $_field->loadTriggeredData();
 }
 
-$ex_object->loadRefReferenceObjects();
-$ex_object->getReportedValues();
-
 $ex_object->_rel_patient = null;
 if (in_array("IPatientRelated", class_implements($ex_object->object_class))) {
-  $rel_patient = $ex_object->_ref_object->loadRelPatient();
-  $rel_patient->loadIPP();
+  if ($ex_object->_ref_object->_id) {
+    $rel_patient = $ex_object->_ref_object->loadRelPatient();
+    $rel_patient->loadIPP();
+  }
+  else {
+    $rel_patient = new CPatient;
+    
+    if ($preview) {
+      $rel_patient->_view = "Patient exemple";
+      $rel_patient->_IPP = "0123456";
+      $ex_object->_ref_object->_view = CAppUI::tr($ex_object->_ref_object->_class)." test";
+    }
+  }
+  
   $ex_object->_rel_patient = $rel_patient;
+}
+
+if ($ex_object->_ref_reference_object_1 instanceof CPatient) {
+  $ex_object->_ref_reference_object_1->loadIPP();
 }
 
 if ($ex_object->_ref_reference_object_2 instanceof CPatient) {

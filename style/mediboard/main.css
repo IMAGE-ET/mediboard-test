@@ -33,7 +33,7 @@ z-index ordering (foreground to background) :
 div.cancelled {
   color: #fff;
   background-color: #f88;
-  text-shadow: 0 0 0 transparent, 0 0 2px rgba(0, 0, 0, 0.7);	
+  text-shadow: 0 0 0 transparent, 0 0 2px rgba(0, 0, 0, 0.7);  
   text-transform: uppercase;
   font-weight: bold;
   text-align: center;
@@ -1867,21 +1867,21 @@ div.jeton_unite {
 }
 
 td.desistee {
-	background: #faa !important;
+  background: #faa !important;
 }
 
 td.waiting {
-	background: #fda !important;
+  background: #fda !important;
 }
 
 td.remplacement_ok {
-	background: #bfb !important;
+  background: #bfb !important;
 }
 
 div.cellule_patient {
-	float: left;
-	width: 49%;
-	padding: 1px;
+  float: left;
+  width: 49%;
+  padding: 1px;
 }
 
 tr.in_progress_before, tr.in_progress_after {

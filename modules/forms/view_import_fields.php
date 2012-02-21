@@ -1,9 +1,9 @@
-<?php /* $Id: view_messages.php 7622 2009-12-16 09:08:41Z phenxdesign $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage forms
- * @version $Revision: 7622 $
+ * @version $Revision$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */

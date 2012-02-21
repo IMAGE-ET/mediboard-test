@@ -131,6 +131,7 @@ ExClass = {
     $V(form.ex_class_host_field_id, drag.get("field_id") || "");
     $V(form.elements.field, drag.get("field") || "");
     $V(form.elements.ex_group_id, drag.get("ex_group_id") || "");
+    $V(form.elements.host_type, drag.get("host_type") || "");
     $V(form["coord_"+type+"_x"].enable(), coord_x);
     $V(form["coord_"+type+"_y"].enable(), coord_y);
     

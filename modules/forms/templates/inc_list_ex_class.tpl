@@ -1,6 +1,11 @@
 <script type="text/javascript">
+toggleExClassCat = function(className){
+  $$(".ex-class-cat").invoke("hide");
+  $("ex-class-"+className).show();
+}
+
 Main.add(function(){
-  Control.Tabs.create("tab-classes");
+  toggleExClassCat($V($("ex-class-select")));
 });
 </script>
 
@@ -8,32 +13,28 @@ Main.add(function(){
   {{tr}}CExClass-title-create{{/tr}}
 </button>
 
-<ul class="control_tabs small wide" id="tab-classes">
+<select onclick="toggleExClassCat($V(this))" id="ex-class-select" style="font-size: 1.2em;">
 {{foreach from=$class_tree item=_by_class key=_class}}
-  <li style="text-align: left;">
-    <a href="#tab-{{$_class}}">
-      <small style="float: right;">({{$counts.$_class}})</small>
-      
-      {{if $_class != "CMbObject"}}
-        {{tr}}{{$_class}}{{/tr}}
-      {{else}}
-        Non classé
-      {{/if}}
-    </a>
-  </li>
+  <option value="{{$_class}}" {{if $_class == $ex_class->host_class}} selected="selected" {{/if}}>
+    ({{$counts.$_class}})
+    {{if $_class != "CMbObject"}}
+      {{tr}}{{$_class}}{{/tr}}
+    {{else}}
+      Non classé
+    {{/if}}
+  </option>
 {{/foreach}}
-</ul>
-<hr class="control_tabs" />
+</select>
 
 {{foreach from=$class_tree item=_by_class key=_class}}
-  <table class="main tbl" id="tab-{{$_class}}" style="display: none;">
+  <table class="main tbl ex-class-cat" id="ex-class-{{$_class}}" style="display: none;">
     {{foreach from=$_by_class item=_by_event key=_event}}
       {{if $_event != "void"}}
       <tr>
         <th>{{tr}}{{$_class}}-event-{{$_event}}{{/tr}}</th>
       </tr>
       {{/if}}
-      
+
       {{foreach from=$_by_event item=_ex_class}}
         <tr data-ex_class_id="{{$_ex_class->_id}}">
           <td class="text" style="min-width: 16em;">
@@ -42,7 +43,7 @@ Main.add(function(){
               </span><span {{if $_ex_class->disabled}}style="background: #aaa;" title="{{tr}}CExClass-disabled{{/tr}}"{{/if}}>&nbsp;&nbsp;
               </span>
             </div>
-            
+
             <a href="#1" onclick="ExClass.edit({{$_ex_class->_id}})">
               {{mb_value object=$_ex_class field=name}}
             </a>

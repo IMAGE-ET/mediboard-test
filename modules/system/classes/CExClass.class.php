@@ -111,6 +111,10 @@ class CExClass extends CMbObject {
    * @return CExObject
    */
   function getExObjectForHostObject(CMbObject $host) {
+    if (!$host->_id) {
+      return array();
+    }
+    
     $this->completeField("disabled", "unicity");
     
     $existing = $this->loadExObjects($host, $ex_object);
@@ -185,6 +189,10 @@ class CExClass extends CMbObject {
   function resolveReferenceObject(CMbObject $object, $level = 1){
     $options = $this->getHostClassOptions();
     list($ref_class, $path) = CValue::read($options, "reference$level");
+    
+    if (!$object->_id) {
+      return new $ref_class;
+    }
     
     if (!$path) return;
     
@@ -544,7 +552,9 @@ class CExClass extends CMbObject {
     $ex_class = new self;
     $list_ex_class = $ex_class->loadList($where, "host_class, event, name");
     
-    $class_tree = array();
+    $class_tree = array(
+      "CMbObject" => array(),
+    );
     
     foreach($list_ex_class as $_ex_class) {
       $host_class = $_ex_class->host_class;
@@ -561,10 +571,8 @@ class CExClass extends CMbObject {
       $class_tree[$host_class][$event][] = $_ex_class;
     }
     
-    if (isset($class_tree["CMbObject"])) {
-      $not_sorted = $class_tree["CMbObject"];
+    if (empty($class_tree["CMbObject"])) {
       unset($class_tree["CMbObject"]);
-      $class_tree["CMbObject"] = $not_sorted;
     }
     
     return $class_tree;

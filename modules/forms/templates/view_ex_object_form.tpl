@@ -181,43 +181,44 @@ Main.add(function(){
               </td>
             {{/if}}
           {{elseif $_group.object instanceof CExClassHostField}}
-            {{assign var=_host_field value=$_group.object}} 
-              {{if $_group.type == "label"}}
-                <th style="font-weight: bold; text-align: left;">
-                  {{mb_title object=$ex_object->_ref_object field=$_host_field->field}}
+            {{assign var=_host_field value=$_group.object}}
+            
+            {{if $_group.type == "label"}}
+              <th style="font-weight: bold; text-align: left;">
+                {{mb_title object=$_host_field->_ref_host_object field=$_host_field->field}}
+              </th>
+            {{else}}
+              <td>
+                {{mb_value object=$_host_field->_ref_host_object field=$_host_field->field}}
+              </td>
+            {{/if}}
+          {{else}}
+            {{assign var=_message value=$_group.object}}
+            
+            {{if $_group.type == "message_title"}}
+              {{if $_message->coord_text_x == $_message->coord_title_x+1}}
+                <th style="font-weight: bold; vertical-align: middle;">
+                  {{$_message->title}}
                 </th>
               {{else}}
-                <td>
-                  {{mb_value object=$ex_object->_ref_object field=$_host_field->field}}
+                <td style="font-weight: bold; text-align: left;">
+                  {{$_message->title}}
                 </td>
               {{/if}}
-          {{else}}
-            {{assign var=_message value=$_group.object}} 
-              {{if $_group.type == "message_title"}}
-              
-                {{if $_message->coord_text_x == $_message->coord_title_x+1}}
-                  <th style="font-weight: bold; vertical-align: middle;">
-                    {{$_message->title}}
-                  </th>
+            {{else}}
+              <td>
+                {{if $_message->type == "title"}}
+                  <div class="ex-message-title">
+                    {{$_message->text}}
+                  </div>
+                  <span class="ex-message-title-spacer">&nbsp;</span>
                 {{else}}
-                  <td style="font-weight: bold; text-align: left;">
-                    {{$_message->title}}
-                  </td>
+                  <div class="small-{{$_message->type}}">
+                    {{mb_value object=$_message field=text}}
+                  </div>
                 {{/if}}
-              {{else}}
-                <td>
-                  {{if $_message->type == "title"}}
-                    <div class="ex-message-title">
-                      {{$_message->text}}
-                    </div>
-                    <span class="ex-message-title-spacer">&nbsp;</span>
-                  {{else}}
-                    <div class="small-{{$_message->type}}">
-                      {{mb_value object=$_message field=text}}
-                    </div>
-                  {{/if}}
-                </td>
-              {{/if}}
+              </td>
+            {{/if}}
           {{/if}}
         {{else}}
           <td></td>
@@ -247,6 +248,7 @@ Main.add(function(){
     {{/if}}
     {{/foreach}}
     
+    {{if $object->_id}}
     <tr>
       <td colspan="4" class="button">
         {{if $ex_object->_id}}
@@ -262,6 +264,7 @@ Main.add(function(){
         {{/if}}
       </td>
     </tr>
+    {{/if}}
     
   </table>
 

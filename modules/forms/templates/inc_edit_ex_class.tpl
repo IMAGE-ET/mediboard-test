@@ -100,6 +100,10 @@ Main.add(function(){
           <tr>
             <td colspan="3" style="vertical-align: bottom; text-align: right;">
               {{if $ex_class->_id}}
+                {{if $ex_class->host_class != "CMbObject"}}
+                  <button type="button" class="search" onclick="ExObject.edit(null, {{$ex_class->_id}}, 'preview')">{{tr}}Preview{{/tr}}</button>
+                {{/if}}
+                
                 <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
                 <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'{{tr}}CExClass.one{{/tr}}',objName:'{{$ex_class->_view|smarty:nodefaults|JSAttribute}}'})">
                   {{tr}}Delete{{/tr}}

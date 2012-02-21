@@ -921,6 +921,11 @@ class CSetupsystem extends CSetup {
               ADD INDEX (`group_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.93";
+    $this->makeRevision("1.0.93");
+    $query = "ALTER TABLE `ex_class_host_field` 
+              ADD `host_type` ENUM ('host','reference1','reference2') DEFAULT 'host'";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.94";
   }
 }
