@@ -139,6 +139,49 @@ class COracleDataSource extends CSQLDataSource {
      */
   }
 
+  function loadHashList($query) {
+    $cur = $this->exec($query);
+    $cur or CApp::rip();
+    
+    $ret = oci_fetch_all($cur, $rows, 0, -1, OCI_FETCHSTATEMENT_BY_ROW + OCI_NUM);
+    
+    $hashlist = array();
+    foreach($rows as $hash) {
+      $hashlist[$hash[0]] = $hash[1];
+    }
+    
+    $this->freeResult($cur);
+    return $hashlist;
+  }
+
+  function loadHashAssoc($query) {
+    $cur = $this->exec($query);
+    $cur or CApp::rip();
+    
+    $ret = oci_fetch_all($cur, $rows, 0, -1, OCI_FETCHSTATEMENT_BY_ROW + OCI_ASSOC);
+    
+    $hashlist = array();
+    foreach($rows as $hash) {
+      $key = reset($hash);
+      $hashlist[$key] = $hash;
+    }
+    
+    $this->freeResult($cur);
+    return $hashlist;
+  }
+
+  function loadList($query, $maxrows = null) {
+    if (null == $result = $this->exec($query)) {
+      CAppUI::setMsg($this->error(), UI_MSG_ERROR);
+      return false;
+    }
+    
+    $ret = oci_fetch_all($result, $list, 0, $maxrows, OCI_FETCHSTATEMENT_BY_ROW + OCI_ASSOC);
+    
+    $this->freeResult($result);
+    return $list;
+  }
+
   function escape($value) {
     return strtr($value, array(
       "'" => "''",
