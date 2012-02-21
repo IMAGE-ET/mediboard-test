@@ -7,7 +7,7 @@
   
 
   updateInstalledControlTabs = function() {
-    if ($('installed').select('button.change').length == 0) {
+    if ($('installed').select('button.upgrade').length == 0) {
       $$('a[href=#installed]')[0].removeClassName("wrong");
     }  
   }
@@ -34,7 +34,7 @@
 
 {{if $installed}}
 <div style="text-align: right">
-  {{if $upgradable}}
+  {{if $upgradable && $coreModules|@count == 0}}
     <button class="change" onclick="updateAll()">
       Mettre à jour tous les modules
     </button>
