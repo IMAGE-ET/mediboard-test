@@ -219,18 +219,11 @@ class CStoredObject extends CModelObject {
   }
   
   /**
-   * Check wether a field has been modified from a non empty value
-   * @param field string Field name
-   * @return boolean
-   */
-  function fieldAltered($field) {
-    return $this->fieldModified($field) && $this->_old->$field;
-  }
-  
-  /**
-   * Check wether a field has been modified or not
-   * @param field string Field name
-   * @param value mixed Check if modified to given value.
+   * Check whether a field has been modified 
+   * 
+   * @param string $field Field name
+   * @param mixed  $value [optional] Check if modified to given value
+   * 
    * @return boolean
    */
   function fieldModified($field, $value = null) {
@@ -262,7 +255,30 @@ class CStoredObject extends CModelObject {
   }
   
   /**
-   * Check wether an object has been modified (that is at least one of its fields
+   * Check whether a field has been modified FROM a non falsy value
+   * 
+   * @param field string Field name
+   * 
+   * @return boolean
+   */
+  function fieldAltered($field) {
+    return $this->fieldModified($field) && $this->_old->$field;
+  }
+  
+  /**
+   * Check whether a field has been modified TO a non falsy value
+   * 
+   * @param field string Field name
+   * 
+   * @return boolean
+   */
+  function fieldValued($field) {
+    return $this->fieldModified($field) && $this->$field;
+  }
+  
+  /**
+   * Check whether an object has been modified (that is at least one of its fields
+   * 
    * @return boolean
    */
   function objectModified() {    
@@ -276,9 +292,8 @@ class CStoredObject extends CModelObject {
   }
   
   /**
-   * Check wether an object has just been created (no older object)
-   * @param field string Field name
-   * @param value mixed Check if modified to given value.
+   * Check whether an object has just been created (no older object)
+   * 
    * @return boolean
    */
   function objectCreated() {
