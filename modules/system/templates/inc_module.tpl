@@ -25,11 +25,13 @@
     {{tr}}Module-_too_new-msg{{/tr}} ({{$_mb_module->_latest}})
   </div>
   {{elseif $_mb_module->_upgradable && $can->admin}}
-    <form name="formUpdateModule-{{$module_id}}" method="post" onsubmit="return onSubmitFormAjax(this, 
-      { onComplete: refreshModule.curry('{{$module_id}}') } )">
+    <form name="formUpdateModule-{{$module_id}}" method="post" {{if $_mb_module->mod_type != "core"}} onsubmit="return onSubmitFormAjax(this, 
+      { onComplete: refreshModule.curry('{{$module_id}}') } )" {{/if}}>
       <input type="hidden" name="dosql" value="do_manage_module" />
-      <input type="hidden" name="m" value="system" />        
-      <input type="hidden" name="ajax" value="1" />
+      <input type="hidden" name="m" value="system" /> 
+      {{if $_mb_module->mod_type != "core"}}       
+        <input type="hidden" name="ajax" value="1" />
+      {{/if}}
       <input type="hidden" name="mod_id" value="{{$module_id}}" />
       <input type="hidden" name="cmd" value="upgrade" />
       
