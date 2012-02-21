@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id: $
+ * $Id$
  * 
  * @package    Mediboard
  * @subpackage classes
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    $Revision: $
+ * @version    $Revision$
  */
 
 /**
@@ -16,7 +16,6 @@
  *  - delimiters, enclosures configuration
  */
 class CCSVFile {
-  var $path = null;
   var $handle = null;
   var $delimiter = ',';
   var $enclosure = '"';
@@ -35,14 +34,22 @@ class CCSVFile {
   /**
    * Standard constructor 
    * 
-   * @param string $path         File path
-   * @param enum   $profile_name Profile name, one of openoffice and excel 
+   * @param mixed $handle       File handle of file path
+   * @param enum  $profile_name Profile name, one of openoffice and excel 
    * 
    * @return void
    */
-  function __construct($path = null, $profile_name = "excel"){
-    $this->path = $path;
-    $this->handle = fopen($this->path, "r+");
+  function __construct($handle = null, $profile_name = "excel") {
+    if ($handle) {
+      $this->handle = $handle;
+      
+      if (is_string($handle)) {
+        $this->handle = fopen($handle, "r+");
+      }
+    }
+    else {
+      $this->handle = CMbPath::getTempFile();
+    }
     
     $this->setProfile($profile_name);
   }
@@ -71,7 +78,7 @@ class CCSVFile {
    * @return array An indexed array containing the fields read
    */
   function readLine() {
-    return fgetcsv($this->path, null, $this->delimiter, $this->enclosure);
+    return fgetcsv($this->handle, null, $this->delimiter, $this->enclosure);
   }
   
   /**
@@ -82,7 +89,7 @@ class CCSVFile {
    * @return int The length of the written string, or false on failure
    */
   function writeLine($values) {
-    return fputcsv($this->path, $values, $this->delimiter, $this->enclosure);
+    return fputcsv($this->handle, $values, $this->delimiter, $this->enclosure);
   }
   
   /**
@@ -92,10 +99,10 @@ class CCSVFile {
    * @todo duplicate of file_get_contents() ?
    */
   function getContent() {
-    rewind($this->path);
+    rewind($this->handle);
     
     $content = "";
-    while ($s = fgets($this->path)) {
+    while ($s = fgets($this->handle)) {
       $content .= $s;
     }
     
