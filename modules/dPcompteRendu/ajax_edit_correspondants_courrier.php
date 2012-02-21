@@ -26,9 +26,13 @@ $destinataires = CDestinataire::$destByClass;
 // Fusion avec les correspondants ajoutés par l'autocomplete
 $compte_rendu->mergeCorrespondantsCourrier(&$destinataires);
 
+$empty_corres = new CCorrespondantCourrier;
+$empty_corres->valueDefaults();
+
 $smarty = new CSmartyDP;
 
 $smarty->assign("compte_rendu", $compte_rendu);
 $smarty->assign("destinataires", $destinataires);
+$smarty->assign("empty_corres", $empty_corres);
 
 $smarty->display("inc_edit_correspondants_courrier.tpl");

@@ -188,7 +188,9 @@ if (isset($_POST["_source"])) {
       );
       
       if (!CAppUI::conf("dPcompteRendu CCompteRendu multiple_doc_correspondants")) {
-        $allSources[] = str_ireplace($fields, $values, $body);
+        for ($i = 0 ; $i < $_POST["_count_".$curr_dest[1]."_".$curr_dest[2]] ; $i++) {
+          $allSources[] = str_ireplace($fields, $values, $body);
+        }
       }
       else {
         // Création d'un document par correspondant
@@ -281,6 +283,7 @@ if (!$do_merge && !intval(CValue::post("del")) && strpos($do->_obj->_source, "[C
       $corres->tag = $_dest->tag;
       $corres->object_id = $object_id;
       $corres->object_class = $object_class;
+      $corres->quantite = $_POST["_count_{$class}_$i"];
       
       if ($msg = $corres->store()) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);

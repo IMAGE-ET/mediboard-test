@@ -751,7 +751,12 @@ class CSetupdPcompteRendu extends CSetup {
     $query = self::replaceTemplateQuery("[Courrier - copie à (complet)", "[Courrier - copie à - complet", true);
     $this->addQuery($query);
     
-    $this->mod_version = "0.73";
+    $this->makeRevision("0.73");
+    $query = "ALTER TABLE `correspondant_courrier` 
+      ADD `quantite` INT (11) UNSIGNED NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.74";
   }
 }
 ?>

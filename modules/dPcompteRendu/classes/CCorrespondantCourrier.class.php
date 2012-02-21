@@ -16,6 +16,7 @@ class CCorrespondantCourrier extends CMbMetaObject {
   
   // DB Fields
   var $tag             = null;
+  var $quantite        = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -29,6 +30,7 @@ class CCorrespondantCourrier extends CMbMetaObject {
     $specs = parent::getProps();
     $specs["compte_rendu_id"] = "ref class|CCompteRendu notNull cascade";
     $specs["object_class"] = "enum list|CMedecin|CPatient|CCorrespondantPatient notNull";
+    $specs["quantite"]     = "num pos notNull min|1 default|1";
     $specs["tag"]          = "str";
     
     return $specs;

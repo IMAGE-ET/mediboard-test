@@ -24,7 +24,7 @@
 
 <table class="tbl">
   <tr>
-    <th class="title" colspan="2">
+    <th class="title" colspan="3">
       Correspondants
       {{if $compte_rendu->_id}}
         <input type="text" name="_view" class="autocomplete"/>
@@ -34,22 +34,36 @@
   </tr>
   {{foreach from=$destinataires key=_class item=_destinataires}}
     <tr>
-      <th class="category" colspan="2">
+      <th class="category" colspan="3">
         {{tr}}{{$_class}}{{/tr}}
       </th>
     </tr>
     {{foreach from=$_destinataires key=_index item=_destinataire}}
       {{assign var=object_guid value=$_destinataire->_guid_object}}
       {{assign var=tag value=$_destinataire->tag}}
+      {{if @isset($correspondants.$tag.$object_guid|smarty:nodefaults)}}
+        {{assign var=correspondant value=$correspondants.$tag.$object_guid}}
+      {{else}}
+        {{assign var=correspondant value=$empty_corres}}
+      {{/if}}
       <tr>
         <td class="narrow">
           <input type="checkbox" name="_dest_{{$_class}}_{{$_index}}" id="editFrm__dest_{{$_class}}_{{$_index}}"
-            {{if @isset($correspondants.$tag.$object_guid|smarty:nodefaults)}}checked="checked"{{/if}}/>
+            {{if $correspondant->_id}}checked="checked"{{/if}}/>
         </td>
         <td>
           <label for="editFrm__dest_{{$_class}}_{{$_index}}">
             {{$_destinataire->nom}} ({{tr}}CDestinataire.tag.{{$tag}}{{/tr}})
           </label>
+        </td>
+        <td>
+          <input type="text" name="_count_{{$_class}}_{{$_index}}" id="editFrm__count_{{$_class}}_{{$_index}}"
+            value="{{$correspondant->quantite}}" style="width: 3em;"/>
+          <script type="text/javascript">
+            Main.add(function() {
+              $('editFrm__count_{{$_class}}_{{$_index}}').addSpinner({min: 1});
+            });
+          </script>
         </td>
       </tr>
     {{/foreach}}
