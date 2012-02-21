@@ -594,6 +594,10 @@ button.download:before, a.button.download:before {
   content: url(images/buttons/download.png);
 }
 
+button.thumbnails:before, a.button.thumbnails:before {
+  content: url(images/buttons/thumbnails.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }

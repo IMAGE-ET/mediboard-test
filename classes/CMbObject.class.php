@@ -103,8 +103,8 @@ class CMbObject extends CStoredObject {
    * @return int document + files count
    */
   function loadRefsDocItems() {
-    $this->nb_files = $this->loadRefsFiles();
-    $this->nb_docs  = $this->loadRefsDocs();
+    $this->_nb_files = $this->loadRefsFiles();
+    $this->_nb_docs  = $this->loadRefsDocs();
     $this->_nb_files_docs = $this->_nb_files + $this->_nb_docs;
   }
   

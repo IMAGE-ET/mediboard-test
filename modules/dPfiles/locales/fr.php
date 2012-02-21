@@ -187,6 +187,7 @@ $locales['config-dPfiles-system_sender-desc'] = 'Système de transmission de fich
 $locales['config-dPfiles-upload_max_filesize'] = 'Taille maximale fichier';
 $locales['config-dPfiles-upload_max_filesize-desc'] = 'Taille maximale du fichier (format: 400k, 2M, 1G, etc.)';
 $locales['dPfiles-system_sender-undefined'] = 'Aucune transmission de fichier configurée, l\'envoi est donc indisponible.';
+$locales['mod-dPfiles-tab-ajax_files_gallery'] = 'Vignettes de fichiers';
 $locales['mod-dPfiles-tab-configure'] = 'Configuration';
 $locales['mod-dPfiles-tab-files_integrity'] = 'Vérification fichiers';
 $locales['mod-dPfiles-tab-httpreq_vw_listfiles'] = 'Liste de fichiers avec aperçus';

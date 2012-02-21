@@ -53,11 +53,11 @@ window.file_id = {{$fileSel->_id}};
       {{mb_value object=$fileSel field=file_date}}
     {{/if}}
     
+    <br />
+    <a class="button notext thumbnails" href="?m=dPfiles&a=ajax_files_gallery&dialog=1&object_class={{$objectClass}}&object_id={{$objectId}}"></a>
     {{if $exchange_source->_id}}
-      <br />
       <button type="button" class="mail" onclick="openWindowMail();">{{tr}}CCompteRendu.send_mail{{/tr}}</button>
     {{/if}}
-    
   {{/if}}
 </div>
 
