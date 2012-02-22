@@ -10,6 +10,7 @@ export LANG=fr_FR.utf-8
 
 # Update
 sh $BASH_PATH/update.sh $1 $2 $3
+check_errs $? "Not enough paremeters" "Successfully updated"
 
 # Rsyncing -- Parsing rsyncupdate.conf
 
