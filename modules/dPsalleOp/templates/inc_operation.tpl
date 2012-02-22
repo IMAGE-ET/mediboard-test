@@ -123,11 +123,11 @@ function reloadSurveillancePerop(){
 }
 
 {{if "maternite"|module_active}}
-function refreshGrossesse(operation_id) {
-  var url = new Url("maternite", "ajax_vw_grossesse");
-  url.addParam('operation_id', operation_id);
-  url.requestUpdate('grossesse');
-}
+  function refreshGrossesse(operation_id) {
+    var url = new Url("maternite", "ajax_vw_grossesse");
+    url.addParam('operation_id', operation_id);
+    url.requestUpdate('grossesse');
+  }
 {{/if}}
 
 </script>
@@ -274,7 +274,12 @@ function refreshGrossesse(operation_id) {
   {{if $isImedsInstalled}}
     <li><a href="#Imeds_tab">Labo</a></li>
   {{/if}}
-  <li style="float: right"><button type="button" class="print" onclick="printFicheBloc('{{$selOp->_id}}}');">Feuille de bloc</button></li>
+  <li style="float: right">
+    {{if "vivalto"|module_active && $can->edit}}
+      {{mb_include module=vivalto template=inc_button_dmi operation=$selOp}}
+    {{/if}}
+    <button type="button" class="print" onclick="printFicheBloc('{{$selOp->_id}}}');">Feuille de bloc</button>
+  </li>
   
   {{if "maternite"|module_active && $sejour->grossesse_id}}
     <li onmouseup="refreshGrossesse('{{$selOp->_id}}')">
