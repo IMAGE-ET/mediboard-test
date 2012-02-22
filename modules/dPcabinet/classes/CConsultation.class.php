@@ -920,15 +920,23 @@ TESTS A EFFECTUER
         $sortie = $date_consult . " 23:59:59";
 
         // Si on a une entrée réelle et que la date de la consultation est avant l'entrée réelle, on sort du store
-        if($this->_ref_sejour->entree_reelle && $date_consult < mbDate($this->_ref_sejour->entree_reelle)) {
+        if ($this->_ref_sejour->entree_reelle && $date_consult < mbDate($this->_ref_sejour->entree_reelle)) {
           return CAppUI::tr("CConsultation-denyDayChange");
         }
         
         // Si on a une sortie réelle et que la date de la consultation est après la sortie réelle, on sort du store
-        if($this->_ref_sejour->sortie_reelle && $date_consult > mbDate($this->_ref_sejour->sortie_reelle)) {
+        if ($this->_ref_sejour->sortie_reelle && $date_consult > mbDate($this->_ref_sejour->sortie_reelle)) {
           return CAppUI::tr("CConsultation-denyDayChange-exit");
         }
-
+        
+        // S'il n'y a qu'une seule consultation dans le séjour, et que le praticien de la consultation est modifié
+        // (changement de plage), alors on modifie également le praticien du séjour
+        if ($this->_id && $this->fieldModified("plageconsult_id") &&
+            count($this->_ref_sejour->_ref_consultations) == 1 &&
+            !$this->_ref_sejour->entree_reelle) {
+          $this->_ref_sejour->praticien_id = $this->_ref_plageconsult->chir_id;
+        }
+        
         // S'il y a d'autres consultations dans le séjour, on étire l'entrée et la sortie
         // en parcourant la liste des consultations
         foreach ($this->_ref_sejour->_ref_consultations as $_consultation) {
