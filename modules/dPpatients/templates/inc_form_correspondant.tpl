@@ -59,7 +59,7 @@
               <input type="text" name="relation_autre" value="{{$correspondant->relation_autre}}" />
           </span>
           <span style="float: left;">
-            {{mb_field object=$correspondant field=relation onchange="toggleRelationAutre(this); toggleUrrsafParente(this)"}}
+            {{mb_field object=$correspondant field=relation onchange="toggleRelationAutre(this); toggleUrrsafParente(this)" alphabet=true}}
           </span>
         {{/if}}
       </th>
