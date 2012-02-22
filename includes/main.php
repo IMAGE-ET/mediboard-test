@@ -171,10 +171,10 @@ if (null == $module = CModule::getInstalled($m)) {
 // these can be further modified by the included action files
 $can = $module->canDo();
 
-$a      = CAppUI::checkFileName(CValue::get("a"     , "index"));
-$u      = CAppUI::checkFileName(CValue::get("u"     , ""));
-$dosql  = CAppUI::checkFileName(CValue::post("dosql", ""));
-$m_post = CAppUI::checkFileName(CValue::post("m", $m));
+$a      = CAppUI::checkFileName(CValue::get("a"      , "index"));
+$u      = CAppUI::checkFileName(CValue::get("u"      , ""));
+$dosql  = CAppUI::checkFileName(CValue::post("dosql" , ""));
+$m_post = CAppUI::checkFileName(CValue::post("m"     , $m));
 $class  = CAppUI::checkFileName(CValue::post("@class", ""));
 
 $tab = $a == "index" ? 
@@ -220,7 +220,7 @@ $obsolete_module = false;
 $user = CAppUI::$user;
 
 // We check only when not in the "system" module, and not in an "action" (ajax, etc)
-if ($m && $m != "system" && !$a && (!$user->_id || $user->isAdmin())) {
+if ($m && $m != "system" && (!$a || $a == "index") && (!$user->_id || $user->isAdmin())) {
   $setupclass = "CSetup$m";
   $setup = new $setupclass;
   $module->compareToSetup($setup);
