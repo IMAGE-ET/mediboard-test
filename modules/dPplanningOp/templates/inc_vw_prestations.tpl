@@ -132,7 +132,6 @@
                   {{/if}}
                   <tr>
                     <th class="category" colspan="2">
-                      {{$liaison->_id}}
                       {{$_prestation}}
                     </th>
                   </tr>

@@ -11,6 +11,7 @@
 {{mb_script module="dPpatients" script="pat_selector"}}
 {{mb_script module="dPpatients" script="medecin"}}
 {{mb_script module="dPplanningOp" script="cim10_selector"}}
+{{mb_default var=count_prestations value=0}}
 
 {{assign var=grossesse value=$sejour->_ref_grossesse}}
 {{if "maternite"|module_active}}
@@ -899,7 +900,7 @@ Main.add( function(){
   {{/if}}
 </tr>
 {{/if}}
-{{if $sejour->_id}}
+{{if $sejour->_id && $count_prestations}}
 <tr>
   <td></td>
   <td colspan="3">

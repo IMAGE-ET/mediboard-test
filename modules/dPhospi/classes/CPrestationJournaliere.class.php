@@ -52,4 +52,10 @@ class CPrestationJournaliere extends CMbObject{
     $prestation->group_id = CGroups::loadCurrent()->_id;
     return $prestation->loadMatchingList("nom");
   }
+  
+  static function countCurrentList() {
+    $prestation = new CPrestationJournaliere();
+    $prestation->group_id = CGroups::loadCurrent()->_id;
+    return $prestation->countMatchingList();
+  }
 }

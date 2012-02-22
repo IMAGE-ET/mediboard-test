@@ -47,8 +47,14 @@ class CPrestationPonctuelle extends CMbObject{
   }
   
   static function loadCurrentList() {
-    $prestation = new CPrestationPonctuelle();
+    $prestation = new CPrestationPonctuelle;
     $prestation->group_id = CGroups::loadCurrent()->_id;
     return $prestation->loadMatchingList("nom");
+  }
+  
+  static function countCurrentList() {
+    $prestation = new CPrestationPonctuelle;
+    $prestation->group_id = CGroups::loadCurrent()->_id;
+    return $prestation->countMatchingList();
   }
 }

@@ -174,6 +174,9 @@ $where["externe"]  = "= '0'";
 $service = new CService;
 $services = $service->loadGroupList($where);
 
+// Compter les prestations journalières
+$count_prestations = CPrestationJournaliere::countCurrentList();
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -214,6 +217,7 @@ $smarty->assign("list_hours_voulu"  , $list_hours_voulu);
 $smarty->assign("list_minutes_voulu", $list_minutes_voulu);
 
 $smarty->assign("prestations", $prestations);
+$smarty->assign("count_prestations", $count_prestations);
 
 $smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
 $smarty->assign("listEtab"              , $listEtab);
