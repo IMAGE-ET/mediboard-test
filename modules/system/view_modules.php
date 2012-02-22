@@ -25,6 +25,10 @@ $coreModules = array();
 $upgradable = false;
 
 foreach($setupClasses as $setupClass) {
+  if (!class_exists($setupClass)) {
+    continue;
+  }
+  
   $setup = new $setupClass;
   $mbmodule = new CModule();
   $mbmodule->compareToSetup($setup);

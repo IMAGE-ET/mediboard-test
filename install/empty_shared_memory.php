@@ -35,3 +35,17 @@ if (!SHM::rem("class-paths")) {
 }
 
 echo "Table des classes supprimée";
+
+if (!SHM::rem("child-classes")) {
+  echo "Impossible de supprimer la table des classes<br />";
+  return;
+}
+
+echo "Table des classes filles supprimée";
+
+if (!SHM::rem("modules")) {
+  echo "Impossible de supprimer la table des classes<br />";
+  return;
+}
+
+echo "Table des modules supprimée";
