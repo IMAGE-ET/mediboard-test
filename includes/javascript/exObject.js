@@ -208,7 +208,7 @@ ExObjectFormula = Class.create({
       if (!formula) return;
       
       var fieldElement = this.form[field];
-      var compute, variables = [];
+      var compute, variables = [], expr;
       
       // concatenation
       if (fieldElement.hasClassName("text")) {
@@ -238,7 +238,7 @@ ExObjectFormula = Class.create({
         formula = formula.replace(/[\[\]]/g, "");
         
         try {
-          var expr = this.parser.parse(formula);
+          expr = this.parser.parse(formula);
           variables = expr.variables();
         } 
         catch (e) {
@@ -277,6 +277,7 @@ ExObjectFormula = Class.create({
   
   //get the input value : coded or non-coded
   getInputValue: function(element){
+    if (!element) return false;
     var value = $V(element);
     
     element = Form.getInputsArray(element)[0];
@@ -338,10 +339,18 @@ ExObjectFormula = Class.create({
     var isConcat = target.hasClassName("text");
 
     data.variables.each(function(v){
-      values[v] = constants[v] || this.getInputValue(form[v]);
+      var val = constants[v] || this.getInputValue(form[v]);
+      
+      // functions are considered like variables
+      if (val === false) {
+        return;
+      }
+      
+      values[v] = val;
+      
       if (!isConcat && values[v] === "") values[v] = NaN;
     }, this);
-  
+    
     var result = data.parser.evaluate(values);
     if (!isConcat && !isFinite(result)) {
       result = "";
