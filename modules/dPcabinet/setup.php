@@ -1426,7 +1426,13 @@ class CSetupdPcabinet extends CSetup {
       ADD `commentaire` TEXT;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.46";
+    $this->makeRevision("1.46");
+    $query="ALTER TABLE `consultation`
+      ADD `at_sans_arret` ENUM ('0','1') DEFAULT '0',
+      ADD `arret_maladie` ENUM ('0','1') DEFAULT '0'";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.47";
   }
 }
 ?>

@@ -61,6 +61,8 @@ class CConsultation extends CCodable {
   var $fin_at           = null;
   var $pec_at           = null;
   var $reprise_at       = null;
+  var $at_sans_arret    = null;
+  var $arret_maladie    = null;
   var $concerne_ALD     = null;
   
   var $remise           = null;
@@ -208,6 +210,8 @@ class CConsultation extends CCodable {
     $specs["fin_at"]   = "dateTime";
     $specs["pec_at"]   = "enum list|soins|arret";
     $specs["reprise_at"] = "dateTime";
+    $specs["at_sans_arret"] = "bool default|0";
+    $specs["arret_maladie"] = "bool default|0";
     
     $specs["total_amo"]         = "currency show|0";
     $specs["total_amc"]         = "currency show|0";
@@ -1428,6 +1432,8 @@ TESTS A EFFECTUER
     $template->addProperty("Consultation - Fin arrêt de travail", mbDateToLocale(mbDate($this->fin_at)));
     $template->addProperty("Consultation - Prise en charge arrêt de travail", $this->getFormattedValue("pec_at"));
     $template->addProperty("Consultation - Reprise de travail", mbDateToLocale(mbDate($this->reprise_at)));
+    $template->addProperty("Consultation - Accident de travail sans arrêt de travail", $this->getFormattedValue("at_sans_arret"));
+    $template->addProperty("Consultation - Arrêt maladie", $this->getFormattedValue("arret_maladie"));
   }
     
   function canDeleteEx() {

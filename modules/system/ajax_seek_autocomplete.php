@@ -16,6 +16,7 @@ $input_field  = CValue::get('input_field', $view_field);
 $keywords     = CValue::get($input_field);
 $limit        = CValue::get('limit', 30);
 $where        = CValue::get('where', array());
+$ljoin        = CValue::get("ljoin", array());
 
 $object = new $object_class;
 $ds = $object->_spec->ds;
@@ -29,7 +30,7 @@ if ($keywords == "") {
   $keywords = "%";
 }
 
-$matches = $object->getAutocompleteList($keywords, $where, $limit);
+$matches = $object->getAutocompleteList($keywords, $where, $limit, $ljoin);
 
 $template = $object->getTypedTemplate("autocomplete");
 

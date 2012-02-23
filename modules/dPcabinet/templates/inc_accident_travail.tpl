@@ -49,9 +49,9 @@
         <th>{{mb_label object=$consult field=pec_at}}</th>
         <td>
           {{if $consult->date_at}}
-            {{mb_field object=$consult field=pec_at onchange="this.form.onsubmit()" emptyLabel="Choose"}}
+            {{mb_field object=$consult field=pec_at onchange="this.form.onsubmit()" emptyLabel="Choose" typeEnum="radio"}}
           {{else}}
-            {{mb_field object=$consult field=pec_at onchange="this.form.onsubmit()" emptyLabel="Choose" readonly=readonly}}
+            {{mb_field object=$consult field=pec_at emptyLabel="Choose" readonly=readonly typeEnum="radio"}}
           {{/if}}
         </td>
       </tr>
@@ -64,6 +64,26 @@
             {{mb_value object=$consult field=reprise_at}}
           {{/if}}
         </td>
+      </tr>
+      <tr>
+        <th>{{mb_label object=$consult field=at_sans_arret}}</th>
+        <td>
+          {{if $consult->date_at}}
+            {{mb_field object=$consult field=at_sans_arret onchange="this.form.onsubmit()"}}
+          {{else}}
+            {{mb_field object=$consult field=at_sans_arret readonly=readonly}}
+          {{/if}}
+        </th>
+      </tr>
+      <tr>
+        <th>{{mb_label object=$consult field=arret_maladie}}</th>
+        <td>
+          {{if $consult->date_at}}
+            {{mb_field object=$consult field=arret_maladie onchange="this.form.onsubmit()"}}
+          {{else}}
+            {{mb_field object=$consult field=arret_maladie readonly=readonly}}
+          {{/if}}
+        </th>
       </tr>
     </table>
   </fieldset>
