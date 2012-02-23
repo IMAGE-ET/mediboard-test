@@ -15,28 +15,30 @@ ExFormula.tokens = {{$field_names|@json}};
       <td>
         <div class="small-info">
           Insérez les champs avec les boutons <button class="right notext" type="button"></button>.
+          <br />
+          <button type="button" class="help" onclick="(new Url('forms', 'view_doc_formula')).popup(800,800)">Aide sur les formules</button>
         </div>
       </td>
     </tr>
     <tr>
       <td>
-      	{{assign var=_spec_type value=$ex_field->_spec_object->getSpecType()}}
-				
-      	{{if "CExClassField::formulaCanArithmetic"|static_call:$_spec_type}}
-	        <select onchange="ExFormula.insertText($V(this)); this.selectedIndex = 0;">
-	          <option value=""> &ndash; Date définie </option>
-	          {{foreach from="CExClassField"|static:_formula_constants item=_const}}
-	            <option value="{{$_const}}">{{$_const}}</option>
-	          {{/foreach}}
-	        </select>
-	        
-	        <select onchange="ExFormula.insertText($V(this)); this.selectedIndex = 0;">
-	          <option value=""> &ndash; Fonction de dates </option>
-	          {{foreach from="CExClassField"|static:_formula_intervals key=_const item=_view}}
-	            <option value="{{$_const}}( ¤ )">{{$_view}}</option>
-	          {{/foreach}}
-	        </select>
-				{{/if}}
+        {{assign var=_spec_type value=$ex_field->_spec_object->getSpecType()}}
+        
+        {{if "CExClassField::formulaCanArithmetic"|static_call:$_spec_type}}
+          <select onchange="ExFormula.insertText($V(this)); this.selectedIndex = 0;">
+            <option value=""> &ndash; Date définie </option>
+            {{foreach from="CExClassField"|static:_formula_constants item=_const}}
+              <option value="{{$_const}}">{{$_const}}</option>
+            {{/foreach}}
+          </select>
+          
+          <select onchange="ExFormula.insertText($V(this)); this.selectedIndex = 0;">
+            <option value=""> &ndash; Fonction de dates </option>
+            {{foreach from="CExClassField"|static:_formula_intervals key=_const item=_view}}
+              <option value="{{$_const}}( ¤ )">{{$_view}}</option>
+            {{/foreach}}
+          </select>
+        {{/if}}
         
         {{* <button class="sum" type="button" onclick="ExFormula.sumAllFields()">Somme de tous les champs</button> *}}
         {{mb_field object=$ex_field field=_formula}}

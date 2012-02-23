@@ -598,6 +598,10 @@ button.thumbnails:before, a.button.thumbnails:before {
   content: url(images/buttons/thumbnails.png);
 }
 
+button.help:before, a.button.help:before {
+  content: url(images/buttons/help.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }
