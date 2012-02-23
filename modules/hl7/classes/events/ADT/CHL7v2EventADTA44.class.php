@@ -16,16 +16,13 @@
  * A44 - Move account information - patient account number
  */
 class CHL7v2EventADTA44 extends CHL7v2EventADT implements CHL7EventADTA43 {
+  var $code        = "A44";
+  var $struct_code = "A43";
+  
   function __construct($i18n = null) {
     parent::__construct($i18n);
         
-    $this->code        = "A44";
     $this->transaction = CPAM::getTransaction($this->code);
-    $this->msg_codes   = array ( 
-      array(
-        $this->event_type, $this->code, "{$this->event_type}_A43"
-      )
-    );
   }
   
   function build($sejour) {

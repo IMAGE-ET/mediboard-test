@@ -16,16 +16,13 @@
  * A03 - Discharge/end visit
  */
 class CHL7v2EventADTA03 extends CHL7v2EventADT implements CHL7EventADTA03 {
+  var $code        = "A03";
+  var $struct_code = "A03";
+  
   function __construct($i18n = null) {
     parent::__construct($i18n);
         
-    $this->code        = "A03";
     $this->transaction = CPAM::getTransaction($this->code);
-    $this->msg_codes   = array ( 
-      array(
-        $this->event_type, $this->code
-      )
-    );
   }
   
   function build($sejour) {

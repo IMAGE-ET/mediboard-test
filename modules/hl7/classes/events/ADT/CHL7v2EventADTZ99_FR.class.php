@@ -16,16 +16,13 @@
  * Z99 - Change admit
  */
 class CHL7v2EventADTZ99_FR extends CHL7v2EventADT implements CHL7EventADTZ99 {
+  var $code        = "Z99";
+  var $struct_code = "Z99";
+  
   function __construct($i18n = "FR") {
     parent::__construct($i18n);
         
-    $this->code        = "Z99";
     $this->transaction = CPAMFR::getTransaction($this->code);
-    $this->msg_codes   = array ( 
-      array(
-        $this->event_type, $this->code
-      )
-    );
   }
   
   function build($sejour) {

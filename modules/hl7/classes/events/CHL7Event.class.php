@@ -22,6 +22,7 @@ class CHL7Event {
   var $profil        = null;
   var $transaction   = null;
   var $code          = null;
+  var $struct_code   = null;
   var $version       = null;
   
   var $message       = null;

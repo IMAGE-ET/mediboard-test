@@ -16,16 +16,13 @@
  * A38 - Cancel pre-admit 
  */
 class CHL7v2EventADTA38 extends CHL7v2EventADT implements CHL7EventADTA38 {
+  var $code        = "A38";
+  var $struct_code = "A38";
+  
   function __construct($i18n = null) {
     parent::__construct($i18n);
         
-    $this->code        = "A38";
     $this->transaction = CPAM::getTransaction($this->code);
-    $this->msg_codes   = array ( 
-      array(
-        $this->event_type, $this->code
-      )
-    );
   }
   
   function build($sejour) {

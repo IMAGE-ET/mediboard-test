@@ -16,16 +16,13 @@
  * A40 - Merge patient
  */
 class CHL7v2EventADTA40 extends CHL7v2EventADT implements CHL7EventADTA39 {
+  var $code        = "A40";
+  var $struct_code = "A39";
+  
   function __construct($i18n = null) {
     parent::__construct($i18n);
         
-    $this->code        = "A40";
     $this->transaction = CPAM::getTransaction($this->code);
-    $this->msg_codes   = array ( 
-      array(
-        $this->event_type, $this->code, "{$this->event_type}_A39"
-      )
-    );
   }
   
   function build($patient){

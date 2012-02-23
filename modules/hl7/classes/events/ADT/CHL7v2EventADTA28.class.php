@@ -16,16 +16,13 @@
  * A28 - Add person information
  */
 class CHL7v2EventADTA28 extends CHL7v2EventADT implements CHL7EventADTA05 {
+  var $code        = "A28";
+  var $struct_code = "A05";
+  
   function __construct($i18n = null) {
     parent::__construct($i18n);
         
-    $this->code        = "A28";
     $this->transaction = CPAM::getTransaction($this->code);
-    $this->msg_codes   = array ( 
-      array(
-        $this->event_type, $this->code, "{$this->event_type}_A05"
-      )
-    );
   }
   
   function build($patient) {

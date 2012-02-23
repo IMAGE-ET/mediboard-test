@@ -16,18 +16,19 @@
  * A01 - Admit/visit notification
  */
 class CHL7v2EventADTA01 extends CHL7v2EventADT implements CHL7EventADTA01 {
+  var $code        = "A01";
+  var $struct_code = "A01";
+  
   function __construct($i18n = null) {
     parent::__construct($i18n);
         
-    $this->code        = "A01";
     $this->transaction = CPAM::getTransaction($this->code);
-    $this->msg_codes   = array ( 
-      array(
-        $this->event_type, $this->code
-      )
-    );
   }
   
+  function getEVNOccuredDateTime($sejour) {
+    return mbDateTime();
+  }
+
   function build($sejour) {
     parent::build($sejour);
     

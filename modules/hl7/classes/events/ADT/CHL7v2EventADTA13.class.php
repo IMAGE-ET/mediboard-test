@@ -16,16 +16,13 @@
  * A13 - Cancel discharge/end visit
  */
 class CHL7v2EventADTA13 extends CHL7v2EventADT implements CHL7EventADTA01 {
+  var $code        = "A13";
+  var $struct_code = "A01";
+  
   function __construct($i18n = null) {
     parent::__construct($i18n);
         
-    $this->code        = "A13";
     $this->transaction = CPAM::getTransaction($this->code);
-    $this->msg_codes   = array ( 
-      array(
-        $this->event_type, $this->code, "{$this->event_type}_A01"
-      )
-    );
   }
   
   function build($sejour) {

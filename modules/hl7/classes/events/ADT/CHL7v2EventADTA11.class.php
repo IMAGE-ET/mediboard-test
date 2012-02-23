@@ -16,16 +16,13 @@
  * A11 - Cancel admit/visit notification
  */
 class CHL7v2EventADTA11 extends CHL7v2EventADT implements CHL7EventADTA09 {
+  var $code        = "A11";
+  var $struct_code = "A09";
+  
   function __construct($i18n = null) {
     parent::__construct($i18n);
         
-    $this->code        = "A11";
     $this->transaction = CPAM::getTransaction($this->code);
-    $this->msg_codes   = array (
-      array(
-        $this->event_type, $this->code, "{$this->event_type}_A09"
-      )
-    );
   }
   
   function build($sejour) {

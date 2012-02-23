@@ -16,16 +16,13 @@
  * A02 - Transfer a patient
  */
 class CHL7v2EventADTA02 extends CHL7v2EventADT implements CHL7EventADTA02 {
+  var $code        = "A02";
+  var $struct_code = "A02";
+  
   function __construct($i18n = null) {
     parent::__construct($i18n);
         
-    $this->code        = "A02";
     $this->transaction = CPAM::getTransaction($this->code);
-    $this->msg_codes   = array ( 
-      array(
-        $this->event_type, $this->code
-      )
-    );
   }
   
   function build($sejour) {

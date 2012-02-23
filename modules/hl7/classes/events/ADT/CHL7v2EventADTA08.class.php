@@ -16,16 +16,13 @@
  * A08 - Update Patient Information
  */
 class CHL7v2EventADTA08 extends CHL7v2EventADT implements CHL7EventADTA01 {
+  var $code        = "A08";
+  var $struct_code = "A01";
+  
   function __construct($i18n = null) {
     parent::__construct($i18n);
         
-    $this->code        = "A08";
     $this->transaction = CPAM::getTransaction($this->code);
-    $this->msg_codes   = array (
-      array(
-        $this->event_type, $this->code, "{$this->event_type}_A01"
-      )
-    );
   }
   
   function build($sejour) {

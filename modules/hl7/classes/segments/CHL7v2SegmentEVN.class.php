@@ -48,7 +48,8 @@ class CHL7v2SegmentEVN extends CHL7v2Segment {
     $data[] = null;
     
     // EVN-5: Operator ID (XCN) (optional repeating)
-    $data[] = $this->getXCN($event->last_log->loadRefUser());
+    //$data[] = $this->getXCN($event->last_log->loadRefUser());
+    $data[] = null;
     
     // EVN-6: Event Occurred (TS) (optional)
     $data[] = $this->occured_datetime;
