@@ -28,11 +28,13 @@
     <tr>
       <th>Catégorie</th>
       <th>Icone</th>
+      <th class="narrow">Durée</th>
     </tr>
     {{foreach from=$categories item=_categorie}}
     <tr {{if $_categorie->_id == $categorie->_id}}class="selected"{{/if}}>
       <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;categorie_id={{$_categorie->_id}}">{{$_categorie->nom_categorie}}</a></td>
       <td><img src="./modules/dPcabinet/images/categories/{{$_categorie->nom_icone}}" /></td>
+      <td>x{{$_categorie->duree}}</td>
     </tr>
     {{/foreach}}
     </table>
@@ -85,14 +87,24 @@
       <tr>
         <th>{{mb_label object=$categorie field="duree"}}</th>
         <td>
-          <select name="duree">
-            <option value="1" {{if $categorie->duree == 1}} selected="selected" {{/if}}>x1</option>
-            <option value="2" {{if $categorie->duree == 2}} selected="selected" {{/if}}>x2</option>
-            <option value="3" {{if $categorie->duree == 3}} selected="selected" {{/if}}>x3</option>
-            <option value="4" {{if $categorie->duree == 4}} selected="selected" {{/if}}>x4</option>
-            <option value="5" {{if $categorie->duree == 5}} selected="selected" {{/if}}>x5</option>
-            <option value="6" {{if $categorie->duree == 6}} selected="selected" {{/if}}>x6</option>
-          </select>
+            <label>
+              <input type="radio" value="1" name="duree" {{if $categorie->duree == 1}}checked="checked"{{/if}}>x1
+            </label>
+            <label>
+              <input type="radio" value="2" name="duree" {{if $categorie->duree == 2}}checked="checked"{{/if}}>x2
+            </label>
+            <label>
+              <input type="radio" value="3" name="duree" {{if $categorie->duree == 3}}checked="checked"{{/if}}>x3
+            </label>
+            <label>
+              <input type="radio" value="4" name="duree" {{if $categorie->duree == 4}}checked="checked"{{/if}}>x4
+            </label>
+            <label>
+              <input type="radio" value="5" name="duree" {{if $categorie->duree == 5}}checked="checked"{{/if}}>x5
+            </label>
+            <label>
+              <input type="radio" value="6" name="duree" {{if $categorie->duree == 6}}checked="checked"{{/if}}>x6
+            </label>
         </td>
       </tr>
       <tr>

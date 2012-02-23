@@ -51,7 +51,9 @@ if($categorie_id){
   $categorie = new CConsultationCategorie();
   $categorie->load($categorie_id);
 }
-
+else {
+  $categorie->valueDefaults();
+}
 // Création du template
 $smarty = new CSmartyDP();
 
