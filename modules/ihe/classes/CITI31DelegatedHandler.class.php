@@ -185,7 +185,8 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     // Cas d'un séjour en cours (entrée réelle)
     if ($sejour->_etat == "encours") {
       // Admission faite
-      if ($sejour->fieldModified("entree_reelle") && !$sejour->_old->entree_reelle) {
+      if ($sejour->fieldModified("entree_reelle") && !$sejour->_old->entree_reelle ||
+          $sejour->entree_reelle && !$sejour->_old->entree_reelle) {
         // Patient externe
         if (in_array($sejour->type, self::$outpatient)) {
           return "A04";

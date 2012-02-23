@@ -92,7 +92,7 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
         if ($receiver->group_id != $group_id) {
           continue;
         }      
-  
+
         $patient1_ipp     = $patient->_IPP = $infos_fus["patient1_ipp"];
         
         $patient_eliminee = $infos_fus["patientElimine"];
@@ -104,7 +104,7 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
         }
   
         // Cas 1 IPP : Pas de message de fusion mais d'une modification du patient
-        if ((!$patient1_ipp && $patient2_ipp) || ($patient1_ipp && !$patient2_ipp)) {
+        if ($patient1_ipp xor $patient2_ipp) {
           if ($patient2_ipp)
             $patient->_IPP = $patient2_ipp;
           

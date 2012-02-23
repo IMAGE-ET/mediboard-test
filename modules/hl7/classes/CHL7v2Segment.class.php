@@ -473,9 +473,9 @@ class CHL7v2Segment extends CHL7v2Entity {
   
   function getPreviousPL(CSejour $sejour) {
     $sejour->loadSurrAffectations();
-    $prev_affectation = $this->_ref_prev_affectation;
-    
-    return $this->getPL($sejour, $prev_affectation);
+    if ($prev_affectation = $sejour->_ref_prev_affectation) {
+      return $this->getPL($sejour, $prev_affectation);
+    }
   }
   
   function getModeTraitement(CSejour $sejour) {

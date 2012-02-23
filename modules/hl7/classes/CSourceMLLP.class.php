@@ -61,7 +61,7 @@ class CSourceMLLP extends CExchangeSource {
   }
   
   function send($evenement_name = null){
-    $this->getSocketClient()->sendandrecive(self::TRAILING.$this->_data.self::LEADING);
+    $this->_acquittement = trim(str_replace("\x1C", "", $this->getSocketClient()->sendandrecive(self::TRAILING.$this->_data.self::LEADING)));
   }
   
   function isReachableSource() {

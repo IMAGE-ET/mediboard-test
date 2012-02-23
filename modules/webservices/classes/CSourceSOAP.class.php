@@ -88,10 +88,6 @@ class CSourceSOAP extends CExchangeSource {
 		return true;
   }
   
-  function getACQ() {    
-    return $this->_acquittement;
-  }
-  
   function isReachableSource() {
     if (!url_exists($this->host)) {
       $this->_reachable = 0;

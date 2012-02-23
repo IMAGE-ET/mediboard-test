@@ -72,8 +72,13 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   
   function toXML($event_code = null, $hl7_datatypes = true) {
     $field = $this->children[0]->fields[8]->items[0];
-    $name = $field->children[0]->data."_".$field->children[1]->data;
-
+    if ($field->children[0]->data == "ACK") {
+      $name = $field->children[0]->data;
+    }
+    else {
+      $name = $field->children[0]->data."_".$field->children[1]->data;
+    }
+    
     $dom = CHL7v2MessageXML::getEventType($event_code);
     $root = $dom->addElement($dom, $name);
     $dom->addNameSpaces($name);
@@ -132,9 +137,9 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     // validation de la syntaxe : chaque ligne doit commencer par 3 lettre + un separateur + au moins une donnée
     $sep_preg = preg_quote($fieldSeparator);
     
-    foreach($lines as $line) {
-      if (!preg_match("/^[A-Z]{2}[A-Z0-9]$sep_preg.+/", $line)) {
-        throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $line);
+    foreach($lines as $_line) {
+      if (!preg_match("/^[A-Z]{2}[A-Z0-9]$sep_preg.+/", $_line)) {
+        throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $_line);
       }
     }
     
@@ -198,20 +203,21 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     
     // message type
     $message_type = explode($this->componentSeparator, $first_line[8]);
-    
+
     if ($message_type[0]) {
-      $this->event_name = $message_type[0].$message_type[1];
       $this->name       = $message_type[0];
+      if ($this->name == "ACK") {
+        $this->event_name = $message_type[0];
+      } 
+      else {
+        $this->event_name = $message_type[0].$message_type[1];
+      }
     }
     else {
       $this->event_name = preg_replace("/[^A-Z0-9]/", "", $message_type[2]);
       $this->name       = substr($message_type[2], 0, 3);
     }
 
-    if ($this->name === "ACK") {
-      $this->event_name = substr($this->event_name, 0, 3);
-    }
-    
     $this->description = (string)$this->getSpecs()->description;
     
     $this->readHeader();

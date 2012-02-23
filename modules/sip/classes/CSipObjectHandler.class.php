@@ -55,11 +55,11 @@ class CSipObjectHandler extends CEAIObjectHandler {
         $patient->_IPP = null;
         $patient->loadIPP($_group->_id);
         $patient1_ipp = $patient->_IPP;
-        
+
         $patient_elimine->_IPP = null;
         $patient_elimine->loadIPP($_group->_id);
         $patient2_ipp = $patient_elimine->_IPP;
-        
+
         // Passage en trash des IPP des patients
         $tap_IPP = CPatient::getTagIPP($_group->_id);
         
@@ -85,10 +85,14 @@ class CSipObjectHandler extends CEAIObjectHandler {
             }
             $_id_400->tag = CAppUI::conf('dPpatients CPatient tag_ipp_trash').$tap_IPP;
             $_id_400->last_update = mbDateTime();
-            $_id_400->store();
+           // $_id_400->store();
           }
         }
-
+        
+        if (!$patient1_ipp && !$patient2_ipp) {
+          continue;  
+        }
+        
         $mbObject->_fusion[$_group->_id] = array (
           "patientElimine" => $patient_elimine,
           "patient1_ipp"   => $patient1_ipp,

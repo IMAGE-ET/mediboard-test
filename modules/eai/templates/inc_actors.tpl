@@ -40,7 +40,7 @@
     <tr>
       <td>
         <a href="#" onclick="InteropActor.refreshActor('{{$_actor->_guid}}', null);" title="Modifier l'acteur d'intégration">
-          {{mb_value object=$_actor field="nom"}}
+          {{$_actor->_view}}
         </a>
       </td>
       <td>{{$_actor->_ref_group->_view}}</td>

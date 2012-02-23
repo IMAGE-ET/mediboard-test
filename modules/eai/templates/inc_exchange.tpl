@@ -77,7 +77,7 @@
      </label>
      {{else}}
        <a href="?m=eai&tab=vw_idx_interop_actors#interop_actor_guid={{$emetteur->_guid}}">
-         {{mb_value object=$emetteur field="nom"}}
+         {{$emetteur->_view}}
        </a>
      {{/if}}
   </td>
@@ -89,7 +89,7 @@
      </label>
      {{else}}
        <a href="?m=eai&tab=vw_idx_interop_actors#interop_actor_guid={{$destinataire->_guid}}">
-         {{mb_value object=$destinataire field="nom"}}
+         {{$destinataire->_view}}
        </a>
      {{/if}}
   </td>

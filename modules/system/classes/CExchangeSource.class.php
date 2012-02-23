@@ -45,6 +45,7 @@ class CExchangeSource extends CMbObject {
   var $_response_time     = null;
   var $_all_source        = array();
   var $_receive_filename  = null;
+  var $_acquittement      = null;
   
   function getProps() {
     $specs = parent::getProps();
@@ -145,7 +146,9 @@ class CExchangeSource extends CMbObject {
   
   function send($evenement_name = null) {}
   
-  function getACQ() {}
+  function getACQ() {    
+    return $this->_acquittement;
+  }
   
   function receive() {}
   

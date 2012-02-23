@@ -41,7 +41,7 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     $data[] = "Mediboard"; 
     
     // MSH-4: Sending Facility (HD) (optional)
-    $data[] = "Mediboard_$group->finess"; 
+    $data[] = $group->finess ? "Mediboard_$group->finess" : "Mediboard"; 
     
     // MSH-5: Receiving Application (HD) (optional)
     $data[] = isset($actor->_configs["receiving_application"]) ? $actor->_configs["receiving_application"] : $actor->nom; 
