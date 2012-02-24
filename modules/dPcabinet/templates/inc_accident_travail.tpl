@@ -75,8 +75,13 @@
           {{/if}}
         </th>
       </tr>
+    </table>
+  </fieldset>
+  <fieldset>
+    <legend>Arrêt maladie</legend>
+    <table style="width: 100%">
       <tr>
-        <th>{{mb_label object=$consult field=arret_maladie}}</th>
+        <th style="width: 30%">{{mb_label object=$consult field=arret_maladie}}</th>
         <td>
           {{if $consult->date_at}}
             {{mb_field object=$consult field=arret_maladie onchange="this.form.onsubmit()"}}
