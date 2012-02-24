@@ -72,36 +72,37 @@
     modal.modalObject.observe("afterClose", refreshMouvements);
   }
   
-  var sejour_selected = null,
-      lit_selected    = null;
+  window.sejour_selected = null;
+  window.lit_selected    = null;
+  window.affectation_selected = null;
   
   chooseSejour = function(sejour_id) {
-    var sejour = $("sejour_move_"+sejour_id);
-    /*if (sejour.checked) {
-      sejour_selected = null;
-      sejour.checked = false;
-      return;
-    }*/
-    sejour_selected = sejour_id;
+    window.sejour_selected = sejour_id;
     moveByRadio();
   }
   
   chooseLit = function(lit_id) {
-    var lit = $("lit_move_"+lit_id);
-    /*if (lit.checked) {
-      lit_selected = null;
-      lit.checked = false;
-      return;
-    }*/
-    lit_selected = lit_id;
+    console.log("rah");
+    window.lit_selected = lit_id;
+    moveByRadio();
+  }
+  
+  chooseAffectation = function(affectation_id) {
+    window.affectation_selected = affectation_id;
     moveByRadio();
   }
   
   // Placement par les boutons radio
   moveByRadio = function() {
-    if (sejour_selected && lit_selected) {
-      moveAffectation(null, lit_selected, sejour_selected);
-      sejour_selected = lit_selected = null;
+    if (window.sejour_selected && window.lit_selected) {
+      moveAffectation(null, window.lit_selected, window.sejour_selected);
+      window.sejour_selected = null;
+      window.lit_selected = null;
+    }
+    else if (window.lit_selected && window.affectation_selected) {
+      moveAffectation(window.affectation_selected, window.lit_selected);
+      window.affectation_selected = null;
+      window.lit_selected = null;
     }
   }
   

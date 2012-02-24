@@ -162,12 +162,12 @@
           {{if $prestation_id}}
             <th class="text">{{$_lit->_selected_item->nom}}</th>
           {{/if}}
-          <th class="text first_cell" style="text-align: left;" onclick="this.down().click();" data-rank="{{$_lit->_selected_item->rank}}">
+          <th class="text first_cell" style="text-align: left;" onclick="chooseLit('{{$_lit->_id}}'); this.down().checked = 'checked';" data-rank="{{$_lit->_selected_item->rank}}">
             {{if isset($_lit->_lines|smarty:nodefaults) && $_lit->_lines|@count > 1}}
               <img src="modules/dPhospi/images/surb.png" title="Collision" style="float: right;">
             {{/if}}
             {{if !$readonly}}
-              <input type="radio" name="lit_move" style="float: left;" id="lit_move_{{$_lit->_id}}" onchange="chooseLit('{{$_lit->_id}}');" />
+              <input type="radio" name="lit_move" style="float: left;" id="lit_move_{{$_lit->_id}}" onclick="chooseLit('{{$_lit->_id}}');" />
             {{/if}}
             {{$_lit}}
           </th>
@@ -206,6 +206,7 @@
                         style="left: {{$offset}}px; width: {{$width}}px; border: 1px solid #{{$praticien->_ref_function->color}};"
                         onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');">
                         {{if $mode_vue_tempo == "classique" && $_affectation->_width > 3 && !$readonly}}
+                          <input type="radio" name="affectation_move" onclick="chooseAffectation('{{$_affectation->_id}}');" style="float: right;"/>
                           <button type="button" class="trash notext opacity-40" style="float: right"
                             onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"
                             onclick="delAffectation('{{$_affectation->_id}}')"></button>

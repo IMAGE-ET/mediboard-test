@@ -175,7 +175,7 @@
                   <div class="wrapper_op">
                     {{if !$readonly}}
                       <span style="float: right;">
-                        <input type="radio" name="sejour_move" id="sejour_move_{{$_sejour->_id}}" onchange="chooseSejour('{{$_sejour->_id}}');"/>
+                        <input type="radio" name="sejour_move" id="sejour_move_{{$_sejour->_id}}" onclick="chooseSejour('{{$_sejour->_id}}');"/>
                       </span>
                     {{/if}}
                     <span {{if !$_sejour->entree_reelle}}class="patient-not-arrived"{{/if}} {{if $_sejour->septique}}class="septique"{{/if}}
