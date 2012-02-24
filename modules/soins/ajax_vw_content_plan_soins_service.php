@@ -80,7 +80,7 @@ foreach($lines as $_line_element){
     $prescriptions[$_line_element->prescription_id] = $_line_element->_ref_prescription;
   }
   $prescription =& $prescriptions[$_line_element->prescription_id];
-  $prescription->_ref_object->loadRefCurrAffectation();
+  $prescription->_ref_object->loadRefCurrAffectation()->loadView();
   $prescription->loadRefPatient();
   $_line_element->loadRefsPrises();
   $_line_element->loadRefLogSignee();
