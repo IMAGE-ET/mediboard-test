@@ -54,6 +54,7 @@ else{
 }
 
 // Gestion du modèle
+$_GET["isBody"] = $compte_rendu->type == "body";
 $templateManager = new CTemplateManager($_GET);
 $templateManager->editor = "ckeditor";
 

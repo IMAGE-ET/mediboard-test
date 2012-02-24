@@ -35,13 +35,15 @@ class CTemplateManager {
     $user = CMediusers::get();
     $this->parameters = $parameters;
     
-    $this->addProperty("Courrier - nom destinataire"     , "[Courrier - nom destinataire]");
-    $this->addProperty("Courrier - adresse destinataire" , "[Courrier - adresse destinataire]");
-    $this->addProperty("Courrier - cp ville destinataire", "[Courrier - cp ville destinataire]");
-    $this->addProperty("Courrier - copie à - simple"     , "[Courrier - copie à - simple]");
-    $this->addProperty("Courrier - copie à - simple (multiligne)", "[Courrier - copie à - simple (multiligne)]");
-    $this->addProperty("Courrier - copie à - complet", "[Courrier - copie à - complet");
-    $this->addProperty("Courrier - copie à - complet (multiligne)", "[Courrier - copie à - simple (complet)]");
+    if (!isset($parameters["isBody"]) || (isset($parameters["isBody"]) && $parameters["isBody"] == 1)) {
+      $this->addProperty("Courrier - nom destinataire"     , "[Courrier - nom destinataire]");
+      $this->addProperty("Courrier - adresse destinataire" , "[Courrier - adresse destinataire]");
+      $this->addProperty("Courrier - cp ville destinataire", "[Courrier - cp ville destinataire]");
+      $this->addProperty("Courrier - copie à - simple"     , "[Courrier - copie à - simple]");
+      $this->addProperty("Courrier - copie à - simple (multiligne)", "[Courrier - copie à - simple (multiligne)]");
+      $this->addProperty("Courrier - copie à - complet", "[Courrier - copie à - complet");
+      $this->addProperty("Courrier - copie à - complet (multiligne)", "[Courrier - copie à - simple (complet)]");
+    }
     
     $now = mbDateTime();
     $this->addDateProperty("Général - date du jour", $now);
