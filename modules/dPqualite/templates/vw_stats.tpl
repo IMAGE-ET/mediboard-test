@@ -110,9 +110,7 @@ function drawGraph(id) {
 }
 
 function showLegendeCriticite() {
-  var url = new Url;
-  url.setModuleAction("dPqualite", "vw_legende_criticite");
-  url.pop(220, 150, "Légende de la criticité");
+  new Url('qualite', 'vw_legende_criticite').requestModal();
 }
 
 Main.add(function () {

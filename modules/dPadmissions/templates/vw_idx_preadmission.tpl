@@ -11,8 +11,7 @@
 <script type="text/javascript">
 
 function showLegend() {
-  var url = new Url("dPadmissions", "vw_legende");
-  url.popup(300, 170, "Legende");
+  new Url("dPadmissions", "vw_legende").requestModal();
 }
 
 function printDHE(type, object_id) {
@@ -46,7 +45,7 @@ Main.add(function () {
 <table class="main">
   <tr>
     <td colspan="2">
-      <a href="#" onclick="showLegend()" class="button search">Légende</a>
+      <a href="#legend" onclick="showLegend()" class="button search">Légende</a>
     </td>
   </tr>
   <tr>

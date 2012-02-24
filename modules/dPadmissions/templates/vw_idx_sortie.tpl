@@ -13,8 +13,7 @@
 <script type="text/javascript">
 
 function showLegend() {
-  var url = new Url("dPadmissions", "vw_legende");
-  url.popup(300, 170, "Legende");
+  var url = new Url("dPadmissions", "vw_legende").requestModal();
 }
 
 function printAmbu(){
@@ -126,7 +125,7 @@ Main.add(function () {
 <table class="main">
 <tr>
   <td>
-    <a href="#" onclick="showLegend()" class="button search">Légende</a>
+    <a href="#legend" onclick="showLegend()" class="button search">Légende</a>
   </td>
   <td style="float: right">
     <form action="?" name="selType" method="get">

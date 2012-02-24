@@ -3,7 +3,7 @@ Main.add(function () {
   Calendar.regField(getForm("selectSalle").date, null, {noView: true});
 });
 showLegend = function() {
-  new Url("dPbloc", "legende").popup(500, 150, "Légende");
+  new Url("bloc", "legende").requestModal();
 }
 </script>
 

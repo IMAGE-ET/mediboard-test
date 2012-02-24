@@ -20,8 +20,7 @@ function printFicheBloc(interv_id) {
 }
 
 function showLegend() {
-  var url = new Url("dPbloc", "legende");
-  url.popup(500, 150, "Legend");
+  var url = new Url('bloc', 'legende').requestModal()
 }
 </script>
 

@@ -10,10 +10,8 @@
 
 <script type="text/javascript">
 
-showLegende = function(){
-  var url = new Url();
-	url.setModuleAction("ssr", "vw_legende");
-	url.popup(300, 200, "Legende");
+showLegende = function() {
+  new Url('ssr', 'vw_legende').requestModal();
 }
 
 

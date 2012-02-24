@@ -221,7 +221,7 @@ Localize = {
       return Localize.that(string) != string;
     });
 	
-	return this.that(string || strings.first);
+	return Localize.that(string || strings.first());
   },
   
   populate: function(strings) {

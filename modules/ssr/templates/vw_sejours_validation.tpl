@@ -15,8 +15,7 @@
 <script type="text/javascript">
 
 function showLegend() {
-  var url = new Url("dPadmissions", "vw_legende");
-  url.popup(300, 170, "Legende");
+  new Url('admissions', "vw_legende").requestModal();
 }
 
 function printPlanning() {
@@ -139,7 +138,7 @@ Main.add(function () {
 <table class="main">
   <tr>
     <td>
-      <a href="#" onclick="showLegend()" class="button search">Légende</a>
+      <a href="#legend" onclick="showLegend()" class="button search">Légende</a>
     </td>
     <td>
       {{if $can->edit}} 
