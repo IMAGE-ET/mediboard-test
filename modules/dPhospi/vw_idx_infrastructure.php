@@ -82,11 +82,9 @@ $prestation->load($prestation_id);
 $prestation->loadRefsNotes();
 
 // Récupération des prestations
-$order = "group_id, nom";
-$prestations = $prestation->loadList(null, $order);
-foreach ($prestations as $_prestation){
-  $_prestation->loadRefGroup();
-}
+$presta = new CPrestation;
+$presta->group_id = $group->_id;
+$prestations = $presta->loadMatchingList("nom");
 
 $praticiens = CAppUI::$user->loadPraticiens();
 

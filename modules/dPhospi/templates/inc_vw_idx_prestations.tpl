@@ -16,20 +16,22 @@
       <th>{{mb_title class=CPrestation field=code}}</th>
       <th>{{mb_title class=CPrestation field=nom}}</th>
       <th>{{mb_title class=CPrestation field=description}}</th>
-      <th>{{mb_title class=CPrestation field=group_id}}</th>
     </tr>
 		
     {{foreach from=$prestations item=_prestation}}
-    <tr {{if $_prestation->_id == $prestation->_id}} class="selected" {{/if}}>
-      <td>{{mb_value object=$_prestation field=code}}</td>
-      <td>
-      	<a href="#" onclick="showInfrastructure('prestation_id', '{{$_prestation->_id}}', 'infrastructure_prestation')">
-      		{{mb_value object=$_prestation field=nom}}
-			  </a>
-			</td>
-      <td class="text compact">{{mb_value object=$_prestation field=description}}</td>
-      <td>{{mb_value object=$_prestation field=group_id}}</td>
-    </tr>
+      <tr {{if $_prestation->_id == $prestation->_id}} class="selected" {{/if}}>
+        <td>{{mb_value object=$_prestation field=code}}</td>
+        <td>
+        	<a href="#" onclick="showInfrastructure('prestation_id', '{{$_prestation->_id}}', 'infrastructure_prestation')">
+        		{{mb_value object=$_prestation field=nom}}
+  			  </a>
+  			</td>
+        <td class="text compact">{{mb_value object=$_prestation field=description}}</td>
+      </tr>
+    {{foreachelse}}
+      <tr>
+        <td colspan="3" class="empty">{{tr}}CPrestation.none{{/tr}}</td>
+      </tr>
     {{/foreach}}
     
 		</table>
