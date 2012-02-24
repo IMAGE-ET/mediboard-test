@@ -119,6 +119,7 @@ class CConsultation extends CCodable {
   var $_ref_chir                 = null;
   var $_date                     = null;
   var $_datetime                 = null;
+  var $_date_fin                 = null;
   var $_is_anesth                = null; 
   var $_du_patient_restant       = null;
   var $_reglements_total_patient = null;
@@ -292,11 +293,15 @@ class CConsultation extends CCodable {
     $this->_check_adresse = $this->adresse;
     $this->getEtat();
     $this->_view = "Consultation ".$this->_etat;
-    // pour récuperer le praticien depuis la plage consult
-    $this->loadRefPlageConsult(true);
+    
     // si _coded vaut 1 alors, impossible de modifier la cotation
     $this->_coded = $this->valide;
     
+    // pour récuperer le praticien depuis la plage consult
+    $this->loadRefPlageConsult(true);
+    $plageconsult = $this->_ref_plageconsult;
+    $this->_date_fin = "$plageconsult->date ". mbTime("+".mbMinutesRelative("00:00:00", $plageconsult->freq)*$this->duree." MINUTES", $this->heure);
+
     $this->_exam_fields = self::getExamFields();
   }
    

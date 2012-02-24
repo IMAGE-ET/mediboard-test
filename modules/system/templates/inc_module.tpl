@@ -35,7 +35,7 @@
       <input type="hidden" name="mod_id" value="{{$module_id}}" />
       <input type="hidden" name="cmd" value="upgrade" />
       
-      <button class="button change submit upgrade" type="submit" {{* onclick="return confirm('{{tr}}CModule-confirm-upgrade{{/tr}}')" *}}>
+      <button class="button change submit upgrade singleclick" type="submit" {{* onclick="return confirm('{{tr}}CModule-confirm-upgrade{{/tr}}')" *}}>
         {{tr}}Upgrade{{/tr}} &gt;
         {{$_mb_module->_latest}}
       </button>
