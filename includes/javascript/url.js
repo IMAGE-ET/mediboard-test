@@ -582,7 +582,7 @@ var Url = Class.create({
         a = this.oParams.a;
     
     oOptions = Object.extend({
-      title: $T('mod-'+m+'-tab-'+a),
+      title: Localize.first('mod-'+m+'-tab-'+a, 'mod-dP'+m+'-tab-'+a),
       showReload: true,
       showClose: true
     }, oOptions);

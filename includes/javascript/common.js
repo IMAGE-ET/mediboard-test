@@ -215,6 +215,15 @@ Localize = {
     return printf.apply(null, args);
   },
   
+  first: function() {
+	var strings = $A(arguments);
+    var string = strings.find(function(string) {
+      return Localize.that(string) != string;
+    });
+	
+	return this.that(string || strings.first);
+  },
+  
   populate: function(strings) {
     if (strings.length) {
       strings.each(Localize.addString.bind(Localize));
