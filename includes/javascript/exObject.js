@@ -1,4 +1,4 @@
-ExObject = {
+var ExObject = {
   container: null,
   classes: {},
   refreshSelf: {},
@@ -178,7 +178,7 @@ ExObject = {
   }
 };
 
-ExObjectFormula = Class.create({
+var ExObjectFormula = Class.create({
   tokenData: null,
   form: null,
   customOps: {
@@ -372,12 +372,13 @@ ExObjectFormula = Class.create({
 });
 
 // TODO put this in the object
-selectExClass = function(element, object_guid, event, _element_id) {
+function selectExClass(element, object_guid, event, _element_id) {
   var view = element.options ? element.options[element.options.selectedIndex].innerHTML : element.innerHTML;
   showExClassForm($V(element) || element.value, object_guid, view, null, event, _element_id);
   element.selectedIndex = 0;
 }
-showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event, _element_id, parent_view, ajax_container) {
+
+function showExClassForm(ex_class_id, object_guid, title, ex_object_id, event, _element_id, parent_view, ajax_container) {
   var url = new Url("forms", "view_ex_object_form");
   url.addParam("ex_class_id", ex_class_id);
   url.addParam("object_guid", object_guid);

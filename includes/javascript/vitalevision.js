@@ -348,7 +348,7 @@ var VitaleVision = {
     $V(form.assure_naissance, jour + "/" + mois + "/" + annee);
     
     $V(form.assure_matricule, getNodeValue("nir", ident));
-		
+    
     if (getNodeValue("qualBenef", amo) == 0) {
       var sexe, first = $V(form.assure_matricule).charAt(0);
       if (first == '1' || first == '2')  // Gestion des codes provisoires commencant par 3, 4, 7 ou 8

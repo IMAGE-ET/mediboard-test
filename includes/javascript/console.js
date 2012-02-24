@@ -66,12 +66,6 @@ var Console = {
     }
   },
   
-  error: function(exception) {
-    var regexp = /([^@])+@(http[s]?:([^:]+))?:([\d]+)/g;
-    exception.stack = (exception.stack || exception.stacktrace || "").match(regexp);
-    this.debug(exception, "Exception", { level: 2 } );
-  },
-  
   debug: function(oValue, sLabel, oOptions) {
     if (Preferences.INFOSYSTEM != 1) {
       return;
@@ -202,19 +196,19 @@ var Console = {
     this.debug(dStop - this.dStart, "Duration in milliseconds");
     this.dStart = null;
   },
-	
-	exec: function(form) {
-		try {
-			var ret = eval(form.elements.code.value);
-			Console.trace(ret);
-		} catch(e) {
-			Console.error(e);
-		}
-		
-		form.elements.code.value = "";
-		
-		return false;
-	}
+  
+  exec: function(form) {
+    try {
+      var ret = eval(form.elements.code.value);
+      Console.trace(ret);
+    } catch(e) {
+      Console.error(e);
+    }
+    
+    form.elements.code.value = "";
+    
+    return false;
+  }
 };
 
 // If there is no console object, it uses the Mediboard Console
@@ -227,12 +221,12 @@ else {
   try {
     document.observe("keydown", function(e){
       var key = Event.key(e);
-			if (e.altKey && key == 123) {
-				$(Console.id).show();
-				getForm("debug-console").elements.code.tryFocus();
-			}
+      if (e.altKey && key == 123) {
+        $(Console.id).show();
+        getForm("debug-console").elements.code.tryFocus();
+      }
     });
-	} catch(e) {}
+  } catch(e) {}
 }
 
 /**
@@ -243,7 +237,7 @@ var Assert = {
     if (Preferences.INFOSYSTEM != 1) {
       return;
     }
-		
+    
     if (!bPredicate) {
       var aArgs = $A(arguments);
       aArgs.shift();

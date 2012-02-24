@@ -13,10 +13,10 @@ class CExClassMessage extends CMbObject {
   
   var $ex_group_id = null;
   var $type    = null;
-	
+  
   var $title   = null;
   var $text    = null;
-	
+  
   var $coord_title_x = null;
   var $coord_title_y = null;
   var $coord_text_x = null;
@@ -36,8 +36,8 @@ class CExClassMessage extends CMbObject {
     $props = parent::getProps();
     $props["ex_group_id"] = "ref notNull class|CExClassFieldGroup cascade";
     $props["type"]        = "enum list|title|info|warning|error";
-		
-    $props["title"]       = "str notNull";
+    
+    $props["title"]       = "str";
     $props["text"]        = "text notNull";
     
     $props["coord_title_x"] = "num min|0 max|100";
@@ -49,8 +49,8 @@ class CExClassMessage extends CMbObject {
   
   function updateFormFields(){
     parent::updateFormFields();
-		
-		$this->_view = CMbString::truncate($this->text, 20);
+    
+    $this->_view = ($this->title ? $this->title : CMbString::truncate($this->text, 20));
   }
   
   function loadRefExGroup($cache = true){

@@ -131,6 +131,11 @@ a.DESC:hover{
   outline: 4px solid #9ECFFF;
 }
 
+.ua-firefox .dropactive {
+  outline: none;
+  box-shadow: 0 0 0 4px #9ECFFF;
+}
+
 /* Should not be used */
 div.dragged {
   background-color: #ffc;

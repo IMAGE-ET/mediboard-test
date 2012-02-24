@@ -926,6 +926,11 @@ class CSetupsystem extends CSetup {
               ADD `host_type` ENUM ('host','reference1','reference2') DEFAULT 'host'";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.94";
+    $this->makeRevision("1.0.94");
+    $query = "ALTER TABLE `ex_class_message` 
+              CHANGE `title` `title` VARCHAR (255)";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.95";
   }
 }

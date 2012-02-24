@@ -292,7 +292,7 @@ toggleGroupLabelEdit = function(link) {
               <tr class="ex-class-message" data-ex_class_message_id="{{$_message->_id}}">
                 <td class="text">
                   <a href="#1" onclick="ExMessage.edit('{{$_message->_id}}', '{{$_group->_id}}')">
-                    {{$_message->title}}
+                    {{$_message}}
                   </a>
                 </td>
               </tr>

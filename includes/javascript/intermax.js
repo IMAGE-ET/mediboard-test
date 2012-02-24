@@ -99,9 +99,9 @@ var Intermax = {
   
   watchResult: function(aAllowedFunctions) {
     if (this.autoWatch && !this.watcher) {
-    	// Empty current output
-	    document.intermaxResult.performRead();
-	  	this.watcher = new PeriodicalExecuter(function() { Intermax.result(aAllowedFunctions) }, 1);
+      // Empty current output
+      document.intermaxResult.performRead();
+      this.watcher = new PeriodicalExecuter(function() { Intermax.result(aAllowedFunctions) }, 1);
     }
   },
   
@@ -111,35 +111,35 @@ var Intermax = {
     this.bindContent(sContent);
 
     if (!$H(this.oContent).values().length) {
-	    if (!this.watcher) {
-	    	Intermax.alert("100");
-	   	}
+      if (!this.watcher) {
+        Intermax.alert("100");
+       }
       return;
     }
     
-		// Fonctions autorisées    
+    // Fonctions autorisées    
     if (this.aAllowedFunctions.length && !this.aAllowedFunctions.include(this.oContent.FONCTION.NOM)) {
-	    if (!this.watcher) {
-		    Intermax.alert("110", this.aAllowedFunctions.join(", "));
-		  }
-	    return;
+      if (!this.watcher) {
+        Intermax.alert("110", this.aAllowedFunctions.join(", "));
+      }
+      return;
     }
     
     if (this.watcher) {
-	    this.watcher.stop();
-	    this.watcher = null;
+      this.watcher.stop();
+      this.watcher = null;
     }
     
     // Fonction en cours d'execution
     if (!this.oContent.PARAM.EXECUTION) {
-	    Intermax.alert("120");
-	    return;
+      Intermax.alert("120");
+      return;
     }
     
-	  if (this.oContent.PARAM.EXECUTION == 'KO') {
-	    Intermax.alert(this.oContent.PARAM.ERREUR);
-	    return;
-	  }
+    if (this.oContent.PARAM.EXECUTION == 'KO') {
+      Intermax.alert(this.oContent.PARAM.ERREUR);
+      return;
+    }
     
     this.sendContent();
   },
@@ -152,27 +152,27 @@ var Intermax = {
   },
   
   handleResult: function(sFunction) {
-		// Activate function handler
+    // Activate function handler
     var fResultHandler = this.ResultHandler[this.oContent.FONCTION.NOM] || this.ResultHandler["all"];
     fResultHandler();
   },
 
   ResultHandler : {
     "all": function() {
-	    Intermax.alert("200");
+      Intermax.alert("200");
     }
   },
   
   Triggers : {
     "Consulter Vitale" : function(iVitale) {
-			Intermax.trigger("Consulter Vitale", { 
-				PARAM: { 
-					AFFICHAGE: 1 
-				}, 
-				VIT: { 
-					VIT_NUMERO_LOGICMAX: iVitale
-				}
-			} );
+      Intermax.trigger("Consulter Vitale", { 
+        PARAM: { 
+          AFFICHAGE: 1 
+        }, 
+        VIT: { 
+          VIT_NUMERO_LOGICMAX: iVitale
+        }
+      } );
     },
 
     "Formater FSE" : function(iCPS, iVitale) {
@@ -187,44 +187,44 @@ var Intermax = {
       
       // Won't extend properly with an array
       if (Intermax.Triggers['Formater FSE'].aActes.length == 0) {
-      	Intermax.Triggers['Formater FSE'].aActes = {};
+        Intermax.Triggers['Formater FSE'].aActes = {};
       }
       
       Object.extend(oContent, Intermax.Triggers['Formater FSE'].aActes);
-			Intermax.trigger("Formater FSE", oContent);
+      Intermax.trigger("Formater FSE", oContent);
     },
 
     "Consulter FSE" : function(iFSE) {
-			Intermax.trigger("Consulter FSE", { 
+      Intermax.trigger("Consulter FSE", { 
         PARAM: {
           AFFICHAGE: 1
         },
         FSE: {
           FSE_NUMERO_FSE: iFSE
         } 
-			} );
+      } );
     },
 
     "Editer FSE" : function(iFSE) {
-			Intermax.trigger("Editer FSE", { 
+      Intermax.trigger("Editer FSE", { 
         PARAM: {
           AFFICHAGE: 1
         },
         FSE: {
           FSE_NUMERO_FSE: iFSE
         } 
-			} );
+      } );
     },
 
     "Annuler FSE" : function(iFSE) {
-			Intermax.trigger("Annuler FSE", { 
+      Intermax.trigger("Annuler FSE", { 
         PARAM: {
           AFFICHAGE: 1
         },
         FSE: {
           FSE_NUMERO_FSE: iFSE
         } 
-			} );
+      } );
     }
   }
 };
