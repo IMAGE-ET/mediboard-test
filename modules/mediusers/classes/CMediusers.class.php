@@ -41,7 +41,7 @@ class CMediusers extends CMbObject {
   var $zisd = null;
   var $ik   = null;
 
-  // dotProject user fields
+  // CUser reported fields fields
   var $_user_type                  = null;
   var $_user_username              = null;
   var $_user_password              = null;

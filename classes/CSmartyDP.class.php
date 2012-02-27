@@ -678,10 +678,10 @@ function smarty_function_unique_id($params, &$smarty) {
 }
 
 /**
- * dotProject integration of Smarty engine main class
+ * Mediboard integration of Smarty engine main class
  *
  * Provides an extension of smarty class with directory initialization
- * integrated to dotProject framework as well as standard data assignment
+ * integrated to Mediboard framework as well as standard data assignment
  */
 class CSmartyDP extends Smarty {
   static $extraPath = "";
