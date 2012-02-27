@@ -1054,12 +1054,6 @@ class CSetupdPpatients extends CSetup {
             ADD `adeli` INT (9) UNSIGNED ZEROFILL;";
     $this->addQuery($query);
     
-    // Data source query
-    $query = "SELECT *
-      FROM `communes_suisse`
-      WHERE `ville_id` = '1'";
-    $this->addDatasource("INSEE", $query);
-    
     $this->makeRevision("0.88");
     $query = "ALTER TABLE `constantes_medicales` 
       ADD `glycemie` FLOAT UNSIGNED";
@@ -1733,7 +1727,7 @@ class CSetupdPpatients extends CSetup {
     
     $this->mod_version = "1.43";
     
-    $query = "SHOW TABLES LIKE 'categorie_socioprofessionnelle'";
+    $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
   }
 }
