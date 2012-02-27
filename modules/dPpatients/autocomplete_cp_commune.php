@@ -42,10 +42,12 @@ if(CAppUI::conf("dPpatients INSEE suisse")) {
 }
 
 if(CAppUI::conf("dPpatients INSEE france")) {
-  $matches += $ds->loadList($queryFrance, intval($max/$nbPays));
+  $france = $ds->loadList($queryFrance, intval($max/$nbPays));
+  $matches = array_merge($matches, $france); 
 }
 if(CAppUI::conf("dPpatients INSEE suisse")) {
-  $matches += $ds->loadList($querySuisse, intval($max/$nbPays));
+  $suisse =  $ds->loadList($querySuisse, intval($max/$nbPays));
+  $matches = array_merge($matches, $suisse);
 }
 
 array_multisort(CMbArray::pluck($matches, "code_postal"), SORT_ASC, CMbArray::pluck($matches, "commune"), SORT_ASC, $matches);
