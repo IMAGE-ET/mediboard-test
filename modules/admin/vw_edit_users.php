@@ -48,6 +48,9 @@ if ($where) {
 	$order = "user_type, user_last_name, user_first_name, template";
 	$limit = 100;
   $users = $user->loadList($where, $order, $limit);
+  foreach ($users as $_user) {
+  	$_user->countBackRefs("profiled_users");
+  }
 }
 
 // Création du template

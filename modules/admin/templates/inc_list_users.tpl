@@ -63,7 +63,7 @@
   <tr>
     <th>Login</th>
     <th>Utilisateur</th>
-    <th>Type</th>
+    <th colspan="2">Type</th>
     <th colspan="3">Administration</th>
   </tr>
 
@@ -77,20 +77,30 @@
     </td>
     <td class="text">
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id={{$_user->_id}}">
-        {{$_user->_view}}
+        {{$_user}}
       </a>
     </td>
-    <td class="text {{if !$_user->user_type}}empty{{/if}}">
-      {{if $_user->user_type}}
-        {{assign var="type" value=$_user->user_type}}
-          {{if $_user->template}}
-            {{mb_label object=$_user field=template}} : 
-          {{/if}}
-          {{$utypes.$type}}
-      {{else}}
-        Aucun type
-      {{/if}}
+    
+    {{if !$_user->user_type}}
+    <td colspan="2" class="text warning">
+      {{tr}}None{{/tr}}
     </td>
+    {{else}}
+
+    <td class="text" {{if !$_user->template}}colspan="2"{{/if}}>
+      {{assign var="type" value=$_user->user_type}}
+        {{if $_user->template}}
+          {{mb_label object=$_user field=template}} : 
+        {{/if}}
+      {{$utypes.$type}}
+    {{/if}}
+    </td>
+
+    {{if $_user->template}}
+    <td class="narrow">
+        <small>{{$_user->_count.profiled_users}}</small> 
+    </td>
+    {{/if}}
     
     <td class="button" style="white-space: nowrap; text-align: left;">
       <button class="search" onclick="location.href='?m={{$m}}&amp;tab=edit_perms&amp;user_id={{$_user->_id}}'">
