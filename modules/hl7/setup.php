@@ -88,7 +88,8 @@ class CSetuphl7 extends CSetup {
     
     $this->makeRevision("0.03");
     
-    $query = "ALTER TABLE `hl7v2`.`table_entry` DROP INDEX `number_code_hl7` ,
+    $query = "ALTER TABLE `hl7v2`.`table_entry` 
+                DROP INDEX `number_code_hl7` ,
                 ADD INDEX `number_code_hl7` ( `number` , `code_hl7_from` );";
     $this->addQuery($query, false, "hl7v2");
     

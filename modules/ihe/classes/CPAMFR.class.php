@@ -49,16 +49,28 @@ class CPAMFR extends CPAM {
     "A55" => "CHL7EventADTA55_FR",
     "Z99" => "CHL7EventADTZ99_FR",
   );
-
-  function getEvenements() {
-    return self::$evenements;
-  }
   
   function __construct() {
     $this->type = "PAM_FR";
   }
+
+  /**
+   * Retrieve events list of data format
+   * @return array Events list
+   */
+  function getEvenements() {
+    return self::$evenements;
+  }
   
-  static function getPAMEvent($code, $version) {
+  /**
+   * Return data format object
+   * @param exchange Instance of exchange
+   * @return object An instance of data format
+   */
+  static function getEvent(CExchangeDataFormat $exchange) {
+    $code    = $exchange->code;
+    $version = $exchange->version;
+    
     foreach (CHL7::$versions as $_version => $_sub_versions) {      
       if (in_array($version, $_sub_versions)) {
         $classname = "CHL7{$_version}EventADT{$code}_FR";

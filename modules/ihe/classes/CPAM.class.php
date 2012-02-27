@@ -15,7 +15,7 @@
  * Class CPAM 
  * Patient Administration Management
  */
-class CPAM {
+class CPAM extends CIHE {
   static $versions = array (
     "2.1", "2.2", "2.3", "2.4", "2.5"  
   );
@@ -54,14 +54,23 @@ class CPAM {
     "A55" => "CHL7EventADTA55",
   );
 
-  function getEvenements() {
-    return self::$evenements;
-  }
-  
   function __construct() {
     $this->type = "PAM";
   }
   
+  /**
+   * Retrieve events list of data format
+   * @return array Events list
+   */
+  function getEvenements() {
+    return self::$evenements;
+  }
+  
+  /**
+   * Retrieve transaction name
+   * @param $code Event code
+   * @return string Transaction name
+   */
   static function getTransaction($code) {
     if (in_array($code, self::$transaction_iti30)) {
       return "ITI30";
@@ -72,7 +81,15 @@ class CPAM {
     }
   }
   
-  static function getPAMEvent($code, $version) {
+  /**
+   * Return data format object
+   * @param exchange Instance of exchange
+   * @return object An instance of data format
+   */
+  static function getEvent(CExchangeDataFormat $exchange) {
+    $code    = $exchange->code;
+    $version = $exchange->version;
+    
     foreach (CHL7::$versions as $_version => $_sub_versions) {      
       if (in_array($version, $_sub_versions)) {
         $classname = "CHL7{$_version}EventADT$code";

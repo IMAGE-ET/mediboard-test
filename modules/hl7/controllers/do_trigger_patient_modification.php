@@ -32,7 +32,7 @@ switch($action) {
 
 CAppUI::displayMsg($patient->store(), "CPatient-msg-$action");
 
-mbTrace($patient);
+//mbTrace($patient);
 
 echo CAppUI::getMsg();
 

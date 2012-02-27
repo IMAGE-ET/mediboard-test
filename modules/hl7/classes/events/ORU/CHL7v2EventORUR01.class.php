@@ -16,24 +16,20 @@
  * R01 - Observation results reports for the patient
  */
 class CHL7v2EventORUR01 extends CHL7v2EventDEC implements CHL7EventORUR01 {
+  var $code = "R01";
+  
   function __construct($i18n = null) {
     parent::__construct($i18n);
-        
-    $this->code        = "R01";
-    $this->transaction = "PCD01";
-    $this->msg_codes   = array ( 
-      array(
-        $this->event_type, $this->code
-      )
-    );
   }
   
+  /**
+   * @see parent::build()
+   */
   function build($sejour) {
     parent::build($sejour);
     
-    
+    /* @todo Pas de création de message pour le moment */
   }
-  
 }
 
 ?>

@@ -20,6 +20,9 @@ class CHL7v2Event extends CHL7Event {
     parent::__construct($i18n);
   }
   
+  /**
+   * @see parent::build()
+   */
   function build($object) {
     // Traitement sur le mbObject
     $this->object   = $object;

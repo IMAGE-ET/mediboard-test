@@ -21,14 +21,15 @@ class CHL7v2EventADTA01 extends CHL7v2EventADT implements CHL7EventADTA01 {
   
   function __construct($i18n = null) {
     parent::__construct($i18n);
-        
-    $this->transaction = CPAM::getTransaction($this->code);
   }
   
   function getEVNOccuredDateTime($sejour) {
     return mbDateTime();
   }
-
+  
+  /**
+   * @see parent::build()
+   */
   function build($sejour) {
     parent::build($sejour);
     

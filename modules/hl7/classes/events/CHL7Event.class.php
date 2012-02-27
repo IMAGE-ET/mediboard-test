@@ -39,6 +39,10 @@ class CHL7Event {
     $this->_is_i18n = $i18n;
   }
   
+  /**
+   * Build HL7 message
+   * @param $object Object to use
+   */
   function build($object) {}
   
   function handle() {}

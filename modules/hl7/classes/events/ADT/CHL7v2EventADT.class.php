@@ -22,14 +22,17 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     parent::__construct($i18n);
     
     $this->profil      = $i18n ? "PAM_$i18n" : "PAM";
-    
     $this->msg_codes   = array ( 
       array(
         $this->event_type, $this->code, "{$this->event_type}_{$this->struct_code}"
       )
     );
+    $this->transaction = CIHE::getPAMTransaction($this->code, $i18n);
   }
   
+  /**
+   * @see parent::build()
+   */
   function build($object) {
     parent::build($object);
         
@@ -42,11 +45,15 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   
   /**
    * Get event planned datetime
+   * @param object Object to use
+   * @return DateTime Event planned
    */
   function getEVNPlannedDateTime($object) {}
   
   /**
-   * Get event occured datetime
+   * Get event planned datetime
+   * @param object Object to use
+   * @return DateTime Event occured
    */
   function getEVNOccuredDateTime($object) {}
   
@@ -60,6 +67,8 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   
   /**
    * Represents an HL7 EVN message segment (Event Type)
+   * @param planned_datetime event planned datetime
+   * @param occured_datetime event occured datetime
    */
   function addEVN($planned_datetime = null, $occured_datetime = null) {
     $EVN = CHL7v2Segment::create("EVN", $this->message);
@@ -70,6 +79,8 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   
   /**
    * Represents an HL7 PID message segment (Patient Identification)
+   * @param CPatient Patient
+   * @param CSejour Admit
    */
   function addPID(CPatient $patient, CSejour $sejour = null) {
     $PID = CHL7v2Segment::create("PID", $this->message);
@@ -81,6 +92,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   
   /**
    * Represents an HL7 PD1 message segment (Patient Additional Demographic)
+   * @param CPatient Patient
    */
   function addPD1(CPatient $patient) {
     $PD1 = CHL7v2Segment::create("PD1", $this->message);
@@ -90,6 +102,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   
   /**
    * Represents an HL7 ROL message segment (Role)
+   * @param CPatient Patient
    */
   function addROLs(CPatient $patient) {
     $patient->loadRefsCorrespondants();
@@ -118,6 +131,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   
   /**
    * Represents an HL7 NK1 message segment (Next of Kin / Associated Parties)
+   * @param CPatient Patient
    */
   function addNK1s(CPatient $patient) {
     $i = 1;
@@ -132,6 +146,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   
   /**
    * Represents an HL7 PV1 message segment (Patient Visit)
+   * @param CSejour Admit
    */
   function addPV1(CSejour $sejour = null, $set_id = 1) {    
     $segment_name = $this->_is_i18n ? "PV1_FR" : "PV1";
@@ -143,6 +158,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   
   /**
    * Represents an HL7 PV2 message segment (Patient Visit - Additional Information)
+   * @param CSejour Admit
    */
   function addPV2(CSejour $sejour = null) {
     $PV2 = CHL7v2Segment::create("PV2", $this->message);
@@ -152,6 +168,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   
   /**
    * Represents an HL7 MRG message segment (Merge Patient Information)
+   * @param CPatient Patient to destroy
    */
   function addMRG(CPatient $patient_eliminee) {
     $MRG = CHL7v2Segment::create("MRG", $this->message);
@@ -161,6 +178,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   
   /**
    * Represents an HL7 ZBE message segment (Movement)
+   * @param CSejour Admit
    */
   function addZBE(CSejour $sejour = null) {
     $ZBE = CHL7v2Segment::create("ZBE", $this->message);
@@ -177,6 +195,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
 
   /**
    * Represents an HL7 ZFP message segment (Situation professionnelle)
+   * @param CSejour Admit
    */
   function addZFP(CSejour $sejour = null) {
     $ZFP = CHL7v2Segment::create("ZFP", $this->message);
@@ -186,6 +205,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   
   /**
    * Represents an HL7 ZFV message segment (Compléments d'information sur la venue)
+   * @param CSejour Admit
    */
   function addZFV(CSejour $sejour = null) {
     $ZFV = CHL7v2Segment::create("ZFV", $this->message);
@@ -195,6 +215,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   
   /**
    * Represents an HL7 ZFM message segment (Mouvement PMSI)
+   * @param CSejour Admit
    */
   function addZFM(CSejour $sejour = null) {
     $ZFM = CHL7v2Segment::create("ZFM", $this->message);
@@ -204,6 +225,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   
   /**
    * Represents an HL7 ZFD message segment (Complément démographique)
+   * @param CSejour Admit
    */
   function addZFD(CSejour $sejour = null) {
     $ZFD = CHL7v2Segment::create("ZFD", $this->message);

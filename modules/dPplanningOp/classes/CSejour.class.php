@@ -1588,6 +1588,15 @@ class CSejour extends CCodable implements IPatientRelated {
   }
   
   /**
+   * Construit le tag NTA (trash) en fonction des variables de configuration
+   * @param $group_id Permet de charger le NTA pour un établissement donné si non null
+   * @return string
+   */
+  static function getTagNTA($group_id = null) {
+    return self::getTagNTA($group_id, "tag_dossier_trash");
+  }
+  
+  /**
    * Charge le NDA du séjour pour l'établissement courant
    * @param $group_id Permet de charger le NDA pour un établissement donné si non null
    */

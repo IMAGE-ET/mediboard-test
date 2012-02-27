@@ -21,10 +21,11 @@ class CHL7v2EventADTA02 extends CHL7v2EventADT implements CHL7EventADTA02 {
   
   function __construct($i18n = null) {
     parent::__construct($i18n);
-        
-    $this->transaction = CPAM::getTransaction($this->code);
   }
   
+  /**
+   * @see parent::build()
+   */
   function build($sejour) {
     parent::build($sejour);
     

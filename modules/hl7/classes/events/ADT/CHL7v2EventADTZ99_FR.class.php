@@ -21,10 +21,11 @@ class CHL7v2EventADTZ99_FR extends CHL7v2EventADT implements CHL7EventADTZ99 {
   
   function __construct($i18n = "FR") {
     parent::__construct($i18n);
-        
-    $this->transaction = CPAMFR::getTransaction($this->code);
   }
   
+  /**
+   * @see parent::build()
+   */
   function build($sejour) {
     parent::build($sejour);
     

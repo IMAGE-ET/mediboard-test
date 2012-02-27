@@ -131,13 +131,8 @@ class CReceiverIHE extends CInteropReceiver {
       return;
     }  
     
-    if ($exchange->type == "PAM") {
-      $data_format = CPAM::getPAMEvent($exchange->code, $exchange->version);
-    }
-    if ($exchange->type == "PAM_FR") {
-      $data_format = CPAMFR::getPAMEvent($exchange->code, $exchange->version);
-    }
-    
+    $data_format = CIHE::getEvent($exchange);
+
     $ack = new CHL7v2Acknowledgment($data_format);
     $ack->handle($ack_data);
     $exchange->date_echange        = mbDateTime();   

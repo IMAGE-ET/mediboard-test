@@ -16,13 +16,23 @@
  * Device Enterprise Communication
  */
 class CHL7v2EventDEC extends CHL7v2Event implements CHL7EventDEC {
+  var $event_type = "ORU";
+  
   function __construct() {
     parent::__construct();
     
     $this->profil      = "DEC";
-    $this->event_type  = "ORU";
+    $this->msg_codes   = array ( 
+      array(
+        $this->event_type, $this->code
+      )
+    );
+    $this->transaction = CIHE::getDECTransaction($this->code, $i18n);
   }
   
+  /**
+   * @see parent::build()
+   */
   function build($object) {
     parent::build($object);
         

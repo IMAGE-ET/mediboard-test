@@ -683,6 +683,7 @@ $locales['CExObjectFieldModifier.type.side'] = 'Côté';
 $locales['CExchangeSource'] = 'Source d\'échange';
 $locales['CExchangeSource-_incompatible'] = 'Rôle de la source incompatible avec le rôle de l\'instance';
 $locales['CExchangeSource-already-exist'] = 'Une source d\'échange existe déjà';
+$locales['CExchangeSource_no-active'] = 'La source d\'échange \'%s\' n\'est pas active';
 $locales['CExchangeSource-no-name'] = 'Veuillez indiquer un nom pour ajouter une source de donnée';
 $locales['CExchangeSource-no-response'] = 'Un problème survient avec la passerelle';
 $locales['CExchangeSource-no-source'] = 'Aucune source de définie pour : \'%s\'';

@@ -26,14 +26,7 @@ $receiver = $exchange->_ref_receiver;
 
 $evenement = null;
 if ($receiver instanceof CReceiverIHE) {
-  if ($exchange->type == "PAM") {
-    $evenement   = "evenementsPatient";
-    $data_format = CPAM::getPAMEvent($exchange->code, $exchange->version);
-  }
-  if ($exchange->type == "PAM_FR") {
-    $evenement   = "evenementsPatient";
-    $data_format = CPAMFR::getPAMEvent($exchange->code, $exchange->version);
-  }
+  $data_format = CIHE::getEvent($exchange);
 }
 
 if ($receiver instanceof CDestinataireHprim) {

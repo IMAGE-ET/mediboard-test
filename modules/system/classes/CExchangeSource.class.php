@@ -157,6 +157,12 @@ class CExchangeSource extends CMbObject {
    * @return boolean reachable
    */
   function isReachable() {
+    if (!$this->active) {
+      $this->_reachable = 1;
+      $this->_message   = CAppUI::tr("CExchangeSource_no-active", $this->host);
+      return;
+    }
+    
     if (!$this->isReachableSource()) {
       return;
     }
