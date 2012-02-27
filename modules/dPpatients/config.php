@@ -50,6 +50,11 @@ $dPconfig["dPpatients"] = array (
   "CMedecin" => array(
    "medecin_strict" => "0",
   ),
+  
+  "INSEE" => array(
+   "france" => "1",
+   "suisse" => "0",
+  ),
 );
 
 ?>

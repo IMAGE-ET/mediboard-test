@@ -15,13 +15,13 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
 
 <hr class="control_tabs" />
 
-<div id="CAntecedent" style="display: none;">
-{{mb_include template=CAntecedent_configure}}
-</div>
-
 <div id="CPatient" style="display: none;">
 {{mb_include template=CPatient_configure}}
 {{mb_include template=inc_configure_actions}}
+</div>
+
+<div id="CAntecedent" style="display: none;">
+{{mb_include template=CAntecedent_configure}}
 </div>
 	
 <div id="CTraitement" style="display: none;">

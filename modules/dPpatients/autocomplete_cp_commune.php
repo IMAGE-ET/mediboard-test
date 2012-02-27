@@ -16,19 +16,39 @@ if (!in_array($column, $columns)) {
   return;
 }
 
+// Parameters
+$ds      = CSQLDataSource::get("INSEE");
+$max     = CValue::get("max", 30);
+$nbPays  = 0;
+$matches = array();
+
 // Needle
 $keyword = reset($_POST);
-$needle = $column == "code_postal" ? "$keyword%" : "%$keyword%";
+$needle  = $column == "code_postal" ? "$keyword%" : "%$keyword%";
 
 // Query
-$select = "SELECT commune, code_postal, departement FROM communes_france";
-$where = "WHERE $column LIKE '$needle'";
-$order = "ORDER BY code_postal, commune";
-$query = "$select $where $order";
+$where       = "WHERE $column LIKE '$needle'";
 
-$ds = CSQLDataSource::get("INSEE");
-$max = CValue::get("max", 30);
-$matches = $ds->loadList($query, $max);
+// France
+if(CAppUI::conf("dPpatients INSEE france")) {
+  $nbPays++;
+  $queryFrance = "SELECT commune, code_postal, departement, 'France' AS pays FROM communes_france $where";
+}
+
+// Suisse
+if(CAppUI::conf("dPpatients INSEE suisse")) {
+  $nbPays++;
+  $querySuisse = "SELECT commune, code_postal, '' AS departement, 'Suisse' AS pays FROM communes_suisse $where";
+}
+
+if(CAppUI::conf("dPpatients INSEE france")) {
+  $matches += $ds->loadList($queryFrance, intval($max/$nbPays));
+}
+if(CAppUI::conf("dPpatients INSEE suisse")) {
+  $matches += $ds->loadList($querySuisse, intval($max/$nbPays));
+}
+
+array_multisort(CMbArray::pluck($matches, "code_postal"), SORT_ASC, CMbArray::pluck($matches, "commune"), SORT_ASC, $matches);
 
 // Template
 $smarty = new CSmartyDP();

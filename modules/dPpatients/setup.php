@@ -1056,8 +1056,8 @@ class CSetupdPpatients extends CSetup {
     
     // Data source query
     $query = "SELECT *
-      FROM `communes_france`
-      WHERE `INSEE` = '99138'";
+      FROM `communes_suisse`
+      WHERE `ville_id` = '1'";
     $this->addDatasource("INSEE", $query);
     
     $this->makeRevision("0.88");
