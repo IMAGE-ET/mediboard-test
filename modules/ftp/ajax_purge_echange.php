@@ -49,7 +49,7 @@ $where["date_echange"] = "< '$date_max'";
 $where["purge"] = "= '0'";
 $count_purge = $exchange->countList($where);
 
-CAppUI::stepAjax("$exchange_class-msg-purge_count", UI_MSG_OK, max(0, $count_purge - $count_delete));
+CAppUI::stepAjax("$exchange_class-msg-purge_count", UI_MSG_OK, $count_purge);
 
 if (!$do_purge) {
   return;
