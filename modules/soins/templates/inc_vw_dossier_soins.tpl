@@ -342,6 +342,9 @@ Main.add(function () {
     	{{if "dPprescription"|module_active}}
       <li onmousedown="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med', '{{$hide_close}}'); refreshTabState();"><a href="#jour">Journée</a></li>
       <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Semaine</a></li>
+				{{if $conf.dPprescription.CPrescription.show_perop_suivi_soins}}
+				  <li onmousedown="PlanSoins.showPeropAdministrations('{{$prescription_id}}')"><a href="#perop_adm" {{if $count_perop_adm == 0}}class="empty"{{/if}}>Perop {{if $count_perop_adm}}<small>({{$count_perop_adm}})</small>{{/if}}</a></li>
+				{{/if}}
       {{/if}}
 			<li onmousedown="updateTasks('{{$sejour->_id}}');"><a href="#tasks">Tâches</a></li>
       <li onmousedown="loadSuivi('{{$sejour->_id}}')"><a href="#dossier_suivi">Trans. <span id="nb_trans"></span> / Obs. / Consult.{{if $conf.soins.constantes_show}} / Const.{{/if}}</a></li>
@@ -425,6 +428,9 @@ Main.add(function () {
     {{/if}}
     </div>
     <div id="semaine" style="display:none"></div>
+		{{if $conf.dPprescription.CPrescription.show_perop_suivi_soins}}
+      <div id="perop_adm" style="display: none"></div>
+		{{/if}}
     <div id="tasks" style="display:none"></div>
     <div id="dossier_suivi" style="display:none"></div>
   {{/if}}

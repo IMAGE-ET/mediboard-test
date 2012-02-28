@@ -639,5 +639,11 @@ PlanSoins = {
         PlanSoins.loadTraitement(null,PlanSoins.date, $V(getForm("click").nb_decalage), 'planification', object_id, object_class, prise_id);
       } });
     }
-  }
+  },
+	
+	showPeropAdministrations: function(prescription_id) {
+	  var url = new Url("soins", "ajax_vw_perop_administrations");
+		url.addParam("prescription_id", prescription_id);
+		url.requestUpdate("perop_adm");
+	}
 };
