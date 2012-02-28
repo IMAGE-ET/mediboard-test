@@ -16,6 +16,6 @@ foreach($mediusers as $mediuser) {
   $mediuser->insGroupPermission();
 }
 
-mbTrace(count($mediusers), "Utilisateurs vérifiés");
+CAppUI::stepAjax(count($mediusers)." utilisateurs vérifiés");
 
 ?>

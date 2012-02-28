@@ -8,13 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-  addPerms = function() {
-    var url = new Url("mediusers", "ajax_add_user_function_group_perms");
-    url.requestUpdate("resultDroits");
-  }
-</script>
-
 <form name="editConfigMediusers" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />

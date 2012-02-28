@@ -16,6 +16,11 @@ function popUpdateMediusers() {
   return false;
 }
  
+addPerms = function() {
+  var url = new Url("mediusers", "ajax_add_user_function_group_perms");
+  url.requestUpdate("resultDroits");
+}
+
 </script>
 
 <h2>Actions de maintenances</h2>
@@ -23,7 +28,7 @@ function popUpdateMediusers() {
 <table class="tbl">
   <tr>
     <th class="narrow">{{tr}}Action{{/tr}}</th>
-    <th >{{tr}}Status{{/tr}}</th>
+    <th>{{tr}}Status{{/tr}}</th>
   </tr>
   
   <tr>
@@ -35,4 +40,15 @@ function popUpdateMediusers() {
     <td>
     </td>
   </tr>
+	
+	<tr>
+    <td>
+      <button class="hslip" onclick="addPerms();">
+        Mise à jour des droits des utilisateurs</button>
+      </button>
+    </td>
+    <td id="resultDroits">
+    </td>
+  </tr>
+	
 </table>
