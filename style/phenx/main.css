@@ -382,6 +382,7 @@ table.tbl th.category.modify,
 table.main th.title.modify,
 table.main th.title.modify {
   color: #C64F00;
+  text-shadow: none;
 }
 
 /* Message styles */
