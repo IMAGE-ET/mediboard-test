@@ -79,6 +79,8 @@
   
   {{mb_include module=system template=inc_config_bool var=fix_doc_edit}}
   
+  {{mb_include module=system template=inc_config_bool var=consult_facture}}
+  
   <!-- CConsultAnesth -->  
   {{assign var="class" value="CConsultAnesth"}}
     
