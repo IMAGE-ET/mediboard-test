@@ -300,7 +300,12 @@ table.tbl th {
 
 table.tbl th.title {
   background: #bbb;
-  border: none
+  border: none;
+  text-shadow:  0 0 0 transparent,
+              -1px  0  .0px rgba(0,0,0,.3), 
+               0   1px .0px rgba(0,0,0,.3), 
+               1px  0  .0px rgba(0,0,0,.3), 
+               0  -1px .0px rgba(0,0,0,.3);
 }
 
 table.tbl tr.selected td,
@@ -348,6 +353,11 @@ table.form th.title {
   font-size: 1.3em;
   background-color: #bbb;
   border: none;
+  text-shadow:  0 0 0 transparent,
+              -1px  0  .0px rgba(0,0,0,.3), 
+               0   1px .0px rgba(0,0,0,.3), 
+               1px  0  .0px rgba(0,0,0,.3), 
+               0  -1px .0px rgba(0,0,0,.3);
 }
 
 table.form th.category {
@@ -356,7 +366,7 @@ table.form th.category {
 
 table.form th.section, 
 table.tbl th.section {
-  background-color: #aaa;
+  background-color: #999;
 }
 
 table.form td {
