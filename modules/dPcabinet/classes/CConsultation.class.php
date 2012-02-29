@@ -65,8 +65,6 @@ class CConsultation extends CCodable {
   var $arret_maladie    = null;
   var $concerne_ALD     = null;
   
-  var $remise           = null;
-  
   // Form fields
   var $_etat           = null;
   var $_hour           = null;
@@ -246,7 +244,6 @@ class CConsultation extends CCodable {
     $specs["_prat_id"]          = "";
     $specs["_acte_dentaire_id"] = "ref class|CActeDentaire";
     $specs["_ref_grossesse"]    = "ref class|CGrossesse";
-    $specs["remise"]            = "str";
     return $specs;
   }
   
@@ -455,7 +452,7 @@ class CConsultation extends CCodable {
       $this->tarif    = $tarif->description;
      }
 
-    $this->du_patient   = ((100-$this->remise)*($this->secteur1 + $this->secteur2))/100;
+    $this->du_patient   = $this->secteur1 + $this->secteur2;
     
     // Mise à jour de codes CCAM prévus, sans information serialisée complémentaire
     foreach($tarif->_codes_ccam as $_code_ccam) {
@@ -756,8 +753,8 @@ class CConsultation extends CCodable {
       // Chargement des actes Tarmed
       $this->loadRefsActesTarmed();
       foreach ($this->_ref_actes_tarmed as $actetarmed) { 
-        $secteur1_TARMED += round($actetarmed->montant_base * (1-$this->remise/100), 2);
-        $secteur2_TARMED += round($actetarmed->montant_depassement * (1-$this->remise/100), 2);
+        $secteur1_TARMED += round($actetarmed->montant_base , 2);
+        $secteur2_TARMED += round($actetarmed->montant_depassement, 2);
       }
     }
     

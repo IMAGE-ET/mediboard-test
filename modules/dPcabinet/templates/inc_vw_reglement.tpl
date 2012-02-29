@@ -47,10 +47,9 @@ modifTotal = function(){
   var form = document.tarifFrm;
   var secteur1 = form.secteur1.value;
   var secteur2 = form.secteur2.value;
-  var remise   = form.remise.value;
 
   $V(form._somme, Math.round(100*(parseFloat(secteur1) + parseFloat(secteur2))) / 100);
-  $V(form.du_patient, Math.round((100-remise)*(parseFloat(form._somme.value))) / 100); 
+  $V(form.du_patient, Math.round(100* parseFloat(form._somme.value)) / 100); 
 }
 
 modifSecteur2 = function(){
@@ -60,15 +59,6 @@ modifSecteur2 = function(){
   
   $V(form.du_patient, somme);
   $V(form.secteur2, Math.round(100*(parseFloat(somme) - parseFloat(secteur1))) / 100);
-}
-
-modifRemise = function(){
-  var form = document.tarifFrm;
-  var secteur1 = form.secteur1.value;
-  var secteur2 = form.secteur2.value;
-  var remise = $('tarifFrm_remise').value;
-
-  $V(form.du_patient, Math.round((100-remise)*(parseFloat(secteur1) + parseFloat(secteur2))) / 100);
 }
 
 printActes = function(){
@@ -281,16 +271,6 @@ Main.add( function(){
                   <span onmouseover="ObjectTooltip.createEx(this, '{{$acte_tarmed->_guid}}');">{{$acte_tarmed->_shortview}}</span>
                 {{/foreach}}
               </td>
-            </tr>
-            <tr>
-              <th>{{mb_label object=$consult field="remise"}}</th>
-              <td>
-                {{if $consult->valide}}
-                  {{mb_value object=$consult field="remise"}}
-                {{else}}
-                  {{mb_field object=$consult field="remise" onchange="modifRemise()" size="4"}}
-                {{/if}}  
-              %</td>
             </tr>
             {{/if}}
             {{if $consult->tarif && $consult->patient_date_reglement == "" && $consult->valide == "1"}}

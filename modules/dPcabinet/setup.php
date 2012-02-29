@@ -1432,7 +1432,13 @@ class CSetupdPcabinet extends CSetup {
       ADD `arret_maladie` ENUM ('0','1') DEFAULT '0'";
     $this->addQuery($query);
     
-    $this->mod_version = "1.47";
+    $this->makeRevision("1.47");
+    
+    $query = "ALTER TABLE `consultation` 
+      DROP `remise`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.48";
   }
 }
 ?>
