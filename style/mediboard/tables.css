@@ -431,7 +431,8 @@ table.form th.category {
   vertical-align: middle;
 }
 
-table.form th.section, table.tbl th.section {
+table.form th.section, 
+table.tbl th.section {
   font-size: 0.9em; 
   font-weight: normal; 
   line-height: 100%;

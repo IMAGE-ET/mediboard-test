@@ -354,6 +354,11 @@ table.form th.category {
   background-color: #ccc;
 }
 
+table.form th.section, 
+table.tbl th.section {
+  background-color: #aaa;
+}
+
 table.form td {
   padding: 1px 2px;
 }
