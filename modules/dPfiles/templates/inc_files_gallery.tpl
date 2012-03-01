@@ -27,7 +27,7 @@
               <img style="border: 1px solid #000;" src="images/pictures/medifile.png" />
             {{else}}
               <img style="border: 1px solid #000;"
-                src="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id={{$_file->_id}}&phpThumb=1&w=200" />
+                src="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id={{$_file->_id}}&phpThumb=1&w=350" />
             {{/if}}
           </a>
           <br />
