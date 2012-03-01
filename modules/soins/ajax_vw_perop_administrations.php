@@ -27,7 +27,8 @@ $where[] = "prescription_line_medicament.perop = '1' OR
             prescription_line_element.perop = '1' OR
             prescription_line_mix.perop = '1'";
     
-$administrations = $administration->loadList($where, null, null, null, $ljoin);
+$order = "dateTime ASC";		
+$administrations = $administration->loadList($where, $order, null, null, $ljoin);
 
 foreach($administrations as $_adm){
 	$_adm->loadTargetObject();
