@@ -70,16 +70,16 @@ class CIHE {
   static function getPAMTransaction($code, $i18n = null) {
     switch ($i18n) {
       case "FR" :
-        return CPAMFR::getTransaction($this->code);
+        return CPAMFR::getTransaction($code);
         break;
       default :
-        return CPAM::getTransaction($this->code);
+        return CPAM::getTransaction($code);
         break;
     }
   }
   
   static function getDECTransaction($code, $i18n = null) {
-    return CDEC::getTransaction($this->code);
+    return CDEC::getTransaction($code);
   }
 }
 ?>
