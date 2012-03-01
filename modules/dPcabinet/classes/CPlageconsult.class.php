@@ -155,7 +155,7 @@ class CPlageconsult extends CMbObject {
     $this->_affected = intval($this->_spec->ds->loadResult($query));
 
     if ($this->_total) {
-      $this->_fill_rate= round($this->_affected/$this->_total*100);
+      $this->_fill_rate = round($this->_affected/$this->_total*100);
     }
   }
   
@@ -270,17 +270,11 @@ class CPlageconsult extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_hour_deb = substr($this->debut, 0, 2);
-    $this->_min_deb  = substr($this->debut, 3, 2);
-    $this->_hour_fin = substr($this->fin, 0, 2);
-    $this->_min_fin  = substr($this->fin, 3, 2);
-    $this->_freq     = substr($this->freq, 3, 2);
-    $tmpHfin         = substr($this->fin, 0, 2);
-    $tmpMfin         = substr($this->fin, 3, 2);
-    $tmpHdebut       = substr($this->debut, 0, 2);
-    $tmpMdebut       = substr($this->debut, 3, 2);
-    $tmpfreq         = 60 / substr($this->freq, 3, 2);
-    $this->_total    = (($tmpHfin + $tmpMfin/60) - ($tmpHdebut + $tmpMdebut/60)) * $tmpfreq;    
+
+    list ($this->_hour_deb, $this->_min_deb) = explode(":", $this->debut);
+    list ($this->_hour_fin, $this->_min_fin) = explode(":", $this->fin);
+    $this->_total = mbTimeCountIntervals($this->debut, $this->fin, $this->freq);
+    $this->_freq  = substr($this->freq, 3, 2);
   }
   
   function updatePlainFields() {
