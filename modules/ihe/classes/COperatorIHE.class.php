@@ -39,6 +39,10 @@ class COperatorIHE extends CEAIOperator {
       // Message non supporté pour cet utilisateur
       $evt_class = CHL7Event::getEventClass($evt);
       if (!in_array($evt_class, $data_format->_messages_supported_class)) {
+        if (!$data_format->_to_treatment) {
+          return;
+        }
+      
         $exchange_ihe->populateExchange($data_format, $evt);
         $exchange_ihe->loadRefsInteropActor();
         $exchange_ihe->populateErrorExchange(null, $evt);
