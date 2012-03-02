@@ -67,7 +67,6 @@ for($i = 0; $i < 7; $i++) {
   	$_consult->loadFillRate();
   	$_consult->countPatients();
   	ajoutEvent($planning, $_consult, $date, $_consult->libelle, "#9F9", "consultation");
-  	remplirHours(&$hours, $_consult->_hour_deb+0, $_consult->_hour_fin+0, $hours_start, $hours_stop);
   }
 }
 
@@ -83,14 +82,13 @@ for($i = 0; $i < 7; $i++) {
   	$_op->loadRefSalle();
     $_op->getNbOperations();
   	ajoutEvent($planning, $_op, $date,$_op->_ref_salle->nom,  "#ABE", "operation");
-  	remplirHours(&$hours, $_op->_heuredeb+0, $_op->_heurefin+0, $hours_start, $hours_stop);
   }
 }
 
-function ajoutEvent(&$planning, $_plage,$date, $libelle, $color, $type){
+function ajoutEvent(&$planning, $_plage, $date, $libelle, $color, $type){
 	$debute = "$date $_plage->debut";
 	$event = new CPlanningEvent($_plage->_guid, $debute, mbMinutesRelative($_plage->debut, $_plage->fin), $libelle, $color, true, null, null);
-  $event->resizable = true;
+    $event->resizable = true;
   
     //Menu des évènements
     $event->addMenuItem($_plage->_guid, $date);
@@ -127,23 +125,6 @@ function ajoutEvent(&$planning, $_plage,$date, $libelle, $color, $type){
   //Ajout de l'évènement au planning 
   $planning->addEvent($event);
 }
-
-function remplirHours(&$hours, $hour_debut, $hour_fin, $hours_start, $hours_stop){
-  if (!isset($hours[$hour_fin])) {
-      for($j = $hour_fin;  $hours_stop < $j; $j--) {
-        $hours[$j] = sprintf("%02d", $j);
-        $hours[$j-1] = sprintf("%02d", $j-1);
-      }
-    }
-    if (!isset($hours[$hour_debut])) {
-      for($j = $hour_debut; $j < $hours_start; $j++) {
-        $hours[$j] = sprintf("%02d", $j);
-        $hours[$j-1] = sprintf("%02d", $j-1);
-      }
-    }
-}
-ksort($hours);
-$planning->hours = $hours;
 
 // Variables de templates
 $smarty->assign("date", $date);

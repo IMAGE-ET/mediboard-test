@@ -1,4 +1,8 @@
 <?php
+$locales['CConstantesMedicales-_bricker_cumul'] = 'Cumul Bricker';
+$locales['CConstantesMedicales-_catheter_suspubien_cumul'] = 'Cumul catheter suspubien';
+$locales['CConstantesMedicales-_sonde_nephro_1_cumul'] = 'Cumul sonde népro 1';
+$locales['CConstantesMedicales-_sonde_nephro_2_cumul'] = 'Cumul sonde népro 2';
 $locales['CElementPrescription-back-indices_couts'] = 'Indices de coût';
 $locales['CElementPrescription-back-indices_couts.empty'] = 'Indices de coût';
 $locales['CIndiceCout'] = 'Indice de coût';

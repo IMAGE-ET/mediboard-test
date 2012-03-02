@@ -32,10 +32,6 @@ class CPlageconsult extends CMbObject {
   var $desistee = null;
   
   // Form fields
-  var $_hour_deb             = null;
-  var $_min_deb              = null;
-  var $_hour_fin             = null;
-  var $_min_fin              = null;
   var $_freq                 = null;
   var $_affected             = null;
   var $_total                = null;
@@ -80,17 +76,13 @@ class CPlageconsult extends CMbObject {
       "date"    => "date notNull",
       "freq"    => "time notNull",
       "debut"   => "time notNull",
-      "fin"     => "time notNull",
+      "fin"     => "time notNull moreThan|debut",
       "libelle" => "str seekable",
       "locked"  => "bool default|0",
       "remplacant_ok" => "bool default|0",
       "desistee"   => "bool default|0",
       
       // Form fields
-      "_hour_deb"  => "",
-      "_min_deb"   => "",
-      "_hour_fin"  => "",
-      "_min_fin"   => "",
       "_freq"      => "",
       "_affected"  => "",
       "_total"     => "",
@@ -270,41 +262,30 @@ class CPlageconsult extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
+    $this->_view = sprintf(
+      "Plage du %s de %s à %s",
+      mbTransformTime($this->date , null, CAppUI::conf("date")),
+      mbTransformTime($this->debut, null, CAppUI::conf("time")),
+      mbTransformTime($this->fin  , null, CAppUI::conf("time"))
+    );
 
-    list ($this->_hour_deb, $this->_min_deb) = explode(":", $this->debut);
-    list ($this->_hour_fin, $this->_min_fin) = explode(":", $this->fin);
     $this->_total = mbTimeCountIntervals($this->debut, $this->fin, $this->freq);
     $this->_freq  = substr($this->freq, 3, 2);
   }
   
   function updatePlainFields() {
-  	
-  	if($this->_hour_deb !== null) {
-      if($this->_min_deb !== null)
-        $this->debut = $this->_hour_deb.":".$this->_min_deb.":00";
-      else
-        $this->debut = $this->_hour_deb.":00:00";
-    }
-    if($this->_hour_fin !== null) {
-      if($this->_min_fin !== null)
-        $this->fin = $this->_hour_fin.":".$this->_min_fin.":00";
-      else
-        $this->fin = $this->_hour_fin.":00:00";
-    }
-    if ($this->_freq !== null)
+    if ($this->_freq !== null) {
       $this->freq  = "00:". $this->_freq. ":00";
+    }
   
-	  if($this->fin && $this->fin == "00:00:00"){
+    // @todo: Still useful? Not so sure...
+	if ($this->fin && $this->fin == "00:00:00"){
 	  	$this->fin = "23:59:59";
 	  }
 	}
   
   function becomeNext() {
     // Store form fields
-    $_hour_deb = $this->_hour_deb;
-    $_min_deb  = $this->_min_deb;
-    $_hour_fin = $this->_hour_fin;
-    $_min_fin  = $this->_min_fin;
     $_freq     = $this->_freq;
     $libelle   = $this->libelle;
 
@@ -317,10 +298,6 @@ class CPlageconsult extends CMbObject {
     }
 
     // Restore form fields
-    $this->_hour_deb = $_hour_deb;
-    $this->_min_deb  = $_min_deb;
-    $this->_hour_fin = $_hour_fin;
-    $this->_min_fin  = $_min_fin;
     $this->_freq     = $_freq;
     $this->libelle   = $libelle;
     $this->updatePlainFields();

@@ -145,22 +145,7 @@ $where["chir_id"] = " = '$chirSel'";
 for ($i = 0; $i < 7; $i++) {
   $jour = mbDate("+$i day", $debut);
   $where["date"] = "= '$jour'";
-  $listPlages = $plage->loadList($where);
-
-  foreach($listPlages as $_plage){
-    if (!isset($hours[$_plage->_hour_fin+0])) {
-      for($j = $_plage->_hour_fin;  CPlageconsult::$hours_stop < $j; $j--) {
-        $hours[$j] = sprintf("%02d", $j);
-        $hours[$j-1] = sprintf("%02d", $j-1);
-      }
-    }
-    if (!isset($hours[$_plage->_hour_deb+0])) {
-      for($j = $_plage->_hour_deb+0; $j < CPlageconsult::$hours_start; $j++) {
-        $hours[$j] = sprintf("%02d", $j);
-        $hours[$j-1] = sprintf("%02d", $j-1);
-      }
-    }
-    
+  foreach($plage->loadList($where) as $_plage){
     $_plage->loadRefsBack();
     $_plage->countPatients();
     $debute = "$jour $_plage->debut";
@@ -194,9 +179,6 @@ for ($i = 0; $i < 7; $i++) {
     $planning->addEvent($event);
   }    
 }
-
-ksort($hours);
-$planning->hours = $hours;
 
 // Création du template
 $smarty = new CSmartyDP();

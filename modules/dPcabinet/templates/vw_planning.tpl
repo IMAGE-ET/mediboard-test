@@ -12,31 +12,6 @@ function showConsultations(oTd, plageconsult_id){
   url.requestUpdate('consultations');
 }
 
-function checkPlage() {
-  var form = getForm("editFrm");
-  var timeDebut = form._hour_deb.value + ":" +form._min_deb.value;
-  var timeFin   = form._hour_fin.value + ":" +form._min_fin.value;
-
-  if(timeDebut >= timeFin) {
-    alert("L'heure de fin doit être supérieure à l'heure de début de la plage de consultation");
-    return false;
-  }  
-
-  if(!checkForm(form)){
-    return false;
-  }
-  
-  if(form.nbaffected.value!= 0 && form.nbaffected.value!=""){
-    if(timeDebut > form._firstconsult_time.value || timeFin < form._lastconsult_time.value){
-      if(!(confirm("Certaines consultations se trouvent en dehors de la plage de consultation.\n\nVoulez-vous appliquer les modifications ?"))){
-        return false;
-      }
-    }  
-  }
-    
-  return true;
-}
-
 function putArrivee(oForm) {
   var today = new Date();
   oForm.arrivee.value = today.toDATETIME(true);
