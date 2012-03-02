@@ -98,12 +98,18 @@ Main.add(function () {
     </form>
   </td>
 </tr>
-
 <tr>
-  <td style="width: 50%">
-    {{include file="inc_list_plages.tpl"}}
-  </td>
-  <td id="listPlaces"></td>
+  <td colspan="2">
+    <div style="float: left; width: 50%" id="listePlages">
+       {{include file="inc_list_plages.tpl"}}
+     </div>
+     <div id="listPlaces" style="float: right; width: 50%;">
+     </div>
+  
+     <script type="text/javascript">
+       ViewPort.SetAvlHeight('listPlaces', 1);
+       ViewPort.SetAvlHeight('listePlages', 1);
+     </script>
+  </td>
 </tr>
-
 </table>
