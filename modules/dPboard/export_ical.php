@@ -1,12 +1,25 @@
-<?php /* $Id:export_ical.php  $ */
+<?php
+/**
+ * $Id: $
+ * 
+ * @package    Mediboard
+ * @subpackage board
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision: $
+ */
 
 /**
- * @package Mediboard
- * @subpackage dPboard
- * @version $Revision: 13328 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- */ 
+ * Turn a iso time to a string representation for iCal exports
+ * 
+ * @param time $time Time to convert
+ * 
+ * @return string
+ */
+function ical_time($time) {
+  list($hour, $min) = explode(":", $time);
+  return "{$hour}h{$min}";
+}
 
 CCanDo::checkRead();
 
@@ -36,7 +49,7 @@ $plagesConsult  = array();
 $plagesOp       = array();
 $plagesPerDayOp = array();
 
-for($i = 0; mbDate("+$i day", $debut)!=$fin ; $i++) {
+for ($i = 0; mbDate("+$i day", $debut)!=$fin ; $i++) {
   $where = array();
   $where["chir_id"] = "= '$prat_id'";
   $date             = mbDate("+$i day", $debut);
@@ -48,21 +61,21 @@ for($i = 0; mbDate("+$i day", $debut)!=$fin ; $i++) {
   $where[]        = "chir_id = '$prat_id' OR anesth_id = '$prat_id'";
   $where["date"]  = "= '$date'";
   
-  foreach($listSalles as $salle){
+  foreach ($listSalles as $salle) {
     $where["salle_id"] = "= '$salle->_id'";
     $plagesPerDayOp[$salle->_id] = $plageOp->loadList($where);
     $nb_oper = $nb_oper + count($plagesPerDayOp[$salle->_id]);
   }
   
-  foreach($plagesPerDayConsult as $value) {
+  foreach ($plagesPerDayConsult as $value) {
     $value->countPatients();
   }
   
-  if(in_array("consult", $export) && count($plagesPerDayConsult)){
-    foreach($plagesPerDayConsult as $value) {
+  if (in_array("consult", $export) && count($plagesPerDayConsult)) {
+    foreach ($plagesPerDayConsult as $value) {
       $value->loadFillRate();
       
-      if($details){
+      if ($details) {
         $value->loadRefsConsultations();
       }
     }
@@ -70,24 +83,25 @@ for($i = 0; mbDate("+$i day", $debut)!=$fin ; $i++) {
     $plagesConsult[$date] = $plagesPerDayConsult;
   }
   
-  if (in_array("interv", $export) && $nb_oper){
-    foreach($plagesPerDayOp as $key => $valuePlages) {
-      if(!count($valuePlages)){
+  if (in_array("interv", $export) && $nb_oper) {
+    foreach ($plagesPerDayOp as $key => $valuePlages) {
+      if (!count($valuePlages)) {
         unset($plagesPerDayOp[$key]);
+        continue;
       }
-      else{
-        foreach($valuePlages as $keyPlage=>$value){
-          $value->loadRefSalle();
-          $value->_ref_salle->loadRefBloc();
-          $value->_ref_salle->_ref_bloc->loadRefGroup();
-          if($details){
-            $value->loadRefsOperations();
-          }
-          $value->getNbOperations();
+
+      foreach ($valuePlages as $keyPlage=>$value) {
+        $value->loadRefSalle();
+        $value->_ref_salle->loadRefBloc();
+        $value->_ref_salle->_ref_bloc->loadRefGroup();
+        if ($details) {
+          $value->loadRefsOperations();
         }
         
-        $plagesOp[$key][$date] = $plagesPerDayOp[$key];
+        $value->getNbOperations();
       }
+        
+      $plagesOp[$key][$date] = $plagesPerDayOp[$key];
     }
   }
 }
@@ -96,56 +110,60 @@ for($i = 0; mbDate("+$i day", $debut)!=$fin ; $i++) {
 $v = new CMbCalendar("Planning");
 
 // Création des évènements plages de consultation
-if(in_array("consult", $export)){
-  foreach($plagesConsult as $curr_day => $plagesPerDay){
-    foreach($plagesPerDay as $rdv){
-      $noms = "";
+if (in_array("consult", $export)) {
+  foreach ($plagesConsult as $curr_day => $plagesPerDay) {
+    foreach ($plagesPerDay as $rdv) {
+      $description = "$rdv->_nb_patients patient(s)";
 			
-      //évènement détaillé
-      if($details && $rdv->_nb_patients > 0){
-        $noms .= " :\n";
-        foreach($rdv->_ref_consultations as $consult){
-          $consult->loadRefPatient();
-          $noms .= substr($consult->heure, 0, 2)."h".substr($consult->heure, 3, 3)." ".$consult->_ref_patient."\n";
+      // Evènement détaillé
+      if ($details) {
+        foreach ($rdv->_ref_consultations as $consult) {
+          $when = iCal::time($consult->heure);
+          $patient = $consult->loadRefPatient();
+          $what = $patient->_id ? $patient->_view : "Pause: $consult->motif"; 
+          $description.= "\n$when: $what";
         }
       }
       
-      $start = sprintf("%s %02d:%02d:00", $rdv->date, $rdv->_hour_deb, $rdv->_min_deb);
-      $end   = sprintf("%s %02d:%02d:00", $rdv->date, $rdv->_hour_fin, $rdv->_min_fin);
-      
-      $v->addEvent("", "Consultation - $rdv->libelle", "$rdv->_nb_patients patient(s) $noms", null, $rdv->_guid, $start, $end);
+      $deb = "$rdv->date $rdv->debut";
+      $fin = "$rdv->date $rdv->fin";
+      $v->addEvent("", "Consultation - $rdv->libelle", $description, null, $rdv->_guid, $deb, $fin);
     }
   }
 }
 
 // Création des évènements plages d'interventions
-if (in_array("interv", $export)){
-  foreach($plagesOp as $salle){
-    foreach($salle as $curr_day => $plagesPerDay){
-      foreach($plagesPerDay as $rdv){
-        $noms = "";
+if (in_array("interv", $export)) {
+  foreach ($plagesOp as $salle) {
+    foreach ($salle as $curr_day => $plagesPerDay) {
+      foreach ($plagesPerDay as $rdv) {
+        $description = "$rdv->_nb_operations intervention(s)";
         
-        // évènement détaillé
-        if($details && $rdv->_nb_operations > 0){
-          $noms .= " : \n";
-          foreach($rdv->_ref_operations as $op){
+        // Evènement détaillé
+        if ($details) {
+          foreach ($rdv->_ref_operations as $op) {
             $op->loadComplete();
-            $noms .= $op->_ref_patient." Duree: ".substr($op->temp_operation, 0, 2)."h".substr($op->temp_operation, 3, 2)." Horaire :".$op->horaire_voulu."\n";
+            $duration = iCal::time($op->temp_operation);
+            $when     = iCal::time(mbTime($op->_datetime));
+            $patient = $op->_ref_patient->_view;
+            $description.= "\n$when: $patient (duree: $duration)";
           }
         }
       
-        $start = sprintf("%s %02d:%02d:00", $rdv->date, $rdv->_heuredeb, $rdv->_minutedeb);
-        $end   = sprintf("%s %02d:%02d:00", $rdv->date, $rdv->_heurefin, $rdv->_minutefin);
+        $deb = "$rdv->date $rdv->debut";
+        $fin = "$rdv->date $rdv->fin";
         
         $location = $rdv->_ref_salle->_ref_bloc->_ref_group->_view;
-        $v->addEvent($location, $rdv->_ref_salle->_view, "$rdv->_nb_operations intervention(s) $noms", null, $rdv->_guid, $start, $end);          
+        $v->addEvent($location, $rdv->_ref_salle->_view, $description, null, $rdv->_guid, $deb, $fin);          
       }
     }
   }
 }
 
-//Conversion du calendrier en champ texte
+// Conversion du calendrier en champ texte
 $str = $v->createCalendar();
+
+//echo "<pre>$str</pre>"; return;
 
 header("Content-disposition: attachment; filename=agenda.ics"); 
 header("Content-Type: text/calendar; charset=".CApp::$encoding);
