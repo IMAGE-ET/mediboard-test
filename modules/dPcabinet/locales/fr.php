@@ -1445,4 +1445,6 @@ $locales['pref-view_traitement'] = 'Affichage des traitements';
 $locales['pref-view_traitement-0'] = 'Cacher';
 $locales['pref-view_traitement-1'] = 'Visible';
 $locales['pref-view_traitement-desc'] = 'Affichage des traitemens';
+$locales['pref-viewFunctionPrats'] = 'Afficher la fonction des praticiens lors des RDV';
+$locales['pref-viewFunctionPrats-desc'] = 'Afficher les fonctions des praticiens lors de la prise de rendez-vous';
 ?>

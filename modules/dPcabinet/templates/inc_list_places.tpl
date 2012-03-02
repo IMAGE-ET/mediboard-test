@@ -57,6 +57,10 @@ PlageConsult.addPlaceAfter = function(plage_id) {
       {{/if}}
       Dr {{$plage->_ref_chir->_view}}
       <br />
+      {{if $app->user_prefs.viewFunctionPrats}}
+        {{$plage->_ref_chir->_ref_function->_view}}
+        <br />
+      {{/if}}
       Plage du {{$plage->date|date_format:$conf.longdate}} de {{$plage->debut|date_format:$conf.time}} à {{$plage->fin|date_format:$conf.time}}
     </th>
   </tr>

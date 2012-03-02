@@ -83,6 +83,7 @@ if ($plageconsult_id) {
     $plage->load($plageconsult_id);
   }
   $plage->loadRefs(false);
+  $plage->_ref_chir->loadRefFunction();
   
   for ($i = 0; $i < $plage->_total; $i++) {
     $minutes = $plage->_freq * $i;

@@ -1438,7 +1438,11 @@ class CSetupdPcabinet extends CSetup {
       DROP `remise`;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.48";
+    $this->makeRevision("1.48");
+    
+    $this->addPrefQuery("viewFunctionPrats", "0");
+    
+    $this->mod_version = "1.49";
   }
 }
 ?>
