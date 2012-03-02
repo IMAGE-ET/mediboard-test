@@ -36,15 +36,17 @@ if ($del) {
     if ($obj->plageop_id) {
       if ($msg = $obj->delete()) {
         $not_deleted++;
-      } else {
+      } 
+      else {
         $msg = "plage supprimée";
         $deleted++;
       } 
-    } else {
+    } 
+    else {
       $not_found++;
       $msg = "Impossible de supprimer, plage non trouvée";
     }
-    $body_msg .= "<br />Plage du $obj->_day-$obj->_month-$obj->_year: " . $msg;
+    $body_msg .= "<br />Plage du $obj->date: $msg";
     $repeat -= $obj->becomeNext();
   }
   if ($deleted    ) $header [] = "$deleted plage(s) supprimée(s)";
@@ -66,13 +68,14 @@ if ($del) {
       if ($obj->plageop_id) {
         if ($msg = $obj->store()) {
           $not_updated++;
-        } else {
+        } 
+        else {
           $msg = "plage mise à jour";
           $updated++;
         }
       } 
     
-      $body_msg .= "<br />Plage du $obj->_day-$obj->_month-$obj->_year: " . $msg;
+      $body_msg .= "<br />Plage du $obj->date: $msg";
     
       $repeat -= $obj->becomeNext();
     }
@@ -114,7 +117,7 @@ if ($del) {
         }
       }
     
-      $body_msg .= "<br />Plage du $obj->_day-$obj->_month-$obj->_year: " . $msg;
+      $body_msg .= "<br />Plage du $obj->date: $msg";
     
       $repeat -= $obj->becomeNext();
     }

@@ -40,10 +40,6 @@ class CPlageOp extends CMbObject {
   var $_day          = null;
   var $_month        = null;
   var $_year         = null;
-  var $_heuredeb     = null;
-  var $_minutedeb    = null;
-  var $_heurefin     = null;
-  var $_minutefin    = null;
   var $_duree_prevue = null;
   var $_type_repeat  = null;
   
@@ -92,11 +88,6 @@ class CPlageOp extends CMbObject {
     $specs["delay_repl"]       = "num min|0";
     $specs["actes_locked"]     = "bool";
 
-    // TODO: get rid of these form fields !
-    $specs["_heuredeb"]        = "num min|0 max|23";
-    $specs["_minutedeb"]       = "num min|0 max|59";
-    $specs["_heurefin"]        = "num min|0 max|23";
-    $specs["_minutefin"]       = "num min|0 max|59";
     $specs["_type_repeat"]     = "enum list|simple|double|triple|quadruple|sameweek";
     return $specs;
   }
@@ -286,30 +277,9 @@ class CPlageOp extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_year         = substr($this->date, 0, 4);
-    $this->_month        = substr($this->date, 5, 2);
-    $this->_day          = substr($this->date, 8, 2);
-    $this->_heuredeb     = substr($this->debut, 0, 2);
-    $this->_minutedeb    = substr($this->debut, 3, 2);
-    $this->_heurefin     = substr($this->fin, 0, 2);
-    $this->_minutefin    = substr($this->fin, 3, 2);
     $this->_duree_prevue = mbTimeRelative($this->debut, $this->fin);
     $this->_view = "Plage du ".$this->getFormattedValue("date");
-  }
-  
-  function updatePlainFields() {
-    if(($this->_heuredeb !== null) && ($this->_minutedeb !== null)) {
-      $this->debut = sprintf("%02d:%02d:00", $this->_heuredeb, $this->_minutedeb);
-    }
-    if(($this->_heurefin !== null) && ($this->_minutefin !== null)) {
-      $this->fin = sprintf("%02d:%02d:00", $this->_heurefin, $this->_minutefin);
-    }
-    if(($this->_year !== null) && ($this->_month !== null) && ($this->_day !== null)) {
-      $this->date = sprintf("%04d-%02d-%02d", $this->_year, $this->_month, $this->_day);
-    }
-    return parent::updatePlainFields();
-  }
-  
+  }  
   
   /**
    * find the next plageop according
