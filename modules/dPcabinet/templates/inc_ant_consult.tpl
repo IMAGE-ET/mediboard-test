@@ -32,31 +32,30 @@ updateTokenCim10Anesth = function(){
   onSubmitFormAjax(oForm, { onComplete : DossierMedical.reloadDossierSejour });
 }
 
-onSubmitAnt = function (oForm) {
-	if (oForm.rques.value.blank()) {
+onSubmitAnt = function (form) {
+  var rques = $(form.rques);
+  if (!rques.present()) {
     return false;
   }
 
-  onSubmitFormAjax(oForm, {
-    onComplete : DossierMedical.reloadDossiersMedicaux 
-  } );
-  
-  oForm.rques.value = "";
+  onSubmitFormAjax(form, { onComplete : DossierMedical.reloadDossiersMedicaux } );
+
+  rques.clear().focus();
 
   return false;
 }
 
-onSubmitTraitement = function (oForm) {
-	if (oForm.traitement.value.blank()) {
+onSubmitTraitement = function (form) {
+  var trait = $(form.traitement);
+  if (!trait.present()) {
     return false;
   }
   
-  onSubmitFormAjax(oForm, {
+  onSubmitFormAjax(form, {
     onComplete : DossierMedical.reloadDossiersMedicaux 
   } );
   
-  // Nettoyage du formulaire
-  oForm.traitement.value = "";
+  trait.clear().focus();
 
   return false;
 }
@@ -89,25 +88,25 @@ DossierMedical = {
   },
   
   reloadDossierPatient: function() {
-	  var antUrl = new Url("dPcabinet", "httpreq_vw_list_antecedents");
-	  antUrl.addParam("patient_id", "{{$patient->_id}}");
-	  antUrl.addParam("_is_anesth", "{{$_is_anesth}}");
-	  {{if $_is_anesth}}
-	    antUrl.addParam("sejour_id", DossierMedical.sejour_id);
-	  {{/if}}
-	  antUrl.requestUpdate('listAnt');
-	},
-	reloadDossierSejour: function(){
+    var antUrl = new Url("dPcabinet", "httpreq_vw_list_antecedents");
+    antUrl.addParam("patient_id", "{{$patient->_id}}");
+    antUrl.addParam("_is_anesth", "{{$_is_anesth}}");
+    {{if $_is_anesth}}
+      antUrl.addParam("sejour_id", DossierMedical.sejour_id);
+    {{/if}}
+    antUrl.requestUpdate('listAnt');
+  },
+  reloadDossierSejour: function(){
       var antUrl = new Url("dPcabinet", "httpreq_vw_list_antecedents_anesth");  
-	  antUrl.addParam("sejour_id", DossierMedical.sejour_id);
-	  antUrl.requestUpdate('listAntCAnesth');
-	},
-	reloadDossiersMedicaux: function(){
-	  DossierMedical.reloadDossierPatient();
+    antUrl.addParam("sejour_id", DossierMedical.sejour_id);
+    antUrl.requestUpdate('listAntCAnesth');
+  },
+  reloadDossiersMedicaux: function(){
+    DossierMedical.reloadDossierPatient();
     {{if $_is_anesth || $sejour_id}}
     DossierMedical.reloadDossierSejour();
     {{/if}}
-	}
+  }
 }
  
 refreshAddPoso = function(code_cip){
@@ -119,31 +118,31 @@ refreshAddPoso = function(code_cip){
 Main.add(function () {
   DossierMedical.reloadDossiersMedicaux();
   
-	if($('tab_traitements_perso')){
-	  Control.Tabs.create('tab_traitements_perso', false);
-	}
+  if($('tab_traitements_perso')){
+    Control.Tabs.create('tab_traitements_perso', false);
+  }
 });
 
 </script>
 
 <table class="main">
-	{{mb_default var=show_header value=0}}
+  {{mb_default var=show_header value=0}}
   {{if $show_header}} 
-		<tr>
-			<th class="title" colspan="2">
-				<a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
-		      {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" size=42}}
-		    </a>
-		   
-		    <h2 style="color: #fff; font-weight: bold;">
-		      {{$sejour->_ref_patient->_view}}
-		      <span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
-		    </h2> 
-			</th>
-		</tr>   
+    <tr>
+      <th class="title" colspan="2">
+        <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
+          {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" size=42}}
+        </a>
+       
+        <h2 style="color: #fff; font-weight: bold;">
+          {{$sejour->_ref_patient->_view}}
+          <span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
+        </h2> 
+      </th>
+    </tr>   
   {{/if}}   
-	
-	<tr>
+  
+  <tr>
     <td class="halfPane">
       
 <table class="form">
@@ -165,6 +164,7 @@ Main.add(function () {
         <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />
       
         <!-- dossier_medical_id du sejour si c'est une consultation_anesth -->
+        
         {{if $_is_anesth}}
         <!-- On passe _sejour_id seulement s'il y a un sejour_id -->
         <input type="hidden" name="_sejour_id" value="{{$sejour_id}}" />
