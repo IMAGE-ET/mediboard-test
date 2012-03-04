@@ -113,11 +113,12 @@ Traitement = {
   {{if $dossier_medical->_count_antecedents || $dossier_medical->_count_cancelled_antecedents}}
     {{foreach from=$dossier_medical->_all_antecedents item=_antecedent}}
     <li {{if $_antecedent->annule}}class="cancelled" style="display: none;"{{/if}}>
-      <form name="delAntFrm-{{$_antecedent->_id}}" action="?m=dPcabinet" method="post">
+      <form name="Del-{{$_antecedent->_guid}}" action="?m=dPcabinet" method="post">
         <input type="hidden" name="m" value="dPpatients" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_antecedent_aed" />
-        <input type="hidden" name="antecedent_id" value="{{$_antecedent->_id}}" />
+        {{mb_key object=$_antecedent}}
+
         <input type="hidden" name="annule" value="" />
                
         <!-- Seulement si l'utilisateur est le créateur -->

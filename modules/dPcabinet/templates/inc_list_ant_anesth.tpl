@@ -21,15 +21,15 @@
 var cancelledAnesthVisible = true;
 
 onSubmitDossierMedical = function(oForm) {
-	return onSubmitFormAjax(oForm, { 
-		onComplete : DossierMedical.reloadDossierSejour 
-	} );
+  return onSubmitFormAjax(oForm, { 
+    onComplete : DossierMedical.reloadDossierSejour 
+  } );
 }
 
 copyAntecedent = function(antecedent_id){
   var oForm = document.frmCopyAntecedent;
   oForm.antecedent_id.value = antecedent_id;
- 	onSubmitDossierMedical(oForm);
+   onSubmitDossierMedical(oForm);
 }
 
 copyTraitement = function(traitement_id){
@@ -53,41 +53,42 @@ toggleCancelledAnesth = function(list) {
 <strong>Antécédents significatifs</strong>
 
 <ul id="antecedents-{{$dossier_medical->_guid}}">
-	{{if $dossier_medical->_count_antecedents || $dossier_medical->_count_cancelled_antecedents}}
-  {{foreach from=$dossier_medical->_ref_antecedents_by_type key=curr_type item=list_antecedent}}
-  {{foreach from=$list_antecedent item=curr_antecedent}}
-  <li {{if $curr_antecedent->annule}}class="cancelled" style="display: none;"{{/if}}>
-    <form name="delAntFrm-{{$curr_antecedent->_id}}" action="?m=dPcabinet" method="post">
+  {{if $dossier_medical->_count_antecedents || $dossier_medical->_count_cancelled_antecedents}}
+  {{foreach from=$dossier_medical->_ref_antecedents_by_type key=_type item=list_antecedent}}
+  {{foreach from=$list_antecedent item=_antecedent}}
+  <li {{if $_antecedent->annule}}class="cancelled" style="display: none;"{{/if}}>
+    <!-- Seulement si l'utilisateur est le créateur -->
+    {{if $_antecedent->_ref_first_log && $_antecedent->_ref_first_log->user_id == $app->user_id}}
+    <form name="Del-{{$_antecedent->_guid}}" action="?m=dPcabinet" method="post" style="float: left; margin-left: -22px;">
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_antecedent_aed" />
-      <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->_id}}" />
+      {{mb_key object=$_antecedent}}
+
       <input type="hidden" name="annule" value="" />
-             
-      <!-- Seulement si l'utilisateur est le créateur -->
-      {{if $curr_antecedent->_ref_first_log && $curr_antecedent->_ref_first_log->user_id == $app->user_id}}
+
       <button title="{{tr}}Delete{{/tr}}" class="trash notext" type="button" onclick="Antecedent.remove(this.form, DossierMedical.reloadDossierSejour)">
         {{tr}}Delete{{/tr}}
       </button>
-      {{/if}}
     </form>
+    {{/if}}
 
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_antecedent->_guid}}')">
-	    <strong>
-	    	{{if $curr_antecedent->type    }} {{mb_value object=$curr_antecedent field=type    }} {{/if}}
-	    	{{if $curr_antecedent->appareil}} {{mb_value object=$curr_antecedent field=appareil}} {{/if}}
-	    </strong>
-      {{if $curr_antecedent->date}}
-        [{{mb_value object=$curr_antecedent field=date}}] :
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$_antecedent->_guid}}')">
+      <strong>
+        {{if $_antecedent->type    }} {{mb_value object=$_antecedent field=type    }} {{/if}}
+        {{if $_antecedent->appareil}} {{mb_value object=$_antecedent field=appareil}} {{/if}}
+      </strong>
+      {{if $_antecedent->date}}
+        [{{mb_value object=$_antecedent field=date}}] :
       {{/if}}
-      {{$curr_antecedent->rques|nl2br}}
+      {{$_antecedent->rques|nl2br}}
     </span>
   </li>
   {{/foreach}}
   {{/foreach}}
-	{{else}}
-		<li class="empty">{{tr}}CAntecedent.none{{/tr}}</li>
-	{{/if}}
+  {{else}}
+    <li class="empty">{{tr}}CAntecedent.none{{/tr}}</li>
+  {{/if}}
 </ul>
       
 {{if is_array($dossier_medical->_ref_traitements)}}
@@ -138,10 +139,10 @@ toggleCancelledAnesth = function(list) {
         </button>
       {{/if}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView')">
-		    <a href=#1 onclick="Prescription.viewProduit(null,'{{$_line->code_ucd}}','{{$_line->code_cis}}');">
-		      {{$_line->_ucd_view}} ({{$_line->_forme_galenique}})</a>
-		  </span>
-	  </form>
+        <a href=#1 onclick="Prescription.viewProduit(null,'{{$_line->code_ucd}}','{{$_line->code_cis}}');">
+          {{$_line->_ucd_view}} ({{$_line->_forme_galenique}})</a>
+      </span>
+    </form>
   </li>
   {{foreachelse}}
   <li class="empty">Pas de traitements personnels</li>
@@ -151,12 +152,12 @@ toggleCancelledAnesth = function(list) {
 
 <strong>Diagnostics significatifs de l'intervention</strong>
 <ul>
-  {{foreach from=$dossier_medical->_ext_codes_cim item=curr_code}}
+  {{foreach from=$dossier_medical->_ext_codes_cim item=_code}}
   <li>
-    <button class="trash notext" type="button" onclick="oCimAnesthField.remove('{{$curr_code->code}}')">
+    <button class="trash notext" type="button" onclick="oCimAnesthField.remove('{{$_code->code}}')">
       {{tr}}delete{{/tr}}
     </button>
-    {{$curr_code->code}}: {{$curr_code->libelle}}
+    {{$_code->code}}: {{$_code->libelle}}
   </li>
   {{foreachelse}}
   <li class="empty">Pas de diagnostic</li>
