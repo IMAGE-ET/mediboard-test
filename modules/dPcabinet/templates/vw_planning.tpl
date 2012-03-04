@@ -47,7 +47,7 @@ Main.add(function () {
 {{mb_script module=ssr script=planning}}
 <table class="main">
   <tr>
-    <th style="width: 60%;">
+    <th style="width: 50%;">
       <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
@@ -127,23 +127,6 @@ Main.add(function () {
           }
         });
       </script>
-      <div class="small-info">
-        <strong>L'affichage du semainier a évolué</strong>.
-        <div>Désormais, vous pouvez utiliser les boutons qui apparaissent au survol de la plage de consultation pour :</div>
-        <div>
-            <button type="button" class="notext list">Liste</button>
-            Afficher la liste des patients sur la droite
-        </div>
-        <div>
-            <button type="button" class="notext edit">Edit</button>
-            Modifier la plage selectionnée
-        </div>
-        <div>
-            <button type="button" class="notext clock">RDV</button>
-            Prendre un nouveau rendez-vous dans cette plage
-        </div>
-        Les anciennes commandes fonctionnent encore mais seront supprimées prochainement.
-    </div>
     <td id="consultations">{{mb_include module=dPcabinet template=inc_consultations}}</td>
   </tr>
 </table>
