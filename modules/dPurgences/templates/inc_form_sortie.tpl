@@ -64,7 +64,7 @@
     </td>
   </tr>
 	
-  <tr id="commentaires_sortie" {{if $sejour->mode_sortie == "" || $sejour->mode_sortie == "normal"}} style="display:none;" {{/if}}>
+  <tr id="commentaires_sortie">
     <th>{{mb_label object=$sejour field="commentaires_sortie"}}</th>
     <td>
     	{{mb_field object=$sejour field="commentaires_sortie" onchange="this.form.onsubmit();" form="editSejour"
