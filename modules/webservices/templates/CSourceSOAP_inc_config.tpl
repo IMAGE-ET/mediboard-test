@@ -54,6 +54,10 @@
             <td>{{mb_field object=$source field="encoding"}}</td>
           </tr>
           <tr>
+            <th>{{mb_label object=$source field="stream_context"}}</th>
+            <td>{{mb_field object=$source field="stream_context"}}</td>
+          </tr>
+          <tr>
             <td class="button" colspan="2">
               {{if $source->_id}}
                 <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

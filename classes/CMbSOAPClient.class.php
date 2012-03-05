@@ -163,8 +163,8 @@ class CMbSOAPClient extends SoapClient {
     return $result;
   }
   
-  static public function make($rooturl, $login = null, $password = null, $type = null, $options = array(), $loggable = null) {
-    if (!url_exists($rooturl)) {
+  static public function make($rooturl, $login = null, $password = null, $type = null, $options = array(), $loggable = null, $stream_context = null) {
+    if (!url_exists($rooturl, $stream_context)) {
       throw new CMbException("CSourceSOAP-unreachable-source", $rooturl);
     }
 

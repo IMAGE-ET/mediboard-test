@@ -162,6 +162,7 @@ $locales['CEchangeHprim21.object_class.CPatient'] = 'Patient';
 $locales['CEchangeHprim21.object_class.CSejour'] = 'Séjour';
 $locales['CEchangeHprim21.one'] = 'échange H\' 2.1';
 $locales['CEchangeHprim21.sender_class.CSenderFTP'] = 'Expéditeur FTP';
+$locales['CEchangeHprim21.sender_class.CSenderMLLP'] = 'Expéditeur MLLP';
 $locales['CEchangeHprim21.sender_class.CSenderSOAP'] = 'Expéditeur SOAP';
 $locales['CGroups-back-echanges_hprim21'] = 'Echanges';
 $locales['CGroups-back-echanges_hprim21.empty'] = 'Pas d\'échange';

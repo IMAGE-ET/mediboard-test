@@ -258,6 +258,7 @@ $locales['CEchangeHprim.object_class.CSejour'] = 'Séjour';
 $locales['CEchangeHprim.one'] = 'echange H\'XML';
 $locales['CEchangeHprim.select'] = 'Choisissez un echange H\'XML';
 $locales['CEchangeHprim.sender_class.CSenderFTP'] = 'Expéditeur SOAP';
+$locales['CEchangeHprim.sender_class.CSenderMLLP'] = 'Expéditeur MLLP';
 $locales['CEchangeHprim.sender_class.CSenderSOAP'] = 'Expéditeur FTP';
 $locales['CGroups-back-'] = 'Etablissements';
 $locales['CGroups-back-destinataires_hprim'] = 'Destinataires H\'XML';

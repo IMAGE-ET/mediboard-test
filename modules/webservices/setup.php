@@ -142,7 +142,13 @@ function __construct() {
                 ADD `encoding` ENUM ('UTF-8','ISO-8859-1','ISO-8859-15') DEFAULT 'UTF-8';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.24";      
+    $this->makeRevision("0.24");
+    
+    $query = "ALTER TABLE `source_soap` 
+                ADD `stream_context` VARCHAR (255);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.25";      
   }
 }
 ?>

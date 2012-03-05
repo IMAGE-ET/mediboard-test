@@ -119,6 +119,7 @@ $locales['CExchangeIHE.object_class.CPatient'] = 'Patient';
 $locales['CExchangeIHE.object_class.CSejour'] = 'Séjour';
 $locales['CExchangeIHE.one'] = 'Un échange IHE';
 $locales['CExchangeIHE.sender_class.CSenderFTP'] = 'Expéditeur FTP';
+$locales['CExchangeIHE.sender_class.CSenderMLLP'] = 'Expéditeur MLLP';
 $locales['CExchangeIHE.sender_class.CSenderSOAP'] = 'Expéditeur SOAP';
 $locales['CGroups-back-.empty'] = 'Aucun établissement';
 $locales['CHL7EventADTA01'] = 'ITI31 - ADT^A01';

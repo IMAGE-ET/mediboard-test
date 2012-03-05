@@ -10,14 +10,15 @@
 
 class CSourceSOAP extends CExchangeSource {
   // DB Table key
-  var $source_soap_id = null;
+  var $source_soap_id   = null;
   
   // DB Fields
   var $wsdl_mode        = null;
 	var $evenement_name   = null;
 	var $single_parameter = null;
   var $encoding         = null;
-  
+	var $stream_context   = null; 
+   
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'source_soap';
@@ -31,7 +32,8 @@ class CSourceSOAP extends CExchangeSource {
 		$specs["evenement_name"]   = "str";
 		$specs["single_parameter"] = "str";
 		$specs["encoding"]         = "enum list|UTF-8|ISO-8859-1|ISO-8859-15 default|UTF-8";
-
+		$specs["stream_context"]   = "str";
+		
     return $specs;
   }
   
@@ -57,7 +59,7 @@ class CSourceSOAP extends CExchangeSource {
 		  "encoding" => $this->encoding
 		);
 		
-		$this->_client = CMbSOAPClient::make($this->host, $this->user, $this->password, $this->type_echange, $options);
+		$this->_client = CMbSOAPClient::make($this->host, $this->user, $this->password, $this->type_echange, $options, null, $this->stream_context);
     if ($this->_client->soap_client_error) {
       throw new CMbException("CSourceSOAP-unreachable-source", $this->name);
     }

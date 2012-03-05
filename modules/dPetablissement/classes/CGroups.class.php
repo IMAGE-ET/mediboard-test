@@ -102,6 +102,7 @@ class CGroups extends CMbObject {
     $backProps["senders_ftp"]             = "CSenderFTP group_id";
     $backProps["senders_soap"]            = "CSenderSOAP group_id";
     $backProps["senders_mllp"]            = "CSenderMLLP group_id";
+		$backProps["senders_fs"]              = "CSenderFileSystem group_id";
     $backProps["view_sender_sources"]     = "CViewSenderSource group_id";
     $backProps["modeles_etiquette"]       = "CModeleEtiquette group_id";
     $backProps["unites_fonctionnelles"]   = "CUniteFonctionnelle group_id";
@@ -110,6 +111,7 @@ class CGroups extends CMbObject {
     $backProps["prestations_journalieres"] = "CPrestationJournaliere group_id";
     $backProps["prestations_ponctuelles"] = "CPrestationPonctuelle group_id";
     $backProps["supervision_graphs"]      = "CSupervisionGraph owner_id";
+		$backProps["incrementers"]            = "CIncrementer group_id";
     return $backProps;
   }
   

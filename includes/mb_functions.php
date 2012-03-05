@@ -872,9 +872,21 @@ function luhn ($code) {
  * 
  * @return bool
  */
-function url_exists($url) {
+function url_exists($url, $stream_context) {
   $old = ini_set('default_socket_timeout', 5); 
-
+	
+	if ($stream_context_create) {
+		// By default get_headers uses a GET request to fetch the headers. If you
+		// want to send a HEAD request instead, you can do so using a stream context:
+		stream_context_set_default(
+    	array(
+        'http' => array(
+          'method' => $stream_context
+        )
+    	)
+		);
+	}
+	
   $headers = @get_headers($url);
   ini_set('default_socket_timeout', $old); 
   return (preg_match("|200|", $headers[0])); 
