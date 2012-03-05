@@ -200,6 +200,14 @@ if ($indexGroup->load($g) && !$indexGroup->canRead()) {
 
 // do some db work if dosql is set
 if ($dosql) {
+  // dP remover super hack
+  if (null == $module = CModule::getInstalled($m_post)) {
+    if (null == $module = CModule::getInstalled("dP$m_post")) {
+      CAppUI::redirect("m=system&a=module_missing&mod=$m_post");
+    }
+    $m_post = "dP$m_post";
+  }	
+  
   // controller in controllers/ directory
   if (is_file("./modules/$m_post/controllers/$dosql.php")) {
     include "./modules/$m_post/controllers/$dosql.php";
