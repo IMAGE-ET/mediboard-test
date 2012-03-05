@@ -142,7 +142,6 @@ if (!$user->isPraticien()) {
   }
 }
 
-$user->load();
 $user->loadRefFunction();
 
 // Chargement des catégories
