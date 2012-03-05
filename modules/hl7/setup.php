@@ -704,8 +704,19 @@ class CSetuphl7 extends CSetup {
     // Normal
     $this->insertTableEntry("9001", "5", "5", "normal", "normal", "Sorti à l'essai");
     
+		$this->makeRevision("0.19");
+		
+		$query = "ALTER TABLE `hl7_config` 
+                ADD `handle_mode` ENUM ('normal','simple') DEFAULT 'normal';";
+    $this->addQuery($query);
+		
+		$this->makeRevision("0.20");
+		
+		$query = "ALTER TABLE `hl7_config` 
+                CHANGE `sender_class` `sender_class` VARCHAR (80);";
+    $this->addQuery($query);
     
-    $this->mod_version = "0.19";
+    $this->mod_version = "0.21";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

@@ -31,7 +31,7 @@ class CExchangeDataFormatConfig extends CMbObject {
     $props = parent::getProps();
     
     $props["sender_id"]    = "ref class|CInteropSender meta|sender_class";
-    $props["sender_class"] = "enum list|CSenderFTP|CSenderSOAP|CSenderMLLP show|0";
+    $props["sender_class"] = "enum list|CSenderFTP|CSenderSOAP|CSenderMLLP|CSenderFileSystem show|0";
     
     return $props;
   }

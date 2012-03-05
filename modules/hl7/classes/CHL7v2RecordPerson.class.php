@@ -175,10 +175,10 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     }
     
     // Segment PID
-    $this->getPID($data["PID"], $newPatient);
+    $this->getSegment("PID", $data, $newPatient);
     
     // Segment PD1
-    $this->getPD1($data["PD1"], $newPatient);
+    $this->getSegment("PD1", $data, $newPatient);
     
     // Correspondants médicaux
     if ($newPatient->_id && array_key_exists("ROL", $data)) {
@@ -195,6 +195,16 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       }
     }
   }
+	
+	function getSegment($name, $data, $object) {
+		if (!array_key_exists($name, $data) || $data[$name] === NULL) {
+			return;
+		}
+		
+		$function = "get$name";
+		
+		$this->$function($data[$name], $object);
+	}
   
   function checkSimilarPatient(CPatient $recoveredPatient, CPatient $newPatient) {
     return $recoveredPatient->checkSimilar($newPatient->nom, $newPatient->prenom);
@@ -229,20 +239,24 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $newPatient->matricule = $this->queryTextNode("PID.19", $node);
   }
   
-  function getNames(DOMNode $node, CPatient $newPatient, DOMNodeList $PID5) {    
-    if ($this->queryTextNode("XPN.7", $node) == "D") {
-      $newPatient->nom = $this->queryTextNode("XPN.1/FN.1", $node);
-    }
-    if ($this->queryTextNode("XPN.7", $node) == "L") {
-      // Dans le cas où l'on a pas de nom de nom de naissance le legal name
-      // est le nom du patient
-      if ($PID5->length > 1) {
-        $newPatient->nom_jeune_fille = $this->queryTextNode("XPN.1/FN.1", $node);
-      } 
-      else {
-        $newPatient->nom = $this->queryTextNode("XPN.1/FN.1", $node);
-      }
-    }
+  function getNames(DOMNode $node, CPatient $newPatient, DOMNodeList $PID5) {
+  	$fn1 = $this->queryTextNode("XPN.1/FN.1", $node);
+		
+		switch($this->queryTextNode("XPN.7", $node)) {
+			case "D" :
+				$newPatient->nom = $fn1;
+				break;
+			case "L" :
+				// Dans le cas où l'on a pas de nom de nom de naissance le legal name
+      	// est le nom du patient
+      	if ($PID5->length > 1) {
+      		$newPatient->nom_jeune_fille = $fn1;
+				}
+				break;
+			default:
+				$newPatient->nom = $fn1;
+				break;
+		}     
   }
   
   function getFirstNames(DOMNode $node, CPatient $newPatient) {    

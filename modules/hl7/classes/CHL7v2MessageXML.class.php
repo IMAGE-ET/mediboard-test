@@ -131,9 +131,15 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   }
   
   function getPIIdentifier(DOMNode $node, &$data) {
-    if ($this->queryTextNode("CX.5", $node) == "PI") {
+		if (CHL7v2Message::$handle_mode == "simple") {
       $data["PI"] = $this->queryTextNode("CX.1", $node);
-    }
+    } 
+		else {
+			if ($this->queryTextNode("CX.5", $node) == "PI") {
+	      $data["PI"] = $this->queryTextNode("CX.1", $node);
+	    }
+		}
+		
   }
   
   function getANIdentifier(DOMNode $node, &$data) {    
@@ -191,7 +197,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     if ($PID_18 = $this->queryNode("PID.18", $contextNode)) {
       $this->getANIdentifier($PID_18, $data);
     }    
-   
+ 
     return $data;
   }
   

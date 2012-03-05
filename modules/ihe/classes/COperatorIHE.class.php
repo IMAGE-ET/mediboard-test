@@ -87,19 +87,26 @@ class COperatorIHE extends CEAIOperator {
       $exchange_ihe->loadRefsInteropActor();
 
       // Chargement des configs de l'expéditeur
-      $exchange_ihe->_ref_sender->getConfigs($data_format);
+      $sender = $exchange_ihe->_ref_sender;
+      $sender->getConfigs($data_format);
+			
+			CHL7v2Message::setHandleMode($sender->_configs["handle_mode"]); 
 
       $dom_evt->_ref_exchange_ihe = $exchange_ihe;
       $ack->_ref_exchange_ihe     = $exchange_ihe;
 
       // Message événement patient
       if ($evt instanceof CHL7EventADT) {
-        return self::eventPerson($data, $exchange_ihe, $dom_evt, $ack);
+        $msgAck = self::eventPerson($data, $exchange_ihe, $dom_evt, $ack);
+				CHL7v2Message::resetBuildMode(); 
+				return $msgAck;
       }
       
       // Message événement observation
       if ($evt instanceof CHL7EventDEC) {
-        return self::eventObservation($data, $exchange_ihe, $dom_evt, $ack);
+        $msgAck = self::eventObservation($data, $exchange_ihe, $dom_evt, $ack);
+				CHL7v2Message::resetBuildMode(); 
+				return $msgAck;
       }
     } catch(Exception $e) {
       $exchange_ihe->populateExchange($data_format, $evt);
@@ -114,6 +121,8 @@ class COperatorIHE extends CEAIOperator {
 
       $exchange_ihe->populateErrorExchange($ack);
       
+			CHL7v2Message::resetBuildMode(); 
+			
       return $msgAck;
     }
   }
