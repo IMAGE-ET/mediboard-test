@@ -716,7 +716,13 @@ class CSetuphl7 extends CSetup {
                 CHANGE `sender_class` `sender_class` VARCHAR (80);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.21";
+    $this->makeRevision("0.21");
+		
+		$query = "ALTER TABLE `hl7_config` 
+                ADD `get_NDA` ENUM ('PID_18','PV1_19') DEFAULT 'PID_18';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.22";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

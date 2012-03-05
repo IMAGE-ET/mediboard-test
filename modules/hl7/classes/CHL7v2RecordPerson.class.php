@@ -195,17 +195,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       }
     }
   }
-	
-	function getSegment($name, $data, $object) {
-		if (!array_key_exists($name, $data) || $data[$name] === NULL) {
-			return;
-		}
-		
-		$function = "get$name";
-		
-		$this->$function($data[$name], $object);
-	}
-  
+
   function checkSimilarPatient(CPatient $recoveredPatient, CPatient $newPatient) {
     return $recoveredPatient->checkSimilar($newPatient->nom, $newPatient->prenom);
   }
@@ -220,7 +210,8 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       $this->getFirstNames($_PID5, $newPatient);
       
       // Civilité
-      $newPatient->civilite = $this->queryTextNode("XPN.5", $_PID5);
+      /* @todo Voir comment faire ! Nouvelle table HL7 ? */
+      //$newPatient->civilite = $this->queryTextNode("XPN.5", $_PID5);
     }
     
     // Date de naissance
