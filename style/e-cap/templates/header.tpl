@@ -1,4 +1,4 @@
-{{include file="../../mediboard/templates/common.tpl"}}
+{{mb_include style=mediboard template=common nodebug=true}}
 
 {{if !$dialog && (!$app->_ref_user || !$app->_ref_user->_id)}}
 <!-- No Mediuser -->
@@ -25,7 +25,7 @@ var Menu = {
 </script>
 
 {{if !$dialog}}
-  {{include file="../../mediboard/templates/message.tpl" nodebug=true}}
+  {{mb_include style=mediboard template=message nodebug=true}}
 {{/if}}
 
 <table id="main" class="{{if $dialog}}dialog{{/if}} {{$m}}">
@@ -45,7 +45,7 @@ var Menu = {
   
   {{if !$offline}}
   {{assign var=style value="width: 130px;"}}
-  {{mb_include module=mediboard template=change_group}}
+  {{mb_include style=mediboard template=change_group}}
   
   <!-- Welcome -->
   <div>
@@ -53,7 +53,7 @@ var Menu = {
       {{$app->user_first_name}} {{$app->user_last_name}}
     </label>
     <br />
-    {{mb_include module=mediboard template=svnstatus}}
+    {{mb_include style=mediboard template=svnstatus}}
   </div>
   {{/if}}
 
@@ -141,8 +141,8 @@ var Menu = {
           </td>
           <td class="welcome">
             {{if !$offline}}
-              {{mb_include module=mediboard template=svnstatus}}
-              {{mb_include module=mediboard template=change_group}}
+              {{mb_include module=style template=svnstatus}}
+              {{mb_include module=style template=change_group}}
             {{/if}}
             <br />
             <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$conf.datetime}}">
@@ -202,7 +202,7 @@ var Menu = {
 {{/if}}
 
 <td id="mainPane">
-  {{mb_include module=mediboard template=obsolete_module}}
+  {{mb_include style=mediboard template=obsolete_module}}
 
 {{if $dialog}}
 <div class="dialog" id="systemMsg">

@@ -1,8 +1,8 @@
-{{include file="../../mediboard/templates/common.tpl" nodebug=true}}
+{{mb_include style=mediboard template=common nodebug=true}}
 
 {{if !$offline && !$dialog}}
 
-{{include file="../../mediboard/templates/message.tpl"}}
+{{mb_include style=mediboard template=message nodebug=true}}
 
 <table id="header">
   <tr>
@@ -25,9 +25,9 @@
             <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$conf.datetime}}">
             {{$app->user_first_name}} {{$app->user_last_name}}
             </span>
-            {{mb_include module=mediboard template=svnstatus}}
+            {{mb_include style=mediboard template=svnstatus}}
             <br />
-            {{mb_include module=mediboard template=change_group}}
+            {{mb_include style=mediboard template=change_group}}
           </td>
         </tr>
       </table>
@@ -57,7 +57,7 @@
 </table>
 {{/if}}
 
-{{mb_include module=mediboard template=obsolete_module}}
+{{mb_include style=mediboard template=obsolete_module}}
 <div id="systemMsg">
   {{$errorMessage|nl2br|smarty:nodefaults}}
 </div>

@@ -1,4 +1,4 @@
-{{include file="../../mediboard/templates/common.tpl" nodebug=true}}
+{{mb_include style=mediboard template=common nodebug=true}}
 
 <table style="width: 100%;">
   <tr>
@@ -12,7 +12,7 @@
           {{$app->user_first_name}} {{$app->user_last_name}}
         </div>
         
-        {{mb_include module=mediboard template=svnstatus}}    
+        {{mb_include style=mediboard template=svnstatus}}    
         
         <div class="menu">
           {{if $portal.help}}
@@ -31,7 +31,7 @@
         </div>
         
         {{assign var=style value="max-width: 140px;"}}
-        {{mb_include module=mediboard template=change_group}}
+        {{mb_include style=mediboard template=change_group}}
       </div>
       
       <ul id="nav">
@@ -49,8 +49,8 @@
     </td>
     {{/if}}
     <td id="main" class="{{if $dialog}}dialog{{/if}} {{$m}}">
-      {{mb_include module=mediboard template=obsolete_module}}
-      {{include file="../../mediboard/templates/message.tpl" nodebug=true}}
+      {{mb_include style=mediboard template=obsolete_module}}
+      {{mb_include style=mediboard template=message nodebug=true}}
       
       <div id="systemMsg">
         {{$errorMessage|nl2br|smarty:nodefaults|nl2br}}

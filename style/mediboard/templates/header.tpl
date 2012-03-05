@@ -1,8 +1,8 @@
-{{include file="common.tpl" nodebug=true}}
+{{mb_include template=common nodebug=true}}
 
 {{if !$offline && !$dialog}}
 
-{{include file="message.tpl" nodebug=true}}
+{{mb_include template=message nodebug=true}}
 
 <script type="text/javascript">
 var Menu = {
@@ -68,8 +68,8 @@ var Menu = {
         {{$app->user_first_name}} {{$app->user_last_name}}
       </span>
       - 
-      {{mb_include module=mediboard template=change_group}}
-      {{mb_include module=mediboard template=svnstatus}} 
+      {{mb_include template=change_group}}
+      {{mb_include template=svnstatus}} 
       
       <div class="menu">
         {{if $portal.help}}
@@ -105,7 +105,7 @@ var Menu = {
   {{/if}}
   <tr>
     <td style="vertical-align: top;">
-      {{mb_include module=mediboard template=obsolete_module}}
+      {{mb_include template=obsolete_module}}
       <div id="systemMsg">
         {{$errorMessage|nl2br|smarty:nodefaults}}
       </div>

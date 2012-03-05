@@ -1,4 +1,4 @@
-{{include file="../../mediboard/templates/common.tpl" nodebug=true}}
+{{mb_include style=mediboard template=common nodebug=true}}
 
 <script type="text/javascript">
 var Menu = {
@@ -20,14 +20,14 @@ var Menu = {
   
 {{if !$dialog}}
 
-{{include file="../../mediboard/templates/message.tpl"}}
+{{mb_include style=mediboard template=message nodebug=true}}
 
 {{if @$app->user_prefs.MenuPosition == "left"}}
 <td id="leftMenu">
   {{mb_include style="mediboard" template="logo" width="140"}}
   
   {{if !$offline}}
-    {{mb_include module=mediboard template=change_group}}
+    {{mb_include style=mediboard template=change_group}}
   
     <!-- Welcome -->
     <div>
@@ -35,7 +35,7 @@ var Menu = {
         {{$app->user_first_name}} {{$app->user_last_name}}
       </label>
       <br />
-      {{mb_include module=mediboard template=svnstatus}}    
+      {{mb_include style=mediboard template=svnstatus}}    
     </div>
   {{/if}}
 
@@ -170,7 +170,7 @@ var Menu = {
 {{/if}}
 
 <td id="mainPane">
-  {{mb_include module=mediboard template=obsolete_module}}
+  {{mb_include style=mediboard template=obsolete_module}}
 {{if $dialog}}
 <div class="dialog" id="systemMsg">
   {{$errorMessage|nl2br|smarty:nodefaults}}

@@ -1,8 +1,8 @@
-{{include file="../../mediboard/templates/common.tpl" nodebug=true}}
+{{mb_include style=mediboard template=common nodebug=true}}
 
 {{if !$offline && !$dialog}}
 
-{{include file="../../mediboard/templates/message.tpl"}}
+{{mb_include style=mediboard template=message nodebug=true}}
 
 <table id="headerMenu">
   <tr>
@@ -73,8 +73,8 @@
       {{/if}}
     </td>
     <td class="end">
-      {{mb_include module=mediboard template=svnstatus}}
-      {{mb_include module=mediboard template=change_group}}
+      {{mb_include style=mediboard template=svnstatus}}
+      {{mb_include style=mediboard template=change_group}}
     </td>
   </tr>
 </table>
@@ -83,7 +83,7 @@
 <table id="main" class="{{if $dialog}}dialog {{/if}}{{$m}}">
   <tr>
     <td class="tabox">
-      {{mb_include module=mediboard template=obsolete_module}}
+      {{mb_include style=mediboard template=obsolete_module}}
 {{if $dialog}}
     <!-- System messages -->
     <div id="systemMsg">
