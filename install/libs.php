@@ -359,12 +359,12 @@ CLibrary::$all[$library->name] = $library;
 $library = new CLibrary;
 $library->name = "dompdf";
 $library->url = "http://code.google.com/p/dompdf";
-$library->fileName = "dompdf-03-02-12.tar.gz";
+$library->fileName = "dompdf-05-03-12.tar.gz";
 $library->description ="HTML to PDF Converter";
 $library->sourceDir = "dompdf";
 $library->targetDir = "dompdf";
 $library->versionFile = "include/image_cache.cls.php";
-$library->versionString = "urldecode";
+$library->versionString = "!strpos(";
 CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
