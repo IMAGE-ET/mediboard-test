@@ -872,7 +872,7 @@ function luhn ($code) {
  * 
  * @return bool
  */
-function url_exists($url, $stream_context) {
+function url_exists($url, $stream_context = null) {
   $old = ini_set('default_socket_timeout', 5); 
 	
 	if ($stream_context) {
