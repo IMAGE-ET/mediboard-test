@@ -621,7 +621,7 @@ function smarty_function_mb_script($params, &$smarty) {
 /**
  * Module/Style aware include alternative
  * @param array params 
- * - module    : Module where template is located 
+ * - module    : Module where template is located, no dP ugly prefix required
  * - style     : Style where template is located
  * - $template : Template name (no extension)
  * @return void
@@ -631,6 +631,12 @@ function smarty_function_mb_include($params, &$smarty) {
   
   // Module précisé
   if ($module = CMbArray::extract($params, "module")) {
+    // dP ugly prefix hack
+    $root = CAppUI::conf("root_dir");
+    if (!is_dir("$root/modules/$module") && substr($module, 0, 2) != "dP") {
+    	$module = "dP$module";
+    }
+    
     $template = "../../$module/templates/$template";
   }
 

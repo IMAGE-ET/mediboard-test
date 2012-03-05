@@ -130,13 +130,15 @@ Main.add(function () {
   {{if $show_header}} 
     <tr>
       <th class="title" colspan="2">
-        <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
-          {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" size=42}}
+        <a style="float: left" href="?m=patients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
+          {{mb_include module=patients template=inc_vw_photo_identite size=42}}
         </a>
        
         <h2 style="color: #fff; font-weight: bold;">
-          {{$sejour->_ref_patient->_view}}
+          {{$patient}}
+          {{if isset($sejour|smarty:nodefaults)}}
           <span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
+          {{/if}}
         </h2> 
       </th>
     </tr>   
@@ -158,7 +160,7 @@ Main.add(function () {
 
         <form name="editAntFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitAnt(this);">
       
-        <input type="hidden" name="m" value="dPpatients" />
+        <input type="hidden" name="m" value="patients" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_antecedent_aed" />
         <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />

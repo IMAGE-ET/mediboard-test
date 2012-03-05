@@ -79,7 +79,7 @@ Main.add( function () {
   </tr>
   {{/if}}
   {{foreach from=$_plage->_ref_consultations item=_consult}}
-    {{mb_include module=dPcabinet template=inc_detail_consult}}
+    {{mb_include module=cabinet template=inc_detail_consult}}
   {{/foreach}}
   
   {{foreachelse}}
