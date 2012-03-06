@@ -106,6 +106,7 @@ case "$1" in
     ;;
 
   *)
-    echo "Action $1 unknown" \
-    ;; \
+    echo "Action '$1' unknown"
+    exit 1
+    ;;
 esac
