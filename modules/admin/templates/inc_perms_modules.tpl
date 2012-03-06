@@ -79,12 +79,18 @@
               <th>Nom interne</th>
               <th>Nom visible</th>
             </tr>
-            {{foreach from=$module_classes.$modname item=_class}}
-            <tr>
-              <td>{{$_class}}</td>
-              <td>{{tr}}{{$_class}}{{/tr}}</td>
-            </tr>
-            {{/foreach}}
+            {{if isset($module_classes.$modname|smarty:nodefaults)}}
+              {{foreach from=$module_classes.$modname item=_class}}
+                <tr>
+                  <td>{{$_class}}</td>
+                  <td>{{tr}}{{$_class}}{{/tr}}</td>
+                </tr>
+              {{/foreach}}
+            {{else}}
+              <tr>
+                <td class="empty" colspan="2">{{tr}}CMbObject.none{{/tr}}</td>
+              </tr>
+            {{/if}}
           </table>
           <strong>{{tr}}module-{{$modname}}-court{{/tr}}</strong>
           <div class="compact">{{tr}}module-{{$modname}}-long{{/tr}}</div>

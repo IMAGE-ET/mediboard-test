@@ -89,6 +89,7 @@ $locales['CMbFieldSpec.typeEnum.radio'] = 'Boutons radio';
 $locales['CMbFieldSpec.typeEnum.select'] = 'Liste de choix';
 $locales['CMbFieldSpec.unlink'] = 'Liaison faible';
 $locales['CMbFieldSpec.vertical'] = 'Vertical';
+$locales["CMbObject.none"] = 'Aucun objet';
 $locales['CMbObject-back-files'] = 'Fichiers';
 $locales['CMbObject-back-notes'] = 'Notes utilisateurs';
 $locales['CMbObject-msg-cascade-issues'] = 'problèmes en cascade pour';
