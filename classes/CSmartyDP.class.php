@@ -465,10 +465,12 @@ function smarty_function_mb_ditto($params, &$smarty) {
  * Fonction that return the value of an object field
  */
 function smarty_function_mb_value($params, &$smarty) {
-  if (empty($params["field"])) return $params["object"]->_view;
-  $field = $params["field"];
-  $object = $params["object"];
-  $spec = $params["object"]->_specs[$field];
+  $object = CMbArray::extract($params, "object",  null, true);
+  $field  = CMbArray::extract($params, "field");
+  
+  if (!$field) {
+  	return "<span onmouseover=\"ObjectTooltip.createEx(this, '$object->_guid')\">$object->_view</span>";
+  }  
   
   if (null !== $value = CMbArray::extract($params, "value")) {
     
@@ -479,6 +481,8 @@ function smarty_function_mb_value($params, &$smarty) {
       unset($object->_fwd[$field]);  
     }
   }
+
+  $spec = $object->_specs[$field];
   return $spec->getValue($object, $smarty, $params);
 }
 
