@@ -41,8 +41,8 @@ class CTemplateManager {
       $this->addProperty("Courrier - cp ville destinataire", "[Courrier - cp ville destinataire]");
       $this->addProperty("Courrier - copie à - simple"     , "[Courrier - copie à - simple]");
       $this->addProperty("Courrier - copie à - simple (multiligne)", "[Courrier - copie à - simple (multiligne)]");
-      $this->addProperty("Courrier - copie à - complet", "[Courrier - copie à - complet");
-      $this->addProperty("Courrier - copie à - complet (multiligne)", "[Courrier - copie à - simple (complet)]");
+      $this->addProperty("Courrier - copie à - complet", "[Courrier - copie à - complet]");
+      $this->addProperty("Courrier - copie à - complet (multiligne)", "[Courrier - copie à - complet (multiligne)]");
     }
     
     $now = mbDateTime();
