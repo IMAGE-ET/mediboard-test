@@ -111,17 +111,19 @@ Main.add(function () {
 
       <script>
         Main.add(function() {
-          window["planning-{{$planning->guid}}"].onMenuClick = function(event, plage, elem){
-            if(event == "list"){
+          window['planning-{{$planning->guid}}'].onMenuClick = function(event, plage, elem){
+            if (event == 'list') {
               showConsultations(elem,plage);
             }
-            if(event == "edit"){
+            
+            if (event == 'edit') {
               PlageConsultation.edit(plage);
             }
-            if(event == "clock"){
-              var url=new Url("dPcabinet", "edit_planning");
-              url.addParam("consultation_id", 0);
-              url.addParam("plageconsult_id", plage);
+            
+            if (event == 'clock') {
+              var url=new Url('cabinet', 'edit_planning', 'tab');
+              url.addParam('consultation_id', 0);
+              url.addParam('plageconsult_id', plage);
               url.redirectOpener();
             }
           }
