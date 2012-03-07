@@ -49,11 +49,6 @@ class CEAISejour extends CEAIMbObject {
   }
   
   static function storeNDA(CIdSante400 $NDA, CSejour $sejour, CInteropSender $sender) {
-    /*$NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, null, $sejour->_id);
-    if ($NDA->_id) {
-      return;
-    }*/
-    
     /* Gestion du numéroteur */
     $group = new CGroups();
     $group->load($sender->group_id);
@@ -73,6 +68,11 @@ class CEAISejour extends CEAIMbObject {
       return $NDA->store();  
     }
     else {
+      $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, null, $sejour->_id);
+      if ($NDA->_id) {
+        return;
+      }
+    
       // Pas de NDA passé
       if (!$NDA->id400) {
         if (!CIncrementer::generateIdex($sejour, $sender->_tag_sejour, $sender->group_id)) {

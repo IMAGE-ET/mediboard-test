@@ -20,6 +20,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   var $_ref_exchange_ihe = null;
   var $_ref_sender       = null;
   var $_ref_receiver     = null;
+  var $_is_i18n          = null;
   
   static function getEventType($event_code = null) {
     switch ($event_code) {
@@ -119,6 +120,16 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     return $xpath->queryTextNode($nodeName, $contextNode);
   }
   
+	function getSegment($name, $data, $object) {
+		if (!array_key_exists($name, $data) || $data[$name] === NULL) {
+			return;
+		}
+		
+		$function = "get$name";
+		
+		$this->$function($data[$name], $object);
+	}
+	
   function getMSHEvenementXML() {
     $data = array();
     
@@ -142,10 +153,15 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
 		
   }
   
-  function getANIdentifier(DOMNode $node, &$data) {    
-    if ($this->queryTextNode("CX.5", $node) == "AN") {
+  function getANIdentifier(DOMNode $node, &$data) {
+  	if (CHL7v2Message::$handle_mode == "simple") {
       $data["AN"] = $this->queryTextNode("CX.1", $node);
-    }
+    } 
+		else {
+			if ($this->queryTextNode("CX.5", $node) == "AN") {
+	      $data["AN"] = $this->queryTextNode("CX.1", $node);
+	    }
+		}
   }
   
   function getRIIdentifiers(DOMNode $node, &$data, CInteropSender $sender) {
@@ -205,8 +221,16 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     $data = array();
     
     // RI - Resource identifier 
+    // AN - On peut également retrouver le numéro de dossier dans ce champ
     if ($PV1_19 = $this->queryNode("PV1.19", $contextNode)) {
-      $this->getRIIdentifiers($PV1_19, $data, $sender);
+    	switch ($sender->_configs["get_NDA"]) {
+				case 'PV1_19':
+					$this->getANIdentifier($PV1_19, $data);
+					break;
+				default:
+					$this->getRIIdentifiers($PV1_19, $data, $sender);
+					break;
+			}
     }
       
     // PA - Preadmit Number

@@ -22,7 +22,8 @@ class COperatorIHE extends CEAIOperator {
 
     // Récupération des informations du message - CHL7v2MessageXML
     $dom_evt = $evt->handle($msg);
-
+    $dom_evt->_is_i18n = $evt->_is_i18n;
+    
     try {
       // Création de l'échange
       $exchange_ihe = new CExchangeIHE();
@@ -95,19 +96,10 @@ class COperatorIHE extends CEAIOperator {
       $dom_evt->_ref_exchange_ihe = $exchange_ihe;
       $ack->_ref_exchange_ihe     = $exchange_ihe;
 
-      // Message événement patient
-      if ($evt instanceof CHL7EventADT) {
-        $msgAck = self::eventPerson($data, $exchange_ihe, $dom_evt, $ack);
-				CHL7v2Message::resetBuildMode(); 
-				return $msgAck;
-      }
+      // Message PAM / DEC 
+      $msgAck = self::handleEvent($data, $exchange_ihe, $dom_evt, $ack);
       
-      // Message événement observation
-      if ($evt instanceof CHL7EventDEC) {
-        $msgAck = self::eventObservation($data, $exchange_ihe, $dom_evt, $ack);
-				CHL7v2Message::resetBuildMode(); 
-				return $msgAck;
-      }
+      CHL7v2Message::resetBuildMode(); 			
     } catch(Exception $e) {
       $exchange_ihe->populateExchange($data_format, $evt);
       $exchange_ihe->loadRefsInteropActor();
@@ -122,29 +114,20 @@ class COperatorIHE extends CEAIOperator {
       $exchange_ihe->populateErrorExchange($ack);
       
 			CHL7v2Message::resetBuildMode(); 
-			
-      return $msgAck;
     }
+
+    return $msgAck;
   }
   
-  static function eventPerson($data = array(), CExchangeIHE $exchange_ihe, CHL7v2MessageXML $dom_evt, CHL7Acknowledgment $ack) {
+  static function handleEvent($data = array(), CExchangeIHE $exchange_ihe, CHL7v2MessageXML $dom_evt, CHL7Acknowledgment $ack) {
     $newPatient = new CPatient();
     $newPatient->_eai_exchange_initiator_id = $exchange_ihe->_id;
     
     $data = array_merge($data, $dom_evt->getContentNodes());
     
     //$exchange_ihe->id_permanent = array_key_exists("PI", $data['personIdentifiers']) ? $data['personIdentifiers']['PI'] : null;
-    
+
     return $dom_evt->handle($ack, $newPatient, $data);
-  }
-  
-  static function eventObservation($data = array(), CExchangeIHE $exchange_ihe, CHL7v2MessageXML $dom_evt, CHL7Acknowledgment $ack) {
-    $patient = new CPatient();
-    $patient->_eai_exchange_initiator_id = $exchange_ihe->_id;
-    
-    $data = array_merge($data, $dom_evt->getContentNodes());
-    
-    return $dom_evt->handle($ack, $patient, $data);
   }
 }
 

@@ -41,11 +41,6 @@ class CEAIPatient extends CEAIMbObject {
   }
   
   static function storeIPP(CIdSante400 $IPP, CPatient $patient, CInteropSender $sender) {
-    /*$IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, null, $patient->_id);
-    if ($IPP->_id) {
-      return;
-    }*/
-    
     /* Gestion du numéroteur */
     $group = new CGroups();
     $group->load($sender->group_id);
@@ -65,6 +60,11 @@ class CEAIPatient extends CEAIMbObject {
       return $IPP->store();  
     }
     else {
+      $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, null, $patient->_id);
+      if ($IPP->_id) {
+        return;
+      }
+      
       // Pas d'IPP passé
       if (!$IPP->id400) {
         if (!CIncrementer::generateIdex($patient, $sender->_tag_patient, $sender->group_id)) {
