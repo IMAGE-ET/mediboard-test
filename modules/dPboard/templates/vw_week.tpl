@@ -49,6 +49,18 @@ Main.add(function () {
 <table class="main">
   <tr>
     <th>
+      <div style="width:120px; float: right;">
+        <table id="weeklyPlanning" class="tbl">
+          <tr>
+            <td style="background-color:#9F9;">&nbsp;&nbsp;</td>
+            <td>Plage de consultation</td>
+          </tr>
+          <tr>
+            <td style="background-color:#ABE;">&nbsp;&nbsp;</td>
+            <td>Plage opératoire</td>
+          </tr>
+        </table>
+      </div>
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$prec}}" >&lt;&lt;&lt;</a>
       Semaine du {{$debut|date_format:"%A %d %b %Y"}} au {{$fin|date_format:"%A %d %b %Y"}}
       <form name="changeDate" action="?m={{$m}}" method="get">
@@ -91,16 +103,3 @@ Main.add(function () {
    </script>
    
 </table>
-<div style="width:100px;">
-  Légende:
-  <table id="weeklyPlanning" class="tbl">
-    <tr>
-      <td style="background-color:#9F9;">&nbsp;&nbsp;</td>
-      <td>Plage de consultation</td>
-    </tr>
-    <tr>
-      <td style="background-color:#ABE;">&nbsp;&nbsp;</td>
-      <td>Plage opératoire</td>
-    </tr>
-  </table>
-</div>
