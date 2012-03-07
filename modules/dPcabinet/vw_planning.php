@@ -127,7 +127,7 @@ $debut = mbDate("-1 week", $debut);
 $debut = mbDate("next monday", $debut);
 
 //Instanciation du planning
-$planning = new CPlanningWeek($debut, $debut, $fin, $nbjours, false, null, null, true);
+$planning = new CPlanningWeek($debut, $debut, $fin, $nbjours, false, 450, null, true);
 if($user->load($chirSel)){
   $planning->title = $user->load($chirSel)->_view;
 }
