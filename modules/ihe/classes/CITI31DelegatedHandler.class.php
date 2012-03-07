@@ -56,11 +56,16 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         if ($sejour->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
           return;
         }
-
+				
         if (!$sejour->_NDA) {
-          $NDA = new CIdSante400();
-          $NDA->loadLatestFor($sejour, $receiver->_tag_sejour);
-          $sejour->_NDA = $NDA->id400;
+        	// Génération du NDA dans le cas de la création, ce dernier n'était pas créé
+					if ($msg = $sejour->generateNDA()) {
+			      CAppUI::setMsg($msg, UI_MSG_ERROR);
+			    }
+					
+					$NDA = new CIdSante400();
+        	$NDA->loadLatestFor($sejour, $receiver->_tag_sejour);
+					$sejour->_NDA = $NDA->id400;
         }
         
         $current_affectation = null;

@@ -37,7 +37,9 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
       $mbObject->_receiver = $receiver;
     }
     
-    switch ($mbObject->loadLastLog()->type) {
+		$patient = $mbObject;
+		
+    switch ($patient->loadLastLog()->type) {
       case "create":
         $code = "A28";
         break;
@@ -49,24 +51,29 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
         break;
     }
     
-    if ($mbObject->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
+    if ($patient->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
       return;
     }
-   
-    if (!$mbObject->_IPP) {
-      $IPP = new CIdSante400();
-      $IPP->loadLatestFor($mbObject, $receiver->_tag_patient);
-      $mbObject->_IPP = $IPP->id400;
+   	
+    if (!$patient->_IPP) {
+    	// Génération de l'IPP dans le cas de la création, ce dernier n'était pas créé
+			if ($msg = $patient->generateIPP()) {
+	      CAppUI::setMsg($msg, UI_MSG_ERROR);
+	    }
+			
+			$IPP = new CIdSante400();
+    	$IPP->loadLatestFor($patient, $receiver->_tag_patient);
+			$patient->_IPP = $IPP->id400;
     }
 
     // Envoi pas les patients qui n'ont pas d'IPP
-    if (!$receiver->_configs["send_all_patients"] && !$mbObject->_IPP) {
+    if (!$receiver->_configs["send_all_patients"] && !$patient->_IPP) {
       return;
     }
     
-    $this->sendITI($this->profil, $this->transaction, $code, $mbObject);
+    $this->sendITI($this->profil, $this->transaction, $code, $patient);
     
-    $mbObject->_IPP = null;
+    $patient->_IPP = null;
   }
 
   function onBeforeMerge(CMbObject $mbObject) {
