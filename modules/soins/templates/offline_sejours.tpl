@@ -41,12 +41,15 @@
 
 <table class="tbl table_print">
   <tr>
-    <th class="title" colspan="6">
+    <th class="title" colspan="7">
       <button class="print not-printable" style="float: right;" onclick="window.print();">{{tr}}Print{{/tr}}</button>
       ({{$sejours|@count}}) Séjours du {{$date|date_format:$conf.longdate}} {{$hour|date_format:$conf.time}} - Service {{$service}}
     </th>
   </tr>
   <tr>
+    <th>
+      {{tr}}CAffectation-lit_id{{/tr}}
+    </th>
     <th>
       {{tr}}CSejour-patient_id{{/tr}}
     </th>
@@ -67,6 +70,13 @@
   </tr>
   {{foreach from=$sejours item=_sejour}}
     <tr>
+      <td>
+        {{if $conf.soins.show_only_lit_bilan}}
+          {{$_sejour->_ref_curr_affectation->_ref_lit->_shortview}}
+        {{else}}
+          {{$_sejour->_ref_curr_affectation->_ref_lit}}
+        {{/if}}
+      </td>
       <td>
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_ref_patient->_guid}}')">
           {{$_sejour->_ref_patient->_view}}

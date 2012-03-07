@@ -34,6 +34,7 @@ foreach($service->_ref_chambres as &$_chambre){
       $sejour->checkDaysRelative($date);
       $sejour->loadNDA();
       $sejour->loadRefsNotes();
+      $sejour->loadRefCurrAffectation()->loadRefLit();
       
       // Patient
       $patient = $sejour->loadRefPatient();
