@@ -1082,6 +1082,8 @@ class CPatient extends CMbObject {
       $leftjoin["functions_mediboard"] = "users_mediboard.function_id = functions_mediboard.function_id";
       return $this->_ref_consultations = $consultation->loadList($where, $order, null, null, $leftjoin);
     }
+    
+    return $this->_ref_consultations = array();
   }
   
   function loadRefDossierMedical() {
