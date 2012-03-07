@@ -136,36 +136,38 @@
     {{if $_suivi->_ref_consult_anesth->_id}}
       {{assign var=consult_anesth value=$_suivi->_ref_consult_anesth}}
       {{if $consult_anesth->ASA}}
-        {{tr}}CConsultAnesth.ASA.{{$consult_anesth->ASA}}{{/tr}} -
+        <u>ASA :</u> {{tr}}CConsultAnesth.ASA.{{$consult_anesth->ASA}}{{/tr}} <br />
       {{/if}}
       {{if $consult_anesth->position}}
-        {{$consult_anesth->position}} -
+        <u>Position :</u> {{mb_value object=$consult_anesth field=position}} <br />
       {{/if}}
       {{if $consult_anesth->prepa_preop}}
-        {{$consult_anesth->prepa_preop}} -
+        <u>{{mb_label class=CConsultAnesth field=prepa_preop}} :</u> {{mb_value object=$consult_anesth field=prepa_preop}} <br />
       {{/if}}
-      {{if $consult_anesth|@count}}
-        {{foreach from=$consult_anesth->_ref_techniques item=_technique}}
-          {{$_technique->technique}} -
+      {{if $_suivi->rques}}
+        <u>Remarques :</u> {{mb_value object=$_suivi field=rques}} <br />
+      {{/if}}
+      {{if $consult_anesth->_ref_techniques|@count}}
+        <u>Techniques :</u>
+        {{foreach from=$consult_anesth->_ref_techniques item=_technique name=foreach_techniques}}
+          {{mb_value object=$_technique field=technique}} {{if !$smarty.foreach.foreach_techniques.last}}-{{/if}}
         {{/foreach}}
       {{/if}}
-      {{$_suivi->rques}}
     {{else}}
-      {{$_suivi->conclusion}} <br />
       {{if $_suivi->rques}}
-        {{$_suivi->rques}} <br />
+        <u>Remarques :</u> {{mb_value object=$_suivi field=rques}} <br />
       {{/if}}
       {{if $_suivi->examen}}
-        {{$_suivi->examen}} <br />
+        <u>Examen clinique :</u> {{mb_value object=$_suivi field=examen}} <br />
       {{/if}}
       {{if $_suivi->traitement}}
-        {{$_suivi->traitement}} <br />
+        <u>Traitement :</u> {{mb_value object=$_suivi field=traitement}} <br />
       {{/if}}
       {{if $conf.dPcabinet.CConsultation.show_histoire_maladie && $_suivi->histoire_maladie}}
-        {{$_suivi->histoire_maladie}} <br />
+        <u>Histoire de la maladie :</u> {{mb_value object=$_suivi field=histoire_maladie}} <br />
       {{/if}}
       {{if $conf.dPcabinet.CConsultation.show_conclusion && $_suivi->conclusion}}
-        {{$_suivi->conclusion}} <br />
+        <u>Au total :</u> {{mb_value object=$_suivi field=conclusion}}
       {{/if}}
     {{/if}}
   </td>

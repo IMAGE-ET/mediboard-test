@@ -29,7 +29,7 @@
                   {{if $_antecedent->date}} 
                     {{mb_value object=$_antecedent field="date"}} :
                   {{/if}}
-                  {{$_antecedent->rques}}
+                  {{mb_value object=$_antecedent field=rques}}
                 </li>
               {{/foreach}}
             </ul>
@@ -50,7 +50,7 @@
             {{foreach from=$object->_ref_traitements item=_traitement}}
               <li>
                 {{mb_include module=system template=inc_interval_date_progressive object=$_traitement from_field=debut to_field=fin}}:
-                {{$_traitement->traitement}}
+                {{mb_value object=$_traitement field=traitement}}
               </li>
             {{/foreach}}
           {{if $object->_ref_traitements|@count}}</ul>{{/if}}
