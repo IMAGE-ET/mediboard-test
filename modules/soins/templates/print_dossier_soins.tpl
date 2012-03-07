@@ -153,12 +153,12 @@
         onclick="resetPrintable('{{$sejour->_id}}'); Control.Modal.close();">{{tr}}Close{{/tr}}</button>
       {{/if}}      
       {{$object->_view}}
-      {{mb_include module=dPpatients template=inc_vw_ipp ipp=$object->_IPP}}
+      {{mb_include module=patients template=inc_vw_ipp ipp=$object->_IPP}}
     </th>
   </tr>
 </table>
 
-{{mb_include module=dPpatients template=CPatient_complete no_header=true}}
+{{mb_include module=patients template=CPatient_complete no_header=true}}
 
 {{assign var=object value=$sejour}}
 <table class="tbl print_sejour" style="border: none !important; page-break-after: always;">
@@ -166,7 +166,7 @@
     <tr>
       <th class="title">
         {{$object->_view}}
-        {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+        {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
         <br />
         {{$object->_ref_curr_affectation->_ref_lit}}
       </th>
@@ -174,13 +174,13 @@
   </thead>
   <tr>
     <td>
-      {{mb_include module=dPplanningOp template=CSejour_complete no_header=true}}
+      {{mb_include module=planningOp template=CSejour_complete no_header=true}}
     </td>
   </tr>
   {{if $dossier|@count}}
     <tr>
       <td>
-        {{mb_include module=dPprescription template=inc_vw_dossier_cloture}}
+        {{mb_include module=prescription template=inc_vw_dossier_cloture}}
       </td>
     </tr>
   {{/if}}
@@ -206,7 +206,7 @@
     <tr>
       <th class="title">
         {{$sejour->_view}}
-        {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+        {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
       </th>
     </tr>
   </thead>

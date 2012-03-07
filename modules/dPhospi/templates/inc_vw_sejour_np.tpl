@@ -20,7 +20,7 @@
 
   <td style="padding: 1px;" onclick="markAsSelected(this); addSejourIdToSession('{{$curr_sejour->_id}}'); loadViewSejour('{{$curr_sejour->_id}}', {{$curr_sejour->praticien_id}}, {{$curr_sejour->patient_id}}, '{{$date}}'); tab_sejour.setActiveTab('Imeds')">
 	  {{if $isImedsInstalled}}
-      {{mb_include module=dPImeds template=inc_sejour_labo sejour=$curr_sejour link="#"}}
+      {{mb_include module=Imeds template=inc_sejour_labo sejour=$curr_sejour link="#"}}
     {{/if}}
   </td>
   

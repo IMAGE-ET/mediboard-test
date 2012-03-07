@@ -143,7 +143,7 @@ Main.add(function(){
       <td style="padding:1px;">
         <div id="preanesth">
         {{assign var=check_list value=$operation_check_lists.preanesth}}
-        {{mb_include module=dPsalleOp template=inc_edit_check_list 
+        {{mb_include module=salleOp template=inc_edit_check_list 
              check_item_categories=$operation_check_item_categories.preanesth
              personnel=$listValidateurs}}
         </div>
@@ -151,7 +151,7 @@ Main.add(function(){
       <td style="padding:1px;">
         <div id="preop">
         {{assign var=check_list value=$operation_check_lists.preop}}
-        {{mb_include module=dPsalleOp template=inc_edit_check_list 
+        {{mb_include module=salleOp template=inc_edit_check_list 
              check_item_categories=$operation_check_item_categories.preop
              personnel=$listValidateurs}}
         </div>
@@ -159,7 +159,7 @@ Main.add(function(){
       <td style="padding:1px;">
         <div id="postop">
         {{assign var=check_list value=$operation_check_lists.postop}}
-        {{mb_include module=dPsalleOp template=inc_edit_check_list 
+        {{mb_include module=salleOp template=inc_edit_check_list 
              check_item_categories=$operation_check_item_categories.postop
              personnel=$listValidateurs}}
         </div>
@@ -170,7 +170,7 @@ Main.add(function(){
       <td style="padding:0;" colspan="2">
         <div id="preendoscopie">
         {{assign var=check_list value=$operation_check_lists.preendoscopie}}
-        {{mb_include module=dPsalleOp template=inc_edit_check_list 
+        {{mb_include module=salleOp template=inc_edit_check_list 
              check_item_categories=$operation_check_item_categories.preendoscopie
              personnel=$listValidateurs}}
         </div>
@@ -178,7 +178,7 @@ Main.add(function(){
       <td style="padding:0;">
         <div id="postendoscopie">
         {{assign var=check_list value=$operation_check_lists.postendoscopie}}
-        {{mb_include module=dPsalleOp template=inc_edit_check_list 
+        {{mb_include module=salleOp template=inc_edit_check_list 
              check_item_categories=$operation_check_item_categories.postendoscopie
              personnel=$listValidateurs}}
         </div>
@@ -189,7 +189,7 @@ Main.add(function(){
       <td style="padding:0;" colspan="2">
         <div id="preendoscopie_bronchique">
         {{assign var=check_list value=$operation_check_lists.preendoscopie_bronchique}}
-        {{mb_include module=dPsalleOp template=inc_edit_check_list 
+        {{mb_include module=salleOp template=inc_edit_check_list 
              check_item_categories=$operation_check_item_categories.preendoscopie_bronchique
              personnel=$listValidateurs}}
         </div>
@@ -197,7 +197,7 @@ Main.add(function(){
       <td style="padding:0;">
         <div id="postendoscopie_bronchique">
         {{assign var=check_list value=$operation_check_lists.postendoscopie_bronchique}}
-        {{mb_include module=dPsalleOp template=inc_edit_check_list 
+        {{mb_include module=salleOp template=inc_edit_check_list 
              check_item_categories=$operation_check_item_categories.postendoscopie_bronchique
              personnel=$listValidateurs}}
         </div>
@@ -208,7 +208,7 @@ Main.add(function(){
       <td style="padding:1px;">
         <div id="preanesth_radio">
         {{assign var=check_list value=$operation_check_lists.preanesth_radio}}
-        {{mb_include module=dPsalleOp template=inc_edit_check_list 
+        {{mb_include module=salleOp template=inc_edit_check_list 
              check_item_categories=$operation_check_item_categories.preanesth_radio
              personnel=$listValidateurs}}
         </div>
@@ -216,7 +216,7 @@ Main.add(function(){
       <td style="padding:1px;">
         <div id="preop_radio">
         {{assign var=check_list value=$operation_check_lists.preop_radio}}
-        {{mb_include module=dPsalleOp template=inc_edit_check_list 
+        {{mb_include module=salleOp template=inc_edit_check_list 
              check_item_categories=$operation_check_item_categories.preop_radio
              personnel=$listValidateurs}}
         </div>
@@ -224,7 +224,7 @@ Main.add(function(){
       <td style="padding:1px;">
         <div id="postop_radio">
         {{assign var=check_list value=$operation_check_lists.postop_radio}}
-        {{mb_include module=dPsalleOp template=inc_edit_check_list 
+        {{mb_include module=salleOp template=inc_edit_check_list 
              check_item_categories=$operation_check_item_categories.postop_radio
              personnel=$listValidateurs}}
         </div>

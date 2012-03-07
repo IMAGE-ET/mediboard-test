@@ -1,4 +1,4 @@
-{{mb_script module=dPhospi script=affectation_uf}}
+{{mb_script module=hospi script=affectation_uf}}
 
 <form name="affect_uf" action="?m={{$m}}" method="post" onsubmit="return AffectationUf.onSubmit(this);" style="text-align:left;">
   <input type="hidden" name="m" value="dPhospi" />

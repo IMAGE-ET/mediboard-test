@@ -3,7 +3,7 @@
 {{assign var="module" value="dPcabinet"}}
 {{assign var="do_subject_aed" value="do_consultation_aed"}}
 
-{{mb_include module=dPsalleOp template=js_codage_ccam}}
+{{mb_include module=salleOp template=js_codage_ccam}}
 
 {{if "dPmedicament"|module_active}}
   {{mb_script module="dPmedicament" script="medicament_selector"}}
@@ -111,13 +111,13 @@ Main.add(function () {
   <div id="ccam" style="display: none;">
     {{assign var="module" value="dPcabinet"}}
     {{assign var="subject" value=$consult}}
-    {{mb_include module=dPsalleOp template=inc_codage_ccam}}
+    {{mb_include module=salleOp template=inc_codage_ccam}}
   </div>
   
   <div id="ngap" style="display: none;">
     <div id="listActesNGAP">
       {{assign var="_object_class" value="CConsultation"}}
-      {{mb_include module=dPcabinet template=inc_codage_ngap}}
+      {{mb_include module=cabinet template=inc_codage_ngap}}
     </div>
   </div>
   

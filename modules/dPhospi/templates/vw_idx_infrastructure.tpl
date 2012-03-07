@@ -29,7 +29,7 @@ function submit_Ajax(form, update_name){
 }
 </script>
 
-{{mb_script module=dPhospi script=affectation_uf}}
+{{mb_script module=hospi script=affectation_uf}}
 
 <ul id="tabs-chambres" class="control_tabs">
   <li><a href="#secteurs">{{tr}}CSecteur{{/tr}}</a></li>

@@ -16,20 +16,20 @@
 <table class="{{$tbl_class}}">
   <tr>
     <th class="title" colspan="4" style="font-size: 16px; cursor: pointer;" onclick="window.print()">
-      Dossier d'urgence de <span style="font-size: 20px">{{$patient->_view}}</span> {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}} <br />
+      Dossier d'urgence de <span style="font-size: 20px">{{$patient->_view}}</span> {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}} <br />
       né(e) le {{mb_value object=$patient field=naissance}} de sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}} <br /> <hr />
-      <span style="font-size: 14px">par le Dr {{$consult->_ref_praticien}} le {{mb_value object=$consult field=_date}} - Dossier {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}</span>
+      <span style="font-size: 14px">par le Dr {{$consult->_ref_praticien}} le {{mb_value object=$consult field=_date}} - Dossier {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}</span>
     </th>
   </tr>
 
-  {{mb_include module=dPcabinet template=print_inc_dossier_medical}}
+  {{mb_include module=cabinet template=print_inc_dossier_medical}}
 </table>
 
 <br />
 <table class="{{$tbl_class}}">
   <tr><th class="title">Constantes médicales</th></tr>
 </table>
-{{mb_include module=dPpatients template=print_constantes}}
+{{mb_include module=patients template=print_constantes}}
 
 <br />
 <table class="{{$tbl_class}}">
@@ -40,7 +40,7 @@
     <td>{{mb_value object=$rpu field="motif"}}</td>
   </tr>
   
-	{{mb_include module=dPcabinet template=print_inc_antecents_traitements}}
+	{{mb_include module=cabinet template=print_inc_antecents_traitements}}
 </table>
 
 {{if !@$offline}}
@@ -86,7 +86,7 @@
 </table>
 
 <br />
-{{mb_include module=dPhospi template=inc_list_transmissions list_transmissions=$sejour->_ref_suivi_medical readonly=true}}
+{{mb_include module=hospi template=inc_list_transmissions list_transmissions=$sejour->_ref_suivi_medical readonly=true}}
 
 <table class="{{$tbl_class}}">
   <tr>
@@ -124,7 +124,7 @@
 </table>
 
 <br />
-{{mb_include module=dPcabinet template=print_actes readonly=true}}
+{{mb_include module=cabinet template=print_actes readonly=true}}
 
 </div>
 

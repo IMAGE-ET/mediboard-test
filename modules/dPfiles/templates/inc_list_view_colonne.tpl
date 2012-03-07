@@ -1,4 +1,4 @@
-{{mb_script module=dPcompteRendu script=modele_selector}}
+{{mb_script module=compteRendu script=modele_selector}}
 {{if $object}}
   {{assign var=object_class value=$object->_class}}
   {{assign var=object_id value=$object->_id}}
@@ -40,7 +40,7 @@ Main.add(function () {
   {{assign var=docCount value=$_cat.items|@count}}
   {{if $docCount || $conf.dPfiles.CFilesCategory.show_empty}}
     <div id="Category-{{$_cat_id}}" style="display: none; clear: both;">
-      {{mb_include module=dPfiles template=inc_list_files_colonne list=$_cat.items}}
+      {{mb_include module=files template=inc_list_files_colonne list=$_cat.items}}
     </div>
   {{/if}}
 {{/foreach}}

@@ -1,6 +1,6 @@
 <!-- $Id$ -->
 
-{{mb_script module=dPpmsi script=PMSI ajax=true}}
+{{mb_script module=pmsi script=PMSI ajax=true}}
 {{mb_default var=confirmCloture value=0}}
 
 <td>

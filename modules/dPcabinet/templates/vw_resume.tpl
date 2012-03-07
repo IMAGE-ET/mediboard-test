@@ -65,7 +65,7 @@ function newExam(sAction, consultation_id) {
   <tr>
     <td>
     <!-- Dossier Médical -->
-      {{mb_include module=dPpatients template=CDossierMedical_complete object=$patient->_ref_dossier_medical}}
+      {{mb_include module=patients template=CDossierMedical_complete object=$patient->_ref_dossier_medical}}
     </td>
   </tr>
   <tr>

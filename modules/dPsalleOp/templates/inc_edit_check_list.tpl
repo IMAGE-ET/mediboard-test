@@ -135,22 +135,22 @@ Main.add(function(){
           {{assign var=default_value value=$curr_type->default_value}}
           
           {{if $default_value == "yes"}}
-            {{mb_include module=dPsalleOp template=inc_check_list_field_yes}}
-            {{mb_include module=dPsalleOp template=inc_check_list_field_no}}
+            {{mb_include module=salleOp template=inc_check_list_field_yes}}
+            {{mb_include module=salleOp template=inc_check_list_field_no}}
           {{else}}
-            {{mb_include module=dPsalleOp template=inc_check_list_field_no}}
-            {{mb_include module=dPsalleOp template=inc_check_list_field_yes}}
+            {{mb_include module=salleOp template=inc_check_list_field_no}}
+            {{mb_include module=salleOp template=inc_check_list_field_yes}}
           {{/if}}
           
           {{if $attr == "notrecommended"}}
             <div>
-              {{mb_include module=dPsalleOp template=inc_check_list_field_notrecommended}}
+              {{mb_include module=salleOp template=inc_check_list_field_notrecommended}}
             </div>
           {{/if}}
           
           {{if $attr == "notapplicable"}}
             <div>
-              {{mb_include module=dPsalleOp template=inc_check_list_field_notapplicable}}
+              {{mb_include module=salleOp template=inc_check_list_field_notapplicable}}
             </div>
           {{/if}}
         </td>

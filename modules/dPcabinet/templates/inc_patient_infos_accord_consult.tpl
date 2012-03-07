@@ -55,13 +55,13 @@ function newConsultation(chir_id, pat_id, consult_urgence_id) {
   
   <tr>
     <td class="text">
-      {{mb_include module=dPcabinet template=inc_patient_infos}}
+      {{mb_include module=cabinet template=inc_patient_infos}}
     </td>
     <td class="text">
-      {{mb_include module=dPcabinet template=inc_patient_medecins}}
+      {{mb_include module=cabinet template=inc_patient_medecins}}
     </td>
     <td class="text">
-      {{mb_include module=dPcabinet template=inc_patient_history}}
+      {{mb_include module=cabinet template=inc_patient_history}}
     </td>
     <td class="button">
       {{if !$app->user_prefs.simpleCabinet}}

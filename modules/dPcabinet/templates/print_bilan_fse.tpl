@@ -1,6 +1,6 @@
 <!-- $Id$ -->
 
-{{mb_include module=dPpatients template=inc_intermax}}
+{{mb_include module=patients template=inc_intermax}}
 
 <table class="main">
   <tr>

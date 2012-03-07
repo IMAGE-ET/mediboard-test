@@ -40,7 +40,7 @@ Main.add(function () {
     </td>
     <td>
       <strong onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
-        {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$_sejour->_NDA}}
+        {{mb_include module=planningOp template=inc_vw_numdos nda=$_sejour->_NDA}}
       </strong>
     </td>
 
@@ -52,7 +52,7 @@ Main.add(function () {
       {{assign var=patient value=$_sejour->_ref_patient}}
       <a href="?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$patient->_id}}&amp;sejour_id={{$_sejour->_id}}">
         <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
-          {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}
+          {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}
           {{$patient}}
         </span>
       </a>

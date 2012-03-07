@@ -14,7 +14,7 @@
   <tr>
     <th class="category {{if $sejour->sortie_reelle}}arretee{{/if}}" colspan="4">
       {{tr}}CSejour-_etat.{{$sejour->_etat}}{{/tr}}
-      {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA _doss_id=$sejour->_id}}
+      {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA _doss_id=$sejour->_id}}
     </th>
   </tr>
   
@@ -28,7 +28,7 @@
   
   <tr>
     <td class="button">
-      {{mb_script module=dPplanningOp script=sejour ajax=true}}
+      {{mb_script module=planningOp script=sejour ajax=true}}
 
       {{if $can->edit}}
 			<button type="button" class="edit" onclick="Sejour.edit('{{$sejour->_id}}');">
@@ -73,5 +73,5 @@
 </table>
 
 <table class="tbl tooltip">
-  {{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$sejour vue=view}}
+  {{mb_include module=cabinet template=inc_list_actes_ccam subject=$sejour vue=view}}
 </table>

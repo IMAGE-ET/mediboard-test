@@ -170,7 +170,7 @@
                   id="sejour_temporel_{{$_sejour->_id}}" data-patient_id="{{$patient->_id}}" data-sejour_id="{{$_sejour->_id}}"
                   onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
                   <span style="float: left; padding-left: 1px; padding-right: 1px;">
-                    {{mb_include module=dPpatients template=inc_vw_photo_identite mode=read patient=$patient size=22}}
+                    {{mb_include module=patients template=inc_vw_photo_identite mode=read patient=$patient size=22}}
                   </span>
                   <div class="wrapper_op">
                     {{if !$readonly}}

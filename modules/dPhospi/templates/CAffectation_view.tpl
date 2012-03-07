@@ -22,7 +22,7 @@
       </th>
     </tr>
       <td rowspan="3">
-        {{mb_include module=dPpatients template=inc_vw_photo_identite mode=read patient=$patient size=50}}
+        {{mb_include module=patients template=inc_vw_photo_identite mode=read patient=$patient size=50}}
       </td>
       <td>
         <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">

@@ -29,7 +29,7 @@ Main.add(function(){
 });
 </script>
 
-{{mb_script module=dPbloc script=edit_planning}}
+{{mb_script module=bloc script=edit_planning}}
 
 <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkPlage()" class="{{$plagesel->_spec}}">
 <input type="hidden" name="dosql" value="do_plagesop_aed" />

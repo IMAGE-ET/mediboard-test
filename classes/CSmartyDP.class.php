@@ -595,18 +595,21 @@ function smarty_function_mb_colonne($params, &$smarty) {
  */
 function smarty_function_mb_script($params, &$smarty) {
   // Path provided
-  $extraPath = "";
   $path = CMbArray::extract($params, "path");
   $ajax = CMbArray::extract($params, "ajax");
   
   // Script name providied
   if ($script = CMbArray::extract($params, "script")) {
-    $module = CMbArray::extract($params, "module");
-    
-    if(CMbArray::extract($params, "mobile")){
-      $extraPath = "mobile/";
-    }
-    $dir = $module ? $extraPath."modules/$module/javascript" : "includes/javascript";
+  	if ($module = CMbArray::extract($params, "module")) {
+      // dP ugly prefix hack
+      $root = CAppUI::conf("root_dir");
+      if (!is_dir("$root/modules/$module") && substr($module, 0, 2) != "dP") {
+        $module = "dP$module";
+      }
+  	}
+
+    $prefix = CMbArray::extract($params, "mobile") ? "mobile/" : "";
+  	$dir = $module ? $prefix . "modules/$module/javascript" : "includes/javascript";
     $path = "$dir/$script.js";
   }
   

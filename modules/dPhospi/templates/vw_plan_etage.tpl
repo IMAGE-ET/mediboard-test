@@ -7,7 +7,7 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
-{{mb_script module=dPhospi script=drag_chambre}}
+{{mb_script module=hospi script=drag_chambre}}
 
 <style type="text/css">
 .chambre{

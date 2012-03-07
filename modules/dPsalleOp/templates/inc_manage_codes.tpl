@@ -77,7 +77,7 @@ changeCodeToDel = function(subject_id, code_ccam, actes_ids){
             <table class="main layout">
               <tr id="export_{{$subject->_class}}_{{$subject->_id}}">
                 {{if !$subject->facture || $m == "dPpmsi" || $can->admin}}
-                  {{mb_include module=dPpmsi template="inc_export_actes_pmsi" object=$subject confirmCloture=1}}
+                  {{mb_include module=pmsi template="inc_export_actes_pmsi" object=$subject confirmCloture=1}}
                 {{else}}
                   <td>
                     <div class="small-warning">Export PMSI impossible</div>

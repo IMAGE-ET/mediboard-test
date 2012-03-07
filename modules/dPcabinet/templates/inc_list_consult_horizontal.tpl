@@ -90,7 +90,7 @@ Main.add( function () {
         <td colspan="{{$nb_creneaux}}">
       {{/if}}
         <table>
-          {{mb_include module=dPcabinet template=inc_detail_consult}}
+          {{mb_include module=cabinet template=inc_detail_consult}}
         </table>
         
       {{if isset($consultations.$next_key|smarty:nodefaults)}}

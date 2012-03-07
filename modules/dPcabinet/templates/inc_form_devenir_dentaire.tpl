@@ -107,5 +107,5 @@
   {{/if}}
 </table>
 <div id="list_actes_dentaires">
-  {{mb_include module=dPcabinet template=inc_list_actes_dentaires}}
+  {{mb_include module=cabinet template=inc_list_actes_dentaires}}
 </div>

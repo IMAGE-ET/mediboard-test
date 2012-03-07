@@ -1,4 +1,4 @@
-{{mb_include module=dPcabinet template=CConsultation_view object=$object->_ref_consultation}}
+{{mb_include module=cabinet template=CConsultation_view object=$object->_ref_consultation}}
 
 <table class="tbl">
   <tr>

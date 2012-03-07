@@ -163,7 +163,7 @@ Reconvocation = {
             <tr>
               <th class="title">{{$_praticien}}</th>
               {{assign var=listPlage value=$listPlages.$prat_id.plages}}
-              {{mb_include module=dPcabinet template=inc_list_consult_horizontal}}
+              {{mb_include module=cabinet template=inc_list_consult_horizontal}}
             </tr>
           {{/foreach}}
            
@@ -184,7 +184,7 @@ Reconvocation = {
                {{assign var="tab" value=""}}
                {{assign var="vue" value="0"}}
                {{assign var="userSel" value=$curr_day.prat}}
-               {{mb_include module=dPcabinet template=inc_list_consult}}
+               {{mb_include module=cabinet template=inc_list_consult}}
              </td>
            {{foreachelse}}
              <td class="empty">{{tr}}CPlageconsult.none{{/tr}}</td>

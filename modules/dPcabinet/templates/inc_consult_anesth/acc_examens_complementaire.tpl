@@ -1,4 +1,4 @@
-{{mb_script module=dPcabinet script=exam_comp}}
+{{mb_script module=cabinet script=exam_comp}}
 {{mb_default var=view_prescription value=1}}
 
 <script type="text/javascript">

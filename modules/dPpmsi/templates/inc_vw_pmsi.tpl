@@ -13,12 +13,12 @@
   <td class="text halfPane" colspan="2">
     <div id="cim-{{$sejour->_id}}">
     {{assign var="sejour" value=$sejour}}
-    {{mb_include module=dPpmsi template=inc_diagnostic}}
+    {{mb_include module=pmsi template=inc_diagnostic}}
     </div>
   </td>
   <td class="text halfPane" colspan="2">
     <div id="GHM-{{$sejour->_id}}">
-      {{mb_include module=dPpmsi template=inc_vw_GHM}}
+      {{mb_include module=pmsi template=inc_vw_GHM}}
     </div>
   </td>
 </tr>
@@ -33,11 +33,11 @@
 <tr>
   <td class="text" colspan="2">
     <div id="cim-list-{{$sejour->_id}}">
-      {{mb_include module=dPpmsi template=inc_list_diags}}
+      {{mb_include module=pmsi template=inc_list_diags}}
     </div>
   </td>
   <td class="text" colspan="2" {{if is_array($patient->_ref_dossier_medical->_ref_traitements)}}rowspan="3"{{/if}}>
-    {{mb_include module=dPpmsi template=inc_list_antecedents}}
+    {{mb_include module=pmsi template=inc_list_antecedents}}
   </td>
 </tr>
 
@@ -45,6 +45,6 @@
   <th class="category" colspan="2">{{tr}}CTraitement.more{{/tr}}</th>
 </tr>
 {{if is_array($patient->_ref_dossier_medical->_ref_traitements)}}
-  {{mb_include module=dPpmsi template=inc_list_traitements}}
+  {{mb_include module=pmsi template=inc_list_traitements}}
 {{/if}}
 </table>

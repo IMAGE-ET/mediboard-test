@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module=dPstock script=product_selector}}
+{{mb_script module=stock script=product_selector}}
 
 <script type="text/javascript">
 function refreshList(){
@@ -175,7 +175,7 @@ function refreshListStocksService(product_id) {
       
       {{if $stock->_id}}
       <div id="list-stock-services">
-        {{mb_include module=dPstock template=inc_list_stock_services services=$list_services}}
+        {{mb_include module=stock template=inc_list_stock_services services=$list_services}}
       </div>
       {{/if}}
     </td>

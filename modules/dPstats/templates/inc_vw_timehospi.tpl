@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module=dPccam script=code_ccam}}
+{{mb_script module=ccam script=code_ccam}}
 
 <table class="tbl">
   <tr>

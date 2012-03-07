@@ -71,7 +71,7 @@ Voir les séjour :
 	      </div>
 	    </td>
 	    <td rowspan="{{$count_sejour}}" style="text-align: center">
-	      <strong>{{mb_include module=dPpatients template=inc_vw_ipp ipp=$_patient->_IPP}}</strong>
+	      <strong>{{mb_include module=patients template=inc_vw_ipp ipp=$_patient->_IPP}}</strong>
 	    </td>
 	    <td rowspan="{{$count_sejour}}">
 	      <big>{{mb_value object=$_patient field=naissance}}</big> 
@@ -103,7 +103,7 @@ Voir les séjour :
           {{tr}}None{{/tr}}
        </div>
     	{{else}}
-      <strong>{{mb_include module=dPplanningOp template=inc_vw_numdos nda=$_sejour->_NDA _doss_id=$_sejour->_id}}</strong>
+      <strong>{{mb_include module=planningOp template=inc_vw_numdos nda=$_sejour->_NDA _doss_id=$_sejour->_id}}</strong>
     	{{/if}}
 		</td>
     

@@ -4,7 +4,7 @@
   <td>{{mb_value object=$_operation->_ref_patient}}</td>
   <td>{{mb_value object=$_operation->_ref_salle}}</td>
   <td class="text">
-    {{mb_include module=dPplanningOp template=inc_vw_operation}}
+    {{mb_include module=planningOp template=inc_vw_operation}}
     <br />
     {{if $is_alerte}}
     {{$_alerte->comments|nl2br}}

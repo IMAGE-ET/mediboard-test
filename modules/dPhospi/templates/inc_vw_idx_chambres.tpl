@@ -67,7 +67,7 @@
     </td>
   
     <td class="halfPane" id="infrastructure_chambre">
-      {{mb_include module=dPhospi template=inc_vw_chambre}}
+      {{mb_include module=hospi template=inc_vw_chambre}}
     </td>
   </tr>
 </table>

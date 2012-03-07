@@ -31,7 +31,7 @@
 {{mb_script module="dPpatients" script="patient"}}
 {{assign var="do_subject_aed" value="do_sejour_aed"}}
 {{assign var="module" value="dPhospi"}}
-{{mb_include module=dPsalleOp template=js_codage_ccam}}
+{{mb_include module=salleOp template=js_codage_ccam}}
 {{if $conf.dPhospi.CLit.alt_icons_sortants}}
   {{assign var=suffixe_icons value="2"}}
 {{else}}
@@ -499,7 +499,7 @@ printDossierComplet = function(){
 
                 <td style="padding: 1px;" onclick="markAsSelected(this); addSejourIdToSession('{{$sejour->_id}}'); loadViewSejour('{{$sejour->_id}}', {{$sejour->praticien_id}}, {{$sejour->patient_id}}, '{{$date}}'); tab_sejour.setActiveTab('Imeds')">
                   {{if $isImedsInstalled}}
-                    {{mb_include module=dPImeds template=inc_sejour_labo link="#"}}
+                    {{mb_include module=Imeds template=inc_sejour_labo link="#"}}
                   {{/if}}
                 </td>
                 

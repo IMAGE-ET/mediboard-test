@@ -55,7 +55,7 @@ var Patient = {
   
   <th><label for="naissance" title="Date de naissance">Date de naissance</label></th>
   <td>
-    {{mb_include module=dPpatients template=inc_select_date date=$datePat tabindex=4}}
+    {{mb_include module=patients template=inc_select_date date=$datePat tabindex=4}}
   </td>
   <td><button class="search" type="submit">Rechercher</button></td>
 </tr>

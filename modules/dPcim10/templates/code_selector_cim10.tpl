@@ -46,5 +46,5 @@
   </table>
 </form>
 <div id="code_area" style="height: 60%; text-align: left;">
-  {{mb_include module=dPcim10 template=inc_code_selector_cim10}}
+  {{mb_include module=cim10 template=inc_code_selector_cim10}}
 </div>

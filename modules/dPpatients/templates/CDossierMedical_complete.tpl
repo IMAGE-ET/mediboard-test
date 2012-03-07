@@ -59,7 +59,7 @@
 				{{if $object->_ref_prescription}}
 	        {{assign var=prescription value=$object->_ref_prescription}}
 	        {{if $object->_ref_prescription->_id && $prescription->_ref_prescription_lines|@count}}
-	          {{mb_script module=dPprescription script=prescription ajax=true}}
+	          {{mb_script module=prescription script=prescription ajax=true}}
 	          {{if (is_array($object->_ref_traitements) && $object->_ref_traitements|@count)}}
 	            <hr style="width: 50%" />
 	          {{/if}}

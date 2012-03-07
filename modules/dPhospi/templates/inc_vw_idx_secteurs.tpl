@@ -38,7 +38,7 @@
   </td> 
 
   <td class="halfPane" id="infrastructure_secteur">
-    {{mb_include module=dPhospi template=inc_vw_secteur}}
+    {{mb_include module=hospi template=inc_vw_secteur}}
   </td>
 </tr>
 

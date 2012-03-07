@@ -46,7 +46,7 @@
       </label>
     </th>
     <td colspan="2">
-      {{mb_include module=dPpatients template=inc_select_date date="--" tabindex=7}}
+      {{mb_include module=patients template=inc_select_date date="--" tabindex=7}}
     </td>
   </tr>
   

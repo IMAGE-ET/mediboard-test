@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module=dPstock script=order_manager}}
+{{mb_script module=stock script=order_manager}}
 
 <script type="text/javascript">
 Main.add(function () {
@@ -105,7 +105,7 @@ function showProductDetails(product_id) {
     </td>
 
     <td class="halfPane" id="orders-list">
-      {{mb_include module=dPstock template=inc_orders_tabs}}
+      {{mb_include module=stock template=inc_orders_tabs}}
     </td>
   </tr>
   

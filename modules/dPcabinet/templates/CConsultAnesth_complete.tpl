@@ -351,7 +351,7 @@ newExam = function(sAction, consultation_id) {
 </table>
 
 <table class="tbl">
-	{{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$object->_ref_consultation vue=complete}}
+	{{mb_include module=cabinet template=inc_list_actes_ccam subject=$object->_ref_consultation vue=complete}}
 </table>
   
 <!-- Dossier Médical -->

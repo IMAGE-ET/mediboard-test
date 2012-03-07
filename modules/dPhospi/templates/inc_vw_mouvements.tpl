@@ -218,7 +218,7 @@
                         {{/if}}
                         {{if $_sejour->_id && $mode_vue_tempo == "classique"}}
                           <span style="float: left; padding-right: 1px;">
-                            {{mb_include module=dPpatients template=inc_vw_photo_identite mode=read patient=$_patient size=22}}
+                            {{mb_include module=patients template=inc_vw_photo_identite mode=read patient=$_patient size=22}}
                           </span>
                         {{/if}}
                         

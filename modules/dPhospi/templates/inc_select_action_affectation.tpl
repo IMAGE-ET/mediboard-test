@@ -16,4 +16,4 @@
   {{/if}}
 </table>
 
-{{mb_include module=dPhospi template=inc_other_actions}}
+{{mb_include module=hospi template=inc_other_actions}}

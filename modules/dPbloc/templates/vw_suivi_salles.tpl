@@ -66,7 +66,7 @@ function showLegend() {
           <th class="title">{{$_salle->nom}}</th>
         </tr>
       </table>
-      {{mb_include module=dPsalleOp template=inc_details_plages salle=$_salle}}
+      {{mb_include module=salleOp template=inc_details_plages salle=$_salle}}
     </td>
     {{foreachelse}}
     <td class="empty">{{tr}}CSalle.none{{/tr}}</td>

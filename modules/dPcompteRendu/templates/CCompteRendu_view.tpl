@@ -1,6 +1,6 @@
-{{mb_script module=dPcompteRendu script=document ajax=1}}
+{{mb_script module=compteRendu script=document ajax=1}}
 
-{{mb_script module=dPcompteRendu script=document}}{{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+{{mb_script module=compteRendu script=document}}{{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 {{assign var="document" value=$object}}
 {{if !$document->object_id}}
 <table class="tbl">

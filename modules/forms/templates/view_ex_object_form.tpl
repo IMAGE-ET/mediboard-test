@@ -98,7 +98,7 @@ Main.add(function(){
         {{$ex_object->_ref_reference_object_2}} 
       
         {{if $ex_object->_ref_reference_object_2 instanceof CPatient}}
-          {{mb_include module=dPpatients template=inc_vw_ipp ipp=$ex_object->_ref_reference_object_2->_IPP}}
+          {{mb_include module=patients template=inc_vw_ipp ipp=$ex_object->_ref_reference_object_2->_IPP}}
         {{/if}}
       </span>
     {{else}}
@@ -107,7 +107,7 @@ Main.add(function(){
         <span style="color: #006600;" 
              onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}');">
           {{$_patient}}
-          {{mb_include module=dPpatients template=inc_vw_ipp ipp=$_patient->_IPP}}
+          {{mb_include module=patients template=inc_vw_ipp ipp=$_patient->_IPP}}
         </span>
       {{/if}}
     {{/if}}
@@ -314,7 +314,7 @@ function switchMode(){
             <span style="color: #006600;">
               {{$ex_object->_ref_reference_object_2}}
               {{if $ex_object->_ref_reference_object_2 instanceof CPatient}}
-                {{mb_include module=dPpatients template=inc_vw_ipp ipp=$ex_object->_ref_reference_object_2->_IPP}}
+                {{mb_include module=patients template=inc_vw_ipp ipp=$ex_object->_ref_reference_object_2->_IPP}}
               {{/if}}
             </span>
           {{else}}
@@ -322,7 +322,7 @@ function switchMode(){
               {{assign var=_patient value=$ex_object->_rel_patient}}
               <span style="color: #006600;">
                 {{$_patient}}
-                {{mb_include module=dPpatients template=inc_vw_ipp ipp=$_patient->_IPP}}
+                {{mb_include module=patients template=inc_vw_ipp ipp=$_patient->_IPP}}
               </span>
             {{/if}}
           {{/if}}

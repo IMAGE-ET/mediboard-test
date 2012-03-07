@@ -206,7 +206,7 @@ function changePageDossierMed(page) {
             </tr>
            {{foreach from=$dossiersMed item=_dossier}}
              {{assign var="patient" value=$_dossier->_ref_object}}
-             {{mb_include module=dPpatients template=inc_list_dossier_clinique}}
+             {{mb_include module=patients template=inc_list_dossier_clinique}}
             {{/foreach}} 
           </table>
         </form>
@@ -230,7 +230,7 @@ function changePageDossierMed(page) {
             </tr>
            {{foreach from=$traitements item=_traitement}}
              {{assign var="patient" value=$_traitement->_ref_dossier_medical->_ref_object}}
-             {{mb_include module=dPpatients template=inc_list_dossier_clinique}}
+             {{mb_include module=patients template=inc_list_dossier_clinique}}
             {{/foreach}} 
           </table>
         </form>
@@ -255,7 +255,7 @@ function changePageDossierMed(page) {
             </tr>
            {{foreach from=$antecedents item=_antecedent}}
              {{assign var="patient" value=$curr_antecedent->_ref_dossier_medical->_ref_object}}
-             {{mb_include module=dPpatients template=inc_list_dossier_clinique}}
+             {{mb_include module=patients template=inc_list_dossier_clinique}}
             {{/foreach}} 
           </table>
         </form>
@@ -279,7 +279,7 @@ function changePageDossierMed(page) {
             </tr>
            {{foreach from=$consultations item=_consultation}}
              {{assign var=patient value=$_consultation->_ref_patient}}
-             {{mb_include module=dPpatients template=inc_list_dossier_clinique}}
+             {{mb_include module=patients template=inc_list_dossier_clinique}}
             {{/foreach}} 
           </table>
         </form>
@@ -304,7 +304,7 @@ function changePageDossierMed(page) {
             </tr>
            {{foreach from=$interventions item=_intervention}}
              {{assign var=patient value=$_intervention->_ref_sejour->_ref_patient}}
-             {{mb_include module=dPpatients template=inc_list_dossier_clinique}}
+             {{mb_include module=patients template=inc_list_dossier_clinique}}
             {{/foreach}} 
           </table>
         </form>
@@ -329,7 +329,7 @@ function changePageDossierMed(page) {
             </tr>
            {{foreach from=$sejours item=_sejour}}
              {{assign var=patient value=$_sejour->_ref_patient}}
-             {{mb_include module=dPpatients template=inc_list_dossier_clinique}}
+             {{mb_include module=patients template=inc_list_dossier_clinique}}
             {{/foreach}} 
           </table>
         </form>

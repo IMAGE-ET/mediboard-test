@@ -60,6 +60,6 @@
     </th>
   </tr>
   {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}
-    {{mb_include module=dPhospi template=inc_affectations_lits}}
+    {{mb_include module=hospi template=inc_affectations_lits}}
   {{/foreach}}
 </table>

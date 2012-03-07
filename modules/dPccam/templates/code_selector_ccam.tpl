@@ -28,5 +28,5 @@
   </table>
 </form>
 <div id="code_area" style="height: 60%; text-align: left;">
-  {{mb_include module=dPccam template=inc_code_selector_ccam}}
+  {{mb_include module=ccam template=inc_code_selector_ccam}}
 </div>

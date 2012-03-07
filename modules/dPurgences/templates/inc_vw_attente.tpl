@@ -24,11 +24,11 @@
 	      Modifier l'heure
 	    </button>
 			{{if $isImedsInstalled && ($debut == "bio_depart")}}
-			  {{mb_include module=dPImeds template=inc_sejour_labo sejour=$_sejour link="$rpu_link#Imeds"}}
+			  {{mb_include module=Imeds template=inc_sejour_labo sejour=$_sejour link="$rpu_link#Imeds"}}
 		  {{/if}}
 		</form>
 		{{/if}}
 </td>
 <td id="{{$fin}}-{{$rpu->_id}}" {{if $_sejour->sortie_reelle}}class="opacity-60"{{/if}}>
-  {{mb_include module=dPurgences template=inc_vw_fin_attente}}
+  {{mb_include module=urgences template=inc_vw_fin_attente}}
 </td>

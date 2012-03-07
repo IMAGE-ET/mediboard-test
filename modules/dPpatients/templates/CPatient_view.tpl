@@ -10,7 +10,7 @@
     </th>
   </tr>
   <tr>
-    <th>Identité {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}</th>
+    <th>Identité {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}</th>
     <th>Coordonnées</th>
   </tr>
   <tr>

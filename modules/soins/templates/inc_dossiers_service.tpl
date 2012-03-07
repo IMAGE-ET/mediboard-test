@@ -9,7 +9,7 @@
   <td>{{mb_value object=$_sejour field="type"}}</td>
   <td>
     {{foreach from=$_sejour->_ref_operations item=_operation}}
-      {{mb_include module=dPplanningOp template=inc_vw_operation}}
+      {{mb_include module=planningOp template=inc_vw_operation}}
     {{/foreach}}
   </td>
 </tr>

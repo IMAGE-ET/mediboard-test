@@ -18,7 +18,7 @@
 {{assign var="consult_anesth" value=$consult->_ref_consult_anesth}}  
 {{assign var="operation" value=$consult_anesth->_ref_operation}}
   
-{{mb_include module=dPcabinet template=inc_header_fiche_anesth}}
+{{mb_include module=cabinet template=inc_header_fiche_anesth}}
 
 <table class="{{$tbl_class}}" style="page-break-after: always;">
   <tr>
@@ -366,7 +366,7 @@
   </tr>
 </table>
 
-{{mb_include module=dPcabinet template=inc_header_fiche_anesth}}
+{{mb_include module=cabinet template=inc_header_fiche_anesth}}
 
 <table class="{{$tbl_class}}">
   <tr>

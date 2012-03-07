@@ -1,6 +1,6 @@
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 {{assign var=choice_factory value=$app->user_prefs.choice_factory}}
-{{mb_script module=dPcompteRendu script=thumb}}
+{{mb_script module=compteRendu script=thumb}}
 
 <script type="text/javascript">
 window.same_print = {{$conf.dPcompteRendu.CCompteRendu.same_print}};
@@ -445,7 +445,7 @@ Main.add(function(){
   <tr>
     <td colspan="2">
       <div id="reloadzones">
-        {{mb_include module=dPcompteRendu template=inc_zones_fields}}
+        {{mb_include module=compteRendu template=inc_zones_fields}}
       </div>
     </td>
   </tr>
@@ -468,7 +468,7 @@ Main.add(function(){
       </label>
     </th>
     <td id="sendbutton">
-      {{mb_include module=dPfiles template=inc_file_send_button 
+      {{mb_include module=files template=inc_file_send_button 
                    _doc_item=$compte_rendu
                    onComplete="refreshSendButton()"
                    notext=""}}

@@ -294,7 +294,7 @@ modeExpertDisplay = function() {
 {{if $op->_ref_actes|@count}}
 <hr />
 <table class="tbl">
-  {{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$op vue=complete}}
+  {{mb_include module=cabinet template=inc_list_actes_ccam subject=$op vue=complete}}
 </table>
 {{/if}}
 

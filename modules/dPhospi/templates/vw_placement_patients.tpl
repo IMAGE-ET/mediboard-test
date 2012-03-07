@@ -14,7 +14,7 @@ Main.add(function () {
   Calendar.regField(getForm("changeDate").date, null, {noView: true});
 });
 </script>
-{{mb_script module=dPhospi script=drag_patient}}
+{{mb_script module=hospi script=drag_patient}}
 
 <style type="text/css">
   

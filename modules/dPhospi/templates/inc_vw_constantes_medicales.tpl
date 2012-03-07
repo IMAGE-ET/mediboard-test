@@ -431,10 +431,10 @@ loadConstantesMedicales  = function(context_guid) {
           </button>
           
           <div class="contantes-horizontal" style="display: none;">
-          {{mb_include module=dPpatients template=print_constantes}}
+          {{mb_include module=patients template=print_constantes}}
           </div>
           <div class="contantes-vertical">
-          {{mb_include module=dPpatients template=print_constantes_vert}}
+          {{mb_include module=patients template=print_constantes_vert}}
           </div>
         </div>
       </td>

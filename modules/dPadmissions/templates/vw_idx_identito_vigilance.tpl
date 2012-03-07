@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module=dPadmissions script=identito_vigilance}}
+{{mb_script module=admissions script=identito_vigilance}}
 
 <script type="text/javascript">
 onMergeComplete = function() {

@@ -83,7 +83,7 @@ Main.add(function() {
             {{$patient}}
           </big> 
           <br />
-          {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}
+          {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}
           {{$patient->_age}} ans
         </td>
         <td class="{{$arrete}}" style="text-align: center;">

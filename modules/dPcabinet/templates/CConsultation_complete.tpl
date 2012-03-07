@@ -75,7 +75,7 @@ printFiche = function() {
 </table>
 
 <table class="tbl">
-	{{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$object vue=complete}}
+	{{mb_include module=cabinet template=inc_list_actes_ccam subject=$object vue=complete}}
 </table>
 {{if $object->_ref_plageconsult->chir_id == $app->user_id || $can->admin}}
 <table class="form">

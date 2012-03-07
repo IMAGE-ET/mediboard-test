@@ -303,7 +303,7 @@ Main.add(function () {
                   {{mb_label object=$consult field=_function_secondary_id}}
                 </th>
                 <td id="secondary_functions">
-                  {{mb_include module=dPcabinet template=inc_refresh_secondary_functions}}
+                  {{mb_include module=cabinet template=inc_refresh_secondary_functions}}
                 </td>
               </tr>
             {{/if}}
@@ -434,7 +434,7 @@ Main.add(function () {
           
           <tr id="correspondant_medical" {{if !$consult->_check_adresse}}style="display: none;"{{/if}}>
             {{assign var="object" value=$consult}}
-            {{mb_include module=dPplanningOp template=inc_check_correspondant_medical}}
+            {{mb_include module=planningOp template=inc_check_correspondant_medical}}
           </tr>
           
           <tr>

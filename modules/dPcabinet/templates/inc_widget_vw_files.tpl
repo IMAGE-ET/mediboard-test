@@ -25,5 +25,5 @@
 
 
 <table class="form" id="list_{{$object->_class}}{{$object->_id}}">
-  {{mb_include module=dPcabinet template=inc_widget_list_files}}
+  {{mb_include module=cabinet template=inc_widget_list_files}}
 </table>

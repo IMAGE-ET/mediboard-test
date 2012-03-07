@@ -167,7 +167,7 @@ html {
   
   <tr>
     <td>
-      {{mb_include module=dPstock template=inc_order_items_list}}
+      {{mb_include module=stock template=inc_order_items_list}}
     </td>
   </tr>
 </table>

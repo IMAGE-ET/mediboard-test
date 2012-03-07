@@ -1,4 +1,4 @@
-{{mb_script module=dPhospi script=affectation_uf}}
+{{mb_script module=hospi script=affectation_uf}}
 
 <script type='text/javascript'>
   Position.includeScrollOffsets = true;
@@ -39,11 +39,11 @@
 
 <!-- Légendes -->
 <div class="modal" id="legend_temporel" style="display: none;">
-  {{mb_include module=dPhospi template=inc_legend_mouvement}}
+  {{mb_include module=hospi template=inc_legend_mouvement}}
 </div>
 
 <div class="modal" id="legend_tableau" style="display: none;">
-  {{mb_include module=dPhospi template=legende}}
+  {{mb_include module=hospi template=legende}}
 </div>
 
 <ul class="control_tabs" id="placements_tabs">

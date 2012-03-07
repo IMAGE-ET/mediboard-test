@@ -1,4 +1,4 @@
-{{mb_script module=dPcompteRendu script=document}}
+{{mb_script module=compteRendu script=document}}
 {{if $object}}
   {{assign var=object_class value=$object->_class}}
   {{assign var=object_id value=$object->_id}}
@@ -47,7 +47,7 @@ Main.add(function () {
   </tr>
   {{/if}}
   <tbody id="Category-{{$_cat_id}}">
-    {{mb_include module=dPfiles template=inc_list_files list=$_cat.items}}
+    {{mb_include module=files template=inc_list_files list=$_cat.items}}
   </tbody>
 </table>
 {{/if}}

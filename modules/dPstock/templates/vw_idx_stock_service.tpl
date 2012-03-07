@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module=dPstock script=product_selector}}
+{{mb_script module=stock script=product_selector}}
 
 <script type="text/javascript">
 function refreshList(){

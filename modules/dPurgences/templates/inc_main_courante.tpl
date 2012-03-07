@@ -138,13 +138,13 @@
 			{{mb_include module=system template=inc_object_notes object=$_sejour mode=view float=right}}
       
 			{{if $isImedsInstalled}}
-			  {{mb_include module=dPImeds template=inc_sejour_labo sejour=$_sejour link="$rpu_link#Imeds"}}
+			  {{mb_include module=Imeds template=inc_sejour_labo sejour=$_sejour link="$rpu_link#Imeds"}}
       {{/if}}
 
       <a href="{{$rpu_link}}">
       	<span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
           {{mb_value object=$_sejour field=_entree date=$date}}
-         {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$_sejour->_NDA}}
+         {{mb_include module=planningOp template=inc_vw_numdos nda=$_sejour->_NDA}}
         </span>
       </a>
 								

@@ -140,7 +140,7 @@ Main.add(function () {
         {{$_sejour->libelle}}
       {{else}}
         {{foreach from=$_sejour->_ref_operations item=_operation}}
-          {{mb_include module=dPplanningOp template=inc_vw_operation operation=$_operation}}
+          {{mb_include module=planningOp template=inc_vw_operation operation=$_operation}}
         {{/foreach}}
       {{/if}}
     </td>

@@ -16,14 +16,14 @@
 
   <tr>
     <th class="category" colspan="3" style="width: 50%;">
-      Identité {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}
+      Identité {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}
     </th>
     <th class="category" colspan="2" style="width: 50%;">Coordonnées</th>
   </tr>
 
   <tr>
     <td rowspan="4" class="narrow" style="vertical-align: middle; text-align: center;">
-      {{mb_include module=dPpatients template=inc_vw_photo_identite mode="read" size="64"}}
+      {{mb_include module=patients template=inc_vw_photo_identite mode="read" size="64"}}
     </td>
     <th>{{mb_label object=$patient field="nom"}}</th>
     <td>{{mb_value object=$patient field="nom"}}</td>

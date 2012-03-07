@@ -109,7 +109,7 @@ function reloadSejours(checkCollision) {
       </button>
       
       Modification du séjour {{$sejour->_view}} 
-      {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+      {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
     </th>
     {{else}}
     <th colspan="2" class="title">
@@ -151,8 +151,8 @@ function reloadSejours(checkCollision) {
         </tr>
         <tr>
           <td id="documents">
-            {{mb_script module=dPcompteRendu script=document}}
-            {{mb_script module=dPcompteRendu script=modele_selector}}
+            {{mb_script module=compteRendu script=document}}
+            {{mb_script module=compteRendu script=modele_selector}}
             <script type="text/javascript">
             Document.register('{{$sejour->_id}}','{{$sejour->_class}}','{{$sejour->praticien_id}}', 'documents');
             </script>
@@ -166,11 +166,11 @@ function reloadSejours(checkCollision) {
         </tr>
         <tr>
           <td id="files">
-            {{mb_script module=dPcabinet script=file}}
+            {{mb_script module=cabinet script=file}}
             <script type="text/javascript">
             File.register('{{$sejour->_id}}','{{$sejour->_class}}', 'files');
             </script>
-            {{mb_include module=dPfiles template=yoplet_uploader object=$sejour}}
+            {{mb_include module=files template=yoplet_uploader object=$sejour}}
           </td>
         </tr>
         {{/if}}

@@ -105,7 +105,7 @@
         </strong>
       </td>
       <td>{{$_stock->quantity}}</td>
-      <td>{{mb_include module=dPstock template=inc_bargraph stock=$_stock}}</td>
+      <td>{{mb_include module=stock template=inc_bargraph stock=$_stock}}</td>
     </tr>
   {{foreachelse}}
     <tr>
@@ -121,7 +121,7 @@
         </strong>
       </td>
       <td>{{$_stock->quantity}}</td>
-      <td>{{mb_include module=dPstock template=inc_bargraph stock=$_stock}}</td>
+      <td>{{mb_include module=stock template=inc_bargraph stock=$_stock}}</td>
     </tr>
   {{foreachelse}}
     <tr>

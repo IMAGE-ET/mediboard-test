@@ -1,4 +1,4 @@
-{{mb_script module=dPsante400 script=mouvements}}
+{{mb_script module=sante400 script=mouvements}}
 
 <script type="text/javascript">
 Main.add(function() {

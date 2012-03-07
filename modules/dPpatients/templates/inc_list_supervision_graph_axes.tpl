@@ -27,7 +27,7 @@
       <td>{{mb_value object=$_axis field=display}}</td>
       <td>{{mb_value object=$_axis field=show_points}}</td>
       <td>
-        {{mb_include module=dPpatients template=inc_axis_symbol axis=$_axis}}
+        {{mb_include module=patients template=inc_axis_symbol axis=$_axis}}
         {{mb_value object=$_axis field=symbol}}
       </td>
       <td>

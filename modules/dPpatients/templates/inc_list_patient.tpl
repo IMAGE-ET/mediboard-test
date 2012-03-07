@@ -139,7 +139,7 @@ emptyBirthday = function() {
       </label>
     </th>
     <td>
-    	{{mb_include module=dPpatients template=inc_select_date date=$naissance tabindex=3}}
+    	{{mb_include module=patients template=inc_select_date date=$naissance tabindex=3}}
       <button type="button" class="cancel notext" onclick="emptyBirthday()" title="Vider la date de naissance"></button>
     </td>
     
@@ -248,7 +248,7 @@ emptyBirthday = function() {
     </th>
   </tr>
   {{foreach from=$patients item=_patient}}
-    {{mb_include module=dPpatients template=inc_list_patient_line}}
+    {{mb_include module=patients template=inc_list_patient_line}}
   {{foreachelse}}
 	  <tr>
 	    <td colspan="100" class="empty">{{tr}}dPpatients-CPatient-no-exact-results{{/tr}}</td>
@@ -265,7 +265,7 @@ emptyBirthday = function() {
 	  </tr>
   {{/if}}
   {{foreach from=$patientsSoundex item=_patient}}
-    {{mb_include module=dPpatients template=inc_list_patient_line}}
+    {{mb_include module=patients template=inc_list_patient_line}}
   {{/foreach}}
 </table>
 </form>  

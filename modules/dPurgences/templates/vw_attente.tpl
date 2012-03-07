@@ -82,7 +82,7 @@ Main.add(function () {
 			    <strong>
 			    {{$patient->_view}}
 			    </strong>
-			    <br />{{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}
+			    <br />{{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}
 			  </a>
 			</td>
 			
@@ -92,11 +92,11 @@ Main.add(function () {
 			  </a>
 			</td>
 			
-			{{mb_include module=dPurgences template=inc_vw_attente debut=radio_debut fin=radio_fin}}
+			{{mb_include module=urgences template=inc_vw_attente debut=radio_debut fin=radio_fin}}
 			
-			{{mb_include module=dPurgences template=inc_vw_attente debut=bio_depart fin=bio_retour}}
+			{{mb_include module=urgences template=inc_vw_attente debut=bio_depart fin=bio_retour}}
 			
-			{{mb_include module=dPurgences template=inc_vw_attente debut=specia_att fin=specia_arr}}
+			{{mb_include module=urgences template=inc_vw_attente debut=specia_att fin=specia_arr}}
 		</tr>
   {{/foreach}}
 </table>

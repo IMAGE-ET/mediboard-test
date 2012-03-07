@@ -24,7 +24,7 @@
       </tr>
     </thead>
     <tbody id="list-correspondants">
-      {{mb_include module=dPpatients template=inc_list_correspondants
+      {{mb_include module=patients template=inc_list_correspondants
          correspondants_by_relation=`$patient->_ref_cp_by_relation`
          nb_correspondants=$patient->_ref_correspondants_patient|@count}}
     </tbody>

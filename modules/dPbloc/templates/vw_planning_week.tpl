@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module=dPbloc script=edit_planning}}
+{{mb_script module=bloc script=edit_planning}}
 
 <table class="main">
   <tr>

@@ -5,7 +5,7 @@
 {{assign var="do_subject_aed" value="do_planning_aed"}}
 {{assign var="module" value="dPsalleOp"}}
 {{assign var="object" value=$selOp}}
-{{mb_include module=dPsalleOp template=js_codage_ccam}}
+{{mb_include module=salleOp template=js_codage_ccam}}
 {{mb_script module="soins" script="plan_soins"}}
 
 <script type="text/javascript">

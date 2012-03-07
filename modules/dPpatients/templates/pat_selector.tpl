@@ -2,9 +2,9 @@
 
 {{if $app->user_prefs.GestionFSE}}
   {{if $app->user_prefs.VitaleVision}}
-    {{mb_include module=dPpatients template=inc_vitalevision debug=false keepFiles=true}}
+    {{mb_include module=patients template=inc_vitalevision debug=false keepFiles=true}}
   {{else}}
-    {{mb_include module=dPpatients template=inc_intermax debug=false}}
+    {{mb_include module=patients template=inc_intermax debug=false}}
   {{/if}}
 {{/if}}
 
@@ -188,7 +188,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
       
       <th><label for="naissance" title="Date de naissance">Date de naissance</label></th>
       <td>
-        {{mb_include module=dPpatients template=inc_select_date date=$datePat tabindex=3}}
+        {{mb_include module=patients template=inc_select_date date=$datePat tabindex=3}}
       </td>
     </tr>
     

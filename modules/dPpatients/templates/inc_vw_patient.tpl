@@ -21,7 +21,7 @@ Document.refreshList = function() {
 </div>
 {{else}}
 
-{{mb_include module=dPpatients template=inc_vw_identite_patient}}
+{{mb_include module=patients template=inc_vw_identite_patient}}
 
 <table class="form">
   <tr>
@@ -117,7 +117,7 @@ Document.refreshList = function() {
     <th colspan="2" class="category">Séjours</th>
   </tr>
   {{foreach from=$patient->_ref_sejours item=object}}
-    {{mb_include module=dPpatients template=inc_vw_elem_dossier}}
+    {{mb_include module=patients template=inc_vw_elem_dossier}}
   {{/foreach}}
   {{/if}}
   
@@ -126,7 +126,7 @@ Document.refreshList = function() {
     <th colspan="2" class="category">Consultations</th>
   </tr>
   {{foreach from=$patient->_ref_consultations item=object}}
-    {{mb_include module=dPpatients template=inc_vw_elem_dossier}}
+    {{mb_include module=patients template=inc_vw_elem_dossier}}
   {{/foreach}}
   {{/if}}
   
@@ -139,7 +139,7 @@ Document.refreshList = function() {
         <td colspan="2">Séjours</td>
       </tr>
       {{foreach from=$grossesse->_ref_sejours item=object}}
-        {{mb_include module=dPpatients template=inc_vw_elem_dossier}}
+        {{mb_include module=patients template=inc_vw_elem_dossier}}
       {{foreachelse}}
         <td colspan="2" class="empty">{{tr}}CSejour.none{{/tr}}</td>
       {{/foreach}}
@@ -147,7 +147,7 @@ Document.refreshList = function() {
         <td colspan="2">Consultations</td>
       </tr>
       {{foreach from=$grossesse->_ref_consultations item=object}}
-        {{mb_include module=dPpatients template=inc_vw_elem_dossier show_semaine_grossesse=1}}
+        {{mb_include module=patients template=inc_vw_elem_dossier show_semaine_grossesse=1}}
       {{foreachelse}}
         <td colspan="2" class="empty">{{tr}}CConsultation.none{{/tr}}</td>
       {{/foreach}}

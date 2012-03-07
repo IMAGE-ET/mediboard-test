@@ -11,7 +11,7 @@
 <table style="width: 100%; border-collapse:collapse;">
   {{if $patient->_ref_sejours}}
     {{foreach from=$patient->_ref_sejours item=object}}
-      {{mb_include module=dPpatients template=inc_vw_elem_dossier}}
+      {{mb_include module=patients template=inc_vw_elem_dossier}}
     {{/foreach}}
   {{else}}
     <tr>

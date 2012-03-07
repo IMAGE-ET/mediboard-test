@@ -169,7 +169,7 @@ function printPage(element){
                     {{assign var=constantes_medicales_grid value=$csteByTimeAll.$sejour_id}}
                   {{/if}}
                   
-                  {{mb_include module=dPurgences template=print_dossier}}
+                  {{mb_include module=urgences template=print_dossier}}
                 </div>
               </div>
             {{/if}}

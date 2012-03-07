@@ -51,7 +51,7 @@ Main.add(function () {
         {{foreach from=$services item=curr_service}}
           {{if $curr_service->_ref_chambres|@count}}
           <td class="fullService narrow" id="service{{$curr_service->service_id}}">
-          {{mb_include module=dPhospi template=inc_affectations_services}}
+          {{mb_include module=hospi template=inc_affectations_services}}
           </td>
           {{/if}}
         {{/foreach}}

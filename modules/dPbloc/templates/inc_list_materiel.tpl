@@ -47,7 +47,7 @@
 			<a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$_operation->_id}}">
       {{/if}}
 
-      {{mb_include module=dPplanningOp template=inc_vw_operation _operation=$_operation}}
+      {{mb_include module=planningOp template=inc_vw_operation _operation=$_operation}}
 
       {{if !$dialog}}
       </a>

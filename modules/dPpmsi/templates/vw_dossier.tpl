@@ -195,7 +195,7 @@ Main.add(function () {
       </form>
       {{if $patient->_id}}
       <div id="vwPatient">
-        {{mb_include module=dPpatients template=inc_vw_identite_patient}}
+        {{mb_include module=patients template=inc_vw_identite_patient}}
       </div>
       <table class="form">
         <tr>
@@ -205,7 +205,7 @@ Main.add(function () {
           {{if $_sejour->group_id == $g || $conf.dPpatients.CPatient.multi_group == "full"}}
           <tr {{if $_sejour->_id == $isSejourPatient}}class="selected{{/if}}">
             <td class="text">
-              {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$_sejour->_NDA}}
+              {{mb_include module=planningOp template=inc_vw_numdos nda=$_sejour->_NDA}}
               <a href="#{{$_sejour->_guid}}" onclick="loadSejour('{{$_sejour->_id}}'); $(this).up('tr').addUniqueClassName('selected')">
                 <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
                   {{$_sejour->_shortview}}
@@ -250,7 +250,7 @@ Main.add(function () {
     </td>
     {{if $patient->_id}}
     <td id="sejour">
-      {{mb_include module=dPpmsi template=inc_vw_sejour}}
+      {{mb_include module=pmsi template=inc_vw_sejour}}
     </td>
     {{/if}}
   </tr>

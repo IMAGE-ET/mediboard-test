@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module=dPurgences script=contraintes_rpu}}
+{{mb_script module=urgences script=contraintes_rpu}}
 
 <script type="text/javascript">
 
@@ -235,7 +235,7 @@ function showEtabEntreeTransfert(mode) {
            </table>
          </form>
      
-        {{mb_include module=dPurgences template=inc_form_sortie}}
+        {{mb_include module=urgences template=inc_form_sortie}}
 
       </fieldset>
 
@@ -322,7 +322,7 @@ function showEtabEntreeTransfert(mode) {
           <input type="hidden" name="sortie_autorisee" value="1" />
         </form>
         <div id="div_sortie_reelle">
-          {{mb_include module=dPurgences template=inc_sortie_reelle}}
+          {{mb_include module=urgences template=inc_sortie_reelle}}
         </div>
         
         <button type="button" class="print" onclick="printDossier({{$rpu->_id}})">

@@ -42,7 +42,7 @@ Planification.purge = function(sejour_id) {
 				{{$patient}}
 			</big> 
 		  <br />
-			{{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}
+			{{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}
       {{$patient->_age}} ans
     </td>
     <td style="text-align: center;">

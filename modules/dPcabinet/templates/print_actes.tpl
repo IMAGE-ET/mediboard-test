@@ -6,7 +6,7 @@
 {{/if}}
 
 <table class="main tbl">
-{{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$consult vue=complete extra=tarif}}
+{{mb_include module=cabinet template=inc_list_actes_ccam subject=$consult vue=complete extra=tarif}}
 </table>
 
 {{assign var=object value=$consult}}

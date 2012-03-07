@@ -50,7 +50,7 @@ refreshListIntervs = function() {
 	    <th></th>
 	  </tr>
 	  <tbody id="intervs-sejour-{{$sejour->_guid}}">
-	    {{mb_include module=dPplanningOp template=inc_info_list_operations}}
+	    {{mb_include module=planningOp template=inc_info_list_operations}}
     </tbody>
 	</table>
 {{elseif $sejour->_id}}

@@ -39,5 +39,5 @@
 </table>
 
 <table class="tbl tooltip">
-  {{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$operation vue=view}}
+  {{mb_include module=cabinet template=inc_list_actes_ccam subject=$operation vue=view}}
 </table>

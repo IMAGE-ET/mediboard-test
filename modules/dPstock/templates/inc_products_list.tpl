@@ -31,7 +31,7 @@
     <tbody class="hoverable product-{{$_product->_id}}">
     <tr>
       <td rowspan="2" {{if $_product->_in_order}}class="ok"{{/if}}>
-        {{mb_include module=dPstock template=inc_product_in_order product=$_product}}
+        {{mb_include module=stock template=inc_product_in_order product=$_product}}
       </td>
       <td colspan="10" style="font-weight: bold;">
         <a href="#1" onclick="return editProduct({{$_product->_id}})">

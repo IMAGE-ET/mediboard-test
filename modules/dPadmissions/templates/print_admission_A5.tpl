@@ -18,7 +18,7 @@
     </th>
   </tr>
   <tr>
-    <th class="category" colspan="4">Patient {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}</th>
+    <th class="category" colspan="4">Patient {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}</th>
   </tr>
 
   <tr>
@@ -71,7 +71,7 @@
   </tr>
 
   <tr>
-    <th class="category" colspan="4">Admission {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$curr_adm->_NDA}}</th>
+    <th class="category" colspan="4">Admission {{mb_include module=planningOp template=inc_vw_numdos nda=$curr_adm->_NDA}}</th>
   </tr>
   
   <tr>

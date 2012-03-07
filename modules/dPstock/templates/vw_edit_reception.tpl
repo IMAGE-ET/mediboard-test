@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module=dPstock script=order_manager}}
+{{mb_script module=stock script=order_manager}}
 
 <script type="text/javascript">
 var reception_id = '{{$reception->_id}}';
@@ -201,7 +201,7 @@ function receptionCallback(){
         </div>
         {{else}}
           <div class="order" id="order-{{$order->_id}}">
-            {{mb_include module=dPstock template=inc_order_to_receive}}
+            {{mb_include module=stock template=inc_order_to_receive}}
           </div>
         {{/if}}
       </div>

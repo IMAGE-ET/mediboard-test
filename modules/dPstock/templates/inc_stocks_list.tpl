@@ -34,7 +34,7 @@
   <tr {{if $stock_id == $_stock->_id}}class="selected"{{/if}}>
     {{if $class == 'CProductStockGroup'}}
       <td {{if $product->_in_order}}class="ok"{{/if}}>
-        {{mb_include module=dPstock template=inc_product_in_order}}
+        {{mb_include module=stock template=inc_product_in_order}}
       </td>
     {{/if}}
     <td>

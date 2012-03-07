@@ -1,4 +1,4 @@
-{{mb_script module=dPcabinet script=yoplet}}
+{{mb_script module=cabinet script=yoplet}}
 
 {{if $app->user_prefs.directory_to_watch}}
   <script type="text/javascript">
@@ -7,7 +7,7 @@
   </script>
   
   <!-- Modale pour l'applet --> 
-  {{mb_include module=dPfiles template=yoplet_modal object=$object}}
+  {{mb_include module=files template=yoplet_modal object=$object}}
 
   <applet id="uploader" name="yopletuploader" width="{{if $app->user_prefs.debug_yoplet == 1}}400{{else}}1{{/if}}"
           height="{{if $app->user_prefs.debug_yoplet == 1}}400{{else}}1{{/if}}"

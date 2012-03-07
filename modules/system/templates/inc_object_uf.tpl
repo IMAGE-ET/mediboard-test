@@ -1,6 +1,6 @@
 {{assign var="unitefonctionnelle" value=$object}}
 
-{{mb_script module=dPhospi script=affectation_uf}}
+{{mb_script module=hospi script=affectation_uf}}
 
 <a style="float: right;" href="#1" title=""
   onclick="AffectationUf.edit('{{$object->_guid}}')"  

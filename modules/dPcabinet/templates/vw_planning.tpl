@@ -43,7 +43,7 @@ Main.add(function () {
 });
 </script>
 
-{{mb_script module=dPcabinet script=plage_consultation}}
+{{mb_script module=cabinet script=plage_consultation}}
 {{mb_script module=ssr script=planning}}
 <table class="main">
   <tr>
@@ -136,6 +136,6 @@ Main.add(function () {
 
         </script>
       </div>
-    <td id="consultations">{{mb_include module=dPcabinet template=inc_consultations}}</td>
+    <td id="consultations">{{mb_include module=cabinet template=inc_consultations}}</td>
   </tr>
 </table>

@@ -39,7 +39,7 @@
       <th>{{mb_colonne class="CAffectation" field="sortie"     order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
     </tr>
     {{foreach from=$deplacements item=_sortie}}
-      {{mb_include module=dPhospi template=inc_check_deplacement_line}}
+      {{mb_include module=hospi template=inc_check_deplacement_line}}
     {{foreachelse}}
       <tr><td colspan="6" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
     {{/foreach}}
@@ -102,7 +102,7 @@
       </th>
     </tr>
     {{foreach from=$mouvements item=_sortie}}
-      {{mb_include module=dPhospi template=inc_check_sortie_line}}
+      {{mb_include module=hospi template=inc_check_sortie_line}}
     {{foreachelse}}
       <tr><td colspan="100" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
     {{/foreach}}
@@ -147,7 +147,7 @@
         <th>{{mb_colonne class="CAffectation" field="sortie" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}</th>
       </tr>
       {{foreach from=$mouvementsNP item=_sortie}}
-        {{mb_include module=dPhospi template=inc_check_sortieNP_line}}
+        {{mb_include module=hospi template=inc_check_sortieNP_line}}
       {{foreachelse}}
         <tr><td colspan="10" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
     {{/foreach}}

@@ -413,7 +413,7 @@ Main.add( function(){
     {{/if}}
     {{tr}}CSejour-msg-informations{{/tr}} 
 		{{if $mode_operation && $sejour->_NDA}}
-		{{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+		{{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
 		{{/if}}
   </th>
 </tr>
@@ -552,7 +552,7 @@ Main.add( function(){
 </tr>
 
 <tbody id="ald_patient">
-  {{mb_include module=dPplanningOp template=inc_check_ald patient=$sejour->_ref_patient}}
+  {{mb_include module=planningOp template=inc_check_ald patient=$sejour->_ref_patient}}
 </tbody>
 
 {{if $conf.dPplanningOp.CSejour.accident}}

@@ -35,7 +35,7 @@
   <tbody class="hoverable">
     <tr class="{{if $_reference->_id == $reference_id}}selected{{/if}}">
       <td rowspan="2" {{if $_product->_in_order}}class="ok"{{/if}}>
-        {{mb_include module=dPstock template=inc_product_in_order product=$_product}}
+        {{mb_include module=stock template=inc_product_in_order product=$_product}}
       </td>
       <td colspan="{{if $conf.dPstock.CProductReference.show_cond_price}}{{if $mode == 'order'}}5{{else}}4{{/if}}{{else}}{{if $mode == 'order'}}5{{else}}4{{/if}}{{/if}}">
         <a href="{{if !$mode}}?m=dPstock&amp;tab=vw_idx_reference&amp;reference_id={{$_reference->_id}}{{else}}#1{{/if}}">
@@ -121,7 +121,7 @@
         {{if $_product->_ref_stock_group}}
         <table class="main layout">
           <tr>
-            <td>{{mb_include module=dPstock template=inc_bargraph stock=$_product->_ref_stock_group}}</td>
+            <td>{{mb_include module=stock template=inc_bargraph stock=$_product->_ref_stock_group}}</td>
             <td style="width: 3em;">{{$_product->_ref_stock_group->quantity}}</td>
           </tr>
         </table>

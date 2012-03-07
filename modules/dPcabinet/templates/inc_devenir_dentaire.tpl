@@ -114,7 +114,7 @@
           <th class="category">Etudiant</th>
         </tr>
         <tbody id="list_devenirs">
-          {{mb_include module=dPcabinet template=inc_list_devenirs_dentaires}}
+          {{mb_include module=cabinet template=inc_list_devenirs_dentaires}}
         </tbody>
       </table>
     </td>

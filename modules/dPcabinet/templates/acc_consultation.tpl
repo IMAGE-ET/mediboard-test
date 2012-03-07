@@ -2,7 +2,7 @@
 {{assign var="object" value=$consult}}
 {{assign var="module" value="dPcabinet"}}
 {{assign var="do_subject_aed" value="do_consultation_aed"}}
-{{mb_include module=dPsalleOp template=js_codage_ccam}}
+{{mb_include module=salleOp template=js_codage_ccam}}
 {{assign var=sejour_id value=$consult->sejour_id}}
 
 {{assign var="rpu" value=""}}
@@ -87,7 +87,7 @@ Main.add(function () {
   {{if $rpu}}
 	  <li><a href="#rpuConsult">
 	     RPU 
-	    {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$consult->_ref_sejour->_NDA}}
+	    {{mb_include module=planningOp template=inc_vw_numdos nda=$consult->_ref_sejour->_NDA}}
 	    </a>
 	  </li>
   {{/if}}
@@ -128,7 +128,7 @@ Main.add(function () {
 {{if $consult->sejour_id}}
   {{if $rpu}}
     <div id="rpuConsult" style="display: none;">
-		  {{mb_include module=dPurgences template=inc_vw_rpu}}
+		  {{mb_include module=urgences template=inc_vw_rpu}}
 		</div>
 	{{/if}}
 
@@ -141,7 +141,7 @@ Main.add(function () {
 </div>
 {{/if}}
 
-<div id="AntTrait" style="display: none;">{{mb_include module=dPcabinet template=inc_ant_consult}}</div>
+<div id="AntTrait" style="display: none;">{{mb_include module=cabinet template=inc_ant_consult}}</div>
 
 {{if $rpu}}
 <div id="suivisoins" style="display:none">
@@ -156,7 +156,7 @@ Main.add(function () {
 <div id="Constantes" style="display: none"></div>
 
 <div id="Examens" style="display: none;">
-  {{mb_include module=dPcabinet template=inc_main_consultform}}
+  {{mb_include module=cabinet template=inc_main_consultform}}
 </div>
 
 {{if @$modules.dPImeds->mod_active && $consult->sejour_id}}
@@ -196,26 +196,26 @@ Main.add(function () {
 	  <div id="ccam" style="display: none;">
 	    {{assign var="module" value="dPcabinet"}}
 	    {{assign var="subject" value=$consult}}
-	    {{mb_include module=dPsalleOp template=inc_codage_ccam}}
+	    {{mb_include module=salleOp template=inc_codage_ccam}}
 	  </div>
 	  
 	  <div id="ngap" style="display: none;">
 	    <div id="listActesNGAP">
 	      {{assign var="_object_class" value="CConsultation"}}
-		    {{mb_include module=dPcabinet template=inc_codage_ngap}}
+		    {{mb_include module=cabinet template=inc_codage_ngap}}
 	    </div>
 	  </div>
 	  
 	  {{if $sejour && $sejour->_id}}
 	  <div id="cim" style="display: none;">
 	    {{assign var=sejour value=$consult->_ref_sejour}}
-	    {{mb_include module=dPsalleOp template=inc_diagnostic_principal modeDAS="1"}}
+	    {{mb_include module=salleOp template=inc_diagnostic_principal modeDAS="1"}}
 	  </div>
 	  {{/if}}
 	  
 	  {{if $conf.dPccam.CCodable.use_frais_divers.CConsultation}}     
     <div id="fraisdivers" style="display: none;">
-      {{mb_include module=dPccam template=inc_frais_divers object=$consult}}
+      {{mb_include module=ccam template=inc_frais_divers object=$consult}}
     </div>
     {{/if}}
     
@@ -232,13 +232,13 @@ Main.add(function () {
 
 {{if $consult->_is_dentiste}}
   <div id="etat_dentaire">
-    {{mb_include module=dPcabinet template="inc_consult_anesth/intubation"}}
+    {{mb_include module=cabinet template="inc_consult_anesth/intubation"}}
   </div>
   <div id="devenir_dentaire">
-    {{mb_include module=dPcabinet template="inc_devenir_dentaire"}}
+    {{mb_include module=cabinet template="inc_devenir_dentaire"}}
   </div>
 {{/if}}
 
 <div id="fdrConsult" style="display: none;">
-  {{mb_include module=dPcabinet template=inc_fdr_consult}}
+  {{mb_include module=cabinet template=inc_fdr_consult}}
 </div>

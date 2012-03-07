@@ -6,7 +6,7 @@
       <tr>
         <th class="title" colspan="7">
           {{$sejour->_view}}
-          {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+          {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
         </th>
       </tr>
     </thead>
@@ -88,7 +88,7 @@
 	    {{if ($_suivi instanceof CPrescriptionLineElement || $_suivi instanceof CPrescriptionLineComment) && !$readonly}}
 			  onmouseover="highlightTransmissions('{{$_suivi->_guid}}');" onmouseout="removeHighlightTransmissions();"
 			{{/if}}>
- 	  {{mb_include module=dPhospi template=inc_line_suivi show_patient=false nodebug=true}}
+ 	  {{mb_include module=hospi template=inc_line_suivi show_patient=false nodebug=true}}
 		</tr>
   {{foreachelse}}
   </tbody>

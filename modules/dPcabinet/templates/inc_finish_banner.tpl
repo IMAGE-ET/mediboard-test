@@ -37,8 +37,8 @@ function changePratPec(prat_id) {
   <input type="hidden" name="prat_id" value="" />
 </form>
 
-{{mb_script module=dPcabinet script=file}}
-{{mb_include module=dPfiles template=yoplet_uploader object=$consult}}
+{{mb_script module=cabinet script=file}}
+{{mb_include module=files template=yoplet_uploader object=$consult}}
 
 <form class="watch" name="editFrmFinish" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
 
@@ -65,7 +65,7 @@ function changePratPec(prat_id) {
         {{tr}}Programme{{/tr}}
       </button>
       <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}">
-        {{mb_include module=dPpatients template=inc_vw_photo_identite patient=$patient size=42}}
+        {{mb_include module=patients template=inc_vw_photo_identite patient=$patient size=42}}
       </a>
       <div style="float:right">
         <button class="print" type="button" onclick="printAllDocs()">

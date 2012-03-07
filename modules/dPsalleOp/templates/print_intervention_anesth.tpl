@@ -33,7 +33,7 @@ Main.add(function(){
 	</tr>
   <tr>
 		<td><strong>Date de l'intervention</strong> {{mb_value object=$operation field=_datetime}}</td>
-    <td><strong>Interventon réalisée</strong> {{mb_include module=dPplanningOp template=inc_vw_operation _operation=$operation nodebug=true}}</td>
+    <td><strong>Interventon réalisée</strong> {{mb_include module=planningOp template=inc_vw_operation _operation=$operation nodebug=true}}</td>
 	</tr>
 	<tr>
 		<td><strong>{{mb_label object=$operation field=anesth_id}}</strong> {{mb_value object=$operation field=anesth_id}}</td>

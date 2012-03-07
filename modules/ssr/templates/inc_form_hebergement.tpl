@@ -21,7 +21,7 @@
       <script type="text/javascript">
         Medecin.sFormName = "editSejourHebergement";
       </script>
-      {{mb_include module=dPplanningOp template=inc_check_correspondant_medical}}
+      {{mb_include module=planningOp template=inc_check_correspondant_medical}}
     </tr>
     <tr>
       <td></td>

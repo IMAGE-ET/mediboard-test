@@ -232,7 +232,7 @@
         </tr>
       </table>
       
-      {{mb_include module=dPplanningOp template=inc_infos_operation}}
+      {{mb_include module=planningOp template=inc_infos_operation}}
       
       {{if $sejour->_ref_transmissions|@count}}
         <table class="tbl">

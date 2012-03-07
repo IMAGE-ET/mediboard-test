@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module=dPcabinet script=file}}
-{{mb_include module=dPfiles template=yoplet_uploader object=$sejour}}
+{{mb_script module=cabinet script=file}}
+{{mb_include module=files template=yoplet_uploader object=$sejour}}
 {{assign var=gerer_circonstance value=$conf.dPurgences.gerer_circonstance}}
 
 {{if !$group->service_urgences_id}}
@@ -28,8 +28,8 @@
 	  {{mb_script module="dPmedicament" script="equivalent_selector"}}
 	{{/if}}
 	
-	{{mb_script module=dPcompteRendu script=modele_selector}}
-  {{mb_script module=dPcompteRendu script=document}}
+	{{mb_script module=compteRendu script=modele_selector}}
+  {{mb_script module=compteRendu script=document}}
 
 	<script type="text/javascript">
 	
@@ -241,14 +241,14 @@
 	
 		    {{tr}}CRPU-title-modify{{/tr}}
 				'{{$rpu}}'
-		    {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+		    {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
 	    </th>
 	    {{else}}
 	    <th class="title" colspan="4">
         {{tr}}CRPU-title-create{{/tr}}
 		    {{if $sejour->_NDA}}
 		    	pour le dossier
-		      {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+		      {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
 		    {{/if}}
 		  </th>
 	    {{/if}}
@@ -532,7 +532,7 @@
 		  {{assign var="_is_anesth" value="0"}}
 		  {{assign var=sejour_id value=""}}
 		  
-		  {{mb_include module=dPcabinet template=inc_ant_consult chir_id=$app->user_id}}
+		  {{mb_include module=cabinet template=inc_ant_consult chir_id=$app->user_id}}
 		</div>
 		
 		<div id="suivisoins" style="display:none"></div>

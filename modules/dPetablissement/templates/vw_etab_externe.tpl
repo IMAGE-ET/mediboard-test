@@ -39,7 +39,7 @@ reload = function(etab_id){
     </td>
 		
     <td class="halfPane" id="group_externe">
-      {{mb_include module=dPetablissement template=inc_etab_externe}}
+      {{mb_include module=etablissement template=inc_etab_externe}}
     </td>
   </tr>
 </table>

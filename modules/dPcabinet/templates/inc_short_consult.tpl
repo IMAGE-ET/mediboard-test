@@ -70,28 +70,28 @@
 <hr class="control_tabs" />
 
 <div id="antecedents" style="display: none">
-  {{mb_include module=dPcabinet template="inc_ant_consult"}}
+  {{mb_include module=cabinet template="inc_ant_consult"}}
 </div>
 {{if !$consult_anesth->_id}}
   <div id="exams" style="display: none;">
-    {{mb_include module=dPcabinet template="inc_main_consultform"}}
+    {{mb_include module=cabinet template="inc_main_consultform"}}
   </div>
 {{else}}
   <div id="exam_clinique" style="display: none;">
-    {{mb_include module=dPcabinet template="inc_consult_anesth/acc_examens_clinique"}}
+    {{mb_include module=cabinet template="inc_consult_anesth/acc_examens_clinique"}}
   </div>
   <div id="intubation" style="display: none;">
-    {{mb_include module=dPcabinet template="inc_consult_anesth/intubation"}}
+    {{mb_include module=cabinet template="inc_consult_anesth/intubation"}}
   </div>
   <div id="exam_comp" style="display: none;">
-    {{mb_include module=dPcabinet template="inc_consult_anesth/acc_examens_complementaire"}}
+    {{mb_include module=cabinet template="inc_consult_anesth/acc_examens_complementaire"}}
   </div>
   <div id="infos_anesth" style="display: none;">
-    {{mb_include module=dPcabinet template="inc_consult_anesth/acc_infos_anesth"}}
+    {{mb_include module=cabinet template="inc_consult_anesth/acc_infos_anesth"}}
   </div>
   {{if $conf.dPcabinet.CConsultAnesth.show_facteurs_risque}}
     <div id="facteurs_risque" style="display: none;">
-      {{mb_include module=dPcabinet template="inc_consult_anesth/inc_vw_facteurs_risque"}}
+      {{mb_include module=cabinet template="inc_consult_anesth/inc_vw_facteurs_risque"}}
     </div>
   {{/if}}
   {{if $consult_anesth->operation_id}}
@@ -99,7 +99,7 @@
     {{assign var=callback value=refreshVisite}}
     {{assign var=currUser value=$userSel}}
     <div id="visite_pre_anesth">
-      {{mb_include module=dPsalleOp template=inc_visite_pre_anesth}}
+      {{mb_include module=salleOp template=inc_visite_pre_anesth}}
     </div>
   {{/if}}
 {{/if}}

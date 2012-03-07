@@ -176,7 +176,7 @@ printOffline = function(element) {
     
     <td style="text-align: center;">
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
-       {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$_sejour->_NDA}}
+       {{mb_include module=planningOp template=inc_vw_numdos nda=$_sejour->_NDA}}
       </span>
 
       {{assign var=bilan value=$_sejour->_ref_bilan_ssr}}

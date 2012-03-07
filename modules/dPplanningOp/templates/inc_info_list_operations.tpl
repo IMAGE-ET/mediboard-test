@@ -26,7 +26,7 @@
   </th>
   {{else}}
   <td class="text">
-    {{mb_include module=dPplanningOp template=inc_vw_operation}}
+    {{mb_include module=planningOp template=inc_vw_operation}}
   </td>
 	{{/if}}
   <td class="narrow button">
@@ -53,7 +53,7 @@
 {{if $_operation->_back && array_key_exists("check_lists", $_operation->_back)}}
 <tr>
   <td colspan="10">
-    {{mb_include module=dPsalleOp template=inc_vw_check_lists operation=$_operation}}
+    {{mb_include module=salleOp template=inc_vw_check_lists operation=$_operation}}
   </td>
 </tr>
 {{/if}}

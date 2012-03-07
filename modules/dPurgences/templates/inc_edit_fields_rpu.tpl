@@ -8,7 +8,7 @@
     <table class="form">
       <th class="category" colspan="2">{{tr}}CSejour{{/tr}}</th>
       <tr>
-        {{mb_include module=dPurgences template=inc_diagnostic_principal}}
+        {{mb_include module=urgences template=inc_diagnostic_principal}}
       </tr>
     </table>
   </form>

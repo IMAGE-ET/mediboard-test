@@ -37,7 +37,7 @@
       <input type="hidden" name="tab" value="vw_idx_patients" />
       <input type="hidden" name="patient_id" value="{{$object->_id}}" />
       {{$object->_view}}
-      {{mb_include module=dPpatients template=inc_vw_ipp ipp=$object->_IPP}}
+      {{mb_include module=patients template=inc_vw_ipp ipp=$object->_IPP}}
       </form>
     </th>
   </tr>
@@ -275,7 +275,7 @@
   {{if $object->_ref_dossier_medical->_canRead}}
     <tr>
       <td colspan="2">
-        {{mb_include module=dPpatients template=CDossierMedical_complete object=$object->_ref_dossier_medical}}
+        {{mb_include module=patients template=CDossierMedical_complete object=$object->_ref_dossier_medical}}
       </td>
     </tr>
   {{/if}}

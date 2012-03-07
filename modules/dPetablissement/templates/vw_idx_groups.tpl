@@ -56,7 +56,7 @@ reload = function(group_id){
     </td>
     {{if $can->edit}}
     <td class="halfPane" id="group_etab">
-      {{mb_include module=dPetablissement template=inc_vw_groups}}
+      {{mb_include module=etablissement template=inc_vw_groups}}
     </td>
     {{/if}}
   </tr>

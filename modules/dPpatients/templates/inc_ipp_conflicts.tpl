@@ -32,7 +32,7 @@
     </div>
   </td>
   <td style="text-align: center">
-    <strong>{{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}</strong>
+    <strong>{{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}</strong>
   </td>
   <td>
     <big>{{mb_value object=$patient field=naissance}}</big> 
@@ -53,7 +53,7 @@
     </div>
   </td>
   <td style="text-align: center">
-    <strong>{{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient_conflict->_IPP}}</strong>
+    <strong>{{mb_include module=patients template=inc_vw_ipp ipp=$patient_conflict->_IPP}}</strong>
   </td>
   <td>
     <big>{{mb_value object=$patient_conflict field=naissance}}</big> 

@@ -84,5 +84,5 @@
     <input type="hidden" name="secteur_id" value="" />
   </form>
   
-  {{mb_include module=dPhospi template=inc_services_secteur}}
+  {{mb_include module=hospi template=inc_services_secteur}}
 {{/if}}

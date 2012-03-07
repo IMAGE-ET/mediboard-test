@@ -244,7 +244,7 @@ createConsultEntree = function() {
 </form>
 
 <div style="display: none;" id="legend_suivi">
-  {{mb_include module=dPhospi template=inc_legend_suivi}}
+  {{mb_include module=hospi template=inc_legend_suivi}}
 </div>
 
 <button type="button" class="search" onclick="modal('legend_suivi')" style="float: right;">Légende</button>

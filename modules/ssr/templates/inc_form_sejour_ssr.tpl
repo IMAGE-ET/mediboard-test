@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module=dPpatients script=pat_selector}}
+{{mb_script module=patients script=pat_selector}}
 
 <script type="text/javascript">
 ProtocoleSelector.init = function(){
@@ -122,7 +122,7 @@ function printFormSejour() {
           <img src="images/icons/edit.png" alt="modifier" />
         </a>
         {{tr}}CSejour-title-modify{{/tr}} {{$sejour}}
-        {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+        {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
       </th>
       {{else}}
       <th class="title" colspan="8">
@@ -133,7 +133,7 @@ function printFormSejour() {
         {{tr}}CSejour-title-create{{/tr}} 
         {{if $sejour->_NDA}}
           pour le dossier
-          {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+          {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
         {{/if}}
       </th>
       {{/if}}

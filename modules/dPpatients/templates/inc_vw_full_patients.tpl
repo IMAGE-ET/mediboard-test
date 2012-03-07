@@ -74,7 +74,7 @@ onMergeComplete = function() {
         <img align="top" src="images/icons/labo.png" title="Résultats de laboratoire" />
       </a>
       {{/if}}
-      {{mb_include module=dPpatients template=inc_form_docitems_button object=$patient}}
+      {{mb_include module=patients template=inc_form_docitems_button object=$patient}}
     </div>
     {{/if}} 
   </th>
@@ -122,12 +122,12 @@ onMergeComplete = function() {
       {{if $_sejour->_canRead}}
         {{if $isImedsInstalled}}
           <div onclick="view_labo_sejour({{$_sejour->_id}})" style="float: left;">
-            {{mb_include module=dPImeds template=inc_sejour_labo sejour=$_sejour link="#1"}}
+            {{mb_include module=Imeds template=inc_sejour_labo sejour=$_sejour link="#1"}}
           </div>
         {{/if}}
         
         <div style="clear: both;">
-          {{mb_include module=dPpatients template=inc_form_docitems_button object=$_sejour}}
+          {{mb_include module=patients template=inc_form_docitems_button object=$_sejour}}
         </div>
       {{/if}}         
       </td>
@@ -158,7 +158,7 @@ onMergeComplete = function() {
       <td style="text-align: right;">
      
       {{if $_sejour->_canRead}}
-        {{mb_include module=dPpatients template=inc_form_docitems_button object=$_consult}}
+        {{mb_include module=patients template=inc_form_docitems_button object=$_consult}}
        {{/if}}
       </td>
     </tr>
@@ -182,7 +182,7 @@ onMergeComplete = function() {
     
       <td style="text-align:right;">
       {{if $_op->_canRead}}
-        {{mb_include module=dPpatients template=inc_form_docitems_button object=$_op}}
+        {{mb_include module=patients template=inc_form_docitems_button object=$_op}}
       {{/if}} 
       </td>
     </tr>
@@ -211,7 +211,7 @@ onMergeComplete = function() {
       
       <td style="text-align:right;">
       {{if $_consult->_canRead}}
-        {{mb_include module=dPpatients template=inc_form_docitems_button object=$_consult}}
+        {{mb_include module=patients template=inc_form_docitems_button object=$_consult}}
       {{/if}}
       </td>
     </tr>
@@ -269,7 +269,7 @@ onMergeComplete = function() {
   
     <td style="text-align:right;">
     {{if $_consult->_canRead}}
-      {{mb_include module=dPpatients template=inc_form_docitems_button object=$_consult}}
+      {{mb_include module=patients template=inc_form_docitems_button object=$_consult}}
     {{/if}}
     </td>
   </tr>

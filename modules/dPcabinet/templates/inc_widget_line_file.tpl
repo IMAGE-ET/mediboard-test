@@ -58,7 +58,7 @@
       {{mb_key object=$_file}}
      
       <!-- Send File -->
-      {{mb_include module=dPfiles template=inc_file_send_button 
+      {{mb_include module=files template=inc_file_send_button 
          notext=notext
           _doc_item=$_file
           onComplete="File.refresh('$object_id','$object_class')"

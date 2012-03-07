@@ -137,7 +137,7 @@ function reloadHeadersFooters() {
 
 </script>
 
-{{mb_script module=dPcompteRendu script=thumb}}
+{{mb_script module=compteRendu script=thumb}}
 
 <script type="text/javascript">
 

@@ -1,4 +1,4 @@
-{{mb_script module=dPdeveloppement script=code_sniffer}}
+{{mb_script module=developpement script=code_sniffer}}
 
 <script type="text/javascript">
 Main.add(function () {

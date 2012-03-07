@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module=dPurgences script=main_courante}}
+{{mb_script module=urgences script=main_courante}}
 {{mb_script module="dPplanningOp" script="cim10_selector"}}
 
 <script type="text/javascript">
@@ -148,7 +148,7 @@ function submitSejour() {
     {{assign var=rpu value=$sejour->_ref_rpu}}
     {{assign var=patient value=$sejour->_ref_patient}}
     <tr id="{{$rpu->_guid}}" {{if !$sejour->sortie_reelle && $sejour->_veille}} class="veille" {{/if}}>
-      {{mb_include module=dPurgences template=inc_sortie_rpu}}
+      {{mb_include module=urgences template=inc_sortie_rpu}}
     </tr>
   {{foreachelse}}
 	  <tr><td colspan="{{$conf.dPurgences.responsable_rpu_view|ternary:7:6}}" class="empty">Aucune sortie à effectuer</td></tr>

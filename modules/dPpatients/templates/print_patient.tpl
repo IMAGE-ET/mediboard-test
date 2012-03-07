@@ -33,7 +33,7 @@ function toggleList(list, button) {
 	</tr>
   <tr>
   	<th>{{mb_label object=$patient field=nom}} / {{mb_label object=$patient field=prenom}}</th>
-	  <td colspan="3"><strong>{{$patient->_view}}</strong> {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP hide_empty=true}}</td>
+	  <td colspan="3"><strong>{{$patient->_view}}</strong> {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP hide_empty=true}}</td>
 	</tr>
 	<tr>
     <th>{{mb_label object=$patient field=naissance}} / {{mb_label object=$patient field=sexe}}</th>
@@ -122,7 +122,7 @@ function toggleList(list, button) {
   <tr class="sejour">
     <th class="text">{{$curr_sejour->_ref_praticien->_view}}</th>
     <td colspan="3">
-      {{mb_include module=dPplanningOp template=inc_vw_numdos nda=$curr_sejour->_NDA}}
+      {{mb_include module=planningOp template=inc_vw_numdos nda=$curr_sejour->_NDA}}
       Du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}}
       au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}
 			- ({{mb_value object=$curr_sejour field=type}})

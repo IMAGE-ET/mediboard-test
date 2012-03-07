@@ -87,7 +87,7 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
 
   {{foreach from=$sejours item=_sejour}}
   <tr id="admission{{$_sejour->sejour_id}}">
-    {{mb_include module=dPadmissions template="inc_vw_admission_line" nodebug=true}}
+    {{mb_include module=admissions template="inc_vw_admission_line" nodebug=true}}
   </tr>
   {{foreachelse}}
   <tr>

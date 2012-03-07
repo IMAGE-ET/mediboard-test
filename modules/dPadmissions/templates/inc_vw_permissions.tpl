@@ -66,7 +66,7 @@ Calendar.regField(getForm("changeDatePermissions").date, null, {noView: true});
 
   {{foreach from=$affectations item=_aff}}
   <tr id="permission{{$_aff->_id}}">
-    {{mb_include module=dPadmissions template="inc_vw_permission_line" _sejour=$_aff->_ref_sejour nodebug=true}}
+    {{mb_include module=admissions template="inc_vw_permission_line" _sejour=$_aff->_ref_sejour nodebug=true}}
   </tr>
   {{foreachelse}}
   <tr>

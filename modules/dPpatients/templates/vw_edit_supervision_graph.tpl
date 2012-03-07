@@ -1,4 +1,4 @@
-{{mb_script module=dPpatients script=supervision_graph}}
+{{mb_script module=patients script=supervision_graph}}
 {{mb_script module=mediusers script=color_selector}}
 
 <script type="text/javascript">
@@ -38,7 +38,7 @@ Main.add(function(){
                   {{foreach from=$_axis->_back.series|@array_reverse item=_series}}
                     <span style="float: right; width: 4px; height: 9px; background-color: #{{$_series->color}}; margin-left: 1px;"></span>
                   {{/foreach}}
-                  {{mb_include module=dPpatients template=inc_axis_symbol axis=$_axis small=true}}
+                  {{mb_include module=patients template=inc_axis_symbol axis=$_axis small=true}}
                   {{$_axis}}
                 </div>
               {{/foreach}}

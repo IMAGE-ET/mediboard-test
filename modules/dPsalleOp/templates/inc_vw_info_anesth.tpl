@@ -149,11 +149,11 @@ Main.add(function(){
 		  </tr>
 		</table>
 	{{else}}
-	  {{mb_include module=dPcabinet template=inc_choose_dossier_anesth}}
+	  {{mb_include module=cabinet template=inc_choose_dossier_anesth}}
 	{{/if}}
   {{assign var=callback value=refreshVisite}}
   <div id="visite_pre_anesth">
-    {{mb_include module=dPsalleOp template=inc_visite_pre_anesth}}
+    {{mb_include module=salleOp template=inc_visite_pre_anesth}}
   </div>
 </div>
 

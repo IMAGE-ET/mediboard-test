@@ -10,7 +10,7 @@
 	<td>
   	{{assign var=sejour value=$_operation->_ref_sejour}}
     <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
-    	<strong>{{mb_include module=dPplanningOp template=inc_vw_numdos nda=$sejour->_NDA}}</strong>
+    	<strong>{{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}</strong>
     </span>
   </td>
   
@@ -22,7 +22,7 @@
     {{assign var=patient value=$sejour->_ref_patient}}
     <a href="?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$sejour->patient_id}}&amp;sejour_id={{$sejour->_id}}">
     	<span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
-	      {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}
+	      {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}
 	      {{$patient}}
     	</span> 
     </a>
@@ -37,7 +37,7 @@
   </td>
 	
   <td class="text">
-  	{{mb_include module=dPplanningOp template=inc_vw_operation}}
+  	{{mb_include module=planningOp template=inc_vw_operation}}
   </td>
 
   <td>{{$_operation->_nb_files_docs+$_operation->_ref_sejour->_nb_files_docs}}</td>

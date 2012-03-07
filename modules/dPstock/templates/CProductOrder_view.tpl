@@ -53,4 +53,4 @@ popupOrderForm = function(order_id, width, height) {
   {{/if}}
 </table>
 
-{{mb_include module=dPstock template=inc_order_items_list screen=true}}
+{{mb_include module=stock template=inc_order_items_list screen=true}}

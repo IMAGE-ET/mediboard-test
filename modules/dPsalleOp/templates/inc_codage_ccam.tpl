@@ -51,9 +51,9 @@
       <td class="text">
         <!-- Codage des actes -->
         {{if $subject->_coded && !$can->admin && $m != "dPpmsi"}}
-          {{mb_include module=dPsalleOp template=inc_possible_actes_ccam}}
+          {{mb_include module=salleOp template=inc_possible_actes_ccam}}
         {{else}}
-          {{mb_include module=dPsalleOp template=inc_edit_actes_ccam}}
+          {{mb_include module=salleOp template=inc_edit_actes_ccam}}
         {{/if}}
       </td>
     </tr>

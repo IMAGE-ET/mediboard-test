@@ -27,8 +27,8 @@
   </tr>
 </table>
 
-{{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$consultation vue=view}}
-{{mb_include module=dPcabinet template=inc_list_actes_ngap subject=$consultation }}
+{{mb_include module=cabinet template=inc_list_actes_ccam subject=$consultation vue=view}}
+{{mb_include module=cabinet template=inc_list_actes_ngap subject=$consultation }}
  
 {{assign var=examaudio value=$consultation->_ref_examaudio}}
 {{if $examaudio && $examaudio->_id}}
