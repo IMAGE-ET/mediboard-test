@@ -1,4 +1,5 @@
 <table class="tbl">
+  
   <tr>
     <th class="title" colspan="2">Statistiques</th>
   </tr>

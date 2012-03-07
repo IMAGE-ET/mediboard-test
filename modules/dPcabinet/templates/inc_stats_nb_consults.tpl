@@ -30,7 +30,7 @@
   </tr>     
   {{foreachelse}}
   <tr>
-    <td class="empty">{{tr}}None{{/tr}}</td>
+    <td colspan="10" class="empty">{{tr}}None{{/tr}}</td>
   </tr>
   {{/foreach}}
 </table>
