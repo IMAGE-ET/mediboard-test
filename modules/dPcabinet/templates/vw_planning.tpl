@@ -107,10 +107,15 @@ Main.add(function () {
   </tr>
   <tr>
     <td>
+      <div id="planning-plages">
       {{mb_include module=ssr template=inc_vw_week}}
-
-      <script>
+        <script type="text/javascript">
+	
         Main.add(function() {
+          ViewPort.SetAvlHeight("planning-plages", 1);
+          var height = $('planning-plages').getDimensions().height - 50;
+          // Lancer le calcul du view planning avec la hauteur height
+          
           window['planning-{{$planning->guid}}'].onMenuClick = function(event, plage, elem){
             if (event == 'list') {
               showConsultations(elem,plage);
@@ -121,14 +126,16 @@ Main.add(function () {
             }
             
             if (event == 'clock') {
-              var url=new Url('cabinet', 'edit_planning', 'tab');
+              var url = new Url('cabinet', 'edit_planning', 'tab');
               url.addParam('consultation_id', 0);
               url.addParam('plageconsult_id', plage);
               url.redirectOpener();
             }
           }
         });
-      </script>
+
+        </script>
+      </div>
     <td id="consultations">{{mb_include module=dPcabinet template=inc_consultations}}</td>
   </tr>
 </table>
