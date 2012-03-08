@@ -26,4 +26,6 @@ require "$path/config.php";
 //}
 
 // Overload configuration (for master/slave)
-require "$path/config_overload.php";
+if (is_file("$path/config_overload.php")) {
+  include "$path/config_overload.php";
+}
