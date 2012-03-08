@@ -95,7 +95,8 @@
           <tr>
             <th>{{mb_label object=$secondary_function field="user_id"}}</th>
             <td>
-              <input type="text" name="user_id" class="notNull" value=""/>
+              <input type="hidden" name="user_id" class="notNull" value=""/>
+              <input type="text" name="_view" value="" />
               <input type="hidden" name="object_class" value="CMediusers" />
               <button class="search" type="button" onclick="ObjectSelector.initEdit()">Chercher</button>
               <script type="text/javascript">
@@ -104,6 +105,7 @@
                   this.sId       = "user_id";
                   this.sClass    = "object_class";  
                   this.onlyclass = "true";
+                  this.sView     = "_view";
                   this.pop();
                 }
               </script>
@@ -148,7 +150,7 @@
             </td>
             <td class="button">
               {{if $can->edit}}
-              <form name="addSecUser" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+              <form name="delSecUser-{{$curr_function->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
               <input type="hidden" name="dosql" value="do_secondary_function_aed" />
               <input type="hidden" name="secondary_function_id" value="{{$curr_function->secondary_function_id}}" />
               <input type="hidden" name="del" value="1" />
