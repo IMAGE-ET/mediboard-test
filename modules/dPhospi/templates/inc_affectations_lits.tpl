@@ -81,7 +81,9 @@
         {{/if}}
         
         <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
-          <strong>{{$patient}}</strong>
+          <strong {{if $sejour->type == "ambu"}}style="font-style: italic;"{{/if}}>
+            {{$patient}}
+          </strong>
         </span>
 
         {{if (!$sejour->entree_reelle) || ($aff_prev->_id && $aff_prev->effectue == 0)}}
