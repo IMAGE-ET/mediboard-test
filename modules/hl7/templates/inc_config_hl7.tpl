@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<form name="editConfigHL7" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
+<form name="editConfigHL7" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
   <table class="form">
@@ -20,7 +20,12 @@
     {{mb_include module=system template=inc_config_bool var=doctorActif}}
     
     {{mb_include module=system template=inc_config_str var=importFunctionName}}
-
+    
+    {{assign var=hl7v2_versions value="CHL7v2"|static:versions}} 
+    {{assign var=list_hl7v2_versions value='|'|implode:$hl7v2_versions}}
+    
+    {{mb_include module=system template=inc_config_enum var=default_version values=$list_hl7v2_versions}}
+    
     <tr>
       <td class="button" colspan="10">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

@@ -241,12 +241,17 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
 		
 		CMbArray::removeValue("", $parts);
 		
-    $this->version = $parts[0];
+    $this->version = $version = $parts[0];
     
     if (count($parts) > 1) {
       $this->i18n_code = $parts[1];
-      $this->extension = "$parts[1]_$parts[2]";
+      $this->extension = $version = "$parts[1]_$parts[2]";
     }
+
+    // Dans le cas où la version passée est incorrecte on met par défaut 2.5
+    if (!in_array($version, CHL7v2Message::$versions)) {
+      $this->version = CAppUI::conf("hl7 default_version");
+    }    
   }
   
   function readHeader(){

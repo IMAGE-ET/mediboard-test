@@ -7,6 +7,7 @@ $dPconfig["hl7"] = array(
   "indeterminateDoctor"           => "Medecin indéterminé",
   "doctorActif"                   => "0",
   "importFunctionName"            => "Import",
+  "default_version"               => "2.5"
 );
 
 $dPconfig["db"]["hl7v2"] = array(
