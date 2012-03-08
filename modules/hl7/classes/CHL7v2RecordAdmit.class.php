@@ -48,6 +48,17 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     return $data;
   }
   
+  function getVenueAN($sender, $data) {
+    switch ($sender->_configs["get_NDA"]) {
+      case 'PV1_19':
+        return CValue::read($data['admitIdentifiers'], "AN");
+        break;
+      default:
+       return CValue::read($data['personIdentifiers'], "AN");
+        break;
+    }
+  }
+  
   function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
     $event_temp = $ack->event;
 
@@ -93,7 +104,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
  
   function handleA01(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création possible
-    
     return $this->handleA05($ack, $newVenue, $data);
   }
   
@@ -135,8 +145,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $venueRI       = CValue::read($data['admitIdentifiers'], "RI");
     $venueRISender = CValue::read($data['admitIdentifiers'], "RI_Sender");
     $venueNPA      = CValue::read($data['admitIdentifiers'], "NPA");
-    $venueAN       = CValue::read($data['personIdentifiers'], "AN");
-    
+    $venueAN       = $this->getVenueAN($sender, $data);
+        
     $NDA = new CIdSante400();
     if ($venueAN) {
       $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
@@ -394,7 +404,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $venueRI       = CValue::read($data['admitIdentifiers'], "RI");
     $venueRISender = CValue::read($data['admitIdentifiers'], "RI_Sender");
     $venueNPA      = CValue::read($data['admitIdentifiers'], "NPA");
-    $venueAN       = CValue::read($data['personIdentifiers'], "NA");
+    $venueAN       = $this->getVenueAN($sender, $data);
     
     $NDA = new CIdSante400();
     if ($venueAN) {
@@ -477,8 +487,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $comment = "Le mouvement '$movement_id' est inconnu dans Mediboard";
       return $exchange_ihe->setAckAR($ack, "E206", $comment, $newVenue);
     }
-    
-    
   }
   
   function mappingMovement($data, CSejour $newVenue, CMovement $movement) {
