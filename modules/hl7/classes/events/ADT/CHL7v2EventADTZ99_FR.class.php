@@ -23,6 +23,10 @@ class CHL7v2EventADTZ99_FR extends CHL7v2EventADT implements CHL7EventADTZ99 {
     parent::__construct($i18n);
   }
   
+  function getEVNOccuredDateTime($sejour) {
+    return mbDateTime();
+  }
+  
   /**
    * @see parent::build()
    */

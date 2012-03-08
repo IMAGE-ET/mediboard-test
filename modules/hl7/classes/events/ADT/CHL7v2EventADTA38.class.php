@@ -23,6 +23,10 @@ class CHL7v2EventADTA38 extends CHL7v2EventADT implements CHL7EventADTA38 {
     parent::__construct($i18n);
   }
   
+  function getEVNOccuredDateTime($sejour) {
+    return mbDateTime();
+  }
+
   /**
    * @see parent::build()
    */

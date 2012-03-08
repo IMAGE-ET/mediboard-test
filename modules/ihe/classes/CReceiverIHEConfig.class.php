@@ -28,6 +28,7 @@ class CReceiverIHEConfig extends CMbObject {
   var $ITI31_HL7_version        = null; 
   
   var $build_mode               = null;
+  var $build_NDA                = null;
   
   var $send_all_patients        = null;
   var $send_default_affectation = null;
@@ -57,6 +58,7 @@ class CReceiverIHEConfig extends CMbObject {
     $props["ITI31_HL7_version"]        = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5|FR_2.1|FR_2.2|FR_2.3 default|2.5";
     
     $props["build_mode"]               = "enum list|normal|simple default|normal";
+    $props["build_NDA"]                = "enum list|PID_18|PV1_19 default|PID_18";
     
     $props["receiving_application"]    = "str";
     $props["receiving_facility"]       = "str";

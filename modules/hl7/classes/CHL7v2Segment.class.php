@@ -440,7 +440,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     return $names;
   }
   
-  function getPL(CSejour $sejour, CAffectation $affectation = null) {
+  function getPL(CSejour $sejour, CAffectation $affectation = null, $location_status = false) {
     $group       = $sejour->loadRefEtablissement();
     if (!$affectation) {
       $affectation = $sejour->getCurrAffectation();
@@ -462,7 +462,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         // Table - 0116
         // O - Occupé
         // U - Libre
-        "O",
+        $location_status ? "O" : null,
         // PL-6 - Person location type
         null,
         // PL-7 - Building

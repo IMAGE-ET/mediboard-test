@@ -29,18 +29,21 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $PV1 = $this->queryNode("PV1", null, $data, true);
 
     $data["admitIdentifiers"] = $this->getAdmitIdentifiers($PV1, $sender);
-
+    
     $this->queryNode("PV2", null, $data, true);
     
-    $this->queryNode("ZBE", null, $data, true);
+    // Traitement des segments spécifiques extension française PAM
+    if ($this->_is_i18n == "FR") {
+      $this->queryNode("ZBE", null, $data, true);
     
-    $this->queryNode("ZFP", null, $data, true);
-    
-    $this->queryNode("ZFV", null, $data, true);
-    
-    $this->queryNode("ZFM", null, $data, true);
-    
-    $this->queryNode("ZFD", null, $data, true);
+      $this->queryNode("ZFP", null, $data, true);
+      
+      $this->queryNode("ZFV", null, $data, true);
+      
+      $this->queryNode("ZFM", null, $data, true);
+      
+      $this->queryNode("ZFD", null, $data, true);
+    }
     
     return $data;
   }
@@ -50,7 +53,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
     $exchange_ihe = $this->_ref_exchange_ihe;
     $sender       = $this->_ref_sender;
-  
+
     // Acquittement d'erreur : identifiants RI et NA non fournis
     if (!$data['admitIdentifiers']) {
       return $exchange_ihe->setAckAR($ack, "E200", null, $newPatient);
@@ -435,22 +438,22 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function mappingVenue($data, CSejour $newVenue) {
     // Segment PV1
-    $this->getPV1($data["PV1"], $newVenue);
+    $this->getSegment("PV1", $data, $newVenue);
     
     // Segment PV2
-    $this->getPV2($data["PV2"], $newVenue);
+    $this->getSegment("PV2", $data, $newVenue);
     
     // Segment ZFD
-    $this->getZFD($data["ZFD"], $newVenue);
+    $this->getSegment("ZFD", $data, $newVenue);
     
     // Segment ZFM
-    $this->getZFM($data["ZFM"], $newVenue);
+    $this->getSegment("ZFM", $data, $newVenue);
     
     // Segment ZFP
-    $this->getZFP($data["ZFP"], $newVenue);
+    $this->getSegment("ZFP", $data, $newVenue);
     
     // Segment ZFV
-    $this->getZFV($data["ZFV"], $newVenue);
+    $this->getSegment("ZFV", $data, $newVenue);
 
     /* TODO Supprimer ceci après l'ajout des times picker */
     $newVenue->_hour_entree_prevue = null;
@@ -656,7 +659,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getHospitalService(DOMNode $node, CSejour $newVenue) {
-    $newVenue->discipline_id = $this->queryTextNode("PV1.10", $node);
+    /* @todo Voir comment gérer */
+    // $newVenue->discipline_id = $this->queryTextNode("PV1.10", $node);
   }
   
   function getAdmitSource(DOMNode $node, CSejour $newVenue) {
