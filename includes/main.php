@@ -228,7 +228,8 @@ $obsolete_module = false;
 $user = CAppUI::$user;
 
 // We check only when not in the "system" module, and not in an "action" (ajax, etc)
-if ($m && $m != "system" && (!$a || $a == "index") && (!$user->_id || $user->isAdmin())) {
+// And when user is undefined or admin
+if ($m && $m != "system" && (!$a || $a == "index") && (!$user || !$user->_id || $user->isAdmin())) {
   $setupclass = "CSetup$m";
   $setup = new $setupclass;
   $module->compareToSetup($setup);
