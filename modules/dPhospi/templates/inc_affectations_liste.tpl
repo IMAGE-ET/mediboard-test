@@ -31,8 +31,8 @@
     </td>
     <td class="patient" onclick="flipSejour({{$_sejour->_id}})">
       <strong {{if !$_sejour->entree_reelle}}class="patient-not-arrived"{{/if}} {{if $_sejour->septique}}class="septique"{{/if}}>
-        <a name="sejour{{$_sejour->_id}}">
-          {{$_sejour->_ref_patient->_view}}
+        <a name="sejour{{$_sejour->_id}}" {{if $_sejour->type == "ambu"}}style="font-style: italic;"{{/if}}>
+          {{$_sejour->_ref_patient}}
         </a>
       </strong>
       {{if $_sejour->type != "ambu" && $_sejour->type != "exte"}}
@@ -75,15 +75,15 @@
 
   <tr>
     <td colspan="2">
-    	<strong>
+      <strong>
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
-    	</strong>
+      </strong>
     </td>
   </tr>
 
-	{{if $_sejour->prestation_id}}
+  {{if $_sejour->prestation_id}}
   <tr>
-    <td colspan="2"><strong>Prestation: </strong>{{$_sejour->_ref_prestation->_view}}</td>
+    <td colspan="2"><strong>Prestation: </strong>{{$_sejour->_ref_prestation}}</td>
   </tr>
   {{/if}}
 
