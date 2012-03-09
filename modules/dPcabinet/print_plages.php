@@ -70,6 +70,7 @@ foreach ($listPlage as $plage_id => &$plage) {
     $consultation =& $plage->_ref_consultations[$keyConsult];
 
     $consultation->loadRefPatient(1);
+    
     // Chargement de la categorie
     $consultation->loadRefCategorie(1);
     $consultation->loadRefConsultAnesth();
@@ -85,9 +86,7 @@ foreach ($listPlage as $plage_id => &$plage) {
     $keyPlace = mbTimeCountIntervals($plage->debut, $consultation->heure, $plage->freq);
     
     for ($i = 0;  $i < $consultation->duree; $i++) {
-      if (isset($plage->listPlace[($keyPlace + $i)])) {
-        $plage->listPlace[($keyPlace + $i)]["consultations"][] =& $consultation;
-      }
+      @$plage->listPlace[($keyPlace + $i)]["consultations"][] =& $consultation;
     }
   }
 }
