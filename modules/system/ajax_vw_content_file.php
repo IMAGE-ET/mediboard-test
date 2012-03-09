@@ -11,13 +11,13 @@
  * @link     http://www.mediboard.org
  */
 
+CCanDo::checkAdmin();
+
 $path = CValue::get("path");
 
 $content_file = file_get_contents($path);
 
 $smarty = new CSmartyDP;
-
 $smarty->assign("content_file", $content_file);
-
 $smarty->display("inc_vw_content_file.tpl");
 ?>
