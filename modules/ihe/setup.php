@@ -166,8 +166,16 @@ class CSetupihe extends CSetup {
     $query = "ALTER TABLE `receiver_ihe_config` 
                 ADD `build_NDA` ENUM ('PID_18','PV1_19') DEFAULT 'PID_18';";
     $this->addQuery($query);
+    
+    $this->makeRevision("0.16");
+    
+    $query = "ALTER TABLE `receiver_ihe_config` 
+              ADD `build_PV1_3_2` ENUM ('name','config_value') DEFAULT 'name',
+              ADD `build_PV1_3_5` ENUM ('bed_status','null') DEFAULT 'bed_status',
+              ADD `build_PV1_10` ENUM ('discipline','service') DEFAULT 'discipline';";
+    $this->addQuery($query);  
        
-    $this->mod_version = "0.16";
+    $this->mod_version = "0.17";
   }
 }
 

@@ -8,14 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-  viewFile = function(path) {
-    var url = new Url("system", "ajax_vw_content_file");
-    url.addParam("path", path);
-    url.modal(600);
-  }
-</script>
-
 <table class="main">
   <tr>
     <td>
@@ -30,7 +22,6 @@
               <a target="blank" href="?m=system&a=download_file&filename={{$_file}}&exchange_source_guid={{$exchange_source->_guid}}&dialog=1&suppressHeaders=1" class="button download notext">
                 {{tr}}Download{{/tr}}
               </a>
-              <button type="button" class="lookup notext" onclick="viewFile('{{$_file}}')"></button>    
             </td>
             <td class="text"> {{$_file}} </td>
           </tr>

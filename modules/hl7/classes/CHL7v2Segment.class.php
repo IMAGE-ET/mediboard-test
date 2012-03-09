@@ -439,8 +439,46 @@ class CHL7v2Segment extends CHL7v2Entity {
 
     return $names;
   }
+
+  function getPL2 (CInteropReceiver $receiver, CSejour $sejour, CAffectation $affectation = null) {
+    // Chambre
+    switch ($receiver->_configs["build_PV1_3_2"]) {
+      // Valeur en config
+      case 'config_value':
+        return CAppUI::conf("hl7 CHL7v2Segment PV1_3_2");
+      // Nom de la chambre
+      default:
+        return ($affectation->_id && $affectation->_ref_lit) ? $affectation->_ref_lit->_ref_chambre->nom : null;
+    }
+  }
   
-  function getPL(CSejour $sejour, CAffectation $affectation = null, $location_status = false) {
+  function getPL5 (CInteropReceiver $receiver) {
+    // Statut du lit
+    switch ($receiver->_configs["build_PV1_3_5"]) {
+      // Ne rien envoyer
+      case 'null':
+        return null;
+      // Occupé - Libre
+      default:
+        // O - Occupé
+        // U - Libre
+        return "O";
+    }
+  }
+  
+  function getPV110 (CInteropReceiver $receiver, CSejour $sejour) {
+    // Hospital Service
+    switch ($receiver->_configs["build_PV1_10"]) {
+      // idex du service
+      case 'service':
+        return CIdSante400::getMatch("CService", $receiver->_tag_service, null, $sejour->service_id)->id400;
+      // Discipline médico-tarifaire
+      default:
+        return $sejour->discipline_id;
+    }
+  }
+  
+  function getPL(CInteropReceiver $receiver, CSejour $sejour, CAffectation $affectation = null) {
     $group       = $sejour->loadRefEtablissement();
     if (!$affectation) {
       $affectation = $sejour->getCurrAffectation();
@@ -453,7 +491,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         // PL-1 - Code UF hébergement
         $current_uf["hebergement"]->code,
         // PL-2 - Chambre
-        ($affectation->_id && $affectation->_ref_lit) ? $affectation->_ref_lit->_ref_chambre->nom : null,
+        $this->getPL2($receiver, $sejour, $affectation),
         // PL-3 - Lit
         ($affectation->_id && $affectation->_ref_lit) ? $affectation->_ref_lit->nom : null,
         // PL-4 - Etablissement hospitalier
@@ -462,7 +500,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         // Table - 0116
         // O - Occupé
         // U - Libre
-        $location_status ? "O" : null,
+        $this->getPL5($receiver),
         // PL-6 - Person location type
         null,
         // PL-7 - Building
@@ -471,10 +509,10 @@ class CHL7v2Segment extends CHL7v2Entity {
     );
   }
   
-  function getPreviousPL(CSejour $sejour) {
+  function getPreviousPL(CInteropReceiver $receiver, CSejour $sejour) {
     $sejour->loadSurrAffectations();
     if ($prev_affectation = $sejour->_ref_prev_affectation) {
-      return $this->getPL($sejour, $prev_affectation);
+      return $this->getPL($receiver, $sejour, $prev_affectation);
     }
   }
   

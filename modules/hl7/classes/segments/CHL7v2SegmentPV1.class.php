@@ -56,7 +56,7 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     $data[] = CHL7v2TableEntry::mapTo("4", $sejour->type);
     
     // PV1-3: Assigned Patient Location (PL) (optional)
-    $data[] = $this->getPL($sejour);
+    $data[] = $this->getPL($receiver, $sejour);
     
     // PV1-4: Admission Type (IS) (optional)
     // Table - 0007
@@ -90,7 +90,7 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     }
     
     // PV1-6: Prior Patient Location (PL) (optional)
-    $data[] = $this->getPreviousPL($sejour);
+    $data[] = $this->getPreviousPL($receiver, $sejour);
     
     // PV1-7: Attending Doctor (XCN) (optional repeating)
     $sejour->loadRefPraticien();
@@ -103,7 +103,7 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     $data[] = null;
     
     // PV1-10: Hospital Service (IS) (optional)
-    $data[] = $sejour->discipline_id;
+    $data[] = $this->getPV110($receiver, $sejour);
     
     // PV1-11: Temporary Location (PL) (optional)
     $data[] = null;

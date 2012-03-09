@@ -18,15 +18,20 @@
 </script>
 
 <ul id="tabs-configure" class="control_tabs">
-  <li><a href="#config-hl7">{{tr}}config-hl7{{/tr}}</a></li>
+  <li><a href="#CHL7-config">{{tr}}CHL7-config{{/tr}}</a></li>
+  <li><a href="#CHL7v2Segment-config">{{tr}}CHL7v2Segment-config{{/tr}}</a></li>
   <li><a href="#config-source">{{tr}}config-hl7v2-source{{/tr}}</a></li>
   <li><a href="#config-hl7v2-tables">{{tr}}config-hl7v2-tables{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
 
-<div id="config-hl7" style="display: none;">
-  {{mb_include module=hl7 template=inc_config_hl7}}
+<div id="CHL7-config" style="display: none;">
+  {{mb_include module=hl7 template=CHL7_config}}
+</div>
+
+<div id="CHL7v2Segment-config" style="display: none;">
+  {{mb_include module=hl7 template=CHL7v2Segment_config}}
 </div>
 
 <div id="config-source" style="display: none;">

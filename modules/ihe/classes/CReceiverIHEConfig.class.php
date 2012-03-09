@@ -30,6 +30,11 @@ class CReceiverIHEConfig extends CMbObject {
   var $build_mode               = null;
   var $build_NDA                = null;
   
+  // PV1
+  var $build_PV1_3_2            = null;
+  var $build_PV1_3_5            = null;
+  var $build_PV1_10             = null;
+  
   var $send_all_patients        = null;
   var $send_default_affectation = null;
   
@@ -59,6 +64,11 @@ class CReceiverIHEConfig extends CMbObject {
     
     $props["build_mode"]               = "enum list|normal|simple default|normal";
     $props["build_NDA"]                = "enum list|PID_18|PV1_19 default|PID_18";
+    
+    // PV1
+    $props["build_PV1_3_2"]            = "enum list|name|config_value default|name";
+    $props["build_PV1_3_5"]            = "enum list|bed_status|null default|bed_status";
+    $props["build_PV1_10"]             = "enum list|discipline|service default|discipline";
     
     $props["receiving_application"]    = "str";
     $props["receiving_facility"]       = "str";

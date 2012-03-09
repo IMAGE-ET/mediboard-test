@@ -576,10 +576,15 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       case "RI" :
         // Notre propre RI
         if (($this->queryTextNode("XCN.9/HD.2", $node) == CAppUI::conf("hl7 assigningAuthorityUniversalID"))) {
-          $object->id = $id;
-          break;
+          return $id;
         }
       default :
+        // Recherche du praticien par son idex
+        $id400  = CIdSante400::getMatch($object->_class, $this->_ref_sender->_tag_mediuser, $id);
+        if ($id400->_id) {
+          return $id400->object_id;
+        }
+        
         if ($object instanceof CMediusers) {
           $object->_user_first_name = $first_name;
           $object->_user_last_name  = $last_name;
@@ -588,6 +593,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           $object->prenom = $first_name;
           $object->nom    = $last_name;
         }
+        
         break;
     }
     

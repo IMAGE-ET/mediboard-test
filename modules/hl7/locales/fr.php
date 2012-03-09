@@ -1,5 +1,6 @@
 <?php
 $locales['CExchangeIHE.sender_class.CSenderMLLP'] = 'Source MLLP';
+$locales['CHL7-config'] = 'HL7';
 $locales['CHL7Config'] = 'Configuration HL7';
 $locales['CHL7Config-assigning_authority_namespace_id-court'] = 'Autorité d\'affectation - Nom';
 $locales['CHL7Config-assigning_authority_namespace_id-desc'] = 'Nom de l\'application';
@@ -111,6 +112,8 @@ $locales['CHL7v2Exception-17'] = 'Type de données inattendu';
 $locales['CHL7v2Exception-18'] = 'Chaîne trop longue';
 $locales['CHL7v2Exception-19'] = 'Valeur inconnue dans la table';
 $locales['CHL7v2Exception-20'] = 'Événement inconnu';
+$locales['CHL7v2Segment-config'] = 'Segments';
+$locales['CHL7v2SegmentPV1'] = 'Segment PV1';
 $locales['CHL7v2TableDescription'] = 'Table HL7v2';
 $locales['CHL7v2TableDescription-_count_entries-court'] = 'Entrées associées';
 $locales['CHL7v2TableDescription-_count_entries-desc'] = 'Entrées associées';
@@ -241,7 +244,8 @@ $locales['HL7-v.2.3'] = 'HL7 version 2.3';
 $locales['HL7-v.2.3.1'] = 'HL7 version 2.3.1';
 $locales['HL7-v.2.4'] = 'HL7 version 2.4';
 $locales['HL7-v.2.5'] = 'HL7 version 2.5';
-$locales['config-hl7'] = 'HL7';
+$locales['config-hl7-CHL7v2Segment-PV1_3_2'] = 'Nom chambre (PV1-3.2)';
+$locales['config-hl7-CHL7v2Segment-PV1_3_2-desc'] = 'Nom chambre (PV1-3.2)';
 $locales['config-hl7-assigningAuthorityUniversalID'] = 'ID de l\'autorité d\'assignation de MB';
 $locales['config-hl7-assigningAuthorityUniversalID-desc'] = 'ID de l\'autorité d\'assignation de Mediboard';
 $locales['config-hl7-default_version'] = 'Valeur HL7 par défaut';
