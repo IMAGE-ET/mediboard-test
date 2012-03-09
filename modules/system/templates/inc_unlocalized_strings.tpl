@@ -52,7 +52,7 @@
   <tr>
     <td class="button" colspan="10">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-      <button class="cancel" type="button">{{tr}}Close{{/tr}}</button>
+      <button class="cancel" type="button" onclick="Control.Modal.close();">{{tr}}Close{{/tr}}</button>
     </td>
   </tr>
 
