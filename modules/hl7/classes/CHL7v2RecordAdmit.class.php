@@ -49,7 +49,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getVenueAN($sender, $data) {
-    switch ($sender->_configs["get_NDA"]) {
+    switch ($sender->_configs["handle_NDA"]) {
       case 'PV1_19':
         return CValue::read($data['admitIdentifiers'], "AN");
         break;

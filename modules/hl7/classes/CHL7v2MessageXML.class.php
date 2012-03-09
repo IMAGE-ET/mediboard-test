@@ -223,7 +223,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     // RI - Resource identifier 
     // AN - On peut également retrouver le numéro de dossier dans ce champ
     if ($PV1_19 = $this->queryNode("PV1.19", $contextNode)) {
-    	switch ($sender->_configs["get_NDA"]) {
+    	switch ($sender->_configs["handle_NDA"]) {
 				case 'PV1_19':
 					$this->getANIdentifier($PV1_19, $data);
 					break;
