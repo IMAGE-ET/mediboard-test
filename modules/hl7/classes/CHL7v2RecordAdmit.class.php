@@ -664,24 +664,35 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getReferringDoctor(DOMNode $node, CSejour $newVenue) {
-    $PV18 = $this->query("PV1.8", $node);
+    $PV1_8 = $this->query("PV1.8", $node);
     
     $medecin = new CMedecin();
-    foreach ($PV18 as $_PV18) {
-      $newVenue->adresse_par_prat_id = $this->getDoctor($_PV18, $medecin);
+    foreach ($PV1_8 as $_PV1_8) {
+      $newVenue->adresse_par_prat_id = $this->getDoctor($_PV1_8, $medecin);
     }
   }
   
   function getHospitalService(DOMNode $node, CSejour $newVenue) {
-    /* @todo Voir comment gérer */
-    // $newVenue->discipline_id = $this->queryTextNode("PV1.10", $node);
+    $sender = $this->_ref_sender;
+    $PV1_10 = $this->queryTextNode("PV1.10", $node);
+    
+    // Hospital Service
+    switch ($sender->_configs["handle_PV1_10"]) {
+      // idex du service
+      case 'service':
+        $newVenue->service_id = CIdSante400::getMatch("CService", $sender->_tag_service, null, $PV1_10)->object_id;
+        break;
+      // Discipline médico-tarifaire
+      default:
+        $newVenue->discipline_id = $PV1_10;
+        break;
+    }
   }
   
   function getAdmitSource(DOMNode $node, CSejour $newVenue) {
     $admit_source = $this->queryTextNode("PV1.14", $node);
     
-    /* @todo Voir comment gérer */
-    
+    /* @todo Voir comment gérer */    
   }
   
   function getFinancialClass(DOMNode $node, CSejour $newVenue) {

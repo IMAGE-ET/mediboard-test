@@ -22,7 +22,8 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "assigning_authority_universal_id",
     "assigning_authority_universal_type_id",
     "handle_mode",
-    "get_NDA"
+    "handle_NDA",
+    "handle_PV1_10"
   );
   
   var $hl7_config_id = null;
@@ -32,8 +33,9 @@ class CHL7Config extends CExchangeDataFormatConfig {
   var $assigning_authority_universal_id      = null;
   var $assigning_authority_universal_type_id = null;
 	
-	var $handle_mode = null;
-	var $get_NDA		 = null;
+	var $handle_mode   = null;
+	var $handle_NDA	   = null;
+  var $handle_PV1_10 = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -50,8 +52,11 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["assigning_authority_universal_id"]      = "str";
     $props["assigning_authority_universal_type_id"] = "str";
 		
-		$props["handle_mode"] = "enum list|normal|simple default|normal";
-		$props["get_NDA"]     = "enum list|PID_18|PV1_19 default|PID_18";
+		$props["handle_mode"]   = "enum list|normal|simple default|normal";
+		$props["handle_NDA"]    = "enum list|PID_18|PV1_19 default|PID_18";
+    
+    // PV1
+    $props["handle_PV1_10"] = "enum list|discipline|service default|discipline";
     
     return $props;
   }
