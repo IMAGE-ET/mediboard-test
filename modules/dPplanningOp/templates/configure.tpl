@@ -1,15 +1,7 @@
 <script type="text/javascript">
-  function importSAEBase(){
-    var url = new Url("dPplanningOp", "ajax_import_sae_base");
-    url.requestUpdate("import-log");
-  }
-
-  Main.add(function() {
-	  var form = getForm("editConfig");
-	  form["dPplanningOp[CSejour][max_cancel_time]"].addSpinner({min:0, max:24});
-	  form["dPplanningOp[CSejour][hours_sejour_proche]"].addSpinner({min:0, max:96});
-    Control.Tabs.create('tabs-configure', true);
-  });
+Main.add(function() {
+  Control.Tabs.create('tabs-configure', true);
+});
 </script>
 
 <ul id="tabs-configure" class="control_tabs">
@@ -30,71 +22,58 @@
 <input type="hidden" name="m" value="system" />
 
 <div id="configure-mode_easy" style="display: none">
+
 <table class="form">
   <tr>
     <th class="title" colspan="2">Affichage de la DHE simplifiée</th>
   </tr>
   
-  {{assign var="class" value="CSejour"}}
-	
-  {{assign var="var"   value="easy_cim10"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
-  {{assign var="var"   value="easy_service"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
-  {{assign var="var"   value="easy_chambre_simple"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
-  {{assign var="var"   value="easy_ald_cmu"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
+  {{assign var=class value=CSejour}}
+  
+  {{mb_include module=system template=inc_config_bool var=easy_cim10}}
+  {{mb_include module=system template=inc_config_bool var=easy_service}}
+  {{mb_include module=system template=inc_config_bool var=easy_chambre_simple}}
+  {{mb_include module=system template=inc_config_bool var=easy_ald_cmu}}
     
-  {{assign var="class" value="COperation"}}
-  {{assign var="var"   value="easy_horaire_voulu"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
-  {{assign var="var"   value="easy_materiel"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
-  {{assign var="var"   value="easy_remarques"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
-  {{assign var="var"   value="easy_regime"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
-  {{assign var="var"   value="easy_accident"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
-  {{assign var="var"   value="easy_assurances"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
+  {{assign var=class value=COperation}}
+  
+  {{mb_include module=system template=inc_config_bool var=easy_horaire_voulu}}
+  {{mb_include module=system template=inc_config_bool var=easy_materiel}}
+  {{mb_include module=system template=inc_config_bool var=easy_remarques}}
+  {{mb_include module=system template=inc_config_bool var=easy_regime}}
+  {{mb_include module=system template=inc_config_bool var=easy_accident}}
+  {{mb_include module=system template=inc_config_bool var=easy_assurances}}
   
   <tr>
     <td class="button" colspan="2">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
     </td>
   </tr>
+  
 </table>
+
 </div>
 
 <div id="configure-COperation" style="display: none;">
-{{assign var="class" value="COperation"}}
+
+{{assign var=class value=COperation}}
+
 <table class="form">
   <tr>
     <th class="title" colspan="2">{{tr}}{{$class}}{{/tr}}</th>
   </tr>
   
-  {{assign var="var" value="use_ccam"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
-  {{assign var="var" value="verif_cote"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
-  {{assign var="var" value="horaire_voulu"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
-  {{assign var="var" value="delete_only_admin"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
+  {{mb_include module=system template=inc_config_bool var=use_ccam}}
+  {{mb_include module=system template=inc_config_bool var=verif_cote}}
+  {{mb_include module=system template=inc_config_bool var=horaire_voulu}}
+  {{mb_include module=system template=inc_config_bool var=delete_only_admin}}
   
-  {{assign var="var" value="duree_deb"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$hours skip_locales=true}}
-  {{assign var="var" value="duree_fin"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$hours skip_locales=true}}
-  {{assign var="var" value="hour_urgence_deb"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$hours skip_locales=true}}
-  {{assign var="var" value="hour_urgence_fin"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$hours skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=duree_deb  values=$hours skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=duree_fin  values=$hours skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=hour_urgence_deb  values=$hours skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=hour_urgence_fin  values=$hours skip_locales=true}}
   
-  {{assign var="var" value="min_intervalle"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$intervals skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=min_intervalle values=$intervals skip_locales=true}}
   <tr>
     <td class="button" colspan="2">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
@@ -105,65 +84,53 @@
 
 <div id="configure-CSejour" style="display: none;">
 {{assign var="class" value="CSejour"}}
+<script type="text/javascript">
+Main.add(function() {
+  var form = getForm("editConfig");
+  form["dPplanningOp[CSejour][max_cancel_time]"    ].addSpinner({min:0, max:24});
+  form["dPplanningOp[CSejour][hours_sejour_proche]"].addSpinner({min:0, max:96});
+});
+</script>
+
 <table class="form">
   <tr>
     <th class="title" colspan="2">{{tr}}{{$class}}{{/tr}}</th>
   </tr>
 
-  {{assign var="var" value="patient_id"}}
-  {{mb_include module=system template=inc_config_enum var=$var values=$patient_ids}}
+  {{mb_include module=system template=inc_config_enum var=patient_id values=$patient_ids}}
+  {{mb_include module=system template=inc_config_enum var=check_collisions values="no|date|datetime"}}
+  {{mb_include module=system template=inc_config_bool var=modif_SHS}}
 
-  {{assign var="var" value="check_collisions"}}
-  {{mb_include module=system template=inc_config_enum var=$var values="no|date|datetime"}}
-
-  {{assign var="var" value="modif_SHS"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
-
-  {{assign var="var" value="heure_deb"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$hours skip_locales=true}}
-  {{assign var="var" value="heure_fin"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$hours skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=heure_deb  values=$hours skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=heure_fin  values=$hours skip_locales=true}}
   
-  {{assign var="var" value="min_intervalle"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$intervals skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=min_intervalle  values=$intervals skip_locales=true}}
 
-  {{assign var="var" value="blocage_occupation"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
-  {{assign var="var" value="service_id_notNull"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
-  {{assign var="var" value="consult_accomp"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
-  {{assign var="var" value="accident"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
-  {{assign var="var" value="assurances"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
-	{{assign var="var" value="delete_only_admin"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
-  {{assign var="var" value="max_cancel_time"}}
-  {{mb_include module=system template=inc_config_str  var=$var  size="2" suffix="h"}}
-  {{assign var="var"   value="hours_sejour_proche"}}
-  {{mb_include module=system template=inc_config_str  var=$var  size="2" suffix="h"}}
-  {{assign var="var"   value="fix_doc_edit"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
-  {{assign var="var"   value="show_type_pec"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
+  {{mb_include module=system template=inc_config_bool var=blocage_occupation}}
+  {{mb_include module=system template=inc_config_bool var=service_id_notNull}}
+  {{mb_include module=system template=inc_config_bool var=consult_accomp}}
+  {{mb_include module=system template=inc_config_bool var=accident}}
+  {{mb_include module=system template=inc_config_bool var=assurances}}
+  {{mb_include module=system template=inc_config_bool var=delete_only_admin}}
+  {{mb_include module=system template=inc_config_str  var=max_cancel_time     size=2 suffix=h}}
+  {{mb_include module=system template=inc_config_str  var=hours_sejour_proche size=2 suffix=h}}
+  {{mb_include module=system template=inc_config_bool var=fix_doc_edit}}
+  {{mb_include module=system template=inc_config_bool var=show_type_pec}}
+  
   <tr>
     <th class="title" colspan="2">Heure par defaut du séjour</th>
   </tr>
+  
   <tr>
     <th class="category" colspan="2">Heure d'entree</th>
   </tr>
-  {{assign var="var" value="heure_entree_veille"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$hours skip_locales=true}}
-  {{assign var="var" value="heure_entree_jour"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$hours skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=heure_entree_veille values=$hours skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=heure_entree_jour   values=$hours skip_locales=true}}
   <tr>
     <th class="category" colspan="2">Heure de sortie</th>
   </tr>
-  {{assign var="var" value="heure_sortie_ambu"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$hours skip_locales=true}}
-  {{assign var="var" value="heure_sortie_autre"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$hours skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=heure_sortie_ambu  values=$hours skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=heure_sortie_autre values=$hours skip_locales=true}}
   
   {{assign var="var" value="sortie_prevue"}}
   <tr>
@@ -188,8 +155,7 @@
   </tr>
   {{/foreach}}
   
-  {{assign var="var" value="show_discipline_tarifaire"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
+  {{mb_include module=system template=inc_config_bool var=show_discipline_tarifaire }}
   <tr>
     <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
@@ -252,7 +218,11 @@
         Import de la base
       </th>
     <tr>
-      <td class="narrow"><button onclick="importSAEBase()" class="change">{{tr}}Import{{/tr}}</button></td>
+      <td class="narrow">
+        <button onclick="new Url('planningOp', 'ajax_import_sae_base').requestUpdate('import-log');" class="change">
+          {{tr}}Import{{/tr}}
+        </button>
+      </td>
       <td id="import-log"></td>
     </tr>
   </table>
