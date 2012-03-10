@@ -396,4 +396,41 @@ abstract class CMbArray {
     
     $array = array_merge(array_combine($keys, $vals), empty($keys2) ? array() : array_combine($keys2, $vals2));
   }
+  
+  /**
+   * Return the standard average of an array
+   * 
+   * @param array $array Scalar values
+   * 
+   * @return float: average
+   */
+  static function average($array) {
+    if (!is_array($array)) {
+      return;
+    }
+    
+    return array_sum($array) / count($array);
+  }
+  
+  /**
+   * Return the standard variance of an array
+   * 
+   * @param array $array Scalar values
+   * 
+   * @return float: ecart-type
+   */
+  static function variance($array) {
+    if (!is_array($array)) {
+      return;
+    }
+  
+    $moyenne = mbMoyenne($array);
+    $sigma = 0;
+    foreach ($array as $value) {
+      $sigma += pow((floatval($value)-$moyenne), 2);
+    }
+    
+    return sqrt($sigma / count($array));
+  }
+  
 }

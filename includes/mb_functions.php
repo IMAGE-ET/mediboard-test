@@ -627,42 +627,6 @@ class CMbDate {
 }
 
 /**
- * Return the standard average of an array
- * 
- * @param array $array Scalar values
- * 
- * @return float: ecart-type
- */
-function mbMoyenne($array) {
-  if (!is_array($array)) {
-  	return;
-  }
-  
-  return array_sum($array) / count($array);
-}
-
-/**
- * Return the standard variance of an array
- * 
- * @param array $array Scalar values
- * 
- * @return float: ecart-type
- */
-function mbEcartType($array) {
-  if (!is_array($array)) {
-  	return;
-  }
-
-  $moyenne = mbMoyenne($array);
-  $sigma = 0;
-  foreach ($array as $value) {
-    $sigma += pow((floatval($value)-$moyenne), 2);
-  }
-  
-  return sqrt($sigma / count($array));
-}
-
-/**
  * URL to the mediboard.org documentation page
  * 
  * @param string $module Module name

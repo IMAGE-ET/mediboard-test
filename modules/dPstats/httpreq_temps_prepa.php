@@ -88,8 +88,8 @@ foreach($listPrats as $_prat) {
             		'$_prat->user_id',
             		'".count($preparation[$_prat->user_id])."',
             		'".$nb_plage[$_prat->user_id]."',
-            		'".strftime("%H:%M:%S",mbMoyenne($preparation[$_prat->user_id]))."',
-            		'".strftime("%H:%M:%S",mbEcartType($preparation[$_prat->user_id]))."');";
+            		'".strftime("%H:%M:%S",CMbArray::average($preparation[$_prat->user_id]))."',
+            		'".strftime("%H:%M:%S",CMbArray::variance($preparation[$_prat->user_id]))."');";
 	$ds->exec( $sql ); $ds->error();
   }
 }
