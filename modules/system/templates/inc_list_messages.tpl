@@ -90,6 +90,11 @@
 </tr>
 
 </tbody>
+{{foreachelse}}
+<tr>
+  <td class="empty" colspan="5">{{tr}}CMessage.none{{/tr}}
+</td>
+</tr>
 {{/foreach}}
   
 </table>
