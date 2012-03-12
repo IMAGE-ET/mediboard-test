@@ -1,48 +1,12 @@
 {{assign var="patient" value=$object}}
 
-<table class="tbl">
+{{mb_include module=dPpatients template=inc_vw_identite_patient tooltip=1}}
+  
+<table class="form">
   <tr>
-    <th colspan="2" class="title text">
-      {{mb_include module=system template=inc_object_idsante400 object=$patient}}
-      {{mb_include module=system template=inc_object_history object=$patient}}
-      {{mb_include module=system template=inc_object_notes}}
-      {{$patient}}
-    </th>
-  </tr>
-  <tr>
-    <th>Identité {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}</th>
-    <th>Coordonnées</th>
-  </tr>
-  <tr>
-    <td>
-      {{mb_include module=system template=inc_field_view prop=nom}} 
-      {{mb_include module=system template=inc_field_view prop=nom_jeune_fille}}
-      {{mb_include module=system template=inc_field_view prop=prenom}}
-      {{mb_include module=system template=inc_field_view prop=prenom_2}}
-      {{mb_include module=system template=inc_field_view prop=prenom_3}}
-      {{mb_include module=system template=inc_field_view prop=prenom_4}}
-
-      {{mb_include module=system template=inc_field_view prop=sexe}}
-      {{mb_include module=system template=inc_field_view prop=naissance}}
-      {{mb_include module=system template=inc_field_view prop=_age}}
-      {{mb_include module=system template=inc_field_view prop=profession}}
-      {{mb_include module=system template=inc_field_view prop=matricule}}
-    </td>
-    <td>
-      {{mb_include module=system template=inc_field_view prop=adresse}}
-      {{mb_include module=system template=inc_field_view prop=cp}}
-      {{mb_include module=system template=inc_field_view prop=ville}}
-      {{mb_include module=system template=inc_field_view prop=tel}}
-      {{mb_include module=system template=inc_field_view prop=tel2}}
-      {{mb_include module=system template=inc_field_view prop=tel_autre}}
-      {{mb_include module=system template=inc_field_view prop=rques}}
-    </td>
-  </tr>
-	
-	<tr>
-		<td colspan="2" class="button">
-			{{mb_script module="dPpatients" script="patient" ajax="true"}}
-			
+    <td colspan="5" class="button">
+      {{mb_script module="dPpatients" script="patient" ajax="true"}}
+      
       <button type="button" class="search" onclick="Patient.view('{{$patient->_id}}')">
         Dossier Complet
       </button>
@@ -68,6 +32,30 @@
       </button>
       {{/if}}
       
-		</td>
-	</tr>
+      {{if $can->admin}} 
+      <form name="Purge-{{$patient->_guid}}" action="?m={{$m}}&amp;tab=vw_idx_patients" method="post" onsubmit="return confirmCreation(this)">
+        <input type="hidden" name="dosql" value="do_patients_aed" />
+        <input type="hidden" name="tab" value="vw_idx_patients" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="_purge" value="0" />
+        <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
+              
+        <script type="text/javascript">
+          confirmPurge = function(form) {
+            if (confirm("ATTENTION : Vous êtes sur le point de purger le dossier d'un patient !")) {
+              form._purge.value = "1";
+              confirmDeletion(form,  {
+                typeName:'le patient',
+                objName:'{{$patient->_view|smarty:nodefaults|JSAttribute}}'
+              });
+            }
+          }
+        </script>
+        <button type="button" class="cancel" onclick="confirmPurge(this.form);">
+          {{tr}}Purge{{/tr}}
+        </button>
+      </form>
+      {{/if}}
+    </td>
+  </tr>
 </table>
