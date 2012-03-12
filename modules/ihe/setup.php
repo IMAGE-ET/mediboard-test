@@ -174,8 +174,14 @@ class CSetupihe extends CSetup {
               ADD `build_PV1_3_5` ENUM ('bed_status','null') DEFAULT 'bed_status',
               ADD `build_PV1_10` ENUM ('discipline','service') DEFAULT 'discipline';";
     $this->addQuery($query);  
+    
+    $this->makeRevision("0.17");
+    
+    $query = "ALTER TABLE `receiver_ihe_config` 
+              ADD `build_PV1_3_3` ENUM ('name','config_value') DEFAULT 'name';";
+    $this->addQuery($query); 
        
-    $this->mod_version = "0.17";
+    $this->mod_version = "0.18";
   }
 }
 

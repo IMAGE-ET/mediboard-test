@@ -32,6 +32,7 @@ class CReceiverIHEConfig extends CMbObject {
   
   // PV1
   var $build_PV1_3_2            = null;
+  var $build_PV1_3_3            = null;
   var $build_PV1_3_5            = null;
   var $build_PV1_10             = null;
   
@@ -67,6 +68,7 @@ class CReceiverIHEConfig extends CMbObject {
     
     // PV1
     $props["build_PV1_3_2"]            = "enum list|name|config_value default|name";
+    $props["build_PV1_3_3"]            = "enum list|name|config_value default|name";
     $props["build_PV1_3_5"]            = "enum list|bed_status|null default|bed_status";
     $props["build_PV1_10"]             = "enum list|discipline|service default|discipline";
     

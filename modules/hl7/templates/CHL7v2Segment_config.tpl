@@ -20,6 +20,8 @@
     
     {{mb_include module=system template=inc_config_str var=PV1_3_2}}
     
+    {{mb_include module=system template=inc_config_str var=PV1_3_3}}
+    
     <tr>
       <td class="button" colspan="10">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

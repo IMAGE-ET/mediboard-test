@@ -9,7 +9,8 @@ $dPconfig["hl7"] = array(
   "importFunctionName"            => "Import",
   "default_version"               => "2.5",
   "CHL7v2Segment"                 => array(
-    "PV1_3_2" => ""
+    "PV1_3_2" => "",
+    "PV1_3_3" => ""
   ),  
 );
 

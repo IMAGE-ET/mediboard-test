@@ -452,6 +452,18 @@ class CHL7v2Segment extends CHL7v2Entity {
     }
   }
   
+  function getPL3 (CInteropReceiver $receiver, CSejour $sejour, CAffectation $affectation = null) {
+    // Lit
+    switch ($receiver->_configs["build_PV1_3_3"]) {
+      // Valeur en config
+      case 'config_value':
+        return CAppUI::conf("hl7 CHL7v2Segment PV1_3_3");
+      // Nom du lit
+      default:
+        return ($affectation->_id && $affectation->_ref_lit) ? $affectation->_ref_lit->nom : null;
+    }
+  }
+  
   function getPL5 (CInteropReceiver $receiver) {
     // Statut du lit
     switch ($receiver->_configs["build_PV1_3_5"]) {
@@ -493,7 +505,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         // PL-2 - Chambre
         $this->getPL2($receiver, $sejour, $affectation),
         // PL-3 - Lit
-        ($affectation->_id && $affectation->_ref_lit) ? $affectation->_ref_lit->nom : null,
+        $this->getPL3($receiver, $sejour, $affectation),
         // PL-4 - Etablissement hospitalier
         $this->getGroupAssigningAuthority($sejour->loadRefEtablissement()),
         // PL-5 - Statut du lit
