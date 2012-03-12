@@ -817,7 +817,7 @@ class CMediusers extends CMbObject {
   }
 
   function loadProfessionnelDeSante($permType = PERM_READ, $function_id = null, $name = null, $secondary = false) {
-    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Kinesitherapeute", "Sage Femme", "Dentiste"), $permType, $function_id, $name, $secondary);
+    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme", "Dentiste"), $permType, $function_id, $name, $secondary);
   }
   
   function loadPersonnels($permType = PERM_READ, $function_id = null, $name = null) {
@@ -825,7 +825,7 @@ class CMediusers extends CMbObject {
   }
 
   function loadKines($permType = PERM_READ, $function_id = null, $name = null) {
-    return $this->loadListFromType(array("Kinesitherapeute"), $permType, $function_id, $name);
+    return $this->loadListFromType(array("Rééducateur"), $permType, $function_id, $name);
   }
 
   function isFromType($user_types) {
@@ -882,11 +882,11 @@ class CMediusers extends CMbObject {
    * @return bool
    */
   function isMedical() {
-    return $this->isFromType(array("Administrator", "Chirurgien", "Anesthésiste", "Infirmière", "Médecin", "Kinesitherapeute", "Sage Femme", "Dentiste"));
+    return $this->isFromType(array("Administrator", "Chirurgien", "Anesthésiste", "Infirmière", "Médecin", "Rééducateur", "Sage Femme", "Dentiste"));
   }
   
   function isExecutantPrescription() {
-    return $this->isFromType(array("Infirmière", "Aide soignant", "Kinesitherapeute"));
+    return $this->isFromType(array("Infirmière", "Aide soignant", "Rééducateur"));
   }
   
   /**
@@ -894,7 +894,7 @@ class CMediusers extends CMbObject {
    * @return bool
    */
   function isKine() {
-    return $this->isFromType(array("Kinesitherapeute"));
+    return $this->isFromType(array("Rééducateur"));
   }
 
   function isAdmin() {

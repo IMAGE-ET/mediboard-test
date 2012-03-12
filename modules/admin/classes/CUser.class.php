@@ -77,7 +77,7 @@ class CUser extends CMbObject {
     12 => "Surveillante de bloc",
     13 => "Médecin",
     14 => "Personnel",
-    15 => "Kinesitherapeute",
+    15 => "Rééducateur",
     16 => "Sage Femme",
     17 => "Pharmacien",
     18 => "Aide soignant",
