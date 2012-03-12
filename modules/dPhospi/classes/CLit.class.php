@@ -77,8 +77,7 @@ class CLit extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_shortview = self::$_prefixe . $this->nom;
-    $this->_view      = $this->nom_complet ? self::$_prefixe . $this->nom_complet : $this->_shortview;
+    $this->_shortview = $this->_view = self::$_prefixe . ($this->nom_complet ? $this->nom_complet : $this->nom);
   }
   
   function loadCompleteView() {
