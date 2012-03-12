@@ -36,10 +36,7 @@ class COperatorIHE extends CEAIOperator {
       /* @todo Gestion que de la version 2 pour le moment */
       $ack = new CHL7v2Acknowledgment($evt);
       $ack->message_control_id = $data['identifiantMessage'];
-    
-      // Expéditeur du message
-      $sender = $exchange_ihe->_ref_sender;
-    
+
       // Message non supporté pour cet utilisateur
       $evt_class = CHL7Event::getEventClass($evt);
       if (!in_array($evt_class, $data_format->_messages_supported_class)) {
@@ -92,6 +89,7 @@ class COperatorIHE extends CEAIOperator {
       $exchange_ihe->loadRefsInteropActor();
 
       // Chargement des configs de l'expéditeur
+      $sender = $exchange_ihe->_ref_sender;
       $sender->getConfigs($data_format);
 			
 			CHL7v2Message::setHandleMode($sender->_configs["handle_mode"]); 
