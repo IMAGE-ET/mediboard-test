@@ -44,33 +44,11 @@
 
 {{if !$rhs->_in_bounds}} 
 <div class="small-warning">
-	Le séjour ne comporte aucune journée dans la semaine de ce RHS.
-	<br/>
-	Ce RHS <strong>doit être supprimé</strong>.
+  Le séjour ne comporte aucune journée dans la semaine de ce RHS.
+  <br/>
+  Ce RHS <strong>doit être supprimé</strong>.
 </div>
 {{/if}}
-
-<script type="text/javascript">
-
-Main.add( function(){
-  var form = getForm("new-line-{{$rhs->_guid}}");
-  
-	var url = new Url("ssr", "httpreq_do_intervenant_autocomplete");
-	url.autoComplete(form._executant, "{{$rhs->_guid}}_executant_auto_complete", {
-    dropdown: true,
-    minChars: 2,
-    updateElement: function(element) { CotationRHS.updateExecutant(element, form); }
-	} );
-  
-	var url = new Url("ssr", "httpreq_do_activite_autocomplete");
-	url.autoComplete(form.code_activite_cdarr, "{{$rhs->_guid}}_activite_auto_complete", {
-    dropdown: false,
-    minChars: 2,
-    updateElement: function(element) { CotationRHS.updateActivite(element, form); }
-	} );
-} );
-
-</script>
 
 <table class="main">
   <tr>
@@ -91,6 +69,16 @@ Main.add( function(){
       {{if $rhs->facture == 1}}
       <div class="small-warning">{{tr}}CRHS.charged{{/tr}}</div>
       {{else}}
+      <script type="text/javascript">
+
+      Main.add( function(){
+        var form = getForm("new-line-{{$rhs->_guid}}");
+        CotationRHS.autocompleteActivite(form);
+        CotationRHS.autocompleteExecutant(form);
+      } );
+
+      </script>
+      
       <form name="new-line-{{$rhs->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitLine(this);">
       <input type="hidden" name="m" value="ssr" />
       <input type="hidden" name="dosql" value="do_line_rhs_aed" />
@@ -104,7 +92,7 @@ Main.add( function(){
           <th>{{mb_label object=$rhs_line field=code_activite_cdarr}}</th>
           <td>
             {{mb_field object=$rhs_line field=code_activite_cdarr class="autocomplete"}}
-            <div style="display:none;" class="autocomplete" id="{{$rhs->_guid}}_activite_auto_complete"></div>
+            <div style="display:none;" class="autocomplete activite" id="{{$rhs->_guid}}_activite_auto_complete"></div>
           </td>
         </tr>
         <tr>
@@ -113,7 +101,7 @@ Main.add( function(){
             {{mb_field object=$rhs_line field=executant_id hidden=true}}
             {{mb_field object=$rhs_line field=code_intervenant_cdarr hidden=true}}
             {{mb_field object=$rhs_line field=_executant class="autocomplete"}}
-            <div style="display:none;" class="autocomplete" id="{{$rhs->_guid}}_executant_auto_complete"></div>
+            <div style="display:none;" class="autocomplete executant" id="{{$rhs->_guid}}_executant_auto_complete"></div>
           </td>
         </tr>
         <tr>

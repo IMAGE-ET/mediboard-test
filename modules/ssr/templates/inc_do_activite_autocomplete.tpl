@@ -16,10 +16,12 @@
       {{$_activite->libelle|emphasize:$needle}}
       <br />
       <small class="opacity-70">
-			 	{{$_activite->_ref_type_activite->_view|emphasize:$needle}}
-			</small>
+        {{$_activite->_ref_type_activite->_view|emphasize:$needle}}
+      </small>
     </li>
    {{foreachelse}}
-    <li style="text-align: left;"><span class="informal">Aucun résultat</span></li>
+    <li style="text-align: left;">
+      <span class="informal">Aucun résultat</span>
+    </li>
   {{/foreach}}
 </ul>

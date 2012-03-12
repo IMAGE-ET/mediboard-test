@@ -82,34 +82,44 @@ CotationRHS = {
     tab.down("a small").update("("+count+")");
   },
   
-  updateExecutant: function(selected, form) {
-    Element.cleanWhitespace(selected);
-    var dn = selected.childNodes;
+  autocompleteExecutant: function (form) {
+    var url = new Url('ssr', 'httpreq_do_intervenant_autocomplete');
+    url.autoComplete(form._executant, form.down('.autocomplete.executant'), {
+      dropdown: true,
+      minChars: 2,
+      updateElement: function(element) { CotationRHS.updateExecutant(element, form); }
+    } );
+  },
   
-    if(dn[0].className == 'informal') {
-      // On vide les valeurs
+  updateExecutant: function(selected, form) {
+    var values = selected.down('.values'); 
+  
+    // On vide les valeurs
+    if (!values) {
       $V(form._executant, '');
       $V(form.executant_id, '');
       $V(form.code_intervenant_cdarr, '');
-      // Sinon, on rempli les valeurs
-    } else {
-      $V(form.executant_id,           dn[0].firstChild.nodeValue);
-      $V(form.code_intervenant_cdarr, dn[1].firstChild.nodeValue);
-      $V(form._executant,             dn[2].firstChild.nodeValue);
+    } 
+    // Sinon, on rempli les valeurs
+    else {
+      $V(form.executant_id,           values.down('.executant_id'          ).textContent);
+      $V(form.code_intervenant_cdarr, values.down('.code_intervenant_cdarr').textContent);
+      $V(form._executant,             values.down('._executant'            ).textContent);
     }
   },
   
-  updateActivite: function(selected, form) {
-    Element.cleanWhitespace(selected);
-    var dn = selected.childNodes;
+  autocompleteActivite: function(form) {
+    var url = new Url('ssr', 'httpreq_do_activite_autocomplete');
+    url.autoComplete(form.code_activite_cdarr, form.down('.autocomplete.activite'), {
+      dropdown: true,
+      minChars: 2,
+      updateElement: function(element) { CotationRHS.updateActivite(element, form); }
+    } );
+  },
   
-    if(dn[0].className == 'informal') {
-      // On vide les valeurs
-      $V(form.code_activite_cdarr, '');
-      // Sinon, on rempli les valeurs
-    } else {
-      $V(oForm.code_activite_cdarr, dn[0].firstChild.nodeValue);
-    }
+  updateActivite: function(selected, form) {
+    var value = selected.down('.value'); 
+    $V(form.code_activite_cdarr, value ? value.textContent : '');
   },
   
   editDependancesRHS: function(rhs_id) {
