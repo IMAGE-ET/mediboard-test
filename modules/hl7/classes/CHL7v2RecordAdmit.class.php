@@ -251,7 +251,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       
       // RI non fourni
       if (!$venueRI) {
-        $code_IPP = "I223"; 
+        $code_NDA = "I223"; 
       } else {
         $tmpVenue = new CSejour();
         // RI connu
