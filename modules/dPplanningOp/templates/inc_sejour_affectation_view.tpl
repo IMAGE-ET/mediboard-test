@@ -15,20 +15,18 @@
   </td>
   <td>
     <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
-      {{$patient->nom}} {{$patient->prenom}}
+      {{$patient->_view}}
     </span>
   </td>
-  <td>
-    {{mb_value object=$sejour field=entree}}
-  </td>
+  <td>Du <strong>{{mb_value object=$sejour field=entree}}</strong></td>
 </tr>
 <tr>
   <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}</td>
-  <td>{{mb_value object=$sejour field=sortie}}</td>
+  <td>Au <strong>{{mb_value object=$sejour field=sortie}}</strong></td>
 </tr>
 <tr>
   <td colspan="2" class="text">
-    {{mb_label object=$sejour field=libelle}} : {{mb_value object=$sejour field=_motif_complet}}
+    <strong>{{mb_value object=$sejour field=_motif_complet}}</strong>
   </td>
 </tr>
 
@@ -43,10 +41,10 @@
 {{if $object instanceof CSejour}}
   <tr>
     <td class="text" colspan="2">
-      Etablissement : {{$object->_ref_group}}
+      <strong>{{mb_value object=$object field=type}}</strong>
     </td>
     <td class="text">
-      {{mb_label object=$object field=type}} : {{mb_value object=$object field=type}}
+      {{$object->_ref_group}}
     </td>
   </tr>
 {{/if}}

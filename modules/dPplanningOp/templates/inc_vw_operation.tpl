@@ -2,7 +2,7 @@
 
 <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
 {{if $_operation->libelle}}
-  <strong>[{{$_operation->libelle}}]<br /></strong>
+  <strong>{{$_operation->libelle}}<br /></strong>
 {{/if}}
 
 {{if $app->user_prefs.dPplanningOp_listeCompacte}}
