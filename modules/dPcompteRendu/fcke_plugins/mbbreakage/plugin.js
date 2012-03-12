@@ -20,32 +20,30 @@ CKEDITOR.plugins.add('mbbreakage',{
 function mbbreakage_onclick(editor) {
   var selection = editor.getSelection();
   var selected_text = selection.getSelectedText();
-  //var transformed_text = "";
   
   // N'appliquer le plugin que si une partie du texte a été sélectionnée
   if (selected_text != '') {
+    var ranges = selection.getRanges();
+    var rangeIterator = ranges.createIterator();
+    var range = null;
+    var uppercase = 0;
     
     // S'il y a des minuscules et/ou des majuscules, on passe en majuscule
-    if (/[:lower:,:upper:][:lower:,:upper:]+/.test(selected_text) || selected_text == selected_text.toLowerCase()) {
-      var style = {
-      element: 'span',
-      attributes: {
-          'style': 'text-transform: uppercase'
-        }
-      };
-    }
-    // Passage en minuscule
-    else {
-      var style = {
-        element: 'span',
-        attributes: {
-          'style': 'text-transform: lowercase'
-        }
-      };
+    if (selected_text == selected_text.toLowerCase()) {
+      uppercase = 1;
     }
     
-    var styleCK = new CKEDITOR.style(style);
-    editor.addCommand('subscript', new CKEDITOR.styleCommand(styleCK));
-    editor.execCommand("subscript");
+    while ((range = rangeIterator.getNextRange(1))) {
+      var walker = new CKEDITOR.dom.walker( range );
+      var node = null;
+      while ( ( node = walker.next() ) ) {
+        if (uppercase) {
+          node.$.textContent = node.$.textContent.toUpperCase();
+        }
+        else {
+          node.$.textContent = node.$.textContent.toLowerCase();
+        }
+      }
+    }
   }
 }
