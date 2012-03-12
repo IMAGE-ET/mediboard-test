@@ -973,6 +973,7 @@ $locales['CSourceFileSystem-_response_time-desc'] = 'Temps de réponse';
 $locales['CSourceFileSystem-active'] = 'Active';
 $locales['CSourceFileSystem-active-court'] = 'Active';
 $locales['CSourceFileSystem-active-desc'] = 'Active';
+$locales['CSourceFileSystem-file-not-deleted'] = 'Le fichier \'%s\' n\'a pu être supprimé';
 $locales['CSourceFileSystem-file-not-readable'] = 'Le fichier \'%s\' n\'est pas accessible en lecture';
 $locales['CSourceFileSystem-fileextension'] = 'Extension des fichiers';
 $locales['CSourceFileSystem-fileextension-court'] = 'Ext. fichiers';

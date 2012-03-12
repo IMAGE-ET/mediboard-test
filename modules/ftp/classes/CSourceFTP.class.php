@@ -129,6 +129,20 @@ class CSourceFTP extends CExchangeSource {
     return $file_get_content;
   }
   
+  function delFile($path) {
+    $ftp = $this->init($this);
+    
+    try {
+      $ftp->connect();
+      
+      $ftp->delFile($path);
+    } catch (CMbException $e) {
+      $e->stepAjax();
+    }
+    
+    $ftp->close();
+  }
+  
   function isReachableSource() {
     $ftp = new CFTP();
     $ftp->init($this);

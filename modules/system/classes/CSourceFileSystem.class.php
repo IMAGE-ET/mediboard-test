@@ -110,6 +110,12 @@ class CSourceFileSystem extends CExchangeSource {
     return str_replace("\\", "/", $path);
   }
   
+  function delFile($path) {
+    if (unlink($path) === false) {
+      throw new CMbException("CSourceFileSystem-file-not-deleted", $path);
+    }    
+  }
+  
   function isReachableSource() {
     if (is_dir($this->host)) {
       return true;
