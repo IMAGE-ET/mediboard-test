@@ -624,7 +624,8 @@ class CExClass extends CMbObject {
     $forms = array();
     
     foreach($ex_classes as $_ex_class) {
-      $forms[$_ex_class->_id] = array(
+      // We may have more than one form per exclass
+      $forms[] = array(
         "ex_class_id" => $_ex_class->_id,
         "object_guid" => $_ex_class->_host_object->_guid,
         "event" => $_ex_class->event,
