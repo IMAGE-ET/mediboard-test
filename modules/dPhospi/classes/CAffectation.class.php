@@ -99,8 +99,7 @@ class CAffectation extends CMbObject {
     $sejour = $this->loadRefSejour();
     $sejour->loadRefPraticien();
     $sejour->loadRefPatient()->loadRefPhotoIdentite();
-    $sejour->loadRefsAffectations();
-    $affectations = $sejour->_ref_affectations;
+    $affectations = $sejour->loadRefsAffectations();
     
     if (is_array($affectations) && count($affectations)) {
       foreach ($affectations as $_affectation) {

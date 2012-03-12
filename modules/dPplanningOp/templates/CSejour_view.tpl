@@ -1,6 +1,7 @@
-{{include file=CMbObject_view.tpl}}
-
-{{assign var=sejour value=$object}}
+{{assign var=sejour       value=$object}}
+{{assign var=patient      value=$object->_ref_patient}}
+{{assign var=operations   value=$object->_ref_operations}}
+{{assign var=affectations value=$object->_ref_affectations}}
 
 <script type="text/javascript">
   editPrestations = function (sejour_id) {
@@ -9,6 +10,10 @@
     url.requestModal(800, 700);
   }
 </script>
+
+<table class="tbl">
+  {{mb_include module=dPplanningOp template=inc_sejour_affectation_view}}
+</table>
 
 <table class="tbl tooltip">
   <tr>
@@ -19,11 +24,11 @@
   </tr>
   
   {{if $sejour->annule == 1}}
-  <tr>
-    <th class="category cancelled" colspan="4">
-    {{tr}}CSejour-annule{{/tr}}
-    </th>
-  </tr>
+    <tr>
+      <th class="category cancelled" colspan="4">
+      {{tr}}CSejour-annule{{/tr}}
+      </th>
+    </tr>
   {{/if}}
   
   <tr>
@@ -67,7 +72,6 @@
         {{tr}}module-Brancardage-long{{/tr}}
         </button>
       {{/if}}
-			
     </td>
   </tr>
 </table>

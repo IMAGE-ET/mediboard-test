@@ -1508,6 +1508,23 @@ class CSejour extends CCodable implements IPatientRelated {
   
   function loadView() {
     parent::loadView();
+    $this->loadRefPatient();
+    $this->loadRefEtablissement();
+    $affectations = $this->loadRefsAffectations();
+    
+    foreach ($this->loadRefsOperations() as $_operation) {
+      $_operation->loadRefChir();
+      $_operation->loadRefPlageOp();
+    }
+    
+    if (is_array($affectations) && count($affectations)) {
+      foreach ($affectations as $_affectation) {
+        $_affectation->loadRefLit()->loadCompleteView();
+        $_affectation->_view = $_affectation->_ref_lit->_view;
+        $_affectation->loadRefParentAffectation();
+      }
+    }
+    
     $this->loadNDA();
   }
 
