@@ -151,7 +151,7 @@ class CExchangeIHE extends CExchangeTabular {
       $msgAck = $ack->event_ack->msg_hl7;
       $this->_acquittement       = $ack->event_ack->msg_hl7;;
       /* @todo Comment gérer ces informations ? */
-      $this->statut_acquittement = null;
+      $this->statut_acquittement = $ack->ack_code;
       $this->acquittement_valide = $ack->event_ack->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
     } else {
       $this->message_valide      = $event->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
