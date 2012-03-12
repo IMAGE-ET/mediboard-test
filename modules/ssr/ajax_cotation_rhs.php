@@ -56,8 +56,8 @@ foreach($rhss as $_rhs) {
     $_rhs->loadBackRefs("lines");
     foreach($_rhs->_back["lines"] as $_line) {
       $_line->loadRefActiviteCdARR();
-      $_line->_ref_code_activite_cdarr->loadRefTypeActivite();
-      $totaux[$_rhs->_id][$_line->_ref_code_activite_cdarr->_ref_type_activite->code] += $_line->_qty_total;
+      $_line->_ref_activite_cdarr->loadRefTypeActivite();
+      $totaux[$_rhs->_id][$_line->_ref_activite_cdarr->_ref_type_activite->code] += $_line->_qty_total;
       $_line->loadRefIntervenantCdARR();
       $_line->loadFwdRef("executant_id", true);
       $_line->_fwd["executant_id"]->loadRefsFwd();

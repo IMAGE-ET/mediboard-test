@@ -19,7 +19,7 @@
       {{$_intervenant->_view|emphasize:$needle}}
       <br />
       <small class="opacity-70">
-        {{$_intervenant->_ref_code_intervenant_cdarr}}
+        {{$_intervenant->_ref_intervenant_cdarr}}
       </small>
     </li>
    {{foreachelse}}

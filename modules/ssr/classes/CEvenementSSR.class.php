@@ -145,7 +145,7 @@ class CEvenementSSR extends CMbObject {
         return CAppUI::tr("CMediusers-code_intervenant_cdarr-none");
       }
       $therapeute->loadRefCodeIntervenantCdARR();
-      $code_intervenant_cdarr = $therapeute->_ref_code_intervenant_cdarr->code;
+      $code_intervenant_cdarr = $therapeute->_ref_intervenant_cdarr->code;
       
       
       // Création du RHS au besoins

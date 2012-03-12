@@ -197,13 +197,14 @@ class CRHS extends CMbObject {
 
   function loadRefDependances() {
     if ($this->_ref_dependances) {
-      return;
+      return $this->_ref_dependances;
     }
     
     $order = "dependances_id ASC";
     $this->_ref_dependances = new CDependancesRHS();
     $this->_ref_dependances->rhs_id = $this->_id;
     $this->_ref_dependances->loadMatchingObject($order);
+    return $this->_ref_dependances;
   }
   
   function loadDependancesChronology(){
@@ -262,8 +263,8 @@ class CRHS extends CMbObject {
     $lines = $this->_ref_lignes_activites;
     foreach($lines as $_line) {
       $_line->loadRefActiviteCdARR();
-      $_line->_ref_code_activite_cdarr->loadRefTypeActivite();
-      $type_activite = $_line->_ref_code_activite_cdarr->_ref_type_activite;
+      $_line->_ref_activite_cdarr->loadRefTypeActivite();
+      $type_activite = $_line->_ref_activite_cdarr->_ref_type_activite;
       $totaux[$type_activite->code] += $_line->_qty_total;
     }
     

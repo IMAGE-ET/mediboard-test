@@ -11,13 +11,13 @@
 CCanDo::checkEdit();
 
 // Utilisateur courant
-$curr_user = CMediusers::get();
+$user = CMediusers::get();
 
 // RHS concernés
 $rhs = new CRHS();
 $rhs->load(CValue::get("rhs_id"));
 if (!$rhs->_id) {
-	CAppUI::stepAjax("RHS inexistant", UI_MSG_ERROR);
+  CAppUI::stepAjax("RHS inexistant", UI_MSG_ERROR);
 }
 $rhs->loadRefsNotes();
 
@@ -25,37 +25,36 @@ $rhs->loadRefsNotes();
 $type_activite = new CTypeActiviteCdARR();
 $types_activite = $type_activite->loadList();
 $totaux = array();
-if($rhs->_id) {
+if ($rhs->_id) {
   $totaux[$rhs->_id] = array();
   foreach($types_activite as $_type) {
     $totaux[$rhs->_id][$_type->code] = 0;
   }
   $rhs->loadRefSejour();
-  $rhs->loadRefDependances();
-  if(!$rhs->_ref_dependances->_id) {
-    $rhs->_ref_dependances->store();
+  $dependances = $rhs->loadRefDependances();
+  if (!$dependances->_id) {
+    $dependances->store();
   }
   $rhs->loadDependancesChronology();
 	
-  $rhs->loadBackRefs("lines");
   $_line = new CLigneActivitesRHS();
-  foreach($rhs->_back["lines"] as $_line) {
-    $_line->loadRefActiviteCdARR();
-    $_line->_ref_code_activite_cdarr->loadRefTypeActivite();
-    $totaux[$rhs->_id][$_line->_ref_code_activite_cdarr->_ref_type_activite->code] += $_line->_qty_total;
+  foreach ($rhs->loadBackRefs("lines") as $_line) {
+    $activite = $_line->loadRefActiviteCdARR();
+    $type = $activite->loadRefTypeActivite();
+    $totaux[$rhs->_id][$type->code] += $_line->_qty_total;
     $_line->loadRefIntervenantCdARR();
-    $_line->loadFwdRef("executant_id", true);
-    $_line->_fwd["executant_id"]->loadRefsFwd();
-    $_line->_fwd["executant_id"]->loadRefCodeIntervenantCdARR();
+    $executant = $_line->loadFwdRef("executant_id", true);
+    $executant->loadRefsFwd();
+    $executant->loadRefCodeIntervenantCdARR();
   }
 }
 
 // Ligne vide d'activité
 $rhs_line = new CLigneActivitesRHS();
-if($curr_user->code_intervenant_cdarr) {
-  $rhs_line->_executant             = $curr_user->_view;
-  $rhs_line->executant_id           = $curr_user->user_id;
-  $rhs_line->code_intervenant_cdarr = $curr_user->code_intervenant_cdarr;
+if ($user->code_intervenant_cdarr) {
+  $rhs_line->_executant             = $user->_view;
+  $rhs_line->executant_id           = $user->user_id;
+  $rhs_line->code_intervenant_cdarr = $user->code_intervenant_cdarr;
 }
 
 // Création du template

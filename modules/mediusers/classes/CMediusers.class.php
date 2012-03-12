@@ -85,7 +85,7 @@ class CMediusers extends CMbObject {
   var $_ref_discipline             = null;
   var $_ref_profile                = null;
   var $_ref_user                   = null;
-  var $_ref_code_intervenant_cdarr = null;
+  var $_ref_intervenant_cdarr = null;
   var $_ref_packs                  = array();
   var $_ref_protocoles             = array();
   
@@ -386,7 +386,7 @@ class CMediusers extends CMbObject {
   }
   
   function loadRefCodeIntervenantCdARR() {
-    return $this->_ref_code_intervenant_cdarr = CIntervenantCdARR::get($this->code_intervenant_cdarr);
+    return $this->_ref_intervenant_cdarr = CIntervenantCdARR::get($this->code_intervenant_cdarr);
   }
   
   function loadRefsFwd() {

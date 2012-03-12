@@ -60,7 +60,7 @@ foreach ($evenements as $_evenement) {
   $therapeute = $_evenement->_ref_therapeute;
   
   $therapeute->loadRefCodeIntervenantCdARR();
-  $code_intervenant_cdarr = $therapeute->_ref_code_intervenant_cdarr->code;
+  $code_intervenant_cdarr = $therapeute->_ref_intervenant_cdarr->code;
   
   $_evenement->loadRefsActesCdARR();
   $actes_cdarr = $_evenement->_ref_actes_cdarr;
@@ -81,8 +81,8 @@ foreach ($evenements as $_evenement) {
 $rhs->loadBackRefs("lines");
 foreach($rhs->_back["lines"] as $_line) {
   $_line->loadRefActiviteCdARR();
-  $_line->_ref_code_activite_cdarr->loadRefTypeActivite();
-  $totaux[$rhs->_id][$_line->_ref_code_activite_cdarr->_ref_type_activite->code] += $_line->_qty_total;
+  $_line->_ref_activite_cdarr->loadRefTypeActivite();
+  $totaux[$rhs->_id][$_line->_ref_activite_cdarr->_ref_type_activite->code] += $_line->_qty_total;
   $_line->loadRefIntervenantCdARR();
   $_line->loadFwdRef("executant_id", true);
   $_line->_fwd["executant_id"]->loadRefsFwd();

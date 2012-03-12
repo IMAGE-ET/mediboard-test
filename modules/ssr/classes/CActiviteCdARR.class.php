@@ -52,7 +52,7 @@ class CActiviteCdARR extends CCdARRObject {
   }
   
   function loadRefTypeActivite() {
-    $this->_ref_type_activite = CTypeActiviteCdARR::get($this->type);
+    return $this->_ref_type_activite = CTypeActiviteCdARR::get($this->type);
   }
 	
 	function loadView(){

@@ -37,9 +37,9 @@ class CLigneActivitesRHS extends CMbObject {
 	// Distant fields
 
 	// References
-	var $_ref_rhs                    = null;
-	var $_ref_code_activite_cdarr    = null;
-	var $_ref_code_intervenant_cdarr = null;
+	var $_ref_rhs               = null;
+	var $_ref_activite_cdarr    = null;
+	var $_ref_intervenant_cdarr = null;
 	
   function getSpec() {
     $spec = parent::getSpec();
@@ -79,7 +79,6 @@ class CLigneActivitesRHS extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = $this->loadRefActiviteCdARR()->_view;
 
     $this->_qty_total = 
       $this->qty_mon + 
@@ -111,11 +110,14 @@ class CLigneActivitesRHS extends CMbObject {
   }
   
   function loadRefActiviteCdARR() {
-    return $this->_ref_code_activite_cdarr = CActiviteCdARR::get($this->code_activite_cdarr);
+  	//    $this->_view = $this->loadRefActiviteCdARR()->_view;
+  	$activite = CActiviteCdARR::get($this->code_activite_cdarr);
+  	$this->_view = $activite->_view;
+    return $this->_ref_activite_cdarr = $activite;
   }
   
   function loadRefIntervenantCdARR() {
-    return $this->_ref_code_intervenant_cdarr = CIntervenantCdARR::get($this->code_intervenant_cdarr);
+    return $this->_ref_intervenant_cdarr = CIntervenantCdARR::get($this->code_intervenant_cdarr);
   }
 	
   /**

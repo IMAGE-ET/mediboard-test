@@ -32,7 +32,7 @@
   </tr>
   {{foreach from=$rhs->_back.lines item=_line name=backlines}}
     {{assign var=executant value=$_line->_fwd.executant_id}}
-    {{assign var=activite  value=$_line->_ref_code_activite_cdarr}}
+    {{assign var=activite  value=$_line->_ref_activite_cdarr}}
     {{assign var=numsemaine value=$rhs->_week_number}}
     {{assign var=indexforeach value=$smarty.foreach.backlines.index}}
     
@@ -62,7 +62,7 @@
       <td class="text">
         {{mb_include module="mediusers" template="inc_vw_mediuser" mediuser=$executant}}
         <br />
-        <small>{{$_line->_ref_code_intervenant_cdarr->_view}}</small>
+        <small>{{$_line->_ref_intervenant_cdarr->_view}}</small>
       </td>
       
       {{foreach from=$days key=day item=litteral_day}}
