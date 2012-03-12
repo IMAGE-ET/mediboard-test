@@ -45,6 +45,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $this->queryNode("ZFD", null, $data, true);
     }
     
+    $this->queryNode("GT1", null, $data, true);
+    
     return $data;
   }
   
@@ -465,6 +467,13 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Segment ZFV
     $this->getSegment("ZFV", $data, $newVenue);
 
+    // Débiteurs
+    if (array_key_exists("GT1", $data)) {
+      foreach ($data["GT1"] as $_GT1) {
+        $this->getGT1($_GT1, $newVenue);
+      }
+    }
+
     /* TODO Supprimer ceci après l'ajout des times picker */
     $newVenue->_hour_entree_prevue = null;
     $newVenue->_min_entree_prevue = null;
@@ -680,7 +689,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     switch ($sender->_configs["handle_PV1_10"]) {
       // idex du service
       case 'service':
-        $newVenue->service_id = CIdSante400::getMatch("CService", $sender->_tag_service, null, $PV1_10)->object_id;
+        $newVenue->service_id = CIdSante400::getMatch("CService", $sender->_tag_service, $PV1_10)->object_id;
         break;
       // Discipline médico-tarifaire
       default:
@@ -861,6 +870,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
     
     $newVenue->etablissement_entree_id = $etab_ext->_id;
+  }
+  
+  function getGT1(DOMNode $node, CSejour $newVenue) {
+    
   }
 }
 ?>
