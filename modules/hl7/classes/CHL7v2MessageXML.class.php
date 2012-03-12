@@ -263,6 +263,10 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     return ($value == "Y") ? 1 : 0;
   }
   
+  function getPhone($string) {
+    return substr(preg_replace("/[^0-9]/", "", $string), 0, 10);
+  }
+  
   function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {}
 }
 

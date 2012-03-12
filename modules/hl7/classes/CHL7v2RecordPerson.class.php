@@ -298,7 +298,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $PID13 = $this->query("PID.13", $node);
     $phones = array();
     foreach ($PID13 as $_PID13) {
-      $tel_number = $this->queryTextNode("XTN.1", $_PID13);
+      $tel_number = $this->getPhone($this->queryTextNode("XTN.1", $_PID13));
       switch ($this->queryTextNode("XTN.2", $_PID13)) {
         case "PRN" :
           $newPatient->tel  = $tel_number;
