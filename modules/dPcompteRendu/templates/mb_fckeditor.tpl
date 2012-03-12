@@ -21,7 +21,7 @@ CKEDITOR.plugins.addExternal("mbmail"     , "../../modules/dPcompteRendu/fcke_pl
 {{if $can->admin}}
   CKEDITOR.plugins.addExternal("mbthumbs", "../../modules/dPcompteRendu/fcke_plugins/mbthumbs/plugin.js");
 {{/if}}
-
+CKEDITOR.plugins.addExternal("mbbreakage", "../../modules/dPcompteRendu/fcke_plugins/mbbreakage/plugin.js");
 
 // CK editor general configuration
 CKEDITOR.editorConfig = function(config) {
@@ -76,7 +76,7 @@ CKEDITOR.editorConfig = function(config) {
     {{/if}}
     
     config.extraPlugins =  'mbfields,mbfreetext,mbhelpers,mblists,{{if $mode_play && !$templateManager->isModele}}mbplay,{{/if}},mbprint,mbprintPDF,';
-    config.extraPlugins += 'mbheader,mbfooter,mbpagebreak,mblineheight{{if "printing"|module_active && !$templateManager->isModele}},mbprinting{{/if}}{{if $can->admin}},mbthumbs{{/if}}';
+    config.extraPlugins += 'mbheader,mbfooter,mbpagebreak,mblineheight{{if "printing"|module_active && !$templateManager->isModele}},mbprinting{{/if}}{{if $can->admin}},mbthumbs{{/if}},mbbreakage';
     {{if !$templateManager->isModele}}
       config.extraPlugins += ',mbmail';
     {{/if}}    
@@ -89,7 +89,7 @@ CKEDITOR.editorConfig = function(config) {
       ['RemoveFormat', 'Bold', 'Italic', 'Underline', 'Strike'],
       ['Subscript', 'Superscript', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList'],
       ['Outdent', 'Indent', 'mblineheight', 'TextColor', 'BGColor'],'/',
-      [{{if !$templateManager->isModele && $mode_play}}'mbplay', {{/if}} 'mbfields', {{if $templateManager->isModele}}'mblists', 'mbfreetext', {{/if}}'mbhelpers', {{if !$templateManager->isModele}}'mbmail', {{/if}}{{if $can->admin}}'mbthumbs'{{/if}}]];
+      [{{if !$templateManager->isModele && $mode_play}}'mbplay', {{/if}} 'mbfields', {{if $templateManager->isModele}}'mblists', 'mbfreetext', {{/if}}'mbhelpers', {{if !$templateManager->isModele}}'mbmail', {{/if}}'mbbreakage', {{if $can->admin}}'mbthumbs'{{/if}}]];
 
     window.parent.fields = [];
     window.parent.listeChoix = [];
