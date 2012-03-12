@@ -64,14 +64,14 @@ foreach ($files as $_filepath) {
   if ($acq = CEAIDispatcher::dispatch($message, $sender, null, $to_treatment)) {
     try {
       CEAIDispatcher::createFileACK($acq, $sender);
-      $source->delFile($path);
+      $source->delFile($_filepath);
     } catch (Exception $e) {
       CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
     }
   }
   
   try {
-    $source->delFile($path);
+    $source->delFile($_filepath);
   } catch (Exception $e) {
     CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING);
   }
