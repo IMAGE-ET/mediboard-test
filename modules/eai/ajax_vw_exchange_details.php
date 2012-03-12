@@ -31,33 +31,38 @@ $exchange->getObservations();
 $smarty = new CSmartyDP();
 $smarty->assign("exchange", $exchange);
 
-if ($exchange instanceof CExchangeTabular) {
-  $msg_segment_group = $exchange->getMessage();
+switch(true) {
+  case $exchange instanceof CExchangeTabular:
+    $msg_segment_group = $exchange->getMessage();
+    
+    if ($msg_segment_group) {
+      $geshi = new Geshi($msg_segment_group->toXML()->saveXML(), "xml");
+      $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
+      $geshi->set_overall_style("max-height: 100%; white-space:pre-wrap;");
+      $geshi->enable_classes();
+      $msg_segment_group->_xml = $geshi->parse_code();
+    }
+    
+    $ack_segment_group = $exchange->getACK();
+    if ($ack_segment_group) {
+      $geshi = new Geshi($ack_segment_group->toXML()->saveXML(), "xml");
+      $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
+      $geshi->set_overall_style("max-height: 100%; white-space:pre-wrap;");
+      $geshi->enable_classes();
+      $ack_segment_group->_xml = $geshi->parse_code();
+    }
+    
+    $smarty->assign("msg_segment_group", $msg_segment_group);
+    $smarty->assign("ack_segment_group", $ack_segment_group);
+    $smarty->display("inc_exchange_tabular_details.tpl");
+  break;
+
+  case $exchange instanceof CEchangeXML:
+    $smarty->display("inc_exchange_xml_details.tpl");
+  break;
   
-  if ($msg_segment_group) {
-    $geshi = new Geshi($msg_segment_group->toXML()->saveXML(), "xml");
-    $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
-    $geshi->set_overall_style("max-height: 100%; white-space:pre-wrap;");
-    $geshi->enable_classes();
-    $msg_segment_group->_xml = $geshi->parse_code();
-  }
-  
-  $ack_segment_group = $exchange->getACK();
-  if ($ack_segment_group) {
-    $geshi = new Geshi($ack_segment_group->toXML()->saveXML(), "xml");
-    $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
-    $geshi->set_overall_style("max-height: 100%; white-space:pre-wrap;");
-    $geshi->enable_classes();
-    $ack_segment_group->_xml = $geshi->parse_code();
-  }
-  
-  $smarty->assign("msg_segment_group", $msg_segment_group);
-  $smarty->assign("ack_segment_group", $ack_segment_group);
-  $smarty->display("inc_exchange_tabular_details.tpl");
-} 
-elseif ($exchange instanceof CEchangeXML) {
-  $smarty->display("inc_exchange_xml_details.tpl");
+  default:
+    $exchange->guessDataType();
+    $smarty->display("inc_exchange_any_details.tpl");
+  break;
 }
-
-
-?>

@@ -60,6 +60,18 @@ class CExchangeAny extends CExchangeDataFormat {
     $this->_acquittement = $content->content;
   }
   
+  function guessDataType(){
+    if (strpos($this->_message, '<?xml') === 0) {
+      $this->_props["_message"] = "xml";
+      $this->_specs["_message"] = CMbFieldSpecFact::getSpec($this, "_message", "xml");
+    }
+    
+    if (strpos($this->_acquittement, '<?xml') === 0) {
+      $this->_props["_acquittement"] = "xml";
+      $this->_specs["_acquittement"] = CMbFieldSpecFact::getSpec($this, "_acquittement", "xml");
+    }
+  }
+  
   function updatePlainFields() {
     if ($this->_message !== null) {
       $content = new CContentAny();
