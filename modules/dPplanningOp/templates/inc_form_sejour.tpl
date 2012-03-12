@@ -706,16 +706,8 @@ Main.add( function(){
 <tr>
   <th>{{mb_label object=$sejour field="type"}}</th>
   <td colspan="3">
-    <select name="type" style="width: 15em;"
-      onchange="changeTypeHospi(); OccupationServices.updateOccupation(); checkDureeHospi('syncDuree');">
-    {{assign var=specType value=$sejour->_specs.type}}
-    {{foreach from=$specType->_locales item="curr_type" key="key"}}
-      <option value="{{$key}}"
-        {{if $sejour->type == $key || (!$sejour->type && $key == $specType->default)}}selected="selected"{{/if}}>
-        {{$curr_type}}
-      </option>
-    {{/foreach}}
-    </select>
+    {{mb_field object=$sejour field=type style="width: 15em;"
+      onchange="changeTypeHospi(); OccupationServices.updateOccupation(); checkDureeHospi('syncDuree');"}}
   </td>
 </tr>
 {{if $conf.dPplanningOp.CSejour.show_type_pec}}

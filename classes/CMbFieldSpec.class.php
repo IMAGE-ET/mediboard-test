@@ -185,7 +185,7 @@ class CMbFieldSpec {
     $propValue = $object->$fieldName;
 
     // NotNull
-    if ($this->notNull && !$this->default && ($propValue === null || $propValue === "")) {
+    if ($this->notNull && $this->default === null && ($propValue === null || $propValue === "")) {
       return "Ne peut pas avoir une valeur nulle";
     }
 

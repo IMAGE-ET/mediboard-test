@@ -263,7 +263,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["modalite"]                 = "enum notNull list|office|libre|tiers default|libre show|0";
     $props["annule"]                   = "bool show|0";
     $props["recuse"]                   = "enum list|-1|0|1 default|-1 show|0";
-    $props["chambre_seule"]            = "bool show|0 default|".(CGroups::loadCurrent()->chambre_particuliere ? 1 : 0);
+    $props["chambre_seule"]            = "bool notNull show|0 default|".(CGroups::loadCurrent()->chambre_particuliere ? 1 : 0);
     $props["reanimation"]              = "bool default|0";
     $props["zt"]                       = "bool default|0";
     $props["service_id"]               = "ref".(CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1 ? ' notNull' : '')." class|CService seekable";
