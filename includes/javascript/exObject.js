@@ -63,7 +63,7 @@ var ExObject = {
   
   triggerMulti: function(forms) {
     $A(forms).each(function(data){
-      showExClassForm(data.ex_class_id, data.object_guid, object_guid+"_"+data.event+"_"+data.ex_class_id, "", data.event);
+      showExClassForm(data.ex_class_id, data.object_guid, data.object_guid+"_"+data.event+"_"+data.ex_class_id, "", data.event);
     });
   },
   
