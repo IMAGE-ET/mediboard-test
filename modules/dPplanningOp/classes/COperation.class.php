@@ -628,6 +628,7 @@ class COperation extends CCodable implements IPatientRelated {
   
   function loadView() {
     parent::loadView();
+    $this->loadRefPraticien()->loadRefFunction();
     $this->loadRefPatient();
     $this->_ref_sejour->_ref_patient->loadRefPhotoIdentite();
   }

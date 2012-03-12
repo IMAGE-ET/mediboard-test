@@ -376,8 +376,10 @@ class CConsultation extends CCodable {
   
   function loadView() {
     parent::loadView();
+    $this->loadRefPatient()->loadRefPhotoIdentite();
     $this->loadRefsFichesExamen(); 
     $this->loadRefsActesNGAP();
+    $this->loadRefCategorie();
   }
 
   /**

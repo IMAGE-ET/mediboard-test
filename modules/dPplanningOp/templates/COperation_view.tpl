@@ -12,7 +12,7 @@
     </th>
   </tr>
   <tr>
-    <td rowspan="3">
+    <td rowspan="3" style="width: 1px;">
       {{mb_include module=patients template=inc_vw_photo_identite mode=read patient=$patient size=50}}
     </td>
     <td>
@@ -23,11 +23,16 @@
   </tr>
   <tr>
     <td>
-      {{mb_label object=$object field=libelle}} : {{mb_value object=$object field=libelle}}
+      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$object->_ref_praticien}}
     </td>
   </tr>
   <tr>
     <td>
+      {{mb_label object=$object field=libelle}} : {{mb_value object=$object field=libelle}}
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
       {{mb_label object=$object field=cote}} {{mb_value object=$object field=cote}}
     </td>
   </tr>
@@ -43,18 +48,16 @@
   </tr>
   
   {{if $operation->debut_op}}
-    <tr colspan="4">
-      <td>
+    <tr>
+      <td colspan="2">
         <strong>{{tr}}COperation-debut_op{{/tr}} :</strong>
         {{$operation->debut_op|date_format:$conf.time}}
-      </td>
-      <td>
       </td>
     </tr>
   {{/if}}
   {{if $operation->annulee == 1}}
   <tr>
-    <th class="category cancelled" colspan="4">
+    <th class="category cancelled" colspan="2">
     {{tr}}COperation-annulee{{/tr}}
     </th>
   </tr>

@@ -10,7 +10,7 @@
   </th>
 </tr>
 <tr>
-  <td rowspan="3">
+  <td rowspan="3" style="width: 1px;">
     {{mb_include module=patients template=inc_vw_photo_identite mode=read patient=$patient size=50}}
   </td>
   <td>
