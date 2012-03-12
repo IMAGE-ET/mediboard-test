@@ -629,6 +629,7 @@ class COperation extends CCodable implements IPatientRelated {
   function loadView() {
     parent::loadView();
     $this->loadRefPatient();
+    $this->_ref_sejour->_ref_patient->loadRefPhotoIdentite();
   }
   
   function loadComplete() {
@@ -754,8 +755,13 @@ class COperation extends CCodable implements IPatientRelated {
       $this->_acte_execution = mbDateTime();
     }
 
-    $this->_view = "Intervention du ";
-    $this->_view .= mbTransformTime(null, $this->_datetime, CAppUI::conf("date"));
+    $this->_view = "Intervention ";
+    
+    if ($this->date) {
+      $this->_view .= "(hors plage) ";
+    }
+    
+    $this->_view .= "du " . mbTransformTime(null, $this->_datetime, CAppUI::conf("date"));
     return $this->_ref_plageop;
   }
   

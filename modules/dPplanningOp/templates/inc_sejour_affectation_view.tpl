@@ -9,6 +9,7 @@
     {{/if}}
   </th>
 </tr>
+<tr>
   <td rowspan="3">
     {{mb_include module=patients template=inc_vw_photo_identite mode=read patient=$patient size=50}}
   </td>
