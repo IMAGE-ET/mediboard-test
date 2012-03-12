@@ -19,6 +19,8 @@ $sender = CMbObject::loadFromGuid($actor_guid);
 $sender->loadRefGroup();
 $sender->loadRefsExchangesSources();
 
+$delete_file = $sender->_delete_file;
+
 $source = reset($sender->_ref_exchanges_sources);
 
 $files = array();
@@ -31,7 +33,16 @@ try {
 $fileextension           = $source->fileextension;
 $fileextension_write_end = $source->fileextension_write_end;
 
+$i = CAppUI::conf("eai max_files_to_process");
 foreach ($files as $_filepath) {
+  if ($i == 0) {
+    CAppUI::stepAjax("Fin du traitement des fichiers");
+    
+    return;
+  }
+  
+  $sender->_delete_file = $delete_file;
+  
   $path_info = pathinfo($_filepath);
   if (!isset($path_info["extension"])) {
     continue;
@@ -64,19 +75,27 @@ foreach ($files as $_filepath) {
   if ($acq = CEAIDispatcher::dispatch($message, $sender, null, $to_treatment)) {
     try {
       CEAIDispatcher::createFileACK($acq, $sender);
-      $source->delFile($_filepath);
     } catch (Exception $e) {
+      if ($sender->_delete_file !== false) {
+        $source->delFile($_filepath);
+      } 
+      else {
+        CAppUI::stepAjax("CEAIDispatcher-no_message_supported_for_this_actor", UI_MSG_WARNING, $sender->_data_format->_family_message->code);
+      } 
       CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
     }
   }
-  
-  try {
+
+  if ($sender->_delete_file !== false) {
     $source->delFile($_filepath);
-  } catch (Exception $e) {
-    CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING);
   }
+  else {
+    CAppUI::stepAjax("CEAIDispatcher-no_message_supported_for_this_actor", UI_MSG_WARNING, $sender->_data_format->_family_message->code);      
+  } 
   
   CAppUI::stepAjax("Message retraité");
+  
+  $i--;
 }
 
 
