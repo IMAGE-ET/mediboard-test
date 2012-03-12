@@ -99,13 +99,14 @@ class CFloatSpec extends CMbFieldSpec {
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
-    $form       = CMbArray::extract($params, "form");
-    $increment  = CMbArray::extract($params, "increment");
-    $showPlus   = CMbArray::extract($params, "showPlus");
-    $fraction   = CMbArray::extract($params, "fraction");
-    $deferEvent = CMbArray::extract($params, "deferEvent");
-    $field      = htmlspecialchars($this->fieldName);
-    $maxLength  = 8;
+    $form         = CMbArray::extract($params, "form");
+    $increment    = CMbArray::extract($params, "increment");
+    $showPlus     = CMbArray::extract($params, "showPlus");
+    $fraction     = CMbArray::extract($params, "fraction");
+    $showFraction = CMbArray::extract($params, "showFraction");
+    $deferEvent   = CMbArray::extract($params, "deferEvent");
+    $field        = htmlspecialchars($this->fieldName);
+    $maxLength    = 8;
     CMbArray::defaultValue($params, "size", $maxLength);
     CMbArray::defaultValue($params, "maxlength", $maxLength);
     $fieldId = $form.'_'.$field;
@@ -138,19 +139,20 @@ class CFloatSpec extends CMbFieldSpec {
       $sHtml .= '
     <script type="text/javascript">
       Main.add(function(){
-      	var element = $(document.forms["'.$form.'"]["'.$field.'"]);
-				
-      	if ($(element.form).isReadonly()) return;
-				
+        var element = $(document.forms["'.$form.'"]["'.$field.'"]);
+        
+        if ($(element.form).isReadonly()) return;
+        
         element.addSpinner({';
-          if ($step)       $sHtml .= "step: $step,";
-          if ($deferEvent) $sHtml .= "deferEvent: true,";
-          if ($this->pos)  $sHtml .= "min: 0,";
-          elseif(isset($min))     $sHtml .= "min: $min,";
-          if (isset($max)) $sHtml .= "max: $max,";
-          if ($showPlus)   $sHtml .= "showPlus: $showPlus,";
-          if ($decimals)   $sHtml .= "decimals: $decimals,";
-          if ($fraction)   $sHtml .= "fraction: $fraction,";
+          if ($step)          $sHtml .= "step: $step,";
+          if ($decimals)      $sHtml .= "decimals: $decimals,";
+          if ($this->pos)     $sHtml .= "min: 0,";
+          elseif(isset($min)) $sHtml .= "min: $min,";
+          if (isset($max))    $sHtml .= "max: $max,";
+          if ($deferEvent)    $sHtml .= "deferEvent: true,";
+          if ($showPlus)      $sHtml .= "showPlus: true,";
+          if ($fraction)      $sHtml .= "fraction: true,";
+          if ($showFraction)  $sHtml .= "showFraction: true,";
           $sHtml .= '_:0 // IE rules
         });
       });

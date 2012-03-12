@@ -325,7 +325,7 @@ function prepareForm(oForm) {
         var inactiveApplets;
         var tries = 50;
             
-        function waitForApplet() {
+        var waitForApplet = function() {
           inactiveApplets = applets.length;
           for(var i = 0; i < applets.length; i++) {
             if (Prototype.Browser.IE || "isActive" in applets[i] && 

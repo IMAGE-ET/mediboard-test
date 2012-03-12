@@ -633,7 +633,7 @@ var Note = {
 
 // *******
 var notWhitespace   = /\S/;
-Dom = {
+var Dom = {
   writeElem : function(elem, elemReplace){
     elem = $(elem);
     while (elem.firstChild) {
@@ -1490,7 +1490,7 @@ Element.getTempIframe = function(id) {
   return iframe;
 };
 
-BarcodeParser = {
+var BarcodeParser = {
   inputWatcher: Class.create({
     initialize: function(input, options) {
       this.input = $(input);

@@ -128,7 +128,7 @@ Element.addMethods(['input', 'textarea'], {
       el.selectionEnd = end;
     }
     else {
-      function offsetToRangeCharacterMove(el, offset) {
+      var offsetToRangeCharacterMove = function(el, offset) {
         return offset - (el.value.slice(0, offset).split("\r\n").length - 1);
       }
       

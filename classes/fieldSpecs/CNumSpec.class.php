@@ -204,12 +204,12 @@ class CNumSpec extends CMbFieldSpec {
         if ($(element.form).isReadonly()) return;
         
         element.addSpinner({';
-          if ($step)       $sHtml .= "step: $step,";
-          if ($deferEvent) $sHtml .= "deferEvent: true,";
-          if ($this->pos)  $sHtml .= "min: 0,";
+          if ($step)          $sHtml .= "step: $step,";
+          if ($this->pos)     $sHtml .= "min: 0,";
           elseif(isset($min)) $sHtml .= "min: $min,";
-          if (isset($max)) $sHtml .= "max: $max,";
-          if ($showPlus)   $sHtml .= "showPlus: $showPlus,";
+          if (isset($max))    $sHtml .= "max: $max,";
+          if ($deferEvent)    $sHtml .= "deferEvent: true,";
+          if ($showPlus)      $sHtml .= "showPlus: true,";
           $sHtml .= '_:0 // IE rules
         });
       });
