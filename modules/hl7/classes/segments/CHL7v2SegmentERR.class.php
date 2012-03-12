@@ -32,6 +32,8 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
   function build(CHL7v2Event $event) {
     parent::build($event);
     
+    $version        = $event->message->version;
+
     $error          = $this->error;
     $acknowledgment = $this->acknowledgment;
     
@@ -40,7 +42,11 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
     if ($error) {
       // ERR-1: Error Code and Location (ELD) (optional repeating)
       $data[] = $error->getCodeLocation();
-    
+      
+      if ($version < "2.5") {
+        return $this->fill($data);
+      }
+      
       // ERR-2: Error Location (ERL) (optional repeating)
       $data[] = $error->getLocation();
       
@@ -106,6 +112,10 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
           CAppUI::tr("CHL7EventADT-$acknowledgment->ack_code-$acknowledgment->_mb_error_code")
         )
       );
+      
+      if ($version < "2.5") {
+        return $this->fill($data);
+      }
       
       // ERR-2
       $data[] = null;
