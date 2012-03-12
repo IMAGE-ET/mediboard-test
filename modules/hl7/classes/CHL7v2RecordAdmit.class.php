@@ -45,7 +45,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $this->queryNode("ZFD", null, $data, true);
     }
     
-    $this->queryNode("GT1", null, $data, true);
+    $this->queryNodes("GT1", null, $data, true);
     
     return $data;
   }
