@@ -76,10 +76,10 @@ class CSetupdPccam extends CSetup {
     $this->mod_version = "0.15";    
 		
 		// Data source query
-    //$query = "SELECT *
-    //  FROM `actes`
-    //  WHERE CODE = 'JDDB007'";
-    $query = "SHOW TABLES LIKE 'forfaits'";
+    $query = "SELECT *
+      FROM `actes`
+      WHERE CODE = 'JJCC004'";
+    //$query = "SHOW TABLES LIKE 'forfaits'";
     $this->addDatasource("ccamV2", $query);
 		
   }
