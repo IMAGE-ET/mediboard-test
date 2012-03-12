@@ -807,7 +807,6 @@ $locales['mod-ssr-tab-ajax_interv_autocomplete'] = 'Autocomplétion des intervent
 $locales['mod-ssr-tab-ajax_planning_equipement'] = 'Planning d\'équipement';
 $locales['mod-ssr-tab-ajax_planning_sejour'] = 'Planning de séjour';
 $locales['mod-ssr-tab-ajax_planning_technicien'] = 'Planning de technique';
-$locales['mod-ssr-tab-ajax_recalculate_rhs'] = 'Calcul du RHS';
 $locales['mod-ssr-tab-ajax_sejours_rhs_search'] = 'Recherche de RHS';
 $locales['mod-ssr-tab-ajax_sejours_technicien'] = 'Séjours de rééducateur';
 $locales['mod-ssr-tab-ajax_sejours_to_rhs_date_monday'] = 'Facturation des RHS d\'une semaine';

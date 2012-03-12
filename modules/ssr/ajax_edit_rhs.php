@@ -21,10 +21,17 @@ if (!$rhs->_id) {
 }
 $rhs->loadRefsNotes();
 
+// Recalcul
+if (CValue::get("recalculate")) {
+  $rhs->recalculate();
+}
+
 // Liste des catégories d'activité
 $type_activite = new CTypeActiviteCdARR();
 $types_activite = $type_activite->loadList();
 $totaux = array();
+$executants = array();
+$lines_by_executant = array();
 if ($rhs->_id) {
   $totaux[$rhs->_id] = array();
   foreach($types_activite as $_type) {
@@ -45,7 +52,9 @@ if ($rhs->_id) {
     $_line->loadRefIntervenantCdARR();
     $executant = $_line->loadFwdRef("executant_id", true);
     $executant->loadRefsFwd();
-    $executant->loadRefCodeIntervenantCdARR();
+    $executant->loadRefIntervenantCdARR();
+    $executants[$executant->_id] = $executant;
+    $lines_by_executant[$executant->_id][] = $_line;
   }
 }
 
@@ -60,10 +69,12 @@ if ($user->code_intervenant_cdarr) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("types_activite", $types_activite);
-$smarty->assign("rhs_line"      , $rhs_line);
-$smarty->assign("totaux"        , $totaux);
-$smarty->assign("rhs"           , $rhs);
+$smarty->assign("lines_by_executant", $lines_by_executant);
+$smarty->assign("executants"        , $executants);
+$smarty->assign("types_activite"    , $types_activite);
+$smarty->assign("rhs_line"          , $rhs_line);
+$smarty->assign("totaux"            , $totaux);
+$smarty->assign("rhs"               , $rhs);
 
 $smarty->display("inc_edit_rhs.tpl");
 

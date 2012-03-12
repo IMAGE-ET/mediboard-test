@@ -21,18 +21,23 @@
     <td class="narrow">
     
 <script type="text/javascript">
-Main.add(Control.Tabs.create.curry('tabs-rhss', true, {
-  afterChange: function(newContainer){
-    var rhs_id = newContainer.get("rhs_id");
-    CotationRHS.launchDrawDependancesGraph(rhs_id);
-  }
-}));
+Main.add(function() {
+  var options = {
+    afterChange: function(newContainer) {
+	  var rhs_id = newContainer.get("rhs_id");
+	  CotationRHS.launchDrawDependancesGraph(rhs_id);
+	}
+  };
+  
+  Control.Tabs.create('tabs-rhss', true, options).activeLink.onmouseup();
+});
 </script>
 
 <ul id="tabs-rhss" class="control_tabs_vertical" style="width: 14em;">
   {{foreach from=$rhss item=_rhs}}
   <li>
     <a href="#cotation-{{if $_rhs->_id}}{{$_rhs->_id}}{{else}}{{$_rhs->date_monday}}{{/if}}" 
+      onmouseup="CotationRHS.refreshRHS('{{$_rhs->_id}}');"
       {{if !$_rhs->_id}}class="empty"{{/if}}
       {{if !$_rhs->_in_bounds}}class="wrong"{{/if}}
       >
@@ -52,7 +57,6 @@ Main.add(Control.Tabs.create.curry('tabs-rhss', true, {
       
 {{foreach from=$rhss item=_rhs}}
 <div id="cotation-{{if $_rhs->_id}}{{$_rhs->_id}}{{else}}{{$_rhs->date_monday}}{{/if}}" style="display: none;" data-rhs_id="{{$_rhs->_id}}">
-  {{mb_include template=inc_edit_rhs rhs=$_rhs}}
 </div>
 {{/foreach}}
 

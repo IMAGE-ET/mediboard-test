@@ -37,7 +37,7 @@ if($rhs->_id) {
     $_line->loadRefIntervenantCdARR();
     $_line->loadFwdRef("executant_id", true);
     $_line->_fwd["executant_id"]->loadRefsFwd();
-    $_line->_fwd["executant_id"]->loadRefCodeIntervenantCdARR();
+    $_line->_fwd["executant_id"]->loadRefIntervenantCdARR();
   }
 }
 

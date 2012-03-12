@@ -24,15 +24,10 @@ CotationRHS = {
       });
   },
   
-  recalculatehRHS: function(rhs_id) {
-    new Url('ssr', 'ajax_recalculate_rhs') .
-      addParam('rhs_id', rhs_id) .
-      requestUpdate('cotation-' + rhs_id);
-  },
-  
-  refreshTotaux: function(rhs_id) {
+  refreshTotaux: function(rhs_id, recalculate) {
     new Url('ssr', 'ajax_totaux_rhs') .
       addParam('rhs_id', rhs_id) .
+      addParam('recalculate', recalculate) .
       requestUpdate('totaux-' + rhs_id);
   },
   

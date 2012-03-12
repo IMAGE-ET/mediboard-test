@@ -22,7 +22,7 @@
       {{assign var=line_guid value=$_line->_guid}}
       {{assign var=qty_form value="chg-$litteral_day-$line_guid"}}
 
-      {{mb_field object=$_line field=$qty form=$qty_form onchange="this.form.onsubmit()" tabindex="$numsemaine$indexforeach$day" style="text-align: center;"}}
+      {{mb_field object=$_line field=$qty form=$qty_form onchange="this.form.onsubmit()" style="text-align: center;"}}
     </form>
   {{else}}
     {{$_line->$qty}}

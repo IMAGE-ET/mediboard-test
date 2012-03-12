@@ -29,7 +29,7 @@ $intervenants = $intervenant->seek($needle, $where, 100, false, $ljoin, $order);
 
 foreach($intervenants as &$_intervenant) {
   $_intervenant->loadRefFunction();
-  $_intervenant->loadRefCodeIntervenantCdARR();
+  $_intervenant->loadRefIntervenantCdARR();
 }
 
 // Création du template

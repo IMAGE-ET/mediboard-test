@@ -44,7 +44,7 @@
           {{tr}}Restore{{/tr}}
         </button> 
       {{else}}
-        <button class="change" type="button" onclick="CotationRHS.recalculatehRHS('{{$rhs->_id}}')">
+        <button class="change" type="button" onclick="CotationRHS.refreshRHS('{{$rhs->_id}}', '1')">
           {{tr}}CLigneActivitesRHS.recalculate{{/tr}}
         </button>
         <button class="tick"   type="button" onclick="$V(this.form.facture, '1'); this.form.onsubmit();">

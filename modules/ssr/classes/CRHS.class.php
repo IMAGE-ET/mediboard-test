@@ -270,6 +270,46 @@ class CRHS extends CMbObject {
     
     return $totaux;
   }
+  
+  function recalculate() {
+    // Suppression des lignes d'activités du RHS
+    $this->loadBackRefs("lines");
+    foreach($this->_back["lines"] as $_line) {
+      if ($_line->auto) {
+        $_line->delete();
+      }
+    }
+    $this->loadBackRefs("lines");
+    
+    // Ajout des lignes d'activités 
+    $evenementSSR = new CEvenementSSR();
+    $evenementSSR->sejour_id = $this->_ref_sejour->_id;
+    $evenementSSR->realise = 1;
+    $evenements = $evenementSSR->loadMatchingList();
+    foreach ($evenements as $_evenement) {
+      $evenementRhs = $_evenement->getRHS();
+      if ($evenementRhs->_id != $this->_id) {
+        continue;
+      }
+      
+      
+      $therapeute = $_evenement->loadRefTherapeute();
+      $intervenant = $therapeute->loadRefIntervenantCdARR();
+      $code_intervenant_cdarr = $intervenant->code;
+      $actes_cdarr =$_evenement->loadRefsActesCdARR();
+      foreach ($actes_cdarr as $_acte_cdarr) {
+        $ligne = new CLigneActivitesRHS();
+        $ligne->rhs_id                 = $this->_id;
+        $ligne->executant_id           = $therapeute->_id;
+        $ligne->code_activite_cdarr    = $_acte_cdarr->code;
+        $ligne->code_intervenant_cdarr = $code_intervenant_cdarr;
+        $ligne->loadMatchingObject();
+        $ligne->crementDay($_evenement->debut, "inc");
+        $ligne->auto = "1";
+        $ligne->store();
+      }
+    }    
+  }
 }
 
 ?>

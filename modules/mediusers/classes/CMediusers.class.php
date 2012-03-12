@@ -385,7 +385,7 @@ class CMediusers extends CMbObject {
     return $this->_ref_spec_cpam = $this->loadFwdRef("spec_cpam_id", true);
   }
   
-  function loadRefCodeIntervenantCdARR() {
+  function loadRefIntervenantCdARR() {
     return $this->_ref_intervenant_cdarr = CIntervenantCdARR::get($this->code_intervenant_cdarr);
   }
   

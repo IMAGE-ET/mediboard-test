@@ -144,7 +144,7 @@ class CEvenementSSR extends CMbObject {
       if (!$therapeute->code_intervenant_cdarr) {
         return CAppUI::tr("CMediusers-code_intervenant_cdarr-none");
       }
-      $therapeute->loadRefCodeIntervenantCdARR();
+      $therapeute->loadRefIntervenantCdARR();
       $code_intervenant_cdarr = $therapeute->_ref_intervenant_cdarr->code;
       
       

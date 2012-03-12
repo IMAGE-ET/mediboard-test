@@ -8,11 +8,8 @@
   * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
   *}}
 
-{{ if !@$read_only}}
-  {{assign var=read_only value=false}}
-{{/if}}
-
-{{ if $rhs->facture == 1}}
+{{mb_default var=read_only value=false}}
+{{if $rhs->facture == 1}}
   {{assign var=read_only value=true}}
 {{/if}}
   
@@ -21,8 +18,8 @@
 <table class="tbl">
   <tr>
     <th class="narrow"></th>
-    <th>{{mb_title object=$rhs_line field=code_activite_cdarr}}</th>
-    <th>{{mb_title object=$rhs_line field=executant_id}}</th>
+    <th colspan="2">{{mb_title object=$rhs_line field=code_activite_cdarr}}</th>
+    <th>{{mb_title class=CActiviteCdARR field=libelle}}</th>
     
     {{foreach from=$days key=day item=litteral_day}}
     <th class="category narrow">{{mb_title object=$rhs_line field=qty_$litteral_day}}</th>
@@ -30,12 +27,17 @@
     
     <th class="narrow"></th>
   </tr>
-  {{foreach from=$rhs->_back.lines item=_line name=backlines}}
-    {{assign var=executant value=$_line->_fwd.executant_id}}
+  {{foreach from=$lines_by_executant key=executant_id item=_lines}}
+    {{assign var=executant value=$executants.$executant_id}}
+    <tr>
+      <th class="text section" colspan="12" style="text-align: left;">
+        {{mb_include module="mediusers" template="inc_vw_mediuser" mediuser=$executant}}
+        &mdash;
+        {{$executant->_ref_intervenant_cdarr}}
+      </th>
+    </tr>  
+    {{foreach from=$_lines item=_line}}
     {{assign var=activite  value=$_line->_ref_activite_cdarr}}
-    {{assign var=numsemaine value=$rhs->_week_number}}
-    {{assign var=indexforeach value=$smarty.foreach.backlines.index}}
-    
     <tr>
       <td>
         {{if !$read_only && !$_line->auto}}
@@ -54,18 +56,20 @@
         </form>
         {{/if}}
       </td>
+      
       <td class="text">
         {{$activite}}
-        <br />
-        <small>{{$activite->_ref_type_activite}}</small>
-      </td>
-      <td class="text">
-        {{mb_include module="mediusers" template="inc_vw_mediuser" mediuser=$executant}}
-        <br />
-        <small>{{$_line->_ref_intervenant_cdarr->_view}}</small>
       </td>
       
-      {{foreach from=$days key=day item=litteral_day}}
+      <td class="narrow">
+        {{$activite->_ref_type_activite->code}}
+      </td>
+      
+      <td class="text">
+        {{$activite->libelle}}
+      </td>
+      
+{{foreach from=$days key=day item=litteral_day}}
         {{mb_include template="inc_line_rhs"}}
       {{/foreach}}
       
@@ -74,6 +78,8 @@
       </td>
       
     </tr>
+    {{/foreach}}
+    
   {{foreachelse}}
   <tr>
     <td colspan="10" class="empty">{{tr}}CRHS-back-lines.empty{{/tr}}</td>

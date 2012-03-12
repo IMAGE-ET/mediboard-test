@@ -19,7 +19,7 @@ $kines = CFunctionCategoryPrescription::getAllExecutants();
 
 $kine = new CMediusers();
 $kine->load($kine_id);
-$kine->loadRefCodeIntervenantCdARR();
+$kine->loadRefIntervenantCdARR();
 
 // Création du template
 $smarty = new CSmartyDP();
