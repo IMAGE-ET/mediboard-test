@@ -59,7 +59,7 @@ Main.add(function () {
   <table class="form" id="mb_field" style="display: none;">
   {{foreach from=$specs item=class key=spec}}
     <tr>
-      <th>{{mb_title object=$object field=$spec}}</th>
+      <th>{{mb_label object=$object field=$spec}}</th>
       <td>{{mb_field object=$object field=$spec form=test register=1 increment=1}}</td>
     </tr>
   {{/foreach}}

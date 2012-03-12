@@ -1,4 +1,4 @@
-DateFormat = Class.create();
+var DateFormat = Class.create();
 Object.extend(DateFormat, {
   MONTH_NAMES: ['January','February','March','April','May','June','July','August','September','October','November','December','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
   DAY_NAMES: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
@@ -250,7 +250,6 @@ var ProgressiveCalendar = Class.create({
     this.element = $(element);
     
     this.options = Object.extend({
-      container: null,
       icon: "images/icons/calendar.gif",
       container: $(document.body)
     }, options || {});
@@ -636,8 +635,7 @@ var Calendar = {
         elementView.observe('click', showPicker).observe('focus', showPicker);
       }
     }
-   
-  
+    
     // We update the view
     if (element.value && !elementView.value) {
       var date = DateFormat.parse(element.value, datepicker.options.altFormat);
@@ -669,7 +667,14 @@ var Calendar = {
       }.bindAsEventListener(datepicker));
     }
     
-    datepicker.element.observe('change', function(){elementView.fire("ui:change")});
+    datepicker.handlers.onSelect = function(date) {
+      element.fire("ui:change");
+      
+      if (elementView != element) {
+        elementView.fire("ui:change");
+      }
+    }
+    
     element.addClassName('datepicker');
     
     return datepicker;
