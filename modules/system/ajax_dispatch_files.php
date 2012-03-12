@@ -78,6 +78,7 @@ foreach ($files as $_filepath) {
     } catch (Exception $e) {
       if ($sender->_delete_file !== false) {
         $source->delFile($_filepath);
+        $i--;
       } 
       else {
         CAppUI::stepAjax("CEAIDispatcher-no_message_supported_for_this_actor", UI_MSG_WARNING, $sender->_data_format->_family_message->code);
@@ -88,14 +89,13 @@ foreach ($files as $_filepath) {
 
   if ($sender->_delete_file !== false) {
     $source->delFile($_filepath);
+    $i--;
   }
   else {
     CAppUI::stepAjax("CEAIDispatcher-no_message_supported_for_this_actor", UI_MSG_WARNING, $sender->_data_format->_family_message->code);      
   } 
   
   CAppUI::stepAjax("Message retraité");
-  
-  $i--;
 }
 
 
