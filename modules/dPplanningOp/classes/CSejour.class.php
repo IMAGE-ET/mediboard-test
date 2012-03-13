@@ -1508,7 +1508,7 @@ class CSejour extends CCodable implements IPatientRelated {
   
   function loadView() {
     parent::loadView();
-    $this->loadRefPatient();
+    $this->loadRefPatient()->loadRefPhotoIdentite();
     $this->loadRefEtablissement();
     $affectations = $this->loadRefsAffectations();
     
