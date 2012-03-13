@@ -13,7 +13,7 @@
             <description>Start of Movement Date/Time</description>
             <datatype>TS</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="1" length="26">
+        <field minOccurs="0" maxOccurs="1" forbidden="true" length="26">
             <name>ZBE.3</name>
             <description>End of Movement Date/Time</description>
             <datatype>TS</datatype>

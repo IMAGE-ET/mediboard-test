@@ -27,6 +27,10 @@ class CHL7v2SimpleXMLElement extends CMbSimpleXMLElement {
     return (string)$this->attributes()->maxOccurs === "unbounded";
   }
   
+  function isForbidden(){
+    return (string)$this->attributes()->forbidden === "true";
+  }
+  
   /**
    * Obligé de mettre les prop de cadinalité et d'ouverture en attributs sinon ca créé des enfants
    * 

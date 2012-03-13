@@ -84,8 +84,16 @@ class CHL7v2Segment extends CHL7v2Entity {
       
       if (array_key_exists($i, $fields)) {
         $_data = $fields[$i];
-        if (($_data === null || $_data === "") && $_spec->isRequired()) {
-          $this->error(CHL7v2Exception::FIELD_EMPTY, null, $field);
+        
+        if ($_data === null || $_data === "") {
+          if ($_spec->isRequired()) {
+            $this->error(CHL7v2Exception::FIELD_EMPTY, null, $field);
+          }
+        }
+        else {
+          if ($_spec->isForbidden()) {
+            $this->error(CHL7v2Exception::FIELD_FORBIDDEN, $_data, $field);
+          }
         }
         
         if ($_data instanceof CMbObject) {

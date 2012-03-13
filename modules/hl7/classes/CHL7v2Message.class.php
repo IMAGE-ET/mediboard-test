@@ -30,7 +30,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   static $decorateToString   = false;
   
   static $build_mode         = "normal";
-	static $handle_mode        = "normal";
+  static $handle_mode        = "normal";
    
   var $segmentTerminator     = self::DEFAULT_SEGMENT_TERMINATOR;
   var $escapeCharacter       = self::DEFAULT_ESCAPE_CHARACTER;
@@ -70,8 +70,8 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   static function resetBuildMode() {
     self::$build_mode = "normal";
   }
-	
-	static function setHandleMode($handle_mode) {
+  
+  static function setHandleMode($handle_mode) {
     self::$handle_mode = $handle_mode;
   }
   
@@ -238,9 +238,9 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   
   private function parseRawVersion($raw){
     $parts = explode($this->componentSeparator, $raw);
-		
-		CMbArray::removeValue("", $parts);
-		
+    
+    CMbArray::removeValue("", $parts);
+    
     $this->version = $version = $parts[0];
     
     if (count($parts) > 1) {

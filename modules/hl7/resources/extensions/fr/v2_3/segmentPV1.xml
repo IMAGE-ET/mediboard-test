@@ -43,7 +43,7 @@
             <description>Referring Doctor</description>
             <datatype>XCN</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="unbounded" length="250" table="0010">
+        <field minOccurs="0" maxOccurs="unbounded" forbidden="true" length="250" table="0010">
             <name>PV1.9</name>
             <description>Consulting Doctor</description>
             <datatype>XCN</datatype>
@@ -198,7 +198,7 @@
             <description>Servicing Facility</description>
             <datatype>IS</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="1" table="0116">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="1" table="0116">
             <name>PV1.40</name>
             <description>Bed Status</description>
             <datatype>IS</datatype>
@@ -258,7 +258,7 @@
             <description>Visit Indicator</description>
             <datatype>IS</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="unbounded" length="250" table="0010">
+        <field minOccurs="0" maxOccurs="unbounded" forbidden="true" length="250" table="0010">
             <name>PV1.52</name>
             <description>Other Healthcare Provider</description>
             <datatype>XCN</datatype>

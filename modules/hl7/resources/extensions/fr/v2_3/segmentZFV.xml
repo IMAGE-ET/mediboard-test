@@ -13,7 +13,7 @@
             <description>Mode de transport de sortie</description>
             <datatype>CE</datatype>
         </field> 
-        <field minOccurs="0" maxOccurs="0" length="2">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="2">
             <name>ZFV.3</name>
             <description>Type de preadmission</description>
             <datatype>IS</datatype>

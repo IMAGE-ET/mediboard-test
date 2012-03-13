@@ -20,6 +20,7 @@ class CHL7v2Field extends CHL7v2Entity {
   var $table         = null;
   var $description   = null;
   var $required      = null;
+  var $forbidden     = null;
   var $unbounded     = null;
   var $items         = array();
     
@@ -43,6 +44,7 @@ class CHL7v2Field extends CHL7v2Entity {
     }
     $this->description = (string)$spec->description;
     $this->required    = $spec->isRequired();
+    $this->forbidden   = $spec->isForbidden();
     $this->unbounded   = $spec->isUnbounded();
   }
   
@@ -57,8 +59,15 @@ class CHL7v2Field extends CHL7v2Entity {
   function parse($data) {
     parent::parse($data);
     
-    if ($this->required && ($this->data === "" || $this->data === null) /* === $message->nullValue*/) { // nullValue ("") or null ??
-      $this->error(CHL7v2Exception::FIELD_EMPTY, null, $this);
+    if ($this->data === "" || $this->data === null) { // === $message->nullValue) { // nullValue ("") or null ??
+      if ($this->required) {
+        $this->error(CHL7v2Exception::FIELD_EMPTY, null, $this);
+      }
+    }
+    else {
+      if ($this->forbidden) {
+        $this->error(CHL7v2Exception::FIELD_FORBIDDEN, $this->data, $this);
+      }
     }
     
     $message = $this->getMessage();

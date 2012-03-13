@@ -8,7 +8,7 @@
             <description>Set ID</description>
             <datatype>SI</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="20">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="20">
             <name>PID.2</name>
             <description>Patient ID</description>
             <datatype>CX</datatype>
@@ -18,7 +18,7 @@
             <description>Patient Identifier List</description>
             <datatype>CX</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="unbounded" length="20">
+        <field minOccurs="0" maxOccurs="unbounded" forbidden="true" length="20">
             <name>PID.4</name>
             <description>Alternate Patient ID</description>
             <datatype>CX</datatype>
@@ -43,7 +43,7 @@
             <description>Administrative Sex</description>
             <datatype>IS</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="unbounded" length="250">
+        <field minOccurs="0" maxOccurs="unbounded" forbidden="true" length="250">
             <name>PID.9</name>
             <description>Patient Alias</description>
             <datatype>XPN</datatype>
@@ -58,7 +58,7 @@
             <description>Patient Address</description>
             <datatype>XAD</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="4" table="0289">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="4" table="0289">
             <name>PID.12</name>
             <description>County Code</description>
             <datatype>IS</datatype>
@@ -83,7 +83,7 @@
             <description>Marital Status</description>
             <datatype>CE</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="250" table="0006">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="250" table="0006">
             <name>PID.17</name>
             <description>Religion</description>
             <datatype>CE</datatype>
@@ -93,12 +93,12 @@
             <description>Patient Account Number</description>
             <datatype>CX</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="16">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="16">
             <name>PID.19</name>
             <description>Ssn Number - Patient</description>
             <datatype>ST</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="25">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="25">
             <name>PID.20</name>
             <description>Driver's License Number - Patient</description>
             <datatype>DLN</datatype>
@@ -108,7 +108,7 @@
             <description>Mother's Identifier</description>
             <datatype>CX</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="unbounded" length="250" table="0189">
+        <field minOccurs="0" maxOccurs="unbounded" forbidden="true" length="250" table="0189">
             <name>PID.22</name>
             <description>Ethnic Group</description>
             <datatype>CE</datatype>
@@ -138,7 +138,7 @@
             <description>Veterans Military Status</description>
             <datatype>CE</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="250" table="0212">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="250" table="0212">
             <name>PID.28</name>
             <description>Nationality</description>
             <datatype>CE</datatype>
@@ -153,7 +153,7 @@
             <description>Patient Death Indicator</description>
             <datatype>ID</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="1" table="0136">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="1" table="0136">
             <name>PID.31</name>
             <description>Identity Unknown Indicator</description>
             <datatype>ID</datatype>
