@@ -1,4 +1,4 @@
-<!-- $Id$ -->
+{{* $Id$ *}}
 
 {{mb_script module=pmsi script=PMSI ajax=true}}
 {{mb_default var=confirmCloture value=0}}

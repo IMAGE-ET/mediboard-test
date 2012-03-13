@@ -56,7 +56,7 @@
   </table>
   
   <ul id="tabs-pmsi" class="control_tabs">
-    <li><a href="#PMSI">{{tr}}PMSI{{/tr}}</a></li>
+    <li><a href="#tab-PMSI">{{tr}}PMSI{{/tr}}</a></li>
     <li><a href="#ServeurActes" {{if !$sejour->_ref_operations}}class="empty"{{/if}}>Actes</a></li>
     <li onmousedown="loadDocuments()"><a href="#Docs">Documents</a></li>
     <li style="float: right">
@@ -75,7 +75,7 @@
   
   <hr class="control_tabs" />
   
-  <div id="PMSI" style="display: none;">
+  <div id="tab-PMSI" style="display: none;">
     {{mb_include template=inc_vw_pmsi}}
   </div>
   

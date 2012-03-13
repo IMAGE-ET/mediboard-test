@@ -9,16 +9,15 @@
  * @link     http://www.mediboard.org
  */
 
-
 PMSI = {
   exportActes : function(object_id, object_class, oOptions, confirmCloture, module){
-	if ((confirmCloture == 1) && !confirm("L'envoi des actes cloturera définitivement le codage de cette intervention pour le chirurgien et l'anesthésiste." +
-        "\nConfirmez-vous l'envoi en facturation ?")) {
+    if ((confirmCloture == 1) && !confirm("L'envoi des actes cloturera définitivement le codage de cette intervention pour le chirurgien et l'anesthésiste." +
+          "\nConfirmez-vous l'envoi en facturation ?")) {
       return;
-	} 
-	
-	var oDefaultOptions = {
-  	  onlySentFiles : false
+    } 
+    
+    var oDefaultOptions = {
+      onlySentFiles : false
     };
   
     Object.extend(oDefaultOptions, oOptions);
@@ -30,9 +29,10 @@ PMSI = {
   
     var oRequestOptions = {
       waitingText: oDefaultOptions.onlySentFiles ? 
-  	    "Chargement des fichers envoyés" : 
+        "Chargement des fichers envoyés" : 
         "Export des actes..."
     };
+    
     if (confirmCloture == 1) {
       oRequestOptions.onComplete = function() {
         PMSI.reloadActes(object_id, module);
@@ -44,25 +44,26 @@ PMSI = {
   
   deverouilleDossier : function(object_id, object_class, confirmCloture, module) {
     var url = new Url("dPpmsi", "ajax_refresh_export_actes_pmsi");
-	url.addParam("object_id", object_id);
-	url.addParam("object_class", object_class);
-	
-	var oRequestOptions = {
-			waitingText: "Dévérouillage du dossier..."
+    url.addParam("object_id", object_id);
+    url.addParam("object_class", object_class);
+  
+    var oRequestOptions = {
+      waitingText: "Dévérouillage du dossier..."
     };
-	if (confirmCloture == 1) {
+    
+    if (confirmCloture == 1) {
       oRequestOptions.onComplete = function() {
         PMSI.reloadActes(object_id, module);
       }
     }
-	
-	url.requestUpdate("export_" + object_class + "_" + object_id, oRequestOptions);     
+  
+    url.requestUpdate("export_" + object_class + "_" + object_id, oRequestOptions);     
   },
   
   reloadActes : function(operation_id, module) {
     var url = new Url("dPsalleOp", "ajax_refresh_actes");
-	url.addParam("operation_id", operation_id);
-	url.addParam("module", module);
-	url.requestUpdate("codage_actes");
+    url.addParam("operation_id", operation_id);
+    url.addParam("module", module);
+    url.requestUpdate("codage_actes");
   }
 };

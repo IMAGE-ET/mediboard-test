@@ -37,7 +37,7 @@
     <button class="search notext" type="button" onclick="CIM10Selector.initDP({{$sejour->_id}})">
       {{tr}}Search{{/tr}}
     </button>
-    <button type="button" class="cancel notext" onclick="deleteDP();">
+    <button type="button" class="cancel notext" onclick="deleteDP();"></button>
   </div>
 </form>
 
@@ -80,7 +80,7 @@
     <button class="search notext" type="button" onclick="CIM10Selector.initDR({{$sejour->_id}})">
       {{tr}}Search{{/tr}}
     </button>
-    <button type="button" class="cancel notext" onclick="deleteDR();">
+    <button type="button" class="cancel notext" onclick="deleteDR();"></button>
   </div>
 </form>
 
