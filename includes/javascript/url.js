@@ -580,7 +580,7 @@ var Url = Class.create({
   requestModal: function(iWidth, iHeight, oOptions) {
     var m = this.oParams.m,
         a = this.oParams.a;
-    
+        
     oOptions = Object.extend({
       title: Localize.first('mod-'+m+'-tab-'+a, 'mod-dP'+m+'-tab-'+a),
       showReload: true,
@@ -652,6 +652,13 @@ var Url = Class.create({
   requestUpdate: function(ioTarget, oOptions) {
     this.addParam("suppressHeaders", 1);
     this.addParam("ajax", 1);
+    
+    // onComplete callback definition shortcut
+    if (oOptions instanceof Function) {
+      oOptions = {
+        onComplete: oOptions
+      };
+    }
     
     var element = $(ioTarget);
     

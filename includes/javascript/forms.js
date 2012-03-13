@@ -566,6 +566,13 @@ function submitFormAjax(oForm, ioTarget, oOptions) {
  * @return false to prevent page reloading
  */
 function onSubmitFormAjax(oForm, oOptions, ioTarget) {
+  // onComplete callback definition shortcut
+  if (oOptions instanceof Function) {
+    oOptions = {
+      onComplete: oOptions
+    };
+  }
+  
   oOptions = Object.extend({
     method: oForm.method,
     check: checkForm,
