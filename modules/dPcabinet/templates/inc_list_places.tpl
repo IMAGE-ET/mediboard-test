@@ -155,18 +155,25 @@ PlageConsult.addPlaceAfter = function(plage_id) {
         {{assign var="style" value=""}}
       {{/if}}
       <div {{$style|smarty:nodefaults}}>
-        {{assign var=categorie value=$_consultation->_ref_categorie}}
-        {{if $categorie->_id}}
-          <img style="float: right;" src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" alt="{{$categorie->nom_categorie}}" title="{{$categorie->nom_categorie}}" />
-        {{/if}}
-
         {{$_consultation->patient_id|ternary:$_consultation->_ref_patient:"[PAUSE]"}}
         {{if $_consultation->duree > 1}}
           x{{$_consultation->duree}}
         {{/if}}
+        {{assign var=categorie value=$_consultation->_ref_categorie}}
+        {{if $categorie->_id}}
+          <div class="compact">
+            <img src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" alt="{{$categorie->nom_categorie}}" title="{{$categorie->nom_categorie}}" />
+            {{$categorie->nom_categorie|spancate}}
+          </div>
+        {{/if}}
         {{if $_consultation->motif}}
           <div class="compact">
             {{$_consultation->motif|spancate}}
+          </div>
+        {{/if}}
+        {{if $_consultation->rques}}
+          <div class="compact">
+            {{$_consultation->rques|spancate}}
           </div>
         {{/if}}
       </div>

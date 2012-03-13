@@ -10,12 +10,11 @@
 CCanDo::checkRead();
 $now = mbDate();
 
-$show_tel = CValue::get("show_tel", 0);
-
 $filter = new CConsultation;
 $filter->plageconsult_id = CValue::get("plage_id", null);
 $filter->_date_min       = CValue::get("_date_min", "$now");
 $filter->_date_max       = CValue::get("_date_max", "$now");
+$filter->_telephone      = CValue::get("_telephone");
 $filter->_coordonnees    = CValue::get("_coordonnees");
 $filter->_plages_vides   = CValue::get("_plages_vides", 1);
 $filter->_non_pourvues   = CValue::get("_non_pourvues", 1);
@@ -105,10 +104,8 @@ if (!$filter->_plages_vides) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("coordonnees", $filter->_coordonnees);
 $smarty->assign("filter"     , $filter);
 $smarty->assign("listPlage"  , $listPlage);
-$smarty->assign("show_tel"   , $show_tel);
 $smarty->display("print_plages.tpl");
 
 ?>

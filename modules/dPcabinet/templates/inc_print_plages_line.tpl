@@ -10,7 +10,7 @@
       {{$patient->_view}}
     </td>
     
-      {{if $coordonnees}}
+      {{if $filter->_coordonnees}}
       <td rowspan="2" class="text" style="{{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
         {{mb_value object=$patient field=adresse}}
         <br />
@@ -23,7 +23,7 @@
         <br />
         {{mb_value object=$patient field=tel2}}
       </td>
-      {{elseif $show_tel}}
+      {{elseif $filter->_telephone}}
         <td rowspan="2" style="{{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
           {{mb_value object=$patient field=tel}}
           <br />
@@ -39,13 +39,19 @@
     </td>
     
     {{else}}
-    <td rowspan="2" colspan="{{if $coordonnees}}4{{else}}2{{/if}}" style="{{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
+    <td rowspan="2" colspan="{{if $filter->_coordonnees}}4{{else}}2{{/if}}" style="{{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
       [PAUSE]
     </td>
     {{/if}}
     
     {{assign var=consult_anesth value=$curr_consult->_ref_consult_anesth}}
     <td {{if !$consult_anesth->operation_id}}rowspan="2"{{/if}} class="text" style="{{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
+      {{if $categorie->_id}}
+        <div>
+          <img src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" alt="{{$categorie->nom_categorie}}" title="{{$categorie->nom_categorie}}" />
+          {{$categorie->nom_categorie}}
+        </div>
+      {{/if}}
       {{mb_value object=$curr_consult field=motif}}
     </td>
     

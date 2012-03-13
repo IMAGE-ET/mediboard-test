@@ -60,7 +60,7 @@
     <td class="button" colspan="2">
       {{mb_script module="dPcabinet" script="consultation" ajax="true"}}
       <button type="button" class="edit" onclick="Consultation.edit('{{$consultation->_id}}')">
-        {{tr}}Modify{{/tr}}
+        {{tr}}CConsultation{{/tr}}
       </button>
       
       {{if $can->edit}} 

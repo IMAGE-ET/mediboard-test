@@ -51,7 +51,7 @@
     <td {{$style|smarty:nodefaults}}>
       <div style="float: left">
       {{if $patient->_id}}
-        <a href="{{$href_consult}}" title="Voir la consultation">
+        <a href="{{$href_consult}}">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
             {{$_consult->heure|date_format:$conf.time}}
           </span>
@@ -62,13 +62,6 @@
         </span>
       {{/if}}
       </div>
-      
-      {{assign var=categorie value=$_consult->_ref_categorie}}
-      {{if $categorie->_id}}
-      <div style="float: right">
-        <img src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" alt="{{$categorie->nom_categorie}}" title="{{$categorie->nom_categorie}}" />
-      </div>
-      {{/if}}
     </td>
 
     <td class="text" {{$style|smarty:nodefaults}}>
@@ -79,15 +72,22 @@
         <img src="images/icons/edit.png" alt="modifier" />
       </a>
       <a href="{{$href_consult}}">
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
-        {{$patient}}
-        </span>
+        {{mb_value object=$patient}}
       </a>
       {{/if}}
     </td>
     <td class="text" {{$style|smarty:nodefaults}}>
       {{if $patient->_id}}
-        <a href="{{$href_consult}}"  title="Voir la consultation">{{$_consult->motif|truncate:35:"...":false|nl2br}}</a>
+        <a href="{{$href_consult}}"  title="Voir la consultation">
+          {{assign var=categorie value=$_consult->_ref_categorie}}
+          {{if $categorie->_id}}
+          <div>
+            <img src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" alt="{{$categorie->nom_categorie}}" title="{{$categorie->nom_categorie}}" />
+            {{$categorie->nom_categorie}}
+          </div>
+          {{/if}}
+          {{$_consult->motif|truncate:35:"...":false|nl2br}}
+        </a>
       {{else}}
         {{$_consult->motif|truncate:35:"...":false|nl2br}}
       {{/if}}

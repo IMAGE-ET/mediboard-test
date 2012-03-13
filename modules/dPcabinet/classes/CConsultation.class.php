@@ -127,12 +127,13 @@ class CConsultation extends CCodable {
   var $_facturable               = null;
   
   // Filter Fields
-  var $_date_min                = null;
-  var $_date_max                = null;
+  var $_date_min               = null;
+  var $_date_max               = null;
   var $_prat_id                = null;
   var $_etat_reglement_patient = null;
   var $_etat_reglement_tiers   = null;
   var $_type_affichage         = null;
+  var $_telephone              = null;
   var $_coordonnees            = null;
   var $_plages_vides           = null;
   var $_empty_places           = null;
@@ -233,6 +234,7 @@ class CConsultation extends CCodable {
     $specs["_date_min"]         = "date";
     $specs["_date_max"]         = "date moreEquals|_date_min";
     $specs["_type_affichage"]   = "enum list|complete|totaux";
+    $specs["_telephone"]        = "bool default|0";
     $specs["_coordonnees"]      = "bool default|0";
     $specs["_plages_vides"]     = "bool default|1";
     $specs["_non_pourvues"]     = "bool default|1";

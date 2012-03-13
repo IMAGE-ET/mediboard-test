@@ -82,6 +82,10 @@ function changeDateCal(){
           </select></td>
         </tr>
         <tr>
+          <th>{{mb_label object=$filter field="_telephone"}}</th>
+          <td>{{mb_field object=$filter field="_telephone"}}</td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$filter field="_coordonnees"}}</th>
           <td>{{mb_field object=$filter field="_coordonnees"}}</td>
         </tr>
