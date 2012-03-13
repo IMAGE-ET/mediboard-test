@@ -49,39 +49,43 @@
   </tr>
 {{/if}}
 
+{{if $affectations|@count}}
 <tr>
   <td colspan="3">
-    {{if $affectations|@count}}
-      Affectations :
-      <ul>
-        {{foreach from=$affectations item=_affectation}}
-          <li>
-            {{if $_affectation->_id == $object->_id}}
-              <strong>
-            {{else}}
-              <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}')">
-            {{/if}}
-            {{$_affectation}} {{mb_include module=system template=inc_interval_datetime from=$_affectation->entree to=$_affectation->sortie}}
-            {{if $_affectation->_id == $object->_id}}
-              </strong>
-            {{else}}
-              </span>
-            {{/if}}
-          </li>
-        {{/foreach}}
-      </ul>
-    {{/if}}
-    {{if $operations|@count}}
-      Interventions :
-      <ul>
-        {{foreach from=$operations item=_operation}}
-          <li>
-            <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
-              Intervention du {{mb_value object=$_operation field=_datetime}}
+    Affectations :
+    <ul>
+      {{foreach from=$affectations item=_affectation}}
+        <li>
+          {{if $_affectation->_id == $object->_id}}
+            <strong>
+          {{else}}
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}')">
+          {{/if}}
+          {{$_affectation}} {{mb_include module=system template=inc_interval_datetime from=$_affectation->entree to=$_affectation->sortie}}
+          {{if $_affectation->_id == $object->_id}}
+            </strong>
+          {{else}}
             </span>
-          </li>
-        {{/foreach}}
-      </ul>
-    {{/if}}
+          {{/if}}
+        </li>
+      {{/foreach}}
+    </ul>
   </td>
 </tr>
+{{/if}}
+{{if $operations|@count}}
+<tr>
+  <td colspan="3">
+    Interventions :
+    <ul>
+      {{foreach from=$operations item=_operation}}
+        <li>
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
+            Intervention du {{mb_value object=$_operation field=_datetime}}
+          </span>
+        </li>
+      {{/foreach}}
+    </ul>
+  </td>
+</tr>
+{{/if}}

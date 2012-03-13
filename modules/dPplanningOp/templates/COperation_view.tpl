@@ -28,13 +28,15 @@
   </tr>
   <tr>
     <td colspan="2">
+      <strong>
       {{if $object->libelle}}
-        <strong>[{{$object->libelle}}]<br /></strong>
+        {{$object->libelle}}<br />
       {{/if}}
       {{foreach from=$object->_ext_codes_ccam item=_code name=codes}}
       {{$_code->code}}
       {{if !$smarty.foreach.codes.last}}&mdash;{{/if}}
       {{/foreach}}
+      </strong>
     </td>
   </tr>
   <tr>
