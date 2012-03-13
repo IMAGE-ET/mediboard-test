@@ -8,40 +8,6 @@
   * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
   *}}
 
-{{if !$rhs->_id}}
-<form name="Edit-CRHS-{{$rhs->_date_sunday}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitRHS(this)">
-
-<input type="hidden" name="m" value="ssr" />
-<input type="hidden" name="dosql" value="do_rhs_aed" />
-<input type="hidden" name="del" value="0" />
-
-{{mb_key object=$rhs}}
-{{mb_field object=$rhs field=sejour_id  hidden=1}}
-
-<table class="form">
-  <tr>
-    <th>{{mb_label object=$rhs field=date_monday}}</th>
-    <td>{{mb_field object=$rhs field=date_monday readonly=1}}</td>
-  </tr>
-  <tr>
-    <th>{{mb_label object=$rhs field=_date_sunday}}</th>
-    <td>{{mb_field object=$rhs field=_date_sunday readonly=1}}</td>
-  </tr>
-  <tr>
-    <td class="button" colspan="4">
-      <button class="new" type="submit">
-        {{tr}}CRHS-title-create{{/tr}}
-      </button>
-    </td>
-  </tr>
-</table>
-
-</form>
-{{/if}}
-
-
-{{if $rhs->_id}}
-
 {{if !$rhs->_in_bounds}} 
 <div class="small-warning">
   Le séjour ne comporte aucune journée dans la semaine de ce RHS.
@@ -119,4 +85,3 @@
 </table>
 
 {{mb_include template="inc_lines_rhs"}}
-{{/if}}

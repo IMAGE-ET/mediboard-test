@@ -69,7 +69,7 @@
         {{$activite->libelle}}
       </td>
       
-{{foreach from=$days key=day item=litteral_day}}
+      {{foreach from=$days key=day item=litteral_day}}
         {{mb_include template="inc_line_rhs"}}
       {{/foreach}}
       
@@ -82,7 +82,7 @@
     
   {{foreachelse}}
   <tr>
-    <td colspan="10" class="empty">{{tr}}CRHS-back-lines.empty{{/tr}}</td>
+    <td colspan="12" class="empty">{{tr}}CRHS-back-lines.empty{{/tr}}</td>
   </tr>
   {{/foreach}}
 </table>

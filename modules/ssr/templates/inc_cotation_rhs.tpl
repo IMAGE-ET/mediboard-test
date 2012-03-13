@@ -56,8 +56,15 @@ Main.add(function() {
     <td>
       
 {{foreach from=$rhss item=_rhs}}
-<div id="cotation-{{if $_rhs->_id}}{{$_rhs->_id}}{{else}}{{$_rhs->date_monday}}{{/if}}" style="display: none;" data-rhs_id="{{$_rhs->_id}}">
-</div>
+
+{{if $_rhs->_id}}
+  <div id="cotation-{{$_rhs->_id}}" style="display: none;" data-rhs_id="{{$_rhs->_id}}">
+  </div>
+{{else}}
+  <div id="cotation-{{$_rhs->date_monday}}" style="display: none;" data-rhs_id="">
+  {{mb_include template=inc_create_rhs rhs=$_rhs}}
+  </div>
+{{/if}}
 {{/foreach}}
 
     </td>
