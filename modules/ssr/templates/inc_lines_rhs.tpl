@@ -27,8 +27,8 @@
     
     <th class="narrow"></th>
   </tr>
-  {{foreach from=$lines_by_executant key=executant_id item=_lines}}
-    {{assign var=executant value=$executants.$executant_id}}
+  {{foreach from=$rhs->_ref_lines_by_executant key=executant_id item=_lines}}
+    {{assign var=executant value=$rhs->_ref_executants.$executant_id}}
     <tr>
       <th class="text section" colspan="12" style="text-align: left;">
         {{mb_include module="mediusers" template="inc_vw_mediuser" mediuser=$executant}}

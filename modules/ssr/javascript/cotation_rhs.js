@@ -19,9 +19,7 @@ CotationRHS = {
   refreshRHS: function(rhs_id) {
     new Url('ssr', 'ajax_edit_rhs') .
       addParam('rhs_id', rhs_id) .
-      requestUpdate('cotation-' + rhs_id, {
-        onComplete: CotationRHS.launchDrawDependancesGraph.curry(rhs_id)
-      });
+      requestUpdate('cotation-' + rhs_id, CotationRHS.launchDrawDependancesGraph.curry(rhs_id));
   },
   
   refreshTotaux: function(rhs_id, recalculate) {
@@ -49,9 +47,7 @@ CotationRHS = {
   },
   
   onSubmitRHS: function(form) {
-    return onSubmitFormAjax(form, { 
-      onComplete: CotationRHS.refresh.curry($V(form.sejour_id))
-    } );
+    return onSubmitFormAjax(form, CotationRHS.refresh.curry($V(form.sejour_id)));
   },
   
   onSubmitLine: function(form) {
@@ -66,9 +62,8 @@ CotationRHS = {
     } else {
       form.parentNode.addClassName("ok");
     }
-    return onSubmitFormAjax(form, {
-      onComplete : CotationRHS.refreshTotaux.curry($V(form.rhs_id))
-    } );
+    
+    return onSubmitFormAjax(form, CotationRHS.refreshTotaux.curry($V(form.rhs_id)));
   },
   
   updateTab: function(count) {

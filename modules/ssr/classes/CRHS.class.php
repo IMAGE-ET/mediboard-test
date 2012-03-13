@@ -310,6 +310,36 @@ class CRHS extends CMbObject {
       }
     }    
   }
+  
+  function buildTotaux() {
+    // Initialisation des totaux
+  	$totaux = array();
+    $type_activite = new CTypeActiviteCdARR();
+    $types_activite = $type_activite->loadList();
+    foreach($types_activite as $_type) {
+      $totaux[$_type->code] = 0;
+    }
+	
+    // Comptage et classement par executants
+    $executants = array();
+    $lines_by_executant = array();
+    foreach ($this->loadBackRefs("lines") as $_line) {
+      $activite = $_line->loadRefActiviteCdARR();
+      $type = $activite->loadRefTypeActivite();
+      $totaux[$type->code] += $_line->_qty_total;
+      $_line->loadRefIntervenantCdARR();
+      $executant = $_line->loadFwdRef("executant_id", true);
+      $executant->loadRefsFwd();
+      $executant->loadRefIntervenantCdARR();
+      $executants[$executant->_id] = $executant;
+      $lines_by_executant[$executant->_id][] = $_line;
+    }
+    
+    $this->_ref_lines_by_executant = $lines_by_executant;
+    $this->_ref_executants         = $executants;
+    $this->_ref_types_activite     = $types_activite;
+    return $this->_totaux = $totaux;
+  }
 }
 
 ?>

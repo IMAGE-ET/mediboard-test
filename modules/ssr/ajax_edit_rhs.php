@@ -27,35 +27,14 @@ if (CValue::get("recalculate")) {
 }
 
 // Liste des catégories d'activité
-$type_activite = new CTypeActiviteCdARR();
-$types_activite = $type_activite->loadList();
-$totaux = array();
-$executants = array();
-$lines_by_executant = array();
 if ($rhs->_id) {
-  $totaux[$rhs->_id] = array();
-  foreach($types_activite as $_type) {
-    $totaux[$rhs->_id][$_type->code] = 0;
-  }
   $rhs->loadRefSejour();
   $dependances = $rhs->loadRefDependances();
   if (!$dependances->_id) {
     $dependances->store();
   }
   $rhs->loadDependancesChronology();
-	
-  $_line = new CLigneActivitesRHS();
-  foreach ($rhs->loadBackRefs("lines") as $_line) {
-    $activite = $_line->loadRefActiviteCdARR();
-    $type = $activite->loadRefTypeActivite();
-    $totaux[$rhs->_id][$type->code] += $_line->_qty_total;
-    $_line->loadRefIntervenantCdARR();
-    $executant = $_line->loadFwdRef("executant_id", true);
-    $executant->loadRefsFwd();
-    $executant->loadRefIntervenantCdARR();
-    $executants[$executant->_id] = $executant;
-    $lines_by_executant[$executant->_id][] = $_line;
-  }
+  $rhs->buildTotaux();
 }
 
 // Ligne vide d'activité
@@ -69,11 +48,7 @@ if ($user->code_intervenant_cdarr) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("lines_by_executant", $lines_by_executant);
-$smarty->assign("executants"        , $executants);
-$smarty->assign("types_activite"    , $types_activite);
 $smarty->assign("rhs_line"          , $rhs_line);
-$smarty->assign("totaux"            , $totaux);
 $smarty->assign("rhs"               , $rhs);
 
 $smarty->display("inc_edit_rhs.tpl");

@@ -17,36 +17,12 @@ if (!$rhs->_id) {
   CAppUI::stepAjax("RHS inexistant", UI_MSG_ERROR);
 }
 $rhs->loadRefsNotes();
-
-// Liste des catégories d'activité
-$type_activite = new CTypeActiviteCdARR();
-$types_activite = $type_activite->loadList();
-$totaux = array();
-
-if($rhs->_id) {
-  $totaux[$rhs->_id] = array();
-  foreach($types_activite as $_type) {
-    $totaux[$rhs->_id][$_type->code] = 0;
-  }
-  $rhs->loadRefSejour();
-  $_line = new CLigneActivitesRHS();
-  foreach($rhs->loadBackRefs("lines") as $_line) {
-    $_line->loadRefActiviteCdARR();
-    $_line->_ref_activite_cdarr->loadRefTypeActivite();
-    $totaux[$rhs->_id][$_line->_ref_activite_cdarr->_ref_type_activite->code] += $_line->_qty_total;
-    $_line->loadRefIntervenantCdARR();
-    $_line->loadFwdRef("executant_id", true);
-    $_line->_fwd["executant_id"]->loadRefsFwd();
-    $_line->_fwd["executant_id"]->loadRefIntervenantCdARR();
-  }
-}
+$rhs->buildTotaux();
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("types_activite", $types_activite);
-$smarty->assign("totaux"        , $totaux);
-$smarty->assign("rhs"           , $rhs);
+$smarty->assign("rhs", $rhs);
 
 $smarty->display("inc_totaux_rhs.tpl");
 
