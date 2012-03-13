@@ -51,9 +51,7 @@ CotationRHS = {
   },
   
   onSubmitLine: function(form) {
-     return onSubmitFormAjax(form, {
-       onComplete: CotationRHS.refreshRHS.curry($V(form.rhs_id)) 
-     } );
+     return onSubmitFormAjax(form, CotationRHS.refreshRHS.curry($V(form.rhs_id)));
   },
   
   onSubmitQuantity: function(form, sField) {
@@ -158,8 +156,9 @@ CotationRHS = {
   },
   
   launchDrawDependancesGraph: function(rhs_id) {
-    try { // sometimes, the container is invisible, flotr doesn'r support it
-      CotationRHS.dependancesGraphs[rhs_id]();
+	// Sometimes the container is invisible, flotr doesn't support it
+	try { 
+      (CotationRHS.dependancesGraphs[rhs_id] || Prototype.emptyFunction)();
       CotationRHS.dependancesGraphs[rhs_id] = function(){};
     } catch(e) {}
   }
