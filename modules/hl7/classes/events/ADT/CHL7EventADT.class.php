@@ -19,6 +19,8 @@ interface CHL7EventADT {
   function __construct();
   
   function build($object);
+  
+  function buildI18nSegments($object);
 }
 
 ?>

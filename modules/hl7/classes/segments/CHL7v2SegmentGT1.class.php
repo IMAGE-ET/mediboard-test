@@ -18,6 +18,12 @@
 
 class CHL7v2SegmentGT1 extends CHL7v2Segment {
   var $name   = "GT1";
+  var $set_id = null;
+  
+  /**
+   * @var CPatient
+   */
+  var $patient = null;
   
   /**
    * @var CSejour
@@ -27,18 +33,15 @@ class CHL7v2SegmentGT1 extends CHL7v2Segment {
   function build(CHL7v2Event $event) {
     $data = array();
     
-    $sejour = new CSejour();
-    $sejour = $this->sejour;
+    $patient = $this->patient;
     
     parent::build($event);
 
     $data[] = null;
     
     // GT1-1: Set ID - GT1 (SI)
-    $data[] = null;
-    
-    $data[] = null;
-    
+    $data[] = $this->set_id;
+        
     // GT1-2: Guarantor Number (CX) (optional repeating)
     $data[] = null;
     

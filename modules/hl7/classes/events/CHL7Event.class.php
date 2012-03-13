@@ -45,6 +45,12 @@ class CHL7Event {
    */
   function build($object) {}
   
+  /**
+   * Build specifics HL7 message (i18n)
+   * @param $object Object to use
+   */
+  function buildI18nSegments($object) {}
+  
   function handle() {}
   
   static function getEventClass($event) {

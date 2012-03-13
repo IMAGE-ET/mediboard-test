@@ -47,6 +47,7 @@ class CHL7v2EventADTA28 extends CHL7v2EventADT implements CHL7EventADTA05 {
     
     // Patient Visit
     $this->addPV1();
+
   }
 }
 

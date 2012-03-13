@@ -45,6 +45,9 @@ class CHL7v2EventADTA54 extends CHL7v2EventADT implements CHL7EventADTA54 {
     
     // Patient Visit - Additionale Info
     $this->addPV2($sejour);
+    
+    // Build specific segments (i18n)
+    $this->buildI18nSegments($sejour);
   }
   
 }

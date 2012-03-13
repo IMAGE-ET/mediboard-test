@@ -21,11 +21,10 @@ class CHL7v2EventADTA01_FR extends CHL7v2EventADTA01 {
   }
   
   /**
-   * @see parent::build()
+   * @see parent::buildI18nSegments()
    */
-  function build($sejour) {
-    parent::build($sejour);
-
+  function buildI18nSegments($sejour) {
+    
     // Movement segment
     $this->addZBE($sejour);
     
@@ -41,7 +40,6 @@ class CHL7v2EventADTA01_FR extends CHL7v2EventADTA01 {
     // Complément démographique
     $this->addZFD($sejour);
   }
-  
 }
 
 ?>

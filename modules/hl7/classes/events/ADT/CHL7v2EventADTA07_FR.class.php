@@ -21,11 +21,9 @@ class CHL7v2EventADTA07_FR extends CHL7v2EventADTA07 {
   }
   
   /**
-   * @see parent::build()
+   * @see parent::buildI18nSegments()
    */
-  function build($sejour) {
-    parent::build($sejour);
-    
+  function buildI18nSegments($sejour) {
     // Movement segment
     $this->addZBE($sejour);
   }
