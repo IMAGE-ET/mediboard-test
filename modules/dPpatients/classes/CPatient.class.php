@@ -291,7 +291,7 @@ class CPatient extends CMbObject {
     $specs["civilite"]          = "enum list|m|mme|mlle|enf|dr|pr|me|vve default|m";
     $specs["adresse"]           = "text confidential";
     $specs["ville"]             = "str confidential seekable";
-    $specs["cp"]                = "numchar minLength|4 maxLength|5 confidential";
+    $specs["cp"]                = "str minLength|4 maxLength|5 confidential";
     $specs["tel"]               = "numchar confidential length|10 mask|$phone_number_format";
     $specs["tel2"]              = "numchar confidential length|10 mask|$phone_number_format";
     $specs["tel_autre"]         = "str maxLength|20";
@@ -328,8 +328,7 @@ class CPatient extends CMbObject {
     $specs["pays"]                 = "str";
     $specs["pays_insee"]           = "str";
     $specs["lieu_naissance"]       = "str";
-    $specs["cp_naissance"]         = "numchar minLength|4 maxLength|5";
-    $specs["pays_naissance_insee"] = "str";
+    $specs["cp_naissance"]         = "str minLength|4 maxLength|5 confidential";
     $specs["profession"]           = "str autocomplete";
     $specs["csp" ]                 = "numchar length|2";
     
@@ -344,13 +343,13 @@ class CPatient extends CMbObject {
     $specs["assure_naissance"]            = "birthDate confidential mask|99/99/9999 format|$3-$2-$1";
     $specs["assure_adresse"]              = "text confidential";
     $specs["assure_ville"]                = "str confidential";
-    $specs["assure_cp"]                   = "numchar minLength|4 maxLength|5 confidential";
+    $specs["assure_cp"]                   = "str minLength|4 maxLength|5 confidential";
     $specs["assure_tel"]                  = "numchar confidential length|10 mask|$phone_number_format";
     $specs["assure_tel2"]                 = "numchar confidential length|10 mask|$phone_number_format";
     $specs["assure_pays"]                 = "str";
     $specs["assure_pays_insee"]           = "str";
     $specs["assure_lieu_naissance"]       = "str";
-    $specs["assure_cp_naissance"]         = "numchar minLength|4 maxLength|5";
+    $specs["assure_cp_naissance"]         = "str minLength|4 maxLength|5 confidential";
     $specs["assure_pays_naissance_insee"] = "str";
     $specs["assure_profession"]           = "str autocomplete";
     $specs["assure_rques"]                = "text";

@@ -1725,7 +1725,13 @@ class CSetupdPpatients extends CSetup {
               ADD `bricker` FLOAT UNSIGNED";
     $this->addQuery($query);
     
-    $this->mod_version = "1.43";
+    $this->makeRevision("1.43");
+    $query = "ALTER TABLE `patients`
+              CHANGE `cp` `cp` VARCHAR (5),
+              CHANGE `assure_cp` `assure_cp` VARCHAR (5)";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.44";
     
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
