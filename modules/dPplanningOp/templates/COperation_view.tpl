@@ -47,7 +47,7 @@
   <tr>
     <td colspan="3">
       <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
-        [Voir le séjour]
+        Séjour : {{$object->_ref_sejour->_shortview}}
       </span>
     </td>
   </tr>
