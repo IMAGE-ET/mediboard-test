@@ -118,7 +118,7 @@ if (isset($_POST["_source"])) {
     // Récupération des correspondants ajoutés par l'autocomplete
     $cr_dest = new CCompteRendu;
     $cr_dest->load($_POST["compte_rendu_id"]);
-    $cr_dest->mergeCorrespondantsCourrier(&$allDest);
+    $cr_dest->mergeCorrespondantsCourrier($allDest);
     
     $bodyTag = '<div id="body">';
 

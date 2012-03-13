@@ -348,7 +348,7 @@ class CCompteRendu extends CDocumentItem {
     }
   }
   
-  function mergeCorrespondantsCourrier($destinataires) {
+  function mergeCorrespondantsCourrier(&$destinataires) {
     $this->loadRefsCorrespondantsCourrierByTagGuid();
     
     if (!isset($this->_refs_correspondants_courrier_by_tag_guid["correspondant"])) {
