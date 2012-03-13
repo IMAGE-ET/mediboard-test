@@ -201,13 +201,15 @@ var References = {
 };
 
 /** l10n functions */
-Localize = {
+var Localize = {
   strings: [],
 
   that: function() {
     var args = $A(arguments),
-    string = args[0];
+        string = args[0];
+        
     args[0] = (window.locales ? (window.locales[string] || string) : string);
+    
     if (window.locales && !window.locales[string]) {
       Localize.addString(string);
     }
@@ -247,6 +249,7 @@ Localize = {
     // Add a row in form
     var name = 's['+string+']';
     var form = getForm('UnlocForm');
+    
     if (form) {
       var tbody = form.down('tbody');
       tbody.insert(

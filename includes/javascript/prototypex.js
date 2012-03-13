@@ -1008,34 +1008,41 @@ Element.findDuplicates = function(attr, tag) {
 }
 
 Element._duplicates = [];
+Element._idConflicts = [];
 
 Element.warnDuplicates = function(){
   if (Prototype.Browser.IE || !(console.firebug || (Preferences.INFOSYSTEM == 1))) return; // if("0") => true
   
-  var dups;
+  var elements;
   
-  /*dups = Element.findDuplicates("id");
-  if (dups.length && !Element._duplicates.intersect(dups).length) {
-    Element._duplicates = Element._duplicates.concat(dups);
-    console.warn("Duplicates *[id]: ", dups);
+  /*elements = Element.findDuplicates("id");
+  if (elements.length && !Element._duplicates.intersect(elements).length) {
+    Element._duplicates = Element._duplicates.concat(elements);
+    console.warn("Duplicates *[id]: ", elements);
   }*/
   
-  dups = Element.findDuplicates("name", "form");
-  if (dups.length && !Element._duplicates.intersect(dups).length) {
-    Element._duplicates = Element._duplicates.concat(dups);
-    console.warn("Duplicates form[name]: ", dups);
+  elements = Element.findDuplicates("name", "form");
+  if (elements.length && !Element._duplicates.intersect(elements).length) {
+    Element._duplicates = Element._duplicates.concat(elements);
+    console.warn("Duplicates form[name]: ", elements);
   }
   
-  dups = $$("form form");
-  if (dups.length && !Element._duplicates.intersect(dups).length) {
-    Element._duplicates = Element._duplicates.concat(dups);
-    console.error("Nested form: ", dups);
+  elements = $$("form form");
+  if (elements.length && !Element._duplicates.intersect(elements).length) {
+    Element._duplicates = Element._duplicates.concat(elements);
+    console.error("Nested form: ", elements);
   }
   
-  dups = $$("form:not([method]), form[method='']");
-  if (dups.length && !Element._duplicates.intersect(dups).length) {
-    Element._duplicates = Element._duplicates.concat(dups);
-    console.error("Method-less forms: ", dups);
+  elements = $$("form:not([method]), form[method='']");
+  if (elements.length && !Element._duplicates.intersect(elements).length) {
+    Element._duplicates = Element._duplicates.concat(elements);
+    console.error("Method-less forms: ", elements);
+  }
+  
+  elements = $$("*[id]").pluck("id").intersect($H(window).keys().without("console", "main", "menubar", "performance")); // FIXME
+  if (elements.length && !Element._idConflicts.intersect(elements).length) {
+    Element._idConflicts = Element._idConflicts.concat(elements);
+    console.error("ID conflicts (element ID and global variable have the same name): ", elements);
   }
 };
 
