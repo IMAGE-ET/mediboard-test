@@ -113,7 +113,14 @@ class CSetupftp extends CSetup {
                 ADD INDEX (`purge`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.08";    
+    $this->makeRevision("0.08");
+    
+    $query = "ALTER TABLE `sender_ftp` 
+                ADD `save_unsupported_message` ENUM ('0','1') DEFAULT '1',
+                ADD `create_ack_file` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.09";    
   }
 }
 ?>

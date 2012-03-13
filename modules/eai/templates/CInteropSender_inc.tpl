@@ -13,6 +13,7 @@
   <th>{{mb_label object=$actor field="user_id"}}</th>
   <td>
     {{mb_field object=$actor field="user_id" hidden=true}}
+    
     {{if $actor->user_id}}
       <input type="text" size="30" readonly="readonly" ondblclick="ObjectSelector.init()" name="_user_view" value="{{$actor->_ref_user->_view|stripslashes}}" />
     {{else}}
@@ -33,4 +34,14 @@
         } 
        </script>
   </td>
+</tr>
+
+<tr>
+  <th>{{mb_label object=$actor field="save_unsupported_message"}}</th>
+  <td>{{mb_field object=$actor field="save_unsupported_message"}}</td>
+</tr>
+
+<tr>
+  <th>{{mb_label object=$actor field="create_ack_file"}}</th>
+  <td>{{mb_field object=$actor field="create_ack_file"}}</td>
 </tr>

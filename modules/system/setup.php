@@ -931,6 +931,13 @@ class CSetupsystem extends CSetup {
               CHANGE `title` `title` VARCHAR (255)";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.95";
+    $this->makeRevision("1.0.95");
+    
+    $query = "ALTER TABLE `sender_file_system` 
+                ADD `save_unsupported_message` ENUM ('0','1') DEFAULT '1',
+                ADD `create_ack_file` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.96";
   }
 }

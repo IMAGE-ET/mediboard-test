@@ -729,7 +729,14 @@ class CSetuphl7 extends CSetup {
               CHANGE `get_NDA` `handle_NDA` ENUM ('PID_18','PV1_19') DEFAULT 'PID_18';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.23";
+    $this->makeRevision("0.23");
+    
+    $query = "ALTER TABLE `sender_mllp` 
+                ADD `save_unsupported_message` ENUM ('0','1') DEFAULT '1',
+                ADD `create_ack_file` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.24";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

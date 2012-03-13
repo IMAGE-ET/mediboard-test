@@ -41,7 +41,10 @@ class COperatorIHE extends CEAIOperator {
       $evt_class = CHL7Event::getEventClass($evt);
       if (!in_array($evt_class, $data_format->_messages_supported_class)) {
         $data_format->_ref_sender->_delete_file = false;
-        if (!$data_format->_to_treatment) {
+        // Pas de création d'échange dans le cas : 
+        // * où l'on ne souhaite pas traiter le message
+        // * où le sender n'enregistre pas les messages non pris en charge
+        if (!$data_format->_to_treatment || !$data_format->_ref_sender->save_unsupported_message) {
           return;
         }
 
@@ -81,7 +84,8 @@ class COperatorIHE extends CEAIOperator {
       }
       
       $exchange_ihe->store();
-
+      
+      // Pas de traitement du message
       if (!$data_format->_to_treatment) {
         return;
       }

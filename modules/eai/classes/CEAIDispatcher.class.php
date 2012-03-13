@@ -107,7 +107,11 @@ class CEAIDispatcher {
   /*
    * Create ACK
    */
-  static function createFileACK($msg, $sender) {    
+  static function createFileACK($msg, $sender) {
+    if (!$sender->create_ack_file) {
+      return;
+    }
+        
     $source       = reset($sender->_ref_exchanges_sources);
     $filename_ack = "ACK_".$source->_receive_filename;
     

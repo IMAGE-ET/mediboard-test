@@ -148,7 +148,14 @@ function __construct() {
                 ADD `stream_context` VARCHAR (255);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.25";      
+    $this->makeRevision("0.25");
+    
+    $query = "ALTER TABLE `sender_soap` 
+                ADD `save_unsupported_message` ENUM ('0','1') DEFAULT '1',
+                ADD `create_ack_file` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.26";      
   }
 }
 ?>
