@@ -51,17 +51,38 @@
       </span>
     </td>
   </tr>
+  {{if $object->examen}}
   <tr>
     <td colspan="3" class="text">
-      {{mb_value object=$object field=rques}}
+      {{mb_label object=$object field=examen}} : {{mb_value object=$object field=examen}}
     </td>
   </tr>
-  
+  {{/if}}
+  {{if $object->materiel}}
+  <tr>
+    <td colspan="3" class="text">
+      {{mb_label object=$object field=materiel}} : {{mb_value object=$object field=materiel}}
+    </td>
+  </tr>
+  {{/if}}
+  {{if $object->rques}}
+  <tr>
+    <td colspan="3" class="text">
+      {{mb_label object=$object field=rques}} : {{mb_value object=$object field=rques}}
+    </td>
+  </tr>
+  {{/if}}
   {{if $operation->debut_op}}
     <tr>
       <td colspan="3">
-        <strong>{{tr}}COperation-debut_op{{/tr}} :</strong>
-        {{$operation->debut_op|date_format:$conf.time}}
+        {{mb_label object=$object field=debut_op}} : {{$operation->debut_op|date_format:$conf.time}}
+      </td>
+    </tr>
+  {{/if}}
+  {{if $operation->fin_op}}
+    <tr>
+      <td colspan="3">
+        {{mb_label object=$object field=fin_op}} : {{$operation->fin_op|date_format:$conf.time}}
       </td>
     </tr>
   {{/if}}
