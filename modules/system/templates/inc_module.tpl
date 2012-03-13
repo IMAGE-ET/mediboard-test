@@ -11,7 +11,13 @@
 
   <td>
     <label title="{{tr}}module-{{$_mb_module->mod_name}}-long{{/tr}}">
-      <strong>{{tr}}module-{{$_mb_module->mod_name}}-court{{/tr}}</strong>
+      {{if $installed}}
+      <a href="?m={{$_mb_module->mod_name}}">
+      {{/if}}  
+         <strong>{{tr}}module-{{$_mb_module->mod_name}}-court{{/tr}}</strong>
+      {{if $installed}}
+      </a>
+      {{/if}}
     </label>
   </td>
 
