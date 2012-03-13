@@ -66,7 +66,7 @@ for($i = 0; $i < 7; $i++) {
   foreach($plagesConsult as $_consult){
   	$_consult->loadFillRate();
   	$_consult->countPatients();
-  	ajoutEvent($planning, $_consult, $date, $_consult->libelle, "#9F9", "consultation");
+  	ajoutEvent($planning, $_consult, $date, $_consult->libelle, "#BFB", "consultation");
   }
 }
 
@@ -81,7 +81,7 @@ for($i = 0; $i < 7; $i++) {
   foreach($plagesOp as $_op){
   	$_op->loadRefSalle();
     $_op->getNbOperations();
-  	ajoutEvent($planning, $_op, $date,$_op->_ref_salle->nom,  "#ABE", "operation");
+  	ajoutEvent($planning, $_op, $date,$_op->_ref_salle->nom,  "#BCE", "operation");
   }
 }
 
@@ -98,17 +98,17 @@ function ajoutEvent(&$planning, $_plage, $date, $libelle, $color, $type){
 	
 	//Paramètres de la plage de consultation
   $event->type = $type;
+  $pct = $_plage->_fill_rate;
+    if($pct > "100"){
+      $pct = "100";
+    }
+    if($pct == ""){
+      $pct = 0;
+    }
+    
   
-  if($type == "consultation"){
+  if ($type == "consultation") {
 	  $event->plage["id"] = $_plage->plageconsult_id; 
-	  $pct = $_plage->_fill_rate;
-	  if($pct > "100"){
-	    $pct = "100";
-	  }
-	  if($pct == ""){
-	    $pct = 0;
-	  }
-	  
 	  $event->plage["pct"] = $pct;
 	  $event->plage["locked"] = $_plage->locked;
 	  $event->plage["_affected"] = $_plage->_affected;
@@ -117,7 +117,7 @@ function ajoutEvent(&$planning, $_plage, $date, $libelle, $color, $type){
   }
   else{
     $event->plage["id"] = $_plage->plageop_id; 
-    $event->plage["pct"] = 0;
+    $event->plage["pct"] = $pct;
     $event->plage["locked"] = 0;
     $event->plage["_nb_operations"] = $_plage->_nb_operations;
   }

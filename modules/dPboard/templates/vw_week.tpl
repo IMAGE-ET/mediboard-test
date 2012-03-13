@@ -19,18 +19,20 @@ function viewItem(guid, id, date, oTd) {
   var url = new Url;
   url.addParam("board"     , "1");
   url.addParam("boardItem" , "1");
-  url.addParam("chirSel" , "{{$chirSel}}");
+  
   url.addParam("date"    , date);
 
   var sClass = guid.split("-")[0];
   
   if(sClass == "CPlageconsult"){
     url.setModuleAction("dPcabinet", "httpreq_vw_list_consult");
+    url.addParam("chirSel" , "{{$chirSel}}");
     url.addParam("plageconsult_id", id);
     url.addParam("selConsult"     , "");
   } 
   else if(sClass == "CPlageOp"){
     url.setModuleAction("dPplanningOp", "httpreq_vw_list_operations");
+    url.addParam("pratSel" , "{{$chirSel}}");
     url.addParam("urgences", "0");
   } else return;
 
@@ -52,11 +54,11 @@ Main.add(function () {
       <div style="width:120px; float: right;">
         <table id="weeklyPlanning" class="tbl">
           <tr>
-            <td style="background-color:#9F9;">&nbsp;&nbsp;</td>
+            <td style="background-color:#BFB;">&nbsp;&nbsp;</td>
             <td>Plage de consultation</td>
           </tr>
           <tr>
-            <td style="background-color:#ABE;">&nbsp;&nbsp;</td>
+            <td style="background-color:#BCE;">&nbsp;&nbsp;</td>
             <td>Plage opératoire</td>
           </tr>
         </table>
@@ -82,6 +84,7 @@ Main.add(function () {
    <script>
      Main.add(function() {
        window["planning-{{$planning->guid}}"].onMenuClick = function(guid, id, oTd){
+       
         if(oTd.title != "operation" && oTd.title != "consultation"){
           viewItem(guid, id, oTd.title, oTd);
         }

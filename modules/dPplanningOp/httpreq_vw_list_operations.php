@@ -59,7 +59,7 @@ if($userSel->_id){
     $curr_plage->loadRefsFwd();
     $where = array();
     $where["plageop_id"] = "= '$curr_plage->_id'";
-    if($userSel->_id) {
+    if($userSel->_id && !$userSel->isAnesth()) {
       $where["chir_id"] = "= '$userSel->_id'";
     }
     $where["annulee"] = "= '0'";
