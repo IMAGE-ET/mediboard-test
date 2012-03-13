@@ -15,7 +15,9 @@ $module->registerTab("edit_sorties"               , TAB_READ);
 $module->registerTab("vw_recherche"               , TAB_READ);
 $module->registerTab("vw_suivi_bloc"              , TAB_READ);
 $module->registerTab("form_print_planning"        , TAB_READ);
-$module->registerTab("vw_idx_pathologies"         , TAB_READ);
+if(CAppUI::conf("dPhospi pathologies") || CAppUI::$user->isAdmin()) {
+  $module->registerTab("vw_idx_pathologies"         , TAB_READ);
+}
 /*
 $module->registerTab("vw_idx_sejour"              , TAB_READ);
 if(CModule::getActive("dPprescription")){

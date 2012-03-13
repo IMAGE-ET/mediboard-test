@@ -1,7 +1,7 @@
 <?php
 
 $dPconfig["dPhospi"] = array (
-  "pathologies" => 1,
+  "pathologies" => 0,
   "tag_service" => "",
   "nb_hours_trans" => 1,
   "hour_limit" => "16:00:00",
