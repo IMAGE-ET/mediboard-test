@@ -736,7 +736,12 @@ class CSetuphl7 extends CSetup {
                 ADD `create_ack_file` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.24";
+    $this->makeRevision("0.24");
+    
+    $query = "ALTER TABLE `hl7_config` 
+                ADD `encoding` ENUM ('UTF-8','ISO-8859-1') DEFAULT 'UTF-8';";
+    
+    $this->mod_version = "0.25";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

@@ -21,6 +21,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "assigning_authority_namespace_id",
     "assigning_authority_universal_id",
     "assigning_authority_universal_type_id",
+    "encoding",
     "handle_mode",
     "handle_NDA",
     "handle_PV1_10"
@@ -33,6 +34,8 @@ class CHL7Config extends CExchangeDataFormatConfig {
   var $assigning_authority_universal_id      = null;
   var $assigning_authority_universal_type_id = null;
 	
+  var $encoding      = null;
+  
 	var $handle_mode   = null;
 	var $handle_NDA	   = null;
   var $handle_PV1_10 = null;
@@ -52,6 +55,8 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["assigning_authority_universal_id"]      = "str";
     $props["assigning_authority_universal_type_id"] = "str";
 		
+    $props["encoding"]      = "enum list|UTF-8|ISO-8859-1 default|UTF-8";
+    
 		$props["handle_mode"]   = "enum list|normal|simple default|normal";
 		$props["handle_NDA"]    = "enum list|PID_18|PV1_19 default|PID_18";
     
