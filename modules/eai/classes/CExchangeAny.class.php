@@ -61,14 +61,21 @@ class CExchangeAny extends CExchangeDataFormat {
   }
   
   function guessDataType(){
-    if (strpos($this->_message, '<?xml') === 0) {
-      $this->_props["_message"] = "xml";
-      $this->_specs["_message"] = CMbFieldSpecFact::getSpec($this, "_message", "xml");
-    }
+    $data_types = array(
+       "<?xml" => "xml", 
+       "MSH|"  => "er7",
+    );
     
-    if (strpos($this->_acquittement, '<?xml') === 0) {
-      $this->_props["_acquittement"] = "xml";
-      $this->_specs["_acquittement"] = CMbFieldSpecFact::getSpec($this, "_acquittement", "xml");
+    foreach ($data_types as $check => $spec) {
+      if (strpos($this->_message, $check) === 0) {
+        $this->_props["_message"] = $spec;
+        $this->_specs["_message"] = CMbFieldSpecFact::getSpec($this, "_message", $spec);
+      }
+      
+      if (strpos($this->_acquittement, $check) === 0) {
+        $this->_props["_acquittement"] = $spec;
+        $this->_specs["_acquittement"] = CMbFieldSpecFact::getSpec($this, "_acquittement", $spec);
+      }
     }
   }
   
