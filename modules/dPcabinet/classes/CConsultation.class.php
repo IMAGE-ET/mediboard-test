@@ -380,6 +380,8 @@ class CConsultation extends CCodable {
     $this->loadRefsFichesExamen(); 
     $this->loadRefsActesNGAP();
     $this->loadRefCategorie();
+    $this->loadRefPlageConsult(1);
+    $this->_ref_chir->loadRefFunction();
   }
 
   /**
