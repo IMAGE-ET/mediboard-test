@@ -24,7 +24,7 @@ CDestinataire::makeAllFor($object);
 $destinataires = CDestinataire::$destByClass;
 
 // Fusion avec les correspondants ajoutés par l'autocomplete
-$compte_rendu->mergeCorrespondantsCourrier(&$destinataires);
+$compte_rendu->mergeCorrespondantsCourrier($destinataires);
 
 $empty_corres = new CCorrespondantCourrier;
 $empty_corres->valueDefaults();
