@@ -74,7 +74,6 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   }
   
   function __construct($encoding = "utf-8") {
-    mbTrace($encoding);
     parent::__construct($encoding);
 
     $this->formatOutput = true;

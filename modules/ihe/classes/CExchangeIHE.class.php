@@ -143,7 +143,6 @@ class CExchangeIHE extends CExchangeTabular {
   }
   
   function getEncoding(){
-    mbTrace($this->_message_object->getEncoding());
     return $this->_message_object->getEncoding();
   }
  
