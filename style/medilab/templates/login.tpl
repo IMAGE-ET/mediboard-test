@@ -1,4 +1,4 @@
-{{include file="../../mediboard/templates/common.tpl"}}
+{{mb_include style=mediboard template=common}}
 
 <div id="login">
   <form name="loginFrm" action="?" method="post" onsubmit="return checkForm(this)">

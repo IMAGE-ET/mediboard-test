@@ -1,1 +1,1 @@
-{{include file="../../mediboard/templates/footer.tpl"}}
+{{mb_include style=mediboard template=footer}}

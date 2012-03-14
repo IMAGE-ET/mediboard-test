@@ -1,1 +1,1 @@
-{{include file="../../mediboard/templates/login.tpl"}}
+{{mb_include style=mediboard template=login}}

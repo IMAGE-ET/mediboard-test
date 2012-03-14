@@ -1,1 +1,1 @@
-{{include file="../../mediboard/templates/tabbox.tpl"}}
+{{mb_include style=mediboard template=tabbox}}

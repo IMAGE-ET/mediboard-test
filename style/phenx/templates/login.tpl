@@ -1,4 +1,4 @@
-{{include file="../../mediboard/templates/common.tpl" nodebug=true}}
+{{mb_include style=mediboard template=common}}
 
 <div id="login" {{if $dialog}} class="dialog" {{/if}}>
   {{if !$dialog}}

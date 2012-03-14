@@ -4,7 +4,7 @@
 </table>
 
 {{if $debugMode && !$offline}}
-  {{mb_include template=../../../style/mediboard/templates/performance}}
+  {{mb_include style=mediboard template=performance}}
 {{/if}}
 
 <script type="text/javascript">
