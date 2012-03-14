@@ -232,7 +232,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
   
   function getNames(DOMNode $node, CPatient $newPatient, DOMNodeList $PID5) {
   	$fn1 = $this->queryTextNode("XPN.1/FN.1", $node);
-		
+
 		switch($this->queryTextNode("XPN.7", $node)) {
 			case "D" :
 				$newPatient->nom = $fn1;
@@ -243,14 +243,18 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       	if ($PID5->length > 1) {
       		$newPatient->nom_jeune_fille = $fn1;
 				}
+        else {
+          $newPatient->nom = $fn1;
+        }
 				break;
 			default:
 				$newPatient->nom = $fn1;
 				break;
-		}     
+		}    
   }
   
-  function getFirstNames(DOMNode $node, CPatient $newPatient) {    
+  function getFirstNames(DOMNode $node, CPatient $newPatient) {
+    mbLog($this->saveXML());    
     $newPatient->prenom = $this->queryTextNode("XPN.2", $node);
     $first_names = explode(",", $this->queryTextNode("XPN.3", $node));
     $newPatient->prenom_2 = CValue::read($first_names, 1);

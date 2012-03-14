@@ -593,7 +593,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         if ($id400->_id) {
           return $id400->object_id;
         }
-        
+
         if ($object instanceof CMediusers) {
           $object->_user_first_name = $first_name;
           $object->_user_last_name  = $last_name;
@@ -605,19 +605,26 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         
         break;
     }
-    
+
     // Cas où l'on a aucune information sur le médecin
     if (!$object->rpps && !$object->adeli && !$object->_id &&
-        (($object instanceof CMediusers && (!$object->_user_first_name || $object->_user_last_name)) ||
-        ($object instanceof CMedecin && (!$object->prenom || $object->nom)))) {
+        (($object instanceof CMediusers && !$object->_user_last_name) ||
+        ($object instanceof CMedecin && !$object->nom))) {
       return null;      
     }
     
-    if ($object->loadMatchingObject()) {
+    if ($object instanceof CMedecin && $object->loadMatchingObject()) {
       return $object->_id;
     }
-    
+      
     if ($object instanceof CMediusers) {
+      $user = new CUser;
+      $user->user_first_name = $first_name;
+      $user->user_last_name  = $last_name;
+      if ($user->loadMatchingObject()) {
+        return $user->_id;
+      }
+      
       $object->_user_first_name = $first_name;
       $object->_user_last_name  = $last_name;
       
