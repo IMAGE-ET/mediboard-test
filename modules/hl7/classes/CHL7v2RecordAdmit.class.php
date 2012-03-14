@@ -54,10 +54,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     switch ($sender->_configs["handle_NDA"]) {
       case 'PV1_19':
         return CValue::read($data['admitIdentifiers'], "AN");
-        break;
       default:
        return CValue::read($data['personIdentifiers'], "AN");
-        break;
     }
   }
   
@@ -111,7 +109,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function handleA02(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
-    if (!$this->admitFound($newVenue)) {
+    if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
     }
     
@@ -121,7 +119,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function handleA03(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
-    if (!$this->admitFound($newVenue)) {
+    if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
     }
     
@@ -289,7 +287,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function handleA06(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
-    if (!$this->admitFound($newVenue)) {
+    if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
     }
     
@@ -298,7 +296,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function handleA07(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
-    if (!$this->admitFound($newVenue)) {
+    if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
     }
     
@@ -307,7 +305,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function handleA08(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
-    if (!$this->admitFound($newVenue)) {
+    if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
     }
     
@@ -316,7 +314,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function handleA11(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
-    if (!$this->admitFound($newVenue)) {
+    if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
     }
     
@@ -325,7 +323,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function handleA12(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
-    if (!$this->admitFound($newVenue)) {
+    if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
     }
     
@@ -334,7 +332,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function handleA13(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
-    if (!$this->admitFound($newVenue)) {
+    if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
     }
     
@@ -343,7 +341,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function handleA38(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
-    if (!$this->admitFound($newVenue)) {
+    if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
     }
     
@@ -352,7 +350,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function handleA44(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
-    if (!$this->admitFound($newVenue)) {
+    if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
     }
     
@@ -361,7 +359,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function handleA45(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
-    if (!$this->admitFound($newVenue)) {
+    if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
     }
     
@@ -370,7 +368,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function handleA54(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
-    if (!$this->admitFound($newVenue)) {
+    if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
     }
     
@@ -379,7 +377,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function handleA55(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
-    if (!$this->admitFound($newVenue)) {
+    if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
     }
     
@@ -388,7 +386,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function handleZ99(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
-    if (!$this->admitFound($newVenue)) {
+    if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
     }
     
@@ -399,7 +397,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     return true;
   }
   
-  function admitFound(CSejour $newVenue) {
+  function admitFound(CSejour $newVenue, $data) {
     $exchange_ihe = $this->_ref_exchange_ihe;
     $sender       = $this->_ref_sender;
     
