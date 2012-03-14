@@ -79,7 +79,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     self::$handle_mode = "normal";
   }
   
-  function toXML($event_code = null, $hl7_datatypes = true) {
+  function toXML($event_code = null, $hl7_datatypes = true, $encoding = "utf-8") {
     $field = $this->children[0]->fields[8]->items[0];
     if ($field->children[0]->data == "ACK") {
       $name = $field->children[0]->data;
@@ -88,18 +88,18 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
       $name = $field->children[0]->data."_".$field->children[1]->data;
     }
     
-    $dom = CHL7v2MessageXML::getEventType($event_code);
+    $dom = CHL7v2MessageXML::getEventType($event_code, $encoding);
     $root = $dom->addElement($dom, $name);
     $dom->addNameSpaces($name);
    
-    return $this->_toXML($root, $hl7_datatypes);
+    return $this->_toXML($root, $hl7_datatypes, $encoding);
   }
   
-  function _toXML(DOMNode $node, $hl7_datatypes) {
+  function _toXML(DOMNode $node, $hl7_datatypes, $encoding) {
     $doc = $node->ownerDocument;
     
     foreach($this->children as $_child) {
-      $_child->_toXML($node, $hl7_datatypes);
+      $_child->_toXML($node, $hl7_datatypes, $encoding);
     }
     
     return $doc;
@@ -451,7 +451,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
       $encoding = CHL7v2TableEntry::mapFrom(211, $this->children[0]->fields[17]->items[0]->data);
     }
     
-    return $encoding;
+    return strtolower($encoding);
   }
   
   function error($code, $data, $entity = null, $level = CHL7v2Error::E_ERROR) {

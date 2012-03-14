@@ -24,12 +24,12 @@ class CHL7v2Segment extends CHL7v2Entity {
     $this->parent = $parent;
   }
   
-  function _toXML(DOMNode $node, $hl7_datatypes) {
+  function _toXML(DOMNode $node, $hl7_datatypes, $encoding) {
     $doc = $node->ownerDocument;
     $new_node = $doc->createElement($this->name);
     
     foreach($this->fields as $_field) {
-      $_field->_toXML($new_node, $hl7_datatypes);
+      $_field->_toXML($new_node, $hl7_datatypes, $encoding);
     }
     
     $node->appendChild($new_node);

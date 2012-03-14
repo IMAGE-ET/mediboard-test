@@ -22,18 +22,18 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   var $_ref_receiver     = null;
   var $_is_i18n          = null;
   
-  static function getEventType($event_code = null) {
+  static function getEventType($event_code = null, $encoding = "utf-8") {
     switch ($event_code) {
       // Création d'un nouveau patient - Mise à jour d'information du patient
       case "CHL7v2EventADTA28" : 
       case "CHL7v2EventADTA28_FR" :   
       case "CHL7v2EventADTA31" :
       case "CHL7v2EventADTA31_FR" :
-        return new CHL7v2RecordPerson();
+        return new CHL7v2RecordPerson($encoding);
       // Fusion de deux patients
       case "CHL7v2EventADTA40" : 
       case "CHL7v2EventADTA40_FR" : 
-        return new CHL7v2MergePersons();
+        return new CHL7v2MergePersons($encoding);
       // Création d'une venue - Mise à jour d'information de la venue
       case "CHL7v2EventADTA01" :
       case "CHL7v2EventADTA01_FR" : 
@@ -64,17 +64,18 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
       case "CHL7v2EventADTA55" : 
       case "CHL7v2EventADTA55_FR" :
       case "CHL7v2EventADTZ99_FR" : 
-        return new CHL7v2RecordAdmit();  
+        return new CHL7v2RecordAdmit($encoding);  
       // Création des résultats d'observations
       case "CHL7v2EventORUR01" : 
-        return new CHL7v2RecordObservationResultSet();  
+        return new CHL7v2RecordObservationResultSet($encoding);  
       default : 
-        return new CHL7v2MessageXML();
+        return new CHL7v2MessageXML($encoding);
     }
   }
   
-  function __construct() {
-    parent::__construct("utf-8");
+  function __construct($encoding = "utf-8") {
+    mbTrace($encoding);
+    parent::__construct($encoding);
 
     $this->formatOutput = true;
   }
@@ -120,16 +121,16 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     return $xpath->queryTextNode($nodeName, $contextNode);
   }
   
-	function getSegment($name, $data, $object) {
-		if (!array_key_exists($name, $data) || $data[$name] === NULL) {
-			return;
-		}
-		
-		$function = "get$name";
-		
-		$this->$function($data[$name], $object);
-	}
-	
+  function getSegment($name, $data, $object) {
+    if (!array_key_exists($name, $data) || $data[$name] === NULL) {
+      return;
+    }
+    
+    $function = "get$name";
+    
+    $this->$function($data[$name], $object);
+  }
+  
   function getMSHEvenementXML() {
     $data = array();
     
@@ -142,26 +143,26 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   }
   
   function getPIIdentifier(DOMNode $node, &$data) {
-		if (CHL7v2Message::$handle_mode == "simple") {
+    if (CHL7v2Message::$handle_mode == "simple") {
       $data["PI"] = $this->queryTextNode("CX.1", $node);
     } 
-		else {
-			if ($this->queryTextNode("CX.5", $node) == "PI") {
-	      $data["PI"] = $this->queryTextNode("CX.1", $node);
-	    }
-		}
-		
+    else {
+      if ($this->queryTextNode("CX.5", $node) == "PI") {
+        $data["PI"] = $this->queryTextNode("CX.1", $node);
+      }
+    }
+    
   }
   
   function getANIdentifier(DOMNode $node, &$data) {
-  	if (CHL7v2Message::$handle_mode == "simple") {
+    if (CHL7v2Message::$handle_mode == "simple") {
       $data["AN"] = $this->queryTextNode("CX.1", $node);
     } 
-		else {
-			if ($this->queryTextNode("CX.5", $node) == "AN") {
-	      $data["AN"] = $this->queryTextNode("CX.1", $node);
-	    }
-		}
+    else {
+      if ($this->queryTextNode("CX.5", $node) == "AN") {
+        $data["AN"] = $this->queryTextNode("CX.1", $node);
+      }
+    }
   }
   
   function getRIIdentifiers(DOMNode $node, &$data, CInteropSender $sender) {
@@ -223,14 +224,14 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     // RI - Resource identifier 
     // AN - On peut également retrouver le numéro de dossier dans ce champ
     if ($PV1_19 = $this->queryNode("PV1.19", $contextNode)) {
-    	switch ($sender->_configs["handle_NDA"]) {
-				case 'PV1_19':
-					$this->getANIdentifier($PV1_19, $data);
-					break;
-				default:
-					$this->getRIIdentifiers($PV1_19, $data, $sender);
-					break;
-			}
+      switch ($sender->_configs["handle_NDA"]) {
+        case 'PV1_19':
+          $this->getANIdentifier($PV1_19, $data);
+          break;
+        default:
+          $this->getRIIdentifiers($PV1_19, $data, $sender);
+          break;
+      }
     }
       
     // PA - Preadmit Number

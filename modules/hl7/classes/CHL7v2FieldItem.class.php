@@ -33,12 +33,12 @@ class CHL7v2FieldItem extends CHL7v2Component {
     return $this->parent;
   }
   
-  function _toXML(DOMNode $node, $hl7_datatypes) {
+  function _toXML(DOMNode $node, $hl7_datatypes, $encoding) {
     $doc = $node->ownerDocument;
     $field = $this->getField();
     $new_node = $doc->createElement($field->name);
     
-    parent::_toXML($new_node, $hl7_datatypes);
+    parent::_toXML($new_node, $hl7_datatypes, $encoding);
     
     $node->appendChild($new_node);
   }

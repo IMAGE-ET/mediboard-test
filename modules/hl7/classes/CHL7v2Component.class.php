@@ -83,14 +83,14 @@ class CHL7v2Component extends CHL7v2Entity {
     $this->props = CHL7v2DataType::load($this->datatype, $this->getVersion(), $this->getMessage()->extension);
   }
   
-  function _toXML(DOMNode $node, $hl7_datatypes) {
+  function _toXML(DOMNode $node, $hl7_datatypes, $encoding) {
     $doc = $node->ownerDocument;
     $field = $this->getField();
     
     if ($this->props instanceof CHL7v2DataTypeComposite) {
       foreach($this->children as $i => $_child) {
         $new_node = $doc->createElement("$this->datatype.".($i+1));
-        $_child->_toXML($new_node, $hl7_datatypes);
+        $_child->_toXML($new_node, $hl7_datatypes, $encoding);
         $node->appendChild($new_node);
       }
     }
@@ -110,6 +110,11 @@ class CHL7v2Component extends CHL7v2Entity {
         if (!$hl7_datatypes && $str !== "") {
           $str = $this->props->toMB($str, $field);
         }
+      }
+        
+      $data_encoding = $this->getEncoding();
+      if ($data_encoding && $data_encoding !== $encoding) {
+        $str = mb_convert_encoding($str, $encoding, $data_encoding);
       }
       
       $new_node = $doc->createTextNode($str);

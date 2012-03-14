@@ -6,7 +6,7 @@
   });
 </script>
 <div {{if $key != "input"}} style="display: none;" {{/if}} id="message-{{$key}}">
-  <h1>{{$message->description}} ({{$message->version}}) <span class="type">{{$message->name}}</span></h1>
+  <h1>{{$message->description}} ({{$message->version}}) <span class="type">{{$message->name}}</span> [{{$message->getEncoding()}}]</h1>
   
   <ul class="control_tabs" id="message-tab-{{$key}}">
     <li><a href="#message-{{$key}}-tree">Arbre</a></li>
