@@ -12,6 +12,8 @@
 
 CCanDo::checkRead();
 
+$this->setTimeLimit(360);
+
 $actor_guid   = CValue::get("actor_guid");
 $to_treatment = CValue::get("to_treatment", 1);
 
