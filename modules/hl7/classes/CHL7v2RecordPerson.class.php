@@ -254,7 +254,6 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
   }
   
   function getFirstNames(DOMNode $node, CPatient $newPatient) {
-    mbLog($this->saveXML());    
     $newPatient->prenom = $this->queryTextNode("XPN.2", $node);
     $first_names = explode(",", $this->queryTextNode("XPN.3", $node));
     $newPatient->prenom_2 = CValue::read($first_names, 1);
