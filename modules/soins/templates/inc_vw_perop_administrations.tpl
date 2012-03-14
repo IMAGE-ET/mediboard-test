@@ -28,7 +28,10 @@
           {{/if}}
         </td>
 				<td>
-					<strong>{{$_perop->quantite}} {{$unite}} </strong>
+					<strong>{{$_perop->quantite}} {{$unite}}</strong>
+          {{if $_perop->_quantite_mg && $unite != "mg"}}
+            soit {{$_perop->_quantite_mg}} mg
+          {{/if}}
         </td>
     </tr>
   {{foreachelse}}
