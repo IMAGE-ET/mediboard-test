@@ -175,7 +175,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           // Notifier les autres destinataires autre que le sender
           $newVenue->_eai_initiateur_group_id = $sender->group_id;
           if ($msgVenue = $newVenue->store()) {
-            return $exchange_ihe->setAckAR($ack, "E201", $msgPatient, $newVenue);
+            return $exchange_ihe->setAckAR($ack, "E201", $msgVenue, $newVenue);
           }
                     
           $code_NDA      = "I221";
@@ -432,7 +432,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Notifier les autres destinataires autre que le sender
     $newVenue->_eai_initiateur_group_id = $sender->group_id;
     if ($msgVenue = $newVenue->store()) {
-      return $exchange_ihe->setAckAR($ack, "E201", null, $newVenue);
+      return $exchange_ihe->setAckAR($ack, "E201", $msgVenue, $newVenue);
     }
     
     // Mapping du mouvement
