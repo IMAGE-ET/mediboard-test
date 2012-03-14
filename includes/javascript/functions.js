@@ -1355,7 +1355,7 @@ Element.addMethods({
     var parentHead = $$("head")[0];
   
     if (Prototype.Browser.IE) { // argh
-      parentHead.select("link").each(function(e){
+      parentHead.select("link, style").each(function(e){
         // Si c'est une feuille de style
         if (e.styleSheet) {
           var css = e.styleSheet.cssText;
