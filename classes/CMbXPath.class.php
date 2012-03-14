@@ -49,7 +49,7 @@ class CMbXPath extends DOMXPath {
   function queryTextNode($query, DOMNode $contextNode = null, $purgeChars = "", $addslashes = false) {
     $text = "";
     if ($node = $this->queryUniqueNode($query, $contextNode)) {
-      $text = utf8_decode($node->textContent);
+      $text = $this->convertEncoding($node->textContent);
       $text = str_replace(str_split($purgeChars), "", $text);
       $text = trim($text);
       if ($addslashes)
@@ -62,7 +62,7 @@ class CMbXPath extends DOMXPath {
   function queryMultilineTextNode($query, DOMNode $contextNode = null, $prefix = "") {
     $text = "";
     if ($node = $this->queryUniqueNode($query, $contextNode)) {
-      $text = utf8_decode($node->textContent);
+      $text = $this->convertEncoding($node->textContent);
       if ($prefix) {
         $text = str_replace($prefix, "", $text);
       }
@@ -74,7 +74,7 @@ class CMbXPath extends DOMXPath {
   function queryAttributNode($query, DOMNode $contextNode = null, $attName, $purgeChars = "", $optional = true) {
     $text = "";
     if ($node = $this->queryUniqueNode($query, $contextNode, $optional)) {
-      $text = utf8_decode($node->getAttribute($attName));
+      $text = $this->convertEncoding($node->getAttribute($attName));
       $text = str_replace(str_split($purgeChars), "", $text);
       $text = trim($text);
       $text = addslashes($text);
@@ -85,11 +85,11 @@ class CMbXPath extends DOMXPath {
   
   function getMultipleTextNodes($query, DOMNode $contextNode = null) {
     $array = array();
-    $query = utf8_encode($query);
+    $query = $this->convertEncoding($query);
     $nodeList = $contextNode ? parent::query($query, $contextNode) : parent::query($query);
     
     foreach ($nodeList as $n) {
-      $array[] = utf8_decode($n->nodeValue);
+      $array[] = $this->convertEncoding($n->nodeValue);
     }
     return $array;
   }
@@ -97,13 +97,17 @@ class CMbXPath extends DOMXPath {
   function getValueAttributNode(DOMNode $node, $attName, $purgeChars = "") {
     $text = "";
     if ($att = $node->getAttributeNode($attName)) {
-      $text = utf8_decode($att->value);
+      $text = $this->convertEncoding($att->value);
       $text = str_replace(str_split($purgeChars), "", $text);
       $text = trim($text);
       $text = addslashes($text);
     }
     
     return $text;
+  }
+  
+  function convertEncoding($value) {
+    return utf8_decode($value);
   }
 }
 

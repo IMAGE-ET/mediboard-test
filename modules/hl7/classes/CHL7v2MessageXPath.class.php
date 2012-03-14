@@ -22,6 +22,10 @@ class CHL7v2MessageXPath extends CMbXPath {
     
     $this->registerNamespace( "hl7", "urn:hl7-org:v2xml" );
   }
+  
+  function convertEncoding($value) {
+    return $value;
+  }
 }
 
 ?>
