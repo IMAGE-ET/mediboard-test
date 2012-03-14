@@ -329,6 +329,7 @@ class CPatient extends CMbObject {
     $specs["pays_insee"]           = "str";
     $specs["lieu_naissance"]       = "str";
     $specs["cp_naissance"]         = "str minLength|4 maxLength|5 confidential";
+    $specs["pays_naissance_insee"] = "str";
     $specs["profession"]           = "str autocomplete";
     $specs["csp" ]                 = "numchar length|2";
     
