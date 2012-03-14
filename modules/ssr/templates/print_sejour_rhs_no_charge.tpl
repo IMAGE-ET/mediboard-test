@@ -8,17 +8,13 @@
   * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
   *}}
 
-<!-- Fermeture des tableaux -->
-    </td>
-  </tr>
-</table>
-
+{{mb_include style=$style template=open_printable}}
 
 <div class="not-printable">
-	<button type="button" class="print not-printable" onclick="window.print()">
-	  {{tr}}Print{{/tr}}
-	  {{$sejours_rhs|@count}} {{tr}}CRHS{{/tr}}
-	</button>
+  <button type="button" class="print not-printable" onclick="window.print()">
+    {{tr}}Print{{/tr}}
+    {{$sejours_rhs|@count}} {{tr}}CRHS{{/tr}}
+  </button>
 </div>
 
 {{assign var=days value="CRHS"|static:days}}
@@ -28,13 +24,13 @@
 <table class="tbl">
   <tr>
     <th class="title" colspan="11">
-    	<big>
-    		{{$sejour}}<br/>
+      <big>
+        {{$sejour}}<br/>
         {{tr}}CRHS{{/tr}} {{$_rhs}}
-				&mdash;
+        &mdash;
         {{mb_include module=system template=inc_interval_date from=$_rhs->date_monday to=$_rhs->_date_sunday}}
-			</big>
-		</th>
+      </big>
+    </th>
   </tr>
 
   {{assign var=dependance value=$_rhs->_ref_dependances}}
@@ -66,15 +62,15 @@
   <tr>
     <th class="title" colspan="11">Totaux RHS</th>
   </tr>
-  {{foreach from=$types_activite item=_type name=liste_types}}
+  {{assign var=totaux value=$_rhs->_totaux}}
+  {{foreach from=$_rhs->_ref_types_activite item=_type name=liste_types}}
     {{assign var=code value=$_type->code}}
-    {{assign var=rhs_id value=$_rhs->_id}}
-    {{assign var=total value=$totaux.$rhs_id.$code}}
+    {{assign var=total value=$totaux.$code}}
     {{if $smarty.foreach.liste_types.index % 3 == 0}}
     <tr>
     {{/if}}
       <td class="button">
-        {{if $total}}{{$total}}{{else}}-{{/if}}
+        {{if $total}}{{$total|default:'-'}}{{else}}-{{/if}}
       </td>
       <th style="text-align: left">{{$_type->_shortview}}</th>
       
@@ -84,58 +80,12 @@
   {{/foreach}}
 </table>
 
- <table class="tbl">   
-  <tr>
-    <th class="title" colspan="11">{{tr}}CLigneActivitesRHS{{/tr}}</th>
-  </tr>
-  
-  <tr>
-    <th>{{mb_title object=$rhs_line field=code_activite_cdarr}}</th>
-    <th>{{mb_title object=$rhs_line field=executant_id}}</th>
-    {{foreach from=$days key=day item=litteral_day}}
-    <th class="narrow">{{mb_title object=$rhs_line field=qty_$litteral_day}}</th>
-    {{/foreach}}
-  </tr>
-
-    {{foreach from=$_rhs->_back.lines item=_line name=backlines}}
-      {{assign var=executant value=$_line->_fwd.executant_id}}
-      {{assign var=activite  value=$_line->_ref_activite_cdarr}}
-      {{assign var=numsemaine value=$_rhs->_week_number}}
-      {{assign var=indexforeach value=$smarty.foreach.backlines.index}}
-            
-      {{if $smarty.foreach.backlines.first}}
-      
-      {{/if}}
-      <tr>
-        <td class="text">
-          <strong>{{$activite}}</strong> :
-					{{$activite->libelle}}
-          <br />
-          <small>{{$activite->_ref_type_activite->_view}}</small>
-        </td>
-        <td class="text">
-          {{mb_include module="mediusers" template="inc_vw_mediuser" mediuser=$executant}}
-          <br />
-          <small>{{$_line->_ref_intervenant_cdarr->_view}}</small>
-        </td>
-        {{foreach from=$days key=day item=litteral_day}}
-          {{mb_include template="inc_line_rhs" rhs=$_rhs}}
-        {{/foreach}}
-      </tr>
-    {{foreachelse}}
-    <tr>
-      <td colspan="10" class="empty">{{tr}}CRHS-back-lines.empty{{/tr}}</td>
-    </tr>
-    {{/foreach}}
-</table>
+{{mb_include template=inc_lines_rhs rhs=$_rhs}}
 
 <br style="page-break-after: always;" />
 
 {{foreachelse}}
-<div class="small-info">Aucun RHS de sélectionné</div>
+<div class="small-info">{{tr}}CRHS-none{{/tr}}</div>
 {{/foreach}}
 
-<!-- Re-ouverture des tableaux -->
-<table>
-  <tr>
-    <td>
+{{mb_include style=$style template=close_printable}}

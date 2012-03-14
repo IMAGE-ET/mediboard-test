@@ -28,43 +28,22 @@ $types_activite = $type_activite->loadList();
 
 $totaux = array();
 foreach($sejours_rhs as $_rhs) {
-  $totaux[$_rhs->_id] = array();
-  foreach ($types_activite as $_type) {
-    $totaux[$_rhs->_id][$_type->code] = 0;
+  // Dépendances
+  $dependances = $_rhs->loadRefDependances();
+  if (!$dependances->_id) {
+    $dependances->store();
   }
+  
   $_rhs->loadRefSejour();
-  $_rhs->loadRefDependances();
-  if(!$_rhs->_ref_dependances->_id) {
-    $_rhs->_ref_dependances->store();
-  }
-  $_rhs->loadBackRefs("lines");
-  foreach($_rhs->_back["lines"] as $_line) {
-    $_line->loadRefActiviteCdARR();
-    $_line->_ref_activite_cdarr->loadRefTypeActivite();
-    $totaux[$_rhs->_id][$_line->_ref_activite_cdarr->_ref_type_activite->code] += $_line->_qty_total;
-    $_line->loadRefIntervenantCdARR();
-    $_line->loadFwdRef("executant_id", true);
-    $_line->_fwd["executant_id"]->loadRefsFwd();
-    $_line->_fwd["executant_id"]->loadRefIntervenantCdARR();
-  }
+  $_rhs->buildTotaux();
+  
 }
 
-// Ligne vide d'activité
-$rhs_line = new CLigneActivitesRHS();
-$user = new CAppUI::$user;
-if ($user->code_intervenant_cdarr) {
-  $rhs_line->_executant             = $user->_view;
-  $rhs_line->executant_id           = $user->user_id;
-  $rhs_line->code_intervenant_cdarr = $user->code_intervenant_cdarr;
-}
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("sejours_rhs"    , $sejours_rhs);
-$smarty->assign("rhs_line"       , $rhs_line);
-$smarty->assign("types_activite" , $types_activite);
-$smarty->assign("totaux"         , $totaux);
 $smarty->assign("read_only"      , true);
 
 $smarty->display("print_sejour_rhs_no_charge.tpl");

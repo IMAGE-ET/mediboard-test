@@ -18,11 +18,11 @@
 <table class="tbl">
   <tr>
     <th class="narrow"></th>
-    <th colspan="2">{{mb_title object=$rhs_line field=code_activite_cdarr}}</th>
+    <th colspan="2">{{mb_title class=CLigneActivitesRHS field=code_activite_cdarr}}</th>
     <th>{{mb_title class=CActiviteCdARR field=libelle}}</th>
     
     {{foreach from=$days key=day item=litteral_day}}
-    <th class="category narrow">{{mb_title object=$rhs_line field=qty_$litteral_day}}</th>
+    <th class="category narrow">{{mb_title class=CLigneActivitesRHS field=qty_$litteral_day}}</th>
     {{/foreach}}
     
     <th class="narrow"></th>
