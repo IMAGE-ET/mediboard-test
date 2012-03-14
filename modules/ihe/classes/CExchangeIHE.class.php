@@ -27,6 +27,11 @@ class CExchangeIHE extends CExchangeTabular {
   var $exchange_ihe_id = null;
   
   var $code            = null;
+  
+  /**
+   * @var CHL7v2Message
+   */
+  var $_message_object = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -116,8 +121,11 @@ class CExchangeIHE extends CExchangeTabular {
     if ($this->_message !== null) {
       $hl7_message = new CHL7v2Message();
       $hl7_message->parse($this->_message);
+      
       $this->_doc_errors_msg   = !$hl7_message->isOK(CHL7v2Error::E_ERROR);
       $this->_doc_warnings_msg = !$hl7_message->isOK(CHL7v2Error::E_WARNING);
+      
+      $this->_message_object = $hl7_message;
 
       return $hl7_message;
     }
@@ -133,6 +141,11 @@ class CExchangeIHE extends CExchangeTabular {
       return $hl7_ack;
     }
   }
+  
+  function getEncoding(){
+    mbTrace($this->_message_object->getEncoding());
+    return $this->_message_object->getEncoding();
+  }
  
   function populateExchange(CExchangeDataFormat $data_format, CHL7Event $event) {
     $this->group_id        = $data_format->group_id;
@@ -143,7 +156,7 @@ class CExchangeIHE extends CExchangeTabular {
     $this->type            = $event->profil;
     $this->sous_type       = $event->transaction;
     $this->code            = $event->code;
-    $this->_message        = $data_format->_message;;
+    $this->_message        = $data_format->_message;
   }
   
   function populateErrorExchange(CHL7Acknowledgment $ack = null, CHL7Event $event = null) {

@@ -197,12 +197,18 @@ class CExchangeDataFormat extends CMbMetaObject {
     return array(); 
   }
   
+  function getEncoding() {
+    
+  }
+  
   function setObjectIdClass(CMbObject $mbObject) {
     if ($mbObject) {
       $this->object_id    = $mbObject->_id;
       $this->object_class = $mbObject->_class;
     }
   }
+  
+  abstract function loadContent();
 }
 
 ?>

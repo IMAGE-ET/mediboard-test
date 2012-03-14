@@ -444,6 +444,16 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     return $this;
   }
   
+  function getEncoding() {
+    $encoding = "utf-8";
+    
+    if (isset($this->children[0]->fields[17]->items[0])) {
+      $encoding = CHL7v2TableEntry::mapFrom(211, $this->children[0]->fields[17]->items[0]->data);
+    }
+    
+    return $encoding;
+  }
+  
   function error($code, $data, $entity = null, $level = CHL7v2Error::E_ERROR) {
     $error = new CHL7v2Error;
     $error->line = $this->current_line+1;
