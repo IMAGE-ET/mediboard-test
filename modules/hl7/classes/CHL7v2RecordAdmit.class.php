@@ -412,6 +412,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
     
     if ($NDA->_id) {
+      $newVenue->load($NDA->object_id);
+      
       return true;
     }
     
