@@ -107,6 +107,10 @@ class CExchangeDataFormat extends CMbMetaObject {
   function getObservations() {}
   
   function getErrors() {}
+  
+  function loadContent() {}
+  
+  function getEncoding() {}
 
   function updateFormFields() {
     parent::updateFormFields();
@@ -196,11 +200,7 @@ class CExchangeDataFormat extends CMbMetaObject {
   function getFamily() {
     return array(); 
   }
-  
-  function getEncoding() {
     
-  }
-  
   function setObjectIdClass(CMbObject $mbObject) {
     if ($mbObject) {
       $this->object_id    = $mbObject->_id;
@@ -208,7 +208,7 @@ class CExchangeDataFormat extends CMbMetaObject {
     }
   }
   
-  abstract function loadContent();
+  
 }
 
 ?>
