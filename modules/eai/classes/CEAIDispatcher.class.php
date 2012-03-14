@@ -21,6 +21,10 @@ class CEAIDispatcher {
   static $xml_error   = null;
     
   static function dispatch($data, CInteropSender $actor = null, $exchange_id = null, $to_treatment = true) {
+    if ($actor && isset($actor->_configs["encoding"]) && $actor->_configs["encoding"] == "UTF-8") {
+      $data = utf8_decode($data);
+    }
+    
     self::$errors = array();
     // Accepte t-on des utilisateurs acteurs non enregistrés ?
     if (!$actor) {

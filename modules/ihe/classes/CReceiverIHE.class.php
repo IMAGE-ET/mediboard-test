@@ -115,6 +115,10 @@ class CReceiverIHE extends CInteropReceiver {
       $source->setData($msg, false, "MB-$evenement->event_type-$evenement->code-$exchange->_id.$source->fileextension");
     }
     else {
+      if ($this->_configs["encoding"] == "UTF-8") {
+        $msg = utf8_encode($msg); 
+      }
+      
       $source->setData($msg);
     }
     try {

@@ -88,7 +88,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
       $name = $field->children[0]->data."_".$field->children[1]->data;
     }
     
-    $dom = CHL7v2MessageXML::getEventType($event_code, $encoding);
+    $dom = CHL7v2MessageXML::getEventType($event_code);
     $root = $dom->addElement($dom, $name);
     $dom->addNameSpaces($name);
    
@@ -445,13 +445,13 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   }
   
   function getEncoding() {
-    $encoding = "utf-8";
+    return "utf-8";
     
-    if (isset($this->children[0]->fields[17]->items[0])) {
+    /*if (isset($this->children[0]->fields[17]->items[0])) {
       $encoding = CHL7v2TableEntry::mapFrom(211, $this->children[0]->fields[17]->items[0]->data);
     }
     
-    return strtolower($encoding);
+    return strtolower($encoding);*/
   }
   
   function error($code, $data, $entity = null, $level = CHL7v2Error::E_ERROR) {

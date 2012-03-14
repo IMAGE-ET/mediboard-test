@@ -112,10 +112,11 @@ class CHL7v2Component extends CHL7v2Entity {
         }
       }
         
-      $data_encoding = $this->getEncoding();
+      /*$data_encoding = $this->getEncoding();
+
       if ($data_encoding && $data_encoding !== $encoding) {
         $str = mb_convert_encoding($str, $encoding, $data_encoding);
-      }
+      }*/
       
       $new_node = $doc->createTextNode($str);
       $node->appendChild($new_node);
