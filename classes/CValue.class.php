@@ -166,11 +166,12 @@ abstract class CValue {
  * @access public
  * @param string $name The key to store in the session
  * @param mixed $value The value to store
- * @return void
+ * @return the value
  **/
   static function setSession($name, $value = null) {
     global $m;
     $_SESSION[$m][$name] = $value;
+    return self::read($_SESSION[$m], $name);
   }
 
 /**
@@ -178,9 +179,10 @@ abstract class CValue {
  * @access public
  * @param string $name The key to store in the session
  * @param mixed $value The value to store
- * @return void
+ * @return the value
  **/
   static function setSessionAbs($name, $value = null) {
     $_SESSION[$name] = $value;
+    return self::read($_SESSION, $name);
   }
 }

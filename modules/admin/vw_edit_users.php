@@ -28,11 +28,11 @@ if ($user->template) {
 }
 
 // Récuperation des utilisateurs recherchés
-$user_last_name  = addslashes(CValue::getOrSession("user_last_name" ));
-$user_first_name = addslashes(CValue::getOrSession("user_first_name"));
-$user_username   = addslashes(CValue::getOrSession("user_username"  ));
-$user_type       = addslashes(CValue::getOrSession("user_type"      ));
-$template        = addslashes(CValue::getOrSession("template"       ));
+$user_username   = CValue::getOrSession("user_username"  );
+$user_last_name  = CValue::getOrSession("user_last_name" );
+$user_first_name = CValue::getOrSession("user_first_name");
+$user_type       = CValue::getOrSession("user_type"      );
+$template        = CValue::getOrSession("template"       );
 
 // Where clause
 $where = null;

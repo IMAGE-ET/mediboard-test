@@ -14,7 +14,6 @@
       <a class="button new" href="?m={{$m}}&amp;user_id=0">
         {{tr}}CUser-title-create{{/tr}}
       </a>
-      
       {{mb_include template=inc_list_users}}
     </td>
     <td class="halfPane">

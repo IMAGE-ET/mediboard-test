@@ -82,6 +82,7 @@ class CMediusers extends CMbObject {
   // Object references
   var $_ref_banque                 = null;
   var $_ref_function               = null;
+  var $_ref_spec_cpam              = null;
   var $_ref_discipline             = null;
   var $_ref_profile                = null;
   var $_ref_user                   = null;
@@ -354,6 +355,11 @@ class CMediusers extends CMbObject {
     $this->updateSpecs();
   }
 
+  function loadView() {
+    $this->loadRefsFwd();
+    $this->isPraticien();
+  }
+
   /**
    * @return CBanque
    */
@@ -392,6 +398,7 @@ class CMediusers extends CMbObject {
   function loadRefsFwd() {
     // Forward references
     $this->loadRefFunction();
+    $this->loadRefSpecCPAM();
     $this->loadRefDiscipline();
   }
 
