@@ -215,6 +215,9 @@
                             <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF" class="opacity-40"
                               onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"/>
                           </a>
+                          <span style="float: right; margin-top: 3px; margin-right: 3px;">
+                            {{mb_include module=patients template=inc_vw_antecedents patient=$_patient type=deficience readonly=1}}
+                          </span>
                         {{/if}}
                         {{if $_sejour->_id && $mode_vue_tempo == "classique"}}
                           <span style="float: left; padding-right: 1px;">

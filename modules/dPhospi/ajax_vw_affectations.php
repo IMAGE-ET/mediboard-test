@@ -173,7 +173,9 @@ foreach($sejours_non_affectes as $_key => $_sejour) {
     $_sejour->_entree_offset = CMbDate::position(max($date_min, $_sejour->entree), $date_min, $period);
     $_sejour->_sortie_offset = CMbDate::position(min($date_max, $_sejour->sortie), $date_min, $period);
     $_sejour->_width = $_sejour->_sortie_offset - $_sejour->_entree_offset;
-    $_sejour->loadRefPatient()->loadRefPhotoIdentite();
+    $patient = $_sejour->loadRefPatient();
+    $patient->loadRefPhotoIdentite();
+    $patient->loadRefDossierMedical()->loadRefsAntecedents();
   }
   
   if (isset($operations[$_sejour->_id])) {

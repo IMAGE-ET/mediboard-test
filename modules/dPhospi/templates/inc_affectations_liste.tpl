@@ -7,6 +7,8 @@
 </table>
 
 {{foreach from=$sejourNonAffectes item=_sejour}}
+{{assign var=patient value=$_sejour->_ref_patient}}
+
 <form name="addAffectationsejour_{{$_sejour->_id}}" action="?m={{$m}}" method="post">
   <input type="hidden" name="m" value="dPhospi" />
   <input type="hidden" name="dosql" value="do_affectation_aed" />
@@ -41,6 +43,8 @@
       ({{$_sejour->type|truncate:1:""|capitalize}} - {{$_sejour->_ref_praticien->_shortview}})
       {{/if}}
       <div style="float: right;">
+        {{mb_include module=patients template=inc_vw_antecedents type=deficience readonly=1}}
+        
         {{if $_sejour->_couvert_cmu}}
         <strong>
           CMU

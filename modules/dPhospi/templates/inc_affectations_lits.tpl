@@ -79,7 +79,9 @@
         {{else}}
           <span>
         {{/if}}
-        
+        <span style="float: right;">
+          {{mb_include module=patients template=inc_vw_antecedents type=deficience readonly=1}}
+        </span>
         <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
           <strong {{if $sejour->type == "ambu"}}style="font-style: italic;"{{/if}}>
             {{$patient}}

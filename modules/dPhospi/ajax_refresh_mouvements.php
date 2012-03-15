@@ -187,7 +187,9 @@ foreach ($affectations as $_affectation) {
   $_affectation->loadRefsAffectations();
   $sejour = $_affectation->loadRefSejour();
   $sejour->loadRefPraticien()->loadRefFunction();
-  $sejour->loadRefPatient()->loadRefPhotoIdentite();
+  $patient = $sejour->loadRefPatient();
+  $patient->loadRefPhotoIdentite();
+  $patient->loadRefDossierMedical()->loadRefsAntecedents();
   $lits[$_affectation->lit_id]->_ref_affectations[$_affectation->_id] = $_affectation;
   $_affectation->_entree_offset = CMbDate::position(max($date_min, $_affectation->entree), $date_min, $period);
   $_affectation->_sortie_offset = CMbDate::position(min($date_max, $_affectation->sortie), $date_min, $period);

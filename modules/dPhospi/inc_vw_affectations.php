@@ -122,6 +122,8 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type =
           $sejour->loadNDA();
           $sejour->_ref_praticien =& getCachedPraticien($sejour->praticien_id);
           $sejour->_ref_patient =& getCachedPatient($sejour->patient_id);
+          $sejour->_ref_patient->loadRefDossierMedical()->loadRefsAntecedents();
+          
 		      // Chargement des droits CMU
           $sejour->getDroitsCMU();
 
@@ -175,6 +177,7 @@ function loadSejourNonAffectes($where, $order = null, $praticien_id = null) {
   	$sejour->loadRefsPrescriptions();
     $sejour->_ref_praticien =& getCachedPraticien($sejour->praticien_id);
     $sejour->_ref_patient   =& getCachedPatient($sejour->patient_id);
+    $sejour->_ref_patient->loadRefDossierMedical()->loadRefsAntecedents();
     
     // Chargement des droits CMU
     $sejour->getDroitsCMU();

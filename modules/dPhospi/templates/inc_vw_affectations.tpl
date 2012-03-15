@@ -187,6 +187,9 @@
                     {{else}}
                       ({{$_sejour->type|truncate:1:""|capitalize}} - {{$_sejour->_ref_praticien->_shortview}})
                     {{/if}}
+                    <span style="float: right; margin-top: 3px; margin-right: 3px;">
+                      {{mb_include module=patients template=inc_vw_antecedents type=deficience readonly=1}}
+                    </span>
                     <br />
                     <div>
                       <span class="compact">
