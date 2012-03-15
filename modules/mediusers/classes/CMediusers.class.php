@@ -356,6 +356,7 @@ class CMediusers extends CMbObject {
   }
 
   function loadView() {
+    parent::loadView();
     $this->loadRefsFwd();
     $this->isPraticien();
   }
