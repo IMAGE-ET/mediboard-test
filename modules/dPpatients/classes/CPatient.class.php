@@ -1794,6 +1794,7 @@ class CPatient extends CMbObject {
     parent::loadView();
     $this->loadIPP();
     $this->loadRefPhotoIdentite();
+    $this->loadRefsCorrespondants();
   }
   
   function countNbEnfants() {

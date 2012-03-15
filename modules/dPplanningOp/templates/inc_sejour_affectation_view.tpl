@@ -1,9 +1,9 @@
 <tr>
-  <th colspan="3">
+  <th class="title text" colspan="3">
     {{mb_include module=system template=inc_object_notes     }}
     {{mb_include module=system template=inc_object_idsante400}}
     {{mb_include module=system template=inc_object_history   }}
-    {{$object}}
+    {{$object->_shortview}}
     {{if $object instanceof CAffectation}}
       {{mb_include module=system template=inc_interval_datetime from=$object->entree to=$object->sortie}}
     {{/if}}

@@ -11,7 +11,7 @@
   }
 </script>
 
-<table class="tbl">
+<table class="tbl tooltip">
   {{mb_include module=dPplanningOp template=inc_sejour_affectation_view}}
 </table>
 

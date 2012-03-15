@@ -1,10 +1,67 @@
-{{assign var="patient" value=$object}}
-
-{{mb_include module=dPpatients template=inc_vw_identite_patient tooltip=1}}
-  
-<table class="form">
+{{*mb_include module=dPpatients template=inc_vw_identite_patient tooltip=1*}}
+{{assign var="patient" value=$object}}  
+<table class="tbl tooltip">
   <tr>
-    <td colspan="5" class="button">
+    <th class="title text" colspan="3">
+      {{if $patient->date_lecture_vitale}}
+      <div style="float: right;">
+        <img src="images/icons/carte_vitale.png" title="{{tr}}CPatient-date-lecture-vitale{{/tr}} : {{mb_value object=$patient field="date_lecture_vitale" format=relative}}" />
+      </div>
+      {{/if}}
+
+      {{mb_include module=system template=inc_object_idsante400 object=$patient}}
+      {{mb_include module=system template=inc_object_history object=$patient}}
+      {{mb_include module=system template=inc_object_notes object=$patient}}
+      {{$patient}}
+      {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}
+    </th>
+  </tr>
+  <tr>
+    <td rowspan="3" style="width: 1px;">
+      {{mb_include module=patients template=inc_vw_photo_identite mode=read patient=$patient size=50}}
+    </td>
+    <td>{{mb_value object=$patient}}</td>
+    <td>{{mb_value object=$patient field="adresse"}}</td>
+  </tr>
+  <tr>
+    <td>
+      {{mb_value object=$patient field=_age}} ans ({{mb_value object=$patient field=naissance}})
+    </td>
+    <td>
+      {{mb_value object=$patient field="cp"}}
+      {{mb_value object=$patient field="ville"}}
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      {{mb_label object=$patient field="matricule"}} :
+      {{mb_value object=$patient field="matricule"}}
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      {{mb_label object=$patient field="tel"}} :
+      {{mb_value object=$patient field="tel"}}
+    </td>
+    <td rowspan="3" class="text" style="vertical-align: top;">
+      {{mb_label object=$patient field="rques"}}<br />
+      {{mb_value object=$patient field="rques"}}
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      {{mb_label object=$patient field="tel2"}} :
+      {{mb_value object=$patient field="tel2"}}
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      {{mb_label object=$patient field="tel_autre"}} :
+      {{mb_value object=$patient field="tel_autre"}}
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3" class="button">
       {{mb_script module="dPpatients" script="patient" ajax="true"}}
       
       <button type="button" class="search" onclick="Patient.view('{{$patient->_id}}')">
@@ -58,4 +115,22 @@
       {{/if}}
     </td>
   </tr>
+  {{if ($patient->medecin_traitant || $patient->_ref_medecins_correspondants|@count)}}
+    <tr>
+      <th class="category" colspan="3">Correspondants médicaux</th>
+    </tr>
+    
+    <tr>
+      <td colspan="5" class="text">
+        {{assign var=medecin value=$patient->_ref_medecin_traitant}}
+        {{if $medecin->_id}}
+          <strong>{{mb_value object=$medecin}}</strong> ;
+        {{/if}}
+        {{foreach from=$patient->_ref_medecins_correspondants item=curr_corresp}}
+          {{assign var=medecin value=$curr_corresp->_ref_medecin}}
+          {{mb_value object=$medecin}} ;
+        {{/foreach}}
+      </td>
+    </tr>
+  {{/if}}
 </table>
