@@ -84,6 +84,8 @@ class CMedecin extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
+    $this->nom = CMbString::upper($this->nom);
+    $this->prenom = CMbString::capitalize(CMbString::lower($this->prenom));
     
     if ($this->type == 'medecin') {
     	$this->_view = "Dr $this->nom $this->prenom";
@@ -93,6 +95,17 @@ class CMedecin extends CMbObject {
     	if ($this->type) {
     	  $this->_view .= " ({$this->_specs['type']->_locales[$this->type]})";
     	} 
+    }
+  }
+      
+  function updatePlainFields() {
+    parent::updatePlainFields();
+
+    if ($this->nom) {
+      $this->nom = CMbString::upper($this->nom);
+    }
+    if ($this->prenom) {
+      $this->prenom = CMbString::capitalize(CMbString::lower($this->prenom));
     }
   }
 	 

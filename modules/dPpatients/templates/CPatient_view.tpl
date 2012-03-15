@@ -1,4 +1,3 @@
-{{*mb_include module=dPpatients template=inc_vw_identite_patient tooltip=1*}}
 {{assign var="patient" value=$object}}  
 <table class="tbl tooltip">
   <tr>
