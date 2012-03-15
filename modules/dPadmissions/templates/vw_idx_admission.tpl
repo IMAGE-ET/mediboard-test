@@ -11,6 +11,7 @@
 {{mb_script module=hprim21 script=pat_hprim_selector}}
 {{mb_script module=hprim21 script=sejour_hprim_selector}}
 {{mb_script module=admissions script=admissions}}
+{{mb_script module=patients script=antecedent}}
 
 <script type="text/javascript">
 

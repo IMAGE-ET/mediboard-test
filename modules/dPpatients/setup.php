@@ -1731,7 +1731,14 @@ class CSetupdPpatients extends CSetup {
               CHANGE `assure_cp` `assure_cp` VARCHAR (5)";
     $this->addQuery($query);
     
-    $this->mod_version = "1.44";
+    $this->makeRevision("1.44");
+    
+    $query = "ALTER TABLE `antecedent`
+            CHANGE `type` `type`
+            ENUM('med','alle','trans','obst','chir','fam','anesth','gyn','cardio','pulm','stomato','plast','ophtalmo','digestif','gastro','stomie','uro','ortho','traumato','amput','neurochir','greffe','thrombo','cutane','hemato','rhumato','neuropsy','infect','endocrino','carcino','orl','addiction','habitus', 'deficience');";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.45";
     
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

@@ -4,40 +4,9 @@
   {{assign var=prescription_sejour_id value=$sejour->_ref_prescription_sejour->_id}}
 {{/if}}
 
+{{mb_script module="patients" script="antecedent"}}
+
 <script type="text/javascript">
-
-Antecedent = {
-  remove: function(oForm, onComplete) {
-    var oOptions = {
-      typeName: 'cet antécédent',
-      ajax: 1,
-      target: 'systemMsg'
-    };
-    
-    var oOptionsAjax = {
-      onComplete: onComplete
-    };
-    
-    confirmDeletion(oForm, oOptions, oOptionsAjax);
-  },
-  
-  cancel: function(oForm, onComplete) {
-    $V(oForm.annule, 1);
-    onSubmitFormAjax(oForm, {onComplete: onComplete});
-    $V(oForm.annule, '');
-  },
-  
-  restore: function(oForm, onComplete) {
-    $V(oForm.annule, '0');
-    onSubmitFormAjax(oForm, {onComplete: onComplete});
-    $V(oForm.annule, '');
-  },
-
-  toggleCancelled: function(list) {
-    $(list).select('.cancelled').invoke('toggle');
-  }
-};
-
 Traitement = {
   prescription_sejour_id: {{$prescription_sejour_id|@json}},
   remove: function(oForm, onComplete) {

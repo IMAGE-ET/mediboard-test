@@ -602,6 +602,10 @@ button.help:before, a.button.help:before {
   content: url(images/buttons/help.png);
 }
 
+button.deficience:before, a.button.deficience:before {
+  content: url(images/buttons/deficience.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }

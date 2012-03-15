@@ -73,6 +73,8 @@
   {{else}}
     -
   {{/if}}
+  
+  {{mb_include module=patients template=inc_vw_antecedents type=deficience}}
 </td>
 
 <td colspan="2" class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">

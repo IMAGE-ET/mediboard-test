@@ -110,8 +110,11 @@ foreach ($sejours as $sejour_id => $_sejour) {
   }
   
   // Chargement du patient
-  $_sejour->loadRefPatient(1);
-  $_sejour->_ref_patient->loadIPP();
+  $patient = $_sejour->loadRefPatient(1);
+  $patient->loadIPP();
+  
+  $dossier_medical = $patient->loadRefDossierMedical();
+  $dossier_medical->loadRefsAntecedents();
   
   // Chargment du numéro de dossier
   $_sejour->loadNDA();

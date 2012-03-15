@@ -26,7 +26,7 @@ class CAntecedent extends CMbObject {
   var $_count_rques_aides = null;
   
   static $types = array(
-	  'med', 'alle', 'trans', 'obst', 
+	  'med', 'alle', 'trans', 'obst', 'deficience',
 	  'chir', 'fam', 'anesth', 'gyn', 
 	  'cardio', 'pulm', 'stomato', 'plast', 
 	  'ophtalmo', 'digestif', 'gastro', 
