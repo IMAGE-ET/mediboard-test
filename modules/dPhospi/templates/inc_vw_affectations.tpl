@@ -208,6 +208,13 @@
                       <div class="operation_in_mouv opacity-40"
                         style="left: {{$offset_op}}px; width: {{$width_op}}px;"></div>
                     {{/foreach}}
+                    {{if $_sejour->duree_uscpo && $offset_op && $width_op}}
+                      {{math equation=x+y+2 x=$offset_op y=$width_op assign=offset_uscpo}}
+                      {{math equation=x*(y+4.6) x=$_sejour->duree_uscpo y=$td_width assign=width_uscpo}}
+                      
+                      <div class="soins_uscpo{{if $mode_vue_tempo == "compacte"}}_compact{{/if}} opacity-40"
+                        style="left: {{$offset_uscpo}}px; width: {{$width_uscpo}}px;"></div>
+                    {{/if}}
                   </div>
                 </div>
               </div>

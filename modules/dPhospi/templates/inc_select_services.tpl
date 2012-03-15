@@ -28,6 +28,9 @@
     });
     checked_radio = !checked_radio;
   }
+  Main.add(function() {
+    Control.Modal.stack.last().position();
+  });
 </script>
 
 <!-- Formulaire de sauvegarde des services en préférence utilisateur -->
@@ -37,6 +40,9 @@
   <input type="hidden" name="user_id" value="{{$app->user_id}}" />
   <input type="hidden" name="pref[services_ids_hospi]" value="{{$services_ids_hospi}}" />
 </form>
+
+{{math equation=x+1 x=$secteurs|@count assign=colspan}}
+
 <div style="overflow-x: auto;">
   <form name="selectServices" method="get" onsubmit="return onSubmitFormAjax(this, null, '{{$view}}')">
     <input type="hidden" name="m" value="dPhospi" />
@@ -47,46 +53,53 @@
     {{/if}}
     <table class="tbl">
       <tr>
-        <th>
+        <th colspan="{{$colspan}}">
           <button type="button" style="float: left;" class="cancel notext" onclick="toggleChecked()" title="Tout cocher / décocher"></button>
           {{tr}}CService-title-selection{{/tr}}
         </th>
       </tr>
-      {{foreach from=$secteurs item=_secteur}}
-        <tr>
-          <td>
+      <tr>
+      <tr>
+        {{assign var=i value=0}}
+        {{foreach from=$secteurs item=_secteur}}
+          {{if $i == 6}}
+            {{assign var=i value=0}}
+            </tr>
+            <tr>
+          {{/if}}
+          <td style="vertical-align: top;">
             <label>
               <input type="checkbox" name="_secteur_{{$_secteur->_id}}" {{if $_secteur->_all_checked}}checked='checked'{{/if}}
                 onclick="$$('.secteur_{{$_secteur->_id}}').each(function(elt){ elt.down('input').checked=this.checked ? 'checked' : ''; }.bind(this))"/>
               <strong>{{mb_value object=$_secteur field=nom}}</strong>
             </label>
+            {{foreach from=$_secteur->_ref_services item=_service}}
+              <p class="secteur_{{$_secteur->_id}}">
+                  <label>
+                    <input style="margin-left: 1em;" type="checkbox" name="services_ids[{{$_service->_id}}]" value="{{$_service->_id}}"
+                      {{if !in_array($_service->_id, array_keys($services_allowed))}}disabled="disabled"{{/if}}
+                      {{if $services_ids && in_array($_service->_id, $services_ids)}}checked="checked"{{/if}}/> {{$_service}}
+                  </label>
+                </p>
+            {{/foreach}}
           </td>
-        </tr>
-        {{foreach from=$_secteur->_ref_services item=_service}}
-          <tr class="secteur_{{$_secteur->_id}}">
-            <td>
+          {{math equation=x+1 x=$i assign=i}}
+        {{/foreach}}
+        <td style="vertical-align: top;" colspan="{{math equation=x-y x=$secteurs|@count y=$i}}">
+          <strong>Hors secteur</strong>
+          {{foreach from=$all_services item=_service}}
+            <p>
               <label>
-                <input style="margin-left: 1em;" type="checkbox" name="services_ids[{{$_service->_id}}]" value="{{$_service->_id}}"
+                <input type="checkbox" name="services_ids[{{$_service->_id}}]" value="{{$_service->_id}}"
                   {{if !in_array($_service->_id, array_keys($services_allowed))}}disabled="disabled"{{/if}}
                   {{if $services_ids && in_array($_service->_id, $services_ids)}}checked="checked"{{/if}}/> {{$_service}}
               </label>
-            </td>
-          </tr>
-        {{/foreach}}
-      {{/foreach}}
-      {{foreach from=$all_services item=_service}}
-        <tr>
-          <td>
-            <label>
-              <input type="checkbox" name="services_ids[{{$_service->_id}}]" value="{{$_service->_id}}"
-                {{if !in_array($_service->_id, array_keys($services_allowed))}}disabled="disabled"{{/if}}
-                {{if $services_ids && in_array($_service->_id, $services_ids)}}checked="checked"{{/if}}/> {{$_service}}
-            </label>
-          </td>
-        </tr>
-      {{/foreach}}
+            </p>
+          {{/foreach}}
+        </td>
+      </tr>
       <tr>
-        <td class="button">
+        <td class="button" colspan="{{$colspan}}">
           <button type="button" class="tick"
             onclick="Control.Modal.close(); this.form.onsubmit();">{{tr}}Validate{{/tr}}</button>
           <button type="button" class="save" onclick="savePref(form);">
