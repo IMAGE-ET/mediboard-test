@@ -440,80 +440,6 @@ class CMediusers extends CMbObject {
     );
   }
 
-  /**
-   * Lie une numéro de lecture de CPS au Mediuser
-   * @return string Store-like message
-   */
-  function bindCPS() {
-    if (null == $intermax = CValue::postOrSessionAbs("intermax")) {
-      return;
-    }
-
-    // Make id400
-    $cps = $intermax["CPS"];
-    $cpsNumero = $cps["CPS_NUMERO_LOGICMAX"];
-    $id_cps = new CIdSante400();
-    $id_cps->object_class = $this->_class;
-    $id_cps->id400 = $cpsNumero;
-    $id_cps->tag = "LogicMax CPSNumero";
-    $id_cps->loadMatchingObject();
-
-    // Autre association ?
-    if ($id_cps->object_id && $id_cps->object_id != $this->_id) {
-      $id_cps->loadTargetObject();
-      $medOther =& $id_cps->_ref_object;
-      return sprintf("CPS déjà associée à l'utilisateur %s (ADELI: '%s')",
-      $medOther->_view,
-      $medOther->adeli);
-    }
-
-    $id_cps->object_id = $this->_id;
-    $id_cps->last_update = mbDateTime();
-    return $id_cps->store();
-  }
-
-  function loadIdCPS() {
-    $id_cps = new CIdSante400();
-    if (!$id_cps->_ref_module) {
-      return;
-    }
-
-    $id_cps->setObject($this);
-    $id_cps->tag = "LogicMax CPSNumero";
-    $id_cps->loadMatchingObject();
-    $this->_id_cps = $id_cps->id400;
-  }
-
-  function loadFromIdCPS($numero_cps) {
-    // Make id vitale
-    $id_cps = new CIdSante400();
-    $id_cps->object_class = $this->_class;
-    $id_cps->id400 = $numero_cps;
-    $id_cps->tag = "LogicMax CPSNumero";
-    $id_cps->loadMatchingObject();
-
-    // Load patient from found id vitale
-    if ($id_cps->object_id) {
-      $this->load($id_cps->object_id);
-    }
-  }
-
-  /**
-   * Map les valeurs venant d'une CPS
-   * @return void
-   */
-  function getPropertiesFromCPS() {
-    if (null == $intermax = CValue::postOrSessionAbs("intermax")) {
-      return;
-    }
-
-    $cps = $intermax["CPS"];
-
-    $this->adeli = $cps["CPS_ADELI_NUMERO_CPS"];
-    $this->_user_first_name = $cps["CPS_PRENOM"];
-    $this->_user_last_name  = $cps["CPS_NOM"];
-  }
-
   function check() {
     // TODO: voir a fusionner cette fonction avec celle de admin.class.php qui est exactement la meme
     // Chargement des specs des attributs du mediuser  
@@ -617,8 +543,8 @@ class CMediusers extends CMbObject {
   
     /// <diff>
       // Bind CPS
-      if ($this->_bind_cps && $this->_id) {
-        if ($msg = $this->bindCPS()) {
+      if ($this->_bind_cps && $this->_id && CModule::getActive("fse")) {
+        if ($msg = CFseFactory::createCPS()->bindCPS($this)) {
           return $msg;
         }
       }

@@ -85,14 +85,16 @@ Main.add( function(){
 });
 </script>
 
-{{mb_ternary var=gestionFSE test=$consult->sejour_id value=0 other=$app->user_prefs.GestionFSE}}
+{{assign var=modFSE value="fse"|module_active}}
+
+{{mb_ternary var=gestionFSE test=$consult->sejour_id value=0 other=$modFSE->canRead()}}
 
 <table class="layout main">
   <tr>
     {{if $gestionFSE}}
     <td class="halfPane">
       <!-- Inclusion de la gestion de la FSE -->
-      {{include file="inc_vw_gestion_fse.tpl"}}
+      {{mb_include module=fse template=inc_gestion_fse}}
     </td>
     {{/if}}
   

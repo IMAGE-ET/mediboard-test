@@ -86,9 +86,6 @@ Main.add(function () {
 
 </script>
 
-<!-- Script won't be evaled in Ajax inclusion. Need to force it -->
-{{mb_script script=intermax}}
-
 <table class="main">
   <tr>
     <th colspan="2">

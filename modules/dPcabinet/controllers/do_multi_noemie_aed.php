@@ -41,7 +41,9 @@ $total = array("nb" => 0, "value" => 0);
 foreach($listConsults as $key => &$consult) {
   $consult->loadRefsFwd();
   $consult->loadRefsReglements();
-  $consult->loadIdsFSE();
+  if (CModule::getActive("fse")) {
+    CFseFactory::createFSE()->loadIdsFSE($consult);
+  }
   $consult->_new_tiers_reglement = new CReglement();
   $consult->_new_tiers_reglement->mode = "virement";
   $consult->_new_tiers_reglement->montant = $consult->_du_tiers_restant;

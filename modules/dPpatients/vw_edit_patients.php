@@ -28,7 +28,9 @@ $patient->loadRefsCorrespondantsPatient();
 
 // Chargement de l'ipp
 $patient->loadIPP();
-$patient->loadIdVitale();
+if (CModule::getActive("fse")) {
+  CFseFactory::createCV()->loadIdVitale($patient);
+}
 
 if (!$patient_id) {
   $patient->nom    = $name;
@@ -42,9 +44,9 @@ if (!$patient_id) {
 }
 
 // Peut etre pas besoin de verifier si on n'utilise pas VitaleVision
-if ($useVitale && CAppUI::pref('GestionFSE') && !CAppUI::pref('VitaleVision')) {
+if ($useVitale && CModule::getActive("fse")->canRead() && !CAppUI::pref('VitaleVision') && CModule::getActive("fse")) {
   $patVitale = new CPatient();
-  $patVitale->getPropertiesFromVitale();
+  CFseFactory::createCV()->getPropertiesFromVitale($patVitale);
   $patVitale->nullifyEmptyFields();
   $patient->extendsWith($patVitale);
   $patient->updateFormFields();

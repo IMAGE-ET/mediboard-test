@@ -1,18 +1,15 @@
+
+{{assign var=modFSE value="fse"|module_active}}
+
 {{if !$board}}
 	{{if $app->user_prefs.VitaleVision}}
 	  {{include file="../../dPpatients/templates/inc_vitalevision.tpl" debug=false keepFiles=true}}
-	{{else}}
-	  {{include file="../../dPpatients/templates/inc_intermax.tpl" debug=false}}
-		
-		<script type="text/javascript">
-	    Intermax.ResultHandler["Consulter Vitale"] =
-	    Intermax.ResultHandler["Lire Vitale"] = function() {
-	      var url = new Url;
-	      url.setModuleTab("dPpatients", "vw_idx_patients");
-	      url.addParam("useVitale", 1);
-	      url.redirect();
-	    }
-		</script>
+	{{elseif $modFSE->canRead()}}
+	   <script type="text/javascript">
+	     var urlFSE = new Url;
+	     urlFSE.setModuleTab("dPpatients", "vw_idx_patients");
+	     urlFSE.addParam("useVitale", 1);
+	   </script>
 	{{/if}}
 	
 	<script type="text/javascript">
@@ -176,21 +173,14 @@ emptyBirthday = function() {
       <button class="search" tabindex="10" type="submit">{{tr}}Search{{/tr}}</button>
       
       {{if !$board}}
-        {{if $app->user_prefs.GestionFSE}}
-          {{if $app->user_prefs.VitaleVision}}
-    	      <button class="search singleclick" type="button" tabindex="11" onclick="VitaleVision.read();">
-    	        Lire Vitale
-    	      </button>
-          {{else}}
-    	      <button class="search singleclick" type="button" tabindex="11" onclick="Intermax.trigger('Lire Vitale');">
-    	        Lire Vitale
-    	      </button>
-    	      <button class="change intermax-result notext" tabindex="12" type="button" onclick="Intermax.result('Lire Vitale');">
-    	        Résultat Vitale
-    	      </button>
-          {{/if}}
+        {{if $app->user_prefs.VitaleVision}}
+  	      <button class="search singleclick" type="button" tabindex="11" onclick="VitaleVision.read();">
+  	        Lire Vitale
+  	      </button>
+        {{elseif $modFSE->canRead()}}
+          {{mb_include module=fse template=inc_button_vitale}}
         {{/if}}
-        
+
         {{if $can->edit}}
           {{if $nom || $prenom || $patient_ipp || $naissance}}
           <button class="new" type="button" tabindex="15" onclick="Patient.create(this.form);">

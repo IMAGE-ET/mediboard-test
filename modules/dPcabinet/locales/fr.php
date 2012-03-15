@@ -1445,4 +1445,5 @@ $locales['pref-view_traitement'] = 'Affichage des traitements';
 $locales['pref-view_traitement-0'] = 'Cacher';
 $locales['pref-view_traitement-1'] = 'Visible';
 $locales['pref-view_traitement-desc'] = 'Affichage des traitemens';
+$locales['mod-dPcabinet-tab-vw_fse'] = 'LogicMax FSE';
 ?>

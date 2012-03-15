@@ -6,7 +6,6 @@ Main.add(function () {
 
 <ul id="tabs-configure" class="control_tabs">
   <li><a href="#params">Paramètres</a></li>
-  <li><a href="#logicmax">LogicMax</a></li>
   <li><a href="#actions">Autres actions</a></li>
   <li><a href="#offline">Mode offline</a></li>
 </ul>
@@ -15,10 +14,6 @@ Main.add(function () {
 
 <div id="params" style="display: none;">
  {{include file=inc_configure_params.tpl}}
-</div>
-
-<div id="logicmax" style="display: none;">
-	{{include file="../../system/templates/configure_dsn.tpl" dsn=logicmax}}
 </div>
 
 <div id="actions" style="display: none;">

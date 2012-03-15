@@ -114,10 +114,7 @@ Main.add(function () {
 <table class="main">
   <tr>
     <td id="listConsult" style="width: 240px;"></td>
-    <td>
-    
-    {{include file="../../dPpatients/templates/inc_intermax.tpl"}}
-    
+    <td> 
     {{if $consult->_id}}
       {{assign var="patient" value=$consult->_ref_patient}}
       {{include file="../../dPcabinet/templates/inc_consult_anesth/patient_infos.tpl"}}

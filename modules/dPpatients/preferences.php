@@ -9,8 +9,6 @@
  
 // Préférences par Module
 CPreferences::$modules["dPpatients"] = array (
-  "GestionFSE", 
-  "InterMaxDir",
   "VitaleVisionDir", 
   "VitaleVision",
   "vCardExport",

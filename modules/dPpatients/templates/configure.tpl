@@ -9,7 +9,6 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
   <li><a href="#CDossierMedical">{{tr}}CDossierMedical{{/tr}}</a></li>
   <li><a href="#CConstantesMedicales">{{tr}}CConstantesMedicales{{/tr}}</a></li>
   <li><a href="#CMedecin"       >{{tr}}CMedecin{{/tr}}       </a></li>
-  <li><a href="#LogicMax"       >{{tr}}LogicMax{{/tr}}       </a></li>
   <li><a href="#INSEE"          >{{tr}}INSEE{{/tr}}          </a></li>
 </ul>
 
@@ -38,10 +37,6 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
 
 <div id="CMedecin" style="display: none;">
 {{mb_include template=CMedecin_configure}}
-</div>
-
-<div id="LogicMax" style="display: none;">
-{{mb_include template=inc_configure_intermax}}
 </div>
 
 <div id="INSEE" style="display: none;">

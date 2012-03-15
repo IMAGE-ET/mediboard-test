@@ -28,7 +28,7 @@ $patient_month       = CValue::getOrSession("Date_Month");
 $patient_year        = CValue::getOrSession("Date_Year");
 $patient_naissance   = null;
 $patient_ipp         = CValue::get("patient_ipp");
-$useVitale           = CValue::get("useVitale",  CAppUI::pref('GestionFSE') && CAppUI::pref('VitaleVision') ? 1 : 0);
+$useVitale           = CValue::get("useVitale",  CModule::getActive("fse") || CAppUI::pref('VitaleVision') ? 1 : 0);
 $prat_id             = CValue::get("prat_id");
 
 $patVitale = new CPatient;
@@ -44,14 +44,15 @@ if ($new = CValue::get("new")) {
 }
 
 // Champs vitale
-if ($useVitale) {
-  $patVitale->getPropertiesFromVitale();
+if ($useVitale && CModule::getActive("fse")) {
+  $cv = CFseFactory::createCV();
+  $cv->getPropertiesFromVitale($patVitale);
   $patVitale->updateFormFields();
   $patient_nom    = $patVitale->nom;
   $patient_prenom = $patVitale->prenom;
   CValue::setSession("nom", $patVitale->nom);
   CValue::setSession("prenom", $patVitale->prenom);
-  $patVitale->loadFromIdVitale();
+  $cv->loadFromIdVitale($patVitale);
 }
 
 // Recherhche par IPP

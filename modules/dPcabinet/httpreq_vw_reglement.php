@@ -76,10 +76,15 @@ if ($selConsult) {
   // Patient
   $patient =& $consult->_ref_patient;
 }
-$consult->loadIdsFSE();
-$consult->makeFSE();
-$consult->_ref_chir->loadIdCPS();
-$consult->_ref_patient->loadIdVitale();
+
+if (CModule::getActive("fse")) {
+  $fse = CFseFactory::createFSE();
+  $fse->loadIdsFSE($consult);
+  $fse->makeFSE($consult);
+  CFseFactory::createCPS()->loadIdCPS($consult->_ref_chir);
+  CFseFactory::createCV()->loadIdVitale($consult->_ref_patient);
+}
+
 
 // Récupération des tarifs
 $tarif = new CTarif;

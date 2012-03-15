@@ -23,8 +23,10 @@ if (CValue::get("new", 0)) {
 
 if ($patient->_id) {
   $patient->loadDossierComplet();
-	$patient->loadIPP();
-  $patient->loadIdVitale();
+  $patient->loadIPP();
+  if (CModule::getActive("fse")) {
+    CFseFactory::createCV()->loadIdVitale($patient);
+  }
 }
 
 $vip = 0;

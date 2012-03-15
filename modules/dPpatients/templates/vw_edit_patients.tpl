@@ -12,6 +12,8 @@
   {{mb_script module="dPpatients"  script="correspondant"}}
 {{/if}}
 
+{{assign var=modFSE value="fse"|module_active}}
+
 {{if $app->user_prefs.VitaleVision}}
   {{mb_include template=inc_vitalevision}}
   
@@ -19,23 +21,12 @@
 		var lireVitale = VitaleVision.read;
 	</script>
 {{else}}
-  {{mb_include template=inc_intermax}}
-	
 	<script type="text/javascript">
-		Intermax.ResultHandler["Consulter Vitale"] =
-		Intermax.ResultHandler["Lire Vitale"] = function() {
-		  var url = new Url;
-		//  url.setModuleTab("dPpatients", "vw_edit_patients");
-		  url.addParam("m", "dPpatients");
-		  url.addParam("{{$actionType}}",  "vw_edit_patients");
-		  url.addParam("dialog",  "{{$dialog}}");
-		  url.addParam("useVitale", 1);
-		  url.redirect();
-		}
-		
-		var lireVitale = function(){
-      Intermax.trigger('Lire Vitale');
-    }
+		var urlFSE = new Url;
+	  urlFSE.addParam("m", "dPpatients");
+	  urlFSE.addParam("{{$actionType}}",  "vw_edit_patients");
+	  urlFSE.addParam("dialog",  "{{$dialog}}");
+	  urlFSE.addParam("useVitale", 1);
 	</script>
 {{/if}}
 
@@ -200,21 +191,13 @@ Main.add(function () {
   <tr>
   {{if $patient->_id}}
     <th class="title modify" colspan="5">
-      {{if $app->user_prefs.GestionFSE}}
-	      <button class="search singleclick" type="button" onclick="lireVitale();" style="float: left;">
-	        Lire Vitale
-	      </button>
-	      {{if !$app->user_prefs.VitaleVision}}
-		      {{if $patient->_id_vitale}}
-			      <button class="search singleclick" type="button" onclick="Intermax.Triggers['Consulter Vitale']({{$patient->_id_vitale}});" style="float: left;">
-			        Consulter Vitale
-			      </button>
-		      {{/if}}
-		      <button class="change intermax-result" type="button" onclick="Intermax.result();" style="float: left;">
-		        Résultat Vitale
-		      </button>
-	      {{/if}}
-			{{/if}}
+      {{if $app->user_prefs.VitaleVision}}
+        <button class="search singleclick" type="button" onclick="lireVitale();" style="float: left;">
+         Lire Vitale
+        </button>
+      {{elseif $modFSE->canRead()}}
+        {{mb_include module=fse template=inc_button_vitale}}
+      {{/if}}
     
 			{{if $patient->date_lecture_vitale}}
       <div style="float: right;">
@@ -230,16 +213,13 @@ Main.add(function () {
     </th>
   {{else}}
     <th class="title" colspan="5">
-      {{if $app->user_prefs.GestionFSE}}
+      {{if $app->user_prefs.VitaleVision}}
         <button class="search singleclick" type="button" onclick="lireVitale();" style="float: left;">
-          Lire Vitale
+         Lire Vitale
         </button>
-				{{if !$app->user_prefs.VitaleVision}}
-		      <button class="change intermax-result" type="button" onclick="Intermax.result();" style="float: left;">
-		        Résultat Vitale
-		      </button>
-				{{/if}}
-			{{/if}}
+      {{elseif $modFSE->canRead()}}
+        {{mb_include module=fse template=inc_button_vitale}}
+      {{/if}}
 			{{tr}}Create{{/tr}}
       {{if $patient->_bind_vitale}}{{tr}}UseVitale{{/tr}}{{/if}}
     </th>

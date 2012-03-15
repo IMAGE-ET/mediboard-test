@@ -463,8 +463,10 @@ class CPatient extends CMbObject {
     }
     
     // Vitale
-    if ($msg = $this->bindVitale()) {
-      return $msg;
+    if (CModule::getActive("fse")) {
+      if ($msg = CFseFactory::createCV()->bindVitale($this)) {
+        return $msg;
+      }
     }
     
     // Génération de l'IPP ? 
@@ -486,185 +488,6 @@ class CPatient extends CMbObject {
         return CAppUI::tr("CIncrementer_undefined");
       }
     }
-  }
-       
-  /**
-   * Bind LogicMax idex to patient
-   * @return Store-like message
-   */
-  function bindVitale() {
-    if (!$this->_bind_vitale) {
-      return;
-    }
-    
-    $this->_bind_vitale = null;
-    
-    if (!$this->_id) {
-      return;
-    }
-    
-    // Make id400
-    if (null == $intermax = CValue::postOrSessionAbs("intermax")) {
-      return;
-    }
-    
-    $vitale = $intermax["VITALE"];
-    $vitNumero = $vitale["VIT_NUMERO_LOGICMAX"];
-    $id_vitale = new CIdSante400();
-    $id_vitale->object_class = $this->_class;
-    $id_vitale->id400 = $vitNumero;
-    $id_vitale->tag = "LogicMax VitNumero";
-    $id_vitale->loadMatchingObject();
-    
-    // Autre association ?
-    if ($id_vitale->object_id && $id_vitale->object_id != $this->_id) {
-      $id_vitale->loadTargetObject();
-      $patOther =& $id_vitale->_ref_object;
-      return "Bénéficiaire Vitale déjà associé au patient " . $patOther->_view .
-        " né le " . mbDateToLocale($patOther->naissance);
-    }
-    
-    $id_vitale->object_id = $this->_id;
-    $id_vitale->last_update = mbDateTime();
-    
-    if ($msg = $id_vitale->store()) {
-      return $msg;
-    }
-
-    // Mise à jour dupuis Vitale
-    if ($this->_update_vitale) {
-      $patient_vitale = new CPatient;
-      $patient_vitale->getPropertiesFromVitale();
-      $patient_vitale->date_lecture_vitale = mbDateTime();
-      $patient_vitale->calculINS_C();
-      
-      foreach (array_keys($this->getPlainFields()) as $field) {
-        $vitale_value = $patient_vitale->$field;
-        if ($vitale_value || $vitale_value === "0") {
-          $this->$field = $patient_vitale->$field;
-        }
-      }
-      
-      if ($msg = $this->store()) {
-        return $msg;
-      }
-    }
-  }
-
-  function loadIdVitale() {
-    if (!$this->_id) {
-      return;
-    }
-    
-    $id_vitale = new CIdSante400();
-    if (!$id_vitale->_ref_module) {
-      return;
-    }
-    
-    $id_vitale->setObject($this);
-    $id_vitale->tag = "LogicMax VitNumero";
-    $id_vitale->loadMatchingObject();
-    $this->_ref_vitale_idsante400 = $id_vitale;
-    $this->_id_vitale = $id_vitale->id400;
-  }
-  
-  /**
-   * Load exact patient associated with id vitale
-   */
-  function loadFromIdVitale() {
-    if (null == $intermax = CValue::postOrSessionAbs("intermax")) {
-      return;
-    }
-    
-    $vitale = $intermax["VITALE"];
-    $vitNumero = $vitale["VIT_NUMERO_LOGICMAX"];
-    
-    // Make id vitale
-    $id_vitale = new CIdSante400();
-    $id_vitale->object_class = $this->_class;
-    $id_vitale->id400 = $vitNumero;
-    $id_vitale->tag = "LogicMax VitNumero";
-    $id_vitale->loadMatchingObject();
-    
-    // Load patient from found id vitale
-    if ($id_vitale->object_id) {
-      $this->load($id_vitale->object_id);
-    }
-  }
-  
-  function getPropertiesFromVitale() {
-    if (null == $intermax = CValue::postOrSessionAbs("intermax")) {
-      return;
-    }
-    
-    $vitale = $intermax["VITALE"];
-    $this->nom    = $vitale["VIT_NOM"];
-    $this->prenom = $vitale["VIT_PRENOM"];
-    $this->naissance = mbDateFromLocale($vitale["VIT_DATE_NAISSANCE"]);
-    
-    $this->rang_naissance = $vitale["VIT_RANG_GEMELLAIRE"];
-    
-    // Adresse
-    $this->adresse = trim(implode("\n", array(
-      $vitale["VIT_ADRESSE_1"],
-      $vitale["VIT_ADRESSE_2"],
-      $vitale["VIT_ADRESSE_3"],
-      $vitale["VIT_ADRESSE_4"])
-    ));
-    
-    // CP et ville
-    @list($this->cp, $this->ville) = explode(" ", $vitale["VIT_ADRESSE_5"], 2);
-    
-    // Matricules
-    $this->assure_matricule = $vitale["VIT_NUMERO_SS"].$vitale["VIT_CLE_SS"];
-    $this->matricule = $this->assure_matricule;
-    if (CValue::read($vitale, "VIT_NUMERO_SS_INDIV")) {
-      $this->matricule = $vitale["VIT_NUMERO_SS_INDIV"].$vitale["VIT_CLE_SS_INDIV"];
-    }
-    
-    $sexeMatrix = array (
-      "1" => "m",
-      "2" => "f",
-    );
-    
-    // Sexe récupéré que quand le bénéficiaire est l'assuré
-    if ($vitale["VIT_CODE_QUALITE"] == "00") {
-      $this->sexe = $sexeMatrix[$this->matricule[0]];
-    }
-
-    // Assuré
-    $this->assure_nom          = $vitale["VIT_NOM_ASSURE"];
-    $this->assure_prenom       = $vitale["VIT_PRENOM_ASSURE"];
-    $this->fin_validite_vitale = mbDateFromLocale($vitale["VIT_FIN_VALID_VITALE"]);
-    
-    // Régime
-    $this->code_regime  = $vitale["VIT_CODE_REGIME"];
-    $this->caisse_gest  = $vitale["VIT_CAISSE_GEST"];
-    $this->centre_gest  = $vitale["VIT_CENTRE_GEST"];
-    $this->regime_sante = CValue::read($vitale, "VIT_NOM_AMO");
-    
-    //@todo: quelle est la clé pour le code gestion ?
-    //$this->code_gestion = CValue::read($vitale, "??");
-    
-    $this->qual_beneficiaire = intval($vitale["VIT_CODE_QUALITE"]);
-    
-    // Recherche de la période AMO courante
-    foreach ($intermax as $category => $periode) {
-      if (preg_match("/PERIODE_AMO_(\d)+/i", $category)) {
-        $deb_amo = mbDateFromLocale($periode["PER_AMO_DEBUT"]);
-        $fin_amo = CValue::first(mbDateFromLocale($periode["PER_AMO_FIN"]), "2015-01-01");
-        if (CMbRange::in(mbDate(), $deb_amo, $fin_amo)) {
-          $this->deb_amo  = $deb_amo;
-          $this->fin_amo  = $fin_amo;
-          $this->ald      = $periode["PER_AMO_ALD"];
-          $this->code_exo = $periode["PER_AMO_CODE_EXO"];
-          $this->code_sit = $periode["PER_AMO_CODE_SIT"];
-          $this->cmu      = $vitale["VIT_CMU"];
-        }
-      }
-    }
-    
-    $this->regime_am = CValue::read($vitale, "VIT_REGIME_AM");
   }
   
   function guessExoneration(){
@@ -1168,7 +991,9 @@ class CPatient extends CMbObject {
   // Forward references
   function loadRefsFwd() {
     $this->loadRefsCorrespondants();
-    $this->loadIdVitale();
+    if (CModule::getActive("fse")) {
+      CFseFactory::createCV()->loadIdVitale($this);
+    }
   }
       
   function loadComplete(){

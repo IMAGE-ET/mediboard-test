@@ -46,7 +46,10 @@ if ($patient->_id) {
 
 // Chargement des identifiants standards
 $patient->loadIPP();
-$patient->loadIdVitale();
+if (CModule::getActive("fse")) {
+  CFseFactory::createCV()->loadIdVitale($patient);
+}
+
 
 $vip = 0;
 if($patient->vip && !CCanDo::admin()) {
@@ -75,7 +78,9 @@ $listSiblings = $patient->getSiblings();
 foreach ($listSiblings as &$_sibling) {
   $_sibling->loadDossierComplet();
   $_sibling->loadIPP();
-  $_sibling->loadIdVitale();
+  if (CModule::getActive("fse")) {
+    CFseFactory::createCV()->loadIdVitale($_sibling);
+  }
   foreach($_sibling->_ref_sejours as &$_sejour){
   	$_sejour->loadNDA();
   }

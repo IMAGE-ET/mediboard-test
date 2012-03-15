@@ -44,9 +44,6 @@ Main.add(function () {
 });
 </script>
 
-<!-- Script won't be evaled in Ajax inclusion. Need to force it -->
-{{mb_script script=intermax}}
-
 {{mb_script module=ssr script=planning}}
 <table class="main">
   <tr>

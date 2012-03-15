@@ -54,8 +54,6 @@ Main.add(function () {
   <tr>
     <td id="listConsult" style="width: 240px;"></td>
     <td>
-			{{include file="../../dPpatients/templates/inc_intermax.tpl"}}
-			
       {{if $consult->_id}}
       {{assign var="patient" value=$consult->_ref_patient}}
       <div id="finishBanner">

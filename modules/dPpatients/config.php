@@ -24,10 +24,6 @@ $dPconfig["dPpatients"] = array (
     "enabled" => "1",
   ),
   
-  "intermax"    => array (
-    "auto_watch" => "0",
-  ),
-  
   "CDossierMedical" => array (
   ),
   

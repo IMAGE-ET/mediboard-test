@@ -44,11 +44,10 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
 // Recherche par traits classiques
 else {
   // Gestion du cas vitale
-  if ($useVitale && CAppUI::pref('GestionFSE') && !CAppUI::pref('VitaleVision')) {
+  if ($useVitale && CModule::getActive("fse")->canRead() && !CAppUI::pref('VitaleVision')) {
     $patVitale = new CPatient();  
-    $patVitale->loadFromIdVitale();
-    $patVitale->getPropertiesFromVitale();
-    
+    CFseFactory::createCV()->loadFromIdVitale($patVitale);
+    CFseFactory::createCV()->getPropertiesFromVitale($patVitale);
     $name = $patVitale->nom;
     $firstName = $patVitale->prenom;
   }
