@@ -3,7 +3,7 @@
     <name>XCN</name>
     <description>Extended Composite ID Number and Name For Persons</description>
     <elements>
-        <field minOccurs="0" maxOccurs="0" length="15">
+        <field minOccurs="0" maxOccurs="0" length="199">
             <name>XCN.1</name>
             <description>ID Number</description>
             <datatype>ST</datatype>
@@ -23,7 +23,7 @@
             <description>Second and Further Given Names or Initials Thereof</description>
             <datatype>ST</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="20">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="20">
             <name>XCN.5</name>
             <description>Suffix</description>
             <datatype>ST</datatype>
@@ -33,12 +33,12 @@
             <description>Prefix</description>
             <datatype>ST</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="5" table="0360">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="5" table="0360">
             <name>XCN.7</name>
             <description>Degree</description>
             <datatype>IS</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="4" table="0297">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="4" table="0297">
             <name>XCN.8</name>
             <description>Source Table</description>
             <datatype>IS</datatype>
@@ -53,12 +53,12 @@
             <description>Name Type Code</description>
             <datatype>ID</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="1">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="1">
             <name>XCN.11</name>
             <description>Identifier Check Digit</description>
             <datatype>ST</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="3" table="0061">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="3" table="0061">
             <name>XCN.12</name>
             <description>Check Digit Scheme</description>
             <datatype>ID</datatype>
@@ -73,47 +73,47 @@
             <description>Assigning Facility</description>
             <datatype>HD</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="1" table="0465">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="1" table="0465">
             <name>XCN.15</name>
             <description>Name Representation Code</description>
             <datatype>ID</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="483" table="0448">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="483" table="0448">
             <name>XCN.16</name>
             <description>Name Context</description>
             <datatype>CE</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="53">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="53">
             <name>XCN.17</name>
             <description>Name Validity Range</description>
             <datatype>DR</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="1" table="0444">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="1" table="0444">
             <name>XCN.18</name>
             <description>Name Assembly Order</description>
             <datatype>ID</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="26">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="26">
             <name>XCN.19</name>
             <description>Effective Date</description>
             <datatype>TS</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="26">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="26">
             <name>XCN.20</name>
             <description>Expiration Date</description>
             <datatype>TS</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="199">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="199">
             <name>XCN.21</name>
             <description>Professional Suffix</description>
             <datatype>ST</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="705">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="705">
             <name>XCN.22</name>
             <description>Assigning Jurisdiction</description>
             <datatype>CWE</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="705">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="705">
             <name>XCN.23</name>
             <description>Assigning Agency or Department</description>
             <datatype>CWE</datatype>

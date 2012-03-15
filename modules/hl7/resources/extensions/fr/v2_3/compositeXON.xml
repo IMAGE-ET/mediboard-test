@@ -8,22 +8,22 @@
             <description>Organization Name</description>
             <datatype>ST</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="20" table="0204">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="20" table="0204">
             <name>XON.2</name>
             <description>Organization Name Type Code</description>
             <datatype>IS</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="4">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="4">
             <name>XON.3</name>
             <description>ID Number</description>
             <datatype>NM</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="1">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="1">
             <name>XON.4</name>
             <description>Check Digit</description>
             <datatype>NM</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="3" table="0061">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="3" table="0061">
             <name>XON.5</name>
             <description>Check Digit Scheme</description>
             <datatype>ID</datatype>
@@ -38,17 +38,17 @@
             <description>Identifier Type Code</description>
             <datatype>ID</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="227">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="227">
             <name>XON.8</name>
             <description>Assigning Facility</description>
             <datatype>HD</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="1" table="0465">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="1" table="0465">
             <name>XON.9</name>
             <description>Name Representation Code</description>
             <datatype>ID</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="20">
+        <field minOccurs="0" maxOccurs="0" length="64">
             <name>XON.10</name>
             <description>Organization Identifier</description>
             <datatype>ST</datatype>

@@ -87,7 +87,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
       $patient->ville,
       null,
       $patient->cp,
-      $patient->pays_insee,
+      CHL7v2TableEntry::mapTo("399", $patient->pays_insee),
       // Table - 0190
       // B   - Firm/Business 
       // BA  - Bad address 
@@ -111,7 +111,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
         $patient->lieu_naissance,
         null,
         $patient->cp_naissance,
-        $patient->pays_naissance_insee,
+        CHL7v2TableEntry::mapTo("399", $patient->pays_naissance_insee), 
         // Table - 0190
         // B   - Firm/Business 
         // BA  - Bad address 
@@ -135,48 +135,88 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $data[] = null;
     
     // PID-13: Phone Number - Home (XTN) (optional repeating)
+    // Table - 0201
+    // ASN - Answering Service Number
+    // BPN - Beeper Number 
+    // EMR - Emergency Number  
+    // NET - Network (email) Address
+    // ORN - Other Residence Number 
+    // PRN - Primary Residence Number 
+    // VHN - Vacation Home Number  
+    // WPN - Work Number
+    
+    // Table - 0202
+    // BP       - Beeper  
+    // CP       - Cellular Phone  
+    // FX       - Fax 
+    // Internet - Internet Address: Use Only If Telecommunication Use Code Is NET 
+    // MD       - Modem 
+    // PH       - Telephone  
+    // TDD      - Telecommunications Device for the Deaf  
+    // TTY      - Teletypewriter
     $phones = array();
     if ($patient->tel) {
       $phones[] = array(
-        $patient->tel,
+        null,
         // Table - 0201
-        // ASN - Answering Service Number
-        // BPN - Beeper Number 
-        // EMR - Emergency Number  
-        // NET - Network (email) Address
-        // ORN - Other Residence Number 
-        // PRN - Primary Residence Number 
-        // VHN - Vacation Home Number  
-        // WPN - Work Number
         "PRN",
         // Table - 0202
-        // BP       - Beeper  
-        // CP       - Cellular Phone  
-        // FX       - Fax 
-        // Internet - Internet Address: Use Only If Telecommunication Use Code Is NET 
-        // MD       - Modem 
-        // PH       - Telephone  
-        // TDD      - Telecommunications Device for the Deaf  
-        // TTY      - Teletypewriter
-        "PH"
+        "PH",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        $patient->tel
       );
     }
     if ($patient->tel2) {
       $phones[] = array(
-        $patient->tel2,
+        null,
         // Table - 0201
         "ORN",
         // Table - 0202
-        "CP"
+        "CP",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        $patient->tel2
       );
     }
     if ($patient->tel_autre) {
       $phones[] = array(
-        $patient->tel_autre,
+        null,
         // Table - 0201
         "ORN",
         // Table - 0202
-        "PH"
+        "PH",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        $patient->tel_autre
+      );
+    }
+    if ($patient->email) {
+      $phones[] = array(
+        null,
+        // Table - 0201
+        "NET",
+        // Table - 0202
+        "Internet",
+        $patient->email,
       );
     }
     $data[] =  $phones;
@@ -212,9 +252,10 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     }
     
     // PID-19: SSN Number - Patient (ST) (optional)
-    $data[] = $patient->matricule;
-    
-    // PID-20: Driver's License Number - Patient (DLN) (optional)
+    //$data[] = $patient->matricule;
+    $data[] = null;
+   
+   // PID-20: Driver's License Number - Patient (DLN) (optional)
     $data[] = null;
     
     // PID-21: Mother's Identifier (CX) (optional repeating)

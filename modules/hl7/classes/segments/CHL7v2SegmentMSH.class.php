@@ -94,7 +94,8 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     $data[] = null;
     
     // MSH-17: Country Code (ID) (optional)
-    $data[] = CHL7v2TableEntry::mapTo("399", "FRA"); 
+    // FRA = 250
+    $data[] = CHL7v2TableEntry::mapTo("399", "250"); 
     
     // MSH-18: Character Set (ID) (optional repeating)
     $encoding = isset($actor->_configs["encoding"]) ? $actor->_configs["encoding"] : "UTF-8";

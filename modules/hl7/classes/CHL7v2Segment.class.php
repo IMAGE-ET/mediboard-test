@@ -284,20 +284,14 @@ class CHL7v2Segment extends CHL7v2Entity {
       $this->getAssigningAuthority("mediboard"),
       "RI"
     );
-    if ($patient->INSC) {
-      $identifiers[] = array(
-        $patient->INSC,
-        null,
-        null,
-        // PID-3-4 Autorité d'affectation
-        $this->getAssigningAuthority("INS-C"),
-        "INS-C",
-        null,
-        mbDate($patient->INSC_date)
-      );
-    }
+    
+    $this->fillOtherIdentifiers($identifiers, $patient);
     
     return $identifiers;
+  }
+
+  function fillOtherIdentifiers(&$identifiers, CPatient $patient) {
+    
   }
   
   function getXCN(CMbObject $object) {
@@ -307,21 +301,21 @@ class CHL7v2Segment extends CHL7v2Entity {
       $xcn1  = CValue::first($object->rpps, $object->adeli, $object->_id);
       $xcn2  = $object->nom;
       $xcn3  = $object->prenom;
-      $xcn9  = $this->getAssigningAuthority($object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "mediboard"));
+      //$xcn9  = $this->getAssigningAuthority($object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "mediboard"));
       $xcn13 = $object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "RI");
     }
     if ($object instanceof CUser) {
       $xcn1  = $object->_id;
       $xcn2  = $object->user_last_name;
       $xcn3  = $object->user_first_name;
-      $xcn9  = $this->getAssigningAuthority("mediboard");
+      //$xcn9  = $this->getAssigningAuthority("mediboard");
       $xcn13 = "RI";
     }
     if ($object instanceof CMediusers) {
       $xcn1  = CValue::first($object->rpps, $object->adeli, $object->_id);
       $xcn2  = $object->_user_last_name;
       $xcn3  = $object->_user_first_name;
-      $xcn9  = $this->getAssigningAuthority($object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "mediboard"));
+      //$xcn9  = $this->getAssigningAuthority($object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "mediboard"));
       $xcn13 = $object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "RI");
     }
     

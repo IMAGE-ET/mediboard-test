@@ -83,7 +83,8 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    * @param CSejour Admit
    */
   function addPID(CPatient $patient, CSejour $sejour = null) {
-    $PID = CHL7v2Segment::create("PID", $this->message);
+    $segment_name = $this->_is_i18n ? "PID_FR" : "PID";
+    $PID = CHL7v2Segment::create($segment_name, $this->message);
     $PID->patient = $patient;
     $PID->sejour = $sejour;
     $PID->set_id  = 1;
@@ -231,6 +232,14 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     $ZFD = CHL7v2Segment::create("ZFD", $this->message);
     $ZFD->patient = $sejour->_ref_patient;
     $ZFD->build($this);
+  }
+  
+  /**
+   * Represents an HL7 GT1 message segment (Guarantor)
+   * @param CPatient Patient
+   */
+  function addGT1(CPatient $patient = null) {
+    
   }
 }
 

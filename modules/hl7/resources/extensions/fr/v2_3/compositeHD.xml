@@ -13,7 +13,7 @@
             <description>Universal ID</description>
             <datatype>ST</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="6" table="0301">
+        <field minOccurs="0" maxOccurs="0" length="6" table="0203">
             <name>HD.3</name>
             <description>Universal ID Type</description>
             <datatype>ID</datatype>

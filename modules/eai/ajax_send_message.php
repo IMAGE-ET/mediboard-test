@@ -25,7 +25,9 @@ if (!$exchange->message_valide) {
 $receiver = $exchange->_ref_receiver;
 
 $evenement = null;
+
 if ($receiver instanceof CReceiverIHE) {
+  $evenement   = "evenementsPatient";
   $data_format = CIHE::getEvent($exchange);
 }
 

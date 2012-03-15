@@ -3,7 +3,7 @@
     <name>XTN</name>
     <description>Extended Telecommunication Number</description>
     <elements>
-        <field minOccurs="0" maxOccurs="0" length="199">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="199">
             <name>XTN.1</name>
             <description>Telephone Number</description>
             <datatype>ST</datatype>
@@ -23,22 +23,22 @@
             <description>Email Address</description>
             <datatype>ST</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="3">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="3">
             <name>XTN.5</name>
             <description>Country Code</description>
             <datatype>NM</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="5">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="5">
             <name>XTN.6</name>
             <description>Area/City Code</description>
             <datatype>NM</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="9">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="9">
             <name>XTN.7</name>
             <description>Local Number</description>
             <datatype>NM</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="5">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="5">
             <name>XTN.8</name>
             <description>Extension</description>
             <datatype>NM</datatype>
@@ -48,12 +48,12 @@
             <description>Any Text</description>
             <datatype>ST</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="4">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="4">
             <name>XTN.10</name>
             <description>Extension Prefix</description>
             <datatype>ST</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="6">
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="6">
             <name>XTN.11</name>
             <description>Speed Dial Code</description>
             <datatype>ST</datatype>
