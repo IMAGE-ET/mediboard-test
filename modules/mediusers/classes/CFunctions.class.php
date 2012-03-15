@@ -105,6 +105,11 @@ class CFunctions extends CMbObject {
     $this->_view = $this->text;
     $this->_shortview = CMbString::truncate($this->text);
    }
+   
+   function loadView() {
+     parent::loadView();
+     $this->loadRefsFwd();
+   }
   
   // Forward references
   function loadRefsFwd() {
