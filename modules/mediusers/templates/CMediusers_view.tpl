@@ -30,6 +30,9 @@
     </td>
   </tr>
   {{if $mediuser->_is_praticien}}
+  <tr>
+    <th colspan="2">Praticien</th>
+  </tr>
   {{if $mediuser->discipline_id}}
   <tr>
     <td colspan="2">
@@ -86,6 +89,9 @@
   </tr>
   {{assign var=modPerm value="admin"|module_active}}
   {{if $modPerm && $modPerm->canEdit()}}
+  <tr>
+    <th colspan="2">Administration</th>
+  </tr>
   <tr>
     <td colspan="2" {{if !$mediuser->actif}}class="cancelled"{{/if}}>
       {{mb_label object=$mediuser field=_user_username}} :
