@@ -36,7 +36,7 @@ $patient_month       = CValue::getOrSession("Date_Month");
 $patient_year        = CValue::getOrSession("Date_Year");
 $patient_naissance   = null;
 $patient_ipp         = CValue::get("patient_ipp");
-$useVitale           = CValue::get("useVitale",  CModule::getActive("fse")->canRead() && CAppUI::pref('VitaleVision') ? 1 : 0);
+$useVitale           = CValue::get("useVitale",  CModule::getActive("fse") && CAppUI::pref('VitaleVision') ? 1 : 0);
 $prat_id             = CValue::get("prat_id");
 
 $patient_nom_search    = null;
@@ -64,7 +64,7 @@ if ($patient_ipp && CModule::getInstalled("dPsante400")){
 // Recheche par traits classiques 
 else {
 	// Champs vitale
-	if ($useVitale && CModule::getActive("fse")->canRead() && !CAppUI::pref('VitaleVision') && CModule::getActive("fse")) {
+	if ($useVitale && !CAppUI::pref('VitaleVision') && CModule::getActive("fse")) {
 	  CFseFactory::createCV()->getPropertiesFromVitale($patVitale);
 	  $patVitale->updateFormFields();
 	  $patient_nom    = $patVitale->nom   ;
