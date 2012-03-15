@@ -87,7 +87,7 @@ Main.add( function(){
 
 {{assign var=modFSE value="fse"|module_active}}
 
-{{mb_ternary var=gestionFSE test=$consult->sejour_id value=0 other=$modFSE->canRead()}}
+{{mb_ternary var=gestionFSE test=$consult->sejour_id value=0 other=$modFSE && $modFSE->canRead()}}
 
 <table class="layout main">
   <tr>

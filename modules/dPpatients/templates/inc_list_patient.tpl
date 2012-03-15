@@ -4,7 +4,7 @@
 {{if !$board}}
 	{{if $app->user_prefs.VitaleVision}}
 	  {{include file="../../dPpatients/templates/inc_vitalevision.tpl" debug=false keepFiles=true}}
-	{{elseif $modFSE->canRead()}}
+	{{elseif $modFSE && $modFSE->canRead()}}
 	   <script type="text/javascript">
 	     var urlFSE = new Url;
 	     urlFSE.setModuleTab("dPpatients", "vw_idx_patients");
@@ -177,7 +177,7 @@ emptyBirthday = function() {
   	      <button class="search singleclick" type="button" tabindex="11" onclick="VitaleVision.read();">
   	        Lire Vitale
   	      </button>
-        {{elseif $modFSE->canRead()}}
+        {{elseif $modFSE && $modFSE->canRead()}}
           {{mb_include module=fse template=inc_button_vitale}}
         {{/if}}
 

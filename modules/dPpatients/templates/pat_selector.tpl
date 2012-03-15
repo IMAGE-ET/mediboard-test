@@ -45,7 +45,7 @@ var Patient = {
   }
 }
 
-{{if $modFSE->canRead() && !$app->user_prefs.VitaleVision}}
+{{if $modFSE && $modFSE->canRead() && !$app->user_prefs.VitaleVision}}
   var urlFSE = new Url("dPpatients", "pat_selector");
   urlFSE.addParam("useVitale", 1);
   urlFSE.addParam("dialog", 1);
@@ -205,7 +205,7 @@ var Patient = {
           <button class="search singleclick" type="button" onclick="$V(this.form.useVitale, 1); VitaleVision.read();">
             Lire Vitale
           </button>
-        {{elseif $modFSE->canRead()}}
+        {{elseif $modFSE && $modFSE->canRead()}}
           {{mb_include module=fse template=inc_button_vitale}}
         {{/if}}
       </td>
