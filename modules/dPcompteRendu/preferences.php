@@ -21,6 +21,7 @@ CPreferences::$modules["dPcompteRendu"] = array(
   "aideShowOver",
   "pdf_and_thumbs",
   "mode_play",
-  "choice_factory"
+  "choice_factory",
+  "multiple_docs"
 );
 ?>

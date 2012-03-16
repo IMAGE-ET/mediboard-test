@@ -26,7 +26,8 @@ Document = {
       url.addParam("switch_mode", switch_mode);
     }
     
-    url.popup(Document.popupSize.width, Document.popupSize.height);
+    var multiple_docs = Preferences.multiple_docs == "0" ? "Document" : null;
+    url.popup(Document.popupSize.width, Document.popupSize.height, multiple_docs);
   },
 
   createPack: function(pack_id, object_id, target_id, target_class, switch_mode) {
@@ -48,7 +49,8 @@ Document = {
       url.addParam("switch_mode", switch_mode);
     }
     
-    url.popup(Document.popupSize.width, Document.popupSize.height);
+    var multiple_docs = Preferences.multiple_docs == "0" ? "Document" : null;
+    url.popup(Document.popupSize.width, Document.popupSize.height, multiple_docs);
   },
   
   fastMode: function(object_class, modele_id, object_id, target_id, target_class, unique_id) {
@@ -57,8 +59,8 @@ Document = {
     var url = new Url("dPcompteRendu", "edit_compte_rendu");
     url.addParam("modele_id"   , modele_id);
     url.addParam("object_id"   , object_id);
-    url.addParam('object_class', object_class);
-    url.addParam('unique_id'   , unique_id);
+    url.addParam("object_class", object_class);
+    url.addParam("unique_id"   , unique_id);
     url.requestModal(750, 400, {onComplete: function() { modalWindow.position(); }});
   },
   fastModePack: function(pack_id, object_id, unique_id) {
@@ -73,15 +75,20 @@ Document = {
   edit: function(compte_rendu_id){
     var url = new Url("dPcompteRendu", "edit_compte_rendu");
     url.addParam("compte_rendu_id", compte_rendu_id);
-    url.popup(Document.popupSize.width, Document.popupSize.height, "cr_"+compte_rendu_id);
+    if (Preferences.multiple_docs != "0") {
+      url.popup(Document.popupSize.width, Document.popupSize.height, "cr_" + compte_rendu_id);
+    }
+    else {
+      url.popup(Document.popupSize.width, Document.popupSize.height, "Document");
+    }
   },
   
   del: function(form, doc_view) {
     var oConfirmOptions = { 
-      typeName: 'le document',
+      typeName: "le document",
       objName: doc_view,
       ajax: 1,
-      target: 'systemMsg'
+      target: "systemMsg"
     };
     
     var oAjaxOptions = {
@@ -169,7 +176,7 @@ Document = {
         if (oIframe.readyState !== "complete") {
           return;
         }
-        oIframe.contentWindow.document.execCommand('print', false, null);
+        oIframe.contentWindow.document.execCommand("print", false, null);
         oIframe.onreadystatechange = null;
       }
     }

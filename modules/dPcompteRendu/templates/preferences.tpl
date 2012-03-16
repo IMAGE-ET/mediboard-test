@@ -21,3 +21,4 @@
 {{mb_include template=inc_pref spec=bool var=pdf_and_thumbs}}
 {{mb_include template=inc_pref spec=bool var=mode_play}}
 {{mb_include template=inc_pref spec=enum var=choice_factory values="CDomPDFConverter|CWkHtmlToPDFConverter"}}
+{{mb_include template=inc_pref spec=bool var=multiple_docs}}

@@ -100,7 +100,7 @@ function refreshZones(id, obj) {
   var form = getForm("editFrm");
   $V(form.date_print, obj.date_print);
   
-  if (id) {
+  if (Preferences.multiple_docs == "1" && id) {
     window.name = "cr_"+id;
   }
   
