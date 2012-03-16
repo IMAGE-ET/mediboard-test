@@ -100,8 +100,8 @@
   </tr>
   <tr>
     <td colspan="3">
-      {{mb_label object=$mediuser field=_user_type}} :
-      {{mb_value object=$mediuser field=_user_type}}
+      {{mb_label object=$mediuser field=_user_type_view}} :
+      {{mb_value object=$mediuser field=_user_type_view}} [{{mb_value object=$mediuser field=_user_type}}]
     </td>
   </tr>
   <tr>

@@ -71,6 +71,7 @@ class CMediusers extends CMbObject {
   var $_force_merge                = false;
   var $_user_id                    = null;
   var $_keep_user                  = null;
+  var $_user_type_view             = null;
   
   // Distant fields
   var $_group_id                   = null;
@@ -158,6 +159,7 @@ class CMediusers extends CMbObject {
     $specs["_user_ville"]            = "str confidential reported";
     $specs["_profile_id"]            = "ref reported class|CUser";
     $specs["_user_type"]             = "num notNull min|0 max|20 reported";
+    $specs["_user_type_view"]        = "str";
     
     // The different levels of security are stored to be usable in JS
     $specs["_user_password_weak"]    = "password minLength|4";
@@ -254,7 +256,7 @@ class CMediusers extends CMbObject {
     $backProps["expediteur_ftp"]                  = "CSenderFTP user_id";
     $backProps["expediteur_soap"]                 = "CSenderSOAP user_id";
     $backProps["expediteur_mllp"]                 = "CSenderMLLP user_id";
-		$backProps["expediteur_fs"]                   = "CSenderFileSystem user_id";
+    $backProps["expediteur_fs"]                   = "CSenderFileSystem user_id";
     $backProps["ufs"]                             = "CAffectationUniteFonctionnelle object_id";
     $backProps["documents_crees"]                 = "CCompteRendu author_id";
     $backProps["devenirs_dentaires"]              = "CDevenirDentaire etudiant_id";
@@ -349,6 +351,7 @@ class CMediusers extends CMbObject {
       } 
       
       $this->_shortview = strtoupper($this->_shortview);
+      $this->_user_type_view = CValue::read(CUser::$types, $this->_user_type);
     }
     
     $this->_ref_user = $user;

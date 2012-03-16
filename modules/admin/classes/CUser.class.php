@@ -52,6 +52,9 @@ class CUser extends CMbObject {
   // Behaviour fields
   var $_purge_connections = null;
   
+  // Form fields
+  var $_user_type_view    = null;
+  
   // Object references
   var $_ref_preferences = null;
   var $_ref_mediuser    = null;
@@ -141,6 +144,7 @@ class CUser extends CMbObject {
     }
     
     $specs["_ldap_linked"]       = "bool";
+    $specs["_user_type_view"]    = "str";
     $specs["_count_connections"] = "num";
     
     return $specs;
@@ -227,6 +231,7 @@ class CUser extends CMbObject {
     $user_last_name  = CMbString::upper($this->user_last_name);
     $this->_view = "$user_last_name $user_first_name";
     $this->_login_locked = $this->user_login_errors >= CAppUI::conf('admin CUser max_login_attempts');
+    $this->_user_type_view = CValue::read(self::$types, $this->user_type);
   }
 
   function check() {
@@ -286,10 +291,10 @@ class CUser extends CMbObject {
     return parent::store();
   }
   
-	/**
-	 * We need to delete the CMediusers
-	 * @return 
-	 */
+  /**
+   * We need to delete the CMediusers
+   * @return 
+   */
   function delete(){
     if ($msg = $this->canDeleteEx()) {
       return $msg;
@@ -298,7 +303,7 @@ class CUser extends CMbObject {
     $mediuser = $this->loadRefMediuser();
     
     if ($mediuser->_id) {
-    	$mediuser->_keep_user = true;
+      $mediuser->_keep_user = true;
       if ($msg = $mediuser->delete()) {
         return $msg;
       }
@@ -474,7 +479,7 @@ class CUser extends CMbObject {
    * @return array<CUser> Profiled users collection
    */
   function loadRefProfiledUsers() {
-  	return $this->_ref_profiled_users = $this->loadBackRefs("profiled_users", "user_last_name, user_first_name");
+    return $this->_ref_profiled_users = $this->loadBackRefs("profiled_users", "user_last_name, user_first_name");
   }
 }
 
