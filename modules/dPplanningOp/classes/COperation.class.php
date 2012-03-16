@@ -482,7 +482,7 @@ class COperation extends CCodable implements IPatientRelated {
       
       // Aucune alerte
       else {
-      	return;
+        return;
       }
       
       // Complément d'alerte
@@ -948,6 +948,9 @@ class COperation extends CCodable implements IPatientRelated {
       return;
     }
     
+    $this->_dmi_prescription_id = null;
+    $this->_dmi_praticien_id    = null;
+    
     $lines = $this->loadBackRefs("prescription_dmis");
     
     if (empty($lines)) {
@@ -955,6 +958,11 @@ class COperation extends CCodable implements IPatientRelated {
     }
     
     foreach($lines as $_line) {
+      if (!isset($this->_dmi_prescription_id)) {
+        $this->_dmi_prescription_id = $_line->prescription_id;
+        $this->_dmi_praticien_id    = $_line->loadRefPrescription()->praticien_id;
+      }
+      
       if (!$_line->isValidated()) {
         return $this->_dmi_alert = "warning";
       }
