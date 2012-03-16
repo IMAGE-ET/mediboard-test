@@ -13,7 +13,7 @@ class CExObjectFieldModifier extends CMbObject {
   
   var $ex_object_id = null;
   var $ex_class_field_id = null;
-	
+  
   var $type  = null;
   var $value = null;
   
@@ -53,14 +53,14 @@ class CExObjectFieldModifier extends CMbObject {
     
     $this->_view = $this->std;
   }
-	
-	function fillIfEmpty($str) {
+  
+  function fillIfEmpty($str) {
     if (!$this->_id) {
       $this->std = $this->desc = $this->court = $str;
-			$this->updateFormFields();
+      $this->updateFormFields();
       $this->std = $this->desc = $this->court = "";
     }
-	}
+  }
   
   function loadRefExClassField($cache = true){
     return $this->_ref_ex_class_field = $this->loadFwdRef("ex_class_field_id", $cache);

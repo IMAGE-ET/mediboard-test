@@ -26,8 +26,8 @@
     display:none;
   }
   
-  table.tbl td {
-    border-width: 2px;
+  table.tbl > * > tr > td {
+    border-width: 1pt;
   }
   
   .planning .event  {    

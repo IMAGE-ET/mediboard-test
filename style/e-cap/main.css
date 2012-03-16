@@ -477,9 +477,9 @@ ul.control_tabs_vertical li a.active {
     display: none;
   }
   
-  table.tbl td,
-  table.tbl th,
-  table.tbl th.title {
-    border: 1px solid #888;
+  table.tbl > * > tr > td,
+  table.tbl > * > tr > th,
+  table.tbl > * > tr > th.title {
+    border: 1px solid #999;
   }
 }

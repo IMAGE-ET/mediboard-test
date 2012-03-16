@@ -230,7 +230,7 @@ abstract class CHTMLResourceLoader {
     while(!feof(self::$_fp_in)) {
       $line = fgets(self::$_fp_in);
       
-      $line = preg_replace_callback("/<img([^>]*)src\s*=\s*[\"']([^\"']+)[\"']([^>]*)/i", array('self', 'replaceImgSrc'), $line);
+      $line = preg_replace_callback("/<img([^>]*)src\s*=\s*[\"']([^\"']+)[\"']([^>]*)>/i", array('self', 'replaceImgSrc'), $line);
       $line = preg_replace_callback("/<link[^>]*rel=\"stylesheet\"[^>]*href\s*=\s*[\"']([^\"']+)[\"'][^>]*>/i", array('self', 'replaceStylesheet'), $line);
       $line = preg_replace_callback("/<script[^>]*src\s*=\s*[\"']([^\"']+)[\"'][^>]*>\s*<\/script>/i", array('self', 'replaceScriptSrc'), $line);
       
