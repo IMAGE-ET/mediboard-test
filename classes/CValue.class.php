@@ -170,8 +170,7 @@ abstract class CValue {
  **/
   static function setSession($name, $value = null) {
     global $m;
-    $_SESSION[$m][$name] = $value;
-    return self::read($_SESSION[$m], $name);
+    return $_SESSION[$m][$name] = $value;
   }
 
 /**
@@ -182,7 +181,6 @@ abstract class CValue {
  * @return the value
  **/
   static function setSessionAbs($name, $value = null) {
-    $_SESSION[$name] = $value;
-    return self::read($_SESSION, $name);
+    return $_SESSION[$name] = $value;
   }
 }
