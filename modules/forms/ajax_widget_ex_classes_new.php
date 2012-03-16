@@ -49,10 +49,10 @@ foreach($ex_classes as $_id => $_ex_class) {
       $_log->loadRefUser()->loadRefMediuser()->loadRefFunction();
     }
   }
-	
+  
   $count += count($objects);
-	
-	$ex_objects[$_ex_class->_id] = $objects;
+  
+  $ex_objects[$_ex_class->_id] = $objects;
 }
 
 foreach($ex_objects as $_id => $_ex_object) {

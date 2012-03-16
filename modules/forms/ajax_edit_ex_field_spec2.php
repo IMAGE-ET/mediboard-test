@@ -191,8 +191,13 @@ if ($context instanceof CExClassField) {
     $triggerables = $triggerable->loadList($where, "conditional DESC");
   }
   
-  if (!empty($context->concept_id) && !empty($context->_ref_concept->_ref_ex_list)) {
-    $items_all = array_keys($context->_ref_concept->_ref_ex_list->_ref_items);
+  if (!empty($context->concept_id)) {
+    if (!empty($context->_ref_concept->_ref_ex_list)) {
+      $items_all = array_keys($context->_ref_concept->_ref_ex_list->_ref_items);
+    }
+    else {
+      $items_all = array_keys($context->_ref_concept->_ref_items);
+    }
   }
 }
 
