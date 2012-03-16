@@ -5,7 +5,7 @@
     
     var services_ids_hospi = $V(services_ids_hospi_elt).evalJSON();
     
-    services_ids_hospi.g{{$group_id}} = $V(form.select("input[checked]"));
+    services_ids_hospi.g{{$group_id}} = $V(form.select("input[class=service]:checked"));
     
     if (services_ids_hospi.g{{$group_id}} == null) {
       services_ids_hospi.g{{$group_id}} = "";
@@ -77,7 +77,7 @@
               <p class="secteur_{{$_secteur->_id}}">
                   <label>
                     <input style="margin-left: 1em;" type="checkbox" name="services_ids[{{$_service->_id}}]" value="{{$_service->_id}}"
-                      {{if !in_array($_service->_id, array_keys($services_allowed))}}disabled="disabled"{{/if}}
+                      {{if !in_array($_service->_id, array_keys($services_allowed))}}disabled="disabled"{{/if}} class="service"
                       {{if $services_ids && in_array($_service->_id, $services_ids)}}checked="checked"{{/if}}/> {{$_service}}
                   </label>
                 </p>
@@ -90,7 +90,7 @@
           {{foreach from=$all_services item=_service}}
             <p>
               <label>
-                <input type="checkbox" name="services_ids[{{$_service->_id}}]" value="{{$_service->_id}}"
+                <input type="checkbox" name="services_ids[{{$_service->_id}}]" value="{{$_service->_id}}" class="service"
                   {{if !in_array($_service->_id, array_keys($services_allowed))}}disabled="disabled"{{/if}}
                   {{if $services_ids && in_array($_service->_id, $services_ids)}}checked="checked"{{/if}}/> {{$_service}}
               </label>
