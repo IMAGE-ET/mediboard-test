@@ -297,6 +297,15 @@ abstract class CMbString {
     return str_ireplace("<br />", "", $string);
   }
   
+  /**
+   * Create hyperlinks around URLs in a string
+   * 
+   * @param string $str The string
+   * @return string The string with hyperlinks
+   */
+  static function makeUrlHyperlinks($str) {
+    return preg_replace('@(https?://([-\w\.]+)+(:\d+)?(/([\w/_\.#-]*(\?\S+)?)?)?)@', '<a href="$1" target="_blank">$1</a>', $str);
+  }
   
   // Table extraite de :
   // - http://www.sourcerally.net/Scripts/39-Convert-HTML-Entities-to-XML-Entities
