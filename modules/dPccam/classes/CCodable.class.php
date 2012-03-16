@@ -30,7 +30,7 @@ class CCodable extends CMbObject {
   // Actes CCAM
   var $_text_codes_ccam    = null;
   var $_codes_ccam         = null;
-  var $_tokens_ccam        = array();
+  var $_tokens_ccam        = null;
   var $_ref_actes_ccam     = null;
   var $_ext_codes_ccam     = null;
   

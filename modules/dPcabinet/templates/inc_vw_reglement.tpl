@@ -87,15 +87,17 @@ Main.add( function(){
 
 {{assign var=modFSE value="fse"|module_active}}
 
-{{mb_ternary var=gestionFSE test=$consult->sejour_id value=0 other=$modFSE && $modFSE->canRead()}}
+{{mb_ternary var=gestionFSE test=$consult->sejour_id value=0 other=$modFSE}}
 
 <table class="layout main">
   <tr>
     {{if $gestionFSE}}
-    <td class="halfPane">
-      <!-- Inclusion de la gestion de la FSE -->
-      {{mb_include module=fse template=inc_gestion_fse}}
-    </td>
+      {{if $modFSE->canRead()}}
+        <td class="halfPane">
+          <!-- Inclusion de la gestion de la FSE -->
+          {{mb_include module=fse template=inc_gestion_fse}}
+        </td>
+      {{/if}}
     {{/if}}
   
     <td>
@@ -219,7 +221,7 @@ Main.add( function(){
           <input type="hidden" name="dosql" value="do_consultation_aed" />
           {{mb_key object=$consult}}
           {{mb_field object=$consult field="sejour_id" hidden=1}}
-    
+
           <table width="100%">
             <!-- A régler -->
             <tr>
