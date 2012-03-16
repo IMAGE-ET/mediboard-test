@@ -293,7 +293,7 @@ function editIntervention(op_id) {
       <th colspan="4" class="title">{{$sejour->_view}} </th>
     </tr>
     <tr>
-       <th> </th>
+      <th> </th>
       <th class="category">{{mb_title object=$movement field=movement_type}}</th>
       <th class="category">{{mb_title object=$movement field=original_trigger_code}}</th>
       <th class="category">{{mb_title object=$movement field=last_update}}</th>
@@ -311,6 +311,10 @@ function editIntervention(op_id) {
           </label>
         </td>
       </tr>
+    {{foreachelse}}
+    <tr> 
+      <td colspan="4" class="empty">{{tr}}CMovement.none{{/tr}}</th>
+    </tr>
     {{/foreach}}
   </table>
 </div>

@@ -9,6 +9,12 @@
     url.addParam("sejour_id", sejour_id);
     url.requestModal(800, 700);
   }
+  
+  popEtatSejour = function(sejour_id) {
+    var url = new Url("dPhospi", "vw_parcours");
+    url.addParam("sejour_id", '{{$sejour->_id}}');
+    url.requestModal(700, 550);
+  }
 </script>
 
 <table class="tbl tooltip">
@@ -72,6 +78,8 @@
         {{tr}}module-Brancardage-long{{/tr}}
         </button>
       {{/if}}
+      
+      <button type="button" class="lookup" onclick="popEtatSejour();">État du séjour</button>
     </td>
   </tr>
 </table>
