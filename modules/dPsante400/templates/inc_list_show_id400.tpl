@@ -31,7 +31,7 @@
         IdentitoVigilance.stop();
       }
       var div = getForm("editTags").up("div").up("div");
-      var cancel_button = div.down("button.cancel");
+      var cancel_button = div.down("button.close");
       var reload_button =  div.down("button.change");
   
       cancel_button.observe("click", someReload);
