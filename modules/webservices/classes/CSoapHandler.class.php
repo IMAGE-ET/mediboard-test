@@ -16,6 +16,8 @@ class CSoapHandler {
       "entier2"   => "int")
   );
   
+   var $returnSpecs = array();
+  
   /**
    * Calculation method (add/substract)
    * @param operation Type de l'opération (add / substract)

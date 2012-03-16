@@ -33,16 +33,17 @@ if (isset($wsdl)) {
 
   header('Content-Type: application/xml; charset=UTF-8');
   
-  $functions = array();
+  $functions = $returns = array();
   if ($classname != "CSoapHandler") {
     $soap_handler= new CSoapHandler();
     $functions += $soap_handler->paramSpecs;
   }
   $functions += $class->paramSpecs;
+  $returns   += $class->returnSpecs;
   
   $wsdlFile = new CWsdlDocument();
   $wsdlFile->addTypes();
-  $wsdlFile->addMessage($functions);
+  $wsdlFile->addMessage($functions, $returns);
   $wsdlFile->addPortType($functions);
   $wsdlFile->addBinding($functions);
   $wsdlFile->addService($username, $password, $m, $a, $classname);

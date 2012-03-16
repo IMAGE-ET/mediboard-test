@@ -54,7 +54,7 @@ class CWsdlDocument extends CMbXMLDocument {
     $this->purgeEmptyElements();
   }
   
-  function addMessage($functions) {
+  function addMessage($functions, $returns = array()) {
     $definitions = $this->documentElement;
     $partie3 = $this->createComment("partie 3 : Message");
     $definitions->appendChild($partie3);
@@ -72,9 +72,18 @@ class CWsdlDocument extends CMbXMLDocument {
       $message = $this->addElement($definitions, "message");
       $this->addAttribute($message, "name", $nameFunction."Response");
       
-      $part = $this->addElement($message, "part");
-      $this->addAttribute($part, "name", "return");
-      $this->addAttribute($part, "type", "xsd:".$this->xsd["string"]);
+      if (!empty($returns) && array_key_exists($nameFunction, $returns)) {
+        foreach ($returns[$nameFunction] as $returnName => $returnValue) {
+          $part = $this->addElement($message, "part");
+          $this->addAttribute($part, "name", $returnName);
+          $this->addAttribute($part, "type", "xsd:".$this->xsd[$returnValue]);
+        }
+      } 
+      else {
+        $part = $this->addElement($message, "part");
+        $this->addAttribute($part, "name", "return");
+        $this->addAttribute($part, "type", "xsd:".$this->xsd["string"]);
+      }
     }
   }
   
