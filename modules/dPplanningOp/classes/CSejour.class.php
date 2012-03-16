@@ -119,13 +119,15 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_is_proche          = null;
   var $_motif_complet      = null;
   var $_grossesse          = null;
+  var $_offset_uscpo       = null;
+  var $_width_uscpo        = null;
   
   // Behaviour fields
   var $_check_bounds  = true;
   var $_en_mutation   = null;
   var $_unique_lit_id = null;
   var $_no_synchro    = null;
-
+  
   // HPRIM Fields
   var $_eai_initiateur_group_id  = null; // group initiateur du message EAI
     

@@ -390,7 +390,7 @@ Main.add(function () {
         
         <tr>
           <th>{{mb_label object=$protocole field="duree_uscpo"}}</th>
-          <td>{{mb_field object=$protocole field="duree_uscpo" increment=true form=editFrm size="2"}} nuits</td>
+          <td>{{mb_field object=$protocole field="duree_uscpo" increment=true form=editFrm size="2"}} {{tr}}day{{/tr}}(s)</td>
         </tr>
         
         <tr>

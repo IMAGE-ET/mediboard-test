@@ -720,7 +720,7 @@ Main.add( function(){
 {{/if}}
 <tr>
   <th>{{mb_label object=$sejour field=duree_uscpo}}</th>
-  <td colspan="3">{{mb_field object=$sejour field=duree_uscpo increment=true form=editSejour size=2}}h</td>
+  <td colspan="3">{{mb_field object=$sejour field=duree_uscpo increment=true form=editSejour size=2}} {{tr}}day{{/tr}}(s)</td>
 </tr>
 <tr class="reanimation">
   <th>{{mb_label object=$sejour field="reanimation"}}</th>
