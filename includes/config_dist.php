@@ -25,8 +25,8 @@ $dPconfig["offline"]           = "0";
 $dPconfig["instance_role"]     = "qualif";
 $dPconfig["http_redirections"] = "0";      
 $dPconfig["mb_id"]             = "";
-$dPconfig["minify_javascript"] = "0";
-$dPconfig["minify_css"]        = "0";
+$dPconfig["minify_javascript"] = "1";
+$dPconfig["minify_css"]        = "1";
 $dPconfig["currency_symbol"]   = "&euro;";
 $dPconfig["hide_confidential"] = "0";
 $dPconfig["locale_warn"]       = "0";
@@ -113,9 +113,9 @@ $dPconfig["dPsante400"] = array (
   "user" => "",
   "pass" => "",
   "group_id" => "",
-	"CSejour" => array(
-	  "sibling_hours" => 1,
-	),
+  "CSejour" => array(
+    "sibling_hours" => 1,
+  ),
 );
 
 $dPconfig["dPlabo"] = array (
@@ -154,7 +154,7 @@ $dPconfig["hprim21"] = array (
 
 $dPconfig["dPpmsi"] = array(
   "systeme_facturation" => "",
-	"server"              => "0",
+  "server"              => "0",
   "transmission_actes"  => "pmsi",
   "passage_facture"     => "envoi",
 ); 

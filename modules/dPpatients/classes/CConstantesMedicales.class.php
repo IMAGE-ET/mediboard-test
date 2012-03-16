@@ -408,11 +408,6 @@ class CConstantesMedicales extends CMbObject {
           if (isset($spec->min)) $spec->min *= $conv;
           if (isset($spec->max)) $spec->max *= $conv;
         }
-        
-        $_params["unit"]      = $unit;
-        $_params["standard"] *= $conv;
-        $_params["min"]      *= $conv;
-        $_params["max"]      *= $conv;
       }
     }
     
@@ -950,6 +945,26 @@ class CConstantesMedicales extends CMbObject {
     
     foreach($list_constantes as $_constant => &$_params) {
       self::$list_constantes_type[$_params["type"]][$_constant] = &$_params;
+      
+      // Conversion des unités
+      // FIXME Vraiment pas logique !!
+      $unit = "mmHg";
+
+      if (isset($_params["conversion"][$unit])) {
+        if (in_array($_constant, array("ta", "ta_gauche", "ta_droit"))) {
+          if (CAppUI::conf("dPpatients CConstantesMedicales unite_ta") == "cmHg") {
+            continue;
+          }
+        }
+        
+        $conv = $_params["conversion"][$unit];
+        
+        $_params_ref = &CConstantesMedicales::$list_constantes[$_constant];
+        $_params_ref["unit"]      = $unit;
+        $_params_ref["standard"] *= $conv;
+        $_params_ref["min"]      *= $conv;
+        $_params_ref["max"]      *= $conv;
+      }
       
       // Champs de cumuls
       if (isset($_params["cumul_reset_config"])) {
