@@ -16,7 +16,7 @@
   </tr>
   {{/if}}
   <tr>
-    <td>
+    <td style="width: 50%;">
       {{mb_label object=$medecin field="tel"}} :
       {{mb_value object=$medecin field="tel"}}
     </td>

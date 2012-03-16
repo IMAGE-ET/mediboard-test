@@ -123,11 +123,11 @@
       <td colspan="5" class="text">
         {{assign var=medecin value=$patient->_ref_medecin_traitant}}
         {{if $medecin->_id}}
-          <strong>{{mb_value object=$medecin}}</strong> ;
+          <strong>{{mb_value object=$medecin}}</strong><br />
         {{/if}}
         {{foreach from=$patient->_ref_medecins_correspondants item=curr_corresp}}
           {{assign var=medecin value=$curr_corresp->_ref_medecin}}
-          {{mb_value object=$medecin}} ;
+          {{mb_value object=$medecin}}<br />
         {{/foreach}}
       </td>
     </tr>
