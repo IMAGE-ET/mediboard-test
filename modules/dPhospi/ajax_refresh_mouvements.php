@@ -210,17 +210,17 @@ foreach ($affectations as $_affectation) {
     
     if (end($_operations) == $_operation) {
       if (($_operation->_datetime < $date_min) || ($_operation->_datetime > $date_max)) {
-        $_sejour->_offset_uscpo = 0;
+        $sejour->_offset_uscpo = 0;
       }
       else {
-        $_sejour->_offset_uscpo = CMbDate::position(mbDateTime("+$hour_operation hours +$min_operation minutes", $_operation->_datetime), max($date_min, $_affectation->entree), $period);
+        $sejour->_offset_uscpo = CMbDate::position(mbDateTime("+$hour_operation hours + $min_operation minutes", $_operation->_datetime), max($date_min, $_affectation->entree), $period);
       }
       if (($_operation->_datetime > $date_max)) {
-        $_sejour->_width_uscpo = 0;
+        $sejour->_width_uscpo = 0;
       }
       else {
-        $fin_uscpo = $hour_operation + 24 * $_sejour->duree_uscpo;
-        $_sejour->_width_uscpo = CMbDate::position(mbDateTime("+$fin_uscpo hours +$min_operation minutes", $_operation->_datetime), max($date_min, $_affectation->entree), $period) - $_sejour->_offset_uscpo;
+        $fin_uscpo = $hour_operation + 24 * $sejour->duree_uscpo;
+        $sejour->_width_uscpo = CMbDate::position(mbDateTime("+$fin_uscpo hours + $min_operation minutes", $_operation->_datetime), max($date_min, $_affectation->entree), $period) - $sejour->_offset_uscpo;
       }
     }
     
