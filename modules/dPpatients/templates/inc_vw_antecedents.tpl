@@ -2,18 +2,17 @@
 {{mb_default var=readonly value=0}}
 
 {{assign var=antecedents value=$patient->_ref_dossier_medical->_ref_antecedents_by_type}}
-{{if $readonly}}
-  {{if $antecedents.deficience|@count}}
-    <img src="images/icons/deficience.png" onmouseover="ObjectTooltip.createDOM(this, 'div_atcd');"/>
+{{if isset($antecedents.$type|smarty:nodefaults) && $antecedents.$type|@count}}
+  {{if $readonly}}
+    <img src="images/icons/{{$type}}.png" onmouseover="ObjectTooltip.createDOM(this, 'div_atcd');"/>
+  {{else}}
+    <button type="button" onclick="Antecedent.editAntecedents('{{$patient->_id}}', '{{$type}}', reloadAdmission)"
+        class="{{$type}} notext {{if isset($antecedents.deficience|smarty:nodefaults) && !$antecedents.$type|@count}}opacity-40{{/if}}"
+        {{if $antecedents.$type|@count}}
+          onmouseover="ObjectTooltip.createDOM(this, 'div_atcd');"
+        {{/if}}></button>
   {{/if}}
-{{else}}
-  <button type="button" onclick="Antecedent.editAntecedents('{{$patient->_id}}', 'deficience', reloadAdmission)"
-      class="deficience notext {{if !$antecedents.deficience|@count}}opacity-40{{/if}}"
-      {{if $antecedents.deficience|@count}}
-        onmouseover="ObjectTooltip.createDOM(this, 'div_atcd');"
-      {{/if}}></button>
 {{/if}}
-
 <div id="div_atcd" style="display: none;">
   <ul>
     {{foreach from=$antecedents key=name item=cat}}
