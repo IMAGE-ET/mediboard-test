@@ -66,7 +66,7 @@ function requestInfoPat() {
   if(!oForm.patient_id.value){
     return false;
   }
-  var url = new Url("dPpatients", "httpreq_get_last_refs");
+  var url = new Url("patients", "httpreq_get_last_refs");
   url.addElement(oForm.patient_id);
   url.addElement(oForm.consultation_id);
   url.requestUpdate("infoPat");
