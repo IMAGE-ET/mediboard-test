@@ -39,6 +39,7 @@ class CPlageconsult extends CMbObject {
   var $_nb_patients          = null;
   var $_consult_by_categorie = null;
   var $_colliding_plages     = null;
+  var $_type_repeat          = null;
   
   // Field pour le calcul de collision (fin à 00:00:00)
   var $_fin = null;
@@ -73,27 +74,28 @@ class CPlageconsult extends CMbObject {
     $specs = array (
       "chir_id" => "ref notNull class|CMediusers seekable",
       "remplacant_id" => "ref class|CMediusers seekable",
-      "date"    => "date notNull",
-      "freq"    => "time notNull",
-      "debut"   => "time notNull",
-      "fin"     => "time notNull moreThan|debut",
-      "libelle" => "str seekable",
-      "locked"  => "bool default|0",
+      "date"          => "date notNull",
+      "freq"          => "time notNull",
+      "debut"         => "time notNull",
+      "fin"           => "time notNull moreThan|debut",
+      "libelle"       => "str seekable",
+      "locked"        => "bool default|0",
       "remplacant_ok" => "bool default|0",
       "desistee"   => "bool default|0",
       
       // Form fields
-      "_freq"      => "",
-      "_affected"  => "",
-      "_total"     => "",
-      "_fill_rate" => "",
+      "_freq"        => "",
+      "_affected"    => "",
+      "_total"       => "",
+      "_fill_rate"   => "",
+      "_type_repeat" => "enum list|simple|double|triple|quadruple|sameweek",
       
       // Filter fields
-      "_date_min"    => "date",
-      "_date_max"    => "date moreThan|_date_min",
-      "_function_id" => "ref class|CFunctions",
+      "_date_min"          => "date",
+      "_date_max"          => "date moreThan|_date_min",
+      "_function_id"       => "ref class|CFunctions",
       "_other_function_id" => "ref class|CFunctions",
-      "_user_id"     => 'ref class|CMediusers'
+      "_user_id"           => 'ref class|CMediusers'
       );
 
     return array_merge($parentSpecs, $specs);
@@ -285,22 +287,60 @@ class CPlageconsult extends CMbObject {
 	}
   
   function becomeNext() {
-    // Store form fields
-    $_freq     = $this->_freq;
-    $libelle   = $this->libelle;
+    $week_jumped = 0;
+    switch($this->_type_repeat) {
+      case "quadruple": 
+        $this->date = mbDate("+1 WEEK", $this->date); // 4
+        $week_jumped++;
+      case "triple": 
+        $this->date = mbDate("+1 WEEK", $this->date); // 3
+        $week_jumped++;
+      case "double": 
+        $this->date = mbDate("+1 WEEK", $this->date); // 2
+        $week_jumped++;
+      case "simple": 
+        $this->date = mbDate("+1 WEEK", $this->date); // 1
+        $week_jumped++;
+        break;
+      case "sameweek":
+        $week_number = CMbDate::weekNumberInMonth($this->date);
+        $next_month  = CMbDate::monthNumber(mbDate("+1 MONTH", $this->date));
+        $i=0;
+        do {
+          $this->date = mbDate("+1 WEEK", $this->date);
+          $week_jumped++;
+          $i++;
+        } while(
+          $i<10 && 
+          (CMbDate::monthNumber($this->date)       <  $next_month) ||
+          (CMbDate::weekNumberInMonth($this->date) != $week_number)
+        );
+      break;
+    }
+    
+    // Stockage des champs modifiés
+    $debut   = $this->debut;
+    $fin     = $this->fin;
+    $freq    = $this->freq;
+    $libelle = $this->libelle;
+    $locked  = $this->locked;
 
-    $this->date = mbDate("+7 DAYS", $this->date);
-    $where["date"] = "= '$this->date'";
+    // Recherche de la plage suivante
+    $where["date"]    = "= '$this->date'";
     $where["chir_id"] = "= '$this->chir_id'";
-    $where[] = "`debut` = '$this->debut' OR `fin` = '$this->fin'";
+    $where[]          = "`debut` = '$this->debut' OR `fin` = '$this->fin'";
     if (!$this->loadObject($where)) {
       $this->plageconsult_id = null;
     }
 
-    // Restore form fields
-    $this->_freq     = $_freq;
-    $this->libelle   = $libelle;
-    $this->updatePlainFields();
+    // Remise en place des champs modifiés
+    $this->debut   = $debut;
+    $this->fin     = $fin;
+    $this->freq    = $freq;
+    $this->libelle = $libelle;
+    $this->locked  = $locked;
+    $this->updateFormFields();
+    return $week_jumped;
   }    
 }
 

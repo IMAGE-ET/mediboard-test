@@ -87,7 +87,7 @@ class CPlageOp extends CMbObject {
     $specs["verrouillage"]     = "enum list|defaut|non|oui default|defaut";
     $specs["delay_repl"]       = "num min|0";
     $specs["actes_locked"]     = "bool";
-
+    
     $specs["_type_repeat"]     = "enum list|simple|double|triple|quadruple|sameweek";
     return $specs;
   }
@@ -319,6 +319,16 @@ class CPlageOp extends CMbObject {
       break;
     }
     
+    // Stockage des champs modifiés
+    $debut            = $this->debut;
+    $fin              = $this->fin;
+    $temps_inter_op   = $this->temps_inter_op;
+    $max_intervention = $this->max_intervention;
+    $anesth_id        = $this->anesth_id;
+    $delay_repl       = $this->delay_repl;
+    $spec_repl_id     = $this->spec_repl_id;
+    
+    // Recherche de la plafe suivante
     $where             = array();
     $where["date"]     = "= '$this->date'";
     $where[]           = "`debut` = '$this->debut' OR `fin` = '$this->fin'";
@@ -329,13 +339,6 @@ class CPlageOp extends CMbObject {
       $where["spec_id"] = "= '$this->spec_id'";
     }
     $plages           = $this->loadList($where);
-    $debut            = $this->debut;
-    $fin              = $this->fin;
-    $temps_inter_op   = $this->temps_inter_op;
-    $max_intervention = $this->max_intervention;
-    $anesth_id        = $this->anesth_id;
-    $delay_repl       = $this->delay_repl;
-    $spec_repl_id     = $this->spec_repl_id;
     if(count($plages) > 0) {
       $this->load(reset($plages)->plageop_id);
     }
@@ -344,6 +347,8 @@ class CPlageOp extends CMbObject {
     }
     if(!$this->chir_id) $this->chir_id = "";
     if(!$this->spec_id) $this->spec_id = "";
+    
+    // Remise en place des champs modifiés
     $this->debut            = $debut;
     $this->fin              = $fin;
     $this->temps_inter_op   = $temps_inter_op;

@@ -12,8 +12,8 @@
 $obj = new CPlageOp();
 $obj->bind($_POST);
 
-$del         = CValue::post("del", 0);
-$repeat      = CValue::post("_repeat", 0);
+$del    = CValue::post("del"    , 0);
+$repeat = CValue::post("_repeat", 0);
 
 
 // si l'id de l'objet est nul => creation
@@ -27,122 +27,58 @@ $msgNo    = null;
 if ($del) {
   // Supression des plages
   $obj->load();
-  $deleted     = 0;
-  $not_deleted = 0;
-  $not_found   = 0;
-
   while ($repeat > 0) {
-    $msg = null;
-    if ($obj->plageop_id) {
+    if (!$obj->_id) {
+      CAppUI::setMsg("Plage non trouvée", UI_MSG_ERROR);
+    }
+    else {
       if ($msg = $obj->delete()) {
-        $not_deleted++;
+        CAppUI::setMsg("Plage non supprimée", UI_MSG_ERROR);
+        CAppUI::setMsg("Plage du $obj->date: $msg", UI_MSG_ERROR);
       } 
       else {
-        $msg = "plage supprimée";
-        $deleted++;
-      } 
-    } 
-    else {
-      $not_found++;
-      $msg = "Impossible de supprimer, plage non trouvée";
+        CAppUI::setMsg("Plage supprimée", UI_MSG_OK);
+      }
     }
-    $body_msg .= "<br />Plage du $obj->date: $msg";
     $repeat -= $obj->becomeNext();
   }
-  if ($deleted    ) $header [] = "$deleted plage(s) supprimée(s)";
-  if ($not_deleted) $header [] = "$not_deleted plage(s) non supprimée(s)";
-  if ($not_found  ) $header [] = "$not_found plage(s) non trouvée(s)";
-  $msgNo = $deleted ? UI_MSG_ALERT : UI_MSG_ERROR;
   $_SESSION["dPbloc"]["id"] = null;
   
 } else {
   //Modification des plages
-  if($obj->plageop_id!=0) {
-    $created = 0;
-    $updated = 0;
-    $not_created = 0;
-    $not_updated = 0;
-
-    while ($repeat > 0) {
-      $msg = null;
-      if ($obj->plageop_id) {
+  if ($obj->_id != 0) {
+    while ($repeat > 0) {   
+      if ($obj->_id) {
         if ($msg = $obj->store()) {
-          $not_updated++;
+          CAppUI::setMsg("Plage non mise à jour", UI_MSG_ERROR);
+          CAppUI::setMsg("Plage du $obj->date: $msg", UI_MSG_ERROR);
         } 
         else {
-          $msg = "plage mise à jour";
-          $updated++;
-        }
+          CAppUI::setMsg("Plage mise à jour", UI_MSG_OK);
+        }      
       } 
-    
-      $body_msg .= "<br />Plage du $obj->date: $msg";
-    
       $repeat -= $obj->becomeNext();
     }
-  
-    if ($created) $header [] = "$created plage(s) créée(s)";
-    if ($updated) $header [] = "$updated plage(s) mise(s) à jour";
-    if ($not_created) $header [] = "$not_created plage(s) non créée(s)";
-    if ($not_updated) $header [] = "$not_created plage(s) non mise(s) à jour";
-  
-    $msgNo = ($not_created + $not_updated) ?
-      (($not_created + $not_updated) ? UI_MSG_ALERT : UI_MSG_ERROR) :
-      UI_MSG_OK;
   }
-  // fin modification
-  
-  // debut creation
+  // Création des plages
   else {
-  
-    $created = 0;
-    $updated = 0;
-    $not_created = 0;
-    $not_updated = 0;
-
-    while ($repeat > 0) {
-      $msg = null;
-      if ($obj->plageop_id) {
-        if ($msg = $obj->store()) {
-          $not_updated++;
-        } else {
-          $msg = "plage mise à jour";
-          $updated++;
-        }
-      } else {
-        if ($msg = $obj->store()) {
-          $not_created++;
-        } else {
-          $msg = "plage créée";
-          $created++;
-        }
+    while ($repeat > 0) {   
+      if ($msg = $obj->store()) {
+        CAppUI::setMsg("Plage non créée", UI_MSG_ERROR);
+        CAppUI::setMsg("Plage du $obj->date: $msg", UI_MSG_ERROR);
+      } 
+      else {
+        CAppUI::setMsg("Plage créée", UI_MSG_OK);
       }
-    
-      $body_msg .= "<br />Plage du $obj->date: $msg";
-    
       $repeat -= $obj->becomeNext();
     }
-  
-    if ($created) $header [] = "$created plage(s) créée(s)";
-    if ($updated) $header [] = "$updated plage(s) mise(s) à jour";
-    if ($not_created) $header [] = "$not_created plage(s) non créée(s)";
-    if ($not_updated) $header [] = "$not_created plage(s) non mise(s) à jour";
-  
-    $msgNo = ($not_created + $not_updated) ?
-      (($not_created + $not_updated) ? UI_MSG_ALERT : UI_MSG_ERROR) :
-      UI_MSG_OK;
   }
 }
 
-$complete_msg = implode(" - ", $header);
-if ($body_msg) {
-  // Uncomment for more verbose
-  $complete_msg .= $body_msg; 
+if ($otherm = CValue::post("otherm", 0)) {
+  $m = $otherm;
 }
 
-if( $otherm = CValue::post("otherm", 0) )
-  $m = $otherm;
-
-CAppUI::setMsg($complete_msg, $msgNo);
 CAppUI::redirect("m=$m");
 
 ?>

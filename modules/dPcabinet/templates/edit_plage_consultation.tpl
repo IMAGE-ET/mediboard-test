@@ -60,7 +60,7 @@ Main.add(function(){
   <tr>
       <th>{{mb_label object=$plageSel field="fin"}}</th>
       <td>{{mb_field object=$plageSel field="fin"}}</td>
-      <th><label for="_repeat" title="Nombre de plages à créer">Nombre de plages</label></th>
+      <th><label for="_repeat" title="Nombre de semaines de répétition">Nombre de semaines</label></th>
       <td><input type="text" size="2" name="_repeat" value="1" /></td>
   </tr>      
 
@@ -76,21 +76,8 @@ Main.add(function(){
         <option value="45" {{if ($plageSel->_freq == "45")}} selected="selected" {{/if}}>45</option>
      </select> min
    </td>
- 
-   <th><label for="_type_repeat" title="Espacement des plages">Type de répétition</label></th>
-   <td>
-      <select name="_type_repeat" style="width: 15em;">
-        <option value="1">Toutes les semaines</option>
-        <option value="2">Une semaine sur 2</option>
-        <option value="3">Une semaine sur 3</option>
-        <option value="4">Une semaine sur 4</option>
-        <option value="5">Une semaine sur 5</option>
-        <option value="6">Une semaine sur 6</option>
-        <option value="7">Une semaine sur 7</option>
-        <option value="8">Une semaine sur 8</option>
-        <option value="9">Une semaine sur 9</option>
-      </select>
-    </td>
+    <th>{{mb_label object=$plageSel field="_type_repeat"}}</th>
+    <td>{{mb_field object=$plageSel field="_type_repeat" style="width: 15em;" typeEnum="select"}}</td>
   </tr>
 
   <tr>
@@ -121,39 +108,16 @@ Main.add(function(){
     {{if !$plageSel->_id}}
     <td class="button" colspan="4"><button type="submit" class="submit">{{tr}}Create{{/tr}}</button></td>
     {{else}}
-    <td class="button" colspan="4"><button type="submit" class="modify">{{tr}}Modify{{/tr}}</button></td>
+    <td class="button" colspan="4">
+      <button type="submit" class="modify">{{tr}}Modify{{/tr}}</button>
+      <button class="trash" type='button' onclick="confirmDeletion(this.form,{typeName:'la plage de consultations du',objName:'{{$plageSel->date|date_format:$conf.longdate}}'})">
+        {{tr}}Delete{{/tr}}
+      </button>
+    </td>
     {{/if}}
   </tr>
 
 </table>
 
 </form>
-      
-{{if $plageSel->_id}}
-<form name='removeFrm' action='?m=dPcabinet' method='post'>
-
-<input type='hidden' name='dosql' value='do_plageconsult_multi_aed' />
-<input type='hidden' name='del' value='1' />
-{{mb_key object=$plageSel}}
-          
-<table class="form">
-  <tr>
-    <th class="title modify" colspan="2">Supprimer cette plage</th>
-  </tr>
-  <tr>
-    <th>Supprimer cette plage pendant</th>
-    <td><input type='text' name='_repeat' size="1" value='1' /> semaine(s)</td>
-  </tr>
-  <tr>
-    <td class="button" colspan="2">
-      <button class="trash" type='button' onclick="confirmDeletion(this.form,{typeName:'la plage de consultations du',objName:'{{$plageSel->date|date_format:$conf.longdate}}'})">
-        {{tr}}Delete{{/tr}}
-      </button>
-    </td>
-  </tr>
-</table>
-
-</form>
-        {{/if}}        
-    
     
