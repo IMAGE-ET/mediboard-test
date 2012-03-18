@@ -308,16 +308,7 @@ class CConsultation extends CCodable {
     if (($this->_hour !== null) && ($this->_min !== null)) {
       $this->heure = $this->_hour.":".$this->_min.":00";
     }
-    
-    // Nom de tarif manuel
-    if ($this->tarif === "manuel") {
-      // Get all acts
-      $this->loadRefsActes();
-      foreach ($this->_ref_actes as $acte) {
-        $this->tarif.= " $acte->_shortview";
-      }
-    }
-    
+        
     // Liaison FSE prioritaire sur l'état
     if ($this->_bind_fse) {
       $this->valide = 0;
@@ -754,11 +745,13 @@ class CConsultation extends CCodable {
     $secteur2_NGAP    = 0;
     $secteur2_CCAM    = 0;
     $secteur2_TARMED  = 0;
+    $count_actes = 0;
     
     if (CModule::getInstalled("tarmed")) {
       // Chargement des actes Tarmed
       $this->loadRefsActesTarmed();
       foreach ($this->_ref_actes_tarmed as $actetarmed) { 
+        $count_actes++;
         $secteur1_TARMED += round($actetarmed->montant_base , 2);
         $secteur2_TARMED += round($actetarmed->montant_depassement, 2);
       }
@@ -767,6 +760,7 @@ class CConsultation extends CCodable {
     // Chargement des actes NGAP
     $this->loadRefsActesNGAP();
     foreach ($this->_ref_actes_ngap as $acteNGAP) { 
+      $count_actes++;
       $secteur1_NGAP += $acteNGAP->montant_base;
       $secteur2_NGAP += $acteNGAP->montant_depassement;
     }
@@ -774,6 +768,7 @@ class CConsultation extends CCodable {
     // Chargement des actes CCAM
     $this->loadRefsActesCCAM();
     foreach ($this->_ref_actes_ccam as $acteCCAM) { 
+      $count_actes++;
       $secteur1_CCAM += $acteCCAM->montant_base;
       $secteur2_CCAM += $acteCCAM->montant_depassement;
     }
@@ -781,6 +776,12 @@ class CConsultation extends CCodable {
     // Remplissage des montant de la consultation
     $this->secteur1 = $secteur1_NGAP + $secteur1_CCAM + $secteur1_TARMED;
     $this->secteur2 = $secteur2_NGAP + $secteur2_CCAM + $secteur2_TARMED;
+    
+    // Cotation manuelle
+    $this->completeField("tarif");
+    if (!$this->tarif && $count_actes) {
+      $this->tarif = "Cotation manuelle";
+    }
     
     return $this->store();
     

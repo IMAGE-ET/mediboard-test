@@ -127,18 +127,16 @@ Main.add( function(){
           {{/if}}
 				
           <!-- Formulaire de selection de tarif -->
-          <form name="selectionTarif" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete : Reglement.reload.curry(true) } );">
+          <form name="selectionTarif" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, Reglement.reload.curry(true));">
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="dosql" value="do_consultation_aed" />
             {{mb_key object=$consult}}
             <input type="hidden" name="_bind_tarif" value="1" />
+            <input type="hidden" name="_delete_actes" value="0" />
 
             {{if $consult->tarif == "pursue"}}
             {{mb_field object=$consult field=tarif hidden=1}}
-            <input type="hidden" name="_delete_actes" value="0" />
-            {{else}}
-            <input type="hidden" name="_delete_actes" value="1" />
             {{/if}}
            
             <table class="form">
@@ -154,7 +152,7 @@ Main.add( function(){
                   <th><label for="choix" title="Type de cotation pour la consultation. Obligatoire.">Cotation</label></th>
                   <td>
                     <select name="_tarif_id"  class="notNull str" style="width: 130px;" onchange="this.form.onsubmit();">
-                      <option value="" selected="selected">&mdash; Choisir la cotation</option>
+                      <option value="" selected="selected">&mdash; {{tr}}Choose{{/tr}}</option>
                       {{if $tarifs.user|@count}}
                         <optgroup label="Tarifs praticien">
                         {{foreach from=$tarifs.user item=_tarif}}
@@ -291,7 +289,7 @@ Main.add( function(){
                 {{/if}}
                 
                 {{if !$consult->_current_fse && $consult->_ref_reglements|@count == 0}}
-                <button class="cancel" type="button" id="buttonCheckActe" onclick="checkActe(this)">Annuler la validation</button>
+                <button class="cancel" type="button" id="buttonCheckActe" onclick="checkActe(this)">Rouvrir la cotation</button>
                 {{/if}}
                 <button class="print" type="button" onclick="printActes()">Imprimer les actes</button>
               </td>
@@ -316,8 +314,8 @@ Main.add( function(){
                   <input type="hidden" name="chrono" value="64" />
                   {{/if}}
                   
-                  <button class="submit" type="button" onclick="validTarif();">Valider la cotation</button>
-                  <button class="cancel" type="button" onclick="cancelTarif('delActes')">Annuler la cotation</button>
+                  <button class="submit" type="button" onclick="validTarif();">Cloturer la cotation</button>
+                  <button class="cancel" type="button" onclick="cancelTarif('delActes')">Vider la cotation</button>
                 </td>
               </tr>
             {{/if}}
