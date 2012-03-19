@@ -39,6 +39,11 @@ class CSmpObjectHandler extends CEAIObjectHandler {
       return;
     }
     
+    // Si pas en mode alternatif
+    if (!CAppUI::conf("alternative_mode")) {
+      throw new CMbException("no_alternative_mode");
+    }
+    
     $this->sendFormatAction("onBeforeMerge", $mbObject);
   }
   

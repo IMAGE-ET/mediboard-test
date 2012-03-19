@@ -39,6 +39,11 @@ class CSipObjectHandler extends CEAIObjectHandler {
       return;
     }
     
+    // Si pas en mode alternatif
+    if (!CAppUI::conf("alternative_mode")) {
+      throw new CMbException("no_alternative_mode");
+    }
+    
     $patient = $mbObject;
 
     $patient_elimine = new CPatient();
