@@ -29,15 +29,15 @@ Main.add(function(){
     {{mb_include module=system template=inc_config_bool var=readonly}}
     {{mb_include module=system template=inc_config_bool var=log_js_errors}}
     {{mb_include module=system template=inc_config_str var=weinre_debug_host}}
-		
+    
     <tr>
       <th colspan="2" class="title">
         Compression des scripts et feuilles de style
       </th>
     </tr>
     {{mb_include module=system template=inc_config_enum var=minify_javascript values="0|1"}} {{* |2 *}}
-    {{mb_include module=system template=inc_config_enum var=minify_css values="0|1|2"}}
-		
+    {{mb_include module=system template=inc_config_enum var=minify_css values="1|2"}}
+    
     <tr>
       <th colspan="2" class="title">
         Fusion des objets

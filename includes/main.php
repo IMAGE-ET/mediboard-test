@@ -67,8 +67,8 @@ CJSLoader::$files = array(
   
   // Growler
   //"lib/growler/build/Growler-compressed.js",
-	
-	// TreeView
+  
+  // TreeView
   "includes/javascript/treeview.js",
 
   // Flotr
@@ -113,13 +113,24 @@ if (!CAppUI::$instance->user_id) {
     $tplAjax->display("ajax_errors.tpl");
   }
   else {
-  	$favicon = "style/$uistyle/images/icons/favicon.ico";
+    $favicon = "style/$uistyle/images/icons/favicon.ico";
     $tplLogin = new CSmartyDP("style/$uistyle");
     $tplLogin->assign("localeInfo"           , $locale_info);
+    
+    // Favicon
     $tplLogin->assign("mediboardShortIcon"   , CFaviconLoader::loadFile($favicon));
-    $tplLogin->assign("mediboardCommonStyle" , CCSSLoader::loadFiles());
-    $tplLogin->assign("mediboardStyle"       , CCSSLoader::loadFiles($uistyle));
+    
+    // CSS
+    $mediboardStyle = CCSSLoader::loadFiles();
+    if ($uistyle != "mediboard") {
+      $mediboardStyle .= CCSSLoader::loadFiles($uistyle);
+    }
+    $mediboardStyle .= CCSSLoader::loadFiles("modules");
+    $tplLogin->assign("mediboardStyle"       , $mediboardStyle);
+    
+    // JS
     $tplLogin->assign("mediboardScript"      , CJSLoader::loadFiles(!$debug));
+    
     $tplLogin->assign("errorMessage"         , CAppUI::getMsg());
     $tplLogin->assign("time"                 , time());
     $tplLogin->assign("redirect"             , $redirect);
@@ -206,7 +217,7 @@ if ($dosql) {
       CAppUI::redirect("m=system&a=module_missing&mod=$m_post");
     }
     $m_post = "dP$m_post";
-  }	
+  }  
   
   // controller in controllers/ directory
   if (is_file("./modules/$m_post/controllers/$dosql.php")) {
@@ -280,10 +291,21 @@ if (!$suppressHeaders) {
   $tplHeader->assign("obsolete_module"      , $obsolete_module);
   $tplHeader->assign("configOffline"        , null);
   $tplHeader->assign("localeInfo"           , $locale_info);
+  
+  // Favicon
   $tplHeader->assign("mediboardShortIcon"   , CFaviconLoader::loadFile("style/$uistyle/images/icons/favicon.ico"));
-  $tplHeader->assign("mediboardCommonStyle" , CCSSLoader::loadFiles());
-  $tplHeader->assign("mediboardStyle"       , CCSSLoader::loadFiles($uistyle));
+  
+  // CSS
+  $mediboardStyle = CCSSLoader::loadFiles();
+  if ($uistyle != "mediboard") {
+    $mediboardStyle .= CCSSLoader::loadFiles($uistyle);
+  }
+  $mediboardStyle .= CCSSLoader::loadFiles("modules");
+  $tplHeader->assign("mediboardStyle"       , $mediboardStyle);
+  
+  //JS
   $tplHeader->assign("mediboardScript"      , CJSLoader::loadFiles(!$debug));
+  
   $tplHeader->assign("dialog"               , $dialog);
   $tplHeader->assign("messages"             , $messages);
   $tplHeader->assign("mails"                , $mails);
@@ -334,7 +356,7 @@ CApp::$performance["ccam"] = array (
 // Data sources performances
 foreach (CSQLDataSource::$dataSources as $dsn => $ds) {
   if (!$ds) {
-  	continue;
+    continue;
   }
   
   $chrono = $ds->chrono;

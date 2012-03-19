@@ -78,9 +78,6 @@
   </script>
 
   {{$mediboardShortIcon|smarty:nodefaults}}
-  {{if $uistyle != 'mediboard'}}
-    {{$mediboardCommonStyle|smarty:nodefaults}}
-  {{/if}}
   {{$mediboardStyle|smarty:nodefaults}}
   
   <!--[if lte IE 8]>

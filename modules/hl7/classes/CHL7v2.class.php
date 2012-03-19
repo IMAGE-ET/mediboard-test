@@ -128,7 +128,7 @@ abstract class CHL7v2 {
   /**
    * @return CHL7v2SimpleXMLElement
    */
-  function getSchema($type, $name, $extension = "noext") {
+  function getSchema($type, $name, $extension = "none") {
     /*if (empty(self::$schemas)) {
       self::$schemas = SHM::get("hl7-v2-schemas");
     }*/
@@ -143,7 +143,7 @@ abstract class CHL7v2 {
       $this->error(CHL7v2Exception::VERSION_UNKNOWN, $version);
     }
     
-    if ($extension && $extension !== "noext" && preg_match("/([A-Z]{2})_(.*)/", $extension, $matches)) {
+    if ($extension && $extension !== "none" && preg_match("/([A-Z]{2})_(.*)/", $extension, $matches)) {
       $lang = strtolower($matches[1]);
       $v    = "v".str_replace(".", "_", $matches[2]);
       $version_dir = "extensions/$lang/$v";

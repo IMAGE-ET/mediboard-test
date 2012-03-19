@@ -26,29 +26,34 @@ abstract class CCSSLoader extends CHTMLResourceLoader {
   }
   
   static function loadFiles($theme = "mediboard", $media = "all", $type = "text/css") {
-    $path = "style/$theme";
     $compress = CAppUI::conf("minify_css");
     
-    if (!$compress) {
-      $css_file = "$path/main.css";
-      return self::loadFile($css_file, $media, null, self::getLastChange($css_file), $type);
-    }
-    
-    if(file_exists("$path/css.list")) {
-      $list = file("$path/css.list", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-      $list = array_map("trim", $list);
+    if ($theme == "modules") {
+      $files = glob("modules/*/css/main.css");
     }
     else {
-      $list = array("main.css");
+      $path = "style/$theme";
+      
+      /*if (!$compress) {
+        $css_file = "$path/main.css";
+        return self::loadFile($css_file, $media, null, self::getLastChange($css_file), $type);
+      }*/
+      
+      if(file_exists("$path/css.list")) {
+        $list = file("$path/css.list", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $list = array_map("trim", $list);
+      }
+      else {
+        $list = array("main.css");
+      }
+    
+      $files = array();
+      foreach($list as $_file) {
+        $files[] = "$path/$_file";
+      }
     }
     
     $result = "";
-    
-    $files = array();
-    foreach($list as $_file) {
-      $files[] = "$path/$_file";
-    }
-    
     $uptodate = false;
     
     $hash = self::getHash(implode("", $files)."-level-$compress");
@@ -68,16 +73,17 @@ abstract class CCSSLoader extends CHTMLResourceLoader {
     
     if (!$uptodate) {
       $all = "";
-      foreach($files as $file) {
-        $content = file_get_contents($file);
-        
-        if ($compress == 2) {
-          $content = self::minify($content);
-        }
-        
+      foreach($files as $_file) {
+        $_path = dirname($_file);
+        $content = file_get_contents($_file);
         $content = preg_replace("/\@import\s+(?:url\()?[\"']?([^\"\'\)]+)[\"']?\)?;/i", "", $content); // remove @imports
-        $content = preg_replace("/(url\s*\(\s*[\"\']?)/", "$1../$path/", $content); // relative paths
+        $content = preg_replace("/(url\s*\(\s*[\"\']?)/", "$1../$_path/", $content); // relative paths
+        
         $all .= $content."\n";
+      }
+        
+      if ($compress == 2) {
+        $all = self::minify($all);
       }
       
       file_put_contents($cachefile, $all);
@@ -95,11 +101,8 @@ abstract class CCSSLoader extends CHTMLResourceLoader {
     $css = preg_replace("!/\*[^*]*\*+([^/][^*]*\*+)*/!", "", $css); // comments
     $css = preg_replace("/\s*([\{\};:,>])\s*/", "$1", $css); // whitespace around { } ; : , >
     $css = str_replace(";}", "}", $css); // ;} >> }
+    $css = str_replace("/./", "/", $css); // /./ >> /
+    $css = CMbPath::reduce($css); // foo/../ >> /
     return $css;
-  }
-  
-  private static function reducePath($matches) {
-    mbTrace($matches, "m", true);
-    return CMbPath::reduce($matches[1]);
   }
 }

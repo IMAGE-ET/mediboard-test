@@ -52,8 +52,7 @@ if ($indexFile) {
   $smartyStyle->assign("offline"              , true);
   $smartyStyle->assign("localeInfo"           , $locale_info);
   $smartyStyle->assign("mediboardShortIcon"   , CFaviconLoader::loadFile("style/$uistyle/images/icons/favicon.ico"));
-  $smartyStyle->assign("mediboardCommonStyle" , CCSSLoader::loadFile("style/mediboard/main.css", "all"));
-  $smartyStyle->assign("mediboardStyle"       , CCSSLoader::loadFile("style/$uistyle/main.css", "all"));
+  $smartyStyle->assign("mediboardStyle"       , CCSSLoader::loadFiles());
   $smartyStyle->assign("mediboardScript"      , CJSLoader::loadFiles());
   $smartyStyle->assign("messages"             , $messages);
   $smartyStyle->assign("debugMode"            , CAppUI::pref("INFOSYSTEM"));
