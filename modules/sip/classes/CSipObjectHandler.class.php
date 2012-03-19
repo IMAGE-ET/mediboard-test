@@ -51,7 +51,6 @@ class CSipObjectHandler extends CEAIObjectHandler {
         if ($mbObject->_eai_initiateur_group_id == $_group->_id) {
           continue;
         }
-        
         $patient->_IPP = null;
         $patient->loadIPP($_group->_id);
         $patient1_ipp = $patient->_IPP;
@@ -76,7 +75,6 @@ class CSipObjectHandler extends CEAIObjectHandler {
         $id400sPatientElimine = $id400PatientElimine->loadMatchingList();
 
         $id400s = array_merge($id400sPatient, $id400sPatientElimine);
-
         if (count($id400s) > 1) {
           foreach ($id400s as $_id_400) {
             // On continue pour ne pas mettre en trash l'IPP du patient que l'on garde
@@ -85,7 +83,7 @@ class CSipObjectHandler extends CEAIObjectHandler {
             }
             $_id_400->tag = CAppUI::conf('dPpatients CPatient tag_ipp_trash').$tap_IPP;
             $_id_400->last_update = mbDateTime();
-           // $_id_400->store();
+            $_id_400->store();
           }
         }
         
@@ -98,9 +96,10 @@ class CSipObjectHandler extends CEAIObjectHandler {
           "patient1_ipp"   => $patient1_ipp,
           "patient2_ipp"   => $patient2_ipp,
         );
+       
       }        
     }
-    
+
     $this->sendFormatAction("onBeforeMerge", $mbObject);
   }
   
