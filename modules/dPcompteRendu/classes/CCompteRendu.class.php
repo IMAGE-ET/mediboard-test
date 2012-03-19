@@ -864,7 +864,7 @@ class CCompteRendu extends CDocumentItem {
       if ($elements->length) {
         $last_div = $elements->item(0);
         $last_div = $last_div->nextSibling;
-        while ($last_div->nodeType != 1) {
+        while ($last_div && $last_div->nodeType != 1) {
           $last_div = $last_div->nextSibling;
         }
         if ($last_div->getAttribute("id") == "footer") {
@@ -876,7 +876,7 @@ class CCompteRendu extends CDocumentItem {
       if (!$last_div) {
         $last_div = $xpath->query("//div[@id='footer']")->item(0);
         $last_div = $last_div->nextSibling;
-        while ($last_div->nodeType != 1) {
+        while ($last_div && $last_div->nodeType != 1) {
           $last_div = $last_div->nextSibling;
         }
       }
