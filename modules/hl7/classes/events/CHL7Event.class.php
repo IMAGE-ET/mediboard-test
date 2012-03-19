@@ -30,8 +30,16 @@ class CHL7Event {
 
   var $msg_codes     = array();
   
+  /**
+   * @var CReceiverIHE
+   */
   var $_receiver     = null;
+  
+  /**
+   * @var CInteropSender
+   */
   var $_sender       = null;
+  
   var $_exchange_ihe = null; 
   var $_is_i18n      = null; 
   

@@ -30,6 +30,8 @@ class CReceiverIHEConfig extends CMbObject {
   var $build_mode               = null;
   var $build_NDA                = null;
   
+  var $ER7_segment_terminator   = null;
+  
   // PV1
   var $build_PV1_3_2            = null;
   var $build_PV1_3_3            = null;
@@ -65,6 +67,8 @@ class CReceiverIHEConfig extends CMbObject {
     
     $props["build_mode"]               = "enum list|normal|simple default|normal";
     $props["build_NDA"]                = "enum list|PID_18|PV1_19 default|PID_18";
+    
+    $props["ER7_segment_terminator"]   = "enum list|CR|LF|CRLF";
     
     // PV1
     $props["build_PV1_3_2"]            = "enum list|name|config_value default|name";
