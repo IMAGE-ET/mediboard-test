@@ -28,6 +28,9 @@ then
   check_errs $? "Wrong paramaters" "Successfully updated"
 fi
 
+# File must exists (touch doesn't override)
+touch $BASH_PATH/rsyncupdate.exclude
+
 # Rsyncing -- Parsing rsyncupdate.conf
 if [ "$action" != "info" ]
 then
