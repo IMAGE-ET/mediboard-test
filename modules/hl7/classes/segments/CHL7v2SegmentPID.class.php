@@ -80,30 +80,33 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     // PID-11: Patient Address (XAD) (optional repeating)
     $address = array();
     
-    $linesAdress = explode("\n", $patient->adresse, 2);
-    $address[] = array(
-      CValue::read($linesAdress, 0),
-      str_replace("\n", $message->componentSeparator, CValue::read($linesAdress, 1)),
-      $patient->ville,
-      null,
-      $patient->cp,
-      CHL7v2TableEntry::mapTo("399", $patient->pays_insee),
-      // Table - 0190
-      // B   - Firm/Business 
-      // BA  - Bad address 
-      // BDL - Birth delivery location (address where birth occurred)  
-      // BR  - Residence at birth (home address at time of birth)  
-      // C   - Current Or Temporary
-      // F   - Country Of Origin 
-      // H   - Home 
-      // L   - Legal Address 
-      // M   - Mailing
-      // N   - Birth (nee) (birth address, not otherwise specified)  
-      // O   - Office
-      // P   - Permanent 
-      // RH  - Registry home
-      "H",
-    );
+    if ($patient->adresse || $patient->ville || $patient->cp) {
+      $linesAdress = explode("\n", $patient->adresse, 2);
+      $address[] = array(
+        CValue::read($linesAdress, 0),
+        str_replace("\n", $message->componentSeparator, CValue::read($linesAdress, 1)),
+        $patient->ville,
+        null,
+        $patient->cp,
+        CHL7v2TableEntry::mapTo("399", $patient->pays_insee),
+        // Table - 0190
+        // B   - Firm/Business 
+        // BA  - Bad address 
+        // BDL - Birth delivery location (address where birth occurred)  
+        // BR  - Residence at birth (home address at time of birth)  
+        // C   - Current Or Temporary
+        // F   - Country Of Origin 
+        // H   - Home 
+        // L   - Legal Address 
+        // M   - Mailing
+        // N   - Birth (nee) (birth address, not otherwise specified)  
+        // O   - Office
+        // P   - Permanent 
+        // RH  - Registry home
+        "H",
+      );
+    }
+    
     if ($patient->lieu_naissance || $patient->cp_naissance || $patient->pays_naissance_insee) {
       $address[] = array(
         null,
