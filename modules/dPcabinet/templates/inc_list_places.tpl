@@ -20,7 +20,7 @@ PlageConsult.addPlaceBefore = function(plage_id) {
   date.setHours({{$plage->debut|date_format:"%H"}});
   date.setMinutes({{$plage->debut|date_format:"%M"}} - {{$plage->freq|date_format:"%M"}});
   date.setSeconds({{$plage->debut|date_format:"%S"}});
-  oForm.debut.value = date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+  oForm.debut.value = printf('%02d:%02d:%02d',date.getHours(), date.getMinutes(), date.getSeconds());
   submitFormAjax(oForm, "systemMsg", { onComplete: function() { PlageConsult.refreshPlage(); } });
 };
 PlageConsult.addPlaceAfter = function(plage_id) {
@@ -29,7 +29,7 @@ PlageConsult.addPlaceAfter = function(plage_id) {
   date.setHours({{$plage->fin|date_format:"%H"}});
   date.setMinutes({{$plage->fin|date_format:"%M"}} + {{$plage->freq|date_format:"%M"}});
   date.setSeconds({{$plage->fin|date_format:"%S"}});
-  oForm.fin.value = date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+  oForm.fin.value = printf('%02d:%02d:%02d', date.getHours(), date.getMinutes(), date.getSeconds());
   submitFormAjax(oForm, "systemMsg", { onComplete: function() { PlageConsult.refreshPlage(); } });
 };
 {{/if}}
