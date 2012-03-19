@@ -371,8 +371,32 @@ class CStoredObject extends CModelObject {
    * @todo Should not be used, use canDo()->edit instead
    * @return CCanDo 
    */ 
-    function canEdit() {
+  function canEdit() {
     return $this->_canEdit = $this->getPerm(PERM_EDIT);
+  }
+  
+  /**
+   * Prevents accessing the objects by redirecting to an "access denied page", 
+   * if the user doesn't have READ access
+   */
+  function needsRead() {
+    $can = $this->canDo();
+    
+    if (!$can->read) {
+      $can->redirect();
+    }
+  }
+  
+  /**
+   * Prevents accessing the objects by redirecting to an "access denied page", 
+   * if the user doesn't have EDIT access
+   */
+  function needsEdit() {
+    $can = $this->canDo();
+    
+    if (!$can->edit) {
+      $can->redirect();
+    }
   }
 
   /*
