@@ -34,11 +34,12 @@ class CHL7v2Event extends CHL7Event {
     // Génération de l'échange
     $this->generateExchange();
  
-    $terminator = CValue::read(array(
+    $terminators = array(
       "CR"   => "\r",
       "LF"   => "\n",
       "CRLF" => "\r\n",
-    ), $this->_receiver->_configs["ER7_segment_terminator"], CHL7v2Message::DEFAULT_SEGMENT_TERMINATOR);
+    );
+    $terminator = CValue::read($terminators, $this->_receiver->_configs["ER7_segment_terminator"], CHL7v2Message::DEFAULT_SEGMENT_TERMINATOR);
     
     // Création du message HL7
     $message = new CHL7v2Message($this->version);
