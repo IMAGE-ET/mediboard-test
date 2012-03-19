@@ -380,7 +380,7 @@ class CAffectation extends CMbObject {
     }
     
     $affectation_uf = new CAffectationUniteFonctionnelle();
-    if (!$this->uf_soins_id) {
+    if (!$this->uf_soins_id || $this->uf_soins_id!=$service->_id) {
       $where["object_id"]     = "= '{$service->_id}'";
       $where["object_class"]  = "= 'CService'";
       $affectation_uf->loadObject($where);
@@ -413,7 +413,7 @@ class CAffectation extends CMbObject {
     }
   }
   
-  function loadRefUfs($cache = 1) {     
+  function loadRefUfs($cache = 1) {
     $this->loadRefUFHebergement($cache);
     $this->loadRefUFMedicale($cache);
     $this->loadRefUFSoins($cache);
