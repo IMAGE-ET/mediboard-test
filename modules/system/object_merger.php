@@ -12,7 +12,7 @@ $objects_class  = CValue::get('objects_class');
 $readonly_class = CValue::get('readonly_class');
 $objects_id     = CValue::get('objects_id');
 if (!is_array($objects_id)) {
-	$objects_id = explode("-", $objects_id);
+  $objects_id = explode("-", $objects_id);
 }
 
 $objects = array();
@@ -41,7 +41,7 @@ if (class_exists($objects_class) && count($objects_id)) {
   
   // Default préselection of first object
   $_selected = reset($objects);
-	
+  
   // selection of the first CSejour or CPatient with an ext ID
   if ($objects_class == "CSejour" || $objects_class == "CPatient") {
     $no_extid = array();
@@ -58,22 +58,22 @@ if (class_exists($objects_class) && count($objects_id)) {
     }
     
     if (count($no_extid) < count($objects)) {
-    	// Selection disabled for idex less objects
+      // Selection disabled for idex less objects
       if (CAppUI::conf("merge_prevent_base_without_idex") == 1) {
         foreach($no_extid as $_object) {
           $_object->_disabled = true;
         }
 
-	      $_selected = reset($extid);
+        $_selected = reset($extid);
       }
     }
   }
-	
-	// Selected object IS selected (!)
+  
+  // Selected object IS selected (!)
   $_selected->_selected = true;
   
   // Check merge
-	$result = new $objects_class;
+  $result = new $objects_class;
   $checkMerge = $result->checkMerge($objects);
 
   // Merge trivial fields
@@ -84,9 +84,9 @@ if (class_exists($objects_class) && count($objects_id)) {
     // No values
     if (!count($values)) {
       $statuses[$field] = "none";
-			continue;
-		}
-		
+      continue;
+    }
+    
     $result->$field = reset($values);
 
     // One unique value
@@ -112,8 +112,10 @@ $counts = array(
 );
 
 foreach ($statuses as $status) {
-	$counts[$status]++;
+  $counts[$status]++;
 }
+
+$classes = $readonly_class ? array() : CApp::getInstalledClasses();
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -125,7 +127,7 @@ $smarty->assign("result",  $result);
 $smarty->assign("statuses",  $statuses);
 $smarty->assign("counts",  $counts);
 $smarty->assign("checkMerge", $checkMerge);
-$smarty->assign("list_classes", CApp::getInstalledClasses());
+$smarty->assign("list_classes", $classes);
 $smarty->assign("alternative_mode", CAppUI::conf("alternative_mode"));
 $smarty->assign("readonly_class", $readonly_class);
 

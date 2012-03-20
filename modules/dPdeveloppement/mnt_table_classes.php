@@ -28,7 +28,7 @@ $selected_classes = array();
 $list_classes = array();
 
 // On regarde si la classe existe vraiment
-if (array_search($class, $installed_classes) == false) {
+if (array_search($class, $installed_classes) === false) {
   $class = null;
   $selected_classes =& $installed_classes;
 }
@@ -135,45 +135,45 @@ foreach ($selected_classes as $_class) {
   if($object->_spec->table && $ds->loadTable($object->_spec->table)) {
     $details['no_table'] = false;
 
-	  $sql = "SHOW COLUMNS FROM `{$object->_spec->table}`";
-	  $list_fields = $ds->loadList($sql);
-	  
-	  foreach($list_fields as $curr_field){
-	    $details['fields'][$curr_field['Field']]['db'] = array();
-	    if (!isset($details['fields'][$curr_field['Field']]['object'])) {
-	      $details['fields'][$curr_field['Field']]['object'] = array();
-	      $details['fields'][$curr_field['Field']]['object']['spec'] = null;
-	    }
-	  	$field =& $details['fields'][$curr_field['Field']]['db'];
-	  	
-	  	$props = CMbFieldSpec::parseDBSpec($curr_field['Type']);
-	  	
-	    $field['type']     = $props['type'];
-	    $field['params']   = $props['params'];
-	    $field['unsigned'] = $props['unsigned'];
-	    $field['zerofill'] = $props['zerofill'];
-	    $field['null']     = ($curr_field['Null'] != 'NO');
-	    $field['default']  = $curr_field['Default'];
-	    $field['index']    = null;
-	    $field['extra']    = $curr_field['Extra'];
-	  }
-	  
-	  // Extraction des Index
-	  $sql = "SHOW INDEX FROM `{$object->_spec->table}`";
+    $sql = "SHOW COLUMNS FROM `{$object->_spec->table}`";
+    $list_fields = $ds->loadList($sql);
     
-	  $list_indexes = $ds->loadList($sql);
-	  
+    foreach($list_fields as $curr_field){
+      $details['fields'][$curr_field['Field']]['db'] = array();
+      if (!isset($details['fields'][$curr_field['Field']]['object'])) {
+        $details['fields'][$curr_field['Field']]['object'] = array();
+        $details['fields'][$curr_field['Field']]['object']['spec'] = null;
+      }
+      $field =& $details['fields'][$curr_field['Field']]['db'];
+      
+      $props = CMbFieldSpec::parseDBSpec($curr_field['Type']);
+      
+      $field['type']     = $props['type'];
+      $field['params']   = $props['params'];
+      $field['unsigned'] = $props['unsigned'];
+      $field['zerofill'] = $props['zerofill'];
+      $field['null']     = ($curr_field['Null'] != 'NO');
+      $field['default']  = $curr_field['Default'];
+      $field['index']    = null;
+      $field['extra']    = $curr_field['Extra'];
+    }
+    
+    // Extraction des Index
+    $sql = "SHOW INDEX FROM `{$object->_spec->table}`";
+    
+    $list_indexes = $ds->loadList($sql);
+    
     $duplicates = array_duplicates($list_indexes, 'Column_name');
     $details['duplicates'] = $duplicates;
-	  
-	  foreach($list_indexes as $curr_index) {
+    
+    foreach($list_indexes as $curr_index) {
       $details['fields'][$curr_index['Column_name']]['db']['index'] = $curr_index['Key_name'];
       
-	    if($curr_index['Key_name'] == 'PRIMARY'){
+      if($curr_index['Key_name'] == 'PRIMARY'){
         $details['db_key'] = $curr_index['Column_name'];
         $details['fields'][$curr_index['Column_name']]['object']['db_spec']['extra'] = 'auto_increment';
       }
-	  }
+    }
   } else {
     $details['no_table'] = true;
     $details['duplicates'] = array();

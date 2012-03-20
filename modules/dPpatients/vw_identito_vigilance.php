@@ -16,11 +16,14 @@ if (CAppUI::$user->_user_type =! 1) {
 }
 
 $patient_id = CValue::getOrSession("patient_id");
+$naissance  = CValue::getOrSession("naissance", array(
+  "day"   => 1,
+  "month" => 1,
+  "year"  => 1,
+));
 
 // Patient à analyser
 $patient = new CPatient();
-
-$count_matching_patients = $patient->countMatchingPatients();
 
 $id400 = new CIdSante400();
 $id400->object_class = "CPatient";
@@ -40,7 +43,7 @@ if ($patient->_id) {
 
 if ($patient->_id) {
   foreach($patient->_ref_sejours as &$_sejour){
-  	$_sejour->loadNDA();
+    $_sejour->loadNDA();
   }
 }
 
@@ -88,7 +91,7 @@ foreach ($listSiblings as &$_sibling) {
     }
   }
   foreach($_sibling->_ref_sejours as &$_sejour){
-  	$_sejour->loadNDA();
+    $_sejour->loadNDA();
   }
 }
 
@@ -104,8 +107,8 @@ $smarty->assign("patient"     , $patient);
 $smarty->assign("listPrat"    , $listPrat);
 $smarty->assign("listSiblings", $listSiblings);
 $smarty->assign("vip"         , $vip);
+$smarty->assign("naissance"   , $naissance);
 
-$smarty->assign("count_matching_patients", $count_matching_patients);
 $smarty->assign("count_conflicts", $count_conflicts);
 
 $smarty->display("vw_identito_vigilance.tpl");

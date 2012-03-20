@@ -137,7 +137,7 @@ class CApp {
     $save = array();
     foreach ($arguments as $_key => $_value) {
       if (!isset($_GET[$_key])) {
-      	continue;
+        continue;
       }
       
       $save[$_key] = $_GET[$_key];
@@ -330,10 +330,10 @@ class CApp {
    */
   static function groupClassesByModule($classes) {
     $grouped = array();
-  	foreach ($classes as $class) {
+    foreach ($classes as $class) {
       $object = new $class;
       if ($module = $object->_ref_module) {
-      	$grouped[$module->mod_name][] = $class;
+        $grouped[$module->mod_name][] = $class;
       }
     }
     return $grouped;
