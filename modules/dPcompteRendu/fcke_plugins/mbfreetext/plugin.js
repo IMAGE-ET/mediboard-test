@@ -38,7 +38,7 @@ CKEDITOR.plugins.add('mbfreetext',{
    });
    editor.addCommand('mbfreetext', {exec: mbfreetext_onclick});
    editor.ui.addButton('mbfreetext', {label:'Texte libre', command:'mbfreetext',
-   	 icon:'../../modules/dPcompteRendu/fcke_plugins/mbfreetext/images/mbfreetext.png' });
+     icon:'../../modules/dPcompteRendu/fcke_plugins/mbfreetext/images/mbfreetext.png' });
   }
 });
 

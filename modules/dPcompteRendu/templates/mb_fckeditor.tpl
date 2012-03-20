@@ -33,7 +33,8 @@ CKEDITOR.editorConfig = function(config) {
   config.pasteFromWordPromptCleanup = true;
   config.pasteFromWordRemoveFontStyles = "{{$clean_word}}";
   config.pasteFromWordRemoveStyles = "{{$clean_word}}";
-  config.fontSize_sizes = 'xx-small/xx-small;x-small/x-small;small/small;medium/medium;large/large;x-large/x-large;xx-large/xx-large';
+  config.fontSize_sizes  = '8/8px;9/9px;10/10px;11/11px;12/12px;14/14px;16/16px;18/18px;20/20px;22/22px;24/24px;26/26px;28/28px;36/36px;48/48px;72/72px;';
+  config.fontSize_sizes += 'xx-small/xx-small;x-small/x-small;small/small;medium/medium;large/large;x-large/x-large;xx-large/xx-large';
   
   var css = ["style/mediboard/htmlarea.css?build={{$version.build}}"];
   if (Prototype.Browser.IE) {
@@ -48,7 +49,8 @@ CKEDITOR.editorConfig = function(config) {
   config.resize_maxWidth = "100%";
   config.resize_minWidth = "100%";
   config.font_defaultLabel = '{{$conf.dPcompteRendu.CCompteRendu.default_font}}';
-  config.fontSize_defaultLabel = 'small';
+  config.fontSize_defaultLabel = '{{$conf.dPcompteRendu.CCompteRendu.default_size}}'
+  
   // Suppression du redimensionnement manuel
   config.resize_enabled = false;
   // Suppression du bouton de masquage des barres d'outils

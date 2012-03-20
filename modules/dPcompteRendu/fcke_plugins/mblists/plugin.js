@@ -22,7 +22,7 @@ CKEDITOR.plugins.add('mblists',{
        label: "Fermer",
        onClick: function(e) { CKEDITOR.dialog.getCurrent().hide(); }
      }
-	],
+  ],
     minWidth : 350,
     minHeight : 210,
     contents :
@@ -47,7 +47,7 @@ CKEDITOR.plugins.add('mblists',{
    
    editor.addCommand('mblists', {exec: mblists_onclick});
    editor.ui.addButton('mblists', {label:'Listes de choix', command:'mblists',
-   	 icon:'../../modules/dPcompteRendu/fcke_plugins/mblists/images/mblists.png' });
+     icon:'../../modules/dPcompteRendu/fcke_plugins/mblists/images/mblists.png' });
   }
 });
 

@@ -19,6 +19,7 @@ $dPconfig["dPcompteRendu"] = array (
     "clean_word" => "1",
     "arch_wkhtmltopdf" => "i386",
     "check_to_empty_field" => "1",
-    "default_font" => "Georgia"
+    "default_font" => "Georgia",
+    "default_size" => "small"
   ),
 );

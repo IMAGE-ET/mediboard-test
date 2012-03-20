@@ -34,7 +34,12 @@
     function Ok(e) {
       var content = $('txtData').value;
         if (content != '') {
-          var sHtml = "<span class='field'>[[Texte libre - " + content + "]]</span>&nbsp;";
+          if (Prototype.Browser.Gecko) {
+            var sHtml = "<span contenteditable='false'><span class='field' contenteditable='true'>[[Texte libre - " + content + "]]</span></span>&nbsp;";
+          }
+          else {
+            var sHtml = "<span class='field' contenteditable='false'>[[Texte libre - " + content + "]]</span>&nbsp;";
+          }
           if (CKEDITOR.env.gecko) {
             insertSpecialChar(sHtml);
           } else {

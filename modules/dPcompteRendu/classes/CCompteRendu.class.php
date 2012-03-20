@@ -641,6 +641,7 @@ class CCompteRendu extends CDocumentItem {
 
   function loadHTMLcontent($htmlcontent, $mode = "modele", $type = "body", $header = "", $sizeheader = 0, $footer = "", $sizefooter = 0, $margins = array()) {
     $default_font = CAppUI::conf("dPcompteRendu CCompteRendu default_font");
+    $default_size = CAppUI::conf("dPcompteRendu CCompteRendu default_size");
     
     $style = file_get_contents("style/mediboard/htmlarea.css") .
       "@page {
@@ -651,6 +652,7 @@ class CCompteRendu extends CDocumentItem {
        }
        body {
          font-family: $default_font;
+         font-size: $default_size;
          margin:  0;
          padding: 0;
        }";

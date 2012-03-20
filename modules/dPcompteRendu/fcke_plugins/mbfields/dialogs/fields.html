@@ -88,7 +88,12 @@
           var sHtml = "<span class='field'>" + string + "</span>&nbsp;";
         }
         else {
-          var sHtml = "<span class='field' contenteditable='false'>" + string + "</span>&nbsp;";
+          if (Prototype.Browser.Gecko) {
+            var sHtml = "<span contenteditable='false'><span class='field' contenteditable='true'>" + string + "</span></span>&nbsp;";
+          }
+          else {
+            var sHtml = "<span class='field' contenteditable='false'>" + string + "</span>&nbsp;";
+          }
         }
         CKEDITOR.instances.htmlarea.focus();
         if (CKEDITOR.env.gecko && string.match(/Code barre/) == -1) {
@@ -167,7 +172,7 @@
 
   </head>
   <body>
-  	Chercher un champ : <input type="text" id="searchinput" autofocus="true" value="" onkeyup="searchWord(this)"/>
+    Chercher un champ : <input type="text" id="searchinput" autofocus="true" value="" onkeyup="searchWord(this)"/>
     <table>
       <tr id="classic">
         <td>

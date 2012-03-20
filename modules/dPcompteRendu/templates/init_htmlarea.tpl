@@ -23,10 +23,11 @@ window.nb_textes_libres = {{$templateManager->textes_libres|@count}};
 function initCKEditor() {
   CKEDITOR.ispasting = false;
   window.old_source = $("htmlarea").value;
-	var editor = CKEDITOR.replace("htmlarea", {customConfig: "../../?m=dPcompteRendu&a=mb_fckeditor&suppressHeaders=1"});
-    editor.addCss( 'body { font-family: {{$conf.dPcompteRendu.CCompteRendu.default_font}} }' );
-	editor.on("instanceReady", function(e) {
-    
+  var editor = CKEDITOR.replace("htmlarea", {customConfig: "../../?m=dPcompteRendu&a=mb_fckeditor&suppressHeaders=1"});
+  editor.addCss( 'body { font-family: {{$conf.dPcompteRendu.CCompteRendu.default_font}} }' );
+  editor.addCss( 'body { font-size: {{$conf.dPcompteRendu.CCompteRendu.default_size}} }' );
+  
+  editor.on("instanceReady", function(e) {  
     window.resizeEditor = function () {
       var dims = document.viewport.getDimensions();
       var greedyPane = $$(".greedyPane")[0];
@@ -41,9 +42,9 @@ function initCKEditor() {
       }
     }
     
-	  var ck_instance = CKEDITOR.instances.htmlarea;
+    var ck_instance = CKEDITOR.instances.htmlarea;
 
-	  {{if !$templateManager->valueMode}}
+    {{if !$templateManager->valueMode}}
   
       // Le content editable des champs
       // Les plugins qui ne doivent pas être pris en compte pour le changement de valeur pour contentEditable
@@ -53,17 +54,53 @@ function initCKEditor() {
           obj = {data: null};
         }
         if (ck_instance.document == null || (obj.data && plugins.indexOf(obj.data.name) != -1)) return;
-        var spans = ck_instance.document.getBody().getElementsByTag("span").$;
-        for(var i in spans) {
-          var span = spans[i];
-          if (span && span.className && (Element.hasClassName(span, "field") || Element.hasClassName(span, "name"))) {
-            if (state) {
-              span.removeAttribute("contentEditable");
+        
+        var spans_by_class = [];
+        spans_by_class[0] = ck_instance.document.$.getElementsByClassName("field");
+        spans_by_class[1] = ck_instance.document.$.getElementsByClassName("name");
+        
+        for (var s = 0; s < spans_by_class.length; s++) {
+          var spans = spans_by_class[s];
+          
+          // Bug : Firefox n'efface pas un span en contentEditable à false.
+          // Il faut passer par un double span.
+          if (spans.length) {
+            for (var i in spans) {
+              var span = spans[i];
+              
+              if (state) {
+                if (Prototype.Browser.Gecko) {
+                  var span_parent = Element.up(span);
+                  var parent = Element.up(span_parent);
+                  var span_copy = span.cloneNode(true);
+                  span_copy.removeAttribute("contentEditable");
+                  parent.insertBefore(span_copy, span_parent);
+                  Element.remove(span_parent);
+                }
+                else {
+                  span.removeAttribute("contentEditable");
+                }
+              }
+              else {
+                if (Prototype.Browser.Gecko) {
+                  var parent = Element.up(span);
+                  var span_insert = new DOM.span();
+                  var span_copy = span.cloneNode(true);
+                  
+                  span_insert.contentEditable = false;
+                  span_copy.contentEditable = true;
+                  
+                  span_insert.insert(span_copy);
+                  parent.insertBefore(span_insert, span);
+                  
+                  Element.remove(span);
+                }
+                else {           
+                  span.contentEditable = false;
+                }
+              }
             }
-            else {
-              span.contentEditable = false;
-            }
-          }
+          }            
         }
       };
       
@@ -77,15 +114,15 @@ function initCKEditor() {
       ck_instance.on("afterrenderColors" , window.toggleContentEditable.curry(false));
     {{/if}}
     
-	  // Redimensionnement de l'éditeur
-		window.resizeEditor();
+    // Redimensionnement de l'éditeur
+    window.resizeEditor();
 
     // Redimensionnement automatique de l'éditeur en même temps que celui de la fenêtre.
-		Event.observe(window, "resize", function(e){
-		  window.resizeEditor();
+    Event.observe(window, "resize", function(e){
+      window.resizeEditor();
     });
-		
-		{{if $templateManager->printMode}}
+    
+    {{if $templateManager->printMode}}
       CKEDITOR.instances.htmlarea.element.$.disabled=true;
       CKEDITOR.instances.htmlarea.element.$.contentEditable=false;
       CKEDITOR.instances.htmlarea.element.$.designMode="Off";
@@ -93,42 +130,42 @@ function initCKEditor() {
         keyEvent.cancel();
       });
     {{else}}
-		  {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+      {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
         if (window.Thumb) {
-    		  Thumb.content = ck_instance.getData();
-    	    window.thumbs_timeout = setTimeout(function() {
+          Thumb.content = ck_instance.getData();
+          window.thumbs_timeout = setTimeout(function() {
             Thumb.refreshThumbs(1);
-    	    }, time_before_thumbs);
+          }, time_before_thumbs);
         }
-  		{{/if}}
+      {{/if}}
 
-		  if (window.pdf_thumbnails && Prototype.Browser.IE) {
-	      window.save_style = deleteStyle();
-	      ck_instance.on("beforePreview", function() { restoreStyle(); });
-	      ck_instance.on("afterPreview", function() { window.save_style = deleteStyle(); });
-	    }
+      if (window.pdf_thumbnails && Prototype.Browser.IE) {
+        window.save_style = deleteStyle();
+        ck_instance.on("beforePreview", function() { restoreStyle(); });
+        ck_instance.on("afterPreview", function() { window.save_style = deleteStyle(); });
+      }
       
-  		// Don't close the window with escape
-  	  document.stopObserving('keydown', closeWindowByEscape);
-  	  
-  	  // Don't allow escape or alt+f4 to cancel the request
-  	  document.observe('keydown', function(e){
-  	    var keycode = Event.key(e);
-  	    if (keycode == 27 || keycode == 115 && e.altKey) {
-  	      return Event.stop(e);
-  	    }
-  	    // Catches command+s
-  	    if (keycode == 83 && e.metaKey) {
-  	      submitCompteRendu();
-  	      Event.stop(e);
-  	    }
-  	    {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
-  	      if (keycode == 80 && (e.ctrlKey || e.metaKey)) {
-  	        ck_instance.getCommand("mbprintPDF").exec();
-  	        Event.stop(e);
-  	      }
-  	    {{/if}}
-	    });
+      // Don't close the window with escape
+      document.stopObserving('keydown', closeWindowByEscape);
+      
+      // Don't allow escape or alt+f4 to cancel the request
+      document.observe('keydown', function(e){
+        var keycode = Event.key(e);
+        if (keycode == 27 || keycode == 115 && e.altKey) {
+          return Event.stop(e);
+        }
+        // Catches command+s
+        if (keycode == 83 && e.metaKey) {
+          submitCompteRendu();
+          Event.stop(e);
+        }
+        {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+          if (keycode == 80 && (e.ctrlKey || e.metaKey)) {
+            ck_instance.getCommand("mbprintPDF").exec();
+            Event.stop(e);
+          }
+        {{/if}}
+      });
 
     // Surveillance de modification de l'éditeur de texte
     if (window.Thumb) {
@@ -164,7 +201,7 @@ function initCKEditor() {
       });
     }
     {{/if}}
-	});
+  });
 }
 
 Main.add(initCKEditor);

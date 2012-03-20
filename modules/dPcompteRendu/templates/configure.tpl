@@ -52,6 +52,10 @@
     {{mb_include module=system template=inc_config_enum values="Arial|Comic Sans MS|Courier New|Georgia|Lucida Sans Unicode|Tahoma|Times New Roman|Trebuchet MS|Verdana"}}
   </tr>
   <tr>
+    {{assign var="var" value="default_size"}}
+    {{mb_include module=system template=inc_config_enum values="xx-small|x-small|small|medium|large|x-large|xx-large|8pt|9pt|10pt|11pt|12pt|14pt|16pt|18pt|20pt|22pt|24pt|26pt|28pt|36pt|48pt|72pt"}}
+  </tr>
+  <tr>
     {{assign var="var" value="header_footer_fly"}}
     {{mb_include module=system template=inc_config_bool}}
   </tr>
