@@ -7,8 +7,7 @@
 * @author Romain Ollivier
 */
 
-$file = tempnam(sys_get_temp_dir(), "mb_");
-$csv = new CCSVFile($file);
+$csv = new CCSVFile();
 
 CApp::getMbClasses(null, $instances);
 
@@ -25,5 +24,3 @@ foreach($instances as $_class => $_instance) {
 }
 
 $csv->stream("Class to table");
-
-unlink($file);
