@@ -48,10 +48,10 @@ if (!is_file($translateModule->targetPath)) {
 $translateModule->load();
 
 foreach ($strings as $key => $valChaine){
-  if ($valChaine && $valChaine !== ""){
+  if ($valChaine !== ""){
     $translateModule->values[$key] = stripslashes($valChaine);
   }
-  elseif ($valChaine === "") {
+  else {
     unset($translateModule->values[$key]);
   }
 }

@@ -1388,7 +1388,6 @@ class CStoredObject extends CModelObject {
   /**
    * Load named back reference collection
    * @param string       $backName Name of the collection
-   * @param array        $where    Array of where clauses
    * @param array|string $order    Order SQL statement
    * @param string       $limit    MySQL limit clause
    * @param array|string $group    Group by SQL statement

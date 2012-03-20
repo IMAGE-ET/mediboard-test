@@ -46,9 +46,9 @@ foreach($localesDirs as $locale){
 global $trans;
 $trans = array();
 foreach($localesDirs as $locale){
-	foreach($contenu_file[$locale] as $k=>$v){
-		$trans[ (is_int($k) ? $v : $k) ][$locale] = $v;
-	}
+  foreach($contenu_file[$locale] as $k=>$v){
+    $trans[ (is_int($k) ? $v : $k) ][$locale] = $v;
+  }
 }
 
 
@@ -99,7 +99,7 @@ foreach ($classes as $class) {
   addLocale($classname, $prop, "$classname-$prop-court");
   
   // Traductions de chaque propriété
-	foreach ($object->_specs as $prop => $spec) { 
+  foreach ($object->_specs as $prop => $spec) { 
     if (!$spec->prop) {
       continue;
     }
@@ -113,17 +113,17 @@ foreach ($classes as $class) {
     //  continue;
     //}
     
-	  addLocale($classname, $prop, "$classname-$prop");
-	  addLocale($classname, $prop, "$classname-$prop-desc");
-	  addLocale($classname, $prop, "$classname-$prop-court");
+    addLocale($classname, $prop, "$classname-$prop");
+    addLocale($classname, $prop, "$classname-$prop-desc");
+    addLocale($classname, $prop, "$classname-$prop-court");
   
     if ($spec instanceof CEnumSpec) {
       if (!$spec->notNull) {
-	      addLocale($classname, $prop, "$classname.$prop.");
+        addLocale($classname, $prop, "$classname.$prop.");
       }
       
       foreach (explode("|", $spec->list) as $value) {
-	      addLocale($classname, $prop, "$classname.$prop.$value");
+        addLocale($classname, $prop, "$classname.$prop.$value");
       }
     }
     
@@ -161,9 +161,9 @@ function addConfigConfigCategory($chapter, $category, $values) {
 }
 
 if ($categories = @CAppUI::conf($module)) {
-	foreach ($categories as $category => $values) {
-	  addConfigConfigCategory($module, $category, $values);
-	}
+  foreach ($categories as $category => $values) {
+    addConfigConfigCategory($module, $category, $values);
+  }
 }
 
 if ($module == "system") {
@@ -193,12 +193,12 @@ $empty_locales = array_fill(0, 5, null);
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("items"  	    , $items);
+$smarty->assign("items"        , $items);
 $smarty->assign("completions" , $completions);
-$smarty->assign("locales"  		, $localesDirs);
-$smarty->assign("modules"  		, $modules);
-$smarty->assign("module"   		, $module);
-$smarty->assign("trans"    		, $trans);
+$smarty->assign("locales"      , $localesDirs);
+$smarty->assign("modules"      , $modules);
+$smarty->assign("module"       , $module);
+$smarty->assign("trans"        , $trans);
 $smarty->assign("language"    , $language);
 $smarty->assign("other_locales", $all_locales);
 $smarty->assign("empty_locales", $empty_locales);
