@@ -708,7 +708,9 @@ class COperation extends CCodable implements IPatientRelated {
     $this->_ref_anesth        = $this->loadFwdRef("anesth_id"            , $cache);
     $this->_ref_anesth_visite = $this->loadFwdRef("prat_visite_anesth_id", $cache);
     
-    $this->_ref_plageop = $this->loadFwdRef("plageop_id", $cache);
+    if (!$this->_ref_plageop) {
+      $this->_ref_plageop = $this->loadFwdRef("plageop_id", $cache);
+    }
     // Avec plage d'opération
     if ($this->_ref_plageop->_id) {
       $this->_ref_plageop->loadRefsFwd($cache);
@@ -821,7 +823,7 @@ class COperation extends CCodable implements IPatientRelated {
     $this->loadRefPlageOp($cache);
     $this->loadExtCodesCCAM();
     
-    $this->loadRefChir($cache);
+    $this->loadRefChir($cache)->loadRefFunction();
     $this->loadRefPatient($cache);
     $this->_view = "Intervention de {$this->_ref_sejour->_ref_patient->_view} par le Dr {$this->_ref_chir->_view}";
   }

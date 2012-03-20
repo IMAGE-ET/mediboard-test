@@ -19,6 +19,7 @@ foreach ($patient->loadRefsSejours($where) as $_sejour) {
   foreach ($_sejour->loadRefsConsultations() as $_consult) {
     $_consult->getType();
     $_consult->loadRefPlageConsult();
+    $_consult->loadRefPraticien()->loadRefFunction();
   }
   
   foreach ($_sejour->loadRefsOperations() as $_operation) {
@@ -34,7 +35,7 @@ foreach ($patient->loadRefsConsultations() as $_consult) {
   
   $_consult->loadRefsFwd();
   $_consult->getType();
-  $_consult->loadRefPraticien();
+  $_consult->loadRefPraticien()->loadRefFunction();
   $_consult->loadRefPlageConsult();
 }
 
