@@ -23,21 +23,29 @@
         <button name="submit" class="search">Filtrer</button>
       </form>
     </td>
+    <td>
+      <form action="?" name="csv-class-table" method="get" target="_blank">
+        <input type="hidden" name="m" value="dPdeveloppement" />
+        <input type="hidden" name="a" value="csv_class_tables" />
+        <input type="hidden" name="suppressHeaders" value="1" />
+        <button class="change">CSV classes / tables</button>
+      </form>
+    </td>
   </tr>
-	
-	<tr>
-	  <td>
-      <div class="big-info">Pour chaque spécification de propriété : 
-      	<ul>
-      	  <li><strong>la première ligne</strong> correspond au mapping objet => relationnel théorique,</li> 
-					<li><strong>la deuxième ligne </strong>correspond à ce qui est réellement présent dans la base de données.</li>
-				</ul>
-			</div>
-	  </td>
-	</tr>
   
   <tr>
-    <td>
+    <td colspan="2">
+      <div class="big-info">Pour chaque spécification de propriété : 
+        <ul>
+          <li><strong>la première ligne</strong> correspond au mapping objet => relationnel théorique,</li> 
+          <li><strong>la deuxième ligne </strong>correspond à ce qui est réellement présent dans la base de données.</li>
+        </ul>
+      </div>
+    </td>
+  </tr>
+  
+  <tr>
+    <td colspan="2">
       <table class="tbl">
         <tr>
           <th rowspan="2">Champ</th>
@@ -54,21 +62,21 @@
         {{foreach from=$list_classes key=_class item=_class_details}}
           {{if $list_errors.$_class || $list_classes|@count == 1}}
             {{if $_class_details.suggestion}}
-	          <tr>
-	            <th colspan="11" class="title">
-	              <button id="sugg-{{$_class}}-trigger" class="edit" style="float: left;">
-	                {{tr}}Suggestion{{/tr}}
-	              </button>
-	              {{$_class}} ({{tr}}{{$_class}}{{/tr}})
-	            </th>
-	          </tr>
-	          <tr id="sugg-{{$_class}}">
-	            <td colspan="100">
-	              <script type="text/javascript">new PairEffect('sugg-{{$_class}}', {bStoreInCookie: false});</script>
-	              <pre>{{$_class_details.suggestion}}</pre>
-	            </td>
-	          </tr>
-	          {{/if}}
+            <tr>
+              <th colspan="11" class="title">
+                <button id="sugg-{{$_class}}-trigger" class="edit" style="float: left;">
+                  {{tr}}Suggestion{{/tr}}
+                </button>
+                {{$_class}} ({{tr}}{{$_class}}{{/tr}})
+              </th>
+            </tr>
+            <tr id="sugg-{{$_class}}">
+              <td colspan="100">
+                <script type="text/javascript">new PairEffect('sugg-{{$_class}}', {bStoreInCookie: false});</script>
+                <pre>{{$_class_details.suggestion}}</pre>
+              </td>
+            </tr>
+            {{/if}}
           {{foreach from=$_class_details.fields key=curr_field_name item=curr_field}}
             
             {{if $list_errors.$_class.$curr_field_name || $_class_details.key == $curr_field_name || $class == $_class}}
