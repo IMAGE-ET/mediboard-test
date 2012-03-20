@@ -141,8 +141,8 @@ var Menu = {
           </td>
           <td class="welcome">
             {{if !$offline}}
-              {{mb_include module=style template=svnstatus}}
-              {{mb_include module=style template=change_group}}
+              {{mb_include style=mediboard template=svnstatus}}
+              {{mb_include style=mediboard template=change_group}}
             {{/if}}
             <br />
             <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$conf.datetime}}">
