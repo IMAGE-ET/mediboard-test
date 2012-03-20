@@ -555,8 +555,11 @@ class CMediusers extends CMbObject {
     /// <diff>
       // Bind CPS
       if ($this->_bind_cps && $this->_id && CModule::getActive("fse")) {
-        if ($msg = CFseFactory::createCPS()->bindCPS($this)) {
-          return $msg;
+        $cps = CFseFactory::createCPS();  
+        if ($cps) {
+          if ($msg = $cps->bindCPS($this)) {
+            return $msg;
+          }
         }
       }
     /// </diff>    

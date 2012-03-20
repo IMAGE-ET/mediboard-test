@@ -46,13 +46,15 @@ if ($new = CValue::get("new")) {
 // Champs vitale
 if ($useVitale && CModule::getActive("fse")) {
   $cv = CFseFactory::createCV();
-  $cv->getPropertiesFromVitale($patVitale);
-  $patVitale->updateFormFields();
-  $patient_nom    = $patVitale->nom;
-  $patient_prenom = $patVitale->prenom;
-  CValue::setSession("nom", $patVitale->nom);
-  CValue::setSession("prenom", $patVitale->prenom);
-  $cv->loadFromIdVitale($patVitale);
+  if($cv) {
+    $cv->getPropertiesFromVitale($patVitale);
+    $patVitale->updateFormFields();
+    $patient_nom    = $patVitale->nom;
+    $patient_prenom = $patVitale->prenom;
+    CValue::setSession("nom", $patVitale->nom);
+    CValue::setSession("prenom", $patVitale->prenom);
+    $cv->loadFromIdVitale($patVitale);
+  }
 }
 
 // Recherhche par IPP

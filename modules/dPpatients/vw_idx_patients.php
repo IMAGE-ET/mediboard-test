@@ -65,13 +65,16 @@ if ($patient_ipp && CModule::getInstalled("dPsante400")){
 else {
 	// Champs vitale
 	if ($useVitale && !CAppUI::pref('VitaleVision') && CModule::getActive("fse")) {
-	  CFseFactory::createCV()->getPropertiesFromVitale($patVitale);
-	  $patVitale->updateFormFields();
-	  $patient_nom    = $patVitale->nom   ;
-	  $patient_prenom = $patVitale->prenom;
-	  CValue::setSession("nom"   , $patVitale->nom   );
-	  CValue::setSession("prenom", $patVitale->prenom);
-	  CFseFactory::createCV()->loadFromIdVitale($patVitale);
+	  $cv = CFseFactory::createCV();
+	  if ($cv) {
+	    $cv->getPropertiesFromVitale($patVitale);
+  	  $patVitale->updateFormFields();
+  	  $patient_nom    = $patVitale->nom   ;
+  	  $patient_prenom = $patVitale->prenom;
+  	  CValue::setSession("nom"   , $patVitale->nom   );
+  	  CValue::setSession("prenom", $patVitale->prenom);
+  	  $cv->loadFromIdVitale($patVitale);
+    }
 	}
 	
 	$where        = array();

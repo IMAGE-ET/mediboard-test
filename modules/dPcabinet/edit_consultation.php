@@ -155,14 +155,16 @@ if ($consult->_id) {
 if ($consult->_id && CModule::getActive("fse")){
   // Chargement des identifiants LogicMax
   $fse = CFseFactory::createFSE();
-  $fse->loadIdsFSE($consult);
-  $fse->makeFSE($consult);
+  if ($fse) {
+    $fse->loadIdsFSE($consult);
+    $fse->makeFSE($consult);
+    
+    $cps = CFseFactory::createCPS()->loadIdCPS($consult->_ref_chir);
+    
+    CFseFactory::createCV()->loadIdVitale($consult->_ref_patient);
   
-  $cps = CFseFactory::createCPS()->loadIdCPS($consult->_ref_chir);
-  
-  CFseFactory::createCV()->loadIdVitale($consult->_ref_patient);
-
-  $consult->canDo();
+    $consult->canDo();
+  }
 }
 
 $antecedent = new CAntecedent();

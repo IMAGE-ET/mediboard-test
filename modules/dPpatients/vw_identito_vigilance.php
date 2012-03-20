@@ -47,7 +47,10 @@ if ($patient->_id) {
 // Chargement des identifiants standards
 $patient->loadIPP();
 if (CModule::getActive("fse")) {
-  CFseFactory::createCV()->loadIdVitale($patient);
+  $cv = CFseFactory::createCV();
+  if ($cv) {
+    $cv->loadIdVitale($patient);
+  }
 }
 
 
@@ -79,7 +82,10 @@ foreach ($listSiblings as &$_sibling) {
   $_sibling->loadDossierComplet();
   $_sibling->loadIPP();
   if (CModule::getActive("fse")) {
-    CFseFactory::createCV()->loadIdVitale($_sibling);
+    $cv = CFseFactory::createCV();
+    if ($cv) {
+      $cv->loadIdVitale($_sibling);
+    }
   }
   foreach($_sibling->_ref_sejours as &$_sejour){
   	$_sejour->loadNDA();

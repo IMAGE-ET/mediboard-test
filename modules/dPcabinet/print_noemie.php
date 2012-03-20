@@ -50,7 +50,10 @@ foreach($listConsults as $key => &$consult) {
   $consult->loadRefsFwd();
   $consult->loadRefsReglements();
   if (CModule::getActive("fse")) {
-    CFseFactory::createFSE()->loadIdsFSE($consult);
+    $fse = CFseFactory::createFSE();
+    if ($fse) {
+      $fse->loadIdsFSE($consult);
+    }
   }
   $consult->_new_tiers_reglement = new CReglement();
   $consult->_new_tiers_reglement->mode = "virement";

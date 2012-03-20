@@ -46,10 +46,13 @@ else {
   // Gestion du cas vitale
   if ($useVitale && CModule::getActive("fse") && !CAppUI::pref('VitaleVision')) {
     $patVitale = new CPatient();  
-    CFseFactory::createCV()->loadFromIdVitale($patVitale);
-    CFseFactory::createCV()->getPropertiesFromVitale($patVitale);
-    $name = $patVitale->nom;
-    $firstName = $patVitale->prenom;
+    $cv = CFseFactory::createCV();
+    if ($cv) {
+      $cv->loadFromIdVitale($patVitale);
+      $cv->getPropertiesFromVitale($patVitale);
+      $name = $patVitale->nom;
+      $firstName = $patVitale->prenom;
+    }
   }
   
   // Recherche sur valeurs exactes et phonétique

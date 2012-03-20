@@ -29,7 +29,10 @@ $patient->loadRefsCorrespondantsPatient();
 // Chargement de l'ipp
 $patient->loadIPP();
 if (CModule::getActive("fse")) {
-  CFseFactory::createCV()->loadIdVitale($patient);
+  $cv = CFseFactory::createCV();
+  if ($cv) {
+    $cv->loadIdVitale($patient);
+  }
 }
 
 if (!$patient_id) {
@@ -46,11 +49,14 @@ if (!$patient_id) {
 // Peut etre pas besoin de verifier si on n'utilise pas VitaleVision
 if ($useVitale && !CAppUI::pref('VitaleVision') && CModule::getActive("fse")) {
   $patVitale = new CPatient();
-  CFseFactory::createCV()->getPropertiesFromVitale($patVitale);
-  $patVitale->nullifyEmptyFields();
-  $patient->extendsWith($patVitale);
-  $patient->updateFormFields();
-  $patient->_bind_vitale = "1";
+  $cv = CFseFactory::createCV();
+  if ($cv) {
+    $cv->getPropertiesFromVitale($patVitale);
+    $patVitale->nullifyEmptyFields();
+    $patient->extendsWith($patVitale);
+    $patient->updateFormFields();
+    $patient->_bind_vitale = "1";
+  }
 }
 
 // Chargement du nom_fr du pays de naissance

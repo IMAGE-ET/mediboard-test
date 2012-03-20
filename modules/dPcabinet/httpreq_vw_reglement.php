@@ -79,10 +79,12 @@ if ($selConsult) {
 
 if (CModule::getActive("fse")) {
   $fse = CFseFactory::createFSE();
-  $fse->loadIdsFSE($consult);
-  $fse->makeFSE($consult);
-  CFseFactory::createCPS()->loadIdCPS($consult->_ref_chir);
-  CFseFactory::createCV()->loadIdVitale($consult->_ref_patient);
+  if($fse) {
+    $fse->loadIdsFSE($consult);
+    $fse->makeFSE($consult);
+    CFseFactory::createCPS()->loadIdCPS($consult->_ref_chir);
+    CFseFactory::createCV()->loadIdVitale($consult->_ref_patient);
+  }  
 }
 
 

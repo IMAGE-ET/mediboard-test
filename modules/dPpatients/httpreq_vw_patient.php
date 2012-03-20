@@ -25,7 +25,10 @@ if ($patient->_id) {
   $patient->loadDossierComplet();
   $patient->loadIPP();
   if (CModule::getActive("fse")) {
-    CFseFactory::createCV()->loadIdVitale($patient);
+    $cv = CFseFactory::createCV();
+    if ($cv) {
+      $cv->loadIdVitale($patient);
+    }
   }
 }
 

@@ -464,8 +464,11 @@ class CPatient extends CMbObject {
     
     // Vitale
     if (CModule::getActive("fse")) {
-      if ($msg = CFseFactory::createCV()->bindVitale($this)) {
-        return $msg;
+      $cv = CFseFactory::createCV();
+      if ($cv) {
+        if ($msg = $cv->bindVitale($this)) {
+          return $msg;
+        }  
       }
     }
     
@@ -992,7 +995,10 @@ class CPatient extends CMbObject {
   function loadRefsFwd() {
     $this->loadRefsCorrespondants();
     if (CModule::getActive("fse")) {
-      CFseFactory::createCV()->loadIdVitale($this);
+      $cv = CFseFactory::createCV();
+      if ($cv) {
+        $cv->loadIdVitale($this);
+      }
     }
   }
       
