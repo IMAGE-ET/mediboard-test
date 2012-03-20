@@ -57,31 +57,78 @@ class CHL7v2SegmentNK1 extends CHL7v2Segment {
     );
     
     // NK1-5: Phone Number (XTN) (optional repeating)
-    $data[] = array(
-      array(
-        $correspondant->tel,
+    
+    // Table - 0201
+    // ASN - Answering Service Number
+    // BPN - Beeper Number 
+    // EMR - Emergency Number  
+    // NET - Network (email) Address
+    // ORN - Other Residence Number 
+    // PRN - Primary Residence Number 
+    // VHN - Vacation Home Number  
+    // WPN - Work Number
+        
+    // Table - 0202
+    // BP       - Beeper  
+    // CP       - Cellular Phone  
+    // FX       - Fax 
+    // Internet - Internet Address: Use Only If Telecommunication Use Code Is NET 
+    // MD       - Modem 
+    // PH       - Telephone  
+    // TDD      - Telecommunications Device for the Deaf  
+    // TTY      - Teletypewriter
+    
+    $phones = array();
+    if ($correspondant->tel) {
+      $phones[] = array(
+        null,
         // Table - 0201
-        // ASN - Answering Service Number
-        // BPN - Beeper Number 
-        // EMR - Emergency Number  
-        // NET - Network (email) Address
-        // ORN - Other Residence Number 
-        // PRN - Primary Residence Number 
-        // VHN - Vacation Home Number  
-        // WPN - Work Number
         "PRN",
         // Table - 0202
-        // BP       - Beeper  
-        // CP       - Cellular Phone  
-        // FX       - Fax 
-        // Internet - Internet Address: Use Only If Telecommunication Use Code Is NET 
-        // MD       - Modem 
-        // PH       - Telephone  
-        // TDD      - Telecommunications Device for the Deaf  
-        // TTY      - Teletypewriter
-        "PH"
-      )
-    );
+        "PH",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        $correspondant->tel
+      );
+    }
+    
+    if ($correspondant->mob) {
+      $phones[] = array(
+        null,
+        // Table - 0201
+        "PRN",
+        // Table - 0202
+        "CP",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        $correspondant->mob
+      );
+    }
+    
+    if ($correspondant->email) {
+      $phones[] = array(
+        null,
+        // Table - 0201
+        "NET",
+        // Table - 0202
+        "Internet",
+        $correspondant->email,
+      );
+    }
+      
+    $data[] = $phones;
     
     // NK1-6: Business Phone Number (XTN) (optional repeating)
     $data[] = null;

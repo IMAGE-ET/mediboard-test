@@ -180,7 +180,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
       $phones[] = array(
         null,
         // Table - 0201
-        "ORN",
+        "PRN",
         // Table - 0202
         "CP",
         null,

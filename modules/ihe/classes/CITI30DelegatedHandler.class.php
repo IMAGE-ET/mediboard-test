@@ -35,21 +35,24 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     if ($mbObject instanceof CCorrespondantPatient) {
       $mbObject = $mbObject->loadRefPatient();
       $mbObject->_receiver = $receiver;
+      
+      $code = "A31";
+    }
+    else {
+      switch ($mbObject->loadLastLog()->type) {
+        case "create":
+          $code = "A28";
+          break;
+        case "store":
+          $code = "A31";
+          break;
+        default:
+          $code = null;
+          break;
+      }
     }
     
 		$patient = $mbObject;
-		
-    switch ($patient->loadLastLog()->type) {
-      case "create":
-        $code = "A28";
-        break;
-      case "store":
-        $code = "A31";
-        break;
-      default:
-        $code = null;
-        break;
-    }
     
     if ($patient->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
       return;
@@ -137,5 +140,35 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
       } 
     } 
   }  
+
+  function onAfterDelete(CMbObject $mbObject) {
+    if (!$this->isHandled($mbObject)) {
+      return false;
+    }
+
+    // On gère seulement la suppression des correspondants patient
+    if (!$mbObject instanceof CCorrespondantPatient) {
+      return;
+    }
+    
+    $receiver = $mbObject->_receiver;
+    $receiver->getInternationalizationCode($this->transaction);
+    
+    $patient = $mbObject->loadRefPatient();
+    $patient->_receiver = $receiver;
+    
+    $code = "A31";
+        
+    if ($patient->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
+      return;
+    }
+    
+    // Envoi pas les patients qui n'ont pas d'IPP
+    if (!$receiver->_configs["send_all_patients"] && !$patient->_IPP) {
+      return;
+    }
+    
+    $this->sendITI($this->profil, $this->transaction, $code, $patient);
+  }
 }
 ?>
