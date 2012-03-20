@@ -41,7 +41,7 @@ $dPconfig["issue_tracker_url"] = "http://www.mediboard.org/public/tracker4";
 $dPconfig["help_page_url"]     = "http://www.mediboard.org/public/mod-%m-tab-%a";
 
 // Object merge
-$dPconfig["alternative_mode"]  = "0";
+$dPconfig["alternative_mode"]  = "1";
 $dPconfig["merge_prevent_base_without_idex"]  = "1";
 
 $dPconfig["browser_compat"]    = array(

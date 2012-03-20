@@ -70,7 +70,7 @@ class CAppUI {
   // Global collections
   var $messages = array();
   var $user_prefs = array();
-  var $state = array();
+  var $update_hash = null;
   
   /** @var string Default page for a redirect call*/
   var $defaultRedirect = "";
@@ -502,7 +502,7 @@ class CAppUI {
     // User template case
     if ($user->template) {
         self::setMsg("Auth-failed-template", UI_MSG_ERROR);
-    	return false;
+      return false;
     }
 
     // LDAP case
@@ -580,7 +580,7 @@ class CAppUI {
     }
 
     // load the user preferences
-    self::buildPrefs(self::$instance->user_id);
+    self::buildPrefs();
     
     return true;
   }
@@ -889,6 +889,30 @@ class CAppUI {
       $output .= '</tr>';
     }
     return "$output</tbody></table>";
+  }
+  
+  /**
+   * Check if session is up to date by comparing with module versions
+   */
+  static function checkSessionUpdate(){
+    global $version;
+    
+    $instance = CAppUI::$instance;
+    
+    if (!$instance->user_id) {
+      return;
+    }
+    
+    $query = "SELECT GROUP_CONCAT(`mod_name`, `mod_version`) FROM `modules`";
+    $module = new CModule;
+    $hash  = $module->_spec->ds->loadResult($query);
+    
+    $hash .= $version["build"];
+    
+    if (!isset($instance->update_hash) || $instance->update_hash != $hash) {
+      self::buildPrefs();
+      $instance->update_hash = $hash;
+    }
   }
 }
 

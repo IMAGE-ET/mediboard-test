@@ -32,8 +32,10 @@ CAppUI::$instance =& $_SESSION["AppUI"];
 CAppUI::$instance->session_name = $session_name;
 
 if (!isset($_SESSION["locked"])) {
-  $_SESSION["locked"] = false;	
+  $_SESSION["locked"] = false;  
 }
+
+CAppUI::checkSessionUpdate();
 
 if (!isset($_SESSION['browser'])) {
   /** Basic browser detection */ 
