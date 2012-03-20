@@ -205,16 +205,6 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return "A16";
       }
       
-      // Cas d'une mutation ? 
-      /*if ($sejour->fieldModified("service_entree_id")) {
-        return "A02";
-      }
-      
-      // Annulation de la mutation ? 
-      if ($sejour->fieldModified("service_entree_id", "")) {
-        return "A12";
-      }*/
-      
       // Bascule externe devient hospitalisé (outpatient > inpatient)
       if ($sejour->fieldModified("type") 
         && (in_array($sejour->type, self::$inpatient)) 

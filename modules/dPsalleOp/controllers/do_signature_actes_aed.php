@@ -78,11 +78,7 @@ if (CAppUI::conf("dPpmsi transmission_actes") == "signature" && $object_class ==
     $mbSejour->loadNDA();
     $mbSejour->_ref_patient->loadIPP();
   }
-  
-  if (!$evenementActivitePMSI->checkSchema()) {
-    return;
-  }
-        
+
   // Facturation de l'opération où du séjour
   $mbObject->facture = 1;
   $mbObject->loadLastLog();
@@ -93,7 +89,7 @@ if (CAppUI::conf("dPpmsi transmission_actes") == "signature" && $object_class ==
     $mbObject->facture = 0;
     $mbObject->store();
     
-    $e->stepAjax();
+    CAppUI::setMsg($e->getMessage(), UI_MSG_ERROR );
   }
   
   $mbObject->countExchanges();
