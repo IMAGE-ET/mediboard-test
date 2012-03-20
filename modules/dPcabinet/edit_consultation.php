@@ -152,6 +152,10 @@ if ($consult->_id) {
   $consultAnesth->consultation_anesth_id = 0;
 }
 
+if ($consult->_id){
+  $consult->canDo();
+}
+
 if ($consult->_id && CModule::getActive("fse")){
   // Chargement des identifiants LogicMax
   $fse = CFseFactory::createFSE();
@@ -162,8 +166,6 @@ if ($consult->_id && CModule::getActive("fse")){
     $cps = CFseFactory::createCPS()->loadIdCPS($consult->_ref_chir);
     
     CFseFactory::createCV()->loadIdVitale($consult->_ref_patient);
-  
-    $consult->canDo();
   }
 }
 
