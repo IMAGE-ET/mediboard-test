@@ -3,9 +3,6 @@
 
 <table class="form">
   <tr>
-    <th class="category" colspan="2">Documents</th>
-  </tr>
-  <tr>
     <td class="halfPane">
       <fieldset>
         <legend>{{tr}}CFile{{/tr}} - {{tr}}{{$consult->_class}}{{/tr}}</legend>            
@@ -67,36 +64,5 @@
       </fieldset>
     </td>
   </tr>
-  {{/if}}
-
-  <!-- 2eme ligne -->
-  {{* si on n'est pas dans le module dPsalleOp (pas besoin du reglement) *}}
-  {{if $m!="dPsalleOp"}}
-  <tr>
-    <th class="category" colspan="2">Règlements</th>
-  </tr>
-  
-  <tr>
-    <!--  Accident du travail -->
-    <td colspan="2" id="at_area">
-      {{mb_include module=cabinet template="inc_accident_travail"}}
-    </td>
-  </tr>
-  
-  <tr>
-    <!-- Reglement -->
-    <td colspan="2">
-      {{mb_script module="dPcabinet" script="reglement"}}
-      <script type="text/javascript">
-        Reglement.consultation_id = '{{$consult->_id}}';
-        Reglement.user_id = '{{$userSel->_id}}';
-        Reglement.register('{{$consult->_id}}');
-      </script>
-    </td>
-  </tr>
-  {{/if}}
-	{{if array_key_exists("sigems", $modules)}}
-    <!-- Inclusion de la gestion du système de facturation -->
-    {{mb_include module=sigems template=check_actes_reels}}
   {{/if}}
 </table>

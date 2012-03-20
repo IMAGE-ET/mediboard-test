@@ -121,7 +121,8 @@ Main.add(function () {
     <li><a href="#devenir_dentaire">Projet thérapeutique</a></li>
   {{/if}}
   
-  <li><a href="#fdrConsult">Docs et Règlements</a></li>
+  <li><a href="#fdrConsult">Documents</a></li>
+  <li><a href="#reglement">Réglements</a></li>
 </ul>
 <hr class="control_tabs" />
 
@@ -242,3 +243,11 @@ Main.add(function () {
 <div id="fdrConsult" style="display: none;">
   {{mb_include module=cabinet template=inc_fdr_consult}}
 </div>
+
+<!-- Reglement -->
+{{mb_script module="dPcabinet" script="reglement"}}
+<script type="text/javascript">
+  Reglement.consultation_id = '{{$consult->_id}}';
+  Reglement.user_id = '{{$userSel->_id}}';
+  Reglement.register('{{$consult->_id}}');
+</script>

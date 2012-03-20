@@ -51,6 +51,15 @@ Main.add(function () {
         <div id="fdrConsult">
           {{include file="../../dPcabinet/templates/inc_fdr_consult.tpl"}}
         </div>
+        
+        <!-- Reglement -->
+        {{mb_script module="dPcabinet" script="reglement"}}
+        <script type="text/javascript">
+          Reglement.consultation_id = '{{$consult->_id}}';
+          Reglement.user_id = '{{$userSel->_id}}';
+          Reglement.register('{{$consult->_id}}');
+        </script>
+        
       {{/if}}
     </td>
   </tr>

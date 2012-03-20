@@ -89,7 +89,14 @@ Main.add( function(){
 
 {{mb_ternary var=gestionFSE test=$consult->sejour_id value=0 other=$modFSE}}
 
-<table class="layout main">
+<table class="form">
+  <tr>
+    <!--  Accident du travail -->
+    <td colspan="2" id="at_area">
+      {{mb_include module=cabinet template="inc_accident_travail"}}
+    </td>
+  </tr>
+  
   <tr>
     {{if $gestionFSE}}
       {{if $modFSE->canRead()}}
@@ -423,4 +430,8 @@ Main.add( function(){
       {{/if}}
     </td>
   </tr>
+  {{if array_key_exists("sigems", $modules)}}
+    <!-- Inclusion de la gestion du système de facturation -->
+    {{mb_include module=sigems template=check_actes_reels}}
+  {{/if}}
 </table>

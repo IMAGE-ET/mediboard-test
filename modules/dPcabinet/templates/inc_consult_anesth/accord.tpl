@@ -67,7 +67,8 @@ Main.add(function () {
   {{if $app->user_prefs.ccam_consultation == 1}}
   <li><a href="#Actes">Cotation</a></li>
   {{/if}}
-  <li><a href="#fdrConsult">Docs. et Réglements</a></li>
+  <li><a href="#fdrConsult">Documents</a></li>
+  <li><a href="#reglement">Réglements</a></li>
 </ul>
 <hr class="control_tabs" />
 
@@ -132,3 +133,11 @@ Main.add(function () {
 {{/if}}
 	
 <div id="fdrConsult" style="display: none;">{{include file="../../dPcabinet/templates/inc_fdr_consult.tpl"}}</div>
+
+<!-- Reglement -->
+{{mb_script module="dPcabinet" script="reglement"}}
+<script type="text/javascript">
+  Reglement.consultation_id = '{{$consult->_id}}';
+  Reglement.user_id = '{{$userSel->_id}}';
+  Reglement.register('{{$consult->_id}}');
+</script>
