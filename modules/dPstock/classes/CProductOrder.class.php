@@ -288,11 +288,14 @@ class CProductOrder extends CMbMetaObject {
     }
     
     $orderby = 'product_order.date_ordered DESC, product_order_item_reception.date DESC';
-    $where['product_order.deleted'] = " = 0";
-    $where['product_order.cancelled'] = " = 0";
-    $where['product_order.locked'] = " = 0";
+    $where['product_order.deleted']      = " = 0";
+    $where['product_order.cancelled']    = " = 0";
+    $where['product_order.locked']       = " = 0";
     $where['product_order.date_ordered'] = "IS NULL";
     $where['product_order.received']     = " != '1'";
+    
+    // Exclude return orders (Bon de retour)
+    $where['product_order.comments']     = $this->_spec->ds->prepare("!= %", CProductOrder::$_return_form_label);
     
     switch ($type) {
       case 'waiting': break;
