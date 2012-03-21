@@ -48,7 +48,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if (CAppUI::conf('smp server')) {} 
       // Si Client
       else {
-        $code = $this->getCode($sejour);
+        $code = $this->getCodeSejour($sejour);
         
         // Cas où : 
         // * on est l'initiateur du message 
@@ -93,16 +93,8 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if ($sejour->_etat == "preadmission") {
         return;
       }
-
-      // Création d'une affectation
-      if ($current_log->type == "create") {
-        $code = "A02";
-      }
       
-      // Modifcation d'une affectation
-      if ($current_log->type == "store") {
-        $code = $this->getModificationAdmitCode($receiver);
-      }
+      $code = $this->getCodeAffectation($affectation);
 
       // Cas où : 
       // * on est l'initiateur du message 
@@ -159,7 +151,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     return $sejour->_ref_hl7_movement = $movement;
   }
   
-  function getCode(CSejour $sejour) {
+  function getCodeSejour(CSejour $sejour) {
     $current_log = $sejour->loadLastLog();
     if (!in_array($current_log->type, array("create", "store"))) {
       return null;
@@ -200,9 +192,14 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return "A01";
       }
       
-      // Sortie confirmée (confirme)
-      if ($sejour->fieldModified("confirme")) {
+      // Confirmation de sortie
+      if ($sejour->fieldModified("confirme", "1")) {
         return "A16";
+      }
+      
+      // Annulation confirmation de sortie
+      if ($sejour->_old->confirme && $sejour->fieldModified("confirme", "0")) {
+        return "A25";
       }
       
       // Bascule externe devient hospitalisé (outpatient > inpatient)
@@ -271,6 +268,23 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     }
   }
   
+  function getCodeAffectation(CAffectation $affectation) {
+    $current_log = $affectation->_ref_current_log;
+    if (!in_array($current_log->type, array("create", "store"))) {
+      return null;
+    }
+    
+    // Création d'une affectation
+    if ($current_log->type == "create") {
+      return "A02";
+    }
+ 
+    // Modifcation d'une affectation
+    if ($current_log->type == "store") {
+      return $this->getModificationAdmitCode($affectation->_receiver);
+    }
+  }
+  
   function getModificationAdmitCode(CReceiverIHE $receiver) {
     switch ($receiver->_i18n_code) {
       // Cas de l'extension française : Z99
@@ -290,16 +304,12 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
-
-    
   }
   
   function onAfterMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
-
-    
   }  
 }
 ?>
