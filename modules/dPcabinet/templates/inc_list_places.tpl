@@ -5,9 +5,7 @@ PlageConsult.setClose = function(time) {
   window.parent.PlageConsultSelector.set(time,
     "{{$plage->_id}}",
     "{{$plage->date|date_format:"%A %d/%m/%Y"}}",
-    "{{$plage->freq}}",
-    "{{$plage->chir_id}}",
-    "{{$plage->_ref_chir->_view|smarty:nodefaults|escape:"javascript"}}");
+    "{{$plage->chir_id}}");
   window.close();
   var form = window.parent.getForm(window.parent.PlageConsultSelector.sForm);
   if (Preferences.choosePatientAfterDate == 1 && !$V(form.patient_id) && !form._pause.checked) {

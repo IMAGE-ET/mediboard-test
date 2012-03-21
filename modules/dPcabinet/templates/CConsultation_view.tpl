@@ -15,9 +15,7 @@
       {{mb_include module=patients template=inc_vw_photo_identite mode=read patient=$patient size=50}}
     </td>
     <td>
-      <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
-        {{$patient->nom}} {{$patient->prenom}}
-      </span>
+      <strong>{{mb_value object=$patient}}</strong>
     </td>
   </tr>
   <tr>

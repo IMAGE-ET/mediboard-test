@@ -366,7 +366,6 @@ Main.add(function () {
                   this.sHeure           = "heure";
                   this.sPlageconsult_id = "plageconsult_id";
                   this.sDate            = "_date";
-                  this.sDuree           = "duree";
                   this.sChir_id         = "chir_id";
                   this.sFunction_id     = "_function_id";
                   this.modal();

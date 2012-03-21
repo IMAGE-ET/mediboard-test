@@ -484,7 +484,8 @@ table#weeklyPlanning th.today {
 }
  */
 
-#planningWeek .event:hover{
+#planningWeek .operation:hover,
+#planningWeek .consultation:hover{
   overflow:visible;
   min-height:35px;
 }

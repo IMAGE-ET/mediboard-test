@@ -1,13 +1,20 @@
 <!-- $Id$ -->
 
 <script type="text/javascript">
+function openweekview() {
+  var url = new Url("cabinet", "vw_week_planning");
+  url.addParam("prat_id", "{{$chirSel}}");
+  url.addParam("date", '{{$debut}}');
+  url.redirect();
+}
+
 function showConsultations(oTd, plageconsult_id){
   oTd = $(oTd);
   
   oTd.up("table").select(".event").invoke("removeClassName", "selected");
   oTd.up(".event").addClassName("selected");
   
-  var url = new Url("dPcabinet", "inc_consultation_plage");
+  var url = new Url("cabinet", "inc_consultation_plage");
   url.addParam("plageconsult_id", plageconsult_id);
   url.requestUpdate('consultations');
 }
@@ -23,7 +30,7 @@ function goToDate(oForm, date) {
 }
 
 function showConsultSiDesistement(){
-  var url = new Url("dPcabinet", "vw_list_consult_si_desistement");
+  var url = new Url("cabinet", "vw_list_consult_si_desistement");
   url.addParam("chir_id", '{{$chirSel}}');
   url.pop(500, 500, "test");
 }
@@ -31,7 +38,7 @@ function showConsultSiDesistement(){
 function printPlage(plage_id) {
     var form = document.paramFrm;
     var url = new Url;
-    url.setModuleAction("dPcabinet", "print_plages");
+    url.setModuleAction("cabinet", "print_plages");
     url.addParam("plage_id", plage_id);
     url.addParam("_telephone", 1);
     url.popup(700, 550, "Planning");
@@ -64,6 +71,7 @@ Main.add(function () {
       </form>
       <br/>
       <button style="float:left;" class="new" onclick="PlageConsultation.edit('0');">Créer une nouvelle plage</button>
+      <button style="float:right;" class="new" onclick="openweekview();">Vue semaine</button>
     </th>
     <td style="min-width: 350px;">
       <form action="?" name="selectPrat" method="get">

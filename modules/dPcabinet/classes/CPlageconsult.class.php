@@ -153,6 +153,25 @@ class CPlageconsult extends CMbObject {
     }
   }
   
+  function getUtilisation() {
+    $this->loadRefsConsultations(false);
+    $i = $this->debut;
+    for($i = $this->debut; $i < $this->fin; $i = mbAddTime("+".$this->freq, $i)) {
+      $utilisation[$i] = 0;
+    }
+    foreach($this->_ref_consultations as $_consult) {
+      if(!isset($utilisation[$_consult->heure])) {
+        continue;
+      }
+      $emplacement = $_consult->heure;
+      for($i = 0; $i < $_consult->duree; $i++) {
+        $utilisation[$emplacement]++;
+        $emplacement = mbAddTime("+".$this->freq, $emplacement);
+      }
+    }
+    return $utilisation;
+  }
+  
   function loadCategorieFill() {
     if (!$this->_id) {
       return;

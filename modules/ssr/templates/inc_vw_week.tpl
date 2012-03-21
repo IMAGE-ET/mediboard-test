@@ -136,7 +136,9 @@ Main.add(function() {
                         
                         <div id="{{$_event->internal_id}}"
                              class="event {{$draggable}} {{$resizable}} {{if $disabled}}disabled{{/if}} {{$_event->css_class}} {{$_event->guid}} {{$_event->type}} {{if !$_event->important}}opacity-60{{/if}} {{if  isset($plageconsult_id|smarty:nodefaults) && $plageconsult_id == $_event->plage.id }}selected{{/if}}" 
-                             style="background-color: {{$_event->color}}; {{if $_event->type}}text-align:center;{{/if}}">
+                             style="background-color: {{$_event->color}}; {{if $_event->type == 'consultation' || $_event->type == 'operation'}}text-align:center;{{/if}}"
+                             {{if $_event->type == "rdvfull"}}onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}')"{{/if}}
+                             {{if $_event->type == "rdvfree"}}onclick="setClose('{{$_event->start|date_format:"%H:%M:00"}}', '{{$_event->plage.id}}', '{{$_event->start|date_format:"%A %d/%m/%Y"}}', '{{$chir_id}}');"{{/if}}>
                           
                            {{if $_event->menu|@count == 3}}
                             <div class="toolbar">
@@ -196,6 +198,12 @@ Main.add(function() {
                                 {{/if}}
                               {{/foreach}}
                               
+                            {{elseif $_event->type == "rdvfree" || $_event->type == "rdvfull"}}
+                              {{$_event->start|date_format:"%H:%M"}}
+                              {{if $_event->length}}
+                              - {{$_event->end|date_format:"%H:%M"}}
+                              {{/if}}
+                              {{$_event->title|smarty:nodefaults|nl2br}}
                             {{else}}
                               {{$_event->title|smarty:nodefaults|nl2br}}
                             {{/if}}
