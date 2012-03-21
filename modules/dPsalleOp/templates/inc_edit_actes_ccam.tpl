@@ -91,7 +91,7 @@
                     {{/if}}
                     submitFormAjax(this.form, 'systemMsg',{onComplete: function() {
                       ActesCCAM.notifyChange({{$subject->_id}},{{$subject->_praticien_id}});
-                      ActesNGAP.refreshList();}});"> Coder cet acte
+                      ActesNGAP.refreshList();}});"> Coter cet acte
                   </button>
               
                   {{else}}

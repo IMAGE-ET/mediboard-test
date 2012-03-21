@@ -19,6 +19,7 @@ if(CModule::getActive("dPprescription")){
   $module->registerTab("vw_bilan_transmissions", TAB_READ);
 }
 
+$module->registerTab("vw_interv_non_cotees", TAB_EDIT);
 $module->registerTab("vw_stats", TAB_READ);
 $module->registerTab("vw_agenda", TAB_READ);
 

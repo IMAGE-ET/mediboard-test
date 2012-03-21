@@ -354,6 +354,7 @@ $locales['mod-dPsalleOp-tab-vw_daily_check_item_category'] = 'Checklist de la ca
 $locales['mod-dPsalleOp-tab-vw_daily_check_item_type'] = 'Checklist ouverture salle';
 $locales['mod-dPsalleOp-tab-vw_daily_check_traceability'] = 'Traçabilité Checklist';
 $locales['mod-dPsalleOp-tab-vw_dmi'] = 'DMI';
+$locales['mod-dPsalleOp-tab-vw_interv_non_cotees'] = 'Saisie des cotations';
 $locales['mod-dPsalleOp-tab-vw_operations'] = 'Salle d\'opération';
 $locales['mod-dPsalleOp-tab-vw_reveil'] = 'Salle de reveil';
 $locales['mod-dPsalleOp-tab-vw_signature_actes'] = 'Bilan des actes';

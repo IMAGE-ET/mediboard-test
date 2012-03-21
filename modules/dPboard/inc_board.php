@@ -26,7 +26,7 @@ $prat = new CMediusers();
 if ($user->_is_secretaire) {
   // Chargement de la liste de praticien
   $praticiens = $user->loadPraticiens(PERM_EDIT);
-  $prat->load(CValue::postOrSession("praticien_id"));
+  $prat->load(CValue::getOrSession("praticien_id"));
 }
 
 // Si le user est un praticien

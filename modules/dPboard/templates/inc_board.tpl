@@ -9,7 +9,9 @@
 *}}
 
 {{if $user->_is_secretaire}}
-<form name="ChoixPraticien" method="post" action="#">
+<form name="ChoixPraticien" method="get" action="?">
+  <input type="hidden" name="m" value="{{$m}}"/>
+  <input type="hidden" name="tab" value="{{$tab}}" />
   <label for="praticien_id" title="Praticien pour lequel on affiche les statistiques">Praticien</label>
   <select name="praticien_id" onchange="form.submit()">
   <option value="">&mdash; Choix d'un praticien</option>
