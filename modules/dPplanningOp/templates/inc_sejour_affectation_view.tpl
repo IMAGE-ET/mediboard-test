@@ -26,7 +26,15 @@
 </tr>
 <tr>
   <td colspan="2" class="text">
-    <strong>{{mb_value object=$sejour field=_motif_complet}}</strong>
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
+      <strong>
+        {{if $sejour->_motif_complet}}
+          {{mb_value object=$sejour field=_motif_complet}}
+        {{else}}
+          {{tr}}CSejour{{/tr}}
+        {{/if}}
+      </strong>
+    </span>
   </td>
 </tr>
 
