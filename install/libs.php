@@ -258,8 +258,8 @@ $library->fileName = "ckeditor_3.6.2.tar.gz";
 $library->description = "Composant Javascript d'édition de texte au format HTML";
 $library->sourceDir = "ckeditor";
 $library->targetDir = "ckeditor";
-$library->versionFile = "ckeditor.js";
-$library->versionString = "version:'3.6.2'";
+$library->versionFile = "plugins/table/dialogs/table.js";
+$library->versionString = "100%";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "ckeditor";
