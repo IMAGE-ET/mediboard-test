@@ -9,14 +9,14 @@
 
 CCanDo::checkRead();
 
-global $period, $periods, $chir_id, $function_id, $date, $ndate, $pdate;
+global $period, $periods, $chir_id, $function_id, $date, $ndate, $pdate, $plageconsult_id;
 
 $prat = new CMediusers;
 $prat->load($chir_id);
 
 //Planning au format  CPlanningWeek
 $today = mbDate();
-$debut = CValue::getOrSession("date", $today);
+$debut = $date;
 $debut = mbDate("-1 week", $debut);
 $debut = mbDate("next monday", $debut);
 $fin   = mbDate("next sunday", $debut);
@@ -77,6 +77,7 @@ $smarty->assign("pdate"          , $pdate);
 $smarty->assign("chir_id"        , $chir_id);
 $smarty->assign("function_id"    , $function_id);
 $smarty->assign("plageconsult_id", $plageconsult_id);
+$smarty->assign("plage"          , $plage);
 $smarty->assign("planning"       , $planning);
 $smarty->assign("bank_holidays"  , mbBankHolidays($today));
 

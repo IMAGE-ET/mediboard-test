@@ -10,18 +10,10 @@
 $ds = CSQLDataSource::get("std");
 
 // Initialisation des variables
-global $period, $periods, $chir_id, $function_id, $date, $ndate, $pdate;
+global $period, $periods, $chir_id, $function_id, $date, $ndate, $pdate, $plageconsult_id;
 
-$plageconsult_id = CValue::get("plageconsult_id");
 $hour            = CValue::get("hour");
 $hide_finished   = CValue::get("hide_finished", true);
-
-// Récupération des consultations de la plage séléctionnée
-$plage = new CPlageconsult;
-if ($plageconsult_id) {
-  $plage->load($plageconsult_id);
-  $date = $plage->date;
-}
 
 // Récupération des plages de consultation disponibles
 $listPlage = new CPlageconsult;
