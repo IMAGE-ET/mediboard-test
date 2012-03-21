@@ -671,6 +671,7 @@ $locales['mod-dPhospi-tab-vw_prestations'] = 'Prestations';
 $locales['mod-dPhospi-tab-vw_printers'] = 'Imprimantes';
 $locales['mod-dPhospi-tab-vw_rapport'] = 'Rapport d\'hospitalisation';
 $locales['mod-dPhospi-tab-vw_recherche'] = 'Etat des lits';
+$locales['mod-dPhospi-tab-vw_stats'] = 'Stats';
 $locales['mod-dPhospi-tab-vw_suivi_bloc'] = 'Suivi bloc';
 $locales['module-dPhospi-court'] = 'Hospitalisation';
 $locales['module-dPhospi-long'] = 'Gestion des hospitalisations';

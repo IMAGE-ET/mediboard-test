@@ -144,6 +144,7 @@ $where["sejour.entree"] = "<= '$date_max'";
 $where["sejour.sortie"] = ">= '$date_min'";
 
 if ($duree_uscpo) {
+  $ljoin["operations"] = "operations.sejour_id = sejour.sejour_id";
   $where["duree_uscpo"] = "> 0";
 }
 
@@ -191,30 +192,17 @@ foreach($sejours_non_affectes as $_key => $_sejour) {
     $hour_operation = mbTransformTime(null, $_operation->temp_operation, "%H");
     $min_operation = mbTransformTime(null, $_operation->temp_operation, "%M");
     
-    if (end($_operations) == $_operation) {
-      if (($_operation->_datetime < $date_min) || ($_operation->_datetime > $date_max)) {
-        $_sejour->_offset_uscpo = 0;
-      }
-      else {
-        $_sejour->_offset_uscpo = CMbDate::position(mbDateTime("+$hour_operation hours +$min_operation minutes", $_operation->_datetime), max($date_min, $_sejour->entree), $period);
-      }
-      if (($_operation->_datetime > $date_max)) {
-        $_sejour->_width_uscpo = 0;
-      }
-      else {
-        $fin_uscpo = $hour_operation + 24 * $_sejour->duree_uscpo;
-        $_sejour->_width_uscpo = CMbDate::position(mbDateTime("+$fin_uscpo hours +$min_operation minutes", $_operation->_datetime), max($date_min, $_sejour->entree), $period) - $_sejour->_offset_uscpo;
-      }
-    }
-    
-    if (($_operation->_datetime < $date_min) || ($_operation->_datetime > $date_max)) {
-      unset($_sejour->_ref_operations[$key]);
-      continue;
-    }
-    
     $_operation->_debut_offset = CMbDate::position($_operation->_datetime, max($date_min, $_sejour->entree), $period);
     $_operation->_fin_offset = CMbDate::position(mbDateTime("+$hour_operation hours +$min_operation minutes",$_operation->_datetime), max($date_min, $_sejour->entree), $period);
     $_operation->_width = $_operation->_fin_offset - $_operation->_debut_offset;
+    
+    if (($_operation->_datetime > $date_max)) {
+      $_operation->_width_uscpo = 0;
+    }
+    else {
+      $fin_uscpo = $hour_operation + 24 * $_operation->duree_uscpo;
+      $_operation->_width_uscpo = CMbDate::position(mbDateTime("+$fin_uscpo hours +$min_operation minutes", $_operation->_datetime), max($date_min, $_sejour->entree), $period) - $_operation->_fin_offset;
+    }
   }
 }
 

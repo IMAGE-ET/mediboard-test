@@ -208,31 +208,18 @@ foreach ($affectations as $_affectation) {
     $hour_operation = mbTransformTime(null, $_operation->temp_operation, "%H");
     $min_operation = mbTransformTime(null, $_operation->temp_operation, "%M");
     
-    if (end($_operations) == $_operation) {
-      if (($_operation->_datetime < $date_min) || ($_operation->_datetime > $date_max)) {
-        $sejour->_offset_uscpo = 0;
-      }
-      else {
-        $sejour->_offset_uscpo = CMbDate::position(mbDateTime("+$hour_operation hours + $min_operation minutes", $_operation->_datetime), max($date_min, $_affectation->entree), $period);
-      }
-      if (($_operation->_datetime > $date_max)) {
-        $sejour->_width_uscpo = 0;
-      }
-      else {
-        $fin_uscpo = $hour_operation + 24 * $sejour->duree_uscpo;
-        $sejour->_width_uscpo = CMbDate::position(mbDateTime("+$fin_uscpo hours + $min_operation minutes", $_operation->_datetime), max($date_min, $_affectation->entree), $period) - $sejour->_offset_uscpo;
-      }
-    }
-    
-    if (($_operation->_datetime < $date_min) || ($_operation->_datetime > $date_max)) {
-      unset($sejour->_ref_operations[$key]);
-      continue;
-    }
-    
     $_operation->_debut_offset = CMbDate::position($_operation->_datetime, max($date_min, $_affectation->entree), $period);
     
     $_operation->_fin_offset = CMbDate::position(mbDateTime("+$hour_operation hours +$min_operation minutes",$_operation->_datetime), max($date_min, $_affectation->entree), $period);
     $_operation->_width = $_operation->_fin_offset - $_operation->_debut_offset;
+    
+    if (($_operation->_datetime > $date_max)) {
+      $_operation->_width_uscpo = 0;
+    }
+    else {
+      $fin_uscpo = $hour_operation + 24 * $_operation->duree_uscpo;
+      $_operation->_width_uscpo = CMbDate::position(mbDateTime("+$fin_uscpo hours + $min_operation minutes", $_operation->_datetime), max($date_min, $_affectation->entree), $period) - $_operation->_fin_offset;
+    }
   }
 }
 

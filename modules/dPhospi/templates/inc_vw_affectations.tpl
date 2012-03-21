@@ -207,14 +207,15 @@
                       {{math equation=x*(y+4.6) x=$_operation->_width y=$td_width assign=width_op}}
                       <div class="operation_in_mouv opacity-40"
                         style="left: {{$offset_op}}px; width: {{$width_op}}px;"></div>
-                    {{/foreach}}
-                    {{if $_sejour->duree_uscpo}}
-                      {{math equation=x*(y+4.6) x=$_sejour->_offset_uscpo y=$td_width assign=offset_uscpo}}
-                      {{math equation=x*(y+4.6) x=$_sejour->_width_uscpo y=$td_width assign=width_uscpo}}
                       
-                      <div class="soins_uscpo opacity-40"
-                        style="left: {{$offset_uscpo}}px; width: {{$width_uscpo}}px;"></div>
-                    {{/if}}
+                      {{if $_operation->duree_uscpo}}
+                        {{math equation=x+y x=$offset_op y=$width_op assign=offset_uscpo}}
+                        {{math equation=x*(y+4.6) x=$_operation->_width_uscpo y=$td_width assign=width_uscpo}}
+                        
+                        <div class="soins_uscpo opacity-40"
+                          style="left: {{$offset_uscpo}}px; width: {{$width_uscpo}}px;"></div>
+                      {{/if}}
+                    {{/foreach}}
                   </div>
                 </div>
               </div>

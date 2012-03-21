@@ -1252,7 +1252,6 @@ class CSetupdPplanningOp extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("1.32");
-    
     $query = "ALTER TABLE `sejour`
                 ADD `confirme` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
@@ -1261,7 +1260,19 @@ class CSetupdPplanningOp extends CSetup {
                 ADD INDEX ( `confirme` )";
     $this->addQuery($query);
     
-    $this->mod_version = "1.33";
+    $this->makeRevision("1.33");
+    $query = "ALTER TABLE `operations`
+      ADD `duree_uscpo` INT (11) UNSIGNED DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $query = "UPDATE `operations`
+      LEFT JOIN `sejour` ON `sejour`.`sejour_id` = `operations`.`sejour_id`
+      SET `operations`.`duree_uscpo` = `sejour`.`duree_uscpo`;";
+    $this->addQuery($query); 
+    
+    $query = "ALTER TABLE `sejour`
+      DROP `duree_uscpo`";
+    $this->mod_version = "1.34";
   }
 }
 ?>

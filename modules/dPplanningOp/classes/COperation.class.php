@@ -48,6 +48,8 @@ class COperation extends CCodable implements IPatientRelated {
   
   var $annulee = null;
   
+  var $duree_uscpo        = null;
+  
   // Timings enregistrés
   var $debut_prepa_preop = null;
   var $fin_prepa_preop   = null;
@@ -100,6 +102,8 @@ class COperation extends CCodable implements IPatientRelated {
   var $_password_visite_anesth = null;
   var $_patient_id      = null;
   var $_dmi_alert       = null;
+  var $_offset_uscpo    = null;
+  var $_width_uscpo     = null;
   
   // Distant fields
   var $_datetime          = null;
@@ -224,6 +228,7 @@ class COperation extends CCodable implements IPatientRelated {
 
     $specs["facture"]                 = "bool default|0";
     
+    $specs["duree_uscpo"]             = "num min|0 default|0";
     
     $specs["_duree_interv"]           = "time";
     $specs["_duree_garrot"]           = "time";

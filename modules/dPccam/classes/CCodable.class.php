@@ -272,7 +272,7 @@ class CCodable extends CMbObject {
    */
   function loadRefsActesCCAM() {
     if ($this->_ref_actes_ccam) {
-      return;
+      return $this->_ref_actes_ccam;
     }
 
     $order = array();
@@ -283,7 +283,7 @@ class CCodable extends CMbObject {
     $order[] = "acte_id";
     
     if (null === $this->_ref_actes_ccam = $this->loadBackRefs("actes_ccam", $order)) {
-      return;
+      return $this->_ref_actes_ccam;
     }
     
     $this->_temp_ccam = array();
@@ -292,6 +292,7 @@ class CCodable extends CMbObject {
     }
     
     $this->_tokens_ccam = implode("|", $this->_temp_ccam);
+    return $this->_ref_actes_ccam;
   }
   
   /**

@@ -279,6 +279,11 @@ CCAMSelector.init = function(){
   {{/if}}
   
   <tr>
+    <th>{{mb_label object=$op field=duree_uscpo}}</th>
+    <td colspan="3">{{mb_field object=$op field=duree_uscpo increment=true form=editOp size=2}} {{tr}}day{{/tr}}(s)</td>
+  </tr>
+  
+  <tr>
     <td class="text">{{mb_label object=$op field="examen"}}</td>
     <td class="text">{{mb_label object=$op field="materiel"}}</td>
     <td class="text">{{mb_label object=$op field="rques"}}</td>
