@@ -16,10 +16,15 @@ foreach($instances as $_class => $_instance) {
     continue;
   }
   
+  $_module = $_instance->_ref_module;
+  
   $csv->writeLine(array(
     $_class,
+    CAppUI::tr($_class),
     $_instance->_spec->table,
     $_instance->_spec->key,
+    $_module->mod_name,
+    CAppUI::tr("module-{$_module->mod_name}-court"),
   ));
 }
 

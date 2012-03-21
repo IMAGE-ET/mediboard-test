@@ -96,7 +96,6 @@ class CCSVFile {
    * Get the full content of the file
    * 
    * @return string
-   * @todo duplicate of file_get_contents() ?
    */
   function getContent() {
     rewind($this->handle);
