@@ -71,7 +71,6 @@ Main.add(function () {
       </form>
       <br/>
       <button style="float:left;" class="new" onclick="PlageConsultation.edit('0');">Créer une nouvelle plage</button>
-      <button style="float:right;" class="new" onclick="openweekview();">Vue semaine</button>
     </th>
     <td style="min-width: 350px;">
       <form action="?" name="selectPrat" method="get">
