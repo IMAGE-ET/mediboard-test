@@ -29,7 +29,7 @@ $planning->hour_min = "07";
 $planning->hour_max = "20";
 $planning->pauses   = array("07", "12", "19");
 
-$plage = new CPlageConsult();
+$plage = new CPlageconsult();
 
 $where = array();
 $where["chir_id"] = " = '$chir_id'";
