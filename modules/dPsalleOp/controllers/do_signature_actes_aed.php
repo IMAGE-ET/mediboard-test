@@ -64,8 +64,18 @@ foreach ($actes_ccam as $key => $_acte_ccam){
   }
 }
 
-// Transmission des actes CCAM lors de la signature
-if (CAppUI::conf("dPpmsi transmission_actes") == "signature" && $object_class == "COperation") {  
+// Pour la double validation, on compte le nombre d'actes total, et ceux qui sont signés
+$acte_ccam->signe = null;
+$acte_ccam->executant_id = null;
+$nb_actes_totaux = $acte_ccam->countMatchingList();
+
+$acte_ccam->signe = 1;
+$nb_actes_signes = $acte_ccam->countMatchingList();
+
+// Transmission des actes CCAM lors de la double validation (tous les actes sont signés)
+if (CAppUI::conf("dPpmsi transmission_actes") == "signature" && $object_class == "COperation" && $nb_actes_totaux == $nb_actes_signes) {
+  $actes_ccam = $acte_ccam->loadMatchingList();
+  
   $mbObject = new COperation();
   // Chargement de l'opération et génération du document
   if ($mbObject->load($object_id)) {
