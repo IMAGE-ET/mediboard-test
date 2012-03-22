@@ -401,6 +401,8 @@ class CRPU extends CMbObject {
     }
     
     // Déclenchement pour avoir les données RPU
+    // Pas de sycnhro dans certains cas
+    $this->_ref_sejour->_no_synchro = true;
     $this->_ref_sejour->notify("AfterStore");
   }
   
