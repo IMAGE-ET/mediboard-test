@@ -400,10 +400,10 @@ Main.add( function(){
 {{/if}}
 
 <table class="form">
-<col style="width:25%" />
-<col style="width:55%" />
-<col style="width:10%" />
-<col style="width:10%" />
+<col style="width:20%" />
+<col style="width:40%" />
+<col style="width:20%" />
+<col style="width:20%" />
 <tr>
   <th class="category" colspan="4">
     {{if $mode_operation && $sejour->_id}}
@@ -417,9 +417,9 @@ Main.add( function(){
      </a>
     {{/if}}
     {{tr}}CSejour-msg-informations{{/tr}} 
-		{{if $mode_operation && $sejour->_NDA}}
-		{{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
-		{{/if}}
+    {{if $mode_operation && $sejour->_NDA}}
+    {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+    {{/if}}
   </th>
 </tr>
 
@@ -493,13 +493,13 @@ Main.add( function(){
 
 <tr>
   <th>
-  	<script type="text/javascript">
-  		if (window.reloadSejours == null) {
-			  reloadSejours = Prototype.emptyFunction;
-			}
-  	</script>
+    <script type="text/javascript">
+      if (window.reloadSejours == null) {
+        reloadSejours = Prototype.emptyFunction;
+      }
+    </script>
     <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" value="{{$patient->_id}}" 
-		  onchange="changePat(); reloadSejours();" />
+      onchange="changePat(); reloadSejours();" />
     {{mb_label object=$sejour field="patient_id"}}
   </th>
   <td colspan="3">
@@ -511,7 +511,7 @@ Main.add( function(){
         confirmChangePatient();
       {{/if}}"/>
     <button type="button" class="search notext" onclick="
-	    {{if !$sejour->_id}}
+      {{if !$sejour->_id}}
         PatSelector.init();
       {{else}}
         confirmChangePatient();
@@ -630,7 +630,7 @@ Main.add( function(){
 {{if $maternite_active && !$mode_operation}}
   <tr>
     <th>{{mb_label object=$sejour field=_ref_grossesse}}</th>  
-    <td>
+    <td colspan="3">
       {{if $grossesse}}
         <span onmouseover="ObjectTooltip.createEx(this, '{{$grossesse->_guid}}')">{{$grossesse}}</span>
       {{else}}
@@ -657,9 +657,9 @@ Main.add( function(){
 
 <tr>
   <th>{{mb_label object=$sejour field="_date_entree_prevue"}}</th>
-  <td colspan="3">
+  <td colspan="2">
     {{mb_field object=$sejour form=editSejour field=_date_entree_prevue canNull=false 
-		  onchange="OccupationServices.updateOccupation(); modifSejour(); updateSortiePrevue(); reloadSejours(true);"}}
+      onchange="OccupationServices.updateOccupation(); modifSejour(); updateSortiePrevue(); reloadSejours(true);"}}
     à
     <select name="_hour_entree_prevue" onchange="updateHeureSortie(); checkHeureSortie(); reloadSejours(true);">
     {{foreach from=$hours item=hour}}
@@ -671,8 +671,10 @@ Main.add( function(){
       <option value="{{$min}}" {{if $sejour->_min_entree_prevue == $min}} selected="selected" {{/if}}>{{$min}}</option>
     {{/foreach}}
     </select> min
+  </td>
+  <td>
     {{if $can->admin}}
-    (admin: {{mb_value object=$sejour field=entree_prevue}})
+      (admin: {{mb_value object=$sejour field=entree_prevue}})
     {{/if}}
   </td>
 </tr>
@@ -688,9 +690,9 @@ Main.add( function(){
 
 <tr {{if $mode_operation && !$can->admin}} style="display: none" {{/if}}>
   <th>{{mb_label object=$sejour field="_date_sortie_prevue"}}</th>
-  <td colspan="3">
+  <td colspan="2">
     {{mb_field object=$sejour form=editSejour field=_date_sortie_prevue canNull=false 
-		  onchange="updateDureePrevue(); modifSejour(); reloadSejours(true);"}}
+      onchange="updateDureePrevue(); modifSejour(); reloadSejours(true);"}}
     à 
     <select name="_hour_sortie_prevue" onchange="reloadSejours(true);">
     {{foreach from=$hours item=hour}}
@@ -702,46 +704,61 @@ Main.add( function(){
       <option value="{{$min}}" {{if $sejour->_min_sortie_prevue == $min}} selected="selected" {{/if}}>{{$min}}</option>
     {{/foreach}}
     </select> min
+  </td>
+  <td>
     {{if $can->admin}}
-    (admin: {{mb_value object=$sejour field=sortie_prevue}})
+      (admin: {{mb_value object=$sejour field=sortie_prevue}})
     {{/if}}
   </td>
 </tr>
 
 <tr>
   <th>{{mb_label object=$sejour field="type"}}</th>
-  <td colspan="3">
+  <td>
     {{mb_field object=$sejour field=type style="width: 15em;"
       onchange="changeTypeHospi(); OccupationServices.updateOccupation(); checkDureeHospi('syncDuree');"}}
   </td>
+  
+  <td colspan="2" rowspan="2">
+    <table>
+      <tr class="reanimation">
+        <th>{{mb_label object=$sejour field="reanimation"}}</th>
+        <td colspan="3"> {{mb_field object=$sejour field="reanimation"}} </td>
+      </tr>
+      
+      <tr class="UHCD">
+        <th>{{mb_label object=$sejour field="UHCD"}}</th>
+        <td colspan="3">
+          {{mb_field object=$sejour field="UHCD"}}
+          <script type="text/javascript">
+            function changeTypeHospi() {
+              var oForm = getForm("editSejour");
+              var sValue = $V(oForm.type);
+              if (sValue != "comp") {
+                $V(oForm.reanimation, '0');
+                $V(oForm.UHCD       , '0');
+              }
+              
+              $(oForm).select(".reanimation").invoke(sValue == "comp" ? "show" : "hide");
+              $(oForm).select(".UHCD").invoke(sValue == "comp" ? "show" : "hide");
+            }
+      
+          Main.add(changeTypeHospi);
+          </script>
+        </td>
+      </tr>
+    </table>
+  </td>
 </tr>
+
 {{if $conf.dPplanningOp.CSejour.show_type_pec}}
   <tr>
     <th>{{mb_label object=$sejour field="type_pec"}}</th>
-    <td colspan="3">
+    <td>
       {{mb_field object=$sejour field="type_pec" emptyLabel="Choose" typeEnum="radio"}}
     </td>
   </tr>
 {{/if}}
-<tr class="reanimation">
-  <th>{{mb_label object=$sejour field="reanimation"}}</th>
-  <td colspan="3">
-    {{mb_field object=$sejour field="reanimation"}}
-    <script type="text/javascript">
-      function changeTypeHospi() {
-        var oForm = getForm("editSejour");
-        var sValue = $V(oForm.type);
-        if (sValue != "comp") {
-          $V(oForm.reanimation, '0');
-        }
-        
-        $(oForm).select(".reanimation").invoke(sValue == "comp" ? "show" : "hide");
-      }
-
-    Main.add(changeTypeHospi);
-    </script>
-  </td>
-</tr>
 
 <tr>
   <th>Taux d'occupation</th>
@@ -819,8 +836,8 @@ Main.add( function(){
 <tr>
   <th>{{mb_label object=$sejour field=etablissement_entree_id}}</th>
   <td colspan="3">
-	  {{mb_field object=$sejour field=etablissement_entree_id form="editSejour" autocomplete="true,1,50,true,true"}}
-	</td>
+    {{mb_field object=$sejour field=etablissement_entree_id form="editSejour" autocomplete="true,1,50,true,true"}}
+  </td>
 </tr>
 {{/if}}
 
@@ -833,13 +850,6 @@ Main.add( function(){
   </td>
 </tr>
 {{/if}}
-
-<tr>
-  <th>{{mb_label object=$sejour field="zt"}}</th>
-  <td colspan="3">
-    {{mb_field object=$sejour field="zt"}}
-  </td>
-</tr>
 
 <tr>
   <th>{{mb_label object=$sejour field="facturable"}}</th>
@@ -862,6 +872,7 @@ Main.add( function(){
   <td>{{mb_field object=$sejour field="hormone_croissance"}}</td>  
 </tr>
 </tbody>
+
 <tr>
   <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
   <td>

@@ -33,7 +33,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $recuse              = null; 
   var $chambre_seule       = null; 
   var $reanimation         = null; 
-  var $zt                  = null; 
+  var $UHCD                = null; 
   var $service_id          = null; 
 
   var $entree_prevue       = null;
@@ -265,7 +265,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["recuse"]                   = "enum list|-1|0|1 default|-1 show|0";
     $props["chambre_seule"]            = "bool notNull show|0 default|".(CGroups::loadCurrent()->chambre_particuliere ? 1 : 0);
     $props["reanimation"]              = "bool default|0";
-    $props["zt"]                       = "bool default|0";
+    $props["UHCD"]                     = "bool default|0";
     $props["service_id"]               = "ref".(CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1 ? ' notNull' : '')." class|CService seekable";
     $props["entree_prevue"]            = "dateTime notNull show|0";
     $props["sortie_prevue"]            = "dateTime notNull moreEquals|entree_prevue show|0";
@@ -2237,20 +2237,34 @@ class CSejour extends CCodable implements IPatientRelated {
     );
   }
   
-  function getMovementType() {
+  function getMovementType($code = null) {
     // Cas d'une pré-admission
     if ($this->_etat == "preadmission") {
       return "PADM";
     }
     
+    if ($this->_etat == "encours" && ($this->service_entree_id || $code == "A02")) {
+      return "MUTA";
+    }
+    
+    // Cas d'une entrée autorisée
+    if ($code == "A14") {
+      return "EATT";
+    }
+    
+    // Cas d'un transfert autorisé
+    if ($code == "A15") {
+      return "TATT";
+    }
+
+    // Cas d'une sortie autorisée
+    if ($code == "A16") {
+      return "SATT";
+    }
+    
     // Cas d'une admission
     if ($this->_etat == "encours") {
       return "ADMI";
-    }
-    
-    // Cas d'une mutation
-    if ($this->_etat == "encours" && $this->service_entree_id) {
-      return "MUTA";
     }
     
     // Cas d'une sortie
