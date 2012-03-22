@@ -299,7 +299,7 @@ function editIntervention(op_id) {
       <th class="category">{{mb_title object=$movement field=last_update}}</th>
     </tr>
     {{foreach from=$movements item=_movement}}
-      <tr {{if $_movement->cancel}}class="arretee"{{/if}}>
+      <tr {{if $_movement->cancel}}class="hatching"{{/if}}>
         <td> 
           <span onmouseover="ObjectTooltip.createEx(this,'{{$_movement->_guid}}', 'identifiers')">{{$_movement->_view}}</span>
         </td>

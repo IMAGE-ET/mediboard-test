@@ -121,19 +121,42 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     $movement = new CMovement();
     // Initialise le mouvement 
     $movement->sejour_id     = $sejour->_id;
-    $movement->movement_type = $sejour->getMovementType();
-
-    $current_log = $sejour->loadLastLog();
   
     if ($affectation) {
       $movement->affectation_id = $affectation->_id;  
     }
     
     if ($insert) {
+      // Dans le cas d'un insert le type correspond nécessairement au type actuel du séjour
+      $movement->movement_type         = $sejour->getMovementType($code);
       $movement->original_trigger_code = $code;
+      $movement->store();
+    
+      return $sejour->_ref_hl7_movement = $movement;
     }
-    elseif ($update || $cancel) {
-      $movement->cancel = 0;               
+    elseif ($update) {
+      // Dans le cas d'un update le type correspond à celui du trigger
+      //$movement_type = $sejour->getMovementType($code);
+
+      // Mise à jour entrée réelle
+      if ($sejour->fieldModified("entree_reelle")) {
+        $movement_type = "ADMI";
+      }
+      
+      // Mise à jour sortie réelle
+      if ($sejour->fieldModified("sortie_reelle")) {
+        $movement_type = "SORT";
+      }
+      
+      // Mise à jour d'une affectation
+      if ($affectation && $affectation->_ref_current_log == "store") {
+        $movement_type = "MUTA";
+      }
+      
+      $movement->cancel = 0; 
+    }
+    elseif ($cancel) {
+      $movement->cancel = 0;    
     }
 
     $order = "affectation_id DESC";
@@ -141,11 +164,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if (!empty($movements)) {
       $movement = reset($movements);
     }
-    
+
     if ($cancel) {
       $movement->cancel = 1;
     }
-      
+
     $movement->store();
     
     return $sejour->_ref_hl7_movement = $movement;

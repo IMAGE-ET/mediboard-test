@@ -23,8 +23,8 @@ class CHL7v2EventADTA03 extends CHL7v2EventADT implements CHL7EventADTA03 {
     parent::__construct($i18n);
   }
   
-  function getEVNOccuredDateTime($sejour) {
-    return mbDateTime();
+  function getEVNOccuredDateTime(CSejour $sejour) {
+    return $sejour->sortie_reelle;
   }
   
   /**
@@ -48,10 +48,7 @@ class CHL7v2EventADTA03 extends CHL7v2EventADT implements CHL7EventADTA03 {
     
     // Patient Visit
     $this->addPV1($sejour);
-    
-    // Patient Visit - Additionale Info
-    $this->addPV2($sejour);
-    
+
     // Build specific segments (i18n)
     $this->buildI18nSegments($sejour);
   }

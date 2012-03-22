@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A04 - Register a patient - HL7
+ * A14 - Pending Admit - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,21 +12,21 @@
  */
 
 /**
- * Class CHL7v2EventADTA04
- * A04 - Register a patient
+ * Class CHL7v2EventADTA14
+ * A14 - Pending Admit
  */
-class CHL7v2EventADTA04 extends CHL7v2EventADT implements CHL7EventADTA01 {
-  var $code        = "A04";
-  var $struct_code = "A01";
+class CHL7v2EventADTA14 extends CHL7v2EventADT implements CHL7EventADTA14 {
+  var $code        = "A14";
+  var $struct_code = "A14";
   
   function __construct($i18n = null) {
     parent::__construct($i18n);
   }
   
-  function getEVNOccuredDateTime(CSejour $sejour) {
-    return $sejour->entree_reelle;
+  function getEVNPlannedDateTime(CSejour $sejour) {
+    return $sejour->sortie_reelle;
   }
-  
+    
   /**
    * @see parent::build()
    */
@@ -54,8 +54,10 @@ class CHL7v2EventADTA04 extends CHL7v2EventADT implements CHL7EventADTA01 {
     
     // Build specific segments (i18n)
     $this->buildI18nSegments($sejour);
+    
+    // Guarantor
+    $this->addGT1($patient);
   }
-  
 }
 
 ?>

@@ -76,12 +76,25 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     );
     
     // ZBE-2: Start of Movement Date/Time (TS)
-    // Cas spécifique si pour la sortie réelle est modifiée
-    if ($movement->original_trigger_code == "A03") {
-      $data[] = $sejour->sortie_reelle;
+    // $data[] = $movement->last_update;
+    $code = $event->code;
+    if ($event->code == "Z99") {
+      $code = $movement->original_trigger_code;
     }
-    else {
-      $data[] = $movement->last_update;
+    
+    switch ($code) {
+      case 'A01' : case 'A04' :
+        $data[] = $sejour->entree_reelle;
+        break;
+      case 'A05':
+        $data[] = $sejour->entree_prevue;
+        break;
+      case 'A03':
+        $data[] = $sejour->sortie_reelle;
+        break;  
+      default:
+        $data[] = $movement->last_update;
+        break;
     }
     
     // ZBE-3: End of Movement Date/Time (TS) (optional)
