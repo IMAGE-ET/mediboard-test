@@ -36,6 +36,7 @@ class CGrossesse extends CMbObject{
   var $_date_fecondation = null;
   var $_semaine_grossesse = null;
   var $_terme_vs_operation = null;
+  var $_operation_id    = null;
   
   function getSpec() {
     $spec = parent::getSpec();

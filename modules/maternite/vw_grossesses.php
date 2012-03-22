@@ -26,6 +26,7 @@ CMbObject::massLoadFwdRef($grossesses, "parturiente_id");
 
 foreach ($grossesses as $_grossesse) {
   $_grossesse->loadRefParturiente();
+  $_grossesse->loadRefsSejours();
 }
 
 $smarty = new CSmartyDP;

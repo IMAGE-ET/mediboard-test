@@ -13,6 +13,7 @@ CCanDo::checkRead();
 $sejour_id    = CValue::getOrSession("sejour_id");
 $patient_id   = CValue::get("patient_id");
 $praticien_id = CValue::get("praticien_id");
+$grossesse_id = CValue::get("grossesse_id");
 
 // Liste des Etablissements selon Permissions
 $etablissements = new CMediusers();
@@ -84,6 +85,11 @@ $sejour->loadRefsNotes();
 $sejour->loadRefsConsultAnesth();
 $sejour->_ref_consult_anesth->loadRefConsultation();
 
+if (CModule::getActive("maternite") && !$sejour->_id && $grossesse_id) {
+  $sejour->grossesse_id = $grossesse_id;
+  $sejour->type_pec = 'O';
+  $sejour->loadRefGrossesse();
+}
 
 $patient->loadRefsSejours();
 

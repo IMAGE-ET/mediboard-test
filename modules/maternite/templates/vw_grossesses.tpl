@@ -17,22 +17,36 @@
 
 <table class="tbl">
   <tr>
-    <th class="category" colspan="2">Grossesses arrivant à terme entre le {{$date_min|date_format:$conf.date}} et le {{$date_max|date_format:$conf.date}}</th>
+    <th class="category" colspan="4">Grossesses arrivant à terme entre le {{$date_min|date_format:$conf.date}} et le {{$date_max|date_format:$conf.date}}</th>
   </tr>
   {{foreach from=$grossesses item=_grossesse}}
     <tr>
-      <td>
+      <td style="width: 8%">
+        {{$_grossesse->terme_prevu|date_format:$conf.date}}
+      </td>
+      <td style="width: 15%">
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_grossesse->_guid}}')">
           {{$_grossesse->_ref_parturiente}}
         </span>
       </td>
       <td>
-        {{$_grossesse->terme_prevu|date_format:$conf.date}}
+        <ul style="line-height: 1.4em;">
+          {{foreach from=$_grossesse->_ref_sejours item=_sejour}}
+            <li>
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
+                {{$_sejour}}
+              </span>
+            </li>
+          {{/foreach}}
+        </ul>
+      </td>
+      <td class="narrow">
+        <a class="button new" href="?m=dPplanningOp&tab=vw_edit_sejour&grossesse_id={{$_grossesse->_id}}&sejour_id=0&patient_id={{$_grossesse->parturiente_id}}">Nouveau séjour</a>
       </td>
     </tr>
   {{foreachelse}}
     <tr>
-      <td class="empty" colspan="2">{{tr}}CGrossesse.none{{/tr}}</td>
+      <td class="empty" colspan="4">{{tr}}CGrossesse.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

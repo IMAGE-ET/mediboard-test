@@ -1,9 +1,22 @@
-
 <script type="text/javascript">
   Main.add(function() {
     Calendar.regField(getForm("changeDate").elements["date"], null, {noView: true});
   });
+  
+  createDossierProvisoire = function(operation_id) {
+    var form = getForm('createProvisoire');
+    $V(form.operation_id, operation_id);
+    form.onsubmit();
+  }
 </script>
+{{mb_script module=admissions script=admissions}}
+
+<form name="createProvisoire" method="post" onsubmit="return onSubmitFormAjax(this);">
+  <input type="hidden" name="m" value="maternite" />
+  <input type="hidden" name="dosql" value="do_dossier_provisoire_aed" />
+  <input type="hidden" name="operation_id" value=""/>
+</form>
+
 <table class="main">
   <tr>
     <td style="width: 100px">
@@ -69,9 +82,9 @@
       </table>
     </td>
     <td>
-      <table class="tbl">
+      <table class="tbl" id="admissions">
         <tr>
-          <th class="title" colspan="4">
+          <th class="title" colspan="6">
             <strong>
               <a href="?m=maternite&tab=vw_admissions&date={{$date_before}}" style="display: inline;">&lt;&lt;&lt;</a>
               {{$date|date_format:$conf.longdate}}
@@ -88,8 +101,12 @@
         <tr>
           <th class="category narrow">Admettre</th>
           <th class="category narrow">{{tr}}CPatient{{/tr}}</th>
+          <th class="narrow">
+            <input type="text" size="3" onkeyup="Admissions.filter(this, 'admissions')" id="filter-patient-name" />
+          </th>
           <th class="category narrow">Terme</th>
           <th class="category">Praticiens</th>
+          <th></th>
         </tr>
         {{foreach from=$sejours item=_sejour}}
           {{assign var=grossesse value=$_sejour->_ref_grossesse}}
@@ -108,8 +125,8 @@
                 {{/if}}
               </form>
             </td>
-            <td>
-              <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">{{$_sejour->_ref_patient}}</span>
+            <td colspan="2">
+              <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">{{$_sejour->_ref_patient}}</span>
             </td>
             <td>
               {{$grossesse->terme_prevu|date_format:$conf.date}}
@@ -119,10 +136,17 @@
                 {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_praticien}}
               {{/foreach}}
             </td>
+            <td class="narrow">
+              {{if $grossesse->_operation_id}}
+                <button type="button" class="add notext" title="Créer un dossier provisoire"
+                  onclick="if (confirm('Voulez-vous créer un dossier provisoire pour le patient {{$_sejour->_ref_patient}}')) {
+                    createDossierProvisoire('{{$grossesse->_operation_id}}'); }"></button>
+              {{/if}}
+            </td>
           </tr>
         {{foreachelse}}
           <tr>
-            <td colspan="4" class="empty">{{tr}}CSejour.none{{/tr}}</td>
+            <td colspan="6" class="empty">{{tr}}CSejour.none{{/tr}}</td>
           </tr>
         {{/foreach}}
       </table>

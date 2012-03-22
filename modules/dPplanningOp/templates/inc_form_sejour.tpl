@@ -56,6 +56,11 @@ function bindGrossesse() {
   if (!$V(form._grossesse) || fill_grossesse) {
     return checkDureeHospi() && checkModeSortie() && OccupationServices.testOccupation() && checkForm(form);
   }
+  // Si création de séjour avec paramètre grossesse_id passé,
+  // alors il n'y a rien à faire.
+  if ($V(form.grossesse_id)) {
+    return false;
+  }
   var url = new Url("maternite","ajax_bind_grossesse");
   url.addParam("patient_id", $V(form.patient_id));
   url.requestModal();

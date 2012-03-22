@@ -65,14 +65,15 @@ if (!$naissance_id) {
   storeObject($patient);
   
   // Etape 2 (constantes)
-  $constantes = new CConstantesMedicales;
-  $constantes->patient_id = $patient->_id;
-  $constantes->datetime = "now";
-  $constantes->poids = $poids;
-  $constantes->taille = $taille;
-  $constantes->perimetre_cranien = $perimetre_cranien;
-  storeObject($constantes);
-  
+  if ($poids || $taille || $perimetre_cranien) {
+    $constantes = new CConstantesMedicales;
+    $constantes->patient_id = $patient->_id;
+    $constantes->datetime = "now";
+    $constantes->poids = $poids;
+    $constantes->taille = $taille;
+    $constantes->perimetre_cranien = $perimetre_cranien;
+    storeObject($constantes);
+  }
   // Etape 3 (séjour)
   $sejour_enfant = new CSejour;
   $sejour_enfant->entree_reelle = $datetime;
@@ -113,21 +114,24 @@ else {
   $patient->nom = $nom;
   $patient->prenom = $prenom;
   $patient->nom = $nom;
+  $patient->sexe = $sexe;
   storeObject($patient);
   
-  $constantes = new CConstantesMedicales;
-  $constantes->load($constantes_id);
-  $constantes->poids = $poids;
-  $constantes->taille = $taille;
-  $constantes->perimetre_cranien = $perimetre_cranien;
-  
-  // Depuis un dossier provisoire, les constantes médicales ne sont pas créées.
-  if (!$constantes->_id) {
-    $constantes->patient_id = $patient->_id;
-    $constantes->datetime = mbDateTime();
+  if ($poids || $taille || $perimetre_cranien) {
+    $constantes = new CConstantesMedicales;
+    $constantes->load($constantes_id);
+    $constantes->poids = $poids;
+    $constantes->taille = $taille;
+    $constantes->perimetre_cranien = $perimetre_cranien;
+    
+    // Depuis un dossier provisoire, les constantes médicales ne sont pas créées.
+    if (!$constantes->_id) {
+      $constantes->patient_id = $patient->_id;
+      $constantes->datetime = mbDateTime();
+    }
+    
+    storeObject($constantes);
   }
-  
-  storeObject($constantes);
 }
 echo CAppUI::getMsg();
 
