@@ -65,7 +65,7 @@ function initCKEditor() {
           // Bug : Firefox n'efface pas un span en contentEditable à false.
           // Il faut passer par un double span.
           if (spans.length) {
-            for (var i in spans) {
+            for (var i = 0; i < spans.length; i++) {
               var span = spans[i];
               
               if (state) {
