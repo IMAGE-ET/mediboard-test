@@ -4,7 +4,7 @@
   {{assign var=prescription_sejour_id value=$sejour->_ref_prescription_sejour->_id}}
 {{/if}}
 
-{{mb_script module="patients" script="antecedent"}}
+{{mb_script module="patients" script="antecedent" ajax=true}}
 
 <script type="text/javascript">
 Traitement = {
