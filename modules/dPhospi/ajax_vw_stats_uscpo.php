@@ -12,9 +12,11 @@
  */
 
 CCanDo::checkRead();
-$date_min = CValue::getOrSession("date_min", mbDate("-1 month"));
-$date_max = CValue::getOrSession("date_max", mbDate());
 
+$date_min   = CValue::getOrSession("date_min", mbDate("-1 month"));
+$date_max   = CValue::getOrSession("date_max", mbDate());
+$service_id = CValue::getOrSession("service_id", "");
+ 
 if ($date_min > $date_max) {
   list($date_min, $date_max) = array($date_max, $date_min);
 }
@@ -27,6 +29,10 @@ $ljoin = array();
 $where["duree_uscpo"] = "> 0";
 
 $ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
+if ($service_id) {
+  $ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
+  $where["sejour.service_id"] = "= '$service_id'";
+}
 
 $day = $date_min;
 $dates = array();
@@ -35,7 +41,7 @@ $serie = array(
   'data' => array(),
   'label' => utf8_encode("Nombre de nuits prévuées")
 );
-
+  
 while ($day <= $date_max) {
   $dates[] = array(count($dates), mbDateToLocale($day));
   $where[2] = "plagesop.date <= '$day' AND DATE_ADD(plagesop.date, INTERVAL duree_uscpo DAY) > '$day'";
@@ -73,11 +79,16 @@ $options = CFlotrGraph::merge("bars", array(
 
 $graph = array('series' => $series, 'options' => $options);
 
+$service = new CService;
+$services = $service->loadListWithPerms(PERM_READ);
+
 $smarty = new CSmartyDP;
 
 $smarty->assign("date_min", $date_min);
 $smarty->assign("date_max", $date_max);
+$smarty->assign("services", $services);
 $smarty->assign("graph"   , $graph);
+$smarty->assign("service_id", $service_id);
 
 $smarty->display("inc_vw_stats_uscpo.tpl");
 ?>

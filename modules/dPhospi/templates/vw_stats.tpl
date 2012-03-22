@@ -4,11 +4,14 @@
     refreshUSCPO();
   });
   
-  refreshUSCPO = function(date_min, date_max) {
+  refreshUSCPO = function(date_min, date_max, service_id) {
     var url = new Url("dPhospi", "ajax_vw_stats_uscpo");
     if (date_min && date_max) {
       url.addParam("date_min", date_min);
       url.addParam("date_max", date_max);
+    }
+    if (!Object.isUndefined(service_id)) {
+      url.addParam("service_id", service_id);
     }
     url.requestUpdate("uscpo");
     
