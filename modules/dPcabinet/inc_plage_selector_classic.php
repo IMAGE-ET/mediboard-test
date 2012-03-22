@@ -17,6 +17,7 @@ $hide_finished   = CValue::get("hide_finished", true);
 
 // Récupération des plages de consultation disponibles
 $listPlage = new CPlageconsult;
+$plage = new CPlageconsult;
 $where = array();
 
 // Praticiens sélectionnés
