@@ -8,24 +8,20 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 // Recuperation de l'id de l'etablissement externe
 $etab_id = CValue::getOrSession("etab_id");
 
 // Récupération des etablissements externes
-$etabExterne = new CEtabExterne();
+$etab_externe = new CEtabExterne();
 if($etab_id){
-  $etabExterne->load($etab_id);
+  $etab_externe->load($etab_id);
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("etabExterne"     , $etabExterne      );
+$smarty->assign("etab_externe", $etab_externe);
 
 $smarty->display("inc_etab_externe.tpl");
-
-?>

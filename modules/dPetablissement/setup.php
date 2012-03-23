@@ -19,37 +19,37 @@ class CSetupdPetablissement extends CSetup {
     
     $this->makeRevision("0.1");
     $query = "ALTER TABLE `groups_mediboard`
-		  ADD `raison_sociale` VARCHAR( 50 ) ,
-			ADD `adresse` TEXT ,
-			ADD `cp` VARCHAR( 5 ) ,
-			ADD `ville` VARCHAR( 50 ) ,
-			ADD `tel` VARCHAR( 10 ) ,
-			ADD `directeur` VARCHAR( 50 ) ,
-			ADD `domiciliation` VARCHAR( 9 ) ,
-			ADD `siret` VARCHAR( 14 );";
+      ADD `raison_sociale` VARCHAR( 50 ) ,
+      ADD `adresse` TEXT ,
+      ADD `cp` VARCHAR( 5 ) ,
+      ADD `ville` VARCHAR( 50 ) ,
+      ADD `tel` VARCHAR( 10 ) ,
+      ADD `directeur` VARCHAR( 50 ) ,
+      ADD `domiciliation` VARCHAR( 9 ) ,
+      ADD `siret` VARCHAR( 14 );";
     $this->addQuery($query);
     $query = "INSERT INTO `groups_mediboard` ( `group_id` , `text` )
-			VALUES (NULL , 'Etablissement');";
+      VALUES (NULL , 'Etablissement');";
     $this->addQuery($query);
 
     $this->makeRevision("0.11");
     $query = "ALTER TABLE `groups_mediboard` 
-		  ADD `ape` VARCHAR( 4 ) DEFAULT NULL;";
+      ADD `ape` VARCHAR( 4 ) DEFAULT NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("0.12");
     $query = "ALTER TABLE `groups_mediboard`
-		  CHANGE `group_id` `group_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-			CHANGE `cp` `cp` int(5) unsigned zerofill NULL,
-			CHANGE `tel` `tel` bigint(10) unsigned zerofill NULL,
-			CHANGE `text` `text` varchar(255) NOT NULL;";
+      CHANGE `group_id` `group_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+      CHANGE `cp` `cp` int(5) unsigned zerofill NULL,
+      CHANGE `tel` `tel` bigint(10) unsigned zerofill NULL,
+      CHANGE `text` `text` varchar(255) NOT NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("0.13");
     $query = "ALTER TABLE `groups_mediboard`
-		  ADD `fax` bigint(10) unsigned zerofill NULL AFTER `tel`,
-			ADD `mail` varchar(50) DEFAULT NULL,
-			ADD `web` varchar(255) DEFAULT NULL;" ;
+      ADD `fax` bigint(10) unsigned zerofill NULL AFTER `tel`,
+      ADD `mail` varchar(50) DEFAULT NULL,
+      ADD `web` varchar(255) DEFAULT NULL;" ;
     $this->addQuery($query);
 
     
@@ -60,16 +60,16 @@ class CSetupdPetablissement extends CSetup {
     
     $this->makeRevision("0.15");
     $query = "CREATE TABLE `etab_externe` (
-			`etab_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
-			`nom` VARCHAR(255) NOT NULL, 
-			`raison_sociale` VARCHAR(50), 
-			`adresse` TEXT, 
-			`cp` INT(5) UNSIGNED ZEROFILL, 
-			`ville` VARCHAR(50),  
-			`tel` BIGINT(10) UNSIGNED ZEROFILL, 
-			`fax` BIGINT(10) UNSIGNED ZEROFILL, 
-			`finess` INT(9) UNSIGNED ZEROFILL, 
-			PRIMARY KEY (`etab_id`)) /*! ENGINE=MyISAM */;";
+      `etab_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+      `nom` VARCHAR(255) NOT NULL, 
+      `raison_sociale` VARCHAR(50), 
+      `adresse` TEXT, 
+      `cp` INT(5) UNSIGNED ZEROFILL, 
+      `ville` VARCHAR(50),  
+      `tel` BIGINT(10) UNSIGNED ZEROFILL, 
+      `fax` BIGINT(10) UNSIGNED ZEROFILL, 
+      `finess` INT(9) UNSIGNED ZEROFILL, 
+      PRIMARY KEY (`etab_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.16");
@@ -140,8 +140,21 @@ class CSetupdPetablissement extends CSetup {
                 ADD `smp_notify_all_actors` ENUM ('0','1') DEFAULT '0',
                 ADD `smp_idex_generator` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
+    
+    $this->makeRevision("0.26");
+    $query = "ALTER TABLE `etab_externe` 
+      ADD INDEX (`nom`),
+      ADD INDEX (`raison_sociale`),
+      ADD INDEX (`cp`),
+      ADD INDEX (`ville`),
+      ADD INDEX (`tel`),
+      ADD INDEX (`fax`),
+      ADD INDEX (`finess`),
+      ADD INDEX (`siret`),
+      ADD INDEX (`ape`);";
+    $this->addQuery($query);
 
-    $this->mod_version = "0.26";
+    $this->mod_version = "0.27";
   } 
 }
 

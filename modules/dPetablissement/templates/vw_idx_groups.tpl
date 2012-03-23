@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script>
-reload = function(group_id){
+<script type="text/javascript">
+editCGroups = function(group_id){
   var url = new Url("dPetablissement", "ajax_vw_groups");
   url.addParam("group_id", group_id);
   url.requestUpdate('group_etab'); 
@@ -20,10 +20,11 @@ reload = function(group_id){
   <tr>
     <td class="halfPane">
       {{if $can->edit}}
-      <button onclick="reload('0')" class="new">
-        Créer un établissement
+      <button onclick="editCGroups('0')" class="new">
+        {{tr}}CGroups-title-create{{/tr}}
       </button>
       {{/if}}
+      
       <table class="tbl">
         <tr>
           <th>Liste des établissements</th>
@@ -33,21 +34,20 @@ reload = function(group_id){
         <tr {{if $_group->_id == $group->_id}} class="selected" {{/if}}>
           <td>
             {{if $can->edit}}
-            <a href="#" onclick="reload('{{$_group->_id}}')">
+            <a href="#" onclick="editCGroups('{{$_group->_id}}')">
               {{$_group->text}}
             </a>
             {{else}}
-            {{$_group->text}}
+              {{$_group->text}}
             {{/if}}
           </td>
           <td>
             {{if $can->edit}}
-            <a href="#" onclick="reload('{{$_group->_id}}')">
+            <a href="#" onclick="editCGroups('{{$_group->_id}}')">
               {{$_group->_ref_functions|@count}}
             </a>
             {{else}}
               {{$_group->_ref_functions|@count}}
-            </a>
             {{/if}}
           </td>
         </tr>

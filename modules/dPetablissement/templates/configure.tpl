@@ -20,11 +20,18 @@
 
 <ul id="tabs-configure" class="control_tabs">
   <li onmousedown="refreshConfigClasses();">
-    <a href="#object-config">{{tr}}config-dPetablissement-object-config{{/tr}}</a></li>
+    <a href="#object-config">{{tr}}config-dPetablissement-object-config{{/tr}}</a>
+  </li>
+  <li>
+    <a href="#CEtabExterne-import">Import {{tr}}CEtabExterne{{/tr}}</a>
+  </li>
 </ul>
-
 <hr class="control_tabs" />
 
 <div id="object-config" style="display: none;">
   <div class="small-info">{{tr}}config-dPetablissement-object-config-classes{{/tr}}</div>
+</div>
+
+<div id="CEtabExterne-import" style="display: none;">
+  {{mb_include module=etablissement template=inc_import_etab_externe}}
 </div>

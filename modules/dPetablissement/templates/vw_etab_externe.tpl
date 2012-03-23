@@ -7,31 +7,51 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
-<script>
-reload = function(etab_id){
+
+<script type="text/javascript">
+editCEtabExterne = function(etab_id){
   var url = new Url("dPetablissement", "ajax_etab_externe");
   url.addParam("etab_id", etab_id);
   url.requestUpdate('group_externe'); 
+}
+
+changePage = function(page){
+  $V(getForm("filter-etab_externes").elements.start, page);
 }
 </script>
 
 <table class="main">
   <tr>
     <td class="halfPane">
-      <button class="new" onclick="reload('0')">
-        Créer un établissement externe
-      </button>
+      <form name="filter-etab_externes" method="get" action="?">
+        <input type="hidden" name="m" value="dPetablissement" />
+        <input type="hidden" name="{{$actionType}}" value="{{$action}}" />
+        <input type="hidden" name="start" value="{{$current_page}}" onchange="this.form.submit()" />
+        
+        <input type="text" name="keywords" value="{{$keywords}}" onchange="this.form.start.value = 0" />
+        <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
+      </form>
+      {{mb_include module=system template=inc_pagination total=$total_etab_externes current=$current_page change_page="changePage" step=40}}
+      
       <table class="tbl">
-        <tr>
-          <th>Liste des établissements externes</th>
-        </tr>
-        {{foreach from=$listEtabExternes item=curr_etab}}
-        <tr {{if $curr_etab->_id == $etabExterne->_id}}class="selected"{{/if}}>
+        {{foreach from=$list_etab_externes item=_etab}}
+        <tr id="{{$_etab->_guid}}-row">
           <td>
-            <a href="#" onclick="reload('{{$curr_etab->_id}}')">
-              {{$curr_etab->nom}}
+            <a href="#" onclick="editCEtabExterne('{{$_etab->_id}}')">
+              {{$_etab->nom}}
             </a>
           </td>
+          <td>
+            {{$_etab->cp}}
+            {{$_etab->ville}}
+          </td>
+          <td>
+            {{$_etab->finess}}
+          </td>
+        </tr>
+        {{foreachelse}}
+        <tr>
+          <td class="empty" colspan="3">{{tr}}CEtabExterne.none{{/tr}}</td>
         </tr>
         {{/foreach}}
       </table>
