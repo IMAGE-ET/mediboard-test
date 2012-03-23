@@ -152,7 +152,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if ($affectation && $affectation->_ref_current_log == "store") {
         $movement_type = "MUTA";
       }
-      
+      $movement->movement_type = $movement_type;
       $movement->cancel = 0; 
     }
     elseif ($cancel) {
