@@ -37,10 +37,6 @@ function printDHE(type, object_id) {
   url.popup(700, 550, "DHE");
 }
 
-function loadTransfert(oForm){
-  $("listEtabExterne-" + oForm.name).setVisible($V(oForm.mode_sortie) == "transfert");
-}
-
 var changeEtablissementId = function(oForm) {
   $V(oForm._modifier_sortie, '0');
   var type = $V(oForm.type);

@@ -82,8 +82,7 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
       <script type="text/javascript">
         Main.add(function(){
           // Ceci doit rester ici !! prepareForm necessaire car pas appelé au premier refresh d'un periodical update
-          var form = getForm("editFrm{{$_sejour->_guid}}");
-          loadTransfert(form);
+          prepareForm("editFrm{{$_sejour->_guid}}");
         });
       </script>
       
