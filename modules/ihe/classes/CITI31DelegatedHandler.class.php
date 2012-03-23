@@ -241,7 +241,9 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       
       // Changement du médecin responsable
       if ($sejour->fieldModified("praticien_id")) {
-        return "A54";
+        /* @todo Mettre en config !!! */
+        return "Z99";
+        //return "A54";
       }
       
       // Annulation du médecin responsable
