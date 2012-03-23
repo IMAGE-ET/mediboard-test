@@ -43,8 +43,9 @@
       {{if "maternite"|module_active && $affectation->parent_affectation_id}}
         <form name="dissociateAffectation" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {onComplete: Control.Modal.close})">
           <input type="hidden" name="m" value="dPhospi" />
-          <input type="hidden" name="dosql" value="do_dissociate_affectation_aed" />
+          <input type="hidden" name="dosql" value="do_affectation_aed" />
           <input type="hidden" name="affectation_id" value="{{$affectation->_id}}" />
+          <input type="hidden" name="parent_affectation_id" value="" />
           {{if $lit_id}}
             <input type="hidden" name="lit_id" value="{{$lit_id}}" />
           {{/if}}

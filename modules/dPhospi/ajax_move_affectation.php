@@ -37,6 +37,14 @@ if ($msg = $affectation->store()) {
   CAppUI::setMsg($msg, UI_MSG_ERROR);
 }
 
+$affectations_enfant = $affectation->loadBackRefs("affectations_enfant");
+foreach ($affectations_enfant as $_affectation) {
+  $_affectation->lit_id = $lit_id;
+  if ($msg = $_affectation->store()) {
+    CAppUI::setMsg($msg, UI_MSG_ERROR);
+  }
+}
+
 // Niveaux de prestations réalisées à créer
 // pour une nouvelle affectation (par rapport aux niveaux de prestations du lit)
 if (!$affectation_id && isset($sejour)) {

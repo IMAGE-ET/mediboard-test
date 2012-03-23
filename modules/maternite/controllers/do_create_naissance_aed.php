@@ -103,9 +103,15 @@ if (!$naissance_id) {
 }
 // Modification d'une naissance
 else {
+  $validation_naissance = false;
   $naissance = new CNaissance;
   $naissance->load($naissance_id);
   $naissance->rang = $rang;
+  
+  if (!$naissance->heure && $naissance->rang && $heure && $rang) {
+    $validation_naissance = true;
+  }
+  
   $naissance->heure = $heure;
   storeObject($naissance);
   
@@ -116,6 +122,26 @@ else {
   $patient->nom = $nom;
   $patient->sexe = $sexe;
   storeObject($patient);
+  
+  // Créer l'affectation si nécessaire (si issu d'un dossier provisoire)
+  if ($validation_naissance) {
+    $sejour_enfant = new CSejour;
+    $sejour_enfant->load($naissance->sejour_enfant_id);
+    $sejour_enfant->entree_reelle = $datetime;
+    storeObject($sejour_enfant);
+    
+    $affectation = $sejour_enfant->loadRefCurrAffectation();
+    
+    if (!$affectation->_id) {
+      $affectation = new CAffectation;
+      $affectation->entree = $sejour_enfant->entree_reelle;
+      $affectation->sortie = $sejour_enfant->sortie_prevue;
+      $affectation->lit_id = $curr_affect->lit_id;
+      $affectation->sejour_id = $sejour_enfant->_id;
+      $affectation->parent_affectation_id = $curr_affect->_id;
+      storeObject($affectation);
+    }
+  }
   
   if ($poids || $taille || $perimetre_cranien) {
     $constantes = new CConstantesMedicales;
