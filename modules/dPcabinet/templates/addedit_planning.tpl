@@ -161,7 +161,9 @@ checkCorrespondantMedical = function(){
 
 toggleGrossesse = function(sexe) {
   var form = getForm("editFrm");
-  form._grossesse_view.disabled = sexe == "f" ? "" : "disabled";
+  if (form._grossesse_view) {
+    form._grossesse_view.disabled = sexe == "f" ? "" : "disabled";
+  }
 }
 
 Main.add(function () {
@@ -422,8 +424,8 @@ Main.add(function () {
                 {{if $grossesse}}
                   <span onmouseover="ObjectTooltip.createEx(this, '{{$grossesse->_guid}}')">{{$grossesse}}</span>
                 {{else}}
-                  <input type="checkbox" name="_ref_grossesse_view"
-                    {{if $pat->_id && $pat->sexe == "m"}}disabled="disabled"{{/if}}
+                  <input type="checkbox" name="_grossesse_view"
+                    {{if !$pat->_id || ($pat->_id && $pat->sexe == "m")}}disabled="disabled"{{/if}}
                     onchange="$V(this.form._grossesse, this.checked ? 1 : 0);" />
                   <input type="hidden" name="_grossesse" value="" />
                 {{/if}}

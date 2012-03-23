@@ -48,7 +48,9 @@ function changeModeSortie(mode_sortie){
 
 function toggleGrossesse(sexe) {
   var form = getForm("editSejour");
-  form._grossesse_view.disabled = sexe == "f" ? "" : "disabled";
+  if (form._grossesse_view) {
+    form._grossesse_view.disabled = sexe == "f" ? "" : "disabled";
+  }
 }
 
 function bindGrossesse() {
