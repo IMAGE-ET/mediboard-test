@@ -13,6 +13,9 @@ $cr_id = CValue::get("compte_rendu_id");
 $update_date_print = CValue::get("update_date_print", 0);
 $cr = new CCompteRendu();
 $cr->load($cr_id);
+
+if (!$cr->_id) return;
+
 $cr->loadContent();
 
 if (!$cr->canRead()) return;
