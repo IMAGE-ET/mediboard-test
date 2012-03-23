@@ -117,16 +117,22 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
         {{else}}
           <input type="hidden" name="_modifier_sortie" value="1" />
           <input type="hidden" name="entree_reelle" value="{{$_sejour->entree_reelle}}" />
-          <button class="tick" type="button" onclick="confirmation('{{$date_actuelle}}', '{{$date_demain}}', '{{$_sejour->sortie_prevue}}', '{{$_sejour->entree_reelle}}', this.form);">
+          
+          <button class="tick" type="button" style="float: right;" onclick="confirmation('{{$date_actuelle}}', '{{$date_demain}}', '{{$_sejour->sortie_prevue}}', '{{$_sejour->entree_reelle}}', this.form);">
             Effectuer la sortie
           </button>
-          <br />  
+          
           {{mb_field object=$_sejour field="mode_sortie" onchange="this.form._modifier_sortie.value = '0'; submitSortie(this.form);"}}
-          <br />
-          <div id="listEtabExterne-editFrm{{$_sejour->_guid}}" style="display: none;">
-            Etablissement: <br />
-            {{mb_field object=$_sejour field="etablissement_sortie_id" form="editFrm`$_sejour->_guid`" 
-                       autocomplete="true,1,50,true,true" onchange="changeEtablissementId(this.form)"}}
+          <div id="listEtabExterne-editFrm{{$_sejour->_guid}}" {{if $_sejour->mode_sortie != "transfert"}} style="display: none;" {{/if}}>
+            <table class="main layout" style="text-align: right;">
+              <tr>
+                <td>Etablissement:</td>
+                <td style="width: 0.1%;">
+                  {{mb_field object=$_sejour field="etablissement_sortie_id" form="editFrm`$_sejour->_guid`" 
+                             autocomplete="true,1,50,true,true" onchange="changeEtablissementId(this.form)"}}
+                </td>
+              </tr>
+            </table>
           </div>
         {{/if}}
       </form>
