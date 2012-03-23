@@ -79,13 +79,6 @@ function reloadDiagnostic(sejour_id, modeDAS) {
   }
 {{/if}}
 
-function reloadAntAllergie(sejour_id){
-  if(!$('antecedent_allergie')) return;
-  
-  var url = new Url("dPprescription", "httpreq_vw_antecedent_allergie");
-  url.addParam("sejour_id", sejour_id);
-  url.requestUpdate("antecedent_allergie");
-}
 
 function addSejourIdToSession(sejour_id){
   var url = new Url("system", "httpreq_set_value_to_session");
