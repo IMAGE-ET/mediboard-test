@@ -15,35 +15,35 @@
 {{if !$group->service_urgences_id}}
   <div class="small-warning">{{tr}}dPurgences-no-service_urgences_id{{/tr}}</div>
 {{else}}
-	{{mb_script module="dPpatients" script="pat_selector"}}
-	{{mb_script module="dPurgences" script="contraintes_rpu"}}
-	
-	{{if "dPprescription"|module_active}}
-	  {{mb_script module="dPprescription" script="prescription"}}
-	  {{mb_script module="dPprescription" script="element_selector"}}
+  {{mb_script module="dPpatients" script="pat_selector"}}
+  {{mb_script module="dPurgences" script="contraintes_rpu"}}
+  
+  {{if "dPprescription"|module_active}}
+    {{mb_script module="dPprescription" script="prescription"}}
+    {{mb_script module="dPprescription" script="element_selector"}}
   {{/if}}
-	
-	{{if "dPmedicament"|module_active}}
-	  {{mb_script module="dPmedicament" script="medicament_selector"}}
-	  {{mb_script module="dPmedicament" script="equivalent_selector"}}
-	{{/if}}
-	
-	{{mb_script module=compteRendu script=modele_selector}}
+  
+  {{if "dPmedicament"|module_active}}
+    {{mb_script module="dPmedicament" script="medicament_selector"}}
+    {{mb_script module="dPmedicament" script="equivalent_selector"}}
+  {{/if}}
+  
+  {{mb_script module=compteRendu script=modele_selector}}
   {{mb_script module=compteRendu script=document}}
 
-	<script type="text/javascript">
-	
-	ContraintesRPU.contraintesProvenance = {{$contrainteProvenance|@json}};
-	
-	function loadSuivi(sejour_id, user_id, cible, show_obs, show_trans, show_const) {
-	  if (!sejour_id) {
-		  return;
-	  }
-	  
+  <script type="text/javascript">
+  
+  ContraintesRPU.contraintesProvenance = {{$contrainteProvenance|@json}};
+  
+  function loadSuivi(sejour_id, user_id, cible, show_obs, show_trans, show_const) {
+    if (!sejour_id) {
+      return;
+    }
+    
     var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
     urlSuivi.addParam("sejour_id", sejour_id);
     urlSuivi.addParam("user_id", user_id);
-		urlSuivi.addParam("cible", cible);
+    urlSuivi.addParam("cible", cible);
     if (!Object.isUndefined(show_obs)) {
       urlSuivi.addParam("_show_obs", show_obs);
     }
@@ -54,32 +54,23 @@
       urlSuivi.addParam("_show_const", show_const);
     }
     urlSuivi.requestUpdate("suivisoins", { onComplete: function() { Control.Modal.close(); } });
-	}
-	
-	function submitSuivi(oForm) {
-	  sejour_id = oForm.sejour_id.value;
-	  submitFormAjax(oForm, 'systemMsg', { onComplete: function() { loadSuivi(sejour_id); } });
-	}
-	
-	function refreshConstantesMedicales(context_guid) {
-	  if (context_guid) {
-	    var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
-	    url.addParam("context_guid", context_guid);
-	    url.requestUpdate("constantes");
-	  }
-	}
-	
-	var constantesMedicalesDrawn = false;
-	function refreshConstantesHack(sejour_id) {
-	  (function(){
-	    if (constantesMedicalesDrawn == false && $('constantes').visible() && sejour_id) {
-	      refreshConstantesMedicales('CSejour-'+sejour_id);
-	      constantesMedicalesDrawn = true;
-	    }
-	  }).delay(0.5);
-	}
-
-	function refreshConstantesHack(sejour_id) {
+  }
+  
+  function submitSuivi(oForm) {
+    sejour_id = oForm.sejour_id.value;
+    submitFormAjax(oForm, 'systemMsg', { onComplete: function() { loadSuivi(sejour_id); } });
+  }
+  
+  function refreshConstantesMedicales(context_guid) {
+    if (context_guid) {
+      var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
+      url.addParam("context_guid", context_guid);
+      url.requestUpdate("constantes");
+    }
+  }
+  
+  var constantesMedicalesDrawn = false;
+  function refreshConstantesHack(sejour_id) {
     (function(){
       if (constantesMedicalesDrawn == false && $('constantes').visible() && sejour_id) {
         refreshConstantesMedicales('CSejour-'+sejour_id);
@@ -88,7 +79,16 @@
     }).delay(0.5);
   }
 
-	function showExamens(consult_id) {
+  function refreshConstantesHack(sejour_id) {
+    (function(){
+      if (constantesMedicalesDrawn == false && $('constantes').visible() && sejour_id) {
+        refreshConstantesMedicales('CSejour-'+sejour_id);
+        constantesMedicalesDrawn = true;
+      }
+    }).delay(0.5);
+  }
+
+  function showExamens(consult_id) {
     if (!consult_id) {
       return;
     }
@@ -98,8 +98,8 @@
     url.requestUpdate("examens");
   }
 
-	function loadDocItems(sejour_id, consult_id) {
-		if (!sejour_id) {
+  function loadDocItems(sejour_id, consult_id) {
+    if (!sejour_id) {
       return;
     }
 
@@ -107,73 +107,73 @@
     url.addParam("sejour_id" , sejour_id);
     url.addParam("consult_id", consult_id);
     url.requestUpdate("doc-items");
-	}
+  }
 
-	function loadActes(sejour_id) {
-		if (!sejour_id) {
+  function loadActes(sejour_id) {
+    if (!sejour_id) {
       return;
     }
 
-		var url = new Url("dPurgences", "ajax_show_actes");
+    var url = new Url("dPurgences", "ajax_show_actes");
     url.addParam("sejour_id" , sejour_id);
     url.requestUpdate("actes");
-	}	
-	
-	function cancelRPU() {
-	  var oForm = document.editRPU;
-	  var oElement = oForm._annule;
-	  
-	  if (oElement.value == "0") {
-	    if (confirm("Voulez-vous vraiment annuler le dossier ?")) {
-	      oElement.value = "1";
-	      oForm.submit();
-	      return;
-	    }
-	  }
-	      
-	  if (oElement.value == "1") {
-	    if (confirm("Voulez-vous vraiment rétablir le dossier ?")) {
-	      oElement.value = "0";
-	      oForm.submit();
-	      return;
-	    }
-	  }
-	}
-	
-	{{if $isPrescriptionInstalled}}
-  	function reloadPrescription(prescription_id){
-  	  Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null,'');
-  	}
-	{{/if}}
-
-  function changeModeEntree(mode_entree) {
-	  loadTransfert(mode_entree); 
-	  loadServiceMutation(mode_entree);
+  }  
+  
+  function cancelRPU() {
+    var oForm = document.editRPU;
+    var oElement = oForm._annule;
+    
+    if (oElement.value == "0") {
+      if (confirm("Voulez-vous vraiment annuler le dossier ?")) {
+        oElement.value = "1";
+        oForm.submit();
+        return;
+      }
+    }
+        
+    if (oElement.value == "1") {
+      if (confirm("Voulez-vous vraiment rétablir le dossier ?")) {
+        oElement.value = "0";
+        oForm.submit();
+        return;
+      }
+    }
   }
   
-	function loadTransfert(mode_entree){
+  {{if $isPrescriptionInstalled}}
+    function reloadPrescription(prescription_id){
+      Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null,'');
+    }
+  {{/if}}
+
+  function changeModeEntree(mode_entree) {
+    loadTransfert(mode_entree); 
+    loadServiceMutation(mode_entree);
+  }
+  
+  function loadTransfert(mode_entree){
     $('etablissement_entree_transfert').setVisible(mode_entree == 7);
-	}
-	
-	function loadServiceMutation(mode_entree){
-	  $('service_entree_mutation').setVisible(mode_entree == 6);
-	}
-	
-	function printDossier(id) {
-	  var url = new Url("dPurgences", "print_dossier");
-	  url.addParam("rpu_id", id);
-	  url.popup(700, 550, "RPU");
-	}
+  }
+  
+  function loadServiceMutation(mode_entree){
+    $('service_entree_mutation').setVisible(mode_entree == 6);
+  }
+  
+  function printDossier(id) {
+    var url = new Url("dPurgences", "print_dossier");
+    url.addParam("rpu_id", id);
+    url.popup(700, 550, "RPU");
+  }
 
   function printEtiquettes(id) {
-	  getForm("download_etiq").submit();
+    getForm("download_etiq").submit();
   }
-	  
-	function loadResultLabo(sejour_id) {
-	  var url = new Url("dPImeds", "httpreq_vw_sejour_results");
-	  url.addParam("sejour_id", sejour_id);
-	  url.requestUpdate('Imeds');
-	}
+    
+  function loadResultLabo(sejour_id) {
+    var url = new Url("dPImeds", "httpreq_vw_sejour_results");
+    url.addParam("sejour_id", sejour_id);
+    url.requestUpdate('Imeds');
+  }
 
   function requestInfoPat() {
     var oForm = getForm("editRPU");
@@ -187,19 +187,19 @@
     url.requestUpdate("infoPat");
   }
 
-	Main.add(function () {
-	  {{if $rpu->_id && $can->edit}}
-	    DossierMedical.reloadDossierPatient();
-	    var tab_sejour = Control.Tabs.create('tab-dossier');
-	    loadDocItems('{{$rpu->sejour_id}}', '{{$rpu->_ref_consult->_id}}');
-	  {{/if}}
-	  
-	  if (document.editAntFrm){
-	    document.editAntFrm.type.onchange();
-	  }
-	});
-	
-	</script>
+  Main.add(function () {
+    {{if $rpu->_id && $can->edit}}
+      DossierMedical.reloadDossierPatient();
+      var tab_sejour = Control.Tabs.create('tab-dossier');
+      loadDocItems('{{$rpu->sejour_id}}', '{{$rpu->_ref_consult->_id}}');
+    {{/if}}
+    
+    if (document.editAntFrm){
+      document.editAntFrm.type.onchange();
+    }
+  });
+  
+  </script>
 
   <form name="download_etiq" style="display: none;" action="?" target="_blank" method="get">
     <input type="hidden" name="m" value="dPurgences" />
@@ -209,162 +209,162 @@
     <input type="hidden" name="dialog" value="1" />
   </form>
 
-	<form name="editRPU" action="?m={{$m}}{{if !$can->edit}}&amp;tab=vw_idx_rpu{{/if}}" method="post" onsubmit="return checkForm(this)">
-	
-	<input type="hidden" name="m" value="dPurgences" />
-	<input type="hidden" name="dosql" value="do_rpu_aed" />
-	<input type="hidden" name="del" value="0" />
-	<input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
-	<input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
-	<input type="hidden" name="_annule" value="{{$rpu->_annule|default:"0"}}" />
-	
-	<input type="hidden" name="_bind_sejour" value="1" />
-	<table class="form">
-		<colgroup>
-			<col class="narrow" />
+  <form name="editRPU" action="?m={{$m}}{{if !$can->edit}}&amp;tab=vw_idx_rpu{{/if}}" method="post" onsubmit="return checkForm(this)">
+  
+  <input type="hidden" name="m" value="dPurgences" />
+  <input type="hidden" name="dosql" value="do_rpu_aed" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
+  <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+  <input type="hidden" name="_annule" value="{{$rpu->_annule|default:"0"}}" />
+  
+  <input type="hidden" name="_bind_sejour" value="1" />
+  <table class="form">
+    <colgroup>
+      <col class="narrow" />
       <col style="width: 50%" />
       <col class="narrow" />
       <col style="width: 50%" />
-		</colgroup>
-		
-	  <tr>
-	    {{if $rpu->_id}}
-	    <th class="title modify" colspan="4">
-	    	
-	      {{mb_include module=system template=inc_object_notes      object=$sejour}}
-	      {{mb_include module=system template=inc_object_idsante400 object=$rpu}}
-	      {{mb_include module=system template=inc_object_history    object=$rpu}}
-	
-		    <a class="action" style="float: right;" title="Modifier uniquement le sejour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
-		      <img src="images/icons/edit.png" alt="modifier" />
-		    </a>
-	
-		    {{tr}}CRPU-title-modify{{/tr}}
-				'{{$rpu}}'
-		    {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
-	    </th>
-	    {{else}}
-	    <th class="title" colspan="4">
+    </colgroup>
+    
+    <tr>
+      {{if $rpu->_id}}
+      <th class="title modify" colspan="4">
+        
+        {{mb_include module=system template=inc_object_notes      object=$sejour}}
+        {{mb_include module=system template=inc_object_idsante400 object=$rpu}}
+        {{mb_include module=system template=inc_object_history    object=$rpu}}
+  
+        <a class="action" style="float: right;" title="Modifier uniquement le sejour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
+          <img src="images/icons/edit.png" alt="modifier" />
+        </a>
+  
+        {{tr}}CRPU-title-modify{{/tr}}
+        '{{$rpu}}'
+        {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+      </th>
+      {{else}}
+      <th class="title" colspan="4">
         {{tr}}CRPU-title-create{{/tr}}
-		    {{if $sejour->_NDA}}
-		    	pour le dossier
-		      {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
-		    {{/if}}
-		  </th>
-	    {{/if}}
-	  </tr>
-	
-		{{if $rpu->_annule}}
-		<tr>
-		  <th class="category cancelled" colspan="4">
-		  {{tr}}CRPU-_annule{{/tr}}
-		  </th>
-		</tr>
-		{{/if}}
-	  
-	  <tr>
-	    <th>{{mb_label object=$rpu field="_responsable_id"}}</th>
-	    <td>
-	      <select name="_responsable_id" style="width: 15em;" class="{{$rpu->_props._responsable_id}}">
-	        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-	        {{foreach from=$listResponsables item=curr_user}}
-	        <option value="{{$curr_user->_id}}" class="mediuser" style="border-color: #{{$curr_user->_ref_function->color}}" {{if $curr_user->_id == $rpu->_responsable_id}}selected="selected"{{/if}}>
-	          {{$curr_user->_view}}
-	        </option>
-	        {{/foreach}}
-	      </select>
-	    </td>
-	    
-	    <th>{{mb_label object=$rpu field="_mode_entree"}}</th>
-	    <td>{{mb_field object=$rpu field="_mode_entree" style="width: 15em;" emptyLabel="Choose" onchange="ContraintesRPU.updateProvenance(this.value, true); changeModeEntree(this.value)"}}</td>
-	  </tr>
-	  
-	  <tr>
-	    <th>{{mb_label object=$rpu field="_entree"}}</th>
-	    <td>{{mb_field object=$rpu field="_entree" form="editRPU" register=true}}</td>
-	    
-		  <th></th>
-			<td>
-				<input type="hidden" name="group_id" value="{{$g}}" />
-				<div id="etablissement_entree_transfert" {{if !$rpu->_etablissement_entree_id}}style="display:none"{{/if}}>
+        {{if $sejour->_NDA}}
+          pour le dossier
+          {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+        {{/if}}
+      </th>
+      {{/if}}
+    </tr>
+  
+    {{if $rpu->_annule}}
+    <tr>
+      <th class="category cancelled" colspan="4">
+      {{tr}}CRPU-_annule{{/tr}}
+      </th>
+    </tr>
+    {{/if}}
+    
+    <tr>
+      <th>{{mb_label object=$rpu field="_responsable_id"}}</th>
+      <td>
+        <select name="_responsable_id" style="width: 15em;" class="{{$rpu->_props._responsable_id}}">
+          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+          {{foreach from=$listResponsables item=curr_user}}
+          <option value="{{$curr_user->_id}}" class="mediuser" style="border-color: #{{$curr_user->_ref_function->color}}" {{if $curr_user->_id == $rpu->_responsable_id}}selected="selected"{{/if}}>
+            {{$curr_user->_view}}
+          </option>
+          {{/foreach}}
+        </select>
+      </td>
+      
+      <th>{{mb_label object=$rpu field="_mode_entree"}}</th>
+      <td>{{mb_field object=$rpu field="_mode_entree" style="width: 15em;" emptyLabel="Choose" onchange="ContraintesRPU.updateProvenance(this.value, true); changeModeEntree(this.value)"}}</td>
+    </tr>
+    
+    <tr>
+      <th>{{mb_label object=$rpu field="_entree"}}</th>
+      <td>{{mb_field object=$rpu field="_entree" form="editRPU" register=true}}</td>
+      
+      <th></th>
+      <td>
+        <input type="hidden" name="group_id" value="{{$g}}" />
+        <div id="etablissement_entree_transfert" {{if !$rpu->_etablissement_entree_id}}style="display:none"{{/if}}>
           {{mb_field object=$rpu field="_etablissement_entree_id" form="editRPU" style="width: 12em;" autocomplete="true,1,50,true,true"}}
         </div>
         <div id="service_entree_mutation" {{if !$rpu->_service_entree_id}}style="display:none"{{/if}}>
           {{mb_field object=$rpu field="_service_entree_id" form="editRPU" autocomplete="true,1,50,true,true"}}
           <input type="hidden" name="cancelled" value="0" />
         </div>
-			</td>	
-	  </tr>
-	
-	  <tr>
-		  <th>
-		    <input type="hidden" name="_patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$rpu->_patient_id}}"  onchange="requestInfoPat();" />
-		    {{mb_label object=$rpu field="_patient_id"}}
-		  </th>
-		  <td>
-		  	<input type="text" name="_patient_view" style="width: 15em;" value="{{$patient->_view}}" 
-		  	  {{if $conf.dPurgences.allow_change_patient || !$sejour->_id || $app->user_type == 1}} 
-		  	    onfocus="PatSelector.init()" 
-		  	  {{/if}}
-		  	readonly="readonly" />
-		    
-		    {{if $conf.dPurgences.allow_change_patient || !$sejour->_id || $app->user_type == 1}} 
-		      <button type="button" class="search notext" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
-		    {{/if}}
-		    <script type="text/javascript">
-		      PatSelector.init = function(){
-		        this.sForm = "editRPU";
-		        this.sId   = "_patient_id";
-		        this.sView = "_patient_view";
-		        this.pop();
-		      }
-		    </script>
-				{{if $patient->_id}}
+      </td>  
+    </tr>
+  
+    <tr>
+      <th>
+        <input type="hidden" name="_patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$rpu->_patient_id}}"  onchange="requestInfoPat();" />
+        {{mb_label object=$rpu field="_patient_id"}}
+      </th>
+      <td>
+        <input type="text" name="_patient_view" style="width: 15em;" value="{{$patient->_view}}" 
+          {{if $conf.dPurgences.allow_change_patient || !$sejour->_id || $app->user_type == 1}} 
+            onfocus="PatSelector.init()" 
+          {{/if}}
+        readonly="readonly" />
+        
+        {{if $conf.dPurgences.allow_change_patient || !$sejour->_id || $app->user_type == 1}} 
+          <button type="button" class="search notext" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
+        {{/if}}
+        <script type="text/javascript">
+          PatSelector.init = function(){
+            this.sForm = "editRPU";
+            this.sId   = "_patient_id";
+            this.sView = "_patient_view";
+            this.pop();
+          }
+        </script>
+        {{if $patient->_id}}
         <button id="button-edit-patient" type="button" class="edit notext"
           onclick="location.href='?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id='+this.form._patient_id.value" 
         >
           {{tr}}Edit{{/tr}}
         </button>
-				{{/if}}
-		    
-	    </td>
-	    
-	    {{if $conf.dPurgences.old_rpu == "1"}}
-	    <th>{{mb_label object=$rpu field="urprov"}}</th>
-	    <td>{{mb_field object=$rpu field="urprov" emptyLabel="Choose" style="width: 15em;"}}</td>
-	    {{else}}
-	    <th>{{mb_label object=$rpu field="_provenance"}}</th>
-	    <td>{{mb_field object=$rpu field="_provenance" emptyLabel="Choose" style="width: 15em;"}}</td>
-	    {{/if}}
-	  </tr>
-	  
-	  <tr>
-		  {{if $can->edit}}
-	    <th>{{mb_label object=$rpu field="ccmu"}}</th>
-	    <td>{{mb_field object=$rpu field="ccmu" emptyLabel="Choose" style="width: 15em;"}}</td>
-			{{else}}
-			<th></th>
-	    <td></td>
-		  {{/if}}
-		  <th>{{mb_label object=$rpu field="_transport"}}</th>
-	    <td>{{mb_field object=$rpu field="_transport" emptyLabel="Choose" style="width: 15em;"}}</td>
-	  </tr>
-	  
-	   <!-- Selection du service -->
-	  <tr>
-	    <td colspan="2"></td>
-		  <th>{{mb_label object=$rpu field="pec_transport"}}</th>
-	    <td>{{mb_field object=$rpu field="pec_transport" emptyLabel="Choose" style="width: 15em;"}}</td>
+        {{/if}}
+        
+      </td>
+      
+      {{if $conf.dPurgences.old_rpu == "1"}}
+      <th>{{mb_label object=$rpu field="urprov"}}</th>
+      <td>{{mb_field object=$rpu field="urprov" emptyLabel="Choose" style="width: 15em;"}}</td>
+      {{else}}
+      <th>{{mb_label object=$rpu field="_provenance"}}</th>
+      <td>{{mb_field object=$rpu field="_provenance" emptyLabel="Choose" style="width: 15em;"}}</td>
+      {{/if}}
+    </tr>
+    
+    <tr>
+      {{if $can->edit}}
+      <th>{{mb_label object=$rpu field="ccmu"}}</th>
+      <td>{{mb_field object=$rpu field="ccmu" emptyLabel="Choose" style="width: 15em;"}}</td>
+      {{else}}
+      <th></th>
+      <td></td>
+      {{/if}}
+      <th>{{mb_label object=$rpu field="_transport"}}</th>
+      <td>{{mb_field object=$rpu field="_transport" emptyLabel="Choose" style="width: 15em;"}}</td>
+    </tr>
+    
+     <!-- Selection du service -->
+    <tr>
+      <td colspan="2"></td>
+      <th>{{mb_label object=$rpu field="pec_transport"}}</th>
+      <td>{{mb_field object=$rpu field="pec_transport" emptyLabel="Choose" style="width: 15em;"}}</td>
       </tr>
-	
-	  <tr>
-	    <th>{{mb_label object=$rpu field="box_id"}}</th>
-	    <td style="vertical-align: middle;">
-	      {{include file="../../dPhospi/templates/inc_select_lit.tpl"
-	      		field=box_id 
-	      		selected_id=$rpu->box_id 
-	      		ajaxSubmit=0 
-	      		listService=$listServicesUrgence}}
+  
+    <tr>
+      <th>{{mb_label object=$rpu field="box_id"}}</th>
+      <td style="vertical-align: middle;">
+        {{include file="../../dPhospi/templates/inc_select_lit.tpl"
+            field=box_id 
+            selected_id=$rpu->box_id 
+            ajaxSubmit=0 
+            listService=$listServicesUrgence}}
         <button type="button" class="cancel opacity-60 notext" onclick="this.form.elements['box_id'].selectedIndex=0"></button>
         &mdash; {{tr}}CRPU-_service_id{{/tr}} :
         {{if $listServicesUrgence|@count == 1}}
@@ -381,11 +381,11 @@
         </select>
         {{/if}}
       </td>
-			<th>{{mb_label object=$rpu field="date_at"}}</th>
-	    <td>{{mb_field object=$rpu field="date_at" form="editRPU" register=true}}</td>
-	  </tr>
-	
-	  {{if $can->edit}}
+      <th>{{mb_label object=$rpu field="date_at"}}</th>
+      <td>{{mb_field object=$rpu field="date_at" form="editRPU" register=true}}</td>
+    </tr>
+  
+    {{if $can->edit}}
       {{if $gerer_circonstance}}
         <tr>
           <th>{{mb_label object=$rpu field="circonstance"}}</th>
@@ -418,144 +418,144 @@
           </td>
         </tr>
       {{/if}}
-  	  <tr>
-  	    <th>{{mb_label object=$rpu field="diag_infirmier"}}</th> 
-  	    <td>
-  	      {{mb_field object=$rpu field="diag_infirmier" class="autocomplete" form="editRPU"
+      <tr>
+        <th>{{mb_label object=$rpu field="diag_infirmier"}}</th> 
+        <td>
+          {{mb_field object=$rpu field="diag_infirmier" class="autocomplete" form="editRPU"
                         aidesaisie="validate: function() { form.onsubmit() },
                                     validateOnBlur: 0,
                                     resetSearchField: 0,
                                     resetDependFields: 0"}}
-  	    </td>
-  	    <th>{{mb_label object=$rpu field="pec_douleur"}}</th>
-  	    <td>
-  	     {{mb_field object=$rpu field="pec_douleur" class="autocomplete" form="editRPU"
+        </td>
+        <th>{{mb_label object=$rpu field="pec_douleur"}}</th>
+        <td>
+         {{mb_field object=$rpu field="pec_douleur" class="autocomplete" form="editRPU"
                         aidesaisie="validate: function() { form.onsubmit() },
                                     validateOnBlur: 0,
                                     resetSearchField: 0,
                                     resetDependFields: 0"}}
-  	    </td>
-  	  </tr>
-	  {{/if}}
-	  
-	  <tr>
-			<td class="button" colspan="4">
-			  {{if $rpu->_id}}
-				  <button class="modify" type="submit">Valider</button>
-			    {{mb_ternary var=annule_text test=$sejour->annule value="Rétablir" other="Annuler"}}
-			    {{mb_ternary var=annule_class test=$sejour->annule value="change" other="cancel"}}
-			    
-			    <button class="{{$annule_class}}" type="button" onclick="cancelRPU();">
-			      {{$annule_text}}
-			    </button>
-			    
-			    {{if $can->admin}}
-					  <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'urgence ',objName:'{{$rpu->_view|smarty:nodefaults|JSAttribute}}'})">
-					    {{tr}}Delete{{/tr}}
-					  </button>
-					{{/if}}
-					
-					<button type="button" class="print" onclick="printDossier({{$rpu->_id}})">
-		        {{tr}}Print{{/tr}} dossier
-		      </button>
-		      
-		      <button type="button" class="print" onclick="printEtiquettes({{$rpu->_id}})">
-		        {{tr}}CModeleEtiquette.print_labels{{/tr}}
-		      </button>
-					    
-	        <a class="button new" href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id=0">
-	          {{tr}}CRPU-title-create{{/tr}}
-	        </a>
-		    {{else}}
-			    <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
-	      {{/if}}
-	  	</td>
-	  </tr>
-	  {{if !$rpu->_id}}
+        </td>
+      </tr>
+    {{/if}}
+    
+    <tr>
+      <td class="button" colspan="4">
+        {{if $rpu->_id}}
+          <button class="modify" type="submit">Valider</button>
+          {{mb_ternary var=annule_text test=$sejour->annule value="Rétablir" other="Annuler"}}
+          {{mb_ternary var=annule_class test=$sejour->annule value="change" other="cancel"}}
+          
+          <button class="{{$annule_class}}" type="button" onclick="cancelRPU();">
+            {{$annule_text}}
+          </button>
+          
+          {{if $can->admin}}
+            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'urgence ',objName:'{{$rpu->_view|smarty:nodefaults|JSAttribute}}'})">
+              {{tr}}Delete{{/tr}}
+            </button>
+          {{/if}}
+          
+          <button type="button" class="print" onclick="printDossier({{$rpu->_id}})">
+            {{tr}}Print{{/tr}} dossier
+          </button>
+          
+          <button type="button" class="print" onclick="printEtiquettes({{$rpu->_id}})">
+            {{tr}}CModeleEtiquette.print_labels{{/tr}}
+          </button>
+              
+          <a class="button new" href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id=0">
+            {{tr}}CRPU-title-create{{/tr}}
+          </a>
+        {{else}}
+          <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+        {{/if}}
+      </td>
+    </tr>
+    {{if !$rpu->_id}}
     <tr>
       <td colspan="4">
         <fieldSet>
           <legend>Infos patient</legend>
           <div class="text" id="infoPat">
-          	<div class="empty">Aucun patient sélectionné</div>
+            <div class="empty">Aucun patient sélectionné</div>
           </div>
         </fieldSet>
       </td>
     </tr>
-	  {{/if}}
-	  
-	</table>
-	
-	</form>
-	
-	<!-- Dossier Médical du patient -->
-	{{if $rpu->_id && $can->edit}}
-		<table width="100%" class="tbl">
-		  <tr>
-		    <th class="category">Attentes</th>
-		    <th class="category">Prise en charge médicale</th>
-		  </tr>
-		
-		  <tr>
-		    <td style="width: 60%">
-		      {{include file="inc_vw_rpu_attente.tpl"}}
-		    </td>
-		    <td class="button {{if $sejour->type != "urg"}}arretee{{/if}}">
-		  		{{include file="inc_pec_praticien.tpl"}}
-		    </td>
-		  </tr>
-		</table>
-		
-	  {{assign var=consult value=$rpu->_ref_consult}}
-	
-		<ul id="tab-dossier" class="control_tabs">
-		  <li><a href="#antecedents">Antécédents &amp; Traitements</a></li>
-		  <li onmouseup="loadSuivi({{$rpu->sejour_id}});"><a href="#suivisoins">Suivi soins</a></li>
-		  <li onmouseup="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">{{tr}}CPatient.surveillance{{/tr}}</a></li>
-		  <li onmouseup="showExamens('{{$consult->_id}}')"><a href="#examens">Dossier médical</a></li>
-		  {{if $app->user_prefs.ccam_sejour == 1 }}
-		    <li onmouseup="loadActes('{{$rpu->sejour_id}}')"><a href="#actes">Cotation infirmière</a></li>
-		  {{/if}}
-			{{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !$conf.dPprescription.CPrescription.prescription_suivi_soins}}
-		    <li {{if $consult->sejour_id}} onmouseup="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'');" {{/if}}><a href="#prescription_sejour">Prescription</a></li>
-		  {{/if}}
-		  {{if @$modules.dPImeds->mod_active}}
+    {{/if}}
+    
+  </table>
+  
+  </form>
+  
+  <!-- Dossier Médical du patient -->
+  {{if $rpu->_id && $can->edit}}
+    <table width="100%" class="tbl">
+      <tr>
+        <th class="category">Attentes</th>
+        <th class="category">Prise en charge médicale</th>
+      </tr>
+    
+      <tr>
+        <td style="width: 60%">
+          {{include file="inc_vw_rpu_attente.tpl"}}
+        </td>
+        <td class="button {{if $sejour->type != "urg"}}arretee{{/if}}">
+          {{include file="inc_pec_praticien.tpl"}}
+        </td>
+      </tr>
+    </table>
+    
+    {{assign var=consult value=$rpu->_ref_consult}}
+  
+    <ul id="tab-dossier" class="control_tabs">
+      <li><a href="#antecedents">Antécédents &amp; Traitements</a></li>
+      <li onmouseup="loadSuivi({{$rpu->sejour_id}});"><a href="#suivisoins">Suivi soins</a></li>
+      <li onmouseup="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">{{tr}}CPatient.surveillance{{/tr}}</a></li>
+      <li onmouseup="showExamens('{{$consult->_id}}')"><a href="#examens">Dossier médical</a></li>
+      {{if $app->user_prefs.ccam_sejour == 1 }}
+        <li onmouseup="loadActes('{{$rpu->sejour_id}}')"><a href="#actes">Cotation infirmière</a></li>
+      {{/if}}
+      {{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !$conf.dPprescription.CPrescription.prescription_suivi_soins}}
+        <li {{if $consult->sejour_id}} onmouseup="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'');" {{/if}}><a href="#prescription_sejour">Prescription</a></li>
+      {{/if}}
+      {{if @$modules.dPImeds->mod_active}}
         <li onmouseup="loadResultLabo('{{$rpu->sejour_id}}')"><a href="#Imeds">Labo</a></li>
       {{/if}}
-		  <li onmouseup="loadDocItems('{{$rpu->sejour_id}}', '{{$consult->_id}}')"><a href="#doc-items">Documents</a></li>
-		</ul>
-		
-		<hr class="control_tabs" />
-		
-		<div id="antecedents">
-		  {{assign var="current_m" value="dPurgences"}}
-		  {{assign var="_is_anesth" value="0"}}
-		  {{assign var=sejour_id value=""}}
-		  
-		  {{mb_include module=cabinet template=inc_ant_consult chir_id=$app->user_id}}
-		</div>
-		
-		<div id="suivisoins" style="display:none"></div>
-		<div id="constantes" style="display:none"></div>
-		<div id="examens"    style="display:none">
-		  <div class="small-info">
+      <li onmouseup="loadDocItems('{{$rpu->sejour_id}}', '{{$consult->_id}}')"><a href="#doc-items">Documents</a></li>
+    </ul>
+    
+    <hr class="control_tabs" />
+    
+    <div id="antecedents">
+      {{assign var="current_m" value="dPurgences"}}
+      {{assign var="_is_anesth" value="0"}}
+      {{assign var=sejour_id value=""}}
+      
+      {{mb_include module=cabinet template=inc_ant_consult chir_id=$app->user_id}}
+    </div>
+    
+    <div id="suivisoins" style="display:none"></div>
+    <div id="constantes" style="display:none"></div>
+    <div id="examens"    style="display:none">
+      <div class="small-info">
         Aucune prise en charge médicale
       </div>
-		</div>
-		
-		{{if $app->user_prefs.ccam_sejour == 1 }}
-		<div id="actes" style="display: none;"> </div>    
-		{{/if}}
-		
-		{{if $isPrescriptionInstalled && $modules.dPprescription->_can->read}}
-		<div id="prescription_sejour" style="display: none;">
-		  <div class="small-info">
-		    Aucune prescription
-		  </div>
-		</div>
-		{{/if}}
-		
-		{{if @$modules.dPImeds->mod_active}}
+    </div>
+    
+    {{if $app->user_prefs.ccam_sejour == 1 }}
+    <div id="actes" style="display: none;"> </div>    
+    {{/if}}
+    
+    {{if $isPrescriptionInstalled && $modules.dPprescription->_can->read}}
+    <div id="prescription_sejour" style="display: none;">
+      <div class="small-info">
+        Aucune prescription
+      </div>
+    </div>
+    {{/if}}
+    
+    {{if @$modules.dPImeds->mod_active}}
     <div id="Imeds" style="display: none;">
       <div class="small-info">
         Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
@@ -563,15 +563,15 @@
       </div>
     </div>
     {{/if}}
-			
-	  <div id="doc-items" style="display: none;"></div>
-	{{/if}}
-	
-	
-	{{if $sejour->mode_entree}}
-	<script type="text/javascript">
-  	// Lancement des fonctions de contraintes entre les champs
-  	ContraintesRPU.updateProvenance("{{$sejour->mode_entree}}");
-	</script>
-	{{/if}}
+      
+    <div id="doc-items" style="display: none;"></div>
+  {{/if}}
+  
+  
+  {{if $sejour->mode_entree}}
+  <script type="text/javascript">
+    // Lancement des fonctions de contraintes entre les champs
+    ContraintesRPU.updateProvenance("{{$sejour->mode_entree}}");
+  </script>
+  {{/if}}
 {{/if}}

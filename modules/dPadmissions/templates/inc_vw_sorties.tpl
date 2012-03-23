@@ -78,60 +78,76 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
   <tr>
     <td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
       {{if $canAdmissions->edit}}
-      <form name="editFrm{{$_sejour->_id}}" action="?m={{$m}}" method="post">
-      <input type="hidden" name="m" value="dPplanningOp" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_sejour_aed" />
-      <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
-      <input type="hidden" name="type" value="{{$_sejour->type}}" />
       
-      {{if $_sejour->sortie_reelle}}
-      <input type="hidden" name="mode_sortie" value="{{$_sejour->mode_sortie}}" />
-      <input type="hidden" name="etablissement_sortie_id" value="{{$_sejour->etablissement_sortie_id}}" />
-      <input type="hidden" name="_modifier_sortie" value="0" />
-      <button class="cancel" type="button" onclick="submitSortie(this.form)">
-        Annuler la sortie
-      </button>
-      <br />
-      {{if ($_sejour->sortie_reelle < $date_min) || ($_sejour->sortie_reelle > $date_max)}}
-        {{$_sejour->sortie_reelle|date_format:$conf.datetime}}
-      {{else}}
-        {{$_sejour->sortie_reelle|date_format:$conf.time}}
-      {{/if}}
-      - {{tr}}CSejour.mode_sortie.{{$_sejour->mode_sortie}}{{/tr}}
-      {{if $_sejour->etablissement_sortie_id}}
-        - {{$_sejour->_ref_etablissement_transfert}}
-      {{/if}}
-      {{else}}
-      <input type="hidden" name="_modifier_sortie" value="1" />
-      <input type="hidden" name="entree_reelle" value="{{$_sejour->entree_reelle}}" />
-      <button class="tick" type="button" onclick="confirmation('{{$date_actuelle}}', '{{$date_demain}}', '{{$_sejour->sortie_prevue}}', '{{$_sejour->entree_reelle}}', this.form);">
-        Effectuer la sortie
-      </button>
-      <br />  
-      {{mb_field object=$_sejour field="mode_sortie" onchange="this.form._modifier_sortie.value = '0'; submitSortie(this.form);"}}
-      <br />
-      <div id="listEtabExterne-editFrm{{$_sejour->_id}}" style="display: inline;"></div>
       <script type="text/javascript">
-        loadTransfert(document.editFrm{{$_sejour->_id}});
+        Main.add(function(){
+          // Ceci doit rester ici !! prepareForm necessaire car pas appelé au premier refresh d'un periodical update
+          var form = getForm("editFrm{{$_sejour->_guid}}");
+          loadTransfert(form);
+        });
       </script>
-      {{/if}}
+      
+      <form name="editFrm{{$_sejour->_guid}}" action="?m={{$m}}" method="post">
+        <input type="hidden" name="m" value="dPplanningOp" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="dosql" value="do_sejour_aed" />
+        <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
+        <input type="hidden" name="type" value="{{$_sejour->type}}" />
+        
+        {{if $_sejour->sortie_reelle}}
+          <input type="hidden" name="mode_sortie" value="{{$_sejour->mode_sortie}}" />
+          <input type="hidden" name="etablissement_sortie_id" value="{{$_sejour->etablissement_sortie_id}}" />
+          <input type="hidden" name="_modifier_sortie" value="0" />
+          <button class="cancel" type="button" onclick="submitSortie(this.form)">
+            Annuler la sortie
+          </button>
+          
+          <br />
+          {{if ($_sejour->sortie_reelle < $date_min) || ($_sejour->sortie_reelle > $date_max)}}
+            {{$_sejour->sortie_reelle|date_format:$conf.datetime}}
+          {{else}}
+            {{$_sejour->sortie_reelle|date_format:$conf.time}}
+          {{/if}}
+          
+          - {{tr}}CSejour.mode_sortie.{{$_sejour->mode_sortie}}{{/tr}}
+          
+          {{if $_sejour->etablissement_sortie_id}}
+            - {{$_sejour->_ref_etablissement_transfert}}
+          {{/if}}
+        {{else}}
+          <input type="hidden" name="_modifier_sortie" value="1" />
+          <input type="hidden" name="entree_reelle" value="{{$_sejour->entree_reelle}}" />
+          <button class="tick" type="button" onclick="confirmation('{{$date_actuelle}}', '{{$date_demain}}', '{{$_sejour->sortie_prevue}}', '{{$_sejour->entree_reelle}}', this.form);">
+            Effectuer la sortie
+          </button>
+          <br />  
+          {{mb_field object=$_sejour field="mode_sortie" onchange="this.form._modifier_sortie.value = '0'; submitSortie(this.form);"}}
+          <br />
+          <div id="listEtabExterne-editFrm{{$_sejour->_guid}}" style="display: none;">
+            Etablissement: <br />
+            {{mb_field object=$_sejour field="etablissement_sortie_id" form="editFrm`$_sejour->_guid`" 
+                       autocomplete="true,1,50,true,true" onchange="changeEtablissementId(this.form)"}}
+          </div>
+        {{/if}}
       </form>
+      
       {{elseif $_sejour->sortie_reelle}}
-      {{if ($_sejour->sortie_reelle < $date_min) || ($_sejour->sortie_reelle > $date_max)}}
-        {{$_sejour->sortie_reelle|date_format:$conf.datetime}}
+        {{if ($_sejour->sortie_reelle < $date_min) || ($_sejour->sortie_reelle > $date_max)}}
+          {{$_sejour->sortie_reelle|date_format:$conf.datetime}}
+        {{else}}
+          {{$_sejour->sortie_reelle|date_format:$conf.time}}
+        {{/if}}
+        
+        {{if $_sejour->mode_sortie}}
+          <br />
+          {{tr}}CSejour.mode_sortie.{{$_sejour->mode_sortie}}{{/tr}}
+        {{/if}}
+        
+        {{if $_sejour->etablissement_sortie_id}}
+          <br />{{$_sejour->_ref_etablissement_transfert}}
+        {{/if}}
       {{else}}
-        {{$_sejour->sortie_reelle|date_format:$conf.time}}
-      {{/if}}
-      {{if $_sejour->mode_sortie}}
-      <br />
-      {{tr}}CSejour.mode_sortie.{{$_sejour->mode_sortie}}{{/tr}}
-      {{/if}}
-      {{if $_sejour->etablissement_sortie_id}}
-        <br />{{$_sejour->_ref_etablissement_transfert}}
-      {{/if}}
-      {{else}}
-      -
+        -
       {{/if}}
     </td>
     

@@ -18,7 +18,7 @@
 <table class="form" style="width: 100%">
   
   {{if $can->edit}}
-	
+  
   <tr {{if !$ajax}} style="display: none" {{/if}}>
     <th>{{mb_label object=$sejour field=entree_reelle}}</th>
     <td>
@@ -49,38 +49,38 @@
          </strong>
       {{/if}}
     </td>
-	</tr>
-	
+  </tr>
+  
   <tr id="etablissement_sortie_transfert" {{if $sejour->mode_sortie != "transfert"}} style="display:none;" {{/if}}>
-  	<th>{{mb_label object=$sejour field="etablissement_sortie_id"}}</th>
+    <th>{{mb_label object=$sejour field="etablissement_sortie_id"}}</th>
     <td>{{mb_field object=$sejour field="etablissement_sortie_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}</td>
   </tr>
 
   <tr id="service_sortie_transfert" {{if $sejour->mode_sortie != "mutation"}} style="display:none;" {{/if}}>
-  	<th>{{mb_label object=$sejour field="service_sortie_id"}}</th>
-		<td>
+    <th>{{mb_label object=$sejour field="service_sortie_id"}}</th>
+    <td>
       {{mb_field object=$sejour field="service_sortie_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}
       <input type="hidden" name="cancelled" value="0" />
     </td>
   </tr>
-	
+  
   <tr id="commentaires_sortie">
     <th>{{mb_label object=$sejour field="commentaires_sortie"}}</th>
     <td>
-    	{{mb_field object=$sejour field="commentaires_sortie" onchange="this.form.onsubmit();" form="editSejour"
+      {{mb_field object=$sejour field="commentaires_sortie" onchange="this.form.onsubmit();" form="editSejour"
         aidesaisie="validate: function() { form.onsubmit();},
                     resetSearchField: 0,
                     resetDependFields: 0,
                     validateOnBlur: 0" }}
-			</td>
+      </td>
   </tr>
   
   <!-- Diagnostic Principal -->
-	{{if !$ajax}} 
+  {{if !$ajax}} 
   <tr id="dp_{{$sejour->_id}}">
     {{mb_include module=urgences template=inc_diagnostic_principal}}
   </tr>         
-	{{/if}}
+  {{/if}}
 </table>
 
 </form>

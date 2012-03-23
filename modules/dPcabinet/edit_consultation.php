@@ -115,7 +115,7 @@ if ($consult->_id) {
   if ($consultAnesth->_id) {
     $consultAnesth->loadRefs();
     if ($consultAnesth->_ref_operation->_id || $consultAnesth->_ref_sejour->_id) {
-    	$consultAnesth->_ref_operation->loadExtCodesCCAM();
+      $consultAnesth->_ref_operation->loadExtCodesCCAM();
       $consultAnesth->_ref_operation->loadRefs();
       $consultAnesth->_ref_sejour->loadRefPraticien();
     }
@@ -131,7 +131,7 @@ if ($consult->_id) {
   foreach ($patient->_ref_consultations as &$_consultation) {
     $_consultation->loadRefsFwd();
     $_consultation->_ref_chir->loadRefFunction();
-		
+    
   }
   
   // Chargement de ses séjours
@@ -195,7 +195,6 @@ if ($consult->adresse_par_prat_id) {
   $consult->_ref_adresse_par_prat = $medecin_adresse_par;
 }
 
-$listEtab = array();
 $listServicesUrgence = array();
 
 if ($consult->sejour_id) {
@@ -213,11 +212,6 @@ if ($consult->_ref_sejour && $consult->_ref_sejour->_id){
     // Mise en session du rpu_id
     $_SESSION["dPurgences"]["rpu_id"] = $consult->_ref_sejour->_ref_rpu->_id;
     $consult->_ref_sejour->_ref_rpu->loadRefSejourMutation();
-  
-    // Chargement des etablissements externes
-    $order = "nom";
-    $etab = new CEtabExterne();
-    $listEtab = $etab->loadList(null, $order);
     
     // Chargement des boxes d'urgences
     $listServicesUrgence = CService::loadServicesUrgence();
@@ -233,11 +227,11 @@ $acte_ngap->loadListExecutants();
 $acte_tarmed = null;
 //Si le module Tarmed est installé chargement d'un acte
 if(CModule::getInstalled("tarmed")){
-	//Initialisation d'un acte Tarmed
-	$acte_tarmed = new CActeTarmed();
-	$acte_tarmed->quantite = 1;
-	$acte_tarmed->loadListExecutants();
-	$acte_tarmed->loadRefExecutant();
+  //Initialisation d'un acte Tarmed
+  $acte_tarmed = new CActeTarmed();
+  $acte_tarmed->quantite = 1;
+  $acte_tarmed->loadListExecutants();
+  $acte_tarmed->loadRefExecutant();
 }
 // Tableau de contraintes pour les champs du RPU
 // Contraintes sur le mode d'entree / provenance
@@ -257,13 +251,13 @@ $contrainteOrientation["normal"] = array("", "FUGUE", "SCAM", "PSA", "REO");
 
 $list_etat_dents = array();
 if ($consult->_id) {
-	if ($consult->_ref_patient->_ref_dossier_medical->_id) {
-  	$consult->_ref_patient->_ref_dossier_medical->loadRefsEtatsDents();
-  	$etat_dents = $consult->_ref_patient->_ref_dossier_medical->_ref_etats_dents;
-  	foreach ($etat_dents as $etat) {
-  	  $list_etat_dents[$etat->dent] = $etat->etat;
-  	}
-	}
+  if ($consult->_ref_patient->_ref_dossier_medical->_id) {
+    $consult->_ref_patient->_ref_dossier_medical->loadRefsEtatsDents();
+    $etat_dents = $consult->_ref_patient->_ref_dossier_medical->_ref_etats_dents;
+    foreach ($etat_dents as $etat) {
+      $list_etat_dents[$etat->dent] = $etat->etat;
+    }
+  }
 }
 
 $consult->loadRefsActesTarmed();
@@ -289,7 +283,6 @@ $smarty->assign("contrainteProvenance" , $contrainteProvenance );
 $smarty->assign("contrainteDestination", $contrainteDestination);
 $smarty->assign("contrainteOrientation", $contrainteOrientation);
 
-$smarty->assign("listEtab"           , $listEtab           );
 $smarty->assign("listServicesUrgence", $listServicesUrgence);
 
 $smarty->assign("acte_ngap"      , $acte_ngap);
@@ -337,14 +330,14 @@ if ($consult->_is_dentiste) {
 
 if($consult->_is_anesth) {
   $nextSejourAndOperation = $consult->_ref_patient->getNextSejourAndOperation($consult->_ref_plageconsult->date);
-	$secs = range(0, 60-1, 1);
-	$mins = range(0, 15-1, 1);
-	
-	$smarty->assign("nextSejourAndOperation", $nextSejourAndOperation);
-	$smarty->assign("secs"                  , $secs);
-	$smarty->assign("mins"                  , $mins);
-	$smarty->assign("consult_anesth"        , $consultAnesth);
-	$smarty->display("../../dPcabinet/templates/edit_consultation_anesth.tpl");  
+  $secs = range(0, 60-1, 1);
+  $mins = range(0, 15-1, 1);
+  
+  $smarty->assign("nextSejourAndOperation", $nextSejourAndOperation);
+  $smarty->assign("secs"                  , $secs);
+  $smarty->assign("mins"                  , $mins);
+  $smarty->assign("consult_anesth"        , $consultAnesth);
+  $smarty->display("../../dPcabinet/templates/edit_consultation_anesth.tpl");  
 } else {
   if(CAppUI::pref("MODCONSULT")){
     $smarty->display("../../dPcabinet/templates/edit_consultation_accord.tpl");

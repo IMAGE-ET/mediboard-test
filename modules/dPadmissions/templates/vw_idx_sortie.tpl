@@ -38,18 +38,7 @@ function printDHE(type, object_id) {
 }
 
 function loadTransfert(oForm){
-  sejour_id   = $V(oForm.sejour_id)
-  mode_sortie = $V(oForm.mode_sortie);
-  // si Transfert, affichage du select
-  if(mode_sortie=="transfert"){
-    //Chargement de la liste des etablissement externes
-    var url = new Url("dPadmissions", "httpreq_vw_etab_externes");
-    url.addParam("sejour_id", sejour_id);
-    url.requestUpdate('listEtabExterne-'+oForm.name);
-  } else {
-    // sinon, on vide le contenu de la div
-    $("listEtabExterne-" + oForm.name).innerHTML = "";
-  }
+  $("listEtabExterne-" + oForm.name).setVisible($V(oForm.mode_sortie) == "transfert");
 }
 
 var changeEtablissementId = function(oForm) {

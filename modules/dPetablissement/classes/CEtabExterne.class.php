@@ -10,7 +10,7 @@
 
 class CEtabExterne extends CMbObject {
   // DB Table key
-  var $etab_id       = null;	
+  var $etab_id       = null;  
 
   // DB Fields
   var $nom            = null;
@@ -39,7 +39,7 @@ class CEtabExterne extends CMbObject {
   }
   
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
     
     $specs["nom"]            = "str notNull confidential seekable";
