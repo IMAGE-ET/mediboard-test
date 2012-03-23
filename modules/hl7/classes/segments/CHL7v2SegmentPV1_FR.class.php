@@ -234,7 +234,7 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
     $data[] = CHL7v2TableEntry::mapTo("112", $discharge_disposition);
     
     // PV1-37: Discharged to Location (DLD) (optional)
-    $data[] = ($sejour->etablissement_sortie_id && ($event->code == "A03" || $event->code == "A16")) ? array($sejour->loadRefEtablissementTransfert()->finess) : null;
+    $data[] = ($sejour->etablissement_sortie_id && ($event->code == "A03" || $event->code == "A16" || $event->code == "A21")) ? array($sejour->loadRefEtablissementTransfert()->finess) : null;
     
     // PV1-38: Diet Type (CE) (optional)
     $data[] = null;

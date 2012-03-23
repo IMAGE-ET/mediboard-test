@@ -23,7 +23,8 @@ class CPAMFR extends CPAM {
   static $transaction_iti31 = array(
     "A01", "A02", "A03", "A04", "A05", "A06", "A07",
     "A11", "A12", "A13", "A14", "A16", "A25", "A38", 
-    "A44", "A54", "A55", "Z99"
+    "A44", "A54", "A55", "Z80", "Z81", "Z84", "Z85",
+    "Z99"
   );
   
   static $evenements = array(
@@ -50,6 +51,10 @@ class CPAMFR extends CPAM {
     "A44" => "CHL7EventADTA44_FR",
     "A54" => "CHL7EventADTA54_FR",
     "A55" => "CHL7EventADTA55_FR",
+    "Z80" => "CHL7EventADTZ80_FR",
+    "Z81" => "CHL7EventADTZ81_FR",
+    "Z84" => "CHL7EventADTZ84_FR",
+    "Z85" => "CHL7EventADTZ85_FR",
     "Z99" => "CHL7EventADTZ99_FR",
   );
   
