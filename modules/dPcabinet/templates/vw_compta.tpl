@@ -37,7 +37,7 @@ function changeDate(sDebut, sFin){
   oForm._date_max_da.value = Date.fromDATE(sFin).toLocaleDate();  
 }
 
-function viewActes(){
+function viewActes(etab){
   var oForm = document.printFrm;
   
   if(!oForm.chir.value) {
@@ -50,7 +50,13 @@ function viewActes(){
   url.addElement(oForm._date_min);
   url.addElement(oForm._date_max);
   url.addElement(oForm.chir);
-  url.addElement(oForm.typeVue);
+  url.addParam("etab", etab);
+  if (etab) {
+    url.addElement(oForm.tyepVueEtab);
+  }
+  else {
+    url.addElement(oForm.typeVue);
+  }
   url.popup(950, 550, "Rapport des actes réalisés");
   
   return false;
@@ -173,6 +179,30 @@ function viewActes(){
           </td>
         </tr>
         <tr>
+          <th class="category" colspan="4">Comptabilité Etablissement</th>
+        </tr>
+        <tr>
+          <th>
+            <label for="typeVueEtab">Type d'affichage</label>
+          </th>
+          <td>
+            <select name="typeVueEtab">
+            <option value="1">Liste complète</option>
+            <option value="2">Totaux</option>
+            </select>
+          </td>
+          <td colspan="2" rowspan="2" class="text">
+            <div class="big-info">
+              Affichage de l'état des règlements de la liste des actes réalisés aux blocs.
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="button" colspan="2">
+            <button type="button" class="search" onclick="viewActes(1);">Validation paiements</button>
+          </td>
+        </tr>
+        <tr>
           <th class="category" colspan="4">Comptabilité "Interventions"</th>
         </tr>
         <tr>
@@ -187,7 +217,7 @@ function viewActes(){
           </td>
           <td colspan="2" rowspan="2" class="text">
             <div class="big-info">
-              Affichage de l'état des règlements de la liste des actes réalisé aux blocs.
+              Affichage de l'état des règlements de la liste des actes réalisés aux blocs.
             </div>
           </td>
         </tr>

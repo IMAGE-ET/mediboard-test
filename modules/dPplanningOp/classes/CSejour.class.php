@@ -800,7 +800,8 @@ class CSejour extends CCodable implements IPatientRelated {
         $this->_shortview .= " au " . mbTransformTime(null, $this->_sortie, CAppUI::conf("date"));
       }
     }
-    $this->_acte_execution = mbAddDateTime($this->entree_prevue);
+    $this->_acte_execution = mbDateTime($this->entree_prevue);
+    
     $this->_praticien_id = $this->praticien_id;
         
     $this->_adresse_par = ($this->etablissement_entree_id || $this->adresse_par_prat_id);

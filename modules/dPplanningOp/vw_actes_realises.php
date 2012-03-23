@@ -13,6 +13,7 @@ $_date_min = CValue::getOrSession("_date_min");
 $_date_max = CValue::getOrSession("_date_max");
 $_prat_id = CValue::getOrSession("chir");
 $typeVue = CValue::getOrSession("typeVue");
+$etab = CValue::getOrSession("etab");
 
 $nbActes = array();
 $montantSejour = array();
@@ -25,11 +26,21 @@ $praticien->load($_prat_id);
 $acte_ccam = new CActeCCAM();
 $order = "execution ASC";
 $where = array();
+$ljoin = array();
+
 $where["executant_id"] = " = '$_prat_id'";
 $where["execution"] = "BETWEEN '$_date_min' AND '$_date_max'";
 
-//$where[] = "(object_class <> 'CConsultation' OR consultation.sejour_id IS NOT NULL AND consultation.consultation_id = object_id)"; 
-$actes_ccam = $acte_ccam->loadList($where, $order);
+$ljoin["consultation"] = "acte_ccam.object_id = consultation.sejour_id AND acte_ccam.object_class = 'CConsultation'";
+
+if ($etab) {
+  $where[] = "(object_class <> 'CConsultation') OR (consultation.sejour_id IS NOT NULL AND consultation.consultation_id = object_id)";
+}
+else {
+  $where[] = "consultation.sejour_id IS NULL";
+}
+
+$actes_ccam = $acte_ccam->loadList($where, $order, null, null, $ljoin);
 
 // Initialisation du tableau de codables
 $codables = array(
@@ -95,24 +106,30 @@ foreach($sejours as $key => $sejour){
     
     // Calcul du nombre d'actes par sejour
     if($sejour->_ref_actes_ccam){
-      foreach($sejour->_ref_actes_ccam as $acte){
-        @$nbActes[$sejour->_id]++;
-        @$montantSejour[$sejour->_id] += $acte->_montant_facture; 
+      if (count($sejour->_ref_actes_ccam)) {
+        foreach($sejour->_ref_actes_ccam as $acte){
+          @$nbActes[$sejour->_id]++;
+          @$montantSejour[$sejour->_id] += $acte->_montant_facture; 
+        }
       }
     }
     if($sejour->_ref_operations){
       foreach($sejour->_ref_operations as $operation){
-        foreach($operation->_ref_actes_ccam as $acte){
-          @$nbActes[$sejour->_id]++;
-          @$montantSejour[$sejour->_id] += $acte->_montant_facture;
+        if (count($operation->_ref_actes_ccam)) {
+          foreach($operation->_ref_actes_ccam as $acte){
+            @$nbActes[$sejour->_id]++;
+            @$montantSejour[$sejour->_id] += $acte->_montant_facture;
+          }
         }
       }
     }
     if($sejour->_ref_consultations){
       foreach($sejour->_ref_consultations as $consult){
-        foreach($consult->_ref_actes_ccam as $acte){
-          @$nbActes[$sejour->_id]++;
-          @$montantSejour[$sejour->_id] += $acte->_montant_facture;
+        if (count($consult->_ref_actes_ccam)) {
+          foreach($consult->_ref_actes_ccam as $acte){
+            @$nbActes[$sejour->_id]++;
+            @$montantSejour[$sejour->_id] += $acte->_montant_facture;
+          }
         }
       }
     }

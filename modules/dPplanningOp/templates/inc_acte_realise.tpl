@@ -12,7 +12,7 @@
 
 {{if $codable->_class == "CConsultation"}}
 	Consultation du {{$codable->_datetime|date_format:"%d %B %Y"}}
-	{{if $codable->libelle}}: {{$codable->libelle}}{{/if}}
+	{{if $codable->motif}}: {{$codable->motif}}{{/if}}
 {{/if}}
 
 {{if $codable->_class == "CSejour"}}
