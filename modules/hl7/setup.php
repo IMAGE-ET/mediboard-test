@@ -744,7 +744,28 @@ class CSetuphl7 extends CSetup {
                 ADD `encoding` ENUM ('UTF-8','ISO-8859-1') DEFAULT 'UTF-8';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.26";
+    $this->makeRevision("0.26");
+    
+    // Table - 0063
+    // Ascendant
+    $this->insertTableEntry("63", "DAN", "DAN", "ascendant", "ascendant", "Ascendant");
+    
+    // Collatéral
+    $this->insertTableEntry("63", "COL", "COL", "colateral", "colateral", "Collatéral");
+    
+    // Conjoint
+    $this->insertTableEntry("63", "CON", "CON", "conjoint", "conjoint", "Conjoint");
+    
+    // Directeur
+    $this->insertTableEntry("63", "DIR", "DIR", "directeur", "directeur", "Directeur");
+    
+    // Divers
+    $this->insertTableEntry("63", "DIV", "DIV", "divers", "divers", "Divers");
+    
+    // Grand-parent
+    $this->insertTableEntry("63", "GRP", "GRP", "grand_parent", "grand_parent", "Grand-parent");
+    
+    $this->mod_version = "0.27";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
