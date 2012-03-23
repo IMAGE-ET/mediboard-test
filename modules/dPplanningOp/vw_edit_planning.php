@@ -142,9 +142,8 @@ if ($sejour->adresse_par_prat_id && ($sejour->adresse_par_prat_id != $patient->_
 }
 
 // Chargement des etablissements externes
-$order = "nom";
 $etab = new CEtabExterne();
-$listEtab = $etab->loadList(null, $order);
+$count_etab_externe = $etab->countList();
 
 $sejours =& $patient->_ref_sejours;
 
@@ -220,7 +219,7 @@ $smarty->assign("prestations", $prestations);
 $smarty->assign("count_prestations", $count_prestations);
 
 $smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
-$smarty->assign("listEtab"              , $listEtab);
+$smarty->assign("count_etab_externe"    , $count_etab_externe);
 $smarty->assign("listAnesthType"        , $listAnesthType);
 $smarty->assign("anesthesistes"         , $anesthesistes);
 $smarty->assign("medecin_adresse_par"   , $medecin_adresse_par);

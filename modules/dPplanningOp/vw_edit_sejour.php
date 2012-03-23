@@ -133,9 +133,8 @@ $sejour->makeCancelAlerts();
 $sejour->loadNDA();
 
 // Chargement des etablissements externes
-$order = "nom";
 $etab = new CEtabExterne();
-$listEtab = $etab->loadList(null, $order);
+$count_etab_externe = $etab->countList();
 
 // Récupération de la liste des services
 $where = array();
@@ -165,7 +164,7 @@ $smarty->assign("patient"       , $patient);
 $smarty->assign("sejours"       , $sejours);
 
 $smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
-$smarty->assign("listEtab", $listEtab);
+$smarty->assign("count_etab_externe", $count_etab_externe);
 $smarty->assign("medecin_adresse_par", $medecin_adresse_par);
 
 $smarty->assign("etablissements", $etablissements);

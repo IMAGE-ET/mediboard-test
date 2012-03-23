@@ -75,9 +75,8 @@ $hours_urgence = range($config["hour_urgence_deb"], $config["hour_urgence_fin"])
 $mins_duree = range(0, 59, $config["min_intervalle"]);
 
 // Chargement des etablissements externes
-$order = "nom";
 $etab = new CEtabExterne();
-$listEtab = $etab->loadList(null, $order);
+$count_etab_externe = $etab->countList();
 
 // Récupération des services
 $service = new CService();
@@ -110,7 +109,7 @@ $smarty->assign("patient"  , $patient);
 $smarty->assign("sejours"  , $sejours);
 
 $smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
-$smarty->assign("listEtab", $listEtab);
+$smarty->assign("count_etab_externe", $count_etab_externe);
 $smarty->assign("medecin_adresse_par", $medecin_adresse_par);
 
 $smarty->assign("listPraticiens", $listPraticiens);

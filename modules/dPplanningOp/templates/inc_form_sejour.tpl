@@ -832,7 +832,7 @@ Main.add( function(){
   </td>
 </tr>
 
-{{if $listEtab|@count}}
+{{if $count_etab_externe}}
 <tr>
   <th>{{mb_label object=$sejour field=etablissement_entree_id}}</th>
   <td colspan="3">
