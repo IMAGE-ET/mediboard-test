@@ -157,14 +157,14 @@
         <tr>
           <th style="width: 1%;">
           </th>
-          <th>
-            <strong>{{tr}}CCorrespondantPatient-nom{{/tr}}</strong>
+          <th class="category">
+            {{tr}}CCorrespondantPatient-nom{{/tr}}
           </th>
-          <th>
-            <strong>{{tr}}CCorrespondantPatient-prenom{{/tr}}</strong>
+          <th class="category">
+            {{tr}}CCorrespondantPatient-prenom{{/tr}}
           </th>
-          <th>
-            <strong>{{tr}}CCorrespondantPatient-tel{{/tr}}</strong>
+          <th class="category">
+            {{tr}}CCorrespondantPatient-tel{{/tr}}
           </th>
         </tr>
         {{foreach from=$patient->_ref_cp_by_relation item=_correspondants}}
