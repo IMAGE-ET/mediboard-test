@@ -16,6 +16,24 @@ $affectation->load($affectation_id);
 $lit = new CLit;
 $lit->load($affectation->lit_id);
 
+$affectations = array();
+$sejour_parturiente = null;
+
+if (CModule::getActive("maternite")) {
+  $naissance = new CNaissance;
+  $naissance->sejour_enfant_id = $affectation->sejour_id;
+  $naissance->loadMatchingObject();
+  
+  if ($naissance->_id) {
+    $sejour_parturiente = $naissance->loadRefOperation()->loadRefSejour();
+    $sejour_parturiente->loadRefPatient();
+    $affectations = $sejour_parturiente->loadRefsAffectations();
+    foreach ($affectations as $_affectation) {
+      $_affectation->loadView();
+    }
+  }
+}
+
 if (!$affectation->_id) {
   $affectation->lit_id = $lit_id;
   $lit = $lit->load($lit_id);
@@ -23,8 +41,11 @@ if (!$affectation->_id) {
 
 $smarty = new CSmartyDP;
 
-$smarty->assign("affectation", $affectation);
-$smarty->assign("lit", $lit);
-$smarty->assign("lit_id", $lit_id);
+$smarty->assign("affectation" , $affectation);
+$smarty->assign("affectations", $affectations);
+$smarty->assign("lit"         , $lit);
+$smarty->assign("lit_id"      , $lit_id);
+$smarty->assign("sejour_parturiente", $sejour_parturiente);
+
 $smarty->display("inc_edit_affectation.tpl");
 ?>
