@@ -33,7 +33,7 @@ reload = function(group_id){
         <tr {{if $_group->_id == $group->_id}} class="selected" {{/if}}>
           <td>
             {{if $can->edit}}
-            <a href=#" onclick="reload('{{$_group->_id}}')">
+            <a href="#" onclick="reload('{{$_group->_id}}')">
               {{$_group->text}}
             </a>
             {{else}}
@@ -42,7 +42,7 @@ reload = function(group_id){
           </td>
           <td>
             {{if $can->edit}}
-            <a href=#" onclick="reload('{{$_group->_id}}')">
+            <a href="#" onclick="reload('{{$_group->_id}}')">
               {{$_group->_ref_functions|@count}}
             </a>
             {{else}}

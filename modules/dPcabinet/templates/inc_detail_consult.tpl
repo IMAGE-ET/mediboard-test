@@ -106,7 +106,7 @@
       {{elseif $canCabinet->read}}
         <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}">
       {{else}}
-        <a href=#1 title="Impossible de modifier le RDV">
+        <a href="#1" title="Impossible de modifier le RDV">
       {{/if}}
       
         <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">

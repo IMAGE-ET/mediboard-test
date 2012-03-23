@@ -28,16 +28,15 @@ reload = function(etab_id){
         {{foreach from=$listEtabExternes item=curr_etab}}
         <tr {{if $curr_etab->_id == $etabExterne->_id}}class="selected"{{/if}}>
           <td>
-            <a  href=#" onclick="reload('{{$curr_etab->_id}}')">
+            <a href="#" onclick="reload('{{$curr_etab->_id}}')">
               {{$curr_etab->nom}}
             </a>
           </td>
-          
         </tr>
         {{/foreach}}
       </table>
     </td>
-		
+    
     <td class="halfPane" id="group_externe">
       {{mb_include module=etablissement template=inc_etab_externe}}
     </td>
