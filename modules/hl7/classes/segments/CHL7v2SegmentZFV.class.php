@@ -56,7 +56,7 @@ class CHL7v2SegmentZFV extends CHL7v2Segment {
     $adresses = array();
     if ($sejour->etablissement_entree_id) {
       $adresses[] = array(
-        $etab_provenance->adresse,
+        str_replace("\n", "", $etab_provenance->adresse),
         null,
         $etab_provenance->ville,
         null,
@@ -68,7 +68,7 @@ class CHL7v2SegmentZFV extends CHL7v2Segment {
     if ($sejour->etablissement_sortie_id) {
       $etab_destination = $sejour->loadRefEtablissementTransfert();
       $adresses[] = array(
-        $etab_destination->adresse,
+        str_replace("\n", "", $etab_destination->adresse),
         null,
         $etab_destination->ville,
         null,
