@@ -18,8 +18,8 @@
       <th class="category" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
     </tr>
     {{mb_include module=system template=inc_config_bool var=strong_password}}
-    
     {{mb_include module=system template=inc_config_str var=max_login_attempts}}
+    {{mb_include module=system template=inc_config_bool var=allow_change_password}}
     <tr>
       <td class="button" colspan="100">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

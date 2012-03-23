@@ -481,6 +481,10 @@ class CUser extends CMbObject {
   function loadRefProfiledUsers() {
     return $this->_ref_profiled_users = $this->loadBackRefs("profiled_users", "user_last_name, user_first_name");
   }
+  
+  function canChangePassword() {
+    return (CAppUI::conf("admin CUser allow_change_password") || $this->user_type == 1);
+  }
 }
 
 ?>

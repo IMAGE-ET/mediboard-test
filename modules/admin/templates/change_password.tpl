@@ -10,6 +10,8 @@
 
 {{if $user->_ldap_linked && !$conf.admin.LDAP.allow_change_password}}
   <div class="small-warning">{{tr}}CUser_associate-ldap-no-password-change{{/tr}}</div>
+{{elseif !$user->canChangePassword()}}
+  <div class="small-warning">{{tr}}CUser-password_change_forbidden{{/tr}}</div>
 {{else}}
   <form name="chpwdFrm" action="?m={{$m}}&amp;{{if $forceChange}}tab{{else}}a{{/if}}=chpwd" method="post" onsubmit="return onSubmitFormAjax(this)">
   

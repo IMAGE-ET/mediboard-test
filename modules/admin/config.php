@@ -10,16 +10,17 @@
 
 $dPconfig["admin"] = array (
   "CUser" => array(
-    "strong_password" => "0",
-    "max_login_attempts" => "5",
+    "strong_password"         => "0",
+    "max_login_attempts"      => "5",
+    "allow_change_password"   => "1",
   ),
   "LDAP" => array(
-    "ldap_connection"  => "0",
-    "ldap_tag"         => "ldap",
-    "ldap_user"        => "",
-    "ldap_password"    => "",
-    "object_guid_mode" => "hexa",
-    "allow_change_password" => "0",
+    "ldap_connection"         => "0",
+    "ldap_tag"                => "ldap",
+    "ldap_user"               => "",
+    "ldap_password"           => "",
+    "object_guid_mode"        => "hexa",
+    "allow_change_password"   => "0",
   ),
 );
 
