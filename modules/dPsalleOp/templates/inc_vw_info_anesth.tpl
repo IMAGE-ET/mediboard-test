@@ -51,10 +51,14 @@ Main.add(function(){
   // Refresh tab perop
   if($("tab_perop").visible()){
     refreshAnesthPerops('{{$selOp->_id}}');
-		{{if "dPprescription"|module_active}}
-    Prescription.updatePerop('{{$selOp->sejour_id}}');
-		{{/if}}
   }
+    
+  {{if "dPprescription"|module_active}}
+    if($('perop').visible()){
+      Prescription.updatePerop('{{$selOp->sejour_id}}');
+    }
+  {{/if}}
+
 });
 </script>
 
@@ -97,8 +101,9 @@ Main.add(function(){
 	
 <ul id="anesth_tab_group" class="control_tabs">
 	<li><a href="#tab_preanesth">Pré-anesthésie</a></li>
-	<li onmousedown="refreshAnesthPerops('{{$selOp->_id}}'); if(window.Prescription){ Prescription.updatePerop('{{$selOp->sejour_id}}'); }"><a href="#tab_perop">Per-opératoire</a></li>
-	<li style="float: right"><button type="button" class="print" onclick="printIntervAnesth();">Fiche d'intervention anesthésie</button></li>
+	<li onmousedown="refreshAnesthPerops('{{$selOp->_id}}');"><a href="#tab_perop">Evenements per-opératoire</a></li>
+	<li onmousedown="if(window.Prescription){ Prescription.updatePerop('{{$selOp->sejour_id}}'); }"><a href="#perop">Administrations per-opératoires</a></li>
+  <!--<li style="float: right"><button type="button" class="print" onclick="printIntervAnesth();">Fiche d'intervention anesthésie</button></li>-->
 </ul>
 <hr class="control_tabs" />
 
@@ -204,5 +209,6 @@ Main.add(function(){
 	    <td id="list_perops_{{$selOp->_id}}"></td>
 	  </tr>
 	</table>
-	<div id="perop"></div>
 </div>
+
+<div id="perop"></div>
