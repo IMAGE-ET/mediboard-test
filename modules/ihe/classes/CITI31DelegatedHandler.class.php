@@ -136,7 +136,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     }
     elseif ($update) {
       // Dans le cas d'un update le type correspond à celui du trigger
-      //$movement_type = $sejour->getMovementType($code);
+      $movement_type = $sejour->getMovementType($code);
 
       // Mise à jour entrée réelle
       if ($sejour->fieldModified("entree_reelle")) {
@@ -147,9 +147,9 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if ($sejour->fieldModified("sortie_reelle")) {
         $movement_type = "SORT";
       }
-      
+
       // Mise à jour d'une affectation
-      if ($affectation && $affectation->_ref_current_log == "store") {
+      if ($affectation && $affectation->_ref_current_log->type == "store") {
         $movement_type = "MUTA";
       }
       $movement->movement_type = $movement_type;
