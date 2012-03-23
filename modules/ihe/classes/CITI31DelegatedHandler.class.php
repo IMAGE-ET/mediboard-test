@@ -16,10 +16,10 @@
  * ITI31 Delegated Handler
  */
 class CITI31DelegatedHandler extends CITIDelegatedHandler {
-  static $handled        = array ("CSejour", "CAffectation");
+  static $handled        = array ("CSejour", "CAffectation", "CUniteFonctionnelle");
   protected $profil      = "PAM";
   protected $transaction = "ITI31";
-  
+
   static $inpatient      = array("comp", "ssr", "psy", "seances", "consult");
   static $outpatient     = array("urg", "ambu", "exte");
   
@@ -110,6 +110,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
    
       // Envoi de l'événement
       $this->sendITI($this->profil, $this->transaction, $code, $sejour);
+    }
+    
+    // Traitement Unité Fonctionnelle
+    if ($mbObject instanceof CUniteFonctionnelle) {
+      
     }
   }
   
