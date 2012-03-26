@@ -160,7 +160,7 @@ abstract class CHL7v2 {
       $this->error(CHL7v2Exception::SPECS_FILE_MISSING, $this->spec_filename);
     }
 
-    $schema = simplexml_load_file($this->spec_filename, "CHL7v2SimpleXMLElement");
+    $schema = @simplexml_load_file($this->spec_filename, "CHL7v2SimpleXMLElement");
     
     self::$schemas[$version][$type][$name][$extension] = $schema;
     

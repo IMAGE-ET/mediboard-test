@@ -107,6 +107,7 @@ $locales['CHL7EventORUR01'] = 'PCD01 - ORU^R01';
 $locales['CHL7v2Exception-1'] = 'Fichier vide ou trop court';
 $locales['CHL7v2Exception-3'] = 'Format de séparateur invalide';
 $locales['CHL7v2Exception-4'] = 'Syntaxe de segment invalide';
+$locales['CHL7v2Exception-5'] = 'Type de segment inconnu';
 $locales['CHL7v2Exception-7'] = 'Nombre de champs trop élevé dans le segment';
 $locales['CHL7v2Exception-8'] = 'Fichier de specs manquant';
 $locales['CHL7v2Exception-10'] = 'Numéro de version inconnu';

@@ -135,8 +135,8 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     
     // valid separator
     if (!preg_match("/[^a-z0-9]/i", $fieldSeparator) ) {
-      throw new CHL7v2Exception(CHL7v2Exception::INVALID_SEPARATOR, $data);
-    }   
+      throw new CHL7v2Exception(CHL7v2Exception::INVALID_SEPARATOR, substr($data, 0, 10));
+    }
     
     $lines = CHL7v2::split(self::DEFAULT_SEGMENT_TERMINATOR, $data);
     
@@ -159,8 +159,8 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     try {
       self::isWellFormed($data);
     } catch(CHL7v2Exception $e) {
-      $this->error($e, $data);
-      return false;
+      $this->error($e->getMessage(), $e->extraData);
+      //return false;
     }
 
      // remove all chars before MSH
@@ -343,6 +343,16 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
           CHL7v2::d($current_node->getSegmentHeader()." ".$current_node->state(), "red");
           
           $handled = false;
+          
+          if ($this->getCurrentLineHeader() == "") {
+            break 2;
+          }
+          
+          $seg_schema = $this->getSchema(self::PREFIX_SEGMENT_NAME, $this->getCurrentLineHeader(), $this->getMessage()->extension);
+          if ($seg_schema == false) {
+            $this->error(CHL7v2Exception::UNKOWN_SEGMENT_TYPE, $this->getCurrentLine());
+            break 2;
+          }
           
           // Si la spec correspond a la ligne courante
           if ($this->getCurrentLineHeader() == $current_node->getSegmentHeader()) {
