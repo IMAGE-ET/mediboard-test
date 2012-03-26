@@ -17,6 +17,14 @@
   }
 </script>
 
+<form name="download_etiq_{{$sejour->_id}}" style="display: none;" action="?" target="_blank" method="get">
+  <input type="hidden" name="m" value="dPplanningOp" />
+  <input type="hidden" name="a" value="print_etiquettes" />
+  <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+  <input type="hidden" name="suppressHeaders" value="1" />
+  <input type="hidden" name="dialog" value="1" />
+</form>
+
 <table class="tbl tooltip">
   {{mb_include module=dPplanningOp template=inc_sejour_affectation_view}}
 </table>
@@ -76,6 +84,13 @@
         {{mb_script module=brancardage script=creation_brancardage ajax=true}}
         <button type="button" class="edit" onclick="CreationBrancard.edit('{{$sejour->_id}}');" style="width:80px;">
         {{tr}}module-Brancardage-long{{/tr}}
+        </button>
+      {{/if}}
+      
+      {{if @$modules.dPhospi->_can->read}}
+        <br />
+        <button type="button" class="print" onclick="getForm('download_etiq_{{$sejour->_id}}').submit()">
+          {{tr}}CModeleEtiquette.print_labels{{/tr}}
         </button>
       {{/if}}
       
