@@ -66,13 +66,7 @@ while($date < $now) {
     "nom" => "= 'Périmés'",
   );
   $services_expired = new CService;
-  $services_expired = $services_expired->loadListWithPerms(PERM_READ, $where_services);
-  
-  $service_expired_id = null;
-  if (count($services_expired)) {
-    $service_expired = reset($services_expired);
-    $service_expired_id = $service_expired->_id;
-  }
+  $services_expired_ids = $services_expired->loadIds($where_services);
   
   // Output //////////////////
   $where = array(
@@ -81,8 +75,8 @@ while($date < $now) {
     "product_delivery_trace.date_delivery" => "BETWEEN '$date' AND '$to'",
   );
   
-  if ($service_expired_id) {
-    $where[100] = "(product_delivery.type != 'expired' OR product_delivery.type IS NULL) AND product_delivery.service_id != '$service_expired_id'";
+  if (count($services_expired_ids)) {
+    $where[100] = "(product_delivery.type != 'expired' OR product_delivery.type IS NULL) AND product_delivery.service_id NOT IN (".implode(',', $services_expired_ids).")";
   }
   else {
     $where[100] =  "product_delivery.type != 'expired' OR product_delivery.type IS NULL";
@@ -103,8 +97,8 @@ while($date < $now) {
   $series[1]["data"][] = array(count($series[1]["data"])*2, $total);
   
   // Output expired ///////////////////
-  if ($service_expired_id) {
-    $where[100] = "product_delivery.type = 'expired' OR product_delivery.service_id = '$service_expired_id'";
+  if (count($services_expired_ids)) {
+    $where[100] = "product_delivery.type = 'expired' OR product_delivery.service_id IN (".implode(',', $services_expired_ids).")";
   }
   else {
     $where[100] = "product_delivery.type = 'expired'";
