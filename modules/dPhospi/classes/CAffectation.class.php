@@ -345,7 +345,7 @@ class CAffectation extends CMbObject {
     
   function makeUF() {
     
-    $this->completeField("uf_hebergement_id", "uf_soins_id", "uf_medicale_id");
+    $this->completeField("lit_id", "uf_hebergement_id", "uf_soins_id", "uf_medicale_id");
     
     $this->loadRefLit()->loadRefChambre()->loadRefService();
     $lit       = $this->_ref_lit;
