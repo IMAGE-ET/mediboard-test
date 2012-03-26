@@ -16,7 +16,7 @@ if (CValue::post("_duplicate")) {
   $product->code .= "-copie";
   $product->name .= " (Copie)";
   $product->_id = null;
-	
+  
   if ($msg = $product->store()) {
     CAppUI::setMsg($msg);
   }

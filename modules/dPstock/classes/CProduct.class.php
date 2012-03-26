@@ -64,6 +64,7 @@ class CProduct extends CMbObject {
   
   var $_in_order           = null;
   var $_classe_atc         = null;
+  var $_create_stock_quantity = null;
   
   // This group's stock id
   var $_ref_stock_group    = null;
@@ -103,7 +104,7 @@ class CProduct extends CMbObject {
     $specs['code_canonical']= 'str maxLength|32 seekable show|0';
     $specs['scc_code']      = 'numchar length|10 seekable|equal protected'; // Manufacturer Code + Item Number
     
-    $specs['category_id']   = 'ref notNull class|CProductCategory';
+    $specs['category_id']   = 'ref notNull class|CProductCategory autocomplete|name';
     $specs['societe_id']    = 'ref class|CSociete seekable autocomplete|name';
     $specs['quantity']      = 'num notNull min|0 show|0';
     $specs['item_title']    = 'str autocomplete show|0';
@@ -124,6 +125,7 @@ class CProduct extends CMbObject {
     $specs['_unit_quantity']= 'float min|0';
     $specs['_quantity']     = 'str show|1';
     $specs['_consumption']  = 'num show|1';
+    $specs['_create_stock_quantity'] = 'num min|0';
     
     $specs['_classe_atc']  = 'str';
     return $specs;
@@ -197,7 +199,7 @@ class CProduct extends CMbObject {
       return $this->_ref_stock_group;
     }
     
-		// Coneserver le loadMatchingObject car group_id et product_id sont utilisés (au moins dans CBcbProduitLivretTherapeutique::addToStocks)
+    // Coneserver le loadMatchingObject car group_id et product_id sont utilisés (au moins dans CBcbProduitLivretTherapeutique::addToStocks)
     $this->completeField("product_id");
     $this->_ref_stock_group = new CProductStockGroup();
     $this->_ref_stock_group->group_id = CProductStockGroup::getHostGroup();
@@ -445,7 +447,26 @@ class CProduct extends CMbObject {
       }
     }
     
-    return parent::store();
+    $create_stock_quantity = $this->_create_stock_quantity;
+    
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+    
+    if ($create_stock_quantity) {
+      $stock = $this->loadRefStock();
+      $stock->quantity = $create_stock_quantity;
+      $stock->order_threshold_min = $stock->quantity;
+      
+      $group = CGroups::loadCurrent();
+      $stock->location_id = CProductStockLocation::getDefaultLocation($group, $this)->_id;
+      
+      if ($msg = $stock->store()) {
+        CAppUI::setMsg($msg, UI_MSG_WARNING);
+      }
+      
+      $this->_create_stock_quantity = null;
+    }
   }
   
   function getPendingOrderItems($count = true){
