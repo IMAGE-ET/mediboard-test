@@ -94,7 +94,7 @@ function reloadSejours(checkCollision) {
         if (this.checked) {
           $('link_operation').href = '?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id=0&amp;sejour_id={{$sejour->_id}}';
         } else {
-          $('link_operation') = '?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id=0&amp;sejour_id={{$sejour->_id}}';
+          $('link_operation').href = '?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id=0&amp;sejour_id={{$sejour->_id}}';
         }" /> Hors plage
       </label>
     </td>
