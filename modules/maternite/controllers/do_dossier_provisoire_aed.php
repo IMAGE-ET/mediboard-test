@@ -47,7 +47,7 @@ storeObject($patient);
 
 $sejour_enfant = new CSejour;
 $sejour_enfant->patient_id = $patient->_id;
-$sejour_enfant->entree_prevue = $terme_prevu . " 00:00:01";
+$sejour_enfant->entree_prevue = mbDateTime();
 $sejour_enfant->sortie_prevue = $sejour->sortie;
 $sejour_enfant->praticien_id = $sejour->praticien_id;
 $sejour_enfant->group_id = $sejour->group_id;

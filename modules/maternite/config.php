@@ -12,6 +12,7 @@
  */
 
 $dPconfig["maternite"] = array(
-  "days_terme" => "5"
+  "days_terme" => "5",
+  "duree_sejour" => "3",
 );
 ?>

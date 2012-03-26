@@ -11,7 +11,7 @@
 </script>
 {{mb_script module=admissions script=admissions}}
 
-<form name="createProvisoire" method="post" onsubmit="return onSubmitFormAjax(this);">
+<form name="createProvisoire" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function() {document.location.reload() }});">
   <input type="hidden" name="m" value="maternite" />
   <input type="hidden" name="dosql" value="do_dossier_provisoire_aed" />
   <input type="hidden" name="operation_id" value=""/>
@@ -84,7 +84,7 @@
     <td>
       <table class="tbl" id="admissions">
         <tr>
-          <th class="title" colspan="6">
+          <th class="title" colspan="7">
             <strong>
               <a href="?m=maternite&tab=vw_admissions&date={{$date_before}}" style="display: inline;">&lt;&lt;&lt;</a>
               {{$date|date_format:$conf.longdate}}
@@ -106,6 +106,7 @@
           </th>
           <th class="category narrow">Terme</th>
           <th class="category">Praticiens</th>
+          <th class="category">Naissances</th>
           <th></th>
         </tr>
         {{foreach from=$sejours item=_sejour}}
@@ -136,6 +137,14 @@
                 {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_praticien}}
               {{/foreach}}
             </td>
+            <td class="text">
+              {{foreach from=$grossesse->_ref_naissances item=_naissance name=foreach_naissance}}
+                <span onmouseover="ObjectTooltip.createEx(this, '{{$_naissance->_guid}}')">
+                  {{$_naissance->_ref_sejour_enfant}}
+                </span>
+                {{if !$smarty.foreach.foreach_naissance.last}}<br />{{/if}}
+              {{/foreach}}
+            </td>
             <td class="narrow">
               {{if $grossesse->_operation_id}}
                 <button type="button" class="add notext" title="Créer un dossier provisoire"
@@ -146,7 +155,7 @@
           </tr>
         {{foreachelse}}
           <tr>
-            <td colspan="6" class="empty">{{tr}}CSejour.none{{/tr}}</td>
+            <td colspan="7" class="empty">{{tr}}CSejour.none{{/tr}}</td>
           </tr>
         {{/foreach}}
       </table>

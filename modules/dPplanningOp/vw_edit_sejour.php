@@ -89,6 +89,9 @@ if (CModule::getActive("maternite") && !$sejour->_id && $grossesse_id) {
   $sejour->grossesse_id = $grossesse_id;
   $sejour->type_pec = 'O';
   $sejour->loadRefGrossesse();
+  $sejour->_date_entree_prevue = mbDate();
+  $duree_sejour = CAppUI::conf("maternite duree_sejour");
+  $sejour->_date_sortie_prevue = mbDate("+ $duree_sejour days");
 }
 
 $patient->loadRefsSejours();

@@ -108,7 +108,18 @@ foreach ($sejours as $_sejour) {
   $grossesse = $_sejour->loadRefGrossesse();
   $grossesse->_praticiens = CMbObject::massLoadFwdRef($grossesse->loadRefsSejours(), "praticien_id");
   $grossesse->_praticiens = array_merge($grossesse->_praticiens, CMbObject::massLoadFwdRef($grossesse->loadRefsConsultations(), "_prat_id"));
-  $grossesse->_operation_id = $operation->_id;
+  $naissances = $grossesse->loadRefsNaissances();
+  
+  $sejours_enfant = CMbObject::massLoadFwdRef($naissances, "sejour_enfant_id");
+  CMbObject::massLoadFwdRef($sejours_enfant, "patient_id");
+  
+  foreach ($naissances as $_naissance) {
+    $_naissance->loadRefSejourEnfant()->loadRefPatient();
+  }
+  
+  if ($operation) {
+    $grossesse->_operation_id = $operation->_id;
+  }
   
   CMbObject::massLoadFwdRef($grossesse->_praticiens, "function_id");
   foreach ($grossesse->_praticiens as $_praticien) {
