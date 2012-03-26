@@ -379,6 +379,13 @@ class CDossierMedical extends CMbMetaObject {
       }
     }
     
+    // Maladie thrombo-embolique
+    if ($champ == "Patient") {
+      $template->addProperty("Anesthésie - Maladie thrombo-embolique - Patient"  , $this->getFormattedValue("risque_thrombo_patient"));
+    }
+    else {
+      $template->addProperty("Anesthésie - Maladie thrombo-embolique - Chirurgie", $this->getFormattedValue("risque_thrombo_chirurgie"));
+    }
     $template->addListProperty("$champ - Diagnostics", $list);
   }
 }
