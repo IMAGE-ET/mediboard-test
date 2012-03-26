@@ -16,7 +16,7 @@
  * ITI31 Delegated Handler
  */
 class CITI31DelegatedHandler extends CITIDelegatedHandler {
-  static $handled        = array ("CSejour", "CAffectation", "CUniteFonctionnelle");
+  static $handled        = array ("CSejour", "CAffectation");
   protected $profil      = "PAM";
   protected $transaction = "ITI31";
 
@@ -110,11 +110,6 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
    
       // Envoi de l'événement
       $this->sendITI($this->profil, $this->transaction, $code, $sejour);
-    }
-    
-    // Traitement Unité Fonctionnelle
-    if ($mbObject instanceof CUniteFonctionnelle) {
-      
     }
   }
   
@@ -261,11 +256,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if ($sejour->fieldModified("patient_id")) {
         return "A44";
       }
-      
-      /* @todo Changement d'UF Médicale */
-      
-      /* @todo Changement d'UF de Soins */
-      
+
       // Cas d'une annulation
       if ($sejour->fieldModified("annule", "1")) {
         return "A11";
@@ -303,16 +294,24 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if (!in_array($current_log->type, array("create", "store"))) {
       return null;
     }
-    
+
     // Création d'une affectation
     if ($current_log->type == "create") {
       return "A02";
     }
+
+    /* Changement d'UF Médicale */
+    if ($affectation->_old->uf_medicale_id && $affectation->fieldModified("uf_medicale_id")) {
+      return "Z80";
+    }
+
+    /* Changement d'UF de Soins */
+    if ($affectation->_old->uf_soins_id && $affectation->fieldModified("uf_soins_id")) {
+      return "Z84";
+    }
  
     // Modifcation d'une affectation
-    if ($current_log->type == "store") {
-      return $this->getModificationAdmitCode($affectation->_receiver);
-    }
+    return $this->getModificationAdmitCode($affectation->_receiver);
   }
   
   function getModificationAdmitCode(CReceiverIHE $receiver) {

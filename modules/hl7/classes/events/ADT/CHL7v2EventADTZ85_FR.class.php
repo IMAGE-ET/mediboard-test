@@ -15,7 +15,7 @@
  * Class CHL7v2EventADTZ85
  * Z85 - Pending Change of Nursing Ward
  */
-class CHL7v2EventADTZ85 extends CHL7v2EventADT implements CHL7EventADTA01 {
+class CHL7v2EventADTZ85_FR extends CHL7v2EventADT implements CHL7EventADTA01 {
   var $code        = "Z85";
   var $struct_code = "A01";
   

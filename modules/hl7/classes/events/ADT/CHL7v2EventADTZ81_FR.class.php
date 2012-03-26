@@ -15,7 +15,7 @@
  * Class CHL7v2EventADTZ81
  * Z81 - Cancel the former change
  */
-class CHL7v2EventADTZ81 extends CHL7v2EventADT implements CHL7EventADTA01 {
+class CHL7v2EventADTZ81_FR extends CHL7v2EventADT implements CHL7EventADTA01 {
   var $code        = "Z81";
   var $struct_code = "A01";
   

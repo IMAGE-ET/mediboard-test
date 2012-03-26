@@ -15,7 +15,7 @@
  * Class CHL7v2EventADTZ80
  * Z80 - Change of medical responsibility
  */
-class CHL7v2EventADTZ80 extends CHL7v2EventADT implements CHL7EventADTA01 {
+class CHL7v2EventADTZ80_FR extends CHL7v2EventADT implements CHL7EventADTA01 {
   var $code        = "Z80";
   var $struct_code = "A01";
   
