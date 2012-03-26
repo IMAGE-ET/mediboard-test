@@ -25,7 +25,7 @@ $options = array();
 /* Définition des options */
 $options["legend"] = array("show" => true, "position" => "nw");
 $options["grid"] = array("verticalLines" => false, "backgroundColor" => "#FFFFFF");
-$options["mouse"] = array("relative" => true, "position" => "ne");
+$options["mouse"] = array("track" => true, "relative" => true, "position" => "ne");
 $options["yaxis"] = array("min" => 0, "autoscaleMargin" => 1);
 $options["y2axis"] = array("min" => 0, "autoscaleMargin" => 1);
 $options["xaxis"] = array("labelsAngle" => 45, "ticks" => array());
@@ -79,7 +79,6 @@ if (isset($criteres["emetteur"])) {
   $where["sender_id"] = " IS NULL";
 }
 if (isset($criteres["destinataire"])) {
-  mbTrace("destinataire checked");
   $where["receiver_id"] = " IS NULL";
 }
 if (isset($criteres["message_invalide"])) {
