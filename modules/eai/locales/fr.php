@@ -102,6 +102,8 @@ $locales['CExchangeDataFormat'] = 'Formats d\'échanges';
 $locales['CExchangeDataFormat-_count_ack_invalide'] = 'ACK invalide';
 $locales['CExchangeDataFormat-_count_exchanges'] = 'Echanges';
 $locales['CExchangeDataFormat-_count_msg_invalide'] = 'MSG invalide';
+$locales['CExchangeDataFormat-group_id-desc'] = 'Etablissement';
+$locales['CExchangeDataFormat-group_id'] = 'Etablissement';
 $locales['CExchangeDataFormat.sender_class.CSenderFTP'] = 'Expéditeur FTP';
 $locales['CExchangeDataFormat.sender_class.CSenderSOAP'] = 'Expéditeur SOAP';
 $locales['CExchangeDataFormat_no-configs'] = 'Aucune configurations de défnies pour cet acteur';
@@ -197,6 +199,7 @@ $locales['mod-eai-tab-configure'] = 'Configurer';
 $locales['mod-eai-tab-download_exchange'] = 'Télécharger l\'échange';
 $locales['mod-eai-tab-vw_idx_exchange_data_format'] = 'Echanges';
 $locales['mod-eai-tab-vw_idx_interop_actors'] = 'Acteurs';
+$locales['mod-eai-tab-vw_stats'] = 'Stats';
 $locales['module-eai-court'] = 'EAI';
 $locales['module-eai-long'] = 'Enterprise Application Integration';
 ?>
