@@ -86,9 +86,17 @@ function reloadSejours(checkCollision) {
       </a>
     </td>
     <td>
-      <a class="button new" href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id=0&amp;sejour_id={{$sejour->_id}}">
+      <a class="button new" href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id=0&amp;sejour_id={{$sejour->_id}}" id="link_operation">
         Programmer une nouvelle intervention dans ce séjour
       </a>
+      <label>
+        <input type="checkbox" onclick="
+        if (this.checked) {
+          $('link_operation').href = '?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id=0&amp;sejour_id={{$sejour->_id}}';
+        } else {
+          $('link_operation') = '?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id=0&amp;sejour_id={{$sejour->_id}}';
+        }" /> Hors plage
+      </label>
     </td>
   </tr>
   {{/if}}
