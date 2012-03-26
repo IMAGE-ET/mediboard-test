@@ -98,10 +98,11 @@
              {{assign var=found_checked value=0}}
              {{foreach from=$choixsoins item=_choix}}
               <input type="radio" name="uf_soins_id_radio_view" value="{{$_choix->_ref_uf->_id}}"
-              {{if $affectation->uf_soins_id == $_choix->_ref_uf->_id}}
+               onclick="$V(this.form.uf_soins_id, this.value); $V(this.form.uf_soins_id_view, '')"
+              {{if $affectation->uf_soins_id == $_choix->_ref_uf->uf_id}}
               checked="checked"
               {{assign var=found_checked value=1}}
-              {{/if}}> {{$_choix->_ref_uf->libelle}}   
+              {{/if}} > {{$_choix->_ref_uf->libelle}}   
           {{/foreach}}
           &mdash; Autre :
             <input type="text" class="autocomplete" name="uf_soins_id_view"
@@ -164,6 +165,7 @@
             {{foreach from=$choixmedical item=_choix}}
               <label>
                 <input type="radio" name="uf_medicale_id_radio_view" value="{{$_choix->_ref_uf->_id}}"
+                onclick="$V(this.form.uf_medicale_id, this.value); $V(this.form.uf_medicale_id_view, '')"
                 {{if $affectation->uf_medicale_id == $_choix->_ref_uf->_id}}
                   checked="checked"
                   {{assign var=found_checked value=1}}
@@ -209,7 +211,5 @@
       </tr>
       </table>
     </fieldset>
-    
-    
-        <button class="submit" type="submit">{{tr}}Ajouter{{/tr}}</button>
+  <button class="submit" type="submit">{{tr}}Ajouter{{/tr}}</button>
 </form>
