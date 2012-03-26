@@ -41,7 +41,7 @@
   	        {{/foreach}}
             &mdash; Autre :
             <input type="text" class="autocomplete" name="uf_hebergement_id_view"
-            {{if !$found_checked}}value="{{$affectation->_ref_uf_hebergement->code}}{{/if}}"/>
+            {{if !$found_checked}}value="{{$affectation->_ref_uf_hebergement->libelle}}{{/if}}"/>
             
             
             <script type="text/javascript">
@@ -106,7 +106,7 @@
           {{/foreach}}
           &mdash; Autre :
             <input type="text" class="autocomplete" name="uf_soins_id_view"
-            {{if !$found_checked}}value="{{$affectation->_ref_uf_soins->code}}{{/if}}"/>
+            {{if !$found_checked}}value="{{$affectation->_ref_uf_soins->libelle}}{{/if}}"/>
             
             <script type="text/javascript">
               Main.add(function() {
@@ -175,7 +175,7 @@
             {{/foreach}}
             &mdash; Autre :
             <input type="text" class="autocomplete" name="uf_medicale_id_view"
-            {{if !$found_checked}}value="{{$affectation->_ref_uf_medicale->code}}{{/if}}"/>
+            {{if !$found_checked}}value="{{$affectation->_ref_uf_medicale->libelle}}{{/if}}"/>
             
             <script type="text/javascript">
               Main.add(function() {
