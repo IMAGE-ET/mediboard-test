@@ -41,7 +41,13 @@ $translateModule->sourcePath = null;
 
 // Ecriture du fichier
 $translateModule->options = array("name" => "locales");
-$translateModule->targetPath = "modules/$module/locales/$language.php";
+
+if ($module != "common") {
+  $translateModule->targetPath = "modules/$module/locales/$language.php";
+}
+else {
+  $translateModule->targetPath = "locales/$language/common.php";
+}
 
 if (!is_file($translateModule->targetPath)) {
   CMbPath::forceDir(dirname($translateModule->targetPath));

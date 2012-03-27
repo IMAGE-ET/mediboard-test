@@ -1,10 +1,23 @@
 <?php
 $locales['CIdSante400'] = 'External identifier';
+$locales['CIdSante400-object'] = 'Objet';
+$locales['CIdSante400-title-delete'] = 'Suppression de l\'identifiant externe';
+$locales['CIdSante400.cannot_modify_id400'] = 'Vous ne pouvez pas modifier ces informations. n Pour les modifier, veuillez contacter le responsable de la n cellule identito-vigilance.';
+$locales['CIdSante400.select'] = 'Choisir un identifiant';
+$locales['CIncrementer_undefined'] = 'Aucun incrémenteur est défini';
 $locales['CMbObject-back-identifiants'] = 'Foreign identities';
-$locales['CMouvement400-marked'] = 'Mark';
-$locales['CMouvement400-marked-desc'] = 'Mouvement mark';
+$locales['CMouvement400-marked'] = 'Marquage';
+$locales['CMouvement400-marked-0'] = 'Mouvements à traiter';
+$locales['CMouvement400-marked-1'] = 'Mouvement traités avec un erreur';
+$locales['CMouvement400-marked-desc'] = 'Marquage des mouvements';
+$locales['CMouvement400-relaunch'] = 'Relancer automatiquement';
+$locales['CMouvement400-relaunch-desc'] = 'Relancer automatiquement le traitement au bout de 5 secondes';
 $locales['CMouvement400-type'] = 'Type';
-$locales['CMouvement400-type-desc'] = 'Mouvement type';
+$locales['CMouvement400-type-attendue'] = 'Mouvement de DHE';
+$locales['CMouvement400-type-desc'] = 'Type de mouvement';
+$locales['CMouvement400-type-intervention'] = 'Mouvement d\'intervention';
+$locales['CMouvement400-type-sejour'] = 'Mouvement de séjour';
+$locales['CTriggerMark-create'] = 'Créer une marque';
 $locales['config-dPsante400-dsn'] = 'DSN';
 $locales['config-dPsante400-dsn-desc'] = 'Data Source Name to handle';
 $locales['config-dPsante400-group_id'] = 'Center Filter';
@@ -17,4 +30,10 @@ $locales['config-dPsante400-pass'] = 'Password';
 $locales['config-dPsante400-pass-desc'] = 'DSN password';
 $locales['config-dPsante400-user'] = 'User';
 $locales['config-dPsante400-user-desc'] = 'DSN username';
+$locales['config-interop-mode_compat'] = 'Mode de compalité';
+$locales['config-interop-mode_compat-default'] = 'Aucun';
+$locales['config-interop-mode_compat-medicap'] = 'Medicap';
+$locales['mod-dPsante400-tab-easycom'] = 'Tests EasyCom';
+$locales['module-dPsante400-court'] = 'External IDs';
+$locales['module-dPsante400-long'] = 'External IDs';
 ?>

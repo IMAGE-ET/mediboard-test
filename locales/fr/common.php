@@ -233,6 +233,7 @@ $locales['Realisation'] = 'Réalisation';
 $locales['Receive'] = 'Recevoir';
 $locales['Recompute'] = 'Recalculer';
 $locales['Refresh'] = 'Rafraîchir';
+$locales['Reload'] = 'Recharger';
 $locales['Reminder'] = 'Pense-bête';
 $locales['Remove'] = 'Supprimer';
 $locales['Rendez-vous'] = 'Rendez-vous';

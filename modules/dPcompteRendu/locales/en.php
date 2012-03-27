@@ -1,3 +1,4 @@
 <?php
-$locales['CMbObject-back-documents'] = 'Documents';
+$locales['module-dPcompteRendu-court'] = 'Templates';
+$locales['module-dPcompteRendu-long'] = 'Templates';
 ?>

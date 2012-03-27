@@ -9,35 +9,54 @@
 
 CCanDo::checkEdit();
 
-$module = CValue::getOrSession("module", "system");
-$classes = CModule::getClassesFor($module);
 global $language;
+
+$module = CValue::getOrSession("module", "system");
 $language = CValue::getOrSession("language", "fr");
 
-// Hack to have CModule in system locale file
-if ($module == "system") {
-  $classes[] = "CModule";
+if ($module != "common") {
+  $classes = CModule::getClassesFor($module);
+
+  // Hack to have CModule in system locale file
+  if ($module == "system") {
+    $classes[] = "CModule";
+  }
+}
+else {
+  $classes = array();
 }
 
 // liste des dossiers modules + common et styles
 $modules = array_keys(CModule::getInstalled());
+$modules[] = "common";
 sort($modules);
 
 // Dossier des traductions
 $localesDirs = array();
-$files = glob("modules/$module/locales/*");
-foreach ($files as $file) {
-  $name = basename($file, ".php");
-  $localesDirs[$name] = $name;
+
+if ($module != "common") {
+  $files = glob("modules/$module/locales/*");
+
+  foreach ($files as $file) {
+    $name = basename($file, ".php");
+    $localesDirs[$name] = $file;
+  }
+}
+else {
+  $files = glob("locales/*/common.php");
+  foreach ($files as $file) {
+    $name = basename(dirname($file));
+    $localesDirs[$name] = $file;
+  }
 }
 
 // Récupération du fichier demandé pour toutes les langues
 $translateModule = new CMbConfig;
 $translateModule->sourcePath = null;
 $contenu_file = array();
-foreach($localesDirs as $locale){
+foreach($localesDirs as $locale => $path){
   $translateModule->options = array("name" => "locales");
-  $translateModule->targetPath = "modules/$module/locales/$locale.php";
+  $translateModule->targetPath = $path;
   $translateModule->load();
   $contenu_file[$locale] = $translateModule->values;
 }
@@ -45,7 +64,7 @@ foreach($localesDirs as $locale){
 // Réattribution des clés et organisation
 global $trans;
 $trans = array();
-foreach($localesDirs as $locale){
+foreach($localesDirs as $locale => $path){
   foreach($contenu_file[$locale] as $k=>$v){
     $trans[ (is_int($k) ? $v : $k) ][$locale] = $v;
   }
@@ -55,7 +74,7 @@ foreach($localesDirs as $locale){
 global $items, $completions, $all_locales;
 $items = array();
 $completions = array();
-$all_locales = $contenu_file[$locale];
+$all_locales = $contenu_file[$language];
 
 // Ajoute un item de localisation
 function addLocale($class, $cat, $name) {
@@ -174,18 +193,20 @@ if ($module == "system") {
   }
 }
 
-$files = CAppUI::readFiles("modules/$module", '\.php$');
-
-addLocale("Module", "Name", "module-$module-court");
-addLocale("Module", "Name", "module-$module-long");
-
-foreach($files as $_file) {
-  $_tab = substr($_file, 0, -4);
+if ($module != "common") {
+  $files = CAppUI::readFiles("modules/$module", '\.php$');
   
-  if (in_array($_tab, array("setup", "index", "config", "preferences"))/* ||
-      preg_match("/^httpreq|^ajax/", $_tab)*/) continue;
+  addLocale("Module", "Name", "module-$module-court");
+  addLocale("Module", "Name", "module-$module-long");
   
-  addLocale("Module", "Tabs", "mod-$module-tab-$_tab");
+  foreach($files as $_file) {
+    $_tab = substr($_file, 0, -4);
+    
+    if (in_array($_tab, array("setup", "index", "config", "preferences"))/* ||
+        preg_match("/^httpreq|^ajax/", $_tab)*/) continue;
+    
+    addLocale("Module", "Tabs", "mod-$module-tab-$_tab");
+  }
 }
 
 $empty_locales = array_fill(0, 5, null);
@@ -195,7 +216,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("items"        , $items);
 $smarty->assign("completions" , $completions);
-$smarty->assign("locales"      , $localesDirs);
+$smarty->assign("locales"      , array_keys($localesDirs));
 $smarty->assign("modules"      , $modules);
 $smarty->assign("module"       , $module);
 $smarty->assign("trans"        , $trans);
