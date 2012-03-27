@@ -147,6 +147,7 @@ class CPlageOp extends CMbObject {
     foreach ($this->_ref_operations as &$operation) {
       $operation->_ref_plageop =& $this;
     }
+    return $this->_ref_operations;
   }
 
   function loadRefsBack($annulee = 1, $order = "rank, horaire_voulu") {

@@ -32,6 +32,7 @@ if($plagesel->_id){
     $plageop_id = 0;
     $plagesel = new CPlageOp;
   }
+  $plagesel->loadAffectationsPersonnel();
 }
 
 if(!$plagesel->_id) {
@@ -56,6 +57,32 @@ foreach($chirs as $_chir) {
   $_chir->loadRefFunction();
 }
 
+// Chargement du personnel
+$listPersIADE     = CPersonnel::loadListPers("iade");
+$listPersAideOp   = CPersonnel::loadListPers("op");
+$listPersPanseuse = CPersonnel::loadListPers("op_panseuse");
+
+if ($plagesel->_id) {
+  $affectations_plage["iade"] = $plagesel->_ref_affectations_personnel["iade"];
+$affectations_plage["op"] = $plagesel->_ref_affectations_personnel["op"];
+$affectations_plage["op_panseuse"] = $plagesel->_ref_affectations_personnel["op_panseuse"];
+  foreach($affectations_plage["iade"] as $key => $affectation){
+    if(array_key_exists($affectation->personnel_id, $listPersIADE)){
+      unset($listPersIADE[$affectation->personnel_id]);
+    }
+  }
+  foreach($affectations_plage["op"] as $key => $affectation){
+    if(array_key_exists($affectation->personnel_id, $listPersAideOp)){
+      unset($listPersAideOp[$affectation->personnel_id]);
+    }
+  }
+  foreach($affectations_plage["op_panseuse"] as $key => $affectation){
+    if(array_key_exists($affectation->personnel_id, $listPersPanseuse)){
+      unset($listPersPanseuse[$affectation->personnel_id]);
+    }
+  }
+}
+
 //Création du template
 $smarty = new CSmartyDP();
 
@@ -66,6 +93,9 @@ $smarty->assign("plagesel"          , $plagesel          );
 $smarty->assign("specs"             , $specs             );
 $smarty->assign("anesths"           , $anesths           );
 $smarty->assign("chirs"             , $chirs             );
+$smarty->assign("listPersIADE"      , $listPersIADE      );
+$smarty->assign("listPersAideOp"    , $listPersAideOp    );
+$smarty->assign("listPersPanseuse"  , $listPersPanseuse  );
 
 $smarty->display("inc_edit_planning.tpl");
 ?>

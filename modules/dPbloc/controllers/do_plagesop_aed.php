@@ -15,6 +15,15 @@ $obj->bind($_POST);
 $del    = CValue::post("del"    , 0);
 $repeat = CValue::post("_repeat", 0);
 
+$_iade_id = CValue::post("_iade_id");
+$_aideop_id = CValue::post("_op_id");
+$_op_panseuse_id = CValue::post("_op_panseuse_id");
+
+$_del_iade_id = CValue::post("_del_iade_id");
+$_del_op_id   = CValue::post("_del_op_id");
+$_del_op_panseuse_id = CValue::post("_del_op_panseuse_id");
+
+$del_personnel = array($_del_iade_id, $_del_op_id, $_del_op_panseuse_id);
 
 // si l'id de l'objet est nul => creation
 // si l'objet a un id, alors, modification
@@ -47,22 +56,24 @@ if ($del) {
 } else {
   //Modification des plages
   if ($obj->_id != 0) {
-    while ($repeat > 0) {   
+    while ($repeat > 0) {
       if ($obj->_id) {
         if ($msg = $obj->store()) {
           CAppUI::setMsg("Plage non mise à jour", UI_MSG_ERROR);
           CAppUI::setMsg("Plage du $obj->date: $msg", UI_MSG_ERROR);
-        } 
+        }
         else {
           CAppUI::setMsg("Plage mise à jour", UI_MSG_OK);
-        }      
-      } 
+        }
+        managePersonnel($obj);  
+      }
       $repeat -= $obj->becomeNext();
     }
   }
   // Création des plages
   else {
-    while ($repeat > 0) {   
+    while ($repeat > 0) {
+      
       if ($msg = $obj->store()) {
         CAppUI::setMsg("Plage non créée", UI_MSG_ERROR);
         CAppUI::setMsg("Plage du $obj->date: $msg", UI_MSG_ERROR);
@@ -70,7 +81,69 @@ if ($del) {
       else {
         CAppUI::setMsg("Plage créée", UI_MSG_OK);
       }
+      
+      managePersonnel($obj);
       $repeat -= $obj->becomeNext();
+    }
+  }
+}
+
+function managePersonnel($obj) {
+  global $_iade_id, $_aideop_id, $_op_panseuse_id, $del_personnel;
+  
+  if ($_iade_id) {
+    $affectation_personnel = new CAffectationPersonnel;
+    $affectation_personnel->object_class = $obj->_class;
+    $affectation_personnel->object_id    = $obj->_id;
+    $affectation_personnel->personnel_id = $_iade_id;
+    if ($msg = $affectation_personnel->store()) {
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
+    }
+    else {
+      CAppUI::setMsg("IADE ajoutée", UI_MSG_OK);
+    }
+  }
+  
+  if ($_aideop_id) {
+    $affectation_personnel = new CAffectationPersonnel;
+    $affectation_personnel->object_class = $obj->_class;
+    $affectation_personnel->object_id    = $obj->_id;
+    $affectation_personnel->personnel_id = $_aideop_id;
+    if ($msg = $affectation_personnel->store()) {
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
+    }
+    else {
+      CAppUI::setMsg("Aide opératoire ajoutée", UI_MSG_OK);
+    }
+  }
+  
+  if ($_op_panseuse_id) {
+    $affectation_personnel = new CAffectationPersonnel;
+    $affectation_personnel->object_class = $obj->_class;
+    $affectation_personnel->object_id    = $obj->_id;
+    $affectation_personnel->personnel_id = $_panseuse_id;
+    if ($msg = $affectation_personnel->store()) {
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
+    }
+    else {
+      CAppUI::setMsg("Panseuse ajoutée", UI_MSG_OK);
+    }
+  }
+  
+  foreach ($del_personnel as $_personnel_id) {
+    $affectation_personnel = new CAffectationPersonnel;
+    $affectation_personnel->object_class = $obj->_class;
+    $affectation_personnel->object_id = $obj->_id;
+    $affectation_personnel->personnel_id = $_personnel_id;
+    $affectation_personnel->loadMatchingObject();
+    
+    if ($affectation_personnel->_id) {
+      if ($msg = $affectation_personnel->delete()) {
+        CAppui::setMsg($msg, UI_MSG_ERROR);
+      }
+      else {
+        CAppUI::setMsg("Personnel supprimé");
+      }
     }
   }
 }

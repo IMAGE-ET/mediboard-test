@@ -35,6 +35,9 @@ Main.add(function(){
 <input type="hidden" name="dosql" value="do_plagesop_aed" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="plageop_id" value="{{$plagesel->plageop_id}}" />
+<input type="hidden" name="_del_iade_id" value="" />
+<input type="hidden" name="_del_op_id" value="" />
+<input type="hidden" name="_del_op_panseuse_id" value="" />
 
   <table class="form" id="modif_planning">
     <tr>
@@ -184,9 +187,52 @@ Main.add(function(){
   <tr>
     <th>{{mb_label object=$plagesel field="verrouillage"}}</th>
     <td>{{mb_field object=$plagesel field="verrouillage"}}</td>
-    <th></th>
-    <td></td>
+    <th>Attribution du personnel</th>
+    <td>
+      <select name="_iade_id" style="width: 10em;">
+        <option value="">&mdash; {{tr}}CPersonnel.emplacement.iade{{/tr}}</option>
+        {{foreach from=$listPersIADE item=_personnelBloc}}
+          <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>
+        {{/foreach}}
+      </select>
+      <br />
+      <select name="_op_id" style="width: 10em;">
+        <option value="">&mdash; {{tr}}CPersonnel.emplacement.op{{/tr}}</option>
+        {{foreach from=$listPersAideOp item=_personnelBloc}}
+          <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>
+        {{/foreach}}
+      </select>
+      <br />
+      <select name="_op_panseuse_id" style="width: 10em;">
+        <option value="">&mdash; {{tr}}CPersonnel.emplacement.op_panseuse{{/tr}}</option>
+        {{foreach from=$listPersPanseuse item=_personnelBloc}}
+          <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>
+        {{/foreach}}
+      </select>
+    </td>
   </tr>
+  <tr>
+    <th>
+      Personnel en salle
+    </th>
+    <td colspan="3">
+      {{foreach from=$plagesel->_ref_affectations_personnel item=_affectations_by_type key=_type}}
+        {{if $_type != "reveil" && $_type != "service" && $_affectations_by_type|@count}}
+          <strong>
+            {{tr}}CPersonnel.emplacement.{{$_type}}{{/tr}} :
+          </strong>
+          {{foreach from=$_affectations_by_type item=_affectation_personnel}}
+            {{assign var=personnel value=$_affectation_personnel->_ref_personnel}}
+            <span>
+              <button type="button" class="cancel notext"
+                onclick="$V(this.form._del_{{$_type}}_id, {{$personnel->_id}}); this.form.submit();"></button>
+             {{$personnel->_ref_user}}
+             </span>
+          {{/foreach}}
+          <br />
+        {{/if}}
+      {{/foreach}} 
+    </td>
   <tr>
     <td colspan="4" class="text">
       <div class="small-info">
