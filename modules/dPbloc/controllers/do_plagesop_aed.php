@@ -121,7 +121,7 @@ function managePersonnel($obj) {
     $affectation_personnel = new CAffectationPersonnel;
     $affectation_personnel->object_class = $obj->_class;
     $affectation_personnel->object_id    = $obj->_id;
-    $affectation_personnel->personnel_id = $_panseuse_id;
+    $affectation_personnel->personnel_id = $_op_panseuse_id;
     if ($msg = $affectation_personnel->store()) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
     }
