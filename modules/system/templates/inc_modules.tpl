@@ -35,7 +35,7 @@
 {{if $installed}}
 <div style="text-align: right">
   {{if $upgradable && $coreModules|@count == 0}}
-    <button class="change" onclick="updateAll()">
+    <button class="change oneclick" onclick="updateAll()">
       Mettre à jour tous les modules
     </button>
   {{/if}}
