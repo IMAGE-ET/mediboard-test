@@ -70,8 +70,9 @@ foreach ($prescription->_ref_prescription_lines_element_by_cat as $chap => $_lin
 
 // Bilan
 $bilan = $sejour->loadRefBilanSSR();
-$bilan->loadRefTechnicien();
-$bilan->_ref_technicien->loadRefKine();
+$bilan->loadRefTechnicien()->loadRefKine();
+// Au cas où le bilan n'existe pas encore
+$bilan->sejour_id = $sejour->_id;
 
 // Technicien et plateau
 $technicien = new CTechnicien;

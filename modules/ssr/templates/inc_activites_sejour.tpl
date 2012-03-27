@@ -8,7 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if $bilan->technicien_id}} 
 <script type="text/javascript">
 
 selectActivite = function(activite) {
@@ -315,7 +314,6 @@ Main.add(function(){
 });
                   
 </script>
-{{/if}}
 
 
 {{if !$bilan->technicien_id}} 
@@ -326,8 +324,7 @@ Main.add(function(){
     Me rendre à la répartition des patients
   </a>
 </div>
-{{else}}
-
+{{/if}}
 
 <ul id="tabs-activites" class="control_tabs small">
   <li>
@@ -917,4 +914,3 @@ Main.add(function(){
   </table>
 
 </div>
-{{/if}}
