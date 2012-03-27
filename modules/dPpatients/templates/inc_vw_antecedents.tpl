@@ -2,12 +2,12 @@
 {{mb_default var=readonly value=0}}
 
 {{assign var=antecedents value=$patient->_ref_dossier_medical->_ref_antecedents_by_type}}
-{{if isset($antecedents.$type|smarty:nodefaults) && $antecedents.$type|@count}}
+{{if isset($antecedents.$type|smarty:nodefaults)}}
   {{if $readonly}}
     <img src="images/icons/{{$type}}.png" onmouseover="ObjectTooltip.createDOM(this, 'div_atcd');"/>
   {{else}}
     <button type="button" onclick="Antecedent.editAntecedents('{{$patient->_id}}', '{{$type}}', reloadAdmission)"
-        class="{{$type}} notext {{if isset($antecedents.deficience|smarty:nodefaults) && !$antecedents.$type|@count}}opacity-40{{/if}}"
+        class="{{$type}} notext {{if !$antecedents.$type|@count}}opacity-40{{/if}}"
         {{if $antecedents.$type|@count}}
           onmouseover="ObjectTooltip.createDOM(this, 'div_atcd');"
         {{/if}}></button>

@@ -334,11 +334,21 @@ class CDossierMedical extends CMbMetaObject {
         foreach ($prescription->_ref_prescription_lines as $_line) {
           $view = $_line->_ucd_view;
           $prises = $_line->loadRefsPrises();
+          $debut = "";
+          $fin = "";
+          if ($_line->debut) {
+            $debut = " depuis " . $_line->getFormattedValue("debut");
+          }
+          if ($_line->fin) {
+            $fin = " jusqu'au" . $_line->getFormattedValue("fin");
+          }
 					$posologie = implode(" - ", CMbArray::pluck($prises, "_view"));
 					$posologie = $posologie ? " ($posologie)" : "";
           $list[] = $view . $posologie;
+          
         }
       }
+      
       $template->addListProperty("$champ - Traitements", $list);
     }
     
