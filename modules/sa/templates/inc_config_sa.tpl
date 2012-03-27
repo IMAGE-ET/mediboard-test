@@ -12,7 +12,7 @@
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
   <table class="form">
-    {{assign var="mod" value="sms"}}
+    {{assign var="mod" value="sa"}}
     <tr>
       <th class="title" colspan="10">{{tr}}config-{{$mod}}{{/tr}}</th>
     </tr>
@@ -24,6 +24,9 @@
     </tr>
         
     {{mb_include module=system template=inc_config_bool var=server}}
+    
+    {{mb_include module=system template=inc_config_enum var=trigger_sejour    values=facture|sortie_reelle}}
+    {{mb_include module=system template=inc_config_enum var=trigger_operation values=facture|testCloture}}
     
     <tr>
       <td class="button" colspan="10">
