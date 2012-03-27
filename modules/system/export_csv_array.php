@@ -14,13 +14,12 @@ $filename = CValue::post("filename", "data");
 $data = stripslashes($data);
 $data = json_decode(utf8_encode($data), true);
 
-$out = fopen("php://output", "w");
-header("Content-Type: application/csv");
-header("Content-Disposition: attachment; filename=\"$filename.csv\"");
+$csv = new CCSVFile(null, "excel");
 
 foreach($data as $_line) {
-  if (CMbString::isUTF8(implode("", $_line))) {
-    $_line = array_map("utf8_decode", $_line);
-  }
-  fputcsv($out, $_line, ";");
+  $csv->writeLine($_line);
 }
+
+$csv->stream($filename);
+
+CApp::rip();
