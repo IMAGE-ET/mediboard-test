@@ -59,6 +59,8 @@ class CActe extends CMbMetaObject {
   function loadRefExecutant() {
     $this->_ref_executant = $this->loadFwdRef("executant_id", true);
     $this->_ref_executant->loadRefFunction();
+    
+    return $this->_ref_executant;
   }
   
   function loadListExecutants($guess = true) {

@@ -18,7 +18,7 @@ $object->countExchanges();
 // Facturation de l'opération où du séjour
 $object->facture = 0;
 if ($msg = $object->store()) {
-  CAppUI::setMsg($msg, UI_MSG_ERROR );
+  CAppUI::setMsg($msg, UI_MSG_ERROR);
 }
   
 // Création du template

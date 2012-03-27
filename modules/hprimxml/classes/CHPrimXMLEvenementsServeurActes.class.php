@@ -20,33 +20,73 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     parent::generateEnteteMessage("evenementsServeurActes");
   }
   
-  function generateFromOperation($mbOp) {
+  function generateFromOperation(CCodable $codable) {
     $evenementsServeurActes = $this->documentElement;
 
     $evenementServeurActe = $this->addElement($evenementsServeurActes, "evenementServeurActe");
     $this->addDateTimeElement($evenementServeurActe, "dateAction");
 
     // Ajout du patient
-    $mbPatient =& $mbOp->_ref_sejour->_ref_patient;
     $patient = $this->addElement($evenementServeurActe, "patient");
+    switch ($codable->_class) {
+      // CSejour / CConsultation
+      case 'CSejour': case 'CConsultation':
+        $mbPatient = $codable->loadRefPatient();
+        break;
+      
+      // COperation
+      case 'COperation':
+        $mbPatient = $codable->_ref_sejour->_ref_patient;
+        break;
+    }  
     $this->addPatient($patient, $mbPatient, false, true);
     
-    // Ajout de la venue, c'est-à-dire le séjour
-    $mbSejour =& $mbOp->_ref_sejour;
+    // Ajout de la venue
     $venue = $this->addElement($evenementServeurActe, "venue");
+    switch ($codable->_class) {
+      // COperation / CConsultation
+      case 'COperation': case 'CConsultation':
+        $mbSejour = $codable->_ref_sejour;
+        break;
+      
+      // CSejour
+      case 'CSejour':
+        $mbSejour = $codable;
+        break;
+    }
     $this->addVenue($venue, $mbSejour, null, true);
     
-    // Ajout de l'intervention
+    // Ajout de l'intervention ou consultation ou sejour
     $intervention = $this->addElement($evenementServeurActe, "intervention");
-    $this->addIntervention($intervention, $mbOp);
-    
+    switch ($codable->_class) {
+      // COperation 
+      case 'COperation':
+        $this->addIntervention($intervention, $codable);
+        break;
+        
+      // CConsultation / CSejour
+      // On ajoute seulement l'identifiant de la consultation ou séjour
+      case 'CConsultation': case 'CSejour':
+        $identifiant = $this->addElement($intervention, "identifiant");
+        $this->addElement($identifiant, "emetteur", $codable->_id);
+        break;
+    }
+      
     // Ajout des actes CCAM
     $actesCCAM = $this->addElement($evenementServeurActe, "actesCCAM");
-    foreach ($mbOp->_ref_actes_ccam as $mbActe) {
-      if ((CAppUI::conf("dPpmsi transmission_actes") == "signature") && (!$mbActe->signe || $mbActe->sent)) {
+    foreach ($codable->_ref_actes_ccam as $_acte_ccam) {
+      if ((CAppUI::conf("dPpmsi transmission_actes") == "signature") && (!$_acte_ccam->signe || $_acte_ccam->sent)) {
         continue;
       }
-      $this->addActeCCAM($actesCCAM, $mbActe, $mbOp);
+      $this->addActeCCAM($actesCCAM, $_acte_ccam, $codable);
+    }
+    
+    // Ajout des actes NGAP
+    if (CAppUI::conf("hprimxml send_actes_ngap")) {
+      $actesNGAP = $this->addElement($evenementServeurActe, "actesNGAP");
+      foreach ($codable->_ref_actes_ngap as $_acte_ngap) {
+        $this->addActeNGAP($actesNGAP, $_acte_ngap, $codable);
+      }
     }
 
     // Traitement final

@@ -13,12 +13,11 @@ $modeDAS   = CValue::getOrSession("modeDAS", 1);
 $sejour = new CSejour;
 $sejour->load($sejour_id);
 $sejour->loadRefGHM();
+$sejour->countExchanges();
 
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->assign("sejour" , $sejour);
-
 $smarty->display("inc_vw_GHM.tpl");
 
 ?>

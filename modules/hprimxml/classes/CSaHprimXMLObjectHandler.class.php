@@ -9,7 +9,7 @@
  */
 
 class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
-  static $handled = array ("CSejour", "COperation");
+  static $handled = array ("CSejour", "COperation", "CConsultation");
 
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);
@@ -19,24 +19,33 @@ class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     if (!$this->isHandled($mbObject)) {
       return;
     }
-    
-    $evt = null;
-    if ($mbObject instanceof CSejour) {
-      $evt = (CAppUI::conf("hprimxml send_diagnostic") == "evt_serveuretatspatient") ? 
-                   "CHPrimXMLEvenementsServeurEtatsPatient" : "CHPrimXMLEvenementsPmsi";
-    }
-  
-    if ($mbObject instanceof COperation) {
-      $evt = "CHPrimXMLEvenementsServeurActes";
-    }
-    
+        
     $receiver = $mbObject->_receiver;
     if (CGroups::loadCurrent()->_id != $receiver->group_id) {
       return;
     }
-        
-    $this->sendEvenementPMSI($evt, $mbObject);
     
+    // Envoi des diags du séjour
+    if ($mbObject instanceof CSejour) {
+      $sejour = $mbObject;
+      if ($sejour->DP || $sejour->DR || (count($sejour->_ref_dossier_medical->_codes_cim) > 0)) {
+        $evt = (CAppUI::conf("hprimxml send_diagnostic") == "evt_serveuretatspatient") ? 
+                   "CHPrimXMLEvenementsServeurEtatsPatient" : "CHPrimXMLEvenementsPmsi";
+                   
+        $this->sendEvenementPMSI($evt, $sejour);         
+      }
+    }
+    
+    $codable = $mbObject;
+    // Chargement des actes du codable
+    $codable->loadRefsActes();  
+    
+    // Envoi des actes CCAM / NGAP
+    if (empty($codable->_ref_actes_ccam) && empty($codable->_ref_actes_ngap)) {
+      return;
+    }
+    
+    $this->sendEvenementPMSI("CHPrimXMLEvenementsServeurActes", $codable);   
   }
 }
 ?>

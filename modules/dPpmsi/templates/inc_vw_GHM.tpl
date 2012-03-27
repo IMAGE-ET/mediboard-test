@@ -44,14 +44,22 @@
     </td>
   </tr>
   {{/if}}
-  <tr id="export_{{$sejour->_class}}_{{$sejour->_id}}">
-    {{mb_include template="inc_export_actes_pmsi" object=$sejour}}
-  </tr>
-  {{else}}
+{{else}}
   <tr>
     <td>
       <strong>{{$GHM->_GHM}}</strong>
     </td>
   </tr>
 {{/if}}
+
+<tr><td><hr /></td></tr>
+  
+{{if $sejour->_ref_GHM->_CM || $sejour->_ref_actes_ccam}}
+<tr id="export_{{$sejour->_class}}_{{$sejour->_id}}">
+  <td>
+    {{mb_include template="inc_export_actes_pmsi" object=$sejour}}
+  </td>
+</tr>
+{{/if}}
+
 </table>

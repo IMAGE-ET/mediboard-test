@@ -24,7 +24,10 @@
     <tr>
       <th class="category" colspan="2">PMSI</th>
     </tr>
+    
     {{mb_include module=system template=inc_config_enum var=send_diagnostic values=evt_pmsi|evt_serveuretatspatient}}
+    {{mb_include module=system template=inc_config_bool var=send_actes_ngap}}
+    
     <tr>
       <td class="button" colspan="10">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

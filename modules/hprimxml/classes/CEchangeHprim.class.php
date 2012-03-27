@@ -30,7 +30,7 @@ class CEchangeHprim extends CEchangeXML {
     
     $props["receiver_id"]   = "ref class|CDestinataireHprim"; 
     $props["initiateur_id"] = "ref class|CEchangeHprim";
-    $props["object_class"]  = "enum list|CPatient|CSejour|COperation|CAffectation show|0";
+    $props["object_class"]  = "enum list|CPatient|CSejour|COperation|CAffectation|CConsultation show|0";
     
     return $props;
   }
@@ -106,24 +106,14 @@ class CEchangeHprim extends CEchangeXML {
     $this->getObservations();
   }
   
-  function setObjectClassIdPermanent($mbObject) {
-    if ($mbObject instanceof CPatient) {
-      $this->object_class = "CPatient";
-      if ($mbObject->_IPP) {
-        $this->id_permanent = $mbObject->_IPP;
-      }
+  function setObjectClassIdPermanent(CMbObject $mbObject) {
+    $this->object_class = $mbObject->_class;
+    
+    if ($mbObject instanceof CPatient && $mbObject->_IPP) {
+      $this->id_permanent = $mbObject->_IPP;
     }
-    if ($mbObject instanceof CSejour) {
-      $this->object_class = "CSejour";
-      if ($mbObject->_NDA) {
-        $this->id_permanent = $mbObject->_NDA;
-      }
-    }
-    if ($mbObject instanceof COperation) {
-      $this->object_class = "COperation";
-    }
-    if ($mbObject instanceof CAffectation) {
-      $this->object_class = "CAffectation";
+    if ($mbObject instanceof CSejour && $mbObject->_NDA) {
+      $this->id_permanent = $mbObject->_NDA;
     }
   }
   

@@ -146,7 +146,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $echg_hprim->_message        = utf8_encode($this->saveXML());
     $echg_hprim->initiateur_id   = $initiateur;
     $echg_hprim->setObjectClassIdPermanent($mbObject);
-    $echg_hprim->store();
+    mbTrace($echg_hprim->store());
     
     // Chargement des configs du destinataire
     $this->_ref_receiver->loadConfigValues();
@@ -265,7 +265,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($prenoms, "prenom", $mbMediuser->_user_first_name);
   }
   
-  function addActeCCAM($elParent, $mbActeCCAM, $mbOp) {
+  function addActeCCAM($elParent, CActeCCAM $mbActeCCAM, CCodable $codable) {
     $acteCCAM = $this->addElement($elParent, "acteCCAM");
     $this->addAttribute($acteCCAM, "action", "création");
     $this->addAttribute($acteCCAM, "facturable", "oui");
@@ -278,28 +278,23 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     $identifiant = $this->addElement($acteCCAM, "identifiant");
     $emetteur    = $this->addElement($identifiant, "emetteur", "acte{$mbActeCCAM->_id}");
-    $this->addElement($acteCCAM, "codeActe", $mbActeCCAM->code_acte);
+    
+    $this->addElement($acteCCAM, "codeActe"    , $mbActeCCAM->code_acte);
     $this->addElement($acteCCAM, "codeActivite", $mbActeCCAM->code_activite);
-    $this->addElement($acteCCAM, "codePhase", $mbActeCCAM->code_phase);
-
-    $mbOpDebut = CValue::first(
-      $mbOp->debut_op, 
-      $mbOp->entree_salle, 
-      $mbOp->time_operation
-    );
-
+    $this->addElement($acteCCAM, "codePhase"   , $mbActeCCAM->code_phase);
+    
     $execute = $this->addElement($acteCCAM, "execute");
-    $this->addElement($execute, "date", $mbOp->date  ? $mbOp->date : $mbOp->_ref_plageop->date);
-    $this->addElement($execute, "heure", $mbOpDebut);
-
-    $mbExecutant = $mbActeCCAM->_ref_executant;
-    $executant = $this->addElement($acteCCAM, "executant");
-    $medecins = $this->addElement($executant, "medecins");
+    $this->addElement($execute, "date" , mbDate($mbActeCCAM->execution));
+    $this->addElement($execute, "heure", mbTime($mbActeCCAM->execution));
+    
+    $mbExecutant      = $mbActeCCAM->loadRefExecutant();
+    $executant        = $this->addElement($acteCCAM, "executant");
+    $medecins         = $this->addElement($executant, "medecins");
     $medecinExecutant = $this->addElement($medecins, "medecinExecutant");
     $this->addAttribute($medecinExecutant, "principal", "oui");
-    $medecin = $this->addElement($medecinExecutant, "medecin");
+    $medecin          = $this->addElement($medecinExecutant, "medecin");
     $this->addProfessionnelSante($medecin, $mbExecutant);
-    $this->addUniteFonctionnelle($executant, $mbOp);
+    //$this->addUniteFonctionnelle($executant, $codable);
     
     $modificateurs = $this->addElement($acteCCAM, "modificateurs");
     foreach ($mbActeCCAM->_modificateurs as $mbModificateur) {
@@ -328,6 +323,48 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     return $acteCCAM;
   }
   
+  function addActeNGAP($elParent, CActeNGAP $mbActeNGAP, CCodable $codable) {
+    $acteNGAP = $this->addElement($elParent, "acteNGAP");
+    $this->addAttribute($acteNGAP, "action", "création");
+    
+    $identifiant = $this->addElement($acteNGAP, "identifiant");
+    $emetteur    = $this->addElement($identifiant, "emetteur", "acte{$mbActeNGAP->_id}");
+    
+    $this->addElement($acteNGAP, "lettreCle"    , $mbActeNGAP->code);
+    $this->addElement($acteNGAP, "coefficient"  , $mbActeNGAP->demi ? $mbActeNGAP->coefficient * 0.5 : $mbActeNGAP->coefficient);
+    // dénombrement doit être égale à 1 pour les actes ngap (CS, C etc....), 
+    // elle varie seulement pour les actes de Biologie "dénombrement = nombre de code affinés"
+    $this->addElement($acteNGAP, "denombrement" , 1);
+    $this->addElement($acteNGAP, "quantite"     , $mbActeNGAP->quantite);
+    
+    $execute = $this->addElement($acteNGAP, "execute");
+    $this->addElement($execute, "date" , mbDate($mbActeNGAP->_execution));
+    $this->addElement($execute, "heure", mbTime($mbActeNGAP->_execution));
+    
+    $mbExecutant      = $mbActeNGAP->_ref_executant;
+    $prestataire      = $this->addElement($acteNGAP, "prestataire");
+    $medecins         = $this->addElement($prestataire, "medecins");
+    $medecin          = $this->addElement($medecins, "medecin");
+    $this->addProfessionnelSante($medecin, $mbExecutant);
+    
+    $montant = $this->addElement($acteNGAP, "montant");
+    if ($mbActeNGAP->montant_depassement > 0) {
+      $montantDepassement = $this->addElement($montant, "montantDepassement", sprintf("%.2f", $mbActeNGAP->montant_depassement));
+      if (CAppUI::conf("dPpmsi systeme_facturation") == "siemens") {
+        if (CAppUI::conf("dPsalleOp CActeCCAM envoi_motif_depassement")) {
+          $this->addAttribute($montantDepassement, "motif", "d");
+        }         
+      }
+      else {
+        if ($mbActeNGAP->motif_depassement) {
+          $this->addAttribute($montantDepassement, "motif", $mbActeNGAP->motif_depassement);
+        }
+      }
+    }
+    
+    return $acteNGAP;
+  }
+    
   function addActeCCAMAcquittement($elParent, $acteCCAM) {
   	$mbActeCCAM = $acteCCAM["codeActe"];
 		
@@ -1059,10 +1096,10 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   
   function addDiagnosticsEtat($elParent, CSejour $mbSejour) {
     $this->addDiagnosticEtat($elParent, strtoupper($mbSejour->DP), "dp");
-    if($mbSejour->DR) {
+    if ($mbSejour->DR) {
       $this->addDiagnosticEtat($elParent, strtoupper($mbSejour->DR), "dr");
     }
-    if(count($mbSejour->_ref_dossier_medical->_codes_cim)) {
+    if (count($mbSejour->_ref_dossier_medical->_codes_cim)) {
       foreach($mbSejour->_ref_dossier_medical->_codes_cim as $_diag_significatif) {
         $this->addDiagnosticEtat($elParent, strtoupper($_diag_significatif), "ds");
       }
