@@ -151,7 +151,7 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
 switch ($period) {
   default: $period = "DAY";
   case "DAY":
-  	$format = "%d/%m/%Y";
+    $format = "%d/%m/%Y";
     break;
     
   case "WEEK";
@@ -361,10 +361,25 @@ switch ($axe) {
     
     $series = &$data[$axe]['series'];
     
-    $etab_externe = new CEtabExterne;
-    $etabs = $etab_externe->loadList(null, "nom");
+    $sejour = new CSejour;
+    $end   = end($dates);
+    $start = reset($dates);
     
-    $etabs["none"] = new CEtabExterne;
+    $query = new CRequest;
+    $query->addSelect("sejour.etablissement_sortie_id");
+    $query->addTable("sejour");
+    $query->addGroup("sejour.etablissement_sortie_id");
+    $query->addWhere(array(
+      "sejour.entree" => "BETWEEN '$start' AND '$end'",
+      "sejour.etablissement_sortie_id" => "IS NOT NULL",
+    ));
+    $etab_externe_ids = $sejour->_spec->ds->loadColumn($query->getRequest());
+    
+    $etab_externe = new CEtabExterne;
+    $etabs = $etab_externe->loadList(array(
+      $etab_externe->_spec->key => $etab_externe->_spec->ds->prepareIn($etab_externe_ids),
+    ));
+    $etabs["none"] = $etab_externe;
     $etabs["none"]->_view = "Non renseigné";
     
     $where["sejour.mode_sortie"] = "= 'transfert'";
