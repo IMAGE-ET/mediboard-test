@@ -37,7 +37,7 @@
     </div>
   </td>
   <td class="narrow">
-    <div {{if !$sejour->confirme && !$sejour->sortie_reelle}}class="only-printable"{{/if}}>
+    <div {{if !$sejour->sortie_reelle}}class="only-printable"{{/if}}>
       {{if $type == 'presents'}}
         {{$_sortie->sortie|date_format:$conf.datetime}}
       {{else}}
@@ -45,39 +45,35 @@
       {{/if}}
     </div>
     <div class="not-printable">
-      {{if !$sejour->confirme && !$sejour->sortie_reelle}}
+      {{if !$sejour->sortie_reelle}}
       {{assign var=aff_guid value=$_sortie->_guid}}
       <form name="editSortiePrevue-{{$type}}-{{$aff_guid}}" method="post" action="?"
         onsubmit="return onSubmitFormAjax(this, { onComplete: function() { refreshList(null, null, '{{$type}}', '{{$type_mouvement}}'); } })">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_sejour_aed" />
         <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="confirme" value="{{$sejour->confirme}}" />
         {{mb_key object=$sejour}}
         {{mb_field object=$sejour field=entree_prevue hidden=true}}
         <button class="add" type="button" onclick="addDays(this, 1)">1J</button>
-        {{mb_field object=$sejour field=sortie_prevue register=true form="editSortiePrevue-$type-$aff_guid" onchange="this.form.onsubmit()"}}
-      </form>
-      {{/if}}
-    </td>
-    <td class="narrow">
-      <form name="sortie-{{$sejour->_guid}}" action="?m={{$m}}" method="post"
-        onsubmit="return onSubmitFormAjax(this, {onComplete: function() { refreshList(null, null, '{{$type}}', '{{$type_mouvement}}'); } })">
-        <input type="hidden" name="m" value="dPplanningOp" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="dosql" value="do_sejour_aed" />
-        {{mb_key object=$sejour}}
+        {{mb_field object=$sejour field=sortie_prevue register=true form="editSortiePrevue-`$type`-`$aff_guid`" onchange="this.form.onsubmit()"}}
+        {{mb_field object=$sejour field="mode_sortie" onchange="this.form.onsubmit()"}}
         {{if $sejour->confirme}}
-          <input type="hidden" name="confirme" value="0" />
-          <button type="submit" class="cancel">
+          <button type="button" onclick="$V(this.form.confirme, 0); this.form.onsubmit()" class="cancel">
             Annuler
           </button>
         {{else}}
-          <input type="hidden" name="confirme" value="1" />
-          <button type="submit" class="tick">
+          <button type="button" onclick="$V(this.form.confirme, 1); this.form.onsubmit()" class="tick">
             Autoriser
           </button>
         {{/if}}
+        <br />
+        <div id="listEtabExterne-editFrm{{$sejour->_guid}}" {{if $sejour->mode_sortie != "transfert"}} style="display: none;" {{/if}}>
+          {{mb_field object=$sejour field="etablissement_sortie_id" form="editSortiePrevue-`$type`-`$aff_guid`" 
+            autocomplete="true,1,50,true,true" onchange="this.form.onsubmit()"}}
+        </div>
       </form>
+      {{/if}}
     </div>
   </td>
 </tr>

@@ -48,7 +48,7 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
   
   {{assign var=url value="?m=$m&tab=vw_idx_sortie&selSortis=$selSortis"}}
   <tr>
-    <th>Effectuer la sortie</th>
+    <th class="narrow">Effectuer la sortie</th>
     <th>
       {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url="$url"}}
     </th>
@@ -117,21 +117,15 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
           <input type="hidden" name="_modifier_sortie" value="1" />
           <input type="hidden" name="entree_reelle" value="{{$_sejour->entree_reelle}}" />
           
-          <button class="tick" type="button" style="float: right;" onclick="confirmation('{{$date_actuelle}}', '{{$date_demain}}', '{{$_sejour->sortie_prevue}}', '{{$_sejour->entree_reelle}}', this.form);">
-            Effectuer la sortie
-          </button>
-          
-          {{mb_field object=$_sejour field="mode_sortie" onchange="this.form._modifier_sortie.value = '0'; submitSortie(this.form);"}}
+          <div style="white-space: nowrap;">
+            {{mb_field object=$_sejour field="mode_sortie" onchange="this.form._modifier_sortie.value = '0'; submitSortie(this.form);"}}
+            <button class="tick" type="button" onclick="confirmation('{{$date_actuelle}}', '{{$date_demain}}', '{{$_sejour->sortie_prevue}}', '{{$_sejour->entree_reelle}}', this.form);">
+              Effectuer la sortie
+            </button>
+          </div>
           <div id="listEtabExterne-editFrm{{$_sejour->_guid}}" {{if $_sejour->mode_sortie != "transfert"}} style="display: none;" {{/if}}>
-            <table class="main layout" style="text-align: right;">
-              <tr>
-                <td>Etablissement:</td>
-                <td style="width: 0.1%;">
-                  {{mb_field object=$_sejour field="etablissement_sortie_id" form="editFrm`$_sejour->_guid`" 
-                             autocomplete="true,1,50,true,true" onchange="changeEtablissementId(this.form)"}}
-                </td>
-              </tr>
-            </table>
+            {{mb_field object=$_sejour field="etablissement_sortie_id" form="editFrm`$_sejour->_guid`" 
+              autocomplete="true,1,50,true,true" onchange="changeEtablissementId(this.form)"}}
           </div>
         {{/if}}
       </form>

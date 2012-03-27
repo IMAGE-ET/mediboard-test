@@ -1,12 +1,6 @@
 <!-- $Id$ -->
 
 <script type="text/javascript">
-function openweekview() {
-  var url = new Url("cabinet", "vw_week_planning");
-  url.addParam("prat_id", "{{$chirSel}}");
-  url.addParam("date", '{{$debut}}');
-  url.redirect();
-}
 
 function showConsultations(oTd, plageconsult_id){
   oTd = $(oTd);

@@ -55,7 +55,13 @@
         {{mb_key object=$sejour}}
         {{mb_field object=$sejour field=entree_prevue hidden=true}}
         <button class="add" type="button" onclick="addDays(this, 1)">1J</button>
-        {{mb_field object=$sejour field=sortie_prevue register=true form="editSortiePrevue-$type-$sejour_guid" onchange="this.form.onsubmit()"}}
+        {{mb_field object=$sejour field=sortie_prevue register=true form="editSortiePrevue-`$type`-`$sejour_guid`" onchange="this.form.onsubmit()"}}
+        {{mb_field object=$sejour field="mode_sortie" onchange="this.form.onsubmit()"}}
+        <br />
+        <div id="listEtabExterne-editFrm{{$sejour->_guid}}" {{if $sejour->mode_sortie != "transfert"}} style="display: none;" {{/if}}>
+          {{mb_field object=$sejour field="etablissement_sortie_id" form="editSortiePrevue-`$type`-`$sejour_guid`" 
+            autocomplete="true,1,50,true,true" onchange="this.form.onsubmit()"}}
+        </div>
       </form>
       </div>
     {{/if}}

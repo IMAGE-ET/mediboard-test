@@ -12,6 +12,7 @@ setClose = function(time, plage_id, plage_date, chir_id) {
 };
 
 Main.add(function () {
+  Calendar.regField(getForm("Filter").date, null, {noView: true});
   var planning = window["planning-{{$planning->guid}}"];
   ViewPort.SetAvlHeight("plageSelectorTable", 1);
   $('planningWeek').style.height = "1500px";

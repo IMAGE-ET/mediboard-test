@@ -156,4 +156,5 @@ $locales['mod-dPbloc-tab-vw_suivi_salles'] = 'Suivi salles';
 $locales['mod-dPbloc-tab-vw_urgences'] = 'Hors plage';
 $locales['module-dPbloc-court'] = 'Bloc opératoire';
 $locales['module-dPbloc-long'] = 'Planning du bloc opératoire';
+$locales['pref-suivisalleAutonome'] = 'Date du suivi de salle autonome';
 ?>

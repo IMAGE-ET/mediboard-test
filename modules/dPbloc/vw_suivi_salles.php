@@ -10,8 +10,7 @@
 
 global $can, $g;
 $can->needsRead();
-
-$date_suivi = CValue::getOrSession("date", mbDate());
+$date_suivi = CAppUI::pref("suivisalleAutonome") ? CValue::get("date", mbDate()) : CValue::getOrSession("date", mbDate());
 $listBlocs  = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");
 $bloc_id    = CValue::getOrSession("bloc_id", reset($listBlocs)->_id);
 if(!key_exists($bloc_id, $listBlocs)) {

@@ -242,7 +242,10 @@ class CSetupdPbloc extends CSetup {
       ADD `verrouillage` ENUM ('defaut','non','oui') DEFAULT 'defaut' AFTER max_intervention;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.29";
+    $this->makeRevision("0.29");
+    $this->addPrefQuery("suivisalleAutonome", 0);
+    
+    $this->mod_version = "0.30";
   }  
 }
 ?>

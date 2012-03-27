@@ -11,6 +11,8 @@ CCanDo::checkRead();
 
 global $period, $periods, $chir_id, $function_id, $date, $ndate, $pdate, $plageconsult_id;
 
+$plageconsult_id = 0;
+
 $prat = new CMediusers;
 $prat->load($chir_id);
 
@@ -21,19 +23,30 @@ $debut = mbDate("-1 week", $debut);
 $debut = mbDate("next monday", $debut);
 $fin   = mbDate("next sunday", $debut);
 
+// Nombre de jours
+$nbDays = 5;
+$plage  = new CPlageconsult();
+$where  = array();
+$where["chir_id"] = " = '$chir_id'";
+$where["date"] = "= '$fin'";
+if($plage->countList($where)) {
+  $nbDays = 7;
+} else {
+  $where["date"] = "= '".mbDate("-1 day", $fin)."'";
+  if($plage->countList($where)) {
+    $nbDays = 6;
+  }
+}
+
 //Instanciation du planning
-$planning = new CPlanningWeek($debut, $debut, $fin, 7, false, "auto", false, false);
+$planning = new CPlanningWeek($debut, $debut, $fin, $nbDays, false, "auto", false, false);
 $planning->title    = $prat->_view;
 $planning->guid     = $prat->_guid;
 $planning->hour_min = "07";
 $planning->hour_max = "20";
 $planning->pauses   = array("07", "12", "19");
 
-$plage = new CPlageconsult();
-
-$where = array();
-$where["chir_id"] = " = '$chir_id'";
-for ($i = 0; $i < 7; $i++) {
+for ($i = 0; $i < $nbDays; $i++) {
   $jour = mbDate("+$i day", $debut);
   $where["date"] = "= '$jour'";
   foreach($plage->loadList($where) as $_plage){
@@ -47,7 +60,7 @@ for ($i = 0; $i < 7; $i++) {
         $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, "[PAUSE]", "#aa0", true, null, null);
       }
       $event->type        = "rdvfull";
-      $event->plage["id"] = $_consult->_id;
+      $event->plage["id"] = $_plage->_id;
       //Ajout de l'évènement au planning 
       $planning->addEvent($event);
     }
