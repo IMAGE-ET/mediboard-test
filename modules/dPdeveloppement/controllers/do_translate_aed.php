@@ -12,7 +12,10 @@ function redirect() {
     echo CAppUI::getMsg();
     CApp::rip();
   }
-  CAppUI::redirect();
+  
+  $m   = CValue::post("m");
+  $tab = CValue::post("tab");
+  CAppUI::redirect("m=$m&tab=$tab");
 }
 
 global $can;
