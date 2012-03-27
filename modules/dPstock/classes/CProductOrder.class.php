@@ -295,7 +295,7 @@ class CProductOrder extends CMbMetaObject {
     $where['product_order.received']     = " != '1'";
     
     // Exclude return orders (Bon de retour)
-    $where['product_order.comments']     = $this->_spec->ds->prepare("!= %", CProductOrder::$_return_form_label);
+    $where['product_order.comments']     = $this->_spec->ds->prepare("!= % OR product_order.comments IS NULL", CProductOrder::$_return_form_label);
     
     switch ($type) {
       case 'waiting': break;
