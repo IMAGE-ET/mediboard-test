@@ -87,6 +87,7 @@ if (CModule::getActive("fse")) {
   }  
 }
 
+$consult->loadRefs();  
 
 // Récupération des tarifs
 $tarif = new CTarif;
