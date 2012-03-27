@@ -81,12 +81,22 @@ $listServicesUrgence = CService::loadServicesUrgence();
 $module_orumip = CModule::getActive("orumip");
 $orumip_active = $module_orumip && $module_orumip->mod_active;
 
+$nb_printers = 0;
+
+if (CModule::getActive("printing")) {
+  // Chargement des imprimantes pour l'impression d'étiquettes 
+  $user_printers = CMediusers::get();
+  $function      = $user_printers->loadRefFunction();
+  $nb_printers   = $function->countBackRefs("printers");
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("group"               , $group);
 if (CModule::getActive("dPprescription")){
   $smarty->assign("line"                , new CPrescriptionLineMedicament());
 }
+
 $smarty->assign("listServicesUrgence" , $listServicesUrgence);
 $smarty->assign("contrainteProvenance", $contrainteProvenance);
 $smarty->assign("userSel"             , $user);
@@ -100,7 +110,9 @@ $smarty->assign("listResponsables"    , $listResponsables);
 $smarty->assign("listPrats"           , $listPrats);
 $smarty->assign("praticien"           , $praticien);
 $smarty->assign("orumip_active"       , $orumip_active);
+$smarty->assign("nb_printers"         , $nb_printers);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isImedsInstalled"    , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
+
 $smarty->display("vw_aed_rpu.tpl");
 ?>

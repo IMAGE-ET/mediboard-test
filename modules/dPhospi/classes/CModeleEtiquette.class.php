@@ -105,7 +105,7 @@ class CModeleEtiquette extends CMbMetaObject {
     );
   }
   
-  function printEtiquettes() {
+  function printEtiquettes($printer_id = null) {
     // Affectation de la police par défault si aucune n'est choisie
     if ($this->font == "")
       $this->font = "dejavusansmono";
@@ -210,7 +210,21 @@ class CModeleEtiquette extends CMbMetaObject {
       $pdf->SetY($y);
       $pdf->SetX($x);
     }
-    $pdf->Output($this->nom.'.pdf', "I");
+    
+    if ($printer_id) {
+      $file = new CFile;
+      $file->_file_path = tempnam("/tmp", "etiq");
+      file_put_contents($file->_file_path, $pdf->Output($this->nom.'.pdf', "S"));
+      
+      $printer = new CPrinter();
+      $printer->load($printer_id);
+      $printer->loadRefSource()->sendDocument($file);
+      
+      unlink($file->_file_path);
+    }
+    else {
+      $pdf->Output($this->nom.'.pdf', "I");
+    }
   }
 }
 ?>

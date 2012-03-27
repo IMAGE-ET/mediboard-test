@@ -164,11 +164,7 @@
     url.addParam("rpu_id", id);
     url.popup(700, 550, "RPU");
   }
-
-  function printEtiquettes(id) {
-    getForm("download_etiq").submit();
-  }
-    
+ 
   function loadResultLabo(sejour_id) {
     var url = new Url("dPImeds", "httpreq_vw_sejour_results");
     url.addParam("sejour_id", sejour_id);
@@ -186,7 +182,21 @@
     url.addParam("is_anesth", 0);
     url.requestUpdate("infoPat");
   }
-
+  
+  function printEtiquettes() {
+    var nb_printers = {{$nb_printers|@json}};
+    if (nb_printers > 0) {
+      var url = new Url('dPcompteRendu', 'ajax_choose_printer');
+      url.addParam('mode_etiquette', 1);
+      url.addParam('object_class', '{{$rpu->_class}}');
+      url.addParam('object_id', '{{$rpu->_id}}');
+      url.requestModal(400);
+    }
+    else {
+      getForm('download_etiq').submit();
+    }
+  }
+  
   Main.add(function () {
     {{if $rpu->_id && $can->edit}}
       DossierMedical.reloadDossierPatient();
@@ -202,9 +212,10 @@
   </script>
 
   <form name="download_etiq" style="display: none;" action="?" target="_blank" method="get">
-    <input type="hidden" name="m" value="dPurgences" />
+    <input type="hidden" name="m" value="dPhospi" />
     <input type="hidden" name="a" value="print_etiquettes" />
     <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
+    <input type="hidden" name="object_class" value="{{$rpu->_class}}" />
     <input type="hidden" name="suppressHeaders" value="1" />
     <input type="hidden" name="dialog" value="1" />
   </form>
@@ -459,7 +470,7 @@
             {{tr}}Print{{/tr}} dossier
           </button>
           
-          <button type="button" class="print" onclick="printEtiquettes({{$rpu->_id}})">
+          <button type="button" class="print" onclick="printEtiquettes();">
             {{tr}}CModeleEtiquette.print_labels{{/tr}}
           </button>
               

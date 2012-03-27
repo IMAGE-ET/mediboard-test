@@ -118,7 +118,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_is_proche          = null;
   var $_motif_complet      = null;
   var $_grossesse          = null;
-  
+  var $_nb_printers        = null;
   
   // Behaviour fields
   var $_check_bounds  = true;
@@ -1527,6 +1527,13 @@ class CSejour extends CCodable implements IPatientRelated {
     }
     
     $this->loadNDA();
+    
+    if (CModule::getActive("printing")) {
+      // Compter les imprimantes pour l'impression d'étiquettes
+      $user_printers = CMediusers::get();
+      $function      = $user_printers->loadRefFunction();
+      $this->_nb_printers = $function->countBackRefs("printers");
+    }
   }
 
 /**

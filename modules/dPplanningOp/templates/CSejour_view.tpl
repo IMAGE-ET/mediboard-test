@@ -15,12 +15,26 @@
     url.addParam("sejour_id", '{{$sejour->_id}}');
     url.requestModal(700, 550);
   }
+  printEtiquettes = function() {
+    var nb_printers = {{$sejour->_nb_printers|@json}};
+    if (nb_printers > 0) {
+      var url = new Url('dPcompteRendu', 'ajax_choose_printer');
+      url.addParam('mode_etiquette', 1);
+      url.addParam('object_class', '{{$sejour->_class}}');
+      url.addParam('object_id', '{{$sejour->_id}}');
+      url.requestModal(400);
+    }
+    else {
+      getForm('download_etiq_{{$sejour->_id}}').submit();
+    }
+  }
 </script>
 
 <form name="download_etiq_{{$sejour->_id}}" style="display: none;" action="?" target="_blank" method="get">
-  <input type="hidden" name="m" value="dPplanningOp" />
+  <input type="hidden" name="m" value="dPhospi" />
   <input type="hidden" name="a" value="print_etiquettes" />
   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+  <input type="hidden" name="object_class" value="{{$sejour->_class}}" />
   <input type="hidden" name="suppressHeaders" value="1" />
   <input type="hidden" name="dialog" value="1" />
 </form>
@@ -89,7 +103,7 @@
       
       {{if @$modules.dPhospi->_can->read}}
         <br />
-        <button type="button" class="print" onclick="getForm('download_etiq_{{$sejour->_id}}').submit()">
+        <button type="button" class="print" onclick="printEtiquettes()">
           {{tr}}CModeleEtiquette.print_labels{{/tr}}
         </button>
       {{/if}}
