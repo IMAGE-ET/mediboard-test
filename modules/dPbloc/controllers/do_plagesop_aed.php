@@ -13,7 +13,7 @@ $obj = new CPlageOp();
 $obj->bind($_POST);
 
 $del    = CValue::post("del"    , 0);
-$repeat = CValue::post("_repeat", 0);
+$repeat = CValue::post("_repeat", 1);
 
 $_iade_id = CValue::post("_iade_id");
 $_aideop_id = CValue::post("_op_id");

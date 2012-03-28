@@ -290,6 +290,9 @@ class CPlageOp extends CMbObject {
    */
   function becomeNext() {
     $week_jumped = 0;
+    if(!$this->_type_repeat) {
+      $this->_type_repeat = "simple";
+    }
     switch($this->_type_repeat) {
       case "quadruple": 
         $this->date = mbDate("+1 WEEK", $this->date); // 4
@@ -328,6 +331,7 @@ class CPlageOp extends CMbObject {
     $anesth_id        = $this->anesth_id;
     $delay_repl       = $this->delay_repl;
     $spec_repl_id     = $this->spec_repl_id;
+    $type_repeat      = $this->_type_repeat;
     
     // Recherche de la plafe suivante
     $where             = array();
@@ -357,6 +361,7 @@ class CPlageOp extends CMbObject {
     $this->anesth_id        = $anesth_id;
     $this->delay_repl       = $delay_repl;
     $this->spec_repl_id     = $spec_repl_id;
+    $this->_type_repeat     = $type_repeat;
     $this->updateFormFields();
     return $week_jumped;
   }
