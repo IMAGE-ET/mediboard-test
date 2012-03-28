@@ -12,17 +12,15 @@
 
 <script type="text/javascript">
 function checkFormPrint(form) {
-  if(!checkForm(form)){
+  if (!checkForm(form)){
     return false;
   }
   
-  popPlanning();
+  popPlanning(form);
 }
-
   
-function popPlanning() {
-  var form = getForm("paramFrm");
-  var url = new Url("dPbloc", "view_planning");
+function popPlanning(form) {
+  var url = new Url("bloc", "view_planning");
   url.addElement(form._date_min);
   url.addElement(form._date_max);
   url.addParam("_plage", $V(form._plage));
@@ -37,10 +35,21 @@ function popPlanning() {
   url.addParam("_coordonnees"   , $V(form._coordonnees));
   url.addParam("_print_numdoss" , $V(form._print_numdoss));
   url.addParam("_print_annulees", $V(form._print_annulees));
-	if(form.planning_perso.checked){// pour l'affichage du planning perso d'un anesthesiste
-	  url.addParam("planning_perso", true);
-	}
+  if (form.planning_perso.checked){ // pour l'affichage du planning perso d'un anesthesiste
+    url.addParam("planning_perso", true);
+  }
   url.popup(900, 550, 'Planning');
+}
+
+function printPlanningPersonnel(form) {
+  var url = new Url("bloc", "print_planning_personnel");
+  url.addElement(form._date_min);
+  url.addElement(form._date_max);
+  url.addElement(form.salle_id);
+  url.addElement(form._bloc_id);
+  url.addElement(form._prat_id);
+  url.addElement(form._specialite);
+  url.popup(900, 500, 'Planning du personnel');
 }
 
 function changeDate(sDebut, sFin){
@@ -78,11 +87,11 @@ function changeDateCal(minChanged){
 function showCheckboxAnesth(element){
   var form = getForm("paramFrm");
   if ($(element.options[element.selectedIndex]).hasClassName('anesth')){
-	   $('perso').show();
-		 form.planning_perso.checked = "";
-	}
+     $('perso').show();
+     form.planning_perso.checked = "";
+  }
   else {
-	 $('perso').hide();
+   $('perso').hide();
   }
 }
 
@@ -167,9 +176,9 @@ function showCheckboxAnesth(element){
                 </option>
               {{/foreach}}
             </select>
-						<span id="perso" {{if !$praticien->isAnesth()}} style="display:none;"{{/if}}>
-						  Planning personnel <input type="checkbox" name="planning_perso" />
-						</span>
+            <span id="perso" {{if !$praticien->isAnesth()}} style="display:none;"{{/if}}>
+              Planning personnel <input type="checkbox" name="planning_perso" />
+            </span>
           </td>
         </tr>
         <tr>
@@ -260,10 +269,12 @@ function showCheckboxAnesth(element){
             <label for="_coordonnees_1" title="Afficher ou cacher le numéro de tel du patient">Afficher les coordonnées du patient</label>
           </th>
           <td>  
-            <label for="_coordonnees_1">Oui</label>
-            <input type="radio" name="_coordonnees" value="1" /> 
-            <label for="_coordonnees_0">Non</label>
-            <input type="radio" name="_coordonnees" value="0" checked="checked"/> 
+            <label>
+              Oui <input type="radio" name="_coordonnees" value="1" />
+            </label> 
+            <label>
+              Non <input type="radio" name="_coordonnees" value="0" checked="checked"/>
+            </label> 
           </td>
         </tr>
             
@@ -272,30 +283,36 @@ function showCheckboxAnesth(element){
             <label for="print_numdoss_1" title="Afficher ou cacher le numéro de dossier">Afficher le numéro de dossier</label>
           </th>
           <td>  
-            <label for="_print_numdoss_1">Oui</label>
-            <input type="radio" name="_print_numdoss" value="1" /> 
-            <label for="_print_numdoss_0">Non</label>
-            <input type="radio" name="_print_numdoss" value="0" checked="checked"/> 
+            <label>
+              Oui <input type="radio" name="_print_numdoss" value="1" />
+            </label> 
+            <label>
+              Non <input type="radio" name="_print_numdoss" value="0" checked="checked"/>
+            </label> 
           </td>
         </tr>
         <tr>
           <th style="width: 50%">{{mb_label object=$filter field="_plage"}}</th>
           <td>  
             {{assign var="var" value="plage_vide"}}
-            <label for="_plage">Oui</label>
-            <input type="radio" name="_plage" value="1" {{if $conf.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
-            <label for="_plage">Non</label>
-            <input type="radio" name="_plage" value="0" {{if $conf.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+            <label>
+              Oui <input type="radio" name="_plage" value="1" {{if $conf.$m.$class.$var == "1"}}checked="checked"{{/if}}/>
+            </label>
+            <label>
+              Non <input type="radio" name="_plage" value="0" {{if $conf.$m.$class.$var == "0"}}checked="checked"{{/if}}/>
+            </label>
           </td>
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_ccam_libelle"}}</th>
           <td>  
             {{assign var="var" value="libelle_ccam"}}
-            <label for="_ccam_libelle">Oui</label>
-            <input type="radio" name="_ccam_libelle" value="1" {{if $conf.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
-            <label for="_ccam_libelle">Non</label>
-            <input type="radio" name="_ccam_libelle" value="0" {{if $conf.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+            <label>
+              Oui <input type="radio" name="_ccam_libelle" value="1" {{if $conf.$m.$class.$var == "1"}}checked="checked"{{/if}}/>
+            </label> 
+            <label>
+              Non <input type="radio" name="_ccam_libelle" value="0" {{if $conf.$m.$class.$var == "0"}}checked="checked"{{/if}}/>
+            </label> 
           </td>
         </tr>
         <tr>
@@ -303,15 +320,18 @@ function showCheckboxAnesth(element){
             <label for="print_annulees_1" title="Afficher ou cacher les interventions annulées">Afficher les interventions annulées</label>
           </th>
           <td>  
-            <label for="_print_annulees_1">Oui</label>
-            <input type="radio" name="_print_annulees" value="1" /> 
-            <label for="_print_annulees_0">Non</label>
-            <input type="radio" name="_print_annulees" value="0" checked="checked"/> 
+            <label>
+              Oui <input type="radio" name="_print_annulees" value="1" />
+            </label> 
+            <label>
+              Non <input type="radio" name="_print_annulees" value="0" checked="checked"/>
+            </label> 
           </td>
         </tr>
         <tr>
           <td colspan="2" class="button">
             <button class="print" type="button" onclick="checkFormPrint(this.form)">Afficher</button>
+            <button class="print" type="button" onclick="printPlanningPersonnel(this.form)">Planning du personnel</button>
           </td>
         </tr>
       </table>
