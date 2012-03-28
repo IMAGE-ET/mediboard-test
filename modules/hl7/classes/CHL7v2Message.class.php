@@ -342,7 +342,12 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     
     $n = 500; // pour eviter les boucles infinies !
 
-    while($n-- && $current_node/* && $this->current_line < $lines_count*/) {
+    while($n--/* && $current_node && $this->current_line < $lines_count*/) {
+      if (!$current_node && $this->current_line < count($this->children)) {
+        $this->error(CHL7v2Exception::UNEXPECTED_SEGMENT, $this->getCurrentLine());
+        break;
+      }
+      
       switch($current_node->getName()) {
         
         // SEGMENT //

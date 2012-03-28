@@ -13,6 +13,7 @@ class CHL7v2Exception extends Exception {
   const INVALID_SEPARATOR          = 3;
   const SEGMENT_INVALID_SYNTAX     = 4;
   const UNKOWN_SEGMENT_TYPE        = 5;
+  const UNEXPECTED_SEGMENT         = 6;
   const TOO_MANY_FIELDS            = 7;
   const SPECS_FILE_MISSING         = 8;
   const VERSION_UNKNOWN            = 10;
