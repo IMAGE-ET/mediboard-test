@@ -8,11 +8,11 @@
   {{if !$sejour->UHCD}}
     <input type="hidden" name="UHCD" value="1" />
     <input type="hidden" name="type" value="comp" />
-    <button class="tick oneclick" type="submit"> Passer en UHCD </button>
+    <button class="hslip oneclick" type="submit"> Passer en dossier UHCD </button>
   {{else}}
     <input type="hidden" name="UHCD" value="0" />
     <input type="hidden" name="type" value="urg" />
-    <button class="cancel oneclick" type="submit"> Revenir en dossier d'urgences </button>
+    <button class="hslip oneclick" type="submit"> Revenir en dossier ATU </button>
   {{/if}}
 </form>
 
