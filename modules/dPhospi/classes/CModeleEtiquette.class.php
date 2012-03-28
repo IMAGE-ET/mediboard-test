@@ -29,6 +29,7 @@ class CModeleEtiquette extends CMbMetaObject {
   var $font          = null;
   var $group_id      = null;
   var $show_border   = null;
+  var $text_align    = null;
   var $_width_etiq   = null;
   var $_height_etiq  = null;
   
@@ -74,6 +75,7 @@ class CModeleEtiquette extends CMbMetaObject {
     $specs["font"]          = "text show|0";
     $specs["group_id"]      = "ref class|CGroups notNull";
     $specs["show_border"]   = "bool default|0";
+    $specs["text_align"]    = "enum list|top|middle|bottom default|top";
     $specs["_write_bold"]   = "bool";
     $specs["_width_etiq"]   = "float";
     $specs["_height_etiq"]   = "float";
@@ -106,6 +108,7 @@ class CModeleEtiquette extends CMbMetaObject {
   }
   
   function printEtiquettes($printer_id = null) {
+    mbLog($this);
     // Affectation de la police par défault si aucune n'est choisie
     if ($this->font == "")
       $this->font = "dejavusansmono";
@@ -179,6 +182,60 @@ class CModeleEtiquette extends CMbMetaObject {
       $fragments = explode("@", $textes[$current_text]);
       $was_barcode = 0;
       CMbArray::removeValue("", $fragments);
+      
+      // Evaluation de la hauteur du contenu de la cellule
+      // si un alignement spécifique est demandé.
+      if ($this->text_align != "top") {
+        $pdf_ex = new CMbPdf('p', 'cm', array($largeur_etiq, $hauteur_etiq));
+        
+        $pdf_ex->setFont($this->font, '', $this->hauteur_ligne);
+        $pdf_ex->SetMargins(0, 0, 0);
+        $pdf_ex->setPrintHeader(false);
+        $pdf_ex->setPrintFooter(false);
+        $pdf_ex->SetAutoPageBreak(false);
+        
+        $pdf_ex->AddPage();
+        
+        foreach ($fragments as $fragment) {
+          if (preg_match("/BARCODE_(.*)/", $fragment, $matches) == 1) {
+            $barcode_x = $pdf_ex->getX();
+            $barcode_y = $pdf_ex->getY();
+            $barcode = $matches[1];
+            $barcode_width = strlen($barcode) * 0.4 + 0.1;
+            $pdf_ex->writeBarcode($barcode_x, $barcode_y, $barcode_width, 0.8, "C128B", 1, null, null, $barcode);
+            
+            $pdf_ex->setX($barcode_x + $barcode_width);
+            $was_barcode = 1;
+          }
+          else {
+            if ($was_barcode) {
+              $sub_fragments = explode("<br />", $fragment,2);
+              
+              $pdf_ex->WriteHTML($sub_fragments[0], false);
+              $actual_y = $pdf_ex->getY();
+              $pdf_ex->setY($actual_y+0.8);
+              $pdf_ex->WriteHTML($sub_fragments[1], false);
+            }
+            else {
+              $pdf_ex->WriteHTML($fragment, false);
+            }
+            $was_barcode = 0;
+          }
+          
+        }
+        
+        //$pdf_ex->Output($this->nom.'.pdf', "I");
+        $pdf_y = $pdf->getY();
+        $pdf_ex_y = $pdf_ex->getY();
+        
+        switch($this->text_align) {
+          case "middle":
+          	$pdf->setY($pdf_y -0.2 + ($hauteur_etiq - $pdf_ex_y) / 2);
+            break;
+          case "bottom":
+          	$pdf->setY($pdf_y - 0.4 + $hauteur_etiq - $pdf_ex_y);
+        }
+      }
       
       foreach ($fragments as $fragment) {
         if (preg_match("/BARCODE_(.*)/", $fragment, $matches) == 1) {

@@ -571,7 +571,12 @@ class CSetupdPhospi extends CSetup {
     $query = "ALTER TABLE `item_liaison`
       CHANGE `item_prestation_id` `item_prestation_id` INT (11) UNSIGNED DEFAULT NULL";
     
-    $this->mod_version = "0.58";
+    $this->makeRevision("0.58");
+    $query = "ALTER TABLE `modele_etiquette`
+      ADD `text_align` ENUM ('top','middle','bottom') DEFAULT 'top'";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.59";
   }
 }
 ?>

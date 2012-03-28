@@ -24,5 +24,6 @@ $modele_etiquette->texte_3       = CValue::post("texte_3");
 $modele_etiquette->texte_4       = CValue::post("texte_4");
 $modele_etiquette->font          = CValue::post("font");
 $modele_etiquette->show_border   = CValue::post("show_border");
+$modele_etiquette->text_align    = CValue::post("text_align");
 $modele_etiquette->printEtiquettes();
 ?>
