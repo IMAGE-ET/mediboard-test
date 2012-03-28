@@ -34,8 +34,9 @@ $patient = $sejour->loadRefPatient();
 
 // Chargement des modèles d'étiquettes
 $modele_etiquette = new CModeleEtiquette;
+
 $where = array();
-mbLog($object_class);
+
 $where['object_class'] = " = '$object_class'";
 $where["group_id"] = " = '".CGroups::loadCurrent()->_id."'";
 
