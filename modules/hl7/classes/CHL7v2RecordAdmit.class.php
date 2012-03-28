@@ -700,7 +700,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         break;
       // Discipline médico-tarifaire
       default:
-        //$newVenue->discipline_id = $PV1_10;
+        $newVenue->discipline_id = $PV1_10;
         break; 
     }
   }

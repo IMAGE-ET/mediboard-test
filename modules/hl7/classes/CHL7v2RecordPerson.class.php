@@ -169,13 +169,8 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
   }    
   
   function mappingPatient($data, CPatient $newPatient) {
-    // Mapping de l'INS-C
-    if (array_key_exists("INSC", $data["personIdentifiers"])) {
-      $newPatient->INSC = $data["personIdentifiers"]["INSC"];
-    }
-    
     // Segment PID
-    $this->getSegment("PID", $data, $newPatient);
+    $this->getPID($data["PID"], $newPatient, $data);
     
     // Segment PD1
     $this->getSegment("PD1", $data, $newPatient);
@@ -200,7 +195,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     return $recoveredPatient->checkSimilar($newPatient->nom, $newPatient->prenom);
   }
   
-  function getPID(DOMNode $node, CPatient $newPatient) {    
+  function getPID(DOMNode $node, CPatient $newPatient, $data = null) {    
     $PID5 = $this->query("PID.5", $node);
     foreach ($PID5 as $_PID5) {
       // Nom(s)
@@ -227,7 +222,24 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $this->getPhones($node, $newPatient);
     
     //NSS
-    $newPatient->matricule = $this->queryTextNode("PID.19", $node);
+    $sender = $this->_ref_sender;
+    switch ($sender->_configs["handle_NSS"]) {
+      // PID_19
+      case 'PID_19':
+        $newPatient->matricule = $this->queryTextNode("PID.19", $node);
+        break;
+      // PID_3
+      default:
+        if (array_key_exists("SS", $data["personIdentifiers"])) {
+          $newPatient->matricule = $data["personIdentifiers"]["SS"];
+        }
+        break; 
+    }
+    
+    // Mapping de l'INS-C
+    if (array_key_exists("INSC", $data["personIdentifiers"])) {
+      $newPatient->INSC = $data["personIdentifiers"]["INSC"];
+    }
   }
   
   function getNames(DOMNode $node, CPatient $newPatient, DOMNodeList $PID5) {

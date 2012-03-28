@@ -765,7 +765,13 @@ class CSetuphl7 extends CSetup {
     // Grand-parent
     $this->insertTableEntry("63", "GRP", "GRP", "grand_parent", "grand_parent", "Grand-parent");
     
-    $this->mod_version = "0.27";
+    $this->makeRevision("0.27");
+    
+    $query = "ALTER TABLE `hl7_config` 
+                ADD `handle_NSS` ENUM ('PID_3','PID_19') DEFAULT 'PID_3';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.28";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

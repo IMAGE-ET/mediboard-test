@@ -207,6 +207,11 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
       if ($this->queryTextNode("CX.5", $_node) == "INS-C") {
         $data["INSC"] = $this->queryTextNode("CX.1", $_node);
       } 
+      
+      // SS - Numéro de Sécurité Social
+      if ($this->queryTextNode("CX.5", $_node) == "SS") {
+        $data["SS"] = $this->queryTextNode("CX.1", $_node);
+      } 
     }
     
     // AN - Patient Account Number (NDA)

@@ -208,7 +208,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $first_line = CHL7v2::split($this->fieldSeparator, reset($this->lines));
     
     // version
-    $this->parseRawVersion($first_line[11]);
+    $this->parseRawVersion($first_line[11], $first_line[16]);
     
     // message type
     $message_type = explode($this->componentSeparator, $first_line[8]);
@@ -236,16 +236,23 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     }
   }
   
-  private function parseRawVersion($raw){
+  private function parseRawVersion($raw, $country_code = null){
     $parts = explode($this->componentSeparator, $raw);
-    
+   
     CMbArray::removeValue("", $parts);
     
     $this->version = $version = $parts[0];
     
+    // Version spécifique française spécifiée
     if (count($parts) > 1) {
       $this->i18n_code = $parts[1];
       $this->extension = $version = "$parts[1]_$parts[2]";
+    } 
+    // Recherche depuis le code du pays
+    /* @todo Pas top */
+    elseif ($country_code == "FRA") {
+      $this->i18n_code = "FR";
+      $this->extension = $version = "FR_2.3";
     }
 
     // Dans le cas où la version passée est incorrecte on met par défaut 2.5
@@ -347,7 +354,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
           if ($this->getCurrentLineHeader() == "") {
             break 2;
           }
-          
+
           $seg_schema = $this->getSchema(self::PREFIX_SEGMENT_NAME, $this->getCurrentLineHeader(), $this->getMessage()->extension);
           if ($seg_schema == false) {
             $this->error(CHL7v2Exception::UNKOWN_SEGMENT_TYPE, $this->getCurrentLine());

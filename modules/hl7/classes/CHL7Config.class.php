@@ -24,7 +24,8 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "encoding",
     "handle_mode",
     "handle_NDA",
-    "handle_PV1_10"
+    "handle_PV1_10",
+    "handle_NSS"
   );
   
   var $hl7_config_id = null;
@@ -39,6 +40,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
 	var $handle_mode   = null;
 	var $handle_NDA	   = null;
   var $handle_PV1_10 = null;
+  var $handle_NSS    = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -58,7 +60,10 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["encoding"]      = "enum list|UTF-8|ISO-8859-1 default|UTF-8";
     
 		$props["handle_mode"]   = "enum list|normal|simple default|normal";
+		
+		// PID
 		$props["handle_NDA"]    = "enum list|PID_18|PV1_19 default|PID_18";
+    $props["handle_NSS"]    = "enum list|PID_3|PID_19 default|PID_3";
     
     // PV1
     $props["handle_PV1_10"] = "enum list|discipline|service default|discipline";
