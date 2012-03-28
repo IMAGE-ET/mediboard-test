@@ -195,26 +195,34 @@ if ($consult->adresse_par_prat_id) {
   $consult->_ref_adresse_par_prat = $medecin_adresse_par;
 }
 
-$listServicesUrgence = array();
+// Chargement des boxes 
+$services = array();
 
 if ($consult->sejour_id) {
-  $consult->loadRefSejour();
+  $sejour = $consult->loadRefSejour();
 }
 
 // Chargement du sejour
-if ($consult->_ref_sejour && $consult->_ref_sejour->_id){
-  $consult->_ref_sejour->loadExtDiagnostics();
-  $consult->_ref_sejour->loadRefDossierMedical();
-  $consult->_ref_sejour->loadNDA();
+if ($sejour && $sejour->_id){
+  $sejour->loadExtDiagnostics();
+  $sejour->loadRefDossierMedical();
+  $sejour->loadNDA();
   
   $consult->_ref_chir->isUrgentiste();
   if ($consult->_ref_chir->_is_urgentiste) {
     // Mise en session du rpu_id
-    $_SESSION["dPurgences"]["rpu_id"] = $consult->_ref_sejour->_ref_rpu->_id;
-    $consult->_ref_sejour->_ref_rpu->loadRefSejourMutation();
-    
-    // Chargement des boxes d'urgences
-    $listServicesUrgence = CService::loadServicesUrgence();
+    $_SESSION["dPurgences"]["rpu_id"] = $sejour->_ref_rpu->_id;
+    $sejour->_ref_rpu->loadRefSejourMutation();
+
+    // Urgences pour un séjour "urg"
+    if ($sejour->type == "urg") {
+      $services = CService::loadServicesUrgence();
+    }
+    // UHCD pour un séjour "comp" et en UHCD
+    if ($sejour->type == "comp" && $sejour->UHCD) {
+      $services = CService::loadServicesUHCD();
+    }
+
   }
 }
 
@@ -283,7 +291,7 @@ $smarty->assign("contrainteProvenance" , $contrainteProvenance );
 $smarty->assign("contrainteDestination", $contrainteDestination);
 $smarty->assign("contrainteOrientation", $contrainteOrientation);
 
-$smarty->assign("listServicesUrgence", $listServicesUrgence);
+$smarty->assign("services"        , $services);
 
 $smarty->assign("acte_ngap"      , $acte_ngap);
 $smarty->assign("acte_tarmed"    , $acte_tarmed);

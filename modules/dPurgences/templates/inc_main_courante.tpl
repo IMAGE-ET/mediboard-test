@@ -14,7 +14,19 @@
   Main.add(function() {
     Veille.refresh();
     Missing.refresh();
-    $$("a[href=#holder_main_courante] small")[0].update("({{$listSejours|@count}})");
+    
+    {{if $type == "MainCourante"}}
+      $$("a[href=#holder_main_courante] small")[0].update("({{$listSejours|@count}})");
+    {{else if $type == "UHCD"}}
+      var tab = $$("a[href=#holder_uhcd]")[0];
+      tab.down("small").update("({{$listSejours|@count}})");
+      {{if $listSejours|@count == '0'}}
+        tab.addClassName('empty');
+      {{else}}
+        tab.removeClassName('empty');
+      {{/if}}
+    {{/if}}
+    
 	  {{if $isImedsInstalled}}
       ImedsResultsWatcher.loadResults();
     {{/if}}
@@ -27,12 +39,20 @@
   }
 
   fillDiag = function(rpu_id) {
-    MainCourante.stop();
+    {{if $type == "MainCourante"}}
+      MainCourante.stop();
+    {{else if $type == "UHCD"}}
+      UHCD.stop();
+    {{/if}}
     var url = new Url("dPurgences", "ajax_edit_diag");
     url.addParam("rpu_id", rpu_id);
     url.requestModal(500, 200);
     url.modalObject.observe("afterClose", function(){
-      MainCourante.start();
+      {{if $type == "MainCourante"}}
+        MainCourante.start();
+      {{else if $type == "UHCD"}}
+        UHCD.start();
+      {{/if}}
     });
   }
 </script>
@@ -41,7 +61,11 @@
   <strong>Résultats filtrés</strong>.
   <br />
   Les résultats sont filtrés et le rafraîchissement est désactivé. 
-  <button class="change" onclick="MainCourante.start()">Relancer</button>
+  {{if $type == "MainCourante"}}
+    <button class="change" onclick="MainCourante.start()">Relancer</button>
+  {{else if $type == "UHCD"}}
+    <button class="change" onclick="UHCD.start()">Relancer</button>
+  {{/if}}
 </div>
 
 <table class="tbl">
@@ -52,9 +76,15 @@
     <th style="width: 16em;">
     	{{mb_colonne class=CRPU field="_patient_id" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}
 		</th>
+		
 		<th class="narrow">
-      <input type="text" size="6" onkeyup="MainCourante.filter(this, 'filter-indicator')" id="filter-patient-name" />
+  		{{if $type == "MainCourante"}}
+        <input type="text" size="6" onkeyup="MainCourante.filter(this, 'filter-indicator')" id="filter-patient-name-{{$type}}" />
+      {{else if $type == "UHCD"}}
+        <input type="text" size="6" onkeyup="UHCD.filter(this, 'filter-indicator')" id="filter-patient-name-{{$type}}" />
+      {{/if}}
 		</th>
+		
     <th style="width: 10em;">
 		  {{mb_colonne class=CRPU field="_entree"     order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}
 		</th>
@@ -75,245 +105,251 @@
   </tr>
 
   {{foreach from=$listSejours item=_sejour key=sejour_id}}
-  {{assign var=rpu value=$_sejour->_ref_rpu}}
-  {{assign var=rpu_id value=$rpu->_id}}
-  {{assign var=patient value=$_sejour->_ref_patient}}
-  {{assign var=consult value=$rpu->_ref_consult}}
-
-  {{assign var=background value=none}}
-  {{if $consult && $consult->_id}}{{assign var=background value="#ccf"}}{{/if}}
+    {{assign var=rpu value=$_sejour->_ref_rpu}}
+    {{assign var=rpu_id value=$rpu->_id}}
+    {{assign var=patient value=$_sejour->_ref_patient}}
+    {{assign var=consult value=$rpu->_ref_consult}}
   
-  {{* Param to create/edit a RPU *}}
-  {{mb_ternary var=rpu_link_param test=$rpu->_id value="rpu_id=$rpu_id" other="sejour_id=$sejour_id"}}
-  {{assign var=rpu_link value="?m=dPurgences&tab=vw_aed_rpu&$rpu_link_param"}}
+    {{assign var=background value=none}}
+    {{if $consult && $consult->_id}}{{assign var=background value="#ccf"}}{{/if}}
+    
+    {{* Param to create/edit a RPU *}}
+    {{mb_ternary var=rpu_link_param test=$rpu->_id value="rpu_id=$rpu_id" other="sejour_id=$sejour_id"}}
+    {{assign var=rpu_link value="?m=dPurgences&tab=vw_aed_rpu&$rpu_link_param"}}
+    
+    <tr class="
+  	 {{if !$_sejour->sortie_reelle && $_sejour->_veille}}veille{{/if}}
+     {{if !$rpu_id}}missing{{/if}}
+    ">
+    	{{if $_sejour->annule}}
+      <td class="cancelled">
+        {{tr}}Cancelled{{/tr}}
+      </td>
+  	  {{else}}
   
-  <tr class="
-	 {{if !$_sejour->sortie_reelle && $_sejour->_veille}}veille{{/if}}
-   {{if !$rpu_id}}missing{{/if}}
-  ">
-  	{{if $_sejour->annule}}
-    <td class="cancelled">
-      {{tr}}Cancelled{{/tr}}
-    </td>
-	  {{else}}
-
-    <td class="ccmu-{{$rpu->ccmu}} text" 
-      {{if $_sejour->sortie_reelle || ($rpu->mutation_sejour_id && $conf.dPurgences.create_sejour_hospit)}}
-        style="border-right: 5px solid black"
-      {{/if}}>
-      <a href="{{$rpu_link}}">
-        {{if $rpu->ccmu}}
-				  {{mb_value object=$rpu field=ccmu}}
-        {{/if}}
-      </a>
-      {{if $rpu->box_id}}
-
-      {{assign var=rpu_box_id value=$rpu->box_id}}
-      <strong>{{$boxes.$rpu_box_id->_view}}</strong>
-      {{/if}}
-    </td>
-    {{/if}}
-
-  	{{if $_sejour->annule}}
-  	<td colspan="2" class="text cancelled">
-	  {{else}}
-    <td colspan="2" class="text" style="background-color: {{$background}};">
-    {{/if}}
-      {{mb_include template=inc_rpu_patient}}
-    </td>
-
-  	{{if $_sejour->annule}}
-    <td class="cancelled" colspan="{{if $conf.dPurgences.responsable_rpu_view}}4{{else}}3{{/if}}">
-      {{tr}}Cancelled{{/tr}}
-    </td>
-		<td class="cancelled">
-		  {{if $rpu->_ref_consult->_id}}
-      {{include file="inc_pec_praticien.tpl"}}
-			{{/if}}
-    </td>
-
-	  {{else}}
-
-    <td class="text" style="background-color: {{$background}}; text-align: center;">
-			{{mb_include module=system template=inc_object_notes object=$_sejour mode=view float=right}}
-      
-			{{if $isImedsInstalled}}
-			  {{mb_include module=Imeds template=inc_sejour_labo sejour=$_sejour link="$rpu_link#Imeds"}}
-      {{/if}}
-
-      <a href="{{$rpu_link}}">
-      	<span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
-          {{mb_value object=$_sejour field=_entree date=$date}}
-         {{mb_include module=planningOp template=inc_vw_numdos nda=$_sejour->_NDA}}
-        </span>
-      </a>
-								
-      {{if $show_statut == 1}}
-        <div style="clear: both; font-weight: bold; padding-top: 3px;">
-          <form name="editRPU-{{$rpu->_id}}"
-            onsubmit="return onSubmitFormAjax(this, {onComplete: function() { MainCourante.start() }});" method="post" action="?">
-            <input type="hidden" name="m" value="dPurgences" />
-            <input type="hidden" name="dosql" value="do_rpu_aed" />
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="radio_fin" value="{{$rpu->radio_fin}}" />
-            <input type="hidden" name="bio_retour" value="{{$rpu->bio_retour}}" />
-            <input type="hidden" name="specia_arr" value="{{$rpu->specia_arr}}" />
-            {{mb_key object=$rpu}}
-        
-            {{if $rpu->radio_debut}}
-              {{if !$rpu->radio_fin}} 
-                <a onclick="fillRetour('{{$rpu->_id}}', 'radio_fin')" href="#1" style="display: inline;">
-              {{/if}}
-              <img src="modules/soins/images/radio{{if !$rpu->radio_fin}}_grey{{/if}}.png"
-                {{if !$rpu->radio_fin}}
-                  title="{{tr}}CRPU-radio_debut{{/tr}} à {{$rpu->radio_debut|date_format:$conf.time}}"
-                {{else}}
-                  title="{{tr}}CRPU-radio_fin{{/tr}} à {{$rpu->radio_fin|date_format:$conf.time}}"
-                {{/if}}/>
-              {{if !$rpu->radio_fin}}
-                </a>
-              {{/if}}
-            {{elseif !$rpu->radio_fin}}
-             <img src="images/icons/placeholder.png"/>
-            {{/if}}
-           
-            {{if $rpu->bio_depart}}
-              {{if !$rpu->bio_retour}}
-                <a onclick="fillRetour('{{$rpu->_id}}', 'bio_retour')" href="#1" style="display: inline;">
-              {{/if}}
-              <img src="images/icons/labo{{if !$rpu->bio_retour}}_grey{{/if}}.png"
-                {{if !$rpu->bio_retour}}
-                  title="{{tr}}CRPU-bio_depart{{/tr}} à {{$rpu->bio_depart|date_format:$conf.time}}"
-                {{else}}
-                  title="{{tr}}CRPU-bio_retour{{/tr}} à {{$rpu->bio_retour|date_format:$conf.time}}"
-                {{/if}}/>
-              {{if !$rpu->bio_retour}}
-                 </a>
-              {{/if}}
-            {{elseif !$rpu->bio_retour}}
-              <img src="images/icons/placeholder.png"/>
-            {{/if}}
-
-            {{if $rpu->specia_att}}
-              {{if !$rpu->specia_arr}}
-                <a onclick="fillRetour('{{$rpu->_id}}', 'specia_arr')" href="#1" style="display: inline;">
-              {{/if}}
-              <img src="modules/soins/images/stethoscope{{if !$rpu->specia_arr}}_grey{{/if}}.png"
-                {{if !$rpu->specia_arr}}
-                  title="{{tr}}CRPU-specia_att{{/tr}} à {{$rpu->specia_att|date_format:$conf.time}}"
-                {{else}}
-                  title="{{tr}}CRPU-specia_arr{{/tr}} à {{$rpu->specia_arr|date_format:$conf.time}}"
-                {{/if}}/>
-              {{if !$rpu->specia_arr}}
-                </a>
-              {{/if}}
-            {{elseif !$rpu->specia_arr}}
-              <img src="images/icons/placeholder.png"/>
-            {{/if}}
-
-            {{if $_sejour->_nb_files_docs > 0}}
-              <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}#doc-items" style="display: inline">
-                <img src="images/icons/docitem.png"
-                  title="{{$_sejour->_nb_files|default:0}} {{tr}}CMbObject-back-files{{/tr}} / {{$_sejour->_nb_docs|default:0}} {{tr}}CMbObject-back-documents{{/tr}}"/></a>
-            {{else}}
-              <img src="images/icons/placeholder.png"/>
-            {{/if}}
-
-            {{assign var=prescription value=$_sejour->_ref_prescription_sejour}}
-            {{if $prescription->_id}}
-              <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}#suivisoins" style="display: inline;">
-                {{if $prescription->_count_recent_modif_presc}}
-                  <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
-                {{else}}
-  	              <img src="images/icons/ampoule_grey.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
-  	            {{/if}}
-              </a>
-	    	    {{else}}
-              <img src="images/icons/placeholder.png"/>
-			      {{/if}}
-          </form>
-        </div>
-      {{/if}}
-    </td>
-    
-    {{if $conf.dPurgences.responsable_rpu_view}}
-    <td class="text" style="background-color: {{$background}};">
-      <a href="{{$rpu_link}}">
-        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
-      </a>
-    </td>
-    {{/if}}
-
-    {{if $rpu->_id}}
-      {{if $rpu->mutation_sejour_id}}
-			  {{mb_include template=inc_dossier_mutation colspan=1}}
-      {{else}} 
-  		  <td style="background-color: {{$background}}; text-align: center">
-  		    {{if $consult && $consult->_id}}
-    		    {{if !$_sejour->sortie_reelle && $show_statut}}
-              {{mb_include template=inc_icone_attente}}
-            {{/if}}
-  			    <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
-  			      Consult. {{$consult->heure|date_format:$conf.time}}
-  			      {{if $date != $consult->_ref_plageconsult->date}}
-  			      <br/>le {{$consult->_ref_plageconsult->date|date_format:$conf.date}}
-  			      {{/if}}
-  			    </a>
-  			    {{if !$_sejour->sortie_reelle}}
-  			      ({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})
-  			    {{elseif $_sejour->sortie_reelle}}
-              {{if $_sejour->mode_sortie != "normal"}}
-                ({{mb_value object=$_sejour field=mode_sortie}}
-              {{else}}
-                (sortie
-              {{/if}}
-              à {{$_sejour->sortie_reelle|date_format:$conf.time}})
-  			    {{/if}}
-  		    {{else}}
-  		      {{include file="inc_attente.tpl" sejour=$_sejour}}
-  	      {{/if}}
-  	    </td>
-      {{/if}} 
-    
-	    {{if $medicalView}}
-  	    <td class="text" style="background-color: {{$background}};">
-          {{if $admin_urgences}}
-            <button class="edit notext" style="float: right;" title="{{tr}}CRPU-modif_diag_infirmier{{/tr}}" onclick="fillDiag('{{$rpu->_id}}')"></button>
+      <td class="ccmu-{{$rpu->ccmu}} text" 
+        {{if $_sejour->sortie_reelle || ($rpu->mutation_sejour_id && $conf.dPurgences.create_sejour_hospit)}}
+          style="border-right: 5px solid black"
+        {{/if}}>
+        <a href="{{$rpu_link}}">
+          {{if $rpu->ccmu}}
+  				  {{mb_value object=$rpu field=ccmu}}
           {{/if}}
-				  {{if $rpu->date_at}} 
-					<img src="images/icons/accident_travail.png" />
-				  {{/if}}
-  				{{if $rpu->motif && $conf.dPurgences.diag_prat_view}}
-  				  <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
-  				  	<strong>{{mb_title class=$rpu field=motif}}</strong> : {{$rpu->motif|nl2br}}
-  				  </span>
-  	      {{else}}
-  				  <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
-              {{$rpu->diag_infirmier|nl2br}}
-            </span>
-  	      {{/if}}
-  	    </td>
-	    {{/if}}
-	
-	    <td class="button {{if $_sejour->type != "urg"}}arretee{{/if}}" style="background-color: {{$background}};">
-			  {{include file="inc_pec_praticien.tpl"}}
-	    </td>
-
-		{{else}}
-			<!-- Pas de RPU pour ce séjour d'urgence -->
-			<td colspan="{{$medicalView|ternary:3:2}}">
-			  <div class="small-warning">
-			  	{{tr}}CRPU.no_assoc{{/tr}}
-			  	<br />
-			  	{{tr}}CRPU.no_assoc_clic{{/tr}}
-			  	<a class="button action new" href="{{$rpu_link}}">{{tr}}CRPU-title-create{{/tr}}</a>
-			  </div>
-			</td>
-		{{/if}}
-    {{/if}}
-  </tr>
+        </a>
+        {{if $rpu->box_id}}
+          {{assign var=rpu_box_id value=$rpu->box_id}}
+          {{if array_key_exists($rpu_box_id, $boxes)}}
+            <strong>{{$boxes.$rpu_box_id->_view}}</strong>
+          {{/if}}
+        {{/if}}
+      </td>
+      {{/if}}
   
+    	{{if $_sejour->annule}}
+    	<td colspan="2" class="text cancelled">
+  	  {{else}}
+      <td colspan="2" class="text" style="background-color: {{$background}};">
+      {{/if}}
+        {{mb_include template=inc_rpu_patient}}
+      </td>
+  
+    	{{if $_sejour->annule}}
+      <td class="cancelled" colspan="{{if $conf.dPurgences.responsable_rpu_view}}4{{else}}3{{/if}}">
+        {{tr}}Cancelled{{/tr}}
+      </td>
+  		<td class="cancelled">
+  		  {{if $rpu->_ref_consult->_id}}
+          {{mb_include template="inc_pec_praticien"}}
+  			{{/if}}
+      </td>
+  
+  	  {{else}}
+  
+      <td class="text" style="background-color: {{$background}}; text-align: center;">
+  			{{mb_include module=system template=inc_object_notes object=$_sejour mode=view float=right}}
+        
+  			{{if $isImedsInstalled}}
+  			  {{mb_include module=Imeds template=inc_sejour_labo sejour=$_sejour link="$rpu_link#Imeds"}}
+        {{/if}}
+  
+        <a href="{{$rpu_link}}">
+        	<span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
+            {{mb_value object=$_sejour field=_entree date=$date}}
+           {{mb_include module=planningOp template=inc_vw_numdos nda=$_sejour->_NDA}}
+          </span>
+        </a>
+  								
+        {{if $show_statut == 1}}
+          <div style="clear: both; font-weight: bold; padding-top: 3px;">
+            {{if $type == "MainCourante"}}
+              <form name="editRPU-{{$rpu->_id}}"
+                onsubmit="return onSubmitFormAjax(this, {onComplete: function() { MainCourante.start() }});" method="post" action="?">              
+            {{else if $type == "UHCD"}}
+              <form name="editRPU-{{$rpu->_id}}"
+                onsubmit="return onSubmitFormAjax(this, {onComplete: function() { UHCD.start() }});" method="post" action="?">
+            {{/if}}
+      
+              <input type="hidden" name="m" value="dPurgences" />
+              <input type="hidden" name="dosql" value="do_rpu_aed" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="radio_fin" value="{{$rpu->radio_fin}}" />
+              <input type="hidden" name="bio_retour" value="{{$rpu->bio_retour}}" />
+              <input type="hidden" name="specia_arr" value="{{$rpu->specia_arr}}" />
+              {{mb_key object=$rpu}}
+          
+              {{if $rpu->radio_debut}}
+                {{if !$rpu->radio_fin}} 
+                  <a onclick="fillRetour('{{$rpu->_id}}', 'radio_fin')" href="#1" style="display: inline;">
+                {{/if}}
+                <img src="modules/soins/images/radio{{if !$rpu->radio_fin}}_grey{{/if}}.png"
+                  {{if !$rpu->radio_fin}}
+                    title="{{tr}}CRPU-radio_debut{{/tr}} à {{$rpu->radio_debut|date_format:$conf.time}}"
+                  {{else}}
+                    title="{{tr}}CRPU-radio_fin{{/tr}} à {{$rpu->radio_fin|date_format:$conf.time}}"
+                  {{/if}}/>
+                {{if !$rpu->radio_fin}}
+                  </a>
+                {{/if}}
+              {{elseif !$rpu->radio_fin}}
+               <img src="images/icons/placeholder.png"/>
+              {{/if}}
+             
+              {{if $rpu->bio_depart}}
+                {{if !$rpu->bio_retour}}
+                  <a onclick="fillRetour('{{$rpu->_id}}', 'bio_retour')" href="#1" style="display: inline;">
+                {{/if}}
+                <img src="images/icons/labo{{if !$rpu->bio_retour}}_grey{{/if}}.png"
+                  {{if !$rpu->bio_retour}}
+                    title="{{tr}}CRPU-bio_depart{{/tr}} à {{$rpu->bio_depart|date_format:$conf.time}}"
+                  {{else}}
+                    title="{{tr}}CRPU-bio_retour{{/tr}} à {{$rpu->bio_retour|date_format:$conf.time}}"
+                  {{/if}}/>
+                {{if !$rpu->bio_retour}}
+                   </a>
+                {{/if}}
+              {{elseif !$rpu->bio_retour}}
+                <img src="images/icons/placeholder.png"/>
+              {{/if}}
+  
+              {{if $rpu->specia_att}}
+                {{if !$rpu->specia_arr}}
+                  <a onclick="fillRetour('{{$rpu->_id}}', 'specia_arr')" href="#1" style="display: inline;">
+                {{/if}}
+                <img src="modules/soins/images/stethoscope{{if !$rpu->specia_arr}}_grey{{/if}}.png"
+                  {{if !$rpu->specia_arr}}
+                    title="{{tr}}CRPU-specia_att{{/tr}} à {{$rpu->specia_att|date_format:$conf.time}}"
+                  {{else}}
+                    title="{{tr}}CRPU-specia_arr{{/tr}} à {{$rpu->specia_arr|date_format:$conf.time}}"
+                  {{/if}}/>
+                {{if !$rpu->specia_arr}}
+                  </a>
+                {{/if}}
+              {{elseif !$rpu->specia_arr}}
+                <img src="images/icons/placeholder.png"/>
+              {{/if}}
+  
+              {{if $_sejour->_nb_files_docs > 0}}
+                <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}#doc-items" style="display: inline">
+                  <img src="images/icons/docitem.png"
+                    title="{{$_sejour->_nb_files|default:0}} {{tr}}CMbObject-back-files{{/tr}} / {{$_sejour->_nb_docs|default:0}} {{tr}}CMbObject-back-documents{{/tr}}"/></a>
+              {{else}}
+                <img src="images/icons/placeholder.png"/>
+              {{/if}}
+  
+              {{assign var=prescription value=$_sejour->_ref_prescription_sejour}}
+              {{if $prescription->_id}}
+                <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}#suivisoins" style="display: inline;">
+                  {{if $prescription->_count_recent_modif_presc}}
+                    <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
+                  {{else}}
+    	              <img src="images/icons/ampoule_grey.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
+    	            {{/if}}
+                </a>
+  	    	    {{else}}
+                <img src="images/icons/placeholder.png"/>
+  			      {{/if}}
+            </form>
+          </div>
+        {{/if}}
+      </td>
+      
+      {{if $conf.dPurgences.responsable_rpu_view}}
+      <td class="text" style="background-color: {{$background}};">
+        <a href="{{$rpu_link}}">
+          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
+        </a>
+      </td>
+      {{/if}}
+  
+      {{if $rpu->_id}}
+        {{if $rpu->mutation_sejour_id}}
+  			  {{mb_include template=inc_dossier_mutation colspan=1}}
+        {{else}} 
+    		  <td style="background-color: {{$background}}; text-align: center">
+    		    {{if $consult && $consult->_id}}
+      		    {{if !$_sejour->sortie_reelle && $show_statut}}
+                {{mb_include template=inc_icone_attente}}
+              {{/if}}
+    			    <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
+    			      Consult. {{$consult->heure|date_format:$conf.time}}
+    			      {{if $date != $consult->_ref_plageconsult->date}}
+    			      <br/>le {{$consult->_ref_plageconsult->date|date_format:$conf.date}}
+    			      {{/if}}
+    			    </a>
+    			    {{if !$_sejour->sortie_reelle}}
+    			      ({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})
+    			    {{elseif $_sejour->sortie_reelle}}
+                {{if $_sejour->mode_sortie != "normal"}}
+                  ({{mb_value object=$_sejour field=mode_sortie}}
+                {{else}}
+                  (sortie
+                {{/if}}
+                à {{$_sejour->sortie_reelle|date_format:$conf.time}})
+    			    {{/if}}
+    		    {{else}}
+    		      {{mb_include template="inc_attente" sejour=$_sejour}}
+    	      {{/if}}
+    	    </td>
+        {{/if}} 
+      
+  	    {{if $medicalView}}
+    	    <td class="text" style="background-color: {{$background}};">
+            {{if $admin_urgences}}
+              <button class="edit notext" style="float: right;" title="{{tr}}CRPU-modif_diag_infirmier{{/tr}}" onclick="fillDiag('{{$rpu->_id}}')"></button>
+            {{/if}}
+  				  {{if $rpu->date_at}} 
+  					<img src="images/icons/accident_travail.png" />
+  				  {{/if}}
+    				{{if $rpu->motif && $conf.dPurgences.diag_prat_view}}
+    				  <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
+    				  	<strong>{{mb_title class=$rpu field=motif}}</strong> : {{$rpu->motif|nl2br}}
+    				  </span>
+    	      {{else}}
+    				  <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
+                {{$rpu->diag_infirmier|nl2br}}
+              </span>
+    	      {{/if}}
+    	    </td>
+  	    {{/if}}
+  	
+  	    <td class="button {{if $_sejour->type != "urg"}}arretee{{/if}}" style="background-color: {{$background}};">
+  			  {{mb_include template="inc_pec_praticien"}}
+  	    </td>
+  
+  		{{else}}
+  			<!-- Pas de RPU pour ce séjour d'urgence -->
+  			<td colspan="{{$medicalView|ternary:3:2}}">
+  			  <div class="small-warning">
+  			  	{{tr}}CRPU.no_assoc{{/tr}}
+  			  	<br />
+  			  	{{tr}}CRPU.no_assoc_clic{{/tr}}
+  			  	<a class="button action new" href="{{$rpu_link}}">{{tr}}CRPU-title-create{{/tr}}</a>
+  			  </div>
+  			</td>
+  		{{/if}}
+      {{/if}}
+    </tr>
   {{foreachelse}}
-  <tr><td colspan="10" class="empty">{{tr}}CSejour.none_main_courante{{/tr}}</td></tr>
+    <tr><td colspan="10" class="empty">{{tr}}CSejour.none_main_courante{{/tr}}</td></tr>
   {{/foreach}}
 </table>

@@ -68,10 +68,12 @@ class CRPU extends CMbObject {
   var $_DP             = null;
   var $_ref_actes_ccam = null;
   var $_service_id     = null;
+  var $_UHCD           = null;
   var $_etablissement_sortie_id = null;
   var $_etablissement_entree_id = null;
   var $_service_entree_id       = null;
   var $_service_sortie_id       = null;
+  
   
   // Object References
   var $_ref_sejour = null;
@@ -130,6 +132,7 @@ class CRPU extends CMbObject {
       "_patient_id"      => "ref notNull class|CPatient",
       "_responsable_id"  => "ref notNull class|CMediusers",
       "_service_id"      => "ref".(CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1 ? ' notNull' : '')." class|CService seekable",
+      "_UHCD"            => "bool",
       "_entree"          => "dateTime",
       "_etablissement_sortie_id"        => "ref class|CEtabExterne autocomplete|nom",
       "_etablissement_entree_id" => "ref class|CEtabExterne autocomplete|nom", 
@@ -167,12 +170,14 @@ class CRPU extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     
+    // @todo: A supprimer du updateFormFields
     $sejour = $this->loadRefSejour();
 
     $this->_responsable_id = $sejour->praticien_id;
     $this->_entree         = $sejour->_entree;
     $this->_DP             = $sejour->DP;
     $this->_annule         = $sejour->annule;
+    $this->_UHCD           = $sejour->UHCD;
     
     $patient =& $sejour->_ref_patient;
     
@@ -200,15 +205,15 @@ class CRPU extends CMbObject {
       $this->_mode_sortie = 9;
     }
     
-    $this->_mode_entree = $sejour->mode_entree;
-    $this->_sortie = $sejour->sortie_reelle;
-    $this->_provenance = $sejour->provenance;
-    $this->_transport = $sejour->transport;
-    $this->_destination = $sejour->destination;
+    $this->_mode_entree             = $sejour->mode_entree;
+    $this->_sortie                  = $sejour->sortie_reelle;
+    $this->_provenance              = $sejour->provenance;
+    $this->_transport               = $sejour->transport;
+    $this->_destination             = $sejour->destination;
     $this->_etablissement_sortie_id = $sejour->etablissement_sortie_id;
     $this->_etablissement_entree_id = $sejour->etablissement_entree_id;
-    $this->_service_entree_id = $sejour->service_entree_id;
-    $this->_service_sortie_id = $sejour->service_sortie_id;
+    $this->_service_entree_id       = $sejour->service_entree_id;
+    $this->_service_sortie_id       = $sejour->service_sortie_id;
     
     // @todo: A supprimer du updateFormFields
     $this->loadRefConsult();
@@ -324,6 +329,7 @@ class CRPU extends CMbObject {
     $sejour->provenance  = $this->_provenance;
     $sejour->destination = $this->_destination;
     $sejour->transport   = $this->_transport;
+    $sejour->UHCD        = $this->_UHCD;
     // Le patient est souvent chargé à vide ce qui pose problème
     // dans le onAfterStore(). Ne pas supprimer.
     $sejour->_ref_patient = null;

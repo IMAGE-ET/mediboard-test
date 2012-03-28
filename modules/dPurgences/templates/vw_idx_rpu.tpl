@@ -8,9 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module=urgences script=main_courante}}
+{{mb_script module=urgences   script=main_courante}}
+{{mb_script module=urgences   script=uhcd}}
 {{mb_script module=admissions script=identito_vigilance}}
-{{mb_script module=patients script=pat_selector}}
+{{mb_script module=patients   script=pat_selector}}
 
 {{if $isImedsInstalled}}
   {{mb_script module="dPImeds" script="Imeds_results_watcher"}}
@@ -43,13 +44,23 @@ onMergeComplete = function() {
 
 Main.add(function () {
   // Delays prevent potential overload with periodical previous updates
+  
+  // Main courante
   MainCourante.start(0, 60);
+  
+  // UHCD
+  UHCD.date = "{{$date}}"; 
+  UHCD.start(1, 80);
+  
+  // Reconvocations
 	{{if $conf.dPurgences.gerer_reconvoc == "1"}}
-  Consultations.start.delay(1, 80);
+    Consultations.start.delay(2, 100);
 	{{/if}}
+	
+	// Identito-vigilance
   IdentitoVigilance.date = "{{$date}}";	
-  IdentitoVigilance.start(2,100);
-
+  IdentitoVigilance.start(3, 120);
+  
   var tabs = Control.Tabs.create('tab_main_courante', false);
 });
 
@@ -70,6 +81,7 @@ Main.add(function () {
     </form>
   </li>
   <li><a href="#holder_main_courante">Main courante <small>(&ndash;)</small></a></li>
+  <li><a href="#holder_uhcd" class="empty">UHCD <small>(&ndash;)</small></a></li>
 	{{if $conf.dPurgences.gerer_reconvoc == "1"}}
   <li><a href="#consultations" class="empty">Reconvocations <small>(&ndash; / &ndash;)</small></a></li>
 	{{/if}}
@@ -89,6 +101,7 @@ Main.add(function () {
     </form>
   </li>
 </ul>
+
 <hr class="control_tabs" />
 
 <div id="holder_main_courante">
@@ -123,11 +136,36 @@ Main.add(function () {
   
 	<div id="main_courante"></div>
 </div>
+
+<div id="holder_uhcd" style="display: none;">
+  <table style="width: 100%;" style="display: none;">
+    <tr>
+      <td style="text-align: right">
+       Affichage
+       <form name="UHCD-view" action="" method="post">
+          <select name="uhcd_affichage" onChange="UHCD.refreshUHCD()">
+            <option value="tous"              {{if $uhcd_affichage == "tous"             }} selected = "selected" {{/if}}>Tous</option>
+            <option value="presents"          {{if $uhcd_affichage == "presents"         }} selected = "selected" {{/if}}>Présents</option>
+            <option value="prendre_en_charge" {{if $uhcd_affichage == "prendre_en_charge"}} selected = "selected" {{/if}}>A PeC</option>
+            <option value="annule"            {{if $uhcd_affichage == "annule"            }} selected = "selected" {{/if}}>Annulé</option>
+          </select>
+        </form>
+        <a href="#" onclick="MainCourante.legend()" class="button search">Légende</a>
+      </td>
+    </tr>
+  </table>
+  
+  <div id="uhcd">
+    <div class="small-info">{{tr}}msg-common-loading-soon{{/tr}}</div>
+  </div>
+</div>
+
 {{if $conf.dPurgences.gerer_reconvoc == "1"}}
 <div id="consultations" style="display: none;">
   <div class="small-info">{{tr}}msg-common-loading-soon{{/tr}}</div>
 </div>
 {{/if}}
+
 <div id="identito_vigilance" style="display: none; margin: 0 5px;">
   <div class="small-info">{{tr}}msg-common-loading-soon{{/tr}}</div>
 </div>

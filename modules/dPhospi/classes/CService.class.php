@@ -150,10 +150,28 @@ class CService extends CMbObject {
    * @return array|CService
    */
   static function loadServicesUrgence() {
-    global $g;
     $service = new CService();
-    $service->group_id = $g;
+    $service->group_id = CGroups::loadCurrent()->_id;
     $service->urgence = "1";
+    $services = $service->loadMatchingList();
+    foreach ($services as $_service) {
+      $_service->loadRefsBack();
+      foreach ($_service->_ref_chambres as $_chambre) {
+        $_chambre->loadRefsBack();
+      }
+    }
+    
+    return $services;
+  }
+  
+  /**
+   * Charge les services d'UHCD de l'établissement courant
+   * @return array|CService
+   */
+  static function loadServicesUHCD() {
+    $service = new CService();
+    $service->group_id = CGroups::loadCurrent()->_id;
+    $service->uhcd     = "1";
     $services = $service->loadMatchingList();
     foreach ($services as $_service) {
       $_service->loadRefsBack();

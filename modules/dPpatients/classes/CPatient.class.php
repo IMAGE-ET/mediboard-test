@@ -451,6 +451,9 @@ class CPatient extends CMbObject {
   }
   
   function store() {
+    //$this->INSC      = "1075102722581011056235";
+    //$this->INSC_date = " 2012-03-12 16:59:21";
+    
     // Standard store
     if ($msg = parent::store()) {
       return $msg;

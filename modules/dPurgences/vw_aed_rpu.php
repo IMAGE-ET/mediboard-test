@@ -74,9 +74,15 @@ $contrainteProvenance[6] = array("", 1, 2, 3, 4);
 $contrainteProvenance[7] = array("", 1, 2, 3, 4);
 $contrainteProvenance[8] = array("", 5, 8);
 
-// Chargement des boxes d'urgences
-$listServicesUrgence = CService::loadServicesUrgence();
+// Chargement des boxes 
+$services = array();
+// Urgences pour un séjour "urg"
+$services = CService::loadServicesUrgence();
 
+// UHCD pour un séjour "comp" et en UHCD
+if ($sejour->type == "comp" && $sejour->UHCD) {
+  $services = CService::loadServicesUHCD();
+}
 
 $module_orumip = CModule::getActive("orumip");
 $orumip_active = $module_orumip && $module_orumip->mod_active;
@@ -94,10 +100,10 @@ if (CModule::getActive("printing")) {
 $smarty = new CSmartyDP();
 $smarty->assign("group"               , $group);
 if (CModule::getActive("dPprescription")){
-  $smarty->assign("line"                , new CPrescriptionLineMedicament());
+  $smarty->assign("line"              , new CPrescriptionLineMedicament());
 }
 
-$smarty->assign("listServicesUrgence" , $listServicesUrgence);
+$smarty->assign("services"            , $services);
 $smarty->assign("contrainteProvenance", $contrainteProvenance);
 $smarty->assign("userSel"             , $user);
 $smarty->assign("today"               , mbDate());

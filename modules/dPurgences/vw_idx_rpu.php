@@ -16,8 +16,11 @@ CAppUI::requireModuleFile("dPurgences", "redirect_barcode");
 $order_way = CValue::getOrSession("order_way", "ASC");
 $order_col = CValue::getOrSession("order_col", "_pec_transport");
 
-// Type d'affichage
+// Type d'affichage main courante
 $selAffichage = CValue::postOrSession("selAffichage", CAppUI::conf("dPurgences default_view"));
+
+// Type d'affichage UHCD
+$uhcd_affichage = CValue::postOrSession("uhcd_affichage");
 
 // Selection de la date
 $date = CValue::getOrSession("date", mbDate());
@@ -27,6 +30,7 @@ $today = mbDate();
 $smarty = new CSmartyDP();
 $smarty->assign("group"           , CGroups::loadCurrent());
 $smarty->assign("selAffichage"    , $selAffichage);
+$smarty->assign("uhcd_affichage"  , $uhcd_affichage);
 $smarty->assign("date"            , $date);
 $smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 

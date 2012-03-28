@@ -7,7 +7,7 @@
 
 {{assign var="rpu" value=""}}
 {{assign var="mutation_id" value=""}}
-{{if $consult->sejour_id && ($consult->_ref_sejour->type == "urg") && $consult->_ref_chir->_is_urgentiste}}
+{{if $consult->sejour_id && $consult->_ref_sejour->_ref_rpu}}
   {{assign var="rpu" value=$consult->_ref_sejour->_ref_rpu}}
   {{assign var="mutation_id" value=$rpu->mutation_sejour_id}}
 {{/if}}

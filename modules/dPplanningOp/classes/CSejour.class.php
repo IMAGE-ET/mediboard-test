@@ -1363,7 +1363,8 @@ class CSejour extends CCodable implements IPatientRelated {
     $this->_ref_consultations = $this->loadBackRefs("consultations");
     
     $this->_ref_consult_atu = new CConsultation;
-    if ($this->type == "urg") {
+    
+    if ($this->countBackRefs("rpu") > 0) {
       foreach ($this->_ref_consultations as $_consult) {
         $_consult->loadRefPraticien();      
         $praticien = $_consult->_ref_praticien;

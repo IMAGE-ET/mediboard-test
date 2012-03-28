@@ -8,7 +8,7 @@
   
 <select name="box_id" {{if $ajaxSubmit}}onchange="this.form.onsubmit();"{{/if}}>
   <option value="">&mdash; Choisir un box</option>
- {{foreach from=$listServicesUrgence item=_service}}
+ {{foreach from=$services item=_service}}
  <optgroup label="{{$_service->_view}}">
    {{foreach from=$_service->_ref_chambres item=_chambre}}
     {{foreach from=$_chambre->_ref_lits item=_lit}}

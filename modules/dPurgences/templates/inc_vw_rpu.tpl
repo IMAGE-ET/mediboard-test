@@ -199,7 +199,7 @@ function showEtabEntreeTransfert(mode) {
             <tr>
               <th>{{mb_label object=$rpu field="box_id"}}</th>
               <td>
-                {{include file="../../dPhospi/templates/inc_select_lit.tpl" field=box_id selected_id=$rpu->box_id ajaxSubmit=true listService=$listServicesUrgence}}
+                {{mb_include module=dPhospi template=inc_select_lit" field=box_id selected_id=$rpu->box_id ajaxSubmit=true listService=$services}}
               </td>
             </tr>
   
@@ -312,6 +312,10 @@ function showEtabEntreeTransfert(mode) {
               </form>
             {{/if}}
           {{/if}}
+          
+          <div id="uhcd_button" style="display: inline-block">
+            {{mb_include module=dPurgences template=inc_uhcd}}
+          </div>          
         {{/if}}
         <!--  Autoriser sortie du patient --> <!--  Autoriser sortie du patient et valider la sortie -->
         <form name="editSortieAutorise" method="post" action="?m={{$m}}">

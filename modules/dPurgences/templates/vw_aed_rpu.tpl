@@ -371,20 +371,16 @@
     <tr>
       <th>{{mb_label object=$rpu field="box_id"}}</th>
       <td style="vertical-align: middle;">
-        {{include file="../../dPhospi/templates/inc_select_lit.tpl"
-            field=box_id 
-            selected_id=$rpu->box_id 
-            ajaxSubmit=0 
-            listService=$listServicesUrgence}}
+        {{mb_include module=dPhospi template="inc_select_lit" field=box_id selected_id=$rpu->box_id ajaxSubmit=0 listService=$services}}
         <button type="button" class="cancel opacity-60 notext" onclick="this.form.elements['box_id'].selectedIndex=0"></button>
         &mdash; {{tr}}CRPU-_service_id{{/tr}} :
-        {{if $listServicesUrgence|@count == 1}}
-          {{assign var=first_service value=$listServicesUrgence|@reset}}
+        {{if $services|@count == 1}}
+          {{assign var=first_service value=$services|@reset}}
           {{$first_service->_view}}
         {{else}}
         <select name="_service_id" class="{{$sejour->_props.service_id}}">
           <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-          {{foreach from=$listServicesUrgence item=_service}}
+          {{foreach from=$services item=_service}}
           <option value="{{$_service->_id}}" {{if "Urgences" == $_service->nom}} selected="selected" {{/if}}>
             {{$_service->_view}}
           </option>
