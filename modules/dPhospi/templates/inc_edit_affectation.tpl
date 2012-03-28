@@ -1,16 +1,4 @@
-<script>
-  bloquerLits = function(oForm){
-    for(var i=0; i<100;i++){
-      if($("editAffect_chambre"+i) && $("editAffect_chambre"+i).value){
-        oForm.lit_id.value = $("editAffect_chambre"+i).value;
-        onSubmitFormAjax(oForm);
-      }
-    }
-    Control.Modal.close();
-  }
-</script>
-
-<form name="editAffect" method="post" action="?" onsubmit="bloquerLits(this);">
+<form name="editAffect" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {onComplete: Control.Modal.close});">
   <input type="hidden" name="m" value="dPhospi" />
   <input type="hidden" name="dosql" value="do_affectation_aed" />
   <input type="hidden" name="del" value="0" />
@@ -20,26 +8,9 @@
   <table class="form">
     {{if !$affectation->_id}}
       <tr>
-        <th class="category" colspan="4" >Service {{$service->nom}}</th>
+        <th><input type="checkbox" name="_lock_all_lits" value="1"/></th>
+        <td colspan="3" >Bloquer tous les lits du service {{$lit->_ref_chambre->_ref_service->nom}}</td>
       </tr>
-      {{assign var="key" value="0"}}
-      {{foreach from=$service->_ref_chambres item=chambre}}
-        {{foreach from=$chambre->_ref_lits item=lit}}
-          {{if $key%4==0}}
-           <tr>
-          {{/if}}
-             <td>
-          <input type="checkbox" name="chambre{{$key}}" value="{{if $affectation->lit_id == $lit->_id}}{{$lit->_id}}{{/if}}" {{if $affectation->lit_id == $lit->_id}}checked="checked"{{/if}} onclick="if(this.value){this.value='';}else{this.value='{{$lit->_id}}'};" />
-          <label>{{$chambre->nom}} - {{$lit->_view}}</label></td>
-          {{if $key%4==3}}
-           </tr>
-          {{/if}}
-          {{assign var="key" value=$key+1}}
-        {{/foreach}}
-      {{/foreach}}
-      {{if $key%4!=3}}
-       </tr>
-      {{/if}}
     {{/if}}
     <tr>
       <th>

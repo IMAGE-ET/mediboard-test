@@ -34,16 +34,10 @@ if (CModule::getActive("maternite")) {
   }
 }
 
-$service = null;
 if (!$affectation->_id) {
   $affectation->lit_id = $lit_id;
   $lit = $lit->load($lit_id);
 	$lit->loadRefChambre()->loadRefService();
-	$service = $lit->_ref_chambre->_ref_service;
-	$service->loadRefsChambres();
-	foreach($service->_ref_chambres as $chambre){
-	  $chambre->loadRefsLits();
-	}
 }
 
 $smarty = new CSmartyDP;
@@ -53,7 +47,6 @@ $smarty->assign("affectations", $affectations);
 $smarty->assign("lit"         , $lit);
 $smarty->assign("lit_id"      , $lit_id);
 $smarty->assign("sejour_parturiente", $sejour_parturiente);
-$smarty->assign("service"     , $service);
 
 $smarty->display("inc_edit_affectation.tpl");
 ?>
