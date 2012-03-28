@@ -154,8 +154,8 @@
     </td>
   </tr>
   {{/if}}
-  <tr id="export_{{$curr_op->_class}}_{{$curr_op->_id}}">
-    <td>
+  <tr>
+    <td colspan="4">
       {{mb_include template="inc_export_actes_pmsi" object=$curr_op}}
     </td>
   </tr>

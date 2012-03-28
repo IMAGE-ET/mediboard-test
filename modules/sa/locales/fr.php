@@ -15,6 +15,7 @@ $locales['config-sa-trigger_sejour'] = 'Trigger sur le séjour';
 $locales['config-sa-trigger_sejour-desc'] = 'Trigger sur le séjour';
 $locales['config-sa-trigger_sejour-facture'] = 'Facturé';
 $locales['config-sa-trigger_sejour-sortie_reelle'] = 'Sortie réelle';
+$locales['config-sa-trigger_sejour-testCloture'] = 'Actes clôturés';
 $locales['config-traitement-sa'] = 'Traitement du mode SA';
 $locales['mod-sa-tab-configure'] = 'Configuration';
 $locales['module-sa-court'] = 'SA';

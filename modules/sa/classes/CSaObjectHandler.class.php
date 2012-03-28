@@ -22,33 +22,57 @@ class CSaObjectHandler extends CEAIObjectHandler {
     
     switch ($mbObject->_class) {
       // CSejour 
-      // Envoi des actes / diags soit quand le séjour est facturé, soit quand le sejour a une sortie réelle
+      // Envoi des actes / diags soit quand le séjour est facturé, soit quand le sejour a une sortie réelle, soit quand on a la clôture sur le sejour
       case 'CSejour': 
-        if ($mbObject->fieldModified('facture', 1)) {
-          $this->sendFormatAction("onAfterStore", $mbObject);
+        $sejour = $mbObject;
+        
+        switch (CAppUI::conf("sa trigger_sejour")) {
+          case 'sortie_reelle':
+            if ($sejour->fieldModified('sortie_reelle')) {
+              $this->sendFormatAction("onAfterStore", $sejour);
+            }
+            break;
+            
+          case 'testCloture':
+            if ($sejour->testCloture()) {
+              $this->sendFormatAction("onAfterStore", $sejour);
+            }
+            break;
+            
+          default:
+            if ($sejour->fieldModified('facture', 1)) {
+              $this->sendFormatAction("onAfterStore", $sejour);
+            }
+            break;
         }
-        
-        /*if ($mbObject->fieldModified('sortie_reelle')) {
-          $this->sendFormatAction("onAfterStore", $mbObject);
-        }*/
-        
         break;
       
       // COperation
       // Envoi des actes soit quand l'interv est facturée, soit quand on a la clôture sur l'interv
       case 'COperation':
-        if ($mbObject->fieldModified('facture', 1)) {
-          $this->sendFormatAction("onAfterStore", $mbObject);
-        }
+        $operation = $mbObject;
         
-        // if $mbObject->testCloture()
+        switch (CAppUI::conf("sa trigger_operation")) {
+          case 'testCloture':
+            if ($operation->testCloture()) {
+              $this->sendFormatAction("onAfterStore", $operation);
+            }
+            break;
+          
+          default:
+            if ($operation->fieldModified('facture', 1)) {
+              $this->sendFormatAction("onAfterStore", $operation);
+            }
+            break;
+        }
         break;
       
       // CConsultation
       // Envoi des actes dans le cas de la clôture de la cotation
       case 'CConsultation':
-        if ($mbObject->sejour_id && $mbObject->fieldModified("valide", 1)) {
-          $this->sendFormatAction("onAfterStore", $mbObject);
+        $consultation = $sejour;
+        if ($consultation->sejour_id && $consultation->fieldModified("valide", 1)) {
+          $this->sendFormatAction("onAfterStore", $consultation);
         }
         break;
         

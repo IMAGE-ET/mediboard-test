@@ -25,7 +25,7 @@
         
     {{mb_include module=system template=inc_config_bool var=server}}
     
-    {{mb_include module=system template=inc_config_enum var=trigger_sejour    values=facture|sortie_reelle}}
+    {{mb_include module=system template=inc_config_enum var=trigger_sejour    values=facture|sortie_reelle|testCloture}}
     {{mb_include module=system template=inc_config_enum var=trigger_operation values=facture|testCloture}}
     
     <tr>

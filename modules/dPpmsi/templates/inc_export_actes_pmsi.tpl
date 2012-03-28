@@ -3,7 +3,7 @@
 {{mb_script module=pmsi script=PMSI ajax=true}}
 {{mb_default var=confirmCloture value=0}}
 
-<div>
+<div id="export_{{$object->_class}}_{{$object->_id}}">
   {{if $object->facture}}
     {{if $m == "dPpmsi" || $can->admin}}
     <button class="cancel " onclick="PMSI.deverouilleDossier('{{$object->_id}}', '{{$object->_class}}', '{{$confirmCloture}}', '{{$m}}')">
@@ -23,15 +23,16 @@
       {{/if}}
     </button>
   {{/if}}
-</div>
-<div class="text">
-  {{if $object->_nb_exchanges}}
-    <div class="small-success">
-      Export déjà effectué {{$object->_nb_exchanges}} fois
-    </div>
-  {{else}}
-    <div class="small-info">
-      Pas d'export effectué
-    </div>
-  {{/if}}
+  
+  <div class="text">
+    {{if $object->_nb_exchanges}}
+      <div class="small-success">
+        Export déjà effectué {{$object->_nb_exchanges}} fois
+      </div>
+    {{else}}
+      <div class="small-info">
+        Pas d'export effectué
+      </div>
+    {{/if}}
+  </div>
 </div>

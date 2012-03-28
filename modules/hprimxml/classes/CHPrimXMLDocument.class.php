@@ -146,7 +146,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $echg_hprim->_message        = utf8_encode($this->saveXML());
     $echg_hprim->initiateur_id   = $initiateur;
     $echg_hprim->setObjectClassIdPermanent($mbObject);
-    mbTrace($echg_hprim->store());
+    $echg_hprim->store();
     
     // Chargement des configs du destinataire
     $this->_ref_receiver->loadConfigValues();

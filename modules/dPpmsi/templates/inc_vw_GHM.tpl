@@ -55,7 +55,7 @@
 <tr><td><hr /></td></tr>
   
 {{if $sejour->_ref_GHM->_CM || $sejour->_ref_actes_ccam}}
-<tr id="export_{{$sejour->_class}}_{{$sejour->_id}}">
+<tr>
   <td>
     {{mb_include template="inc_export_actes_pmsi" object=$sejour}}
   </td>
