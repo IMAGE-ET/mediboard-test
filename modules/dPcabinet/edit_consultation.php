@@ -203,7 +203,7 @@ if ($consult->sejour_id) {
 }
 
 // Chargement du sejour
-if ($sejour && $sejour->_id){
+if ($consult->_ref_sejour && $sejour->_id){
   $sejour->loadExtDiagnostics();
   $sejour->loadRefDossierMedical();
   $sejour->loadNDA();
