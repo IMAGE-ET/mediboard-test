@@ -33,16 +33,18 @@
   </tr>
   <tr>
     <th style="width: 50%"></th>
-    <td>
+    <td class="text">
       {{assign var=antecedents value=$conf.dPpatients.CAntecedent.types}}
       {{if preg_match("/deficience/", $antecedents)}}
-        <div class="big-info">
-          Le type d'antécédent Déficience est bien coché dans la configuration du module Dossier Patient.
+        <div class="small-success">
+          Le type d'antécédent <strong>Déficience</strong> est bien coché dans le volet Antécédents de
+          <a href="?m=patients&tab=configure">l'onglet Configurer dumodule Dossier Patient</a>
         </div>
       {{else}}
-        <div class="big-warning">
-          Pour afficher cette icône, le type d'antécédent Déficience doit être coché dans le volet Antécédents de l'onglet Configurer du
-          <a href="?m=dPpatients&tab=configure">module Dossier Patient</a>
+        <div class="small-warning">
+          Pour afficher cette icône, le type d'antécédent <strong>Déficience</strong> 
+          doit être coché dans le volet Antécédents de
+          <a href="?m=patients&tab=configure">l'onglet Configurer dumodule Dossier Patient</a>
         </div>
       {{/if}}
     </td>
