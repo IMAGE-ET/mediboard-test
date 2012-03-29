@@ -67,7 +67,11 @@ class CHL7v2TableEntry extends CHL7v2TableObject {
   }
   
   static function mapFrom($table, $hl7Value) {
-    return CHL7v2::getTableMbValue($table, $hl7Value);
+    if ($value = CHL7v2::getTableMbValue($table, $hl7Value)) {
+      return $value;
+    }
+    
+    return null;
   }
 }
 ?>

@@ -125,8 +125,9 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_en_mutation   = null;
   var $_unique_lit_id = null;
   var $_no_synchro    = null;
+  var $_generate_NDA  = true;
   
-  // HPRIM Fields
+  // EAI Fields
   var $_eai_initiateur_group_id  = null; // group initiateur du message EAI
     
   // Object References
@@ -708,8 +709,10 @@ class CSejour extends CCodable implements IPatientRelated {
     }
     
     // Génération du NDA ? 
-    if ($msg = $this->generateNDA()) {
-      return $msg;
+    if ($this->_generate_NDA) {
+      if ($msg = $this->generateNDA()) {
+        return $msg;
+      }
     }
   }
   

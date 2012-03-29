@@ -49,9 +49,6 @@ class CHL7v2EventADTA07 extends CHL7v2EventADT implements CHL7EventADTA06 {
     // Patient Visit
     $this->addPV1($sejour);
     
-    // Patient Visit - Additionale Info
-    $this->addPV2($sejour);
-    
     // Build specific segments (i18n)
     $this->buildI18nSegments($sejour);
   }

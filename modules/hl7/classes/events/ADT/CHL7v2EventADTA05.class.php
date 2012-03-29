@@ -24,7 +24,7 @@ class CHL7v2EventADTA05 extends CHL7v2EventADT implements CHL7EventADTA05 {
   }
   
   function getEVNPlannedDateTime($sejour) {
-    return mbDateTime();
+    return null;
   }
 
   /**

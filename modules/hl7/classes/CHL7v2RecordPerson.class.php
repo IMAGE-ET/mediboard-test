@@ -33,8 +33,10 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $_modif_patient = false;
 
     $exchange_ihe = $this->_ref_exchange_ihe;
-    $exchange_ihe->_ref_sender->loadConfigValues();
     $sender       = $exchange_ihe->_ref_sender;
+    $sender->loadConfigValues();
+   
+    $this->_ref_sender = $sender;
 
     // Acquittement d'erreur : identifiants RI et PI non fournis
     if (!$data['personIdentifiers']) {
@@ -69,6 +71,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
           
           // Notifier les autres destinataires autre que le sender
           $newPatient->_eai_initiateur_group_id = $sender->group_id;
+          $newPatient->_generate_IPP = false;
           if ($msgPatient = $newPatient->store()) {
             return $exchange_ihe->setAckAR($ack, "E101", $msgPatient, $newPatient);
           }
@@ -106,6 +109,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
 
         // Notifier les autres destinataires autre que le sender
         $newPatient->_eai_initiateur_group_id = $sender->group_id;
+        $newPatient->_generate_IPP = false;
         if ($msgPatient = $newPatient->store()) {
           return $exchange_ihe->setAckAR($ack, "E101", $msgPatient, $newPatient);
         }

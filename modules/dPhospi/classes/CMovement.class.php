@@ -36,7 +36,7 @@ class CMovement extends CMbObject {
   function getProps() {
     $props = parent::getProps();
     $props["sejour_id"]             = "ref notNull class|CSejour seekable";
-    $props["affectation_id"]        = "ref class|CAffectation seekable";
+    $props["affectation_id"]        = "ref class|CAffectation seekable cascade";
     $props["movement_type"]         = "enum notNull list|PADM|ADMI|MUTA|SATT|SORT";
     $props["original_trigger_code"] = "str length|3";
     $props["last_update"]           = "dateTime notNull";

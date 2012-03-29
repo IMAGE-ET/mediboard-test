@@ -63,10 +63,13 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $event_temp = $ack->event;
 
     $exchange_ihe = $this->_ref_exchange_ihe;
-    $sender       = $this->_ref_sender;
+    $sender       = $exchange_ihe->_ref_sender;
+    $sender->loadConfigValues();
+   
+    $this->_ref_sender = $sender;
 
     // Acquittement d'erreur : identifiants RI et NA non fournis
-    if (!$data['admitIdentifiers']) {
+    if (!$data['admitIdentifiers'] && !$this->getVenueAN($sender, $data)) {
       return $exchange_ihe->setAckAR($ack, "E200", null, $newPatient);
     }
 
@@ -174,6 +177,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           
           // Notifier les autres destinataires autre que le sender
           $newVenue->_eai_initiateur_group_id = $sender->group_id;
+          $newVenue->_generate_NDA = false;
           if ($msgVenue = $newVenue->store()) {
             return $exchange_ihe->setAckAR($ack, "E201", $msgVenue, $newVenue);
           }
@@ -191,7 +195,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         if (!$venueAN) {
           $code_NDA = "I225";
         } 
-        // Association de l'IPP
+        // Association du NDA
         else {
           $code_NDA = "I222";
         }  
@@ -224,6 +228,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         
         // Notifier les autres destinataires autre que le sender
         $newVenue->_eai_initiateur_group_id = $sender->group_id;
+        $newVenue->_generate_NDA = false;
         if ($msgVenue = $newVenue->store()) {
           return $exchange_ihe->setAckAR($ack, "E201", $msgVenue, $newVenue);
         }

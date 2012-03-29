@@ -20,6 +20,10 @@ class CHL7v2EventADTA05_FR extends CHL7v2EventADTA05 {
     parent::__construct($i18n);
   }
   
+  function getEVNPlannedDateTime($sejour) {
+    return mbDateTime();
+  }
+  
   /**
    * @see parent::buildI18nSegments()
    */

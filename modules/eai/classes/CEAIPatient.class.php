@@ -60,8 +60,8 @@ class CEAIPatient extends CEAIMbObject {
       return $IPP->store();  
     }
     else {
-      $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, null, $patient->_id);
-      if ($IPP->_id) {
+      $IPP_temp = CIdSante400::getMatch("CPatient", $sender->_tag_patient, null, $patient->_id);
+      if ($IPP_temp->_id) {
         return;
       }
       
@@ -75,7 +75,14 @@ class CEAIPatient extends CEAIMbObject {
       }
       else {
         /* @todo Gestion des plages d'identifiants */
-        return CAppUI::tr("CEAIPatient-idex-not-in-the-range");
+        if (($IPP->id400 < $group->_configs["ipp_range_min"]) || ($IPP->id400 > $group->_configs["ipp_range_max"])) {
+           return CAppUI::tr("CEAIPatient-idex-not-in-the-range");
+        }
+        
+        $IPP->object_id   = $patient->_id;
+        $IPP->last_update = mbDateTime();
+      
+        return $IPP->store();  
       }
     }  
   }

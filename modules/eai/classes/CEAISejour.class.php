@@ -68,8 +68,8 @@ class CEAISejour extends CEAIMbObject {
       return $NDA->store();  
     }
     else {
-      $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, null, $sejour->_id);
-      if ($NDA->_id) {
+      $NDA_temp = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, null, $sejour->_id);
+      if ($NDA_temp->_id) {
         return;
       }
     
@@ -83,7 +83,14 @@ class CEAISejour extends CEAIMbObject {
       }
       else {
         /* @todo Gestion des plages d'identifiants */
-        return CAppUI::tr("CEAISejour-idex-not-in-the-range");
+        if (($NDA->id400 < $group->_configs["nda_range_min"]) || ($NDA->id400 > $group->_configs["nda_range_max"])) {
+           return CAppUI::tr("CEAISejour-idex-not-in-the-range");
+        }
+        
+        $NDA->object_id   = $sejour->_id;
+        $NDA->last_update = mbDateTime();
+      
+        return $NDA->store();  
       }
     }  
   }

@@ -340,5 +340,46 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       return false;
     }
   }  
+  
+  function onAfterDelete(CMbObject $mbObject) {
+    if (!$this->isHandled($mbObject)) {
+      return false;
+    }
+    
+    $receiver = $mbObject->_receiver;
+    $receiver->getInternationalizationCode($this->transaction);  
+
+    // Traitement Affectation
+    if ($mbObject instanceof CAffectation) {
+      $affectation = $mbObject;
+      $current_log = $affectation->_ref_current_log;
+      if (!$current_log || $affectation->_no_synchro || !in_array($current_log->type, array("delete"))) {
+        return;
+      }
+      
+      $sejour = $affectation->loadRefSejour();
+      if ($sejour->_etat == "preadmission") {
+        return;
+      }
+      
+      // Annulation d'une affectation
+      $code = "A12";
+
+      // Cas où : 
+      // * on est l'initiateur du message 
+      // * le destinataire ne supporte pas le message
+      if ($affectation->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
+        return;
+      }
+      
+      $sejour->loadRefPatient();
+      $sejour->_receiver = $receiver;
+      
+      $this->createMovement($code, $sejour, $affectation);
+   
+      // Envoi de l'événement
+      $this->sendITI($this->profil, $this->transaction, $code, $sejour);
+    }  
+  }  
 }
 ?>

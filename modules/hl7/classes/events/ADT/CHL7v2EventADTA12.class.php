@@ -15,9 +15,9 @@
  * Class CHL7v2EventADTA12
  * A12 - Cancel transfer
  */
-class CHL7v2EventADTA12 extends CHL7v2EventADT implements CHL7EventADTA09 {
+class CHL7v2EventADTA12 extends CHL7v2EventADT implements CHL7EventADTA12 {
   var $code        = "A12";
-  var $struct_code = "A09";
+  var $struct_code = "A12";
   
   function __construct($i18n = null) {
     parent::__construct($i18n);

@@ -165,6 +165,7 @@ class CPatient extends CMbObject {
   
   // Behaviour fields 
   var $_anonyme                     = null;
+  var $_generate_IPP                = true;
   
   // Form fields
   var $_age           = null;
@@ -191,7 +192,10 @@ class CPatient extends CMbObject {
   
   // Navigation Fields
   var $_dossier_cabinet_url = null;
-
+  
+  // EAI Fields
+  var $_eai_initiateur_group_id  = null; // group initiateur du message EAI
+  
   // HPRIM Fields
   var $_prenoms          = null; // multiple
   var $_nom_naissance    = null; // +/- = nom_jeune_fille
@@ -201,7 +205,6 @@ class CPatient extends CMbObject {
   var $_IPP              = null;
   var $_fusion           = null; // fusion
   var $_patient_elimine  = null; // fusion
-  var $_eai_initiateur_group_id  = null; // group initiateur du message EAI
   
   // Object References
   var $_nb_docs                     = null;
@@ -476,8 +479,10 @@ class CPatient extends CMbObject {
     }
     
     // Génération de l'IPP ? 
-    if ($msg = $this->generateIPP()) {
-      return $msg;
+    if ($this->_generate_IPP) {
+      if ($msg = $this->generateIPP()) {
+        return $msg;
+      }
     }
   }
   
