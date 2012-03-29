@@ -20,6 +20,7 @@ if(intval(CValue::post("del", null))) {
   if($do->_obj->plageop_id && ($do->_old->plageop_id != $do->_obj->plageop_id)) {
     $do->_obj->rank = 0;
   }
+  
   $do->doStore();
   if($do->_obj->plageop_id && $do->_old->plageop_id && ($do->_old->plageop_id != $do->_obj->plageop_id)) {
     $plageop = new CPlageOp;

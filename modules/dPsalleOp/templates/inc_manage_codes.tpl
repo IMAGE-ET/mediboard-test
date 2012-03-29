@@ -1,12 +1,10 @@
 <script type="text/javascript">
-
-changeCodeToDel = function(subject_id, code_ccam, actes_ids){
-  var oForm = getForm("manageCodes");
-  $V(oForm._selCode, code_ccam);
-  $V(oForm._actes, actes_ids);
-  ActesCCAM.remove(subject_id);
-}
-
+  changeCodeToDel = function(subject_id, code_ccam, actes_ids){
+    var oForm = getForm("manageCodes");
+    $V(oForm._selCode, code_ccam);
+    $V(oForm._actes, actes_ids);
+    ActesCCAM.remove(subject_id);
+  }
 </script>
 
 <!-- Pas d'affichage de inc_manage_codes si la consultation est deja validée -->
@@ -36,7 +34,7 @@ changeCodeToDel = function(subject_id, code_ccam, actes_ids){
        
           <input type="text" size="10" name="_codes_ccam" />
           
-          <script type="text/javascript">   
+          <script type="text/javascript">
             CCAMSelector.init = function(){
               this.sForm = "manageCodes";
               this.sClass = "_class";
@@ -73,7 +71,7 @@ changeCodeToDel = function(subject_id, code_ccam, actes_ids){
       <td class="halfPane">
         <fieldset>
           <legend>Validation du codage</legend>
-          {{if ($conf.dPsalleOp.CActeCCAM.envoi_actes_salle || $m == "dPpmsi") && ($subject instanceof COperation)}}
+          {{if $m == "dPpmsi" && $subject instanceof COperation}}
             <table class="main layout">
               <tr id="export_{{$subject->_class}}_{{$subject->_id}}">
                 {{if !$subject->facture || $m == "dPpmsi" || $can->admin}}
@@ -87,9 +85,20 @@ changeCodeToDel = function(subject_id, code_ccam, actes_ids){
             </table>
           {{/if}}
           {{if ($module == "dPsalleOp" || $module == "dPhospi") && $conf.dPsalleOp.CActeCCAM.signature}}
-            <button class="tick" onclick="signerActes('{{$subject->_id}}', '{{$subject->_class}}')">
-              Signer les actes
-            </button>
+            {{if $subject instanceof COperation && $subject->cloture_activite_1 && $subject->cloture_activite_4}}
+              <button class="tick" disabled="disabled">Signer les actes</button>
+            {{else}}
+              <button class="tick" onclick="signerActes('{{$subject->_id}}', '{{$subject->_class}}')">
+                Signer les actes
+              </button>
+            {{/if}}
+            {{if $subject instanceof COperation || $subject instanceof CSejour}}
+              {{if $subject->cloture_activite_1 && $subject->cloture_activite_4}}
+                <button class="tick" disabled="disabled">Clôturer les activités</button>
+              {{else}}
+                <button class="tick" onclick="clotureActivite('{{$subject->_id}}', '{{$subject->_class}}')">Clôturer les activités</button>
+              {{/if}}
+            {{/if}}
           {{/if}}
         </fieldset>
       </td>
@@ -99,10 +108,8 @@ changeCodeToDel = function(subject_id, code_ccam, actes_ids){
 {{*/if*}}
 
 {{if $ajax}}
-<script type="text/javascript">
-
-oCodesManagerForm = document.manageCodes;
-prepareForm(oCodesManagerForm);
-
-</script>
+  <script type="text/javascript">
+    oCodesManagerForm = document.manageCodes;
+    prepareForm(oCodesManagerForm);
+  </script>
 {{/if}}

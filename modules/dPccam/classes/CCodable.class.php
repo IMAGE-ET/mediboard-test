@@ -14,6 +14,10 @@ class CCodable extends CMbObject {
   var $codes_ccam          = null;
   var $facture             = null; // Séjour facturé ou non
   
+  // Clôture des actes
+  var $cloture_activite_1    = null;
+  var $cloture_activite_4    = null;
+  
   // Form fields
   var $_acte_execution          = null;
   var $_acte_depassement        = null;
@@ -99,6 +103,37 @@ class CCodable extends CMbObject {
    * @return string Store-like message
    */
   function store() {
+    global $can;
+    $this->completeField("cloture_activite_1");
+    $this->completeField("cloture_activite_4");
+    $this->loadOldObject();
+    
+    if (($this instanceof CSejour || $this instanceof COperation) && 
+        !$can->admin && (CAppUI::conf("dPsalleOp CActeCCAM signature") &&
+        $this->fieldModified("codes_ccam")        &&
+        ($this->cloture_activite_1                ||
+         $this->cloture_activite_4)               &&
+        strcmp($this->codes_ccam, $this->_old->codes_ccam))) {
+      
+      
+      $new_code = substr($this->codes_ccam, strlen($this->_old->codes_ccam)+1);
+      
+      $code_ccam = new CCodeCCAM($new_code);
+      $code_ccam->getRemarques();
+      $activites = $code_ccam->getActivites();
+      
+      if (isset($activites[1]) && $this->cloture_activite_1) {
+        CAppUI::setMsg("Impossible de rajouter un code : l'activité 1 est clôturée", UI_MSG_ERROR);
+        echo CAppUI::getMsg();
+        CApp::rip();
+      }
+      if (isset($activites[4]) && $this->cloture_activite_4) {
+        CAppUI::setMsg("Impossible de rajouter un code : l'activité 4 est clôturée", UI_MSG_ERROR);
+        echo CAppUI::getMsg();
+        CApp::rip();
+      }
+    }
+    
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
@@ -148,7 +183,11 @@ class CCodable extends CMbObject {
     $props = parent::getProps();
     $props["codes_ccam"]   = "str show|0";
     $props["facture"]      = "bool default|0";
-
+    
+    // Clôture des actes
+    $props["cloture_activite_1"]    = "bool default|0";
+    $props["cloture_activite_4"]    = "bool default|0";
+    
     $props["_tokens_ccam"]    = "";
     $props["_tokens_ngap"]    = "";
     $props["_tokens_tarmed"]  = "";
@@ -422,6 +461,29 @@ class CCodable extends CMbObject {
       }   
     }
     return parent::check();
+  }
+  
+  function testCloture() {
+    $actes_ccam = $this->loadRefsActesCCAM();
+    
+    $count_activite_1 = 0;
+    $count_activite_4 = 0;
+    
+    foreach ($actes_ccam as $_acte_ccam) {
+      $code_ccam = $_acte_ccam->loadRefCodeCCAM();
+      $activites = $code_ccam->getActivites();
+      
+      if (isset($activites[1])) {
+        $count_activite_1 += count($activites[1]);
+      }
+      
+      if (isset($activites[4])) {
+        $count_activite_4 += count($activites[4]);
+      }
+    }
+    
+    return ($count_activite_1 == 0 || $this->cloture_activite_1) &&
+           ($count_activite_4 == 0 || $this->cloture_activite_4);
   }
   
   function checkModificateur($code, $heure) {

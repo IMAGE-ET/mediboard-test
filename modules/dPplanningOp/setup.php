@@ -1280,8 +1280,19 @@ class CSetupdPplanningOp extends CSetup {
     $query = "ALTER TABLE `sejour`
                 CHANGE `zt` `UHCD` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);  
-      
-    $this->mod_version = "1.35";
+    
+    $this->makeRevision("1.35");
+    $query = "ALTER TABLE `operations`
+      ADD `cloture_activite_1` ENUM ('0','1') DEFAULT '0',
+      ADD `cloture_activite_4` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `sejour`
+      ADD `cloture_activite_1` ENUM ('0','1') DEFAULT '0',
+      ADD `cloture_activite_4` ENUM ('0','1') DEFAULT '0';";  
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.36";
   }
 }
 ?>

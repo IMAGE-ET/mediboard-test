@@ -2154,7 +2154,7 @@ class CSejour extends CCodable implements IPatientRelated {
   function completeLabelFields() {
     $this->loadRefPraticien();
     $this->loadNDA();
-    return array("DATE ENT" => mbDateToLocale($this->entree), "PRAT RESPONSABLE" => $this->_ref_praticien->_view,
+    return array("DATE ENT" => mbDateToLocale(mbDate($this->entree)), "PRAT RESPONSABLE" => $this->_ref_praticien->_view,
                  "HEURE ENT" => mbTime($this->entree),
                  "NDOS"     => $this->_NDA,
                  "CODE BARRE NDOS" => "@BARCODE_".$this->_NDA."@");

@@ -42,6 +42,25 @@ else {
 
 $actes_ccam = $acte_ccam->loadList($where, $order, null, null, $ljoin);
 
+// Parcours des actes NGAP
+$sejour = new CSejour;
+$ljoin = array();
+$where = array();
+
+$where["entree_prevue"] = "BETWEEN '$_date_min' AND '$_date_max'";
+$ljoin["acte_ngap"] = "acte_ngap.object_id = sejour.sejour_id AND acte_ngap.object_class = 'CSejour'";
+//$where[] = "" ;
+$sejours = $sejour->loadList($where, null, null, null, $ljoin);
+
+mbTrace(array_keys($sejours));
+
+$operation = new COperation;
+$ljoin = array();
+$where = array();
+
+//$where[]
+
+
 // Initialisation du tableau de codables
 $codables = array(
   "COperation"    => array(), 

@@ -31,6 +31,7 @@ $user->_user_password = $password;
 
 if (!$user->_user_password) {
   CAppUI::setMsg("Veuillez saisir votre mot de passe", UI_MSG_ERROR );
+  echo CAppUI::getMsg();
   if ($redirectUrl) {
     CAppUI::redirect($redirectUrl);
   }
@@ -41,6 +42,7 @@ $user->loadMatchingObject();
 
 if (!$user->_id){
   CAppUI::setMsg("Mot de passe incorrect", UI_MSG_ERROR );
+  echo CAppUI::getMsg();
   if ($redirectUrl) {
     CAppUI::redirect($redirectUrl);
   }
@@ -61,55 +63,6 @@ foreach ($actes_ccam as $key => $_acte_ccam){
   $msg = $_acte_ccam->store();
   if ($msg) {
   	CAppUI::setMsg($msg, UI_MSG_ERROR );
-  }
-}
-
-// Pour la double validation, on compte le nombre d'actes total, et ceux qui sont signés
-$acte_ccam->signe = null;
-$acte_ccam->executant_id = null;
-$nb_actes_totaux = $acte_ccam->countMatchingList();
-
-$acte_ccam->signe = 1;
-$nb_actes_signes = $acte_ccam->countMatchingList();
-
-// Transmission des actes CCAM lors de la double validation (tous les actes sont signés)
-if (CAppUI::conf("dPpmsi transmission_actes") == "signature" && $object_class == "COperation" && $nb_actes_totaux == $nb_actes_signes) {
-  $actes_ccam = $acte_ccam->loadMatchingList();
-  
-  $mbObject = new COperation();
-  // Chargement de l'opération et génération du document
-  if ($mbObject->load($object_id)) {
-    $mbObject->loadRefs();
-    foreach ($mbObject->_ref_actes_ccam as $acte_ccam) {
-      $acte_ccam->loadRefsFwd();
-    }
-    $mbSejour =& $mbObject->_ref_sejour;
-    $mbSejour->loadRefsFwd();
-    $mbSejour->loadNDA();
-    $mbSejour->_ref_patient->loadIPP();
-  }
-
-  // Facturation de l'opération où du séjour
-  $mbObject->facture = 1;
-  $mbObject->loadLastLog();
-  try {
-    $mbObject->store();
-  } catch(CMbException $e) {
-    // Cas d'erreur on repasse à 0 la facturation
-    $mbObject->facture = 0;
-    $mbObject->store();
-    
-    CAppUI::setMsg($e->getMessage(), UI_MSG_ERROR );
-  }
-  
-  $mbObject->countExchanges();
-  
-  // Flag les actes CCAM en envoyés
-  foreach ($actes_ccam as $key => $_acte_ccam){
-    $_acte_ccam->sent = 1;
-    if ($msg = $_acte_ccam->store()) {
-      CAppUI::setMsg($msg, UI_MSG_ERROR );
-    }
   }
 }
 

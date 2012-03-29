@@ -1,24 +1,23 @@
 <script type="text/javascript">
 
-function signeActes(oForm, subject_id, praticien_id) {
+signeActes = function(oForm, subject_id, praticien_id) {
 	{{if $dialog}}
-  return onSubmitFormAjax(oForm, {onComplete: function() { reloadAll(subject_id, praticien_id); } } );
+    return onSubmitFormAjax(oForm, {onComplete: function() { reloadAll(subject_id, praticien_id); } } );
   {{else}}
-  oForm.submit();
+    oForm.submit();
   {{/if}}
 }
 
-function reloadAll(subject_id, praticien_id) {
-  if(window.opener) {
-    window.opener.ActesCCAM.refreshList(subject_id, praticien_id);
+reloadAll = function(subject_id, praticien_id) {
+  if (window.parent) {
+    window.parent.ActesCCAM.refreshList(subject_id, praticien_id);
   }
-  window.location.reload();
-  
+  $("signature_actes_{{$object->_guid}}").up('div').up().select('.change')[0].click();
 }
 
 </script>
 
-<table class="main">
+<table class="main" id="signature_actes_{{$object->_guid}}">
   {{if !$dialog}}
   <tr>
     <th>

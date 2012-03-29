@@ -1,10 +1,17 @@
 <script type="text/javascript">
   signerActes = function(object_id, object_class){
-    var url = new Url;
-    url.setModuleAction("dPsalleOp", "vw_signature_actes");
+    var url = new Url("dPsalleOp", "vw_signature_actes");
     url.addParam("object_id", object_id);
     url.addParam("object_class", object_class);
-    url.popup(625, 600, 'Signature des actes');
+    url.addParam("dialog", 1);
+    url.requestModal(700, 400, 'Signature des actes');
+  }
+  
+  clotureActivite = function(object_id, object_class) {
+    var url = new Url("dPsalleOp", "ajax_cloture_activite");
+    url.addParam("object_id", object_id);
+    url.addParam("object_class", object_class);
+    url.requestModal(500, 300);
   }
 </script>
 

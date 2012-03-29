@@ -14,9 +14,20 @@
 {{assign var=actes_ids value=$subject->_associationCodesActes.$_key.ids}}
 <fieldset>
   <legend class="text" style="width: 90%">
-    <button type="button" class="notext trash" style="float: right;" onclick="changeCodeToDel('{{$subject->_id}}', '{{$_code->code}}', '{{$actes_ids}}')">
-      {{tr}}Delete{{/tr}}
-    </button>
+    {{assign var=can_delete value=1}}
+    {{foreach from=$_code->activites item=_activite}}
+      {{foreach from=$_activite->phases item=_phase}}
+        {{if $can_delete && $_phase->_connected_acte->signe && !$can->admin}}
+          {{assign var=can_delete value=0}}
+        {{/if}}
+      {{/foreach}}
+    {{/foreach}}
+    
+    {{if $can_delete}}
+      <button type="button" class="notext trash" style="float: right;" onclick="changeCodeToDel('{{$subject->_id}}', '{{$_code->code}}', '{{$actes_ids}}')">
+        {{tr}}Delete{{/tr}}
+      </button>
+    {{/if}}
     <!-- Codes d'associations -->
     {{if count($_code->assos) > 0 && count($_code->assos) < 15}}
     <select style="float:right; width: 160px;" name="asso" onchange="setCodeTemp(this.value)">
@@ -81,7 +92,10 @@
             <tr id="acte{{$key}}-trigger">
               <td colspan="10" style="width: 100%; background-color: #{{$bg_color}}; border: 2px solid {{if $_activite->numero == 4}}#44f{{else}}#ff0{{/if}};">
                 <div style="float: right;">
-                  {{if !$acte->_id}}
+                  {{if !$acte->_id && (!$conf.dPsalleOp.CActeCCAM.signature ||
+                     ($conf.dPsalleOp.CActeCCAM.signature &&
+                     ( ($_activite->numero == 1 && !$subject->cloture_activite_1) ||
+                       ($_activite->numero == 4 && !$subject->cloture_activite_4) )))}}
                   <button class="add" type="button" onclick="Event.stop(event);
                     {{if $acte->_anesth_associe && $subject->_class == "COperation"}}
                     if(confirm('Cet acte ne comporte pas l\'activité d\'anesthésie.\nVoulez-vous ajouter le code d\'anesthésie complémentaire {{$acte->_anesth_associe}} ?')) {

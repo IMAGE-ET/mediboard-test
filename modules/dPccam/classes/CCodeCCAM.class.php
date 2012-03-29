@@ -311,6 +311,8 @@ class CCodeCCAM {
     } else {
     	$this->_default = 0;
     }
+    
+    return $this->activites;
   }
   
   function getModificateursFromActivite(&$activite) {
