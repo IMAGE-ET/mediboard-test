@@ -55,8 +55,26 @@ class CTemplateManager {
     if ($user->isPraticien()) {
       $user_complete .= $user->titres;
     }
+    
+    // Initials
+    $elements_first_name = split("[ -]", $user->_user_first_name);
+    $initials_first_name = "";
+    
+    foreach ($elements_first_name as $_element) {
+      $initials_first_name .= strtoupper(substr($_element, 0, 1));
+    }
+    
+    $elements_last_name = split("[ -]", $user->_user_last_name);
+    $initials_last_name = "";
+    
+    foreach ($elements_last_name as $_element) {
+      $initials_last_name .= strtoupper(substr($_element, 0, 1));
+    }
+    
     $this->addProperty("Général - rédacteur"        , $user->_shortview);
     $this->addProperty("Général - rédacteur complet", $user_complete);
+    $this->addProperty("Général - rédacteur (initiales) - prénom", $initials_first_name);
+    $this->addProperty("Général - rédacteur (initiales) - nom", $initials_last_name);
     if (CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") && CAppUI::pref("pdf_and_thumbs")) {
       $this->addProperty("Général - numéro de page", "[Général - numéro de page]");
     }
