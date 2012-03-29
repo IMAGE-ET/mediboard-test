@@ -153,8 +153,17 @@ class CSetupdPetablissement extends CSetup {
       ADD INDEX (`siret`),
       ADD INDEX (`ape`);";
     $this->addQuery($query);
-
-    $this->mod_version = "0.27";
+    
+    $this->makeRevision("0.27");
+    
+    $query = "ALTER TABLE `groups_config` 
+                ADD `ipp_range_min` INT (11) UNSIGNED,
+                ADD `ipp_range_max` INT (11),
+                ADD `nda_range_min` INT (11) UNSIGNED,
+                ADD `nda_range_max` INT (11);";
+    $this->addQuery($query);
+   
+    $this->mod_version = "0.28";
   } 
 }
 

@@ -24,10 +24,17 @@ class CGroupsConfig extends CMbObject {
   
   var $ecap_CRPU_notes_creation = null;
   
+  // SIP
   var $sip_notify_all_actors = null;
   var $sip_idex_generator    = null;
+  var $ipp_range_min         = null;
+  var $ipp_range_max         = null;
+  
+  // SMP
   var $smp_notify_all_actors = null;
   var $smp_idex_generator    = null;
+  var $nda_range_min         = null;
+  var $nda_range_max         = null;
   
   var $dPprescription_CPrescription_show_trash_24h   = null;
   
@@ -53,10 +60,17 @@ class CGroupsConfig extends CMbObject {
     
     $specs["ecap_CRPU_notes_creation"] = "bool default|0";
     
+    // SIP
     $specs["sip_notify_all_actors"] = "bool default|0";
     $specs["sip_idex_generator"]    = "bool default|0";
+    $specs["ipp_range_min"]         = "num min|0";
+    $specs["ipp_range_max"]         = "num moreThan|ipp_range_min";
+    
+    // SMP
     $specs["smp_notify_all_actors"] = "bool default|0";
     $specs["smp_idex_generator"]    = "bool default|0";
+    $specs["nda_range_min"]         = "num min|0";
+    $specs["nda_range_max"]         = "num moreThan|ipp_range_min";
     
     $specs["dPprescription_CPrescription_show_trash_24h"] = "bool default|0";
     
