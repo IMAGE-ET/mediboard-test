@@ -35,7 +35,17 @@ $modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where, null, nu
 unset($where["user_id"]);
 
 $where["type"] = "= 'body'";
-$where["function_id"] = " IN ('$user->function_id', '".CAppUI::$user->function_id."')";
+
+// Inclusion des fonctions secondaires de l'utilisateur connecté
+$sec_function = new CSecondaryFunction;
+$sec_function->user_id = CAppUI::$user->_id;
+$sec_functions = $sec_function->loadMatchingList();
+
+$functions_ids = CMbArray::pluck($sec_functions, "function_id");
+
+array_merge($functions_ids, array($user->function_id, CAppUI::$user->function_id));
+
+$where["function_id"] = CSQLDataSource::prepareIn($functions_ids);
 $modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where, null, null, null, $order));
 
 unset($where["function_id"]);
