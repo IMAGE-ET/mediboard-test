@@ -70,7 +70,7 @@ class CSaObjectHandler extends CEAIObjectHandler {
       // CConsultation
       // Envoi des actes dans le cas de la clôture de la cotation
       case 'CConsultation':
-        $consultation = $sejour;
+        $consultation = $mbObject;
         if ($consultation->sejour_id && $consultation->fieldModified("valide", 1)) {
           $this->sendFormatAction("onAfterStore", $consultation);
         }
