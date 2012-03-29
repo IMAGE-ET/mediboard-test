@@ -17,13 +17,13 @@ if(intval(CValue::post("del", null))) {
   $do->redirectDelete = "m=$m&tab=vw_edit_planning&operation_id=0";
   $do->doDelete();
 } else {
-  if($do->_obj->plageop_id && ($do->_objBefore->plageop_id != $do->_obj->plageop_id)) {
+  if($do->_obj->plageop_id && ($do->_old->plageop_id != $do->_obj->plageop_id)) {
     $do->_obj->rank = 0;
   }
   $do->doStore();
-  if($do->_obj->plageop_id && $do->_objBefore->plageop_id && ($do->_objBefore->plageop_id != $do->_obj->plageop_id)) {
+  if($do->_obj->plageop_id && $do->_old->plageop_id && ($do->_old->plageop_id != $do->_obj->plageop_id)) {
     $plageop = new CPlageOp;
-    $plageop->load($do->_objBefore->plageop_id);
+    $plageop->load($do->_old->plageop_id);
     $plageop->spec_id = "";
     $plageop->store();
   }

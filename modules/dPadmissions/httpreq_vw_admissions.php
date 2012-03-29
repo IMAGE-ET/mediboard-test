@@ -79,7 +79,7 @@ if ($selSaisis != "0") {
 }
 
 if ($order_col != "patient_id" && $order_col != "entree_prevue" && $order_col != "praticien_id"){
-	$order_col = "patient_id";	
+  $order_col = "patient_id";  
 }
 
 if ($order_col == "patient_id"){
@@ -101,40 +101,38 @@ $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
 $functions  = CMbObject::massLoadFwdRef($praticiens, "function_id");
 
 foreach ($sejours as $sejour_id => $_sejour) {
-  $_sejour->loadRefPraticien(1);
-	$praticien =& $_sejour->_ref_praticien;
-  
-	if ($filterFunction && $filterFunction != $praticien->function_id) {
+  $praticien = $_sejour->loadRefPraticien(1);
+  if ($filterFunction && $filterFunction != $praticien->function_id) {
     unset($sejours[$sejour_id]);
-	  continue;
+    continue;
   }
   
   // Chargement du patient
   $patient = $_sejour->loadRefPatient(1);
   $patient->loadIPP();
   
+  
   $dossier_medical = $patient->loadRefDossierMedical();
   $dossier_medical->loadRefsAntecedents();
   
   // Chargment du numéro de dossier
   $_sejour->loadNDA();
-  $whereOperations = array("annulee" => "= '0'");
 
   // Chargement des interventions
-	$_sejour->loadRefsOperations($whereOperations);
-	$operation = new COperation();
+  $whereOperations = array("annulee" => "= '0'");
+  $_sejour->loadRefsOperations($whereOperations);
   foreach ($_sejour->_ref_operations as $operation) {
-  	$operation->loadRefsActes();
+    $operation->loadRefsActes();
     $operation->loadRefsConsultAnesth();
-		$consult_anesth =& $operation->_ref_consult_anesth; 
+    $consult_anesth = $operation->_ref_consult_anesth; 
     $consult_anesth->loadRefConsultation();
     $consult_anesth->_ref_consultation->loadRefPlageConsult(1);
-    $consult_anesth->_date_consult =& $consult_anesth->_ref_consultation->_date;
+    $consult_anesth->_date_consult = $consult_anesth->_ref_consultation->_date;
   }
 
   // Chargement de l'affectation
   $_sejour->loadRefsAffectations();
-  $affectation =& $_sejour->_ref_first_affectation;
+  $affectation = $_sejour->_ref_first_affectation;
   if ($affectation->_id) {
     $affectation->loadRefLit(1);
     $affectation->_ref_lit->loadCompleteView();
@@ -143,9 +141,9 @@ foreach ($sejours as $sejour_id => $_sejour) {
 
 // Si la fonction selectionnée n'est pas dans la liste des fonction, on la rajoute
 if ($filterFunction && !array_key_exists($filterFunction, $functions)){
-	$_function = new CFunctions();
-	$_function->load($filterFunction);
-	$functions[$filterFunction] = $_function;
+  $_function = new CFunctions();
+  $_function->load($filterFunction);
+  $functions[$filterFunction] = $_function;
 }
 
 // Création du template

@@ -15,8 +15,8 @@ class CDoExObjectAddEdit extends CDoObjectAddEdit {
     $this->_obj->_ex_class_id = $_ex_class_id;
     $this->_obj->setExClass();
     
-    $this->_objBefore->_ex_class_id = $_ex_class_id;
-    $this->_objBefore->setExClass();
+    $this->_old->_ex_class_id = $_ex_class_id;
+    $this->_old->setExClass();
     
     return parent::doBind();
   }

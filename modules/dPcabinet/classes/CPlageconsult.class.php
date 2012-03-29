@@ -72,7 +72,7 @@ class CPlageconsult extends CMbObject {
   function getProps() {
     $parentSpecs = parent::getProps();
     $specs = array (
-      "chir_id" => "ref notNull class|CMediusers seekable",
+      "chir_id"       => "ref notNull class|CMediusers seekable",
       "remplacant_id" => "ref class|CMediusers seekable",
       "date"          => "date notNull",
       "freq"          => "time notNull",

@@ -29,7 +29,7 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
     
     // Object binding
     $this->_obj->bind($_POST["ged"]);
-    $this->_objBefore->load($this->_obj->_id);
+    $this->_old->load($this->_obj->_id);
   }
   
   function doStore() {
@@ -38,7 +38,7 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
     if($this->_obj->doc_ged_id){
       // Procédure Existante --> Verification
 
-      //if($this->_objBefore->etat == CDocGed::REDAC && $_validation === null){
+      //if($this->_old->etat == CDocGed::REDAC && $_validation === null){
       if(isset($_FILES["formfile"])){
         // Test d'upload du fichier
         $objFile = new CFileAddEdit;
@@ -56,13 +56,13 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
       }      
     }
     
-    if($this->_objBefore->group_id && $this->_obj->doc_chapitre_id && $this->_obj->doc_categorie_id && !$this->_objBefore->num_ref){
+    if($this->_old->group_id && $this->_obj->doc_chapitre_id && $this->_obj->doc_categorie_id && !$this->_old->num_ref){
       // Nouvelle Procédure
       $this->_obj->version = 1;
       
       $where = array();
       $where["num_ref"]          = "IS NOT NULL";
-      $where["group_id"]         = "= '".$this->_objBefore->group_id."'";
+      $where["group_id"]         = "= '".$this->_old->group_id."'";
       $where["doc_chapitre_id"]  = "= '".$this->_obj->doc_chapitre_id."'";
       $where["doc_categorie_id"] = "= '".$this->_obj->doc_categorie_id."'";
       $where["annule"]           = "= '0'";
@@ -90,9 +90,9 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
       }
     }
 
-    if(!($this->_objBefore->etat == CDocGed::VALID && $this->_obj->etat == CDocGed::TERMINE)){
+    if(!($this->_old->etat == CDocGed::VALID && $this->_obj->etat == CDocGed::TERMINE)){
       // Annulation changement de version
-      $this->_obj->version = $this->_objBefore->version;
+      $this->_obj->version = $this->_old->version;
     }
     
     if ($msg = $this->_obj->store()) {
@@ -123,7 +123,7 @@ class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
     
     // Object binding
     $this->_obj->bind($_POST["suivi"]);
-    $this->_objBefore->load($this->_obj->_id);
+    $this->_old->load($this->_obj->_id);
   }
 
   function doStore() {

@@ -25,7 +25,7 @@ class CDoCopyTraitement extends CDoObjectAddEdit {
     
     // Creation du nouveau traitement affectée au sejour
     unset($_POST["traitement_id"]);
-    $this->_obj = $this->_objBefore;
+    $this->_obj = $this->_old;
     $this->_obj->_id = null;
     $this->_obj->traitement_id = null;
     

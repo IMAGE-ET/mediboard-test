@@ -19,28 +19,31 @@ class CDoMediuserAddEdit extends CDoObjectAddEdit {
   }
   
   function doStore () {
-  	// keep track of former values for fieldModified below
-		$this->_obj->loadOldObject();
-		
-    if ($msg = $this->_obj->store()) {
-    	CAppUI::setMsg($msg, UI_MSG_ERROR);
-    	if ($this->redirectError) {
+    // keep track of former values for fieldModified below
+    $obj = $this->_obj;
+    $old = $obj->loadOldObject();
+
+    if ($msg = $obj->store()) {
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
+      if ($this->redirectError) {
         CAppUI::redirect($this->redirectError);
       }
     } 
+    
     else {
       // Keep trace for redirections
-      CValue::setSession($this->objectKey, $this->_obj->_id);
-      
-      $isNotNew = @$_POST[$this->objectKey];
+      CValue::setSession($this->objectKey, $obj->_id);
       
       // Insert new group and function permission
-      if ($this->_obj->fieldModified("function_id") || !$isNotNew) {
-        $this->_obj->insFunctionPermission(); 
-        $this->_obj->insGroupPermission();
+      if ($obj->fieldModified("function_id") || !$old->_id) {
+        $obj->insFunctionPermission(); 
+        $obj->insGroupPermission();
       }
       
-      CAppUI::setMsg( $isNotNew ? $this->modifyMsg : $this->createMsg, UI_MSG_OK);
+      // Message
+      CAppUI::setMsg($old->_id ? $this->modifyMsg : $this->createMsg, UI_MSG_OK);
+      
+      // Redirection
       if ($this->redirectStore) {
         CAppUI::redirect($this->redirectStore);
       }

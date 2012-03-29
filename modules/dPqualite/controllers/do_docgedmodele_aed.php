@@ -33,7 +33,7 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
     
     // Object binding
     $this->_obj->bind($_POST["ged"]);
-    $this->_objBefore->load($this->_obj->_id);
+    $this->_old->load($this->_obj->_id);
   }
 
 
@@ -94,7 +94,7 @@ class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
     
     // Object binding
     $this->_obj->bind($_POST["suivi"]);
-    $this->_objBefore->load($this->_obj->_id);
+    $this->_old->load($this->_obj->_id);
   }
   
   function doStore() {

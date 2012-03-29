@@ -25,7 +25,7 @@ class CDoCopyAntecedent extends CDoObjectAddEdit {
     
     // Creation du nouvel antecedent
     unset($_POST["antecedent_id"]);
-    $this->_obj = $this->_objBefore;
+    $this->_obj = $this->_old;
     $this->_obj->_id = null;
     $this->_obj->antecedent_id = null;
     

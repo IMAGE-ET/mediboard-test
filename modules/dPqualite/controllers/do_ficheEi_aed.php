@@ -23,20 +23,20 @@ class CDoFicheEiAddEdit extends CDoObjectAddEdit {
     if(!$_validation){
       // Pas de $_validation ==> pas d'edition de la fiche
       
-      if(!$this->_objBefore->fiche_ei_id){
+      if(!$this->_old->fiche_ei_id){
         // Nouvelle fiche
         $this->_obj->date_fiche = mbDateTime();
         
-      }elseif($this->_objBefore->qualite_date_validation){      
+      }elseif($this->_old->qualite_date_validation){      
         // NE RIEN FAIRE !! -> Attente de verif et de controle
         
-      }elseif(!$this->_objBefore->qualite_date_validation && $this->_objBefore->service_date_validation){
+      }elseif(!$this->_old->qualite_date_validation && $this->_old->service_date_validation){
         $this->_obj->qualite_date_validation = mbDateTime();
       
-      }elseif(!$this->_objBefore->service_date_validation && $this->_objBefore->date_validation){  
+      }elseif(!$this->_old->service_date_validation && $this->_old->date_validation){  
         $this->_obj->service_date_validation = mbDateTime();
         
-      }elseif(!$this->_objBefore->date_validation){
+      }elseif(!$this->_old->date_validation){
         $this->_obj->date_validation = mbDateTime();
       }
       

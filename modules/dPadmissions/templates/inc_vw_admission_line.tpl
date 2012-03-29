@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if $_sejour->type == 'ambu'}} {{assign var=background value="#faa"}}
+{{if     $_sejour->type == 'ambu'}} {{assign var=background value="#faa"}}
 {{elseif $_sejour->type == 'comp'}} {{assign var=background value="#fff"}}
 {{elseif $_sejour->type == 'exte'}} {{assign var=background value="#afa"}}
 {{elseif $_sejour->type == 'consult'}} {{assign var=background value="#cfdfff"}}
@@ -77,19 +77,19 @@
 
 <td colspan="2" class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   {{if $canPlanningOp->read}}
-    <a class="action" style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
-      <img src="images/icons/planning.png" />
-    </a>
-    
-    {{foreach from=$_sejour->_ref_operations item=curr_op}}
-    <a class="action" style="float: right" title="Imprimer la DHE de l'intervention" href="#1" onclick="printDHE('operation_id', {{$curr_op->_id}}); return false;">
+  <a class="action" style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
+    <img src="images/icons/planning.png" />
+  </a>
+    {{foreach from=$_sejour->_ref_operations item=_op}}
+    <a class="action" style="float: right" title="Imprimer la DHE de l'intervention" href="#printDHE" onclick="printDHE('operation_id', {{$_op->_id}}); return false;">
       <img src="images/icons/print.png" />
     </a>
     {{foreachelse}}
-    <a class="action" style="float: right" title="Imprimer la DHE du séjour" href="#1" onclick="printDHE('sejour_id', {{$_sejour->_id}}); return false;">
+    <a class="action" style="float: right" title="Imprimer la DHE du séjour" href="#printDHE" onclick="printDHE('sejour_id', {{$_sejour->_id}}); return false;">
       <img src="images/icons/print.png" />
     </a>
     {{/foreach}}
+
     {{if $conf.dPadmissions.show_deficience}}
       <span style="float: right;">
         {{mb_include module=patients template=inc_vw_antecedents type=deficience}}
@@ -258,11 +258,11 @@
 </td>
 
 <td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-  {{foreach from=$_sejour->_ref_operations item=curr_op}}
-  {{if $curr_op->_ref_consult_anesth->_id}}
-  <div class="{{if $curr_op->_ref_consult_anesth->_ref_consultation->chrono == 64}}small-success{{else}}small-info{{/if}}" style="margin: 0px;">
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_ref_consult_anesth->_guid}}');">
-    {{$curr_op->_ref_consult_anesth->_date_consult|date_format:$conf.date}}
+  {{foreach from=$_sejour->_ref_operations item=_op}}
+  {{if $_op->_ref_consult_anesth->_id}}
+  <div class="{{if $_op->_ref_consult_anesth->_ref_consultation->chrono == 64}}small-success{{else}}small-info{{/if}}" style="margin: 0px;">
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_consult_anesth->_guid}}');">
+    {{$_op->_ref_consult_anesth->_date_consult|date_format:$conf.date}}
     </span>
   </div>
   {{/if}}
@@ -280,10 +280,10 @@
 
 {{if $conf.dPadmissions.show_dh}}
   <td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-    {{foreach from=$_sejour->_ref_operations item=curr_op}}
-    {{if $curr_op->_ref_actes_ccam|@count}}
+    {{foreach from=$_sejour->_ref_operations item=_op}}
+    {{if $_op->_ref_actes_ccam|@count}}
     <span style="color: #484;">
-    {{foreach from=$curr_op->_ref_actes_ccam item=_acte}}
+    {{foreach from=$_op->_ref_actes_ccam item=_acte}}
       {{if $_acte->montant_depassement}}
         {{if $_acte->code_activite == 1}}
         Chir :
@@ -298,10 +298,10 @@
     {{/foreach}}
     </span>
     {{/if}}
-    {{if $curr_op->depassement}}
+    {{if $_op->depassement}}
     <!-- Pas de possibilité d'imprimer les dépassements pour l'instant -->
     <!-- <a href="#" onclick="printDepassement({{$_sejour->sejour_id}})"></a> -->
-    Prévu : {{mb_value object=$curr_op field="depassement"}}
+    Prévu : {{mb_value object=$_op field="depassement"}}
     <br />
     {{/if}}
     {{foreachelse}}

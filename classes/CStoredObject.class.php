@@ -195,12 +195,16 @@ class CStoredObject extends CModelObject {
   
   /**
    * Load the object database version
+   * 
+   * @return CMbObject of the same class
    */
   function loadOldObject() {
     if (!$this->_old) {
       $this->_old = new $this->_class;
       $this->_old->load($this->_id);
     }
+    
+    return $this->_old; 
   }
 
   /**
@@ -215,6 +219,7 @@ class CStoredObject extends CModelObject {
         $count++;
       }
     }
+    
     return $count;
   }
   

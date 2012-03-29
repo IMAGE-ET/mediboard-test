@@ -19,6 +19,7 @@ $value = CValue::post("value", 1);
 $id    = CValue::post("id", 0);
 $filterFunction = CValue::post("filterFunction");
 
+
 $dateTime = mbDateTime();
 
 switch ($mode) {

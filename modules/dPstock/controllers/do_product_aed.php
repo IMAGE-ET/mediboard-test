@@ -12,7 +12,7 @@ $do = new CDoObjectAddEdit('CProduct');
 
 if (CValue::post("_duplicate")) {
   $do->doBind();
-  $product = $do->_objBefore;
+  $product = $do->_old;
   $product->code .= "-copie";
   $product->name .= " (Copie)";
   $product->_id = null;

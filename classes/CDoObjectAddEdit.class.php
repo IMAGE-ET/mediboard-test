@@ -11,6 +11,7 @@
 class CDoObjectAddEdit {
   var $className           = null;
   var $objectKey           = null;
+  var $objectKeys          = null;
   var $createMsg           = null;
   var $modifyMsg           = null;
   var $deleteMsg           = null;
@@ -19,21 +20,13 @@ class CDoObjectAddEdit {
   var $redirectStore       = null;
   var $redirectError       = null;
   var $redirectDelete      = null;
-  var $isNotNew            = null;
   var $ajax                = null;
   var $callBack            = null;
   var $suppressHeaders     = null;
   var $_logIt              = null;
   
-  /**
-   * @var CMbObject
-   */
-  var $_obj                = null;
-  
-  /**
-   * @var CMbObject
-   */
-  var $_objBefore          = null;
+  var $_obj  = null;
+  var $_old = null;
 
   function CDoObjectAddEdit($className, $objectKey = null) {
     global $m;
@@ -53,9 +46,10 @@ class CDoObjectAddEdit {
 
     $this->_logIt              = true;
     $this->_obj                = new $this->className();
-    $this->_objBefore          = new $this->className();
+    $this->_old                = new $this->className();
     
     $this->objectKey = $objectKey ? $objectKey : $this->_obj->_spec->key;
+    $this->objectKeys = $this->objectKey . "s";
   }
 
   function doBind() {
@@ -69,8 +63,9 @@ class CDoObjectAddEdit {
     
     // Object binding
     $this->_obj->bind($this->request);
-    
-    $this->_objBefore->load($this->_obj->_id);
+        
+    // Old object 
+    $this->_old->load($this->_obj->_id);
   }
 
   function doDelete() {
@@ -117,8 +112,7 @@ class CDoObjectAddEdit {
     else {
       $id = $this->objectKey;
       CValue::setSession($id, $this->_obj->_id);
-      $this->isNotNew = CValue::read($this->request, $this->objectKey);
-      CAppUI::setMsg($this->isNotNew ? $this->modifyMsg : $this->createMsg, UI_MSG_OK);
+      CAppUI::setMsg($this->_old->_id ? $this->modifyMsg : $this->createMsg, UI_MSG_OK);
       if ($this->redirectStore) {
         $this->redirect =& $this->redirectStore;
       }
@@ -165,18 +159,37 @@ class CDoObjectAddEdit {
       $guid = "$this->className-$id";
       CAppUI::callbackAjax("Form.onSubmitComplete", $guid, $fields);
     }
+
     
     CApp::rip();
   }
 
   function doIt() {
+    // Multiple case
+    if ($object_ids = CMbArray::extract($this->request, $this->objectKeys)) {
+      $request = $this->request;
+      foreach (explode("-", $object_ids) as $object_id) {
+      	$this->request = $request;
+      	$this->request[$this->objectKey] = $object_id;
+      	mbTrace($this->request, 'Before Bound');
+      	$this->doSingle();
+      }
+      CApp::rip();
+    }
+  	
+    $this->doSingle();
+    $this->doRedirect();
+  }
+  
+  function doSingle() {
     $this->doBind();
-    if (intval(CValue::read($this->request, 'del'))) {
+   
+    if (CMbArray::extract($this->request, 'del')) {
       $this->doDelete();
-    } else {
+    } 
+    else {
       $this->doStore();
     }
-    $this->doRedirect();
   }
 
   /**

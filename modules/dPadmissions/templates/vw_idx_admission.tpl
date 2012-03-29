@@ -46,47 +46,54 @@ function reloadFullAdmissions(filterFunction) {
   url.addParam("date"      , "{{$date}}");
   url.addParam("type"      , $V(oForm._type_admission));
   url.addParam("service_id", $V(oForm.service_id));
-  url.addParam("prat_id", $V(oForm.prat_id));
+  url.addParam("prat_id"   , $V(oForm.prat_id));
   url.requestUpdate('allAdmissions');
-	reloadAdmission(filterFunction);
+  reloadAdmission(filterFunction);
 }
 
 function reloadAdmission(filterFunction) {
   var oForm = getForm("selType");
   var url = new Url("dPadmissions", "httpreq_vw_admissions");
-  url.addParam("selAdmis", "{{$selAdmis}}");
-  url.addParam("selSaisis", "{{$selSaisis}}");
+  url.addParam("selAdmis"  , "{{$selAdmis}}");
+  url.addParam("selSaisis" , "{{$selSaisis}}");
   url.addParam("date"      , "{{$date}}");
   url.addParam("type"      , $V(oForm._type_admission));
   url.addParam("service_id", $V(oForm.service_id));
-  url.addParam("prat_id", $V(oForm.prat_id));
-	if(!Object.isUndefined(filterFunction)){
-	  url.addParam("filterFunction", filterFunction);
-	}
+  url.addParam("prat_id"   , $V(oForm.prat_id));
+
+  if (filterFunction !== null) {
+    url.addParam("filterFunction", filterFunction);
+  }
+
   url.requestUpdate('listAdmissions');
 }
 
-function confirmation(oForm){
-  if(confirm('La date enregistrée d\'admission est différente de la date prévue, souhaitez vous confimer l\'admission du patient ?')){
-    submitAdmission(oForm);
+function confirmation(form) {
+  if (confirm('La date enregistrée d\'admission est différente de la date prévue, souhaitez vous confimer l\'admission du patient ?')){
+    submitAdmission(form);
   }
 }
 
 function submitCote(oForm) {
-  return onSubmitFormAjax(oForm, { onComplete : reloadAdmission });
+  return onSubmitFormAjax(oForm, reloadAdmission);
+}
+
+function submitMultiple(form) {
+  return onSubmitFormAjax(form, reloadAdmission);
 }
 
 function submitAdmission(oForm, bPassCheck) {
   {{if @$modules.hprim21 && $conf.hprim21.mandatory_num_dos_ipp_adm}}
     var oIPPForm = document.forms["editIPP" + oForm.patient_id.value];
     var oNumDosForm = document.forms["editNumdos" + oForm.sejour_id.value];
-    if(!bPassCheck && oIPPForm && oNumDosForm && (!$V(oIPPForm.id400) || !$V(oNumDosForm.id400)) ) {
+    if (!bPassCheck && oIPPForm && oNumDosForm && (!$V(oIPPForm.id400) || !$V(oNumDosForm.id400)) ) {
       setExternalIds(oForm);
-    } else {
-      return onSubmitFormAjax(oForm, { onComplete : reloadAdmission });
+    } 
+    else {
+      return onSubmitFormAjax(oForm, reloadAdmission);
     }
   {{else}}
-    return onSubmitFormAjax(oForm, { onComplete : reloadAdmission });
+    return onSubmitFormAjax(oForm, reloadAdmission);
   {{/if}}
 }
 

@@ -45,7 +45,7 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
         $smarty->assign("msgSystem"      , $msgSystem);
         $smarty->assign("callBack"       , $this->callBack);
         if($demandeSynchro){
-          $smarty->assign("object"     , $this->_objBefore);
+          $smarty->assign("object"     , $this->_old);
         }
         $smarty->display("add_del_repas_offline.tpl");
       }
@@ -61,7 +61,7 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
     $this->doBind();
     
     if($this->synchro){
-       if(!$this->_objBefore->_id && $this->_obj->repas_id){
+       if(!$this->_old->_id && $this->_obj->repas_id){
          // Repas supprimé depuis la derniere synchro
          CAppUI::setMsg("Le repas a été supprimé depuis la dernière synchronisation.", UI_MSG_ERROR );
          $this->doRedirect();
@@ -90,8 +90,8 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
        if($error_ref){
          $this->doRedirect();
        }
-       if(!$this->synchroConfirm && $this->_objBefore->_id){
-         $object = $this->_objBefore;
+       if(!$this->synchroConfirm && $this->_old->_id){
+         $object = $this->_old;
          
          $select = "count(`user_log_id`) AS `total`";
          $table  = "user_log";

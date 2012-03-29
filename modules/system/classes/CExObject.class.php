@@ -254,6 +254,8 @@ class CExObject extends CMbMetaObject {
       $this->_old->setExClass();
       $this->_old->load($this->_id);
     }
+    
+    return $this->_old; 
   }
   
   function store(){
