@@ -28,7 +28,7 @@ class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     // Envoi des diags du séjour
     if ($mbObject instanceof CSejour) {
       $sejour = $mbObject;
-      if ($sejour->DP || $sejour->DR || (count($sejour->_ref_dossier_medical->_codes_cim) > 0)) {
+      if ($sejour->DP || $sejour->DR || (count($sejour->loadRefDossierMedical()->_codes_cim) > 0)) {
         $evt = (CAppUI::conf("hprimxml send_diagnostic") == "evt_serveuretatspatient") ? 
                    "CHPrimXMLEvenementsServeurEtatsPatient" : "CHPrimXMLEvenementsPmsi";
                    
