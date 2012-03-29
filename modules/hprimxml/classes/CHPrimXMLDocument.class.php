@@ -854,6 +854,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     // Ajout des participants
     $mbParticipants = array();
     foreach($mbOp->_ref_actes_ccam as $acte_ccam) {
+      $acte_ccam->loadRefExecutant();
       $mbParticipant = $acte_ccam->_ref_executant;
       $mbParticipants[$mbParticipant->user_id] = $mbParticipant;
     }

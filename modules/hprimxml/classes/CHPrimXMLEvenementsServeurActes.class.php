@@ -36,7 +36,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       
       // COperation
       case 'COperation':
-        $mbPatient = $codable->_ref_sejour->_ref_patient;
+        $mbPatient = $codable->_ref_sejour->loadRefPatient();
         break;
     }  
     $this->addPatient($patient, $mbPatient, false, true);
