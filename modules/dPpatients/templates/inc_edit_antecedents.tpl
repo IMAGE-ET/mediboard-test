@@ -25,7 +25,7 @@
   <table class="form">
     <tr>
       <th class="title" colspan="4">
-        Antécédent de type {{tr}}CAntecedent.type.{{$type}}{{/tr}}
+        Antécédents de type {{tr}}CAntecedent.type.{{$type}}{{/tr}}
       </th>
     </tr>
     <tr>
@@ -35,12 +35,11 @@
       {{else}}
         <td colspan="2"></td>
       {{/if}}
-      <td rowspan="{{if $type}}2{{else}}3{{/if}}" style="width: 60%">
+      <td rowspan="{{$type|ternary:2:3}}" style="width: 50%">
         {{mb_field object=$antecedent field="rques" rows="4" form="editAntFrm"
           aidesaisie="filterWithDependFields: false, validateOnBlur: 0"}}
       </td>
-      <td style="width: 40%; text-align: left;" rowspan="{{if $type}}2{{else}}3{{/if}}">
-        <strong>Antécédents</strong>
+      <td style="width: 50%; text-align: left; padding-left: 2em;" rowspan="{{$type|ternary:2:3}}">
         {{foreach from=$antecedents item=_antecedent}}
           <li {{if $_antecedent->annule}}class="cancelled" style="display: none;"{{/if}}>
             {{if $_antecedent->_ref_first_log && $_antecedent->_ref_first_log->user_id == $app->user_id}}
@@ -51,7 +50,9 @@
               </button>
             {{/if}}   
             <strong>
+              {{if !$type}} 
               {{if $_antecedent->type    }} {{mb_value object=$_antecedent field=type    }} {{/if}}
+              {{/if}}
               {{if $_antecedent->appareil}} {{mb_value object=$_antecedent field=appareil}} {{/if}}
             </strong>
             {{if $_antecedent->date}}
