@@ -107,7 +107,7 @@
           <th class="category narrow">Terme</th>
           <th class="category">Praticiens</th>
           <th class="category">Naissances</th>
-          <th></th>
+          <th class="category"></th>
         </tr>
         {{foreach from=$sejours item=_sejour}}
           {{assign var=grossesse value=$_sejour->_ref_grossesse}}
