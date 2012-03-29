@@ -243,7 +243,7 @@ class CConsultation extends CCodable {
     $specs["_check_adresse"]    = "";
     $specs["_somme"]            = "currency";    
     $specs["_type"]             = "enum list|urg|anesth";
-    $specs["_prat_id"]          = "";
+    $specs["_prat_id"]          = "ref class|CMediusers";
     $specs["_acte_dentaire_id"] = "ref class|CActeDentaire";
     $specs["_ref_grossesse"]    = "ref class|CGrossesse";
     return $specs;
