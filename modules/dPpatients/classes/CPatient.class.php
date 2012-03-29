@@ -1651,7 +1651,7 @@ class CPatient extends CMbObject {
                  "SEXE"           => $this->sexe, "CIVILITE" => $this->civilite,
                  "CIVILITE LONGUE" => $this->_civilite_long, "ACCORD GENRE" => $this->sexe == "f" ? "e" : "",
                  "CODE BARRE IPP" => "@BARCODE_" . $this->_IPP."@",
-                 "ADRESSE"        => "$this->adresse \n $this->cp $this->ville",
+                 "ADRESSE"        => "$this->adresse \n$this->cp $this->ville",
                  "MED. TRAITANT"  => "Dr $medecin_traitant->nom $medecin_traitant->prenom");
   }
   
