@@ -470,11 +470,10 @@ class CCodable extends CMbObject {
     $count_activite_4 = 0;
     
     foreach ($actes_ccam as $_acte_ccam) {
-      $code_ccam = $_acte_ccam->loadRefCodeCCAM();
-      if ($code_ccam->code_activite == 1) {
+      if ($_acte_ccam->code_activite == 1) {
         $count_activite_1 ++;
       }
-      if ($code_ccam->code_activite == 4) {
+      if ($_acte_ccam->code_activite == 4) {
         $count_activite_4 ++;
       }
     }
