@@ -56,12 +56,12 @@ class CAffectationPersonnel extends CMbMetaObject {
   
   function loadRefPersonnel(){
   	$this->_ref_personnel = new CPersonnel();
-  	$this->_ref_personnel = $this->_ref_personnel->getCached($this->personnel_id);
+  	return $this->_ref_personnel = $this->_ref_personnel->getCached($this->personnel_id);
   }
   
   function loadRefObject(){
     $this->_ref_object = new $this->object_class;
-    $this->_ref_object = $this->_ref_object->getCached($this->object_id);
+    return $this->_ref_object = $this->_ref_object->getCached($this->object_id);
   }
    
   /**
