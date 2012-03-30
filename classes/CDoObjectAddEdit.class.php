@@ -171,7 +171,6 @@ class CDoObjectAddEdit {
       foreach (explode("-", $object_ids) as $object_id) {
       	$this->request = $request;
       	$this->request[$this->objectKey] = $object_id;
-      	mbTrace($this->request, 'Before Bound');
       	$this->doSingle();
       }
       CApp::rip();
