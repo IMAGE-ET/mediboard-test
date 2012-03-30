@@ -131,18 +131,20 @@ function managePersonnel($obj) {
   }
   
   foreach ($del_personnel as $_personnel_id) {
-    $affectation_personnel = new CAffectationPersonnel;
-    $affectation_personnel->object_class = $obj->_class;
-    $affectation_personnel->object_id = $obj->_id;
-    $affectation_personnel->personnel_id = $_personnel_id;
-    $affectation_personnel->loadMatchingObject();
-    
-    if ($affectation_personnel->_id) {
-      if ($msg = $affectation_personnel->delete()) {
-        CAppui::setMsg($msg, UI_MSG_ERROR);
-      }
-      else {
-        CAppUI::setMsg("Personnel supprimé");
+    if ($_personnel_id) {
+      $affectation_personnel = new CAffectationPersonnel;
+      $affectation_personnel->object_class = $obj->_class;
+      $affectation_personnel->object_id = $obj->_id;
+      $affectation_personnel->personnel_id = $_personnel_id;
+      $affectation_personnel->loadMatchingObject();
+      
+      if ($affectation_personnel->_id) {
+        if ($msg = $affectation_personnel->delete()) {
+          CAppui::setMsg($msg, UI_MSG_ERROR);
+        }
+        else {
+          CAppUI::setMsg("Personnel supprimé");
+        }
       }
     }
   }
