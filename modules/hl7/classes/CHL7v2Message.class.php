@@ -208,7 +208,12 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $first_line = CHL7v2::split($this->fieldSeparator, reset($this->lines));
     
     // version
-    $this->parseRawVersion($first_line[11], $first_line[16]);
+    if (array_key_exists(16, $first_line)) {
+      $this->parseRawVersion($first_line[11], $first_line[16]);
+    }
+    else {
+      $this->parseRawVersion($first_line[11]);
+    }
     
     // message type
     $message_type = explode($this->componentSeparator, $first_line[8]);
