@@ -218,7 +218,7 @@ Main.add(function(){
                 {{assign var=personnel value=$_affectation_personnel->_ref_personnel}}
                 <span style="white-space: nowrap;">
                   <button type="button" class="cancel notext"
-                    onclick="$V(this.form._del_{{$_type}}_id, {{$personnel->_id}}); this.form.submit();"></button>
+                    onclick="$V(this.form._del_iade_id, {{$personnel->_id}}); this.form.submit();"></button>
                  {{$personnel->_ref_user}}
                  </span>
               {{/foreach}}
@@ -238,7 +238,7 @@ Main.add(function(){
                 {{assign var=personnel value=$_affectation_personnel->_ref_personnel}}
                 <span style="white-space: nowrap;">
                   <button type="button" class="cancel notext"
-                    onclick="$V(this.form._del_{{$_type}}_id, {{$personnel->_id}}); this.form.submit();"></button>
+                    onclick="$V(this.form._del_op_id, {{$personnel->_id}}); this.form.submit();"></button>
                  {{$personnel->_ref_user}}
                  </span>
               {{/foreach}}
@@ -258,7 +258,7 @@ Main.add(function(){
                 {{assign var=personnel value=$_affectation_personnel->_ref_personnel}}
                 <span style="white-space: nowrap;">
                   <button type="button" class="cancel notext"
-                    onclick="$V(this.form._del_{{$_type}}_id, {{$personnel->_id}}); this.form.submit();"></button>
+                    onclick="$V(this.form._del_op_panseuse_id, {{$personnel->_id}}); this.form.submit();"></button>
                  {{$personnel->_ref_user}}
                  </span>
               {{/foreach}}
