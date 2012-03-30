@@ -31,12 +31,12 @@ ExClass = {
   toggleConditional: function(auto) {
     var form = getForm("editExClass");
     
-    if (auto) {
+    /*if (auto) {
       $V(form.conditional, "0");
       $V(form.__conditional, false);
     }
     
-    form.__conditional.disabled = auto;
+    form.__conditional.disabled = auto;*/
   },
   setEvent: function(select) {
     var form = select.form;
