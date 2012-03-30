@@ -323,7 +323,9 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
           $newPatient->tel  = $tel_number;
           break;
         case "ORN" :
-          $newPatient->tel2 = $tel_number;
+          if ($this->queryTextNode("XTN.3", $_PID13) == "CP") {
+            $newPatient->tel2 = $tel_number;
+          }
           break;
         default :
           $newPatient->tel_autre = $tel_number;
