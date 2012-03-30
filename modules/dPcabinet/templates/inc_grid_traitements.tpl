@@ -13,6 +13,7 @@ function addTraitement(rques, type, element) {
       $(element).setStyle({cursor: 'default', opacity: 0.3}).onclick = null;
     }
   }
+  window.focus();
 }
 </script>
 

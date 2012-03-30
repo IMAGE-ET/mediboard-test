@@ -14,7 +14,7 @@ function addAntecedent(rques, type, appareil, input) {
       $(input).up('td').setStyle({cursor: 'default', opacity: 0.3});
     }
   }
-  return false;
+  window.focus();
 }
 
 var oFormAntFrmGrid;
