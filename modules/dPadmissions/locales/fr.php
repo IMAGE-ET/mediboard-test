@@ -31,6 +31,7 @@ $locales['mod-dPadmissions-tab-vw_idx_consult'] = 'Consultation des anesthésiste
 $locales['mod-dPadmissions-tab-vw_idx_identito_vigilance'] = 'Identito-vigilance';
 $locales['mod-dPadmissions-tab-vw_idx_permissions'] = 'Permissions';
 $locales['mod-dPadmissions-tab-vw_idx_preadmission'] = 'Pré-admissions';
+$locales['mod-dPadmissions-tab-vw_idx_present'] = 'Présents';
 $locales['mod-dPadmissions-tab-vw_idx_sortie'] = 'Sorties';
 $locales['mod-dPadmissions-tab-vw_legende'] = 'Légende';
 $locales['module-dPadmissions-court'] = 'Admissions';
