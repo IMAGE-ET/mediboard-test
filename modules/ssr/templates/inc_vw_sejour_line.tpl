@@ -184,12 +184,7 @@
       {{/if}}
     {{/if}}
     <br />
-    {{assign var=affectation value=$_sejour->_ref_first_affectation}}
-    {{if $affectation->affectation_id}}
-      {{$affectation->_ref_lit->_view}}
-    {{else}}
-      Non placé
-    {{/if}}
+    {{mb_include module=hospi template=inc_placement_sejour sejour=$_sejour}}
   {{/if}}  
 </td>
 

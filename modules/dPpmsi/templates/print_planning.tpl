@@ -98,12 +98,7 @@
             {{mb_value object=$sejour field=sortie}}
           </td>
           <td class="text">
-            {{assign var="affectation" value=$sejour->_ref_first_affectation}}
-            {{if $affectation->_id}}
-            {{$affectation->_ref_lit->_view}}
-            {{else}}
-            Non placé
-            {{/if}}
+            {{mb_include module=hospi template=inc_placement_sejour sejour=$sejour}}
           </td>
           <td>
             {{$sejour->DP}}

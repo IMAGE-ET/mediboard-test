@@ -113,13 +113,8 @@
   Prest. {{$prestations.$_prestation_id->_view}}
   {{/if}}
   {{/if}}
-  <br />
-  {{assign var=affectation value=$curr_adm->_ref_first_affectation}}
-  {{if $affectation->affectation_id}}
-  {{$affectation->_ref_lit->_view}}
-  {{else}}
-  Non placé
-  {{/if}}
+  
+  {{mb_include module=hospi template=inc_placement_sejour sejour=$curr_adm}}
 </td>
 
 <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">

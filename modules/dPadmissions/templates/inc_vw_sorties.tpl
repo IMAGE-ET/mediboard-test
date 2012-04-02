@@ -190,15 +190,14 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
       {{if !($_sejour->type == 'exte') && !($_sejour->type == 'consult') && $_sejour->annule != 1}}
         {{foreach from=$_sejour->_ref_affectations item=_aff}}
           {{if $_aff->effectue}}
-            <div style="display: inline;" class="effectue">{{$_aff->_ref_lit->_view}}</div>
+            <div class="effectue">{{$_aff->_ref_lit}}</div>
           {{else}}
-            {{$_aff->_ref_lit->_view}}
+            <div>{{$_aff->_ref_lit}}</div>
           {{/if}}
-          <br />
         {{/foreach}}
         
         {{if !$_sejour->_ref_affectations|@count}}
-          Non placé
+          <div class="empty">Non placé</div>
         {{/if}}
        {{/if}}  
     </td>

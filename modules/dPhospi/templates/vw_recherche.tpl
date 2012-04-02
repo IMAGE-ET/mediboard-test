@@ -126,7 +126,7 @@ Main.add(function () {
       </span>
     </td>
     {{else}}
-    <td class="text">Non placé</td>
+    <td class="text empty">Non placé</td>
     <td class="text">
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
         {{mb_include module=system template=inc_interval_datetime from=$_sejour->entree to=$_sejour->sortie}}

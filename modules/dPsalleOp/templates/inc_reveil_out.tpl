@@ -34,12 +34,7 @@ submitSortieForm = function(oFormSortie) {
       </a>
     </td>
     <td class="text">
-      {{assign var="affectation" value=$_operation->_ref_sejour->_ref_first_affectation}}
-      {{if $affectation->affectation_id}}
-      {{$affectation->_ref_lit->_view}}
-      {{else}}
-      Non placé
-      {{/if}}
+      {{mb_include module=hospi template=inc_placement_sejour sejour=$_operation->_ref_sejour}}
     </td>
     <td class="button">
       {{if $can->edit}}

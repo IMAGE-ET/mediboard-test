@@ -81,12 +81,7 @@
     <td>{{$curr_sejour->_duree_prevue}} j</td>
     <td class="text">{{$curr_sejour->convalescence|nl2br}}</td>
     <td class="text">
-      {{assign var="affectation" value=$curr_sejour->_ref_first_affectation}}
-      {{if $affectation->affectation_id}}
-        {{$affectation->_ref_lit->_view}}
-      {{else}}
-        Non placé
-      {{/if}}
+      {{mb_include module=hospi template=inc_placement_sejour sejour=$curr_sejour}}
       ({{tr}}chambre_seule.{{$curr_sejour->chambre_seule}}{{/tr}})
     </td>
     <td class="text">{{$curr_sejour->_ref_prestation->_view}}</td>

@@ -156,6 +156,7 @@ $locales['CConfigConstantesMedicales-service_id'] = 'Service';
 $locales['CConfigConstantesMedicales-service_id-court'] = 'Service';
 $locales['CConfigConstantesMedicales-service_id-desc'] = 'Service';
 $locales['CConfigConstantesMedicales-shm-none'] = 'Cache de config de constantes médicales vide';
+$locales['CConfigConstantesMedicales-shm-ok'] = 'Cache des config de constantes médicales ok';
 $locales['CConfigConstantesMedicales-show_cat_tabs'] = 'Catégories en volets';
 $locales['CConfigConstantesMedicales-show_cat_tabs-court'] = 'Catégories en volets';
 $locales['CConfigConstantesMedicales-show_cat_tabs-desc'] = 'Afficher les catégories de constantes sous forme de volet';

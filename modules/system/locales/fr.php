@@ -78,6 +78,7 @@ $locales['CAlert.level.low'] = 'bas';
 $locales['CAlert.level.medium'] = 'moyen';
 $locales['CAlert.none'] = 'Aucune alerte';
 $locales['CAlert.one'] = 'l\'alerte';
+$locales['CConfigConstantesMedicales-shm-rem-ok'] = 'Cache des config de constantes médicales supprimé avec succès';
 $locales['CContentAny'] = 'Contenu générique';
 $locales['CContentAny-content'] = 'Texte';
 $locales['CContentAny-content-court'] = 'Texte';
