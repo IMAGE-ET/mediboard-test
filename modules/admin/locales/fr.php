@@ -282,6 +282,7 @@ $locales['config-source-ldap'] = 'Configuration source LDAP';
 $locales['config-user-source-ldap'] = 'Utilisateur LDAP';
 $locales['copied from template'] = 'copiés depuis un modèle';
 $locales['ldap'] = 'LDAP';
+$locales['ldap-hexa-to-registry'] = 'Convertir les idex Hexa vers Registre';
 $locales['ldap-massive-import'] = 'Importer en masse les comptes LDAP';
 $locales['ldap-massive-import-search'] = 'Rechercher les comptes qui ne sont pas associés';
 $locales['massively'] = 'massivement';

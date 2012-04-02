@@ -103,9 +103,9 @@ class CLDAP {
       return false;
     }
     
-		if (!$source_ldap->secured) {
-			$source_ldap->start_tls();
-		}
+    if (!$source_ldap->secured) {
+      $source_ldap->start_tls();
+    }
     
     $bound = $source_ldap->ldap_bind($source_ldap->_ldapconn, $user->user_username, $old_pass);
     
@@ -322,22 +322,26 @@ class CLDAP {
     $objectguid = $objectguid[1];
     
     if (CAppUI::conf("admin LDAP object_guid_mode") == "registry") {
-      $first_segment  = substr($objectguid, 4, 4);
-      $second_segment = substr($objectguid, 0, 4);
-      $third_segment  = substr($objectguid, 8, 4);
-      $fourth_segment = substr($objectguid, 12, 4);
-      $fifth_segment  = substr($objectguid, 16, 4);
-      $sixth_segment  = substr($objectguid, 20, 12);
-      
-      $first_segment  = implode("", array_reverse(str_split($first_segment, 2)));
-      $second_segment = implode("", array_reverse(str_split($second_segment, 2)));
-      $third_segment  = implode("", array_reverse(str_split($third_segment, 2)));
-      $fourth_segment = implode("", array_reverse(str_split($fourth_segment, 2)));
-    
-      $objectguid = "$first_segment$second_segment-$third_segment-$fourth_segment-$fifth_segment-$sixth_segment";
+      $objectguid = self::convertHexaToRegistry($objectguid);
     }
     
     return $objectguid;
+  }
+
+  static function convertHexaToRegistry($objectguid) {
+    $first_segment  = substr($objectguid, 4, 4);
+    $second_segment = substr($objectguid, 0, 4);
+    $third_segment  = substr($objectguid, 8, 4);
+    $fourth_segment = substr($objectguid, 12, 4);
+    $fifth_segment  = substr($objectguid, 16, 4);
+    $sixth_segment  = substr($objectguid, 20, 12);
+    
+    $first_segment  = implode("", array_reverse(str_split($first_segment, 2)));
+    $second_segment = implode("", array_reverse(str_split($second_segment, 2)));
+    $third_segment  = implode("", array_reverse(str_split($third_segment, 2)));
+    $fourth_segment = implode("", array_reverse(str_split($fourth_segment, 2)));
+  
+    return "$first_segment$second_segment-$third_segment-$fourth_segment-$fifth_segment-$sixth_segment";
   }
   
   /**

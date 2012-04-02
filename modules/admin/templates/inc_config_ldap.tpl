@@ -37,6 +37,11 @@
       LDAPMassiveImport(button);
     }} );
   }
+  
+  function LDAPHexaToRegistry() {
+    var url = new Url("admin", "ajax_ldap_hexa_to_registry");
+    url.requestUpdate("ldap-hexa-to-registry");
+  }
 </script>
 
 <table class="main">
@@ -99,6 +104,21 @@
             </tr>
           </table>
         </form>
+        
+        <table class="tbl">
+          <tr>
+            <th class="title" colspan="2">{{tr}}ldap-hexa-to-registry{{/tr}}</th>
+          </tr>
+          
+          <tr>
+            <td class="narrow">
+              <button type="button" class="tick" onclick="LDAPHexaToRegistry(this)">
+                {{tr}}ldap-hexa-to-registry{{/tr}}
+              </button>
+            </td>
+            <td rowspan="2" id="ldap-hexa-to-registry"></td>
+          </tr>
+        </table>
       </div>
           
      <div id="ldap-user">
