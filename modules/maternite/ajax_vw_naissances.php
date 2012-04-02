@@ -16,10 +16,14 @@ $operation_id = CValue::get("operation_id");
 $operation = new COperation;
 $operation->load($operation_id);
 
-$grossesse = $operation->loadRefSejour(1)->loadRefGrossesse();
+$sejour = $operation->loadRefSejour();
 
-$naissances = $operation->loadRefsNaissances();
+$grossesse = $sejour->loadRefGrossesse();
+
+$naissances = $grossesse->loadRefsNaissances();
+
 $sejours = CMbObject::massLoadFwdRef($naissances, "sejour_enfant_id");
+
 CMbObject::massLoadFwdRef($sejours, "patient_id");
 
 foreach ($naissances as $_naissance) {

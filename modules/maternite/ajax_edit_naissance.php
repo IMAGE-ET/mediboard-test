@@ -11,8 +11,11 @@
  * @link     http://www.mediboard.org
  */
 
-$naissance_id = CValue::get("naissance_id");
-$operation_id = CValue::get("operation_id");
+$naissance_id   = CValue::get("naissance_id");
+$operation_id   = CValue::get("operation_id");
+$provisoire     = CValue::get("provisoire", 0);
+$sejour_id      = CValue::get("sejour_id");
+$callback       = CValue::get("callback");
 
 $naissance  = new CNaissance;
 $constantes = new CConstantesMedicales;
@@ -23,7 +26,15 @@ $patient->naissance = mbDate();
 $operation = new COperation();
 $operation->load($operation_id);
 
-$parturiente = $operation->loadRefSejour()->loadRefGrossesse()->loadRefParturiente();
+if ($operation->_id) {
+  $parturiente = $operation->loadRefPatient();
+}
+else if ($sejour_id) {
+  $sejour = new CSejour;
+  $sejour->load($sejour_id);
+  $parturiente = $sejour->loadRefPatient();
+}
+
 $anonmymous = is_numeric($parturiente->nom);
 
 if ($naissance_id) {
@@ -32,9 +43,12 @@ if ($naissance_id) {
   $constantes = $patient->getFirstConstantes();
 }
 else {
-  $naissance->rang = $operation->countBackRefs("naissances") + 1;
+  if (!$provisoire) {
+    $naissance->rang = $operation->countBackRefs("naissances") + 1;
+    $naissance->heure = mbTime();
+  }
+  
   $naissance->operation_id = $operation_id;
-  $naissance->heure = mbTime();
   if (!$anonmymous) {
     $patient->nom = $parturiente->nom;
   }
@@ -46,6 +60,10 @@ $smarty->assign("naissance"  , $naissance);
 $smarty->assign("patient"    , $patient);
 $smarty->assign("constantes" , $constantes);
 $smarty->assign("parturiente", $parturiente);
+$smarty->assign("provisoire" , $provisoire);
+$smarty->assign("sejour_id"  , $sejour_id);
+$smarty->assign("callback"   , $callback);
+$smarty->assign("operation_id", $operation_id);
 $smarty->assign("list_constantes", CConstantesMedicales::$list_constantes);
 
 $smarty->display("inc_edit_naissance.tpl");

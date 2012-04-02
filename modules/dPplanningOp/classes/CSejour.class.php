@@ -343,9 +343,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["_coordonnees"]      = "bool default|0";
     $props["_adresse_par"]      = "bool";
     $props["_adresse_par_prat"] = "str";
-    $props["_ref_etablissement_provenance"] = "str";
     $props["_etat"]             = "enum list|preadmission|encours|cloture";
-    $props["_ref_grossesse"]        = "ref class|CGrossesse";
     
     $props["_duree_prevue"]                     = "num";
     $props["_duree_reelle"]                     = "num";

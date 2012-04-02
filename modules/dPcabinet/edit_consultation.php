@@ -280,6 +280,10 @@ if ($consult->_ref_actes_tarmed) {
 $total = $soustotal_base + $soustotal_dh;
 $total = round($total,2);
 
+if (CModule::getActive("maternite")) {
+  $consult->loadRefGrossesse();
+}
+
 // Tout utilisateur peut consulter en lecture seule une consultation de séjour
 $consult->canEdit();
 

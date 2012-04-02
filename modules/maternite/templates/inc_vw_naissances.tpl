@@ -1,7 +1,7 @@
 <form name="createProvisoire" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function() { refreshGrossesse('{{$operation->_id}}'); } });">
   <input type="hidden" name="m" value="maternite" />
   <input type="hidden" name="dosql" value="do_dossier_provisoire_aed" />
-  <input type="hidden" name="operation_id" value="{{$operation->_id}}"/>
+  <input type="hidden" name="sejour_id" value="{{$operation->sejour_id}}"/>
 </form>
 <table class="tbl">
   <tr>
@@ -32,12 +32,12 @@
     <th class="category">{{tr}}CPatient{{/tr}}</th>
     <th class="category">{{tr}}CSejour{{/tr}}</th>
   </tr>
-  {{foreach from=$operation->_ref_naissances item=_naissance}}
+  {{foreach from=$operation->_ref_sejour->_ref_grossesse->_ref_naissances item=_naissance}}
     {{assign var=sejour_enfant value=$_naissance->_ref_sejour_enfant}}
     {{assign var=enfant value=$sejour_enfant->_ref_patient}}
     <tr>
       <td>
-        <button type="button" class="edit notext" onclick="Naissance.edit('{{$_naissance->_id}}')"></button>
+        <button type="button" class="edit notext" onclick="Naissance.edit('{{$_naissance->_id}}', '{{$operation->_id}}')"></button>
       </td>
       <td>
         {{if $_naissance->heure && $_naissance->rang}}

@@ -2,6 +2,7 @@ Grossesse = {
   formTo: null,
   formFrom: null,
   duree_sejour: null,
+  submit: false,
   viewGrossesses: function(parturiente_id, object_guid, grossesse_id_form) {
     var url = new Url("maternite", "ajax_bind_grossesse");
     url.addParam("parturiente_id", parturiente_id);
@@ -9,7 +10,7 @@ Grossesse = {
     if (grossesse_id_form) {
       url.addParam("grossesse_id_form", grossesse_id_form);
     }
-    url.requestModal(700, 400);
+    url.requestModal(700, 200);
   },
   toggleGrossesse: function(sexe, form) {
     if (form._grossesse_view) {
@@ -46,6 +47,10 @@ Grossesse = {
     if (this.formTo.sejour_id) {
       $V(this.formTo.type_pec, 'O');
       $V(this.formTo._duree_prevue, this.duree_sejour);
+    }
+    if (this.submit) {
+      console.log("toto");
+      return onSubmitFormAjax(this.formTo);
     }
   }
 }

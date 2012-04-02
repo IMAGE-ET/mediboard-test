@@ -58,7 +58,12 @@ class CSetupmaternite extends CSetup {
       ADD `date_dernieres_regles` DATE;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.03";
+    $this->makeRevision("0.03");
+    $query = "ALTER TABLE `grossesse`
+      CHANGE `grosssesse_id` `grossesse_id` INT (11) UNSIGNED";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.04";
   }
 }
 ?>

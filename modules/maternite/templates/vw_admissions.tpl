@@ -3,19 +3,9 @@
     Calendar.regField(getForm("changeDate").elements["date"], null, {noView: true});
   });
   
-  createDossierProvisoire = function(operation_id) {
-    var form = getForm('createProvisoire');
-    $V(form.operation_id, operation_id);
-    form.onsubmit();
-  }
 </script>
 {{mb_script module=admissions script=admissions}}
-
-<form name="createProvisoire" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function() {document.location.reload() }});">
-  <input type="hidden" name="m" value="maternite" />
-  <input type="hidden" name="dosql" value="do_dossier_provisoire_aed" />
-  <input type="hidden" name="operation_id" value=""/>
-</form>
+{{mb_script module=maternite script=naissance}}
 
 <table class="main">
   <tr>
@@ -146,11 +136,8 @@
               {{/foreach}}
             </td>
             <td class="narrow">
-              {{if $grossesse->_operation_id}}
-                <button type="button" class="add notext" title="Créer un dossier provisoire"
-                  onclick="if (confirm('Voulez-vous créer un dossier provisoire pour le patient {{$_sejour->_ref_patient}}')) {
-                    createDossierProvisoire('{{$grossesse->_operation_id}}'); }"></button>
-              {{/if}}
+              <button type="button" class="add notext" title="Créer un dossier provisoire"
+                onclick="Naissance.edit(null, null, '{{$_sejour->_id}}', 1, 'document.location.reload')"></button>
             </td>
           </tr>
         {{foreachelse}}

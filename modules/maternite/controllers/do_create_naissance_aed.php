@@ -15,6 +15,7 @@ $naissance_id = CValue::post("naissance_id");
 $operation_id = CValue::post("operation_id");
 $patient_id   = CValue::post("patient_id");
 $constantes_id = CValue::post("constantes_medicales_id");
+$hors_etab    = CValue::post("hors_etab");
 $sexe         = CValue::post("sexe");
 $heure        = CValue::post("heure");
 $rang         = CValue::post("rang");
@@ -111,6 +112,7 @@ if (!$naissance_id) {
   $naissance->grossesse_id = $grossesse->_id;
   $naissance->rang         = $rang;
   $naissance->heure        = $heure;
+  $naissance->hors_etab    = $hors_etab;
   storeObject($naissance);
 }
 // Modification d'une naissance
@@ -122,6 +124,7 @@ else {
   
   if (!$naissance->heure && !$naissance->rang && $heure && $rang) {
     $validation_naissance = true;
+    $naissance->operation_id = $operation_id;
   }
   
   $naissance->heure = $heure;

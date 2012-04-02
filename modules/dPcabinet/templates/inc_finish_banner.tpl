@@ -72,6 +72,9 @@ function changePratPec(prat_id) {
           Imprimer les documents
         </button> 
         <br />
+        {{if "maternite"|module_active && !$_is_anesth}}
+          {{mb_include module=maternite template=inc_input_grossesse object=$consult submit=1}}
+        {{/if}}
         {{if $sejour && $sejour->_id}}
           <button class="print" type="button" onclick="printConsult();">
             Imprimer la consultation
