@@ -20,8 +20,6 @@
 {{/if}}
 
 <script type="text/javascript">
-fill_grossesse = 0;
-
 Medecin = {
   form: null,
   edit : function() {
@@ -105,30 +103,9 @@ function checkFormRDV(form){
     if (checkedOperation) {
       form._operation_id.value = checkedOperation.value;
     }
-    {{if $maternite_active}}
-      return bindGrossesse();
-    {{else}}
-      return checkForm(form);
-    {{/if}}
-  }
-}
-
-function bindGrossesse() {
-  var form = getForm('editFrm');
-  if (!$V(form._grossesse) || fill_grossesse) {
+    
     return checkForm(form);
   }
-  var url = new Url("maternite","ajax_bind_grossesse");
-  url.addParam("patient_id", $V(form.patient_id));
-  url.requestModal();
-  return false;
-}
-
-function submitAfterGrossesse(grossesse_id) {
-  fill_grossesse = 1;
-  var form = getForm('editFrm');
-  $V(form.grossesse_id, grossesse_id);
-  form.submit();
 }
 
 function printForm() {
@@ -157,13 +134,6 @@ checkCorrespondantMedical = function(){
   url.addParam("object_id" , $V(form.consultation_id));
   url.addParam("object_class", '{{$consult->_class}}');
   url.requestUpdate("correspondant_medical");
-}
-
-toggleGrossesse = function(sexe) {
-  var form = getForm("editFrm");
-  if (form._grossesse_view) {
-    form._grossesse_view.disabled = sexe == "f" ? "" : "disabled";
-  }
 }
 
 Main.add(function () {
@@ -196,10 +166,6 @@ Main.add(function () {
 <input type="hidden" name="arrivee" value="" />
 <input type="hidden" name="chrono" value="{{$consult|const:'PLANIFIE'}}" />
 <input type="hidden" name="_operation_id" value="" />
-<input type="hidden" name="grossesse_id" value="{{$consult->grossesse_id}}" />
-{{if $maternite_active && !$consult->_id}}
-  <input type="hidden" name="_patient_sexe" value="" onchange="toggleGrossesse(this.value)"/>
-{{/if}}
 
 <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;consultation_id=0">
   {{tr}}CConsultation-title-create{{/tr}}
@@ -417,18 +383,10 @@ Main.add(function () {
           </tr>
           
           {{if $maternite_active}}
-            {{assign var=grossesse value=$consult->_ref_grossesse}}
             <tr>
-              <th>{{mb_label object=$consult field=_ref_grossesse}}</th>  
+              <th>{{tr}}CGrossesse{{/tr}}</th>
               <td>
-                {{if $grossesse}}
-                  <span onmouseover="ObjectTooltip.createEx(this, '{{$grossesse->_guid}}')">{{$grossesse}}</span>
-                {{else}}
-                  <input type="checkbox" name="_grossesse_view"
-                    {{if !$pat->_id || ($pat->_id && $pat->sexe == "m")}}disabled="disabled"{{/if}}
-                    onchange="$V(this.form._grossesse, this.checked ? 1 : 0);" />
-                  <input type="hidden" name="_grossesse" value="" />
-                {{/if}}
+                 {{mb_include module=maternite template=inc_input_grossesse object=$consult patient=$pat}}
               </td>
             </tr>
           {{/if}}

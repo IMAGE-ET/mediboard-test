@@ -74,9 +74,18 @@ if (!$naissance_id) {
     $constantes->perimetre_cranien = $perimetre_cranien;
     storeObject($constantes);
   }
+  
   // Etape 3 (séjour)
   $sejour_enfant = new CSejour;
-  $sejour_enfant->entree_reelle = $datetime;
+  
+  // Si dossier provisoire, entrée prévue
+  if ($rang && $heure) {
+    $sejour_enfant->entree_reelle = $datetime;
+  }
+  else {
+    $sejour_enfant->entree_prevue = mbDate();
+  }
+  
   $sejour_enfant->sortie_prevue = $curr_affect->sortie;
   $sejour_enfant->patient_id = $patient->_id;
   $sejour_enfant->praticien_id = $sejour->praticien_id;
@@ -84,13 +93,16 @@ if (!$naissance_id) {
   storeObject($sejour_enfant);
   
   // Etape 4 (affectation)
-  $affectation = new CAffectation;
-  $affectation->entree = $sejour_enfant->entree_reelle;
-  $affectation->sortie = $sejour_enfant->sortie_prevue;
-  $affectation->lit_id = $curr_affect->lit_id;
-  $affectation->sejour_id = $sejour_enfant->_id;
-  $affectation->parent_affectation_id = $curr_affect->_id;
-  storeObject($affectation);
+  // Sauf si c'est un dossier provisoire
+  if ($rang && $heure) {
+    $affectation = new CAffectation;
+    $affectation->entree = $sejour_enfant->entree_reelle;
+    $affectation->sortie = $sejour_enfant->sortie_prevue;
+    $affectation->lit_id = $curr_affect->lit_id;
+    $affectation->sejour_id = $sejour_enfant->_id;
+    $affectation->parent_affectation_id = $curr_affect->_id;
+    storeObject($affectation);
+  }
   
   // Etape 5 (naissance)
   $naissance = new CNaissance;
@@ -108,7 +120,7 @@ else {
   $naissance->load($naissance_id);
   $naissance->rang = $rang;
   
-  if (!$naissance->heure && $naissance->rang && $heure && $rang) {
+  if (!$naissance->heure && !$naissance->rang && $heure && $rang) {
     $validation_naissance = true;
   }
   

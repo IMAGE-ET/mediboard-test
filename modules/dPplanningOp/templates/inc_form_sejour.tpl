@@ -12,17 +12,18 @@
 {{mb_script module="dPpatients" script="medecin"}}
 {{mb_script module="dPplanningOp" script="cim10_selector"}}
 {{mb_default var=count_prestations value=0}}
+{{mb_default var=_duree_prevue value=0}}
 
-{{assign var=grossesse value=$sejour->_ref_grossesse}}
 {{if "maternite"|module_active}}
   {{assign var=maternite_active value="1"}}
+  {{if !$sejour->_id && $sejour->grossesse_id}}
+    {{assign var=_duree_prevue value=$sejour->_duree_prevue}}
+  {{/if}}
 {{else}}
   {{assign var=maternite_active value="0"}}
 {{/if}}
 
 <script type="text/javascript">
-fill_grossesse = 0;
-
 function checkHeureSortie(){
   var oForm = getForm("editSejour");
   var heure_entree = parseInt(oForm._hour_entree_prevue.value, 10);
@@ -46,36 +47,6 @@ function changeModeSortie(mode_sortie){
   loadServiceMutation(mode_sortie);
 }
 
-function toggleGrossesse(sexe) {
-  var form = getForm("editSejour");
-  if (form._grossesse_view) {
-    form._grossesse_view.disabled = sexe == "f" ? "" : "disabled";
-  }
-}
-
-function bindGrossesse() {
-  var form = getForm('editSejour');
-  if (!$V(form._grossesse) || fill_grossesse) {
-    return checkDureeHospi() && checkModeSortie() && OccupationServices.testOccupation() && checkForm(form);
-  }
-  // Si création de séjour avec paramètre grossesse_id passé,
-  // alors il n'y a rien à faire.
-  if ($V(form.grossesse_id)) {
-    return false;
-  }
-  var url = new Url("maternite","ajax_bind_grossesse");
-  url.addParam("patient_id", $V(form.patient_id));
-  url.requestModal();
-  return false;
-}
-
-function submitAfterGrossesse(grossesse_id) {
-  fill_grossesse = 1;
-  var form = getForm('editSejour');
-  $V(form.grossesse_id, grossesse_id);
-  form.submit();
-}
-
 function checkModeSortie(){
   var oForm = getForm("editSejour");
   
@@ -89,11 +60,7 @@ function checkModeSortie(){
 
 function checkSejour() {
   var oForm = getForm("editSejour");
-  {{if $maternite_active}}
-    return bindGrossesse();
-  {{else}}
-    return checkDureeHospi() && checkModeSortie() && OccupationServices.testOccupation() && checkForm(oForm);
-  {{/if}}
+  return checkDureeHospi() && checkModeSortie() && OccupationServices.testOccupation() && checkForm(oForm);
 }
 
 function checkPresta(){
@@ -342,10 +309,6 @@ Main.add( function(){
   removePlageOp(false);
   OccupationServices.initOccupation();
   OccupationServices.configBlocage = ({{$conf.dPplanningOp.CSejour.blocage_occupation|@json}} == "1") && !{{$modules.dPcabinet->_can->edit|@json}};
-  
-  {{if $maternite_active && !$grossesse && !$mode_operation}}
-    toggleGrossesse($V(form._patient_sexe));
-  {{/if}}
 });
 </script>
 
@@ -369,10 +332,6 @@ Main.add( function(){
 <input type="hidden" name="del" value="0" />
 {{if $sejour->sortie_reelle && !$can->admin}}
 <!-- <input type="hidden" name="_locked" value="1" /> -->
-{{/if}}
-<input type="hidden" name="grossesse_id" value="{{$sejour->grossesse_id}}" />
-{{if $maternite_active}}
-  <input type="hidden" name="_patient_sexe" value="{{if $patient}}{{$patient->sexe}}{{/if}}" onchange="toggleGrossesse(this.value)"/>
 {{/if}}
 
 {{mb_field object=$sejour field="codes_ccam" hidden=1}}
@@ -631,18 +590,9 @@ Main.add( function(){
 {{/if}}
 {{if $maternite_active && !$mode_operation}}
   <tr>
-    <th>{{mb_label object=$sejour field=_ref_grossesse}}</th>  
+    <th>{{tr}}CGrossesse{{/tr}}</th>  
     <td colspan="3">
-      {{if $grossesse}}
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$grossesse->_guid}}')">{{$grossesse}}</span>
-      {{else}}
-        <input type="checkbox" name="_grossesse_view" disabled="disabled"
-          onchange="$V(this.form._grossesse, this.checked ? 1 : 0);
-            {{if $conf.dPplanningOp.CSejour.show_type_pec}}
-              if (this.checked) { $V(this.form.type_pec, 'O'); }
-            {{/if}}" />
-        <input type="hidden" name="_grossesse" value=""/>
-      {{/if}}
+      {{mb_include module=maternite template=inc_input_grossesse object=$sejour patient=$patient}}
     </td>
   </tr>
 {{/if}}
@@ -684,7 +634,7 @@ Main.add( function(){
 <tr>
   <th>{{mb_label object=$sejour field="_duree_prevue"}}</th>
   <td colspan="3">
-    {{mb_field object=$sejour field="_duree_prevue" increment=true form=editSejour prop="num min|0" size=2 onchange="updateSortiePrevue(); checkDureeHospi('syncType');" value=$sejour->sejour_id|ternary:$sejour->_duree_prevue:0}}
+    {{mb_field object=$sejour field="_duree_prevue" increment=true form=editSejour prop="num min|0" size=2 onchange="updateSortiePrevue(); checkDureeHospi('syncType');" value=$sejour->sejour_id|ternary:$sejour->_duree_prevue:$_duree_prevue}}
     nuits
     (<span id="dureeEst"></span>)
   </td>

@@ -11,16 +11,16 @@
  * @link     http://www.mediboard.org
  */
 
-$patient_id = CValue::get("patient_id");
-
-$grossesse = new CGrossesse;
-$grossesse->parturiente_id = $patient_id;
-$grossesse->active = 1;
-$grossesse->loadMatchingObject();
+$parturiente_id    = CValue::get("parturiente_id");
+$object_guid       = CValue::get("object_guid");
+$grossesse_id_form = CValue::getOrSession("grossesse_id_form");
 
 $smarty = new CSmartyDP;
 
-$smarty->assign("grossesse", $grossesse);
+$smarty->assign("parturiente_id", $parturiente_id);
+$smarty->assign("object_guid"   , $object_guid);
+$smarty->assign("grossesse_id_form"  , $grossesse_id_form);
 
 $smarty->display("inc_bind_grossesse.tpl");
+
 ?>

@@ -61,10 +61,6 @@ if ($sejour_id) {
     CAppUI::redirect("m=$m&tab=$tab&sejour_id=0");
   }
 
-  if (CModule::getActive("maternite")) {
-    $sejour->loadRefGrossesse();
-  }
-  
   foreach ($sejour->_ref_operations as &$operation) {
     $operation->loadRefsFwd();
     $operation->_ref_chir->loadRefsFwd();
@@ -85,13 +81,20 @@ $sejour->loadRefsNotes();
 $sejour->loadRefsConsultAnesth();
 $sejour->_ref_consult_anesth->loadRefConsultation();
 
-if (CModule::getActive("maternite") && !$sejour->_id && $grossesse_id) {
-  $sejour->grossesse_id = $grossesse_id;
-  $sejour->type_pec = 'O';
+if (CModule::getActive("maternite")) {
+  if ($grossesse_id) {
+    $sejour->grossesse_id = $grossesse_id;
+  }
+  
   $sejour->loadRefGrossesse();
-  $sejour->_date_entree_prevue = mbDate();
-  $duree_sejour = CAppUI::conf("maternite duree_sejour");
-  $sejour->_date_sortie_prevue = mbDate("+ $duree_sejour days");
+  
+  if (!$sejour->_id && $grossesse_id) {
+    $sejour->type_pec = 'O';
+    $sejour->_date_entree_prevue = mbDate();
+    $duree_sejour = CAppUI::conf("maternite duree_sejour");
+    $sejour->_date_sortie_prevue = mbDate("+ $duree_sejour days");
+    $sejour->_duree_prevue = $duree_sejour;
+  }
 }
 
 $patient->loadRefsSejours();
