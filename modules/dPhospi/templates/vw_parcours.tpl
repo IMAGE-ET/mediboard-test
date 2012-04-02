@@ -288,33 +288,5 @@ function editIntervention(op_id) {
 </div>
 
 <div id="mouvements" style="display: none;">
-  <table class="tbl">
-    <tr> 
-      <th colspan="4" class="title">{{$sejour->_view}} </th>
-    </tr>
-    <tr>
-      <th> </th>
-      <th class="category">{{mb_title object=$movement field=movement_type}}</th>
-      <th class="category">{{mb_title object=$movement field=original_trigger_code}}</th>
-      <th class="category">{{mb_title object=$movement field=last_update}}</th>
-    </tr>
-    {{foreach from=$movements item=_movement}}
-      <tr {{if $_movement->cancel}}class="hatching"{{/if}}>
-        <td> 
-          <span onmouseover="ObjectTooltip.createEx(this,'{{$_movement->_guid}}', 'identifiers')">{{$_movement->_view}}</span>
-        </td>
-        <td>{{mb_value object=$_movement field=movement_type}}</td>
-        <td>{{mb_value object=$_movement field=original_trigger_code}}</td>
-        <td>
-          <label title='{{mb_value object=$_movement field="last_update"}}'>
-            {{mb_value object=$_movement field="last_update" format=relative}}
-          </label>
-        </td>
-      </tr>
-    {{foreachelse}}
-    <tr> 
-      <td colspan="4" class="empty">{{tr}}CMovement.none{{/tr}}</th>
-    </tr>
-    {{/foreach}}
-  </table>
+  {{mb_include module=hospi template=inc_movements}}
 </div>

@@ -576,7 +576,16 @@ class CSetupdPhospi extends CSetup {
       ADD `text_align` ENUM ('top','middle','bottom') DEFAULT 'top'";
     $this->addQuery($query);
     
-    $this->mod_version = "0.59";
+    $this->makeRevision("0.59");
+    $query = "ALTER TABLE `movement` 
+              ADD `start_of_movement` DATETIME;";
+    $this->addQuery($query);           
+              
+    $query = "ALTER TABLE `movement` 
+              ADD INDEX (`start_of_movement`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.60";
   }
 }
 ?>

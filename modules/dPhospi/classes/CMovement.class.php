@@ -17,6 +17,7 @@ class CMovement extends CMbObject {
   var $affectation_id        = null;
   var $movement_type         = null;
   var $original_trigger_code = null;
+  var $start_of_movement     = null;
   var $last_update           = null;
   var $cancel                = null;
   
@@ -39,6 +40,7 @@ class CMovement extends CMbObject {
     $props["affectation_id"]        = "ref class|CAffectation seekable cascade";
     $props["movement_type"]         = "enum notNull list|PADM|ADMI|MUTA|SATT|SORT";
     $props["original_trigger_code"] = "str length|3";
+    $props["start_of_movement"]     = "dateTime";
     $props["last_update"]           = "dateTime notNull";
     $props["cancel"]                = "bool default|0";
     
@@ -66,7 +68,7 @@ class CMovement extends CMbObject {
   }
   
   function loadMatchingList($order = null, $limit = null, $group = null, $ljoin = null) {
-    $order = "last_update DESC";
+    $order = "last_update DESC, movement_id DESC";
 
     return parent::loadMatchingList($order, $limit, $group, $ljoin);
   }
