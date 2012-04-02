@@ -79,6 +79,7 @@ Main.add(function(){
   {{mb_field object=$ex_object field=_ex_class_id hidden=true}}
   {{mb_field object=$ex_object field=object_class hidden=true}}
   {{mb_field object=$ex_object field=object_id hidden=true}}
+  {{*mb_field object=$ex_object field=group_id hidden=true*}}
   
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="callback" value="ExObjectForms.{{$ex_form_hash}}.closeOnSuccess" />
@@ -120,6 +121,8 @@ Main.add(function(){
     {{/if}}
     
     <hr style="border-color: #333; margin: 4px 0;" />
+    {{*<span style="float: right;">{{$ex_object->_ref_group}}</span>*}}
+    
     {{$ex_object->_ref_ex_class->name}} - {{$object}}
     
     {{if $parent_view}}
@@ -310,6 +313,8 @@ function switchMode(){
     <tr>
       <td colspan="4">
         <p style="font-weight: bold; font-size: 1.1em;">
+          {{*<span style="float: right;">{{$ex_object->_ref_group}}</span>*}}
+    
           {{if $ex_object->_ref_reference_object_2 && $ex_object->_ref_reference_object_2->_id}}
             <span style="color: #006600;">
               {{$ex_object->_ref_reference_object_2}}
@@ -390,11 +395,11 @@ function switchMode(){
             {{assign var=_host_field value=$_group.object}} 
               {{if $_group.type == "label"}}
                 <th style="font-weight: bold; text-align: left; white-space: normal;">
-                  {{mb_title object=$ex_object->_ref_object field=$_host_field->field}}
+                  {{mb_title object=$_host_field->_ref_host_object field=$_host_field->field}}
                 </th>
               {{else}}
                 <td>
-                  {{mb_value object=$ex_object->_ref_object field=$_host_field->field}}
+                  {{mb_value object=$_host_field->_ref_host_object field=$_host_field->field}}
                 </td>
               {{/if}}
           {{else}}
