@@ -108,7 +108,6 @@ class CModeleEtiquette extends CMbMetaObject {
   }
   
   function printEtiquettes($printer_id = null) {
-    mbLog($this);
     // Affectation de la police par défault si aucune n'est choisie
     if ($this->font == "")
       $this->font = "dejavusansmono";
