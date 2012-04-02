@@ -35,14 +35,10 @@ try {
 $fileextension           = $source->fileextension;
 $fileextension_write_end = $source->fileextension_write_end;
 
-$i = CAppUI::conf("eai max_files_to_process");
+$count = CAppUI::conf("eai max_files_to_process");
+$files = array_slice($files, 0, $count);
+
 foreach ($files as $_filepath) {
-  if ($i == 0) {
-    CAppUI::stepAjax("Fin du traitement des fichiers");
-    
-    return;
-  }
-  
   $sender->_delete_file = $delete_file;
   
   $path_info = pathinfo($_filepath);
@@ -80,7 +76,6 @@ foreach ($files as $_filepath) {
     } catch (Exception $e) {
       if ($sender->_delete_file !== false) {
         $source->delFile($_filepath);
-        $i--;
       } 
       else {
         CAppUI::stepAjax("CEAIDispatcher-no_message_supported_for_this_actor", UI_MSG_WARNING, $sender->_data_format->_family_message->code);
@@ -91,7 +86,6 @@ foreach ($files as $_filepath) {
 
   if ($sender->_delete_file !== false) {
     $source->delFile($_filepath);
-    $i--;
   }
   else {
     CAppUI::stepAjax("CEAIDispatcher-no_message_supported_for_this_actor", UI_MSG_WARNING, $sender->_data_format->_family_message->code);      
