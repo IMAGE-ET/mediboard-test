@@ -49,7 +49,6 @@ class CInteropActor extends CMbObject {
     
     $props["_reachable"]        = "bool";
     $props["_parent_class"]     = "str";
-    $props["_ref_last_message"] = "str";
     
     $props["_tag_patient"]  = "str";
     $props["_tag_sejour"]   = "str";

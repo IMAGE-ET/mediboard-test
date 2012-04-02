@@ -32,9 +32,12 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     $receiver = $mbObject->_receiver;
     $receiver->getInternationalizationCode($this->transaction);
     
+    $eai_initiateur_group_id = $mbObject->_eai_initiateur_group_id;
+    
     if ($mbObject instanceof CCorrespondantPatient) {
-      $mbObject = $mbObject->loadRefPatient();
-      $mbObject->_receiver = $receiver;
+      $mbObject                           = $mbObject->loadRefPatient();
+      $mbObject->_receiver                = $receiver;
+      $mbObject->_eai_initiateur_group_id = $eai_initiateur_group_id;
       
       $code = "A31";
     }
@@ -53,7 +56,6 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     }
     
 		$patient = $mbObject;
-    
     if ($patient->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
       return;
     }

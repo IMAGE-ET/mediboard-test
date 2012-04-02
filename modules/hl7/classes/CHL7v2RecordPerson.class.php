@@ -317,14 +317,14 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $PID13 = $this->query("PID.13", $node);
     $phones = array();
     foreach ($PID13 as $_PID13) {
-      $tel_number = $this->getPhone($this->queryTextNode("XTN.1", $_PID13));
+      $tel_number = $this->queryTextNode("XTN.1", $_PID13);
       switch ($this->queryTextNode("XTN.2", $_PID13)) {
         case "PRN" :
-          $newPatient->tel  = $tel_number;
+          $newPatient->tel  = $this->getPhone($tel_number);
           break;
         case "ORN" :
           if ($this->queryTextNode("XTN.3", $_PID13) == "CP") {
-            $newPatient->tel2 = $tel_number;
+            $newPatient->tel2 = $this->getPhone($tel_number);
           }
           break;
         default :
@@ -340,6 +340,8 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
   }
   
   function getROL(DOMNode $node, CPatient $newPatient) {
+    $sender = $this->_ref_sender;
+    
     switch ($this->queryTextNode("ROL.3/CE.1", $node)) {
       // Médecin traitant
       case "ODRP" :
@@ -350,13 +352,17 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
         $correspondant->patient_id = $newPatient->_id;
         $correspondant->medecin_id = $this->getMedecin($this->queryNode("ROL.4", $node));
         if (!$correspondant->loadMatchingObject()) {
+          // Notifier les autres destinataires autre que le sender
+          $correspondant->_eai_initiateur_group_id = $sender->group_id;
           $correspondant->store();
         } 
         break;
     }
   }
   
-  function getNK1(DOMNode $node, CPatient $newPatient) {    
+  function getNK1(DOMNode $node, CPatient $newPatient) {
+    $sender = $this->_ref_sender;
+        
     $NK1_2  = $this->queryNode("NK1.2", $node);
     $nom    = $this->queryTextNode("XPN.1/FN.1", $NK1_2);
     $prenom = $this->queryTextNode("XPN.2", $NK1_2);
@@ -394,6 +400,9 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $corres_patient->parente_autre = $parente_autre; 
     $corres_patient->relation = CHL7v2TableEntry::mapFrom("131", $relation);
     $corres_patient->relation_autre = $relation_autre;
+    
+    // Notifier les autres destinataires autre que le sender
+    $corres_patient->_eai_initiateur_group_id = $sender->group_id;
     
     $corres_patient->store();
   }

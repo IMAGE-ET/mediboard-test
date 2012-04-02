@@ -49,12 +49,19 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
       case "CHL7v2EventADTA06_FR" :
       case "CHL7v2EventADTA07" :
       case "CHL7v2EventADTA07_FR" :
+      case "CHL7v2EventADTA08" :  
       case "CHL7v2EventADTA11" :
       case "CHL7v2EventADTA11_FR" :
       case "CHL7v2EventADTA12" :
       case "CHL7v2EventADTA12_FR" :
       case "CHL7v2EventADTA13" :
       case "CHL7v2EventADTA13_FR" :
+      case "CHL7v2EventADTA14" :
+      case "CHL7v2EventADTA14_FR" :
+      case "CHL7v2EventADTA16" :
+      case "CHL7v2EventADTA16_FR" :
+      case "CHL7v2EventADTA25" :
+      case "CHL7v2EventADTA25_FR" :  
       case "CHL7v2EventADTA38" :
       case "CHL7v2EventADTA38_FR" :  
       case "CHL7v2EventADTA44" :
@@ -63,12 +70,17 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
       case "CHL7v2EventADTA54_FR" :
       case "CHL7v2EventADTA55" : 
       case "CHL7v2EventADTA55_FR" :
+      case "CHL7v2EventADTZ80_FR" : 
+      case "CHL7v2EventADTZ81_FR" : 
+      case "CHL7v2EventADTZ84_FR" :
+      case "CHL7v2EventADTZ85_FR" : 
       case "CHL7v2EventADTZ99_FR" : 
         return new CHL7v2RecordAdmit($encoding);  
       // Création des résultats d'observations
       case "CHL7v2EventORUR01" : 
         return new CHL7v2RecordObservationResultSet($encoding);  
       default : 
+        mbLog("Event code '$event_code' non reconnu");
         return new CHL7v2MessageXML($encoding);
     }
   }
