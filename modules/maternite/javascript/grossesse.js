@@ -49,7 +49,6 @@ Grossesse = {
       $V(this.formTo._duree_prevue, this.duree_sejour);
     }
     if (this.submit) {
-      console.log("toto");
       return onSubmitFormAjax(this.formTo);
     }
   }
