@@ -535,6 +535,18 @@ Object.extend(ElementChecker, {
       this.str();
     },
 
+    // regex sans modificateurs
+    // par exemple : regex|\s*[a-zA-Z][a-zA-Z0-9_]*\s*
+    // On peut mettre des pipe dans la regex avec \x7C ou des espaces avec \x20
+    // http://www.whatwg.org/specs/web-apps/current-work/multipage/common-input-element-attributes.html#the-pattern-attribute
+    pattern: function(){
+      this.assertSingleArg("pattern");
+      var re = new RegExp("^(?:"+this.oProperties.pattern+")$");
+      
+      if (!re.test(this.sValue))
+        this.addError("pattern", "Ne respecte pas le format attendu");
+    },
+
     // regex avec ou sans modificateurs
     // par exemple : regex|^\s*[a-zA-Z][a-zA-Z0-9_]*\s*$|gi
     // On peut mettre des pipe dans la regex avec \x7C ou des espaces avec \x20

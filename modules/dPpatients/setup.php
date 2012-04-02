@@ -1732,13 +1732,26 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("1.44");
-    
     $query = "ALTER TABLE `antecedent`
             CHANGE `type` `type`
             ENUM('med','alle','trans','obst','chir','fam','anesth','gyn','cardio','pulm','stomato','plast','ophtalmo','digestif','gastro','stomie','uro','ortho','traumato','amput','neurochir','greffe','thrombo','cutane','hemato','rhumato','neuropsy','infect','endocrino','carcino','orl','addiction','habitus', 'deficience');";
     $this->addQuery($query);
     
-    $this->mod_version = "1.45";
+    $this->makeRevision("1.45");
+    $query = "ALTER TABLE `patients` 
+              CHANGE `tel` `tel` VARCHAR (20),
+              CHANGE `tel2` `tel2` VARCHAR (20),
+              CHANGE `tel_autre` `tel_autre` VARCHAR (40),
+              CHANGE `assure_tel` `assure_tel` VARCHAR (20),
+              CHANGE `assure_tel2` `assure_tel2` VARCHAR (20)";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `correspondant_patient` 
+              CHANGE `tel` `tel` VARCHAR (20),
+              CHANGE `mob` `mob` VARCHAR (20),
+              CHANGE `fax` `fax` VARCHAR (20);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.46";
     
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

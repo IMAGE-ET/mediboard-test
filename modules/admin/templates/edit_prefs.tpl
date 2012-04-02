@@ -16,16 +16,16 @@
   {{foreach from=$prefs key=module item=_prefs}}
   {{if $_prefs && ($module == "common" || $module|module_active)}}  
   <li>
-  	<a href="#module-{{$module}}" style="line-height: 24px;">
+    <a href="#module-{{$module}}" style="line-height: 24px;">
       {{if $module != "common"}}
         <img src="modules/{{$module}}/images/icon.png" width="24" style="float: left;" />
       {{/if}}
-	  	{{tr}}module-{{$module}}-court{{/tr}}
-	  	<small>({{$_prefs|@count}})</small> 
-	  </a>
-	</li>
-	{{/if}}
-	{{/foreach}}
+      {{tr}}module-{{$module}}-court{{/tr}}
+      <small>({{$_prefs|@count}})</small> 
+    </a>
+  </li>
+  {{/if}}
+  {{/foreach}}
 </ul>
 
 <script type="text/javascript">
@@ -47,26 +47,26 @@ Preferences.onSubmit = function(form) {
   <col style="width: 40%;" />
   {{if $user_id != "default"}} 
     <col style="width: 15%;" />
-		{{if !$user->template}}
-	  <col style="width: 15%;" />
-		{{/if}}
-	  <col style="width: 30%;" />
+    {{if !$user->template}}
+    <col style="width: 15%;" />
+    {{/if}}
+    <col style="width: 30%;" />
   {{else}}
-    <col style="width: 40%;" />	
+    <col style="width: 40%;" />  
   {{/if}}
-	
-	<tr>
+  
+  <tr>
     <th class="category">
       {{tr}}Preference{{/tr}}
     </th>
     <th class="category">
-			{{if $can->admin && $user_id != "default"}}
-			<a href="?m={{$m}}&amp;tab=edit_prefs&amp;user_id=default" class="button edit">
+      {{if $can->admin && $user_id != "default"}}
+      <a href="?m={{$m}}&amp;tab=edit_prefs&amp;user_id=default" class="button edit">
         {{tr}}Default{{/tr}}
-			</a>
-			{{else}}
+      </a>
+      {{else}}
         {{tr}}Default{{/tr}}
-			{{/if}}
+      {{/if}}
 
     </th>
 
@@ -80,23 +80,23 @@ Preferences.onSubmit = function(form) {
       <a href="?m={{$m}}&amp;tab=edit_prefs&amp;user_id={{$prof->_id}}" class="button edit">
         {{$prof}}
       </a>
-			{{else}}
+      {{else}}
         {{if $prof->_id}}{{$prof}}{{else}}{{tr}}None{{/tr}}{{/if}}
       {{/if}}
     </th>
-		{{/if}}
-		
+    {{/if}}
+    
     <th class="category">
       {{tr}}{{$user->template|ternary:"User template":"CUser"}}{{/tr}} :
       <br/>{{if $user->_id}}{{$user}}{{else}}{{tr}}None{{/tr}}{{/if}}
     </th>
-		
-		{{/if}}
+    
+    {{/if}}
   </tr>
 
   <!-- Tous modules confondus -->
   {{assign var="module" value="common"}}
-	<tbody style="display: none" id="module-{{$module}}">
+  <tbody style="display: none" id="module-{{$module}}">
 
   {{mb_include template=inc_pref spec=enum var=LOCALE values=$locales value_locale_prefix="language."}}
   {{mb_include template=inc_pref spec=enum var=UISTYLE values=$styles value_locale_prefix="style."}}
@@ -105,7 +105,7 @@ Preferences.onSubmit = function(form) {
   {{mb_include template=inc_pref spec=bool var=touchscreen}}
   {{mb_include template=inc_pref spec=enum var=tooltipAppearenceTimeout values="short|medium|long" value_locale_prefix=""}}
   {{mb_include template=inc_pref spec=enum var=autocompleteDelay values="short|medium|long" value_locale_prefix=""}}
-	{{mb_include template=inc_pref spec=bool var=showCounterTip}}
+  {{mb_include template=inc_pref spec=bool var=showCounterTip}}
   {{mb_include template=inc_pref spec=bool var=showLastUpdate}}
   {{mb_include template=inc_pref spec=enum var=textareaToolbarPosition values="right|left"}}
   

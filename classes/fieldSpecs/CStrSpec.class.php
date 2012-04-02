@@ -29,11 +29,11 @@ class CStrSpec extends CMbFieldSpec {
     if ($this->length) {
       return "CHAR ($this->length)";
     }
-		
+    
     if ($this->class) {
       return "VARCHAR (80)";
     }
-		
+    
     return "VARCHAR (255)";
   }
   
@@ -50,12 +50,11 @@ class CStrSpec extends CMbFieldSpec {
   }
   
   function getValue($object, $smarty = null, $params = array()) {
-    $value = $object->{$this->fieldName};
     if ($this->class) {
-      return htmlspecialchars(CAppUI::tr($value));
+      return htmlspecialchars(CAppUI::tr($object->{$this->fieldName}));
     }
-
-    return $value;
+    
+    return parent::getValue($object, $smarty, $params);
   }
 
   function checkProperty($object){
@@ -110,7 +109,7 @@ class CStrSpec extends CMbFieldSpec {
         return "Ne doit contenir que des chiffres et des lettres non-accentuées (pas d'espaces)";
       }
     }
-		
+    
     // class
     if ($this->class) {
       $object = @new $propValue;

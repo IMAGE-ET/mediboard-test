@@ -272,15 +272,17 @@ class CMbFieldSpec {
         } // else, that means the value is already the formatted value
       }
       else {
-        $object->{$this->fieldName} = $formatted;
+        $propValue = $object->{$this->fieldName} = $formatted;
       }
     }
 
     // pattern
-    if ($this->pattern) {
-      if (!preg_match('/^'.preg_quote($this->pattern).'$/', $propValue)) {
-        return 'Ne correspond pas au format attendu';
-      }
+    // regex sans modificateurs
+    // par exemple : regex|\s*[a-zA-Z][a-zA-Z0-9_]*\s*
+    // On peut mettre des pipe dans la regex avec \x7C ou des espaces avec \x20
+    // http://www.whatwg.org/specs/web-apps/current-work/multipage/common-input-element-attributes.html#the-pattern-attribute
+    if ($this->pattern && !preg_match('/^(?:'.$this->pattern.')$/', $propValue)) {
+      return 'Ne correspond pas au format attendu';
     }
   }
 
