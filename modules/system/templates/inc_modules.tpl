@@ -1,42 +1,71 @@
- <script type="text/javascript">
-  refreshModule = function(mod_id) {
+<script type="text/javascript">
+var Module = {
+  list: [],
+  refresh: function(id) {
     var url = new Url('system', 'ajax_refresh_module'); 
-    url.addParam("mod_id", mod_id);
-    url.requestUpdate('mod_'+mod_id, { onComplete: updateInstalledControlTabs } ); 
-  }
-  
+    url.addParam("mod_id", id);
+    url.requestUpdate('mod_'+id, Module.updateInstalledControlTabs); 
+  },
 
-  updateInstalledControlTabs = function() {
-    if ($('installed').select('button.upgrade').length == 0) {
+  updateInstalledControlTabs: function() {
+    var upgradableCount = $('installed').select('button.upgrade').length;
+    
+    $("upgrade-all-button").down("span").update(upgradableCount);
+    
+    if (upgradableCount == 0) {
       $$('a[href=#installed]')[0].removeClassName("wrong");
-    }  
-  }
-
-  moveRow = function(tr, cmd) {
-    switch (cmd) {
-      case "moveup" :
-        if (tr.previous() == tr.up().firstDescendant()) {
-          return;
-        }
-        tr.previous().insert({before:tr});
-      break;    
-      
-      case "movedn" :
-        tr.next().insert({after:tr});
-      break;
     }
+  },
+  
+  moveRowUp: function(row) {
+    if (row.previous() == row.up().firstDescendant()) {
+      return;
+    }
+    
+    row.previous().insert({before: row});
+  },
+  
+  moveRowDown: function(row) {
+    row.next().insert({after: row});
+  },
+  
+  updateAll: function() {
+    Module.list = $("installed").select("form.upgrade").sort(function(form){
+      return form.get("dependencies");
+    }).reverse();
+    
+    Module.updateChain(Module.list.shift());
+  },
+  
+  updateOne: function(form, callback) {
+    WaitingMessage.cover(form.up("tr"));
+    
+    return onSubmitFormAjax(form, function() { 
+      Module.refresh(form.get("id"));
+      
+      if (callback) {
+        callback();
+      }
+    });
+  },
+  
+  updateChain: function(form) {
+    if (!form) {
+      return;
+    }
+    
+    Module.updateOne(form, Module.updateChain.curry(Module.list.shift()));
   }
+}
 
-  updateAll = function() {
-    $('installed').select('form.upgrade').sort(function(form){ return form.get("dependencies"); }).reverse().invoke("onsubmit");
-  }
+Main.add(Module.updateInstalledControlTabs);
 </script>
 
 {{if $installed}}
 <div style="text-align: right">
   {{if $upgradable && $coreModules|@count == 0}}
-    <button class="change oneclick" onclick="updateAll()">
-      Mettre à jour tous les modules
+    <button class="change oneclick" onclick="Module.updateAll()" id="upgrade-all-button">
+      Mettre à jour tous les modules (<span></span>)
     </button>
   {{/if}}
 

@@ -31,8 +31,8 @@
     {{tr}}Module-_too_new-msg{{/tr}} ({{$_mb_module->_latest}})
   </div>
   {{elseif $_mb_module->_upgradable && $can->admin}}
-    <form name="formUpdateModule-{{$module_id}}" method="post" {{if $_mb_module->mod_type != "core"}} onsubmit="return onSubmitFormAjax(this, 
-      { onComplete: refreshModule.curry('{{$module_id}}') } )" {{/if}} class="upgrade" data-dependencies="{{$_mb_module->_dependencies_not_verified}}">
+    <form name="formUpdateModule-{{$module_id}}" method="post" class="upgrade" data-id="{{$module_id}}" data-dependencies="{{$_mb_module->_dependencies_not_verified}}"
+          {{if $_mb_module->mod_type != "core"}} onsubmit="return Module.updateOne(this)" {{/if}}>
       <input type="hidden" name="dosql" value="do_manage_module" />
       <input type="hidden" name="m" value="system" /> 
       {{if $_mb_module->mod_type != "core"}}       
@@ -102,8 +102,7 @@
   <td style="text-align: center;" class="narrow">
     <!-- Actif -->
     {{if $can->edit}}
-      <form name="formActifModule-{{$module_id}}" method="post" onsubmit="return onSubmitFormAjax(this, 
-        { onComplete: refreshModule.curry('{{$module_id}}') } )">
+      <form name="formActifModule-{{$module_id}}" method="post" onsubmit="return onSubmitFormAjax(this, Module.refresh.curry('{{$module_id}}'))">
         <input type="hidden" name="dosql" value="do_manage_module" />
         <input type="hidden" name="m" value="system" />        
         <input type="hidden" name="ajax" value="1" />
@@ -122,8 +121,7 @@
   <td style="text-align: center;" class="narrow">
     <!-- Visible -->
     {{if $can->edit}}
-      <form name="formVisibleModule-{{$module_id}}" method="post" onsubmit="return onSubmitFormAjax(this, 
-        { onComplete: refreshModule.curry('{{$module_id}}') } )">
+      <form name="formVisibleModule-{{$module_id}}" method="post" onsubmit="return onSubmitFormAjax(this, Module.refresh.curry('{{$module_id}}'))">
         <input type="hidden" name="dosql" value="do_manage_module" />
         <input type="hidden" name="m" value="system" />        
         <input type="hidden" name="ajax" value="1" />
@@ -151,8 +149,8 @@
         
         <img src="./images/icons/updown.gif" usemap="#map-{{$_mb_module->_id}}" />
         <map name="map-{{$_mb_module->_id}}">
-          <area coords="0,0,10,7"  href="#1" onclick="$V(this.up('form').cmd, 'moveup'); moveRow(this.up('tr'), 'moveup') ; this.up('form').onsubmit();" />
-          <area coords="0,8,10,14" href="#1" onclick="$V(this.up('form').cmd, 'movedn'); moveRow(this.up('tr'), 'movedn') ; this.up('form').onsubmit();" />
+          <area coords="0,0,10,7"  href="#1" onclick="$V(this.up('form').cmd, 'moveup'); Module.moveRowUp(this.up('tr'));   this.up('form').onsubmit();" />
+          <area coords="0,8,10,14" href="#1" onclick="$V(this.up('form').cmd, 'movedn'); Module.moveRowDown(this.up('tr')); this.up('form').onsubmit();" />
         </map>
       </form>
     {{/if}}

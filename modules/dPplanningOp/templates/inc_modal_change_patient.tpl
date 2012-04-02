@@ -12,12 +12,12 @@
 
 <script type="text/javascript">
   confirmChangePatient = function() {
-    var modalConfirm = modal($("confirmChangePatient"));
+    var modalConfirm = modal($("confirmChangePatientModal"));
     modalConfirm.position();
   } 
 </script>
 
-<div id="confirmChangePatient" style="display: none; width: 400px;"
+<div id="confirmChangePatientModal" style="display: none; width: 400px;"
      class="{{if $patient_id_config == 0 || $patient_id_config == 2}}
               big-info
             {{else}}
