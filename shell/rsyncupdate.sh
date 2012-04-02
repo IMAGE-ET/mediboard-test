@@ -44,9 +44,9 @@ then
       echo "-- Rsync $line --"
       rsync -avpz --stats $BASH_PATH/.. --delete $line --exclude-from=$BASH_PATH/rsyncupdate.exclude \
         --exclude includes/config_overload.php \
-        --exclude tmp/* \
-        --exclude lib/* \
-        --exclude files/* \
+        --exclude tmp \
+        --exclude lib \
+        --exclude files \
         --exclude includes/config.php \
         --exclude images/pictures/logo_custom.png
       check_errs $? "Failed to rsync $line" "Succesfully rsync-ed $line"
