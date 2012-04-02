@@ -43,7 +43,7 @@ $sec_functions = $sec_function->loadMatchingList();
 
 $functions_ids = CMbArray::pluck($sec_functions, "function_id");
 
-array_merge($functions_ids, array($user->function_id, CAppUI::$user->function_id));
+$functions_ids = array_merge($functions_ids, array($user->function_id, CAppUI::$user->function_id));
 
 $where["function_id"] = CSQLDataSource::prepareIn($functions_ids);
 $modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where, null, null, null, $order));
