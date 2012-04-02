@@ -15,7 +15,7 @@ function errorHandler(errorMsg, url, lineNumber, exception) {
   var ignored = ["Script error."];
   
   try {
-    if (ignored.indexOf(errorMsg) == -1) {
+    if (App.config.log_js_errors && ignored.indexOf(errorMsg) == -1) {
       exception = exception || new Error(errorMsg, url, lineNumber);
       
       new Ajax.Request("index.php?m=system&a=js_error_handler&suppressHeaders=1&dialog=1", {
@@ -218,12 +218,12 @@ var Localize = {
   },
   
   first: function() {
-	var strings = $A(arguments);
+  var strings = $A(arguments);
     var string = strings.find(function(string) {
       return Localize.that(string) != string;
     });
-	
-	return Localize.that(string || strings.first());
+  
+  return Localize.that(string || strings.first());
   },
   
   populate: function(strings) {
