@@ -247,7 +247,11 @@ Main.add(function () {
               <option value="">&mdash; {{tr}}CCompteRendu-set-function{{/tr}}</option>
               {{foreach from=$listFunc item=curr_func}}
               <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->_id}}" {{if $curr_func->_id == $compte_rendu->function_id}} selected="selected" {{/if}}>
-              {{$curr_func->_view}}
+              {{if $smarty.session.browser.name == "msie"}}
+                {{$curr_func->_view|truncate:45}}
+              {{else}}
+                {{$curr_func->_view}}
+              {{/if}}
               </option>
               {{/foreach}}
             </select>
