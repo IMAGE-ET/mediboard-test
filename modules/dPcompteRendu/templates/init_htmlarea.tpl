@@ -53,8 +53,24 @@ function initCKEditor() {
         if (Object.isUndefined(obj)) {
           obj = {data: null};
         }
+        
         if (ck_instance.document == null || (obj.data && plugins.indexOf(obj.data.name) != -1)) return;
         
+        if (Prototype.Browser.IE) {
+          var spans = ck_instance.document.getBody().getElementsByTag("span").$;
+          for (var i in spans) {
+            var span = spans[i];
+            if (span && span.className && (Element.hasClassName(span, "field") || Element.hasClassName(span, "name"))) {
+              if (state) {
+                span.removeAttribute("contentEditable");
+              }
+              else {
+                span.contentEditable = false;
+              }              
+            }
+          }
+          return;          
+        }          
         var spans_by_class = [];
         spans_by_class[0] = ck_instance.document.$.getElementsByClassName("field");
         spans_by_class[1] = ck_instance.document.$.getElementsByClassName("name");
