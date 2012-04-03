@@ -635,8 +635,8 @@ Main.add( function(){
   <th>{{mb_label object=$sejour field="_duree_prevue"}}</th>
   <td colspan="3">
     {{mb_field object=$sejour field="_duree_prevue" increment=true form=editSejour prop="num min|0" size=2 onchange="updateSortiePrevue(); checkDureeHospi('syncType');" value=$sejour->sejour_id|ternary:$sejour->_duree_prevue:$_duree_prevue}}
-    nuits
-    (<span id="dureeEst"></span>)
+    {{tr}}night{{/tr}}(s)
+    - (<span id="dureeEst"></span>)
   </td>
 </tr>
 
