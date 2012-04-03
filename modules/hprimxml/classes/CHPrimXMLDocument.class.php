@@ -283,9 +283,34 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($acteCCAM, "codeActivite", $mbActeCCAM->code_activite);
     $this->addElement($acteCCAM, "codePhase"   , $mbActeCCAM->code_phase);
     
+    // Date et heure de l'opération
+    if ((CAppUI::conf("hprimxml date_heure_acte") == "operation") && $codable instanceof COperation) {
+      $date  = $codable->date ? $codable->date : $codable->_ref_plageop->date;
+      $heure = CValue::first(
+                $codable->debut_op, 
+                $codable->entree_salle, 
+                $codable->time_operation
+              );
+      
+      $sejour = $codable->_ref_sejour;
+      if ("$date $heure" < $sejour->entree) {
+        $date  = mbDate($sejour->entree);
+        $heure = mbTime($sejour->entree);
+      }
+      if ("$date $heure" > $sejour->sortie) {
+        $date  = mbDate($sejour->sortie);
+        $heure = mbTime($sejour->sortie);
+      }
+    }
+    // Date et heure de l'éxécution de l'acte
+    else {
+      $date  = mbDate($mbActeCCAM->execution);
+      $heure = mbTime($mbActeCCAM->execution);
+    }
+    
     $execute = $this->addElement($acteCCAM, "execute");
-    $this->addElement($execute, "date" , mbDate($mbActeCCAM->execution));
-    $this->addElement($execute, "heure", mbTime($mbActeCCAM->execution));
+    $this->addElement($execute, "date" , $date);
+    $this->addElement($execute, "heure", $heure);
     
     $mbExecutant      = $mbActeCCAM->loadRefExecutant();
     $executant        = $this->addElement($acteCCAM, "executant");

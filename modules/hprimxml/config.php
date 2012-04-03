@@ -42,6 +42,7 @@ $dPconfig["hprimxml"] = array (
   "trash_numdos_sejour_cancel" => "0",
   "code_transmitter_sender"    => "mb_id",
   "code_receiver_sender"       => "dest",
+  "date_heure_acte"            => "operation",
   
   // Schéma
   "concatenate_xsd"            => "0",
