@@ -180,7 +180,7 @@ CKEDITOR.editorConfig = function(config) {
   {{/if}}
 
   // Aides à la saisie
-  aOptionsHelpers = {{$templateManager->helpers|@json|smarty:nodefaults}};
+  aOptionsHelpers = {{"utf8_encode"|array_map_recursive:$templateManager->helpers|@json|smarty:nodefaults}};
   window.parent.helpers.push({
     commandName: "MbHelpers",
     spanClass: "helper",
