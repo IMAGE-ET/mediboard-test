@@ -141,7 +141,7 @@ class CDossierMedical extends CMbMetaObject {
     
   function loadRefsAntecedents($cancelled = false) {
     // Initialisation du classement
-    $order = "type, appareil";
+    $order = "CAST(type AS CHAR), CAST(appareil AS CHAR), rques";
     if (null === $this->_all_antecedents = $this->loadBackRefs("antecedents", $order)) {
       return;
     }
