@@ -286,7 +286,7 @@ a.button.big {
   font-size: 150%;
   height: 50px;
   margin: 4px 10px;
-  padding: 4px 8px;
+  padding: 3px;
   border-width: 2px;
   text-align: center;
   -moz-border-radius: 6px;
