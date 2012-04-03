@@ -14,6 +14,9 @@
 {{if $from_date != $to_date}}
   Du {{$from|date_format:$conf.datetime}}
   au {{$to|date_format:$conf.datetime}}
+{{elseif $from == $to}}
+  Le {{$from_date}}
+  à  {{$to|date_format:$conf.time}}
 {{else}}
   Le {{$from_date}}
   de {{$from|date_format:$conf.time}} 
