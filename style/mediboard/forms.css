@@ -292,7 +292,7 @@ a.button.big {
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
   border-radius: 6px;
-  whitespace: normal;
+  white-space: normal;
 }
 
 button.cut:before, a.button.cut:before {
