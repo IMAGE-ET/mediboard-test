@@ -185,6 +185,8 @@ if ($user->isInstalled()) {
 // Init output filter
 CHTMLResourceLoader::initOutput(CValue::get("_aio"));
 
+CApp::notify("BeforeMain");
+
 // We check if the mobile feature is available and if the user agent is a mobile
 if (is_file("./mobile/main.php") && !empty($_SESSION["browser"]["mobile"])) {
   include "./mobile/main.php";
@@ -192,6 +194,8 @@ if (is_file("./mobile/main.php") && !empty($_SESSION["browser"]["mobile"])) {
 else {
   include "./includes/main.php";
 }
+
+CApp::notify("AfterMain");
 
 require "./includes/access_log.php";
 

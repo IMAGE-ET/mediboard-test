@@ -57,6 +57,11 @@ $dPconfig["object_handlers"]   = array (
 //  "CMyObjectHandler" => true,
 );
 
+// Index handlers
+$dPconfig["index_handlers"]   = array (
+//  "CMyIndexHandler" => true,
+);
+
 // Mode migration
 $dPconfig["migration"]["active"] = "0";
 $dPconfig["migration"]["intranet_url"] = "http://intranet_server/mediboard/";

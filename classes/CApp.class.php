@@ -47,6 +47,8 @@ class CApp {
     "objectCounts" => null,
   );
     
+  static $handlers = null;
+  
   /**
    * Will trigger an error for logging purpose whenever the application dies unexpectedly
    * 
@@ -338,5 +340,44 @@ class CApp {
     }
     return $grouped;
   }
+  
+  /**
+   * Staticly build index handlers array
+   * @return void
+   */
+  public static final function makeHandlers() {
+    if (is_array(self::$handlers)) {
+      return;
+    }
+    
+    // Static initialisations
+    self::$handlers = array();
+    foreach (CAppUI::conf("index_handlers") as $handler => $active) {
+      if ($active) {
+        self::$handlers[$handler] = new $handler;
+      }
+    }
+  }
+  
+  /**
+   * Subject notification mechanism 
+   * @todo Implement to factorise 
+   *   on[Before|After][Store|Merge|Delete]()
+   *   which have to get back de CPersistantObject layer
+   */
+  static function notify($message) {
+    // Event Handlers
+    self::makeHandlers();
+    foreach (self::$handlers as $handler) {
+      try {
+        call_user_func(array($handler, "on$message"));
+      } 
+      catch (Exception $e) {
+        CAppUI::setMsg($e, UI_MSG_ERROR);
+      }
+    }
+  }
+  
+  
 }
 ?>
