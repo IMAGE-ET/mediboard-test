@@ -102,8 +102,11 @@ class COperation extends CCodable implements IPatientRelated {
   var $_password_visite_anesth = null;
   var $_patient_id      = null;
   var $_dmi_alert       = null;
-  var $_offset_uscpo    = null;
-  var $_width_uscpo     = null;
+  var $_offset_uscpo    = array();
+  var $_width_uscpo     = array();
+  var $_width           = array();
+  var $_debut_offset    = array();
+  var $_fin_offset      = array();
   
   // Distant fields
   var $_datetime          = null;
