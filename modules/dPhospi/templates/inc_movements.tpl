@@ -17,8 +17,8 @@
       <td>{{mb_value object=$_movement field=movement_type}}</td>
       <td><code>{{mb_value object=$_movement field=original_trigger_code}}</code></td>
       <td>
-        <label title='{{mb_value object=$_movement field="start_of_movement"}}'>
-          {{mb_value object=$_movement field="start_of_movement" format=relative}}
+        <label title='{{mb_value object=$_movement field="start_of_movement" format=relative}}'>
+          {{mb_include module=system template=inc_interval_datetime from=$_movement->start_of_movement to=$_movement->start_of_movement}}
         </label>
       </td>
       <td>
