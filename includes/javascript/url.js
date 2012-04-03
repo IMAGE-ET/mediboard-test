@@ -197,11 +197,15 @@ var Url = Class.create({
       } catch(e) {
         return;
       }
+      
       window.children[sWindowName] = this.oWindow;
       
       if (wasClosedBefore && this.oWindow.history.length == 0) {
-        this.oWindow.moveTo(features.left, features.top);
-        this.oWindow.resizeTo(features.width, features.height);
+        // bug in Chrome 18: invisible popup
+        if (BrowserDetect.browser != "Chrome") {
+          this.oWindow.moveTo(features.left, features.top);
+          this.oWindow.resizeTo(features.width, features.height);
+        }
       }
       
       if (!this.oWindow)
