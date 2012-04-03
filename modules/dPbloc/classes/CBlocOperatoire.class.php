@@ -73,19 +73,19 @@ class CBlocOperatoire extends CMbObject {
   
   function loadRefGroup(){
     $group = new CGroups;
-    $this->_ref_group = $group->getCached($this->group_id);
+    return $this->_ref_group = $group->getCached($this->group_id);
   }
   
   function loadRefsFwd(){
-    $this->loadRefGroup();
+    return $this->loadRefGroup();
   }
   
   function loadRefsSalles() {
-  	$this->_ref_salles = $this->loadBackRefs('salles', 'nom');
+  	return $this->_ref_salles = $this->loadBackRefs('salles', 'nom');
   }
   
   function loadRefsBack() {
-    $this->loadRefsSalles();
+    return $this->loadRefsSalles();
   }
   
   function loadRefsAlertesIntervs() {

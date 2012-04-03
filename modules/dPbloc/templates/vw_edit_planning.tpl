@@ -10,7 +10,6 @@
 
 {{mb_script module=bloc script=edit_planning}}
 
-</script>
 <table class="main">
   <tr>
     <td class="greedyPane" style="text-align:center;">

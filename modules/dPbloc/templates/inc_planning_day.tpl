@@ -30,7 +30,10 @@
 {{assign var="keyHorsPlage" value="$curr_day-s$salle_id-HorsPlage"}}
 <tr>
   <td colspan="3" class="salle" {{if $affichages.$keyHorsPlage|@count}}rowspan="2"{{/if}}>
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$_salle->_guid}}')">{{$_salle->nom}}</span>
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$_salle->_guid}}')"
+      onclick="EditPlanning.monitorDaySalle('{{$_salle->_id}}', '{{$curr_day}}');">
+      {{$_salle->nom}}
+    </span>
   </td>
   {{foreach from=$listHours item=_hour}}
   {{foreach from=$listMins item=_min}}

@@ -12,7 +12,7 @@
 
 <table class="main">
   <tr>
-    <td>
+    <td class="greedyPane" style="text-align:center;">
       {{if $nbIntervNonPlacees || $nbIntervHorsPlage || $nbAlertesInterv}}
         <div class="warning" style="float: right;">
           <a href="#nothing" onclick="EditPlanning.showAlerte('{{$date}}', '{{$bloc->_id}}', 'semaine');">
@@ -45,6 +45,9 @@
         </select>
       </form>
     </td>
+    <td rowspan="100">
+      {{include file="inc_legende_planning.tpl"}}
+    </td>
   </tr>
   <tr>
     <td class="greedyPane">
@@ -54,9 +57,6 @@
         {{include file="inc_planning_day.tpl"}}
       {{/foreach}}
       </table>
-   </td>
-   <td>
-     {{include file="inc_legende_planning.tpl"}}
-   </td>
+    </td>
   </tr>
 </table>

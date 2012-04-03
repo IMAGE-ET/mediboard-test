@@ -53,5 +53,12 @@ EditPlanning  = {
     url.addParam("type"   , type);
     url.addParam("bloc_id", bloc_id);
     url.requestModal(800, 500);
+  },
+  
+  monitorDaySalle: function(salle_id, date) {
+    var url = new Url("dPbloc", "monitor_day_salle");
+    url.addParam("salle_id", salle_id);
+    url.addParam("date"    , date);
+    url.requestModal(900);
   }
 };
