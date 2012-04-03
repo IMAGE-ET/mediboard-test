@@ -141,10 +141,10 @@ function cancelSejour() {
 
 function modifSejour() {
   var oForm = document.editSejour;
-  {{if $conf.dPplanningOp.CSejour.modif_SHS}}
-  if (oForm.saisi_SHS.value == '1') {
-    oForm.modif_SHS.value = '1';
-    oForm.saisi_SHS.value = '0';
+  {{if $conf.dPplanningOp.CSejour.entree_modifiee}}
+  if (oForm.entree_preparee.value == '1') {
+    oForm.entree_modifiee.value = '1';
+    oForm.entree_preparee.value = '0';
   }
   {{/if}}
   canNullOK(oForm._date_entree_prevue);

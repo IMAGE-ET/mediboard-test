@@ -43,9 +43,11 @@ class CSejour extends CCodable implements IPatientRelated {
   var $entree              = null;
   var $sortie              = null;
   
-  var $saisi_SHS           = null; // @todo Renommer ce champ
-  var $modif_SHS           = null; // @todo Renommer ce champ
-
+  var $entree_preparee     = null;
+  var $sortie_preparee     = null;
+  var $entree_modifiee     = null;
+  var $sortie_modifiee     = null;
+  
   var $DP                  = null; 
   var $DR                  = null;
   var $pathologie          = null;
@@ -274,8 +276,10 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["sortie_reelle"]            = "dateTime moreEquals|entree_reelle show|0";
     $props["entree"]                   = "dateTime derived show|0";
     $props["sortie"]                   = "dateTime moreEquals|entree derived show|0";
-    $props["saisi_SHS"]                = "bool";
-    $props["modif_SHS"]                = "bool";
+    $props["entree_preparee"]          = "bool";
+    $props["sortie_preparee"]          = "bool";
+    $props["entree_modifiee"]          = "bool";
+    $props["sortie_modifiee"]          = "bool";
     $props["DP"]                       = "code cim10 show|0";
     $props["DR"]                       = "code cim10 show|0";
     $props["pathologie"]               = "str length|3 show|0";

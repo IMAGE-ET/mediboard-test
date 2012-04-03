@@ -125,23 +125,23 @@
   <input type="hidden" name="dosql" value="do_sejour_aed" />
   <input type="hidden" name="sejour_id" value="{{$curr_adm->_id}}" />
 	<input type="hidden" name="patient_id" value="{{$curr_adm->patient_id}}" />
-  {{if !$curr_adm->saisi_SHS}}
-  <input type="hidden" name="saisi_SHS" value="1" />
+  {{if !$curr_adm->entree_preparee}}
+  <input type="hidden" name="entree_preparee" value="1" />
   <button class="tick" type="button" onclick="submitPreAdmission(this.form);">
-    {{tr}}CSejour-saisi_SHS{{/tr}}
+    {{tr}}CSejour-entree_preparee{{/tr}}
   </button>
   {{else}}
-  <input type="hidden" name="saisi_SHS" value="0" />
+  <input type="hidden" name="entree_preparee" value="0" />
   <button class="cancel" type="button" onclick="submitPreAdmission(this.form);">
     {{tr}}Cancel{{/tr}}
   </button>
   {{/if}}
-  {{if ($curr_adm->modif_SHS == 1) && ($conf.dPplanningOp.CSejour.modif_SHS == 1)}}
+  {{if ($curr_adm->entree_modifiee == 1) && ($conf.dPplanningOp.CSejour.entree_modifiee == 1)}}
     <img src="images/icons/warning.png" title="Le dossier a été modifié, il faut le préparer" />
   {{/if}}
   </form>
   {{else}}
-  {{mb_value object=$curr_adm field="saisi_SHS"}}
+  {{mb_value object=$curr_adm field="entree_preparee"}}
   {{/if}}
 </td>
 

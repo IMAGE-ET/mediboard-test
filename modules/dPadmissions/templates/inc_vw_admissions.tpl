@@ -69,15 +69,15 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
       <input type="hidden" name="dosql" value="do_sejour_aed" />
       <input type="hidden" name="sejour_ids" value="{{$sejours|@array_keys|@join:"-"}}" />
 
-      <input type="hidden" name="saisi_SHS" value="1" />
+      <input type="hidden" name="entree_preparee" value="1" />
 
       <button class="tick" type="submit">
-        {{tr}}CSejour-saisi_SHS-tous{{/tr}}
+        {{tr}}CSejour-entree_preparee-tous{{/tr}}
       </button>
 
       </form>
       {{else}}
-        {{tr}}CSejour-saisi_SHS-tous{{/tr}}
+        {{tr}}CSejour-entree_preparee-tous{{/tr}}
       {{/if}}
     </th>
     <th>Anesth.</th>

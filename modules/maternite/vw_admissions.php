@@ -67,7 +67,7 @@ $query = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`se
     FROM `sejour`
   WHERE `sejour`.`entree` BETWEEN '$month_min' AND '$month_max'
     AND `sejour`.`group_id` = '$group->_id'
-    AND `sejour`.`saisi_SHS` = '0'
+    AND `sejour`.`entree_preparee` = '0'
     AND `sejour`.`annule` = '0'
     AND `sejour`.`type_pec` = 'O'
   GROUP BY `date`
@@ -92,7 +92,7 @@ if ($view == "non_eff") {
 }
 
 if ($view == "non_prep") {
-  $where["sejour.saisi_SHS"] = "= '0'";
+  $where["sejour.entree_preparee"] = "= '0'";
 }
 
 $sejours = $sejour->loadList($where, "patients.nom ASC", null, null, $ljoin);

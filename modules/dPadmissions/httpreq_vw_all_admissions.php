@@ -114,7 +114,7 @@ $query = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`se
   $leftjoinService
   WHERE `sejour`.`entree` BETWEEN '$month_min' AND '$month_max'
     AND `sejour`.`group_id` = '$group->_id'
-    AND `sejour`.`saisi_SHS` = '0'
+    AND `sejour`.`entree_preparee` = '0'
     AND `sejour`.`annule` = '0'
     $filterType
     $filterService

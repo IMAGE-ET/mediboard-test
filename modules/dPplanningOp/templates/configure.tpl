@@ -99,7 +99,7 @@ Main.add(function() {
 
   {{mb_include module=system template=inc_config_enum var=patient_id values=$patient_ids}}
   {{mb_include module=system template=inc_config_enum var=check_collisions values="no|date|datetime"}}
-  {{mb_include module=system template=inc_config_bool var=modif_SHS}}
+  {{mb_include module=system template=inc_config_bool var=entree_modifiee}}
 
   {{mb_include module=system template=inc_config_enum var=heure_deb  values=$hours skip_locales=true}}
   {{mb_include module=system template=inc_config_enum var=heure_fin  values=$hours skip_locales=true}}

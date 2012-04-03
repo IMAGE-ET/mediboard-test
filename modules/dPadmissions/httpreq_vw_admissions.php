@@ -75,7 +75,7 @@ if ($selAdmis != "0") {
 }
 
 if ($selSaisis != "0") {
-  $where["sejour.saisi_SHS"] = "= '0'";
+  $where["sejour.entree_preparee"] = "= '0'";
 }
 
 if ($order_col != "patient_id" && $order_col != "entree_prevue" && $order_col != "praticien_id"){
