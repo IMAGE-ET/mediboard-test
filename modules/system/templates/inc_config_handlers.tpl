@@ -8,28 +8,48 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<table class="form">    
-  {{foreach from=$handlers key=_handler_name item=_handler_object}}
+<form name="EditConfig-handlers" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return onSubmitFormAjax(this)">
+
+<input type="hidden" name="m" value="system" />
+<input type="hidden" name="dosql" value="do_configure" />
+
+<table class="form">  
+  {{assign var=types value="-"|explode:"index-object"}}
+  {{foreach from=$types item=type}}
+  {{assign var=class value=`$type`_handlers}}
+  <tr><th class="title" colspan="2">{{tr}}{{$class}}{{/tr}}</th></tr>
+
+  {{foreach from=$conf.$class key=var item=value}}
+        
+    {{assign var=field  value="$class[$var]"}}
+    {{assign var=locale value=$var}}
     <tr>
-      <th style="width:30%"> {{$_handler_name}} </th>
-      <td>  
-        <form name="editConfigHandler-{{$_handler_name}}" action="?m={{$m}}&amp;{{$actionType}}=configure" 
-            method="post" onsubmit="return onSubmitFormAjax(this);">
-          <input type="hidden" name="m" value="system" />
-          <input type="hidden" name="dosql" value="do_configure" />
-          
-          <label for="handlers_{{$_handler_name}}_1">{{tr}}bool.1{{/tr}}</label>
-          <input type="radio" name="object_handlers[{{$_handler_name}}]" value="1" onchange="this.form.onsubmit();" 
-            {{if array_key_exists($_handler_name, $conf.object_handlers) &&
-              $conf.object_handlers.$_handler_name == "1"}}checked="checked"
-            {{/if}}/>
-          <label for="object_handlers_{{$_handler_name}}_0">{{tr}}bool.0{{/tr}}</label>
-          <input type="radio" name="object_handlers[{{$_handler_name}}]" value="0" onchange="this.form.onsubmit();" 
-            {{if array_key_exists($_handler_name, $conf.object_handlers) &&
-              $conf.object_handlers.$_handler_name == "0"}}checked="checked"
-            {{/if}}/>
-        </form>
+      <th style="width: 50%">
+        <label for="{{$field}}" title="{{tr}}{{$locale}}-desc{{/tr}}">
+          {{tr}}{{$locale}}{{/tr}}
+        </label>  
+      </th>
+
+      <td>
+        <label for="{{$field}}_1">{{tr}}bool.1{{/tr}}</label>
+        <input type="radio" name="{{$field}}" value="1" {{if $value == "1"}}checked="checked"{{/if}}/>
+        <label for="{{$field}}_0">{{tr}}bool.0{{/tr}}</label>
+        <input type="radio" name="{{$field}}" value="0" {{if $value != "1"}}checked="checked"{{/if}}/>
       </td>
-    </tr>  
+    </tr>
+
+  {{foreachelse}}
+  <tr><td colspan="2" class="empty">{{tr}}CMbIndexHandler{{/tr}}</td></tr>
   {{/foreach}}
+	
+{{/foreach}}
+
+  <tr>
+    <td class="button" colspan="6">
+      <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
+    </td>
+  </tr>
+
 </table>
+
+</form>

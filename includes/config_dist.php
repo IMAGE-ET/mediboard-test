@@ -54,12 +54,12 @@ $dPconfig["browser_compat"]    = array(
 
 // Object handlers
 $dPconfig["object_handlers"]   = array (
-//  "CMyObjectHandler" => true,
+//  "CMyObjectHandler" => "0",
 );
 
 // Index handlers
 $dPconfig["index_handlers"]   = array (
-//  "CMyIndexHandler" => true,
+//  "CMyIndexHandler" => "1",
 );
 
 // Mode migration

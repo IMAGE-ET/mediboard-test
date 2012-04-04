@@ -30,6 +30,11 @@ class CMbMetaObject extends CMbObject {
     $this->object_class = $object->_class;
   }
   
+  function loadListFor(CMbObject $object) {
+  	$this->setObject($object);
+  	return $this->loadMatchingList();
+  }
+  
   /**
    * Load target of meta object
    * 
