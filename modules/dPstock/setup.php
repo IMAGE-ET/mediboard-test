@@ -758,7 +758,7 @@ class CSetupdPstock extends CSetup {
     $this->makeRevision("1.44");
     $query = "INSERT INTO product_stock_location (
        name, position, group_id, object_class, object_id
-    ) SELECT 'Lieu par défaut', 0, groups_mediboard.group_id, 'CGroups', groups_mediboard.group_id 
+    ) SELECT 'Lieu par défaut', 1, groups_mediboard.group_id, 'CGroups', groups_mediboard.group_id 
       FROM groups_mediboard";
     $this->addQuery($query);
     
@@ -766,7 +766,7 @@ class CSetupdPstock extends CSetup {
     $this->addDependency("dPhospi", "0.16");
     $query = "INSERT INTO product_stock_location (
        name, position, group_id, object_class, object_id
-    ) SELECT 'Lieu par défaut', 0, service.group_id, 'CService', service.service_id 
+    ) SELECT 'Lieu par défaut', 1, service.group_id, 'CService', service.service_id 
       FROM service";
     $this->addQuery($query);
     
@@ -777,7 +777,7 @@ class CSetupdPstock extends CSetup {
        WHERE 
          `product_stock_group`.`group_id` = `product_stock_location`.`object_id` AND
          `product_stock_location`.`object_class` = 'CGroups' AND
-         `product_stock_location`.`position` = 0 AND
+         `product_stock_location`.`position` = 1 AND
          `product_stock_location`.`name` = 'Lieu par défaut'
        LIMIT 1
     ) WHERE`product_stock_group`.`location_id` IS NULL";
@@ -789,7 +789,7 @@ class CSetupdPstock extends CSetup {
        WHERE 
          `product_stock_service`.`service_id` = `product_stock_location`.`object_id` AND
          `product_stock_location`.`object_class` = 'CService' AND
-         `product_stock_location`.`position` = 0 AND
+         `product_stock_location`.`position` = 1 AND
          `product_stock_location`.`name` = 'Lieu par défaut'
        LIMIT 1
     ) WHERE `product_stock_service`.`location_id` IS NULL";

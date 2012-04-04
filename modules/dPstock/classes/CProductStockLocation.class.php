@@ -190,6 +190,7 @@ class CProductStockLocation extends CMbMetaObject {
       if (!$location->loadObject($where, "position")) {
         $location->name = "Lieu par défaut";
         $location->group_id = ($host instanceof CGroups ? $host->_id : $host->group_id);
+        $location->setObject($host);
         $location->store();
       }
       
