@@ -9,8 +9,11 @@ var Module = {
 
   updateInstalledControlTabs: function() {
     var upgradableCount = $('installed').select('button.upgrade').length;
+    var upgradeAllButton = $("upgrade-all-button");
     
-    $("upgrade-all-button").down("span").update(upgradableCount);
+    if (upgradeAllButton) {
+      upgradeAllButton.down("span").update(upgradableCount);
+    }
     
     if (upgradableCount == 0) {
       $$('a[href=#installed]')[0].removeClassName("wrong");
