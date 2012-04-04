@@ -17,7 +17,7 @@ $chir = null;
 $mediuser = CMediusers::get();
 
 if ($mediuser->isPraticien()) {
-  $chir = $mediuser->createUser();
+  $chir = $mediuser;
 }
 
 $chirSel      = CValue::getOrSession("praticien_id", $chir ? $chir->user_id : null);
