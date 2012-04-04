@@ -13,82 +13,79 @@ $chambre = $lit->loadRefChambre();
 $service = $chambre->loadRefService();
 
 $affectation = CMbObject::loadFromGuid($curr_affectation_guid);
-$affectation->loadRefSejour();
 $affectation->loadRefUfs();
-$praticien = $affectation->_ref_sejour->loadRefPraticien();
+$sejour = $affectation->loadRefSejour();
+$praticien = $sejour->loadRefPraticien();
+$function = $praticien->loadRefFunction();
 
-$uf  = new CAffectationUniteFonctionnelle();
+$ufs_medicale    = array();
+$ufs_soins       = array();
+$ufs_hevergement = array();
+$auf = new CAffectationUniteFonctionnelle();
 
-$choixmedical    = array();
-$choixsoins      = array();
-$choixhebergment = array();
-
-$where = array();
-$where["object_class"] = " = 'CService'";
-$where["object_id"]    = " = '$service->_id'";
-$services   = $uf->loadList($where);
-foreach($services as $serv){
-	$serv->loadRefUniteFonctionnelle();
-	$choixsoins[$serv->uf_id]=$serv;
-	$choixhebergment[$serv->uf_id]=$serv;
+// UFs de services
+$ufs_service = array();
+foreach ($auf->loadListFor($service) as $_auf) {
+  $uf = $_auf->loadRefUniteFonctionnelle();
+  $ufs_service    [$uf->_id] = $uf;
+  $ufs_soins      [$uf->_id] = $uf;
+  $ufs_hebergement[$uf->_id] = $uf;
 }
 
-$where["object_class"] = " = 'CChambre'";
-$where["object_id"]    = " = '$chambre->_id'";
-$chambres   = $uf->loadList($where);
-foreach($chambres as $ch){
-  $ch->loadRefUniteFonctionnelle();
-  $choixhebergment[$ch->uf_id]=$ch;
+// UFs de chambre
+$ufs_chambre = array();
+foreach ($auf->loadListFor($chambre) as $_auf) {
+  $uf = $_auf->loadRefUniteFonctionnelle();
+  $ufs_chambre    [$uf->_id] = $uf;
+  $ufs_hebergement[$uf->_id] = $uf;
 }
 
-$where["object_class"] = " = 'CLit'";
-$where["object_id"]    = " = '$lit->_id'";
-$lits       = $uf->loadList($where);
-foreach($lits as $_lit){
-  $_lit->loadRefUniteFonctionnelle();
-  $choixhebergment[$_lit->uf_id]=$_lit;
+// UFs de lit
+$ufs_lit = array();
+foreach ($auf->loadListFor($lit) as $_auf) {
+  $uf = $_auf->loadRefUniteFonctionnelle();
+  $ufs_lit        [$uf->_id] = $uf;
+  $ufs_hebergement[$uf->_id] = $uf;
 }
 
-$where["object_class"] = " = 'CFunctions'";
-$where["object_id"]    = " = '{$praticien->_ref_function->_id}'";
-$fonctions  = $uf->loadList($where);
-foreach($fonctions as $fct){
-  $fct->loadRefUniteFonctionnelle();
-  $choixmedical[$fct->uf_id]=$fct;
+// UFs de fonction
+$ufs_function = array();
+foreach ($auf->loadListFor($function) as $_auf) {
+  $uf = $_auf->loadRefUniteFonctionnelle();
+  $ufs_function   [$uf->_id] = $uf;
+  $ufs_medicale   [$uf->_id] = $uf;
 }
 
-$where["object_class"] = " = 'CMediusers'";
-$where["object_id"]    = " = '{$praticien->_id}'";
-$mediusers  = $uf->loadList($where);
-foreach($mediusers as $med){
-  $med->loadRefUniteFonctionnelle();
-  $choixmedical[$med->uf_id]=$med;
+// UFs de praticien
+$ufs_praticien = array();
+foreach ($auf->loadListFor($praticien) as $_auf) {
+  $uf = $_auf->loadRefUniteFonctionnelle();
+  $ufs_praticien [$uf->_id] = $uf;
+  $ufs_medicale  [$uf->_id] = $uf;
 }
 
-$choixmedical     = array_reverse ($choixmedical);
-$choixsoins       = array_reverse ($choixsoins);
-$choixhebergment  = array_reverse ($choixhebergment);
-
-$nomservice = $service->nom;
-$hebergement = array($nomservice => $services, 
-                     $chambre->nom => $chambres,
-                     $lit->nom => $lits);
-$medical     = array("{$praticien->_ref_function->text}" => $fonctions,
-                     "{$praticien->_view}" => $mediusers);
-    
+$ufs_medicale    = array_reverse($ufs_medicale);
+$ufs_soins       = array_reverse($ufs_soins);
+$ufs_hebergement = array_reverse($ufs_hebergement);    
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("affectation" , $affectation);
-$smarty->assign("services"    , $services);
-$smarty->assign("nomservice"  , $nomservice);
-$smarty->assign("hebergement" , $hebergement);
-$smarty->assign("medical"     , $medical);
+$smarty->assign("affectation", $affectation);
+$smarty->assign("service"    , $service);
+$smarty->assign("chambre"    , $chambre);
+$smarty->assign("lit"        , $lit);
+$smarty->assign("function"   , $function);
+$smarty->assign("praticien"  , $praticien);
 
-$smarty->assign("choixmedical"    , $choixmedical);
-$smarty->assign("choixsoins"      , $choixsoins);
-$smarty->assign("choixhebergment" , $choixhebergment);
+$smarty->assign("ufs_service"    , $ufs_service);
+$smarty->assign("ufs_chambre"    , $ufs_chambre);
+$smarty->assign("ufs_lit"        , $ufs_lit);
+$smarty->assign("ufs_function"   , $ufs_function);
+$smarty->assign("ufs_praticien"  , $ufs_praticien);
+$smarty->assign("ufs_medicale"   , $ufs_medicale);
+$smarty->assign("ufs_soins"      , $ufs_soins);
+$smarty->assign("ufs_hebergement", $ufs_hebergement);
 
 $smarty->display("inc_vw_affectation_uf.tpl");
 ?>
