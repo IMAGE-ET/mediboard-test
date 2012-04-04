@@ -98,6 +98,7 @@
             <a href="?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$plage->plageop_id}}">
             <img src="images/icons/personnel.png" border="0" height="16" width="16" 
                  onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-plage-{{$plage->_id}}")' />
+            {{mb_include module=system template=inc_vw_counter_tip count=$plage->_count_affectations_personnel}}
             </a>
             <div id="tooltip-content-plage-{{$plage->_id}}" style="display: none; width: 200px;">
               <table class="tbl">

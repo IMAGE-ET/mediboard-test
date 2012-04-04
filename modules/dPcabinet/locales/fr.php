@@ -1203,6 +1203,7 @@ $locales['mod-dPcabinet-tab-print_rapport'] = 'Impression du rapport';
 $locales['mod-dPcabinet-tab-print_select_docs'] = 'Impression multiple';
 $locales['mod-dPcabinet-tab-transfert_plageconsult'] = 'Transférer des plages';
 $locales['mod-dPcabinet-tab-view_consultation'] = 'Consultation';
+$locales['mod-dPcabinet-tab-vw_ant_easymode'] = 'Antécédents mode grille';
 $locales['mod-dPcabinet-tab-vw_banques'] = 'Banques';
 $locales['mod-dPcabinet-tab-vw_categories'] = 'Catégories';
 $locales['mod-dPcabinet-tab-vw_compta'] = 'Comptabilité';

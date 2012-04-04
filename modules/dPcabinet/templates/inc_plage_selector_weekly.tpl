@@ -48,6 +48,19 @@ Main.add(function () {
             </select>
           </td>
           
+          <td>
+            <select name="chir_id" style="width: 15em;" onchange="this.form.submit()">
+              {{foreach from=$listPraticiens item=curr_praticien}}
+              <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
+                {{$curr_praticien->_view}}
+                {{if $app->user_prefs.viewFunctionPrats}}
+                  - {{$curr_praticien->_ref_function->_view}}
+                {{/if}}
+              </option>
+             {{/foreach}}
+            </select>
+          </td>
+          
           <td class="button" style="width: 250px;">
             <a style="float:left" href="#1" onclick="$V(getForm('Filter').date, '{{$pdate}}')">&lt;&lt;&lt;</a>
             <a style="float:right" href="#1" onclick="$V(getForm('Filter').date, '{{$ndate}}')">&gt;&gt;&gt;</a>

@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $period, $periods, $chir_id, $function_id, $date, $ndate, $pdate, $plageconsult_id;
+global $period, $periods, $listPraticiens, $chir_id, $function_id, $date, $ndate, $pdate, $plageconsult_id;
 
 $period          = CValue::get("period", CAppUI::pref("DefaultPeriod"));
 $periods         = array("day", "week", "month","weekly");
@@ -15,6 +15,10 @@ $chir_id         = CValue::get("chir_id");
 $function_id     = $chir_id ? null : CValue::get("function_id");
 $date            = CValue::get("date", mbDate());
 $plageconsult_id = CValue::get("plageconsult_id");
+
+// Liste des praticiens
+$user = new CMediusers();
+$listPraticiens = $user->loadPraticiens();
 
 // Récupération des consultations de la plage séléctionnée
 $plage = new CPlageconsult;

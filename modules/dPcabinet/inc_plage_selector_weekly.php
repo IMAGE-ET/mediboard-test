@@ -9,9 +9,13 @@
 
 CCanDo::checkRead();
 
-global $period, $periods, $chir_id, $function_id, $date, $ndate, $pdate, $plageconsult_id;
+global $period, $periods, $listPraticiens, $chir_id, $function_id, $date, $ndate, $pdate, $plageconsult_id;
 
 $plageconsult_id = 0;
+
+if(!$chir_id) {
+  $chir_id = reset($listPraticiens);
+}
 
 $prat = new CMediusers;
 $prat->load($chir_id);
@@ -87,6 +91,7 @@ $smarty->assign("date"           , $date);
 $smarty->assign("refDate"        , $debut);
 $smarty->assign("ndate"          , $ndate);
 $smarty->assign("pdate"          , $pdate);
+$smarty->assign("listPraticiens" , $listPraticiens);
 $smarty->assign("chir_id"        , $chir_id);
 $smarty->assign("function_id"    , $function_id);
 $smarty->assign("plageconsult_id", $plageconsult_id);
