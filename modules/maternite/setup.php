@@ -63,7 +63,12 @@ class CSetupmaternite extends CSetup {
       CHANGE `grosssesse_id` `grossesse_id` INT (11) UNSIGNED";
     $this->addQuery($query);
     
-    $this->mod_version = "0.04";
+    $this->makeRevision("0.04");
+    $query = "ALTER TABLE `grossesse`
+      CHANGE `grossesse_id` `grossesse_id` INT (11) UNSIGNED NOT NULL auto_increment";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.05";
   }
 }
 ?>
