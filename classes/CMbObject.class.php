@@ -29,6 +29,8 @@ class CMbObject extends CStoredObject {
   var $_ref_object_configs = null; // Object configs
   var $_ref_tag_items  = array(); // Object tag items
 
+  var $_count_affectations_personnel = null;
+  
   /**
    * Chargement des notes sur l'objet
    * @param $perm One of PERM_READ | PERM_EDIT
@@ -367,6 +369,8 @@ class CMbObject extends CStoredObject {
     if (null == $affectations = $this->loadBackRefs("affectations_personnel")) {
       return;
     }
+    
+    $this->_count_affectations_personnel = count($affectations);
     
     // Chargement et classement
     foreach ($affectations as $key => $affectation) {
