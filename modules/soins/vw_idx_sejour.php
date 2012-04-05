@@ -14,12 +14,12 @@ CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 $can->needsRead();
 
 // Filtres
-$date = CValue::getOrSession("date", mbDate());
-$datetime = mbDateTime(); 
-$mode = CValue::getOrSession("mode", 0);
-$service_id   = CValue::getOrSession("service_id");
-$praticien_id = CValue::getOrSession("praticien_id");
-$_active_tab  = CValue::get("_active_tab");
+$date           = CValue::getOrSession("date", mbDate());
+$datetime       = mbDateTime(); 
+$mode           = CValue::getOrSession("mode", 0);
+$service_id     = CValue::getOrSession("service_id");
+$praticien_id   = CValue::getOrSession("praticien_id");
+$_active_tab    = CValue::get("_active_tab");
 $type_admission = CValue::getOrSession("type");
 
 $tab_sejour = array();
@@ -33,7 +33,7 @@ if(CModule::getActive("dPprescription")){
 
 // Test du type de l'utilisateur courant
 $anesthesiste = $userCourant->isFromType(array("Anesthésiste"));
-$praticien    = $userCourant->isPraticien();
+$praticien    = $userCourant->isPraticien() && !$anesthesiste;
 
 if($praticien && !$service_id && !$praticien_id) {
   $praticien_id = $userCourant->user_id;
