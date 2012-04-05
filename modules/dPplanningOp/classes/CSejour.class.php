@@ -1765,6 +1765,46 @@ class CSejour extends CCodable implements IPatientRelated {
     return $this->_ref_affectations;
   }
   
+  function forceAffectation($datetime, $lit_id) {
+    $splitting            = new CAffectation();
+    $where["sejour_id"] = "=  '$this->_id'";
+    $where["entree"]    = "<= '$datetime'";
+    $where["sortie"]    = ">= '$datetime'";
+    $splitting->loadObject($where);
+    
+    $affectation = new CAffectation();
+    
+    // On retrouve une affectation a spliter
+    if ($splitting->_id) {
+      // Affecte la sortie de l'affectation a créer avec l'ancienne date de sortie
+      $affectation->sortie = $splitting->sortie;
+    }
+    // On créé une première affectation
+    else {
+      $splitting->sejour_id = $this->_id;
+      $splitting->entree    = $this->entree;
+      $splitting->lit_id    = $lit_id; 
+    }
+    
+    // On passe à effectuer la split
+    $splitting->effectue = 1;
+    $splitting->sortie   = $datetime;
+    if ($msg = $splitting->store()) {
+      return $msg;
+    }
+    
+    // Créé la nouvelle affectation
+    $affectation->sejour_id = $this->_id;
+    $affectation->entree    = $datetime;
+    $affectation->lit_id    = $lit_id; 
+    
+    if ($msg = $affectation->store()) {
+      return $msg;
+    }
+    
+    return $affectation;
+  }
+  
   function loadRefsOperations($where = array()) {
     $where["sejour_id"] = "= '$this->_id'";
     $order = "date ASC";
@@ -1829,12 +1869,6 @@ class CSejour extends CCodable implements IPatientRelated {
     $this->_ref_GHM->_ref_sejour = $this;
     $this->_ref_GHM->bindInfos();
     $this->_ref_GHM->getGHM();
-  }
-  
-  function loadEchangeHprim() {
-    $order = "date_production DESC";
-    // Récupération de tous les échanges produits
-    $this->_ref_echange_hprim = $this->loadBackRefs("echanges_hprim", $order);
   }
   
   function fillLimitedTemplate(&$template) {

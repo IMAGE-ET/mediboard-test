@@ -842,12 +842,6 @@ class COperation extends CCodable implements IPatientRelated {
     $this->loadRefsDocs();
   }
   
-  function loadEchangeHprim() {
-    $order = "date_production DESC";
-    // Récupération de tous les échanges produits
-    $this->_ref_echange_hprim = $this->loadBackRefs("echanges_hprim", $order);
-  }
-  
   /**
    * @return bool
    */
