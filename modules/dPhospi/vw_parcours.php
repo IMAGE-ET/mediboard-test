@@ -175,6 +175,7 @@ $movements = $movement->loadMatchingList();
 foreach ($movements as $_movement) {
   $_movement->loadRefSejour();
   $_movement->loadRefAffectation();
+  $_movement->_ref_affectation->loadView();
 }
 
 // Création du template

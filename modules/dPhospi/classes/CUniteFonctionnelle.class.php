@@ -58,6 +58,14 @@ class CUniteFonctionnelle extends CMbObject {
     parent::updateFormFields();
     $this->_view = $this->libelle;
   }
+  
+  static function getUF($code_uf) {
+    $uf = new self;
+    $uf->code = $code_uf;
+    $uf->loadMatchingObject();
+    
+    return $uf;
+  }
 }
 
 ?>

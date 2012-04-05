@@ -68,7 +68,7 @@ class CMovement extends CMbObject {
   }
   
   function loadMatchingList($order = null, $limit = null, $group = null, $ljoin = null) {
-    $order = "last_update DESC, movement_id DESC";
+    $order = "start_of_movement DESC, movement_id DESC";
 
     return parent::loadMatchingList($order, $limit, $group, $ljoin);
   }
