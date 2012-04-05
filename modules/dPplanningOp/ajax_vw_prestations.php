@@ -93,9 +93,11 @@ if (isset($liaisons_j[$date_temp])) {
     if (isset($liaisons_j_date[$_prestation_id])) {
       $save_liaison = $liaisons_j_date[$_prestation_id];
       $item_liaison->_ref_item->_id             = $save_liaison->item_prestation_id;
-      $item_liaison->_ref_item_realise->_id     = $save_liaison->item_prestation_realise_id;
       $item_liaison->_ref_item->nom             = $save_liaison->_ref_item->nom;
+      $item_liaison->_ref_item->rank            = $save_liaison->_ref_item->rank;
+      $item_liaison->_ref_item_realise->_id     = $save_liaison->item_prestation_realise_id;
       $item_liaison->_ref_item_realise->nom     = $save_liaison->_ref_item_realise->nom;
+      $item_liaison->_ref_item_realise->rank    = $save_liaison->_ref_item_realise->rank;
       $save_state[$_prestation_id] = $item_liaison;
     }
     else {
@@ -120,10 +122,10 @@ if (isset($liaisons_j[$date_temp])) {
       if (isset($liaisons_j_date[$_prestation_id])) {
         $save_liaison = $liaisons_j_date[$_prestation_id];
         $item_liaison->_ref_item->_id             = $save_liaison->_ref_item->_id;
-        $item_liaison->_ref_item_realise->_id     = $save_liaison->_ref_item_realise->_id;
         $item_liaison->_ref_item->nom             = $save_liaison->_ref_item->nom;
-        $item_liaison->_ref_item_realise->nom     = $save_liaison->_ref_item_realise->nom;
         $item_liaison->_ref_item->rank            = $save_liaison->_ref_item->rank;
+        $item_liaison->_ref_item_realise->_id     = $save_liaison->_ref_item_realise->_id;
+        $item_liaison->_ref_item_realise->nom     = $save_liaison->_ref_item_realise->nom;
         $item_liaison->_ref_item_realise->rank    = $save_liaison->_ref_item_realise->rank;
         $save_state[$_prestation_id] = $item_liaison;
       }
@@ -131,10 +133,10 @@ if (isset($liaisons_j[$date_temp])) {
         $save_liaison = $save_state[$_prestation_id];
         
         $item_liaison->_ref_item->_id             = $save_liaison->_ref_item->_id;
-        $item_liaison->_ref_item_realise->_id     = $save_liaison->_ref_item_realise->_id;
         $item_liaison->_ref_item->nom             = $save_liaison->_ref_item->nom;
-        $item_liaison->_ref_item_realise->nom     = $save_liaison->_ref_item_realise->nom;
         $item_liaison->_ref_item->rank            = $save_liaison->_ref_item->rank;
+        $item_liaison->_ref_item_realise->_id     = $save_liaison->_ref_item_realise->_id;
+        $item_liaison->_ref_item_realise->nom     = $save_liaison->_ref_item_realise->nom;
         $item_liaison->_ref_item_realise->rank    = $save_liaison->_ref_item_realise->rank;
         $liaisons_j_date[$_prestation_id] = $item_liaison;
       }
