@@ -59,7 +59,7 @@ toggleCancelledAnesth = function(list) {
   <li {{if $_antecedent->annule}}class="cancelled" style="display: none;"{{/if}}>
     <!-- Seulement si l'utilisateur est le créateur -->
     {{if $_antecedent->_ref_first_log && $_antecedent->_ref_first_log->user_id == $app->user_id}}
-    <form name="Del-{{$_antecedent->_guid}}" action="?m=dPcabinet" method="post" style="float: left; margin-left: -22px;">
+    <form name="Del-{{$_antecedent->_guid}}" action="?m=dPcabinet" method="post">
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_antecedent_aed" />

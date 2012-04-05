@@ -8,6 +8,7 @@
 */
 
 $autoadd_default = CAppUI::pref("AUTOADDSIGN", true);
+$del = $_POST["del"];
 
 // Sejour
 // si on a un sejour et que l'option d'ajout automatique est activée
@@ -21,6 +22,8 @@ if(isset($_POST["_sejour_id"]) && $autoadd_default && ($_POST["_sejour_id"] != "
  
   $doSejour->doIt();
 }
+
+$_POST["del"] = $del;
 
 // Patient
 $doPatient = new CDoObjectAddEdit("CAntecedent", "antecedent_id");
