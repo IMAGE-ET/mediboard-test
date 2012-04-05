@@ -15,7 +15,7 @@ viewListPrescription = function(){
 	var oFilterForm = getForm("bilanPrescriptions");
   url.addParam('type_prescription', $V(oFilterForm.type_prescription));
 	url.addParam('signee', $V(oFilterForm.signee));
-  url.addParam('praticien_id', $V(oFilterForm.praticien_id));
+  url.addParam('prat_bilan_id', $V(oFilterForm.prat_bilan_id_id));
   url.addParam('_date_entree_prevue', $V(oFilterForm._date_entree_prevue));
   url.addParam('_date_sortie_prevue', $V(oFilterForm._date_sortie_prevue));
   url.requestUpdate("list_prescriptions");
@@ -69,7 +69,7 @@ Main.add(function () {
 	            </select>
 	          </td>
 	          <td>
-			       <select name="praticien_id">
+			       <select name="prat_bilan_id">
 			          <option value="">&mdash; Sélection d'un praticien</option>
 				        {{foreach from=$praticiens item=praticien}}
 				        <option class="mediuser" 
