@@ -14,6 +14,17 @@ checkPlage = function() {
   
   return true;
 }
+
+toggleDel = function(input) {
+  if (input.disabled) {
+    input.enable();
+  }
+  else {
+    input.disable();
+  }
+  input.up('span').toggleClassName('opacity-40');
+}
+
 Main.add(function(){
   var oForm = getForm('editFrm');
   Calendar.regField(oForm.date);
@@ -35,9 +46,6 @@ Main.add(function(){
 <input type="hidden" name="dosql" value="do_plagesop_aed" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="plageop_id" value="{{$plagesel->plageop_id}}" />
-<input type="hidden" name="_del_iade_id" value="" />
-<input type="hidden" name="_del_op_id" value="" />
-<input type="hidden" name="_del_op_panseuse_id" value="" />
 
 <table class="form">
   <tr>
@@ -217,8 +225,9 @@ Main.add(function(){
               {{foreach from=$plagesel->_ref_affectations_personnel.iade item=_affectation_personnel}}
                 {{assign var=personnel value=$_affectation_personnel->_ref_personnel}}
                 <span style="white-space: nowrap;">
+                  <input type="hidden" name="_del_iade_ids[{{$personnel->_id}}]" value="{{$personnel->_id}}" disabled/>
                   <button type="button" class="cancel notext"
-                    onclick="$V(this.form._del_iade_id, {{$personnel->_id}}); this.form.submit();"></button>
+                    onclick="toggleDel(this.form.elements['_del_iade_ids[{{$personnel->_id}}]'])"></button>
                  {{$personnel->_ref_user}}
                  </span>
               {{/foreach}}
@@ -237,8 +246,9 @@ Main.add(function(){
               {{foreach from=$plagesel->_ref_affectations_personnel.op item=_affectation_personnel}}
                 {{assign var=personnel value=$_affectation_personnel->_ref_personnel}}
                 <span style="white-space: nowrap;">
+                  <input type="hidden" name="_del_op_ids[{{$personnel->_id}}]" value="{{$personnel->_id}}" disabled/>
                   <button type="button" class="cancel notext"
-                    onclick="$V(this.form._del_op_id, {{$personnel->_id}}); this.form.submit();"></button>
+                    onclick="toggleDel(this.form.elements['_del_op_ids[{{$personnel->_id}}]'])"></button>
                  {{$personnel->_ref_user}}
                  </span>
               {{/foreach}}
@@ -257,8 +267,9 @@ Main.add(function(){
               {{foreach from=$plagesel->_ref_affectations_personnel.op_panseuse item=_affectation_personnel}}
                 {{assign var=personnel value=$_affectation_personnel->_ref_personnel}}
                 <span style="white-space: nowrap;">
+                  <input type="hidden" name="_del_op_panseuse_ids[{{$personnel->_id}}]" value="{{$personnel->_id}}" disabled/>
                   <button type="button" class="cancel notext"
-                    onclick="$V(this.form._del_op_panseuse_id, {{$personnel->_id}}); this.form.submit();"></button>
+                    onclick="toggleDel(this.form.elements['_del_op_panseuse_ids[{{$personnel->_id}}]'])"></button>
                  {{$personnel->_ref_user}}
                  </span>
               {{/foreach}}

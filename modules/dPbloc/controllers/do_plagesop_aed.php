@@ -19,11 +19,11 @@ $_iade_id = CValue::post("_iade_id");
 $_aideop_id = CValue::post("_op_id");
 $_op_panseuse_id = CValue::post("_op_panseuse_id");
 
-$_del_iade_id = CValue::post("_del_iade_id");
-$_del_op_id   = CValue::post("_del_op_id");
-$_del_op_panseuse_id = CValue::post("_del_op_panseuse_id");
+$_del_iade_ids = CValue::post("_del_iade_ids", array());
+$_del_op_ids   = CValue::post("_del_op_ids", array());
+$_del_op_panseuse_ids = CValue::post("_del_op_panseuse_ids", array());
 
-$del_personnel = array($_del_iade_id, $_del_op_id, $_del_op_panseuse_id);
+$del_personnel = array_merge($_del_iade_ids, $_del_op_ids, $_del_op_panseuse_ids);
 
 // si l'id de l'objet est nul => creation
 // si l'objet a un id, alors, modification
