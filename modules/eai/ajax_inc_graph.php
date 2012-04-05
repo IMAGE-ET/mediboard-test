@@ -17,7 +17,8 @@ $date_production  = CValue::getOrSession("date_production", mbDate());
 $period           = CValue::getOrSession('period', "DAY");
 $count            = CValue::getOrSession('count', 30);
 $group_id         = CValue::getOrSession("group_id", CGroups::loadCurrent()->_id);
-$mode             = CValue::GetOrSession("mode");
+$mode             = CValue::getOrSession("mode");
+$statut_ack       = CValue::get("statut_ack");
 
 /* Initialisation du graphiques */
 $options = array();
@@ -89,6 +90,10 @@ if (isset($criteres["acquittement_invalide"])) {
 }
 if (isset($criteres["no_date_echange"])) {
   $where["date_echange"] = " IS NULL";
+}
+
+if ($statut_ack) {
+  $where["statut_acquittement"] = " = '$statut_ack'";
 }
 
 $where["group_id"] = " = '$group_id'";

@@ -1781,6 +1781,7 @@ class CSejour extends CCodable implements IPatientRelated {
     }
     // On créé une première affectation
     else {
+      $affectation->sortie  = $this->sortie;
       $splitting->sejour_id = $this->_id;
       $splitting->entree    = $this->entree;
       $splitting->lit_id    = $lit_id; 

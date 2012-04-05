@@ -115,13 +115,19 @@
         <table class="form">
           {{foreach from=$criteres item=critere}}
             <tr>
+              <th>{{tr}}CExchange-type-{{$critere}}{{/tr}}</th>
               <td>
                 <label>
-                  <input type="checkbox" name="selected_criteres[{{$critere}}]" value="{{$critere}}"/>{{tr}}CExchange-type-{{$critere}}{{/tr}}
+                  <input type="checkbox" name="selected_criteres[{{$critere}}]" value="{{$critere}}"/>
                 </label>
               </td>
             </tr>
           {{/foreach}}
+          
+          <tr>
+            <th>Statut acquittement</th>
+            <td> <input type="text" name="statut_ack" value="" size="10"/>  </td>
+          </tr>
         </table>
       </td>
     </tr>
@@ -132,6 +138,25 @@
     </tr>
   </table>
 </form>
+
+<div class="small-info">
+  <strong>Pour les échanges XML</strong>
+  <ul>
+    <li> Échanges H'XML 
+      <ul>
+        <li> Statut acquittement : <code>OK</code> - <code>avertissement</code> - <code>erreur</code></li>
+      </ul>
+    </li>
+  </ul>
+  <strong>Pour les échanges tabulés</strong>
+  <ul>
+    <li> Échanges IHE 
+      <ul>
+        <li> Statut acquittement : <code>AA</code> <em>(OK)</em> - <code>AR</code> <em>(Erreur)</em></li>
+      </ul>
+    </li>
+  </ul>
+</div>
 
 <table class="main">
   <tr>

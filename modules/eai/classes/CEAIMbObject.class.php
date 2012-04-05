@@ -40,7 +40,7 @@ class CEAIMbObject {
     $modified_fields = self::getModifiedFields($object);
     
     if ($object instanceof CPatient) {
-      switch ($object->_ref_last_log->type) {
+      switch ($object->loadLastLog()->type) {
          // Enregistrement du patient
         case "create" :
           $comment = "Le patient a été créé dans Mediboard avec l'IC $object->_id.";

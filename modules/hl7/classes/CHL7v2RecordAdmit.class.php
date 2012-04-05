@@ -286,14 +286,14 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Mapping du mouvement
     $return_movement = $this->mappingAndStoreMovement($ack, $newVenue, $data);
     if (is_string($return_movement)) {
-      return $return_movement;
+      return $exchange_ihe->setAckAR($ack, "E207", $return_movement, $newVenue);
     }
     $movement = $return_movement;
     
     // Mapping de l'affectation
     $return_affectation = $this->mappingAndStoreAffectation($ack, $newVenue, $data, $return_movement);
     if (is_string($return_affectation)) {
-      return $return_affectation;
+      return $exchange_ihe->setAckAR($ack, "E208", $return_affectation, $newVenue);
     }
     $affectation = $return_affectation;
     
@@ -515,14 +515,14 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Mapping du mouvement
     $return_movement = $this->mappingAndStoreMovement($ack, $newVenue, $data);
     if (is_string($return_movement)) {
-      return $return_movement;
+      return $exchange_ihe->setAckAR($ack, "E207", $return_movement, $newVenue);
     }
     $movement = $return_movement;
     
     // Mapping de l'affectation
     $return_affectation = $this->mappingAndStoreAffectation($ack, $newVenue, $data, $return_movement);
     if (is_string($return_affectation)) {
-      return $return_affectation;
+      return $exchange_ihe->setAckAR($ack, "E208", $return_affectation, $newVenue);
     }
     $affectation = $return_affectation;
     
@@ -602,12 +602,12 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
 
     // Chargement des affectations du séjour
+    $datetime = $this->queryTextNode("EVN.6/TS.1", $data["EVN"]);
     // Cas mutation - A02
     if ($this->_ref_exchange_ihe->code == "A02") {
-      $datetime = $this->queryTextNode("EVN.6/TS.1", $data["EVN"]);
       $affectation->entree = $datetime;
       $affectation->loadMatchingObject();
-   
+
       // Si on ne retrouve pas une affectation
       // Création de l'affectation 
       // et mettre à 'effectuee' la précédente si elle existe sinon création de celle-ci
@@ -636,8 +636,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     // Tous les autres cas on récupère et on met à jour la première affectation
     else {
-      $newVenue->loadRefsAffectations();
-      $affectation = $newVenue->_ref_first_affectation;      
+      $affectation =  $newVenue->getCurrAffectation($datetime);    
       if (!$affectation->_id) {
         $affectation->sejour_id = $newVenue->_id;
         $affectation->entree    = $newVenue->entree;
