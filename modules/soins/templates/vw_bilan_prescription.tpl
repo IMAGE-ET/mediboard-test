@@ -15,7 +15,7 @@ viewListPrescription = function(){
 	var oFilterForm = getForm("bilanPrescriptions");
   url.addParam('type_prescription', $V(oFilterForm.type_prescription));
 	url.addParam('signee', $V(oFilterForm.signee));
-  url.addParam('prat_bilan_id', $V(oFilterForm.prat_bilan_id_id));
+  url.addParam('prat_bilan_id', $V(oFilterForm.prat_bilan_id));
   url.addParam('_date_entree_prevue', $V(oFilterForm._date_entree_prevue));
   url.addParam('_date_sortie_prevue', $V(oFilterForm._date_sortie_prevue));
   url.requestUpdate("list_prescriptions");
