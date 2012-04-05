@@ -49,7 +49,8 @@
       
       <ul class="control_tabs" id="msg-message-tab">
         <li><a href="#msg-message-tree">Arbre</a></li>
-        <li><a href="#msg-message-er7">ER7</a></li>
+        <li><a href="#msg-message-er7-input">ER7 input</a></li>
+        <li><a href="#msg-message-er7-parsed">ER7 parsed</a></li>
         <li><a href="#msg-message-xml">XML</a></li>
         <li><a href="#msg-message-warnings" class="{{if $exchange->_doc_warnings_msg}}wrong{{else}}empty{{/if}}">Avertissements</a></li>
         <li><a href="#msg-message-errors" class="{{if $exchange->_doc_errors_msg}}wrong{{else}}empty{{/if}}">Erreurs</a></li>
@@ -61,7 +62,11 @@
         {{mb_include module=hl7 template=inc_segment_group_children segment_group=$msg_segment_group}}
       </ul>
       
-      <div id="msg-message-er7" style="display: none;">
+      <div id="msg-message-er7-input" style="display: none;">
+        {{$msg_segment_group->highlight_er7($msg_segment_group->data)|smarty:nodefaults}}
+      </div>
+      
+      <div id="msg-message-er7-parsed" style="display: none;">
         {{$msg_segment_group->flatten(true)|smarty:nodefaults}}
       </div>
       

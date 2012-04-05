@@ -93,6 +93,7 @@ $locales['CHL7EventADT-AR-E203'] = 'La fusion des séjours a échoué';
 $locales['CHL7EventADT-AR-E204'] = 'Le séjour n\'existe pas, ou n\'a pas été retrouvé par son NA, impossible de le modifier';
 $locales['CHL7EventADT-AR-E205'] = 'Le séjour n\'a pas été retrouvé par son PI';
 $locales['CHL7EventADT-AR-E206'] = 'Le mouvement n\'a pas été retrouvé par son identifiant';
+$locales['CHL7EventADT-AR-E207'] = '';
 $locales['CHL7EventADT-AR-E220'] = 'Séjour(s) inconnu(s) par le système';
 $locales['CHL7EventADT-AR-E221'] = 'Erreur lors du test préalable de la fusion des séjours';
 $locales['CHL7EventADT-AR-E222'] = 'Erreur lors de la fusion des données séjours';

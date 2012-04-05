@@ -351,7 +351,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
         $correspondant = new CCorrespondant();
         $correspondant->patient_id = $newPatient->_id;
         $correspondant->medecin_id = $this->getMedecin($this->queryNode("ROL.4", $node));
-        if (!$correspondant->loadMatchingObject()) {
+        if (!$correspondant->loadMatchingObjectEsc()) {
           // Notifier les autres destinataires autre que le sender
           $correspondant->_eai_initiateur_group_id = $sender->group_id;
           $correspondant->store();
@@ -390,7 +390,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $corres_patient->patient_id = $newPatient->_id;
     $corres_patient->nom        = $nom;
     $corres_patient->prenom     = $prenom;
-    $corres_patient->loadMatchingObject();
+    $corres_patient->loadMatchingObjectEsc();
     
     $corres_patient->adresse  = $adresse;
     $corres_patient->cp       = $cp;
@@ -417,11 +417,11 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     switch ($this->queryTextNode("XCN.13", $node)) {
       case "RPPS" :
         $medecin->rpps  = $xcn1;
-        $medecin->loadMatchingObject();
+        $medecin->loadMatchingObjectEsc();
         break;
       case "ADELI" :
         $medecin->adeli = $xcn1;
-        $medecin->loadMatchingObject();
+        $medecin->loadMatchingObjectEsc();
         break;
       case "RI" :
         // Gestion de l'identifiant MB
@@ -436,7 +436,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     if (!$medecin->_id) {
       $medecin->nom    = $xcn2;
       $medecin->prenom = $xcn3;
-      $medecin->loadMatchingObject();
+      $medecin->loadMatchingObjectEsc();
       
       // Dans le cas où il n'est pas connu dans MB on le créé
       $medecin->store();

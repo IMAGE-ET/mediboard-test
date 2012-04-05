@@ -284,8 +284,23 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
     
     // Mapping du mouvement
-    if ($msgMovement = $this->mappingAndStoreMovement($ack, $newVenue, $data)) {
-      return $msgMovement;
+    $return_movement = $this->mappingAndStoreMovement($ack, $newVenue, $data);
+    if (is_string($return_movement)) {
+      return $return_movement;
+    }
+    $movement = $return_movement;
+    
+    // Mapping de l'affectation
+    $return_affectation = $this->mappingAndStoreAffectation($ack, $newVenue, $data, $return_movement);
+    if (is_string($return_affectation)) {
+      return $return_affectation;
+    }
+    $affectation = $return_affectation;
+    
+    // Affectation de l'affectation au mouvement
+    if ($affectation->_id) {
+      $movement->affectation_id = $affectation->_id;
+      $movement->store();
     }
     
     return $exchange_ihe->setAckAA($ack, $codes, $comment, $newVenue);
@@ -498,8 +513,23 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
     
     // Mapping du mouvement
-    if ($msgMovement = $this->mappingAndStoreMovement($ack, $newVenue, $data)) {
-      return $msgMovement;
+    $return_movement = $this->mappingAndStoreMovement($ack, $newVenue, $data);
+    if (is_string($return_movement)) {
+      return $return_movement;
+    }
+    $movement = $return_movement;
+    
+    // Mapping de l'affectation
+    $return_affectation = $this->mappingAndStoreAffectation($ack, $newVenue, $data, $return_movement);
+    if (is_string($return_affectation)) {
+      return $return_affectation;
+    }
+    $affectation = $return_affectation;
+    
+    // Affectation de l'affectation au mouvement
+    if ($affectation->_id) {
+      $movement->affectation_id = $affectation->_id;
+      $movement->store();
     }
     
     $codes   = array ("I202", "I226");
@@ -556,21 +586,99 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $comment = "Le mouvement '$movement_id' est inconnu dans Mediboard";
       return $exchange_ihe->setAckAR($ack, "E206", $comment, $newVenue);
     }
-  }
-  
-  function mappingMovement($data, CSejour $newVenue, CMovement $movement) {
-    // Segment ZBE
-    $movement = $this->getZBE($data["ZBE"], $newVenue, $movement);
     
     return $movement;
+  }
+  
+  function mappingAndStoreAffectation(CHL7Acknowledgment $ack, CSejour $newVenue, $data, CMovement $movement) {
+    $PV1 = $data["PV1"];
+    
+    $affectation = new CAffectation();
+    $affectation->sejour_id = $newVenue->_id;
+
+    // Si pas de lit on retourne une affectation vide
+    if (!$this->queryTextNode("PV1.3/PL.3", $PV1)) {
+      return $affectation;     
+    }
+
+    // Chargement des affectations du séjour
+    // Cas mutation - A02
+    if ($this->_ref_exchange_ihe->code == "A02") {
+      $datetime = $this->queryTextNode("EVN.6/TS.1", $data["EVN"]);
+      $affectation->entree = $datetime;
+      $affectation->loadMatchingObject();
+   
+      // Si on ne retrouve pas une affectation
+      // Création de l'affectation 
+      // et mettre à 'effectuee' la précédente si elle existe sinon création de celle-ci
+      if (!$affectation->_id) {
+        // Récupération du Lit et UFs
+        $this->getPL($this->queryNode("PV1.3", $PV1), $affectation);
+      
+        $return_affectation = $newVenue->forceAffectation($datetime, $affectation->lit_id);
+        if (is_string($return_affectation)) {
+          return $return_affectation;
+        }
+        
+        $affectation = $return_affectation;
+      }
+    }
+
+    // Cas modification - Z99
+    elseif ($this->_ref_exchange_ihe->code == "Z99") {
+      if (!$movement->affectation_id) {
+        $comment = "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
+        return $exchange_ihe->setAckAR($ack, "E207", $comment, $newVenue);
+      }
+      
+      $affectation = $movement->loadRefAffectation();
+    }
+    
+    // Tous les autres cas on récupère et on met à jour la première affectation
+    else {
+      $newVenue->loadRefsAffectations();
+      $affectation = $newVenue->_ref_first_affectation;      
+      if (!$affectation->_id) {
+        $affectation->sejour_id = $newVenue->_id;
+        $affectation->entree    = $newVenue->entree;
+        $affectation->sortie    = $newVenue->sortie;
+      }
+    } 
+    
+    // Récupération du Lit et UFs
+    $this->getPL($this->queryNode("PV1.3", $PV1), $affectation);
+    $affectation->uf_medicale_id = $this->mappingUFMedicale($data);
+    $affectation->uf_soins_id    = $this->mappingUFSoins($data);
+     
+    $affectation->store();
+    
+    return $affectation;
+  }
+  
+  function mappingUFMedicale($data) {
+    if (!array_key_exists("ZBE", $data)) {
+      return;
+    }
+    
+    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $this->queryNode("ZBE.7", $data["ZBE"])))->_id;
+  }
+  
+  function mappingUFSoins($data) {
+    if (!array_key_exists("ZBE", $data)) {
+      return;
+    }
+    
+    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $this->queryNode("ZBE.8", $data["ZBE"])))->_id;
+  }  
+  
+  function mappingMovement($data, CSejour $newVenue, CMovement $movement) {
+    // Segment ZBE    
+    return $this->getZBE($data["ZBE"], $newVenue, $movement);
   }
   
   function getPV1(DOMNode $node, CSejour $newVenue) {    
     // Classe de patient
     $this->getPatientClass($node, $newVenue);
-
-    // Hébergement du patient
-    $this->getPL($node, $newVenue);
     
     // Type de l'admission
     $this->getAdmissionType($node, $newVenue);
@@ -606,8 +714,19 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $newVenue->type = $patient_class ? $patient_class : "comp";
   }
   
-  function getPL(DOMNode $node, CSejour $newVenue) {
-    /* @todo Gestion des mouvements / affectations */
+  function getPL(DOMNode $node, CAffectation $affectation) {
+    $code_uf     = $this->queryTextNode("PL.1", $node);    
+    $nom_lit     = $this->queryTextNode("PL.3", $node);
+    
+    $lit = new CLit();
+    $lit->nom = $nom_lit;
+    $lit->loadMatchingObjectEsc();
+    
+    // Affectation du lit
+    $affectation->lit_id = $lit->_id;
+
+    // Affectation de l'UF hébergement
+    $affectation->uf_hebergement_id = CUniteFonctionnelle::getUF($code_uf)->_id;
   }
   
   function getAdmissionType(DOMNode $node, CSejour $newVenue) {
@@ -673,7 +792,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return null;      
     }
     
-    if ($object instanceof CMedecin && $object->loadMatchingObject()) {
+    if ($object instanceof CMedecin && $object->loadMatchingObjectEsc()) {
       return $object->_id;
     }
       
@@ -681,7 +800,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $user = new CUser;
       $user->user_first_name = $first_name;
       $user->user_last_name  = $last_name;
-      if ($user->loadMatchingObject()) {
+      if ($user->loadMatchingObjectEsc()) {
         return $user->_id;
       }
       
@@ -698,7 +817,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $function = new CFunctions();
     $function->text = CAppUI::conf("hl7 importFunctionName");
     $function->group_id = $sender->group_id;
-    $function->loadMatchingObject();
+    $function->loadMatchingObjectEsc();
     if (!$function->_id) {
       $function->type = "cabinet";
       $function->compta_partagee = 0;
@@ -729,7 +848,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     $user    = new CUser();
     $user->user_last_name = CAppUI::conf("hl7 indeterminateDoctor")." $sender->group_id";
-    if (!$user->loadMatchingObject()) {
+    if (!$user->loadMatchingObjectEsc()) {
       $mediuser = new CMediusers();
       $mediuser->_user_last_name = $user->user_last_name;
       
@@ -767,7 +886,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function getAdmitSource(DOMNode $node, CSejour $newVenue) {
     $admit_source = $this->queryTextNode("PV1.14", $node);
-    
     /* @todo Voir comment gérer */    
   }
   
@@ -790,7 +908,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     $etab_ext = new CEtabExterne();
     $etab_ext->finess = $finess;
-    if (!$etab_ext->loadMatchingObject()) {
+    if (!$etab_ext->loadMatchingObjectEsc()) {
       return;
     }
     
@@ -846,8 +964,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $start_movement_dt = $this->queryTextNode("ZBE.2/TS.1", $node);
     $action            = $this->queryTextNode("ZBE.4", $node);
     $original_trigger  = $this->queryTextNode("ZBE.6", $node);
-    $uf_medicale       = $this->queryNode("ZBE.7", $node);
-    $uf_soins          = $this->queryNode("ZBE.8", $node);
     
     $movement->sejour_id = $newVenue->_id;
     $movement->original_trigger_code = $original_trigger;
@@ -856,7 +972,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $movement_id_split       = explode("-", $movement_id);
       $movement->_id           = $movement_id_split[0];
       $movement->movement_type = $movement_id_split[1];
-      $movement->loadMatchingObject();
+      $movement->loadMatchingObjectEsc();
       if (!$movement->_id) {
         return null;
       }
@@ -883,12 +999,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $id400Movement->store();
     }
     
-    /* Reste gestion des affectations */
-    $affectation = new CAffectation();
-    
     return $movement;
   }
-  
+
   function getZFD(DOMNode $node, CSejour $newVenue) {  
     // Date lunaire
     if ($date_lunaire = $this->queryTextNode("ZFD.1", $node)) {
@@ -949,7 +1062,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     $etab_ext = new CEtabExterne();
     $etab_ext->finess = $finess;
-    if (!$etab_ext->loadMatchingObject()) {
+    if (!$etab_ext->loadMatchingObjectEsc()) {
       return;
     }
     

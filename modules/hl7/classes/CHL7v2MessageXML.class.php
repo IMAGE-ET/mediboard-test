@@ -80,7 +80,6 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
       case "CHL7v2EventORUR01" : 
         return new CHL7v2RecordObservationResultSet($encoding);  
       default : 
-        mbLog("Event code '$event_code' non reconnu");
         return new CHL7v2MessageXML($encoding);
     }
   }
@@ -266,6 +265,8 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     $sender->loadConfigValues();
    
     $this->_ref_sender = $sender;
+    
+    $this->queryNode("EVN", null, $data, true);
     
     $PID = $this->queryNode("PID", null, $data, true);
     

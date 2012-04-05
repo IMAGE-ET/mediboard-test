@@ -122,14 +122,15 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     // Initialise le mouvement 
     $movement->sejour_id     = $sejour->_id;
   
-    if ($affectation) {
+    if ($affectation && $code == "A02") {
       $movement->affectation_id = $affectation->_id;  
     }
-    
+
     if ($insert) {
       // Dans le cas d'un insert le type correspond nécessairement au type actuel du séjour
       $movement->movement_type         = $sejour->getMovementType($code);
       $movement->original_trigger_code = $code;
+      $movement->start_of_movement     = $this->getStartOfMovement($code, $sejour);
       $movement->store();
     
       return $sejour->_ref_hl7_movement = $movement;
@@ -172,6 +173,42 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     $movement->store();
     
     return $sejour->_ref_hl7_movement = $movement;
+  }
+
+  function getStartOfMovement($code, CSejour $sejour) {
+    switch ($code) {
+      // Admission hospitalisé / externe
+      case 'A01' : 
+      case 'A04' :
+        // Date de l'admission
+        return $sejour->entree_reelle;
+      // Mutation : changement d'UF hébergement
+      case 'A02':
+      // Changement de statut externe ou urgence vers hospitalisé
+      case 'A06':
+      // Changement de statut hospitalisé ou urgence vers externe
+      case 'A07':
+      // Changement de médecin responsable
+      case 'A54':
+      // Changement d'UF médicale
+      case 'Z80':
+      // Changement d'UF de soins
+      case 'Z84':
+        // Date du transfert
+        return mbDateTime();
+      // Sortie définitive
+      case 'A03':
+        // Date de la sortie
+        return $sejour->sortie_reelle;
+      // Pré-admission
+      case 'A05':
+        // Date de la pré-admission
+        return $sejour->entree_prevue;
+      // Sortie en attente
+      case 'A16':
+        // Date de la sortie
+        return $sejour->sortie;
+    }
   }
   
   function getCodeSejour(CSejour $sejour) {

@@ -20,7 +20,7 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
   static $actions = array(
     "INSERT" => array(
       "A05", "A01", "A14", "A04", "A06", "A07", "A54", "A02", "A15", 
-      "A03", "A16", "A21", "A22", "Z80", "Z83", "Z84", "Z86", "Z88"
+      "A03", "A16", "A21", "A22", "Z80", "Z82", "Z84", "Z86", "Z88"
     ),
     "UPDATE" => array(
       "Z99"
@@ -62,7 +62,14 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     if ($this->other_affectation) {
       $affectation = $this->other_affectation;
     }
-
+    
+    $action_movement = null;
+    foreach (self::$actions as $action => $events) {
+      if (in_array($event->code, $events)) {
+        $action_movement = $action;
+      }
+    };
+    
     // ZBE-1: Movement ID (EI) (optional)
     $data[] = array (
       array (
@@ -76,38 +83,13 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     );
     
     // ZBE-2: Start of Movement Date/Time (TS)
-    // $data[] = $movement->last_update;
-    $code = $event->code;
-    if ($event->code == "Z99") {
-      $code = $movement->original_trigger_code;
-    }
-    
-    switch ($code) {
-      case 'A01' : case 'A04' :
-        $data[] = $sejour->entree_reelle;
-        break;
-      case 'A05':
-        $data[] = $sejour->entree_prevue;
-        break;
-      case 'A03':
-        $data[] = $sejour->sortie_reelle;
-        break;  
-      default:
-        $data[] = $movement->last_update;
-        break;
-    }
+    $data[] = ($action_movement == "UPDATE" || $action_movement == "CANCEL") ? $movement->last_update : $movement->start_of_movement;
     
     // ZBE-3: End of Movement Date/Time (TS) (optional)
     // Forbidden (IHE France)
     $data[] = null;
     
     // ZBE-4: Action on the Movement (ID)
-    $action_movement = null;
-    foreach (self::$actions as $action => $events) {
-      if (in_array($event->code, $events)) {
-        $action_movement = $action;
-      }
-    };
     $data[] = $action_movement;
     
     // ZBE-5: Indicator "Historical Movement" (ID) 
