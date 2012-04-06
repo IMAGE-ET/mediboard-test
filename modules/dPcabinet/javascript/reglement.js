@@ -14,20 +14,20 @@ var Reglement = {
           reloadFinishBanner();
         }
       }
-	  } );
+	} );
   }, 
   reload: function(reload_acts) {
 	var url = new Url("dPcabinet", "httpreq_vw_reglement");
     url.addParam("selConsult", document.editFrmFinish.consultation_id.value);
 	url.requestUpdate('reglement');
-    
+	
     // Rafraichissement des actes CCAM et NGAP
     if (reload_acts && Preferences.ccam_consultation == "1" && Preferences.MODCONSULT == "1"){
       ActesCCAM.refreshList(Reglement.consultation_id, Reglement.user_id);
       ActesNGAP.refreshList();
-      
-      if(window.ActesTarmed){ 
-    	ActesTarmed.refreshList();
+     
+      if (reload_acts && Preferences.MODCONSULT == "1" && window.ActesTarmed){
+        ActesTarmed.refreshList();
       }
     }
   },
