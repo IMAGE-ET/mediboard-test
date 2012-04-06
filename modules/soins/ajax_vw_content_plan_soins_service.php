@@ -29,7 +29,7 @@ if(!$nb_decalage){
 $tabHours = CAdministration::getTimingPlanSoins($date, $configs);
 foreach($tabHours as $_key_date => $_period_date){
   foreach($_period_date as $_key_periode => $_period_dates){
-    $count_composition_dossier[$_key_date][$_key_periode] = CAppUI::conf("dPprescription CPrescription manual_planif") ? 3 : 2;
+    $count_composition_dossier[$_key_date][$_key_periode] = CConfigService::getConfigGroupFor("Planfication manuelle") ? 3 : 2;
     $first_date = reset(array_keys($_period_dates));
     $first_time = reset(reset($_period_dates));
     $last_date = end(array_keys($_period_dates));
@@ -112,7 +112,7 @@ foreach($lines as $_line_element){
         $prescription->_ref_lines_elt_for_plan[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
        
       }
-      $_line_element->calculPrises($prescription, $_date, $name_chap, $name_cat, 1, CAppUI::conf("dPprescription CPrescription manual_planif"));
+      $_line_element->calculPrises($prescription, $_date, $name_chap, $name_cat, 1, CConfigService::getConfigGroupFor("Planfication manuelle"));
     }
   }
 
@@ -155,6 +155,7 @@ $smarty->assign("date", $date);
 $smarty->assign("move_dossier_soin", false);
 $smarty->assign("configs", $configs);
 $smarty->assign("params", CConstantesMedicales::$list_constantes);
+$smarty->assign("manual_planif", CConfigService::getConfigGroupFor("Planfication manuelle"));
 
 $smarty->display('inc_vw_content_plan_soins_service.tpl');
 

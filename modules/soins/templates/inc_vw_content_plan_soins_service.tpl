@@ -4,7 +4,7 @@ Main.add(function(){
 	PlanSoins.init({
 		composition_dossier: {{$composition_dossier|@json}}, 
 		date: "{{$date}}", 
-		manual_planif: "{{$conf.dPprescription.CPrescription.manual_planif}}",
+		manual_planif: "{{$manual_planif}}",
 	  bornes_composition_dossier:  {{$bornes_composition_dossier|@json}},
 		nb_postes: {{$bornes_composition_dossier|@count}}
 	});
@@ -77,7 +77,7 @@ Main.add(function(){
     </tr>
 		<tr>
       <th></th>
-      {{if $conf.dPprescription.CPrescription.manual_planif}}
+      {{if $manual_planif}}
         <th>x</th>
       {{/if}}
       {{foreach from=$tabHours key=_date item=_hours_by_moment}}
