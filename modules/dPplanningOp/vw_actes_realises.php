@@ -49,17 +49,12 @@ $where = array();
 
 $where["entree_prevue"] = "BETWEEN '$_date_min' AND '$_date_max'";
 $ljoin["acte_ngap"] = "acte_ngap.object_id = sejour.sejour_id AND acte_ngap.object_class = 'CSejour'";
-//$where[] = "" ;
-$sejours = $sejour->loadList($where, null, null, null, $ljoin);
 
-mbTrace(array_keys($sejours));
+$sejours = $sejour->loadList($where, null, null, null, $ljoin);
 
 $operation = new COperation;
 $ljoin = array();
 $where = array();
-
-//$where[]
-
 
 // Initialisation du tableau de codables
 $codables = array(
