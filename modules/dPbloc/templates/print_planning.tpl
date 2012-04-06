@@ -331,7 +331,9 @@ function showCheckboxAnesth(element){
         <tr>
           <td colspan="2" class="button">
             <button class="print" type="button" onclick="checkFormPrint(this.form)">Afficher</button>
-            <button class="print" type="button" onclick="printPlanningPersonnel(this.form)">Planning du personnel</button>
+            {{if $can->edit}}
+              <button class="print" type="button" onclick="printPlanningPersonnel(this.form)">Planning du personnel</button>
+            {{/if}}
           </td>
         </tr>
       </table>

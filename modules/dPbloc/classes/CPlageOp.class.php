@@ -44,7 +44,7 @@ class CPlageOp extends CMbObject {
   var $_type_repeat  = null;
   
   // Behaviour Fields
-  var $_verrouillee = null;
+  var $_verrouillee = array();
   
   // Object References
   var $_ref_chir       = null;
@@ -244,6 +244,14 @@ class CPlageOp extends CMbObject {
         return $msg;
       }
     }
+    
+    // Erreur si on créé / modifier une plage sur une salle bloquée
+    $salle = $this->loadRefSalle();
+    if ($salle->isLocked($this->date)) {
+      $msg = "Impossible de " . ($this->_id ? "modifier" : "créer") . " la plage : la salle $salle est bloquée";
+      return $msg;
+    }
+    
     // Modification du salle_id de la plage -> repercussion sur les interventions
     if($this->_id && $this->salle_id && $this->salle_id != $oldPlage->salle_id) {
       foreach($oldPlage->_ref_operations as &$_operation) {
@@ -394,18 +402,28 @@ class CPlageOp extends CMbObject {
     $result = $this->_spec->ds->loadHash($sql);
     $this->_nb_operations_placees = $result["total"];
     
-    if($this->verrouillage == "oui") {
-      $this->_verrouillee = 1;
-    } elseif($this->verrouillage == "non") {
-      $this->_verrouillee = 0;
-    } else {
+    if ($this->verrouillage == "oui") {
+      $this->_verrouillee = array("force");
+    }
+    elseif($this->verrouillage == "non") {
+      $this->_verrouillee = array();
+    }
+    else {
       $this->loadRefSalle();
       $this->_ref_salle->loadRefBloc();
       $date_min = mbDate("+ " . $this->_ref_salle->_ref_bloc->days_locked . " DAYS");
       $check_datemin      = $this->date < $date_min;
       $check_fill         = ($this->_fill_rate > 100) && CAppUI::conf("dPbloc CPlageOp locked");
       $check_max          = $this->max_intervention && $this->_nb_operations >= $this->max_intervention;
-      $this->_verrouillee = $check_datemin || $check_fill || $check_max;
+      if ($check_datemin) {
+        $this->_verrouillee[] = "datemin";
+      }
+      if ($check_fill) {
+        $this->_verrouillee[] = "fill";
+      }
+      if ($check_max) {
+        $this->_verrouillee[] = "max";
+      }
     }
     
   }

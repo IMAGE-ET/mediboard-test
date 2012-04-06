@@ -28,7 +28,13 @@ $bloc->loadRefsSalles();
 $nbAlertesInterv = count($bloc->loadRefsAlertesIntervs());
 
 $listSalles = $bloc->_ref_salles;
-  
+
+foreach ($listSalles as $_salle) {
+  if ($_salle->isLocked($date)) {
+    $_salle->_blocage[$date] = 1;
+  }
+}
+
 // Informations sur la plage demandée
 $plagesel = new CPlageOp;
 $plagesel->load($plageop_id);

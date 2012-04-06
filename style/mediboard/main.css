@@ -1220,6 +1220,10 @@ table.tbl tr.hatching th, table.tbl tr.hatching td{
   background-image: url(../../images/icons/ray.gif);
 }
 
+table.planningBloc tr.hatching th, table.planningBloc tr.hatching td{   
+  background-image: url(../../images/icons/ray.gif);
+}
+
 table.tbl th.traitement, table.tbl td.traitement, table.tbl tr:hover td.traitement {
   background-color: #bdb;
 }

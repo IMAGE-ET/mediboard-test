@@ -27,6 +27,9 @@ class CSalle extends CMbObject {
   var $_ref_urgences = null;
   var $_ref_deplacees = null;
   
+  // Form fields
+  var $_blocage = array();
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'sallesbloc';
@@ -173,6 +176,21 @@ class CSalle extends CMbObject {
     $where[] = "operations.salle_id = '$this->salle_id' OR plagesop.salle_id = '$this->salle_id' OR (plagesop.salle_id IS NULL AND operations.salle_id IS NULL)";
     $order = "operations.date, operations.chir_id";
     return $this->_alertes_intervs = $alerte->loadList($where, $order, null, null, $ljoin);
+  }
+  
+  function isLocked($date = "now") {
+    $blocage = new CBlocage;
+    
+    if ($date == "now") {
+      $date = mbDate();
+    }
+    
+    $where = array();
+    $where["salle_id"] = "= '$this->_id'";
+    $where[] = "'$date' BETWEEN deb AND fin";
+    
+    return $blocage->countList($where) > 0;
+    
   }
 }
 ?>

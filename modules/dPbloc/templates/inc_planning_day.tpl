@@ -28,7 +28,7 @@
 </tr>
 {{foreach from=$listSalles item=_salle key=salle_id}}
 {{assign var="keyHorsPlage" value="$curr_day-s$salle_id-HorsPlage"}}
-<tr>
+<tr {{if isset($_salle->_blocage.$curr_day|smarty:nodefaults)}}class="hatching"{{/if}}>
   <td colspan="3" class="salle" {{if $affichages.$keyHorsPlage|@count}}rowspan="2"{{/if}}>
     <span onmouseover="ObjectTooltip.createEx(this, '{{$_salle->_guid}}')"
       onclick="EditPlanning.monitorDaySalle('{{$_salle->_id}}', '{{$curr_day}}');">

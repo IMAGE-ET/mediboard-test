@@ -244,8 +244,24 @@ class CSetupdPbloc extends CSetup {
     
     $this->makeRevision("0.29");
     $this->addPrefQuery("suivisalleAutonome", 0);
+
+    $this->makeRevision("0.30");
+    $query = "CREATE TABLE `blocage` (
+      `blocage_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `salle_id` INT (11) UNSIGNED NOT NULL,
+      `libelle` VARCHAR (255),
+      `deb` DATE NOT NULL,
+      `fin` DATE NOT NULL
+      ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
     
-    $this->mod_version = "0.30";
+    $query = "ALTER TABLE `blocage` 
+      ADD INDEX (`salle_id`),
+      ADD INDEX (`deb`),
+      ADD INDEX (`fin`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.31";
   }  
 }
 ?>

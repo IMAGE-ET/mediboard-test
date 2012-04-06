@@ -158,7 +158,7 @@ Main.add(function () {
               <div class="text" style="text-align: left">
                 <label 
                   for="list_{{$_plage->_id}}"
-                  {{if $resp_bloc || !$_plage->_verrouillee}}
+                  {{if $resp_bloc || $_plage->_verrouillee|@count == 0}}
                     ondblclick="setClose('{{$_plage->date}}', '{{$_plage->salle_id}}')"
                   {{else}}
                     onclick="showProgramme({{$_plage->_id}})"
@@ -176,18 +176,13 @@ Main.add(function () {
             </div>
          	 </td>
           <td style="text-align: center;" class="narrow">
-            {{if $resp_bloc || !$_plage->_verrouillee}}
+            {{if $resp_bloc || $_plage->_verrouillee|@count == 0}}
             <input type="radio" name="list" value="{{$_plage->plageop_id}}"
                ondblclick="setClose('{{$_plage->date}}', '{{$_plage->salle_id}}')"
                onclick="showProgramme({{$_plage->_id}}); getForm('plageSelectorFrm')._date.value='{{$_plage->date}}'; getForm('plageSelectorFrm')._salle_id.value='{{$_plage->salle_id}}';"/>
             {{else}}
-              <img src="style/mediboard/images/icons/lock.png" 
-                {{if $_plage->max_intervention && $_plage->_nb_operations >= $_plage->max_intervention}}
-                  title="Nombre d'interventions maximum atteint ({{$_plage->_nb_operations}}/{{$_plage->max_intervention}})"
-                {{elseif $_plage->date < $date_min}}
-                  title="Impossible de planifier à cette date"
-                {{/if}}
-              />
+              <img src="style/mediboard/images/icons/lock.png"
+                title="Impossible de planifier à cette date : {{foreach from=$_plage->_verrouillee item=_raison name=foreach_verrou}}{{tr}}CPlageOp._verrouillee.{{$_raison}}{{/tr}}{{if !$smarty.foreach.foreach_verrou.last}}&mdash;{{/if}}{{/foreach}}" />
             {{/if}}
           </td>
         </tr>
