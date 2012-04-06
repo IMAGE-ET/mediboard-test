@@ -41,17 +41,21 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
 
     if ($error) {
       // ERR-1: Error Code and Location (ELD) (optional repeating)
-      $data[] = $error->getCodeLocation();
-      
       if ($version < "2.5") {
+        $data[] = $error->getCodeLocation();
         return $this->fill($data);
       }
+      $data[] = null;
       
       // ERR-2: Error Location (ERL) (optional repeating)
-      $data[] = $error->getLocation();
+      $data[] = array(
+        $error->getLocation()
+      );
       
       // ERR-3: HL7 Error Code (CWE) 
-      $data[] = $error->getHL7Code();
+      $data[] = array(
+        $error->getHL7Code()
+      );
       
       if ($error->level == CHL7v2Error::E_ERROR) {
         // ERR-4: Severity (ID) 
@@ -100,25 +104,31 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
       $data[] = null; 
     } else {
       // ERR-1: Error Code and Location (ELD) (optional repeating)
+      if ($version < "2.5") {
+        $data[] = array(
+          null, 
+          null,
+          null,
+          array(
+            $acknowledgment->hl7_error_code,
+            null,
+            null,
+            $acknowledgment->_mb_error_code,
+            CAppUI::tr("CHL7EventADT-$acknowledgment->ack_code-$acknowledgment->_mb_error_code")
+          )
+        );
+        return $this->fill($data);
+      }
+      $data[] = null;
+      
+      // ERR-2
       $data[] = array(
-        null, 
-        null,
-        null,
         array(
-          $acknowledgment->hl7_error_code,
-          null,
-          null,
-          $acknowledgment->_mb_error_code,
-          CAppUI::tr("CHL7EventADT-$acknowledgment->ack_code-$acknowledgment->_mb_error_code")
+          0,
+          0
         )
       );
       
-      if ($version < "2.5") {
-        return $this->fill($data);
-      }
-      
-      // ERR-2
-      $data[] = null;
       // ERR-3
       $data[] = $acknowledgment->hl7_error_code;
       // ERR-4

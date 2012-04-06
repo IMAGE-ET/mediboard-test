@@ -22,7 +22,7 @@ class CHL7v2EventACK extends CHL7v2Event implements CHL7EventACK {
     
     $this->msg_codes   = array ( 
       array(
-        $this->event_type, $trigger_event->code
+        $this->event_type, $trigger_event->code, $this->event_type
       )
     );
 

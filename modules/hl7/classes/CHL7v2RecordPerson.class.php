@@ -196,7 +196,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
   }
 
   function checkSimilarPatient(CPatient $recoveredPatient, CPatient $newPatient) {
-    return $recoveredPatient->checkSimilar($newPatient->nom, $newPatient->prenom);
+    return $recoveredPatient->checkSimilar($newPatient->nom, $newPatient->prenom, false);
   }
   
   function getPID(DOMNode $node, CPatient $newPatient, $data = null) {    

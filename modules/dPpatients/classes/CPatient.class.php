@@ -896,11 +896,18 @@ class CPatient extends CMbObject {
   }
 
 
-  function checkSimilar($nom, $prenom) {
+  function checkSimilar($nom, $prenom, $strict = true) {
     $soundex2 = new soundex2;
-    $testNom    = $this->nom_soundex2    == $soundex2->build($nom);
-    $testPrenom = $this->prenom_soundex2 == $soundex2->build($prenom);
-    return($testNom && $testPrenom);
+    
+    $testNom    = CMbString::lower($this->nom_soundex2)    == CMbString::lower($soundex2->build($nom));
+    $testPrenom = CMbString::lower($this->prenom_soundex2) == CMbString::lower($soundex2->build($prenom));
+    
+    if ($strict) {
+      return($testNom && $testPrenom);
+    }
+    else {
+      return($testNom || $testPrenom);
+    }
   }
   
   function loadRefsConsultations($where = null) {
