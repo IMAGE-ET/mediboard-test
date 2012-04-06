@@ -189,7 +189,7 @@ Main.add(function () {
 	    <li><a href="#fraisdivers">Frais divers</a></li>
 	    {{/if}}
       {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
-      <li><a href="#tarmed_tab">Actes Tarmed</a></li>
+      <li><a href="#tarmed_tab">Tarmed</a></li>
       {{/if}}
     </ul>
     <hr class="control_tabs"/>
