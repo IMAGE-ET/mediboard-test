@@ -16,10 +16,26 @@ Naissance = {
     }
     url.requestModal(400);
   },
+  
   reloadNaissances : function(operation_id) {
     if (!$('naissance_area')) return;
     var url = new Url('maternite', 'ajax_vw_naissances');
     url.addParam('operation_id', operation_id);
     url.requestUpdate('naissance_area');
+  },
+  
+  confirmDeletion: function(form) {
+    var options = {
+      typeName:'la naissance', 
+      ajax: 1
+    }
+	    
+    var ajax = {
+      onComplete: function() {
+        Control.Modal.close();
+      }
+    }
+	    
+    confirmDeletion(form, options, ajax);    
   }
 }

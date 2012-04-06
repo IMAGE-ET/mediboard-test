@@ -1,6 +1,7 @@
 <form name="newNaissance" method="post" action="?"
   onsubmit="return onSubmitFormAjax(this, {onComplete: function() { Control.Modal.close(); Naissance.reloadNaissances('{{$operation_id}}'); }})">
   <input type="hidden" name="m" value="maternite" />
+  <input type="hidden" name="del" value="0" />
   {{if $provisoire}}
     <input type="hidden" name="dosql" value="do_dossier_provisoire_aed" />
     <input type="hidden" name="sejour_id" value="{{$sejour_id}}" />
@@ -11,9 +12,18 @@
     <input type="hidden" name="callback" value="{{$callback}}" />
   {{/if}}
   
-  {{mb_key object=$naissance}}
-  {{mb_key object=$parturiente}}
-  {{mb_key object=$constantes}}
+  {{if $naissance}}
+    {{mb_key object=$naissance}}
+  {{/if}}
+ 
+  {{if $parturiente}} 
+    {{mb_key object=$parturiente}}
+  {{/if}}
+
+  {{if $constantes}} 
+    {{mb_key object=$constantes}}
+  {{/if}}
+  
   <input type="hidden" name="operation_id" value="{{$naissance->operation_id}}" />
   
   <table class="form">
@@ -27,7 +37,7 @@
         {{mb_label object=$patient field="sexe"}}
       </th>
       <td>
-        {{mb_field object=$patient field="sexe" emptyLabel="CPatient.sexe."}}
+        {{mb_field object=$patient field="sexe" emptyLabel="Choose"}}
       </td>
     </tr>
     <tr>
@@ -46,15 +56,16 @@
         {{mb_field object=$patient field="nom"}}
       </td>
     </tr>
-    <tr>
-      <th>
-        {{mb_label object=$patient field="prenom"}}
-      </th>
-      <td>
-        {{mb_field object=$patient field="prenom"}}
-      </td>
-    </tr>
+    
     {{if !$provisoire}}
+      <tr>
+        <th>
+          {{mb_label object=$patient field="prenom"}}
+        </th>
+        <td>
+          {{mb_field object=$patient field="prenom"}}
+        </td>
+      </tr>
       <tr>
         <th>
          {{mb_label object=$naissance field="hors_etab"}}
@@ -107,11 +118,19 @@
         </td>
       </tr>
     {{/if}}
-    <tr>
-      <td colspan="2" class="button">
-        <button type="button" class="save" onclick="this.form.onsubmit();">
-          {{tr}}{{if !$naissance->_id}}Create{{else}}Save{{/if}}{{/tr}}</button>
-      </td>
-    </tr>
+    
+  <tr>
+    <td class="button" colspan="2">
+      {{if $naissance->_id}}
+        <button type="submit" class="submit">{{tr}}Modify{{/tr}}</button>
+        <button type="button" class="trash" onclick="Naissance.confirmDeletion(this.form)">
+          {{tr}}Delete{{/tr}}
+        </button>
+      {{else}}
+        <button type="submit" class="submit singleclick">{{tr}}Create{{/tr}}</button>
+      {{/if}}
+    </td>
+  </tr>
+
   </table>
 </form>

@@ -130,8 +130,10 @@ else {
   $naissance->heure = $heure;
   storeObject($naissance);
   
+  $sejour = $naissance->loadRefSejourEnfant();
+  
   $patient = new CPatient;
-  $patient->load($patient_id);
+  $patient->load($sejour->patient_id);
   $patient->nom = $nom;
   $patient->prenom = $prenom;
   $patient->nom = $nom;

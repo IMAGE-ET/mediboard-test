@@ -17,7 +17,6 @@ $provisoire     = CValue::get("provisoire", 0);
 $sejour_id      = CValue::get("sejour_id");
 $callback       = CValue::get("callback");
 
-$naissance  = new CNaissance;
 $constantes = new CConstantesMedicales;
 
 $patient    = new CPatient;
@@ -26,22 +25,27 @@ $patient->naissance = mbDate();
 $operation = new COperation();
 $operation->load($operation_id);
 
+$parturiente = null;
 if ($operation->_id) {
   $parturiente = $operation->loadRefPatient();
 }
-else if ($sejour_id) {
+
+if ($sejour_id) {
   $sejour = new CSejour;
   $sejour->load($sejour_id);
   $parturiente = $sejour->loadRefPatient();
 }
 
-$anonmymous = is_numeric($parturiente->nom);
 
+$anonmymous = $parturiente ? is_numeric($parturiente->nom) : false;
+
+$naissance  = new CNaissance;
 if ($naissance_id) {
   $naissance->load($naissance_id);
   $patient = $naissance->loadRefSejourEnfant()->loadRefPatient();
   $constantes = $patient->getFirstConstantes();
 }
+
 else {
   if (!$provisoire) {
     $naissance->rang = $operation->countBackRefs("naissances") + 1;
