@@ -101,10 +101,15 @@ Main.add(function () {
 {{if $app->user_prefs.ccam_consultation == 1}}
 <div id="Actes" style="display: none;">
   <ul id="tab-actes" class="control_tabs">
-    <li><a href="#ccam">Actes CCAM</a></li>
-    <li><a href="#ngap">Actes NGAP</a></li>
-    {{if $consult->sejour_id}}
-      <li><a href="#cim">Diagnostics</a></li>
+    {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
+      <li><a href="#ccam">Actes CCAM</a></li>
+      <li><a href="#ngap">Actes NGAP</a></li>
+      {{if $consult->sejour_id}}
+        <li><a href="#cim">Diagnostics</a></li>
+      {{/if}}
+    {{/if}}
+    {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
+      <li><a href="#tarmed_tab">Tarmed</a></li>
     {{/if}}
   </ul>
   <hr class="control_tabs"/>
@@ -127,7 +132,14 @@ Main.add(function () {
       {{assign var="sejour" value=$consult->_ref_sejour}}
       {{include file="../../dPsalleOp/templates/inc_diagnostic_principal.tpl" modeDAS="1"}}
     </div>
-
+  {{/if}}
+  
+  {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
+    <div id="tarmed_tab" >
+      <div id="listActesTarmed">
+        {{mb_include module=tarmed template=inc_codage_tarmed }}
+      </div>
+    </div>
   {{/if}}
 </div>
 {{/if}}
