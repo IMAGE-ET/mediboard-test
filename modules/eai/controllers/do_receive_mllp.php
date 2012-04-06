@@ -22,4 +22,10 @@ if (!$source_mllp->_id) {
 $sender_mllp = CMbObject::loadFromGuid($source_mllp->name);
 
 // Dispatch EAI 
-CEAIDispatcher::dispatch($message, $sender_mllp);
+$ack = CEAIDispatcher::dispatch($message, $sender_mllp);
+
+ob_clean();
+
+echo $ack;
+
+CApp::rip();

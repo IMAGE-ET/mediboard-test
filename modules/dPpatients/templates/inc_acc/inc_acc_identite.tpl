@@ -1,8 +1,8 @@
 <script type="text/javascript">
 
 togglePrenomsList = function(element) {
-	var list = $("patient_identite").select('.prenoms_list').invoke('toggle');
-	Element.classNames(element).flip('up', 'down');
+  var list = $("patient_identite").select('.prenoms_list').invoke('toggle');
+  Element.classNames(element).flip('up', 'down');
 }
 
 toggleNomNaissance = function(element) {
@@ -50,51 +50,51 @@ selectFirstEnabled = function(select){
 }
 
 disableOptions = function (select, list) {
-	$A(select.options).each(function (o) {
+  $A(select.options).each(function (o) {
     o.disabled = (list.indexOf(o.value) != -1);
-	});
+  });
   if (select.options[select.selectedIndex].disabled) {
     selectFirstEnabled(select);
   }
 }
 
 changeCiviliteForSexe = function(element, assure) {
-	var oForm = document.editFrm.elements;
-	var valueSexe = $V(element);
-	if(valueSexe == 'm') {
-		disableOptions($(oForm[(assure ? 'assure_' : '')+'civilite']), ['mme', 'mlle', 'vve']);
-	} else {
-		disableOptions($(oForm[(assure ? 'assure_' : '')+'civilite']), ['m']);
-	} 
+  var oForm = document.editFrm.elements;
+  var valueSexe = $V(element);
+  if(valueSexe == 'm') {
+    disableOptions($(oForm[(assure ? 'assure_' : '')+'civilite']), ['mme', 'mlle', 'vve']);
+  } else {
+    disableOptions($(oForm[(assure ? 'assure_' : '')+'civilite']), ['m']);
+  } 
 }
 
 var adult_age = {{$conf.dPpatients.CPatient.adult_age}};
 
 changeCiviliteForDate = function(element, assure) {
-	var oForm = document.editFrm.elements;
+  var oForm = document.editFrm.elements;
   if ($V(element)) {
-	  var date = new Date();
-	  var naissance = $V(element).split('/')[2];
-	  if (((date.getFullYear()- adult_age) <= naissance) && (naissance <= (date.getFullYear()))) {
-		  $V($(oForm[(assure ? 'assure_' : '')+'civilite']), "enf");
-	  } else {
-		  changeCiviliteForSexe(element.form.sexe);
-	  }
+    var date = new Date();
+    var naissance = $V(element).split('/')[2];
+    if (((date.getFullYear()- adult_age) <= naissance) && (naissance <= (date.getFullYear()))) {
+      $V($(oForm[(assure ? 'assure_' : '')+'civilite']), "enf");
+    } else {
+      changeCiviliteForSexe(element.form.sexe);
+    }
   }
 }
 
 anonymous = function() {
-	$V("editFrm_nom"   , "anonyme");   
-  $V("editFrm_prenom", "anonyme"); 	
+  $V("editFrm_nom"   , "anonyme");   
+  $V("editFrm_prenom", "anonyme");   
 }
 
 checkDoublon = function() {
-	var oForm = document.editFrm;
-	
-	if ($V("editFrm_nom") && $V("editFrm_prenom") && $V("editFrm_naissance")) {
-		SiblingsChecker.submit = false;
-		SiblingsChecker.request(oForm);
-	}
+  var oForm = document.editFrm;
+  
+  if ($V("editFrm_nom") && $V("editFrm_prenom") && $V("editFrm_naissance")) {
+    SiblingsChecker.submit = false;
+    SiblingsChecker.request(oForm);
+  }
 }
 
 refreshInfoTutelle = function(tutelle) {
@@ -112,7 +112,7 @@ Main.add(function() {
       button = $("patient_identite").select("button.down.notext");
   for (i = 0; i < list.length; i++) {
     if ($V(list[i])) {
-    	togglePrenomsList(button[0]);
+      togglePrenomsList(button[0]);
       break;
     }
   }
@@ -133,8 +133,8 @@ Main.add(function() {
       <table class="form" id="patient_identite">
         <tr>
           <th class="category" colspan="3">Identité Patient</th>
-      	</tr>
-      	<tr>
+        </tr>
+        <tr>
           <td colspan="3" class="text">
             <div class="small-warning" id="doublon-warning" style="display: none;">
               
@@ -150,22 +150,22 @@ Main.add(function() {
             {{mb_field object=$patient field="nom" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}}
             {{if !$patient->_id}}
               <button type="button" style="padding: 0px" onclick="anonymous()" tabIndex="1000"><img src="modules/dPpatients/images/anonyme.png" alt="Anonyme" /></button>
-      	    {{/if}}
+            {{/if}}
           </td>
           {{if $patient->_id}}
           <td rowspan="14"  class="narrow" style="text-align: center;" id="{{$patient->_guid}}-identity">
             {{mb_include template=inc_vw_photo_identite mode="edit"}}
           </td>
           {{/if}}
-      	</tr>
+        </tr>
         <tr>
           <th>{{mb_label object=$patient field="prenom"}}</th>
           <td>
-      	    {{mb_field object=$patient field="prenom" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}} 
-      	    <button type="button" class="down notext" onclick="togglePrenomsList(this)" tabIndex="1000">{{tr}}Add{{/tr}}</button> 
+            {{mb_field object=$patient field="prenom" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}} 
+            <button type="button" class="down notext" onclick="togglePrenomsList(this)" tabIndex="1000">{{tr}}Add{{/tr}}</button> 
           </td>
-      	</tr>
-      	
+        </tr>
+        
         <tr class="prenoms_list" style="display: none;">
           <th>{{mb_label object=$patient field="prenom_2"}}</th>
           <td>{{mb_field object=$patient field="prenom_2" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}} </td>
@@ -193,16 +193,16 @@ Main.add(function() {
             </script>
             {{/if}}
           </td>
-      	</tr>
+        </tr>
         <tr>
           <th>{{mb_label object=$patient field="sexe"}}</th>
           <td>{{mb_field object=$patient field="sexe" onchange="toggleNomNaissance(this); copyIdentiteAssureValues(this); changeCiviliteForSexe(this);"}}</td>
-      	</tr>
+        </tr>
         <tr>
           <th>{{mb_label object=$patient field="naissance"}}</th>
           <td>{{mb_field object=$patient field="naissance" onchange="checkDoublon();copyIdentiteAssureValues(this); changeCiviliteForDate(this);"}}</td>
-      	</tr>
-      	<tr>
+        </tr>
+        <tr>
           <th>{{mb_label object=$patient field="civilite"}}</th>
           <td>
             {{assign var=civilite_locales value=$patient->_specs.civilite}} 
@@ -216,8 +216,8 @@ Main.add(function() {
         <tr>
           <th>{{mb_label object=$patient field="rang_naissance"}}</th>
           <td>{{mb_field object=$patient field="rang_naissance"}}</td>
-      	</tr>
-      	<tr>
+        </tr>
+        <tr>
           <th>{{mb_label object=$patient field="cp_naissance"}}</th>
           <td>{{mb_field object=$patient field="cp_naissance" onchange="copyIdentiteAssureValues(this)"}}</td>
         </tr>
@@ -235,8 +235,8 @@ Main.add(function() {
         <tr>
           <th>{{mb_label object=$patient field="profession"}}</th>
           <td>{{mb_field object=$patient field="profession" form=editFrm onchange="copyIdentiteAssureValues(this)"}}</td>
-      	</tr>
-      	<tr>
+        </tr>
+        <tr>
           <th>{{mb_label object=$patient field="csp"}}</th>
           <td>
             <input type="text" name="_csp_view" size="25" value="{{$patient->_csp_view}}"/>
@@ -246,11 +246,11 @@ Main.add(function() {
         <tr>
           <th>{{mb_label object=$patient field="matricule"}}</th>
           <td>{{mb_field object=$patient field="matricule" onchange="copyIdentiteAssureValues(this)"}}</td>
-      	</tr>
+        </tr>
         <tr>
           <th>{{mb_label object=$patient field="qual_beneficiaire"}}</th>
-          <td>{{mb_field object=$patient field="qual_beneficiaire" onchange=showCopieIdentite() style="width:20em;"}}</td>
-      	</tr>
+          <td>{{mb_field object=$patient field="qual_beneficiaire" style="width:20em;"}}</td>
+        </tr>
         <tr>
           <th>{{mb_label object=$patient field="tutelle"}}</th>
           <td colspan="2">{{mb_field object=$patient field="tutelle" onchange="refreshInfoTutelle(this.value);"}}</td>
@@ -263,7 +263,7 @@ Main.add(function() {
           <th>{{mb_label object=$patient field="deces"}}</th>
           <td colspan="2">{{mb_field object=$patient field="deces" register=true form=editFrm}}</td>
         </tr>
-      </table>	
+      </table>  
     </td>
     <td>
       <table class="form">

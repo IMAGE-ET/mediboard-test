@@ -104,21 +104,24 @@ class CMLLPServer {
         "message" => $buffer,
         "client_addr" => $client["addr"],
         "client_port" => $client["port"],
+        "suppressHeaders" => 1,
       );
       
       $start = microtime(true);
-      $this->http_request_post($this->call_url."/index.php?login={$this->username}:{$this->password}", $post);
+      $ack = $this->http_request_post($this->call_url."/index.php?suppressHeaders=1&login={$this->username}:{$this->password}", $post);
       $this->request_count++;
       $time = microtime(true) - $start;
       echo sprintf(" > Request done in %f s\n", $time);
       
       $buffer = "";
+      return "\x0B$ack\x1C\x0D";
     }
     else {
       // Mise en buffer du message
       $buffer .= "$request\n";
     }
     
+    return "";
     return md5($request)."\n";
   }
   

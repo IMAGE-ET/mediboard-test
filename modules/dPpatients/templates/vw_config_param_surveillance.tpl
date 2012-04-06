@@ -5,7 +5,7 @@
 
 <script>
 Main.add(function(){
-  Control.Tabs.create("main_tabs_types");
+  Control.Tabs.create("main_tabs_types", true);
    
 });
 </script>
