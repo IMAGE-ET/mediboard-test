@@ -16,9 +16,13 @@ $function_id     = $chir_id ? null : CValue::get("function_id");
 $date            = CValue::get("date", mbDate());
 $plageconsult_id = CValue::get("plageconsult_id");
 
-// Liste des praticiens
-$user = new CMediusers();
-$listPraticiens = $user->loadPraticiens();
+// Vérification des droits sur les praticiens
+$mediuser = new CMediusers();
+if(CAppUI::pref("pratOnlyForConsult", 1)) {
+  $listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
+} else {
+  $listPraticiens = $mediuser->loadProfessionnelDeSante(PERM_EDIT);
+}
 
 // Récupération des consultations de la plage séléctionnée
 $plage = new CPlageconsult;

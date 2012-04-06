@@ -14,9 +14,9 @@ $user = CUser::get();
 // Recuperation de l'id de la consultation du passage en urgence
 $consult_urgence_id = CValue::get("consult_urgence_id");
 
-$consult = new CConsultation();
-$chir = new CMediusers;
-$pat = new CPatient;
+$consult      = new CConsultation();
+$chir         = new CMediusers();
+$pat          = new CPatient();
 $plageConsult = new CPlageconsult();
 
 // L'utilisateur est-il praticien?
@@ -62,7 +62,7 @@ if (!$consultation_id) {
   }
 } 
 
-// Consultation existente
+// Consultation existante
 else {
   $consult->load($consultation_id);
   $canConsult = $consult->canDo();

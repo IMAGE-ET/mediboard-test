@@ -142,10 +142,14 @@ Main.add(function () {
   requestInfoPat();
 
   {{if $plageConsult->_id && !$consult->_id}}
-  $V(form.chir_id, '{{$plageConsult->chir_id}}', false);
-  $V(form.plageconsult_id, '{{$plageConsult->_id}}');
-  refreshListCategorie({{$plageConsult->chir_id}});
-  PlageConsultSelector.init();
+    $V(form.chir_id, '{{$plageConsult->chir_id}}', false);
+    $V(form.plageconsult_id, '{{$plageConsult->_id}}');
+    refreshListCategorie({{$plageConsult->chir_id}});
+    PlageConsultSelector.init();
+  {{elseif $pat->_id && !$consult->_id}}
+    if($V(form.chir_id)) {
+      PlageConsultSelector.init();
+    }
   {{/if}}
   
   {{if $consult->_id && $consult->patient_id}}
