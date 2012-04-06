@@ -275,14 +275,14 @@ class CHL7v2Segment extends CHL7v2Entity {
       );
     }
 
-    $identifiers[] = array(
+    /*$identifiers[] = array(
       $patient->_id,
       null,
       null,
       // PID-3-4 Autorité d'affectation
       $this->getAssigningAuthority("mediboard"),
       "RI"
-    );
+    );*/
     
     $this->fillOtherIdentifiers($identifiers, $patient);
     

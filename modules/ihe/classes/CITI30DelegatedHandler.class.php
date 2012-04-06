@@ -51,12 +51,12 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
       if ($id400->object_class != "CPatient" || !$id400->_old->_id) {
         return;
       }
-      
+
       // Pas un tag IPP
       if ($id400->tag != CPatient::getTagIPP()) {
         return;
       }
-      
+     
       // Vraiment une modif de l'idex ?
       if ($id400->id400 == $id400->_old->id400) {
         return;
