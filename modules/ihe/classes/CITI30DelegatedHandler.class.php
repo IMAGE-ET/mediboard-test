@@ -16,7 +16,7 @@
  * ITI30 Delegated Handler
  */
 class CITI30DelegatedHandler extends CITIDelegatedHandler {
-  static $handled        = array ("CPatient", "CCorrespondantPatient");
+  static $handled        = array ("CPatient", "CCorrespondantPatient", "CIdSante400");
   protected $profil      = "PAM";
   protected $transaction = "ITI30";
   
@@ -34,6 +34,7 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     
     $eai_initiateur_group_id = $mbObject->_eai_initiateur_group_id;
     
+    // Création/MAJ d'un correspondant patient
     if ($mbObject instanceof CCorrespondantPatient) {
       $mbObject                           = $mbObject->loadRefPatient();
       $mbObject->_receiver                = $receiver;
@@ -41,6 +42,50 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
       
       $code = "A31";
     }
+    
+    // MAJ de l'IPP du patient
+    elseif ($mbObject instanceof CIdSante400) {
+      $id400 = $mbObject;
+      
+      // Concerne pas les patients / Pas en mode modification
+      if ($id400->object_class != "CPatient" || !$id400->_old->_id) {
+        return;
+      }
+      
+      // Pas un tag IPP
+      if ($id400->tag != CPatient::getTagIPP()) {
+        return;
+      }
+      
+      // Vraiment une modif de l'idex ?
+      if ($id400->id400 == $id400->_old->id400) {
+        return;
+      }
+      
+      $code = "A47";
+      
+      $patient = new CPatient();
+      $patient->load($id400->object_id);
+      $patient->_receiver = $receiver;
+      
+      $patient->_patient_elimine = clone $patient;
+      
+      // Affecte le nouvel IPP au patient
+      $patient->_IPP = $id400->id400;
+      
+      // Affecte l'ancien IPP au "patient éliminé"
+      $patient->_patient_elimine->_IPP = $id400->_old->id400;
+
+      if (!$this->isMessageSupported($this->transaction, $code, $receiver)) {
+       
+        return;
+      }
+      
+      $this->sendITI($this->profil, $this->transaction, $code, $patient);
+      
+      return;
+    }
+    // Création/MAJ d'un patient
     else {
       switch ($mbObject->loadLastLog()->type) {
         case "create":

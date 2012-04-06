@@ -29,7 +29,7 @@ class CHL7v2SegmentMRG extends CHL7v2Segment {
     
     $patient_eliminee  = $this->patient_eliminee;
     $group             = $event->_receiver->_ref_group;
-    
+
     $data = array();
     
     // MRG-1: Prior Patient Identifier List (CX) (repeating)

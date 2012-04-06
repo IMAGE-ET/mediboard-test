@@ -17,7 +17,7 @@
  */
 class CPAMFR extends CPAM {
   static $transaction_iti30 = array(
-    "A28", "A31", "A40"
+    "A28", "A31", "A40", "A47"
   );
   
   static $transaction_iti31 = array(
@@ -32,6 +32,7 @@ class CPAMFR extends CPAM {
     "A28" => "CHL7EventADTA28_FR",
     "A31" => "CHL7EventADTA31_FR",
     "A40" => "CHL7EventADTA40_FR",
+    "A47" => "CHL7EventADTA47_FR",
     
     // ITI-31
     "A01" => "CHL7EventADTA01_FR",

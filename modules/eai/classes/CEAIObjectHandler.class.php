@@ -72,8 +72,8 @@ class CEAIObjectHandler extends CMbObjectHandler {
     }
     
     $mbObject->_eai_initiateur_group_id = $this->_eai_initiateur_group_id;
-    
-    if (!$mbObject->_ref_last_log) {
+
+    if (!$mbObject->_ref_last_log && $mbObject->_class != "CIdSante400") {
       return false;
     }
     
@@ -81,6 +81,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
     if ($mbObject->_merging) {
       return false;
     }
+    
     if ($mbObject->_forwardRefMerging) {
       return false;
     }

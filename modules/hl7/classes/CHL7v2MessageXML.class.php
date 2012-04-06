@@ -34,6 +34,10 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
       case "CHL7v2EventADTA40" : 
       case "CHL7v2EventADTA40_FR" : 
         return new CHL7v2MergePersons($encoding);
+      // Changement de la liste d'identifiants du patient
+      case "CHL7v2EventADTA47" : 
+      case "CHL7v2EventADTA47_FR" : 
+        return new CHL7v2ChangePatientIdentifierList($encoding);
       // Création d'une venue - Mise à jour d'information de la venue
       case "CHL7v2EventADTA01" :
       case "CHL7v2EventADTA01_FR" : 
