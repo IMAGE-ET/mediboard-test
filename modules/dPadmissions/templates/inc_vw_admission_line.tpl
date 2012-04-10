@@ -23,7 +23,7 @@
   {{if $conf.dPplanningOp.COperation.verif_cote}}
   {{foreach from=$_sejour->_ref_operations item=curr_op}}
     {{if $curr_op->cote == "droit" || $curr_op->cote == "gauche"}}
-      <form name="editCoteOp{{$curr_op->_id}}" action="?" method="post">
+      <form name="editCoteOp{{$curr_op->_id}}" action="?" method="post" class="prepared">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         {{mb_key object=$curr_op}}
@@ -107,7 +107,7 @@
       this.pop();
     };
   </script>
-  <form name="editIPP{{$patient->_id}}" action="?m={{$m}}" method="post">
+  <form name="editIPP{{$patient->_id}}" action="?m={{$m}}" method="post" class="prepared">
     <input type="hidden" name="dosql" value="do_idsante400_aed" />
     <input type="hidden" name="m" value="dPsante400" />
     <input type="hidden" name="del" value="0" />
@@ -133,7 +133,7 @@
     };
   </script>
   {{if $_sejour->_ref_NDA}}
-  <form name="editNumdos{{$_sejour->_id}}" action="?m={{$m}}" method="post" onsubmit="return ExtRefManager.submitNumdosForm({{$_sejour->_id}})">
+  <form name="editNumdos{{$_sejour->_id}}" action="?m={{$m}}" method="post" class="prepared" onsubmit="return ExtRefManager.submitNumdosForm({{$_sejour->_id}})">
     <input type="hidden" name="dosql" value="do_idsante400_aed" />
     <input type="hidden" name="m" value="dPsante400" />
     <input type="hidden" name="del" value="0" />
@@ -165,7 +165,7 @@
   <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
     {{$_sejour->entree_prevue|date_format:$conf.time}} 
     <br />
-		{{$_sejour->type|upper|truncate:1:"":true}}
+    {{$_sejour->type|upper|truncate:1:"":true}}
     {{$_sejour->_ref_operations|@count}} Int.
   </span>
 </td>
@@ -173,7 +173,7 @@
 <td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   {{if !($_sejour->type == 'exte') && !($_sejour->type == 'consult') && $_sejour->annule != 1}}
     {{if $canAdmissions->edit}}
-      <form name="editChFrm{{$_sejour->sejour_id}}" action="?" method="post">
+      <form name="editChFrm{{$_sejour->sejour_id}}" action="?" method="post" class="prepared">
       <input type="hidden" name="m" value="dPplanningOp" />
       <input type="hidden" name="dosql" value="do_sejour_aed" />
       <input type="hidden" name="sejour_id" value="{{$_sejour->sejour_id}}" />
@@ -193,7 +193,7 @@
     
       <!-- Prestations -->
       {{if $prestations}}
-      <form name="editPrestFrm{{$_sejour->sejour_id}}" method="post">
+      <form name="editPrestFrm{{$_sejour->sejour_id}}" method="post" class="prepared">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_sejour_aed" />
         <input type="hidden" name="sejour_id" value="{{$_sejour->sejour_id}}" />
@@ -224,11 +224,11 @@
 
 <td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   {{if $canAdmissions->edit}}
-    <form name="editSaisFrm{{$_sejour->_id}}" action="?" method="post">
+    <form name="editSaisFrm{{$_sejour->_id}}" action="?" method="post" class="prepared">
       <input type="hidden" name="m" value="dPplanningOp" />
       <input type="hidden" name="dosql" value="do_sejour_aed" />
       <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
-    	<input type="hidden" name="patient_id" value="{{$_sejour->patient_id}}" />
+      <input type="hidden" name="patient_id" value="{{$_sejour->patient_id}}" />
       
       {{if !$_sejour->entree_preparee}}
         <input type="hidden" name="entree_preparee" value="1" />
