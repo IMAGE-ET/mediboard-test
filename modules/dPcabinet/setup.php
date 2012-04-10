@@ -1442,7 +1442,37 @@ class CSetupdPcabinet extends CSetup {
     
     $this->addPrefQuery("viewFunctionPrats", "0");
     
-    $this->mod_version = "1.49";
+    $this->makeRevision("1.49");
+    
+    $query = "CREATE TABLE `factureconsult` (
+         `factureconsult_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+         `patient_id` int(11) unsigned NOT NULL,
+         `rabais` FLOAT DEFAULT '0' NOT NULL,
+         `ouverture` date NOT NULL,
+         `cloture` date,
+         `du_patient` float NOT NULL DEFAULT '0.0',
+         `du_tiers` float NOT NULL DEFAULT '0.0',
+         PRIMARY KEY (`factureconsult_id`),
+         INDEX (`patient_id`) );";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE factureconsult 
+              ADD INDEX (`ouverture`), 
+              ADD INDEX (`cloture`);";
+    $this->addQuery($query);
+    
+    $this->makeRevision("1.50");
+    
+    $query = "ALTER TABLE `factureconsult` 
+              ADD `type_facture` enum ('maladie','accident') NOT NULL default 'maladie';";
+    $this->addQuery($query);
+    
+    $query="ALTER TABLE `reglement`
+      CHANGE `consultation_id` `object_id` INT(11) UNSIGNED ,
+      ADD `object_class`  ENUM ('CConsultation','CFactureConsult') NOT NULL default 'CConsultation';";
+    $this->addQuery($query);
+        
+    $this->mod_version = "1.51";
   }
 }
 ?>

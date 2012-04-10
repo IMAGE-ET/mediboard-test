@@ -34,7 +34,7 @@
   
   {{foreach from=$list_reglements item="reglement"}}
   <tr>
-    <td colspan="3">{{$reglement->_ref_consultation->_ref_patient->_view}}</td>
+    <td colspan="3">{{$reglement->_ref_object->_ref_patient->_view}}</td>
     <td colspan="3">{{$reglement->_ref_banque->_view}}</td>
     <td>{{mb_value object=$reglement field=montant}}</td>
   </tr>

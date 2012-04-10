@@ -38,7 +38,7 @@ $where['reglement.mode']     = "= 'cheque' ";
 $where['reglement.date']     = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59' ";
 
 $ljoin = array();
-$ljoin['consultation']       = "consultation.consultation_id = reglement.consultation_id";
+$ljoin['consultation']       = "consultation.consultation_id = reglement.object_id";
 
 if ($praticien->_id) {
   $where['plageconsult.chir_id'] = "= '$praticien->_id'";
@@ -55,7 +55,7 @@ $list_reglements = $reglement->loadList($where, $orderby, null, null, $ljoin);
 foreach($list_reglements as $curr_reglement){
   $curr_reglement->loadrefs();
   
-  $curr_consult = $curr_reglement->_ref_consultation;
+  $curr_consult = $curr_reglement->_ref_object;
 	$curr_consult->loadRefPraticien();
 	$curr_consult->loadRefPatient();
 	

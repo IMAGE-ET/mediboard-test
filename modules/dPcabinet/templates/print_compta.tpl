@@ -140,7 +140,7 @@
         </tr>
         
 				{{foreach from=$_date.reglements item=_reglement}}
-				{{assign var=consultation value=$_reglement->_ref_consultation}}
+				{{assign var=consultation value=$_reglement->_ref_object}}
         <tr>
           <td class="text">
             {{assign var=prat_id value=$consultation->_ref_chir->_id}}

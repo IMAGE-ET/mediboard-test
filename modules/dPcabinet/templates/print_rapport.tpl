@@ -241,7 +241,8 @@ PlageConsult = {
               <input type="hidden" name="del" value="0" />
               <input type="hidden" name="dosql" value="do_reglement_aed" />
               {{mb_key object=$_reglement}}
-              {{mb_field object=$_reglement field=consultation_id hidden=1}}
+              <input type="hidden" name="object_id" value="{{$_consultation->_id}}" />
+              <input type="hidden" name="object_class" value="CConsultation" />
               {{mb_field object=$_reglement field=montant         hidden=1}}
               {{mb_field object=$_reglement field=mode            hidden=1}}
               {{mb_field object=$_reglement field=date register=true form="reglement-chdate-$_reglement_id" onchange="this.form.onsubmit()"}}
@@ -259,7 +260,8 @@ PlageConsult = {
             <input type="hidden" name="dosql" value="do_reglement_aed" />
             <input type="hidden" name="date" value="now" />
             <input type="hidden" name="emetteur" value="patient" />
-            {{mb_field object=$new_reglement field=consultation_id hidden=1}}
+            <input type="hidden" name="object_id" value="{{$_consultation->_id}}" />
+            <input type="hidden" name="object_class" value="CConsultation" />
             {{mb_field object=$new_reglement field=montant}}
             {{mb_field object=$new_reglement field=mode emptyLabel="Choose" onchange="Reglement.updateBanque(this)"}}
             {{mb_field object=$new_reglement field=banque_id options=$banques style="width: 7em; display: none;"}}
@@ -285,7 +287,8 @@ PlageConsult = {
               <input type="hidden" name="del" value="0" />
               <input type="hidden" name="dosql" value="do_reglement_aed" />
               {{mb_key object=$_reglement}}
-              {{mb_field object=$_reglement field=consultation_id hidden=1}}
+              {{mb_field object=$_reglement field=object_id       hidden=1}}
+              {{mb_field object=$_reglement field=object_class    hidden=1}}
               {{mb_field object=$_reglement field=montant         hidden=1}}
               {{mb_field object=$_reglement field=mode            hidden=1}}
               {{mb_field object=$_reglement field=date register=true form="reglement-chdate-$_reglement_id" onchange="this.form.onsubmit()"}}
@@ -303,7 +306,8 @@ PlageConsult = {
             <input type="hidden" name="dosql" value="do_reglement_aed" />
             <input type="hidden" name="date" value="now" />
             <input type="hidden" name="emetteur" value="tiers" />
-            {{mb_field object=$new_reglement field=consultation_id hidden=1}}
+            <input type="hidden" name="object_id" value="{{$_consultation->_id}}" />
+            <input type="hidden" name="object_class" value="CConsultation" />
             {{mb_field object=$new_reglement field=montant}}
             {{mb_field object=$new_reglement field=mode emptyLabel="Choose" onchange="Reglement.updateBanque(this)"}}
             {{mb_field object=$new_reglement field=banque_id options=$banques style="width: 7em; display: none;"}}

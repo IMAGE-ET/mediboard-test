@@ -162,7 +162,7 @@ class CConsultation extends CCodable {
     $backProps["exampossum"]      = "CExamPossum consultation_id";
     $backProps["examigs"]         = "CExamIgs consultation_id";
     $backProps["prescriptions"]   = "CPrescription object_id";
-    $backProps["reglements"]      = "CReglement consultation_id";
+    $backProps["reglements"]      = "CReglement object_id";
     $backProps["actes_dentaires"] = "CActeDentaire consult_id";
     return $backProps;
   }
@@ -747,7 +747,7 @@ class CConsultation extends CCodable {
     $secteur2_TARMED  = 0;
     $count_actes = 0;
     
-    if (CModule::getInstalled("tarmed")) {
+    if (CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
       // Chargement des actes Tarmed
       $this->loadRefsActesTarmed();
       foreach ($this->_ref_actes_tarmed as $actetarmed) { 
@@ -776,6 +776,10 @@ class CConsultation extends CCodable {
     // Remplissage des montant de la consultation
     $this->secteur1 = $secteur1_NGAP + $secteur1_CCAM + $secteur1_TARMED;
     $this->secteur2 = $secteur2_NGAP + $secteur2_CCAM + $secteur2_TARMED;
+    
+    if($secteur1_NGAP == 0 && $secteur1_CCAM == 0 && $secteur2_NGAP==0 && $secteur2_CCAM ==0){
+    	$this->du_patient = $this->secteur1 + $this->secteur2;
+    }
     
     // Cotation manuelle
     $this->completeField("tarif");

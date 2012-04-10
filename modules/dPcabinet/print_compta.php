@@ -29,7 +29,7 @@ if($filter->_type_affichage == "complete") {
 
 // On recherche tous les règlements effectués selon les critères
 $ljoin = array();
-$ljoin["consultation"] = "reglement.consultation_id = consultation.consultation_id";
+$ljoin["consultation"] = "reglement.object_id = consultation.consultation_id AND reglement.object_class = 'CConsultation'";
 $ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id";
 
 $where = array();
@@ -86,9 +86,9 @@ foreach (array_merge($reglement->_specs["mode"]->_list, array("")) as $_mode) {
 $listReglements = array();
 $listConsults = array();
 foreach ($reglements as $_reglement) {
-  $_reglement->loadRefConsultation();
-  $_reglement->_ref_consultation->loadRefPatient(1);
-  $_reglement->_ref_consultation->loadRefPlageConsult(1);
+  $_reglement->loadTargetObject();
+  $_reglement->_ref_object->loadRefPatient(1);
+  $_reglement->_ref_object->loadRefPlageConsult(1);
 	
   if ($_reglement->emetteur == "patient") {
     $recapReglement["total"]["du_patient"] += $_reglement->montant;
@@ -103,10 +103,10 @@ foreach ($reglements as $_reglement) {
     $recapReglement[$_reglement->mode]["nb_reglement_tiers"]++;
   }
 	
-  if(!array_key_exists($_reglement->_ref_consultation->_id, $listConsults)) {
-    $recapReglement["total"]["secteur1"] += $_reglement->_ref_consultation->secteur1;
-    $recapReglement["total"]["secteur2"] += $_reglement->_ref_consultation->secteur2;
-    $listConsults[$_reglement->_ref_consultation->_id] = $_reglement->_ref_consultation;
+  if(!array_key_exists($_reglement->_ref_object->_id, $listConsults)) {
+    $recapReglement["total"]["secteur1"] += $_reglement->_ref_object->secteur1;
+    $recapReglement["total"]["secteur2"] += $_reglement->_ref_object->secteur2;
+    $listConsults[$_reglement->_ref_object->_id] = $_reglement->_ref_object;
   }
   if(!isset($listReglements[mbDate(null, $_reglement->date)])) {
     $listReglements[mbDate(null, $_reglement->date)]["total"]["patient"] = 0;

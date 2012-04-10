@@ -7,12 +7,11 @@
  * @author Fabien Ménager
  */
 
-class CReglement extends CMbObject {
+class CReglement extends CMbMetaObject {
   // DB Table key
   var $reglement_id    = null;
 
   // DB References
-  var $consultation_id = null;
   var $banque_id       = null;
 
   // DB fields
@@ -20,10 +19,13 @@ class CReglement extends CMbObject {
   var $montant         = null;
   var $emetteur        = null;
   var $mode            = null;
+  var $object_class    = null;
+  var $object_id       = null;
   
   // Fwd References
   var $_ref_consultation = null;
   var $_ref_banque     = null;
+  var $_ref_object     = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -34,7 +36,7 @@ class CReglement extends CMbObject {
   
   function getProps() {
     $specs = parent::getProps();
-    $specs['consultation_id'] = 'ref notNull class|CConsultation';
+    $specs['object_class']    = 'enum notNull list|CConsultation|CFactureConsult show|0';
     $specs['banque_id']       = 'ref class|CBanque';
     $specs['date']            = 'dateTime notNull';
     $specs['montant']         = 'currency notNull';
@@ -42,17 +44,13 @@ class CReglement extends CMbObject {
     $specs['mode']            = 'enum notNull list|cheque|CB|especes|virement|autre default|cheque';
     return $specs;
   }
-	
-  function loadRefConsultation() {
-    $this->_ref_consultation = $this->loadFwdRef("consultation_id", "1");
-  }
   
   function loadRefBanque() {
     $this->_ref_banque = $this->loadFwdRef("banque_id", 1);
   }
   
   function loadRefsFwd() {
-    $this->loadRefConsultation();
+    $this->loadTargetObject();
 		$this->loadRefBanque();
   }
   
@@ -70,7 +68,8 @@ class CReglement extends CMbObject {
     }
     
     $this->loadRefsFwd();
-    if (!$this->_ref_consultation->valide) {
+    
+    if ($this->object_class == "CConsultation" && !$this->_ref_object->valide) {
     	return "Impossible d'enregistrer un règlement car le tarif de la consultation n'est pas validé";
     }
   }
@@ -82,21 +81,22 @@ class CReglement extends CMbObject {
   function acquiteFacture() {
     // Au cas où le reglement fait l'acquittement
     $this->loadRefsFwd();
-    $consult =& $this->_ref_consultation;
-    $consult->loadRefsReglements();
-    
-    // Acquitement patient
-    if ($this->emetteur == "patient" && $consult->du_patient) {
-      $consult->patient_date_reglement = $consult->_du_patient_restant <= 0 ? mbDate() : "";
+    if ($this->object_class == "CConsultation"){
+	    $consult =& $this->_ref_object;
+	    $consult->loadRefsReglements();
+	    
+	    // Acquitement patient
+	    if ($this->emetteur == "patient" && $consult->du_patient) {
+	      $consult->patient_date_reglement = $consult->_du_patient_restant <= 0 ? mbDate() : "";
+	    }
+	      
+	    // Acquitement tiers
+	    if ($this->emetteur == "tiers" && $consult->du_tiers) {
+	      $consult->tiers_date_reglement = $consult->_du_tiers_restant <= 0 ? mbDate() : "";
+	    }
+	    
+	    return $consult->store();
     }
-      
-    // Acquitement tiers
-    if ($this->emetteur == "tiers" && $consult->du_tiers) {
-      $consult->tiers_date_reglement = $consult->_du_tiers_restant <= 0 ? mbDate() : "";
-    }
-      
-	  
-    return $consult->store();
   }
   
   function store() {
