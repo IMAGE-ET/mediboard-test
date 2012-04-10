@@ -407,7 +407,7 @@ table.planningBloc td.plageop {
   background: #ddd;
   vertical-align: top; 
   text-align: center; 
-  white-space: nowrap;  
+  white-space: normal;  
   text-shadow:  0 0 0 transparent,
                -1px  0  .0px rgba(255,255,255,.3), 
                 0   1px .0px rgba(255,255,255,.3), 
