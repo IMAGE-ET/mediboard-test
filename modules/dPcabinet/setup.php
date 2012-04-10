@@ -1471,8 +1471,14 @@ class CSetupdPcabinet extends CSetup {
       CHANGE `consultation_id` `object_id` INT(11) UNSIGNED ,
       ADD `object_class`  ENUM ('CConsultation','CFactureConsult') NOT NULL default 'CConsultation';";
     $this->addQuery($query);
-        
-    $this->mod_version = "1.51";
+    
+    $this->makeRevision("1.51");
+    
+    $query = "ALTER TABLE `consultation` 
+              ADD `factureconsult_id` INT(11) UNSIGNED NULL;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.52";
   }
 }
 ?>

@@ -21,6 +21,7 @@ class CConsultation extends CCodable {
   var $patient_id      = null;
   var $sejour_id       = null;
   var $grossesse_id    = null;
+  var $factureconsult_id  = null;
   
   // DB fields
   var $type            = null;
@@ -109,7 +110,7 @@ class CConsultation extends CCodable {
   var $_ref_reglements_patient = null;
   var $_ref_reglements_tiers   = null;
   var $_ref_grossesse          = null;
-  
+  var $_ref_facture            = null;
   var $_ref_prescription = null; 
   var $_ref_categorie    = null;
   
@@ -174,6 +175,7 @@ class CConsultation extends CCodable {
     $specs["patient_id"]        = "ref class|CPatient purgeable seekable show|1";
     $specs["categorie_id"]      = "ref class|CConsultationCategorie show|1";
     $specs["grossesse_id"]      = "ref class|CGrossesse show|0";
+    $specs["factureconsult_id"] = "ref class|CFactureConsult show|0";
     $specs["_praticien_id"]     ="ref class|CMediusers seekable show|1"; //is put here for view
     $specs["_function_secondary_id"] = "ref class|CFunctions";
     $specs["motif"]             = "text helped seekable";
@@ -1138,6 +1140,10 @@ TESTS A EFFECTUER
   
   function loadRefGrossesse() {
     return $this->_ref_grossesse = $this->loadFwdRef("grossesse_id");
+  }
+  
+  function loadRefFacture() {
+    return $this->_ref_facture = $this->loadFwdRef("factureconsult_id");
   }
   
   function getActeExecution() {
