@@ -21,7 +21,7 @@ ini_set("soap.wsdl_cache_enabled", "0");
 $wsdl      = CValue::get('wsdl');
 $username  = CValue::request('username');
 $password  = CValue::request('password');
-$classname = CValue::request('class');
+$classname = CValue::request('class', "CEAISoapHandler");
 
 // Génération du fichier WSDL
 if (isset($wsdl)) {
