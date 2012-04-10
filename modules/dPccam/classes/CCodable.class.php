@@ -359,8 +359,25 @@ class CCodable extends CMbObject {
    * Charge les actes Tarmed codés
    */
   function loadRefsActesTarmed(){
-    if(CModule::getInstalled("tarmed")){
-	  	if (null === $this->_ref_actes_tarmed = $this->loadBackRefs("actes_tarmed", "code ASC")) {
+  	$this->_ref_actes_tarmed = array();
+  	
+    if(CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ){
+      //Classement des actes par ordre chonologique et par code
+    	$ljoin = array();
+    	$ljoin["consultation"] = "acte_tarmed.object_id = consultation.consultation_id";
+    	$ljoin["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
+    	
+      $where = array();
+      $where["acte_tarmed.object_class"] = " = 'CConsultation'";
+      $where["acte_tarmed.object_id"] = " = '$this->_id'";
+      
+      //Dans le cas ou la date est nulle on prend celle de la plage de consultation correspondante
+	    $order = "IFNULL(acte_tarmed.date, plageconsult.date) ,code ASC";
+	    
+	    $acte_tarmed = new CActeTarmed();
+	    $this->_ref_actes_tarmed = $acte_tarmed->loadList($where, $order, null, null, $ljoin );
+	    
+	  	if (null === $this->_ref_actes_tarmed) {
 	      return;
 	    }
 	    
