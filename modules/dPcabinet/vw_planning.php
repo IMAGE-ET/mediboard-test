@@ -107,14 +107,20 @@ $count_si_desistement = $consultation_desist->countList($where, null, $ljoin);
   
 $nbjours = 7;
 
-for($i = 5; $i < 7; $i++) {
-  $dateArr = mbDate("+$i day", $debut);
-  
-  $listPlage = new CPlageConsult();
-  $where = array();
-  $where["date"] = "= '$dateArr'";
-  $where["chir_id"] = " = '$chirSel'";
-  if(!$listPlage->countList($where)){
+$dateArr = mbDate("+6 day", $debut);
+
+$listPlage = new CPlageConsult();
+
+$where = array();
+$where["date"] = "= '$dateArr'";
+$where["chir_id"] = " = '$chirSel'";
+
+if (!$listPlage->countList($where)){
+  $nbjours--;
+  // Aucune plage le dimanche, on peut donc tester le samedi.
+  $dateArr = mbDate("+5 day", $debut);
+  $where["date"] = "= '$dateArr'"; 
+  if (!$listPlage->countList($where)) {
     $nbjours--;
   }
 }
