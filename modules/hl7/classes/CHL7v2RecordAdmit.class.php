@@ -68,7 +68,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
     $this->_ref_sender = $sender;
 
-    // Acquittement d'erreur : identifiants RI et NA non fournis
+    // Acquittement d'erreur : identifiants RI et NA, VN non fournis
     if (!$data['admitIdentifiers'] && !$this->getVenueAN($sender, $data)) {
       return $exchange_ihe->setAckAR($ack, "E200", null, $newPatient);
     }
@@ -149,6 +149,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $venueRI       = CValue::read($data['admitIdentifiers'], "RI");
     $venueRISender = CValue::read($data['admitIdentifiers'], "RI_Sender");
     $venueNPA      = CValue::read($data['admitIdentifiers'], "NPA");
+    $venueVN       = CValue::read($data['admitIdentifiers'], "VN");
     $venueAN       = $this->getVenueAN($sender, $data);
         
     $NDA = new CIdSante400();
@@ -161,7 +162,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       // NPA fourni
       if ($venueNPA) {
         /* @todo Gérer ce cas */
-        
       }
       
       // RI fourni
@@ -203,7 +203,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       }
       
       if (!$newVenue->_id) {
-        // Mapping du patient
+        // Mapping du séjour
         $this->mappingVenue($data, $newVenue);
       
         // Séjour retrouvé ?
@@ -298,7 +298,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $affectation = $return_affectation;
     
     // Affectation de l'affectation au mouvement
-    if ($affectation->_id) {
+    if ($affectation && $affectation->_id) {
       $movement->affectation_id = $affectation->_id;
       $movement->store();
     }
@@ -478,6 +478,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     $venueRI       = CValue::read($data['admitIdentifiers'], "RI");
     $venueRISender = CValue::read($data['admitIdentifiers'], "RI_Sender");
+    $venueVN       = CValue::read($data['admitIdentifiers'], "VN");
     $venueNPA      = CValue::read($data['admitIdentifiers'], "NPA");
     $venueAN       = $this->getVenueAN($sender, $data);
     
@@ -494,6 +495,17 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     if ($newVenue->load($venueRI)) {
       return true;
+    }
+    
+    /* @todo Hack temporaire .... Gestion du VN */   
+    // Mapping du séjour
+    $this->mappingVenue($data, $newVenue);
+    // Séjour retrouvé ?
+    if (CAppUI::conf("hl7 strictSejourMatch")) {
+      // Recherche d'un num dossier déjà existant pour cette venue 
+      if ($newVenue->loadMatchingSejour(null, true)) {
+        return true;
+      }
     }
     
     return false;
@@ -527,7 +539,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $affectation = $return_affectation;
     
     // Affectation de l'affectation au mouvement
-    if ($affectation->_id) {
+    if ($affectation && $affectation->_id) {
       $movement->affectation_id = $affectation->_id;
       $movement->store();
     }
@@ -590,7 +602,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     return $movement;
   }
   
-  function mappingAndStoreAffectation(CHL7Acknowledgment $ack, CSejour $newVenue, $data, CMovement $movement) {
+  function mappingAndStoreAffectation(CHL7Acknowledgment $ack, CSejour $newVenue, $data, CMovement $movement = null) {
+    if (!$movement) {
+      return;
+    }
+    
     $PV1 = $data["PV1"];
     
     $affectation = new CAffectation();

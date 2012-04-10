@@ -155,7 +155,6 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     $data[] = null;
     
     // PV1-19: Visit Number (CX) (optional)
-    /* @todo Gestion des séances */ 
     if ($receiver->_configs["build_NDA"] == "PV1_19") {
       $sejour->loadNDA($group->_id);
       $data[] = $sejour->_NDA ? array( 
@@ -169,6 +168,7 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
                   )
                 ) : null;
     } else {
+      /* @todo Gestion des séances */ 
       $data[] = array(
         array (
           $sejour->_id,

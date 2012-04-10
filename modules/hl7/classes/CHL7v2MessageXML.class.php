@@ -179,6 +179,13 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     }
   }
   
+  function getVNIdentifiers(DOMNode $node, &$data, CInteropSender $sender) {
+    if (($this->queryTextNode("CX.5", $node) == "VN")) {
+      $data["VN"] = $this->queryTextNode("CX.1", $node);
+      return;
+    }
+  }
+  
   function getRIIdentifiers(DOMNode $node, &$data, CInteropSender $sender) {
     // Notre propre RI
     if (($this->queryTextNode("CX.5", $node) == "RI") && 
@@ -241,6 +248,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     $data = array();
     
     // RI - Resource identifier 
+    // VN - Visit Number
     // AN - On peut également retrouver le numéro de dossier dans ce champ
     if ($PV1_19 = $this->queryNode("PV1.19", $contextNode)) {
       switch ($sender->_configs["handle_NDA"]) {
@@ -248,7 +256,12 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
           $this->getANIdentifier($PV1_19, $data);
           break;
         default:
+          // RI - Resource Identifier
           $this->getRIIdentifiers($PV1_19, $data, $sender);
+          
+          // VN - Visit Number
+          $this->getVNIdentifiers($PV1_19, $data, $sender);
+    
           break;
       }
     }
