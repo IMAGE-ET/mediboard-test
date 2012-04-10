@@ -25,7 +25,7 @@ function toggleCode(iCode, bForceTo){
   var oElement = oForm["_ItemsSel_cat_" + oForm._elemOpen.value];
   oItemSelField = new TokenField(oElement);
   oItemSelField.toggle(iCode, bForceTo);
-  
+  oForm.evenements.fire("ui:change");
   refreshListChoix();
 }
 
