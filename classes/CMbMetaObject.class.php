@@ -12,13 +12,13 @@ class CMbMetaObject extends CMbObject {
   var $object_id    = null;
   var $object_class = null;
 
-	/**
-	 * @var CMbObject
-	 */
+  /**
+   * @var CMbObject
+   */
   var $_ref_object  = null;
   
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["object_id"]    = "ref notNull class|CMbObject meta|object_class";
     $specs["object_class"] = "str notNull class show|0";
     return $specs;
@@ -31,8 +31,8 @@ class CMbMetaObject extends CMbObject {
   }
   
   function loadListFor(CMbObject $object) {
-  	$this->setObject($object);
-  	return $this->loadMatchingList();
+    $this->setObject($object);
+    return $this->loadMatchingList();
   }
   
   /**
@@ -59,18 +59,18 @@ class CMbMetaObject extends CMbObject {
     }
 
     else {
-  	  $this->_ref_object = $this->loadFwdRef("object_id", $cache);
+      $this->_ref_object = $this->loadFwdRef("object_id", $cache);
     }
-  	
+    
     if (!$this->_ref_object->_id) {
       $this->_ref_object->load(null);
       $this->_ref_object->_view = "Element supprimé";
     }
-		
-		return $this->_ref_object;
+    
+    return $this->_ref_object;
   }
     
-  function loadRefsFwd() {	
+  function loadRefsFwd() {  
     parent::loadRefsFwd();
     $this->loadTargetObject();
   }

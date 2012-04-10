@@ -5,7 +5,7 @@
 SchemaDentaire.oListEtats = {{$list_etat_dents|@json}};
 
 Main.add(function () {
-  var states = [0, 'defaut', 'bridge', 'pivot', 'mobile', 'appareil'];
+  var states = [0, 'defaut', 'bridge', 'pivot', 'mobile', 'appareil', 'implant'];
   SchemaDentaire.initialize("dents-schema", states);
 } );
 </script>

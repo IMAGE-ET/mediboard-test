@@ -1121,8 +1121,12 @@ table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
   background: #6699FF;
 }
 
+.schema-dentaire .implant {
+  background: #FFFF00;
+}
+
 .schema-dentaire .pivot {
-  background: #FF6600;
+  background: #FF9900;
 }
 
 .schema-dentaire .mobile {
@@ -1176,7 +1180,7 @@ table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
 }
 
 .dent-legend a {
-  padding: 2px;
+  padding: 1px;
   margin: 1px;
 }
 

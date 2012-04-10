@@ -82,6 +82,8 @@ Main.add(function(){
     </tr>
     {{/foreach}}
     
+    {{mb_include module=system template=inc_config_bool var=browser_enable_ie9 m=null}}
+    
     <tr>
       <th colspan="2" class="title">
         Mode migration

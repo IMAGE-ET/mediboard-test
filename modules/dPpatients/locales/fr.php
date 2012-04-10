@@ -592,6 +592,7 @@ $locales['CEtatDent.etat.'] = 'Aucun';
 $locales['CEtatDent.etat.appareil'] = 'Appareil';
 $locales['CEtatDent.etat.bridge'] = 'Bridge';
 $locales['CEtatDent.etat.defaut'] = 'Etat normal';
+$locales['CEtatDent.etat.implant'] = 'Implant';
 $locales['CEtatDent.etat.mobile'] = 'Mobile';
 $locales['CEtatDent.etat.pivot'] = 'Pivot';
 $locales['CEtatDent.more'] = 'dents';

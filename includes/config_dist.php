@@ -51,6 +51,7 @@ $dPconfig["browser_compat"]    = array(
   'chrome'  => '5.0',
   'safari'  => '525.26', // 3.2
 );
+$dPconfig["browser_enable_ie9"]  = "0";
 
 // Object handlers
 $dPconfig["object_handlers"]   = array (

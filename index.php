@@ -168,7 +168,7 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");  // Date in the past
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");  // always modified
 header("Cache-Control: no-cache, no-store, must-revalidate");  // HTTP/1.1
 header("Pragma: no-cache");  // HTTP/1.0
-header("X-UA-Compatible: IE=8"); // Force IE8 mode
+header("X-UA-Compatible: IE=".(CAppUI::conf("browser_enable_ie9") ? 9 : 8)); // Force IE8 mode
 //header("X-UA-Compatible: IE=8;chrome=1"); // To use the ChromeFrame plugin in IE
 
 // Show errors to admin

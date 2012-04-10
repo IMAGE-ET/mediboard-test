@@ -34,7 +34,7 @@ class CEtatDent extends CMbObject {
     
     $specs["dossier_medical_id"] = "ref notNull class|CDossierMedical";
     $specs["dent"]               = "num notNull pos";
-    $specs["etat"]               = "enum list|bridge|pivot|mobile|appareil|defaut";
+    $specs["etat"]               = "enum list|bridge|pivot|mobile|appareil|implant|defaut";
     
     return $specs;
   }
