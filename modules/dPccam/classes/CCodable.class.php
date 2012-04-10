@@ -385,7 +385,7 @@ class CCodable extends CMbObject {
 	    foreach ($this->_ref_actes_tarmed as $_acte_tarmed){
 	      $this->_codes_tarmed[] = $_acte_tarmed->makeFullCode(); 
 	      $_acte_tarmed->loadRefExecutant();
-	      $_acte_tarmed->getLibelle();
+	      $_acte_tarmed->loadRefTarmed();
 	      $_acte_tarmed->countActesAssocies();
 	    }
 	    $this->_tokens_tarmed = implode("|", $this->_codes_tarmed);

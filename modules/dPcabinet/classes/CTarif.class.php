@@ -251,6 +251,7 @@ class CTarif extends CMbObject {
 	    foreach ($this->_codes_tarmed as $code) {
 	      $acte = new CActeTarmed();
 	      $acte->setFullCode($code);
+	      $acte->loadRefTarmed(CTarmed::LITE);
 	      $this->_new_actes["$code"] = $acte;
 	      if (!$acte->getPrecodeReady()) {
 	        return $this->_precode_ready = '0';
