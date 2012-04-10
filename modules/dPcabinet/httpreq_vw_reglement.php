@@ -93,20 +93,20 @@ $consult->loadRefs();
 $tarif = new CTarif;
 $tarifs = array();
 if (!$consult->tarif || $consult->tarif == "pursue") {
-	$order = "description";
-	$where = array();
-	$where["chir_id"] = "= '$userSel->user_id'";
-	$tarifs["user"] = $tarif->loadList($where, $order);
-	foreach ($tarifs["user"] as $_tarif) {
-	  $_tarif->getPrecodeReady();
-	}
-	
-	$where = array();
-	$where["function_id"] = "= '$userSel->function_id'";
-	$tarifs["func"] = $tarif->loadList($where, $order);
-	foreach($tarifs["func"] as $_tarif) {
-	  $_tarif->getPrecodeReady();
-	}
+  $order = "description";
+  $where = array();
+  $where["chir_id"] = "= '$userSel->user_id'";
+  $tarifs["user"] = $tarif->loadList($where, $order);
+  foreach ($tarifs["user"] as $_tarif) {
+    $_tarif->getPrecodeReady();
+  }
+  
+  $where = array();
+  $where["function_id"] = "= '$userSel->function_id'";
+  $tarifs["func"] = $tarif->loadList($where, $order);
+  foreach($tarifs["func"] as $_tarif) {
+    $_tarif->getPrecodeReady();
+  }
 }
 
 // Règlements
@@ -121,13 +121,34 @@ $reglement->montant = round($consult->_du_patient_restant, 2);
 $consult->loadRefsActesNGAP();
 $consult->loadRefsActesTarmed();
 
+//Chargement de la facture
+$facture = new CFactureConsult();
+$facture_patient = null;
+if($consult->patient_id && $facture->loadObject("patient_id = '$consult->patient_id' AND cloture IS NULL")){ // TODO
+  $facture_patient = $facture;
+  $facture_patient->loadRefs();
+}
+else if( $consult->patient_id &&  $factures = $facture->loadList("patient_id = '$consult->patient_id' AND cloture IS NOT NULL")){
+  foreach($factures as $_facture){
+    $_facture->loadRefsConsults();
+    foreach($_facture->_ref_consults as $consultation){
+      if($consultation->_id == $consult->_id){
+        $facture_patient = $_facture;
+        $facture_patient->loadRefPatient();
+      }
+    }
+  }  
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("banques"  , $banques);
+$smarty->assign("facture"  , $facture_patient);
 $smarty->assign("consult"  , $consult);
 $smarty->assign("reglement", $reglement);
 $smarty->assign("tarifs"   , $tarifs);
+$smarty->assign("date"      , mbDate());
 
 $smarty->display("inc_vw_reglement.tpl");
 

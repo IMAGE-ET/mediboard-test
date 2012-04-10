@@ -1,6 +1,8 @@
 {{assign var=patient value=$consult->_ref_patient}}
 {{assign var=praticien value=$consult->_ref_chir}}
 
+{{mb_script module="dPcabinet" script="facture" ajax="true"}}
+
 <script type="text/javascript">
 	
 pursueTarif = function() {
@@ -21,7 +23,7 @@ cancelTarif = function(action) {
   {{if $app->user_prefs.autoCloseConsult}}
   $V(form.chrono, "48");
   {{/if}}
-  
+
   $V(form.valide, 0);
   $V(form._somme, 0);
   
@@ -41,6 +43,17 @@ validTarif = function(){
     $V(form.tarif, "manuel");
   }
   Reglement.submit(form, true);
+}
+
+loadFacture = function(){
+  {{if $conf.dPcabinet.CConsultation.consult_facture == "1"}}
+    Facture.load(document.tarifFrm, '{{$consult->patient_id}}', '{{$consult->_id}}');
+  {{/if}}
+}
+reloadFacture = function(){
+  {{if $conf.dPcabinet.CConsultation.consult_facture == "1"}}
+    Facture.reload('{{$consult->patient_id}}', '{{$consult->_id}}', 1);
+  {{/if}}
 }
 
 modifTotal = function(){
@@ -70,6 +83,7 @@ printActes = function(){
 checkActe = function(button) {
   button.form.du_tiers.value = 0; 
   button.form.du_patient.value = 0; 
+  button.form.factureconsult_id.value = ""; 
   cancelTarif();
 }
 
@@ -224,6 +238,7 @@ Main.add( function(){
           <input type="hidden" name="m" value="dPcabinet" />
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="dosql" value="do_consultation_aed" />
+          <input type="hidden" name="type_facture" value="{{if $consult->pec_at == 'arret'}}accident{{/if}}"/>
           {{mb_key object=$consult}}
           {{mb_field object=$consult field="sejour_id" hidden=1}}
 
@@ -236,17 +251,25 @@ Main.add( function(){
                 <input type="hidden" name="patient_date_reglement" value="" />
                 {{if $consult->valide}}
                   {{mb_value object=$consult field="_somme" value=$consult->secteur1+$consult->secteur2 onchange="modifSecteur2()"}}
-                  <br />
-                  {{mb_value object=$consult field="secteur1"}} (S1) +
-                  {{mb_value object=$consult field="secteur2"}} (S2)
+                   {{if !@$modules.tarmed->_can->read || $conf.tarmed.CCodeTarmed.use_cotation_tarmed != "1"}}
+                    <br />
+                    {{mb_value object=$consult field="secteur1"}} (S1) +
+                    {{mb_value object=$consult field="secteur2"}} (S2)
+                   {{/if}}
                 {{else}}
+                
                   {{math equation="x+y" x=$consult->secteur1 y=$consult->secteur2 assign=somme}}
                   {{mb_field size=6 object=$consult field="_somme" value="$somme" onchange="modifSecteur2()"}}
-                  <br />
-                  {{mb_label object=$consult field="secteur1"}}
-                  {{mb_field object=$consult field="secteur1" onchange="modifTotal()"}} +
-                  {{mb_label object=$consult field="secteur2"}}
-                  {{mb_field object=$consult field="secteur2" onchange="modifTotal()"}}
+                  {{if !@$modules.tarmed->_can->read || $conf.tarmed.CCodeTarmed.use_cotation_tarmed != "1"}}
+                    <br />
+                    {{mb_label object=$consult field="secteur1"}}
+                    {{mb_field object=$consult field="secteur1" onchange="modifTotal()"}} +
+                    {{mb_label object=$consult field="secteur2"}}
+                    {{mb_field object=$consult field="secteur2" onchange="modifTotal()"}}
+                  {{else}}
+                    {{mb_field object=$consult field="secteur1" onchange="modifTotal()" hidden=1}}
+                    {{mb_field object=$consult field="secteur2" onchange="modifTotal()" hidden=1}}
+                  {{/if}}
                 {{/if}}
                 {{if $consult->patient_date_reglement}}
                   {{mb_field object=$consult field="du_patient" hidden=1}}
@@ -290,25 +313,29 @@ Main.add( function(){
                 <input type="hidden" name="secteur2" value="{{$consult->secteur2}}" />
                 <input type="hidden" name="du_patient" value="{{$consult->du_patient}}" />
                 <input type="hidden" name="du_tiers" value="{{$consult->du_tiers}}" />
+                <input type="hidden" name="factureconsult_id" value="{{$consult->factureconsult_id}}" />
                 
                 {{if $app->user_prefs.autoCloseConsult}}
                 <input type="hidden" name="chrono" value="{{$consult->chrono}}" />
                 {{/if}}
                 
                 {{if !$consult->_current_fse && $consult->_ref_reglements|@count == 0}}
-                <button class="cancel" type="button" id="buttonCheckActe" onclick="checkActe(this)">Rouvrir la cotation</button>
+                <button class="cancel" type="button" id="buttonCheckActe" onclick="checkActe(this);reloadFacture();">Rouvrir la cotation</button>
                 {{/if}}
                 <button class="print" type="button" onclick="printActes()">Imprimer les actes</button>
               </td>
             </tr>
             {{elseif !$consult->patient_date_reglement}}
+            
               {{if !$consult->sejour_id}}
               <tr>
                 <th>{{mb_label object=$consult field="du_patient"}}</th>
                 <td>
                   {{mb_field object=$consult field="du_patient"}}
                   {{mb_field object=$consult field="du_tiers" hidden="1"}}
-                  <button type="button" class="tick" onclick="$V(this.form.du_patient, 0);">Tiers-payant total</button>   
+                  {{if !@$modules.tarmed->_can->read || $conf.tarmed.CCodeTarmed.use_cotation_tarmed != "1"}}
+                    <button type="button" class="tick" onclick="$V(this.form.du_patient, 0);">Tiers-payant total</button>
+                  {{/if}}   
                 </td>
               </tr>
               {{/if}}
@@ -320,8 +347,7 @@ Main.add( function(){
                   {{if $app->user_prefs.autoCloseConsult}}
                   <input type="hidden" name="chrono" value="64" />
                   {{/if}}
-                  
-                  <button class="submit" type="button" onclick="validTarif();">Cloturer la cotation</button>
+                  <button class="submit" type="button" onclick="validTarif();loadFacture();">Cloturer la cotation</button>
                   <button class="cancel" type="button" onclick="cancelTarif('delActes')">Vider la cotation</button>
                 </td>
               </tr>
@@ -330,7 +356,7 @@ Main.add( function(){
           </form>
           <!-- Fin du formulaire de tarification -->
       </fieldset>
-      {{if $consult->tarif && $consult->valide == "1"}}
+      {{if $consult->tarif && $consult->valide == "1" && $conf.dPcabinet.CConsultation.consult_facture == "0"}}
       <fieldset>
         <legend>Règlement</legend>
         <!-- Debut du formulaire de rajout de reglements -->
@@ -359,7 +385,8 @@ Main.add( function(){
 
               <input type="hidden" name="date" value="now" />
               <input type="hidden" name="emetteur" value="patient" />
-              {{mb_field object=$reglement field="consultation_id" hidden=1}}
+              <input type="hidden" name="object_id" value="{{$consult->_id}}"/>
+              <input type="hidden" name="object_class" value="CConsultation"/>
             
               <table style="width: 100%;">
                 <tr>
@@ -385,7 +412,7 @@ Main.add( function(){
                   <td>
                     <label title="{{mb_value object=$_reglement field=date}}">
                       {{$_reglement->date|date_format:$conf.date}}
-										</label>
+                    </label>
                   </td>
                   <td>
                     <a class="button remove notext" href="" onclick="return Reglement.cancel({{$_reglement->_id}});"></a>
@@ -430,6 +457,13 @@ Main.add( function(){
       {{/if}}
     </td>
   </tr>
+  {{if $conf.dPcabinet.CConsultation.consult_facture == "1"}}
+    <tr>
+      <td id="load_facture">
+        {{mb_include module=dPcabinet template="inc_vw_facturation"}}
+      </td>
+    </tr>
+  {{/if}}
   {{if array_key_exists("sigems", $modules)}}
     <!-- Inclusion de la gestion du système de facturation -->
     {{mb_include module=sigems template=check_actes_reels}}
