@@ -9,27 +9,24 @@
  */
 
 class CExObject extends CMbMetaObject {
-  var $ex_object_id = null;
+  var $ex_object_id       = null;
   
-  var $reference_class = null;
-  var $reference_id = null;
+  var $group_id           = null;
   
-  var $reference2_class = null;
-  var $reference2_id = null;
+  var $reference_class    = null;
+  var $reference_id       = null;
   
-  var $_ex_class_id = null;
-  var $_own_ex_class_id = null;
+  var $reference2_class   = null;
+  var $reference2_id      = null;
+  
+  var $_ex_class_id       = null;
+  var $_own_ex_class_id   = null;
   var $_specs_already_set = false;
-  
-  static $_load_lite = false;
-  static $_multiple_load = false;
-  
-  static $_ex_specs = array();
   
   /**
    * @var CExClass
    */
-  public $_ref_ex_class = null;
+  var $_ref_ex_class = null;
   
   /**
    * @var CMbObject
@@ -41,7 +38,17 @@ class CExObject extends CMbMetaObject {
    */
   var $_ref_reference_object_2 = null;
   
+  /**
+   * @var CGroups
+   */
+  var $_ref_group = null;
+  
   var $_reported_fields = array();
+  
+  static $_load_lite      = false;
+  static $_multiple_load  = false;
+  
+  static $_ex_specs       = array();
 
   function __construct(){
     parent::__construct();
@@ -101,6 +108,13 @@ class CExObject extends CMbMetaObject {
   function loadRefReferenceObjects(){
     $this->_ref_reference_object_1 = $this->loadFwdRef("reference_id");
     $this->_ref_reference_object_2 = $this->loadFwdRef("reference2_id");
+  }
+  
+  /**
+   * @return CGroups
+   */
+  function loadRefGroup($cache = true){
+    return $this->_ref_group = $this->loadFwdRef("group_id", $cache);
   }
   
   /**
@@ -275,6 +289,10 @@ class CExObject extends CMbMetaObject {
         $reference = $this->_ref_ex_class->resolveReferenceObject($object, 2);
         $this->setReferenceObject_2($reference);
       }
+      
+      if (!$this->group_id) {
+        $this->group_id = CGroups::loadCurrent()->_id;
+      }
     }
     
     return parent::store();
@@ -356,11 +374,13 @@ class CExObject extends CMbMetaObject {
     
     $class = get_class($this)."_".$this->getClassId();
     $props = parent::getProps();
-    $props["ex_object_id"] = "ref class|$class show|0";
-    $props["_ex_class_id"]    = "ref class|CExClass";
+    $props["ex_object_id"]     = "ref class|$class show|0";
+    $props["_ex_class_id"]     = "ref class|CExClass";
     
-    $props["reference_class"] = "str class";
-    $props["reference_id"]    = "ref class|CMbObject meta|reference_class";
+    $props["group_id"]         = "ref class|CGroups notNull";
+    
+    $props["reference_class"]  = "str class";
+    $props["reference_id"]     = "ref class|CMbObject meta|reference_class";
     
     $props["reference2_class"] = "str class";
     $props["reference2_id"]    = "ref class|CMbObject meta|reference2_class";

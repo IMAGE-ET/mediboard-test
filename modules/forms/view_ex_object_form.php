@@ -72,6 +72,11 @@ list($grid, $out_of_grid, $groups) = $ex_object->_ref_ex_class->getGrid();
 if ($ex_object_id || $ex_object->_id) {
   $ex_object->load($ex_object_id);
 }
+else {
+  $ex_object->group_id = CGroups::loadCurrent()->_id;
+}
+
+$ex_object->loadRefGroup();
 
 // loadAllFwdRefs ne marche pas bien (a cause de la clé primaire)
 foreach($ex_object->_specs as $_field => $_spec) {

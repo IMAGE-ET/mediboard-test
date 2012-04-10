@@ -14,19 +14,21 @@ Main.add(function(){
 </button>
 <br />
 
-<select onclick="toggleExClassCat($V(this))" id="ex-class-select" style="font-size: 1.2em;">
-{{foreach from=$class_tree item=_by_class key=_class}}
-  <option value="{{$_class}}" {{if $_class == $ex_class->host_class}} selected="selected" {{/if}}>
-    ({{$counts.$_class}})
-    {{if $_class != "CMbObject"}}
-      {{tr}}{{$_class}}{{/tr}}
-    {{else}}
-      Non classé
-    {{/if}}
-  </option>
-{{/foreach}}
-</select>
-<br />
+<div style="{{if $class_tree|@count == 0}} display: none; {{/if}}">
+  <select onclick="toggleExClassCat($V(this))" id="ex-class-select" style="font-size: 1.2em;">
+  {{foreach from=$class_tree item=_by_class key=_class}}
+    <option value="{{$_class}}" {{if $_class == $ex_class->host_class}} selected="selected" {{/if}}>
+      ({{$counts.$_class}})
+      {{if $_class != "CMbObject"}}
+        {{tr}}{{$_class}}{{/tr}}
+      {{else}}
+        Non classé
+      {{/if}}
+    </option>
+  {{/foreach}}
+  </select>
+  <br />
+</div>
 
 {{foreach from=$class_tree item=_by_class key=_class}}
   <table class="main tbl ex-class-cat" id="ex-class-{{$_class}}" style="display: none;">
@@ -55,5 +57,9 @@ Main.add(function(){
     {{/foreach}}
   </table>
 {{foreachelse}}
-  {{tr}}CExClass.none{{/tr}}
+  <table class="main tbl">
+    <tr>
+      <td class="empty">{{tr}}CExClass.none{{/tr}}</td>
+    </tr>
+  </table>
 {{/foreach}}

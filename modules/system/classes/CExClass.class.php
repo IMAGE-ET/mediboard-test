@@ -799,17 +799,26 @@ class CExClass extends CMbObject {
       
       $table_name = $this->getTableName();
       $query = "CREATE TABLE `$table_name` (
-        `ex_object_id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        `object_id` INT UNSIGNED NOT NULL,
-        `object_class` VARCHAR(80) NOT NULL,
-        `reference_id` INT UNSIGNED NOT NULL,
-        `reference_class` VARCHAR(80) NOT NULL,
-        `reference2_id` INT UNSIGNED NOT NULL,
+        `ex_object_id`     INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        `group_id`         INT(11) UNSIGNED NOT NULL,
+        
+        `object_id`        INT(11) UNSIGNED NOT NULL,
+        `object_class`     VARCHAR(80) NOT NULL,
+        
+        `reference_id`     INT(11) UNSIGNED NOT NULL,
+        `reference_class`  VARCHAR(80) NOT NULL,
+        
+        `reference2_id`    INT(11) UNSIGNED NOT NULL,
         `reference2_class` VARCHAR(80) NOT NULL,
+        
+        INDEX ( `group_id` ),
+        
         INDEX ( `object_id` ),
         INDEX ( `object_class` ),
+        
         INDEX ( `reference_id` ),
         INDEX ( `reference_class` ),
+        
         INDEX ( `reference2_id` ),
         INDEX ( `reference2_class` )
       ) /*! ENGINE=MyISAM */;";

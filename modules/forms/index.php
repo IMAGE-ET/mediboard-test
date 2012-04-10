@@ -15,7 +15,7 @@ $module = CModule::getInstalled(basename(dirname(__FILE__)));
 $module->registerTab("view_ex_class",      TAB_EDIT);
 $module->registerTab("view_ex_list",       TAB_EDIT);
 $module->registerTab("view_ex_concept",    TAB_EDIT);
-$module->registerTab("view_ex_object",     TAB_EDIT);
+$module->registerTab("view_ex_object_explorer", TAB_EDIT);
 
 /*
 $module->registerTab("view_import",        TAB_ADMIN);

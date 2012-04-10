@@ -115,7 +115,7 @@ function refreshListOrders(type, form, invoiced) {
 }
 
 function refreshLists(form, invoiced) {
-  if (!window.opener) {
+  if (!window.opener || window.opener.closed) {
     // We load the visible one first
     orderTypes.each(function(type){
       if ($("list-orders-"+type).visible()) {

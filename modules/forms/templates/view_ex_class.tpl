@@ -18,8 +18,8 @@ ExClass.edit({{$ex_class->_id}});
 
 <table class="main">
   <tr>
-    <td id="exClassList" style="width: 15%;">
-    	<!-- exClassList -->
+    <td id="exClassList" style="width: 15%; min-width: 18em;">
+      <!-- exClassList -->
     </td>
     <td id="exClassEditor">
       <!-- exClassEditor -->

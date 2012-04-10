@@ -24,19 +24,23 @@ if (!$user->user_password) {
 
 // Chargement des senders
 $sender  = new CViewSender();
-$senders = $sender->loadList(null, "name");
+$where = array(
+  "active" => "= '1'",
+);
+
+$senders = $sender->loadList($where, "name");
 
 // Envoi de vues
 foreach ($senders as $_sender) {
   $_sender->makeUrl($user);
-	if (!$_sender->getActive($minute)) {
-  	unset($senders[$_sender->_id]);
-  	continue;
+  if (!$_sender->getActive($minute)) {
+    unset($senders[$_sender->_id]);
+    continue;
   }
 
   if ($user->user_password) {
     $_sender->makeUrl($user);
-  	$_sender->makeFile();
+    $_sender->makeFile();
     $_sender->sendFile();
   }
 }

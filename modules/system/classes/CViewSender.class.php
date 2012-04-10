@@ -177,8 +177,10 @@ class CViewSender extends CMbObject {
       $chrono = new Chronometer();
       $chrono->start();
       
-      $source_ftp = $_sender_source->_ref_source->_ref_source_ftp;
-      if ($source_ftp->_id && $source_ftp->active) {
+      $_source = $_sender_source->_ref_source;
+      $source_ftp = $_source->_ref_source_ftp;
+      
+      if ($source_ftp->_id && $source_ftp->active && $_source->actif) {
         $basename = $this->name;
         $destination_basename = $source_ftp->fileprefix.$basename;
         $can_zip = $_sender_source->_ref_source->archive;

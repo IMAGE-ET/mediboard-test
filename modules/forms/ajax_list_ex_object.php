@@ -15,16 +15,22 @@ $reference_id    = CValue::get("reference_id");
 $detail          = CValue::get("detail", 1);
 $ex_class_id     = CValue::get("ex_class_id");
 $target_element  = CValue::get("target_element");
+$ex_object_ids   = CValue::get("ex_object_ids");
 $print           = CValue::get("print");
 $start           = CValue::get("start", 0);
 
 CValue::setSession('reference_class', $reference_class);
 CValue::setSession('reference_id',    $reference_id);
 
-$reference = new $reference_class;
-
-if ($reference_id) {
-  $reference->load($reference_id);
+if ($reference_class) {
+  $reference = new $reference_class;
+  
+  if ($reference_id) {
+    $reference->load($reference_id);
+  }
+}
+else {
+  $reference = null;
 }
 
 CExClassField::$_load_lite = true;
@@ -81,7 +87,7 @@ if ($limit) {
 $ref_objects_cache = array();
   
 foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
-  $ex_class_key = $_ex_class->host_class."-event-".$_ex_class->event;
+  $ex_class_key = "$_ex_class->host_class-event-$_ex_class->event";
   
   if (!$from_cache && $detail > 1) {
     foreach($_ex_class->loadRefsGroups() as $_group) {
@@ -96,20 +102,27 @@ foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
   $_ex_object->_ex_class_id = $_ex_class_id;
   $_ex_object->setExClass();
   
-  $where = array(
-    "(reference_class  = '$reference_class' AND reference_id  = '$reference_id') OR 
-     (reference2_class = '$reference_class' AND reference2_id = '$reference_id') OR 
-     (object_class     = '$reference_class' AND object_id     = '$reference_id')"
-  );
+  if ($ex_object_ids) {
+    $ids = explode("-", $ex_object_ids);
+    $where = array(
+      $_ex_object->_spec->key => $_ex_object->_spec->ds->prepareIn($ids),
+    );
+  }
+  else {
+    $where = array(
+      "(reference_class  = '$reference_class' AND reference_id  = '$reference_id') OR 
+       (reference2_class = '$reference_class' AND reference2_id = '$reference_id') OR 
+       (object_class     = '$reference_class' AND object_id     = '$reference_id')"
+    );
+  }
   
   $_ex_objects = $_ex_object->loadList($where, "{$_ex_object->_spec->key} DESC", $limit);
   $_ex_objects_count = $_ex_object->countList($where);
+  
   $total = max($_ex_objects_count, $total);
   
-  $count = $_ex_object->countList($where);
-  
-  if ($count) {
-    $ex_objects_counts_by_event[$ex_class_key][$_ex_class_id] = $_ex_object->countList($where);
+  if ($_ex_objects_count) {
+    $ex_objects_counts_by_event[$ex_class_key][$_ex_class_id] = $_ex_objects_count;
   }
   
   if ($detail == 0) continue;

@@ -932,12 +932,60 @@ class CSetupsystem extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("1.0.95");
-    
     $query = "ALTER TABLE `sender_file_system` 
                 ADD `save_unsupported_message` ENUM ('0','1') DEFAULT '1',
                 ADD `create_ack_file` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.96";
+    $this->makeRevision("1.0.96");
+    function setup_system_addExObjectGroupId(){
+      set_time_limit(1800);
+      ignore_user_abort(1);
+      
+      $ds = CSQLDataSource::get("std");
+ 
+      // Changement des chirurgiens
+      $query = "SELECT ex_class_id, host_class FROM ex_class";
+      $list_ex_class = $ds->loadHashAssoc($query);
+      foreach($list_ex_class as $key => $hash) {
+        $query = "ALTER TABLE `ex_object_$key` 
+              ADD `group_id` INT (11) UNSIGNED NOT NULL AFTER `ex_object_id`";
+        $ds->exec($query);
+        
+        $field_class = null;
+        $field_id = null;
+        switch($hash["host_class"]) {
+          case "CMbObject": 
+          break;
+          
+          case "CPrescriptionLineElement":
+          case "CPrescriptionLineMedicament":
+          case "COperation":
+          case "CConsultation":
+          case "CConsultAnesth":
+          case "CAdministration":
+            $field_class = "reference_class";
+            $field_id    = "reference_id";
+          break;
+          
+          case "CSejour":
+            $field_class = "object_class";
+            $field_id    = "object_id";
+        }
+        
+        if ($field_class && $field_id) {
+          $query = "UPDATE `ex_object_$key` 
+                    LEFT JOIN `sejour` ON `ex_object_$key`.`$field_id`    = `sejour`.`sejour_id` AND 
+                                          `ex_object_$key`.`$field_class` = 'CSejour'
+                    SET `ex_object_$key`.`group_id` = `sejour`.`group_id`";
+          $ds->exec($query);
+        }
+      }
+      
+      return true;
+    }
+    $this->addFunction("setup_system_addExObjectGroupId");
+    
+    $this->mod_version = "1.0.97";
   }
 }
