@@ -119,7 +119,7 @@ Main.add(function () {
     {{foreach from=$all_constantes key=_type item=_list}}
       <tbody id="type-{{$_type}}" {{if $show_cat_tabs}} {{if $_type != "vital"}} style="display: none;" {{/if}} {{/if}}>
       {{foreach from=$_list key=_constante item=_params}}
-        <tr {{if !array_key_exists($_constante, $selection) && $const->$_constante == ""}}
+        <tr {{if !array_key_exists($_constante, $selection) && ($const->$_constante == "" || !$display_graph)}}
           style="display: none;" class="secondary"
           {{assign var=at_least_one_hidden value=true}}
         {{/if}}>
