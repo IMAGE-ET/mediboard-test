@@ -209,7 +209,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         // Séjour retrouvé ?
         if (CAppUI::conf("hl7 strictSejourMatch")) {
           // Recherche d'un num dossier déjà existant pour cette venue 
-          if ($newVenue->loadMatchingSejour(null, true)) {                 
+          if ($newVenue->loadMatchingSejour(null, true, false)) {                 
             $code_NDA     = "A221";
             $_modif_sejour = true;
           }
@@ -339,6 +339,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
     }
     
+    // Suppression de l'entrée réelle / mode d'entrée
+    
     return $this->mappingAndStoreVenue($ack, $newVenue, $data);
   }
   
@@ -357,6 +359,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
     }
     
+    // Suppression sortie réelle, mode de sortie, ...
     return $this->mappingAndStoreVenue($ack, $newVenue, $data);
   }
   
@@ -492,21 +495,12 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       
       return true;
     }
-    
+
     if ($newVenue->load($venueRI)) {
       return true;
     }
     
-    /* @todo Hack temporaire .... Gestion du VN */   
-    // Mapping du séjour
-    $this->mappingVenue($data, $newVenue);
-    // Séjour retrouvé ?
-    if (CAppUI::conf("hl7 strictSejourMatch")) {
-      // Recherche d'un num dossier déjà existant pour cette venue 
-      if ($newVenue->loadMatchingSejour(null, true)) {
-        return true;
-      }
-    }
+    /* @todo Gestion du VN */   
     
     return false;
   }
@@ -551,6 +545,13 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function mappingVenue($data, CSejour $newVenue) {
+    $event_code = $this->_ref_exchange_ihe->code;
+    // Cas spécifique de certains segments 
+    // A38 : Annulation du séjour
+    if ($event_code == "A38") {
+      $newVenue->annule = 1;
+    }
+    
     // Segment PV1
     $this->getSegment("PV1", $data, $newVenue);
     
@@ -931,14 +932,27 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getAdmitDischarge(DOMNode $node, CSejour $newVenue) {
+    $event_code = $this->_ref_exchange_ihe->code;
+    
     // On récupère l'entrée réelle ssi msg !A05
-    if ($this->_ref_exchange_ihe->code != "A05") {
+    if ($event_code != "A05") {
       $newVenue->entree_reelle = $this->queryTextNode("PV1.44", $node);
     }
     
     // On récupère la sortie réelle ssi msg A03 / Z99
-    if ($this->_ref_exchange_ihe->code == "A03" || $this->_ref_exchange_ihe->code == "Z99") {
+    if ($event_code == "A03" || $event_code == "Z99") {
       $newVenue->sortie_reelle = $this->queryTextNode("PV1.45", $node);
+    }
+    
+    // Cas spécifique de certains segments 
+    // A11 : on supprime la date d'entrée réelle 
+    if ($event_code == "A11") {
+      $newVenue->entree_reelle = "";
+    }
+    
+    // A13 : on supprime la date de sortie réelle 
+    if ($event_code == "A13") {
+      $newVenue->sortie_reelle = "";
     }
   }
   
