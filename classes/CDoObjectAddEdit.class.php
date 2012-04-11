@@ -26,7 +26,7 @@ class CDoObjectAddEdit {
   var $_logIt              = null;
   
   var $_obj  = null;
-  var $_old = null;
+  var $_old  = null;
 
   function CDoObjectAddEdit($className, $objectKey = null) {
     global $m;
@@ -45,6 +45,7 @@ class CDoObjectAddEdit {
     $this->request             =& $_POST;
 
     $this->_logIt              = true;
+    // @todo : à supprimer cf déplacement dans le doBind()
     $this->_obj                = new $this->className();
     $this->_old                = new $this->className();
     
@@ -60,7 +61,8 @@ class CDoObjectAddEdit {
     if($this->postRedirect) {
       $this->redirect = $this->postRedirect;
     }
-    
+    $this->_obj                = new $this->className();
+    $this->_old                = new $this->className();
     // Object binding
     $this->_obj->bind($this->request);
         
@@ -173,7 +175,7 @@ class CDoObjectAddEdit {
       	$this->request[$this->objectKey] = $object_id;
       	$this->doSingle();
       }
-      CApp::rip();
+      $this->doRedirect();
     }
   	
     $this->doSingle();
@@ -182,7 +184,7 @@ class CDoObjectAddEdit {
   
   function doSingle() {
     $this->doBind();
-   
+    mbTrace($this->_obj->getPlainFields());
     if (CMbArray::extract($this->request, 'del')) {
       $this->doDelete();
     } 
