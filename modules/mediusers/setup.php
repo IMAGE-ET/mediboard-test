@@ -193,9 +193,9 @@ class CSetupmediusers extends CSetup {
     $this->addQuery($query);
     
     function setup_updateFct(){
-        $ds = CSQLDataSource::get("std");
+      $ds = CSQLDataSource::get("std");
  
-    	if($ds->loadTable("groups_mediboard")) {
+      if($ds->loadTable("groups_mediboard")) {
         $query = "UPDATE `functions_mediboard`, `groups_mediboard`" .
             "\nSET `functions_mediboard`.`type` = 'cabinet'" .
             "\nWHERE `functions_mediboard`.`group_id` = `groups_mediboard`.`group_id`" .
@@ -386,95 +386,101 @@ class CSetupmediusers extends CSetup {
                "\nADD `tel` bigint(10) unsigned zerofill NULL," .
                "\nADD `fax` bigint(10) unsigned zerofill NULL," .
                "\nADD `soustitre` TEXT NULL;";
-     $this->addQuery($query);
+    $this->addQuery($query);
      
-     $this->makeRevision("0.24");
-     $query = "ALTER TABLE `discipline` ADD `categorie` enum('ORT','ORL','OPH','DER','STO','GAS','ARE','RAD','GYN','EST') NULL";
-     $this->addQuery($query);
+    $this->makeRevision("0.24");
+    $query = "ALTER TABLE `discipline` ADD `categorie` enum('ORT','ORL','OPH','DER','STO','GAS','ARE','RAD','GYN','EST') NULL";
+    $this->addQuery($query);
      
-     $this->makeRevision("0.25");
-     $query = "UPDATE `users_mediboard` SET `discipline_id` = NULL WHERE `discipline_id` = '0';";
-     $this->addQuery($query);
+    $this->makeRevision("0.25");
+    $query = "UPDATE `users_mediboard` SET `discipline_id` = NULL WHERE `discipline_id` = '0';";
+    $this->addQuery($query);
      
-     $this->makeRevision("0.26");
-     $query = "ALTER TABLE `users_mediboard` ADD `compte` VARCHAR(23);";
-     $this->addQuery($query);
+    $this->makeRevision("0.26");
+    $query = "ALTER TABLE `users_mediboard` ADD `compte` VARCHAR(23);";
+    $this->addQuery($query);
      
-     $this->makeRevision("0.27");
-     $query = "ALTER TABLE `users_mediboard` ADD `banque_id` INT(11) UNSIGNED;";
-     $this->addQuery($query);
+    $this->makeRevision("0.27");
+    $query = "ALTER TABLE `users_mediboard` ADD `banque_id` INT(11) UNSIGNED;";
+    $this->addQuery($query);
      
-     $this->makeRevision("0.28");
-     $query = "ALTER TABLE `functions_mediboard` ADD `compta_partagee` BOOL NOT NULL DEFAULT '0';";
-     $this->addQuery($query);
+    $this->makeRevision("0.28");
+    $query = "ALTER TABLE `functions_mediboard` ADD `compta_partagee` BOOL NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
      
-     $this->makeRevision("0.29");
-     $query = "CREATE TABLE `secondary_function` (
+    $this->makeRevision("0.29");
+    $query = "CREATE TABLE `secondary_function` (
                `secondary_function_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
                `function_id` INT (11) UNSIGNED NOT NULL,
                `user_id` INT (11) UNSIGNED NOT NULL
              ) /*! ENGINE=MyISAM */;";
-     $this->addQuery($query);
-     $query = "ALTER TABLE `secondary_function` 
-             ADD INDEX (`function_id`),
-             ADD INDEX (`user_id`);";
-     $this->addQuery($query);
+    $this->addQuery($query);
+    $query = "ALTER TABLE `secondary_function` 
+              ADD INDEX (`function_id`),
+              ADD INDEX (`user_id`);";
+    $this->addQuery($query);
      
-     $this->makeRevision("0.30");
-     $query = "ALTER TABLE `users_mediboard` 
-						   ADD `rpps` BIGINT (11) UNSIGNED ZEROFILL AFTER `adeli`;";
-     $this->addQuery($query);
-     $query = "ALTER TABLE `users_mediboard` 
-							 ADD INDEX (`deb_activite`),
-							 ADD INDEX (`fin_activite`),
-							 ADD INDEX (`banque_id`),
-							 ADD INDEX (`spec_cpam_id`);";
-     $this->addQuery($query);
+    $this->makeRevision("0.30");
+    $query = "ALTER TABLE `users_mediboard` 
+              ADD `rpps` BIGINT (11) UNSIGNED ZEROFILL AFTER `adeli`;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `users_mediboard` 
+              ADD INDEX (`deb_activite`),
+              ADD INDEX (`fin_activite`),
+              ADD INDEX (`banque_id`),
+              ADD INDEX (`spec_cpam_id`);";
+    $this->addQuery($query);
      
-     $this->makeRevision("0.31");
-     $query = "INSERT INTO `spec_cpam` (`spec_cpam_id`, `text`, `actes`) VALUES(80,'SANTE PUBLIQUE ET MEDECINE SOCIALE','');";
-     $this->addQuery($query);
+    $this->makeRevision("0.31");
+    $query = "INSERT INTO `spec_cpam` (`spec_cpam_id`, `text`, `actes`) VALUES(80,'SANTE PUBLIQUE ET MEDECINE SOCIALE','');";
+    $this->addQuery($query);
      
-     $this->makeRevision("0.32");
-     $query = "ALTER TABLE `users_mediboard` ADD `code_intervenant_cdarr` CHAR (2) DEFAULT NULL;";
-     $this->addQuery($query);
+    $this->makeRevision("0.32");
+    $query = "ALTER TABLE `users_mediboard` ADD `code_intervenant_cdarr` CHAR (2) DEFAULT NULL;";
+    $this->addQuery($query);
      
-     $this->makeRevision("0.33");
-     $query = "ALTER TABLE `functions_mediboard` 
+    $this->makeRevision("0.33");
+    $query = "ALTER TABLE `functions_mediboard` 
               ADD `actif` ENUM ('0','1') DEFAULT '1',
               ADD `admission_auto` ENUM ('0','1') DEFAULT '0';";
-     $this->addQuery($query);
+    $this->addQuery($query);
      
-     $this->makeRevision("0.34");
-     $query = "ALTER TABLE `functions_mediboard`
+    $this->makeRevision("0.34");
+    $query = "ALTER TABLE `functions_mediboard`
               ADD `consults_partagees` ENUM ('0','1') NOT NULL DEFAULT '1' AFTER compta_partagee;";
-     $this->addQuery($query);
+    $this->addQuery($query);
      
-		 $this->makeRevision("0.35");
-		 $query = "ALTER TABLE `users_mediboard` 
+    $this->makeRevision("0.35");
+    $query = "ALTER TABLE `users_mediboard` 
               ADD `secteur` ENUM ('1','2'),
               ADD `cab` VARCHAR (255),
               ADD `conv` VARCHAR (255),
               ADD `zisd` VARCHAR (255),
               ADD `ik` VARCHAR (255);";
-		 $this->addQuery($query);
-		 
-		 $this->makeRevision("0.36");
-     $query = "ALTER TABLE `users_mediboard` 
-                ADD `cps` BIGINT ZEROFILL AFTER `rpps`;";
-     $this->addQuery($query);
+    $this->addQuery($query);
      
-     $this->makeRevision("0.37");
-     $query = "ALTER TABLE `users_mediboard` 
-                 CHANGE `cps` `cps` VARCHAR (255);";
-     $this->addQuery($query);
-		 
-     $this->makeRevision("0.38");
-     $query = "ALTER TABLE `functions_mediboard`
-               ADD `quotas` INT (11) UNSIGNED;";
-     $this->addQuery($query);
+    $this->makeRevision("0.36");
+    $query = "ALTER TABLE `users_mediboard` 
+              ADD `cps` BIGINT ZEROFILL AFTER `rpps`;";
+    $this->addQuery($query);
      
-     $this->mod_version = "0.39";
+    $this->makeRevision("0.37");
+    $query = "ALTER TABLE `users_mediboard` 
+              CHANGE `cps` `cps` VARCHAR (255);";
+    $this->addQuery($query);
+     
+    $this->makeRevision("0.38");
+    $query = "ALTER TABLE `functions_mediboard`
+              ADD `quotas` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+     
+    $this->makeRevision("0.39");
+    $query = "ALTER TABLE `functions_mediboard` 
+              CHANGE `tel` `tel` VARCHAR (20),
+              CHANGE `fax` `fax` VARCHAR (20)";
+    $this->addQuery($query);
+     
+    $this->mod_version = "0.40";
   }
 }
 

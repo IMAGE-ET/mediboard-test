@@ -155,15 +155,25 @@ class CSetupdPetablissement extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("0.27");
-    
     $query = "ALTER TABLE `groups_config` 
                 ADD `ipp_range_min` INT (11) UNSIGNED,
                 ADD `ipp_range_max` INT (11),
                 ADD `nda_range_min` INT (11) UNSIGNED,
                 ADD `nda_range_max` INT (11);";
     $this->addQuery($query);
+    
+    $this->makeRevision("0.28");
+    $query = "ALTER TABLE `etab_externe` 
+              CHANGE `tel` `tel` VARCHAR (20),
+              CHANGE `fax` `fax` VARCHAR (20);";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `groups_mediboard` 
+              CHANGE `tel` `tel` VARCHAR (20),
+              CHANGE `fax` `fax` VARCHAR (20),
+              CHANGE `tel_anesth` `tel_anesth` VARCHAR (20);";
+    $this->addQuery($query);
    
-    $this->mod_version = "0.28";
+    $this->mod_version = "0.29";
   } 
 }
 

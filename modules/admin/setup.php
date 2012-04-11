@@ -273,7 +273,13 @@ class CSetupadmin extends CSetup {
               ADD `secured` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.22";
+    $this->makeRevision("1.0.22");
+    $query = "ALTER TABLE `users` 
+              CHANGE `user_phone` `user_phone` VARCHAR (20),
+              CHANGE `user_mobile` `user_mobile` VARCHAR (20)";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.23";
   }
 }
 ?>

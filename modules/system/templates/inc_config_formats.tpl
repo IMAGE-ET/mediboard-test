@@ -51,7 +51,7 @@ ElementChecker.check.match = function(){
     </tr>
     
     {{assign var="m" value="system"}}
-    {{mb_include module=system template=inc_config_str var=phone_number_format maxlength=14 cssClass="str match|^9[9\\s]+9$"}}
+    {{mb_include module=system template=inc_config_str var=phone_number_format maxlength=30 cssClass="str pattern|9[9\\s]+9"}}
     
     <tr>
       <th></th>

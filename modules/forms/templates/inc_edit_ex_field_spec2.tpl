@@ -149,7 +149,7 @@ Main.add(function(){
         {{if !$concept_based}}
           {{* str *}}
           {{if $_type == "str"}}
-            <input type="text" name="{{$_name}}" value="{{$spec_value|replace:"\\x20":" "|replace:"\\x7C":"|"}}" class="str {{if $_name != "default"}}nospace regex|^\s*[a-zA-Z0-9_]*\s*$|gi{{/if}}" />
+            <input type="text" name="{{$_name}}" value="{{$spec_value|replace:"\\x20":" "|replace:"\\x7C":"|"}}" class="str {{if $_name != "default"}}nospace pattern|\s*[a-zA-Z0-9_]*\s*{{/if}}" />
             
           {{* num *}}
           {{elseif $_type == "num"}}

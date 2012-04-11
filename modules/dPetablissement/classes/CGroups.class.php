@@ -10,10 +10,10 @@
 
 class CGroups extends CMbObject {
   // DB Table key
-	var $group_id       = null;	
+  var $group_id       = null;  
 
   // DB Fields
-	var $text                = null;
+  var $text                = null;
   var $raison_sociale      = null;
   var $adresse             = null;
   var $cp                  = null;
@@ -102,7 +102,7 @@ class CGroups extends CMbObject {
     $backProps["senders_ftp"]             = "CSenderFTP group_id";
     $backProps["senders_soap"]            = "CSenderSOAP group_id";
     $backProps["senders_mllp"]            = "CSenderMLLP group_id";
-		$backProps["senders_fs"]              = "CSenderFileSystem group_id";
+    $backProps["senders_fs"]              = "CSenderFileSystem group_id";
     $backProps["view_sender_sources"]     = "CViewSenderSource group_id";
     $backProps["modeles_etiquette"]       = "CModeleEtiquette group_id";
     $backProps["unites_fonctionnelles"]   = "CUniteFonctionnelle group_id";
@@ -111,22 +111,28 @@ class CGroups extends CMbObject {
     $backProps["prestations_journalieres"] = "CPrestationJournaliere group_id";
     $backProps["prestations_ponctuelles"] = "CPrestationPonctuelle group_id";
     $backProps["supervision_graphs"]      = "CSupervisionGraph owner_id";
-		$backProps["incrementers"]            = "CIncrementer group_id";
+    $backProps["incrementers"]            = "CIncrementer group_id";
     return $backProps;
   }
   
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
+    
     $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
+    
+    $phone_number_mask = "";
+    if ($phone_number_format != "") {
+      $phone_number_mask = " mask|$phone_number_format";
+    }
     
     $specs["text"]                = "str notNull confidential seekable";
     $specs["raison_sociale"]      = "str maxLength|50";
     $specs["adresse"]             = "text confidential";
     $specs["cp"]                  = "numchar length|5";
     $specs["ville"]               = "str maxLength|50 confidential";
-    $specs["tel"]                 = "numchar length|10 mask|$phone_number_format";
-    $specs["fax"]                 = "numchar length|10 mask|$phone_number_format";
-    $specs["tel_anesth"]          = "numchar length|10 mask|$phone_number_format";
+    $specs["tel"]                 = "str pattern|\d+ minLength|10$phone_number_mask";
+    $specs["fax"]                 = "str pattern|\d+ minLength|10$phone_number_mask";
+    $specs["tel_anesth"]          = "str pattern|\d+ minLength|10$phone_number_mask";
     $specs["service_urgences_id"] = "ref class|CFunctions";
     $specs["pharmacie_id"]        = "ref class|CFunctions";
     $specs["directeur"]           = "str maxLength|50";
@@ -161,16 +167,16 @@ class CGroups extends CMbObject {
    * Load blocs operatoires with given permission
    */
   function loadBlocs($permType = PERM_READ, $load_salles = true) {
-  	$bloc = new CBlocOperatoire();
-  	$where = array('group_id' => "='$this->_id'");
+    $bloc = new CBlocOperatoire();
+    $where = array('group_id' => "='$this->_id'");
     $this->_ref_blocs = $bloc->loadListWithPerms($permType, $where, 'nom');
     
     if ($load_salles) {
-			foreach ($this->_ref_blocs as &$bloc) {
-			  $bloc->loadRefsSalles();
-			}
+      foreach ($this->_ref_blocs as &$bloc) {
+        $bloc->loadRefsSalles();
+      }
     }
-		return $this->_ref_blocs;
+    return $this->_ref_blocs;
   }
   
   function loadRefsBack() {
@@ -225,8 +231,8 @@ class CGroups extends CMbObject {
   static function loadCurrent() {
     if (!self::$_ref_current) {
       global $g;
-	    self::$_ref_current = new CGroups();
-	    self::$_ref_current->load($g);
+      self::$_ref_current = new CGroups();
+      self::$_ref_current->load($g);
     }
     return self::$_ref_current;
   }

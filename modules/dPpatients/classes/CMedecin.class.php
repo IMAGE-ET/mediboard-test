@@ -12,19 +12,19 @@
  */
 class CMedecin extends CMbObject {
   // DB Table key
-	var $medecin_id = null;
+  var $medecin_id = null;
 
   // DB Fields
-	var $nom             = null;
+  var $nom             = null;
   var $prenom          = null;
   var $jeunefille      = null;
-	var $adresse         = null;
-	var $ville           = null;
-	var $cp              = null;
-	var $tel             = null;
-	var $fax             = null;
-	var $portable        = null;
-	var $email           = null;
+  var $adresse         = null;
+  var $ville           = null;
+  var $cp              = null;
+  var $tel             = null;
+  var $fax             = null;
+  var $portable        = null;
+  var $email           = null;
   var $disciplines     = null;
   var $orientations    = null;
   var $complementaires = null;
@@ -41,7 +41,7 @@ class CMedecin extends CMbObject {
     $spec->key   = 'medecin_id';
     return $spec;
   }
-	
+  
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["patients_traites"]        = "CPatient medecin_traitant";
@@ -55,17 +55,25 @@ class CMedecin extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
+    
     $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
+    
+    $phone_number_mask = "";
+    if ($phone_number_format != "") {
+      $phone_number_mask = " mask|$phone_number_format";
+    }
+    
+    $medecin_strict = (CAppUI::conf("dPpatients CMedecin medecin_strict") == 1 ? ' notNull' : '');
     
     $specs["nom"]             = "str notNull confidential seekable";
     $specs["prenom"]          = "str seekable";
     $specs["jeunefille"]      = "str confidential";
-    $specs["adresse"]         = "text".(CAppUI::conf("dPpatients CMedecin medecin_strict") == 1 ? ' notNull' : '')." confidential";
-    $specs["ville"]           = "str".(CAppUI::conf("dPpatients CMedecin medecin_strict") == 1 ? ' notNull' : '')." confidential seekable";
-    $specs["cp"]              = "numchar".(CAppUI::conf("dPpatients CMedecin medecin_strict") == 1 ? ' notNull' : '')." maxLength|5 confidential";
-    $specs["tel"]             = "numchar".(CAppUI::conf("dPpatients CMedecin medecin_strict") == 1 ? ' notNull' : '')." length|10 confidential mask|$phone_number_format";
-    $specs["fax"]             = "numchar length|10 confidential mask|$phone_number_format";
-    $specs["portable"]        = "numchar length|10 confidential mask|$phone_number_format";
+    $specs["adresse"]         = "text$medecin_strict confidential";
+    $specs["ville"]           = "str$medecin_strict confidential seekable";
+    $specs["cp"]              = "numchar$medecin_strict maxLength|5 confidential";
+    $specs["tel"]             = "str$medecin_strict confidential pattern|\d+ minLength|10$phone_number_mask";
+    $specs["fax"]             = "str confidential pattern|\d+ minLength|10$phone_number_mask";
+    $specs["portable"]        = "str confidential pattern|\d+ minLength|10$phone_number_mask";
     $specs["email"]           = "str confidential";
     $specs["disciplines"]     = "text seekable";
     $specs["orientations"]    = "text";
@@ -88,13 +96,13 @@ class CMedecin extends CMbObject {
     $this->prenom = CMbString::capitalize(CMbString::lower($this->prenom));
     
     if ($this->type == 'medecin') {
-    	$this->_view = "Dr $this->nom $this->prenom";
+      $this->_view = "Dr $this->nom $this->prenom";
     }
     else {
-    	$this->_view = "$this->nom $this->prenom";
-    	if ($this->type) {
-    	  $this->_view .= " ({$this->_specs['type']->_locales[$this->type]})";
-    	} 
+      $this->_view = "$this->nom $this->prenom";
+      if ($this->type) {
+        $this->_view .= " ({$this->_specs['type']->_locales[$this->type]})";
+      } 
     }
   }
       
@@ -108,7 +116,7 @@ class CMedecin extends CMbObject {
       $this->prenom = CMbString::capitalize(CMbString::lower($this->prenom));
     }
   }
-	 
+   
   function loadRefs() {
     // Backward references
     $obj = new CPatient();

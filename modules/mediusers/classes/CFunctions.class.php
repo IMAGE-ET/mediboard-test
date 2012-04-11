@@ -75,12 +75,18 @@ class CFunctions extends CMbObject {
     $backProps["protocoles"]                     = "CProtocole function_id";
     $backProps["ufs"]                            = "CAffectationUniteFonctionnelle object_id";
     $backProps["destination_brancardage"]        = "CDestinationBrancardage object_id";
-	  return $backProps;
-	}
-	
+    return $backProps;
+  }
+  
   function getProps() {
     $specs = parent::getProps();
+    
     $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
+    
+    $phone_number_mask = "";
+    if ($phone_number_format != "") {
+      $phone_number_mask = " mask|$phone_number_format";
+    }
     
     $specs["group_id"]           = "ref notNull class|CGroups";
     $specs["type"]               = "enum notNull list|administratif|cabinet";
@@ -89,8 +95,8 @@ class CFunctions extends CMbObject {
     $specs["adresse"]            = "text";
     $specs["cp"]                 = "numchar length|5";
     $specs["ville"]              = "str maxLength|50";
-    $specs["tel"]                = "numchar length|10 mask|$phone_number_format";
-    $specs["fax"]                = "numchar length|10 mask|$phone_number_format";
+    $specs["tel"]                = "str pattern|\d+ minLength|10$phone_number_mask";
+    $specs["fax"]                = "str pattern|\d+ minLength|10$phone_number_mask";
     $specs["soustitre"]          = "text";
     $specs["compta_partagee"]    = "bool default|0 notNull";
     $specs["consults_partagees"] = "bool default|1 notNull";

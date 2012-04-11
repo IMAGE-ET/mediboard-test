@@ -923,6 +923,11 @@ class CSetupdPstock extends CSetup {
               ADD INDEX (`bill_date`);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.53";
+    $this->makeRevision("1.53");
+    $query = "ALTER TABLE `societe` 
+              CHANGE `fax` `fax` VARCHAR (20);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.54";
   }
 }

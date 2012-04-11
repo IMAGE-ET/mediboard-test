@@ -1756,7 +1756,14 @@ class CSetupdPpatients extends CSetup {
               CHANGE `etat` `etat` ENUM ('bridge','pivot','mobile','appareil','implant','defaut');";
     $this->addQuery($query);
     
-    $this->mod_version = "1.47";
+    $this->makeRevision("1.47");
+    $query = "ALTER TABLE `medecin` 
+              CHANGE `tel` `tel` VARCHAR (20),
+              CHANGE `fax` `fax` VARCHAR (20),
+              CHANGE `portable` `portable` VARCHAR (20);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.48";
     
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

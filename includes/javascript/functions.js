@@ -1444,6 +1444,16 @@ Element.addMethods({
   }
 });
 
+App.print = function(){
+  if (Prototype.Browser.IE && document.documentMode == 9 && window.parent) {
+    document.execCommand('print', false, null);
+  }
+  else {
+    window.focus();
+    window.print();
+  }
+}
+
 /**
  * Adds column highlighting to a table
  * @param {Element} table The table

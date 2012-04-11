@@ -278,7 +278,7 @@ class CMbFieldSpec {
 
     // pattern
     // regex sans modificateurs
-    // par exemple : regex|\s*[a-zA-Z][a-zA-Z0-9_]*\s*
+    // par exemple : pattern|\s*[a-zA-Z][a-zA-Z0-9_]*\s*
     // On peut mettre des pipe dans la regex avec \x7C ou des espaces avec \x20
     // http://www.whatwg.org/specs/web-apps/current-work/multipage/common-input-element-attributes.html#the-pattern-attribute
     if ($this->pattern && !preg_match('/^(?:'.$this->pattern.')$/', $propValue)) {
