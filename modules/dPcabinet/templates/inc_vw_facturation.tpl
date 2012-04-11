@@ -3,15 +3,6 @@
 {{/if}}
 
 <script>
-function printFacture(factureconsult_id, edit_justificatif, edit_bvr) {
-  var url = new Url('dPcabinet', 'edit_bvr');
-  url.addParam('factureconsult_id', factureconsult_id);
-  url.addParam('edit_justificatif', edit_justificatif);
-  url.addParam('edit_bvr', edit_bvr);
-  url.addParam('suppressHeaders', '1');
-  url.popup(1000, 600, 'systemMsg');
-}
-
 {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
   ajoutActe = function(oForm){
     {{if $facture}}      
@@ -85,14 +76,15 @@ function printFacture(factureconsult_id, edit_justificatif, edit_bvr) {
               </td>
             </tr>
           {{/if}}
-          {{if $facture->cloture && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
+          {{if $facture->cloture && @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
             <tr>
               <td colspan="10">
                 {{if $facture->type_facture == "maladie"}}
-                  <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 0, 1);">Edition des BVR</button>
+                <!-- mettre un 1 au 4ème argument pour une facture ac préimpression --> 
+                  <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 0, 1, 0, 0);">Edition des BVR</button>
                 {{/if}}
                 {{*<button class="cut" onclick="Facture.cutFacture('{{$facture->_id}}');">Eclatement</button>*}}
-                <button class="print" onclick="printFacture('{{$facture->_id}}', 1, 0);">Justificatif de remboursement</button>
+                <button class="print" onclick="printFacture('{{$facture->_id}}', 1, 0, 0, 0);">Justificatif de remboursement</button>
               </td>
             </tr>
           {{/if}}
@@ -110,8 +102,8 @@ function printFacture(factureconsult_id, edit_justificatif, edit_bvr) {
             <th class="category">Date</th>
             <th class="category">Code</th>
             <th class="category">Libelle</th>
-            <th class="category">{{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}Du patient{{else}}Coût{{/if}}</th>
-            <th class="category" style="min-width:50px;">{{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}Du tiers{{else}}Qte{{/if}}</th>
+            <th class="category">{{if $conf.dPccam.CCodeCCAM.use_cotation_ccam}}Du patient{{else}}Coût{{/if}}</th>
+            <th class="category" style="min-width:50px;">{{if $conf.dPccam.CCodeCCAM.use_cotation_ccam}}Du tiers{{else}}Qte{{/if}}</th>
             <th class="category">Montant</th>
           </tr>
           {{foreach from=$facture->_ref_consults item=_consultation}}
@@ -138,7 +130,7 @@ function printFacture(factureconsult_id, edit_justificatif, edit_bvr) {
                   <td>{{$_acte_ngap->montant_base+$_acte_ngap->montant_depassement}}</td>
                 </tr>
               {{/foreach}}
-            {{elseif  @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
+            {{elseif @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
               {{foreach from=$_consultation->_ref_actes_tarmed item=_acte_tarmed}}
                 <tr>
                   <td style="text-align:center;width:100px;">{{if $_acte_tarmed->date}}{{mb_value object=$_acte_tarmed field="date"}} {{else}}{{$_consultation->_date|date_format:"%d/%m/%Y"}}{{/if}}</td>
@@ -151,7 +143,7 @@ function printFacture(factureconsult_id, edit_justificatif, edit_bvr) {
               {{/foreach}}
             {{/if}}
           {{/foreach}}
-          {{if !$facture->cloture && @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1" && isset($factures|smarty:nodefaults) && count($factures) != 0 }}
+          {{if !$facture->cloture && @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed && isset($factures|smarty:nodefaults) && count($factures) != 0 }}
           <tr>
             <td colspan="7">
               <form name="editTarmed"  method="post" action="">
