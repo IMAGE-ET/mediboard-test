@@ -91,7 +91,7 @@ function printFacture(factureconsult_id, edit_justificatif, edit_bvr) {
                 {{if $facture->type_facture == "maladie"}}
                   <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 0, 1);">Edition des BVR</button>
                 {{/if}}
-                <button class="cut" onclick="Facture.cutFacture('{{$facture->_id}}');">Eclatement</button>
+                {{*<button class="cut" onclick="Facture.cutFacture('{{$facture->_id}}');">Eclatement</button>*}}
                 <button class="print" onclick="printFacture('{{$facture->_id}}', 1, 0);">Justificatif de remboursement</button>
               </td>
             </tr>
@@ -203,14 +203,14 @@ function printFacture(factureconsult_id, edit_justificatif, edit_bvr) {
             <tr>
               <td colspan="3" rowspan="4"></td>
               <td colspan="2">Montant</td>
-              <td style="text-align:right;">{{mb_value object=$facture field="montant_sans_remise"}}</td>
+              <td style="text-align:right;">{{mb_value object=$facture field="_montant_sans_remise"}}</td>
                
             <tr>
           {{/if}}
           <tr>
-            <td colspan="2"><b>{{mb_label object=$facture field="rabais"}}</b></td>
+            <td colspan="2"><b>{{mb_label object=$facture field="remise"}}</b></td>
             <td> 
-              <form name="modif_rabais" method="post" action="?m={{$m}}">
+              <form name="modif_remise" method="post" action="?m={{$m}}">
                 <input type="hidden" name="dosql" value="do_factureconsult_aed" />
                 <input type="hidden" name="m" value="dPcabinet" />
                 <input type="hidden" name="del" value="0" />
@@ -219,17 +219,17 @@ function printFacture(factureconsult_id, edit_justificatif, edit_bvr) {
                 <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures) != 0}}0{{else}}1{{/if}}" />
                 
                 {{if $facture->cloture}}
-                  {{mb_value object=$facture field="rabais"}} 
+                  {{mb_value object=$facture field="remise"}} 
                 {{else}}
-                  <input name="rabais" type="text" value="{{$facture->rabais}}" onchange="Facture.modifCloture(this.form);" size="4" />
+                  <input name="remise" type="text" value="{{$facture->remise}}" onchange="Facture.modifCloture(this.form);" size="4" />
                 {{/if}}
-                <br/>soit <b>{{if $facture->montant_sans_remise != 0}}{{math equation="(y/x)*100" x=$facture->montant_sans_remise y=$facture->rabais format="%.2f"}}{{else}}0{{/if}}%</b>
+                <br/>soit <b>{{if $facture->_montant_sans_remise != 0}}{{math equation="(y/x)*100" x=$facture->_montant_sans_remise y=$facture->remise format="%.2f"}}{{else}}0{{/if}}%</b>
               </form>
             </td>
           </tr>
           <tr>
             <td colspan="2"><b>Montant Total</b></td>
-            <td style="text-align:right;"><b>{{mb_value object=$facture field="montant_avec_remise"}}</b></td>
+            <td style="text-align:right;"><b>{{mb_value object=$facture field="_montant_avec_remise"}}</b></td>
           <tr>
           <tr>
             <td colspan="6">

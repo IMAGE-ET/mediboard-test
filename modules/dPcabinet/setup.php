@@ -1478,7 +1478,18 @@ class CSetupdPcabinet extends CSetup {
               ADD `factureconsult_id` INT(11) UNSIGNED NULL;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.52";
+    $this->makeRevision("1.52");
+    
+    $query = "ALTER TABLE `factureconsult` 
+              ADD `patient_date_reglement` DATE,
+              ADD `tiers_date_reglement` DATE;";
+    $this->addQuery($query);
+    
+    $query="ALTER TABLE `factureconsult`
+      CHANGE `rabais` `remise` FLOAT DEFAULT '0' NOT NULL;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.53";
   }
 }
 ?>

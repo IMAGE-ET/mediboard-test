@@ -30,7 +30,9 @@ delReglement= function(reglement_id){
       <script type="text/javascript">Main.add( function() { prepareForm(document.forms["reglement-add"]); } );</script>
       
       <form name="reglement-add" action="" method="post">
-        <input type="hidden" name="m" value="dPcabinet" />
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="vw_factures" />
+        
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_reglement_aed" />
 
@@ -76,7 +78,7 @@ delReglement= function(reglement_id){
               {{mb_field object=$reglement field=mode emptyLabel="Choose" onchange="updateBanque(this)"}}
               {{mb_field object=$reglement field=banque_id options=$banques style="display: none"}}
             </td>
-            <td>{{mb_field object=$reglement field=montant}}</td>
+            <td><input type="text" class="currency notNul" size="4" maxlength="8" name="montant" value="{{$facture->_du_patient_restant}}" /></td>
             <td></td>
             <td><button class="add notext" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ Facture.reloadReglement('{{$facture->_id}}')}});">{{tr}}Add{{/tr}}</button></td>
           </tr>
@@ -85,6 +87,17 @@ delReglement= function(reglement_id){
             <td colspan="4" style="text-align: center;">
               {{mb_value object=$facture field=_reglements_total_patient}} réglés, 
               <strong>{{mb_value object=$facture field=_du_patient_restant}} restant</strong>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4" style="text-align: center;">
+              <strong>
+                {{if $facture->patient_date_reglement}}
+                {{mb_label object=$facture field=patient_date_reglement}}
+                le 
+                {{mb_value object=$facture field=patient_date_reglement}}
+                {{/if}}
+              </strong>
             </td>
           </tr>
         </table>

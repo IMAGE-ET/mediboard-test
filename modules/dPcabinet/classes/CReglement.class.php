@@ -25,7 +25,6 @@ class CReglement extends CMbMetaObject {
   // Fwd References
   var $_ref_consultation = null;
   var $_ref_banque     = null;
-  var $_ref_object     = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -96,6 +95,22 @@ class CReglement extends CMbMetaObject {
 	    }
 	    
 	    return $consult->store();
+    }
+    if ($this->object_class == "CFactureConsult"){
+	    $facture =& $this->_ref_object;
+	    $facture->loadRefReglements();
+	    
+	    // Acquitement patient
+	    if ($this->emetteur == "patient" && $facture->du_patient) {
+	      $facture->patient_date_reglement = $facture->_du_patient_restant <= 0 ? mbDate() : "";
+	    }
+	      
+	    // Acquitement tiers
+	    if ($this->emetteur == "tiers" && $facture->du_tiers) {
+	      $facture->tiers_date_reglement = $facture->_du_tiers_restant <= 0 ? mbDate() : "";
+	    }
+	    
+	    return $facture->store();
     }
   }
   

@@ -15,13 +15,12 @@ $module->registerTab("edit_planning"             , TAB_READ);
 $module->registerTab("edit_consultation"         , TAB_EDIT);
 //$module->registerTab("vw_dossier"                , TAB_EDIT);
 $module->registerTab("form_print_plages"         , TAB_READ);
-$module->registerTab("vw_compta"                 , TAB_EDIT);
 
 if (!CAppUI::conf("dPcabinet CConsultation consult_facture")){
 	$module->registerTab("vw_compta"                 , TAB_EDIT);
 }
 else{
-//  $module->registerTab("vw_compta2"              , TAB_EDIT);
+  $module->registerTab("vw_compta2"              , TAB_EDIT);
   $module->registerTab("vw_factures"             , TAB_EDIT);
 }
 

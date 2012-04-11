@@ -15,20 +15,24 @@ class CFactureConsult extends CMbObject {
   
   // DB Fields
   var $patient_id   = null; 
-  var $rabais       = null; 
+  var $remise       = null; 
   var $ouverture    = null; 
   var $cloture      = null;
   var $du_patient   = null;
   var $du_tiers     = null;
-  var $montant_sans_remise = null;
-  var $montant_avec_remise = null;
-  var $type_facture = null;
+  var $type_facture         = null;
+  var $patient_date_reglement = null;
+  var $tiers_date_reglement = null;
   var $tarif     = null;
   
   // Form fields
+  var $_montant_sans_remise  = null;
+  var $_montant_avec_remise  = null;
   var $_du_patient_restant        = null;
+  var $_du_tiers_restant          = null;
   var $_reglements_total_patient  = null;
-  var $_der_consult_id             = null;
+  var $_reglements_total_tiers    = null;
+  var $_der_consult_id            = null;
   
   // Object References
   var $_ref_patient       = null;
@@ -56,16 +60,21 @@ class CFactureConsult extends CMbObject {
   function getProps() {
     $props = parent::getProps();
     $props["patient_id"]  = "ref class|CPatient purgeable seekable notNull show|1";
-    $props["rabais"]      = "currency";
+    $props["remise"]      = "currency";
     $props["ouverture"]   = "date notNull";
     $props["cloture"]     = "date";
     $props["du_patient"]  = "float";
     $props["du_tiers"]    = "float";
-    $props["type_facture"]       = "enum notNull list|maladie|accident default|maladie";
+    $props["type_facture"]              = "enum notNull list|maladie|accident default|maladie";
+    $props["patient_date_reglement"]    = "date";
+    $props["tiers_date_reglement"]      = "date";
+    
     $props["_du_patient_restant"]       = "currency";
+    $props["_du_tiers_restant"]         = "currency";
     $props["_reglements_total_patient"] = "currency";
-    $props["montant_sans_remise"]       = "currency";
-    $props["montant_avec_remise"]       = "currency";
+    $props["_reglements_total_tiers"]   = "currency";
+    $props["_montant_sans_remise"]       = "currency";
+    $props["_montant_avec_remise"]       = "currency";
     $props["tarif"]                     = "str";
     return $props;
   }
@@ -104,7 +113,7 @@ class CFactureConsult extends CMbObject {
     $factures = $facture->loadList( $where, "factureconsult_id DESC");
     if(count($factures)>1){
       foreach($factures as $fact){
-        $this->_montant_factures[] = $fact->du_patient + $fact->du_tiers - $fact->rabais;
+        $this->_montant_factures[] = $fact->du_patient + $fact->du_tiers - $fact->remise;
         $refs = $consult->loadList("patient_id = '$this->patient_id' AND factureconsult_id = '$fact->factureconsult_id'", "consultation_id DESC");
         if($refs){
           $this->_ref_consults = $refs;
@@ -145,25 +154,30 @@ class CFactureConsult extends CMbObject {
   function loadRefPlageConsult(){}
 	
   function loadRefReglements($cache = 1) {
+    $this->_montant_sans_remise = 0;
   	if($this->_montant_factures){
-      $this->montant_sans_remise = 0;
 	    foreach($this->_montant_factures as $_montant){
-	      $this->montant_sans_remise += $_montant;
+	      $this->_montant_sans_remise += $_montant;
 	    }
   	}
   	else{
-  		$this->montant_sans_remise = $this->du_patient  + $this->du_tiers;
+  		$this->_montant_sans_remise = $this->du_patient  + $this->du_tiers;
   	}
-  	$this->montant_avec_remise = $this->montant_sans_remise - $this->rabais;
+  	$this->_montant_avec_remise = $this->_montant_sans_remise - $this->remise;
   	
     $this->_ref_reglements = $this->loadBackRefs("reglement", 'date');
     
-    $this->_du_patient_restant = $this->du_patient - $this->rabais;
+    $this->_du_patient_restant = $this->du_patient - $this->remise;
+    $this->_du_tiers_restant = $this->du_tiers;
     foreach($this->_ref_reglements as $_reglement){
       $_reglement->loadRefBanque();
       if($_reglement->emetteur == "patient"){
       	$this->_du_patient_restant  -= $_reglement->montant;
       	$this->_reglements_total_patient += $_reglement->montant;
+      }
+      if($_reglement->emetteur == "tiers"){
+      	$this->_du_tiers_restant  -= $_reglement->montant;
+      	$this->_reglements_total_tiers += $_reglement->montant;
       }
     }
     return $this->_ref_reglements;
