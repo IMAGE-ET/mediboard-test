@@ -170,7 +170,7 @@ if (isset($_POST["_source"])) {
         $copyTo .= $_destinataire->nom."; ";
         $copyToMulti .= $_destinataire->nom."<br />";
         $copyToComplet .= $_destinataire->nom. " - " .
-                          nl2br($_destinataire->adresse). " ".
+                          preg_replace("/\n\r\t/", " ", $_destinataire->adresse). " ".
                           $_destinataire->cpville;
         
         $copyToCompletMulti .= $_destinataire->nom. " - " . preg_replace("/\n\r\t/", " ", $_destinataire->adresse) . " " .
