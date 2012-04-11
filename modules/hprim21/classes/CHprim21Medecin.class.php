@@ -68,7 +68,7 @@ class CHprim21Medecin extends CHprim21Object {
     }
     
     $identite = explode($reader->separateur_sous_champ, $elements[13]);
-    if(!$identite[0]) {
+    if (!$identite[0]) {
       return false;
     }
     $this->external_id = $identite[0];
@@ -77,7 +77,7 @@ class CHprim21Medecin extends CHprim21Object {
     $this->prenom      = $identite[2];
     $this->prenom2     = $identite[3];
     $this->alias       = $identite[4];
-    $this->civilite    = $identite[5];
+    $this->civilite    = isset($identite[5]) ? $identite[5] : null;
     
     return true;
   }

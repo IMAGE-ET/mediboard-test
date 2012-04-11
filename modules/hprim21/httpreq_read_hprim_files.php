@@ -38,6 +38,9 @@ $sender_ftp = new CSenderFTP();
 $sender_ftp->user_id = CUser::get()->_id;
 $sender_ftp->loadMatchingObject();
 
+$count = CAppUI::conf("eai max_files_to_process");
+$list = array_slice($list, 0, $count);
+
 foreach($list as $filepath) {
   if (substr($filepath, -(strlen($extension))) == $extension) {
     $filename = basename($filepath);
