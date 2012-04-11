@@ -15,7 +15,9 @@
     <th class="narrow">{{mb_title class=CProductReception field="reference"}}</th>
     <th>{{mb_title class=CProductReception field="societe_id"}}</th>
     <th>{{mb_title class=CProductReception field="date"}}</th>
-    <th>Nombre d'elements</th>
+    <th>{{mb_title class=CProductReception field="bill_number"}}</th>
+    <th>{{mb_title class=CProductReception field="bill_date"}}</th>
+    <th>Nb éléments</th>
     <th></th>
   </tr>
   {{foreach from=$receptions item=_reception}}
@@ -27,6 +29,8 @@
     </td>
     <td>{{mb_value object=$_reception field="societe_id"}}</td>
     <td>{{mb_value object=$_reception field="date"}}</td>
+    <td>{{mb_value object=$_reception field="bill_number"}}</td>
+    <td>{{mb_value object=$_reception field="bill_date"}}</td>
     <td>{{$_reception->_count_reception_items}}</td>
     <td class="narrow">
       <button type="button" class="edit notext" {{if $_reception->locked}}disabled="disabled"{{/if}} onclick="editReception({{$_reception->_id}})">{{tr}}Edit{{/tr}}</button>

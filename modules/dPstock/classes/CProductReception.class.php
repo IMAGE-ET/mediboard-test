@@ -9,26 +9,28 @@
  */
 
 class CProductReception extends CMbObject {
-	// DB Table key
-	var $reception_id     = null;
+  // DB Table key
+  var $reception_id     = null;
 
-	// DB Fields
-	var $date             = null;
-	var $societe_id       = null;
+  // DB Fields
+  var $date             = null;
+  var $societe_id       = null;
   var $group_id         = null;
   var $reference        = null;
+  var $bill_number      = null;
+  var $bill_date        = null;
   var $locked           = null;
 
-	// Object References
-	//    Multiple
-	var $_ref_reception_items = null;
+  // Object References
+  //    Multiple
+  var $_ref_reception_items = null;
   var $_count_reception_items = null;
   var $_total = null;
-	
-	//    Single
-	var $_ref_societe = null;
+  
+  //    Single
+  var $_ref_societe = null;
   var $_ref_group   = null;
-	
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "product_reception";
@@ -37,32 +39,34 @@ class CProductReception extends CMbObject {
     return $spec;
   }
 
-	function getBackProps() {
-		$backProps = parent::getBackProps();
-		$backProps["reception_items"] = "CProductOrderItemReception reception_id";
-		return $backProps;
-	}
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["reception_items"] = "CProductOrderItemReception reception_id";
+    return $backProps;
+  }
 
-	function getProps() {
-		$specs = parent::getProps();
+  function getProps() {
+    $specs = parent::getProps();
     $specs['date']       = 'dateTime seekable';
     $specs['societe_id'] = 'ref class|CSociete seekable';
     $specs['group_id']   = 'ref notNull class|CGroups show|0';
-	  $specs['reference']  = 'str notNull seekable';
+    $specs['reference']  = 'str notNull seekable';
     $specs['locked']     = 'bool notNull default|0';
+    $specs['bill_number']= 'str maxLength|64 protected seekable';
+    $specs['bill_date']  = 'date';
     $specs['_total']     = 'currency';
-		return $specs;
-	}
+    return $specs;
+  }
   
   private function getUniqueNumber() {
-  	$format = CAppUI::conf('dPstock CProductOrder order_number_format');
-  	
+    $format = CAppUI::conf('dPstock CProductOrder order_number_format');
+    
     if (strpos($format, '%id') === false) {
       $format .= '%id';
     }
     
-  	$format = str_replace('%id', str_pad($this->_id?$this->_id:0, 4, '0', STR_PAD_LEFT), $format);
-  	return mbTransformTime(null, null, $format);
+    $format = str_replace('%id', str_pad($this->_id?$this->_id:0, 4, '0', STR_PAD_LEFT), $format);
+    return mbTransformTime(null, null, $format);
   }
   
   function findFromOrder($order_id, $locked = false) {
@@ -101,11 +105,11 @@ class CProductReception extends CMbObject {
     return $receptions;
   }
 
-	function updateFormFields() {
-		parent::updateFormFields();
+  function updateFormFields() {
+    parent::updateFormFields();
     $this->loadRefSociete();
     $this->_view = $this->reference . ($this->societe_id ? " - {$this->_ref_societe->_view}" : "");
-	}
+  }
   
   function updatePlainFields(){
     if (!$this->_id && $this->locked === null) {
@@ -125,9 +129,9 @@ class CProductReception extends CMbObject {
     return parent::store();
   }
 
-	function loadRefsBack(){
-		$this->_ref_reception_items = $this->loadBackRefs('reception_items');
-	}
+  function loadRefsBack(){
+    $this->_ref_reception_items = $this->loadBackRefs('reception_items');
+  }
 
   function updateTotal(){
     $this->loadRefsBack();
@@ -142,26 +146,26 @@ class CProductReception extends CMbObject {
   function countReceptionItems(){
     $this->_count_reception_items = $this->countBackRefs('reception_items');
   }
-	
+  
   function loadRefSociete(){
     $this->_ref_societe = $this->loadFwdRef("societe_id", true);
   }
   
-	function loadRefsFwd(){
-		$this->loadRefSociete();
+  function loadRefsFwd(){
+    $this->loadRefSociete();
     $this->_ref_group = $this->loadFwdRef("group_id", true);
-	}
+  }
 
-	function getPerm($permType) {
-		if(!$this->_ref_reception_items) {
-			$this->loadRefsBack();
-		}
+  function getPerm($permType) {
+    if(!$this->_ref_reception_items) {
+      $this->loadRefsBack();
+    }
 
-		foreach ($this->_ref_reception_items as $item) {
-			if (!$item->getPerm($permType)) {
-				return false;
-			}
-		}
-		return true;
-	}
+    foreach ($this->_ref_reception_items as $item) {
+      if (!$item->getPerm($permType)) {
+        return false;
+      }
+    }
+    return true;
+  }
 }

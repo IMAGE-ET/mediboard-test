@@ -36,8 +36,8 @@ receiveOrderItems = function(form, container) {
 
 editUnitPrice = function(order_item_id) {
   var url = new Url("dPstock", "httpreq_edit_order_item_unit_price");
-	url.addParam("order_item_id", order_item_id);
-	url.requestModal(500, 200);
+  url.addParam("order_item_id", order_item_id);
+  url.requestModal(500, 200);
 }
 </script>
 
@@ -77,7 +77,20 @@ editUnitPrice = function(order_item_id) {
     <th style="text-align: center;" class="narrow">Déjà reçu</th>
     <th style="text-align: right;" class="narrow"></th>
   </tr>
+  
+  {{assign var=_class_comptable value=null}}
+  
   {{foreach from=$order->_ref_order_items item=curr_item}}
+    {{assign var=_reference value=$curr_item->_ref_reference}}
+    {{assign var=_product value=$_reference->_ref_product}}
+    
+    {{if $_product->classe_comptable != $_class_comptable}}
+      {{assign var=_class_comptable value=$_product->classe_comptable}}
+      <tr>
+        <th colspan="7" class="category" style="text-align: center;">{{$_class_comptable}}</th>
+      </tr>
+    {{/if}}
+    
     <tbody id="order-item-{{$curr_item->_id}}" class="hoverable">
     {{include file="inc_order_to_receive_item.tpl"}}
     </tbody>

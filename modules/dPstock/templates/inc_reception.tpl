@@ -23,6 +23,30 @@
   </form>
   {{/if}}
   
+  <form name="bill-reception-{{$reception->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this)">
+    <input type="hidden" name="m" value="dPstock" />
+    <input type="hidden" name="dosql" value="do_product_reception_aed" />
+    {{mb_key object=$reception}}
+    
+    <fieldset>
+      <legend>Facturation</legend>
+      <table class="main form">
+        <tr>
+          <th>{{mb_label object=$reception field=bill_number}}</th>
+          <td>{{mb_field object=$reception field=bill_number}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$reception field=bill_date}}</th>
+          <td>
+            {{mb_field object=$reception field=bill_date form="bill-reception-`$reception->_id`" register=true}}
+            <button class="submit">{{tr}}Save{{/tr}}</button>
+          </td>
+        </tr>
+      </table>
+    </fieldset>
+    <br />
+  </form>
+  
   <table class="tbl">
     <tr>
       <th colspan="6" class="title">{{$reception->reference}}</th>
@@ -41,7 +65,7 @@
       </tbody>
     {{foreachelse}}
       <tr>
-        <td colspan="10" class="empty">{{tr}}CProductOrderItemReception.none{{/tr}}</td>
+        <td colspan="6" class="empty">{{tr}}CProductOrderItemReception.none{{/tr}}</td>
       </tr>
     {{/foreach}}
   </table>

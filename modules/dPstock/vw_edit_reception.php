@@ -47,6 +47,10 @@ foreach($order->_ref_order_items as $_item) {
   }
 }
 
+if (!$reception->bill_date) {
+  $reception->bill_date = mbDate();
+}
+
 $smarty = new CSmartyDP();
 
 $smarty->assign('reception', $reception);

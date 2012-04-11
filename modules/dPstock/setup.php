@@ -914,6 +914,15 @@ class CSetupdPstock extends CSetup {
               CHANGE `quantity` `quantity` FLOAT NOT NULL";
     $this->addQuery($query);
     
-    $this->mod_version = "1.52";
+    $this->makeRevision("1.52");
+    $query = "ALTER TABLE `product_reception` 
+              ADD `bill_number` VARCHAR (64),
+              ADD `bill_date` DATE;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `product_reception` 
+              ADD INDEX (`bill_date`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.53";
   }
 }

@@ -74,7 +74,20 @@ Main.add(function(){
       <th></th>
     {{/if}}
   </tr>
+  
+  {{assign var=_class_comptable value=null}}
+  
   {{foreach from=$order->_ref_order_items item=curr_item}}
+    {{assign var=_reference value=$curr_item->_ref_reference}}
+    {{assign var=_product value=$_reference->_ref_product}}
+    
+    {{if $_product->classe_comptable != $_class_comptable}}
+      {{assign var=_class_comptable value=$_product->classe_comptable}}
+      <tr>
+        <th colspan="7" class="category" style="text-align: center;">{{$_class_comptable}}</th>
+      </tr>
+    {{/if}}
+    
     <tbody id="order-item-{{$curr_item->_id}}">
     {{include file="inc_order_item.tpl"}}
     </tbody>

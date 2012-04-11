@@ -11,72 +11,84 @@
 <table class="{{if !@$screen}}grid print{{else}}main tbl{{/if}}">
   <thead>
     <tr>
-      <th class="category">Code</th>
+      <th class="title">Code</th>
       {{if $order->object_id || $order->_has_lot_numbers}}
-        {{if "dmi"|module_active}}<th class="category">LPP</th>{{/if}}
-        <th class="category">Lot</th>
-        <th class="category">Date pér.</th>
+        {{if "dmi"|module_active}}<th class="title">LPP</th>{{/if}}
+        <th class="title">Lot</th>
+        <th class="title">Date pér.</th>
       {{/if}}
-      <th class="category" style="width: auto;">{{mb_title class=CProduct field=name}}</th>
-      <th class="category">Unités</th>
-      <th class="category"></th>
+      <th class="title" style="width: auto;">{{mb_title class=CProduct field=name}}</th>
+      <th class="title">Unités</th>
+      <th class="title"></th>
       {{if $order->object_id || $order->comments|strpos:"Bon de retour" === 0}}
-        <th class="category">{{mb_title class=CProductOrderItem field=renewal}}</th>
+        <th class="title">{{mb_title class=CProductOrderItem field=renewal}}</th>
       {{/if}}
-      <th class="category">{{mb_title class=CProductOrderItem field=unit_price}}</th>
-      <th class="category">{{mb_title class=CProductOrderItem field=_price}}</th>
-      <th class="category">{{mb_title class=CProductOrderItem field=tva}}</th>
+      <th class="title">{{mb_title class=CProductOrderItem field=unit_price}}</th>
+      <th class="title">{{mb_title class=CProductOrderItem field=_price}}</th>
+      <th class="title">{{mb_title class=CProductOrderItem field=tva}}</th>
     </tr>
   </thead>
   
+  {{assign var=_class_comptable value=null}}
+  
   {{foreach from=$order->_ref_order_items item=curr_item}}
-  <tr>
-    <td style="text-align: right; white-space: nowrap;">
-      {{if $curr_item->_ref_reference->supplier_code}}
-        {{mb_value object=$curr_item->_ref_reference field=supplier_code}}
-      {{else}}
-        {{mb_value object=$curr_item->_ref_reference->_ref_product field=code}}
-      {{/if}}
-    </td>
+    {{assign var=_reference value=$curr_item->_ref_reference}}
+    {{assign var=_product value=$_reference->_ref_product}}
     
-    {{if $order->object_id || $order->_has_lot_numbers}}
-      {{if $curr_item->_ref_lot}}
-        {{if "dmi"|module_active}}
-          <td>
-            {{if isset($curr_item->_ref_dmi|smarty:nodefaults)}}
-              {{$curr_item->_ref_dmi->code_lpp}}
-            {{/if}}
-          </td>
+    {{if $_product->classe_comptable != $_class_comptable}}
+      {{assign var=_class_comptable value=$_product->classe_comptable}}
+      <tr>
+        <th colspan="11" class="category" style="text-align: center;">{{$_class_comptable}}</th>
+      </tr>
+    {{/if}}
+    
+    <tr>
+      <td style="text-align: right; white-space: nowrap;">
+        {{if $curr_item->_ref_reference->supplier_code}}
+          {{mb_value object=$curr_item->_ref_reference field=supplier_code}}
+        {{else}}
+          {{mb_value object=$curr_item->_ref_reference->_ref_product field=code}}
         {{/if}}
-        <td>{{mb_value object=$curr_item->_ref_lot field=code}}</td>
-        <td>{{mb_value object=$curr_item->_ref_lot field=lapsing_date}}</td>
-      {{else}}
-        {{if "dmi"|module_active}}
+      </td>
+      
+      {{if $order->object_id || $order->_has_lot_numbers}}
+        {{if $curr_item->_ref_lot}}
+          {{if "dmi"|module_active}}
+            <td>
+              {{if isset($curr_item->_ref_dmi|smarty:nodefaults)}}
+                {{$curr_item->_ref_dmi->code_lpp}}
+              {{/if}}
+            </td>
+          {{/if}}
+          <td>{{mb_value object=$curr_item->_ref_lot field=code}}</td>
+          <td>{{mb_value object=$curr_item->_ref_lot field=lapsing_date}}</td>
+        {{else}}
+          {{if "dmi"|module_active}}
+            <td></td>
+          {{/if}}
+          <td></td>
           <td></td>
         {{/if}}
-        <td></td>
-        <td></td>
       {{/if}}
-    {{/if}}
-    
-    <td>
-      <strong>{{mb_value object=$curr_item->_ref_reference->_ref_product field=name}}</strong>
       
-      {{if $curr_item->septic}}
-        (Déstérilisé)
+      <td>
+        <strong>{{mb_value object=$curr_item->_ref_reference->_ref_product field=name}}</strong>
+        
+        {{if $curr_item->septic}}
+          (Déstérilisé)
+        {{/if}}
+      </td>
+      <td style="text-align: right; white-space: nowrap;">{{mb_value object=$curr_item field=quantity}}</td>
+      <td style="white-space: nowrap;">{{$curr_item->_ref_reference->_ref_product->item_title}}</td>
+      
+      {{if $order->object_id || $order->comments|strpos:"Bon de retour" === 0}}
+        <td>{{mb_value object=$curr_item field=renewal}}</td>
       {{/if}}
-    </td>
-    <td style="text-align: right; white-space: nowrap;">{{mb_value object=$curr_item field=quantity}}</td>
-    <td style="white-space: nowrap;">{{$curr_item->_ref_reference->_ref_product->item_title}}</td>
-    
-    {{if $order->object_id || $order->comments|strpos:"Bon de retour" === 0}}
-      <td>{{mb_value object=$curr_item field=renewal}}</td>
-    {{/if}}
-    
-    <td style="white-space: nowrap; text-align: right;">{{mb_value object=$curr_item field=unit_price}}</td>
-    <td style="white-space: nowrap; text-align: right;">{{mb_value object=$curr_item field=_price}}</td>
-    <td style="white-space: nowrap; text-align: right;">{{mb_value object=$curr_item field=tva decimals=1}}</td>
-  </tr>
+      
+      <td style="white-space: nowrap; text-align: right;">{{mb_value object=$curr_item field=unit_price}}</td>
+      <td style="white-space: nowrap; text-align: right;">{{mb_value object=$curr_item field=_price}}</td>
+      <td style="white-space: nowrap; text-align: right;">{{mb_value object=$curr_item field=tva decimals=1}}</td>
+    </tr>
   {{/foreach}}
   
   <tr>

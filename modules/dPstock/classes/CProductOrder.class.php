@@ -482,7 +482,13 @@ class CProductOrder extends CMbMetaObject {
     if ($this->_ref_order_items && !$force) {
       return $this->_ref_order_items;
     }
-    return $this->_ref_order_items = $this->loadBackRefs('order_items', "renewal");
+    
+    $ljoin = array(
+      "product_reference" => "product_reference.reference_id = product_order_item.reference_id",
+      "product"           => "product.product_id = product_reference.product_id",
+    );
+    
+    return $this->_ref_order_items = $this->loadBackRefs('order_items', "renewal, product.classe_comptable, product.code", null, null, $ljoin);
   }
   
   function loadRefAddress(){
