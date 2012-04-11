@@ -184,7 +184,6 @@ class CDoObjectAddEdit {
   
   function doSingle() {
     $this->doBind();
-    mbTrace($this->_obj->getPlainFields());
     if (CMbArray::extract($this->request, 'del')) {
       $this->doDelete();
     } 
