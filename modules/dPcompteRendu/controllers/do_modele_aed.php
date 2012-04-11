@@ -171,10 +171,14 @@ if (isset($_POST["_source"])) {
         $copyToMulti .= $_destinataire->nom."<br />";
         $copyToComplet .= $_destinataire->nom. " - " .
                           nl2br($_destinataire->adresse). " ".
-                          $_destinataire->cpville. "; ";
-        $copyToCompletMulti .= $_destinataire->nom. "<br />" .
-                               nl2br($_destinataire->adresse). "<br />".
-                               $_destinataire->cpville. "<br />";
+                          $_destinataire->cpville;
+        
+        $copyToCompletMulti .= $_destinataire->nom. " - " . preg_replace("/\n\r\t/", " ", $_destinataire->adresse) . " " .
+                               $_destinataire->cpville;
+        if (end($destinataires) !== $_dest) {
+          $copyToComplet .= " ; ";
+          $copyToCompletMulti .= "<br />";
+        }
       }
       
       $values = array(
