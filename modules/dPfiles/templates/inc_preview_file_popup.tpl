@@ -74,7 +74,7 @@ window.file_id = {{$fileSel->_id}};
     <input type="hidden" name="a" value="preview_files"/>
     <input type="hidden" name="dosql" value="do_file_aed"/>
     {{mb_key object=$fileSel hidden=1}}
-    {{if $fileSel->_class == "CFile" && !$isConverted}}
+    {{if $fileSel->_class == "CFile" && !$includeInfosFile}}
       {{mb_field object=$fileSel field=_rotate hidden=1}}
       <button type="button" style="float: left;" class="rotate_left notext singleclick" onclick="onSubmitRotate(this, 'left')" title="{{tr}}CFile._rotate.left{{/tr}}"></button>
       <button type="button" style="float: right;" class="rotate_right notext singleclick" onclick="onSubmitRotate(this, 'right')" title="{{tr}}CFile._rotate.right{{/tr}}"></button>

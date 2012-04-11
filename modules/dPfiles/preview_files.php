@@ -156,20 +156,18 @@ elseif($fileSel && $elementClass == "CCompteRendu" && !$acces_denied && !$pdf_ac
 	$includeInfosFile = $fileSel->_source;
 }
 
-if ($pdf_active) {
-  if ($elementClass == "CCompteRendu") {
-    $fileSel->loadNbPages();
-    if($fileSel->_nb_pages) {
-      if($sfn>$fileSel->_nb_pages || $sfn<0){$sfn = 0;}
-      if($sfn!=0){
-        $page_prev = $sfn - 1; 
-      }
-      if($sfn<($fileSel->_nb_pages-1)){
-        $page_next = $sfn + 1;
-      }
-      for($i=1;$i<=$fileSel->_nb_pages;$i++){
-        $arrNumPages[] = $i;
-      }
+if ($pdf_active && $elementClass == "CCompteRendu") {
+  $fileSel->loadNbPages();
+  if($fileSel->_nb_pages) {
+    if($sfn>$fileSel->_nb_pages || $sfn<0){$sfn = 0;}
+    if($sfn!=0){
+      $page_prev = $sfn - 1; 
+    }
+    if($sfn<($fileSel->_nb_pages-1)){
+      $page_next = $sfn + 1;
+    }
+    for($i=1;$i<=$fileSel->_nb_pages;$i++){
+      $arrNumPages[] = $i;
     }
   }
 }
