@@ -1,4 +1,5 @@
-<form name="editAffect" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {onComplete: Control.Modal.close});">
+<form name="editAffect" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {onComplete: function() {
+    refreshMouvements(Control.Modal.close, '{{$affectation->lit_id}}'); }});">
   <input type="hidden" name="m" value="dPhospi" />
   <input type="hidden" name="dosql" value="do_affectation_aed" />
   <input type="hidden" name="del" value="0" />

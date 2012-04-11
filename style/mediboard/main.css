@@ -1711,6 +1711,10 @@ div.wrapper_line, div.wrapper_op {
   margin-bottom: 8px;
 }
 
+div.hatching {
+  background-image: url(../../images/icons/ray.gif);
+}
+
 div.wrapper_line_compact {
   position: relative;
   height: 1.1em;
@@ -1736,8 +1740,8 @@ div.affectation, div.affect_legend {
   padding: 1px;
 }
 
-div.affectation:hover {
-  min-width: 150px !important;
+div.affectation_resize:hover {
+  width: auto !important;
   /*z-index: 500;*/
 }
 
@@ -1747,6 +1751,14 @@ div.affectation_compact {
   position: absolute;
   height: 1.1em;
   padding: 1px;
+}
+
+div.toolbar_affectation {
+  display: none;
+}
+
+div.toolbar_affectation:hover {
+  display: block;
 }
 
 div.affect_left {

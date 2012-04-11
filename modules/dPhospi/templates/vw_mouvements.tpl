@@ -18,11 +18,22 @@
       url.requestModal(700, 400);
    }
    
-   refreshMouvements = function(after_refresh) {
+   refreshMouvements = function(after_refresh, lit_id) {
      if (!after_refresh) {
        after_refresh = Prototype.emptyFunction;
      }
-     return onSubmitFormAjax(getForm('filterMouv'), {onComplete: after_refresh}, 'view_affectations');
+     if (lit_id) {
+       var url = new Url("dPhospi", "ajax_refresh_line_lit");
+       url.addParam("lit_id", lit_id);
+       var form = getForm('filterMouv');
+       url.addParam("date", $V(form.date));
+       url.addParam("mode_vue_tempo", $V(form.mode_vue_tempo));
+       url.addParam("prestation_id", $V(form.prestation_id));
+       url.addParam("granularite", $V(form.granularite));
+       
+       url.requestUpdate($("CLit-"+lit_id), {onComplete: after_refresh});
+     }
+     else return onSubmitFormAjax(getForm('filterMouv'), {onComplete: after_refresh}, 'view_affectations');
    }
    
    editAffectation = function(affectation_id, lit_id) {
@@ -31,17 +42,20 @@
      if (!Object.isUndefined(lit_id)) {
        url.addParam("lit_id", lit_id);
      }
+     
+     Placement.stop();
      var modal = url.requestModal(500, null, {showReload: false});
-     modal.modalObject.observe("afterClose", function() { refreshMouvements(loadNonPlaces);});
+     modal.modalObject.observe("afterClose", function() { Placement.resume(); });
    }
    
-   delAffectation = function(affectation_id) {
+   delAffectation = function(affectation_id, lit_id) {
      var form = getForm("delAffect");
      $V(form.affectation_id, affectation_id);
-     return onSubmitFormAjax(form, {onComplete: function(){ refreshMouvements(loadNonPlaces); }});
+     return onSubmitFormAjax(form, {onComplete: function(){ refreshMouvements(loadNonPlaces, lit_id); }});
    }
    
    moveAffectation = function(affectation_id, lit_id, sejour_id) {
+   
     var url = new Url("dPhospi", "ajax_move_affectation");
     if (!Object.isUndefined(affectation_id)) {
       url.addParam("affectation_id", affectation_id);
@@ -58,18 +72,19 @@
       if (!affectation_id) {
         after_mouv = loadNonPlaces;
       }
-      refreshMouvements(after_mouv);
+      refreshMouvements(after_mouv, lit_id);
     }});
   }
   
   // Drop d'une affectation avec la touche ctrl
   selectAction = function(affectation_id, lit_id, sejour_id) {
+    Placement.stop();
     var url = new Url("dPhospi", "ajax_select_action_affectation");
     url.addParam("affectation_id", affectation_id);
     url.addParam("lit_id", lit_id);
     url.addParam("sejour_id", sejour_id);
     var modal = url.requestModal(500, null, {showReload: false});
-    modal.modalObject.observe("afterClose", refreshMouvements);
+    modal.modalObject.observe("afterClose", function() {  Placement.resume(); });
   }
   
   window.sejour_selected = null;
@@ -82,7 +97,6 @@
   }
   
   chooseLit = function(lit_id) {
-    console.log("rah");
     window.lit_selected = lit_id;
     moveByRadio();
   }
@@ -101,6 +115,7 @@
     }
     else if (window.lit_selected && window.affectation_selected) {
       moveAffectation(window.affectation_selected, window.lit_selected);
+      $("affectation_temporel_"+window.affectation_selected).remove();
       window.affectation_selected = null;
       window.lit_selected = null;
     }

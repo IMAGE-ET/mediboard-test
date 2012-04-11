@@ -33,6 +33,11 @@ else {
 
 $affectation->lit_id = $lit_id;
 
+// Si l'affectation est un blocage, il faut vider le champ sejour_id
+if ($affectation->sejour_id == 0) {
+  $affectation->sejour_id = "";
+}
+
 if ($msg = $affectation->store()) {
   CAppUI::setMsg($msg, UI_MSG_ERROR);
 }

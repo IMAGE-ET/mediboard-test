@@ -4,6 +4,8 @@
   Position.includeScrollOffsets = true;
   Placement = {
     tabs: null,
+    updater: null,
+    frequency: null,
     loadTableau: function(services_ids) {
       var url = new Url('dPhospi', 'vw_affectations');
       url.requestUpdate('tableau');
@@ -28,12 +30,42 @@
         case 'temporel':
           this.loadTemporel();
       }
+    },
+    init: function(frequency){
+      this.frequency = frequency || this.frequency;
+      
+      var url = new Url("dPhospi", "vw_mouvements");
+      Placement.updater = url.periodicalUpdate('temporel', {
+        frequency: this.frequency
+      });
+    },
+    
+    start: function(delay, frequency){
+      this.stop();
+      this.init.delay(delay, frequency);
+    },
+    
+    stop: function(){
+      if (this.updater) {
+        this.updater.stop();
+      }
+    },
+    
+    resume: function(){
+      if (this.updater) {
+        this.updater.resume();
+      }
     }
   }
   
   Main.add(function(){
     Placement.tabs = Control.Tabs.create('placements_tabs', true);
-    Placement.loadActiveView();
+    if (Placement.tabs.activeLink.key == "temporel") {
+      Placement.start(0, 120);
+    }
+    else {
+      Placement.loadActiveView();
+    }
   });
 </script>
 

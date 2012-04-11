@@ -15,7 +15,11 @@
   </tr>
   <tr>
     <td colspan="4">
-      <form name="cutAffectation" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {onComplete: Control.Modal.close})">
+      <form name="cutAffectation" method="post" action="?"
+        onsubmit="return onSubmitFormAjax(this, {onComplete: function() {
+          refreshMouvements(null, '{{$affectation->lit_id}}');
+          refreshMouvements(Control.Modal.close, '{{$lit_id}}');
+           }})">
         <input type="hidden" name="m" value="dPhospi" />
         <input type="hidden" name="dosql" value="do_cut_affectation_aed" />
         <input type="hidden" name="lit_id" value="{{$lit_id}}" />
