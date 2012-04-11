@@ -177,6 +177,7 @@ $locales['config-reaffectation_plageop'] = 'Réaffectation des plages opératoires
 $locales['mod-dPbloc-tab-configure'] = 'Configuration';
 $locales['mod-dPbloc-tab-inc_edit_planning'] = 'Gestion des vacations';
 $locales['mod-dPbloc-tab-legende'] = 'Légende';
+$locales['mod-dPbloc-tab-monitor_day_salle'] = 'Supervision hebdomadaire des salles';
 $locales['mod-dPbloc-tab-print_materiel'] = 'Impression du matériel';
 $locales['mod-dPbloc-tab-print_planning'] = 'Impression des plannings';
 $locales['mod-dPbloc-tab-print_suivi'] = 'Impression suivi';

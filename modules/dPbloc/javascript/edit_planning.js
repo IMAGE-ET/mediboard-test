@@ -47,6 +47,11 @@ EditPlanning  = {
     url.popup(900, 550, "Planning");
 	},
 	
+	lockPlages: function(oForm) {
+	  alert('on lock tout');
+	  oForm.submit();
+	},
+	
 	showAlerte: function(date, bloc_id, type) {
     var url = new Url("dPbloc", "vw_alertes");
     url.addParam("date"   , date);
@@ -56,7 +61,7 @@ EditPlanning  = {
   },
   
   monitorDaySalle: function(salle_id, date) {
-    var url = new Url("dPbloc", "monitor_day_salle");
+    var url = new Url("bloc", "monitor_day_salle");
     url.addParam("salle_id", salle_id);
     url.addParam("date"    , date);
     url.requestModal(900);

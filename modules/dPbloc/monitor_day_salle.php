@@ -111,7 +111,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("listPlages"        , $listPlages        );
 $smarty->assign("listDays"          , $listDays          );
 $smarty->assign("listBlocs"         , $listBlocs         );
-$smarty->assign("bloc"              , $salle             );
+$smarty->assign("salle"             , $salle             );
 $smarty->assign("listHours"         , CPlageOp::$hours   );
 $smarty->assign("listMins"          , CPlageOp::$minutes );
 $smarty->assign("affichages"        , $affichages        );

@@ -59,7 +59,7 @@ for ($i = 0; $i < $nbDays; $i++) {
       $debute = "$jour $_consult->heure";
       if($_consult->patient_id) {
         $_consult->loadRefPatient();
-        $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->_ref_patient->_view, "#000", true, null, null);
+        $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->_ref_patient->_view, "#666", true, null, null);
       } else {
         $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, "[PAUSE]", "#aa0", true, null, null);
       }
@@ -72,7 +72,7 @@ for ($i = 0; $i < $nbDays; $i++) {
     foreach($utilisation as $_timing => $_nb) {
       if(!$_nb) {
         $debute = "$jour $_timing";
-        $event = new CPlanningEvent($debute, $debute, $_plage->_freq, "", "#383", true, null, null);
+        $event = new CPlanningEvent($debute, $debute, $_plage->_freq, "", "#6a6", true, null, null);
         $event->type        = "rdvfree";
         $event->plage["id"] = $_plage->_id;
         //Ajout de l'évènement au planning 
