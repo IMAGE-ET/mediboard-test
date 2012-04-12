@@ -154,7 +154,19 @@ class CGroups extends CMbObject {
     $this->_cp_court = substr($this->cp,0,2);
   }
   
-  
+  function store(){
+    $is_new = !$this->_id;
+    
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+    
+    if ($is_new) {
+      CConfigService::emptySHM();
+      CConfigMomentUnitaire::emptySHM();
+      CConfigConstantesMedicales::emptySHM();
+    }
+  }
 
   /**
    * Load functions with given permission

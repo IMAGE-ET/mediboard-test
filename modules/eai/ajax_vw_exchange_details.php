@@ -19,8 +19,7 @@ $exchange_guid = CValue::get("exchange_guid");
 $observations = $doc_errors_msg = $doc_errors_ack = array();
 
 // Chargement de l'échange demandé
-$object = new CMbObject();
-$exchange = $object->loadFromGuid($exchange_guid);
+$exchange = CMbObject::loadFromGuid($exchange_guid);
 
 $exchange->loadRefs(); 
 $exchange->loadRefsInteropActor();

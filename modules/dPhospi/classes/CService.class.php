@@ -1,9 +1,9 @@
 <?php /* $Id$ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPhospi
- *	@version $Revision$
+ *  @package Mediboard
+ *  @subpackage dPhospi
+ *  @version $Revision$
  *  @author Thomas Despoix
 */
 
@@ -14,7 +14,7 @@
  */
 class CService extends CMbObject {
   // DB Table key
-  var $service_id = null;	
+  var $service_id = null;  
   
   // DB references
   var $group_id       = null;
@@ -30,13 +30,13 @@ class CService extends CMbObject {
   var $urgence     = null;
   var $uhcd        = null;
   var $externe     = null;
-	
+  
   
   // Object references
   var $_ref_chambres = null;
   var $_ref_group    = null;
   var $_ref_validrepas = null;
-	
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'service';
@@ -55,19 +55,19 @@ class CService extends CMbObject {
     $backProps["endowments"]             = "CProductEndowment service_id";
     $backProps["services_entree"]        = "CSejour service_entree_id";
     $backProps["services_sortie"]        = "CSejour service_sortie_id";
-		
-		// stocks
+    
+    // stocks
     $backProps["product_deliveries"]     = "CProductDelivery service_id";
     $backProps["product_stock_services"] = "CProductStockService object_id";
     $backProps["stock_locations"]        = "CProductStockLocation object_id";
-		$backProps["config_constantes_medicales"] = "CConfigConstantesMedicales service_id";
-		$backProps["ufs"]                         = "CAffectationUniteFonctionnelle object_id";
-		
+    $backProps["config_constantes_medicales"] = "CConfigConstantesMedicales service_id";
+    $backProps["ufs"]                         = "CAffectationUniteFonctionnelle object_id";
+    
     return $backProps;
   }
 
   function getProps() {
-  	$props = parent::getProps();
+    $props = parent::getProps();
     $props["group_id"]       = "ref notNull class|CGroups";
     $props["responsable_id"] = "ref class|CMediusers";
     $props["secteur_id"]     = "ref class|CSecteur";
@@ -87,8 +87,22 @@ class CService extends CMbObject {
   }
   
   function updateFormFields() {
-  	parent::updateFormFields();
+    parent::updateFormFields();
     $this->_view = $this->nom;
+  }
+  
+  function store(){
+    $is_new = !$this->_id;
+    
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+    
+    if ($is_new) {
+      CConfigService::emptySHM();
+      CConfigMomentUnitaire::emptySHM();
+      CConfigConstantesMedicales::emptySHM();
+    }
   }
   
   /**
@@ -103,11 +117,11 @@ class CService extends CMbObject {
   }
 
   function loadRefsChambres() {
-  	return $this->_ref_chambres = $this->loadBackRefs("chambres", "nom");
+    return $this->_ref_chambres = $this->loadBackRefs("chambres", "nom");
   }
 
   function loadRefGroup() {
-  	return $this->_ref_group = $this->loadFwdRef("group_id", true);
+    return $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
 
   function loadRefsBack() {
@@ -115,7 +129,7 @@ class CService extends CMbObject {
   }
 
   function loadRefsFwd(){
-  	$this->loadRefGroup();
+    $this->loadRefGroup();
   }
   
   function getPerm($permType) {

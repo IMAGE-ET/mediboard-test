@@ -12,13 +12,14 @@
 {{if $exchange->_message === null && $exchange->_acquittement === null}}
   <div class="small-info">{{tr}}{{$exchange->_class}}-purge-desc{{/tr}}</div>
 {{else}}
-<script type="text/javascript">
-  Main.add(function () {
-    Control.Tabs.create('tabs-contenu', true);
-  });
-</script>
 <tr>
   <td>
+    <script type="text/javascript">
+      Main.add(function () {
+        Control.Tabs.create('tabs-contenu', true);
+      });
+    </script>
+    
     <ul id="tabs-contenu" class="control_tabs">
       <li> 
         <a href="#msg-message"> 
@@ -39,7 +40,8 @@
     <div id="msg-message" style="display: none;">
       <script>
         Main.add(function(){
-          Control.Tabs.create("msg-message-tab");
+          Control.Tabs.create("msg-message-tab", true);
+          
           var tree = new TreeView("msg-message-tree");
           tree.collapseAll();
         });
@@ -54,6 +56,7 @@
         <li><a href="#msg-message-xml">XML</a></li>
         <li><a href="#msg-message-warnings" class="{{if $exchange->_doc_warnings_msg}}wrong{{else}}empty{{/if}}">Avertissements</a></li>
         <li><a href="#msg-message-errors" class="{{if $exchange->_doc_errors_msg}}wrong{{else}}empty{{/if}}">Erreurs</a></li>
+        <li><a href="#msg-message-query">Requête</a></li>
       </ul>
       
       <hr class="control_tabs" />
@@ -82,6 +85,20 @@
       
       <div id="msg-message-errors" style="display: none;">
         {{mb_include module=hl7 template=inc_hl7v2_errors errors=$msg_segment_group->errors level=2}}
+      </div>
+      
+      <div id="msg-message-query" style="display: none; text-align: left;">
+        <form name="er7-xml-document-form" action="?m=hl7&amp;a=ajax_get_er7_xml" onsubmit="return Url.update(this, 'er7-query-result')" method="post" class="prepared">
+          <input type="hidden" name="m" value="hl7" />
+          <input type="hidden" name="a" value="ajax_get_er7_xml" />
+          <input type="hidden" name="suppressHeaders" value="1" />
+          <input type="hidden" name="ajax" value="1" />
+          <textarea name="er7" style="display: none;">{{$msg_segment_group->data}}</textarea>
+          
+          <input type="text" name="query" value="" size="50" placeholder="Requête XPath (// implicite, sensible à la casse)" />
+          <button class="submit notext"></button>
+        </form>
+        <div id="er7-query-result"></div>
       </div>
     </div>
     

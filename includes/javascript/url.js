@@ -907,7 +907,18 @@ Url.parse = function(url) {
 };
 
 Url.update = function(form, element) {
-  new Url().addFormData(form).requestUpdate(element);
+  var method = form.getAttribute("method");
+  var getParameters;
+  
+  if (method == "post") {
+    getParameters = form.getAttribute("action").toQueryParams();
+  }
+  
+  new Url().addFormData(form).requestUpdate(element, {
+    method: method,
+    getParameters: getParameters
+  });
+  
   return false;
 };
 
