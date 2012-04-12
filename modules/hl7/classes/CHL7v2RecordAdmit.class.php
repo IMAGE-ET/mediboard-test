@@ -965,8 +965,16 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getExpectedAdmitDischarge(DOMNode $node, CSejour $newVenue) {
-    $newVenue->entree_prevue = $this->queryTextNode("PV2.8", $node);
-    $newVenue->sortie_prevue = $this->queryTextNode("PV2.9", $node);
+    $entree_prevue = $this->queryTextNode("PV2.8", $node);
+    $sortie_prevue = $this->queryTextNode("PV2.9", $node);
+
+    if (!$sortie_prevue && !$newVenue->sortie_prevue) {
+      $sortie_prevue = mbAddDateTime(CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$newVenue->type).":00:00", 
+                    $newVenue->entree_reelle ? $newVenue->entree_reelle : $newVenue->entree_prevue);
+    } 
+    
+    $newVenue->entree_prevue = $entree_prevue;
+    $newVenue->sortie_prevue = $sortie_prevue;
 
     // On récupère l'entrée et sortie réelle ssi !entree_prevue && !sortie_prevue
     $parentNode = $node->parentNode;
