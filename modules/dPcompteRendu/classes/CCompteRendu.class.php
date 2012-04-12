@@ -43,6 +43,7 @@ class CCompteRendu extends CDocumentItem {
   var $_orientation      = null;
   var $_list_classes     = null;
   var $_date             = null;
+  var $_count_utilisation = null;
   
   var $_is_editable      = true;
 

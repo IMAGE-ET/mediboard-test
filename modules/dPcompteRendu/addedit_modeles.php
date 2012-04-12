@@ -133,6 +133,14 @@ if ($compte_rendu->_id) {
     unset($footers["func"]);
     unset($headers["func"]);
   }
+  
+  switch ($compte_rendu->type) {
+    case "header":
+      $compte_rendu->_count_utilisation = $compte_rendu->countBackRefs("modeles_headed");
+      break;
+    case "footer":
+      $compte_rendu->_count_utilisation = $compte_rendu->countBackRefs("modeles_footed");
+  }
 }
 
 $formats = CCompteRendu::$_page_formats;

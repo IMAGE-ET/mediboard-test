@@ -401,6 +401,7 @@ $locales['mod-dPcompteRendu-tab-aides_export_csv'] = 'Export des aides à la sais
 $locales['mod-dPcompteRendu-tab-aides_import_csv'] = 'Import des aides à la saisie';
 $locales['mod-dPcompteRendu-tab-aides_saisie_grid'] = 'Mode grille des aides à la saisie';
 $locales['mod-dPcompteRendu-tab-ajax_choose_printer'] = 'Choix d\'une imprimante';
+$locales['mod-dPcompteRendu-tab-ajax_show_utilisation'] = 'Utilisation du modèle';
 $locales['mod-dPcompteRendu-tab-ajax_view_mail'] = 'Envoyer le document par mail';
 $locales['mod-dPcompteRendu-tab-configure'] = 'Configuration';
 $locales['mod-dPcompteRendu-tab-dompdf_config'] = 'Configuration DOMPDF';

@@ -29,7 +29,7 @@
     </td>
     {{/if}}
   
-    <td rowspan="2" style="vertical-align: top; width: 100%;">
+    <td rowspan="2" style="vertical-align: top;">
       {{include file=CMbObject_view.tpl}}
 		</td>
 	</tr>

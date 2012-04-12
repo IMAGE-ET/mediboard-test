@@ -60,6 +60,11 @@ var Modele = {
     $$('body')[0].insert(container);
     // Calcul approximatif de la hauteur
     $V(getForm("editFrm").height, (container.getHeight()).round());
+  },
+  showUtilisation: function() {
+    var url = new Url("dPcompteRendu", "ajax_show_utilisation");
+    url.addParam("compte_rendu_id", "{{$compte_rendu->_id}}");
+    url.requestModal(640, 480);
   }
 };
 
@@ -481,6 +486,10 @@ Main.add(function () {
           <td class="button" colspan="2">
              <button type="button" class="add" onclick="Modele.copy(this.form)">{{tr}}Duplicate{{/tr}}</button>
              <button type="button" class="search" onclick="Modele.preview($V(this.form.compte_rendu_id))">{{tr}}Preview{{/tr}}</button>
+             {{if $compte_rendu->type != "body"}}
+               <br />
+               <button type="button" class="search" onclick="Modele.showUtilisation()">Utilisation ({{$compte_rendu->_count_utilisation}})</button>
+             {{/if}}
           </td>
         </tr>
         
