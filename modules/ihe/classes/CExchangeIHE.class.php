@@ -201,5 +201,33 @@ class CExchangeIHE extends CExchangeTabular {
 
     return $this->populateExchangeACK($ack, $mbObject);               
   }
+  
+  function getObservations($display_errors = false) {
+    if ($this->_acquittement) {
+      $acq = $this->_acquittement;
+      
+      if (strpos($acq, "UNICODE") !== false) {
+        $acq = utf8_decode($acq);
+      }
+      
+      // quick regex
+      // ERR|~~~207^0^0^E201||207|E|code^libelle|||commentaire
+      if (preg_match("/ERR\|[^\|]*\|[^\|]*\|[^\|]*\|[^\|]*\|([^\^]+)\^([^\|]+)\|[^\|]*\|[^\|]*\|([^\r\n\|]*)/ms", $acq, $matches)) {
+        return $this->_observations = array(
+          array(
+            "code"        => $matches[1],
+            "libelle"     => $matches[2],
+            "commentaire" => strip_tags($matches[3]),
+          )
+        );
+      }
+    }
+  }
+  
+  function loadView() {
+    parent::loadView();
+    
+    $this->getObservations();
+  }
 }
 ?>
