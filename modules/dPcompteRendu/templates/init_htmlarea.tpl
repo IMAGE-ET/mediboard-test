@@ -196,9 +196,12 @@ function initCKEditor() {
         }
         CKEDITOR.ispasting = true;
         
-        evt.cancel();
-  
-        var paste = evt.data.html;
+        // Tenir compte de la façon dont on colle :
+        // - sans mise en forme
+        // - depuis word
+        
+        var paste = evt.data.html || evt.data.text;
+        
         var alltags = paste.match(/<[a-z]+/g);
              
         if (alltags) {
