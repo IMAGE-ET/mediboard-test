@@ -50,7 +50,7 @@ if($objectClass && $objectId && $elementClass && $elementId){
     
     // Recherche du fichier/document demandé et Vérification droit Read
     if($elementClass == "CFile"){
-    	$type = "_ref_files";
+      $type = "_ref_files";
       $nameFile = "file_name";
     }
     
@@ -84,7 +84,7 @@ if($objectClass && $objectId && $elementClass && $elementId){
     }
     
   }else {
-  	// Objet Inexistant
+    // Objet Inexistant
     $object = null;
   }
 }
@@ -114,7 +114,7 @@ if($fileSel && $elementClass == "CFile" && !$acces_denied){
         }
         
       case "text/plain": 
-        $includeInfosFile = nl2br(htmlspecialchars(utf8_decode($raw_content)));
+        $includeInfosFile = "<pre>".nl2br(htmlspecialchars(utf8_decode($raw_content)))."</pre>";
         break;
     }
   }
@@ -153,7 +153,7 @@ if($fileSel && $elementClass == "CFile" && !$acces_denied){
 }
 elseif($fileSel && $elementClass == "CCompteRendu" && !$acces_denied && !$pdf_active){
   $fileSel->loadContent();
-	$includeInfosFile = $fileSel->_source;
+  $includeInfosFile = $fileSel->_source;
 }
 
 if ($pdf_active && $elementClass == "CCompteRendu") {
@@ -174,9 +174,9 @@ if ($pdf_active && $elementClass == "CCompteRendu") {
 else {
   // Initialisation de FCKEditor
   if ($includeInfosFile) {
-	$templateManager = new CTemplateManager;
-	$templateManager->printMode = true;
-	$templateManager->initHTMLArea();
+  $templateManager = new CTemplateManager;
+  $templateManager->printMode = true;
+  $templateManager->initHTMLArea();
   }
 }
 
@@ -203,7 +203,7 @@ if($popup==1){
   $listCat  = null;
   $fileprev = null;
   $filenext = null;
-  if($object){	
+  if($object){  
     $affichageFile = CFile::loadDocItemsByObject($object);
     
     // Récupération du fichier/doc préc et suivant
