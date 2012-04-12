@@ -36,13 +36,13 @@ window.Facture = {
     url.addParam('factureconsult_id'    , factureconsult_id);
     url.requestModal();
     this.modal = url.modalObject;
-    url.modalObject.observe("afterClose", function(){
-    	Facture.reload(document.getForm("eclatement_facture").patient_id.value, 0);
-      });
   },
   cut: function(oForm) {
     onSubmitFormAjax(oForm, {
       onComplete : function() {
+        var url = new Url('dPcabinet', 'ajax_view_facture');
+        url.addParam('factureconsult_id'    , oForm.factureconsult_id.value);
+        url.requestUpdate("load_facture");
   	  	Facture.modal.close();
       }
     });
