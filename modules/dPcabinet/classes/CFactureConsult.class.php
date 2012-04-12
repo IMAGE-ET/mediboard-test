@@ -33,13 +33,14 @@ class CFactureConsult extends CMbObject {
   var $_reglements_total_patient  = null;
   var $_reglements_total_tiers    = null;
   var $_der_consult_id            = null;
+  var $_montant_total_factures    = null;
+  var $_montant_factures          = array();
   
   // Object References
   var $_ref_patient       = null;
   var $_ref_consults      = null;
   var $_ref_der_consult   = null;
   var $_ref_reglements    = null;
-  var $_montant_factures  = array();
   
   var $_ref_chir = null;
   
@@ -101,7 +102,6 @@ class CFactureConsult extends CMbObject {
     $this->_ref_consults = $consult->loadList($where, $order);
     
     //Dans le cas d'un éclatement de facture recherche des consultations
-    /*
     $facture = new CFactureConsult();
     
     $where = array();
@@ -113,14 +113,19 @@ class CFactureConsult extends CMbObject {
     $factures = $facture->loadList( $where, "factureconsult_id DESC");
     if(count($factures)>1){
       foreach($factures as $fact){
-        $this->_montant_factures[] = $fact->du_patient + $fact->du_tiers - $fact->remise;
+      	$ajout = $fact->du_patient + $fact->du_tiers - $fact->remise;
+        $this->_montant_factures[] = $ajout;
+        $this->_montant_total_factures += $ajout;
         $refs = $consult->loadList("patient_id = '$this->patient_id' AND factureconsult_id = '$fact->factureconsult_id'", "consultation_id DESC");
         if($refs){
           $this->_ref_consults = $refs;
         }
       }
     }
-    */
+    else{
+    	$this->_montant_factures[] = $this->du_patient + $this->du_tiers - $this->remise;
+    }
+    
     foreach($this->_ref_consults as $key => $consult){
     	$consult->loadRefsActes();
       $consult->loadExtCodesCCAM();
@@ -155,15 +160,16 @@ class CFactureConsult extends CMbObject {
 	
   function loadRefReglements($cache = 1) {
     $this->_montant_sans_remise = 0;
-  	if($this->_montant_factures){
+  	if(count($this->_montant_factures)>1){
 	    foreach($this->_montant_factures as $_montant){
 	      $this->_montant_sans_remise += $_montant;
 	    }
+	    $this->_montant_avec_remise = $this->_montant_sans_remise;
   	}
   	else{
   		$this->_montant_sans_remise = $this->du_patient  + $this->du_tiers;
+  		$this->_montant_avec_remise = $this->_montant_sans_remise - $this->remise;
   	}
-  	$this->_montant_avec_remise = $this->_montant_sans_remise - $this->remise;
   	
     $this->_ref_reglements = $this->loadBackRefs("reglement", 'date');
     

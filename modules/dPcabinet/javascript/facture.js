@@ -39,5 +39,12 @@ window.Facture = {
     url.modalObject.observe("afterClose", function(){
     	Facture.reload(document.getForm("eclatement_facture").patient_id.value, 0);
       });
+  },
+  cut: function(oForm) {
+    onSubmitFormAjax(oForm, {
+      onComplete : function() {
+  	  	Facture.modal.close();
+      }
+    });
   }
 };

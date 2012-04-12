@@ -83,7 +83,7 @@
                 <!-- mettre un 1 au 4ème argument pour une facture ac préimpression --> 
                   <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 0, 1, 0, 0);">Edition des BVR</button>
                 {{/if}}
-                {{*<button class="cut" onclick="Facture.cutFacture('{{$facture->_id}}');">Eclatement</button>*}}
+                <button class="cut" onclick="Facture.cutFacture('{{$facture->_id}}');">Eclatement</button>
                 <button class="print" onclick="printFacture('{{$facture->_id}}', 1, 0, 0, 0);">Justificatif de remboursement</button>
               </td>
             </tr>
@@ -182,26 +182,26 @@
             </td>
           </tr>
           {{/if}}
-          {{if count($facture->_montant_factures)>1}}
+          
+          {{assign var="nb_montants" value=$facture->_montant_factures|@count }}
+          {{if $nb_montants>1}}
             {{foreach from=$facture->_montant_factures item=_montant key=key }}
               <tr>
-                <td colspan="3"></td>
+                {{if $key==0}}<td colspan="3"  rowspan="{{$nb_montants+2}}"></td>{{/if}}
                 <td colspan="2">Montant n°{{$key+1}}</td>
                 <td style="text-align:right;">{{$_montant}}</td>
-                 
-              <tr>
+              </tr>
             {{/foreach}}
           {{else}}
             <tr>
               <td colspan="3" rowspan="4"></td>
               <td colspan="2">Montant</td>
               <td style="text-align:right;">{{mb_value object=$facture field="_montant_sans_remise"}}</td>
-               
-            <tr>
+            </tr>
           {{/if}}
           <tr>
             <td colspan="2"><b>{{mb_label object=$facture field="remise"}}</b></td>
-            <td> 
+            <td style="text-align:right;"> 
               <form name="modif_remise" method="post" action="?m={{$m}}">
                 <input type="hidden" name="dosql" value="do_factureconsult_aed" />
                 <input type="hidden" name="m" value="dPcabinet" />
