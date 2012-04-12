@@ -128,6 +128,7 @@ function refreshZones(id, obj) {
            refresh();
            window.resizeEditor();
            var form = getForm("editFrm");
+           $V(form.compte_rendu_id, id);
            if (Thumb.print) {
              pdfAndPrintServer(id);
            }
@@ -135,7 +136,6 @@ function refreshZones(id, obj) {
              window.callback();
            }
            form.onsubmit = function() { Url.ping({onComplete: submitCompteRendu}); return false;};
-           $V(form.compte_rendu_id, id);
     }});
   }
     

@@ -6,7 +6,15 @@
     <tr>
       <td class="destinataireCR text" id="destinataire" colspan="2">
         <button type="button" class="mail"
-          onclick="openCorrespondants('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}', 1);">
+          onclick="
+          {{if $compte_rendu->_id}}
+            openCorrespondants('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}', 1);
+          {{else}}
+            submitCompteRendu(function() {
+              var form = getForm('editFrm');
+              openCorrespondants($V(form.compte_rendu_id), '{{$compte_rendu->_ref_object->_guid}}', 1);
+            });
+          {{/if}}">
           Correspondants
         </button>
         <div class="modal" id="correspondants_courrier" style="display: none; width: 50%"></div>
