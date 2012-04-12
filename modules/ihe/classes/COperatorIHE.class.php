@@ -75,12 +75,12 @@ class COperatorIHE extends CEAIOperator {
       }
       
       $exchange_ihe->populateExchange($data_format, $evt);
+      $exchange_ihe->message_valide = 1;
       
       // Gestion des notifications ? 
       if (!$exchange_ihe->_id) {
         $exchange_ihe->date_production      = mbDateTime();
         $exchange_ihe->identifiant_emetteur = $data['identifiantMessage'];
-        $exchange_ihe->message_valide       = 1;
       }
       
       $exchange_ihe->store();
