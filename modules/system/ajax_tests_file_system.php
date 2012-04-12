@@ -45,13 +45,21 @@ else if ($type_action == "sendFile") {
 }  
 // Récupération des fichiers
 else if ($type_action == "getFiles") {
-  try {
-    $files = $exchange_source->receive();
-  } catch (CMbException $e) {
-    $e->stepAjax(UI_MSG_ERROR);
-  }
+  $count_files = CMbPath::countFiles($exchange_source->host);
   
-  CAppUI::stepAjax("Le dossier '$exchange_source->host' contient : ".CMbPath::countFiles($exchange_source->host)." fichier(s)");
+  CAppUI::stepAjax("Le dossier '$exchange_source->host' contient : $count_files fichier(s)");
+  
+  $files = array();
+  if ($count_files < 1000) {
+    try {
+      $files = $exchange_source->receive();
+    } catch (CMbException $e) {
+      $e->stepAjax(UI_MSG_ERROR);
+    }
+  }
+  else {
+    CAppUI::stepAjax("Le dossier '$exchange_source->host' contient trop de fichiers pour être listé", UI_MSG_WARNING);
+  }
   
   // Création du template
   $smarty = new CSmartyDP();
