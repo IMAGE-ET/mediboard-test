@@ -89,7 +89,9 @@
      </label>
      {{else}}
        <a href="?m=eai&tab=vw_idx_interop_actors#interop_actor_guid={{$destinataire->_guid}}">
-         {{$destinataire->_view}}
+         <span onmouseover="ObjectTooltip.createEx(this, '{{$destinataire->_guid}}');">
+           {{$destinataire->_view}}
+         </span>
        </a>
      {{/if}}
   </td>
@@ -100,19 +102,22 @@
     <td class="narrow">{{mb_value object=$object field="version"}}</td>
   {{/if}}
   <td class="{{if $object->date_echange}}ok{{else}}warning{{/if}} narrow">
-    <span>
-      <label title='{{mb_value object=$object field="date_echange"}}'>
-        {{mb_value object=$object field="date_echange" format=relative}}
-      </label>
-    </span>
+    <label title='{{mb_value object=$object field="date_echange"}}'>
+      {{mb_value object=$object field="date_echange" format=relative}}
+    </label>
   </td>
-  <td class="{{if !$object->statut_acquittement || 
-                  ($object->statut_acquittement == 'erreur') || 
-                  ($object->statut_acquittement == 'AR') || 
-                  ($object->statut_acquittement == 'err')}}error 
-             {{elseif ($object->statut_acquittement == 'avertissement') || 
-                      ($object->statut_acquittement == 'avt') || 
-                      ($object->statut_acquittement == 'AE')}}warning
+  {{assign var=statut_acq value=$object->statut_acquittement}}
+  <td class="{{if !$statut_acq && $object->_self_sender}}
+               hatching
+             {{elseif !$statut_acq || 
+                      ($statut_acq == 'erreur') || 
+                      ($statut_acq == 'AR') || 
+                      ($statut_acq == 'err')}}
+               error 
+             {{elseif ($statut_acq == 'avertissement') || 
+                      ($statut_acq == 'avt') || 
+                      ($statut_acq == 'AE')}}
+               warning
              {{/if}} 
              narrow">
     {{mb_value object=$object field="statut_acquittement"}}
@@ -125,12 +130,12 @@
     {{/foreach}}
   </td>
   <td class="{{if !$object->message_valide}}error{{/if}} narrow">
-    <a target="blank" href="?m=eai&a=download_exchange&exchange_guid={{$object->_guid}}&dialog=1&suppressHeaders=1&message=1" 
+    <a target="_blank" href="?m=eai&a=download_exchange&exchange_guid={{$object->_guid}}&dialog=1&suppressHeaders=1&message=1" 
       class="button modify notext"></a>
   </td>
-  <td class="{{if !$object->acquittement_valide}}error{{/if}} narrow">
+  <td class="{{if !$statut_acq && $object->_self_sender}}hatching{{elseif !$object->acquittement_valide}}error{{/if}} narrow">
     {{if $object->_acquittement}}
-      <a target="blank" href="?m=eai&a=download_exchange&exchange_guid={{$object->_guid}}&dialog=1&suppressHeaders=1&ack=1" 
+      <a target="_blank" href="?m=eai&a=download_exchange&exchange_guid={{$object->_guid}}&dialog=1&suppressHeaders=1&ack=1" 
         class="button modify notext"></a>
     {{/if}}
   </td>
