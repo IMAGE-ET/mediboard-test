@@ -59,7 +59,7 @@ for ($i = 0; $i < $nbDays; $i++) {
       $debute = "$jour $_consult->heure";
       if($_consult->patient_id) {
         $_consult->loadRefPatient();
-        $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->_ref_patient->_view, "#ccc", true, null, null);
+        $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->_ref_patient->_view, "#fff", true, null, null);
       } else {
         $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, "[PAUSE]", "#ffa", true, null, null);
       }
