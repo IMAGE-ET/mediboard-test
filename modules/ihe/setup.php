@@ -186,8 +186,18 @@ class CSetupihe extends CSetup {
     $query = "ALTER TABLE `receiver_ihe_config` 
               ADD `ER7_segment_terminator` ENUM ('CR','LF','CRLF') DEFAULT 'CR';";
     $this->addQuery($query); 
+    
+    $this->makeRevision("0.19");
+    
+    $query = "ALTER TABLE `receiver_ihe_config` 
+                ADD `build_PV1_14` ENUM ('admit_source','ZFM') DEFAULT 'admit_source';";
+    $this->addQuery($query); 
+    
+    $query = "ALTER TABLE `receiver_ihe_config` 
+                ADD `build_PV1_36` ENUM ('discharge_disposition','ZFM') DEFAULT 'discharge_disposition';";
+    $this->addQuery($query); 
        
-    $this->mod_version = "0.19";
+    $this->mod_version = "0.20";
   }
 }
 
