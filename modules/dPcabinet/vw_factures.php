@@ -64,11 +64,12 @@ else{
 	$factures = $facture->loadList("cloture IS $cloture AND patient_id = '$patient_id' ", "ouverture ASC", 50);
 }
 
-foreach($factures as $key => $_facture){
-  $_facture->loadRefReglements();
-	if(!$no_finish_reglement && $_facture->_du_patient_restant==0 || 
-	    $no_finish_reglement && $_facture->_du_patient_restant!=0){
-		unset($factures[$key]);
+if($no_finish_reglement){
+	foreach($factures as $key => $_facture){
+	  $_facture->loadRefReglements();
+	  if($_facture->_du_patient_restant==0 ){
+	    unset($factures[$key]);
+	  }
 	}
 }
 
@@ -80,6 +81,7 @@ if($factureconsult_id){
   	$last_consult = reset($facture->_ref_consults);
     $derconsult_id = $last_consult->_id;
   }
+  
 }
 
 // Chargement des banques si nous sommes dans la vue des factures
