@@ -116,28 +116,7 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     
     // PV1-14: Admit Source (IS) (optional)
     // Table - 0023
-    // 1  - Envoyé par un médecin extérieur 
-    // 3  - Convocation à l'hôpital
-    // 4  - Transfert depuis un autre centre hospitalier
-    // 6  - Entrée par transfert interne
-    // 7  - Entrée en urgence
-    // 8  - Entrée sous contrainte des forces de l'ordre
-    // 90 - Séjour programmé
-    // 91 - Décision personnelle
-    $admit_source = "90";
-    if ($sejour->adresse_par_prat_id) {
-      $admit_source = "1";
-    }
-    if ($sejour->etablissement_entree_id) {
-      $admit_source = "4";
-    }
-    if ($sejour->service_entree_id) {
-      $admit_source = "6";
-    }
-    if ($sejour->type == "urg") {
-      $admit_source = "7";
-    }
-    $data[] = $admit_source;
+    $data[] = $this->getPV114($receiver, $sejour);
     
     // PV1-15: Ambulatory Status (IS) (optional repeating)
     $data[] = null;
@@ -235,17 +214,8 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     
     // PV1-36: Discharge Disposition (IS) (optional)
     // Table - 0112
-    // 2 - Messures disciplinaires
-    // 3 - Décision médicale (valeur par défaut)
-    // 4 - Contre avis médicale 
-    // 5 - En attente d'examen
-    // 6 - Convenances personnelles
-    // R - Essai (contexte psychatrique)
-    // E - Evasion 
-    // F - Fugue
     $sejour->loadRefsAffectations();
-    $discharge_disposition = $sejour->confirme ? "3": "4";
-    $data[] = CHL7v2TableEntry::mapTo("112", $discharge_disposition);
+    $data[] = $this->getPV136($receiver, $sejour);
     
     // PV1-37: Discharged to Location (DLD) (optional)
     $data[] = ($sejour->etablissement_sortie_id && ($event->code == "A03" || $event->code == "A16")) ? array($sejour->loadRefEtablissementTransfert()->finess) : null;

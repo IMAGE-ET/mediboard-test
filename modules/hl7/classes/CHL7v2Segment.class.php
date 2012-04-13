@@ -491,6 +491,63 @@ class CHL7v2Segment extends CHL7v2Entity {
     }
   }
   
+  function getPV114 (CInteropReceiver $receiver, CSejour $sejour) {
+    // Admit source
+    switch ($receiver->_configs["build_PV1_14"]) {
+      // Combinaison du ZFM
+      // ZFM.1 + ZFM.3
+      case 'ZFM':
+        return $sejour->mode_entree.$this->getModeProvenance($sejour);
+      // Mode d'entrée
+      default:
+         // 1  - Envoyé par un médecin extérieur 
+        // 3  - Convocation à l'hôpital
+        // 4  - Transfert depuis un autre centre hospitalier
+        // 6  - Entrée par transfert interne
+        // 7  - Entrée en urgence
+        // 8  - Entrée sous contrainte des forces de l'ordre
+        // 90 - Séjour programmé
+        // 91 - Décision personnelle
+        $admit_source = "90";
+        if ($sejour->adresse_par_prat_id) {
+          $admit_source = "1";
+        }
+        if ($sejour->etablissement_entree_id) {
+          $admit_source = "4";
+        }
+        if ($sejour->service_entree_id) {
+          $admit_source = "6";
+        }
+        if ($sejour->type == "urg") {
+          $admit_source = "7";
+        }
+        
+        return $admit_source;
+    }
+  }
+  
+  function getPV136 (CInteropReceiver $receiver, CSejour $sejour) {
+    // Discharge Disposition
+    switch ($receiver->_configs["build_PV1_36"]) {
+      // Combinaison du ZFM
+      // ZFM.2 + ZFM.4
+      case 'ZFM':
+        return $this->getModeSortie($sejour).$sejour->destination;
+      // Circonstance de sortie
+      default:
+        // 2 - Messures disciplinaires
+        // 3 - Décision médicale (valeur par défaut)
+        // 4 - Contre avis médicale 
+        // 5 - En attente d'examen
+        // 6 - Convenances personnelles
+        // R - Essai (contexte psychatrique)
+        // E - Evasion 
+        // F - Fugue
+        $discharge_disposition = $sejour->confirme ? "3": "4";
+        CHL7v2TableEntry::mapTo("112", $discharge_disposition);    
+    }
+  }   
+  
   function getPL(CInteropReceiver $receiver, CSejour $sejour, CAffectation $affectation = null) {
     $group       = $sejour->loadRefEtablissement();
     if (!$affectation) {
@@ -534,6 +591,30 @@ class CHL7v2Segment extends CHL7v2Entity {
     $code .= $sejour->type_pec ? "_$sejour->type_pec" : null;
 
     return CHL7v2TableEntry::mapTo("32", CMbString::lower($code));
+  }
+  
+  function getModeSortie(CSejour $sejour) {
+    $mode_sortie = null;
+    switch ($sejour->mode_sortie) {
+      case "transfert" :
+        $mode_sortie = 7;
+        break;
+      case "mutation" :
+        $mode_sortie = 6;
+        break;
+      case "deces" :
+        $mode_sortie = 9;
+        break;
+      default :
+        $mode_sortie = 5;
+        break;
+    }
+    
+    return $mode_sortie;
+  }
+  
+  function getModeProvenance(CSejour $sejour) {
+    return ($sejour->provenance == "8") ? "5" : $sejour->provenance;  
   }
 }
 
