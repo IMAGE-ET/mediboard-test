@@ -665,8 +665,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $this->getPL($this->queryNode("PV1.3", $PV1), $affectation);
     $affectation->uf_medicale_id = $this->mappingUFMedicale($data);
     $affectation->uf_soins_id    = $this->mappingUFSoins($data);
-     
-    $affectation->store();
+    
+    if ($msg = $affectation->store()) {
+      return $msg;
+    }
     
     return $affectation;
   }
