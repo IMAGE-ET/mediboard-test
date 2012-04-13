@@ -21,7 +21,7 @@
                  <hr />
                 
                  <button style="margin: -1px;" class="edit notext" 
-                         onclick="ExObject.edit('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}')">
+                         onclick="ExObject.edit('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}', '{{$target_element}}')">
                    {{tr}}Edit{{/tr}}
                  </button>
                  

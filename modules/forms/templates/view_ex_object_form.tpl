@@ -40,12 +40,25 @@ ExObjectForms.{{$ex_form_hash}} = {
           eval("window.opener."+element_id.substr(1)+"()"); // ARG
         }
         else {
-          window.opener.ExObject.register.defer("{{$_element_id}}", {
-            ex_class_id: "{{$ex_class_id}}", 
-            object_guid: "{{$object_guid}}", 
-            event: "{{$event}}", 
-            _element_id: "{{$_element_id}}"
-          });
+          var target = window.opener.$("{{$_element_id}}");
+          
+          if (target.get("ex_class_id")) {
+            window.opener.ExObject.loadExObjects.defer(
+              target.get("reference_class"), 
+              target.get("reference_id"), 
+              "{{$_element_id}}", 
+              target.get("detail"), 
+              target.get("ex_class_id")
+            );
+          }
+          else {
+            window.opener.ExObject.register.defer("{{$_element_id}}", {
+              ex_class_id: "{{$ex_class_id}}", 
+              object_guid: "{{$object_guid}}", 
+              event: "{{$event}}", 
+              _element_id: "{{$_element_id}}"
+            });
+          }
         }
       }
       

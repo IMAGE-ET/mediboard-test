@@ -173,6 +173,11 @@ if ($detail == 2) {
   foreach($ex_objects_by_event as $ex_objects_by_class) {
     foreach($ex_objects_by_class as $_ex_objects) {
       $first = reset($_ex_objects);
+      
+      if (!$first) {
+        continue;
+      }
+      
       $_ex_class = $first->_ref_ex_class;
   
       foreach ($_ex_class->_ref_groups as $_ex_group) {
