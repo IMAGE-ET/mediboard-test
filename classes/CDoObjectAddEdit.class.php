@@ -50,9 +50,11 @@ class CDoObjectAddEdit {
     $this->request             =& $_POST;
 
     $this->_logIt              = true;
+    
     // @todo : à supprimer cf déplacement dans le doBind()
     $this->_obj                = new $this->className();
     $this->_old                = new $this->className();
+    $this->onAfterInstanciation(); // Lancer ceci apres chaque instanciation de _obj et _old !!
     
     $this->objectKey = $objectKey ? $objectKey : $this->_obj->_spec->key;
     $this->objectKeys = $this->objectKey . "s";
@@ -63,16 +65,24 @@ class CDoObjectAddEdit {
     $this->suppressHeaders = CMbArray::extract($this->request, "suppressHeaders");
     $this->callBack        = CMbArray::extract($this->request, "callback");
     $this->postRedirect    = CMbArray::extract($this->request, "postRedirect");
+    
     if($this->postRedirect) {
       $this->redirect = $this->postRedirect;
     }
-    $this->_obj                = new $this->className();
-    $this->_old                = new $this->className();
+    
+    $this->_obj            = new $this->className();
+    $this->_old            = new $this->className();
+    $this->onAfterInstanciation(); // Lancer ceci apres chaque instanciation de _obj et _old !!
+    
     // Object binding
     $this->_obj->bind($this->request);
         
     // Old object 
     $this->_old->load($this->_obj->_id);
+  }
+  
+  function onAfterInstanciation(){
+    
   }
 
   function doDelete() {

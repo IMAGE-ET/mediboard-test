@@ -9,7 +9,7 @@
  */
 
 class CDoExObjectAddEdit extends CDoObjectAddEdit {
-  function doBind() {
+  function onAfterInstanciation(){
     $_ex_class_id = CValue::read($this->request, "_ex_class_id");
     
     $this->_obj->_ex_class_id = $_ex_class_id;
@@ -17,8 +17,6 @@ class CDoExObjectAddEdit extends CDoObjectAddEdit {
     
     $this->_old->_ex_class_id = $_ex_class_id;
     $this->_old->setExClass();
-    
-    return parent::doBind();
   }
 }
 
