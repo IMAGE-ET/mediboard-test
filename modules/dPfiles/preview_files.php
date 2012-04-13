@@ -114,7 +114,7 @@ if($fileSel && $elementClass == "CFile" && !$acces_denied){
         }
         
       case "text/plain": 
-        $includeInfosFile = "<pre>".nl2br(htmlspecialchars(utf8_decode($raw_content)))."</pre>";
+        $includeInfosFile = "<pre>".htmlspecialchars(utf8_decode($raw_content))."</pre>";
         break;
     }
   }

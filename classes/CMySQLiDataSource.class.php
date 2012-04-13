@@ -9,10 +9,14 @@
  */
 
 class CMySQLiDataSource extends CMySQLDataSource {
-	/**
-	 * @var MySQLi
-	 */
-	var $link;
+  /**
+   * @var MySQLi
+   */
+  var $link;
+  
+  const ASSOC = 1; // MYSQLI_ASSOC;
+  const NUM   = 2; // MYSQLI_NUM;
+  const BOTH  = 3; // MYSQLI_BOTH;
     
   function connect($host, $name, $user, $pass) {
     if (!class_exists("MySQLi")) {
@@ -20,8 +24,8 @@ class CMySQLiDataSource extends CMySQLDataSource {
       return;
     }
     
-		$this->link = new MySQLi($host, $user, $pass, $name);
-		
+    $this->link = new MySQLi($host, $user, $pass, $name);
+    
     if ($error = $this->link->connect_error) { 
       trigger_error( "FATAL ERROR: Connection to MySQL server failed ($error)", E_USER_ERROR );
       return;
@@ -86,6 +90,59 @@ class CMySQLiDataSource extends CMySQLDataSource {
     
     return $result->fetch_object($class_name, $params);
   }
+  
+  /*
+  protected function fetchAll(mysqli_result $result, $result_type = self::NUM) {
+    return $result->fetch_all($result_type);
+  }
+
+  function loadHashList($query) {
+    $cur = $this->exec($query);
+    $cur or CApp::rip();
+    
+    $rows = $this->fetchAll($cur, self::NUM);
+    
+    $hashlist = array();
+    foreach($rows as $hash) {
+      $hashlist[$hash[0]] = $hash[1];
+    }
+    
+    $this->freeResult($cur);
+    return $hashlist;
+  }
+
+  function loadHashAssoc($query) {
+    $cur = $this->exec($query);
+    $cur or CApp::rip();
+    
+    $rows = $this->fetchAll($cur, self::ASSOC);
+    
+    $hashlist = array();
+    foreach($rows as $hash) {
+      $key = reset($hash);
+      $hashlist[$key] = $hash;
+    }
+    
+    $this->freeResult($cur);
+    return $hashlist;
+  }
+
+  function loadList($query, $maxrows = null) {
+    if (null == $result = $this->exec($query)) {
+      CAppUI::setMsg($this->error(), UI_MSG_ERROR);
+      return false;
+    }
+    
+    $list = $this->fetchAll($result, self::ASSOC);
+    
+    if ($maxrows) {
+      $list = array_slice($list, 0, $maxrows);
+    }
+    
+    $this->freeResult($result);
+    return $list;
+  }
+  */
 
   function escape($value) {
     return $this->link->escape_string($value);
