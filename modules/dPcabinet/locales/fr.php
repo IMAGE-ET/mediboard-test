@@ -1389,4 +1389,6 @@ $locales['pref-view_traitement'] = 'Affichage des traitements';
 $locales['pref-view_traitement-0'] = 'Cacher';
 $locales['pref-view_traitement-1'] = 'Visible';
 $locales['pref-view_traitement-desc'] = 'Affichage des traitemens';
+$locales['pref-viewWeeklyConsultCalendar'] = 'Vue du calendrier latérale pour les RDV semainier';
+$locales['pref-viewWeeklyConsultCalendar-desc'] = 'Affichage du calendrier latéral lors de la prise de RDV en mode semainier';
 ?>

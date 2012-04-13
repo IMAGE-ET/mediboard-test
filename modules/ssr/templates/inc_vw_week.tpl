@@ -199,6 +199,7 @@ Main.add(function() {
                               {{/foreach}}
                               
                             {{elseif $_event->type == "rdvfree" || $_event->type == "rdvfull"}}
+                              <span style="color: #000;">
                               {{$_event->start|date_format:"%H:%M"}}
                               {{if $_event->length}}
                               - {{$_event->end|date_format:"%H:%M"}}
@@ -207,6 +208,7 @@ Main.add(function() {
                             {{else}}
                               {{$_event->title|smarty:nodefaults|nl2br}}
                             {{/if}}
+                            </span>
                           </div>
                           
                           {{if $app->user_prefs.ssr_planning_resize && $_event->resizable}}

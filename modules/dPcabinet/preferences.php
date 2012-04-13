@@ -13,6 +13,7 @@ CPreferences::$modules["dPcabinet"] = array (
   "MODCONSULT",
   "AUTOADDSIGN",
   "DefaultPeriod",
+  "viewWeeklyConsultCalendar",
   "DossierCabinet",
   "simpleCabinet",
   "ccam_consultation",

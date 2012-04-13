@@ -1489,7 +1489,11 @@ class CSetupdPcabinet extends CSetup {
       CHANGE `rabais` `remise` FLOAT DEFAULT '0' NOT NULL;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.53";
+    $this->makeRevision("1.53");
+    
+    $this->addPrefQuery("viewWeeklyConsultCalendar", "0");
+    
+    $this->mod_version = "1.54";
   }
 }
 ?>

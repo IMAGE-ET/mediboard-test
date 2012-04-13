@@ -1,4 +1,5 @@
 {{mb_script module=ssr script=planning}}
+{{assign var=vue_right value=$app->user_prefs.viewWeeklyConsultCalendar}}
 
 <script type="text/javascript">
 
@@ -12,7 +13,10 @@ setClose = function(time, plage_id, plage_date, chir_id) {
 };
 
 Main.add(function () {
-  Calendar.regField(getForm("Filter").date, null, {noView: true});
+  Calendar.regField(getForm("FilterTop").date, null, {noView: true});
+  {{if $vue_right}}
+  Calendar.regField(getForm("FilterRight").date, null, {noView: true, inline: true, container: null});
+  {{/if}}
   var planning = window["planning-{{$planning->guid}}"];
   ViewPort.SetAvlHeight("plageSelectorTable", 1);
   $('planningWeek').style.height = "1500px";
@@ -22,16 +26,15 @@ Main.add(function () {
 
 <div id="plageSelectorTable">
 
-<table class="main layout">
+<table class="main layout" style="height: 100%">
   <tr>
-    <td class="category" colspan="2">
+    <td>
       
-      <form name="Filter" action="?" method="get">
+      <form name="FilterTop" action="?" method="get">
       
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="a" value="plage_selector" />
       <input type="hidden" name="dialog" value="1" />
-      <input type="hidden" name="chir_id" value="{{$chir_id}}" />
       <input type="hidden" name="function_id" value="{{$function_id}}" />
       <input type="hidden" name="plageconsult_id" value="{{$plage->_id}}" />
   
@@ -62,8 +65,8 @@ Main.add(function () {
           </td>
           
           <td class="button" style="width: 250px;">
-            <a style="float:left" href="#1" onclick="$V(getForm('Filter').date, '{{$pdate}}')">&lt;&lt;&lt;</a>
-            <a style="float:right" href="#1" onclick="$V(getForm('Filter').date, '{{$ndate}}')">&gt;&gt;&gt;</a>
+            <a style="float:left" href="#1" onclick="$V(getForm('FilterTop').date, '{{$pdate}}')">&lt;&lt;&lt;</a>
+            <a style="float:right" href="#1" onclick="$V(getForm('FilterTop').date, '{{$ndate}}')">&gt;&gt;&gt;</a>
             <strong>
               {{$refDate|date_format:" semaine du %d %B %Y (%U)"}}
             </strong>
@@ -75,9 +78,27 @@ Main.add(function () {
   
       </form>
     </td>
+    {{if $vue_right}}
+    <td rowspan="2">
+      <form name="FilterRight" action="?" method="get">
+      <input type="hidden" name="m" value="dPcabinet" />
+      <input type="hidden" name="a" value="plage_selector" />
+      <input type="hidden" name="dialog" value="1" />
+      <input type="hidden" name="chir_id" value="{{$chir_id}}" />
+      <input type="hidden" name="function_id" value="{{$function_id}}" />
+      <input type="hidden" name="plageconsult_id" value="{{$plage->_id}}" />
+      <input type="hidden" name="period" value="{{$period}}" />
+      <table class="form">
+         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit();" />
+      </table>
+      </form>
+    </td>
+    {{/if}}
+  </tr>
+  <tr>
+    <td>
+      {{mb_include module=ssr template=inc_vw_week}}
+    </td>
   </tr>
 </table>
-
-{{mb_include module=ssr template=inc_vw_week}}
-
 </div>

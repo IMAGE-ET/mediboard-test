@@ -165,7 +165,9 @@ class CPlageconsult extends CMbObject {
       }
       $emplacement = $_consult->heure;
       for($i = 0; $i < $_consult->duree; $i++) {
-        $utilisation[$emplacement]++;
+        if(isset($utilisation[$emplacement])) {
+          $utilisation[$emplacement]++;
+        }
         $emplacement = mbAddTime("+".$this->freq, $emplacement);
       }
     }

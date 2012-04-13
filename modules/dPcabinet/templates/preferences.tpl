@@ -16,6 +16,7 @@
   
 {{mb_include template=inc_pref spec=enum var=DossierCabinet values="dPcabinet|dPpatients"}}
 {{mb_include template=inc_pref spec=enum var=DefaultPeriod values="day|week|month|weekly" value_locale_prefix="Period."}}
+{{mb_include template=inc_pref spec=bool var=viewWeeklyConsultCalendar}}
 {{mb_include template=inc_pref spec=enum var=simpleCabinet values="0|1"}}
 {{mb_include template=inc_pref spec=enum var=ccam_consultation values="0|1"}}
 {{mb_include template=inc_pref spec=enum var=view_traitement values="0|1"}}

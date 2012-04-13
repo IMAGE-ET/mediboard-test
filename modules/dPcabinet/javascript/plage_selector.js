@@ -7,7 +7,7 @@ var PlageConsultSelector = {
   sDate            : null,
   sChir_id         : null,
   sFunction_id     : null,
-  options 		   : {},
+  options 		     : {},
 
   modal: function() {
     var oForm = getForm(this.sForm);
