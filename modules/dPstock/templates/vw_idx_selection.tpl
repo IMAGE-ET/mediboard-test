@@ -60,7 +60,7 @@ Main.add(function(){
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="10">
-      <form name="filter-selections" action="?" method="post" onsubmit="return filterSelections(this)">
+      <form name="filter-selections" action="?" method="get" onsubmit="return filterSelections(this)">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
         <input type="hidden" name="letter" value="{{$letter}}" onchange="this.form.onsubmit()" />

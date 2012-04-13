@@ -75,7 +75,7 @@ function showProductDetails(product_id) {
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="2">
-      <form action="?" name="filter-references" method="post" onsubmit="return filterReferences(this);">
+      <form action="?" name="filter-references" method="get" onsubmit="return filterReferences(this);">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="mode" value="order" />
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />

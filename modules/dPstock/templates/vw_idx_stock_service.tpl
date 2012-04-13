@@ -36,7 +36,7 @@ ProductSelector.init = function(){
 <table class="main">
   <tr>
     <td rowspan="3" class="halfPane">
-      <form name="filter-stocks" action="?" method="post" onsubmit="return refreshList()">
+      <form name="filter-stocks" action="?" method="get" onsubmit="return refreshList()">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
         
@@ -47,7 +47,7 @@ ProductSelector.init = function(){
           {{/foreach}}
         </select>
         
-				<input type="hidden" name="object_class" value="CService" /> {{* XXX *}}
+        <input type="hidden" name="object_class" value="CService" /> {{* XXX *}}
         <select name="object_id" onchange="$V(this.form.start,0);this.form.onsubmit()">
           <option value="">&mdash; {{tr}}CService.all{{/tr}}</option>
           {{foreach from=$list_services item=curr_service}}

@@ -54,7 +54,7 @@ function deliver(oForm, sign) {
   <tr>
     <td class="halfPane">
 
-      <form name="filter-stocks" action="?" method="post" onsubmit="return stocksFilter.submit('keywords');">
+      <form name="filter-stocks" action="?" method="get" onsubmit="return stocksFilter.submit('keywords');">
         <input type="hidden" name="m" value="{{$m}}" />
         
         <select name="category_id" onchange="stocksFilter.submit();">

@@ -1046,3 +1046,34 @@ div.ex-message-title {
 span.ex-message-title-spacer {
   font-size: 1.6em;
 }
+
+/** Readonly mode **/
+form.readonly .inputExtension,
+form.readonly .dropdown-trigger,
+form.readonly .numericField .arrows {
+  display: none;
+}
+
+form.readonly .input.autocomplete,
+form.readonly .input.dropdown {
+  background-image: none;
+  padding-right: 0;
+}
+
+form.readonly input,
+form.readonly select,
+form.readonly textarea {
+  pointer-events: none;
+}
+
+form.readonly .button.remove, form.readonly button.remove,
+form.readonly .button.add,    form.readonly button.add,
+form.readonly .button.merge,  form.readonly button.merge,
+form.readonly .button.trash,  form.readonly button.trash,
+form.readonly .button.new,    form.readonly button.new,
+form.readonly .button.save,   form.readonly button.save,
+form.readonly .button.submit, form.readonly button.submit,
+form.readonly .button.cancel, form.readonly button.cancel,
+form.readonly .button.modify, form.readonly button.modify {
+  display: none;
+}

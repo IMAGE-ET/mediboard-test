@@ -49,7 +49,7 @@ Main.add(function(){
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="10">
-      <form name="filter-products" action="?" method="post" onsubmit="return filterReferences(this)">
+      <form name="filter-products" action="?" method="get" onsubmit="return filterReferences(this)">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
         <input type="hidden" name="letter" value="{{$letter}}" onchange="this.form.onsubmit()" />

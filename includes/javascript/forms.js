@@ -271,7 +271,7 @@ function prepareForm(oForm) {
     }
     
     // Locked object
-    if (oForm.lockAllFields) {
+    if (oForm.lockAllFields && sElementName !== "m" && sElementName !== "dosql") {
       oElement.disabled = true;
     }
     
@@ -362,7 +362,7 @@ function prepareForm(oForm) {
     }
     
     // Can null
-    if (props.canNull) {
+    if (props.canNull && !readonly) {
       UIchange = true;
       oElement.observe("change", canNullOK)
               .observe("keyup",  canNullOK)
@@ -370,7 +370,7 @@ function prepareForm(oForm) {
     }
 
     // Not null
-    if (props.notNull) {
+    if (props.notNull && !readonly) {
       UIchange = true;
       oElement.observe("change", notNullOK)
               .observe("keyup",  notNullOK)
@@ -416,11 +416,7 @@ function makeReadOnly(element) {
     element.select("form[method='post']").each(function(form){
       if (form.dosql && form.dosql.value === "do_configure") return;
       
-      form.select(".inputExtension, .dropdown-trigger, .numericField .arrows").invoke("hide");
-      form.select("input.autocomplete").invoke("removeClassName", "autocomplete");
-      form.select("input.dropdown").invoke("setStyle", {
-        paddingRight: 0
-      });
+      form.addClassName("readonly");
     });
     
     var selector = "remove add merge trash new save submit cancel modify".replace(/(\w+)/g, "a.button.$1, button.$1,").replace(/(.)$/, "");

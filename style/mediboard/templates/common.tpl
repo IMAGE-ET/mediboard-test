@@ -118,9 +118,9 @@
 
 {{if $conf.readonly}}
 <div class="big-info not-printable">
-  <big>{{tr}}Mode-readonly-title{{/tr}}</big>
-  <div>{{tr}}Mode-readonly-description{{/tr}}</div>
-  <div>{{tr}}Mode-readonly-disclaimer{{/tr}}</div>
+  <strong>{{tr}}Mode-readonly-title{{/tr}}</strong><br />
+  {{tr}}Mode-readonly-description{{/tr}}<br />
+  {{tr}}Mode-readonly-disclaimer{{/tr}}
 </div>
 {{/if}}
 

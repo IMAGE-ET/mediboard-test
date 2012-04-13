@@ -47,7 +47,7 @@ function filterReferences(form) {
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-      <form name="filter-references" action="?" method="post" onsubmit="return filterReferences(this)">
+      <form name="filter-references" action="?" method="get" onsubmit="return filterReferences(this)">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
         <input type="hidden" name="letter" value="{{$letter}}" onchange="this.form.onsubmit()" />
@@ -56,8 +56,8 @@ function filterReferences(form) {
           <option value="">&ndash; {{tr}}CProductCategory.all{{/tr}}</option>
         {{foreach from=$list_categories item=curr_category}} 
           <option value="{{$curr_category->category_id}}" {{if $filter->category_id==$curr_category->_id}}selected="selected"{{/if}}>
-          	{{$curr_category->name}}
-					</option>
+            {{$curr_category->name}}
+          </option>
         {{/foreach}}
         </select>
         
@@ -91,11 +91,11 @@ function filterReferences(form) {
       <ul class="control_tabs" id="reference-tabs">
         <li>
            {{assign var=orders_count value=$lists_objects.orders|@count}}
-        	 <a href="#reference-orders" {{if !$orders_count}}class="empty"{{/if}}>
-        	   {{tr}}CProductOrder{{/tr}}
-						 <small>({{$orders_count}})</small>
-					 </a>
-				</li>
+           <a href="#reference-orders" {{if !$orders_count}}class="empty"{{/if}}>
+             {{tr}}CProductOrder{{/tr}}
+             <small>({{$orders_count}})</small>
+           </a>
+        </li>
         <li>
            {{assign var=receptions_count value=$lists_objects.receptions|@count}}
            <a href="#reference-receptions" {{if !$receptions_count}}class="empty"{{/if}}>
@@ -113,13 +113,13 @@ function filterReferences(form) {
       
       <hr class="control_tabs" />
         
-			<table id="reference-orders" style="display: block;" class="tbl">
+      <table id="reference-orders" style="display: block;" class="tbl">
         <tr>
           <th>{{mb_title class=CProductOrder field=order_number}}</th>
           <th>{{mb_title class=CProductOrder field=date_ordered}}</th>
           <th>{{mb_title class=CProductOrder field=_status}}</th>
         </tr>
-				
+        
         {{foreach from=$lists_objects.orders item=_order}}
         <tr>
           <td>
@@ -161,9 +161,9 @@ function filterReferences(form) {
       <table class="tbl" id="reference-bills" style="display: none;">
         <tr>
           <td colspan="10">
-          	<div class="small-info">
-          		En cours de développement
-          	</div>
+            <div class="small-info">
+              En cours de développement
+            </div>
           </td>
         </tr>
       </table>

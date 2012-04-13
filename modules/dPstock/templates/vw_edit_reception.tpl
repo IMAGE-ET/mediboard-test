@@ -169,7 +169,7 @@ function receptionCallback(){
 
       <div id="orders-containers">
         <div id="no-order">
-          <form action="?" name="filter-references" method="post" onsubmit="return filterReferences(this);">
+          <form action="?" name="filter-references" method="get" onsubmit="return filterReferences(this);">
             <input type="hidden" name="m" value="{{$m}}" />
             <input type="hidden" name="mode" value="reception" />
             <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />

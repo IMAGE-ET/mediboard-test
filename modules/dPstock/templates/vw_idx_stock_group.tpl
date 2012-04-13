@@ -48,7 +48,7 @@ function refreshListStocksService(product_id) {
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-      <form name="filter-stocks" action="?" method="post" onsubmit="return refreshList()">
+      <form name="filter-stocks" action="?" method="get" onsubmit="return refreshList()">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
         <input type="hidden" name="letter" value="{{$letter}}" onchange="this.form.onsubmit()" />

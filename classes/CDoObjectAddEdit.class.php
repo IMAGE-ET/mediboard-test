@@ -29,6 +29,11 @@ class CDoObjectAddEdit {
   var $_old  = null;
 
   function CDoObjectAddEdit($className, $objectKey = null) {
+    if (CAppUI::conf("readonly")) {
+      CAppUI::stepAjax("Mode-readonly-title", UI_MSG_ERROR);
+      return;
+    }
+    
     global $m;
 
     $this->className           = $className;
@@ -171,13 +176,13 @@ class CDoObjectAddEdit {
     if ($object_ids = CMbArray::extract($this->request, $this->objectKeys)) {
       $request = $this->request;
       foreach (explode("-", $object_ids) as $object_id) {
-      	$this->request = $request;
-      	$this->request[$this->objectKey] = $object_id;
-      	$this->doSingle();
+        $this->request = $request;
+        $this->request[$this->objectKey] = $object_id;
+        $this->doSingle();
       }
       $this->doRedirect();
     }
-  	
+    
     $this->doSingle();
     $this->doRedirect();
   }

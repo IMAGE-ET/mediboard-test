@@ -50,7 +50,7 @@ Main.add(function(){
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="10">
-      <form name="filter-endowments" action="?" method="post" onsubmit="return filterEndowments(this)">
+      <form name="filter-endowments" action="?" method="get" onsubmit="return filterEndowments(this)">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
         <input type="hidden" name="letter" value="{{$letter}}" onchange="this.form.onsubmit()" />

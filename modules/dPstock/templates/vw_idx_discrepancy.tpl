@@ -34,7 +34,7 @@ Main.add(function () {
 
 <!-- Tabs containers -->
 <div id="list-stocks-group-filter" style="display: none;">
-  <form name="list-filter-group" action="?" method="post" onsubmit="return filterGroup.submit()">
+  <form name="list-filter-group" action="?" method="get" onsubmit="return filterGroup.submit()">
     <input type="hidden" name="m" value="{{$m}}" />
     <input type="hidden" name="limit" value="" />
     <input type="text" name="keywords" value="" />
@@ -50,7 +50,7 @@ Main.add(function () {
 </div>
 
 <div id="list-stocks-service-filter" style="display: none;">
-  <form name="list-filter-service" action="?" method="post" onsubmit="return filterService.submit()">
+  <form name="list-filter-service" action="?" method="get" onsubmit="return filterService.submit()">
     <input type="hidden" name="m" value="{{$m}}" />
     <input type="hidden" name="limit" value="" />
     <input type="text" name="keywords" value="" />
