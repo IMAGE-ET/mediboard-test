@@ -10,7 +10,7 @@
 
 CCanDo::checkRead();
 
-$date_limite = mbDate("- 6 month");
+$date_limite = mbDate("- 1 month");
 $qte_limite  = 1000;
 
 $tag_ipp    = CPatient::getTagIPP();
