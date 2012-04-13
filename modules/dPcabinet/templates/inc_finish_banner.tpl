@@ -72,14 +72,15 @@ function changePratPec(prat_id) {
           Imprimer les documents
         </button> 
         <br />
-        {{if "maternite"|module_active && !$_is_anesth}}
-          {{mb_include module=maternite template=inc_input_grossesse object=$consult submit=1}}
-        {{/if}}
         {{if $sejour && $sejour->_id}}
           <button class="print" type="button" onclick="printConsult();">
             Imprimer la consultation
           </button><br/> 
           <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}');">{{$sejour}} </span>          
+        {{/if}}
+        {{if "maternite"|module_active && !$_is_anesth && $modules.maternite->_can->read}}
+          <br />
+          {{mb_include module=maternite template=inc_input_grossesse object=$consult submit=1}}
         {{/if}}   
       </div>
       {{/if}}

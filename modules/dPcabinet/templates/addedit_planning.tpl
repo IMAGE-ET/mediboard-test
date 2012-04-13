@@ -387,7 +387,7 @@ Main.add(function () {
             </td>
           </tr>
           
-          {{if $maternite_active}}
+          {{if $maternite_active && @$modules.maternite->_can->read}}
             <tr>
               <th>{{tr}}CGrossesse{{/tr}}</th>
               <td>

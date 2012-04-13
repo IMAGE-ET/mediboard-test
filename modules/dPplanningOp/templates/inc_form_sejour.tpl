@@ -588,7 +588,7 @@ Main.add( function(){
   </td>
 </tr>
 {{/if}}
-{{if $maternite_active && !$mode_operation}}
+{{if $maternite_active && !$mode_operation && @$modules.maternite->_can->read}}
   <tr>
     <th>{{tr}}CGrossesse{{/tr}}</th>  
     <td colspan="3">
