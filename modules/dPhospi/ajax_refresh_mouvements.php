@@ -183,7 +183,12 @@ $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
 CMbObject::massLoadFwdRef($praticiens, "function_id");
 $operations = array();
 
+$suivi_affectation = false;
+
 foreach ($affectations as $_affectation) {
+  if (!$suivi_affectation && $_affectation->parent_affectation_id) {
+    $suivi_affectation = true;
+  }
   $_affectation->loadRefsAffectations();
   $sejour = $_affectation->loadRefSejour();
   $sejour->loadRefPraticien()->loadRefFunction();
@@ -257,6 +262,8 @@ $smarty->assign("nb_affectations", $nb_affectations);
 $smarty->assign("readonly"    , $readonly);
 $smarty->assign("current"     , $current);
 $smarty->assign("prestation_id", $prestation_id);
+$smarty->assign("suivi_affectation", $suivi_affectation);
+
 $smarty->display("inc_vw_mouvements.tpl");
 
 ?>

@@ -2,7 +2,7 @@
   <th class="text">{{$_lit->_selected_item->nom}}</th>
 {{/if}}
 <th class="text first_cell" style="text-align: left;" onclick="chooseLit('{{$_lit->_id}}'); this.down().checked = 'checked';" data-rank="{{$_lit->_selected_item->rank}}">
-  {{if isset($_lit->_lines|smarty:nodefaults) && $_lit->_lines|@count > 1}}
+  {{if isset($_lit->_lines|smarty:nodefaults) && $_lit->_lines|@count > 1 && !$suivi_affectation}}
     <img src="modules/dPhospi/images/surb.png" title="Collision" style="float: right;">
   {{/if}}
   {{if !$readonly}}
@@ -45,13 +45,17 @@
               data-width="{{$_affectation->_width}}" data-offset="{{$_affectation->_entree_offset}}"
               style="left: {{$offset}}px; width: {{$width}}px; border: 1px solid #{{$praticien->_ref_function->color}};"
               onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');
-                this.select('.affectation_toolbar')[0].show()"
-              {{if $smarty.session.browser.name == "msie"}}
-                onmouseleave
-              {{else}}
-                onmouseout
-              {{/if}}="this.select('.affectation_toolbar')[0].hide();">
-              {{if $mode_vue_tempo == "classique" && !$readonly}}
+              {{if $mode_vue_tempo == "classique"}}
+                this.select('.affectation_toolbar')[0].show()
+              {{/if}}"
+              {{if $mode_vue_tempo == "classique"}}
+                {{if $smarty.session.browser.name == "msie"}}
+                  onmouseleave
+                {{else}}
+                  onmouseout
+                {{/if}}="this.select('.affectation_toolbar')[0].hide();"
+              {{/if}}>
+              {{if !$readonly}}
               <table style="background: none !important; padding: 0 !important; border: 0 !important; margin: 0 !important; border-spacing: 0" >
                 <tr style="background: none !important; padding: 0 !important; border: 0 !important; margin: 0 !important">
                   {{if $_sejour->_id && $mode_vue_tempo == "classique"}}
@@ -90,42 +94,41 @@
                       BLOQUE
                     {{/if}}
                   </td>
-                  <td style="vertical-align: middle; background: none !important; padding: 0 !important; border: 0 !important; margin: 0 !important; width: 1%;">
-                    <div style="display: none;" class="affectation_toolbar">
-                      <span style="margin-top: 3px; margin-right: 3px;">
-                        {{mb_include module=patients template=inc_vw_antecedents patient=$_patient type=deficience readonly=1}}
-                      </span>
-                    <a style="margin-top: 3px; display: inline" href="#1"
-                        onclick="AffectationUf.affecter('{{$_affectation->_guid}}','{{$_lit->_guid}}')">
-                        <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF" class="opacity-40"
-                          onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"/>
-                      </a>
-                    <button type="button" class="trash notext opacity-40"
-                        onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"
-                        onclick="delAffectation('{{$_affectation->_id}}', '{{$_affectation->lit_id}}')"></button>
-                      <input type="radio" name="affectation_move" onclick="chooseAffectation('{{$_affectation->_id}}');" />
-                    </div>
-                  </td>
+                  {{if $mode_vue_tempo != "compacte"}}
+                    <td style="vertical-align: middle; background: none !important; padding: 0 !important; border: 0 !important; margin: 0 !important; width: 1%;">
+                      <div style="display: none;" class="affectation_toolbar">
+                        <span style="margin-top: 3px; margin-right: 3px;">
+                          {{mb_include module=patients template=inc_vw_antecedents patient=$_patient type=deficience readonly=1}}
+                        </span>
+                      <a style="margin-top: 3px; display: inline" href="#1"
+                          onclick="AffectationUf.affecter('{{$_affectation->_guid}}','{{$_lit->_guid}}')">
+                          <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF" class="opacity-40"
+                            onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"/>
+                        </a>
+                      <button type="button" class="trash notext opacity-40"
+                          onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"
+                          onclick="delAffectation('{{$_affectation->_id}}', '{{$_affectation->lit_id}}')"></button>
+                        <input type="radio" name="affectation_move" onclick="chooseAffectation('{{$_affectation->_id}}');" />
+                      </div>
+                    </td>
+                  {{/if}}
                 </tr>
-              </table>  
+              </table>
             {{/if}}
-            <div class="wrapper_op">
-              
-              {{assign var=$_affectation_id value=$_affectation->_id}}
-              {{foreach from=$_sejour->_ref_operations item=_operation}}
-                {{math equation=x*(y+4.6) x=$_operation->_debut_offset.$_affectation_id y=$td_width assign=offset_op}}
-                {{math equation=x*(y+4.6) x=$_operation->_width.$_affectation_id y=$td_width assign=width_op}}
-                <div class="operation_in_mouv{{if $mode_vue_tempo == "compacte"}}_compact{{/if}} opacity-40"
-                  style="left: {{$offset_op}}px; width: {{$width_op}}px;"></div>
-                {{if $_operation->duree_uscpo}}
-                  {{math equation=x+y x=$offset_op y=$width_op assign=offset_uscpo}}
-                  {{math equation=x*(y+4.6) x=$_operation->_width_uscpo.$_affectation_id y=$td_width assign=width_uscpo}}
-                  
-                  <div class="soins_uscpo opacity-40"
-                    style="left: {{$offset_uscpo}}px; width: {{$width_uscpo}}px; z-index: -1;"></div>
-                {{/if}}
-              {{/foreach}}
-            </div>
+            {{assign var=$_affectation_id value=$_affectation->_id}}
+            {{foreach from=$_sejour->_ref_operations item=_operation}}
+              {{math equation=x*(y+4.6) x=$_operation->_debut_offset.$_affectation_id y=$td_width assign=offset_op}}
+              {{math equation=x*(y+4.6) x=$_operation->_width.$_affectation_id y=$td_width assign=width_op}}
+              <div class="operation_in_mouv{{if $mode_vue_tempo == "compacte"}}_compact{{/if}} opacity-40"
+                style="left: {{$offset_op}}px; width: {{$width_op}}px;"></div>
+              {{if $_operation->duree_uscpo}}
+                {{math equation=x+y x=$offset_op y=$width_op assign=offset_uscpo}}
+                {{math equation=x*(y+4.6) x=$_operation->_width_uscpo.$_affectation_id y=$td_width assign=width_uscpo}}
+                
+                <div class="soins_uscpo opacity-40"
+                  style="left: {{$offset_uscpo}}px; width: {{$width_uscpo}}px; z-index: -1;"></div>
+              {{/if}}
+            {{/foreach}}
           </div>
                   
           {{if !$readonly}}

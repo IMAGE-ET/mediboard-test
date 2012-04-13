@@ -107,7 +107,12 @@ $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
 CMbObject::massLoadFwdRef($praticiens, "function_id");
 $operations = array();
 
+$suivi_affectation = false;
+
 foreach ($affectations as $_affectation) {
+  if (!$suivi_affectation && $_affectation->parent_affectation_id) {
+    $suivi_affectation = true;
+  }
   $_affectation->loadRefsAffectations();
   $sejour = $_affectation->loadRefSejour();
   $sejour->loadRefPraticien()->loadRefFunction();
@@ -195,6 +200,7 @@ $smarty->assign("td_width"  , $td_width);
 $smarty->assign("mode_vue_tempo", $mode_vue_tempo);
 $smarty->assign("prestation_id", $prestation_id);
 $smarty->assign("show_age_patient", CAppUI::conf("dPhospi show_age_patient"));
+$smarty->assign("suivi_affectation", $suivi_affectation);
 
 $smarty->display("inc_line_lit.tpl");
 
