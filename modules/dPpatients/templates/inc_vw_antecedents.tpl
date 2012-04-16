@@ -6,11 +6,14 @@
   {{if $readonly}}
     <img src="images/icons/{{$type}}.png" {{if !$antecedents.$type|@count}}class="opacity-40"{{/if}} onmouseover="ObjectTooltip.createDOM(this, 'div_atcd');"/>
   {{else}}
+    {{if count($antecedents.$type)}}
     <button type="button" onclick="Antecedent.editAntecedents('{{$patient->_id}}', '{{$type}}', reloadAdmission)"
-        class="{{$type}} notext {{if !$antecedents.$type|@count}}opacity-40{{/if}}"
-        {{if $antecedents.$type|@count}}
-          onmouseover="ObjectTooltip.createDOM(this, 'div_atcd');"
-        {{/if}}></button>
+      class="{{$type}} notext {{if !$antecedents.$type|@count}}opacity-40{{/if}}"
+      {{if $antecedents.$type|@count}}
+        onmouseover="ObjectTooltip.createDOM(this, 'div_atcd');"
+      {{/if}}>
+    </button>
+    {{/if}}
   {{/if}}
 {{/if}}
 <div id="div_atcd" style="display: none;">
