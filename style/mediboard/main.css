@@ -1711,7 +1711,7 @@ div.hatching {
   background-image: url(../../images/icons/ray.gif);
 }
 
-div.wrapper_line_compact {
+div.wrapper_line.compacte {
   position: relative;
   height: 1.1em;
   margin-bottom: 8px;
@@ -1741,8 +1741,7 @@ div.affectation_resize:hover {
   /*z-index: 500;*/
 }
 
-div.affectation_compact {
-  border: 1px solid #aaa;
+div.affectation.compacte {
   overflow: hidden;
   position: absolute;
   height: 1.1em;
@@ -1797,7 +1796,7 @@ div.operation_in_mouv {
   background: #6AE;
 }
 
-div.operation_in_mouv_compact {
+div.operation_in_mouv.compacte {
   position: absolute;
   height: 11px;
   top: 1px;

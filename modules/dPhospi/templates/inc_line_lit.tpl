@@ -10,6 +10,12 @@
   {{/if}}
   {{$_lit}}
 </th>
+
+{{assign var=onmouseevent value=onmouseout}}
+{{if $smarty.session.browser.name == "msie"}}
+  {{assign var=onmouseevent value=onmouseleave}}
+{{/if}}
+
 {{foreach from=0|range:$nb_ticks_r item=_i}}
   {{assign var=datetime value=$datetimes.$_i}}
   <td class="mouvement_lit {{if $datetime == $current}}current_hour{{/if}}" style="min-width: {{$td_width}}px;"
@@ -18,7 +24,7 @@
       {{*  Parcours des affectations *}}
       {{foreach from=$_lit->_lines item=_lines_by_level key=_level}}
         
-        <div class="wrapper_line{{if $mode_vue_tempo == "compacte"}}_compact{{/if}}">
+        <div class="wrapper_line {{$mode_vue_tempo}}">
           
         {{foreach from=$_lines_by_level item=_affectations_ids}}
           
@@ -32,29 +38,31 @@
             {{math equation=x*(y+4.6) x=$_affectation->_entree_offset y=$td_width assign=offset}}
             {{math equation=x*(y+4.6) x=$_affectation->_width y=$td_width assign=width}} 
             
-            <div id="affectation_temporel_{{$_affectation->_id}}" data-affectation_id="{{$_affectation->_id}}" data-lit_id="{{$_affectation->lit_id}}"
-             class="affectation{{if $mode_vue_tempo == "compacte"}}_compact{{/if}} opacity-90 draggable
-              {{if !$_sejour->_id}}clit_bloque{{else}}clit{{/if}}
-              {{if $_affectation->_width < 6}}affectation_resize{{/if}}
-              {{if $_sejour->confirme}}sejour_sortie_autorisee{{/if}}
-              {{$_affectation->sortie}} {{$_sejour->sortie}} {{$date_max}}
-              {{if $_affectation->entree == $_sejour->entree && $_affectation->entree >= $date_min}}debut_sejour{{/if}}
-              {{if $_affectation->sortie == $_sejour->sortie && $_affectation->sortie <= $date_max}}fin_sejour{{/if}}
-              {{if $_affectation->entree > $date_min && $_sejour->_id}}affect_left{{/if}}
-              {{if $_affectation->sortie < $date_max && $_sejour->_id}}affect_right{{/if}}"
-              data-width="{{$_affectation->_width}}" data-offset="{{$_affectation->_entree_offset}}"
+            <div id="affectation_temporel_{{$_affectation->_id}}" 
+              class="affectation {{$mode_vue_tempo}} opacity-90 draggable
+                {{if !$_sejour->_id}}clit_bloque{{else}}clit{{/if}}
+                {{if $_affectation->_width < 6}}affectation_resize{{/if}}
+                {{if $_sejour->confirme}}sejour_sortie_autorisee{{/if}}
+                {{$_affectation->sortie}} {{$_sejour->sortie}} {{$date_max}}
+                {{if $_affectation->entree == $_sejour->entree && $_affectation->entree >= $date_min}}debut_sejour{{/if}}
+                {{if $_affectation->sortie == $_sejour->sortie && $_affectation->sortie <= $date_max}}fin_sejour{{/if}}
+                {{if $_affectation->entree > $date_min && $_sejour->_id}}affect_left{{/if}}
+                {{if $_affectation->sortie < $date_max && $_sejour->_id}}affect_right{{/if}}
+              "
+              data-affectation_id="{{$_affectation->_id}}" 
+              data-lit_id="{{$_affectation->lit_id}}"
+              data-width="{{$_affectation->_width}}" 
+              data-offset="{{$_affectation->_entree_offset}}"
               style="left: {{$offset}}px; width: {{$width}}px; border: 1px solid #{{$praticien->_ref_function->color}};"
               onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');
+                if ($(this).hasClassName('classique')) {
+                  this.select('.affectation_toolbar')[0].show();
+                }
+              "
               {{if $mode_vue_tempo == "classique"}}
-                this.select('.affectation_toolbar')[0].show()
-              {{/if}}"
-              {{if $mode_vue_tempo == "classique"}}
-                {{if $smarty.session.browser.name == "msie"}}
-                  onmouseleave
-                {{else}}
-                  onmouseout
-                {{/if}}="this.select('.affectation_toolbar')[0].hide();"
+                {{$onmouseevent}}="this.select('.affectation_toolbar')[0].hide();"
               {{/if}}>
+
               {{if !$readonly}}
               <table style="background: none !important; padding: 0 !important; border: 0 !important; margin: 0 !important; border-spacing: 0" >
                 <tr style="background: none !important; padding: 0 !important; border: 0 !important; margin: 0 !important">
