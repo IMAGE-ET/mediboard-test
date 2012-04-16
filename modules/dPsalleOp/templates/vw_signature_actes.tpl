@@ -8,16 +8,17 @@ signeActes = function(oForm, subject_id, praticien_id) {
   {{/if}}
 }
 
-reloadAll = function(subject_id, praticien_id) {
-  if (window.parent) {
-    window.parent.ActesCCAM.refreshList(subject_id, praticien_id);
+{{if $dialog}}
+  reloadAll = function(subject_id, praticien_id) {
+    if (window.parent) {
+      window.parent.ActesCCAM.refreshList(subject_id, praticien_id);
+    }
+    $("signature_actes_{{$object->_guid}}").up('div').up().select('.change')[0].click();
   }
-  $("signature_actes_{{$object->_guid}}").up('div').up().select('.change')[0].click();
-}
-
+{{/if}}
 </script>
 
-<table class="main" id="signature_actes_{{$object->_guid}}">
+<table class="main" {{if $dialog}}id="signature_actes_{{$object->_guid}}"{{/if}}>
   {{if !$dialog}}
   <tr>
     <th>
