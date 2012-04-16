@@ -1750,19 +1750,18 @@ class CSejour extends CCodable implements IPatientRelated {
   }
   
   function loadRefsAffectations($order = "sortie DESC") {
-    $where = array("sejour_id" => "= '$this->sejour_id'");
-    $this->_ref_affectations = new CAffectation();
-    $this->_ref_affectations = $this->_ref_affectations->loadList($where, $order);
-    if (count($this->_ref_affectations) > 0) {
-      $this->_ref_first_affectation = end($this->_ref_affectations);
-      $this->_ref_last_affectation = reset($this->_ref_affectations);
+    $affectations = $this->loadBackRefs("affectations", $order);
+
+    if (count($affectations) > 0) {
+      $this->_ref_first_affectation = end  ($affectations);
+      $this->_ref_last_affectation  = reset($affectations);
     } 
     else {
       $this->_ref_first_affectation = new CAffectation;
-      $this->_ref_last_affectation = new CAffectation;
+      $this->_ref_last_affectation  = new CAffectation;
     }
         
-    return $this->_ref_affectations;
+    return $this->_ref_affectations = $affectations;
   }
   
   function forceAffectation($datetime, $lit_id) {
