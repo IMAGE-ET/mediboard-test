@@ -16,9 +16,10 @@ class CNaissance extends CMbObject {
   var $naissance_id     = null;
 
   // DB References
+  var $sejour_maman_id  = null;
+  var $sejour_enfant_id = null;
   var $operation_id     = null;
   var $grossesse_id     = null;
-  var $sejour_enfant_id = null;
   
   // DB Fields
   var $hors_etab        = null;
@@ -29,6 +30,7 @@ class CNaissance extends CMbObject {
   var $_ref_operation   = null;
   var $_ref_grossesse   = null;
   var $_ref_sejour_enfant = null;
+  var $_ref_sejour_maman  = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -38,16 +40,39 @@ class CNaissance extends CMbObject {
   }
   
   function getProps() {
-  	$specs = parent::getProps();
-    $specs["operation_id"]     = "ref class|COperation";
-    $specs["grossesse_id"]     = "ref class|CGrossesse";
-    $specs["sejour_enfant_id"] = "ref notNull class|CSejour";
-    $specs["hors_etab"]        = "bool default|0";
-    $specs["heure"]            = "time";
-    $specs["rang"]             = "num pos";
-    return $specs;
+  	$props = parent::getProps();
+    $props["operation_id"]     = "ref class|COperation";
+    $props["grossesse_id"]     = "ref class|CGrossesse";
+    $props["sejour_maman_id" ] = "ref notNull class|CSejour";
+    $props["sejour_enfant_id"] = "ref notNull class|CSejour";
+    $props["hors_etab"]        = "bool default|0";
+    $props["heure"]            = "time";
+    $props["rang"]             = "num pos";
+    return $props;
   }
   
+  function check() {
+  	if ($msg = parent::check()) {
+      return $msg;
+  	}
+  	
+  	$this->completeField("opreration_id", "sejour_id", "grossesse_id");
+  	
+  	// Operation has to be part of sejour
+  	if ($this->operation_id) {
+      $operation = $this->loadRefOperation();
+      if ($operation->sejour_id != $this->sejour_id) {
+      	return "failed-operation-notin-sejour";
+      }
+  	}
+
+    // Sejour has to be part of grossesse
+    $sejour = $this->loadRefSejourMaman();
+    if ($sejour->grossesse_id != $this->grossesse_id) {
+      return "failed-sejour-maman-notin-grossesse";
+    }
+  }
+    
   function updateFormFields() {
     parent::updateFormFields();
     if ($this->rang && $this->heure) {
@@ -73,6 +98,10 @@ class CNaissance extends CMbObject {
   
   function loadRefSejourEnfant() {
     return $this->_ref_sejour_enfant = $this->loadFwdRef("sejour_enfant_id", true);
+  }
+
+  function loadRefSejourMaman() {
+    return $this->_ref_sejour_maman = $this->loadFwdRef("sejour_maman_id", true);
   }
 }
 ?>

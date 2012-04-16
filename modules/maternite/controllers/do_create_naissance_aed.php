@@ -49,9 +49,9 @@ function storeObject($object) {
 }
 
 // Cinq étapes pour la création de la naissance :
-//   1. Créer le nouveau patient (bébé)
+//   1. Créer le nouveau patient (enfant)
 //   2. Créer le relevé de constantes
-//   3. Créer le séjour du patient
+//   3. Créer le séjour de l'enfant
 //   4. Créer l'affectation du séjour
 //   5. Créer la naissance
 

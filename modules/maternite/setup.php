@@ -68,7 +68,13 @@ class CSetupmaternite extends CSetup {
       CHANGE `grossesse_id` `grossesse_id` INT (11) UNSIGNED NOT NULL auto_increment";
     $this->addQuery($query);
     
-    $this->mod_version = "0.05";
+    $this->makeRevision("0.05");
+    $query = "ALTER TABLE `naissance`
+      ADD `sejour_maman_id` INT (11) UNSIGNED NOT NULL,
+      ADD INDEX (`sejour_maman_id`)";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.06";
   }
 }
 ?>
