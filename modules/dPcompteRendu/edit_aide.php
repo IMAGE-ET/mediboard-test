@@ -84,7 +84,8 @@ $user->loadRefFunction();
 $group = CGroups::loadCurrent();
 
 $aidebis = new CAideSaisie();
-$where[] = "`field` = '".$field."' AND (
+$where[] = "`class` = '".$class."' AND
+`field` = '".$field."' AND (
   user_id     = " . $user_id . " OR 
   function_id = " . $user->function_id . " OR 
   group_id    = " . $group->_id . "
