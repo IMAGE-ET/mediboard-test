@@ -96,7 +96,7 @@
           </th>
           <th class="category narrow">Terme</th>
           <th class="category">Praticiens</th>
-          <th class="category">Naissances</th>
+          <th class="category">Naissances / Séjours enfants</th>
           <th class="category"></th>
         </tr>
         {{foreach from=$sejours item=_sejour}}
@@ -128,12 +128,35 @@
               {{/foreach}}
             </td>
             <td class="text">
-              {{foreach from=$grossesse->_ref_naissances item=_naissance name=foreach_naissance}}
-                <span onmouseover="ObjectTooltip.createEx(this, '{{$_naissance->_guid}}')">
-                  {{$_naissance->_ref_sejour_enfant}}
-                </span>
-                {{if !$smarty.foreach.foreach_naissance.last}}<br />{{/if}}
-              {{/foreach}}
+              <table class="layout" style="width: 100%;">
+                {{foreach from=$grossesse->_ref_naissances item=_naissance name=foreach_naissance}}
+                {{assign var=sejour_enfant value=$_naissance->_ref_sejour_enfant}}
+                <tr>
+                  <td class="narrow">
+                    <button class="edit notext" onclick="Naissance.edit('{{$_naissance->_id}}')">
+                      {{tr}}Edit{{/tr}}
+                    </button>
+                  </td>
+
+                  <td>
+                    {{$_naissance}} {{$sejour_enfant->_ref_patient}}
+                  </td>
+                  
+                  <td class="narrow">
+                    <button class="print notext" onclick="Naissance.printDossier('{{$naissance->_id}}')">
+                      {{tr}}Print{{/tr}}
+                    </button>
+                  </td>
+
+	                  <td>
+                    {{assign var=sejour_enfant value=$_naissance->_ref_sejour_enfant}}
+                    <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour_enfant->_guid}}')">
+                      {{mb_include module=system template=inc_interval_date from=$sejour_enfant->entree to=$sejour_enfant->sortie}}
+                    </span>
+                  </td>
+                </tr>
+                {{/foreach}}
+              </table>
             </td>
             <td class="narrow">
               <button type="button" class="add notext" title="Créer un dossier provisoire"
