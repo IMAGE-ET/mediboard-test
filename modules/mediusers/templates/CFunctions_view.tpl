@@ -3,9 +3,9 @@
 <table class="tbl tooltip">
   <tr>
     <th class="title text">
-      {{mb_include module=system template=inc_object_idsante400 object=function}}
-      {{mb_include module=system template=inc_object_history object=function}}
-      {{*mb_include module=system template=inc_object_notes object=function*}}
+      {{mb_include module=system template=inc_object_idsante400 object=$function}}
+      {{mb_include module=system template=inc_object_history object=$function}}
+      {{*mb_include module=system template=inc_object_notes object=$function*}}
       {{$function}}
     </th>
   </tr>
