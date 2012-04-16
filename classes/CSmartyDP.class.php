@@ -263,13 +263,12 @@ function smarty_modifier_static($object, $name) {
   
   $class = new ReflectionClass($object);
   $statics = $class->getStaticProperties();
-  if (!isset($statics[$name])) {
+  if (!array_key_exists($name, $statics)) {
     trigger_error("Static variable '$name' for class '$class->name' does not exist", E_USER_WARNING);
+    return;
   }
-  else {
-    $static = $statics[$name];
-  }
-  return $static;
+
+  return $statics[$name];
 }
 
 function smarty_modifier_static_call($callback, $args) {
