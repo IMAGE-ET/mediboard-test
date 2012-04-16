@@ -1493,7 +1493,12 @@ class CSetupdPcabinet extends CSetup {
     
     $this->addPrefQuery("viewWeeklyConsultCalendar", "0");
     
-    $this->mod_version = "1.54";
+    $this->makeRevision("1.54");
+    
+    $query="ALTER TABLE `consultation` 
+              ADD INDEX (`grossesse_id`),
+              ADD INDEX (`factureconsult_id`);";
+    $this->mod_version = "1.55";
   }
 }
 ?>
