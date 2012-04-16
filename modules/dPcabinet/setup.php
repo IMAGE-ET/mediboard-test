@@ -1498,7 +1498,13 @@ class CSetupdPcabinet extends CSetup {
     $query="ALTER TABLE `consultation` 
               ADD INDEX (`grossesse_id`),
               ADD INDEX (`factureconsult_id`);";
-    $this->mod_version = "1.55";
+    $this->addQuery($query);
+    $this->makeRevision("1.55");
+    
+    $query="ALTER TABLE `factureconsult` 
+              CHANGE `remise` `remise` DECIMAL (10,2) DEFAULT  '0';";
+    $this->addQuery($query);
+    $this->mod_version = "1.56";
   }
 }
 ?>
