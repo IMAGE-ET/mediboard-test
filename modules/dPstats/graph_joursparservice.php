@@ -57,17 +57,18 @@ function graphJoursParService($debut = null, $fin = null, $prat_id = 0, $service
 		  $end_month = mbDate("-1 DAY", $end_month);
 		  
 		  $query = "SELECT
-                  SUM(DATEDIFF(LEAST(sejour.sortie_$type_data, '$end_month 23:59:59'), GREATEST(sejour.entree_$type_data, '$curr_month 00:00:00'))) AS total, 
+                  SUM(DATEDIFF(LEAST(affectation.sortie, '$end_month 23:59:59'), GREATEST(affectation.entree, '$curr_month 00:00:00'))) AS total, 
                   DATE_FORMAT('$curr_month', '%m/%Y') AS mois,
                   DATE_FORMAT('$curr_month', '%Y%m') AS orderitem
-                FROM sejour
-	              INNER JOIN users_mediboard ON sejour.praticien_id = users_mediboard.user_id
-	              LEFT JOIN affectation ON sejour.sejour_id = affectation.sejour_id
-	              LEFT JOIN lit ON affectation.lit_id = lit.lit_id
-	              LEFT JOIN chambre ON lit.chambre_id = chambre.chambre_id
-	              LEFT JOIN service ON chambre.service_id = service.service_id
+                FROM affectation
+                LEFT JOIN sejour ON sejour.sejour_id = affectation.sejour_id
+                LEFT JOIN lit ON affectation.lit_id = lit.lit_id
+                LEFT JOIN chambre ON lit.chambre_id = chambre.chambre_id
+                LEFT JOIN service ON chambre.service_id = service.service_id
+	              LEFT JOIN users_mediboard ON sejour.praticien_id = users_mediboard.user_id
 	              WHERE sejour.annule = '0'
-                  AND (sejour.entree_$type_data BETWEEN '$curr_month 00:00:00' AND '$end_month 23:59:59' OR sejour.sortie_$type_data BETWEEN '$curr_month 00:00:00' AND '$end_month 23:59:59')
+                  AND affectation.sortie >= '$curr_month 00:00:00'
+                  AND affectation.entree <= '$end_month 23:59:59'
 		              AND service.service_id = '$service->_id'";
 				
 	    if($prat_id)       $query .= "\nAND sejour.praticien_id = '$prat_id'";
@@ -118,7 +119,7 @@ function graphJoursParService($debut = null, $fin = null, $prat_id = 0, $service
 	if($type_adm)      $subtitle .= " - ".$listHospis[$type_adm];
 	
 	$options = array(
-		'title' => utf8_encode("Nombre de nuits par service - $type_data"),
+		'title' => utf8_encode("Nombre de nuits par service"),
 		'subtitle' => utf8_encode($subtitle),
 		'xaxis' => array('labelsAngle' => 45, 'ticks' => $ticks),
 		'yaxis' => array('autoscaleMargin' => 1),
