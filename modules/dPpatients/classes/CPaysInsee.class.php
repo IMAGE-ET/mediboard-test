@@ -35,9 +35,10 @@ class CPaysInsee extends CMbObject {
   }
   
   static function getAlpha3($numerique) {
-    $this->load($numerique);
+    $pays = new self;
+    $pays->load($numerique);
     
-    return $this->alpha_3;
+    return $pays->alpha_3;
   }
 }
 ?>
