@@ -56,12 +56,12 @@ class CNaissance extends CMbObject {
       return $msg;
   	}
   	
-  	$this->completeField("opreration_id", "sejour_id", "grossesse_id");
+  	$this->completeField("operation_id", "sejour_maman_id", "grossesse_id");
   	
   	// Operation has to be part of sejour
   	if ($this->operation_id) {
       $operation = $this->loadRefOperation();
-      if ($operation->sejour_id != $this->sejour_id) {
+      if ($operation->sejour_id != $this->sejour_maman_id) {
       	return "failed-operation-notin-sejour";
       }
   	}
