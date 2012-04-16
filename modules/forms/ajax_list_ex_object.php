@@ -69,7 +69,7 @@ else {
   switch($detail) {
     case 3: 
     case 2: 
-      $limit = ($ex_class_id ? 15 : 10); break;
+      $limit = ($ex_object_ids ? 50 : ($ex_class_id ? 15 : 10)); break;
     case 1: 
       $limit = ($ex_class_id ? 50 : 25); break;
   default:
@@ -220,4 +220,5 @@ $smarty->assign("ex_class_id",     $ex_class_id);
 $smarty->assign("target_element",  $target_element);
 $smarty->assign("print",           $print);
 $smarty->assign("start",           $start);
+$smarty->assign("ex_object_ids",   $ex_object_ids);
 $smarty->display("inc_list_ex_object.tpl");

@@ -13,32 +13,36 @@
             <th class="narrow"></th>
             <th {{if !$print}} style="min-width: 20em;" {{/if}}>Champ</th>
             {{foreach from=$_ex_objects item=_ex_object name=_ex_object}}
-              <th class="narrow {{if $print}}text{{/if}}">
+              <th class="narrow text">
                 
                 {{mb_value object=$_ex_object->_ref_first_log field=date}}
                 
                 {{if !$print}}
                  <hr />
-                
-                 <button style="margin: -1px;" class="edit notext" 
-                         onclick="ExObject.edit('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}', '{{$target_element}}')">
-                   {{tr}}Edit{{/tr}}
-                 </button>
                  
-                 <button style="margin: -1px;" class="search notext" 
-                         onclick="ExObject.display('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}')">
-                   {{tr}}Display{{/tr}}
-                 </button>
-                
-                 <button style="margin: -1px;" class="history notext" 
-                         onclick="ExObject.history('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}')">
-                   {{tr}}History{{/tr}}
-                 </button>
-                 
-                 <button style="margin: -1px;" class="print notext" 
-                         onclick="ExObject.print('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}')">
-                   {{tr}}Print{{/tr}}
-                 </button>
+                 <div style="white-space: nowrap;">
+                   {{if !$ex_object_ids}}
+                     <button style="margin: -1px;" class="edit notext" 
+                             onclick="ExObject.edit('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}', '{{$target_element}}')">
+                       {{tr}}Edit{{/tr}}
+                     </button>
+                   {{/if}}
+                   
+                   <button style="margin: -1px;" class="search notext" 
+                           onclick="ExObject.display('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}')">
+                     {{tr}}Display{{/tr}}
+                   </button>
+                  
+                   <button style="margin: -1px;" class="history notext" 
+                           onclick="ExObject.history('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}')">
+                     {{tr}}History{{/tr}}
+                   </button>
+                   
+                   <button style="margin: -1px;" class="print notext" 
+                           onclick="ExObject.print('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}')">
+                     {{tr}}Print{{/tr}}
+                   </button>
+                 </div>
                  {{/if}}
               </th>
             {{/foreach}}

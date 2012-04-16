@@ -73,7 +73,7 @@ toggleEmptyRows = function(){
 
 ExObject.refreshSelf.{{$self_guid}} = function(start){
   start = start || 0;
-  ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', '{{$target_element}}', '{{$detail}}', '{{$ex_class_id}}', {start: start});
+  ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', '{{$target_element}}', '{{$detail}}', '{{$ex_class_id}}', {start: start, ex_object_ids: '{{$ex_object_ids}}' });
 }
 
 </script>

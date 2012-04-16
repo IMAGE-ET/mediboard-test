@@ -34,6 +34,7 @@ if ($keywords) {
   $where[] = "product_reference.code LIKE '%$keywords%' OR 
               product.code LIKE '%$keywords%' OR 
               product.name LIKE '%$keywords%' OR 
+              product.classe_comptable LIKE '%$keywords%' OR 
               product.description LIKE '%$keywords%'";
 }
 if (!$show_all) {

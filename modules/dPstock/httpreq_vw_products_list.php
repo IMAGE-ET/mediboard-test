@@ -33,6 +33,7 @@ if ($societe_id) {
 if ($keywords) {
   $where[] = "`code` LIKE '%$keywords%' OR 
               `name` LIKE '%$keywords%' OR 
+              `classe_comptable` LIKE '%$keywords%' OR 
               `description` LIKE '%$keywords%'";
 }
 if (!$show_all) {
@@ -45,7 +46,7 @@ $total = $product->countList($where);
 $list_products = $product->loadList($where, $orderby, intval($start).",".CAppUI::conf("dPstock CProduct pagination_size"));
 
 foreach($list_products as $prod) {
-	$prod->loadRefs();
+  $prod->loadRefs();
   $prod->getPendingOrderItems(false);
 }
 

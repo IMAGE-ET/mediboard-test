@@ -12,22 +12,14 @@ CCanDo::checkEdit();
 
 $ratio = (float)(CValue::get("ratio", 2));
 
-$query = "SELECT 
-product_order_item.order_item_id,
-product_order_item.reference_id, 
-product_reference.price AS RP, 
-product_order_item.unit_price AS OP
- 
-FROM `product_order_item` 
-
-LEFT JOIN 
-WHERE ;";
+set_min_memory_limit('512M');
+set_time_limit(120);
 
 $sql = new CRequest();
 $sql->addTable("product_order_item");
 $sql->addSelect("
   product_order_item.order_item_id,
-	product_order_item.reference_id, 
+  product_order_item.reference_id, 
   product_reference.price AS RP, 
   product_order_item.unit_price AS OP, 
   product_order_item.quantity AS OQ, 
@@ -54,29 +46,29 @@ $references = array();
 $references_cahpp = array();
 
 foreach($changes as $_change) {
-	if (!isset($references[$_change["reference_id"]])) {
-		$_reference = new CProductReference;
-		$_reference->load($_change["reference_id"]);
-		$references[$_reference->_id] = $_reference;
-		
+  if (!isset($references[$_change["reference_id"]])) {
+    $_reference = new CProductReference;
+    $_reference->load($_change["reference_id"]);
+    $references[$_reference->_id] = $_reference;
+    
     $article = new CCAHPPArticle();
-		
+    
     $where = array("reference_fournisseur" => $article->_spec->ds->prepare("=%", $_reference->supplier_code));
-		
-		if (!$article->loadObject($where)) {
-			$where = array("cip" => $article->_spec->ds->prepare("=%", $_reference->loadRefProduct()->code));
-	    $article->loadObject($where);
-		}
-		
+    
+    if (!$article->loadObject($where)) {
+      $where = array("cip" => $article->_spec->ds->prepare("=%", $_reference->loadRefProduct()->code));
+      $article->loadObject($where);
+    }
+    
     $references_cahpp[$_reference->_id] = $article;
-	}
-	
-	$_order_item = new CProductOrderItem;
-	$_order_item->load($_change["order_item_id"]);
-	$_order_item->loadOrder();
-	$_change["order_item"] = $_order_item;
-	
-	$changes_struct[$_change["reference_id"]][] = $_change;
+  }
+  
+  $_order_item = new CProductOrderItem;
+  $_order_item->load($_change["order_item_id"]);
+  $_order_item->loadOrder();
+  $_change["order_item"] = $_order_item;
+  
+  $changes_struct[$_change["reference_id"]][] = $_change;
 }
 
 $order_item = new CProductOrderItem;
