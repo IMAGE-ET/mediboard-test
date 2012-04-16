@@ -33,5 +33,11 @@ class CPaysInsee extends CMbObject {
     $specs["nom_ISO"  ] = "str";
     return $specs;
   }
+  
+  static function getAlpha3($numerique) {
+    $this->load($numerique);
+    
+    return $this->alpha_3;
+  }
 }
 ?>

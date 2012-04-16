@@ -88,7 +88,8 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
         $patient->ville,
         null,
         $patient->cp,
-        CHL7v2TableEntry::mapTo("399", $patient->pays_insee),
+        // Pays INSEE, récupération de l'alpha 3
+        CPaysInsee::getAlpha3($patient->pays_insee),
         // Table - 0190
         // B   - Firm/Business 
         // BA  - Bad address 
@@ -114,7 +115,8 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
         $patient->lieu_naissance,
         null,
         $patient->cp_naissance,
-        CHL7v2TableEntry::mapTo("399", $patient->pays_naissance_insee), 
+        // Pays INSEE, récupération de l'alpha 3
+        CPaysInsee::getAlpha3($patient->pays_naissance_insee),
         // Table - 0190
         // B   - Firm/Business 
         // BA  - Bad address 
