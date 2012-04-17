@@ -5,7 +5,7 @@ refresh = function(oForm) {
   var url = new Url('dPcabinet', 'ajax_cut_facture');
   url.addParam('factureconsult_id'    , oForm.factureconsult_id.value);
   url.addParam('nb_factures'    , oForm.nbfacture.value);
-  url.requestUpdate("anonymous_element_1");
+  url.requestUpdate(Facture.modal.container.down('.content'));
 }
 </script>
 
