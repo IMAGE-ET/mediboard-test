@@ -54,7 +54,7 @@
      return onSubmitFormAjax(form, {onComplete: function(){ refreshMouvements(loadNonPlaces, lit_id); }});
    }
    
-   moveAffectation = function(affectation_id, lit_id, sejour_id) {
+   moveAffectation = function(affectation_id, lit_id, sejour_id, lit_id_origine) {
    
     var url = new Url("dPhospi", "ajax_move_affectation");
     if (!Object.isUndefined(affectation_id)) {
@@ -71,6 +71,9 @@
       // Pas d'affectation_id, on recharge la liste des affectations (placement d'un patient)
       if (!affectation_id) {
         after_mouv = loadNonPlaces;
+      }
+      if (lit_id_origine) {
+        refreshMouvements(null, lit_id_origine);
       }
       refreshMouvements(after_mouv, lit_id);
     }});

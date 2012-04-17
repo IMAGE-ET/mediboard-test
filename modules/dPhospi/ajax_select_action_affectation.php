@@ -21,7 +21,7 @@ $smarty->assign("affectation"   , $affectation);
 $smarty->assign("affectation_id", $affectation_id);
 $smarty->assign("lit_id"        , $lit_id);
 $smarty->assign("sejour_id"     , $sejour_id);
-
+$smarty->assign("affectations"  , array());
 $smarty->display("inc_select_action_affectation.tpl");
 
 ?>

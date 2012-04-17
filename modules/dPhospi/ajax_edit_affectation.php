@@ -25,7 +25,7 @@ if (CModule::getActive("maternite")) {
   $naissance->loadMatchingObject();
   
   if ($naissance->_id) {
-    $sejour_maman = $naissance->loadRefOperation()->loadRefSejour();
+    $sejour_maman = $naissance->loadRefSejourMaman();
     $sejour_maman->loadRefPatient();
     $affectations = $sejour_maman->loadRefsAffectations();
     foreach ($affectations as $_affectation) {

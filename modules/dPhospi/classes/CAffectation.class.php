@@ -197,7 +197,11 @@ class CAffectation extends CMbObject {
     if ($msg = parent::store()) {
       return $msg;
     }
-
+    
+    // Si le module maternité est active
+    // Et que c'est une création d'affectation
+    //if ()
+    
     // Pas de problème de synchro pour les blocages de lits
     if (!$this->sejour_id || $this->_no_synchro) {
       return $msg;

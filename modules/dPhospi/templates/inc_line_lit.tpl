@@ -35,6 +35,11 @@
             {{assign var=praticien value=$_sejour->_ref_praticien}}
             {{assign var=offset_op value=0}}
             {{assign var=width_op value=0}}
+            {{if $praticien->_id}}
+              {{assign var=color value=$praticien->_ref_function->color}}
+            {{else}}
+              {{assign var=color value="688"}}
+            {{/if}}
             {{math equation=x*(y+4.6) x=$_affectation->_entree_offset y=$td_width assign=offset}}
             {{math equation=x*(y+4.6) x=$_affectation->_width y=$td_width assign=width}} 
             
@@ -43,9 +48,10 @@
                 {{if !$_sejour->_id}}clit_bloque{{else}}clit{{/if}}
                 {{if $_affectation->_width < 6}}affectation_resize{{/if}}
                 {{if $_sejour->confirme}}sejour_sortie_autorisee{{/if}}
-                {{$_affectation->sortie}} {{$_sejour->sortie}} {{$date_max}}
                 {{if $_affectation->entree == $_sejour->entree && $_affectation->entree >= $date_min}}debut_sejour{{/if}}
                 {{if $_affectation->sortie == $_sejour->sortie && $_affectation->sortie <= $date_max}}fin_sejour{{/if}}
+                {{if !$_affectation->sejour_id && $_affectation->entree >= $date_min}}debut_blocage{{/if}}
+                {{if !$_affectation->sejour_id && $_affectation->sortie <= $date_max}}fin_blocage{{/if}}
                 {{if $_affectation->entree > $date_min && $_sejour->_id}}affect_left{{/if}}
                 {{if $_affectation->sortie < $date_max && $_sejour->_id}}affect_right{{/if}}
               "
@@ -53,8 +59,8 @@
               data-lit_id="{{$_affectation->lit_id}}"
               data-width="{{$_affectation->_width}}" 
               data-offset="{{$_affectation->_entree_offset}}"
-              style="left: {{$offset}}px; width: {{$width}}px; border: 1px solid #{{$praticien->_ref_function->color}};"
-              onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');
+              style="left: {{$offset}}px; width: {{$width}}px; border: 1px solid #{{$color}};"
+              onmouseover="
                 if ($(this).hasClassName('classique')) {
                   this.select('.affectation_toolbar')[0].show();
                 }
@@ -83,7 +89,11 @@
                       {{if $_affectation->parent_affectation_id}}
                         <span class="compact">
                       {{/if}}
-                        {{$_patient->nom}} {{$_patient->prenom}} {{if $show_age_patient}}({{$_patient->_age}} ans){{/if}}
+                      <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');">
+                        {{$_patient->nom}} {{$_patient->prenom}}
+                      </span>
+                      {{if $show_age_patient}}({{$_patient->_age}} ans){{/if}}
+                      
                       {{if $_affectation->parent_affectation_id}}
                         </span>
                       {{/if}}
@@ -105,22 +115,26 @@
                         </span>
                       {{/if}}
                     {{else}}
-                      BLOQUE
+                      <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');">
+                        BLOQUE
+                      </span>
                     {{/if}}
                   </td>
                   {{if $mode_vue_tempo != "compacte"}}
                     <td style="vertical-align: middle; background: none !important; padding: 0 !important; border: 0 !important; margin: 0 !important; width: 1%;">
                       <div style="display: none;" class="affectation_toolbar">
-                       {{if $conf.dPadmissions.show_deficience}}
-                        <span style="margin-top: 3px; margin-right: 3px;">
-                          {{mb_include module=patients template=inc_vw_antecedents patient=$_patient type=deficience readonly=1}}
-                        </span>
+                       {{if $_affectation->sejour_id}}
+                         {{if $conf.dPadmissions.show_deficience}}
+                          <span style="margin-top: 3px; margin-right: 3px;">
+                            {{mb_include module=patients template=inc_vw_antecedents patient=$_patient type=deficience readonly=1}}
+                          </span>
+                         {{/if}}
+                         <a style="margin-top: 3px; display: inline" href="#1"
+                            onclick="AffectationUf.affecter('{{$_affectation->_guid}}','{{$_lit->_guid}}')">
+                           <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF" class="opacity-40"
+                              onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"/>
+                         </a>
                        {{/if}}
-                       <a style="margin-top: 3px; display: inline" href="#1"
-                          onclick="AffectationUf.affecter('{{$_affectation->_guid}}','{{$_lit->_guid}}')">
-                         <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF" class="opacity-40"
-                            onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"/>
-                       </a>
                        <button type="button" class="trash notext opacity-40"
                           onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"
                           onclick="delAffectation('{{$_affectation->_id}}', '{{$_affectation->lit_id}}')"></button>

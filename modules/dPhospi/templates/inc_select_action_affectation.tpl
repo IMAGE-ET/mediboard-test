@@ -8,7 +8,7 @@
     <tr>
       <td>
         <button type="button" class="tick"
-          onclick="moveAffectation('{{$affectation_id}}', '{{$lit_id}}', '{{$sejour_id}}'); Control.Modal.close();">
+          onclick="moveAffectation('{{$affectation_id}}', '{{$lit_id}}', '{{$sejour_id}}', '{{$affectation->lit_id}}'); Control.Modal.close();">
             Déplacer l'affectation
          </button>
       </td>

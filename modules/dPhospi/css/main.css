@@ -1,0 +1,134 @@
+div.clit {
+  background: #fff;
+  color: #000;  
+}
+
+div.clit_bloque {
+  background: #fff;
+  color: #688;
+  border: 1px solid #688;
+}
+
+div.wrapper_line {
+  position: relative;
+  height: 2em;
+  margin-bottom: 8px;
+}
+
+div.hatching {
+  background-image: url(../../images/icons/ray.gif);
+}
+
+div.wrapper_line.compacte {
+  position: relative;
+  height: 1.1em;
+  margin-bottom: 8px;
+}
+
+td.mouvement_lit {
+  padding-bottom: 2px;
+  padding-top: 0;
+}
+
+td.current_hour {
+  background: #f88 !important;
+}
+
+div.affectation, div.affect_legend {
+  border-right: none !important;
+  border-left: none !important;
+  border: 1px solid #aaa;
+  overflow: hidden;
+  position: absolute;
+  height: 2.4em;
+  padding: 1px;
+}
+
+div.affectation_resize:hover {
+  width: auto !important;
+  /*z-index: 500;*/
+}
+
+div.affectation.compacte {
+  overflow: hidden;
+  position: absolute;
+  height: 1.1em;
+  padding: 1px;
+}
+
+div.toolbar_affectation {
+  display: none;
+}
+
+div.toolbar_affectation:hover {
+  display: block;
+}
+
+div.affect_left {
+  border-left: 4px solid #888 !important;
+}
+
+div.affect_right {
+  border-right: 4px solid #888 !important;
+}
+
+div.debut_sejour {
+  border-left: 4px solid #5a5 !important;
+}
+
+div.fin_sejour {
+  border-right: 4px solid #5a5 !important;
+}
+
+div.debut_blocage {
+  border-left: 1px solid #688 !important;
+}
+
+div.fin_blocage {
+  border-right: 1px solid #688 !important;
+}
+
+tr.lit_hover td {
+  background: #ccc !important;
+}
+
+div.non_affectes_hover {
+  background: #ccc !important;
+}
+
+div.sejour_non_affecte {
+  width: 15em;
+  margin: 2px;
+  height: 2.5em;
+  border: 1px solid #aaa;
+  overflow: hidden;
+  vertical-align: top; 
+}
+
+div.operation_in_mouv {
+  position: absolute;
+  height: 25px;
+  top: 1px;
+  background: #6AE;
+}
+
+div.operation_in_mouv.compacte {
+  position: absolute;
+  height: 11px;
+  top: 1px;
+  background: #6AE;
+}
+
+div.soins_uscpo {
+  position: absolute;
+  height: 25px;
+  top: 1px;
+  background: #fd7;
+}
+
+div.soins_uscpo_compact {
+  position: absolute;
+  height: 11px;
+  top: 1px;
+  background: #fd7;
+}

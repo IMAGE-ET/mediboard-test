@@ -54,7 +54,7 @@
               }
               // Sinon déplacement de l'affectation si c'est vers un autre lit
               else if (lit_id != div.get("lit_id")) {
-                moveAffectation(affectation_id, lit_id, sejour_id);
+                moveAffectation(affectation_id, lit_id, sejour_id, div.get("lit_id"));
               }
             }
             if (div.get("lit_id") && lit_id != div.get("lit_id") && !event.ctrlKey) {
