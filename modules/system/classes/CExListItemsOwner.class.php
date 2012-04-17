@@ -34,17 +34,36 @@ class CExListItemsOwner extends CMbObject {
     return $item->loadIds($where, "LPAD(code, 20, '0'), name"); // Natural sort, sort of ...
   }
   
+  function getItemNames(){
+    $item = new CExListItem;
+    $where = array(
+      $this->getBackRefField() => "= '$this->_id'"
+    );
+    
+    $request = new CRequest();
+    $request->addWhere($where);
+    $request->addTable($item->_spec->table);
+    $request->addOrder("LPAD(code, 20, '0'), name");
+    $request->addSelect(array(
+      $item->_spec->key,
+      "name",
+    ));
+
+    $ds = $item->_spec->ds;
+    return $ds->loadHashList($request->getRequest());
+  }
+  
   function getRealListOwner(){
     return $this;
   }
   
   function updateEnumSpec(CEnumSpec $spec){
-    $items = $this->loadRefItems();
+    $items = $this->getItemNames();
     $empty = empty($spec->_locales);
     
-    foreach($items as $_item) {
-      if (!$empty && !isset($spec->_locales[$_item->_id])) continue;
-      $spec->_locales[$_item->_id] = $_item->name;
+    foreach($items as $_id => $_item) {
+      if (!$empty && !isset($spec->_locales[$_id])) continue;
+      $spec->_locales[$_id] = $_item;
     }
     
     $spec->_list = array_keys($spec->_locales);

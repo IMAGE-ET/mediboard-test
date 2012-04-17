@@ -348,7 +348,8 @@ class CExClassField extends CExListItemsOwner {
   
   function updateTranslation(){
     $list_owner = $this->getRealListOwner();
-    $items = $list_owner->loadRefItems(true);
+    $items = $list_owner->getItemNames();
+    //$items = $list_owner->loadRefItems(true);
     
     global $locales;
     
@@ -357,9 +358,12 @@ class CExClassField extends CExListItemsOwner {
     $key = $ex_class->getExClassName().".$this->name";
     $locales["{$key}."] = CAppUI::tr("Undefined");
     
-    foreach($items as $_item) {
-      $locales["{$key}.$_item->_id"] = $_item->name;
+    foreach($items as $_id => $_item) {
+      $locales["$key.$_id"] = $_item;
     }
+    /*foreach($items as $_item) {
+      $locales["{$key}.$_item->_id"] = $_item->name;
+    }*/
     
     $trans = $this->loadRefTranslation();
     $this->_locale       = $trans->std;
