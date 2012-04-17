@@ -87,6 +87,11 @@ class CExObject extends CMbMetaObject {
       return $this->_ref_ex_class;
     }
     
+    $id = $this->getClassId();
+    if (isset(CExClass::$_list_cache[$id])) {
+      return $this->_ref_ex_class = CExClass::$_list_cache[$id];
+    }
+    
     $ex_class = new CExClass();
     $ex_class->load($this->getClassId());
     

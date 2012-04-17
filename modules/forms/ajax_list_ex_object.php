@@ -46,12 +46,20 @@ if ($ex_class_id) {
   $where['ex_class_id'] = "= '$ex_class_id'";
 }
 
-$ex_class = new CExClass;
-$from_cache = true;
-
 if (empty(CExClass::$_list_cache)) {
+  $ex_class = new CExClass;
   CExClass::$_list_cache = $ex_class->loadList($where);
-  $from_cache = false;
+  
+  if ($detail > 1) {
+    foreach(CExClass::$_list_cache as $_ex_class) {
+      foreach($_ex_class->loadRefsGroups() as $_group) {
+        $_group->loadRefsFields();
+        foreach($_group->_ref_fields as $_field) {
+          $_field->updateTranslation();
+        }
+      }
+    }
+  }
 }
 
 $all_ex_objects = array();
@@ -88,15 +96,6 @@ $ref_objects_cache = array();
   
 foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
   $ex_class_key = "$_ex_class->host_class-event-$_ex_class->event";
-  
-  if (!$from_cache && $detail > 1) {
-    foreach($_ex_class->loadRefsGroups() as $_group) {
-      $_group->loadRefsFields();
-      foreach($_group->_ref_fields as $_field) {
-        $_field->updateTranslation();
-      }
-    }
-  }
   
   $_ex_object = new CExObject;
   $_ex_object->_ex_class_id = $_ex_class_id;
