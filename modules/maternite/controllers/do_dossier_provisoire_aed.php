@@ -11,13 +11,15 @@
  * @link     http://www.mediboard.org
  */
 
-$sejour_id   = CValue::post("sejour_id");
-$callback    = CValue::post("callback");
-$prenom      = CValue::post("prenom");
-$nom         = CValue::post("nom");
+$sejour_maman_id = CValue::post("sejour_maman_id");
+$operation_id    = CValue::post("operation_id");
+$callback        = CValue::post("callback");
+$prenom          = CValue::post("prenom");
+$nom             = CValue::post("nom");
+$praticien_id    = CValue::post('praticien_id');
 
 $sejour = new CSejour;
-$sejour->load($sejour_id);
+$sejour->load($sejour_maman_id);
  
 $parturiente = $sejour->loadRefPatient();
 $grossesse   = $sejour->loadRefGrossesse();
@@ -51,7 +53,7 @@ $sejour_enfant = new CSejour;
 $sejour_enfant->patient_id = $patient->_id;
 $sejour_enfant->entree_prevue = mbDateTime();
 $sejour_enfant->sortie_prevue = $sejour->sortie;
-$sejour_enfant->praticien_id = $sejour->praticien_id;
+$sejour_enfant->praticien_id = $praticien_id;
 $sejour_enfant->group_id = $sejour->group_id;
 storeObject($sejour_enfant);
 
@@ -62,7 +64,9 @@ if (!$prenom) {
 
 $naissance = new CNaissance;
 $naissance->grossesse_id = $grossesse->_id;
+$naissance->sejour_maman_id = $sejour->_id;
 $naissance->sejour_enfant_id = $sejour_enfant->_id;
+$naissance->operation_id     = $operation_id;
 storeObject($naissance);
 
 echo CAppUI::getMsg();

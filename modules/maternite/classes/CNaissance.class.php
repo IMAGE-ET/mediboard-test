@@ -75,7 +75,7 @@ class CNaissance extends CMbObject {
     
   function updateFormFields() {
     parent::updateFormFields();
-    if ($this->rang && $this->heure) {
+    if ($this->heure) {
       $this->_view = "Naissance à ".$this->getFormattedValue("heure");
     }
     else {
