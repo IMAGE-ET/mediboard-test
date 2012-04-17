@@ -80,7 +80,13 @@
                       {{elseif $_affectation->effectue}}
                         <span style="text-decoration: line-through">
                       {{/if}}
+                      {{if $_affectation->parent_affectation_id}}
+                        <span class="compact">
+                      {{/if}}
                         {{$_patient->nom}} {{$_patient->prenom}} {{if $show_age_patient}}({{$_patient->_age}} ans){{/if}}
+                      {{if $_affectation->parent_affectation_id}}
+                        </span>
+                      {{/if}}
                       {{if ($_affectation->entree == $_sejour->entree && !$_sejour->entree_reelle) ||
                         ($_affectation->entree != $_sejour->entree && !$_affectation->_ref_prev->effectue) ||
                         $_affectation->effectue}}
@@ -105,18 +111,20 @@
                   {{if $mode_vue_tempo != "compacte"}}
                     <td style="vertical-align: middle; background: none !important; padding: 0 !important; border: 0 !important; margin: 0 !important; width: 1%;">
                       <div style="display: none;" class="affectation_toolbar">
+                       {{if $conf.dPadmissions.show_deficience}}
                         <span style="margin-top: 3px; margin-right: 3px;">
                           {{mb_include module=patients template=inc_vw_antecedents patient=$_patient type=deficience readonly=1}}
                         </span>
-                      <a style="margin-top: 3px; display: inline" href="#1"
+                       {{/if}}
+                       <a style="margin-top: 3px; display: inline" href="#1"
                           onclick="AffectationUf.affecter('{{$_affectation->_guid}}','{{$_lit->_guid}}')">
-                          <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF" class="opacity-40"
+                         <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF" class="opacity-40"
                             onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"/>
-                        </a>
-                      <button type="button" class="trash notext opacity-40"
+                       </a>
+                       <button type="button" class="trash notext opacity-40"
                           onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"
                           onclick="delAffectation('{{$_affectation->_id}}', '{{$_affectation->lit_id}}')"></button>
-                        <input type="radio" name="affectation_move" onclick="chooseAffectation('{{$_affectation->_id}}');" />
+                       <input type="radio" name="affectation_move" onclick="chooseAffectation('{{$_affectation->_id}}');" />
                       </div>
                     </td>
                   {{/if}}
