@@ -118,9 +118,9 @@ if (in_array("consult", $export)) {
       // Evènement détaillé
       if ($details) {
         foreach ($rdv->_ref_consultations as $consult) {
-          $when = iCal::time($consult->heure);
+          $when = ical_time($consult->heure);
           $patient = $consult->loadRefPatient();
-          $what = $patient->_id ? $patient->_view : "Pause: $consult->motif"; 
+          $what = $patient->_id ? "$patient->_civilite $patient->nom" : "Pause: $consult->motif"; 
           $description.= "\n$when: $what";
         }
       }
@@ -143,8 +143,8 @@ if (in_array("interv", $export)) {
         if ($details) {
           foreach ($rdv->_ref_operations as $op) {
             $op->loadComplete();
-            $duration = iCal::time($op->temp_operation);
-            $when     = iCal::time(mbTime($op->_datetime));
+            $duration = ical_time($op->temp_operation);
+            $when     = ical_time(mbTime($op->_datetime));
             $patient = $op->_ref_patient->_view;
             $description.= "\n$when: $patient (duree: $duration)";
           }
