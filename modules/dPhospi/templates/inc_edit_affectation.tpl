@@ -1,5 +1,12 @@
-<form name="editAffect" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {onComplete: function() {
-    refreshMouvements(Control.Modal.close, '{{$affectation->lit_id}}'); }});">
+<form name="editAffect" method="post" action="?" 
+  onsubmit="return onSubmitFormAjax(this, {onComplete: function() {
+    if($V(this._lock_all_lits)){
+      refreshMouvements(Control.Modal.close, '{{$affectation->lit_id}}'); 
+    }
+    else{
+    refreshMouvements(Control.Modal.close);
+    }
+    }});">
   <input type="hidden" name="m" value="dPhospi" />
   <input type="hidden" name="dosql" value="do_affectation_aed" />
   <input type="hidden" name="del" value="0" />
