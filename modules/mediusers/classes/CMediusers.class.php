@@ -722,6 +722,7 @@ class CMediusers extends CMbObject {
   static function loadFonctions($permType = PERM_READ, $group_id = null, $type = null) {
     $group = CGroups::loadCurrent(); 
     $functions = new CFunctions;
+    $functions->actif = 1;
     $functions->group_id = CValue::first($group_id, $group->_id);
 
     if ($type) {
