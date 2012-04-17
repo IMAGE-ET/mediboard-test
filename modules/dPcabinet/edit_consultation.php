@@ -233,6 +233,7 @@ $acte_ngap->coefficient = 1;
 $acte_ngap->loadListExecutants();
 
 $acte_tarmed = null;
+$acte_caisse = null;
 //Si le module Tarmed est installé chargement d'un acte
 if(CModule::getInstalled("tarmed")){
   //Initialisation d'un acte Tarmed
@@ -240,7 +241,13 @@ if(CModule::getInstalled("tarmed")){
   $acte_tarmed->quantite = 1;
   $acte_tarmed->loadListExecutants();
   $acte_tarmed->loadRefExecutant();
+  $acte_caisse = new CActeCaisse();
+  $acte_caisse->quantite = 1;
+  $acte_caisse->loadListExecutants();
+  $acte_caisse->loadRefExecutant();
+  $acte_caisse->loadListCaisses();
 }
+
 // Tableau de contraintes pour les champs du RPU
 // Contraintes sur le mode d'entree / provenance
 //$contrainteProvenance[6] = array("", 1, 2, 3, 4);
@@ -269,16 +276,25 @@ if ($consult->_id) {
 }
 
 $consult->loadRefsActesTarmed();
-$soustotal_base = 0;
-$soustotal_dh   = 0;
+$consult->loadRefsActesCaisse();
+$soustotal_base = array("tarmed" => 0, "caisse" => 0);
+$soustotal_dh   = array("tarmed" => 0, "caisse" => 0);
 if ($consult->_ref_actes_tarmed) {
   foreach($consult->_ref_actes_tarmed as $acte){
-    $soustotal_base += $acte->montant_base;
-    $soustotal_dh   += $acte->montant_depassement; 
+    $soustotal_base["tarmed"] += $acte->montant_base;
+    $soustotal_dh["tarmed"]   += $acte->montant_depassement; 
   }
 }
-$total = $soustotal_base + $soustotal_dh;
-$total = round($total,2);
+if ($consult->_ref_actes_caisse) {
+  foreach($consult->_ref_actes_caisse as $acte){
+    $soustotal_base["caisse"] += $acte->montant_base;
+    $soustotal_dh["caisse"]   += $acte->montant_depassement; 
+  }
+}
+$total["tarmed"] = $soustotal_base["tarmed"] + $soustotal_dh["tarmed"];
+$total["caisse"] = $soustotal_base["caisse"] + $soustotal_dh["caisse"];
+$total["tarmed"] = round($total["tarmed"],2);
+$total["caisse"] = round($total["caisse"],2);
 
 if (CModule::getActive("maternite")) {
   $consult->loadRefGrossesse();
@@ -299,6 +315,7 @@ $smarty->assign("services"        , $services);
 
 $smarty->assign("acte_ngap"      , $acte_ngap);
 $smarty->assign("acte_tarmed"    , $acte_tarmed);
+$smarty->assign("acte_caisse"    , $acte_caisse);
 $smarty->assign("tabSejour"      , $tabSejour);
 $smarty->assign("banques"        , $banques);
 $smarty->assign("listAnesths"    , $listAnesths);

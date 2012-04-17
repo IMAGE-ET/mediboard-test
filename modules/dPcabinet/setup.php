@@ -1453,7 +1453,7 @@ class CSetupdPcabinet extends CSetup {
          `du_patient` float NOT NULL DEFAULT '0.0',
          `du_tiers` float NOT NULL DEFAULT '0.0',
          PRIMARY KEY (`factureconsult_id`),
-         INDEX (`patient_id`) );";
+         INDEX (`patient_id`) )/*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $query = "ALTER TABLE factureconsult 

@@ -120,6 +120,7 @@ $reglement->montant = round($consult->_du_patient_restant, 2);
 // Codes et actes NGAP
 $consult->loadRefsActesNGAP();
 $consult->loadRefsActesTarmed();
+$consult->loadRefsActesCaisse();
 
 //Chargement de la facture
 $facture = new CFactureConsult();

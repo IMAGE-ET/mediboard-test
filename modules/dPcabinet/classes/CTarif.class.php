@@ -22,6 +22,7 @@ class CTarif extends CMbObject {
   var $codes_ccam  = null;
   var $codes_ngap  = null;
   var $codes_tarmed = null;
+  var $codes_caisse = null;
   
   // Form fields
   var $_type       = null;
@@ -29,6 +30,7 @@ class CTarif extends CMbObject {
   var $_codes_ngap = array();
   var $_codes_ccam = array();
   var $_codes_tarmed = array();
+  var $_codes_caisse = array();
   var $_new_actes  = array();
   
   // Remote fields
@@ -65,6 +67,7 @@ class CTarif extends CMbObject {
     $specs["codes_ccam"]  = "str";
     $specs["codes_ngap"]  = "str";
     $specs["codes_tarmed"]= "str";
+    $specs["codes_caisse"]= "str";
     $specs["_somme"]      = "currency";
     $specs["_type"]       = "";
     
@@ -81,9 +84,11 @@ class CTarif extends CMbObject {
     $this->_codes_ngap = explode("|", $this->codes_ngap);
     $this->_codes_ccam = explode("|", $this->codes_ccam);
     $this->_codes_tarmed = explode("|", $this->codes_tarmed);
+    $this->_codes_caisse = explode("|", $this->codes_caisse);
     CMbArray::removeValue("", $this->_codes_ngap);
     CMbArray::removeValue("", $this->_codes_ccam);
     CMbArray::removeValue("", $this->_codes_tarmed);
+    CMbArray::removeValue("", $this->_codes_caisse);
     $this->_somme = $this->secteur1 + $this->secteur2;
   }
   
@@ -111,6 +116,7 @@ class CTarif extends CMbObject {
     $consult->loadRefsActesNGAP();
     $consult->loadRefsActesCCAM();
     $consult->loadRefsActesTarmed();
+    $consult->loadRefsActesCaisse();
     
     // Affectation des valeurs au tarif
     $this->secteur1    = $consult->secteur1;
@@ -119,6 +125,7 @@ class CTarif extends CMbObject {
     $this->codes_ccam  = $consult->_tokens_ccam;
     $this->codes_ngap  = $consult->_tokens_ngap;
     $this->codes_tarmed= $consult->_tokens_tarmed;
+    $this->codes_caisse= $consult->_tokens_caisse;
     $this->chir_id     = $consult->_ref_chir->_id;
     $this->function_id = "";
   }
@@ -190,12 +197,29 @@ class CTarif extends CMbObject {
 				$_code = $acte->makeFullCode();
 	    }
 	    $this->codes_tarmed = implode("|", $this->_codes_tarmed);
+	    
+	    // Actes Caisse
+	    $this->completeField("codes_caisse");
+	    $this->_codes_caisse = explode("|", $this->codes_caisse);
+	    CMbArray::removeValue("", $this->_codes_caisse);
+			foreach ($this->_codes_caisse as &$_code) {
+		    $acte = new CActeCaisse;
+		    $acte->setFullCode($_code);
+	      $this->secteur1 += $acte->updateMontantBase();	
+				
+	      // Affectation du secteur 2  au dépassement du premier acte trouvé
+	      $acte->montant_depassement = $secteur2 ? $secteur2 : 0;
+	      $secteur2 = 0;
+	
+				$_code = $acte->makeFullCode();
+	    }
+	    $this->codes_caisse = implode("|", $this->_codes_caisse);
     }
 		return $this->secteur1;
 	}
 	
 	function getSecteur1Uptodate() {
-		if ((!$this->codes_ngap && !$this->codes_ccam) || !$this->codes_tarmed) {
+		if ((!$this->codes_ngap && !$this->codes_ccam) || (!$this->codes_tarmed && !$this->codes_caisse)) {
 			return $this->_secteur1_uptodate = "1";
 		}
 		
@@ -204,6 +228,7 @@ class CTarif extends CMbObject {
     $codes_ccam = $this->_codes_ccam;
     $codes_ngap = $this->_codes_ngap;
     $codes_tarmed = $this->_codes_tarmed;
+    $codes_caisse = $this->_codes_caisse;
     
 		// Compute...
     $this->_update_montants = true;
@@ -214,6 +239,7 @@ class CTarif extends CMbObject {
     $this->_codes_ccam = $codes_ccam;
     $this->_codes_ngap = $codes_ngap;
     $this->_codes_tarmed = $codes_tarmed;
+    $this->_codes_caisse = $codes_caisse;
 
     return $this->_secteur1_uptodate = CFloatSpec::equals($secteur1, $new_secteur1, $this->_specs["secteur1"]) ? "1" : "0";
 	}
@@ -222,7 +248,7 @@ class CTarif extends CMbObject {
     $this->_has_mto = '0';
     $this->_new_actes = array();
     
-    if (count($this->_codes_ccam) + count($this->_codes_ngap) + count($this->_codes_tarmed) == 0) {
+    if (count($this->_codes_ccam) + count($this->_codes_ngap) + count($this->_codes_tarmed) + count($this->_codes_caisse) == 0) {
       return $this->_precode_ready = '0';
     }
     
@@ -252,6 +278,14 @@ class CTarif extends CMbObject {
 	      $acte = new CActeTarmed();
 	      $acte->setFullCode($code);
 	      $acte->loadRefTarmed(CTarmed::LITE);
+	      $this->_new_actes["$code"] = $acte;
+	      if (!$acte->getPrecodeReady()) {
+	        return $this->_precode_ready = '0';
+	      }
+	    }
+	    foreach ($this->_codes_caisse as $code) {
+	      $acte = new CActeCaisse();
+	      $acte->setFullCode($code);
 	      $this->_new_actes["$code"] = $acte;
 	      if (!$acte->getPrecodeReady()) {
 	        return $this->_precode_ready = '0';

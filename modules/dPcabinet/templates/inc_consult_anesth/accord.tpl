@@ -110,6 +110,7 @@ Main.add(function () {
     {{/if}}
     {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
       <li><a href="#tarmed_tab">Tarmed</a></li>
+      <li><a href="#caisse_tab">Caisses</a></li>
     {{/if}}
   </ul>
   <hr class="control_tabs"/>
@@ -138,6 +139,11 @@ Main.add(function () {
     <div id="tarmed_tab" >
       <div id="listActesTarmed">
         {{mb_include module=tarmed template=inc_codage_tarmed }}
+      </div>
+    </div>
+    <div id="caisse_tab" style="display:none">
+      <div id="listActesCaisse">
+        {{mb_include module=tarmed template=inc_codage_caisse }}
       </div>
     </div>
   {{/if}}

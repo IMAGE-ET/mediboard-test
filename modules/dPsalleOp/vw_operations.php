@@ -154,9 +154,8 @@ $acte_ngap->quantite = 1;
 $acte_ngap->coefficient = 1;
 $acte_ngap->loadListExecutants();
 
-
-$soustotal_base = 0;
-$soustotal_dh   = 0;
+$soustotal_base = array("tarmed" => 0, "caisse" => 0);
+$soustotal_dh   = array("tarmed" => 0, "caisse" => 0);
 $acte_tarmed = null;
 if(CModule::getInstalled("tarmed")){
 	//Initialisation d'un acte Tarmed
@@ -166,13 +165,21 @@ if(CModule::getInstalled("tarmed")){
 	$acte_tarmed->loadRefExecutant();
   if($selOp->_ref_actes_tarmed){
 		foreach($selOp->_ref_actes_tarmed as $acte){
-		  $soustotal_base += $acte->montant_base;
-		  $soustotal_dh   += $acte->montant_depassement;  
+		  $soustotal_base["tarmed"] += $acte->montant_base;
+		  $soustotal_dh["tarmed"]   += $acte->montant_depassement;  
+		}
+  }
+  if($selOp->_ref_actes_caisse){
+		foreach($selOp->_ref_actes_caisse as $acte){
+		  $soustotal_base["caisse"] += $acte->montant_base;
+		  $soustotal_dh["caisse"]   += $acte->montant_depassement;  
 		}
   }
 }
-$total = $soustotal_base + $soustotal_dh;
-$total = round($total,2);
+$total["tarmed"] = $soustotal_base["tarmed"] + $soustotal_dh["tarmed"];
+$total["caisse"] = $soustotal_base["caisse"] + $soustotal_dh["caisse"];
+$total["tarmed"] = round($total["tarmed"],2);
+$total["caisse"] = round($total["caisse"],2);
 
 // Vérification de la check list journalière
 $daily_check_list = CDailyCheckList::getList($salle, $date);

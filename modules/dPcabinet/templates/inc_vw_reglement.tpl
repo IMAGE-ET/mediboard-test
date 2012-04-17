@@ -238,7 +238,7 @@ Main.add( function(){
           <input type="hidden" name="m" value="dPcabinet" />
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="dosql" value="do_consultation_aed" />
-          <input type="hidden" name="type_facture" value="{{if $consult->pec_at == 'arret'}}accident{{/if}}"/>
+          <input type="hidden" name="type_facture" value="{{if $consult->pec_at == 'arret'}}accident{{else}}maladie{{/if}}"/>
           {{mb_key object=$consult}}
           {{mb_field object=$consult field="sejour_id" hidden=1}}
 
@@ -301,6 +301,14 @@ Main.add( function(){
               <td>{{mb_field object=$consult field="_tokens_tarmed" readonly="readonly" hidden=1}}
                 {{foreach from=$consult->_ref_actes_tarmed item=acte_tarmed}}
                   <span onmouseover="ObjectTooltip.createEx(this, '{{$acte_tarmed->_guid}}');">{{$acte_tarmed->_shortview}}</span>
+                {{/foreach}}
+              </td>
+            </tr>
+            <tr>
+              <th>Codes Prestation</th>
+              <td>{{mb_field object=$consult field="_tokens_caisse" readonly="readonly" hidden=1}}
+                {{foreach from=$consult->_ref_actes_caisse item=acte_caisse}}
+                  <span onmouseover="ObjectTooltip.createEx(this, '{{$acte_caisse->_guid}}');">{{$acte_caisse->_shortview}}</span>
                 {{/foreach}}
               </td>
             </tr>

@@ -20,6 +20,9 @@ foreach ($facture->_ref_consults as $consult){
 	foreach($consult->_ref_actes_tarmed as $acte_tarmed){
 		$facture->du_patient += $acte_tarmed->montant_base; 
 	}
+	foreach($consult->_ref_actes_caisse as $acte_caisse){
+		$facture->du_patient += $acte_caisse->montant_base; 
+	}
 }
 
 $facture->_montant_sans_remise = null;

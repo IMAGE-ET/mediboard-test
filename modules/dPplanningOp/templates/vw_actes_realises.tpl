@@ -63,7 +63,7 @@ var viewCCAM = function(codeacte) {
           </td>
         </tr>
         <tr>
-          <th>Nombre d'actes ccam</th>
+          <th>Nombre d'actes {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}ccam{{/if}}</th>
           <td>
             {{$totalActes}}
           </td>

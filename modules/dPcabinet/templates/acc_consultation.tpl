@@ -183,13 +183,14 @@ Main.add(function () {
   	    <li><a href="#ngap">Actes NGAP</a></li>
       {{/if}}
 	    {{if $sejour && $sejour->_id}}
-	    <li><a href="#cim">Diagnostics</a></li>	    
+	     <li><a href="#cim">Diagnostics</a></li>	    
 	    {{/if}}
-	    {{if $conf.dPccam.CCodable.use_frais_divers.CConsultation}}
-	    <li><a href="#fraisdivers">Frais divers</a></li>
+	    {{if $conf.dPccam.CCodable.use_frais_divers.CConsultation && $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
+	     <li><a href="#fraisdivers">Frais divers</a></li>
 	    {{/if}}
       {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
-      <li><a href="#tarmed_tab">Tarmed</a></li>
+        <li><a href="#tarmed_tab">Tarmed</a></li>
+        <li><a href="#caisse_tab">Caisses</a></li>
       {{/if}}
     </ul>
     <hr class="control_tabs"/>
@@ -214,18 +215,23 @@ Main.add(function () {
 	  </div>
 	  {{/if}}
 	  
-	  {{if $conf.dPccam.CCodable.use_frais_divers.CConsultation}}     
+	  {{if $conf.dPccam.CCodable.use_frais_divers.CConsultation && $conf.dPccam.CCodeCCAM.use_cotation_ccam}}     
     <div id="fraisdivers" style="display: none;">
       {{mb_include module=ccam template=inc_frais_divers object=$consult}}
     </div>
     {{/if}}
     
-    {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
-    <div id="tarmed_tab" >
-      <div id="listActesTarmed">
-        {{mb_include module=tarmed template=inc_codage_tarmed }}
+    {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+      <div id="tarmed_tab" style="display:none">
+        <div id="listActesTarmed">
+          {{mb_include module=tarmed template=inc_codage_tarmed }}
+        </div>
       </div>
-    </div>
+      <div id="caisse_tab" style="display:none">
+        <div id="listActesCaisse">
+          {{mb_include module=tarmed template=inc_codage_caisse}}
+        </div>
+      </div>
     {{/if}}
 	{{/if}}
 </div>

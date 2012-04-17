@@ -73,16 +73,16 @@ delReglement= function(reglement_id){
           </tr>
           {{/foreach}}
           {{if ($facture->_montant_total_factures-$facture->_reglements_total_patient) > 0}}
-          <tr>
-            <td>
-              {{mb_field object=$reglement field=mode emptyLabel="Choose" onchange="updateBanque(this)"}}
-              {{mb_field object=$reglement field=banque_id options=$banques style="display: none"}}
-            </td>
-            <td><input type="text" class="currency notNul" size="4" maxlength="8" name="montant" value="{{$facture->_montant_total_factures-$facture->_reglements_total_patient}}" /></td>
-            <td></td>
-            <td><button class="add notext" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ Facture.reloadReglement('{{$facture->_id}}')}});">{{tr}}Add{{/tr}}</button></td>
-          </tr>
-         {{/if}}
+            <tr>
+              <td>
+                {{mb_field object=$reglement field=mode emptyLabel="Choose" onchange="updateBanque(this)"}}
+                {{mb_field object=$reglement field=banque_id options=$banques style="display: none"}}
+              </td>
+              <td><input type="text" class="currency notNul" size="4" maxlength="8" name="montant" value="{{$facture->_montant_total_factures-$facture->_reglements_total_patient}}" /></td>
+              <td></td>
+              <td><button class="add notext" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ Facture.reloadReglement('{{$facture->_id}}')}});">{{tr}}Add{{/tr}}</button></td>
+            </tr>
+          {{/if}}
           <tr>
             <td colspan="4" style="text-align: center;">
               {{mb_value object=$facture field=_reglements_total_patient}} réglés, 

@@ -28,6 +28,7 @@ var Reglement = {
      
       if (reload_acts && Preferences.MODCONSULT == "1" && window.ActesTarmed){
         ActesTarmed.refreshList();
+        ActesCaisse.refreshList();
       }
     }
   },

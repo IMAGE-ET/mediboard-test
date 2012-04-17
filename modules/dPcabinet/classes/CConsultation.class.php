@@ -480,6 +480,10 @@ class CConsultation extends CCodable {
       if ($msg = $this->precodeTARMED()){
         return $msg;
       }
+      $this->_tokens_caisse = $tarif->codes_caisse;
+      if ($msg = $this->precodeCAISSE()){
+        return $msg;
+      }
     }
   }
     
@@ -739,14 +743,36 @@ class CConsultation extends CCodable {
     } 
   }
   
+  function precodeCAISSE() {
+    $listCodesCaisse = explode("|",$this->_tokens_caisse);
+    foreach($listCodesCaisse as $key => $code_caisse){
+      if($code_caisse) {
+        $acte = new CActeCaisse();
+        $acte->_preserve_montant = true;
+        $acte->setFullCode($code_caisse);
+
+        $acte->object_id = $this->_id;
+        $acte->object_class = $this->_class;
+        $acte->executant_id = $this->getExecutantId();
+        if (!$acte->countMatchingList()) {
+          if ($msg = $acte->store()) {
+            return $msg;
+          }
+        }
+      }
+    } 
+  }
+  
   function doUpdateMontants(){
     // Initialisation des montants
     $secteur1_NGAP    = 0;
     $secteur1_CCAM    = 0;
     $secteur1_TARMED  = 0;
+    $secteur1_CAISSE  = 0;
     $secteur2_NGAP    = 0;
     $secteur2_CCAM    = 0;
     $secteur2_TARMED  = 0;
+    $secteur2_CAISSE  = 0;
     $count_actes = 0;
     
     if (CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
@@ -756,6 +782,12 @@ class CConsultation extends CCodable {
         $count_actes++;
         $secteur1_TARMED += round($actetarmed->montant_base , 2);
         $secteur2_TARMED += round($actetarmed->montant_depassement, 2);
+      }
+      $this->loadRefsActesCaisse();
+      foreach ($this->_ref_actes_caisse as $actecaisse) { 
+        $count_actes++;
+        $secteur1_CAISSE += round($actecaisse->montant_base , 2);
+        $secteur2_CAISSE += round($actecaisse->montant_depassement, 2);
       }
     }
     
@@ -776,8 +808,8 @@ class CConsultation extends CCodable {
     }
     
     // Remplissage des montant de la consultation
-    $this->secteur1 = $secteur1_NGAP + $secteur1_CCAM + $secteur1_TARMED;
-    $this->secteur2 = $secteur2_NGAP + $secteur2_CCAM + $secteur2_TARMED;
+    $this->secteur1 = $secteur1_NGAP + $secteur1_CCAM + $secteur1_TARMED + $secteur1_CAISSE;
+    $this->secteur2 = $secteur2_NGAP + $secteur2_CCAM + $secteur2_TARMED + $secteur2_CAISSE;
     
     if($secteur1_NGAP == 0 && $secteur1_CCAM == 0 && $secteur2_NGAP==0 && $secteur2_CCAM ==0){
     	$this->du_patient = $this->secteur1 + $this->secteur2;

@@ -49,6 +49,11 @@ class CCodable extends CMbObject {
   var $_ref_actes_tarmed  = null;
   var $_tokens_tarmed     = null;
   
+  // Actes Caisse
+  var $_codes_caisse      = null;
+  var $_ref_actes_caisse  = null;
+  var $_tokens_caisse     = null;
+  
   // Back references
   var $_ref_actes = null;
   var $_ref_prescriptions = null;
@@ -95,6 +100,14 @@ class CCodable extends CMbObject {
         }
       }
       $this->_tokens_tarmed = "";
+      
+      $this->loadRefsActesCaisse();
+      foreach ($this->_ref_actes_caisse as $acte) { 
+        if ($msg = $acte->delete()) {
+          return $msg;
+        }
+      }
+      $this->_tokens_caisse = "";
     }
   }  
   
@@ -191,9 +204,11 @@ class CCodable extends CMbObject {
     $props["_tokens_ccam"]    = "";
     $props["_tokens_ngap"]    = "";
     $props["_tokens_tarmed"]  = "";
+    $props["_tokens_caisse"]  = "";
     $props["_codes_ccam"]     = "";
     $props["_codes_ngap"]     = "";
     $props["_codes_tarmed"]   = "";
+    $props["_codes_caisse"]   = "";
 
     $props["_count_actes"] = "num min|0";
     return $props;
@@ -204,6 +219,7 @@ class CCodable extends CMbObject {
     $backProps["actes_ngap"]    = "CActeNGAP object_id";
     $backProps["actes_ccam"]    = "CActeCCAM object_id";
     $backProps["actes_tarmed"]  = "CActeTarmed object_id";
+    $backProps["actes_caisse"]  = "CActeCaisse object_id";
     $backProps["frais_divers"]  = "CFraisDivers object_id";
     return $backProps;
   }
@@ -271,7 +287,7 @@ class CCodable extends CMbObject {
   }
   
   function countActes() {
-    $this->_count_actes = $this->countBackRefs("actes_ngap") + $this->countBackRefs("actes_ccam") + $this->countBackRefs("actes_tarmed");
+    $this->_count_actes = $this->countBackRefs("actes_ngap") + $this->countBackRefs("actes_ccam") + $this->countBackRefs("actes_tarmed") + $this->countBackRefs("actes_caisse");
   }
 
   function correctActes() {
@@ -291,6 +307,7 @@ class CCodable extends CMbObject {
     $this->loadRefsActesCCAM();
     $this->loadRefsActesNGAP();  
     $this->loadRefsActesTarmed();
+    $this->loadRefsActesCaisse();
     foreach($this->_ref_actes_ccam as $acte_ccam){
       $this->_ref_actes[] = $acte_ccam;
     }
@@ -300,6 +317,11 @@ class CCodable extends CMbObject {
     if($this->_ref_actes_tarmed){
 	    foreach($this->_ref_actes_tarmed as $acte_tarmed){
 	      $this->_ref_actes[] = $acte_tarmed;
+	    }
+    }
+    if($this->_ref_actes_caisse){
+	    foreach($this->_ref_actes_caisse as $acte_caisse){
+	      $this->_ref_actes[] = $acte_caisse;
 	    }
     }
     
@@ -389,6 +411,39 @@ class CCodable extends CMbObject {
 	      $_acte_tarmed->countActesAssocies();
 	    }
 	    $this->_tokens_tarmed = implode("|", $this->_codes_tarmed);
+    }
+  }
+  
+  /**
+   * Charge les actes Caisse codés
+   */
+  function loadRefsActesCaisse(){
+  	$this->_ref_actes_caisse = array();
+  	
+    if(CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ){
+      //Classement des actes par ordre chonologique et par code
+      
+      $where = array();
+      $where["acte_caisse.object_class"] = " = 'CConsultation'";
+      $where["acte_caisse.object_id"] = " = '$this->_id'";
+      
+	    $order = "caisse_maladie_id, code ASC";
+	    
+	    $acte_caisse = new CActeCaisse();
+	    $this->_ref_actes_caisse = $acte_caisse->loadList($where, $order);
+	    
+	  	if (null === $this->_ref_actes_caisse) {
+	      return;
+	    }
+	    
+	    $this->_codes_caisse = array();
+	    foreach ($this->_ref_actes_caisse as $_acte_caisse){
+	      $this->_codes_caisse[] = $_acte_caisse->makeFullCode(); 
+        $_acte_caisse->loadRefExecutant();
+	      $_acte_caisse->loadRefPrestationCaisse();
+	      $_acte_caisse->loadRefCaisseMaladie();
+	    }
+	    $this->_tokens_caisse = implode("|", $this->_codes_caisse);
     }
   }
   
