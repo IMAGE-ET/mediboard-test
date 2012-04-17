@@ -180,6 +180,7 @@ $locales['Lookup'] = 'Chercher';
 $locales['Medical'] = 'Médical';
 $locales['Medium'] = 'Moyen';
 $locales['Merge'] = 'Fusionner';
+$locales['mergeTooFewObjects'] = 'La fusion a échoué (le nombre d\'objets ne permet pas la fusion)';
 $locales['Mode-readonly-description'] = 'Bien que toutes les informations soient pleinement accessibles, aucune donnée ne peut être enregistrée car Mediboard est en mode "lecture seule" pour des raisons de maintenance.';
 $locales['Mode-readonly-disclaimer'] = 'Si le problème persiste, alerter l\'administrateur du système. Merci pour votre compréhension.';
 $locales['Mode-readonly-msg'] = 'Mode consultation !';
