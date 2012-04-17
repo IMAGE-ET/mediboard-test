@@ -49,6 +49,7 @@ $locales['CIntervHorsPlage.all'] = 'Toutes les interventions hors plage';
 $locales['CIntervHorsPlage.none'] = 'Aucune intervention hors plage';
 $locales['CIntervHorsPlage.one'] = 'Une intervention hors plage';
 $locales['CMbObject-back-modeles_etiquettes'] = 'Modèles d\'étiquette';
+$locales['CMbObject-back-prescriptions'] = 'Prescriptions';
 $locales['CMedecin-back-'] = 'Séjours';
 $locales['CMedecin-back-sejours_adresses'] = 'Séjours adressés';
 $locales['CMedecin-back-sejours_adresses.empty'] = 'Aucun séjour adressé';
