@@ -585,7 +585,12 @@ class CSetupdPhospi extends CSetup {
               ADD INDEX (`start_of_movement`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.60";
+    $this->makeRevision("0.60");
+    $query = "ALTER TABLE `service`
+      ADD `neonatalogie` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.61";
   }
 }
 ?>

@@ -30,7 +30,7 @@ class CService extends CMbObject {
   var $urgence     = null;
   var $uhcd        = null;
   var $externe     = null;
-  
+  var $neonatalogie = null;
   
   // Object references
   var $_ref_chambres = null;
@@ -75,14 +75,15 @@ class CService extends CMbObject {
     $sejour = new CSejour;
     $props["type_sejour"] = CMbString::removeToken($sejour->_props["type"], " ", "notNull");
 
-    $props["nom"]         = "str notNull seekable";
-    $props["description"] = "text seekable";
-    $props["urgence"]     = "bool default|0";
-    $props["uhcd"]        = "bool default|0";
-    $props["hospit_jour"] = "bool default|0";
-    $props["externe"]     = "bool default|0";
-    $props["cancelled"  ] = "bool default|0";
-
+    $props["nom"]          = "str notNull seekable";
+    $props["description"]  = "text seekable";
+    $props["urgence"]      = "bool default|0";
+    $props["uhcd"]         = "bool default|0";
+    $props["hospit_jour"]  = "bool default|0";
+    $props["externe"]      = "bool default|0";
+    $props["cancelled"  ]  = "bool default|0";
+    $props["neonatalogie"] = "bool default|0";
+    
     return $props;
   }
   

@@ -57,6 +57,11 @@
       <th>{{mb_label object=$service field=cancelled}}</th>
       <td>{{mb_field object=$service field=cancelled}}</td>
     </tr>
+    
+    <tr>
+      <th>{{mb_label object=$service field=neonatalogie}}</th>
+      <td>{{mb_field object=$service field=neonatalogie}}</td>
+    </tr>
         
     <tr>
       <th>{{mb_label object=$service field=description}}</th>
