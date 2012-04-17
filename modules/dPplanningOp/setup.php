@@ -1300,7 +1300,19 @@ class CSetupdPplanningOp extends CSetup {
        ADD `sortie_modifiee` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.37";
+    $this->makeRevision("1.37");
+    $query = "ALTER TABLE `protocole` 
+      ADD `presence_preop` TIME,
+      ADD `presence_postop` TIME;";
+    $this->addQuery($query);
+    
+    $this->makeRevision("1.38");
+    $query = "ALTER TABLE `operations` 
+      ADD `presence_preop` TIME,
+      ADD `presence_postop` TIME;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.39";
   }
 }
 ?>

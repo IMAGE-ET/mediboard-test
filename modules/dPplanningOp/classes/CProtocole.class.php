@@ -43,6 +43,8 @@ class CProtocole extends CMbObject {
   var $service_id        = null;
   var $libelle_sejour    = null;
   var $duree_uscpo       = null;
+  var $presence_preop    = null;
+  var $presence_postop   = null;
   
   // DB fields linked protocols
   var $protocole_prescription_chir_id      = null;
@@ -75,58 +77,65 @@ class CProtocole extends CMbObject {
   }
 
   function getProps() {
-  	$specs = parent::getProps();
-    $specs["chir_id"]         = "ref class|CMediusers seekable";
-    $specs["function_id"]     = "ref class|CFunctions seekable";
-    $specs["group_id"]        = "ref class|CGroups seekable";
-    $specs["for_sejour"]      = "bool notNull default|0";
-    $specs["type"]            = "enum list|comp|ambu|exte|seances|ssr|psy default|comp";
-    $specs["DP"]              = "code cim10";
-    $specs["convalescence"]   = "text";
-    $specs["rques_sejour"]    = "text";
-    $specs["libelle"]         = "str seekable";
-    $specs["cote"]            = "enum list|droit|gauche|bilatéral|total|inconnu";
-    $specs["libelle_sejour"]  = "str seekable";
-    $specs["service_id"]      = "ref".(CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1 ? ' notNull' : '')." class|CService seekable";
-    $specs["examen"]          = "text confidential seekable";
-    $specs["materiel"]        = "text confidential seekable";
-    $specs["duree_hospi"]     = "num notNull min|0 max|36500";
-    $specs["rques_operation"] = "text confidential";
-    $specs["depassement"]     = "currency min|0 confidential";
-    $specs["forfait"]         = "currency min|0 confidential";
-    $specs["fournitures"]     = "currency min|0 confidential";
-    $specs["pathologie"]      = "str length|3";
-    $specs["septique"]        = "bool";
-    $specs["codes_ccam"]      = "str seekable";
-    $specs["temp_operation"]  = "time";
-    $specs["type_pec"]        = "enum list|M|C|O";
-    $specs["duree_uscpo"]     = "num min|0 default|0";
+  	$props = parent::getProps();
+    $props["chir_id"]         = "ref class|CMediusers seekable";
+    $props["function_id"]     = "ref class|CFunctions seekable";
+    $props["group_id"]        = "ref class|CGroups seekable";
+    $props["for_sejour"]      = "bool notNull default|0";
+    $props["type"]            = "enum list|comp|ambu|exte|seances|ssr|psy default|comp";
+    $props["DP"]              = "code cim10";
+    $props["convalescence"]   = "text";
+    $props["rques_sejour"]    = "text";
+    $props["libelle"]         = "str seekable";
+    $props["cote"]            = "enum list|droit|gauche|bilatéral|total|inconnu";
+    $props["libelle_sejour"]  = "str seekable";
+    $props["service_id"]      = "ref".(CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1 ? ' notNull' : '')." class|CService seekable";
+    $props["examen"]          = "text confidential seekable";
+    $props["materiel"]        = "text confidential seekable";
+    $props["duree_hospi"]     = "num notNull min|0 max|36500";
+    $props["rques_operation"] = "text confidential";
+    $props["depassement"]     = "currency min|0 confidential";
+    $props["forfait"]         = "currency min|0 confidential";
+    $props["fournitures"]     = "currency min|0 confidential";
+    $props["pathologie"]      = "str length|3";
+    $props["septique"]        = "bool";
+    $props["codes_ccam"]      = "str seekable";
+    $props["temp_operation"]  = "time notNull";
+    $props["type_pec"]        = "enum list|M|C|O";
+    $props["duree_uscpo"]     = "num min|0 default|0";
+    $props["presence_preop"]  = "time show|0";
+    $props["presence_postop"] = "time show|0";
     
-    $specs["protocole_prescription_chir_id"]      = "ref class|CMbObject meta|protocole_prescription_chir_class";
-    $specs["protocole_prescription_chir_class"]   = "enum list|CPrescription|CPrescriptionProtocolePack";
-    $specs["protocole_prescription_anesth_id"]    = "ref class|CMbObject meta|protocole_prescription_anesth_class";
-    $specs["protocole_prescription_anesth_class"] = "enum list|CPrescription|CPrescriptionProtocolePack";
+    $props["protocole_prescription_chir_id"]      = "ref class|CMbObject meta|protocole_prescription_chir_class";
+    $props["protocole_prescription_chir_class"]   = "enum list|CPrescription|CPrescriptionProtocolePack";
+    $props["protocole_prescription_anesth_id"]    = "ref class|CMbObject meta|protocole_prescription_anesth_class";
+    $props["protocole_prescription_anesth_class"] = "enum list|CPrescription|CPrescriptionProtocolePack";
     
-    $specs["_hour_op"]        = "num";
-    $specs["_min_op"]         = "num";
-    return $specs;
+    $props["_hour_op"]        = "num";
+    $props["_min_op"]         = "num";
+    return $props;
   }
 
   function updateFormFields() {
     parent::updateFormFields();
     $this->codes_ccam = strtoupper($this->codes_ccam);
-    if($this->codes_ccam) {
+    if ($this->codes_ccam) {
       $this->_codes_ccam = explode("|", $this->codes_ccam);
-    } else {
+    } 
+    else {
       $this->_codes_ccam = array();
-      }
+    }
+
     $this->_hour_op = intval(substr($this->temp_operation, 0, 2));
     $this->_min_op  = intval(substr($this->temp_operation, 3, 2));
-    if($this->libelle_sejour) {
+    
+    if ($this->libelle_sejour) {
       $this->_view = $this->libelle_sejour;
-    } elseif($this->libelle) {
+    } 
+    elseif ($this->libelle) {
       $this->_view = $this->libelle;
-    } else {
+    } 
+    else {
       $this->_view = $this->codes_ccam;
     }
   }

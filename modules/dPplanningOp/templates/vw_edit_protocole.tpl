@@ -274,26 +274,23 @@ Main.add(function () {
         </tr> 
         
         <tr>
-          <th>
-            {{mb_label object=$protocole field="_hour_op"}}
-          </th>
-          <td colspan="2">
-            <select name="_hour_op" class="notNull num min|0">
-            {{foreach from=$hours|smarty:nodefaults key=key item=hour}}
-              <option value="{{$key}}" {{if (!$protocole && $key == 1) || $protocole->_hour_op == $key}} selected="selected" {{/if}}>{{$key}}</option>
-            {{/foreach}}
-            </select> h 
-            <select name="_min_op">
-            {{foreach from=$mins|smarty:nodefaults item=min}}
-              <option value="{{$min}}" {{if (!$protocole && $min == 0) || $protocole->_min_op == $min}} selected="selected" {{/if}}>{{$min}}</option>
-            {{/foreach}}
-            </select> mn
-          </td>
+          <th>{{mb_label object=$protocole field=temp_operation}}</th>
+          <td colspan="2">{{mb_field object=$protocole field=temp_operation form=editFrm }}</td>
         </tr>
         
         <tr>
           <th>{{mb_label object=$protocole field="duree_uscpo"}}</th>
           <td colspan="2">{{mb_field object=$protocole field="duree_uscpo" increment=true form=editFrm size="2"}} {{tr}}night{{/tr}}(s)</td>
+        </tr>
+        
+        <tr>
+          <th>{{mb_label object=$protocole field=presence_preop}}</th>
+          <td colspan="2">{{mb_field object=$protocole field=presence_preop form=editFrm }}</td>
+        </tr>
+
+        <tr>
+          <th>{{mb_label object=$protocole field=presence_postop}}</th>
+          <td colspan="2">{{mb_field object=$protocole field=presence_postop form=editFrm }}</td>
         </tr>
         
         <tr>

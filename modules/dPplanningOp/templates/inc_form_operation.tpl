@@ -284,6 +284,16 @@ CCAMSelector.init = function(){
   </tr>
   
   <tr>
+    <th>{{mb_label object=$op field=presence_preop}}</th>
+    <td colspan="2">{{mb_field object=$op field=presence_preop form=editOp }}</td>
+  </tr>
+
+  <tr>
+    <th>{{mb_label object=$op field=presence_postop}}</th>
+    <td colspan="2">{{mb_field object=$op field=presence_postop form=editOp }}</td>
+  </tr>
+        
+  <tr>
     <td class="text">{{mb_label object=$op field="examen"}}</td>
     <td class="text">{{mb_label object=$op field="materiel"}}</td>
     <td class="text">{{mb_label object=$op field="rques"}}</td>

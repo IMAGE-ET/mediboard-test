@@ -48,7 +48,10 @@ class COperation extends CCodable implements IPatientRelated {
   
   var $annulee = null;
   
+  var $horaire_voulu      = null;
   var $duree_uscpo        = null;
+  var $presence_preop     = null;
+  var $presence_postop    = null;
   
   // Timings enregistrés
   var $debut_prepa_preop = null;
@@ -64,7 +67,6 @@ class COperation extends CCodable implements IPatientRelated {
   var $sortie_reveil     = null;
   var $induction_debut   = null;
   var $induction_fin     = null;
-  var $horaire_voulu     = null;
   
   // Vérification du côté
   var $cote_admission      = null;
@@ -174,89 +176,91 @@ class COperation extends CCodable implements IPatientRelated {
   }
   
   function getProps() {
-    $specs = parent::getProps();
-    $specs["sejour_id"]          = "ref notNull class|CSejour";
-    $specs["chir_id"]            = "ref notNull class|CMediusers seekable";
-    $specs["anesth_id"]          = "ref class|CMediusers";
-    $specs["plageop_id"]         = "ref class|CPlageOp seekable show|0";
-    $specs["pause"]              = "time show|0";
-    $specs["salle_id"]           = "ref class|CSalle";
-    $specs["date"]               = "date";
-    $specs["code_uf"]            = "str length|3";
-    $specs["libelle_uf"]         = "str maxLength|35";
-    $specs["libelle"]            = "str seekable autocomplete dependsOn|chir_id";
-    $specs["cote"]               = "enum notNull list|droit|gauche|bilatéral|total|inconnu default|inconnu";
-    $specs["temp_operation"]     = "time show|0";
-    $specs["debut_prepa_preop"]  = "time show|0";
-    $specs["fin_prepa_preop"]    = "time show|0";
-    $specs["entree_salle"]       = "time show|0";
-    $specs["sortie_salle"]       = "time show|0";
-    $specs["time_operation"]     = "time show|0";
-    $specs["examen"]             = "text helped";
-    $specs["materiel"]           = "text helped seekable show|0";
-    $specs["commande_mat"]       = "bool show|0";
-    $specs["info"]               = "bool";
-    $specs["type_anesth"]        = "ref class|CTypeAnesth";
-    $specs["rques"]              = "text helped";
-    $specs["rank"]               = "num max|255 show|0";
-    $specs["depassement"]        = "currency min|0 confidential show|0";
-    $specs["forfait"]            = "currency min|0 confidential show|0";
-    $specs["fournitures"]        = "currency min|0 confidential show|0";
-    $specs["depassement_anesth"] = "currency min|0 confidential show|0";
-    $specs["annulee"]            = "bool show|0";
-    $specs["pose_garrot"]        = "time show|0";
-    $specs["debut_op"]           = "time show|0";
-    $specs["fin_op"]             = "time show|0";
-    $specs["retrait_garrot"]     = "time show|0";
-    $specs["entree_reveil"]      = "time show|0";
-    $specs["sortie_reveil"]      = "time show|0";
-    $specs["induction_debut"]    = "time show|0";
-    $specs["induction_fin"]      = "time show|0";
-    $specs["entree_bloc"]        = "time show|0";
-    $specs["anapath"]            = "enum list|1|0|? default|? show|0";
-    $specs["labo"]               = "enum list|1|0|? default|? show|0";
-    $specs["prothese"]           = "enum list|1|0|? default|? show|0";
-    $specs["horaire_voulu"]      = "time show|0";
+    $props = parent::getProps();
+    $props["sejour_id"]          = "ref notNull class|CSejour";
+    $props["chir_id"]            = "ref notNull class|CMediusers seekable";
+    $props["anesth_id"]          = "ref class|CMediusers";
+    $props["plageop_id"]         = "ref class|CPlageOp seekable show|0";
+    $props["pause"]              = "time show|0";
+    $props["salle_id"]           = "ref class|CSalle";
+    $props["date"]               = "date";
+    $props["code_uf"]            = "str length|3";
+    $props["libelle_uf"]         = "str maxLength|35";
+    $props["libelle"]            = "str seekable autocomplete dependsOn|chir_id";
+    $props["cote"]               = "enum notNull list|droit|gauche|bilatéral|total|inconnu default|inconnu";
+    $props["temp_operation"]     = "time show|0";
+    $props["debut_prepa_preop"]  = "time show|0";
+    $props["fin_prepa_preop"]    = "time show|0";
+    $props["entree_salle"]       = "time show|0";
+    $props["sortie_salle"]       = "time show|0";
+    $props["time_operation"]     = "time show|0";
+    $props["examen"]             = "text helped";
+    $props["materiel"]           = "text helped seekable show|0";
+    $props["commande_mat"]       = "bool show|0";
+    $props["info"]               = "bool";
+    $props["type_anesth"]        = "ref class|CTypeAnesth";
+    $props["rques"]              = "text helped";
+    $props["rank"]               = "num max|255 show|0";
+    $props["depassement"]        = "currency min|0 confidential show|0";
+    $props["forfait"]            = "currency min|0 confidential show|0";
+    $props["fournitures"]        = "currency min|0 confidential show|0";
+    $props["depassement_anesth"] = "currency min|0 confidential show|0";
+    $props["annulee"]            = "bool show|0";
+    $props["pose_garrot"]        = "time show|0";
+    $props["debut_op"]           = "time show|0";
+    $props["fin_op"]             = "time show|0";
+    $props["retrait_garrot"]     = "time show|0";
+    $props["entree_reveil"]      = "time show|0";
+    $props["sortie_reveil"]      = "time show|0";
+    $props["induction_debut"]    = "time show|0";
+    $props["induction_fin"]      = "time show|0";
+    $props["entree_bloc"]        = "time show|0";
+    $props["anapath"]            = "enum list|1|0|? default|? show|0";
+    $props["labo"]               = "enum list|1|0|? default|? show|0";
+    $props["prothese"]           = "enum list|1|0|? default|? show|0";
+    $props["horaire_voulu"]      = "time show|0";
+    $props["presence_preop"]     = "time show|0";
+    $props["presence_postop"]    = "time show|0";
     
-    $specs["cote_admission"]     = "enum list|droit|gauche show|0";
-    $specs["cote_consult_anesth"]= "enum list|droit|gauche show|0";
-    $specs["cote_hospi"]         = "enum list|droit|gauche show|0";
-    $specs["cote_bloc"]          = "enum list|droit|gauche show|0";
+    $props["cote_admission"]     = "enum list|droit|gauche show|0";
+    $props["cote_consult_anesth"]= "enum list|droit|gauche show|0";
+    $props["cote_hospi"]         = "enum list|droit|gauche show|0";
+    $props["cote_bloc"]          = "enum list|droit|gauche show|0";
     
     // Visite de préanesthésie
-    $specs["date_visite_anesth"]    = "dateTime";
-    $specs["prat_visite_anesth_id"] = "ref class|CMediusers";
-    $specs["rques_visite_anesth"]   = "text helped show|0";
-    $specs["autorisation_anesth"]   = "bool default|0";
+    $props["date_visite_anesth"]    = "dateTime";
+    $props["prat_visite_anesth_id"] = "ref class|CMediusers";
+    $props["rques_visite_anesth"]   = "text helped show|0";
+    $props["autorisation_anesth"]   = "bool default|0";
 
-    $specs["facture"]                 = "bool default|0";
+    $props["facture"]                 = "bool default|0";
     
-    $specs["duree_uscpo"]             = "num min|0 default|0";
+    $props["duree_uscpo"]             = "num min|0 default|0";
     
-    $specs["_duree_interv"]           = "time";
-    $specs["_duree_garrot"]           = "time";
-    $specs["_duree_induction"]        = "time";
-    $specs["_presence_salle"]         = "time";
-    $specs["_duree_sspi"]             = "time";
+    $props["_duree_interv"]           = "time";
+    $props["_duree_garrot"]           = "time";
+    $props["_duree_induction"]        = "time";
+    $props["_presence_salle"]         = "time";
+    $props["_duree_sspi"]             = "time";
 
-    $specs["_date_min"]               = "date";
-    $specs["_date_max"]               = "date moreEquals|_date_min";
-    $specs["_plage"]                  = "bool";
-    $specs["_intervention"]           = "text";
-    $specs["_prat_id"]                = "text";
-    $specs["_patient_id"]             = "ref class|CPatient show|1";
-    $specs["_bloc_id"]                = "ref class|CBlocOperatoire";
-    $specs["_specialite"]             = "text";
-    $specs["_ccam_libelle"]           = "bool default|1";
-    $specs["_hour_op"]                = "";
-    $specs["_min_op"]                 = "";
-    $specs["_datetime"]               = "dateTime show";
-    $specs["_pause_min"]              = "numchar length|2";
-    $specs["_pause_hour"]             = "numchar length|2";
-    $specs["_move"]                   = "str";
-    $specs["_password_visite_anesth"] = "password notNull";
+    $props["_date_min"]               = "date";
+    $props["_date_max"]               = "date moreEquals|_date_min";
+    $props["_plage"]                  = "bool";
+    $props["_intervention"]           = "text";
+    $props["_prat_id"]                = "text";
+    $props["_patient_id"]             = "ref class|CPatient show|1";
+    $props["_bloc_id"]                = "ref class|CBlocOperatoire";
+    $props["_specialite"]             = "text";
+    $props["_ccam_libelle"]           = "bool default|1";
+    $props["_hour_op"]                = "";
+    $props["_min_op"]                 = "";
+    $props["_datetime"]               = "dateTime show";
+    $props["_pause_min"]              = "numchar length|2";
+    $props["_pause_hour"]             = "numchar length|2";
+    $props["_move"]                   = "str";
+    $props["_password_visite_anesth"] = "password notNull";
     
-    return $specs;
+    return $props;
   }
   
   function loadRelPatient(){

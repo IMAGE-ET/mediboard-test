@@ -46,9 +46,6 @@ $start = CAppUI::conf("dPplanningOp COperation duree_deb");
 $stop  = CAppUI::conf("dPplanningOp COperation duree_fin");
 $step  = CAppUI::conf("dPplanningOp COperation min_intervalle");
 
-$hours = range($start, $stop);
-$mins = range(0,59,$step);
-
 // Récupération des services
 $service = new CService();
 $where = array();
@@ -68,9 +65,6 @@ $smarty->assign("chir"        , $chir);
 $smarty->assign("listPraticiens", $listPraticiens);
 $smarty->assign("listFunctions" , $listFunctions);
 $smarty->assign("listServices"  , $listServices);
-
-$smarty->assign("hours", $hours);
-$smarty->assign("mins" , $mins);
 
 $smarty->display("vw_edit_protocole.tpl");
 
