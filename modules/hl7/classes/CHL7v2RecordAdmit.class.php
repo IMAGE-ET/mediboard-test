@@ -664,8 +664,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Cas modification - Z99
     elseif ($this->_ref_exchange_ihe->code == "Z99") {
       if (!$movement->affectation_id) {
-        $comment = "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
-        return $exchange_ihe->setAckAR($ack, "E207", $comment, $newVenue);
+        return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
       }
       
       $affectation = $movement->loadRefAffectation();
