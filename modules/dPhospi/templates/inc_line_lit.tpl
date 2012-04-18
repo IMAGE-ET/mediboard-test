@@ -42,9 +42,12 @@
             {{/if}}
             {{math equation=x*(y+4.6) x=$_affectation->_entree_offset y=$td_width assign=offset}}
             {{math equation=x*(y+4.6) x=$_affectation->_width y=$td_width assign=width}} 
-            
+            {{assign var=mode_vue_reelle value=$mode_vue_tempo}}
+            {{if $_affectation->parent_affectation_id}}
+              {{assign var=mode_vue_reelle value="compacte"}}
+            {{/if}}
             <div id="affectation_temporel_{{$_affectation->_id}}" 
-              class="affectation {{$mode_vue_tempo}} opacity-90 draggable
+              class="affectation {{$mode_vue_reelle}} opacity-90 draggable
                 {{if !$_sejour->_id}}clit_bloque{{else}}clit{{/if}}
                 {{if $_affectation->_width < 6}}affectation_resize{{/if}}
                 {{if $_sejour->confirme}}sejour_sortie_autorisee{{/if}}
@@ -54,6 +57,7 @@
                 {{if !$_affectation->sejour_id && $_affectation->sortie <= $date_max}}fin_blocage{{/if}}
                 {{if $_affectation->entree > $date_min && $_sejour->_id}}affect_left{{/if}}
                 {{if $_affectation->sortie < $date_max && $_sejour->_id}}affect_right{{/if}}
+                {{if $_affectation->parent_affectation_id}}child{{/if}}
               "
               data-affectation_id="{{$_affectation->_id}}" 
               data-lit_id="{{$_affectation->lit_id}}"
@@ -65,20 +69,20 @@
                   this.select('.affectation_toolbar')[0].show();
                 }
               "
-              {{if $mode_vue_tempo == "classique"}}
+              {{if $mode_vue_reelle == "classique"}}
                 {{$onmouseevent}}="this.select('.affectation_toolbar')[0].hide();"
               {{/if}}>
 
               {{if !$readonly}}
-              <table style="background: none !important; padding: 0 !important; border: 0 !important; margin: 0 !important; border-spacing: 0" >
-                <tr style="background: none !important; padding: 0 !important; border: 0 !important; margin: 0 !important">
-                  {{if $_sejour->_id && $mode_vue_tempo == "classique"}}
-                    <td style="width: 1%; background: none !important; padding: 0 !important; border: 0 !important; margin: 0 !important; vertical-align: top;">
+              <table class="layout_affectation">
+                <tr>
+                  {{if $_sejour->_id && $mode_vue_reelle == "classique"}}
+                    <td class="narrow" style="vertical-align: top; padding-right: 2px !important;">
                       {{mb_include module=patients template=inc_vw_photo_identite mode=read patient=$_patient size=22}}
                     </td>
                   {{/if}}
                   
-                  <td style="background: none !important; padding: 0 !important; border: 0 !important; margin: 0 !important; vertical-align: top;">
+                  <td style="vertical-align: top;">
                     {{if $_sejour->_id}}
                       {{if ($_affectation->entree == $_sejour->entree && !$_sejour->entree_reelle) ||
                         ($_affectation->entree != $_sejour->entree && !$_affectation->_ref_prev->effectue)}}
@@ -86,33 +90,26 @@
                       {{elseif $_affectation->effectue}}
                         <span style="text-decoration: line-through">
                       {{/if}}
-                      {{if $_affectation->parent_affectation_id}}
-                        <span class="compact">
-                      {{/if}}
+                      
                       <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');">
                         {{$_patient->nom}} {{$_patient->prenom}}
                       </span>
+                      
                       {{if $show_age_patient}}({{$_patient->_age}} ans){{/if}}
                       
-                      {{if $_affectation->parent_affectation_id}}
-                        </span>
-                      {{/if}}
                       {{if ($_affectation->entree == $_sejour->entree && !$_sejour->entree_reelle) ||
                         ($_affectation->entree != $_sejour->entree && !$_affectation->_ref_prev->effectue) ||
                         $_affectation->effectue}}
                         </span>
                       {{/if}}
-                      {{if $mode_vue_tempo == "classique"}}
-                        <br />
-                        <span class="compact">
+                      {{if $mode_vue_reelle == "classique"}}
+                        <div class="compact">
                           {{$_sejour->_motif_complet}}
-                        </span>
-                        <span class="compact">
                           <em style="color: #f00;" title="Chambre seule">
                             {{if $_sejour->chambre_seule}}CS{{else}}CD{{/if}}
                             {{if $_sejour->prestation_id}}- {{$_sejour->_ref_prestation->code}}{{/if}}
                           </em>
-                        </span>
+                        </div>
                       {{/if}}
                     {{else}}
                       <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');">
@@ -120,8 +117,8 @@
                       </span>
                     {{/if}}
                   </td>
-                  {{if $mode_vue_tempo != "compacte"}}
-                    <td style="vertical-align: middle; background: none !important; padding: 0 !important; border: 0 !important; margin: 0 !important; width: 1%;">
+                  {{if $mode_vue_reelle != "compacte"}}
+                    <td style="vertical-align: middle; width: 1%;">
                       <div style="display: none;" class="affectation_toolbar">
                        {{if $_affectation->sejour_id}}
                          {{if $conf.dPadmissions.show_deficience}}
@@ -149,7 +146,7 @@
             {{foreach from=$_sejour->_ref_operations item=_operation}}
               {{math equation=x*(y+4.6) x=$_operation->_debut_offset.$_affectation_id y=$td_width assign=offset_op}}
               {{math equation=x*(y+4.6) x=$_operation->_width.$_affectation_id y=$td_width assign=width_op}}
-              <div class="operation_in_mouv{{if $mode_vue_tempo == "compacte"}}_compact{{/if}} opacity-40"
+              <div class="operation_in_mouv{{if $mode_vue_reelle == "compacte"}}_compact{{/if}} opacity-40"
                 style="left: {{$offset_op}}px; width: {{$width_op}}px;"></div>
               {{if $_operation->duree_uscpo}}
                 {{math equation=x+y x=$offset_op y=$width_op assign=offset_uscpo}}

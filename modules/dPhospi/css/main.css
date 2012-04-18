@@ -44,6 +44,10 @@ div.affectation, div.affect_legend {
   padding: 1px;
 }
 
+div.affectation.child {
+  margin-top: 0.5em;
+}
+
 div.affectation_resize:hover {
   width: auto !important;
   /*z-index: 500;*/
@@ -131,4 +135,14 @@ div.soins_uscpo_compact {
   height: 11px;
   top: 1px;
   background: #fd7;
+}
+
+table.layout_affectation,
+table.layout_affectation tr,
+table.layout_affectation td {
+  background: none !important;
+  padding: 0 !important;
+  border: 0 !important;
+  margin: 0 !important;
+  border-spacing: 0; 
 }
