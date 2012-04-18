@@ -60,7 +60,7 @@ class CDoObjectAddEdit {
     $this->objectKeys = $this->objectKey . "s";
   }
 
-  function doBind() {
+  function doBind($reinstanciate_objects = false) {
     $this->ajax            = CMbArray::extract($this->request, "ajax");
     $this->suppressHeaders = CMbArray::extract($this->request, "suppressHeaders");
     $this->callBack        = CMbArray::extract($this->request, "callback");
@@ -70,9 +70,11 @@ class CDoObjectAddEdit {
       $this->redirect = $this->postRedirect;
     }
     
-    $this->_obj            = new $this->className();
-    $this->_old            = new $this->className();
-    $this->onAfterInstanciation(); // Lancer ceci apres chaque instanciation de _obj et _old !!
+    if ($reinstanciate_objects) {
+      $this->_obj            = new $this->className();
+      $this->_old            = new $this->className();
+      $this->onAfterInstanciation(); // Lancer ceci apres chaque instanciation de _obj et _old !!
+    }
     
     // Object binding
     $this->_obj->bind($this->request);
@@ -176,7 +178,6 @@ class CDoObjectAddEdit {
       $guid = "$this->className-$id";
       CAppUI::callbackAjax("Form.onSubmitComplete", $guid, $fields);
     }
-
     
     CApp::rip();
   }
@@ -188,17 +189,19 @@ class CDoObjectAddEdit {
       foreach (explode("-", $object_ids) as $object_id) {
         $this->request = $request;
         $this->request[$this->objectKey] = $object_id;
-        $this->doSingle();
+        $this->doSingle(true);
       }
+      
       $this->doRedirect();
     }
     
-    $this->doSingle();
+    $this->doSingle(false);
     $this->doRedirect();
   }
   
-  function doSingle() {
-    $this->doBind();
+  function doSingle($reinstanciate_objects) {
+    $this->doBind($reinstanciate_objects);
+    
     if (CMbArray::extract($this->request, 'del')) {
       $this->doDelete();
     } 
