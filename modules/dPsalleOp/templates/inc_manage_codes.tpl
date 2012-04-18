@@ -71,7 +71,7 @@
       <td class="halfPane">
         <fieldset>
           <legend>Validation du codage</legend>
-          {{if $m == "dPpmsi" && $subject instanceof COperation}}
+          {{if $conf.dPsalleOp.CActeCCAM.envoi_actes_salle || $m == "dPpmsi" && $subject instanceof COperation}}
             <table class="main layout">
               <tr id="export_{{$subject->_class}}_{{$subject->_id}}">
                 {{if !$subject->facture || $m == "dPpmsi" || $can->admin}}
