@@ -366,7 +366,7 @@ Main.add(function () {
                    {{if $sejour->_entree < $bornes_composition_dossier|@reset|@reset}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$prev_date}}', null, null, null, null, null, null, '1', '{{$hide_close}}');"{{/if}}
                    ></button>
     
-         Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}
+         Plan de soins du {{$date|@date_format:"%d/%m/%Y"}}
          <form name="changeDateDossier" method="get" action="?" onsubmit="return false" style="font-size: 11px">
            <input type="hidden" name="date" class="date" value="{{$date}}" onchange="PlanSoins.loadTraitement('{{$sejour->_id}}',this.value,'','administration', null, null, null, null, '1', '{{$hide_close}}');"/>
          </form>
