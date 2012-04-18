@@ -72,6 +72,21 @@ class CPAMFR extends CPAM {
   }
   
   /**
+   * Retrieve transaction name
+   * @param $code Event code
+   * @return string Transaction name
+   */
+  static function getTransaction($code) {
+    if (in_array($code, self::$transaction_iti30)) {
+      return "ITI30";
+    }
+    
+    if (in_array($code, self::$transaction_iti31)) {
+      return "ITI31";
+    }
+  }
+  
+  /**
    * Return data format object
    * @param exchange Instance of exchange
    * @return object An instance of data format

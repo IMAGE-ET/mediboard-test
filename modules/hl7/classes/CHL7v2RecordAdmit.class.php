@@ -608,6 +608,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return;
     }
     
+    $exchange_ihe = $this->_ref_exchange_ihe;
+    
     $PV1_3 = $this->queryNode("PV1.3", $data["PV1"]);
         
     $affectation = new CAffectation();
