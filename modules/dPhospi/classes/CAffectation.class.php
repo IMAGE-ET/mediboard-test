@@ -183,6 +183,9 @@ class CAffectation extends CMbObject {
   }
 
   function store() {
+    $create_affectations = false;
+    $sejour = $this->loadRefSejour();
+    
   	// Conserver l'ancien objet avant d'enregistrer
     $old = new CAffectation();
     if ($this->_id) {
@@ -193,14 +196,41 @@ class CAffectation extends CMbObject {
     // Gestion des UFs
     $this->makeUF();
     
+    // Si c'est une création d'affectation, avec ni une précédente ni une suivante,
+    // que le séjour est relié à une grossesse, et que le module maternité est actif,
+    // alors il faut créer les affectations des bébés.
+    if (CModule::getActive("maternite") && $this->_ref_sejour->grossesse_id && !$this->_id && !$this->_ref_prev && !$this->_ref_next) {
+      $create_affectations = true;
+    }
+    
     // Enregistrement standard
     if ($msg = parent::store()) {
       return $msg;
     }
     
-    // Si le module maternité est active
-    // Et que c'est une création d'affectation
-    //if ()
+    if ($create_affectations) {
+      $grossesse = $this->_ref_sejour->loadRefGrossesse();
+      $naissances = $grossesse->loadRefsNaissances();
+      foreach ($naissances as $key => $_naissance) {
+        // On exclue les dossiers provisoires
+        if (!$_naissance->heure) {
+          unset ($naissances[$key]);
+        }
+      }
+      $sejours = CMbObject::massLoadFwdRef($naissances, "sejour_enfant_id");
+      
+      foreach ($sejours as $_sejour) {
+        $_affectation = new CAffectation;
+        $_affectation->lit_id = $this->lit_id;
+        $_affectation->sejour_id = $_sejour->_id;
+        $_affectation->parent_affectation_id = $this->_id;
+        $_affectation->entree = mbDateTime();
+        $_affectation->sortie = $this->sortie;
+        if ($msg = $_affectation->store()) {
+          return $msg;
+        }
+      }
+    }
     
     // Pas de problème de synchro pour les blocages de lits
     if (!$this->sejour_id || $this->_no_synchro) {
@@ -224,7 +254,6 @@ class CAffectation extends CMbObject {
     
     $prev = $this->_ref_prev;
     $next = $this->_ref_next;
-    $sejour = $this->loadRefSejour();
     
     // Mise à jour vs l'entrée
     if (!$prev->_id) {
