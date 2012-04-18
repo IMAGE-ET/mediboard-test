@@ -90,7 +90,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       }
       
       $sejour = $affectation->loadRefSejour();
-      if ($sejour->_etat == "preadmission") {
+      if (!$sejour->_id || $sejour->_etat == "preadmission") {
         return;
       }
       
@@ -395,7 +395,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       }
       
       $sejour = $affectation->loadRefSejour();
-      if ($sejour->_etat == "preadmission") {
+      if (!$sejour->_id || $sejour->_etat == "preadmission") {
         return;
       }
       
@@ -411,7 +411,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       
       $sejour->loadRefPatient();
       $sejour->_receiver = $receiver;
-      
+
       $this->createMovement($code, $sejour, $affectation);
    
       // Envoi de l'événement
