@@ -13,6 +13,7 @@ CCanDo::checkEdit();
 $sender_source_id = CValue::get("sender_source_id");
 $sender_source    = new CViewSenderSource();
 $sender_source->load($sender_source_id);
+$sender_source->loadRefsNotes();
 $sender_source->loadRefSourceFTP();
 
 $smarty = new CSmartyDP();
