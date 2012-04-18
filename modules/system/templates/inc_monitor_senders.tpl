@@ -69,7 +69,10 @@
 	      </td>
 	      
 	      {{assign var=class value=ok}}
-	      {{if $_sender_source->_last_age > $_sender->period}} 
+        {{if $_sender_source->_last_age > $_sender->period}} 
+          {{assign var=class value=warning}}
+        {{/if}}
+	      {{if $_sender_source->_last_age > 2 * $_sender->period}} 
 	        {{assign var=class value=error}}
 	      {{/if}}
 	      <td class="{{$class}}">
