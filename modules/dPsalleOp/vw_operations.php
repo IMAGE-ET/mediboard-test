@@ -157,12 +157,18 @@ $acte_ngap->loadListExecutants();
 $soustotal_base = array("tarmed" => 0, "caisse" => 0);
 $soustotal_dh   = array("tarmed" => 0, "caisse" => 0);
 $acte_tarmed = null;
+$acte_caisse = null;
 if(CModule::getInstalled("tarmed")){
 	//Initialisation d'un acte Tarmed
 	$acte_tarmed = new CActeTarmed();
 	$acte_tarmed->quantite = 1;
 	$acte_tarmed->loadListExecutants();
 	$acte_tarmed->loadRefExecutant();
+  $acte_caisse = new CActeCaisse();
+  $acte_caisse->quantite = 1;
+  $acte_caisse->loadListExecutants();
+  $acte_caisse->loadRefExecutant();
+  $acte_caisse->loadListCaisses();
   if($selOp->_ref_actes_tarmed){
 		foreach($selOp->_ref_actes_tarmed as $acte){
 		  $soustotal_base["tarmed"] += $acte->montant_base;
@@ -248,6 +254,7 @@ $smarty->assign("anesth_perop"           , new CAnesthPerop());
 $smarty->assign("unites"                 , $unites);
 $smarty->assign("acte_ngap"              , $acte_ngap);
 $smarty->assign("acte_tarmed"            , $acte_tarmed);
+$smarty->assign("acte_caisse"            , $acte_caisse);
 $smarty->assign("op"                     , $op);
 $smarty->assign("salle"                  , $salle_id);
 $smarty->assign("currUser"               , $currUser);
