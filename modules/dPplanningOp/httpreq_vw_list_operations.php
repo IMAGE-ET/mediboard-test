@@ -104,6 +104,25 @@ if ($praticien->_can->edit) {
   }
 }
 
+// Compter les modèles d'étiquettes
+$modele_etiquette = new CModeleEtiquette;
+
+$where = array();
+
+$where['object_class'] = " = '$object_class'";
+$where["group_id"] = " = '".CGroups::loadCurrent()->_id."'";
+
+$nb_modeles_etiquettes = $modele_etiquette->countList($where);
+
+$nb_printers = 0;
+
+if (CModule::getActive("printing")) {
+  // Chargement des imprimantes pour l'impression d'étiquettes 
+  $user_printers = CMediusers::get();
+  $function      = $user_printers->loadRefFunction();
+  $nb_printers   = $function->countBackRefs("printers");
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -115,6 +134,8 @@ $smarty->assign("date"        , $date);
 $smarty->assign("listUrgences", $listUrgences);
 $smarty->assign("listDay"     , $listDay);
 $smarty->assign("board"       , $board);
+$smarty->assign("nb_printers" , $nb_printers);
+$smarty->assign("nb_modeles_etiquettes", $nb_modeles_etiquettes);
 
 $smarty->display("inc_list_operations.tpl");
 

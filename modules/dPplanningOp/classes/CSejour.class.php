@@ -2190,13 +2190,15 @@ class CSejour extends CCodable implements IPatientRelated {
     return $nb_days;
   }
   
-  function completeLabelFields() {
+  function completeLabelFields(&$fields) {
+    $this->loadRefPatient()->completeLabelFields($fields);
     $this->loadRefPraticien();
     $this->loadNDA();
-    return array("DATE ENT" => mbDateToLocale(mbDate($this->entree)), "PRAT RESPONSABLE" => $this->_ref_praticien->_view,
+    
+    $fields = array_merge($fields, array("DATE ENT" => mbDateToLocale(mbDate($this->entree)), "PRAT RESPONSABLE" => $this->_ref_praticien->_view,
                  "HEURE ENT" => mbTime($this->entree),
                  "NDOS"     => $this->_NDA,
-                 "CODE BARRE NDOS" => "@BARCODE_".$this->_NDA."@");
+                 "CODE BARRE NDOS" => "@BARCODE_".$this->_NDA."@"));
   }
   
   function checkMerge($sejours = array()/*<CSejour>*/) {

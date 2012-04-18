@@ -4,8 +4,11 @@
   });
   
 </script>
-{{mb_script module=admissions script=admissions}}
-{{mb_script module=maternite script=naissance}}
+{{mb_script module=admissions    script=admissions}}
+{{mb_script module=maternite     script=naissance}}
+{{mb_script module=dPcompteRendu script=document}}
+{{mb_script module=dPcompteRendu script=modele_selector}}
+{{mb_script module=dPcabinet     script=file}}
 
 <table class="main">
   <tr>
@@ -74,7 +77,7 @@
     <td>
       <table class="tbl" id="admissions">
         <tr>
-          <th class="title" colspan="7">
+          <th class="title" colspan="9">
             <strong>
               <a href="?m=maternite&tab=vw_admissions&date={{$date_before}}" style="display: inline;">&lt;&lt;&lt;</a>
               {{$date|date_format:$conf.longdate}}
@@ -96,14 +99,16 @@
           </th>
           <th class="category narrow">Terme</th>
           <th class="category">Praticiens</th>
-          <th class="category">Naissances / Séjours enfants</th>
+          <th class="category">Rang / Heure</th>
+          <th class="category">Enfants</th>
+          <th class="category">Séjours</th>
           <th class="category"></th>
         </tr>
         {{foreach from=$sejours item=_sejour}}
           {{assign var=grossesse value=$_sejour->_ref_grossesse}}
           {{assign var=patient value=$_sejour->_ref_patient}}
           <tr>
-            <td>
+            <td rowspan="{{$grossesse->_ref_naissances|@count}}">
               <form name="editSejour-{{$_sejour->_id}}" method="post">
                 <input type="hidden" name="m" value="dPplanningOp" />
                 <input type="hidden" name="dosql" value="do_sejour_aed" />
@@ -116,56 +121,63 @@
                 {{/if}}
               </form>
             </td>
-            <td colspan="2">
+            <td colspan="2" rowspan="{{$grossesse->_ref_naissances|@count}}">
               <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">{{$_sejour->_ref_patient}}</span>
             </td>
-            <td>
+            <td rowspan="{{$grossesse->_ref_naissances|@count}}">
               {{$grossesse->terme_prevu|date_format:$conf.date}}
             </td>
-            <td>
+            <td rowspan="{{$grossesse->_ref_naissances|@count}}">
               {{foreach from=$grossesse->_praticiens item=_praticien}}
                 {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_praticien}}
               {{/foreach}}
             </td>
-            <td class="text">
-              <table class="layout" style="width: 100%;">
-                {{foreach from=$grossesse->_ref_naissances item=_naissance name=foreach_naissance}}
-                {{assign var=sejour_enfant value=$_naissance->_ref_sejour_enfant}}
+            {{foreach from=$grossesse->_ref_naissances item=_naissance name=foreach_naissance}}
+              {{assign var=sejour_enfant value=$_naissance->_ref_sejour_enfant}}
+              {{assign var=enfant value=$sejour_enfant->_ref_patient}}
+              {{if !$smarty.foreach.foreach_naissance.first}}
                 <tr>
-                  <td class="narrow">
-                    <button class="edit notext" onclick="Naissance.edit('{{$_naissance->_id}}')">
-                      {{tr}}Edit{{/tr}}
-                    </button>
-                  </td>
-
-                  <td>
-                    {{$_naissance}} {{$sejour_enfant->_ref_patient}}
-                  </td>
-                  
-                  <td class="narrow">
-                    <button class="print notext" onclick="Naissance.printDossier('{{$naissance->_id}}')">
-                      {{tr}}Print{{/tr}}
-                    </button>
-                  </td>
-
-	                  <td>
-                    {{assign var=sejour_enfant value=$_naissance->_ref_sejour_enfant}}
-                    <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour_enfant->_guid}}')">
-                      {{mb_include module=system template=inc_interval_date from=$sejour_enfant->entree to=$sejour_enfant->sortie}}
-                    </span>
-                  </td>
+              {{/if}}
+              <td>
+                <button class="edit notext" onclick="Naissance.edit('{{$_naissance->_id}}')">
+                  {{tr}}Edit{{/tr}}
+                </button>
+                {{if $_naissance->heure}}
+                  Le {{$enfant->naissance|date_format:$conf.date}} à {{$_naissance}}
+                {{else}}
+                  {{$_naissance}}
+                {{/if}}
+              </td>
+              <td>
+                <span onmouseover="ObjectTooltip.createEx(this, '{{$enfant->_guid}}')">
+                  {{$enfant}}
+                </span>
+              </td>
+              
+              <td>
+                <button class="print notext" onclick="Naissance.printDossier('{{$sejour_enfant->_id}}')">
+                  {{tr}}Print{{/tr}}
+                </button>
+                {{assign var=sejour_enfant value=$_naissance->_ref_sejour_enfant}}
+                <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour_enfant->_guid}}')">
+                  {{mb_include module=system template=inc_interval_date from=$sejour_enfant->entree to=$sejour_enfant->sortie}}
+                </span>
+              </td>
+              {{if $smarty.foreach.foreach_naissance.first}}
+                <td class="narrow" rowspan="{{$grossesse->_ref_naissances|@count}}">
+                  <button type="button" class="add notext" title="Créer un dossier provisoire"
+                    onclick="Naissance.edit(null, null, '{{$_sejour->_id}}', 1, 'document.location.reload')"></button>
+                </td>
+              {{/if}}
+              {{if $smarty.foreach.foreach_naissance.first}}
                 </tr>
-                {{/foreach}}
-              </table>
-            </td>
-            <td class="narrow">
-              <button type="button" class="add notext" title="Créer un dossier provisoire"
-                onclick="Naissance.edit(null, null, '{{$_sejour->_id}}', 1, 'document.location.reload')"></button>
-            </td>
-          </tr>
+              {{/if}}
+            {{foreachelse}}
+              <td colspan="4"></td>
+            {{/foreach}}
         {{foreachelse}}
           <tr>
-            <td colspan="7" class="empty">{{tr}}CSejour.none{{/tr}}</td>
+            <td colspan="9" class="empty">{{tr}}CSejour.none{{/tr}}</td>
           </tr>
         {{/foreach}}
       </table>

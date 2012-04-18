@@ -1658,12 +1658,12 @@ class CPatient extends CMbObject {
     return $this->_nb_enfants;
   }
   
-  function completeLabelFields() {
+  function completeLabelFields(&$fields) {
     $this->loadIPP();
     $medecin_traitant = new CMedecin();
     $medecin_traitant->load($this->medecin_traitant);
     
-    return array("DATE NAISS"     => mbDateToLocale($this->naissance), "IPP"    => $this->_IPP,
+    $fields = array_merge($fields, array("DATE NAISS"     => mbDateToLocale($this->naissance), "IPP"    => $this->_IPP,
                  "LIEU NAISSANCE" => $this->lieu_naissance,
                  "NOM"            => $this->nom,       "NOM JF" => $this->nom_jeune_fille,
                  "NUM SECU"       => $this->matricule, "PRENOM" => $this->prenom,
@@ -1671,7 +1671,7 @@ class CPatient extends CMbObject {
                  "CIVILITE LONGUE" => $this->_civilite_long, "ACCORD GENRE" => $this->sexe == "f" ? "e" : "",
                  "CODE BARRE IPP" => "@BARCODE_" . $this->_IPP."@",
                  "ADRESSE"        => "$this->adresse \n$this->cp $this->ville",
-                 "MED. TRAITANT"  => "Dr $medecin_traitant->nom $medecin_traitant->prenom");
+                 "MED. TRAITANT"  => "Dr $medecin_traitant->nom $medecin_traitant->prenom"));
   }
   
   function docsEditable() {

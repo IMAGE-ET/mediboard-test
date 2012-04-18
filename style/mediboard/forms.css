@@ -607,6 +607,10 @@ button.deficience:before, a.button.deficience:before {
   content: url(images/buttons/deficience.png);
 }
 
+button.modele_etiquette:before, a.modele_etiquette:before {
+  content: url(images/buttons/modele_etiquette.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }

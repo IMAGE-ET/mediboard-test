@@ -42,10 +42,9 @@
       </td>
       <td>
         {{if $_naissance->heure}}
-          Rang {{mb_value object=$_naissance field=rang}}
-          le {{$enfant->naissance|date_format:$conf.date}} à {{mb_value object=$_naissance field=heure}}
+          Le {{$enfant->naissance|date_format:$conf.date}} à {{$_naissance}}
         {{else}}
-          Dossier provisoire
+          {{$_naissance}}
         {{/if}}
       </td>
       <td>

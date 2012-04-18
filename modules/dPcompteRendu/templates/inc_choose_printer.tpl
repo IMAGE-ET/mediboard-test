@@ -5,11 +5,7 @@
     {{if $mode_etiquette}}
       printEtiquette = function(id) {
         var url = new Url("dPhospi", "print_etiquettes");
-        {{if $object_class == "CRPU"}}
-          url.addParam("rpu_id", '{{$object_id}}');
-        {{else if $object_class == "CSejour"}}
-          url.addParam("sejour_id", '{{$object_id}}');
-        {{/if}}
+        url.addParam("object_id", '{{$object_id}}');
         url.addParam("object_class", '{{$object_class}}');
         url.addParam("printer_id", id);
         url.requestUpdate("systemMsg");

@@ -214,7 +214,7 @@
   <form name="download_etiq" style="display: none;" action="?" target="_blank" method="get">
     <input type="hidden" name="m" value="dPhospi" />
     <input type="hidden" name="a" value="print_etiquettes" />
-    <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
+    <input type="hidden" name="object_id" value="{{$rpu->_id}}" />
     <input type="hidden" name="object_class" value="{{$rpu->_class}}" />
     <input type="hidden" name="suppressHeaders" value="1" />
     <input type="hidden" name="dialog" value="1" />

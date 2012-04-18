@@ -428,7 +428,14 @@ class CMbObject extends CStoredObject {
    **/
   function fillLimitedTemplate(&$template) {
   }
-   
+  
+  /**
+   * This function registers fields for the label printing
+   * @param $fields Array of fields
+   */
+  function completeLabelFields(&$fields) {
+  }
+  
   /**
    * Load object config 
    * @return array contains config of class and/or object

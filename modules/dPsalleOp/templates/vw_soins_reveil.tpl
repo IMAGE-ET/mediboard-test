@@ -157,7 +157,7 @@ Main.add(function () {
 	        <div id="documents">
 	          {{mb_script module="dPcompteRendu" script="document"}}
 	          {{mb_script module="dPcompteRendu" script="modele_selector"}}
-	          {{include file=../../dPplanningOp/templates/inc_documents_operation.tpl}}
+	          {{mb_include module=planningOp template=inc_documents_operation}}
 	        </div>
 	      </td>
 	    </tr>

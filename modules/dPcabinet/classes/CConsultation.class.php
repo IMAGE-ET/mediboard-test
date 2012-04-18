@@ -1554,6 +1554,10 @@ TESTS A EFFECTUER
     return (mbDateTime("+ 24 HOUR", "{$this->_date} {$this->heure}") > mbDateTime());
   }
   
+  function completeLabelFields(&$fields) {
+    $this->loadRefPatient()->completeLabelFields($fields);
+  }
+  
   function canEdit() {
     if (!$this->sejour_id || CCanDo::admin() || !CAppUI::conf("dPcabinet CConsultation consult_readonly")) {
       return parent::canEdit();

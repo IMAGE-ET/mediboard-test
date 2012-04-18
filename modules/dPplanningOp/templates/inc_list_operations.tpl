@@ -86,7 +86,7 @@
   {{if !$_operation->annulee}}
 	<tr>
     <td class="top" colspan="10">
-      {{include file=inc_documents_operation.tpl operation=$_operation preloaded=true}}
+      {{mb_include module=dPplanningOp template=inc_documents_operation operation=$_operation preloaded=true}}
     </td>
   </tr>
   {{/if}}
@@ -137,7 +137,7 @@
   {{if !$board}}
 	<tr>
     <td class="top" colspan="10">
-      {{include file=inc_documents_operation.tpl operation=$_operation preloaded=true}}
+      {{mb_include template=inc_documents_operation operation=$_operation preloaded=true}}
     </td>
   </tr>
   {{/if}}

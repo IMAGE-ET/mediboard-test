@@ -4,11 +4,20 @@
   * @param $packs array|CPack  List of packs
   * @param $praticien CMediuser Owner of modeles
   *}}
-  
+
+{{mb_script module=dPhospi script=modele_etiquette ajax=true}}  
 {{assign var=object_class value=$object->_class}}
 {{assign var=object_id value=$object->_id}}
 {{unique_id var=unique_id}}
 
+<form name="download_etiq_{{$object->_class}}_{{$object->_id}}" style="display: none;" action="?" target="_blank" method="get">
+  <input type="hidden" name="m" value="dPhospi" />
+  <input type="hidden" name="a" value="print_etiquettes" />
+  <input type="hidden" name="object_class" value="{{$object->_class}}" />
+  <input type="hidden" name="object_id" value="{{$object->_id}}" />
+  <input type="hidden" name="suppressHeaders" value="1" />
+  <input type="hidden" name="dialog" value="1" />
+</form>
 
 <form name="DocumentAdd-{{$unique_id}}-{{$object->_guid}}" action="?m={{$m}}" method="post">
 <input type="text" value="&mdash; Modèle" name="keywords_modele" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 5em;" />
@@ -43,6 +52,8 @@ Main.add(function() {
     dropdown: true,
     width: "250px"
   });
+  
+  ModeleEtiquette.nb_printers  = {{$nb_printers|@json}};
   
   function createDoc(input, selected) {
     var id = selected.down(".id").innerHTML;
@@ -91,6 +102,10 @@ Main.add(function() {
 <button type="button" class="print notext" onclick="Document.printSelDocs('{{$object_id}}', '{{$object_class}}');">
   {{tr}}Print{{/tr}}
 </button>
+
+{{if $nb_modeles_etiquettes}}
+  <button type="button" class="modele_etiquette" onclick="ModeleEtiquette.print('{{$object_class}}', '{{$object_id}}')">Etiquettes</button>
+{{/if}}
 
 <input type="hidden" name="_modele_id" value="" />
 <input type="hidden" name="_object_id" value="" onchange="Document.create(this.form._modele_id.value, this.value,'{{$object_id}}','{{$object_class}}'); $V(this, ''); $V(this.form._modele_id, ''); "/>

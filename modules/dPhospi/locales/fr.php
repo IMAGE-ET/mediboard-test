@@ -642,6 +642,7 @@ $locales['config-dPhospi-show_mouvements-desc'] = 'Afficher la vue des mouvement
 $locales['config-dPhospi-tag_service'] = 'Tag Service';
 $locales['config-dPhospi-tag_service-desc'] = 'Tag Service';
 $locales['config-synchro_sejour_affectation'] = 'Synchronisation séjours en affectations';
+$locales['mod-dPdPhospi-tab-httpreq_documents_sejour'] = 'Documents et Fichiers';
 $locales['mod-dPhospi-tab-ajax_affectation_uf'] = 'Affectation d\'UFs';
 $locales['mod-dPhospi-tab-ajax_creation_affectation'] = 'Création d\'affectation';
 $locales['mod-dPhospi-tab-ajax_edit_affectation'] = 'Edition d\'affectation';

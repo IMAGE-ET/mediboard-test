@@ -14,23 +14,17 @@
 ignore_user_abort(true);
 
 $printer_id   = CValue::get("printer_id");
-$rpu_id       = CValue::get("rpu_id");
-$sejour_id    = CValue::get("sejour_id");
+$object_id    = CValue::get("object_id");
 $object_class = CValue::get("object_class");
 
-// Chargement du rpu
-if ($rpu_id) {
-  $rpu = new CRPU();
-  $rpu->load($rpu_id);
-  $sejour = $rpu->loadRefSejour();
-}
+$object = new $object_class;
+$object->load($object_id);
 
-if ($sejour_id) {
-  $sejour = new CSejour;
-  $sejour->load($sejour_id);
-}
+$patient = new CPatient;
 
-$patient = $sejour->loadRefPatient();
+$fields = array();
+
+$object->completeLabelFields($fields);
 
 // Chargement des modèles d'étiquettes
 $modele_etiquette = new CModeleEtiquette;
@@ -40,13 +34,10 @@ $where = array();
 $where['object_class'] = " = '$object_class'";
 $where["group_id"] = " = '".CGroups::loadCurrent()->_id."'";
 
-$fields = $sejour->completeLabelFields();
-$fields = array_merge($fields, $patient->completeLabelFields());
-$fields = array_merge($fields, $modele_etiquette->completeLabelFields());
-
 if (count($modeles_etiquettes = $modele_etiquette->loadList($where))) {
   // TODO: faire une modale pour proposer les modèles d'étiquettes
   $first_modele = reset($modeles_etiquettes);
+  $first_modele->completeLabelFields($fields);
   $first_modele->replaceFields($fields);
   $first_modele->printEtiquettes($printer_id);
 }

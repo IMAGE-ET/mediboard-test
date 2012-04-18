@@ -100,11 +100,11 @@ class CModeleEtiquette extends CMbMetaObject {
     }
   }
   
-  function completeLabelFields() {
-    return array(
+  function completeLabelFields(&$fields) {
+    $fields = array_merge($fields,array(
       "DATE COURANTE" => mbDateToLocale(mbDate()),
       "HEURE COURANTE" => mbTime()
-    );
+    ));
   }
   
   function printEtiquettes($printer_id = null) {

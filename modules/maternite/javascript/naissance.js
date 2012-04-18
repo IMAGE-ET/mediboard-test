@@ -37,5 +37,11 @@ Naissance = {
     }
 	    
     confirmDeletion(form, options, ajax);    
+  },
+  printDossier: function(sejour_id) {
+    var url = new Url("dPhospi", "httpreq_documents_sejour");
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("only_sejour", 1);
+    url.requestModal(700, 400);
   }
 }

@@ -391,7 +391,7 @@ function reloadSurveillancePerop(){
 			  <div id="documents">
 					{{mb_script module="dPcompteRendu" script="document"}}
 					{{mb_script module="dPcompteRendu" script="modele_selector"}}
-			    {{include file=../../dPplanningOp/templates/inc_documents_operation.tpl operation=$selOp}}
+			    {{mb_include module=planningOp template=inc_documents_operation operation=$selOp}}
 			  </div>
 		  </td>
 	  </tr>
