@@ -10,7 +10,13 @@
 
 <table class="tbl">
   <tr>
+    <th class="title" colspan="3">Production</th>
+    <th class="title" colspan="8">Envoi</th>
+  <tr>
     <th>{{mb_title class=CViewSender field=name}}</th>
+    <th>{{mb_title class=CViewSender field=last_duration}}</th>
+    <th>{{mb_title class=CViewSender field=last_size}}</th>
+    
     <th>{{mb_title class=CSourceToViewSender field=source_id}}</th>
     <th>{{mb_title class=CSourceToViewSender field=last_duration}}</th>
     <th>{{mb_title class=CSourceToViewSender field=last_size}}</th>
@@ -30,17 +36,30 @@
 	  <tr>
 	    {{assign var=count_sources value=$_sender->_ref_senders_source|@count}}
 	
-	    <td rowspan="{{$count_sources}}">{{mb_value object=$_sender field=name}}</td>
+	    <td rowspan="{{$count_sources}}">
+        {{mb_value object=$_sender field=name}}
+      </td>
+      
+      <td rowspan="{{$count_sources}}">
+        {{$_sender->last_duration|round:3}}s
+      </td>
+      
+      <td rowspan="{{$count_sources}}" title="{{$_sender->last_size}}">
+        {{$_sender->last_size|decabinary}}
+      </td>
 
 	    {{foreach from=$_sender->_ref_senders_source item=_sender_source name=sender_source}}
 	    <td>{{mb_value object=$_sender_source field=source_id tooltip=true}}</td>
 	    <td>{{$_sender_source->last_duration|round:3}}s</td>
 			
       {{assign var=class value=ok}}
-      {{if $_sender_source->last_size == 0}} 
+      {{if $_sender_source->last_size < 1000}} 
         {{assign var=class value=error}}
       {{/if}}
-	    <td class="{{$class}}">{{$_sender_source->last_size|decabinary}}</td>
+	    
+      <td class="{{$class}}" title="{{$_sender_source->last_size}}">
+        {{$_sender_source->last_size|decabinary}}
+      </td>
       
       {{assign var=class value=ok}}
       {{assign var=colspan value="1"}}

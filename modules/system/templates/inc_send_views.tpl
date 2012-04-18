@@ -41,8 +41,8 @@
       {{mb_title class=CViewSender field=_url}} / 
       {{mb_title class=CViewSender field=_file}}
     </th>
-    <th>{{mb_title class=CViewSender field=_file_download_duration}}</th>
-    <th>{{mb_title class=CViewSender field=_file_download_size}}</th>
+    <th>{{mb_title class=CViewSender field=last_duration}}</th>
+    <th>{{mb_title class=CViewSender field=last_size}}</th>
     <th>{{mb_title class=CSourceToViewSender field=source_id}}</th>
     <th>{{mb_title class=CSourceToViewSender field=last_duration}}</th>
     <th>{{mb_title class=CSourceToViewSender field=last_size}}</th>
@@ -61,10 +61,10 @@
 	      {{mb_value object=$_sender field=_file}}
 	    </td>
 	    <td rowspan="{{$count_sources}}">
-	      {{$_sender->_file_download_duration|round:3}}s
+	      {{$_sender->last_duration|round:3}}s
 	    </td>
 	    <td rowspan="{{$count_sources}}"> 
-	      {{$_sender->_file_download_size|decabinary}}
+	      {{$_sender->last_size|decabinary}}
 	    </td>
 	    
 	    {{foreach from=$_sender->_ref_senders_source item=_sender_source name=sender_source}}

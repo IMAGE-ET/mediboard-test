@@ -986,6 +986,12 @@ class CSetupsystem extends CSetup {
     }
     $this->addFunction("setup_system_addExObjectGroupId");
     
-    $this->mod_version = "1.0.97";
+    $this->makeRevision("1.0.97");
+    $query = "ALTER TABLE `view_sender` 
+      ADD `last_duration` FLOAT,
+      ADD `last_size` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.98";
   }
 }
