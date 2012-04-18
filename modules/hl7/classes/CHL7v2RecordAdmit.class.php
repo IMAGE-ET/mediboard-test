@@ -608,13 +608,31 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return;
     }
     
-    $PV1 = $data["PV1"];
-    
+    $PV1_3 = $this->queryNode("PV1.3", $data["PV1"]);
+        
     $affectation = new CAffectation();
     $affectation->sejour_id = $newVenue->_id;
 
     // Si pas de lit on retourne une affectation vide
-    if (!$this->queryTextNode("PV1.3/PL.3", $PV1)) {
+    if (!$this->queryTextNode("PL.3", $PV1_3)) {
+      // On essaye de récupérer le service dans ce cas depuis l'UF d'hébergement
+      $uf           = new CUniteFonctionnelle();
+      $uf->group_id = $newVenue->group_id;
+      $uf->code     = $this->queryTextNode("PL.1", $PV1_3); 
+      if (!$uf->loadMatchingObject()) {
+        return $affectation;      
+      }
+
+      $affectation_uf               = new CAffectationUniteFonctionnelle();
+      $affectation_uf->uf_id        = $uf->_id;
+      $affectation_uf->object_class = "CService";
+      if (!$affectation_uf->loadMatchingObject()) {
+        return $affectation;      
+      }
+
+      $newVenue->service_id = $affectation_uf->object_id;
+      $newVenue->store();
+      
       return $affectation;     
     }
 
@@ -630,7 +648,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       // et mettre à 'effectuee' la précédente si elle existe sinon création de celle-ci
       if (!$affectation->_id) {
         // Récupération du Lit et UFs
-        $this->getPL($this->queryNode("PV1.3", $PV1), $affectation);
+        $this->getPL($PV1_3, $affectation);
       
         $return_affectation = $newVenue->forceAffectation($datetime, $affectation->lit_id);
         if (is_string($return_affectation)) {
@@ -662,7 +680,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     } 
     
     // Récupération du Lit et UFs
-    $this->getPL($this->queryNode("PV1.3", $PV1), $affectation);
+    $this->getPL($PV1_3, $affectation);
     $affectation->uf_medicale_id = $this->mappingUFMedicale($data);
     $affectation->uf_soins_id    = $this->mappingUFSoins($data);
     
