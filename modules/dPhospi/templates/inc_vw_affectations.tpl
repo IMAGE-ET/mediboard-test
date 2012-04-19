@@ -166,7 +166,7 @@
             {{if $_i == 0}}
               <div class="wrapper_line" id="wrapper_line_{{$_sejour->_id}}">
                 <div class="affectation clit draggable text sejour_non_affecte {{if $_sejour->entree >= $date_min}}debut_sejour{{/if}}
-                  {{if $_sejour->sortie <= $date_max}}fin_sejour{{/if}}"
+                  {{if $_sejour->sortie <= $date_max}}fin_sejour{{/if}} {{$_sejour->_guid}}"
                   style="border: 1px solid #{{$praticien->_ref_function->color}}; width: {{$width}}px; left: {{$offset}}px;"
                   id="sejour_temporel_{{$_sejour->_id}}" data-patient_id="{{$patient->_id}}" data-sejour_id="{{$_sejour->_id}}"
                   onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">

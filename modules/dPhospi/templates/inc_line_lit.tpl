@@ -48,6 +48,7 @@
             {{/if}}
             <div id="affectation_temporel_{{$_affectation->_id}}" 
               class="affectation {{$mode_vue_reelle}} opacity-90 draggable
+                {{$_sejour->_guid}}
                 {{if !$_sejour->_id}}clit_bloque{{else}}clit{{/if}}
                 {{if $_affectation->_width < 6}}affectation_resize{{/if}}
                 {{if $_sejour->confirme}}sejour_sortie_autorisee{{/if}}
@@ -134,7 +135,7 @@
                        {{/if}}
                        <button type="button" class="trash notext opacity-40"
                           onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"
-                          onclick="delAffectation('{{$_affectation->_id}}', '{{$_affectation->lit_id}}')"></button>
+                          onclick="delAffectation('{{$_affectation->_id}}', '{{$_affectation->lit_id}}', 'CSejour-{{$_affectation->sejour_id}}')"></button>
                        <input type="radio" name="affectation_move" onclick="chooseAffectation('{{$_affectation->_id}}');" />
                       </div>
                     </td>
