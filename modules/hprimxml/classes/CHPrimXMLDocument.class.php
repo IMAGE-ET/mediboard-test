@@ -1125,6 +1125,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     if ($mbSejour->DR) {
       $this->addDiagnosticEtat($elParent, strtoupper($mbSejour->DR), "dr");
     }
+    
+    $mbSejour->loadRefDossierMedical();
     if (count($mbSejour->_ref_dossier_medical->_codes_cim)) {
       foreach($mbSejour->_ref_dossier_medical->_codes_cim as $_diag_significatif) {
         $this->addDiagnosticEtat($elParent, strtoupper($_diag_significatif), "ds");
