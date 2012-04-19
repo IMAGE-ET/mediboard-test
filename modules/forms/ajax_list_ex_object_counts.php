@@ -12,6 +12,7 @@ CCanDo::checkRead();
 
 $date_min = CValue::getOrSession("date_min");
 $date_max = CValue::getOrSession("date_max");
+$group_id = CValue::getOrSession("group_id");
 $concept_search = CValue::get("concept_search"); // concept values
 
 CExClassField::$_load_lite = true;
@@ -20,7 +21,6 @@ CExObject::$_load_lite     = true;
 
 $ex_class = new CExClass;
 
-$group_id = CGroups::loadCurrent()->_id;
 $where = array(
   "group_id = $group_id OR group_id IS NULL"
 );
@@ -52,6 +52,7 @@ foreach($ex_classes as $_ex_class_id => $_ex_class) {
   $_ex_object->setExClass();
 
   $where = array(
+    "group_id" => "= '$group_id'",
     "user_log.date" => "BETWEEN '$date_min' AND '$date_max'",
     "user_log.type" => "= 'create'",
   );
