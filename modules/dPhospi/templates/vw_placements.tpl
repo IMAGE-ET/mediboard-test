@@ -6,6 +6,8 @@
     tabs: null,
     updater: null,
     frequency: null,
+    scrollAffectations: 0,
+    scrollNonPlaces: 0,
     loadTableau: function(services_ids) {
       var url = new Url('dPhospi', 'vw_affectations');
       url.requestUpdate('tableau');
@@ -36,7 +38,16 @@
       
       var url = new Url("dPhospi", "vw_mouvements");
       Placement.updater = url.periodicalUpdate('temporel', {
-        frequency: this.frequency
+        frequency: this.frequency,
+        onCreate: function() {
+          var view_affectations = $("view_affectations");
+          var list_affectations = $("list_affectations");
+          if (!view_affectations || !list_affectations) {
+            return;
+          }
+          Placement.scrollAffectations = view_affectations.scrollTop;
+          Placement.scrollNonPlaces    = list_affectations.scrollTop;
+        }
       });
     },
     
@@ -82,7 +93,7 @@
   <li onmousedown="Placement.loadTableau();">
     <a href="#tableau">Tableau</a>
   </li>
-  <li onmousedown="Placement.loadTemporel();">
+  <li onmousedown="Placement.start(0, 120);">
     <a href="#temporel">Temporel</a>
   </li>
   <li>

@@ -34,7 +34,8 @@
         time_line_temporelle_non_affectes.setClassName('scroll_shadow', list_affectations.scrollTop);
       });
       list_affectations.fire('scroll');
-   }
+    }
+    $("list_affectations").scrollTop = Placement.scrollNonPlaces;
   });
 </script>
 

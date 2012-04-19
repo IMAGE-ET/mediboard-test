@@ -68,6 +68,8 @@
           // Bug de firefox
           tr.setStyle({position: "static"});
        });
+       
+       $("view_affectations").scrollTop = Placement.scrollAffectations;
     });
   </script>
 {{/if}}
