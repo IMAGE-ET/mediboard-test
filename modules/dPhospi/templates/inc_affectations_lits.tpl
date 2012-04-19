@@ -18,7 +18,7 @@
   {{assign var="patient" value=$sejour->_ref_patient}}
   {{assign var="aff_prev" value=$curr_affectation->_ref_prev}}
   {{assign var="aff_next" value=$curr_affectation->_ref_next}}
-  <form name="addAffectationaffectation_{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
+  <form name="addAffectationaffectation_{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" class="prepared">
     <input type="hidden" name="m" value="dPhospi" />
     <input type="hidden" name="dosql" value="do_affectation_aed" />
     <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
@@ -26,8 +26,8 @@
     <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
     <input type="hidden" name="entree" value="{{$curr_affectation->entree}}" />
     <input type="hidden" name="sortie" value="{{$curr_affectation->sortie}}" />
-
   </form>
+  
   <table class="tbl" id="affectation_{{$curr_affectation->_id}}">
     <tr class="patient">
       {{if $curr_affectation->sejour_id}}
@@ -120,7 +120,7 @@
       </td>
       <td class="action">
         {{if $can->edit}}
-        <form name="rmvAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
+        <form name="rmvAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" class="prepared">
           <input type="hidden" name="m" value="dPhospi" />
           <input type="hidden" name="dosql" value="do_affectation_aed" />
           <input type="hidden" name="del" value="1" />
@@ -333,7 +333,7 @@
     <tr class="dates">
       <td class="text" colspan="3">
         {{if $can->edit}}
-        <form name="editChFrm{{$sejour->_id}}" action="?m=dPhospi" method="post">
+        <form name="editChFrm{{$sejour->_id}}" action="?m=dPhospi" method="post" class="prepared">
           <input type="hidden" name="m" value="dPplanningOp" />
           <input type="hidden" name="dosql" value="do_sejour_aed" />
           <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />

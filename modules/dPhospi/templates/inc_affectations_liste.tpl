@@ -9,7 +9,7 @@
 {{foreach from=$sejourNonAffectes item=_sejour}}
 {{assign var=patient value=$_sejour->_ref_patient}}
 
-<form name="addAffectationsejour_{{$_sejour->_id}}" action="?m={{$m}}" method="post">
+<form name="addAffectationsejour_{{$_sejour->_id}}" action="?m={{$m}}" method="post" class="prepared">
   <input type="hidden" name="m" value="dPhospi" />
   <input type="hidden" name="dosql" value="do_affectation_aed" />
   <input type="hidden" name="lit_id" value="" />
