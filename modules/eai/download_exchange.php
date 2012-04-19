@@ -19,7 +19,7 @@ if ($exchange_object instanceof CEchangeXML) {
   $extension = ".xml";    
 }
 if ($exchange_object instanceof CExchangeIHE) {
-  $extension = ".ER7";    
+  $extension = ".HL7";    
 }
 
 if (CValue::get("message") == 1) {

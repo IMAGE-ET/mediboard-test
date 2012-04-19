@@ -40,7 +40,13 @@
     <div id="msg-message" style="display: none;">
       <script>
         Main.add(function(){
-          Control.Tabs.create("msg-message-tab", true);
+          Control.Tabs.create("msg-message-tab", true, { afterChange: function(newContainer) { 
+            switch(newContainer.id) {
+              case "msg-message-fast-queries" :
+                getForm("form-fast-queries").onsubmit();
+                break;
+            }
+          }});
           
           var tree = new TreeView("msg-message-tree");
           tree.collapseAll();
@@ -56,7 +62,8 @@
         <li><a href="#msg-message-xml">XML</a></li>
         <li><a href="#msg-message-warnings" class="{{if $exchange->_doc_warnings_msg}}wrong{{else}}empty{{/if}}">Avertissements</a></li>
         <li><a href="#msg-message-errors" class="{{if $exchange->_doc_errors_msg}}wrong{{else}}empty{{/if}}">Erreurs</a></li>
-        <li><a href="#msg-message-query">Requête</a></li>
+        <li><a href="#msg-message-fast-queries">Requêtes rapides</a></li>
+        <li><a href="#msg-message-query">Requêteur</a></li>
       </ul>
       
       <hr class="control_tabs" />
@@ -85,6 +92,18 @@
       
       <div id="msg-message-errors" style="display: none;">
         {{mb_include module=hl7 template=inc_hl7v2_errors errors=$msg_segment_group->errors level=2}}
+      </div>
+      
+      <div id="msg-message-fast-queries" style="display: none;">
+        <form name="form-fast-queries" action="?m=hl7&amp;a=ajax_show_fast_queries" onsubmit="return Url.update(this, 'er7-fast-queries')" method="post" class="prepared">
+          <input type="hidden" name="m" value="hl7" />
+          <input type="hidden" name="a" value="fast-queries" />
+          <input type="hidden" name="suppressHeaders" value="1" />
+          <input type="hidden" name="ajax" value="1" />
+          <input type="hidden" name="exchange_id" value="{{$exchange->_id}}" />
+          <textarea name="er7" style="display: none;">{{$msg_segment_group->data}}</textarea>
+        </form>
+        <div id="er7-fast-queries"></div>
       </div>
       
       <div id="msg-message-query" style="display: none; text-align: left;">
