@@ -251,7 +251,9 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
   
   function getPersonIdentifiers(CPatient $patient, CGroups $group) {
-    $patient->loadIPP($group->_id);
+    if (!$patient->_IPP) {
+      $patient->loadIPP($group->_id);
+    }
     
     // Table - 0203
     // RI - Resource identifier

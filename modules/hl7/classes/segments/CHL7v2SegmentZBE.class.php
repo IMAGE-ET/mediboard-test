@@ -98,9 +98,9 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     // ZBE-6: Original trigger event code (ID) (optional)
     $data[] = ($action_movement == "UPDATE" || $action_movement == "CANCEL") ? $movement->original_trigger_code : null;
     
+    $ufs = $sejour->getUF(null, $affectation->_id);
     // ZBE-7: Ward of medical responsibility in the period starting with this movement (XON) (optional)
-    $affectation->loadRefUFMedicale();
-    $uf_medicale = $affectation->_ref_uf_medicale;
+    $uf_medicale = isset($ufs["medicale"]) ? $ufs["medicale"] : null;
     if (isset($uf_medicale->_id)) {
       $data[] = array(
         // ZBE-7.1 : Libellé de l'UF
@@ -124,8 +124,7 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     }
     
     // ZBE-8: Ward of care responsibility in the period starting with this movement (XON) (optional)
-    $affectation->loadRefUFSoins();
-    $uf_soins = $affectation->_ref_uf_soins;
+    $uf_soins = isset($ufs["soins"]) ? $ufs["soins"] : null;
     if (isset($uf_soins->_id)) {
       $data[] = array(
         // ZBE-7.1 : Libellé de l'UF
@@ -161,7 +160,20 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     // LD - Changement de prise en charge médico-administrative et de lit, laissant les responsabilités inchangées
     // HMS - Changement conjoint des trois responsabilités.
     /* @todo Voir comment gérer ceci... */
-    $data[] = "HMS";
+   
+    // Changement d'UF médicale
+    if ($event->code == "Z80" || $event->code == "Z81" ||
+        $event->code == "Z82" || $event->code == "Z83") {
+      $data[] = "M";
+    }
+    // Changement d'UF de soins
+    elseif ($event->code == "Z84" || $event->code == "Z85" ||
+            $event->code == "Z86" || $event->code == "Z87") {
+      $data[] = "S";
+    }
+    else {
+      $data[] = "HMS";
+    }
     
     $this->fill($data);
   }
