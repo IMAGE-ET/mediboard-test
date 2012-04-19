@@ -48,7 +48,7 @@ function initCKEditor() {
   
       // Le content editable des champs
       // Les plugins qui ne doivent pas être pris en compte pour le changement de valeur pour contentEditable
-      var plugins = ["source", "undo", "redo", "pastefromword"];    
+      var plugins = ["source", "undo", "redo", "pastefromword", "mbprint"];    
       window.toggleContentEditable = function(state, obj) {
         if (Object.isUndefined(obj)) {
           obj = {data: null};
