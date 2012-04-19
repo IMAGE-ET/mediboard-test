@@ -1,3 +1,5 @@
+{{mb_default var=show_target value=true}}
+
 {{if $_suivi instanceof CObservationMedicale}}
   {{if @$show_patient}}
   <td><strong>{{$_suivi->_ref_sejour->_ref_patient}}</strong></td>
@@ -190,6 +192,7 @@
   </td>
   <td class="narrow">{{$_suivi->date|date_format:$conf.time}}</td>
   <td class="text" style="height: 22px;">
+   {{if $show_target}}
     {{if $_suivi->object_id && $_suivi->object_class}}
       {{assign var=classes value=' '|explode:"CPrescriptionLineMedicament CPrescriptionLineElement CAdministration CPrescriptionLineMix"}}
       {{if in_array($_suivi->object_class, $classes)}}
@@ -201,6 +204,8 @@
       {{if !$readonly && $_suivi->_canEdit}}
         <a href="#1" onclick="if (window.addTransmission) { addTransmission('{{$_suivi->sejour_id}}', '{{$app->user_id}}', null, '{{$_suivi->object_id}}', '{{$_suivi->object_class}}'); }">
       {{/if}}
+      
+     
         {{if !in_array($_suivi->object_class, $classes)}}
           {{$_suivi->_ref_object->_view}}
         {{/if}}
@@ -221,6 +226,7 @@
             [{{$_suivi->_ref_object->_ref_object->_ref_element_prescription->_ref_category_prescription->_view}}]
           {{/if}}
         {{/if}}
+        
       {{if !$readonly && $_suivi->_canEdit}}
         </a>
       {{/if}}
@@ -228,6 +234,8 @@
     {{if $_suivi->libelle_ATC}}
       <a href="#1" onclick="if (window.addTransmission) { addTransmission('{{$_suivi->sejour_id}}', '{{$_suivi->user_id}}', null, null, null, '{{$_suivi->libelle_ATC|smarty:nodefaults|JSAttribute}}'); }">{{$_suivi->libelle_ATC}}</a>
     {{/if}}
+  {{/if}} 
+
   </td>
   <td class="text {{if $_suivi->type}}trans-{{$_suivi->type}}{{/if}} libelle_trans">
     {{mb_value object=$_suivi field=text}}
