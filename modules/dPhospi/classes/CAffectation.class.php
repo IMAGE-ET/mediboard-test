@@ -408,23 +408,15 @@ class CAffectation extends CMbObject {
         }
       }
       
-      if ($affectation_uf->uf_id) {
-        $modified = true;
-      }
-      
       $this->uf_hebergement_id = $affectation_uf->uf_id;      
     }
     
     $affectation_uf = new CAffectationUniteFonctionnelle();
-    if (!$this->uf_soins_id || $this->uf_soins_id!=$service->_id && $service->_id) {
-      $where["object_id"]     = "= '{$service->_id}'";
+    if (!$this->uf_soins_id) {
+      $where["object_id"]     = "= '$service->_id'";
       $where["object_class"]  = "= 'CService'";
       $affectation_uf->loadObject($where);
-      
-      if ($affectation_uf->uf_id) {
-        $modified = true;
-      }
-      
+            
       $this->uf_soins_id = $affectation_uf->uf_id;
     }
     
@@ -439,10 +431,6 @@ class CAffectation extends CMbObject {
         $where["object_id"]     = "= '{$praticien->_ref_function->_id}'";
         $where["object_class"]  = "= 'CFunctions'";
         $affectation_uf->loadObject($where);
-      }
-      
-      if ($affectation_uf->uf_id) {
-        $modified = true;
       }
       
       $this->uf_medicale_id = $affectation_uf->uf_id;
