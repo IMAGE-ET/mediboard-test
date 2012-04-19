@@ -107,7 +107,7 @@
     <tr class="dates">   
       <td class="text" colspan="2">
         {{if $can->edit}}
-        <form name="entreeAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;">
+        <form name="entreeAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;" class="prepared">
           <input type="hidden" name="m" value="dPhospi" />
           <input type="hidden" name="dosql" value="do_affectation_aed" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
@@ -135,7 +135,7 @@
     <tr class="dates">
       <td class="text" colspan="2">
         {{if $can->edit && (!$sejour->sortie_reelle || $aff_next->_id)}}
-        <form name="sortieAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;">
+        <form name="sortieAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;" class="prepared">
           <input type="hidden" name="m" value="dPhospi" />
           <input type="hidden" name="dosql" value="do_affectation_aed" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
@@ -162,7 +162,7 @@
     <tr class="dates">
       <td class="text" colspan="2">
         {{if $can->edit && (!$sejour->entree_reelle || $aff_prev->_id)}}
-        <form name="entreeAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;">
+        <form name="entreeAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;" class="prepared">
           <input type="hidden" name="m" value="dPhospi" />
           <input type="hidden" name="dosql" value="do_affectation_aed" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
@@ -201,7 +201,7 @@
     <tr class="dates">
       <td class="text" colspan="2">
         {{if $can->edit && (!$sejour->sortie_reelle || $aff_next->_id)}}
-        <form name="sortieAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;">
+        <form name="sortieAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;" class="prepared">
           <input type="hidden" name="m" value="dPhospi" />
           <input type="hidden" name="dosql" value="do_affectation_aed" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
@@ -225,7 +225,7 @@
       </td>
       <td class="action">
         {{if $can->edit && !$aff_next->_id}}
-        <form name="splitAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
+        <form name="splitAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" class="prepared">
           <input type="hidden" name="m" value="dPhospi" />
           <input type="hidden" name="dosql" value="do_affectation_split" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
@@ -284,7 +284,7 @@
     </tr>
     <tr class="dates">
       <td class="text" colspan="3">
-        <form name="SeptieSejour{{$sejour->_id}}" action="?m=dPhospi" method="post">
+        <form name="SeptieSejour{{$sejour->_id}}" action="?m=dPhospi" method="post" class="prepared">
           <input type="hidden" name="m" value="dPplanningOp" />
           <input type="hidden" name="otherm" value="dPhospi" />
           <input type="hidden" name="dosql" value="do_sejour_aed" />
@@ -293,10 +293,14 @@
           {{$sejour->pathologie}}
           -
           {{if $can->edit}}
-          <input type="radio" name="septique" value="0" {{if $sejour->septique == 0}} checked="checked" {{/if}} onclick="this.form.submit()" />
-          <label for="septique_0" title="Séjour propre">Propre</label>
-          <input type="radio" name="septique" value="1" {{if $sejour->septique == 1}} checked="checked" {{/if}} onclick="this.form.submit()" />
-          <label for="septique_1" title="Séjour septique">Septique</label>
+          <label title="Séjour propre">
+            <input type="radio" name="septique" value="0" {{if $sejour->septique == 0}} checked="checked" {{/if}} onclick="this.form.submit()" />
+            Propre
+          </label>
+          <label title="Séjour septique">
+            <input type="radio" name="septique" value="1" {{if $sejour->septique == 1}} checked="checked" {{/if}} onclick="this.form.submit()" />
+            Septique
+          </label>
           {{else}}
             {{if $sejour->septique == 0}}
             Propre
