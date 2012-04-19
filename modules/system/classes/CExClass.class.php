@@ -105,6 +105,57 @@ class CExClass extends CMbObject {
     return $this->_host_class_options = $object->_spec->events[$this->event];
   }
   
+  function getWhereConceptSearch($search) {
+    $comp_map = array(
+      "eq"  => "=",
+      "lte" => "<=",
+      "lt"  => "<",
+      "gte" => ">=",
+      "gt"  => ">",
+    );
+          
+    $_fields = $this->loadRefsAllFields();
+    $_table  = $this->getTableName();
+    $where   = array();
+    
+    foreach($_fields as $_field) {
+      if (!isset($search[$_field->concept_id])) {
+        continue;
+      }
+      
+      $_ds    = $_field->_spec->ds;
+      $_col   = "$_table.$_field->name";
+      
+      foreach($search[$_field->concept_id] as $_i => $_val) {
+        $_val_a = $_val['a'];
+        $_comp  = $_val['comp'];
+        
+        if (isset($comp_map[$_comp])) {
+          $where[$_col] = $_ds->prepare($comp_map[$_comp]."%", $_val_a);
+        }
+        else {
+          switch($_comp) {
+            case "contains": 
+              $where[$_col] = $_ds->prepareLike("%$_val_a%");
+              break;
+            case "begins": 
+              $where[$_col] = $_ds->prepareLike("$_val_a%");
+              break;
+            case "ends": 
+              $where[$_col] = $_ds->prepareLike("%$_val_a");
+              break;
+            case "between": 
+              $_val_b = $_val['b'];
+              $where[$_col] = $_ds->prepare("BETWEEN % AND %", $_val_a, $_val_b);
+              break;
+          }
+        }
+      }
+    }
+
+    return $where;
+  }
+  
   /**
    * Returns an instance of CExObject which corresponds to the unicity
    * @param CMbObject $host

@@ -15,9 +15,15 @@ $reference_id    = CValue::get("reference_id");
 $detail          = CValue::get("detail", 1);
 $ex_class_id     = CValue::get("ex_class_id");
 $target_element  = CValue::get("target_element");
-$ex_object_ids   = CValue::get("ex_object_ids");
 $print           = CValue::get("print");
 $start           = CValue::get("start", 0);
+
+// Search mode
+$search_mode     = CValue::get("search_mode", 0);
+$date_min        = CValue::get("date_min");
+$date_max        = CValue::get("date_max");
+$group_id        = CValue::get("group_id");
+$concept_search  = CValue::get("concept_search");
 
 CValue::setSession('reference_class', $reference_class);
 CValue::setSession('reference_id',    $reference_id);
@@ -77,7 +83,7 @@ else {
   switch($detail) {
     case 3: 
     case 2: 
-      $limit = ($ex_object_ids ? 50 : ($ex_class_id ? 15 : 10)); break;
+      $limit = ($search_mode ? 50 : ($ex_class_id ? 15 : 10)); break;
     case 1: 
       $limit = ($ex_class_id ? 50 : 25); break;
   default:
@@ -93,7 +99,13 @@ if ($limit) {
 }
 
 $ref_objects_cache = array();
-  
+
+$search = null;
+if ($concept_search) {
+  $concept_search = stripslashes($concept_search);
+  $search = CExConcept::parseSearch($concept_search);
+}
+
 foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
   $ex_class_key = "$_ex_class->host_class-event-$_ex_class->event";
   
@@ -101,11 +113,20 @@ foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
   $_ex_object->_ex_class_id = $_ex_class_id;
   $_ex_object->setExClass();
   
-  if ($ex_object_ids) {
-    $ids = explode("-", $ex_object_ids);
+  if ($search_mode) {
     $where = array(
-      $_ex_object->_spec->key => $_ex_object->_spec->ds->prepareIn($ids),
+      "group_id" => "= '$group_id'",
+      "user_log.date" => "BETWEEN '$date_min' AND '$date_max'",
+      "user_log.type" => "= 'create'",
     );
+    
+    $ljoin = array(
+      "user_log" => "user_log.object_id = {$_ex_object->_spec->table}.ex_object_id AND user_log.object_class = '$_ex_object->_class'"
+    );
+    
+    if (!empty($search)) {
+      $where = array_merge($where, $_ex_class->getWhereConceptSearch($search));
+    }
   }
   else {
     $where = array(
@@ -113,10 +134,12 @@ foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
        (reference2_class = '$reference_class' AND reference2_id = '$reference_id') OR 
        (object_class     = '$reference_class' AND object_id     = '$reference_id')"
     );
+    
+    $ljoin = array();
   }
   
-  $_ex_objects = $_ex_object->loadList($where, "{$_ex_object->_spec->key} DESC", $limit);
-  $_ex_objects_count = $_ex_object->countList($where);
+  $_ex_objects = $_ex_object->loadList($where, "{$_ex_object->_spec->key} DESC", $limit, null, $ljoin);
+  $_ex_objects_count = $_ex_object->countList($where, null, $ljoin);
   
   $total = max($_ex_objects_count, $total);
   
@@ -219,5 +242,5 @@ $smarty->assign("ex_class_id",     $ex_class_id);
 $smarty->assign("target_element",  $target_element);
 $smarty->assign("print",           $print);
 $smarty->assign("start",           $start);
-$smarty->assign("ex_object_ids",   $ex_object_ids);
+$smarty->assign("search_mode",     $search_mode);
 $smarty->display("inc_list_ex_object.tpl");

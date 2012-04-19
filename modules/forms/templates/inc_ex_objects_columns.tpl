@@ -1,7 +1,7 @@
 {{foreach from=$ex_objects_by_class item=_ex_objects key=_ex_class_id}}
     {{assign var=_ex_obj value=$_ex_objects|@reset}}
   
-    {{if !$ex_class_id}}
+    {{if !$ex_class_id || $search_mode}}
       <h3>{{$ex_classes.$_ex_class_id->name}}</h3>
     {{/if}}
     
@@ -21,7 +21,7 @@
                  <hr />
                  
                  <div style="white-space: nowrap;">
-                   {{if !$ex_object_ids}}
+                   {{if !$search_mode}}
                      <button style="margin: -1px;" class="edit notext" 
                              onclick="ExObject.edit('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}', '{{$target_element}}')">
                        {{tr}}Edit{{/tr}}

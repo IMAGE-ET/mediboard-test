@@ -157,7 +157,7 @@ var ExObject = {
     options = Object.extend({
       print: 0,
       start: 0,
-      ex_object_ids: null,
+      search_mode: null,
       onComplete: function(){}
     }, options);
     

@@ -73,7 +73,17 @@ toggleEmptyRows = function(){
 
 ExObject.refreshSelf.{{$self_guid}} = function(start){
   start = start || 0;
-  ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', '{{$target_element}}', '{{$detail}}', '{{$ex_class_id}}', {start: start, ex_object_ids: '{{$ex_object_ids}}' });
+  var options = {start: start};
+  var form = getForm('filter-ex_object');
+  
+  if (form) {
+    options = Object.extend(getForm('filter-ex_object').serialize(true), {
+      start: start, 
+      a: 'ajax_list_ex_object'
+    });
+  }
+  
+  ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', '{{$target_element}}', '{{$detail}}', '{{$ex_class_id}}', options);
 }
 
 </script>

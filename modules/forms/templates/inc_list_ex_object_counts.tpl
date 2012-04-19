@@ -7,8 +7,8 @@
       <tr>
         <th class="category" colspan="2">{{tr}}{{$key}}{{/tr}}</th>
       </tr>
-      {{foreach from=$_ex_classes key=_ex_class_id item=_ex_class_data}}
-        <tr>
+      {{foreach from=$_ex_classes key=_ex_class_id item=_ex_class_count}}
+        <tr id="row-ex_class-{{$_ex_class_id}}">
           <td>
             {{assign var=_ex_class value=$ex_classes.$_ex_class_id}}
             
@@ -21,7 +21,9 @@
             {{$_ex_class->name}}
           </td>
           <td class="narrow" style="text-align: right;">
-            {{$_ex_class_data.count}} <button class="right notext" style="margin: -1px;" onclick="ExObject.loadExObjects(null, null, $('list-ex_object'), 2, {{$_ex_class_id}}, {ex_object_ids: '{{'-'|implode:$_ex_class_data.ids}}'})"></button>
+            {{$_ex_class_count}} 
+            <button class="right notext" style="margin: -1px;" 
+                    onclick="ExObject.loadExObjects(null, null, $('list-ex_object'), 2, {{$_ex_class_id}}, Object.extend(getForm('filter-ex_object').serialize(true), {a: 'ajax_list_ex_object'})); $('row-ex_class-{{$_ex_class_id}}').addUniqueClassName('selected')"></button>
           </td>
         </tr>
       {{/foreach}}
