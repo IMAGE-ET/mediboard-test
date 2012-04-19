@@ -196,7 +196,8 @@ $tab = $a == "index" ?
 if (
     CAppUI::$instance->weak_password && 
     !CAppUI::$instance->user_remote && 
-    !($m == "admin" && $tab == "chpwd")
+    !($m      == "admin" && $tab == "chpwd") &&
+    !($m_post == "admin" && $dosql == "do_chpwd_aed")
 ) {
   CAppUI::redirect("m=admin&tab=chpwd&forceChange=1");
 }

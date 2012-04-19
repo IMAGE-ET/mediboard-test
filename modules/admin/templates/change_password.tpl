@@ -8,17 +8,22 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+  goHome = function(){
+    location.replace("?");
+  }
+</script>
+
 {{if $user->_ldap_linked && !$conf.admin.LDAP.allow_change_password}}
   <div class="small-warning">{{tr}}CUser_associate-ldap-no-password-change{{/tr}}</div>
 {{elseif !$user->canChangePassword()}}
   <div class="small-warning">{{tr}}CUser-password_change_forbidden{{/tr}}</div>
 {{else}}
-  <form name="chpwdFrm" action="?m={{$m}}&amp;{{if $forceChange}}tab{{else}}a{{/if}}=chpwd" method="post" onsubmit="return onSubmitFormAjax(this)">
-  
+  <form name="chpwdFrm" action="?m=admin&amp;{{if $forceChange}}tab{{else}}a{{/if}}=chpwd" method="post" onsubmit="return onSubmitFormAjax(this)">
     <input type="hidden" name="m" value="admin" />
     <input type="hidden" name="dosql" value="do_chpwd_aed" />
     <input type="hidden" name="del" value="0" />
-    <input type="hidden" name="callback" value="Control.Modal.close" />
+    <input type="hidden" name="callback" value="{{if $forceChange}}goHome{{else}}Control.Modal.close{{/if}}" />
   
     {{if !$forceChange}}
       <input type="hidden" name="dialog" value="1" />
