@@ -20,7 +20,7 @@ $function = $praticien->loadRefFunction();
 
 $ufs_medicale    = array();
 $ufs_soins       = array();
-$ufs_hevergement = array();
+$ufs_hebergement = array();
 $auf = new CAffectationUniteFonctionnelle();
 
 // UFs de services
