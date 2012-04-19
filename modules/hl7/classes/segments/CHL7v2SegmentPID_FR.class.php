@@ -30,5 +30,14 @@ class CHL7v2SegmentPID_FR extends CHL7v2SegmentPID {
         mbDate($patient->INSC_date)
       );
     }
+    
+    $identifiers[] = array(
+      $patient->_id,
+      null,
+      null,
+      // PID-3-4 Autorité d'affectation
+      $this->getAssigningAuthority("mediboard"),
+      "RI"
+    );
   }
 }

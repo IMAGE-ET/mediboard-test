@@ -251,6 +251,8 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
   
   function getPersonIdentifiers(CPatient $patient, CGroups $group) {
+    $patient->loadIPP($group->_id);
+    
     // Table - 0203
     // RI - Resource identifier
     // PI - Patient internal identifier
@@ -275,15 +277,6 @@ class CHL7v2Segment extends CHL7v2Entity {
       );
     }
 
-    /*$identifiers[] = array(
-      $patient->_id,
-      null,
-      null,
-      // PID-3-4 Autorité d'affectation
-      $this->getAssigningAuthority("mediboard"),
-      "RI"
-    );*/
-    
     $this->fillOtherIdentifiers($identifiers, $patient);
     
     return $identifiers;
@@ -301,7 +294,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       $xcn1  = CValue::first($object->rpps, $object->adeli, $id400->id400, $object->_id);
       $xcn2  = $object->nom;
       $xcn3  = $object->prenom;
-     // $xcn9  = $this->getAssigningAuthority($object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "mediboard"));
+     // $xcn9  = $this->getAssigningAuthority($object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : ($id400->id400 ? "idex" : "mediboard")));
       $xcn13 = $object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "RI");
     }
     if ($object instanceof CUser) {
@@ -315,7 +308,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       $xcn1  = CValue::first($object->rpps, $object->adeli, $id400->id400, $object->_id);
       $xcn2  = $object->_user_last_name;
       $xcn3  = $object->_user_first_name;
-    //  $xcn9  = $this->getAssigningAuthority($object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "mediboard"));
+    //  $xcn9  = $this->getAssigningAuthority($object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : ($id400->id400 ? "idex" : "mediboard")));
       $xcn13 = $object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "RI");
     }
     
