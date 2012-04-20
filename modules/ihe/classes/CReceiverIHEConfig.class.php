@@ -43,6 +43,9 @@ class CReceiverIHEConfig extends CMbObject {
   var $send_all_patients        = null;
   var $send_default_affectation = null;
   
+  var $send_change_medical_responsibility = null;
+  var $send_change_nursing_ward           = null;
+  
   var $receiving_application    = null;
   var $receiving_facility       = null;
               
@@ -66,6 +69,10 @@ class CReceiverIHEConfig extends CMbObject {
     
     $props["ITI30_HL7_version"]        = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5|FR_2.1|FR_2.2|FR_2.3 default|2.5";
     $props["ITI31_HL7_version"]        = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5|FR_2.1|FR_2.2|FR_2.3 default|2.5";
+    
+    
+    $props["send_change_medical_responsibility"] = "enum list|Z80|Z99 default|Z80";
+    $props["send_change_nursing_ward"]           = "enum list|Z84|Z99 default|Z84";
     
     $props["build_mode"]               = "enum list|normal|simple default|normal";
     $props["build_NDA"]                = "enum list|PID_18|PV1_19 default|PID_18";
