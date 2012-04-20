@@ -52,7 +52,7 @@ Main.add(function () {
     <th class="category">Patient</th>
     <th class="category">Praticien</th>
     <th class="category">Etat</th>
-    <th class="category">Chambre</th>
+    <th class="category">Lit</th>
   </tr>
   {{foreach from=$currService item=currOp}}
   <tr>
