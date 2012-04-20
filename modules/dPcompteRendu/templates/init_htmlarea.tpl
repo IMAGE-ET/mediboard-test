@@ -194,7 +194,10 @@ function initCKEditor() {
         if (CKEDITOR.ispasting) {
           return;
         }
+        
         CKEDITOR.ispasting = true;
+        
+        evt.cancel();
         
         // Tenir compte de la façon dont on colle :
         // - sans mise en forme
