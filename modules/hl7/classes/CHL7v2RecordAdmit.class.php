@@ -664,7 +664,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Cas modification - Z99
     elseif ($this->_ref_exchange_ihe->code == "Z99") {
       $affectation =  $newVenue->getCurrAffectation($datetime);
-      // Si on le mouvemet n'a pas d'affectation associée, et que l'on a déjà une affectation dans MB
+      // Si on le mouvement n'a pas d'affectation associée, et que l'on a déjà une affectation dans MB
       if (!$movement->affectation_id && $affectation->_id) {
         return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
       }
@@ -992,6 +992,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Entrée / Sortie prévue du séjour
     $this->getExpectedAdmitDischarge($node, $newVenue);
     
+    // Visit description
+    $this->getVisitDescription($node, $newVenue);
+    
     // Mode de transport d'entrée
     $this->getModeArrivalCode($node, $newVenue);
   }
@@ -1025,6 +1028,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if (!$newVenue->sortie_prevue) {
       $newVenue->sortie_prevue = $this->queryTextNode("PV1.45", $this->queryNode("PV1", $parentNode));
     }
+  }
+
+  function getVisitDescription(DOMNode $node, CSejour $newVenue) {    
+    $newVenue->libelle = $this->queryTextNode("PV2.12", $node);
   }
   
   function getModeArrivalCode(DOMNode $node, CSejour $newVenue) {
