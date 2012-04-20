@@ -40,9 +40,9 @@
     <td style="background-color:#ccf"></td>
     <td class="text">Intervention déplacée dans une autre salle</td>
   </tr>
-	<tr>
+  <tr>
     <td>
-    	<span class="mediuser" style="border-color: #F99">&nbsp;</span>
+      <span class="mediuser" style="border-color: #F99">&nbsp;</span>
     </td>
     <td class="text">Aucun acte codé</td>
   </tr>
