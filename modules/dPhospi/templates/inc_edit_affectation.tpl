@@ -15,10 +15,18 @@
   
   <table class="form">
     {{if !$affectation->_id}}
-      <tr>
-        <th><input type="checkbox" name="_lock_all_lits" value="1"/></th>
-        <td colspan="3" >Bloquer tous les lits du service {{$lit->_ref_chambre->_ref_service->nom}}</td>
-      </tr>
+      {{if $urgence}}
+      <input type="hidden" name="function_id" value="{{$affectation->function_id}}"/>
+        <tr>
+          <th><input type="checkbox" name="_lock_all_lits_urgences" value="1"/></th>
+          <td colspan="3">Mise à disposition de  tous les lits du service {{$lit->_ref_chambre->_ref_service->nom}} pour les urgences</td>
+        </tr>
+      {{else}}
+        <tr>
+          <th><input type="checkbox" name="_lock_all_lits" value="1"/></th>
+          <td colspan="3">Bloquer tous les lits du service {{$lit->_ref_chambre->_ref_service->nom}}</td>
+        </tr>
+      {{/if}}
     {{/if}}
     <tr>
       <th>

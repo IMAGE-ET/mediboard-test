@@ -36,11 +36,15 @@
      else return onSubmitFormAjax(getForm('filterMouv'), {onComplete: after_refresh}, 'view_affectations');
    }
    
-   editAffectation = function(affectation_id, lit_id) {
+   editAffectation = function(affectation_id, lit_id, urgence) {
      var url = new Url("dPhospi", "ajax_edit_affectation");
      url.addParam("affectation_id", affectation_id);
+     
      if (!Object.isUndefined(lit_id)) {
        url.addParam("lit_id", lit_id);
+     }
+     if (!Object.isUndefined(urgence)) {
+      url.addParam("urgence", urgence);
      }
      
      Placement.stop();

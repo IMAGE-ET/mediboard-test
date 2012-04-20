@@ -10,11 +10,16 @@
 
 $affectation_id = CValue::get("affectation_id");
 $lit_id         = CValue::get("lit_id");
+$urgence         = CValue::get("urgence");
 
 $affectation = new CAffectation;
 $affectation->load($affectation_id);
 $lit = new CLit;
 $lit->load($affectation->lit_id);
+  if($urgence){
+    $service_urgence = CGroups::loadCurrent()->service_urgences_id;
+    $affectation->function_id = $service_urgence; 
+  }
 
 $affectations = array();
 $sejour_maman = null;
@@ -47,6 +52,7 @@ $smarty->assign("affectations", $affectations);
 $smarty->assign("lit"         , $lit);
 $smarty->assign("lit_id"      , $lit_id);
 $smarty->assign("sejour_maman", $sejour_maman);
+$smarty->assign("urgence"     , $urgence);
 
 $smarty->display("inc_edit_affectation.tpl");
 ?>

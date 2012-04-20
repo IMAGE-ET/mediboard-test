@@ -7,6 +7,13 @@
                     new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 });
                   },
                   revert: true});
+    var container2 = $('lit_urgence');
+    new Draggable(container2, {
+                  ghosting: "true",
+                  starteffect: function(element) {
+                    new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 });
+                  },
+                  revert: true});
   {{/if}}
   
   Main.add(function() {
@@ -94,8 +101,11 @@
       {{/if}}
     </form>
     <div id="lit_bloque" class="clit_bloque draggable" style="display: inline-block;">
-    <strong>[BLOQUER UN LIT]</strong>
-  </div>
+      <strong>[BLOQUER UN LIT]</strong>
+    </div>
+    <div id="lit_urgence" class="clit_bloque draggable" style="display: inline-block;">
+      <strong>[LIT EN URGENCE]</strong>
+    </div>
     <table class="tbl" style="width: auto; table-layout: fixed;">
       <tr>
       

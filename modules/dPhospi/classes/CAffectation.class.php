@@ -19,6 +19,7 @@ class CAffectation extends CMbObject {
   var $lit_id    = null;
   var $sejour_id = null;
   var $parent_affectation_id = null;
+  var $function_id = null;
   
   // DB Fields
   var $entree   = null;
@@ -79,6 +80,7 @@ class CAffectation extends CMbObject {
     $specs["lit_id"]       = "ref notNull class|CLit";
     $specs["sejour_id"]    = "ref class|CSejour cascade";
     $specs["parent_affectation_id"] = "ref class|CAffectation";
+    $specs["function_id"]  = "ref class|CFunctions";
     $specs["entree"]       = "dateTime notNull";
     $specs["sortie"]       = "dateTime notNull";
     $specs["effectue"]     = "bool";

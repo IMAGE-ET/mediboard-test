@@ -590,7 +590,13 @@ class CSetupdPhospi extends CSetup {
       ADD `neonatalogie` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.61";
+    $this->makeRevision("0.61");
+    
+    $query = "ALTER TABLE `affectation`
+      ADD `function_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.62";
   }
 }
 ?>

@@ -39,22 +39,26 @@
             
             // Création d'une affectation pour bloquer un lit
             if (div.id == "lit_bloque") {
-              editAffectation(null, lit_id);
+              editAffectation(null, lit_id, 0);
             }
             else {
-            
-              var ctrl_pressed = event.ctrlKey;
-              var affectation_id = div.get("affectation_id");
-              var sejour_id = div.get("sejour_id");
-              
-              // Si la touche ctrl est pressée dans le déplacement et que l'affectation existe,
-              // ouverture de la modale pour demander quoi faire
-              if (ctrl_pressed && affectation_id) {
-                selectAction(affectation_id, lit_id, sejour_id);
+              if (div.id == "lit_urgence") {
+                editAffectation(null, lit_id, 1);
               }
-              // Sinon déplacement de l'affectation si c'est vers un autre lit
-              else if (lit_id != div.get("lit_id")) {
-                moveAffectation(affectation_id, lit_id, sejour_id, div.get("lit_id"));
+              else{
+                var ctrl_pressed = event.ctrlKey;
+                var affectation_id = div.get("affectation_id");
+                var sejour_id = div.get("sejour_id");
+                
+                // Si la touche ctrl est pressée dans le déplacement et que l'affectation existe,
+                // ouverture de la modale pour demander quoi faire
+                if (ctrl_pressed && affectation_id) {
+                  selectAction(affectation_id, lit_id, sejour_id);
+                }
+                // Sinon déplacement de l'affectation si c'est vers un autre lit
+                else if (lit_id != div.get("lit_id")) {
+                  moveAffectation(affectation_id, lit_id, sejour_id, div.get("lit_id"));
+                }
               }
             }
             if (div.get("lit_id") && lit_id != div.get("lit_id") && !event.ctrlKey) {

@@ -112,9 +112,13 @@
                           </em>
                         </div>
                       {{/if}}
-                    {{else}}
+                    {{elseif !$_affectation->function_id}}
                       <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');">
                         BLOQUE
+                      </span>
+                    {{else}}
+                      <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');">
+                        BLOQUE URGENCE
                       </span>
                     {{/if}}
                   </td>
