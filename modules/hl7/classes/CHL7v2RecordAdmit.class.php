@@ -663,11 +663,22 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
     // Cas modification - Z99
     elseif ($this->_ref_exchange_ihe->code == "Z99") {
-      if (!$movement->affectation_id) {
+      $affectation =  $newVenue->getCurrAffectation($datetime);
+      // Si on le mouvemet n'a pas d'affectation associée, et que l'on a déjà une affectation dans MB
+      if (!$movement->affectation_id && $affectation->_id) {
         return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
       }
       
-      $affectation = $movement->loadRefAffectation();
+      // Si on a une affectation associée, alors on charge celle-ci
+      if ($movement->affectation_id) {
+        $affectation = $movement->loadRefAffectation();
+      }
+      // Sinon on récupère et on met à jour la première affectation
+      else {
+        $affectation->sejour_id = $newVenue->_id;
+        $affectation->entree    = $newVenue->entree;
+        $affectation->sortie    = $newVenue->sortie;
+      }      
     }
     
     // Tous les autres cas on récupère et on met à jour la première affectation
