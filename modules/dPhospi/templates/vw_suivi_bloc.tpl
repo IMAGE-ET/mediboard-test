@@ -39,7 +39,7 @@ Main.add(function () {
 <table class="tbl"> 
 {{foreach from=$listServices key=keyServ item=currService}}
   <tr>
-    <th class="title" colspan="4">
+    <th class="title" colspan="10">
        {{if $keyServ == "NP"}}
          Non placés
        {{else}}
@@ -48,6 +48,7 @@ Main.add(function () {
      </th>
   </tr>
   <tr>
+    <th class="category narrow">Heure prévue</th>
     <th class="category">Patient</th>
     <th class="category">Praticien</th>
     <th class="category">Etat</th>
@@ -55,6 +56,13 @@ Main.add(function () {
   </tr>
   {{foreach from=$currService item=currOp}}
   <tr>
+    <td class="button">
+      {{if $currOp->time_operation && $currOp->time_operation != "00:00:00"}}
+        {{$currOp->time_operation|date_format:$conf.time}}
+      {{else}}
+        -
+      {{/if}}
+    </td>
     <td>
       <span onmouseover="ObjectTooltip.createEx(this, '{{$currOp->_ref_sejour->_ref_patient->_guid}}')">
         {{$currOp->_ref_sejour->_ref_patient->_view}}
