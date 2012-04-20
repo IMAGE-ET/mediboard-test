@@ -59,12 +59,20 @@ for ($i = 0; $i < $nbDays; $i++) {
       $debute = "$jour $_consult->heure";
       if($_consult->patient_id) {
         $_consult->loadRefPatient();
-        $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->_ref_patient->_view, "#fff", true, null, null);
+        $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->_ref_patient->_view, "#fee", true, null, null);
       } else {
         $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, "[PAUSE]", "#ffa", true, null, null);
       }
       $event->type        = "rdvfull";
       $event->plage["id"] = $_plage->_id;
+      if($_plage->locked == 1) {
+        $event->disabled = true;
+      }
+      $_consult->loadRefCategorie();
+      if($_consult->categorie_id) {
+        $event->icon = "./modules/dPcabinet/images/categories/".$_consult->_ref_categorie->nom_icone;
+        $event->icon_desc = $_consult->_ref_categorie->nom_categorie;
+      }
       //Ajout de l'évènement au planning 
       $planning->addEvent($event);
     }
@@ -75,6 +83,9 @@ for ($i = 0; $i < $nbDays; $i++) {
         $event = new CPlanningEvent($debute, $debute, $_plage->_freq, "", "#cfc", true, null, null);
         $event->type        = "rdvfree";
         $event->plage["id"] = $_plage->_id;
+        if($_plage->locked == 1) {
+          $event->disabled = true;
+        }
         //Ajout de l'évènement au planning 
         $planning->addEvent($event);
       }

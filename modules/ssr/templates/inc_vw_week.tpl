@@ -138,7 +138,7 @@ Main.add(function() {
                              class="event {{$draggable}} {{$resizable}} {{if $disabled}}disabled{{/if}} {{$_event->css_class}} {{$_event->guid}} {{$_event->type}} {{if !$_event->important}}opacity-60{{/if}} {{if  isset($plageconsult_id|smarty:nodefaults) && $plageconsult_id == $_event->plage.id }}selected{{/if}}" 
                              style="background-color: {{$_event->color}}; {{if $_event->type == 'consultation' || $_event->type == 'operation'}}text-align:center;{{/if}}"
                              {{if $_event->type == "rdvfull"}}onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}')"{{/if}}
-                             {{if $_event->type == "rdvfree" || $_event->type == "rdvfull"}}onclick="setClose('{{$_event->start|date_format:"%H:%M:00"}}', '{{$_event->plage.id}}', '{{$_event->start|date_format:"%A %d/%m/%Y"}}', '{{$chir_id}}');"{{/if}}>
+                             {{if ($_event->type == "rdvfree" || $_event->type == "rdvfull") && !$_event->disabled}}onclick="setClose('{{$_event->start|date_format:"%H:%M:00"}}', '{{$_event->plage.id}}', '{{$_event->start|date_format:"%A %d/%m/%Y"}}', '{{$chir_id}}');"{{/if}}>
                           
                            {{if $_event->menu|@count == 3}}
                             <div class="toolbar">
@@ -162,6 +162,7 @@ Main.add(function() {
                           
                           <div class="body">
                             {{if $_event->type == "consultation" || $_event->type == "operation"}}
+                              <span>
                               {{assign var="plage" value=$_event->plage}}
                               {{assign var="elements" value=$_event->menu}}
                               {{foreach from=$elements key=num item=_plage}}
@@ -199,13 +200,17 @@ Main.add(function() {
                               {{/foreach}}
                               
                             {{elseif $_event->type == "rdvfree" || $_event->type == "rdvfull"}}
+                              {{if $_event->disabled}}
+                                <img src="style/mediboard/images/buttons/lock.png" style="float: right; height: 12px; width: 12px;" />
+                              {{/if}}
                               <span style="color: #000;">
-                              {{$_event->start|date_format:"%H:%M"}}
-                              {{if $_event->length}}
-                              - {{$_event->end|date_format:"%H:%M"}}
+                              <strong>{{$_event->start|date_format:"%H:%M"}}</strong>
+                              {{if $_event->icon}}
+                                <img src="{{$_event->icon}}" style="height: 12px; width: 12px;" alt="{{$_event->icon_desc}}" title="{{$_event->icon_desc}}" />
                               {{/if}}
                               {{$_event->title|smarty:nodefaults|nl2br}}
                             {{else}}
+                              <span>
                               {{$_event->title|smarty:nodefaults|nl2br}}
                             {{/if}}
                             </span>

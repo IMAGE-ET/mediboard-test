@@ -87,7 +87,7 @@ if ($plageconsult_id) {
   
   for ($i = 0; $i < $plage->_total; $i++) {
     $minutes = $plage->_freq * $i;
-    $listPlace[$i]["time"] = mbTime("+ $minutes minutes", $plage->debut);
+    $listPlace[$i]["time"]          = mbTime("+ $minutes minutes", $plage->debut);
     $listPlace[$i]["consultations"] = array();
   }
   
@@ -124,27 +124,27 @@ if ($plageconsult_id) {
   }
   
   if(CAppUI::pref("pratOnlyForConsult", 1)) {
-    $listPrat = $user->loadPraticiens(PERM_EDIT, $user->function_id, null, true);
+    $listPrat    = $user->loadPraticiens(PERM_EDIT, $user->function_id, null, true);
     $listAllPrat = $user->loadPraticiens(null, null, null, true);
   } else {
-    $listPrat = $user->loadProfessionnelDeSante(PERM_EDIT, $user->function_id, null, true);
+    $listPrat    = $user->loadProfessionnelDeSante(PERM_EDIT, $user->function_id, null, true);
     $listAllPrat = $user->loadProfessionnelDeSante(null, null, null, true);
   }
   
   $where = array();
-  $where["date"] = $ds->prepare("BETWEEN %1 AND %2", "$plage->date", "$plage->date");
-  $where[] = "libelle != 'automatique' OR libelle IS NULL";
+  $where["date"]    = $ds->prepare("BETWEEN %1 AND %2", "$plage->date", "$plage->date");
+  $where[]          = "libelle != 'automatique' OR libelle IS NULL";
   $where["chir_id"] = " = '$user->_id'";
   
   
   if ($display_nb_consult == "cab" || $display_nb_consult == "etab") {
     $where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat));
-    $plages_func = $plage->loadList($where);
+    $plages_func      = $plage->loadList($where);
     $utilisation_func = utilisation_rdv($plages_func, $listPlace, $plage);
   }
   if ($display_nb_consult == "etab") {
     $where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listAllPrat));
-    $plages_etab = $plage->loadList($where);
+    $plages_etab      = $plage->loadList($where);
     $utilisation_etab = utilisation_rdv($plages_etab, $listPlace, $plage);
   }
 }

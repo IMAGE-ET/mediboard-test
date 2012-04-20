@@ -111,8 +111,8 @@ class CConsultation extends CCodable {
   var $_ref_reglements_tiers   = null;
   var $_ref_grossesse          = null;
   var $_ref_facture            = null;
-  var $_ref_prescription = null; 
-  var $_ref_categorie    = null;
+  var $_ref_prescription       = null; 
+  var $_ref_categorie          = null;
   
   // Distant fields
   var $_ref_chir                 = null;

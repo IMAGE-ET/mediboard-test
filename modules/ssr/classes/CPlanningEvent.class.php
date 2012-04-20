@@ -9,29 +9,31 @@
  */
 
 class CPlanningEvent  {
-  var $guid   = null;
+  var $guid        = null;
   var $internal_id = null;
   
-  var $title  = null;
+  var $title     = null;
+  var $icon      = null;
+  var $icon_desc = null;
   
   var $type   = null;
   var $plage  = array();
   var $menu   = array();
   
-  var $start  = null;
-  var $end    = null;
-  var $length = null;
-  var $day    = null;
+  var $start     = null;
+  var $end       = null;
+  var $length    = null;
+  var $day       = null;
   var $draggable = false;
   var $resizable = false;
-  var $disabled = false;
+  var $disabled  = false;
   
-  var $hour   = null;
+  var $hour    = null;
   var $minutes = null;
   
-  var $width = null;
-  var $offset = null;
-  var $color = null;
+  var $width     = null;
+  var $offset    = null;
+  var $color     = null;
 	var $important = null;
   
   function __construct ($guid, $date, $length = 0, $title = "", $color = null, $important = true, $css_class = null, $draggable_guid = null) {
