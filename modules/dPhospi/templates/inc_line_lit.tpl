@@ -67,11 +67,11 @@
               style="left: {{$offset}}px; width: {{$width}}px; border: 1px solid #{{$color}};"
               onmouseover="
                 if ($(this).hasClassName('classique')) {
-                  this.select('.affectation_toolbar')[0].show();
+                  this.select('.toolbar_affectation')[0].setStyle({visibility: 'visible'});
                 }
               "
               {{if $mode_vue_reelle == "classique"}}
-                {{$onmouseevent}}="this.select('.affectation_toolbar')[0].hide();"
+                {{$onmouseevent}}="this.select('.toolbar_affectation')[0].setStyle({visibility: 'hidden'});"
               {{/if}}>
 
               {{if !$readonly}}
@@ -120,24 +120,30 @@
                   </td>
                   {{if $mode_vue_reelle != "compacte"}}
                     <td style="vertical-align: middle; width: 1%;">
-                      <div style="display: none;" class="affectation_toolbar">
+                      {{if !$_affectation->uf_hebergement_id || !$_affectation->uf_medicale_id || !$_affectation->uf_soins_id}}
+                        <a style="margin-top: 3px; display: inline" href="#1"
+                            onclick="AffectationUf.affecter('{{$_affectation->_guid}}','{{$_lit->_guid}}', 'refreshMouvements.curry(null, {{$_affectation->lit_id}})')">
+                           <img src="images/icons/uf-warning.png" width="16" height="16" title="Affecter les UF" /></a>
+                      {{/if}}
+                      <span class="toolbar_affectation">
                        {{if $_affectation->sejour_id}}
                          {{if $conf.dPadmissions.show_deficience}}
                           <span style="margin-top: 3px; margin-right: 3px;">
                             {{mb_include module=patients template=inc_vw_antecedents patient=$_patient type=deficience readonly=1}}
                           </span>
                          {{/if}}
-                         <a style="margin-top: 3px; display: inline" href="#1"
-                            onclick="AffectationUf.affecter('{{$_affectation->_guid}}','{{$_lit->_guid}}')">
-                           <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF" class="opacity-40"
-                              onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"/>
-                         </a>
+                         {{if $_affectation->uf_hebergement_id && $_affectation->uf_medicale_id && $_affectation->uf_soins_id}} 
+                           <a style="margin-top: 3px; display: inline" href="#1"
+                              onclick="AffectationUf.affecter('{{$_affectation->_guid}}','{{$_lit->_guid}}', 'refreshMouvements.curry(null, \'{{$_affectation->lit_id}}\')')">
+                             <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF" class="opacity-40"
+                                onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"/></a>
+                         {{/if}}
                        {{/if}}
                        <button type="button" class="trash notext opacity-40"
                           onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"
                           onclick="delAffectation('{{$_affectation->_id}}', '{{$_affectation->lit_id}}', 'CSejour-{{$_affectation->sejour_id}}')"></button>
                        <input type="radio" name="affectation_move" onclick="chooseAffectation('{{$_affectation->_id}}');" />
-                      </div>
+                      </span>
                     </td>
                   {{/if}}
                 </tr>

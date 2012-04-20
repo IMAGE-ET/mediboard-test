@@ -3,6 +3,8 @@
 CCanDo::checkEdit();
 
 // Récupération des paramètres
+$callback = CValue::get("callback");
+
 $mediuser = CMediusers::get();
 $mediuser->loadRefFunction();
 $curr_affectation_guid = CValue::get("curr_affectation_guid");
@@ -86,6 +88,8 @@ $smarty->assign("ufs_praticien"  , $ufs_praticien);
 $smarty->assign("ufs_medicale"   , $ufs_medicale);
 $smarty->assign("ufs_soins"      , $ufs_soins);
 $smarty->assign("ufs_hebergement", $ufs_hebergement);
+
+$smarty->assign("callback", $callback);
 
 $smarty->display("inc_vw_affectation_uf.tpl");
 ?>

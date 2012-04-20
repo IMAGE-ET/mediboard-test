@@ -8,10 +8,11 @@ AffectationUf  = {
 		this.modal = url.modalObject;
 	},
 	
-	affecter: function(curr_affectation_guid, lit_guid) {
+	affecter: function(curr_affectation_guid, lit_guid, callback) {
 		var url = new Url('dPhospi'				, 'ajax_vw_association_uf');
 		url.addParam('curr_affectation_guid'	, curr_affectation_guid);
 		url.addParam('lit_guid'	, lit_guid);
+    url.addParam('callback' , callback);
 		url.requestModal(600, 400);
 		this.modal = url.modalObject;
 	},

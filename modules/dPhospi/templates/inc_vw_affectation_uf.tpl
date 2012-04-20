@@ -4,7 +4,9 @@
   <input type="hidden" name="m" value="dPhospi" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="do_affectation_aed" />
-  
+  {{if $callback}}
+    <input type="hidden" name="callback" value="{{$callback}}" />
+  {{/if}}
   <input type="hidden" name="affectation_id" value="{{$affectation->_id}}" />
 
   <fieldset>

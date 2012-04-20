@@ -16,7 +16,7 @@ div.wrapper_line {
 }
 
 div.hatching {
-  background-image: url(../../images/icons/ray.gif);
+  background-image: url(../../../images/icons/ray.gif);
 }
 
 div.wrapper_line.compacte {
@@ -60,12 +60,8 @@ div.affectation.compacte {
   padding: 1px;
 }
 
-div.toolbar_affectation {
-  display: none;
-}
-
-div.toolbar_affectation:hover {
-  display: block;
+span.toolbar_affectation {
+  visibility: hidden;
 }
 
 div.affect_left {
