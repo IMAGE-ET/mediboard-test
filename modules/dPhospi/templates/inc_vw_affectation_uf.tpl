@@ -9,7 +9,7 @@
   {{/if}}
   <input type="hidden" name="affectation_id" value="{{$affectation->_id}}" />
 
-  <fieldset>
+  <fieldset style="max-width:400px;">
     <legend>
       <img src="style/mediboard/images/buttons/search.png" onclick="$(this).up('fieldset').down('tbody').toggle();"/>
       {{mb_label class=CAffectation field=uf_hebergement_id}}
@@ -25,7 +25,7 @@
     </table>
   </fieldset>
     
-  <fieldset>
+  <fieldset style="max-width:400px;">
     <legend>
       <img src="style/mediboard/images/buttons/search.png" onclick="$(this).up('fieldset').down('tbody').toggle();"/>
       {{mb_label class=CAffectation field=uf_soins_id}}
@@ -39,7 +39,7 @@
     </table>
   </fieldset>
 
-  <fieldset>
+  <fieldset style="max-width:400px;">
     <legend>
       <img src="style/mediboard/images/buttons/search.png" onclick="$(this).up('fieldset').down('tbody').toggle();"/>
       {{mb_label class=CAffectation field=uf_medicale_id}}
@@ -53,6 +53,7 @@
       {{mb_include template=inc_options_ufs_context context=medicale ufs=$ufs_medicale}}
     </table>
   </fieldset>
-  
-  <button class="submit" type="submit">{{tr}}Validate{{/tr}}</button>
+  {{if $see_validate}}
+    <button class="submit" type="submit">{{tr}}Validate{{/tr}}</button>
+  {{/if}}
 </form>

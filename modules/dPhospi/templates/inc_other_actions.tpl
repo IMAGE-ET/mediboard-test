@@ -7,6 +7,13 @@
       $('cut_affectation').disabled = '';
     }
   }
+  addUfs = function(){
+    var form = getForm("affect_uf");
+    var form2 = getForm("cutAffectation");
+    form2.uf_hebergement_id.value = form.uf_hebergement_id.value;
+    form2.uf_medicale_id.value    = form.uf_medicale_id.value;
+    form2.uf_soins_id.value       = form.uf_soins_id.value;
+  }
 </script>
 
 <table class="form">
@@ -16,7 +23,7 @@
   <tr>
     <td colspan="4">
       <form name="cutAffectation" method="post" action="?"
-        onsubmit="return onSubmitFormAjax(this, {onComplete: function() {
+        onsubmit="addUfs();return onSubmitFormAjax(this, {onComplete: function() {
           refreshMouvements(null, '{{$affectation->lit_id}}');
           refreshMouvements(Control.Modal.close, '{{$lit_id}}');
            }})">
@@ -24,6 +31,9 @@
         <input type="hidden" name="dosql" value="do_cut_affectation_aed" />
         <input type="hidden" name="lit_id" value="{{$lit_id}}" />
         <input type="hidden" name="entree" value="{{$affectation->entree}}" />
+        <input type="hidden" name="uf_hebergement_id" value="" />
+        <input type="hidden" name="uf_medicale_id" value="" />
+        <input type="hidden" name="uf_soins_id" value="" />
         {{mb_key object=$affectation}}
         <input type="text" name="_date_cut_da" value="{{$affectation->entree|date_format:$conf.datetime}}" readonly="readonly"/>
         <input type="hidden" name="_date_cut" class="dateTime" value="{{$affectation->entree}}"
@@ -65,6 +75,19 @@
           </select>
         </form>
       {{/if}}
+    </td>
+  </tr>
+  <tr>
+    <td id="ufs_affectation">
+      <script>
+        Main.add( function(){
+          var url = new Url("hospi", "ajax_vw_association_uf");
+          url.addParam("curr_affectation_guid", '{{$affectation->_guid}}');
+          url.addParam("lit_guid", "CLit-"+'{{$affectation->lit_id}}');
+          url.addParam("see_validate", 0);
+          url.requestUpdate('ufs_affectation');
+        } );
+      </script>
     </td>
   </tr>
 </table>

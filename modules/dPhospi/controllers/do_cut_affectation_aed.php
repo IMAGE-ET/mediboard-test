@@ -11,6 +11,9 @@
 $affectation_id = CValue::post("affectation_id");
 $_date_cut      = CValue::post("_date_cut");
 $lit_id         = CValue::post("lit_id");
+$uf_hebergement_id   = CValue::post("uf_hebergement_id");
+$uf_medicale_id      = CValue::post("uf_medicale_id");
+$uf_soins_id         = CValue::post("uf_soins_id");
 
 $affectation = new CAffectation;
 $affectation->load($affectation_id);
@@ -22,10 +25,14 @@ if ($_date_cut < $affectation->entree || $_date_cut > $affectation->sortie) {
 }
 
 $affectation_cut = new CAffectation;
-$affectation_cut->entree = $_date_cut;
-$affectation_cut->lit_id = $affectation->lit_id;
+$affectation_cut->entree    = $_date_cut;
+$affectation_cut->lit_id    = $affectation->lit_id;
 $affectation_cut->sejour_id = $affectation->sejour_id;
-$affectation_cut->sortie = $affectation->sortie;
+$affectation_cut->sortie    = $affectation->sortie;
+
+$affectation_cut->uf_hebergement_id = $uf_hebergement_id;
+$affectation_cut->uf_medicale_id    = $uf_medicale_id;
+$affectation_cut->uf_soins_id       = $uf_soins_id;
 //$affectation_cut->effectue = 0;
 
 if ($lit_id) {

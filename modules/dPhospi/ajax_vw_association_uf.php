@@ -89,6 +89,7 @@ $smarty->assign("ufs_medicale"   , $ufs_medicale);
 $smarty->assign("ufs_soins"      , $ufs_soins);
 $smarty->assign("ufs_hebergement", $ufs_hebergement);
 
+$smarty->assign("see_validate", CValue::get("see_validate", 1));
 $smarty->assign("callback", $callback);
 
 $smarty->display("inc_vw_affectation_uf.tpl");
