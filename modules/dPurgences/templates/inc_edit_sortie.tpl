@@ -27,7 +27,23 @@ Fields = {
 	  $('etablissement_sortie_transfert').setVisible(mode_sortie == "transfert");
 	  $('service_sortie_transfert'      ).setVisible(mode_sortie == "mutation");
   },
-	
+  
+  modif: function(service_sortie_id) {
+    var divLits = $('lit_sortie_transfert');
+    divLits.setVisible(service_sortie_id);
+
+    elements=divLits.select('option');    
+    elements.each(function(e) {
+        e.style.display = "none";
+    });
+    
+    //Tous les éléments à afficher
+    elements=divLits.select('option.service-'+service_sortie_id);    
+    elements.each(function(e) {
+        e.style.display = "";
+    });
+  },
+  
   clear: function() {
     if (confirm($T('CSejour-sortie-confirm-clearall'))) {
       var form = getForm('editSejour');

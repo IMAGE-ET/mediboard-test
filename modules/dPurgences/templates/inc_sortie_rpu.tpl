@@ -124,7 +124,7 @@
     </div>
   {{/if}}
   
-	{{if $sejour->sortie_reelle}} 
+	{{if $sejour->sortie_reelle || $sejour->mode_sortie == "mutation"}} 
     <button class="edit notext" style="float: right;" onclick="Sortie.edit('{{$rpu->_id}}')">
 		  {{tr}}Edit{{/tr}} {{mb_label object=$sejour field=sortie}}
 		</button>

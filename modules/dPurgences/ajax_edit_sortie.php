@@ -10,7 +10,7 @@
 
 CCanDo::checkEdit();
 
-$rpu_id = CValue::get("rpu_id");
+$rpu_id         = CValue::get("rpu_id");
 
 // Chargement du RPU
 $rpu = new CRPU();
@@ -28,10 +28,27 @@ if (!$sejour->sortie_reelle) {
 	$sejour->sortie_reelle = mbDateTime();
 }
 
+$listLits = array();
+$ljoin = array();
+$where = array();
+
+$ljoin["affectation"] = "affectation.lit_id = lit.lit_id";
+
+$where["affectation.entree"] = "<= '$sejour->sortie_reelle'";
+$where["affectation.sortie"] = ">= '$sejour->sortie_reelle'";
+$where["affectation.function_id"] = "IS NOT NULL";
+
+$lit = new CLit();
+$listLits = $lit->loadList($where, null, null, null, $ljoin);
+foreach($listLits as $_lit){
+	$_lit->loadRefChambre()->loadRefService();
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("rpu", $rpu);
 $smarty->assign("sejour", $sejour);
+$smarty->assign("listLits", $listLits);
 
 $smarty->display("inc_edit_sortie.tpl");
 ?>

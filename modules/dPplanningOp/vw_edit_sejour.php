@@ -151,6 +151,22 @@ $services = $service->loadGroupList($where);
 // Compter les prestations journalières
 $count_prestations = CPrestationJournaliere::countCurrentList();
 
+$listLits = array();
+$ljoin = array();
+$where = array();
+
+$ljoin["affectation"] = "affectation.lit_id = lit.lit_id";
+
+$where["affectation.entree"] = "<= '".mbDateTime()."'";
+$where["affectation.sortie"] = ">= '".mbDateTime()."'";
+$where["affectation.function_id"] = "IS NOT NULL";
+
+$lit = new CLit();
+$listLits = $lit->loadList($where, null, null, null, $ljoin);
+foreach($listLits as $_lit){
+  $_lit->loadRefChambre()->loadRefService();
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -181,6 +197,7 @@ $smarty->assign("count_prestations", $count_prestations);
 
 $smarty->assign("hours", $hours);
 $smarty->assign("mins" , $mins);
+$smarty->assign("listLits" , $listLits);
 
 $smarty->display("vw_edit_sejour.tpl");
 
