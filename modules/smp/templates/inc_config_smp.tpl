@@ -34,6 +34,10 @@
     {{mb_include module=system template=inc_config_bool var=server}}
     
     {{mb_include module=system template=inc_config_str var=tag_nda cssClass="str dontMatch"}}
+    
+    {{mb_include module=system template=inc_config_str var=tag_visit_number}}
+    
+    {{mb_include module=system template=inc_config_bool var=create_object_by_vn}}
 
     <tr>
       <td class="button" colspan="10">
