@@ -38,6 +38,7 @@ if($list_type == "left") {
 $intervs = $interv->loadList($where, $order, null, null, $ljoin);
 foreach($intervs as $_interv) {
   $_interv->loadRefsFwd();
+  $_interv->_ref_chir->loadRefFunction();
   $_interv->_ref_sejour->loadRefsFwd();
 }
 

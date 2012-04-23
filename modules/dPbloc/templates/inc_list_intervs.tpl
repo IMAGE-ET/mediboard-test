@@ -53,7 +53,7 @@
       {{mb_include module=system template=inc_object_history object=$_op}}
       <strong>
         {{if $_op->rank}}
-          <div class="rank" style="float: left;"> {{$_op->rank}} </div> 
+          <div class="rank" style="float: left;">{{$_op->rank}}</div>
           {{$_op->time_operation|date_format:$conf.time}}
         {{/if}}
         <a href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$patient->_id}}">
@@ -62,8 +62,10 @@
           </span>
         </a>
       </strong>
+      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_op->_ref_chir}}
+      <br />
       <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}');" {{if !$sejour->entree_reelle}}style="color: red;"{{/if}}>
-       Admision. le {{mb_value object=$sejour field=_entree}} ({{$sejour->type|truncate:1:""|capitalize}})
+       Adm. le {{mb_value object=$sejour field=_entree}} ({{$sejour->type|truncate:1:""|capitalize}})
       </span>
       {{if $_op->horaire_voulu}}
         <br />
@@ -95,36 +97,12 @@
       </form>
       </div>
     </td>
-    <td class="text" style="vertical-algn: top;">
-      <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$_op->_id}}">
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_guid}}');">
-        Dr {{$_op->_ref_chir->_view}}
-        <br />
-        {{if $_op->libelle}}
-          <em>[{{$_op->libelle}}]</em>
-        {{else}}
-        {{foreach from=$_op->_ext_codes_ccam item=curr_code}}
-          <strong>{{$curr_code->code}}</strong> : {{$curr_code->libelleLong|truncate:60:"...":false}}<br />
-        {{/foreach}}
-        {{/if}}
-        </span>
-      </a>
-      {{mb_label object=$_op field=cote}}
-      {{mb_value object=$_op field=cote}}
-      <br />
-      {{if $_op->rques}}
-      <div class="small-warning">
-        {{$_op->rques|nl2br}}
-      </div>
-      {{/if}}
-      <button style="float: right;" class="{{if $_op->_ref_consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}" style="width:11em;" type="button" onclick="printFicheAnesth('{{$_op->_ref_consult_anesth->_ref_consultation->_id}}', '{{$_op->_id}}');">
-        Fiche d'anesthésie
-      </button>
-      <form name="editFrmAnesth{{$_op->operation_id}}" action="?m={{$m}}" method="post">
+    <td class="text" style="vertical-align: top;">
+      <form name="editFrmAnesth{{$_op->operation_id}}" action="?m={{$m}}" method="post" style="float: right;">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$_op->operation_id}}" />
-        <select name="type_anesth" onchange="submitOrder(this.form, '{{$list_type}}');" style="width: 10em; float: left;">
+        <select name="type_anesth" onchange="submitOrder(this.form, '{{$list_type}}');" style="width: 11em; clear: both;">
           <option value="">&mdash; Anesthésie</option>
           {{foreach from=$anesth item=curr_anesth}}
           <option value="{{$curr_anesth->type_anesth_id}}" {{if $_op->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}} >
@@ -132,7 +110,38 @@
           </option>
           {{/foreach}}
         </select>
+        <br />
+        <button style="clear: both;" class="{{if $_op->_ref_consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}"
+          style="width:11em;" type="button"
+          onclick="printFicheAnesth('{{$_op->_ref_consult_anesth->_ref_consultation->_id}}', '{{$_op->_id}}');">
+          Fiche d'anesthésie
+        </button>
       </form>
+      <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$_op->_id}}">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_guid}}');">
+          {{if $_op->libelle}}
+            <strong>{{$_op->libelle}}</strong>
+          {{else}}
+          {{foreach from=$_op->_ext_codes_ccam item=curr_code}}
+            <strong>{{$curr_code->code}}</strong> : {{$curr_code->libelleLong|truncate:60:"...":false}}<br />
+          {{/foreach}}
+          {{/if}}
+        </span>
+      </a>
+      {{mb_label object=$_op field=cote}} :
+      <strong>{{mb_value object=$_op field=cote}}</strong>
+      {{if $_op->materiel}}
+      <div class="small-info">
+        <em>{{mb_label object=$_op field=materiel}}</em> :
+        {{mb_value object=$_op field=materiel}}
+      </div>
+      {{/if}}
+      {{if $_op->rques}}
+      <div class="small-warning">
+        <em>{{mb_label object=$_op field=rques}}</em> :
+        {{mb_value object=$_op field=rques}}
+      </div>
+      {{/if}}
     </td>
     <td>
       <!-- Intervention à valider -->
