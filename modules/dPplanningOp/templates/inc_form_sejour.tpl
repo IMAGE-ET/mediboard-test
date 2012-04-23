@@ -780,21 +780,15 @@ Main.add( function(){
         <input type="hidden" name="cancelled" value="0" />
       </div>
       
-      <div>
-        <tr id="lit_sortie_transfert" {{if $sejour->type != "mutation"}} style="display:none;" {{/if}} >
-          <input type="hidden" name="type" value="{{$sejour->type}}" />
-          <th>Lit</th>
-          <td>
-            <select name="lit_id" style="width: 15em;" onchange="this.form.sortie_reelle.value = '';">
-              <option value="0">&mdash; Choisir Lit </option>
-              {{foreach from=$listLits item=lit}}
-                <option value="{{$lit->_id}}" class="service-{{$lit->_ref_chambre->_ref_service->_id}}" style="display:none;">
-                  {{$lit->_view}}
-                </option>
-              {{/foreach}}
-            </select>
-          </td>
-        </tr>
+      <div id="lit_sortie_transfert" {{if $sejour->type != "mutation"}} style="display:none;" {{/if}} >
+        <select name="lit_id" style="width: 15em;" onchange="this.form.sortie_reelle.value = '';">
+          <option value="0">&mdash; Choisir Lit </option>
+          {{foreach from=$listLits item=lit}}
+            <option value="{{$lit->_id}}" class="service-{{$lit->_ref_chambre->_ref_service->_id}}" style="display:none;">
+              {{$lit->_view}}
+            </option>
+          {{/foreach}}
+        </select>
       </div> 
     {{else}}
       {{mb_value object=$sejour field=mode_sortie}}
