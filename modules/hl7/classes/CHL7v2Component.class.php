@@ -221,8 +221,9 @@ class CHL7v2Component extends CHL7v2Entity {
     }
     else {
       // length
-      if ($this->length && strlen($this->data) > $this->length) {
-        $this->error(CHL7v2Exception::DATA_TOO_LONG, var_export($this->data, true)." ($this->length)", $this);
+      $length = strlen($this->data);
+      if ($this->length && $length > $this->length) {
+        $this->error(CHL7v2Exception::DATA_TOO_LONG, var_export($this->data, true)." ($length / $this->length)", $this);
         $this->invalid = true;
       }
       

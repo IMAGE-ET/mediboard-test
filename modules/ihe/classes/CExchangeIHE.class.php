@@ -206,20 +206,28 @@ class CExchangeIHE extends CExchangeTabular {
     if ($this->_acquittement) {
       $acq = $this->_acquittement;
       
+      $this->_observations = array();
+      
       if (strpos($acq, "UNICODE") !== false) {
         $acq = utf8_decode($acq);
       }
       
       // quick regex
       // ERR|~~~207^0^0^E201||207|E|code^libelle|||commentaire
-      if (preg_match("/ERR\|[^\|]*\|[^\|]*\|[^\|]*\|[^\|]*\|([^\^]+)\^([^\|]+)\|[^\|]*\|[^\|]*\|([^\r\n\|]*)/ms", $acq, $matches)) {
-        return $this->_observations = array(
-          array(
-            "code"        => $matches[1],
-            "libelle"     => $matches[2],
-            "commentaire" => strip_tags($matches[3]),
-          )
-        );
+      if (preg_match_all("/ERR\|[^\|]*\|[^\|]*\|[^\|]*\|([^\|]*)\|([^\^]+)\^([^\|]+)\|[^\|]*\|[^\|]*\|([^\r\n\|]*)/ms", $acq, $matches, PREG_SET_ORDER)) {
+        foreach($matches as $match) {
+          if ($match[1] == "E") {
+            $this->_observations[$match[2]] = array(
+              array(
+                "code"        => $match[2],
+                "libelle"     => $match[3],
+                "commentaire" => strip_tags($match[4]),
+              )
+            );
+          }
+        }
+        
+        return $this->_observations;
       }
     }
   }
