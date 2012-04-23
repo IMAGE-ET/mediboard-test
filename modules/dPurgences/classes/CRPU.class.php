@@ -484,6 +484,13 @@ class CRPU extends CMbObject {
     }
   }
   
+  function completeLabelFields(&$fields) {
+    $sejour = $this->loadRefSejour();
+    $sejour->completeLabelFields($fields);
+    $patient = $sejour->loadRefPatient();
+    $patient->completeLabelFields($fields);
+  }
+  
   function docsEditable() {
     return true;
   }
