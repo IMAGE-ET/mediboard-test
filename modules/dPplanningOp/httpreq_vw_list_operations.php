@@ -109,7 +109,7 @@ $modele_etiquette = new CModeleEtiquette;
 
 $where = array();
 
-$where['object_class'] = " = '$object_class'";
+$where['object_class'] = " IN ('COperation', 'CSejour')";
 $where["group_id"] = " = '".CGroups::loadCurrent()->_id."'";
 
 $nb_modeles_etiquettes = $modele_etiquette->countList($where);
