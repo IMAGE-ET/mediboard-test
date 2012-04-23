@@ -90,7 +90,8 @@ function changeUser(user_id) {
     <tr>
       <th><label title="{{tr}}CAideSaisie-user_id-desc{{/tr}}" for="user_id">{{tr}}CAideSaisie-user_id{{/tr}}</label></th>
       <td>
-        <input type="hidden" name="user_id" value="{{$fields.user_id}}" />
+        <input type="hidden" name="user_id"
+        {{if (!$aide->_id && $choicepratcab == "prat" && $aide->user_id) || ($aide->_id && $aide->user_id)}}value="{{$fields.user_id}}"{{/if}} />
         <label>
           <input type="radio" name="_owner_id" value="{{$fields.user_id}}" onclick="$V(this.form.user_id, this.value); $(this.form.user_id).fire('ui:change')"
           {{if (!$aide->_id && $choicepratcab == "prat" && $aide->user_id) || ($aide->_id && $aide->user_id)}}checked="checked"{{/if}} />
@@ -102,7 +103,8 @@ function changeUser(user_id) {
     <tr>
       <th><label title="{{tr}}CAideSaisie-function_id-desc{{/tr}}" for="function_id">{{tr}}CAideSaisie._owner.func{{/tr}}</label></th>
       <td>
-        <input type="hidden" name="function_id" value="{{$fields.function_id}}" />
+        <input type="hidden" name="function_id"
+          {{if (!$aide->_id && $choicepratcab == "cab" && $aide->function_id) || ($aide->_id && $aide->function_id)}}value="{{$fields.function_id}}"{{/if}} />
         <label>
           <input type="radio" name="_owner_id" value="{{$fields.function_id}}" onclick="$V(this.form.function_id, this.value); $(this.form.function_id).fire('ui:change')"
           {{if (!$aide->_id && $choicepratcab == "cab" && $aide->function_id) || ($aide->_id && $aide->function_id)}}checked="checked"{{/if}} />
@@ -114,7 +116,8 @@ function changeUser(user_id) {
     <tr>
       <th><label title="{{tr}}CAideSaisie-group_id-desc{{/tr}}" for="group_id">{{tr}}CAideSaisie-group_id{{/tr}}</label></th>
       <td>
-        <input type="hidden" name="group_id" value="{{$fields.group_id}}" />
+        <input type="hidden" name="group_id"
+          {{if (!$aide->_id && $choicepratcab == "group" && $aide->group_id) || ($aide->_id && $aide->group_id)}}value="{{$fields.group_id}}"{{/if}} />
         <label>
           <input type="radio" name="_owner_id" value="{{$fields.group_id}}" onclick="$V(this.form.group_id, this.value); $(this.form.group_id).fire('ui:change')"
           {{if (!$aide->_id && $choicepratcab == "group" && $aide->group_id) || ($aide->_id && $aide->group_id)}}checked="checked"{{/if}} />
