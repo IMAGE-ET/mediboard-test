@@ -14,6 +14,7 @@
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+<input type="hidden" name="type" value="{{$sejour->type}}" />
 
 <table class="form" style="width: 100%">
   
@@ -64,7 +65,6 @@
     </td>
   </tr>
   <tr id="lit_sortie_transfert" {{if $sejour->mode_sortie != "mutation"}} style="display:none;" {{/if}}>
-    <input type="hidden" name="type" value="{{$sejour->type}}" />
     <th>Lit</th>
     <td>
       <select name="lit_id" style="width: 15em;" onchange="this.form.sortie_reelle.value = '';">
