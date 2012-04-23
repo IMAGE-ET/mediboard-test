@@ -32,7 +32,7 @@ printFacture = function(factureconsult_id, edit_justificatif, edit_bvr, preimpre
   url.addParam('preimpression', preimpression);
   url.addParam('prat_id', prat_id);
   url.addParam('suppressHeaders', '1');
-  url.popup(1000, 600, 'systemMsg');
+  url.popup(1000, 600);
 }
 </script>
 
@@ -73,7 +73,7 @@ printFacture = function(factureconsult_id, edit_justificatif, edit_bvr, preimpre
         <th></th>
         <td>
           <label>
-            <input type="checkbox" name="no_finish_reglement" value="0" onchange="refreshList();"/>
+            <input type="checkbox" name="no_finish_reglement" value="0" {{if $no_finish_reglement }}checked="checked"{{/if}} onchange="refreshList();"/>
             Uniquement réglées
           </label>
         </td>

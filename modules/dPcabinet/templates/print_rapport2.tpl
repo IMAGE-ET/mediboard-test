@@ -239,16 +239,16 @@ PlageConsult = {
 					</td>
           <td class="text">
           	{{if $_consultation->tarif}} 
-            <span onmouseover="ObjectTooltip.createEx(this, '{{$_consultation->_guid}}')">
-              {{$_consultation->tarif}}
-            </span>
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$_consultation->_guid}}')">
+                {{$_consultation->tarif}}
+              </span>
           	{{/if}}
           </td>
-          {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam && !isset($_consultation->_montant_sans_remise|smarty:nodefaults)}}
+          {{if !isset($_consultation->_montant_sans_remise|smarty:nodefaults)}}
             <td>{{mb_value object=$_consultation field=secteur1}}</td>
             <td>{{mb_value object=$_consultation field=secteur2}}</td>
             <td>{{mb_value object=$_consultation field=_somme}}</td>
-          {{elseif $conf.dPcabinet.CConsultation.consult_facture && isset($_consultation->_montant_sans_remise|smarty:nodefaults)}}
+          {{else}}
             <td>{{mb_value object=$_consultation field=_montant_sans_remise}}</td>
             <td>{{mb_value object=$_consultation field=remise}}</td>
             <td>{{mb_value object=$_consultation field=_montant_avec_remise}}</td>

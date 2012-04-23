@@ -103,7 +103,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("acte_tarmed"   , $acte_tarmed);
 $smarty->assign("facture"       , $facture);
 if(!CValue::get("not_load_banque")){
-  $smarty->assign("factures"      , array());
+  $smarty->assign("factures"      , array(new CFactureConsult()));
 }
 $smarty->assign("derconsult_id" , $consult_id);
 $smarty->assign("date"          , $date);

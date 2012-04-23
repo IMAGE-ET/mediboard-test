@@ -12,7 +12,24 @@ updateBanque = function(mode) {
 delReglement= function(reglement_id){
   var oForm = getForm('reglement-delete');
   $V(oForm.reglement_id, reglement_id);
-  confirmDeletion(oForm);
+   onSubmitFormAjax(confirmDeletion(oForm), {
+      onComplete : function() {
+        var url = new Url('dPcabinet', 'ajax_view_facture');
+        url.addParam('factureconsult_id'    ,'{{$facture->_id}}');
+        url.requestUpdate("load_facture");
+      }
+    });
+  ;
+}
+AddReglement = function (oForm){
+  onSubmitFormAjax(oForm, {
+    onComplete : function() {
+      var url = new Url('dPcabinet'   , 'ajax_view_facture');
+      url.addParam('factureconsult_id', oForm.object_id.value);
+      url.addParam('not_load_banque', 0);
+      url.requestUpdate('load_facture');
+    }
+  });
 }
 </script>
 
@@ -80,7 +97,7 @@ delReglement= function(reglement_id){
               </td>
               <td><input type="text" class="currency notNul" size="4" maxlength="8" name="montant" value="{{$facture->_montant_total_factures-$facture->_reglements_total_patient}}" /></td>
               <td></td>
-              <td><button class="add notext" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ Facture.reloadReglement('{{$facture->_id}}')}});">{{tr}}Add{{/tr}}</button></td>
+              <td><button class="add notext" type="button" onclick="AddReglement(this.form);">{{tr}}Add{{/tr}}</button></td>
             </tr>
           {{/if}}
           <tr>

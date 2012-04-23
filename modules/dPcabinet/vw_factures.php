@@ -67,7 +67,7 @@ else{
 if($no_finish_reglement){
 	foreach($factures as $key => $_facture){
 	  $_facture->loadRefReglements();
-	  if($_facture->_du_patient_restant==0 ){
+	  if($_facture->_du_patient_restant != 0 ){
 	    unset($factures[$key]);
 	  }
 	}
@@ -78,10 +78,9 @@ if($factureconsult_id){
   $facture->load($factureconsult_id);	
   $facture->loadRefs();
   if($facture->_ref_consults){
-  	$last_consult = reset($facture->_ref_consults);
+  	$last_consult = end($facture->_ref_consults);
     $derconsult_id = $last_consult->_id;
   }
-  
 }
 
 // Chargement des banques si nous sommes dans la vue des factures

@@ -97,7 +97,7 @@ class CFactureConsult extends CMbObject {
   	$where = array();
   	$where["patient_id"] = "= '$this->patient_id'";
   	$where["factureconsult_id"] = "= '$this->factureconsult_id'";
-  	$order = "consultation_id DESC";
+  	$order = "consultation_id ASC";
   	
     $this->_ref_consults = $consult->loadList($where, $order);
     
@@ -124,6 +124,7 @@ class CFactureConsult extends CMbObject {
 	      }
 	    }
 	    else{
+	    	$this->_montant_factures = array();
 	    	$this->_montant_factures[] = $this->du_patient + $this->du_tiers - $this->remise;
 	    	$this->_montant_total_factures = $this->du_patient + $this->du_tiers - $this->remise;
 	    }
@@ -139,7 +140,7 @@ class CFactureConsult extends CMbObject {
   }
   
   function loadRefsDerConsultation() {
-    $this->_ref_der_consult = reset($this->_ref_consults);
+    $this->_ref_der_consult = end($this->_ref_consults);
     if($this->_ref_der_consult){
       $this->_der_consult_id = $this->_ref_der_consult->_id;
     }
@@ -151,7 +152,7 @@ class CFactureConsult extends CMbObject {
   }  
   
   function loadRefPraticien(){
-  	$this->loadRefsConsults();
+  	if(!$this->_ref_consults){$this->loadRefsConsults();}
   	if($this->_ref_der_consult){
 	  	$this->_ref_chir = $this->_ref_der_consult->loadRefPraticien();
 	  	$this->tarif = $this->_ref_der_consult->tarif;
@@ -209,6 +210,9 @@ class CFactureConsult extends CMbObject {
 	
 	//Numéro de contrôle BVR
 	function getNoControle($noatraiter){
+		if(!$noatraiter){
+			$noatraiter = $this->du_patient + $this->du_tiers;
+		}
 	  $report = 0;
 	  $cpt = strlen($noatraiter);
 	  for($i = 0; $i < $cpt; $i++){
