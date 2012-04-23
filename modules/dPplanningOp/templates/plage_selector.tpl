@@ -177,12 +177,22 @@ Main.add(function () {
          	 </td>
           <td style="text-align: center;" class="narrow">
             {{if $resp_bloc || $_plage->_verrouillee|@count == 0}}
-            <input type="radio" name="list" value="{{$_plage->plageop_id}}"
-               ondblclick="setClose('{{$_plage->date}}', '{{$_plage->salle_id}}')"
-               onclick="showProgramme({{$_plage->_id}}); getForm('plageSelectorFrm')._date.value='{{$_plage->date}}'; getForm('plageSelectorFrm')._salle_id.value='{{$_plage->salle_id}}';"/>
-            {{else}}
-              <img src="style/mediboard/images/icons/lock.png"
-                title="Impossible de planifier à cette date : {{foreach from=$_plage->_verrouillee item=_raison name=foreach_verrou}}{{tr}}CPlageOp._verrouillee.{{$_raison}}{{/tr}}{{if !$smarty.foreach.foreach_verrou.last}}&mdash;{{/if}}{{/foreach}}" />
+              <input type="radio" name="list" value="{{$_plage->plageop_id}}"
+                 ondblclick="setClose('{{$_plage->date}}', '{{$_plage->salle_id}}')"
+                 onclick="showProgramme({{$_plage->_id}}); getForm('plageSelectorFrm')._date.value='{{$_plage->date}}'; getForm('plageSelectorFrm')._salle_id.value='{{$_plage->salle_id}}';"/>
+            {{/if}}
+            {{if $_plage->_verrouillee|@count > 0}}
+              <img src="style/mediboard/images/icons/lock.png" onmouseover="ObjectTooltip.createDOM(this, 'verrou_{{$_plage->_guid}}')"/>
+              <div style="display: none;" id="verrou_{{$_plage->_guid}}">
+                Impossible {{if $resp_bloc}}pour le personnel{{/if}} de planifier à cette date :
+                <ul>
+                  {{foreach from=$_plage->_verrouillee item=_raison name=foreach_verrou}}
+                    <li>
+                      {{tr}}CPlageOp._verrouillee.{{$_raison}}{{/tr}}
+                    </li>
+                  {{/foreach}}
+                </ul>
+              </div>
             {{/if}}
           </td>
         </tr>
