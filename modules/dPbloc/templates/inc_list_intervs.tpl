@@ -128,13 +128,12 @@
           {{/if}}
         </span>
       </a>
-      {{mb_label object=$_op field=cote}} :
-      <strong>{{mb_value object=$_op field=cote}}</strong>
+      <em>{{mb_label object=$_op field=cote}}</em> :
+      {{mb_value object=$_op field=cote}}
       {{if $_op->materiel}}
-      <div class="small-info">
+        <br />
         <em>{{mb_label object=$_op field=materiel}}</em> :
         {{mb_value object=$_op field=materiel}}
-      </div>
       {{/if}}
       {{if $_op->rques}}
       <div class="small-warning">
