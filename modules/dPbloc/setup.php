@@ -261,7 +261,77 @@ class CSetupdPbloc extends CSetup {
       ADD INDEX (`fin`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.31";
-  }  
+    $this->makeRevision("0.31");
+    
+    $query = "CREATE TABLE `ressource_materielle` (
+      `ressource_materielle_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `type_ressource_id` INT (11) UNSIGNED NOT NULL,
+      `group_id` INT (11) UNSIGNED NOT NULL,
+      `libelle` VARCHAR (255) NOT NULL,
+      `deb_activite` DATE,
+      `fin_activite` DATE,
+      `retablissement` ENUM ('0','1') DEFAULT '0'
+    ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `ressource_materielle`
+      ADD INDEX (`type_ressource_id`),
+      ADD INDEX (`group_id`),
+      ADD INDEX (`deb_activite`),
+      ADD INDEX (`fin_activite`),
+      ADD INDEX (`retablissement`);";
+    $this->addQuery($query);
+    
+    $query = "CREATE TABLE `type_ressource` (
+      `type_ressource_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `group_id` INT (11) UNSIGNED NOT NULL,
+      `libelle` VARCHAR (255) NOT NULL,
+      `description` TEXT
+    ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `type_ressource` 
+      ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+    
+    $query = "CREATE TABLE `usage_ressource` (
+      `usage_ressource_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `ressource_materielle_id` INT (11) UNSIGNED NOT NULL,
+      `besoin_id` INT (11) UNSIGNED NOT NULL,
+      `commentaire` TEXT
+    ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `usage_ressource` 
+      ADD INDEX (`ressource_materielle_id`),
+      ADD INDEX (`besoin_id`);";
+    $this->addQuery($query);
+    
+    $query = "CREATE TABLE `indispo_ressource` (
+      `indispo_ressource_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `ressource_materielle_id` INT (11) UNSIGNED NOT NULL,
+      `deb` DATE NOT NULL,
+      `fin` DATE NOT NULL,
+      `commentaire` TEXT
+    ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "CREATE TABLE `besoin_ressource` (
+      `besoin_ressource_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `type_ressource_id` INT (11) UNSIGNED NOT NULL,
+      `protocole_id` INT (11) UNSIGNED NOT NULL,
+      `operation_id` INT (11) UNSIGNED NOT NULL,
+      `commentaire` TEXT
+    ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `besoin_ressource` 
+      ADD INDEX (`type_ressource_id`),
+      ADD INDEX (`protocole_id`),
+      ADD INDEX (`operation_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.32";
+  }
 }
 ?>
