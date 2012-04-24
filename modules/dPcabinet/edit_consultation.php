@@ -212,6 +212,7 @@ if ($consult->_ref_sejour && $sejour->_id){
     // Mise en session du rpu_id
     $_SESSION["dPurgences"]["rpu_id"] = $sejour->_ref_rpu->_id;
     $sejour->_ref_rpu->loadRefSejourMutation();
+    $sejour->_ref_rpu->_ref_sejour_mutation->loadNDA();
 
     // Urgences pour un séjour "urg"
     if ($sejour->type == "urg") {
