@@ -24,7 +24,7 @@ foreach ($facture->_ref_consults as $consult){
 		$facture->du_patient += $acte_caisse->montant_base; 
 	}
 }
-
+$facture->remise = 0;
 $facture->_montant_sans_remise = null;
 $facture->_montant_avec_remise = null;
 if ($msg = $facture->store()) {
