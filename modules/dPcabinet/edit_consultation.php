@@ -207,9 +207,8 @@ if ($consult->_ref_sejour && $sejour->_id){
   $sejour->loadExtDiagnostics();
   $sejour->loadRefDossierMedical();
   $sejour->loadNDA();
-  
-  $consult->_ref_chir->isUrgentiste();
-  if ($consult->_ref_chir->_is_urgentiste) {
+
+  if ($sejour->loadRefRPU()->_id) {
     // Mise en session du rpu_id
     $_SESSION["dPurgences"]["rpu_id"] = $sejour->_ref_rpu->_id;
     $sejour->_ref_rpu->loadRefSejourMutation();
