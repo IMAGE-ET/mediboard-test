@@ -211,14 +211,10 @@ class CAffectation extends CMbObject {
     }
     
     if ($create_affectations) {
+      
       $grossesse = $this->_ref_sejour->loadRefGrossesse();
       $naissances = $grossesse->loadRefsNaissances();
-      foreach ($naissances as $key => $_naissance) {
-        // On exclue les dossiers provisoires
-        if (!$_naissance->heure) {
-          unset ($naissances[$key]);
-        }
-      }
+
       $sejours = CMbObject::massLoadFwdRef($naissances, "sejour_enfant_id");
       
       foreach ($sejours as $_sejour) {
