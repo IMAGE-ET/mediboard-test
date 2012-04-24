@@ -596,7 +596,13 @@ class CSetupdPhospi extends CSetup {
       ADD `function_id` INT (11) UNSIGNED;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.62";
+    $this->makeRevision("0.62");
+    $query = "ALTER TABLE `observation_medicale`
+              ADD `object_id` INT (11) UNSIGNED,
+              ADD `object_class` ENUM ('CPrescriptionLineElement','CPrescriptionLineMedicament','CPrescriptionLineMix');";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.63";
   }
 }
 ?>

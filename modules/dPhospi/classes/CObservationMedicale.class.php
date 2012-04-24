@@ -13,7 +13,7 @@
  * @abstract Permet d'ajouter des observations médicales à un séjour
  */
 
-class CObservationMedicale extends CMbObject {
+class CObservationMedicale extends CMbMetaObject {
 
   // DB Table key
   var $observation_medicale_id = null;	
@@ -39,6 +39,8 @@ class CObservationMedicale extends CMbObject {
 
   function getProps() {
   	$specs = parent::getProps();
+    $specs["object_id"]    = "ref class|CMbObject meta|object_class cascade";
+    $specs["object_class"] = "enum list|CPrescriptionLineElement|CPrescriptionLineMedicament|CPrescriptionLineMix show|0";
     $specs["sejour_id"]    = "ref notNull class|CSejour";
     $specs["user_id"]      = "ref notNull class|CMediusers";
     $specs["degre"]        = "enum notNull list|low|high|info default|low";

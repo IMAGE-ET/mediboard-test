@@ -19,7 +19,18 @@
     </strong>
   </td>
   <td>{{$_suivi->date|date_format:$conf.time}}</td>
-  <td class="text" colspan="2">
+  <td>
+   {{if $_suivi->object_id}}
+     <span onmouseover="ObjectTooltip.createEx(this, '{{$_suivi->_ref_object->_guid}}');">
+       {{if $_suivi->_ref_object instanceof CPrescriptionLineMedicament}}
+         {{$_suivi->_ref_object->_ucd_view}}
+       {{else}}
+         {{$_suivi->_ref_object->_view}}
+       {{/if}}
+     </span>
+   {{/if}}
+  </td>  
+  <td class="text">
     <div>
 	    <strong>{{mb_value object=$_suivi field=text}}</strong>
     </div>
