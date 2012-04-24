@@ -32,6 +32,7 @@ class CInteropActor extends CMbObject {
   var $_tag_mediuser             = null;
   var $_tag_service              = null;
   var $_tag_movement             = null;
+  var $_tag_visit_number         = null;
   
   // Forward references
   var $_ref_group                = null;
@@ -50,11 +51,13 @@ class CInteropActor extends CMbObject {
     $props["_reachable"]        = "bool";
     $props["_parent_class"]     = "str";
     
-    $props["_tag_patient"]  = "str";
-    $props["_tag_sejour"]   = "str";
-    $props["_tag_mediuser"] = "str";
-    $props["_tag_service"]  = "str";
-    $props["_tag_movement"] = "str";
+    $props["_tag_patient"]      = "str";
+    $props["_tag_sejour"]       = "str";
+    $props["_tag_mediuser"]     = "str";
+    $props["_tag_service"]      = "str";
+    $props["_tag_movement"]     = "str";
+    $props["_tag_visit_number"] = "str";
+    
     return $props;
   }
 
@@ -64,11 +67,12 @@ class CInteropActor extends CMbObject {
     $this->_view = $this->libelle ? $this->libelle : $this->nom;
     $this->_type_echange = $this->_class;
 
-    $this->_tag_patient  = CPatient::getTagIPP($this->group_id);  
-    $this->_tag_sejour   = CSejour::getTagNDA($this->group_id);
-    $this->_tag_mediuser = CMediusers::getTagMediusers($this->group_id);
-    $this->_tag_service  = CService::getTagService($this->group_id);
-    $this->_tag_movement = CMovement::getTagMovement($this->group_id);
+    $this->_tag_patient       = CPatient::getTagIPP($this->group_id);  
+    $this->_tag_sejour        = CSejour::getTagNDA($this->group_id);
+    $this->_tag_mediuser      = CMediusers::getTagMediusers($this->group_id);
+    $this->_tag_service       = CService::getTagService($this->group_id);
+    $this->_tag_movement      = CMovement::getTagMovement($this->group_id);
+    $this->_tag_visit_number  = CSmp::getTagVisitNumber($this->group_id);
     
     if (CModule::getActive("phast")) {
       $this->_tag_phast  = CPhast::getTagPhast($this->group_id);
