@@ -17,6 +17,8 @@
  */
 
 class CHL7v2RecordAdmit extends CHL7v2MessageXML {
+  var $_object_found_by_vn = null;
+  
   function getContentNodes() {
     $data  = parent::getContentNodes();
 
@@ -151,21 +153,48 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $venueNPA      = CValue::read($data['admitIdentifiers'], "NPA");
     $venueVN       = CValue::read($data['admitIdentifiers'], "VN");
     $venueAN       = $this->getVenueAN($sender, $data);
-        
+
     $NDA = new CIdSante400();
     if ($venueAN) {
       $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
     }
     
     // NDA non connu (non fourni ou non retrouvé)
-    if (!$venueAN || !$NDA->_id) {
+    if (!$venueAN || $NDA->_id) {
+      // Aucun NDA fourni / Association du NDA
+      $code_NDA = !$venueAN ? "I225" : "I222";
+      
+      $found = false;
+      
       // NPA fourni
-      if ($venueNPA) {
+      if (!$found && $venueNPA) {
         /* @todo Gérer ce cas */
       }
       
+      // VN fourni
+      if (!$found && $venueVN) {
+        // Le champ PV1.2 conditionne le remplissage et l'interprétation de PV1.19
+        $this->getSejourByVisitNumber($newVenue, $data);
+        if ($newVenue->_id) {
+          $found = true;
+          
+          // Mapping du séjour
+          $this->mappingVenue($data, $newVenue);
+          
+          // Notifier les autres destinataires autre que le sender
+          $newVenue->_eai_initiateur_group_id = $sender->group_id;
+          $newVenue->_generate_NDA = false;
+          if ($msgVenue = $newVenue->store()) {
+            return $exchange_ihe->setAckAR($ack, "E201", $msgVenue, $newVenue);
+          }
+                    
+          $code_NDA      = "A222";
+          $_modif_sejour = true;
+        }
+      }
+      
       // RI fourni
-      if ($venueRI) {
+      if (!$found && $venueRI) {
         // Recherche du séjour par son RI
         if ($newVenue->load($venueRI)) {
           $recoveredSejour = clone $newVenue;
@@ -189,16 +218,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         // Séjour non retrouvé par son RI
         else {
           $code_NDA = "I220";
-        }  
-      }
-      else {
-        // Aucun NDA fourni
-        if (!$venueAN) {
-          $code_NDA = "I225";
-        } 
-        // Association du NDA
-        else {
-          $code_NDA = "I222";
         }  
       }
       
@@ -239,6 +258,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         return $exchange_ihe->setAckAR($ack, "E202", $msgNDA, $newVenue);
       }
       
+      // Création du VN, voir de l'objet
+      if ($msgVN = $this->createObjectByVisitNumber($newVenue, $data)) {
+        return $exchange_ihe->setAckAR($ack, "E210", $msgVN, $newVenue);
+      }
+      
       $codes = array (($_modif_sejour ? "I202" : "I201"), $code_NDA);
       
       $comment  = CEAISejour::getComment($newVenue);
@@ -276,6 +300,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $newVenue->_eai_initiateur_group_id = $sender->group_id;
       if ($msgVenue = $newVenue->store()) {
         return $exchange_ihe->setAckAR($ack, "E201", $msgVenue, $newVenue);
+      }
+      
+      // Création du VN, voir de l'objet
+      if ($msgVN = $this->createObjectByVisitNumber($newVenue, $data)) {
+        return $exchange_ihe->setAckAR($ack, "E210", $msgVN, $newVenue);
       }
             
       $codes = array ("I202", $code_NDA);
@@ -475,6 +504,159 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     return true;
   }
   
+  function getSejourByVisitNumber(CSejour $newVenue, $data) {
+    $sender  = $this->_ref_sender;
+    $venueVN = CValue::read($data['admitIdentifiers'], "VN");
+        
+    $where = $ljoin = array();
+    $where["id_sante400.tag"]   = " = '$sender->_tag_visit_number'";
+    $where["id_sante400.id400"] = " = '$venueVN'";
+           
+    switch ($this->queryTextNode("PV1.2", $data["PV1"])) {
+      // Identifie la venue pour actes et consultation externe
+      case 'O':
+        $consultation = new CConsultation();
+                
+        $ljoin["id_sante400"]              = "id_sante400.object_id = consultation.consultation_id";
+        $where["id_sante400.object_class"] = " = 'CConsultation'";
+        $where["consultation.type"]        = " != 'chimio'";
+        
+        $consultation->loadObject($where, null, null, $ljoin);
+        // Nécessaire pour savoir quel objet créé en cas de besoin
+        $this->_object_found_by_vn = $consultation;
+        
+        if (!$consultation->_id) {
+          return false;
+        }
+        
+        $newVenue->load($consultation->sejour_id);
+        
+        return true;
+      // Identifie une séance 
+      case 'R':
+        $consultation = new CConsultation();
+                
+        $ljoin["id_sante400"]              = "id_sante400.object_id = consultation.consultation_id";
+        $where["id_sante400.object_class"] = " = 'CConsultation'"; 
+        $where["consultation.type"]        = " = 'chimio'";
+        
+        $consultation->loadObject($where, null, null, $ljoin);
+        // Nécessaire pour savoir quel objet créé en cas de besoin
+        $this->_object_found_by_vn = $consultation;
+        
+        if (!$consultation->_id) {
+          return false;
+        }
+        
+        $newVenue->load($consultation->sejour_id);
+        
+        return true;
+      // Identifie le n° de passage aux urgences
+      case 'E':
+        $rpu = new CRPU();
+        
+        $ljoin["id_sante400"]              = "id_sante400.object_id = rpu.rpu_id";
+        $where["id_sante400.object_class"] = " = 'CRPU'"; 
+        
+        $rpu->loadObject($where, null, null, $ljoin);
+        // Nécessaire pour savoir quel objet créé en cas de besoin
+        $this->_object_found_by_vn = $rpu;
+        
+        if (!$rpu->_id) {
+          return false;
+        }
+        
+        $newVenue->load($rpu->sejour_id);
+        
+        return true;
+      // Identifie le séjour ou hospitalisation à domicile
+      default:      
+        $idexVisitNumber = CIdSante400::getMatch("CSejour", $sender->_tag_visit_number, $venueVN);  
+        $this->_object_found_by_vn = $newVenue;
+        if (!$idexVisitNumber->_id) {
+          return false;
+        }
+        
+        $newVenue->load($idexVisitNumber->object_id);
+        $this->_object_found_by_vn = $newVenue;
+        
+        return true;
+    }
+    
+    return false;
+  }
+
+  function createObjectByVisitNumber(CSejour $newVenue, $data) {
+    $venueVN = CValue::read($data['admitIdentifiers'], "VN");
+    if (!$venueVN) {
+      return;
+    }
+    
+    $this->getSejourByVisitNumber($newVenue, $data);
+    if (!$this->_object_found_by_vn) {
+      return; 
+    }
+    
+    $object_found_by_vn = $this->_object_found_by_vn;
+    // Création de l'objet ? 
+    if (!$object_found_by_vn->_id) {
+      if (!CAppUI::conf("smp create_object_by_vn")) {
+        return;
+      }
+            
+      $where = array();
+      $where["sejour_id"] = " = '$newVenue->_id'";
+      $object_found_by_vn->sejour_id = $newVenue->_id;
+
+      // On va rechercher l'objet en fonction de son type, où le créer
+      switch ($this->queryTextNode("PV1.2", $data["PV1"])) {
+        // Identifie la venue pour actes et consultation externe (CConsultation && type != chimio)
+        case 'O':
+          $where["type"] = " != 'chimio'";
+          break;
+        // Identifie une séance (CConsultation && type == chimio)
+        case 'R':
+          $where["type"] = " = 'chimio'";
+          $object_found_by_vn->type = "chimio";
+          break;
+        // Identifie le n° de passage aux urgences
+        case 'E':
+          $object_found_by_vn->_patient_id = $newVenue->patient_id;
+          $object_found_by_vn->_entree     = $newVenue->entree;
+          $object_found_by_vn->_group_id   = $newVenue->group_id;
+          
+          break;
+      }  
+      
+      $count_list = $object_found_by_vn->countList($where);
+      if ($count_list > 1) {
+        /* @todo voir comment gérer ceci ! */
+        return;
+      }
+      
+      // Dans le cas où l'on doit créer l'objet
+      if (!$object_found_by_vn->_id) {
+        $object_found_by_vn->store();
+      }
+    }
+    
+    // On affecte le VN
+    $sender       = $this->_ref_sender;
+    $object_class = $object_found_by_vn->_class;
+    $object_id    = $object_found_by_vn->_id;
+      
+    $idexVN = CIdSante400::getMatch($object_class, $sender->_tag_visit_number, $venueVN, $object_id);
+    // L'idex est déjà associé sur notre objet
+    if ($idexVN->_id) {
+      return;
+    }
+    
+    // Création de l'idex
+    $idexVN->last_update = mbDateTime();
+
+    return $idexVN->store();
+  } 
+  
   function admitFound(CSejour $newVenue, $data) {
     $exchange_ihe = $this->_ref_exchange_ihe;
     $sender       = $this->_ref_sender;
@@ -500,7 +682,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return true;
     }
     
-    /* @todo Gestion du VN */   
+    if ($venueVN) {
+      return $this->getSejourByVisitNumber($newVenue, $data);
+    }
     
     return false;
   }
@@ -532,10 +716,15 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
     $affectation = $return_affectation;
     
-    // Affectation de l'affectation au mouvement
+    // Attribution de l'affectation au mouvement
     if ($affectation && $affectation->_id) {
       $movement->affectation_id = $affectation->_id;
       $movement->store();
+    }
+    
+    // Création du VN, voir de l'objet
+    if ($msgVN = $this->createObjectByVisitNumber($newVenue, $data)) {
+      return $exchange_ihe->setAckAR($ack, "E210", $msgVN, $newVenue);
     }
     
     $codes   = array ("I202", "I226");

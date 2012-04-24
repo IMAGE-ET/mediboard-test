@@ -218,15 +218,13 @@ class CExchangeIHE extends CExchangeTabular {
         foreach($matches as $match) {
           if ($match[1] == "E") {
             $this->_observations[$match[2]] = array(
-              array(
-                "code"        => $match[2],
-                "libelle"     => $match[3],
-                "commentaire" => strip_tags($match[4]),
-              )
+              "code"        => $match[2],
+              "libelle"     => $match[3],
+              "commentaire" => strip_tags($match[4]),
             );
           }
         }
-        
+
         return $this->_observations;
       }
     }

@@ -180,9 +180,8 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   }
   
   function getVNIdentifiers(DOMNode $node, &$data, CInteropSender $sender) {
-    if (($this->queryTextNode("CX.5", $node) == "VN")) {
+    if (($this->queryTextNode("CX.9/CWE.1", $node) == "VN")) {
       $data["VN"] = $this->queryTextNode("CX.1", $node);
-      return;
     }
   }
   
@@ -204,7 +203,6 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     // RI des autres systèmes
     if (($this->queryTextNode("CX.5", $node) == "RI")) {
       $data["RI_Others"] = $this->queryTextNode("CX.1", $node);
-      return;
     }
   }
   
