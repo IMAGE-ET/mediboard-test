@@ -60,7 +60,7 @@ function utilisation_rdv($plages, $list, $plage) {
   $save_key = 0;
   
   foreach ($utilisation as $key => $_util) {
-    if (!isset($creneaux[$key])) {
+    if (!isset($creneaux[$key]) && isset($utilisation[$save_key])) {
       $utilisation[$save_key] = max($_util, $utilisation[$save_key]);
       unset($utilisation[$key]);
     }
