@@ -173,7 +173,11 @@
                 </tr>
               {{/if}}
             {{foreachelse}}
-              <td colspan="4"></td>
+              <td colspan="3"></td>
+              <td class="narrow" rowspan="{{$grossesse->_ref_naissances|@count}}">
+                <button type="button" class="add notext" title="Créer un dossier provisoire"
+                  onclick="Naissance.edit(null, null, '{{$_sejour->_id}}', 1, 'document.location.reload')"></button>
+              </td>
             {{/foreach}}
         {{foreachelse}}
           <tr>
