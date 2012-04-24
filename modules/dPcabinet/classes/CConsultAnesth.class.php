@@ -425,7 +425,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $template->addListProperty("Anesthésie - Techniques complémentaires", $list);
     
     $template->addProperty("Anesthésie - Résultats ECG"             , $this->result_ecg);
-    $template->addProperty("Anesthésie - Résultats Radio pulmonaier", $this->result_rp);
+    $template->addProperty("Anesthésie - Résultats Radio pulmonaire", $this->result_rp);
     $template->addProperty("Anesthésie - Examen cardiovasculaire"   , $this->examenCardio);
     $template->addProperty("Anesthésie - Examen pulmonaire"         , $this->examenPulmo);
     $template->addProperty("Anesthésie - Examen digestif"           , $this->examenDigest);
