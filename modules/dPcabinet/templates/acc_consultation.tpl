@@ -10,6 +10,9 @@
 {{if $consult->sejour_id && $consult->_ref_sejour->_ref_rpu->_id}}
   {{assign var="rpu" value=$consult->_ref_sejour->_ref_rpu}}
   {{assign var="mutation_id" value=$rpu->mutation_sejour_id}}
+  {{if $mutation_id == $consult->sejour_id}}
+    {{assign var="mutation_id" value=""}}
+  {{/if}}
 {{/if}}
 
 {{mb_script module="dPmedicament" script="equivalent_selector"}}
