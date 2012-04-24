@@ -98,11 +98,12 @@ class CAppUI {
    * Used to include a php class file from the lib directory
    * 
    * @param string $name The class root file name (excluding .php)
+   * @param bool $rip Trigger CApp::rip
    * 
    * @return mixed Job-done bool or file return value
    * @todo Migrate to CApp
    */
-  static function requireLibraryFile($name) {
+  static function requireLibraryFile($name, $rip = true) {
     if ($root = self::conf("root_dir")) {
       $file = "$root/lib/$name.php";
       if (is_file($file)) {
@@ -111,7 +112,9 @@ class CAppUI {
 
       $library = ucwords(dirname($name));
       self::setMsg("La librairie <strong>$library</strong> n'est pas installée", UI_MSG_ERROR);
-      CApp::rip();
+      if ($rip) {
+        CApp::rip();
+      }
     }
   }
   

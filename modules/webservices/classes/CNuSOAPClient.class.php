@@ -7,7 +7,7 @@
  *  @author SARL OpenXtrem
  */
 
-CAppUI::requireLibraryFile("NuSOAP/nusoap");
+CAppUI::requireLibraryFile("NuSOAP/nusoap", false);
 
 if (!class_exists("nusoap_client", false)) {
   return;
