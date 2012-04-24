@@ -83,7 +83,7 @@ else {
   switch($detail) {
     case 3: 
     case 2: 
-      $limit = ($search_mode ? 50 : ($ex_class_id ? 15 : 10)); break;
+      $limit = ($search_mode ? 50 : ($ex_class_id ? 20 : 10)); break;
     case 1: 
       $limit = ($ex_class_id ? 50 : 25); break;
   default:

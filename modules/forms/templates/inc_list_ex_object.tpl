@@ -34,16 +34,17 @@ prepareEmptyRows = function(){
   var container = $("ex_class-tables");
   if (!container) return;
   
-  var emptyBodies = container.select(".ex_class-table tbody").filter(function(tbody){ 
+  var emptyBodies = container.select(".ex_class-table tbody.data-row").filter(function(tbody){ 
     var emptyRows = tbody.select('tr.field.empty').length;
     var allRows = tbody.select('tr.field').length;
     var empty = (emptyRows == allRows);
     
     if (!empty) {
-      var th = tbody.down('th');
-      th.addClassName("rowspan-changed");
-      th.emptyRowSpan = allRows-emptyRows+1;
-      th.origRowSpan = th.rowSpan;
+      tbody.select('th.ex_group').each(function(th){;
+        th.addClassName("rowspan-changed");
+        th.emptyRowSpan = allRows-emptyRows+1;
+        th.origRowSpan = th.rowSpan;
+      });
     }
     
     return empty;
@@ -295,9 +296,9 @@ ExObject.refreshSelf.{{$self_guid}} = function(start){
                 {{$ex_classes.$_ex_class_id->name}}
               </td>
               <td class="narrow" style="text-align: right;">
-                <button class="right rtl" style="margin: -1px" 
+                {{$_ex_objects_count}}
+                <button class="right notext" style="margin: -1px" 
                         onclick="ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', 'ex_class-list', 2, '{{$_ex_class_id}}')">
-                  {{$_ex_objects_count}}
                 </button>
               </td>
             </tr>

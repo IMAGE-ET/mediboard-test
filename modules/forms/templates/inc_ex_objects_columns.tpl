@@ -1,3 +1,5 @@
+{{assign var=_title_col value=10}}
+
 {{foreach from=$ex_objects_by_class item=_ex_objects key=_ex_class_id}}
     {{assign var=_ex_obj value=$_ex_objects|@reset}}
   
@@ -12,9 +14,9 @@
           <tr style="font-size: 0.9em;">
             <th class="narrow"></th>
             <th {{if !$print}} style="min-width: 20em;" {{/if}}>Champ</th>
+            
             {{foreach from=$_ex_objects item=_ex_object name=_ex_object}}
               <th class="narrow text">
-                
                 {{mb_value object=$_ex_object->_ref_first_log field=date}}
                 
                 {{if !$print}}
@@ -22,29 +24,30 @@
                  
                  <div style="white-space: nowrap;">
                    {{if !$search_mode}}
-                     <button style="margin: -1px;" class="edit notext" 
+                     <button style="margin: -1px;" class="edit notext" title="{{tr}}Edit{{/tr}}"
                              onclick="ExObject.edit('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}', '{{$target_element}}')">
-                       {{tr}}Edit{{/tr}}
                      </button>
                    {{/if}}
                    
-                   <button style="margin: -1px;" class="search notext" 
+                   <button style="margin: -1px;" class="search notext" title="{{tr}}Display{{/tr}}"
                            onclick="ExObject.display('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}')">
-                     {{tr}}Display{{/tr}}
                    </button>
                   
-                   <button style="margin: -1px;" class="history notext" 
+                   <button style="margin: -1px;" class="history notext" title="{{tr}}History{{/tr}}"
                            onclick="ExObject.history('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}')">
-                     {{tr}}History{{/tr}}
                    </button>
                    
-                   <button style="margin: -1px;" class="print notext" 
+                   <button style="margin: -1px;" class="print notext" title="{{tr}}Print{{/tr}}"
                            onclick="ExObject.print('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}')">
-                     {{tr}}Print{{/tr}}
                    </button>
                  </div>
                  {{/if}}
               </th>
+              
+              {{if $smarty.foreach._ex_object.iteration%$_title_col==0}}
+                <th class="narrow"></th>
+                <th>Champ</th>
+              {{/if}}
             {{/foreach}}
           </tr>
         </thead>
@@ -52,31 +55,62 @@
         {{foreach from=$_ex_obj->_ref_ex_class->_ref_groups item=_ex_group name=_ex_group}}
           {{if $_ex_group->_ref_fields|@count}}
           
-          <tbody {{if $_ex_group->_empty}} empty {{/if}}>
-            <tr style="border-top: 2px solid #333;">
-              <th rowspan="{{math equation="x+1" x=$_ex_group->_ref_fields|@count}}">
+          <tbody class="data-row">
+            <tr style="border-top: 2px solid #333;"> 
+              <th rowspan="{{math equation="x+1" x=$_ex_group->_ref_fields|@count}}" class="ex_group">
                 {{vertical}}{{$_ex_group}}{{/vertical}}
               </th>
-              <td colspan="{{math equation="x+2" x=$_ex_objects|@count}}" style="padding: 1px;"></td>
+              <td colspan="{{$_title_col+1}}" style="padding: 0;"></td>
+              
+              {{foreach from=$_ex_objects item=_ex_object name=_ex_object}}
+                {{if $smarty.foreach._ex_object.iteration%$_title_col==0}}
+                  <th rowspan="{{math equation="x+1" x=$_ex_group->_ref_fields|@count}}" class="ex_group">
+                    {{vertical}}{{$_ex_group}}{{/vertical}}
+                  </th>
+                  <td colspan="{{$_title_col+1}}" style="padding: 0;"></td>
+                {{/if}}
+              {{/foreach}}
             </tr>
             
-              {{foreach from=$_ex_group->_ref_fields item=_ex_field}}
-                {{assign var=field_name value=$_ex_field->name}}
+            {{foreach from=$_ex_group->_ref_fields item=_ex_field name=_ex_field}}
+              {{assign var=field_name value=$_ex_field->name}}
+              
+              <tr class="field {{if $_ex_field->_empty}} empty {{/if}}">
+                <th class="text section" style="font-size: 0.9em; min-width: 12em;">
+                  {{mb_label object=$_ex_obj field=$field_name}}
+                </th>
                 
-                <tr class="field {{if $_ex_field->_empty}} empty {{/if}}">
-                  
-                  <td class="text label" style="font-weight: bold;">
-                    {{mb_label object=$_ex_obj field=$field_name}}</span>
+                {{foreach from=$_ex_objects item=_ex_object2 name=_ex_object2}}
+                  <td {{if $_ex_object2->$field_name === null || $_ex_object2->$field_name === ""}} style="color: #aaa;" {{/if}} class="text value {{if $_ex_object2->_specs.$field_name instanceof CTextSpec}} compact {{/if}}">
+                    {{mb_value object=$_ex_object2 field=$field_name}} 
                   </td>
                   
-                  {{foreach from=$_ex_objects item=_ex_object2}}
-                    <td {{if $_ex_object2->$field_name === null || $_ex_object2->$field_name === ""}} style="color: #aaa;" {{/if}} class="text value {{if $_ex_object2->_specs.$field_name instanceof CTextSpec}} compact {{/if}}">
-                      {{mb_value object=$_ex_object2 field=$field_name}} 
-                    </td>
-                  {{/foreach}}
-                </tr>
-              {{/foreach}}
+                  {{if $smarty.foreach._ex_object2.iteration%$_title_col==0}}
+                    <th class="text section" style="font-size: 0.9em; min-width: 12em;">
+                      {{mb_label object=$_ex_obj field=$field_name}}
+                    </th>
+                  {{/if}}
+                {{/foreach}}
+              </tr>
+            {{/foreach}}
           </tbody>
+          
+          {{if !$smarty.foreach._ex_group.last}}
+            <tr style="font-size: 0.9em;">
+              <th class="narrow"></th>
+              <th>Champ</th>
+              
+              {{foreach from=$_ex_objects item=_ex_object name=_ex_object}}
+                <th class="narrow text">
+                  {{mb_value object=$_ex_object->_ref_first_log field=date}}
+                </th>
+                {{if $smarty.foreach._ex_object.iteration%$_title_col==0}}
+                  <th></th>
+                  <th></th>
+                {{/if}}
+              {{/foreach}}
+            </tr>
+          {{/if}}
           
           {{/if}}
         {{/foreach}}

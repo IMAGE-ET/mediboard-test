@@ -192,7 +192,7 @@ Main.add(function(){
                 </td>
               {{/if}}
             {{elseif $_group.type == "field"}}
-              <td>
+              <td {{if $_field->coord_field_x == $_field->coord_label_x+1}} style="vertical-align: middle;" {{/if}}>
                 {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_field form="editExObject_$ex_form_hash"}}
               </td>
             {{/if}}
@@ -249,11 +249,11 @@ Main.add(function(){
       
       {{if isset($out_of_grid.$_group_id.field.$_field_name|smarty:nodefaults)}}
         <tr>
-          <th style="font-weight: bold; width: 50%; vertical-align: middle;" colspan="2">
+          <th colspan="2" style="vertical-align: middle; font-weight: bold; width: 50%;">
             {{mb_label object=$ex_object field=$_field->name}}
             {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$_field}}
           </th>
-          <td colspan="2">
+          <td colspan="2" style="vertical-align: middle;">
             {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_field form="editExObject_$ex_form_hash"}}
           </td>
         </tr>
