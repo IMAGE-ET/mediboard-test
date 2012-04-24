@@ -54,6 +54,10 @@
             <td>{{mb_field object=$source field="encoding"}}</td>
           </tr>
           <tr>
+            <th>{{mb_label object=$source field="type_soap"}}</th>
+            <td>{{mb_field object=$source field="type_soap"}}</td>
+          </tr>
+          <tr>
             <th>{{mb_label object=$source field="stream_context"}}</th>
             <td>{{mb_field object=$source field="stream_context"}}</td>
           </tr>

@@ -29,7 +29,9 @@ $module->registerTab("vw_categories"             , TAB_EDIT);
 $module->registerTab("vw_banques"                , TAB_ADMIN);
 $module->registerTab("vw_stats"                  , TAB_ADMIN);
 $module->registerTab("offline_programme_consult" , TAB_ADMIN);
-$module->registerTab("vw_fse"                    , TAB_READ); 
+if (CModule::getActive("fse")) {
+  $module->registerTab("vw_fse"                  , TAB_READ); 
+}
 
 if (CModule::getActive("dPprescription")) {
   $module->registerTab("vw_idx_livret", TAB_EDIT);

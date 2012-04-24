@@ -155,7 +155,13 @@ function __construct() {
                 ADD `create_ack_file` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.26";      
+    $this->makeRevision("0.26");
+    
+    $query = "ALTER TABLE `source_soap` 
+              ADD `type_soap` ENUM ('CMbSOAPClient','CNuSOAPClient') NOT NULL DEFAULT 'CMbSOAPClient';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.27";      
   }
 }
 ?>

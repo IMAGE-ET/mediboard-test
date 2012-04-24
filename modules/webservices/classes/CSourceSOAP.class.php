@@ -17,7 +17,8 @@ class CSourceSOAP extends CExchangeSource {
 	var $evenement_name   = null;
 	var $single_parameter = null;
   var $encoding         = null;
-	var $stream_context   = null; 
+	var $stream_context   = null;
+  var $type_soap        = null;
    
   function getSpec() {
     $spec = parent::getSpec();
@@ -33,6 +34,7 @@ class CSourceSOAP extends CExchangeSource {
 		$specs["single_parameter"] = "str";
 		$specs["encoding"]         = "enum list|UTF-8|ISO-8859-1|ISO-8859-15 default|UTF-8";
 		$specs["stream_context"]   = "str";
+    $specs["type_soap"]        = "enum list|CMbSOAPClient|CNuSOAPClient default|CMbSOAPClient notNull";
 		
     return $specs;
   }
@@ -54,19 +56,6 @@ class CSourceSOAP extends CExchangeSource {
 		if (!$evenement_name) {
 		  throw new CMbException("CSourceSOAP-no-evenement", $this->name);
 		}   
-		
-		$options = array(
-		  "encoding" => $this->encoding
-		);
-		
-		$this->_client = CMbSOAPClient::make($this->host, $this->user, $this->password, $this->type_echange, $options, null, $this->stream_context);
-    if ($this->_client->soap_client_error) {
-      throw new CMbException("CSourceSOAP-unreachable-source", $this->name);
-    }
-    // Applatissement du tableau $arguments qui contient un élement vide array([0] => ...) ?
-    $this->_client->flatten  = $flatten;
-    // Aucun log à produire ? 
-    $this->_client->loggable = $this->loggable;
     
     if ($this->single_parameter) {
       $this->_data = array("$this->single_parameter" => $this->_data);
@@ -75,11 +64,33 @@ class CSourceSOAP extends CExchangeSource {
     if (!$this->_data) {
       $this->_data = array();
     }
+		
+    if ($this->type_soap == "CMbSOAPClient") {
+      $options = array(
+        "encoding" => $this->encoding
+      );
+  
+      $this->_client = CMbSOAPClient::make($this->host, $this->user, $this->password, $this->type_echange, $options, null, $this->stream_context);
+      if ($this->_client->soap_client_error) {
+        throw new CMbException("CSourceSOAP-unreachable-source", $this->name);
+      }
+      
+      // Applatissement du tableau $arguments qui contient un ï¿½lement vide array([0] => ...) ?
+      $this->_client->flatten  = $flatten;
+      
+      // Aucun log à produire ? 
+      $this->_client->loggable = $this->loggable;
+  
+      $this->_acquittement = $this->_args_list ? 
+          call_user_func_array(array($this->_client, $evenement_name), $this->_data) : 
+          $this->_client->$evenement_name($this->_data);
+       
+    }  elseif ($this->type_soap == "CNuSOAPClient") {
+      $this->_client = CNuSOAPClient::make($this->host, $this->type_echange, $this->encoding, $this->loggable, $this->user, $this->password);
+      
+      $this->_acquittement = $this->_client->call($evenement_name, $this->_data);
+    }
 
-    $this->_acquittement = $this->_args_list ? 
-        call_user_func_array(array($this->_client, $evenement_name), $this->_data) : 
-        $this->_client->$evenement_name($this->_data);
-    
     if (is_object($this->_acquittement)) {
       $acquittement = (array) $this->_acquittement;
       if (count($acquittement) == 1) {
@@ -105,7 +116,11 @@ class CSourceSOAP extends CExchangeSource {
     );
     
     try {
-      CMbSOAPClient::make($this->host, $this->user, $this->password, $this->type_echange, $options);
+      if ($this->type_soap == "CMbSOAPClient") {
+        CMbSOAPClient::make($this->host, $this->user, $this->password, $this->type_echange, $options);
+      } elseif ($this->type_soap == "CNuSOAPClient") {
+        CNuSOAPClient::make($this->host, $this->type_echange, $this->encoding, false, $this->user, $this->password);
+      }
     } catch (Exception $e) {
       $this->_reachable = 1;
       $this->_message   = $e->getMessage();

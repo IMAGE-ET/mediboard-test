@@ -1385,10 +1385,10 @@ $locales['pref-simpleCabinet-1'] = 'sans hospitalisation';
 $locales['pref-simpleCabinet-desc'] = 'Affichage des informations concernant les hospitalisations';
 $locales['pref-viewFunctionPrats'] = 'Afficher la fonction des praticiens lors des RDV';
 $locales['pref-viewFunctionPrats-desc'] = 'Afficher les fonctions des praticiens lors de la prise de rendez-vous';
+$locales['pref-viewWeeklyConsultCalendar'] = 'Vue du calendrier latérale pour les RDV semainier';
+$locales['pref-viewWeeklyConsultCalendar-desc'] = 'Affichage du calendrier latéral lors de la prise de RDV en mode semainier';
 $locales['pref-view_traitement'] = 'Affichage des traitements';
 $locales['pref-view_traitement-0'] = 'Cacher';
 $locales['pref-view_traitement-1'] = 'Visible';
 $locales['pref-view_traitement-desc'] = 'Affichage des traitemens';
-$locales['pref-viewWeeklyConsultCalendar'] = 'Vue du calendrier latérale pour les RDV semainier';
-$locales['pref-viewWeeklyConsultCalendar-desc'] = 'Affichage du calendrier latéral lors de la prise de RDV en mode semainier';
 ?>

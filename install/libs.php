@@ -464,4 +464,16 @@ $library->versionString = "SO_REUSEADDR";
 
 CLibrary::$all[$library->name] = $library;
 
+$library = new CLibrary;
+$library->name = "NuSOAP";
+$library->url = "http://sourceforge.net/projects/nusoap/";
+$library->fileName = "NuSOAP.tar.gz";
+$library->description = "A rewrite of SOAPx4";
+$library->sourceDir = "NuSOAP";
+$library->targetDir = "NuSOAP";
+$library->versionFile = "changelog";
+$library->versionString = "0.9.5";
+
+CLibrary::$all[$library->name] = $library;
+
 ?>
