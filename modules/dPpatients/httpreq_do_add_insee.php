@@ -22,7 +22,7 @@ if (null == $nbFiles = CMbPath::extract($sourcePath, $targetDir)) {
 CAppUI::stepAjax("Extraction de $nbFiles fichier(s)", UI_MSG_OK);
 
 $ds = CSQLDataSource::get("INSEE");
-if (null == $lineCount = $ds->queryDump($targetPath, false)) {
+if (null == $lineCount = $ds->queryDump($targetPath, true)) {
   $msg = $ds->error();
   CAppUI::stepAjax("Erreur de requête SQL: $msg", UI_MSG_ERROR);
 }
