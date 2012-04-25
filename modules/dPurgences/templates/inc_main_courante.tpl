@@ -329,9 +329,17 @@
     				  	<strong>{{mb_title class=$rpu field=motif}}</strong> : {{$rpu->motif|nl2br}}
     				  </span>
     	      {{else}}
+    	       {{if $rpu->diag_infirmier}}
     				  <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
                 {{$rpu->diag_infirmier|nl2br}}
               </span>
+              {{else}}
+                {{if $rpu->motif_entree}}
+                  <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');" class="compact">
+                    {{mb_label object=$rpu field="motif_entree"}} : {{$rpu->motif_entree|nl2br}}
+                  </span> 
+                {{/if}} 
+              {{/if}}
     	      {{/if}}
     	    </td>
   	    {{/if}}

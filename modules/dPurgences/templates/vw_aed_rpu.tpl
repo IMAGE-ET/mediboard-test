@@ -341,32 +341,34 @@
       </td>
       
       {{if $conf.dPurgences.old_rpu == "1"}}
-      <th>{{mb_label object=$rpu field="urprov"}}</th>
-      <td>{{mb_field object=$rpu field="urprov" emptyLabel="Choose" style="width: 15em;"}}</td>
+        <th>{{mb_label object=$rpu field="urprov"}}</th>
+        <td>{{mb_field object=$rpu field="urprov" emptyLabel="Choose" style="width: 15em;"}}</td>
       {{else}}
-      <th>{{mb_label object=$rpu field="_provenance"}}</th>
-      <td>{{mb_field object=$rpu field="_provenance" emptyLabel="Choose" style="width: 15em;"}}</td>
+        <th>{{mb_label object=$rpu field="_provenance"}}</th>
+        <td>{{mb_field object=$rpu field="_provenance" emptyLabel="Choose" style="width: 15em;"}}</td>
       {{/if}}
     </tr>
     
     <tr>
       {{if $can->edit}}
-      <th>{{mb_label object=$rpu field="ccmu"}}</th>
-      <td>{{mb_field object=$rpu field="ccmu" emptyLabel="Choose" style="width: 15em;"}}</td>
+        <th>{{mb_label object=$rpu field="ccmu"}}</th>
+        <td>{{mb_field object=$rpu field="ccmu" emptyLabel="Choose" style="width: 15em;"}}</td>
       {{else}}
-      <th></th>
-      <td></td>
+        <th></th>
+        <td></td>
       {{/if}}
+      
       <th>{{mb_label object=$rpu field="_transport"}}</th>
       <td>{{mb_field object=$rpu field="_transport" emptyLabel="Choose" style="width: 15em;"}}</td>
     </tr>
     
      <!-- Selection du service -->
     <tr>
-      <td colspan="2"></td>
+      <th></th>
+      <td></td>
       <th>{{mb_label object=$rpu field="pec_transport"}}</th>
       <td>{{mb_field object=$rpu field="pec_transport" emptyLabel="Choose" style="width: 15em;"}}</td>
-      </tr>
+    </tr>
   
     <tr>
       <th>{{mb_label object=$rpu field="box_id"}}</th>
@@ -396,7 +398,7 @@
       {{if $gerer_circonstance}}
         <tr>
           <th>{{mb_label object=$rpu field="circonstance"}}</th>
-          <td colspan="3">
+          <td>
             <input type="hidden" name="circonstance" value="{{$rpu->circonstance}}" />
             <input type="text" name="_keywords_circonstance" value="{{if $orumip_active}}{{$rpu->_libelle_circonstance}}{{else}}{{$rpu->circonstance}}{{/if}}" class="autocomplete"/>
             <br/>
@@ -423,8 +425,20 @@
               });
             </script>
           </td>
+          <th></th>
+          <td></td>
         </tr>
       {{/if}}
+      
+      {{if $rpu->motif_entree}}
+      <tr>
+        <th>{{mb_label object=$rpu field="motif_entree"}}</th>
+        <td>{{mb_value object=$rpu field="motif_entree"}}</td>
+        <th></th>
+        <td></td>
+      </tr>  
+      {{/if}}
+      
       <tr>
         <th>{{mb_label object=$rpu field="diag_infirmier"}}</th> 
         <td>
@@ -443,6 +457,17 @@
                                     resetDependFields: 0"}}
         </td>
       </tr>
+    {{else}}
+      <th>{{mb_label object=$rpu field="motif_entree"}}</th>
+      <td>
+         {{mb_field object=$rpu field="motif_entree" class="autocomplete" form="editRPU"
+                        aidesaisie="validate: function() { form.onsubmit() },
+                                    validateOnBlur: 0,
+                                    resetSearchField: 0,
+                                    resetDependFields: 0"}}
+      </td>
+      <th></th>
+      <td></td>
     {{/if}}
     
     <tr>

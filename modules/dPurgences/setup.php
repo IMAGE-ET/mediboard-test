@@ -296,7 +296,13 @@ class CSetupdPurgences extends CSetup {
       DROP `transport`;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.35";
+    $this->makeRevision("0.35");
+    
+    $query = "ALTER TABLE `rpu`
+                ADD `motif_entree` TEXT";
+    $this->addQuery($query); 
+    
+    $this->mod_version = "0.36";
   }  
 }
 

@@ -18,6 +18,7 @@ class CRPU extends CMbObject {
     
   // DB Fields
   var $sejour_id       = null;
+  var $motif_entree    = null;
   var $diag_infirmier  = null;
   var $pec_transport   = null;
   var $pec_douleur     = null;
@@ -102,6 +103,7 @@ class CRPU extends CMbObject {
     $specsParent = parent::getProps();
     $specs = array (
       "sejour_id"        => "ref notNull class|CSejour cascade",
+      "motif_entree"     => "text helped",
       "diag_infirmier"   => "text helped",
       "pec_douleur"      => "text helped",
       "pec_transport"    => "enum list|med|paramed|aucun",
