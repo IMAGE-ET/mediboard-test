@@ -94,10 +94,10 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
     
     // PV1-7: Attending Doctor (XCN) (optional repeating)
     $sejour->loadRefPraticien();
-    $data[] = $this->getXCN($sejour->_ref_praticien);
+    $data[] = $this->getXCN($sejour->_ref_praticien, $receiver);
     
     // PV1-8: Referring Doctor (XCN) (optional repeating)
-    $data[] = $sejour->adresse_par_prat_id ? $this->getXCN($sejour->loadRefAdresseParPraticien()) : null;
+    $data[] = $sejour->adresse_par_prat_id ? $this->getXCN($sejour->loadRefAdresseParPraticien(), $receiver) : null;
     
     // PV1-9: Consulting Doctor (XCN) (optional repeating)
     $data[] = null;
@@ -149,7 +149,7 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
     $data[] = $sejour->loadRefPatient()->vip ? "I" : "P";
     
     // PV1-17: Admitting Doctor (XCN) (optional repeating)
-    $data[] = $this->getXCN($sejour->_ref_praticien);
+    $data[] = $this->getXCN($sejour->_ref_praticien, $receiver);
     
     // PV1-18: Patient Type (IS) (optional)
     $data[] = null;
@@ -291,6 +291,18 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
     $data[] = null;
     
     $this->fill($data);
+  }
+  
+  function getXCN9(CMbObject $object, CInteropActor $actor) {
+    $xcn9 = null;
+
+    $id400 = $object->_ref_last_id400;
+    if ($object instanceof CMedecin || $object instanceof CMediusers) {
+      return $this->getAssigningAuthority($object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : ($id400->id400 ? "actor" : "mediboard")), null, $actor);
+    }
+    if ($object instanceof CUser) {
+      return $this->getAssigningAuthority("mediboard");
+    } 
   }
 }
 

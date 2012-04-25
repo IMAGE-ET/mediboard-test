@@ -1584,6 +1584,78 @@ TESTS A EFFECTUER
     // Tout utilisateur peut consulter une consultation de séjour en lecture seule
     return $this->_canRead = 1;
   }
+  
+  function createByDatetime($datetime, $praticien_id, $patient_id) {
+    $day_now   = mbTransformTime(null, $datetime, "%Y-%m-%d");
+    $time_now  = mbTransformTime(null, $datetime, "%H:%M:00");
+    $hour_now  = mbTransformTime(null, $datetime, "%H:00:00");
+    $hour_next = mbTime("+1 HOUR", $hour_now);
+    
+    $plage       = new CPlageconsult();
+    $plageBefore = new CPlageconsult();
+    $plageAfter  = new CPlageconsult();
+    
+    // Cas ou une plage correspond
+    $where = array();
+    $where["chir_id"] = "= '$praticien_id'";
+    $where["date"]    = "= '$day_now'";
+    $where["debut"]   = "<= '$time_now'";
+    $where["fin"]     = "> '$time_now'";
+    $plage->loadObject($where);
+    
+    if (!$plage->plageconsult_id) {
+      // Cas ou on a des plage en collision
+      $where = array();
+      $where["chir_id"] = "= '$praticien_id'";
+      $where["date"]    = "= '$day_now'";
+      $where["debut"]   = "<= '$hour_now'";
+      $where["fin"]     = ">= '$hour_now'";
+      $plageBefore->loadObject($where);
+      $where["debut"]   = "<= '$hour_next'";
+      $where["fin"]     = ">= '$hour_next'";
+      $plageAfter->loadObject($where);
+      if ($plageBefore->plageconsult_id) {
+        if ($plageAfter->plageconsult_id) {
+          $plageBefore->fin = $plageAfter->debut;
+        } else {
+          $plageBefore->fin = max($plageBefore->fin, $hour_next);
+        }
+        $plage = $plageBefore;
+      } elseif ($plageAfter->plageconsult_id) {
+        $plageAfter->debut = min($plageAfter->debut, $hour_now);
+        $plage = $plageAfter;
+      } else {
+        $plage->chir_id = $praticien_id;
+        $plage->date    = $day_now;
+        $plage->freq    = "00:".CPlageconsult::$minutes_interval.":00";
+        $plage->debut   = $hour_now;
+        $plage->fin     = $hour_next;
+      }
+      
+      $plage->updateFormFields();
+      
+      if ($msg = $plage->store()) {
+        return $msg;
+      }
+    }
+            
+    $this->plageconsult_id = $plage->plageconsult_id;
+    $this->patient_id      = $patient_id;
+    
+    // Chargement de la consult avec la plageconsult && le patient
+    $this->loadMatchingObject();
+    
+    if (!$this->_id) {
+      $this->heure   = $time_now;
+      $this->arrivee = "$day_now $time_now";
+      $this->duree   = 1;
+      $this->chrono  = CConsultation::TERMINE;
+    }
+            
+    if ($msg = $this->store()) {
+      return $msg;
+    }
+  }
 }
 
 ?>

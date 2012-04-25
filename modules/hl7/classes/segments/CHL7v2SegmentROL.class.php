@@ -67,7 +67,7 @@ class CHL7v2SegmentROL extends CHL7v2Segment {
     );
      
     // ROL-4: Role Person (XCN) (repeating)
-    $data[] = $this->getXCN($medecin);
+    $data[] = $this->getXCN($medecin, $event->_receiver);
     
     // ROL-5: Role Begin Date/Time (TS) (optional)
     $data[] = null;

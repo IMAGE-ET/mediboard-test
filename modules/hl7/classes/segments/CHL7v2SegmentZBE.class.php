@@ -103,20 +103,22 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     $uf_medicale = isset($ufs["medicale"]) ? $ufs["medicale"] : null;
     if (isset($uf_medicale->_id)) {
       $data[] = array(
-        // ZBE-7.1 : Libellé de l'UF
-        $uf_medicale->libelle,
-        null,
-        null,
-        null,
-        null,
-        // ZBE-7.6 : Identifiant de l'autorité d'affectation  qui a attribué l'identifiant de l'UF de responsabilité médicale
-        $this->getAssigningAuthority("mediboard"),
-        // ZBE-7.7 : La seule valeur utilisable de la table 203 est "UF"
-        "UF",
-        null,
-        null,
-        // ZBE-7.10 : Identifiant de l'UF de responsabilité médicale
-        $uf_medicale->code
+        array(
+          // ZBE-7.1 : Libellé de l'UF
+          $uf_medicale->libelle,
+          null,
+          null,
+          null,
+          null,
+          // ZBE-7.6 : Identifiant de l'autorité d'affectation  qui a attribué l'identifiant de l'UF de responsabilité médicale
+          $this->getAssigningAuthority("mediboard"),
+          // ZBE-7.7 : La seule valeur utilisable de la table 203 est "UF"
+          "UF",
+          null,
+          null,
+          // ZBE-7.10 : Identifiant de l'UF de responsabilité médicale
+          $uf_medicale->code
+        )
       );
     } 
     else {
@@ -127,20 +129,22 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     $uf_soins = isset($ufs["soins"]) ? $ufs["soins"] : null;
     if (isset($uf_soins->_id)) {
       $data[] = array(
-        // ZBE-7.1 : Libellé de l'UF
-        $uf_soins->libelle,
-        null,
-        null,
-        null,
-        null,
-        // ZBE-7.6 : Identifiant de l'autorité d'affectation  qui a attribué l'identifiant de l'UF de responsabilité médicale
-        $this->getAssigningAuthority("mediboard"),
-        // ZBE-7.7 : La seule valeur utilisable de la table 203 est "UF"
-        "UF",
-        null,
-        null,
-        // ZBE-7.10 : Identifiant de l'UF de responsabilité médicale
-        $uf_soins->code
+        array(
+          // ZBE-8.1 : Libellé de l'UF
+          $uf_soins->libelle,
+          null,
+          null,
+          null,
+          null,
+          // ZBE-8.6 : Identifiant de l'autorité d'affectation  qui a attribué l'identifiant de l'UF de responsabilité médicale
+          $this->getAssigningAuthority("mediboard"),
+          // ZBE-8.7 : La seule valeur utilisable de la table 203 est "UF"
+          "UF",
+          null,
+          null,
+          // ZBE-8.10 : Identifiant de l'UF de responsabilité médicale
+          $uf_soins->code
+        )
       );
     } 
     else {

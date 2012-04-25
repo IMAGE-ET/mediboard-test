@@ -203,8 +203,16 @@ class CHL7v2Segment extends CHL7v2Entity {
     $this->getMessage()->appendChild($this);
   }
   
-  function getAssigningAuthority($name = "mediboard", $value= null) {
+  function getAssigningAuthority($name = "mediboard", $value= null, $actor = null) {
     switch ($name) {
+      case "actor" :
+        $configs = $actor->_configs;
+        return array(
+          $configs["assigning_authority_namespace_id"],
+          $configs["assigning_authority_universal_id"],
+          $configs["assigning_authority_universal_type_id"],
+        );
+        break;
       case "mediboard" :
         return array(
           "Mediboard",
@@ -288,29 +296,33 @@ class CHL7v2Segment extends CHL7v2Entity {
     
   }
   
-  function getXCN(CMbObject $object) {
+  function getXCN9(CMbObject $object) {
+    return null;
+  }
+  
+  function getXCN(CMbObject $object, CInteropActor $actor) {
     $xcn1 = $xcn2 = $xcn3 = $xcn9 = $xcn13 = null;
     
     $id400 = $object->loadLastId400();
     if ($object instanceof CMedecin) {
       $xcn1  = CValue::first($object->rpps, $object->adeli, $id400->id400, $object->_id);
       $xcn2  = $object->nom;
-      $xcn3  = $object->prenom;
-     // $xcn9  = $this->getAssigningAuthority($object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : ($id400->id400 ? "idex" : "mediboard")));
+      $xcn3  = $object->prenom;      
+      $xcn9  = $this->getXCN9($object, $actor);
       $xcn13 = $object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "RI");
     }
     if ($object instanceof CUser) {
       $xcn1  = $object->_id;
       $xcn2  = $object->user_last_name;
       $xcn3  = $object->user_first_name;
-    //  $xcn9  = $this->getAssigningAuthority("mediboard");
+      $xcn9  = $this->getXCN9($object);
       $xcn13 = "RI";
     }
     if ($object instanceof CMediusers) {
       $xcn1  = CValue::first($object->rpps, $object->adeli, $id400->id400, $object->_id);
       $xcn2  = $object->_user_last_name;
       $xcn3  = $object->_user_first_name;
-    //  $xcn9  = $this->getAssigningAuthority($object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : ($id400->id400 ? "idex" : "mediboard")));
+      $xcn9  = $this->getXCN9($object, $actor);
       $xcn13 = $object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "RI");
     }
     
