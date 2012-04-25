@@ -22,6 +22,18 @@ class CReceiverIHEConfig extends CMbObject {
   var $object_id                = null; // CReceiverIHE
   
   // Object configs
+  
+  // Options
+    // => ITI-30
+  var $iti30_option_merge       = null;
+  var $iti30_option_link_unlink = null;
+  // => ITI-31
+  var $iti31_in_outpatient_emanagement           = null;
+  var $iti31_pending_event_management            = null;
+  var $iti31_advanced_encounter_management       = null;
+  var $iti31_temporary_patient_transfer_tracking = null;
+  var $iti31_historic_movement                   = null;
+  
   var $encoding                 = null;
   
   var $ITI30_HL7_version        = null; 
@@ -64,6 +76,17 @@ class CReceiverIHEConfig extends CMbObject {
   function getProps() {
     $props = parent::getProps();
     $props["object_id"]                = "ref class|CReceiverIHE";
+    
+    // Options
+    // => ITI-30
+    $props["iti30_option_merge"]                        = "bool default|1";
+    $props["iti30_option_link_unlink"]                  = "bool default|0";
+    // => ITI-31
+    $props["iti31_in_outpatient_emanagement"]           = "bool default|1";
+    $props["iti31_pending_event_management"]            = "bool default|0";
+    $props["iti31_advanced_encounter_management"]       = "bool default|1";
+    $props["iti31_temporary_patient_transfer_tracking"] = "bool default|0";
+    $props["iti31_historic_movement"]                   = "bool default|1";
     
     $props["encoding"]                 = "enum list|UTF-8|ISO-8859-1 default|UTF-8";
     

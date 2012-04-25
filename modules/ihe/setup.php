@@ -203,8 +203,20 @@ class CSetupihe extends CSetup {
                 ADD `send_change_medical_responsibility` ENUM ('Z80','Z99') DEFAULT 'Z80',
                 ADD `send_change_nursing_ward` ENUM ('Z84','Z99') DEFAULT 'Z84';";
     $this->addQuery($query); 
-       
-    $this->mod_version = "0.21";
+    
+    $this->makeRevision("0.21");
+    
+    $query = "ALTER TABLE `receiver_ihe_config` 
+                ADD `iti30_option_merge` ENUM ('0','1') DEFAULT '1',
+                ADD `iti30_option_link_unlink` ENUM ('0','1') DEFAULT '0',
+                ADD `iti31_in_outpatient_emanagement` ENUM ('0','1') DEFAULT '1',
+                ADD `iti31_pending_event_management` ENUM ('0','1') DEFAULT '0',
+                ADD `iti31_advanced_encounter_management` ENUM ('0','1') DEFAULT '1',
+                ADD `iti31_temporary_patient_transfer_tracking` ENUM ('0','1') DEFAULT '0',
+                ADD `iti31_historic_movement` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.22";
   }
 }
 
