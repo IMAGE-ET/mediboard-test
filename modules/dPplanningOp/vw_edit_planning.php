@@ -176,6 +176,30 @@ $services = $service->loadGroupList($where);
 // Compter les prestations journalières
 $count_prestations = CPrestationJournaliere::countCurrentList();
 
+if (!$sejour->sortie_reelle) {
+  $sejour->sortie_reelle = mbDateTime();
+}
+
+$where = array();
+$where["entree"] = "<= '".$sejour->sortie_reelle."'";
+$where["sortie"] = ">= '".$sejour->sortie_reelle."'";
+$where["function_id"] = "IS NOT NULL";
+
+$affectation = new CAffectation();
+$blocages_lit = $affectation->loadList($where);
+
+$where["function_id"] = "IS NULL";
+
+foreach($blocages_lit as $key => $blocage){
+  $blocage->loadRefLit()->loadRefChambre()->loadRefService();
+  $where["lit_id"] = "= '$blocage->lit_id'";
+  if(!$sejour->_id && $affectation->loadObject($where))
+  {
+    $affectation->loadRefSejour();
+    $affectation->_ref_sejour->loadRefPatient();
+    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".mbTransformTime($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
+  }
+}
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -223,6 +247,7 @@ $smarty->assign("count_etab_externe"    , $count_etab_externe);
 $smarty->assign("listAnesthType"        , $listAnesthType);
 $smarty->assign("anesthesistes"         , $anesthesistes);
 $smarty->assign("medecin_adresse_par"   , $medecin_adresse_par);
+$smarty->assign("blocages_lit"          , $blocages_lit);
 
 $smarty->display("vw_edit_planning.tpl");
 

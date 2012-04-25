@@ -25,23 +25,18 @@ submitSejour = function(force) {
 Fields = {
   init: function(mode_sortie) {
 	  $('etablissement_sortie_transfert').setVisible(mode_sortie == "transfert");
-	  $('service_sortie_transfert'      ).setVisible(mode_sortie == "mutation");
+	  $('lit_sortie_transfert'      ).setVisible(mode_sortie == "mutation");
   },
   
-  modif: function(service_sortie_id) {
-    var divLits = $('lit_sortie_transfert');
-    divLits.setVisible(service_sortie_id);
-
-    elements=divLits.select('option');    
-    elements.each(function(e) {
-        e.style.display = "none";
-    });
+  modif: function(lit_id) {
+    var form = getForm('editSejour');
+    $('service_sortie_transfert').setVisible(lit_id);
     
-    //Tous les éléments à afficher
-    elements=divLits.select('option.service-'+service_sortie_id);    
-    elements.each(function(e) {
-        e.style.display = "";
-    });
+    var service = $('CLit-'+lit_id).className;
+    service = service.split("-");
+    form.service_sortie_id.value = service[1];
+    
+    form.service_sortie_id_autocomplete_view.value = service[2];
   },
   
   clear: function() {

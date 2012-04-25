@@ -24,20 +24,14 @@
 {{/if}}
 
 <script type="text/javascript">  
-function modifLits(service_sortie_id){
-  var divLits = $('lit_sortie_transfert');
-  divLits.setVisible(service_sortie_id);
-
-  elements=divLits.select('option');    
-  elements.each(function(e) {
-      e.style.display = "none";
-  });
+function modifLits(lit_id){
+  var form = getForm('editSejour');
   
-  //Tous les éléments à afficher
-  elements=divLits.select('option.service-'+service_sortie_id);    
-  elements.each(function(e) {
-      e.style.display = "";
-  });
+  var service = $('CLit-'+lit_id).className;
+  service = service.split("-");
+  form.service_sortie_id.value = service[1];
+  
+  form.service_sortie_id_autocomplete_view.value = service[2];
 }
 
 function checkHeureSortie(){
@@ -776,20 +770,20 @@ Main.add( function(){
         {{mb_field object=$sejour field="etablissement_sortie_id" form="editSejour" autocomplete="true,1,50,true,true" style="width: 12em;"}}
       </div>
       <div id="services" {{if !$sejour->service_sortie_id}}style="display:none"{{/if}}>
-        {{mb_field object=$sejour field="service_sortie_id" form="editSejour" autocomplete="true,1,50,true,true" style="width: 12em;" onchange="modifLits(this.value)"}}
+        {{mb_field object=$sejour field="service_sortie_id" form="editSejour" autocomplete="true,1,50,true,true" style="width: 12em;"}}
         <input type="hidden" name="cancelled" value="0" />
       </div>
       
-      <div id="lit_sortie_transfert" {{if $sejour->type != "mutation"}} style="display:none;" {{/if}} >
-        <select name="lit_id" style="width: 15em;" onchange="this.form.sortie_reelle.value = '';">
+      <div id="lit_sortie_transfert" {{if $sejour->mode_sortie != "mutation"}} style="display:none;" {{/if}} >
+        <select name="lit_id" style="width: 15em;" onchange="modifLits(this.value);this.form.sortie_reelle.value = '';">
           <option value="0">&mdash; Choisir Lit </option>
-          {{foreach from=$listLits item=lit}}
-            <option value="{{$lit->_id}}" class="service-{{$lit->_ref_chambre->_ref_service->_id}}" style="display:none;">
-              {{$lit->_view}}
+          {{foreach from=$blocages_lit item=blocage_lit}}
+            <option id="{{$blocage_lit->_ref_lit->_guid}}" value="{{$blocage_lit->lit_id}}" class="{{$blocage_lit->_ref_lit->_ref_chambre->_ref_service->_guid}}-{{$blocage_lit->_ref_lit->_ref_chambre->_ref_service->nom}}">
+              {{$blocage_lit->_ref_lit->_view}}{{$blocage_lit->_ref_lit->_view["2"]}}
             </option>
           {{/foreach}}
         </select>
-      </div> 
+      </div>
     {{else}}
       {{mb_value object=$sejour field=mode_sortie}}
     {{/if}}    

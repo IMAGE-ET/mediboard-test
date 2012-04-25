@@ -28,27 +28,33 @@ if (!$sejour->sortie_reelle) {
 	$sejour->sortie_reelle = mbDateTime();
 }
 
-$listLits = array();
-$ljoin = array();
 $where = array();
+$where["entree"] = "<= '$sejour->sortie_reelle'";
+$where["sortie"] = ">= '$sejour->sortie_reelle'";
+$where["function_id"] = "IS NOT NULL";
 
-$ljoin["affectation"] = "affectation.lit_id = lit.lit_id";
+$affectation = new CAffectation();
+$blocages_lit = $affectation->loadList($where);
 
-$where["affectation.entree"] = "<= '$sejour->sortie_reelle'";
-$where["affectation.sortie"] = ">= '$sejour->sortie_reelle'";
-$where["affectation.function_id"] = "IS NOT NULL";
+$where["function_id"] = "IS NULL";
 
-$lit = new CLit();
-$listLits = $lit->loadList($where, null, null, null, $ljoin);
-foreach($listLits as $_lit){
-	$_lit->loadRefChambre()->loadRefService();
+foreach($blocages_lit as $blocage){
+	$blocage->loadRefLit()->loadRefChambre()->loadRefService();
+	$where["lit_id"] = "= '$blocage->lit_id'";
+	
+	if($affectation->loadObject($where))
+	{
+		$affectation->loadRefSejour();
+		$affectation->_ref_sejour->loadRefPatient();
+    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".mbTransformTime($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
+	}
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("rpu", $rpu);
 $smarty->assign("sejour", $sejour);
-$smarty->assign("listLits", $listLits);
+$smarty->assign("blocages_lit", $blocages_lit);
 
 $smarty->display("inc_edit_sortie.tpl");
 ?>

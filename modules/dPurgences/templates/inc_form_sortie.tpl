@@ -57,26 +57,28 @@
     <td>{{mb_field object=$sejour field="etablissement_sortie_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}</td>
   </tr>
 
-  <tr id="service_sortie_transfert" {{if $sejour->mode_sortie != "mutation"}} style="display:none;" {{/if}}>
-    <th>{{mb_label object=$sejour field="service_sortie_id"}}</th>
-    <td>
-      {{mb_field object=$sejour field="service_sortie_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="Fields.modif(this.value);this.form.onsubmit();"}}
-      <input type="hidden" name="cancelled" value="0" />
-    </td>
-  </tr>
   <tr id="lit_sortie_transfert" {{if $sejour->mode_sortie != "mutation"}} style="display:none;" {{/if}}>
     <th>Lit</th>
     <td>
-      <select name="lit_id" style="width: 15em;" onchange="this.form.sortie_reelle.value = '';">
+      <select name="lit_id" style="width: 15em;" onchange="Fields.modif(this.value);this.form.sortie_reelle.value = '';"  >
         <option value="0">&mdash; Choisir Lit </option>
-        {{foreach from=$listLits item=lit}}
-          <option value="{{$lit->_id}}" class="service-{{$lit->_ref_chambre->_ref_service->_id}}" style="display:none;">
-            {{$lit->_view}}
+        {{foreach from=$blocages_lit item=blocage_lit}}
+          <option id="{{$blocage_lit->_ref_lit->_guid}}" value="{{$blocage_lit->lit_id}}" class="{{$blocage_lit->_ref_lit->_ref_chambre->_ref_service->_guid}}-{{$blocage_lit->_ref_lit->_ref_chambre->_ref_service->nom}}">
+            {{$blocage_lit->_ref_lit->_view}}
           </option>
         {{/foreach}}
       </select>
     </td>
-  </tr>  
+  </tr>
+  
+  <tr id="service_sortie_transfert" {{if $sejour->mode_sortie != "mutation"}} style="display:none;" {{/if}}>
+    <th>{{mb_label object=$sejour field="service_sortie_id"}}</th>
+    <td>
+      {{mb_field object=$sejour field="service_sortie_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}
+      <input type="hidden" name="cancelled" value="0" />
+    </td>
+  </tr>
+  
   <tr id="commentaires_sortie">
     <th>{{mb_label object=$sejour field="commentaires_sortie"}}</th>
     <td>

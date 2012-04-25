@@ -157,6 +157,30 @@ $where["externe"]  = "= '0'";
 $service = new CService;
 $services = $service->loadGroupList($where);
 
+if (!$sejour->sortie_reelle) {
+  $sejour->sortie_reelle = mbDateTime();
+}
+
+$where = array();
+$where["entree"] = "<= '".$sejour->sortie_reelle."'";
+$where["sortie"] = ">= '".$sejour->sortie_reelle."'";
+$where["function_id"] = "IS NOT NULL";
+
+$affectatione = new CAffectation();
+$blocages_lit = $affectatione->loadList($where);
+
+$where["function_id"] = "IS NULL";
+
+foreach($blocages_lit as $key => $blocage){
+  $blocage->loadRefLit()->loadRefChambre()->loadRefService();
+  $where["lit_id"] = "= '$blocage->lit_id'";
+  if(!$sejour->_id && $affectatione->loadObject($where))
+  {
+    $affectatione->loadRefSejour();
+    $affectatione->_ref_sejour->loadRefPatient();
+    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".mbTransformTime($affectatione->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectatione->_ref_sejour->_ref_patient->_view.")";
+  }
+}
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -195,6 +219,7 @@ $smarty->assign("hours_urgence", $hours_urgence);
 $smarty->assign("mins_duree"   , $mins_duree);
 
 $smarty->assign("prestations", $prestations);
+$smarty->assign("blocages_lit", $blocages_lit);
 
 $smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
 $smarty->assign("count_etab_externe", $count_etab_externe);
