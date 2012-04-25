@@ -11,6 +11,7 @@ $only_sejour = CValue::get("only_sejour", 0);
 
 $sejour = new CSejour();
 $sejour->load(CValue::get("sejour_id"));
+$sejour->loadRefPatient();
 $sejour->loadRefsOperations();
 $sejour->canRead();
 
