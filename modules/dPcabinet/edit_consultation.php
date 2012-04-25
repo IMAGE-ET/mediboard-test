@@ -370,8 +370,8 @@ if($consult->_is_anesth) {
 } else {
   if(CAppUI::pref("MODCONSULT")){
 	  $where = array();
-		$where["entree"] = "<= '$sejour->sortie_reelle'";
-		$where["sortie"] = ">= '$sejour->sortie_reelle'";
+		$where["entree"] = "<= '".mbDateTime()."'";
+		$where["sortie"] = ">= '".mbDateTime()."'";
 		$where["function_id"] = "IS NOT NULL";
 		
 		$affectation = new CAffectation();
