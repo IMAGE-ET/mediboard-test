@@ -151,13 +151,14 @@ $services = $service->loadGroupList($where);
 // Compter les prestations journalières
 $count_prestations = CPrestationJournaliere::countCurrentList();
 
-if (!$sejour->sortie_reelle) {
-  $sejour->sortie_reelle = mbDateTime();
+$sortie_sejour = mbDateTime();
+if ($sejour->sortie_reelle) {
+  $sortie_sejour = $sejour->sortie_reelle;
 }
 
 $where = array();
-$where["entree"] = "<= '".$sejour->sortie_reelle."'";
-$where["sortie"] = ">= '".$sejour->sortie_reelle."'";
+$where["entree"] = "<= '".$sortie_sejour."'";
+$where["sortie"] = ">= '".$sortie_sejour."'";
 $where["function_id"] = "IS NOT NULL";
 
 $affectatione = new CAffectation();
