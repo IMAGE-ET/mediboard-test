@@ -77,7 +77,7 @@
     <td>
       <table class="tbl" id="admissions">
         <tr>
-          <th class="title" colspan="9">
+          <th class="title" colspan="10">
             <strong>
               <a href="?m=maternite&tab=vw_admissions&date={{$date_before}}" style="display: inline;">&lt;&lt;&lt;</a>
               {{$date|date_format:$conf.longdate}}
@@ -91,20 +91,29 @@
             </strong>
           </th>
         </tr>
+
+        <tr>
+          <th colspan="6" class="category">Parturiente</th>
+          <th colspan="4" class="category">Enfants</th>
+        </tr>
+        
         <tr>
           <th class="category narrow">Admettre</th>
           <th class="category narrow">{{tr}}CPatient{{/tr}}</th>
           <th class="narrow">
             <input type="text" size="3" onkeyup="Admissions.filter(this, 'admissions')" id="filter-patient-name" />
           </th>
-          <th class="category narrow">Terme</th>
+          <th class="category">{{mb_label class=CSejour field=entree}}</th>
+          <th class="category narrow">{{mb_label class=CGrossesse field=terme_prevu}}</th>
           <th class="category">Praticiens</th>
-          <th class="category">Rang / Heure</th>
+          
+          <th class="category">Rangs / Heures</th>
           <th class="category">Enfants</th>
           <th class="category">Séjours</th>
           <th class="category"></th>
         </tr>
         {{foreach from=$sejours item=_sejour}}
+        <tbody class="hoverable">
           {{assign var=grossesse value=$_sejour->_ref_grossesse}}
           {{assign var=patient value=$_sejour->_ref_patient}}
           <tr>
@@ -123,6 +132,14 @@
             </td>
             <td colspan="2" rowspan="{{$grossesse->_ref_naissances|@count}}">
               <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">{{$_sejour->_ref_patient}}</span>
+            </td>
+            <td rowspan="{{$grossesse->_ref_naissances|@count}}">
+              <button class="print notext" onclick="Naissance.printDossier('{{$_sejour->_id}}')">
+                {{tr}}Print{{/tr}}
+              </button>
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
+                {{mb_value object=$_sejour field=entree date=$date}}
+              </span>
             </td>
             <td rowspan="{{$grossesse->_ref_naissances|@count}}">
               {{$grossesse->terme_prevu|date_format:$conf.date}}
@@ -179,6 +196,8 @@
                   onclick="Naissance.edit(null, null, '{{$_sejour->_id}}', 1, 'document.location.reload')"></button>
               </td>
             {{/foreach}}
+         </tbody>
+         
         {{foreachelse}}
           <tr>
             <td colspan="9" class="empty">{{tr}}CSejour.none{{/tr}}</td>
