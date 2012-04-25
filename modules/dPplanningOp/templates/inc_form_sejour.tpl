@@ -779,7 +779,7 @@ Main.add( function(){
           <option value="0">&mdash; Choisir Lit </option>
           {{foreach from=$blocages_lit item=blocage_lit}}
             <option id="{{$blocage_lit->_ref_lit->_guid}}" value="{{$blocage_lit->lit_id}}" class="{{$blocage_lit->_ref_lit->_ref_chambre->_ref_service->_guid}}-{{$blocage_lit->_ref_lit->_ref_chambre->_ref_service->nom}}">
-              {{$blocage_lit->_ref_lit->_view}}{{$blocage_lit->_ref_lit->_view["2"]}}
+              {{$blocage_lit->_ref_lit->_view}}
             </option>
           {{/foreach}}
         </select>
