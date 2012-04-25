@@ -40,7 +40,6 @@ $where[] = CAppUI::pref("showMissingRPU") ?
   "sejour.type = 'urg' OR rpu.rpu_id IS NOT NULL" :
   "rpu.rpu_id IS NOT NULL";
 $where["sejour.group_id"] = "= '$group->_id'";
-$where["sejour.UHCD"] = "= '0'";
 
 if ($selAffichage == "prendre_en_charge"){
   $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";

@@ -268,6 +268,10 @@
   	    	    {{else}}
                 <img src="images/icons/placeholder.png"/>
   			      {{/if}}
+  			      
+  			      {{if $_sejour->UHCD}}
+  			        <img src="images/icons/uhcd.png"/>
+  			      {{/if}}
             </form>
           </div>
         {{/if}}
