@@ -637,7 +637,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       if ($object_found_by_vn instanceof CConsultation) {        
         $datetime = $this->queryTextNode("EVN.6/TS.1", $data["EVN"]);
         
-        $object_found_by_vn->motif = $this->queryTextNode("PV2.12", $data["PV2"]);
+        if ($data["PV2"]) {
+          $object_found_by_vn->motif = $this->queryTextNode("PV2.12", $data["PV2"]);
+        }
+        
         // Création de la consultation
         if ($msg = $object_found_by_vn->createByDatetime($datetime, $newVenue->praticien_id, $newVenue->patient_id)) {
           return $msg;

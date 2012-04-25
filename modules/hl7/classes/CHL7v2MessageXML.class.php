@@ -180,7 +180,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   }
   
   function getVNIdentifiers(DOMNode $node, &$data, CInteropSender $sender) {
-    if (($this->queryTextNode("CX.9/CWE.1", $node) == "VN")) {
+    if (($this->queryTextNode("CX.5", $node) == "VN")) {
       $data["VN"] = $this->queryTextNode("CX.1", $node);
     }
   }
@@ -256,7 +256,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
         default:
           // RI - Resource Identifier
           $this->getRIIdentifiers($PV1_19, $data, $sender);
-          
+
           // VN - Visit Number
           $this->getVNIdentifiers($PV1_19, $data, $sender);
     
