@@ -5,7 +5,7 @@ percent=`ps -aux|grep soffice.bin|grep headless|sed -r 's/\s+/\ /g'|cut -d" " -f
 
 if [ $percent -ge 10 ]
 then
-  pkill soffice.bin;
+  pkill soffice;
   export HOME=/tmp; /usr/bin/soffice -accept="socket,host=localhost,port=8100;urp;StarOffice.ServiceManager" -no-logo -headless -nofirststartwizard -no-restore >> /tmp/log_ooo &
 fi
 
