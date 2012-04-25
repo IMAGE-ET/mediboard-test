@@ -18,10 +18,26 @@
 
 class CHL7Config extends CExchangeDataFormatConfig {
   static $config_fields = array(
+    // Options
+    // => ITI-30
+    "iti30_option_merge",
+    "iti30_option_link_unlink",
+    // => ITI-31
+    "iti31_in_outpatient_emanagement",
+    "iti31_pending_event_management",
+    "iti31_advanced_encounter_management",
+    "iti31_temporary_patient_transfer_tracking",
+    "iti31_historic_movement",
+    
+    // Assigning authority
     "assigning_authority_namespace_id",
     "assigning_authority_universal_id",
     "assigning_authority_universal_type_id",
+    
+    // Encoding
     "encoding",
+    
+    // Handle
     "handle_mode",
     "handle_NDA",
     "handle_PV1_10",
@@ -31,6 +47,15 @@ class CHL7Config extends CExchangeDataFormatConfig {
   var $hl7_config_id = null;
 
   // Object configs
+  var $iti30_option_merge       = null;
+  var $iti30_option_link_unlink = null;
+  
+  var $iti31_in_outpatient_emanagement           = null;
+  var $iti31_pending_event_management            = null;
+  var $iti31_advanced_encounter_management       = null;
+  var $iti31_temporary_patient_transfer_tracking = null;
+  var $iti31_historic_movement                   = null;
+  
   var $assigning_authority_namespace_id      = null;
   var $assigning_authority_universal_id      = null;
   var $assigning_authority_universal_type_id = null;
@@ -52,20 +77,31 @@ class CHL7Config extends CExchangeDataFormatConfig {
 
   function getProps() {
     $props = parent::getProps();
-
+    
+    // Options
+    // => ITI-30
+    $props["iti30_option_merge"]                        = "bool default|1";
+    $props["iti30_option_link_unlink"]                  = "bool default|0";
+    // => ITI-31
+    $props["iti31_in_outpatient_emanagement"]           = "bool default|1";
+    $props["iti31_pending_event_management"]            = "bool default|0";
+    $props["iti31_advanced_encounter_management"]       = "bool default|1";
+    $props["iti31_temporary_patient_transfer_tracking"] = "bool default|0";
+    $props["iti31_historic_movement"]                   = "bool default|1";
+    
     $props["assigning_authority_namespace_id"]      = "str";
     $props["assigning_authority_universal_id"]      = "str";
     $props["assigning_authority_universal_type_id"] = "str";
 		
+    // Encoding
     $props["encoding"]      = "enum list|UTF-8|ISO-8859-1 default|UTF-8";
     
+    // Handle
 		$props["handle_mode"]   = "enum list|normal|simple default|normal";
-		
-		// PID
+		// => PID
 		$props["handle_NDA"]    = "enum list|PID_18|PV1_19 default|PID_18";
     $props["handle_NSS"]    = "enum list|PID_3|PID_19 default|PID_3";
-    
-    // PV1
+    // => PV1
     $props["handle_PV1_10"] = "enum list|discipline|service default|discipline";
     
     return $props;

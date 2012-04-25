@@ -771,7 +771,19 @@ class CSetuphl7 extends CSetup {
                 ADD `handle_NSS` ENUM ('PID_3','PID_19') DEFAULT 'PID_3';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.28";
+    $this->makeRevision("0.28");
+    
+    $query = "ALTER TABLE `hl7_config` 
+                ADD `iti30_option_merge` ENUM ('0','1') DEFAULT '1',
+                ADD `iti30_option_link_unlink` ENUM ('0','1') DEFAULT '0',
+                ADD `iti31_in_outpatient_emanagement` ENUM ('0','1') DEFAULT '1',
+                ADD `iti31_pending_event_management` ENUM ('0','1') DEFAULT '0',
+                ADD `iti31_advanced_encounter_management` ENUM ('0','1') DEFAULT '1',
+                ADD `iti31_temporary_patient_transfer_tracking` ENUM ('0','1') DEFAULT '0',
+                ADD `iti31_historic_movement` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.29";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
