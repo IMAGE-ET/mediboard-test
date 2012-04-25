@@ -254,26 +254,12 @@ CLibrary::$all[$library->name] = $library;
 $library = new CLibrary;
 $library->name = "CKEditor";
 $library->url = "http://ckeditor.com/";
-$library->fileName = "ckeditor_3.6.2.tar.gz";
+$library->fileName = "ckeditor_3.6.3.tar.gz";
 $library->description = "Composant Javascript d'édition de texte au format HTML";
 $library->sourceDir = "ckeditor";
 $library->targetDir = "ckeditor";
-$library->versionFile = "plugins/table/dialogs/table.js";
-$library->versionString = "100%";
-
-$patch = new CLibraryPatch;
-$patch->dirName = "ckeditor";
-$patch->subDirName = "skins/v2/";
-$patch->sourceName = "editor.css";
-$patch->targetDir = "skins/v2/";
-$library->patches[] = $patch;
-
-$patch = new CLibraryPatch;
-$patch->dirName = "ckeditor";
-$patch->subDirName = "/";
-$patch->sourceName = "ckeditor.js";
-$patch->targetDir = "/";
-$library->patches[] = $patch;
+$library->versionFile = "ckeditor.js";
+$library->versionString = "3.6.3";
 
 CLibrary::$all[$library->name] = $library;
 

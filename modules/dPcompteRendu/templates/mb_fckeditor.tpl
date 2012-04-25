@@ -56,7 +56,7 @@ CKEDITOR.editorConfig = function(config) {
   // Suppression du bouton de masquage des barres d'outils
   config.toolbarCanCollapse = false;
   // Suppression de la barre d'état avec la dom
-  config.removePlugins = 'elementspath';
+  config.removePlugins = 'a11yhelp,about,elementspath,flash,forms,iframe,link,newpage,pagebreak,scayt,showblocks,showborders,smiley,templates,wsc';
   
   {{if $templateManager->printMode}}
     config.toolbar_Full = [['Preview', 'Print', '-','Find']];
@@ -91,7 +91,7 @@ CKEDITOR.editorConfig = function(config) {
       ['RemoveFormat', 'Bold', 'Italic', 'Underline', 'Strike'],
       ['Subscript', 'Superscript', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList'],
       ['Outdent', 'Indent', 'mblineheight', 'TextColor', 'BGColor'],'/',
-      [{{if !$templateManager->isModele && $mode_play}}'mbplay', {{/if}} 'mbfields', {{if $templateManager->isModele}}'mblists', 'mbfreetext', {{/if}}'mbhelpers', {{if !$templateManager->isModele}}'mbmail', {{/if}}'mbbreakage', {{if $can->admin}}'mbthumbs'{{/if}}]];
+      [{{if !$templateManager->isModele && $mode_play}}'mbplay', {{/if}} 'mbfields', {{if $templateManager->isModele}}'mblists', 'mbfreetext', {{/if}}{{if !$templateManager->isModele}}'mbhelpers', 'mbmail', {{/if}}'mbbreakage', {{if $can->admin}}'mbthumbs'{{/if}}]];
 
     window.parent.fields = [];
     window.parent.listeChoix = [];
