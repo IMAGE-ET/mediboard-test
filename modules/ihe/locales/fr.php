@@ -172,6 +172,7 @@ $locales['CHL7EventADTZ80_FR'] = 'ITI31 - ADT^Z80';
 $locales['CHL7EventADTZ81_FR'] = 'ITI31 - ADT^Z81';
 $locales['CHL7EventADTZ84_FR'] = 'ITI31 - ADT^Z84';
 $locales['CHL7EventADTZ85_FR'] = 'ITI31 - ADT^Z85';
+$locales['CHL7EventADTZ99'] = 'ITI31 - ADT^Z99';
 $locales['CHL7EventADTZ99_FR'] = 'ITI31 - ADT^Z99';
 $locales['CITI30'] = 'ITI-30';
 $locales['CITI31'] = 'ITI-31';

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A03 - Discharge/end visit - HL7
+ * Z99 - Change admit - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,19 +12,19 @@
  */
 
 /**
- * Class CHL7v2EventADTA03
- * A03 - Discharge/end visit
+ * Class CHL7v2EventADTZ99
+ * Z99 - Change admit - HL7
  */
-class CHL7v2EventADTA03 extends CHL7v2EventADT implements CHL7EventADTA03 {
-  var $code        = "A03";
-  var $struct_code = "A03";
+class CHL7v2EventADTZ99 extends CHL7v2EventADT implements CHL7EventADTZ99 {
+  var $code        = "Z99";
+  var $struct_code = "Z99";
   
   function __construct($i18n = null) {
     parent::__construct($i18n);
   }
   
   function getEVNOccuredDateTime(CSejour $sejour) {
-    return $sejour->sortie_reelle;
+    return $sejour->entree_reelle;
   }
   
   /**
@@ -48,9 +48,15 @@ class CHL7v2EventADTA03 extends CHL7v2EventADT implements CHL7EventADTA03 {
     
     // Patient Visit
     $this->addPV1($sejour);
-
+    
+    // Patient Visit - Additionale Info
+    $this->addPV2($sejour);
+    
     // Build specific segments (i18n)
     $this->buildI18nSegments($sejour);
+    
+    // Guarantor
+    $this->addGT1($patient);
   }
   
   /**

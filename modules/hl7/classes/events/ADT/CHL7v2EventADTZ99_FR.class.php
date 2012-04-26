@@ -15,43 +15,16 @@
  * Class CHL7v2EventADTZ99_FR
  * Z99 - Change admit
  */
-class CHL7v2EventADTZ99_FR extends CHL7v2EventADT implements CHL7EventADTZ99 {
-  var $code        = "Z99";
-  var $struct_code = "Z99";
-  
+class CHL7v2EventADTZ99_FR  extends CHL7v2EventADTZ99 {
   function __construct($i18n = "FR") {
     parent::__construct($i18n);
   }
   
-  function getEVNOccuredDateTime($sejour) {
-    return mbDateTime();
-  }
-  
   /**
-   * @see parent::build()
+   * @see parent::buildI18nSegments()
    */
-  function build($sejour) {
-    parent::build($sejour);
-    
-    $patient = $sejour->_ref_patient;
-    // Patient Identification
-    $this->addPID($patient, $sejour);
-    
-    // Patient Additional Demographic
-    $this->addPD1($patient);
-    
-    // Doctors
-    $this->addROLs($patient);
-    
-    // Next of Kin / Associated Parties
-    $this->addNK1s($patient);
-    
-    // Patient Visit
-    $this->addPV1($sejour);
-    
-    // Patient Visit - Additionale Info
-    $this->addPV2($sejour);
-    
+  function buildI18nSegments($sejour) {
+
     // Movement segment
     $this->addZBE($sejour);
     
@@ -72,7 +45,6 @@ class CHL7v2EventADTZ99_FR extends CHL7v2EventADT implements CHL7EventADTZ99 {
     // Si A01, A04, A05, A14
     $this->addZFD($sejour);
   }
-  
 }
 
 ?>
