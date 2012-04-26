@@ -1,13 +1,10 @@
+<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="submit_Ajax(this, 'prestations')">
+  <input type="hidden" name="m" value="hospi" />
+  <input type="hidden" name="dosql" value="do_prestation_aed" />
+  <input type="hidden" name="del" value="0" />
+  {{mb_key object=$prestation}}
 
-    <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="submit_Ajax(this, 'prestations')">
-
-    <input type="hidden" name="dosql" value="do_prestation_aed" />
-    <input type="hidden" name="del" value="0" />
-
-    {{mb_key object=$prestation}}
-
-    <table class="form">
-      
+  <table class="form">
     <tr>
       {{if $prestation->_id}}
       <th class="title modify" colspan="2">
@@ -37,12 +34,12 @@
       <th>{{mb_label object=$prestation field=nom}}</th>
       <td>{{mb_field object=$prestation field=nom}}</td>
     </tr>   
-
+  
     <tr>
       <th>{{mb_label object=$prestation field=description}}</th>
       <td>{{mb_field object=$prestation field=description}}</td>
     </tr>    
-
+  
     <tr>
       <td class="button" colspan="2">
         {{if $prestation->_id}}
@@ -55,7 +52,5 @@
         {{/if}}
       </td>
     </tr>
-
-    </table>   
-
-    </form>
+  </table>   
+</form>

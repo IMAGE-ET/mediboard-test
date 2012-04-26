@@ -1,4 +1,5 @@
-<form name="Edit-CSecteur" action="?m={{$m}}" method="post" onsubmit="submit_Ajax(this, 'secteurs')">
+<form name="Edit-CSecteur" action="" method="post" onsubmit="submit_Ajax(this, 'secteurs')">
+  <input type="hidden" name="m" value="hospi" />
   <input type="hidden" name="dosql" value="do_secteur_aed" />
   <input type="hidden" name="del" value="0" />
   {{mb_key object=$secteur}}

@@ -23,9 +23,13 @@ function showLit(type_id, valeur_id, type_id2, valeur_id2, update_name){
   url.requestUpdate(update_name);
 }
 function submit_Ajax(form, update_name){
-  var url = new Url("dPhospi", "ajax_list_infrastructure");
-  url.addParam("type_name", update_name);
-  url.requestUpdate(update_name);
+  onSubmitFormAjax(form, {
+      onComplete : function() {
+        var url = new Url("dPhospi", "ajax_list_infrastructure");
+        url.addParam("type_name", update_name);
+        url.requestUpdate(update_name);
+      }
+    });
 }
 </script>
 

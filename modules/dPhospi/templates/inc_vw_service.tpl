@@ -1,23 +1,23 @@
-        <!-- Formulaire d'un service -->
-    <form name="Edit-CService" action="" method="post" onsubmit="submit_Ajax(this, 'services')">
-
-    <input type="hidden" name="dosql" value="do_service_aed" />
-    <input type="hidden" name="del" value="0" />
-    {{mb_key object=$service}}
-
-    <table class="form">
-      {{mb_include module=system template=inc_form_table_header_uf         object=$service }}
-      
+<!-- Formulaire d'un service -->
+<form name="Edit-CService" action="" method="post" onsubmit="submit_Ajax(this, 'services')">
+  <input type="hidden" name="m" value="hospi" />
+  <input type="hidden" name="dosql" value="do_service_aed" />
+  <input type="hidden" name="del" value="0" />
+  {{mb_key object=$service}}
+  
+  <table class="form">
+    {{mb_include module=system template=inc_form_table_header_uf         object=$service }}
+    
     <tr>
       <th>{{mb_label object=$service field=group_id}}</th>
       <td>{{mb_field object=$service field=group_id options=$etablissements}}</td>
     </tr>
-
+  
     <tr>
       <th>{{mb_label object=$service field=nom}}</th>
       <td>{{mb_field object=$service field=nom}}</td>
     </tr>       
-
+  
     <tr>
       <th>{{mb_label object=$service field=responsable_id}}</th>
       <td>
@@ -27,7 +27,7 @@
         </select>
       </td>
     </tr>
-
+  
     <tr>
       <th>{{mb_label object=$service field=type_sejour}}</th>
       <td>{{mb_field object=$service field=type_sejour}}</td>
@@ -42,17 +42,17 @@
       <th>{{mb_label object=$service field=uhcd}}</th>
       <td>{{mb_field object=$service field=uhcd}}</td>
     </tr>    
-
+  
     <tr>
       <th>{{mb_label object=$service field=hospit_jour}}</th>
       <td>{{mb_field object=$service field=hospit_jour}}</td>
     </tr>    
-
+  
     <tr>
       <th>{{mb_label object=$service field=externe}}</th>
       <td>{{mb_field object=$service field=externe}}</td>
     </tr>
-
+  
     <tr>
       <th>{{mb_label object=$service field=cancelled}}</th>
       <td>{{mb_field object=$service field=cancelled}}</td>
@@ -67,7 +67,7 @@
       <th>{{mb_label object=$service field=description}}</th>
       <td>{{mb_field object=$service field=description}}</td>
     </tr>    
-
+  
     <tr>
       <td class="button" colspan="2">
         {{if $service->_id}}
@@ -80,7 +80,5 @@
         {{/if}}
       </td>
     </tr>
-
-    </table>   
-
-    </form>
+  </table>
+</form>
