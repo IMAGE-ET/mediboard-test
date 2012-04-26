@@ -11,7 +11,7 @@
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
 set_min_memory_limit("512M");
-set_time_limit(60);
+set_time_limit(120);
 
 $service_id = CValue::get("service_id");
 $date       = CValue::get("date", mbDate());
