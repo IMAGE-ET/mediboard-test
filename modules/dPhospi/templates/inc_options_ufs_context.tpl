@@ -30,7 +30,7 @@
       var form = getForm("affect_uf");
       var url = new Url("system", "httpreq_field_autocomplete");
       url.addParam("class", "CUniteFonctionnelle");
-      url.addParam("field", "code");
+      url.addParam("field", "libelle");
       url.addParam("limit", 30);
       url.addParam("view_field", "code");
       url.addParam("show_view", true);
