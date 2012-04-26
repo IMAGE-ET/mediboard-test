@@ -49,18 +49,18 @@ $patient->prenom = $prenom ? $prenom : "provi";
 $patient->naissance = $terme_prevu;
 storeObject($patient);
 
+if (!$prenom) {
+  $patient->prenom = $patient->_id;
+  $patient->store();
+}
+
 $sejour_enfant = new CSejour;
 $sejour_enfant->patient_id = $patient->_id;
-$sejour_enfant->entree_prevue = mbDateTime($terme_prevu);
+$sejour_enfant->entree_prevue = mbDateTime();
 $sejour_enfant->sortie_prevue = $sejour->sortie;
 $sejour_enfant->praticien_id = $praticien_id;
 $sejour_enfant->group_id = $sejour->group_id;
 storeObject($sejour_enfant);
-
-if (!$prenom) {
-  $patient->prenom = $sejour_enfant->_id;
-  $patient->store();
-}
 
 $naissance = new CNaissance;
 $naissance->grossesse_id = $grossesse->_id;
