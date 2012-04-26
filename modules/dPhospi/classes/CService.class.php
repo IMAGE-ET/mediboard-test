@@ -117,8 +117,17 @@ class CService extends CMbObject {
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
 
-  function loadRefsChambres() {
-    return $this->_ref_chambres = $this->loadBackRefs("chambres", "nom");
+  function loadRefsChambres($annule = true) {
+    $chambre = new CChambre();
+    $where = array(
+      "service_id" => "= '$this->_id'",
+    );
+    
+    if (!$annule) {
+      $where["annule"] = "= '0'";
+    }
+    
+    return $this->_ref_chambres = $this->_back["chambres"] = $chambre->loadList($where, "nom");
   }
 
   function loadRefGroup() {
@@ -170,9 +179,9 @@ class CService extends CMbObject {
     $service->urgence = "1";
     $services = $service->loadMatchingList();
     foreach ($services as $_service) {
-      $_service->loadRefsBack();
+      $_service->loadRefsChambres(false);
       foreach ($_service->_ref_chambres as $_chambre) {
-        $_chambre->loadRefsBack();
+        $_chambre->loadRefsLits();
       }
     }
     
