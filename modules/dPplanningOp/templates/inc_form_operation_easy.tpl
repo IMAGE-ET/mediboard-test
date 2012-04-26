@@ -173,7 +173,7 @@
     <td colspan="2">
       <input type="text" name="_locale_date" readonly="readonly"
         style="width: 15em;"
-        onclick="PlageOpSelector.init()"
+        onfocus="this.blur(); PlageOpSelector.init()"
         value="{{$op->_datetime|date_format:$conf.datetime}}" />
       <button type="button" class="search notext" onclick="PlageOpSelector.init()">Choisir une date</button>
     </td>
