@@ -89,7 +89,7 @@ foreach ($profiles as $profile => $_user_id) {
       }
     }
     
-    if (count($codes_favoris)) {
+    if (count($codes_stats) && count($codes_favoris)) {
       $where .= ",";
     }
     
