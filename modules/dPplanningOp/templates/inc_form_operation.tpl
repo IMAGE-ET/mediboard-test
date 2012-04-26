@@ -256,7 +256,7 @@ CCAMSelector.init = function(){
 	    </th>
 	    <td colspan="2">
 	      <input type="text" name="_locale_date" readonly="readonly"
-	        onfocus="PlageOpSelector.init()"
+	        onclick="PlageOpSelector.init()"
 	        value="{{$op->_datetime|date_format:$conf.datetime}}"
 	        onchange="Value.synchronize(this);"
 	        style="width: 15em" />
