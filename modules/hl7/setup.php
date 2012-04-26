@@ -76,7 +76,7 @@ class CSetuphl7 extends CSetup {
   
     $query = "ALTER TABLE `table_description` 
                 ADD `user` ENUM ('0','1') NOT NULL DEFAULT '0';";
-    $this->addQuery($query, false, "hl7v2");
+    $this->addQuery($query, true, "hl7v2");
     
     // Gestion du mode de placement en psychiatrie
     $query = "INSERT INTO `hl7v2`.`table_description` (
