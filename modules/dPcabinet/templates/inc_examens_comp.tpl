@@ -24,8 +24,8 @@
 
   <ul>
     {{if !$consult->_count_fiches_examen}}
-    <li>
-      <em>Aucune fiche complémentaire</em>
+    <li class="empty">
+      Aucune fiche complémentaire
     </li>
     {{/if}}
   	{{assign var=examaudio value=$consult->_ref_examaudio}}
