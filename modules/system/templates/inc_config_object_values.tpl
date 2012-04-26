@@ -10,12 +10,12 @@
 
 <script type="text/javascript">
 resetValue = function(object_id, field_name) {
-	var oForm = getForm('editObjectConfig-'+object_id);
-	$V(oForm[field_name], "");
+  var oForm = getForm('editObjectConfig-'+object_id);
+  $V(oForm[field_name], "");
 }
   
 onSubmitObjectConfigs = function(oForm, object_instance_id, object_guid) {
-	return onSubmitFormAjax(oForm, { onComplete: (window.refreshConfigObjectValues || InteropActor.refreshConfigObjectValues).curry(object_instance_id, object_guid) });
+  return onSubmitFormAjax(oForm, { onComplete: (window.refreshConfigObjectValues || InteropActor.refreshConfigObjectValues).curry(object_instance_id, object_guid) });
 }
 </script>
 
@@ -33,25 +33,33 @@ onSubmitObjectConfigs = function(oForm, object_instance_id, object_guid) {
       <th class="category" colspan="2">{{tr}}Value{{/tr}}</th>
       <th class="category">{{tr}}Default{{/tr}}</th>
     </tr>
-    {{foreach from=$fields key=_field_name item=_field_value}}
-    <tr>
-      <th>{{mb_label object=$object field=$_field_name}}</th>
-      <td><button class="notext cancel" type="button" onclick="resetValue('{{$object->_id}}', '{{$_field_name}}');">{{tr}}Delete{{/tr}}</button></td>
-      <td>
-        {{if $object->_specs.$_field_name instanceof CEnumSpec || $object->_specs.$_field_name instanceof CBoolSpec}}
-        {{mb_field object=$object field=$_field_name typeEnum=select emptyLabel="Undefined"}}
-        {{else}}
-        {{mb_field object=$object field=$_field_name}}
-        {{/if}}
-      </td>
-      <td {{if $object->$_field_name !== null}}class="arretee"{{/if}}>
-        {{if $object->_default_specs_values}}
-          {{mb_value object=$default_config field=$_field_name}}
-        {{else}}
-          {{mb_value object=$default field=$_field_name}}
-        {{/if}}
-      </td>
-    </tr>
+    {{foreach from=$categories key=cat_name item=_fields}}
+      {{if $cat_name}}
+        <tr>
+          <th colspan="4" class="section" style="text-align: center;">{{$cat_name}}</th>
+        </tr>
+      {{/if}}
+      
+      {{foreach from=$_fields item=_field_name}}
+      <tr>
+        <th>{{mb_label object=$object field=$_field_name}}</th>
+        <td><button class="notext cancel" type="button" onclick="resetValue('{{$object->_id}}', '{{$_field_name}}');">{{tr}}Delete{{/tr}}</button></td>
+        <td>
+          {{if $object->_specs.$_field_name instanceof CEnumSpec || $object->_specs.$_field_name instanceof CBoolSpec}}
+          {{mb_field object=$object field=$_field_name typeEnum=select emptyLabel="Undefined"}}
+          {{else}}
+          {{mb_field object=$object field=$_field_name}}
+          {{/if}}
+        </td>
+        <td {{if $object->$_field_name !== null}}class="arretee"{{/if}}>
+          {{if $object->_default_specs_values}}
+            {{mb_value object=$default_config field=$_field_name}}
+          {{else}}
+            {{mb_value object=$default field=$_field_name}}
+          {{/if}}
+        </td>
+      </tr>
+      {{/foreach}}
     {{/foreach}}
     <tr>
       <td class="button" colspan="4">
