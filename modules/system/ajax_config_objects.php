@@ -12,7 +12,10 @@ CCanDo::checkAdmin();
 
 $classname = CValue::get("classname");
 
-$objects = array();
+$objects = array(
+  "default" => null,
+  "objects" => array(),
+);
 
 $class = new $classname;
 $class->loadRefObjectConfigs();
