@@ -39,6 +39,13 @@ if (!$object->_id && !$object_id) {
 $fields = $object->getPlainFields();
 unset($fields[$object->_spec->key]);
 unset($fields["object_id"]);
+
+if (!isset($object->_categories)) {
+  $categories = array("" => array_keys($fields));
+}
+else {
+  $categories = $object->_categories;
+}
     
 // Création du template
 $smarty = new CSmartyDP();
@@ -46,5 +53,6 @@ $smarty->assign("object"        , $object);
 $smarty->assign("default"       , $default);
 $smarty->assign("default_config", $default_config);
 $smarty->assign("fields"        , $fields);
+$smarty->assign("categories"    , $categories);
 $smarty->display("inc_config_object_values.tpl");
 ?>
