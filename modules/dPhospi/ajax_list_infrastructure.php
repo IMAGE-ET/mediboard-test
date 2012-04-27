@@ -16,6 +16,7 @@ $chambre_id    = CValue::getOrSession("chambre_id");
 $lit_id        = CValue::getOrSession("lit_id");
 $uf_id         = CValue::getOrSession("uf_id");
 $prestation_id = CValue::getOrSession("prestation_id");
+$secteur_id    = CValue::getOrSession("secteur_id");
 
 $group = CGroups::loadCurrent();
 
@@ -85,6 +86,16 @@ if($type_name == "prestations"){
     $_prestation->loadRefGroup();
   }
 }
+if($type_name == "secteurs"){
+	 // Chargement du secteur à ajouter / éditer
+	$secteur = new CSecteur;
+	$secteur->group_id = $group->_id;
+	$secteur->load($secteur_id);
+	$secteur->loadRefsNotes();
+	$secteur->loadRefsServices();
+	// Récupération des secteurs
+	$secteurs = $secteur->loadListWithPerms(PERM_READ, $where, $order);
+}
 
 $praticiens = CAppUI::$user->loadPraticiens();
 
@@ -114,5 +125,10 @@ if($type_name == "prestations"){
   $smarty->assign("prestation"    , $prestation);
   $smarty->assign("prestations"   , $prestations);
   $smarty->display("inc_vw_idx_prestations.tpl");
+}
+if($type_name == "secteurs"){
+	$smarty->assign("secteurs"      , $secteurs);
+	$smarty->assign("secteur"       , $secteur);
+  $smarty->display("inc_vw_idx_secteurs.tpl");
 }
 ?>
