@@ -17,6 +17,19 @@
       <td colspan="3">{{tr}}COperation.none{{/tr}}</td>
     </tr>
   {{else}}
+    
+    {{assign var=rank_desired value="-1"}}
+    <tr>
+      <td colspan="4">
+        <button style="float: right;" class="tick" type="button" onclick="setClose('', '')">{{tr}}OK{{/tr}}</button>
+        <button style="float: right;" class="cancel" type="button" onclick="window._close()">{{tr}}Cancel{{/tr}}</button>
+        <label class="insert">
+          <input type="radio" name="_place_after_interv_id" value="0" checked="checked" />
+          Sans préférence pour le placement
+        </label>
+      </td>
+    </tr>
+    
     {{assign var=place_after_interv_id value=-1}}
     {{assign var=is_placed value=true}}
     
@@ -46,15 +59,5 @@
       {{/if}}
       
     {{/foreach}}
-    
-    {{assign var=rank_desired value="-1"}}
-    <tr>
-      <td colspan="4">
-        <label class="insert">
-          <input type="radio" name="_place_after_interv_id" value="0" checked="checked" />
-          Sans préférence pour le placement
-        </label>
-      </td>
-    </tr>
   {{/if}}
 </table>

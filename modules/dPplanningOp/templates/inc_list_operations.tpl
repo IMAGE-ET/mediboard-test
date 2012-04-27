@@ -117,13 +117,12 @@
               {{mb_value object=$_operation field=horaire_voulu}}
             {{/if}}
           </strong>
-          <br />
-          ({{$_operation->temp_operation|date_format:$conf.time}})
         {{/if}}
         
         <a href="{{$patient->_dossier_cabinet_url}}">
           <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">{{$patient}}</strong>
         </a>
+        {{mb_label object=$_operation field=temp_operation}} : {{mb_value object=$_operation field=temp_operation}}
       </td>
       <td class="text top">
         <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$_operation->_id}}">
