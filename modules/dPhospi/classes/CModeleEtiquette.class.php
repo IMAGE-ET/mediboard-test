@@ -41,7 +41,7 @@ class CModeleEtiquette extends CMbMetaObject {
             "NOM", "NOM JF",  "NUM SECU",
             "PRENOM", "SEXE", "CIVILITE", "CIVILITE LONGUE",
             "ACCORD GENRE", "CODE BARRE IPP", "ADRESSE", "MED. TRAITANT"),
-      "CSejour" => array("NDOS", "DATE ENT", "HEURE ENT", "PRAT RESPONSABLE", "CODE BARRE NDOS"),
+      "CSejour" => array("NDOS", "DATE ENT", "HEURE ENT", "DATE SORTIE", "HEURE SORTIE", "PRAT RESPONSABLE", "CODE BARRE NDOS"),
       "General" => array("DATE COURANTE", "HEURE COURANTE"));
   
   static $listfonts =
