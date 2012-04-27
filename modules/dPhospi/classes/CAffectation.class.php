@@ -185,6 +185,7 @@ class CAffectation extends CMbObject {
   }
 
   function store() {
+    $this->completeField("sejour_id");
     $create_affectations = false;
     $sejour = $this->loadRefSejour();
     
