@@ -108,11 +108,11 @@ Reconvocation = {
         {{if !$offline}}
           <tr>
             <th>
-              <label for="cabinet_id" title="Sélectionner un cabinet">Cabinet</label>
+              <label for="cabinet_id" title="Sélectionner un groupe">Groupe de praticiens</label>
             </th>
             <td>
-              <select name="cabinet_id" onchange="this.form.submit()">
-                <option value="">&mdash; Choisir un cabinet</option>
+              <select name="cabinet_id" onchange="this.form.submit()" style="width: 15em;">
+                <option value="">&mdash; Choisir un groupe</option>
                 {{foreach from=$cabinets item=curr_cabinet}}
                   <option value="{{$curr_cabinet->_id}}" class="mediuser" style="border-color: #{{$curr_cabinet->color}}" {{if $curr_cabinet->_id == $cabinet_id}} selected="selected" {{/if}}>
                     {{$curr_cabinet->_view}}
