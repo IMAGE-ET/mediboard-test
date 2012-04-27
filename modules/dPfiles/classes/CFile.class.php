@@ -392,11 +392,11 @@ class CFile extends CDocumentItem {
   }
  
   static function openoffice_launched() {
-    return exec("pgrep soffice.bin");
+    return exec("pgrep soffice");
   }
   
-  static function openoffice_overload() {
-    $a = exec("sh shell/ooo_overload.sh");
+  static function openoffice_overload($force_restart = 0) {
+    $a = exec("sh shell/ooo_overload.sh $force_restart");
   }
   
   function convertToPDF($file_path = null, $pdf_path = null) {
@@ -466,6 +466,11 @@ class CFile extends CDocumentItem {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
         return 0;
       }
+    }
+    // Si la conversion a échoué,
+    // on relance le service s'il ne répond plus.
+    if ( $res != 1) {
+      CFile::openoffice_overload(1);
     }
     
     return $res;
