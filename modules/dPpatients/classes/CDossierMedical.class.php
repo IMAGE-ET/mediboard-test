@@ -199,11 +199,14 @@ class CDossierMedical extends CMbMetaObject {
    * Compte les antecedents de type allergies
    */
   function countAllergies(){
+    if(!$this->_id){
+      return $this->_count_allergies = 0;
+    }
     $antecedent = new CAntecedent();
     $antecedent->type = "alle";
     $antecedent->annule = "0";
     $antecedent->dossier_medical_id = $this->_id;
-    $this->_count_allergies = $antecedent->countMatchingList();
+    return $this->_count_allergies = $antecedent->countMatchingList();
   }
 	
 	function loadRefsAllergies(){
