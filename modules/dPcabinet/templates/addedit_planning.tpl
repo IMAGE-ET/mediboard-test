@@ -448,7 +448,7 @@ Main.add(function () {
             {{/if}}
           </tbody>
           <tr>
-            <th>Choix par cabinet</th>
+            <th>Recherche par groupe</th>
             <td>
               <select name="_function_id" style="width: 15em;" onchange = "if (this.value != '') { $V(this.form.chir_id, ''); $V(this.form._date, '');}">
                 <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
