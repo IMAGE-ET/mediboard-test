@@ -14,49 +14,38 @@ $plageop_id = CValue::get("plageop_id");
 $list_type  = CValue::get("list_type", "left");
 
 $anesth = new CTypeAnesth;
-$orderanesth = "name";
-$anesth = $anesth->loadList(null,$orderanesth);
+$anesth = $anesth->loadList(null, "name");
 
 // Infos sur la plage opératoire
 $plage = new CPlageOp;
 $plage->load($plageop_id);
 $plage->loadRefsFwd();
 
-$interv = new COperation();
-$where = array();
-$where["operations.plageop_id"] = "= '$plageop_id'";
-$ljoin = array();
-$ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
-
-if($list_type == "left") {
-  $where["rank"] = "= '0'";
-  $order = "operations.temp_operation";
-} else {
-  $where["rank"] = "!= '0'";
-  $order = "operations.rank";
-}
-$intervs = $interv->loadList($where, $order, null, null, $ljoin);
+$intervs = $plage->loadRefsOperations(true, "rank, rank_voulu, horaire_voulu", true, $list_type != "left");
 foreach($intervs as $_interv) {
   $_interv->loadRefsFwd();
   $_interv->_ref_chir->loadRefFunction();
   $_interv->_ref_sejour->loadRefsFwd();
+  
+  $patient = $_interv->_ref_sejour->_ref_patient;
+  $patient->loadRefDossierMedical();
+  $patient->_ref_dossier_medical->countAllergies();
 }
 
 // liste des plages du praticien
-$listPlages = new CPlageOp();
-$listSalle = array();
-$where = array();
+$where = array(
+  "date"    => "= '$plage->date'",
+  "chir_id" => "= '$plage->chir_id'",
+);
 
-$where["date"]    = "= '$plage->date'";
-$where["chir_id"] = "= '$plage->chir_id'";
-$listPlages = $listPlages->loadList($where);
-foreach($listPlages as $keyPlages=>$valPlages){
-  $listPlages[$keyPlages]->loadRefSalle();
+$list_plages = $plage->loadList($where);
+foreach($list_plages as $_plage){
+  $_plage->loadRefSalle();
 }
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("listPlages", $listPlages);
+$smarty->assign("listPlages", $list_plages);
 $smarty->assign("plage"     , $plage);
 $smarty->assign("anesth"    , $anesth);
 $smarty->assign("intervs"   , $intervs);

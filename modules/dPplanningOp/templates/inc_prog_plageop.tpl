@@ -1,6 +1,9 @@
+
 <table class="tbl">
+  <col style="width: 25px;" />
+  
   <tr>
-    <th class="category" colspan="3">
+    <th class="category" colspan="4">
       Programme du {{mb_value object=$plageop field=date}}
       <br />
       {{$plageop->debut|date_format:$conf.time}} -
@@ -9,38 +12,49 @@
     </th>
   </tr>
   
-  {{foreach from=$plageop->_ref_operations item=_operation}}
-  {{assign var=patient value=$_operation->_ref_sejour->_ref_patient}}
-  {{assign var=chir    value=$_operation->_ref_chir}}
-  <tbody class="hoverable">
-  <tr>
-    <td rowspan="2">
-      <strong>
-      {{if $_operation->rank}}
-        {{mb_value object=$_operation field=time_operation}}
-        <img src="images/icons/tick.png" title="validé" />
-      {{elseif $_operation->horaire_voulu}}
-        {{mb_value object=$_operation field=horaire_voulu}}
+  {{if $plageop->_ref_operations|@count == 0}}
+    <tr>
+      <td colspan="3">{{tr}}COperation.none{{/tr}}</td>
+    </tr>
+  {{else}}
+    {{assign var=place_after_interv_id value=-1}}
+    {{assign var=is_placed value=true}}
+    
+    {{foreach from=$plageop->_ref_operations item=_operation name=operations}}
+      {{if !$_operation->rank && $is_placed}}
+        <tr>
+          <td colspan="4" style="background: #ddd;">
+            <label class="insert" title="Placer l'intervention de préférence ici">
+              <input type="radio" name="_place_after_interv_id" value="{{$place_after_interv_id}}" /><div></div>
+              {{mb_value object=$_operation field=_horaire_voulu}}
+            </label>
+          </td>
+        </tr>
       {{else}}
-        NP
+        <tr>
+          <td colspan="4" style="background: #ddd; padding: 1px;"></td>
+        </tr>
       {{/if}}
-      </strong>
-      <br />
-      <em>({{mb_value object=$_operation field=temp_operation}})</em>
-    </td>
-    <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$chir}}</td>
-    <td>
-      <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">{{$patient}}</span>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2">{{mb_include template=inc_vw_operation}}</td>
-  </tr>
-  </tbody>
-  {{foreachelse}}
-  <tr>
-    <td colspan="3">{{tr}}COperation.none{{/tr}}</td>
-  </tr>
-  {{/foreach}}
+      
+      {{if $_operation->_id}}
+        {{mb_include module=planningOp template=inc_prog_plageop_line operation=$_operation}}
+        {{assign var=place_after_interv_id value=$_operation->_id}}
+      {{/if}}
+      
+      {{if !($_operation->rank || $_operation->horaire_voulu)}}
+        {{assign var=is_placed value=false}}
+      {{/if}}
+      
+    {{/foreach}}
+    
+    {{assign var=rank_desired value="-1"}}
+    <tr>
+      <td colspan="4">
+        <label class="insert">
+          <input type="radio" name="_place_after_interv_id" value="0" checked="checked" />
+          Sans préférence pour le placement
+        </label>
+      </td>
+    </tr>
+  {{/if}}
 </table>
-  

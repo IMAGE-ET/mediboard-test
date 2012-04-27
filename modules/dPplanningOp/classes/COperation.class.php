@@ -37,6 +37,7 @@ class COperation extends CCodable implements IPatientRelated {
   var $type_anesth    = null;  
   var $rques          = null;
   var $rank           = null;
+  var $rank_voulu     = null;
   var $anapath        = null;
   var $labo           = null;
   var $prothese       = null;
@@ -49,6 +50,7 @@ class COperation extends CCodable implements IPatientRelated {
   var $annulee = null;
   
   var $horaire_voulu      = null;
+  var $_horaire_voulu     = null;
   var $duree_uscpo        = null;
   var $presence_preop     = null;
   var $presence_postop    = null;
@@ -101,6 +103,7 @@ class COperation extends CCodable implements IPatientRelated {
   var $_protocole_prescription_anesth_id = null;
   var $_protocole_prescription_chir_id   = null;
   var $_move            = null;
+  var $_reorder_rank_voulu = null;
   var $_password_visite_anesth = null;
   var $_patient_id      = null;
   var $_dmi_alert       = null;
@@ -109,6 +112,7 @@ class COperation extends CCodable implements IPatientRelated {
   var $_width           = array();
   var $_debut_offset    = array();
   var $_fin_offset      = array();
+  var $_place_after_interv_id = null;
   
   // Distant fields
   var $_datetime          = null;
@@ -122,6 +126,10 @@ class COperation extends CCodable implements IPatientRelated {
 
   // References
   var $_ref_chir           = null;
+  
+  /**
+   * @var CPlageOp
+   */
   var $_ref_plageop        = null;
   var $_ref_salle          = null;
   var $_ref_anesth         = null;
@@ -201,6 +209,7 @@ class COperation extends CCodable implements IPatientRelated {
     $props["type_anesth"]        = "ref class|CTypeAnesth";
     $props["rques"]              = "text helped";
     $props["rank"]               = "num max|255 show|0";
+    $props["rank_voulu"]         = "num max|255 show|0";
     $props["depassement"]        = "currency min|0 confidential show|0";
     $props["forfait"]            = "currency min|0 confidential show|0";
     $props["fournitures"]        = "currency min|0 confidential show|0";
@@ -242,6 +251,7 @@ class COperation extends CCodable implements IPatientRelated {
     $props["_duree_induction"]        = "time";
     $props["_presence_salle"]         = "time";
     $props["_duree_sspi"]             = "time";
+    $props["_horaire_voulu"]          = "time";
 
     $props["_date_min"]               = "date";
     $props["_date_max"]               = "date moreEquals|_date_min";
@@ -423,8 +433,8 @@ class COperation extends CCodable implements IPatientRelated {
       $this->pause = sprintf("%02d:%02d:00", $this->_pause_hour, $this->_pause_min);
     }
     
-    $this->completeField('rank');
-    $this->completeField('plageop_id');
+    $this->completeField('rank', 'plageop_id');
+    
     if($this->_move) {
       $op = new COperation;
       $op->plageop_id = $this->plageop_id;
@@ -461,6 +471,8 @@ class COperation extends CCodable implements IPatientRelated {
         break;
         default;
       }
+      
+      $this->_reorder_rank_voulu = true;
       $this->_move = null;
     }
   }
@@ -555,6 +567,8 @@ class COperation extends CCodable implements IPatientRelated {
     }
     
     $comments = $this->prepareAlert();
+    $place_after_interv_id = $this->_place_after_interv_id;
+    $this->_place_after_interv_id = null;
     
     // Standard storage
     if ($msg = parent::store()) {
@@ -601,13 +615,38 @@ class COperation extends CCodable implements IPatientRelated {
       }
     }
     
+    $reorder_rank_voulu = $this->_reorder_rank_voulu;
+    $this->_reorder_rank_voulu = null;
+    
     // Cas de la création dans une plage de spécialité
     if ($this->plageop_id) {
-      $this->loadRefPlageOp();
-      if ($this->_ref_plageop->spec_id && $this->_ref_plageop->unique_chir) {
-        $this->_ref_plageop->chir_id = $this->chir_id;
-        $this->_ref_plageop->spec_id = "";
-        $this->_ref_plageop->store();
+      $plage = $this->loadRefPlageOp();
+      if ($plage->spec_id && $plage->unique_chir) {
+        $plage->chir_id = $this->chir_id;
+        $plage->spec_id = "";
+        $plage->store();
+      }
+      
+      // Placement de l'interv selon la preference (placement souhaité)
+      if ($place_after_interv_id) {
+        $plage->loadRefsOperations(false, "rank, rank_voulu, horaire_voulu", true);
+        
+        unset($plage->_ref_operations[$this->_id]);
+        
+        if ($place_after_interv_id == -1) {
+          $reorder = true;
+          $reorder_rank_voulu = true;
+          $plage->_ref_operations = CMbArray::mergeKeys(array($this->_id => $this), $plage->_ref_operations); // To preserve keys (array_unshift does not)
+        }
+        elseif(isset($plage->_ref_operations[$place_after_interv_id])) {
+          $reorder = true;
+          $reorder_rank_voulu = true;
+          CMbArray::insertAfterKey($plage->_ref_operations, $place_after_interv_id, $this->_id, $this);
+        }
+        
+        if ($reorder_rank_voulu) {
+          $plage->_reorder_up_to_interv_id = $this->_id;
+        }
       }
     }
     
@@ -622,7 +661,8 @@ class COperation extends CCodable implements IPatientRelated {
       if ($old_plage) {
         $old_plage->reorderOp();
       }
-      $this->_ref_plageop->reorderOp();
+      
+      $this->_ref_plageop->reorderOp($reorder_rank_voulu ? "reorder" : null);
     }
   }
   

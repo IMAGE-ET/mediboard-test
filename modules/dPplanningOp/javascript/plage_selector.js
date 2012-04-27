@@ -5,7 +5,7 @@ PlageOpSelector = {
   sPlage_id           : null,  // Identifiant de la plage
   sSalle_id           : null,  // Identifiant de la salle
   sDate               : null,  // Date de la plage
-  sHoraireVoulu       : null,  // Horaire de passage au bloc souhaité
+  sPlaceAfterInterv   : null,  // Id de l'interv après laquelle on veut placer
   sPlage_id_easy      : null,
   sSalle_id_easy      : null,
   sDateEasy           : null,
@@ -18,15 +18,14 @@ PlageOpSelector = {
     sDate        : null,
     bAdm         : null,
     dAdm         : null,
-    sHoraireVoulu: null
+    sPlaceAfterInterv : null
   },
   
   options : {},
 
   pop: function(iChir, iHour_op, iMin_op, iGroup_id, iOperation_id) {
     if (checkChir() && checkDuree()) {
-      var url = new Url();
-      url.setModuleAction("dPplanningOp", "plage_selector");
+      var url = new Url("dPplanningOp", "plage_selector");
       url.addParam("chir"        , iChir);
       url.addParam("curr_op_hour", iHour_op);
       url.addParam("curr_op_min" , iMin_op);
@@ -37,7 +36,7 @@ PlageOpSelector = {
     }
   },
 
-  set: function(plage_id, salle_id, sDate, bAdm, typeHospi, hour_entree, min_entree, hour_voulu, min_voulu) {
+  set: function(plage_id, salle_id, sDate, bAdm, typeHospi, hour_entree, min_entree, place_after_interv_id) {
     // Declaration de formulaires
     var oOpForm     = getForm("editOp");
     var oSejourForm = getForm("editSejour");
@@ -57,15 +56,19 @@ PlageOpSelector = {
       if (bAdm == "veille") {
         dAdm.addDays(-1);
       }
-      dateEntreeSej = $V(oSejourForm._date_entree_prevue);
-      dateSortieSej = $V(oSejourForm._date_sortie_prevue);
+      
+      var dateEntreeSej = $V(oSejourForm._date_entree_prevue);
+      var dateSortieSej = $V(oSejourForm._date_sortie_prevue);
+      
       if(dateEntreeSej && dateSortieSej) {
         dateEntreeSej = Date.fromDATE(dateEntreeSej);
         dateSortieSej = Date.fromDATE(dateSortieSej);
+        
         if (bAdm == "aucune" && (dAdm > dateSortieSej || dAdm < dateEntreeSej) && !$("modeExpert").visible()){
           modalWindow = modal($("date_alert"));
         }
       }
+      
       if (bAdm != "aucune") {
         dAdm.setHours(hour_entree);
         dAdm.setMinutes(min_entree);
@@ -86,18 +89,12 @@ PlageOpSelector = {
     this.prepared.salle_id = salle_id;
     this.prepared.bAdm     = bAdm;
     this.prepared.sDate    = sDate;
-    
-    if(!Object.isUndefined(hour_voulu) && hour_voulu != "" && !Object.isUndefined(min_voulu) && min_voulu != "") {
-      this.prepared.sHoraireVoulu = hour_voulu+":"+min_voulu+":00";
-    }
-    else {
-      this.prepared.sHoraireVoulu = "";
-    }
+    this.prepared.sDate    = sDate;
+    this.prepared.sPlaceAfterInterv = place_after_interv_id;
     
     // Lancement de l'execution du set
     window.setTimeout( window.PlageOpSelector.doSet , 1);
   },
-  
   
   doSet: function(){
     var oOpForm     = getForm("editOp");
@@ -105,11 +102,12 @@ PlageOpSelector = {
    
     $V(oOpForm[PlageOpSelector.sPlage_id]    , PlageOpSelector.prepared.plage_id);
     $V(oOpForm[PlageOpSelector.sSalle_id]    , PlageOpSelector.prepared.salle_id);
-    $V(oOpForm[PlageOpSelector.sHoraireVoulu], PlageOpSelector.prepared.sHoraireVoulu);
+    $V(oOpForm[PlageOpSelector.sPlaceAfterInterv], PlageOpSelector.prepared.sPlaceAfterInterv);
+    
     // Si seul l'horaire voulu est changé, le onchange sur la date n'est pas fait.
     // Il faut donc le forcer
-    $V(oOpForm[PlageOpSelector.sDate],"");
-    $V(oOpForm[PlageOpSelector.sDate]        , PlageOpSelector.prepared.sDate);
+    $V(oOpForm[PlageOpSelector.sDate], "");
+    $V(oOpForm[PlageOpSelector.sDate], PlageOpSelector.prepared.sDate);
    
     if(PlageOpSelector.prepared.bAdm != "aucune"){ 
       $V(oSejourForm[PlageOpSelector.s_hour_entree_prevue], PlageOpSelector.prepared.dAdm.getHours());

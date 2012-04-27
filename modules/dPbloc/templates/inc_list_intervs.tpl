@@ -1,4 +1,9 @@
 <script type="text/javascript">
+  ObjectTooltip.modes.allergies = {  
+    module: "patients",
+    action: "ajax_vw_allergies",
+    sClass: "tooltip"
+  };
   
   Main.add(function(){
     var oForm = getForm("editPlageTiming");
@@ -19,8 +24,9 @@
 
 </script>
 
-{{if $list_type == "left"}}
 <table class="tbl">
+  
+{{if $list_type == "left"}}
   <tr>
     <th class="title" colspan="3">
       {{if $conf.dPplanningOp.COperation.horaire_voulu}}
@@ -38,7 +44,6 @@
     </th>
   </tr>
 {{else}}
-<table class="tbl">
   <tr>
     <th class="title" colspan="3">Ordre des interventions</th>
   </tr>
@@ -51,10 +56,15 @@
   <tr>
     <td class="text" style="vertical-align: top;">
       {{mb_include module=system template=inc_object_history object=$_op}}
+      {{if $patient->_ref_dossier_medical->_id && $patient->_ref_dossier_medical->_count_allergies}}
+        <img src="images/icons/warning.png" style="float: right" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}', 'allergies');" />
+      {{/if}}
       <strong>
         {{if $_op->rank}}
           <div class="rank" style="float: left;">{{$_op->rank}}</div>
           {{$_op->time_operation|date_format:$conf.time}}
+        {{elseif $_op->rank_voulu}}
+          <div class="rank desired" style="float: left;">{{$_op->rank_voulu}}</div>
         {{/if}}
         <a href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$patient->_id}}">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
@@ -97,6 +107,7 @@
       </form>
       </div>
     </td>
+    
     <td class="text" style="vertical-align: top;">
       <form name="editFrmAnesth{{$_op->operation_id}}" action="?m={{$m}}" method="post" style="float: right;">
         <input type="hidden" name="m" value="dPplanningOp" />
@@ -111,12 +122,13 @@
           {{/foreach}}
         </select>
         <br />
-        <button style="clear: both;" class="{{if $_op->_ref_consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}"
-          style="width:11em;" type="button"
-          onclick="printFicheAnesth('{{$_op->_ref_consult_anesth->_ref_consultation->_id}}', '{{$_op->_id}}');">
+        <button type="button" style="clear: both; width:11em;" 
+                class="{{if $_op->_ref_consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}"
+                onclick="printFicheAnesth('{{$_op->_ref_consult_anesth->_ref_consultation->_id}}', '{{$_op->_id}}');">
           Fiche d'anesthésie
         </button>
       </form>
+      
       <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$_op->_id}}">
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_guid}}');">
           {{if $_op->libelle}}
@@ -128,6 +140,7 @@
           {{/if}}
         </span>
       </a>
+      
       <em>{{mb_label object=$_op field=cote}}</em> :
       {{mb_value object=$_op field=cote}}
       {{if $_op->materiel}}
@@ -142,35 +155,38 @@
       </div>
       {{/if}}
     </td>
-    <td>
+    
+    <td class="narrow" style="text-align: center;">
       <!-- Intervention à valider -->
       {{if $_op->annulee}}
-      <img src="images/icons/cross.png" width="12" height="12" border="0" />
+        <img src="images/icons/cross.png" />
       {{elseif $_op->rank == 0}}
-      <form name="edit-insert-{{$_op->operation_id}}" action="?m={{$m}}" method="post">
-        <input type="hidden" name="m" value="dPplanningOp" />
-        <input type="hidden" name="dosql" value="do_planning_aed" />
-        <input type="hidden" name="_move" value="last" /><!-- Insertion à la fin -->
-        <input type="hidden" name="operation_id" value="{{$_op->operation_id}}" />
-        <button type="button" class="tick notext oneclick" title="{{tr}}Add{{/tr}}" onclick="submitOrder(this.form);">
-          {{tr}}Add{{/tr}}
-        </button>
-      </form>
-      {{else}}
-      <!-- Intervention validée -->
-        {{if $_op->rank != 1}}
-        <form name="edit-up-{{$_op->_id}}" action="?m={{$m}}" method="post">
+        <form name="edit-insert-{{$_op->operation_id}}" action="?m={{$m}}" method="post" class="prepared">
           <input type="hidden" name="m" value="dPplanningOp" />
           <input type="hidden" name="dosql" value="do_planning_aed" />
-          <input type="hidden" name="operation_id" value="{{$_op->_id}}" />
-          <input type="hidden" name="_move" value="before" />
-          <button type="button" class="up notext oneclick" title="{{tr}}Up{{/tr}}" onclick="submitOrder(this.form, '{{$list_type}}');">
-            {{tr}}Up{{/tr}}
+          <input type="hidden" name="_move" value="last" /><!-- Insertion à la fin -->
+          <input type="hidden" name="operation_id" value="{{$_op->operation_id}}" />
+          <button type="button" class="tick notext oneclick" title="{{tr}}Add{{/tr}}" onclick="submitOrder(this.form);">
+            {{tr}}Add{{/tr}}
           </button>
         </form>
-        <br />
+      {{else}}
+      
+        <!-- Intervention validée -->
+        {{if $_op->rank != 1}}
+          <form name="edit-up-{{$_op->_id}}" action="?m={{$m}}" method="post" class="prepared">
+            <input type="hidden" name="m" value="dPplanningOp" />
+            <input type="hidden" name="dosql" value="do_planning_aed" />
+            <input type="hidden" name="operation_id" value="{{$_op->_id}}" />
+            <input type="hidden" name="_move" value="before" />
+            <button type="button" class="up notext oneclick" title="{{tr}}Up{{/tr}}" onclick="submitOrder(this.form, '{{$list_type}}');">
+              {{tr}}Up{{/tr}}
+            </button>
+          </form>
+          <br />
         {{/if}}
-        <form name="edit-del-{{$_op->_id}}" action="?m={{$m}}" method="post">
+        
+        <form name="edit-del-{{$_op->_id}}" action="?m={{$m}}" method="post" class="prepared">
           <input type="hidden" name="m" value="dPplanningOp" />
           <input type="hidden" name="dosql" value="do_planning_aed" />
           <input type="hidden" name="operation_id" value="{{$_op->_id}}" />
@@ -180,8 +196,9 @@
           </button>
         </form>
         <br />
+        
         {{if $_op->rank != $intervs|@count}}
-        <form name="edit-down-{{$_op->_id}}" action="?m={{$m}}" method="post">
+        <form name="edit-down-{{$_op->_id}}" action="?m={{$m}}" method="post" class="prepared">
           <input type="hidden" name="m" value="dPplanningOp" />
           <input type="hidden" name="dosql" value="do_planning_aed" />
           <input type="hidden" name="operation_id" value="{{$_op->_id}}" />
@@ -197,10 +214,7 @@
   </tr>
 {{foreachelse}}
   <tr>
-    <td class="empty">
-      {{tr}}COperation.none{{/tr}}
-
-    </td>
+    <td class="empty">{{tr}}COperation.none{{/tr}}</td>
   </tr>
 {{/foreach}}
 </table>

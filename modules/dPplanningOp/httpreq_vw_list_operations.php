@@ -16,14 +16,14 @@ $board     = CValue::get("board", 0);
 $boardItem = CValue::get("boardItem", 0);
 
 // Urgences du jour
-$listUrgences = array();
+$list_urgences = array();
 $operation = new COperation();
 
 if($userSel->_id){
   $operation->date = $date;
   $operation->chir_id = $userSel->_id;
-  $listUrgences = $operation->loadMatchingList("date");
-  foreach($listUrgences as &$curr_urg) {
+  $list_urgences = $operation->loadMatchingList("date");
+  foreach($list_urgences as $curr_urg) {
     $curr_urg->loadRefsFwd();
     $curr_urg->loadRefsDocs();
     $curr_urg->_ref_sejour->loadRefsFwd();
@@ -32,8 +32,8 @@ if($userSel->_id){
 }
 
 // Liste des opérations du jour sélectionné
-$listDay = array();
-$plageOp = new CPlageOp();
+$list_plages = array();
+
 if($userSel->_id){
   $userSel->loadBackRefs("secondary_functions");
   $secondary_specs = array();
@@ -53,24 +53,24 @@ if($userSel->_id){
   $where[] = "plagesop.chir_id = '$userSel->_id' OR plagesop.anesth_id = '$userSel->_id' OR plagesop.spec_id = '$userSel->function_id' $in";
   $order = "debut, salle_id";
   
-  $listDay = $plageOp->loadList($where, $order);
-  $curr_plage = new CPlageOp();
-  foreach ($listDay as $curr_plage) {
-    $curr_plage->loadRefsFwd();
+  $plageop = new CPlageOp();
+  $list_plages = $plageop->loadList($where, $order);
+  
+  foreach ($list_plages as $_plage) {
+    $_plage->loadRefsFwd();
+    
     $where = array();
-    $where["plageop_id"] = "= '$curr_plage->_id'";
     if($userSel->_id && !$userSel->isAnesth()) {
       $where["chir_id"] = "= '$userSel->_id'";
     }
-    $where["annulee"] = "= '0'";
-    $op = new COperation;
-    $curr_plage->_ref_operations = $op->loadList($where, "rank, horaire_voulu");
-    foreach ($curr_plage->_ref_operations as $curr_op) {
-      $curr_op->_ref_plageop = $curr_plage;
-      $curr_op->loadRefsFwd();
-      $curr_op->loadRefsDocs();
-      $curr_op->_ref_sejour->loadRefsFwd();
-      $curr_op->_ref_sejour->loadRefsDocs();
+    
+    $_plage->loadRefsOperations(false, "rank, rank_voulu, horaire_voulu", true, null, $where);
+    
+    foreach ($_plage->_ref_operations as $_op) {
+      $_op->loadRefsFwd();
+      $_op->loadRefsDocs();
+      $_op->_ref_sejour->loadRefsFwd();
+      $_op->_ref_sejour->loadRefsDocs();
     }
   }
 }
@@ -108,7 +108,6 @@ if ($praticien->_can->edit) {
 $modele_etiquette = new CModeleEtiquette;
 
 $where = array();
-
 $where['object_class'] = " IN ('COperation', 'CSejour')";
 $where["group_id"] = " = '".CGroups::loadCurrent()->_id."'";
 
@@ -131,8 +130,8 @@ $smarty->assign("packsByOwner"  , $packsByOwner);
 $smarty->assign("praticien"     , $praticien);
 $smarty->assign("boardItem"   , $boardItem);
 $smarty->assign("date"        , $date);
-$smarty->assign("listUrgences", $listUrgences);
-$smarty->assign("listDay"     , $listDay);
+$smarty->assign("listUrgences", $list_urgences);
+$smarty->assign("listDay"     , $list_plages);
 $smarty->assign("board"       , $board);
 $smarty->assign("nb_printers" , $nb_printers);
 $smarty->assign("nb_modeles_etiquettes", $nb_modeles_etiquettes);

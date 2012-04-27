@@ -42,6 +42,10 @@ class CPlageOp extends CMbObject {
   var $_year         = null;
   var $_duree_prevue = null;
   var $_type_repeat  = null;
+  var $_nb_operations  = null;
+  var $_nb_operations_placees  = null;
+  var $_fill_rate      = null;
+  var $_reorder_up_to_interv_id = null;
   
   // Behaviour Fields
   var $_verrouillee = array();
@@ -53,9 +57,6 @@ class CPlageOp extends CMbObject {
   var $_ref_spec_repl  = null;
   var $_ref_salle      = null;
   var $_ref_operations = null;
-  var $_nb_operations  = null;
-  var $_nb_operations_placees  = null;
-  var $_fill_rate      = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -72,7 +73,7 @@ class CPlageOp extends CMbObject {
   }
   
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["chir_id"]          = "ref class|CMediusers";
     $specs["anesth_id"]        = "ref class|CMediusers";
     $specs["spec_id"]          = "ref class|CFunctions";
@@ -92,28 +93,28 @@ class CPlageOp extends CMbObject {
     return $specs;
   }
   
-  function loadRefs($annulee = 1) {
+  function loadRefs($annulee = true) {
     $this->loadRefsFwd();
     $this->loadRefsBack($annulee);
   }
   
-  function loadRefChir($cache = 1) {
+  function loadRefChir($cache = true) {
     return $this->_ref_chir = $this->loadFwdRef("chir_id", $cache);
   }
   
-  function loadRefAnesth($cache = 1) {
+  function loadRefAnesth($cache = true) {
     return $this->_ref_anesth = $this->loadFwdRef("anesth_id", $cache);
   }
     
-  function loadRefSpec($cache = 1) {
+  function loadRefSpec($cache = true) {
     return $this->_ref_spec = $this->loadFwdRef("spec_id", $cache);
   }
     
-  function loadRefSpecRepl($cache = 1) {
+  function loadRefSpecRepl($cache = true) {
     return $this->_ref_spec_repl = $this->loadFwdRef("spec_repl_id", $cache);
   }
   
-  function loadRefSalle($cache = 1) {
+  function loadRefSalle($cache = true) {
     return $this->_ref_salle = $this->loadFwdRef("salle_id", $cache);
   }
   
@@ -125,10 +126,10 @@ class CPlageOp extends CMbObject {
     }
     if($this->anesth_id){
       $this->_view .= " - ".$this->_ref_anesth->_shortview;
-    }	
+    }  
   }
 
-  function loadRefsFwd($cache = 0) {
+  function loadRefsFwd($cache = false) {
     $this->loadRefChir($cache);
     $this->loadRefAnesth($cache);
     $this->loadRefSpec($cache);
@@ -136,51 +137,121 @@ class CPlageOp extends CMbObject {
     $this->makeView();
   }
   
-  function loadRefsOperations($annulee = 1, $order = "rank, horaire_voulu") {
-    $where = array();
-    $where["plageop_id"] = "= '$this->plageop_id'";
+  function loadRefsOperations($annulee = true, $order = "rank, rank_voulu, horaire_voulu", $sorted = false, $validated = null, $where = array()) {
+    $where += array(
+      "plageop_id" => "= '$this->plageop_id'",
+    );
+    
     if(!$annulee) {
       $where["annulee"] = "= '0'";
     }
+    
     $op = new COperation;
-    $this->_ref_operations = $op->loadList($where, $order);
-    foreach ($this->_ref_operations as &$operation) {
-      $operation->_ref_plageop =& $this;
+    
+    if (!$sorted) {
+      $intervs = $op->loadList($where, $order);
     }
-    return $this->_ref_operations;
+    else {
+      $order = "rank, rank_voulu, horaire_voulu";
+      
+      $intervs = array();
+      
+      if ($validated === null || $validated === true) {
+        $where["rank"] = "> 0";
+        $intervs = CMbArray::mergeKeys($intervs, $op->loadList($where, $order));
+      }
+      
+      if ($validated === null || $validated === false) {
+        // Sans rank
+        $where["rank"] = "= 0";
+        
+        $where["rank_voulu"] = "> 0";
+        $intervs = CMbArray::mergeKeys($intervs, $op->loadList($where, $order));
+          
+        // Sans rank voulu
+        $where["rank_voulu"] = "= 0";
+        
+        $where["horaire_voulu"] = "IS NOT NULL";
+        $intervs = CMbArray::mergeKeys($intervs, $op->loadList($where, $order));
+        
+        $where["horaire_voulu"] = "IS NULL";
+        $intervs = CMbArray::mergeKeys($intervs, $op->loadList($where, $order));
+      }
+    }
+    
+    foreach ($intervs as $operation) {
+      $operation->_ref_plageop = $this;
+    }
+    
+    return $this->_ref_operations = $intervs;
   }
 
-  function loadRefsBack($annulee = 1, $order = "rank, horaire_voulu") {
-  	$this->loadRefsOperations($annulee, $order);
+  function loadRefsBack($annulee = true, $order = "rank, rank_voulu, horaire_voulu") {
+    $this->loadRefsOperations($annulee, $order);
   }
   
-	/** Mise à jour des horaires en fonction de l'ordre des operations, 
-	 *  et mise a jour des rank, de sorte qu'ils soient consecutifs
-	 */
-  function reorderOp() {
+  /** 
+   * Mise à jour des horaires en fonction de l'ordre des operations, 
+   * et mise a jour des rank, de sorte qu'ils soient consecutifs
+   */
+  function reorderOp($rank_voulu = null) {
     $this->completeField("debut", "temps_inter_op");
+    
     if(!count($this->_ref_operations)) {
-      $this->loadRefsBack(0);
+      $this->loadRefsOperations(false, "rank, rank_voulu, horaire_voulu", true);
     }
+    
     $new_time = $this->debut;
     $i = 0;
-    foreach ($this->_ref_operations as &$op) {
-      if($op->rank) {
+    foreach ($this->_ref_operations as $op) {
+      $stored = false;
+      if ($op->rank || $rank_voulu == "validate") {
         $op->rank = ++$i;
         $op->time_operation = $new_time;
+        
         // Pour faire suivre un changement de salle
         if($this->salle_id && $this->fieldModified("salle_id")) {
           $op->salle_id = $this->salle_id;
         }
-        $op->updateFormFields();
-        $op->store(false);
-        // Durée de l'operation
-        // + durée entre les operations
-        // + durée de pause
-        $new_time = mbAddTime($op->temp_operation, $new_time);
-        $new_time = mbAddTime($this->temps_inter_op, $new_time);
-        $new_time = mbAddTime($op->pause, $new_time);
+        
+        $stored = true;
       }
+      elseif ($rank_voulu == "reorder" && ($op->horaire_voulu || $this->_reorder_up_to_interv_id)) {
+        $op->rank_voulu = ++$i;
+        $op->horaire_voulu = $new_time;
+        
+        $stored = true;
+      }
+      
+      if ($this->_reorder_up_to_interv_id == $op->_id) {
+        $this->_reorder_up_to_interv_id = null;
+      }
+      
+      $op->updateFormFields();
+      $op->store(false);
+      
+      // Durée de l'operation
+      // + durée entre les operations
+      // + durée de pause
+      $new_time = mbAddTime($op->temp_operation, $new_time);
+      $new_time = mbAddTime($this->temps_inter_op, $new_time);
+      $new_time = mbAddTime($op->pause, $new_time);
+    }
+  }
+
+  function guessHoraireVoulu() {
+    $this->completeField("debut", "temps_inter_op");
+    
+    $new_time = $this->debut;
+    foreach ($this->_ref_operations as $op) {
+      $op->_horaire_voulu = $new_time;
+      
+      // Durée de l'operation
+      // + durée entre les operations
+      // + durée de pause
+      $new_time = mbAddTime($op->temp_operation, $new_time);
+      $new_time = mbAddTime($this->temps_inter_op, $new_time);
+      $new_time = mbAddTime($op->pause, $new_time);
     }
   }
   
@@ -461,11 +532,11 @@ $listHours = range($pcConfig["hours_start"], $pcConfig["hours_stop" ]);
 $listMins  = range(0, 59, CPlageOp::$minutes_interval);
 
 foreach($listHours as $key => $hour){
-	CPlageOp::$hours[$hour] = str_pad($hour, 2, "0", STR_PAD_LEFT);
+  CPlageOp::$hours[$hour] = str_pad($hour, 2, "0", STR_PAD_LEFT);
 }
 
 foreach($listMins as $key => $min){
-	CPlageOp::$minutes[] = str_pad($min, 2, "0", STR_PAD_LEFT);
+  CPlageOp::$minutes[] = str_pad($min, 2, "0", STR_PAD_LEFT);
 }
-	
+  
 ?>

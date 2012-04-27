@@ -18,28 +18,30 @@ function setMinVouluPlage() {
 }
 
 function setClose(date, salle_id) {
-  var oForm = getForm("plageSelectorFrm");;
+  var oForm = getForm("plageSelectorFrm");
   
   var list = oForm.list;
   if(date == '') {
     date = $V(oForm._date);
   }
+  
   if(salle_id == '') {
     salle_id = $V(oForm._salle_id);
   }
-  var hour_voulu = $V(oForm._hour_voulu);
-  var min_voulu  = $V(oForm._min_voulu);
+  
+  var place_after_interv_id = $V(oForm._place_after_interv_id);
   
   var plage_id = $V(list);
   if (!plage_id) {
     alert('Vous n\'avez pas selectionné de plage ou la plage selectionnée n\'est plus disponible à la planification.\n\nPour plus d\'information, veuillez contacter le responsable du bloc');
-  	return;
+    return;
   }
    
   var adm = $V(oForm.admission);
   var typeHospi = "ambu";
   var hour_entree = $V(oForm.hour_jour);
   var min_entree  = $V(oForm.min_jour);
+  
   // passage en hospi complete si admission == veille
   if(adm == "veille"){
     typeHospi = "comp";
@@ -47,7 +49,7 @@ function setClose(date, salle_id) {
     min_entree  = $V(oForm.min_veille);
   }
   
-  window.parent.PlageOpSelector.set(plage_id, salle_id, date, adm, typeHospi, hour_entree, min_entree, hour_voulu, min_voulu);
+  window.parent.PlageOpSelector.set(plage_id, salle_id, date, adm, typeHospi, hour_entree, min_entree, place_after_interv_id);
   window._close();
 }  
 
@@ -62,16 +64,14 @@ Main.add(function () {
 });
 </script>
 
-<table class="main">
+<table class="main tbl">
   <tr>
-    <th class="title" style="font-size: 16px;">
+    <th class="title" style="font-size: 1.5em;">
       {{assign var=prev    value=-1}}
       {{assign var=next    value=1}}
       {{assign var=current value=0}}
-      <a style="float:left;" href="?m=dPplanningOp&amp;a=plage_selector&amp;dialog=1&amp;curr_op_hour={{$curr_op_hour}}&amp;curr_op_min={{$curr_op_min}}&amp;chir={{$chir}}&amp;date_plagesel={{$listMonthes.$prev.date}}&amp;group_id={{$group_id}}&amp;operation_id={{$operation_id}}">&lt; &lt;</a>
-      <a style="float:right;" href="?m=dPplanningOp&amp;a=plage_selector&amp;dialog=1&amp;curr_op_hour={{$curr_op_hour}}&amp;curr_op_min={{$curr_op_min}}&amp;chir={{$chir}}&amp;date_plagesel={{$listMonthes.$next.date}}&amp;group_id={{$group_id}}&amp;operation_id={{$operation_id}}">&gt; &gt;</a>
-      <div>
-        <form action="?" name="chgDate" method="get">
+      
+      <form action="?" name="chgDate" method="get">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="a" value="plage_selector" />
         <input type="hidden" name="dialog" value="1" />
@@ -80,6 +80,9 @@ Main.add(function () {
         <input type="hidden" name="chir" value="{{$chir}}" />
         <input type="hidden" name="group_id" value="{{$group_id}}" />
         <input type="hidden" name="operation_id" value="{{$operation_id}}" />
+        
+        <button type="button" class="left notext" onclick="$V(this.form.date_plagesel, '{{$listMonthes.$prev.date}}')">&lt; &lt;</button>
+
         <select name="date_plagesel" onchange="this.form.submit()">
         {{foreach from=$listMonthes key=curr_key_month item=curr_month}}
           <option value="{{$curr_month.date}}" {{if $curr_key_month == $current}}selected="selected"{{/if}}>
@@ -87,8 +90,9 @@ Main.add(function () {
           </option>  
         {{/foreach}}
         </select>
-        </form>
-      </div>
+        
+        <button type="button" class="right notext" onclick="$V(this.form.date_plagesel, '{{$listMonthes.$next.date}}')">&lt; &lt;</button>
+      </form>
     </th>
   </tr>
 </table>
@@ -100,18 +104,19 @@ Main.add(function () {
 <input type="hidden" name="_salle_id" value="" />
 <input type="hidden" name="_date" value="" />
 
-<table class="main">  
+<table class="main layout">  
   <tr>
     <td class="halfPane">
       {{if $listPlages|@count > 1}}
       <div class="small-warning">
-        Plusieurs blocs sont disponible, veillez à bien choisir le bloc souhaité
+        Plusieurs blocs sont disponibles, veillez à bien choisir le bloc souhaité
       </div>
       {{elseif $listPlages|@count == 0}}
       <div class="small-info">
         Vous n'avez pas de plage ce mois-ci, vous pouvez contacter le responsable de bloc pour ajouter une vacation
       </div>
       {{/if}}
+      
       <ul id="main_tab_group" class="control_tabs">
         {{foreach from=$listPlages key=_key_bloc item=_blocplage}}
         {{assign var=_bloc value=$blocs.$_key_bloc}}
@@ -119,11 +124,11 @@ Main.add(function () {
         {{/foreach}}
       </ul>
       <hr class="control_tabs" />
+      
       {{foreach from=$listPlages key=_key_bloc item=_blocplage}}
       {{assign var=_bloc value=$blocs.$_key_bloc}}
       {{assign var=date_min value=$_bloc->_date_min}}
-      <div id="bloc-{{$_bloc->_id}}" style="display:none">
-      <table class="tbl">
+      <table class="tbl" id="bloc-{{$_bloc->_id}}" style="display:none">
         <tr>
           <th class="category" colspan="4">
             Choisir une date
@@ -153,29 +158,28 @@ Main.add(function () {
             {{else}}
               {{assign var="backgroundClass" value="full"}}
             {{/if}}
-            <div class="progressBar" style="width: 98%;{{if $_plage->spec_id}}height: 25px;{{/if}}">
-              <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
-              <div class="text" style="text-align: left">
-                <label 
-                  for="list_{{$_plage->_id}}"
-                  {{if $resp_bloc || $_plage->_verrouillee|@count == 0}}
-                    ondblclick="setClose('{{$_plage->date}}', '{{$_plage->salle_id}}')"
-                  {{else}}
-                    onclick="showProgramme({{$_plage->_id}})"
-                  {{/if}}
-                >
-                  {{$_plage->date|date_format:"%a %d"}} -
-                  {{$_plage->debut|date_format:$conf.time}} -
-                  {{$_plage->fin|date_format:$conf.time}}
-                  &mdash; {{$_plage->_ref_salle->_view}}
-                  {{if $_plage->spec_id}}
-                  <br />{{$_plage->_ref_spec->_view|truncate:50}}
-                  {{/if}}
-                </label>
+            
+            <label for="list_{{$_plage->_id}}"
+              {{if $resp_bloc || $_plage->_verrouillee|@count == 0}}
+                ondblclick="setClose('{{$_plage->date}}', '{{$_plage->salle_id}}')"
+              {{else}}
+                onclick="showProgramme({{$_plage->_id}})"
+              {{/if}}>
+              <div class="progressBar" style="width: 98%;{{if $_plage->spec_id}}height: 25px;{{/if}}">
+                <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
+                <div class="text" style="text-align: left">
+                    {{$_plage->date|date_format:"%a %d"}} -
+                    {{$_plage->debut|date_format:$conf.time}} -
+                    {{$_plage->fin|date_format:$conf.time}}
+                    &mdash; {{$_plage->_ref_salle->_view}}
+                    {{if $_plage->spec_id}}
+                    <br />{{$_plage->_ref_spec->_view|truncate:50}}
+                    {{/if}}
+                </div>
               </div>
-            </div>
-         	 </td>
-          <td style="text-align: center;" class="narrow">
+            </label>
+          </td>
+          <td class="narrow">
             {{if $resp_bloc || $_plage->_verrouillee|@count == 0}}
               <input type="radio" name="list" value="{{$_plage->plageop_id}}"
                  ondblclick="setClose('{{$_plage->date}}', '{{$_plage->salle_id}}')"
@@ -198,8 +202,8 @@ Main.add(function () {
         </tr>
         {{/foreach}}
       </table>
-      </div>
       {{/foreach}}
+      
       <table class="tbl">
         <tr>
           <th class="category" colspan="3">
@@ -207,19 +211,19 @@ Main.add(function () {
           </th>
         </tr>
         <tr>
-          <td>
+          <td class="narrow button">
             <img src="images/icons/user.png" />
           </td>
           <td colspan="2">plage personnelle</td>
         </tr>
         <tr>
-          <td>
+          <td class="button">
             <img src="images/icons/user-function.png" />
           </td>
           <td colspan="2">plage de spécialité</td>
         </tr>
         <tr>
-          <td style="width:10px;">
+          <td>
             <div class="progressBar">
               <div class="bar full"></div>
             </div>
@@ -227,7 +231,7 @@ Main.add(function () {
           <td colspan="2">plage pleine</td>
         </tr>
         <tr>
-          <td style="width:10px;">
+          <td>
             <div class="progressBar">
               <div class="bar booked"></div>
             </div>
@@ -235,28 +239,38 @@ Main.add(function () {
           <td colspan="2">plage presque pleine</td>
         </tr>
         <tr>
-          <td style="width:10px;">
+          <td>
             <div class="progressBar">
               <div class="bar normal" style="width: 60%;"></div>
             </div>
           </td>
           <td colspan="2">taux de remplissage</td>
         </tr>
+        <tr>
+          <td class="button">
+            <div class="rank">1</div>
+          </td>
+          <td colspan="2">intervention validée par le bloc</td>
+        </tr>
+        <tr>
+          <td class="button">
+            <div class="rank desired" title="Pas encore validé par le bloc">2</div>
+          </td>
+          <td colspan="2">intervention ayant un ordre de passage souhaité</td>
+        </tr>
       </table>
     </td>
     <td class="halfPane">
       <table class="form">
         <tr>
-          <th colspan="3" class="category">
+          <th colspan="2" class="category">
             Admission du patient
           </th>
         </tr>
         <tr>
-          <td>
+          <td class="narrow">
             <input type="radio" name="admission" value="veille" />
-          </td>
-          <td>
-            <label for="admission_veille">La veille</label> à
+            <label for="admission_veille">La veille à</label>
           </td>
           <td class="greedyPane">
             <select name="hour_veille">
@@ -275,9 +289,7 @@ Main.add(function () {
         <tr>
           <td>
             <input type="radio" name="admission" value="jour" />
-          </td>
-          <td>
-            <label for="admission_jour">Le jour même</label> à
+            <label for="admission_jour">Le jour même à</label>
           </td>
           <td>
             <select name="hour_jour">
@@ -294,43 +306,26 @@ Main.add(function () {
           </td>
         </tr>
         <tr>
-          <td>
-            <input type="radio" name="admission" value="aucune" />
-          </td>
           <td colspan="2">
+            <input type="radio" name="admission" value="aucune" />
             <label for="admission_aucune">Ne pas modifier</label>
           </td>
         </tr>
         <tr>
-          <th colspan="3" class="category">
-            Heure de passage souhaitée
-          </th>
-        </tr>
-        <tr>
-          <td colspan="3" class="button">
-            <select name="_hour_voulu" onchange="setMinVouluPlage();">
-              <option value="">-</option>
-              {{foreach from=$list_hours_voulu|smarty:nodefaults item=hour}}
-                <option value="{{$hour}}">{{$hour}}</option>
-              {{/foreach}}
-            </select> h
-            <select name="_min_voulu">
-              <option value="">-</option>
-              {{foreach from=$list_minutes_voulu|smarty:nodefaults item=min}}
-                <option value="{{$min}}">{{$min}}</option>
-              {{/foreach}}
-            </select> min
+          <td colspan="2" class="text">
+            <div class="small-info">
+              Le choix de l'heure de passage est remplacé par les flèches dans le programme ci-dessous.<br />
+              Afin de placer une intervention, cliquez sur la flèche correspondante.
+            </div>
           </td>
         </tr>
         <tr>
-          <td colspan="3" class="button">
+          <td colspan="2" id="prog_plageop"></td>
+        </tr>
+        <tr>
+          <td colspan="2" class="button">
             <button class="cancel" type="button" onclick="window._close()">{{tr}}Cancel{{/tr}}</button>
             <button class="tick" type="button" onclick="setClose('', '')">{{tr}}OK{{/tr}}</button>          
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
-            <div id="prog_plageop"></div>
           </td>
         </tr>
       </table>

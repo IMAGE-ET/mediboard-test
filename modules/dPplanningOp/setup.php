@@ -1312,7 +1312,12 @@ class CSetupdPplanningOp extends CSetup {
       ADD `presence_postop` TIME;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.39";
+    $this->makeRevision("1.39");
+    $query = "ALTER TABLE `operations` 
+              ADD `rank_voulu` TINYINT (4) NOT NULL DEFAULT '0' AFTER `rank`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.40";
   }
 }
 ?>

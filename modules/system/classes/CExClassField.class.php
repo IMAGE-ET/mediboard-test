@@ -102,6 +102,25 @@ class CExClassField extends CExListItemsOwner {
   static function formulaCanResult($type) {
     return self::formulaCanResultConcat($type) || self::formulaCanResultArithmetic($type);
   }
+  
+  static function getTypes(){
+    return array_intersect_key(CMbFieldSpecFact::$classes, array_flip(array(
+      "enum",
+      "set",
+      "str", 
+      "text", 
+      "num", 
+      "float", 
+      "date",
+      "time",
+      "dateTime",
+      "bool",
+      "pct",
+      "birthDate",
+      "currency",
+      "email",
+    )));
+  }
 
   function getSpec() {
     $spec = parent::getSpec();

@@ -105,27 +105,38 @@ class CExConcept extends CExListItemsOwner {
   
   function updateFieldProp($prop){
     //$concept_spec = $this->loadConceptSpec();
-    $list_re    = "/(\slist\|[^\s]+)/";
-    $default_re = "/(\sdefault\|[^\s]+)/";
+    $list_re     = "/(\slist\|[^\s]+)/";
+    $default_re  = "/(\sdefault\|[^\s]+)/";
+    $vertical_re = "/(\svertical(?:\|[^\s]+)?)/";
     
     $list_prop = "";
     $default_prop = "";
+    $vertical_prop = "";
     
-    $new_prop = $this->prop;
+    $new_prop = preg_replace($vertical_re, "", $this->prop);
     
     // extract $prop's list|XXX
+    $matches = array();
     if (preg_match($list_re, $prop, $matches)) {
       $list_prop = $matches[1];
       $new_prop = preg_replace($list_re, "", $new_prop);  
       
       // extract $prop's default|XXX
+      $matches = array();
       if (preg_match($default_re, $prop, $matches)) {
         $default_prop = $matches[1];
         $new_prop = preg_replace($default_re, "", $new_prop);
       }
     }
     
-    return $new_prop.$list_prop.$default_prop;
+    // extract $prop's vertical
+    $matches = array();
+    if (preg_match($vertical_re, $prop, $matches)) {
+      $vertical_prop = $matches[1];
+      $new_prop = preg_replace($vertical_re, "", $new_prop);  
+    }
+    
+    return $new_prop.$list_prop.$default_prop.$vertical_prop;
   }
   
   /**

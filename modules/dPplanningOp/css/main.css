@@ -1,0 +1,24 @@
+
+#prog_plageop .insert input,
+#prog_plageop .insert div {
+  display: inline-block; 
+  margin: 0;
+  height: 16px;
+  vertical-align: middle;
+}
+
+#prog_plageop label.insert {
+  display: block;
+  font-size: 0.9em;
+  color: #666;
+}
+
+#prog_plageop .insert div {
+  width: 16px;
+  background-image: url(../../../style/mediboard/images/buttons/right.png?3); 
+  background-repeat: no-repeat;
+}
+
+#prog_plageop .insert input:checked+div {
+  background-image: url(../../../style/mediboard/images/buttons/right-selected.png?3); 
+}
