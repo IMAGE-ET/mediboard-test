@@ -626,9 +626,9 @@ class CCompteRendu extends CDocumentItem {
       "CBloodSalvage", "CConsultAnesth", "CConsultation", "CDossierMedical", "CRPU",
       "CFunctions", "CGroups", "CMediusers", "COperation", "CPatient", "CSejour"
     );
-		if(CModule::getActive("dPprescription")){
-			$all_classes[] = "CPrescription";
-		}
+    if(CModule::getActive("dPprescription")){
+      $all_classes[] = "CPrescription";
+    }
     $installed = CApp::getInstalledClasses(null, $all_classes);
     
     foreach ($installed as $key => $class) {
@@ -910,9 +910,10 @@ class CCompteRendu extends CDocumentItem {
     $query = "
       SELECT 
         COUNT(`compte_rendu_id`) AS `docs_count`, 
-        SUM(1) AS `docs_weight`,
+        SUM(LENGTH(`content_html`.`content`)) AS `docs_weight`,
         `author_id` AS `owner_id`
       FROM `compte_rendu` 
+      LEFT JOIN `content_html` ON `compte_rendu`.`content_id` = `content_html`.`content_id`
       GROUP BY `owner_id`
       ORDER BY `docs_weight` DESC";
     return $ds->loadList($query);
@@ -927,11 +928,12 @@ class CCompteRendu extends CDocumentItem {
     $query = "
       SELECT 
         COUNT(`compte_rendu_id`) AS `docs_count`, 
-        SUM(1) AS `docs_weight`, 
+        SUM(LENGTH(`content_html`.`content`)) AS `docs_weight`,
         `object_class`, 
         `file_category_id` AS `category_id`
       FROM `compte_rendu` 
-      WHERE `user_id` $in_owner
+      LEFT JOIN `content_html` ON `compte_rendu`.`content_id` = `content_html`.`content_id`
+      WHERE `author_id` $in_owner
       GROUP BY `object_class`, `category_id`";
     return $ds->loadList($query);
   }
