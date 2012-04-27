@@ -16,7 +16,7 @@ $file = new CFile;
 $smarty = new CSmartyDP();
 $smarty->assign("listNbFiles"  , range(1,10));
 $smarty->assign("today", mbDate());
-$smarty->assign("nb_files", $file->countList());
+$smarty->assign("nb_files", $file->countList() / 100);
 $smarty->display("configure.tpl");
 
 ?>

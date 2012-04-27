@@ -77,9 +77,7 @@
       <form name="selectDateFiles" method="get">
         <select name="step_from">
           {{foreach from=0|range:$nb_files item=i}}
-            {{if $i % 100 == 0}}
             <option value="{{$i}}">{{$i}}</option>
-            {{/if}}
           {{/foreach}}
         </select>
         
