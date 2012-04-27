@@ -1,5 +1,5 @@
 <!-- Formulaire d'une unité foncitonnelle -->
-<form name="Edit-CUniteFonctionnelle" action="" method="post" onsubmit="submit_Ajax(this, 'UF')">
+<form name="Edit-CUniteFonctionnelle" action="" method="post" onsubmit="return submit_Ajax(this, 'UF')">
 <input type="hidden" name="m" value="hospi" />
 <input type="hidden" name="dosql" value="do_uf_aed" />
 <input type="hidden" name="del" value="0" />
