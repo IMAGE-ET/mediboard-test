@@ -211,7 +211,7 @@
   
   </script>
 
-  <form name="download_etiq" style="display: none;" action="?" target="_blank" method="get">
+  <form name="download_etiq" style="display: none;" action="?" target="_blank" method="get" class="prepared">
     <input type="hidden" name="m" value="dPhospi" />
     <input type="hidden" name="a" value="print_etiquettes" />
     <input type="hidden" name="object_id" value="{{$rpu->_id}}" />

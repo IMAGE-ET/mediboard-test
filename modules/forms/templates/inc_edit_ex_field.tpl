@@ -169,7 +169,7 @@ Main.add(function(){
           </th>
           <td>
             <select name="_spec_type" onchange="ExFieldSpec.edit(this.form)">
-              {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
+              {{foreach from="CExClassField::getTypes"|static_call:null key=_key item=_class}}
                 <option value="{{$_key}}" {{if $_key == $spec_type && !$ex_field->concept_id}}selected="selected"{{/if}}>
                   {{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}
                 </option>

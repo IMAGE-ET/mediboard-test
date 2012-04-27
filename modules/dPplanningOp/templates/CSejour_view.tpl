@@ -30,7 +30,7 @@
   }
 </script>
 
-<form name="download_etiq_{{$sejour->_id}}" style="display: none;" action="?" target="_blank" method="get">
+<form name="download_etiq_{{$sejour->_id}}" style="display: none;" action="?" target="_blank" method="get" class="prepared">
   <input type="hidden" name="m" value="dPhospi" />
   <input type="hidden" name="a" value="print_etiquettes" />
   <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
@@ -64,19 +64,19 @@
       {{mb_script module=planningOp script=sejour ajax=true}}
 
       {{if $can->edit}}
-			<button type="button" class="edit" onclick="Sejour.edit('{{$sejour->_id}}');">
-				{{tr}}Modify{{/tr}}
-			</button>
+      <button type="button" class="edit" onclick="Sejour.edit('{{$sejour->_id}}');">
+        {{tr}}Modify{{/tr}}
+      </button>
       <button type="button" class="search" onclick="editPrestations('{{$sejour->_id}}')">Prestations</button>
       {{/if}}
       
       {{if $sejour->type != "urg" && @$modules.dPadmissions->_can->read}}
-			<button type="button" class="search" onclick="Sejour.admission('{{$sejour->_date_entree_prevue}}');">
-				{{tr}}Admission{{/tr}}
-			</button>
+      <button type="button" class="search" onclick="Sejour.admission('{{$sejour->_date_entree_prevue}}');">
+        {{tr}}Admission{{/tr}}
+      </button>
       {{/if}}
-			
-			{{if $sejour->type != "urg" && $sejour->type != "ssr" && @$modules.soins->_can->read}}
+      
+      {{if $sejour->type != "urg" && $sejour->type != "ssr" && @$modules.soins->_can->read}}
       <button type="button" class="search" onclick="Sejour.showDossierSoins('{{$sejour->_id}}')">
         {{tr}}module-soins-court{{/tr}}
       </button>
@@ -93,7 +93,7 @@
         {{tr}}module-dPurgences-long{{/tr}}
       </button>
       {{/if}}
-	  
+    
       {{if @$modules.brancardage->_can->read}}
         {{mb_script module=brancardage script=creation_brancardage ajax=true}}
         <button type="button" class="edit" onclick="CreationBrancard.edit('{{$sejour->_id}}');" style="width:80px;">

@@ -116,7 +116,7 @@ Main.add(function(){
         
         {{if !$object->_id}}
           <select name="_spec_type" onchange="ExConceptSpec.edit(this.form)">
-            {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
+            {{foreach from="CExClassField::getTypes"|static_call:null key=_key item=_class}}
               {{if !$conf.forms.CExConcept.force_list || ($_key != "enum" && $_key != "set")}}
                 <option value="{{$_key}}" {{if $_key == $spec_type && !$object->ex_list_id}}selected="selected"{{/if}}>
                   {{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}

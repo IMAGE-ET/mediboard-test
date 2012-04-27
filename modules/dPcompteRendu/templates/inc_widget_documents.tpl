@@ -10,7 +10,8 @@
 {{assign var=object_id value=$object->_id}}
 {{unique_id var=unique_id}}
 
-<form name="download_etiq_{{$object->_class}}_{{$object->_id}}" style="display: none;" action="?" target="_blank" method="get">
+{{if $nb_modeles_etiquettes}}
+<form name="download_etiq_{{$object->_class}}_{{$object->_id}}" style="display: none;" action="?" target="_blank" method="get" class="prepared">
   <input type="hidden" name="m" value="dPhospi" />
   <input type="hidden" name="a" value="print_etiquettes" />
   <input type="hidden" name="object_class" value="{{$object->_class}}" />
@@ -18,8 +19,9 @@
   <input type="hidden" name="suppressHeaders" value="1" />
   <input type="hidden" name="dialog" value="1" />
 </form>
+{{/if}}
 
-<form name="DocumentAdd-{{$unique_id}}-{{$object->_guid}}" action="?m={{$m}}" method="post">
+<form name="DocumentAdd-{{$unique_id}}-{{$object->_guid}}" action="?m={{$m}}" method="post" class="prepared">
 <input type="text" value="&mdash; Modèle" name="keywords_modele" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 5em;" />
 <input type="text" value="&mdash; Pack" name="keywords_pack" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 4em;"/>
 
@@ -82,18 +84,15 @@ Main.add(function() {
     $V(input, '');
   } 
 });
-</script>
 
-<!-- Création via ModeleSelector -->
-
-<script type="text/javascript">
-  modeleSelector[{{$object_id}}] = new ModeleSelector("DocumentAdd-{{$unique_id}}-{{$object->_guid}}", null, "_modele_id", "_object_id");
+//Création via ModeleSelector
+modeleSelector[{{$object_id}}] = new ModeleSelector("DocumentAdd-{{$unique_id}}-{{$object->_guid}}", null, "_modele_id", "_object_id");
 </script>
 
 <button type="button" class="search notext" onclick="modeleSelector[{{$object_id}}].pop('{{$object_id}}','{{$object_class}}','{{$praticien->_id}}')">
-	{{if $praticien->_can->edit}}
+  {{if $praticien->_can->edit}}
   Tous
-	{{else}}
+  {{else}}
   Modèles disponibles
   {{/if}}
 </button>

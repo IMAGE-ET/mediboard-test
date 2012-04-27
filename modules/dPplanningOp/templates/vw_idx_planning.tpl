@@ -5,13 +5,17 @@
 <script type="text/javascript">
 
 function updateListOperations(date) {
-  var url = new Url;
-  url.setModuleAction("dPplanningOp", "httpreq_vw_list_operations");
-
-  url.addParam("pratSel" , "{{$selPrat}}");
-  url.addParam("date"    , date);
-
+  var url = new Url("dPplanningOp", "httpreq_vw_list_operations");
+  url.addParam("pratSel", "{{$selPrat}}");
+  url.addParam("date"   , date);
   url.requestUpdate('operations');
+  
+  var row = $("date-"+date);
+  if (row) {
+    row.addUniqueClassName("selected");
+  }
+  
+  return false;
 }
 
 Main.add(function () {
@@ -64,10 +68,10 @@ Main.add(function () {
           <th colspan="2">Nb. Opér.</th>
         </tr>
         {{foreach from=$listDays key=curr_date item=curr_day}}
-        <tbody class="hoverable">
+        <tbody class="hoverable" id="date-{{$curr_date|iso_date}}">
         <tr>
-          <td align="right" rowspan="{{$curr_day|@count}}">
-            <a href="#nothing" onclick="updateListOperations('{{$curr_date|iso_date}}')">
+          <td style="text-align: right;" rowspan="{{$curr_day|@count}}">
+            <a href="#nothing" onclick="return updateListOperations('{{$curr_date|iso_date}}')">
               {{$curr_date|date_format:"%a %d"}}
             </a>
           </td>

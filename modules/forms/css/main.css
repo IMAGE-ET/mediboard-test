@@ -1,0 +1,181 @@
+.out-of-grid div {
+  /*display: inline-block;*/
+}
+
+.label-list .draggable,
+.field-list .draggable {
+  border: 1px dotted #aaa;
+  margin: 2px;
+  padding: 2px;
+}
+
+.droppable.grid .draggable {
+  display: block;
+}
+
+.droppable.grid .draggable.label {
+  /*text-align: right;*/
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.field-list .field {
+  white-space: normal;
+}
+
+.grid .field:hover .field-info,
+.field-list .field .field-info {
+  display: block !important;
+  position: absolute;
+  top: -1.5em;
+  color: #333;
+  background: #ddd;
+  padding: 0px 1em;
+  -moz-border-radius-topleft: 4px;
+  -moz-border-radius-topright: 4px;
+  -webkit-border-top-left-radius: 4px;
+  -webkit-border-top-right-radius: 4px;
+  border-radius-topleft: 4px;
+  border-radius-topright: 4px;
+}
+
+.grid .field:hover .field-info {
+  color: #fff;
+  background: #999;
+}
+
+.field-list .field {
+  margin-top: 1.2em;
+}
+
+.field .field-content {
+  overflow-y: hidden;
+}
+
+.field-list .field .field-content {
+  max-height: 2.5em;
+}
+
+.cell[rowspan] .grid .field .field-content {
+  max-height: none;
+}
+
+.grid .field .field-content,
+.cell[rowspan="1"] .grid .field .field-content {
+  max-height: 3.5em;
+}
+
+.draggable .overlay {
+  position:absolute;
+  top:0;
+  left:0;
+  bottom:0;
+  right:0;
+}
+
+.draggable .size .arrows {
+  position: absolute;
+}
+
+.draggable .size .col {
+  right: 0;
+  top: 50%;
+  margin-top: -8px;
+}
+
+.draggable .size .row {
+  left: 50%;
+  bottom: 0;
+}
+
+.draggable .size button {
+  background: none;
+  border: none;
+}
+
+.draggable .size {
+  display: none;
+}
+
+.drop-grid .draggable:hover .size {
+  /*display: block;*/
+}
+
+.grid .hostfield .field-name, 
+.hostfield.dragging .field-name {
+  display: inline !important;
+}
+
+.hostfield {
+  background-color: rgb(205,252,204);
+  background-color: rgba(205,252,204,0.4);
+}
+
+.draggable.hr {
+  padding: 6px;
+}
+
+.message_text {
+  min-height: 1.8em;
+}
+
+div.ex-message-title {
+  font-weight: bold;
+  border-bottom: 1px solid #666;
+  font-size: 1.2em;
+  /*left: 0.5em; 
+  right: 0.5em; 
+  position: absolute;*/
+}
+
+table.cell-layout {
+  empty-cells: hide;
+  line-height: 10px;
+  font-family: monospace;
+  position: absolute;
+  right: 0;
+  top: -10px;
+}
+
+table.cell-layout td {
+  padding: 0;
+}
+
+table.cell-layout a {
+  display: inline;
+  cursor: pointer;
+}
+
+table.cell-layout tr.middle {
+  line-height: 6px;
+}
+
+div.cell-layout-wrapper {
+  display: none;
+}
+
+.cell:hover div.cell-layout-wrapper {
+  /*display: block;*/
+}
+
+form[name="form-grid-layout"].pickmode .draggable {
+  cursor: pointer;
+}
+
+form[name="form-grid-layout"].pickmode .draggable.picked {
+  outline: 2px solid red;
+}
+
+.ua-firefox form[name="form-grid-layout"].pickmode .draggable.picked {
+  outline: none;
+  box-shadow: 0 0 0 2px red;
+}
+
+form[name="form-grid-layout"].pickmode .drop-grid .droppable:hover {
+  outline: 2px solid green;
+}
+
+.ua-firefox form[name="form-grid-layout"].pickmode .drop-grid .droppable:hover {
+  outline: none;
+  box-shadow: 0 0 0 2px green;
+}

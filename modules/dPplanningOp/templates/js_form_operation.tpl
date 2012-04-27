@@ -28,9 +28,9 @@ function refreshListCCAM(mode) {
   var iCode = 0;
   while (sCode = aCcam[iCode++]) {
     var sCodeNode = mode == "expert" ? 
-		 printf("<button class='remove' type='button' onclick='oCcamField.remove(\"%s\")'>%s<\/button>", sCode, sCode) :
-		 sCode;
-		 
+     printf("<button class='remove' type='button' onclick='oCcamField.remove(\"%s\")'>%s<\/button>", sCode, sCode) :
+     sCode;
+     
     aCodeNodes.push(sCodeNode);
   }
   oCcamNode.innerHTML = aCodeNodes.join(mode == "easy" ? " &mdash; " : "");
@@ -210,32 +210,32 @@ function updateEntreePrevue() {
   updateSortiePrevue();
 }
 
-CanBloc = {{$modules.dPbloc->_can|json}};	
+CanBloc = {{$modules.dPbloc->_can|json}};  
 
 function cancelOperation() {  
   var oForm = document.editOp;
   var oElement = oForm.annulee;
   
   if (oElement.value == "0") {
-	  // Tester supérieur à 0 semble obligatoire
-	  if (oForm._count_actes.value > 0) {
-	    var msg = "Attention, l'intervention a probablement déjà eu lieu.\n\n";
-	
-	  	if (CanBloc.edit) {
-	  	  if (!confirm(msg + "Voulez-vous malgré tout l'annuler ?")) {
-	  	  	return;
-	  	 	}
-	  	}
-	  	else {
-	  	  alert(msg + "Veuillez vous adresser au responsable de bloc pour annuler cette intervention");
-	  	  return;
-	  	}
-	  }
-	  
+    // Tester supérieur à 0 semble obligatoire
+    if (oForm._count_actes.value > 0) {
+      var msg = "Attention, l'intervention a probablement déjà eu lieu.\n\n";
+  
+      if (CanBloc.edit) {
+        if (!confirm(msg + "Voulez-vous malgré tout l'annuler ?")) {
+          return;
+         }
+      }
+      else {
+        alert(msg + "Veuillez vous adresser au responsable de bloc pour annuler cette intervention");
+        return;
+      }
+    }
+    
     if (confirm("Voulez-vous vraiment annuler l'intervention ?")) {
       if (confirm("Souhaitez-vous annuler le Séjour correspondant ?\n\nATTENTION, cette action annulera toutes les interventions de ce séjour !")) {
         if (checkCancelAlerts()) {
-         	document.editSejour.annule.value = 1;
+           document.editSejour.annule.value = 1;
         }
       }
       

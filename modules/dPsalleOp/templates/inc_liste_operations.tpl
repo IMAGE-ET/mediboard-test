@@ -42,14 +42,14 @@
   <td class="text" rowspan="{{$rowspan}}">
   {{/if}}
     <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;op={{$_operation->_id}}" title="Coder l'intervention">
-		  {{if ($urgence && $salle) || $_operation->_ref_plageop->spec_id}}
-		    {{$_operation->_ref_chir->_view}} - 
-		  {{/if}}
-	    {{if $_operation->time_operation != "00:00:00"}}
-	      {{$_operation->time_operation|date_format:$conf.time}}
-	    {{else}}
-	      NP
-	    {{/if}}
+      {{if ($urgence && $salle) || $_operation->_ref_plageop->spec_id}}
+        {{$_operation->_ref_chir->_view}} - 
+      {{/if}}
+      {{if $_operation->time_operation != "00:00:00"}}
+        {{$_operation->time_operation|date_format:$conf.time}}
+      {{else}}
+        NP
+      {{/if}}
     </a>
     {{if $vueReduite}}
       <button class="print notext not-printable" onclick="printFicheBloc({{$_operation->_id}})">{{tr}}Print{{/tr}}</button>
@@ -61,13 +61,13 @@
     <div class="warning">
       <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
             onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
-    	  {{$_operation->_ref_patient->_view}}
-    	  {{if $vueReduite}}
-    	    ({{$_operation->_ref_patient->_age}} ans)
-    	  {{/if}}
-    	</span>
-    	<br />
-	    Intervention déplacée vers {{$_operation->_ref_salle->_view}}
+        {{$_operation->_ref_patient->_view}}
+        {{if $vueReduite}}
+          ({{$_operation->_ref_patient->_age}} ans)
+        {{/if}}
+      </span>
+      <br />
+      Intervention déplacée vers {{$_operation->_ref_salle->_view}}
     </div>
   </td>
   
@@ -91,7 +91,7 @@
   </td>
   
   <td class="text">
-		{{mb_ternary var=direction test=$urgence value=vw_edit_urgence other=vw_edit_planning}}
+    {{mb_ternary var=direction test=$urgence value=vw_edit_urgence other=vw_edit_planning}}
     <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}" {{if $_operation->_count_actes == "0"}}style="border-color: #F99" class="mediuser"{{/if}}>
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')" >
       {{if $_operation->libelle}}

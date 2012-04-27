@@ -260,7 +260,7 @@ Main.add(function(){
           
         {{else}}
         
-          {{if !($_type == "list" || $_type == "bool" && $_name == "default" || $_type == "bool" && $_name == "notNull")}}
+          {{if !($_type == "list" || $_type == "bool" && $_name == "default" || $_type == "bool" && ($_name == "notNull" || $_name == "vertical"))}}
             <input type="hidden" name="{{$_name}}" value="{{$spec_value}}" />
           {{/if}}
         
@@ -274,7 +274,8 @@ Main.add(function(){
             
           {{* bool *}}
           {{elseif $_type == "bool"}}
-            {{if $_name == "notNull"}}
+            {{if $_name == "notNull" || 
+                 $_name == "vertical"}}
               {{if !in_array($_name, $boolean)}}
                 <label><input type="radio" name="{{$_name}}" value=""  {{if $spec_value === null || $spec_value === ""}}checked="checked"{{/if}} /> {{tr}}Undefined{{/tr}}</label>
               {{/if}}
