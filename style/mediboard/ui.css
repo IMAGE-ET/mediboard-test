@@ -19,22 +19,22 @@ td a.email {
 }
 
 #login table td.logo {
-  width: 33%;
   text-align: center;
   font-size: 0.9em;
   white-space: normal;
 }
 
-#login input, #login label{
-  font-size: 1.4em;
+#login input, 
+#login label,
+#login button {
+  font-size: 14px;
 }
 
 #login button {
-  font-size: 1.3em;
-  padding: 4px;
   height: 26px;
+  line-height: 22px;
+  padding: 0 4px;
 }
-
 
 /* Global header */
 #header {
@@ -578,13 +578,21 @@ td.show {
 }
 
 div.rank {
-  font-size: 15px; 
-  border-radius: 20px; 
+  font-size: 1.3em; 
+  border-radius: 50%; 
   border: 2px solid #888; 
-  padding: 0px 4px; 
   background: #fff; 
   font-weight: bold; 
-  margin: 0 2px 0 -1px;
+  display: inline-block;
+  width: 1.3em;
+  height: 1.3em;
+  vertical-align: middle;
+  text-align: center;
+  margin: 2px;
+}
+
+div.rank.desired {
+  background-color: #E3C006;
 }
 
 .datepickerControl {
@@ -609,8 +617,8 @@ div.rank {
 
 /** 
  *  Quand les datepicker sont dans des modales (position:fixed) on ne met pas 
- *  le "picker" a la fin de body mais a coté du input, il faut donc forcer 
- *  le positionnement a coté du input
+ *  le "picker" a la fin de body mais a cotï¿½ du input, il faut donc forcer 
+ *  le positionnement a cotï¿½ du input
  */
 .modal .datepickerControl {
   position: absolute!important; 
