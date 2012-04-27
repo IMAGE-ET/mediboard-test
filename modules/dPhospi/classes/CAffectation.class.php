@@ -291,7 +291,9 @@ class CAffectation extends CMbObject {
     if ($changeSejour) {
       $sejour->_no_synchro = 1;
       $sejour->updateFormFields();
-      $sejour->store();
+      if ($msg = $sejour->store()) {
+        return $msg;
+      }
     }
     
     return $msg;
