@@ -1,5 +1,5 @@
 <script type="text/javascript">
-  $("count_{{$type}}_{{$type_mouvement}}").update("{{$update_count}}");
+  $('count_{{$type}}_{{$type_mouvement}}').update('('+'{{$update_count}}'+')');
   {{if $type != "deplacements"}}
   Main.add(function () {
     controlTabs = new Control.Tabs.create('tabs-edit-mouvements-{{$type}}_{{$type_mouvement}}', true);

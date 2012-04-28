@@ -99,18 +99,18 @@ function refreshList(order_col, order_way, type, type_mouvement) {
         {{else}}
           {{tr}}CSejour.type_mouvement.{{$type_mouvement}}{{/tr}} {{tr}}CSejour.type.{{$type}}{{/tr}}
         {{/if}}
-        (<span id="count_{{$type}}_{{$type_mouvement}}">{{$_liste.place}}/{{$_liste.non_place}}</span>)
+        <small id="count_{{$type}}_{{$type_mouvement}}">({{$_liste.place}}/{{$_liste.non_place}})</small>
       </a>
     </li>
     {{/if}}
   {{/foreach}}
   {{/foreach}}
   <li onmousedown="refreshList(null, null, 'deplacements')">
-    <a href="#deplacements_">Déplacements(<span id="count_deplacements_">{{$deplacements}}</span>)</a>
+    <a href="#deplacements_">Déplacements <small id="count_deplacements_">({{$deplacements}})</small></a>
   </li>
   {{if $type != "ambu"}}
   <li onmousedown="refreshList(null, null, 'presents')">
-    <a href="#presents_">Patients présents (<span id="count_presents_">{{$presents}}/{{$presentsNP}}</span>)</a>
+    <a href="#presents_">Patients présents <small id="count_presents_">({{$presents}}/{{$presentsNP}})</small></a>
   </li>
   {{/if}}
 </ul>
