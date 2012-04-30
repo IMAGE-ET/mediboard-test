@@ -158,7 +158,7 @@ function checkAccidentEasy(){
   if (oFormEasy) {
     var date_accident    = $V(oFormEasy.date_accident);
     var date_accident_da = $V(oFormEasy.date_accident_da);
-    var nature_accident  = $V(oFormEasy.nature_acci{{mb_default var=dialog value=0}}dent);
+    var nature_accident  = $V(oFormEasy.nature_accident);
     $V(oForm.date_accident   , date_accident   , false);
     $V(oForm.date_accident_da, date_accident_da, false);
     $V(oForm.nature_accident , nature_accident , false);
