@@ -9,6 +9,7 @@ $dPconfig["sa"] = array (
   
   // Send 
   "send_only_with_ipp_nda" => "0",
+  "send_only_with_type"    => "",
 );
 
 ?>

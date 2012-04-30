@@ -28,6 +28,10 @@
     {{mb_include module=system template=inc_config_enum var=trigger_sejour    values=facture|sortie_reelle|testCloture}}
     {{mb_include module=system template=inc_config_enum var=trigger_operation values=facture|testCloture}}
     
+    {{mb_include module=system template=inc_config_bool var=send_only_with_ipp_nda}}
+    {{assign var=list_types_sejour value='|'|implode:$sejour_types}}
+    {{mb_include module=system template=inc_config_enum var=send_only_with_type values=|$list_types_sejour}}
+    
     <tr>
       <td class="button" colspan="10">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

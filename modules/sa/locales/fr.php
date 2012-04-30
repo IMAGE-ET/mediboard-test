@@ -1,10 +1,24 @@
 <?php
 $locales['CSaObjectHandler'] = 'Gestionnaire SA';
+$locales['CSaObjectHandler-send_only_with_type'] = 'Le type du séjour \'%s\' n\'est pas pris en charge pour un envoi d\'actes';
 $locales['SA'] = 'SA';
 $locales['config-object_handlers-CSaObjectHandler'] = 'Activer le gestionnaire SA';
 $locales['config-object_handlers-CSaObjectHandler-desc'] = 'Activer le gestionnaire SA';
 $locales['config-object_server-CSaObjectHandler'] = 'Serveur d\'objets SA';
 $locales['config-sa'] = 'Configuration mode SA';
+$locales['config-sa-send_only_with_ipp_nda'] = 'Envoyer les actes ssi IPP et NDA';
+$locales['config-sa-send_only_with_ipp_nda-desc'] = 'Envoyer les actes si et seulement si IPP et NDA';
+$locales['config-sa-send_only_with_type'] = 'Envoyer les actes d\'un type de séjour';
+$locales['config-sa-send_only_with_type-'] = 'Tous';
+$locales['config-sa-send_only_with_type-ambu'] = 'Ambulatoire';
+$locales['config-sa-send_only_with_type-comp'] = 'Hospi. complète';
+$locales['config-sa-send_only_with_type-consult'] = 'Consultation';
+$locales['config-sa-send_only_with_type-desc'] = 'Envoyer les actes d\'un type de séjour';
+$locales['config-sa-send_only_with_type-exte'] = 'Externe';
+$locales['config-sa-send_only_with_type-psy'] = 'Psychiatrie';
+$locales['config-sa-send_only_with_type-seances'] = 'Séance(s)';
+$locales['config-sa-send_only_with_type-ssr'] = 'SSR';
+$locales['config-sa-send_only_with_type-urg'] = 'Passage aux urgences';
 $locales['config-sa-server'] = 'Mode Serveur';
 $locales['config-sa-server-desc'] = 'Mode Serveur';
 $locales['config-sa-trigger_operation'] = 'Trigger sur l\'intervention';

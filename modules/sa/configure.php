@@ -10,8 +10,12 @@
 
 CCanDo::checkAdmin();
 
+$sejour = new CSejour();
+$sejour_types = $sejour->_specs["type"]->_list;
+
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("sejour_types", $sejour_types);
 $smarty->display("configure.tpl");
 
 ?>
