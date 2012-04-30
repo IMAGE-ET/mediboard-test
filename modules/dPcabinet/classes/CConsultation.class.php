@@ -125,7 +125,7 @@ class CConsultation extends CCodable {
   var $_du_tiers_restant         = null;
   var $_reglements_total_tiers   = null;
   var $_forfait_se               = null;
-  var $_forfait_fsd              = null;
+  var $_forfait_sd               = null;
   var $_facturable               = null;
   
   // Filter Fields
@@ -230,7 +230,7 @@ class CConsultation extends CCodable {
     $specs["_etat_reglement_patient"]   = "enum list|reglee|non_reglee";
     $specs["_etat_reglement_tiers"  ]   = "enum list|reglee|non_reglee";
     $specs["_forfait_se"]               = "bool default|0";
-    $specs["_forfait_fsd"]              = "bool default|0";
+    $specs["_forfait_sd"]               = "bool default|0";
     $specs["_facturable"]               = "bool default|1";
     
     $specs["_date"]             = "date";
@@ -950,7 +950,7 @@ TESTS A EFFECTUER
     // must be BEFORE loadRefSejour()
     $facturable  = $this->_facturable;
     $forfait_se  = $this->_forfait_se;
-    $forfait_fsd = $this->_forfait_fsd;
+    $forfait_sd  = $this->_forfait_sd;
     
     $this->loadRefSejour();
     $this->_adjust_sejour = false;
@@ -1090,16 +1090,16 @@ TESTS A EFFECTUER
     
     // Forfait SE et facturable. A laisser apres le store()
     if ($this->sejour_id && CAppUI::conf("dPcabinet CConsultation attach_consult_sejour")) {
-      if ($forfait_se !== null || $facturable !== null || $forfait_fsd !== null) {
+      if ($forfait_se !== null || $facturable !== null || $forfait_sd !== null) {
         $this->_ref_sejour->forfait_se = $forfait_se;
-        $this->_ref_sejour->fsd        = $forfait_fsd;
+        $this->_ref_sejour->sd         = $forfait_sd;
         $this->_ref_sejour->facturable = $facturable;
         if ($msg = $this->_ref_sejour->store()) {
           return $msg;
         }
-        $this->_forfait_se  = null;
-        $this->_forfait_fsd = null;
-        $this->_facturable  = null;
+        $this->_forfait_se = null;
+        $this->_forfait_sd = null;
+        $this->_facturable = null;
       }
     }
     

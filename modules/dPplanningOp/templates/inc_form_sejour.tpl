@@ -925,8 +925,8 @@ Main.add( function(){
 <tr>
   <th>{{mb_label object=$sejour field="forfait_se"}}</th>
   <td>{{mb_field object=$sejour field="forfait_se"}}</td>
-  <th>{{mb_label object=$sejour field="forfait_fsd"}}</th>
-  <td>{{mb_field object=$sejour field="forfait_fsd"}}</td>
+  <th>{{mb_label object=$sejour field="forfait_sd"}}</th>
+  <td>{{mb_field object=$sejour field="forfait_sd"}}</td>
 </tr>
 {{/if}}
 </tbody>

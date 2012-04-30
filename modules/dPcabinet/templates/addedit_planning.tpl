@@ -421,8 +421,8 @@ Main.add(function () {
             <td>{{mb_field object=$consult field="_forfait_se" typeEnum="checkbox"}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$consult field="_forfait_fsd"}}</th>
-            <td>{{mb_field object=$consult field="_forfait_fsd" typeEnum="checkbox"}}</td>
+            <th>{{mb_label object=$consult field="_forfait_sd"}}</th>
+            <td>{{mb_field object=$consult field="_forfait_sd" typeEnum="checkbox"}}</td>
           </tr>
           <tr>
             <th>{{mb_label object=$consult field="_facturable"}}</th>

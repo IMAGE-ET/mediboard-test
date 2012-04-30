@@ -1322,7 +1322,12 @@ class CSetupdPplanningOp extends CSetup {
                 ADD `forfait_fsd` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.41";
+     $this->makeRevision("1.41");
+     $query = "ALTER TABLE `sejour`
+                CHANGE `forfait_fsd` `forfait_sd` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.42";
   }
 }
 ?>
