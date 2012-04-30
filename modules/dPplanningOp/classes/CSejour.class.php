@@ -77,6 +77,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $adresse_par_prat_id = null;
   var $libelle             = null;  
   var $forfait_se          = null;
+  var $forfait_fsd         = null;
   var $commentaires_sortie = null;
   var $discipline_id       = null;
   var $ald                 = null;
@@ -309,6 +310,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["libelle"]                  = "str seekable autocomplete dependsOn|praticien_id";
     $props["facture"]                  = "bool default|0";
     $props["forfait_se"]               = "bool default|0";
+    $props["forfait_fsd"]              = "bool default|0";
     $props["commentaires_sortie"]      = "text helped";
     $props["discipline_id"]            = "ref class|CDisciplineTarifaire autocomplete|description show|0";
     $props["ald"]                      = "bool default|0";

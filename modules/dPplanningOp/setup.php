@@ -1317,7 +1317,12 @@ class CSetupdPplanningOp extends CSetup {
               ADD `rank_voulu` TINYINT (4) NOT NULL DEFAULT '0' AFTER `rank`;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.40";
+    $this->makeRevision("1.40");
+    $query = "ALTER TABLE `sejour`
+                ADD `forfait_fsd` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.41";
   }
 }
 ?>
