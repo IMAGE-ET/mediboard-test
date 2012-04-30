@@ -19,6 +19,7 @@ function menu() {
 	echo "[8] Log Ping for server load analysis\n";
 	echo "[9] Log Uptime for server load analysis\n";
 	echo "[10] Run MySQL performance tuning primer script\n";
+  echo "[11] Rotate binlogs\n";
 	echo "-------------------------------------------------------\n";
 	echo "[0] Quit\n";
 	
@@ -89,6 +90,11 @@ function menu() {
 			echo exec("clear") . "\n";
 			task10();
 			break;
+      
+    case "11":
+    	echo exec("clear") . "\n";
+      task11();
+      break;
 
 		// Exit program
 		case "0":
@@ -535,9 +541,9 @@ function task7() {
 
 function task8() {
 	
-	echo "###################################\n";
-	echo "Log Ping for server load analysis #\n";
-	echo "###################################\n\n";
+	echo "#####################################\n";
+	echo "# Log Ping for server load analysis #\n";
+	echo "#####################################\n\n";
 	
 	echo "[0] Return to main menu\n\n";
 
@@ -556,9 +562,9 @@ function task8() {
 
 function task9() {
 	
-	echo "###################################\n";
-	echo "Log Uptime for server load analysis #\n";
-	echo "###################################\n\n";
+	echo "#######################################\n";
+	echo "# Log Uptime for server load analysis #\n";
+	echo "#######################################\n\n";
 	
 	echo "[0] Return to main menu\n\n";
 
@@ -583,9 +589,9 @@ function task9() {
 
 function task10() {
 	
-	echo "############################################\n";
-	echo "Run MySQL performance tuning primer script #\n";
-	echo "############################################\n\n";
+	echo "##############################################\n";
+	echo "# Run MySQL performance tuning primer script #\n";
+	echo "##############################################\n\n";
 
 	echo "Select a mode:\n\n";
 	echo "[1] All (perform all checks [default]\n";
@@ -646,7 +652,16 @@ function task10() {
 	}
 
 	echo shell_exec("sh " . $GLOBALS['currentDir'] . "/tuning-primer.sh " . $mode) . "\n";
-		menu();
+	menu();
+}
+
+function task11() {
+  echo "##################\n";
+  echo "# Rotate binlogs #\n";
+  echo "##################\n\n";
+
+  echo shell_exec("sh " . $GLOBALS['currentDir'] . "/rotateBinlogs.sh") . "\n";
+  menu();  
 }
 
 // In order to have a password prompt that works on many OS (works on Unix, Windows XP and Windows 2003 Server)

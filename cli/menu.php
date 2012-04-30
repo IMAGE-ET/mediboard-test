@@ -9,6 +9,7 @@ require_once("rsyncupdate.php");
 require_once("baseBackup.php");
 require_once("replaceBase.php");
 require_once("request.php");
+require_once("rotateBinlogs.php");
 
 $currentDir = dirname(__FILE__);
 
@@ -303,6 +304,27 @@ banner      : show banner info\n\n";
     }
     break;
     
+  case "rotatebinlogs":
+  	
+    	if (count($argv) == 4) {
+    	  $userAdminDB = $argv[0];
+        $passAdminDB = $argv[1];
+        $binLogsDir = $argv[2];
+        $binLogIndexFilename = $argv[3];
+        
+        rotateBinlogs($userAdminDB, $passAdminDB, $binLogsDir, $binLogIndexFilename);
+        return 0;
+    	}
+      else {
+        echo "Usage: $command $task <MySQL_username> <MySQL_password> <binlogs_directory> <binlog-index_filename>\n
+<MySQL_username>  is the MySQL username allowed to connect, ie admin
+<MySQL_password> is the password of the MySQL user
+<binlogs_directory>  is the directory where binlogs are stored, ie /var/log/mysql
+<binlog-index_filename> is the name of the binlog-index file, ie log-bin.index\n\n";
+        return 1;
+      }
+  	break;
+    
   case "help":
     
     echo "\nUsage : $command <task> [<params>]\n
@@ -339,6 +361,7 @@ function menu() {
   echo "[8] Log Ping for server load analysis\n";
   echo "[9] Log Uptime for server load analysis\n";
   echo "[10] Run MySQL performance tuning primer script\n";
+  echo "[11] Rotate binlogs\n";
   echo "-------------------------------------------------------\n";
   echo "[0] Quit\n";
   
@@ -408,6 +431,12 @@ function menu() {
     case "10":
       echo exec("clear") . "\n";
       task10();
+      break;
+      
+    // Rotate binlogs
+    case "11":
+    	echo exec("clear") . "\n";
+      task11();
       break;
 
     // Exit program
@@ -942,6 +971,45 @@ function task10() {
   echo shell_exec("sh " . $GLOBALS['currentDir'] . "/../shell/tuning-primer.sh " . $mode) . "\n";
     menu();
 }
+
+function task11() {
+  echo "##################\n";
+  echo "# Rotate binlogs #\n";
+  echo "##################\n\n";
+  
+  echo "[0] Return to main menu\n\n";
+
+  echo "MySQL username: ";
+  $userAdminDB = trim(fgets(STDIN));
+  
+  if ($userAdminDB === "0") {
+    echo exec("clear") . "\n";
+    menu();
+  }
+  
+  $passAdminDB = prompt_silent("MySQL user password: ");
+  
+  echo "BinLogs directory [default /var/log/mysql]: ";
+  $binLogsDir = trim(fgets(STDIN));
+  
+  if ($binLogsDir === "") {
+    $binLogsDir = "/var/log/mysql";
+  }
+  
+  echo "BinLog index filename [default log-bin.index]: ";
+  $binLogIndexFilename = trim(fgets(STDIN));
+  
+  if ($binLogIndexFilename === "") {
+    $binLogIndexFilename = "log-bin.index";
+  }
+  
+  echo "\n";
+  rotateBinlogs($userAdminDB, $passAdminDB, $binLogsDir, $binLogIndexFilename);
+  menu();
+  
+}
+  
+  force_dir($backupDir);
 
 // In order to have a password prompt that works on many OS (works on Unix, Windows XP and Windows 2003 Server)
 // Source : http://stackoverflow.com/questions/187736/command-line-password-prompt-in-php
