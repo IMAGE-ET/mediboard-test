@@ -868,6 +868,7 @@ class COperation extends CCodable implements IPatientRelated {
   
   function loadRefsFwd($cache = false) {
     $this->loadRefsConsultAnesth();
+    $this->_ref_consult_anesth->countDocItems();
     $this->_ref_consult_anesth->loadRefConsultation();
     $this->_ref_consult_anesth->_ref_consultation->countDocItems();
     $this->_ref_consult_anesth->_ref_consultation->canRead();

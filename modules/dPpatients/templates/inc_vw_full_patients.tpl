@@ -211,7 +211,7 @@ onMergeComplete = function() {
       
       <td style="text-align:right;">
       {{if $_consult->_canRead}}
-        {{mb_include module=patients template=inc_form_docitems_button object=$_consult}}
+        {{mb_include module=patients template=inc_form_docitems_button object=$consult_anesth}}
       {{/if}}
       </td>
     </tr>
