@@ -388,7 +388,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
           else {
             if (!$current_node->getParent() || $current_node->getParent()->isOpen()) {
               CHL7v2::d(" --> !!!!!!!!!!!!!!!!! Segment non present et groupe requis");
-              //$this->error(CHL7v2Exception::SEGMENT_MISSING, (string)$current_node);
+              $this->error(CHL7v2Exception::SEGMENT_MISSING, (string)$current_node);
             }
           }
        
