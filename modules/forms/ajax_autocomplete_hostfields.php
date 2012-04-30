@@ -15,25 +15,24 @@ $keywords = CValue::get("_host_field_view");
 
 $ex_class = new CExClass;
 $ex_class->load($ex_class_id);
-$ex_class->getAvailableFields();
 $list = $ex_class->buildHostFieldsList();
 
 $show_views = false;
 
 // filtrage
 if ($keywords) {
-	$show_views = true;
-	
-	$re = preg_quote($keywords);
+  $show_views = true;
+  
+  $re = preg_quote($keywords);
   $re = CMbString::allowDiacriticsInRegexp($re);
   $re = str_replace("/", "\\/", $re);
   $re = "/($re)/i";
 
-	foreach($list as $_key => $element) {
-		if (!preg_match($re, $element["title"])) {
-			unset($list[$_key]);
-		}
-	}
+  foreach($list as $_key => $element) {
+    if (!preg_match($re, $element["title"])) {
+      unset($list[$_key]);
+    }
+  }
 }
 
 $smarty = new CSmartyDP();

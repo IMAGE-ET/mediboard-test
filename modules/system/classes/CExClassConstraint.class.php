@@ -206,6 +206,8 @@ class CExClassConstraint extends CMbObject {
     
     if (!$object_field) return false;
     
+    $object->loadView();
+    
     $object = $object_field["object"];
     $field  = $object_field["field"];
     
@@ -213,6 +215,8 @@ class CExClassConstraint extends CMbObject {
     if (!isset($object->_specs[$field])) {
       return false;
     }
+    
+    $object->loadView();
     
     if ($field == "CONNECTED_USER") {
       $value = $object->_guid;

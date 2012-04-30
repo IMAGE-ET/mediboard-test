@@ -394,7 +394,7 @@ class CExClass extends CMbObject {
       }*/
       
       // LEVEL 1
-      if ($_field[0] === "_" || // form field
+      if (($_field[0] === "_" && ($_spec->show === null || $_spec->show == 0)) || // form field
           !($_spec->show === null || $_spec->show == 1) || // not shown
           $_spec instanceof CRefSpec && $_spec->meta && !$this->_host_class_fields[$_spec->meta] instanceof CEnumSpec // not a finite meta class field
           ) {
