@@ -1003,8 +1003,8 @@ class CMediusers extends CMbObject {
     return $nb_days;
   }
   
-  function getAutocompleteList($keywords, $where = null, $limit = null) {
-    $ljoin = array("users" => "users.user_id = users_mediboard.user_id");
+  function getAutocompleteList($keywords, $where = null, $limit = null, $ljoin= null) {
+    $ljoin = array_merge($ljoin, array("users" => "users.user_id = users_mediboard.user_id"));
     $list = $this->seek($keywords, $where, $limit, null, $ljoin, "users.user_last_name");
     
     foreach($list as $_mediuser) {

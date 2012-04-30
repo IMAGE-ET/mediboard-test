@@ -42,6 +42,7 @@ $locales['CNaissance-msg-modify'] = 'Naissance modifiée';
 $locales['CNaissance-naissance_id'] = 'Identifiant';
 $locales['CNaissance-naissance_id-court'] = 'Identifiant';
 $locales['CNaissance-naissance_id-desc'] = 'Identifiant';
+$locales['CNaissance-only_pediatres'] = 'Seulement les pédiatres';
 $locales['CNaissance-operation_id'] = 'Opération';
 $locales['CNaissance-operation_id-court'] = 'Opération';
 $locales['CNaissance-operation_id-desc'] = 'Opération';

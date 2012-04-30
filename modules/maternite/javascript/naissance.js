@@ -14,7 +14,7 @@ Naissance = {
     if (callback) {
       url.addParam("callback", callback);
     }
-    url.requestModal(400);
+    url.requestModal(500, 400);
   },
   
   reloadNaissances : function(operation_id) {

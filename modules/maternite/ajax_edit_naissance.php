@@ -54,8 +54,7 @@ else {
   }
 }
 
-$praticien = new CMediusers;
-$praticiens = $praticien->loadProfessionnelDeSante(PERM_EDIT);
+$sejour->loadRefPraticien();
 
 $smarty = new CSmartyDP;
 
@@ -67,7 +66,6 @@ $smarty->assign("provisoire" , $provisoire);
 $smarty->assign("sejour_id"  , $sejour_id);
 $smarty->assign("callback"   , $callback);
 $smarty->assign("sejour"     , $sejour);
-$smarty->assign("praticiens" , $praticiens);
 $smarty->assign("operation_id", $operation_id);
 $smarty->assign("list_constantes", CConstantesMedicales::$list_constantes);
 
