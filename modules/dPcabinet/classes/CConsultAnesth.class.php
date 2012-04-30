@@ -440,6 +440,8 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     }
     $template->addProperty("Anesthésie - Mallampati", $img, false);
     $template->addProperty("Anesthésie - Remarques",  $this->conclusion);
+    $template->addProperty("Anesthésie - Score APFEL", $this->_score_apfel);
+    
   }
 
   function canDeleteEx() {
