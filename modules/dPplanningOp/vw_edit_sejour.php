@@ -14,6 +14,7 @@ $sejour_id    = CValue::getOrSession("sejour_id");
 $patient_id   = CValue::get("patient_id");
 $praticien_id = CValue::get("praticien_id");
 $grossesse_id = CValue::get("grossesse_id");
+$dialog       = CValue::get("dialog", 0);
 
 // Liste des Etablissements selon Permissions
 $etablissements = new CMediusers();
@@ -208,6 +209,8 @@ $smarty->assign("count_prestations", $count_prestations);
 $smarty->assign("hours", $hours);
 $smarty->assign("mins" , $mins);
 $smarty->assign("blocages_lit" , $blocages_lit);
+
+$smarty->assign("dialog", $dialog);
 
 $smarty->display("vw_edit_sejour.tpl");
 

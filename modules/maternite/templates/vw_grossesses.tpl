@@ -3,6 +3,19 @@
     var form = getForm("filterDate");
     Calendar.regField(form.date, null, {noView: true});
   });
+  
+  editSejour = function(sejour_id, grossesse_id, parturiente_id) {
+    var url = new Url("dPplanningOp", "vw_edit_sejour");
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("grossesse_id", grossesse_id);
+    url.addParam("patient_id", parturiente_id);
+    url.addParam("dialog", 1);
+    
+    url.modal({width: 1000, height: 700});
+    url.modalObject.observe("afterClose", function() {
+      getForm('filterDate').submit();
+    });
+  }
 </script>
 
 {{mb_script module=admissions script=admissions}}
@@ -49,18 +62,17 @@
         </span>
       </td>
       <td>
-        <ul style="line-height: 1.4em;">
-          {{foreach from=$_grossesse->_ref_sejours item=_sejour}}
-            <li>
-              <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
-                {{$_sejour}}
-              </span>
-            </li>
-          {{/foreach}}
-        </ul>
+        {{foreach from=$_grossesse->_ref_sejours item=_sejour}}
+          <div>
+            <button type="button" class="edit notext" onclick="editSejour({{$_sejour->_id}})"></button>
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
+              {{$_sejour}}
+            </span>
+          </div>
+        {{/foreach}}
       </td>
       <td class="narrow">
-        <a class="button new" href="?m=dPplanningOp&tab=vw_edit_sejour&grossesse_id={{$_grossesse->_id}}&sejour_id=0&patient_id={{$_grossesse->parturiente_id}}">Nouveau séjour</a>
+        <button class="new" onclick="editSejour(0, '{{$_grossesse->_id}}', '{{$_grossesse->parturiente_id}}');">{{tr}}CSejour-title-create{{/tr}}</button>
       </td>
     </tr>
   {{foreachelse}}

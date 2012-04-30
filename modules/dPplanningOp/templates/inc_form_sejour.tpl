@@ -13,6 +13,7 @@
 {{mb_script module="dPplanningOp" script="cim10_selector"}}
 {{mb_default var=count_prestations value=0}}
 {{mb_default var=_duree_prevue value=0}}
+{{mb_default var=dialog value=0}}
 
 {{if "maternite"|module_active}}
   {{assign var=maternite_active value="1"}}
@@ -157,7 +158,7 @@ function checkAccidentEasy(){
   if (oFormEasy) {
     var date_accident    = $V(oFormEasy.date_accident);
     var date_accident_da = $V(oFormEasy.date_accident_da);
-    var nature_accident  = $V(oFormEasy.nature_accident);
+    var nature_accident  = $V(oFormEasy.nature_acci{{mb_default var=dialog value=0}}dent);
     $V(oForm.date_accident   , date_accident   , false);
     $V(oForm.date_accident_da, date_accident_da, false);
     $V(oForm.nature_accident , nature_accident , false);
@@ -341,6 +342,11 @@ Main.add( function(){
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="dosql" value="do_sejour_aed" />
 <input type="hidden" name="del" value="0" />
+
+{{if $dialog}}
+  <input type="hidden" name="postRedirect" value="m=planningOp&a=vw_edit_sejour&dialog=1" />
+{{/if}}
+
 {{if $sejour->sortie_reelle && !$can->admin}}
 <!-- <input type="hidden" name="_locked" value="1" /> -->
 {{/if}}
