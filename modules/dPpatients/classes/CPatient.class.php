@@ -1094,6 +1094,8 @@ class CPatient extends CMbObject {
       $consult->_ref_chir->_ref_function->loadRefGroup();
       $consult->canRead();
       $consult->canEdit();
+      $consult->loadRefConsultAnesth()->countDocItems();
+      
       if ($maternite_active && $consult->grossesse_id) {
         $consult->_semaine_grossesse = ceil((mbDaysRelative($this->_ref_grossesses[$consult->grossesse_id]->_date_fecondation, $consult->_date))/7);
         $this->_ref_grossesses[$consult->grossesse_id]->_ref_consultations[$consult->_id] = $consult;
