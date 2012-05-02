@@ -71,7 +71,7 @@ ProtocoleSelector = {
       $V(oOpForm[this.sMin_op],            protocole._min_op);
       $V(oOpForm[this.sMateriel],          protocole.materiel);
       $V(oOpForm[this.sExamen],            protocole.examen);
-      
+      $V(oOpForm[this.sDuree_uscpo],       protocole.duree_uscpo);
       if (oOpForm[this.sDepassement] && oOpForm[this.sForfait] && oOpForm[this.sFournitures]) {
         $V(oOpForm[this.sDepassement],       protocole.depassement, false);
         $V(oOpForm[this.sForfait],           protocole.forfait, false);
@@ -94,9 +94,6 @@ ProtocoleSelector = {
     }
     if (this.sTypePec) {
       oSejourForm[this.sTypePec].value = protocole.type_pec; 
-    }
-    if (this.sDuree_uscpo) {
-      oOpForm[this.sDuree_uscpo].value = protocole.duree_uscpo;
     }
     if(this.sServiceId && (!oSejourForm.sejour_id.value || !oSejourForm[this.sServiceId].value)) {
       $V(oSejourForm[this.sServiceId], protocole.service_id);
