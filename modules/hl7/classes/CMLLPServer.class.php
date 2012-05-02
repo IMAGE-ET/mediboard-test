@@ -17,7 +17,10 @@ if (!file_exists($socket_server_class)) {
   return;
 }
 
-require $socket_server_class;
+if (!class_exists("SocketServer", false)) {
+  require $socket_server_class;
+}
+
 require "$dir/includes/version.php";
 
 class CMLLPServer {
