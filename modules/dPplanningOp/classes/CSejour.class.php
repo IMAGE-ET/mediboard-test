@@ -1904,6 +1904,10 @@ class CSejour extends CCodable implements IPatientRelated {
     $template->addProperty("Sejour - Libelle"                 , $this->getFormattedValue("libelle"));
     $template->addProperty("Sejour - Transport"               , $this->getFormattedValue("transport"));
     
+    $this->loadRefsFiles();
+    $list = CMbArray::pluck($this->_ref_files, "file_name");
+    $template->addListProperty("Sejour - Liste des fichiers", $list);
+    
     if(CAppUI::conf("dPurgences old_rpu") == "1"){
       if (CModule::getActive("sherpa")) {
         $rpu = $this->loadRefRPU();

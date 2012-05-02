@@ -1474,6 +1474,10 @@ class CPatient extends CMbObject {
     $constantes_minimal_vert  = $smarty->fetch("print_constantes_vert.tpl",'','',0);
     $constantes_minimal_vert  = preg_replace('`([\\n\\r])`', '', $constantes_minimal_vert);
     
+    $this->loadRefsFiles();
+    $list = CMbArray::pluck($this->_ref_files, "file_name");
+    $template->addListProperty("Patient - Liste des fichiers", $list);
+    
     $template->addProperty("Patient - Constantes - mode complet horizontal", $constantes_complet_horiz, '', false);
     $template->addProperty("Patient - Constantes - mode minimal horizontal", $constantes_minimal_horiz, '', false);
     $template->addProperty("Patient - Constantes - mode complet vertical"  , $constantes_complet_vert, '', false);

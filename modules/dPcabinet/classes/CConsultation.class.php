@@ -1481,6 +1481,10 @@ TESTS A EFFECTUER
     $libelle_at = $this->date_at ? "Accident du travail du " . $this->getFormattedValue("date_at") : "";
     $template->addProperty("Consultation - Libellé accident du travail"  , $libelle_at);
     
+    $this->loadRefsFiles();
+    $list = CMbArray::pluck($this->_ref_files, "file_name");
+    $template->addListProperty("Consultation - Liste des fichiers", $list);
+    
     $template->addProperty("Consultation - Fin arrêt de travail", mbDateToLocale(mbDate($this->fin_at)));
     $template->addProperty("Consultation - Prise en charge arrêt de travail", $this->getFormattedValue("pec_at"));
     $template->addProperty("Consultation - Reprise de travail", mbDateToLocale(mbDate($this->reprise_at)));

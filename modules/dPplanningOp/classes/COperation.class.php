@@ -976,6 +976,10 @@ class COperation extends CCodable implements IPatientRelated {
     $template->addProperty("Opération - convalescence"        , $this->_ref_sejour->convalescence);
     $template->addProperty("Opération - remarques"            , $this->rques);
     
+    $this->loadRefsFiles();
+    $list = CMbArray::pluck($this->_ref_files, "file_name");
+    $template->addListProperty("Opération - Liste des fichiers", $list);
+    
     $this->loadAffectationsPersonnel();
     foreach ($this->_ref_affectations_personnel as $emplacement => $affectations) {
       $locale = CAppUI::tr("CPersonnel.emplacement.$emplacement");
