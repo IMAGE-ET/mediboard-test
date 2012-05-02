@@ -558,7 +558,7 @@ class SocketServer {
         $request = @fread($conn, $this->__readAmount);
         
         // If connection is closed, mark it for cleanup and continue
-        if (false === $request) {
+        if (false === $request || $request === "") {
           $pool[$conn_id] = false;
           continue;
         }

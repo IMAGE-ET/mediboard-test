@@ -211,15 +211,15 @@ EOT;
   static function send($host, $port, $message) {
     $root_dir = dirname(__FILE__)."/../../..";
     
-    require_once "$root_dir/lib/phpsocket/SocketClient.php";
+    require_once "$root_dir/classes/SocketClient.class.php";
     
     try {
-      /*if (!self::$client) {
+      if (!self::$client) {
         self::$client = new SocketClient();
         self::$client->connect($host, $port);
       }
       
-      return self::$client->sendandrecive($message);*/
+      return self::$client->sendandrecive($message);
     }
     catch(Exception $e) {
       throw $e;

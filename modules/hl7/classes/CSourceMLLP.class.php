@@ -81,6 +81,7 @@ class CSourceMLLP extends CExchangeSource {
     
     $data = "";
     $data = stream_get_contents($this->_socket_client);
+    //$data = fread($this->_socket_client, 10240);
     
     return $data;
   }
