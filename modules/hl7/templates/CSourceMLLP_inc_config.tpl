@@ -31,6 +31,18 @@
             <td>{{mb_field object=$source field="port"}}</td>
           </tr>
           <tr>
+            <th>{{mb_label object=$source field="ssl_enabled"}}</th>
+            <td>{{mb_field object=$source field="ssl_enabled"}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$source field="ssl_certificate"}}</th>
+            <td>{{mb_field object=$source field="ssl_certificate"}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$source field="ssl_passphrase"}}</th>
+            <td>{{mb_field object=$source field="ssl_passphrase"}}</td>
+          </tr>
+          <tr>
             <td class="button" colspan="2">
               {{if $source->_id}}
                 <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

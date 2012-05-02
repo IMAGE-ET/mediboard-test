@@ -90,18 +90,22 @@ Usage: {$argv[0]} <root_url> <username> <password> [--port port]
   <root_url>      The root url for mediboard, ie https://localhost/mediboard
   <username>      The name of the user requesting, ie cron
   <password>      The password of the user requesting, ie ****
-  [--port <port>] The port to listen on
+  [--port <port>] The port to listen on (default: 7001)
+  [--cert <cert>] The SSL certificate if the connection is secured (default: none)
+  [--passphrase <passphrase>] The SSL passphrase (default: none)
 
 EOT;
   exit(0);
 }
 
 $options = array(
-  "url"      => $argv[1],
-  "username" => $argv[2],
-  "password" => $argv[3],
-  "debug"    => false,
-  "port"     => 7001,
+  "url"        => $argv[1],
+  "username"   => $argv[2],
+  "password"   => $argv[3],
+  "debug"      => false,
+  "port"       => 7001,
+  "cert"       => null,
+  "passphrase" => null,
 );
 
 for($i = 3; $i < $argc; $i++) {
@@ -111,11 +115,18 @@ for($i = 3; $i < $argc; $i++) {
     break;
     
     case "--port":
-      $options["port"] = $argv[++$i];
+    case "--cert":
+    case "--passphrase":
+      $options[substr($argv[$i], 2)] = $argv[++$i];
     break;
   }
 }
 // ---- End read arguments
+
+if ($options["cert"] && !is_readable($options["cert"])) {
+  outln("SSL certificate not readable: '{$options['cert']}', exiting.");
+  die;
+}
 
 register_shutdown_function("on_shutdown");
 
@@ -126,7 +137,11 @@ file_put_contents($pid_file, $options["port"]);
 try {
   outln("Starting MLLP Server on port ".$options["port"]." with user '".$options["username"]."'");
   
-  $handler = new CMLLPServer($options["url"], $options["username"], $options["password"], $options["port"]);
+  if ($options["cert"]) {
+    outln("SSL certificate: '{$options['cert']}'");
+  }
+  
+  $handler = new CMLLPServer($options["url"], $options["username"], $options["password"], $options["port"], $options["cert"], $options["passphrase"]);
   $handler->run();
   
   quit();

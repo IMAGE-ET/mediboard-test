@@ -446,7 +446,7 @@ $library->description = "A PHP socket server / client";
 $library->sourceDir = "phpsocket";
 $library->targetDir = "phpsocket";
 $library->versionFile = "SocketServer.php";
-$library->versionString = "SO_REUSEADDR";
+$library->versionString = "stream_socket_server";
 
 CLibrary::$all[$library->name] = $library;
 

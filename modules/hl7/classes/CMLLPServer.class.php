@@ -42,6 +42,16 @@ class CMLLPServer {
   var $port = null;
   
   /**
+   * @var string The SSL certificate path (PEM format)
+   */
+  var $certificate = null;
+  
+  /**
+   * @var string The SSL passphrase
+   */
+  var $passphrase = null;
+  
+  /**
    * @var SocketServer The SocketServer instance
    */
   var $server = null;
@@ -187,8 +197,8 @@ class CMLLPServer {
 -------------------------------------------------------
 
 EOT;
-    
-    $this->server->bind("0.0.0.0", $this->port)
+
+    $this->server->bind("0.0.0.0", $this->port, $this->certificate, $this->passphrase)
                  ->setMotd($motd)
                  ->setRequestHandler     (array($this, "handle"))
                  ->setOnOpenHandler      (array($this, "open"))

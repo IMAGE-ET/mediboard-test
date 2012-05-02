@@ -704,21 +704,21 @@ class CSetuphl7 extends CSetup {
     // Normal
     $this->insertTableEntry("9001", "5", "5", "normal", "normal", "Sorti à l'essai");
     
-		$this->makeRevision("0.19");
-		
-		$query = "ALTER TABLE `hl7_config` 
+    $this->makeRevision("0.19");
+    
+    $query = "ALTER TABLE `hl7_config` 
                 ADD `handle_mode` ENUM ('normal','simple') DEFAULT 'normal';";
     $this->addQuery($query);
-		
-		$this->makeRevision("0.20");
-		
-		$query = "ALTER TABLE `hl7_config` 
+    
+    $this->makeRevision("0.20");
+    
+    $query = "ALTER TABLE `hl7_config` 
                 CHANGE `sender_class` `sender_class` VARCHAR (80);";
     $this->addQuery($query);
     
     $this->makeRevision("0.21");
-		
-		$query = "ALTER TABLE `hl7_config` 
+    
+    $query = "ALTER TABLE `hl7_config` 
                 ADD `get_NDA` ENUM ('PID_18','PV1_19') DEFAULT 'PID_18';";
     $this->addQuery($query);
     
@@ -783,7 +783,14 @@ class CSetuphl7 extends CSetup {
                 ADD `iti31_historic_movement` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.29";
+    $this->makeRevision("0.29");
+    $query = "ALTER TABLE `source_mllp` 
+              ADD `ssl_enabled` ENUM ('0','1') NOT NULL DEFAULT '0',
+              ADD `ssl_certificate` VARCHAR (255),
+              ADD `ssl_passphrase` VARCHAR (255);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.30";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

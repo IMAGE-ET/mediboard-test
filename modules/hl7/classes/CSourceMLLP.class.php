@@ -22,6 +22,10 @@ class CSourceMLLP extends CExchangeSource {
   var $source_mllp_id     = null;
   var $port               = null;
   
+  var $ssl_enabled        = null;
+  var $ssl_certificate    = null;
+  var $ssl_passphrase     = null;
+  
   private $_socket_client = null;
   
   function getSpec() {
@@ -33,7 +37,10 @@ class CSourceMLLP extends CExchangeSource {
 
   function getProps() {
     $specs = parent::getProps();
-    $specs["port"] = "num default|7001";
+    $specs["port"]            = "num default|7001";
+    $specs["ssl_enabled"]     = "bool notNull default|0";
+    $specs["ssl_certificate"] = "str";
+    $specs["ssl_passphrase"]  = "str";
     return $specs;
   }
   
@@ -47,24 +54,54 @@ class CSourceMLLP extends CExchangeSource {
    */
   function getSocketClient(){
     if ($this->_socket_client) return $this->_socket_client;
-		
-    CAppUI::requireLibraryFile("phpsocket/SocketClient");
     
-    $this->_socket_client = new SocketClient;
-    $this->_socket_client->open($this->host, $this->port);
+    $address = "$this->host:$this->port";
+    $context = stream_context_create();
+    
+    if ($this->ssl_enabled && $this->ssl_certificate && is_readable($this->ssl_certificate)) {
+      $address = "tcp://$address";
+      
+      stream_context_set_option($context, 'ssl', 'local_cert', $this->ssl_certificate); 
+      
+      if ($this->ssl_passphrase) {
+        stream_context_set_option($context, 'ssl', 'passphrase', $this->ssl_passphrase); 
+      }
+    }
+    
+    $this->_socket_client = stream_socket_client($address, $errno, $errstr, 5, STREAM_CLIENT_CONNECT, $context);
+    stream_set_blocking($this->_socket_client, 0);
     
     return $this->_socket_client;
   }
   
+  function recv(){
+    $servers = array($this->_socket_client);
+    
+    while (@stream_select($servers, $write = null, $except = null, 5) === false);
+    
+    $data = "";
+    $data = stream_get_contents($this->_socket_client);
+    
+    return $data;
+  }
+  
   function getData($path = null) {
-    return $this->_socket_client->recv();
+    return $this->recv();
   }
   
   function send($evenement_name = null){
-    $this->_acquittement = trim(str_replace("\x1C", "", $this->getSocketClient()->sendandrecive(self::TRAILING.$this->_data.self::LEADING)));
+    $data = self::TRAILING.$this->_data.self::LEADING;
+    
+    fwrite($this->_socket_client, $data, strlen($data));
+
+    $acq = $this->recv();
+    
+    $this->_acquittement = trim(str_replace("\x1C", "", $acq));
   }
   
   function isReachableSource() {
+    return true;
+    
     try {
       $this->getSocketClient();
     } 
