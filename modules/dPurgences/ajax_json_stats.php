@@ -127,7 +127,7 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
         $series[$key+1]["color"] = "#666";
         $series[$key+1]["lines"]["lineWidth"] = 1;
         $series[$key+1]["points"]["show"] = false;
-        $series[$key+1]["label"] = null;
+        $series[$key+1]["label"] = utf8_encode("Temps - écart type");
       }
       $series[$key+1]['data'][$i] = array($i, $mean-$std_dev);
       
@@ -137,7 +137,7 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
         $series[$key+2]["color"] = "#666";
         $series[$key+2]["lines"]["lineWidth"] = 1;
         $series[$key+2]["points"]["show"] = false;
-        $series[$key+2]["label"] = null;
+        $series[$key+2]["label"] = utf8_encode("Temps + écart type");
       }
       $series[$key+2]['data'][$i] = array($i, $mean+$std_dev);
     }
