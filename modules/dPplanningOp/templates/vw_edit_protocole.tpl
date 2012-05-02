@@ -102,17 +102,14 @@ function checkChir() {
 
 function checkDuree() {
   var form = document.editFrm;
-  field1 = form._hour_op;
-  field2 = form._min_op;
+  field1 = form.temp_operation;
   
   if ($V(form.for_sejour) == 1) return true; // Si mode séjour
   
-  if (field1 && field2) {
-    if (field1.value == 0 && field2.value == 0) {
-      alert("Temps opératoire invalide");
-      field1.focus();
-      return false;
-    }
+  if (field1 && $V(field1) == "") {
+    alert("Temps opératoire invalide");
+    field1.focus();
+    return false;
   }
   return true;
 }
@@ -275,7 +272,7 @@ Main.add(function () {
         
         <tr>
           <th>{{mb_label object=$protocole field=temp_operation}}</th>
-          <td colspan="2">{{mb_field object=$protocole field=temp_operation form=editFrm }}</td>
+          <td colspan="2">{{mb_field object=$protocole field=temp_operation form=editFrm class="notNull"}}</td>
         </tr>
         
         <tr>

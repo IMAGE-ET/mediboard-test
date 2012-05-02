@@ -100,7 +100,7 @@ class CProtocole extends CMbObject {
     $props["pathologie"]      = "str length|3";
     $props["septique"]        = "bool";
     $props["codes_ccam"]      = "str seekable";
-    $props["temp_operation"]  = "time notNull";
+    $props["temp_operation"]  = "time";
     $props["type_pec"]        = "enum list|M|C|O";
     $props["duree_uscpo"]     = "num min|0 default|0";
     $props["presence_preop"]  = "time show|0";
