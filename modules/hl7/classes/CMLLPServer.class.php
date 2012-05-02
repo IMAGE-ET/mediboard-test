@@ -10,7 +10,7 @@
 
 $dir = dirname(__FILE__)."/../../..";
 
-$socket_server_class = "$dir/lib/phpsocket/SocketServer.php";
+$socket_server_class = "$dir/classes/SocketServer.class.php";
 
 // Library not installed
 if (!file_exists($socket_server_class)) {
@@ -214,12 +214,12 @@ EOT;
     require_once "$root_dir/lib/phpsocket/SocketClient.php";
     
     try {
-      if (!self::$client) {
+      /*if (!self::$client) {
         self::$client = new SocketClient();
         self::$client->connect($host, $port);
       }
       
-      return self::$client->sendandrecive($message);
+      return self::$client->sendandrecive($message);*/
     }
     catch(Exception $e) {
       throw $e;
