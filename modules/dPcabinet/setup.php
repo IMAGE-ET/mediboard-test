@@ -1504,7 +1504,11 @@ class CSetupdPcabinet extends CSetup {
     $query="ALTER TABLE `factureconsult` 
               CHANGE `remise` `remise` DECIMAL (10,2) DEFAULT  '0';";
     $this->addQuery($query);
-    $this->mod_version = "1.56";
+    $this->makeRevision("1.56");
+    
+    $query = "ALTER TABLE `tarifs` ADD `codes_caisse` VARCHAR(255);";
+    $this->addQuery($query);
+    $this->mod_version = "1.57";
   }
 }
 ?>

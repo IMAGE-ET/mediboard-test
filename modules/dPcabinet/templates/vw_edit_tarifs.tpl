@@ -72,50 +72,64 @@ Main.add(function () {
           <td>{{mb_field object=$tarif field="description"}}</td>
         </tr>
         {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
-        <tr>
-          <th>{{mb_label object=$tarif field=codes_ccam}}</th>
-			    <td>
-			    	{{foreach from=$tarif->_codes_ccam item=_code_ccam}}
-						<span onmouseover="ObjectTooltip.createDOM(this, 'DetailCCAM-{{$_code_ccam}}');">{{$_code_ccam}}</span>
-						<div id="DetailCCAM-{{$_code_ccam}}" style="display: none">
-							{{mb_include module=system template=CMbObject_view object=$tarif->_new_actes.$_code_ccam}}
-						</div>
-            <br/>
-			    	{{foreachelse}}
-			    	<div class="empty">{{tr}}None{{/tr}}</div>
-						{{/foreach}}
-			    </td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$tarif field=codes_ngap}}</th>
-          <td>
-         	  {{foreach from=$tarif->_codes_ngap item=_code_ngap}}
-					  <span onmouseover="ObjectTooltip.createDOM(this, 'DetailNGAP-{{$_code_ngap}}');">{{$_code_ngap}}</span>
-						<br/>
-					  <div id="DetailNGAP-{{$_code_ngap}}" style="display: none">
-				 	    {{mb_include module=system template=CMbObject_view object=$tarif->_new_actes.$_code_ngap}}
-			 		  </div>
-          	{{foreachelse}}
-            <div class="empty">{{tr}}None{{/tr}}</div>
-	 				{{/foreach}}
-          </td>
-        </tr>
+          <tr>
+            <th>{{mb_label object=$tarif field=codes_ccam}}</th>
+  			    <td>
+  			    	{{foreach from=$tarif->_codes_ccam item=_code_ccam}}
+  						<span onmouseover="ObjectTooltip.createDOM(this, 'DetailCCAM-{{$_code_ccam}}');">{{$_code_ccam}}</span>
+  						<div id="DetailCCAM-{{$_code_ccam}}" style="display: none">
+  							{{mb_include module=system template=CMbObject_view object=$tarif->_new_actes.$_code_ccam}}
+  						</div>
+              <br/>
+  			    	{{foreachelse}}
+  			    	<div class="empty">{{tr}}None{{/tr}}</div>
+  						{{/foreach}}
+  			    </td>
+          </tr>
+  
+          <tr>
+            <th>{{mb_label object=$tarif field=codes_ngap}}</th>
+            <td>
+           	  {{foreach from=$tarif->_codes_ngap item=_code_ngap}}
+  					  <span onmouseover="ObjectTooltip.createDOM(this, 'DetailNGAP-{{$_code_ngap}}');">{{$_code_ngap}}</span>
+  						<br/>
+  					  <div id="DetailNGAP-{{$_code_ngap}}" style="display: none">
+  				 	    {{mb_include module=system template=CMbObject_view object=$tarif->_new_actes.$_code_ngap}}
+  			 		  </div>
+            	{{foreachelse}}
+              <div class="empty">{{tr}}None{{/tr}}</div>
+  	 				{{/foreach}}
+            </td>
+          </tr>
         {{elseif @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
-        <tr>
-          <th>{{mb_label object=$tarif field=codes_tarmed}}</th>
-          <td>
-         	  {{foreach from=$tarif->_codes_tarmed item=_code_tarmed}}
-					  <span onmouseover="ObjectTooltip.createDOM(this, 'DetailTarmed-{{$_code_tarmed}}');">{{$_code_tarmed}}</span>
-						<br/>
-					  <div id="DetailTarmed-{{$_code_tarmed}}" style="display: none">
-				 	    {{mb_include module=system template=CMbObject_view object=$tarif->_new_actes.$_code_tarmed}}
-			 		  </div>
-          	{{foreachelse}}
-            <div class="empty">{{tr}}None{{/tr}}</div>
-	 				{{/foreach}}
-          </td>
-        </tr>
+          <tr>
+            <th>{{mb_label object=$tarif field=codes_tarmed}}</th>
+            <td>
+           	  {{foreach from=$tarif->_codes_tarmed item=_code_tarmed}}
+  					  <span onmouseover="ObjectTooltip.createDOM(this, 'DetailTarmed-{{$_code_tarmed}}');">{{$_code_tarmed}}</span>
+  						<br/>
+  					  <div id="DetailTarmed-{{$_code_tarmed}}" style="display: none">
+  				 	    {{mb_include module=system template=CMbObject_view object=$tarif->_new_actes.$_code_tarmed}}
+  			 		  </div>
+            	{{foreachelse}}
+              <div class="empty">{{tr}}None{{/tr}}</div>
+  	 				{{/foreach}}
+            </td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$tarif field=codes_caisse}}</th>
+            <td>
+           	  {{foreach from=$tarif->_codes_caisse item=_code_caisse}}
+  					  <span onmouseover="ObjectTooltip.createDOM(this, 'DetailCaisse-{{$_code_caisse}}');">{{$_code_caisse}}</span>
+  						<br/>
+  					  <div id="DetailTarmed-{{$_code_caisse}}" style="display: none">
+  				 	    {{mb_include module=system template=CMbObject_view object=$tarif->_new_actes.$_code_caisse}}
+  			 		  </div>
+            	{{foreachelse}}
+              <div class="empty">{{tr}}None{{/tr}}</div>
+  	 				{{/foreach}}
+            </td>
+          </tr>
         {{/if}}
         <tr>
           <th>{{mb_label object=$tarif field=secteur1}}</th>
