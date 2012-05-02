@@ -286,6 +286,7 @@ class CTarif extends CMbObject {
 	    foreach ($this->_codes_caisse as $code) {
 	      $acte = new CActeCaisse();
 	      $acte->setFullCode($code);
+	      $acte->loadRefPrestationCaisse();
 	      $this->_new_actes["$code"] = $acte;
 	      if (!$acte->getPrecodeReady()) {
 	        return $this->_precode_ready = '0';
