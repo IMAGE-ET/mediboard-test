@@ -63,7 +63,9 @@
       <select name="lit_id" style="width: 15em;" onchange="Fields.modif(this.value);this.form.sortie_reelle.value = '';"  >
         <option value="0">&mdash; Choisir Lit </option>
         {{foreach from=$blocages_lit item=blocage_lit}}
-          <option id="{{$blocage_lit->_ref_lit->_guid}}" value="{{$blocage_lit->lit_id}}" class="{{$blocage_lit->_ref_lit->_ref_chambre->_ref_service->_guid}}-{{$blocage_lit->_ref_lit->_ref_chambre->_ref_service->nom}}">
+          <option id="{{$blocage_lit->_ref_lit->_guid}}" value="{{$blocage_lit->lit_id}}"
+           class="{{$blocage_lit->_ref_lit->_ref_chambre->_ref_service->_guid}}-{{$blocage_lit->_ref_lit->_ref_chambre->_ref_service->nom}}"
+           {{if $blocage_lit->_ref_lit->_view|strpos:"indisponible"}}disabled{{/if}}>
             {{$blocage_lit->_ref_lit->_view}}
           </option>
         {{/foreach}}
