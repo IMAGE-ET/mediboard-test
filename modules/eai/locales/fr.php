@@ -1,5 +1,6 @@
 <?php
 $locales['CEAIDispatcher-_family_message_no_supported_for_this_actor'] = 'Le message \'%s\' est compris mais n\'est pas supporté par cet utilisateur Mediboard. Veuillez contacter votre administrateur.';
+$locales['CEAIDispatcher-message_dispatch'] = 'Message retraité';
 $locales['CEAIDispatcher-no_actor'] = 'Aucun utilisateur Mediboard associé à ce message. Veuillez contacter votre administrateur.';
 $locales['CEAIDispatcher-no_message_supported_for_this_actor'] = 'Le message \'%s\' est compris mais n\'est pas supporté par cet utilisateur Mediboard. Veuillez contacter votre administrateur.';
 $locales['CEAIDispatcher-no_understand'] = 'Le message n\'est pas supporté par l\'EAI Mediboard. Veuillez contacter votre administrateur.';

@@ -96,7 +96,7 @@ Main.add(function() {
   <tr>
     <th class="title" colspan="2">{{tr}}{{$class}}{{/tr}}</th>
   </tr>
-
+  
   {{mb_include module=system template=inc_config_enum var=patient_id values=$patient_ids}}
   {{mb_include module=system template=inc_config_enum var=check_collisions values="no|date|datetime"}}
   {{mb_include module=system template=inc_config_bool var=entree_modifiee}}
@@ -116,6 +116,7 @@ Main.add(function() {
   {{mb_include module=system template=inc_config_str  var=hours_sejour_proche size=2 suffix=h}}
   {{mb_include module=system template=inc_config_bool var=fix_doc_edit}}
   {{mb_include module=system template=inc_config_bool var=show_type_pec}}
+  {{mb_include module=system template=inc_config_bool var=show_discipline_tarifaire }}
   
   <tr>
     <th class="title" colspan="2">Heure par defaut du séjour</th>
@@ -155,7 +156,6 @@ Main.add(function() {
   </tr>
   {{/foreach}}
   
-  {{mb_include module=system template=inc_config_bool var=show_discipline_tarifaire }}
   <tr>
     <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

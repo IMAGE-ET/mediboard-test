@@ -18,11 +18,10 @@
 
 class CEAIMbObject {
   static function getModifiedFields(CMbObject $object) {
-    $object->loadLogs();
     $modified_fields = "";
 
-    if ($object->_ref_last_log && is_array($object->_ref_last_log->_fields)) {
-      $fields = $object->_ref_last_log->_fields;
+    if ($object->_ref_current_log && is_array($object->_ref_current_log->_fields)) {
+      $fields = $object->_ref_current_log->_fields;
       
       if (count($fields) > 1) {
         $modified_fields = $fields[0];
@@ -40,7 +39,7 @@ class CEAIMbObject {
     $modified_fields = self::getModifiedFields($object);
     
     if ($object instanceof CPatient) {
-      switch ($object->loadLastLog()->type) {
+      switch ($object->_ref_current_log->type) {
          // Enregistrement du patient
         case "create" :
           $comment = "Le patient a été créé dans Mediboard avec l'IC $object->_id.";
@@ -53,13 +52,16 @@ class CEAIMbObject {
         // Fusion des patients
         case "merge" : 
           $comment  = "Le patient avec l'IC '$object->_id' a été fusionné avec le patient dont l'IC est '$otherObject->_id'.";
+          break;
+        default :
+          $comment = "";
       }     
       
       return $comment;
     }
     
     if ($object instanceof CSejour) {
-      switch ($object->_ref_last_log->type) {
+      switch ($object->_ref_current_log->type) {
          // Enregistrement du séjour
         case "create" :
           $comment = "Le séjour a été créé dans Mediboard avec l'IC $object->_id.";
@@ -72,6 +74,8 @@ class CEAIMbObject {
         // Fusion des séjours
         case "merge" : 
           $comment  = "Le séjour avec l'IC '$object->_id' a été fusionné avec le séjour dont l'IC est '$otherObject->_id'.";
+        default :
+          $comment = "";
       }     
       
       return $comment;

@@ -222,21 +222,21 @@ class CHL7v2Segment extends CHL7v2Entity {
         break;
       case "INS-C" :
         return array(
-          null,
+          "ASIP-SANTE-INS-C",
           "1.2.250.1.213.1.4.2",
           "ISO"
         );
         break;
       case "ADELI" :
         return array(
-          null,
+          "ASIP-SANTE-PS",
           "1.2.250.1.71.4.2.1",
           "ISO"
         );
         break;
       case "RPPS" :
         return array(
-          null,
+          "ASIP-SANTE-PS",
           "1.2.250.1.71.4.2.1",
           "ISO"
         );
@@ -245,7 +245,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         return array(
           $value,
           null,
-          null
+          "M"
         );
         break; 
       default :
@@ -296,8 +296,24 @@ class CHL7v2Segment extends CHL7v2Entity {
     
   }
   
-  function getXCN9(CMbObject $object) {
-    return null;
+  function getXCN9(CMbObject $object, CIdSante400 $id400, CInteropActor $actor) {
+    // Autorité d'affectation de l'idex
+    if ($id400->id400) {
+      return $this->getAssigningAuthority("actor", null, $actor);
+    } 
+    
+    // Autorité d'affectation du RPPS
+    elseif ($object->rpps) {
+      return $this->getAssigningAuthority("RPPS");
+    } 
+    
+    // Autorité d'affectation de l'ADELI
+    elseif ($object->adeli) {
+      return $this->getAssigningAuthority("ADELI");
+    } 
+    
+    // Autorité d'affectation de Mediboard
+    return $this->getAssigningAuthority("mediboard");
   }
   
   function getXCN(CMbObject $object, CInteropActor $actor) {
@@ -305,10 +321,10 @@ class CHL7v2Segment extends CHL7v2Entity {
     
     $id400 = $object->loadLastId400();
     if ($object instanceof CMedecin) {
-      $xcn1  = CValue::first($object->rpps, $object->adeli, $id400->id400, $object->_id);
+      $xcn1  = CValue::first($id400->id400, $object->rpps, $object->adeli, $object->_id);
       $xcn2  = $object->nom;
       $xcn3  = $object->prenom;      
-      $xcn9  = $this->getXCN9($object, $actor);
+      $xcn9  = $this->getXCN9($object, $id400, $actor);
       $xcn13 = $object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "RI");
     }
     if ($object instanceof CUser) {
