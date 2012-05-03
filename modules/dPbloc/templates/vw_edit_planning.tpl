@@ -13,8 +13,7 @@
 <table class="main">
   <tr>
     <td class="greedyPane" style="text-align:center;">
-      {{if $can->edit}}
-      {{if $nbIntervNonPlacees || $nbIntervHorsPlage || $nbAlertesInterv}}
+      {{if $can->edit && ($nbIntervNonPlacees || $nbIntervHorsPlage || $nbAlertesInterv)}}
         <div class="warning" style="float: right; text-align:left;">
           <a href="#nothing" onclick="EditPlanning.showAlerte('{{$date}}', '{{$bloc->_id}}', 'jour')">
           {{if $nbAlertesInterv}}
@@ -35,7 +34,6 @@
       <button class="print" onclick="EditPlanning.popPlanning('{{$date}}');" style="font-weight: bold;">
         {{$date|date_format:"%A %d %B"}}
       </button>
-      {{/if}}
       
       <form action="?" name="selectBloc" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
