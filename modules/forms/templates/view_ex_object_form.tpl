@@ -33,30 +33,30 @@ ExObjectForms.{{$ex_form_hash}} = {
     this.updateId(id, obj);
     
     if (!(obj._ui_messages[3] || obj._ui_messages[4])) { // warning ou error
-      if (window.opener && !window.opener.closed && window.opener !== window && window.opener.ExObject) {
-        var element_id = "{{$_element_id}}";
-        
+      var element_id = "{{$_element_id}}";
+      
+      if (element_id && window.opener && !window.opener.closed && window.opener !== window && window.opener.ExObject) {
         if (element_id.charAt(0) == "@") {
           eval("window.opener."+element_id.substr(1)+"()"); // ARG
         }
         else {
-          var target = window.opener.$("{{$_element_id}}");
+          var target = window.opener.$(element_id);
           
           if (target.get("ex_class_id")) {
             window.opener.ExObject.loadExObjects.defer(
               target.get("reference_class"), 
               target.get("reference_id"), 
-              "{{$_element_id}}", 
+              element_id, 
               target.get("detail"), 
               target.get("ex_class_id")
             );
           }
           else {
-            window.opener.ExObject.register.defer("{{$_element_id}}", {
+            window.opener.ExObject.register.defer(element_id, {
               ex_class_id: "{{$ex_class_id}}", 
               object_guid: "{{$object_guid}}", 
               event: "{{$event}}", 
-              _element_id: "{{$_element_id}}"
+              _element_id: element_id
             });
           }
         }
