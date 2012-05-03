@@ -93,7 +93,7 @@
                       {{/if}}
                       
                       <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');">
-                        {{$_patient->nom}} {{$_patient->prenom}}
+                        {{$_patient->nom}} {{if $_patient->nom_jeune_fille}}({{$_patient->nom_jeune_fille}}) {{/if}}{{$_patient->prenom}}
                       </span>
                       
                       {{if $show_age_patient}}({{$_patient->_age}} ans){{/if}}
