@@ -15,6 +15,12 @@ function popUpdateMediusers() {
   url.popup(800, 600, "Modification des utilisateurs");
   return false;
 }
+
+function popAddIdex() {
+  var url = new Url("mediusers", "user_idex_csv");
+  url.popup(800, 600, "Ajout de l'identifiant");
+  return false;
+}
  
 addPerms = function() {
   var url = new Url("mediusers", "ajax_add_user_function_group_perms");
@@ -34,21 +40,29 @@ addPerms = function() {
   <tr>
     <td>
       <button class="hslip" onclick="return popUpdateMediusers();">
-        {{tr}}Update-Mediusers-CSV{{/tr}}</button>
+        {{tr}}Update-Mediusers-CSV{{/tr}}
       </button>
     </td>
-    <td>
-    </td>
+    <td></td>
   </tr>
 	
 	<tr>
     <td>
-      <button class="hslip" onclick="addPerms();">
-        Mise à jour des droits des utilisateurs</button>
+      <button class="hslip" onclick="popAddIdex();">
+       Ajout des idex à partir du code Adeli
       </button>
     </td>
     <td id="resultDroits">
     </td>
   </tr>
-	
+  
+	<tr>
+    <td>
+      <button class="hslip" onclick="addPerms();">
+        Mise à jour des droits des utilisateurs
+      </button>
+    </td>
+    <td id="resultDroits">
+    </td>
+  </tr>
 </table>
