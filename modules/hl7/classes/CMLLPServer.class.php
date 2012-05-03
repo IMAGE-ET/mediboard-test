@@ -65,6 +65,11 @@ class CMLLPServer {
   var $request_count = 0;
   
   /**
+   * @var string
+   */
+  var $started_datetime = null;
+  
+  /**
    * @var SocketClient The SocketClient instance
    */
   static $client = null;
@@ -97,7 +102,7 @@ class CMLLPServer {
           quit("restart");
         }
       case "__STATS__":
-        return $this->request_count;
+        return json_encode($this->getStats());
     }
     
     // Verification qu'on ne recoit pas un en-tete de message en ayant deja des données en buffer
@@ -155,6 +160,7 @@ class CMLLPServer {
   }
   
   function cleanup($id) {
+    unset($this->clients[$id]);
     echo sprintf(" > Connection [%d] cleaned-up\n", $id);
   }
   
@@ -164,6 +170,15 @@ class CMLLPServer {
   
   function write_error($id) {
     echo sprintf(" !!! Write error to [%d]\n", $id);
+  }
+  
+  function getStats(){
+    return array(
+      "request_count" => $this->request_count,
+      "started"       => $this->started_datetime,
+      "memory"        => memory_get_usage(true),
+      "memory_peak"   => memory_get_peak_usage(true),
+    );
   }
   
   /**
@@ -203,6 +218,7 @@ class CMLLPServer {
 -------------------------------------------------------
 
 EOT;
+    $this->started_datetime = $time;
 
     $this->server->bind("0.0.0.0", $this->port, $this->certificate, $this->passphrase)
                  ->setMotd($motd)

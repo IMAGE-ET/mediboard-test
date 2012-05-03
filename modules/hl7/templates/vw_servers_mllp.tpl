@@ -24,5 +24,9 @@
     <tbody id="{{$uid}}">
       {{mb_include module=hl7 template=inc_server_mllp}}
     </tbody>
+  {{foreachelse}}
+    <tr>
+      <td colspan="6" class="empty">Aucun serveur actif</td>
+    </tr>
   {{/foreach}}
 </table>

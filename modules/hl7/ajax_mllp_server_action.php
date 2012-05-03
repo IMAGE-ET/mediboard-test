@@ -27,25 +27,27 @@ switch ($action) {
       CAppUI::displayAjaxMsg($e->getMessage(), UI_MSG_ERROR);
     }
     break;
+    
    case "test" : 
     try {
       $response = CMLLPServer::send("localhost", $port, "\x0B".CMLLPServer::ORU()."\x1C\x0D"); 
-      CAppUI::displayAjaxMsg("Message HL7 envoyé sur localhost:$port : $response");
+      @CAppUI::displayAjaxMsg("Message HL7 envoyé sur localhost:$port : $response");
     }
     catch(Exception $e) {
       CAppUI::displayAjaxMsg($e->getMessage(), UI_MSG_ERROR);
-    }    
+    }
     break;
+    
   case "stats": 
     try {
       CMLLPServer::send("localhost", $port, "yh\n");
-      echo CMLLPServer::send("localhost", $port, "__".strtoupper($action)."__\n"). " requête(s) traitée(s)";
-      
+      mbTrace(json_decode(CMLLPServer::send("localhost", $port, "__".strtoupper($action)."__\n"), true));
     }
     catch(Exception $e) {
       CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
     }
     return;
+    
   default:
     CAppUI::displayAjaxMsg("Unknown command '$action'", UI_MSG_ERROR);
 }
