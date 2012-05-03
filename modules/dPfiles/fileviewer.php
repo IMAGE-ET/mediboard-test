@@ -11,9 +11,6 @@ $user = CUser::get();
 CAppUI::requireLibraryFile("phpThumb/phpthumb.class");
 include_once "lib/phpThumb/phpThumb.config.php";
 
-// To unlock session file
-session_write_close();
-
 //require_once("./lib/phpThumb/phpthumb.class.php");
 //trigger_error("Source is $file->_file");
     
