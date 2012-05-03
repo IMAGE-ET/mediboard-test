@@ -43,6 +43,7 @@ if (!$affectation->_id) {
   $affectation->lit_id = $lit_id;
   $lit->load($lit_id);
   $lit->loadRefChambre()->loadRefService();
+  $affectation->entree = mbDateTime();
 }
 
 $smarty = new CSmartyDP;
