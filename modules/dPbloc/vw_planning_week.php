@@ -41,9 +41,7 @@ if (!$listSalles = $bloc->_ref_salles) {
 $affichages = array();
 foreach($listDays as $keyDate=>$valDate){
   foreach($listSalles as $keySalle=>$valSalle){
-    if ($valSalle->isLocked($valDate)) {
-      $valSalle->_blocage[$valDate] = 1;
-    }
+    $valSalle->_blocage[$valDate] = $valSalle->loadRefsBlocages($valDate);
     foreach(CPlageOp::$hours as $keyHours=>$valHours){
       foreach(CPlageOp::$minutes as $keyMins=>$valMins){
         // Initialisation du tableau

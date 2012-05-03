@@ -33,12 +33,22 @@
 </tr>
 {{foreach from=$listSalles item=_salle key=salle_id}}
 {{assign var="keyHorsPlage" value="$curr_day-s$salle_id-HorsPlage"}}
-<tr {{if isset($_salle->_blocage.$curr_day|smarty:nodefaults)}}class="hatching"{{/if}}>
+<tr {{if $_salle->_blocage.$curr_day|@count}}class="hatching"{{/if}}>
   <td class="salle" {{if $affichages.$keyHorsPlage|@count}}rowspan="2"{{/if}}>
     <span onmouseover="ObjectTooltip.createEx(this, '{{$_salle->_guid}}')"
       onclick="EditPlanning.monitorDaySalle('{{$_salle->_id}}', '{{$curr_day}}');">
       {{$_salle->nom}}
     </span>
+    {{if $_salle->_blocage.$curr_day|@count}}
+        <img src="images/icons/info.png" onmouseover="ObjectTooltip.createDOM(this, 'blocages_{{$salle_id}}')"/>
+        <div id="blocages_{{$salle_id}}" style="display: none">
+          <ul>
+            {{foreach from=$_salle->_blocage.$curr_day item=_blocage}}
+              <li>{{$_blocage->libelle}}</li>
+            {{/foreach}}
+          </ul>
+        </div>
+      {{/if}}
   </td>
   {{mb_include template=inc_planning_bloc_line}}
 </tr>

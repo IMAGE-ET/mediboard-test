@@ -178,7 +178,7 @@ class CSalle extends CMbObject {
     return $this->_alertes_intervs = $alerte->loadList($where, $order, null, null, $ljoin);
   }
   
-  function isLocked($date = "now") {
+  function loadRefsBlocages($date = "now") {
     $blocage = new CBlocage;
     
     if ($date == "now") {
@@ -189,8 +189,7 @@ class CSalle extends CMbObject {
     $where["salle_id"] = "= '$this->_id'";
     $where[] = "'$date' BETWEEN deb AND fin";
     
-    return $blocage->countList($where) > 0;
-    
+    return $blocage->loadList($where);
   }
 }
 ?>

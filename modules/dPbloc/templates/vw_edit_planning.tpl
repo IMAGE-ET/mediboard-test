@@ -54,7 +54,7 @@
       <table class="planningBloc">
       {{assign var=typeVuePlanning value="day"}}
       {{assign var=curr_day value=$date}}
-      {{include file="inc_planning_day.tpl"}}
+      {{mb_include module=bloc template=inc_planning_day}}
       </table>
       {{if $can->edit}}
       <button type="button" class="new" style="float: left;" onclick="EditPlanning.edit('','{{$date}}');">
