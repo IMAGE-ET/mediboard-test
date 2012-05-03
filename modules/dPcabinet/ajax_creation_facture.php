@@ -15,7 +15,7 @@ $consult_id     = CValue::get("consult_id");
 $du_tiers       = CValue::get("du_tiers", "0");
 $type_facture   = CValue::get("type_facture", "maladie");
 $chirsel_id     = CValue::get("executant_id");
-$date           = CValue::get("date");
+$date           = CValue::get("date", mbDate());
 
 $facture = new CFactureConsult();
 
