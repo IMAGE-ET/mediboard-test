@@ -191,7 +191,7 @@
                     {{/if}}
                     <span {{if !$_sejour->entree_reelle}}class="patient-not-arrived"{{/if}} {{if $_sejour->septique}}class="septique"{{/if}}
                     {{if $_sejour->type == "ambu"}}style="font-style: italic;"{{/if}}>
-                      {{$_patient->nom}} {{if $_patient->nom_jeune_fille}}({{$_patient->nom_jeune_fille}}) {{/if}}{{$_patient->prenom}}
+                      {{$patient->nom}} {{if $patient->nom_jeune_fille}}({{$patient->nom_jeune_fille}}) {{/if}}{{$patient->prenom}}
                     </span> {{if $show_age_patient}}({{$patient->_age}} ans){{/if}}
                     {{if $_sejour->type != "ambu" && $_sejour->type != "exte"}}
                       ({{$_sejour->_duree}}j - {{$_sejour->_ref_praticien->_shortview}})
