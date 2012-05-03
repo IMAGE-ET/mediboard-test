@@ -28,7 +28,7 @@
     <tr>
       <td class="button">
         <button type="button" class="edit"
-          onclick="if (window.editAffectation) { editAffectation('{{$object->_id}}') }">Modifier</button>
+          onclick="if (window.editAffectation) { this.up('div').hide(); editAffectation('{{$object->_id}}') }">Modifier</button>
         <button type="button" class="cancel"
           onclick="if (window.delAffectation) { delAffectation('{{$object->_id}}', '{{$object->lit_id}}', 'CSejour-{{$object->sejour_id}}') }">{{tr}}Delete{{/tr}}</button>
         {{if $object->sejour_id}}
