@@ -24,12 +24,19 @@
       <br />
       <em>({{mb_value object=$_operation field=temp_operation}})</em>
     </td>
-    <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$chir}}</td>
     <td>
+      {{if $patient->_ref_dossier_medical->_id && $patient->_ref_dossier_medical->_count_allergies}}
+        <img src="images/icons/warning.png" style="float: right" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}', 'allergies');" />
+      {{/if}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">{{$patient}}</span>
+    </td>
+    <td>
+      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$chir}}
     </td>
   </tr>
   <tr>
-    <td colspan="3">{{mb_include template=inc_vw_operation}}</td>
+    <td colspan="3">
+      {{mb_include template=inc_vw_operation}} ({{mb_label object=$_operation field=cote}} {{mb_value object=$_operation field=cote}})
+    </td>
   </tr>
 </tbody>

@@ -22,7 +22,7 @@ $_op = new COperation();
 $_last_op = null;
 foreach($plageop->_ref_operations as $_op) {
   $_op->loadRefChir()->loadRefFunction();
-  $_op->loadRefSejour()->loadRefPatient();
+  $_op->loadRefSejour()->loadRefPatient()->loadRefDossierMedical()->countAllergies();
   $_op->loadExtCodesCCAM();
   
   $_last_op = $_op;

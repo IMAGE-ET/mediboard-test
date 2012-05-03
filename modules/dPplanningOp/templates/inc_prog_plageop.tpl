@@ -1,3 +1,10 @@
+<script type="text/javascript">
+  ObjectTooltip.modes.allergies = {  
+    module: "patients",
+    action: "ajax_vw_allergies",
+    sClass: "tooltip"
+  };
+</script>
 
 <table class="tbl">
   <col style="width: 25px;" />

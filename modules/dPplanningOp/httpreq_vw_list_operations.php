@@ -27,6 +27,7 @@ if($userSel->_id){
     $curr_urg->loadRefsFwd();
     $curr_urg->loadRefsDocs();
     $curr_urg->_ref_sejour->loadRefsFwd();
+    $curr_urg->_ref_sejour->_ref_patient->loadRefDossierMedical()->countAllergies();
     $curr_urg->_ref_sejour->loadRefsDocs();
   }
 }
@@ -70,6 +71,7 @@ if($userSel->_id){
       $_op->loadRefsFwd();
       $_op->loadRefsDocs();
       $_op->_ref_sejour->loadRefsFwd();
+      $_op->_ref_sejour->_ref_patient->loadRefDossierMedical()->countAllergies();
       $_op->_ref_sejour->loadRefsDocs();
     }
   }

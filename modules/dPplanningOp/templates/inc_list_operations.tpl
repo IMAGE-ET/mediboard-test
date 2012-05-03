@@ -13,6 +13,14 @@
 </form>
 {{/if}}
 
+<script type="text/javascript">
+  ObjectTooltip.modes.allergies = {  
+    module: "patients",
+    action: "ajax_vw_allergies",
+    sClass: "tooltip"
+  };
+</script>
+
 <table class="tbl" {{if $boardItem}}style="font-size: 9px;"{{/if}}>
   <tr>
     <th class="title" colspan="3">Interventions</th>
@@ -107,6 +115,9 @@
       {{/if}}
       
       <td class="text top" {{if !$board}}rowspan="2"{{/if}}>
+        {{if $patient->_ref_dossier_medical->_id && $patient->_ref_dossier_medical->_count_allergies}}
+          <img src="images/icons/warning.png" style="float: right" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}', 'allergies');" />
+        {{/if}}
         {{if $_operation->annulee}}
           [ANNULEE]
         {{else}}
@@ -127,6 +138,7 @@
       <td class="text top">
         <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$_operation->_id}}">
           {{mb_include template=inc_vw_operation}}
+          ({{mb_label object=$_operation field=cote}} {{mb_value object=$_operation field=cote}})
         </a>
       </td>
     </tr>
@@ -145,7 +157,7 @@
   
   {{if $listUrgences|@count}}
   <tr>
-    <th colspan="3">Hors plage</th>
+    <th colspan="10">Hors plage</th>
   </tr>
   {{/if}}
   
@@ -155,10 +167,13 @@
       {{assign var=patient value=$_operation->_ref_sejour->_ref_patient}}
       
       {{if !$board}}
-        <td rowspan="2" class="narrow"></td>
+        <td colspan="2" rowspan="2" class="narrow"></td>
       {{/if}}
       
-      <td class="text" class="top" {{if !$board}}rowspan="2"{{/if}}>
+      <td colspan="2" class="top text" class="top" {{if !$board}}rowspan="2"{{/if}}>
+        {{if $patient->_ref_dossier_medical->_id && $patient->_ref_dossier_medical->_count_allergies}}
+          <img src="images/icons/warning.png" style="float: right" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}', 'allergies');" />
+        {{/if}}
         {{if $_operation->annulee}}
           [ANNULEE]
         {{else}}
@@ -178,7 +193,8 @@
       <td class="text top">
         <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$_operation->_id}}">
           {{if $_operation->salle_id}}Déplacé en salle {{$_operation->_ref_salle}}{{/if}}
-          {{mb_include template=inc_vw_operation}}   
+          {{mb_include template=inc_vw_operation}}
+          ({{mb_label object=$_operation field=cote}} {{mb_value object=$_operation field=cote}})  
         </a>
       </td>
     </tr>
