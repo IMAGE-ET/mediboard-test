@@ -16,7 +16,7 @@ $date_min     = CValue::get("date_min");
 $date_max     = CValue::get("date_max");
 
 $where = array(
-  "date_ordered" => "BETWEEN '$date_min' AND '$date_max'",
+  "DATE(date_ordered) BETWEEN '$date_min' AND '$date_max'",
 );
 
 if ($invoiced xor $not_invoiced) {
