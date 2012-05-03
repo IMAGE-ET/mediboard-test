@@ -29,17 +29,15 @@
 {{if $list_type == "left"}}
   <tr>
     <th class="title" colspan="3">
-      {{if $conf.dPplanningOp.COperation.horaire_voulu}}
       <form name="editOrderVoulu" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPbloc" />
         <input type="hidden" name="dosql" value="do_order_voulu_op" />
         <input type="hidden" name="plageop_id" value="{{$plage->_id}}" />
         <input type="hidden" name="del" value="0" />
         <button type="button" class="tick oneclick" style="float: right;" onclick="submitOrder(this.form);">
-          Utiliser les horaires souhaités
+          Placer selon les horaires souhaités
         </button>
       </form>
-      {{/if}}
       Patients à placer
     </th>
   </tr>
