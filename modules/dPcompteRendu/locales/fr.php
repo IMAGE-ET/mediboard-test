@@ -82,6 +82,7 @@ $locales['CCompteRendu-author_id-desc'] = 'Propriétaire du document, c\'est-à-di
 $locales['CCompteRendu-back-listes_choix'] = 'Listes de choix';
 $locales['CCompteRendu-back-modeles_footed'] = 'Modèles';
 $locales['CCompteRendu-back-modeles_headed'] = 'Modèles';
+$locales['CCompteRendu-back-pack_links'] = 'Packs';
 $locales['CCompteRendu-blank_modele'] = 'Modèle vierge';
 $locales['CCompteRendu-choose-user'] = 'Choisir un utilisateur';
 $locales['CCompteRendu-close'] = 'Fermer';
