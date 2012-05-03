@@ -14,7 +14,18 @@ $plageop = new CPlageOp();
 $plageop->load($plageop_id);
 
 $plageop->loadRefsOperations(false, "rank, rank_voulu, horaire_voulu", true);
-$plageop->reorderOp("validate");
+
+foreach($plageop->_ref_operations as $_id => $_interv) {
+  if (!$_interv->rank && 
+      !$_interv->rank_voulu && 
+      !$_interv->horaire_voulu) {
+    unset($plageop->_ref_operations[$_id]);
+  }
+}
+
+if (!empty($plageop->_ref_operations)) {
+  $plageop->reorderOp("validate");
+}
 
 CAppUI::stepAjax("Placement effectué");
 CApp::rip();

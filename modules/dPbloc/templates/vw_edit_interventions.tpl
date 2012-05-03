@@ -18,7 +18,7 @@
   }
 
   var chooseAnesthCallback = function() {
-	  location.reload(); 
+    location.reload(); 
   }
   
   var reloadAllLists = function() {
@@ -41,13 +41,16 @@
   }
   
   var submitOrder = function(oForm, side) {
+    var callback = reloadAllLists;
+    
     if(side == "left") {
-      return submitFormAjax(oForm, 'systemMsg', { onComplete: reloadLeftList });
+      callback = reloadLeftList;
     }
     if(side == "right") {
-      return submitFormAjax(oForm, 'systemMsg', { onComplete: reloadRightList });
+      callback = reloadRightList;
     }
-    return submitFormAjax(oForm, 'systemMsg', { onComplete: reloadAllLists });
+    
+    return onSubmitFormAjax(oForm, callback);
   }
   
   Main.add(function(){
