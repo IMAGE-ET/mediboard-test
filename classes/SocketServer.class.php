@@ -238,9 +238,13 @@ class SocketServer {
       if ($passphrase) {
         stream_context_set_option($context, 'ssl', 'passphrase', $passphrase); 
       }
+      
+      //stream_context_set_option($context, 'ssl', 'allow_self_signed', true); 
+      //stream_context_set_option($context, 'ssl', 'verify_peer', false); 
     }
     
     $this->__socket = @stream_socket_server("tcp://$address:$port", $errno, $errstr, STREAM_SERVER_BIND | STREAM_SERVER_LISTEN, $context);
+    //stream_socket_enable_crypto($this->__socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
     
     if (false === $this->__socket) {
       $this->__raiseError($errstr);

@@ -71,11 +71,14 @@ class CMLLPServer {
   
   private $clients = array();
   
-  function __construct($call_url, $username, $password, $port){
-    $this->call_url = $call_url;
-    $this->username = $username;
-    $this->password = $password;
-    $this->port = $port;
+  function __construct($call_url, $username, $password, $port, $certificate = null, $passphrase = null){
+    $this->call_url    = $call_url;
+    $this->username    = $username;
+    $this->password    = $password;
+    $this->port        = $port;
+    $this->certificate = $certificate;
+    $this->passphrase  = $passphrase;
+    
     $this->server = new SocketServer(AF_INET, SOCK_STREAM, SOL_TCP);
   }
   
