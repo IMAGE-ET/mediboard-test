@@ -115,7 +115,8 @@ ProtocoleSelector.init = function(){
   this.sFournitures   = "fournitures";
   this.sRques_op      = "rques";
   this.sServiceId     = "service_id";
-  
+  this.sPresencePreop = "presence_preop";
+  this.sPresencePostop = "presence_postop";
   this.sType          = "type";
   {{if $conf.dPplanningOp.CSejour.show_type_pec == 1}}
     this.sTypePec     = "type_pec";

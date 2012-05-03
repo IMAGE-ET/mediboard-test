@@ -30,6 +30,8 @@ ProtocoleSelector = {
   sServiceId       : null,
   sServiceId_easy  : null,
   sForceType       : null,
+  sPresencePreop   : null,
+  sPresencePostop  : null,
   options : {},
 
   pop: function() {
@@ -66,6 +68,10 @@ ProtocoleSelector = {
       
       $V(oOpForm[this.sCodes_ccam],        protocole.codes_ccam);
       $V(oOpForm[this.sLibelle],           protocole.libelle);
+      $V(oOpForm[this.sPresencePreop],     protocole.presence_preop);
+      $V(oOpForm[this.sPresencePreop+"_da"], protocole.presence_preop);
+      $V(oOpForm[this.sPresencePostop],    protocole.presence_postop);
+      $V(oOpForm[this.sPresencePostop+"_da"], protocole.presence_postop);
       $V(oOpForm[this.sCote],              protocole.cote);
       $V(oOpForm[this.sHour_op],           protocole._hour_op);
       $V(oOpForm[this.sMin_op],            protocole._min_op);

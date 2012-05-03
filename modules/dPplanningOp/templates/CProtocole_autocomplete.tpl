@@ -33,6 +33,8 @@
     libelle_sejour   : "{{$match->libelle_sejour|smarty:nodefaults|escape:"javascript"}}",
     _hour_op         : "{{$match->_hour_op}}",
     _min_op          : "{{$match->_min_op}}",
+    presence_preop   : "{{$match->presence_preop}}",
+    presence_postop  : "{{$match->presence_postop}}",
     examen           : "{{$match->examen|smarty:nodefaults|escape:"javascript"}}",
     materiel         : "{{$match->materiel|smarty:nodefaults|escape:"javascript"}}",
     convalescence    : "{{$match->convalescence|smarty:nodefaults|escape:"javascript"}}",
