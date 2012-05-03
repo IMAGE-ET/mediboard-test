@@ -1508,7 +1508,13 @@ class CSetupdPcabinet extends CSetup {
     
     $query = "ALTER TABLE `tarifs` ADD `codes_caisse` VARCHAR(255);";
     $this->addQuery($query);
-    $this->mod_version = "1.57";
+    $this->makeRevision("1.57");
+    
+    $query = "ALTER TABLE `reglement` 
+              CHANGE `mode` `mode` ENUM( 'cheque', 'CB', 'especes', 'virement', 'BVR', 'autre' ),
+              ADD `num_bvr` VARCHAR(50);";
+    $this->addQuery($query);
+    $this->mod_version = "1.58";
   }
 }
 ?>

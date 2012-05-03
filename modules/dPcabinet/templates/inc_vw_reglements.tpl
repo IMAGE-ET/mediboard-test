@@ -8,6 +8,13 @@ updateBanque = function(mode) {
     banque_id.hide();
     $V(banque_id, "");
   }
+  var bvr = mode.form.num_bvr;
+  if ($V(mode) == "BVR") {
+    bvr.show();
+  }
+  else {
+    bvr.hide();
+  }
 }
 delReglement= function(reglement_id){
   var oForm = getForm('reglement-delete');
@@ -30,6 +37,13 @@ AddReglement = function (oForm){
       url.requestUpdate('load_facture');
     }
   });
+}
+modifMontantBVR = function (num_bvr){
+   var eclat = num_bvr.split('>')[0];
+   var montant_bvr = eclat.substring(2, 12)/100;
+  
+   var form = getForm("reglement-add");
+   form.montant.value = montant_bvr;
 }
 </script>
 
@@ -63,6 +77,7 @@ AddReglement = function (oForm){
             <th class="category">
               {{mb_label object=$reglement field=mode}}
               ({{mb_label object=$reglement field=banque_id}})
+              ({{mb_label object=$reglement field=num_bvr}})
             </th>
             <th class="category" style="width: 6em;">{{mb_label object=$reglement field=montant}}</th>
             <th class="category" style="width: 6em;">{{mb_label object=$reglement field=date}}</th>
@@ -77,6 +92,7 @@ AddReglement = function (oForm){
               {{if $_reglement->_ref_banque->_id}}
                 ({{$_reglement->_ref_banque}})
               {{/if}}
+              {{if $_reglement->num_bvr}}( {{$_reglement->num_bvr}} ){{/if}}
             </td>
             <td>{{mb_value object=$_reglement field=montant}}</td>
             <td>
@@ -89,13 +105,23 @@ AddReglement = function (oForm){
             </td>
           </tr>
           {{/foreach}}
-          {{if ($facture->_montant_total_factures-$facture->_reglements_total_patient) > 0}}
+          {{if ($facture->_montant_avec_remise-$facture->_reglements_total_patient) > 0}}
             <tr>
               <td>
                 {{mb_field object=$reglement field=mode emptyLabel="Choose" onchange="updateBanque(this)"}}
                 {{mb_field object=$reglement field=banque_id options=$banques style="display: none"}}
+                {{if $facture->_num_bvr}}
+                  <select name="num_bvr" style="display:none;" onchange="modifMontantBVR(this.value);" >
+                    <option value="0">&mdash; Choisir un numéro</option>
+                    {{foreach from=$facture->_num_bvr item=num}}
+                      <option value="{{$num}}">
+                        {{$num}}
+                      </option>
+                    {{/foreach}}
+                  </select>
+                {{/if}}
               </td>
-              <td><input type="text" class="currency notNul" size="4" maxlength="8" name="montant" value="{{$facture->_montant_total_factures-$facture->_reglements_total_patient}}" /></td>
+              <td><input type="text" class="currency notNul" size="4" maxlength="8" name="montant" value="{{$facture->_montant_avec_remise-$facture->_reglements_total_patient}}" /></td>
               <td></td>
               <td><button class="add notext" type="button" onclick="AddReglement(this.form);">{{tr}}Add{{/tr}}</button></td>
             </tr>
@@ -103,10 +129,10 @@ AddReglement = function (oForm){
           <tr>
             <td colspan="4" style="text-align: center;">
               {{mb_value object=$facture field=_reglements_total_patient}} réglés, 
-              <strong>{{$facture->_montant_total_factures-$facture->_reglements_total_patient}} restant</strong>
+              <strong>{{$facture->_montant_avec_remise-$facture->_reglements_total_patient}} restant</strong>
             </td>
           </tr>
-          {{if ($facture->_montant_total_factures-$facture->_reglements_total_patient) <= 0}}
+          {{if ($facture->_montant_avec_remise-$facture->_reglements_total_patient) <= 0}}
             <tr>
               <td colspan="4" style="text-align: center;">
                 <strong>

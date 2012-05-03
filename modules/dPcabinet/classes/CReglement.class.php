@@ -21,10 +21,11 @@ class CReglement extends CMbMetaObject {
   var $mode            = null;
   var $object_class    = null;
   var $object_id       = null;
+  var $num_bvr         = null;
   
   // Fwd References
   var $_ref_consultation = null;
-  var $_ref_banque     = null;
+  var $_ref_banque       = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -40,7 +41,8 @@ class CReglement extends CMbMetaObject {
     $specs['date']            = 'dateTime notNull';
     $specs['montant']         = 'currency notNull';
     $specs['emetteur']        = 'enum list|patient|tiers';
-    $specs['mode']            = 'enum notNull list|cheque|CB|especes|virement|autre default|cheque';
+    $specs['mode']            = 'enum notNull list|cheque|CB|especes|virement|BVR|autre default|cheque';
+    $specs['num_bvr']         = 'str';
     return $specs;
   }
   
