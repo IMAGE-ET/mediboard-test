@@ -35,8 +35,8 @@
         <input type="hidden" name="uf_medicale_id" value="" />
         <input type="hidden" name="uf_soins_id" value="" />
         {{mb_key object=$affectation}}
-        <input type="text" name="_date_cut_da" value="{{$affectation->entree|date_format:$conf.datetime}}" readonly="readonly"/>
-        <input type="hidden" name="_date_cut" class="dateTime" value="{{$affectation->entree}}"
+        <input type="text" name="_date_cut_da" value="{{$smarty.now|date_format:$conf.datetime}}" readonly="readonly"/>
+        <input type="hidden" name="_date_cut" class="dateTime" value="{{$smarty.now|date_format:$conf.datetime}}"
           onchange="checkCut(this)"/>
         
         <script type="text/javascript">

@@ -19,7 +19,7 @@ $affectation = new CAffectation;
 $affectation->load($affectation_id);
 
 if ($_date_cut < $affectation->entree || $_date_cut > $affectation->sortie) {
-  CAppUI::setMsg("Date de scindage hors des bornes de l'affectation", UI_MSG_ERROR);
+  CAppUI::setMsg("Date de scission hors des bornes de l'affectation", UI_MSG_ERROR);
   echo CAppUI::getMsg();
   CApp::rip();
 }
