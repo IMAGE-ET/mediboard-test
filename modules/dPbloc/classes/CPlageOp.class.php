@@ -318,7 +318,7 @@ class CPlageOp extends CMbObject {
     
     // Erreur si on créé / modifier une plage sur une salle bloquée
     $salle = $this->loadRefSalle();
-    if ($salle->isLocked($this->date)) {
+    if (count($salle->loadRefsBlocages($this->date))) {
       $msg = "Impossible de " . ($this->_id ? "modifier" : "créer") . " la plage : la salle $salle est bloquée";
       return $msg;
     }

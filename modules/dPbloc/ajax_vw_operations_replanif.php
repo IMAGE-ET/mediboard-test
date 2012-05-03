@@ -28,7 +28,7 @@ $salles = array();
 foreach ($plages as $key => $_plage) {
   $salle = $_plage->loadRefSalle();
   
-  if (!$salle->isLocked($date_replanif)) {
+  if (!count($salle->loadRefsBlocages($date_replanif))) {
     unset($plages[$key]);
     continue;
   }
