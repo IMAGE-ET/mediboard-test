@@ -2,7 +2,7 @@
   <input type="hidden" name="m" value="maternite" />
   <input type="hidden" name="dosql" value="do_dossier_provisoire_aed" />
   <input type="hidden" name="operation_id" value="{{$operation->_id}}"/>
-  <input type="hidden" name="sejour_id" value="{{$operation->sejour_id}}"/>
+  <input type="hidden" name="sejour_maman_id" value="{{$operation->sejour_id}}"/>
 </form>
 <table class="tbl">
   <tr>

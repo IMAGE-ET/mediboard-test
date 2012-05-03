@@ -42,7 +42,8 @@ if ($naissance_id) {
 }
 else {
   if (!$provisoire) {
-    $naissance->rang = $sejour->countBackRefs("naissances") + 1;
+    $grossesse = $sejour->loadRefGrossesse();
+    $naissance->rang = $grossesse->countBackRefs("naissances") + 1;
     $naissance->heure = mbTime();
   }
   

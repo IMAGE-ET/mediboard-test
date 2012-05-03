@@ -64,7 +64,7 @@
         {{mb_label object=$patient field="sexe"}}
       </th>
       <td>
-        {{mb_field object=$patient field="sexe" emptyLabel="Choose"}}
+        {{mb_field object=$patient field="sexe" emptyLabel="CPatient.sexe."}}
       </td>
     </tr>
     <tr>
