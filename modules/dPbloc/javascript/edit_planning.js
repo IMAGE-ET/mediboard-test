@@ -47,11 +47,6 @@ EditPlanning  = {
     url.popup(900, 550, "Planning");
 	},
 	
-	lockPlages: function(oForm) {
-	  alert('on lock tout');
-	  oForm.submit();
-	},
-	
 	showAlerte: function(date, bloc_id, type) {
     var url = new Url("dPbloc", "vw_alertes");
     url.addParam("date"   , date);
@@ -65,5 +60,12 @@ EditPlanning  = {
     url.addParam("salle_id", salle_id);
     url.addParam("date"    , date);
     url.requestModal(900);
+  },
+  
+  lockPlages: function(form) {
+    if(confirm('Voulez-vous verrouiller toutes les plages de ce jour ?')) {
+      return checkForm(form);
+    }
+    return false;
   }
 };

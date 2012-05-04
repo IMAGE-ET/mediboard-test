@@ -16,7 +16,7 @@
     {{if $can->edit}}
       <br />
       {{assign var=plages_ids value=$listPlages.$curr_day}}
-      <form name="chg-{{$curr_day}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="chg-{{$curr_day}}" action="?m={{$m}}" method="post" onsubmit="return EditPlanning.lockPlages(this);">
         <input type="hidden" name="m" value="bloc" />
         <input type="hidden" name="@class" value="CPlageOp" />
         <input type="hidden" name="verrouillage" value="oui" />
