@@ -35,6 +35,7 @@ if($facture->loadObject($where)){
     
     $facture->du_patient = $somme + $du_patient;
     $facture->du_tiers   = $somme2 + $du_tiers;
+    $facture->tarif = null;
     $facture->store();
   }
   elseif($du_patient && $ajout_consult){
@@ -58,6 +59,7 @@ if($facture->loadObject($where)){
     
   	$facture->du_patient = $facture->du_patient + $du_patient;
     $facture->du_tiers   = $facture->du_tiers + $du_tiers;
+    $facture->tarif = null;
     $facture->store();
     
     $consult->valide = 1;

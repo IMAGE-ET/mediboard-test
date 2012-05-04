@@ -14,6 +14,7 @@ if($consult_id){
 	if($facture->loadObject("patient_id = '$patient_id' AND cloture IS NULL")){
 	  $facture->loadRefs();
 	  if(count($facture->_ref_consults) == 0){
+	    $facture->tarif = null;
 	    $facture->delete();
 	  }
 	  else{
@@ -26,6 +27,7 @@ if($consult_id){
 	    if($somme != $facture->du_patient || $somme2 != $facture->du_tiers){
 	      $facture->du_patient = $somme ;
 	      $facture->du_tiers   = $somme2;
+        $facture->tarif = null;
 	      $facture->store();
 	    }
 	  }
