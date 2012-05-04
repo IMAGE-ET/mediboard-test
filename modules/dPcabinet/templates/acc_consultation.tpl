@@ -16,6 +16,8 @@
 {{/if}}
 
 {{mb_script module="dPmedicament" script="equivalent_selector"}}
+{{mb_script module="soins" script="plan_soins"}}
+
 
 <script type="text/javascript">
 
@@ -34,7 +36,7 @@ function loadSuivi(sejour_id, user_id, cible, show_obs, show_trans, show_const) 
     if (!Object.isUndefined(show_const)) {
       urlSuivi.addParam("_show_const", show_const);
     }
-    urlSuivi.requestUpdate("suivisoins", {onComplete: function() { Control.Modal.close(); } });
+    urlSuivi.requestUpdate("dossier_suivi", {onComplete: function() { Control.Modal.close(); } });
   }
 }
 
@@ -100,14 +102,18 @@ Main.add(function () {
   {{if "dPprescription"|module_active && $consult->sejour_id && $modules.dPprescription->_can->read && !$conf.dPprescription.CPrescription.prescription_suivi_soins}}
   <li {{if !$mutation_id}}onmousedown="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'', null, false);"{{/if}}>
     <a href="#prescription_sejour">
-      Prescription Séjour
+      Prescription
     </a>
   </li>
+  <li {{if !$mutation_id}}onmousedown="PlanSoins.loadTraitement('{{$consult->sejour_id}}',null,'','administration');"{{/if}}>
+    <a href="#dossier_traitement">
+      Suivi de soins
+    </a>
+  </li>
+  {{elseif $rpu}}
+  <li><a href="#dossier_suivi">Suivi de soins</a></li>
   {{/if}}
- 
-  {{if $rpu}}
-  <li><a href="#suivisoins">Suivi soins</a></li>
-  {{/if}}
+  
   <li onmousedown="refreshConstantesMedicales();"><a href="#Constantes">Constantes</a></li>
   <li><a href="#Examens">Examens</a></li>
   
@@ -136,27 +142,38 @@ Main.add(function () {
 		</div>
 	{{/if}}
 
-<div id="prescription_sejour" style="display: none;">
-  {{if $mutation_id}}
-	  <div class="small-info">
-	    Ce patient a été hospitalisé, veuillez vous référer au dossier de soin de son séjour.
-	  </div>
+
+
+  {{if "dPprescription"|module_active && $consult->sejour_id && $modules.dPprescription->_can->read && !$conf.dPprescription.CPrescription.prescription_suivi_soins}}
+    
+  <div id="prescription_sejour" style="display: none;">
+    {{if $mutation_id}}
+      <div class="small-info">
+        Ce patient a été hospitalisé, veuillez vous référer au dossier de soin de son séjour.
+      </div>
+    {{/if}}
+  </div>
+  
+  <div id="dossier_traitement" style="display: none;">
+    {{if $mutation_id}}
+      <div class="small-info">
+        Ce patient a été hospitalisé, veuillez vous référer au dossier de soin de son séjour.
+      </div>
+    {{/if}}
+  </div>
+  
+  {{elseif $rpu}}
+    <div id="dossier_suivi" style="display:none">
+      {{if $mutation_id}}
+        <div class="small-info">
+          Ce patient a été hospitalisé, veuillez vous référer au dossier de soin de son séjour.
+        </div>
+      {{/if}}
+    </div>
   {{/if}}
-</div>
 {{/if}}
 
 <div id="AntTrait" style="display: none;">{{mb_include module=cabinet template=inc_ant_consult}}</div>
-
-{{if $rpu}}
-<div id="suivisoins" style="display:none">
-  {{if $mutation_id}}
-	  <div class="small-info">
-	    Ce patient a été hospitalisé, veuillez vous référer au dossier de soin de son séjour.
-	  </div>
-  {{/if}}
-</div>
-{{/if}}
-
 <div id="Constantes" style="display: none"></div>
 
 <div id="Examens" style="display: none;">
