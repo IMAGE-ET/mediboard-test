@@ -30,6 +30,8 @@
       th.setStyle({minWidth: width_th+"px"});
     });
     
+    time_line_temporelle_non_affectes.setStyle({width: time_line_temporelle_non_affectes.up('div').getWidth()+"px"});
+    
     if (Prototype.Browser.Gecko) {
       var top_tempo = time_line_temporelle_non_affectes.getStyle("top");
       time_line_temporelle_non_affectes.setStyle({top: top_tempo});
@@ -66,11 +68,11 @@
 {{/if}}
 {{math equation=x-1 x=$nb_ticks assign=nb_ticks_r}}
 
-<div style="height: 5em; width: 100%">
+<div style="height: 2em; width: 100%">
   <div id="time_line_temporelle_non_affectes" style="background: #fff; position: absolute; z-index: 200;">
     <form name="chgFilter" action="?" method="get" onsubmit="return onSubmitFormAjax(this,null, 'list_affectations');">
       <input type="hidden" name="m" value="dPhospi" />
-      <input type="hidden" name="a" value="ajax_vw_affectations" />
+      <input type="hidden" name="a" value="ajax_vw_non_places" />
       {{mb_field object=$sejour field="_type_admission" style="width: 16em;" onchange="this.form.onsubmit()"}}
     
       <select name="triAdm" style="width: 16em;" onchange="this.form.onsubmit()">
@@ -106,53 +108,6 @@
     <div id="lit_urgence" class="clit_bloque draggable" style="display: inline-block;">
       <strong>[LIT EN URGENCE]</strong>
     </div>
-    <table class="tbl" style="width: auto; table-layout: fixed;">
-      <tr>
-      
-      {{if $granularite == "day"}}
-        <th colspan="{{$colspan}}">
-          {{$date|date_format:$conf.longdate}}
-        </th>
-      {{else}}
-        <th></th>
-        {{foreach from=$days item=_day key=_datetime}}
-        
-          <th colspan="{{if $granularite == "week"}}4{{else}}7{{/if}}">
-            {{if $granularite == "week"}}
-              {{$_day|date_format:"%a"}} {{$_day|date_format:$conf.date}}
-            {{else}}
-              {{if isset($change_month.$_day|smarty:nodefaults)}}
-                {{if isset($change_month.$_day.left|smarty:nodefaults)}}
-                  <span style="float: left;">
-                    {{$change_month.$_day.left|date_format:"%B"}}
-                  </span>
-                {{/if}}
-                {{if isset($change_month.$_day.right|smarty:nodefaults)}}
-                  <span style="float: right;">
-                    {{$change_month.$_day.right|date_format:"%B"}}
-                  </span>
-                {{/if}}
-              {{/if}}
-              Semaine {{$_day}}
-            {{/if}}
-          </th>
-        {{/foreach}}
-      {{/if}}
-      </th>
-    </tr>
-    <tr>
-      <th class="first_th"></th>
-      {{foreach from=$datetimes item=_date}}
-        <th style="min-width: {{$td_width}}px;">
-          {{if $granularite == "4weeks"}}
-            {{$_date|date_format:"%a"|upper|substr:0:1}} {{$_date|date_format:"%d"}}
-          {{else}}
-            {{$_date|date_format:"%H"}}h
-          {{/if}}
-        </th>
-      {{/foreach}}
-    </tr>
-    </table>
   </div>
 </div>
 

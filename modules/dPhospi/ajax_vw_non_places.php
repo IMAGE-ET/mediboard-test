@@ -1,4 +1,4 @@
-<?php /* $Id: ajax_vw_affectations.php $ */
+<?php /* $Id: ajax_vw_non_places.php $ */
 
 /**
  * @package Mediboard
@@ -237,5 +237,5 @@ $smarty->assign("current", $current);
 $smarty->assign("items_prestation", $items_prestation);
 $smarty->assign("item_prestation_id", $item_prestation_id);
 $smarty->assign("prestation_id", $prestation_id);
-$smarty->display("inc_vw_affectations.tpl");
+$smarty->display("inc_vw_non_places.tpl");
 ?>

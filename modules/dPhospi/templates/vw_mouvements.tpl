@@ -1,6 +1,6 @@
 <script type="text/javascript">
    loadNonPlaces = function() {
-     var url = new Url("dPhospi", "ajax_vw_affectations");
+     var url = new Url("dPhospi", "ajax_vw_non_places");
      url.requestUpdate("list_affectations");
    }
    
@@ -184,7 +184,7 @@
 
 <form name="filterMouv" action="?" method="get" onsubmit="return false;">
   <input type="hidden" name="m" value="hospi" />
-  <input type="hidden" name="a" value="ajax_refresh_mouvements" />
+  <input type="hidden" name="a" value="ajax_vw_mouvements" />
   
   <!-- Filtre -->
   <div style="width: 100%;">
