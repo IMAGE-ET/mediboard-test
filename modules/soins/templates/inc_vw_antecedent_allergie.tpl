@@ -13,24 +13,31 @@
   <img src="images/icons/antecedents.gif" onmouseover="ObjectTooltip.createDOM(this, 'antecedents{{$sejour_id}}')" />
   
    <div id="antecedents{{$sejour_id}}" style="text-align:left;  display: none;">
-     <ul>
+     <table class="tbl">
+      <tr>
+        <th class="title">
+          Antécédents
+        </th>
+      </tr>
       {{foreach from=$antecedents key=name item=cat}}
-      {{if $name != "alle" && $cat|@count}}
-      <li>
-      <strong>{{tr}}CAntecedent.type.{{$name}}{{/tr}}</strong>
-      <ul>
-      {{foreach from=$cat item=ant}}
-      <li>
-        {{if $ant->date}}
-          {{mb_value object=$ant field=date}}:
+        {{if $name != "alle" && $cat|@count}}
+          <tr>
+            <th>
+              {{tr}}CAntecedent.type.{{$name}}{{/tr}}
+            </th>
+          </tr>
+          {{foreach from=$cat item=ant}}
+            <tr>
+              <td>
+                {{if $ant->date}}
+                  {{mb_value object=$ant field=date}}:
+                {{/if}}
+                {{$ant->rques}}
+              </td>
+            </tr>
+          {{/foreach}}
         {{/if}}
-        {{$ant->rques}}
-      </li>
       {{/foreach}}
-      </ul>
-      </li>
-      {{/if}}
-      {{/foreach}}
-   </ul>   
+      </table>
    </div>  
  {{/if}}
