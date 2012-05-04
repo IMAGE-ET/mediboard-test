@@ -38,6 +38,10 @@ class CEAIMbObject {
   static function getComment(CMbObject $object, CMbObject $otherObject = null) {
     $modified_fields = self::getModifiedFields($object);
     
+    if (!$object->_ref_current_log) {
+      return "";
+    }
+
     if ($object instanceof CPatient) {
       switch ($object->_ref_current_log->type) {
          // Enregistrement du patient
@@ -83,7 +87,7 @@ class CEAIMbObject {
     
     if ($object instanceof CIdSante400) {
       if (!$object->_id) {
-        return;
+        return "";
       }
       
       return "L'IPP/NDA créé est : $object->id400";

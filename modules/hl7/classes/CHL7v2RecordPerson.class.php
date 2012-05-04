@@ -342,15 +342,17 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
   function getROL(DOMNode $node, CPatient $newPatient) {
     $sender = $this->_ref_sender;
     
+    $ROL_4 = $this->queryNodes("ROL.4", $node)->item(0);
+
     switch ($this->queryTextNode("ROL.3/CE.1", $node)) {
       // Médecin traitant
       case "ODRP" :
-        $newPatient->medecin_traitant = $this->getMedecin($this->queryNode("ROL.4", $node));
+        $newPatient->medecin_traitant = $this->getMedecin($ROL_4);
         break;
       case "RT" : 
         $correspondant = new CCorrespondant();
         $correspondant->patient_id = $newPatient->_id;
-        $correspondant->medecin_id = $this->getMedecin($this->queryNode("ROL.4", $node));
+        $correspondant->medecin_id = $this->getMedecin($ROL_4);
         if (!$correspondant->loadMatchingObjectEsc()) {
           // Notifier les autres destinataires autre que le sender
           $correspondant->_eai_initiateur_group_id = $sender->group_id;
@@ -411,7 +413,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $xcn1  = $this->queryTextNode("XCN.1", $node);
     $xcn2  = $this->queryTextNode("XCN.2/FN.1", $node);
     $xcn3  = $this->queryTextNode("XCN.3", $node);
-      
+
     $medecin = new CMedecin();
     
     switch ($this->queryTextNode("XCN.13", $node)) {
@@ -428,8 +430,6 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
         if ($this->queryTextNode("XCN.9/CX.4/HD.2", $node) == CAppUI::conf("hl7 assigningAuthorityUniversalID")) {
           $medecin->load($xcn1);
         }
-        /* @todo Gestion des id externes */
-        break;
     }
     
     // Si pas retrouvé par son identifiant

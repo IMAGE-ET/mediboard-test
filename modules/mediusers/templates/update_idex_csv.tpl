@@ -22,7 +22,7 @@
   <em>* : champs obligatoires</em>
 </div>
 
-<form method="post" action="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog=1&amp;" name="import" enctype="multipart/form-data">
+<form method="post" action="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog=1" name="import" enctype="multipart/form-data">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="{{$actionType}}" value="{{$action}}" />
   
