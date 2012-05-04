@@ -59,6 +59,17 @@ function viewActes(etab){
   
   return false;
 }
+
+printFacture = function(edit_justificatif, edit_bvr) {
+  var oForm = document.printFrm;
+  var url = new Url('dPcabinet', 'edit_bvr');
+  url.addParam('edition_justificatif', edit_justificatif);
+  url.addParam('edition_bvr', edit_bvr);
+  url.addParam('_date_min', oForm._date_min.value);
+  url.addParam('_date_max', oForm._date_max.value);
+  url.addParam('prat_id', oForm.chir.value);
+  url.requestUpdate(SystemMessage.id);
+}
 </script>
 
 <table class="main">
@@ -174,6 +185,14 @@ function viewActes(etab){
             {{/if}}
           </td>
         </tr>
+        {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+          <tr>
+            <td class="button" colspan="2">
+              <button type="button" class="pdf" onclick="printFacture(0, 1);">Impression des BVR</button>
+              <button type="button" class="pdf" onclick="printFacture(1, 0);">Justificatifs de remboursement</button>
+            </td>
+          </tr>
+        {{/if}}
         <tr>
           <th class="category" colspan="4">Comptabilité Etablissement</th>
         </tr>

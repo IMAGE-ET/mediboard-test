@@ -24,13 +24,12 @@ viewFacture = function(element, factureconsult_id){
   url.requestUpdate('load_facture');
 }
 
-printFacture = function(factureconsult_id, edit_justificatif, edit_bvr, preimpression, prat_id) {
+printFacture = function(factureconsult_id, edit_justificatif, edit_bvr) {
+//  var url = new Url('dPcabinet', 'edit_bvr_avec_preimpression');
   var url = new Url('dPcabinet', 'edit_bvr');
   url.addParam('factureconsult_id', factureconsult_id);
-  url.addParam('edit_justificatif', edit_justificatif);
-  url.addParam('edit_bvr', edit_bvr);
-  url.addParam('preimpression', preimpression);
-  url.addParam('prat_id', prat_id);
+  url.addParam('edition_justificatif', edit_justificatif);
+  url.addParam('edition_bvr', edit_bvr);
   url.addParam('suppressHeaders', '1');
   url.popup(1000, 600);
 }
@@ -88,10 +87,6 @@ printFacture = function(factureconsult_id, edit_justificatif, edit_bvr, preimpre
             {{/foreach}}
           </select>
         </td>
-        {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
-          <td>
-            <button class="printPDF" onclick="printFacture(null , 0, 1, 0, {{if $chirSel}}{{$chirSel}}{{else}}null{{/if}});">Préimpression de BVR</button></td>
-        {{/if}}
       </tr>
     </table>
   </form>
@@ -116,7 +111,10 @@ printFacture = function(factureconsult_id, edit_justificatif, edit_bvr, preimpre
                 {{/if}}
               </td>
               <td class="text">
-                <a onclick="viewFacture(this, '{{$_facture->factureconsult_id}}');" href="#">{{$_facture->_ref_patient->_view}}</a>
+                <a onclick="viewFacture(this, '{{$_facture->factureconsult_id}}');" href="#" 
+                  onmouseover="ObjectTooltip.createEx(this, '{{$_facture->_ref_patient->_guid}}')">
+                  {{$_facture->_ref_patient->_view|truncate:30:"...":true}}
+                </a>
               </td>
             </tr>
           {{/foreach}}
