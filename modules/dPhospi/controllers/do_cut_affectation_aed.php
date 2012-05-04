@@ -11,6 +11,9 @@
 $affectation_id = CValue::post("affectation_id");
 $_date_cut      = CValue::post("_date_cut");
 $lit_id         = CValue::post("lit_id");
+$parent_affectation_id = CValue::post("parent_affectation_id");
+$_link_affectation = CValue::post("_link_affectation", 0);
+
 $uf_hebergement_id   = CValue::post("uf_hebergement_id");
 $uf_medicale_id      = CValue::post("uf_medicale_id");
 $uf_soins_id         = CValue::post("uf_soins_id");
@@ -29,6 +32,7 @@ $affectation_cut->entree    = $_date_cut;
 $affectation_cut->lit_id    = $affectation->lit_id;
 $affectation_cut->sejour_id = $affectation->sejour_id;
 $affectation_cut->sortie    = $affectation->sortie;
+$affectation_cut->parent_affectation_id = $parent_affectation_id;
 
 $affectation_cut->uf_hebergement_id = $uf_hebergement_id;
 $affectation_cut->uf_medicale_id    = $uf_medicale_id;
@@ -37,6 +41,22 @@ $affectation_cut->uf_soins_id       = $uf_soins_id;
 
 if ($lit_id) {
   $affectation_cut->lit_id = $lit_id;
+}
+
+// Rattachement à l'affectation de la maman
+if ($_link_affectation) {
+  $naissance = new CNaissance;
+  $naissance->sejour_enfant_id = $affectation->sejour_id;
+  $naissance->loadMatchingObject();
+  
+  if ($naissance->_id) {
+    $sejour_maman = $naissance->loadRefSejourMaman();
+    $affectation_maman = $sejour_maman->getCurrAffectation($_date_cut);
+    if ($affectation_maman->_id) {
+      $affectation_cut->lit_id = $affectation_maman->lit_id;
+      $affectation_cut->parent_affectation_id = $affectation_maman->_id;
+    }
+  }
 }
 
 $affectation->sortie = $_date_cut;

@@ -21,7 +21,6 @@ $lit->load($affectation->lit_id);
     $affectation->function_id = $service_urgence; 
   }
 
-$affectations = array();
 $sejour_maman = null;
 
 if (CModule::getActive("maternite")) {
@@ -32,10 +31,6 @@ if (CModule::getActive("maternite")) {
   if ($naissance->_id) {
     $sejour_maman = $naissance->loadRefSejourMaman();
     $sejour_maman->loadRefPatient();
-    $affectations = $sejour_maman->loadRefsAffectations();
-    foreach ($affectations as $_affectation) {
-      $_affectation->loadView();
-    }
   }
 }
 
@@ -49,7 +44,6 @@ if (!$affectation->_id) {
 $smarty = new CSmartyDP;
 
 $smarty->assign("affectation" , $affectation);
-$smarty->assign("affectations", $affectations);
 $smarty->assign("lit"         , $lit);
 $smarty->assign("lit_id"      , $lit_id);
 $smarty->assign("sejour_maman", $sejour_maman);

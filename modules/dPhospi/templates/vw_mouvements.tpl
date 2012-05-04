@@ -4,7 +4,7 @@
      url.requestUpdate("list_affectations");
    }
    
-   changeLit = function(affectation_id, sejour_id) {
+   changeLit = function(affectation_id, sejour_id, link_affectation) {
       var url = new Url('dPhospi', 'ajax_suggest_lit');
       
       if (affectation_id) {
@@ -13,6 +13,10 @@
       
       if (sejour_id) {
         url.addParam("sejour_id", sejour_id);
+      }
+      
+      if (link_affectation) {
+        url.addParam("_link_affectation", link_affectation);
       }
       
       url.requestModal(700, 400);

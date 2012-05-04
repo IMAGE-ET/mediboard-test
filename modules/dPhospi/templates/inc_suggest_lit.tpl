@@ -4,6 +4,7 @@
       <form name="searchLit" method="get" onsubmit="return onSubmitFormAjax(this, null, this.up('div'))">
         <input type="hidden" name="m" value="dPhospi" />
         <input type="hidden" name="a" value="ajax_suggest_lit" />
+        <input type="hidden" name="_link_affectation" value="{{$_link_affectation}}" />
         {{if $affectation_id}}
           <input type="hidden" name="affectation_id" value="{{$affectation_id}}" />
         {{/if}}
@@ -28,7 +29,7 @@
   </tr>
   {{foreach from=$lits item=_lit}}
     {{assign var=lit_id value=$_lit->_id}}
-    {{math equation="100 - (x/y) * 100" x=$_lit->_dispo_depuis y=$max_entree assign=width_entree}}
+    {{math equation="(x/y) * 100" x=$_lit->_dispo_depuis y=$max_entree assign=width_entree}}
     {{if $_lit->_occupe_dans == "libre"}}
       {{assign var=width_sortie value="100"}}
     {{else}}
@@ -38,16 +39,24 @@
       <td>
         <button type="button" class="tick notext"
         onclick="
-        {{if $affectation_id}}
-          moveAffectation('{{$affectation_id}}', '{{$lit_id}}');
+        {{if $_link_affectation}}
+          submitLiaison('{{$lit_id}}');
         {{else}}
-          moveAffectation(null, '{{$lit_id}}', '{{$sejour_id}}');
+          {{if $affectation_id}}
+            moveAffectation('{{$affectation_id}}', '{{$lit_id}}');
+          {{else}}
+            moveAffectation(null, '{{$lit_id}}', '{{$sejour_id}}');
+          {{/if}}
         {{/if}}
-          Control.Modal.close();"></button>
+        Control.Modal.close();"></button>
       </td>
       <td style="width: 30%;">
         <div style="width: {{$width_entree}}%; background: #dcd;">
-          {{$_lit->_dispo_depuis_friendly.count}} {{tr}}{{$_lit->_dispo_depuis_friendly.unit}}{{/tr}}
+          {{if $_lit->_dispo_depuis_friendly}} 
+            {{$_lit->_dispo_depuis_friendly.count}} {{tr}}{{$_lit->_dispo_depuis_friendly.unit}}{{/tr}}
+          {{else}}
+            &mdash;
+          {{/if}}
         </div>
       </td>
       <td>

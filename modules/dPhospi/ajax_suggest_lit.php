@@ -11,6 +11,7 @@
 $affectation_id = CValue::get("affectation_id");
 $sejour_id      = CValue::get("sejour_id");
 $all_services   = CValue::get("all_services", 0);
+$_link_affectation = CValue::get("_link_affectation", 0);
 
 if (!$affectation_id) {
   $all_services = 1;
@@ -55,6 +56,9 @@ if ($affectation_id) {
   unset($lits[$affectation->lit_id]);
 }
 
+$max_entree = 0;
+$max_sortie = 0;
+
 foreach ($lits as $key => $_lit) {
   $_lit->_ref_affectations = array();
   $_lit->loadCompleteView();
@@ -91,8 +95,11 @@ foreach ($lits as $key => $_lit) {
     continue;
   }
   
-  $_lit->_dispo_depuis_friendly = CMbDate::relative($_lit->_ref_last_dispo->sortie, $entree);
+  if ($_lit->_ref_last_dispo->_id && $_lit->_dispo_depuis > $max_entree) {
+    $max_entree = $_lit->_dispo_depuis;
+  }
   
+  $_lit->_dispo_depuis_friendly = CMbDate::relative($_lit->_ref_last_dispo->sortie, $entree);
   if ($_lit->_ref_next_dispo->entree) {
     $_lit->_occupe_dans = strtotime($_lit->_ref_next_dispo->entree) - strtotime($sortie);
     
@@ -100,6 +107,11 @@ foreach ($lits as $key => $_lit) {
       unset($lits[$key]);
       continue;
     }
+    
+    if ($max_sortie < $_lit->_occupe_dans) {
+      $max_sortie = $_lit->_occupe_dans;
+    }
+    
     $_lit->_occupe_dans_friendly = CMbDate::relative($sortie, $_lit->_ref_next_dispo->entree); 
   }
   else {
@@ -110,9 +122,6 @@ foreach ($lits as $key => $_lit) {
 $sorter = CMbArray::pluck($lits, "_dispo_depuis");
 array_multisort($sorter, SORT_ASC, $lits);
 
-$max_entree = max($sorter);
-$max_sortie = max(CMbArray::pluck($lits, "_occupe_dans"));
-
 $smarty = new CSmartyDP;
 
 $smarty->assign("all_services", $all_services);
@@ -121,6 +130,7 @@ $smarty->assign("affectation_id", $affectation_id);
 $smarty->assign("sejour_id"     , $sejour_id);
 $smarty->assign("max_entree", $max_entree);
 $smarty->assign("max_sortie", $max_sortie);
+$smarty->assign("_link_affectation", $_link_affectation);
 
 $smarty->display("inc_suggest_lit.tpl");
 ?>
