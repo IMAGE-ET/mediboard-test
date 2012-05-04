@@ -240,6 +240,7 @@ createConsultEntree = function() {
   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
   <input type="hidden" name="_operation_id" value="" />
   <input type="hidden" name="type" value="" />
+  <input type="hidden" name="_in_suivi" value="1" />
   <input type="hidden" name="callback" value="modalConsult" />
 </form>
 

@@ -20,6 +20,7 @@ $_operation_id = CValue::post("_operation_id");
 $_datetime     = CValue::post("_datetime");
 $callback      = CValue::post("callback");
 $type          = CValue::post("type");
+$_in_suivi     = CValue::post("_in_suivi", 0);
 
 if (!$_datetime || $_datetime == "now") {
   $_datetime = mbDateTime();
@@ -29,7 +30,7 @@ $sejour = new CSejour();
 $sejour->load(CValue::post("sejour_id"));
 
 // Cas des urgences
-if ($sejour->type === "urg") {
+if ($sejour->type === "urg" && !$_in_suivi) {
   if ($_datetime < $sejour->entree || $_datetime > $sejour->sortie) {
     CAppUI::setMsg("La prise en charge doit être dans les bornes du séjour", UI_MSG_ERROR);
     CAppUI::redirect("m=dPurgences");
