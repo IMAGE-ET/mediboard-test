@@ -9,7 +9,23 @@
   
   Main.add(function() {
     var oFormVisiteAnesth = getForm("visiteAnesth");
-    
+    {{if $selOp->prat_visite_anesth_id}}
+      var oForm = getForm('visiteAnesth');
+      var contextUserId = {{$selOp->prat_visite_anesth_id}};
+      var contextUserView = oForm.prat_visite_anesth_id.options[oForm.prat_visite_anesth_id.selectedIndex].innerHTML.trim();
+    {{else}}
+      var contextUserId = User.id;
+      var contextUserId = User.view;
+    {{/if}}
+    aideRquesAnesth = new AideSaisie.AutoComplete(oFormVisiteAnesth.rques_visite_anesth, {
+      objectClass: "COperation",
+      timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+      {{if $selOp->prat_visite_anesth_id}}
+      contextUserId: contextUserId,
+      contextUserView: contextUserView,
+      {{/if}}
+      validateOnBlur:0
+    });
     {{if !$selOp->date_visite_anesth}}
       var dates = {};
       /*dates.limit = {
@@ -80,10 +96,7 @@
       {{if $selOp->date_visite_anesth}}
         {{mb_value object=$selOp field="rques_visite_anesth"}}
       {{else}}
-        {{mb_field object=$selOp field="rques_visite_anesth" form="visiteAnesth"
-          aidesaisie="validateOnBlur: 0,
-                      timestamp: '`$conf.dPcompteRendu.CCompteRendu.timestamp`',
-                      contextUserId: '`$selOp->prat_visite_anesth_id`'"}}
+        {{mb_field object=$selOp field="rques_visite_anesth"}}
       {{/if}}
     </td>
   </tr>

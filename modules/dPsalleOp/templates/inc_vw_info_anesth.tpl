@@ -188,8 +188,15 @@ Main.add(function(){
             </tr>
             <tr>  
               <td>
+                {{if $selOp->_ref_anesth->_id}}
+                  {{assign var=contextUserId value=$selOp->_ref_anesth->_id}}
+                  {{assign var=contextUserView value=$selOp->_ref_anesth}}
+                {{else}}
+                  {{assign var=contextUserId value=$app->_ref_user->_id}}
+                  {{assign var=contextUserView value=$app->_ref_user}}
+                {{/if}}
                 {{mb_field object=$anesth_perop field="libelle" form="addAnesthPerop"
-                  aidesaisie="contextUserId: '`$selOp->_ref_anesth->_id`'"}}
+                  aidesaisie="contextUserId: '`$contextUserId`', contextUserView: '`$contextUserView`'"}}
               </td>
 	          </tr>
 	          <tr>
