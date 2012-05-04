@@ -188,6 +188,10 @@ class CMbFieldSpec {
     
     return htmlspecialchars($propValue);
   }
+  
+  function getHtmlValue($object, $smarty = null, $params = array()){
+    return $this->getValue($object, $smarty, $params);
+  }
 
   /**
    * Check options (params) of the spec vs. the field value

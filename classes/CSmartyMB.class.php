@@ -193,7 +193,7 @@ class CSmartyMB extends Smarty {
     }
   
     $spec = $object->_specs[$field];
-    return $spec->getValue($object, $smarty, $params);
+    return $spec->getHtmlValue($object, $smarty, $params);
   }
   
   /**
