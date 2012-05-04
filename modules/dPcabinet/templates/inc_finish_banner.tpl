@@ -84,7 +84,15 @@ function changePratPec(prat_id) {
         {{/if}}   
       </div>
       {{/if}}
-      {{$patient}} - {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$consult->_ref_chir}}
+      {{$patient}} -
+      {{if $current_m == "dPurgences"}}
+        <select name="prat_id" class="ref notNull" onchange="changePratPec($V(this));" title="Changer le praticien">
+          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+          {{mb_include module=mediusers template=inc_options_mediuser list=$listPrats selected=$consult->_ref_chir->_id}}
+        </select>
+      {{else}}
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$consult->_ref_chir}}
+      {{/if}}
       <br />
       Consultation
       (Etat : {{$consult->_etat}}
@@ -94,15 +102,6 @@ function changePratPec(prat_id) {
           Terminer
         </button>
       {{/if}})
-      {{if $current_m == "dPurgences"}}
-        <br />
-        <div style="float: left;">
-        <select name="prat_id" class="ref notNull" style="width: 10em;" onchange="changePratPec($V(this));" title="Changer le praticien">
-          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-          {{mb_include module=mediusers template=inc_options_mediuser list=$listPrats selected=$consult->_ref_chir->_id}}
-        </select>
-        </div>
-      {{/if}}
     </th>
   </tr>
 </table>
