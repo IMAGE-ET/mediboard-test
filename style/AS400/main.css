@@ -231,6 +231,8 @@ optgroup, option {
 }
 
 input[type=text], 
+input[type=tel], 
+input[type=email], 
 input[type=password], 
 input[type=file],
 select,
@@ -242,6 +244,8 @@ textarea,
 }
 
 input[type=text]:focus, 
+input[type=tel]:focus, 
+input[type=email]:focus, 
 input[type=password]:focus, 
 input[type=file]:focus,
 select:focus,

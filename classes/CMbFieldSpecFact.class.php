@@ -31,6 +31,7 @@ class CMbFieldSpecFact {
     "code"         => "CCodeSpec",
     "pct"          => "CPctSpec",
     "birthDate"    => "CBirthDateSpec",
+    "phone"        => "CPhoneSpec",
     "ref"          => "CRefSpec",
     "numchar"      => "CNumcharSpec",
     "currency"     => "CCurrencySpec",
@@ -53,7 +54,7 @@ class CMbFieldSpecFact {
    * @return CMbFieldSpec Corresponding spec instance
    */
   static function getSpec(CModelObject $object, $field, $prop) {
-  	return self::getSpecWithClassName($object->_class, $field, $prop);
+    return self::getSpecWithClassName($object->_class, $field, $prop);
   }
   
   /**
@@ -66,23 +67,21 @@ class CMbFieldSpecFact {
    * @return CMbFieldSpec
    */
   static function getSpecWithClassName($class, $field, $prop) {
-    $parts = explode(" ", $prop);
-    $specClass = "CMbFieldSpec";
+    $spec_class  = "CMbFieldSpec";
+    $first_space = strpos($prop, " ");
+    
+    if ($first_space === false) {
+      $spec_type = $prop;
+    }
+    else {
+      $spec_type = substr($prop, 0, $first_space);
+    }
     
     // Get spec class
-    if ($specType = array_shift($parts)) {
-      if (null == $specClass = CMbArray::get(self::$classes, $specType)) {
-        trigger_error("No spec class name for '$class'::'$field' = '$prop'", E_USER_ERROR);
-      }
-    }
-    
-    // Get spec options
-    $specOptions = array();
-    foreach ($parts as $_part) {
-      $options = explode("|", $_part);
-      $specOptions[array_shift($options)] = count($options) ? implode("|", $options) : true;
+    if ($spec_type && (null == $spec_class = CMbArray::get(self::$classes, $spec_type))) {
+      trigger_error("No spec class name for '$class::$field' = '$prop'", E_USER_ERROR);
     }
 
-    return new $specClass($class, $field, $prop, $specOptions);
+    return new $spec_class($class, $field, $prop);
   }
 }

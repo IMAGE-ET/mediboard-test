@@ -40,6 +40,7 @@ class CExClass extends CMbObject {
     "CConsultation",
     "CConsultAnesth",
     "CAdministration",
+    "CRPU",
   );
   
   static function getExtendableSpecs(){

@@ -47,6 +47,8 @@ textarea {
 
 
 input[type=text], 
+input[type=tel], 
+input[type=email], 
 input[type=password], 
 input[type=file],
 textarea {
@@ -55,6 +57,7 @@ textarea {
 }
 
 input[type=text], 
+input[type=tel], 
 input[type=password], 
 input[type=file], 
 select, 
@@ -65,6 +68,7 @@ textarea,
 }
 
 input[type=text]:focus, 
+input[type=tel]:focus, 
 input[type=password]:focus, 
 input[type=file]:focus, 
 select:focus, 
@@ -75,7 +79,7 @@ textarea:focus,
 
 input[type=checkbox].disabled {
   opacity: 0.7;
-  filter:alpha(opacity=70); /* IE patch */
+  -ms-filter: "alpha(opacity=70)";
 }
 
 /** <Two rules required> !! Don't merge them 
@@ -268,7 +272,6 @@ button[disabled], a.button.disabled,
 button[disabled="disabled"] { /* For IE */
   cursor: not-allowed;
   opacity: 0.5;
-  filter: alpha(opacity=50);
   -ms-filter: "alpha(opacity=50)";
 }
 
@@ -1009,7 +1012,6 @@ span.highlight {
 .ajax-upload input[type="file"] {
   position: relative;
   text-align: right;
-  filter: alpha(opacity=0);
   -ms-filter: "alpha(opacity=0)";
   opacity: 0;
   z-index: 20;

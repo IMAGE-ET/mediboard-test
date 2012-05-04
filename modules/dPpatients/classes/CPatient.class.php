@@ -271,13 +271,6 @@ class CPatient extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     
-    $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
-    
-    $phone_number_mask = "";
-    if ($phone_number_format != "") {
-      $phone_number_mask = " mask|$phone_number_format";
-    }
-    
     $specs["nom"]               = "str notNull confidential seekable|begin";
     $specs["prenom"]            = "str notNull seekable|begin";
     $specs["prenom_2"]          = "str";
@@ -302,8 +295,8 @@ class CPatient extends CMbObject {
     $specs["adresse"]           = "text confidential";
     $specs["ville"]             = "str confidential seekable";
     $specs["cp"]                = "str minLength|4 maxLength|5 confidential";
-    $specs["tel"]               = "str confidential pattern|\d+ minLength|10$phone_number_mask";
-    $specs["tel2"]              = "str confidential pattern|\d+ minLength|10$phone_number_mask";
+    $specs["tel"]               = "phone confidential";
+    $specs["tel2"]              = "phone confidential";
     $specs["tel_autre"]         = "str maxLength|20";
     $specs["email"]             = "str confidential";
     $specs["vip"]               = "bool default|0";
@@ -355,8 +348,8 @@ class CPatient extends CMbObject {
     $specs["assure_adresse"]              = "text confidential";
     $specs["assure_ville"]                = "str confidential";
     $specs["assure_cp"]                   = "str minLength|4 maxLength|5 confidential";
-    $specs["assure_tel"]                  = "str confidential pattern|\d+ minLength|10$phone_number_mask";
-    $specs["assure_tel2"]                 = "str confidential pattern|\d+ minLength|10$phone_number_mask";
+    $specs["assure_tel"]                  = "phone confidential";
+    $specs["assure_tel2"]                 = "phone confidential";
     $specs["assure_pays"]                 = "str";
     $specs["assure_pays_insee"]           = "str";
     $specs["assure_lieu_naissance"]       = "str";

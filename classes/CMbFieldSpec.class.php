@@ -64,18 +64,30 @@ class CMbFieldSpec {
    * 
    * @param string $className Class name of the owner object
    * @param string $field     Field name 
-   * @param string $prop      Serialiazed prop
-   * @param array  $options   Options extracted from prop
+   * @param string $prop      Serialized prop
    * 
-   * @return unknown_type
+   * @return void
    */
-  function __construct($className, $field, $prop = null, $options = array()) {
+  function __construct($className, $field, $prop = null) {
     $this->className = $className;
     $this->fieldName = $field;
     $this->prop      = $prop;
+    
+    if ($suffix = trim($this->getPropSuffix())) {
+      $this->prop .= " $suffix";
+    }
+    
+    $parts = explode(" ", $this->prop);
+    array_shift($parts);
+    
+    $spec_options = array();
+    foreach ($parts as $_part) {
+      $options = explode("|", $_part);
+      $spec_options[array_shift($options)] = count($options) ? implode("|", $options) : true;
+    }
 
     $vars = get_object_vars($this);
-    foreach ($options as $k => $v) {
+    foreach ($spec_options as $k => $v) {
       if (array_key_exists($k, $vars)) {
         $this->$k = $v;
       }
@@ -128,6 +140,10 @@ class CMbFieldSpec {
       'reported'      => 'bool',
       'pattern'       => 'str',
     );
+  }
+  
+  function getPropSuffix(){
+    // No prop suffix by default
   }
   
   /**

@@ -40,21 +40,13 @@ class CEtabExterne extends CMbObject {
   
   function getProps() {
     $specs = parent::getProps();
-    
-    $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
-    
-    $phone_number_mask = "";
-    if ($phone_number_format != "") {
-      $phone_number_mask = " mask|$phone_number_format";
-    }
-    
     $specs["nom"]            = "str notNull confidential seekable";
     $specs["raison_sociale"] = "str maxLength|50";
     $specs["adresse"]        = "text confidential";
     $specs["cp"]             = "numchar length|5";
     $specs["ville"]          = "str maxLength|50 confidential";
-    $specs["tel"]            = "str pattern|\d+ minLength|10$phone_number_mask";
-    $specs["fax"]            = "str pattern|\d+ minLength|10$phone_number_mask";
+    $specs["tel"]            = "phone";
+    $specs["fax"]            = "phone";
     $specs["finess"]         = "numchar length|9 confidential mask|9xS9S99999S9 control|luhn";
     $specs["siret"]          = "str length|14";
     $specs["ape"]            = "str maxLength|6 confidential";

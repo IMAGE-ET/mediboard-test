@@ -61,14 +61,6 @@ class CSociete extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
-    
-    $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
-    
-    $phone_number_mask = "";
-    if ($phone_number_format != "") {
-      $phone_number_mask = " mask|$phone_number_format";
-    }
-    
     $specs['name']            = 'str notNull maxLength|50 seekable show|0';
     $specs['code']            = 'str maxLength|80 seekable protected';
     $specs['distributor_code']= 'str maxLength|80 seekable protected';
@@ -77,8 +69,8 @@ class CSociete extends CMbObject {
     $specs['address']         = 'text seekable';
     $specs['postal_code']     = 'str minLength|4 maxLength|5 seekable';
     $specs['city']            = 'str seekable';
-    $specs['phone']           = "str pattern|\d+ minLength|10$phone_number_mask";
-    $specs['fax']             = "str pattern|\d+ minLength|10$phone_number_mask";
+    $specs['phone']           = "phone";
+    $specs['fax']             = "phone";
     $specs['siret']           = 'code siret seekable';
     $specs['email']           = 'email';
     $specs['contact_name']    = 'str seekable';

@@ -121,13 +121,6 @@ class CMediusers extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
-    
-    $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
-    
-    $phone_number_mask = "";
-    if ($phone_number_format != "") {
-      $phone_number_mask = " mask|$phone_number_format";
-    }
 
     // Note: notamment utile pour les seeks
     // Dans les faits c'est plus logique puisque la classe n'est pas autoincremented
@@ -164,7 +157,7 @@ class CMediusers extends CMbObject {
     $specs["_user_first_name"]       = "str reported";
     $specs["_user_last_name"]        = "str notNull confidential reported";
     $specs["_user_email"]            = "str confidential reported";
-    $specs["_user_phone"]            = "str confidential reported pattern|\d+ minLength|10$phone_number_mask";
+    $specs["_user_phone"]            = "phone confidential reported";
     $specs["_user_adresse"]          = "str confidential reported";
     $specs["_user_last_login"]       = "dateTime reported";
     $specs["_user_cp"]               = "num length|5 confidential reported";

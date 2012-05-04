@@ -40,8 +40,6 @@ function mbAutoload($class) {
       return include_once CApp::$classPaths[$class];
     }
   }
-	
-	//mbLog(CApp::$classPaths);
   
   // File moved ?
   if (!$file_exists) {
@@ -58,6 +56,7 @@ function mbAutoload($class) {
     $dirs = array(
       "classes/$class.class.php", 
       "classes/*/$class.class.php",
+      "mobile/*/$class.class.php",
       "modules/*/classes/$class.class.php",
       "modules/*/classes/*/$class.class.php",
       "modules/*/classes/*/*/$class.class.php",
@@ -87,7 +86,6 @@ function mbAutoload($class) {
     $mb_class = false;
   }
   
-	//mbLog($class, "put");
   SHM::put("class-paths", CApp::$classPaths);
   
   return $mb_class;

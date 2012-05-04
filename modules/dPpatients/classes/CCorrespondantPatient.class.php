@@ -48,14 +48,6 @@ class CCorrespondantPatient extends CMbObject {
   
   function getProps() {
     $specs = parent::getProps();
-    
-    $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
-    
-    $phone_number_mask = "";
-    if ($phone_number_format != "") {
-      $phone_number_mask = " mask|$phone_number_format";
-    }
-    
     $specs["patient_id"] = "ref notNull class|CPatient";
     $specs["relation"]   = "enum list|assurance|autre|confiance|employeur|inconnu|prevenir";
     $specs["relation_autre"] = "str";
@@ -64,15 +56,14 @@ class CCorrespondantPatient extends CMbObject {
     $specs["adresse"]    = "text";
     $specs["cp"]         = "numchar minLength|4 maxLength|5";
     $specs["ville"]      = "str confidential";
-    $specs["tel"]        = "str confidential pattern|\d+ minLength|10$phone_number_mask";
-    $specs["mob"]        = "str confidential pattern|\d+ minLength|10$phone_number_mask";
-    $specs["fax"]        = "str confidential pattern|\d+ minLength|10$phone_number_mask";
+    $specs["tel"]        = "phone confidential";
+    $specs["mob"]        = "phone confidential";
+    $specs["fax"]        = "phone confidential";
     $specs["urssaf"]     = "numchar length|11 confidential";
     $specs["parente"]    = "enum list|ami|ascendant|autre|beau_fils|colateral|collegue|compagnon|conjoint|directeur|divers|employeur|employe|enfant|enfant_adoptif|entraineur|epoux|frere|grand_parent|mere|pere|petits_enfants|proche|proprietaire|soeur|tuteur";
     $specs["parente_autre"] = "str";
     $specs["email"]      = "str maxLength|255";
     $specs["remarques"]  = "text";
-    
     return $specs;
   }
   

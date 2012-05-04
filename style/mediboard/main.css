@@ -626,7 +626,6 @@ table#weeklyPlanning th.today {
   border: 2px dotted #000;
   z-index: 100;
   opacity: 0.5;
-  filter: alpha(opacity=50); /* IE lt 8 */
   -ms-filter: "alpha(opacity=50)"; /* IE 8 */
 }
 

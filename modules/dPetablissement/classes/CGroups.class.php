@@ -117,22 +117,14 @@ class CGroups extends CMbObject {
   
   function getProps() {
     $specs = parent::getProps();
-    
-    $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
-    
-    $phone_number_mask = "";
-    if ($phone_number_format != "") {
-      $phone_number_mask = " mask|$phone_number_format";
-    }
-    
     $specs["text"]                = "str notNull confidential seekable";
     $specs["raison_sociale"]      = "str maxLength|50";
     $specs["adresse"]             = "text confidential";
     $specs["cp"]                  = "numchar length|5";
     $specs["ville"]               = "str maxLength|50 confidential";
-    $specs["tel"]                 = "str pattern|\d+ minLength|10$phone_number_mask";
-    $specs["fax"]                 = "str pattern|\d+ minLength|10$phone_number_mask";
-    $specs["tel_anesth"]          = "str pattern|\d+ minLength|10$phone_number_mask";
+    $specs["tel"]                 = "phone";
+    $specs["fax"]                 = "phone";
+    $specs["tel_anesth"]          = "phone";
     $specs["service_urgences_id"] = "ref class|CFunctions";
     $specs["pharmacie_id"]        = "ref class|CFunctions";
     $specs["directeur"]           = "str maxLength|50";
