@@ -58,7 +58,7 @@ Main.add(function () {
   <li><a href="#InfoAnesth">Infos. Anesth.</a></li>
 	{{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription}}
 	  <li onmousedown="Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'', '1', null, null, null,'', null, false);">
-	    <a href="#prescription_sejour">Trait. et prescription</a>
+	    <a href="#prescription_sejour">Prescription</a>
 	  </li>
   {{/if}}
 	{{if $conf.dPcabinet.CConsultAnesth.show_facteurs_risque}}
