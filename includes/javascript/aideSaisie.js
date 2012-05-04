@@ -311,12 +311,12 @@ var AideSaisie = {
             this.options.defaultUserId = this.options.contextUserId;
             this.options.defaultUserView = this.options.contextUserView;
             buttons.owner.down().src = "images/icons/user-glow.png";
-            buttons.owner.title = this.options.contextUserView;
+            buttons.owner.down().title = this.options.contextUserView;
           } else {
             this.options.defaultUserId = this.options.userId;
             this.options.defaultUserView = this.options.userView;
             buttons.owner.down().src = "images/icons/user.png";
-            buttons.owner.title = this.options.userView;
+            buttons.owner.down().title = this.options.userView;
           }
 
           var params = autocomplete.url.toQueryParams();
