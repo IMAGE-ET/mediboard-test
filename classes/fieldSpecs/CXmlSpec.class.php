@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireLibraryFile("geshi/geshi");
-
 class CXmlSpec extends CMbFieldSpec { 
   function getSpecType() {
     return "xml";
@@ -24,13 +22,7 @@ class CXmlSpec extends CMbFieldSpec {
   }
   
   function getValue($object, $smarty = null, $params = array()) {
-    $value = $object->{$this->fieldName};
-    $geshi = new Geshi($value, "xml");
-    $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
-    $geshi->set_overall_style("max-height: 100%; white-space:pre-wrap;");
-    $geshi->enable_classes();
-
-    return utf8_decode($geshi->parse_code());
+    return utf8_decode(CMbString::highlightCode("xml", $object->{$this->fieldName}, false));
   }
   
   function sample(&$object, $consistent = true){

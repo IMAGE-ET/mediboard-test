@@ -22,22 +22,22 @@
 </script>
 
 <h2>
-	Schemas HL7 
+  Schemas HL7 
 
-	<form name="version-select" method="get" action="?">
-	  <input type="hidden" name="m" value="hl7" />
-	  <input type="hidden" name="{{$actionType}}" value="{{$action}}" />
-	  
-	  <select name="version" onchange="this.form.submit();">
-	    {{foreach from=$versions key=_version_type item=_versions}}
-	      <optgroup label="{{if $_version_type == 'int'}}International{{else}}Extension{{/if}}">
-	        {{foreach from=$_versions item=_version}}
-	          <option value="{{$_version}}" {{if $_version==$version}}selected="selected"{{/if}}>{{$_version}}</option>
-	        {{/foreach}}
-	      </optgroup>
-	    {{/foreach}}
-	  </select>
-	</form>
+  <form name="version-select" method="get" action="?">
+    <input type="hidden" name="m" value="hl7" />
+    <input type="hidden" name="{{$actionType}}" value="{{$action}}" />
+    
+    <select name="version" onchange="this.form.submit();">
+      {{foreach from=$versions key=_version_type item=_versions}}
+        <optgroup label="{{if $_version_type == 'int'}}International{{else}}Extension{{/if}}">
+          {{foreach from=$_versions item=_version}}
+            <option value="{{$_version}}" {{if $_version==$version}}selected="selected"{{/if}}>{{$_version}}</option>
+          {{/foreach}}
+        </optgroup>
+      {{/foreach}}
+    </select>
+  </form>
 </h2>
 
 <table class="main">

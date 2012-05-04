@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireLibraryFile("geshi/geshi");
-
 class CPhpSpec extends CMbFieldSpec {
   function getSpecType() {
     return "php";
@@ -23,11 +21,7 @@ class CPhpSpec extends CMbFieldSpec {
     $propValue = $object->{$this->fieldName};
     $propValue = (!empty($params['export']) ? var_export($propValue, true) : $propValue);
     
-    $geshi = new Geshi($propValue, "php");
-    $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
-    $geshi->set_overall_style("max-height: 100%; white-space:normal;");
-    
-    return utf8_decode($geshi->parse_code());
+    return utf8_decode(CMbString::highlightCode("php", $propValue, false));
   }
   
   function getFormHtmlElement($object, $params, $value, $className){

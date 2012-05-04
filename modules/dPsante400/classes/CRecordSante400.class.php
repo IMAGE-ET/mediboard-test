@@ -12,7 +12,7 @@ class CRecordSante400 {
   static $dbh = null;
   static $chrono = null;
   static $verbose = false;
-	static $consumeUnsets = true;
+  static $consumeUnsets = true;
  
   // Fake data source for chrono purposes
   static $ds = null;
@@ -71,18 +71,13 @@ class CRecordSante400 {
       return;
     }
     
-		// Inject values into query
+    // Inject values into query
     foreach ($values as $_value) {
-    	$_value = str_replace("'", "\\'", $_value);
+      $_value = str_replace("'", "\\'", $_value);
       $query = preg_replace("/\?/", "'$_value'", $query, 1);
     }
     
-		// Geshi rendering
-    CAppUI::requireLibraryFile("geshi/geshi");
-    $geshi = new Geshi($query, "sql");
-    $geshi->set_overall_style("white-space: pre-wrap;");
-    $trace = utf8_decode($geshi->parse_code());
-    echo $trace;
+    echo utf8_decode(CMbString::highlightCode("sql", $query, false, "white-space: pre-wrap;"));
   }
   
   /**
@@ -95,7 +90,7 @@ class CRecordSante400 {
    * 
    * @return array
    */
-	static function loadMultiple($query, $values = array(), $max = 100, $class = "CRecordSante400") {
+  static function loadMultiple($query, $values = array(), $max = 100, $class = "CRecordSante400") {
     if (!new $class instanceof CRecordSante400) {
       trigger_error("instances of '$class' are not instances of 'CRecordSante400'", E_USER_WARNING);
     }
@@ -123,13 +118,13 @@ class CRecordSante400 {
       self::$chrono->stop();
 
     } 
-		catch (PDOException $e) {
+    catch (PDOException $e) {
       trigger_error("Error querying '$query' : " . $e->getMessage(), E_USER_ERROR);
     }
     
     return $records;
   }
-	
+  
   /**
    * Prepare and execute query
    * 
@@ -150,11 +145,11 @@ class CRecordSante400 {
       $this->data = $sth->fetch(PDO::FETCH_ASSOC);
       self::$chrono->stop("query");
     } 
-		catch (PDOException $e) {
+    catch (PDOException $e) {
       // Fetch throws this exception in case of UPDATE or DELETE query
       if ($e->getCode() == 24000) {
         self::$chrono->stop("query");
-	      return $sth->rowCount($values);
+        return $sth->rowCount($values);
       }
   
       trigger_error("Error querying '$query' : " . $e->getMessage(), E_USER_ERROR);
@@ -187,7 +182,7 @@ class CRecordSante400 {
    */
   function consumeDateInverse($valueName) {
     $date = $this->consume($valueName);
-		
+    
     $reg = "/(\d{1,2})(\d{2})(\d{4})/i";
     
     // Check format anyway
@@ -198,14 +193,14 @@ class CRecordSante400 {
     return preg_replace($reg, "$3-$2-$1", $date);
   }
   
- 	/**
-	 * Consume and return any value 
-	 * 
-	 * @param string $valueName Value name
-	 * 
-	 * @return string Trimmed and slashed value
-	 */
-	function consume($valueName) {
+   /**
+   * Consume and return any value 
+   * 
+   * @param string $valueName Value name
+   * 
+   * @return string Trimmed and slashed value
+   */
+  function consume($valueName) {
     $valueName = "$this->valuePrefix$valueName";
     
     if (!is_array($this->data)) {
@@ -217,10 +212,10 @@ class CRecordSante400 {
     }
     
     $value = $this->data[$valueName];
-		
-		if (self::$consumeUnsets) {
+    
+    if (self::$consumeUnsets) {
       unset($this->data[$valueName]);
-		}
+    }
 
     return trim(addslashes($value));    
   }
@@ -296,8 +291,8 @@ class CRecordSante400 {
     }
     
     $reg = "/(\d{4})(\d{2})(\d{2})/i";
-		
-		// Check format anyway
+    
+    // Check format anyway
     if (!preg_match($reg, $date)) {
       return null;
     }

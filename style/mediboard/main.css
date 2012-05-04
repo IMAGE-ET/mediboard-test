@@ -1344,6 +1344,10 @@ ul li a.chapitre_signe.active{
   line-height: 1.2em; 
 }
 
+pre.geshi ol {
+  padding-left: 3em;
+}
+
 .septique {
   color: #3A3;
 }

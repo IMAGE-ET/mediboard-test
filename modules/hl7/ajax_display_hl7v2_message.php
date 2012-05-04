@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireLibraryFile("geshi/geshi");
-
 CCanDo::checkRead();
 
 $message_string = CValue::get("message");
@@ -27,12 +25,7 @@ $message->parse($message_string);
 
 $message->_errors_msg   = !$message->isOK(CHL7v2Error::E_ERROR);
 $message->_warnings_msg = !$message->isOK(CHL7v2Error::E_WARNING);
-
-$geshi = new Geshi($message->toXML()->saveXML(), "xml");
-$geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
-$geshi->set_overall_style("max-height: 100%; white-space:pre-wrap;");
-$geshi->enable_classes();
-$message->_xml = $geshi->parse_code();
+$message->_xml = CMbString::highlightCode("xml", $message->toXML()->saveXML());
 
 // Création du template
 $smarty = new CSmartyDP();

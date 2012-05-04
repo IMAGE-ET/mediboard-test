@@ -246,11 +246,7 @@ abstract class CSQLDataSource {
   function exec($query) {
     // Query colouring
     if (CSQLDataSource::$trace) {
-      CAppUI::requireLibraryFile("geshi/geshi");
-      $geshi = new Geshi($query, "sql");
-      $geshi->set_overall_style("white-space: pre-wrap;");
-      $trace = utf8_decode($geshi->parse_code());
-      echo $trace;
+      echo utf8_decode(CMbString::highlightCode("sql", $query, false, "white-space: pre-wrap;"));
     }
     
     // Chrono

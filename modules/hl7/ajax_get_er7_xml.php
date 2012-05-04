@@ -17,8 +17,6 @@ $hl7_message->parse($er7);
 $xml = $hl7_message->toXML();
 
 if ($query) {
-  CAppUI::requireLibraryFile("geshi/geshi");
-  
   $xpath = new CMbXPath($xml);
   $results = @$xpath->query("//$query");
   
@@ -29,12 +27,7 @@ if ($query) {
 
   if ($results) {
     foreach($results as $result) {
-      $geshi = new Geshi($xml->saveXML($result), "xml");
-      $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
-      $geshi->set_overall_style("max-height: 100%; white-space:pre-wrap;");
-      $geshi->enable_classes();
-      
-      $nodes[] = $geshi->parse_code();
+      $nodes[] = CMbString::highlightCode("xml", $xml->saveXML($result));
     }
   }
   

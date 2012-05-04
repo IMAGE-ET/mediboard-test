@@ -402,5 +402,22 @@ abstract class CMbString {
     $str = str_ireplace($html,$xml,$str);
     return $str;
   }
+
+  static function highlightCode($language, $code, $enable_classes = true, $style = "max-height: 100%; white-space:pre-wrap;") {
+    if (!class_exists("GeSHi", false)) {
+      CAppUI::requireLibraryFile("geshi/geshi");
+    }
+    
+    $geshi = new GeSHi($code, $language);
+    $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
+    $geshi->set_overall_style($style);
+    $geshi->set_overall_class("geshi");
+    
+    if ($enable_classes) {
+      $geshi->enable_classes();
+    }
+    
+    return $geshi->parse_code();
+  }
 }
 ?>

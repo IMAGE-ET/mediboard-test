@@ -10,8 +10,6 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireLibraryFile("geshi/geshi");
-
 CCanDo::checkRead();
 
 $exchange_guid = CValue::get("exchange_guid");
@@ -35,20 +33,12 @@ switch(true) {
     $msg_segment_group = $exchange->getMessage();
     
     if ($msg_segment_group) {
-      $geshi = new Geshi($msg_segment_group->toXML()->saveXML(), "xml");
-      $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
-      $geshi->set_overall_style("max-height: 100%; white-space:pre-wrap;");
-      $geshi->enable_classes();
-      $msg_segment_group->_xml = $geshi->parse_code();
+      $msg_segment_group->_xml = CMbString::highlightCode("xml", $msg_segment_group->toXML()->saveXML());
     }
     
     $ack_segment_group = $exchange->getACK();
     if ($ack_segment_group) {
-      $geshi = new Geshi($ack_segment_group->toXML()->saveXML(), "xml");
-      $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
-      $geshi->set_overall_style("max-height: 100%; white-space:pre-wrap;");
-      $geshi->enable_classes();
-      $ack_segment_group->_xml = $geshi->parse_code();
+      $ack_segment_group->_xml = CMbString::highlightCode("xml", $ack_segment_group->toXML()->saveXML());
     }
     
     $smarty->assign("msg_segment_group", $msg_segment_group);
