@@ -76,35 +76,44 @@
           </td>
         </tr>
       {{/if}}
-      {{if $facture->cloture && @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+      {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+        {{if $facture->cloture && isset($factures|smarty:nodefaults) && count($factures)}}
+          <tr>
+            <td colspan="10">
+              <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 0, 1);">Edition des BVR</button>
+              <button class="cut" onclick="Facture.cutFacture('{{$facture->_id}}');"
+                {{if $facture->_nb_factures != 1 || $facture->_reglements_total_patient}}disabled="disabled"{{/if}}> Eclatement</button>
+              <button class="print" onclick="printFacture('{{$facture->_id}}', 1, 0);">Justificatif de remboursement</button>
+            </td>
+          </tr>
+        {{/if}}
         <tr>
-          <td colspan="10">
-            {{if $facture->type_facture == "maladie"}}
-            <!-- mettre un 1 au 4ème argument pour une facture ac préimpression --> 
-              <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 0, 1, 0, 0);" {{if $facture->_reglements_total_patient >= $facture->_montant_total_factures }}disabled="disabled"{{/if}}>Edition des BVR</button>
-            {{/if}}
-            <button class="cut" onclick="Facture.cutFacture('{{$facture->_id}}');"
-              {{if count($facture->_montant_factures) != 1 || $facture->_reglements_total_patient}}disabled="disabled"{{/if}}> Eclatement</button>
-            <button class="print" onclick="printFacture('{{$facture->_id}}', 1, 0, 0, 0);">Justificatif de remboursement</button>
+          <td colspan="10" > Type de la facture:
+            <form name="type_facture" method="post" action=""> 
+              <input type="hidden" name="dosql" value="do_factureconsult_aed" />
+              <input type="hidden" name="m" value="dPcabinet" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="factureconsult_id" value="{{$facture->factureconsult_id}}" />
+              <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
+              <input type="radio" name="type_facture" value="maladie" {{if $facture->type_facture == 'maladie'}}checked{{/if}} onchange="Facture.modifCloture(this.form);" />
+              <label for="maladie">Maladie</label>
+              <input type="radio" name="type_facture" value="accident" {{if $facture->type_facture == 'accident'}}checked{{/if}} onchange="Facture.modifCloture(this.form);" />
+              <label for="accident">Accident</label>
+            </form>
           </td>
         </tr>
       {{/if}}
-      <tr>
-        <td colspan="10" > Type de la facture:
-          <form name="type_facture" method="get"> 
-            <input type="radio" name="type" value="maladie" {{if $facture->type_facture == 'maladie'}}checked{{/if}} disabled />
-            <label for="maladie">Maladie</label>
-            <input type="radio" name="type" value="accident" {{if $facture->type_facture == 'accident'}}checked{{/if}} disabled />
-            <label for="accident">Accident</label>
-          </form>
-        </td>
-      </tr>
       <tr>
         <th class="category">Date</th>
         <th class="category">Code</th>
         <th class="category">Libelle</th>
         <th class="category">{{if $conf.dPccam.CCodeCCAM.use_cotation_ccam}}Base{{else}}Coût{{/if}}</th>
-        <th class="category" style="min-width:50px;">{{if $conf.dPccam.CCodeCCAM.use_cotation_ccam}}DH{{else}}Qte{{/if}}</th>
+        {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
+          <th class="category">DH</th>
+        {{else}}
+          <th class="category">Qte</th>
+          <th class="category">Coeff</th>        
+        {{/if}}
         <th class="category">Montant</th>
       </tr>
       {{foreach from=$facture->_ref_consults item=_consultation}}
@@ -139,7 +148,8 @@
               <td style="white-space: pre-wrap;">{{if !isset($_acte_tarmed->libelle|smarty:nodefaults)}}{{$_acte_tarmed->_ref_tarmed->libelle}}{{else}}{{$_acte_tarmed->libelle}}{{/if}}</td>
               <td style="text-align:right;">{{$_acte_tarmed->montant_base/$_acte_tarmed->quantite|string_format:"%0.2f"}}</td>
               <td style="text-align:right;">{{mb_value object=$_acte_tarmed field="quantite"}}</td>
-              <td style="text-align:right;">{{mb_value object=$_acte_tarmed field="montant_base"}}</td>
+              <td style="text-align:right;">{{$facture->_coeff}}</td>
+              <td style="text-align:right;">{{$_acte_tarmed->montant_base*$facture->_coeff|string_format:"%0.2f"}}</td>
             </tr>
           {{/foreach}}
           {{foreach from=$_consultation->_ref_actes_caisse item=_acte_caisse}}
@@ -149,7 +159,8 @@
               <td style="white-space: pre-wrap;">{{$_acte_caisse->_ref_prestation_caisse->libelle}}</td>
               <td style="text-align:right;">{{$_acte_caisse->montant_base/$_acte_caisse->quantite|string_format:"%0.2f"}}</td>
               <td style="text-align:right;">{{mb_value object=$_acte_caisse field="quantite"}}</td>
-              <td style="text-align:right;">{{mb_value object=$_acte_caisse field="montant_base"}}</td>
+              <td style="text-align:right;">1.00</td>
+              <td style="text-align:right;">{{$_acte_caisse->montant_base}}</td>
             </tr>
           {{/foreach}}
         {{/if}}
@@ -199,70 +210,77 @@
       {{if $nb_montants>1}}
         {{foreach from=$facture->_montant_factures item=_montant key=key }}
           <tr>
-            {{if $key==0}}<td colspan="3"  rowspan="{{$nb_montants+2}}"></td>{{/if}}
+            {{if $key==0}}<td colspan="{{if $conf.dPccam.CCodeCCAM.use_cotation_ccam}}3{{else}}4{{/if}}" rowspan="{{$nb_montants+2}}"></td>{{/if}}
             <td colspan="2">Montant n°{{$key+1}}</td>
-            <td style="text-align:right;">{{$_montant}}</td>
+            <td style="text-align:right;">{{$_montant|string_format:"%0.2f"}}</td>
           </tr>
         {{/foreach}}
-      {{else}}
+      {{elseif !$conf.dPccam.CCodeCCAM.use_cotation_ccam}}
         <tr>
-          <td colspan="3" rowspan="4"></td>
+          <td colspan="4" rowspan="4"></td>
           <td colspan="2">Montant</td>
           <td style="text-align:right;">{{mb_value object=$facture field="_montant_sans_remise"}}</td>
         </tr>
       {{/if}}
-      <tr>
-        <td colspan="2"><b>{{mb_label object=$facture field="remise"}}</b></td>
-        <td style="text-align:right;"> 
-          <form name="modif_remise" method="post" onsubmit="Facture.modifCloture(this.form);">
-            <input type="hidden" name="dosql" value="do_factureconsult_aed" />
-            <input type="hidden" name="m" value="dPcabinet" />
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="factureconsult_id" value="{{$facture->factureconsult_id}}" />
-            <input type="hidden" name="patient_id" value="{{$facture->patient_id}}" />
-            <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
-            
-            {{if $facture->cloture}}
-              {{mb_value object=$facture field="remise"}} 
-            {{else}}
-              <input name="remise" type="text" value="{{$facture->remise}}" onchange="Facture.modifCloture(this.form);" size="4" />
-            {{/if}}
-            <br/>soit <b>{{if $facture->_montant_sans_remise && $facture->remise}}{{math equation="(y/x)*100" x=$facture->_montant_sans_remise y=$facture->remise format="%.2f"}}{{else}}0{{/if}}%</b>
-          </form>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2"><b>Montant Total</b></td>
-        <td style="text-align:right;"><b>{{mb_value object=$facture field="_montant_avec_remise"}}</b></td>
-      <tr>
-      <tr>
-        <td colspan="6">
-          {{if count($facture->_montant_factures)==1 || !$facture->_montant_factures}}
-            <form name="change_type_facture" method="post">
+      {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+        <tr>
+          <td colspan="2"><b>{{mb_label object=$facture field="remise"}}</b></td>
+          <td style="text-align:right;"> 
+            <form name="modif_remise" method="post" onsubmit="Facture.modifCloture(this.form);">
               <input type="hidden" name="dosql" value="do_factureconsult_aed" />
               <input type="hidden" name="m" value="dPcabinet" />
               <input type="hidden" name="del" value="0" />
               <input type="hidden" name="factureconsult_id" value="{{$facture->factureconsult_id}}" />
-              <input type="hidden" name="cloture" value="{{if !$facture->cloture}}{{$date}}{{/if}}" />
+              <input type="hidden" name="patient_id" value="{{$facture->patient_id}}" />
               <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
-              {{if !$facture->cloture}}
-                <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Cloturer la facture</button>
-              {{elseif !isset($reglement|smarty:nodefaults) || ($facture->_ref_reglements|@count == 0)}}
-                <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Réouvrir la facture</button>
+              
+              {{if $facture->cloture}}
+                {{mb_value object=$facture field="remise"}} 
+              {{else}}
+                <input name="remise" type="text" value="{{$facture->remise}}" onchange="Facture.modifCloture(this.form);" size="4" />
               {{/if}}
+              <br/>soit <b>{{if $facture->_montant_sans_remise!=0 && $facture->remise}}{{math equation="(y/x)*100" x=$facture->_montant_sans_remise y=$facture->remise format="%.2f"}}{{else}}0{{/if}}%</b>
             </form>
-          {{else}}
-            <form name="fusionner_eclatements" method="post">
-              <input type="hidden" name="dosql" value="do_fusion_facture_aed" />
-              <input type="hidden" name="m" value="dPcabinet" />
-              <input type="hidden" name="del" value="0" />
-              <input type="hidden" name="factureconsult_id" value="{{$facture->factureconsult_id}}" />
-              <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
-              <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" > Fusionner les éclats de facture </button>
-            </form>
-          {{/if}}
-        </td>
-      </tr>
+          </td>
+        </tr>
+      {{/if}}
+      <tr>
+        {{if !@$modules.tarmed->_can->read || !$conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+          <td colspan="3"></td>
+        {{/if}}
+        <td colspan="2"><b>Montant Total</b></td>
+        <td style="text-align:right;"><b>{{mb_value object=$facture field="_montant_avec_remise"}}</b></td>
+      <tr>
+      {{if !$facture->_reglements_total_patient}}
+        <tr>
+          <td colspan="{{if $conf.dPccam.CCodeCCAM.use_cotation_ccam}}6{{else}}7{{/if}}">
+            {{if $facture->_nb_factures ==1}}
+              <form name="change_type_facture" method="post">
+                <input type="hidden" name="dosql" value="do_factureconsult_aed" />
+                <input type="hidden" name="m" value="dPcabinet" />
+                <input type="hidden" name="del" value="0" />
+                <input type="hidden" name="factureconsult_id" value="{{$facture->factureconsult_id}}" />
+                <input type="hidden" name="cloture" value="{{if !$facture->cloture}}{{$date}}{{/if}}" />
+                <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
+                {{if !$facture->cloture}}
+                  <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Cloturer la facture</button>
+                {{elseif !isset($reglement|smarty:nodefaults) || ($facture->_ref_reglements|@count == 0)}}
+                  <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Réouvrir la facture</button>
+                {{/if}}
+              </form>
+            {{else}}
+              <form name="fusionner_eclatements" method="post">
+                <input type="hidden" name="dosql" value="do_fusion_facture_aed" />
+                <input type="hidden" name="m" value="dPcabinet" />
+                <input type="hidden" name="del" value="0" />
+                <input type="hidden" name="factureconsult_id" value="{{$facture->factureconsult_id}}" />
+                <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
+                <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" > Fusionner les éclats de facture </button>
+              </form>
+            {{/if}}
+          </td>
+        </tr>
+      {{/if}}
     </table>        
   {{else}}
     <legend>Facture</legend>
