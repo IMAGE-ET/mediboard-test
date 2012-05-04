@@ -21,6 +21,7 @@
   {{if "dPprescription"|module_active}}
     {{mb_script module="dPprescription" script="prescription"}}
     {{mb_script module="dPprescription" script="element_selector"}}
+    {{mb_script module="soins" script="plan_soins"}}
   {{/if}}
   
   {{if "dPmedicament"|module_active}}
@@ -53,7 +54,7 @@
     if (!Object.isUndefined(show_const)) {
       urlSuivi.addParam("_show_const", show_const);
     }
-    urlSuivi.requestUpdate("suivisoins", { onComplete: function() { Control.Modal.close(); } });
+    urlSuivi.requestUpdate("dossier_suivi", { onComplete: function() { Control.Modal.close(); } });
   }
   
   function submitSuivi(oForm) {
@@ -542,14 +543,19 @@
   
     <ul id="tab-dossier" class="control_tabs">
       <li><a href="#antecedents">Antécédents &amp; Traitements</a></li>
-      <li onmouseup="loadSuivi({{$rpu->sejour_id}});"><a href="#suivisoins">Suivi soins</a></li>
+      
+      {{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !$conf.dPprescription.CPrescription.prescription_suivi_soins}}
+        <li {{if $consult->sejour_id}} onmouseup="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'');" {{/if}}><a href="#prescription_sejour">Prescription</a></li>
+        <li {{if $consult->sejour_id}} onmouseup="PlanSoins.loadTraitement('{{$consult->sejour_id}}',null,'','administration');"{{/if}}><a href="#dossier_traitement">Suivi de soins</a></li>
+      {{else}}
+        <li onmouseup="loadSuivi({{$rpu->sejour_id}});"><a href="#dossier_suivi">Suivi de soins</a></li>
+      {{/if}}
+      
+      
       <li onmouseup="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">{{tr}}CPatient.surveillance{{/tr}}</a></li>
       <li onmouseup="showExamens('{{$consult->_id}}')"><a href="#examens">Dossier médical</a></li>
       {{if $app->user_prefs.ccam_sejour == 1 }}
         <li onmouseup="loadActes('{{$rpu->sejour_id}}')"><a href="#actes">Cotation infirmière</a></li>
-      {{/if}}
-      {{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !$conf.dPprescription.CPrescription.prescription_suivi_soins}}
-        <li {{if $consult->sejour_id}} onmouseup="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'');" {{/if}}><a href="#prescription_sejour">Prescription</a></li>
       {{/if}}
       {{if @$modules.dPImeds->mod_active}}
         <li onmouseup="loadResultLabo('{{$rpu->sejour_id}}')"><a href="#Imeds">Labo</a></li>
@@ -567,7 +573,6 @@
       {{mb_include module=cabinet template=inc_ant_consult chir_id=$app->user_id}}
     </div>
     
-    <div id="suivisoins" style="display:none"></div>
     <div id="constantes" style="display:none"></div>
     <div id="examens"    style="display:none">
       <div class="small-info">
@@ -579,12 +584,19 @@
     <div id="actes" style="display: none;"> </div>    
     {{/if}}
     
-    {{if $isPrescriptionInstalled && $modules.dPprescription->_can->read}}
+    {{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !$conf.dPprescription.CPrescription.prescription_suivi_soins}}
     <div id="prescription_sejour" style="display: none;">
       <div class="small-info">
         Aucune prescription
       </div>
     </div>
+    <div id="dossier_traitement">
+      <div class="small-info">
+        Aucun plan de soins
+      </div>
+    </div>  
+    {{else}}
+      <div id="dossier_suivi" style="display:none"></div>
     {{/if}}
     
     {{if @$modules.dPImeds->mod_active}}
