@@ -40,7 +40,10 @@ class CMediusers extends CMbObject {
   var $conv = null;  
   var $zisd = null;
   var $ik   = null;
-
+  var $ean   = null;
+  var $rcc   = null;
+  var $adherent   = null;
+  
   // CUser reported fields fields
   var $_user_type                  = null;
   var $_user_username              = null;
@@ -150,6 +153,9 @@ class CMediusers extends CMbObject {
     $specs["conv"]                   = "str";  
     $specs["zisd"]                   = "str";
     $specs["ik"]                     = "str";
+    $specs["ean"]                    = "str";
+    $specs["rcc"]                    = "str";
+    $specs["adherent"]               = "str";
     
     $specs["_group_id"]              = "ref notNull class|CGroups";
     
@@ -200,6 +206,7 @@ class CMediusers extends CMbObject {
     $backProps["actes_ccam_executes"]             = "CActeCCAM executant_id";
     $backProps["actes_ngap_executes"]             = "CActeNGAP executant_id";
     $backProps["actes_tarmed_executes"]           = "CActeTarmed executant_id";
+    $backProps["actes_caisse_executes"]           = "CActeCaisse executant_id";
     $backProps["administrations"]                 = "CAdministration administrateur_id";
     $backProps["aides_saisie"]                    = "CAideSaisie user_id";
     $backProps["modeles"]                         = "CCompteRendu user_id";

@@ -480,7 +480,15 @@ class CSetupmediusers extends CSetup {
               CHANGE `fax` `fax` VARCHAR (20)";
     $this->addQuery($query);
      
-    $this->mod_version = "0.40";
+     $this->makeRevision("0.40");
+     
+     $query = "ALTER TABLE `users_mediboard` 
+                 ADD `ean` VARCHAR (30),
+                 ADD `rcc` VARCHAR (30),
+                 ADD `adherent` VARCHAR (30);";
+     $this->addQuery($query);
+     
+     $this->mod_version = "0.41";
   }
 }
 

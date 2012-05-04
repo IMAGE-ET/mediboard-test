@@ -98,3 +98,18 @@
   </td>
 </tr>
 {{/if}}
+
+{{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}}}
+  <tr>
+    <th>{{mb_label object=$object field="ean"}}</th>
+    <td>{{mb_field object=$object field="ean"}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$object field="rcc"}}</th>
+    <td>{{mb_field object=$object field="rcc"}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$object field="adherent"}}</th>
+    <td>{{mb_field object=$object field="adherent"}}</td>
+  </tr>
+{{/if}}
