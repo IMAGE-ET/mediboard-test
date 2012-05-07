@@ -105,6 +105,7 @@ $locales['mod-soins-tab-vw_pancarte_service'] = 'Pancarte des services';
 $locales['mod-soins-tab-vw_plan_soins_service'] = 'Activités';
 $locales['mod-soins-tab-vw_ressources_soins'] = 'Charge en soins';
 $locales['mod-soins-tab-vw_stocks_service'] = 'Commande / Réception';
+$locales['mod-soins-tab-ajax_vw_suivi_clinique'] = 'Synthèse';
 $locales['module-Brancardage-long'] = 'Brancarder';
 $locales['module-soins-court'] = 'Dossier de soins';
 $locales['module-soins-long'] = 'Dossier de soins';
