@@ -1,4 +1,5 @@
 <?php
+$locales['Add-Operation-CSV'] = 'Ajout des interventions par CSV';
 $locales['CBlocOperatoire-back-'] = 'Intervention';
 $locales['CColorLibelleSejour'] = 'Couleur de motif de séjour';
 $locales['CColorLibelleSejour-color'] = 'Couleur';
@@ -1089,6 +1090,7 @@ $locales['config-dPplanningOp-CSejour-tag_dossier_trash'] = 'Préfixe tag numéro 
 $locales['config-dPplanningOp-CSejour-tag_dossier_trash-desc'] = 'Préfixe tag numéro de dossier poubelle';
 $locales['config-discipline_tarifaire-table'] = 'Import table discipline tarifaire';
 $locales['config-sae-base'] = 'Import de la base SAE';
+$locales['mod-dPplanningOp-tab-add_operation_csv'] = 'Ajout d\'interventions dans Mediboard par CSV';
 $locales['mod-dPplanningOp-tab-ajax_vw_detail_cccam'] = 'Détail du code';
 $locales['mod-dPplanningOp-tab-ajax_vw_prestations'] = 'Edition des prestations';
 $locales['mod-dPplanningOp-tab-check_synchro_hours_sejour'] = 'Recherche synchronisation des heures du séjour';

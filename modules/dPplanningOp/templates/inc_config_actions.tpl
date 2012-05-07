@@ -1,20 +1,25 @@
 <script type="text/javascript">
-viewNoPratSejour = function() {
-  var url = new Url("dPplanningOp", "vw_resp_no_prat"); 
-  url.popup(700, 500, "printFiche");
-}
+  viewNoPratSejour = function() {
+    var url = new Url("dPplanningOp", "vw_resp_no_prat"); 
+    url.popup(700, 500, "printFiche");
+  }
+  
+  checkSynchroSejour = function(sType) {
+    var url = new Url("dPplanningOp", "check_synchro_hours_sejour");
+    url.addParam("type", sType);
+    url.requestUpdate("resultSynchroSejour");
+  }
+  
+  closeSejourConsult = function() {
+    var url = new Url("dPplanningOp", "ajax_close_sejour_consult");
+    url.requestUpdate("result-close-sejour-consult");
+  }
 
-checkSynchroSejour = function(sType) {
-  var url = new Url("dPplanningOp", "check_synchro_hours_sejour");
-  url.addParam("type", sType);
-  url.requestUpdate("resultSynchroSejour");
-}
-
-closeSejourConsult = function() {
-  var url = new Url("dPplanningOp", "ajax_close_sejour_consult");
-  url.requestUpdate("result-close-sejour-consult");
-}
-
+  popAddOperation = function () {
+    var url = new Url("dPplanningOp", "add_operation_csv");
+    url.popup(800, 600, "Ajout des intervensions");
+    return false;
+  }
 </script>
 
 <h2>Actions de maintenances</h2>
@@ -31,8 +36,7 @@ closeSejourConsult = function() {
         Corriger les praticiens des séjours
       </button>
     </td>
-    <td>
-    </td>
+    <td></td>
   </tr>
   
   <tr>
@@ -51,8 +55,7 @@ closeSejourConsult = function() {
         Corriger les problèmes de sortie
       </button>
     </td>
-    <td id="resultSynchroSejour">
-    </td>
+    <td id="resultSynchroSejour"></td>
   </tr>
 	
 	<tr>
@@ -61,8 +64,15 @@ closeSejourConsult = function() {
         {{tr}}close-sejour-consult{{/tr}}
       </button>
     </td>
-    <td id="result-close-sejour-consult">
-    </td>
+    <td id="result-close-sejour-consult"></td>
   </tr>
-
+  
+  <tr>
+    <td>
+      <button class="hslip" onclick="return popAddOperation();">
+        {{tr}}Add-Operation-CSV{{/tr}}
+      </button>
+    </td>
+    <td></td>
+  </tr>
 </table>
