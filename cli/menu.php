@@ -306,13 +306,14 @@ banner      : show banner info\n\n";
     
   case "rotatebinlogs":
   	
-    	if (count($argv) == 4) {
+    	if (count($argv) == 5) {
     	  $userAdminDB = $argv[0];
         $passAdminDB = $argv[1];
         $binLogsDir = $argv[2];
         $binLogIndexFilename = $argv[3];
+        $backupDir = $argv[4];
         
-        rotateBinlogs($userAdminDB, $passAdminDB, $binLogsDir, $binLogIndexFilename);
+        rotateBinlogs($userAdminDB, $passAdminDB, $binLogsDir, $binLogIndexFilename, $backupDir);
         return 0;
     	}
       else {
@@ -1003,8 +1004,15 @@ function task11() {
     $binLogIndexFilename = "log-bin.index";
   }
   
+  echo "Backup directory [default /mbbackup/binlogs]: ";
+  $backupDir = trim(fgets(STDIN));
+  
+  if ($backupDir === "") {
+    $backupDir = "/mbbackup/binlogs";
+  }
+  
   echo "\n";
-  rotateBinlogs($userAdminDB, $passAdminDB, $binLogsDir, $binLogIndexFilename);
+  rotateBinlogs($userAdminDB, $passAdminDB, $binLogsDir, $binLogIndexFilename, $backupDir);
   menu();
   
 }

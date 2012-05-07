@@ -6,7 +6,7 @@ function force_dir($dir) {
 	
 	if (!(is_dir($dir))) {
 		
-		mkdir($dir);
+		mkdir($dir, 0, true);
 	}
 }
 

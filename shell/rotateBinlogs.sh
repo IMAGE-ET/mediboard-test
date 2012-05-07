@@ -3,13 +3,14 @@
 BASH_PATH=$(dirname $0)
 . $BASH_PATH/utils.sh
 
-if [ "$#" -ne 4 ]
+if [ "$#" -ne 5 ]
 then
-  echo "Usage: $0 <MySQL_username> <MySQL_password> <binlogs_directory> <binlog-index_filename>"
+  echo "Usage: $0 <MySQL_username> <MySQL_password> <binlogs_directory> <binlog-index_filename> <backup_directory>"
   echo " <MySQL_username>  is the MySQL username allowed to connect, ie admin"
   echo " <MySQL_password> is the password of the MySQL user"
   echo " <binlogs_directory>  is the directory where binlogs are stored, ie /var/log/mysql"
   echo " <binlog-index_filename> is the name of the binlog-index file, ie log-bin.index"
+  echo " <backup_directory> is the name of the directory where binlogs will be stored, ie /mbbackup/binlogs"
   exit 1
 fi
 
@@ -20,8 +21,8 @@ fi
 announce_script "Rotate binlogs"
 
 # Backup destination dir
-backup="/mbbackup/binlogs"
-mkdir -p /mbbackup/binlogs
+backup=$5
+mkdir -p $5
 
 # Flush logs to start a new one
 mysqladmin -u $1 -p$2 flush-logs

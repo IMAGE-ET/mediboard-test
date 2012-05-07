@@ -1,7 +1,7 @@
 <?php 
 require_once ("utils.php");
 
-function rotateBinlogs($userAdminDB, $passAdminDB, $binLogsDir, $binLogIndexFilename) {
+function rotateBinlogs($userAdminDB, $passAdminDB, $binLogsDir, $binLogIndexFilename, $backup) {
   $currentDir = dirname(__FILE__);
   
   announce_script("Rotate binlogs");
@@ -18,10 +18,12 @@ function rotateBinlogs($userAdminDB, $passAdminDB, $binLogsDir, $binLogIndexFile
     $binLogIndexFilename = "log-bin.index";
   }
   
+  if ($backup === "") {
+    $backup = "/mbbackup/binlogs";
+  }
+  
   # Backup destination dir
-  force_dir("/mbbackup");
-  force_dir("/mbbackup/binlogs");
-  $backup = "/mbbackup/binlogs";
+  force_dir($backup);
   
   # Flush logs to start a new one
   if ($passAdminDB === "") {
