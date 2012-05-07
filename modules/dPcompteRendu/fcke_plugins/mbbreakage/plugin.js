@@ -38,10 +38,10 @@ function mbbreakage_onclick(editor) {
       var node = null;
       while ( ( node = walker.next() ) ) {
         if (uppercase) {
-          node.$.textContent = node.$.textContent.toUpperCase();
+          node.$.nodeValue = node.$.nodeValue.toUpperCase();
         }
         else {
-          node.$.textContent = node.$.textContent.toLowerCase();
+          node.$.nodeValue = node.$.nodeValue.toLowerCase();
         }
       }
     }
