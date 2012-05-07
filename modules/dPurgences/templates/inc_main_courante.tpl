@@ -150,7 +150,7 @@
   	  {{else}}
       <td colspan="2" class="text" style="background-color: {{$background}};">
       {{/if}}
-        <button type="button" class="search" onclick="showSynthese('{{$_sejour->_id}}');" style="float: right">Synthèse</button>
+        <button type="button" class="search notext" title="Synthèse" onclick="showSynthese('{{$_sejour->_id}}');" style="float: right">Synthèse</button>
         {{mb_include template=inc_rpu_patient}}
       </td>
   
