@@ -87,7 +87,7 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     }
     // Création/MAJ d'un patient
     else {
-      switch ($mbObject->loadLastLog()->type) {
+      switch ($mbObject->_ref_current_log->type) {
         case "create":
           $code = "A28";
           break;

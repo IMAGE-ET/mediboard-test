@@ -264,7 +264,40 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $data[] = null;
     
     // PID-21: Mother's Identifier (CX) (optional repeating)
-    $data[] = null;
+    if ($this->sejour) {
+      $naissance = new CNaissance();
+      $naissance->sejour_enfant_id = $this->sejour->_id;
+      $naissance->loadMatchingObject();
+
+      if ($naissance->_id) {
+        $sejour_maman = $naissance->loadRefSejourMaman();
+        $sejour_maman->loadRefPatient()->loadIPP($group->_id);
+        $mother = $sejour_maman->_ref_patient;
+        
+        if (CHL7v2Message::$build_mode == "simple") {
+          $data[] = array(
+            (!$mother->_IPP) ? 0 : $mother->_IPP
+          );          
+        }
+    
+        if ($mother->_IPP) {
+          $data[] = array(
+            $mother->_IPP,
+            null,
+            null,
+            // PID-3-4 Autorité d'affectation
+            $this->getAssigningAuthority("FINESS", $group->finess),
+            "PI"
+          );
+        }
+      }
+      else {
+        $data[] = null;
+      }        
+    }
+    else {
+      $data[] = null;
+    }
     
     // PID-22: Ethnic Group (CE) (optional repeating)
     $data[] = null;
