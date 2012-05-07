@@ -37,8 +37,13 @@ for log in $dir/*bin.0* ; do
 done
 
 # Move binlog indeces to binlog backup
-find /mbbackup -maxdepth 1 -name "binlog-*" -exec mv {} $backup \;
+mv $index $backup
+
+date=`date '+%Y-%m-%dT%H:%M:%S'`
+
+# Archive binlogs
+tar -vcjf $backup/binlogs_$date.tar.bz2 $backup/*bin.0*
 
 # Rotate binlogs and indeces for a week
-find $backup -name "*bin.*" -mtime +7 -exec rm -f {} \; 
-find $backup -name "binlog-*.index" -mtime +7 -exec rm -f {} \;         
+find $backup -name "*bin.0*" -exec rm -f {} \; 
+         
