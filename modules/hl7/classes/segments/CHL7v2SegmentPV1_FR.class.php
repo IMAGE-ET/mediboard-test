@@ -70,9 +70,11 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
     $naissance = new CNaissance();
     $naissance->sejour_enfant_id = $this->sejour->_id;
     $naissance->loadMatchingObject();
+    // Si on a une naissance c'est bien un séjour de nouveau né
     if ($naissance->_id) {
       $data[] = "N";
     }
+    // Si la PEC est obstétrique et qu'on a une grossesse_id alors c'est un accouchement maternité
     else if ($sejour->type_pec == "O" && $sejour->grossesse_id) {
       $data[] = "L";
     } 
@@ -106,7 +108,7 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
     
     // PV1-7: Attending Doctor (XCN) (optional repeating)
     $sejour->loadRefPraticien();
-    $data[] = $this->getXCN($sejour->_ref_praticien, $receiver);
+    $data[] = $this->getXCN($sejour->_ref_praticien, $receiver, true);
     
     // PV1-8: Referring Doctor (XCN) (optional repeating)
     $data[] = $sejour->adresse_par_prat_id ? $this->getXCN($sejour->loadRefAdresseParPraticien(), $receiver) : null;

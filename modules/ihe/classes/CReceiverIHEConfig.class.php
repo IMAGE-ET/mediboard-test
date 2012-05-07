@@ -52,12 +52,13 @@ class CReceiverIHEConfig extends CMbObject {
   var $build_NDA                = null;
   
   // PV1
-  var $build_PV1_3_2            = null;
-  var $build_PV1_3_3            = null;
-  var $build_PV1_3_5            = null;
-  var $build_PV1_10             = null;
-  var $build_PV1_14             = null;
-  var $build_PV1_36             = null;
+  var $build_PV1_3_2 = null;
+  var $build_PV1_3_3 = null;
+  var $build_PV1_3_5 = null;
+  var $build_PV1_7   = null;
+  var $build_PV1_10  = null;
+  var $build_PV1_14  = null;
+  var $build_PV1_36  = null;
   
   var $_categories = array(
     "format" => array(
@@ -96,6 +97,7 @@ class CReceiverIHEConfig extends CMbObject {
       "build_PV1_3_2",
       "build_PV1_3_3",
       "build_PV1_3_5",
+      "build_PV1_7",
       "build_PV1_10",
       "build_PV1_14",
       "build_PV1_36",
@@ -147,12 +149,13 @@ class CReceiverIHEConfig extends CMbObject {
     $props["build_NDA"]                = "enum list|PID_18|PV1_19 default|PID_18";
     
     // PV1
-    $props["build_PV1_3_2"]            = "enum list|name|config_value default|name";
-    $props["build_PV1_3_3"]            = "enum list|name|config_value default|name";
-    $props["build_PV1_3_5"]            = "enum list|bed_status|null default|bed_status";
-    $props["build_PV1_10"]             = "enum list|discipline|service default|discipline";
-    $props["build_PV1_14"]             = "enum list|admit_source|ZFM default|admit_source";
-    $props["build_PV1_36"]             = "enum list|discharge_disposition|ZFM default|discharge_disposition";
+    $props["build_PV1_3_2"] = "enum list|name|config_value default|name";
+    $props["build_PV1_3_3"] = "enum list|name|config_value default|name";
+    $props["build_PV1_3_5"] = "enum list|bed_status|null default|bed_status";
+    $props["build_PV1_7"]   = "enum list|unique|repeatable default|unique";
+    $props["build_PV1_10"]  = "enum list|discipline|service default|discipline";
+    $props["build_PV1_14"]  = "enum list|admit_source|ZFM default|admit_source";
+    $props["build_PV1_36"]  = "enum list|discharge_disposition|ZFM default|discharge_disposition";
     
     return $props;
   }

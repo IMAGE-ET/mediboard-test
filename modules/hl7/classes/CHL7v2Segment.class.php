@@ -316,7 +316,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     return $this->getAssigningAuthority("mediboard");
   }
   
-  function getXCN(CMbObject $object, CInteropActor $actor) {
+  function getXCN(CMbObject $object, CInteropReceiver $actor, $repeatable = false) {
     $xcn1 = $xcn2 = $xcn3 = $xcn9 = $xcn13 = null;
     
     $id400 = $object->loadLastId400();
@@ -342,8 +342,61 @@ class CHL7v2Segment extends CHL7v2Entity {
       $xcn13 = $object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "RI");
     }
     
-    return array(
-      array (
+    if ($repeatable && ($actor->_configs["build_PV1_7"] == "repeatable") && $object instanceof CMediusers) {
+      $xcn = array (
+        null,
+        $xcn2,
+        $xcn3,
+        null,
+        null,
+        null,
+        null,
+        null,
+        $xcn9,
+        "L",
+        null,
+        null,
+        null
+      );
+      
+      $xncs = array();
+      
+      // Ajout du RPPS
+      if ($object->rpps) {
+        $xcn[0]  = $object->rpps;
+        $xcn[8]  = $this->getAssigningAuthority("RPPS");
+        $xcn[12] = "RPPS";
+        
+        $xncs[] = $xcn; 
+      }
+      // Ajout de l'ADELI
+      if ($object->adeli) {
+        $xcn[0]  = $object->adeli;
+        $xcn[8]  = $this->getAssigningAuthority("ADELI");
+        $xcn[12] = "ADELI";
+        
+        $xncs[] = $xcn; 
+      }
+      // Ajout de l'Idex
+      if ($id400->id400) {
+        $xcn[0]  = $id400->id400;
+        $xcn[8]  = $this->getAssigningAuthority("actor", null, $actor);
+        $xcn[12] = "RI";
+        
+        $xncs[] = $xcn;
+      }
+      // Ajout de l'ID Mediboard
+      $xcn[0]  = $object->_id;
+      $xcn[8]  = $this->getAssigningAuthority("mediboard");
+      $xcn[12] = "RI";
+      
+      $xncs[]  = $xcn;
+
+      return $xncs;
+    }
+    else {
+      return array(
+        array (
         // XCN-1
         $xcn1,
         // XCN-2
@@ -396,9 +449,10 @@ class CHL7v2Segment extends CHL7v2Entity {
         // XCN-22
         null,
         // XCN-23
-        null,
-      )
-    );
+          null,
+        )
+      ); 
+    }
   }
   
   function getXPN(CMbObject $object) {
