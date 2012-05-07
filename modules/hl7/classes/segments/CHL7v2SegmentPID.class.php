@@ -309,7 +309,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $data[] = null;
     
     // PID-25: Birth Order (NM) (optional)
-    $data[] = null;
+    $data[] = $patient->rang_naissance;
     
     // PID-26: Citizenship (CE) (optional repeating)
     $data[] = null;
