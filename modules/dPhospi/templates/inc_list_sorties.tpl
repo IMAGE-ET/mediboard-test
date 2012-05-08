@@ -52,10 +52,10 @@
   </script>
   <ul id="tabs-edit-mouvements-{{$type}}_{{$type_mouvement}}" class="control_tabs">
     <li>
-      <a href="#places-{{$type}}_{{$type_mouvement}}">Placés (<span id="count_deplacements">{{$mouvements|@count}}</span>)</a>
+      <a href="#places-{{$type}}_{{$type_mouvement}}">Placés <small id="count_deplacements">({{$mouvements|@count}})</small></a>
     </li>
     <li>
-      <a href="#non-places-{{$type}}_{{$type_mouvement}}">Non placés (<span id="count_presents">{{$mouvementsNP|@count}}</span>)</a>
+      <a href="#non-places-{{$type}}_{{$type_mouvement}}">Non placés <small id="count_presents">({{$mouvementsNP|@count}})</small></a>
     </li>
   </ul>
   <hr class="control_tabs" />
