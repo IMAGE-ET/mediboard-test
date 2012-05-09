@@ -78,7 +78,7 @@
         <input type="text" name="_date_cut_da" value="{{$smarty.now|date_format:$conf.datetime}}" readonly="readonly"/>
         <input type="hidden" name="_date_cut" class="dateTime" value="{{$smarty.now|@date_format:"%Y-%m-%d %H:%M:%S"}}"
           onchange="checkCut(this)"/>
-        <button type="button" class="cut" onclick="this.form.onsubmit();" id="cut_affectation" disabled="disabled">Scinder</button>
+        <button type="button" class="cut" onclick="this.form.onsubmit();" id="cut_affectation">Scinder</button>
       </form>
       <br />
       {{if "maternite"|module_active && $sejour_maman}}
