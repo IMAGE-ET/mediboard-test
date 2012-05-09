@@ -81,13 +81,13 @@ if (filemtime("/tmp/synConfig".basename($file)) != filemtime($file)) {
     $APACHE_GROUP = shell_exec("groups ".$APACHE_USER." | cut -d' ' -f3");
     $APACHE_GROUP = trim($APACHE_GROUP);
     exec("chgrp ".$APACHE_GROUP." ".$file, $result, $returnVar);
-    if (!(check_errs($returnvar, true, "Unable to change owner group of ".$file.".", "Owner group of ".$file." set to ".$APACHE_GROUP."!"))) {
+    if (!(check_errs($returnVar, true, "Unable to change owner group of ".$file.".", "Owner group of ".$file." set to ".$APACHE_GROUP."!"))) {
       return;
     }
     
     // Set group permissions to file
     exec("chmod g+w ".$file, $result, $returnVar);
-    if (!(check_errs($returnvar, true, "Unable to change permissions of ".$file.".", "Permissions of ".$file." changed!"))) {
+    if (!(check_errs($returnVar, true, "Unable to change permissions of ".$file.".", "Permissions of ".$file." changed!"))) {
       return;
     }
   }
