@@ -74,12 +74,28 @@ if (filemtime("/tmp/synConfig".basename($file)) != filemtime($file)) {
     if (!(check_errs(rename("/tmp/synConfig".basename($file), $file), false, "Unable to replace the file.", "The file has been replaced!"))) {
       return;
     }
+    
+    // Set the owner group to APACHE_GROUP
+    $APACHE_USER = shell_exec("ps -ef|grep apache|head -2|tail -1|cut -d' ' -f1");
+    $APACHE_USER = trim($APACHE_USER);
+    $APACHE_GROUP = shell_exec("groups ".$APACHE_USER." | cut -d' ' -f3");
+    $APACHE_GROUP = trim($APACHE_GROUP);
+    exec("chgrp ".$APACHE_GROUP." ".$file, $result, $returnVar);
+    if (!(check_errs($returnvar, true, "Unable to change owner group of ".$file.".", "Owner group of ".$file." set to ".$APACHE_GROUP."!"))) {
+      return;
+    }
+    
+    // Set group permissions to file
+    exec("chmod g+w ".$file, $result, $returnVar);
+    if (!(check_errs($returnvar, true, "Unable to change permissions of ".$file.".", "Permissions of ".$file." changed!"))) {
+      return;
+    }
   }
   // Else, we push
   else {
     echo "Remote file is older. It will be replaced.\n";
     exec("scp ".$file." ".$username."@".$hostname.":".$file, $result, $returnVar);
-    if (!(check_errs($returnVar, true, "Unable to get the file.", "File received!"))) {
+    if (!(check_errs($returnVar, true, "Unable to push the file.", "File send!"))) {
       return;
     }
   }
