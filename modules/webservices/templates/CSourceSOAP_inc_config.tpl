@@ -26,6 +26,10 @@
           </tr>
           {{mb_include module=system template=CExchangeSource_inc}}
           <tr>
+            <th>{{mb_label object=$source field="type_soap"}}</th>
+            <td>{{mb_field object=$source field="type_soap"}}</td>
+          </tr>
+          <tr>
             <th>{{mb_label object=$source field="user"}}</th>
             <td>{{mb_field object=$source field="user"}}</td>
           </tr>
@@ -52,10 +56,6 @@
           <tr>
             <th>{{mb_label object=$source field="encoding"}}</th>
             <td>{{mb_field object=$source field="encoding"}}</td>
-          </tr>
-          <tr>
-            <th>{{mb_label object=$source field="type_soap"}}</th>
-            <td>{{mb_field object=$source field="type_soap"}}</td>
           </tr>
           <tr>
             <th>{{mb_label object=$source field="stream_context"}}</th>
