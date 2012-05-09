@@ -37,8 +37,8 @@ for log in $dir/*bin.0* ; do
   fi
 done
 
-# Move binlog indeces to binlog backup
-mv $index $backup
+# Copy binlog indeces to binlog backup
+cp $index $backup
 
 date=`date '+%Y-%m-%dT%H:%M:%S'`
 
