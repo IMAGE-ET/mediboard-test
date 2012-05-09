@@ -1163,9 +1163,9 @@ TESTS A EFFECTUER
     $this->_ref_sejour->loadRefRPU();
     
     if (CAppUI::conf("dPcabinet CConsultation attach_consult_sejour")) {
-      $this->_forfait_se  = $this->_ref_sejour->forfait_se;
-      $this->_forfait_fsd = $this->_ref_sejour->forfait_fsd;
-      $this->_facturable  = $this->_ref_sejour->facturable;
+      $this->_forfait_se = $this->_ref_sejour->forfait_se;
+      $this->_forfait_sd = $this->_ref_sejour->forfait_sd;
+      $this->_facturable = $this->_ref_sejour->facturable;
     }
     
     return $this->_ref_sejour;
