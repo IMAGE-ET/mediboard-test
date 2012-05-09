@@ -129,7 +129,7 @@ function update($action, $revision) {
 			if (check_errs($svn, NULL, "Failed to write status file", "Status file written!")) {
 				
 				$fic = fopen($status, "w");
-				fwrite($fic, $svn . "Date: " . date("l d F H:i:s") . "\n");
+				fwrite($fic, $svn . "Date: " . date("Y-m-d\TH:i:s") . "\n");
 				fclose($fic);
 			}
 			
