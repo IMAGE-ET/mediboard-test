@@ -161,7 +161,14 @@ function __construct() {
               ADD `type_soap` ENUM ('CMbSOAPClient','CNuSOAPClient') NOT NULL DEFAULT 'CMbSOAPClient';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.27";      
+    $this->makeRevision("0.27");
+    
+    $query = "ALTER TABLE `source_soap` 
+                ADD `local_cert` VARCHAR (255),
+                ADD `passphrase` VARCHAR (255);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.28";      
   }
 }
 ?>

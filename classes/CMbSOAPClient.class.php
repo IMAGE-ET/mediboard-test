@@ -23,7 +23,7 @@ class CMbSOAPClient extends SoapClient {
   var $loggable          = null;
   var $encoding          = null;
   
-  function __construct($rooturl, $type = null, $options = array(), $loggable = null) {
+  function __construct($rooturl, $type = null, $options = array(), $loggable = null, $local_cert = null, $passphrase = null) {
     $this->wsdl = $rooturl;
 
     if ($loggable) {
@@ -44,9 +44,16 @@ class CMbSOAPClient extends SoapClient {
       throw new CMbException("CSourceSOAP-wsdl-invalid");
     }
     
+    // Ajout des options personnalisées
     $options = array_merge($options, array("connexion_timeout" => CAppUI::conf("webservices connection_timeout")));
     if (CAppUI::conf("webservices trace")) {
       $options = array_merge($options, array("trace" => true));
+    }
+    if ($local_cert) {
+      $options = array_merge($options, array("local_cert" => $local_cert));
+    }
+    if ($passphrase) {
+      $options = array_merge($options, array("passphrase" => $passphrase));
     }
 
     parent::__construct($this->wsdl, $options);
@@ -163,7 +170,7 @@ class CMbSOAPClient extends SoapClient {
     return $result;
   }
   
-  static public function make($rooturl, $login = null, $password = null, $type = null, $options = array(), $loggable = null, $stream_context = null) {
+  static public function make($rooturl, $login = null, $password = null, $type = null, $options = array(), $loggable = null, $stream_context = null, $local_cert = null, $passphrase = null) {
     if (!url_exists($rooturl, $stream_context)) {
       throw new CMbException("CSourceSOAP-unreachable-source", $rooturl);
     }
@@ -177,7 +184,7 @@ class CMbSOAPClient extends SoapClient {
         $rooturl = str_replace('%p', $password ? $password : $options['password'], $rooturl);
     }
 
-    if (!$client = new CMbSOAPClient($rooturl, $type, $options, $loggable)) {
+    if (!$client = new CMbSOAPClient($rooturl, $type, $options, $loggable, $local_cert, $passphrase)) {
       throw new CMbException("CSourceSOAP-soapclient-impossible");
     }
     
