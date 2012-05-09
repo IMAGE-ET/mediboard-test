@@ -16,11 +16,11 @@
   <ul>
     <li>NDA *</li>
     <li>ADELI *</li>
-    <li>COTE (droit/gauche/bilateral/total/inconnu) *</li>
+    <li>DATE/HEURE DEBUT *</li>
+    <li>DATE/HEURE FIN *</li>
     <li>LIBELLE *</li>
-    <li>DATE *</li>
-    <li>HEURE *</li>
-    <li>SALLE *</li>
+    <li>SALLE </li>
+    <li>COTE (droit/gauche/bilateral/total/inconnu)</li>
   </ul>
   <em>* : champs obligatoires</em>
 </div>
@@ -37,6 +37,24 @@
 
 {{if $results|@count}}
   <table class="tbl">
-    
+    <tr>
+      <th class="title" colspan="3">{{$results|@count}} interventions </th>
+    </tr>
+    <tr>
+      <th>NDA</th>
+      <th>Adeli</th>
+      <th>Etat</th>
+    </tr>
+    {{foreach from=$results item=_result}}
+    <tr>
+      <td class="narrow">{{$_result.NDA}}</td>
+      <td class="narrow">{{$_result.ADELI}}</td>
+      <td class="text {{if !$_result.error}}ok{{else}}error{{/if}}">
+        {{if $_result.error}}
+          {{$_result.error}}
+        {{/if}}
+      </td>
+    </tr>
+    {{/foreach}}
   </table>
 {{/if}}
