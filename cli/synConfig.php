@@ -77,9 +77,7 @@ if (filemtime("/tmp/synConfig".basename($file)) != filemtime($file)) {
     
     // Set the owner group to APACHE_GROUP
     $APACHE_USER = shell_exec("ps -ef|grep apache|head -2|tail -1|cut -d' ' -f1");
-    $APACHE_USER = trim($APACHE_USER);
     $APACHE_GROUP = shell_exec("groups ".$APACHE_USER." | cut -d' ' -f3");
-    $APACHE_GROUP = trim($APACHE_GROUP);
     exec("chgrp ".$APACHE_GROUP." ".$file, $result, $returnVar);
     if (!(check_errs($returnVar, true, "Unable to change owner group of ".$file.".", "Owner group of ".$file." set to ".$APACHE_GROUP."!"))) {
       return;
@@ -95,7 +93,7 @@ if (filemtime("/tmp/synConfig".basename($file)) != filemtime($file)) {
   else {
     echo "Remote file is older. It will be replaced.\n";
     exec("scp ".$file." ".$username."@".$hostname.":".$file, $result, $returnVar);
-    if (!(check_errs($returnVar, true, "Unable to push the file.", "File send!"))) {
+    if (!(check_errs($returnVar, true, "Unable to push the file.", "File sent!"))) {
       return;
     }
   }
