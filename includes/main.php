@@ -98,6 +98,11 @@ CJSLoader::$files = array(
   "includes/javascript/mbmail.js",
 );
 
+$support = "modules/support/javascript/support.js";
+if (file_exists($support)) {
+  CJSLoader::$files[] = $support;
+}
+
 // check if we are logged in
 if (!CAppUI::$instance->user_id) {
   $redirect = CValue::get("logout") ?  "" : CValue::read($_SERVER, "QUERY_STRING"); 
@@ -327,7 +332,7 @@ if (!$suppressHeaders) {
   $tplHeader->display("header.tpl");
 }
 
-// tabBox et inclusion du fichier demandé
+// tabBox et inclusion du fichier demandï¿½
 if ($tab !== null) {
   $module->showTabs();
 }
