@@ -614,6 +614,14 @@ button.modele_etiquette:before, a.modele_etiquette:before {
   content: url(images/buttons/modele_etiquette.png);
 }
 
+button.sourdine:before, a.sourdine:before {
+  content: url(images/buttons/speaker_mute.png);
+}
+
+button.nosourdine:before, a.nosourdine:before {
+  content: url(images/buttons/volume_lvl_3.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }
