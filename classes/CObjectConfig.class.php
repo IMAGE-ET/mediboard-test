@@ -57,7 +57,7 @@ class CObjectConfig extends CMbMetaObject {
    * 
    * @return CMbObject The resolved next object
    */
-  protected function inheritConfig(&$configs, CMbObject $object) {
+  protected function inheritConfigs(&$configs, CMbObject $object) {
     if (!$object) {
       return;
     }
@@ -110,7 +110,7 @@ class CObjectConfig extends CMbMetaObject {
   function getConfig(CMbObject $object = null){
     $configs = array_merge($this->_default, $this->loadConfigs(/* default */));
     
-    while($object = $this->inheritConfig($configs, $object));
+    while($object = $this->inheritConfigs($configs, $object));
     
     return $configs;
   }
