@@ -109,6 +109,10 @@
       {{/if}}
       
       <button type="button" class="lookup" onclick="popEtatSejour();">État du séjour</button>
+      
+      {{if "web100T"|module_active}}
+        {{mb_include module=web100T template=inc_button_iframe notext="" _sejour=$sejour}}
+      {{/if}}
     </td>
   </tr>
 </table>
