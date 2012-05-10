@@ -62,8 +62,12 @@
           <td>{{mb_field object=$group field="mail"}}</td>
         </tr>
         <tr>
+          <th>{{mb_label object=$group field="mail_apicrypt"}}</th>
+          <td>{{mb_field object=$group field="mail_apicrypt"}}</td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$group field="web"}}</th>
-          <td>{{mb_field object=$group field="web"}}</td>
+          <td>{{mb_field object=$group field="web" size="35"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$group field="directeur"}}</th>

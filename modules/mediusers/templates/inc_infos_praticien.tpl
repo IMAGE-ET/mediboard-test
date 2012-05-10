@@ -47,6 +47,11 @@
 </tr>
 
 <tr>
+  <th>{{mb_label object=$object field="mail_apicrypt"}}</th>
+  <td>{{mb_field object=$object field="mail_apicrypt"}}</td>
+</tr>
+
+<tr>
   <th>{{mb_label object=$object field="secteur"}}</th>
   <td>{{mb_field object=$object field="secteur" emptyLabel="Choose"}}</td>
 </tr>

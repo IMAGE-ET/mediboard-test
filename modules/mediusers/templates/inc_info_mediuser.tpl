@@ -53,7 +53,7 @@
   
   <tbody {{if ($user->_user_type != 3) && ($user->_user_type != 4) && ($user->_user_type != 13)}}style="display:none"{{/if}}>
   
-    {{include file="inc_infos_praticien.tpl" object=$user}}     
+    {{mb_include template="inc_infos_praticien" object=$user}}     
     
   </tbody>
           

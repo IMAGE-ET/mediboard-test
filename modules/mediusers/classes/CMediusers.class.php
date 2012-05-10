@@ -26,6 +26,7 @@ class CMediusers extends CMbObject {
   var $fin_activite                = null;
   var $compte                      = null;
   var $banque_id                   = null;
+  var $mail_apicrypt               = null;
 
   // DB References
   var $function_id                 = null;
@@ -149,6 +150,7 @@ class CMediusers extends CMbObject {
     $specs["ean"]                    = "str";
     $specs["rcc"]                    = "str";
     $specs["adherent"]               = "str";
+    $specs["mail_apicrypt"]          = "email";
     
     $specs["_group_id"]              = "ref notNull class|CGroups";
     
@@ -859,20 +861,21 @@ class CMediusers extends CMbObject {
   function fillTemplate(&$template) {
     $this->loadRefsFwd();
     $this->_ref_function->fillTemplate($template);
-    $template->addProperty("Praticien - nom"       , $this->_user_last_name );
-    $template->addProperty("Praticien - prénom"    , $this->_user_first_name);
-    $template->addProperty("Praticien - initiales" , $this->_shortview);
-    $template->addProperty("Praticien - spécialité", $this->_ref_discipline->_view);
-    $template->addProperty("Praticien - titres"    , $this->titres);
-    $template->addProperty("Praticien - ADELI"     , $this->adeli);
+    $template->addProperty("Praticien - Nom"            , $this->_user_last_name );
+    $template->addProperty("Praticien - Prénom"         , $this->_user_first_name);
+    $template->addProperty("Praticien - Initiales"      , $this->_shortview);
+    $template->addProperty("Praticien - Spécialité"     , $this->_ref_discipline->_view);
+    $template->addProperty("Praticien - Titres"         , $this->titres);
+    $template->addProperty("Praticien - ADELI"          , $this->adeli);
     $template->addBarcode("Praticien - Code barre ADELI", $this->adeli, array("barcode" => array(
       "title" => CAppUI::tr("{$this->_class}-adeli")
     )));
-    $template->addProperty("Praticien - RPPS"      , $this->rpps);
-    $template->addBarcode("Praticien - Code barre RPPS", $this->rpps, array("barcode" => array(
+    $template->addProperty("Praticien - RPPS"           , $this->rpps);
+    $template->addBarcode("Praticien - Code barre RPPS" , $this->rpps, array("barcode" => array(
       "title" => CAppUI::tr("{$this->_class}-rpps")
     )));
-    $template->addProperty("Praticien - email"     , $this->_user_email);
+    $template->addProperty("Praticien - E-mail"         , $this->_user_email);
+    $template->addProperty("Praticien - E-mail Apicrypt", $this->mail_apicrypt);
   }
   
   /**

@@ -172,8 +172,13 @@ class CSetupdPetablissement extends CSetup {
               CHANGE `fax` `fax` VARCHAR (20),
               CHANGE `tel_anesth` `tel_anesth` VARCHAR (20);";
     $this->addQuery($query);
+    
+    $this->makeRevision("0.29");
+    $query = "ALTER TABLE `groups_mediboard` 
+                ADD `mail_apicrypt` VARCHAR (50);";
+    $this->addQuery($query);
    
-    $this->mod_version = "0.29";
+    $this->mod_version = "0.30";
   } 
 }
 

@@ -21,6 +21,7 @@ class CGroups extends CMbObject {
   var $tel                 = null;
   var $fax                 = null;
   var $mail                = null;
+  var $mail_apicrypt       = null;
   var $web                 = null;
   var $directeur           = null;
   var $domiciliation       = null;
@@ -116,27 +117,30 @@ class CGroups extends CMbObject {
   }
   
   function getProps() {
-    $specs = parent::getProps();
-    $specs["text"]                = "str notNull confidential seekable";
-    $specs["raison_sociale"]      = "str maxLength|50";
-    $specs["adresse"]             = "text confidential";
-    $specs["cp"]                  = "numchar length|5";
-    $specs["ville"]               = "str maxLength|50 confidential";
-    $specs["tel"]                 = "phone";
-    $specs["fax"]                 = "phone";
-    $specs["tel_anesth"]          = "phone";
-    $specs["service_urgences_id"] = "ref class|CFunctions";
-    $specs["pharmacie_id"]        = "ref class|CFunctions";
-    $specs["directeur"]           = "str maxLength|50";
-    $specs["domiciliation"]       = "str maxLength|9";
-    $specs["siret"]               = "str length|14";
-    $specs["ape"]                 = "str maxLength|6 confidential";
-    $specs["mail"]                = "email";
-    $specs["web"]                 = "str";
-    $specs["finess"]              = "numchar length|9 confidential mask|9xS9S99999S9 control|luhn";
-    $specs["chambre_particuliere"]= "bool notNull default|0";
-    $specs["_cp_court"]           = "numchar length|2";
-    return $specs;
+    $props = parent::getProps();
+    
+    $props["text"]                = "str notNull confidential seekable";
+    $props["raison_sociale"]      = "str maxLength|50";
+    $props["adresse"]             = "text confidential";
+    $props["cp"]                  = "numchar length|5";
+    $props["ville"]               = "str maxLength|50 confidential";
+    $props["tel"]                 = "phone";
+    $props["fax"]                 = "phone";
+    $props["tel_anesth"]          = "phone";
+    $props["service_urgences_id"] = "ref class|CFunctions";
+    $props["pharmacie_id"]        = "ref class|CFunctions";
+    $props["directeur"]           = "str maxLength|50";
+    $props["domiciliation"]       = "str maxLength|9";
+    $props["siret"]               = "str length|14";
+    $props["ape"]                 = "str maxLength|6 confidential";
+    $props["mail"]                = "email";
+    $props["mail_apicrypt"]       = "email";
+    $props["web"]                 = "str";
+    $props["finess"]              = "numchar length|9 confidential mask|9xS9S99999S9 control|luhn";
+    $props["chambre_particuliere"]= "bool notNull default|0";
+    $props["_cp_court"]           = "numchar length|2";
+    
+    return $props;
   }
   
   function updateFormFields () {
@@ -210,15 +214,17 @@ class CGroups extends CMbObject {
   }
   
   function fillLimitedTemplate(&$template) {
-    $template->addProperty("Etablissement - Nom"       , $this->text);
-    $template->addProperty("Etablissement - Adresse"   , "$this->adresse \n $this->cp $this->ville");
-    $template->addProperty("Etablissement - Ville"     , $this->ville);
-    $template->addProperty("Etablissement - Téléphone" , $this->getFormattedValue("tel"));
-    $template->addProperty("Etablissement - Fax"       , $this->getFormattedValue("fax"));
-    $template->addProperty("Etablissement - Domiciliation", $this->domiciliation);
-    $template->addProperty("Etablissement - Siret"     , $this->siret);
-    $template->addProperty("Etablissement - Finess"     , $this->finess);
-    $template->addProperty("Etablissement - Ape"     , $this->ape);
+    $template->addProperty("Etablissement - Nom"             , $this->text);
+    $template->addProperty("Etablissement - Adresse"         , "$this->adresse \n $this->cp $this->ville");
+    $template->addProperty("Etablissement - Ville"           , $this->ville);
+    $template->addProperty("Etablissement - Téléphone"       , $this->getFormattedValue("tel"));
+    $template->addProperty("Etablissement - Fax"             , $this->getFormattedValue("fax"));
+    $template->addProperty("Etablissement - E-mail"          , $this->getFormattedValue("mail"));
+    $template->addProperty("Etablissement - E-mail Apicrypt" , $this->getFormattedValue("mail_apicrypt"));
+    $template->addProperty("Etablissement - Domiciliation"   , $this->domiciliation);
+    $template->addProperty("Etablissement - Siret"           , $this->siret);
+    $template->addProperty("Etablissement - Finess"          , $this->finess);
+    $template->addProperty("Etablissement - Ape"             , $this->ape);
     $template->addBarCode("Etablissement - Code Barre FINESS", $this->finess, array("barcode" => array(
       "title" => CAppUI::tr("{$this->_class}-finess")
     )));
