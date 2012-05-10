@@ -11,8 +11,8 @@
 $affectation_id = CValue::post("affectation_id");
 $_date_cut      = CValue::post("_date_cut");
 $lit_id         = CValue::post("lit_id");
-$parent_affectation_id = CValue::post("parent_affectation_id");
-$_link_affectation = CValue::post("_link_affectation", 0);
+$_action_maman  = CValue::post("_action_maman", 0);
+$callback       = CValue::post("callback");
 
 $uf_hebergement_id   = CValue::post("uf_hebergement_id");
 $uf_medicale_id      = CValue::post("uf_medicale_id");
@@ -32,7 +32,7 @@ $affectation_cut->entree    = $_date_cut;
 $affectation_cut->lit_id    = $affectation->lit_id;
 $affectation_cut->sejour_id = $affectation->sejour_id;
 $affectation_cut->sortie    = $affectation->sortie;
-$affectation_cut->parent_affectation_id = $parent_affectation_id;
+$affectation_cut->parent_affectation_id = $affectation->parent_affectation_id;
 
 $affectation_cut->uf_hebergement_id = $uf_hebergement_id;
 $affectation_cut->uf_medicale_id    = $uf_medicale_id;
@@ -43,8 +43,15 @@ if ($lit_id) {
   $affectation_cut->lit_id = $lit_id;
 }
 
-// Rattachement à l'affectation de la maman
-if ($_link_affectation) {
+$save_parent_affectation_id = $affectation_cut->parent_affectation_id;
+
+// Détachement de la maman si la checkbox est cochée
+if ($save_parent_affectation_id && $_action_maman) {
+  $affectation_cut->parent_affectation_id = null;
+}
+
+// Rattachement à l'affectation de la maman si la checkbox est cochée
+if ($_action_maman && !$save_parent_affectation_id) {
   $naissance = new CNaissance;
   $naissance->sejour_enfant_id = $affectation->sejour_id;
   $naissance->loadMatchingObject();
@@ -67,6 +74,11 @@ if ($msg = $affectation->store()) {
 
 if ($msg = $affectation_cut->store()) {
   CAppUI::setMsg($msg, UI_MSG_ERROR);
+}
+
+if ($callback) {
+  $fields = $affectation_cut->getProperties();
+  CAppUI::callbackAjax($callback, $affectation_cut->_id, $fields);
 }
 
 echo CAppUI::getMsg();
