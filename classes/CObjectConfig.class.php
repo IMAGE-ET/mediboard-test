@@ -13,7 +13,7 @@ return;  // DON'T LOAD THIS CLASS YET
 // ------------------------------------
 
 class CObjectConfig extends CMbMetaObject {
-  static $_deletion_value = "@@DELETE@@";
+  const INHERIT = "@@INHERIT@@";
   
   var $object_config_id = null;
   
@@ -115,24 +115,32 @@ class CObjectConfig extends CMbMetaObject {
     return $configs;
   }
   
+  function setConfig($key, $value, CMbObject $object) {
+    $_config = new self;
+    $_config->key = $key;
+    $_config->setObject($object);
+    $_config->loadMatchingObject();
+    
+    if ($_config->_id && $value === self::INHERIT) {
+      $_config->delete();
+    }
+    else {
+      $_config->value = $value;
+      $_config->store();
+    }
+  }
+  
   /**
    * @param array Configs
    * @param CMbObject Object
    */
   function setConfigs($configs, CMbObject $object = null) {
     foreach($configs as $_key => $_value) {
-      $_config = new self;
-      $_config->key = $_key;
-      $_config->setObject($object);
-      $_config->loadMatchingObject();
-      
-      if ($_config->_id && $_value === self::$_deletion_value) {
-        $_config->delete();
-      }
-      else {
-        $_config->value = $_value;
-        $_config->store();
-      }
+      $this->setConfig($_key, $_value, $object);
     }
+  }
+  
+  function inheritConfig($key, CMbObject $object){
+    $this->setConfig($key, self::INHERIT, $object);
   }
 }
