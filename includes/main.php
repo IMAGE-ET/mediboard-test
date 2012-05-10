@@ -99,7 +99,7 @@ CJSLoader::$files = array(
 );
 
 $support = "modules/support/javascript/support.js";
-if (file_exists($support)) {
+if (file_exists($support) && CModule::getActive("support")) {
   CJSLoader::$files[] = $support;
 }
 
