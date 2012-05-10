@@ -152,19 +152,27 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
     
     <td class="text CPatient-view" colspan="2" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
       {{if $canPlanningOp->read}}
-      <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
-        <img src="images/icons/planning.png" title="{{tr}}Edit{{/tr}}" />
-      </a>
-      {{foreach from=$_sejour->_ref_operations item=curr_op}}
-      <a class="action" style="float: right" title="Imprimer la DHE de l'intervention" href="#1" onclick="printDHE('operation_id', {{$curr_op->_id}}); return false;">
-        <img src="images/icons/print.png" />
-      </a>
-      {{foreachelse}}
-      <a class="action" style="float: right" title="Imprimer la DHE du séjour" href="#1" onclick="printDHE('sejour_id', {{$_sejour->_id}}); return false;">
-        <img src="images/icons/print.png" />
-      </a>
-      {{/foreach}}
+        <div style="float: right;">
+          {{if "web100T"|module_active}}
+            {{mb_include module=web100T template=inc_button_iframe}}
+          {{/if}}
+          
+          {{foreach from=$_sejour->_ref_operations item=curr_op}}
+          <a class="action" title="Imprimer la DHE de l'intervention" href="#1" onclick="printDHE('operation_id', {{$curr_op->_id}}); return false;">
+            <img src="images/icons/print.png" />
+          </a>
+          {{foreachelse}}
+          <a class="action" title="Imprimer la DHE du séjour" href="#1" onclick="printDHE('sejour_id', {{$_sejour->_id}}); return false;">
+            <img src="images/icons/print.png" />
+          </a>
+          {{/foreach}}
+          
+          <a class="action" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
+            <img src="images/icons/planning.png" title="{{tr}}Edit{{/tr}}" />
+          </a>
+        </div>
       {{/if}}
+      
       {{mb_include module=planningOp template=inc_vw_numdos nda=$_sejour->_NDA _doss_id=$_sejour->_id}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_ref_patient->_guid}}');">
         {{$_sejour->_ref_patient->_view}}

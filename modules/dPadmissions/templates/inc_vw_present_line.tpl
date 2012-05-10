@@ -20,24 +20,29 @@
 
 <td colspan="2" class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   {{if $canPlanningOp->read}}
-  <a class="action" style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
-    <img src="images/icons/planning.png" />
-  </a>
-    {{foreach from=$_sejour->_ref_operations item=_op}}
-    <a class="action" style="float: right" title="Imprimer la DHE de l'intervention" href="#printDHE" onclick="printDHE('operation_id', {{$_op->_id}}); return false;">
-      <img src="images/icons/print.png" />
-    </a>
-    {{foreachelse}}
-    <a class="action" style="float: right" title="Imprimer la DHE du séjour" href="#printDHE" onclick="printDHE('sejour_id', {{$_sejour->_id}}); return false;">
-      <img src="images/icons/print.png" />
-    </a>
-    {{/foreach}}
-
-    {{if $conf.dPadmissions.show_deficience}}
-      <span style="float: right;">
+    <div style="float: right;">
+      {{if "web100T"|module_active}}
+        {{mb_include module=web100T template=inc_button_iframe}}
+      {{/if}}
+      
+      {{if $conf.dPadmissions.show_deficience}}
         {{mb_include module=patients template=inc_vw_antecedents type=deficience}}
-      </span>
-    {{/if}}
+      {{/if}}
+      
+      {{foreach from=$_sejour->_ref_operations item=_op}}
+      <a class="action" title="Imprimer la DHE de l'intervention" href="#printDHE" onclick="printDHE('operation_id', {{$_op->_id}}); return false;">
+        <img src="images/icons/print.png" />
+      </a>
+      {{foreachelse}}
+      <a class="action" title="Imprimer la DHE du séjour" href="#printDHE" onclick="printDHE('sejour_id', {{$_sejour->_id}}); return false;">
+        <img src="images/icons/print.png" />
+      </a>
+      {{/foreach}}
+        
+      <a class="action" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
+        <img src="images/icons/planning.png" />
+      </a>
+    </div>
   {{/if}}
   
   {{if $patient->_ref_IPP}}
