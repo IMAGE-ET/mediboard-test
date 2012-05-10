@@ -540,6 +540,14 @@ class CBarcodeParser {
       $comp["ref"] = "invent zo +$parts[1]";
     }
     
+    // Quatuorevo
+    // QUATUOREVO +15.0 1199914028 2016-08
+    if (empty($comp) && preg_match('/^(QUATUOREVO \+\d{2}\.[05]) (\d{10}) (\d{4}-\d{2})$/ms', $barcode, $parts)) {
+      $comp["ref"] = $parts[1];
+      $comp["lot"] = $parts[2];
+      $comp["per"] = $parts[3];
+    }
+    
     //  ___LOT__
     // S12345678
     if (empty($comp) && preg_match('/^(S\d{8})$/', $barcode, $parts)) {
