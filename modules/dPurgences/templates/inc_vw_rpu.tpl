@@ -196,9 +196,24 @@ function showEtabEntreeTransfert(mode) {
               <td>{{mb_field object=$rpu field="pec_transport" emptyLabel="Choose" onchange="this.form.onsubmit();"}}</td>
             </tr>
             
+            <script type="text/javascript">
+              Main.add(function(){
+                var form = getForm("editRPU");
+                
+                if (form.elements._service_id) {
+                  var box = form.elements.box_id;
+                  box.observe("change", function(event){
+                    var service_id = box.options[box.selectedIndex].up("optgroup").get("service_id");
+                    $V(form.elements._service_id, service_id);
+                  });
+                }
+              });
+            </script>
+    
             <tr>
               <th>{{mb_label object=$rpu field="box_id"}}</th>
               <td>
+                <input type="hidden" name="_service_id" value="" />
                 {{mb_include module=dPhospi template=inc_select_lit" field=box_id selected_id=$rpu->box_id ajaxSubmit=true listService=$services}}
               </td>
             </tr>
