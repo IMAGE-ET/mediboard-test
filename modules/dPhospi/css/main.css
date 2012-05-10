@@ -27,7 +27,7 @@ div.wrapper_line.compacte {
 }
 
 td.mouvement_lit {
-  padding-bottom: 2px;
+  padding-bottom: 0;
   padding-top: 0;
 }
 
@@ -50,8 +50,8 @@ div.affectation.child {
 }
 
 div.affectation_resize:hover {
-  width: auto !important;
-  /*z-index: 500;*/
+  width: 20% !important;
+/*  z-index: 500;*/
 }
 
 div.affectation.compacte {
@@ -98,12 +98,12 @@ div.non_affectes_hover {
 }
 
 div.sejour_non_affecte {
-  width: 15em;
   margin: 2px;
-  height: 2.5em;
+  height: 2.4em;
   border: 1px solid #aaa;
   overflow: hidden;
-  vertical-align: top; 
+  vertical-align: top;
+  margin-top: 0 !important;
 }
 
 div.operation_in_mouv {
@@ -142,4 +142,12 @@ table.layout_affectation td {
   border: 0 !important;
   margin: 0 !important;
   border-spacing: 0; 
+}
+
+table.layout_temporel,
+table.layout_temporel tr,
+table.layout_temporel td {
+  /*padding: 0 !important;
+  margin: 0 !important;
+  border-spacing: 0 !important;*/
 }

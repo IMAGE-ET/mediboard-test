@@ -237,5 +237,7 @@ $smarty->assign("current", $current);
 $smarty->assign("items_prestation", $items_prestation);
 $smarty->assign("item_prestation_id", $item_prestation_id);
 $smarty->assign("prestation_id", $prestation_id);
+$smarty->assign("td_width", 84.2 / $nb_ticks);
+
 $smarty->display("inc_vw_non_places.tpl");
 ?>

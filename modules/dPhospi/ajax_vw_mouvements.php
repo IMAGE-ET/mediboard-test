@@ -263,6 +263,7 @@ $smarty->assign("readonly"    , $readonly);
 $smarty->assign("current"     , $current);
 $smarty->assign("prestation_id", $prestation_id);
 $smarty->assign("suivi_affectation", $suivi_affectation);
+$smarty->assign("td_width"    , 84.2 / $nb_ticks);
 
 $smarty->display("inc_vw_mouvements.tpl");
 

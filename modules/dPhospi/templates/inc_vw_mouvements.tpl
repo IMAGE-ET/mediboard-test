@@ -2,20 +2,10 @@
   <script type="text/javascript">
     Main.add(function() {
       var time_line_temporelle = $("time_line_temporelle");
+      var tableau_vue_temporelle = $("tableau_vue_temporel");
       var view_affectations = $("view_affectations");
       view_affectations.scrollTop = 0;
-      time_line_temporelle.setStyle({width: (parseInt(view_affectations.getStyle("width")) - 15)+'px'});
-      var first_th = $("tableau_vue_temporel").down("tr", 1).down("th");
-      var width_th = parseInt(first_th.getStyle("width"));
-      
-      if (first_th.next().hasClassName("first_cell")) {
-        width_th += parseInt(first_th.next().getStyle("width"))+5;
-      }
-      
-      $$(".first_th").each(function(th) {
-        th.setStyle({minWidth: width_th+"px"});
-      });
-      
+     
       if (Prototype.Browser.Gecko) {
         if (!window.top_view_affectations) {
           var top_tempo = time_line_temporelle.getStyle("top");
@@ -28,7 +18,21 @@
           time_line_temporelle.setClassName('scroll_shadow', view_affectations.scrollTop);
         });
       }
-            
+      else {
+        view_affectations.on('scroll', function() {
+          var style = view_affectations.scrollTop > 0 ?
+            "progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=180, Strength=6)" : "";
+          time_line_temporelle.setStyle({
+            "filter": style,
+          });
+        });
+      }
+      time_line_temporelle.setStyle({width: tableau_vue_temporelle.getWidth()+"px" }); 
+      
+      Event.observe(window, "resize", function(e){
+        time_line_temporelle.setStyle({width: tableau_vue_temporelle.getWidth()+"px" });
+      });
+      
       view_affectations.select(".droppable").each(function(tr) {
          Droppables.add(tr, {
           onDrop: function(div, tr, event) {
@@ -85,7 +89,7 @@
 {{/if}}
 {{math equation=x-1 x=$nb_ticks assign=nb_ticks_r}}
 
-<div style="height: 4.6em; width: 100%">
+<div style="height: 4.6em; width: 100%;">
   <div id="time_line_temporelle" style="background: #fff;z-index: 200; position: absolute;">
     <strong>
       <a href="#1" onclick="$V(getForm('filterMouv').date, '{{$date_before}}');">
@@ -98,15 +102,23 @@
         {{$date_after|date_format:$conf.date}} &gt;&gt;&gt;
       </a>
     </strong>
-    <table class="tbl" style="width: auto; table-layout: fixed;">
+    <table class="tbl" style="table-layout: fixed;">
+      {{if $prestation_id}}
+        <col style="width: 5%;" />
+        <col style="width: 10%;" />
+      {{else}}
+        <col style="width: 15%;" />
+      {{/if}}
       <tr>
-
       {{if $granularite == "day"}}
         <th colspan="{{$colspan}}">
           {{$date|date_format:$conf.longdate}}
         </th>
       {{else}}
         <th></th>
+        {{if $prestation_id}}
+          <th></th>
+        {{/if}}
         {{foreach from=$days item=_day key=_datetime}}
         
           <th colspan="{{if $granularite == "week"}}4{{else}}7{{/if}}">
@@ -129,26 +141,16 @@
             {{/if}}
           </th>
         {{/foreach}}
-      {{/if}}
+      {{/if}} 
       </th>
     </tr>
-    {{if $prestation_id}}
-      {{if $granularite == "day"}}
-        {{assign var=td_width value=36}}
-      {{else}}
-        {{assign var=td_width value=29}}
-      {{/if}}
-    {{else}}
-      {{if $granularite == "day"}}
-        {{assign var=td_width value=37}}
-      {{else}}
-        {{assign var=td_width value=30}}
-      {{/if}}
-    {{/if}}
     <tr>
-      <th class="first_th"></th>
+      <th></th>
+      {{if $prestation_id}}
+        <th></th>
+      {{/if}}
       {{foreach from=$datetimes item=_date}}
-        <th style="min-width: {{$td_width}}px;">
+        <th>
           {{if $granularite == "4weeks"}}
             {{$_date|date_format:"%a"|upper|substr:0:1}} {{$_date|date_format:"%d"}}
           {{else}}
@@ -160,9 +162,13 @@
     </table>
   </div>
 </div>
-<table class="tbl" style="width: auto; table-layout: fixed;" id="tableau_vue_temporel">
-  <col style="width: 100px;" />
-
+<table class="tbl layout_temporel" id="tableau_vue_temporel" style="table-layout: fixed; position: relative;">
+  {{if $prestation_id}}
+    <col style="width: 5%;" />
+    <col style="width: 10%;" />
+  {{else}}
+    <col style="width: 15%;" />
+  {{/if}}
   {{foreach from=$services item=_service}}
     <tr>
       <th class="title" colspan="{{$colspan}}">{{$_service}}</th>

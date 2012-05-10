@@ -162,13 +162,11 @@
     Calendar.regField(getForm('filterMouv').date);
     var view_affectations = $("view_affectations");
     view_affectations.setStyle(
-      { width: document.viewport.getWidth()*(87/100)+"px",
-        height: document.viewport.getHeight()*(0.6)+"px"
+      { height: document.viewport.getHeight()*(0.59)+"px"
       });
     var list_affectations = $("list_affectations");
     list_affectations.setStyle(
-      { width: document.viewport.getWidth()*(87/100)+"px",
-        height: document.viewport.getHeight()*(0.3)+"px"
+      { height: document.viewport.getHeight()*(0.3)+"px"
       });
     refreshMouvements(loadNonPlaces);
   });
@@ -229,6 +227,6 @@
   
 </form>
 
-<div id="view_affectations" style="overflow-x: auto;" onscroll="syncBars(this)"></div>
+<div id="view_affectations" style="overflow-x: auto; overflow-y: scroll;" onscroll="syncBars(this)"></div>
 <hr />
-<div id="list_affectations" style="overflow-x: auto;" onscroll="syncBars(this)"></div>
+<div id="list_affectations" style="overflow-x: auto; overflow-y: scroll;" onscroll="syncBars(this)"></div>

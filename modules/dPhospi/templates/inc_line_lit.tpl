@@ -1,7 +1,16 @@
+{{if $mode_vue_tempo == "classique"}}
+  {{assign var=height_affectation value=3}}
+{{else}}
+  {{assign var=height_affectation value=1.6}}
+{{/if}}
+
 {{if $prestation_id}}
   <th class="text">{{$_lit->_selected_item->nom}}</th>
 {{/if}}
-<th class="text first_cell" style="text-align: left;" onclick="chooseLit('{{$_lit->_id}}'); this.down().checked = 'checked';" data-rank="{{$_lit->_selected_item->rank}}">
+<th class="text"
+  onclick="chooseLit('{{$_lit->_id}}'); this.down().checked = 'checked';"
+  style="text-align: left; {{if isset($_lit->_lines|smarty:nodefaults)}}height: {{math equation=x*y x=$_lit->_lines|@count y=$height_affectation}}em{{/if}}"
+  data-rank="{{$_lit->_selected_item->rank}}">
   {{if isset($_lit->_lines|smarty:nodefaults) && $_lit->_lines|@count > 1 && !$suivi_affectation}}
     <img src="modules/dPhospi/images/surb.png" title="Collision" style="float: right;">
   {{/if}}
@@ -18,14 +27,12 @@
 
 {{foreach from=0|range:$nb_ticks_r item=_i}}
   {{assign var=datetime value=$datetimes.$_i}}
-  <td class="mouvement_lit {{if $datetime == $current}}current_hour{{/if}}" style="min-width: {{$td_width}}px;"
-    data-date="{{$datetime}}"">
+  <td class="mouvement_lit {{if $datetime == $current}}current_hour{{/if}}"
+    data-date="{{$datetime}}" style="vertical-align: top">
     {{if $_i == 0 && isset($_lit->_lines|smarty:nodefaults)}}
       {{*  Parcours des affectations *}}
       {{foreach from=$_lit->_lines item=_lines_by_level key=_level}}
-        
-        <div class="wrapper_line {{$mode_vue_tempo}}">
-          
+
         {{foreach from=$_lines_by_level item=_affectations_ids}}
           
           {{foreach from=$_affectations_ids item=_affectation_id}}
@@ -40,8 +47,8 @@
             {{else}}
               {{assign var=color value="688"}}
             {{/if}}
-            {{math equation=x*(y+4.6) x=$_affectation->_entree_offset y=$td_width assign=offset}}
-            {{math equation=x*(y+4.6) x=$_affectation->_width y=$td_width assign=width}} 
+            {{math equation=x*y x=$_affectation->_entree_offset y=$td_width assign=offset}}
+            {{math equation=x*y x=$_affectation->_width y=$td_width assign=width}} 
             {{assign var=mode_vue_reelle value=$mode_vue_tempo}}
             {{if $_affectation->parent_affectation_id}}
               {{assign var=mode_vue_reelle value="compacte"}}
@@ -64,7 +71,8 @@
               data-lit_id="{{$_affectation->lit_id}}"
               data-width="{{$_affectation->_width}}" 
               data-offset="{{$_affectation->_entree_offset}}"
-              style="left: {{$offset}}px; width: {{$width}}px; border: 1px solid #{{$color}};"
+              style="left: {{$offset}}%; width: {{$width}}%; border: 1px solid #{{$color}}; margin-left: 15.1%;
+                margin-top: {{math equation=x*y x=$_level y=$height_affectation}}em"
               onmouseover="
                 if ($(this).hasClassName('classique')) {
                   this.select('.toolbar_affectation')[0].setStyle({visibility: 'visible'});
@@ -119,7 +127,6 @@
                     {{elseif $_affectation->function_id}}
                       <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');">
                         BLOQUE POUR {{mb_value object=$_affectation field=function_id}}
-
                       </span>
                     {{/if}}
                   </td>
@@ -161,13 +168,13 @@
             {{/if}}
             {{assign var=$_affectation_id value=$_affectation->_id}}
             {{foreach from=$_sejour->_ref_operations item=_operation}}
-              {{math equation=x*(y+4.6) x=$_operation->_debut_offset.$_affectation_id y=$td_width assign=offset_op}}
-              {{math equation=x*(y+4.6) x=$_operation->_width.$_affectation_id y=$td_width assign=width_op}}
+              {{math equation=x*y x=$_operation->_debut_offset.$_affectation_id y=$td_width assign=offset_op}}
+              {{math equation=x*y x=$_operation->_width.$_affectation_id y=$td_width assign=width_op}}
               <div class="operation_in_mouv{{if $mode_vue_reelle == "compacte"}}_compact{{/if}} opacity-40"
-                style="left: {{$offset_op}}px; width: {{$width_op}}px;"></div>
+                style="left: {{$offset_op}}%; width: {{$width_op}}%;"></div>
               {{if $_operation->duree_uscpo}}
                 {{math equation=x+y x=$offset_op y=$width_op assign=offset_uscpo}}
-                {{math equation=x*(y+4.6) x=$_operation->_width_uscpo.$_affectation_id y=$td_width assign=width_uscpo}}
+                {{math equation=x*y x=$_operation->_width_uscpo.$_affectation_id y=$td_width assign=width_uscpo}}
                 
                 <div class="soins_uscpo opacity-40"
                   style="left: {{$offset_uscpo}}px; width: {{$width_uscpo}}px; z-index: -1;"></div>
@@ -183,13 +190,15 @@
                 starteffect: function(element) {
                   new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 });
                 },
+                reverteffect: function(element) {
+                  element.style.top = "auto";
+                },
                 revert: true
               });
             </script>
           {{/if}}
         {{/foreach}}
       {{/foreach}}
-      </div>
     {{/foreach}}
   {{/if}}
 </td>

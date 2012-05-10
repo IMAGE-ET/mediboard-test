@@ -163,23 +163,6 @@ if (isset($lit->_ref_affectations) && count($lit->_ref_affectations)) {
   $lit->_lines = CMbRange::rearrange($intervals);
 }
 
-if ($prestation_id) {
-  if ($granularite == "day") {
-    $td_width = 36;
-  }
-  else {
-    $td_width = 29;
-  }
-}
-else {
-  if ($granularite == "day") {
-    $td_width = 37;
-  }
-  else {
-    $td_width = 30;
-  }
-}
-
 $smarty = new CSmartyDP;
 
 $smarty->assign("affectations", $affectations);
@@ -196,11 +179,11 @@ if ($prestation_id) {
 $smarty->assign("nb_ticks_r", $nb_ticks-1);
 $smarty->assign("datetimes" , $datetimes);
 $smarty->assign("current"   , $current);
-$smarty->assign("td_width"  , $td_width);
 $smarty->assign("mode_vue_tempo", $mode_vue_tempo);
 $smarty->assign("prestation_id", $prestation_id);
 $smarty->assign("show_age_patient", CAppUI::conf("dPhospi show_age_patient"));
 $smarty->assign("suivi_affectation", $suivi_affectation);
+$smarty->assign("td_width"  , 84.2 / $nb_ticks);
 
 $smarty->display("inc_line_lit.tpl");
 

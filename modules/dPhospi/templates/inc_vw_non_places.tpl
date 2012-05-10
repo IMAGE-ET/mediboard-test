@@ -20,17 +20,6 @@
   
     var time_line_temporelle_non_affectes = $("time_line_temporelle_non_affectes");
     var list_affectations = $("list_affectations");
-    var first_th = $("tableau_vue_temporel").down("tr", 1).down("th");
-    var width_th = parseInt(first_th.getStyle("width"));
-    if (first_th.next().hasClassName("first_cell")) {
-       width_th += parseInt(first_th.next().getStyle("width"))+5;
-    }
-    list_affectations.scrollTop = 0;
-    $$(".first_th").each(function(th) {
-      th.setStyle({minWidth: width_th+"px"});
-    });
-    
-    time_line_temporelle_non_affectes.setStyle({width: time_line_temporelle_non_affectes.up('div').getWidth()+"px"});
     
     if (Prototype.Browser.Gecko) {
       var top_tempo = time_line_temporelle_non_affectes.getStyle("top");
@@ -38,7 +27,6 @@
     }
     
     if (!Prototype.Browser.IE) {
-      //time_line_temporelle_non_affectes.setStyle({width: (parseInt(list_affectations.getStyle("width")) - 15)+'px'});
       list_affectations.on('scroll', function() {
         time_line_temporelle_non_affectes.setClassName('scroll_shadow', list_affectations.scrollTop);
       });
@@ -48,24 +36,7 @@
   });
 </script>
 
-{{if $prestation_id}}
-  {{if $granularite == "day"}}
-    {{assign var=td_width value=36}}
-  {{else}}
-    {{assign var=td_width value=29}}
-  {{/if}}
-{{else}}
-  {{if $granularite == "day"}}
-    {{assign var=td_width value=37}}
-  {{else}}
-    {{assign var=td_width value=30}}
-  {{/if}}
-{{/if}}
-{{if $prestation_id}}
-  {{math equation=x+2 x=$nb_ticks assign=colspan}}
-{{else}}
-  {{math equation=x+1 x=$nb_ticks assign=colspan}}
-{{/if}}
+{{math equation=x+1 x=$nb_ticks assign=colspan}}
 {{math equation=x-1 x=$nb_ticks assign=nb_ticks_r}}
 
 <div style="height: 2em; width: 100%">
@@ -112,7 +83,8 @@
 </div>
 
 {{if $sejours_non_affectes|@count}}
-  <table class="tbl" style="width: auto; table-layout: fixed;">
+  <table class="tbl layout_temporel" style="table-layout: fixed; position: relative;">
+    <col style="width: 15%;" />
     <tr>
       <th class="title" colspan="{{$colspan}}">Non placés</th>
     </tr>
@@ -121,68 +93,68 @@
       <tr>
         {{assign var=patient value=$_sejour->_ref_patient}}
         {{assign var=praticien value=$_sejour->_ref_praticien}}
-        {{math equation=x*(y+4.6) x=$_sejour->_width y=$td_width assign=width}}
-        {{math equation=x*(y+4.6) x=$_sejour->_entree_offset y=$td_width assign=offset}}
-        <th style="height: 3em;" class="first_th"></th>
+        {{math equation=x*y x=$_sejour->_width y=$td_width assign=width}}
+        {{math equation=x*y x=$_sejour->_entree_offset y=$td_width assign=offset}}
+        <th style="height: 3em;"></th>
         
         {{foreach from=0|range:$nb_ticks_r item=_i}}
           {{assign var=datetime value=$datetimes.$_i}}
-          <td class="mouvement_lit {{if $datetime == $current}}current_hour{{/if}}" style="min-width: {{$td_width}}px;">
+          <td class="mouvement_lit {{if $datetime == $current}}current_hour{{/if}}" {{if $_i == 0}}id="wrapper_line_{{$_sejour->_id}}"{{/if}} style="vertical-align: top">
             {{if $_i == 0}}
-              <div class="wrapper_line" id="wrapper_line_{{$_sejour->_id}}">
-                <div class="affectation clit draggable text sejour_non_affecte {{if $_sejour->entree >= $date_min}}debut_sejour{{/if}}
-                  {{if $_sejour->sortie <= $date_max}}fin_sejour{{/if}} {{$_sejour->_guid}}"
-                  style="border: 1px solid #{{$praticien->_ref_function->color}}; width: {{$width}}px; left: {{$offset}}px;"
-                  id="sejour_temporel_{{$_sejour->_id}}" data-patient_id="{{$patient->_id}}" data-sejour_id="{{$_sejour->_id}}"
-                  onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
-                  <span style="float: left; padding-left: 1px; padding-right: 1px;">
-                    {{mb_include module=patients template=inc_vw_photo_identite mode=read patient=$patient size=22}}
-                  </span>
-                  <div class="wrapper_op">
-                    {{if !$readonly}}
-                      <span style="float: right;">
-                        <input type="radio" name="sejour_move" id="sejour_move_{{$_sejour->_id}}" onclick="chooseSejour('{{$_sejour->_id}}');"/>
-                      </span>
-                    {{/if}}
-                    <span {{if !$_sejour->entree_reelle}}class="patient-not-arrived"{{/if}} {{if $_sejour->septique}}class="septique"{{/if}}
-                    {{if $_sejour->type == "ambu"}}style="font-style: italic;"{{/if}}>
-                      {{$patient->nom}} {{if $patient->nom_jeune_fille}}({{$patient->nom_jeune_fille}}) {{/if}}{{$patient->prenom}}
-                    </span> {{if $show_age_patient}}({{$patient->_age}} ans){{/if}}
-                    {{if $_sejour->type != "ambu" && $_sejour->type != "exte"}}
-                      ({{$_sejour->_duree}}j - {{$_sejour->_ref_praticien->_shortview}})
-                    {{else}}
-                      ({{$_sejour->type|truncate:1:""|capitalize}} - {{$_sejour->_ref_praticien->_shortview}})
-                    {{/if}}
-                    <span style="float: right; margin-top: 3px; margin-right: 3px;">
-                      {{mb_include module=patients template=inc_vw_antecedents type=deficience readonly=1}}
+              <div class="affectation clit draggable text sejour_non_affecte {{if $_sejour->entree >= $date_min}}debut_sejour{{/if}}
+                {{if $_sejour->sortie <= $date_max}}fin_sejour{{/if}} {{$_sejour->_guid}}"
+                style="border: 1px solid #{{$praticien->_ref_function->color}}; width: {{$width}}%; left: {{$offset}}%; margin-left: 15.1%;"
+                id="sejour_temporel_{{$_sejour->_id}}"
+                data-patient_id="{{$patient->_id}}"
+                data-sejour_id="{{$_sejour->_id}}"
+                onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
+                <span style="float: left; padding-left: 1px; padding-right: 1px;">
+                  {{mb_include module=patients template=inc_vw_photo_identite mode=read patient=$patient size=22}}
+                </span>
+                <div class="wrapper_op">
+                  {{if !$readonly}}
+                    <span style="float: right;">
+                      <input type="radio" name="sejour_move" id="sejour_move_{{$_sejour->_id}}" onclick="chooseSejour('{{$_sejour->_id}}');"/>
                     </span>
-                    <br />
-                    <div>
-                      <span class="compact">
-                        {{$_sejour->_motif_complet}}
-                      </span>
-                      <span class="compact" style="float: right;">
-                      <em style="color: #f00;" title="Chambre seule">
-                        {{if $_sejour->chambre_seule}}CS{{else}}CD{{/if}}
-                        {{if $_sejour->prestation_id}}- {{$_sejour->_ref_prestation->code}}{{/if}}
-                      </em>
-                      </span>
-                    </div>
-                    {{foreach from=$_sejour->_ref_operations item=_operation}}
-                      {{math equation=x*(y+4.6) x=$_operation->_debut_offset y=$td_width assign=offset_op}}
-                      {{math equation=x*(y+4.6) x=$_operation->_width y=$td_width assign=width_op}}
-                      <div class="operation_in_mouv opacity-40"
-                        style="left: {{$offset_op}}px; width: {{$width_op}}px;"></div>
-                      
-                      {{if $_operation->duree_uscpo}}
-                        {{math equation=x+y x=$offset_op y=$width_op assign=offset_uscpo}}
-                        {{math equation=x*(y+4.6) x=$_operation->_width_uscpo y=$td_width assign=width_uscpo}}
-                        
-                        <div class="soins_uscpo opacity-40"
-                          style="left: {{$offset_uscpo}}px; width: {{$width_uscpo}}px;"></div>
-                      {{/if}}
-                    {{/foreach}}
+                  {{/if}}
+                  <span {{if !$_sejour->entree_reelle}}class="patient-not-arrived"{{/if}} {{if $_sejour->septique}}class="septique"{{/if}}
+                  {{if $_sejour->type == "ambu"}}style="font-style: italic;"{{/if}}>
+                    {{$patient->nom}} {{if $patient->nom_jeune_fille}}({{$patient->nom_jeune_fille}}) {{/if}}{{$patient->prenom}}
+                  </span> {{if $show_age_patient}}({{$patient->_age}} ans){{/if}}
+                  {{if $_sejour->type != "ambu" && $_sejour->type != "exte"}}
+                    ({{$_sejour->_duree}}j - {{$_sejour->_ref_praticien->_shortview}})
+                  {{else}}
+                    ({{$_sejour->type|truncate:1:""|capitalize}} - {{$_sejour->_ref_praticien->_shortview}})
+                  {{/if}}
+                  <span style="float: right; margin-top: 3px; margin-right: 3px;">
+                    {{mb_include module=patients template=inc_vw_antecedents type=deficience readonly=1}}
+                  </span>
+                  <br />
+                  <div>
+                    <span class="compact">
+                      {{$_sejour->_motif_complet}}
+                    </span>
+                    <span class="compact" style="float: right;">
+                    <em style="color: #f00;" title="Chambre seule">
+                      {{if $_sejour->chambre_seule}}CS{{else}}CD{{/if}}
+                      {{if $_sejour->prestation_id}}- {{$_sejour->_ref_prestation->code}}{{/if}}
+                    </em>
+                    </span>
                   </div>
+                  {{foreach from=$_sejour->_ref_operations item=_operation}}
+                    {{math equation=x*y x=$_operation->_debut_offset y=$td_width assign=offset_op}}
+                    {{math equation=x*y x=$_operation->_width y=$td_width assign=width_op}}
+                    <div class="operation_in_mouv opacity-40"
+                      style="left: {{$offset_op}}%; width: {{$width_op}}%;"></div>
+                    
+                    {{if $_operation->duree_uscpo}}
+                      {{math equation=x*y x=$offset_op y=$width_op assign=offset_uscpo}}
+                      {{math equation=x*y x=$_operation->_width_uscpo y=$td_width assign=width_uscpo}}
+                      
+                      <div class="soins_uscpo opacity-40"
+                        style="left: {{$offset_uscpo}}%; width: {{$width_uscpo}}%;"></div>
+                    {{/if}}
+                  {{/foreach}}
                 </div>
               </div>
               {{if !$readonly}}
@@ -194,13 +166,20 @@
                       new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 });
                     },
                     onStart: function(drgObj, mouseEvent){
-                      window.save_height_list = $("list_affectations").getStyle('height');
                       var element = drgObj.element;
-                      element.setStyle({
-                        left: element.getOffsetParent().cumulativeOffset().left+parseInt(element.style.left)+'px',
-                        top: element.getOffsetParent().cumulativeOffset().top+parseInt(element.style.top)+'px'
-                        });
+                      element.save_left = element.getStyle("left");
+                      element.save_width = element.getStyle("width");
+                      var table = element.up('table')
+                      var left = element.cumulativeOffset().left
+                      var width = element.getWidth();
+                      
                       $(document.body).insert(element);
+                      element.setStyle({
+                        left:       left + 'px',
+                        marginLeft: '0',
+                        width:      width+'px'
+                      });
+                        
                       {{if $prestation_id && $item_prestation_id}}
                         {{assign var=item_prestation value=$items_prestation.$item_prestation_id}}
                         $$(".first_cell").each(function(elt) {
@@ -232,6 +211,12 @@
                       });
                       var element = drbObj.element;
                       $('wrapper_line_'+element.get('sejour_id')).insert(element);
+                    },
+                    reverteffect: function(element) {
+                      element.style.left = element.save_left;
+                      element.style.width = element.save_width;
+                      element.style.marginLeft = "15.1%";
+                      element.style.top = "auto";
                     },
                     revert: true});
                 </script>
