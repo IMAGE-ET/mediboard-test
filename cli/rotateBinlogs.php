@@ -51,7 +51,7 @@ function rotateBinlogs($userAdminDB, $passAdminDB, $binLogsDir, $binLogIndexFile
   copy($binLogsDir."/".$binLogIndexFilename, $backup."/".$binLogIndexFilename);
   
   # Archive the binlogs
-  exec("tar -cjf ".$backup."/binlogs_".date('Y-m-d\TH:i:s').".tar.bz2 ".$backup."/".$binPrefix."*", $result, $returnVar);
+  exec("tar -cjf ".$backup."/binlogs_".date('Y-m-d\TH:i:s').".tar.bz2 -C ".$backup." ".$binPrefix."*", $result, $returnVar);
   
   # Rotate binlogs
   foreach (glob($backup."/".$binPrefix."*") as $aBinLogFile) {
