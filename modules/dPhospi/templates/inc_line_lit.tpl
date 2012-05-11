@@ -168,16 +168,16 @@
             {{/if}}
             {{assign var=$_affectation_id value=$_affectation->_id}}
             {{foreach from=$_sejour->_ref_operations item=_operation}}
-              {{math equation=x*y x=$_operation->_debut_offset.$_affectation_id y=$td_width assign=offset_op}}
-              {{math equation=x*y x=$_operation->_width.$_affectation_id y=$td_width assign=width_op}}
+              {{math equation=(x/y)*100 x=$_operation->_debut_offset.$_affectation_id y=$_affectation->_width assign=offset_op}}
+              {{math equation=(x/y)*100 x=$_operation->_width.$_affectation_id y=$_affectation->_width assign=width_op}}
               <div class="operation_in_mouv{{if $mode_vue_reelle == "compacte"}}_compact{{/if}} opacity-40"
                 style="left: {{$offset_op}}%; width: {{$width_op}}%;"></div>
               {{if $_operation->duree_uscpo}}
                 {{math equation=x+y x=$offset_op y=$width_op assign=offset_uscpo}}
-                {{math equation=x*y x=$_operation->_width_uscpo.$_affectation_id y=$td_width assign=width_uscpo}}
+                {{math equation=x/y*100 x=$_operation->_width_uscpo.$_affectation_id y=$_affectation->_width assign=width_uscpo}}
                 
                 <div class="soins_uscpo opacity-40"
-                  style="left: {{$offset_uscpo}}px; width: {{$width_uscpo}}px; z-index: -1;"></div>
+                  style="left: {{$offset_uscpo}}%; width: {{$width_uscpo}}%; z-index: -1;"></div>
               {{/if}}
             {{/foreach}}
           </div>

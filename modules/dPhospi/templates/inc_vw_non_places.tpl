@@ -142,15 +142,16 @@
                     </span>
                   </div>
                   {{foreach from=$_sejour->_ref_operations item=_operation}}
+                  {{math equation=(x/y)*100 x=$_operation->_debut_offset y=$_sejour->_width assign=offset_op}}
+                  {{math equation=(x/y)*100 x=$_operation->_width y=$_sejour->_width assign=width_op}}
                     {{math equation=x*y x=$_operation->_debut_offset y=$td_width assign=offset_op}}
                     {{math equation=x*y x=$_operation->_width y=$td_width assign=width_op}}
                     <div class="operation_in_mouv opacity-40"
                       style="left: {{$offset_op}}%; width: {{$width_op}}%;"></div>
                     
                     {{if $_operation->duree_uscpo}}
-                      {{math equation=x*y x=$offset_op y=$width_op assign=offset_uscpo}}
-                      {{math equation=x*y x=$_operation->_width_uscpo y=$td_width assign=width_uscpo}}
-                      
+                      {{math equation=x+y x=$offset_op y=$width_op assign=offset_uscpo}}
+                      {{math equation=x/y*100 x=$_operation->_width_uscpo y=$_sejour->_width assign=width_uscpo}}
                       <div class="soins_uscpo opacity-40"
                         style="left: {{$offset_uscpo}}%; width: {{$width_uscpo}}%;"></div>
                     {{/if}}
