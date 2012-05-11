@@ -27,69 +27,76 @@
   <input type="hidden" name="dosql" value="do_consultation_aed" />
   <input type="hidden" name="ajax" value="1" />
   {{mb_key object=$consult}}
-
-  <fieldset>
-    <legend>{{tr}}CConsultation-date_at{{/tr}}</legend>
-    <table style="width: 100%;">
-      <tr>
-        <th style="width: 30%">{{mb_label object=$consult field=date_at}}</th>
-        <td>{{mb_field object=$consult field=date_at form=editConsultation register=true onchange="updateDates(this); this.form.onsubmit();"}}</td>    
-      </tr>
-      <tr>
-        <th>{{mb_label object=$consult field=fin_at}}</th>
-        <td>
-          {{if $consult->date_at}}
-            {{mb_field object=$consult field=fin_at form=editConsultation register=true onchange="this.form.onsubmit()"}}
-          {{else}}
-            {{mb_value object=$consult field=fin_at}}
-          {{/if}}
-        </td>
-      </tr>
-      <tr>
-        <th>{{mb_label object=$consult field=pec_at}}</th>
-        <td>
-          {{if $consult->date_at}}
-            {{mb_field object=$consult field=pec_at onchange="this.form.onsubmit()" emptyLabel="Choose" typeEnum="radio"}}
-          {{else}}
-            {{mb_field object=$consult field=pec_at emptyLabel="Choose" readonly=readonly typeEnum="radio"}}
-          {{/if}}
-        </td>
-      </tr>
-      <tr>
-        <th>{{mb_label object=$consult field=reprise_at}}</th>
-        <td>
-          {{if $consult->date_at}}
-            {{mb_field object=$consult field=reprise_at form=editConsultation register=true onchange="this.form.onsubmit()"}}
-          {{else}}
-            {{mb_value object=$consult field=reprise_at}}
-          {{/if}}
-        </td>
-      </tr>
-      <tr>
-        <th>{{mb_label object=$consult field=at_sans_arret}}</th>
-        <td>
-          {{if $consult->date_at}}
-            {{mb_field object=$consult field=at_sans_arret onchange="this.form.onsubmit()"}}
-          {{else}}
-            {{mb_field object=$consult field=at_sans_arret readonly=readonly}}
-          {{/if}}
-        </th>
-      </tr>
-    </table>
-  </fieldset>
-  <fieldset>
-    <legend>Arrêt maladie</legend>
-    <table style="width: 100%">
-      <tr>
-        <th style="width: 30%">{{mb_label object=$consult field=arret_maladie}}</th>
-        <td>
-          {{if $consult->date_at}}
-            {{mb_field object=$consult field=arret_maladie onchange="this.form.onsubmit()"}}
-          {{else}}
-            {{mb_field object=$consult field=arret_maladie readonly=readonly}}
-          {{/if}}
-        </th>
-      </tr>
-    </table>
-  </fieldset>
+  <table style="width: 100%">
+    <tr>
+      <td class="halfPane">
+        <fieldset>
+            <legend>{{tr}}CConsultation-date_at{{/tr}}</legend>
+            <table style="width: 100%;">
+              <tr>
+                <th style="width: 30%">{{mb_label object=$consult field=date_at}}</th>
+                <td>{{mb_field object=$consult field=date_at form=editConsultation register=true onchange="updateDates(this); this.form.onsubmit();"}}</td>    
+              </tr>
+              <tr>
+                <th>{{mb_label object=$consult field=fin_at}}</th>
+                <td>
+                  {{if $consult->date_at}}
+                    {{mb_field object=$consult field=fin_at form=editConsultation register=true onchange="this.form.onsubmit()"}}
+                  {{else}}
+                    {{mb_value object=$consult field=fin_at}}
+                  {{/if}}
+                </td>
+              </tr>
+              <tr>
+                <th>{{mb_label object=$consult field=pec_at}}</th>
+                <td>
+                  {{if $consult->date_at}}
+                    {{mb_field object=$consult field=pec_at onchange="this.form.onsubmit()" emptyLabel="Choose" typeEnum="radio"}}
+                  {{else}}
+                    {{mb_field object=$consult field=pec_at emptyLabel="Choose" readonly=readonly typeEnum="radio"}}
+                  {{/if}}
+                </td>
+              </tr>
+              <tr>
+                <th>{{mb_label object=$consult field=reprise_at}}</th>
+                <td>
+                  {{if $consult->date_at}}
+                    {{mb_field object=$consult field=reprise_at form=editConsultation register=true onchange="this.form.onsubmit()"}}
+                  {{else}}
+                    {{mb_value object=$consult field=reprise_at}}
+                  {{/if}}
+                </td>
+              </tr>
+              <tr>
+                <th>{{mb_label object=$consult field=at_sans_arret}}</th>
+                <td>
+                  {{if $consult->date_at}}
+                    {{mb_field object=$consult field=at_sans_arret onchange="this.form.onsubmit()"}}
+                  {{else}}
+                    {{mb_field object=$consult field=at_sans_arret readonly=readonly}}
+                  {{/if}}
+                </th>
+              </tr>
+            </table>
+          </fieldset>
+      </td>
+      <td class="halfPane">
+        <fieldset>
+          <legend>Arrêt maladie</legend>
+          <table style="width: 100%">
+            <tr>
+              <th style="width: 30%">{{mb_label object=$consult field=arret_maladie}}</th>
+              <td>
+                {{if $consult->date_at}}
+                  {{mb_field object=$consult field=arret_maladie onchange="this.form.onsubmit()"}}
+                {{else}}
+                  {{mb_field object=$consult field=arret_maladie readonly=readonly}}
+                {{/if}}
+              </th>
+            </tr>
+          </table>
+        </fieldset>
+      </td>
+    </tr>
+  </table>
 </form>
