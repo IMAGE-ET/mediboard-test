@@ -1,11 +1,15 @@
 <script type="text/javascript">
+  Main.add(Control.Tabs.setTabCount.curry("out", "{{$listOperations|@count}}"));
+  
+  Main.add(function () {
+    {{if $isImedsInstalled}}
+      ImedsResultsWatcher.loadResults();
+    {{/if}}
+  });
 
-Main.add(Control.Tabs.setTabCount.curry("out", "{{$listOperations|@count}}"));
-
-submitSortieForm = function(oFormSortie) {
-  submitFormAjax(oFormSortie,'systemMsg', {onComplete: function(){ refreshTabsReveil() }});
-}
-
+  submitSortieForm = function(oFormSortie) {
+    submitFormAjax(oFormSortie,'systemMsg', {onComplete: function(){ refreshTabsReveil() }});
+  }
 </script>
 
 <table class="tbl">
@@ -22,20 +26,30 @@ submitSortieForm = function(oFormSortie) {
   {{assign var=_operation_id value=$_operation->_id}}
   <tr>
     <td>{{$_operation->_ref_salle->_shortview}}</td>
+    
     <td class="text">
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}
     </td>
+    
     <td class="text">
-     <a href="#" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">
-     <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
+      <div style="float: right;">
+        {{if $isImedsInstalled}}
+          {{mb_include module=Imeds template=inc_sejour_labo link="#1" sejour=$_operation->_ref_sejour float="none"}}
+        {{/if}}
+      </div>
+      
+      <a href="#" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">
+        <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
             onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
         {{$_operation->_ref_patient->_view}}
       </span>
       </a>
     </td>
+    
     <td class="text">
       {{mb_include module=hospi template=inc_placement_sejour sejour=$_operation->_ref_sejour}}
     </td>
+    
     <td class="button">
       {{if $can->edit}}
       <form name="editSortieBlocFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">

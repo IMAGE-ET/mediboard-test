@@ -8,7 +8,7 @@
 */
 
 global $can;
-$can->needsRead();
+$can->checkRead();
 
 $date    = CValue::getOrSession("date", mbDate());
 $bloc_id = CValue::getOrSession("bloc_id");
@@ -48,6 +48,7 @@ $smarty->assign("hour",            $hour);
 $smarty->assign("modif_operation", $modif_operation);
 $smarty->assign("blocs_list",      $blocs_list);
 $smarty->assign("bloc",            $bloc);
+$smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->display("vw_reveil.tpl");
 
 ?>

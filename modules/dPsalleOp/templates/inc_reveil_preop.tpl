@@ -1,11 +1,15 @@
-<script type="text/javascript">
+<script type="text/javascript">  
+  Main.add(Control.Tabs.setTabCount.curry("preop", "{{$listOperations|@count}}"));
 
-Main.add(Control.Tabs.setTabCount.curry("preop", "{{$listOperations|@count}}"));
-
-submitPrepaForm = function(oFormPrepa) {
-  submitFormAjax(oFormPrepa,'systemMsg', {onComplete: function(){ refreshTabsReveil() }});
-}
-
+  submitPrepaForm = function(oFormPrepa) {
+    submitFormAjax(oFormPrepa,'systemMsg', {onComplete: function(){ refreshTabsReveil() }});
+  }
+  
+  Main.add(function () {    
+    {{if $isImedsInstalled}}
+      ImedsResultsWatcher.loadResults();
+    {{/if}}
+  });
 </script>
 
 <table class="tbl">
@@ -33,9 +37,13 @@ submitPrepaForm = function(oFormPrepa) {
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}
     </td>
     <td class="text">
-      <div style="float: right; display: inline">
-        <a href="#" onclick="codageCCAM('{{$_operation->_id}}');">
-        <img src="images/icons/anesth.png" alt="Anesth" />
+      <div style="float: right;">
+        {{if $isImedsInstalled}}
+          {{mb_include module=Imeds template=inc_sejour_labo link="#1" sejour=$_operation->_ref_sejour float="none"}}
+        {{/if}}
+        
+        <a href="#" style="display: inline" onclick="codageCCAM('{{$_operation->_id}}');">
+          <img src="images/icons/anesth.png" alt="Anesth" />
         </a>
       </div>
       

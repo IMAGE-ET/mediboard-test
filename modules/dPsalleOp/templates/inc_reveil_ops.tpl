@@ -1,24 +1,28 @@
 <script type="text/javascript">
-
-Main.add(Control.Tabs.setTabCount.curry("ops", "{{$listOperations|@count}}"));
-
-// faire le submit de formOperation dans le onComplete de l'ajax
-checkPersonnel = function(oFormAffectation, oFormOperation){
-  oFormOperation.entree_reveil.value = 'current';
-  // si affectation renseignée, on submit les deux formulaires
-  if(oFormAffectation && oFormAffectation.personnel_id.value != ""){
-    submitFormAjax(oFormAffectation, 'systemMsg', {onComplete: submitOperationForm.curry(oFormOperation,1)} );
+  Main.add(Control.Tabs.setTabCount.curry("ops", "{{$listOperations|@count}}"));
+  
+  Main.add(function () {    
+    {{if $isImedsInstalled}}
+      ImedsResultsWatcher.loadResults();
+    {{/if}}
+  });
+  
+  // faire le submit de formOperation dans le onComplete de l'ajax
+  checkPersonnel = function(oFormAffectation, oFormOperation){
+    oFormOperation.entree_reveil.value = 'current';
+    // si affectation renseignée, on submit les deux formulaires
+    if(oFormAffectation && oFormAffectation.personnel_id.value != ""){
+      submitFormAjax(oFormAffectation, 'systemMsg', {onComplete: submitOperationForm.curry(oFormOperation,1)} );
+    }
+    else {
+    // sinon, on ne submit que l'operation
+      submitOperationForm(oFormOperation,1);
+    }
   }
-  else {
-  // sinon, on ne submit que l'operation
-    submitOperationForm(oFormOperation,1);
+  
+  submitOperationForm = function(oFormOperation) {
+    submitFormAjax(oFormOperation,'systemMsg', {onComplete: function(){ refreshTabsReveil() }});
   }
-}
-
-submitOperationForm = function(oFormOperation) {
-  submitFormAjax(oFormOperation,'systemMsg', {onComplete: function(){ refreshTabsReveil() }});
-}
-
 </script>
 
 <table class="tbl">
@@ -36,17 +40,26 @@ submitOperationForm = function(oFormOperation) {
   {{foreach from=$listOperations item=_operation}}
   <tr>
     <td>{{$_operation->_ref_salle->_shortview}}</td>
+    
     <td class="text">
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}
     </td>
+    
     <td class="text">
+      <div style="float: right;">
+        {{if $isImedsInstalled}}
+          {{mb_include module=Imeds template=inc_sejour_labo link="#1" sejour=$_operation->_ref_sejour float="none"}}
+        {{/if}}
+      </div>
+      
       <a href="#" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">
-      <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
-            onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
-        {{$_operation->_ref_patient->_view}}
-      </span>
+        <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
+              onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
+          {{$_operation->_ref_patient->_view}}
+        </span>
       </a>
     </td>
+    
     {{if $isbloodSalvageInstalled}}
       <td>
         {{if $_operation->blood_salvage->_id}}

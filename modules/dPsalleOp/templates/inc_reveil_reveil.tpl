@@ -1,11 +1,15 @@
 <script type="text/javascript">
+  Main.add(Control.Tabs.setTabCount.curry("reveil", "{{$listOperations|@count}}"));
 
-Main.add(Control.Tabs.setTabCount.curry("reveil", "{{$listOperations|@count}}"));
+  Main.add(function () {    
+    {{if $isImedsInstalled}}
+      ImedsResultsWatcher.loadResults();
+    {{/if}}
+  });
 
-submitReveilForm = function(oFormOperation) {
-  submitFormAjax(oFormOperation,'systemMsg', {onComplete: function(){refreshTabsReveil()}});
-}
-
+  submitReveilForm = function(oFormOperation) {
+    submitFormAjax(oFormOperation,'systemMsg', {onComplete: function(){refreshTabsReveil()}});
+  }
 </script> 
 
 <table class="tbl">
@@ -33,11 +37,16 @@ submitReveilForm = function(oFormOperation) {
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}
     </td>
     <td class="text">
-      <div style="float: right; display: inline">
-        <a href="#" onclick="codageCCAM('{{$_operation->_id}}');">
-        <img src="images/icons/anesth.png" alt="Anesth" />
+      <div style="float: right;">
+        {{if $isImedsInstalled}}
+          {{mb_include module=Imeds template=inc_sejour_labo link="#1" sejour=$_operation->_ref_sejour float="none"}}
+        {{/if}}
+        
+        <a href="#" style="display: inline" onclick="codageCCAM('{{$_operation->_id}}');">
+          <img src="images/icons/anesth.png" alt="Anesth" />
         </a>
       </div>
+
       <a href="#" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">
 	      <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
             onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">

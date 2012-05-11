@@ -16,6 +16,9 @@
 {{mb_script module="dPcompteRendu" script="modele_selector"}}
 {{mb_script module="dPcabinet" script="file"}}
 
+{{if $isImedsInstalled}}
+  {{mb_script module="dPImeds" script="Imeds_results_watcher"}}
+{{/if}}
 
 {{if $conf.dPsalleOp.CDailyCheckList.active_salle_reveil != '1' || 
      $date < $smarty.now|iso_date || 

@@ -63,8 +63,10 @@ $operation = new COperation();
 $listOperations = $operation->loadList($where, $order);
 
 foreach($listOperations as $key => &$op) {
-  $op->loadRefSejour(1);
-  if($op->_ref_sejour->type == "exte"){
+  $sejour = $op->loadRefSejour(1);
+  $sejour->loadNDA();
+  
+  if ($sejour->type == "exte"){
     unset($listOperations[$key]);
     continue;
   }
@@ -82,25 +84,26 @@ foreach($listOperations as $key => &$op) {
     $op->blood_salvage->loadObject($where);
     $op->blood_salvage->loadRefPlageOp();
     $op->blood_salvage->totaltime = "00:00:00";
-    if($op->blood_salvage->recuperation_start && $op->blood_salvage->transfusion_end) {
+    if ($op->blood_salvage->recuperation_start && $op->blood_salvage->transfusion_end) {
       $op->blood_salvage->totaltime = mbTimeRelative($op->blood_salvage->recuperation_start, $op->blood_salvage->transfusion_end);
-    } elseif($op->blood_salvage->recuperation_start){
+    } 
+    elseif ($op->blood_salvage->recuperation_start){
       $op->blood_salvage->totaltime = mbTimeRelative($op->blood_salvage->recuperation_start,mbDate($op->blood_salvage->_datetime)." ".mbTime());
     }
   }
   
-  if($type == "reveil" || $type == "out"){
-    $op->_ref_sejour->loadRefsAffectations();
-    if($op->_ref_sejour->_ref_first_affectation->_id) {
-      $op->_ref_sejour->_ref_first_affectation->loadRefLit();
-      $op->_ref_sejour->_ref_first_affectation->_ref_lit->loadCompleteView();
+  if ($type == "reveil" || $type == "out"){
+    $sejour->loadRefsAffectations();
+    if ($sejour->_ref_first_affectation->_id) {
+      $sejour->_ref_first_affectation->loadRefLit();
+      $sejour->_ref_first_affectation->_ref_lit->loadCompleteView();
     }
   }
 }
 
 // Chargement de la liste du personnel pour le reveil
 $personnels = array();
-if(Cmodule::getActive("dPpersonnel")) {
+if (Cmodule::getActive("dPpersonnel")) {
   $personnel  = new CPersonnel();
   $personnels = $personnel->loadListPers("reveil");
 }
@@ -114,6 +117,7 @@ $smarty->assign("date"                   , $date);
 $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
 $smarty->assign("hour"                   , mbTime());
 $smarty->assign("modif_operation"        , $modif_operation);
+$smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->display("inc_reveil_$type.tpl");
 
 ?>
