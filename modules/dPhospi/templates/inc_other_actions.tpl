@@ -31,7 +31,7 @@
   liaisonMaman = function(status, parent_affectation_id) {
     var oForm = getForm('cutAffectation');
     if (status && parent_affectation_id) {
-      changeLit('{{$affectation->_id}}', null, 1);
+      changeLit('{{$affectation->_id}}', 1);
       return;
     }
     oForm.onsubmit();
@@ -66,9 +66,7 @@
         <input type="hidden" name="uf_hebergement_id" value="" />
         <input type="hidden" name="uf_medicale_id" value="" />
         <input type="hidden" name="uf_soins_id" value="" />
-        {{if "maternite"|module_active && $sejour_maman}}
-          <input type="hidden" name="callback" value="refreshNewLit" />
-        {{/if}}
+        <input type="hidden" name="callback" value="refreshNewLit" />
         {{mb_key object=$affectation}}
         <input type="text" name="_date_cut_da" value="{{$smarty.now|date_format:$conf.datetime}}" readonly="readonly"/>
         <input type="hidden" name="_date_cut" class="dateTime" value="{{$smarty.now|@date_format:"%Y-%m-%d %H:%M:%S"}}"
@@ -77,6 +75,8 @@
         onclick="
         {{if "maternite"|module_active && $sejour_maman}}
           liaisonMaman(this.form._action_maman.checked, '{{$affectation->parent_affectation_id}}')
+        {{elseif !$lit_id}}
+          changeLit('{{$affectation->_id}}', 1);
         {{else}}
           this.form.onsubmit();
         {{/if}}" id="cut_affectation">Scinder</button>

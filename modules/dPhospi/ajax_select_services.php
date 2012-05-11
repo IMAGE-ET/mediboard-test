@@ -10,7 +10,12 @@
  */
 
 $services_ids = CValue::getOrSession("services_ids");
+$services_ids_suggest = CValue::get("services_ids_suggest", null);
 $view         = CValue::get("view");
+
+if (!is_array($services_ids_suggest) && !is_null($services_ids_suggest)) {
+  $services_ids = explode(",", $services_ids_suggest);
+}
 
 $group_id = CGroups::loadCurrent()->_id;
 

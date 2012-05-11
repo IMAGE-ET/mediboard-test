@@ -7,22 +7,14 @@
         <input type="hidden" name="m" value="dPhospi" />
         <input type="hidden" name="a" value="ajax_suggest_lit" />
         <input type="hidden" name="_link_affectation" value="{{$_link_affectation}}" />
-        {{if $affectation_id}}
-          <input type="hidden" name="affectation_id" value="{{$affectation_id}}" />
-        {{/if}}
-        {{if $sejour_id}}
-          <input type="hidden" name="affectation_id" value="{{$sejour_id}}" />
-        {{/if}}
-        <label>
-          <input type="checkbox" name="all_services" {{if $all_services}}checked="checked"{{/if}} onclick="this.form.onsubmit();"
-          {{if $sejour_id}}disabled="disabled"{{/if}}/>
-            Rechercher dans tous les services
-        </label>
+        <input type="hidden" name="affectation_id" value="{{$affectation_id}}" />
+        <input type="hidden" name="services_ids_suggest" value="{{','|implode:$services_ids_suggest}}" />
+        <button type="button" onclick="Placement.selectServices('cut', '{{','|implode:$services_ids_suggest}}');" class="search" style="float: left;">Services</button>
       </form>
     </th>
   </tr>
   <tr>
-    <th></th>
+    <th class="narrow"></th>
     <th>
       Libre depuis
     </th>
@@ -32,6 +24,7 @@
     </th>
     <th>Occupé après</th>
   </tr>
+  
   {{foreach from=$lits item=_lit}}
     {{assign var=lit_id value=$_lit->_id}}
     {{math equation="(x/y) * 100" x=$_lit->_dispo_depuis y=$max_entree assign=width_entree}}
@@ -48,11 +41,7 @@
           {{if $_link_affectation}}
             submitLiaison('{{$lit_id}}');
           {{else}}
-            {{if $affectation_id}}
-              moveAffectation('{{$affectation_id}}', '{{$lit_id}}');
-            {{else}}
-              moveAffectation(null, '{{$lit_id}}', '{{$sejour_id}}');
-            {{/if}}
+            moveAffectation('{{$affectation_id}}', '{{$lit_id}}');
           {{/if}}
           Control.Modal.close();"></button>
         </td>

@@ -19,9 +19,18 @@
     showLegend: function() {
       modal("legend_" + this.tabs.activeLink.key);
     },
-    selectServices: function() {
+    selectServices: function(view, services_ids_suggest) {
       var url = new Url("dPhospi", "ajax_select_services");
-      url.addParam("view", this.tabs.activeLink.key);
+      
+      if (Object.isUndefined(view)) {
+        view = this.tabs.activeLink.key;
+      }
+      
+      if (!Object.isUndefined(services_ids_suggest)) {
+        url.addParam("services_ids_suggest", services_ids_suggest);
+      }
+      
+      url.addParam("view", view);
       url.requestModal(null, null, {maxHeight: '600'});
     },
     loadActiveView: function() {

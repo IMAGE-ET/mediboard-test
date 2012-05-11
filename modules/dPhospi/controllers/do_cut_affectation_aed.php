@@ -37,7 +37,6 @@ $affectation_cut->parent_affectation_id = $affectation->parent_affectation_id;
 $affectation_cut->uf_hebergement_id = $uf_hebergement_id;
 $affectation_cut->uf_medicale_id    = $uf_medicale_id;
 $affectation_cut->uf_soins_id       = $uf_soins_id;
-//$affectation_cut->effectue = 0;
 
 if ($lit_id) {
   $affectation_cut->lit_id = $lit_id;
@@ -74,6 +73,32 @@ if ($msg = $affectation->store()) {
 
 if ($msg = $affectation_cut->store()) {
   CAppUI::setMsg($msg, UI_MSG_ERROR);
+}
+
+// Scinder également les affectations des enfants
+if ($affectation->countBackRefs("affectations_enfant")) {
+  $affectations_enfant = $affectation->loadBackRefs("affectations_enfant");
+  
+  foreach ($affectations_enfant as $_affectation_enfant) {
+    $_affectation = new CAffectation;
+    $_affectation->entree = $_date_cut;
+    $_affectation->sejour_id = $_affectation_enfant->sejour_id;
+    $_affectation->sortie = $_affectation_enfant->sortie;
+    $_affectation->uf_hebergement_id = $_affectation_enfant->uf_hebergement_id;
+    $_affectation->uf_medicale_id    = $_affectation_enfant->uf_medicale_id;
+    $_affectation->uf_soins_id       = $_affectation_enfant->uf_soins_id;
+    $_affectation->lit_id = $lit_id ? $lit_id : $_affectation_enfant->lit_id;
+    $_affectation->parent_affectation_id = $affectation_cut->_id;
+    $_affectation_enfant->sortie = $_date_cut;
+    
+    if ($msg = $_affectation_enfant->store()) {
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
+    }
+    
+    if ($msg = $_affectation->store()) {
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
+    }
+  }
 }
 
 if ($callback) {

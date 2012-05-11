@@ -28,6 +28,16 @@
     });
     checked_radio = !checked_radio;
   }
+  
+  changeServicesScission = function() {
+    var form = getForm("searchLit");
+    var formPref = getForm('selectServices');
+    var services_ids_suggest = $V(formPref.select("input[class=service]:checked"));
+    $V(form.services_ids_suggest, $A(services_ids_suggest).join(','));
+    form.onsubmit();
+    Control.Modal.close();
+  }
+  
   Main.add(function() {
     Control.Modal.stack.last().position();
   });
@@ -100,11 +110,15 @@
       </tr>
       <tr>
         <td class="button" colspan="{{$colspan}}">
-          <button type="button" class="tick"
-            onclick="Control.Modal.close(); this.form.onsubmit();">{{tr}}Validate{{/tr}}</button>
-          <button type="button" class="save" onclick="savePref(form);">
-            {{tr}}Validate{{/tr}} {{tr}}and{{/tr}} {{tr}}Save{{/tr}}
-          </button>
+          {{if $view == "cut"}}
+            <button type="button" class="tick" onclick="changeServicesScission(); ">{{tr}}Validate{{/tr}}</button>
+          {{else}}
+            <button type="button" class="tick"
+              onclick="Control.Modal.close(); this.form.onsubmit();">{{tr}}Validate{{/tr}}</button>
+            <button type="button" class="save" onclick="savePref(form);">
+              {{tr}}Validate{{/tr}} {{tr}}and{{/tr}} {{tr}}Save{{/tr}}
+            </button>
+          {{/if}}
           <button type="button" class="cancel" onclick="Control.Modal.close();">{{tr}}Close{{/tr}}</button>
         </td>
       </tr>
