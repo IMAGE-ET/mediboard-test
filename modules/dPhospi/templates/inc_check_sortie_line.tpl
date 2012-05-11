@@ -1,12 +1,20 @@
 <tr>
   {{assign var=sejour value=$_sortie->_ref_sejour}}
+  {{assign var=patient value=$sejour->_ref_patient}}
+  
   <td class="text {{if $sejour->confirme}}arretee{{/if}}">
-   {{if $canPlanningOp->read}}
-   <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
-     <img src="images/icons/planning.png" alt="modifier" />
-   </a>
-   {{/if}}
-    {{assign var=patient value=$sejour->_ref_patient}}
+    {{if $canPlanningOp->read}}
+    <div style="float: right">
+      {{if $isImedsInstalled}}
+        {{mb_include module=Imeds template=inc_sejour_labo link="#1" float="none"}}
+      {{/if}}
+        
+      <a class="action" style="display: inline" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
+        <img src="images/icons/planning.png" alt="modifier" />
+      </a>
+    </div>
+    {{/if}}
+    
     <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')"
       {{if !$sejour->entree_reelle}} class="patient-not-arrived"{{/if}}>
       {{$patient}}

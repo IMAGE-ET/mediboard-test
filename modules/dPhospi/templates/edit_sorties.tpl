@@ -1,3 +1,7 @@
+{{if $isImedsInstalled}}
+  {{mb_script module="dPImeds" script="Imeds_results_watcher"}}
+{{/if}}
+
 <script type="text/javascript">
 
 Main.add(function () {

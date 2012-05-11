@@ -117,6 +117,7 @@ if($type == 'presents') {
     $sejour->loadRefPraticien(1);
     $sejour->checkDaysRelative($date);
     $sejour->loadRefsOperations();
+    $sejour->loadNDA();
     $_present->_ref_next->loadRefLit(1)->loadCompleteView();
   }
   foreach($presentsNP as $sejour) {
@@ -146,6 +147,7 @@ if($type == 'presents') {
     $sejour = $_deplacement->_ref_sejour; 
     $sejour->loadRefPatient(1);
     $sejour->loadRefPraticien(1);
+    $sejour->loadNDA();
     $_deplacement->_ref_next->loadRefLit()->loadCompleteView();
   }
 
@@ -165,6 +167,7 @@ if($type == 'presents') {
     $sejour->loadRefPraticien(1);
     $sejour->checkDaysRelative($date);
     $sejour->loadRefsOperations();
+    $sejour->loadNDA();
     
     if ($dmi_active) {
       foreach($sejour->_ref_operations as $_interv) {
@@ -186,6 +189,7 @@ if($type == 'presents') {
     $sejour->loadRefPraticien(1);
     $sejour->checkDaysRelative($date);
     $sejour->loadRefsOperations();
+    $sejour->loadNDA();
     
     if ($dmi_active) {
       foreach($sejour->_ref_operations as $_interv) {
@@ -212,6 +216,7 @@ if($type == 'presents') {
     $sejour->loadRefPraticien(1);
     $sejour->checkDaysRelative($date);
     $sejour->loadRefsOperations();
+    $sejour->loadNDA();
     
     if ($dmi_active) {
       foreach($sejour->_ref_operations as $_interv) {
@@ -233,6 +238,7 @@ if($type == 'presents') {
     $sejour->loadRefPraticien(1);
     $sejour->checkDaysRelative($date);
     $sejour->loadRefsOperations();
+    $sejour->loadNDA();
     
     if ($dmi_active) {
       foreach($sejour->_ref_operations as $_interv) {
@@ -241,7 +247,6 @@ if($type == 'presents') {
     }
   }
 }
-
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -269,6 +274,7 @@ elseif($type == "presents") {
 }
 $smarty->assign("vue"          , $vue);
 $smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));
+$smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 
 $smarty->display("inc_list_sorties.tpl");
 

@@ -3,6 +3,10 @@
   {{if $type != "deplacements"}}
   Main.add(function () {
     controlTabs = new Control.Tabs.create('tabs-edit-mouvements-{{$type}}_{{$type_mouvement}}', true);
+    
+    {{if $isImedsInstalled}}
+      ImedsResultsWatcher.loadResults();
+    {{/if}}
   });
   {{/if}}
 </script>

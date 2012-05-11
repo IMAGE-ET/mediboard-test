@@ -151,6 +151,7 @@ $smarty->assign("praticien_id", $praticien_id);
 $smarty->assign("type_hospi"  , $type_hospi);
 $smarty->assign("vue"         , $vue);
 $smarty->assign("date"        , $date);
+$smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 
 $smarty->display("edit_sorties.tpl");
 
