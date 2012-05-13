@@ -13,19 +13,6 @@ CCanDo::checkEdit();
 // Récuperation de l'utilisateur sélectionné
 $user_id = CValue::getOrSession("user_id");
 $user = $user_id == "0" ? new CUser() : CUser::get($user_id);
-$user->loadRefMediuser();
-$user->loadRefsNotes();
-$user->isLDAPLinked();
-
-// Chargement des conexions
-if ($user->dont_log_connection) {
-  $user->countConnections();
-}
-
-// Chargement des utilateurs associés
-if ($user->template) {
-  $user->loadRefProfiledUsers();
-}
 
 // Récuperation des utilisateurs recherchés
 $user_username   = CValue::getOrSession("user_username"  );
@@ -51,7 +38,28 @@ if ($where) {
   foreach ($users as $_user) {
   	$_user->countBackRefs("profiled_users");
   }
+  
+  // Auto sélection du user s'il est unique
+  if (count($users) == 1) {
+  	$user = reset($users);
+  }
 }
+
+// Chargement du détail de l'utilisateur
+$user->loadRefMediuser();
+$user->loadRefsNotes();
+$user->isLDAPLinked();
+
+// Chargement des conexions
+if ($user->dont_log_connection) {
+  $user->countConnections();
+}
+
+// Chargement des utilateurs associés
+if ($user->template) {
+  $user->loadRefProfiledUsers();
+}
+
 
 // Création du template
 $smarty = new CSmartyDP();
