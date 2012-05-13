@@ -1,6 +1,7 @@
 <table class="tbl">
   <tr>
     <th>
+      
       {{mb_colonne class="CUser" field="user_username" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}
     </th>
     <th>
@@ -26,13 +27,12 @@
   </tr>
 
   {{foreach from=$mediusers item=_user}}
-  <tr {{if $_user->_id == $object->_id}}class="selected"{{/if}}>
+  <tr {{if $_user->_id == $user_id}} class="selected" {{/if}}>
 
-    {{assign var=user_id value=$_user->_id}}
     {{if $_user->_ref_user->_id}}
 
      <td class="text">
-       <a href="#{{$_user->_guid}}" onclick="showMediuser('{{$user_id}}', this)" class="mediuser" style="border-left-color: #{{$_user->_ref_function->color}};">
+       <a href="#{{$_user->_guid}}" onclick="showMediuser('{{$_user->_id}}', this)" class="mediuser" style="border-left-color: #{{$_user->_ref_function->color}};">
          <span onmouseover="ObjectTooltip.createEx(this,'{{$_user->_guid}}', 'identifiers')">
            {{mb_value object=$_user field=_user_username}}
          </span>
@@ -40,13 +40,13 @@
      </td>
      
 		 <td class="text">
-       <a href="#{{$_user->_guid}}" onclick="showMediuser('{{$user_id}}', this)">
+       <a href="#{{$_user->_guid}}" onclick="showMediuser('{{$_user->_id}}', this)">
          {{mb_value object=$_user field=_user_last_name}}
        </a>
      </td>
      
 		 <td class="text">
-       <a href="#{{$_user->_guid}}" onclick="showMediuser('{{$user_id}}', this)">
+       <a href="#{{$_user->_guid}}" onclick="showMediuser('{{$_user->_id}}', this)">
          {{mb_value object=$_user field=_user_first_name}}
        </a>
      </td>

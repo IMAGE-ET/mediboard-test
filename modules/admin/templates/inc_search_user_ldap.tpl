@@ -17,15 +17,14 @@
     	  onComplete: function(){ 
   	      (function() {
     	      if (window.ldap_user_id) {
-      	      var urlAdmin = new Url();
-      	      urlAdmin.addParam("m", "mediusers");
-      	      urlAdmin.addParam("tab", "vw_idx_mediusers");
+              var urlAdmin = new Url("mediusers", "ajax_edit_mediuser");
       	      urlAdmin.addParam("user_id", window.ldap_user_id)
       	      urlAdmin.addParam("ldap_user_actif", window.ldap_user_actif);
       	      urlAdmin.addParam("ldap_user_deb_activite", window.ldap_user_deb_activite);
       	      urlAdmin.addParam("ldap_user_fin_activite", window.ldap_user_fin_activite);
       	      urlAdmin.addParam("no_association", window.no_association);
-      	      urlAdmin.redirect(); 
+              urlAdmin.requestUpdate("vw_mediuser");
+              Control.Modal.close() 
       	    }
   	      }).defer()
   	    }

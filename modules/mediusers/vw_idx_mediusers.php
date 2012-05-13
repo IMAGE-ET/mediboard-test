@@ -16,6 +16,7 @@ $ldap_bound = CValue::get("ldap_bound", false);
 $filter     = CValue::getOrSession("filter", "");
 $order_way  = CValue::getOrSession("order_way", "ASC");
 $order_col  = CValue::getOrSession("order_col", "function_id");
+$user_id    = CValue::getOrSession("user_id");
 
 $step = 25;
 
@@ -35,17 +36,17 @@ $where["functions_mediboard.group_id"] = "= '$group->_id'";
 
 // FIXME: utiliser le seek
 if ($filter) {
-	
+  
   $re = "/(\d+)\s*(jour|mois|an)/i";
   if(preg_match($re, $filter, $matches)){
-  	$map = array("an" => "YEAR", "mois" => "MONTH", "jour" => "DAY");
-  	
+    $map = array("an" => "YEAR", "mois" => "MONTH", "jour" => "DAY");
+    
     $nouvelle_date=mbDateTime("-".$matches[1]." ".$map[$matches[2]]);
     
-  	$where[] ="users.user_last_login <= '$nouvelle_date'";
+    $where[] ="users.user_last_login <= '$nouvelle_date'";
   }
   else{
-  	$where[] ="functions_mediboard.text LIKE '%$filter%' OR 
+    $where[] ="functions_mediboard.text LIKE '%$filter%' OR 
               users.user_last_name LIKE '$filter%' OR 
               users.user_first_name LIKE '$filter%' OR 
               users.user_username LIKE '$filter%' ";
@@ -53,8 +54,8 @@ if ($filter) {
   
 }
 if ($pro_sante) {
-	$user_types = array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme");
-	$utypes_flip = array_flip(CUser::$types);
+  $user_types = array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme");
+  $utypes_flip = array_flip(CUser::$types);
   if (is_array($user_types)) {
     foreach ($user_types as $key => $value) {
       $user_types[$key] = $utypes_flip[$value];
@@ -99,82 +100,28 @@ if ($order_col == "user_last_login") {
 
 $total_mediuser = $mediuser->countList($where, null, $ljoin);
 $mediusers = $mediuser->loadList($where, $order, "$page, $step", null, $ljoin);
-foreach($mediusers as &$_mediuser) {
+foreach($mediusers as $_mediuser) {
   $_mediuser->loadRefFunction();
   $_mediuser->loadRefProfile();
   $_mediuser->_ref_user->isLDAPLinked();
 }
 
-// Chargement des banques
-$banques = array();
-if (class_exists("CBanque")) {
-	$order = "nom ASC";
-	$banque = new CBanque();
-	$banques = $banque->loadList(null, $order);
-}
-
-// Récupération des disciplines
-$disciplines = new CDiscipline;
-$disciplines = $disciplines->loadList();
-
-// Récupération des spécialités CPAM
-$spec_cpam = new CSpecCPAM();
-$spec_cpam = $spec_cpam->loadList();
-  
-// Récupération des profils
-$where = array (
-  "template" => "= '1'"
-);
-$profiles = new CUser();
-$profiles = $profiles->loadList($where);
-
-// Creation du tableau de profil en fonction du type
-foreach($profiles as $key => $profil){
-  $tabProfil[$profil->user_type][] = $profil->_id;
-}
-
-// Récupération du user à ajouter/editer 
-// (mis en dernier car interferences avec le chargement 
-// des autres users car utilisation d'une spec commune)
-$user_id = CValue::getOrSession("user_id");
-$object = new CMediusers;
-if (CValue::get("no_association")) {
-  $object->user_id = $user_id;
-  $object->updateFormFields();
-  $object->_user_id     = $user_id;
-  $object->_id          = null;
-  $actif                = CValue::get("ldap_user_actif", 1);
-  $object->actif        = $actif;
-  $object->deb_activite = CValue::get("ldap_user_deb_activite");;
-  $object->fin_activite = CValue::get("ldap_user_fin_activite");;
-} else {
-  $object->load($user_id);
-}
-if (isset($object->_ref_user)) {
-  $object->_ref_user->isLDAPLinked();
-}
-
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("utypes"        , CUser::$types  );
 $smarty->assign("total_mediuser", $total_mediuser);
-$smarty->assign("page"          , $page         );
-$smarty->assign("pro_sante"     , $pro_sante    );
-$smarty->assign("inactif"       , $inactif      );
-$smarty->assign("ldap_bound"    , $ldap_bound   );
-$smarty->assign("filter"        , $filter       );
-$smarty->assign("mediusers"     , $mediusers    );
-$smarty->assign("tabProfil"     , $tabProfil    );
-$smarty->assign("utypes"        , CUser::$types );
-$smarty->assign("banques"       , $banques      );
-$smarty->assign("object"        , $object       );
-$smarty->assign("profiles"      , $profiles     );
-$smarty->assign("group"         , $group        );
-$smarty->assign("disciplines"   , $disciplines  );
-$smarty->assign("spec_cpam"     , $spec_cpam    );
-$smarty->assign("order_way"     , $order_way);
-$smarty->assign("order_col"     , $order_col);
-$smarty->assign("step"          , $step);
+$smarty->assign("page"          , $page          );
+$smarty->assign("pro_sante"     , $pro_sante     );
+$smarty->assign("inactif"       , $inactif       );
+$smarty->assign("ldap_bound"    , $ldap_bound    );
+$smarty->assign("filter"        , $filter        );
+$smarty->assign("mediusers"     , $mediusers     );
+$smarty->assign("user_id"       , $user_id       );
+$smarty->assign("group"         , $group         );
+$smarty->assign("order_way"     , $order_way     );
+$smarty->assign("order_col"     , $order_col     );
+$smarty->assign("step"          , $step          );
 
 $smarty->display("vw_idx_mediusers.tpl");
 

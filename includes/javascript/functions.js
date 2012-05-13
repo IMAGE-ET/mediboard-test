@@ -786,17 +786,20 @@ Object.extend (Control.Tabs, {
     Control.Tabs.findByTabId(tabName).setActiveTab(tabName);
   },
   
-  setTabCount: function(tabName, count) {
-    count += ""; // String cast
-    
+  getTabAnchor: function(tabName) {
     // Find anchor
     var anchors = $$('a[href=#'+tabName+']');
     if (anchors.length != 1) {
       Console.error('Anchor not found or found multiple for tab: '+tabName);
       return;
     }
+
+    return anchors[0];
+  },
     
-    var anchor = anchors[0];
+  setTabCount: function(tabName, count) {
+    count += ""; // String cast
+    var anchor = this.getTabAnchor(tabName);
     
     //anchor.writeAttribute("data-count", count);
     

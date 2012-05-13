@@ -1,5 +1,10 @@
 <tr>
-  <th colspan="2" class="category">Informations praticien </th>
+  <td colspan="2" class="text">
+    <div class="small-info">
+      Informations pertinentes pour les seuls 
+      <strong>professionnels de santé</strong>.
+    </div>
+  </td>
 </tr>
 
 <tr>

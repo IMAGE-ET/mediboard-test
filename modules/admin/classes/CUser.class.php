@@ -87,6 +87,8 @@ class CUser extends CMbObject {
     19 => "Dentiste"
   );
   
+  static $ps_types = array(3, 4, 13, 16, 17, 19);
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'users';

@@ -1,47 +1,16 @@
 <script type="text/javascript">
 
-function popupImport() {
+popupImport = function () {
   var url = new Url("mediusers", "user_import_csv");
   url.popup(800, 600, "Import des utilisateurs");
   return false;
 }
 
-function loadProfil(type){
-  var tabProfil = {{$tabProfil|@json}};
+showMediuser = function(user_id, element) {
+  if (element) {
+    element.up('tr').addUniqueClassName('selected');
+  }
 
-  // Liste des profils dispo pour le type selectionné
-  var listProfil = tabProfil[type] || [];
-  
-  $A(document.mediuser._profile_id).each( function(input) {
-    input.disabled = !listProfil.include(input.value) && input.value;
-    input.selected = input.selected && !input.disabled;
-  });  
-}
-
-function showPratInfo(type) {
-	// Type de la classe admin 
-	$('show_prat_info').setVisible(type == 3 || type == 4 || type == 13);
-}
-
-function changeRemote(o) {
-  var oPassword = $(o.form._user_password);
-  
-  // can the user connect remotely ?
-  var canRemote = $V(o)==0;
-  
-  // we change the form element's spec 
-  oPassword.className = canRemote?
-  '{{$object->_props._user_password_strong}}':
-  '{{$object->_props._user_password_weak}}';
-  
-  {{if !$object->user_id}}oPassword.addClassName('notNull');{{/if}}
-  
-  // we check the field
-  checkFormElement(oPassword);
-}
-
-showMediuser = function(user_id, element){
-  element.up('tr').addUniqueClassName('selected');
   var url = new Url("mediusers", "ajax_edit_mediuser");
   url.addParam("user_id", user_id);
   url.requestUpdate("vw_mediuser");
@@ -55,7 +24,10 @@ createUserFromLDAP = function(){
 function changePage(page) {
 	$V(getForm('listFilter').page,page);
 }
- 
+
+Main.add(function() {
+  showMediuser('{{$user_id}}');
+});
 </script>
 
 {{assign var=configLDAP value=$conf.admin.LDAP.ldap_connection}}
@@ -121,7 +93,6 @@ function changePage(page) {
       {{mb_include template=vw_list_mediusers}}
     </td>
     <td style="width: 40%" id="vw_mediuser">
-      {{mb_include template=inc_edit_mediuser}}
     </td>
   </tr>
 </table>

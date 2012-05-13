@@ -15,11 +15,27 @@ $user_id = CValue::getOrSession("user_id");
 $group = CGroups::loadCurrent();
 $group->loadFunctions();
 
+// Récupération du user à ajouter/editer 
 $object = new CMediusers;
-$object->load($user_id);
-$object->loadRefFunction();
-$object->loadRefProfile();
-$object->_ref_user->isLDAPLinked();
+if (CValue::get("no_association")) {
+  $object->user_id = $user_id;
+  $object->updateFormFields();
+  $object->_user_id     = $user_id;
+  $object->_id          = null;
+  $object->actif        = CValue::get("ldap_user_actif", 1);
+  $object->deb_activite = CValue::get("ldap_user_deb_activite");;
+  $object->fin_activite = CValue::get("ldap_user_fin_activite");;
+} 
+else {
+  $object->load($user_id);
+  $object->loadRefFunction();
+  $object->loadRefProfile();
+}
+
+// Savoir s'il est relié au LDAP
+if (isset($object->_ref_user)) {
+  $object->_ref_user->isLDAPLinked();
+}
 
 // Chargement des banques
 $banques = array();
@@ -38,28 +54,27 @@ $spec_cpam = new CSpecCPAM();
 $spec_cpam = $spec_cpam->loadList();
   
 // Récupération des profils
-$where = array (
-    "template" => "= '1'"
-);
-$profiles = new CUser();
-$profiles = $profiles->loadList($where);
+$profile = new CUser();
+$profile->template = 1;
+$profiles = $profile->loadMatchingList();
 
 // Creation du tableau de profil en fonction du type
-foreach($profiles as $key => $profil){
+foreach ($profiles as $profil){
   $tabProfil[$profil->user_type][] = $profil->_id;
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("tabProfil"    , $tabProfil    );
-$smarty->assign("utypes"       , CUser::$types );
-$smarty->assign("banques"      , $banques      );
-$smarty->assign("object"       , $object       );
-$smarty->assign("profiles"     , $profiles     );
-$smarty->assign("group"        , $group        );
-$smarty->assign("disciplines"  , $disciplines  );
-$smarty->assign("spec_cpam"    , $spec_cpam    );
+$smarty->assign("tabProfil"    , $tabProfil      );
+$smarty->assign("utypes"       , CUser::$types   );
+$smarty->assign("ps_types"     , CUser::$ps_types);
+$smarty->assign("banques"      , $banques        );
+$smarty->assign("object"       , $object         );
+$smarty->assign("profiles"     , $profiles       );
+$smarty->assign("group"        , $group          );
+$smarty->assign("disciplines"  , $disciplines    );
+$smarty->assign("spec_cpam"    , $spec_cpam      );
 
 $smarty->display("inc_edit_mediuser.tpl");
 
