@@ -65,25 +65,44 @@ class CFile extends CDocumentItem {
   }
   
   function getProps() {
-    $specs = parent::getProps();
-    $specs["file_date"]          = "dateTime notNull";
-    $specs["file_size"]          = "num pos show|0";
-    $specs["file_real_filename"] = "str notNull show|0";
-    $specs["file_type"]          = "str";
-    $specs["file_name"]          = "str notNull show|0";
-    $specs["private"]            = "bool notNull default|0";
-    $specs["rotation"]           = "enum list|0|90|180|270";
+    $props = parent::getProps();
+    
+    $props["file_date"]          = "dateTime notNull";
+    $props["file_size"]          = "num pos show|0";
+    $props["file_real_filename"] = "str notNull show|0";
+    $props["file_type"]          = "str";
+    $props["file_name"]          = "str notNull show|0";
+    $props["private"]            = "bool notNull default|0";
+    $props["rotation"]           = "enum list|0|90|180|270";
+
     // Form Fields
-    $specs["_sub_dir"]      = "str";
-    $specs["_absolute_dir"] = "str";
-    $specs["_file_path"]    = "str";
-    $specs["_file_size"]    = "str show|1";
-    $specs["_old_file_path"]= "str";
+    $props["_sub_dir"]      = "str";
+    $props["_absolute_dir"] = "str";
+    $props["_file_path"]    = "str";
+    $props["_file_size"]    = "str show|1";
+    $props["_old_file_path"]= "str";
+
     // Behavior fields
-    $specs["_rotate"]       = "enum list|left|right";
-    $specs["_rename"]       = "str";
-    $specs["_merge_files"]  = "bool";
-    return $specs;
+    $props["_rotate"]       = "enum list|left|right";
+    $props["_rename"]       = "str";
+    $props["_merge_files"]  = "bool";
+    return $props;
+  }
+  
+  /**
+   * Load a file with a specific name associated with an object
+   * 
+   * @param CMbOjbect $object Context object
+   * @param string    $name   File name with extension
+   * 
+   * @return CFile
+   */
+  static function loadNamed(CMbObject $object, $name) {
+    $file = new CFile();
+    $file->setObject($object);
+    $file->file_name = $name;
+    $file->loadMatchingObject();
+    return $file;    
   }
   
   function forceDir() {

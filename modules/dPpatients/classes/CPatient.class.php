@@ -1258,24 +1258,15 @@ class CPatient extends CMbObject {
   }
   
   function loadRefPhotoIdentite() {
-    global $can;
-    $file = new CFile();
-    $file->setObject($this);
-    $file->file_name = 'identite.jpg';
-    $file->loadMatchingObject();
-    $this->_ref_photo_identite = $file;
+    $file = CFile::loadNamed($this, "identite.jpg");
     $this->_can_see_photo = 1;
-    if($this->_ref_photo_identite->_id) {
-      $this->_ref_photo_identite->loadLogs();
-    
-      $author = new CMediusers;
-      $author->load($this->_ref_photo_identite->_ref_first_log->_ref_user->_id);
-      $author->loadRefFunction();
-      
-      $current_user = CAppUI::$user;
-      $current_user->loadRefFunction();
-      $this->_can_see_photo = ($current_user->function_id == $author->function_id) || !($can->admin == ''); 
+    if ($file->_id) {
+      $author = $file->loadRefAuthor();
+      global $can;
+      $this->_can_see_photo = (CAppUI::$user->function_id == $author->function_id) || !($can->admin == ''); 
     }
+    
+    return $this->_ref_photo_identite = $file;
   }
   
   function getTemplateClasses(){
