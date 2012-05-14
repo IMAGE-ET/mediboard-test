@@ -240,12 +240,18 @@ $library->description = "Composant de création de thumbnails";
 $library->extraDir = "phpThumb";
 $library->sourceDir = "phpThumb";
 $library->targetDir = "phpThumb";
-$library->versionFile = "phpThumb.config.php";
-$library->versionString = "/classes/CMbPath.class.php";
+$library->versionFile = "phpThumb.php";
+$library->versionString = "/*'fltr',*/";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "phpThumb";
 $patch->sourceName = "phpThumb.config.php";
+$patch->targetDir = "";
+$library->patches[] = $patch;
+
+$patch = new CLibraryPatch;
+$patch->dirName = "phpThumb";
+$patch->sourceName = "phpThumb.php";
 $patch->targetDir = "";
 $library->patches[] = $patch;
 
