@@ -248,14 +248,14 @@ class CSetupadmin extends CSetup {
     
     $this->makeRevision("1.0.18");
     $query = "CREATE TABLE `source_ldap` (
-              `source_ldap_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-              `name` VARCHAR (255) NOT NULL,
-              `host` TEXT NOT NULL,
-              `port` INT (11) DEFAULT '389',
-              `rootdn` VARCHAR (255) NOT NULL,
-              `ldap_opt_protocol_version` INT (11) DEFAULT '3',
-              `ldap_opt_referrals` ENUM ('0','1') DEFAULT '0'
-             ) /*! ENGINE=MyISAM */;";
+      `source_ldap_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `name` VARCHAR (255) NOT NULL,
+      `host` TEXT NOT NULL,
+      `port` INT (11) DEFAULT '389',
+      `rootdn` VARCHAR (255) NOT NULL,
+      `ldap_opt_protocol_version` INT (11) DEFAULT '3',
+      `ldap_opt_referrals` ENUM ('0','1') DEFAULT '0'
+     ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.19");
@@ -275,11 +275,20 @@ class CSetupadmin extends CSetup {
     
     $this->makeRevision("1.0.22");
     $query = "ALTER TABLE `users` 
-              CHANGE `user_phone` `user_phone` VARCHAR (20),
-              CHANGE `user_mobile` `user_mobile` VARCHAR (20)";
+      CHANGE `user_phone`  `user_phone`  VARCHAR (20),
+      CHANGE `user_mobile` `user_mobile` VARCHAR (20)";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.23";
+    $this->makeRevision("1.0.23");
+    $query = "ALTER TABLE `users` 
+      DROP `user_pic`,
+      DROP `user_signature`,
+      CHANGE `user_password`     `user_password`     VARCHAR(255),
+      CHANGE `user_login_errors` `user_login_errors` TINYINT( 4 ) UNSIGNED NOT NULL DEFAULT '0',
+      CHANGE `user_type`         `user_type`         TINYINT( 4 ) UNSIGNED NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.24";
   }
 }
 ?>

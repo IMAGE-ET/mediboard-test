@@ -29,8 +29,6 @@ class CUser extends CMbObject {
   var $user_zip         = null;
   var $user_country     = null;
   var $user_birthday    = null;
-  var $user_pic         = null;
-  var $user_signature   = null;
   var $user_last_login  = null;
   var $user_login_errors= null;
   var $template         = null;
@@ -111,46 +109,50 @@ class CUser extends CMbObject {
   }
 
   function getProps() {
-    $specs = parent::getProps();
-    $specs["user_username"]   = "str notNull maxLength|20";
-    $specs["user_password"]   = "str show|0";
-    $specs["user_type"]       = "num notNull min|0 max|20";
-    $specs["user_first_name"] = "str maxLength|50 seekable|begin";
-    $specs["user_last_name"]  = "str notNull maxLength|50 confidential seekable|begin";
-    $specs["user_email"]      = "str maxLength|255";
-    $specs["user_phone"]      = "phone";
-    $specs["user_mobile"]     = "phone";
-    $specs["user_address1"]   = "str";
-    $specs["user_city"]       = "str maxLength|30";
-    $specs["user_zip"]        = "str maxLength|11";
-    $specs["user_country"]    = "str maxLength|30";
-    $specs["user_birthday"]   = "dateTime";
-    $specs["user_pic"]        = "text";
-    $specs["user_signature"]  = "text";
-    $specs["user_last_login"] = "dateTime";
-    $specs["user_login_errors"]= "num";
-    $specs["template"]        = "bool notNull default|0";
-    $specs["profile_id"]      = "ref class|CUser";
-    $specs["dont_log_connection"] = "bool default|0";
+    $props = parent::getProps();
+    
+    // Plain fields
+    $props["user_username"]       = "str notNull maxLength|20";
+    $props["user_password"]       = "str show|0";
+    $props["user_type"]           = "num notNull pos max|20 default|0";
+    $props["user_first_name"]     = "str maxLength|50 seekable|begin";
+    $props["user_last_name"]      = "str notNull maxLength|50 confidential seekable|begin";
+    $props["user_email"]          = "str maxLength|255";
+    $props["user_phone"]          = "phone";
+    $props["user_mobile"]         = "phone";
+    $props["user_address1"]       = "str";
+    $props["user_city"]           = "str maxLength|30";
+    $props["user_zip"]            = "str maxLength|11";
+    $props["user_country"]        = "str maxLength|30";
+    $props["user_birthday"]       = "dateTime";
+    $props["user_last_login"]     = "dateTime";
+    $props["user_login_errors"]   = "num notNull pos max|100 default|0";
+    $props["template"]            = "bool notNull default|0";
+    $props["profile_id"]          = "ref class|CUser";
+    $props["dont_log_connection"] = "bool default|0";
       
     // The different levels of security are stored to be usable in JS
-    $specs["_user_password_weak"]   = "password minLength|4";
-    $specs["_user_password_strong"] = "password minLength|6 notContaining|user_username notNear|user_username alphaAndNum";
-
-    if(CAppUI::conf("admin CUser strong_password")) {
-      $specs["_user_password"] = $specs["_user_password_strong"];
-    } else {
-      $specs["_user_password"] = $specs["_user_password_weak"];
-    }
+    $props["_user_password_weak"]   = "password minLength|4";
+    $props["_user_password_strong"] = "password minLength|6 notContaining|user_username notNear|user_username alphaAndNum";
     
-    $specs["_ldap_linked"]       = "bool";
-    $specs["_user_type_view"]    = "str";
-    $specs["_count_connections"] = "num";
+    // The actuel config level
+    $props["_user_password"] = CAppUI::conf("admin CUser strong_password") ?
+      $props["_user_password_strong"] :
+      $props["_user_password_weak"];
     
-    return $specs;
+    // Derived fields
+    $props["_ldap_linked"]       = "bool";
+    $props["_user_type_view"]    = "str";
+    $props["_count_connections"] = "num";
+    
+    return $props;
   }
   
-  /** Update the object's specs */
+  /** 
+   * Update the object's specs 
+   * 
+   * @return void
+   **/
   function updateSpecs() {
     $oldSpec = $this->_specs['_user_password'];
 
@@ -166,20 +168,22 @@ class CUser extends CMbObject {
     $strongPassword = ((CAppUI::conf("admin CUser strong_password") == "1") && ($remote == 0));
     
     // If the global strong password config is set to TRUE and the user can connect remotely
-    $this->_specs['_user_password'] = $strongPassword?
-      $this->_specs['_user_password_strong']:
+    $this->_specs['_user_password'] = $strongPassword ?
+      $this->_specs['_user_password_strong'] :
       $this->_specs['_user_password_weak'];
     
     $this->_specs['_user_password']->fieldName = $oldSpec->fieldName;
     
-    $this->_props['_user_password'] = $strongPassword?
-      $this->_props['_user_password_strong']:
+    $this->_props['_user_password'] = $strongPassword ?
+      $this->_props['_user_password_strong'] :
       $this->_props['_user_password_weak'];
   }
 
   /**
    * Lazy access to a given user, defaultly connected user
+   * 
    * @param $user_id ref|CUser The user id, connected user if null;
+   * 
    * @return CUser
    */
   static function get($user_id = null) {
@@ -208,6 +212,7 @@ class CUser extends CMbObject {
   
   /**
    * Return true if user login count system is ready
+   * 
    * @return bool
    */
   function loginErrorsReady() {
