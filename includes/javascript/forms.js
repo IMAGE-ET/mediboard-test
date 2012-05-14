@@ -18,20 +18,29 @@ function confirmDeletion(oForm, oOptions, oOptionsAjax) {
     callback: null
   }, oOptions);
   
-  if (oOptions.objName) oOptions.objName = " '" + oOptions.objName + "'";
-  if (confirm(oOptions.msg + oOptions.typeName + " " + oOptions.objName + " ?" )) {
-    oForm.del.value = 1;
-    
-    if (oOptions.callback) {
-      oOptions.callback();
-    }
-    else {
-      if(oOptions.ajax)
-        submitFormAjax(oForm, oOptions.target, oOptionsAjax);
-      else
-        oForm.submit();
-    }
+  if (oOptionsAjax) {
+	oOptions.ajax = true;
   }
+  
+  if (oOptions.objName) {
+    oOptions.objName = " '" + oOptions.objName + "'";
+  }
+  
+  if (!confirm(oOptions.msg + oOptions.typeName + " " + oOptions.objName + " ?" )) {
+	return;
+  }
+  
+  oForm.del.value = 1;
+    
+  if (oOptions.callback) {
+    return oOptions.callback();
+  }
+
+  if (oOptions.ajax) {
+    return submitFormAjax(oForm, oOptions.target, oOptionsAjax);
+  }
+  
+  return oForm.submit();
 }
 
 /** Universal get/set function for form elements
