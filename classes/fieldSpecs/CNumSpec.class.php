@@ -38,10 +38,10 @@ class CNumSpec extends CMbFieldSpec {
       }
     }
     
-    if($this->pos || ($this->min !== null && $this->min >= 0)) {
+    if ($this->pos || ($this->min !== null && $this->min >= 0)) {
       $type_sql .= ' UNSIGNED';
     }
-    
+
     return $type_sql;
   }
   

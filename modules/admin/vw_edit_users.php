@@ -40,7 +40,7 @@ if ($where) {
   }
   
   // Auto sélection du user s'il est unique
-  if (count($users) == 1) {
+  if (count($users) == 1 && $user_id !== "0") {
   	$user = reset($users);
   }
 }

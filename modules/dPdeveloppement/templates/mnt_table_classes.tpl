@@ -77,35 +77,35 @@
               </td>
             </tr>
             {{/if}}
-          {{foreach from=$_class_details.fields key=curr_field_name item=curr_field}}
+          {{foreach from=$_class_details.fields key=_field_name item=_field}}
             
-            {{if $list_errors.$_class.$curr_field_name || $_class_details.key == $curr_field_name || $class == $_class}}
+            {{if $list_errors.$_class.$_field_name || $_class_details.key == $_field_name || $class == $_class}}
             <tr>
-              <td {{if $_class_details.key == $curr_field_name}}class="ok"{{/if}}>{{$curr_field_name}}</td>
+              <td {{if $_class_details.key == $_field_name}}class="ok"{{/if}}>{{$_field_name}}</td>
               
-              {{if !$curr_field.object.spec}}
-                <td class="warning text">Aucune spec<br />&nbsp;</td>
+              {{if !$_field.object.spec}}
+                <td class="warning text">Aucune spec</td>
               {{else}}
-                <td class="text" title="{{$curr_field.object.spec}}">{{$curr_field.object.spec|replace:'|':' | '}}<br />&nbsp;</td>
+                <td class="text" title="{{$_field.object.spec}}">{{$_field.object.spec}}</td>
               {{/if}}
               
               <td class="text">
-                {{if $curr_field.object.db_spec}}
-                    {{$curr_field.object.db_spec.type}}
+                {{if $_field.object.db_spec}}
+                    {{$_field.object.db_spec.type}}
                     
-                    {{if $curr_field.object.db_spec.params|@count > 0}}
+                    {{if $_field.object.db_spec.params|@count > 0}}
                     (
-                      {{foreach from=$curr_field.object.db_spec.params item=param name=params}}
+                      {{foreach from=$_field.object.db_spec.params item=param name=params}}
                         {{$param}}{{if !$smarty.foreach.params.last}},{{/if}} 
                       {{/foreach}}
                     )
                     {{/if}}
                     
-                    {{if $curr_field.object.db_spec.unsigned}}UNSIGNED{{/if}}
-                    {{if $curr_field.object.db_spec.zerofill}}ZEROFILL{{/if}}
+                    {{if $_field.object.db_spec.unsigned}}UNSIGNED{{/if}}
+                    {{if $_field.object.db_spec.zerofill}}ZEROFILL{{/if}}
                   
-                    {{if !$curr_field.object.db_spec.null}}NOT NULL{{/if}}
-                    {{if $curr_field.object.db_spec.default !== null}}DEFAULT {{$curr_field.object.db_spec.default}}{{/if}}
+                    {{if !$_field.object.db_spec.null}}NOT NULL{{/if}}
+                    {{if $_field.object.db_spec.default !== null}}DEFAULT {{$_field.object.db_spec.default}}{{/if}}
                 {{else}}
                   <div class="error">
                     Pas de spec pour cette colonne
@@ -115,31 +115,35 @@
                 <hr style="border: 0; border-top: 1px solid #CCC; margin: 1px;" />
                 
                 {{if !$_class_details.no_table}}
-                  {{if $curr_field.db}}
-                    <span {{if $curr_field.db.type != $curr_field.object.db_spec.type}}class="warning"{{/if}}>
-                      {{$curr_field.db.type}}
+                  {{if $_field.db}}
+                    <span {{if $_field.db.type != $_field.object.db_spec.type}}class="warning"{{/if}}>
+                      {{$_field.db.type}}
                     </span>
                     
-                    <span {{if $curr_field.db.params != $curr_field.object.db_spec.params}}class="warning"{{/if}}>
-                      {{if $curr_field.db.params|@count > 0}}
+                    <span {{if $_field.db.params != $_field.object.db_spec.params}}class="warning"{{/if}}>
+                      {{if $_field.db.params|@count > 0}}
                       (
-                        {{foreach from=$curr_field.db.params item=param name=params}}
+                        {{foreach from=$_field.db.params item=param name=params}}
                           {{$param}}{{if !$smarty.foreach.params.last}},{{/if}}
                         {{/foreach}}
                       )
                       {{/if}}
                     </span>
                   
-                    <span {{if $curr_field.db.unsigned != $curr_field.object.db_spec.unsigned}}class="warning"{{/if}}>
-                      {{if $curr_field.db.unsigned}}UNSIGNED{{/if}}
+                    <span {{if $_field.db.unsigned != $_field.object.db_spec.unsigned}}class="warning"{{/if}}>
+                      {{if $_field.db.unsigned}}UNSIGNED{{/if}}
                     </span>
                     
-                    <span {{if $curr_field.db.zerofill != $curr_field.object.db_spec.zerofill}}class="warning"{{/if}}>
-                      {{if $curr_field.db.zerofill}}ZEROFILL{{/if}}
+                    <span {{if $_field.db.zerofill != $_field.object.db_spec.zerofill}}class="warning"{{/if}}>
+                      {{if $_field.db.zerofill}}ZEROFILL{{/if}}
                     </span>
                     
-                    <span {{if $curr_field.db.null != $curr_field.object.db_spec.null}}class="warning"{{/if}}>
-                      {{if !$curr_field.db.null}}NOT NULL{{/if}}
+                    <span {{if $_field.db.null != $_field.object.db_spec.null}}class="warning"{{/if}}>
+                      {{if !$_field.db.null}}NOT NULL{{/if}}
+                    </span>
+
+                    <span {{if $_field.db.default != $_field.object.db_spec.default}}class="warning"{{/if}}>
+                      {{if $_field.db.default !== null && $_field.db.default !== ''}}DEFAULT {{$_field.db.default}} {{/if}}
                     </span>
   
                   {{else}}
@@ -155,28 +159,28 @@
               </td>
               
               <td>
-                {{$curr_field.object.db_spec.default}}&nbsp;<hr style="border: 0; border-top: 1px solid #CCC; margin: 1px;" />
-                <span {{if $curr_field.db.default != $curr_field.object.db_spec.default}}class="warning"{{/if}}>
-                  {{$curr_field.db.default}}&nbsp;
+                {{$_field.object.db_spec.default}}&nbsp;<hr style="border: 0; border-top: 1px solid #CCC; margin: 1px;" />
+                <span {{if $_field.db.default != $_field.object.db_spec.default}}class="warning"{{/if}}>
+                  {{$_field.db.default}}&nbsp;
                 </span>
               </td>
               
               <td>
-                {{if $curr_field.object.db_spec.index}}Oui{{else}}Non{{/if}}&nbsp;<hr style="border: 0; border-top: 1px solid #CCC; margin: 1px;" />
+                {{if $_field.object.db_spec.index}}Oui{{else}}Non{{/if}}&nbsp;<hr style="border: 0; border-top: 1px solid #CCC; margin: 1px;" />
                 <span 
-                  {{if $curr_field.object.db_spec.index && !$curr_field.db.index}}
+                  {{if $_field.object.db_spec.index && !$_field.db.index}}
                     class="error"
-                  {{elseif !$curr_field.object.db_spec.index && $curr_field.db.index}}
+                  {{elseif !$_field.object.db_spec.index && $_field.db.index}}
                     class="warning"
                   {{/if}}>
-                  {{if $curr_field.db.index}}Oui{{else}}Non{{/if}}&nbsp;
+                  {{if $_field.db.index}}Oui{{else}}Non{{/if}}&nbsp;
                 </span>
               </td>
               
               <td>
-                {{$curr_field.object.db_spec.extra}}&nbsp;<hr style="border: 0; border-top: 1px solid #CCC; margin: 1px;" />
-                <span {{if $curr_field.db.extra != $curr_field.object.db_spec.extra}}class="warning"{{/if}}>
-                  {{$curr_field.db.extra}}&nbsp;
+                {{$_field.object.db_spec.extra}}&nbsp;<hr style="border: 0; border-top: 1px solid #CCC; margin: 1px;" />
+                <span {{if $_field.db.extra != $_field.object.db_spec.extra}}class="warning"{{/if}}>
+                  {{$_field.db.extra}}&nbsp;
                 </span>
               </td>
             </tr>
