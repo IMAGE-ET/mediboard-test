@@ -772,7 +772,7 @@ class CConstantesMedicales extends CMbObject {
     return $color;
   }
   
-  static function buildGrid($list, $full = true) {
+  static function buildGrid($list, $full = true, $only_with_value = false) {
     $grid = array();
     $selection = array_keys(CConstantesMedicales::$list_constantes);
     $cumuls_day = array();
@@ -790,6 +790,10 @@ class CConstantesMedicales extends CMbObject {
       }
       
       $selection = array_unique($selection);
+    }
+    
+    if ($only_with_value) {
+      $selection = array();
     }
     
     $names = $selection;
