@@ -1,6 +1,9 @@
 <table class="tbl">
   <tr>
-    <th colspan="2">Légende</th>
+    <th colspan="2" class="title">Légende</th>
+  </tr>
+  <tr>
+    <th colspan="2" class="category">Affectation</th>
   </tr>
   <tr>
     <td style="width: 60px">
@@ -57,7 +60,7 @@
       <div class="wrapper_line">
         <div class="affect_legend clit" style="width: 30px">
           <div class="wrapper_op">
-            <div class="operation_in_mouv opacity-40" style="width: 15px; left: 7px; top: 0"></div>
+            <div class="operation_in_mouv opacity-40" style="width: 15px; left: 7px;"></div>
           </div>
         </div>
       </div>
@@ -71,7 +74,7 @@
       <div class="wrapper_line">
         <div class="affect_legend clit" style="width: 30px">
           <div class="wrapper_op">
-            <div class="soins_uscpo opacity-40" style="width: 15px; left: 7px; top: 0"></div>
+            <div class="soins_uscpo opacity-40" style="width: 15px; left: 7px;"></div>
           </div>
         </div>
       </div>
@@ -125,6 +128,9 @@
     </td>
   </tr>
   <tr>
+    <th class="category" colspan="2">Patient</th>
+  </tr>
+  <tr>
     <td>
       M. X y
     </td>
@@ -163,6 +169,43 @@
     <td>
       Patient sorti
     </td>
+  </tr>
+  <tr>
+    <th class="category" colspan="2">
+      Alertes
+    </th>
+  </tr>
+  <tr>
+    <td style="text-align: right;"><img src="modules/dPhospi/images/double.png" name="chambre double possible" /></td>
+    <td class="text">Chambre double possible</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;"><img src="modules/dPhospi/images/seul.png" name="chambre simple obligatoire" /></td>
+    <td class="text">Chambre simple obligatoire</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;"><img src="modules/dPhospi/images/surb.png" name="colision" /></td>
+    <td class="text">Colision : deux patients dans un même lit</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;"><img src="modules/dPhospi/images/sexe.png" name="conflit de sexe" /></td>
+    <td class="text">Un homme et une femme dans la même chambre</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;"><img src="modules/dPhospi/images/age.png" name="ecart d'age important" /></td>
+    <td class="text">Ecart d'age important : plus de 15 ans d'écart</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;"><img src="modules/dPhospi/images/prat.png" name="conflit de praticiens" /></td>
+    <td class="text">Conflit de praticiens : deux patients opérés par deux medecins de même spécialité dans la même chambre</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;"><img src="modules/dPhospi/images/path.png" name="conflit de pathologie" /></td>
+    <td class="text">Pathologies incompatibles dans la même chambre</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;"><img src="modules/dPhospi/images/annule.png" name="Chambre plus utilisée" /></td>
+    <td class="text">Chambre plus utilisée</td>
   </tr>
   <tr>
     <td class="button" colspan="2">
