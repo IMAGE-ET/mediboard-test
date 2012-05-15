@@ -9,11 +9,11 @@
 
 $object = mbGetObjectFromGetOrSession("object_class", "object_id", "object_guid");
 
-$file_category_id = CValue::getOrSession("file_category_id", null);
-$_rename          = CValue::getOrSession("_rename", null);
-$uploadok         = CValue::get("uploadok", 0);
-$private          = CValue::get("private", 0);
-$for_identite     = CValue::get("for_identite", 0);
+$file_category_id = CValue::getOrSession("file_category_id");
+$_rename          = CValue::getOrSession("_rename");
+$uploadok         = CValue::get("uploadok");
+$private          = CValue::get("private");
+$for_identite     = CValue::get("for_identite");
 
 $listCategory = CFilesCategory::listCatClass($object->_class);
 
