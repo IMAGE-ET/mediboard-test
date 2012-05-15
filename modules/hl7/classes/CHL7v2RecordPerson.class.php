@@ -244,6 +244,9 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     if (array_key_exists("INSC", $data["personIdentifiers"])) {
       $newPatient->INSC = $data["personIdentifiers"]["INSC"];
     }
+    
+    // Rang naissance
+    $this->getRangNaissance($node, $newPatient);
   }
   
   function getNames(DOMNode $node, CPatient $newPatient, DOMNodeList $PID5) {
@@ -331,6 +334,12 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
           $newPatient->tel_autre = $tel_number;
           break;
       }
+    }
+  }
+  
+  function getRangNaissance(DOMNode $node, CPatient $newPatient) {
+    if ($rang_naissance = $this->queryTextNode("PID.25", $node)) {
+      $newPatient->rang_naissance = $rang_naissance;
     }
   }
   
