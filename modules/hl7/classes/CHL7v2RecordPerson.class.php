@@ -1,7 +1,7 @@
 <?php /* $Id:$ */
 
 /**
- * Record person, message XML
+ * Record person message XML
  *  
  * @category HL7
  * @package  Mediboard
