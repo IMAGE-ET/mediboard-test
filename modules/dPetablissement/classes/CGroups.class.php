@@ -257,7 +257,7 @@ class CGroups extends CMbObject {
    */
   function getTagGroup() {
     // Pas de tag sur l'établiessement
-    if (null == $tag_group = CAppUI::conf("mediusers tag_group")) {
+    if (null == $tag_group = CAppUI::conf("dPetablissement tag_group")) {
       return;
     }
 
