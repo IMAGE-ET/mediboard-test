@@ -19,7 +19,7 @@ $hors_etab    = CValue::post("hors_etab");
 $sexe         = CValue::post("sexe");
 $heure        = CValue::post("heure");
 $rang         = CValue::post("rang");
-$naissance    = CValue::post("naissance");
+$date_naissance = CValue::post("naissance");
 $nom          = CValue::post("nom");
 $prenom       = CValue::post("prenom");
 $poids        = CValue::post("poids");
@@ -88,7 +88,7 @@ if (!$naissance_id) {
     $sejour_enfant->entree_prevue = mbDate();
   }
   
-  $sejour_enfant->sortie_prevue = $curr_affect->sortie;
+  $sejour_enfant->sortie_prevue = $curr_affect->sortie ? $curr_affect->sortie : $sejour->sortie;
   $sejour_enfant->patient_id = $patient->_id;
   $sejour_enfant->praticien_id = $praticien_id;
   $sejour_enfant->group_id = $sejour->group_id;
@@ -142,6 +142,7 @@ else {
   $patient->prenom = $prenom;
   $patient->nom = $nom;
   $patient->sexe = $sexe;
+  $patient->naissance = $date_naissance;
   storeObject($patient);
   
   $sejour_enfant = new CSejour;
