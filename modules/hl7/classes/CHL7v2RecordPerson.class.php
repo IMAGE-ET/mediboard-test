@@ -436,7 +436,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
         break;
       case "RI" :
         // Gestion de l'identifiant MB
-        if ($this->queryTextNode("XCN.9/CX.4/HD.2", $node) == CAppUI::conf("hl7 assigningAuthorityUniversalID")) {
+        if ($this->queryTextNode("XCN.9/CX.4/HD.2", $node) == CAppUI::conf("hl7 assigning_authority_universal_id")) {
           $medecin->load($xcn1);
         }
     }

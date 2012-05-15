@@ -188,7 +188,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   function getRIIdentifiers(DOMNode $node, &$data, CInteropSender $sender) {
     // Notre propre RI
     if (($this->queryTextNode("CX.5", $node) == "RI") && 
-        ($this->queryTextNode("CX.4/HD.2", $node) == CAppUI::conf("hl7 assigningAuthorityUniversalID"))) {
+        ($this->queryTextNode("CX.4/HD.2", $node) == CAppUI::conf("hl7 assigning_authority_universal_id"))) {
       $data["RI"] = $this->queryTextNode("CX.1", $node);
       return;
     }
@@ -208,7 +208,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   
   function getNPAIdentifiers(DOMNode $node, &$data) {
     if (($this->queryTextNode("CX.5", $node) == "RI") && 
-        ($this->queryTextNode("CX.4/HD.2", $node) == CAppUI::conf("hl7 assigningAuthorityUniversalID"))) {
+        ($this->queryTextNode("CX.4/HD.2", $node) == CAppUI::conf("hl7 assigning_authority_universal_id"))) {
       $data["NPA"] = $this->queryTextNode("CX.1", $node);
     }
   }

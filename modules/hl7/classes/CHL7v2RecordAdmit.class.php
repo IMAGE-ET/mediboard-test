@@ -1015,7 +1015,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         break;
       case "RI" :
         // Notre propre RI
-        if (($this->queryTextNode("XCN.9/HD.2", $node) == CAppUI::conf("hl7 assigningAuthorityUniversalID"))) {
+        if (($this->queryTextNode("XCN.9/HD.2", $node) == CAppUI::conf("hl7 assigning_authority_universal_id"))) {
           return $id;
         }
       default :
@@ -1256,7 +1256,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $movement->sejour_id = $newVenue->_id;
     $movement->original_trigger_code = $original_trigger;
     // Notre propre ID de mouvement
-    if (($this->queryTextNode("ZBE.1/EI.3", $node) == CAppUI::conf("hl7 assigningAuthorityUniversalID"))) {
+    if (($this->queryTextNode("ZBE.1/EI.3", $node) == CAppUI::conf("hl7 assigning_authority_universal_id"))) {
       $movement_id_split       = explode("-", $movement_id);
       $movement->_id           = $movement_id_split[0];
       $movement->movement_type = $movement_id_split[1];

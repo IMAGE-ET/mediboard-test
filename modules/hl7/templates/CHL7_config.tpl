@@ -12,7 +12,17 @@
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
   <table class="form">
-    {{mb_include module=system template=inc_config_str var=assigningAuthorityUniversalID}}
+    {{mb_include module=system template=inc_config_str var=assigning_authority_namespace_id}}
+    {{mb_include module=system template=inc_config_str var=assigning_authority_universal_id}}
+    {{mb_include module=system template=inc_config_str var=assigning_authority_universal_type_id}}
+    
+    {{assign var=hl7v2_versions value="CHL7v2"|static:versions}} 
+    {{assign var=list_hl7v2_versions value='|'|implode:$hl7v2_versions}}
+    {{mb_include module=system template=inc_config_enum var=default_version values=$list_hl7v2_versions}}
+    
+    <tr>
+      <td colspan="2"> <hr /> </td>
+    </tr>
     
     {{mb_include module=system template=inc_config_bool var=strictSejourMatch}}
     
@@ -20,12 +30,7 @@
     {{mb_include module=system template=inc_config_bool var=doctorActif}}
     
     {{mb_include module=system template=inc_config_str var=importFunctionName}}
-    
-    {{assign var=hl7v2_versions value="CHL7v2"|static:versions}} 
-    {{assign var=list_hl7v2_versions value='|'|implode:$hl7v2_versions}}
-    
-    {{mb_include module=system template=inc_config_enum var=default_version values=$list_hl7v2_versions}}
-    
+
     <tr>
       <td class="button" colspan="10">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
