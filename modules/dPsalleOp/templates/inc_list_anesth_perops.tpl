@@ -17,7 +17,7 @@
         {{mb_field object=$_perop field=datetime register=true form="editPerop$perop_id" onchange="this.form.onsubmit();"}}
       </form>
     </td>
-    <td class="text greedyPane">
+    <td class="text greedyPane" {{if $_perop->incident}}style="background-color: #f88 !important;"{{/if}}>
       {{if $_perop->incident}}
       <strong>Incident</strong>
       <br />
