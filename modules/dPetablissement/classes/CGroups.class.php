@@ -214,6 +214,8 @@ class CGroups extends CMbObject {
   }
   
   function fillLimitedTemplate(&$template) {
+    $this->notify("BeforeFillLimitedTemplate", $template);
+    
     $template->addProperty("Etablissement - Nom"             , $this->text);
     $template->addProperty("Etablissement - Adresse"         , "$this->adresse \n $this->cp $this->ville");
     $template->addProperty("Etablissement - Ville"           , $this->ville);
@@ -228,6 +230,8 @@ class CGroups extends CMbObject {
     $template->addBarCode("Etablissement - Code Barre FINESS", $this->finess, array("barcode" => array(
       "title" => CAppUI::tr("{$this->_class}-finess")
     )));
+    
+    $this->notify("AfterFillLimitedTemplate", $template);
   }
   
   function fillTemplate(&$template) {

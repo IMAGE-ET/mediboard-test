@@ -36,18 +36,18 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   var $bouche         = null;
   var $distThyro      = null;
   var $etatBucco      = null;
-	
+  
   var $examenCardio   = null;
   var $examenPulmo    = null;
   var $examenDigest   = null;
   var $examenAutre    = null;
-	
+  
   var $conclusion     = null;
   var $position       = null;
   var $premedication  = null;
   var $prepa_preop    = null;
-  var $date_analyse   = null;	
-	
+  var $date_analyse   = null;  
+  
   var $rai            = null;
   var $hb             = null;
   var $tp             = null;
@@ -164,12 +164,12 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $specs["bouche"]           = "enum list|m20|m35|p35";
     $specs["distThyro"]        = "enum list|m65|p65";
     $specs["etatBucco"]        = "text helped";
-		
+    
     $specs["examenCardio"]     = "text helped";
     $specs["examenPulmo"]      = "text helped";
     $specs["examenDigest"]     = "text helped";
     $specs["examenAutre"]      = "text helped";
-		
+    
     $specs["conclusion"]       = "text helped seekable";
     $specs["position"]         = "enum list|DD|DV|DL|GP|AS|TO|GYN";
 
@@ -244,8 +244,8 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     else {
       $this->loadRefSejour();
     }
-		
-		return $this->_ref_operation;
+    
+    return $this->_ref_operation;
   }
 
   /**
@@ -266,7 +266,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   }
 
   function loadView() {
-  	parent::loadView();
+    parent::loadView();
     $this->_ref_consultation = $this->_fwd["consultation_id"];
     $this->_ref_consultation->loadView();
   }
@@ -285,8 +285,8 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $this->_ref_sejour->_ref_dossier_medical->loadRefsAntecedents();
     $this->_ref_sejour->_ref_dossier_medical->loadRefstraitements();
     
-		// Chargement des actes CCAM 
-		$this->_ref_consultation->loadRefsActesCCAM();
+    // Chargement des actes CCAM 
+    $this->_ref_consultation->loadRefsActesCCAM();
     foreach ($this->_ref_consultation->_ref_actes_ccam as &$acte_ccam) {
       $acte_ccam->loadRefsFwd();
     }
@@ -295,19 +295,19 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   function loadRefsFwd() {
     $this->loadRefChir();
     
-		// Chargement operation/sejour
-		$this->loadRefOperation();
+    // Chargement operation/sejour
+    $this->loadRefOperation();
     $this->_ref_operation->loadRefsFwd();
     $this->_date_op =& $this->_ref_operation->_datetime;
-		
-		// Chargement consultation
+    
+    // Chargement consultation
     $this->loadRefConsultation();
     $this->_ref_consultation->loadRefsFwd();
     $this->_ref_plageconsult =& $this->_ref_consultation->_ref_plageconsult;
     $this->_date_consult =& $this->_ref_consultation->_date;
 
     // Calcul de la Clairance créatinine
-		$patient =& $this->_ref_consultation->_ref_patient;
+    $patient =& $this->_ref_consultation->_ref_patient;
     $patient->loadRefConstantesMedicales();
     $const_med = $patient->_ref_constantes_medicales;
     $const_med->updateFormFields();
@@ -396,10 +396,13 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   }
 
   function fillLimitedTemplate(&$template) {
+    $this->updateFormFields();
+    
+    $this->notify("BeforeFillLimitedTemplate", $template);
+    
     $template->addProperty("Anesthésie - Tabac"                  , $this->tabac);
     $template->addProperty("Anesthésie - Oenolisme"              , $this->oenolisme);
     
-    $this->updateFormFields();
     $template->addProperty("Anesthésie - Groupe sanguin"         , "$this->groupe $this->rhesus");
     $template->addProperty("Anesthésie - RAI"                    , $this->rai);
     $template->addProperty("Anesthésie - Hb"                     , "$this->hb g/dl");
@@ -442,6 +445,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $template->addProperty("Anesthésie - Remarques",  $this->conclusion);
     $template->addProperty("Anesthésie - Score APFEL", $this->_score_apfel);
     
+    $this->notify("AfterFillLimitedTemplate", $template);
   }
 
   function canDeleteEx() {

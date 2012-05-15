@@ -1290,7 +1290,7 @@ class CPatient extends CMbObject {
     
     $destinataires = CDestinataire::$destByClass;
 
-    foreach($destinataires as $_destinataires_by_class)
+    foreach($destinataires as $_destinataires_by_class) {
       foreach($_destinataires_by_class as $_destinataire) {
         if (!isset($_destinataire->nom) || strlen($_destinataire->nom) == 0 || $_destinataire->nom === " ") continue;
         $template->destinataires[] =
@@ -1298,9 +1298,13 @@ class CPatient extends CMbObject {
                 "email" => $_destinataire->email,
                 "tag"   => $_destinataire->tag);
       }
+    }
+    
     $this->loadRefsFwd();
     $this->loadRefConstantesMedicales();
     $this->loadIPP();
+    
+    $this->notify("BeforeFillLimitedTemplate", $template);
     
     $template->addProperty("Patient - article"           , $this->_civilite  );
     $template->addProperty("Patient - article long"      , $this->_civilite_long);
@@ -1524,6 +1528,7 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - Bénéficiaire de soin - libellé exo", addslashes($this->libelle_exo));
     $template->addProperty("Patient - Bénéficiaire de soin - notes amc"  , addslashes($this->notes_amc));
     
+    $this->notify("AfterFillLimitedTemplate", $template);
   }
   
   function fillTemplate(&$template) {

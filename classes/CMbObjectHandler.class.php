@@ -14,17 +14,15 @@
  */
  
 abstract class CMbObjectHandler {
+  function onBeforeStore(CMbObject $mbObject) {}
   function onAfterStore(CMbObject $mbObject) {}
   
+  function onBeforeMerge(CMbObject $mbObject) {}
   function onAfterMerge(CMbObject $mbObject) {}
   
+  function onBeforeDelete(CMbObject $mbObject) {}
   function onAfterDelete(CMbObject $mbObject) {}
   
-  function onBeforeStore(CMbObject $mbObject) {}
-  
-  function onBeforeMerge(CMbObject $mbObject) {}
-  
-  function onBeforeDelete(CMbObject $mbObject) {}
+  function onBeforeFillLimitedTemplate(CMbObject $mbObject, CTemplateManager $template) {}
+  function onAfterFillLimitedTemplate(CMbObject $mbObject, CTemplateManager $template) {}
 }
-
-?>

@@ -1885,6 +1885,8 @@ class CSejour extends CCodable implements IPatientRelated {
   }
   
   function fillLimitedTemplate(&$template) {
+    $this->notify("BeforeFillLimitedTemplate", $template);
+    
     $template->addProperty("Admission - Date longue"          , $this->getFormattedValue("entree_prevue"));
     $template->addDateProperty("Admission - Date"             , $this->entree_prevue);
     $template->addTimeProperty("Admission - Heure"            , $this->entree_prevue);
@@ -2011,6 +2013,8 @@ class CSejour extends CCodable implements IPatientRelated {
     
     // Dernière intervention
     $this->_ref_last_operation->fillLimitedTemplate($template);
+    
+    $this->notify("AfterFillLimitedTemplate", $template);
   }
   
   function fillTemplate(&$template) {

@@ -485,15 +485,20 @@ class CModelObject {
   /**
    * Subject notification mechanism 
    * @todo Implement to factorise 
-   *   on[Before|After][Store|Merge|Delete]()
+   *   on[Before|After][Store|Merge|Delete|FillLimitedTemplate]()
    *   which have to get back de CPersistantObject layer
    */
-  function notify($message) {
+  function notify($message/*, ... */) {
     // Event Handlers
     self::makeHandlers();
+    
+    $args = func_get_args();
+    array_shift($args); // $message
+    array_unshift($args, $this);
+    
     foreach (self::getHandlers() as $handler) {
       try {
-        call_user_func(array($handler, "on$message"), $this);
+        call_user_func_array(array($handler, "on$message"), $args);
       } 
       catch (Exception $e) {
         CAppUI::setMsg($e, UI_MSG_ERROR);

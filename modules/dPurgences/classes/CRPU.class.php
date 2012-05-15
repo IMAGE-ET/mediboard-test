@@ -96,6 +96,12 @@ class CRPU extends CMbObject {
     $spec->table = 'rpu';
     $spec->key   = 'rpu_id';
     $spec->measureable = true;
+    /*$spec->events = array(
+      "accueil" => array(
+        "reference1" => array("CSejour",  "sejour_id"),
+        "reference2" => array("CPatient", "sejour_id.patient_id"),
+      ),
+    );*/
     return $spec;
   }
 
@@ -445,6 +451,8 @@ class CRPU extends CMbObject {
     $this->loadRefConsult();
     $this->_ref_consult->loadRefPraticien();
     
+    $this->notify("BeforeFillLimitedTemplate", $template);
+    
     // Duplication des champs de la consultation
     $template->addProperty("RPU - Consultation - Praticien nom"    , $this->_ref_consult->_ref_praticien->_user_first_name);
     $template->addProperty("RPU - Consultation - Praticien prénom" , $this->_ref_consult->_ref_praticien->_user_last_name);
@@ -469,9 +477,11 @@ class CRPU extends CMbObject {
     $libelle_at = $this->date_at ? "Accident du travail du " . $this->getFormattedValue("date_at") : "";
     $template->addProperty("RPU - Libellé accident du travail"  , $libelle_at);
     $template->addProperty("RPU - Sortie autorisée"             , $this->getFormattedValue("sortie_autorisee"));
-     $lit = new CLit;
-    if ($this->box_id) 
+    
+    $lit = new CLit;
+    if ($this->box_id) {
       $lit->load($this->box_id);
+    }
     $template->addProperty("RPU - Box"                          , $lit->_view);
     
     if(CAppUI::conf("dPurgences old_rpu") == "1"){
@@ -484,6 +494,8 @@ class CRPU extends CMbObject {
     else {
       $template->addProperty("RPU - Orientation"          , $this->getFormattedValue("orientation"));
     }
+    
+    $this->notify("AfterFillLimitedTemplate", $template);
   }
   
   function completeLabelFields(&$fields) {
