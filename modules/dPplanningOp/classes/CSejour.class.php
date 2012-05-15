@@ -2211,7 +2211,8 @@ class CSejour extends CCodable implements IPatientRelated {
     $this->loadRefPatient()->completeLabelFields($fields);
     $this->loadRefPraticien();
     $this->loadNDA();
-    
+    $affectation = $this->getCurrAffectation();
+    $affectation->loadView();
     $fields = array_merge($fields,
                 array("DATE ENT" => mbDateToLocale(mbDate($this->entree)),
                       "HEURE ENT" => mbTime($this->entree),
@@ -2219,7 +2220,8 @@ class CSejour extends CCodable implements IPatientRelated {
                       "HEURE SORTIE" => mbTime($this->sortie),
                       "PRAT RESPONSABLE" => $this->_ref_praticien->_view,
                       "NDOS"     => $this->_NDA,
-                      "CODE BARRE NDOS" => "@BARCODE_".$this->_NDA."@"));
+                      "CODE BARRE NDOS" => "@BARCODE_".$this->_NDA."@",
+                      "CHAMBRE COURANTE" => $affectation->_view));
   }
   
   function checkMerge($sejours = array()/*<CSejour>*/) {
