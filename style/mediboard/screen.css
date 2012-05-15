@@ -5,7 +5,7 @@
     display: none;
   }
   
-  label[title]:hover,
+  .desktop label[title]:hover,
   *[onmouseover] {
     border-bottom: 1px dotted #bbb;
     margin-bottom: -1px;
