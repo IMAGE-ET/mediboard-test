@@ -19,6 +19,7 @@
 </script>
 
 <ul id="tabs-configure" class="control_tabs">
+  <li><a href="#CGroup">{{tr}}CGroups{{/tr}}</a></li>
   <li onmousedown="refreshConfigClasses();">
     <a href="#object-config">{{tr}}config-dPetablissement-object-config{{/tr}}</a>
   </li>
@@ -27,6 +28,10 @@
   </li>
 </ul>
 <hr class="control_tabs" />
+
+<div id="CGroup" style="display: none;">
+  {{mb_include module=etablissement template=CGroup_configure}}
+</div>
 
 <div id="object-config" style="display: none;">
   <div class="small-info">{{tr}}config-dPetablissement-object-config-classes{{/tr}}</div>
