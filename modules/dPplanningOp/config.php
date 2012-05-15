@@ -26,6 +26,8 @@ $dPconfig["dPplanningOp"]= array(
     "use_ccam"           => "1",
 	  "verif_cote"         => "0",
 	  "delete_only_admin"  => "1",
+    "duree_preop_adulte" => "45",
+    "duree_preop_enfant" => "15",
 	),
   "CSejour" => array (
     "check_collisions"    => "date",

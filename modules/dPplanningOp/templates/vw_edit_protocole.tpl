@@ -281,6 +281,11 @@ Main.add(function () {
         </tr>
         
         <tr>
+          <th>{{mb_label object=$protocole field=duree_preop}}</th>
+          <td colspan="2">{{mb_field object=$protocole field=duree_preop form=editFrm }}</td>
+        </tr>
+        
+        <tr>
           <th>{{mb_label object=$protocole field=presence_preop}}</th>
           <td colspan="2">{{mb_field object=$protocole field=presence_preop form=editFrm }}</td>
         </tr>

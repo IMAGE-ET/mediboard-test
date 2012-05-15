@@ -52,6 +52,7 @@ class COperation extends CCodable implements IPatientRelated {
   var $horaire_voulu      = null;
   var $_horaire_voulu     = null;
   var $duree_uscpo        = null;
+  var $duree_preop        = null;
   var $presence_preop     = null;
   var $presence_postop    = null;
   
@@ -113,6 +114,7 @@ class COperation extends CCodable implements IPatientRelated {
   var $_debut_offset    = array();
   var $_fin_offset      = array();
   var $_place_after_interv_id = null;
+  var $_heure_us        = null;
   
   // Distant fields
   var $_datetime          = null;
@@ -245,6 +247,7 @@ class COperation extends CCodable implements IPatientRelated {
     $props["facture"]                 = "bool default|0";
     
     $props["duree_uscpo"]             = "num min|0 default|0";
+    $props["duree_preop"]             = "time";
     
     $props["_duree_interv"]           = "time";
     $props["_duree_garrot"]           = "time";
@@ -269,6 +272,7 @@ class COperation extends CCodable implements IPatientRelated {
     $props["_pause_hour"]             = "numchar length|2";
     $props["_move"]                   = "str";
     $props["_password_visite_anesth"] = "password notNull";
+    $props["_heure_us"]               = "time";
     
     return $props;
   }
@@ -569,6 +573,19 @@ class COperation extends CCodable implements IPatientRelated {
     $comments = $this->prepareAlert();
     $place_after_interv_id = $this->_place_after_interv_id;
     $this->_place_after_interv_id = null;
+    
+    
+    // Pré-remplissage de la durée préop si c'est une nouvelle intervention
+    if (!$this->_id && !$this->duree_preop) {
+      $patient = $this->loadRefSejour()->loadRefPatient();
+      
+      if ($patient->_age >= 18) {
+        $this->duree_preop = "00:" . CAppUI::conf("dPplanningOp COperation duree_preop_adulte") . ":00";
+      }
+      else {
+        $this->duree_preop = "00:" . CAppUI::conf("dPplanningOp COperation duree_preop_enfant") . ":00";
+      }
+    }
     
     // Standard storage
     if ($msg = parent::store()) {
@@ -1022,6 +1039,10 @@ class COperation extends CCodable implements IPatientRelated {
     }
     
     return $this->_dmi_alert = "ok";
+  }
+  
+  function updateHeureUS() {
+    $this->_heure_us = $this->duree_preop ? mbSubTime($this->duree_preop, $this->time_operation) : $this->time_operation;
   }
   
   function docsEditable() {

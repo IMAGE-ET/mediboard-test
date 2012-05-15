@@ -229,6 +229,7 @@ $locales['mod-dPbloc-tab-print_suivi'] = 'Impression suivi';
 $locales['mod-dPbloc-tab-view_planning'] = 'Planning du bloc opératoire';
 $locales['mod-dPbloc-tab-vw_alertes'] = 'Alertes';
 $locales['mod-dPbloc-tab-vw_blocages'] = 'Gestion des blocages';
+$locales['mod-dPbloc-tab-vw_departs_us'] = 'Départs US';
 $locales['mod-dPbloc-tab-vw_edit_interventions'] = 'Gestion des interventions';
 $locales['mod-dPbloc-tab-vw_edit_planning'] = 'Planning du jour';
 $locales['mod-dPbloc-tab-vw_idx_blocs'] = 'Gestion des blocs';

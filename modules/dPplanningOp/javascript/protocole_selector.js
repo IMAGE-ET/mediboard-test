@@ -22,6 +22,7 @@ ProtocoleSelector = {
   sType            : null,
   sTypePec         : null,
   sDuree_uscpo     : null,
+  sDuree_preop     : null,
   sConvalescence   : null,
   sDP              : null,
   sRques_sej       : null,
@@ -78,6 +79,7 @@ ProtocoleSelector = {
       $V(oOpForm[this.sMateriel],          protocole.materiel);
       $V(oOpForm[this.sExamen],            protocole.examen);
       $V(oOpForm[this.sDuree_uscpo],       protocole.duree_uscpo);
+      $V(oOpForm[this.sDuree_preop],       protocole.duree_preop);
       if (oOpForm[this.sDepassement] && oOpForm[this.sForfait] && oOpForm[this.sFournitures]) {
         $V(oOpForm[this.sDepassement],       protocole.depassement, false);
         $V(oOpForm[this.sForfait],           protocole.forfait, false);

@@ -14,7 +14,6 @@ ProtocoleSelector.init = function(){
   this.sDuree_prevu    = "_duree_prevue";
   this.sConvalescence  = "convalescence";
   this.sRques_sej      = "rques";
-  this.sDuree_uscpo    = "duree_uscpo";
   
   {{if $conf.dPplanningOp.CSejour.show_type_pec}}
     this.sTypePec       = "type_pec";

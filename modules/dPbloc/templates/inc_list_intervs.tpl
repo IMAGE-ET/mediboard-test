@@ -16,6 +16,7 @@
     {{foreach from=$intervs item=_op}}
     oForm = getForm("edit-interv-{{$_op->_id}}");
     Calendar.regField(oForm.temp_operation, null, options);
+    Calendar.regField(oForm.duree_preop);
     if(oForm.pause) {
       Calendar.regField(oForm.pause);
     }
@@ -87,6 +88,9 @@
         <input type="hidden" name="operation_id" value="{{$_op->_id}}" />
         {{mb_label object=$_op field="temp_operation"}}
         {{mb_field object=$_op field="temp_operation" hidden=true onchange="submitOrder(this.form, '$list_type');"}}
+        <br />
+        {{mb_label object=$_op field="duree_preop"}}
+        {{mb_field object=$_op field="duree_preop" hidden=true onchange="submitOrder(this.form, '$list_type');"}}
         {{if $_op->rank}}
           <br />
           {{mb_label object=$_op field="pause"}}

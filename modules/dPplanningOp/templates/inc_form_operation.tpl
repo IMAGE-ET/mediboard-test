@@ -62,6 +62,7 @@ CCAMSelector.init = function(){
 <input type="hidden" name="_protocole_prescription_chir_id" value="" />
 {{mb_field object=$op field="_count_actes" hidden=1}}
 <input type="hidden" name="_place_after_interv_id" value="" />
+{{mb_field object=$op field=duree_preop form=editOp hidden=1}}
 
 <table class="form">
   <tr>

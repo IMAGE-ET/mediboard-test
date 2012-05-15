@@ -36,6 +36,7 @@
       type             : "{{$_protocole->type}}",
       type_pec         : "{{$_protocole->type_pec}}",
       duree_uscpo      : "{{$_protocole->duree_uscpo}}",
+      duree_preop      : "{{$_protocole->duree_preop}}",
       duree_hospi      : {{$_protocole->duree_hospi}},
       rques_sejour     : "{{$_protocole->rques_sejour|smarty:nodefaults|escape:"javascript"}}",
       rques_operation  : "{{$_protocole->rques_operation|smarty:nodefaults|escape:"javascript"}}",

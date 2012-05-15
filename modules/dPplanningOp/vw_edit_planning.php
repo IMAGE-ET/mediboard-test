@@ -201,6 +201,7 @@ foreach($blocages_lit as $key => $blocage){
     $blocage->_ref_lit->_view .= " indisponible jusqu'à ".mbTransformTime($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
   }
 }
+
 // Création du template
 $smarty = new CSmartyDP();
 

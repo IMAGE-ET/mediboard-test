@@ -122,6 +122,7 @@ ProtocoleSelector.init = function(){
     this.sTypePec     = "type_pec";
   {{/if}}
   this.sDuree_uscpo   = "duree_uscpo";
+  this.sDuree_preop   = "duree_preop";
   this.sDuree_prevu   = "_duree_prevue";
   this.sConvalescence = "convalescence";
   this.sDP            = "DP";

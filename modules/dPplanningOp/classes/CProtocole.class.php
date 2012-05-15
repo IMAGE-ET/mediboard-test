@@ -43,6 +43,7 @@ class CProtocole extends CMbObject {
   var $service_id        = null;
   var $libelle_sejour    = null;
   var $duree_uscpo       = null;
+  var $duree_preop       = null;
   var $presence_preop    = null;
   var $presence_postop   = null;
   
@@ -103,6 +104,7 @@ class CProtocole extends CMbObject {
     $props["temp_operation"]  = "time";
     $props["type_pec"]        = "enum list|M|C|O";
     $props["duree_uscpo"]     = "num min|0 default|0";
+    $props["duree_preop"]     = "time show|0";
     $props["presence_preop"]  = "time show|0";
     $props["presence_postop"] = "time show|0";
     
