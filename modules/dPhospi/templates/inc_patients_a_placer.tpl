@@ -66,6 +66,10 @@
 </form>
 
 {{foreach from=$groupSejourNonAffectes key=group_name item=sejourNonAffectes}}
-  {{mb_include module=hospi template=inc_affectations_liste}}
+  {{if $group_name == "couloir"}}
+    {{mb_include module=hospi template=inc_affectations_couloir}}
+  {{else}}
+    {{mb_include module=hospi template=inc_affectations_liste}}
+  {{/if}}
 {{/foreach}}
 {{/if}}

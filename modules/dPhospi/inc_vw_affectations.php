@@ -148,7 +148,7 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type =
  *  Chargement des admissions à affecter
  */
 function loadSejourNonAffectes($where, $order = null, $praticien_id = null) {
-  global $g;
+  $group_id = CGroups::loadCurrent()->_id;
   
   $leftjoin = array(
     "affectation"     => "sejour.sejour_id = affectation.sejour_id",
@@ -156,15 +156,15 @@ function loadSejourNonAffectes($where, $order = null, $praticien_id = null) {
     "patients"        => "sejour.patient_id = patients.patient_id"
   );
 
-  if($praticien_id){
+  if ($praticien_id){
     $where["sejour.praticien_id"] = " = '$praticien_id'";
   }
 
-  $where["sejour.group_id"] = "= '$g'";
+  $where["sejour.group_id"] = "= '$group_id'";
   
   $where[] = "(sejour.type != 'seances' && affectation.affectation_id IS NULL) || sejour.type = 'seances'";
   
-  if($order == null){
+  if ($order == null){
     $order = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
   }
 
@@ -192,4 +192,63 @@ function loadSejourNonAffectes($where, $order = null, $praticien_id = null) {
   return $sejourNonAffectes;
 }
 
+/**
+ * Chargement des affectations dans les couloirs
+ */
+function loadAffectationsCouloirs($where, $order = null, $praticien_id = null) {
+  $group_id = CGroups::loadCurrent()->_id;
+  
+  $ljoin = array(
+    "sejour"          => "affectation.sejour_id = sejour.sejour_id",
+    "patients"        => "sejour.patient_id = patients.patient_id",
+    "users_mediboard" => "sejour.praticien_id = users_mediboard.user_id",
+  );
+  
+  if ($praticien_id) {
+    $where["sejour.praticien_id"] = " = '$praticien_id'";
+  }
+  
+  if ($order == null){
+    $order = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
+  }
+  
+  $where["affectation.lit_id"] = " IS NULL";
+  
+  $affectation = new CAffectation;
+  $affectations = $affectation->loadList($where, $order, null, null, $ljoin);
+  
+  $tab_affectations = array();
+  
+  foreach ($affectations as $affectation) {
+    $affectation->loadRefsAffectations();
+    $affectation->loadRefSejour()->loadRefPatient();
+    $aff_prev =& $affectation->_ref_prev;
+    if ($aff_prev->affectation_id) {
+      $aff_prev->_ref_lit =& getCachedLit($aff_prev->lit_id);
+    }
+
+    $aff_next =& $affectation->_ref_next;
+    if ($aff_next->affectation_id) {
+      $aff_next->_ref_lit =& getCachedLit($aff_next->lit_id);
+    }
+
+    $sejour =& $affectation->_ref_sejour;
+    $sejour->loadRefPrestation();
+    $sejour->loadRefsOperations();
+    $sejour->loadNDA();
+    $sejour->_ref_praticien =& getCachedPraticien($sejour->praticien_id);
+    $sejour->_ref_patient =& getCachedPatient($sejour->patient_id);
+    $sejour->_ref_patient->loadRefDossierMedical()->loadRefsAntecedents();
+    
+    // Chargement des droits CMU
+    $sejour->getDroitsCMU();
+
+    foreach($sejour->_ref_operations as $operation_id => $curr_operation) {
+      $sejour->_ref_operations[$operation_id]->loadExtCodesCCAM();
+    }
+    $tab_affectations[$affectation->service_id][] = $affectation;
+  }
+  
+  return $tab_affectations;
+}
 ?>

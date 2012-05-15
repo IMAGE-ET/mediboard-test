@@ -602,7 +602,19 @@ class CSetupdPhospi extends CSetup {
               ADD `object_class` ENUM ('CPrescriptionLineElement','CPrescriptionLineMedicament','CPrescriptionLineMix');";
     $this->addQuery($query);
     
-    $this->mod_version = "0.63";
+    $this->makeRevision("0.63");
+    $query = "ALTER TABLE `affectation` 
+      ADD `service_id` INT (11) UNSIGNED NOT NULL AFTER `affectation_id`,
+      CHANGE `lit_id` `lit_id` INT (11) UNSIGNED";
+    $this->addQuery($query);
+    
+    $query = "UPDATE `affectation`
+      LEFT JOIN `lit` ON `affectation`.`lit_id` = `lit`.`lit_id`
+      LEFT JOIN `chambre` ON `lit`.`chambre_id` = `chambre`.`chambre_id`
+      SET `affectation`.`service_id` = `chambre`.`service_id`";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.64";
   }
 }
 ?>

@@ -78,7 +78,7 @@ if($_type_admission != "seances") {
   $where[] = "affectation.affectation_id IS NULL";
 }
 
-$where[] = "service_id IN (".join($services_ids, ',').") OR service_id IS NULL";
+$where[] = "sejour.service_id IN (".join($services_ids, ',').") OR sejour.service_id IS NULL";
 $leftjoin["affectation"]  = "sejour.sejour_id = affectation.sejour_id";
 
 // Filtre sur les fonctions
@@ -98,7 +98,7 @@ $groupSejourNonAffectes = array();
 if ($can->edit) {
 	$where = array();
 	$where["sejour.annule"] = "= '0'";
-  $where[] = "service_id IN (".join($services_ids, ',').") OR service_id IS NULL";
+  $where[] = "sejour.service_id IN (".join($services_ids, ',').") OR sejour.service_id IS NULL";
 
 	$order = null;
   switch ($triAdm) {
@@ -150,11 +150,21 @@ if ($can->edit) {
   $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where, $order);
   $phpChrono->stop("Non affectés: avant");
   $phpChrono->start();
-	
+  
+  // Affectations dans les couloirs
+  $where = array();
+  $where[] = "affectation.service_id IN (".join($services_ids, ',').")";
+  $where["sejour.annule"] = " = '0'";
+  $where[] = "(affectation.entree BETWEEN '$date 00:00:00' AND '$date 23:59:59')
+            OR (affectation.sortie BETWEEN '$date 00:00:00' AND '$date 23:59:59')";
+	$groupSejourNonAffectes["couloir"] = loadAffectationsCouloirs($where, $order);
 }
 
 $functions_filter = array();
 foreach($groupSejourNonAffectes as $_keyGroup => $_group) {
+  if ($_keyGroup == "couloir") {
+    continue;
+  }
   foreach($_group as $_key => $_sejour) {
     $functions_filter[$_sejour->_ref_praticien->function_id] = $_sejour->_ref_praticien->_ref_function;
     if ($filterFunction && $filterFunction != $_sejour->_ref_praticien->function_id) {

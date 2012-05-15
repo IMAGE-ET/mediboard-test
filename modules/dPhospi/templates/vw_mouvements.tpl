@@ -80,14 +80,18 @@
     url.requestUpdate("systemMsg", {onComplete: function() {
       var after_mouv = null;
       
-      // Pas d'affectation_id, on recharge la liste des affectations (placement d'un patient)
-      if (!affectation_id) {
+      // Pas d'affectation_id ou pas de lit_id_origine (affectation dans un couloir),
+      // on recharge la liste des affectations (placement d'un patient)
+      if (!affectation_id || !lit_id_origine) {
         after_mouv = loadNonPlaces;
       }
+      
       if (lit_id_origine) {
-        refreshMouvements(null, lit_id_origine);
+        refreshMouvements(after_mouv, lit_id_origine, after_mouv);
       }
-      refreshMouvements(after_mouv, lit_id);
+      if (lit_id) {
+        refreshMouvements(after_mouv, lit_id, after_mouv);
+      }
     }});
   }
   

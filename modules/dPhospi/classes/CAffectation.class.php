@@ -16,8 +16,9 @@ class CAffectation extends CMbObject {
   var $affectation_id = null;
 
   // DB References
-  var $lit_id    = null;
-  var $sejour_id = null;
+  var $service_id = null;
+  var $lit_id     = null;
+  var $sejour_id  = null;
   var $parent_affectation_id = null;
   var $function_id = null;
   
@@ -77,7 +78,8 @@ class CAffectation extends CMbObject {
 
   function getProps() {
   	$specs = parent::getProps();
-    $specs["lit_id"]       = "ref notNull class|CLit";
+    $specs["service_id"]   = "ref notNull class|CService";
+    $specs["lit_id"]       = "ref class|CLit";
     $specs["sejour_id"]    = "ref class|CSejour cascade";
     $specs["parent_affectation_id"] = "ref class|CAffectation";
     $specs["function_id"]  = "ref class|CFunctions";
@@ -194,6 +196,11 @@ class CAffectation extends CMbObject {
     if ($this->_id) {
       $old->load($this->_id);
       $old->loadRefsAffectations();
+    }
+    
+    // Gestion du service_id
+    if ($this->lit_id) {
+      $this->service_id = $this->loadRefLit()->loadRefChambre()->service_id;
     }
     
     // Gestion des UFs

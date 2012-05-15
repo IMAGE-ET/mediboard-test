@@ -6,6 +6,10 @@ flipSejour = function(sejour_id) {
   Element.classNames("sejour_" + sejour_id).flip("sejourcollapse", "sejourexpand");
 }
 
+flipAffectationCouloir = function(affectation_id) {
+  Element.classNames("affectation_" + affectation_id).flip("sejourcollapse", "sejourexpand");
+}
+
 var selected_hospitalisation = null;
 var selected_hospi = false;
 selectHospitalisation = function(sejour_id) {
@@ -50,7 +54,7 @@ Droppables.addLit = function(lit_id) {
   });
 };
 
-DragDropSejour = function(sejour_id, lit_id){
+DragDropSejour = function(sejour_id, lit_id) {
   $(sejour_id).style.display="none";
   if(sejour_id == 'sejour_bloque') {
     sejour_id = "sejour";

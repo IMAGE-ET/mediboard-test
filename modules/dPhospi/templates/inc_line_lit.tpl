@@ -1,3 +1,5 @@
+{{mb_default var=in_corridor value=0}}
+
 {{if $mode_vue_tempo == "classique"}}
   {{assign var=height_affectation value=3}}
 {{else}}
@@ -14,7 +16,7 @@
   {{if isset($_lit->_lines|smarty:nodefaults) && $_lit->_lines|@count > 1 && !$suivi_affectation}}
     <img src="modules/dPhospi/images/surb.png" title="Collision" style="float: right;">
   {{/if}}
-  {{if !$readonly}}
+  {{if !$readonly && !$in_corridor}}
     <input type="radio" name="lit_move" style="float: left;" id="lit_move_{{$_lit->_id}}" onclick="chooseLit('{{$_lit->_id}}');" />
   {{/if}}
   {{$_lit}}
@@ -28,7 +30,7 @@
 {{foreach from=0|range:$nb_ticks_r item=_i}}
   {{assign var=datetime value=$datetimes.$_i}}
   <td class="mouvement_lit {{if $datetime == $current}}current_hour{{/if}}"
-    data-date="{{$datetime}}" style="vertical-align: top">
+    data-date="{{$datetime}}" style="vertical-align: top" {{if $_i == 0 && !$_lit->_id}}id="wrapper_line_{{$_lit->_affectation_id}}"{{/if}}>
     {{if $_i == 0 && isset($_lit->_lines|smarty:nodefaults)}}
       {{*  Parcours des affectations *}}
       {{foreach from=$_lit->_lines item=_lines_by_level key=_level}}
@@ -132,34 +134,37 @@
                   </td>
                   {{if $mode_vue_reelle != "compacte"}}
                     <td style="vertical-align: middle; width: 1%;">
-                      {{if $_affectation->sejour_id}}
-
                       {{if !$_affectation->uf_hebergement_id || !$_affectation->uf_medicale_id || !$_affectation->uf_soins_id}}
                         <a style="margin-top: 3px; display: inline" href="#1"
-                            onclick="AffectationUf.affecter('{{$_affectation->_guid}}','{{$_lit->_guid}}', 'refreshMouvements.curry(null, {{$_affectation->lit_id}})')">
-                           <img src="images/icons/uf-warning.png" width="16" height="16" title="Affecter les UF" /></a>
+                          onclick="AffectationUf.affecter('{{$_affectation->_guid}}','{{$_lit->_guid}}', 'refreshMouvements.curry(null, {{$_affectation->lit_id}})')">
+                          <img src="images/icons/uf-warning.png" width="16" height="16" title="Affecter les UF" />
+                        </a>
                       {{/if}}
                       <span class="toolbar_affectation">
-                       {{if $_affectation->sejour_id}}
-                         {{if $conf.dPadmissions.show_deficience}}
-                          <span style="margin-top: 3px; margin-right: 3px;">
-                            {{mb_include module=patients template=inc_vw_antecedents patient=$_patient type=deficience readonly=1}}
-                          </span>
-                         {{/if}}
-                         {{if $_affectation->uf_hebergement_id && $_affectation->uf_medicale_id && $_affectation->uf_soins_id}} 
-                           <a style="margin-top: 3px; display: inline" href="#1"
-                              onclick="AffectationUf.affecter('{{$_affectation->_guid}}','{{$_lit->_guid}}', 'refreshMouvements.curry(null, \'{{$_affectation->lit_id}}\')')">
-                             <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF" class="opacity-40"
-                                onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"/></a>
-                         {{/if}}
-                       {{/if}}
-
-                      {{/if}}
-                      
-                       <button type="button" class="edit notext opacity-40"
+                        {{if $_affectation->sejour_id}}
+                          {{if $_affectation->sejour_id}}
+                            {{if $conf.dPadmissions.show_deficience}}
+                              <span style="margin-top: 3px; margin-right: 3px;">
+                                {{mb_include module=patients template=inc_vw_antecedents patient=$_patient type=deficience readonly=1}}
+                              </span>
+                            {{/if}}
+                            {{if $_affectation->uf_hebergement_id && $_affectation->uf_medicale_id && $_affectation->uf_soins_id}} 
+                              <a style="margin-top: 3px; display: inline" href="#1"
+                                 onclick="AffectationUf.affecter('{{$_affectation->_guid}}','{{$_lit->_guid}}', 'refreshMouvements.curry(null, \'{{$_affectation->lit_id}}\')')">
+                                <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF" class="opacity-40"
+                                  onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"/></a>
+                            {{/if}}
+                          {{/if}}
+                        {{/if}}
+                        {{if !$in_corridor}}
+                          <button type="button" class="couloir notext opacity-40"
+                            onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"
+                            onclick="moveAffectation('{{$_affectation->_id}}', '', '', '{{$_affectation->lit_id}}'); loadNonPlaces()"></button>
+                        {{/if}}
+                        <button type="button" class="edit notext opacity-40"
                           onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"
                           onclick="editAffectation('{{$_affectation->_id}}', '{{$_affectation->lit_id}}')"></button>
-                       <input type="radio" name="affectation_move" onclick="chooseAffectation('{{$_affectation->_id}}');" />
+                        <input type="radio" name="affectation_move" onclick="chooseAffectation('{{$_affectation->_id}}');" />
                       </span>
                     </td>
                   {{/if}}
@@ -192,7 +197,36 @@
                 },
                 reverteffect: function(element) {
                   element.style.top = "auto";
+                  {{if $in_corridor}}
+                    element.style.left = element.save_left;
+                    element.style.width = element.save_width;
+                    element.style.marginLeft = "15.1%";
+                  {{/if}}
                 },
+                {{if $in_corridor}}
+                onStart: function(drgObj, mouseEvent){
+                  var element = drgObj.element;
+                  element.save_left = element.getStyle("left");
+                  element.save_width = element.getStyle("width");
+                  var table = element.up('table')
+                  var left = element.cumulativeOffset().left
+                  var width = element.getWidth();
+                  //console.log(element.cumulativeOffset().top);
+                      //console.log(element.up('div').cumulativeScrollOffset().top);
+                  var top = element.viewportOffset().top - element.cumulativeScrollOffset().top;//element.up('div').viewportOffset().top;
+                  $(document.body).insert(element);
+                  element.setStyle({
+                    left:       left + 'px',
+                    marginLeft: '0',
+                    width:      width + 'px',
+                    top:        '100px'
+                  });
+                },
+                onEnd: function(drbObj, mouseEvent) {
+                  var element = drbObj.element;
+                  $('wrapper_line_'+element.get('affectation_id')).insert(element);
+                },
+                {{/if}}
                 revert: true
               });
             </script>

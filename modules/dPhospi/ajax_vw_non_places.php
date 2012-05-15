@@ -25,6 +25,7 @@ $where = array();
 $where["annule"] = "= '0'";
 $where["sejour.group_id"] = "= '$group_id'";
 $where[] = "(sejour.type != 'seances' && affectation.affectation_id IS NULL) || sejour.type = 'seances'";
+$where["sejour.service_id"] = "IS NULL OR `sejour`.`service_id` " . CSQLDataSource::prepareIn($services_ids);
 
 $order = null;
 switch ($triAdm) {
@@ -214,6 +215,79 @@ if ($prestation_id) {
   $items_prestation = $prestation->loadBackRefs("items", "rank asc");
 }
 
+// Chargement des affectations dans les couloirs (sans lit_id)
+$where = array();
+$where["lit_id"] = "IS NULL";
+$where["service_id"] = CSQLDataSource::prepareIn($services_ids);
+$where["entree"] = "<= '$date_max'";
+$where["sortie"] = ">= '$date_min'";
+
+$affectation = new CAffectation;
+
+$affectations = $affectation->loadList($where);
+$sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
+$services = CMbObject::massLoadFwdRef($affectations, "service_id");
+$patients = CMbObject::massLoadFwdRef($sejours, "patient_id");
+$praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
+CMbObject::massLoadFwdRef($praticiens, "function_id");
+$operations = array();
+
+$suivi_affectation = false;
+
+$couloirs = array();
+
+foreach ($affectations as $_affectation) {
+  $lit = new CLit;
+  $lit->_selected_item = new CItemPrestation;
+  $lit->_affectation_id = $_affectation->_id;
+  
+  if (!$suivi_affectation && $_affectation->parent_affectation_id) {
+    $suivi_affectation = true;
+  }
+  $_affectation->loadRefsAffectations();
+  $sejour = $_affectation->loadRefSejour();
+  $sejour->loadRefPraticien()->loadRefFunction();
+  $patient = $sejour->loadRefPatient();
+  $patient->loadRefPhotoIdentite();
+  $patient->loadRefDossierMedical()->loadRefsAntecedents();
+  
+  $_affectation->_entree_offset = CMbDate::position(max($date_min, $_affectation->entree), $date_min, $period);
+  $_affectation->_sortie_offset = CMbDate::position(min($date_max, $_affectation->sortie), $date_min, $period);
+  $_affectation->_width = $_affectation->_sortie_offset - $_affectation->_entree_offset;
+  
+  if (isset($operations[$sejour->_id])) {
+    $_operations = $operations[$sejour->_id];
+  }
+  else {
+    $operations[$sejour->_id] = $_operations = $sejour->loadRefsOperations();
+  }
+  
+  foreach ($_operations as $key=>$_operation) {
+    $_operation->loadRefPlageOp(1);
+    
+    $hour_operation = mbTransformTime(null, $_operation->temp_operation, "%H");
+    $min_operation = mbTransformTime(null, $_operation->temp_operation, "%M");
+    
+    $_operation->_debut_offset[$_affectation->_id] = CMbDate::position($_operation->_datetime, max($date_min, $_affectation->entree), $period);
+    
+    $_operation->_fin_offset[$_affectation->_id] = CMbDate::position(mbDateTime("+$hour_operation hours +$min_operation minutes",$_operation->_datetime), max($date_min, $_affectation->entree), $period);
+    $_operation->_width[$_affectation->_id] = $_operation->_fin_offset[$_affectation->_id] - $_operation->_debut_offset[$_affectation->_id];
+    
+    if (($_operation->_datetime > $date_max)) {
+      $_operation->_width_uscpo[$_affectation->_id] = 0;
+    }
+    else {
+      $fin_uscpo = $hour_operation + 24 * $_operation->duree_uscpo;
+      $_operation->_width_uscpo[$_affectation->_id] = CMbDate::position(mbDateTime("+$fin_uscpo hours + $min_operation minutes", $_operation->_datetime), max($date_min, $_affectation->entree), $period) - $_operation->_fin_offset[$_affectation->_id];
+    }
+  }
+  
+  $lit->_lines = array();
+  $lit->_lines[] = $_affectation->_id;
+  
+  $couloirs[$_affectation->service_id][] = $lit;
+}
+
 $sejour = new CSejour;
 $sejour->_type_admission = $_type_admission;
 
@@ -238,6 +312,10 @@ $smarty->assign("items_prestation", $items_prestation);
 $smarty->assign("item_prestation_id", $item_prestation_id);
 $smarty->assign("prestation_id", $prestation_id);
 $smarty->assign("td_width", 84.2 / $nb_ticks);
+$smarty->assign("couloirs", $couloirs);
+$smarty->assign("mode_vue_tempo", "classique");
+$smarty->assign("affectations", $affectations);
+$smarty->assign("services", $services);
 
 $smarty->display("inc_vw_non_places.tpl");
 ?>

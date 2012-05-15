@@ -82,12 +82,14 @@
   </div>
 </div>
 
-{{if $sejours_non_affectes|@count}}
+{{if $sejours_non_affectes|@count || $couloirs|@count}}
   <table class="tbl layout_temporel" style="table-layout: fixed; position: relative;">
     <col style="width: 15%;" />
-    <tr>
-      <th class="title" colspan="{{$colspan}}">Non placés</th>
-    </tr>
+    {{if $sejours_non_affectes|@count}}
+      <tr>
+        <th class="title" colspan="{{$colspan}}">Non placés</th>
+      </tr>
+    {{/if}}
     {{assign var=show_age_patient value=$conf.dPhospi.show_age_patient}}
     {{foreach from=$sejours_non_affectes item=_sejour}}
       <tr>
@@ -226,6 +228,17 @@
           </td>
         {{/foreach}}
       </tr>
+    {{/foreach}}
+    {{foreach from=$couloirs item=_by_service key=service_id}}
+      <tr>
+        <th class="title" colspan="{{$colspan}}">{{$services.$service_id}}</th>
+        </th>
+      </tr>
+      {{foreach from=$_by_service item=_lit}}
+        <tr class="droppable">
+          {{mb_include module=hospi template=inc_line_lit in_corridor=1}}
+        </tr>
+      {{/foreach}}
     {{/foreach}}
   </table>
 {{else}}

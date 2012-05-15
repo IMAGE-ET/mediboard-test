@@ -43,7 +43,7 @@ $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 
 $where_service = "";
 if (reset($services_ids)) {
-  $where_service = "service_id IN (".join($services_ids, ',').") OR service_id IS NULL"; 
+  $where_service = "sejour.service_id IN (".join($services_ids, ',').") OR sejour.service_id IS NULL"; 
 }
 
 global $phpChrono;
