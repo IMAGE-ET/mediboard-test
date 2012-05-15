@@ -22,7 +22,7 @@ th.title.urgence.modify {
 table.form td.cancelled,
 table.form tr.selected td.cancelled,
 table.tbl tr td.cancelled,
-table.tbl tr:hover td.cancelled,
+.desktop table.tbl tr:hover td.cancelled,
 table.tbl tr.selected td.cancelled,
 table.tbl tbody.hoverable td.cancelled,
 th.cancelled,
@@ -330,7 +330,7 @@ table.tbl td.sortie.deces {
 }
 
 table.tbl tr td.isolement,
-table.tbl tr:hover td.isolement {
+.desktop table.tbl tr:hover td.isolement {
   background-color: #afa;
 }
 
@@ -353,9 +353,9 @@ table.layout > * > tr > th {
   background: transparent !important;
 }
 
-tbody.hoverable:hover tr td,
-table.tbl tr:hover td,
-div.tree-header:hover,
+.desktop tbody.hoverable:hover tr td,
+.desktop table.tbl tr:hover td,
+.desktop div.tree-header:hover,
 table.tbl tr td.hover {
   background-color: #f8f8f8;
 }

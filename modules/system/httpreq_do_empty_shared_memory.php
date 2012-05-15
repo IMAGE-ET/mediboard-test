@@ -39,11 +39,11 @@ if (!SHM::get("class-paths")) {
   CAppUI::stepAjax("Classes-shm-none", UI_MSG_WARNING);
 }
 else {
-	if (!SHM::rem("class-paths")) {
-	  CAppUI::stepAjax("Classes-shm-rem-ko", UI_MSG_ERROR);
-	}
-	
-	CAppUI::stepAjax("Classes-shm-rem-ok", UI_MSG_OK);
+  if (!SHM::rem("class-paths")) {
+    CAppUI::stepAjax("Classes-shm-rem-ko", UI_MSG_ERROR);
+  }
+  
+  CAppUI::stepAjax("Classes-shm-rem-ok", UI_MSG_OK);
 }
 
 // Remove modules cache
@@ -69,11 +69,35 @@ else {
   
   CAppUI::stepAjax("ChildClasses-shm-rem-ok", UI_MSG_OK);
 }
+
+// Remove configuration model
+if (!SHM::get("config-model")) {
+  CAppUI::stepAjax("ConfigModel-shm-none", UI_MSG_WARNING);
+}
+else {
+  if (!SHM::rem("config-model")) {
+    CAppUI::stepAjax("ConfigModel-shm-rem-ko", UI_MSG_ERROR);
+  }
+  
+  CAppUI::stepAjax("ConfigModel-shm-rem-ok", UI_MSG_OK);
+}
+
+// Remove configuration values
+if (!SHM::get("config-values")) {
+  CAppUI::stepAjax("ConfigValues-shm-none", UI_MSG_WARNING);
+}
+else {
+  if (!SHM::rem("config-values")) {
+    CAppUI::stepAjax("ConfigValues-shm-rem-ko", UI_MSG_ERROR);
+  }
+  
+  CAppUI::stepAjax("ConfigValues-shm-rem-ok", UI_MSG_OK);
+}
   
 CJSLoader::writeLocaleFile();
 CAppUI::stepAjax("Locales-javascript-cache-allup", UI_MSG_OK);
 
 // Module specific removals
 foreach (glob("modules/*/empty_shared_memory.php") as $script) {
-	require $script;
+  require $script;
 }

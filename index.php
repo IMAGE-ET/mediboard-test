@@ -182,6 +182,12 @@ if ($user->isInstalled()) {
   CAppUI::$instance->_ref_user =& CAppUI::$user;
 }
 
+// Load DB-stored configuration schema
+$configurations = glob("./modules/*/configuration.php");
+foreach($configurations as $_configuration) {
+  require $_configuration;
+}
+
 // Init output filter
 CHTMLResourceLoader::initOutput(CValue::get("_aio"));
 

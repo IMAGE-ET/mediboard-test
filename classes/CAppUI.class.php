@@ -830,11 +830,20 @@ class CAppUI {
   /**
    * Return the configuration setting for a given path
    * 
-   * @param string $path Tokenized path, eg "module class var";
+   * @param string $path   Tokenized path, eg "module class var";
+   * @param mixed  $object The context
    * 
    * @return mixed String or array of values depending on the path
    */
-  static function conf($path = '') {
+  static function conf($path = "", $context = null) {
+    if ($context) {
+      if ($context instanceof CMbObject) {
+        $context = $context->_guid;
+      }
+      
+      return CConfiguration::getValue($context, $path);
+    }
+    
     global $dPconfig;
     $conf = $dPconfig;
     if (!$path) {

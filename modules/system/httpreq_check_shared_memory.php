@@ -8,11 +8,11 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $version;
+global $version;
 
-$can->needsEdit();
+CCanDo::checkEdit();
 
-// Check locales
+/////////// Locales
 foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
   $localeName = basename($localeDir);
   $locales = array();
@@ -67,16 +67,34 @@ if (null == SHM::get("modules")) {
   CAppUI::stepAjax("Modules-shm-none", UI_MSG_OK);
 }
 
+////////// Classes
 if (null == $sharedClassPaths = SHM::get("class-paths")) {
   CAppUI::stepAjax("Classes-shm-none", UI_MSG_OK);
+} 
+else {
+  // Only if there are missing classes, but nothing must happen if classes are added
+  if (array_intersect($sharedClassPaths, $classPaths) != $classPaths) {
+    CAppUI::stepAjax("Classes-shm-ko", UI_MSG_WARNING);
+  }
+  else {
+    CAppUI::stepAjax("Classes-shm-ok", UI_MSG_OK);
+  }
 }
 
-// Only if there are missing classes, but nothing must happen if classes are added
-if (array_intersect($sharedClassPaths, $classPaths) != $classPaths) {
-  CAppUI::stepAjax("Classes-shm-ko", UI_MSG_WARNING);
+////////// Configuration model
+$cache_status = CConfiguration::getModelCacheStatus();
+switch($cache_status) {
+  case "empty": CAppUI::stepAjax("ConfigModel-shm-none", UI_MSG_OK);      break;
+  case "dirty": CAppUI::stepAjax("ConfigModel-shm-ko",   UI_MSG_WARNING); break;
+  case "ok":    CAppUI::stepAjax("ConfigModel-shm-ok",   UI_MSG_OK);      break;
 }
-else {
-  CAppUI::stepAjax("Classes-shm-ok", UI_MSG_OK);
+
+////////// Configuration values
+$cache_status = CConfiguration::getValuesCacheStatus();
+switch($cache_status) {
+  case "empty": CAppUI::stepAjax("ConfigValues-shm-none", UI_MSG_OK);      break;
+  case "dirty": CAppUI::stepAjax("ConfigValues-shm-ko",   UI_MSG_WARNING); break;
+  case "ok":    CAppUI::stepAjax("ConfigValues-shm-ok",   UI_MSG_OK);      break;
 }
 
 // Module specific checkings

@@ -992,6 +992,20 @@ class CSetupsystem extends CSetup {
       ADD `last_size` INT (11) UNSIGNED;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.98";
+    $this->makeRevision("1.0.98");
+    $query = "CREATE TABLE `configuration` (
+              `configuration_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `feature` VARCHAR (255) NOT NULL,
+              `value` VARCHAR (255),
+              `object_id` INT (11) UNSIGNED,
+              `object_class` VARCHAR (80)
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `configuration` 
+              ADD INDEX (`object_id`, `object_class`),
+              ADD UNIQUE (`feature`, `object_id`, `object_class`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.99";
   }
 }

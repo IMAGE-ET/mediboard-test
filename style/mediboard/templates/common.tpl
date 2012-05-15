@@ -110,7 +110,7 @@
   </script>
 </head>
 
-<body class="{{if @$app->user_prefs.touchscreen == 1 || $browser.name == 'ipad'}} touchscreen {{/if}} {{if $browser.name == 'ipad'}} ipad {{/if}}">
+<body class="{{if @$app->user_prefs.touchscreen == 1 || $browser.name == 'ipad'}} touchscreen {{else}} desktop {{/if}} {{if $browser.name == 'ipad'}} ipad {{/if}}">
 
 {{if $browser.name == "msie"}}
   {{include file="../../mediboard/templates/ie.tpl" nodebug=true}}
