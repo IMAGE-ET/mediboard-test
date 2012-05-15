@@ -10,6 +10,13 @@
 
 {{assign var=confCCAM value=$conf.dPsalleOp.CActeCCAM}}
 
+{{assign var=can_view_tarif value=true}}
+{{if $conf.dPsalleOp.CActeCCAM.restrict_display_tarif}}
+  {{if !$app->_ref_user->isPraticien() && !$app->_ref_user->isSecretaire()}}
+    {{assign var=can_view_tarif value=false}}
+  {{/if}}
+{{/if}}
+
 {{foreach from=$subject->_ext_codes_ccam item=_code key=_key}}
 {{assign var=actes_ids value=$subject->_associationCodesActes.$_key.ids}}
 <fieldset>
@@ -79,6 +86,12 @@
             <input type="hidden" name="montant_depassement" class="{{$acte->_props.montant_depassement}}" value="{{$acte->montant_depassement}}" />
           {{/if}}
           
+          {{assign var=can_view_dh value=true}}
+          {{if $conf.dPsalleOp.CActeCCAM.restrict_display_tarif && $acte->_id && ($acte->_ref_executant->function_id != $app->_ref_user->function_id)}}
+            {{assign var=can_view_dh value=false}}
+          {{/if}}
+          
+        
         	<!-- Couleur de l'acte -->
           {{if $acte->_id && ($acte->code_association == $acte->_guess_association || !$confCCAM.alerte_asso)}}
             {{assign var=bg_color value=9f9}}
@@ -194,7 +207,8 @@
                   
                   {{mb_field object=$acte field=rembourse disabled=$disabled default=$default}}
                 </td>
-                {{if $confCCAM.tarif || $subject->_class == "CConsultation" || ($subject->_class == "COperation" && $subject->_ref_salle->dh == 1)}}
+                
+                {{if $can_view_dh && ($confCCAM.tarif || $subject->_class == "CConsultation" || ($subject->_class == "COperation" && $subject->_ref_salle->dh == 1))}}
                 <th>{{mb_label object=$acte field=montant_depassement}}</th>
                 <td>{{mb_field object=$acte field=montant_depassement}}</td>
                 {{/if}}
@@ -229,7 +243,7 @@
                   {{mb_field object=$acte field=rembourse disabled=$disabled default=$default}}
                 </td>
               </tr>
-              {{if $confCCAM.tarif || $subject->_class == "CConsultation" || ($subject->_class == "COperation" && $subject->_ref_salle->dh == 1)}}
+              {{if $can_view_dh && ($confCCAM.tarif || $subject->_class == "CConsultation" || ($subject->_class == "COperation" && $subject->_ref_salle->dh == 1))}}
               <tr class="{{$view}}">
                 <th>{{mb_label object=$acte field=montant_depassement}}</th>
                 <td>
@@ -323,11 +337,11 @@
                   {{tr}}CActeCCAM-regle-association-{{$acte->_guess_regle_asso}}{{/tr}}
                 </div>
                 
-                {{if $confCCAM.tarif || $subject->_class == "CConsultation"}}
+                {{if $can_view_tarif && ($confCCAM.tarif || $subject->_class == "CConsultation")}}
                   <strong>&mdash; {{$acte->_tarif|currency}}</strong>
                 {{/if}}
                 
-                {{if $confCCAM.tarif || $subject->_class == "CConsultation"  || ($subject->_class == "COperation" && $subject->_ref_salle->dh == 1)}}
+                {{if $can_view_dh && ($confCCAM.tarif || $subject->_class == "CConsultation"  || ($subject->_class == "COperation" && $subject->_ref_salle->dh == 1))}}
                   <br />  {{mb_label object=$acte field=montant_depassement}} : {{mb_value object=$acte field=montant_depassement}}
                 {{/if}}
                 {{/if}}

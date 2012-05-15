@@ -3,6 +3,14 @@
   * A ne pas confondre avec inc_list_actes_ccam.
   *}}
 
+{{assign var=can_view_tarif value=true}}
+{{if $conf.dPsalleOp.CActeCCAM.restrict_display_tarif}}
+  {{if !$app->_ref_user->isPraticien() && !$app->_ref_user->isSecretaire()}}
+    {{assign var=can_view_tarif value=false}}
+  {{/if}}
+{{/if}}
+
+
 <table class="form">
 	<tr>
 	  <th class="category">
@@ -15,11 +23,9 @@
 	  <th class="category">{{mb_title class=CActeCCAM field=modificateurs      }}</th>
 	  <th class="category">{{mb_title class=CActeCCAM field=code_association   }}</th>
 	  <th class="category">{{mb_title class=CActeCCAM field=execution          }}</th>
-    {{if $conf.dPsalleOp.CActeCCAM.tarif || $subject->_class == "CConsultation"}}
     <th class="category">{{mb_title class=CActeCCAM field=montant_base       }}</th>
     <th class="category">{{mb_title class=CActeCCAM field=montant_depassement}}</th>
     <th class="category">{{mb_title class=CActeCCAM field=_montant_facture   }}</th>
-    {{/if}}
 	</tr>
 
 	{{foreach from=$subject->_ext_codes_ccam item=curr_code key=curr_key}}
@@ -29,6 +35,13 @@
 	      {{assign var="acte" value=$curr_phase->_connected_acte}}
 	      {{assign var="view" value=$acte->_viewUnique}}
 	      {{assign var="key" value="$curr_key$view"}}
+        
+                  
+        {{assign var=can_view_dh value=true}}
+        {{if $conf.dPsalleOp.CActeCCAM.restrict_display_tarif && $acte->_id && ($acte->_ref_executant->function_id != $app->_ref_user->function_id)}}
+          {{assign var=can_view_dh value=false}}
+        {{/if}}
+        
 	      {{mb_ternary var=listExecutants test=$acte->_anesth value=$listAnesths other=$listChirs}}
 	      <td style="{{if $acte->_id && $acte->code_association == $acte->_guess_association}}background-color: #9f9;{{elseif $acte->_id}}background-color: #fc9;{{else}}background-color: #f99;{{/if}}">{{$curr_code->code}}-{{$curr_activite->numero}}-{{$curr_phase->phase}}</td>
 	      {{if $acte->_id}}
@@ -50,11 +63,21 @@
 	      <td>{{$acte->modificateurs}}</td>
 	      <td>{{$acte->code_association}}</td>
 	      <td>{{mb_value object=$acte field=execution}}</td>
-        {{if $conf.dPsalleOp.CActeCCAM.tarif || $subject->_class == "CConsultation"}}
-  	      <td style="text-align: right">{{mb_value object=$acte field=montant_base       }}</td>
-  	      <td style="text-align: right">{{mb_value object=$acte field=montant_depassement}}</td>
-  	      <td style="text-align: right">{{mb_value object=$acte field=_montant_facture   }}</td>
-        {{/if}}
+          <td style="text-align: right">
+  	        {{if $can_view_tarif && ($conf.dPsalleOp.CActeCCAM.tarif || $subject->_class == "CConsultation")}}
+  	          {{mb_value object=$acte field=montant_base}}
+            {{/if}}
+          </td>
+  	      <td style="text-align: right">
+  	        {{if $can_view_dh && ($conf.dPsalleOp.CActeCCAM.tarif || $subject->_class == "CConsultation")}}
+              {{mb_value object=$acte field=montant_depassement}}
+            {{/if}}
+          </td>
+  	      <td style="text-align: right">
+  	        {{if $can_view_tarif && $can_view_dh && ($conf.dPsalleOp.CActeCCAM.tarif || $subject->_class == "CConsultation")}}
+  	          {{mb_value object=$acte field=_montant_facture}}
+            {{/if}}
+          </td>
 	    </tr> 
 	    {{/foreach}}
 	  {{/foreach}}

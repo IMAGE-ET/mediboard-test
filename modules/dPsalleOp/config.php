@@ -21,6 +21,7 @@ $dPconfig["dPsalleOp"] = array(
     "contraste"               => "0",
     "alerte_asso"             => "1",
     "tarif"                   => "0",
+    "restrict_display_tarif"  => "0",
     "codage_strict"           => "0",
     "signature"               => "0",
     "openline"                => "0",

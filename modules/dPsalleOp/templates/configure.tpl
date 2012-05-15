@@ -69,6 +69,7 @@
   {{mb_include module=system template=inc_config_bool var=contraste}}
   {{mb_include module=system template=inc_config_bool var=alerte_asso}}
   {{mb_include module=system template=inc_config_bool var=tarif}}
+  {{mb_include module=system template=inc_config_bool var=restrict_display_tarif}}  
   {{mb_include module=system template=inc_config_bool var=codage_strict}}
   {{mb_include module=system template=inc_config_bool var=openline}}
   {{mb_include module=system template=inc_config_bool var=modifs_compacts}}

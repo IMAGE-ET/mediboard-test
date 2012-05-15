@@ -47,6 +47,14 @@ ActesNGAP = {
 
 </script>
 
+{{assign var=can_view_tarif value=true}}
+{{if $conf.dPsalleOp.CActeCCAM.restrict_display_tarif}}
+  {{if !$app->_ref_user->isPraticien() && !$app->_ref_user->isSecretaire()}}
+    {{assign var=can_view_tarif value=false}}
+  {{/if}}
+{{/if}}
+
+
 <form name="editNGAP" method="post" action=""> 
   <input type="hidden" name="acte_ngap_id" value="" />
   <input type="hidden" name="m" value="dPcabinet" />
@@ -101,7 +109,7 @@ ActesNGAP = {
           <th class="category">{{mb_title object=$acte_ngap field=montant_depassement}}</th>
         {{/if}}
       {{else}}
-        {{if $conf.dPsalleOp.CActeCCAM.tarif || $object->_class == "CConsultation"}}
+        {{if $can_view_tarif && ($conf.dPsalleOp.CActeCCAM.tarif || $object->_class == "CConsultation")}}
           <th class="category">{{mb_title object=$acte_ngap field=montant_base}}</th>
           <th class="category">{{mb_title object=$acte_ngap field=montant_depassement}}</th>
         {{/if}}
@@ -165,7 +173,7 @@ ActesNGAP = {
         <td>{{mb_value object=$_acte_ngap field="montant_depassement"}}</td>
         {{/if}}
       {{else}}
-        {{if $conf.dPsalleOp.CActeCCAM.tarif || $object->_class == "CConsultation"}}
+        {{if $can_view_tarif && ($conf.dPsalleOp.CActeCCAM.tarif || $object->_class == "CConsultation")}}
         <td>{{mb_value object=$_acte_ngap field="montant_base"}}</td>
         <td>{{mb_value object=$_acte_ngap field="montant_depassement"}}</td>
         {{/if}}

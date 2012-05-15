@@ -18,6 +18,13 @@ signeActes = function(oForm, subject_id, praticien_id) {
 {{/if}}
 </script>
 
+{{assign var=can_view_tarif value=true}}
+{{if $conf.dPsalleOp.CActeCCAM.restrict_display_tarif}}
+  {{if !$app->_ref_user->isPraticien() && !$app->_ref_user->isSecretaire()}}
+    {{assign var=can_view_tarif value=false}}
+  {{/if}}
+{{/if}}
+
 <table class="main" {{if $dialog}}id="signature_actes_{{$object->_guid}}"{{/if}}>
   {{if !$dialog}}
   <tr>
@@ -61,6 +68,11 @@ signeActes = function(oForm, subject_id, praticien_id) {
 				      
 				      {{foreach from=$praticien item=curr_acte name="acte"}}
 				      
+                {{assign var=can_view_dh value=true}}
+                {{if $conf.dPsalleOp.CActeCCAM.restrict_display_tarif && $curr_acte->_id && ($curr_acte->_ref_executant->function_id != $app->_ref_user->function_id)}}
+                  {{assign var=can_view_dh value=false}}
+                {{/if}}
+                
 								{{if $smarty.foreach.acte.first}}
 								<tr>
 								  <th>{{mb_title object=$curr_acte field=code_acte}}</th>
@@ -68,12 +80,10 @@ signeActes = function(oForm, subject_id, praticien_id) {
 								  <th>{{mb_title object=$curr_acte field=code_phase}}</th>
 								  <th>{{mb_title object=$curr_acte field=modificateurs}}</th>
 								  <th>{{mb_title object=$curr_acte field=code_association}}</th>
-								  {{if $conf.dPsalleOp.CActeCCAM.tarif}}
 								  <th>{{mb_title object=$curr_acte field=rembourse}}</th>
 								  <th>{{mb_title object=$curr_acte field=montant_base}}</th>
 								  <th>{{mb_title object=$curr_acte field=montant_depassement}}</th>
 								  <th>{{mb_title object=$curr_acte field=_montant_facture}}</th>
-								  {{/if}}
 								  <th>{{mb_title object=$curr_acte field=signe}}</th>
 								</tr>
 								{{/if}}
@@ -82,13 +92,27 @@ signeActes = function(oForm, subject_id, praticien_id) {
 								  <td>{{mb_value object=$curr_acte field=code_activite}}</td>
 								  <td>{{mb_value object=$curr_acte field=code_phase}}</td>
 								  <td>{{mb_value object=$curr_acte field=modificateurs}}</td>
-								  <td>{{mb_value object=$curr_acte field=code_association}}</td>
-								  {{if $conf.dPsalleOp.CActeCCAM.tarif}}
-								  <td>{{mb_value object=$curr_acte field=rembourse}}</td>
-								  <td>{{mb_value object=$curr_acte field=montant_base}}</td>
-								  <td>{{mb_value object=$curr_acte field=montant_depassement}}</td>
-								  <td>{{mb_value object=$curr_acte field=_montant_facture}}</td>
-								  {{/if}}
+								  <td>{{mb_value object=$curr_acte field=code_association}}</td>								  
+								  <td>
+								    {{if $conf.dPsalleOp.CActeCCAM.tarif}}
+                      {{mb_value object=$curr_acte field=rembourse}}
+                    {{/if}}
+                  </td>
+								  <td>
+								    {{if $can_view_tarif && $conf.dPsalleOp.CActeCCAM.tarif}}
+                      {{mb_value object=$curr_acte field=montant_base}}
+                    {{/if}}  
+                  </td>
+								  <td>
+								    {{if $can_view_dh && $conf.dPsalleOp.CActeCCAM.tarif}}
+                      {{mb_value object=$curr_acte field=montant_depassement}}
+                    {{/if}}
+                  </td>
+								  <td>
+								    {{if $can_view_tarif && $can_view_dh && $conf.dPsalleOp.CActeCCAM.tarif}}
+                      {{mb_value object=$curr_acte field=_montant_facture}}
+                    {{/if}}
+                  </td>
 								  <td style="text-align: center">
 			            {{if $curr_acte->signe}}
 			              <img src="images/icons/tick.png" alt="" />
