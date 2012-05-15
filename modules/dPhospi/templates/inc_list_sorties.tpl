@@ -1,3 +1,5 @@
+{{assign var=show_duree_preop value=$conf.dPplanningOp.COperation.show_duree_preop}}
+
 <script type="text/javascript">
   $('count_{{$type}}_{{$type_mouvement}}').update('('+'{{$update_count}}'+')');
   {{if $type != "deplacements"}}
@@ -45,7 +47,7 @@
     {{foreach from=$deplacements item=_sortie}}
       {{mb_include module=hospi template=inc_check_deplacement_line}}
     {{foreachelse}}
-      <tr><td colspan="6" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
+      <tr><td colspan="{{if $show_duree_preop}}7{{else}}6{{/if}}" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
     {{/foreach}}
   </table>
 {{else}}
@@ -86,6 +88,9 @@
       </th>
     </tr>
     <tr>
+      {{if $show_duree_preop && $type_mouvement != "sorties"}}
+        <th class="narrow">Heure US</th>
+      {{/if}}
       <th>
         <button class="print notext" style="float:left;" onclick="$('places-{{$type}}_{{$type_mouvement}}').print()">{{tr}}Print{{/tr}}</button>
         {{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}
@@ -135,6 +140,9 @@
         </th>
       </tr>
       <tr>
+        {{if $show_duree_preop && $type_mouvement != "sorties"}}
+          <th class="narrow">Heure US</th>
+        {{/if}}
         <th>
           <button class="print notext not-printable" style="float:left;" onclick="$('non-places-{{$type}}_{{$type_mouvement}}').print()">{{tr}}Print{{/tr}}</button>
           {{mb_colonne class="CAffectation" field="_patient" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}

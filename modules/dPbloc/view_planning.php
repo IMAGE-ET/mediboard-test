@@ -167,6 +167,7 @@ foreach($plagesop as &$plage) {
     $operation->loadRefPlageOp(1);
   	$operation->loadRefPraticien(1);
     $operation->loadExtCodesCCAM();
+    $operation->updateHeureUS();
     $sejour = $operation->loadRefSejour(1);
     $sejour->loadRefsFwd(1);
     if ($_print_numdoss) {
@@ -208,6 +209,7 @@ foreach($operations as $operation) {
   $operation->loadRefPlageOp(1);
   $operation->loadRefPraticien(1);
   $operation->loadExtCodesCCAM();
+  $operation->updateHeureUS();
   $sejour = $operation->loadRefSejour(1);
   $sejour->loadRefsFwd(1);
   if ($_print_numdoss) {

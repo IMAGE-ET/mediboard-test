@@ -17,6 +17,8 @@ $service_id     = CValue::getOrSession("service_id"  , null);
 $order_way      = CValue::getOrSession("order_way"   , "ASC");
 $order_col      = CValue::getOrSession("order_col"   , "_patient");
 
+$show_duree_preop = CAppUI::conf("dPplanningOp COperation show_duree_preop");
+
 $praticien = new CMediusers();
 $praticien->load($praticien_id);
 
@@ -118,6 +120,11 @@ if($type == 'presents') {
     $sejour->checkDaysRelative($date);
     $sejour->loadRefsOperations();
     $sejour->loadNDA();
+    
+    if ($show_duree_preop) {
+      $sejour->loadRefCurrOperation($date)->updateHeureUS();
+    }
+    
     $_present->_ref_next->loadRefLit(1)->loadCompleteView();
   }
   foreach($presentsNP as $sejour) {
@@ -125,6 +132,10 @@ if($type == 'presents') {
     $sejour->loadRefPraticien(1);
     $sejour->checkDaysRelative($date);
     $sejour->loadRefsOperations();
+    
+    if ($show_duree_preop) {
+      $sejour->loadRefCurrOperation($date)->updateHeureUS();
+    }
   }
   
 // Récupération des déplacements du jour
@@ -169,6 +180,10 @@ if($type == 'presents') {
     $sejour->loadRefsOperations();
     $sejour->loadNDA();
     
+    if ($show_duree_preop) {
+      $sejour->loadRefCurrOperation($date)->updateHeureUS();
+    }
+    
     if ($dmi_active) {
       foreach($sejour->_ref_operations as $_interv) {
         $_interv->getDMIAlert();
@@ -191,6 +206,9 @@ if($type == 'presents') {
     $sejour->loadRefsOperations();
     $sejour->loadNDA();
     
+    if ($show_duree_preop) {
+      $sejour->loadRefCurrOperation($date)->updateHeureUS();
+    }
     if ($dmi_active) {
       foreach($sejour->_ref_operations as $_interv) {
         $_interv->getDMIAlert();
@@ -218,6 +236,9 @@ if($type == 'presents') {
     $sejour->loadRefsOperations();
     $sejour->loadNDA();
     
+    if ($show_duree_preop) {
+      $sejour->loadRefCurrOperation($date)->updateHeureUS();
+    }
     if ($dmi_active) {
       foreach($sejour->_ref_operations as $_interv) {
         $_interv->getDMIAlert();
@@ -239,6 +260,10 @@ if($type == 'presents') {
     $sejour->checkDaysRelative($date);
     $sejour->loadRefsOperations();
     $sejour->loadNDA();
+    
+    if ($show_duree_preop) {
+      $sejour->loadRefCurrOperation($date)->updateHeureUS();
+    }
     
     if ($dmi_active) {
       foreach($sejour->_ref_operations as $_interv) {

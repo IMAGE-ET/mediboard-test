@@ -168,6 +168,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_ref_observations            = null;
   var $_ref_hl7_movement            = null;
   var $_ref_grossesse               = null;
+  var $_ref_curr_operation          = null;
   
   // External objects
   var $_ext_diagnostic_principal = null;
@@ -1840,7 +1841,7 @@ class CSejour extends CCodable implements IPatientRelated {
     return $this->_ref_operations;
   }
  
-  function getCurrOperation($date) {
+  function getCurrOperation($date, $show_trace = true) {
     $date = mbDate($date);
     
     $where["operations.sejour_id"] = "= '$this->_id'";
@@ -1850,10 +1851,20 @@ class CSejour extends CCodable implements IPatientRelated {
     $leftjoin["plagesop"]   = "plagesop.plageop_id = operations.plageop_id";
     
     $operation = new COperation;
-    CSQLDataSource::$trace = true;
+    if ($show_trace) {
+      CSQLDataSource::$trace = true;
+    }
     $operation->loadObject($where, null, null, $leftjoin);
-     CSQLDataSource::$trace = false;
+    
+    if ($show_trace) {
+      CSQLDataSource::$trace = false;
+    }
+    
     return $operation;
+  }
+  
+  function loadRefCurrOperation($date) {
+    return $this->_ref_curr_operation = $this->getCurrOperation($date, false);
   }
   
   function loadRefsBack() {
