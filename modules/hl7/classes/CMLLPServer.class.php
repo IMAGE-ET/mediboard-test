@@ -221,7 +221,7 @@ EOT;
     $this->started_datetime = $time;
 
     $this->server->bind("0.0.0.0", $this->port, $this->certificate, $this->passphrase)
-                 ->setMotd($motd)
+                 //->setMotd($motd)
                  ->setRequestHandler     (array($this, "handle"))
                  ->setOnOpenHandler      (array($this, "open"))
                  ->setOnCleanupHandler   (array($this, "cleanup"))
