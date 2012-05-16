@@ -13,7 +13,7 @@ reloadAfterUploadFile = function() {
 deletePhoto = function(file_id){
   var options = {
     typeName: 'la photo',
-    objName: 'identite.jpg',
+    objName: 'identite.jpg'
   }
 
   var ajax = {
@@ -79,7 +79,7 @@ deletePhoto = function(file_id){
 {{if $mode == "edit"}}
   <br />
   {{if !$file->_id}}
-    <button type="button" class="search" onclick="uploadFile('{{$patient->_class}}', '{{$patient->_id}}', null, 'identite.jpg', 1)">
+    <button type="button" class="search" onclick="uploadFile('{{$patient->_guid}}', null, 'identite.jpg', 1)">
       {{tr}}Browse{{/tr}}
     </button>
   {{elseif $patient->_can_see_photo == 1}}

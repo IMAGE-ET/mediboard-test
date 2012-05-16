@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{assign var=show_duree_preop value=$conf.dPplanningOp.COperation.show_duree_preop}}
+
 <table class="tbl">
   <tr class="clear">
     <th colspan="11">
@@ -67,7 +69,7 @@
     </td>
   </tr>
   <tr>
-    <th class="title"></th>
+    <th class="title" {{if $show_duree_preop}}colspan="2"{{/if}}></th>
     {{assign var="col1" value=$conf.dPbloc.CPlageOp.planning.col1}}
     {{assign var="col2" value=$conf.dPbloc.CPlageOp.planning.col2}}
     {{assign var="col3" value=$conf.dPbloc.CPlageOp.planning.col3}}
@@ -79,6 +81,7 @@
   </tr>
   <tr>
     {{assign var=suffixe value="_header.tpl"}}
+    {{if $show_duree_preop}}<th>Heure US</th>{{/if}}
     <th>Heure</th>
     {{include file=inc_planning/$col1$suffixe}}
     {{include file=inc_planning/$col2$suffixe}}
@@ -91,6 +94,9 @@
   {{/if}}
   {{foreach from=$listOperations item=curr_op}}
   <tr>
+    {{if $show_duree_preop}}
+      <td>{{mb_value object=$curr_op field=_heure_us}}</td>
+    {{/if}}
     {{if $curr_op->annulee}}
       <td class="cancelled">ANNULEE</td>
     {{elseif $curr_op->rank || !$curr_op->plageop_id}}

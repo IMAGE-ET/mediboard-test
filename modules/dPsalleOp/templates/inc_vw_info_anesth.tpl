@@ -165,55 +165,22 @@ Main.add(function(){
 <div id="tab_perop" style="display: none;">
 	<table class="form">
 	  <tr>
-	    <th class="title" colspan="2">Per-operatoire</th>
+	    <th class="title" colspan="3">Per-operatoire</th>
 	  </tr>
+    <tr>
+      <th class="category">Evenements</th>
+      <th class="category">Incidents</th>
+      <th class="category"></th>
+    </tr>
 	  <tr>
-	    <td style="width: 50%">
-	      <!-- Affichage et gestion des gestes perop -->
-	      <form name="addAnesthPerop" action="?" method="post" 
-	            onsubmit="return onSubmitFormAjax(this, { onComplete: function(){ refreshAnesthPerops('{{$selOp->_id}}'); $V(this.libelle, ''); $V(this.incident, ''); $V(this.__incident, '')}.bind(this)  } )">
-	
-	        <input type="hidden" name="m" value="dPsalleOp" />
-	        <input type="hidden" name="del" value="0" />
-	        <input type="hidden" name="dosql" value="do_anesth_perop_aed" />
-	        <input type="hidden" name="operation_id" value="{{$selOp->_id}}" />
-	        <input type="hidden" name="datetime" value="now" />
-          {{mb_key object=$anesth_perop}}
-	        
-	        <table class="main layout">
-	          <tr>
-              <td>
-                {{mb_label object=$anesth_perop field="libelle"}}
-              </td>
-            </tr>
-            <tr>  
-              <td>
-                {{if $selOp->_ref_anesth->_id}}
-                  {{assign var=contextUserId value=$selOp->_ref_anesth->_id}}
-                  {{assign var=contextUserView value=$selOp->_ref_anesth}}
-                {{else}}
-                  {{assign var=contextUserId value=$app->_ref_user->_id}}
-                  {{assign var=contextUserView value=$app->_ref_user}}
-                {{/if}}
-                {{mb_field object=$anesth_perop field="libelle" form="addAnesthPerop"
-                  aidesaisie="contextUserId: '`$contextUserId`', contextUserView: '`$contextUserView`'"}}
-              </td>
-	          </tr>
-	          <tr>
-              <td>
-                {{mb_field object=$anesth_perop field="incident" typeEnum="checkbox"}}
-                {{mb_label object=$anesth_perop field="incident"}}
-              </td>
-	          </tr>
-	          <tr>
-	            <td colspan="2" class="button">
-	              <button type="submit" class="submit">Ajouter</button>
-	            </td>
-	          </tr>
-	        </table>
-	      </form>
+	    <td style="width: 30%">
+	      {{mb_include module="salleOp" template="inc_form_evenement_perop"}}
 	    </td>
-	    <td id="list_perops_{{$selOp->_id}}"></td>
+	    <td style="width: 30%">
+        {{mb_include module="salleOp" template="inc_form_evenement_perop" incident=1}}
+      </td>
+      <td id="list_perops_{{$selOp->_id}}">
+      </td>
 	  </tr>
 	</table>
 </div>

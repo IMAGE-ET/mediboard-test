@@ -958,8 +958,15 @@ class COperation extends CCodable implements IPatientRelated {
   
   function fillLimitedTemplate(&$template) {
     $this->loadRefsFwd(1);
-
     $this->loadRefPraticien();
+    $this->loadRefsFiles();
+    $this->loadAffectationsPersonnel();
+    
+    $plageop = $this->_ref_plageop;
+    $plageop->loadAffectationsPersonnel();
+    
+    $this->notify("BeforeFillLimitedTemplate", $template);
+    
     $template->addProperty("Opération - Chirurgien"           , $this->_ref_praticien->_id ? ("Dr ".$this->_ref_praticien->_view) : '');
     $template->addProperty("Opération - Anesthésiste - nom"   , @$this->_ref_anesth->_user_last_name);
     $template->addProperty("Opération - Anesthésiste - prénom", @$this->_ref_anesth->_user_first_name);
@@ -993,24 +1000,22 @@ class COperation extends CCodable implements IPatientRelated {
     $template->addProperty("Opération - convalescence"        , $this->_ref_sejour->convalescence);
     $template->addProperty("Opération - remarques"            , $this->rques);
     
-    $this->loadRefsFiles();
     $list = CMbArray::pluck($this->_ref_files, "file_name");
     $template->addListProperty("Opération - Liste des fichiers", $list);
     
-    $this->loadAffectationsPersonnel();
     foreach ($this->_ref_affectations_personnel as $emplacement => $affectations) {
       $locale = CAppUI::tr("CPersonnel.emplacement.$emplacement");
       $property = implode(" - ", CMbArray::pluck($affectations, "_ref_personnel", "_ref_user", "_view"));
       $template->addProperty("Opération - personnel réel - $locale", $property);
     }
     
-    $plageop = $this->_ref_plageop;
-    $plageop->loadAffectationsPersonnel();
     foreach ($plageop->_ref_affectations_personnel as $emplacement => $affectations) {
       $locale = CAppUI::tr("CPersonnel.emplacement.$emplacement");
       $property = implode(" - ", CMbArray::pluck($affectations, "_ref_personnel", "_ref_user", "_view"));
       $template->addProperty("Opération - personnel prévu - $locale", $property);
     }
+    
+    $this->notify("AfterFillLimitedTemplate", $template);
   }
 
   function getDMIAlert(){

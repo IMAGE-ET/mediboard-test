@@ -1290,7 +1290,7 @@ class CPatient extends CMbObject {
     
     $destinataires = CDestinataire::$destByClass;
 
-    foreach($destinataires as $_destinataires_by_class)
+    foreach($destinataires as $_destinataires_by_class) {
       foreach($_destinataires_by_class as $_destinataire) {
         if (!isset($_destinataire->nom) || strlen($_destinataire->nom) == 0 || $_destinataire->nom === " ") continue;
         $template->destinataires[] =
@@ -1298,9 +1298,13 @@ class CPatient extends CMbObject {
                 "email" => $_destinataire->email,
                 "tag"   => $_destinataire->tag);
       }
+    }
+    
     $this->loadRefsFwd();
     $this->loadRefConstantesMedicales();
     $this->loadIPP();
+    
+    $this->notify("BeforeFillLimitedTemplate", $template);
     
     $template->addProperty("Patient - article"           , $this->_civilite  );
     $template->addProperty("Patient - article long"      , $this->_civilite_long);
@@ -1439,9 +1443,11 @@ class CPatient extends CMbObject {
     
     $grid_complet = CConstantesMedicales::buildGrid(array($const_med), true);
     $grid_minimal = CConstantesMedicales::buildGrid(array($const_med), false);
+    $grid_valued  = CConstantesMedicales::buildGrid(array($const_med), false, true);
     
     $smarty = new CSmartyDP("modules/dPpatients");
 
+    // Horizontal
     $smarty->assign("constantes_medicales_grid", $grid_complet);
     $constantes_complet_horiz = $smarty->fetch("print_constantes.tpl",'','',0);
     $constantes_complet_horiz = preg_replace('`([\\n\\r])`', '', $constantes_complet_horiz); 
@@ -1450,6 +1456,11 @@ class CPatient extends CMbObject {
     $constantes_minimal_horiz = $smarty->fetch("print_constantes.tpl",'','',0);
     $constantes_minimal_horiz = preg_replace('`([\\n\\r])`', '', $constantes_minimal_horiz);
     
+    $smarty->assign("constantes_medicales_grid" , $grid_valued);
+    $constantes_valued_horiz  = $smarty->fetch("print_constantes.tpl",'','',0);
+    $constantes_valued_horiz  = preg_replace('`([\\n\\r])`', '', $constantes_valued_horiz);
+    
+    // Vertical
     $smarty->assign("constantes_medicales_grid", $grid_complet);
     $constantes_complet_vert  = $smarty->fetch("print_constantes_vert.tpl",'','',0);
     $constantes_complet_vert  = preg_replace('`([\\n\\r])`', '', $constantes_complet_vert);
@@ -1457,6 +1468,10 @@ class CPatient extends CMbObject {
     $smarty->assign("constantes_medicales_grid" , $grid_minimal);
     $constantes_minimal_vert  = $smarty->fetch("print_constantes_vert.tpl",'','',0);
     $constantes_minimal_vert  = preg_replace('`([\\n\\r])`', '', $constantes_minimal_vert);
+
+    $smarty->assign("constantes_medicales_grid" , $grid_valued);
+    $constantes_valued_vert   = $smarty->fetch("print_constantes_vert.tpl",'','',0);
+    $constantes_valued_vert   = preg_replace('`([\\n\\r])`', '', $constantes_valued_vert);
     
     $this->loadRefsFiles();
     $list = CMbArray::pluck($this->_ref_files, "file_name");
@@ -1464,8 +1479,10 @@ class CPatient extends CMbObject {
     
     $template->addProperty("Patient - Constantes - mode complet horizontal", $constantes_complet_horiz, '', false);
     $template->addProperty("Patient - Constantes - mode minimal horizontal", $constantes_minimal_horiz, '', false);
+    $template->addProperty("Patient - Constantes - mode avec valeurs horizontal", $constantes_valued_horiz, '', false);
     $template->addProperty("Patient - Constantes - mode complet vertical"  , $constantes_complet_vert, '', false);
     $template->addProperty("Patient - Constantes - mode minimal vertical"  , $constantes_minimal_vert, '', false);
+    $template->addProperty("Patient - Constantes - mode avec valeurs vertical"  , $constantes_valued_vert, '', false);
     $template->addProperty("Patient - poids",  "$const_med->poids kg");
     $template->addProperty("Patient - taille", "$const_med->taille cm");
     $template->addProperty("Patient - Pouls",  $const_med->pouls);
@@ -1511,6 +1528,7 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - Bénéficiaire de soin - libellé exo", addslashes($this->libelle_exo));
     $template->addProperty("Patient - Bénéficiaire de soin - notes amc"  , addslashes($this->notes_amc));
     
+    $this->notify("AfterFillLimitedTemplate", $template);
   }
   
   function fillTemplate(&$template) {

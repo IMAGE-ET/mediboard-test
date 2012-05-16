@@ -72,7 +72,9 @@ for ($i = 0 ; $i < $nb_ticks ; $i++) {
 
 $lit = new CLit;
 $lit->load($lit_id);
-$lit->loadRefChambre();
+$lit->_ref_affectations = array();
+$chambre = $lit->loadRefChambre();
+$chambre->_ref_lits[$lit->_id] = $lit;
 
 $liaisons_items = $lit->loadBackRefs("liaisons_items");
 $items_prestations = CMbObject::massLoadFwdRef($liaisons_items, "item_prestation_id");
@@ -153,7 +155,7 @@ foreach ($affectations as $_affectation) {
 }
 
 $intervals = array();
-if (isset($lit->_ref_affectations) && count($lit->_ref_affectations)) {
+if (count($lit->_ref_affectations)) {
   foreach ($lit->_ref_affectations as $_affectation) {
     $intervals[$_affectation->_id] = array(
       "lower" => $_affectation->entree,
@@ -162,6 +164,8 @@ if (isset($lit->_ref_affectations) && count($lit->_ref_affectations)) {
   }
   $lit->_lines = CMbRange::rearrange($intervals);
 }
+
+$chambre->checkChambre();
 
 $smarty = new CSmartyDP;
 

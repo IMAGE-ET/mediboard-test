@@ -168,6 +168,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_ref_observations            = null;
   var $_ref_hl7_movement            = null;
   var $_ref_grossesse               = null;
+  var $_ref_curr_operation          = null;
   
   // External objects
   var $_ext_diagnostic_principal = null;
@@ -1840,7 +1841,7 @@ class CSejour extends CCodable implements IPatientRelated {
     return $this->_ref_operations;
   }
  
-  function getCurrOperation($date) {
+  function getCurrOperation($date, $show_trace = true) {
     $date = mbDate($date);
     
     $where["operations.sejour_id"] = "= '$this->_id'";
@@ -1850,10 +1851,20 @@ class CSejour extends CCodable implements IPatientRelated {
     $leftjoin["plagesop"]   = "plagesop.plageop_id = operations.plageop_id";
     
     $operation = new COperation;
-    CSQLDataSource::$trace = true;
+    if ($show_trace) {
+      CSQLDataSource::$trace = true;
+    }
     $operation->loadObject($where, null, null, $leftjoin);
-     CSQLDataSource::$trace = false;
+    
+    if ($show_trace) {
+      CSQLDataSource::$trace = false;
+    }
+    
     return $operation;
+  }
+  
+  function loadRefCurrOperation($date) {
+    return $this->_ref_curr_operation = $this->getCurrOperation($date, false);
   }
   
   function loadRefsBack() {
@@ -1874,6 +1885,8 @@ class CSejour extends CCodable implements IPatientRelated {
   }
   
   function fillLimitedTemplate(&$template) {
+    $this->notify("BeforeFillLimitedTemplate", $template);
+    
     $template->addProperty("Admission - Date longue"          , $this->getFormattedValue("entree_prevue"));
     $template->addDateProperty("Admission - Date"             , $this->entree_prevue);
     $template->addTimeProperty("Admission - Heure"            , $this->entree_prevue);
@@ -2000,6 +2013,8 @@ class CSejour extends CCodable implements IPatientRelated {
     
     // Dernière intervention
     $this->_ref_last_operation->fillLimitedTemplate($template);
+    
+    $this->notify("AfterFillLimitedTemplate", $template);
   }
   
   function fillTemplate(&$template) {
@@ -2200,7 +2215,8 @@ class CSejour extends CCodable implements IPatientRelated {
     $this->loadRefPatient()->completeLabelFields($fields);
     $this->loadRefPraticien();
     $this->loadNDA();
-    
+    $affectation = $this->getCurrAffectation();
+    $affectation->loadView();
     $fields = array_merge($fields,
                 array("DATE ENT" => mbDateToLocale(mbDate($this->entree)),
                       "HEURE ENT" => mbTime($this->entree),
@@ -2208,7 +2224,8 @@ class CSejour extends CCodable implements IPatientRelated {
                       "HEURE SORTIE" => mbTime($this->sortie),
                       "PRAT RESPONSABLE" => $this->_ref_praticien->_view,
                       "NDOS"     => $this->_NDA,
-                      "CODE BARRE NDOS" => "@BARCODE_".$this->_NDA."@"));
+                      "CODE BARRE NDOS" => "@BARCODE_".$this->_NDA."@",
+                      "CHAMBRE COURANTE" => $affectation->_view));
   }
   
   function checkMerge($sejours = array()/*<CSejour>*/) {

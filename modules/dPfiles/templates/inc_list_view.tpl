@@ -40,7 +40,7 @@ Main.add(function () {
   {{if $canFile->edit && !$accordDossier}}
   <tr>
     <td colspan="2" class="text">
-      <button class="new" onclick="uploadFile('{{$object_class}}', '{{$object_id}}', '{{$_cat_id}}')">
+      <button class="new" onclick="uploadFile('{{$object->_guid}}', '{{$_cat_id}}')">
         Ajouter un fichier
       </button>
     </td>

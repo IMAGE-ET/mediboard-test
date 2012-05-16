@@ -6,15 +6,44 @@
   {{assign var=height_affectation value=1.6}}
 {{/if}}
 
+{{assign var=chambre value=$_lit->_ref_chambre}}
+
 {{if $prestation_id}}
   <th class="text">{{$_lit->_selected_item->nom}}</th>
 {{/if}}
+
 <th class="text"
   onclick="chooseLit('{{$_lit->_id}}'); this.down().checked = 'checked';"
   style="text-align: left; {{if isset($_lit->_lines|smarty:nodefaults)}}height: {{math equation=x*y x=$_lit->_lines|@count y=$height_affectation}}em{{/if}}"
   data-rank="{{$_lit->_selected_item->rank}}">
-  {{if isset($_lit->_lines|smarty:nodefaults) && $_lit->_lines|@count > 1 && !$suivi_affectation}}
-    <img src="modules/dPhospi/images/surb.png" title="Collision" style="float: right;">
+  
+  {{if $_lit->_id}}
+    <span style="float: right;">
+      {{if isset($_lit->_lines|smarty:nodefaults) && $_lit->_lines|@count > 1 && !$suivi_affectation}}
+        <img src="modules/dPhospi/images/surb.png" title="Collision">
+      {{/if}}
+      {{if $chambre->_ecart_age > 15}}
+        <img src="modules/dPhospi/images/age.png" alt="warning" title="Ecart d'âge important: {{$chambre->_ecart_age}} ans" />
+      {{/if}}
+      {{if $chambre->_genres_melanges}}
+        <img src="modules/dPhospi/images/sexe.png" alt="warning" title="Sexes opposés" />
+      {{/if}}
+      {{if $chambre->_chambre_seule}}
+        <img src="modules/dPhospi/images/seul.png" alt="warning" title="Chambre seule obligatoire" />
+      {{/if}}
+      {{if $chambre->_chambre_double}}
+        <img src="modules/dPhospi/images/double.png" alt="warning" title="Chambre double possible" />
+      {{/if}}
+      {{if $chambre->_conflits_chirurgiens}}
+        <img src="modules/dPhospi/images/prat.png" alt="warning" title="{{$chambre->_conflits_chirurgiens}} Conflit(s) de praticiens" />
+      {{/if}}
+      {{if $chambre->_conflits_pathologies}}
+        <img src="modules/dPhospi/images/path.png" alt="warning" title="{{$chambre->_conflits_pathologies}} Conflit(s) de pathologies" />
+      {{/if}}
+      {{if $chambre->annule == 1}}
+        <img src="modules/dPhospi/images/annule.png" alt="warning" title="Chambre plus utilisée" />
+      {{/if}}
+    </span>
   {{/if}}
   {{if !$readonly && !$in_corridor}}
     <input type="radio" name="lit_move" style="float: left;" id="lit_move_{{$_lit->_id}}" onclick="chooseLit('{{$_lit->_id}}');" />

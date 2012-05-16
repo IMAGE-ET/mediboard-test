@@ -1,7 +1,11 @@
 <tr>
   {{assign var=sejour value=$_sortie->_ref_sejour}}
   {{assign var=patient value=$sejour->_ref_patient}}
-  
+  {{if $show_duree_preop && $type_mouvement != "sorties"}}
+    <td>
+      {{mb_value object=$sejour->_ref_curr_operation field=_heure_us}}
+    </td>
+  {{/if}}
   <td class="text {{if $sejour->confirme}}arretee{{/if}}">
     {{if $canPlanningOp->read}}
     <div style="float: right">

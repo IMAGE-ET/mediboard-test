@@ -814,7 +814,7 @@ class CConsultation extends CCodable {
     $this->secteur2 = $secteur2_NGAP + $secteur2_CCAM + $secteur2_TARMED + $secteur2_CAISSE;
     
     if($secteur1_NGAP == 0 && $secteur1_CCAM == 0 && $secteur2_NGAP==0 && $secteur2_CCAM ==0){
-    	$this->du_patient = $this->secteur1 + $this->secteur2;
+      $this->du_patient = $this->secteur1 + $this->secteur2;
     }
     
     // Cotation manuelle
@@ -1157,7 +1157,11 @@ TESTS A EFFECTUER
     return $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
   }
   
-  // Chargement du sejour et du RPU dans le cas d'une urgence
+  /**
+   * Chargement du sejour et du RPU dans le cas d'une urgence
+   * 
+   * @var CSejour
+   */ 
   function loadRefSejour($cache = 1){
     $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
     $this->_ref_sejour->loadRefRPU();
@@ -1183,9 +1187,13 @@ TESTS A EFFECTUER
     $this->loadRefPlageConsult();
   }
   
+  /**
+   * @param boolean $cache [optional]
+   * @return CPlageconsult
+   */
   function loadRefPlageConsult($cache = 1) {
     if ($this->_ref_plageconsult) {
-      return; 
+      return $this->_ref_plageconsult; 
     }
 
     $this->_ref_plageconsult = $this->loadFwdRef("plageconsult_id", $cache);
@@ -1199,6 +1207,8 @@ TESTS A EFFECTUER
     $this->_is_anesth    = $this->_ref_chir->isAnesth();
     $this->_is_dentiste  = $this->_ref_chir->isDentiste();
     $this->_praticien_id = $this->_ref_chir->_id;
+    
+    return $this->_ref_plageconsult;
   }
   
   function loadRefPraticien(){
@@ -1452,6 +1462,8 @@ TESTS A EFFECTUER
     $this->updateFormFields();
     $this->loadRefsFwd();
     
+    $this->notify("BeforeFillLimitedTemplate", $template);
+    
     $template->addDateProperty("Consultation - date"  , $this->_ref_plageconsult->date);
     $template->addLongDateProperty("Consultation - date longue", $this->_ref_plageconsult->date);
     $template->addTimeProperty("Consultation - heure" , $this->heure);
@@ -1490,6 +1502,8 @@ TESTS A EFFECTUER
     $template->addProperty("Consultation - Reprise de travail", mbDateToLocale(mbDate($this->reprise_at)));
     $template->addProperty("Consultation - Accident de travail sans arrêt de travail", $this->getFormattedValue("at_sans_arret"));
     $template->addProperty("Consultation - Arrêt maladie", $this->getFormattedValue("arret_maladie"));
+    
+    $this->notify("AfterFillLimitedTemplate", $template);
   }
     
   function canDeleteEx() {

@@ -214,6 +214,8 @@ class CGroups extends CMbObject {
   }
   
   function fillLimitedTemplate(&$template) {
+    $this->notify("BeforeFillLimitedTemplate", $template);
+    
     $template->addProperty("Etablissement - Nom"             , $this->text);
     $template->addProperty("Etablissement - Adresse"         , "$this->adresse \n $this->cp $this->ville");
     $template->addProperty("Etablissement - Ville"           , $this->ville);
@@ -228,6 +230,8 @@ class CGroups extends CMbObject {
     $template->addBarCode("Etablissement - Code Barre FINESS", $this->finess, array("barcode" => array(
       "title" => CAppUI::tr("{$this->_class}-finess")
     )));
+    
+    $this->notify("AfterFillLimitedTemplate", $template);
   }
   
   function fillTemplate(&$template) {
@@ -250,5 +254,41 @@ class CGroups extends CMbObject {
   function loadRefsDMICategories() {
     $this->_ref_dmi_categories = $this->loadBackRefs("dmi_categories", "nom");
   }
+  
+  /**
+   * Construit le tag de l'établissement en fonction des variables de configuration
+   * @return string
+   */
+  function getTagGroup() {
+    // Pas de tag sur l'établiessement
+    if (null == $tag_group = CAppUI::conf("dPetablissement tag_group")) {
+      return;
+    }
+
+    return str_replace('$g', $this->_id, $tag_group);
+  }
+  
+  /**
+   * Charge l'idex de l'établissement
+   */
+  function loadIdex() {
+    $tag_group = $this->getTagGroup();
+    
+    if (!$this->_id || !$tag_group) {
+      return;
+    }
+
+    // Récupération du premier idex créé
+    $order = "id400 ASC";
+    
+    // Recuperation de la valeur de l'id400
+    $idex = new CIdSante400();
+    $idex->setObject($this);
+    $idex->tag = $tag_group;
+    $idex->loadMatchingObject($order);
+    
+    return $idex->id400;
+  }
+  
 }
 ?>

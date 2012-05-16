@@ -136,6 +136,7 @@ $chambres = CMbObject::massLoadFwdRef($lits, "chambre_id");
 $services = CMbObject::massLoadFwdRef($chambres, "service_id");
 
 foreach ($lits as $_lit) {
+  $_lit->_ref_affectations = array();
   $chambre = $_lit->loadRefChambre();
   $chambre->_ref_lits[$_lit->_id] = $_lit;
   $service = $chambre->loadRefService();
@@ -239,6 +240,10 @@ foreach ($lits as $_lit) {
     }
     $_lit->_lines = CMbRange::rearrange($intervals);
   }
+}
+
+foreach ($service->_ref_chambres as $_chambre) {
+  $_chambre->checkChambre();
 }
 
 $smarty = new CSmartyDP;

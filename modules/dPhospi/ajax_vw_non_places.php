@@ -224,12 +224,13 @@ $where["sortie"] = ">= '$date_min'";
 
 $affectation = new CAffectation;
 
-$affectations = $affectation->loadList($where);
+$affectations = $affectation->loadList($where, "entree ASC");
 $sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
 $services = CMbObject::massLoadFwdRef($affectations, "service_id");
 $patients = CMbObject::massLoadFwdRef($sejours, "patient_id");
 $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
 CMbObject::massLoadFwdRef($praticiens, "function_id");
+
 $operations = array();
 
 $suivi_affectation = false;

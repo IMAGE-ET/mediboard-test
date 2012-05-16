@@ -9,12 +9,9 @@
 
 class CFileAddEdit extends CDoObjectAddEdit {
   function CFileAddEdit() {
-    global $m;    
-    $selKey   = intval(CValue::post("object_id", 0));
-    $selClass = CValue::post("object_class"    , "");
-    
     $this->CDoObjectAddEdit("CFile", "file_id");
     
+    global $m;    
     $this->redirect = "m=$m"; 
     
     if ($dialog = CValue::post("dialog")) {
@@ -56,7 +53,8 @@ class CFileAddEdit extends CDoObjectAddEdit {
       $obj->file_type = CMbPath::guessMimeType($file_name);
     	if ($msg = $obj->store()) {
     	  CAppUI::setMsg($msg, UI_MSG_ERROR);
-    	} else {
+    	} 
+    	else {
     		$obj->forceDir();
     	  $obj->moveFile($file_path);
     	}
