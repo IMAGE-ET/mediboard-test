@@ -71,15 +71,13 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "format" => array(
       "encoding", 
     ),
-    "version" => array(
-      "ITI30_HL7_version",
-      "ITI31_HL7_version",
-    ),
+    
     "application" => array(
       "assigning_authority_namespace_id",
       "assigning_authority_universal_id",
       "assigning_authority_universal_type_id",
     ),
+    
     "actor options" => array(
       "iti30_option_merge",
       "iti30_option_link_unlink",
@@ -89,6 +87,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
       "iti31_temporary_patient_transfer_tracking",
       "iti31_historic_movement",
     ),
+    
     "handle" => array(
       "handle_mode",
       "handle_NDA",
