@@ -65,9 +65,6 @@ foreach ($items_liaisons as $_item_liaison) {
   
   switch($_item->object_class) {
     case "CPrestationJournaliere":
-    	if (!isset($liaisons_j[$_item_liaison->date][$_item->object_id])) {
-    	  $liaisons_j[$_item_liaison->date] = array();
-    	}
       $liaisons_j[$_item_liaison->date][$_item->object_id] = $_item_liaison;
       break;
     case "CPrestationPonctuelle":
@@ -83,19 +80,7 @@ foreach ($items_liaisons as $_item_liaison) {
 
 $date_temp = mbDate($sejour->entree);
 
-while (!isset($liaisons_j[$date_temp])) {
-  $liaisons_j = $date_temp;
-}
-
-//$date_temp = mbDate($sejour->entree);
-// Récupérer la première date renseignée pour les prestations journalières
-/*reset($liaisons_j);
-$date_temp = key($liaisons_j);
-
-
-
 if (isset($liaisons_j[$date_temp])) {
-  
   $liaisons_j_date =& $liaisons_j[$date_temp];
   $save_state = array();
   
@@ -127,24 +112,22 @@ if (isset($liaisons_j[$date_temp])) {
     if (!isset($liaisons_j[$_date])) {
       $liaisons_j[$_date] = array();
     }
-    
-    
+    $liaisons_j_date =& $liaisons_j[$_date];
     foreach ($prestations_j as $_prestation_id => $_prestation) {
       $item_liaison = new CItemLiaison;
       $item_liaison->_id = "new";
       $item_liaison->loadRefItem();
       $item_liaison->loadRefItemRealise();
-    
-      if (isset($liaisons_j_date[$_prestation_id]) && $liaisons_j_date[$_prestation_id]->_ref_item->_id != "new") {
-        
-        $save_liaison = clone($liaisons_j_date[$_prestation_id]);
+      
+      if (isset($liaisons_j_date[$_prestation_id])) {
+        $save_liaison = $liaisons_j_date[$_prestation_id];
         $item_liaison->_ref_item->_id             = $save_liaison->_ref_item->_id;
         $item_liaison->_ref_item->nom             = $save_liaison->_ref_item->nom;
         $item_liaison->_ref_item->rank            = $save_liaison->_ref_item->rank;
         $item_liaison->_ref_item_realise->_id     = $save_liaison->_ref_item_realise->_id;
         $item_liaison->_ref_item_realise->nom     = $save_liaison->_ref_item_realise->nom;
         $item_liaison->_ref_item_realise->rank    = $save_liaison->_ref_item_realise->rank;
-        $save_state[$_prestation_id] = clone($item_liaison);
+        $save_state[$_prestation_id] = $item_liaison;
       }
       else {
         $save_liaison = $save_state[$_prestation_id];
@@ -157,10 +140,9 @@ if (isset($liaisons_j[$date_temp])) {
         $item_liaison->_ref_item_realise->rank    = $save_liaison->_ref_item_realise->rank;
         $liaisons_j_date[$_prestation_id] = $item_liaison;
       }
-      
     }
   }   
-}-*
+}
 
 $empty_liaison = new CItemLiaison;
 $empty_liaison->_id = "new";
