@@ -18,7 +18,7 @@ toggleCustomValue = function(button, b) {
 }
 </script>
 
-<form name="edit-configuration" method="post" action="?" onsubmit="return onSubmitFormAjax(this)">
+<form name="edit-configuration" method="post" action="?" onsubmit="return onSubmitFormAjax(this, editObjectConfig.curry('{{$object_guid}}'))">
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="dosql" value="do_configuration_aed" />
   <input type="hidden" name="object_guid" value="{{$object_guid}}" />
@@ -42,12 +42,16 @@ toggleCustomValue = function(button, b) {
       {{if $sections.0 != $level_0}}
         <tr>
           <th></th>
-          {{foreach from=$ancestor_configs item=_ancestor}}
+          {{foreach from=$ancestor_configs item=_ancestor name=ancestor}}
             <th>
-              {{if $_ancestor.object != "default"}} {{*  && $object_guid != $_ancestor.object->_guid *}}
+              {{if $_ancestor.object != "default" && !$smarty.foreach.ancestor.last}} {{*  && $object_guid != $_ancestor.object->_guid *}}
                 <button type="button" class="edit notext" onclick="$V($('object_guid-selector'), '{{if $_ancestor.object instanceof CMbObject}}{{$_ancestor.object->_guid}}{{else}}{{$_ancestor.object}}{{/if}}')"></button>
               {{/if}}
-              {{$_ancestor.object}}
+              {{if $_ancestor.object == "default" || $_ancestor.object == "global"}}
+                {{tr}}config-inherit-{{$_ancestor.object}}{{/tr}}
+              {{else}}
+                {{$_ancestor.object}}
+              {{/if}}
             </th>
           {{/foreach}}
         </tr>
