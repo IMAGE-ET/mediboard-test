@@ -57,7 +57,7 @@
     var config = {{$configOffline|@json}};
     {{/if}}
     
-    var Preferences = {{$app->user_prefs|@json}},
+    var Preferences = {{"utf8_encode"|array_map_recursive:$app->user_prefs|@json}},
         User = {{if $app->_ref_user}}{{"utf8_encode"|array_map_recursive:$app->_ref_user->_basic_info|@json}}{{else}}{}{{/if}},
         sessionLocked = {{$smarty.session.locked|@json}},
         App = { 
