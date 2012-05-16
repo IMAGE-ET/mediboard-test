@@ -66,7 +66,7 @@ class CInteropReceiver extends CInteropActor {
     foreach (self::getChildReceivers() as $_interop_receiver) {
       $receiver = new $_interop_receiver;
       
-      $order = "group_id ASC";
+      $order = "group_id ASC, nom ASC";
       // Récupération de la liste des destinataires
       $objects[$_interop_receiver] = $receiver->loadList(null, $order);
       if (!is_array($objects[$_interop_receiver])) {
