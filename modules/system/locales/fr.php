@@ -1533,6 +1533,7 @@ $locales['config-weinre_debug_host-desc'] = 'Hôte de debugging weinre (host:port
 $locales['index_handlers'] = 'Handlers d\'index';
 $locales['mod-system-tab-about'] = 'A propos...';
 $locales['mod-system-tab-access_denied'] = 'Accès refusé';
+$locales['mod-system-tab-ajax_edit_configuration'] = 'Editeur de configuration';
 $locales['mod-system-tab-ajax_edit_object'] = 'Editeur';
 $locales['mod-system-tab-ajax_form_message'] = 'Formulaire de message';
 $locales['mod-system-tab-ajax_form_message_update'] = 'Assistant de message de mise à jour';

@@ -78,7 +78,7 @@ class CSourceMLLP extends CExchangeSource {
   }
   
   function recv(){
-    $servers = array($this->_socket_client);
+    $servers = array($this->getSocketClient());
     
     while (@stream_select($servers, $write = null, $except = null, 5) === false);
     
@@ -96,7 +96,7 @@ class CSourceMLLP extends CExchangeSource {
   function send($evenement_name = null){
     $data = self::TRAILING.$this->_data.self::LEADING;
     
-    fwrite($this->_socket_client, $data, strlen($data));
+    fwrite($this->getSocketClient(), $data, strlen($data));
 
     $acq = $this->recv();
     

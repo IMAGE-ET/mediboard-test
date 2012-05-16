@@ -24,10 +24,10 @@ class CEAIDispatcher {
     if ($actor && isset($actor->_configs["encoding"]) && $actor->_configs["encoding"] == "UTF-8") {
       $data = utf8_decode($data);
     }
-    
+    mbLog($data);
     self::$errors = array();
     // Accepte t-on des utilisateurs acteurs non enregistrés ?
-    if (!$actor) {
+    if (!$actor) {mbLog("ixi ?");
       CEAIDispatcher::$errors[] = CAppUI::tr("CEAIDispatcher-no_actor");
       return self::dispatchError($data);
     }
@@ -53,6 +53,8 @@ class CEAIDispatcher {
     $supported = false;
     $family_message_class = (!$data_format->_family_message_class) ? get_class($data_format->_family_message) : $data_format->_family_message_class;    
     foreach ($data_format->getMessagesSupported($actor->_guid, false, null, true) as $_msg_supported_class => $_msg_supported) {
+    	mbLog($family_message_class);
+		mbLog($_msg_supported_class);
       if ($family_message_class == $_msg_supported_class) {
         $supported = true;
       }
