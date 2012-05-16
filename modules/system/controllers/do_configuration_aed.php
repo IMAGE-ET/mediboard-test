@@ -13,9 +13,19 @@ CCanDo::checkAdmin();
 $configs = CValue::post("c");
 $object_guid = CValue::post("object_guid");
 
-$object = CMbObject::loadFromGuid($object_guid);
+$object = null;
 
-CConfiguration::setConfigs($configs, $object);
+if ($object_guid && $object_guid != "global") {
+  $object = CMbObject::loadFromGuid($object_guid);
+}
+
+$messages = CConfiguration::setConfigs($configs, $object);
+
+foreach($messages as $msg) {
+  CAppUI::setMsg($msg, UI_MSG_WARNING);
+}
+
+CAppUI::setMsg("CConfiguration-msg-modify");
 
 echo CAppUI::getMsg();
 CApp::rip();

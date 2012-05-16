@@ -68,7 +68,10 @@ class CSourceMLLP extends CExchangeSource {
       }
     }
     
-    $this->_socket_client = stream_socket_client($address, $errno, $errstr, 5, STREAM_CLIENT_CONNECT, $context);
+    $this->_socket_client = @stream_socket_client($address, $errno, $errstr, 5, STREAM_CLIENT_CONNECT, $context);
+    if (!$this->_socket_client) {
+      throw new CMbException("CSourceMLLP-unreachable-source", $this->name);
+    }
     stream_set_blocking($this->_socket_client, 0);
     
     return $this->_socket_client;
@@ -101,8 +104,6 @@ class CSourceMLLP extends CExchangeSource {
   }
   
   function isReachableSource() {
-    return true;
-    
     try {
       $this->getSocketClient();
     } 

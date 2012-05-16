@@ -66,6 +66,35 @@ class CHL7Config extends CExchangeDataFormatConfig {
 	var $handle_NDA	   = null;
   var $handle_PV1_10 = null;
   var $handle_NSS    = null;
+  
+  var $_categories = array(
+    "format" => array(
+      "encoding", 
+    ),
+    
+    "application" => array(
+      "assigning_authority_namespace_id",
+      "assigning_authority_universal_id",
+      "assigning_authority_universal_type_id",
+    ),
+    
+    "actor options" => array(
+      "iti30_option_merge",
+      "iti30_option_link_unlink",
+      "iti31_in_outpatient_emanagement",
+      "iti31_pending_event_management",
+      "iti31_advanced_encounter_management",
+      "iti31_temporary_patient_transfer_tracking",
+      "iti31_historic_movement",
+    ),
+    
+    "handle" => array(
+      "handle_mode",
+      "handle_NDA",
+      "handle_PV1_10",
+      "handle_NSS",
+    ),
+  );
 
   function getSpec() {
     $spec = parent::getSpec();

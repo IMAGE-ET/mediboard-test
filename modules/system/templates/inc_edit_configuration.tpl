@@ -29,7 +29,7 @@ Main.add(function(){
       <select id="inherit" onchange="updateObjectTree($V(this))">
         {{if !$inherit}}
           {{foreach from=$all_inherits item=_inherit}}
-            <option value="{{$_inherit}}">{{$_inherit}}</option>
+            <option value="{{$_inherit}}">{{tr}}config-inherit-{{$_inherit}}{{/tr}}</option>
           {{/foreach}}
         {{else}}
           <option value="{{$inherit}}">{{$inherit}}</option>

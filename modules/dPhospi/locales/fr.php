@@ -645,6 +645,7 @@ $locales['config-dPhospi-show_mouvements'] = 'Afficher la vue des mouvements';
 $locales['config-dPhospi-show_mouvements-desc'] = 'Afficher la vue des mouvements';
 $locales['config-dPhospi-tag_service'] = 'Tag Service';
 $locales['config-dPhospi-tag_service-desc'] = 'Tag Service';
+$locales['config-inherit-CService CGroups.group_id'] = 'Service / Etablissement';
 $locales['config-synchro_sejour_affectation'] = 'Synchronisation séjours en affectations';
 $locales['mod-dPdPhospi-tab-ajax_suggest_lit'] = 'Suggestion de changement de lit';
 $locales['mod-dPdPhospi-tab-httpreq_documents_sejour'] = 'Documents et Fichiers';

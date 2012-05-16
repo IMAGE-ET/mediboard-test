@@ -566,20 +566,41 @@ class CConfiguration extends CMbMetaObject {
     return $configs;
   }
 
-  static function setConfig($feature, $value, CMbObject $object) {
-    $_config = new self;
-    $_config->feature = $feature;
-    $_config->setObject($object);
-    $_config->loadMatchingObject();
+  static function setConfig($feature, $value, CMbObject $object = null) {
+    $where = array(
+      "feature" => "= '$feature'",
+    );
     
-    $inherit = $value === self::INHERIT;
+    if ($object) {
+      $where["object_class"] = "= '$object->_class'";
+      $where["object_id"]    = "= '$object->_id'";
+    }
+    else {
+      $where["object_class"] = "IS NULL";
+      $where["object_id"]    = "IS NULL";
+    }
+
+    $_config = new self;
+    $_config->loadObject($where);
+    
+    $inherit = ($value === self::INHERIT);
 
     if ($_config->_id && $inherit) {
-      $_config->delete();
+      return $_config->delete();
     }
     elseif (!$inherit) {
+      if ($object) {
+        $_config->setObject($object);
+      }
+      else {
+        $_config->object_id    = null;
+        $_config->object_class = null;
+      }
+      
+      $_config->feature = $feature;
       $_config->value = $value;
-      $_config->store();
+      
+      return $_config->store();
     }
   }
 
@@ -588,12 +609,18 @@ class CConfiguration extends CMbMetaObject {
    * @param CMbObject Object
    */
   static function setConfigs($configs, CMbObject $object = null) {
+    $messages = array();
+    
     foreach($configs as $_feature => $_value) {
-      self::setConfig($_feature, $_value, $object);
+      if ($msg = self::setConfig($_feature, $_value, $object)) {
+        $messages[] = $msg;
+      }
     }
+    
+    return $messages;
   }
 
-  static function inheritConfig($feature, CMbObject $object){
-    self::setConfig($feature, self::INHERIT, $object);
+  static function inheritConfig($feature, CMbObject $object = null){
+    return self::setConfig($feature, self::INHERIT, $object);
   }
 }

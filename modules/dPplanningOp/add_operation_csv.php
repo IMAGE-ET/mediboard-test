@@ -97,7 +97,9 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $operation->chir_id        = $mediuser->_id;
     $operation->plageop_id     = $plageOp->_id;
     $operation->salle_id       = $salle->_id;
-    $operation->date           = $date_op;
+    if (!$operation->plageop_id) {
+      $operation->date         = $date_op;
+    }
     $operation->temp_operation = $temps_op;
     $operation->time_operation = $time_op;
     $operation->loadMatchingObject();

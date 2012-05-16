@@ -886,8 +886,14 @@ class CStoredObject extends CModelObject {
         $this->completeField($name);
         $other->$name = addslashes($this->$name);
         
+        $value = "";
+        
         if ($this->_specs[$name] instanceof CRefSpec) {
-          $value = $this->loadFwdRef($name)->_view;
+          $fwd = $this->loadFwdRef($name);
+          
+          if ($fwd) {
+            $value = $fwd->_view;
+          }
         }
         else {
           $value = $this->$name;

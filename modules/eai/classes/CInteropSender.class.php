@@ -77,7 +77,8 @@ class CInteropSender extends CInteropActor {
       
       // Récupération de la liste des destinataires
       $where = array();
-      $objects[$_interop_sender] = $itemSender->loadList($where);
+      $order = "group_id ASC, nom ASC";
+      $objects[$_interop_sender] = $itemSender->loadList($where, $order);
       if (!is_array($objects[$_interop_sender])) {
         continue;
       }
