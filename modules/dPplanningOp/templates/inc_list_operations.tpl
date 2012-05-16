@@ -45,6 +45,7 @@
   </tr>
   
   {{assign var=prev_interv value=null}}
+  {{assign var=real_prev_interv value=null}}
   {{assign var=prev_prev_interv_id value=-1}}
   
   {{assign var=list_operations value=$curr_plage->_ref_operations|@array_values}}
@@ -72,7 +73,7 @@
               <input type="hidden" name="m" value="dPplanningOp" />
               <input type="hidden" name="dosql" value="do_planning_aed" />
               <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
-              <input type="hidden" name="_place_after_interv_id" value="{{if $prev_interv}}{{$prev_interv->_id}}{{else}}-1{{/if}}" />
+              <input type="hidden" name="_place_after_interv_id" value="{{if $real_prev_interv}}{{$real_prev_interv->_id}}{{else}}-1{{/if}}" />
               <button type="submit" class="tick notext oneclick" title="Placer"></button>
             </form>
           {{/if}}
@@ -152,6 +153,8 @@
     {{/if}}
   
   </tbody>
+  
+  {{assign var=real_prev_interv value=$_operation}}
   {{/foreach}}
   {{/foreach}}
   
