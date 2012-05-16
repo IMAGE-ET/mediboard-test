@@ -94,6 +94,7 @@ CJSLoader::$files = array(
   "includes/javascript/tag.js",
   "includes/javascript/mbObject.js",
   "includes/javascript/browserDetect.js",
+  "includes/javascript/configuration.js",
 
   "includes/javascript/mbmail.js",
 );
