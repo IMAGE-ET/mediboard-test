@@ -129,10 +129,6 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
         return $echg_hprim->setAckError($dom_acq, "E010", $commentaire, $newPatient);
       }
       
-      if ($msg = $mbPatient->mergePlainFields($patientsElimine_array)) {
-        $commentaire = "La fusion des données des patients a échoué : $msg";
-        return $echg_hprim->setAckError($dom_acq, "E011", $commentaire, $newPatient);
-      }
       $mbPatientElimine_id = $mbPatientElimine->_id;
       
       /** @todo mergePlainFields resets the _id */

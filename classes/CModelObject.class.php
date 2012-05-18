@@ -432,19 +432,24 @@ class CModelObject {
     
     foreach ($objects as &$object) {
       foreach ($fields as $name => $value) {
+        // Assign the value of the first object
         if ($getFirstValue) {
           if ($this->$name === null) {
             $this->$name = $object->$name;
           }
+          continue;
         }
-        else {
-          if ($this->$name === null && !$diffs[$name]) {
-            $this->$name = $object->$name;
-          }
-          else if ($this->$name != $object->$name) {
-            $diffs[$name] = true;
-            $this->$name = null;
-          }
+        
+        // Try to assign the first not null value among objects
+        if ($this->$name === null && !$diffs[$name]) {
+          $this->$name = $object->$name;
+          continue;
+        }
+        
+        // In case we have different values, rather nullify
+        if ($this->$name != $object->$name) {
+          $diffs[$name] = true;
+          $this->$name  = null;
         }
       }
     }
