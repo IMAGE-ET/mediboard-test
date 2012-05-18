@@ -52,7 +52,13 @@ if (!$source->_id) {
   CAppUI::stepAjax("Aucune source pour cet acteur", UI_MSG_ERROR);
 }
 
-$source->setData(utf8_encode($exchange->_message));
+$msg = utf8_encode($exchange->_message);
+if ($source instanceof CSourceFileSystem) {
+  $source->setData($msg, false, "MB-$exchange->type-$exchange->code-$exchange->_id.$source->fileextension");
+}
+else {
+  $source->setData($msg);
+}
 $source->send();
 
 if ($ack_data = $source->getACQ()) {
