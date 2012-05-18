@@ -10,7 +10,7 @@
   <input type="hidden" name="tab" value="vw_interv_non_cotees" />
   <table class="form">
     <tr>
-      <th colspan="2" class="title">
+      <th colspan="3" class="title">
         Critères de filtre
       </th>
     </tr>
@@ -29,14 +29,14 @@
 
 <table class="tbl">
   <tr>
-    <th class="title">
+    <th class="title" colspan="3">
       Liste des plages
     </th>
   </tr>
   {{if $plages|@count || $hors_plage|@count}}
     {{foreach from=$plages item=_plage}}
       <tr>
-        <th>
+        <th colspan="3">
           Plage du {{mb_value object=$_plage field=date}}
           {{if $all_prats}}
             {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_plage->_ref_chir}}
@@ -45,17 +45,29 @@
       </tr>
       {{foreach from=$_plage->_ref_operations item=_operation}}
         {{assign var=codes_ccam value=$_operation->codes_ccam}}
-        {{assign var=nb_actes value='|'|explode:$codes_ccam|@count}}
         <tr>
+          <td class="narrow">
+            {{assign var=patient value=$_operation->_ref_patient}}
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+              {{$patient}}
+            </span>
+          </td>
           <td>
             <a
               {{if $_operation->salle_id}}
                 href="?m=dPsalleOp&tab=vw_operation&op={{$_operation->_id}}&salle={{$_operation->salle_id}}&date={{$_plage->date}}"
               {{/if}}>
               <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
-                {{$_operation}} ({{$nb_actes}} acte(s) non coté(s))
+                {{$_operation}} ({{$_operation->_actes_non_cotes}} acte(s) non coté(s))
               </span>
             </a>
+          </td>
+          <td>
+            {{if $_operation->libelle}}
+              {{$_operation->libelle}}
+            {{else}}
+              {{" ; "|implode:$_operation->_codes_ccam}}
+            {{/if}}
           </td>
         </tr>
       {{/foreach}}
@@ -65,7 +77,6 @@
         <th>Hors plages</th>
         {{foreach from=$hors_plage item=_operation}}
           {{assign var=codes_ccam value=$_operation->codes_ccam}}
-          {{assign var=nb_actes value='|'|explode:$codes_ccam|@count}}
           <tr>
             <td>
               <a
@@ -73,7 +84,7 @@
                   href="?m=dPsalleOp&tab=vw_operation&op={{$_operation->_id}}&salle={{$_operation->salle_id}}&date={{$_plage->date}}"
                 {{/if}}>
                 <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
-                  {{$_operation}} ({{$nb_actes}} acte(s) non coté(s))
+                  {{$_operation}} ({{$_operation->_actes_non_cotes}} acte(s) non coté(s))
                 </span>
               </a>
             </td>
