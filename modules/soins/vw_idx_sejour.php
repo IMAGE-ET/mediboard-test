@@ -31,11 +31,10 @@ if(CModule::getActive("dPprescription")){
   $prescription_sejour = new CPrescription();
 }
 
-// Test du type de l'utilisateur courant
-$anesthesiste = $userCourant->isFromType(array("Anesthésiste"));
-$praticien    = $userCourant->isPraticien() && !$anesthesiste;
+$_is_praticien = $userCourant->isPraticien();
 
-if($praticien && !$service_id && !$praticien_id) {
+// Preselection du praticien_id
+if($_is_praticien && !$service_id && !$praticien_id) {
   $praticien_id = $userCourant->user_id;
 }
 
@@ -44,12 +43,6 @@ $where = array();
 $where["externe"]  = "= '0'";
 $service = new CService;
 $services = $service->loadGroupList($where);
-
-/*
-$services = $praticien_id ?
-  $service->loadList($where, $order) :
-  $service->loadListWithPerms(PERM_READ);
-*/
   
 $changeSejour = CValue::get("service_id") || CValue::get("praticien_id");
 $changeSejour = $changeSejour || (!$service_id && !$praticien_id);
@@ -118,21 +111,44 @@ function cacheLit($affectation) {
   $service->_ref_chambres[$chambre_id] =& $chambre;
 }
 
+// Chargement du praticien
+if ($praticien_id){
+  $praticien = new CMediusers();
+  $praticien->load($praticien_id);
+}
+
+$anesth = new CMediusers();
+$anesthesistes = array_keys($anesth->loadAnesthesistes());
+
 // Si seulement le praticien est indiqué
 if($praticien_id && !$service_id){
   $sejours = array();
   $sejour = new CSejour();
   $where = array();
   $where["group_id"] = "= '$g'";
-  $where["praticien_id"] = " = '$praticien_id'";
+
+  if ($praticien->isAnesth()) {
+    $ljoin = array();
+    $ljoin["operations"] = "operations.sejour_id = sejour.sejour_id";
+    $ljoin["plagesop"]   = "operations.plageop_id = plagesop.plageop_id";
+    $where[] = "operations.anesth_id = '$praticien_id' OR (operations.anesth_id IS NULL AND plagesop.anesth_id = '$praticien_id')";
+  } else {
+    $where["praticien_id"] = " = '$praticien_id'";
+  }
+  
   $where["entree_prevue"] = " <= '$date 23:59:59'";
   $where["sortie_prevue"] = " >= '$date 00:00:00'";
   $where["annule"] = " = '0'";
   $where[] = $type_admission ? "type = '$type_admission'" : "type != 'urg' AND type != 'exte'";
   
-  $sejours = $sejour->loadList($where);
+  if ($praticien->isAnesth()) {
+    $sejours = $sejour->loadList($where, null, null, null, $ljoin);
+  } else {
+    $sejours = $sejour->loadList($where);
+  }
+    
   foreach($sejours as &$_sejour){
-    if($praticien && $_sejour->praticien_id == $userCourant->user_id){
+    if($_is_praticien && $_sejour->praticien_id == $userCourant->user_id){
       $tab_sejour[$_sejour->_id]= $_sejour;
     }
     $affectations = array();
@@ -168,7 +184,7 @@ foreach ($sejoursParService as $key => $_service) {
           $_affectation->loadRefsAffectations();
           $_affectation->loadRefSejour();
           $_sejour =& $_affectation->_ref_sejour;
-          if($praticien && $_sejour->praticien_id == $userCourant->user_id){
+          if($_is_praticien && $_sejour->praticien_id == $userCourant->user_id){
             $tab_sejour[$_sejour->_id]= $_sejour;
           }
           $_sejour->loadRefsPrescriptions();
@@ -255,7 +271,7 @@ if($service_id){
     );
       
     $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where, $order, $praticien_id);
-    if($praticien){
+    if($_is_praticien){
       foreach($groupSejourNonAffectes as $sejours_by_moment){
         foreach($sejours_by_moment as $sejour){
           if($sejour->praticien_id == $userCourant->user_id){
@@ -273,7 +289,7 @@ if($service_id){
     foreach($service->_ref_chambres as &$_chambre){
       foreach($_chambre->_ref_lits as &$_lits){
         foreach($_lits->_ref_affectations as &$_affectation){
-          if($praticien && $_affectation->_ref_sejour->praticien_id == $userCourant->user_id){
+          if($_is_praticien && $_affectation->_ref_sejour->praticien_id == $userCourant->user_id){
             $tab_sejour[$_affectation->_ref_sejour->_id]= $_affectation->_ref_sejour;
           }
           $_affectation->_ref_sejour->loadRefsPrescriptions();
@@ -320,8 +336,8 @@ if ($type_admission) {
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("_active_tab", $_active_tab);
-$smarty->assign("praticien"               , $praticien);
-$smarty->assign("anesthesiste"            , $anesthesiste);
+$smarty->assign("_is_praticien"               , $_is_praticien);
+$smarty->assign("anesthesistes"           , $anesthesistes);
 $smarty->assign("praticiens"              , $praticiens);
 $smarty->assign("praticien_id"            , $praticien_id);
 $smarty->assign("object"                  , $sejour);

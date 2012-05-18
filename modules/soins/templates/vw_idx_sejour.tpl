@@ -305,6 +305,27 @@ printDossierComplet = function(){
   url.popup(850, 600, "Dossier complet");
 }
 
+checkAnesth = function(oField){
+  // Recuperation de la liste des anesthésistes
+  var anesthesistes = {{$anesthesistes|@json}};
+  
+  var oForm = getForm("selService");
+  var praticien_id = $V(oForm.praticien_id);
+  var service_id   = $V(oForm.service_id);
+  
+  if (oField.name == "service_id"){
+    if(anesthesistes.include(praticien_id)){
+      $V(oForm.praticien_id, '', false);
+    }
+  }
+  
+  if (oField.name == "praticien_id"){
+    if(anesthesistes.include(praticien_id)){
+      $V(oForm.service_id, '', false);    
+    }
+  }
+}
+
 </script>
 
 <form name="form_prescription" action="" method="get">
@@ -346,7 +367,7 @@ printDossierComplet = function(){
                 <tr>
                   <th><label for="service_id">Service</label></th>
                   <td>
-                    <select name="service_id" onchange="this.form.submit()" style="max-width: 135px;">
+                    <select name="service_id" onchange="checkAnesth(this); this.form.submit()" style="max-width: 135px;">
                       <option value="">&mdash; Service</option>
                       {{foreach from=$services item=curr_service}}
                       <option value="{{$curr_service->_id}}" {{if $curr_service->_id == $service_id}} selected="selected" {{/if}}>{{$curr_service->nom}}</option>
@@ -362,7 +383,7 @@ printDossierComplet = function(){
                 <tr>
                   <th><label for="praticien_id">Praticien</label></th>
                   <td>
-                    <select name="praticien_id" onchange="this.form.submit();" style="width: 135px;">
+                    <select name="praticien_id" onchange="checkAnesth(this); this.form.submit();" style="width: 135px;">
                       <option value="">&mdash; Choix du praticien</option>
                       {{foreach from=$praticiens item=_prat}}
                         <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}" {{if $_prat->_id == $praticien_id}}selected="selected"{{/if}}>
@@ -392,7 +413,7 @@ printDossierComplet = function(){
           </td>
         </tr>
         
-        {{if $praticien && ($current_date == $date)}}
+        {{if $_is_praticien && ($current_date == $date)}}
           <tr>
             <td class="button">
               <script type="text/javascript">

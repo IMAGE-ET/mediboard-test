@@ -18,7 +18,7 @@ if(CModule::getActive('dPprescription')){
   if (CAppUI::conf("soins show_charge_soins")) {
 	  $module->registerTab("vw_ressources_soins"  , TAB_READ);
   }
-	$module->registerTab("vw_dossier_sejour"    , TAB_READ);
+	//$module->registerTab("vw_dossier_sejour"    , TAB_READ);
 }
 
 if (isset(CModule::$active["dPstock"])) {

@@ -115,6 +115,9 @@ if ($consult->_id) {
   if ($consultAnesth->_id) {
     $consultAnesth->loadRefs();
     if ($consultAnesth->_ref_operation->_id || $consultAnesth->_ref_sejour->_id) {
+      if ($consultAnesth->_ref_operation->passage_uscpo === null) {
+        $consultAnesth->_ref_operation->passage_uscpo = "";
+      }
       $consultAnesth->_ref_operation->loadExtCodesCCAM();
       $consultAnesth->_ref_operation->loadRefs();
       $consultAnesth->_ref_sejour->loadRefPraticien();

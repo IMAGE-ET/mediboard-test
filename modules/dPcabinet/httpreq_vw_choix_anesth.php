@@ -61,6 +61,9 @@ if ($selConsult) {
     $sejour =& $consult->_ref_consult_anesth->_ref_sejour;
 
     if ($consult->_ref_consult_anesth->_ref_operation->operation_id){
+      if ($consult->_ref_consult_anesth->_ref_operation->passage_uscpo === null) {
+        $consult->_ref_consult_anesth->_ref_operation->passage_uscpo = "";
+      }
       $consult->_ref_consult_anesth->_ref_operation->loadRefSejour();
       $sejour =& $consult->_ref_consult_anesth->_ref_operation->_ref_sejour;
     }

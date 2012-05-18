@@ -103,4 +103,4 @@ if ($db->getOne("SELECT * FROM `users`")) {
 <?php } ?>
 
 
-<?php showFooter(); ?>
+<?php require("valid.php"); showFooter(); ?>

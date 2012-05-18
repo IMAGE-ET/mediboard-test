@@ -26,7 +26,7 @@ $mbConfig->load();
 
 $dPconfig = $mbConfig->values;
 
-showHeader(); 
+showHeader();
 
 ?>
 
@@ -186,4 +186,4 @@ showHeader();
 
 </form>
 
-<?php showFooter(); ?>
+<?php require("valid.php"); showFooter(); ?>

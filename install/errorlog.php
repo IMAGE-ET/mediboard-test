@@ -10,9 +10,11 @@
 
 require_once("checkauth.php");
 
-showHeader(); 
+showHeader();
 
 // Escape if the file doesn't exist
 @readfile("../tmp/mb-log.html");
+
+require("valid.php");
 
 showFooter(); ?>

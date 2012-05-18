@@ -11,7 +11,7 @@
 require_once("header.php");
 
 showHeader();
-
+require("valid.php");
 ?>
 
 <div style="font-size: 14px">

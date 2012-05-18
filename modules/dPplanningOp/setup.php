@@ -1336,7 +1336,12 @@ class CSetupdPplanningOp extends CSetup {
       ADD `duree_preop` TIME;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.43";
+    $this->makeRevision("1.43");
+    $query = "ALTER TABLE `operations`
+      ADD `passage_uscpo` ENUM ('0','1') AFTER duree_uscpo;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.44";
   }
 }
 ?>

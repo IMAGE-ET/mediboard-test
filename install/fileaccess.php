@@ -53,7 +53,7 @@ $pathAccess->description = "Répertoire des schemas HPRIM";
 
 $pathAccesses[] = $pathAccess;
 
-showHeader(); 
+showHeader();
 
 ?>
 
@@ -110,4 +110,4 @@ showHeader();
   
 </table>
 
-<?php showFooter(); ?>
+<?php require("valid.php"); showFooter(); ?>

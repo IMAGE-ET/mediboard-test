@@ -26,7 +26,29 @@ guessScoreApfel = function() {
 
 afterStoreScore = function(id, obj) {
   $("score_apfel").update(obj._score_apfel);
-} 
+}
+
+toggleUSCPO = function(status) {
+  var form = getForm("editTypeAnesthFrm");
+  if (status == 1) {
+    $("uscpo_area").setStyle({visibility: "visible"});
+  }
+  else {
+    $V(form.duree_uscpo, 0);
+    $("uscpo_area").setStyle({visibility: "hidden"});
+  }
+}
+
+checkUSCPO = function() {
+  var form = getForm("editTypeAnesthFrm");
+  if ($V(form._passage_uscpo) == 1 && $V(form.duree_uscpo) == "") {
+    alert("Veuillez saisir une durée USCPO");
+    return false;
+  }
+  
+  return true; 
+}
+
 </script>
 
 {{assign var=operation value=$consult_anesth->_ref_operation}}
@@ -58,15 +80,24 @@ afterStoreScore = function(id, obj) {
             </td>
             <td class="halfPane">
               {{if $operation->_id}}
-                <form name="editTypeAnesthFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitFormAjax(this);">
+                <form name="editTypeAnesthFrm" action="?m=dPcabinet" method="post" onsubmit="if (checkUSCPO()) { return onSubmitFormAjax(this); }">
                   <input type="hidden" name="m" value="dPplanningOp" />
                   <input type="hidden" name="del" value="0" />
                   <input type="hidden" name="dosql" value="do_planning_aed" />
                   {{mb_key object=$operation}}
+                  <div>
+                    {{mb_label object=$operation field=passage_uscpo}}
+                    {{mb_field object=$operation field=passage_uscpo onclick="toggleUSCPO(\$V(this)); this.form.onsubmit();"}}
+                    
+                    <span id="uscpo_area" {{if !$operation->passage_uscpo}}style="visibility: hidden;"{{/if}}>
+                      {{mb_label object=$operation field=duree_uscpo style="padding-left: 1.4em;" id="uscpo_label"}}
+                      {{mb_field object=$operation field=duree_uscpo form=editTypeAnesthFrm increment=true onblur="this.form.onsubmit()"}} nuit(s)
+                    </span>
+                  </div>
                   {{mb_label object=$operation field=type_anesth}}
                   {{mb_field object=$operation field=type_anesth options=$anesth style="width: 12em;" onchange="this.form.onsubmit()"}}
+                  <br />
                 </form>
-                <br />
               {{/if}}
               <form name="editInfosASAFrm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
                 <input type="hidden" name="m" value="dPcabinet" />

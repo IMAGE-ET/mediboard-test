@@ -792,5 +792,31 @@ abstract class CSQLDataSource {
     
     return $query;
   }
+  
+  static function tempTableDates($date_min, $date_max) {
+    if (!$date_min && !$date_max) {
+      return;
+    }
+    
+    $date_temp = $date_min;
+    $dates = array();
+    
+    while ($date_temp <= $date_max) {
+      $dates[] = "('$date_temp')";
+      $date_temp = mbDate("+1 day", $date_temp);
+    }
+    
+    $ds = CSQLDataSource::get("std");
+    
+    $tab_name = substr(uniqid("dates_"), 0, 7);
+    
+    $query = "CREATE TEMPORARY TABLE $tab_name (date date not null);";
+    $ds->exec($query);
+    
+    $query = "INSERT INTO $tab_name VALUES " . implode(",", $dates) . ";";
+    $ds->exec($query);
+    
+    return $tab_name;
+  } 
 }
 ?>

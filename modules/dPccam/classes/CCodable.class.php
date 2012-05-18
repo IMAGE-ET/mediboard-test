@@ -26,6 +26,7 @@ class CCodable extends CMbObject {
   var $_anesth                  = null;
   var $_associationCodesActes   = null;
   var $_count_actes             = null;
+  var $_actes_non_cotes         = null;
   
   // Abstract fields
   var $_praticien_id       = null;

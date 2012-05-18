@@ -294,7 +294,7 @@ class CSmartyMB extends Smarty {
         switch ($_key) {
           case "escape":
           if ($_val === "JSAttribute"){
-            $content = JSAttribute($content);
+            $content = $this->JSAttribute($content);
             break;
           }
   

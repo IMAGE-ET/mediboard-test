@@ -71,13 +71,26 @@ foreach ($plages as $_plage_id => $_plage) {
       continue;
     }
     
-    $actes_ccam = &$_operation->loadRefsActesCCAM();
-    if (count($actes_ccam) || !$_operation->codes_ccam) {
+    $actes_ccam = $_operation->loadRefsActesCCAM();
+    $_operation->loadExtCodesCCAM(true);
+    $codes_ccam = $_operation->_ext_codes_ccam;
+    
+    $activites = CMbArray::pluck($codes_ccam, "activites");
+    $nbCodes = 0;
+    
+    foreach ($activites as $_activite) {
+      $nbCodes += count($_activite);
+    }
+    
+    // Si tout est coté, on unset l'opération
+    if (count($actes_ccam) == $nbCodes) {
       unset($operations[$key]);
       continue;
     }
     
+    $_operation->_actes_non_cotes = $nbCodes - count($actes_ccam);
     $_operation->loadRefPlageOp(1);
+    $_operation->loadRefPatient();
   }
   
   if (count($operations) == 0) {
@@ -94,10 +107,23 @@ $hors_plage = $operation->loadList($where);
 foreach ($hors_plage as $key => $_operation) {
   $actes_ccam = $_operation->loadRefsActesCCAM();
   
-  if (count($actes_ccam) || !$_operation->codes_ccam) {
+  $_operation->loadExtCodesCCAM(true);
+  $codes_ccam = $_operation->_ext_codes_ccam;
+  
+  $activites = CMbArray::pluck($codes_ccam, "activites");
+  $nbCodes = 0;
+  
+  foreach ($activites as $_activite) {
+    $nbCodes += count($_activite);
+  }
+  
+  // Si tout est coté, on unset l'opération
+  if (count($actes_ccam) == $nbCodes) {
     unset($hors_plage[$key]);
     continue;
   }
+  
+  $_operation->_actes_non_cotes = $nbCodes - count($actes_ccam);
   $_operation->loadRefPlageOp(1);
 }
 

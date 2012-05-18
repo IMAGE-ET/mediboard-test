@@ -78,7 +78,6 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
         $mbPatient->load($id400Patient->object_id);
       }
       
-      
       $id400PatientElimine = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientEliminePI);
       if ($mbPatientElimine->load($patientElimineRI)) {
         if ($mbPatientElimine->_id != $id400PatientElimine->object_id) {
@@ -110,12 +109,7 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
         $comment = "La fusion de ces deux patients n'est pas possible à cause des problèmes suivants : $checkMerge";
         return $exchange_ihe->setAckAR($ack, "E121", $comment, $newPatient);
       }
-      
-      if ($msg = $mbPatient->mergePlainFields($patientsElimine_array)) {
-        $comment = "La fusion des données des patients a échoué : $msg";
-        return $exchange_ihe->setAckAR($ack, "E122", $comment, $newPatient);
-      }
-      
+
       $mbPatientElimine_id = $mbPatientElimine->_id;
       
       /** @todo mergePlainFields resets the _id */
@@ -130,7 +124,7 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
   
       $mbPatient->_mbPatientElimine_id = $mbPatientElimine_id;
       
-      $comment = CEAIPatient::getComment($mbPatient);
+      $comment = CEAIPatient::getComment($mbPatient, $mbPatientElimine);
     }
     
     return $exchange_ihe->setAckAA($ack, "I103", $comment, $mbPatient);

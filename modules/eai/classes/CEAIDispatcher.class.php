@@ -78,7 +78,8 @@ class CEAIDispatcher {
     // Traitement par le handler du format
     try {
       return $data_format->handle();
-    } catch(CMbException $e) {
+    } 
+    catch(CMbException $e) {
       self::$errors[] = $e->getMessage();
       return self::dispatchError($data);
     }

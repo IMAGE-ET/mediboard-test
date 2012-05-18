@@ -306,18 +306,6 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
     
     $this->fill($data);
   }
-  
-  function getXCN9(CMbObject $object, CInteropActor $actor) {
-    $xcn9 = null;
-
-    $id400 = $object->_ref_last_id400;
-    if ($object instanceof CMedecin || $object instanceof CMediusers) {
-      return $this->getAssigningAuthority($object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : ($id400->id400 ? "actor" : "mediboard")), null, $actor);
-    }
-    if ($object instanceof CUser) {
-      return $this->getAssigningAuthority("mediboard");
-    } 
-  }
 }
 
 ?>

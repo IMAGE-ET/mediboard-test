@@ -58,7 +58,7 @@ if (isset($wsdl)) {
   try {
     $serverSOAP = new SoapServer(CApp::getBaseUrl()."/?login=$username:$password&m=$m&a=$a&class=$classname&wsdl");
   } catch (Exception $e) {
-    echo $e;
+    echo $e->getMessage();
   }
     
   $serverSOAP->setClass($classname); 
