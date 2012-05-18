@@ -57,21 +57,32 @@ addFile = function(elt) {
 <input type="hidden" name="callback" value="reloadCallback" />
 <input type="hidden" name="object_class" value="{{$object->_class}}" />
 <input type="hidden" name="object_id" value="{{$object->_id}}" />
-<input type="hidden" name="for_identite" value="{{$for_identite}}" />
+<input type="hidden" name="named" value="{{$named}}" />
 <input type="hidden" name="_merge_files" value="0" />
-{{if $for_identite}}
-  <input type="hidden" name="_rename" value="{{$_rename}}" />
+
+{{if $named}}
+<input type="hidden" name="_rename" value="{{$_rename}}" />
 {{/if}}
+
 <table class="form">
   <tr>
-    <th class="title" colspan="{{if $for_identite}} 6 {{else}} 7 {{/if}}">
-      Ajouter un fichier pour {{$object->_view}}
+    <th class="title" colspan="{{if $named}} 6 {{else}} 7 {{/if}}">
+      Ajouter un fichier {{if $named}}'{{$_rename}}'{{/if}} pour 
+      <br/>'{{$object->_view}}'
     </th>
   </tr>
+
   <tr>
-    <td class="button">
-      {{tr}}CFile-msg-maxsize{{/tr}} : {{$conf.dPfiles.upload_max_filesize}}<br />
+    <td class="button" colspan="4">
+      <div class="small-info">
+        <div>{{tr}}config-dPfiles-upload_max_filesize{{/tr}} : <strong>{{$conf.dPfiles.upload_max_filesize}}</strong></div>
+        <div>{{tr}}config-dPfiles-extensions_yoplet  {{/tr}} : <strong>{{$conf.dPfiles.extensions_yoplet  }}</strong></div>
+      </div>
     </td>
+  </tr>
+
+{{if !$named}}
+  <tr>
     <th>
       <label title="{{tr}}CFile-file_category_id-desc{{/tr}}">
         {{tr}}CFile-file_category_id{{/tr}}
@@ -87,14 +98,12 @@ addFile = function(elt) {
         {{/foreach}}
       </select>
     </td>
-    {{if !$for_identite}}
       <th>
         <label title="{{tr}}CFile-_rename-desc{{/tr}}">{{tr}}CFile-_rename{{/tr}}</label>
       </th>
       <td>
         <input type="text" name="_rename" value="{{$_rename}}"/>
       </td>
-    {{/if}}
     <th>
       <label title="{{tr}}CFile-private-desc{{/tr}}" for="uploadFrm___private">
         {{tr}}CFile-private{{/tr}}
@@ -104,6 +113,7 @@ addFile = function(elt) {
       {{mb_field object=$file field="private" typeEnum=checkbox}}
     </td>
   </tr>
+{{/if}}
   
   <tr>
     <td colspan="7">
@@ -115,7 +125,7 @@ addFile = function(elt) {
           </th>
           <td colspan="6">
             <input type="file" name="formfile[0]" size="0"
-              {{if !$for_identite}}
+              {{if !$named}}
                 onchange="addFile(this); this.onchange=''"
               {{/if}} />
           </td>

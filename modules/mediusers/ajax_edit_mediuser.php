@@ -32,6 +32,9 @@ else {
   $object->loadRefProfile();
 }
 
+$object->loadNamedFile("identite.jpg");
+$object->loadNamedFile("signature.jpg");
+
 // Savoir s'il est relié au LDAP
 if (isset($object->_ref_user)) {
   $object->_ref_user->isLDAPLinked();

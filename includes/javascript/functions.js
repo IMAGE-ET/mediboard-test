@@ -560,12 +560,12 @@ function guid_ids(guid) {
   url.popup(750, 400, "sante400");
 }
 
-function uploadFile(object_guid, file_category_id, _rename, for_identite){
+function uploadFile(object_guid, file_category_id, _rename, named){
   var url = new Url("files", "upload_file");
   url.addParam("object_guid", object_guid);
   url.addParam("file_category_id", file_category_id);
   url.addParam("_rename", _rename);
-  url.addParam("for_identite", for_identite);
+  url.addParam("named", named);
   url.requestModal(700, 300);
 }
 

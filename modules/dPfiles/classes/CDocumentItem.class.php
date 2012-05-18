@@ -32,14 +32,16 @@ class CDocumentItem extends CMbMetaObject {
   var $_ref_category     = null;
   
   function getProps() {
-    $specs = parent::getProps();
-    $specs["file_category_id"] = "ref class|CFilesCategory";
-    $specs["etat_envoi"]       = "enum notNull list|oui|non|obsolete default|non";
-    $specs["author_id"]        = "ref class|CMediusers";
+    $props = parent::getProps();
     
-    $specs["_extensioned"]     = "str notNull";
-    $specs["_send_problem"]    = "text";
-    return $specs;
+    $props["file_category_id"] = "ref class|CFilesCategory";
+    $props["etat_envoi"]       = "enum notNull list|oui|non|obsolete default|non";
+    $props["author_id"]        = "ref class|CMediusers";
+    
+    $props["_extensioned"]     = "str notNull";
+    $props["_send_problem"]    = "text";
+
+    return $props;
   }
   
   /**
