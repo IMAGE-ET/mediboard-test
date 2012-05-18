@@ -52,6 +52,7 @@ class COperation extends CCodable implements IPatientRelated {
   var $horaire_voulu      = null;
   var $_horaire_voulu     = null;
   var $duree_uscpo        = null;
+  var $passage_uscpo      = null;
   var $duree_preop        = null;
   var $presence_preop     = null;
   var $presence_postop    = null;
@@ -247,6 +248,7 @@ class COperation extends CCodable implements IPatientRelated {
     $props["facture"]                 = "bool default|0";
     
     $props["duree_uscpo"]             = "num min|0 default|0";
+    $props["passage_uscpo"]           = "bool notNull";
     $props["duree_preop"]             = "time";
     
     $props["_duree_interv"]           = "time";
