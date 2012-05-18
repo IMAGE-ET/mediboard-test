@@ -89,4 +89,29 @@ reloadPrescriptionAnesth = function(prescription_id){
       </fieldset>
     </td>
   </tr>
+  <tr>
+    <td colspan="2">
+      <fieldset>
+        <legend>Horodatage intervention</legend>
+          <table class="main layout">
+            <tr>
+              <th style="font-weight: bold">{{mb_label object=$selOp field=entree_salle}}</th>
+              <td>{{mb_value object=$selOp field=entree_salle}}</td>
+              <th style="font-weight: bold">{{mb_label object=$selOp field=pose_garrot}}</th>
+              <td>{{mb_value object=$selOp field=pose_garrot}}</td>
+              <th style="font-weight: bold">{{mb_label object=$selOp field=debut_op}}</th>
+              <td>{{mb_value object=$selOp field=debut_op}}</td>
+            </tr>
+            <tr>
+              <th style="font-weight: bold">{{mb_label object=$selOp field=sortie_salle}}</th>
+              <td>{{mb_value object=$selOp field=sortie_salle}} </td>
+              <th style="font-weight: bold">{{mb_label object=$selOp field=retrait_garrot}}</th>
+              <td>{{mb_value object=$selOp field=retrait_garrot}}</td>
+              <th style="font-weight: bold">{{mb_label object=$selOp field=fin_op}}</th>
+              <td>{{mb_value object=$selOp field=fin_op}}</td>
+            </tr>
+        </table>
+      </fieldset>
+    </td>
+  </tr>
 </table>
