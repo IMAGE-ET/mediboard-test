@@ -10,6 +10,7 @@
 
 require_once("checkauth.php");
 require_once("header.php");
+
 showHeader();
 
 ?>
@@ -112,4 +113,4 @@ Defaults:[nom de l'utilisateur Apache] passwd_timeout=0</pre>
   </fieldset>
 </form>
 
-<?php showFooter(); ?>
+<?php require("valid.php"); showFooter(); ?>

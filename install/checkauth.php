@@ -17,6 +17,8 @@ if (!@include_once($mbpath."includes/config.php")) {
   return;
 }
 
+require("valid.php");
+
 function showLogin() {
   showHeader();
 ?>

@@ -20,7 +20,7 @@ $dbConfigs = array (
 require_once("CMbDb.class.php");
 require_once("addusers.sql.php");
 
-showHeader(); 
+showHeader();
 
 ?>
 
@@ -182,4 +182,4 @@ if (@$_POST["adminhost"]) {
   
 </table>
 
-<?php showFooter(); ?>
+<?php require("valid.php"); showFooter(); ?>

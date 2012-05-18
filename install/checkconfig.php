@@ -10,6 +10,7 @@
 
 require_once("header.php");
 
+
 if (!@include_once($mbpath."includes/config.php")) { 
   showHeader();
 ?>
@@ -20,6 +21,9 @@ if (!@include_once($mbpath."includes/config.php")) {
 </div>
 
 <?php
+
+  require("valid.php");
+  
   showFooter();
   die();
 }

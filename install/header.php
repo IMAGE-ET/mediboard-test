@@ -71,7 +71,7 @@ function showHeader() {
 
 <body class="wizard">
 
-<div class="toc">
+<!--<div class="toc">
   <ol>
     <?php foreach ($stepsText as $step => $stepName) { ?>
     <li>
@@ -83,11 +83,52 @@ function showHeader() {
     </li>
     <?php } ?>
   </ol>
-</div>
+</div>-->
 
 <h1>Installation de Mediboard <?php echo $version["string"]; ?> &mdash; Etape <?php echo $currentStepKey+1; ?>/<?php echo count($steps); ?></h1>
 <?php 
 }
+
+function showToc($validTab = null) {
+  $stepsText = array (
+    "check" => "Prérequis", 
+    "fileaccess" => "Permissions en écriture", 
+    "install" => "Installation", 
+    "configure" => "Configuration", 
+    "initialize" => "Initialisation", 
+    "feed" => "Remplissage des bases", 
+    "finish" => "Finalisation",
+    "phpinfo" => "Infos PHP",
+    "errorlog" => "Logs d'erreur",
+    "update"  => "Mise à jour du système"
+  );
+  
+  $steps = array_keys($stepsText);
+  $currentStep = basename($_SERVER["PHP_SELF"], ".php");
+?>
+  <div class="toc">
+  <ol>
+    <?php foreach ($stepsText as $step => $stepName) { ?>
+    <li>
+      <?php $valid = null;
+            foreach ($validTab as $key => $value) {
+              if ($key == $step) {
+                $valid = $validTab[$key];
+              }
+            }
+            if (is_null($valid)) {
+              unset($valid);
+            }
+            if ($currentStep == $step) { ?>
+      <strong><?php echo $stepName; if (isset($valid) && $valid) {?> <img src="../style/mediboard/images/buttons/tick.png" /><?php } ?></strong>
+      <?php if (!($valid) && isset($valid)) { ?> <img src="../style/mediboard/images/buttons/cancel.png" /><?php }} else { ?>
+      <a href="<?php echo $step; ?>.php"><?php echo $stepName; if (isset($valid) && $valid) {?> <img src="../style/mediboard/images/buttons/tick.png" /><?php } else { if (!($valid) && isset($valid)) { ?> <img src="../style/mediboard/images/buttons/cancel.png" /><?php }}?></a>
+      <?php } ?>
+    </li>
+    <?php } ?>
+  </ol>
+</div>
+<?php }
 
 function showFooter() {
   global $stepsText, $currentStepKey, $currentStep, $steps, $chrono;

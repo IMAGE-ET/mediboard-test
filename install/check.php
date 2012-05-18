@@ -25,7 +25,7 @@ class CPearPackage extends CPrerequisite {
   var $status = "stable";
 
   function check() {
-    return @include("$this->name.php");
+    return @include_once("$this->name.php");
   }
 }
 
@@ -40,6 +40,9 @@ class CPHPVersion extends CPrerequisite {
     return phpversion() >= $this->name;
   }
 }
+
+
+
 $packages = array();
 
 $package = new CPearPackage;
@@ -204,7 +207,7 @@ $php->reasons[] = "Intégration de PDO : accès universel et sécurisé aux base de 
 $php->reasons[] = "Conception objet plus évoluée";
 $versions[] = $php;
 
-showHeader(); 
+showHeader();
 
 ?>
 
@@ -395,4 +398,4 @@ showHeader();
   <pre>pear config-set preferred_state beta</pre>
 </div>
 
-<?php showFooter(); ?>
+<?php require("valid.php"); showFooter(); ?>

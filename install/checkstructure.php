@@ -29,6 +29,7 @@ if (!$db->getOne("SELECT * FROM `users`")) {
 </div>
 
 <?php
+  require("valid.php");
   showFooter();
   die();
 }
