@@ -341,14 +341,15 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if ($affectation->_old->uf_medicale_id && $affectation->fieldModified("uf_medicale_id")) {
       /* @todo Gérer le cas où : création d'une nouvelle affectation && UM1 # UM2 */
       //return "Z80";
-      return "Z99";
+      //return "Z99";
+      return "A02";
     }
 
     /* Changement d'UF de Soins */
     if ($affectation->_old->uf_soins_id && $affectation->fieldModified("uf_soins_id")) {
       /* @todo Gérer le cas où : création d'une nouvelle affectation && US1 # US2 */
       //return "Z84";
-      return "Z99";
+      return "A02";
     }
  
     // Modifcation d'une affectation
