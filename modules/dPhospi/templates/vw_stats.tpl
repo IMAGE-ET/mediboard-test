@@ -15,6 +15,13 @@
     }
     url.requestUpdate(type);
   }
+  
+  listOperations = function(date, service_id) {
+    var url = new Url("dPhospi", "ajax_stat_list_operations");
+    url.addParam("date", date);
+    url.addParam("service_id", service_id);
+    url.requestUpdate("list_operations_uscpo");
+  }
 </script>
 
 <ul id="stats_hospi" class="control_tabs">

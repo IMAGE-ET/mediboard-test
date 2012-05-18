@@ -82,6 +82,14 @@ $graph = array('series' => $series, 'options' => $options);
 $service = new CService;
 $services = $service->loadListWithPerms(PERM_READ);
 
+$dates = array();
+$day = $date_min;
+
+while ($day <= $date_max) {
+  $dates[] = $day;
+  $day = mbDate("+1 day", $day);
+}
+
 $smarty = new CSmartyDP;
 
 $smarty->assign("date_min", $date_min);
@@ -89,6 +97,7 @@ $smarty->assign("date_max", $date_max);
 $smarty->assign("services", $services);
 $smarty->assign("graph"   , $graph);
 $smarty->assign("service_id", $service_id);
+$smarty->assign("dates"   , $dates);
 
 $smarty->display("inc_vw_stats_uscpo.tpl");
 ?>
