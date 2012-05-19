@@ -13,7 +13,7 @@
 </tr>
 <tr>
   <td class="button">
-    {{mb_include module=files template=inc_named_file object=$object name=identite.jpg}}
+    {{mb_include module=files template=inc_named_file object=$object name=identite.jpg mode=edit}}
   </td>
 </tr>
 
@@ -22,7 +22,7 @@
 </tr>
 <tr>
   <td class="button">
-    {{mb_include module=files template=inc_named_file object=$object name=signature.jpg}}
+    {{mb_include module=files template=inc_named_file object=$object name=signature.jpg mode=edit}}
   </td>
 </tr>
 

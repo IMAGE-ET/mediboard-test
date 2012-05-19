@@ -1,8 +1,9 @@
-{{mb_default var=mode       value=edit}}
+{{mb_default var=mode       value=read}}
 {{mb_default var=size       value=120}}
 {{mb_default var=bigsize    value=240}}
-{{mb_default var=border     value="#aaa"}}
-{{mb_default var=background value="#eee"}}
+{{mb_default var=border     value="aaa"}}
+{{mb_default var=background value="eee"}}
+{{mb_default var=default    value="unknown.png"}}
 
 {{assign var=file value=""}} 
 {{if (array_key_exists($name, $object->_ref_named_files))}}
@@ -14,14 +15,14 @@
   {{assign var=src  value="?m=files&a=fileviewer&suppressHeaders=1&file_id=$file_id&phpThumb=1&w=$size&h=$size&zc=1"}}
   {{assign var=_src value="?m=files&a=fileviewer&suppressHeaders=1&file_id=$file_id&phpThumb=1&w=$bigsize"}}
 {{else}}
-  {{assign var=src value="images/pictures/unknown.png"}}
+  {{assign var=src value="images/pictures/$default"}}
 {{/if}}
 
 <div id="{{$object->_guid}}-{{$name}}">
 
 <img 
   src="{{$src}}" 
-  style="width: {{$size}}px; height: {{$size}}px; border: 2px solid {{$border}}; background: {{$background}};" 
+  style="width: {{$size}}px; height: {{$size}}px; border: 2px solid #{{$border}}; background: #{{$background}};" 
   alt="{{$name}}" 
   {{if $file && $file->_id}} 
   onmouseover="ObjectTooltip.createDOM(this, 'tooltip-named-file-{{$file->_id}}')"

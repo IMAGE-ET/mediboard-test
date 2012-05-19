@@ -4,14 +4,15 @@
   <tr>
     <th class="title text" colspan="2">
       {{mb_include module=system template=inc_object_idsante400 object=$mediuser}}
-      {{mb_include module=system template=inc_object_history object=$mediuser}}
-      {{mb_include module=system template=inc_object_notes object=$mediuser}}
+      {{mb_include module=system template=inc_object_history    object=$mediuser}}
+      {{mb_include module=system template=inc_object_notes      object=$mediuser}}
       {{$mediuser}}
     </th>
   </tr>
   <tr>
     <td class="text" style="width: 1px;" rowspan="3">
-      <img src="images/pictures/identity_user.png" style="width: 50px; height: 50px; border: 2px solid #{{$mediuser->_ref_function->color}}; background: #f6f6ff;" alt="{{$object}}" />
+      {{assign var=border value=$mediuser->_ref_function->color}}
+      {{mb_include module=files template=inc_named_file name=identite.jpg default=identity_user.png size=50}}
     </td>
     <td class="text">
       <strong>{{mb_value object=$mediuser->_ref_function}}</strong>

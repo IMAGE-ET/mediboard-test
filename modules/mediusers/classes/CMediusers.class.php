@@ -92,7 +92,6 @@ class CMediusers extends CMbObject {
   var $_ref_profile                = null;
   var $_ref_user                   = null;
   var $_ref_intervenant_cdarr = null;
-  var $_ref_packs                  = array();
   var $_ref_protocoles             = array();
   
   // Object references per day
@@ -279,8 +278,9 @@ class CMediusers extends CMbObject {
     $user->user_type        = $this->_user_type;
     $user->user_username    = $this->_user_username;
     if (isset($this->_ldap_store)) {
-      $user->user_password    = $this->_user_password;
-    } else {
+      $user->user_password     = $this->_user_password;
+    } 
+    else {
       $user->_user_password    = $this->_user_password;
     }
     $user->user_first_name  = $this->_user_first_name;
@@ -368,8 +368,11 @@ class CMediusers extends CMbObject {
 
   function loadView() {
     parent::loadView();
-    $this->loadRefsFwd();
     $this->isPraticien();
+    $this->loadRefFunction();
+    $this->loadRefSpecCPAM();
+    $this->loadRefDiscipline();
+    $this->loadNamedFile("identite.jpg");
   }
 
   /**
@@ -408,18 +411,11 @@ class CMediusers extends CMbObject {
   }
   
   function loadRefsFwd() {
-    // Forward references
     $this->loadRefFunction();
     $this->loadRefSpecCPAM();
     $this->loadRefDiscipline();
   }
-
-  function loadRefsBack() {
-    $where = array("user_id" => "= '$this->user_id'");
-    $packs = new CPack;
-    $this->_ref_packs = $packs->loadList($where);
-  }
-
+  
   function getPerm($permType) {
     if ($this->user_id == CAppUI::$user->_id) {
       return true;

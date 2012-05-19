@@ -11,6 +11,7 @@ CCanDo::checkRead();
 
 $object = mbGetObjectFromGetOrSession("object_class", "object_id", "object_guid");
 $name   = CValue::get("name");
+$mode   = CValue::get("mode", "edit");
 
 $object->loadNamedFile($name);
 
@@ -19,6 +20,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("object", $object);
 $smarty->assign("name"  , $name);
+$smarty->assign("mode"  , $mode);
 
 $smarty->display("inc_named_file.tpl");
 ?>
