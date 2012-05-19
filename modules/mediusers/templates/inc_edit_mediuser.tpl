@@ -107,7 +107,7 @@ Main.add(function () {
   </table>
 
 	<script type="text/javascript">
-	Main.add(Control.Tabs.create.curry('tabs-form'));
+	Main.add(Control.Tabs.create.curry('tabs-form', true));
 	</script>
 	
 	<ul id="tabs-form" class="control_tabs">

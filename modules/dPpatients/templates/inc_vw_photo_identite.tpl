@@ -1,4 +1,4 @@
-{{mb_default var=mode value=edit}}
+{{mb_default var=mode value=read}}
 {{mb_default var=size value=120}}
 
 {{if $mode == "edit"}}

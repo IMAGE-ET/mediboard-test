@@ -1,4 +1,4 @@
-<?php /* $Id: vw_files.php 6345 2009-05-22 14:10:55Z mytto $ */
+<?php /* $Id: $ */
 
 /**
 * @package Mediboard

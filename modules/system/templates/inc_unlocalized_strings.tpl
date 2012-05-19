@@ -25,7 +25,7 @@
 
 <table class="form">
   <tr>
-    <th class="title" colspan="2">{{tr}}system-title-unlocalized{{/tr}}</th></tr>
+    <th class="title" colspan="2">{{tr}}system-title-unlocalized{{/tr}}</th>
   </tr>
   <tr>
     <th>{{tr}}Language{{/tr}}</th>

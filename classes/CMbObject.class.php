@@ -21,14 +21,15 @@ class CMbObject extends CStoredObject {
   var $_nb_exchanges           = null;
   var $_nb_exchanges_by_format = array();
     
-  var $_ref_last_id400 = null;
-  var $_ref_notes      = null; // Notes
-  var $_ref_documents  = array(); // Documents
-  var $_ref_files      = array(); // Fichiers
-  var $_ref_affectations_personnel  = null;
-  var $_ref_object_configs = null; // Object configs
-  var $_ref_tag_items  = array(); // Object tag items
-
+  var $_ref_last_id400     = null;
+  var $_ref_notes          = null; // Notes
+  var $_ref_documents      = array(); // Documents
+  var $_ref_files          = array(); // Fichiers
+  var $_ref_named_files    = array(); // Fichiers par nom
+  var $_ref_tag_items      = array(); // Object tag items
+  var $_ref_object_configs = null;   // Object configs
+  
+  var $_ref_affectations_personnel   = null;
   var $_count_affectations_personnel = null;
   
   /**
@@ -60,6 +61,7 @@ class CMbObject extends CStoredObject {
 
   /**
    * Load files for object with PERM_READ
+   * 
    * @return int file count
    */
   function loadRefsFiles() {
@@ -69,12 +71,24 @@ class CMbObject extends CStoredObject {
     
     // Read permission
     foreach ($this->_ref_files as $_file) {
+      $this->_ref_files_by_name[$_file->file_name] = $_file;
       if (!$_file->canRead()){
         unset($this->_ref_files[$_file->_id]);
       }
     }
     
     return count($this->_ref_files);
+  }
+  
+  /**
+   * Load a named file for for the object, supposedly unique
+   * 
+   * @param string $name Name of the file
+   * 
+   * @return CFile The named file
+   */
+  function loadNamedFile($name) {
+    return $this->_ref_named_files[$name] = CFile::loadNamed($this, $name);
   }
 
   /**

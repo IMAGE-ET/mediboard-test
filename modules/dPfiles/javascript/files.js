@@ -8,24 +8,24 @@ function popFile(objectClass, objectId, elementClass, elementId, sfn){
 
 function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
   file_preview = elementId;
-  var url = new Url("dPfiles", "preview_files");
-  url.addParam("objectClass", objectClass);
-  url.addParam("objectId", objectId);
-  url.addParam("elementClass", elementClass);
-  url.addParam("elementId", elementId);
+  var url = new Url('files', 'preview_files');
+  url.addParam('objectClass', objectClass);
+  url.addParam('objectId', objectId);
+  url.addParam('elementClass', elementClass);
+  url.addParam('elementId', elementId);
   if(sfn && sfn != 0){
-    url.addParam("sfn", sfn);
+    url.addParam('sfn', sfn);
   }
   url.requestUpdate('bigView');
 }
 
 function setObject(oObject){
-  var oForm = getForm("FrmClass");
+  var oForm = getForm('FrmClass');
   oForm.selKey.value = oObject.id;
   oForm.selView.value = oObject.view;
   oForm.selClass.value = oObject.objClass;
   oForm.keywords.value = oObject.keywords;
-  oForm.file_id.value = "";
+  oForm.file_id.value = '';
   if (oForm.onsubmit()) {
     oForm.submit();
   }
@@ -36,7 +36,7 @@ function setObject(oObject){
 }
 
 function reloadListFileDossier(sAction){
-  var oForm = getForm("FrmClass");
+  var oForm = getForm('FrmClass');
   var sSelClass = oForm.selClass.value;
   var sSelKey   = oForm.selKey.value;
   
@@ -44,11 +44,11 @@ function reloadListFileDossier(sAction){
     return false;
   }
   
-  var url = new Url("dPfiles", "httpreq_vw_listfiles");
-  url.addParam("selKey", sSelKey);
-  url.addParam("selClass", sSelClass);  
-  url.addParam("typeVue", oForm.typeVue.value);
-  url.addParam("accordDossier", 1);
+  var url = new Url('files', 'httpreq_vw_listfiles');
+  url.addParam('selKey', sSelKey);
+  url.addParam('selClass', sSelClass);  
+  url.addParam('typeVue', oForm.typeVue.value);
+  url.addParam('accordDossier', 1);
   url.requestUpdate('File'+sSelClass+sSelKey);
 }
 
@@ -65,19 +65,20 @@ function reloadAfterDeleteFile(category_id){
 }
 
 function reloadListFile(sAction, category_id){
-  if(sAction == "delete" && file_preview == file_deleted){
-    ZoomAjax("","","","", 0);
+  if(sAction == 'delete' && file_preview == file_deleted){
+    ZoomAjax('','','','', 0);
   }
   
-  var oForm = getForm("FrmClass");
-  var url = new Url("dPfiles", "httpreq_vw_listfiles");
-  url.addParam("selKey", oForm.selKey.value);
-  url.addParam("selClass", oForm.selClass.value);  
-  url.addParam("typeVue", oForm.typeVue.value);
+  var oForm = getForm('FrmClass');
+  var url = new Url('files', 'httpreq_vw_listfiles');
+  url.addParam('selKey', oForm.selKey.value);
+  url.addParam('selClass', oForm.selClass.value);  
+  url.addParam('typeVue', oForm.typeVue.value);
   if (category_id != undefined) {
-    url.addParam("category_id", category_id);
-    if (category_id == "") category_id = 0;
-    url.addParam("category_id", category_id);
+    if (category_id == '') {
+      category_id = 0;
+    }
+    url.addParam('category_id', category_id);
     url.requestUpdate('Category-' + category_id);
   }
   else {
@@ -87,7 +88,7 @@ function reloadListFile(sAction, category_id){
 
 function submitFileChangt(oForm){
   file_deleted = null;
-  onSubmitFormAjax(oForm, { onComplete : reloadAfterMoveFile });
+  onSubmitFormAjax(oForm, reloadAfterMoveFile);
 }
 
 if (window.Document) {
