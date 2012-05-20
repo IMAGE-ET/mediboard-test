@@ -98,6 +98,10 @@ class CFile extends CDocumentItem {
    * @return CFile
    */
   static function loadNamed(CMbObject $object, $name) {
+    if (!$object->_id) {
+      return new CFile;
+    }
+    
     $file = new CFile();
     $file->setObject($object);
     $file->file_name = $name;

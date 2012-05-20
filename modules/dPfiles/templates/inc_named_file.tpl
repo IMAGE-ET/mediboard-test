@@ -41,13 +41,14 @@
 {{if $mode == "edit"}}
 <script type="text/javascript">
 NamedFile = {
-  init: function(object_guid, name) {
+  init: function(object_guid, name, size) {
     this.object_guid = object_guid;
     this.name        = name;
+    this.size        = size;
   },
   
-  remove: function(object_guid, name, file_id, file_view) {
-    this.init(object_guid, name);
+  remove: function(object_guid, name, file_id, file_view, size) {
+    this.init(object_guid, name, size);
     this.file_id = file_id;
     
     var options = {
@@ -75,12 +76,13 @@ NamedFile = {
     var url = new Url('files', 'vw_named_file');
     url.addParam('object_guid', this.object_guid);
     url.addParam('name', this.name);
+    url.addParam('size', this.size);
     url.addParam('mode', 'edit');
     url.requestUpdate(this.object_guid+'-'+this.name);
   },
   
-  upload: function(object_guid, name) {
-    this.init(object_guid, name);
+  upload: function(object_guid, name, size) {
+    this.init(object_guid, name, size);
     uploadFile(object_guid, null, name, 1);
   }
 };
@@ -90,12 +92,12 @@ reloadAfterUploadFile = NamedFile.refresh.bind(NamedFile);
 
 <br />
 {{if $file && $file->_id}}
-  <button onclick="NamedFile.remove('{{$object->_guid}}', '{{$name}}', '{{$file->_id}}', '{{$file}}')" class="trash" type="button">
+  <button onclick="NamedFile.remove('{{$object->_guid}}', '{{$name}}', '{{$file->_id}}', '{{$file}}', '{{$size}}')" class="trash" type="button">
     {{tr}}Delete{{/tr}}
   </button>
 
 {{else}}
-<button type="button" class="search" onclick="NamedFile.upload('{{$object->_guid}}', '{{$name}}');">
+<button type="button" class="search" onclick="NamedFile.upload('{{$object->_guid}}', '{{$name}}', '{{$size}}');">
   {{tr}}Browse{{/tr}}
 </button>
 
