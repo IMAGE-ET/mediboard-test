@@ -292,12 +292,12 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       $addresses[$adress_type]["pays_insee"] = $this->queryTextNode("XAD.6", $_PID11);
     }
     // Adresse  naissance
-    if (array_key_exists("BR", $addresses)) {
-      $newPatient->lieu_naissance       = CValue::read($addresses["BR"], "ville");
-      $newPatient->cp_naissance         = CValue::read($addresses["BR"], "cp");
-      $newPatient->pays_naissance_insee = CValue::read($addresses["BR"], "pays_insee");
+    if (array_key_exists("BDL", $addresses)) {
+      $newPatient->lieu_naissance       = CValue::read($addresses["BDL"], "ville");
+      $newPatient->cp_naissance         = CValue::read($addresses["BDL"], "cp");
+      $newPatient->pays_naissance_insee = CValue::read($addresses["BDL"], "pays_insee");
       
-      unset($addresses["BR"]);
+      unset($addresses["BDL"]);
     }
     // Adresse
     if (array_key_exists("H", $addresses)) {
@@ -323,7 +323,14 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       $tel_number = $this->queryTextNode("XTN.1", $_PID13);
       switch ($this->queryTextNode("XTN.2", $_PID13)) {
         case "PRN" :
-          $newPatient->tel  = $this->getPhone($tel_number);
+	      if ($this->queryTextNode("XTN.3", $_PID13) == "PH") {
+	      	mbTrace($tel_number);
+	      	$newPatient->tel  = $this->getPhone($tel_number);
+		  }		
+          
+	      if ($this->queryTextNode("XTN.3", $_PID13) == "CP") {
+            $newPatient->tel2 = $this->getPhone($tel_number);
+          }
           break;
         case "ORN" :
           if ($this->queryTextNode("XTN.3", $_PID13) == "CP") {
