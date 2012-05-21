@@ -286,10 +286,11 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     foreach ($PID11 as $_PID11) {
       $adress_type = $this->queryTextNode("XAD.7", $_PID11);
       /* @todo Ajouter la gestion des multi-lignes - SAD.2 */
-      $addresses[$adress_type]["adresse"]    = $this->queryTextNode("XAD.1", $_PID11);
-      $addresses[$adress_type]["ville"]      = $this->queryTextNode("XAD.3", $_PID11);
-      $addresses[$adress_type]["cp"]         = $this->queryTextNode("XAD.5", $_PID11);
-      $addresses[$adress_type]["pays_insee"] = $this->queryTextNode("XAD.6", $_PID11);
+      $addresses[$adress_type]["adresse"]      = $this->queryTextNode("XAD.1", $_PID11);
+	  $addresses[$adress_type]["adresse_comp"] = $this->queryTextNode("XAD.2", $_PID11);
+      $addresses[$adress_type]["ville"]        = $this->queryTextNode("XAD.3", $_PID11);
+      $addresses[$adress_type]["cp"]           = $this->queryTextNode("XAD.5", $_PID11);
+      $addresses[$adress_type]["pays_insee"]   = $this->queryTextNode("XAD.6", $_PID11);
     }
     // Adresse  naissance
     if (array_key_exists("BDL", $addresses)) {
@@ -311,9 +312,16 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
   
   function getAdress($adress, CPatient $newPatient) {    
     $newPatient->adresse    = $adress["adresse"];
+	if ($adress["adresse_comp"]) {
+      $newPatient->adresse  .= $this->getCompAdress($adress["adresse_comp"]);
+	}
     $newPatient->ville      = $adress["ville"];
     $newPatient->cp         = $adress["cp"];
     $newPatient->pays_insee = $adress["pays_insee"];
+  }
+  
+  function getCompAdress($adress) {
+  	return "\n". str_replace("\\S\\", "\n", $adress);
   }
   
   function getPhones(DOMNode $node, CPatient $newPatient) {
