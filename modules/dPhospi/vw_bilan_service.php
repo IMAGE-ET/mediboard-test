@@ -113,9 +113,7 @@ if($do_trans){
   $ljoin["lit"] = "affectation.lit_id = lit.lit_id";
   $ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
   $ljoin["service"] = "chambre.service_id = service.service_id";
-  
-  $where[] = "(degre = 'high') OR (date >= '$dateTime_min' AND date <= '$dateTime_max')";
-  
+ 
   $where["sejour.entree"] = "<= '$dateTime_max'";
   $where["sejour.sortie"] = " >= '$dateTime_min'";              
   
@@ -123,22 +121,24 @@ if($do_trans){
   $where["affectation.sortie"] = ">= '$dateTime_min'";
   $where["service.service_id"] = " = '$service_id'";
   
+  $whereTrans[] = "(degre = 'high' AND (date_max IS NULL OR date_max >= '$dateTime_min')) OR (date >= '$dateTime_min' AND date <= '$dateTime_max')";
   if ($_present_only) {
     $where["sejour.sortie_reelle"] = 'IS NULL';
   }
   
   $order_by = "chambre.nom, date DESC";
 
+  $whereTrans += $where;
   $transmission = new CTransmissionMedicale();
-  $_transmissions = $transmission->loadList($where, $order_by, null, null, $ljoin);
+  $_transmissions = $transmission->loadList($whereTrans, $order_by, null, null, $ljoin);
   
+  $whereObs[] = "(degre = 'high') OR (date >= '$dateTime_min' AND date <= '$dateTime_max')";
+  $whereObs += $where;
+
   $ljoin["sejour"] = "observation_medicale.sejour_id = sejour.sejour_id";
   $observation = new CObservationMedicale();
   $_observations = $observation->loadList($where, $order_by, null, null, $ljoin);
-  
-  // On retire le degré dans le where
-  unset($where[0]);
-  
+    
   $where[] = "(datetime >= '$dateTime_min ' AND datetime <= '$dateTime_max')";
   $ljoin["sejour"] = "constantes_medicales.context_id = sejour.sejour_id";
   $where["context_class"] = " = 'CSejour'";

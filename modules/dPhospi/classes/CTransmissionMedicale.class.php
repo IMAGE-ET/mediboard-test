@@ -18,6 +18,7 @@ class CTransmissionMedicale extends CMbMetaObject {
   var $user_id     = null;
   var $degre       = null;
   var $date        = null;
+  var $date_max    = null;
   var $text        = null;
   var $type        = null;
   var $libelle_ATC = null;
@@ -48,6 +49,7 @@ class CTransmissionMedicale extends CMbMetaObject {
     $props["user_id"]      = "ref notNull class|CMediusers";
     $props["degre"]        = "enum notNull list|low|high default|low";
     $props["date"]         = "dateTime notNull";
+    $props["date_max"]     = "dateTime";
     $props["text"]         = "text helped|type|object_id";
     $props["type"]         = "enum list|data|action|result";
     $props["libelle_ATC"]  = "text";

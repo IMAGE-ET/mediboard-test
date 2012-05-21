@@ -70,6 +70,8 @@ Main.add(function() {
   {{elseif $transmission->libelle_ATC}}
     updateListTransmissions('{{$transmission->libelle_ATC|smarty:nodefaults|JSAttribute}}');
   {{/if}}
+  
+  toggleDateMax();
 });
 
 updateCible = function(elt) {
@@ -117,6 +119,16 @@ completeTrans = function(type, button){
   $V(oField, $V(oField) ? $V(oField)+"\n"+text : text);
 }
 
+toggleDateMax = function() {
+  var oForm = getForm("editTrans");
+  if ($V(oForm.degre) == "high") {
+    $('date-max-{{$transmission->sejour_id}}').show()
+  } else {
+    $('date-max-{{$transmission->sejour_id}}').hide()
+    $V(oForm.date_max, '');
+  }
+}
+
 </script>
 
 <form name="editTrans" action="?" method="post" onsubmit="return checkForm(this)" style="text-align: left;">
@@ -148,13 +160,19 @@ completeTrans = function(type, button){
             <div style="display:none; width: 350px; white-space: normal; text-align: left;" class="autocomplete" id="cible_auto_complete"></div>
             <br />
           {{/if}}
-          {{mb_label object=$transmission field=degre}} : {{mb_field object=$transmission field=degre}} &mdash;
+          {{mb_label object=$transmission field=degre}} : {{mb_field object=$transmission field=degre onchange="toggleDateMax();"}} &mdash;
           {{mb_label object=$transmission field=date}} : {{mb_field object=$transmission field=date}}
+          <span id="date-max-{{$transmission->sejour_id}}" style="display: none;">
+            &mdash;
+            {{mb_label object=$transmission field=date_max}} : {{mb_field object=$transmission field=date_max form="editTrans" register=true}}
+          </span>
           
           {{if $transmission->_id && !$transmission->type}}
+            &mdash;
             {{mb_label object=$transmission field=type}} : {{mb_field object=$transmission field="type" typeEnum="radio"}}
             <button type="button" onclick="$V(this.form.type, '')" class="cancel notext"></button>
           {{elseif $transmission->_id}}
+            &mdash;
             {{mb_label object=$transmission field=type}} : {{mb_value object=$transmission field="type"}}
           {{/if}}
         </fieldset>
