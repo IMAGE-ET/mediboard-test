@@ -158,9 +158,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if ($venueAN) {
       $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
     }
-    
+	
     // NDA non connu (non fourni ou non retrouvé)
-    if (!$venueAN || $NDA->_id) {
+    if (!$NDA->_id) {
       // Aucun NDA fourni / Association du NDA
       $code_NDA = !$venueAN ? "I225" : "I222";
       
@@ -911,16 +911,24 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if (!array_key_exists("ZBE", $data)) {
       return;
     }
+	
+	if (!($ZBE_7 = $this->queryNode("ZBE.7", $data["ZBE"]))) {
+		return;
+	}
     
-    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $this->queryNode("ZBE.7", $data["ZBE"])))->_id;
+    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_7))->_id;
   }
   
   function mappingUFSoins($data) {
     if (!array_key_exists("ZBE", $data)) {
       return;
     }
+	
+	if (!($ZBE_8 = $this->queryNode("ZBE.8", $data["ZBE"]))) {
+		return;
+	}
     
-    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $this->queryNode("ZBE.8", $data["ZBE"])))->_id;
+    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_8))->_id;
   }  
   
   function mappingMovement($data, CSejour $newVenue, CMovement $movement) {
@@ -1322,7 +1330,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getModeProvenancePMSI(DOMNode $node, CSejour $newVenue) {
-    $newVenue->provenance = $this->queryTextNode("ZFM.3", $node);
+  	$ZFM_3 = $this->queryTextNode("ZFM.3", $node);
+  	if ($ZFM_3 == 0) {
+  	  $ZFM_3 = null;	
+  	}
+    $newVenue->provenance = $ZFM_3;
   }
   
   function getModeDestinationPMSI(DOMNode $node, CSejour $newVenue) {
