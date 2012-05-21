@@ -326,13 +326,17 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
   
   function getPhones(DOMNode $node, CPatient $newPatient) {
     $PID13 = $this->query("PID.13", $node);
-    $phones = array();
+    
     foreach ($PID13 as $_PID13) {
-      $tel_number = $this->queryTextNode("XTN.1", $_PID13);
+      $tel_number = $this->queryTextNode("XTN.12", $_PID13);
+      
+      if (!$tel_number) {
+      	$tel_number = $this->queryTextNode("XTN.1", $_PID13);
+      }
+      
       switch ($this->queryTextNode("XTN.2", $_PID13)) {
         case "PRN" :
 	      if ($this->queryTextNode("XTN.3", $_PID13) == "PH") {
-	      	mbTrace($tel_number);
 	      	$newPatient->tel  = $this->getPhone($tel_number);
 		  }		
           
