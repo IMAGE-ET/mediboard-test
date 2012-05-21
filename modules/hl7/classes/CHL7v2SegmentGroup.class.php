@@ -114,7 +114,7 @@ class CHL7v2SegmentGroup extends CHL7v2Entity {
   }
   
   function __toString(){
-    $str = implode((CHL7v2Message::$decorateToString ? "" : $this->getMessage()->segmentTerminator), $this->children);
+    $str = implode("", $this->children);
     
     if (CHL7v2Message::$decorateToString && !$this instanceof CHL7v2Message) {
       $str = "<div class='entity_foo group_bar' id='entity-er7-$this->id' data-title='$this->name'>$str</div>";

@@ -95,7 +95,7 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
       }
       // Passage en trash de l'IPP du patient a éliminer
       $id400PatientElimine->tag = CAppUI::conf('dPpatients CPatient tag_ipp_trash').$sender->_tag_patient;
-      //$id400PatientElimine->store();
+      $id400PatientElimine->store();
       
       $messages = array();
             

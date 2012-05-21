@@ -186,7 +186,10 @@ class CHL7v2Segment extends CHL7v2Entity {
     if (CHL7v2Message::$decorateToString) {
       $str = "<div class='entity segment' id='entity-er7-$this->id' data-title='$this->description'>$str</div>";
     }
-    
+	else {
+	  $str .= $this->getMessage()->segmentTerminator;
+	}
+	
     return $str;
   }
   
