@@ -38,10 +38,10 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     $data[] = substr($message->encoding_characters(), 1);       
      
     // MSH-3: Sending Application (HD) (optional)
-    $data[] = "Mediboard"; 
+    $data[] = CAppUI::conf("hl7 sending_application"); 
     
     // MSH-4: Sending Facility (HD) (optional)
-    $data[] = $group->finess ? "Mediboard_$group->finess" : "Mediboard"; 
+    $data[] = CAppUI::conf("hl7 sending_facility");
     
     // MSH-5: Receiving Application (HD) (optional)
     $data[] = isset($actor->_configs["receiving_application"]) ? $actor->_configs["receiving_application"] : $actor->nom; 

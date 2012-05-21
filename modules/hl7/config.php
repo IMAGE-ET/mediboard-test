@@ -2,9 +2,11 @@
 
 // HL7v2 Tables
 $dPconfig["hl7"] = array(
-"assigning_authority_namespace_id"        => "Mediboard",
+  "assigning_authority_namespace_id"        => "Mediboard",
   "assigning_authority_universal_id"      => "1.2.250.1.2.3.4",
   "assigning_authority_universal_type_id" => "OX",
+  "sending_application"                   => "Mediboard",
+  "sending_facility"                      => "Mediboard",
   "strictSejourMatch"                     => "1",
   "indeterminateDoctor"                   => "Medecin indéterminé",
   "doctorActif"                           => "0",
