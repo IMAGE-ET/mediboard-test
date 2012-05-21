@@ -198,6 +198,7 @@ $locales['mod-eai-tab-ajax_vw_exchange_details'] = 'Détails de l\'échange';
 $locales['mod-eai-tab-ajax_vw_messages_supported'] = 'Messages supportés';
 $locales['mod-eai-tab-configure'] = 'Configurer';
 $locales['mod-eai-tab-download_exchange'] = 'Télécharger l\'échange';
+$locales['mod-eai-tab-import_config'] = 'Import configuration du format';
 $locales['mod-eai-tab-vw_idx_exchange_data_format'] = 'Echanges';
 $locales['mod-eai-tab-vw_idx_interop_actors'] = 'Acteurs';
 $locales['mod-eai-tab-vw_stats'] = 'Stats';

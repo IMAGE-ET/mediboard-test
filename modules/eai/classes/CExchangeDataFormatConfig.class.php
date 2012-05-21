@@ -57,6 +57,10 @@ class CExchangeDataFormatConfig extends CMbObject {
     
    return $doc;
   }
+  
+  function importXML() {
+    
+  }
 }
 
 ?>
