@@ -9,6 +9,10 @@
  * @link     http://www.mediboard.org
 *}}
 
+<a class="button download" target="_blank" href="?m=eai&amp;a=export_config&amp;suppressHeaders=1&config_guid={{$format_config->_guid}}">
+  {{tr}}Export{{/tr}}
+</a>
+
 <table class="form">
   {{foreach from=$categories key=cat_name item=_fields}}
     {{if $cat_name}}
