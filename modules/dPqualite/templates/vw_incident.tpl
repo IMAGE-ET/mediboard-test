@@ -53,10 +53,10 @@ function choixSuiteEven(){
   var oForm = document.FrmEI;
   if(oForm.suite_even.value=="autre"){
     $('suiteEvenAutre').show();
-    oForm.suite_even_descr.class="notNull {{$fiche->_props.suite_even_descr}}";
-  }else{
+    oForm.suite_even_descr.className = "notNull {{$fiche->_props.suite_even_descr}}";    
+  } else {
     $('suiteEvenAutre').hide();
-    oForm.suite_even_descr.class="{{$fiche->_props.suite_even_descr}}";
+    oForm.suite_even_descr.className = "{{$fiche->_props.suite_even_descr}}";
   }
 }
 
