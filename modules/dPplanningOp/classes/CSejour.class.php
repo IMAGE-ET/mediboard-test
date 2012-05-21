@@ -643,6 +643,19 @@ class CSejour extends CCodable implements IPatientRelated {
       }
     }
     
+    // Si annulation possible que par le chef de bloc
+    if (CAppUI::conf("dPplanningOp COperation cancel_only_for_resp_bloc") &&
+      $this->fieldModified("annule", 1) &&
+      $this->entree_reelle &&
+      !CModule::getCanDo("dPbloc")->edit) {
+      foreach ($this->loadRefsOperations() as $_operation) {
+        if ($_operation->rank) {
+          CAppUI::setMsg("Impossible de sauvegarder : une des interventions du séjour est validée.\nContactez le responsable de bloc", UI_MSG_ERROR);
+          return;
+        }
+      }
+    }
+    
     // On fait le store du séjour
     if ($msg = parent::store()) {
       return $msg;

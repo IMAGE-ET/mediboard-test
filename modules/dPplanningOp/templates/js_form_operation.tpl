@@ -239,6 +239,17 @@ function cancelOperation() {
         }
       }
       
+      {{if $conf.dPplanningOp.COperation.cancel_only_for_resp_bloc && $modules.dPbloc->_can->edit && $op->_id && $op->_ref_sejour->entree_reelle && $op->rank}}
+        // Si annulation d'une intervention validée que par le chef de bloc
+        // alors, complétion des remarques pour ajouter Récusée
+        var rques = $V(oForm.rques);
+        if (rques) {
+          $V(oForm.rques, "Récusée\n" + rques);
+        }
+        else {        
+          $V(oForm.rques,  "Récusée");
+        }
+      {{/if}}
       oElement.value = "1";
       submitForms();
       return;

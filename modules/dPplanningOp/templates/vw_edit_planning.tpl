@@ -150,8 +150,8 @@ modeExpertDisplay = function() {
 }
 </script> 
 
-{{include file="js_form_operation.tpl"}}
-{{include file="js_form_sejour.tpl"}}
+{{mb_include module=planningOp template=js_form_operation}}
+{{mb_include module=planningOp template=js_form_sejour}}
 
 <div class="big-info text"  style="display: none; text-align: center;" id="sejour-value-chooser">
   Veuillez indiquer si vous souhaitez garder les valeurs du <strong>dossier existant</strong> ou bien utiliser celles que vous venez de saisir (<strong>nouveau dossier</strong>) :
@@ -259,7 +259,9 @@ modeExpertDisplay = function() {
 			{{if $op->annulee}}
       <button class="change" type="button" onclick="cancelObjects();">{{tr}}Restore{{/tr}}</button>
       {{else}}
-      <button class="cancel" type="button" onclick="cancelObjects();">{{tr}}Cancel{{/tr}}</button>
+        {{if !$conf.dPplanningOp.COperation.cancel_only_for_resp_bloc || $modules.dPbloc->_can->edit || (!$op->_ref_sejour->entree_reelle && !$op->rank)}}
+          <button class="cancel" type="button" onclick="cancelObjects();">{{tr}}Cancel{{/tr}}</button>
+        {{/if}}
       {{/if}}
       {{if !$conf.dPplanningOp.COperation.delete_only_admin || $can->admin}}
       <button class="trash" type="button" onclick="deleteObjects();">{{tr}}Delete{{/tr}}</button>

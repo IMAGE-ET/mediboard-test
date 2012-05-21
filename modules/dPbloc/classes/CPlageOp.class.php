@@ -198,7 +198,8 @@ class CPlageOp extends CMbObject {
     $this->completeField("debut", "temps_inter_op");
     
     if(!count($this->_ref_operations)) {
-      $this->loadRefsOperations(false, "rank, rank_voulu, horaire_voulu", true);
+      $with_cancelled = CAppUI::conf("dPplanningOp COperation save_rank_annulee_validee");
+      $this->loadRefsOperations($with_cancelled, "rank, rank_voulu, horaire_voulu", true);
     }
     
     $new_time = $this->debut;

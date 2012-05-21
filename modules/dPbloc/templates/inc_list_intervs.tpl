@@ -60,7 +60,7 @@
       {{/if}}
       <strong>
         {{if $_op->rank}}
-          <div class="rank" style="float: left;">{{$_op->rank}}</div>
+          <div class="rank" style="float: left;{{if $_op->annulee}}background: #800; color: #fff;{{/if}}">{{$_op->rank}}</div>
           {{$_op->time_operation|date_format:$conf.time}}
         {{elseif $_op->rank_voulu}}
           <div class="rank desired" style="float: left;">{{$_op->rank_voulu}}</div>
@@ -160,7 +160,7 @@
     
     <td class="narrow" style="text-align: center;">
       <!-- Intervention à valider -->
-      {{if $_op->annulee}}
+      {{if $_op->annulee && !$conf.dPplanningOp.COperation.save_rank_annulee_validee}}
         <img src="images/icons/cross.png" />
       {{elseif $_op->rank == 0}}
         <form name="edit-insert-{{$_op->operation_id}}" action="?m={{$m}}" method="post" class="prepared">

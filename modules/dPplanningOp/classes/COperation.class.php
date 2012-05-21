@@ -619,7 +619,7 @@ class COperation extends CCodable implements IPatientRelated {
         $this->_ref_sejour->_protocole_prescription_anesth_id = null;
       }
     } 
-    elseif ($this->rank != 0) {
+    elseif ($this->rank != 0 && !CAppUI::conf("dPplanningOp COperation save_rank_annulee_validee")) {
       $this->rank = 0;
       $this->time_operation = "00:00:00";
     }
