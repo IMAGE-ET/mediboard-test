@@ -84,6 +84,7 @@ foreach ($listPlage as $keyPlage => &$currPlage) {
   $currPlage->_ref_chir =& $listPrat[$currPlage->chir_id];
   $currPlage->loadFillRate();
   $currPlage->loadCategorieFill();
+  $currPlage->loadRefsNotes();
 }
 
 // Création du template

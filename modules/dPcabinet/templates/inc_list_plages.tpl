@@ -16,6 +16,11 @@
           </div>
         </td>
         <td class="text">
+          {{if $online}}
+            <span style="float: right;">
+              {{mb_include module=system template=inc_object_notes object=$_plage}}
+            </span>
+          {{/if}}
           {{$_plage->libelle}}
         </td>
         <td>
