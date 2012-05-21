@@ -171,6 +171,15 @@
     </td>
   </tr>
   <tr>
+    <td>
+      <img src="images/pictures/overweight.png" />
+    </td>
+    <td>
+      Poids supérieur à 120 kilogrammes
+    </td>
+  </tr>
+  </tr>
+  <tr>
     <th class="category" colspan="2">
       Alertes
     </th>

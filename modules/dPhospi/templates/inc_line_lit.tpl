@@ -142,6 +142,9 @@
                         $_affectation->effectue}}
                         </span>
                       {{/if}}
+                      {{if $_patient->_overweight}}
+                        <img src="images/pictures/overweight.png" />
+                      {{/if}}
                       {{if $mode_vue_reelle == "classique"}}
                         <div class="compact">
                           {{$_sejour->_motif_complet}}

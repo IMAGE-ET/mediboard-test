@@ -108,8 +108,7 @@
                 style="border: 1px solid #{{$praticien->_ref_function->color}}; width: {{$width}}%; left: {{$offset}}%; margin-left: 15.1%;"
                 id="sejour_temporel_{{$_sejour->_id}}"
                 data-patient_id="{{$patient->_id}}"
-                data-sejour_id="{{$_sejour->_id}}"
-                onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
+                data-sejour_id="{{$_sejour->_id}}">
                 <span style="float: left; padding-left: 1px; padding-right: 1px;">
                   {{mb_include module=patients template=inc_vw_photo_identite mode=read patient=$patient size=22}}
                 </span>
@@ -119,7 +118,8 @@
                       <input type="radio" name="sejour_move" id="sejour_move_{{$_sejour->_id}}" onclick="chooseSejour('{{$_sejour->_id}}');"/>
                     </span>
                   {{/if}}
-                  <span {{if !$_sejour->entree_reelle}}class="patient-not-arrived"{{/if}} {{if $_sejour->septique}}class="septique"{{/if}}
+                  <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');"
+                    {{if !$_sejour->entree_reelle}}class="patient-not-arrived"{{/if}} {{if $_sejour->septique}}class="septique"{{/if}}
                   {{if $_sejour->type == "ambu"}}style="font-style: italic;"{{/if}}>
                     {{$patient->nom}} {{if $patient->nom_jeune_fille}}({{$patient->nom_jeune_fille}}) {{/if}}{{$patient->prenom}}
                   </span> {{if $show_age_patient}}({{$patient->_age}} ans){{/if}}
@@ -127,6 +127,9 @@
                     ({{$_sejour->_duree}}j - {{$_sejour->_ref_praticien->_shortview}})
                   {{else}}
                     ({{$_sejour->type|truncate:1:""|capitalize}} - {{$_sejour->_ref_praticien->_shortview}})
+                  {{/if}}
+                  {{if $patient->_overweight}}
+                    <img src="images/pictures/overweight.png" />
                   {{/if}}
                   <span style="float: right; margin-top: 3px; margin-right: 3px;">
                     {{mb_include module=patients template=inc_vw_antecedents type=deficience readonly=1}}

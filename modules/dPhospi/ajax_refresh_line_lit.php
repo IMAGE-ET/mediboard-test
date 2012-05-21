@@ -121,6 +121,9 @@ foreach ($affectations as $_affectation) {
   $patient = $sejour->loadRefPatient();
   $patient->loadRefPhotoIdentite();
   $patient->loadRefDossierMedical()->loadRefsAntecedents();
+  $constantes = $patient->getFirstConstantes();
+  $patient->_overweight = $constantes->poids > 120;
+  
   $lit->_ref_affectations[$_affectation->_id] = $_affectation;
   $_affectation->_entree_offset = CMbDate::position(max($date_min, $_affectation->entree), $date_min, $period);
   $_affectation->_sortie_offset = CMbDate::position(min($date_max, $_affectation->sortie), $date_min, $period);

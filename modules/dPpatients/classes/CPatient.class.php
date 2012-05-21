@@ -181,7 +181,7 @@ class CPatient extends CMbObject {
   var $_can_see_photo = null;
   var $_csp_view      = null;
   var $_nb_enfants    = null;
-  
+  var $_overweight    = null;
   var $_age_min       = null;
   var $_age_max       = null;
 

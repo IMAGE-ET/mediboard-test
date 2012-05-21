@@ -178,6 +178,8 @@ foreach($sejours_non_affectes as $_key => $_sejour) {
     $patient = $_sejour->loadRefPatient();
     $patient->loadRefPhotoIdentite();
     $patient->loadRefDossierMedical()->loadRefsAntecedents();
+    $constantes = $patient->getFirstConstantes();
+    $patient->_overweight = $constantes->poids > 120;
   }
   
   if (isset($operations[$_sejour->_id])) {
