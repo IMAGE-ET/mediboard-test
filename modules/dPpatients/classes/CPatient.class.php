@@ -168,6 +168,7 @@ class CPatient extends CMbObject {
   var $_generate_IPP                = true;
   
   // Form fields
+  var $_vip           = null;
   var $_age           = null;
   var $_age_assure    = null;
   var $_civilite      = null;
@@ -378,6 +379,7 @@ class CPatient extends CMbObject {
     
     $specs["_type_exoneration"]           = "enum list|".implode("|", $types_exo);
     $specs["_age"]                        = "num show|1";
+    $specs["_vip"]                        = "bool";
     $specs["_age_assure"]                 = "num";
     
     $specs["_age_min"]                    = "num min|0";
@@ -537,6 +539,8 @@ class CPatient extends CMbObject {
   
     $this->evalAge();
     
+    $this->checkVIP();
+    
     $this->_civilite = CAppUI::tr("CPatient.civilite.$this->civilite");
     if ($this->civilite === "enf") {
       $this->_civilite_long = $this->sexe === "m" ? CAppUI::tr("CPatient.civilite.le_jeune") : CAppUI::tr("CPatient.civilite.la_jeune");
@@ -576,6 +580,35 @@ class CPatient extends CMbObject {
   function evalAge($date = null) {
     $achieved = CMbDate::achievedDurations($this->naissance, $date);
     return $this->_age = $achieved["year"];
+  }
+  
+  /**
+   * Calcul l'aspect confidentiel du patient
+   * @return bool on a accès ou pas
+   */
+  function checkVIP() {
+    $this->_vip = false;
+    if($this->vip && !CModule::getCanDo("dPpatient")->admin()) {
+      $user_in_list_prat = false;
+      $user_in_logs      = false;
+      $this->loadDossierComplet();
+      foreach($this->_ref_praticiens as $_prat) {
+        if($user->_id == $_prat->user_id) {
+          $user_in_list_prat = true;
+        }
+      }
+      $this->loadLogs();
+      foreach($patient->_ref_logs as $_log) {
+        if($user->_id == $_log->user_id) {
+          $user_in_logs = true;
+        }
+      }
+      $this->_vip = !$user_in_list_prat && !$user_in_logs;
+    }
+
+    if($this->_vip) {
+      CValue::setSession("patient_id", 0);
+    }
   }
   
   /**
