@@ -32,34 +32,11 @@ if ($patient->_id) {
   }
 }
 
-$vip = 0;
-if($patient->vip && !CCanDo::admin()) {
-	$user_in_list_prat = false;
-  $user_in_logs      = false;
-  foreach($patient->_ref_praticiens as $_prat) {
-		if($user->_id == $_prat->user_id) {
-      $user_in_list_prat = true;
-    }
-  }
-  $patient->loadLogs();
-  foreach($patient->_ref_logs as $_log) {
-    if($user->_id == $_log->user_id) {
-      $user_in_logs = true;
-    }
-  }
-  $vip = !$user_in_list_prat && !$user_in_logs;
-}
-
-if($vip) {
-	CValue::setSession("patient_id", 0);
-}
-
 $listPrat = $user->loadPraticiens(PERM_EDIT);
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("patient"         , $patient);
-$smarty->assign("vip"             , $vip);
 $smarty->assign("listPrat"        , $listPrat);
 $smarty->assign("canPatients"     , CModule::getCanDo("dPpatients"));
 $smarty->assign("canAdmissions"   , CModule::getCanDo("dPadmissions"));

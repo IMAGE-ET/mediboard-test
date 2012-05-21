@@ -24,7 +24,7 @@ $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 // Récuperation du patient sélectionné
 $patient = new CPatient;
 $patient->load($patient_id);
-if(!$patient->_id) {
+if(!$patient->_id || $patient->_vip) {
   CAppUI::setMsg("Vous devez selectionner un patient", UI_MSG_ALERT);
   CAppUI::redirect("m=dPpatients&tab=0");
 }

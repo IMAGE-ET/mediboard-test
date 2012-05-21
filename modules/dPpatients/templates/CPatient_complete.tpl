@@ -272,7 +272,7 @@
   </tr>
   
   <!-- Dossier Médical -->
-  {{if $object->_ref_dossier_medical->_canRead}}
+  {{if $object->_ref_dossier_medical->_canRead && $object->_ref_dossier_medical->_id}}
     <tr>
       <td colspan="2">
         {{mb_include module=patients template=CDossierMedical_complete object=$object->_ref_dossier_medical}}

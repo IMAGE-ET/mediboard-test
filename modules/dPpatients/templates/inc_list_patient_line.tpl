@@ -5,7 +5,7 @@
              {{if $conf.alternative_mode}}onclick="checkOnlyTwoSelected(this)"{{/if}} />
     </td>
   {{/if}}
-  {{if $_patient->vip && $can->admin}}
+  {{if $_patient->_vip}}
   <td class="text" colspan="4">
     <a href="#{{$_patient->_guid}}" onclick="reloadPatient('{{$_patient->_id}}', this);">
       Patient confidentiel
