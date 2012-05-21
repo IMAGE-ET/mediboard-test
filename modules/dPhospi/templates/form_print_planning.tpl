@@ -42,10 +42,23 @@ function changeDate(sDebut, sFin){
   $V(oForm._date_max_da, Date.fromDATETIME(sFin).toLocaleDateTime());  
 }
 
-function changeDateCal(){
+function changeDateCal(minChanged){
   var oForm = getForm("paramFrm");
   oForm.select_days[0].checked = false;
   oForm.select_days[1].checked = false;
+  oForm.select_days[2].checked = false;
+
+  var minElement = oForm._date_min,
+      maxElement = oForm._date_max,
+      minView = oForm._date_min_da,
+      maxView = oForm._date_max_da;
+  
+  if ((minElement.value > maxElement.value) && minChanged) {
+    var maxDate = Date.fromDATETIME(minElement.value).toDATE()+' 21:00:00';
+    var maxDateView = Date.fromDATETIME(maxDate).toLocaleDateTime()
+    $V(maxElement, maxDate);
+    $V(maxView, maxDateView); 
+  }
 }
 
 </script>
@@ -63,7 +76,7 @@ function changeDateCal(){
         
         <tr>
           <th>{{mb_label object=$filter field="_date_min"}}</th>
-          <td>{{mb_field object=$filter field="_date_min" form="paramFrm" register=true canNull="false" onchange="changeDateCal()"}} </td>
+          <td>{{mb_field object=$filter field="_date_min" form="paramFrm" register=true canNull="false" onchange="changeDateCal(true)"}} </td>
           <td rowspan="2">
             <input type="radio" name="select_days" onclick="changeDate('{{$yesterday_deb}}','{{$yesterday_fin}}');" value="yesterday" /> 
             <label for="select_days_yesterday">Hier</label>
@@ -78,7 +91,7 @@ function changeDateCal(){
 
         <tr>
           <th>{{mb_label object=$filter field="_date_max"}}</th>
-          <td>{{mb_field object=$filter field="_date_max" form="paramFrm" register=true canNull="false" onchange="changeDateCal()"}} </td>
+          <td>{{mb_field object=$filter field="_date_max" form="paramFrm" register=true canNull="false" onchange="changeDateCal(false)"}} </td>
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_admission"}}</th>
