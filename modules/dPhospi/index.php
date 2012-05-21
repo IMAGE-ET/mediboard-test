@@ -18,12 +18,6 @@ $module->registerTab("form_print_planning"        , TAB_READ);
 if(CAppUI::conf("dPhospi pathologies") || CAppUI::$user->isAdmin()) {
   $module->registerTab("vw_idx_pathologies"         , TAB_READ);
 }
-/*
-$module->registerTab("vw_idx_sejour"              , TAB_READ);
-if(CModule::getActive("dPprescription")){
-$module->registerTab("vw_bilan_prescription"      , TAB_READ);
-}
-*/
 $module->registerTab("vw_idx_infrastructure"      , TAB_ADMIN);
 $module->registerTab("vw_stats"                   , TAB_ADMIN);
 $module->registerTab("vw_prestations"             , TAB_ADMIN);

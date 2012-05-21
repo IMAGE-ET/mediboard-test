@@ -55,6 +55,7 @@ foreach($listOps as $_key => $_op) {
   $_op->loadRefSejour();
   $_op->_ref_sejour->loadRefPatient();
   $_op->loadRefAffectation();
+  $_op->loadExtCodesCCAM();
   if (!in_array($_op->_ref_affectation->_ref_lit->_ref_chambre->service_id, array_keys($services))) {
     unset($listOps[$_key]);
     continue;

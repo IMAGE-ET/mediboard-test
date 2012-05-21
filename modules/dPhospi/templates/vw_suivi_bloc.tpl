@@ -51,6 +51,8 @@ Main.add(function () {
     <th class="category narrow">Heure prévue</th>
     <th class="category">Patient</th>
     <th class="category">Praticien</th>
+    <th class="category">Intervention</th>
+    <th class="category">Coté</th>
     <th class="category">Etat</th>
     <th class="category">Lit</th>
   </tr>
@@ -69,6 +71,21 @@ Main.add(function () {
       </span>
     </td>
     <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$currOp->_ref_chir}}</td>
+    <td>
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$currOp->_guid}}')" >
+      {{if $currOp->libelle}}
+        {{$currOp->libelle}}
+      {{else}}
+        {{foreach from=$currOp->_ext_codes_ccam item=curr_code}}
+          {{$curr_code->code}}
+        {{/foreach}}
+      {{/if}}
+       ({{$currOp->_ref_sejour->type|truncate:1:""|capitalize}})
+      </span>
+    </td>
+    <td>
+      {{mb_value object=$currOp field="cote"}}
+    </td>  
     <td>
       {{if !$currOp->entree_bloc && !$currOp->entree_salle}}       En attente d'entrée au bloc
       {{elseif $currOp->entree_bloc && !$currOp->entree_salle}}    Entré(e) au bloc
