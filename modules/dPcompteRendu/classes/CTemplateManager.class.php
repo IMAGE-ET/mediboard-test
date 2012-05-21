@@ -166,6 +166,14 @@ class CTemplateManager {
       
       $_field["field"] .= "/>";
     }
+    
+    if (isset($options["image"])) {
+      
+      $_field = &$this->sections[$section][$field];
+      $src = $this->valueMode ? "?m=files&a=fileviewer&a=fileviewer&suppressHeaders=1&file_id=".$_field['value']."&phpThumb=1" : $_field['fieldHTML'];
+      
+      $_field["field"] = "<img src=\"$src\" />";
+    }
   }
   
   function addDateProperty($field, $value = null) {
@@ -190,6 +198,10 @@ class CTemplateManager {
   
   function addListProperty($field, $items = null) {
     $this->addProperty($field, $this->makeList($items), null, false);
+  }
+  
+  function addImageProperty($field, $file_id) {
+    $this->addProperty($field, $file_id, array("image" => 1), false);
   }
   
   function makeList($items) {
@@ -448,6 +460,11 @@ class CTemplateManager {
           
           $fields[] = "src=\"{$property['fieldHTML']}\"";
           $values[] = "src=\"$image\"";
+        }
+        else if ($property["valueHTML"] && isset($property["options"]["image"])) {
+          $src = "?m=files&a=fileviewer&a=fileviewer&suppressHeaders=1&file_id=".$property['value']."&phpThumb=1";
+          $fields[] = "src=\"{$property['fieldHTML']}\"";
+          $values[] = "src=\"$src\"";
         }
         else {
           $property["fieldHTML"] = preg_replace("/'/",'&#39;', $property["fieldHTML"]);

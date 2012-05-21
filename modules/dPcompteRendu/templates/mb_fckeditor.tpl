@@ -151,13 +151,13 @@ CKEDITOR.editorConfig = function(config) {
         view: '{{$property.view|smarty:nodefaults|escape:"javascript"}}' ,
         item: 
           {{if $templateManager->valueMode}}
-            {{if @$property.options.barcode}}
+            {{if @$property.options.barcode || @$property.options.image}}
               "{{$property.field|smarty:nodefaults|escape:"javascript"}}" ,
             {{else}}
               "{{$property.value|smarty:nodefaults|nl2br|escape:"javascript"}}",
             {{/if}}
           {{else}} 
-            {{if @$property.options.barcode}}
+            {{if @$property.options.barcode || @$property.options.image}}
               "{{$property.field|smarty:nodefaults|escape:"javascript"}}",
             {{else}}
               "[{{$property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]", 

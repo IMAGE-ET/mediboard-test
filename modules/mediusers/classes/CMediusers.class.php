@@ -872,6 +872,14 @@ class CMediusers extends CMbObject {
     )));
     $template->addProperty("Praticien - E-mail"         , $this->_user_email);
     $template->addProperty("Praticien - E-mail Apicrypt", $this->mail_apicrypt);
+    
+    // Identité
+    $identite = $this->loadNamedFile("identite.jpg");
+    $template->addImageProperty("Praticien - Photo d'identite", $identite->_id);
+    
+    // Signature
+    $signature = $this->loadNamedFile("signature.jpg");
+    $template->addImageProperty("Praticien - Signature", $signature->_id);
   }
   
   /**

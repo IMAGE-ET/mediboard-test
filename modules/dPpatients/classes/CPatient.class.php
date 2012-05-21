@@ -1473,9 +1473,14 @@ class CPatient extends CMbObject {
     $constantes_valued_vert   = $smarty->fetch("print_constantes_vert.tpl",'','',0);
     $constantes_valued_vert   = preg_replace('`([\\n\\r])`', '', $constantes_valued_vert);
     
+    // Liste des fichiers
     $this->loadRefsFiles();
     $list = CMbArray::pluck($this->_ref_files, "file_name");
     $template->addListProperty("Patient - Liste des fichiers", $list);
+    
+    // Identité
+    $identite = $this->loadNamedFile("identite.jpg");
+    $template->addImageProperty("Patient - Photo d'identite", $identite->_id);
     
     $template->addProperty("Patient - Constantes - mode complet horizontal", $constantes_complet_horiz, '', false);
     $template->addProperty("Patient - Constantes - mode minimal horizontal", $constantes_minimal_horiz, '', false);
