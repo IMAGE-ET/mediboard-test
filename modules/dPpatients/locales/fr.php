@@ -1440,6 +1440,7 @@ $locales['mod-dPpatients-tab-configure'] = 'Configuration';
 $locales['mod-dPpatients-tab-fusion_medecin'] = 'Fusion des médecins';
 $locales['mod-dPpatients-tab-fusion_pat'] = 'Fusion des patients';
 $locales['mod-dPpatients-tab-httpreq_get_last_refs'] = 'Evénements patient';
+$locales['mod-dPpatients-tab-httpreq_vw_patient'] = 'Résumé d\'un dossier patient';
 $locales['mod-dPpatients-tab-import_medecin'] = 'Import des médecins';
 $locales['mod-dPpatients-tab-pat_selector'] = 'Sélecteur de patient';
 $locales['mod-dPpatients-tab-print_patient'] = 'Impression du patient';

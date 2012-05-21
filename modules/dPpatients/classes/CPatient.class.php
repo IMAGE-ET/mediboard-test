@@ -971,34 +971,39 @@ class CPatient extends CMbObject {
   }
   
   function loadRefsAffectations($date = null) {
+    $affectation = new CAffectation();
+    
+    // Affectations inactives
+    if (!$affectation->_ref_module) {
+      $this->_ref_curr_affectation = null;
+      $this->_ref_next_affectation = null;      
+    }
+    
     if (!$date) {
       $date = mbDateTime();
     }
     
     $this->loadRefsSejours();
+    $group = CGroups::loadCurrent();
     
     // Affectation actuelle et prochaine affectation
     $where["affectation.sejour_id"] = CSQLDataSource::prepareIn(array_keys($this->_ref_sejours));
-    $where["sejour.group_id"] = ">= '".CGroups::loadCurrent()->_id."'";
-    $ljoin["sejour"]      = "sejour.sejour_id = affectation.sejour_id";
+    $where["sejour.group_id"]       = "= '$group->_id'";
     $order = "affectation.entree";
     
-    $this->_ref_curr_affectation = new CAffectation();
-    if($this->_ref_curr_affectation->_ref_module) {
-      $where["affectation.entree"] = "<  '$date'";
-      $where["affectation.sortie"] = ">= '$date'";
-      $this->_ref_curr_affectation->loadObject($where, $order, null, $ljoin);
-    } else {
-      $this->_ref_curr_affectation = null;
-    }
+    // @FIXME A quoi sert cette jointure ?
+    $ljoin["sejour"]                = "sejour.sejour_id = affectation.sejour_id";
     
+    // Affection courante
+    $this->_ref_curr_affectation = new CAffectation();
+    $where["affectation.entree"] = "<  '$date'";
+    $where["affectation.sortie"] = ">= '$date'";
+    $this->_ref_curr_affectation->loadObject($where, $order, null, $ljoin);
+    
+    // Prochaine affectations
     $this->_ref_next_affectation = new CAffectation();
-    if($this->_ref_next_affectation->_ref_module) {
-      $where["affectation.entree"] = "> '$date'";
-      $this->_ref_next_affectation->loadObject($where, $order, null, $ljoin);
-    } else {
-      $this->_ref_next_affectation = null;
-    }
+    $where["affectation.entree"] = "> '$date'";
+    $this->_ref_next_affectation->loadObject($where, $order, null, $ljoin);
   }
   
   function loadRefsDocs() {
@@ -1034,6 +1039,7 @@ class CPatient extends CMbObject {
     $this->loadRefsFiles();
     $this->loadRefsDocs();
     $this->loadRefsConsultations();
+    $this->loadRefsCorrespondants();
     $this->loadRefsAffectations();
     $this->loadRefsPrescriptions();
     $this->loadRefsGrossesses();
@@ -1041,7 +1047,6 @@ class CPatient extends CMbObject {
 
   // Forward references
   function loadRefsFwd() {
-    $this->loadRefsCorrespondants();
     if (CModule::getActive("fse")) {
       $cv = CFseFactory::createCV();
       if ($cv) {
@@ -1070,18 +1075,32 @@ class CPatient extends CMbObject {
   
   function loadDossierComplet($permType = null) {
     $this->_ref_praticiens = array();
-    $pat_id = $this->loadRefs();
     
+    if (!$this->_id) {
+      return;
+    }
+
+    // Patient permission
     $this->canRead();
     $this->canEdit();
+    
+    // Doc items
+    $this->loadRefsFiles();
+    $this->loadRefsDocs();
     $this->countDocItems($permType);
+
+    // Photos et Notes 
     $this->loadRefPhotoIdentite();
     $this->loadRefsNotes();
+    
+    // Correspondants
+    $this->loadRefsCorrespondants();
     $this->loadRefsCorrespondantsPatient();
     
     // Affectations courantes
+    $this->loadRefsAffectations();
     $affectation =& $this->_ref_curr_affectation;
-    if ($affectation && $affectation->affectation_id) {
+    if ($affectation && $affectation->_id) {
       $affectation->loadRefsFwd();
       $affectation->_ref_lit->loadCompleteView();
     }
@@ -1091,37 +1110,35 @@ class CPatient extends CMbObject {
       $affectation->loadRefsFwd();
       $affectation->_ref_lit->loadCompleteView();
     }
-    
-    // Si le loadRef n'a pas fonctionné, on arrete la
-    if(!$pat_id) {
-      return;
-    }
-    
+        
     $maternite_active = CModule::getActive("maternite");
     
     // Consultations
-    foreach ($this->_ref_consultations as $keyConsult => $valueConsult) {
-      if ($valueConsult->sejour_id) {
-        unset($this->_ref_consultations[$keyConsult]);
+    $this->loadRefsConsultations();
+    foreach ($this->_ref_consultations as $consult) {
+      if ($consult->sejour_id) {
+        unset($this->_ref_consultations[$consult->_id]);
         continue;
       }
-
-      $consult =& $this->_ref_consultations[$keyConsult];
+      
+      // Permission
+      $consult->canRead();
+      $consult->canEdit();
       
       $consult->loadRefConsultAnesth();
       $consult->loadRefsFichesExamen();
       $consult->loadExamsComp();
       $consult->countDocItems($permType);
       
-      $consult->loadRefsFwd(1);
-      $this->_ref_praticiens[$consult->_ref_chir->user_id] = $consult->_ref_chir;
+      // Praticien
       $consult->getType();
-      $consult->_ref_chir->loadRefFunction();
-      $consult->_ref_chir->_ref_function->loadRefGroup();
-      $consult->canRead();
-      $consult->canEdit();
+      $praticien = $consult->_ref_praticien;
+      $this->_ref_praticiens[$praticien->_id] = $praticien;
+      $praticien->loadRefFunction()->loadRefGroup();
+      
       $consult->loadRefConsultAnesth()->countDocItems();
       
+      // Grossesse
       if ($maternite_active && $consult->grossesse_id) {
         $consult->_semaine_grossesse = ceil((mbDaysRelative($this->_ref_grossesses[$consult->grossesse_id]->_date_fecondation, $consult->_date))/7);
         $this->_ref_grossesses[$consult->grossesse_id]->_ref_consultations[$consult->_id] = $consult;
@@ -1130,31 +1147,54 @@ class CPatient extends CMbObject {
 
     // Sejours
     foreach ($this->_ref_sejours as $_sejour) {
-      $_sejour->loadNDA();
-      $_sejour->loadRefsAffectations();
-      $_sejour->loadRefsOperations();
-      $_sejour->countDocItems($permType);
-      $_sejour->loadRefsFwd(1);
-      $this->_ref_praticiens[$_sejour->praticien_id] = $_sejour->_ref_praticien;
+      // Permission
       $_sejour->canRead();
       $_sejour->canEdit();
+      
+      // 
+      $_sejour->loadNDA();
+      $_sejour->loadRefsAffectations();
+      $_sejour->countDocItems($permType);
+      
+      // Praticien
+      $praticien = $_sejour->loadRefPraticien(1);
+      $this->_ref_praticiens[$praticien->_id] = $praticien;
+      
       $_sejour->countDocItems($permType);
       if ($maternite_active && $_sejour->grossesse_id) {
         $this->_ref_grossesses[$_sejour->grossesse_id]->_ref_sejours[$_sejour->_id] = $_sejour;
       }
+      
+      $_sejour->loadRefsOperations();
       foreach ($_sejour->_ref_operations as $_operation) {
-        $_operation->loadRefsFwd(1);
-        $_operation->_ref_chir->loadRefFunction();
-        $this->_ref_praticiens[$_operation->chir_id] = $_operation->_ref_chir;
-        $_operation->countDocItems($permType);
         $_operation->canRead();
         $_operation->canEdit();
+        
+        // Praticien
+        $praticien = $_operation->loadRefPraticien(1);
+        $praticien->loadRefFunction();
+        $this->_ref_praticiens[$praticien->_id] = $praticien;
+                
+        // Autres
+        $_operation->loadRefPlageOp(1);
+        $_operation->countDocItems($permType);
+        
+        // Consultation d'anesthésie
+        $consult_anesth = $_operation->loadRefsConsultAnesth();
+        $consult_anesth->countDocItems();
+    
+        $consultation = $consult_anesth->loadRefConsultation();
+        $consultation->countDocItems();
+        $consultation->canRead();
+        $consultation->canEdit();
       }
       
-      $_sejour->loadRefRPU();
-      if($_sejour->_ref_rpu && $_sejour->_ref_rpu->_id) {
-        $_sejour->_ref_rpu->countDocItems($permType);
+      // RPU
+      $rpu = $_sejour->loadRefRPU();
+      if ($rpu && $rpu->_id) {
+        $rpu->countDocItems($permType);
       }
+      
       $_sejour->loadRefsConsultations();
       foreach ($_sejour->_ref_consultations as $_consult) {
         $_consult->loadRefConsultAnesth();
@@ -1296,7 +1336,8 @@ class CPatient extends CMbObject {
     if ($file->_id) {
       $author = $file->loadRefAuthor();
       global $can;
-      $this->_can_see_photo = (CAppUI::$user->function_id == $author->function_id) || !($can->admin == ''); 
+      $this->_can_see_photo = $can->admin 
+        || CAppUI::$user->function_id == $author->function_id; 
     }
     
     return $this->_ref_photo_identite = $file;

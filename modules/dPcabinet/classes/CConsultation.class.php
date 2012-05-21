@@ -1217,11 +1217,8 @@ TESTS A EFFECTUER
   }
   
   function getType() {
-    $this->loadRefPraticien();
-    $praticien =& $this->_ref_praticien;
-    
-    $this->loadRefSejour();
-    $sejour =& $this->_ref_sejour;
+    $praticien = $this->loadRefPraticien();
+    $sejour = $this->loadRefSejour();
     $sejour->loadRefRPU();
     
     // Consultations d'urgences
@@ -1583,17 +1580,14 @@ TESTS A EFFECTUER
     }
     
     // Si sortie réelle, mode lecture seule
-    $sejour = $this->loadRefSejour(1);
-    
+    $sejour = $this->loadRefSejour(1); 
     if ($sejour->sortie_reelle) {
       return $this->_canEdit = 0;
     }
     
     // Modification possible seulement pour les utilisateurs de la même fonction
-    $this->loadRefPlageConsult(1);
-    $users_ids = array_keys(CAppUI::$user->_ref_function->loadRefsUsers());
-    
-    return $this->_canEdit = in_array($this->_ref_chir->_id, $users_ids);
+    $praticien = $this->loadRefPraticien();
+    return $this->_canEdit = CAppUI::$user->function_id == $praticien->function_id;
   }
   
   function canRead() {

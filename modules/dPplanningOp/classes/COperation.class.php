@@ -848,7 +848,7 @@ class COperation extends CCodable implements IPatientRelated {
    */
   function loadRefsConsultAnesth() {
     if ($this->_ref_consult_anesth) {
-      return;
+      return $this->_ref_consult_anesth;
     }
     
     $order = "consultation_anesth_id ASC";
@@ -886,12 +886,14 @@ class COperation extends CCodable implements IPatientRelated {
   }
   
   function loadRefsFwd($cache = false) {
-    $this->loadRefsConsultAnesth();
-    $this->_ref_consult_anesth->countDocItems();
-    $this->_ref_consult_anesth->loadRefConsultation();
-    $this->_ref_consult_anesth->_ref_consultation->countDocItems();
-    $this->_ref_consult_anesth->_ref_consultation->canRead();
-    $this->_ref_consult_anesth->_ref_consultation->canEdit();
+    $consult_anesth = $this->loadRefsConsultAnesth();
+    $consult_anesth->countDocItems();
+
+    $consultation = $consult_anesth->loadRefConsultation();
+    $consultation->countDocItems();
+    $consultation->canRead();
+    $consultation->canEdit();
+    
     $this->loadRefPlageOp($cache);
     $this->loadExtCodesCCAM();
     
