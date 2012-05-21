@@ -62,7 +62,7 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
       $patientElimineRI = CValue::read($data['personElimineIdentifiers'], "RI");
      
       // Acquittement d'erreur : identifiants RI et PI non fournis
-      if (!$patientRI && !$patientPI && 
+      if (!$patientRI && !$patientPI || 
           !$patientElimineRI && !$patientEliminePI) {
         return $exchange_ihe->setAckAR($ack, "E100", null, $newPatient);
       }
@@ -77,7 +77,7 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
       if (!$mbPatient->_id) {
         $mbPatient->load($id400Patient->object_id);
       }
-      
+
       $id400PatientElimine = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientEliminePI);
       if ($mbPatientElimine->load($patientElimineRI)) {
         if ($mbPatientElimine->_id != $id400PatientElimine->object_id) {
@@ -88,15 +88,14 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
       if (!$mbPatientElimine->_id) {
         $mbPatientElimine->load($id400PatientElimine->object_id);
       }
-      
+ 
       if (!$mbPatient->_id || !$mbPatientElimine->_id) {
         $comment = !$mbPatient->_id ? "Le patient $mbPatient->_id est inconnu dans Mediboard." : "Le patient $mbPatientElimine->_id est inconnu dans Mediboard.";
         return $exchange_ihe->setAckAR($ack, "E120", $comment, $newPatient);
       }
-  
       // Passage en trash de l'IPP du patient a éliminer
       $id400PatientElimine->tag = CAppUI::conf('dPpatients CPatient tag_ipp_trash').$sender->_tag_patient;
-      $id400PatientElimine->store();
+      //$id400PatientElimine->store();
       
       $messages = array();
             

@@ -12,6 +12,9 @@
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
   <table class="form">
+  	{{mb_include module=system template=inc_config_str var=sending_application}}
+  	{{mb_include module=system template=inc_config_str var=sending_facility}}
+  	
     {{mb_include module=system template=inc_config_str var=assigning_authority_namespace_id}}
     {{mb_include module=system template=inc_config_str var=assigning_authority_universal_id}}
     {{mb_include module=system template=inc_config_str var=assigning_authority_universal_type_id}}
