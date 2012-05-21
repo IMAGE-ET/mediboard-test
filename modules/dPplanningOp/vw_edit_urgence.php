@@ -15,6 +15,15 @@ $hors_plage = new CIntervHorsPlage();
 if(!$hors_plage->canRead()) {
   $can->redirect();
 }
+
+// Toutes les salles des blocs
+$listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
+
+// Les salles autorisées
+$salle = new CSalle();
+$listSalles = $salle->loadListWithPerms(PERM_READ);
+
+
 // Liste des Etablissements selon Permissions
 $etablissements = CMediusers::loadEtablissements(PERM_READ);
 
@@ -225,6 +234,8 @@ $smarty->assign("blocages_lit", $blocages_lit);
 $smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
 $smarty->assign("count_etab_externe", $count_etab_externe);
 $smarty->assign("medecin_adresse_par", $medecin_adresse_par);
+
+$smarty->assign("listBlocs",  $listBlocs);
 
 $smarty->display("vw_edit_planning.tpl");
 

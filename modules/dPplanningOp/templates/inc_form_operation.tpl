@@ -279,6 +279,28 @@ CCAMSelector.init = function(){
   </tr>
   {{/if}}
   
+  {{if $modurgence}} 
+    <tr>
+      <th>{{mb_label object=$op field=salle_id}}</th>
+      <td colspan="3">
+        <select  style="width: 15em;" name="salle_id">
+          <option value="">&mdash; {{tr}}CSalle.select{{/tr}}</option>
+          {{foreach from=$listBlocs item=_bloc}}
+          <optgroup label="{{$_bloc}}">
+            {{foreach from=$_bloc->_ref_salles item=_salle}}
+            <option value="{{$_salle->_id}}" {{if $_salle->_id == $op->salle_id}}selected="selected"{{/if}}>
+              {{$_salle}}
+            </option>
+            {{foreachelse}}
+            <option value="" disabled="disabled">{{tr}}CSalle.none{{/tr}}</option>
+            {{/foreach}}
+          </optgroup>
+          {{/foreach}}
+        </select>
+      </td>
+    </tr>
+  {{/if}}
+  
   <tr>
     <th>{{mb_label object=$op field=duree_uscpo}}</th>
     <td colspan="3">{{mb_field object=$op field=duree_uscpo increment=true form=editOp size=2}} {{tr}}night{{/tr}}(s)</td>
