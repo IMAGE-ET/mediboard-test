@@ -15,7 +15,7 @@ $format_config_guid = CValue::request("format_config_guid");
 
 $file = isset($_FILES['import']) ? $_FILES['import'] : null;
 
-if ($file && $contents = file_get_contents($file['tmp_name'])) {
+if (!empty($file) && ($contents = file_get_contents($file['tmp_name']))) {
   $actor         = CMbObject::loadFromGuid($actor_guid);
   $format_config = CMbObject::loadFromGuid($format_config_guid);
   
@@ -62,9 +62,15 @@ if ($file && $contents = file_get_contents($file['tmp_name'])) {
   else {
     CAppUI::setMsg("La classe du fichier de configuration importé ('$root_name'), ne correspond pas à celle de la configuration choisie ('$format_config->_class')", UI_MSG_ERROR);
   }
-}
 
-CAppUI::callbackAjax('uploadCallback', CAppUI::getMsg());
+  CAppUI::callbackAjax('window.parent.uploadCallback', array(
+    "message" => CAppUI::getMsg(), 
+    "sender"  => array(
+      "sender_class" => $actor->_class,
+      "sender_id"    => $actor->_id, 
+    )
+  ));
+}
 
 // Création du template
 $smarty = new CSmartyDP();
