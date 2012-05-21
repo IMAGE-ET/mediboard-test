@@ -134,6 +134,10 @@ div.soins_uscpo_compact {
   background: #fd7;
 }
 
+div.sejour_sortie_confirmee {
+  background-image: url(../../../images/icons/ray.gif) !important;
+}
+
 table.layout_affectation,
 table.layout_affectation tr,
 table.layout_affectation td {

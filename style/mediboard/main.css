@@ -1721,10 +1721,6 @@ tr.transmission_haute td {
   background: #faa !important;
 }
 
-div.sejour_sortie_autorisee {
-  background-image: url(../../images/icons/ray.gif);
-}
-
 div.scroll_shadow {
   box-shadow: 0px 3px 8px rgba(0,0,0,.3);
 }

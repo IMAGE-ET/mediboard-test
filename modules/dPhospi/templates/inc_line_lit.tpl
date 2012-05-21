@@ -89,7 +89,7 @@
                 {{$_sejour->_guid}}
                 {{if !$_sejour->_id}}clit_bloque{{else}}clit{{/if}}
                 {{if $_affectation->_width < 6}}affectation_resize{{/if}}
-                {{if $_sejour->confirme}}sejour_sortie_autorisee{{/if}}
+                {{if $_sejour->confirme}}sejour_sortie_confirmee{{/if}}
                 {{if $_affectation->entree == $_sejour->entree && $_affectation->entree >= $date_min}}debut_sejour{{/if}}
                 {{if $_affectation->sortie == $_sejour->sortie && $_affectation->sortie <= $date_max}}fin_sejour{{/if}}
                 {{if !$_affectation->sejour_id && $_affectation->entree >= $date_min}}debut_blocage{{/if}}
