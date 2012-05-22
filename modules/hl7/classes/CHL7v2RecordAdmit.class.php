@@ -1359,7 +1359,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getModeDestinationPMSI(DOMNode $node, CSejour $newVenue) {
-    $newVenue->destination = $this->queryTextNode("ZFM.4", $node);
+  	$ZFM_4 = $this->queryTextNode("ZFM.4", $node);
+  	if ($ZFM_4 == 0) {
+  	  $ZFM_4 = null;	
+  	}
+    $newVenue->destination = $ZFM_4;
   }
   
   function getZFP(DOMNode $node, CSejour $newVenue) {    

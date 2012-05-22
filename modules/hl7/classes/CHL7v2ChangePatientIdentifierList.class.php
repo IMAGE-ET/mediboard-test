@@ -41,7 +41,7 @@ class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
     }
     
     $incorrect_identifier = null;
-    $MRG_1 = $this->queryNode("MRG.1", $data["MRG"]);
+    $MRG_1 = $this->queryNodes("MRG.1", $data["MRG"])->item(0);
     if (CHL7v2Message::$handle_mode == "simple") {
       /* @todo En mode simple, est-ce toujours le PI ? */
     } 
