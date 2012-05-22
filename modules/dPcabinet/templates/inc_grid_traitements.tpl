@@ -27,6 +27,13 @@ function addTraitement(rques, type, element) {
   {{assign var=n value=0}}
   {{foreach from=$type item=curr_helper_for key=curr_helper_for_key}}
     {{foreach from=$curr_helper_for item=curr_helper key=curr_helper_key name=helpers}}
+      {{if $curr_helper.user_id}}
+        {{assign var=owner_icon value="user"}}
+      {{elseif $curr_helper.function_id}}
+        {{assign var=owner_icon value="function"}}
+      {{else}}
+        {{assign var=owner_icon value="group"}}
+      {{/if}}
       {{assign var=i value=$smarty.foreach.helpers.index}}
       {{assign var=n value=$n+1}}
       {{assign var=text value=$curr_helper_key|smarty:nodefaults|JSAttribute}}
@@ -35,7 +42,7 @@ function addTraitement(rques, type, element) {
       {{else}}
         {{assign var=checked value=0}}
       {{/if}}
-      <td class="text" style="cursor: pointer; {{if $checked}}opacity: 0.3; cursor: default;{{/if}}" 
+      <td class="text {{$owner_icon}}" style="cursor: pointer; {{if $checked}}opacity: 0.3; cursor: default;{{/if}}" 
           title="{{$curr_helper_key|smarty:nodefaults|JSAttribute}}"
           onclick="addTraitement('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}', this)">
         <input type="checkbox" {{if $checked}}checked="checked"{{/if}} /> {{$curr_helper}}

@@ -112,6 +112,13 @@ Main.add(function () {
               </tr>
               <tr>
               {{foreach from=$_aides item=curr_aide name=aides}}
+                {{if $curr_aide->_owner == "user"}}
+                  {{assign var=owner_icon value="user"}}
+                {{elseif $curr_aide->_owner == "func"}}
+                  {{assign var=owner_icon value="function"}}
+                {{else}}
+                  {{assign var=owner_icon value="group"}}
+                {{/if}}
                 {{assign var=i value=$smarty.foreach.aides.index}}
                 {{assign var=text value=$curr_aide->text}}
                 {{if isset($applied_antecedents.$type.$text|smarty:nodefaults)}}
@@ -119,7 +126,7 @@ Main.add(function () {
                 {{else}}
                   {{assign var=checked value=0}}
                 {{/if}}
-                <td class="text {{if $checked}}opacity-30{{/if}}" 
+                <td class="text {{if $checked}}opacity-30{{/if}} {{$owner_icon}}" 
                     style="cursor: pointer; width: {{$width}}%; {{if $checked}}cursor: default;{{/if}}" 
                     title="{{$curr_aide->text|smarty:nodefaults|JSAttribute}}">
                   <label>
