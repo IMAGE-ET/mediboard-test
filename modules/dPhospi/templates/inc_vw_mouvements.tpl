@@ -89,7 +89,7 @@
 {{/if}}
 {{math equation=x-1 x=$nb_ticks assign=nb_ticks_r}}
 
-<div style="height: 4.6em; width: 100%;">
+<div style="height: 5em; width: 100%;">
   <div id="time_line_temporelle" style="background: #fff;z-index: 200; position: absolute;">
     <strong>
       <a href="#1" onclick="$V(getForm('filterMouv').date, '{{$date_before}}');">
@@ -145,7 +145,9 @@
       </th>
     </tr>
     <tr>
-      <th></th>
+      <th style="text-align: left;">
+        <input type="text" style="width: 7em;" onkeyup="filter(this, 'tableau_vue_temporel')" class="search" />
+      </th>
       {{if $prestation_id}}
         <th></th>
       {{/if}}
@@ -176,7 +178,7 @@
     {{assign var=show_age_patient value=$conf.dPhospi.show_age_patient}}
     {{foreach from=$_service->_ref_chambres item=_chambre}}
       {{foreach from=$_chambre->_ref_lits item=_lit}}
-        <tr data-lit_id="{{$_lit->_id}}" id="{{$_lit->_guid}}" class="droppable">
+        <tr data-lit_id="{{$_lit->_id}}" id="{{$_lit->_guid}}" class="droppable line">
           {{mb_include module=hospi template=inc_line_lit}}
         </tr>
       {{/foreach}}

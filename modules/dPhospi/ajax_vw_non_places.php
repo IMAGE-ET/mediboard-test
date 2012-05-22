@@ -219,14 +219,20 @@ if ($prestation_id) {
 
 // Chargement des affectations dans les couloirs (sans lit_id)
 $where = array();
+$ljoin = array();
 $where["lit_id"] = "IS NULL";
 $where["service_id"] = CSQLDataSource::prepareIn($services_ids);
 $where["entree"] = "<= '$date_max'";
 $where["sortie"] = ">= '$date_min'";
 
+if ($duree_uscpo) {
+  $ljoin["operations"] = "operations.sejour_id = affectation.sejour_id";
+  $where["duree_uscpo"] = "> 0";
+}
+
 $affectation = new CAffectation;
 
-$affectations = $affectation->loadList($where, "entree ASC");
+$affectations = $affectation->loadList($where, "entree ASC", null, null, $ljoin);
 $sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
 $services = CMbObject::massLoadFwdRef($affectations, "service_id");
 $patients = CMbObject::massLoadFwdRef($sejours, "patient_id");

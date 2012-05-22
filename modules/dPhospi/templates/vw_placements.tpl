@@ -78,6 +78,20 @@
     }
   }
   
+  filter = function(input, table) {
+    table = $(table);
+    table.select("tr").invoke("show");
+    
+    var term = $V(input);
+    if (!term) return;
+    
+    table.select(".CPatient-view").each(function(e) {
+      if (!e.innerHTML.like(term)) {
+        e.up("tr.line").hide();
+      }
+    });
+  }
+    
   Main.add(function(){
     Placement.tabs = Control.Tabs.create('placements_tabs', true);
     if (Placement.tabs.activeLink.key == "temporel") {

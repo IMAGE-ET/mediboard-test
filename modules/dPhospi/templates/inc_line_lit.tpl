@@ -14,12 +14,12 @@
 
 <th class="text"
   onclick="chooseLit('{{$_lit->_id}}'); this.down().checked = 'checked';"
-  style="text-align: left; {{if isset($_lit->_lines|smarty:nodefaults)}}height: {{math equation=x*y x=$_lit->_lines|@count y=$height_affectation}}em{{/if}}"
+  style="text-align: left; {{if $_lit->_lines|@count}}height: {{math equation=x*y x=$_lit->_lines|@count y=$height_affectation}}em{{/if}}"
   data-rank="{{$_lit->_selected_item->rank}}">
   
   {{if $_lit->_id}}
     <span style="float: right;">
-      {{if isset($_lit->_lines|smarty:nodefaults) && $_lit->_lines|@count > 1 && !$suivi_affectation}}
+      {{if $_lit->_lines|@count > 1 && !$suivi_affectation}}
         <img src="modules/dPhospi/images/surb.png" title="Collision">
       {{/if}}
       {{if $chambre->_ecart_age > 15}}
@@ -60,7 +60,7 @@
   {{assign var=datetime value=$datetimes.$_i}}
   <td class="mouvement_lit {{if $datetime == $current}}current_hour{{/if}}"
     data-date="{{$datetime}}" style="vertical-align: top" {{if $_i == 0 && !$_lit->_id}}id="wrapper_line_{{$_lit->_affectation_id}}"{{/if}}>
-    {{if $_i == 0 && isset($_lit->_lines|smarty:nodefaults)}}
+    {{if $_i == 0}}
       {{*  Parcours des affectations *}}
       {{foreach from=$_lit->_lines item=_lines_by_level key=_level}}
 
@@ -131,7 +131,7 @@
                         <span style="text-decoration: line-through">
                       {{/if}}
                       
-                      <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');">
+                      <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');" class="CPatient-view">
                         {{$_patient->nom}} {{if $_patient->nom_jeune_fille}}({{$_patient->nom_jeune_fille}}) {{/if}}{{$_patient->prenom}}
                       </span>
                       
@@ -190,6 +190,7 @@
                         {{/if}}
                         {{if !$in_corridor}}
                           <button type="button" class="couloir notext opacity-40"
+                            title="Placer dans le couloir"
                             onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"
                             onclick="moveAffectation('{{$_affectation->_id}}', '', '', '{{$_affectation->lit_id}}'); loadNonPlaces()"></button>
                         {{/if}}
@@ -266,6 +267,15 @@
         {{/foreach}}
       {{/foreach}}
     {{/foreach}}
+    {{if !$_lit->_lines|@count}}
+      <table style="display: none;">
+        <tr>
+          <td>
+            <span class="CPatient-view" ></span>
+          </td>
+        </tr>
+      </table>
+    {{/if}}
   {{/if}}
 </td>
 {{/foreach}}

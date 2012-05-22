@@ -28,6 +28,7 @@ class CLit extends CMbObject {
   // Form Fields
   var $_overbooking = null;
   var $_selected_item   = null;
+  var $_lines       = array();
   
   // Object references
   var $_ref_chambre      = null;

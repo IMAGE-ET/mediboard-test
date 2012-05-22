@@ -41,6 +41,9 @@
 
 <div style="height: 2em; width: 100%">
   <div id="time_line_temporelle_non_affectes" style="background: #fff; position: absolute; z-index: 200;">
+    <div style="display: inline-block;">
+      <input type="text" style="width: 7em;" onkeyup="filter(this, 'non_places_temporel')" class="search" />
+    </div>
     <form name="chgFilter" action="?" method="get" onsubmit="return onSubmitFormAjax(this,null, 'list_affectations');">
       <input type="hidden" name="m" value="dPhospi" />
       <input type="hidden" name="a" value="ajax_vw_non_places" />
@@ -83,7 +86,7 @@
 </div>
 
 {{if $sejours_non_affectes|@count || $couloirs|@count}}
-  <table class="tbl layout_temporel" style="table-layout: fixed; position: relative;">
+  <table class="tbl layout_temporel" style="table-layout: fixed; position: relative;" id="non_places_temporel">
     <col style="width: 15%;" />
     {{if $sejours_non_affectes|@count}}
       <tr>
@@ -92,7 +95,7 @@
     {{/if}}
     {{assign var=show_age_patient value=$conf.dPhospi.show_age_patient}}
     {{foreach from=$sejours_non_affectes item=_sejour}}
-      <tr>
+      <tr class="line">
         {{assign var=patient value=$_sejour->_ref_patient}}
         {{assign var=praticien value=$_sejour->_ref_praticien}}
         {{math equation=x*y x=$_sejour->_width y=$td_width assign=width}}
@@ -118,11 +121,14 @@
                       <input type="radio" name="sejour_move" id="sejour_move_{{$_sejour->_id}}" onclick="chooseSejour('{{$_sejour->_id}}');"/>
                     </span>
                   {{/if}}
+                  
                   <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');"
-                    {{if !$_sejour->entree_reelle}}class="patient-not-arrived"{{/if}} {{if $_sejour->septique}}class="septique"{{/if}}
+                    class="CPatient-view {{if !$_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_sejour->septique}}septique{{/if}}"
                   {{if $_sejour->type == "ambu"}}style="font-style: italic;"{{/if}}>
+                    
                     {{$patient->nom}} {{if $patient->nom_jeune_fille}}({{$patient->nom_jeune_fille}}) {{/if}}{{$patient->prenom}}
-                  </span> {{if $show_age_patient}}({{$patient->_age}} ans){{/if}}
+                    
+                  </span>{{if $show_age_patient}}({{$patient->_age}} ans){{/if}}
                   {{if $_sejour->type != "ambu" && $_sejour->type != "exte"}}
                     ({{$_sejour->_duree}}j - {{$_sejour->_ref_praticien->_shortview}})
                   {{else}}
@@ -238,7 +244,7 @@
         </th>
       </tr>
       {{foreach from=$_by_service item=_lit}}
-        <tr class="droppable">
+        <tr class="droppable line">
           {{mb_include module=hospi template=inc_line_lit in_corridor=1}}
         </tr>
       {{/foreach}}
