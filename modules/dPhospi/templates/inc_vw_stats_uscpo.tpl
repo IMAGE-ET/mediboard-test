@@ -3,9 +3,6 @@
   
   Main.add(function(){
     Flotr.draw($('graph_uscpo'), graph.series, graph.options);
-    var form = getForm("filter_uscpo");
-    Calendar.regField(form.date_min);
-    Calendar.regField(form.date_max);
   });
 </script>
 

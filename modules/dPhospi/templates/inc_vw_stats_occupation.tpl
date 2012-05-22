@@ -9,9 +9,6 @@
   
   Main.add(function(){
     Flotr.draw($('graph_occupation'), graph.series, graph.options);
-    var form = getForm("filter_occupation");
-    Calendar.regField(form.date_min);
-    Calendar.regField(form.date_max);
   });
 </script>
 

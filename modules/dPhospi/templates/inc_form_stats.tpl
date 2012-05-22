@@ -1,3 +1,11 @@
+<script type="text/javascript">
+  Main.add(function(){
+    var form = getForm("filter_{{$type}}");
+    Calendar.regField(form.date_min);
+    Calendar.regField(form.date_max);
+  });
+</script>
+
 <form name="filter_{{$type}}" method="get" action="?"
   onsubmit="refreshStats('{{$type}}', $V(this.date_min), $V(this.date_max), $V(this.service_id)); return false;">
   <table class="form">

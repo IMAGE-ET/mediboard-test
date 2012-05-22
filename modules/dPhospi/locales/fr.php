@@ -701,4 +701,6 @@ $locales['module-dPhospi-long'] = 'Gestion des hospitalisations';
 $locales['pref-ccam_sejour-desc'] = 'Gestion des actes CCAM des séjours';
 $locales['pref-services_ids_hospi'] = 'Services';
 $locales['pref-services_ids_hospi-desc'] = 'Services';
+$locales['warning-hospi-stats-choose_service'] = 'Veuillez choisir un service pour consulter les statistiques de taux d\'occupation.';
+$locales['warning-hospi-stats-no_beds'] = 'Impossible de produire des statistiques sur ce service car il ne possède aucun lit';
 ?>

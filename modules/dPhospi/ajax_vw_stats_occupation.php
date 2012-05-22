@@ -15,22 +15,23 @@ CCanDo::checkRead();
 
 $date_min   = CValue::getOrSession("date_min", mbDate("-1 month"));
 $date_max   = CValue::getOrSession("date_max", mbDate());
-$service_id = CValue::getOrSession("service_id", "");
+$service_id = CValue::getOrSession("service_id");
 
 $service = new CService;
 $services = $service->loadListWithPerms(PERM_READ);
 
+// Template avec échec
+$smarty = new CSmartyDP;
+$smarty->assign("date_min", $date_min);
+$smarty->assign("date_max", $date_max);
+$smarty->assign("type", "occupation");
+$smarty->assign("service_id", $service_id);
+$smarty->assign("services", $services);
+
 if (!$service_id) {
-  $smarty = new CSmartyDP;
-  
-  $smarty->assign("date_min", $date_min);
-  $smarty->assign("date_max", $date_max);
-  $smarty->assign("type", "occupation");
-  $smarty->assign("service_id", $service_id);
-  $smarty->assign("services", $services);
-  
-  $smarty->display("inc_stat_choose_service.tpl");
-  CApp::rip();
+  $smarty->display("inc_form_stats.tpl");
+  CAppUI::stepMessage(UI_MSG_ALERT  , "warning-hospi-stats-choose_service");
+  return;
 }
 
 $ds        = CSQLDataSource::get("std");
@@ -57,6 +58,11 @@ $where["service_id"] = " = '$service_id'";
 $where["annule"] = " = '0'";
 
 $nb_lits = $lit->countList($where, null, $ljoin);
+if (!$nb_lits) {
+  $smarty->display("inc_form_stats.tpl");
+  CAppUI::stepMessage(UI_MSG_WARNING  , "warning-hospi-stats-no_beds");
+  return;
+}
 
 // Lits ouverts (non bloqués - non compris les blocages des urgence)
 $serie_lits_ouverts = array(
