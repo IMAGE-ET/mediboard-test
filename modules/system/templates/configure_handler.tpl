@@ -8,7 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{assign var=col value="object_handlers"}}
+{{mb_default var=type value=object}}
+{{assign var=col value="`$type`_handlers"}}
 {{assign var=class value=$class_handler}}
 
 
