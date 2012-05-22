@@ -12,7 +12,8 @@ $dPconfig["dPpatients"] = array (
     "extended_print"    => "0",
     "adult_age"         => "15",
     "limit_char_search" => "0",
-    "check_code_insee"  => "1"
+    "check_code_insee"  => "1",
+    "show_patient_link" => "0"
   ),
   
   "CAntecedent" => array (

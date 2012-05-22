@@ -92,6 +92,19 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
           $code = "A28";
           break;
         case "store":
+          // Patient lié
+          if ($mbObject->fieldModified("patient_link_id")) {
+            $code = "A24";
+            break;
+          }
+          
+          // Annulation de la liaison avec le patient lié
+          if ($mbObject->_old->patient_link_id && !$mbObject->patient_link_id) {
+            $code = "A37";
+            break;
+          }
+          
+          // Dans tous les autres cas il s'agit d'une modification          
           $code = "A31";
           break;
         default:

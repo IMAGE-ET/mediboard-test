@@ -1763,7 +1763,12 @@ class CSetupdPpatients extends CSetup {
               CHANGE `portable` `portable` VARCHAR (20);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.48";
+    $this->makeRevision("1.48");
+    $query = "ALTER TABLE `patients`
+                ADD `patient_link_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.49";
     
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

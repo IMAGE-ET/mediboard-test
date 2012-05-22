@@ -602,6 +602,10 @@ button.download:before, a.button.download:before {
   content: url(images/buttons/download.png);
 }
 
+button.upload:before, a.button.upload:before {
+  content: url(images/buttons/upload.png);
+}
+
 button.thumbnails:before, a.button.thumbnails:before {
   content: url(images/buttons/thumbnails.png);
 }
@@ -628,6 +632,14 @@ button.nosourdine:before, a.nosourdine:before {
 
 button.couloir:before, a.couloir:before {
   content: url(images/buttons/couloir.png);
+}
+
+button.link:before, a.button.link:before {
+  content: url(images/buttons/link.png);
+}
+
+button.unlink:before, a.button.unlink:before {
+  content: url(images/buttons/unlink.png);
 }
 
 button.selected {

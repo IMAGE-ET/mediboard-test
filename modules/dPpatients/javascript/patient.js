@@ -34,5 +34,21 @@ Patient = Object.extend({
       addParam("patient_id", patient_id).
       addParam("suppressHeaders", 1).
       pop(700, 550, "Patient");
-  }  
+  },
+  
+  doUnlink: function(patient_id) {
+    var url = new Url();
+    url.addParam("m", "dPpatients");
+    url.addParam("dosql", "do_unlink");
+    url.addParam("patient_id", patient_id);
+    url.requestUpdate("systemMsg", { 
+      method: 'post',
+      onComplete : function() {
+        if (window.reloadPatient) {
+          reloadPatient(patient_id);
+        }
+      }
+    });
+  }
+  
 }, window.Patient);

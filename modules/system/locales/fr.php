@@ -1404,6 +1404,7 @@ $locales['Modules-shm-ko'] = 'Cache de modules obsolète';
 $locales['Modules-shm-none'] = 'Cache de modules absent';
 $locales['Modules-shm-ok'] = 'Cache de modules à jour';
 $locales['Modules-shm-rem-ok'] = 'Cache de modules supprimé';
+$locales['Unlink'] = 'Désassocier';
 $locales['UnlocDiv-AYRRS'] = 'Are you really really sure you want NOT to localize your application ?';
 $locales['UnlocDiv-RRRS'] = 'Really really really sure ?';
 $locales['config-admin-dsn'] = 'Création de la source de données';

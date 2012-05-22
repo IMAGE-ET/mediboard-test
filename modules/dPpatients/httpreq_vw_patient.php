@@ -24,6 +24,7 @@ if (CValue::get("new", 0)) {
 if ($patient->_id) {
   $patient->loadDossierComplet();
   $patient->loadIPP();
+  $patient->loadPatientLinks();
   if (CModule::getActive("fse")) {
     $cv = CFseFactory::createCV();
     if ($cv) {

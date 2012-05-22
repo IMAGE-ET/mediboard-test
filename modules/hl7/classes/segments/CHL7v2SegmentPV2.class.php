@@ -88,7 +88,7 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
     // DT - Parcours de soins non actif (parcours de soins débuté avant la date d'application de la réglementation)
     // MA - Cas particulier de la caisse de Mayotte
     // AS - Autre situation
-    $data[] = null;
+    $data[] = "TN";
     
     // PV2-8: Expected Admit Date/Time (TS) (optional)
     $data[] = $sejour->entree_prevue;

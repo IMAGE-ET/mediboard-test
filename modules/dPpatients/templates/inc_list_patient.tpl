@@ -50,6 +50,16 @@
     if (checkedMerge.length > 2)
       checkedMerge.shift().checked = false;
   }
+  
+  function doLink(oForm) {
+    var url = new Url();
+    url.addParam("m", "dPpatients");
+    url.addParam("dosql", "do_link");
+    url.addParam("objects_id", $V(oForm["objects_id[]"]).join("-"));
+    url.requestUpdate("systemMsg", { 
+      method: 'post'
+    });
+  }
 	</script>
 {{/if}}
 
@@ -210,52 +220,56 @@ emptyBirthday = function() {
 {{/if}}
 
 <form name="fusion" action="?" method="get" onsubmit="return false;">
-
-<table class="tbl" id="list_patients">
-  <tr>
-    {{if ((!$conf.dPpatients.CPatient.merge_only_admin || $can->admin)) && $can->edit}}
-    <th class="narrow">
-    	<button type="button" class="merge notext" title="{{tr}}Merge{{/tr}}" style="margin: -1px;" onclick="doMerge(this.form);">
-    		{{tr}}Merge{{/tr}}
-    	</button>
-    </th>
+  <table class="tbl" id="list_patients">
+    <tr>
+      <th class="narrow">
+      {{if ((!$conf.dPpatients.CPatient.merge_only_admin || $can->admin)) && $can->edit}}
+      	<button type="button" class="merge notext" title="{{tr}}Merge{{/tr}}" style="margin: -1px;" onclick="doMerge(this.form);">
+      		{{tr}}Merge{{/tr}}
+      	</button>
+      {{/if}}
+      {{if $conf.dPpatients.CPatient.show_patient_link}}
+        <button type="button" class="link notext" title="{{tr}}Link{{/tr}}" style="margin: -1px;" onclick="doLink(this.form);">
+          {{tr}}Link{{/tr}}
+        </button>
+      {{/if}}
+      </th>
+      <th>{{tr}}CPatient{{/tr}}</th>
+      <th class="narrow">{{tr}}CPatient-naissance-court{{/tr}}</th>
+      <th>{{tr}}CPatient-adresse{{/tr}}</th>
+      <th class="narrow"></th>
+    </tr>
+  
+    {{mb_ternary var="tabPatient" test=$board 
+       value="vw_full_patients&patient_id=" 
+       other="vw_idx_patients&patient_id="}}
+  		 
+    <!-- Recherche exacte -->
+  	<tr>
+      <th colspan="5">
+        <em>{{tr}}dPpatients-CPatient-exact-results{{/tr}} 
+        {{if ($patients|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}</em>
+      </th>
+    </tr>
+    {{foreach from=$patients item=_patient}}
+      {{mb_include module=patients template=inc_list_patient_line}}
+    {{foreachelse}}
+  	  <tr>
+  	    <td colspan="100" class="empty">{{tr}}dPpatients-CPatient-no-exact-results{{/tr}}</td>
+  	  </tr>
+    {{/foreach}}
+  	
+  	<!-- Recherche phonétique -->
+    {{if $patientsSoundex|@count}}
+  	  <tr>
+  	    <th colspan="5">
+  	      <em>{{tr}}dPpatients-CPatient-close-results{{/tr}} 
+  				  {{if ($patientsSoundex|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}</em>
+  	    </th>
+  	  </tr>
     {{/if}}
-    <th>{{tr}}CPatient{{/tr}}</th>
-    <th class="narrow">{{tr}}CPatient-naissance-court{{/tr}}</th>
-    <th>{{tr}}CPatient-adresse{{/tr}}</th>
-    <th class="narrow"></th>
-  </tr>
-
-  {{mb_ternary var="tabPatient" test=$board 
-     value="vw_full_patients&patient_id=" 
-     other="vw_idx_patients&patient_id="}}
-		 
-  <!-- Recherche exacte -->
-	<tr>
-    <th colspan="5">
-      <em>{{tr}}dPpatients-CPatient-exact-results{{/tr}} 
-      {{if ($patients|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}</em>
-    </th>
-  </tr>
-  {{foreach from=$patients item=_patient}}
-    {{mb_include module=patients template=inc_list_patient_line}}
-  {{foreachelse}}
-	  <tr>
-	    <td colspan="100" class="empty">{{tr}}dPpatients-CPatient-no-exact-results{{/tr}}</td>
-	  </tr>
-  {{/foreach}}
-	
-	<!-- Recherche phonétique -->
-  {{if $patientsSoundex|@count}}
-	  <tr>
-	    <th colspan="5">
-	      <em>{{tr}}dPpatients-CPatient-close-results{{/tr}} 
-				  {{if ($patientsSoundex|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}</em>
-	    </th>
-	  </tr>
-  {{/if}}
-  {{foreach from=$patientsSoundex item=_patient}}
-    {{mb_include module=patients template=inc_list_patient_line}}
-  {{/foreach}}
-</table>
+    {{foreach from=$patientsSoundex item=_patient}}
+      {{mb_include module=patients template=inc_list_patient_line}}
+    {{/foreach}}
+  </table>
 </form>  
