@@ -841,6 +841,27 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       
       return $affectation;     
     }
+    
+    
+    if ($this->_ref_exchange_ihe->code == "A11") {
+    	$affectation =  $newVenue->getCurrAffectation($datetime);
+    	
+      // Si on le mouvement n'a pas d'affectation associée, et que l'on a déjà une affectation dans MB
+      if (!$movement->affectation_id && $affectation->_id) {
+        return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
+      }
+      
+      // Si on a une affectation associée, alors on charge celle-ci
+      if ($movement->affectation_id) {
+        $affectation = $movement->loadRefAffectation();
+      }
+      
+      if ($msg = $affectation->delete()) {
+      	return $msg;
+      }
+      
+      return null;
+    }
 
     // Chargement des affectations du séjour
     $datetime = $this->queryTextNode("EVN.6/TS.1", $data["EVN"]);
