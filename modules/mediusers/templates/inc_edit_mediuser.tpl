@@ -1,3 +1,5 @@
+{{mb_script module=hospi script=affectation_uf ajax=1}}
+
 <script type="text/javascript">
 searchUserLDAP = function(object_id) {
   var url = new Url("admin", "ajax_search_user_ldap");
