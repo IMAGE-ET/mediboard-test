@@ -52,9 +52,10 @@
   </td>
   {{mb_include template=inc_planning_bloc_line}}
 </tr>
+{{math equation=x*4 x=$listHours|@count assign=colspan}}
 {{if $affichages.$keyHorsPlage|@count}}
 <tr>
-  <td colspan="100" class="empty">
+  <td colspan="{{$colspan}}" class="empty">
     <a href="?m=dPbloc&tab=vw_urgences&date={{$curr_day}}">
       + {{$affichages.$keyHorsPlage|@count}} intervention(s) hors plage
     </a>
@@ -63,6 +64,6 @@
 {{/if}}
 {{foreachelse}}
 <tr>
-  <td colspan="100" class="empty">{{tr}}CSalle.none{{/tr}}</td>
+  <td colspan="{{$colspan}}" class="empty">{{tr}}CSalle.none{{/tr}}</td>
 </tr> 
 {{/foreach}} 
