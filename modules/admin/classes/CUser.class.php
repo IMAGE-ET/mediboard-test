@@ -126,7 +126,7 @@ class CUser extends CMbObject {
     $props["user_country"]        = "str maxLength|30";
     $props["user_birthday"]       = "dateTime";
     $props["user_last_login"]     = "dateTime";
-    $props["user_login_errors"]   = "num notNull pos max|100 default|0";
+    $props["user_login_errors"]   = "num notNull min|0 max|100 default|0";
     $props["template"]            = "bool notNull default|0";
     $props["profile_id"]          = "ref class|CUser";
     $props["dont_log_connection"] = "bool default|0";
