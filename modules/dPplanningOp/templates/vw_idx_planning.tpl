@@ -26,11 +26,10 @@ Main.add(function () {
 <table class="main">
   
   <tr>
-    <td style="height: 16px;">
+    <th style="height: 16px;">
       <form action="?" name="selectPraticien" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="{{$tab}}" />
-      <label for="selPrat">Praticien</label>
       <select name="selPrat" onchange="this.form.submit()" style="max-width: 150px;">
         <option value="-1">&mdash; Choisir un praticien</option>
         {{foreach from=$listPrat item=curr_prat}}
@@ -40,7 +39,7 @@ Main.add(function () {
         {{/foreach}}
       </select>
       </form>
-    </td>
+    </th>
     <td rowspan="3" class="greedyPane" style="vertical-align:top;">
       <div id="operations">
         <div class="small-info">

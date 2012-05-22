@@ -49,21 +49,56 @@ Main.add(function () {
   </tr>
   <tr>
     <th class="category narrow">Heure prévue</th>
+    <th class="category" colspan="2">Etat</th>
     <th class="category">Patient</th>
     <th class="category">Praticien</th>
     <th class="category">Intervention</th>
     <th class="category">Coté</th>
-    <th class="category">Etat</th>
     <th class="category">Lit</th>
   </tr>
   {{foreach from=$currService item=currOp}}
   <tr>
-    <td class="button">
+    <td class="button narrow"
+    {{if $currOp->sortie_reveil}}
+      style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"
+    {{elseif $currOp->entree_bloc || $currOp->entree_salle}}
+      style="background-color:#cfc"
+    {{/if}}
+    >
       {{if $currOp->time_operation && $currOp->time_operation != "00:00:00"}}
         {{$currOp->time_operation|date_format:$conf.time}}
       {{else}}
         -
       {{/if}}
+    </td>
+    <td class="button narrow"
+    {{if $currOp->sortie_reveil}}
+      style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"
+    {{elseif $currOp->entree_bloc || $currOp->entree_salle}}
+      style="background-color:#cfc"
+    {{/if}}>
+      {{if $currOp->sortie_reveil}}     {{$currOp->sortie_reveil|date_format:$conf.time}}
+      {{elseif $currOp->entree_reveil}} {{$currOp->entree_reveil|date_format:$conf.time}}
+      {{elseif $currOp->sortie_salle}}  {{$currOp->sortie_salle|date_format:$conf.time}}
+      {{elseif $currOp->entree_salle}}  {{$currOp->entree_salle|date_format:$conf.time}}
+      {{elseif $currOp->entree_bloc}}   {{$currOp->entree_bloc|date_format:$conf.time}}
+      {{else}} -
+      {{/if}}
+    </td> 
+    <td class="narrow"
+    {{if $currOp->sortie_reveil}}
+      style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"
+    {{elseif $currOp->entree_bloc || $currOp->entree_salle}}
+      style="background-color:#cfc"
+    {{/if}}>
+      {{if $currOp->sortie_reveil}}     Sorti(e) du bloc
+      {{elseif $currOp->entree_reveil}} En SSPI
+      {{elseif $currOp->sortie_salle}}  Attente SSPI
+      {{elseif $currOp->entree_salle}}  En salle d'interv.
+      {{elseif $currOp->entree_bloc}}   Entré(e) au bloc
+      {{else}} Attente bloc
+      {{/if}}
+      {{mb_include module=forms template=inc_widget_ex_class_register object=$currOp event=liaison}}
     </td>
     <td>
       <span onmouseover="ObjectTooltip.createEx(this, '{{$currOp->_ref_sejour->_ref_patient->_guid}}')">
@@ -71,31 +106,8 @@ Main.add(function () {
       </span>
     </td>
     <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$currOp->_ref_chir}}</td>
-    <td>
-      <span onmouseover="ObjectTooltip.createEx(this, '{{$currOp->_guid}}')" >
-      {{if $currOp->libelle}}
-        {{$currOp->libelle}}
-      {{else}}
-        {{foreach from=$currOp->_ext_codes_ccam item=curr_code}}
-          {{$curr_code->code}}
-        {{/foreach}}
-      {{/if}}
-       ({{$currOp->_ref_sejour->type|truncate:1:""|capitalize}})
-      </span>
-    </td>
-    <td>
-      {{mb_value object=$currOp field="cote"}}
-    </td>  
-    <td>
-      {{if !$currOp->entree_bloc && !$currOp->entree_salle}}       En attente d'entrée au bloc
-      {{elseif $currOp->entree_bloc && !$currOp->entree_salle}}    Entré(e) au bloc
-      {{elseif $currOp->entree_salle && !$currOp->sortie_salle}}   En salle d'op
-      {{elseif $currOp->sortie_salle && !$currOp->entree_reveil}}  En attente salle de réveil
-      {{elseif $currOp->entree_reveil && !$currOp->sortie_reveil}} En salle de réveil
-      {{else}}                                                     Sorti(e) du bloc
-      {{/if}}
-      {{mb_include module=forms template=inc_widget_ex_class_register object=$currOp event=liaison}}
-    </td>
+    <td>{{mb_include module=planningOp template=inc_vw_operation _operation=$currOp}}</td>
+    <td>{{mb_value object=$currOp field="cote"}}</td>
     <td>{{$currOp->_ref_affectation->_ref_lit->_view}}</td>
   </tr>
   {{/foreach}}
