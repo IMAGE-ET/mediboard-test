@@ -23,7 +23,6 @@
   <tr>
     <th>{{mb_label object=$actor field="nom"}}</th>
     <th>{{mb_label object=$actor field="group_id"}}</th>
-    <th>{{mb_label object=$actor field="actif"}}</th>
     <th>{{mb_label object=$actor field="_reachable"}}</th>
   </tr>
   {{foreach from=$actors key=type_actor item=_actors}}
@@ -37,14 +36,13 @@
       </th>
     </tr>
     {{foreach from=$_actors item=_actor}}
-    <tr>
+    <tr {{if !$_actor->actif}} class="opacity-50" {{/if}}>
       <td>
         <a href="#" onclick="InteropActor.refreshActor('{{$_actor->_guid}}', null);" title="Modifier l'acteur d'intégration">
           {{$_actor->_view}}
         </a>
       </td>
       <td>{{$_actor->_ref_group->_view}}</td>
-      <td>{{mb_value object=$_actor field="actif"}}</td>
       <td>
         {{foreach from=$_actor->_ref_exchanges_sources item=_exchange_source}}
           {{if !$_actor instanceof CSenderSOAP && !$_actor instanceof CSenderMLLP}}
