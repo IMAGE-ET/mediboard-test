@@ -36,7 +36,7 @@
       </th>
     </tr>
     {{foreach from=$_actors item=_actor}}
-    <tr {{if !$_actor->actif}} class="opacity-50" {{/if}}>
+    <tr {{if !$_actor->actif}} class="opacity-30" {{/if}}>
       <td>
         <a href="#" onclick="InteropActor.refreshActor('{{$_actor->_guid}}', null);" title="Modifier l'acteur d'intégration">
           {{$_actor->_view}}
