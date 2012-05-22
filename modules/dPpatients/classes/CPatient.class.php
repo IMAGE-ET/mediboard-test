@@ -589,14 +589,16 @@ class CPatient extends CMbObject {
   function checkVIP() {
     $this->_vip = false;
     if($this->vip && !CModule::getCanDo("dPpatient")->admin()) {
+      // Test si le praticien est présent dans son dossier
       $user_in_list_prat = false;
-      $user_in_logs      = false;
-      $this->loadDossierComplet();
+      $this->loadRefsPraticiens();
       foreach($this->_ref_praticiens as $_prat) {
         if($user->_id == $_prat->user_id) {
           $user_in_list_prat = true;
         }
       }
+      // Test si un l'utilisateur est présen dans les logs
+      $user_in_logs      = false;
       $this->loadLogs();
       foreach($patient->_ref_logs as $_log) {
         if($user->_id == $_log->user_id) {
@@ -605,7 +607,6 @@ class CPatient extends CMbObject {
       }
       $this->_vip = !$user_in_list_prat && !$user_in_logs;
     }
-
     if($this->_vip) {
       CValue::setSession("patient_id", 0);
     }
@@ -1069,6 +1070,29 @@ class CPatient extends CMbObject {
     if ($prescription && is_array($prescription->_ref_prescription_lines)) {
       foreach($prescription->_ref_prescription_lines as $_line) {
         $_line->loadRefsPrises();
+      }
+    }
+  }
+  
+  function loadRefsPraticiens() {
+    // Consultations
+    $this->loadRefsConsultations();
+    foreach ($this->_ref_consultations as $_consult) {
+      $praticien = $_consult->_ref_praticien;
+      $praticien->loadRefFunction()->loadRefGroup();
+      $this->_ref_praticiens[$praticien->_id] = $praticien;
+    }
+    // Séjours
+    $this->loadRefsSejours();
+    foreach ($this->_ref_sejours as $_sejour) {
+      $praticien = $_sejour->loadRefPraticien();
+      $praticien->loadRefFunction()->loadRefGroup();
+      $this->_ref_praticiens[$praticien->_id] = $praticien;
+      $_sejour->loadRefsOperations();
+      foreach ($_sejour->_ref_operations as $_operation) {
+        $praticien = $_operation->loadRefPraticien();
+        $praticien->loadRefFunction()->loadRefGroup();
+        $this->_ref_praticiens[$praticien->_id] = $praticien;
       }
     }
   }
