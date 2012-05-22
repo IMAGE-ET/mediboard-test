@@ -48,7 +48,7 @@ Main.add(function () {
      </th>
   </tr>
   <tr>
-    <th class="category narrow">Heure prévue</th>
+    <th class="category narrow">Prévu</th>
     <th class="category" colspan="2">Etat</th>
     <th class="category">Patient</th>
     <th class="category">Praticien</th>
@@ -85,7 +85,7 @@ Main.add(function () {
       {{else}} -
       {{/if}}
     </td> 
-    <td class="narrow"
+    <td
     {{if $currOp->sortie_reveil}}
       style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"
     {{elseif $currOp->entree_bloc || $currOp->entree_salle}}
