@@ -1337,7 +1337,7 @@ class CPatient extends CMbObject {
       $author = $file->loadRefAuthor();
       global $can;
       $this->_can_see_photo = $can->admin 
-        || CAppUI::$user->function_id == $author->function_id; 
+        || CAppUI::$user->function_id == $author->function_id; 
     }
     
     return $this->_ref_photo_identite = $file;
