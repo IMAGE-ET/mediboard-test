@@ -156,7 +156,7 @@ Main.add(function () {
   <tr>
     <td>
       <fieldset>
-        <legend>Antécédents</legend>
+        <legend>Antécédents et allergies</legend>
 
         <form name="editAntFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitAnt(this);">
       
