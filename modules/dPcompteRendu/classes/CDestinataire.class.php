@@ -106,7 +106,8 @@ class CDestinataire {
       
       self::makeFor($patient);
       
-      $patient->loadRefsFwd();
+      $patient->loadRefsCorrespondants();
+      
       self::makeFor($patient->_ref_medecin_traitant, "traitant");
       
       foreach ($patient->_ref_medecins_correspondants as &$corresp) {
