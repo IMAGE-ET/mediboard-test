@@ -842,6 +842,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return $affectation;     
     }
     
+    // Chargement des affectations du séjour
+    $datetime = $this->queryTextNode("EVN.6/TS.1", $data["EVN"]);
     
     if ($this->_ref_exchange_ihe->code == "A11") {
     	$affectation =  $newVenue->getCurrAffectation($datetime);
@@ -863,8 +865,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return null;
     }
 
-    // Chargement des affectations du séjour
-    $datetime = $this->queryTextNode("EVN.6/TS.1", $data["EVN"]);
     // Cas mutation - A02
     if ($this->_ref_exchange_ihe->code == "A02") {
       $affectation->entree = $datetime;
