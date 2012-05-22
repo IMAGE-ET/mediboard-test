@@ -13,13 +13,13 @@
   <input type="hidden" name="m" value="system" />
   <table class="form">
     {{assign var=class value=CHL7v2Segment}}    
+    {{mb_include module=system template=inc_config_bool var=ignore_unexpected_z_segment}}
     
     <tr>
       <th class="title" colspan="2">{{tr}}{{$class}}PV1{{/tr}}</th>
     </tr>
     
     {{mb_include module=system template=inc_config_str var=PV1_3_2}}
-    
     {{mb_include module=system template=inc_config_str var=PV1_3_3}}
     
     <tr>

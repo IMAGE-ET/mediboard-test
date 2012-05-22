@@ -349,7 +349,16 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
 
     while($n-- && trim($this->getCurrentLine())/* && $current_node && $this->current_line < $lines_count*/) {
       if (!$current_node && $this->current_line <= count($this->children)) {
-        $this->error(CHL7v2Exception::UNEXPECTED_SEGMENT, $this->getCurrentLine());
+      	$_current_line = $this->getCurrentLine();
+      	
+      	$_level = CHL7v2Error::E_WARNING;
+      	
+      	if ($_current_line[0] != "Z" || !CAppUI::conf("hl7 CHL7v2Segment ignore_unexpected_z_segment")) {
+          $_level = CHL7v2Error::E_ERROR;
+      	}
+      	
+        $this->error(CHL7v2Exception::UNEXPECTED_SEGMENT, $_current_line, $_level);
+      	
         break;
       }
       switch($current_node->getName()) {

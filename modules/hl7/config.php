@@ -14,8 +14,9 @@ $dPconfig["hl7"] = array(
   "default_version"                       => "2.5",
   "CHL7v2Segment"                         => array(
     "PV1_3_2" => "",
-    "PV1_3_3" => ""
-  ),  
+    "PV1_3_3" => "",
+    "ignore_unexpected_z_segment" => "0",
+  ),
 );
 
 $dPconfig["db"]["hl7v2"] = array(
