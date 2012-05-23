@@ -20,8 +20,6 @@ require_once("libs.php");
 
 $install = @$_POST['install'];
 
-require("valid.php");
-
 showHeader();
 
 ?>
@@ -133,4 +131,4 @@ showHeader();
 </table>
 </form>
 
-<?php showFooter(); ?>
+<?php require("valid.php"); showFooter(); ?>
