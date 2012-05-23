@@ -31,7 +31,7 @@ switch ($action) {
    case "test" : 
     try {
       $response = CMLLPServer::send("localhost", $port, "\x0B".CMLLPServer::ORU()."\x1C\x0D"); 
-      @CAppUI::displayAjaxMsg("Message HL7 envoyé sur localhost:$port : $response");
+      echo "<pre class='er7'>$response</pre>";
     }
     catch(Exception $e) {
       CAppUI::displayAjaxMsg($e->getMessage(), UI_MSG_ERROR);

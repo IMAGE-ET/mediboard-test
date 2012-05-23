@@ -21,12 +21,12 @@ foreach($pid_files as $_file) {
   }
   
   if (@unlink($_file) === true) {
-    CAppUI::displayAjaxMsg("Le fichier 'pid.$process_id'  a été supprimé");
+    CAppUI::displayAjaxMsg("Le fichier 'pid.$process_id' a été supprimé");
     return;
   } 
 }
 
-CAppUI::displayAjaxMsg("Le fichier 'pid.$process_id'  a pu être supprimé", UI_MSG_ERROR);
+CAppUI::displayAjaxMsg("Le fichier 'pid.$process_id' n'a pas pu être supprimé", UI_MSG_ERROR);
 
 $processes = CMLLPServer::get_ps_status();
 if (!array_key_exists($process_id, $processes)) {
