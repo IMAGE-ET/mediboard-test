@@ -59,7 +59,12 @@ function changePratPec(prat_id) {
       </button>
       <button class="print" type="button" style="float: left;" onclick="printAllDocs()">
         Imprimer les documents
-      </button>      
+      </button>
+      {{if "maternite"|module_active && $modules.maternite->_can->read}}
+        <div style="float: right;">
+          {{mb_include module=maternite template=inc_input_grossesse object=$consult submit=1}}
+        </div>
+      {{/if}}
       {{else}}
       <button type="button" class="hslip notext" style="float:left" onclick="ListConsults.toggle();">
         {{tr}}Programme{{/tr}}
@@ -71,8 +76,8 @@ function changePratPec(prat_id) {
         <button class="print" type="button" onclick="printAllDocs()">
           Imprimer les documents
         </button> 
-        <br />
         {{if $sejour && $sejour->_id}}
+          <br />
           <button class="print" type="button" onclick="printConsult();">
             Imprimer la consultation
           </button><br/> 
