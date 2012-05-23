@@ -341,7 +341,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       $xcn1  = CValue::first($object->rpps, $object->adeli, $id400->id400, $object->_id);
       $xcn2  = $object->_user_last_name;
       $xcn3  = $object->_user_first_name;
-      $xcn9  = $this->getXCN9($object, $actor);
+      $xcn9  = $this->getXCN9($object, $id400, $actor);
       $xcn13 = $object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "RI");
     }
     
