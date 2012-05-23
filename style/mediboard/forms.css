@@ -626,10 +626,6 @@ button.nosourdine:before, a.nosourdine:before {
   content: url(images/buttons/volume_lvl_3.png);
 }
 
-button.couloir:before, a.couloir:before {
-  content: url(images/buttons/couloir.png);
-}
-
 button.selected {
   border: 2px solid #000;
 }

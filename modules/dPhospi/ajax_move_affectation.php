@@ -68,14 +68,13 @@ if (!$affectation_id && isset($sejour)) {
     $ljoin = array();
     
     $where["sejour_id"] = " = '$sejour->_id'";
-    $where["object_class"] = " = 'CPrestationJournaliere'";
-    $where["prestation.prestation_id"] = "= '$_item->object_id'";
+    $where["item_prestation.object_class"] = " = 'CPrestationJournaliere'";
+    $where["item_prestation.object_id"] = "= '$_item->object_id'";
     $ljoin["item_prestation"] = "item_prestation.item_prestation_id = item_liaison.item_prestation_id";
-    $ljoin["prestation"] = "item_prestation.object_id = prestation.prestation_id";
     
-    $item_liaison = reset($item_liaison->loadList($where, null, null, null, $ljoin));
+    $item_liaison->loadObject($where, null, null, $ljoin);
     
-    if (!$item_liaison) {
+    if (!$item_liaison->_id) {
       $item_liaison = new CItemLiaison;
       $item_liaison->sejour_id = $sejour->_id;
       $item_liaison->date = mbDate($sejour->entree);
@@ -87,7 +86,6 @@ if (!$affectation_id && isset($sejour)) {
     if ($msg = $item_liaison->store()) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
     }
-    
   }
 }
 

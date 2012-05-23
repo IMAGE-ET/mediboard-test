@@ -54,6 +54,7 @@ class CAffectation extends CMbObject {
   var $_ref_uf_medicale    = null; 
   var $_ref_uf_soins       = null; 
   var $_ref_parent_affectation = null;
+  var $_curr_liaison_prestation = null;
   
   // EAI Fields
   var $_eai_initiateur_group_id  = null; // group initiateur du message EAI

@@ -12,7 +12,7 @@
   <th class="text">{{$_lit->_selected_item->nom}}</th>
 {{/if}}
 
-<th class="text"
+<th class="text first_cell"
   onclick="chooseLit('{{$_lit->_id}}'); this.down().checked = 'checked';"
   style="text-align: left; {{if $_lit->_lines|@count}}height: {{math equation=x*y x=$_lit->_lines|@count y=$height_affectation}}em{{/if}}"
   data-rank="{{$_lit->_selected_item->rank}}">
@@ -147,11 +147,34 @@
                       {{/if}}
                       {{if $mode_vue_reelle == "classique"}}
                         <div class="compact">
-                          {{$_sejour->_motif_complet}}
-                          <em style="color: #f00;" title="Chambre seule">
-                            {{if $_sejour->chambre_seule}}CS{{else}}CD{{/if}}
-                            {{if $_sejour->prestation_id}}- {{$_sejour->_ref_prestation->code}}{{/if}}
-                          </em>
+                          {{if $prestation_id && $_affectation->_curr_liaison_prestation}}
+                            {{assign var=liaison value=$_affectation->_curr_liaison_prestation}}
+                            {{assign var=item_presta value=$liaison->_ref_item}}
+                            {{assign var=item_presta_realise value=$liaison->_ref_item_realise}}
+                            <span
+                            {{if $item_presta->_id && $item_presta_realise->_id}}
+                              style="color:
+                              {{if $item_presta->rank == $item_presta_realise->rank}}
+                                #9F8
+                              {{elseif $item_presta->rank > $item_presta_realise->rank}}
+                                #FD9
+                              {{else}}
+                                #F89
+                              {{/if}}"
+                            {{/if}}>
+                              {{if $item_presta_realise->_id}}
+                                {{$item_presta_realise->nom}}
+                              {{else}}
+                                {{$item_presta->nom}}
+                              {{/if}}
+                            </span>
+                          {{else}}
+                            {{$_sejour->_motif_complet}}
+                            <em style="color: #f00;" title="Chambre seule">
+                              {{if $_sejour->chambre_seule}}CS{{else}}CD{{/if}}
+                              {{if $_sejour->prestation_id}}- {{$_sejour->_ref_prestation->code}}{{/if}}
+                            </em>
+                          {{/if}}
                         </div>
                       {{/if}}
                     {{elseif !$_affectation->function_id}}
@@ -189,7 +212,7 @@
                           {{/if}}
                         {{/if}}
                         {{if !$in_corridor}}
-                          <button type="button" class="couloir notext opacity-40"
+                          <button type="button" class="door-out notext opacity-40"
                             title="Placer dans le couloir"
                             onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"
                             onclick="moveAffectation('{{$_affectation->_id}}', '', '', '{{$_affectation->lit_id}}'); loadNonPlaces()"></button>
@@ -244,9 +267,8 @@
                   var table = element.up('table')
                   var left = element.cumulativeOffset().left
                   var width = element.getWidth();
-                  //console.log(element.cumulativeOffset().top);
-                      //console.log(element.up('div').cumulativeScrollOffset().top);
-                  var top = element.viewportOffset().top - element.cumulativeScrollOffset().top;//element.up('div').viewportOffset().top;
+                  var top = element.viewportOffset().top - element.cumulativeScrollOffset().top;
+                  
                   $(document.body).insert(element);
                   element.setStyle({
                     left:       left + 'px',

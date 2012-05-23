@@ -210,6 +210,25 @@ foreach ($affectations as $_affectation) {
     $operations[$sejour->_id] = $_operations = $sejour->loadRefsOperations();
   }
   
+  if ($prestation_id) {
+    $item_liaison = new CItemLiaison;
+    $where = array();
+    $ljoin = array();
+    
+    $where["sejour_id"] = "= '$sejour->_id'";
+    $ljoin["item_prestation"] = "item_prestation.item_prestation_id = item_liaison.item_prestation_realise_id";
+    $where["object_class"] = " = 'CPrestationJournaliere'";
+    $where["object_id"] = " = '$prestation_id'";
+    $item_liaison->loadObject($where, null, null, $ljoin);
+    
+    if ($item_liaison->_id) {
+      $item_liaison->loadRefItem();
+      $item_liaison->loadRefItemRealise();
+      
+      $_affectation->_curr_liaison_prestation = $item_liaison;
+    }
+  }
+  
   foreach ($_operations as $key=>$_operation) {
     $_operation->loadRefPlageOp(1);
     
