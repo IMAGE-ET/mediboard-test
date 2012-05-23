@@ -343,11 +343,20 @@ Main.add(function(){
             {{/if}}
             <strong>{{$_perop->quantite}} {{$unite}} </strong>
           </td>
+        {{elseif $_perop instanceof CPrescriptionLineMix}}
+          <td>
+            {{if $datetime == $_perop->_pose}}
+            Pose de la perfusion - 
+            {{else}}
+            Retrait de la perfusion - 
+            {{/if}} 
+            {{$_perop->_short_view}}
+          </td>
         {{else}}
           <td colspan="2" class="greedyPane">
-          {{foreach from=$_perop key=toto item=_constante}}
+          {{foreach from=$_perop key=type item=_constante}}
             {{if $_constante}}
-            <strong>{{tr}}CConstantesMedicales-{{$toto}}{{/tr}}:</strong> {{$_constante}}<br />
+            <strong>{{tr}}CConstantesMedicales-{{$type}}{{/tr}}:</strong> {{$_constante}}<br />
             {{/if}}
           {{/foreach}}
           </td>

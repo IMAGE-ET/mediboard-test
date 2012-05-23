@@ -75,6 +75,23 @@ foreach ($sejour->_list_constantes_medicales as $_constante_medicale) {
   }
 }
 
+
+// Chargements des perfusions pour afficher les poses et les retraits
+$prescription_line_mix = new CPrescriptionLineMix();
+$prescription_line_mix->prescription_id = $prescription_id;
+$prescription_line_mix->perop = 1;
+$mixes = $prescription_line_mix->loadMatchingList();
+
+foreach($mixes as $_mix){
+  $_mix->loadRefsLines();
+  if($_mix->date_pose && $_mix->time_pose){
+    $perops[$_mix->_pose][$_mix->_guid] = $_mix;
+  }
+  if($_mix->date_retrait && $_mix->time_retrait){
+    $perops[$_mix->_retrait][$_mix->_guid] = $_mix;
+  } 
+}
+
 ksort($perops);
 
 // Création du template
