@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Z99 - Change admit - HL7
+ * A22 - Patient returns from a _leave of absence_ - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,19 +12,19 @@
  */
 
 /**
- * Class CHL7v2EventADTZ99
- * Z99 - Change admit - HL7
+ * Class CHL7v2EventADTA22
+ * A22 - Patient returns from a _leave of absence_ 
  */
-class CHL7v2EventADTZ99 extends CHL7v2EventADT implements CHL7EventADTA01 {
-  var $code        = "Z99";
-  var $struct_code = "A01";
+class CHL7v2EventADTA22 extends CHL7v2EventADT implements CHL7EventADTA21 {
+  var $code        = "A22";
+  var $struct_code = "A21";
   
   function __construct($i18n = null) {
     parent::__construct($i18n);
   }
   
-  function getEVNOccuredDateTime(CSejour $sejour) {
-    return $sejour->entree_reelle;
+  function getEVNOccuredDateTime($sejour) {
+    return mbDateTime();
   }
   
   /**
@@ -40,12 +40,6 @@ class CHL7v2EventADTZ99 extends CHL7v2EventADT implements CHL7EventADTA01 {
     // Patient Additional Demographic
     $this->addPD1($patient);
     
-    // Doctors
-    $this->addROLs($patient);
-    
-    // Next of Kin / Associated Parties
-    $this->addNK1s($patient);
-    
     // Patient Visit
     $this->addPV1($sejour);
     
@@ -54,20 +48,6 @@ class CHL7v2EventADTZ99 extends CHL7v2EventADT implements CHL7EventADTA01 {
     
     // Build specific segments (i18n)
     $this->buildI18nSegments($sejour);
-    
-    // Guarantor
-    $this->addGT1($patient);
-  }
-  
-  /**
-   * @see parent::buildI18nSegments()
-   */
-  function buildI18nSegments($sejour) {
-    
-    // Movement segment only used within the context of the "Historic Movement Management"
-    if ($this->_receiver->_configs["iti31_historic_movement"]) {
-      $this->addZBE($sejour);
-    }
   }
 }
 

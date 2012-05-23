@@ -85,15 +85,16 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if ($mbObject instanceof CAffectation) {
       $affectation = $mbObject;
       $current_log = $affectation->_ref_current_log;
+
       if (!$current_log || $affectation->_no_synchro || !in_array($current_log->type, array("create", "store"))) {
         return;
       }
-      
+
       $sejour = $affectation->loadRefSejour();
       if (!$sejour->_id || $sejour->_etat == "preadmission") {
         return;
       }
-      
+
       $code = $this->getCodeAffectation($affectation);
 
       // Cas où : 
@@ -188,6 +189,10 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       case 'A06':
       // Changement de statut hospitalisé ou urgence vers externe
       case 'A07':
+      // Absence provisoire (permission) et mouvement de transfert vers un plateau technique pour acte (<48h)
+      case 'A21':
+      // Retour d'absence provisoire (permission) et mouvement de transfert vers un plateau technique pour acte (<48h)
+      case 'A22': 
       // Changement de médecin responsable
       case 'A54':
       // Changement d'UF médicale
@@ -332,9 +337,22 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       return null;
     }
 
-    // Création d'une affectation
     if ($current_log->type == "create") {
+      /* Affectation dans un service externe */
+      $service = $affectation->loadRefService();
+
+      if ($service->externe) {
+        return "A21";
+      }
+      
+      // Création d'une affectation
       return "A02";
+    }
+
+    /* Affectation dans un service externe effectuée */
+    $service = $affectation->loadRefService();
+    if ($service->externe && $affectation->effectue) {
+      return "A22";
     }
 
     /* Changement d'UF Médicale */
@@ -403,10 +421,25 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if (!$sejour->_id || $sejour->_etat == "preadmission") {
         return;
       }
+
+      /* Annulation de l'affectation dans un service externe */
+      $service = $affectation->loadRefService();
+      if ($service->externe) {
+        // Affectation effectuée 
+        if ($affectation->effectue) {
+          $code = "A52";
+        }
+        // Affectation non effectuée
+        else {
+          $code = "A53";
+        }
+      }
       
       // Annulation d'une affectation
-      $code = "A12";
-
+      else {
+        $code = "A12";
+      }
+      
       // Cas où : 
       // * on est l'initiateur du message 
       // * le destinataire ne supporte pas le message

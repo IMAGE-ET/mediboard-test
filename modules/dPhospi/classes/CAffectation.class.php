@@ -44,12 +44,13 @@ class CAffectation extends CMbObject {
   var $_chambre   = null;
 
   // Object references
-  var $_ref_lit    = null;
-  var $_ref_sejour = null;
-  var $_ref_prev   = null;
-  var $_ref_next   = null;
-  var $_no_synchro = null;
-  var $_list_repas = null;
+  var $_ref_lit     = null;
+  var $_ref_service = null;
+  var $_ref_sejour  = null;
+  var $_ref_prev    = null;
+  var $_ref_next    = null;
+  var $_no_synchro  = null;
+  var $_list_repas  = null;
   var $_ref_uf_hebergement = null; 
   var $_ref_uf_medicale    = null; 
   var $_ref_uf_soins       = null; 
@@ -312,6 +313,10 @@ class CAffectation extends CMbObject {
 
   function loadRefSejour($cache = 1) {
     return $this->_ref_sejour =  $this->loadFwdRef("sejour_id", $cache);
+  }
+  
+  function loadRefService($cache = 1) {
+    return $this->_ref_service = $this->loadFwdRef("service_id", $cache);
   }
 
   function loadRefsFwd($cache = 1) {
