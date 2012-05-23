@@ -26,6 +26,7 @@ $locales['CGrossesse-title-create'] = 'Création de grossesse';
 $locales['CGrossesse-title-modify'] = 'Modification de grossesse';
 $locales['CGrossesse.all'] = 'Toutes les grossesses';
 $locales['CGrossesse.none'] = 'Aucune grossesse';
+$locales['CGrossesse.none_linked'] = 'Aucune grossesse associée';
 $locales['CGrossesse.one'] = 'Une grossesse';
 $locales['CNaissance'] = 'Naissance';
 $locales['CNaissance-grossesse_id'] = 'Grossesse';

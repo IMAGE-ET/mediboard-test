@@ -17,13 +17,15 @@
 <input type="hidden" name="grossesse_id" value="{{$object->grossesse_id}}" id="grossesse_id"/>
 <input type="hidden" name="_patient_sexe" value="" onchange="Grossesse.toggleGrossesse(this.value, this.form)"/>
 
-<span id="view_grossesse">
-  {{if $grossesse->_id}}
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$grossesse->_guid}}')">{{$grossesse}}</span>
-  {{else}}
-    {{tr}}CGrossesse.none{{/tr}}
-  {{/if}}
-</span>
-
-<button type="button" class="edit notext button_grossesse" {{if $patient->sexe != "f"}}disabled="disabled"{{/if}}
-  onclick="Grossesse.viewGrossesses('{{$patient->_id}}', '{{$object->_guid}}', $V(this.form.grossesse_id), this.form)"></button>
+{{if $patient->sexe == "f" && $patient->_age >= 12}}
+  <span id="view_grossesse">
+    {{if $grossesse->_id}}
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$grossesse->_guid}}')">{{$grossesse}}</span>
+    {{else}}
+      {{tr}}CGrossesse.none_linked{{/tr}}
+    {{/if}}
+  </span>
+  
+  <button type="button" class="edit notext button_grossesse" {{if $patient->sexe != "f"}}disabled="disabled"{{/if}}
+    onclick="Grossesse.viewGrossesses('{{$patient->_id}}', '{{$object->_guid}}', $V(this.form.grossesse_id), this.form)"></button>
+{{/if}}
