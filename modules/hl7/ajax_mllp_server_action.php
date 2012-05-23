@@ -32,6 +32,7 @@ switch ($action) {
     try {
       $response = CMLLPServer::send("localhost", $port, "\x0B".CMLLPServer::ORU()."\x1C\x0D"); 
       echo "<pre class='er7'>$response</pre>";
+      return;
     }
     catch(Exception $e) {
       CAppUI::displayAjaxMsg($e->getMessage(), UI_MSG_ERROR);
@@ -40,7 +41,6 @@ switch ($action) {
     
   case "stats": 
     try {
-      CMLLPServer::send("localhost", $port, "yh\n");
       mbTrace(json_decode(CMLLPServer::send("localhost", $port, "__".strtoupper($action)."__\n"), true));
     }
     catch(Exception $e) {
