@@ -71,7 +71,7 @@
         <input type="text" name="_date_cut_da" value="{{$smarty.now|date_format:$conf.datetime}}" readonly="readonly"/>
         <input type="hidden" name="_date_cut" class="dateTime" value="{{$smarty.now|@date_format:"%Y-%m-%d %H:%M:%S"}}"
           onchange="checkCut(this)"/>
-        <button type="button" class="cut"
+        <button type="button" class="hslip"
         onclick="
         {{if "maternite"|module_active && $sejour_maman}}
           liaisonMaman(this.form._action_maman.checked, '{{$affectation->parent_affectation_id}}')
@@ -79,11 +79,11 @@
           changeLit('{{$affectation->_id}}', 1);
         {{else}}
           this.form.onsubmit();
-        {{/if}}" id="cut_affectation">Scinder</button>
+        {{/if}}" id="cut_affectation">Créer un mouvement</button>
         
         {{if "maternite"|module_active && $sejour_maman}}
           <label>
-            <input type="checkbox" name="_action_maman" />
+            <input type="checkbox" name="_action_maman" checked="checked"/>
             {{if $affectation->parent_affectation_id}}Détacher de{{else}}Attacher à {{/if}} la maman ({{$sejour_maman->_ref_patient}})
           </label>
         {{/if}}
