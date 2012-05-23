@@ -33,7 +33,12 @@
 
 <table class="tbl" id="admissions">
   <tr>
-    <th class="title" colspan="5">Grossesses arrivant à terme entre le {{$date_min|date_format:$conf.date}} et le {{$date_max|date_format:$conf.date}}</th>
+    <th class="title" colspan="5">
+      <button class="new" onclick="editSejour(0);" style="float: left;">
+        {{tr}}CSejour-title-create{{/tr}}
+      </button>
+      Grossesses arrivant à terme entre le {{$date_min|date_format:$conf.date}} et le {{$date_max|date_format:$conf.date}}
+    </th>
   </tr>
   <tr>
     <th class="category">
@@ -77,7 +82,7 @@
     </tr>
   {{foreachelse}}
     <tr>
-      <td class="empty" colspan="4">{{tr}}CGrossesse.none{{/tr}}</td>
+      <td class="empty" colspan="5">{{tr}}CGrossesse.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>
