@@ -55,12 +55,17 @@ $dPconfig["browser_enable_ie9"]  = "0";
 
 // Object handlers
 $dPconfig["object_handlers"]   = array (
-//  "CMyObjectHandler" => "0",
+//  "CMyObjectHandler" => "1",
 );
 
 // Index handlers
 $dPconfig["index_handlers"]   = array (
 //  "CMyIndexHandler" => "1",
+);
+
+// Template placehodlers
+$dPconfig["template_placeholders"]   = array (
+//  "CMyTemplatePlaceholder" => "1",
 );
 
 // Mode migration

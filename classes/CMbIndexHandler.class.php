@@ -14,6 +14,7 @@
  */
  
 abstract class CMbIndexHandler {
+  
   function onBeforeMain() {}
 
   function onAfterMain() {}

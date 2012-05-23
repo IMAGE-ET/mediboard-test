@@ -650,7 +650,7 @@ class CSmartyMB extends Smarty {
         $module = "dP$module";
       }
       
-      $template = "../../$module/templates/$template";
+      $template = "../../../modules/$module/templates/$template";
     }
   
     // Style précisé

@@ -166,6 +166,14 @@ td#mainHeader td.welcome {
   display: block;
 }
 
+#leftMenu #menubar .minitoolbar {
+  height: 14px;
+}
+
+#leftMenu #menubar .minitoolbar a {
+  color: #ddd;
+}
+
 #leftMenu #menubar #menuTools {
   height: 14px;
   /* Hack to remove the whitespace between the buttons */

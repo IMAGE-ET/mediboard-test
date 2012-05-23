@@ -14,9 +14,9 @@
 <input type="hidden" name="dosql" value="do_configure" />
 
 <table class="form">  
-  {{assign var=types value="-"|explode:"index-object"}}
+  {{assign var=types value="-"|explode:"index_handlers-object_handlers-template_placeholders"}}
   {{foreach from=$types item=type}}
-  {{assign var=class value=`$type`_handlers}}
+  {{assign var=class value=$type}}
   <tr><th class="title" colspan="2">{{tr}}{{$class}}{{/tr}}</th></tr>
 
   {{foreach from=$conf.$class key=var item=value}}

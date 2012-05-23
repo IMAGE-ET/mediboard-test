@@ -10,15 +10,37 @@
 
 class CSmartyDP extends CSmartyMB {
   
+  public static $placeholders = null;
+  
+  /**
+   * Staticly build template placeholders array
+   * @return void
+   */
+  public static final function makePlaceholders() {
+    if (is_array(self::$placeholders)) {
+      return;
+    }
+    
+    // Static initialisations
+    self::$placeholders = array();
+    foreach (CAppUI::conf("template_placeholders") as $placeholder => $active) {
+      if ($active) {
+        self::$placeholders[$placeholder] = new $placeholder;
+      }
+    }
+  }
+  
   /**
    * Constructor
    */
-  function __construct($dir = null){
+  function __construct($dir = null) {
     parent::__construct($dir);
+
+    $this->makePlaceholders();
+    $this->assign("placeholders", self::$placeholders);
     
     $this->register_block   ("mb_form"           , array($this,"mb_form")); 
     $this->register_block   ("vertical"          , array($this,"smarty_vertical"));
-    
     
     $this->register_function("mb_field"          , array($this,"smarty_function_mb_field"));
     $this->register_function("mb_key"            , array($this,"smarty_function_mb_key"));

@@ -1592,6 +1592,7 @@ $locales['system-msg-backup-diskfull'] = 'Disque plein pour le backup';
 $locales['system-msg-backup-diskfull-desc'] = 'Il n\'y a plus suffisamment de place pour effectuer le backup de base sans risque.';
 $locales['system-msg-unlocalized_warning'] = 'Il reste des textes non localisés au nombre de';
 $locales['system-title-unlocalized'] = 'Donc je traduis ces textes !';
+$locales['template_placeholders'] = 'Placeholders de template';
 $locales['utilities-exchange-source-receive'] = 'Récupérer et dispatcher les fichiers';
 $locales['utilities-source-file_system-connexion'] = 'Test d\'accessibilité';
 $locales['utilities-source-file_system-getFiles'] = 'Liste des fichiers';

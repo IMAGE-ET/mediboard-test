@@ -89,6 +89,14 @@ var Menu = {
         <img src="style/{{$uistyle}}/images/icons/logout.png" alt="{{tr}}menu-logout{{/tr}}" />
       </a>
     </div>
+    
+    {{foreach from=$placeholders item=placeholder}}
+      <hr />
+      <div class="minitoolbar">
+        {{mb_include module=$placeholder->module template=$placeholder->minitoolbar}}
+      </div>
+
+    {{/foreach}}
 
     <hr />
     {{foreach from=$modules key=mod_name item=_module}}
