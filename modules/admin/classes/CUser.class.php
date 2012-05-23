@@ -114,7 +114,7 @@ class CUser extends CMbObject {
     // Plain fields
     $props["user_username"]       = "str notNull maxLength|20";
     $props["user_password"]       = "str show|0";
-    $props["user_type"]           = "num notNull pos max|20 default|0";
+    $props["user_type"]           = "num notNull min|0 max|20 default|0";
     $props["user_first_name"]     = "str maxLength|50 seekable|begin";
     $props["user_last_name"]      = "str notNull maxLength|50 confidential seekable|begin";
     $props["user_email"]          = "str maxLength|255";
