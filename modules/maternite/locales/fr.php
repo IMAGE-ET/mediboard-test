@@ -1,7 +1,7 @@
 <?php
 $locales['CGrossesse'] = 'Grossesse';
-$locales['CGrossesse-active'] = 'Active';
-$locales['CGrossesse-active-desc'] = 'Active';
+$locales['CGrossesse-active'] = 'En cours';
+$locales['CGrossesse-active-desc'] = 'En cours';
 $locales['CGrossesse-back-naissances'] = 'Naissances';
 $locales['CGrossesse-back-naissances.empty'] = 'Naissances';
 $locales['CGrossesse-born_under_x'] = ' La mère est une patiente anonyme, il s\'agit d\'un <strong>accouchement sous X</strong>.';
