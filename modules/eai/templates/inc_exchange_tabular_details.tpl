@@ -73,7 +73,29 @@
       </ul>
       
       <div id="msg-message-er7-input" style="display: none;">
-        {{$msg_segment_group->highlight_er7($msg_segment_group->data)|smarty:nodefaults}}
+        <div id="msg-message-er7-input-view">
+          {{$msg_segment_group->highlight_er7($msg_segment_group->data)|smarty:nodefaults}}
+          <button type="button" class="edit" onclick="$('msg-message-er7-input-view').toggle(); $('msg-message-er7-edit').toggle();">{{tr}}Edit{{/tr}}</button>
+        </div>
+        
+        <div id="msg-message-er7-edit" style="display: none;">
+          <form name="edit-er7" method="post" onsubmit="return onSubmitFormAjax(this, function(){ Control.Modal.close(); ExchangeDataFormat.viewExchange('{{$exchange->_guid}}'); })">
+            <input type="hidden" name="m" value="eai" />
+            <input type="hidden" name="dosql" value="do_exchange_content_edit" />
+            <input type="hidden" name="exchange_guid" value="{{$exchange->_guid}}" />
+            <textarea name="_message" rows="15" style="white-space: pre; word-wrap: normal; font-family: 'lucida console', 'courier new', courier, monospace; font-size: 10px; line-height: 1.3; overflow-x: auto; resize: vertical;">{{$msg_segment_group->data}}</textarea>
+            
+            {{*
+            <label><input type="radio" name="segment_terminator" value="CR"   {{if strpos($msg_segment_group->data,"\r")}} checked {{/if}} /> CR (\r)</label>
+            <label><input type="radio" name="segment_terminator" value="LF"   {{if strpos($msg_segment_group->data,"\n")}} checked {{/if}} /> LF (\n)</label>
+            <label><input type="radio" name="segment_terminator" value="CRLF" {{if strpos($msg_segment_group->data,"\r\n")}} checked {{/if}} /> CRLF (\r\n)</label>
+            *}}
+            <input type="hidden" name="segment_terminator" value="CR" />
+            
+            <button type="submit" class="save">{{tr}}Save{{/tr}}</button>
+            <button type="button" class="cancel" onclick="$('msg-message-er7-input-view').toggle(); $('msg-message-er7-edit').toggle();">{{tr}}Cancel{{/tr}}</button>
+          </form>
+        </div>
       </div>
       
       <div id="msg-message-er7-parsed" style="display: none;">

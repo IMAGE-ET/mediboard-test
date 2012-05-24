@@ -27,7 +27,7 @@ class CEAIDispatcher {
 
     self::$errors = array();
     // Accepte t-on des utilisateurs acteurs non enregistrés ?
-    if (!$actor) {mbLog("ixi ?");
+    if (!$actor) {
       CEAIDispatcher::$errors[] = CAppUI::tr("CEAIDispatcher-no_actor");
       return self::dispatchError($data);
     }
