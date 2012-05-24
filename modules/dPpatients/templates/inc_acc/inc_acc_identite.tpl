@@ -42,7 +42,7 @@ toggleNomNaissance = function(element) {
 selectFirstEnabled = function(select){
   var found = false;
   $A(select.options).each(function (o,i) {
-    if (!found && !o.disabled) {
+    if (!found && !o.disabled && o.value != '') {
       $V(select, o.value);
       found = true;
     }
@@ -51,21 +51,32 @@ selectFirstEnabled = function(select){
 
 disableOptions = function (select, list) {
   $A(select.options).each(function (o) {
-    o.disabled = (list.indexOf(o.value) != -1);
+    o.disabled = list.include(o.value);
   });
-  if (select.options[select.selectedIndex].disabled) {
+  
+  if (select.value == '' || select.options[select.selectedIndex].disabled) {
     selectFirstEnabled(select);
   }
 }
 
 changeCiviliteForSexe = function(element, assure) {
-  var oForm = document.editFrm.elements;
+  var form = document.editFrm.elements;
   var valueSexe = $V(element);
-  if(valueSexe == 'm') {
-    disableOptions($(oForm[(assure ? 'assure_' : '')+'civilite']), ['mme', 'mlle', 'vve']);
-  } else {
-    disableOptions($(oForm[(assure ? 'assure_' : '')+'civilite']), ['m']);
-  } 
+  var civilite = (assure ? 'assure_' : '') + 'civilite';
+  
+  switch (valueSexe) {
+    case 'm':
+    disableOptions($(form[civilite]), $w('mme mlle vve'));
+    break;
+
+    case 'f':
+    disableOptions($(form[civilite]), $w('m'));
+    break;
+
+    default:
+    disableOptions($(form[civilite]), $w('m mme mlle enf dr pr me vve'));
+	  break;
+  }
 }
 
 var adult_age = {{$conf.dPpatients.CPatient.adult_age}};
@@ -149,7 +160,9 @@ Main.add(function() {
           <td>
             {{mb_field object=$patient field="nom" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}}
             {{if !$patient->_id}}
-              <button type="button" style="padding: 0px" onclick="anonymous()" tabIndex="1000"><img src="modules/dPpatients/images/anonyme.png" alt="Anonyme" /></button>
+              <button type="button" style="padding: 0px" onclick="anonymous()" tabIndex="1000">
+                <img src="modules/dPpatients/images/anonyme.png" alt="Anonyme" />
+              </button>
             {{/if}}
           </td>
           {{if $patient->_id}}
@@ -196,7 +209,7 @@ Main.add(function() {
         </tr>
         <tr>
           <th>{{mb_label object=$patient field="sexe"}}</th>
-          <td>{{mb_field object=$patient field="sexe" onchange="toggleNomNaissance(this); copyIdentiteAssureValues(this); changeCiviliteForSexe(this);"}}</td>
+          <td>{{mb_field object=$patient field="sexe" canNull=false typeEnum=radio onchange="toggleNomNaissance(this); copyIdentiteAssureValues(this); changeCiviliteForSexe(this);"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$patient field="naissance"}}</th>
@@ -207,8 +220,11 @@ Main.add(function() {
           <td>
             {{assign var=civilite_locales value=$patient->_specs.civilite}} 
             <select name="civilite" onchange="copyIdentiteAssureValues(this);">
-              {{foreach from=$civilite_locales->_locales key=key item=curr_civilite}} 
-              <option value="{{$key}}" {{if $key == $patient->civilite}}selected="selected"{{/if}}> {{tr}}CPatient.civilite.{{$key}}-long{{/tr}} - ({{$curr_civilite}}) </option>
+              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+              {{foreach from=$civilite_locales->_locales key=key item=_civilite}} 
+              <option value="{{$key}}" {{if $key == $patient->civilite}} selected="selected" {{/if}}> 
+                {{tr}}CPatient.civilite.{{$key}}-long{{/tr}} - ({{$_civilite}})
+              </option>
               {{/foreach}}
             </select>
           </td>
@@ -253,7 +269,7 @@ Main.add(function() {
         </tr>
         <tr>
           <th>{{mb_label object=$patient field="tutelle"}}</th>
-          <td colspan="2">{{mb_field object=$patient field="tutelle" onchange="refreshInfoTutelle(this.value);"}}</td>
+          <td colspan="2">{{mb_field object=$patient field="tutelle" typeEnum=radio onchange="refreshInfoTutelle(this.value);"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$patient field="vip"}}</th>

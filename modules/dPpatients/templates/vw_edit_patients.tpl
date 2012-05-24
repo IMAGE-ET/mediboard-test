@@ -36,9 +36,14 @@ function copyAssureValues(element) {
 	// Hack pour gérer les form fields
 	var sPrefix = element.name[0] == "_" ? "_assure" : "assure_";
   eOther = element.form[sPrefix + element.name];
-
+  
+  // Copy value
   $V(eOther, $V(element));
-  eOther.fire("mask:check");
+  
+  // Radio buttons seem to be null, et valuable with $V 
+  if (element.type != 'radio') {
+    eOther.fire("mask:check");
+  }
 }
 
 function copyIdentiteAssureValues(element) {

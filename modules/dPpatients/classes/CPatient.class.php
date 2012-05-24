@@ -270,101 +270,100 @@ class CPatient extends CMbObject {
   }  
   
   function getProps() {
-    $specs = parent::getProps();
+    $props = parent::getProps();
     
-    $specs["nom"]               = "str notNull confidential seekable|begin";
-    $specs["prenom"]            = "str notNull seekable|begin";
-    $specs["prenom_2"]          = "str";
-    $specs["prenom_3"]          = "str";
-    $specs["prenom_4"]          = "str";
-    $specs["nom_jeune_fille"]   = "str confidential";
-    $specs["nom_soundex2"]      = "str";
-    $specs["prenom_soundex2"]   = "str";
-    $specs["nomjf_soundex2"]    = "str";
-    $specs["medecin_traitant_declare"] = "bool";
-    $specs["medecin_traitant"]  = "ref class|CMedecin";
-    $specs["matricule"]         = CAppUI::conf("dPpatients CPatient check_code_insee") ? "code insee confidential mask|9S99S99S9xS999S999S99" : "str maxLength|8";
-    $specs["INSC"]              = "str length|22";
-    $specs["code_regime"]       = "numchar length|2";
-    $specs["caisse_gest"]       = "numchar length|3";
-    $specs["centre_gest"]       = "numchar length|4";
-    $specs["code_gestion"]      = "str length|2";
-    $specs["centre_carte"]      = "numchar length|4";
-    $specs["regime_sante"]      = "str";
-    $specs["sexe"]              = "enum list|m|f default|m";
-    $specs["civilite"]          = "enum list|m|mme|mlle|enf|dr|pr|me|vve default|m";
-    $specs["adresse"]           = "text confidential";
-    $specs["ville"]             = "str confidential seekable";
-    $specs["cp"]                = "str minLength|4 maxLength|5 confidential";
-    $specs["tel"]               = "phone confidential";
-    $specs["tel2"]              = "phone confidential";
-    $specs["tel_autre"]         = "str maxLength|20";
-    $specs["email"]             = "str confidential";
-    $specs["vip"]               = "bool default|0";
-    $specs["tutelle"]           = "enum list|aucune|tutelle|curatelle default|aucune";
-    $specs["incapable_majeur"]  = "bool";
-    $specs["ATNC"]              = "bool";
+    $props["nom"]               = "str notNull confidential seekable|begin";
+    $props["prenom"]            = "str notNull seekable|begin";
+    $props["prenom_2"]          = "str";
+    $props["prenom_3"]          = "str";
+    $props["prenom_4"]          = "str";
+    $props["nom_jeune_fille"]   = "str confidential";
+    $props["nom_soundex2"]      = "str";
+    $props["prenom_soundex2"]   = "str";
+    $props["nomjf_soundex2"]    = "str";
+    $props["medecin_traitant_declare"] = "bool";
+    $props["medecin_traitant"]  = "ref class|CMedecin";
+    $props["matricule"]         = CAppUI::conf("dPpatients CPatient check_code_insee") ? "code insee confidential mask|9S99S99S9xS999S999S99" : "str maxLength|8";
+    $props["INSC"]              = "str length|22";
+    $props["code_regime"]       = "numchar length|2";
+    $props["caisse_gest"]       = "numchar length|3";
+    $props["centre_gest"]       = "numchar length|4";
+    $props["code_gestion"]      = "str length|2";
+    $props["centre_carte"]      = "numchar length|4";
+    $props["regime_sante"]      = "str";
+    $props["sexe"]              = "enum list|m|f";
+    $props["civilite"]          = "enum list|m|mme|mlle|enf|dr|pr|me|vve";
+    $props["adresse"]           = "text confidential";
+    $props["ville"]             = "str confidential seekable";
+    $props["cp"]                = "str minLength|4 maxLength|5 confidential";
+    $props["tel"]               = "phone confidential";
+    $props["tel2"]              = "phone confidential";
+    $props["tel_autre"]         = "str maxLength|20";
+    $props["email"]             = "str confidential";
+    $props["vip"]               = "bool default|0";
+    $props["tutelle"]           = "enum list|aucune|tutelle|curatelle default|aucune";
+    $props["incapable_majeur"]  = "bool";
+    $props["ATNC"]              = "bool";
     
     $conf = CAppUI::conf("dPpatients CPatient identitovigilence");
-    if($conf === "date" || $conf === "doublons"){
-      $specs["naissance"]       = "birthDate notNull mask|99/99/9999 format|$3-$2-$1";
-    } else {
-      $specs["naissance"]       = "birthDate mask|99/99/9999 format|$3-$2-$1";  
-    }
-    $specs["deces"]             = "date progressive";
-    $specs["rques"]             = "text";
-    $specs["cmu"]               = "bool";
-    $specs["ald"]               = "bool";
-    $specs["code_exo"]          = "enum list|0|4|5|9 default|0";
-    $specs["libelle_exo"]        = "text";
-    $specs["deb_amo"]           = "date";
-    $specs["fin_amo"]           = "date";
-    $specs["notes_amo"]         = "text";
-    $specs["notes_amc"]         = "text";
-    $specs["rang_beneficiaire"] = "enum list|01|02|09|11|12|13|14|15|16|31";
-    $specs["qual_beneficiaire"] = "enum list|0|1|2|3|4|5|6|7|8|9";
-    $specs["rang_naissance"]    = "enum list|1|2|3|4|5|6 default|1";
-    $specs["fin_validite_vitale"] = "date";
-    $specs["code_sit"]          = "numchar length|4";
-    $specs["regime_am"]         = "bool default|0";
-    $specs["mutuelle_types_contrat"] = "text";
+    $props["naissance"] = $conf === "date" || $conf === "doublons" ? 
+      "birthDate mask|99/99/9999 format|$3-$2-$1 notNull" :
+      "birthDate mask|99/99/9999 format|$3-$2-$1";  
+
+    $props["deces"]             = "date progressive";
+    $props["rques"]             = "text";
+    $props["cmu"]               = "bool";
+    $props["ald"]               = "bool";
+    $props["code_exo"]          = "enum list|0|4|5|9 default|0";
+    $props["libelle_exo"]        = "text";
+    $props["deb_amo"]           = "date";
+    $props["fin_amo"]           = "date";
+    $props["notes_amo"]         = "text";
+    $props["notes_amc"]         = "text";
+    $props["rang_beneficiaire"] = "enum list|01|02|09|11|12|13|14|15|16|31";
+    $props["qual_beneficiaire"] = "enum list|0|1|2|3|4|5|6|7|8|9";
+    $props["rang_naissance"]    = "enum list|1|2|3|4|5|6 default|1";
+    $props["fin_validite_vitale"] = "date";
+    $props["code_sit"]          = "numchar length|4";
+    $props["regime_am"]         = "bool default|0";
+    $props["mutuelle_types_contrat"] = "text";
     
-    $specs["pays"]                 = "str";
-    $specs["pays_insee"]           = "str";
-    $specs["lieu_naissance"]       = "str";
-    $specs["cp_naissance"]         = "str minLength|4 maxLength|5 confidential";
-    $specs["pays_naissance_insee"] = "str";
-    $specs["profession"]           = "str autocomplete";
-    $specs["csp" ]                 = "numchar length|2";
+    $props["pays"]                 = "str";
+    $props["pays_insee"]           = "str";
+    $props["lieu_naissance"]       = "str";
+    $props["cp_naissance"]         = "str minLength|4 maxLength|5 confidential";
+    $props["pays_naissance_insee"] = "str";
+    $props["profession"]           = "str autocomplete";
+    $props["csp" ]                 = "numchar length|2";
     
-    $specs["assure_nom"]                  = "str confidential";
-    $specs["assure_prenom"]               = "str";
-    $specs["assure_prenom_2"]             = "str";
-    $specs["assure_prenom_3"]             = "str";
-    $specs["assure_prenom_4"]             = "str";
-    $specs["assure_nom_jeune_fille"]      = "str confidential";
-    $specs["assure_sexe"]                 = "enum list|m|f default|m";
-    $specs["assure_civilite"]             = "enum list|m|mme|mlle|enf|dr|pr|me|vve default|m";
-    $specs["assure_naissance"]            = "birthDate confidential mask|99/99/9999 format|$3-$2-$1";
-    $specs["assure_adresse"]              = "text confidential";
-    $specs["assure_ville"]                = "str confidential";
-    $specs["assure_cp"]                   = "str minLength|4 maxLength|5 confidential";
-    $specs["assure_tel"]                  = "phone confidential";
-    $specs["assure_tel2"]                 = "phone confidential";
-    $specs["assure_pays"]                 = "str";
-    $specs["assure_pays_insee"]           = "str";
-    $specs["assure_lieu_naissance"]       = "str";
-    $specs["assure_cp_naissance"]         = "str minLength|4 maxLength|5 confidential";
-    $specs["assure_pays_naissance_insee"] = "str";
-    $specs["assure_profession"]           = "str autocomplete";
-    $specs["assure_rques"]                = "text";
-    $specs["assure_matricule"]            = "code insee confidential mask|9S99S99S99S999S999S99";
-    $specs["INSC_date"]                   = "dateTime";
-    $specs["date_lecture_vitale"]         = "dateTime";
-    $specs["_id_vitale"]                  = "num";
-    $specs["_pays_naissance_insee"]       = "str";
-    $specs["_assure_pays_naissance_insee"]= "str";
-    $specs["_art115"]                     = "bool";
+    $props["assure_nom"]                  = "str confidential";
+    $props["assure_prenom"]               = "str";
+    $props["assure_prenom_2"]             = "str";
+    $props["assure_prenom_3"]             = "str";
+    $props["assure_prenom_4"]             = "str";
+    $props["assure_nom_jeune_fille"]      = "str confidential";
+    $props["assure_sexe"]                 = "enum list|m|f";
+    $props["assure_civilite"]             = "enum list|m|mme|mlle|enf|dr|pr|me|vve";
+    $props["assure_naissance"]            = "birthDate confidential mask|99/99/9999 format|$3-$2-$1";
+    $props["assure_adresse"]              = "text confidential";
+    $props["assure_ville"]                = "str confidential";
+    $props["assure_cp"]                   = "str minLength|4 maxLength|5 confidential";
+    $props["assure_tel"]                  = "phone confidential";
+    $props["assure_tel2"]                 = "phone confidential";
+    $props["assure_pays"]                 = "str";
+    $props["assure_pays_insee"]           = "str";
+    $props["assure_lieu_naissance"]       = "str";
+    $props["assure_cp_naissance"]         = "str minLength|4 maxLength|5 confidential";
+    $props["assure_pays_naissance_insee"] = "str";
+    $props["assure_profession"]           = "str autocomplete";
+    $props["assure_rques"]                = "text";
+    $props["assure_matricule"]            = "code insee confidential mask|9S99S99S99S999S999S99";
+    $props["INSC_date"]                   = "dateTime";
+    $props["date_lecture_vitale"]         = "dateTime";
+    $props["_id_vitale"]                  = "num";
+    $props["_pays_naissance_insee"]       = "str";
+    $props["_assure_pays_naissance_insee"]= "str";
+    $props["_art115"]                     = "bool";
     
     $types_exo = array(
       "aldHorsListe",
@@ -377,17 +376,17 @@ class CPatient extends CMbObject {
       "fns",
     );
     
-    $specs["_type_exoneration"]           = "enum list|".implode("|", $types_exo);
-    $specs["_age"]                        = "num show|1";
-    $specs["_vip"]                        = "bool";
-    $specs["_age_assure"]                 = "num";
+    $props["_type_exoneration"]           = "enum list|".implode("|", $types_exo);
+    $props["_age"]                        = "num show|1";
+    $props["_vip"]                        = "bool";
+    $props["_age_assure"]                 = "num";
     
-    $specs["_age_min"]                    = "num min|0";
-    $specs["_age_max"]                    = "num min|0";
+    $props["_age_min"]                    = "num min|0";
+    $props["_age_max"]                    = "num min|0";
     
-    $specs["_IPP"]                        = "str";
+    $props["_IPP"]                        = "str";
     
-    return $specs;
+    return $props;
   }
   
   function checkMerge($patients = array()/*<CPatient>*/) {

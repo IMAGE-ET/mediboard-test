@@ -44,7 +44,7 @@
       </tr>
       <tr>
         <th>{{mb_label object=$patient field="assure_sexe"}}</th>
-        <td>{{mb_field object=$patient field="assure_sexe" onchange="changeCiviliteForSexe(this, true);"}}</td>
+        <td>{{mb_field object=$patient field="assure_sexe" typeEnum=radio onchange="changeCiviliteForSexe(this, true);"}}</td>
       </tr>
       <tr>
         <th>{{mb_label object=$patient field="assure_naissance"}}</th>
@@ -55,8 +55,11 @@
         <td>
           {{assign var=civilite_locales value=$patient->_specs.assure_civilite}} 
           <select name="assure_civilite">
+            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
             {{foreach from=$civilite_locales->_locales key=key item=curr_civilite}} 
-            <option value="{{$key}}" {{if $key == $patient->assure_civilite}}selected="selected"{{/if}}>{{tr}}CPatient.civilite.{{$key}}-long{{/tr}} - ({{$curr_civilite}})</option>
+            <option value="{{$key}}" {{if $key == $patient->assure_civilite}}selected="selected"{{/if}}>
+              {{tr}}CPatient.civilite.{{$key}}-long{{/tr}} - ({{$curr_civilite}})
+            </option>
             {{/foreach}}
           </select>
         </td>
