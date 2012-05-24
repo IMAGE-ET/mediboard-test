@@ -22,6 +22,7 @@ class CGrossesse extends CMbObject{
   var $terme_prevu    = null;
   var $active         = null;
   var $date_dernieres_regles = null;
+  var $multiple       = null;
   
   // DB References
   var $_ref_parturiente = null;
@@ -51,6 +52,7 @@ class CGrossesse extends CMbObject{
     $specs["terme_prevu"]    = "date notNull";
     $specs["active"]         = "bool default|1";
     $specs["date_dernieres_regles"] = "date";
+    $specs["multiple"]       = "bool default|0";
     return $specs;
   }
   

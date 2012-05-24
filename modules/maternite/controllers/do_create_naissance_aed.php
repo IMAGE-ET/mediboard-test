@@ -79,15 +79,7 @@ if (!$naissance_id) {
   
   // Etape 3 (séjour)
   $sejour_enfant = new CSejour;
-  
-  // Si dossier provisoire, entrée prévue
-  if ($heure) {
-    $sejour_enfant->entree_reelle = $datetime;
-  }
-  else {
-    $sejour_enfant->entree_prevue = mbDate();
-  }
-  
+  $sejour_enfant->entree_reelle = $datetime;
   $sejour_enfant->sortie_prevue = $curr_affect->sortie ? $curr_affect->sortie : $sejour->sortie;
   $sejour_enfant->patient_id = $patient->_id;
   $sejour_enfant->praticien_id = $praticien_id;
@@ -95,8 +87,7 @@ if (!$naissance_id) {
   storeObject($sejour_enfant);
   
   // Etape 4 (affectation)
-  // Sauf si c'est un dossier provisoire
-  // Checker également si l'affectation de la maman existe
+  // Checker si l'affectation de la maman existe
   if ($heure && $curr_affect->_id) {
     $affectation = new CAffectation;
     $affectation->entree = $sejour_enfant->entree_reelle;

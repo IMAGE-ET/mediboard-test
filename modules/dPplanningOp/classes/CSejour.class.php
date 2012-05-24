@@ -906,6 +906,17 @@ class CSejour extends CCodable implements IPatientRelated {
       $this->sortie_prevue = $this->sortie_reelle;
     }
     
+    // Nouveau séjour relié à une grossesse
+    // Si l'entrée prévue est à l'heure courante, alors on value également l'entrée réelle
+    if (CModule::getActive("maternite") && !$this->_id && $this->grossesse_id) {
+      $current_hour = mbTransformTime(mbTime(), null, "%H");
+      $hour_sejour = $this->_hour_entree_prevue;
+      
+      if (mbDate() == $this->_date_entree_prevue && $current_hour == $hour_sejour) {
+        $this->entree_reelle = mbDateTime();
+      }
+    }
+    
     //@TODO : mieux gérer les current et now dans l'updatePlainFields et le store
     $entree_reelle = ($this->entree_reelle === 'current'|| $this->entree_reelle ===  'now') ? mbDateTime() : $this->entree_reelle;
     if($entree_reelle && ($this->sortie_prevue < $entree_reelle)) {

@@ -35,6 +35,14 @@
       </td>
     </tr>
     <tr>
+      <th>
+        {{mb_label object=$grossesse field=multiple}}
+      </th>
+      <td>
+        {{mb_field object=$grossesse field=multiple}}
+      </td>
+    </tr>
+    <tr>
       <td colspan="2" class="button">
         {{if $grossesse->_id}}
           <button type="button" class="save" onclick="this.form.onsubmit()">{{tr}}Save{{/tr}}</button>

@@ -74,7 +74,15 @@ class CSetupmaternite extends CSetup {
       ADD INDEX (`sejour_maman_id`)";
     $this->addQuery($query);
 
-    $this->mod_version = "0.06";
+    $this->makeRevision("0.06");
+    $query = "ALTER TABLE `grossesse` 
+      ADD `multiple` ENUM ('0','1') DEFAULT '0',
+      ADD INDEX (`parturiente_id`),
+      ADD INDEX (`terme_prevu`),
+      ADD INDEX (`date_dernieres_regles`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.07";
   }
 }
 ?>
