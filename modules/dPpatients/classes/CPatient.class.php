@@ -1137,6 +1137,10 @@ class CPatient extends CMbObject {
         
     $maternite_active = CModule::getActive("maternite");
     
+    if ($maternite_active) {
+      $this->loadRefsGrossesses();
+    }
+    
     // Consultations
     $this->loadRefsConsultations();
     foreach ($this->_ref_consultations as $consult) {
