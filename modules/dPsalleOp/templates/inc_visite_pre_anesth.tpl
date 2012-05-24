@@ -27,15 +27,10 @@
       validateOnBlur:0
     });
     {{if !$selOp->date_visite_anesth}}
-      var dates = {};
-      /*dates.limit = {
-        start: '{{$smarty.now|@date_format:"%Y-%m-%d %H:%M:%S"}}',
-        stop: '{{$smarty.now|@date_format:"%Y-%m-%d %H:%M:%S"}}'
-      };*/
-      Calendar.regField(oFormVisiteAnesth.date_visite_anesth, dates);
+      Calendar.regField(oFormVisiteAnesth.date_visite_anesth);
       
       // Initialisation du champ date
-      $("visiteAnesth_date_visite_anesth_da").value = "Heure actuelle";
+      $("visiteAnesth_date_visite_anesth_da").value = "Date actuelle";
       $V(oFormVisiteAnesth.date_visite_anesth, "current");
     {{/if}}
   });

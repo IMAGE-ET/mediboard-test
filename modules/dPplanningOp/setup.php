@@ -1341,7 +1341,11 @@ class CSetupdPplanningOp extends CSetup {
       ADD `passage_uscpo` ENUM ('0','1') AFTER duree_uscpo;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.44";
+    $this->makeRevision("1.44");
+    $query = "ALTER TABLE `operations` CHANGE `date_visite_anesth` `date_visite_anesth` DATE;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.45";
   }
 }
 ?>

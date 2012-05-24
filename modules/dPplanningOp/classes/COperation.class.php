@@ -240,7 +240,7 @@ class COperation extends CCodable implements IPatientRelated {
     $props["cote_bloc"]          = "enum list|droit|gauche show|0";
     
     // Visite de préanesthésie
-    $props["date_visite_anesth"]    = "dateTime";
+    $props["date_visite_anesth"]    = "date";
     $props["prat_visite_anesth_id"] = "ref class|CMediusers";
     $props["rques_visite_anesth"]   = "text helped show|0";
     $props["autorisation_anesth"]   = "bool default|0";
