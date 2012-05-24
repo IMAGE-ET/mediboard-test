@@ -12,7 +12,7 @@
   
   popEtatSejour = function(sejour_id) {
     var url = new Url("dPhospi", "vw_parcours");
-    url.addParam("sejour_id", '{{$sejour->_id}}');
+    url.addParam("sejour_id", sejour_id);
     url.requestModal(700, 550);
   }
   printEtiquettes = function() {
@@ -108,7 +108,7 @@
         </button>
       {{/if}}
       
-      <button type="button" class="lookup" onclick="popEtatSejour();">État du séjour</button>
+      <button type="button" class="lookup" onclick="popEtatSejour('{{$sejour->_id}}');">État du séjour</button>
       
       {{if "web100T"|module_active}}
         {{mb_include module=web100T template=inc_button_iframe notext="" _sejour=$sejour}}
