@@ -632,7 +632,14 @@ class CHL7v2Segment extends CHL7v2Entity {
   function getPL(CInteropReceiver $receiver, CSejour $sejour, CAffectation $affectation = null) {
     $group       = $sejour->loadRefEtablissement();
     if (!$affectation) {
+      // Chargement de l'affectation courante
       $affectation = $sejour->getCurrAffectation();
+      
+      // Si on n'a pas d'affectation on va essayer de chercher la première
+      if (!$affectation->_id) {
+        $sejour->loadSurrAffectations();
+        $affectation = $sejour->_ref_next_affectation;
+      } 
     }
     $affectation->loadRefLit()->loadRefChambre();
     $current_uf  = $sejour->getUF();

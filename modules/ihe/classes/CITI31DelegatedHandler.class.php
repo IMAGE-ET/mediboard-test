@@ -123,7 +123,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     // Initialise le mouvement 
     $movement->sejour_id     = $sejour->_id;
   
-    if ($affectation && $code == "A02") {
+    if ($affectation) {
       $movement->affectation_id = $affectation->_id;  
     }
 
@@ -176,7 +176,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     return $sejour->_ref_hl7_movement = $movement;
   }
 
-  function getStartOfMovement($code, CSejour $sejour) {
+  function getStartOfMovement($code, CSejour $sejour, CAffectation $affectation = null) {
     switch ($code) {
       // Admission hospitalisé / externe
       case 'A01' : 
@@ -281,18 +281,18 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return "A07";
       }
       
-      // Changement du médecin responsable
-      if ($sejour->fieldModified("praticien_id")) {
-        /* @todo Mettre en config !!! */
-        return "Z99";
-        //return "A54";
-      }
-      
       // Annulation du médecin responsable
       if ($sejour->fieldModified("praticien_id") && 
          ($sejour->praticien_id != $sejour->_old->praticien_id)) {
         return "A55";
-      }
+      } 
+      
+      // Changement du médecin responsable
+      if ($sejour->fieldModified("praticien_id")) {
+        /* @todo Mettre en config !!! */
+        //return "Z99";
+        return "A54";
+      } 
       
       // Réattribution dossier administratif
       if ($sejour->fieldModified("patient_id")) {
@@ -338,20 +338,18 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     }
 
     if ($current_log->type == "create") {
-      /* Affectation dans un service externe */
-      $service = $affectation->loadRefService();
-
-      if ($service->externe) {
-        return "A21";
-      }
-      
       // Création d'une affectation
       return "A02";
     }
-
-    /* Affectation dans un service externe effectuée */
+    
+    /* Affectation dans un service externe */
     $service = $affectation->loadRefService();
     if ($service->externe && $affectation->effectue) {
+      return "A21";
+    }
+            
+    /* Affectation dans un service externe effectuée */
+    if ($service->externe && $affectation->_old->effectue && !$affectation->effectue) {
       return "A22";
     }
 

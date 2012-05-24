@@ -614,7 +614,12 @@ class CSetupdPhospi extends CSetup {
       SET `affectation`.`service_id` = `chambre`.`service_id`";
     $this->addQuery($query);
     
-    $this->mod_version = "0.64";
+    $this->makeRevision("0.64");
+    $query = "ALTER TABLE `movement` 
+                CHANGE `movement_type` `movement_type` VARCHAR (4) NOT NULL";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.65";
   }
 }
 ?>

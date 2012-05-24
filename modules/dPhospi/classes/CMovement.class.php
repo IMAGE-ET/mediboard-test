@@ -30,7 +30,6 @@ class CMovement extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'movement';
     $spec->key   = 'movement_id';
-    $spec->uniques["uniques"] = array("affectation_id");
     return $spec;
   }
   
@@ -38,13 +37,32 @@ class CMovement extends CMbObject {
     $props = parent::getProps();
     $props["sejour_id"]             = "ref notNull class|CSejour seekable";
     $props["affectation_id"]        = "ref class|CAffectation seekable cascade";
-    $props["movement_type"]         = "enum notNull list|PADM|ADMI|MUTA|SATT|SORT";
+    $props["movement_type"]         = "enum notNull list|PADM|ADMI|MUTA|SATT|SORT|AABS|RABS|EATT|TATT";
     $props["original_trigger_code"] = "str length|3";
     $props["start_of_movement"]     = "dateTime";
     $props["last_update"]           = "dateTime notNull";
     $props["cancel"]                = "bool default|0";
     
     return $props;
+  }
+  
+  function check() {
+    if ($msg = parent::check()) {
+      return $msg; 
+    }  
+
+    // Check unique affectation_id except absence (leave / return from leave)
+    if ($this->movement_type != "AABS" && $this->movement_type != "RABS") {
+      $movement = new self;
+      $this->completeField("affectation_id");
+      $movement->affectation_id = $this->affectation_id;
+      $movement->loadMatchingObject();
+  
+      if ($movement->_id && $this->_id != $movement->_id) {
+        return CAppUI::tr("$this->_class-failed-affectation_id") .
+          " : $this->affectation_id";
+      }
+    }
   }
   
   function updateFormFields() {
