@@ -32,7 +32,7 @@
   <td class="button" colspan="2">
     {{if $uf->_id}}
     <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
-    <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'lUF',objName: $V(this.form.libelle)})">
+    <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'lUF',objName: $V(this.form.libelle), ajax: 1})">
       {{tr}}Delete{{/tr}}
     </button>
     {{else}}
