@@ -23,8 +23,14 @@
     <input type="hidden" name="m" value="dPhospi" />
     <input type="hidden" name="dosql" value="do_affectation_aed" />
     {{if $type_externe == "depart"}}
-      {{mb_key object=$_aff->_ref_prev}}
-      {{if $_aff->_ref_prev->effectue}}
+      {{if $_aff->_ref_prev->_id}}
+        {{assign var=_affectation value=$_aff->_ref_prev}}
+      {{else}}
+        {{assign var=_affectation value=$_aff}}
+      {{/if}}
+ 
+      {{mb_key object=$_affectation}}
+      {{if $_affectation->effectue}}
         <input type="hidden" name="effectue" value="0" />
         <button type="button" class="cancel" onclick="onSubmitFormAjax(this.form, { onComplete: function() {reloadPermission()} })">Annuler le départ</button>
       {{else}}
