@@ -189,7 +189,7 @@ if (count($lit->_ref_affectations)) {
   $lit->_lines = CMbRange::rearrange($intervals);
 }
 
-$chambre->checkChambre();
+$lit->_ref_chambre->checkChambre();
 
 $smarty = new CSmartyDP;
 

@@ -264,8 +264,8 @@ foreach ($lits as $_lit) {
   }
 }
 
-foreach ($service->_ref_chambres as $_chambre) {
-  $_chambre->checkChambre();
+foreach ($lits as $_lit) {
+  $_lit->_ref_chambre->checkChambre();
 }
 
 $smarty = new CSmartyDP;
