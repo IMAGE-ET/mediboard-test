@@ -39,7 +39,7 @@ $dates = array();
 $series = array();
 $serie = array(
   'data' => array(),
-  'label' => utf8_encode("Nombre de nuits prévuées")
+  'label' => utf8_encode("Nombre de nuits prévues")
 );
   
 while ($day <= $date_max) {
