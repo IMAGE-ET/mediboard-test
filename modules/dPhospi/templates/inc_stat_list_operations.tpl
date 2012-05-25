@@ -19,7 +19,7 @@
           {{" ; "|implode:$_operation->_codes_ccam}}
         {{/if}}
       <td>
-        <a class="button edit" href="?m=planningOp&vw_edit_planning&selOp={{$_operation->_id}}">Déplacer</a>
+        <a class="button edit" href="?m=planningOp&tab=vw_edit_planning&selOp={{$_operation->_id}}">Déplacer</a>
       </td>
     </tr>
   {{foreachelse}}
