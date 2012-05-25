@@ -581,16 +581,19 @@
             </td>
           </tr>
         {{/if}}
-        
+        {{assign var=prescription value =$consult_anesth->_ref_sejour->_ref_prescription_sejour}}
         <tr>
           <td>
             <ul>
               {{foreach from=$lines item=_line}}
                 {{if $_line instanceof CPrescriptionLineMedicament}}
-                  {{mb_include module="dPprescription" template="inc_print_medicament" med=$_line print=0 dci=0}}
+                  {{mb_include module="prescription" template="inc_print_medicament" med=$_line print=0 dci=0}}
                 {{/if}}
                 {{if $_line instanceof CPrescriptionLineMix}}
-                  {{mb_include module="dPprescription" template="inc_print_prescription_line_mix" perf=$_line print=0 dci=0}}
+                  {{mb_include module="prescription" template="inc_print_prescription_line_mix" perf=$_line print=0 dci=0}}
+                {{/if}}
+                {{if $_line instanceof CPrescriptionLineElement}}
+                  {{mb_include module="prescription" template="inc_print_element" elt=$_line}}
                 {{/if}}
               {{/foreach}}
             </ul>

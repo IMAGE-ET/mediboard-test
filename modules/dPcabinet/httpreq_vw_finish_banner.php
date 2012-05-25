@@ -30,6 +30,10 @@ $consult->_ref_patient->loadRefPhotoIdentite();
 $consult->loadRefPraticien()->loadRefFunction();
 $consult->loadRefSejour();
 
+if (CModule::getActive("maternite")) {
+  $consult->loadRefGrossesse();
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
