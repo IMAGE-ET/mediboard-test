@@ -509,7 +509,7 @@ Main.add( function(){
   <td colspan="3">{{mb_field object=$sejour field="libelle" form="editSejour" style="width: 12em" autocomplete="true,1,50,true,true"}}</td>
 </tr>
 
-<tr>
+<tr {{if !$conf.dPplanningOp.CSejour.easy_cim10}}class="modeExpert"{{/if}}>
   <th>{{mb_label object=$sejour field="DP"}}</th>
   <td colspan="3">
     <script type="text/javascript">
@@ -534,23 +534,25 @@ Main.add( function(){
   </td>
 </tr>
 
-<tbody id="ald_patient">
+<tbody id="ald_patient" {{if !$conf.dPplanningOp.CSejour.easy_ald_cmu}}class="modeExpert"{{/if}}>
   {{mb_include module=planningOp template=inc_check_ald patient=$sejour->_ref_patient}}
 </tbody>
 
 {{if $conf.dPplanningOp.CSejour.accident}}
-<tr>
-  <th>{{mb_label object=$sejour field="date_accident"}}</th>
-  <td colspan="3">{{mb_field object=$sejour form="editSejour" field="date_accident" register=true onchange="checkAccident();"}}</td>
-</tr>
-
-<tr>
-  <th>{{mb_label object=$sejour field="nature_accident"}}</th>
-  <td colspan="3">{{mb_field object=$sejour field="nature_accident" emptyLabel="Choose" style="width: 15em;" onchange="checkAccident();"}}</td>
-</tr>
+  <tbody {{if !$conf.dPplanningOp.COperation.easy_accident}}class="modeExpert"{{/if}}>
+    <tr>
+      <th>{{mb_label object=$sejour field="date_accident"}}</th>
+      <td colspan="3">{{mb_field object=$sejour form="editSejour" field="date_accident" register=true onchange="checkAccident();"}}</td>
+    </tr>
+    
+    <tr>
+      <th>{{mb_label object=$sejour field="nature_accident"}}</th>
+      <td colspan="3">{{mb_field object=$sejour field="nature_accident" emptyLabel="Choose" style="width: 15em;" onchange="checkAccident();"}}</td>
+    </tr>
+  </tbody>
 {{/if}}
 
-<tr>
+<tr {{if !$conf.dPplanningOp.CSejour.easy_service}}class="modeExpert"{{/if}}>
   <th>
     {{mb_label object=$sejour field="service_id"}}
   </th>
@@ -855,7 +857,7 @@ Main.add( function(){
 </tr>
 </tbody>
 
-<tr>
+<tr {{if !$conf.dPplanningOp.CSejour.easy_chambre_simple}}class="modeExpert"{{/if}}>
   <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
   <td>
     {{mb_field object=$sejour field="chambre_seule" onchange="checkChambreSejour();"}}
@@ -948,29 +950,31 @@ Main.add( function(){
 </tr>
 
 {{if $conf.dPplanningOp.CSejour.assurances}}
-<tr>
-  <th colspan="4" class="category">Assurance</th>
-</tr>
-<tr>
-  <th>{{mb_label object=$sejour field="assurance_maladie"}}</th>
-  <td colspan="3">{{mb_field object=$sejour field="assurance_maladie" form="editSejour" style="width: 12em" autocomplete="true,1,50,true,true" onchange="checkAssurances();"}}</td>
-</tr>
-<tr>
-  <th>{{mb_label object=$sejour field="rques_assurance_maladie"}}</th>
-  <td colspan="3">
-    {{mb_field object=$sejour field="rques_assurance_maladie" onchange="checkAssurances();" form="editSejour"
-        aidesaisie="validateOnBlur: 0"}}</td>
-</tr>
-<tr>
-  <th>{{mb_label object=$sejour field="assurance_accident"}}</th>
-  <td colspan="3">{{mb_field object=$sejour field="assurance_accident" form="editSejour" style="width: 12em" autocomplete="true,1,50,true,true" onchange="checkAssurances();"}}</td>
-</tr>
-<tr>
-  <th>{{mb_label object=$sejour field="rques_assurance_accident"}}</th>
-  <td colspan="3">
-    {{mb_field object=$sejour field="rques_assurance_accident" onchange="checkAssurances();" form="editSejour"
-        aidesaisie="validateOnBlur: 0"}}</td>
-</tr>
+  <tbody {{if !$conf.dPplanningOp.COperation.easy_assurances}}class="modeExpert"{{/if}}>
+    <tr>
+      <th colspan="4" class="category">Assurance</th>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$sejour field="assurance_maladie"}}</th>
+      <td colspan="3">{{mb_field object=$sejour field="assurance_maladie" form="editSejour" style="width: 12em" autocomplete="true,1,50,true,true" onchange="checkAssurances();"}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$sejour field="rques_assurance_maladie"}}</th>
+      <td colspan="3">
+        {{mb_field object=$sejour field="rques_assurance_maladie" onchange="checkAssurances();" form="editSejour"
+            aidesaisie="validateOnBlur: 0"}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$sejour field="assurance_accident"}}</th>
+      <td colspan="3">{{mb_field object=$sejour field="assurance_accident" form="editSejour" style="width: 12em" autocomplete="true,1,50,true,true" onchange="checkAssurances();"}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$sejour field="rques_assurance_accident"}}</th>
+      <td colspan="3">
+        {{mb_field object=$sejour field="rques_assurance_accident" onchange="checkAssurances();" form="editSejour"
+            aidesaisie="validateOnBlur: 0"}}</td>
+    </tr>
+  </tbody>
 {{/if}}
 
 <tbody class="modeExpert">
