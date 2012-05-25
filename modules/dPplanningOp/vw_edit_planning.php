@@ -202,6 +202,10 @@ foreach($blocages_lit as $key => $blocage){
   }
 }
 
+if (CModule::getActive("maternite")) {
+  $sejour->loadRefGrossesse();
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
