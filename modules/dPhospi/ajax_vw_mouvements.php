@@ -216,7 +216,8 @@ foreach ($affectations as $_affectation) {
     $ljoin = array();
     
     $where["sejour_id"] = "= '$sejour->_id'";
-    $ljoin["item_prestation"] = "item_prestation.item_prestation_id = item_liaison.item_prestation_realise_id";
+    $ljoin["item_prestation"] = "item_prestation.item_prestation_id = item_liaison.item_prestation_realise_id
+      OR item_prestation.item_prestation_id = item_liaison.item_prestation_id";
     $where["object_class"] = " = 'CPrestationJournaliere'";
     $where["object_id"] = " = '$prestation_id'";
     $item_liaison->loadObject($where, null, null, $ljoin);
