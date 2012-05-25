@@ -12,7 +12,11 @@
     {{if $selOp->prat_visite_anesth_id}}
       var oForm = getForm('visiteAnesth');
       var contextUserId = {{$selOp->prat_visite_anesth_id}};
-      var contextUserView = oForm.prat_visite_anesth_id.options[oForm.prat_visite_anesth_id.selectedIndex].innerHTML.trim();
+      {{if $selOp->date_visite_anesth || $currUser->_is_anesth}}
+        var contextUserView = "{{mb_value object=$selOp field='prat_visite_anesth_id'}}"
+      {{else}}
+        var contextUserView = oForm.prat_visite_anesth_id.options[oForm.prat_visite_anesth_id.selectedIndex].innerHTML.trim();
+      {{/if}}
     {{else}}
       var contextUserId = User.id;
       var contextUserId = User.view;
