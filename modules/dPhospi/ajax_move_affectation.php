@@ -70,7 +70,10 @@ if (!$affectation_id && isset($sejour)) {
     $where["sejour_id"] = " = '$sejour->_id'";
     $where["item_prestation.object_class"] = " = 'CPrestationJournaliere'";
     $where["item_prestation.object_id"] = "= '$_item->object_id'";
-    $ljoin["item_prestation"] = "item_prestation.item_prestation_id = item_liaison.item_prestation_id";
+    
+    // On teste également le réalisé, si une affectation avait déjà été faite puis supprimée.
+    $ljoin["item_prestation"] = "item_prestation.item_prestation_id = item_liaison.item_prestation_id
+      OR item_prestation.item_prestation_id = item_liaison.item_prestation_realise_id";
     
     $item_liaison->loadObject($where, null, null, $ljoin);
     
@@ -82,6 +85,10 @@ if (!$affectation_id && isset($sejour)) {
     }
     
     $item_liaison->item_prestation_realise_id = $_liaison->item_prestation_id;
+    
+    if ($item_liaison->item_prestation_id == 0) {
+      $item_liaison->item_prestation_id = "";
+    }
     
     if ($msg = $item_liaison->store()) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
