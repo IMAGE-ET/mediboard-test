@@ -176,8 +176,10 @@ if($praticien_id && !$service_id){
 }
 
 foreach ($sejoursParService as $key => $_service) {
-  if($key != "NP"){
-    ksort($_service->_ref_chambres);
+  if($key != "NP"){ 
+    $sorter = CMbArray::pluck($_service->_ref_chambres, "nom");
+    array_multisort($sorter, SORT_ASC, $_service->_ref_chambres);
+  
     foreach ($_service->_ref_chambres as $_chambre) {
       foreach ($_chambre->_ref_lits as $_lit) {
         foreach ($_lit->_ref_affectations as $_affectation) {
