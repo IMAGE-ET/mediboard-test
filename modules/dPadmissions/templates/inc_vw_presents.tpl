@@ -41,6 +41,7 @@ Calendar.regField(getForm("changeDatePresents").date, null, {noView: true});
   {{assign var=url value="?m=$m&tab=vw_idx_present"}}
   <tr>
     <th>
+      <input type="checkbox" style="float: left;" onclick="Admissions.togglePrint('admissions', this.checked)"/>
       {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url=$url}}
     </th>
     <th class="narrow">

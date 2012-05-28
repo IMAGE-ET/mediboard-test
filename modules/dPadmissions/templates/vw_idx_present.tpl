@@ -138,14 +138,18 @@ SejourHprimSelector.doSet = function(){
 Main.add(function () {
   var totalUpdater = new Url("dPadmissions", "httpreq_vw_all_presents");
   totalUpdater.addParam("date", "{{$date}}");
-  totalUpdater.periodicalUpdate('allPresents', { frequency: 120 });
+  Admissions.totalUpdater = totalUpdater.periodicalUpdate('allPresents', { frequency: 120 });
   
   var listUpdater = new Url("dPadmissions", "httpreq_vw_presents");
   listUpdater.addParam("date", "{{$date}}");
-  listUpdater.periodicalUpdate('listPresents', { frequency: 120 });
+  Admissions.listUpdater = listUpdater.periodicalUpdate('listPresents', { frequency: 120 });
 });
 
 </script>
+
+<div style="display: none" id="area_prompt_modele">
+  {{mb_include module=admissions template=inc_prompt_modele type=admissions}}
+</div>
 
 <table class="main">
 <tr>
@@ -169,6 +173,7 @@ Main.add(function () {
       </select>
     </form>
     <a href="#" onclick="printPlanning()" class="button print" style="display: none;">Imprimer</a>
+    <a href="#" onclick="Admissions.beforePrint(); modal('area_prompt_modele')" class="button print">{{tr}}CCompteRendu-print_for_select{{/tr}}</a>
   </td>
 </tr>
   <tr>

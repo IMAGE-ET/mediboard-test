@@ -154,6 +154,7 @@ $locales['CCompteRendu-page_height-desc'] = 'Hauteur de la page en cm';
 $locales['CCompteRendu-page_width'] = 'Largeur';
 $locales['CCompteRendu-page_width-desc'] = 'Largeur de la page en cm';
 $locales['CCompteRendu-preview-header-footer'] = 'Aperçu';
+$locales['CCompteRendu-print_for_select'] = 'Imprimer pour la sélection';
 $locales['CCompteRendu-private'] = 'Confidentiel';
 $locales['CCompteRendu-private-desc'] = 'Accessible qu\'aux utilisateurs de la même fonction';
 $locales['CCompteRendu-set-etab'] = 'Associer à un établissement';

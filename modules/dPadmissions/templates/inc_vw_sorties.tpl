@@ -50,6 +50,7 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
   <tr>
     <th class="narrow">Effectuer la sortie</th>
     <th>
+      <input type="checkbox" style="float: left;" onclick="Admissions.togglePrint('sortie', this.checked)"/>
       {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url="$url"}}
     </th>
     <th class="narrow">
@@ -175,7 +176,10 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
         </div>
       {{/if}}
       
+      <input type="checkbox" name="print_doc" value="{{$_sejour->_id}}"/>
+      
       {{mb_include module=planningOp template=inc_vw_numdos nda=$_sejour->_NDA _doss_id=$_sejour->_id}}
+      
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_ref_patient->_guid}}');">
         {{$_sejour->_ref_patient->_view}}
       </span>

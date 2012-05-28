@@ -125,15 +125,19 @@ function confirmation(date_actuelle, date_demain, sortie_prevue, entree_reelle, 
 Main.add(function () {
   var totalUpdater = new Url("dPadmissions", "httpreq_vw_all_sorties");
   totalUpdater.addParam("date", "{{$date}}");
-  totalUpdater.periodicalUpdate('allSorties', { frequency: 120 });
+  Admissions.totalUpdater = totalUpdater.periodicalUpdate('allSorties', { frequency: 120 });
   
   var listUpdater = new Url("dPadmissions", "httpreq_vw_sorties");
   listUpdater.addParam("selSortis", "{{$selSortis}}");
   listUpdater.addParam("date", "{{$date}}");
-  listUpdater.periodicalUpdate('listSorties', { frequency: 120 });
+  Admissions.listUpdater = listUpdater.periodicalUpdate('listSorties', { frequency: 120 });
 });
 
 </script>
+
+<div style="display: none" id="area_prompt_modele">
+  {{mb_include module=admissions template=inc_prompt_modele type=sortie}}
+</div>
 
 <table class="main">
 <tr>
@@ -157,6 +161,7 @@ Main.add(function () {
       </select>
     </form>
     <a href="#" onclick="printPlanning()" class="button print">Imprimer</a>
+    <a href="#" onclick="Admissions.beforePrint(); modal('area_prompt_modele')" class="button print">{{tr}}CCompteRendu-print_for_select{{/tr}}</a>
   </td>
 </tr>
   <tr>
