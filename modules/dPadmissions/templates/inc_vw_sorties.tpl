@@ -86,13 +86,15 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
         });
       </script>
       
-      <form name="editFrm{{$_sejour->_guid}}" action="?m={{$m}}" method="post">
+      <form name="editFrm{{$_sejour->_guid}}" action="?m={{$m}}" method="post" data-patient_view="{{$_sejour->_ref_patient->_view}}">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_sejour_aed" />
         <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
         <input type="hidden" name="type" value="{{$_sejour->type}}" />
-        
+        {{if $_sejour->grossesse_id}}
+          <input type="hidden" name="_sejours_enfants_ids" value="{{","|implode:$_sejour->_sejours_enfants_ids}}" />
+        {{/if}}
         {{if $_sejour->sortie_reelle}}
           <input type="hidden" name="mode_sortie" value="{{$_sejour->mode_sortie}}" />
           <input type="hidden" name="etablissement_sortie_id" value="{{$_sejour->etablissement_sortie_id}}" />

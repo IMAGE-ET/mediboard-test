@@ -12,6 +12,8 @@
 
 <script type="text/javascript">
 
+var sejours_enfants_ids;
+
 function showLegend() {
   var url = new Url("dPadmissions", "vw_legende").requestModal();
 }
@@ -68,7 +70,28 @@ function reloadSorties(filterFunction) {
 }
 
 function submitSortie(oForm) {
-  return onSubmitFormAjax(oForm, { onComplete : reloadSorties });
+  
+  if (!Object.isUndefined(oForm.elements["_sejours_enfants_ids"]) && $V(oForm._modifier_sortie) == 1) {
+    sejours_enfants_ids = $V(oForm._sejours_enfants_ids);
+    sejours_enfants_ids.split(",").each(function(elt) {
+      var form = getForm("editFrmCSejour-"+elt);
+      if (!Object.isUndefined(form) && form.down("button.tick")) {
+        if (confirm('Voulez-vous effectuer dans un même temps la sortie de l\'enfant ' + form.get("patient_view"))) {
+          form.down("button.tick").onclick();
+        }
+      }
+    });
+    
+    sejours_enfants_ids = undefined;
+    return onSubmitFormAjax(oForm, { onComplete : reloadSorties });
+  }
+  
+  if (!Object.isUndefined(sejours_enfants_ids) && sejours_enfants_ids.indexOf($V(oForm.sejour_id)) != -1) {
+    return onSubmitFormAjax(oForm);
+  }
+  else {
+    return onSubmitFormAjax(oForm, { onComplete : reloadSorties });
+  }
 }
 
 function confirmation(oForm, type){
@@ -78,17 +101,22 @@ function confirmation(oForm, type){
    if(confirm('La date enregistrée de sortie est différente de la date prévue, souhaitez vous confimer la sortie du patient ?')){
      submitSortie(oForm, type);
    }
+   else {
+     sejours_enfants_ids = undefined;
+   }
 }
 
 function confirmation(date_actuelle, date_demain, sortie_prevue, entree_reelle, oForm){
   if(entree_reelle == ""){
     if(!confirm('Attention, ce patient ne possède pas de date d\'entrée réelle, souhaitez vous confirmer la sortie du patient ?')){
-     return false;
+      sejours_enfants_ids = undefined;
+      return false;
     }
   }
   if(date_actuelle > sortie_prevue || date_demain < sortie_prevue) {
     if(!confirm('La date enregistrée de sortie est différente de la date prévue, souhaitez vous confimer la sortie du patient ?')){
-     return false;
+      sejours_enfants_ids = undefined;
+      return false;
     }
   }
   submitSortie(oForm);    

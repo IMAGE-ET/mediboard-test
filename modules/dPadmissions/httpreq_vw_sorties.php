@@ -91,6 +91,8 @@ CMbObject::massLoadFwdRef($sejours, "patient_id");
 $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
 $functions  = CMbObject::massLoadFwdRef($praticiens, "function_id");
 
+$maternite_active = CModule::getActive("maternite");
+
 foreach ($sejours as $sejour_id => $_sejour) {
   // Filtre sur la fonction du praticien
   $praticien = $_sejour->loadRefPraticien(1);
@@ -124,6 +126,10 @@ foreach ($sejours as $sejour_id => $_sejour) {
     if ($_aff->_id) {
       $_aff->loadRefLit()->loadCompleteView();
     }
+  }
+  
+  if ($maternite_active && $_sejour->grossesse_id) {
+    $_sejour->_sejours_enfants_ids = CMbArray::pluck($_sejour->loadRefsNaissances(), "sejour_enfant_id");
   }
   
   // Chargement des modes de sortie
