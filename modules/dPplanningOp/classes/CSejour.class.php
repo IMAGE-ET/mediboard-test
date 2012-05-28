@@ -122,7 +122,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_motif_complet      = null;
   var $_grossesse          = null;
   var $_nb_printers        = null;
-  
+  var $_sejours_enfants_ids = array();
   // Behaviour fields
   var $_check_bounds  = true;
   var $_en_mutation   = null;
@@ -253,6 +253,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $backProps["tasks"]                 = "CSejourTask sejour_id";
     $backProps["sejour_brancard"]       = "CBrancardage sejour_id";
     $backProps["naissance"]             = "CNaissance sejour_enfant_id";
+    $backProps["naissances"]            = "CNaissance sejour_maman_id";
     $backProps["movements"]             = "CMovement sejour_id";
     $backProps["items_liaisons"]        = "CItemLiaison sejour_id";
     return $backProps;
@@ -2398,6 +2399,10 @@ class CSejour extends CCodable implements IPatientRelated {
       }
     }
     return $this->_ref_prestations;
+  }
+  
+  function loadRefsNaissances() {
+    return $this->_ref_naissances = $this->loadBackRefs("naissances");
   }
 }
 ?>
