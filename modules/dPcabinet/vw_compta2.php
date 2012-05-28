@@ -36,29 +36,12 @@ $filter_reglement->mode = CValue::getOrSession("mode", 0);
 $mediuser = CMediusers::get();
 $mediuser->loadRefFunction();
 
-$is_praticien           = $mediuser->isPraticien();
+$is_praticien           = $mediuser->isPraticien() ;
 $is_admin = in_array(CUser::$types[$mediuser->_user_type], array("Administrator"));
 $is_admin_or_secretaire = in_array(CUser::$types[$mediuser->_user_type], array("Administrator", "Secrétaire"));
+    
+$listPrat =  $mediuser->loadPraticiensCompta();
 
-// Liste des praticiens du cabinet -> on ne doit pas voir les autres...
-if($is_admin_or_secretaire || $mediuser->_ref_function->compta_partagee) {
-  if($is_admin) {
-    if(CAppUI::pref("pratOnlyForConsult", 1)) {
-      $listPrat = $mediuser->loadPraticiens(PERM_EDIT);
-    } else {
-      $listPrat = $mediuser->loadProfessionnelDeSante(PERM_EDIT);
-    }
-  } else {
-    if(CAppUI::pref("pratOnlyForConsult", 1)) {
-      $listPrat = $mediuser->loadPraticiens(PERM_EDIT, $mediuser->function_id);
-    } else {
-      $listPrat = $mediuser->loadProfessionnelDeSante(PERM_EDIT, $mediuser->function_id);
-    }
-  }
-} else {
-  $listPrat = array($mediuser->_id => $mediuser);
-}
-  
 // Création du template
 $smarty = new CSmartyDP();
 

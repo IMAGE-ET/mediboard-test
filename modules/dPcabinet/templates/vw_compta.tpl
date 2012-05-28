@@ -64,7 +64,7 @@ function viewActes(etab){
 
 </script>
 
-
+{{if count($listPrat)}}
 <table class="main">
   <tr>
     <td>
@@ -231,3 +231,10 @@ function viewActes(etab){
     </td>
   </tr>
 </table>
+{{else}}
+<div class="big-info">
+  Votre compta a été déléguée.<br/>
+  Veuillez contacter l'administrateur
+</div>
+
+{{/if}}
