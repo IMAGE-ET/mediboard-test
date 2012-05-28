@@ -9,11 +9,14 @@
 
 CCanDo::checkRead();
 
+$chir_id = CValue::get("chir_id");
+
 $plageop = new CPlageOp();
 $plageop->load(CValue::get("plageop_id"));
 $plageop->loadRefSalle();
-$plageop->loadRefsOperations(false, null, true);
-$plageop->guessHoraireVoulu(); 
+$where = array("chir_id" => "= '$chir_id'");
+$plageop->loadRefsOperations(false, null, true, null, $where);
+$plageop->guessHoraireVoulu();
 
 $rank_validated = array();
 $rank_not_validated = array();

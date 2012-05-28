@@ -15,11 +15,12 @@ PlageOpSelector.init = function(){
   var oOpForm     = document.editOp;
   var oSejourForm = document.editSejour;
   
-  this.sPlage_id     = "plageop_id";
-  this.sSalle_id     = "salle_id";
-  this.sDate         = "_date";
-  this.sType         = "type";
+  this.sPlage_id         = "plageop_id";
+  this.sSalle_id         = "salle_id";
+  this.sDate             = "_date";
+  this.sType             = "type";
   this.sPlaceAfterInterv = "_place_after_interv_id";
+  this.sHoraireVoulu     = "_horaire_voulu";
   
   this.s_hour_entree_prevue = "_hour_entree_prevue";
   this.s_min_entree_prevue  = "_min_entree_prevue";
@@ -52,6 +53,8 @@ CCAMSelector.init = function(){
 {{mb_field object=$op field="sejour_id" hidden=1 canNull=true}}
 {{mb_field object=$op field="commande_mat" hidden=1}}
 {{mb_field object=$op field="rank" hidden=1}}
+{{*mb_field object=$op field="_horaire_voulu" hidden=0*}}
+<input type="text" name="_horaire_voulu" value="{{$op->_horaire_voulu}}" />
 <input type="hidden" name="annulee" value="{{$op->annulee|default:"0"}}" />
 <input type="hidden" name="salle_id" value="{{$op->salle_id}}" />
 
@@ -78,9 +81,7 @@ CCAMSelector.init = function(){
   
   {{if $op->annulee == 1}}
   <tr>
-    <th class="category cancelled" colspan="3">
-    {{tr}}COperation-annulee{{/tr}}
-    </th>
+    <th class="category cancelled" colspan="3">{{tr}}COperation-annulee{{/tr}}</th>
   </tr>
   {{/if}}
 
@@ -269,15 +270,6 @@ CCAMSelector.init = function(){
       </td>
     {{/if}}
   </tr>
-
-  {{if !$modurgence && $conf.dPplanningOp.COperation.horaire_voulu}}
-  <tr>
-    <th>Horaire souhaité</th>
-    <td colspan="2" class="text">
-      <div class="small-info">Fonctionnalité déplacée dans le selecteur de date d'intervention situé plus haut</div>
-    </td>
-  </tr>
-  {{/if}}
   
   {{if $modurgence}} 
     <tr>

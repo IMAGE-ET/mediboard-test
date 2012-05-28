@@ -374,6 +374,7 @@ class COperation extends CCodable implements IPatientRelated {
     if($this->horaire_voulu){
       $this->_hour_voulu = intval(substr($this->horaire_voulu, 0, 2));
       $this->_min_voulu  = intval(substr($this->horaire_voulu, 3, 2)); 
+      $this->_horaire_voulu = $this->horaire_voulu;
     }
     
     if($this->pause){
@@ -434,6 +435,8 @@ class COperation extends CCodable implements IPatientRelated {
     }
     if($this->_hour_voulu != null and $this->_min_voulu != null) {
       $this->horaire_voulu = sprintf("%02d:%02d:00", $this->_hour_voulu, $this->_min_voulu);
+    } elseif($this->_horaire_voulu) {
+      $this->horaire_voulu = $this->_horaire_voulu;
     }
     if($this->_pause_hour !== null and $this->_pause_min !== null) {
       $this->pause = sprintf("%02d:%02d:00", $this->_pause_hour, $this->_pause_min);
@@ -637,9 +640,9 @@ class COperation extends CCodable implements IPatientRelated {
     $reorder_rank_voulu = $this->_reorder_rank_voulu;
     $this->_reorder_rank_voulu = null;
     
-    // Cas de la création dans une plage de spécialité
     if ($this->plageop_id) {
       $plage = $this->loadRefPlageOp();
+      // Cas de la création dans une plage de spécialité
       if ($plage->spec_id && $plage->unique_chir) {
         $plage->chir_id = $this->chir_id;
         $plage->spec_id = "";

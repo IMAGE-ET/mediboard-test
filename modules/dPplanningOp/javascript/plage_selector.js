@@ -14,10 +14,11 @@ PlageOpSelector = {
   s_date_entree_prevue: null,
   
   prepared: {
-    plage_id     : null,
-    sDate        : null,
-    bAdm         : null,
-    dAdm         : null,
+    plage_id          : null,
+    sDate             : null,
+    bAdm              : null,
+    dAdm              : null,
+    sHoraireVoulu     : null,
     sPlaceAfterInterv : null
   },
   
@@ -36,7 +37,7 @@ PlageOpSelector = {
     }
   },
 
-  set: function(plage_id, salle_id, sDate, bAdm, typeHospi, hour_entree, min_entree, place_after_interv_id) {
+  set: function(plage_id, salle_id, sDate, bAdm, typeHospi, hour_entree, min_entree, place_after_interv_id, horaire_voulu) {
     // Declaration de formulaires
     var oOpForm     = getForm("editOp");
     var oSejourForm = getForm("editSejour");
@@ -84,13 +85,13 @@ PlageOpSelector = {
     }  
     
     // Sauvegarde des valeurs dans l'objet prepared
-    this.prepared.dAdm     = dAdm;
-    this.prepared.plage_id = plage_id;
-    this.prepared.salle_id = salle_id;
-    this.prepared.bAdm     = bAdm;
-    this.prepared.sDate    = sDate;
-    this.prepared.sDate    = sDate;
+    this.prepared.dAdm              = dAdm;
+    this.prepared.plage_id          = plage_id;
+    this.prepared.salle_id          = salle_id;
+    this.prepared.bAdm              = bAdm;
+    this.prepared.sDate             = sDate;
     this.prepared.sPlaceAfterInterv = place_after_interv_id;
+    this.prepared.sHoraireVoulu     = horaire_voulu;
     
     // Lancement de l'execution du set
     window.setTimeout( window.PlageOpSelector.doSet , 1);
@@ -100,9 +101,12 @@ PlageOpSelector = {
     var oOpForm     = getForm("editOp");
     var oSejourForm = getForm("editSejour");
    
-    $V(oOpForm[PlageOpSelector.sPlage_id]    , PlageOpSelector.prepared.plage_id);
-    $V(oOpForm[PlageOpSelector.sSalle_id]    , PlageOpSelector.prepared.salle_id);
+    $V(oOpForm[PlageOpSelector.sPlage_id]        , PlageOpSelector.prepared.plage_id);
+    $V(oOpForm[PlageOpSelector.sSalle_id]        , PlageOpSelector.prepared.salle_id);
     $V(oOpForm[PlageOpSelector.sPlaceAfterInterv], PlageOpSelector.prepared.sPlaceAfterInterv);
+    if(PlageOpSelector.prepared.sPlaceAfterInterv == '-1') {
+      $V(oOpForm[PlageOpSelector.sHoraireVoulu], PlageOpSelector.prepared.sHoraireVoulu);
+    } 
     
     // Si seul l'horaire voulu est changé, le onchange sur la date n'est pas fait.
     // Il faut donc le forcer

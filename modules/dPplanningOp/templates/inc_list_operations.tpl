@@ -55,7 +55,7 @@
       {{assign var=patient value=$_operation->_ref_sejour->_ref_patient}}
       
       <td rowspan="2" class="narrow" style="text-align: center;">
-        {{if !$board && !$_operation->rank && (!$prev_interv || $prev_interv && !$prev_interv->rank)}}
+        {{if !$board && !$_operation->rank && (!$prev_interv || $prev_interv && !$prev_interv->rank) && !($curr_plage->spec_id && !$curr_plage->unique_chir)}}
           {{if $_operation->rank_voulu || $_operation->horaire_voulu}}
             {{if !$smarty.foreach._operation.first && $prev_interv && !$prev_interv->rank}}
               <form name="move-{{$_operation->_guid}}-up" action="?m={{$m}}" method="post" class="prepared" style="display: block;" 
@@ -87,7 +87,7 @@
           <div class="rank opacity-20"></div>
         {{/if}}
         
-        {{if !$board && !$_operation->rank && !$smarty.foreach._operation.last}}
+        {{if !$board && !$_operation->rank && !$smarty.foreach._operation.last && !($curr_plage->spec_id && !$curr_plage->unique_chir)}}
           {{assign var=next_index value=$smarty.foreach._operation.iteration}}
           {{assign var=next_interv value=$list_operations.$next_index}}
           

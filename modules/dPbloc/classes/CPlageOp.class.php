@@ -206,7 +206,7 @@ class CPlageOp extends CMbObject {
     $i = 0;
     foreach ($this->_ref_operations as $op) {
       $stored = false;
-      if ($op->rank || $rank_voulu == "validate") {
+      if ($op->rank || ($rank_voulu == "validate")) {
         $op->rank = ++$i;
         $op->time_operation = $new_time;
         
@@ -217,7 +217,7 @@ class CPlageOp extends CMbObject {
         
         $stored = true;
       }
-      elseif ($rank_voulu == "reorder" && ($op->horaire_voulu || $this->_reorder_up_to_interv_id)) {
+      elseif (!($this->spec_id && !$this->unique_chir) && $rank_voulu == "reorder" && ($op->horaire_voulu || $this->_reorder_up_to_interv_id)) {
         $op->rank_voulu = ++$i;
         $op->horaire_voulu = $new_time;
         
@@ -238,9 +238,13 @@ class CPlageOp extends CMbObject {
       $new_time = mbAddTime($this->temps_inter_op, $new_time);
       $new_time = mbAddTime($op->pause, $new_time);
     }
+    return true;
   }
 
   function guessHoraireVoulu() {
+    if($this->spec_id && !$this->unique_chir) {
+      return false;
+    }
     $this->completeField("debut", "temps_inter_op");
     
     $new_time = $this->debut;
@@ -254,6 +258,7 @@ class CPlageOp extends CMbObject {
       $new_time = mbAddTime($this->temps_inter_op, $new_time);
       $new_time = mbAddTime($op->pause, $new_time);
     }
+    return true;
   }
   
 
@@ -412,6 +417,7 @@ class CPlageOp extends CMbObject {
     $delay_repl       = $this->delay_repl;
     $spec_repl_id     = $this->spec_repl_id;
     $type_repeat      = $this->_type_repeat;
+    $unique_chir      = $this->unique_chir;
     
     // Recherche de la plafe suivante
     $where             = array();
@@ -442,6 +448,7 @@ class CPlageOp extends CMbObject {
     $this->delay_repl       = $delay_repl;
     $this->spec_repl_id     = $spec_repl_id;
     $this->_type_repeat     = $type_repeat;
+    $this->unique_chir      = $unique_chir;
     $this->updateFormFields();
     return $week_jumped;
   }

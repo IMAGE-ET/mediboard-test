@@ -3,6 +3,7 @@
 function showProgramme(plage_id) {
   var url = new Url("dPplanningOp", "ajax_prog_plageop");
   url.addParam("plageop_id", plage_id);
+  url.addParam("chir_id", {{$chir}});
   url.requestUpdate("prog_plageop");
 }
 
@@ -30,6 +31,7 @@ function setClose(date, salle_id) {
   }
   
   var place_after_interv_id = $V(oForm._place_after_interv_id);
+  var horaire_voulu         = $V(oForm._horaire_voulu);
   
   var plage_id = $V(list);
   if (!plage_id) {
@@ -49,7 +51,7 @@ function setClose(date, salle_id) {
     min_entree  = $V(oForm.min_veille);
   }
   
-  window.parent.PlageOpSelector.set(plage_id, salle_id, date, adm, typeHospi, hour_entree, min_entree, place_after_interv_id);
+  window.parent.PlageOpSelector.set(plage_id, salle_id, date, adm, typeHospi, hour_entree, min_entree, place_after_interv_id, horaire_voulu);
   window._close();
 }  
 
