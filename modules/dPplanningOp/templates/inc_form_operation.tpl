@@ -54,7 +54,7 @@ CCAMSelector.init = function(){
 {{mb_field object=$op field="commande_mat" hidden=1}}
 {{mb_field object=$op field="rank" hidden=1}}
 {{*mb_field object=$op field="_horaire_voulu" hidden=0*}}
-<input type="text" name="_horaire_voulu" value="{{$op->_horaire_voulu}}" />
+<input type="hidden" name="_horaire_voulu" value="{{$op->_horaire_voulu}}" />
 <input type="hidden" name="annulee" value="{{$op->annulee|default:"0"}}" />
 <input type="hidden" name="salle_id" value="{{$op->salle_id}}" />
 
