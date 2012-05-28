@@ -137,8 +137,8 @@ table.main tbody.viewported td.viewport {
   border: 1px solid #000;
 }
 
-table.main td.halfPane,
-table.main th.halfPane {
+td.halfPane,
+th.halfPane {
   width: 50%;
 }
 

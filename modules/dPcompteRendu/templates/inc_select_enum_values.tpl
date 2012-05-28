@@ -9,5 +9,10 @@
 *}}
 
 {{foreach from=$list key=_key item=_locale}}
-  <option value="{{if $_key !== 0}}{{$_key}}{{/if}}">{{$_locale}}</option>
+  {{if $_key == '0'}}
+  <option value="">&mdash; {{tr}}None{{/tr}}
+</option>
+  {{else}}
+  <option value="{{if $_key !== '0'}}{{$_key}}{{/if}}">{{$_locale}}</option>
+  {{/if}}
 {{/foreach}}

@@ -7,8 +7,7 @@
 * @author Thomas Despoix
 */
 
-global $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 $object_class = CValue::get("object_class");
 $field        = CValue::get("field");
