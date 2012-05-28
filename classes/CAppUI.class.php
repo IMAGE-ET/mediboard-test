@@ -830,7 +830,7 @@ class CAppUI {
   /**
    * Return the configuration setting for a given path
    * 
-   * @param string $path   Tokenized path, eg "module class var";
+   * @param string $path   Tokenized path, eg "module class var", dP proof
    * @param mixed  $object The context
    * 
    * @return mixed String or array of values depending on the path
@@ -852,6 +852,11 @@ class CAppUI {
     
     $items = explode(' ', $path);
     foreach ($items as $part) {
+      // dP ugly hack
+      if (!array_key_exists($part, $conf) && array_key_exists("dP$part", $conf)) {
+        $part = "dP$part";
+      }
+      
       $conf = $conf[$part];
     }
     
