@@ -494,7 +494,13 @@ class CSetupmediusers extends CSetup {
                  ADD `mail_apicrypt` VARCHAR (50);";
      $this->addQuery($query);
      
-     $this->mod_version = "0.42";
+     $this->makeRevision("0.42");
+     
+     $query = "ALTER TABLE `users_mediboard` 
+                 ADD `compta_deleguee` BOOL NOT NULL DEFAULT '0';";
+     $this->addQuery($query);
+     
+     $this->mod_version = "0.43";
   }
 }
 

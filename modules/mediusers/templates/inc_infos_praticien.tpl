@@ -88,6 +88,11 @@
 </tr>
 
 <tr>
+  <th>{{mb_label object=$object field="compta_deleguee"}}</th>
+  <td>{{mb_field object=$object field="compta_deleguee"}}</td>
+</tr>
+
+<tr>
   <th>{{mb_label object=$object field="compte"}}</th>
   <td>{{mb_field object=$object field="compte"}}</td>
 </tr>

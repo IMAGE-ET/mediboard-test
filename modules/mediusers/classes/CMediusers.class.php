@@ -27,7 +27,8 @@ class CMediusers extends CMbObject {
   var $compte                      = null;
   var $banque_id                   = null;
   var $mail_apicrypt               = null;
-
+  var $compta_deleguee             = null;
+  
   // DB References
   var $function_id                 = null;
   var $discipline_id               = null;
@@ -150,6 +151,7 @@ class CMediusers extends CMbObject {
     $specs["rcc"]                    = "str";
     $specs["adherent"]               = "str";
     $specs["mail_apicrypt"]          = "email";
+    $specs["compta_deleguee"]       = "bool default|0";
     
     $specs["_group_id"]              = "ref notNull class|CGroups";
     
@@ -670,11 +672,11 @@ class CMediusers extends CMbObject {
     }
 
     $order = "`users`.`user_last_name`, `users`.`user_first_name`";
-
+    
     // Get all users
     $mediuser = new CMediusers;
     $mediusers = $mediuser->loadListWithPerms($permType, $where, $order, null, null, $ljoin);
-
+    
     // Associate already loaded function
     foreach ($mediusers as $_mediuser) {
       $_mediuser->loadRefFunction();
@@ -763,6 +765,50 @@ class CMediusers extends CMbObject {
 
   function loadProfessionnelDeSante($permType = PERM_READ, $function_id = null, $name = null, $secondary = false) {
     return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme", "Dentiste"), $permType, $function_id, $name, $secondary);
+  }
+  
+  function loadPraticiensCompta(){
+  	
+		$is_admin               = in_array(CUser::$types[$this->_user_type], array("Administrator"));
+		$is_admin_or_secretaire = in_array(CUser::$types[$this->_user_type], array("Administrator", "Secrétaire"));
+		$listPrat = array();
+		// Liste des praticiens du cabinet
+		if($is_admin_or_secretaire || $this->_ref_function->compta_partagee) {
+		  if($is_admin) {
+		    if(CAppUI::pref("pratOnlyForConsult", 1)) {
+		      $listPrat = $this->loadPraticiens(PERM_EDIT);
+		    } else {
+		      $listPrat = $this->loadProfessionnelDeSante(PERM_EDIT);
+		    }
+		  } else {
+		    if(CAppUI::pref("pratOnlyForConsult", 1)) {
+		      $listPrat = $this->loadPraticiens(PERM_EDIT, $this->function_id);
+		    } else {
+		      $listPrat = $this->loadProfessionnelDeSante(PERM_EDIT, $this->function_id);
+		    }
+		    // On ajoute les praticiens qui ont délégués leurs compta
+		    $where = array();
+	      $where[] = "users_mediboard.compta_deleguee = '1' ||  users_mediboard.user_id ". CSQLDataSource::prepareIn(array_keys($listPrat));
+        // Filters on users values
+        $where["users_mediboard.actif"] = "= '1'";
+    
+        $ljoin["users"] = "users.user_id = users_mediboard.user_id";
+        $order = "users.user_last_name, users.user_first_name";
+        
+        $mediuser = new CMediusers();
+        $mediusers = $mediuser->loadListWithPerms(PERM_EDIT, $where, $order, null, null, $ljoin);
+        
+        // Associate already loaded function
+        foreach ($mediusers as $key => $_mediuser) {
+        	$_mediuser->loadRefFunction();
+        }
+        $listPrat = $mediusers;
+		  }
+		} else if($this->isPraticien() && !$this->compta_deleguee){
+		  $listPrat = array($this->_id => $this);
+		}
+		
+    return $listPrat;
   }
   
   function loadPersonnels($permType = PERM_READ, $function_id = null, $name = null) {
