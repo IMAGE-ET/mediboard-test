@@ -36,7 +36,7 @@
         <input type="hidden" name="plageop_id" value="{{$plage->_id}}" />
         <input type="hidden" name="del" value="0" />
         <button type="button" class="tick oneclick" style="float: right;" onclick="submitOrder(this.form);">
-          Placer selon les horaires souhaités
+          Utiliser l'ordre souhaité
         </button>
       </form>
       Patients à placer
