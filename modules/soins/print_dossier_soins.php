@@ -128,9 +128,6 @@ if(CModule::getActive("dPprescription")){
 	// Parcours des lignes de medicament et stockage du dossier cloturé
 	if (count($prescription->_ref_prescription_lines)) {
 	  foreach($prescription->_ref_prescription_lines as $_line_med){
-	    $_line_med->loadRefsFwd();
-	    $_line_med->loadRefsPrises();
-	    $_line_med->loadRefProduitPrescription();
 	    $_line_med->_ref_produit->loadConditionnement();
 	    $list_lines["medicament"][$_line_med->_id] = $_line_med;
 	    $_line_med->loadRefsAdministrations();
@@ -151,8 +148,6 @@ if(CModule::getActive("dPprescription")){
 	        $_line_elt_comment->loadRefPraticien();
 	      }
 	      foreach($_lines_by_cat["element"] as $_line_elt){
-	        $_line_elt->loadRefElement();
-	        $_line_elt->_ref_element_prescription->loadRefCategory();
 	        $list_lines[$chap][$_line_elt->_id] = $_line_elt;
 	        $_line_elt->loadRefsAdministrations();
 	        foreach($_line_elt->_ref_administrations as $_administration_elt){
