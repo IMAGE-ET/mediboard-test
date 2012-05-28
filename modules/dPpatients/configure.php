@@ -9,9 +9,13 @@
 
 CCanDo::Admin();
 
-$types_antecedents_active     = explode('|', CAppUI::conf("dPpatients CAntecedent types"));
-$appareils_antecedents_active = explode('|', CAppUI::conf("dPpatients CAntecedent appareils"));
+// Types et Appareils
+$active_types     = explode('|', CAppUI::conf("dPpatients CAntecedent types"    ));
+$active_appareils = explode('|', CAppUI::conf("dPpatients CAntecedent appareils"));
+$all_types     = array_unique(array_merge(CAntecedent::$types    , $active_types    ));
+$all_appareils = array_unique(array_merge(CAntecedent::$appareils, $active_appareils));
 
+// Départements des correspondants
 $departements = array();
 for ($i = 1 ; $i < 96 ; $i++) {
   $departements[] = str_pad($i, 2, "0", STR_PAD_LEFT);
@@ -30,10 +34,10 @@ $departements[] = "RE"; // Réunion
 $departements[] = "PM"; // Saitn Pierre et Miquelon
 $departements[] = "WF"; // Wallis et Futuna
 
+// Services
 $service = new CService;
 $services = $service->loadGroupList();
-
-foreach($services as $_service) {
+foreach ($services as $_service) {
 	$_service->_conf_object = $_service->loadUniqueBackRef("config_constantes_medicales");
 }
 
@@ -49,15 +53,18 @@ $base->loadObject($where);
 
 // Création du template
 $smarty = new CSmartyDP();
+
+$smarty->assign("active_types"    , $active_types    );
+$smarty->assign("active_appareils", $active_appareils);
+$smarty->assign("all_types"    , $all_types    );
+$smarty->assign("all_appareils", $all_appareils);
+
 $smarty->assign("pass", CValue::get("pass"));
-$smarty->assign("types_antecedents", CAntecedent::$types);
-$smarty->assign("types_antecedents_active", $types_antecedents_active);
-$smarty->assign("appareils_antecedents", CAntecedent::$appareils);
-$smarty->assign("appareils_antecedents_active", $appareils_antecedents_active);
 $smarty->assign("departements", $departements);
 $smarty->assign("base", $base);
 $smarty->assign("group", $group);
 $smarty->assign("services", $services);
+
 $smarty->display("configure.tpl");
 
 ?>

@@ -25,17 +25,22 @@ class CAntecedent extends CMbObject {
   // Distant fields
   var $_count_rques_aides = null;
   
+  // Types
   static $types = array(
-	  'med', 'alle', 'trans', 'obst', 'deficience',
-	  'chir', 'fam', 'anesth', 'gyn', 
-	  'cardio', 'pulm', 'stomato', 'plast', 
-	  'ophtalmo', 'digestif', 'gastro', 
-	  'stomie', 'uro', 'ortho', 'traumato', 'amput',
-	  'neurochir', 'greffe', 'thrombo', 'cutane',
-	  'hemato', 'rhumato', 'neuropsy', 'infect',
-	  'endocrino', 'carcino', 'orl', 'addiction', 'habitus', 'coag'
+	  'med', 'alle', 'trans', 'obst', 'deficience', 'chir', 'fam', 'anesth', 'gyn', 
+	  'cardio', 'pulm', 'stomato', 'plast', 'ophtalmo', 'digestif', 'gastro', 
+	  'stomie', 'uro', 'ortho', 'traumato', 'amput', 'neurochir', 'greffe', 'thrombo',
+    'cutane', 'hemato', 'rhumato', 'neuropsy', 'infect', 'endocrino', 'carcino', 
+    'orl', 'addiction', 'habitus', 'coag'
 	);
-	  
+	
+	// Types that should not be types, mostly appareils
+	static $non_types = array(
+    'obst', 'gyn', 'cardio', 'stomato', 'digestif', 'gastro', 'stomie', 'neuropsy', 
+    'endocrino', 'orl', 'uro', 'ortho', 'pulm',
+	);
+	
+	// Appareils
 	static $appareils = array(
 	  'cardiovasculaire', 'digestif', 'endocrinien', 'neuro_psychiatrique',
 	  'pulmonaire', 'uro_nephrologique', 'orl', 'gyneco_obstetrique', 'orthopedique',
@@ -50,15 +55,15 @@ class CAntecedent extends CMbObject {
   }
 
   function getProps() {
-    $specs = parent::getProps();
-    $specs["type"]  = "enum list|".CAppUI::conf("dPpatients CAntecedent types");
-    $specs["appareil"] = "enum list|".CAppUI::conf("dPpatients CAntecedent appareils");
-    $specs["date"]  = "date progressive";
-    $specs["rques"] = "text helped|type|appareil";
-    $specs["dossier_medical_id"] = "ref notNull class|CDossierMedical";
-    $specs["annule"] = "bool";
-    $specs["_search"] = "str";
-    return $specs;
+    $props = parent::getProps();
+    $props["type"]  = "enum list|".CAppUI::conf("patients CAntecedent types");
+    $props["appareil"] = "enum list|".CAppUI::conf("patients CAntecedent appareils");
+    $props["date"]  = "date progressive";
+    $props["rques"] = "text helped|type|appareil";
+    $props["dossier_medical_id"] = "ref notNull class|CDossierMedical";
+    $props["annule"] = "bool";
+    $props["_search"] = "str";
+    return $props;
   }
   
 	function updateFormFields() {
