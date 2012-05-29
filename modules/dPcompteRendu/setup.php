@@ -759,7 +759,12 @@ class CSetupdPcompteRendu extends CSetup {
     $this->makeRevision("0.74");
     $this->addPrefQuery("multiple_docs", 0);
     
-    $this->mod_version = "0.75";
+    $this->makeRevision("0.75");
+    $query = "ALTER TABLE `compte_rendu`
+      ADD `purge_field` VARCHAR (255);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.76";
   }
 }
 ?>

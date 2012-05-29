@@ -34,6 +34,7 @@ class CCompteRendu extends CDocumentItem {
   var $fast_edit         = null;
   var $fast_edit_pdf     = null;
   var $date_print        = null;
+  var $purge_field       = null;
   
   // Form fields
   var $_is_document      = false;
@@ -122,6 +123,7 @@ class CCompteRendu extends CDocumentItem {
     $specs["fast_edit"]        = "bool notNull default|0";
     $specs["fast_edit_pdf"]    = "bool notNull default|0";
     $specs["date_print"]       = "dateTime";
+    $specs["purge_field"]      = "str";
     $specs["_owner"]           = "enum list|prat|func|etab";
     $specs["_orientation"]     = "enum list|portrait|landscape";
     $specs["_page_format"]     = "enum list|".implode("|", array_keys(self::$_page_formats));

@@ -203,6 +203,11 @@ window.parent.replaceField = function(elt, class_name, empty) {
     var nom = unescapeHtml(elt.getAttribute("data-nom"));
     
     if (corr_name && corr_name.indexOf("- " + nom + "]") != -1) {
+      if (textReplacement == "") {
+        corr.parentNode.removeChild(corr);
+        return;
+      }
+      
       var pattern = "";
       if (class_name == "name") {
         pattern = "[Liste - " + nom + "]";
@@ -223,5 +228,18 @@ window.parent.replaceField = function(elt, class_name, empty) {
   });
   
   Element.remove(elt);
+  
+  /*var purge_field = document.forms.editFrm.purge_field.value;
+  
+  purge_field = purge_field.replace(/\//, "\/");
+  purge_field = purge_field.replace(/</, "\<");
+  purge_field = purge_field.replace(/>/, "\>");
+  
+  if (purge_field != "") {
+    var data = CKEDITOR.instances.htmlarea.getData();
+    data = data.replace("/"+purge_field+"/", "");
+    CKEDITOR.instances.htmlarea.setData(data, function() {});
+  }
+  */
   CKEDITOR.instances.htmlarea.getCommand('mbplay').exec();    
 }

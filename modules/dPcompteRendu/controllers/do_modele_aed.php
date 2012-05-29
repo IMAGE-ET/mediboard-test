@@ -82,10 +82,11 @@ if (isset($_POST["_source"])) {
       $options = array_map('htmlentities', $options);
       $list = new CListeChoix;
       $list->load($list_id);
-      
+      $is_empty = false;
       if (($check_to_empty_field && isset($_POST["_empty_list"][$list_id])) ||
           (!$check_to_empty_field && !isset($_POST["_empty_list"][$list_id]))) {
         $values[] = "";
+        $is_empty = true;
       }
       else {
         if ($options === array(0 => "undef")) {
@@ -95,12 +96,29 @@ if (isset($_POST["_source"])) {
         $values[] = nl2br(implode(", ", $options));
       }
       $nom = str_replace("#039;", "#39;", htmlentities($list->nom, ENT_QUOTES));
-      $fields[] = "[Liste - ".$nom."]";
+      if ($is_empty) {
+        $fields[] = "<span class=\"name\">[Liste - ".$nom."]</span>";
+      }
+      else {
+        $fields[] = "[Liste - ".$nom."]";
+      }
     }
   }
   
   $_POST["_source"] = str_ireplace($fields, $values, $_POST["_source"]);
-
+  
+  // Si purge_field est valué, on effectue l'opération de nettoyage des lignes
+  
+  if (isset($_POST["purge_field"]) && $_POST["purge_field"] != "" ) {
+    $purge_field = $_POST["purge_field"];
+    $purge_field = str_replace("/", "\/", $purge_field);
+    $purge_field = str_replace("<", "\<", $purge_field);
+    $purge_field = str_replace(">", "\>", $purge_field);
+    $purge_field .= "\s*\<br\s*\/\>";
+    $_POST["_source"] = preg_replace("/\n$purge_field/", "", $_POST["_source"]);
+    
+  }
+  
   // Application des destinataires
   foreach($_POST as $key => $value) {
     // Remplacement des destinataires

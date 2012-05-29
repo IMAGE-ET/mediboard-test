@@ -419,6 +419,11 @@ Main.add(function () {
           </td>
         </tr>
         
+        <tr>
+          <th>{{mb_label object=$compte_rendu field="purge_field"}}</th>
+          <td>{{mb_field object=$compte_rendu field="purge_field"}}</td>
+        </tr>
+        
         {{if $compte_rendu->_id}}
         
         
