@@ -222,7 +222,13 @@ class CSetupihe extends CSetup {
                 ADD `build_PV1_7` ENUM ('unique','repeatable') DEFAULT 'unique';";
     $this->addQuery($query); 
     
-    $this->mod_version = "0.23";
+     $this->makeRevision("0.23");
+    
+    $query = "ALTER TABLE `receiver_ihe_config` 
+                ADD `send_change_attending_doctor` ENUM ('A54','Z99') DEFAULT 'A54';";
+    $this->addQuery($query); 
+    
+    $this->mod_version = "0.24";
   }
 }
 

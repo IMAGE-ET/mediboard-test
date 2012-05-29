@@ -48,6 +48,7 @@ class CReceiverIHEConfig extends CMbObject {
   var $send_default_affectation = null;
   var $send_change_medical_responsibility = null;
   var $send_change_nursing_ward           = null;
+  var $send_change_attending_doctor       = null;
   var $build_mode               = null;
   var $build_NDA                = null;
   
@@ -86,12 +87,14 @@ class CReceiverIHEConfig extends CMbObject {
       "iti31_historic_movement",
     ),
     "send / build" => array(
-      "send_change_medical_responsibility",
-      "send_change_nursing_ward",
-      "send_all_patients",
-      "send_default_affectation",
       "build_mode",
       "build_NDA",
+      
+      "send_change_medical_responsibility",
+      "send_change_nursing_ward",
+      "send_change_attending_doctor",
+      "send_all_patients",
+      "send_default_affectation",
     ),
     "PV1" => array(
       "build_PV1_3_2",
@@ -141,8 +144,9 @@ class CReceiverIHEConfig extends CMbObject {
     $props["iti31_historic_movement"]                   = "bool default|1";
     
     // Send / Build
-    $props["send_change_medical_responsibility"] = "enum list|Z80|Z99 default|Z80";
-    $props["send_change_nursing_ward"]           = "enum list|Z84|Z99 default|Z84";
+    $props["send_change_medical_responsibility"] = "enum list|A02|Z80|Z99 default|Z80";
+    $props["send_change_nursing_ward"]           = "enum list|A02|Z84|Z99 default|Z84";
+    $props["send_change_attending_doctor"]       = "enum list|A54|Z99 default|A54";
     $props["send_all_patients"]        = "bool default|0";
     $props["send_default_affectation"] = "bool default|0";
     $props["build_mode"]               = "enum list|normal|simple default|normal";

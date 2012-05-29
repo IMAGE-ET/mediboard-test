@@ -222,6 +222,9 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       return null;
     }
     
+    $receiver = $sejour->_receiver;
+    $configs  = $receiver->_configs;
+        
     $sejour->loadOldObject();
     // Cas d'une pré-admission
     if ($sejour->_etat == "preadmission") {
@@ -282,16 +285,15 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       }
       
       // Annulation du médecin responsable
+      $send_change_attending_doctor = $configs["send_change_attending_doctor"];
       if ($sejour->fieldModified("praticien_id") && 
          ($sejour->praticien_id != $sejour->_old->praticien_id)) {
-        return "A55";
+        return (($send_change_attending_doctor == "A54") ? "A55" : $this->getModificationAdmitCode($receiver));
       } 
       
       // Changement du médecin responsable
       if ($sejour->fieldModified("praticien_id")) {
-        /* @todo Mettre en config !!! */
-        //return "Z99";
-        return "A54";
+        return (($send_change_attending_doctor == "A54") ? "A54" : $this->getModificationAdmitCode($receiver));
       } 
       
       // Réattribution dossier administratif
@@ -336,6 +338,9 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if (!in_array($current_log->type, array("create", "store"))) {
       return null;
     }
+    
+    $receiver = $affectation->_receiver;
+    $configs  = $receiver->_configs;
 
     if ($current_log->type == "create") {
       // Création d'une affectation
@@ -352,20 +357,32 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if ($service->externe && $affectation->_old->effectue && !$affectation->effectue) {
       return "A22";
     }
-
+    
+    $send_change_medical_responsibility = $configs["send_change_medical_responsibility"];
     /* Changement d'UF Médicale */
     if ($affectation->_old->uf_medicale_id && $affectation->fieldModified("uf_medicale_id")) {
       /* @todo Gérer le cas où : création d'une nouvelle affectation && UM1 # UM2 */
-      //return "Z80";
-      //return "Z99";
-      return "A02";
+      switch ($configs["send_change_medical_responsibility"]) {
+        case 'Z80':
+          return "Z80";
+        case 'A02':
+          return "A02";
+        default:
+         return $this->getModificationAdmitCode($receiver);
+      }
     }
 
     /* Changement d'UF de Soins */
     if ($affectation->_old->uf_soins_id && $affectation->fieldModified("uf_soins_id")) {
       /* @todo Gérer le cas où : création d'une nouvelle affectation && US1 # US2 */
-      //return "Z84";
-      return "A02";
+      switch ($configs["send_change_nursing_ward"]) {
+        case 'Z84':
+          return "Z84";
+        case 'A02':
+          return "A02";
+        default:
+         return $this->getModificationAdmitCode($receiver);
+      }
     }
  
     // Modifcation d'une affectation
