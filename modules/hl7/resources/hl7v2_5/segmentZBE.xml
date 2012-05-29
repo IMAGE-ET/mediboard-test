@@ -37,16 +37,6 @@
             <name>ZBE.7</name>
             <description>Ward of medical responsibility in the period starting with this movement</description>
             <datatype>XON</datatype>
-        </field>
-        <field minOccurs="0" maxOccurs="1" length="6">
-            <name>ZBE.8</name>
-            <description>Ward of care responsibility in the period starting with this movement</description>
-            <datatype>XON</datatype>
-        </field>
-        <field minOccurs="1" maxOccurs="1" length="250">
-            <name>ZBE.9</name>
-            <description>Nature of this movement</description>
-            <datatype>CWE</datatype>
-        </field>      
+        </field>     
     </elements>
 </segment>

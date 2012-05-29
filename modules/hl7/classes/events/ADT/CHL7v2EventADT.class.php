@@ -182,7 +182,8 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    * @param CSejour Admit
    */
   function addZBE(CSejour $sejour = null) {
-    $ZBE = CHL7v2Segment::create("ZBE", $this->message);
+    $segment_name = $this->_is_i18n ? "ZBE_FR" : "ZBE";
+    $ZBE = CHL7v2Segment::create($segment_name, $this->message);
     $ZBE->sejour = $sejour;
     $movement = $sejour->_ref_hl7_movement;
     $affectation = new CAffectation();
