@@ -2309,9 +2309,15 @@ class CSejour extends CCodable implements IPatientRelated {
       $affectation->load($affectation_id);
     }
     else {
+      // Chargement de l'affectation courante
       $affectation = $this->getCurrAffectation($date);
+      
+      // Si on n'a pas d'affectation on va essayer de chercher la première
+      if (!$affectation->_id) {
+        $this->loadSurrAffectations();
+        $affectation = $this->_ref_next_affectation;
+      } 
     }
-    
     if ($affectation->_id) {
       return $affectation->getUFs();
     }
@@ -2347,6 +2353,16 @@ class CSejour extends CCodable implements IPatientRelated {
     
     if ($this->_etat == "encours" && ($this->service_entree_id || $code == "A02")) {
       return "MUTA";
+    }
+    
+    // Cas d'une absence provisoire
+    if ($code == "A21") {
+      return "AABS";
+    }
+    
+    // Cas d'un retour d'absence provisoire
+    if ($code == "A22") {
+      return "RABS";
     }
     
     // Cas d'une entrée autorisée
