@@ -68,7 +68,7 @@ CKEDITOR.editorConfig = function(config) {
   // Suppression du bouton de masquage des barres d'outils
   config.toolbarCanCollapse = false;
   // Suppression de la barre d'état avec la dom
-  config.removePlugins = 'a11yhelp,about,elementspath,flash,forms,iframe,link,newpage,pagebreak,scayt,showblocks,showborders,smiley,templates,wsc';
+  config.removePlugins = 'a11yhelp,about,elementspath,flash,forms,iframe,link,newpage,pagebreak,scayt,showblocks,smiley,templates,wsc';
   
   {{if $templateManager->printMode}}
     config.toolbar_Full = [['Preview', 'Print', '-','Find']];
