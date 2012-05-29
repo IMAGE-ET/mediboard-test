@@ -21,10 +21,8 @@ $useVitale  = CValue::get("useVitale");
 
 $patient = new CPatient;
 $patient->load($patient_id);
-$patient->loadRefsFwd();
 $patient->loadRefPhotoIdentite();
 $patient->countDocItems();
-$patient->loadRefsCorrespondantsPatient();
 
 // Chargement de l'ipp
 $patient->loadIPP();

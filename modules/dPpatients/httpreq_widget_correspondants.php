@@ -17,7 +17,7 @@ $widget_id = CValue::get("widget_id");
 $patient = new CPatient();
 $patient->load($patient_id);
 if ($patient->_id) {
-	$patient->loadRefsFwd();
+  $patient->loadRefsCorrespondants();
 }
 
 // Création du template
