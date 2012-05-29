@@ -132,6 +132,7 @@ class CPatient extends CMbObject {
   var $pays_naissance_insee = null;
   var $profession           = null;
   var $csp                  = null; // Catégorie socioprofessionnelle
+  var $patient_link_id      = null; // Patient link
   
   // Assuré
   var $assure_nom                   = null;
@@ -214,6 +215,7 @@ class CPatient extends CMbObject {
   var $_ref_prescriptions           = null;
   var $_ref_grossesses              = null;
   var $_ref_first_constantes        = null;
+  var $_ref_patient_links           = null;
   
   /**
    * @var CAffectation
@@ -266,6 +268,7 @@ class CPatient extends CMbObject {
     $backProps["grossesses"]            = "CGrossesse parturiente_id";
     $backProps["facture_patient"]       = "CFactureConsult patient_id";
     $backProps["patient_observation_result_sets"] = "CObservationResultSet patient_id"; // interfere avec CMbObject-back-observation_result_sets
+    $backProps["patient_links"]         = "CPatient patient_link_id";
     return $backProps;
   }  
   
@@ -335,6 +338,7 @@ class CPatient extends CMbObject {
     $props["pays_naissance_insee"] = "str";
     $props["profession"]           = "str autocomplete";
     $props["csp" ]                 = "numchar length|2";
+    $specs["patient_link_id"]      = "ref class|CPatient";
     
     $props["assure_nom"]                  = "str confidential";
     $props["assure_prenom"]               = "str";
@@ -457,6 +461,11 @@ class CPatient extends CMbObject {
   function store() {
     //$this->INSC      = "1075102722581011056235";
     //$this->INSC_date = " 2012-03-12 16:59:21";
+    
+    $this->completeField("patient_link_id");
+    if ($this->_id && $this->_id == $this->patient_link_id) {
+      $this->patient_link_id = "";
+    }
     
     // Standard store
     if ($msg = parent::store()) {
@@ -746,6 +755,17 @@ class CPatient extends CMbObject {
     
     $where[] = "'$dateTime' BETWEEN entree AND sortie";
     $this->loadRefsSejours($where);
+  }
+  
+  /**
+   * Get patient links
+   */
+  function loadPatientLinks() {
+    if ($this->patient_link_id) {
+      return $this->_ref_patient_links = array($this->loadFwdRef("patient_link_id"));
+    }
+
+   // return $this->_ref_patient_links = $this->loadBackRefs("patient_links");
   }
   
   /*

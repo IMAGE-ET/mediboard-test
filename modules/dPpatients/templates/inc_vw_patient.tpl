@@ -20,6 +20,21 @@ Document.refreshList = function() {
     pour avoir plus d'information sur ce problème.
   </div>
 {{else}}
+
+{{if $conf.dPpatients.CPatient.show_patient_link && $patient->_ref_patient_links|@count}}
+  <div class="small-info">
+    Patient associé avec le(s) patient(s) suivant(s) : 
+    <ul>
+      {{foreach from=$patient->_ref_patient_links item=_patient_link}}
+        <li>
+          <button type="button" class="unlink notext" title="{{tr}}Unlink{{/tr}}" style="margin: -1px;" onclick="Patient.doUnlink('{{$patient->_id}}');">
+            {{tr}}Unlink{{/tr}}
+          </button>
+          <a href="?m=dPpatients&tab=vw_edit_patients&patient_id={{$_patient_link->_id}}">{{$_patient_link->_view}}</a></li>
+      {{/foreach}}
+    </ul>
+  </div>
+{{/if}}
   {{mb_include module=patients template=inc_vw_identite_patient}}
   
   <table class="form">
