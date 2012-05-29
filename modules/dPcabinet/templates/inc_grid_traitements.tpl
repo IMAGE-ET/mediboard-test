@@ -26,14 +26,14 @@ function addTraitement(rques, type, element) {
   <tr>
   {{assign var=n value=0}}
   {{foreach from=$type item=curr_helper_for key=curr_helper_for_key}}
+    {{if $curr_helper_for_key == "Utilisateur"}}
+      {{assign var=owner_icon value="user"}}
+    {{elseif $curr_helper_for_key == "Fonction"}}
+      {{assign var=owner_icon value="function"}}
+    {{else}}
+      {{assign var=owner_icon value="group"}}
+    {{/if}}
     {{foreach from=$curr_helper_for item=curr_helper key=curr_helper_key name=helpers}}
-      {{if $curr_helper.user_id}}
-        {{assign var=owner_icon value="user"}}
-      {{elseif $curr_helper.function_id}}
-        {{assign var=owner_icon value="function"}}
-      {{else}}
-        {{assign var=owner_icon value="group"}}
-      {{/if}}
       {{assign var=i value=$smarty.foreach.helpers.index}}
       {{assign var=n value=$n+1}}
       {{assign var=text value=$curr_helper_key|smarty:nodefaults|JSAttribute}}
