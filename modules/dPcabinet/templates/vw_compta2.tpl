@@ -128,9 +128,21 @@ printFacture = function(edit_justificatif, edit_bvr) {
           <th>{{mb_label object=$filter field="_date_max"}}</th>
           <td>{{mb_field object=$filter field="_date_max" form="printFrm" canNull="false" register=true}} </td>
         </tr> 
-        
         <tr>
           <th class="category" colspan="4">Comptabilité "Consultations"</th>
+        </tr>
+        <tr>
+          <td colspan="2" class="button"><button class="print" type="submit" onclick="document.printFrm.a.value='print_noncote';">Consultation non cotés</button></td>
+          <td colspan="2" class="text">
+            <div class="big-info">
+              Affichage des règlements effectués, en fonction de la date de paiement.
+            </div>
+          </td>  
+        </tr>
+        <tr>
+          <td class="button" colspan="4">
+            <hr />
+          </td>
         </tr>
         <tr>
           <th>{{mb_label object=$filter_reglement field="mode"}}</th>
