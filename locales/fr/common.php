@@ -280,6 +280,7 @@ $locales['Unarchive'] = 'Désarchiver';
 $locales['Unavailable information'] = 'Information non disponible';
 $locales['Undefined'] = 'Indéfini';
 $locales['Unknown'] = 'Inconnu';
+$locales['Unlink'] = 'Désassocier';
 $locales['Unlock'] = 'Déverrouiller';
 $locales['Unsend'] = 'Annuler envoi';
 $locales['Unstar'] = 'Démarquer';
