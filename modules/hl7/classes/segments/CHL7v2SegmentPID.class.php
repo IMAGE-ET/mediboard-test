@@ -376,5 +376,16 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
           
     $this->fill($data);
   }
+
+  function fillOtherIdentifiers(&$identifiers, CPatient $patient) {
+    $identifiers[] = array(
+      $patient->_id,
+      null,
+      null,
+      // PID-3-4 Autorité d'affectation
+      $this->getAssigningAuthority("mediboard"),
+      "RI"
+    );
+  }
 }
 ?>

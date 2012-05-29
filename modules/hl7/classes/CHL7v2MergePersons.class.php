@@ -62,7 +62,7 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
       $patientElimineRI = CValue::read($data['personElimineIdentifiers'], "RI");
      
       // Acquittement d'erreur : identifiants RI et PI non fournis
-      if (!$patientRI && !$patientPI && 
+      if (!$patientRI && !$patientPI || 
           !$patientElimineRI && !$patientEliminePI) {
         return $exchange_ihe->setAckAR($ack, "E100", null, $newPatient);
       }

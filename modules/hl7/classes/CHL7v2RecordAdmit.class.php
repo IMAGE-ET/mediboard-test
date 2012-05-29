@@ -158,9 +158,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if ($venueAN) {
       $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
     }
-    
+	
     // NDA non connu (non fourni ou non retrouvé)
-    if (!$venueAN || $NDA->_id) {
+    if (!$NDA->_id) {
       // Aucun NDA fourni / Association du NDA
       $code_NDA = !$venueAN ? "I225" : "I222";
       
@@ -841,9 +841,30 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       
       return $affectation;     
     }
-
+    
     // Chargement des affectations du séjour
     $datetime = $this->queryTextNode("EVN.6/TS.1", $data["EVN"]);
+    
+    if ($this->_ref_exchange_ihe->code == "A11") {
+    	$affectation =  $newVenue->getCurrAffectation($datetime);
+    	
+      // Si on le mouvement n'a pas d'affectation associée, et que l'on a déjà une affectation dans MB
+      if (!$movement->affectation_id && $affectation->_id) {
+        return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
+      }
+      
+      // Si on a une affectation associée, alors on charge celle-ci
+      if ($movement->affectation_id) {
+        $affectation = $movement->loadRefAffectation();
+      }
+      
+      if ($msg = $affectation->delete()) {
+      	return $msg;
+      }
+      
+      return null;
+    }
+
     // Cas mutation - A02
     if ($this->_ref_exchange_ihe->code == "A02") {
       $affectation->entree = $datetime;
@@ -911,16 +932,24 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if (!array_key_exists("ZBE", $data)) {
       return;
     }
+	
+	if (!($ZBE_7 = $this->queryNode("ZBE.7", $data["ZBE"]))) {
+		return;
+	}
     
-    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $this->queryNode("ZBE.7", $data["ZBE"])))->_id;
+    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_7))->_id;
   }
   
   function mappingUFSoins($data) {
     if (!array_key_exists("ZBE", $data)) {
       return;
     }
+	
+	if (!($ZBE_8 = $this->queryNode("ZBE.8", $data["ZBE"]))) {
+		return;
+	}
     
-    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $this->queryNode("ZBE.8", $data["ZBE"])))->_id;
+    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_8))->_id;
   }  
   
   function mappingMovement($data, CSejour $newVenue, CMovement $movement) {
@@ -1322,11 +1351,19 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getModeProvenancePMSI(DOMNode $node, CSejour $newVenue) {
-    $newVenue->provenance = $this->queryTextNode("ZFM.3", $node);
+  	$ZFM_3 = $this->queryTextNode("ZFM.3", $node);
+  	if ($ZFM_3 == 0) {
+  	  $ZFM_3 = null;	
+  	}
+    $newVenue->provenance = $ZFM_3;
   }
   
   function getModeDestinationPMSI(DOMNode $node, CSejour $newVenue) {
-    $newVenue->destination = $this->queryTextNode("ZFM.4", $node);
+  	$ZFM_4 = $this->queryTextNode("ZFM.4", $node);
+  	if ($ZFM_4 == 0) {
+  	  $ZFM_4 = null;	
+  	}
+    $newVenue->destination = $ZFM_4;
   }
   
   function getZFP(DOMNode $node, CSejour $newVenue) {    

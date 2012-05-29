@@ -19,6 +19,8 @@ class CSenderMLLP extends CInteropSender {
   // DB Table key
   var $sender_mllp_id  = null;
   
+  var $_duplicate = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'sender_mllp';
@@ -42,6 +44,31 @@ class CSenderMLLP extends CInteropSender {
   
   function read() {
     $this->loadRefsExchangesSources();
+  }
+  
+  function store(){
+  	if ($msg = parent::store()) {
+  		return $msg;
+  	}
+  	
+  	if ($this->_duplicate) {
+  		$duplicate = new self;
+  		
+	  	foreach ($this->getProperties() as $name => $value) {
+	      if ($name[0] !== "_" && $name != $this->_spec->key) {
+	        $duplicate->$name = $value;
+	      }
+	    }
+	    
+      $duplicate->nom     .= " (Copy)";
+      if ($duplicate->libelle) {
+        $duplicate->libelle .= " (Copy)";
+      }
+      
+	    $duplicate->store();
+  	}
+  	
+  	$this->_duplicate = null;
   }
 }
 

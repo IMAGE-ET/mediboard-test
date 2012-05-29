@@ -16,8 +16,8 @@ MLLPServer = {
     url.addParam("uid", uid);
     url.addParam("process_id", process_id);
     url.addParam("action", action);
-    if (action == "stats") {
-    	url.requestUpdate("stats_"+uid);
+    if (action == "stats" || action == "test") {
+      url.requestUpdate("stats_"+uid);
       return;
     }
     url.requestUpdate(uid);

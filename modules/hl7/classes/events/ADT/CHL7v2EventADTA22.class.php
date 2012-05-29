@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A44 - Move account information - patient account number - HL7
+ * A22 - Patient returns from a _leave of absence_ - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,18 +12,18 @@
  */
 
 /**
- * Class CHL7v2EventADTA44
- * A44 - Move account information - patient account number
+ * Class CHL7v2EventADTA22
+ * A22 - Patient returns from a _leave of absence_ 
  */
-class CHL7v2EventADTA44 extends CHL7v2EventADT implements CHL7EventADTA43 {
-  var $code        = "A44";
-  var $struct_code = "A43";
+class CHL7v2EventADTA22 extends CHL7v2EventADT implements CHL7EventADTA21 {
+  var $code        = "A22";
+  var $struct_code = "A21";
   
   function __construct($i18n = null) {
     parent::__construct($i18n);
   }
   
-  function getEVNPlannedDateTime($sejour) {
+  function getEVNOccuredDateTime($sejour) {
     return mbDateTime();
   }
   
@@ -40,12 +40,15 @@ class CHL7v2EventADTA44 extends CHL7v2EventADT implements CHL7EventADTA43 {
     // Patient Additional Demographic
     $this->addPD1($patient);
     
-    $old_patient = new CPatient();
-    $old_patient->load($sejour->_old->patient_id);
-    // Merge Patient Information
-    $this->addMRG($old_patient);
+    // Patient Visit
+    $this->addPV1($sejour);
+    
+    // Patient Visit - Additionale Info
+    $this->addPV2($sejour);
+    
+    // Build specific segments (i18n)
+    $this->buildI18nSegments($sejour);
   }
-  
 }
 
 ?>

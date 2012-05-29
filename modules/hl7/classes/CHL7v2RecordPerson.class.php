@@ -1,7 +1,7 @@
 <?php /* $Id:$ */
 
 /**
- * Record person, message XML
+ * Record person message XML
  *  
  * @category HL7
  * @package  Mediboard
@@ -286,18 +286,19 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     foreach ($PID11 as $_PID11) {
       $adress_type = $this->queryTextNode("XAD.7", $_PID11);
       /* @todo Ajouter la gestion des multi-lignes - SAD.2 */
-      $addresses[$adress_type]["adresse"]    = $this->queryTextNode("XAD.1", $_PID11);
-      $addresses[$adress_type]["ville"]      = $this->queryTextNode("XAD.3", $_PID11);
-      $addresses[$adress_type]["cp"]         = $this->queryTextNode("XAD.5", $_PID11);
-      $addresses[$adress_type]["pays_insee"] = $this->queryTextNode("XAD.6", $_PID11);
+      $addresses[$adress_type]["adresse"]      = $this->queryTextNode("XAD.1", $_PID11);
+	  $addresses[$adress_type]["adresse_comp"] = $this->queryTextNode("XAD.2", $_PID11);
+      $addresses[$adress_type]["ville"]        = $this->queryTextNode("XAD.3", $_PID11);
+      $addresses[$adress_type]["cp"]           = $this->queryTextNode("XAD.5", $_PID11);
+      $addresses[$adress_type]["pays_insee"]   = $this->queryTextNode("XAD.6", $_PID11);
     }
     // Adresse  naissance
-    if (array_key_exists("BR", $addresses)) {
-      $newPatient->lieu_naissance       = CValue::read($addresses["BR"], "ville");
-      $newPatient->cp_naissance         = CValue::read($addresses["BR"], "cp");
-      $newPatient->pays_naissance_insee = CValue::read($addresses["BR"], "pays_insee");
+    if (array_key_exists("BDL", $addresses)) {
+      $newPatient->lieu_naissance       = CValue::read($addresses["BDL"], "ville");
+      $newPatient->cp_naissance         = CValue::read($addresses["BDL"], "cp");
+      $newPatient->pays_naissance_insee = CValue::read($addresses["BDL"], "pays_insee");
       
-      unset($addresses["BR"]);
+      unset($addresses["BDL"]);
     }
     // Adresse
     if (array_key_exists("H", $addresses)) {
@@ -311,19 +312,37 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
   
   function getAdress($adress, CPatient $newPatient) {    
     $newPatient->adresse    = $adress["adresse"];
+	if ($adress["adresse_comp"]) {
+      $newPatient->adresse  .= $this->getCompAdress($adress["adresse_comp"]);
+	}
     $newPatient->ville      = $adress["ville"];
     $newPatient->cp         = $adress["cp"];
     $newPatient->pays_insee = $adress["pays_insee"];
   }
   
+  function getCompAdress($adress) {
+  	return "\n". str_replace("\\S\\", "\n", $adress);
+  }
+  
   function getPhones(DOMNode $node, CPatient $newPatient) {
     $PID13 = $this->query("PID.13", $node);
-    $phones = array();
+    
     foreach ($PID13 as $_PID13) {
-      $tel_number = $this->queryTextNode("XTN.1", $_PID13);
+      $tel_number = $this->queryTextNode("XTN.12", $_PID13);
+      
+      if (!$tel_number) {
+      	$tel_number = $this->queryTextNode("XTN.1", $_PID13);
+      }
+      
       switch ($this->queryTextNode("XTN.2", $_PID13)) {
         case "PRN" :
-          $newPatient->tel  = $this->getPhone($tel_number);
+	      if ($this->queryTextNode("XTN.3", $_PID13) == "PH") {
+	      	$newPatient->tel  = $this->getPhone($tel_number);
+		  }		
+          
+	      if ($this->queryTextNode("XTN.3", $_PID13) == "CP") {
+            $newPatient->tel2 = $this->getPhone($tel_number);
+          }
           break;
         case "ORN" :
           if ($this->queryTextNode("XTN.3", $_PID13) == "CP") {

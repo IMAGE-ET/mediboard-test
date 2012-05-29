@@ -85,7 +85,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       if (array_key_exists($i, $fields)) {
         $_data = $fields[$i];
         
-        if ($_data === null || $_data === "") {
+        if ($_data === null || $_data === "" || $_data === array()) {
           if ($_spec->isRequired()) {
             $this->error(CHL7v2Exception::FIELD_EMPTY, null, $field);
           }
@@ -186,7 +186,10 @@ class CHL7v2Segment extends CHL7v2Entity {
     if (CHL7v2Message::$decorateToString) {
       $str = "<div class='entity segment' id='entity-er7-$this->id' data-title='$this->description'>$str</div>";
     }
-    
+	else {
+	  $str .= $this->getMessage()->segmentTerminator;
+	}
+	
     return $str;
   }
   
@@ -338,7 +341,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       $xcn1  = CValue::first($object->rpps, $object->adeli, $id400->id400, $object->_id);
       $xcn2  = $object->_user_last_name;
       $xcn3  = $object->_user_first_name;
-      $xcn9  = $this->getXCN9($object, $actor);
+      $xcn9  = $this->getXCN9($object, $id400, $actor);
       $xcn13 = $object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "RI");
     }
     
@@ -629,7 +632,14 @@ class CHL7v2Segment extends CHL7v2Entity {
   function getPL(CInteropReceiver $receiver, CSejour $sejour, CAffectation $affectation = null) {
     $group       = $sejour->loadRefEtablissement();
     if (!$affectation) {
+      // Chargement de l'affectation courante
       $affectation = $sejour->getCurrAffectation();
+      
+      // Si on n'a pas d'affectation on va essayer de chercher la première
+      if (!$affectation->_id) {
+        $sejour->loadSurrAffectations();
+        $affectation = $sejour->_ref_next_affectation;
+      } 
     }
     $affectation->loadRefLit()->loadRefChambre();
     $current_uf  = $sejour->getUF();

@@ -15,9 +15,9 @@
  * Class CHL7v2EventADTZ99
  * Z99 - Change admit - HL7
  */
-class CHL7v2EventADTZ99 extends CHL7v2EventADT implements CHL7EventADTZ99 {
+class CHL7v2EventADTZ99 extends CHL7v2EventADT implements CHL7EventADTA01 {
   var $code        = "Z99";
-  var $struct_code = "Z99";
+  var $struct_code = "A01";
   
   function __construct($i18n = null) {
     parent::__construct($i18n);
