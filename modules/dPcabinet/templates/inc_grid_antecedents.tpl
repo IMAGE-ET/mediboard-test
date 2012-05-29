@@ -78,7 +78,7 @@ Main.add(function () {
         
         <table class="main tbl" id="antecedents_{{$type}}" style="display: none; border: none;">
           <tr>
-            <td colspan="1000" style="background-color:transparent; border: none;">     
+            <td class="text" colspan="1000" style="background-color:transparent; border: none;">     
               <script type="text/javascript">
                 Main.add(function(){
                     Control.Tabs.create('tab-{{$type}}', false);
