@@ -619,7 +619,12 @@ class CSetupdPhospi extends CSetup {
               ADD `date_max` DATETIME;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.65";
+    $this->makeRevision("0.65");
+    $query = "ALTER TABLE `movement` 
+                CHANGE `movement_type` `movement_type` VARCHAR (4) NOT NULL";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.66";
   }
 }
 ?>
