@@ -40,8 +40,10 @@ class CHL7v2EventADTA44 extends CHL7v2EventADT implements CHL7EventADTA43 {
     // Patient Additional Demographic
     $this->addPD1($patient);
     
+    $old_patient = new CPatient();
+    $old_patient->load($sejour->_old->patient_id);
     // Merge Patient Information
-    $this->addMRG($patient->_patient_elimine);
+    $this->addMRG($old_patient);
   }
   
 }
