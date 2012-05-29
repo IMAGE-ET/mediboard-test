@@ -34,8 +34,9 @@ function TraiterDrop(element, zoneDrop)
 
 function savePlan(element, zoneDrop){
 	element.style.width="120px";
-	var url=new Url("dPhospi", "ajax_creation_affectation");
+	var url=new Url("dPhospi", "do_affectation_aed");
 	
+	url.addParam("del", 0);
 	url.addParam("sejour_id",element.getAttribute("data-sejour-id"));
 	url.addParam("entree",element.getAttribute("data-entree"));
 	url.addParam("sortie",element.getAttribute("data-sortie"));
