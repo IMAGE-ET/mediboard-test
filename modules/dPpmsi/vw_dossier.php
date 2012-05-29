@@ -22,8 +22,8 @@ $listPrat = $listPrat->loadPraticiens(PERM_READ);
 
 $isSejourPatient = null;
 if ($patient->_id) {
-	$patient->loadRefsFwd();
-	$patient->loadRefPhotoIdentite();
+  $patient->loadRefsCorrespondants();
+  $patient->loadRefPhotoIdentite();
   $patient->loadRefDossierMedical();
   $patient->_ref_dossier_medical->updateFormFields();
   $patient->loadRefsSejours();
