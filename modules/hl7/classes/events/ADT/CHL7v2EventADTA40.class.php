@@ -41,9 +41,6 @@ class CHL7v2EventADTA40 extends CHL7v2EventADT implements CHL7EventADTA39 {
     
     // Merge Patient Information
     $this->addMRG($patient->_patient_elimine);
-    
-    // Patient Visit
-    $this->addPV1();
   }
 }
 
