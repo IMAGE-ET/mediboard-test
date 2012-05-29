@@ -19,6 +19,7 @@
     {{mb_class object=$actor}}
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="parent_class" value="{{$actor->_parent_class}}" />
+    <input type="hidden" name="_duplicate" value="" />
     <input type="hidden" name="callback" value="InteropActor.refreshActorsAndActor" />
                   
     <table class="form">
@@ -59,7 +60,10 @@
       <tr>
         <td class="button" colspan="2">
           {{if $actor->_id}}
-            <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
+            <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
+            {{if $actor instanceof CSenderMLLP}}
+              <button type="button" class="tick" onclick="$V(this.form._duplicate,1);this.form.onsubmit()">{{tr}}Duplicate{{/tr}}</button>
+            {{/if}}
             <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$actor->_view|smarty:nodefaults|JSAttribute}}',ajax:true})">
               {{tr}}Delete{{/tr}}
             </button>

@@ -39,6 +39,28 @@ class CExchangeDataFormatConfig extends CMbObject {
   function getConfigFields() {
     return $this->_config_fields = self::$config_fields;
   }
+  
+  function store(){
+  	$this->exportXML();
+  	return parent::store();
+  }
+  
+  function exportXML(){
+  	$doc = new CMbXMLDocument();
+    $root = $doc->addElement($doc, $this->_class);
+    
+    foreach($this->getConfigFields() as $field) {
+    	$node = $doc->addElement($root, "entry");
+      $node->setAttribute("config", $field);
+      $node->setAttribute("value", $this->$field);
+    }
+    
+   return $doc;
+  }
+  
+  function importXML() {
+    
+  }
 }
 
 ?>
