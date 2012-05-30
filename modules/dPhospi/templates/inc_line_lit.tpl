@@ -147,6 +147,7 @@
                       {{/if}}
                       {{if $mode_vue_reelle == "classique"}}
                         <div class="compact">
+                          {{$_sejour->_motif_complet}}
                           {{if $prestation_id && $_affectation->_curr_liaison_prestation}}
                             {{assign var=liaison value=$_affectation->_curr_liaison_prestation}}
                             {{assign var=item_presta value=$liaison->_ref_item}}
@@ -163,13 +164,12 @@
                               {{/if}}"
                             {{/if}}>
                               {{if $item_presta_realise->_id}}
-                                {{$item_presta_realise->nom}}
+                                <em>({{$item_presta_realise->nom}})</em>
                               {{else}}
-                                {{$item_presta->nom}}
+                                <em>({{$item_presta->nom}})</em>
                               {{/if}}
                             </span>
                           {{else}}
-                            {{$_sejour->_motif_complet}}
                             <em style="color: #f00;" title="Chambre seule">
                               {{if $_sejour->chambre_seule}}CS{{else}}CD{{/if}}
                               {{if $_sejour->prestation_id}}- {{$_sejour->_ref_prestation->code}}{{/if}}
