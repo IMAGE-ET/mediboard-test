@@ -42,7 +42,7 @@ Main.add(function () {
         {{if $usedProfile->_id}}
         <li>
           <a href="#profile">Utilisateurs basés sur le profil '{{$usedProfile->user_username}}' <small>(&ndash;)</small></a>
-          <script>Main.add(Control.Tabs.setTabCount.curry('profile', '{{$profilesList|@count}}'));</script>
+          <script>Main.add(Control.Tabs.setTabCount.curry('profile', '{{$profilesList|@count}}').bind(Control.Tabs));</script>
         </li>
 
         {{/if}}
