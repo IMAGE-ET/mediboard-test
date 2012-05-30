@@ -1517,7 +1517,7 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("1.58");
     
     $query = "ALTER TABLE `plageconsult`
-              ADD `color` VARCHAR(6) NOT NULL DEFAULT 'DDD' ;";
+              ADD `color` VARCHAR(6) NOT NULL DEFAULT 'DDDDDD' ;";
     $this->addQuery($query);
     $this->mod_version = "1.59";
   }
