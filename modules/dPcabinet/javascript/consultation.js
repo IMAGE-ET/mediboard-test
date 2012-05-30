@@ -1,10 +1,11 @@
 // $Id: $
 
 Consultation = {
-  edit: function(consult_id) {
+  edit: function(consult_id, fragment) {
     new Url().
       setModuleTab("dPcabinet", "edit_consultation").
       addParam("selConsult", consult_id).
+      setFragment(fragment).
       redirectOpener();
   },
 	
