@@ -120,6 +120,10 @@ $sejour->makeDatesOperations();
 $sejour->loadNDA();
 $sejour->loadRefsNotes();
 
+if (CModule::getActive("maternite")) {
+  $sejour->loadRefGrossesse();
+}
+
 // Chargements de chargement du patient
 $patient->loadRefsSejours();
 $patient->loadRefsFwd();
