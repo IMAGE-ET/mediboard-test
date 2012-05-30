@@ -7,7 +7,6 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
-
 <script type="text/javascript">
 
 Main.add(function(){
@@ -16,6 +15,29 @@ Main.add(function(){
   Calendar.regField(form.fin  );
 });
 
+ColorSelector = window.ColorSelector || {
+  sForm : null,
+  sColor: null,
+  sColorView: null,
+  options : {
+    width : 400,
+    height: 300
+  },
+  
+  pop: function() {
+    var url = new Url("mediusers", "color_selector");
+    url.addParam("color", $V(getForm(this.sForm)[this.sColor]));
+    url.popup(this.options.width, this.options.height, "Color selector");
+  },
+  
+  set: function(color) {
+    var oForm = getForm(this.sForm);
+    if (color) {
+      $V(oForm[this.sColor], color);
+    }
+    $(this.sColorView).style.background = '#' + oForm[this.sColor].value;
+  }
+};
 </script>
 
 <form name='editFrm' action='?m=dPcabinet' method='post' onsubmit='return PlageConsultation.checkForm(this);'>
@@ -79,9 +101,26 @@ Main.add(function(){
     <th>{{mb_label object=$plageSel field="_type_repeat"}}</th>
     <td>{{mb_field object=$plageSel field="_type_repeat" style="width: 15em;" typeEnum="select"}}</td>
   </tr>
-
   <tr>
-    <td />
+    <script>
+      ColorSelector.init = function(){
+        this.sForm  = "editFrm";
+        this.sColor = "color";
+        this.sColorView = "color-view";
+        this.pop();
+      };
+    </script>
+    <th>{{mb_label object=$plageSel field="color"}}</th>
+    <td>
+      <span class="color-view" id="color-view" style="background: #{{$plageSel->color}};">
+        {{tr}}Choose{{/tr}}
+      </span>
+      <button type="button" class="search notext" onclick="ColorSelector.init()">
+        {{tr}}Choose{{/tr}}
+      </button>
+      {{mb_field object=$plageSel field="color" hidden=1}}
+    </td>
+    <th/>
     <td>
       {{if $plageSel->_affected}} 
          Déjà <strong>{{$plageSel->_affected}} consultations</strong> panifiées
@@ -91,6 +130,10 @@ Main.add(function(){
       <input type='hidden' name='_firstconsult_time' value='{{$_firstconsult_time}}' />
       <input type='hidden' name='_lastconsult_time' value='{{$_lastconsult_time}}' />
      </td>
+   </tr>
+   <tr>
+     <th/>
+     <td/>
      <th>{{mb_label object=$plageSel field="locked"}}</th>
      <td>{{mb_field object=$plageSel field="locked" typeEnum="checkbox"}}</td>
   </tr>

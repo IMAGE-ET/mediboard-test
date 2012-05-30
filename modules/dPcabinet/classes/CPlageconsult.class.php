@@ -30,6 +30,7 @@ class CPlageconsult extends CMbObject {
   var $locked  = null;
   var $remplacant_ok = null;
   var $desistee = null;
+  var $color = null;
   
   // Form fields
   var $_freq                 = null;
@@ -81,7 +82,8 @@ class CPlageconsult extends CMbObject {
       "libelle"       => "str seekable",
       "locked"        => "bool default|0",
       "remplacant_ok" => "bool default|0",
-      "desistee"   => "bool default|0",
+      "desistee"      => "bool default|0",
+      "color"         => "str notNull length|6 default|ffffff",
       
       // Form fields
       "_freq"        => "",

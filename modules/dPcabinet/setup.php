@@ -1514,7 +1514,12 @@ class CSetupdPcabinet extends CSetup {
               CHANGE `mode` `mode` ENUM( 'cheque', 'CB', 'especes', 'virement', 'BVR', 'autre' ),
               ADD `num_bvr` VARCHAR(50);";
     $this->addQuery($query);
-    $this->mod_version = "1.58";
+    $this->makeRevision("1.58");
+    
+    $query = "ALTER TABLE `plageconsult`
+              ADD `color` VARCHAR(6) NOT NULL DEFAULT 'DDD' ;";
+    $this->addQuery($query);
+    $this->mod_version = "1.59";
   }
 }
 ?>

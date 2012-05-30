@@ -160,7 +160,7 @@ for ($i = 0; $i < 7; $i++) {
     if(mbMinutesRelative($_plage->debut, $_plage->fin) > 60 ){
     	 $libelle = $_plage->libelle;
     }
-    $event = new CPlanningEvent($_plage->_guid, $debute, mbMinutesRelative($_plage->debut, $_plage->fin), $libelle, "#ABE", true, null, null);
+    $event = new CPlanningEvent($_plage->_guid, $debute, mbMinutesRelative($_plage->debut, $_plage->fin), $libelle, "#$_plage->color", true, null, null);
 
     //Menu des évènements
     $event->addMenuItem("list", "Voir le contenu de la plage");
