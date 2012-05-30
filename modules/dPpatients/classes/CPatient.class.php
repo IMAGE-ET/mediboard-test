@@ -725,6 +725,7 @@ class CPatient extends CMbObject {
     // Détermine la civilité de l'assure automatiquement (utile en cas d'import)
     $this->completeField("assure_civilite");
     if ($this->assure_civilite === "guess" || !$this->assure_civilite) {
+      $this->assure_naissance = mbDateFromLocale($this->assure_naissance);
       $this->evalAgeAssure();
       $sexe = $this->assure_sexe ? $this->assure_sexe : $this->sexe;
       $this->assure_civilite = ($this->_age_assure < CAppUI::conf("dPpatients CPatient adult_age")) ?
