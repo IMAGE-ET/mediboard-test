@@ -102,8 +102,7 @@ CMbObject::massLoadFwdRef($sejours, "grossesse_id");
 
 foreach ($sejours as $_sejour) {
   $_sejour->loadRefPatient();
-  
-  $operation = reset($_sejour->loadRefsOperations());
+  $_sejour->loadRefsOperations();
   
   $grossesse = $_sejour->loadRefGrossesse();
   $grossesse->_praticiens = CMbObject::massLoadFwdRef($grossesse->loadRefsSejours(), "praticien_id");
@@ -115,10 +114,6 @@ foreach ($sejours as $_sejour) {
   
   foreach ($naissances as $_naissance) {
     $_naissance->loadRefSejourEnfant()->loadRefPatient();
-  }
-  
-  if ($operation) {
-    $grossesse->_operation_id = $operation->_id;
   }
   
   CMbObject::massLoadFwdRef($grossesse->_praticiens, "function_id");

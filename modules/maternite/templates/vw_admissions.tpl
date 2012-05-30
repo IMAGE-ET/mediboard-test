@@ -3,6 +3,17 @@
     Calendar.regField(getForm("changeDate").elements["date"], null, {noView: true});
   });
   
+  editOperation = function(operation_id, sejour_id) {
+    var url = new Url("dPplanningOp", "vw_edit_urgence");
+    url.addParam("operation_id", operation_id);
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("dialog", 1);
+    
+    url.modal({width: 1000, height: 700});
+    url.modalObject.observe("afterClose", function() {
+      document.location.reload();
+    });
+  }
 </script>
 {{mb_script module=admissions    script=admissions}}
 {{mb_script module=maternite     script=naissance}}
@@ -77,7 +88,7 @@
     <td>
       <table class="tbl" id="admissions">
         <tr>
-          <th class="title" colspan="10">
+          <th class="title" colspan="11">
             <strong>
               <a href="?m=maternite&tab=vw_admissions&date={{$date_before}}" style="display: inline;">&lt;&lt;&lt;</a>
               {{$date|date_format:$conf.longdate}}
@@ -93,7 +104,7 @@
         </tr>
 
         <tr>
-          <th colspan="6" class="category">Parturiente</th>
+          <th colspan="7" class="category">Parturiente</th>
           <th colspan="4" class="category">Enfants</th>
         </tr>
         
@@ -104,6 +115,7 @@
             <input type="text" size="3" onkeyup="Admissions.filter(this, 'admissions')" id="filter-patient-name" />
           </th>
           <th class="category">{{mb_label class=CSejour field=entree}}</th>
+          <th class="category">Accouchement</th>
           <th class="category narrow">{{mb_label class=CGrossesse field=terme_prevu}}</th>
           <th class="category">Praticiens</th>
           
@@ -140,6 +152,17 @@
               <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
                 {{mb_value object=$_sejour field=entree date=$date}}
               </span>
+            </td>
+            <td {{if $grossesse->_ref_naissances|@count}}rowspan="{{$grossesse->_ref_naissances|@count}}"{{/if}}>
+              {{assign var=operation value=$_sejour->_ref_last_operation}}
+              {{if $operation->_id}}
+                <span onmouseover="ObjectTooltip.createEx(this, '{{$operation->_guid}}')">
+                  {{mb_value object=$operation field=time_operation}}
+                </span>
+                <button type="button" class="edit notext" onclick="editOperation('{{$operation->_id}}')"></button>
+              {{else}}
+                <button type="button" class="add notext" onclick="editOperation(0, '{{$_sejour->_id}}')"></button>
+              {{/if}}
             </td>
             <td rowspan="{{$grossesse->_ref_naissances|@count}}">
               {{$grossesse->terme_prevu|date_format:$conf.date}}

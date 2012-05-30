@@ -47,6 +47,10 @@ CCAMSelector.init = function(){
 <input type="hidden" name="del" value="0" />
 {{mb_key object=$op}}
 
+{{if $dialog}}
+  <input type="hidden" name="postRedirect" value="m=planningOp&a=vw_edit_urgence&dialog=1" />
+{{/if}}
+
 {{if $op->_id && $op->_ref_sejour->sortie_reelle && !$modules.dPbloc->_can->edit}}
 <!-- <input type="hidden" name="_locked" value="1" /> -->
 {{/if}}
