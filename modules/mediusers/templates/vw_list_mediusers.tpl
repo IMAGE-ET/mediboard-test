@@ -81,12 +81,12 @@
      </td>
           
      {{else}}
-     <td colspan="10" class="text">
-       <div class="small-warning">
-         Pas d'utilisateur <em>core</em> pour 
-         <a class="action" href="{{$href}}">ce Mediuser</a>.
-       </div>
-     </td>
+       <td colspan="10" class="text">
+         <div class="small-warning">
+           Pas d'utilisateur <em>core</em> pour 
+           <a class="action" href="?m=mediusers&tab=vw_idx_mediusers&user_id={{$_user->_id}}">ce Mediuser</a>.
+         </div>
+       </td>
      {{/if}}
      
    </tr>
