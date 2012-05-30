@@ -74,6 +74,7 @@ for ($i = 0; $i < $nbDays; $i++) {
         $event->icon_desc = $_consult->_ref_categorie->nom_categorie;
       }
       //Ajout de l'évènement au planning 
+      $event->plage["color"] = $_plage->color;
       $planning->addEvent($event);
     }
     $utilisation = $_plage->getUtilisation();
@@ -86,6 +87,7 @@ for ($i = 0; $i < $nbDays; $i++) {
         if($_plage->locked == 1) {
           $event->disabled = true;
         }
+        $event->plage["color"] = $_plage->color;
         //Ajout de l'évènement au planning 
         $planning->addEvent($event);
       }

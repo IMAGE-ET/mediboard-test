@@ -102,6 +102,20 @@ ColorSelector = window.ColorSelector || {
     <td>{{mb_field object=$plageSel field="_type_repeat" style="width: 15em;" typeEnum="select"}}</td>
   </tr>
   <tr>
+    <th/>
+    <td/>
+    <th/>
+    <td>
+      {{if $plageSel->_affected}} 
+         Déjà <strong>{{$plageSel->_affected}} consultations</strong> panifiées
+         de <strong>{{$_firstconsult_time}}</strong> à <strong>{{$_lastconsult_time}}</strong>
+      {{/if}}
+      <input type='hidden' name='nbaffected' value='{{$plageSel->_affected}}' />
+      <input type='hidden' name='_firstconsult_time' value='{{$_firstconsult_time}}' />
+      <input type='hidden' name='_lastconsult_time' value='{{$_lastconsult_time}}' />
+     </td>
+   </tr>
+   <tr>
     <script>
       ColorSelector.init = function(){
         this.sForm  = "editFrm";
@@ -120,20 +134,6 @@ ColorSelector = window.ColorSelector || {
       </button>
       {{mb_field object=$plageSel field="color" hidden=1}}
     </td>
-    <th/>
-    <td>
-      {{if $plageSel->_affected}} 
-         Déjà <strong>{{$plageSel->_affected}} consultations</strong> panifiées
-         de <strong>{{$_firstconsult_time}}</strong> à <strong>{{$_lastconsult_time}}</strong>
-      {{/if}}
-      <input type='hidden' name='nbaffected' value='{{$plageSel->_affected}}' />
-      <input type='hidden' name='_firstconsult_time' value='{{$_firstconsult_time}}' />
-      <input type='hidden' name='_lastconsult_time' value='{{$_lastconsult_time}}' />
-     </td>
-   </tr>
-   <tr>
-     <th/>
-     <td/>
      <th>{{mb_label object=$plageSel field="locked"}}</th>
      <td>{{mb_field object=$plageSel field="locked" typeEnum="checkbox"}}</td>
   </tr>

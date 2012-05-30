@@ -160,7 +160,7 @@ for ($i = 0; $i < 7; $i++) {
     if(mbMinutesRelative($_plage->debut, $_plage->fin) > 60 ){
     	 $libelle = $_plage->libelle;
     }
-    $event = new CPlanningEvent($_plage->_guid, $debute, mbMinutesRelative($_plage->debut, $_plage->fin), $libelle, "#$_plage->color", true, null, null);
+    $event = new CPlanningEvent($_plage->_guid, $debute, mbMinutesRelative($_plage->debut, $_plage->fin), $libelle, "#DDD", true, null, null);
 
     //Menu des évènements
     $event->addMenuItem("list", "Voir le contenu de la plage");
@@ -169,7 +169,7 @@ for ($i = 0; $i < 7; $i++) {
 
     //Paramètres de la plage de consultation
     $event->type = "consultation";
-    $event->plage["id"] = $_plage->plageconsult_id; 
+    $event->plage["id"] = $_plage->plageconsult_id;
     
     $pct = $_plage->_fill_rate;
     if($pct > "100"){
@@ -184,6 +184,7 @@ for ($i = 0; $i < 7; $i++) {
     $event->plage["_affected"] = $_plage->_affected;
     $event->plage["_nb_patients"] = $_plage->_nb_patients;
     $event->plage["_total"] = $_plage->_total;
+    $event->plage["color"] = $_plage->color;
 
     //Ajout de l'évènement au planning 
     $planning->addEvent($event);
