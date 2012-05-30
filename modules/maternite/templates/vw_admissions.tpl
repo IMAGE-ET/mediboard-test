@@ -156,7 +156,7 @@
                 <tr>
               {{/if}}
               <td>
-                <button class="edit notext" onclick="Naissance.edit('{{$_naissance->_id}}')">
+                <button class="edit notext" onclick="Naissance.edit('{{$_naissance->_id}}', null, null, 0, 'document.location.reload')">
                   {{tr}}Edit{{/tr}}
                 </button>
                 {{if $_naissance->heure}}

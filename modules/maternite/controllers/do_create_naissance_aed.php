@@ -27,6 +27,7 @@ $taille       = CValue::post("taille");
 $constantes_id = CValue::post("constantes_medicales_id");
 $sejour_maman_id = CValue::post("sejour_maman_id");
 $perimetre_cranien = CValue::post("perimetre_cranien");
+$callback     = CValue::post("callback");
 
 $sejour = new CSejour;
 $sejour->load($sejour_maman_id);
@@ -177,6 +178,10 @@ else {
   }
 }
 echo CAppUI::getMsg();
+
+if ($callback) {
+  CAppUI::callbackAjax($callback);
+}
 
 CApp::rip();
 
