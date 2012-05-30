@@ -83,7 +83,7 @@ class CPlageconsult extends CMbObject {
       "locked"        => "bool default|0",
       "remplacant_ok" => "bool default|0",
       "desistee"      => "bool default|0",
-      "color"         => "str notNull length|6 default|ffffff",
+      "color"         => "str notNull length|6 default|DDDDDD",
       
       // Form fields
       "_freq"        => "",
@@ -347,6 +347,7 @@ class CPlageconsult extends CMbObject {
     $freq    = $this->freq;
     $libelle = $this->libelle;
     $locked  = $this->locked;
+    $color   = $this->color;
 
     // Recherche de la plage suivante
     $where["date"]    = "= '$this->date'";
@@ -362,6 +363,7 @@ class CPlageconsult extends CMbObject {
     $this->freq    = $freq;
     $this->libelle = $libelle;
     $this->locked  = $locked;
+    $this->color   = $color;
     $this->updateFormFields();
     return $week_jumped;
   }    
