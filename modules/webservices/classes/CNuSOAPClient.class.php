@@ -14,7 +14,6 @@ if (!class_exists("nusoap_client", false)) {
 }
 
 class CNuSOAPClient extends nusoap_client {
-  
   var $type_echange_soap  = null;
   var $loggable           = null;
   
@@ -26,7 +25,7 @@ class CNuSOAPClient extends nusoap_client {
    * @param loggable boolean True if you want to log all the exchanges with the web service
    * @param flatten boolean
    */
-  function __construct($wsdl, $type_echange  = null, $encoding = null, $loggable = null) {
+  function __construct($wsdl, $type_echange  = null, $encoding = null, $loggable = null, $local_cert = null, $passphrase = null) {
     
     if ($loggable) {
       $this->loggable = $loggable;
@@ -42,6 +41,20 @@ class CNuSOAPClient extends nusoap_client {
         $this->decode_utf8 = false;
       }
     }
+    
+    if ($local_cert) {
+      $this->certRequest = array(
+        "sslcertfile" => $local_cert
+      );
+    }
+    
+    if ($passphrase) {
+      $this->certRequest = array(
+        "passphrase" => $passphrase
+      );
+    }
+    
+    mbTrace($this);
     
     parent::__construct($wsdl, true);
   }
@@ -162,12 +175,13 @@ class CNuSOAPClient extends nusoap_client {
    * @param type_echange string The type of exchange
    * @param encoding string The type of encoding
    * @param loggable boolean True if you want to log all the exchanges with the web service
-   * @param flatten boolean
    * @param login string The login for accessing the web service
    * @param password string The password for accessing the web service
+   * @param local_cert string local_cert must be in PEM format
+   * @param passphrase  string Pass Phrase (password) of private key
    * @return CNuSOAPClient
    */
-  static public function make($wsdl, $type_echange = null, $encoding = null, $loggable = null,$login = null, $password = null) {
+  static public function make($wsdl, $type_echange = null, $encoding = null, $loggable = null, $login = null, $password = null, $local_cert = null, $passphrase = null) {
     if (!url_exists($wsdl)) {
       throw new CMbException("CSourceSOAP-unreachable-source", $wsdl);
     }
@@ -180,7 +194,7 @@ class CNuSOAPClient extends nusoap_client {
       throw new CMbException("CSourceSOAP-wsdl-invalid");
     }
     
-    $client = new CNuSOAPClient($wsdl, $type_echange, $encoding, $loggable);
+    $client = new CNuSOAPClient($wsdl, $type_echange, $encoding, $loggable, $local_cert, $passphrase);
     
     // Gestion des mots de passe
     if ($login && $password) {

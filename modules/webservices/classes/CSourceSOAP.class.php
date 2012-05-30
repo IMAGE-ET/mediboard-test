@@ -90,7 +90,7 @@ class CSourceSOAP extends CExchangeSource {
           $this->_client->$evenement_name($this->_data);
        
     }  elseif ($this->type_soap == "CNuSOAPClient") {
-      $this->_client = CNuSOAPClient::make($this->host, $this->type_echange, $this->encoding, $this->loggable, $this->user, $this->password);
+      $this->_client = CNuSOAPClient::make($this->host, $this->type_echange, $this->encoding, $this->loggable, $this->user, $this->password, $this->local_cert, $this->passphrase);
       
       $this->_acquittement = $this->_client->call($evenement_name, $this->_data);
     }
