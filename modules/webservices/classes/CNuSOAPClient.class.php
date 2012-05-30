@@ -54,8 +54,6 @@ class CNuSOAPClient extends nusoap_client {
       );
     }
     
-    mbTrace($this);
-    
     parent::__construct($wsdl, true);
   }
   
