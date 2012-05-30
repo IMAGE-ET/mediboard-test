@@ -11,7 +11,7 @@
 <table class="main">
   <tr>
     <td class="narrow">
-      <div style="width: 640px; height: 480px; float: left; margin: 1em;" id="graph_uscpo"></div>
+      <div style="width: 480px; height: 480px; float: left; margin: 1em;" id="graph_uscpo"></div>
     </td>
     <td>
       <select name="select_date" onchange="listOperations(this.value, '{{$service_id}}')">
