@@ -44,6 +44,7 @@ class CNote extends CMbMetaObject {
     $specs["date"]         = "dateTime notNull";
     $specs["libelle"]      = "str notNull";
     $specs["text"]         = "text";
+    $specs["object_id"]   .= " cascade";
     return $specs;
   }
   
