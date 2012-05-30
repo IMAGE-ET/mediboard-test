@@ -156,7 +156,11 @@ for ($i = 0; $i < 7; $i++) {
     $_plage->countPatients();
     $debute = "$jour $_plage->debut";
     
-    $event = new CPlanningEvent($_plage->_guid, $debute, mbMinutesRelative($_plage->debut, $_plage->fin), $_plage->libelle, "#DDD", true, null, null);
+    $libelle = "";
+    if(mbMinutesRelative($_plage->debut, $_plage->fin) > 60 ){
+    	 $libelle = $_plage->libelle;
+    }
+    $event = new CPlanningEvent($_plage->_guid, $debute, mbMinutesRelative($_plage->debut, $_plage->fin), $libelle, "#ABE", true, null, null);
 
     //Menu des évènements
     $event->addMenuItem("list", "Voir le contenu de la plage");
