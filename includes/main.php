@@ -188,7 +188,7 @@ if (null == $module = CModule::getInstalled($m)) {
 // these can be further modified by the included action files
 $can = $module->canDo();
 
-$a      = CAppUI::checkFileName(CValue::get("a"      , "index"));
+$a      = CAppUI::checkFileName(CValue::get("a"      , $index));
 $u      = CAppUI::checkFileName(CValue::get("u"      , ""));
 $dosql  = CAppUI::checkFileName(CValue::post("dosql" , ""));
 $m_post = CAppUI::checkFileName(CValue::post("m"     , $m));

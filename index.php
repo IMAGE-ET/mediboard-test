@@ -79,19 +79,33 @@ if (!CAppUI::$instance->user_id) {
   CAppUI::loadPrefs();
 }
 
-// Don't output anything. Usefull for fileviewers, popup dialogs, ajax requests, etc.
+// Default view
+$index = "index";
+
+// Don't output anything. Usefull for fileviewers, ajax requests, exports, etc.
+$suppressHeaders = CValue::request("suppressHeaders");
+
+// WSDL if often stated as final with no value (&WSDL) wrt client compat 
 $wsdl = CValue::request("wsdl");
 if (isset($wsdl)) {
+  $suppressHeaders = 1;
+  $index = $wsdl;
   $wsdl = 1;
 }
 
-$suppressHeaders = CValue::request("suppressHeaders", $wsdl);
-
 // Output the charset header in case of an ajax request
-$ajax = CValue::request("ajax", false);
+if ($ajax = CValue::request("ajax")) {
+  $suppressHeaders = 1;
+  $index = $ajax;
+  $ajax = 1;
+}
+
 
 // Check if we are in the dialog mode
-$dialog = CValue::request("dialog");
+if ($dialog = CValue::request("dialog")) {
+  $index = $dialog;
+  $dialog = 1;
+}
 
 // Check ldap_guid
 if (CValue::get("ldap_guid")) {

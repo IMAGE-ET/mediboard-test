@@ -454,7 +454,6 @@ var Url = Class.create({
 
     // Autocomplete
     this.addParam("ajax", 1);
-    this.addParam("suppressHeaders", 1);
     
     if (oOptions.valueElement) {
       oOptions.afterUpdateElement = function(input, selected) {
@@ -654,7 +653,6 @@ var Url = Class.create({
   },
 
   requestUpdate: function(ioTarget, oOptions) {
-    this.addParam("suppressHeaders", 1);
     this.addParam("ajax", 1);
     
     // onComplete callback definition shortcut
@@ -787,7 +785,6 @@ var Url = Class.create({
   },
   
   periodicalUpdate: function(ioTarget, oOptions) {
-    this.addParam("suppressHeaders", 1);
     this.addParam("ajax", 1);
     
     var element = $(ioTarget);
@@ -882,8 +879,6 @@ Url.buildPopupFeatures = function(features) {
  */
 Url.ping = function(options) {
   var url = new Url("system", "ajax_ping");
-  url.addParam("suppressHeaders", 1);
-  url.addParam("ajax", 1);
   url.requestUpdate("systemMsg", options);
 };
 
