@@ -141,7 +141,7 @@ Main.add(function() {
                              {{if ($_event->type == "rdvfree" || $_event->type == "rdvfull") && !$_event->disabled}}onclick="setClose('{{$_event->start|date_format:"%H:%M:00"}}', '{{$_event->plage.id}}', '{{$_event->start|date_format:"%A %d/%m/%Y"}}', '{{$chir_id}}');"{{/if}}>
                           
                            {{if $_event->menu|@count == 3}}
-                            <div class="toolbar">
+                            <div class="toolbar" {{if $_event->hour == 0}}style="top:100%;"{{/if}}>
                               {{foreach from=$_event->menu item=element}}
                                 <a class="button {{$element.class}} notext" onclick="window['planning-{{$planning->guid}}'].onMenuClick('{{$element.class}}','{{$_event->plage.id}}', this)" title="{{$element.title}}"></a>
                               {{/foreach}}
