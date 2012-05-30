@@ -85,7 +85,7 @@ $index = "index";
 // Don't output anything. Usefull for fileviewers, ajax requests, exports, etc.
 $suppressHeaders = CValue::request("suppressHeaders");
 
-// WSDL if often stated as final with no value (&WSDL) wrt client compat 
+// WSDL if often stated as final with no value (&wsdl) wrt client compat 
 $wsdl = CValue::request("wsdl");
 if (isset($wsdl)) {
   $suppressHeaders = 1;
@@ -99,7 +99,6 @@ if ($ajax = CValue::request("ajax")) {
   $index = $ajax;
   $ajax = 1;
 }
-
 
 // Check if we are in the dialog mode
 if ($dialog = CValue::request("dialog")) {
