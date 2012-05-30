@@ -215,7 +215,7 @@
     
     Axe de prestation :
     <select name="prestation_id" onchange="refreshMouvements(loadNonPlaces)">
-      <option value="">&mdash; Tous les niveaux</option>
+      <option value="">&mdash; Tous</option>
       {{foreach from=$prestations_journalieres item=_prestation}}
         <option value="{{$_prestation->_id}}" {{if $_prestation->_id == $prestation_id}}selected="selected"{{/if}}>{{$_prestation->nom}}</option>
       {{/foreach}}
