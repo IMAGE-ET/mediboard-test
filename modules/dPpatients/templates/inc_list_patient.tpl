@@ -25,6 +25,10 @@
   	    url.addParam("naissance_month",$V(form.Date_Month));
   	    url.addParam("naissance_year", $V(form.Date_Year));
   	    url.redirect();
+  	  },
+  	  search : function(from) {
+  	    $("useVitale").value = 0;
+  	    return true;
   	  }
   	}
   	
@@ -113,7 +117,7 @@ emptyBirthday = function() {
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="tab" value="{{$tab}}" />
 <input type="hidden" name="new" value="1" />
-<input type="hidden" name="useVitale" value="{{$useVitale}}" />
+<input type="hidden" id="useVitale" name="useVitale" value="{{$useVitale}}" />
 
 <table class="form">
   <tr>
@@ -180,7 +184,7 @@ emptyBirthday = function() {
   
   <tr>
     <td class="button" colspan="4">
-      <button class="search" tabindex="10" type="submit">{{tr}}Search{{/tr}}</button>
+      <button class="search" tabindex="10" type="submit" onclick="Patient.search(this.form);">{{tr}}Search{{/tr}}</button>
       
       {{if !$board}}
         {{if $app->user_prefs.VitaleVision}}
