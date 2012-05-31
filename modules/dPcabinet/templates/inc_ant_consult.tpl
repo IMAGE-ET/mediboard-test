@@ -167,11 +167,11 @@ Main.add(function () {
       
         <!-- dossier_medical_id du sejour si c'est une consultation_anesth -->
         
-        {{if $_is_anesth}}
+        {{if $sejour_id}}
         <!-- On passe _sejour_id seulement s'il y a un sejour_id -->
         <input type="hidden" name="_sejour_id" value="{{$sejour_id}}" />
         {{/if}}
-  
+        
           <table class="layout main">
             <tr>
               {{if $app->user_prefs.showDatesAntecedents}}
