@@ -13,12 +13,11 @@ CCanDo::checkRead();
 $ds = CSQLDataSource::get("std");
 
 // Initialisation de variables
-$date = CValue::getOrSession("date", mbDate());
-$month_min     = mbDate("first day of +0 month", $date);
-$month_max     = mbDate("last day of +0 month" , $date);
-$lastmonth     = mbDate("last day of -1 month" , $date);
-$nextmonth     = mbDate("first day of +1 month", $date);
-
+$date          = CValue::getOrSession("date", mbDate());
+$month_min     = mbTransformTime("+ 0 month", $date, "%Y-%m-01");
+$month_max     = mbTransformTime("+ 1 month", $month_min, "%Y-%m-01");
+$lastmonth     = mbDate("-1 month", $date);
+$nextmonth     = mbDate("+1 month", $date);
 $selSortis     = CValue::getOrSession("selSortis", "0");
 $type          = CValue::getOrSession("type");
 $service_id    = CValue::getOrSession("service_id");
@@ -30,7 +29,7 @@ $demain = mbDate("+ 1 day", $date);
 
 // Initialisation des totaux
 $days = array();
-for ($day = $month_min; $day <= $month_max; $day = mbDate("+1 DAY", $day)) {
+for ($day = $month_min; $day < $month_max; $day = mbDate("+1 DAY", $day)) {
   $days[$day]["num1"] = 0;
   $days[$day]["num2"] = 0;
 }
