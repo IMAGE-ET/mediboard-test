@@ -110,13 +110,13 @@
         
         <tr>
           <th class="category narrow">Admettre</th>
-          <th class="category narrow">{{tr}}CPatient{{/tr}}</th>
+          <th class="category">{{tr}}CPatient{{/tr}}</th>
           <th class="narrow">
             <input type="text" size="3" onkeyup="Admissions.filter(this, 'admissions')" id="filter-patient-name" />
           </th>
           <th class="category">{{mb_label class=CSejour field=entree}}</th>
-          <th class="category">Accouchement</th>
-          <th class="category narrow">{{mb_label class=CGrossesse field=terme_prevu}}</th>
+          <th class="category">Acc.</th>
+          <th class="category narrow">Terme</th>
           <th class="category">Praticiens</th>
           
           <th class="category">Rangs / Heures</th>
@@ -142,7 +142,7 @@
                 {{/if}}
               </form>
             </td>
-            <td colspan="2" rowspan="{{$grossesse->_ref_naissances|@count}}">
+            <td colspan="2" rowspan="{{$grossesse->_ref_naissances|@count}}" class="text">
               <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">{{$_sejour->_ref_patient}}</span>
             </td>
             <td rowspan="{{$grossesse->_ref_naissances|@count}}">
@@ -153,7 +153,7 @@
                 {{mb_value object=$_sejour field=entree date=$date}}
               </span>
             </td>
-            <td {{if $grossesse->_ref_naissances|@count}}rowspan="{{$grossesse->_ref_naissances|@count}}"{{/if}}>
+            <td {{if $grossesse->_ref_naissances|@count}}rowspan="{{$grossesse->_ref_naissances|@count}}"{{/if}} class="button">
               {{assign var=operation value=$_sejour->_ref_last_operation}}
               {{if $operation->_id}}
                 <span onmouseover="ObjectTooltip.createEx(this, '{{$operation->_guid}}')">
@@ -165,9 +165,11 @@
               {{/if}}
             </td>
             <td rowspan="{{$grossesse->_ref_naissances|@count}}">
-              {{$grossesse->terme_prevu|date_format:$conf.date}}
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$grossesse->_guid}}')">
+                {{$grossesse->terme_prevu|date_format:$conf.date}}
+              </span>
             </td>
-            <td rowspan="{{$grossesse->_ref_naissances|@count}}">
+            <td class="text" rowspan="{{$grossesse->_ref_naissances|@count}}">
               {{foreach from=$grossesse->_praticiens item=_praticien}}
                 {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_praticien}}
               {{/foreach}}
@@ -178,14 +180,14 @@
               {{if !$smarty.foreach.foreach_naissance.first}}
                 <tr>
               {{/if}}
-              <td>
+              <td {{if !$_naissance->heure}}class="empty"{{/if}}>
                 <button class="edit notext" onclick="Naissance.edit('{{$_naissance->_id}}', null, null, 0, 'document.location.reload')">
                   {{tr}}Edit{{/tr}}
                 </button>
                 {{if $_naissance->heure}}
                   Le {{$enfant->naissance|date_format:$conf.date}} à {{$_naissance}}
                 {{else}}
-                  {{$_naissance}}
+                 {{$_naissance}}
                 {{/if}}
               </td>
               <td>
@@ -200,7 +202,7 @@
                 </button>
                 {{assign var=sejour_enfant value=$_naissance->_ref_sejour_enfant}}
                 <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour_enfant->_guid}}')">
-                  {{mb_include module=system template=inc_interval_date from=$sejour_enfant->entree to=$sejour_enfant->sortie}}
+                  {{mb_value object=$sejour_enfant field=entree date=$date}}
                 </span>
               </td>
               {{if $smarty.foreach.foreach_naissance.first}}
