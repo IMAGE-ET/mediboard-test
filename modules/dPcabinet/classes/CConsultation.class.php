@@ -1092,7 +1092,7 @@ TESTS A EFFECTUER
     if ($this->sejour_id && CAppUI::conf("dPcabinet CConsultation attach_consult_sejour")) {
       if ($forfait_se !== null || $facturable !== null || $forfait_sd !== null) {
         $this->_ref_sejour->forfait_se = $forfait_se;
-        $this->_ref_sejour->sd         = $forfait_sd;
+        $this->_ref_sejour->forfait_sd = $forfait_sd;
         $this->_ref_sejour->facturable = $facturable;
         if ($msg = $this->_ref_sejour->store()) {
           return $msg;
