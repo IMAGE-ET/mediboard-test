@@ -8,23 +8,24 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$ds = CSQLDataSource::get("std");
-
 CCanDo::checkRead();
+
+$ds = CSQLDataSource::get("std");
 
 // Initialisation de variables
 $date = CValue::getOrSession("date", mbDate());
-$month_min = mbTransformTime("+ 0 month", $date, "%Y-%m-01");
-$month_max = mbTransformTime("+ 1 month", $date, "%Y-%m-01");
-$lastmonth = mbDate("-1 month", $date);
-$nextmonth = mbDate("+1 month", $date);
+$month_min     = mbDate("first day of +0 month", $date);
+$month_max     = mbDate("last day of +0 month" , $date);
+$lastmonth     = mbDate("last day of -1 month" , $date);
+$nextmonth     = mbDate("first day of +1 month", $date);
+
 $bank_holidays = mbBankHolidays($date);
 $hier = mbDate("- 1 day", $date);
 $demain = mbDate("+ 1 day", $date);
 
 // Initialisation du tableau de jours
 $days = array();
-for ($day = $month_min; $day < $month_max; $day = mbDate("+1 DAY", $day)) {
+for ($day = $month_min; $day <= $month_max; $day = mbDate("+1 DAY", $day)) {
   $days[$day] = array(
     "total" => "0",
   );
