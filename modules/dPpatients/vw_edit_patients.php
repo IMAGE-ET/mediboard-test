@@ -23,6 +23,7 @@ $patient = new CPatient;
 $patient->load($patient_id);
 $patient->loadRefPhotoIdentite();
 $patient->countDocItems();
+$patient->loadRefsCorrespondantsPatient();
 
 // Chargement de l'ipp
 $patient->loadIPP();
