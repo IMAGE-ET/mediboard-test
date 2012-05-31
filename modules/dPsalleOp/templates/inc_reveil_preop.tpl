@@ -1,11 +1,11 @@
 <script type="text/javascript">  
-  Main.add(Control.Tabs.setTabCount.curry("preop", "{{$listOperations|@count}}"));
-
   submitPrepaForm = function(oFormPrepa) {
     submitFormAjax(oFormPrepa,'systemMsg', {onComplete: function(){ refreshTabsReveil() }});
   }
   
   Main.add(function () {    
+    Control.Tabs.setTabCount("preop", "{{$listOperations|@count}}");
+    
     {{if $isImedsInstalled}}
       ImedsResultsWatcher.loadResults();
     {{/if}}

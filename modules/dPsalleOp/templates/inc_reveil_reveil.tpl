@@ -1,7 +1,7 @@
 <script type="text/javascript">
-  Main.add(Control.Tabs.setTabCount.curry("reveil", "{{$listOperations|@count}}"));
-
   Main.add(function () {    
+    Control.Tabs.setTabCount("reveil", "{{$listOperations|@count}}");
+    
     {{if $isImedsInstalled}}
       ImedsResultsWatcher.loadResults();
     {{/if}}
