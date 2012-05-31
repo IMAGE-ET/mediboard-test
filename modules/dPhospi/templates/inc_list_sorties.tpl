@@ -51,6 +51,7 @@
         {{assign var=url value="?m=$m&tab=$tab"}}
         <th>{{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
         <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
+        <th>Motif</th>
         <th>{{mb_colonne class="CAffectation" field="_chambre"   order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
         <th>Provenance</th>
         <th>{{mb_colonne class="CAffectation" field="entree"     order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
@@ -84,6 +85,7 @@
         {{assign var=url value="?m=$m&tab=$tab"}}
         <th>{{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
         <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
+        <th>Motif</th>
         <th>{{mb_colonne class="CAffectation" field="_chambre"   order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
         <th>Destination</th>
         <th>{{mb_colonne class="CAffectation" field="sortie"     order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>

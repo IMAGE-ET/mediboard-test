@@ -34,6 +34,10 @@
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
   </td>
   
+  <td class="text">
+    <strong onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">{{$sejour->_motif_complet}}</strong>
+  </td>
+  
   <td class="text {{if $_mouv->effectue && $sens == "sortants"}}arretee{{/if}}">
     {{$_sortie->_ref_lit}}
   </td>
