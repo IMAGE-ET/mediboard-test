@@ -110,7 +110,7 @@ function refreshList(order_col, order_way, type, type_mouvement) {
   {{/foreach}}
   {{/foreach}}
   <li onmousedown="refreshList(null, null, 'deplacements')">
-    <a href="#deplacements_">Déplacements <small id="count_deplacements_">({{$deplacements}})</small></a>
+    <a href="#deplacements_">Déplacements <small id="count_deplacements_">({{$dep_entrants}}/{{$dep_sortants}})</small></a>
   </li>
   {{if $type != "ambu"}}
   <li onmousedown="refreshList(null, null, 'presents')">

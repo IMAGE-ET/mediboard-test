@@ -99,7 +99,7 @@ if($order_col == "sortie"){
 }
 
 // Récupération des présents du jour
-if($type == 'presents') {
+if($type == "presents") {
   // Patients placés
   $where[] = "'$date' BETWEEN DATE(affectation.entree) AND DATE(affectation.sortie)";
   if ($vue) {
@@ -140,13 +140,16 @@ if($type == 'presents') {
   
 // Récupération des déplacements du jour
 } elseif ($type == "deplacements") {
-  $where["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
-  $where["service.externe"]    = "= '0'";
-  $where["sejour.sortie"]      = "!= affectation.sortie";
   if ($vue) {
     $where["effectue"] = "= '0'";
   }
-  $deplacements = $affectation->loadList($where, $order, null, null, $ljoin);
+  $where["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
+  $whereEntrants = $whereSortants = $where;
+  $whereEntrants["sejour.entree"] = "!= affectation.entree";
+  $whereSortants["sejour.sortie"] = "!= affectation.sortie";
+  $dep_entrants = $affectation->loadList($whereEntrants, $order, null, null, $ljoin);
+  $dep_sortants = $affectation->loadList($whereSortants, $order, null, null, $ljoin);
+  $deplacements = array_merge($dep_entrants, $dep_sortants);
   $sejours      = CMbObject::massLoadFwdRef($deplacements, "sejour_id");
   $patients     = CMbObject::massLoadFwdRef($sejours, "patient_id");
   $praticiens   = CMbObject::massLoadFwdRef($sejours, "praticien_id");
@@ -160,6 +163,7 @@ if($type == 'presents') {
     $sejour->loadRefPraticien(1);
     $sejour->loadNDA();
     $_deplacement->_ref_next->loadRefLit()->loadCompleteView();
+    $_deplacement->_ref_prev->loadRefLit()->loadCompleteView();
   }
 
 // Récupération des entrées du jour
@@ -285,8 +289,9 @@ $smarty->assign("order_way"     , $order_way);
 $smarty->assign("order_col"     , $order_col);
 $smarty->assign("date"          , $date);
 if ($type == "deplacements") {
-  $smarty->assign("deplacements", $deplacements);
-  $smarty->assign("update_count", count($deplacements));
+  $smarty->assign("dep_entrants", $dep_entrants);
+  $smarty->assign("dep_sortants", $dep_sortants);
+  $smarty->assign("update_count", count($dep_entrants)."/".count($dep_sortants));
 }
 elseif($type == "presents") {
   $smarty->assign("mouvements"  , $presents);

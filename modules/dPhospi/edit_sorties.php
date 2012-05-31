@@ -96,8 +96,11 @@ if ($vue) {
   $where["effectue"] = "= '0'";
 }
 $where["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
-$where["sejour.sortie"]      = "!= affectation.sortie";
-$deplacements = $affectation->countList($where, null, $ljoin);
+$whereEntrants = $whereSortants = $where;
+$whereEntrants["sejour.entree"] = "!= affectation.entree";
+$whereSortants["sejour.sortie"] = "!= affectation.sortie";
+$dep_entrants = $affectation->countList($whereEntrants, null, $ljoin);
+$dep_sortants = $affectation->countList($whereSortants, null, $ljoin);
 
 // Comptage des entrées/sorties
 foreach($mouvements as $type => &$_mouvement) {
@@ -143,7 +146,8 @@ $smarty = new CSmartyDP;
 $smarty->assign("presents"    , $presents);
 $smarty->assign("presentsNP"  , $presentsNP);
 $smarty->assign("mouvements"  , $mouvements);
-$smarty->assign("deplacements", $deplacements);
+$smarty->assign("dep_entrants", $dep_entrants);
+$smarty->assign("dep_sortants", $dep_sortants);
 $smarty->assign("services"    , $services);
 $smarty->assign("service_id"  , $service_id);
 $smarty->assign("praticiens"  , $praticiens);
