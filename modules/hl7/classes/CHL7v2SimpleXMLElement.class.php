@@ -62,7 +62,7 @@ class CHL7v2SimpleXMLElement extends CMbSimpleXMLElement {
    * @return bool
    */
   function isOpen(){
-    return (bool)$this->attributes()->mbOpen;
+    return (string)$this->attributes()->mbOpen == 1;
   }
   
   /**
