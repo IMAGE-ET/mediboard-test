@@ -31,7 +31,7 @@ if (isset($wsdl)) {
   
   $class = new $classname;
 
-  header('Content-Type: application/xml; charset=UTF-8');
+  header('Content-Type: application/xml; charset=iso-8859-1');
   
   $functions = $returns = array();
   if ($classname != "CSoapHandler") {
