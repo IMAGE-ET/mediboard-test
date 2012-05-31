@@ -18,9 +18,10 @@ $plageconsult_id = CValue::get("plageconsult_id");
 
 // Vérification des droits sur les praticiens
 $mediuser = new CMediusers();
-if(CAppUI::pref("pratOnlyForConsult", 1)) {
+if (CAppUI::pref("pratOnlyForConsult", 1)) {
   $listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
-} else {
+} 
+else {
   $listPraticiens = $mediuser->loadProfessionnelDeSante(PERM_EDIT);
 }
 
@@ -33,16 +34,28 @@ if ($plageconsult_id) {
 
 // Récupération de la periode précédente et suivante
 $unit = $period;
-if($period == "weekly") {
+if ($period == "weekly") {
   $unit = "week";
 }
 
-$ndate = mbDate("+1 $unit", $date);
-$pdate = mbDate("-1 $unit", $date);
+/* WARNING when using "next month", "last month", "+1 month", 
+"-1 month" or any combination of +/-X months. It will give non-intuitive results on Jan 30th and 31st 
+ * http://www.php.net/manual/fr/function.strtotime.php#107331
+ * */
 
-if($period == "weekly") {
+if ($period == "month") {
+  $ndate = mbDate("first day of next month"   , $date);
+  $pdate = mbDate("last day of previous month", $date);
+} 
+else {
+  $ndate = mbDate("+1 $unit", $date);
+  $pdate = mbDate("-1 $unit", $date);
+}
+
+if ($period == "weekly") {
   CAppUI::requireModuleFile("dPcabinet", "inc_plage_selector_weekly");
-} else {
+} 
+else {
   CAppUI::requireModuleFile("dPcabinet", "inc_plage_selector_classic");
 }
 
