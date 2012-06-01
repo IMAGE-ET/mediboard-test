@@ -20,21 +20,36 @@ $ljoin = array();
 $ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
 
 $where["duree_uscpo"] = "> 0";
-$where[] = "operations.date = '$date' OR plagesop.date = '$date'";
-
+$where[] = "(operations.date <= '$date' OR plagesop.date <= '$date') AND
+  (DATE_ADD(plagesop.date, INTERVAL duree_uscpo DAY) > '$date' OR
+   DATE_ADD(operations.date, INTERVAL duree_uscpo DAY) = '$date')";
 
 if ($service_id) {
   $ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
   $where["sejour.service_id"] = " = '$service_id'";
 }
 
+// Prévues
 $operation = new COperation;
-$operations = $operation->loadList($where, null, null, null, $ljoin);
+$operations_prevues = $operation->loadList($where, null, null, null, $ljoin);
 
-CMbObject::massLoadFwdRef($operations, "plageop_id");
-CMbObject::massLoadFwdRef($operations, "chir_id");
+// Placées
+$ljoin["affectation"] = "affectation.sejour_id = operations.sejour_id";
+$where[] = "DATE_ADD(plagesop.date, INTERVAL duree_uscpo DAY) <= affectation.sortie";
+$operations_placees = $operation->loadList($where, null, null, null, $ljoin);
 
-foreach ($operations as $_operation) {
+CMbObject::massLoadFwdRef($operations_prevues, "plageop_id");
+CMbObject::massLoadFwdRef($operations_prevues, "chir_id");
+CMbObject::massLoadFwdRef($operations_placees, "plageop_id");
+CMbObject::massLoadFwdRef($operations_placees, "chir_id");
+
+foreach ($operations_prevues as $_operation) {
+  $_operation->loadRefPatient();
+  $_operation->loadRefPlageOp();
+  $_operation->loadRefChir()->loadRefFunction();
+}
+
+foreach ($operations_placees as $_operation) {
   $_operation->loadRefPatient();
   $_operation->loadRefPlageOp();
   $_operation->loadRefChir()->loadRefFunction();
@@ -42,7 +57,8 @@ foreach ($operations as $_operation) {
 
 $smarty = new CSmartyDP;
 
-$smarty->assign("operations", $operations);
+$smarty->assign("operations_prevues", $operations_prevues);
+$smarty->assign("operations_placees", $operations_placees);
 
 $smarty->display("inc_stat_list_operations.tpl");
 

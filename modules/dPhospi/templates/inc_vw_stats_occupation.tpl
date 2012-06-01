@@ -3,7 +3,12 @@
   
   for (var i = 0; i < graph['series'].length ; i ++) {
     graph['series'][i].markers.labelFormatter = function(obj) {
-      return Math.round(obj.data[obj.index][2] * 100) + "%";
+      if (parseFloat(obj.data[obj.index][2]) > 0) {
+        return Math.round(obj.data[obj.index][2] * 100) + "%";
+      }
+      else {
+        return ""
+      }
     }
   }
   

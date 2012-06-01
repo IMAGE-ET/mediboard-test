@@ -49,7 +49,7 @@
 
 <ul id="stats_hospi" class="control_tabs">
   <li>
-    <a href="#uscpo" onmousedown="refreshStats('uscpo')">USCPO prévue / réalisée</a>
+    <a href="#uscpo" onmousedown="refreshStats('uscpo')">USCPO prévue / placée</a>
   </li>
   <li>
     <a href="#occupation" onmousedown="refreshStats('occupation')">Occupation prévue / réalisée</a>

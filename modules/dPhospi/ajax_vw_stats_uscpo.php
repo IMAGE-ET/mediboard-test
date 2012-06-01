@@ -41,9 +41,18 @@ $serie = array(
   'data' => array(),
   'label' => utf8_encode("Nombre de nuits prévues")
 );
-  
+
+$today = mbDate();
+
 while ($day <= $date_max) {
-  $dates[] = array(count($dates), mbDateToLocale($day));
+  $display = mbDateToLocale($day);
+  
+  // On préfixe d'une étoile si c'est le jour courant
+  if ($day == $today) {
+    $display = "* ".$display;
+  }
+  
+  $dates[] = array(count($dates), $display);
   $where[2] = "plagesop.date <= '$day' AND DATE_ADD(plagesop.date, INTERVAL duree_uscpo DAY) > '$day'";
   $count = count($operation->loadIds($where, null, null, null, $ljoin));
   $day = mbDate("+1 day", $day);
@@ -55,7 +64,7 @@ $series[] = $serie;
 $day = $date_min;
 $serie = array(
  'data' => array(),
- 'label' => utf8_encode("Nombre de nuits réalisées")
+ 'label' => utf8_encode("Nombre de nuits placées")
 );
 
 $ljoin["affectation"] = "affectation.sejour_id = operations.sejour_id";
@@ -65,7 +74,7 @@ while ($day <= $date_max) {
   $where[3] = "DATE_ADD(plagesop.date, INTERVAL duree_uscpo DAY) <= affectation.sortie";
   $day = mbDate("+1 day", $day);
   $count = count($operation->loadIds($where, null, null, null, $ljoin));
-  $serie['data'][] = array(count($serie['data'])+0.2, $count); 
+  $serie['data'][] = array(count($serie['data'])+0.2, intval($count)); 
 }
 
 $series[] = $serie;
@@ -73,6 +82,7 @@ $series[] = $serie;
 $options = CFlotrGraph::merge("bars", array(
   'title'    => utf8_encode("Durées USCPO"),
   'xaxis'    => array('ticks' => $dates),
+  'yaxis'    => array('tickDecimals' => 0),
   'grid'     => array('verticalLines' => true),
   'bars'     => array('barWidth' => 0.4)
 ));
