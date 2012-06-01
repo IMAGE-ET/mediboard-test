@@ -81,6 +81,20 @@
     </td>
   </tr>
   
+  <tr>
+    <th>{{mb_label object=$sejour field=transport_sortie}}</th>
+    <td>
+      {{mb_field object=$sejour field=transport_sortie form=editSejour onchange="this.form.onsubmit();" register=true}}
+    </td> 
+  </tr>
+  
+  <tr>
+    <th>{{mb_label object=$sejour field=rques_transport_sortie}}</th>
+    <td>
+      {{mb_field object=$sejour field=rques_transport_sortie form=editSejour onchange="this.form.onsubmit();" register=true}}
+    </td> 
+  </tr>
+  
   <tr id="commentaires_sortie">
     <th>{{mb_label object=$sejour field="commentaires_sortie"}}</th>
     <td>

@@ -1345,7 +1345,13 @@ class CSetupdPplanningOp extends CSetup {
     $query = "ALTER TABLE `operations` CHANGE `date_visite_anesth` `date_visite_anesth` DATE;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.45";
+    $this->makeRevision("1.45");
+    $query = "ALTER TABLE `sejour` 
+                ADD `transport_sortie` ENUM ('perso','perso_taxi','ambu','ambu_vsl','vsab','smur','heli','fo'),
+                ADD `rques_transport_sortie` TEXT;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.46";
   }
 }
 ?>

@@ -38,7 +38,7 @@ Sortie = {
 	  refreshExecuter.stop();
 	  var url = new Url("dPurgences", "ajax_edit_sortie")
     url.addParam("rpu_id", rpu_id);
-		url.requestModal(500, 200);
+		url.requestModal(500, 300);
     this.modal = url.modalObject;
 	},
 	
