@@ -14,31 +14,9 @@ Main.add(function(){
   Calendar.regField(form.debut);
   Calendar.regField(form.fin  );
 });
-
-ColorSelector = window.ColorSelector || {
-  sForm : null,
-  sColor: null,
-  sColorView: null,
-  options : {
-    width : 400,
-    height: 300
-  },
-  
-  pop: function() {
-    var url = new Url("mediusers", "color_selector");
-    url.addParam("color", $V(getForm(this.sForm)[this.sColor]));
-    url.popup(this.options.width, this.options.height, "Color selector");
-  },
-  
-  set: function(color) {
-    var oForm = getForm(this.sForm);
-    if (color) {
-      $V(oForm[this.sColor], color);
-    }
-    $(this.sColorView).style.background = '#' + oForm[this.sColor].value;
-  }
-};
 </script>
+
+{{mb_script module="mediusers" script="color_selector" ajax=true}}
 
 <form name='editFrm' action='?m=dPcabinet' method='post' onsubmit='return PlageConsultation.checkForm(this);'>
 
