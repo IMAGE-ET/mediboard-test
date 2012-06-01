@@ -139,12 +139,14 @@ class CWsdlDocument extends CMbXMLDocument {
       $input = $this->addElement($operation, "wsdl:input", null, "http://schemas.xmlsoap.org/wsdl/");
       
       $soapbody = $this->addElement($input, "soap:body", null, "http://schemas.xmlsoap.org/wsdl/soap/");
-      $this->addAttribute($soapbody, "use", "literal");
+      $this->addAttribute($soapbody, "use", "encoded");
+      $this->addAttribute($soapbody, "encodingStyle", "http://schemas.xmlsoap.org/soap/encoding/");
       
       $output = $this->addElement($operation, "wsdl:output", null, "http://schemas.xmlsoap.org/wsdl/");
       
       $soapbody = $this->addElement($output, "soap:body", null, "http://schemas.xmlsoap.org/wsdl/soap/");
-      $this->addAttribute($soapbody, "use", "literal");
+      $this->addAttribute($soapbody, "use", "encoded");
+      $this->addAttribute($soapbody, "encodingStyle", "http://schemas.xmlsoap.org/soap/encoding/");
     }
   }
   
