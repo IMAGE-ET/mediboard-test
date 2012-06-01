@@ -88,7 +88,7 @@
           </tr>
         {{/if}}
         <tr>
-          <td colspan="10" > Type de la facture:
+          <td colspan="2"> Type de la facture:
             <form name="type_facture" method="post" action=""> 
               <input type="hidden" name="dosql" value="do_factureconsult_aed" />
               <input type="hidden" name="m" value="dPcabinet" />
@@ -99,6 +99,26 @@
               <label for="maladie">Maladie</label>
               <input type="radio" name="type_facture" value="accident" {{if $facture->type_facture == 'accident'}}checked{{/if}} onchange="Facture.modifCloture(this.form);" />
               <label for="accident">Accident</label>
+            </form>
+          </td>
+          <td colspan="8">
+            <form name="cession_facture" method="post" action=""> 
+              <input type="hidden" name="dosql" value="do_factureconsult_aed" />
+              <input type="hidden" name="m" value="dPcabinet" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="factureconsult_id" value="{{$facture->factureconsult_id}}" />
+              <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
+              <input type="hidden" name="cession_creance" value="{{if $facture->cession_creance == 1}}0{{else}}1{{/if}}" />
+              <input type="checkbox" name="cession_tmp" value="{{$facture->cession_creance}}" {{if $facture->cession_creance}}checked="checked"{{/if}} onchange="Facture.modifCloture(this.form);" />Cession de créance 
+            </form>
+            <form name="npq_facture" method="post" action=""> 
+              <input type="hidden" name="dosql" value="do_factureconsult_aed" />
+              <input type="hidden" name="m" value="dPcabinet" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="factureconsult_id" value="{{$facture->factureconsult_id}}" />
+              <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
+              <input type="hidden" name="npq" value="{{if $facture->npq == 1}}0{{else}}1{{/if}}" />
+              <input type="checkbox" name="npq_tmp" value="{{$facture->npq}}" {{if $facture->npq}}checked="checked"{{/if}} onchange="Facture.modifCloture(this.form);" />NPQ
             </form>
           </td>
         </tr>

@@ -1519,7 +1519,13 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `plageconsult`
               ADD `color` VARCHAR(6) NOT NULL DEFAULT 'DDDDDD' ;";
     $this->addQuery($query);
-    $this->mod_version = "1.59";
+    $this->makeRevision("1.59");
+    
+    $query = "ALTER TABLE `factureconsult`
+              ADD `npq`  ENUM('0','1') DEFAULT '0',
+              ADD `cession_creance` ENUM('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    $this->mod_version = "1.60";
   }
 }
 ?>

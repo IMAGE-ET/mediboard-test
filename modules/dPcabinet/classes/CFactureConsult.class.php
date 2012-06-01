@@ -23,7 +23,9 @@ class CFactureConsult extends CMbObject {
   var $type_facture           = null;
   var $patient_date_reglement = null;
   var $tiers_date_reglement   = null;
-  var $tarif        = null;
+  var $tarif                  = null;
+  var $npq                    = null;
+  var $cession_creance        = null;
   
   // Form fields
   var $_nb_factures         = null;
@@ -73,6 +75,8 @@ class CFactureConsult extends CMbObject {
     $props["type_facture"]              = "enum notNull list|maladie|accident default|maladie";
     $props["patient_date_reglement"]    = "date";
     $props["tiers_date_reglement"]      = "date";
+    $props["npq"]                       = "enum notNull list|0|1 default|0";
+    $props["cession_creance"]           = "enum notNull list|0|1 default|0";
     
     $props["_du_patient_restant"]       = "currency";
     $props["_du_tiers_restant"]         = "currency";
@@ -108,6 +112,10 @@ class CFactureConsult extends CMbObject {
     $this->_ref_consults = $consult->loadList($where, $order);
     $this->_nb_factures = 1 ;
     if(CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ){
+    
+	    if($this->npq){
+	      $this->remise = sprintf("%.2f",(10*(($this->du_patient+$this->du_tiers)*$this->_coeff))/100) ;
+	    }
 	    //Dans le cas d'un éclatement de facture recherche des consultations
 	    $facture = new CFactureConsult();
 	        
