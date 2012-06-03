@@ -327,11 +327,11 @@ div.draggable {
   cursor: move;
 }
 
-tbody.hoverable:hover tr td,
-table.tbl tr:hover td,
-div.tree-header:hover,
-table.tbl tr td.hover {
-  background-color: #FFF2DD;
+.desktop tbody.hoverable:hover tr td,
+.desktop table.tbl tr:hover td,
+.desktop div.tree-header:hover,
+.desktop table.tbl tr td.hover {
+  background-color: #eef;
 }
 
 table.tbl td.button {
