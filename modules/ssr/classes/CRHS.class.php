@@ -316,7 +316,7 @@ class CRHS extends CMbObject {
   	$totaux = array();
     $type_activite = new CTypeActiviteCdARR();
     $types_activite = $type_activite->loadList();
-    foreach($types_activite as $_type) {
+    foreach ($types_activite as $_type) {
       $totaux[$_type->code] = 0;
     }
 	
@@ -331,8 +331,16 @@ class CRHS extends CMbObject {
       $executant = $_line->loadFwdRef("executant_id", true);
       $executant->loadRefsFwd();
       $executant->loadRefIntervenantCdARR();
-      $executants[$executant->_id] = $executant;
-      $lines_by_executant[$executant->_id][] = $_line;
+      
+      // Use guids for keys instead of ids to prevent key corruption by multisorting
+      $executants[$executant->_guid] = $executant;
+      $lines_by_executant[$executant->_guid][] = $_line;
+    }
+
+    // Sort by executants then by code
+    array_multisort(CMbArray::pluck($executants, "_view"), SORT_ASC, $lines_by_executant);
+    foreach ($lines_by_executant as &$_lines) {
+      array_multisort(CMbArray::pluck($_lines, "code_activite_cdarr"), SORT_ASC, $_lines);
     }
     
     $this->_ref_lines_by_executant = $lines_by_executant;
