@@ -14,6 +14,7 @@ $item_id       = CValue::get("item_id");
 
 $prestation = new $object_class;
 $prestation->load($prestation_id);
+$prestation->loadRefsNotes();
 
 if (!$prestation->_id) {
   $prestation->group_id = CGroups::loadCurrent()->_id;

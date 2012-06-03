@@ -15,11 +15,11 @@
 {{/if}}
 <table class="tbl">
   <tr>
-    <th colspan="2" class="title">{{tr}}CItemPrestation.all{{/tr}}</th>
+    <th colspan="3" class="title">{{tr}}CItemPrestation.all{{/tr}}</th>
   </tr>
   <tr>
     {{if $is_journaliere}}
-    <th class="category narrow">{{mb_label class=CItemPrestation field=rank}}</th>
+    <th class="category narrow" colspan="2">{{mb_label class=CItemPrestation field=rank}}</th>
   {{/if}}
     <th class="category">{{mb_label class=CItemPrestation field=nom}}</th>
   </tr>
@@ -32,7 +32,9 @@
             <area coords="0,0,10,7"  href="#1" onclick="reorderItem('{{$_item->_id}}', 'up', '{{$item_id}}');" />
             <area coords="0,8,10,14" href="#1" onclick="reorderItem('{{$_item->_id}}', 'down', '{{$item_id}}');"/>
           </map>
-          {{$_item->rank}}
+        </td>
+        <td>
+          <div class="rank">{{$_item->rank}}</div>          
         </td>
       {{/if}}
       <td><a href="#1" onclick="updateSelected('{{$_item->_id}}', 'item'); editItem('{{$_item->_id}}')">{{mb_value object=$_item field=nom}}</a></td>

@@ -14,6 +14,7 @@ $object_id    = CValue::getOrSession("object_id");
 
 $item = new CItemPrestation;
 $item->load($item_id);
+$item->loadRefsNotes();
 
 if (!$item->_id) {
   $item->object_class = $object_class;

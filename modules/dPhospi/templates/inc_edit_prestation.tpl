@@ -44,7 +44,7 @@
   </table>
 </form>
 
-<br />
+<hr />
 <div id="edit_item"></div>
-<br />
+<hr />
 <div id="list_items"></div>

@@ -1,3 +1,5 @@
+{{mb_include template=inc_warning_config_prestations wanted=standard}}
+
 <table class="main">
 	
 <tr>
@@ -13,7 +15,7 @@
     </tr>
 		
     <tr>
-      <th>{{mb_title class=CPrestation field=code}}</th>
+      <th class="narrow">{{mb_title class=CPrestation field=code}}</th>
       <th>{{mb_title class=CPrestation field=nom}}</th>
       <th>{{mb_title class=CPrestation field=description}}</th>
     </tr>

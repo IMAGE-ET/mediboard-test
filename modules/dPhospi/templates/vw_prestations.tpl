@@ -71,6 +71,8 @@
   });
 </script>
 
+{{mb_include template=inc_warning_config_prestations wanted=expert}}
+
 <!-- Formulaire fictif pour récupérer le type de prestation -->
 <form name="new_prestation" method="get">
   <button type="button" class="new" onclick="removeSelected('prestation'); editPrestation(0, $V(this.form.type_prestation))">
