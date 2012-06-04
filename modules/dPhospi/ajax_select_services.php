@@ -36,7 +36,8 @@ $secteurs = $secteur->loadList($where, "nom");
 
 foreach ($secteurs as $_secteur) {
   $_secteur->loadRefsServices();
-  $_secteur->_all_checked = array_intersect(array_keys($_secteur->_ref_services), array_keys($services_ids)) === array_keys($_secteur->_ref_services);
+  $_secteur->_all_checked = count($_secteur->_ref_services) > 0 ?
+    array_intersect(array_keys($_secteur->_ref_services), array_keys($services_ids)) === array_keys($_secteur->_ref_services) : false;
 }
 
 $services_ids_hospi = CAppUI::pref("services_ids_hospi");
