@@ -9,6 +9,9 @@
 *}}
 
 {{mb_script module=admissions script=admissions}}
+{{if "web100T"|module_active}}
+  {{mb_script module=web100T script=web100T}}
+{{/if}}
 
 <script type="text/javascript">
 
@@ -162,6 +165,9 @@ Main.add(function () {
     </form>
     <a href="#" onclick="printPlanning()" class="button print">Imprimer</a>
     <a href="#" onclick="Admissions.beforePrint(); modal('area_prompt_modele')" class="button print">{{tr}}CCompteRendu-print_for_select{{/tr}}</a>
+    {{if "web100T"|module_active}}
+      {{mb_include module=web100T template=inc_button_send_all_prestations type=sortie}}
+    {{/if}}
   </td>
 </tr>
   <tr>

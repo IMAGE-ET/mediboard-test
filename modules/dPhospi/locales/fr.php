@@ -424,6 +424,7 @@ $locales['CPrestationJournaliere-nom-desc'] = 'Nom de la prestation';
 $locales['CPrestationJournaliere-prestation_journaliere_id'] = 'Identifiant';
 $locales['CPrestationJournaliere-prestation_journaliere_id-court'] = 'Identifiant';
 $locales['CPrestationJournaliere-prestation_journaliere_id-desc'] = 'Identifiant';
+$locales['CPrestationJournaliere-send_for_select'] = 'Prestations pour la sélection';
 $locales['CPrestationJournaliere-title-create'] = 'Création de prestation journalière';
 $locales['CPrestationJournaliere-title-modify'] = 'Modification de prestation journalière';
 $locales['CPrestationJournaliere.all'] = 'Toutes les prestations journalières';

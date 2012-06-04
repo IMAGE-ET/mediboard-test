@@ -12,6 +12,9 @@
 {{mb_script module=hprim21 script=sejour_hprim_selector}}
 {{mb_script module=admissions script=admissions}}
 {{mb_script module=patients script=antecedent}}
+{{if "web100T"|module_active}}
+  {{mb_script module=web100T script=web100T}}
+{{/if}}
 
 <script type="text/javascript">
 
@@ -185,6 +188,9 @@ Main.add(function () {
     </form>
     <a href="#" onclick="printPlanning()" class="button print">{{tr}}Print{{/tr}}</a>
     <a href="#" onclick="Admissions.beforePrint(); modal('area_prompt_modele')" class="button print">{{tr}}CCompteRendu-print_for_select{{/tr}}</a>
+    {{if "web100T"|module_active}}
+      {{mb_include module=web100T template=inc_button_send_all_prestations type=admissions}}
+    {{/if}}
   </td>
 </tr>
   <tr>
