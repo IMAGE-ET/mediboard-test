@@ -81,7 +81,7 @@ class CBoolSpec extends CMbFieldSpec {
   	      "type" => "radio",
   	      "name" => $field,
   	    );
-  	    
+
   	    if (null === $value) {
   	      $value = "$default";
   	    }
@@ -93,7 +93,6 @@ class CBoolSpec extends CMbFieldSpec {
   	      $attributes["class"] = $className;
   	      
   	      $xmlAttributes = CMbArray::makeXmlAttributes($attributes);
-  	      
   	      $sHtml .= "\n<input $xmlAttributes $extra />";
   	      
   	      $sTr = CAppUI::tr("bool.$i");

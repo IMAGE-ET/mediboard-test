@@ -39,15 +39,24 @@ class CSmartyDP extends CSmartyMB {
     $this->makePlaceholders();
     $this->assign("placeholders", self::$placeholders);
     
-    $this->register_block   ("mb_form"           , array($this,"mb_form")); 
-    $this->register_block   ("vertical"          , array($this,"smarty_vertical"));
+    $this->register_compiler_function("mb_return", array($this,"mb_return"));
     
-    $this->register_function("mb_field"          , array($this,"smarty_function_mb_field"));
-    $this->register_function("mb_key"            , array($this,"smarty_function_mb_key"));
-    $this->register_function("mb_label"          , array($this,"smarty_function_mb_label"));
-    $this->register_function("mb_title"          , array($this,"smarty_function_mb_title"));
-    $this->register_function("mb_ternary"        , array($this,"smarty_function_mb_ternary"));
-    $this->register_function("mb_colonne"        , array($this,"smarty_function_mb_colonne"));
+    $this->register_block("mb_form" , array($this,"mb_form")); 
+    $this->register_block("vertical", array($this,"vertical"));
+    
+    $this->register_function("mb_field"          , array($this,"mb_field"));
+    $this->register_function("mb_key"            , array($this,"mb_key"));
+    $this->register_function("mb_label"          , array($this,"mb_label"));
+    $this->register_function("mb_title"          , array($this,"mb_title"));
+    $this->register_function("mb_ternary"        , array($this,"mb_ternary"));
+    $this->register_function("mb_colonne"        , array($this,"mb_colonne"));
+  }
+  
+  /**
+   * mb_return
+   */
+  function mb_return($tag_arg, &$smarty) {
+    return "\nreturn;";
   }
   
   /**
@@ -89,7 +98,7 @@ class CSmartyDP extends CSmartyMB {
    /*
    * Diplays veritcal text
    */
-    function smarty_vertical($params, $content, &$smarty, &$repeat) {
+    function vertical($params, $content, &$smarty, &$repeat) {
       if (isset($content)) {
         $content = trim($content);
         $content = preg_replace("/\s+/", " ", $content);
@@ -123,7 +132,7 @@ class CSmartyDP extends CSmartyMB {
    * - hidden          : {optionnel} Permet de forcer le type "hidden"
    * - canNull         : {optionnel} Permet de passer outre le notNull de la spécification
    */
-  function smarty_function_mb_field($params, &$smarty) {
+  function mb_field($params, &$smarty) {
     if (CAppUI::conf("readonly")) {
       //$params["readonly"] = 1;
     }
@@ -171,7 +180,7 @@ class CSmartyDP extends CSmartyMB {
    * - defaultFor  : {optionnel} Ajout d'une valeur à cibler pour "select" ou "radio"
    * - typeEnum    : {optionnel} Type d'affichage des enums à cibler (values : "select", "radio") [default: "select"]
    */
-  function smarty_function_mb_label($params, &$smarty) {
+  function mb_label($params, &$smarty) {
     if (null == $object = CMbArray::extract($params, "object")) {
       $class = CMbArray::extract($params, "class" , null, true);
       $object = new $class;
@@ -193,7 +202,7 @@ class CSmartyDP extends CSmartyMB {
    * - object      : Objet
    * - field       : Nom du champ a afficher (le champs doit avoir des specs sinon "spec" non optionnel) 
    */
-  function smarty_function_mb_title($params, &$smarty) {
+  function mb_title($params, &$smarty) {
     if (null == $object = CMbArray::extract($params, "object")) {
       $class = CMbArray::extract($params, "class" , null, true);
       $object = new $class;
@@ -212,7 +221,7 @@ class CSmartyDP extends CSmartyMB {
    * - value : Value if test is true
    * - other : Value if test is false
    */
-  function smarty_function_mb_ternary($params, &$smarty) {
+  function mb_ternary($params, &$smarty) {
     $test  = CMbArray::extract($params, "test"  , null, true);
     $value = CMbArray::extract($params, "value" , null, true);
     $other = CMbArray::extract($params, "other" , null, true);
@@ -227,7 +236,7 @@ class CSmartyDP extends CSmartyMB {
     }
   }
   
-  function smarty_function_mb_colonne($params, &$smarty) {
+  function mb_colonne($params, &$smarty) {
     $class         = CMbArray::extract($params, "class"        , null, true);
     $field         = CMbArray::extract($params, "field"        , null, true);
     $order_col     = CMbArray::extract($params, "order_col"    , null, true);

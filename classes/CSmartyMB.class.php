@@ -52,47 +52,47 @@ class CSmartyMB extends Smarty {
     }
 
     // Delimiter definition
-    $this->left_delimiter = "{{";
+    $this->left_delimiter  = "{{";
     $this->right_delimiter = "}}";
     
     // Default modifier for security reason
     $this->default_modifiers = array("@cleanField");
     
     // Register mediboard functions
-    $this->register_block   ("tr"                , array($this,"do_translation")); 
-    $this->register_block   ("main"              , array($this,"script_main")); 
+    $this->register_block   ("tr"                , array($this,"tr")); 
+    $this->register_block   ("main"              , array($this,"main")); 
     
-    $this->register_function("mb_default"        , array($this,"smarty_function_mb_default"));
-    $this->register_function("mb_ditto"          , array($this,"smarty_function_mb_ditto"));
-    $this->register_function("mb_class"          , array($this,"smarty_function_mb_class"));
-    $this->register_function("mb_value"          , array($this,"smarty_function_mb_value"));
+    $this->register_function("mb_default"        , array($this,"mb_default"));
+    $this->register_function("mb_ditto"          , array($this,"mb_ditto"));
+    $this->register_function("mb_class"          , array($this,"mb_class"));
+    $this->register_function("mb_value"          , array($this,"mb_value"));
+    $this->register_function("mb_include"        , array($this,"mb_include"));
+    $this->register_function("mb_script"         , array($this,"mb_script"));
     $this->register_function("thumb"             , array($this,"thumb"));
-    $this->register_function("unique_id"         , array($this,"smarty_function_unique_id"));
-    $this->register_function("mb_include"        , array($this,"smarty_function_mb_include"));
-    $this->register_function("mb_script"         , array($this,"smarty_function_mb_script"));
+    $this->register_function("unique_id"         , array($this,"unique_id"));
     
-    $this->register_modifier("pad"               , array($this,"smarty_modifier_pad"));
-    $this->register_modifier("json"              , array($this,"smarty_modifier_json"));
-    $this->register_modifier("iso_date"          , array($this,"smarty_modifier_iso_date"));
-    $this->register_modifier("iso_time"          , array($this,"smarty_modifier_iso_time"));
-    $this->register_modifier("iso_datetime"      , array($this,"smarty_modifier_iso_datetime"));
-    $this->register_modifier("rel_datetime"      , array($this,"smarty_modifier_rel_datetime"));
-    $this->register_modifier("week_number_month" , array($this,"smarty_modifier_week_number_month"));
+    $this->register_modifier("pad"               , array($this,"pad"));
+    $this->register_modifier("json"              , array($this,"json"));
+    $this->register_modifier("iso_date"          , array($this,"iso_date"));
+    $this->register_modifier("iso_time"          , array($this,"iso_time"));
+    $this->register_modifier("iso_datetime"      , array($this,"iso_datetime"));
+    $this->register_modifier("rel_datetime"      , array($this,"rel_datetime"));
+    $this->register_modifier("week_number_month" , array($this,"week_number_month"));
     
-    $this->register_modifier("const"             , array($this,"smarty_modifier_const"));
-    $this->register_modifier("static"            , array($this,"smarty_modifier_static"));
-    $this->register_modifier("static_call"       , array($this,"smarty_modifier_static_call"));
-    $this->register_modifier("cleanField"        , array($this,"smarty_modifier_cleanField"));
-    $this->register_modifier("stripslashes"      , array($this,"smarty_modifier_stripslashes"));
-    $this->register_modifier("emphasize"         , array($this,"smarty_modifier_emphasize"));
-    $this->register_modifier("ternary"           , array($this,"smarty_modifier_ternary"));
-    $this->register_modifier("trace"             , array($this,"smarty_modifier_trace"));
-    $this->register_modifier("currency"          , array($this,"smarty_modifier_currency"));
-    $this->register_modifier("percent"           , array($this,"smarty_modifier_percent"));
-    $this->register_modifier("spancate"          , array($this,"smarty_modifier_spancate"));
-    $this->register_modifier("decabinary"        , array($this,"smarty_modifier_decabinary"));
-    $this->register_modifier("module_installed"  , array($this,"smarty_modifier_module_installed"));
-    $this->register_modifier("module_active"     , array($this,"smarty_modifier_module_active"));
+    $this->register_modifier("const"             , array($this,"_const"));
+    $this->register_modifier("static"            , array($this,"_static"));
+    $this->register_modifier("static_call"       , array($this,"static_call"));
+    $this->register_modifier("cleanField"        , array($this,"cleanField"));
+    $this->register_modifier("stripslashes"      , array($this,"stripslashes"));
+    $this->register_modifier("emphasize"         , array($this,"emphasize"));
+    $this->register_modifier("ternary"           , array($this,"ternary"));
+    $this->register_modifier("trace"             , array($this,"trace"));
+    $this->register_modifier("currency"          , array($this,"currency"));
+    $this->register_modifier("percent"           , array($this,"percent"));
+    $this->register_modifier("spancate"          , array($this,"spancate"));
+    $this->register_modifier("decabinary"        , array($this,"decabinary"));
+    $this->register_modifier("module_installed"  , array($this,"module_installed"));
+    $this->register_modifier("module_active"     , array($this,"module_active"));
     $this->register_modifier("JSAttribute"       , array($this,"JSAttribute"));
     
     $modules = CModule::getActive();
@@ -128,7 +128,7 @@ class CSmartyMB extends Smarty {
    * - value : Default value of the var
    * @return void
    */
-  function smarty_function_mb_default($params, &$smarty) {
+  function mb_default($params, &$smarty) {
     $var   = CMbArray::extract($params, "var"  , true);
     $value = CMbArray::extract($params, "value", true);
     
@@ -143,7 +143,7 @@ class CSmartyMB extends Smarty {
    * - name  : Name of the cached value
    * - value : Value to show, empty string to clear out cache
    */
-  function smarty_function_mb_ditto($params, &$smarty) {
+  function mb_ditto($params, &$smarty) {
     static $cache = array();
     $name   = CMbArray::extract($params, "name",  null, true);
     $value  = CMbArray::extract($params, "value", null, true);
@@ -158,12 +158,13 @@ class CSmartyMB extends Smarty {
   
   /**
    * @param array params tableau des parametres
-   * Cette fonction prend les mêmes paramètres que smarty_function_mb_field, mais seul object est requis.
+   * Cette fonction prend les mêmes paramètres que mb_field, mais seul object est requis.
    */
-  function smarty_function_mb_class($params, &$smarty) {
+  function mb_class($params, &$smarty) {
     if (null == $object = CMbArray::extract($params, "object")) {
       $class = CMbArray::extract($params, "class" , null, true);
-    } else {
+    } 
+    else {
       $class = $object->_class;
     }
     
@@ -172,9 +173,10 @@ class CSmartyMB extends Smarty {
   
   
   /**
-   * Fonction that return the value of an object field
+   * Get the value of a given field (property)
+   * 
    */
-  function smarty_function_mb_value($params, &$smarty) {
+  function mb_value($params, &$smarty) {
     $object = CMbArray::extract($params, "object",  null, true);
     $field  = CMbArray::extract($params, "field");
     
@@ -197,7 +199,7 @@ class CSmartyMB extends Smarty {
   }
   
   /**
-   * get a concrete filename for automagically created content
+   * Get a concrete filename for automagically created content
    *
    * @param string $auto_base
    * @param string $auto_source
@@ -210,20 +212,23 @@ class CSmartyMB extends Smarty {
     $_compile_dir_sep =  $this->use_sub_dirs ? DIRECTORY_SEPARATOR : '^';
     $_return = $auto_base . DIRECTORY_SEPARATOR;
 
-    if(isset($auto_id)) {
+    if (isset($auto_id)) {
       // make auto_id safe for directory names
       $auto_id = str_replace('%7C',$_compile_dir_sep,(urlencode($auto_id)));
       // split into separate directories
       $_return .= $auto_id . $_compile_dir_sep;
     }
 
-    if(isset($auto_source)) {
+    if (isset($auto_source)) {
       // make source name safe for filename
       $_filename = urlencode(basename($auto_source));
       $_crc32 = sprintf('%08X', crc32($auto_source));
       // prepend %% to avoid name conflicts with
       // with $params['auto_id'] names
-      $_return .=  "$_filename.2.%$_crc32%";
+      
+      // 
+      static $increment = 3;
+      $_return .=  "$_filename.$increment.%$_crc32%";
     }
 
     return $_return;
@@ -286,7 +291,7 @@ class CSmartyMB extends Smarty {
   /**
    * Delegates the actual translation to CAppUI framework object
    */
-  function do_translation($params, $content, &$smarty, &$repeat) {
+  function tr($params, $content, &$smarty, &$repeat) {
     if (isset($content)) {
       $content = CAppUI::tr($content);
       
@@ -308,7 +313,7 @@ class CSmartyMB extends Smarty {
     }
   }
   
-  function script_main($params, $content, &$smarty, &$repeat){
+  function main($params, $content, &$smarty, &$repeat){
     // Let the whitespace around $content
     return "
       <script type=\"text/javascript\">
@@ -346,7 +351,7 @@ class CSmartyMB extends Smarty {
    * @param string $pad_string - string used to pad
    * @param enum $pad_type - both, left or right
    */
-  function smarty_modifier_pad($string, $length, $pad_string = ' ', $pad_type = 'left') {
+  function pad($string, $length, $pad_string = ' ', $pad_type = 'left') {
     static $pads = array(
       'left' => STR_PAD_LEFT, 
       'right'=> STR_PAD_RIGHT, 
@@ -361,7 +366,7 @@ class CSmartyMB extends Smarty {
    * Example:  {$object|json}
    * @param any $object The object to be encoded
    */
-  function smarty_modifier_json($object, $force_object = false) {
+  function json($object, $force_object = false) {
     // $options = $force_object ? JSON_FORCE_OBJECT : 0; // Only PHP 5.3 !!
     
     if ($force_object && is_array($object) && empty($object)) {
@@ -376,7 +381,7 @@ class CSmartyMB extends Smarty {
    * Example:  {$datetime|iso_date}
    * @param datetime $datetime The date to format
    */
-  function smarty_modifier_iso_date($datetime) {
+  function iso_date($datetime) {
     return strftime("%Y-%m-%d", strtotime($datetime));
   }
   
@@ -385,7 +390,7 @@ class CSmartyMB extends Smarty {
    * Example:  {$datetime|iso_time}
    * @param datetime $datetime The date to format
    */
-  function smarty_modifier_iso_time($datetime) {
+  function iso_time($datetime) {
     return strftime("%H:%M:%S", strtotime($datetime));
   }
   
@@ -394,7 +399,7 @@ class CSmartyMB extends Smarty {
    * Example:  {$datetime|iso_datetime}
    * @param datetime $datetime The date to format
    */
-  function smarty_modifier_iso_datetime($datetime) {
+  function iso_datetime($datetime) {
     return strftime("%Y-%m-%d %H:%M:%S", strtotime($datetime));
   }
   
@@ -403,7 +408,7 @@ class CSmartyMB extends Smarty {
    * Example:  {$datetime|week_number_month}
    * @param datetime $datetime The date to format
    */
-  function smarty_modifier_week_number_month($datetime) {
+  function week_number_month($datetime) {
     return CMbDate::weekNumberInMonth($datetime);
   }
   
@@ -412,7 +417,7 @@ class CSmartyMB extends Smarty {
    * Example:  {$datetime|rel_datetime:$now}
    * @param datetime $datetime The date to format
    */
-  function smarty_modifier_rel_datetime($datetime, $reference = null) {
+  function rel_datetime($datetime, $reference = null) {
     if (!$datetime) {
       return;
     }
@@ -426,7 +431,7 @@ class CSmartyMB extends Smarty {
    * Example:  {$value|currency}
    * @param float $value The value to format
    */
-  function smarty_modifier_currency($value) {
+  function currency($value) {
     return number_format($value, 2, ",", " ") . " " . CAppUI::conf("currency_symbol");
   }
   
@@ -436,7 +441,7 @@ class CSmartyMB extends Smarty {
    * Example:  {$value|spancate}
    * @param float $value The value to format
    */
-  function smarty_modifier_spancate($string, $length = 80, $etc = '...', $break_words = true, $middle = false) {
+  function spancate($string, $length = 80, $etc = '...', $break_words = true, $middle = false) {
     CAppUI::requireLibraryFile("smarty/libs/plugins/modifier.truncate");
     $string = html_entity_decode($string);
     $truncated = smarty_modifier_truncate($string, $length, $etc, $break_words, $middle);
@@ -450,7 +455,7 @@ class CSmartyMB extends Smarty {
    * Example:  {$value|decabinary}
    * @param float $value The value to format
    */
-  function smarty_modifier_decabinary($value) {
+  function decabinary($value) {
     $decabinary = CMbString::toDecaBinary($value);
     return "<span title=\"$value\">$decabinary</span>";
   }
@@ -461,11 +466,11 @@ class CSmartyMB extends Smarty {
    * Example:  {$value|percent}
    * @param float $value The value to format
    */
-  function smarty_modifier_percent($value) {
+  function percent($value) {
     return  !is_null($value) ? number_format($value*100, 2) . "%" : "";
   }
   
-  function smarty_modifier_const($object, $name) {
+  function _const($object, $name) {
     // If the first arg is an instance, we get its class name
     if (!is_string($object)) {
       $object = get_class($object);
@@ -473,7 +478,7 @@ class CSmartyMB extends Smarty {
     return constant("$object::$name");
   }
   
-  function smarty_modifier_static($object, $name) {
+  function _static($object, $name) {
     if (!is_string($object)) {
       $object = get_class($object);
     }
@@ -488,7 +493,7 @@ class CSmartyMB extends Smarty {
     return $statics[$name];
   }
   
-  function smarty_modifier_static_call($callback, $args) {
+  function static_call($callback, $args) {
     $args = func_get_args();
     $callback = array_shift($args);
     $callback = explode("::", $callback);
@@ -500,7 +505,7 @@ class CSmartyMB extends Smarty {
    * Example:  {"dPfiles"|module_installed}
    * @param string $module The module name
    */
-  function smarty_modifier_module_installed($module) {
+  function module_installed($module) {
     return CModule::getInstalled($module);
   }
   
@@ -509,7 +514,7 @@ class CSmartyMB extends Smarty {
    * Example:  {"dPfiles"|module_active}
    * @param string $module The module name
    */
-  function smarty_modifier_module_active($module) {
+  function module_active($module) {
     return CModule::getActive($module);
   }
   
@@ -521,7 +526,7 @@ class CSmartyMB extends Smarty {
     );
   }
   
-  function smarty_modifier_cleanField($string){
+  function cleanField($string){
     if (!is_scalar($string)) {
       return $string;
     }
@@ -529,7 +534,7 @@ class CSmartyMB extends Smarty {
     return htmlspecialchars($string, ENT_QUOTES);
   }
   
-  function smarty_modifier_stripslashes($string){
+  function stripslashes($string){
     return stripslashes($string);
   }
   
@@ -540,7 +545,7 @@ class CSmartyMB extends Smarty {
    * @param string $text The text subject
    * @param array|string $tokens The string tokens to emphasize, space seperated if string
    */
-  function smarty_modifier_emphasize($text, $tokens, $tag = "em") {
+  function emphasize($text, $tokens, $tag = "em") {
     if (!is_array($tokens)) {
       $tokens = explode(" ", $tokens);
     }
@@ -567,7 +572,7 @@ class CSmartyMB extends Smarty {
    * @param object $option2 the value if the condition evaluates to false
    * @return object $option1 or $option2
    */
-  function smarty_modifier_ternary($value, $option1, $option2) {
+  function ternary($value, $option1, $option2) {
     return $value ? $option1 : $option2;
   }
   
@@ -576,19 +581,19 @@ class CSmartyMB extends Smarty {
    * @param object $value The condition
    * @return void
    */
-  function smarty_modifier_trace($value) {
+  function trace($value) {
     mbExport($value);
   }
   
   /**
    * @param array params tableau des parametres
-   * Cette fonction prend les mêmes paramètres que smarty_function_mb_field, mais seul object est requis.
+   * Cette fonction prend les mêmes paramètres que mb_field, mais seul object est requis.
    */
-  function smarty_function_mb_key($params, &$smarty) {
+  function mb_key($params, &$smarty) {
     $params['field'] = $params["object"]->_spec->key;
     $params['prop'] = 'ref';
     $params['hidden'] = true;
-    return $this->smarty_function_mb_field($params, $smarty);
+    return $this->mb_field($params, $smarty);
   }
   
   /**
@@ -599,7 +604,7 @@ class CSmartyMB extends Smarty {
    * - module : Module name to find script, if not provided, use global includes
    * @return HTML script node
    */
-  function smarty_function_mb_script($params, &$smarty) {
+  function mb_script($params, &$smarty) {
     // Path provided
     $path = CMbArray::extract($params, "path");
     $ajax = CMbArray::extract($params, "ajax");
@@ -639,7 +644,7 @@ class CSmartyMB extends Smarty {
    * - $template : Template name (no extension)
    * @return void
    */
-  function smarty_function_mb_include($params, &$smarty) {
+  function mb_include($params, &$smarty) {
     $template = CMbArray::extract($params, "template");
     
     // Module précisé
@@ -663,7 +668,7 @@ class CSmartyMB extends Smarty {
     $tpl_vars = $smarty->_tpl_vars;
     $smarty->_smarty_include(array(
       'smarty_include_tpl_file' => $path,
-      'smarty_include_vars' => $params
+      'smarty_include_vars'     => $params
     ));
     $smarty->_tpl_vars = $tpl_vars;
   }
@@ -676,7 +681,7 @@ class CSmartyMB extends Smarty {
    * - var: Name of the var
    * @return void
    */
-  function smarty_function_unique_id($params, &$smarty) {
+  function unique_id($params, &$smarty) {
     $var = CMbArray::extract($params, "var", null, true);
     // The dot is removed to get valide CSS ID identifiers
     $smarty->assign($var, str_replace(".", "", uniqid("", true)));
