@@ -17,7 +17,7 @@
   
   <!-- Selection du chirurgien -->
   <tr>
-    <th>{{mb_label object=$op field="chir_id"}}</th>
+    <th class="narrow">{{mb_label object=$op field="chir_id"}}</th>
     <td colspan="2">
       <select name="chir_id" class="{{$op->_props.chir_id}}"
         onchange="synchroPrat(); Value.synchronize(this); removePlageOp(true);"
@@ -37,8 +37,8 @@
   <tr>
     <th>{{mb_label object=$sejour field="service_id"}}</th>
     <td colspan="2">
-      <select name="service_id" class="{{$sejour->_props.service_id}}" onchange="synchroService(this);" style="width: 15em;">
-        <option value="">&mdash; Choisir un service</option>
+      <select name="service_id" class="{{$sejour->_props.service_id}}" onchange="Value.synchronize(this, 'editSejour');" style="width: 15em;">
+        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
         {{foreach from=$listServices item=_service}}
         <option value="{{$_service->_id}}" {{if $sejour->service_id == $_service->_id}} selected="selected" {{/if}}>
           {{$_service->_view}}
@@ -81,10 +81,10 @@
       });
       </script>
       
-      <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$sejour->DP}}" onchange="synchroService(this);" style="width: 12em" />
+      <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$sejour->DP}}" onchange="Value.synchronize(this, 'editSejour');" style="width: 12em" />
       <button type="button" class="cancel notext" onclick="$V(this.form.DP, '');" />
       <button type="button" class="search notext" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
-      <input type="hidden" name="DP" value="{{$sejour->DP}}" onchange="$V(this.form.keywords_code, this.value); synchroService(this);"/>
+      <input type="hidden" name="DP" value="{{$sejour->DP}}" onchange="$V(this.form.keywords_code, this.value); Value.synchronize(this, 'editSejour');"/>
     </td>
   </tr>
   {{/if}}
@@ -218,22 +218,30 @@
   <!-- Selection du type de chambre et du régime alimentaire-->
   {{if $conf.dPplanningOp.CSejour.easy_chambre_simple || $conf.dPplanningOp.COperation.easy_regime}}
   <tr>
+
     {{if $conf.dPplanningOp.CSejour.easy_chambre_simple}}
+      {{if $conf.dPhospi.systeme_prestations == "standard"}}
       <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
-      <td>
-        {{mb_field object=$sejour field="chambre_seule" onchange="checkChambreSejourEasy()"}}
+      <td>{{mb_field object=$sejour field="chambre_seule" onchange="checkChambreSejourEasy()"}}</td>
+      {{/if}}
+      
+      {{if $conf.dPhospi.systeme_prestations == "expert"}}
+      <td />
+      <td class="button">
+        {{if $sejour->_id}}
+        <button type="button" class="search" onclick="editPrestations('{{$sejour->_id}}')">Prestations</button>
+        {{/if}}
       </td>
-      {{else}}
+      {{/if}}
+    {{else}}
       <td colspan="2" />
     {{/if}}
    
-    {{if $conf.dPplanningOp.COperation.easy_regime}}
-      <td class="button">
-        <button type="button" class="new" onclick="popRegimes()">Régime alimentaire</button>
-      </td>
-      {{else}}
-      <td />
-    {{/if}}
+    <td class="button">
+      {{if $conf.dPplanningOp.COperation.easy_regime}}
+       {{mb_include template=regimes_alimentaires prefix=easy}}
+      {{/if}}
+    </td>
   </tr>
   {{/if}}
 

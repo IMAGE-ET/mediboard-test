@@ -20,9 +20,6 @@ $dialog       = CValue::get("dialog", 0);
 $etablissements = new CMediusers();
 $etablissements = $etablissements->loadEtablissements(PERM_READ);
 
-// Chargement des prestations
-$prestations = CPrestation::loadCurrentList();
-
 // L'utilisateur est-il un praticien
 $mediuser = CMediusers::get();
 if ($mediuser->isPraticien() and !$praticien_id) {
@@ -149,32 +146,32 @@ $where["externe"]  = "= '0'";
 $service = new CService;
 $services = $service->loadGroupList($where);
 
-// Compter les prestations journalières
+// Compter les prestations journalières système expert
 $count_prestations = CPrestationJournaliere::countCurrentList();
+
+// Chargement des prestations système standard
+$prestations = CPrestation::loadCurrentList();
 
 $sortie_sejour = mbDateTime();
 if ($sejour->sortie_reelle) {
   $sortie_sejour = $sejour->sortie_reelle;
 }
 
+// Mise à disposition de lits
+$affectation = new CAffectation();
 $where = array();
-$where["entree"] = "<= '".$sortie_sejour."'";
-$where["sortie"] = ">= '".$sortie_sejour."'";
+$where["entree"] = "<= '$sortie_sejour'";
+$where["sortie"] = ">= '$sortie_sejour'";
 $where["function_id"] = "IS NOT NULL";
-
-$affectatione = new CAffectation();
-$blocages_lit = $affectatione->loadList($where);
+$blocages_lit = $affectation->loadList($where);
 
 $where["function_id"] = "IS NULL";
-
-foreach($blocages_lit as $key => $blocage){
+foreach($blocages_lit as $blocage) {
   $blocage->loadRefLit()->loadRefChambre()->loadRefService();
   $where["lit_id"] = "= '$blocage->lit_id'";
-  if(!$sejour->_id && $affectatione->loadObject($where))
-  {
-    $affectatione->loadRefSejour();
-    $affectatione->_ref_sejour->loadRefPatient();
-    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".mbTransformTime($affectatione->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectatione->_ref_sejour->_ref_patient->_view.")";
+  if (!$sejour->_id && $affectation->loadObject($where)) {
+    $affectation->loadRefSejour()->loadRefPatient();
+    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".mbTransformTime($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
   }
 }
 
@@ -188,7 +185,6 @@ $smarty->assign("heure_entree_veille" , $heure_entree_veille);
 $smarty->assign("heure_entree_jour"   , $heure_entree_jour);
 //$smarty->assign("locked_sejour"         , $locked_sejour);
 
-$smarty->assign("prestations", $prestations);
 $smarty->assign("categorie_prat", $categorie_prat);
 $smarty->assign("sejour"        , $sejour);
 $smarty->assign("op"            , new COperation);
@@ -204,6 +200,7 @@ $smarty->assign("etablissements", $etablissements);
 $smarty->assign("listPraticiens", $listPraticiens);
 $smarty->assign("listServices"  , $services);
 
+$smarty->assign("prestations"   , $prestations);
 $smarty->assign("count_prestations", $count_prestations);
 
 $smarty->assign("hours", $hours);

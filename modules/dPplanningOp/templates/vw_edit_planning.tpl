@@ -230,10 +230,10 @@ modeExpertDisplay = function() {
   
   <!-- Mode easy -->
   <tr id="modeEasy" style="display:none;"> 
-    <td>
+    <td style="width: 60%;">
     {{mb_include template=inc_form_operation_easy}}
     </td>
-    <td class="text">
+    <td class="text" style="width: 40%;">
       <div class="big-info">
        Ceci est le <strong>mode simplifié</strong> de planification d'intervention.<br/>
        Il est nécessaire de <strong>sélectionner un protocole</strong> pour créer une intervention.<br/>

@@ -78,7 +78,7 @@ function checkSejour() {
 function checkPresta(){
   var oForm = getForm("editSejour");
   var oFormEasy = getForm("editOpEasy");
-  if($V(oForm.prestation_id) != ""){
+  if ($V(oForm.prestation_id) != ""){
     if (oForm) {
       $V(oForm.chambre_seule, "1");
     }
@@ -527,10 +527,10 @@ Main.add( function(){
     });
     </script>
     
-    <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$sejour->DP}}" onchange="if(getForm('editOp')) {synchroService(this)};" style="width: 12em" />
+    <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$sejour->DP}}" onchange="Value.synchronize(this, 'editSejour');" style="width: 12em" />
     <button type="button" class="cancel notext" onclick="$V(this.form.DP, '');" />
     <button type="button" class="search notext" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
-    <input type="hidden" name="DP" value="{{$sejour->DP}}" onchange="$V(this.form.keywords_code, this.value); if(getForm('editOp')) {synchroService(this)};"/>
+    <input type="hidden" name="DP" value="{{$sejour->DP}}" onchange="$V(this.form.keywords_code, this.value); Value.synchronize(this, 'editSejour');"/>
   </td>
 </tr>
 
@@ -552,13 +552,13 @@ Main.add( function(){
   </tbody>
 {{/if}}
 
-<tr {{if !$conf.dPplanningOp.CSejour.easy_service}}class="modeExpert"{{/if}}>
+<tr {{if !$conf.dPplanningOp.CSejour.easy_service}} class="modeExpert" {{/if}}>
   <th>
     {{mb_label object=$sejour field="service_id"}}
   </th>
   <td colspan="3">
     <select name="service_id" class="{{$sejour->_props.service_id}}" style="width: 15em"
-      onchange="if(getForm('editOp')) {synchroService(this)};">
+      onchange="Value.synchronize(this, 'editSejour');">
       <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
       {{foreach from=$listServices item=_service}}
       <option value="{{$_service->_id}}" {{if $sejour->service_id == $_service->_id}} selected="selected" {{/if}}>
@@ -805,7 +805,7 @@ Main.add( function(){
 
 <tr id="correspondant_medical">
   {{assign var="object" value=$sejour}}
-  {{mb_include template="inc_check_correspondant_medical"}}
+  {{mb_include template=inc_check_correspondant_medical}}
 </tr>
 <tr>
   <td></td>
@@ -842,98 +842,90 @@ Main.add( function(){
   </td>
 </tr>
 
-<tr {{if $mode_operation}}style="display: none;"{{/if}}>
-  <th>{{mb_label object=$sejour field="modalite" typeEnum="radio"}}</th>
-  <td colspan="3">
-    {{mb_field object=$sejour field="modalite" typeEnum="radio"}}
-  </td>
-</tr>
-
-<tr {{if $mode_operation}}style="display: none;"{{/if}}>
-  <th>{{mb_label object=$sejour field="ATNC"}}</th>
-  <td>{{mb_field object=$sejour field="ATNC"}}</td>
-  <th>{{mb_label object=$sejour field="hormone_croissance"}}</th>
-  <td>{{mb_field object=$sejour field="hormone_croissance"}}</td>  
-</tr>
-</tbody>
-
-<tr {{if !$conf.dPplanningOp.CSejour.easy_chambre_simple}}class="modeExpert"{{/if}}>
-  <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
-  <td>
-    {{mb_field object=$sejour field="chambre_seule" onchange="checkChambreSejour();"}}
-    {{if $mode_operation}}
-      {{mb_field object=$sejour field="repas_sans_sel"     hidden="hidden"}}
-      {{mb_field object=$sejour field="repas_sans_porc"    hidden="hidden"}}
-      {{mb_field object=$sejour field="repas_diabete"      hidden="hidden"}}
-      {{mb_field object=$sejour field="repas_sans_residu"  hidden="hidden"}}
-    {{/if}}
-  </td>
-  
-  {{if $mode_operation}}
-  <td colspan="2">
-    <button type="button" class="new" onclick="popRegimes()">Régime alimentaire</button>
-  </td>
-  {{else}}
-  <th class="modeExpert">{{mb_label object=$sejour field="repas_sans_sel"}}</th>
-  <td class="modeExpert">{{mb_field object=$sejour field="repas_sans_sel"}}</td>
-  {{/if}}
-</tr>
-<tbody class="modeExpert">
-{{if $prestations}}
-<tr>
-<th>{{mb_label object=$sejour field=prestation_id}}</th>
-  <td colspan="3">
-  <select name="prestation_id" onchange="checkPresta();">
-  <option value="">&mdash; Choix d'une prestation</option>
-  {{foreach from=$prestations item="_prestation"}}
-    <option value="{{$_prestation->_id}}" {{if $sejour->prestation_id == $_prestation->_id}}selected = selected{{/if}}>{{$_prestation->_view}}</option>
-  {{/foreach}}
-  </select>
-  </td>
-  {{if $mode_operation}}
-  <td colspan="2" />
-  {{/if}}
-</tr>
-{{/if}}
-{{if $sejour->_id && $count_prestations}}
-<tr>
-  <td></td>
-  <td colspan="3">
-    <button type="button" class="search" onclick="editPrestations('{{$sejour->_id}}')">Prestations</button>
-  </td>
-</tr>
-{{/if}}
-<!-- Si on est pas en mode operation, on affiche la suite -->
 {{if !$mode_operation}}
-<tr>
-  <th>{{mb_label object=$sejour field="lit_accompagnant"}}</th>
-  <td>{{mb_field object=$sejour field="lit_accompagnant"}}</td>
-  <th>{{mb_label object=$sejour field="repas_sans_porc"}}</th>
-  <td>{{mb_field object=$sejour field="repas_sans_porc"}}</td>
-</tr>
-
-<tr>
-  <th>{{mb_label object=$sejour field="isolement"}}</th>
-  <td>{{mb_field object=$sejour field="isolement"}}</td>
-  <th>{{mb_label object=$sejour field="repas_diabete"}}</th>
-  <td>{{mb_field object=$sejour field="repas_diabete"}}</td>
-</tr>
-
-<tr>
-  <th>{{mb_label object=$sejour field="television"}}</th>
-  <td>{{mb_field object=$sejour field="television"}}</td>
-  <th>{{mb_label object=$sejour field="repas_sans_residu"}}</th>
-  <td>{{mb_field object=$sejour field="repas_sans_residu"}}</td>
-</tr>
-
-<tr>
+<tr class="modeExpert">
   <th>{{mb_label object=$sejour field="forfait_se"}}</th>
   <td>{{mb_field object=$sejour field="forfait_se"}}</td>
   <th>{{mb_label object=$sejour field="forfait_sd"}}</th>
   <td>{{mb_field object=$sejour field="forfait_sd"}}</td>
 </tr>
 {{/if}}
+
+<tr {{if $mode_operation}} style="display: none;" {{/if}}>
+  <th>{{mb_label object=$sejour field="modalite" typeEnum="radio"}}</th>
+  <td colspan="3">
+    {{mb_field object=$sejour field="modalite" typeEnum="radio"}}
+  </td>
+</tr>
+
+<tr {{if $mode_operation}} style="display: none;" {{/if}}>
+  <th>{{mb_label object=$sejour field="ATNC"}}</th>
+  <td>{{mb_field object=$sejour field="ATNC"}}</td>
+  <th>{{mb_label object=$sejour field="isolement"}}</th>
+  <td>{{mb_field object=$sejour field="isolement"}}</td>
+</tr>
+
 </tbody>
+
+{{if $conf.dPhospi.systeme_prestations == "standard"}} 
+  <tr {{if !$conf.dPplanningOp.CSejour.easy_chambre_simple}} class="modeExpert" {{/if}}>
+    <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
+    <td>
+      {{mb_field object=$sejour field="chambre_seule" onchange="checkChambreSejour();"}}
+    </td>
+    
+    <td colspan="2" class="button modeExpert">
+      {{mb_include template=regimes_alimentaires prefix=expert}}
+    </td>
+  </tr>
+  
+  <tr>
+    <th>{{mb_label object=$sejour field=prestation_id}}</th>
+    <td colspan="3">
+      <select name="prestation_id" style="width: 15em;" onchange="checkPresta();">
+        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+        {{foreach from=$prestations item="_prestation"}}
+        <option value="{{$_prestation->_id}}" {{if $sejour->prestation_id == $_prestation->_id}}selected = selected{{/if}}>{{$_prestation->_view}}</option>
+        {{/foreach}}
+      </select>
+    </td>
+  
+    {{if $mode_operation}}
+    <td colspan="2" />
+    {{/if}}
+  </tr>
+    
+  {{if !$mode_operation}}
+  <tr class="modeExpert">
+    <th>{{mb_label object=$sejour field="lit_accompagnant"}}</th>
+    <td>{{mb_field object=$sejour field="lit_accompagnant"}}</td>
+    <th>{{mb_label object=$sejour field="television"}}</th>
+    <td>{{mb_field object=$sejour field="television"}}</td>
+  </tr>
+  {{/if}}
+{{/if}}
+
+{{if $conf.dPhospi.systeme_prestations == "expert"}}
+<tr>
+  <td />
+  <td class="button">
+    <div {{if !$conf.dPplanningOp.CSejour.easy_chambre_simple}} class="modeExpert" {{/if}}>
+      {{if $sejour->_id}}
+      <button type="button" class="search" onclick="editPrestations('{{$sejour->_id}}')">Prestations</button>
+      {{/if}}
+    </div>
+  </td>
+
+  <td colspan="2" class="button">
+    <div {{if !$conf.dPplanningOp.COperation.easy_regime}} class="modeExpert" {{/if}}>
+      {{mb_include template=regimes_alimentaires prefix=expert}}
+    </div>
+  </td>
+</tr>
+
+{{/if}}
+
+
 <tr>
   <td class="text">{{mb_label object=$sejour field="convalescence"}}</td>
   <td class="text" colspan="3">{{mb_label object=$sejour field="rques"}}</td>

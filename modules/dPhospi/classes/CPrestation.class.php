@@ -59,9 +59,8 @@ class CPrestation extends CMbObject {
    * @return array[CPrestation]
    */
   static function loadCurrentList() {
-    global $g;
     $prestation = new CPrestation();
-    $prestation->group_id = $g;
+    $prestation->group_id = CGroups::loadCurrent()->_id;;
     return $prestation->loadMatchingList("nom");    
   }
 }

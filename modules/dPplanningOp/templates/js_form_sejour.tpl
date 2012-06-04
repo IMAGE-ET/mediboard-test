@@ -4,6 +4,20 @@
 
 <script type="text/javascript">
 
+var Value = {
+  // Synchronize elements value between Easy and Expert forms
+  synchronize: function(element, expert) {
+    expert = expert || "editOp";
+    Console.debug(expert);
+    var other = element.form.name == expert ?
+      document.editOpEasy :
+      document.forms[expert];
+    if (other) {
+      $V(other[element.name], element.value);
+    }
+  }
+}
+
 var listCategoriePrat = {{$categorie_prat|@json}};
 
 function modifPrat(){
@@ -387,26 +401,6 @@ var OccupationServices =  {
   }
 };
 
-function popRegimes() {
-  var oForm = document.editSejour;
-  var url = new Url("dPplanningOp", "vw_regimes_alimentaires");
-  url.addParam("hormone_croissance" , $V(oForm.hormone_croissance));
-  url.addParam("repas_sans_sel"     , $V(oForm.repas_sans_sel));
-  url.addParam("repas_sans_porc"    , $V(oForm.repas_sans_porc));
-  url.addParam("repas_diabete"      , $V(oForm.repas_diabete));
-  url.addParam("repas_sans_residu"  , $V(oForm.repas_sans_residu));
-  url.pop(500, 200, "regimes");
-}
-
-function syncRegimes(hormone_croissance, repas_sans_sel, repas_sans_porc, repas_diabete, repas_sans_residu) {
-  var oForm = document.editSejour;
-  $V(oForm.hormone_croissance, hormone_croissance);
-  $V(oForm.repas_sans_sel    , repas_sans_sel);
-  $V(oForm.repas_sans_porc   , repas_sans_porc);
-  $V(oForm.repas_diabete     , repas_diabete);
-  $V(oForm.repas_sans_residu , repas_sans_residu);
-}
-
 function setAldCmu(oCurrForm) {
   oSejourForm   = getForm("editSejour");
   oEasyForm     = getForm("editOpEasy");
@@ -456,10 +450,10 @@ window.bChangePat = 0;
 window.bOldPat = 0;
 
 function editPrestations(sejour_id) {
-  var url = new Url("dPplanningOp", "ajax_vw_prestations");
+  var url = new Url("planningOp", "ajax_vw_prestations");
   url.addParam("sejour_id", sejour_id);
   url.addParam("vue_prestation", "sejour");
-  url.requestModal(800, 700);
+  url.requestModal(800, 600);
 }
 
 </script>

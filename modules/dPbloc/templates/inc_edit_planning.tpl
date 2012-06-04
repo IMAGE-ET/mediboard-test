@@ -33,10 +33,10 @@ Main.add(function(){
     exactMinutes: false, 
     minInterval: {{"CPlageOp"|static:minutes_interval}},
     minHours: {{"CPlageOp"|static:hours_start}},
-    maxHours: {{"CPlageOp"|static:hours_stop}}
+    maxHours: {{"CPlageOp"|static:hours_stop }}
   };
   Calendar.regField(oForm.debut, null, options);
-  Calendar.regField(oForm.fin, null, options);
+  Calendar.regField(oForm.fin  , null, options);
 });
 </script>
 

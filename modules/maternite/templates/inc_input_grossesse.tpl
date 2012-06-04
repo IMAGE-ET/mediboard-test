@@ -21,7 +21,7 @@
   {{if $grossesse->_id}}
     <span onmouseover="ObjectTooltip.createEx(this, '{{$grossesse->_guid}}')">{{$grossesse}}</span>
   {{else}}
-    {{tr}}CGrossesse.none_linked{{/tr}}
+    <div class="empty" style="display:inline">{{tr}}CGrossesse.none_linked{{/tr}}</div>
   {{/if}}
 </span>
 

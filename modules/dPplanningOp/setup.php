@@ -656,12 +656,12 @@ class CSetupdPplanningOp extends CSetup {
     $query = "ALTER TABLE `sejour`
       ADD `ATNC` ENUM('0','1') NOT NULL DEFAULT '0',
       ADD `hormone_croissance` ENUM('0','1') NOT NULL DEFAULT '0',
-      ADD `lit_accompagnant` ENUM('0','1') NOT NULL DEFAULT '0',
-      ADD `isolement` ENUM('0','1') NOT NULL DEFAULT '0',
-      ADD `television` ENUM('0','1') NOT NULL DEFAULT '0',
-      ADD `repas_diabete` ENUM('0','1') NOT NULL DEFAULT '0',
-      ADD `repas_sans_sel` ENUM('0','1') NOT NULL DEFAULT '0',
-      ADD `repas_sans_residu` ENUM('0','1') NOT NULL DEFAULT '0',
+      ADD `lit_accompagnant`   ENUM('0','1') NOT NULL DEFAULT '0',
+      ADD `isolement`          ENUM('0','1') NOT NULL DEFAULT '0',
+      ADD `television`         ENUM('0','1') NOT NULL DEFAULT '0',
+      ADD `repas_diabete`      ENUM('0','1') NOT NULL DEFAULT '0',
+      ADD `repas_sans_sel`     ENUM('0','1') NOT NULL DEFAULT '0',
+      ADD `repas_sans_residu`  ENUM('0','1') NOT NULL DEFAULT '0',
       CHANGE `type` `type` ENUM('comp','ambu','exte','seances','ssr','psy') NOT NULL DEFAULT 'comp';";
     $this->addQuery($query);
     $query = "UPDATE sejour SET ATNC = '1' WHERE sejour_id IN (SELECT sejour_id FROM `operations` WHERE ATNC = '1');";

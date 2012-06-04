@@ -156,16 +156,6 @@ function modifOp() {
   modifSejour();
 }
 
-var Value = {
-  // Synchronize elements value between Easy and Expert forms
-  synchronize: function(element) {
-    var oOtherForm = element.form.name == "editOp" ?
-      document.editOpEasy :
-      document.editOp;
-    $V(oOtherForm[element.name], element.value);
-  }
-}
-
 function setMinVoulu(oForm) {
   if(oForm._hour_voulu.value && !oForm._min_voulu.value) {
     oForm._min_voulu.value = "00";
@@ -183,12 +173,6 @@ function synchroPrat() {
     $V(oSejourForm.praticien_id, oOpForm.chir_id.value);
   }
   updateTime();
-}
-
-
-function synchroService(element) {
-  var oOtherForm = element.form.name == "editSejour" ? document.editOpEasy : document.editSejour;
-  $V(oOtherForm[element.name], element.value);
 }
 
 function updateEntreePrevue() {

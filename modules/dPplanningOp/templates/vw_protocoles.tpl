@@ -116,8 +116,8 @@ Main.add(function(){
           <tr>
             <th><label for="chir_id" title="Filtrer les protocoles d'un praticien">Praticien</label></th>
             <td>
-              <select name="chir_id" onchange="if (this.form.function_id) {this.form.function_id.selectedIndex=0;} reloadPage(this.form);">
-                <option value="0">&mdash; Choisissez un praticien</option>
+              <select name="chir_id" style="width: 20em;" onchange="if (this.form.function_id) {this.form.function_id.selectedIndex=0;} reloadPage(this.form);">
+                <option value="0">&mdash; {{tr}}Choose{{/tr}}</option>
                 {{foreach from=$listPrat item=curr_prat}}
                 <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}}; {{if !$curr_prat->_ref_protocoles|@count}}color: #999;{{/if}}"
                         value="{{$curr_prat->user_id}}" {{if ($chir_id == $curr_prat->user_id) && !$function_id}} selected="selected" {{/if}}>
@@ -129,8 +129,8 @@ Main.add(function(){
             <th><label for="prat_id" title="Filtrer les protocoles d'une fonction">Fonction</label></th>
             <td>
               {{if $can->admin}}
-              <select name="function_id" onchange="if (this.form.chir_id) { this.form.selectedIndex=0; } reloadPage(this.form);">
-                <option value="0">&mdash; Choisissez une fonction</option>
+              <select name="function_id" style="width: 30em;" onchange="if (this.form.chir_id) { this.form.selectedIndex=0; } reloadPage(this.form);">
+                <option value="0">&mdash; {{tr}}Choose{{/tr}}</option>
                 {{foreach from=$listFunc item=curr_function}}
                 <option class="mediuser" style="border-color: #{{$curr_function->color}}; {{if !$curr_function->_ref_protocoles|@count}}color: #999;{{/if}}"
                         value="{{$curr_function->_id}}" {{if $curr_function->_id == $function_id}}selected="selected"{{/if}}>
@@ -140,7 +140,7 @@ Main.add(function(){
               </select>
               {{/if}}
             </td>
-            <th>Recherche</th>
+            <th>{{tr}}Search{{/tr}}</th>
             <td>
               <input name="search_protocole" />
             </td>

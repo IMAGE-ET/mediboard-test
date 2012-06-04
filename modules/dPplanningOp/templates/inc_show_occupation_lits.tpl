@@ -15,5 +15,5 @@
   <div class="text" style="text-align: center">{{$occupation|string_format:"%.0f"}} %</div>
 </div>
 {{else}}
-Non disponible
+<div class="empty">{{tr}}Unavailable{{/tr}}</div>
 {{/if}}
