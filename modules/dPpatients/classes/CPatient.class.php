@@ -171,6 +171,7 @@ class CPatient extends CMbObject {
   // Form fields
   var $_vip           = null;
   var $_age           = null;
+  var $_age_month     = null;
   var $_age_assure    = null;
   var $_civilite      = null;
   var $_civilite_long = null;
@@ -382,6 +383,7 @@ class CPatient extends CMbObject {
     
     $props["_type_exoneration"]           = "enum list|".implode("|", $types_exo);
     $props["_age"]                        = "num show|1";
+    $props["_age_month"]                  = "num show|1";
     $props["_vip"]                        = "bool";
     $props["_age_assure"]                 = "num";
     
@@ -547,6 +549,10 @@ class CPatient extends CMbObject {
   
     $this->evalAge();
     
+    if ($this->_age < 2) {
+      $this->evalAgeMois();
+    }
+    
     $this->checkVIP();
     
     $this->_civilite = CAppUI::tr("CPatient.civilite.$this->civilite");
@@ -637,7 +643,7 @@ class CPatient extends CMbObject {
    */
   function evalAgeMois($date = null){
     $achieved = CMbDate::achievedDurations($this->naissance, $date);
-    return $achieved["month"];
+    return $this->_age_month = $achieved["month"];
   }
   
   /**

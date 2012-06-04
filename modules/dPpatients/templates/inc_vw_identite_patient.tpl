@@ -51,7 +51,13 @@
   
   <tr>
     <th>{{mb_label object=$patient field="_age"}}</th>
-    <td>{{mb_value object=$patient field="_age"}} ans</td>
+    <td>
+      {{if $patient->_age_month}}
+        {{mb_value object=$patient field="_age_month"}} mois
+      {{else}}
+        {{mb_value object=$patient field="_age"}} ans
+      {{/if}}
+    </td>
     <th>{{mb_label object=$patient field="tel"}}</th>
     <td>{{mb_value object=$patient field="tel"}}</td>
   </tr>
