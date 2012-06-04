@@ -96,12 +96,12 @@ class CRPU extends CMbObject {
     $spec->table = 'rpu';
     $spec->key   = 'rpu_id';
     $spec->measureable = true;
-    /*$spec->events = array(
-      "accueil" => array(
+    $spec->events = array(
+      "pec" => array(
         "reference1" => array("CSejour",  "sejour_id"),
         "reference2" => array("CPatient", "sejour_id.patient_id"),
       ),
-    );*/
+    );
     return $spec;
   }
 

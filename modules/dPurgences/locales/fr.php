@@ -141,6 +141,7 @@ $locales['CRPU-date_at-desc'] = 'Accident de travail';
 $locales['CRPU-diag_infirmier'] = 'Diagnostic infirmier';
 $locales['CRPU-diag_infirmier-court'] = 'Diag. infirimier';
 $locales['CRPU-diag_infirmier-desc'] = 'Diagnostic infirimier';
+$locales['CRPU-event-pec'] = 'Prise en charge';
 $locales['CRPU-gemsa'] = 'Code GEMSA';
 $locales['CRPU-gemsa-court'] = 'GEMSA';
 $locales['CRPU-gemsa-desc'] = 'Code GEMSA';

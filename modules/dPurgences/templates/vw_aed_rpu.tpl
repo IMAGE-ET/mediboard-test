@@ -205,6 +205,10 @@
       loadDocItems('{{$rpu->sejour_id}}', '{{$rpu->_ref_consult->_id}}');
     {{/if}}
     
+    {{if "forms"|module_active}}
+      ExObject.loadExObjects("{{$rpu->_class}}", "{{$rpu->_id}}", "ex-forms-rpu", 1);
+    {{/if}}
+    
     if (document.editAntFrm){
       document.editAntFrm.type.onchange();
     }
@@ -567,6 +571,11 @@
       
       
       <li onmouseup="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">{{tr}}CPatient.surveillance{{/tr}}</a></li>
+      
+      {{if "forms"|module_active}}
+        <li><a href="#ex-forms-rpu">Formulaires</a></li>
+      {{/if}}
+      
       <li onmouseup="showExamens('{{$consult->_id}}')"><a href="#examens">Dossier médical</a></li>
       {{if $app->user_prefs.ccam_sejour == 1 }}
         <li onmouseup="loadActes('{{$rpu->sejour_id}}')"><a href="#actes">Cotation infirmière</a></li>
@@ -588,6 +597,8 @@
     </div>
     
     <div id="constantes" style="display:none"></div>
+    <div id="ex-forms-rpu" style="display: none;"></div>
+    
     <div id="examens"    style="display:none">
       <div class="small-info">
         Aucune prise en charge médicale
