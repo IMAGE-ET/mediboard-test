@@ -91,7 +91,7 @@
   	{{mb_ditto name=date value=$_suivi->debut|date_format:$conf.date}}
 	</td>
 	<td>{{mb_value object=$_suivi field="time_debut"}}</td>
-  <td colspan="2" {{if $_suivi->_count.transmissions}}class="arretee"{{/if}}>
+  <td colspan="2" {{if $_suivi->_count.transmissions}} class="arretee" {{/if}}>
   	{{if !$readonly}}
 		  <button type="button" class="tick" onclick="addTransmissionAdm('{{$_suivi->_id}}','{{$_suivi->_class}}');" style="float: right;">Réaliser ({{$_suivi->_count.transmissions}})</button>
 		{{/if}}
@@ -101,8 +101,8 @@
 		{{/if}}
     {{mb_value object=$_suivi field="commentaire"}}
 	</td>
-	<td>
-    {{if !$readonly && $_suivi->_canEdit}}
+	<td class="narrow button {{if $_suivi->_count.transmissions}} arretee {{/if}}" style="white-space: nowrap;">
+    {{if !$readonly && $_suivi->_canEdit && !$_suivi->_count.transmissions}}
       <form name="Del-{{$_suivi->_guid}}" action="?" method="post">
         <input type="hidden" name="m" value="dPprescription" />
         {{if $_suivi instanceof CPrescriptionLineElement}}
@@ -118,7 +118,7 @@
       <button type="button" class="edit notext"
         onclick="addPrescription('{{$_suivi->_ref_prescription->object_id}}', '{{$app->user_id}}', '{{$_suivi->_id}}', '{{$_suivi->_class}}');">{{tr}}Edit{{/tr}}</button>
     {{/if}}
-    </td>
+  </td>
   {{/if}}
 
 {{if $_suivi instanceof CConsultation}}
@@ -184,7 +184,7 @@
       {{/if}}
     {{/if}}
   </td>
-  <td>
+  <td class="narrow button" style="white-space: nowrap;">
     {{if !$readonly}}
       <button type="button" class="{{if $_suivi->_canEdit}}edit{{else}}search{{/if}} notext" onclick="modalConsult('{{$_suivi->_id}}')"></button>
     {{/if}}
@@ -252,7 +252,7 @@
     {{mb_value object=$_suivi field=text}}
   </td>
   
-  <td style="white-space: nowrap;">
+  <td class="narrow button" style="white-space: nowrap;">
     {{if !$readonly && $_suivi->_canEdit}}
       <form name="Del-{{$_suivi->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="dosql" value="do_transmission_aed" />
@@ -340,7 +340,7 @@
     {{/foreach}}
   </td>
   
-  <td style="white-space: nowrap;">
+  <td class="narrow button" style="white-space: nowrap;">
     {{if !$readonly && $_suivi[0]->_canEdit}}
       
       <form name="Del-{{$_suivi[0]->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">

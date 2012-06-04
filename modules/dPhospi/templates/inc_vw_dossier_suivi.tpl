@@ -37,16 +37,15 @@ submitLineElement = function(){
   $V(oFormLineElementSuivi.commentaire, $V(oFormLineSuivi.commentaire));
 	
 	// Si la prescription de sejour n'existe pas
-	if(!$V(oFormLineElementSuivi.prescription_id)){
+	if (!$V(oFormLineElementSuivi.prescription_id)){
 	  var oFormPrescription = getForm("addPrescriptionSuiviSoins");
 		return onSubmitFormAjax(oFormPrescription);
-	} else {
-    return onSubmitFormAjax(oFormLineElementSuivi, { onComplete: function() {
-      Control.Modal.close();
-      loadSuivi('{{$sejour->_id}}');
-    }
-    });
 	}
+  
+  return onSubmitFormAjax(oFormLineElementSuivi, { onComplete: function() {
+    Control.Modal.close();
+    loadSuivi('{{$sejour->_id}}');
+  } } );
 }
 
 // Submit d'une ligne de commentaire
@@ -54,35 +53,34 @@ submitLineComment = function(){
   var oFormLineCommentSuivi = getForm('addLineCommentMedSuiviSoins');
 
   // Si la prescription de sejour n'existe pas
-  if(!$V(oFormLineCommentSuivi.prescription_id)){
+  if (!$V(oFormLineCommentSuivi.prescription_id)){
     var oFormPrescription = getForm("addPrescriptionSuiviSoins");
     return onSubmitFormAjax(oFormPrescription);
-  } else {
-    return onSubmitFormAjax(oFormLineCommentSuivi, { onComplete: function() {
-      Control.Modal.close();
-      loadSuivi('{{$sejour->_id}}');
-    }
-    });
   }
+  
+  return onSubmitFormAjax(oFormLineCommentSuivi, { onComplete: function() {
+    Control.Modal.close();
+    loadSuivi('{{$sejour->_id}}');
+  } } );
 }
 
 submitProtocoleSuiviSoins = function(){
   var oFormProtocoleSuiviSoins = getForm("applyProtocoleSuiviSoins");
 	// Si la prescription de sejour n'existe pas
-  if(!$V(oFormProtocoleSuiviSoins.prescription_id)){
+  if (!$V(oFormProtocoleSuiviSoins.prescription_id)){
     var oFormPrescription = getForm("addPrescriptionSuiviSoins");
     return onSubmitFormAjax(oFormPrescription);
-  } else {
-    return onSubmitFormAjax(oFormProtocoleSuiviSoins, { onComplete: function() {
-      Control.Modal.close();
-      if (window.updateNbTrans) {
-        updateNbTrans('{{$sejour->_id}}');
-      }
-      if (window.loadSuivi) {
-        loadSuivi('{{$sejour->_id}}');
-      }
-    } });
-  }
+  } 
+  
+  return onSubmitFormAjax(oFormProtocoleSuiviSoins, { onComplete: function() {
+    Control.Modal.close();
+    if (window.updateNbTrans) {
+      updateNbTrans('{{$sejour->_id}}');
+    }
+    if (window.loadSuivi) {
+      loadSuivi('{{$sejour->_id}}');
+    }
+  } } );
 }
 
 updatePrescriptionId = function(prescription_id){
@@ -277,9 +275,9 @@ createConsultEntree = function() {
 	       {{assign var=end value=$count_trans-$start}}
 	    {{/if}}
 	    {{assign var=mini_list value=$sejour->_ref_suivi_medical|@array_slice:$start:$end}}
-	    {{include file="../../dPhospi/templates/inc_list_transmissions.tpl" readonly=false list_transmissions=$mini_list}}
+      {{mb_include module=hospi template=inc_list_transmissions readonly=false list_transmissions=$mini_list}}
     </div>
   {{/if}}
 {{foreachelse}}
-  {{include file="../../dPhospi/templates/inc_list_transmissions.tpl" readonly=false list_transmissions=null}}
+  {{mb_include module=hospi template=inc_list_transmissions readonly=false list_transmissions=null}}
 {{/foreach}}
