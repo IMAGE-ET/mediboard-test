@@ -44,7 +44,7 @@ div.affectation.child {
 }
 
 div.affectation_resize:hover {
-  width: 20% !important;
+  width: auto !important;
 /*  z-index: 500;*/
 }
 

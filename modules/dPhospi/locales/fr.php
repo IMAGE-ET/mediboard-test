@@ -47,6 +47,7 @@ $locales['CAffectation-msg-modify'] = 'Affectation modifiée';
 $locales['CAffectation-parent_affectation_id'] = 'Affectation parente';
 $locales['CAffectation-parent_affectation_id-court'] = 'Affectation parente';
 $locales['CAffectation-parent_affectation_id-desc'] = 'Affectation parente';
+$locales['CAffectation-play_pause_temporel'] = 'Arrêter / Relancer le rafraîchissement automatique';
 $locales['CAffectation-rques'] = 'Remarques';
 $locales['CAffectation-rques-court'] = 'Rques.';
 $locales['CAffectation-rques-desc'] = 'Remarques sur l\'affectation';

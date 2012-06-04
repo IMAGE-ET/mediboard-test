@@ -173,7 +173,7 @@ foreach ($affectations as $_affectation) {
       $item_liaison->loadRefItem();
       $item_liaison->loadRefItemRealise();
       
-      $_affectation->_curr_liaison_prestation = $item_liaison;
+      $sejour->_curr_liaison_prestation = $item_liaison;
     }
   }
 }

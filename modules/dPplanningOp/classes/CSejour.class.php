@@ -188,6 +188,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_ref_suivi_medical         = null;
   var $_diagnostics_associes      = null;
   var $_ref_prestations           = null;
+  var $_curr_liaison_prestation   = null;
   
   // Filter Fields
   var $_date_min        = null;

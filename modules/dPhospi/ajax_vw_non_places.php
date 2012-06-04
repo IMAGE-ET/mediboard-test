@@ -207,6 +207,27 @@ foreach($sejours_non_affectes as $_key => $_sejour) {
       $_operation->_width_uscpo = CMbDate::position(mbDateTime("+$fin_uscpo hours +$min_operation minutes", $_operation->_datetime), max($date_min, $_sejour->entree), $period) - $_operation->_fin_offset;
     }
   }
+  
+  if ($prestation_id) {
+    $item_liaison = new CItemLiaison;
+    $where = array();
+    $ljoin = array();
+    
+    $where["sejour_id"] = "= '$_sejour->_id'";
+    $ljoin["item_prestation"] = "item_prestation.item_prestation_id = item_liaison.item_prestation_realise_id OR
+      item_prestation.item_prestation_id = item_liaison.item_prestation_id";
+    
+    $where["object_class"] = " = 'CPrestationJournaliere'";
+    $where["object_id"] = " = '$prestation_id'";
+    $item_liaison->loadObject($where, null, null, $ljoin);
+    
+    if ($item_liaison->_id) {
+      $item_liaison->loadRefItem();
+      $item_liaison->loadRefItemRealise();
+      
+      $_sejour->_curr_liaison_prestation = $item_liaison;
+    }
+  }
 }
 
 $items_prestation = array();

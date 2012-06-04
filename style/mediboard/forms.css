@@ -638,6 +638,14 @@ button.unlink:before, a.button.unlink:before {
   content: url(images/buttons/unlink.png);
 }
 
+button.play:before, a.button.play:before {
+  content: url(images/buttons/play.png);
+}
+
+button.pause:before, a.button.pause:before {
+  content: url(images/buttons/pause.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }

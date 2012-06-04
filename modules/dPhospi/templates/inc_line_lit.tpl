@@ -147,9 +147,10 @@
                       {{/if}}
                       {{if $mode_vue_reelle == "classique"}}
                         <div class="compact">
+                          <span onmouseover="ObjectTooltip.createEx(this, '{{$praticien->_guid}}')">({{$praticien->_shortview}})</span>
                           {{$_sejour->_motif_complet}}
-                          {{if $prestation_id && $_affectation->_curr_liaison_prestation}}
-                            {{assign var=liaison value=$_affectation->_curr_liaison_prestation}}
+                          {{if $prestation_id && $_sejour->_curr_liaison_prestation}}
+                            {{assign var=liaison value=$_sejour->_curr_liaison_prestation}}
                             {{assign var=item_presta value=$liaison->_ref_item}}
                             {{assign var=item_presta_realise value=$liaison->_ref_item_realise}}
                             <span
@@ -211,7 +212,7 @@
                             {{/if}}
                           {{/if}}
                         {{/if}}
-                        {{if !$in_corridor}}
+                        {{if !$in_corridor && $_affectation->sejour_id != 0}}
                           <button type="button" class="door-out notext opacity-40"
                             title="Placer dans le couloir"
                             onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"

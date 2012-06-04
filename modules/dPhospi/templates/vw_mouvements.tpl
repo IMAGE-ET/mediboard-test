@@ -155,6 +155,17 @@
     $(container).setStyle({});
   }
   
+  togglePlayPause = function(button) {
+    button.toggleClassName("play");
+    button.toggleClassName("pause");
+    if (button.hasClassName("play")) {
+      Placement.stop();
+    }
+    else {
+      Placement.resume();
+    }
+  }
+  
   Main.add(function() {
     Calendar.regField(getForm('filterMouv').date);
     var view_affectations = $("view_affectations");
@@ -220,6 +231,9 @@
         <option value="{{$_prestation->_id}}" {{if $_prestation->_id == $prestation_id}}selected="selected"{{/if}}>{{$_prestation->nom}}</option>
       {{/foreach}}
     </select>
+    
+    <button type="button" class="pause notext" onclick="togglePlayPause(this);"
+      title="{{tr}}CAffectation-play_pause_temporel{{/tr}}"></button>
   </div>
   
 </form>

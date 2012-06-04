@@ -146,10 +146,33 @@
                       {{$_sejour->_motif_complet}}
                     </span>
                     <span class="compact" style="float: right;">
-                    <em style="color: #f00;" title="Chambre seule">
-                      {{if $_sejour->chambre_seule}}CS{{else}}CD{{/if}}
-                      {{if $_sejour->prestation_id}}- {{$_sejour->_ref_prestation->code}}{{/if}}
-                    </em>
+                      {{if $prestation_id && $_sejour->_curr_liaison_prestation}}
+                        {{assign var=liaison value=$_sejour->_curr_liaison_prestation}}
+                        {{assign var=item_presta value=$liaison->_ref_item}}
+                        {{assign var=item_presta_realise value=$liaison->_ref_item_realise}}
+                        <span
+                        {{if $item_presta->_id && $item_presta_realise->_id}}
+                          style="color:
+                          {{if $item_presta->rank == $item_presta_realise->rank}}
+                            #9F8
+                          {{elseif $item_presta->rank > $item_presta_realise->rank}}
+                            #FD9
+                          {{else}}
+                            #F89
+                          {{/if}}"
+                        {{/if}}>
+                          {{if $item_presta_realise->_id}}
+                            <em>({{$item_presta_realise->nom}})</em>
+                          {{else}}
+                            <em>({{$item_presta->nom}})</em>
+                          {{/if}}
+                        </span>
+                      {{else}}
+                        <em style="color: #f00;" title="Chambre seule">
+                          {{if $_sejour->chambre_seule}}CS{{else}}CD{{/if}}
+                          {{if $_sejour->prestation_id}}- {{$_sejour->_ref_prestation->code}}{{/if}}
+                        </em>
+                      {{/if}}
                     </span>
                   </div>
                   {{foreach from=$_sejour->_ref_operations item=_operation}}
