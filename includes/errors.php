@@ -323,7 +323,10 @@ function errorHandler($code, $text, $file, $line, $context, $backtrace = null) {
   
   $log .= "</div>";
   
-  CApp::$performance[$errorCategories[$code]]++;
+  // CApp might not be ready yet as of early error handling
+  if (class_exists("CApp")) {
+    CApp::$performance[$errorCategories[$code]]++;
+  }
   
   if (ini_get("log_errors")) {
     file_put_contents(LOG_PATH, $log, FILE_APPEND);
