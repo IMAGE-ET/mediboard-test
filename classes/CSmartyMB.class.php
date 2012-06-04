@@ -226,7 +226,7 @@ class CSmartyMB extends Smarty {
       // prepend %% to avoid name conflicts with
       // with $params['auto_id'] names
       
-      // 
+      // increment this value at dev time to enforce template recompilation
       static $increment = 3;
       $_return .=  "$_filename.$increment.%$_crc32%";
     }
