@@ -1435,7 +1435,7 @@ class CPatient extends CMbObject {
     $this->notify("BeforeFillLimitedTemplate", $template);
     
     $template->addProperty("Patient - article"           , $this->_civilite  );
-    $template->addProperty("Patient - article long"      , $this->_civilite_long);
+    $template->addProperty("Patient - article long"      , ucfirst($this->_civilite_long));
     $template->addProperty("Patient - nom"               , $this->nom        );
     $template->addProperty("Patient - nom jeune fille"   , $this->nom_jeune_fille);
     $template->addProperty("Patient - prénom"            , $this->prenom     );
