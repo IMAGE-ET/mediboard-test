@@ -27,6 +27,11 @@ $filter->_admission     = CValue::get("_admission", "heure");
 $filter->_ccam_libelle  = CValue::get("_ccam_libelle", "1");
 $filter->_coordonnees   = CValue::get("_coordonnees", 0);
 
+$filter->_service     = explode(",", $filter->_service);
+$filter->praticien_id = explode(",", $filter->praticien_id);
+CMbArray::removeValue(0, $filter->praticien_id);
+CMbArray::removeValue(0, $filter->_service);
+
 $total   = 0;
 
 $sejours = new CSejour;
@@ -48,7 +53,13 @@ $sejourReq->addWhereClause("sejour.type", "!= 'urg'");
 if ($filter->_specialite or $filter->praticien_id) {
   $speChirs = new CMediusers;
   $speChirs = $speChirs->loadList(array ("function_id" => "= '$filter->_specialite'"));
-  $sejourReq->addWhereClause("sejour.praticien_id", CSQLDataSource::prepareIn(array_keys($speChirs), $filter->praticien_id));
+  
+  if (count($filter->praticien_id)) {
+    $sejourReq->addWhereClause("sejour.praticien_id", CSQLDataSource::prepareIn($filter->praticien_id));
+  }
+  else {
+    $sejourReq->addWhereClause("sejour.praticien_id", array_keys($speChirs));
+  }
 }
 
 if ($filter->_filter_type) {
@@ -100,7 +111,7 @@ foreach ($sejours as $key => &$sejour) {
   $affectation =& $sejour->_ref_first_affectation;
   $affectation->_ref_lit->loadCompleteView();
 
-  if ($filter->_service  && ($affectation->_ref_lit->_ref_chambre->service_id != $filter->_service)) {
+  if (count($filter->_service) && !in_array($affectation->_ref_lit->_ref_chambre->service_id, $filter->_service)) {
     unset($sejours[$key]);
     continue;
   }elseif(!$filter->_service && $affectation->_id && !in_array($affectation->_ref_lit->_ref_chambre->service_id, array_keys($services))){

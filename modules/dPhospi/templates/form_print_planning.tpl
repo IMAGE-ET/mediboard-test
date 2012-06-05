@@ -20,9 +20,9 @@ function popPlanning() {
   url.addElement(form._date_max);
   url.addElement(form._horodatage);
   url.addElement(form.ordre);
-  url.addElement(form._service);
+  url.addParam("service", [$V(form._service)].flatten().join(","));
   url.addElement(form._filter_type);
-  url.addElement(form.praticien_id);
+  url.addParam("praticien_id", [$V(form.praticien_id)].flatten().join(","));
   url.addElement(form._specialite);
   url.addElement(form.convalescence);
   {{if $conf.dPplanningOp.CSejour.consult_accomp}}
@@ -59,6 +59,11 @@ function changeDateCal(minChanged){
     $V(maxElement, maxDate);
     $V(maxView, maxDateView); 
   }
+}
+
+function toggleMultiple(select, multiple) {
+  select.size = multiple ? 10 : 1;
+  select.multiple = multiple;
 }
 
 </script>
@@ -110,13 +115,19 @@ function changeDateCal(minChanged){
 
         <tr>
           <th>{{mb_label object=$filter field="_service"}}</th>
-          <td colspan="2">
+          <td>
           	<select name="_service">
             	<option value="0">&mdash; {{tr}}All{{/tr}}</option>
             	{{foreach from=$listServ item=curr_serv}}
             	<option value="{{$curr_serv->service_id}}">{{$curr_serv->nom}}</option>
             	{{/foreach}}
              </select>
+           </td>
+           <td>
+             <label>
+               <input type="checkbox" name="_multiple_services" onclick="toggleMultiple(this.form._service, this.checked)"/> Multiple
+             </label>
+           <td>
          </td>
         </tr>
       </table>
@@ -126,33 +137,42 @@ function changeDateCal(minChanged){
 
       <table class="form">
         <tr>
-          <th class="category" colspan="2">Paramètres de filtre</th>
+          <th class="category" colspan="3">Paramètres de filtre</th>
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_filter_type"}}</th>
-          <td>{{mb_field object=$filter field="_filter_type" emptyLabel="All"}}</td>
+          <td colspan="2">{{mb_field object=$filter field="_filter_type" emptyLabel="All"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="praticien_id"}}</th>
-          <td><select name="praticien_id" style="width: 20em;">
-            <option value="0">&mdash; {{tr}}All{{/tr}}</option>
-            {{foreach from=$listPrat item=curr_prat}}
-              <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}">{{$curr_prat->_view}}</option>
-            {{/foreach}}
-          </select></td>
+          <td>
+            <select name="praticien_id" style="width: 20em;">
+              <option value="0">&mdash; {{tr}}All{{/tr}}</option>
+              {{foreach from=$listPrat item=curr_prat}}
+                <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}">{{$curr_prat->_view}}</option>
+              {{/foreach}}
+            </select>
+          </td>
+          <td>
+            <label>
+              <input type="checkbox" onclick="toggleMultiple(this.form.praticien_id, this.checked)"/>Multiple
+            </label>
+          </td>
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_specialite"}}</th>
-          <td><select name="_specialite" style="width: 20em;">
-            <option value="0">&mdash; {{tr}}All{{/tr}}</option>
-            {{foreach from=$listSpec item=curr_spec}}
-              <option class="mediuser" style="border-color: #{{$curr_spec->color}};" value="{{$curr_spec->function_id}}">{{$curr_spec->text}}</option>
-            {{/foreach}}
-          </select></td>
+          <td colspan="2">
+            <select name="_specialite" style="width: 20em;">
+              <option value="0">&mdash; {{tr}}All{{/tr}}</option>
+              {{foreach from=$listSpec item=curr_spec}}
+                <option class="mediuser" style="border-color: #{{$curr_spec->color}};" value="{{$curr_spec->function_id}}">{{$curr_spec->text}}</option>
+              {{/foreach}}
+            </select>
+          </td>
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="convalescence"}}</th>
-          <td>
+          <td colspan="2">
             <select name="convalescence">
               <option value="0">&mdash; Indifférent</option>
               <option value="o">avec</option>
@@ -164,7 +184,7 @@ function changeDateCal(minChanged){
         {{if $conf.dPplanningOp.CSejour.consult_accomp}}
         <tr>
           <th>{{mb_label object=$filter field="consult_accomp"}}</th>
-          <td>
+          <td colspan="2">
             <select name="consult_accomp">
               <option value="0">&mdash; Indifférent</option>
               <option value="oui">oui</option>
@@ -176,11 +196,11 @@ function changeDateCal(minChanged){
         
         <tr>
           <th>{{mb_label object=$filter field="_ccam_libelle"}}</th>
-          <td>{{mb_field object=$filter field="_ccam_libelle"}}</td>
+          <td colspan="2">{{mb_field object=$filter field="_ccam_libelle"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_coordonnees"}}</th>
-          <td>{{mb_field object=$filter field="_coordonnees"}}</td>
+          <td colspan="2">{{mb_field object=$filter field="_coordonnees"}}</td>
         </tr>
       </table>
 
