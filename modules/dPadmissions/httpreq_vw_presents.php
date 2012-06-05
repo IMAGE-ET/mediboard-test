@@ -112,8 +112,11 @@ foreach ($sejours as $sejour_id => $_sejour) {
   $dossier_medical = $patient->loadRefDossierMedical();
   $dossier_medical->loadRefsAntecedents();
   
-  // Chargment du numéro de dossier
+  // Chargement du numéro de dossier
   $_sejour->loadNDA();
+  
+  // Chargement des notes du séjour
+  $_sejour->loadRefsNotes();
 
   // Chargement des interventions
   $whereOperations = array("annulee" => "= '0'");

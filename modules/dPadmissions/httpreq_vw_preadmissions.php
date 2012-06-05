@@ -60,6 +60,7 @@ foreach($listConsultations as $curr_consult) {
     $curr_sejour->loadRefPatient();
     $curr_sejour->loadRefPraticien();
     $curr_sejour->loadNDA();
+    $curr_sejour->loadRefsNotes();
     $curr_sejour->loadRefsAffectations();
     $curr_sejour->loadRefsOperations();
     foreach($curr_sejour->_ref_affectations as $_aff) {
@@ -72,13 +73,11 @@ foreach($listConsultations as $curr_consult) {
       $curr_consult->_next_sejour_and_operation["COperation"]->loadRefSejour();
       $curr_consult->_next_sejour_and_operation["COperation"]->_ref_sejour->loadRefPraticien();
       $curr_consult->_next_sejour_and_operation["COperation"]->_ref_sejour->loadNDA();
-      $curr_consult->_next_sejour_and_operation["COperation"]->_ref_sejour->loadRefPraticien();
-      $curr_consult->_next_sejour_and_operation["COperation"]->_ref_sejour->loadNDA();
+      $curr_consult->_next_sejour_and_operation["COperation"]->_ref_sejour->loadRefsNotes();
     } elseif($curr_consult->_next_sejour_and_operation["CSejour"]) {
       $curr_consult->_next_sejour_and_operation["CSejour"]->loadRefPraticien();
       $curr_consult->_next_sejour_and_operation["CSejour"]->loadNDA();
-      $curr_consult->_next_sejour_and_operation["CSejour"]->loadRefPraticien();
-      $curr_consult->_next_sejour_and_operation["CSejour"]->loadNDA();
+      $curr_consult->_next_sejour_and_operation["CSejour"]->loadRefsNotes();
     }
   }
 }

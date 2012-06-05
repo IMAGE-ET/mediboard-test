@@ -59,6 +59,9 @@
   {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_adm->_ref_praticien}}
 </td>
 <td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+  <div style="float: right;">
+    {{mb_include module=system template=inc_object_notes object=$curr_adm}}
+  </div>
   {{mb_include module=planningOp template=inc_vw_numdos nda=$curr_adm->_NDA _doss_id=$curr_adm->_id}}
   <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_adm->_guid}}');">
   le {{$curr_adm->_entree|date_format:$conf.date}}

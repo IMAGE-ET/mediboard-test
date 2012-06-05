@@ -58,7 +58,7 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
     </th>
     
     <th>
-    {{mb_colonne class="CSejour" field="entree_prevue" order_col=$order_col order_way=$order_way url=$url}}
+      {{mb_colonne class="CSejour" field="entree_prevue" order_col=$order_col order_way=$order_way url=$url}}
     </th>
     
     <th class="narrow">Chambre</th>

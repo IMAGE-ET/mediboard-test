@@ -173,6 +173,8 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
           <a class="action" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
             <img src="images/icons/planning.png" title="{{tr}}Edit{{/tr}}" />
           </a>
+          
+          {{mb_include module=system template=inc_object_notes object=$_sejour}}
         </div>
       {{/if}}
       

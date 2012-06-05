@@ -106,6 +106,9 @@ foreach ($sejours as $sejour_id => $_sejour) {
   
   // Chargment du numéro de dossier
   $_sejour->loadNDA();
+  
+  // Chargements des notes sur le séjour
+  $_sejour->loadRefsNotes();
 
   // Chargement des interventions
   $whereOperations = array("annulee" => "= '0'");

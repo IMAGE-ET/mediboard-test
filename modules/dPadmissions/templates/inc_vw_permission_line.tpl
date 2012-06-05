@@ -61,6 +61,9 @@
 </td>
 
 <td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+  <div style="float: right;">
+    
+  </div>
   <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
     {{$_aff->entree|date_format:$conf.time}}
   </span>

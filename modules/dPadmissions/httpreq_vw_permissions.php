@@ -94,8 +94,11 @@ foreach ($affectations as $affectation_id => $affectation) {
   $sejour->loadRefPatient();
   $sejour->_ref_patient->loadIPP();
   
-  // Chargment du numéro de dossier
+  // Chargement du numéro de dossier
   $sejour->loadNDA();
+  
+  // Chargement des notes sur le séjour
+  $sejour->loadRefsNotes();
 }
 
 // Si la fonction selectionnée n'est pas dans la liste des fonction, on la rajoute
