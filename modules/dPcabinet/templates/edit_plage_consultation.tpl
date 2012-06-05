@@ -104,7 +104,7 @@ Main.add(function(){
     </script>
     <th>{{mb_label object=$plageSel field="color"}}</th>
     <td>
-      <span class="color-view" id="color-view" style="background: #{{$plageSel->color}};">
+      <span class="color-view" id="color-view" style="background: #{{if $plageSel->color}}{{$plageSel->color}}{{else}}DDDDDD{{/if}};">
         {{tr}}Choose{{/tr}}
       </span>
       <button type="button" class="search notext" onclick="ColorSelector.init()">

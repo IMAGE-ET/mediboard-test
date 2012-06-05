@@ -83,7 +83,7 @@ class CPlageconsult extends CMbObject {
       "locked"        => "bool default|0",
       "remplacant_ok" => "bool default|0",
       "desistee"      => "bool default|0",
-      "color"         => "str notNull length|6 default|DDDDDD",
+      "color"         => "str length|6 default|DDDDDD",
       
       // Form fields
       "_freq"        => "",
