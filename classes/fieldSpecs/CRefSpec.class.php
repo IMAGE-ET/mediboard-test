@@ -89,14 +89,22 @@ class CRefSpec extends CMbFieldSpec {
     }
   }
   
+  /**
+   * @param array $params Template params:
+   *   - options : array of objects with IDs
+   *   - choose  : string alternative for Choose default option
+   *   - size    : interger for size of text input 
+   * @see classes/CMbFieldSpec#getFormHtmlElement($object, $params, $value, $className)
+   */
   function getFormHtmlElement($object, $params, $value, $className) {
   	if ($options = CMbArray::extract($params, "options")) {
       $field         = htmlspecialchars($this->fieldName);
       $className     = htmlspecialchars(trim("$className $this->prop"));
 	    $extra         = CMbArray::makeXmlAttributes($params);
-
+      $choose        = CMbArray::extract($params, "choose", "Choose");
+	    $choose = CAppUI::tr($choose);
+	    
       $html = "\n<select name=\"$field\" class=\"$className\" $extra>";
-      $choose = CAppUI::tr("Choose");
       $html.= "\n<option value=\"\">&mdash; $choose</option>";
 			foreach ($options as $_option) {
 				$selected = $value == $_option->_id ? "selected=\"selected\"" : "";

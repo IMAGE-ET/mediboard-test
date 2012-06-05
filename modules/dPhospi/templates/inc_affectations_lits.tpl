@@ -336,24 +336,7 @@
     {{/if}}
     <tr class="dates">
       <td class="text" colspan="3">
-        {{if $can->edit}}
-        <form name="editChFrm{{$sejour->_id}}" action="?m=dPhospi" method="post" class="prepared">
-          <input type="hidden" name="m" value="dPplanningOp" />
-          <input type="hidden" name="dosql" value="do_sejour_aed" />
-          <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
-          {{if $sejour->chambre_seule}}
-          <input type="hidden" name="chambre_seule" value="0" />
-          <button class="change" type="submit" style="color: #f22;">
-            Chambre simple
-          </button>
-          {{else}}
-          <input type="hidden" name="chambre_seule" value="1" />
-          <button class="change" type="submit">
-            Chambre double
-          </button>
-          {{/if}}
-        </form>
-        {{/if}}
+        {{mb_include module=admissions template=inc_form_prestations edit=$can->edit}}
       </td>
     </tr>
     {{/if}}

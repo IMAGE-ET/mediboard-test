@@ -177,12 +177,16 @@ $affectation = new CAffectation();
 $affectation->entree = mbAddDateTime("08:00:00",$date);
 $affectation->sortie = mbAddDateTime("23:00:00",$date);
 
+// Chargement des prestations
+$prestations = CPrestation::loadCurrentList();
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("services_ids"          , $services_ids);
 $smarty->assign("services"              , $services);
 $smarty->assign("affectation"           , $affectation);
+$smarty->assign("prestations"           , $prestations);
 $smarty->assign("pathos"                , $pathos);
 $smarty->assign("date"                  , $date);
 $smarty->assign("demain"                , mbDate("+ 1 day", $date));

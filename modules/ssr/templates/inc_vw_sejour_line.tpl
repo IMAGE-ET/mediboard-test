@@ -135,55 +135,9 @@
   </span>
 </td>
 
-<td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   {{if !($_sejour->type == 'exte') && !($_sejour->type == 'consult') && $_sejour->annule != 1}}
-    {{if $canAdmissions->edit}}
-      <form name="editChFrm{{$_sejour->sejour_id}}" action="?" method="post">
-      <input type="hidden" name="m" value="dPplanningOp" />
-      <input type="hidden" name="dosql" value="do_sejour_aed" />
-      <input type="hidden" name="sejour_id" value="{{$_sejour->sejour_id}}" />
-      <input type="hidden" name="patient_id" value="{{$_sejour->patient_id}}" />
-      {{if $_sejour->chambre_seule}}
-        <input type="hidden" name="chambre_seule" value="0" />
-        <button class="change" type="button" style="color: #f22 !important" onclick="submitAdmission(this.form, 1);">
-          Chambre simple
-        </button>
-      {{else}}
-        <input type="hidden" name="chambre_seule" value="1" />
-        <button class="change" type="button" onclick="submitAdmission(this.form, 1);">
-          Chambre double
-        </button>
-      {{/if}}
-      </form>
-    
-      <!-- Prestations -->
-      {{if $prestations}}
-      <form name="editPrestFrm{{$_sejour->sejour_id}}" method="post">
-        <input type="hidden" name="m" value="dPplanningOp" />
-        <input type="hidden" name="dosql" value="do_sejour_aed" />
-        <input type="hidden" name="sejour_id" value="{{$_sejour->sejour_id}}" />
-        <input type="hidden" name="patient_id" value="{{$_sejour->patient_id}}" />
-        <select name="prestation_id" onchange="submitFormAjax(this.form, 'systemMsg')">
-        <option value="">&mdash; Prestation</option>
-        {{foreach from=$prestations item="_prestation"}}
-          <option value="{{$_prestation->_id}}" {{if $_sejour->prestation_id==$_prestation->_id}} selected = selected {{/if}}>{{$_prestation->_view}}</option>
-        {{/foreach}}
-        </select>
-      </form>
-      {{/if}}
-    {{else}}
-      {{if $_sejour->chambre_seule}}
-        Simple
-      {{else}}
-        Double
-      {{/if}}
-      {{if $_sejour->prestation_id && $prestations}}
-        {{assign var=_prestation_id value=$_sejour->prestation_id}}
-        <br />
-        Prest. {{$prestations.$_prestation_id->_view}}
-      {{/if}}
-    {{/if}}
-    <br />
+    {{mb_include module=admissions template=inc_form_prestations sejour=$_sejour edit=$canAdmissions->edit}}
     {{mb_include module=hospi template=inc_placement_sejour sejour=$_sejour}}
   {{/if}}  
 </td>
