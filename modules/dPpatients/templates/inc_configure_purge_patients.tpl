@@ -2,7 +2,7 @@
 
 function purgePatients() {
   var url = new Url("dPpatients", "ajax_purge_patients");
-  url.addParam("qte", 10);
+  url.addParam("qte", 5);
   url.requestUpdate("purge_patients", repeatPurge);
 }
 
@@ -25,7 +25,7 @@ function repeatPurge() {
 <table class="tbl">
   <tr>
     <th>
-      Purge des patients (par 10)
+      Purge des patients (par 5)
       <button type="button" class="tick" onclick="purgePatients();">
         GO
       </button>
