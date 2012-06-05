@@ -28,6 +28,13 @@ if (is_array($liaisons_j)) {
       $realise_id = null;
       $item_liaison = new CItemLiaison;
       
+      // Liaison utilisée pour l'affichage
+      // Pas de store
+      if ((@isset($liaison['souhait']['temp']) && !@isset($liaison['realise']['new'])) ||
+          (@isset($liaison['realise']['temp']) && !@isset($liaison['souhait']['new']))) {
+        continue;
+      }
+      
       if (isset($liaison['souhait'])) {
         if (isset($liaison['souhait']['new'])) {
           $souhait_id = $liaison['souhait']['new'];
@@ -35,10 +42,12 @@ if (is_array($liaisons_j)) {
         else {
           $souhait_id = reset($liaison['souhait']);
           $item_liaison->load(reset(array_keys($liaison['souhait'])));
+          
         }
       }
+      
       if (isset($liaison['realise'])) {
-        if (isset($liaison['souhait']['new'])) {
+        if (isset($liaison['realise']['new'])) {
           $realise_id = $liaison['realise']['new'];
         }
         else {
@@ -53,9 +62,15 @@ if (is_array($liaisons_j)) {
         $item_liaison->sejour_id = $sejour_id;
       }
       
-      $item_liaison->item_prestation_id = $souhait_id;
-      $item_liaison->item_prestation_realise_id = $realise_id;
-      $item_liaison->store();
+      // On ne store que si c'est nouvelle liaison
+      // ou un changement de niveau
+      if (!$item_liaison->_id ||
+           $item_liaison->item_prestation_id != $souhait_id ||
+           $item_liaison->item_prestation_realise_id != $souhait_id) {
+        $item_liaison->item_prestation_id = $souhait_id;
+        $item_liaison->item_prestation_realise_id = $realise_id;
+        $item_liaison->store();
+      }
     }
   }
 }

@@ -18,6 +18,10 @@
     });
     Control.Modal.close();
   }
+  
+  switchToNew = function(input) {
+    input.name = input.name.replace("[temp]", "[new]");
+  }
 </script>
 {{math equation=x+2 x=$dates|@count assign="colspan"}}
 
@@ -144,7 +148,9 @@
                         <label>
                           <input type="radio"
                             name="liaisons_j[{{$prestation_id}}][{{$_date}}][souhait][{{$liaison->_id}}]"
-                            onclick="var elt_hidden = this.next(); $V(elt_hidden, this.checked ? '{{$_item->_id}}' : 0);"
+                            {{if $liaison->_id == "temp"}}
+                              onclick="switchToNew(this)"
+                            {{/if}}
                             {{if $liaison->item_prestation_id == $_item->_id}}checked="checked"{{/if}} value="{{$_item->_id}}"/>{{$_item->nom}}
                         </label>
                       {{/foreach}}
@@ -160,7 +166,9 @@
                           <label>
                             <input type="radio"
                               name="liaisons_j[{{$prestation_id}}][{{$_date}}][realise][{{$liaison->_id}}]"
-                              onclick="var elt_hidden = this.next(); $V(elt_hidden, this.checked ? '{{$_item->_id}}' : 0);"
+                              {{if $liaison->_id == "temp"}}
+                                onclick="switchToNew(this)"
+                              {{/if}}
                               {{if $liaison->item_prestation_realise_id == $_item->_id}}checked="checked"{{/if}} value="{{$_item->_id}}"/>{{$_item->nom}}
                           </label>
                         {{/foreach}}
@@ -206,6 +214,8 @@
                 {{else}}
                   {{$item_presta->nom}}
                 {{/if}}
+              {{elseif $item_presta_realise->_id}}
+                {{$item_presta_realise->nom}}
               {{/if}}
             </td>
           {{/foreach}}

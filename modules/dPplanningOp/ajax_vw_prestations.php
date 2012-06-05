@@ -80,72 +80,89 @@ foreach ($items_liaisons as $_item_liaison) {
 
 $date_temp = mbDate($sejour->entree);
 
-if (isset($liaisons_j[$date_temp])) {
-  $liaisons_j_date =& $liaisons_j[$date_temp];
-  $save_state = array();
+while (!isset($liaisons_j[$date_temp]) && $date_temp < mbDate($sejour->sortie)) {
+  $date_temp = mbDate("+1 day", $date_temp);
+}
+
+$liaisons_j_date =& $liaisons_j[$date_temp];
+$save_state = array();
+
+foreach ($prestations_j as $_prestation_id => $_prestation) {
+  $item_liaison = new CItemLiaison;
+  $item_liaison->_id = "temp";
+  $item_liaison->loadRefItem();
+  $item_liaison->loadRefItemRealise();
+  
+  if (isset($liaisons_j_date[$_prestation_id])) {
+    $save_liaison = $liaisons_j_date[$_prestation_id];
+    
+      $item_liaison->item_prestation_id         = $save_liaison->item_prestation_id;
+      $item_liaison->item_prestation_realise_id = $save_liaison->item_prestation_realise_id;
+      $item_liaison->_ref_item->_id             = $save_liaison->_ref_item->_id;
+      $item_liaison->_ref_item->nom             = $save_liaison->_ref_item->nom;
+      $item_liaison->_ref_item->rank            = $save_liaison->_ref_item->rank;
+      $item_liaison->_ref_item_realise->_id     = $save_liaison->_ref_item_realise->_id;
+      $item_liaison->_ref_item_realise->nom     = $save_liaison->_ref_item_realise->nom;
+      $item_liaison->_ref_item_realise->rank    = $save_liaison->_ref_item_realise->rank;
+    
+    $save_state[$_prestation_id] = $item_liaison;
+  }
+  else {
+    $save_state[$_prestation_id] = $item_liaison;
+    $liaisons_j_date[$_prestation_id] = $item_liaison;
+  }
+}
+
+foreach ($dates as $_date => $_value) {
+  if ($_date <= $date_temp) {
+    continue;
+  }
+  if (!isset($liaisons_j[$_date])) {
+    //mbTrace($_date);
+    $liaisons_j[$_date] = array();
+  }
+  $liaisons_j_date =& $liaisons_j[$_date];
   
   foreach ($prestations_j as $_prestation_id => $_prestation) {
     $item_liaison = new CItemLiaison;
-    $item_liaison->_id = "new";
+    $item_liaison->_id = "temp";
     $item_liaison->loadRefItem();
     $item_liaison->loadRefItemRealise();
     
     if (isset($liaisons_j_date[$_prestation_id])) {
       $save_liaison = $liaisons_j_date[$_prestation_id];
-      $item_liaison->_ref_item->_id             = $save_liaison->item_prestation_id;
-      $item_liaison->_ref_item->nom             = $save_liaison->_ref_item->nom;
-      $item_liaison->_ref_item->rank            = $save_liaison->_ref_item->rank;
-      $item_liaison->_ref_item_realise->_id     = $save_liaison->item_prestation_realise_id;
-      $item_liaison->_ref_item_realise->nom     = $save_liaison->_ref_item_realise->nom;
-      $item_liaison->_ref_item_realise->rank    = $save_liaison->_ref_item_realise->rank;
+      
+        $item_liaison->item_prestation_id         = $save_liaison->item_prestation_id;
+        $item_liaison->item_prestation_realise_id = $save_liaison->item_prestation_realise_id;
+        $item_liaison->_ref_item->_id             = $save_liaison->_ref_item->_id;
+        $item_liaison->_ref_item->nom             = $save_liaison->_ref_item->nom;
+        $item_liaison->_ref_item->rank            = $save_liaison->_ref_item->rank;
+        $item_liaison->_ref_item_realise->_id     = $save_liaison->_ref_item_realise->_id;
+        $item_liaison->_ref_item_realise->nom     = $save_liaison->_ref_item_realise->nom;
+        $item_liaison->_ref_item_realise->rank    = $save_liaison->_ref_item_realise->rank;
+      
       $save_state[$_prestation_id] = $item_liaison;
     }
     else {
-      $save_state[$_prestation_id] = $liaisons_j_date[$_prestation_id] = $item_liaison;
+      $save_liaison = $save_state[$_prestation_id];
+      
+        $item_liaison->item_prestation_id         = $save_liaison->item_prestation_id;
+        $item_liaison->item_prestation_realise_id = $save_liaison->item_prestation_realise_id;
+        $item_liaison->_ref_item->_id             = $save_liaison->_ref_item->_id;
+        $item_liaison->_ref_item->nom             = $save_liaison->_ref_item->nom;
+        $item_liaison->_ref_item->rank            = $save_liaison->_ref_item->rank;
+        $item_liaison->_ref_item_realise->_id     = $save_liaison->_ref_item_realise->_id;
+        $item_liaison->_ref_item_realise->nom     = $save_liaison->_ref_item_realise->nom;
+        $item_liaison->_ref_item_realise->rank    = $save_liaison->_ref_item_realise->rank;
+      
+      $liaisons_j_date[$_prestation_id] = $item_liaison;
+      
     }
   }
-  
-  foreach ($dates as $_date => $_value) {
-    if ($_date == $date_temp) {
-      continue;
-    }
-    if (!isset($liaisons_j[$_date])) {
-      $liaisons_j[$_date] = array();
-    }
-    $liaisons_j_date =& $liaisons_j[$_date];
-    foreach ($prestations_j as $_prestation_id => $_prestation) {
-      $item_liaison = new CItemLiaison;
-      $item_liaison->_id = "new";
-      $item_liaison->loadRefItem();
-      $item_liaison->loadRefItemRealise();
-      
-      if (isset($liaisons_j_date[$_prestation_id])) {
-        $save_liaison = $liaisons_j_date[$_prestation_id];
-        $item_liaison->_ref_item->_id             = $save_liaison->_ref_item->_id;
-        $item_liaison->_ref_item->nom             = $save_liaison->_ref_item->nom;
-        $item_liaison->_ref_item->rank            = $save_liaison->_ref_item->rank;
-        $item_liaison->_ref_item_realise->_id     = $save_liaison->_ref_item_realise->_id;
-        $item_liaison->_ref_item_realise->nom     = $save_liaison->_ref_item_realise->nom;
-        $item_liaison->_ref_item_realise->rank    = $save_liaison->_ref_item_realise->rank;
-        $save_state[$_prestation_id] = $item_liaison;
-      }
-      else {
-        $save_liaison = $save_state[$_prestation_id];
-        
-        $item_liaison->_ref_item->_id             = $save_liaison->_ref_item->_id;
-        $item_liaison->_ref_item->nom             = $save_liaison->_ref_item->nom;
-        $item_liaison->_ref_item->rank            = $save_liaison->_ref_item->rank;
-        $item_liaison->_ref_item_realise->_id     = $save_liaison->_ref_item_realise->_id;
-        $item_liaison->_ref_item_realise->nom     = $save_liaison->_ref_item_realise->nom;
-        $item_liaison->_ref_item_realise->rank    = $save_liaison->_ref_item_realise->rank;
-        $liaisons_j_date[$_prestation_id] = $item_liaison;
-      }
-    }
-  }   
 }
 
 $empty_liaison = new CItemLiaison;
-$empty_liaison->_id = "new";
+$empty_liaison->_id = "temp";
 $empty_liaison->loadRefItem();
 $empty_liaison->loadRefItemRealise();
 $smarty = new CSmartyDP;
