@@ -51,19 +51,25 @@ $where = array(
 );
 $base->loadObject($where);
 
+// Nombre de patients
+$patient = new CPatient();
+$nb_patients = $patient->countList();
+
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("active_types"    , $active_types    );
+$smarty->assign("active_types"    , $active_types);
 $smarty->assign("active_appareils", $active_appareils);
-$smarty->assign("all_types"    , $all_types    );
-$smarty->assign("all_appareils", $all_appareils);
+$smarty->assign("all_types"       , $all_types);
+$smarty->assign("all_appareils"   , $all_appareils);
 
-$smarty->assign("pass", CValue::get("pass"));
+$smarty->assign("pass"        , CValue::get("pass"));
 $smarty->assign("departements", $departements);
-$smarty->assign("base", $base);
-$smarty->assign("group", $group);
-$smarty->assign("services", $services);
+$smarty->assign("base"        , $base);
+$smarty->assign("group"       , $group);
+$smarty->assign("services"    , $services);
+
+$smarty->assign("nb_patients", $nb_patients);
 
 $smarty->display("configure.tpl");
 

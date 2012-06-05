@@ -10,6 +10,7 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
   <li><a href="#CConstantesMedicales">{{tr}}CConstantesMedicales{{/tr}}</a></li>
   <li><a href="#CMedecin"       >{{tr}}CMedecin{{/tr}}       </a></li>
   <li><a href="#INSEE"          >{{tr}}INSEE{{/tr}}          </a></li>
+  <li><a href="#Purge"          >{{tr}}Purge{{/tr}}          </a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -41,5 +42,9 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
 
 <div id="INSEE" style="display: none;">
 {{mb_include template=inc_configure_insee}}
+</div>
+
+<div id="Purge" style="display: none;">
+{{mb_include template=inc_configure_purge_patients}}
 </div>
 
