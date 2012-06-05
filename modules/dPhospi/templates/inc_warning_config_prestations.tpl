@@ -1,4 +1,4 @@
-{{if $conf.dPhospi.prestations != $wanted}} 
+{{if $conf.dPhospi.systeme_prestations != $wanted}} 
 <div class="small-warning">
 La <a href="?m=hospi&tab=configure">configuration</a> du 
 <strong>{{tr}}config-dPhospi-systeme_prestations{{/tr}} 
