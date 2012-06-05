@@ -6,6 +6,12 @@ function purgePatients() {
   url.requestUpdate("purge_patients");
 }
 
+function repeatPurge() {
+  if($V($("check_repeat_purge"))) {
+    purgePatients();
+  }
+}
+
 </script>
 
 <div class="big-warning">
@@ -17,13 +23,19 @@ function purgePatients() {
   </strong>
 </div>
 <table class="tbl">
-  <th>
-    Purge des patients (par 10)
-    <button type="button" class="tick" onclick="purgePatients();">
-      GO
-    </button>
-  </th>
-  <td id="purge_patients">
-    <div class="small-info">{{$nb_patients}} patients dans la base</div>
-  </td>
+  <tr>
+    <th>
+      Purge des patients (par 10)
+      <button type="button" class="tick" onclick="purgePatients();">
+        GO
+      </button>
+      <br />
+      <input type="checkbox" name="repeat_purge" id="check_repeat_purge"/> Relancer automatiquement
+    </th>
+  </tr>
+  <tr>
+    <td id="purge_patients">
+      <div class="small-info">{{$nb_patients}} patients dans la base</div>
+    </td>
+  </tr>
 </table>

@@ -19,20 +19,25 @@ $qte = CValue::get("qte", 1);
 $listPatients = $patient->loadList(null, null, $qte);
 
 foreach($listPatients as $_patient) {
+  CAppUI::setMsg($_patient->_view, UI_MSG_OK);
   if($msg = $_patient->purge()) {
-    //CAppUI::displayAjaxMsg($msg, UI_MSG_ERROR);
+    CAppUI::setMsg($msg, UI_MSG_ALERT);
     $error++;
-  } else {
-    $suppr++;
+    continue;
   }
+  CAppUI::setMsg("patient supprimé", UI_MSG_OK);
+  $suppr++;
 }
 
 // Nombre de patients
 $nb_patients = $patient->countList();
 
+CAppUI::callbackAjax("repeatPurge");
+
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("resultsMsg" , CAppUI::getMsg());
 $smarty->assign("suppr"      , $suppr);
 $smarty->assign("error"      , $error);
 $smarty->assign("nb_patients", $nb_patients);
