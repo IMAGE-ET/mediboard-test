@@ -3,7 +3,7 @@
 function purgePatients() {
   var url = new Url("dPpatients", "ajax_purge_patients");
   url.addParam("qte", 10);
-  url.requestUpdate("purge_patients");
+  url.requestUpdate("purge_patients", repeatPurge);
 }
 
 function repeatPurge() {

@@ -32,8 +32,6 @@ foreach($listPatients as $_patient) {
 // Nombre de patients
 $nb_patients = $patient->countList();
 
-CAppUI::callbackAjax("repeatPurge");
-
 // Création du template
 $smarty = new CSmartyDP();
 
