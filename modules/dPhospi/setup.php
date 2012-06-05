@@ -624,7 +624,12 @@ class CSetupdPhospi extends CSetup {
                 CHANGE `movement_type` `movement_type` VARCHAR (4) NOT NULL";
     $this->addQuery($query);
     
-    $this->mod_version = "0.66";
+    $this->makeRevision("0.66");
+    $query = "ALTER TABLE `prestation_journaliere` 
+      ADD `desire` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.67";
   }
 }
 ?>

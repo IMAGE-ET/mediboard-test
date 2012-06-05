@@ -19,6 +19,17 @@
     Control.Modal.close();
   }
   
+  autoRealiser = function(input) {
+    var name = input.name.replace("souhait", "realise").replace("new", "temp");
+    
+    $A(input.form.elements[name]).each(function(elt) {
+      if (elt.value == input.value) {
+        elt.checked = "checked";
+        return;
+      }
+    });
+  }
+  
   switchToNew = function(input) {
     input.name = input.name.replace("[temp]", "[new]");
   }
@@ -121,8 +132,6 @@
               <strong>{{$_date|date_format:"%d/%m"}} {{$day}}</strong>
             </span>
             
-            
-            
             <div class="modal" id="edit_{{$_date}}" style="display: none;">
               <table class="form">
                 <th class="title" colspan="2">
@@ -148,33 +157,36 @@
                         <label>
                           <input type="radio"
                             name="liaisons_j[{{$prestation_id}}][{{$_date}}][souhait][{{$liaison->_id}}]"
-                            {{if $liaison->_id == "temp"}}
-                              onclick="switchToNew(this)"
-                            {{/if}}
+                              onclick="
+                              {{if $liaison->_id == "temp"}}
+                                switchToNew(this)
+                              {{/if}}
+                              {{if $_prestation->desire}}
+                                autoRealiser(this);
+                              {{/if}}"
+                            
                             {{if $liaison->item_prestation_id == $_item->_id}}checked="checked"{{/if}} value="{{$_item->_id}}"/>{{$_item->nom}}
                         </label>
                       {{/foreach}}
                     </td>
                   </tr>
-                  {{if $vue_prestation == "all"}}
-                    <tr>
-                      <th>
-                        Réalisé
-                      </th>
-                      <td>
-                        {{foreach from=$_prestation->_ref_items item=_item}}
-                          <label>
-                            <input type="radio"
-                              name="liaisons_j[{{$prestation_id}}][{{$_date}}][realise][{{$liaison->_id}}]"
-                              {{if $liaison->_id == "temp"}}
-                                onclick="switchToNew(this)"
-                              {{/if}}
-                              {{if $liaison->item_prestation_realise_id == $_item->_id}}checked="checked"{{/if}} value="{{$_item->_id}}"/>{{$_item->nom}}
-                          </label>
-                        {{/foreach}}
-                      </td>
-                    </tr>
-                  {{/if}}
+                  <tr {{if $vue_prestation != "all"}}style="display: none;"{{/if}}>
+                    <th>
+                      Réalisé
+                    </th>
+                    <td>
+                      {{foreach from=$_prestation->_ref_items item=_item}}
+                        <label>
+                          <input type="radio"
+                            name="liaisons_j[{{$prestation_id}}][{{$_date}}][realise][{{$liaison->_id}}]"
+                            {{if $liaison->_id == "temp"}}
+                              onclick="switchToNew(this)"
+                            {{/if}}
+                            {{if $liaison->item_prestation_realise_id == $_item->_id}}checked="checked"{{/if}} value="{{$_item->_id}}"/>{{$_item->nom}}
+                        </label>
+                      {{/foreach}}
+                    </td>
+                  </tr>
                 {{/foreach}}
                 <tr>
                   <td class="button" colspan="2">

@@ -15,6 +15,7 @@ class CPrestationJournaliere extends CMbObject{
   // DB Fields
   var $nom      = null;
   var $group_id = null;
+  var $desire  = null;
   
   // Form fields
   var $_count_items = 0;
@@ -31,6 +32,7 @@ class CPrestationJournaliere extends CMbObject{
     $specs = parent::getProps();
     $specs["nom"]       = "str notNull";
     $specs["group_id"]  = "ref notNull class|CGroups";
+    $specs["desire"]    = "bool default|0";
     
     return $specs;
   }

@@ -28,6 +28,16 @@
         {{mb_field object=$prestation field=nom}}
       </td>
     </tr>
+    {{if $prestation instanceof CPrestationJournaliere}}
+    <tr>
+      <th>
+        {{mb_label object=$prestation field=desire}}
+      </th>
+      <td>
+        {{mb_field object=$prestation field=desire}}
+      </td>
+    </tr>
+    {{/if}}
     <tr>
       <td colspan="2" class="button">
         <button type="button" class="save" onclick="this.form.onsubmit()">
