@@ -155,7 +155,9 @@ class CActe extends CMbMetaObject {
     if ($msg = parent::delete()){
       return $msg;
     }
-    return $this->updateMontant();
+    if(!$this->_purge) {
+      return $this->updateMontant();
+    }
   }
 }
 
