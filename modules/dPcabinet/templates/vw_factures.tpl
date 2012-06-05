@@ -7,13 +7,16 @@ refreshList = function(){
   if(!oForm._pat_name.value){
     oForm.patient_id.value = '';
   }
-  var url = new Url("cabinet" , "vw_factures");
+  var url = new Url("cabinet" , "vw_factures", "tab");
   url.addParam("etat_cloture" , $V(oForm.etat_cloture) ? 1 : 0 );
   url.addParam("etat_ouvert"  , $V(oForm.etat_ouvert) ? 1 : 0 );
   url.addParam("patient_id"   , oForm.patient_id.value);
   url.addParam("chirSel"      , oForm.chirSel.value);
+  
+  url.addParam("_date_min"    , oForm._date_min.value);
+  url.addParam("_date_max"    , oForm._date_max.value);
   url.addParam("no_finish_reglement" , $V(oForm.no_finish_reglement) ? 1 : 0);
-  url.requestUpdate('factures');
+  url.redirect();
 }
   
 viewFacture = function(element, factureconsult_id){
@@ -33,6 +36,10 @@ printFacture = function(factureconsult_id, edit_justificatif, edit_bvr) {
   url.addParam('suppressHeaders', '1');
   url.popup(1000, 600);
 }
+Main.add(function () {
+  Calendar.regField(getForm("choice-facture")._date_min, null);
+  Calendar.regField(getForm("choice-facture")._date_max, null);
+});
 </script>
 
 <div id="factures">
@@ -41,16 +48,17 @@ printFacture = function(factureconsult_id, edit_justificatif, edit_bvr) {
     <input type="hidden" name="tab" value="{{$tab}}" />
     <table class="form" name="choix_type_facture">
       <tr>
-        <th>Afficher les factures:</th>
+        <th class="title" colspan="6">Afficher les factures</th>
+      </tr>
+      <tr>
+        <th>Depuis le</th>
+        <td>{{mb_field object=$filter field="_date_min" form="printFrm" canNull="false" register=true onchange="refreshList()"}}</td>
+        <th style="width:100px;"></th>
         <td>
-          <label>
             <input name="etat_ouvert" value="1" type="checkbox" {{if $etat_ouvert == 1}}checked="checked"{{/if}} onchange="refreshList();" />
-            Ouvertes 
-          </label> 
-         <label>
+            Ouvertes
            <input name="etat_cloture" value="1" type="checkbox" {{if $etat_cloture == 1}}checked="checked"{{/if}} onchange="refreshList();" />
            Cloturées 
-         </label>
         </td>
         <th>Patient</th>
         <td>
@@ -69,6 +77,8 @@ printFacture = function(factureconsult_id, edit_justificatif, edit_bvr) {
         </td>
       </tr>
       <tr>
+        <th>Jusqu'au</th>
+        <td>{{mb_field object=$filter field="_date_max" form="printFrm" canNull="false" register=true onchange="refreshList()"}}</td>
         <th></th>
         <td>
           <label>

@@ -10,6 +10,8 @@
 
 CCanDo::checkEdit();
 
+$date_min           = CValue::getOrSession("_date_min", mbDate());
+$date_max           = CValue::getOrSession("_date_max", mbDate());
 $etat               = CValue::getOrSession("etat", "ouvert");
 $etat_cloture       = CValue::getOrSession("etat_cloture", 1);
 $etat_ouvert        = CValue::getOrSession("etat_ouvert", 1);
@@ -28,28 +30,32 @@ $patient->load($patient_id);
 $user = new CMediusers();
 $listChir =  $user->loadPraticiens(PERM_EDIT) ;
 
-$cloture = "NULL";
-if($etat_cloture){
-	$cloture = "NOT NULL";
-}
-
 //Tri des factures ayant un chir dans une de ses consultations
 $factures= array();
 $facture = new CFactureConsult();
 
+$where = array();
+$where["ouverture"] = "BETWEEN '$date_min' AND '$date_max'";
+
+if($etat_cloture && !$etat_ouvert){
+  $where["cloture"] = "BETWEEN '$date_min' AND '$date_max'";
+}
+elseif($etat_cloture && $etat_ouvert){
+	 $where[] = "cloture BETWEEN '$date_min' AND '$date_max' OR cloture IS NULL";
+}
+elseif(!$etat_cloture && $etat_ouvert){
+	$where["cloture"] = "IS NULL";
+}
+
 if ($chirSel){
 	$ljoin = array();
-	$where = array();
 	
 	$ljoin["consultation"] = "factureconsult.factureconsult_id = consultation.factureconsult_id" ;
 	$ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id" ;
 	
 	$where["consultation.factureconsult_id"] =" IS NOT NULL ";
 	$where["plageconsult.chir_id"] =" = '$chirSel' ";
-	
-	if(!($etat_ouvert && $etat_cloture)){
-		$where["factureconsult.cloture"] =" IS $cloture ";
-	}
+
 	if($patient_id){
 		$where["factureconsult.patient_id"] =" = '$patient_id' ";
 	}
@@ -61,7 +67,8 @@ if ($chirSel){
 	$factures = $facture->loadList($where, $order, $limit, null, $ljoin);
 }
 else{
-	$factures = $facture->loadList("cloture IS $cloture AND patient_id = '$patient_id' ", "ouverture ASC", 50);
+  $where["patient_id"] = "= '$patient_id'";	
+	$factures = $facture->loadList( $where , "ouverture ASC", 50);
 }
 
 if($no_finish_reglement){
@@ -101,6 +108,10 @@ if(CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotat
 	$acte_tarmed->quantite = 1;
 }
 
+$filter = new CConsultation();
+$filter->_date_min = $date_min;
+$filter->_date_max = $date_max;
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -116,6 +127,7 @@ $smarty->assign("facture"       , $facture);
 $smarty->assign("etat_ouvert"   , $etat_ouvert);
 $smarty->assign("etat_cloture"  , $etat_cloture);
 $smarty->assign("date"          , mbDate());
+$smarty->assign("filter"        , $filter);
 $smarty->assign("no_finish_reglement"      ,$no_finish_reglement);
 
 $smarty->display("vw_factures.tpl");
