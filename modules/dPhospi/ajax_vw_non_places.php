@@ -154,22 +154,24 @@ if ($item_prestation_id && $prestation_id) {
   $where["item_liaison.item_prestation_id"] = " = '$item_prestation_id'";
 }
 
-$sejours_non_affectes = $sejour->loadList($where, $order, null, null, $ljoin);
+$sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
-$praticiens = CMbObject::massLoadFwdRef($sejours_non_affectes, "praticien_id");
-CMbObject::massLoadFwdRef($sejours_non_affectes, "prestation_id");
-CMbObject::massLoadFwdRef($sejours_non_affectes, "patient_id");
+$praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
+CMbObject::massLoadFwdRef($sejours, "prestation_id");
+CMbObject::massLoadFwdRef($sejours, "patient_id");
 CMbObject::massLoadFwdRef($praticiens, "function_id");
+$services = CMbObject::massLoadFwdRef($sejours, "service_id");
 
+$sejours_non_affectes = array();
 $functions_filter = array();
 $operations = array();
 
-foreach($sejours_non_affectes as $_key => $_sejour) {
+foreach($sejours as $_key => $_sejour) {
   $_sejour->loadRefPrestation();
   $_sejour->loadRefPraticien()->loadRefFunction();
   $functions_filter[$_sejour->_ref_praticien->function_id] = $_sejour->_ref_praticien->_ref_function;
   if ($filter_function && $filter_function != $_sejour->_ref_praticien->function_id) {
-    unset($sejours_non_affectes[$_key]);
+    unset($sejours[$_key]);
   }
   else {
     $_sejour->_entree_offset = CMbDate::position(max($date_min, $_sejour->entree), $date_min, $period);
@@ -228,6 +230,13 @@ foreach($sejours_non_affectes as $_key => $_sejour) {
       $_sejour->_curr_liaison_prestation = $item_liaison;
     }
   }
+  
+  if (!$_sejour->service_id) {
+    @$sejours_non_affectes["np"][] = $_sejour;
+  }
+  else {
+    @$sejours_non_affectes[$_sejour->service_id][] = $_sejour;
+  }
 }
 
 $items_prestation = array();
@@ -255,16 +264,13 @@ $affectation = new CAffectation;
 
 $affectations = $affectation->loadList($where, "entree ASC", null, null, $ljoin);
 $sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
-$services = CMbObject::massLoadFwdRef($affectations, "service_id");
+$services = $services + CMbObject::massLoadFwdRef($affectations, "service_id");
 $patients = CMbObject::massLoadFwdRef($sejours, "patient_id");
 $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
 CMbObject::massLoadFwdRef($praticiens, "function_id");
 
 $operations = array();
-
 $suivi_affectation = false;
-
-$couloirs = array();
 
 foreach ($affectations as $_affectation) {
   $lit = new CLit;
@@ -315,8 +321,10 @@ foreach ($affectations as $_affectation) {
   $lit->_lines = array();
   $lit->_lines[] = $_affectation->_id;
   
-  $couloirs[$_affectation->service_id][] = $lit;
+  @$sejours_non_affectes[$_affectation->service_id][] = $lit;
 }
+
+ksort($sejours_non_affectes, SORT_STRING);
 
 $sejour = new CSejour;
 $sejour->_type_admission = $_type_admission;
@@ -342,7 +350,6 @@ $smarty->assign("items_prestation", $items_prestation);
 $smarty->assign("item_prestation_id", $item_prestation_id);
 $smarty->assign("prestation_id", $prestation_id);
 $smarty->assign("td_width", 84.2 / $nb_ticks);
-$smarty->assign("couloirs", $couloirs);
 $smarty->assign("mode_vue_tempo", "classique");
 $smarty->assign("affectations", $affectations);
 $smarty->assign("services", $services);
