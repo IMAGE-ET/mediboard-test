@@ -325,7 +325,7 @@ loadConstantesMedicales  = function(context_guid) {
     </td>
     <td style="width: 25%;">
       {{mb_title object=$patient field=naissance}}: 
-      {{mb_value object=$patient field=naissance}} ({{$patient->_age}} ans)
+      {{mb_value object=$patient field=naissance}} ({{$patient->_age}})
     </td>
     <td style="width: 25%;">
       {{mb_title object=$patient->_ref_constantes_medicales field=taille}}:

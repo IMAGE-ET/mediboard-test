@@ -84,7 +84,7 @@ if($mode == "csv") {
         $line .= '"'.$curr_plage->fin.'";';
         $line .= '"'.$curr_op->rank.'";';
         $line .= '"'.$curr_op->_rank_reel.'";';
-        $line .= '"'.$curr_op->_ref_sejour->_ref_patient->_view.'" ('.$curr_op->_ref_sejour->_ref_patient->_age.' ans);';
+        $line .= '"'.$curr_op->_ref_sejour->_ref_patient->_view.'" ('.$curr_op->_ref_sejour->_ref_patient->_age.');';
         $line .= '"'.$curr_op->_ref_sejour->type.'";';
         $line .= '"'.$curr_op->_ref_chir->_view.'";';
         $line .= '"'.$curr_op->_ref_anesth->_view.'";';

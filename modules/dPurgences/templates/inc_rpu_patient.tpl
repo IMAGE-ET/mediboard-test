@@ -23,4 +23,4 @@
 {{/if}}
 {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}
 ({{$patient->sexe|upper}})
-{{if $conf.dPurgences.age_patient_rpu_view}}{{$patient->_age}} ans{{/if}}
+{{if $conf.dPurgences.age_patient_rpu_view}}{{$patient->_age}}{{/if}}

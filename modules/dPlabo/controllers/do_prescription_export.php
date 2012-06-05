@@ -70,7 +70,7 @@ $mbPatient =& $mbPrescription->_ref_patient;
 
 // Gestion du titre du patient
 if($mbPatient->sexe == "m"){
-  if($mbPatient->_age >= 0 && $mbPatient->_age <= 3){
+  if($mbPatient->_annees >= 0 && $mbPatient->_annees <= 3){
 	  $titre_ = "Bébé garçon";
   }
   if($mbPatient->civilite == "enf") {
@@ -82,7 +82,7 @@ if($mbPatient->sexe == "m"){
 }
 
 if($mbPatient->sexe == "f"){
-  if($mbPatient->_age >= 0 && $mbPatient->_age <= 3){
+  if($mbPatient->_annees >= 0 && $mbPatient->_annees <= 3){
 	  $titre_ = "Bébé fille";
   }
   if($mbPatient->civilite == "enf") {

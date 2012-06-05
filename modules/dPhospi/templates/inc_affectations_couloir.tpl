@@ -192,7 +192,7 @@
                 </td>
               </tr>
               <tr class="dates">
-                <td colspan="3"><strong>Age</strong>: {{$patient->_age}} ans ({{mb_value object=$patient field=naissance}})</td>
+                <td colspan="3"><strong>Age</strong>: {{$patient->_age}} ({{mb_value object=$patient field=naissance}})</td>
               </tr>
           
               {{if $sejour->prestation_id}}

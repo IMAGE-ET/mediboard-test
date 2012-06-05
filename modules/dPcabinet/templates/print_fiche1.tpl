@@ -38,7 +38,7 @@
           <th>Telephone</th>
           <td style="white-space: nowrap;">{{mb_value object=$patient field="tel"}}</td>
           <th>Age</th>
-          <td style="white-space: nowrap;">{{$patient->_age}} ans</td>
+          <td style="white-space: nowrap;">{{$patient->_age}}</td>
           <th>C.A.</th>
           <td>
             Dr {{$consult->_ref_chir->_view}}

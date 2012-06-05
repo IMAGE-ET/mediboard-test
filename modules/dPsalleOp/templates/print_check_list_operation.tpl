@@ -1,7 +1,7 @@
 <h2>Check list de sécurité du patient</h2>
 <hr />
-<h3>{{$patient->_view}} ({{$patient->_age}} ans
-{{if $patient->_age != "??"}}- {{mb_value object=$patient field="naissance"}}{{/if}})
+<h3>{{$patient->_view}} ({{$patient->_age}}
+{{if $patient->_annees != "??"}}- {{mb_value object=$patient field="naissance"}}{{/if}})
 &mdash; Dr {{$operation->_ref_chir->_view}}
 {{if $sejour->_ref_curr_affectation->_id}}- {{$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->_view}}{{/if}}
 <br />

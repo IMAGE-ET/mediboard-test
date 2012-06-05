@@ -3,7 +3,7 @@
     <td style="font-weight: bold;">
       <a href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}">
         <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
-           {{$patient->_view}} &mdash; {{$patient->_age}} ans
+           {{$patient->_view}} &mdash; {{$patient->_age}}
         </span>
       </a>
     </td>

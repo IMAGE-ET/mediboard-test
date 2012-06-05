@@ -63,7 +63,7 @@ onMergeComplete = function() {
 <tr>
   <th class="title text" colspan="3">
     <a href="#{{$patient->_guid}}" onclick="viewCompleteItem('{{$patient->_guid}}'); ViewFullPatient.select(this)">
-      {{$patient->_view}} ({{$patient->_age}} ans)
+      {{$patient->_view}} ({{$patient->_age}})
     </a>
   </th>
   <th class="title">

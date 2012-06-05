@@ -13,7 +13,7 @@ function showSummary(patient_id) {
 
 <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">{{$patient->_view}}</span>
 <br />
-Age : {{$patient->_age}} ans
+Age : {{$patient->_age}}
 
 <hr />
 

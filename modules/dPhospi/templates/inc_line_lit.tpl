@@ -135,7 +135,7 @@
                         {{$_patient->nom}} {{if $_patient->nom_jeune_fille}}({{$_patient->nom_jeune_fille}}) {{/if}}{{$_patient->prenom}}
                       </span>
                       
-                      {{if $show_age_patient}}({{$_patient->_age}} ans){{/if}}
+                      {{if $show_age_patient}}({{$_patient->_age}}){{/if}}
                       
                       {{if ($_affectation->entree == $_sejour->entree && !$_sejour->entree_reelle) ||
                         ($_affectation->entree != $_sejour->entree && !$_affectation->_ref_prev->effectue) ||

@@ -32,9 +32,9 @@ $consultAnesth =& $consultation->_ref_consult_anesth;
 $const_med     =  $patient->_ref_constantes_medicales;
 
 $patient->evalAge($consultation->_date);
-if(!$exam_possum->age && $patient->_age != "??"){
-  if($patient->_age >= 71) {      $exam_possum->age = "sup71";
-  }elseif($patient->_age >= 61){  $exam_possum->age = "61";
+if(!$exam_possum->age && $patient->_annees != "??"){
+  if($patient->_annees >= 71) {      $exam_possum->age = "sup71";
+  }elseif($patient->_annees >= 61){  $exam_possum->age = "61";
   }else{                          $exam_possum->age = "inf60";
   }
 }

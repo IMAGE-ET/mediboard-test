@@ -31,8 +31,8 @@
         </td>
       {{/if}}
     <td rowspan="2" style="text-align: center; {{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
-      {{$patient->_age}} ans
-      {{if $patient->_age != "??"}}
+      {{$patient->_age}}
+      {{if $patient->_annees != "??"}}
         <br />
         ({{mb_value object=$patient field="naissance"}})
       {{/if}}

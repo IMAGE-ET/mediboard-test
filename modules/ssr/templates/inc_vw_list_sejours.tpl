@@ -84,7 +84,7 @@ Main.add(function() {
           </big> 
           <br />
           {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}
-          {{$patient->_age}} ans
+          {{$patient->_age}}
         </td>
         <td class="{{$arrete}}" style="text-align: center;">
           {{mb_value object=$_sejour field=entree format=$conf.date}}

@@ -74,11 +74,11 @@ foreach ($sejours as &$_sejour) {
   
   // Statistiques  d'âge de patient
   $patient =& $_sejour->_ref_patient;
-  if ($patient->_age < "1") {
+  if ($patient->_annees < "1") {
     $stats[$entree_patient]["less_than_1"]++;
   }
     
-  if ($patient->_age >= "75") {
+  if ($patient->_annees >= "75") {
     $stats[$entree_patient]["more_than_75"]++;
   } 
 }

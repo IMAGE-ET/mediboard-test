@@ -26,15 +26,15 @@ $exam_igs->loadMatchingObject();
 
 if (!$exam_igs->_id) {
   // Pre-remplissage de l'age du patient
-  if($consultation->_ref_patient->_age < 40){
+  if($consultation->_ref_patient->_annees < 40){
     $exam_igs->age = 0; 
-  } elseif ($consultation->_ref_patient->_age < 59) {
+  } elseif ($consultation->_ref_patient->_annees < 59) {
     $exam_igs->age = 7; 
-  } elseif ($consultation->_ref_patient->_age < 69) {
+  } elseif ($consultation->_ref_patient->_annees < 69) {
     $exam_igs->age = 12; 
-  } elseif ($consultation->_ref_patient->_age < 74) {
+  } elseif ($consultation->_ref_patient->_annees < 74) {
     $exam_igs->age = 15; 
-  } elseif ($consultation->_ref_patient->_age < 79) {
+  } elseif ($consultation->_ref_patient->_annees < 79) {
     $exam_igs->age = 16; 
   } else {
     $exam_igs->age = 18;

@@ -25,6 +25,6 @@
   {{/if}}
 </span>
 
-<button type="button" class="edit notext button_grossesse" {{if !$patient->_id || ($patient->sexe != "f" && $patient->_age >= 12)}}disabled="disabled"{{/if}}
+<button type="button" class="edit notext button_grossesse" {{if !$patient->_id || ($patient->sexe != "f" && $patient->_annees < 12)}}disabled="disabled"{{/if}}
   onclick="Grossesse.viewGrossesses('{{$patient->_id}}', '{{$object->_guid}}', $V(this.form.grossesse_id), this.form)"></button>
   

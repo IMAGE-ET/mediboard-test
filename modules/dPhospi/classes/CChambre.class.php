@@ -177,7 +177,7 @@ class CChambre extends CMbObject {
           $this->_conflits_pathologies++;
 
         // Ecart d'âge
-        $ecart = max($patient1->_age, $patient2->_age) - min($patient1->_age, $patient2->_age);
+        $ecart = max($patient1->_annees, $patient2->_annees) - min($patient1->_annees, $patient2->_annees);
         $this->_ecart_age = max($ecart, $this->_ecart_age);
 
         // Genres mélangés

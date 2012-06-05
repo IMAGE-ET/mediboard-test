@@ -110,7 +110,7 @@ var viewCCAM = function(codeacte) {
         {{assign var="sejour_id" value=$sejour->_id}}
         <tbody class="hoverable">
         <tr>
-          <td rowspan="{{$nbActes.$sejour_id}}">{{$sejour->_ref_patient->_view}} {{if $sejour->_ref_patient->_age}}({{$sejour->_ref_patient->_age}} ans){{/if}}</td>
+          <td rowspan="{{$nbActes.$sejour_id}}">{{$sejour->_ref_patient->_view}} {{if $sejour->_ref_patient->_age}}({{$sejour->_ref_patient->_age}}){{/if}}</td>
           <td rowspan="{{$nbActes.$sejour_id}}">
             {{$montantSejour.$sejour_id|currency}}
           </td>

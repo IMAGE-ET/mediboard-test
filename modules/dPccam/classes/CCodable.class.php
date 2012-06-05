@@ -568,10 +568,10 @@ class CCodable extends CMbObject {
     
     switch ($code) {
       case "A":
-        return ($patient->_age < 4 || $patient->_age > 80); 
+        return ($patient->_annees < 4 || $patient->_annees > 80); 
         break;
       case "E":
-        return $patient->_age < 5;
+        return $patient->_annees < 5;
         break;
       case "P":
         return in_array($discipline->text, array("MEDECINE GENERALE", "PEDIATRIE")) &&

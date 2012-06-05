@@ -15,7 +15,7 @@
 		    </span>
 		  </td>
 		  <td>
-		    {{$patient->_age}} ans
+		    {{$patient->_age}}
 		  </td>
 		  {{if $_coordonnees}}
 		  <td>

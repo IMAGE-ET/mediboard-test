@@ -764,7 +764,11 @@ class CSetupdPcompteRendu extends CSetup {
       ADD `purge_field` VARCHAR (255);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.76";
+    $this->makeRevision("0.76");
+    $query = self::replaceTemplateQuery("[Patient - âge", "[Patient - années", true);
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.77";
   }
 }
 ?>

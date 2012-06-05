@@ -584,7 +584,7 @@ class COperation extends CCodable implements IPatientRelated {
     if (!$this->_id && !$this->duree_preop) {
       $patient = $this->loadRefSejour()->loadRefPatient();
       
-      if ($patient->_age >= 18) {
+      if ($patient->_annees >= 18) {
         $this->duree_preop = "00:" . CAppUI::conf("dPplanningOp COperation duree_preop_adulte") . ":00";
       }
       else {

@@ -128,7 +128,7 @@ Main.add(function () {
         Non renseigné
       {{/if}}
     </td>
-    <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}} ({{$curr_op->_ref_sejour->_ref_patient->_age}} ans)</td>
+    <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}} ({{$curr_op->_ref_sejour->_ref_patient->_age}})</td>
     <td class="text">{{tr}}CSejour.type.{{$curr_op->_ref_sejour->type}}{{/tr}}</td>
     <td class="text">{{$curr_op->_ref_sejour->entree_prevue|date_format:$conf.datetime}}</td>
     <td class="text">

@@ -170,8 +170,8 @@ class CPatient extends CMbObject {
   
   // Form fields
   var $_vip           = null;
+  var $_annees        = null;
   var $_age           = null;
-  var $_age_month     = null;
   var $_age_assure    = null;
   var $_civilite      = null;
   var $_civilite_long = null;
@@ -382,8 +382,8 @@ class CPatient extends CMbObject {
     );
     
     $props["_type_exoneration"]           = "enum list|".implode("|", $types_exo);
-    $props["_age"]                        = "num show|1";
-    $props["_age_month"]                  = "num show|1";
+    $props["_annees"]                     = "num show|1";
+    $props["_age"]                        = "str";
     $props["_vip"]                        = "bool";
     $props["_age_assure"]                 = "num";
     
@@ -546,12 +546,10 @@ class CPatient extends CMbObject {
     if($this->libelle_exo) {
       $this->_art115 = preg_match("/pension militaire/i", $this->libelle_exo);
     }
-  
-    $this->evalAge();
     
-    if ($this->_age < 2) {
-      $this->evalAgeMois();
-    }
+    $relative = CMbDate::relative($this->naissance);
+    $this->evalAge();    
+    $this->_age = $relative["count"] . " " . CAppUI::tr($relative["unit"] . ($relative["count"] > 1 ? "s" : "") .($relative["unit"] == "year" ? "_old" : ""));
     
     $this->checkVIP();
     
@@ -593,7 +591,7 @@ class CPatient extends CMbObject {
    */
   function evalAge($date = null) {
     $achieved = CMbDate::achievedDurations($this->naissance, $date);
-    return $this->_age = $achieved["year"];
+    return $this->_annees = $achieved["year"];
   }
   
   /**
@@ -643,7 +641,7 @@ class CPatient extends CMbObject {
    */
   function evalAgeMois($date = null){
     $achieved = CMbDate::achievedDurations($this->naissance, $date);
-    return $this->_age_month = $achieved["month"];
+    return $achieved["month"];
   }
   
   /**
@@ -724,7 +722,7 @@ class CPatient extends CMbObject {
     $this->completeField("civilite");
     if ($this->civilite === "guess" || !$this->civilite) {
       $this->evalAge();
-      $this->civilite = ($this->_age < CAppUI::conf("dPpatients CPatient adult_age")) ?
+      $this->civilite = ($this->_annees < CAppUI::conf("dPpatients CPatient adult_age")) ?
         "enf" : (($this->sexe === "m") ? "m" : "mme");
     }
     
@@ -1442,6 +1440,7 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - adresse"           , $this->adresse    );
     $template->addProperty("Patient - ville"             , $this->ville      );
     $template->addProperty("Patient - cp"                , $this->cp         );
+    $template->addProperty("Patient - années"            , $this->_annees    );
     $template->addProperty("Patient - âge"               , $this->_age       );
     $template->addDateProperty("Patient - date de naissance", $this->naissance);
     $template->addProperty("Patient - lieu de naissance" , $this->lieu_naissance);

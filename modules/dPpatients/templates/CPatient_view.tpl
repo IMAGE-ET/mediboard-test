@@ -24,11 +24,7 @@
   </tr>
   <tr>
     <td>
-      {{if $patient->_age_month}}
-        {{mb_value object=$patient field=_age_month}} mois
-      {{else}}
-        {{mb_value object=$patient field=_age}} ans
-      {{/if}} ({{mb_value object=$patient field=naissance}})
+      {{mb_value object=$patient field=_age}} ({{mb_value object=$patient field=naissance}})
     </td>
     <td>
       {{mb_value object=$patient field="cp"}}

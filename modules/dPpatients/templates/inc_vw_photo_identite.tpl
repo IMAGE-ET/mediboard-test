@@ -40,15 +40,15 @@ deletePhoto = function(file_id){
     {{assign var=_src value="images/pictures/identity_anonymous.png"}}
   {{/if}}
 {{else}}
-  {{if $patient->_age < 2 && $patient->naissance && $patient->naissance != "0000-00-00"}}
+  {{if $patient->_annees < 2 && $patient->naissance && $patient->naissance != "0000-00-00"}}
     {{assign var=src value="images/pictures/identity_baby.png"}}
-  {{elseif $patient->_age < $conf.dPpatients.CPatient.adult_age}}
+  {{elseif $patient->_annees < $conf.dPpatients.CPatient.adult_age}}
     {{assign var=src value="images/pictures/identity_child.png"}}
-  {{elseif $patient->sexe == 'm' && $patient->_age < 60}}
+  {{elseif $patient->sexe == 'm' && $patient->_annees < 60}}
     {{assign var=src value="images/pictures/identity_male.png"}}
-  {{elseif $patient->sexe == 'm' && $patient->_age >= 60}}
+  {{elseif $patient->sexe == 'm' && $patient->_annees >= 60}}
     {{assign var=src value="images/pictures/identity_male_old.png"}}
-  {{elseif $patient->_age < 60}}
+  {{elseif $patient->_annees < 60}}
     {{assign var=src value="images/pictures/identity_female.png"}}
   {{else}}
     {{assign var=src value="images/pictures/identity_female_old.png"}}

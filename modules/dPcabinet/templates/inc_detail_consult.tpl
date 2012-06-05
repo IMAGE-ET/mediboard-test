@@ -111,8 +111,8 @@
       
         <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
           {{$patient->_view|truncate:30:"...":true}}
-          {{if $patient->_age != "??"}}
-            ({{$patient->_age}}&nbsp;ans)
+          {{if $patient->_annees != "??"}}
+            ({{$patient->_age}})
           {{/if}}
         </strong>
       </a>

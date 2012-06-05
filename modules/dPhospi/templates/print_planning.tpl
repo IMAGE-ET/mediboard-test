@@ -130,7 +130,7 @@
       </span>
     </td>
     <td class="text">
-      {{mb_value object=$patient field="naissance"}} ({{$patient->_age}} ans)
+      {{mb_value object=$patient field="naissance"}} ({{$patient->_age}})
     </td>
     
     {{if $filter->_coordonnees}}

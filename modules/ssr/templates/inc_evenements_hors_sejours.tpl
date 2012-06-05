@@ -43,7 +43,7 @@ Planification.purge = function(sejour_id) {
 			</big> 
 		  <br />
 			{{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}
-      {{$patient->_age}} ans
+      {{$patient->_age}}
     </td>
     <td style="text-align: center;">
       {{mb_value object=$_sejour field=entree format=$conf.date}}

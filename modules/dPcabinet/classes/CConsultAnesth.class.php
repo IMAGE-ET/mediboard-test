@@ -311,7 +311,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $patient->loadRefConstantesMedicales();
     $const_med = $patient->_ref_constantes_medicales;
     $const_med->updateFormFields();
-    $age = intval($patient->_age);
+    $age = intval($patient->_annees);
     if ($const_med->poids && $this->creatinine && 
         $age && $age >= 18 && $age <= 110 && 
         $const_med->poids >= 35 && $const_med->poids <= 120 && 

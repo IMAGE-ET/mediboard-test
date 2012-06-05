@@ -128,7 +128,7 @@
                     
                     {{$patient->nom}} {{if $patient->nom_jeune_fille}}({{$patient->nom_jeune_fille}}) {{/if}}{{$patient->prenom}}
                     
-                  </span>{{if $show_age_patient}}({{$patient->_age}} ans){{/if}}
+                  </span>{{if $show_age_patient}}({{$patient->_age}}){{/if}}
                   {{if $_sejour->type != "ambu" && $_sejour->type != "exte"}}
                     ({{$_sejour->_duree}}j - {{$_sejour->_ref_praticien->_shortview}})
                   {{else}}

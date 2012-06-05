@@ -77,7 +77,7 @@ Voir les séjour :
 	      <big>{{mb_value object=$_patient field=naissance}}</big> 
 	    </td>
 	    <td rowspan="{{$count_sejour}}">
-	      {{mb_value object=$_patient field=_age}} ans
+	      {{mb_value object=$_patient field=_age}}
 	    </td>
 	    <td rowspan="{{$count_sejour}}">
 	      {{mb_value object=$_patient field=adresse}}

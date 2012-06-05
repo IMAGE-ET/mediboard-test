@@ -23,4 +23,4 @@
 </a>
       
 {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}
-{{$patient->_age}} ans
+{{$patient->_age}}

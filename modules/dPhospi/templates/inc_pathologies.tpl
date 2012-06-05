@@ -27,7 +27,7 @@
   </td>
 </tr>
 <tr>
-  <td class="text" colspan="2" style="background:#{{$curr_sejour->_ref_praticien->_ref_function->color}}"><em>Age</em> : {{$curr_sejour->_ref_patient->_age}} ans</td>
+  <td class="text" colspan="2" style="background:#{{$curr_sejour->_ref_praticien->_ref_function->color}}"><em>Age</em> : {{$curr_sejour->_ref_patient->_age}}</td>
 </tr>
 <tr>
   <td class="text" colspan="2" style="background:#{{$curr_sejour->_ref_praticien->_ref_function->color}}"><em>Dr {{$curr_sejour->_ref_praticien->_view}}</em></td>

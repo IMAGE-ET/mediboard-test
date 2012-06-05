@@ -384,7 +384,7 @@
                 DS:  {{$sejour->_sortie|date_format:"%d/%m/%Y"}}
               </span>
               <strong>{{$patient->_view}}</strong>
-              Né(e) le {{mb_value object=$patient field=naissance}} - ({{$patient->_age}} ans) - ({{$patient->_ref_constantes_medicales->poids}} kg)
+              Né(e) le {{mb_value object=$patient field=naissance}} - ({{$patient->_age}}) - ({{$patient->_ref_constantes_medicales->poids}} kg)
               <br />
               {{if $operation->_id}}
                 {{$operation->_ref_chir->_view}} - Intervention le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}} - 
@@ -458,7 +458,7 @@
             DS: {{$sejour->_sortie|date_format:"%d/%m/%Y"}}
           </span>
           <strong>{{$patient->_view}}</strong>
-          Né(e) le {{mb_value object=$patient field=naissance}} - ({{$patient->_age}} ans) - ({{$patient->_ref_constantes_medicales->poids}} kg)
+          Né(e) le {{mb_value object=$patient field=naissance}} - ({{$patient->_age}}) - ({{$patient->_ref_constantes_medicales->poids}} kg)
           <br />
            Intervention le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}} - 
           <strong>(I{{if $operation->_compteur_jour >=0}}+{{/if}}{{$operation->_compteur_jour}}) - {{mb_label object=$operation field="cote"}} {{mb_value object=$operation field="cote"}}</strong>

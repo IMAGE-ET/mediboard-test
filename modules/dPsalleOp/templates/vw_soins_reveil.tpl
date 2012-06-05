@@ -113,8 +113,8 @@ Main.add(function () {
 	        <img src="images/icons/edit.png" alt="modifier" />
 	       </a>
 	      {{$patient->_view}}
-	      ({{$patient->_age}} ans
-	      {{if $patient->_age != "??"}}- {{mb_value object=$patient field="naissance"}}{{/if}})
+	      ({{$patient->_age}}
+	      {{if $patient->_annees != "??"}}- {{mb_value object=$patient field="naissance"}}{{/if}})
 	      &mdash; Dr {{$operation->_ref_chir->_view}}
 	      <br />
 	      {{if $operation->libelle}}{{$operation->libelle}} &mdash;{{/if}}

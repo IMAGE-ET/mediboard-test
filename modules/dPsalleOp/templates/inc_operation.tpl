@@ -147,8 +147,8 @@ function reloadSurveillancePerop(){
  			</a>
       
       {{$patient->_view}}
-      ({{$patient->_age}} ans
-      {{if $patient->_age != "??"}}- {{mb_value object=$patient field="naissance"}}{{/if}})
+      ({{$patient->_age}}
+      {{if $patient->_annees != "??"}}- {{mb_value object=$patient field="naissance"}}{{/if}})
       &mdash; Dr {{$selOp->_ref_chir->_view}}
       {{if $sejour->_ref_curr_affectation->_id}}- {{$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->_view}}{{/if}}
       <br />

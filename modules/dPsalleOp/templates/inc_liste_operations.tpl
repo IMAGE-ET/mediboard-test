@@ -63,7 +63,7 @@
             onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
         {{$_operation->_ref_patient->_view}}
         {{if $vueReduite}}
-          ({{$_operation->_ref_patient->_age}} ans)
+          ({{$_operation->_ref_patient->_age}})
         {{/if}}
       </span>
       <br />
@@ -78,7 +78,7 @@
           onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
       {{$_operation->_ref_patient->_view}}
       {{if $vueReduite}}
-        ({{$_operation->_ref_patient->_age}} ans)
+        ({{$_operation->_ref_patient->_age}})
       {{/if}}
     </span>
     {{if $_operation->_ref_affectation && $_operation->_ref_affectation->_ref_lit->_id && $conf.dPbloc.CPlageOp.chambre_operation == 1}}

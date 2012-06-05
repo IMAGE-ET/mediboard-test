@@ -38,7 +38,7 @@
     <big>{{mb_value object=$patient field=naissance}}</big> 
   </td>
   <td>
-    {{mb_value object=$patient field=_age}} ans
+    {{mb_value object=$patient field=_age}}
   </td>
   <td>
     {{mb_value object=$patient field=adresse}}
@@ -59,7 +59,7 @@
     <big>{{mb_value object=$patient_conflict field=naissance}}</big> 
   </td>
   <td>
-    {{mb_value object=$patient_conflict field=_age}} ans
+    {{mb_value object=$patient_conflict field=_age}}
   </td>
   <td>
     {{mb_value object=$patient_conflict field=adresse}}

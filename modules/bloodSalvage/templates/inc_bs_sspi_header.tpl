@@ -16,8 +16,8 @@
         <img src="images/icons/edit.png" title="{{tr}}Edit{{/tr}}" />
       </a>
       {{$patient->_view}}
-      ({{$patient->_age}} ans
-      {{if $patient->_age != "??"}}- {{mb_value object=$patient field="naissance"}}{{/if}})
+      ({{$patient->_age}}
+      {{if $patient->_annees != "??"}}- {{mb_value object=$patient field="naissance"}}{{/if}})
     </th>
   </tr>
 </table>

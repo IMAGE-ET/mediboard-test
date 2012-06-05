@@ -22,7 +22,7 @@
   </tr>
 
   <tr>
-    <td colspan="4" style="text-align: center;">né(e) le {{mb_value object=$patient field="naissance"}} ({{$patient->_age}} ans) de sexe {{tr}}CPatient.sexe.{{$patient->sexe}}{{/tr}}</td>
+    <td colspan="4" style="text-align: center;">né(e) le {{mb_value object=$patient field="naissance"}} ({{$patient->_age}}) de sexe {{tr}}CPatient.sexe.{{$patient->sexe}}{{/tr}}</td>
   </tr>
 
   <tr>
