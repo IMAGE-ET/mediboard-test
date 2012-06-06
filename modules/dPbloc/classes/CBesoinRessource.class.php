@@ -41,4 +41,11 @@ class CBesoinRessource extends CMbObject{
     
     return $specs;
   }
+  
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["usages"] = "CUsageRessource besoin_ressource_id";
+    
+    return $backProps;
+  }
 }

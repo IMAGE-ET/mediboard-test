@@ -117,7 +117,13 @@ class CProtocole extends CMbObject {
     $props["_min_op"]         = "num";
     return $props;
   }
-
+  
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["besoins_ressources"] = "CBesoinRessource protocole_id";
+    return $backProps;
+  }
+  
   function updateFormFields() {
     parent::updateFormFields();
     $this->codes_ccam = strtoupper($this->codes_ccam);

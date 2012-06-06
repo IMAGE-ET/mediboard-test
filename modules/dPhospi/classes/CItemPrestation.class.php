@@ -40,9 +40,9 @@ class CItemPrestation extends CMbMetaObject{
   
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["items_liaisons"]        = "CItemLiaison item_prestation_id";
+    $backProps["items_liaisons"]          = "CItemLiaison item_prestation_id";
     $backProps["items_liaisons_realises"] = "CItemLiaison item_prestation_realise_id";
-    
+    $backProps["lits_item"]               = "CLitLiaisonItem item_prestation_id";
     return $backProps;
   }
   

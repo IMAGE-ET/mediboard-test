@@ -339,7 +339,7 @@ class CPatient extends CMbObject {
     $props["pays_naissance_insee"] = "str";
     $props["profession"]           = "str autocomplete";
     $props["csp" ]                 = "numchar length|2";
-    $specs["patient_link_id"]      = "ref class|CPatient";
+    $props["patient_link_id"]      = "ref class|CPatient";
     
     $props["assure_nom"]                  = "str confidential";
     $props["assure_prenom"]               = "str";

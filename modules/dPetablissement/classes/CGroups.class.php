@@ -113,6 +113,10 @@ class CGroups extends CMbObject {
     $backProps["prestations_ponctuelles"] = "CPrestationPonctuelle group_id";
     $backProps["supervision_graphs"]      = "CSupervisionGraph owner_id";
     $backProps["incrementers"]            = "CIncrementer group_id";
+    $backProps["ressources_materielles"]  = "CRessourceMaterielle group_id";
+    $backProps["type_ressources"]         = "CTypeRessource group_id";
+    $backProps["secteurs"]                = "CSecteur group_id";
+    $backProps["protocoles"]              = "CProtocole group_id";
     return $backProps;
   }
   

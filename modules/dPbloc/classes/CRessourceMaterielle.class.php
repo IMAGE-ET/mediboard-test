@@ -44,8 +44,14 @@ class CRessourceMaterielle extends CMbObject {
     $specs["deb_activite"]      = "date";
     $specs["fin_activite"]      = "date";
     $specs["retablissement"]    = "bool default|0";
-    
     return $specs;
+  }
+  
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["indispos"] = "CIndispoRessource ressource_materielle_id";
+    $backProps["usages"]   = "CUsageRessource ressource_materielle_id";
+    return $backProps;
   }
   
   function updateFormFields() {
