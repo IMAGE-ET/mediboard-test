@@ -21,7 +21,7 @@ $nextmonth     = mbDate("first day of +1 month", $date);
 
 $type          = CValue::getOrSession("type");
 $type_externe  = CValue::getOrSession("type_externe", "depart");
-$service_id    = CValue::getOrSession("service_id");
+
 $bank_holidays = mbBankHolidays($date);
 
 $hier   = mbDate("- 1 day", $date);
@@ -53,7 +53,7 @@ if($type == "ambucomp") {
 }
 
 // filtre sur les services
-$filterService = "AND service.service_id ".CSQLDataSource::prepareIn(array_keys($services), $service_id);
+$filterService = "AND service.service_id ". CSQLDataSource::prepareIn(array_keys($services));
 
 $group = CGroups::loadCurrent();
 

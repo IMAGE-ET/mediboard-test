@@ -12,7 +12,6 @@ CCanDo::checkRead();
 
 // Type d'admission
 $type           = CValue::getOrSession("type");
-$service_id     = CValue::getOrSession("service_id");
 $type_externe   = CValue::getOrSession("type_externe", "depart");
 $date           = CValue::getOrSession("date", mbDate());
 $next           = mbDate("+1 DAY", $date);
@@ -43,11 +42,7 @@ $ljoin["lit"]      = "affectation.lit_id = lit.lit_id";
 $ljoin["chambre"]  = "lit.chambre_id = chambre.chambre_id";
 $ljoin["service"]  = "chambre.service_id = service.service_id";
 
-// Filtre sur les services
 $where["service.externe"] = "= '1'";
-if($service_id) {
-  $where["service.service_id"] = "= '$service_id'";
-}
 
 // Filtre sur le type du séjour
 if($type == "ambucomp") {

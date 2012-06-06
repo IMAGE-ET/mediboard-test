@@ -36,8 +36,9 @@ $prats = $prat->loadChirurgiens();
 
 $sejour = new CSejour();
 $sejour->_type_admission = $type;
-$sejour->service_id      = $service_id;
+$sejour->service_id      = explode(",", $service_id);
 $sejour->praticien_id    = $prat_id;
+
 // Création du template
 $smarty = new CSmartyDP();
 

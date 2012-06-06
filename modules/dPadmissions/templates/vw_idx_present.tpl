@@ -17,24 +17,13 @@
 {{/if}}
 
 <script type="text/javascript">
-
-function showLegend() {
-  var url = new Url("dPadmissions", "vw_legende").requestModal();
-}
-
 function printPlanning() {
   var oForm = document.selType;
   var url = new Url("dPadmissions", "print_entrees");
   url.addParam("date"      , "{{$date}}");
   url.addParam("type"      , $V(oForm._type_admission));
-  url.addParam("service_id", $V(oForm.service_id));
+  url.addParam("service_id", [$V(oForm.service_id)].flatten().join(","));
   url.popup(700, 550, "Entrees");
-}
-
-function printDHE(type, object_id) {
-  var url = new Url("dPplanningOp", "view_planning");
-  url.addParam(type, object_id);
-  url.popup(700, 550, "DHE");
 }
 
 function printDepassement(id) {
@@ -48,7 +37,7 @@ function reloadFullPresents(filterFunction) {
   var url = new Url("dPadmissions", "httpreq_vw_all_presents");
   url.addParam("date"      , "{{$date}}");
   url.addParam("type"      , $V(oForm._type_admission));
-  url.addParam("service_id", $V(oForm.service_id));
+  url.addParam("service_id", [$V(oForm.service_id)].flatten().join(","));
   url.addParam("prat_id", $V(oForm.prat_id));
   url.requestUpdate('allPresents');
 	reloadPresent(filterFunction);
@@ -59,7 +48,7 @@ function reloadPresent(filterFunction) {
   var url = new Url("dPadmissions", "httpreq_vw_presents");
   url.addParam("date"      , "{{$date}}");
   url.addParam("type"      , $V(oForm._type_admission));
-  url.addParam("service_id", $V(oForm.service_id));
+  url.addParam("service_id", [$V(oForm.service_id)].flatten().join(","));
   url.addParam("prat_id", $V(oForm.prat_id));
 	if(!Object.isUndefined(filterFunction)){
 	  url.addParam("filterFunction", filterFunction);
@@ -157,15 +146,18 @@ Main.add(function () {
 <table class="main">
 <tr>
   <td>
-    <a href="#legend" onclick="showLegend()" class="button search">Légende</a>
+    <a href="#legend" onclick="Admissions.showLegend()" class="button search">Légende</a>
   </td>
   <td style="float: right">
     <form action="?" name="selType" method="get">
+      <label>
+        <input type="checkbox" onclick="Admissions.toggleMultipleServices(this)" {{if $sejour->service_id|@count > 1}}checked="checked"{{/if}}/> Multiple
+      </label>
       {{mb_field object=$sejour field="_type_admission" emptyLabel="CSejour.all" onchange="reloadFullPresents()"}}
-      <select name="service_id" onchange="reloadFullPresents();">
+      <select name="service_id" onchange="reloadFullPresents();" {{if $sejour->service_id|@count > 1}}size="5" multiple="true"{{/if}}>
         <option value="">&mdash; Tous les services</option>
         {{foreach from=$services item=_service}}
-          <option value="{{$_service->_id}}"{{if $_service->_id == $sejour->service_id}}selected="selected"{{/if}}}>{{$_service}}</option>
+          <option value="{{$_service->_id}}" {{if in_array($_service->_id, $sejour->service_id)}}selected="selected"{{/if}}}>{{$_service}}</option>
         {{/foreach}}
       </select>
       <select name="prat_id" onchange="reloadFullPresents();">

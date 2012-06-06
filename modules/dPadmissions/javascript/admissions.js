@@ -14,12 +14,20 @@ Admissions = {
       }
     });
   },
+  
   togglePrint: function(table_id, status) {
     var table = $(table_id);!
     table.select("input[name=print_doc]").each(function(elt) {
       elt.checked = status ? "checked" : "";
     });
   },
+  
+  printDHE: function(type, object_id) {
+    var url = new Url("dPplanningOp", "view_planning");
+    url.addParam(type, object_id);
+    url.popup(700, 550, "DHE");
+  },
+  
   printForSelection: function(modele_id, table_id) {
     if (!modele_id) {
       alert("Veuillez choisir un modèle avant de lancer l'impression");
@@ -38,13 +46,27 @@ Admissions = {
     oForm.submit();
     return true;
   },
+  
   beforePrint: function() {
     Admissions.totalUpdater.stop();
     Admissions.listUpdater.stop();
   },
+  
   afterPrint: function() {
     Control.Modal.close();
     Admissions.totalUpdater.resume();
     Admissions.listUpdater.resume();
+  },
+  
+  toggleMultipleServices: function(elt) {
+    var status = elt.checked;
+    var form = elt.form;
+    var elt_service_id = form.service_id;
+    elt_service_id.multiple = status;
+    elt_service_id.size = status ? 5 : 1;
+  },
+  
+  showLegend: function() {
+    var url = new Url("dPadmissions", "vw_legende").requestModal();
   }
 };

@@ -23,6 +23,8 @@ $type          = CValue::getOrSession("type");
 $service_id    = CValue::getOrSession("service_id");
 $prat_id       = CValue::getOrSession("prat_id");
 $bank_holidays = mbBankHolidays($date);
+$service_id    = explode(",", $service_id);
+CMbArray::removeValue("", $service_id);
 
 $hier   = mbDate("- 1 day", $date);
 $demain = mbDate("+ 1 day", $date);
@@ -46,7 +48,7 @@ else {
 }
 
 // filtre sur les services
-if ($service_id) {
+if (count($service_id)) {
   $leftjoinService = "LEFT JOIN affectation
                         ON affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie_prevue
                       LEFT JOIN lit
@@ -55,7 +57,7 @@ if ($service_id) {
                         ON lit.chambre_id = chambre.chambre_id
                       LEFT JOIN service
                         ON chambre.service_id = service.service_id";
-  $filterService = "AND service.service_id = '$service_id'";
+  $filterService = "AND service.service_id " . CSQLDataSource::prepareIn($service_id);
 } else {
   $leftjoinService = $filterService = "";
 }

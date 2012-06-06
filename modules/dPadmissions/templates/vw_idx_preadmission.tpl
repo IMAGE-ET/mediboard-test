@@ -8,18 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_script module=admissions script=admissions}}
+
 <script type="text/javascript">
-
-function showLegend() {
-  new Url("dPadmissions", "vw_legende").requestModal();
-}
-
-function printDHE(type, object_id) {
-  var url = new Url("dPplanningOp", "view_planning");
-  url.addParam(type, object_id);
-  url.popup(700, 550, "DHE");
-}
-
 function submitPreAdmission(oForm) {
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadPreAdmission });
 }
@@ -45,7 +36,7 @@ Main.add(function () {
 <table class="main">
   <tr>
     <td colspan="2">
-      <a href="#legend" onclick="showLegend()" class="button search">Légende</a>
+      <a href="#legend" onclick="Admissions.showLegend()" class="button search">Légende</a>
     </td>
   </tr>
   <tr>

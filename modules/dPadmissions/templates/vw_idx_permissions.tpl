@@ -11,11 +11,6 @@
 {{mb_script module=admissions script=admissions}}
 
 <script type="text/javascript">
-
-function showLegend() {
-  var url = new Url("dPadmissions", "vw_legende").requestModal();	
-}
-
 function reloadFullPermissions(filterFunction) {
   var oForm = getForm("selType");
   var url = new Url("dPadmissions", "httpreq_vw_all_permissions");
@@ -49,7 +44,7 @@ Main.add(function () {
 <table class="main">
 <tr>
   <td>
-    <a href="#legend" onclick="showLegend()" class="button search">Légende</a>
+    <a href="#legend" onclick="Admissions.showLegend()" class="button search">Légende</a>
   </td>
 </tr>
   <tr>

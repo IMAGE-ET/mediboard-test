@@ -20,6 +20,9 @@ $date           = CValue::getOrSession("date", mbDate());
 $next           = mbDate("+1 DAY", $date);
 $filterFunction = CValue::getOrSession("filterFunction");
 
+$service_id = explode(",", $service_id);
+CMbArray::removeValue("", $service_id);
+
 $date_actuelle = mbDateTime("00:00:00");
 $date_demain   = mbDateTime("00:00:00","+ 1 day");
 
@@ -42,12 +45,12 @@ $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $ljoin["users"] = "sejour.praticien_id = users.user_id";
 
 // Filtre sur les services
-if($service_id) {
+if (count($service_id)) {
   $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie_prevue";
   $ljoin["lit"]                = "affectation.lit_id = lit.lit_id";
   $ljoin["chambre"]            = "lit.chambre_id = chambre.chambre_id";
   $ljoin["service"]            = "chambre.service_id = service.service_id";
-  $where["service.service_id"] = "= '$service_id'";
+  $where["service.service_id"] = CSQLDataSource::prepareIn($service_id);
 }
 
 // Filtre sur le type du séjour

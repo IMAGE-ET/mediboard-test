@@ -23,11 +23,11 @@
 <td class="text">
   {{if $curr_adm->_id && !$curr_adm->annule && $curr_consult->_ref_consult_anesth->_ref_sejour->_id}}
   {{foreach from=$curr_adm->_ref_operations item=curr_op}}
-  <a class="action" style="float: right" title="Imprimer la DHE de l'intervention" href="#1" onclick="printDHE('operation_id', {{$curr_op->_id}}); return false;">
+  <a class="action" style="float: right" title="Imprimer la DHE de l'intervention" href="#1" onclick="Admissions.printDHE('operation_id', {{$curr_op->_id}}); return false;">
     <img src="images/icons/print.png" />
   </a>
   {{foreachelse}}
-  <a class="action" style="float: right" title="Imprimer la DHE du séjour" href="#1" onclick="printDHE('sejour_id', {{$curr_adm->_id}}); return false;">
+  <a class="action" style="float: right" title="Imprimer la DHE du séjour" href="#1" onclick="Admissions.printDHE('sejour_id', {{$curr_adm->_id}}); return false;">
     <img src="images/icons/print.png" />
   </a>
   {{/foreach}}
@@ -142,7 +142,7 @@
 {{else}}
 <td colspan="4" class="button" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   {{if $type_event == "COperation"}}
-  <a class="action" style="float: right" title="Imprimer la DHE de l'intervention" href="#1" onclick="printDHE('operation_id', {{$curr_consult->_next_sejour_and_operation.COperation->_id}}); return false;">
+  <a class="action" style="float: right" title="Imprimer la DHE de l'intervention" href="#1" onclick="Admissions.printDHE('operation_id', {{$curr_consult->_next_sejour_and_operation.COperation->_id}}); return false;">
     <img src="images/icons/print.png" />
   </a>
   Intervention non associé à la consultation
@@ -160,7 +160,7 @@
   </form>
   {{/if}}
   {{else}}
-  <a class="action" style="float: right" title="Imprimer la DHE du séjour" href="#1" onclick="printDHE('sejour_id', {{$curr_adm->_id}}); return false;">
+  <a class="action" style="float: right" title="Imprimer la DHE du séjour" href="#1" onclick="Admissions.printDHE('sejour_id', {{$curr_adm->_id}}); return false;">
     <img src="images/icons/print.png" />
   </a>
   Séjour non associé à la consultation

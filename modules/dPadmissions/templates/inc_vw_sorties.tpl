@@ -161,11 +161,11 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
           {{/if}}
           
           {{foreach from=$_sejour->_ref_operations item=curr_op}}
-          <a class="action" title="Imprimer la DHE de l'intervention" href="#1" onclick="printDHE('operation_id', {{$curr_op->_id}}); return false;">
+          <a class="action" title="Imprimer la DHE de l'intervention" href="#1" onclick="Admissions.printDHE('operation_id', {{$curr_op->_id}}); return false;">
             <img src="images/icons/print.png" />
           </a>
           {{foreachelse}}
-          <a class="action" title="Imprimer la DHE du séjour" href="#1" onclick="printDHE('sejour_id', {{$_sejour->_id}}); return false;">
+          <a class="action" title="Imprimer la DHE du séjour" href="#1" onclick="Admissions.printDHE('sejour_id', {{$_sejour->_id}}); return false;">
             <img src="images/icons/print.png" />
           </a>
           {{/foreach}}

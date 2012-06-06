@@ -30,11 +30,11 @@
       {{/if}}
       
       {{foreach from=$_sejour->_ref_operations item=_op}}
-      <a class="action" title="Imprimer la DHE de l'intervention" href="#printDHE" onclick="printDHE('operation_id', {{$_op->_id}}); return false;">
+      <a class="action" title="Imprimer la DHE de l'intervention" href="#printDHE" onclick="Admissions.printDHE('operation_id', {{$_op->_id}}); return false;">
         <img src="images/icons/print.png" />
       </a>
       {{foreachelse}}
-      <a class="action" title="Imprimer la DHE du séjour" href="#printDHE" onclick="printDHE('sejour_id', {{$_sejour->_id}}); return false;">
+      <a class="action" title="Imprimer la DHE du séjour" href="#printDHE" onclick="Admissions.printDHE('sejour_id', {{$_sejour->_id}}); return false;">
         <img src="images/icons/print.png" />
       </a>
       {{/foreach}}
