@@ -103,6 +103,14 @@
   });
 </script>
 
+<!-- Formulaire de sauvegarde de l'axe de prestation en préférence utilisateur (vue temporelle)-->
+<form name="editPrefPresta" method="post">
+  <input type="hidden" name="m" value="admin" />
+  <input type="hidden" name="dosql" value="do_preference_aed" />
+  <input type="hidden" name="user_id" value="{{$app->user_id}}" />
+  <input type="hidden" name="pref[prestation_id_hospi]" value="" />
+</form>
+
 <!-- Légendes -->
 <div class="modal" id="legend_temporel" style="display: none;">
   {{mb_include module=hospi template=inc_legend_mouvement}}

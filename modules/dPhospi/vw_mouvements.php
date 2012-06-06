@@ -17,7 +17,10 @@ $granularites = array("day", "week", "4weeks");
 $triAdm       = CValue::getOrSession("triAdm", "praticien");
 $mode_vue_tempo = CValue::getOrSession("mode_vue_tempo", "classique");
 $readonly     = CValue::get("readonly");
-$prestation_id = CValue::getOrSession("prestation_id", "0");
+$prestation_id = CValue::getOrSession("prestation_id", CAppUI::pref("prestation_id_hospi"));
+
+// Si c'est la préférence utilisateur, il faut la mettre en session 
+CValue::setSession("prestation_id", $prestation_id);
 
 $prestation_journaliere = new CPrestationJournaliere;
 

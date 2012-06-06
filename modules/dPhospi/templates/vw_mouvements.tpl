@@ -166,6 +166,15 @@
     }
   }
   
+  savePrefAndReload = function(prestation_id) {
+    var oForm = getForm("editPrefPresta");
+    $V(oForm.elements["pref[prestation_id_hospi]"], prestation_id);
+    return onSubmitFormAjax(oForm, {onComplete: function() {
+      refreshMouvements(loadNonPlaces);
+    }});
+  
+  }
+  
   Main.add(function() {
     Calendar.regField(getForm('filterMouv').date);
     var view_affectations = $("view_affectations");
@@ -225,7 +234,7 @@
     &mdash;
     
     Axe de prestation :
-    <select name="prestation_id" onchange="refreshMouvements(loadNonPlaces)">
+    <select name="prestation_id" onchange="savePrefAndReload(this.value);">
       <option value="">&mdash; Tous</option>
       {{foreach from=$prestations_journalieres item=_prestation}}
         <option value="{{$_prestation->_id}}" {{if $_prestation->_id == $prestation_id}}selected="selected"{{/if}}>{{$_prestation->nom}}</option>
