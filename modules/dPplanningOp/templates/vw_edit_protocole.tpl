@@ -275,10 +275,12 @@ Main.add(function () {
           <td colspan="2">{{mb_field object=$protocole field=temp_operation form=editFrm class="notNull"}}</td>
         </tr>
         
-        <tr>
-          <th>{{mb_label object=$protocole field="duree_uscpo"}}</th>
-          <td colspan="2">{{mb_field object=$protocole field="duree_uscpo" increment=true form=editFrm size="2"}} {{tr}}night{{/tr}}(s)</td>
-        </tr>
+        {{if $conf.dPplanningOp.COperation.show_duree_uscpo >= 1}}
+          <tr>
+            <th>{{mb_label object=$protocole field="duree_uscpo"}}</th>
+            <td colspan="2">{{mb_field object=$protocole field="duree_uscpo" increment=true form=editFrm size="2"}} {{tr}}night{{/tr}}(s)</td>
+          </tr>
+        {{/if}}
         
         <tr>
           <th>{{mb_label object=$protocole field=duree_preop}}</th>

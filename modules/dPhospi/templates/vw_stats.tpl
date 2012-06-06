@@ -48,15 +48,18 @@
 </script>
 
 <ul id="stats_hospi" class="control_tabs">
-  <li>
-    <a href="#uscpo" onmousedown="refreshStats('uscpo')">USCPO prévue / placée</a>
-  </li>
+  {{if $conf.dPplanningOp.COperation.show_duree_uscpo}}
+    <li>
+      <a href="#uscpo" onmousedown="refreshStats('uscpo')">USCPO prévue / placée</a>
+    </li>
+  {{/if}}
   <li>
     <a href="#occupation" onmousedown="refreshStats('occupation')">Occupation prévue / réalisée</a>
   </li>
 </ul>
 
 <hr class="control_tabs" />
-
-<div id="uscpo" style="display: none;"></div>
+{{if $conf.dPplanningOp.COperation.show_duree_uscpo}}
+  <div id="uscpo" style="display: none;"></div>
+{{/if}}
 <div id="occupation" style="display: none;"></div>

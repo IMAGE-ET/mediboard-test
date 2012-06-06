@@ -80,20 +80,23 @@ checkUSCPO = function() {
             </td>
             <td class="halfPane">
               {{if $operation->_id}}
-                <form name="editTypeAnesthFrm" action="?m=dPcabinet" method="post" onsubmit="if (checkUSCPO()) { return onSubmitFormAjax(this); }">
+                <form name="editTypeAnesthFrm" action="?m=dPcabinet" method="post"
+                  onsubmit="{{if $conf.dPplanningOp.COperation.show_duree_preop == 2}}if (checkUSCPO()) {{/if}} return onSubmitFormAjax(this);">
                   <input type="hidden" name="m" value="dPplanningOp" />
                   <input type="hidden" name="del" value="0" />
                   <input type="hidden" name="dosql" value="do_planning_aed" />
                   {{mb_key object=$operation}}
-                  <div>
-                    {{mb_label object=$operation field=passage_uscpo}}
-                    {{mb_field object=$operation field=passage_uscpo onclick="toggleUSCPO(\$V(this)); this.form.onsubmit();"}}
-                    
-                    <span id="uscpo_area" {{if !$operation->passage_uscpo}}style="visibility: hidden;"{{/if}}>
-                      {{mb_label object=$operation field=duree_uscpo style="padding-left: 1.4em;" id="uscpo_label"}}
-                      {{mb_field object=$operation field=duree_uscpo form=editTypeAnesthFrm increment=true onblur="this.form.onsubmit()"}} nuit(s)
-                    </span>
-                  </div>
+                  {{if $conf.dPplanningOp.COperation.show_duree_uscpo >= 1}}
+                    <div>
+                      {{mb_label object=$operation field=passage_uscpo}}
+                      {{mb_field object=$operation field=passage_uscpo onclick="toggleUSCPO(\$V(this)); this.form.onsubmit();"}}
+                      
+                      <span id="uscpo_area" {{if !$operation->passage_uscpo}}style="visibility: hidden;"{{/if}}>
+                        {{mb_label object=$operation field=duree_uscpo style="padding-left: 1.4em;" id="uscpo_label"}}
+                        {{mb_field object=$operation field=duree_uscpo form=editTypeAnesthFrm increment=true onblur="this.form.onsubmit()"}} nuit(s)
+                      </span>
+                    </div>
+                  {{/if}}
                   {{mb_label object=$operation field=type_anesth}}
                   {{mb_field object=$operation field=type_anesth options=$anesth style="width: 12em;" onchange="this.form.onsubmit()"}}
                   <br />

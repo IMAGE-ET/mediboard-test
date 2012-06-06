@@ -297,10 +297,12 @@ CCAMSelector.init = function(){
     </tr>
   {{/if}}
   
-  <tr>
-    <th>{{mb_label object=$op field=duree_uscpo}}</th>
-    <td colspan="3">{{mb_field object=$op field=duree_uscpo increment=true form=editOp size=2}} {{tr}}night{{/tr}}(s)</td>
-  </tr>
+  {{if $conf.dPplanningOp.COperation.show_duree_uscpo >= 1}}
+    <tr>
+      <th>{{mb_label object=$op field=duree_uscpo}}</th>
+      <td colspan="3">{{mb_field object=$op field=duree_uscpo increment=true form=editOp size=2}} {{tr}}night{{/tr}}(s)</td>
+    </tr>
+  {{/if}}
   
   <tr>
     <th>{{mb_label object=$op field=presence_preop}}</th>

@@ -248,7 +248,14 @@ class COperation extends CCodable implements IPatientRelated {
     $props["facture"]                 = "bool default|0";
     
     $props["duree_uscpo"]             = "num min|0 default|0";
-    $props["passage_uscpo"]           = "bool notNull";
+    
+    if (CAppUI::conf("dPplanningOp COperation show_duree_uscpo") == 2) {
+      $props["passage_uscpo"]           = "bool notNull";
+    }
+    else {
+      $props["passage_uscpo"]           = "bool";
+    }
+    
     $props["duree_preop"]             = "time";
     
     $props["_duree_interv"]           = "time";
