@@ -85,7 +85,7 @@
   </div>
 </div>
 
-{{if $sejours_non_affectes|@count || $couloirs|@count}}
+{{if $sejours_non_affectes|@count}}
   <table class="tbl layout_temporel" style="table-layout: fixed; position: relative;" id="non_places_temporel">
     <col style="width: 15%;" />
     {{assign var=show_age_patient value=$conf.dPhospi.show_age_patient}}
