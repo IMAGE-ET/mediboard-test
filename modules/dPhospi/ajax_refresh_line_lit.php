@@ -189,6 +189,41 @@ if (count($lit->_ref_affectations)) {
   $lit->_lines = CMbRange::rearrange($intervals);
 }
 
+// Pour les alertes, il est nécessaire de charger les autres lits
+// de la chambre concernée ainsi que les affectations
+
+$where = array();
+$where["entree"] = "<= '$date_max'";
+$where["sortie"] = ">= '$date_min'";
+
+$lits = $chambre->loadBackIds("lits");
+
+foreach ($lits as $_lit_id) {
+  if ($lit_id == $_lit_id) {
+    continue;
+  }
+  $_lit = new CLit;
+  $_lit->load($_lit_id);
+  
+  $where["lit_id"] = "= '$_lit->_id'";
+  
+  $_affectations = $affectation->loadList($where);
+  
+  $_sejours = CMbObject::massLoadFwdRef($_affectations, "sejour_id");
+  CMbObject::massLoadFwdRef($_sejours, "patient_id");
+  CMbObject::massLoadFwdRef($_sejours, "praticien_id");
+  
+  foreach ($_affectations as $_affectation) {
+    $_sejour = $_affectation->loadRefSejour();
+    $_sejour->loadRefPraticien();
+    $_sejour->loadRefPatient();
+  }
+  
+  $_lit->_ref_affectations = $_affectations;
+  
+  $chambre->_ref_lits[$_lit->_id] = $_lit;
+}
+
 $lit->_ref_chambre->checkChambre();
 
 $smarty = new CSmartyDP;
