@@ -50,7 +50,9 @@ $count = CAppUI::conf("eai max_files_to_process");
 $files = array_slice($files, 0, $count);
 
 // Mise à jour du fichier avec le nouveau diff
-unlink($filename_excludes);
+if (file_exists($filename_excludes)) {
+  unlink($filename_excludes);
+}  
 $file  = fopen($filename_excludes, "a+");
 foreach (array_diff($files_excludes, $array_diff) as $_file_exclude) {
   fputs($file, $_file_exclude."\n");
