@@ -65,7 +65,7 @@
             {{/if}}
           {{elseif $_value != "__empty__"}}
             <td style="text-align: center; font-size: 0.9em;" >
-              {{if $_value}}{{$_value}}{{else}}&nbsp;{{/if}}
+              {{if $_value !== ""}}{{$_value}}{{else}}&nbsp;{{/if}}
             </td>
           {{else}}
             <!--<td></td>-->

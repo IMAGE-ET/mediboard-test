@@ -50,7 +50,7 @@
           {{/if}}
         {{elseif $_value != "__empty__"}}
           <td style="text-align: center;">
-            {{if $_value}}{{$_value}}{{else}}&nbsp;{{/if}}
+            {{if $_value !== ""}}{{$_value}}{{else}}&nbsp;{{/if}}
           </td>
         {{/if}}
       {{/foreach}}
