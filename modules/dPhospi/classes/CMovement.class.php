@@ -57,8 +57,8 @@ class CMovement extends CMbObject {
       $this->completeField("affectation_id");
       $movement->affectation_id = $this->affectation_id;
       $movement->loadMatchingObject();
-  
-      if ($movement->_id && $this->_id != $movement->_id) {
+
+      if ($this->affectation_id && $movement->_id && $this->_id != $movement->_id) {
         return CAppUI::tr("$this->_class-failed-affectation_id") .
           " : $this->affectation_id";
       }
