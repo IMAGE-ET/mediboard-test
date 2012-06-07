@@ -16,6 +16,7 @@ CPreferences::$modules["common"] = array (
   "MenuPosition",
   "DEFMODULE",
   "touchscreen",
+  "MobileUI",
   "tooltipAppearenceTimeout",
   "showLastUpdate",
   "directory_to_watch",

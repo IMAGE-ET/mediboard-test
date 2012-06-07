@@ -13,7 +13,7 @@ CCanDo::checkAdmin();
 $cmd      = CValue::post("cmd");
 $mod_id   = CValue::post("mod_id");
 $mod_name = CValue::post("mod_name");
-
+$mobile = CValue::post("mobile",0);
 
 // If it we come from the installer script
 if ($cmd == "upgrade-core") {
@@ -159,6 +159,8 @@ if (CValue::get("ajax") || CValue::post("ajax")) {
 
 SHM::rem("modules");
 
+if(!$mobile) {
 CAppUI::redirect("m=system&tab=view_modules");
+}
 
 ?>

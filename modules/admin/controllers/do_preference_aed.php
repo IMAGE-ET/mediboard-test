@@ -33,5 +33,10 @@ if ($pref->user_id) {
   CAppUI::buildPrefs();
 }
 
+if($redirect =  CValue::post("postRedirect") ){
+  echo $redirect;
+  CAppUI::redirect($redirect);
+}else{
 echo CAppUI::getMsg();
 CApp::rip();
+}

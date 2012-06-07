@@ -101,6 +101,9 @@ Preferences.onSubmit = function(form) {
   {{mb_include template=inc_pref spec=enum var=LOCALE values=$locales value_locale_prefix="language."}}
   {{mb_include template=inc_pref spec=enum var=UISTYLE values=$styles value_locale_prefix="style."}}
   {{mb_include template=inc_pref spec=enum var=MenuPosition values="top|left"}}
+  {{if is_dir("./mobile")}}
+    {{mb_include template=inc_pref spec=bool var=MobileUI}}
+  {{/if}}
   {{mb_include template=inc_pref spec=module var=DEFMODULE}}
   {{mb_include template=inc_pref spec=bool var=touchscreen}}
   {{mb_include template=inc_pref spec=enum var=tooltipAppearenceTimeout values="short|medium|long" value_locale_prefix=""}}

@@ -10,8 +10,8 @@
 class CPlageconsult extends CMbObject {
   static $minutes = array();
   static $hours = array();
-  static $hours_start = null;  
-  static $hours_stop = null;  
+  static $hours_start = null;
+  static $hours_stop = null;
   static $minutes_interval = null;
   
   // DB Table key
