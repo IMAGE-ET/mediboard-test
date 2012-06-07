@@ -73,13 +73,14 @@ class CSourceFileSystem extends CExchangeSource {
     $i = 1;
     $this->_files = array();
     while (false !== ($entry = readdir($handle))) {
+      $entry = "$path/$entry";
       /* Limite de 5000 fichiers */
       if ($i == 10000) {
         break;
       }
       
       /* Suppression des dossier */
-      if (is_dir("$path/$entry")) {
+      if (is_dir($entry)) {
         continue;
       } 
       
