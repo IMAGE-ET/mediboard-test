@@ -63,7 +63,35 @@ class CSourceFileSystem extends CExchangeSource {
       throw new CMbException("CSourceFileSystem-path-not-readable", $path);
     }
     
-    return $this->_files = CMbPath::getFiles($path);
+    if (!$handle = opendir($path)) {
+      throw new CMbException("CSourceFileSystem-path-not-readable", $path);
+    }  
+    
+    /* Loop over the directory 
+     * $this->_files = CMbPath::getFiles($path); => pas optimisé pour un listing volumineux
+     * */
+    $i = 1;
+    $this->_files = array();
+    while (false !== ($entry = readdir($handle))) {
+      /* Limite de 5000 fichiers */
+      if ($i == 10000) {
+        break;
+      }
+      
+      /* Suppression des dossier */
+      if (is_dir("$path/$entry")) {
+        continue;
+      } 
+      
+      
+      $this->_files[] = $entry;
+      
+      $i++;
+    }
+    
+    closedir($handle);
+    
+    return $this->_files;
   }
   
   function send($evenement_name = null) {
