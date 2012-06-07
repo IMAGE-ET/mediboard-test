@@ -65,10 +65,17 @@ foreach ($listPlage as $plage_id => &$plage) {
     $plage->listPlace[$i]["consultations"] = array();
   }
   
+  CMbObject::massLoadFwdRef($plage->_ref_consultations, "sejour_id");
+  
   foreach ($plage->_ref_consultations as $keyConsult => $valConsult) {
     $consultation =& $plage->_ref_consultations[$keyConsult];
-
-    $consultation->loadRefPatient(1);
+    
+    $patient = $consultation->loadRefPatient(1);
+    
+    if ($consultation->sejour_id) {
+      $patient->_ref_curr_affectation = $consultation->loadRefSejour()->loadRefCurrAffectation(mbDate($consultation->_datetime));
+      $patient->_ref_curr_affectation->loadView();
+    }
     
     // Chargement de la categorie
     $consultation->loadRefCategorie(1);

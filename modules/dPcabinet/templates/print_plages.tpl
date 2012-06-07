@@ -38,7 +38,7 @@
     
     <tr>
       <th rowspan="2" colspan="2"><b>Heure</b></th>
-      <th {{if $filter->_coordonnees}}colspan="4"{{elseif $filter->_telephone}}colspan="3"{{else}}colspan="2"{{/if}}><b>Patient</b></th>
+      <th {{if $filter->_coordonnees}}colspan="5"{{elseif $filter->_telephone}}colspan="4"{{else}}colspan="3"{{/if}}><b>Patient</b></th>
       <th colspan="3"><b>Consultation</b></th>
     </tr>
     
@@ -52,6 +52,7 @@
         <th class="narrow">Tel</th>
       {{/if}}
       <th class="narrow">Age</th>
+      <th class="narrow">Lit</th>
       <th style="width: 25%;">Motif</th>
       <th style="width: 25%;">Remarques</th>
       <th>Durée</th>

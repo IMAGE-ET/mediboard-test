@@ -742,7 +742,7 @@ class CPatient extends CMbObject {
   // Backward references
   function loadRefsSejours($where = null) {
     if (!$this->_id) { 
-      return array();
+      return $this->_ref_sejours = array();
     }
     
     $sejour = new CSejour;
@@ -1010,11 +1010,11 @@ class CPatient extends CMbObject {
       $date = mbDateTime();
     }
     
-    $this->loadRefsSejours();
+    $sejours = $this->loadRefsSejours();
     $group = CGroups::loadCurrent();
     
     // Affectation actuelle et prochaine affectation
-    $where["affectation.sejour_id"] = CSQLDataSource::prepareIn(array_keys($this->_ref_sejours));
+    $where["affectation.sejour_id"] = CSQLDataSource::prepareIn(array_keys($sejours));
     $where["sejour.group_id"]       = "= '$group->_id'";
     $order = "affectation.entree";
     
