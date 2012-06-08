@@ -150,9 +150,6 @@ Main.add(function () {
   </td>
   <td style="float: right">
     <form action="?" name="selType" method="get">
-      <label>
-        <input type="checkbox" onclick="Admissions.toggleMultipleServices(this)" {{if $sejour->service_id|@count > 1}}checked="checked"{{/if}}/> Multiple
-      </label>
       {{mb_field object=$sejour field="_type_admission" emptyLabel="CSejour.all" onchange="reloadFullPresents()"}}
       <select name="service_id" onchange="reloadFullPresents();" {{if $sejour->service_id|@count > 1}}size="5" multiple="true"{{/if}}>
         <option value="">&mdash; Tous les services</option>
@@ -160,6 +157,7 @@ Main.add(function () {
           <option value="{{$_service->_id}}" {{if in_array($_service->_id, $sejour->service_id)}}selected="selected"{{/if}}}>{{$_service}}</option>
         {{/foreach}}
       </select>
+      <input type="checkbox" onclick="Admissions.toggleMultipleServices(this)" {{if $sejour->service_id|@count > 1}}checked="checked"{{/if}}/>
       <select name="prat_id" onchange="reloadFullPresents();">
         <option value="">&mdash; Tous les praticiens</option>
         {{foreach from=$prats item=_prat}}
