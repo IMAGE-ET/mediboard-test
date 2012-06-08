@@ -36,7 +36,7 @@
   }
 
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["id400"]        = "str notNull maxLength|80";
     $specs["tag"]          = "str maxLength|80";
     $specs["last_update"]  = "dateTime notNull";
@@ -166,7 +166,7 @@
 
     $this->object_class = $object_class;
     $this->object_id = $mbObject->_id;
-		$this->last_update = null; // In case already defined
+    $this->last_update = null; // In case already defined
     $this->loadMatchingObject("`last_update` DESC");
     $this->_ref_object = null; // Prevent optimisation errors
     $this->loadRefs();
@@ -195,6 +195,9 @@
     }
   }
   
+  /**
+   * @return CIdSante400 The matching external ID
+   */
   static function getMatch($object_class, $tag, $id400, $object_id = null) {
     $id_ext               = new self;
     $id_ext->object_class = $object_class;

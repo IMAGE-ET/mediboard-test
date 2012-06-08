@@ -19,7 +19,7 @@ function confirmDeletion(oForm, oOptions, oOptionsAjax) {
   }, oOptions);
   
   if (oOptionsAjax) {
-	oOptions.ajax = true;
+    oOptions.ajax = true;
   }
   
   if (oOptions.objName) {
@@ -27,7 +27,7 @@ function confirmDeletion(oForm, oOptions, oOptionsAjax) {
   }
   
   if (!confirm(oOptions.msg + oOptions.typeName + " " + oOptions.objName + " ?" )) {
-	return;
+    return;
   }
   
   oForm.del.value = 1;

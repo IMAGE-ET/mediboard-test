@@ -14,7 +14,7 @@
       maxHours    : {{$conf.dPplanningOp.COperation.duree_fin}}
     };
     {{foreach from=$intervs item=_op}}
-    oForm = getForm("edit-interv-{{$_op->_id}}");
+    oForm = getForm("edit-interv-{{$list_type}}-{{$_op->_id}}");
     Calendar.regField(oForm.temp_operation, null, options);
     Calendar.regField(oForm.duree_preop);
     if(oForm.pause) {
@@ -81,7 +81,7 @@
         Passage souhaité à {{$_op->horaire_voulu|date_format:$conf.time}}
       {{/if}}
       <div style="text-align: right;">
-      <form name="edit-interv-{{$_op->operation_id}}" action="?m={{$m}}" method="post">
+      <form name="edit-interv-{{$list_type}}-{{$_op->operation_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="del" value="0" />
@@ -95,7 +95,7 @@
           <br />
           {{mb_label object=$_op field="pause"}}
           {{mb_field object=$_op field="pause" hidden=true onchange="submitOrder(this.form, '$list_type');"}}
-        {{elseif $listPlages|@count != '1'}}
+        {{elseif $listPlages|@count > 1}}
           <br />
           Changement de salle
           <select name="plageop_id" onchange="submitOrder(this.form);">

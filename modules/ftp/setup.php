@@ -120,7 +120,13 @@ class CSetupftp extends CSetup {
                 ADD `create_ack_file` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.09";    
+    $this->makeRevision("0.09");
+    
+    $query = "ALTER TABLE `echange_ftp` 
+                ADD INDEX (`function_name`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.10";    
   }
 }
 ?>

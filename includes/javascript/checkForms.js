@@ -369,8 +369,10 @@ Object.extend(ElementChecker, {
         }
       }
       else {
-        if (!this.sValue || (this.sValue && list.indexOf(this.sValue) == -1)) 
+        var value = this.sValue+""; // Sometimes it's an array
+        if (!value || (value && list.indexOf(value) == -1)) {
           this.addError("list", "N'est pas une valeur possible");
+        }
       }
     },
     
