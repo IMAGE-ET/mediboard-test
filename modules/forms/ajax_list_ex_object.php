@@ -166,6 +166,12 @@ foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
     $_ex->loadLogs();
     $_log = $_ex->_ref_first_log;
     
+    // Cas tres etrange de formulaire sans aucun log
+    // Plutot que de tout planter, on ne l'affiche pas
+    if (!$_log) {
+      continue;
+    }
+    
     $all_ex_objects["$_log->date $_ex->_id"] = $_ex;
     $ex_objects_by_event[$ex_class_key][$_ex_class_id]["$_log->date $_ex->_id"] = $_ex;
   }
