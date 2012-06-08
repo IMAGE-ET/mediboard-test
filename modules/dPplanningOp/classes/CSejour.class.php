@@ -125,6 +125,8 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_grossesse          = null;
   var $_nb_printers        = null;
   var $_sejours_enfants_ids = array();
+  var $_date_deces         = null;
+  
   // Behaviour fields
   var $_check_bounds  = true;
   var $_en_mutation   = null;
@@ -368,8 +370,9 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["_protocole_prescription_anesth_id"] = "str";
     $props["_protocole_prescription_chir_id"]   = "str";
     $props["_motif_complet"]                    = "str";
-    $props["_unique_lit_id"]   = "ref class|CLit";
-        
+    $props["_unique_lit_id"]    = "ref class|CLit";
+    $props["_date_deces"]       = "date progressive";      
+    
     return $props;
   }
   
@@ -634,20 +637,21 @@ class CSejour extends CCodable implements IPatientRelated {
     
     $patient_modified = $this->fieldModified("patient_id");
     
-    // Pour un séjour non annulé et un changement du mode de sortie,
-    // mise à jour de la date de décès du patient.
-    $mode_sortie_modified = $this->fieldModified("mode_sortie");
-
-    if (!$this->annule && $mode_sortie_modified) {
+    // Pour un séjour non annulé, mise à jour de la date de décès du patient
+    // suivant le mode de sortie
+    if (!$this->annule) {
       $patient = new CPatient;
       $patient->load($this->patient_id);
-
-      // Pas de changement si la date de décès existe déjà.
-      if ("deces" === $this->mode_sortie && $patient->deces === null) {
-        $patient->deces = mbDate();
-        if ($msg = $patient->store()) {
-          return $msg;
-        }
+      
+      if ("deces" === $this->mode_sortie) {
+        $patient->deces = $this->_date_deces;
+      }
+      else {
+        $patient->deces = "";
+      }
+      
+      if ($msg = $patient->store()) {
+        return $msg;
       }
     }
     

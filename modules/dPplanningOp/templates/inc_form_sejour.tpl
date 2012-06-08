@@ -54,9 +54,21 @@ function loadServiceMutation(mode_sortie){
   $('lit_sortie_transfert').setVisible(mode_sortie == "mutation");
 }
 
+function loadDateDeces(mode_sortie) {
+  $('date_deces').setVisible(mode_sortie == "deces");
+  var form = getForm("editSejour");
+  if (mode_sortie == "deces") {
+    form._date_deces.addClassName("notNull");
+  }
+  else {
+    form._date_deces.removeClassName("notNull");
+  }
+}
+
 function changeModeSortie(mode_sortie){
   loadTransfert(mode_sortie);
   loadServiceMutation(mode_sortie);
+  loadDateDeces(mode_sortie);
 }
 
 function checkModeSortie(){
@@ -317,6 +329,8 @@ Main.add( function(){
 //  };
   
   Calendar.regField(form._date_sortie_prevue, dates);
+  
+  Calendar.regProgressiveField(form._date_deces);
   
   removePlageOp(false);
   OccupationServices.initOccupation();
@@ -793,6 +807,10 @@ Main.add( function(){
             </option>
           {{/foreach}}
         </select>
+      </div>
+      <div id="date_deces" {{if $sejour->mode_sortie != "deces"}}style="display: none"{{/if}}>
+        <input type="hidden" name="_date_deces" value="{{$patient->deces}}"
+          class="date progressive {{if $sejour->mode_sortie == "deces"}}notNull{{/if}}" />
       </div>
     {{else}}
       {{mb_value object=$sejour field=mode_sortie}}

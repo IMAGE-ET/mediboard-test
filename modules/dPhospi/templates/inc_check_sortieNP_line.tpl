@@ -69,12 +69,21 @@
         {{mb_field object=$sejour field=entree_prevue hidden=true}}
         <button class="add" type="button" onclick="addDays(this, 1)">1J</button>
         {{mb_field object=$sejour field=sortie_prevue register=true form="editSortiePrevue-`$type`-`$sejour_guid`" onchange="this.form.onsubmit()"}}
-        {{mb_field object=$sejour field="mode_sortie" onchange="this.form.onsubmit()"}}
+        {{mb_field object=$sejour field="mode_sortie" onchange="if (\$V(this) == 'deces') { showDateDeces('`$sejour->_id`'); } else { this.form.onsubmit(); }"}}
         <br />
         <div id="listEtabExterne-editFrm{{$sejour->_guid}}" {{if $sejour->mode_sortie != "transfert"}} style="display: none;" {{/if}}>
           {{mb_field object=$sejour field="etablissement_sortie_id" form="editSortiePrevue-`$type`-`$sejour_guid`" 
             autocomplete="true,1,50,true,true" onchange="this.form.onsubmit()"}}
         </div>
+        <div id="dateDeces{{$sejour->_id}}" {{if $sejour->mode_sortie != "deces"}}style="display: none"{{/if}}>
+          {{mb_label object=$patient field=deces}} : <input type="hidden" name="_date_deces" value="{{$patient->deces}}" onchange="this.form.onsubmit()"
+          class="date progressive {{if $sejour->mode_sortie == "deces"}}notNull{{/if}}" />
+        </div>
+        <script type="text/javascript">
+          Main.add(function() {
+            Calendar.regProgressiveField(getForm('editSortiePrevue-{{$type}}-{{$sejour_guid}}')._date_deces);
+          });
+        </script>
       </form>
       </div>
     {{/if}}

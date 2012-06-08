@@ -81,6 +81,19 @@
     </td>
   </tr>
   
+  <tr id="date_deces" {{if $sejour->mode_sortie != "deces"}}style="display: none"{{/if}}>
+    <th>{{mb_label class="CPatient" field="deces"}}</th>
+    <td>
+      <input type="hidden" name="_date_deces" value="{{$sejour->_ref_patient->deces}}" onchange="this.form.onsubmit()"
+          class="date progressive {{if $sejour->mode_sortie == "deces"}}notNull{{/if}}" />
+      <script type="text/javascript">
+          Main.add(function() {
+            Calendar.regProgressiveField(getForm('editSejour')._date_deces);
+          });
+        </script>
+    </td>
+  </tr>
+  
   <tr>
     <th>{{mb_label object=$sejour field=transport_sortie}}</th>
     <td>

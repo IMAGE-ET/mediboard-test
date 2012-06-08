@@ -54,6 +54,10 @@ function refreshList(order_col, order_way, type, type_mouvement) {
     url.requestUpdate(controlTabs.activeContainer.id);
   }
 }
+
+function showDateDeces(sejour_id) {
+  $('dateDeces'+sejour_id).show();
+}
 </script>
 
 <table class="main">

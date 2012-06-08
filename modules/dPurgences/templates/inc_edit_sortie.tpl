@@ -9,12 +9,12 @@
 *}}
 
 <script type="text/javascript">
-	
+  
 submitSejour = function(force) {
   if (!force) {
-	  return;
-	}
-	
+    return;
+  }
+  
   var form = getForm('editSejour');
   return onSubmitFormAjax(form, { onComplete: function() {
     Sortie.refresh('{{$rpu->_id}}');
@@ -24,8 +24,15 @@ submitSejour = function(force) {
 
 Fields = {
   init: function(mode_sortie) {
-	  $('etablissement_sortie_transfert').setVisible(mode_sortie == "transfert");
-	  $('lit_sortie_transfert'      ).setVisible(mode_sortie == "mutation");
+    $('etablissement_sortie_transfert').setVisible(mode_sortie == "transfert");
+    $('lit_sortie_transfert'      ).setVisible(mode_sortie == "mutation");
+    $('date_deces').setVisible(mode_sortie === "deces");
+    var date_deces = getForm("editSejour")._date_deces;
+    if (mode_sortie != "deces") {
+      $V(date_deces, "", false);
+      $V(date_deces.previous().down("input"), "", false);
+      date_deces.removeClassName("notNull");
+    }
   },
   
   modif: function(lit_id) {
