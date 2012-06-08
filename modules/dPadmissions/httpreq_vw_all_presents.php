@@ -13,7 +13,6 @@ CCanDo::checkRead();
 // Initialisation de variables
 $date = CValue::getOrSession("date", mbDate());
 $month_min     = mbDate("first day of +0 month", $date);
-$month_max     = mbDate("last day of +0 month" , $date);
 $lastmonth     = mbDate("last day of -1 month" , $date);
 $nextmonth     = mbDate("first day of +1 month", $date);
 
@@ -29,7 +28,7 @@ $demain = mbDate("+ 1 day", $date);
 
 // Initialisation du tableau de jours
 $days = array();
-for ($day = $month_min; $day <= $month_max; $day = mbDate("+1 DAY", $day)) {
+for ($day = $month_min; $day < $nextmonth; $day = mbDate("+1 DAY", $day)) {
   $days[$day] = "0";
 }
 

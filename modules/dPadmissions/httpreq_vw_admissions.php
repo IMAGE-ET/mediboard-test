@@ -32,7 +32,7 @@ $hier   = mbDate("- 1 day", $date);
 $demain = mbDate("+ 1 day", $date);
 
 $date_min = mbDateTime("00:00:00", $date);
-$date_max = mbDateTime("23:59:00", $date);
+$date_max = mbDateTime("23:59:59", $date);
 
 // Chargement des prestations
 $prestations = CPrestation::loadCurrentList();
@@ -70,7 +70,7 @@ if ($prat_id) {
 }
 
 $where["sejour.group_id"] = "= '$group->_id'";
-$where["sejour.entree"]   = "BETWEEN '$date' AND '$next'";
+$where["sejour.entree"]   = "BETWEEN '$date_min' AND '$date_max'";
 $where["sejour.annule"]   = "= '0'";
 
 if ($selAdmis != "0") {

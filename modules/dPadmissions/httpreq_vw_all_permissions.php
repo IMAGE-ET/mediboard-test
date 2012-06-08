@@ -15,7 +15,6 @@ $ds = CSQLDataSource::get("std");
 // Initialisation de variables
 $date = CValue::getOrSession("date", mbDate());
 $month_min     = mbDate("first day of +0 month", $date);
-$month_max     = mbDate("last day of +0 month" , $date);
 $lastmonth     = mbDate("last day of -1 month" , $date);
 $nextmonth     = mbDate("first day of +1 month", $date);
 
@@ -29,7 +28,7 @@ $demain = mbDate("+ 1 day", $date);
 
 // Initialisation du tableau de jours
 $days = array();
-for ($day = $month_min; $day <= $month_max; $day = mbDate("+1 DAY", $day)) {
+for ($day = $month_min; $day < $nextmonth; $day = mbDate("+1 DAY", $day)) {
   $days[$day] = array(
     "num1" => "0",
     "num2" => "0",
@@ -68,7 +67,7 @@ $query = "SELECT DATE_FORMAT(`affectation`.`entree`, '%Y-%m-%d') AS `date`, COUN
     ON lit.chambre_id = chambre.chambre_id
   LEFT JOIN service
     ON chambre.service_id = service.service_id
-  WHERE `affectation`.`entree` BETWEEN '$month_min' AND '$month_max'
+  WHERE `affectation`.`entree` BETWEEN '$month_min' AND '$nextmonth'
     AND `sejour`.`group_id` = '$group->_id'
     AND `sejour`.`annule` = '0'
     $filterService
@@ -91,7 +90,7 @@ $query = "SELECT DATE_FORMAT(`affectation`.`sortie`, '%Y-%m-%d') AS `date`, COUN
     ON lit.chambre_id = chambre.chambre_id
   LEFT JOIN service
     ON chambre.service_id = service.service_id
-  WHERE `affectation`.`sortie` BETWEEN '$month_min' AND '$month_max'
+  WHERE `affectation`.`sortie` BETWEEN '$month_min' AND '$nextmonth'
     AND `sejour`.`group_id` = '$group->_id'
     AND `sejour`.`annule` = '0'
     $filterService

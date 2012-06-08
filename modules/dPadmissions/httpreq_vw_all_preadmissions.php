@@ -15,7 +15,6 @@ $ds = CSQLDataSource::get("std");
 // Initialisation de variables
 $date = CValue::getOrSession("date", mbDate());
 $month_min     = mbDate("first day of +0 month", $date);
-$month_max     = mbDate("last day of +0 month" , $date);
 $lastmonth     = mbDate("last day of -1 month" , $date);
 $nextmonth     = mbDate("first day of +1 month", $date);
 
@@ -25,7 +24,7 @@ $demain = mbDate("+ 1 day", $date);
 
 // Initialisation du tableau de jours
 $days = array();
-for ($day = $month_min; $day <= $month_max; $day = mbDate("+1 DAY", $day)) {
+for ($day = $month_min; $day < $nextmonth; $day = mbDate("+1 DAY", $day)) {
   $days[$day] = array(
     "total" => "0",
   );
@@ -49,7 +48,7 @@ $where = array();
 $where["consultation.patient_id"] = "IS NOT NULL";
 $where["consultation.annule"] = "= '0'";
 $where["plageconsult.chir_id"] = CSQLDataSource::prepareIn(array_keys($anesthesistes));
-$where["plageconsult.date"] = "BETWEEN '$month_min' AND '$month_max'";
+$where["plageconsult.date"] = "BETWEEN '$month_min' AND '$nextmonth'";
 $order = "plageconsult.date";
 $groupby = "plageconsult.date";
 

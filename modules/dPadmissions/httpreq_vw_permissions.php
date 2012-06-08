@@ -24,7 +24,7 @@ $hier   = mbDate("- 1 day", $date);
 $demain = mbDate("+ 1 day", $date);
 
 $date_min = mbDateTime("00:00:00", $date);
-$date_max = mbDateTime("23:59:00", $date);
+$date_max = mbDateTime("23:59:59", $date);
 
 // Chargement des prestations
 $prestations = CPrestation::loadCurrentList();
@@ -55,9 +55,9 @@ if($type == "ambucomp") {
 
 $where["sejour.group_id"] = "= '$group->_id'";
 if($type_externe == "depart") {
-  $where["affectation.entree"] = "BETWEEN '$date' AND '$next'";
+  $where["affectation.entree"] = "BETWEEN '$date_min' AND '$date_max'";
 } else {
-  $where["affectation.sortie"] = "BETWEEN '$date' AND '$next'";
+  $where["affectation.sortie"] = "BETWEEN '$date_min' AND '$date_max'";
 }
 $where["sejour.annule"]   = "= '0'";
 

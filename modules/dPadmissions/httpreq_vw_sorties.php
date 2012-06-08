@@ -30,7 +30,7 @@ $hier   = mbDate("- 1 day", $date);
 $demain = mbDate("+ 1 day", $date);
 
 $date_min = mbDateTime("00:00:00", $date);
-$date_max = mbDateTime("23:59:00", $date);
+$date_max = mbDateTime("23:59:59", $date);
 
 // Sorties de la journée
 $sejour = new CSejour;
@@ -64,7 +64,7 @@ if ($prat_id) {
   $where["sejour.praticien_id"] = " = '$prat_id'";
 }
 $where["sejour.group_id"] = "= '$group->_id'";
-$where["sejour.sortie"]   = "BETWEEN '$date' AND '$next'";
+$where["sejour.sortie"]   = "BETWEEN '$date_min' AND '$date_max'";
 $where["sejour.annule"]   = "= '0'";
 
 if ($selSortis != "0") {
