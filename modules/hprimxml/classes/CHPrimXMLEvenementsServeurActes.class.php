@@ -39,6 +39,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
         $mbPatient = $codable->_ref_sejour->loadRefPatient();
         break;
     }  
+    $mbPatient->loadIPP();
     $this->addPatient($patient, $mbPatient, false, true);
     
     // Ajout de la venue
@@ -54,6 +55,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
         $mbSejour = $codable;
         break;
     }
+    $mbSejour->loadNDA();
     $this->addVenue($venue, $mbSejour, null, true);
     
     // Ajout de l'intervention ou consultation ou sejour
