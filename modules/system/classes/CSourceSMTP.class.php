@@ -18,6 +18,7 @@ class CSourceSMTP extends CExchangeSource {
   // DB Fields
   var $port     = null;
   var $email    = null;
+  var $auth     = null;
   var $ssl      = null;
   var $timeout  = null;
   var $debug    = null;
@@ -35,6 +36,7 @@ class CSourceSMTP extends CExchangeSource {
     $props = parent::getProps();
     $props["port"]     = "num default|25";
     $props["email"]    = "email";
+    $props["auth"]     = "bool default|1";
     $props["ssl"]      = "bool";
     $props["password"] = "password";
     $props["timeout"]  = "num default|5";
@@ -67,7 +69,7 @@ class CSourceSMTP extends CExchangeSource {
     }
     
     $this->_mail->Host       = $this->host;        
-    $this->_mail->SMTPAuth   = true;
+    $this->_mail->SMTPAuth   = $this->auth; 
     $this->_mail->Port       = $this->port;
     $this->_mail->Username   = $this->user;
     $this->_mail->Password   = $this->password;

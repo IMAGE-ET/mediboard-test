@@ -1006,9 +1006,14 @@ class CSetupsystem extends CSetup {
               ADD UNIQUE (`feature`, `object_id`, `object_class`);";
     $this->addQuery($query);
     
-    
     $this->makeRevision("1.0.99");
     $this->addPrefQuery("MobileUI", 1);
+    
+    $this->makeRevision("1.1.00");
+    $query = "ALTER TABLE `source_smtp` 
+      ADD `auth` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+    
     
     $this->mod_version = "1.1.0";
   }
