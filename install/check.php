@@ -1,41 +1,85 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage install
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Installation prerequisite checker
+ *
+ * PHP version 5.1.x+
+ *  
+ * @package    Mediboard
+ * @subpackage Intaller
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    SVN: $Id$ 
+ * @link       http://www.mediboard.org
  */
 
-require_once("header.php");
+require_once "header.php";
 
+/**
+ * Prerequisite abstract class
+ */
 class CPrerequisite {
   var $name = "";
   var $description = "";
   var $mandatory = false;
   var $reason = array();
 
+  /**
+   * Check prerequisite
+   * 
+   * @return bool
+   */
   function check() {
     return false;
   }
 }
 
+/**
+ * PEAR package prerequisite
+ */
 class CPearPackage extends CPrerequisite {
   var $status = "stable";
 
+  /**
+   * Check file inclusion
+   * 
+   * @see parent::check
+   * 
+   * @return bool
+   */
   function check() {
-    return @include_once("$this->name.php");
+    return @include_once "$this->name.php";
   }
 }
 
+/**
+ * PHP extension prerequisite
+ */
 class CPHPExtension  extends CPrerequisite {
+
+  /**
+   * Check extension load
+   * 
+   * @see parent::check
+   * 
+   * @return bool
+   */
   function check() {
     return extension_loaded(strtolower($this->name));
   }
 }
 
+/**
+ * PHP version prerequisite
+ */
 class CPHPVersion extends CPrerequisite {
+
+  /**
+   * Compare PHP version
+   * 
+   * @see parent::check
+   * 
+   * @return bool
+   */
   function check() {
     return phpversion() >= $this->name;
   }
@@ -79,18 +123,9 @@ $package->name = "PHP/CodeSniffer";
 $package->description = "Analyseur syntaxique de code source";
 $package->status = "beta";
 $package->mandatory = false;
-$package->reasons[] = "Outil de génie logiciel pour vérifier la qualité du code source de Mediboard";
+$package->reasons[] = 
+  "Outil de génie logiciel pour vérifier la qualité du code source de Mediboard";
 $packages[] = $package;
-
-/*
-$package = new CPearPackage;
-$package->name = "phpUnit";
-$package->description = "Package de test unitaire";
-$package->mandatory = false;
-$package->reasons[] = "Tests unitaires et fonctionnels de Mediboard";
-$package->reasons[] = "cf. <a href='http://www.phpunit.de/wiki/Documentation' style='display: inline;'>http://www.phpunit.de/wiki/Documentation</a>";
-$packages[] = $package;
-*/
 
 $extensions = array();
 
@@ -160,13 +195,15 @@ $extensions[] = $extension;
 
 $extension = new CPHPExtension;
 $extension->name = "CURL";
-$extension->description = "Extension permettant de communiquer avec des serveurs distants, grâce à de nombreux protocoles";
+$extension->description = 
+  "Extension permettant de communiquer avec des serveurs distants, grâce à de nombreux protocoles";
 $extension->reasons[] = "Connexion au site web du Conseil National l'Ordre des Médecins";
 $extensions[] = $extension;
 
 $extension = new CPHPExtension;
 $extension->name = "GD";
-$extension->description = "Extension de manipulation d'image. \nGD version 2 est recommandée car elle permet un meilleur rendu, grâce à de nombreux protocoles";
+$extension->description = "Extension de manipulation d'image.";
+$extension->reasons[] = "GD version 2 est recommandée car elle permet un meilleur rendu";
 $extension->reasons[] = "Module de statistiques graphiques";
 $extension->reasons[] = "Fonction d'audiogrammes";
 $extensions[] = $extension;
@@ -241,33 +278,37 @@ showHeader();
   <th>Installation ?</th>
 </tr>
   
-<?php foreach($versions as $prereq) { ?>
-<tr>
-  <td><strong><?php echo $prereq->name; ?></strong></td>
-  <td class="text"><?php echo nl2br($prereq->description); ?></td>
-  <td>
-    <?php if ($prereq->mandatory) { ?>
-    Oui
-    <?php } else { ?>
-    Recommandée
-    <?php } ?>
-  </td>
-  <td class="text">
-    <ul>
-      <?php foreach($prereq->reasons as $reason) { ?>
-      <li><?php echo $reason; ?></li>
+<?php // @codingStandardsIgnoreStart ?>  
+<?php foreach ($versions as $prereq) { ?>
+  <tr>
+    <td><strong><?php echo $prereq->name; ?></strong></td>
+    <td class="text"><?php echo nl2br($prereq->description); ?></td>
+    <td>
+      <?php if ($prereq->mandatory) { ?>
+      Oui
+      <?php } else { ?>
+      Recommandée
       <?php } ?>
-    </ul>
-  </td>
-  <td>
-    <?php if ($prereq->check()) { ?>
-    <div class="info">Oui, Version <?php echo phpVersion(); ?></div>
-    <?php } else { ?>
-    <div class="<?php echo $prereq->mandatory ? "error" : "warning"; ?>">Non, Version <?php echo phpVersion(); ?></div>
-    <?php } ?>
-  </td>
-</tr>
+    </td>
+    <td class="text">
+      <ul>
+        <?php foreach ($prereq->reasons as $reason) { ?>
+        <li><?php echo $reason; ?></li>
+        <?php } ?>
+      </ul>
+    </td>
+    <td>
+      <?php if ($prereq->check()) { ?>
+        <div class="info">Oui, Version <?php echo phpVersion(); ?></div>
+      <?php } else { ?>
+        <div class="<?php echo $prereq->mandatory ? "error" : "warning"; ?>">
+          Non, Version <?php echo phpVersion(); ?>
+        </div>
+      <?php } ?>
+    </td>
+  </tr>
 <?php } ?>
+<?php // @codingStandardsIgnoreEnd ?>  
   
 </table>
 
@@ -303,33 +344,35 @@ showHeader();
   <th>Installation ?</th>
 </tr>
 
+<?php // @codingStandardsIgnoreStart ?>  
 <?php foreach($extensions as $prereq) { ?>
-<tr>
-  <td><strong><?php echo $prereq->name; ?></strong></td>
-  <td class="text"><?php echo nl2br($prereq->description); ?></td>
-  <td>
-    <?php if ($prereq->mandatory) { ?>
-    Oui
-    <?php } else { ?>
-    Recommandée
-    <?php } ?>
-  </td>
-  <td class="text">
-    <ul>
-      <?php foreach($prereq->reasons as $reason) { ?>
-      <li><?php echo $reason; ?></li>
+  <tr>
+    <td><strong><?php echo $prereq->name; ?></strong></td>
+    <td class="text"><?php echo nl2br($prereq->description); ?></td>
+    <td>
+      <?php if ($prereq->mandatory) { ?>
+      Oui
+      <?php } else { ?>
+      Recommandée
       <?php } ?>
-    </ul>
-  </td>
-  <td>
-    <?php if ($prereq->check()) { ?>
-    <div class="info">Extension chargée</div>
-    <?php } else { ?>
-    <div class="<?php echo $prereq->mandatory ? "error" : "warning"; ?>">Extension absente</div>
-    <?php } ?>
-  </td>
-</tr>
+    </td>
+    <td class="text">
+      <ul>
+        <?php foreach($prereq->reasons as $reason) { ?>
+        <li><?php echo $reason; ?></li>
+        <?php } ?>
+      </ul>
+    </td>
+    <td>
+      <?php if ($prereq->check()) { ?>
+      <div class="info">Extension chargée</div>
+      <?php } else { ?>
+      <div class="<?php echo $prereq->mandatory ? "error" : "warning"; ?>">Extension absente</div>
+      <?php } ?>
+    </td>
+  </tr>
 <?php } ?>
+<?php // @codingStandardsIgnoreEnd ?>  
 
 </table>
 
@@ -358,34 +401,36 @@ showHeader();
   <th>Installation ?</th>
 </tr>
 
+<?php // @codingStandardsIgnoreStart ?>  
 <?php foreach($packages as $prereq) { ?>
-<tr>
-  <td><strong><?php echo $prereq->name; ?></strong></td>
-  <td class="text"><?php echo nl2br($prereq->description); ?></td>
-  <td>
-    <?php if ($prereq->mandatory) { ?>
-    Oui
-    <?php } else { ?>
-    Recommandé
-    <?php } ?>
-  </td>
-  <td class="text">
-    <ul>
-      <?php foreach($prereq->reasons as $reason) { ?>
-      <li><?php echo $reason; ?></li>
+  <tr>
+    <td><strong><?php echo $prereq->name; ?></strong></td>
+    <td class="text"><?php echo nl2br($prereq->description); ?></td>
+    <td>
+      <?php if ($prereq->mandatory) { ?>
+      Oui
+      <?php } else { ?>
+      Recommandé
       <?php } ?>
-    </ul>
-  </td>
-  <td><?php echo $prereq->status; ?></td>
-  <td>
-    <?php if ($prereq->check()) { ?>
-    <div class="info">Package installé</div>
-    <?php } else { ?>
-    <div class="<?php echo $prereq->mandatory ? "error" : "warning"; ?>">Package manquant</div>
-    <?php } ?>
-  </td>
-</tr>
+    </td>
+    <td class="text">
+      <ul>
+        <?php foreach($prereq->reasons as $reason) { ?>
+        <li><?php echo $reason; ?></li>
+        <?php } ?>
+      </ul>
+    </td>
+    <td><?php echo $prereq->status; ?></td>
+    <td>
+      <?php if ($prereq->check()) { ?>
+        <div class="info">Package installé</div>
+      <?php } else { ?>
+        <div class="<?php echo $prereq->mandatory ? "error" : "warning"; ?>">Package manquant</div>
+      <?php } ?>
+    </td>
+  </tr>
 <?php } ?>
+<?php // @codingStandardsIgnoreEnd ?>  
 
 </table>
 
@@ -398,4 +443,7 @@ showHeader();
   <pre>pear config-set preferred_state beta</pre>
 </div>
 
-<?php require("valid.php"); showFooter(); ?>
+<?php 
+require "valid.php"; 
+showFooter(); 
+?>

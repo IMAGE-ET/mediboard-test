@@ -1,25 +1,34 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage install
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Installation authentication checker
+ *
+ * PHP version 5.1.x+
+ *  
+ * @package    Mediboard
+ * @subpackage Intaller
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    SVN: $Id$ 
+ * @link       http://www.mediboard.org
  */
 
-require_once("header.php");
-require_once("CMbDb.class.php");
+require_once "header.php";
+require_once "CMbDb.class.php";
+require_once "Auth.php";
 
-require_once("Auth.php");
-
-if (!@include_once($mbpath."includes/config.php")) { 
+if (!@include_once $mbpath."includes/config.php") { 
   return;
 }
 
+/**
+ * Show login page 
+ * 
+ * @return void
+ */
 function showLogin() {
-  require("valid.php");
+  include "valid.php";
   showHeader();
+  // @codingStandardsIgnoreStart
 ?>
 
 <form name="login" method="post" action="">
@@ -44,6 +53,7 @@ function showLogin() {
 </form>
 
 <?php
+  // @codingStandardsIgnoreEnd
   showFooter();
   die();
 }
@@ -68,7 +78,7 @@ $auth = new Auth("DB", $params);
 $auth->setShowLogin(false);
 $auth->start();
 
-// Abandon if authentification is not possible
+// Abandon if authentication is not possible
 $users = $auth->listUsers();
 if (PEAR::isError($users)) {
   return;

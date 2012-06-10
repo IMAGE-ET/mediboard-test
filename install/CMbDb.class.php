@@ -1,15 +1,5 @@
 <?php
 /**
- * Generate system user SQL queries
- * 
- * @package    Mediboard
- * @subpackage install
- * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    $Revision$
- */
-
-/**
  * $Id$
  * 
  * @package    Mediboard
@@ -120,7 +110,7 @@ class CMbDb {
    * @return result The actual result if successfull, false otherwise
    */
   function getOne($query, $data = array()) {
-    $res =& $this->_db->getOne($query, $params);
+    $res =& $this->_db->getOne($query, $data);
     if (PEAR::isError($res)) {
       $this->logError($res, "Erreur d'exécution de requête");
       return false;

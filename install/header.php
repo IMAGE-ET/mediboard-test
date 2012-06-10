@@ -16,6 +16,11 @@ if (defined("E_DEPRECATED")) {
 
 $mbpath = "../";
 
+function trace($any) {
+  $trace = print_r($any, true);
+  echo "<pre>$trace</pre>";  
+}
+
 if (!file_exists($mbpath."classes/CMbArray.class.php")){
   $mbpath = "./";
 }
