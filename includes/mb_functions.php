@@ -832,20 +832,22 @@ function luhn ($code) {
 /**
  * Check wether a URL exists (200 HTTP Header)
  * 
- * @param string $url URL to check
+ * @param string $url    URL to check
+ * @param string $method HTTP method (GET, POST, HEAD, PUT, ...)
  * 
  * @return bool
  */
-function url_exists($url, $stream_context = null) {
+function url_exists($url, $method = null) {
   $old = ini_set('default_socket_timeout', 5); 
 	
-	if ($stream_context) {
-		// By default get_headers uses a GET request to fetch the headers. If you
-		// want to send a HEAD request instead, you can do so using a stream context:
+	if ($method) {
+		// By default get_headers uses a GET request to fetch the headers. 
+		// If you want to send a HEAD request instead, 
+		// you can change method with a stream context
 		stream_context_set_default(
     	array(
         'http' => array(
-          'method' => $stream_context
+          'method' => $method
         )
     	)
 		);

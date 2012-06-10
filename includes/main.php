@@ -230,10 +230,6 @@ if ($dosql) {
   if (is_file("./modules/$m_post/controllers/$dosql.php")) {
     include "./modules/$m_post/controllers/$dosql.php";
   } 
-  // otherwise... @FIXME to be removed
-  else {
-    include "./modules/$m_post/$dosql.php";
-  }
 }
 
 if ($class) {
