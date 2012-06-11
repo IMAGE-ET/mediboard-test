@@ -114,7 +114,7 @@
 </tr>
 {{/if}}
 
-{{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}}}
+{{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
   <tr>
     <th>{{mb_label object=$object field="ean"}}</th>
     <td>{{mb_field object=$object field="ean"}}</td>
