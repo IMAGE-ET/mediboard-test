@@ -30,13 +30,20 @@ function showConsultSiDesistement(){
 }
 
 function printPlage(plage_id) {
-    var form = document.paramFrm;
-    var url = new Url;
-    url.setModuleAction("cabinet", "print_plages");
-    url.addParam("plage_id", plage_id);
-    url.addParam("_telephone", 1);
-    url.popup(700, 550, "Planning");
-  }
+  var form = document.paramFrm;
+  var url = new Url;
+  url.setModuleAction("cabinet", "print_plages");
+  url.addParam("plage_id", plage_id);
+  url.addParam("_telephone", 1);
+  url.popup(700, 550, "Planning");
+}
+
+function printPlanning() {
+  var url = new Url("cabinet", "print_planning");
+  url.addParam("date", "{{$debut}}");
+  url.addParam("chir_id", "{{$chirSel}}");
+  url.popup(900, 600, "Planning");
+}
 
 Main.add(function () {
   var planning = window["planning-{{$planning->guid}}"];
@@ -46,6 +53,7 @@ Main.add(function () {
 
 {{mb_script module=cabinet script=plage_consultation}}
 {{mb_script module=ssr script=planning}}
+
 <table class="main">
   <tr>
     <th style="width: 50%;">
@@ -64,7 +72,8 @@ Main.add(function () {
         <a href="#1" onclick="$V($(this).getSurroundingForm().debut, '{{$today}}')">Aujourd'hui</a>
       </form>
       <br/>
-      <button style="float:left;" class="new" onclick="PlageConsultation.edit('0');">Créer une nouvelle plage</button>
+      <button style="float: left;" class="new" onclick="PlageConsultation.edit('0');">Créer une nouvelle plage</button>
+      <button style="float: right;" class="print" onclick="printPlanning();">{{tr}}Print{{/tr}}
     </th>
     <td style="min-width: 350px;">
       <form action="?" name="selectPrat" method="get">

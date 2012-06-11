@@ -9,6 +9,7 @@
 *}}
 
 {{mb_default var=bank_holidays value="|"|explode:""}}
+{{mb_default var=print value=0}}
 
 <script type="text/javascript">
 
@@ -47,6 +48,9 @@ Main.add(function() {
     <tr>
       <th class="title {{if $planning->selectable}}selector{{/if}}" colspan="{{$nb_days+2}}" 
       {{if $planning->selectable}} onclick="window['planning-{{$planning->guid}}'].selectAllEvents()" {{/if}}>
+        {{if $print}}
+          <button type="button" class="print notext not-printable" onclick="$('{{$planning->guid}}').print()"></button>
+        {{/if}}
         <div class="nbSelectedEvents" style="float: left; font-size: smaller; width: 20px;">
           (-) {{if @$date && $dialog}} {{$date|date_format:$conf.datetime}} {{/if}}
         </div>
@@ -87,7 +91,13 @@ Main.add(function() {
         <col span="{{$nb_days}}" />
       </colgroup>
       {{foreach from=$planning->hours item=_hour}}
-        <tr class="hour-{{$_hour}} {{if in_array($_hour, $planning->pauses)}}pause{{/if}}">
+        {{assign var=printable value="not-printable"}}
+        {{foreach from=$planning->days key=_day item=_events name=days}}
+          {{if isset($planning->events_sorted.$_day.$_hour|smarty:nodefaults)}}
+            {{assign var=printable value=""}}
+          {{/if}}
+        {{/foreach}}
+        <tr class="hour-{{$_hour}} {{$printable}} {{if in_array($_hour, $planning->pauses)}}pause{{/if}}">
           <th class="hour">{{$_hour}}h</th>
           
           {{foreach from=$planning->days key=_day item=_events name=days}}

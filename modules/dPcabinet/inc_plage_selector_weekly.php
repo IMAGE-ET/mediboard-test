@@ -9,7 +9,7 @@
 
 CCanDo::checkRead();
 
-global $period, $periods, $listPraticiens, $chir_id, $function_id, $date, $ndate, $pdate, $plageconsult_id;
+global $period, $periods, $listPraticiens, $chir_id, $function_id, $date, $ndate, $pdate, $plageconsult_id, $print;
 
 $plageconsult_id = 0;
 
@@ -43,7 +43,7 @@ if($plage->countList($where)) {
 }
 
 //Instanciation du planning
-$planning = new CPlanningWeek($debut, $debut, $fin, $nbDays, false, "auto", false, false);
+$planning = new CPlanningWeek($debut, $debut, $fin, $nbDays, false, $print ? "1000" : "auto", false, !$print);
 $planning->title    = $prat->_view;
 $planning->guid     = $prat->_guid;
 $planning->hour_min = "07";
@@ -111,5 +111,6 @@ $smarty->assign("plageconsult_id", $plageconsult_id);
 $smarty->assign("plage"          , $plage);
 $smarty->assign("planning"       , $planning);
 $smarty->assign("bank_holidays"  , mbBankHolidays($today));
+$smarty->assign("print"          , $print);
 
 $smarty->display("inc_plage_selector_weekly.tpl");

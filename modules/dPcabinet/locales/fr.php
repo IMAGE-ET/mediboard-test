@@ -1325,6 +1325,7 @@ $locales['mod-dPcabinet-tab-print_docs'] = 'Impression des documents';
 $locales['mod-dPcabinet-tab-print_fiche'] = 'Fiche d\'anesthésie';
 $locales['mod-dPcabinet-tab-print_pack'] = 'Impression du pack';
 $locales['mod-dPcabinet-tab-print_plages'] = 'Impression des plages';
+$locales['mod-dPcabinet-tab-print_planning'] = 'Impression paysage du semainier';
 $locales['mod-dPcabinet-tab-print_rapport'] = 'Impression du rapport';
 $locales['mod-dPcabinet-tab-print_select_docs'] = 'Impression multiple';
 $locales['mod-dPcabinet-tab-transfert_plageconsult'] = 'Transférer des plages';
