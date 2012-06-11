@@ -52,7 +52,7 @@ Main.add(function () {
       </tr>
       <tr>
         <th>Depuis le</th>
-        <td>{{mb_field object=$filter field="_date_min" form="printFrm" canNull="false" register=true onchange="refreshList()"}}</td>
+        <td>{{mb_field object=$filter field="_date_min" form="choice-facture" canNull="false" register=true onchange="refreshList()"}}</td>
         <th style="width:100px;"></th>
         <td>
             <input name="etat_ouvert" value="1" type="checkbox" {{if $etat_ouvert == 1}}checked="checked"{{/if}} onchange="refreshList();" />
@@ -78,7 +78,7 @@ Main.add(function () {
       </tr>
       <tr>
         <th>Jusqu'au</th>
-        <td>{{mb_field object=$filter field="_date_max" form="printFrm" canNull="false" register=true onchange="refreshList()"}}</td>
+        <td>{{mb_field object=$filter field="_date_max" form="choice-facture" canNull="false" register=true onchange="refreshList()"}}</td>
         <th></th>
         <td>
           <label>
