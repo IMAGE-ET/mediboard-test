@@ -9,12 +9,12 @@
     <button type="button" onclick="Antecedent.editAntecedents('{{$patient->_id}}', '{{$type}}', reloadAdmission)"
       class="{{$type}} notext {{if !$antecedents.$type|@count}}opacity-40{{/if}}"
       {{if $antecedents.$type|@count}}
-        onmouseover="ObjectTooltip.createDOM(this, 'div_atcd');"
+        onmouseover="ObjectTooltip.createDOM(this, 'div_atcd_{{$patient->_id}}');"
       {{/if}}>
     </button>
   {{/if}}
 {{/if}}
-<div id="div_atcd" style="display: none;">
+<div id="div_atcd_{{$patient->_id}}" style="display: none;">
   <ul>
     {{foreach from=$antecedents key=name item=cat}}
       {{if ($type == "" || ($type == $name) ) && $cat|@count}}
