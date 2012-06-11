@@ -1876,7 +1876,15 @@ class CSejour extends CCodable implements IPatientRelated {
     }
     return $this->_ref_operations;
   }
- 
+  
+  function loadRefLastOperation() {
+    $operation = new COperation;
+    $operation->sejour_id = $this->_id;
+    $operation->loadMatchingObject("date DESC");
+    
+    return $this->_ref_last_operation = $operation;
+  } 
+  
   function getCurrOperation($date, $show_trace = true) {
     $date = mbDate($date);
     

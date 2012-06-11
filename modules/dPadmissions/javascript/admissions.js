@@ -46,7 +46,20 @@ Admissions = {
     oForm.submit();
     return true;
   },
-  
+  printFichesAnesth: function(table_id) {
+    var url = new Url("admissions", "print_fiches_anesth");
+    var table = $(table_id);
+    var sejours_ids = table.select("input[name=print_doc]:checked").collect(function(elt) { return elt.value });
+    
+    if (sejours_ids == "") {
+      alert("Veuillez sélectionner au minimum un patient pour l'impression");
+      return false;
+    }
+    
+    url.addParam("sejours_ids", sejours_ids.join(","));
+    url.popup(700, 500);
+  }
+  ,
   beforePrint: function() {
     Admissions.totalUpdater.stop();
     Admissions.listUpdater.stop();

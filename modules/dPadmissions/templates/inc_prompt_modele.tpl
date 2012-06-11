@@ -38,8 +38,9 @@
     </tr>
     <tr>
       <td colspan="2" class="button">
+        <button type="button" class="print" onclick="Admissions.printFichesAnesth('{{$type}}')">Imprimer les fiches d'anesthésie</button>
         <button type="button" class="print"
-          onclick="if (Admissions.printForSelection($V(this.form.modele_id), '{{$type}}')) {Admissions.afterPrint(); }">{{tr}}Print{{/tr}}</button>
+          onclick="if (Admissions.printForSelection($V(this.form.modele_id), '{{$type}}')) { Admissions.afterPrint(); }">{{tr}}Print{{/tr}}</button>
         <button type="button" class="close" onclick="Admissions.afterPrint();">{{tr}}Close{{/tr}}</button>
       </td>
     </tr>
