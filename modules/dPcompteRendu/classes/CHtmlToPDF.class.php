@@ -86,7 +86,7 @@ class CHtmlToPDF {
       // END extra headers to resolve IE caching bug
       header("MIME-Version: 1.0");
       header("Content-length: ".strlen($pdf_content));
-      header("Content-type: $file->file_type");
+      header('Content-type: application/pdf');
       header("Content-disposition: inline; filename=\"".$file->file_name."\"");
       
       echo $pdf_content;
