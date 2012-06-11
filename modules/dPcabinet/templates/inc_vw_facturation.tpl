@@ -1,66 +1,3 @@
-{{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
-  {{mb_script module="tarmed" script="actes"}}
-{{/if}}
-
-<script>
-{{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
-  ajoutActe = function(oForm){
-    {{if $facture}}      
-      var url = new Url('dPcabinet', 'ajax_creation_facture');
-      url.addParam('consult_id', oForm.object_id.value);
-      url.addParam('ajout_consult', "ok");
-      url.addParam('patient_id', '{{$facture->patient_id}}');
-      url.addParam('du_patient', oForm.montant_base.value);
-      url.addParam('executant_id', oForm.executant_id.value);
-      url.addParam('_libelle', oForm._libelle.value);
-      url.addParam('date', oForm.date.value);
-      url.addParam('code', oForm.code.value);
-      url.addParam('montant_base', oForm.montant_base.value);
-      url.addParam('quantite', oForm.quantite.value);
-      url.requestUpdate('load_facture');
-    {{/if}}
-  }
-    
-  refreshLibelle = function(){
-    var oForm = document.editTarmed;
-    var url = new Url("tarmed", "ajax_vw_tarif_code_tarmed");
-    url.addParam("type", "libelle");
-    url.addParam("quantite", oForm.quantite.value);
-    url.addParam("code", oForm.code.value);
-    url.requestUpdate('libelleActeTarmed'); 
-  }
-    
-  refreshTarif = function(){
-    var oForm = document.editTarmed;
-    var url = new Url("tarmed", "ajax_vw_tarif_code_tarmed");
-    url.addParam("type", "tarif");
-    url.addParam("quantite", oForm.quantite.value);
-    url.addParam("code", oForm.code.value);
-    url.requestUpdate('tarifActeTarmed'); 
-  }
-  
-  Main.add(function () {
-    {{if $facture && $facture->_id && !$facture->cloture && @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1" && isset($factures|smarty:nodefaults) && count($factures)}}
-        var oForm = getForm("editTarmed");
-        Calendar.regField(oForm.date, null);
-        
-        var url = new Url("tarmed", "ajax_do_tarmed_autocomplete");
-        url.autoComplete(oForm.code, "codeacte_auto_complete", {
-          minChars: 0,
-          dropdown: true,
-          select: "newcode",
-          updateElement: function(selected) {
-            var form = getForm('editTarmed');
-            $V(form.code, selected.down(".newcode").getText(), false);
-            form.quantite.value = 1;
-            refreshTarif();
-            refreshLibelle();
-          }
-        });
-    {{/if}}
-  });
-{{/if}}
-</script>
 <!-- Facture -->
 <fieldset>
   {{if $facture && $facture->_id}}
@@ -185,47 +122,7 @@
           {{/foreach}}
         {{/if}}
       {{/foreach}}
-      {{*
-      {{if !$facture->cloture && @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed && isset($factures|smarty:nodefaults) && count($factures) != 0 }}
-      <tr>
-        <td colspan="7">
-          <form name="editTarmed"  method="post" action="">
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="m" value="tarmed" />
-            <input type="hidden" name="dosql" value="do_acte_tarmed_aed" />
-            <input type="hidden" name="object_id" value="{{$derconsult_id}}" />
-            <input type="hidden" name="object_class" value="CConsultation" />
-            <input type="hidden" name="executant_id" value="{{$chirSel}}"/>                
-            <input type="hidden" name="libelle" value=""/>
-            <table class="form" >
-              <tr>
-              <td style="width:100px;">{{mb_field object=$acte_tarmed field="date"}}
-              </td>
-              <td style="width:135px;">
-                {{mb_field object=$acte_tarmed field="code" style="width:100px;" }}
-                <div style="display: none;" class="autocomplete" id="codeacte_auto_complete"></div>
-              </td>
-              <td style="width:500px;float:left;" id="libelleActeTarmed">
-                <input type="text" name="_libelle" value="Saisir un libelle" style="width:400px;" />
-              </td>
-              <td id="tarifActeTarmed" style="float:left;" >
-                <input type="text" name="montant_base" value="{{$acte_tarmed->montant_base}}"  style="width:70px;"/>
-              </td >
-              <td id="qteActeTarmed" style="float:left;">
-                {{mb_field object=$acte_tarmed field="quantite" size="2" form="editTarmed" increment=1 min=1}}
-              </td>
-              <td>
-                <button type="button" class="new" onclick="ajoutActe(this.form);">
-                  {{tr}}Create{{/tr}}
-                </button>
-              </td>
-              </tr>
-            </table>
-          </form>
-        </td>
-      </tr>
-      {{/if}}
-      *}}
+     
       {{assign var="nb_montants" value=$facture->_montant_factures|@count }}
       {{if $nb_montants>1}}
         {{foreach from=$facture->_montant_factures item=_montant key=key }}
