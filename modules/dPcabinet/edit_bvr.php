@@ -27,9 +27,19 @@ if ($factureconsult_id){
 	$factures[$factureconsult_id] = $facture->load($factureconsult_id);
 }
 else{
-	$where = array();
+  $where = array();
 	$where[]  = "(ouverture >= '$date_min' AND cloture  <= '$date_max') OR (ouverture >= '$date_min' AND cloture  <= '$date_max') ";
 	$factures = $facture->loadList($where, "factureconsult_id DESC", null, "patient_id");
+	
+  //Avant l'envoi par ftp des fichiers, création d'un fichier print.lock indiquant un envoi de fichiers en cours
+  $exchange_source = CExchangeSource::get("tarmed_export_impression_factures", "ftp", true);
+  $exchange_source->init();
+  try {
+    $exchange_source->setData("Ne pas imprimer maintenant. Merci d'avance!");
+    $exchange_source->send("", "print.lock");
+  } catch(CMbException $e) {
+    $e->stepAjax();
+  }
 }
 
 if($edition_bvr){
@@ -139,13 +149,32 @@ if($edition_bvr){
 			  }
 			  else{ $nom_dest = $facture->_ref_patient->_view; }
 			  
+			  $destinataire = array(
+			     "nom"=> "$nom_dest",
+			     "adresse"=> $facture->_ref_patient->adresse,
+			     "cp"=> $facture->_ref_patient->cp." ".$facture->_ref_patient->ville,
+			  );
+			   
+			  if($facture->cession_creance){
+			  	$facture->_ref_patient->loadRefsCorrespondantsPatient();
+	        foreach($facture->_ref_patient->_ref_correspondants_patient as $correspondant){
+	          if($correspondant->relation == "assurance"){
+	            $destinataire["nom"] = $correspondant->nom." ".$correspondant->prenom;
+	            $destinataire["adresse"] = $correspondant->adresse;
+	            $destinataire["cp"] = $correspondant->cp."".$correspondant->ville;
+	          }
+	        }
+			  }
+			  
+			  
 			  //Destinataire de la facture
 			  $patient = array(
 			    "50" => "Destinataire",
-			    $nom_dest,
-			    $facture->_ref_patient->adresse,
-			    $facture->_ref_patient->cp." ".$facture->_ref_patient->ville,
+			    $destinataire["nom"],
+			    $destinataire["adresse"],
+			    $destinataire["cp"],
 			    "80" => "Patient",
+			    "n° AVS: ".$facture->_ref_patient->matricule, 
 			    $facture->_ref_patient->_view,
 			    $facture->_ref_patient->adresse,
 			    $facture->_ref_patient->cp." ".$facture->_ref_patient->ville
@@ -165,6 +194,14 @@ if($edition_bvr){
 	        $pdf->setFont($font, '', 15);
 	        $pdf->setXY(80,40);
 			  	$pdf->Write("", "Accident");
+	        $pdf->SetTextColor(0,0,0);
+			  	$pdf->setFont($font, '', 8);
+			  }
+			  if ($facture->cession_creance){
+			  	$pdf->SetTextColor(80,80,80);
+	        $pdf->setFont($font, '', 15);
+	        $pdf->setXY(80,30);
+			  	$pdf->Write("", "Cession de créance");
 	        $pdf->SetTextColor(0,0,0);
 			  	$pdf->setFont($font, '', 8);
 			  }
@@ -312,17 +349,18 @@ if($edition_bvr){
 			  $pdf->setFont($font, '', 8);
 			  $pdf->Text($l_colonne, $h_ligne*15+$haut_doc , $facture->_num_reference);
 			  //Adresse du patient de la facture
-			  $pdf->Text($l_colonne, $h_ligne*16+$haut_doc , $facture->_ref_patient->_view);
-			  $pdf->Text(49*$l_colonne, $h_ligne*12+$haut_doc , $facture->_ref_patient->_view);
-			  $longeur = strlen($facture->_ref_patient->adresse);
+			  $pdf->Text($l_colonne, $h_ligne*16+$haut_doc , $destinataire["nom"]);
+			  $pdf->Text(49*$l_colonne, $h_ligne*12+$haut_doc , $destinataire["nom"]);
+			  
+			  $longeur = strlen($destinataire["adresse"]);
 			  //Si le texte dépasse la largeur de la colonne => retour à la ligne
 			  for($j=0; $j < $longeur/30; $j++){
-			    $report = substr($facture->_ref_patient->adresse, 0+30*$j, 30);
+			    $report = substr($destinataire["adresse"], 0+30*$j, 30);
 			    $pdf->Text($l_colonne, $h_ligne*(17+$j)+$haut_doc , $report);
 			    $pdf->Text(49*$l_colonne, $h_ligne*(13+$j)+$haut_doc , $report);
 			  }
-			  $pdf->Text($l_colonne, $h_ligne*(17+$j)+$haut_doc , $facture->_ref_patient->cp." ".$facture->_ref_patient->ville);
-			  $pdf->Text(49*$l_colonne, $h_ligne*(13+$j)+$haut_doc , $facture->_ref_patient->cp." ".$facture->_ref_patient->ville);
+			  $pdf->Text($l_colonne, $h_ligne*(17+$j)+$haut_doc , $destinataire["cp"]);
+			  $pdf->Text(49*$l_colonne, $h_ligne*(13+$j)+$haut_doc , $destinataire["cp"]);
 			  
 				//Ecriture du code bvr généré modulo10 récursif
 				$font = "ocrbb";
@@ -332,15 +370,35 @@ if($edition_bvr){
 				$pdf->Text($w, $h_ligne*21+$haut_doc, $bvr);
 			}
 		}
+		//enregistrement pour chaque facture l'ensemble des factures
 		if($factureconsult_id){
 			$pdf->Output($facture->cloture."_".$facture->_ref_patient->nom.'.pdf', "I");
 		}
 		else{
-		  $pdf->Output(CAppUI::conf("tarmed CCodeTarmed chemin_sauvegarde_bvr").'bvrs\ '.$facture->cloture."_".$facture->_ref_patient->nom.'.pdf', "F");	
+			$exchange_source = CExchangeSource::get("tarmed_export_impression_factures", "ftp", true);
+			$exchange_source->init();
+	
+	    try {
+	    	$exchange_source->setData($pdf->Output($facture->cloture."_".$facture->_ref_patient->nom.'.pdf', "S"));
+	      $exchange_source->send("", $facture->cloture."_".$facture->_ref_patient->nom.'.pdf');
+	    } catch(CMbException $e) {
+	      $e->stepAjax();
+	    }
 		}
 	}
 }
 if($edition_justificatif){
   include("justificatif.php");
+}
+
+if(!$factureconsult_id){
+  //Après l'envoi par ftp des fichiers, suppression du fichier print.lock
+  $exchange_source = CExchangeSource::get("tarmed_export_impression_factures", "ftp", true);
+  $exchange_source->init();
+  try {
+    $exchange_source->delFile("print.lock");
+  } catch(CMbException $e) {
+    $e->stepAjax();
+  }
 }
 ?>

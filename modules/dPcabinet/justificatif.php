@@ -370,7 +370,14 @@ foreach($factures as $facture){
     $pdf->Output($facture->cloture."_".$facture->_ref_patient->nom.'.pdf', "I");
   }
   else{
-    $pdf->Output(CAppUI::conf("tarmed CCodeTarmed chemin_sauvegarde_bvr").'justificatifs\ '.$facture->cloture."_".$facture->_ref_patient->nom.'.pdf', "F"); 
+    $exchange_source = CExchangeSource::get("tarmed_export_impression_justificatifs", "ftp", true);
+    $exchange_source->init();
+    try {
+      $exchange_source->setData($pdf->Output($facture->cloture."_".$facture->_ref_patient->nom.'.pdf', "S"));
+      $exchange_source->send("", $facture->cloture."_".$facture->_ref_patient->nom.'.pdf');
+    } catch(CMbException $e) {
+      $e->stepAjax();
+    }
   }
 }
 ?>
