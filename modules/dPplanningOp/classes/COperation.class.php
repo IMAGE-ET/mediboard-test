@@ -693,7 +693,7 @@ class COperation extends CCodable implements IPatientRelated {
         $old_plage->reorderOp();
       }
       
-      $this->_ref_plageop->reorderOp($reorder_rank_voulu ? "reorder" : null);
+      $this->_ref_plageop->reorderOp($reorder_rank_voulu ? CPlageOp::RANK_REORDER : null);
     }
   }
   

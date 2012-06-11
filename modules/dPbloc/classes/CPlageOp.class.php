@@ -9,6 +9,9 @@
  */
 
 class CPlageOp extends CMbObject {
+  const RANK_VALIDATE = 1;
+  const RANK_REORDER  = 2;
+  
   static $minutes = array();
   static $hours = array();
   static $hours_start = null;  
@@ -194,7 +197,7 @@ class CPlageOp extends CMbObject {
    * Mise à jour des horaires en fonction de l'ordre des operations, 
    * et mise a jour des rank, de sorte qu'ils soient consecutifs
    */
-  function reorderOp($rank_voulu = null) {
+  function reorderOp($action = null) {
     $this->completeField("debut", "temps_inter_op");
     
     if(!count($this->_ref_operations)) {
@@ -203,12 +206,35 @@ class CPlageOp extends CMbObject {
     }
     
     $new_time = $this->debut;
+    $plage_multipraticien = $this->spec_id && !$this->unique_chir;
+    
+    $prev_op = new COperation();
     $i = 0;
     foreach ($this->_ref_operations as $op) {
       $stored = false;
-      if ($op->rank || ($rank_voulu == "validate")) {
+      
+      // Intervention deja validée ou si on veut valider
+      if ($op->rank || ($action & self::RANK_VALIDATE)) {
         $op->rank = ++$i;
-        $op->time_operation = $new_time;
+        
+        // Creation des pauses si plage multi-praticien
+        if ($plage_multipraticien && ($action & self::RANK_VALIDATE)) {
+          if($prev_op->_id) {
+            $op->time_operation = max($new_time, $op->horaire_voulu);
+            
+            $prev_op->_pause_hour = $prev_op->_pause_min = null; // FIXME ARHHHH 
+            $prev_op->pause = mbSubTime($new_time, $op->time_operation);
+            $prev_op->store(false);
+          }
+          else {
+            $op->time_operation = $new_time;
+          }
+          
+          $prev_op = $op;
+        }
+        else {
+          $op->time_operation = $new_time;
+        }
         
         // Pour faire suivre un changement de salle
         if($this->salle_id && $this->fieldModified("salle_id")) {
@@ -217,7 +243,11 @@ class CPlageOp extends CMbObject {
         
         $stored = true;
       }
-      elseif (!($this->spec_id && !$this->unique_chir) && $rank_voulu == "reorder" && ($op->horaire_voulu || $this->_reorder_up_to_interv_id)) {
+      
+      // Plage monopraticien
+      elseif (!$plage_multipraticien && 
+              ($action & self::RANK_REORDER) && 
+              ($op->horaire_voulu || $this->_reorder_up_to_interv_id)) {
         $op->rank_voulu = ++$i;
         $op->horaire_voulu = $new_time;
         

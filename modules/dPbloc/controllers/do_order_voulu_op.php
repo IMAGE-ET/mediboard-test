@@ -24,7 +24,7 @@ foreach($plageop->_ref_operations as $_id => $_interv) {
 }
 
 if (!empty($plageop->_ref_operations)) {
-  $plageop->reorderOp("validate");
+  $plageop->reorderOp(CPlageOp::RANK_VALIDATE);
 }
 
 CAppUI::stepAjax("Placement effectué");
