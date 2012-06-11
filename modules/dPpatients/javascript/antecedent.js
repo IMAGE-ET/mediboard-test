@@ -43,7 +43,7 @@ Antecedent = {
     var url = new Url("dPpatients", "ajax_edit_antecedents");
     url.addParam("patient_id", patient_id);
     url.addParam("type", type);
-    url.requestModal(700);
+    url.requestModal(700, 400);
     url.modalObject.observe("afterClose", function() { if (callback) { callback(); } });
   }
 }

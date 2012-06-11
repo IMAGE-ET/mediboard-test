@@ -35,11 +35,11 @@
       {{else}}
         <td colspan="2"></td>
       {{/if}}
-      <td rowspan="{{$type|ternary:2:3}}" style="width: 50%">
+      <td rowspan="{{$type|ternary:2:3}}" style="width: 60%">
         {{mb_field object=$antecedent field="rques" rows="4" form="editAntFrm"
           aidesaisie="filterWithDependFields: false, validateOnBlur: 0"}}
       </td>
-      <td style="width: 50%; text-align: left; padding-left: 2em;" rowspan="{{$type|ternary:2:3}}">
+      <td style="width: 40%; text-align: left; padding-left: 2em;" rowspan="{{$type|ternary:2:3}}">
         {{foreach from=$antecedents item=_antecedent}}
           <li {{if $_antecedent->annule}}class="cancelled" style="display: none;"{{/if}}>
             {{if $_antecedent->_ref_first_log && $_antecedent->_ref_first_log->user_id == $app->user_id}}
