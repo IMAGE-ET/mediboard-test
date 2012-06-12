@@ -11,19 +11,18 @@
 
 <table class="tbl">
 <tr>
-  <th>{{mb_title class=CAideSaisie field=class}}</th>
-  <th>{{mb_title class=CAideSaisie field=field}}</th>
-  <th class="narrow">{{mb_title class=CAideSaisie field=depend_value_1}}</th>
-  <th class="narrow">{{mb_title class=CAideSaisie field=depend_value_2}}</th>
-  <th>{{mb_title class=CAideSaisie field=name}}</th>
+  <th>{{mb_colonne class=CAideSaisie field=class order_col=$order_col order_way=$order_way function=sortBy}}</th>
+  <th>{{mb_colonne class=CAideSaisie field=field order_col=$order_col order_way=$order_way function=sortBy}}</th>
+  <th class="narrow">{{mb_colonne class=CAideSaisie field=depend_value_1 order_col=$order_col order_way=$order_way function=sortBy}}</th>
+  <th class="narrow">{{mb_colonne class=CAideSaisie field=depend_value_2 order_col=$order_col order_way=$order_way function=sortBy}}</th>
+  <th>{{mb_colonne class=CAideSaisie field=name order_col=$order_col order_way=$order_way function=sortBy}}</th>
   <th>{{mb_title class=CAideSaisie field=text}}</th>
   <th class="narrow"></th>
 </tr>
 
 {{foreach from=$aides item=_aide}}
-<tr>
-  {{assign var="aide_id" value=$_aide->aide_id}}
-  {{assign var="href" value="?m=dPcompteRendu&tab=vw_idx_aides&aide_id=$aide_id"}}
+<tr {{if $_aide->_id == $aide_id}}class="selected"{{/if}}>
+  {{assign var="href" value="?m=dPcompteRendu&tab=vw_idx_aides&aide_id=`$_aide->_id`"}}
   {{assign var="class" value=$_aide->class}}
   {{assign var="field" value=$_aide->field}}
   <td class="text"><a href="{{$href}}">{{tr}}{{$class}}{{/tr}}</a></td>

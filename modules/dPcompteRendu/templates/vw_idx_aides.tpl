@@ -139,6 +139,13 @@ function getListDependValues(select, object_class, field) {
   }});
 }
 
+function sortBy(order_col, order_way) {
+  var oForm = getForm("filterFrm");
+  $V(oForm.order_col, order_col);
+  $V(oForm.order_way, order_way);
+  oForm.onsubmit();
+}
+
 var changePage = {};
 
 Main.add(function () {
@@ -171,7 +178,9 @@ Main.add(function () {
       <input type="hidden" name="start[user]" value="{{$start.user}}" onchange="this.form.onsubmit()" />
       <input type="hidden" name="start[func]" value="{{$start.func}}" onchange="this.form.onsubmit()" />
       <input type="hidden" name="start[etab]" value="{{$start.etab}}" onchange="this.form.onsubmit()" />
-      
+      <input type="hidden" name="order_col"   value="{{$order_col}}" />
+      <input type="hidden" name="order_way"   value="{{$order_way}}" />
+      <input type="hidden" name="aide_id"     value="{{$aide_id}}" />
       <table class="form">
         <tr>
           <th class="category" colspan="10">Filtrer les aides</th>

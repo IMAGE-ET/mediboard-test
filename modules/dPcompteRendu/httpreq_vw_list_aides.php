@@ -15,6 +15,11 @@ $filter_user_id = CValue::getOrSession("filter_user_id");
 $filter_class   = CValue::getOrSession("filter_class");
 $start          = CValue::getOrSession("start");
 $keywords       = CValue::getOrSession("keywords");
+$order_col      = CValue::getOrSession("order_col");
+$order_way      = CValue::getOrSession("order_way");
+$aide_id        = CValue::getOrSession("aide_id", "0");
+
+$order_by = $order_col . " " . $order_way;
 
 $userSel = new CMediusers;
 $userSel->load($filter_user_id);
@@ -35,8 +40,6 @@ if ($filter_class) {
   $where["class"] = "= '$filter_class'";
 }
 
-$order = array("group_id", "function_id", "user_id", "class", "depend_value_1", "field", "name");
-
 // Liste des aides pour le praticien
 $aides = array(
   "user" => array(),
@@ -55,7 +58,7 @@ if ($userSel->user_id) {
   
   $where["user_id"] = "= '$userSel->user_id'";
   $aides["user_ids"] = array_keys($_aide->seek($keywords, $where, 1000));
-  $aides["user"] = $_aide->seek($keywords, $where, $start["user"].", 30", true);
+  $aides["user"] = $_aide->seek($keywords, $where, $start["user"].", 30", true, null, $order_by);
   $aidesCount["user"] = $_aide->_totalSeek;
   foreach($aides["user"] as $aide) {
     $aide->loadRefsFwd();
@@ -64,7 +67,7 @@ if ($userSel->user_id) {
 
   $where["function_id"] = "= '$userSel->function_id'";
   $aides["func_ids"] = array_keys($_aide->seek($keywords, $where, 1000));
-  $aides["func"] = $_aide->seek($keywords, $where, $start["func"].", 30", true);
+  $aides["func"] = $_aide->seek($keywords, $where, $start["func"].", 30", true, null, $order_by);
   $aidesCount["func"] = $_aide->_totalSeek;
   foreach($aides["func"] as $aide) {
     $aide->loadRefsFwd();
@@ -73,7 +76,7 @@ if ($userSel->user_id) {
 
   $where["group_id"] = "= '{$userSel->_ref_function->group_id}'";
   $aides["etab_ids"] = array_keys($_aide->seek($keywords, $where, 1000));
-  $aides["etab"] = $_aide->seek($keywords, $where, $start["etab"].", 30", true);
+  $aides["etab"] = $_aide->seek($keywords, $where, $start["etab"].", 30", true, null, $order_by);
   $aidesCount["etab"] = $_aide->_totalSeek;
   foreach($aides["etab"] as $aide) {
     $aide->loadRefsFwd();
@@ -89,5 +92,8 @@ $smarty->assign("aides",        $aides);
 $smarty->assign("aidesCount",   $aidesCount);
 $smarty->assign("filter_class", $filter_class);
 $smarty->assign("start",        $start);
+$smarty->assign("order_col",    $order_col);
+$smarty->assign("order_way",    $order_way);
+$smarty->assign("aide_id",      $aide_id);
 
 $smarty->display("inc_tabs_aides.tpl");

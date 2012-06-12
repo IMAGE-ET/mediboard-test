@@ -16,9 +16,11 @@ $ds = CSQLDataSource::get("std");
 // Utilisateur sélectionné ou utilisateur courant
 $filter_user_id = CValue::getOrSession("filter_user_id");
 $filter_class   = CValue::getOrSession("filter_class");
-$aide_id        = CValue::getOrSession("aide_id");
+$aide_id        = CValue::getOrSession("aide_id", "0");
 $keywords       = CValue::getOrSession("keywords");
 $start          = CValue::getOrSession("start", array("user" => 0, "func" => 0, "etab" => 0));
+$order_col      = CValue::getOrSession("order_col", "class");
+$order_way      = CValue::getOrSession("order_way", "ASC");
 
 $classes = array_flip(CApp::getInstalledClasses());
 $listTraductions = array();
@@ -112,6 +114,9 @@ $smarty->assign("keywords"        , $keywords);
 $smarty->assign("filter_class"    , $filter_class);
 $smarty->assign("filter_user_id"  , $filter_user_id);
 $smarty->assign("listTraductions" , $listTraductions);
+$smarty->assign("order_col"       , $order_col);
+$smarty->assign("order_way"       , $order_way);
+$smarty->assign("aide_id"         , $aide_id);
 
 $smarty->display("vw_idx_aides.tpl");
 ?>
