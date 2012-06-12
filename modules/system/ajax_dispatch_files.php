@@ -28,6 +28,11 @@ $source = reset($sender->_ref_exchanges_sources);
 $path = $source->getFullPath($source->_path);
 $filename_excludes = "$path/mb_excludes.txt";
 
+if (!is_readable($filename_excludes)) {
+  mbLog("Fichier locké");
+  return;
+}  
+
 $files = array();
 try {
   $files = $source->receive();
@@ -57,7 +62,6 @@ $file  = fopen($filename_excludes, "a+");
 foreach (array_diff($files_excludes, $array_diff) as $_file_exclude) {
   fputs($file, $_file_exclude."\n");
 }
-fclose($file);
 
 foreach ($files as $_filepath) {
   $sender->_delete_file = $delete_file;
@@ -82,11 +86,16 @@ foreach ($files as $_filepath) {
   if ($fileextension_write_end && count(preg_grep("@$_filepath_no_ext.$fileextension_write_end$@", $files)) == 0) {
     continue;
   }
-
-  $message  = $source->getData($_filepath);  
-  if (!$message) {
+  
+  try {
+    $message  = $source->getData($_filepath); 
+    if (!$message) {
+      continue;
+    }
+  } catch (CMbException $e) {
+    $e->stepAjax(UI_MSG_WARNING);
     continue;
-  }
+  }   
   
   $source->_receive_filename = $path_info["filename"];
 
@@ -114,6 +123,8 @@ foreach ($files as $_filepath) {
   
   CAppUI::stepAjax("CEAIDispatcher-message_dispatch");
 }
+
+fclose($file);
 
 function dispatchError(CInteropSender $sender, $filename_excludes, $path_info) {
   CAppUI::stepAjax("CEAIDispatcher-no_message_supported_for_this_actor", UI_MSG_WARNING, $sender->_data_format->_family_message->code);
