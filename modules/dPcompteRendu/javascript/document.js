@@ -154,7 +154,7 @@ Document = {
     
     if (only_docs == undefined || only_docs == 1) {
       url.addParam("only_docs", 1);
-      url.requestUpdate("docs_"+oOptions.object_class+oOptions.object_id);
+      url.requestUpdate(container.down("table"));
     }
     else {
       url.requestUpdate(container);
