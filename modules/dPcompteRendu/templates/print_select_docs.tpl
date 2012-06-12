@@ -11,8 +11,7 @@
       url.addParam("dialog", 1);
       url.addParam("suppressHeaders", 1);
       url.addFormData("selectDocsFrm");
-      var sUrl = url.make();
-      oIframe.src = sUrl;
+      url.redirect();
     }
   </script>
   <form name="selectDocsFrm" action="?" method="get">
