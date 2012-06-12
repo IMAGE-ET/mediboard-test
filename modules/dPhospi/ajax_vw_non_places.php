@@ -151,7 +151,7 @@ if ($duree_uscpo) {
 
 if ($item_prestation_id && $prestation_id) {
   $ljoin["item_liaison"] = "sejour.sejour_id = item_liaison.sejour_id";
-  $where["item_liaison.item_prestation_id"] = " = '$item_prestation_id'";
+  $where["item_liaison.item_souhaite_id"] = " = '$item_prestation_id'";
 }
 
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
@@ -216,8 +216,9 @@ foreach($sejours as $_key => $_sejour) {
     $ljoin = array();
     
     $where["sejour_id"] = "= '$_sejour->_id'";
-    $ljoin["item_prestation"] = "item_prestation.item_prestation_id = item_liaison.item_prestation_realise_id OR
-      item_prestation.item_prestation_id = item_liaison.item_prestation_id";
+    $ljoin["item_prestation"] = 
+      "item_prestation.item_prestation_id = item_liaison.item_realise_id OR
+       item_prestation.item_prestation_id = item_liaison.item_souhait_id";
     
     $where["object_class"] = " = 'CPrestationJournaliere'";
     $where["object_id"] = " = '$prestation_id'";

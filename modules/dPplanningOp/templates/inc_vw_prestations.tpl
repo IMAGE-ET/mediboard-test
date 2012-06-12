@@ -3,13 +3,13 @@
     elts.each(function(elt) {
       elt.checked = "";
     });
-  }
+  };
   
   openModal = function(id_div) {
     var div = $(id_div);
     window.save_checked = div.select("input").pluck("checked");
     modal(id_div);
-  }
+  };
   
   closeModal = function(id_div) {
     var div = $(id_div);
@@ -17,7 +17,7 @@
       elt.checked = window.save_checked[index];
     });
     Control.Modal.close();
-  }
+  };
   
   autoRealiser = function(input) {
     var name = input.name.replace("souhait", "realise").replace("new", "temp");
@@ -28,17 +28,22 @@
         return;
       }
     });
-  }
+  };
   
   switchToNew = function(input) {
     input.name = input.name.replace("[temp]", "[new]");
-  }
+  };
+  
+  onSubmitLiaisons = function(form) {
+    return onSubmitFormAjax(form, function() {
+      form.up('div.modal').down('button.change').onclick(); 
+    });
+  };
+  
 </script>
 {{math equation=x+2 x=$dates|@count assign="colspan"}}
 
-<form name="add_prestation_ponctuelle" method="post" action="?"
-  onsubmit="return onSubmitFormAjax(this, {onComplete: function() {
-    getForm('add_prestation_ponctuelle').up('div').up('div').select('button.change')[0].onclick(); }})">
+<form name="add_prestation_ponctuelle" method="post" action="?" onsubmit="return onSubmitLiaisons(this);">
   <input type="hidden" name="m" value="dPhospi" />
   <input type="hidden" name="dosql" value="do_add_item_ponctuelle_aed" />
   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
@@ -47,8 +52,7 @@
 </form>
 
 <div style="height: 100%; overflow-y: auto;">
-  <form name="edit_prestations" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {onComplete: function() {
-    getForm('add_prestation_ponctuelle').up('div').up('div').select('button.change')[0].onclick(); }})">
+  <form name="edit_prestations" method="post" action="?" onsubmit="return onSubmitLiaisons(this);">
     <input type="hidden" name="m" value="dPhospi"/>
     <input type="hidden" name="dosql" value="do_items_liaisons_aed" />
     <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
@@ -75,7 +79,7 @@
         {{if $context == "all"}}
           <th>
             <div>
-              <input type="hidden" name="date" class="date" value="{{$sejour->entree|date_format:"%Y-%m-%d"}}"/>
+              <input type="hidden" name="date" class="date" value="{{$today}}"/>
               <input type="text" class="autocomplete" name="prestation_ponctuelle_view"/>
               <div class="autocomplete" id="prestation_autocomplete" style="display: none; color: #000; text-align: left;"></div>
             </div>
@@ -165,7 +169,7 @@
                                 autoRealiser(this);
                               {{/if}}"
                             
-                            {{if $liaison->item_prestation_id == $_item->_id}}checked="checked"{{/if}} value="{{$_item->_id}}"/>{{$_item->nom}}
+                            {{if $liaison->item_souhait_id == $_item->_id}}checked="checked"{{/if}} value="{{$_item->_id}}"/>{{$_item->nom}}
                         </label>
                       {{/foreach}}
                     </td>
@@ -182,7 +186,7 @@
                             {{if $liaison->_id == "temp"}}
                               onclick="switchToNew(this)"
                             {{/if}}
-                            {{if $liaison->item_prestation_realise_id == $_item->_id}}checked="checked"{{/if}} value="{{$_item->_id}}"/>{{$_item->nom}}
+                            {{if $liaison->item_realise_id == $_item->_id}}checked="checked"{{/if}} value="{{$_item->_id}}"/>{{$_item->nom}}
                         </label>
                       {{/foreach}}
                     </td>
@@ -207,7 +211,7 @@
             {{assign var=item_presta value=$liaison->_ref_item}}
             {{assign var=item_presta_realise value=$liaison->_ref_item_realise}}
             
-            <td class="button
+            <td style="text-align: center;" class="
               {{if $item_presta->_id && $item_presta_realise->_id}}
                 {{if $item_presta->rank == $item_presta_realise->rank}}
                   item_egal
@@ -235,34 +239,26 @@
           {{if $context == "all"}}
             <td>
               {{if isset($liaisons_p.$_date|smarty:nodefaults)}}
-                <table class="tbl">
-                  <tr>
-                    {{foreach from=$liaisons_p.$_date item=_liaison key=prestation_id}}
-                      {{assign var=prestation value=$prestations_p.$prestation_id}}
-                      <th>
-                        {{$prestation->nom}}
-                      </th>
+                {{foreach from=$liaisons_p.$_date item=_liaisons_by_prestation key=prestation_id}}
+                    {{assign var=prestation value=$prestations_p.$prestation_id}}
+                    {{foreach from=$_liaisons_by_prestation item=_liaison}}
+                      {{assign var=_item value=$_liaison->_ref_item}}
+                      <div style="float: left; width: 8em;">
+                        <span onmouseover="ObjectTooltip.createEx(this, '{{$_item->_guid}}');">
+                          {{$_item}}
+                        </span> :
+                      </div>
+                      <div style="float: left; width: 4em; padding-right: 2em;">
+                        <input type="text" class="ponctuelle" name="liaisons_p[{{$_liaison->_id}}]" value="{{$_liaison->quantite}}" size="1" onchange="this.form.onsubmit()"/>
+                        <script type="text/javascript">
+                          Main.add(function() {
+                             getForm('edit_prestations').elements['liaisons_p[{{$_liaison->_id}}]'].addSpinner(
+                             {step: 1, min: 0});
+                          });
+                        </script>
+                      </div>
                     {{/foreach}}
-                  </tr>
-                  <tr>
-                    {{foreach from=$liaisons_p.$_date item=_liaisons_by_prestation key=prestation_id}}
-                      <td>
-                        {{assign var=prestation value=$prestations_p.$prestation_id}}
-                        {{foreach from=$_liaisons_by_prestation item=_liaison}}
-                          {{assign var=_item value=$_liaison->_ref_item}}
-                          {{$_item->nom}} :
-                          <input type="text" name="liaisons_p[{{$_liaison->_id}}]" value="{{$_liaison->quantite}}" style="width: 3em;" onchange="this.form.onsubmit()"/>
-                          <script type="text/javascript">
-                            Main.add(function() {
-                               getForm('edit_prestations').elements['liaisons_p[{{$_liaison->_id}}]'].addSpinner(
-                               {step: 1, min: 0});
-                            });
-                          </script>
-                        {{/foreach}}
-                      </td>
-                    {{/foreach}}
-                  </tr>
-                </table>
+                {{/foreach}}
               {{/if}}
             </td>
           {{/if}}

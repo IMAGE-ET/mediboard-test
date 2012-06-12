@@ -114,7 +114,7 @@ foreach ($sejours as $sejour_id => $_sejour) {
   $patient = $_sejour->loadRefPatient(1);
   $patient->loadIPP();
   
-  
+  // Dossier médical
   $dossier_medical = $patient->loadRefDossierMedical();
   $dossier_medical->loadRefsAntecedents();
   
@@ -123,25 +123,26 @@ foreach ($sejours as $sejour_id => $_sejour) {
   
   // Chargement des notes sur le séjour
   $_sejour->loadRefsNotes();
-
+  
+  // Chargement des prestations
+  $_sejour->countPrestationsSouhaitees();
+  
   // Chargement des interventions
   $whereOperations = array("annulee" => "= '0'");
   $_sejour->loadRefsOperations($whereOperations);
   foreach ($_sejour->_ref_operations as $operation) {
     $operation->loadRefsActes();
-    $operation->loadRefsConsultAnesth();
-    $consult_anesth = $operation->_ref_consult_anesth; 
-    $consult_anesth->loadRefConsultation();
-    $consult_anesth->_ref_consultation->loadRefPlageConsult(1);
-    $consult_anesth->_date_consult = $consult_anesth->_ref_consultation->_date;
+    $consult_anesth = $operation->loadRefsConsultAnesth();
+    $consultation = $consult_anesth->loadRefConsultation();
+    $consultation->loadRefPlageConsult(1);
+    $consult_anesth->_date_consult = $consultation->_date;
   }
 
   // Chargement de l'affectation
   $_sejour->loadRefsAffectations();
   $affectation = $_sejour->_ref_first_affectation;
   if ($affectation->_id) {
-    $affectation->loadRefLit(1);
-    $affectation->_ref_lit->loadCompleteView();
+    $affectation->loadRefLit(1)->loadCompleteView();
   }
 }
 

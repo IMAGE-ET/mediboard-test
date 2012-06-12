@@ -36,9 +36,9 @@ class CStoredObject extends CModelObject {
   /**
    * References
    */
-  var $_back           = null; // Back references collections
-  var $_count          = null; // Back references counts
-  var $_fwd            = null; // Forward references
+  var $_back           = array(); // Back references collections
+  var $_count          = array(); // Back references counts
+  var $_fwd            = array(); // Forward references
   var $_history        = null; // Array representation of the object's evolution
   
   /**
@@ -1360,11 +1360,15 @@ class CStoredObject extends CModelObject {
 
   /**
    * Count number back refreferecing object
+   * 
    * @param string $backName name the of the back references to count
+   * @param array  $where    Additional where clauses
+   * 
    * @return int the count null if back references module is not installed
+   * 
    * @todo Add the missing arguments (the same as loadbackRefs)
    */
-  function countBackRefs($backName) {
+  function countBackRefs($backName, $where = array()) {
     if (!$backSpec = $this->makeBackSpec($backName)) {
       return null;
     }
@@ -1381,10 +1385,16 @@ class CStoredObject extends CModelObject {
       return $this->_count[$backName] = 0;
     }
     
+    // @todo Refactor using CRequest
     $query = "SELECT COUNT({$backObject->_spec->key}) 
       FROM `{$backObject->_spec->table}`
       WHERE `$backField` = '$this->_id'";
 
+    // Additional where clauses
+    foreach ($where as $_field => $_clause) {
+      $query .= "\nAND `$_field` $_clause";
+    }
+    
     // Cas des meta objects
     $backSpec =& $backObject->_specs[$backField];
     $backMeta = $backSpec->meta;

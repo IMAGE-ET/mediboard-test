@@ -13,7 +13,7 @@ $item_prestation_id = CValue::post("item_prestation_id");
 $date               = CValue::post("date");
 
 $item_liaison = new CItemLiaison;
-$item_liaison->item_prestation_id = $item_prestation_id;
+$item_liaison->item_souhait_id = $item_prestation_id;
 $item_liaison->sejour_id = $sejour_id;
 $item_liaison->date = $date;
 $item_liaison->quantite = 1;

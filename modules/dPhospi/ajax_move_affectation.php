@@ -72,8 +72,9 @@ if (!$affectation_id && isset($sejour)) {
     $where["item_prestation.object_id"] = "= '$_item->object_id'";
     
     // On teste également le réalisé, si une affectation avait déjà été faite puis supprimée.
-    $ljoin["item_prestation"] = "item_prestation.item_prestation_id = item_liaison.item_prestation_id
-      OR item_prestation.item_prestation_id = item_liaison.item_prestation_realise_id";
+    $ljoin["item_prestation"] = 
+      "  item_prestation.item_prestation_id = item_liaison.item_souhait_id
+      OR item_prestation.item_prestation_id = item_liaison.item_realise_id";
     
     $item_liaison->loadObject($where, null, null, $ljoin);
     
@@ -84,10 +85,11 @@ if (!$affectation_id && isset($sejour)) {
       $item_liaison->quantite = 0;
     }
     
-    $item_liaison->item_prestation_realise_id = $_liaison->item_prestation_id;
+    $item_liaison->item_realise_id = $_liaison->item_souhait_id;
     
-    if ($item_liaison->item_prestation_id == 0) {
-      $item_liaison->item_prestation_id = "";
+    // @todo Ne devrait plus être nécessaire
+    if ($item_liaison->item_souhait_id == 0) {
+      $item_liaison->item_souhait_id = "";
     }
     
     if ($msg = $item_liaison->store()) {

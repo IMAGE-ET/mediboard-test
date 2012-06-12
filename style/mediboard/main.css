@@ -1699,10 +1699,12 @@ tr.show_important {
 
 .item_superior {
   background: #f89 !important;
+  line-height: 110%;
 }
 
 .item_inferior {
   background: #fd9 !important;
+  line-height: 110%;
 }
 
 tr.consultation_entree td {

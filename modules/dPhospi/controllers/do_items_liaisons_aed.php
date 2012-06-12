@@ -16,8 +16,16 @@ if (is_array($liaisons_p)) {
   foreach ($liaisons_p as $liaison_id=>$quantite) {
     $item_liaison = new CItemLiaison;
     $item_liaison->load($liaison_id);
-    $item_liaison->quantite = $quantite;
-    $item_liaison->store();
+
+    // Enregistrement si la quantité est valide
+    if ($quantite) {
+      $item_liaison->quantite = $quantite;
+      $item_liaison->store();
+    }
+    // Suppression sinon
+    else {
+      $item_liaison->delete();
+    }
   }
 }
 
@@ -65,10 +73,10 @@ if (is_array($liaisons_j)) {
       // On ne store que si c'est nouvelle liaison
       // ou un changement de niveau
       if (!$item_liaison->_id ||
-           $item_liaison->item_prestation_id != $souhait_id ||
-           $item_liaison->item_prestation_realise_id != $souhait_id) {
-        $item_liaison->item_prestation_id = $souhait_id;
-        $item_liaison->item_prestation_realise_id = $realise_id;
+           $item_liaison->item_souhait_id != $souhait_id ||
+           $item_liaison->item_realise_id != $realise_id) {
+        $item_liaison->item_souhait_id = $souhait_id;
+        $item_liaison->item_realise_id = $realise_id;
         $item_liaison->store();
       }
     }

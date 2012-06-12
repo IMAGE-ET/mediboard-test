@@ -13,11 +13,11 @@ class CItemLiaison extends CMbObject{
   var $item_liaison_id  = null;
   
   // DB Fields
-  var $sejour_id         =  null;
-  var $item_prestation_id = null;
-  var $item_prestation_realise_id = null;
-  var $date              = null;
-  var $quantite          = null;
+  var $sejour_id       =  null;
+  var $item_souhait_id = null;
+  var $item_realise_id = null;
+  var $date            = null;
+  var $quantite        = null;
   
   // Ref Fields
   var $_ref_affectation  = null;
@@ -33,21 +33,21 @@ class CItemLiaison extends CMbObject{
   
   function getProps() {
     $specs = parent::getProps();
-    $specs["sejour_id"]          = "ref notNull class|CSejour cascade";
-    $specs["item_prestation_id"] = "ref class|CItemPrestation cascade";
-    $specs["item_prestation_realise_id"] = "ref class|CItemPrestation cascade";
-    $specs["date"]               = "date";
-    $specs["quantite"]           = "num default|0";
+    $specs["sejour_id"]       = "ref notNull class|CSejour cascade";
+    $specs["item_souhait_id"] = "ref class|CItemPrestation cascade";
+    $specs["item_realise_id"] = "ref class|CItemPrestation cascade";
+    $specs["date"]            = "date";
+    $specs["quantite"]        = "num default|0";
     
     return $specs;
   }
   
   function loadRefItem() {
-    return $this->_ref_item = $this->loadFwdRef("item_prestation_id", true);
+    return $this->_ref_item = $this->loadFwdRef("item_souhait_id", true);
   }
   
   function loadRefItemRealise() {
-    return $this->_ref_item_realise = $this->loadFwdRef("item_prestation_realise_id", true);
+    return $this->_ref_item_realise = $this->loadFwdRef("item_realise_id", true);
   }
   
   function loadRefSejour() {

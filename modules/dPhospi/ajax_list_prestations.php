@@ -16,8 +16,8 @@ $where["group_id"] = " = '" . CGroups::loadCurrent()->_id . "'";
 $prestation_journaliere = new CPrestationJournaliere;
 $prestation_ponctuelle = new CPrestationPonctuelle;
 
-$prestations[$prestation_journaliere->_class]  = $prestation_journaliere->loadList($where);
-$prestations[$prestation_ponctuelle->_class] = $prestation_ponctuelle->loadList($where);
+$prestations[$prestation_journaliere->_class] = $prestation_journaliere->loadList($where);
+$prestations[$prestation_ponctuelle->_class ] = $prestation_ponctuelle->loadList($where);
 
 foreach ($prestations as $_prestations_by_class) {
   foreach ($_prestations_by_class as $_prestation) {

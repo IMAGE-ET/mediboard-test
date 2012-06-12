@@ -84,9 +84,11 @@
               <td {{if $_class_details.key == $_field_name}}class="ok"{{/if}}>{{$_field_name}}</td>
               
               {{if !$_field.object.spec}}
-                <td class="warning text">Aucune spec</td>
+                <td class="warning text">Aucune définition de propriété</td>
               {{else}}
-                <td class="text" title="{{$_field.object.spec}}">{{$_field.object.spec}}</td>
+                <td class="text" title="{{$_field.object.spec}}">
+                  {{$_field.object.spec|replace:"|":" | "}}
+                </td>
               {{/if}}
               
               <td class="text">

@@ -2415,11 +2415,11 @@ class CSejour extends CCodable implements IPatientRelated {
     
     $items_liaisons = $this->loadBackRefs("items_liaisons");
     
-    CMbObject::massLoadFwdRef($items_liaisons, "item_prestation_id");
-    CMbObject::massLoadFwdRef($items_liaisons, "item_prestation_realise_id");
+    CMbObject::massLoadFwdRef($items_liaisons, "item_souhait_id");
+    CMbObject::massLoadFwdRef($items_liaisons, "item_realise_id");
 
     foreach ($items_liaisons as $_item_liaison) {
-      $_item = $_item_liaison->loadRefItem();
+      $_item_souhait = $_item_liaison->loadRefItem();
       $_item_realise = $_item_liaison->loadRefItemRealise();
       
       if ($_item_realise->_id) {
@@ -2427,13 +2427,18 @@ class CSejour extends CCodable implements IPatientRelated {
         $_item_realise->_quantite = 1;
         $_item_realise->loadRefObject();
       }
-      elseif ($_item->object_class == "CPrestationPonctuelle"){
-        $this->_ref_prestations[$_item_liaison->date][] = $_item;
-        $_item->_quantite = $_item_liaison->quantite;
-        $_item->loadRefObject();
+      elseif ($_item_souhait->object_class == "CPrestationPonctuelle"){
+        $this->_ref_prestations[$_item_liaison->date][] = $_item_souhait;
+        $_item_souhait->_quantite = $_item_liaison->quantite;
+        $_item_souhait->loadRefObject();
       }
     }
     return $this->_ref_prestations;
+  }
+  
+  function countPrestationsSouhaitees() {
+    $where["item_souhait_id"] = "IS NOT NULL"; 
+    return $this->countBackRefs("items_liaisons", $where);
   }
   
   function loadRefsNaissances() {

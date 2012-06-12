@@ -8,8 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_script module=planningOp script=prestations ajax=1}}
+
 <script type="text/javascript">
-Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
+Main.add(function() {
+  Prestations.callback = reloadAdmission;
+  Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
+});
 </script>
 
 <table class="tbl" id="admissions">
@@ -22,7 +27,7 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
         <input type="hidden" name="tab" value="vw_idx_admission" />
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       </form>
-      <a href="?m=dPadmissions&tab=vw_idx_admission&date={{$demain}}" style="display: inline">>>></a>
+      <a href="?m=admissions&tab=vw_idx_admission&date={{$demain}}" style="display: inline">>>></a>
       <br />
       
       <em style="float: left; font-weight: normal;">

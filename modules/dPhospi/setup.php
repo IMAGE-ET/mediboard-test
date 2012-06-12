@@ -629,7 +629,23 @@ class CSetupdPhospi extends CSetup {
       ADD `desire` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.67";
+    $this->makeRevision("0.67");
+    $query = "ALTER TABLE `item_liaison` 
+      CHANGE `item_prestation_id`         `item_souhait_id` INT (11) UNSIGNED,
+      CHANGE `item_prestation_realise_id` `item_realise_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `item_liaison` 
+      ADD INDEX (`sejour_id`);";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.68");
+    $query = "UPDATE `item_liaison`
+      SET `item_souhait_id` = NULL
+      WHERE `item_souhait_id` = 0";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.69";
   }
 }
 ?>

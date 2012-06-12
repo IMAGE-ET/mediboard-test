@@ -235,7 +235,7 @@ class CRequest {
    * returns the SQL string that count the number of rows
    * @param CMbObject $obj Object on which table we prefix selects, ne prefix if null
    */
-  function getCountRequest(CMbObject $obj = null, $fields = array(), $found_rows = false) {
+  function getCountRequest(CMbObject $obj = null, $fields = array()) {
     // MbObject binding
     $sql = "SELECT COUNT(*) as total";
     
