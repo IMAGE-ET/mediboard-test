@@ -80,10 +80,10 @@ DossierMedical = {
     
     // Mise à jour des formulaire
     if(document.editTrmtFrm){
-      document.editTrmtFrm._sejour_id.value   = sejour_id;
+      $V(document.editTrmtFrm._sejour_id, sejour_id, false);
     }
     if(document.editAntFrm){
-      document.editAntFrm._sejour_id.value    = sejour_id;
+      $V(document.editAntFrm._sejour_id, sejour_id, false);
     }
   },
   
