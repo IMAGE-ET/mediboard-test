@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$sejour_id      = CValue::get("sejour_id");
-$vue_prestation = CValue::get("vue_prestation", "all");
+$sejour_id = CValue::get("sejour_id");
+$context   = CValue::get("context", "all");
 
 $prestations_j = CPrestationJournaliere::loadCurrentList();
 $dates         = array();
@@ -167,16 +167,16 @@ $empty_liaison->loadRefItem();
 $empty_liaison->loadRefItemRealise();
 $smarty = new CSmartyDP;
 
-$smarty->assign("today"      , mbDate());
-$smarty->assign("dates"      , $dates);
-$smarty->assign("sejour"     , $sejour);
-$smarty->assign("affectations", $affectations);
+$smarty->assign("today"        , mbDate());
+$smarty->assign("dates"        , $dates);
+$smarty->assign("sejour"       , $sejour);
+$smarty->assign("affectations" , $affectations);
 $smarty->assign("prestations_j", $prestations_j);
 $smarty->assign("prestations_p", $prestations_p);
 $smarty->assign("empty_liaison", $empty_liaison);
-$smarty->assign("liaisons_p", $liaisons_p);
-$smarty->assign("liaisons_j", $liaisons_j);
-$smarty->assign("vue_prestation", $vue_prestation);
-$smarty->assign("bank_holidays"  , mbBankHolidays(mbDate()));
+$smarty->assign("liaisons_p"   , $liaisons_p);
+$smarty->assign("liaisons_j"   , $liaisons_j);
+$smarty->assign("context"      , $context);
+$smarty->assign("bank_holidays", mbBankHolidays(mbDate()));
 $smarty->display("inc_vw_prestations.tpl");
 ?>

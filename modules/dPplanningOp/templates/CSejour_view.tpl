@@ -1,24 +1,21 @@
+{{mb_script module=planningOp script=prestations ajax=1}}
+
 {{assign var=sejour       value=$object}}
 {{assign var=patient      value=$object->_ref_patient}}
 {{assign var=operations   value=$object->_ref_operations}}
 {{assign var=affectations value=$object->_ref_affectations}}
 
+
 <script type="text/javascript">
-  editPrestations = function (sejour_id) {
-    var url = new Url("dPplanningOp", "ajax_vw_prestations");
-    url.addParam("sejour_id", sejour_id);
-    url.requestModal(800, 700);
-  }
-  
   popEtatSejour = function(sejour_id) {
-    var url = new Url("dPhospi", "vw_parcours");
-    url.addParam("sejour_id", sejour_id);
+    var url = new Url('hospi', 'vw_parcours');
+    url.addParam('sejour_id', sejour_id);
     url.requestModal(700, 550);
   }
   printEtiquettes = function() {
     var nb_printers = {{$sejour->_nb_printers|@json}};
     if (nb_printers > 0) {
-      var url = new Url('dPcompteRendu', 'ajax_choose_printer');
+      var url = new Url('compteRendu', 'ajax_choose_printer');
       url.addParam('mode_etiquette', 1);
       url.addParam('object_class', '{{$sejour->_class}}');
       url.addParam('object_id', '{{$sejour->_id}}');
@@ -67,7 +64,7 @@
       <button type="button" class="edit" onclick="Sejour.edit('{{$sejour->_id}}');">
         {{tr}}Modify{{/tr}}
       </button>
-      <button type="button" class="search" onclick="editPrestations('{{$sejour->_id}}')">Prestations</button>
+      <button type="button" class="search" onclick="Prestations.edit('{{$sejour->_id}}')">Prestations</button>
       {{/if}}
       
       {{if $sejour->type != "urg" && @$modules.dPadmissions->_can->read}}

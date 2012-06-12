@@ -8,9 +8,11 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
  
-{{mb_script module="dPpatients" script="pat_selector"}}
-{{mb_script module="dPpatients" script="medecin"}}
-{{mb_script module="dPplanningOp" script="cim10_selector"}}
+{{mb_script module=patients   script=pat_selector}}
+{{mb_script module=patients   script=medecin}}
+{{mb_script module=planningOp script=cim10_selector}}
+{{mb_script module=planningOp script=prestations}}
+
 {{mb_default var=count_prestations value=0}}
 {{mb_default var=_duree_prevue value=0}}
 {{mb_default var=dialog value=0}}
@@ -929,7 +931,7 @@ Main.add( function(){
   <td class="button">
     <div {{if !$conf.dPplanningOp.CSejour.easy_chambre_simple}} class="modeExpert" {{/if}}>
       {{if $sejour->_id}}
-      <button type="button" class="search" onclick="editPrestations('{{$sejour->_id}}')">Prestations</button>
+      <button type="button" class="search" onclick="Prestations.edit('{{$sejour->_id}}', 'sejour')">Prestations</button>
       {{/if}}
     </div>
   </td>

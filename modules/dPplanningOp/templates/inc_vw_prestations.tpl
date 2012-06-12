@@ -57,7 +57,7 @@
       <tr>
         <th class="title narrow"></th>
         <th class="title" style="max-width: 45%" colspan="{{$prestations_j|@count}}">Journalières</th>
-        {{if $vue_prestation == "all"}}
+        {{if $context == "all"}}
           <th class="title">
             Ponctuelles
           </th>
@@ -72,7 +72,7 @@
         {{foreach from=$prestations_j item=_prestation}}
           <th style="width: {{$width_prestation}}%">{{$_prestation->nom}}</th>
         {{/foreach}}
-        {{if $vue_prestation == "all"}}
+        {{if $context == "all"}}
           <th>
             <div>
               <input type="hidden" name="date" class="date" value="{{$sejour->entree|date_format:"%Y-%m-%d"}}"/>
@@ -170,7 +170,7 @@
                       {{/foreach}}
                     </td>
                   </tr>
-                  <tr {{if $vue_prestation != "all"}}style="display: none;"{{/if}}>
+                  <tr {{if $context != "all"}} style="display: none;" {{/if}}>
                     <th>
                       Réalisé
                     </th>
@@ -232,7 +232,7 @@
             </td>
           {{/foreach}}
           
-          {{if $vue_prestation == "all"}}
+          {{if $context == "all"}}
             <td>
               {{if isset($liaisons_p.$_date|smarty:nodefaults)}}
                 <table class="tbl">

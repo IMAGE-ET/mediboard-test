@@ -229,7 +229,7 @@
       <td />
       <td class="button">
         {{if $sejour->_id}}
-        <button type="button" class="search" onclick="editPrestations('{{$sejour->_id}}')">Prestations</button>
+        <button type="button" class="search" onclick="Prestations.edit('{{$sejour->_id}}', 'sejour')">Prestations</button>
         {{/if}}
       </td>
       {{/if}}

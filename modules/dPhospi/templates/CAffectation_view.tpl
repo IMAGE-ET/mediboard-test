@@ -1,10 +1,4 @@
-<script type="text/javascript">
-  editPrestations = function (sejour_id) {
-    var url = new Url("dPplanningOp", "ajax_vw_prestations");
-    url.addParam("sejour_id", sejour_id);
-    url.requestModal(800, 700);
-  }
-</script>
+{{mb_script module=planningOp script=prestations ajax=1}}
 
 {{assign var=sejour     value=$object->_ref_sejour}}
 {{assign var=patient    value=$sejour->_ref_patient}}
@@ -32,7 +26,7 @@
         <button type="button" class="cancel"
           onclick="if (window.delAffectation) { delAffectation('{{$object->_id}}', '{{$object->lit_id}}', 'CSejour-{{$object->sejour_id}}') }">{{tr}}Delete{{/tr}}</button>
         {{if $object->sejour_id}}
-          <button type="button" class="search" onclick="editPrestations('{{$object->sejour_id}}')">Prestations</button>
+          <button type="button" class="search" onclick="Prestations.edit('{{$object->sejour_id}}')">Prestations</button>
         {{/if}}
       </td>
     </tr>
