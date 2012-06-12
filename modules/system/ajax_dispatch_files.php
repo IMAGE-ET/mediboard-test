@@ -29,11 +29,12 @@ $path = $source->getFullPath($source->_path);
 $filename_excludes = "$path/mb_excludes.txt";
 
 $filename_lock = "$path/mb_lock.txt";
-$file_lock     = fopen($filename_lock, "a");
-if (!$file_lock) {
+if (file_exists($filename_lock)) {
   mbLog("Fichier locké");
   return;
 }  
+
+touch($filename_lock);
 
 $files = array();
 try {
@@ -132,7 +133,8 @@ foreach ($files as $_filepath) {
 }
 
 fclose($file);
-fclose($file_lock);
+
+unlink($filename_lock);
 
 function dispatchError(CInteropSender $sender, $filename_excludes, $path_info) {
   CAppUI::stepAjax("CEAIDispatcher-no_message_supported_for_this_actor", UI_MSG_WARNING, $sender->_data_format->_family_message->code);
