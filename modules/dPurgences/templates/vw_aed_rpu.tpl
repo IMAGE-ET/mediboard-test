@@ -206,7 +206,9 @@
     {{/if}}
     
     {{if "forms"|module_active}}
-      ExObject.loadExObjects("{{$rpu->_class}}", "{{$rpu->_id}}", "ex-forms-rpu", 1);
+      if ($("ex-forms-rpu")) {
+        ExObject.loadExObjects("{{$rpu->_class}}", "{{$rpu->_id}}", "ex-forms-rpu", 1);
+      }
     {{/if}}
     
     if (document.editAntFrm){
