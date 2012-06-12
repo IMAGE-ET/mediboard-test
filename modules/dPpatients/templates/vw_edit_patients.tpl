@@ -13,6 +13,7 @@
 {{/if}}
 
 {{assign var=modFSE value="fse"|module_active}}
+{{assign var=patient_id value=$patient->_id}}
 
 {{if $app->user_prefs.VitaleVision}}
   {{mb_include template=inc_vitalevision}}

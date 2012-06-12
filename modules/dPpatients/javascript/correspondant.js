@@ -1,15 +1,19 @@
 Correspondant = {
-  edit: function(correspondant_id, patient_id) {
+  edit: function(correspondant_id, patient_id, callback) {
     var url = new Url('dPpatients', 'ajax_form_correspondant');
     url.addParam('correspondant_id', correspondant_id);
     url.addParam("patient_id", patient_id);
     url.requestModal(500);
+    if (!Object.isUndefined(callback)) {
+      url.modalObject.observe("afterClose", function(){
+        callback();
+      });
+    }
   },
 
   onSubmit: function(form) {
     return onSubmitFormAjax(form, { 
       onComplete: function() {
-        Correspondant.refreshList($V(form.patient_id));
         Control.Modal.close();
       }
     });
@@ -24,7 +28,6 @@ Correspondant = {
     
     var ajax = {
       onComplete: function() {
-        Correspondant.refreshList($V(form.patient_id));
         Control.Modal.close();
       }
     };

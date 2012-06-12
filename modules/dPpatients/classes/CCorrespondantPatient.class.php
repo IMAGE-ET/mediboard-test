@@ -67,6 +67,14 @@ class CCorrespondantPatient extends CMbObject {
     return $specs;
   }
   
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view = $this->relation ?
+      CAppUI::tr("CCorrespondantPatient.relation.".$this->relation) :
+      $this->relation_autre;
+  }
+  
+  
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["correspondants_courrier"] = "CCorrespondantCourrier object_id";

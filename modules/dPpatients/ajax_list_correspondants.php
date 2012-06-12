@@ -15,8 +15,11 @@ $patient->load($patient_id);
 $patient->loadRefsCorrespondantsPatient();
 
 $smarty = new CSmartyDP;
+
 $smarty->assign("correspondants_by_relation", $patient->_ref_cp_by_relation);
 $smarty->assign("nb_correspondants", count($patient->_ref_correspondants_patient));
+$smarty->assign("patient_id", $patient_id);
+
 $smarty->display("inc_list_correspondants.tpl");
 
 ?>

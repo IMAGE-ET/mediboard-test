@@ -61,7 +61,7 @@
             <td>{{mb_value object=$_correspondant field=email}}</td>
             <td>{{mb_value object=$_correspondant field=remarques}}</td>
             <td>
-              <button type="button" class="edit notext" onclick="Correspondant.edit('{{$_correspondant->_id}}')"></button>
+              <button type="button" class="edit notext" onclick="Correspondant.edit('{{$_correspondant->_id}}', null, Correspondant.refreshList.curry('{{$patient_id}}'))"></button>
             </td>
           </tr>
         {{foreachelse}}
