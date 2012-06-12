@@ -30,7 +30,6 @@ $filename_excludes = "$path/mb_excludes.txt";
 
 $filename_lock = "$path/mb_lock.txt";
 if (file_exists($filename_lock)) {
-  mbLog("Fichier locké");
   return;
 }  
 
