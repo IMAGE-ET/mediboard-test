@@ -604,6 +604,8 @@ class CPatient extends CMbObject {
    */
   function checkVIP() {
     $this->_vip = false;
+    $user = CMediusers::get();
+    
     if($this->vip && !CModule::getCanDo("dPpatient")->admin()) {
       // Test si le praticien est présent dans son dossier
       $user_in_list_prat = false;
@@ -613,10 +615,11 @@ class CPatient extends CMbObject {
           $user_in_list_prat = true;
         }
       }
-      // Test si un l'utilisateur est présen dans les logs
+      // Test si un l'utilisateur est présent dans les logs
       $user_in_logs      = false;
       $this->loadLogs();
-      foreach($patient->_ref_logs as $_log) {
+      
+      foreach($this->_ref_logs as $_log) {
         if($user->_id == $_log->user_id) {
           $user_in_logs = true;
         }
