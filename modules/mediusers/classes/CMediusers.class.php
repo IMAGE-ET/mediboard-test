@@ -796,7 +796,9 @@ class CMediusers extends CMbObject {
         $order = "users.user_last_name, users.user_first_name";
         
         $mediuser = new CMediusers();
-        $mediusers = $mediuser->loadListWithPerms(PERM_EDIT, $where, $order, null, null, $ljoin);
+        //les praticiens WithPerms sont déjà chargés
+//        $mediusers = $mediuser->loadListWithPerms(PERM_EDIT, $where, $order, null, null, $ljoin);
+        $mediusers = $mediuser->loadList($where, $order, null, null, $ljoin);
         
         // Associate already loaded function
         foreach ($mediusers as $key => $_mediuser) {
