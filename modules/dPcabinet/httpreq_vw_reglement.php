@@ -125,20 +125,24 @@ $consult->loadRefsActesCaisse();
 //Chargement de la facture
 $facture = new CFactureConsult();
 $facture_patient = null;
-if($consult->patient_id && $facture->loadObject("patient_id = '$consult->patient_id' AND cloture IS NULL")){ // TODO
+$where = array();
+$where["patient_id"] = "= '$consult->patient_id'";
+$where["cloture"] = " IS NULL";
+if($consult->patient_id && $facture->loadObject($where)){
   $facture_patient = $facture;
   $facture_patient->loadRefs();
 }
-else if( $consult->patient_id &&  $factures = $facture->loadList("patient_id = '$consult->patient_id' AND cloture IS NOT NULL")){
-  foreach($factures as $_facture){
-    $_facture->loadRefsConsults();
-    foreach($_facture->_ref_consults as $consultation){
-      if($consultation->_id == $consult->_id){
-        $facture_patient = $_facture;
-        $facture_patient->loadRefPatient();
-      }
-    }
-  }  
+else{ $where["cloture"] = " IS NOT NULL"; 
+	if( $consult->patient_id &&  $factures = $facture->loadList($where)){
+	  foreach($factures as $_facture){
+	    $_facture->loadRefs();
+	    foreach($_facture->_ref_consults as $consultation){
+	      if($consultation->_id == $consult->_id){
+	        $facture_patient = $_facture;
+	      }
+	    }
+	  }  
+	}
 }
 
 // Création du template
