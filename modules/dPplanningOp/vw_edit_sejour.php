@@ -59,19 +59,16 @@ if ($sejour_id) {
     CAppUI::redirect("m=$m&tab=$tab&sejour_id=0");
   }
 
-  foreach ($sejour->_ref_operations as &$operation) {
+  foreach ($sejour->_ref_operations as $operation) {
     $operation->loadRefsFwd();
     $operation->_ref_chir->loadRefsFwd();
   }
 
-  foreach ($sejour->_ref_affectations as &$affectation) {
-    $affectation->loadRefLit();
-    $lit =& $affectation->_ref_lit;
-    $lit->loadCompleteView();
+  foreach ($sejour->_ref_affectations as $affectation) {
+    $affectation->loadRefLit()->loadCompleteView();
   }
-
-  $praticien =& $sejour->_ref_praticien;
-  $patient =& $sejour->_ref_patient;
+  $praticien = $sejour->_ref_praticien;
+  $patient = $sejour->_ref_patient;
 }
 
 $sejour->makeDatesOperations();

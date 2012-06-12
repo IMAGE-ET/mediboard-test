@@ -17,7 +17,11 @@
 
   {{foreach from=$sejour->_ref_affectations item=_affectation}}
   <tr>
-    <td>{{$_affectation->_ref_lit->_view}}</td>
+    <td>
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');">
+        {{$_affectation->_ref_lit->_view}}
+      </span>
+    </td>
     <td>{{mb_value object=$_affectation field=entree}}</td>
     <td>{{mb_value object=$_affectation field=sortie}}</td>
     <td>
