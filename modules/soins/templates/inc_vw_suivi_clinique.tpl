@@ -1,4 +1,5 @@
 {{assign var=patient value=$sejour->_ref_patient}}
+{{mb_script module=patients script=correspondant ajax=true}}
 
 <script type="text/javascript">
   modalViewComplete = function(object_guid, title) {
@@ -156,12 +157,11 @@
       <table class="tbl">
         <tr>
           <th style="width: 1%;">
+            <button type="button" class="add notext" style="float: left;"
+              onclick="Correspondant.edit(0, '{{$patient->_id}}', loadSuiviClinique.curry(document.form_prescription.sejour_id.value))"></button>
           </th>
           <th class="category">
-            {{tr}}CCorrespondantPatient-nom{{/tr}}
-          </th>
-          <th class="category">
-            {{tr}}CCorrespondantPatient-prenom{{/tr}}
+            {{tr}}CCorrespondantPatient-nom{{/tr}} / {{tr}}CCorrespondantPatient-prenom{{/tr}}
           </th>
           <th class="category">
             {{tr}}CCorrespondantPatient-tel{{/tr}}
@@ -174,10 +174,10 @@
                 <strong>{{mb_value object=$_correspondant field=relation}}</strong>
               </td>
               <td>
-                {{mb_value object=$_correspondant field="nom"}}
-              </td>
-              <td>
-                {{mb_value object=$_correspondant field="prenom"}}
+                <span onmouseover="ObjectTooltip.createEx(this, '{{$_correspondant->_guid}}')">
+                  {{mb_value object=$_correspondant field="nom"}}
+                  {{mb_value object=$_correspondant field="prenom"}}
+                </span>
               </td>
               <td>
                 {{mb_value object=$_correspondant field="tel"}}
