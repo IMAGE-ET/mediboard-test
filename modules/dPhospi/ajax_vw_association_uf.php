@@ -29,15 +29,15 @@ $auf = new CAffectationUniteFonctionnelle();
 $ufs_sejour = array();
 
 $uf = $sejour->loadRefUFHebergement();
-$ufs_sejour_hebergement[$uf->_id] = $uf;
+$uf_sejour_hebergement[$uf->_id] = $uf;
 $ufs_hebergement[$uf->_id] = $uf;
 
 $uf = $sejour->loadRefUFMedicale();
-$ufs_sejour_medicale[$uf->_id] = $uf;
+$uf_sejour_medicale[$uf->_id] = $uf;
 $ufs_medicale[$uf->_id] = $uf;
 
 $uf = $sejour->loadRefUFSoins();
-$ufs_sejour_soins[$uf->_id] = $uf;
+$uf_sejour_soins[$uf->_id] = $uf;
 $ufs_soins[$uf->_id] = $uf;
 
 // UFs de services
