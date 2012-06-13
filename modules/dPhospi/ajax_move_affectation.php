@@ -85,12 +85,7 @@ if (!$affectation_id && isset($sejour)) {
       $item_liaison->quantite = 0;
     }
     
-    $item_liaison->item_realise_id = $_liaison->item_souhait_id;
-    
-    // @todo Ne devrait plus être nécessaire
-    if ($item_liaison->item_souhait_id == 0) {
-      $item_liaison->item_souhait_id = "";
-    }
+    $item_liaison->item_realise_id = $_liaison->item_prestation_id;
     
     if ($msg = $item_liaison->store()) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
