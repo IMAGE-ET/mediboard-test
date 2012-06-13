@@ -1308,12 +1308,17 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
     $movement->start_of_movement = $start_movement_dt;
     $movement->last_update = mbDateTime();
-    $movement->store();
+    
+    if ($msg = $movement->store()) {
+      return $msg;
+    }
     
     if ($id400_create) {
       $id400Movement->last_update = mbDateTime();
       $id400Movement->object_id   = $movement->_id;
-      $id400Movement->store();
+      if ($msg = $id400Movement->store()) {
+        return $msg;
+      } 
     }
     
     return $movement;
