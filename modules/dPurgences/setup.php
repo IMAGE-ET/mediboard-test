@@ -302,7 +302,12 @@ class CSetupdPurgences extends CSetup {
                 ADD `motif_entree` TEXT";
     $this->addQuery($query); 
     
-    $this->mod_version = "0.36";
+    $this->makeRevision("0.36");
+    $query = "ALTER TABLE `rpu`
+      ADD `regule_par` ENUM ('centre_15','medecin');";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.37";
   }  
 }
 

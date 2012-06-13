@@ -37,6 +37,7 @@ class CRPU extends CMbObject {
   var $sortie_autorisee = null;
   var $date_at         = null;
   var $circonstance    = null;
+  var $regule_par      = null;
   
   // Legacy Sherpa fields
   var $type_pathologie = null; // Should be $urtype
@@ -129,7 +130,8 @@ class CRPU extends CMbObject {
       "sortie_autorisee" => "bool",
       "date_at"          => "date",
       "circonstance"     => "str",
-    
+      "regule_par"       => "enum list|centre_15|medecin",
+      
       "_DP"              => "code cim10 show|1",
       "_provenance"      => "enum list|1|2|3|4|5|6|7|8",
       "_destination"     => "enum list|1|2|3|4|6|7",

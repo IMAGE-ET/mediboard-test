@@ -371,8 +371,8 @@
     
      <!-- Selection du service -->
     <tr>
-      <th></th>
-      <td></td>
+      <th>{{mb_label object=$rpu field="regule_par"}}</th>
+      <td>{{mb_field object=$rpu field="regule_par" emptyLabel="Choose" style="width: 15em;"}}</td>
       <th>{{mb_label object=$rpu field="pec_transport"}}</th>
       <td>{{mb_field object=$rpu field="pec_transport" emptyLabel="Choose" style="width: 15em;"}}</td>
     </tr>
