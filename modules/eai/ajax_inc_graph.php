@@ -46,6 +46,11 @@ $options["title"] = "Echanges";
 switch ($period) {
   default: $period = "DAY";
   
+  case "SECOND":
+  case "MINUTE":
+    $format = "%d/%m/%Y %H:%M:%S";
+    break;
+    
   case "HOUR":
     $format = "%d/%m/%Y %H:%M";
     break;
