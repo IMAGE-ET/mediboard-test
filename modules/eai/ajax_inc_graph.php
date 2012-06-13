@@ -46,18 +46,22 @@ $options["title"] = "Echanges";
 switch ($period) {
   default: $period = "DAY";
   
+  case "HOUR":
+    $format = "%d/%m/%Y %H:%M";
+    break;
+  
   case "DAY":
     $format = "%d/%m/%Y";
     break;
     
   case "WEEK";
     $format = "%W";
-    $date_production = mbDate("+1 day last sunday", $date_production);
+    $date_production = mbDateTime("+1 day last sunday", $date_production);
     break;
     
   case "MONTH";
     $format = "%m/%Y";
-    $date_production = mbDate("first day", $date_production);
+    $date_production = mbDateTime("first day", $date_production);
     break;
 } 
 
@@ -67,7 +71,7 @@ $date = $date_production;
 $n = min($count, 120);
 while ($n--) {
   $dates[] = $date;
-  $date = mbDate("+1 $period", $date);
+  $date = mbDateTime("+1 $period", $date);
 }
 
 foreach ($dates as $i => $_date) {
@@ -105,7 +109,7 @@ foreach ($exchanges as $_sub_class => $_child_classes) {
     $exchange = new $_child_class;
     $series[$i] = array("data" => array(), "label" => utf8_encode(CAppUI::tr($_child_class)));
     foreach ($dates as $j => $_date) {
-      $_date_next = mbDate("+1 $period", $_date);
+      $_date_next = mbDateTime("+1 $period", $_date);
       $where["date_production"] = " BETWEEN '$_date' AND '$_date_next'";
       
       $count = $exchange->countList($where, null, null);

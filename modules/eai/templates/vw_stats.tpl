@@ -61,6 +61,7 @@
             <td>
               <input type="text" name="count" value="{{$count}}" size="2"/>
               <select name="period" onchange="this.form.onsubmit()">
+                <option value="HOUR">heures</option>
                 <option value="DAY">jours</option>
                 <option value="WEEK">semaines</option>
                 <option value="MONTH">mois</option>
