@@ -12,7 +12,7 @@
 
 CCanDo::checkRead();
 
-set_time_limit(120);
+set_time_limit(240);
 
 $actor_guid   = CValue::get("actor_guid");
 $to_treatment = CValue::get("to_treatment", 1);
