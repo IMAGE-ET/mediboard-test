@@ -268,10 +268,6 @@ Main.add(function() {
           <td>{{mb_field object=$patient field="qual_beneficiaire" style="width:20em;"}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$patient field="regule_par"}}</th>
-          <td>{{mb_field object=$patient field="regule_par" style="width:20em;"}}</td>
-        </tr>
-        <tr>
           <th>{{mb_label object=$patient field="tutelle"}}</th>
           <td colspan="2">{{mb_field object=$patient field="tutelle" typeEnum=radio onchange="refreshInfoTutelle(this.value);"}}</td>
         </tr>
