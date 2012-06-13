@@ -214,7 +214,7 @@
   {{foreach from=$_sejour->_ref_operations item=_op}}
   {{if $_op->_ref_consult_anesth->_id}}
   <div class="{{if $_op->_ref_consult_anesth->_ref_consultation->chrono == 64}}small-success{{else}}small-info{{/if}}" style="margin: 0px;">
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_consult_anesth->_guid}}');">
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_ref_consult_anesth->_ref_consultation->_guid}}');">
     {{$_op->_ref_consult_anesth->_date_consult|date_format:$conf.date}}
     </span>
   </div>
