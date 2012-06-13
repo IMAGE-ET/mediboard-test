@@ -1,20 +1,36 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage install
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Installation file access checker
+ *
+ * PHP version 5.1.x+
+ *  
+ * @package    Mediboard
+ * @subpackage Intaller
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    SVN: $Id$ 
+ * @link       http://www.mediboard.org
  */
 
-require_once("checkauth.php");
 
+require_once "checkauth.php";
+
+/**
+ * File access check helper
+ * Responsibilities:
+ *  - path and description of path
+ *  - checking
+ */
 class CPathAccess {
   var $path = "";
   var $description = "";
   var $reason = array();
 
+  /**
+   * Actually check path is writable
+   * 
+   * @return bool
+   */
   function check() {
     global $mbpath;
     return is_writable($mbpath.$this->path);
@@ -55,6 +71,7 @@ $pathAccesses[] = $pathAccess;
 
 showHeader();
 
+// @codingStandardsIgnoreStart
 ?>
 
 <h2>Vérification des accès en écriture</h2>
@@ -110,4 +127,8 @@ showHeader();
   
 </table>
 
-<?php require("valid.php"); showFooter(); ?>
+<?php
+// @codingStandardsIgnoreStop
+require "valid.php"; 
+showFooter(); 
+?>

@@ -1,26 +1,31 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage install
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Installation config checker
+ *
+ * PHP version 5.1.x+
+ *  
+ * @package    Mediboard
+ * @subpackage Intaller
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    SVN: $Id$ 
+ * @link       http://www.mediboard.org
  */
 
-require_once("header.php");
+require_once "header.php";
 
-
-if (!@include_once($mbpath."includes/config.php")) { 
+if (!@include_once $mbpath."includes/config.php") { 
   showHeader();
+  // @codingStandardsIgnoreStart
 ?>
-
-<div class="small-error">
-  Erreur : Le fichier de configuration n'a pas été validé, merci de revenir à l'étape 
-  précédente.
-</div>
-
+  
+  <div class="small-error">
+    Erreur : Le fichier de configuration n'a pas été validé, merci de revenir à l'étape 
+    précédente.
+  </div>
+  
 <?php
+  // @codingStandardsIgnoreStop
 
   require("valid.php");
   

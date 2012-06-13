@@ -1,25 +1,32 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
- * @subpackage install
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Installation database structure checker
+ *
+ * PHP version 5.1.x+
+ *  
+ * @package    Mediboard
+ * @subpackage Intaller
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    SVN: $Id$ 
+ * @link       http://www.mediboard.org
  */
 
-require_once("header.php");
-require_once("CMbDb.class.php");
+require_once "header.php";
+require_once "CMbDb.class.php";
 
 $dbConfig = $dPconfig["db"]["std"];
 $db = new CMbDb(
   $dbConfig["dbhost"], 
   $dbConfig["dbuser"], 
   $dbConfig["dbpass"], 
-  $dbConfig["dbname"]);
+  $dbConfig["dbname"]
+);
+
 $db->connect();
 if (!$db->getOne("SELECT * FROM `users`")) {
   showHeader();
+  // @codingStandardsIgnoreStart
 ?>
 
 <div class="small-error">
@@ -29,7 +36,8 @@ if (!$db->getOne("SELECT * FROM `users`")) {
 </div>
 
 <?php
-  require("valid.php");
+  // @codingStandardsIgnoreStop
+  require "valid.php";
   showFooter();
   die();
 }

@@ -1,21 +1,26 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage install
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Installation database feed
+ *
+ * PHP version 5.1.x+
+ *  
+ * @package    Mediboard
+ * @subpackage Intaller
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    SVN: $Id$ 
+ * @link       http://www.mediboard.org
  */
 
-require_once("checkconfig.php");
-require_once("checkauth.php");
+require_once "checkconfig.php";
+require_once "checkauth.php";
 
 $dbConfigs = $dPconfig["db"];
 unset($dbConfigs["ccam"]);
 
 showHeader(); 
 
+// @codingStandardsIgnoreStart
 ?>
 
 <h2>Test et construction initial de la base de données</h2>
@@ -82,14 +87,19 @@ if (@$_POST["do"]) {
 <?php } ?>
 
 <?php 
+// @codingStandardsIgnoreStop
+
 $dbConfig = $dbConfigs["std"];
 $db = new CMbDb(
   $dbConfig["dbhost"], 
   $dbConfig["dbuser"], 
   $dbConfig["dbpass"], 
-  $dbConfig["dbname"]);
+  $dbConfig["dbname"]
+);
+
 $db->connect();
 if ($db->getOne("SELECT * FROM `users`")) {
+// @codingStandardsIgnoreStart
 ?>
 
 <div class="small-warning">
@@ -102,5 +112,9 @@ if ($db->getOne("SELECT * FROM `users`")) {
 
 <?php } ?>
 
+<?php 
+// @codingStandardsIgnoreStop
 
-<?php require("valid.php"); showFooter(); ?>
+require "valid.php"; 
+showFooter(); 
+?>

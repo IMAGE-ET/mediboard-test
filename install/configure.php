@@ -1,23 +1,29 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage install
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Installation main configure form
+ *
+ * PHP version 5.1.x+
+ *  
+ * @package    Mediboard
+ * @subpackage Intaller
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    SVN: $Id$ 
+ * @link       http://www.mediboard.org
  */
 
-require_once("checkauth.php");
-require_once($mbpath."includes/compat.php");
-require_once($mbpath."classes/CMbConfig.class.php");
-require_once($mbpath."classes/CMbArray.class.php");
 
-if(isset($_POST["username"])){
- unset($_POST["username"]); 
+require_once "checkauth.php";
+require_once $mbpath."includes/compat.php";
+require_once $mbpath."classes/CMbConfig.class.php";
+require_once $mbpath."classes/CMbArray.class.php";
+
+if (isset($_POST["username"])) {
+  unset($_POST["username"]);
 }
-if(isset($_POST["password"])){
- unset($_POST["password"]); 
+
+if (isset($_POST["password"])) {
+  unset($_POST["password"]); 
 }
 
 $mbConfig = new CMbConfig;
@@ -28,6 +34,7 @@ $dPconfig = $mbConfig->values;
 
 showHeader();
 
+// @codingStandardsIgnoreStart
 ?>
 
 <h2>Création du fichier de configuration</h2>
@@ -186,4 +193,9 @@ showHeader();
 
 </form>
 
-<?php require("valid.php"); showFooter(); ?>
+<?php
+// @codingStandardsIgnoreStop
+
+require "valid.php"; 
+showFooter(); 
+?>

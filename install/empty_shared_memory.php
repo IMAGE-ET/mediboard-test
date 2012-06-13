@@ -1,15 +1,19 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
- * @subpackage install
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Installation Shared memory manager
+ *
+ * PHP version 5.1.x+
+ *  
+ * @package    Mediboard
+ * @subpackage Intaller
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    SVN: $Id: checkauth.php 15808 2012-06-10 18:19:07Z mytto $ 
+ * @link       http://www.mediboard.org
  */
 
 $rootName = basename($dPconfig["root_dir"]);
-require_once("../classes/SHM.class.php");
+require_once "../classes/SHM.class.php";
         
 // Remove locales
 foreach (glob("../locales/*", GLOB_ONLYDIR) as $localeDir) {
