@@ -3,6 +3,7 @@ $locales['config-forms-CExClassField-force_concept'] = 'Forcer l\'utilisation de
 $locales['config-forms-CExClassField-force_concept-desc'] = 'Forcer l\'utilisation des concepts (vivement conseillé)';
 $locales['config-forms-CExConcept-force_list'] = 'Forcer l\'utilisation des listes';
 $locales['config-forms-CExConcept-force_list-desc'] = 'Forcer l\'utilisation des listes';
+$locales['mod-forms-tab-ajax_edit_ex_field_predicate'] = 'Prédicat';
 $locales['mod-forms-tab-configure'] = 'Configurer';
 $locales['mod-forms-tab-do_batch_action'] = 'Action par lot';
 $locales['mod-forms-tab-do_import'] = 'Importation';

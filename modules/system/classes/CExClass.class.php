@@ -19,6 +19,7 @@ class CExClass extends CMbObject {
   var $required   = null;
   var $unicity    = null;
   var $group_id   = null;
+  var $native_views = null;
   
   var $_ref_fields = null;
   var $_ref_constraints = null;
@@ -27,6 +28,7 @@ class CExClass extends CMbObject {
   var $_fields_by_name = null;
   var $_host_class_fields = null;
   var $_host_class_options = null;
+  var $_available_native_views = null;
   
   static $_groups_cache = array();
   
@@ -41,6 +43,12 @@ class CExClass extends CMbObject {
     "CConsultAnesth",
     "CAdministration",
     "CRPU",
+  );
+  
+  static $_native_views = array(
+    "atcd"       => "CSejour",
+    "constantes" => "CSejour",
+    "corresp"    => "CPatient",
   );
   
   static function getExtendableSpecs(){
@@ -59,6 +67,50 @@ class CExClass extends CMbObject {
     }
       
     return $specs;
+  }
+  
+  static function compareValues($a, $operator, $b) {
+    // =|!=|>|>=|<|<=|startsWith|endsWith|contains default|=
+    switch ($operator) {
+      default:
+      case "=": 
+        if ($a == $b) return true;
+        break;
+        
+      case "!=": 
+        if ($a != $b) return true;
+        break;
+        
+      case ">": 
+        if ($a > $b) return true;
+        break;
+        
+      case ">=": 
+        if ($a >= $b) return true;
+        break;
+        
+      case "<": 
+        if ($a < $b) return true;
+        break;
+        
+      case "<=": 
+        if ($a <= $b) return true;
+        break;
+        
+      case "startsWith": 
+        if (strpos($a, $b) === 0) return true;
+        break;
+        
+      case "endsWith": 
+        if (substr($a, -strlen($b)) == $b) return true;
+        break;
+        
+      case "contains": 
+        if (strpos($a, $b) !== false) return true;
+        break;
+    }
+    
+    return false;
   }
 
   function getSpec() {
@@ -79,7 +131,39 @@ class CExClass extends CMbObject {
     $props["required"]   = "bool default|0";
     $props["unicity"]    = "enum notNull list|no|host default|no vertical"; //"enum notNull list|no|host|reference1|reference2 default|no vertical";
     $props["group_id"]   = "ref class|CGroups";
+    $props["native_views"] = "set vertical list|".implode("|", array_keys(self::$_native_views));
     return $props;
+  }
+  
+  function getAvailableNativeViews(){
+    if (!$this->_id) {
+      return $this->_available_native_views = array();
+    }
+    
+    $levels = array(1, 2, "host");
+    
+    $options = $this->getHostClassOptions();
+    $available_views = array();
+    
+    foreach(self::$_native_views as $_name => $_class) {
+      foreach($levels as $_level) {
+        if ($_level == "host") {
+          $ref_class = $this->host_class;
+        }
+        else {
+          list($ref_class) = CValue::read($options, "reference$_level");
+        }
+        if ($_class === $ref_class) {
+          $available_views[$_name] = $_class;
+        }
+      }
+    }
+    
+    $field = "native_views";
+    $this->_props[$field] = "set vertical list|".implode("|", array_keys($available_views));
+    $this->_specs[$field] = CMbFieldSpecFact::getSpec($this, $field, $this->_props[$field]);
+    
+    return $this->_available_native_views = $available_views;
   }
 
   function getBackProps() {
@@ -292,6 +376,8 @@ class CExClass extends CMbObject {
   
   function updateFormFields(){
     parent::updateFormFields();
+    
+    $this->getAvailableNativeViews();
     
     if ($this->host_class === "CMbObject") {
       $this->_view = "Non classé";
@@ -696,6 +782,19 @@ class CExClass extends CMbObject {
     <script type='text/javascript'>
       (window.ExObject || window.opener.ExObject).triggerMulti(".json_encode($forms).");
     </script>";
+  }
+  
+  function loadRefsDisplayConditions(){
+    $where = array(
+      "ex_class_field_group.ex_class_id" => "= '$this->_id'",
+    );
+    $ljoin = array(
+      "ex_class_field"       => "ex_class_field_predicate.ex_class_field_predicate_id = ex_class_field.predicate_id",
+      "ex_class_field_group" => "ex_class_field_group.ex_class_field_group_id = ex_class_field.ex_group_id",
+    );
+    
+    $ex_field_predicate = new CExClassFieldPredicate;
+    return $ex_field_predicate->loadList($where, null, null, null, $ljoin);
   }
   
   function getGrid($w = 4, $h = 30, $reduce = true) {

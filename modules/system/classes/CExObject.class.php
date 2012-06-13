@@ -22,6 +22,7 @@ class CExObject extends CMbMetaObject {
   var $_ex_class_id       = null;
   var $_own_ex_class_id   = null;
   var $_specs_already_set = false;
+  var $_native_views      = null;
   
   /**
    * @var CExClass
@@ -44,6 +45,8 @@ class CExObject extends CMbMetaObject {
   var $_ref_group = null;
   
   var $_reported_fields = array();
+  var $_fields_display = array();
+  var $_fields_display_struct = array();
   
   static $_load_lite      = false;
   static $_multiple_load  = false;
@@ -120,6 +123,21 @@ class CExObject extends CMbMetaObject {
    */
   function loadRefGroup($cache = true){
     return $this->_ref_group = $this->loadFwdRef("group_id", $cache);
+  }
+  
+  function loadNativeViews(){
+    $this->_native_views = array();
+    
+    $views = $this->_ref_ex_class->getAvailableNativeViews();
+    $selected_views = explode('|', $this->_ref_ex_class->native_views);
+    
+    foreach($views as $_name => $_class) {
+      if (in_array($_name, $selected_views)) {
+        $this->_native_views[$_name] = $this->getReferenceObject($_class);
+      }
+    }
+    
+    return $this->_native_views;
   }
   
   /**
@@ -277,6 +295,30 @@ class CExObject extends CMbMetaObject {
     return $this->_old; 
   }
   
+  function setFieldsDisplay(){
+    $fields = $this->_ref_ex_class->loadRefsAllFields(true);
+    
+    $this->_fields_display_struct = array();
+    
+    foreach($fields as $_field) {
+      if (!$_field->predicate_id) {
+        continue;
+      }
+      
+      $_predicate = $_field->loadRefPredicate();
+      $_source_field = $_predicate->loadRefExClassField();
+      
+      $this->_fields_display[$_field->name] = $_predicate->checkValue($this->{$_source_field->name});
+      
+      $this->_fields_display_struct[] = array(
+        "target"   => $_field->name,
+        "trigger"  => $_source_field->name,
+        "operator" => $_predicate->operator,
+        "value"    => $_predicate->value,
+      );
+    }
+  }
+  
   function store(){
     if ($msg = $this->check()) {
       return $msg;
@@ -400,6 +442,7 @@ class CExObject extends CMbMetaObject {
       if (isset($this->{$_field->name})) break; // don't redeclare them more than once
       $this->{$_field->name} = null; // declaration of the field
       $props[$_field->name] = $_field->prop; // declaration of the field spec
+      $this->_fields_display[$_field->name] = true; // display the field by default
     }
     
     return $props;
@@ -446,6 +489,20 @@ class CExObject extends CMbMetaObject {
     // the first is at the end because of the date order !
     $this->_ref_first_log = end($this->_ref_logs);
     $this->_ref_last_log  = reset($this->_ref_logs);
+  }
+  
+  function getReferenceObject($class) {
+    $fields = array(
+      "object_class"     => "object_id", 
+      "reference_class"  => "reference_id", 
+      "reference2_class" => "reference2_id", 
+    );
+    
+    foreach($fields as $_class => $_id) {
+      if ($this->$_class == $class) {
+        return $this->loadFwdRef($_id);
+      }
+    }
   }
   
   static function getValidObject($object_class) {

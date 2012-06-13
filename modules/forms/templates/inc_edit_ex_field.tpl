@@ -65,7 +65,7 @@ Main.add(function(){
     {{/if}}
   {{/if}}
 
-  new Control.Tabs("ExClassField-param", {
+  Control.Tabs.create("ExClassField-param", true, {
     afterChange: function(newContainer){
       ExFormula.toggleInsertButtons(newContainer.id == "fieldFormulaEditor", "{{$_can_formula_arithmetic|ternary:'arithmetic':'concat'}}", '{{$ex_field->_id}}');
     }
@@ -200,7 +200,7 @@ Main.add(function(){
       
       <th><label for="ex_group_id">Groupe</label></th>
       <td>
-        <select name="ex_group_id">
+        <select name="ex_group_id" style="max-width: 20em;">
           {{foreach from=$ex_class->_ref_groups item=_group}}
             <option value="{{$_group->_id}}" {{if $_group->_id == $ex_field->ex_group_id}}selected="selected"{{/if}}>{{$_group}}</option>
           {{/foreach}}
@@ -210,47 +210,59 @@ Main.add(function(){
     
     <tr>
       <th>Report de valeur</th>
-      <td>
+      <td colspan="3">
         {{assign var=class_options value=$ex_field->_ref_ex_group->_ref_ex_class->_host_class_options}}
         {{assign var=_host_class value=$ex_field->_ref_ex_group->_ref_ex_class->host_class}}
       
         {{if $ex_field->_id}}
-          <label><input type="radio" name="report_level" value="" {{if $ex_field->report_level == ""}}  checked="checked" {{/if}} /> Aucun </label>
-          
+          <select name="report_level" style="max-width: 16em;">
+            <option value="">Aucun</option>
+            
           {{if $_host_class != "CMbObject"}}
-            <label>
-              <input type="radio" name="report_level" value="host" {{if $ex_field->report_level == "host"}} checked="checked" {{/if}} />
+            <option value="host" {{if $ex_field->report_level == "host"}} selected="selected" {{/if}}>
               {{tr}}{{$_host_class}}{{/tr}}
-            </label>
+            </option>
           {{/if}}
           
           {{if $class_options.reference1.0}}
-            <label>
-              <input type="radio" name="report_level" value="1" {{if $ex_field->report_level == "1"}} checked="checked" {{/if}} />
+            <option value="1" {{if $ex_field->report_level == "1"}} selected="selected" {{/if}}>
               {{if $class_options.reference1.1|strpos:"." === false}}
                 {{tr}}{{$_host_class}}-{{$class_options.reference1.1}}{{/tr}}
               {{else}}
                 {{tr}}{{$class_options.reference1.0}}{{/tr}}
               {{/if}}
-            </label>
+            </option>
           {{/if}}
           
           {{if $class_options.reference2.0}}
-            <label>
-              <input type="radio" name="report_level" value="2" {{if $ex_field->report_level == "2"}} checked="checked" {{/if}} />
+            <option value="2" {{if $ex_field->report_level == "2"}} selected="selected" {{/if}}>
               {{if $class_options.reference2.1|strpos:"." === false}}
                 {{tr}}{{$_host_class}}-{{$class_options.reference2.1}}{{/tr}}
               {{else}}
                 {{tr}}{{$class_options.reference2.0}}{{/tr}}
               {{/if}}
-            </label>
+            </option>
           {{/if}}
+          </select>
         {{else}}
           <em>Enregistrez le champ avant de définir le type de report</em>
         {{/if}}
       </td>
-      
-      <td colspan="2">
+    </tr>
+    
+    {{*
+    <tr>
+      <th>{{mb_label object=$ex_field field=predicate_id}}</th>
+      <td colspan="3">
+        {{mb_field object=$ex_field field=predicate_id form="editField" autocomplete="true,1,50,true,true" size=70}}
+        <button class="new notext" onclick="ExFieldPredicate.create({{$ex_field->_id}})" type="button">{{tr}}New{{/tr}}</button>
+      </td>
+    </tr>
+    *}}
+    
+    <tr>
+      <td></td>
+      <td colspan="3">
         {{if $ex_field->_id}}
           <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
           <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'le champ ',objName:'{{$ex_field->_view|smarty:nodefaults|JSAttribute}}'})">
@@ -287,6 +299,14 @@ Main.add(function(){
         </a>
       </li>
     {{/if}}
+    
+    {{*
+    <li>
+      <a href="#fieldPredicates" {{if $ex_field->_ref_predicates|@count == 0}} class="empty" {{/if}}>
+        {{tr}}CExClassField-back-predicates{{/tr}} <small>({{$ex_field->_ref_predicates|@count}})</small>
+      </a>
+    </li>
+    *}}
   {{/if}}
 </ul>
 <hr class="control_tabs" />
@@ -295,4 +315,33 @@ Main.add(function(){
 
 <div id="fieldFormulaEditor" style="display: none;">
   Enregistrez le champ pour modifier sa formule
+</div>
+
+<div id="fieldPredicates" style="display: none;">
+  {{if $ex_field->_id}}
+    <button class="new" onclick="ExFieldPredicate.create('{{$ex_field->_id}}')">{{tr}}CExClassFieldPredicate-title-create{{/tr}}</button>
+    
+    <table class="main tbl" style="table-layout: fixed;">
+      <tr>
+        <th class="narrow"></th>
+        <th>{{mb_title class=CExClassFieldPredicate field=operator}}</th>
+        <th>{{mb_title class=CExClassFieldPredicate field=_value}}</th>
+      </tr>
+      {{foreach from=$ex_field->_ref_predicates item=_predicate}}
+        <tr>
+          <td>
+            <button class="edit notext" onclick="ExFieldPredicate.edit({{$_predicate->_id}})">{{tr}}Edit{{/tr}}</button>
+          </td>
+          <td style="text-align: right;">{{mb_value object=$_predicate field=operator}}</td>
+          <td>{{mb_value object=$_predicate field=_value}}</td>
+        </tr>
+      {{foreachelse}}
+        <tr>
+          <td colspan="3" class="empty">
+            {{tr}}CExClassFieldPredicate.none{{/tr}}
+          </td>
+        </tr>
+      {{/foreach}}
+    </table>
+  {{/if}}
 </div>

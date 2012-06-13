@@ -1,3 +1,5 @@
+{{mb_default var=simple_view value=0}}
+
 <script type="text/javascript">  
 g = [];
 data = {{$data|@json}};
@@ -293,10 +295,10 @@ loadConstantesMedicales  = function(context_guid) {
 };
 </script>
 
-<table class="tbl" {{if $print}}style="display: none;"{{/if}}>
+<table class="tbl" {{if $print || $simple_view}}style="display: none;"{{/if}}>
   <tr>
     <th colspan="10" class="title">
-      <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
+      <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}">
         {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$patient size=42}}
       </a>
       Constantes médicales dans le cadre de: 
@@ -345,7 +347,7 @@ loadConstantesMedicales  = function(context_guid) {
 {{if $print}}
   <div id="constantes-medicales-graph" style="text-align: center;"></div>
 {{else}}
-  {{if "forms"|module_active && $context instanceof CSejour}}
+  {{if "forms"|module_active && $context instanceof CSejour && !$simple_view}}
     <script type="text/javascript">
       Main.add(function(){
         Control.Tabs.create("surveillance-tab");
@@ -421,20 +423,15 @@ loadConstantesMedicales  = function(context_guid) {
         </div>
         
         <div id="constantes-table" style="display: none; text-align: left;">
-          <div class="small-info">
-            <strong>L'ordre chronologique du tableau a changé !</strong><br />
-            Les relevés les plus récents sont maintenant en haut ou à gauche selon l'orientation.
-          </div>
-          
           <button class="change" onclick="$('constantes-table').down('.contantes-horizontal').toggle(); $('constantes-table').down('.contantes-vertical').toggle()">
             Changer l'orientation
           </button>
           
           <div class="contantes-horizontal" style="display: none;">
-          {{mb_include module=patients template=print_constantes}}
+            {{mb_include module=patients template=print_constantes}}
           </div>
           <div class="contantes-vertical">
-          {{mb_include module=patients template=print_constantes_vert}}
+            {{mb_include module=patients template=print_constantes_vert}}
           </div>
         </div>
       </td>

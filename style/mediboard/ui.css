@@ -373,6 +373,7 @@ ul.control_tabs_vertical li a.active {
   border-right: 1px solid #fff;
 }
 
+/** EMPTY **/
 ul.control_tabs li a.empty, 
 ul.control_tabs_vertical li a.empty,
 span.empty {
@@ -389,6 +390,7 @@ ul.control_tabs_vertical li a.empty.active {
   background-color: #eee;
 }
 
+/** WRONG **/
 ul.control_tabs li a.wrong, 
 ul.control_tabs_vertical li a.wrong,
 span.wrong {
@@ -403,6 +405,20 @@ ul.control_tabs_vertical li a.wrong:hover {
 ul.control_tabs li a.wrong.active, 
 ul.control_tabs_vertical li a.wrong.active {
   background-color: #ffa;
+  color: #000000;
+}
+
+/** SPECIAL **/
+ul.control_tabs li a.special, 
+ul.control_tabs_vertical li a.special,
+ul.control_tabs li a.special:hover, 
+ul.control_tabs_vertical li a.special:hover {
+  background-color: #94dd89;
+}
+
+ul.control_tabs li a.special.active, 
+ul.control_tabs_vertical li a.special.active {
+  background-color: #6fe060;
   color: #000000;
 }
 

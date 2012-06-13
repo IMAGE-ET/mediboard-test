@@ -146,16 +146,19 @@ Main.add(function(){
   <li>
     <a href="#ExConcept-spec-editor">Paramètres</a>
   </li>
+  {{if $object->_id}}
   <li>
     <a href="#ex-back-class_fields" {{if $object->_back.class_fields|@count == 0}} class="empty" {{/if}}>
       {{tr}}CExConcept-back-class_fields{{/tr}} <small>({{$object->_back.class_fields|@count}})</small>
     </a>
   </li>
+  {{/if}}
 </ul>
 <hr class="control_tabs" />
 
 <div id="ExConcept-spec-editor" style="display: none;"></div>
 
+{{if $object->_id}}
 <div id="ex-back-class_fields" style="display: none;">
   <table class="main tbl">
     <tr>
@@ -183,3 +186,4 @@ Main.add(function(){
     {{/foreach}}
   </table>
 </div>
+{{/if}}

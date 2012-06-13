@@ -35,27 +35,34 @@ $template = null;
 
 if ($spec instanceof CRefSpec) {
   $target_object = new $spec->class;
-  $where[$view_field] = $ds->prepareLike($search);
   
-  if ($spec->perm) {
-    $permsTable = array(
-      "deny" => PERM_DENY,
-      "read" => PERM_READ,
-      "edit" => PERM_EDIT,
-    );
-    $perm = $permsTable[$spec->perm] ? $permsTable[$spec->perm] : null;
-    $matches = $target_object->loadListWithPerms($perm, $where, $view_field, $limit, $view_field);
-    //$total = $target_object->_totalWithPerms;
+  if ($view_field == "_view") {
+    $matches = $target_object->getAutocompleteList($input, $where, $limit);
   }
   else {
-    $matches = $target_object->loadList($where, $view_field, $limit, $view_field);
-    $total = $target_object->countList($where, $view_field);
-  } 
+    $where[$view_field] = $ds->prepareLike($search);
+    
+    if ($spec->perm) {
+      $permsTable = array(
+        "deny" => PERM_DENY,
+        "read" => PERM_READ,
+        "edit" => PERM_EDIT,
+      );
+      $perm = $permsTable[$spec->perm] ? $permsTable[$spec->perm] : null;
+      $matches = $target_object->loadListWithPerms($perm, $where, $view_field, $limit, $view_field);
+      //$total = $target_object->_totalWithPerms;
+    }
+    else {
+      $matches = $target_object->loadList($where, $view_field, $limit, $view_field);
+      $total = $target_object->countList($where, $view_field);
+    }
+  }
+  
   $template = $target_object->getTypedTemplate("autocomplete");
 }
 else {
   $where[$field] = $ds->prepareLike($search);
-	$matches = $object->loadList($where, $field, $limit, $field);
+  $matches = $object->loadList($where, $field, $limit, $field);
   /*$counts = CMbArray::pluck($object->countMultipleList($where, $field, $field), "total");
   $count = count($counts);
   

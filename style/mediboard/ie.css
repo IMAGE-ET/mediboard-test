@@ -40,66 +40,88 @@ button img {
 /* Cross browser opacity */
   .opacity-0, 
 tr.opacity-0 > td, 
-tr.opacity-0 > th {
+tr.opacity-0 > th, 
+  .opacity-0 input, 
+  .opacity-0 .inputExtension  {
   -ms-filter: "alpha(opacity=0)";
 }
 
   .opacity-10, 
 tr.opacity-10 > td, 
-tr.opacity-10 > th {
+tr.opacity-10 > th, 
+  .opacity-10 input, 
+  .opacity-10 .inputExtension  {
   -ms-filter: "alpha(opacity=10)";
 }
 
   .opacity-20, 
 tr.opacity-20 > td, 
-tr.opacity-20 > th {
+tr.opacity-20 > th, 
+  .opacity-20 input, 
+  .opacity-20 .inputExtension {
   -ms-filter: "alpha(opacity=20)";
 }
 
   .opacity-30, 
 tr.opacity-30 > td, 
-tr.opacity-30 > th {
+tr.opacity-30 > th, 
+  .opacity-30 input, 
+  .opacity-30 .inputExtension  {
   -ms-filter: "alpha(opacity=30)";
 }
 
   .opacity-40, 
 tr.opacity-40 > td, 
-tr.opacity-40 > th {
+tr.opacity-40 > th, 
+  .opacity-40 input, 
+  .opacity-40 .inputExtension  {
   -ms-filter: "alpha(opacity=40)";
 }
 
   .opacity-50, 
 tr.opacity-50 > td, 
-tr.opacity-50 > th {
+tr.opacity-50 > th, 
+  .opacity-50 input, 
+  .opacity-50 .inputExtension  {
   -ms-filter: "alpha(opacity=50)";
 }
 
   .opacity-60, 
 tr.opacity-60 > td, 
-tr.opacity-60 > th {
+tr.opacity-60 > th, 
+  .opacity-60 input, 
+  .opacity-60 .inputExtension  {
   -ms-filter: "alpha(opacity=60)";
 }
 
   .opacity-70, 
 tr.opacity-70 > td, 
-tr.opacity-70 > th {
+tr.opacity-70 > th, 
+  .opacity-70 input, 
+  .opacity-70 .inputExtension  {
   -ms-filter: "alpha(opacity=70)";
 }
 
   .opacity-80, 
 tr.opacity-80 > td, 
-tr.opacity-80 > th {
+tr.opacity-80 > th, 
+  .opacity-80 input, 
+  .opacity-80 .inputExtension  {
   -ms-filter: "alpha(opacity=80)";
 }
 
   .opacity-90, 
 tr.opacity-90 > td, 
-tr.opacity-90 > th {
+tr.opacity-90 > th, 
+  .opacity-90 input, 
+  .opacity-90 .inputExtension  {
   -ms-filter: "alpha(opacity=90)";
 }
 
   .opacity-100, 
 tr.opacity-100 > td, 
-tr.opacity-100 > th {
+tr.opacity-100 > th, 
+  .opacity-100 input, 
+  .opacity-100 .inputExtension  {
   -ms-filter: "alpha(opacity=100)";
 }

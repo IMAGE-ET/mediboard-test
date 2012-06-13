@@ -81,8 +81,11 @@ ExObjectForms.{{$ex_form_hash}} = {
 };
 
 Main.add(function(){
+  var form = getForm("editExObject_{{$ex_form_hash}}");
+  
   ExObject.current = {object_guid: "{{$object_guid}}", event: "{{$event}}"};
-  new ExObjectFormula({{$formula_token_values|@json}}, getForm("editExObject_{{$ex_form_hash}}"));
+  new ExObjectFormula({{$formula_token_values|@json}}, form);
+  ExObject.initPredicates({{$ex_object->_fields_display_struct|@json}}, form);
 });
 </script>
 
@@ -156,13 +159,19 @@ Main.add(function(){
   </script>
   
   <ul id="ex_class-groups-tabs-{{$ex_form_hash}}" class="control_tabs" style="clear: left;">
-  {{foreach from=$grid key=_group_id item=_grid}}
-    {{if $groups.$_group_id->_ref_fields|@count}}
-    <li>
-      <a href="#tab-{{$groups.$_group_id->_guid}}">{{$groups.$_group_id}}</a>
-    </li>
-    {{/if}}
-  {{/foreach}}
+    {{foreach from=$grid key=_group_id item=_grid}}
+      {{if $groups.$_group_id->_ref_fields|@count}}
+      <li>
+        <a href="#tab-{{$groups.$_group_id->_guid}}">{{$groups.$_group_id}}</a>
+      </li>
+      {{/if}}
+    {{/foreach}}
+    
+    {{foreach from=$ex_object->_native_views item=object key=_name}}
+      {{if $object && $object->_id}}
+        <li><a href="#tab-native_views-{{$_name}}" class="special">{{tr}}CExClass.native_views.{{$_name}}{{/tr}}</a></li>
+      {{/if}}
+    {{/foreach}}
   </ul>
   <hr class="control_tabs" />
   
@@ -182,18 +191,24 @@ Main.add(function(){
             {{if $_group.type == "label"}}
               {{if $_field->coord_field_x == $_field->coord_label_x+1}}
                 <th style="font-weight: bold; vertical-align: middle;">
-                  {{mb_label object=$ex_object field=$_field_name}}
-                  {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$_field}}
+                  <div class="field-{{$_field->name}} field-label">
+                    {{mb_label object=$ex_object field=$_field_name}}
+                    {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$_field}}
+                  </div>
                 </th>
               {{else}}
-                <td style="font-weight: bold; text-align: left;">
-                  {{mb_label object=$ex_object field=$_field_name}}
-                  {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$_field}}
+                <td style="font-weight: bold; text-align: left;" class="field-{{$_field->name}} field-label">
+                  <div class="field-{{$_field->name}} field-label">
+                    {{mb_label object=$ex_object field=$_field_name}}
+                    {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$_field}}
+                  </div>
                 </td>
               {{/if}}
             {{elseif $_group.type == "field"}}
               <td {{if $_field->coord_field_x == $_field->coord_label_x+1}} style="vertical-align: middle;" {{/if}}>
-                {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_field form="editExObject_$ex_form_hash"}}
+                <div class="field-{{$_field->name}} field-input">
+                  {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_field form="editExObject_$ex_form_hash"}}
+                </div>
               </td>
             {{/if}}
           {{elseif $_group.object instanceof CExClassHostField}}
@@ -250,41 +265,51 @@ Main.add(function(){
       {{if isset($out_of_grid.$_group_id.field.$_field_name|smarty:nodefaults)}}
         <tr>
           <th colspan="2" style="vertical-align: middle; font-weight: bold; width: 50%;">
-            {{mb_label object=$ex_object field=$_field->name}}
-            {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$_field}}
+            <div class="field-{{$_field->name}} field-label">
+              {{mb_label object=$ex_object field=$_field->name}}
+              {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$_field}}
+            </div>
           </th>
           <td colspan="2" style="vertical-align: middle;">
-            {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_field form="editExObject_$ex_form_hash"}}
+            <div class="field-{{$_field->name}} field-input">
+              {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_field form="editExObject_$ex_form_hash"}}
+            </div>
           </td>
         </tr>
       {{/if}}
     {{/foreach}}
     
+      {{if $object->_id}}
+      <tr>
+        <td colspan="4" class="button">
+          {{if $ex_object->_id}}
+            <button class="modify singleclick" type="submit">{{tr}}Save{{/tr}}</button>
+            
+            {{if $can_delete}}
+              <button type="button" class="trash" onclick="confirmDeletion(this.form,{callback: (function(){ FormObserver.changes = 0; onSubmitFormAjax(this.form); }).bind(this), typeName:'', objName:'{{$ex_object->_view|smarty:nodefaults|JSAttribute}}'})">
+                {{tr}}Delete{{/tr}}
+              </button>
+            {{/if}}
+          {{else}}
+            <button class="submit singleclick" type="submit">{{tr}}Save{{/tr}}</button>
+          {{/if}}
+        </td>
+      </tr>
+      {{/if}}
+      
     </tbody>
     {{/if}}
     {{/foreach}}
     
-    {{if $object->_id}}
-    <tr>
-      <td colspan="4" class="button">
-        {{if $ex_object->_id}}
-          <button class="modify singleclick" type="submit">{{tr}}Save{{/tr}}</button>
-          
-          {{if $can_delete}}
-            <button type="button" class="trash" onclick="confirmDeletion(this.form,{callback: (function(){ FormObserver.changes = 0; onSubmitFormAjax(this.form); }).bind(this), typeName:'', objName:'{{$ex_object->_view|smarty:nodefaults|JSAttribute}}'})">
-              {{tr}}Delete{{/tr}}
-            </button>
-          {{/if}}
-        {{else}}
-          <button class="submit singleclick" type="submit">{{tr}}Save{{/tr}}</button>
-        {{/if}}
-      </td>
-    </tr>
-    {{/if}}
-    
   </table>
 
 {{/mb_form}}
+
+{{foreach from=$ex_object->_native_views item=object key=_name}}
+  <div id="tab-native_views-{{$_name}}" style="display: none;">
+    {{mb_include module=forms template="inc_native_view_$_name"}}
+  </div>
+{{/foreach}}
 
 {{else}}
 

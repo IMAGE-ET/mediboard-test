@@ -49,7 +49,7 @@
   </fieldset>
 {{elseif $ex_field->formula}}
   {{mb_field object=$ex_object field=$_field_name readonly=true style="font-weight: bold; background-color: #aaff56;" class="noresize" rows=5 title=$ex_field->_formula}}
-	<button type="button" class="cancel notext" style="margin-left: -1px;" onclick="$V($(this).previous(),'')">Vider</button>
+  <button type="button" class="cancel notext" style="margin-left: -1px;" onclick="$V($(this).previous(),'')">Vider</button>
 {{else}}
   {{mb_field object=$ex_object field=$_field_name register=true increment=true form=$form emptyLabel=" "}}
 {{/if}}

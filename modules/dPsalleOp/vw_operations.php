@@ -82,47 +82,47 @@ if ($op) {
   
   $selOp->_ref_plageop->loadRefsFwd();
 
-	// Affichage des données
-	$listChamps = array(
-	                1=>array("hb","ht","ht_final","plaquettes"),
-	                2=>array("creatinine","_clairance","na","k"),
-	                3=>array("tp","tca","tsivy","ecbu")
-	                );
-	$cAnesth =& $selOp->_ref_consult_anesth;
-	foreach($listChamps as $keyCol=>$aColonne){
-		foreach($aColonne as $keyChamp=>$champ){
-		  $verifchamp = true;
-	    if($champ=="tca"){
-		    $champ2 = $cAnesth->tca_temoin;
-		  }else{
-		    $champ2 = false;
-	      if(($champ=="ecbu" && $cAnesth->ecbu=="?") || ($champ=="tsivy" && $cAnesth->tsivy=="00:00:00")){
-	        $verifchamp = false;
-	      }
-		  }
-	    $champ_exist = $champ2 || ($verifchamp && $cAnesth->$champ);
-	    if(!$champ_exist){
-	      unset($listChamps[$keyCol][$keyChamp]);
-	    }
-		}
-	}
+  // Affichage des données
+  $listChamps = array(
+                  1=>array("hb","ht","ht_final","plaquettes"),
+                  2=>array("creatinine","_clairance","na","k"),
+                  3=>array("tp","tca","tsivy","ecbu")
+                  );
+  $cAnesth =& $selOp->_ref_consult_anesth;
+  foreach($listChamps as $keyCol=>$aColonne){
+    foreach($aColonne as $keyChamp=>$champ){
+      $verifchamp = true;
+      if($champ=="tca"){
+        $champ2 = $cAnesth->tca_temoin;
+      }else{
+        $champ2 = false;
+        if(($champ=="ecbu" && $cAnesth->ecbu=="?") || ($champ=="tsivy" && $cAnesth->tsivy=="00:00:00")){
+          $verifchamp = false;
+        }
+      }
+      $champ_exist = $champ2 || ($verifchamp && $cAnesth->$champ);
+      if(!$champ_exist){
+        unset($listChamps[$keyCol][$keyChamp]);
+      }
+    }
+  }
 
   $selOp->_ref_consult_anesth->_ref_consultation->loadRefsBack();
   $selOp->_ref_consult_anesth->_ref_consultation->loadRefPraticien()->loadRefFunction();
   
   // Chargement de la prescription de sejour
-	if (CModule::getActive("dPprescription")){
-		$prescription = new CPrescription();
-	  $prescription->object_id = $selOp->sejour_id;
-		$prescription->object_class = "CSejour";
-		$prescription->type = "sejour";
-		$prescription->loadMatchingObject();
+  if (CModule::getActive("dPprescription")){
+    $prescription = new CPrescription();
+    $prescription->object_id = $selOp->sejour_id;
+    $prescription->object_class = "CSejour";
+    $prescription->type = "sejour";
+    $prescription->loadMatchingObject();
   }
-	
-	$anesth_id = ($selOp->anesth_id) ? $selOp->anesth_id : $selOp->_ref_plageop->anesth_id;
-	if($anesth_id && CModule::getActive('dPprescription')){
-	  $protocoles = CPrescription::getAllProtocolesFor($anesth_id, null, null, 'CSejour','sejour');
-	}
+  
+  $anesth_id = ($selOp->anesth_id) ? $selOp->anesth_id : $selOp->_ref_plageop->anesth_id;
+  if($anesth_id && CModule::getActive('dPprescription')){
+    $protocoles = CPrescription::getAllProtocolesFor($anesth_id, null, null, 'CSejour','sejour');
+  }
 
   if(!$selOp->prat_visite_anesth_id && $selOp->_ref_anesth->_id) {
     $selOp->prat_visite_anesth_id = $selOp->_ref_anesth->_id;
@@ -159,27 +159,27 @@ $soustotal_dh   = array("tarmed" => 0, "caisse" => 0);
 $acte_tarmed = null;
 $acte_caisse = null;
 if(CModule::getInstalled("tarmed")){
-	//Initialisation d'un acte Tarmed
-	$acte_tarmed = new CActeTarmed();
-	$acte_tarmed->quantite = 1;
-	$acte_tarmed->loadListExecutants();
-	$acte_tarmed->loadRefExecutant();
+  //Initialisation d'un acte Tarmed
+  $acte_tarmed = new CActeTarmed();
+  $acte_tarmed->quantite = 1;
+  $acte_tarmed->loadListExecutants();
+  $acte_tarmed->loadRefExecutant();
   $acte_caisse = new CActeCaisse();
   $acte_caisse->quantite = 1;
   $acte_caisse->loadListExecutants();
   $acte_caisse->loadRefExecutant();
   $acte_caisse->loadListCaisses();
   if($selOp->_ref_actes_tarmed){
-		foreach($selOp->_ref_actes_tarmed as $acte){
-		  $soustotal_base["tarmed"] += $acte->montant_base;
-		  $soustotal_dh["tarmed"]   += $acte->montant_depassement;  
-		}
+    foreach($selOp->_ref_actes_tarmed as $acte){
+      $soustotal_base["tarmed"] += $acte->montant_base;
+      $soustotal_dh["tarmed"]   += $acte->montant_depassement;  
+    }
   }
   if($selOp->_ref_actes_caisse){
-		foreach($selOp->_ref_actes_caisse as $acte){
-		  $soustotal_base["caisse"] += $acte->montant_base;
-		  $soustotal_dh["caisse"]   += $acte->montant_depassement;  
-		}
+    foreach($selOp->_ref_actes_caisse as $acte){
+      $soustotal_base["caisse"] += $acte->montant_base;
+      $soustotal_dh["caisse"]   += $acte->montant_depassement;  
+    }
   }
 }
 $total["tarmed"] = $soustotal_base["tarmed"] + $soustotal_dh["tarmed"];
@@ -271,9 +271,9 @@ $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
 $smarty->assign("isImedsInstalled"       , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("codage_prat"            , $group->_configs["codage_prat"]);
 if (CModule::getActive("dPprescription")){
-	if(!isset($prescription)){
-		$prescription = new CPrescription();
-	}
+  if(!isset($prescription)){
+    $prescription = new CPrescription();
+  }
   $smarty->assign("prescription"           , $prescription);
 }
 $smarty->assign("protocoles"             , $protocoles);

@@ -29,6 +29,7 @@ $print                 = CValue::get('print');
 $paginate              = CValue::get('paginate', 0);
 $start                 = CValue::get('start', 0);
 $count                 = CValue::get('count', 50);
+$simple_view           = CValue::get('simple_view', 0);
 
 if (!$start) {
   $start = 0;
@@ -491,6 +492,7 @@ $smarty->assign('count',         $count);
 $smarty->assign('total_constantes', $total_constantes);
 $smarty->assign('paginate',      $paginate);
 $smarty->assign('constantes_medicales_grid', $constantes_medicales_grid);
+$smarty->assign('simple_view',   $simple_view);
 $smarty->display('inc_vw_constantes_medicales.tpl');
 
 ?>

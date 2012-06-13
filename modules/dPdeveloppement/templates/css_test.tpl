@@ -38,9 +38,11 @@ Main.add(function(){
   <li><a href="#tab1">normal</a></li>
   <li><a href="#tab2" class="active">active</a></li>
   <li><a href="#tab3" class="empty">empty</a></li>
-  <li><a href="#tab3" class="empty active">empty active</a></li>
-  <li><a href="#tab4" class="wrong">wrong</a></li>
-  <li><a href="#tab4" class="wrong active">wrong active</a></li>
+  <li><a href="#tab4" class="empty active">empty active</a></li>
+  <li><a href="#tab5" class="wrong">wrong</a></li>
+  <li><a href="#tab6" class="wrong active">wrong active</a></li>
+  <li><a href="#tab7" class="special">special</a></li>
+  <li><a href="#tab8" class="special active">special active</a></li>
 </ul>
 <hr class="control_tabs"/>
 
@@ -52,9 +54,11 @@ Main.add(function(){
   <li><a href="#tab1">normal</a></li>
   <li><a href="#tab2" class="active">active</a></li>
   <li><a href="#tab3" class="empty">empty</a></li>
-  <li><a href="#tab3" class="empty active">empty active</a></li>
-  <li><a href="#tab4" class="wrong">wrong</a></li>
-  <li><a href="#tab4" class="wrong active">wrong active</a></li>
+  <li><a href="#tab4" class="empty active">empty active</a></li>
+  <li><a href="#tab5" class="wrong">wrong</a></li>
+  <li><a href="#tab6" class="wrong active">wrong active</a></li>
+  <li><a href="#tab7" class="special">special</a></li>
+  <li><a href="#tab8" class="special active">special active</a></li>
 </ul>
 
     </td>

@@ -16,6 +16,7 @@ class CExClassField extends CExListItemsOwner {
   var $prop = null; 
   var $report_level = null;
   var $concept_id = null;
+  var $predicate_id = null;
   
   var $formula = null;
   var $_formula = null;
@@ -37,6 +38,8 @@ class CExClassField extends CExListItemsOwner {
   var $_ref_ex_group = null;
   var $_ref_ex_class = null;
   var $_ref_translation = null;
+  var $_ref_predicates = null;
+  var $_ref_predicate = null;
   var $_ref_concept = null;
   var $_spec_object = null;
   var $_ex_class_id = null;
@@ -142,6 +145,7 @@ class CExClassField extends CExListItemsOwner {
     $props["name"]        = "str notNull protected canonical";
     $props["report_level"]= "enum list|1|2|host";
     $props["prop"]        = "text notNull";
+    $props["predicate_id"]= "ref class|CExClassFieldPredicate autocomplete|_view|true";
     
     $props["formula"]     = "text"; // canonical tokens
     $props["_formula"]    = "text"; // localized tokens
@@ -164,10 +168,11 @@ class CExClassField extends CExListItemsOwner {
   
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["enum_translations"] = "CExClassFieldEnumTranslation ex_class_field_id";
+    $backProps["enum_translations"]  = "CExClassFieldEnumTranslation ex_class_field_id";
     $backProps["field_translations"] = "CExClassFieldTranslation ex_class_field_id";
-    $backProps["list_items"] = "CExListItem field_id";
-    $backProps["ex_triggers"] = "CExClassFieldTrigger ex_class_field_id";
+    $backProps["list_items"]         = "CExListItem field_id";
+    $backProps["ex_triggers"]        = "CExClassFieldTrigger ex_class_field_id";
+    $backProps["predicates"]         = "CExClassFieldPredicate ex_class_field_id";
     return $backProps;
   }
   
@@ -181,6 +186,27 @@ class CExClassField extends CExListItemsOwner {
       $this->_ex_class_id = $this->loadRefExGroup()->ex_class_id;
       $this->updateTranslation();
     }
+  }
+  
+  function getAutocompleteList($keywords, $where = null, $limit = null, $ljoin = null, $order = null) {
+    $list = $this->loadList($where, null, null, null, $ljoin);
+    
+    $real_list = array();
+    $re = preg_quote($keywords);
+    $re = CMbString::allowDiacriticsInRegexp($re);
+    $re = str_replace("/", "\\/", $re);
+    $re = "/($re)/i";
+    
+    foreach($list as $_ex_field) {
+      if ($keywords == "%" || $keywords == "" || preg_match($re, $_ex_field->_view)) {
+        $_group = $_ex_field->loadRefExGroup();
+        $_ex_field->_view = "$_group->_view - $_ex_field->_view";
+        
+        $real_list[$_ex_field->_id] = $_ex_field;
+      }
+    }
+    
+    return $real_list;
   }
   
   function getFieldNames($name_as_key = true, $all_groups = true){
@@ -331,6 +357,20 @@ class CExClassField extends CExListItemsOwner {
   }
   
   /**
+   * @return array
+   */
+  function loadRefPredicates(){
+    return $this->_ref_predicates = $this->loadBackRefs("predicates");
+  }
+  
+  /**
+   * @return array
+   */
+  function loadRefPredicate($cache = true){
+    return $this->_ref_predicate = $this->loadFwdRef("predicate_id", $cache);
+  }
+  
+  /**
    * @param bool $cache [optional]
    * @return CExClassFieldGroup
    */
@@ -344,10 +384,8 @@ class CExClassField extends CExListItemsOwner {
   }
   
   /**
-   * CExConcept
-   * 
-   * @param object $cache [optional]
-   * @return 
+   * @param bool $cache [optional]
+   * @return CExConcept
    */
   function loadRefConcept($cache = true){
     return $this->_ref_concept = $this->loadFwdRef("concept_id", $cache);

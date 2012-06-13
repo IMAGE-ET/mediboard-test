@@ -230,49 +230,7 @@ class CExClassConstraint extends CMbObject {
       }
     }
     
-    $cons = $this->value;
-    
-    // =|!=|>|>=|<|<=|startsWith|endsWith|contains default|=
-    switch ($this->operator) {
-      default:
-      case "=": 
-        if ($value == $cons) return true;
-        break;
-        
-      case "!=": 
-        if ($value != $cons) return true;
-        break;
-        
-      case ">": 
-        if ($value > $cons) return true;
-        break;
-        
-      case ">=": 
-        if ($value >= $cons) return true;
-        break;
-        
-      case "<": 
-        if ($value < $cons) return true;
-        break;
-        
-      case "<=": 
-        if ($value <= $cons) return true;
-        break;
-        
-      case "startsWith": 
-        if (strpos($value, $cons) === 0) return true;
-        break;
-        
-      case "endsWith": 
-        if (substr($value, -strlen($cons)) == $cons) return true;
-        break;
-        
-      case "contains": 
-        if (strpos($value, $cons) !== false) return true;
-        break;
-    }
-    
-    return false;
+    return CExClass::compareValues($value, $this->operator, $this->value);
   }
   
   function loadRefExClass(){

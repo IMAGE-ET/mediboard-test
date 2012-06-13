@@ -21,7 +21,7 @@ class CTextSpec extends CMbFieldSpec {
     return null;
   }
   
-  function getValue($object, $smarty = null, $params = array()) {
+  function getHtmlValue($object, $smarty = null, $params = array()) {
     $value = $object->{$this->fieldName};
     if ($truncate = CValue::read($params, "truncate")) {
       $value = CMbString::truncate($value, $truncate === true ? null : $truncate);

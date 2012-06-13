@@ -16,12 +16,11 @@
 
 <ul>
 {{foreach from=$matches item=match}}
-  <li id="autocomplete-{{$match->_guid}}">
+  <li id="autocomplete-{{$match->_guid}}" data-id="{{$match->_id}}" data-guid="{{$match->_guid}}">
   {{if $template}}
     {{include file=$template nodebug=true}}
   {{else}}
-    {{* Do not add carriage returns or it will add whitespace in the input *}}
-    <span class="view">{{if $show_view}}{{$match->_view}}{{else}}{{$match->$f|emphasize:$input}}{{/if}}</span>
+    {{mb_include module=system template=CMbObject_autocomplete nodebug=true}}
   {{/if}}
   </li>
 {{foreachelse}}

@@ -98,6 +98,11 @@ Main.add(function(){
           </tr>
           
           <tr>
+            <th>{{mb_label object=$ex_class field=native_views}}</th>
+            <td colspan="4">{{mb_field object=$ex_class field=native_views}}</td>
+          </tr>
+          
+          <tr>
             <td colspan="3" style="vertical-align: bottom; text-align: right;">
               {{if $ex_class->_id}}
                 {{if $ex_class->host_class != "CMbObject"}}

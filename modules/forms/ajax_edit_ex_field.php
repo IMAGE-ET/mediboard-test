@@ -26,17 +26,19 @@ if ($ex_field->load($ex_field_id)) {
 }
 else {
   $ex_field->ex_class_id = $ex_class_id;
-	$ex_field->ex_group_id = $ex_group_id;
+  $ex_field->ex_group_id = $ex_group_id;
 }
 
 $ex_field->loadRefExClass();
+$ex_field->loadRefPredicate();
+$ex_field->loadRefPredicates();
 
 if ($ex_class_id) {
-	$ex_class = new CExClass;
-	$ex_class->load($ex_class_id);
+  $ex_class = new CExClass;
+  $ex_class->load($ex_class_id);
 }
 else {
-	$ex_class = $ex_field->_ref_ex_class;
+  $ex_class = $ex_field->_ref_ex_class;
 }
 
 $ex_class->loadRefsGroups();

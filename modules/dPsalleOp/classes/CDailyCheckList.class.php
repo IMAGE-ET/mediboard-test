@@ -168,9 +168,11 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     foreach($this->_ref_item_types as $type) {
       $type->loadRefsFwd();
     }
-    $this->loadBackRefs('items');
-    if ($this->_back['items']) {
-      foreach($this->_back['items'] as $item) {
+    
+    $items = $this->loadBackRefs('items');
+    
+    if ($items) {
+      foreach($items as $item) {
         if (isset($this->_ref_item_types[$item->item_type_id])) {
           $this->_ref_item_types[$item->item_type_id]->_checked = $item->checked;
           $this->_ref_item_types[$item->item_type_id]->_answer = $item->getAnswer();

@@ -93,6 +93,7 @@ foreach($ex_object->_specs as $_field => $_spec) {
 
 $ex_object->getReportedValues();
 $ex_object->loadRefReferenceObjects();
+$ex_object->setFieldsDisplay();
 
 if (!$ex_object->_id) {
   if (!$ex_object->reference_id && !$ex_object->reference_class) {
@@ -105,6 +106,9 @@ if (!$ex_object->_id) {
     $ex_object->setReferenceObject_2($reference);
   }
 }
+
+// depends on setReferenceObject_1 and setReferenceObject_2
+$ex_object->loadNativeViews();
 
 $fields = array();
 foreach($groups as $_group) {

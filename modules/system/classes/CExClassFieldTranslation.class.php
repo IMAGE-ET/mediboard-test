@@ -61,9 +61,9 @@ class CExClassFieldTranslation extends CMbObject {
     $trans->lang = $lang;
     $trans->ex_class_field_id = $field_id;
     
-		if ($trans->loadMatchingObject()) {
-			self::$cache[$lang][$field_id] = $trans;
-		}
+    if ($trans->loadMatchingObject()) {
+      self::$cache[$lang][$field_id] = $trans;
+    }
     
     return $trans;
   }
@@ -88,6 +88,10 @@ class CExClassFieldTranslation extends CMbObject {
     }
   }
   
+  /**
+   * @param bool $cache [optional]
+   * @return CExClassField
+   */
   function loadRefExClassField($cache = true){
     return $this->_ref_ex_class_field = $this->loadFwdRef("ex_class_field_id", $cache);
   }

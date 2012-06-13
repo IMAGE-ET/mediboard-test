@@ -331,7 +331,7 @@ div.draggable {
 .desktop table.tbl tr:hover td,
 .desktop div.tree-header:hover,
 .desktop table.tbl tr td.hover {
-  background-color: #eef;
+  background-color: #FFF2DD;
 }
 
 table.tbl td.button {

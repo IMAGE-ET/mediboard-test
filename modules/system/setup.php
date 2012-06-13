@@ -1008,13 +1008,32 @@ class CSetupsystem extends CSetup {
     
     $this->makeRevision("1.0.99");
     $this->addPrefQuery("MobileUI", 1);
-    
+
     $this->makeRevision("1.1.00");
     $query = "ALTER TABLE `source_smtp` 
       ADD `auth` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
     
+    $this->makeRevision("1.1.0");
+    $query = "CREATE TABLE `ex_class_field_predicate` (
+              `ex_class_field_predicate_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `ex_class_field_id` INT (11) UNSIGNED NOT NULL,
+              `operator` ENUM ('=','!=','>','>=','<','<=','startsWith','endsWith','contains') NOT NULL DEFAULT '=',
+              `value` VARCHAR (255) NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_field_predicate` 
+              ADD INDEX (`ex_class_field_id`);";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_field` 
+              ADD `predicate_id` INT (11) UNSIGNED,
+              ADD INDEX (`predicate_id`)";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class` 
+              ADD `native_views` VARCHAR(255),
+              ADD INDEX (`native_views`)";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.1.0";
+    $this->mod_version = "1.1.01";
   }
 }

@@ -674,3 +674,15 @@ ExFormula = {
     });
   }
 };
+
+ExFieldPredicate = {
+  edit: function(id, ex_field_id) {
+    var url = new Url("forms", "ajax_edit_ex_field_predicate");
+    url.addParam("ex_field_predicate_id", id);
+    url.addParam("ex_field_id", ex_field_id);
+    url.requestModal(500, 300);
+  },
+  create: function(ex_field_id) {
+    this.edit("0", ex_field_id);
+  }
+};

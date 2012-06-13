@@ -176,6 +176,90 @@ var ExObject = {
     url.addParam("target_element", target.identify());
     url.mergeParams(options);
     url.requestUpdate(target, {onComplete: options.onComplete});
+  },
+  
+  handlePredicates: function(predicates, form){
+    predicates.each(function(p){
+      var triggerValue = $V(form.elements[p.trigger]);
+      if (Object.isArray(triggerValue)) {
+        triggerValue = triggerValue.join("|");
+      }
+      else {
+        triggerValue += "";
+      }
+      
+      var display = (function(){
+        // An empty value hides the target
+        if (triggerValue === "") {
+          return false;
+        }
+        
+        switch (p.operator) {
+          case "=": 
+            if (triggerValue == p.value) return true;
+            break;
+            
+          case "!=": 
+            if (triggerValue != p.value) return true;
+            break;
+            
+          case ">": 
+            if (triggerValue > p.value) return true;
+            break;
+            
+          case ">=": 
+            if (triggerValue >= p.value) return true;
+            break;
+            
+          case "<": 
+            if (triggerValue < p.value) return true;
+            break;
+            
+          case "<=": 
+            if (triggerValue <= p.value) return true;
+            break;
+            
+          case "startsWith": 
+            if (triggerValue.indexOf(p.value) == 0) return true;
+            break;
+            
+          case "endsWith": 
+            if (triggerValue.substr(-p.value.length) == p.value) return true;
+            break;
+            
+          case "contains": 
+            if (triggerValue.indexOf(p.value) > -1) return true;
+            break;
+            
+          default: return true;
+        }
+        
+        return false;
+      })();
+      
+      ExObject.toggleField(p.target, display);
+    });
+  },
+  
+  initPredicates: function(predicates, form){
+    var callback = ExObject.handlePredicates.curry(predicates, form);
+    callback();
+    
+    predicates.each(function(p){
+      var inputs = Form.getInputsArray(form.elements[p.trigger]);
+      
+      inputs.each(function(input){
+        input.observe("change", callback)
+             .observe("ui:change", callback)
+             .observe("click", callback);
+      });
+    });
+  },
+  
+  toggleField: function(name, v) {
+    $$(".field-"+name).each(function(field){
+      field.setClassName("opacity-20", !v);
+    })
   }
 };
 
