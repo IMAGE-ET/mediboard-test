@@ -35,6 +35,8 @@ if (file_exists($filename_lock)) {
 
 touch($filename_lock);
 
+$count = $source->_limit = CAppUI::conf("eai max_files_to_process");
+
 $files = array();
 try {
   $files = $source->receive();
@@ -53,7 +55,6 @@ if (file_exists($filename_excludes)) {
 $array_diff = array_diff($files_excludes, $files);
 
 $files = array_diff($files, $files_excludes);
-$count = CAppUI::conf("eai max_files_to_process");
 $files = array_slice($files, 0, $count);
 
 // Mise à jour du fichier avec le nouveau diff
