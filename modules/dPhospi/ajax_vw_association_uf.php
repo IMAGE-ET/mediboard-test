@@ -25,6 +25,21 @@ $ufs_soins       = array();
 $ufs_hebergement = array();
 $auf = new CAffectationUniteFonctionnelle();
 
+// UFs de séjour
+$ufs_sejour = array();
+
+$uf = $sejour->loadRefUFHebergement();
+$ufs_sejour_hebergement[$uf->_id] = $uf;
+$ufs_hebergement[$uf->_id] = $uf;
+
+$uf = $sejour->loadRefUFMedicale();
+$ufs_sejour_medicale[$uf->_id] = $uf;
+$ufs_medicale[$uf->_id] = $uf;
+
+$uf = $sejour->loadRefUFSoins();
+$ufs_sejour_soins[$uf->_id] = $uf;
+$ufs_soins[$uf->_id] = $uf;
+
 // UFs de services
 $ufs_service = array();
 foreach ($auf->loadListFor($service) as $_auf) {
@@ -74,12 +89,16 @@ $ufs_hebergement = array_reverse($ufs_hebergement);
 $smarty = new CSmartyDP();
 
 $smarty->assign("affectation", $affectation);
+$smarty->assign("sejour"     , $sejour);
 $smarty->assign("service"    , $service);
 $smarty->assign("chambre"    , $chambre);
 $smarty->assign("lit"        , $lit);
 $smarty->assign("function"   , $function);
 $smarty->assign("praticien"  , $praticien);
 
+$smarty->assign("uf_sejour_hebergement", $uf_sejour_hebergement);
+$smarty->assign("uf_sejour_soins", $uf_sejour_soins);
+$smarty->assign("uf_sejour_medicale", $uf_sejour_medicale);
 $smarty->assign("ufs_service"    , $ufs_service);
 $smarty->assign("ufs_chambre"    , $ufs_chambre);
 $smarty->assign("ufs_lit"        , $ufs_lit);

@@ -214,6 +214,7 @@ $smarty->assign("chir"      , $chir);
 $smarty->assign("praticien" , $chir);
 $smarty->assign("patient"   , $patient );
 $smarty->assign("sejours"   , $sejours);
+$smarty->assign("ufs"       , CUniteFonctionnelle::getUFs());
 
 $smarty->assign("modurgence", 1);
 $smarty->assign("today"     , $today);

@@ -48,7 +48,10 @@
     rques_operation  : "{{$match->rques_operation|smarty:nodefaults|escape:"javascript"}}",
     protocole_prescription_anesth_id: "{{$type_prot_anesth}}{{$match->protocole_prescription_anesth_id}}",
     protocole_prescription_chir_id  : "{{$type_prot_chir}}{{$match->protocole_prescription_chir_id}}",
-    service_id       : "{{$match->service_id}}"
+    service_id       : "{{$match->service_id}}",
+    uf_hebergement_id: "{{$match->uf_hebergement_id}}",
+    uf_medicale_id   : "{{$match->uf_medicale_id}}",
+    uf_soins_id      : "{{$match->uf_soins_id}}"
   };
 </script>
 

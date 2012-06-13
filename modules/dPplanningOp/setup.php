@@ -1351,7 +1351,31 @@ class CSetupdPplanningOp extends CSetup {
                 ADD `rques_transport_sortie` TEXT;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.46";
+    $this->makeRevision("1.46");
+    $query = "ALTER TABLE `protocole` 
+      ADD `uf_hebergement_id` INT (11) UNSIGNED AFTER `group_id`,
+      ADD `uf_medicale_id` INT (11) UNSIGNED AFTER `uf_hebergement_id`,
+      ADD `uf_soins_id` INT (11) UNSIGNED AFTER `uf_medicale_id`;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `sejour` 
+      ADD `uf_hebergement_id` INT (11) UNSIGNED AFTER `group_id`,
+      ADD `uf_medicale_id` INT (11) UNSIGNED AFTER `uf_hebergement_id`,
+      ADD `uf_soins_id` INT (11) UNSIGNED AFTER `uf_medicale_id`;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `sejour`
+      ADD INDEX (`uf_hebergement_id`),
+      ADD INDEX (`uf_medicale_id`),
+      ADD INDEX (`uf_soins_id`);";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `protocole`
+      ADD INDEX (`uf_hebergement_id`),
+      ADD INDEX (`uf_medicale_id`),
+      ADD INDEX (`uf_soins_id`);";
+    
+    $this->mod_version = "1.47";
   }
 }
 ?>

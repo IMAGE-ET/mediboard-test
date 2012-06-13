@@ -21,6 +21,10 @@ class CSejour extends CCodable implements IPatientRelated {
   var $group_id            = null;
   var $grossesse_id        = null;
   
+  var $uf_hebergement_id   = null; // UF de responsabilité d'hébergement
+  var $uf_medicale_id      = null; // UF de responsabilité médicale
+  var $uf_soins_id         = null; // UF de responsabilité de soins
+  
   var $etablissement_entree_id = null;
   var $etablissement_sortie_id = null;
   var $service_entree_id       = null; // Service d'entrée du séjour
@@ -261,6 +265,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $backProps["naissances"]            = "CNaissance sejour_maman_id";
     $backProps["movements"]             = "CMovement sejour_id";
     $backProps["items_liaisons"]        = "CItemLiaison sejour_id";
+    $backProps["ufs"]                   = "CAffectationUniteFonctionnelle object_id";
     return $backProps;
   }
 
@@ -270,6 +275,9 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["praticien_id"]             = "ref notNull class|CMediusers seekable";
     $props["group_id"]                 = "ref notNull class|CGroups";
     $props["grossesse_id"]             = "ref class|CGrossesse";
+    $props["uf_hebergement_id"]        = "ref class|CUniteFonctionnelle seekable";
+    $props["uf_medicale_id"]           = "ref class|CUniteFonctionnelle seekable";
+    $props["uf_soins_id"]              = "ref class|CUniteFonctionnelle seekable";
     $props["type"]                     = "enum notNull list|comp|ambu|exte|seances|ssr|psy|urg|consult default|ambu";
     $props["modalite"]                 = "enum notNull list|office|libre|tiers default|libre show|0";
     $props["annule"]                   = "bool show|0";
@@ -2443,6 +2451,18 @@ class CSejour extends CCodable implements IPatientRelated {
   
   function loadRefsNaissances() {
     return $this->_ref_naissances = $this->loadBackRefs("naissances");
+  }
+  
+  function loadRefUFHebergement($cache = true) {
+    return $this->_ref_uf_hebergement = $this->loadFwdRef("uf_hebergement_id", $cache);
+  }
+  
+  function loadRefUFMedicale($cache = true) {
+    return $this->_ref_uf_medicale = $this->loadFwdRef("uf_medicale_id", $cache);
+  }
+  
+  function loadRefUFSoins($cache = true) {
+    return $this->_ref_uf_soins = $this->loadFwdRef("uf_soins_id", $cache);
   }
 }
 ?>

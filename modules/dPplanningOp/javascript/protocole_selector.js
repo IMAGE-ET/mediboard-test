@@ -33,6 +33,9 @@ ProtocoleSelector = {
   sForceType       : null,
   sPresencePreop   : null,
   sPresencePostop  : null,
+  sUf_hebergement_id : null,
+  sUf_medicale_id  : null,
+  sUf_soins_id     : null,
   options : {},
 
   pop: function() {
@@ -99,6 +102,15 @@ ProtocoleSelector = {
       if (this.sType) {
         oSejourForm[this.sType].value = protocole.type;
       }
+    }
+    if (this.sUf_hebergement_id) {
+      oSejourForm[this.sUf_hebergement_id].value = protocole.uf_hebergement_id;
+    }
+    if (this.sUf_medicale_id) {
+      oSejourForm[this.sUf_medicale_id].value = protocole.uf_medicale_id;
+    }
+    if (this.sUf_soins_id) {
+      oSejourForm[this.sUf_soins_id].value = protocole.uf_soins_id;
     }
     if (this.sTypePec) {
       oSejourForm[this.sTypePec].value = protocole.type_pec; 

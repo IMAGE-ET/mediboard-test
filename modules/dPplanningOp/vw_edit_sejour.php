@@ -188,6 +188,7 @@ $smarty->assign("op"            , new COperation);
 $smarty->assign("praticien"     , $praticien);
 $smarty->assign("patient"       , $patient);
 $smarty->assign("sejours"       , $sejours);
+$smarty->assign("ufs"           , CUniteFonctionnelle::getUFs());
 
 $smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
 $smarty->assign("count_etab_externe", $count_etab_externe);

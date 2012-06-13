@@ -645,7 +645,12 @@ class CSetupdPhospi extends CSetup {
       WHERE `item_souhait_id` = 0";
     $this->addQuery($query);
     
-    $this->mod_version = "0.69";
+    $this->makeRevision("0.69");
+    $query = "ALTER TABLE `affectation_uf` 
+              CHANGE `object_class` `object_class` ENUM ('CService','CChambre','CLit','CMediusers','CFunctions','CSejour','CProtocole') NOT NULL;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.70";
   }
 }
 ?>

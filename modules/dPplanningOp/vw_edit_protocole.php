@@ -61,6 +61,7 @@ $smarty->assign("mediuser"    , $mediuser);
 $smarty->assign("is_praticien", $is_praticien);
 $smarty->assign("protocole"   , $protocole);
 $smarty->assign("chir"        , $chir);
+$smarty->assign("ufs"         , CUniteFonctionnelle::getUFs());
 
 $smarty->assign("listPraticiens", $listPraticiens);
 $smarty->assign("listFunctions" , $listFunctions);

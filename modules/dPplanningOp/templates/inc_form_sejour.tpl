@@ -332,7 +332,9 @@ Main.add( function(){
   
   Calendar.regField(form._date_sortie_prevue, dates);
   
-  Calendar.regProgressiveField(form._date_deces);
+  {{if !$mode_operation}}
+    Calendar.regProgressiveField(form._date_deces);
+  {{/if}}
   
   removePlageOp(false);
   OccupationServices.initOccupation();
@@ -927,7 +929,7 @@ Main.add( function(){
 
 {{if $conf.dPhospi.systeme_prestations == "expert"}}
 <tr>
-  <td />
+  <td></td>
   <td class="button">
     <div {{if !$conf.dPplanningOp.CSejour.easy_chambre_simple}} class="modeExpert" {{/if}}>
       {{if $sejour->_id}}
@@ -945,7 +947,13 @@ Main.add( function(){
 
 {{/if}}
 
-
+<tr>
+  <th></th>
+  <td></td>
+  <td colspan="2" class="button">
+    {{mb_include module=planningOp template=inc_ufs_sejour_protocole object=$sejour}}
+  </td>
+</tr>
 <tr>
   <td class="text">{{mb_label object=$sejour field="convalescence"}}</td>
   <td class="text" colspan="3">{{mb_label object=$sejour field="rques"}}</td>

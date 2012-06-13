@@ -43,7 +43,10 @@
       protocole_prescription_anesth_id: "{{$type_prot_anesth}}{{$_protocole->protocole_prescription_anesth_id}}",
       libelle_protocole_prescription_chir: "{{$_protocole->_ref_protocole_prescription_chir->libelle|smarty:nodefaults}}",
       protocole_prescription_chir_id:   "{{$type_prot_chir}}{{$_protocole->protocole_prescription_chir_id}}",
-      service_id       : "{{$_protocole->service_id}}"
+      service_id       : "{{$_protocole->service_id}}",
+      uf_hebergement_id: "{{$_protocole->uf_hebergement_id}}",
+      uf_medicale_id   : "{{$_protocole->uf_medicale_id}}",
+      uf_soins_id      : "{{$_protocole->uf_soins_id}}",
     };
   {{/foreach}}
 {{else}}

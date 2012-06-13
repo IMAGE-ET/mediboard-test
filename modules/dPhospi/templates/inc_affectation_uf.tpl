@@ -20,10 +20,10 @@
 	{{foreach from=$affectations_uf item=_affectation_uf}}
     <tr>
 	   	<td>
-	      <form name="delete-{{$_affectation_uf->_guid}}" action="?m={{$m}}" method="post"  onsubmit="return AffectationUf.onDeletion(this);" >
-          <button type="submit" class="remove notext">{{tr}}Remove{{/tr}}</button>
+	      <form name="delete-{{$_affectation_uf->_guid}}" action="?m={{$m}}" method="post">
+          <button type="button" onclick="AffectationUf.onDeletion(this.form);" class="remove notext">{{tr}}Remove{{/tr}}</button>
 	        <input type="hidden" name="m" value="{{$m}}" />
-	        <input type="hidden" name="del" value="0" />
+	        <input type="hidden" name="del" value="1" />
 	        <input type="hidden" name="dosql" value="do_affectation_uf_aed" />
 	        <input type="hidden" name="affectation_uf_id" value="{{$_affectation_uf->_id}}" />
 	        {{mb_value object=$_affectation_uf field=uf_id}}

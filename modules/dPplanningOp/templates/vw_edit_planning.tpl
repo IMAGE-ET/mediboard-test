@@ -118,6 +118,10 @@ ProtocoleSelector.init = function(){
   this.sPresencePreop = "presence_preop";
   this.sPresencePostop = "presence_postop";
   this.sType          = "type";
+  this.sUf_hebergement_id = "uf_hebergement_id";
+  this.sUf_medicale_id = "uf_medicale_id";
+  this.sUf_soins_id = "uf_soins_id";
+  
   {{if $conf.dPplanningOp.CSejour.show_type_pec == 1}}
     this.sTypePec     = "type_pec";
   {{/if}}

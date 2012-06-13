@@ -398,7 +398,12 @@ Main.add(function () {
           <th>{{mb_label object=$protocole field="type"}}</th>
           <td>{{mb_field object=$protocole field="type" style="width: 15em;"}}</td>
         </tr>
-        
+        <tr>
+          <th></th>
+          <td>
+            {{mb_include module=planningOp template=inc_ufs_sejour_protocole object=$protocole}}
+          </td>
+        </tr>
         {{if $conf.dPplanningOp.CSejour.show_type_pec}}
           <tr>
             <th>{{mb_label object=$protocole field="type_pec"}}</th>

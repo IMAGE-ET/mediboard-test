@@ -15,7 +15,10 @@ class CProtocole extends CMbObject {
   var $chir_id     = null;
   var $function_id = null;
   var $group_id    = null;
-
+  var $uf_hebergement_id = null; // UF de responsabilité d'hébergement
+  var $uf_medicale_id    = null; // UF de responsabilité médicale
+  var $uf_soins_id       = null; // UF de responsabilité de soins
+  
   // For sejour/intervention
   var $for_sejour = null; // Sejour / Operation
   
@@ -82,6 +85,9 @@ class CProtocole extends CMbObject {
     $props["chir_id"]         = "ref class|CMediusers seekable";
     $props["function_id"]     = "ref class|CFunctions seekable";
     $props["group_id"]        = "ref class|CGroups seekable";
+    $props["uf_hebergement_id"] = "ref class|CUniteFonctionnelle seekable";
+    $props["uf_medicale_id"]    = "ref class|CUniteFonctionnelle seekable";
+    $props["uf_soins_id"]       = "ref class|CUniteFonctionnelle seekable";
     $props["for_sejour"]      = "bool notNull default|0";
     $props["type"]            = "enum list|comp|ambu|exte|seances|ssr|psy default|comp";
     $props["DP"]              = "code cim10";
@@ -121,6 +127,7 @@ class CProtocole extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["besoins_ressources"] = "CBesoinRessource protocole_id";
+    $backProps["ufs"]  = "CAffectationUniteFonctionnelle object_id";
     return $backProps;
   }
   

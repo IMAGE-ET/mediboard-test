@@ -23,7 +23,10 @@ AffectationUf  = {
   },
   
   onDeletion: function(form) {
-    Control.Modal.close();
-    return confirmDeletion(form);   
+    return confirmDeletion(form,
+      { typeName: 'l\'affectation d\'UF'},
+      { onComplete: function(){
+          Control.Modal.close();
+      }});
   }
 };

@@ -16,6 +16,7 @@
     </legend>
     <table class="form">
       <tbody style="display: none;">
+      {{mb_include template=inc_vw_ufs_object object=$sejour  ufs=$uf_sejour_hebergement}}
       {{mb_include template=inc_vw_ufs_object object=$service ufs=$ufs_service}}
       {{mb_include template=inc_vw_ufs_object object=$chambre ufs=$ufs_chambre}}
       {{mb_include template=inc_vw_ufs_object object=$lit     ufs=$ufs_lit    }}
@@ -32,6 +33,7 @@
     </legend>
     <table class="form">
       <tbody style="display: none;">
+      {{mb_include template=inc_vw_ufs_object object=$sejour  ufs=$uf_sejour_soins}}
       {{mb_include template=inc_vw_ufs_object object=$service ufs=$ufs_service}}
       </tbody>
 
@@ -46,6 +48,7 @@
     </legend>
     <table class="form">
       <tbody style="display: none;">
+      {{mb_include template=inc_vw_ufs_object object=$sejour    ufs=$uf_sejour_medicale}}
       {{mb_include template=inc_vw_ufs_object object=$function  ufs=$ufs_function }}
       {{mb_include template=inc_vw_ufs_object object=$praticien ufs=$ufs_praticien}}
       </tbody>

@@ -31,7 +31,7 @@ class CAffectationUniteFonctionnelle extends CMbMetaObject {
   	$props = parent::getProps();
     $props["uf_id"]        = "ref class|CUniteFonctionnelle notNull";
     $props["object_id"]    = "ref class|CMbObject meta|object_class cascade notNull";
-  	$props["object_class"] = "enum list|CService|CChambre|CLit|CMediusers|CFunctions show|0 notNull";
+  	$props["object_class"] = "enum list|CService|CChambre|CLit|CMediusers|CFunctions|CSejour|CProtocole show|0 notNull";
     return $props;
   }
   

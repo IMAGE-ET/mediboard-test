@@ -66,6 +66,13 @@ class CUniteFonctionnelle extends CMbObject {
     
     return $uf;
   }
+  
+  static function getUFs() {
+    $uf = new self;
+    $uf->group_id = CGroups::loadCurrent()->_id;
+    
+    return $uf->loadMatchingList("libelle");
+  }
 }
 
 ?>

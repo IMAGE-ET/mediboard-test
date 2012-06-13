@@ -400,52 +400,63 @@ class CAffectation extends CMbObject {
     $lit       = $this->_ref_lit;
     $chambre   = $lit->_ref_chambre;
     $service   = $chambre->_ref_service;
+    $sejour    = $this->loadRefSejour();
     
     $modified = false;
     
     $affectation_uf = new CAffectationUniteFonctionnelle();
+    
     if (!$this->uf_hebergement_id) {
-      $where["object_id"]     = "= '{$lit->_id}'";
-      $where["object_class"]  = "= 'CLit'";
-      $affectation_uf->loadObject($where);
-
-      if (!$affectation_uf->_id) {
-        $where["object_id"]     = "= '{$chambre->_id}'";
-        $where["object_class"]  = "= 'CChambre'";
-        $affectation_uf->loadObject($where);
+      
+      $affectation_uf->uf_id = $sejour->uf_hebergement_id;
+      if (!$affectation_uf->uf_id) {
         
+        $where["object_id"]     = "= '{$lit->_id}'";
+        $where["object_class"]  = "= 'CLit'";
+        $affectation_uf->loadObject($where);
+  
         if (!$affectation_uf->_id) {
-          $where["object_id"]     = "= '{$service->_id}'";
-          $where["object_class"]  = "= 'CService'";
+          $where["object_id"]     = "= '{$chambre->_id}'";
+          $where["object_class"]  = "= 'CChambre'";
           $affectation_uf->loadObject($where);
+          
+          if (!$affectation_uf->_id) {
+            $where["object_id"]     = "= '{$service->_id}'";
+            $where["object_class"]  = "= 'CService'";
+            $affectation_uf->loadObject($where);
+          }
         }
       }
-      
       $this->uf_hebergement_id = $affectation_uf->uf_id;      
     }
     
     $affectation_uf = new CAffectationUniteFonctionnelle();
     if (!$this->uf_soins_id) {
-      $where["object_id"]     = "= '$service->_id'";
-      $where["object_class"]  = "= 'CService'";
-      $affectation_uf->loadObject($where);
-            
+      
+      $affectation_uf->uf_id = $sejour->uf_soins_id;
+      if (!$affectation_uf->uf_id) {
+        $where["object_id"]     = "= '$service->_id'";
+        $where["object_class"]  = "= 'CService'";
+        $affectation_uf->loadObject($where);
+      }
       $this->uf_soins_id = $affectation_uf->uf_id;
     }
     
     $affectation_uf = new CAffectationUniteFonctionnelle();
     if (!$this->uf_medicale_id) {
-      $praticien = $this->loadRefSejour()->loadRefPraticien();
-      $where["object_id"]     = "= '{$praticien->_id}'";
-      $where["object_class"]  = "= 'CMediusers'";
-      $affectation_uf->loadObject($where);
-
-      if (!$affectation_uf->_id) {
-        $where["object_id"]     = "= '{$praticien->_ref_function->_id}'";
-        $where["object_class"]  = "= 'CFunctions'";
-        $affectation_uf->loadObject($where);
-      }
       
+      $affectation_uf->uf_id = $sejour->uf_medicale_id;
+      if (!$affectation_uf->uf_id) {
+        $praticien = $this->loadRefSejour()->loadRefPraticien();
+        $where["object_id"]     = "= '{$praticien->_id}'";
+        $where["object_class"]  = "= 'CMediusers'";
+        $affectation_uf->loadObject($where);
+        if (!$affectation_uf->_id) {
+          $where["object_id"]     = "= '{$praticien->_ref_function->_id}'";
+          $where["object_class"]  = "= 'CFunctions'";
+          $affectation_uf->loadObject($where);
+        }
+      }
       $this->uf_medicale_id = $affectation_uf->uf_id;
     }
   }
