@@ -5,19 +5,21 @@
 
 <h1>{{$sejour}}</h1>
 
-<div id="Documents-{{$sejour->_guid}}" style="float: left; width: 50%;">
-	<script type="text/javascript">
-	Document.register('{{$sejour->_id}}','{{$sejour->_class}}','{{$sejour->praticien_id}}', 'Documents-{{$sejour->_guid}}', 'normal');
-	</script>
-</div>
+{{if !$operation_id}}
+  <div id="Documents-{{$sejour->_guid}}" style="float: left; width: 50%;">
+  	<script type="text/javascript">
+  	Document.register('{{$sejour->_id}}','{{$sejour->_class}}','{{$sejour->praticien_id}}', 'Documents-{{$sejour->_guid}}', 'normal');
+  	</script>
+  </div>
+  
+  <div id="Files-{{$sejour->_guid}}" style="float: left; width: 50%;">
+  <script type="text/javascript">
+    File.register('{{$sejour->_id}}','{{$sejour->_class}}', "Files-{{$sejour->_guid}}");
+  </script>
+  </div>
+{{/if}}
 
-<div id="Files-{{$sejour->_guid}}" style="float: left; width: 50%;">
-<script type="text/javascript">
-  File.register('{{$sejour->_id}}','{{$sejour->_class}}', "Files-{{$sejour->_guid}}");
-</script>
-</div>
-
-{{if !$only_sejour && $sejour->_ref_consult_anesth->_id}}
+{{if !$only_sejour && !$operation_id && $sejour->_ref_consult_anesth->_id}}
   {{assign var=consult_anesth value=$sejour->_ref_consult_anesth}}
   {{assign var=consult value=$consult_anesth->_ref_consultation}}
   <h2 style="clear: both;">{{tr}}CConsultAnesth{{/tr}} du {{$consult_anesth->_date_consult|date_format:$conf.date}}</h2>
@@ -48,7 +50,7 @@
     </script>
     </div>
     
-    {{if $operation->_ref_consult_anesth->_id}}
+    {{if $operation->_ref_consult_anesth->_id && !$operation_id}}
       {{assign var=consult_anesth value=$operation->_ref_consult_anesth}}
       {{assign var=consult value=$consult_anesth->_ref_consultation}}
       <h2 style="clear: both;">{{tr}}CConsultAnesth{{/tr}} du {{$consult_anesth->_date_consult|date_format:$conf.date}}</h2>

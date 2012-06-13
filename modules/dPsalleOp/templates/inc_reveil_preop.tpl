@@ -20,8 +20,9 @@
     <th>Patient</th>
     <th>Interv</th>
     <th>Coté</th>
-    <th>debut prépa.</th>
-    <th>fin prépa.</th>
+    <th class="narrow">Début</th>
+    <th class="narrow">Fin</th>
+    <th class="narrow"></th>
   </tr>
 {{foreach from=$listOperations item=_operation}}
   <tr>
@@ -103,6 +104,10 @@
       {{else}}
         {{mb_value object=$_operation field="fin_prepa_preop"}}
       {{/if}}
+    </td>
+    <td>
+      <button type="button" class="print notext"
+        onclick="printDossier('{{$_operation->sejour_id}}', '{{$_operation->_id}}')"></button>
     </td>
   </tr>
   {{foreachelse}}

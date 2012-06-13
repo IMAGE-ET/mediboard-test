@@ -21,6 +21,7 @@
     <th>{{tr}}SSPI.SortieSalle{{/tr}}</th>
     <th>{{tr}}SSPI.EntreeReveil{{/tr}}</th>
     <th>{{tr}}SSPI.SortieReveil{{/tr}}</th>
+    <th class="narrow"></th>
   </tr> 
   {{foreach from=$listOperations key=key item=_operation}}
   {{assign var=_operation_id value=$_operation->_id}}
@@ -100,6 +101,10 @@
       </form>
       
       {{mb_include module=forms template=inc_widget_ex_class_register object=$_operation event=sortie_reveil cssStyle="display: inline-block; font-size: 0.8em;"}}
+    </td>
+    <td>
+      <button type="button" class="print notext"
+        onclick="printDossier('{{$_operation->sejour_id}}', '{{$_operation->_id}}')"></button>
     </td>
   </tr>
   {{foreachelse}}

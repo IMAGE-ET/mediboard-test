@@ -93,6 +93,13 @@ showDossierSoins = function(sejour_id, operation_id, default_tab){
 	{{/if}}
 }
 
+printDossier = function(sejour_id, operation_id) {
+  var url = new Url("dPhospi", "httpreq_documents_sejour");
+  url.addParam("sejour_id", sejour_id);
+  url.addParam("operation_id", operation_id);
+  url.requestModal(700, 400);
+}
+
 </script>
 
      

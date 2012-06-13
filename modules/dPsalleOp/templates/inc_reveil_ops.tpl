@@ -36,6 +36,7 @@
     <th>{{tr}}SSPI.SortieSalle{{/tr}}</th>
     <th>{{tr}}SSPI.EntreeReveil{{/tr}}</th>
     <th>{{tr}}SSPI.SortieReveil{{/tr}}</th>
+    <th class="narrow"></th>
   </tr>    
   {{foreach from=$listOperations item=_operation}}
   <tr>
@@ -159,6 +160,10 @@
         </button>
       </form>
       {{else}}-{{/if}}
+    </td>
+    <td>
+      <button type="button" class="print notext"
+        onclick="printDossier('{{$_operation->sejour_id}}', '{{$_operation->_id}}')"></button>
     </td>
   </tr>
   {{foreachelse}}

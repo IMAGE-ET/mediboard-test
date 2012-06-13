@@ -15,6 +15,7 @@
     <th>{{tr}}SSPI.Patient{{/tr}}</th>
     <th>{{mb_title class=COperation field=entree_salle}}</th>
 		<th>{{mb_title class=COperation field=debut_op}}</th>
+    <th class="narrow"></th>
   </tr>    
   {{foreach from=$listOperations item=_operation}}
   <tr>
@@ -48,6 +49,10 @@
 		    -
 			{{/if}}	
 	  </td>
+    <td>
+      <button type="button" class="print notext"
+        onclick="printDossier('{{$_operation->sejour_id}}', '{{$_operation->_id}}')"></button>
+    </td>
   </tr>
   {{foreachelse}}
   <tr><td colspan="20" class="empty">{{tr}}COperation.none{{/tr}}</td></tr>
