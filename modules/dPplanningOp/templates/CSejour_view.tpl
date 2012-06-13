@@ -64,7 +64,9 @@
       <button type="button" class="edit" onclick="Sejour.edit('{{$sejour->_id}}');">
         {{tr}}Modify{{/tr}}
       </button>
-      <button type="button" class="search" onclick="Prestations.edit('{{$sejour->_id}}')">Prestations</button>
+      {{if $conf.dPhospi.systeme_prestations == "expert"}}
+        <button type="button" class="search" onclick="Prestations.edit('{{$sejour->_id}}')">Prestations</button>
+      {{/if}}
       {{/if}}
       
       {{if $sejour->type != "urg" && @$modules.dPadmissions->_can->read}}
