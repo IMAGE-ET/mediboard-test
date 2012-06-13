@@ -1078,6 +1078,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
       
     if ($object instanceof CMediusers) {
+      if (($object->rpps || $object->adeli) && $object->loadMatchingObjectEsc()) {
+        return $object->_id;
+      }
+      
       $user = new CUser;
       $user->user_first_name = $first_name;
       $user->user_last_name  = $last_name;
@@ -1112,12 +1116,21 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $user = new CUser();
     $user->user_last_name   = $mediuser->_user_last_name;
     $user->user_first_name  = $mediuser->_user_first_name;
-    $users = $user->seek("$user->user_last_name $user->user_first_name");
+    // On recherche par le seek
+    $users                  = $user->seek("$user->user_last_name $user->user_first_name");
     if (count($users) == 1) {
       $user = reset($users);
       $user->loadRefMediuser();
       $mediuser = $user->_ref_mediuser;
     } else {
+      // Dernière recherche si le login est déjà existant
+      $user = new CUser();
+      $user->user_username = $mediuser->_user_username;
+      if ($user->loadMatchingObject()) {
+        // On affecte un username aléatoire
+        $mediuser->_user_username .= rand(1, 10);    
+      }
+      
       $mediuser->store();
     }
     
