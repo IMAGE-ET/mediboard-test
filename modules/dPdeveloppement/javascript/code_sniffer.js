@@ -22,7 +22,7 @@ CodeSniffer = {
   run: function(button) {
 	$('sniff-file').update();
     $('sniff-run').down('button.change').enable();
-    $('sniff-run').down('input.auto').checked = this.auto = true;
+    $('sniff-run').down('input.auto').checked  = this.auto  = true;
     $('sniff-run').down('input.force').checked = this.force = false;
     
 	var run = $('sniff-run');
@@ -90,7 +90,7 @@ CodeSniffer = {
         onComplete: function() {
           status.update(DOM.div({ className: 'info' }, 'Done'));
           if (CodeSniffer.auto) {
-            CodeSniffer.start();
+            CodeSniffer.start.bind(CodeSniffer).defer();
           }
         }
       }
@@ -106,7 +106,7 @@ CodeSniffer = {
     }
 
 	if (file.tag == 'uptodate' && this.auto && !this.force) {
-      CodeSniffer.start();
+      CodeSniffer.start.bind(CodeSniffer).defer();
 	}
   },
   
