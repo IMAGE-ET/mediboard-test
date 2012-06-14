@@ -17,9 +17,10 @@
  */
 class COperatorIHE extends CEAIOperator {
   function event(CExchangeDataFormat $data_format) {
-    $msg = $data_format->_message;
-    $evt = $data_format->_family_message;
-
+    $msg               = $data_format->_message;
+    $evt               = $data_format->_family_message;
+    $evt->_data_format = $data_format;
+    
     // Récupération des informations du message - CHL7v2MessageXML
     $dom_evt = $evt->handle($msg);
     $dom_evt->_is_i18n = $evt->_is_i18n;

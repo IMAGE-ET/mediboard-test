@@ -163,7 +163,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
 
   function parse($data, $parse_body = true) {
     try {
-      self::isWellFormed($data);
+      self::isWellFormed($data, $this->strict_segment_terminator);
     } catch(CHL7v2Exception $e) {
       $this->error($e->getMessage(), $e->extraData);
       //return false;

@@ -17,6 +17,16 @@ $exchange_guid = CValue::get("exchange_guid");
 // Chargement de l'échange demandé
 $object = new CMbObject();
 $exchange = $object->loadFromGuid($exchange_guid);
+
+if (!$exchange) {
+  // Création du template
+  $smarty = new CSmartyDP();
+  $smarty->assign("object", null);
+  $smarty->display("inc_exchange.tpl");
+  
+  return;
+}
+
 $exchange->loadRefs(); 
 $exchange->loadRefsInteropActor();
 $exchange->getObservations();

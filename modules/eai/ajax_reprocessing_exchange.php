@@ -21,8 +21,11 @@ $exchange = $object->loadFromGuid($exchange_guid);
 $sender = new $exchange->sender_class;
 $sender->load($exchange->sender_id);
 
+// Suppression de l'identifiant dans le cas où l'échange repasse pour éviter un autre échange avec
+// un identifiant forcé
 if ($exchange instanceof CExchangeAny) {
-  $exchange->_id = null;;
+  $exchange_id = $exchange->_id;
+  $exchange->_id = null;
 }
 
 if (!$ack_data = CEAIDispatcher::dispatch($exchange->_message, $sender, $exchange->_id)) {
@@ -58,8 +61,12 @@ if ($exchange instanceof CExchangeIHE) {
   CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' a été retraité");
 }
 
+// Dans le cas d'un échange générique on le supprime
 if ($exchange instanceof CExchangeAny) {
+  $exchange->_id = $exchange_id;
+  $exchange->delete();
   
+  CAppUI::stepAjax("Le message a été supprimé");
 }
 
 ?>

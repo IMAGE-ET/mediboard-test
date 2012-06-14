@@ -51,6 +51,11 @@ class CHL7v2Event extends CHL7Event {
     
   function handle($msg_hl7) {
     $this->message = new CHL7v2Message();
+
+    if ($this->_data_format) {
+      $this->message->strict_segment_terminator = $this->_data_format->_configs_format->strict_segment_terminator;
+    }
+    
     $this->message->parse($msg_hl7);
     
     return $this->message->toXML(get_class($this), false, CApp::$encoding);

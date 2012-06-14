@@ -8,6 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{if !$object}}
+<tr>
+  <td colspan="21" class="empty">
+    {{tr}}CExchangeDataFormat.none{{/tr}}
+  </td>
+</tr> 
+{{else}}
 <tr>
   <td class="narrow">
    {{if $object->_self_sender}}
@@ -140,3 +147,4 @@
     {{/if}}
   </td>
 </tr>
+{{/if}}
