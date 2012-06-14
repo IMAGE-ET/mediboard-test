@@ -29,6 +29,14 @@ if ($exchange instanceof CExchangeAny) {
 }
 
 if (!$ack_data = CEAIDispatcher::dispatch($exchange->_message, $sender, $exchange->_id)) {
+  // Dans le cas d'un échange générique on le supprime
+  if ($exchange instanceof CExchangeAny) {
+    $exchange->_id = $exchange_id;
+    $exchange->delete();
+    
+    CAppUI::stepAjax("Le message a été supprimé");
+  }
+
   CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' ne peut retraité", UI_MSG_ERROR);
 }
 
