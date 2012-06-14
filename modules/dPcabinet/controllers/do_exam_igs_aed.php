@@ -8,6 +8,6 @@
 */
 
 $do = new CDoObjectAddEdit("CExamIgs", "examigs_id");
-$do->redirect = null;
 $do->doIt();
+
 ?>

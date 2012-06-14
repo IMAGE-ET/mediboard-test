@@ -277,7 +277,6 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $this->_ref_consultation->loadExamsComp();
     $this->_ref_consultation->loadRefsExamNyha();
     $this->_ref_consultation->loadRefsExamPossum();
-    $this->_ref_consultation->loadRefsExamIgs();
     
     $this->loadRefOperation();    
     

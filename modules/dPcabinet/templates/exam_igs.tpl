@@ -1,210 +1,112 @@
 <script type="text/javascript">
 
-function checkSelect(){
-	var oForm = getForm("caligs");
-	var inputs = $(oForm).select("input");
-  var valigs = 0;
-	
-	// Parcours des champs
-	for(var i=0 ; i<inputs.length ; i++){
-		if(inputs[i].checked==true && inputs[i].id.indexOf('-na') == -1){
-      valigs += parseInt(inputs[i].value);
-		}
-	} 
-	$V(oForm.scoreIGS, valigs);
+checkSelect = function(){
+  var oForm = getForm("editScoreIGS");
+  var score_igs = 0;
+  
+  oForm.select("input[type=radio]:checked:not(.empty_value)").each(function(oRadio){
+    var radio_value = $V(oRadio);
+    var checked_value = parseInt(radio_value,10);
+    score_igs += checked_value;
+    oRadio.up('tr').down('.value').update(checked_value);
+  });
+  
+  $V(oForm.scoreIGS, score_igs);
 }
 
-// Lancement du reload
-window.opener.ExamDialog.reload('{{$exam_igs->consultation_id}}');
+empty_on_click = function(elem) {
+  console.log(getForm("editScoreIGS").elements[elem]);
+  $A(getForm("editScoreIGS").elements[elem]).each(function(radio){
+    radio.checked = false;
+  });
+  
+  $("editScoreIGS_"+elem+"_").checked = true;
+  
+  getForm("editScoreIGS").elements[elem][0].up('tr').down('.value').update('');
+  checkSelect();     
+}
+
+showLaboResult = function() {
+  var url = new Url("dPImeds", "httpreq_vw_sejour_results");
+  url.addParam("sejour_id", "{{$sejour->_id}}");
+  url.requestModal(800, 700);
+}
 
 Main.add(checkSelect);
 
-function empty_on_click(elem) {
-	elem.up().next().childElements().each(function(item){
-		item.checked=false;
-	});
-  $(elem.name + '-na').checked = 'true';
-  checkSelect();      
-}
-
 </script>
 
-<form name="caligs" method="post" action="?m=dPcabinet&amp;a=exam_igs&amp;dialog=1">
-  <input type="hidden" name="dosql" value="do_exam_igs_aed" />
+<form name="editScoreIGS" method="post" action="?" onsubmit="return onSubmitFormAjax(this, { onComplete: function(){ refreshFiches('{{$sejour->_id}}'); Control.Modal.close(); } });">
   <input type="hidden" name="m" value="dPcabinet" />
+  <input type="hidden" name="dosql" value="do_exam_igs_aed" />
   <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
   {{mb_key object=$exam_igs}}
-  {{mb_field object=$exam_igs field="consultation_id" hidden=1}}
 
-  <table class="form">
-  	{{mb_include module=system template=inc_form_table_header object=$exam_igs}}
-
-		<tr>
-		  <th>
-		    {{mb_label object=$exam_igs field="age"}}
-		    {{mb_value object=$exam_igs field="age"}}
-		    <button type='button' class='cancel notext' name='age' onclick='empty_on_click(this)'></button>
-		  </th>
-		  <td>
-		    <input type="radio" id = "age-na" style="display: none;" name="age" value = ''/>
-		    {{mb_field object=$exam_igs field="age" typeEnum="radio" onclick="checkSelect();"}}
-		  </td>
-		</tr>
-		<tr>
-		  <th>
-		    {{mb_label object=$exam_igs field="FC"}}
-		    <button type='button' class='cancel notext' name='FC' onclick='empty_on_click(this)'></button>
-		  </th>
-		  <td>
-		    <input type="radio" id = "FC-na" style="display: none;" name="FC" value = ''/>
-		    {{mb_field object=$exam_igs field="FC" typeEnum="radio" onclick="checkSelect();"}}
-		  </td>
-		</tr>
-		<tr>
-		  <th>
-		    {{mb_label object=$exam_igs field="TA"}}
-		    <button type='button' class='cancel notext' name='TA' onclick='empty_on_click(this)'></button>
-		  </th>
-		  <td>
-		    <input type="radio" id = "TA-na" style="display: none;" name="TA" value = ''/>
-		    {{mb_field object=$exam_igs field="TA" typeEnum="radio" onclick="checkSelect();"}}
-		  </td>
-		</tr>
-		<tr>
-		  <th>
-		    {{mb_label object=$exam_igs field="temperature"}}
-		    <button type='button' class='cancel notext' name='temperature' onclick='empty_on_click(this)'></button>
-		  </th>
-		  <td>
-		    <input type="radio" id = "temperature-na" style="display: none;" name="temperature" value = ''/>
-		    {{mb_field object=$exam_igs field="temperature" typeEnum="radio" onclick="checkSelect();"}}
-		  </td>
-		</tr>
-		<tr>
-		  <th>
-		    {{mb_label object=$exam_igs field="PAO2_FIO2"}}
-		    <button type='button' class='cancel notext' name='PAO2_FIO2' onclick='empty_on_click(this)'></button>
-		  </th>
-		  <td>
-		    <input type="radio" id = "PAO2_FIO2-na" style="display: none;" name="PAO2_FIO2" value = ''/>
-		    {{mb_field object=$exam_igs field="PAO2_FIO2" typeEnum="radio" onclick="checkSelect();"}}
-		  </td>
-		</tr>
-		<tr>
-		  <th>
-		    {{mb_label object=$exam_igs field="diurese"}}
-		    <button type='button' class='cancel notext' name='diurese' onclick='empty_on_click(this)'></button>
-		  </th>
-		  <td>
-		    <input type="radio" id = "diurese-na" style="display: none;" name="diurese" value = ''/>
-		    {{mb_field object=$exam_igs field="diurese" typeEnum="radio" onclick="checkSelect();"}}
-		  </td>
-		</tr>
-		<tr>
-		  <th>
-		    {{mb_label object=$exam_igs field="uree"}}
-		    <button type='button' class='cancel notext' name='uree' onclick='empty_on_click(this)'></button>
-		  </th>
-		  <td>
-		    <input type="radio" id = "uree-na" style="display: none;" name="uree" value = ''/>
-		    {{mb_field object=$exam_igs field="uree" typeEnum="radio" onclick="checkSelect();"}}
-		  </td>
-		</tr>
-		<tr>
-		  <th>
-		    {{mb_label object=$exam_igs field="globules_blancs"}}
-		    <button type='button' class='cancel notext' name='globules_blancs' onclick='empty_on_click(this)'></button>
-		  </th>
-		  <td>
-		    <input type="radio" id = "globules_blancs-na" style="display: none;" name="globules_blancs" value = ''/>
-		    {{mb_field object=$exam_igs field="globules_blancs" typeEnum="radio" onclick="checkSelect();"}}
-		  </td>
-		</tr>
-		<tr>
-		  <th>
-		    {{mb_label object=$exam_igs field="kaliemie"}}
-		    <button type='button' class='cancel notext' name='kaliemie' onclick='empty_on_click(this)'></button>
-		  </th>
-		  <td>
-		    <input type="radio" id = "kaliemie-na" style="display: none;" name="kaliemie" value = ''/>
-		    {{mb_field object=$exam_igs field="kaliemie" typeEnum="radio" onclick="checkSelect();"}}
-		  </td>
-		</tr>
-		<tr>
-		  <th>
-		    {{mb_label object=$exam_igs field="natremie"}}
-		    <button type='button' class='cancel notext' name='natremie' onclick='empty_on_click(this)'></button>
-		  </th>
-		  <td>
-		    <input type="radio" id = "natremie-na" style="display: none;" name="natremie" value = ''/>
-		    {{mb_field object=$exam_igs field="natremie" typeEnum="radio" onclick="checkSelect();"}}
-		  </td>
-		</tr>
-		<tr>
-		  <th>
-		    {{mb_label object=$exam_igs field="HCO3"}}
-		    <button type='button' class='cancel notext' name='HCO3' onclick='empty_on_click(this)'></button>
-		  </th>
-		  <td>
-		    <input type="radio" id = "HCO3-na" style="display: none;" name="HCO3" value = ''/>
-		    {{mb_field object=$exam_igs field="HCO3" typeEnum="radio" onclick="checkSelect();"}}
-		  </td>
-		</tr>
-		<tr>
-		  <th>
-		    {{mb_label object=$exam_igs field="billirubine"}}
-		    <button type='button' class='cancel notext' name='billirubine' onclick='empty_on_click(this)'></button>
-		  </th>
-		  <td>
-		    <input type="radio" id = "billirubine-na" style="display: none;" name="billirubine" value = ''/>
-		    {{mb_field object=$exam_igs field="billirubine" typeEnum="radio" onclick="checkSelect();"}}
-		  </td>
-		</tr>
-		<tr>
-		  <th>
-		    {{mb_label object=$exam_igs field="glascow"}}
-		    <button type='button' class='cancel notext' name='glascow' onclick='empty_on_click(this)'></button>
-		  </th>
-		  <td>
-		    <input type="radio" id = "glascow-na" style="display: none;" name="glascow" value = ''/>
-		    {{mb_field object=$exam_igs field="glascow" typeEnum="radio" onclick="checkSelect();"}}
-		  </td>
-		</tr>
-		<tr>
-		  <th>
-		    {{mb_label object=$exam_igs field="maladies_chroniques"}}
-		    <button type='button' class='cancel notext' name='maladies_chroniques' onclick='empty_on_click(this)'></button>
-		  </th>
-		  <td>
-		    <input type="radio" id = "maladies_chroniques-na" style="display: none;" name="maladies_chroniques" value = ''/>
-		    {{mb_field object=$exam_igs field="maladies_chroniques" typeEnum="radio" onclick="checkSelect();"}}
-		  </td>
-		</tr>
-		<tr>
-		  <th>
-		    {{mb_label object=$exam_igs field="admission"}}
-		    <button type='button' class='cancel notext' name='admission' onclick='empty_on_click(this)'></button>
-		  </th>
-		  <td>
-		    <input type="radio" id = "admission-na" style="display: none;" name="admission" value = ''/>
-		    {{mb_field object=$exam_igs field="admission" typeEnum="radio" onclick="checkSelect();"}}
-		  </td>
-		</tr>
-		<tr>
-		  <th>
-		    {{mb_label object=$exam_igs field="scoreIGS"}}
-		  </th>
-		  <td colspan="6" class="button">
-		    {{mb_field object=$exam_igs field="scoreIGS" readonly="readonly"}}
-	      {{if $exam_igs->_id}}
+  <table class="tbl">
+    <tr>
+      <th class="title {{if $exam_igs->_id}}modify{{/if}}" colspan="10">
+        <button type="button" style="float: right" onclick="showLaboResult();" class="search">Labo</button>
+        {{if $exam_igs->_id}}
+          {{mb_include module=system template=inc_object_history object=$exam_igs}}
+          {{tr}}{{$exam_igs->_class}}-title-modify{{/tr}} 
+          <br />
+          '{{$exam_igs}}'
+        {{else}}
+          {{tr}}{{$exam_igs->_class}}-title-create{{/tr}} 
+        {{/if}}
+    </tr>
+    <tr>
+      <th class="category">Paramètre</th>
+      <th class="category" colspan="6">Sélection</th>
+      <th class="category">Valeur</th>
+      {{if !$exam_igs->_id}}
+      <th class="category">Dernière<br />constante</th>
+      {{/if}}
+      <th class="category"></th>
+    </tr>
+    {{foreach from="CExamIGS"|static:fields item=_field}}
+    <tr>
+      <th>
+        {{mb_label object=$exam_igs field=$_field}}
+      </th>
+      <td style="width: 80px;">
+        {{mb_field object=$exam_igs field=$_field typeEnum="radio" onclick="checkSelect();" separator="</td><td style='width: 80px;'>"}}
+         <input type="radio" value="" name="{{$_field}}" id="editScoreIGS_{{$_field}}_" class="empty_value" style="display: none;">
+      </td>
+      <!-- Calcul du nombre de td à rajouter pour compléter la ligne -->
+      {{math equation=6-x x=$exam_igs->_specs.$_field->_list|@count assign=nb_colonne}}
+      {{if $nb_colonne}}
+        <td colspan="{{$nb_colonne}}" />
+      {{/if}}
+      <td class="value" style="text-align: center;"></td>
+      {{if !$exam_igs->_id}}
+      <td style="text-align: center;">
+        {{if array_key_exists($_field, $last_constantes)}}
+          {{$last_constantes.$_field}}
+        {{/if}}
+      </td>  
+      {{/if}}
+      <td>
+        <button type='button' class='cancel notext' onclick="empty_on_click('{{$_field}}')"></button>
+      </td>
+    </tr>
+    {{/foreach}}
+    <tr>
+      <th class="title">
+        {{mb_label object=$exam_igs field="scoreIGS"}}
+      </th>
+      <td colspan="10">
+        {{mb_field object=$exam_igs field="scoreIGS" readonly="readonly" style="font-weight: bold; text-align: center; font-size: 1.2em;"}}
+        {{if $exam_igs->_id}}
           <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
-          <button type="button" class="trash" onclick="confirmDeletion(this.form, {typeName:'cet examen IGS'})">
-          	{{tr}}Delete{{/tr}}
-					</button>
+          <button type="button" class="trash" onclick="confirmDeletion(this.form, { ajax:true, typeName:'cet examen IGS'})">
+            {{tr}}Delete{{/tr}}
+          </button>
         {{else}}
           <button type="submit" class="submit">{{tr}}Create{{/tr}}</button>
         {{/if}}
        </td>    
-		</tr>
-	</table>
+    </tr>
+  </table>
 </form>

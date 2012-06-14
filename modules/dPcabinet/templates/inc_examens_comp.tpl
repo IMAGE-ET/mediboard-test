@@ -6,7 +6,6 @@
       {{if $_is_anesth}}
         <option value="exam_possum">Score Possum</option>
         <option value="exam_nyha">Classification NYHA</option>
-        <option value="exam_igs">Score IGS</option>
       {{else}}
         <option value="exam_audio">Audiogramme</option>          
       {{/if}}
@@ -57,13 +56,6 @@
     <li>
       <a href="#nothing" onclick="ExamDialog.init('exam_nyha');">
         {{$consult->_ref_examnyha->_view}}
-      </a>
-    </li>
-    {{/if}}
-    {{if $consult->_ref_examigs->_id}}
-    <li>
-      <a href="#nothing" onclick="ExamDialog.init('exam_igs');">
-        {{$consult->_ref_examigs->_view}}
       </a>
     </li>
     {{/if}}

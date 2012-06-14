@@ -76,7 +76,6 @@ if ($consultation_id) {
   $consult->loadExamsComp();
   $consult->loadRefsExamNyha();
   $consult->loadRefsExamPossum();
-  $consult->loadRefsExamIgs();
   $consult->loadRefSejour();
   
   if($consult->_ref_consult_anesth->_id) {

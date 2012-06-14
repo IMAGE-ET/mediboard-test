@@ -13,7 +13,7 @@ class CExamIgs extends CMbObject {
   var $examigs_id = null;
 
   // DB References
-  var $consultation_id = null;
+  var $sejour_id       = null;
 
   // DB fields
   var $age                 = null;
@@ -35,6 +35,9 @@ class CExamIgs extends CMbObject {
   
   // Fwd References
   var $_ref_consult = null;
+  
+  static $fields = array("age", "FC", "TA", "temperature", "PAO2_FIO2", "diurese", "uree", "globules_blancs", 
+                            "kaliemie", "natremie", "HCO3" , "billirubine", "glascow", "maladies_chroniques", "admission");
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -45,7 +48,7 @@ class CExamIgs extends CMbObject {
   
   function getProps() {
   	$specs = parent::getProps();
-    $specs["consultation_id"]     = "ref notNull class|CConsultation";
+    $specs["sejour_id"]           = "ref notNull class|CSejour";
     $specs["age"]                 = "enum list|0|7|12|15|16|18";
     $specs["FC"]                  = "enum list|11|2|0|4|7";
     $specs["TA"]                  = "enum list|13|5|0|2";
@@ -64,22 +67,10 @@ class CExamIgs extends CMbObject {
     $specs["scoreIGS"]            = "num";
     return $specs;
   }
-
-  function loadRefsFwd() {
-    $this->_ref_consult = new CConsultation;
-    $this->_ref_consult->load($this->consultation_id);
-  }
   
   function updateFormFields(){
     parent::updateFormFields();
     $this->_view = "Score IGS: $this->scoreIGS";  
-  }
-  
-  function getPerm($permType) {
-    if(!$this->_ref_consult) {
-      $this->loadRefsFwd();
-    }
-    return $this->_ref_consult->getPerm($permType);
   }
 }
 

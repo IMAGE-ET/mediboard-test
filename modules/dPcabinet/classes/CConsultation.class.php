@@ -104,7 +104,6 @@ class CConsultation extends CCodable {
   var $_ref_examcomp           = null;
   var $_ref_examnyha           = null;
   var $_ref_exampossum         = null;
-  var $_ref_examigs            = null;
   var $_count_fiches_examen    = null;
   var $_ref_reglements         = null;
   var $_ref_reglements_patient = null;
@@ -162,7 +161,6 @@ class CConsultation extends CCodable {
     $backProps["examcomp"]        = "CExamComp consultation_id";
     $backProps["examnyha"]        = "CExamNyha consultation_id";
     $backProps["exampossum"]      = "CExamPossum consultation_id";
-    $backProps["examigs"]         = "CExamIgs consultation_id";
     $backProps["prescriptions"]   = "CPrescription object_id";
     $backProps["reglements"]      = "CReglement object_id";
     $backProps["actes_dentaires"] = "CActeDentaire consult_id";
@@ -1308,21 +1306,15 @@ TESTS A EFFECTUER
   function loadRefsExamPossum(){
     $this->_ref_exampossum = $this->loadUniqueBackRef("exampossum");
   }
-  
-  function loadRefsExamIgs(){
-    $this->_ref_examigs = $this->loadUniqueBackRef("examigs");
-  }
-  
+    
   function loadRefsFichesExamen() {
     $this->loadRefsExamAudio();
     $this->loadRefsExamNyha();
     $this->loadRefsExamPossum();
-    $this->loadRefsExamIgs();
     $this->_count_fiches_examen = 0;
     $this->_count_fiches_examen += $this->_ref_examaudio ->_id ? 1 : 0; 
     $this->_count_fiches_examen += $this->_ref_examnyha  ->_id ? 1 : 0; 
     $this->_count_fiches_examen += $this->_ref_exampossum->_id ? 1 : 0; 
-    $this->_count_fiches_examen += $this->_ref_examigs   ->_id ? 1 : 0; 
   }
   
   // Chargement des prescriptions liées à la consultation

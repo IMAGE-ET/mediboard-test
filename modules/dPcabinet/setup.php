@@ -1514,18 +1514,48 @@ class CSetupdPcabinet extends CSetup {
               CHANGE `mode` `mode` ENUM( 'cheque', 'CB', 'especes', 'virement', 'BVR', 'autre' ),
               ADD `num_bvr` VARCHAR(50);";
     $this->addQuery($query);
-    $this->makeRevision("1.58");
     
+    $this->makeRevision("1.58");
+        
     $query = "ALTER TABLE `plageconsult`
               ADD `color` VARCHAR(6) NOT NULL DEFAULT 'DDDDDD' ;";
     $this->addQuery($query);
+    
     $this->makeRevision("1.59");
     
     $query = "ALTER TABLE `factureconsult`
               ADD `npq`  ENUM('0','1') DEFAULT '0',
               ADD `cession_creance` ENUM('0','1') DEFAULT '0';";
     $this->addQuery($query);
-    $this->mod_version = "1.60";
+
+    $this->makeRevision("1.60");
+    $query = "ALTER TABLE `examigs` 
+              ADD `sejour_id` INT (11) UNSIGNED NOT NULL;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `examigs` ADD INDEX (`sejour_id`);";
+    $this->addQuery($query);
+    
+    $query = "UPDATE `examigs`
+              SET examigs.sejour_id = (SELECT sejour.sejour_id
+                               FROM sejour
+                               LEFT JOIN consultation_anesth ON sejour.sejour_id = consultation_anesth.sejour_id
+                               WHERE consultation_anesth.consultation_id = examigs.consultation_id);";
+    $this->addQuery($query);
+    
+    $query = "UPDATE `examigs`
+              SET sejour_id = (SELECT sejour.sejour_id
+                               FROM sejour
+                               LEFT JOIN operations ON operations.sejour_id = sejour.sejour_id
+                               LEFT JOIN consultation_anesth ON operations.operation_id = consultation_anesth.operation_id
+                               WHERE consultation_anesth.consultation_id = examigs.consultation_id)
+              WHERE examigs.sejour_id = '0';";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `examigs` DROP `consultation_id`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.61";
   }
 }
 ?>
