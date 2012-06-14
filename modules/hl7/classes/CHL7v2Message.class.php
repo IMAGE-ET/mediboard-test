@@ -40,6 +40,8 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   var $subcomponentSeparator = self::DEFAULT_SUBCOMPONENT_SEPARATOR;
   var $nullValue             = self::DEFAULT_NULL_VALUE;
   
+  var $strict_segment_terminator = false;
+  
   var $escape_sequences   = null;
   var $unescape_sequences = null;
 
@@ -113,18 +115,22 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     return $this->event_name;
   }
   
-  static function fixRawER7($data) {
+  static function fixRawER7($data, $strict = false) {
     $data = trim($data);
     $data = str_replace("\r\n", "\r", $data);
-    $data = str_replace("\n", "\r", $data);
+    
+    if (!$strict) {
+      $data = str_replace("\n", "\r", $data);
+    }
+    
     return $data;
   }
   
-  static function isWellFormed($data) {
+  static function isWellFormed($data, $strict_segment_terminator = false) {
     // remove all chars before MSH
     $msh_pos = strpos($data, "MSH");
     $data = substr($data, $msh_pos);
-    $data = self::fixRawER7($data);
+    $data = self::fixRawER7($data, $strict_segment_terminator);
   
     // first tokenize the segments
     if (($data == null) || (strlen($data) < 4)) {
@@ -166,7 +172,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
      // remove all chars before MSH
     $msh_pos = strpos($data, "MSH");
     $data = substr($data, $msh_pos);
-    $data = self::fixRawER7($data);
+    $data = self::fixRawER7($data, $this->strict_segment_terminator);
     
     parent::parse($data);
     

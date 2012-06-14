@@ -59,17 +59,19 @@ class CHL7Config extends CExchangeDataFormatConfig {
   var $assigning_authority_namespace_id      = null;
   var $assigning_authority_universal_id      = null;
   var $assigning_authority_universal_type_id = null;
-	
-  var $encoding      = null;
   
-	var $handle_mode   = null;
-	var $handle_NDA	   = null;
+  var $encoding      = null;
+  var $strict_segment_terminator = null;
+  
+  var $handle_mode   = null;
+  var $handle_NDA    = null;
   var $handle_PV1_10 = null;
   var $handle_NSS    = null;
   
   var $_categories = array(
     "format" => array(
       "encoding", 
+      "strict_segment_terminator",
     ),
     
     "application" => array(
@@ -121,14 +123,15 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["assigning_authority_namespace_id"]      = "str";
     $props["assigning_authority_universal_id"]      = "str";
     $props["assigning_authority_universal_type_id"] = "str";
-		
+    
     // Encoding
     $props["encoding"]      = "enum list|UTF-8|ISO-8859-1 default|UTF-8";
+    $props["strict_segment_terminator"] = "bool default|0";
     
     // Handle
-		$props["handle_mode"]   = "enum list|normal|simple default|normal";
-		// => PID
-		$props["handle_NDA"]    = "enum list|PID_18|PV1_19 default|PID_18";
+    $props["handle_mode"]   = "enum list|normal|simple default|normal";
+    // => PID
+    $props["handle_NDA"]    = "enum list|PID_18|PV1_19 default|PID_18";
     $props["handle_NSS"]    = "enum list|PID_3|PID_19 default|PID_3";
     // => PV1
     $props["handle_PV1_10"] = "enum list|discipline|service default|discipline";

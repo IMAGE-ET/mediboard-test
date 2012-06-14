@@ -790,7 +790,12 @@ class CSetuphl7 extends CSetup {
               ADD `ssl_passphrase` VARCHAR (255);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.30";
+    $this->makeRevision("0.30");
+    $query = "ALTER TABLE `hl7_config` 
+              ADD `strict_segment_terminator` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.31";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

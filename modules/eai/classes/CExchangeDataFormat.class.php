@@ -59,9 +59,19 @@ class CExchangeDataFormat extends CMbMetaObject {
   var $_exchange_ihe             = null;
   var $_to_treatment             = true;
   
-  // Forward references
+  /**
+   * @var CGroups
+   */
   var $_ref_group      = null;
+  
+  /**
+   * @var CInteropSender
+   */
   var $_ref_sender     = null;
+  
+  /**
+   * @var CInteropReceiver
+   */
   var $_ref_receiver   = null;
   
   function getProps() {
@@ -100,8 +110,22 @@ class CExchangeDataFormat extends CMbMetaObject {
   }
   
   function loadRefsInteropActor() {
-    $this->_ref_sender   = $this->loadFwdRef("sender_id");
-    $this->_ref_receiver = $this->loadFwdRef("receiver_id");
+    $this->loadRefReceiver();
+    $this->loadRefSender();
+  }
+  
+  /**
+   * @return CInteropSender
+   */
+  function loadRefSender(){
+    return $this->_ref_sender = $this->loadFwdRef("sender_id");
+  }
+  
+  /**
+   * @return CInteropReceiver
+   */
+  function loadRefReceiver(){
+    return $this->_ref_receiver = $this->loadFwdRef("receiver_id");
   }
   
   function getObservations() {}

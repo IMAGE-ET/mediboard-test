@@ -35,7 +35,11 @@ class CEAIDispatcher {
     foreach (CExchangeDataFormat::getAll() as $key => $_exchange_class) {  
       $understand = false;
       foreach (CApp::getChildClasses($_exchange_class, array(), true) as $under_key => $_data_format) {
+        /**
+         * @var CExchangeDataFormat
+         */
         $data_format = new $_data_format;
+        
         // Test si le message est compris
         $understand = $data_format->understand($data, $actor);    
         if ($understand) {

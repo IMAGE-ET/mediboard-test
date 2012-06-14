@@ -65,14 +65,20 @@ class CExchangeIHE extends CExchangeTabular {
     return self::$messages;
   }
   
-  function isWellFormed($data) {
+  function isWellFormed($data, CInteropActor $actor = null) {
     try {
-      return CHL7v2Message::isWellFormed($data);
+      $sender = ($actor ? $actor : $this->loadRefSender());
+      $strict = $this->getConfigs($sender->_guid)->strict_segment_terminator;
+      
+      return CHL7v2Message::isWellFormed($data, $strict);
     } catch (Exception $e) {
       return false;
     }
   }
   
+  /**
+   * @return CHL7Config
+   */
   function getConfigs($actor_guid) {
     list($sender_class, $sender_id) = explode("-", $actor_guid);
     
@@ -85,12 +91,11 @@ class CExchangeIHE extends CExchangeTabular {
   }
   
   function understand($data, CInteropActor $actor = null) {
-    if (!$this->isWellFormed($data)) {
+    if (!$this->isWellFormed($data, $actor)) {
       return false;
     }
 
-    $hl7_message = new CHL7v2Message();
-    $hl7_message->parse($data, false);
+    $hl7_message = $this->parseMessage($data, false);
     
     $hl7_message_evt = "CHL7Event$hl7_message->event_name";
     if ($hl7_message->i18n_code) {
@@ -117,10 +122,12 @@ class CExchangeIHE extends CExchangeTabular {
   
   function getErrors() {}
   
+  /**
+   * @return CHL7v2Message
+   */
   function getMessage() {
     if ($this->_message !== null) {
-      $hl7_message = new CHL7v2Message();
-      $hl7_message->parse($this->_message);
+      $hl7_message = $this->parseMessage($this->_message);
       
       $this->_doc_errors_msg   = !$hl7_message->isOK(CHL7v2Error::E_ERROR);
       $this->_doc_warnings_msg = !$hl7_message->isOK(CHL7v2Error::E_WARNING);
@@ -131,10 +138,25 @@ class CExchangeIHE extends CExchangeTabular {
     }
   }
   
+  /**
+   * @return CHL7v2Message
+   */
+  function parseMessage($string, $parse_body = true) {
+    $hl7_message = new CHL7v2Message();
+    $hl7_message->strict_segment_terminator = ($this->_configs_format->strict_segment_terminator == 1);
+    $hl7_message->parse($string, $parse_body);
+    
+    return $hl7_message;
+  }
+  
+  /**
+   * @return CHL7v2Message
+   */
   function getACK() {
     if ($this->_acquittement !== null) {
       $hl7_ack = new CHL7v2Message();
       $hl7_ack->parse($this->_acquittement);
+      
       $this->_doc_errors_ack   = !$hl7_ack->isOK(CHL7v2Error::E_ERROR);
       $this->_doc_warnings_ack = !$hl7_ack->isOK(CHL7v2Error::E_WARNING);
 
