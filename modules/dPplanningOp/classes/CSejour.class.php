@@ -177,6 +177,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_ref_hl7_movement            = null;
   var $_ref_grossesse               = null;
   var $_ref_curr_operation          = null;
+  var $_ref_exams_igs               = null;
   
   // External objects
   var $_ext_diagnostic_principal = null;
@@ -265,7 +266,9 @@ class CSejour extends CCodable implements IPatientRelated {
     $backProps["naissances"]            = "CNaissance sejour_maman_id";
     $backProps["movements"]             = "CMovement sejour_id";
     $backProps["items_liaisons"]        = "CItemLiaison sejour_id";
+    $backProps["exams_igs"]             = "CExamIgs sejour_id";
     $backProps["ufs"]                   = "CAffectationUniteFonctionnelle object_id";
+    $backProps["actes_cdarr"]           = "CActeCdARR sejour_id";
     return $backProps;
   }
 
@@ -1264,6 +1267,10 @@ class CSejour extends CCodable implements IPatientRelated {
   
   function loadRefsTasks(){
     return $this->_ref_tasks = $this->loadBackRefs("tasks"); 
+  }
+  
+  function loadRefsExamsIGS(){
+    return $this->_ref_exams_igs = $this->loadBackRefs("exams_igs"); 
   }
   
   function loadSuiviMedical() {

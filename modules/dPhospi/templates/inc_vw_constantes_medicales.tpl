@@ -293,6 +293,12 @@ loadConstantesMedicales  = function(context_guid) {
   url.addParam("paginate", window.paginate || 0);
   url.requestUpdate(container);
 };
+
+refreshFiches = function(sejour_id){
+  var url = new Url("soins", "ajax_vw_fiches");
+  url.addParam("sejour_id", sejour_id);
+  url.requestUpdate("tab-fiches");
+}
 </script>
 
 <table class="tbl" {{if $print || $simple_view}}style="display: none;"{{/if}}>
@@ -347,26 +353,31 @@ loadConstantesMedicales  = function(context_guid) {
 {{if $print}}
   <div id="constantes-medicales-graph" style="text-align: center;"></div>
 {{else}}
-  {{if "forms"|module_active && $context instanceof CSejour && !$simple_view}}
-    <script type="text/javascript">
-      Main.add(function(){
-        Control.Tabs.create("surveillance-tab");
-      });
-    </script>
-    
+   <script type="text/javascript">
+     Main.add(function(){
+      Control.Tabs.create("surveillance-tab");
+     });
+   </script>
+
     <ul class="control_tabs" id="surveillance-tab">
       <li>
         <a href="#tab-constantes-medicales">Constantes</a>
       </li>
+      {{if "forms"|module_active && $context instanceof CSejour && !$simple_view}}
+        <li>
+          <a href="#tab-ex_class-list" onmousedown="this.onmousedown=null; ExObject.loadExObjects('{{$context->_class}}', '{{$context->_id}}', 'tab-ex_class-list', 0)">
+            Formulaires
+          </a>
+        </li>
+      {{/if}}
       <li>
-        <a href="#tab-ex_class-list" onmousedown="this.onmousedown=null; ExObject.loadExObjects('{{$context->_class}}', '{{$context->_id}}', 'tab-ex_class-list', 0)">
-          Formulaires
-        </a>
+        <a href="#tab-fiches" onmousedown="refreshFiches('{{$context->_id}}');">Fiches</a>
       </li>
     </ul>
     <hr class="control_tabs" />
   {{/if}}
   
+    
   <table class="main" id="tab-constantes-medicales">
     <tr>
       <td class="narrow" id="constantes-medicales-form">
@@ -428,10 +439,10 @@ loadConstantesMedicales  = function(context_guid) {
           </button>
           
           <div class="contantes-horizontal" style="display: none;">
-            {{mb_include module=patients template=print_constantes}}
+          {{mb_include module=patients template=print_constantes}}
           </div>
           <div class="contantes-vertical">
-            {{mb_include module=patients template=print_constantes_vert}}
+          {{mb_include module=patients template=print_constantes_vert}}
           </div>
         </div>
       </td>
@@ -439,4 +450,5 @@ loadConstantesMedicales  = function(context_guid) {
   </table>
   
   <div id="tab-ex_class-list" style="display: none;"></div>
+  <div id="tab-fiches" style="display: none;"></div>
 {{/if}}
