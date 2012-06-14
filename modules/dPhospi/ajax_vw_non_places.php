@@ -141,8 +141,8 @@ if ($granularite == "4weeks" && count($days) == 5) {
   array_pop($days);
 }
 
-$where["sejour.entree"] = "<= '$date_max'";
-$where["sejour.sortie"] = ">= '$date_min'";
+$where["sejour.entree"] = "< '$date_max'";
+$where["sejour.sortie"] = "> '$date_min'";
 
 if ($duree_uscpo) {
   $ljoin["operations"] = "operations.sejour_id = sejour.sejour_id";

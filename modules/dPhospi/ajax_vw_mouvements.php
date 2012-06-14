@@ -165,8 +165,8 @@ array_multisort(CMbArray::pluck($services, "nom"), SORT_ASC, $services);
 // Chargement des affectations
 $where = array();
 $where["lit_id"] = CSQLDataSource::prepareIn(array_keys($lits));
-$where["entree"] = "<= '$date_max'";
-$where["sortie"] = ">= '$date_min'";
+$where["entree"] = "< '$date_max'";
+$where["sortie"] = "> '$date_min'";
 
 $affectation = new CAffectation;
 $nb_affectations = $affectation->countList($where);
