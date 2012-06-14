@@ -95,7 +95,7 @@ class CExchangeIHE extends CExchangeTabular {
       return false;
     }
 
-    $hl7_message = $this->parseMessage($data, false);
+    $hl7_message = $this->parseMessage($data, false, $actor);
     
     $hl7_message_evt = "CHL7Event$hl7_message->event_name";
     if ($hl7_message->i18n_code) {
@@ -141,9 +141,20 @@ class CExchangeIHE extends CExchangeTabular {
   /**
    * @return CHL7v2Message
    */
-  function parseMessage($string, $parse_body = true) {
+  function parseMessage($string, $parse_body = true, $actor = null) {
     $hl7_message = new CHL7v2Message();
-    $hl7_message->strict_segment_terminator = ($this->_configs_format->strict_segment_terminator == 1);
+    
+    if (!$this->_id && $actor) {
+      $this->sender_id    = $actor->_id;
+      $this->sender_class = $actor->_class;
+    }
+    
+    if ($this->sender_id) {
+      $this->loadRefSender();
+      $this->getConfigs($this->_ref_sender->_guid);
+      $hl7_message->strict_segment_terminator = ($this->_configs_format->strict_segment_terminator == 1);
+    }
+
     $hl7_message->parse($string, $parse_body);
     
     return $hl7_message;
