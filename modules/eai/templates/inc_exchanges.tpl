@@ -11,7 +11,7 @@
 {{assign var=mod_name value=$exchange->_ref_module->mod_name}}
 
 {{if $total_exchanges != 0}}
-  {{mb_include module=system template=inc_pagination total=$total_exchanges current=$page change_page='ExchangeDataFormat.changePage' jumper='10' step=100}}
+  {{mb_include module=system template=inc_pagination total=$total_exchanges current=$page change_page='ExchangeDataFormat.changePage' jumper='10' step=25}}
 {{/if}}
 <table class="tbl">
   <tr>
