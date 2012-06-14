@@ -98,6 +98,13 @@
             </td>
           </tr>
           
+          <tr>
+            <th colspan="2">Mots-clés dans le contenu</th>
+            <td colspan="2">
+              <input type="text" name="keywords" value="{{$keywords}}" />
+            </td>
+          </tr>
+          
           {{mb_include module=$mod_name template="`$exchange->_class`_filter_inc"}}
           
           <tr>

@@ -16,6 +16,8 @@ $exchange_class    = CValue::getOrSession("exchange_class");
 $exchange_type     = CValue::getOrSession("exchange_type");
 $exchange_group_id = CValue::getOrSession("exchange_group_id");
 
+$keywords          = CValue::getOrSession("keywords");
+
 $_date_min = CValue::getOrSession('_date_min', mbDateTime("-7 day"));
 $_date_max = CValue::getOrSession('_date_max', mbDateTime("+1 day"));
 $page      = CValue::getOrSession('value', 0);
@@ -51,6 +53,7 @@ $smarty->assign("types"     , $types);
 $smarty->assign("page"      , $page);
 $smarty->assign("messages"  , $messages);
 $smarty->assign("evenements", $evenements);
+$smarty->assign("keywords"  , $keywords);
 $smarty->display("inc_filters_exchanges.tpl");
 
 

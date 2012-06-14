@@ -23,6 +23,7 @@ $group_id            = CValue::getOrSession("group_id");
 $page                = CValue::get('page', 0);
 $_date_min           = CValue::getOrSession('_date_min', mbDateTime("-7 day"));
 $_date_max           = CValue::getOrSession('_date_max', mbDateTime("+1 day"));
+$keywords            = CValue::getOrSession("keywords");
 
 $exchange = new $exchange_class;
 
@@ -66,6 +67,14 @@ if ($id_permanent) {
 if ($object_id) {
   $where["object_id"] = " = '$object_id'";
 }
+$ljoin = null;
+if ($keywords) {
+  $content_exchange = $exchange->loadFwdRef("message_content_id");
+  $table            = $content_exchange->_spec->table;
+  $ljoin[$table]    = $exchange->_spec->table.".message_content_id = $table.content_id";
+  
+  $where["$table.content"] = " LIKE '%$keywords%'";
+}
 
 $group_id = $group_id ? $group_id : CGroups::loadCurrent()->_id;
 $where["group_id"] = " = '$group_id'";
@@ -73,10 +82,10 @@ $exchange->group_id = $group_id;
 $exchange->loadRefGroups();
 
 $forceindex[] = "date_production";
-$total_exchanges = $itemExchange->countList($where, null, null, $forceindex);
+$total_exchanges = $itemExchange->countList($where, null, $ljoin, $forceindex);
 $order = "date_production DESC";
 
-$exchanges = $itemExchange->loadList($where, $order, "$page, 20", null, null, $forceindex);
+$exchanges = $itemExchange->loadList($where, $order, "$page, 20", null, $ljoin, $forceindex);
 foreach($exchanges as $_exchange) {
   $_exchange->loadRefsBack();
   $_exchange->getObservations();
@@ -94,6 +103,7 @@ $smarty->assign("selected_types"     , $t);
 $smarty->assign("statut_acquittement", $statut_acquittement);
 $smarty->assign("type"               , $type);
 $smarty->assign("evenement"          , $evenement);
+$smarty->assign("keywords"           , $keywords);
 
 $smarty->display("inc_exchanges.tpl");
 
