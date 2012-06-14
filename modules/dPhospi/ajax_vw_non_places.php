@@ -172,6 +172,7 @@ foreach($sejours as $_key => $_sejour) {
   $functions_filter[$_sejour->_ref_praticien->function_id] = $_sejour->_ref_praticien->_ref_function;
   if ($filter_function && $filter_function != $_sejour->_ref_praticien->function_id) {
     unset($sejours[$_key]);
+    continue;
   }
   else {
     $_sejour->_entree_offset = CMbDate::position(max($date_min, $_sejour->entree), $date_min, $period);

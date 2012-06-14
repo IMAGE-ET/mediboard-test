@@ -186,10 +186,9 @@
                         </span>
                       </div>
                       {{foreach from=$_object->_ref_operations item=_operation}}
-                      {{math equation=(x/y)*100 x=$_operation->_debut_offset y=$_object->_width assign=offset_op}}
-                      {{math equation=(x/y)*100 x=$_operation->_width y=$_object->_width assign=width_op}}
-                        {{math equation=x*y x=$_operation->_debut_offset y=$td_width assign=offset_op}}
-                        {{math equation=x*y x=$_operation->_width y=$td_width assign=width_op}}
+                        {{math equation=(x/y)*100 x=$_operation->_debut_offset y=$_object->_width assign=offset_op}}
+                        {{math equation=(x/y)*100 x=$_operation->_width y=$_object->_width assign=width_op}}
+                        
                         <div class="operation_in_mouv opacity-40"
                           style="left: {{$offset_op}}%; width: {{$width_op}}%;"></div>
                         
