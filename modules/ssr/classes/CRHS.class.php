@@ -292,7 +292,6 @@ class CRHS extends CMbObject {
         continue;
       }
       
-      
       $therapeute = $_evenement->loadRefTherapeute();
       $intervenant = $therapeute->loadRefIntervenantCdARR();
       $code_intervenant_cdarr = $intervenant->code;
@@ -308,7 +307,27 @@ class CRHS extends CMbObject {
         $ligne->auto = "1";
         $ligne->store();
       }
-    }    
+    }  
+    
+    
+    // Gestion des administrations
+    $this->_ref_sejour->loadBackRefs("actes_cdarr");
+    foreach($this->_ref_sejour->_back["actes_cdarr"] as $_acte_cdarr_adm){
+      $_acte_cdarr_adm->loadRefAdministration();
+      $administration = $_acte_cdarr_adm->_ref_administration;
+      $administration->loadRefAdministrateur();
+      $therapeute = $_evenement->loadRefTherapeute();
+      
+      $ligne = new CLigneActivitesRHS();
+      $ligne->rhs_id                 = $this->_id;
+      $ligne->executant_id           = $therapeute->_id;
+      $ligne->code_activite_cdarr    = $_acte_cdarr_adm->code;
+      $ligne->code_intervenant_cdarr = $code_intervenant_cdarr;
+      $ligne->loadMatchingObject();
+      $ligne->crementDay($administration->dateTime, "inc");
+      $ligne->auto = "1";
+      $ligne->store();
+    }
   }
   
   function buildTotaux() {

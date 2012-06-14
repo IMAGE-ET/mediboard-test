@@ -174,6 +174,8 @@ class CEvenementSSR extends CMbObject {
       }
     }
     
+    
+    
     return parent::check();
   }
   

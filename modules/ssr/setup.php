@@ -423,7 +423,24 @@ class CSetupssr extends CSetup {
       ADD UNIQUE ligne (rhs_id, executant_id, code_activite_cdarr)";
     $this->addQuery($query);
     
-    $this->mod_version = "0.38";
+    $this->makeRevision("0.38");
+    $query = "ALTER TABLE `acte_cdarr` 
+              ADD `administration_id` INT (11) UNSIGNED,
+              CHANGE `evenement_ssr_id` `evenement_ssr_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    $this->makeRevision("0.39");
+
+    $query = "ALTER TABLE `acte_cdarr` ADD INDEX (`administration_id`);";
+    $this->addQuery($query);
+         
+    $this->makeRevision("0.40");
+    $query = "ALTER TABLE `acte_cdarr` ADD `sejour_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `acte_cdarr` ADD INDEX (`sejour_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.41";
 
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";

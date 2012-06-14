@@ -14,11 +14,16 @@ class CActeCdARR extends CMbObject {
   
   // DB Fields
   var $evenement_ssr_id = null;
+  var $administration_id = null;
+  var $sejour_id         = null;
   var $code = null;
   
   // References
   var $_ref_activite_cdarr = null;
- 
+  var $_ref_administration = null;
+  var $_ref_evenement_ssr  = null;
+  var $_ref_sejour         = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table       = 'acte_cdarr';
@@ -28,8 +33,10 @@ class CActeCdARR extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
-    $props["evenement_ssr_id"] = "ref notNull class|CEvenementSSR cascade";
-    $props["code"]             = "str notNull length|4 show|0";
+    $props["evenement_ssr_id"]  = "ref class|CEvenementSSR cascade";
+    $props["administration_id"] = "ref class|CAdministration cascade";
+    $props["sejour_id"]         = "ref class|CSejour";
+    $props["code"]              = "str notNull length|4 show|0";
     return $props;
   }
 
@@ -40,6 +47,14 @@ class CActeCdARR extends CMbObject {
   
   function loadRefEvenementSSR(){
     $this->_ref_evenement_ssr = $this->loadFwdRef("evenement_ssr_id", true);
+  }
+  
+  function loadRefAdministration(){
+    $this->_ref_administration = $this->loadFwdRef("administration_id", true);
+  }
+  
+  function loadRefSejour(){
+    $this->_ref_sejour = $this->loadFwdRef("sejour_id", true);
   }
 
   function loadRefActiviteCdarr() {
@@ -52,7 +67,6 @@ class CActeCdARR extends CMbObject {
     parent::loadView();
     $this->loadRefActiviteCdarr();
   }
-
 }
 
 ?>
