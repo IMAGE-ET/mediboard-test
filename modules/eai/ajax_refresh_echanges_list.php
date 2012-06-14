@@ -23,7 +23,8 @@ $group_id            = CValue::getOrSession("group_id");
 $page                = CValue::get('page', 0);
 $_date_min           = CValue::getOrSession('_date_min', mbDateTime("-7 day"));
 $_date_max           = CValue::getOrSession('_date_max', mbDateTime("+1 day"));
-$keywords            = CValue::getOrSession("keywords");
+$keywords_msg        = CValue::getOrSession("keywords_msg");
+$keywords_ack        = CValue::getOrSession("keywords_ack");
 
 $exchange = new $exchange_class;
 
@@ -68,13 +69,21 @@ if ($object_id) {
   $where["object_id"] = " = '$object_id'";
 }
 $ljoin = null;
-if ($keywords) {
+if ($keywords_msg) {
   $content_exchange = $exchange->loadFwdRef("message_content_id");
   $table            = $content_exchange->_spec->table;
   $ljoin[$table]    = $exchange->_spec->table.".message_content_id = $table.content_id";
   
-  $where["$table.content"] = " LIKE '%$keywords%'";
+  $where["$table.content"] = " LIKE '%$keywords_msg%'";
 }
+
+if ($keywords_ack) {
+  $content_exchange = $exchange->loadFwdRef("acquittement_content_id");
+  $table            = $content_exchange->_spec->table;
+  $ljoin[$table]    = $exchange->_spec->table.".acquittement_content_id = $table.content_id";
+  
+  $where["$table.content"] = " LIKE '%$keywords_ack%'";
+}  
 
 $group_id = $group_id ? $group_id : CGroups::loadCurrent()->_id;
 $where["group_id"] = " = '$group_id'";
@@ -103,7 +112,8 @@ $smarty->assign("selected_types"     , $t);
 $smarty->assign("statut_acquittement", $statut_acquittement);
 $smarty->assign("type"               , $type);
 $smarty->assign("evenement"          , $evenement);
-$smarty->assign("keywords"           , $keywords);
+$smarty->assign("keywords_msg"       , $keywords_msg);
+$smarty->assign("keywords_ack"       , $keywords_ack);
 
 $smarty->display("inc_exchanges.tpl");
 

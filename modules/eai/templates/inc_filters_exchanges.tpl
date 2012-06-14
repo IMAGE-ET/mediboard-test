@@ -99,9 +99,16 @@
           </tr>
           
           <tr>
-            <th colspan="2">Mots-clés dans le contenu</th>
+            <th colspan="2">Mots-clés dans le contenu du message</th>
             <td colspan="2">
-              <input type="text" name="keywords" value="{{$keywords}}" />
+              <input type="text" name="keywords_msg" value="{{$keywords_msg}}" />
+            </td>
+          </tr>
+          
+          <tr>
+            <th colspan="2">Mots-clés dans le contenu de l'acquittement</th>
+            <td colspan="2">
+              <input type="text" name="keywords_ack" value="{{$keywords_ack}}" />
             </td>
           </tr>
           
