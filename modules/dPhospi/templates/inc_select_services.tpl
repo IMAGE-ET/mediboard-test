@@ -64,7 +64,7 @@
     <table class="tbl">
       <tr>
         <th colspan="{{$colspan}}">
-          <button type="button" style="float: left;" class="cancel notext" onclick="toggleChecked()" title="Tout cocher / décocher"></button>
+          <button type="button" style="float: left;" class="tick notext" onclick="toggleChecked()" title="Tout cocher / décocher"></button>
           {{tr}}CService-title-selection{{/tr}}
         </th>
       </tr>
