@@ -375,9 +375,7 @@ refreshFiches = function(sejour_id){
       </li>
     </ul>
     <hr class="control_tabs" />
-  {{/if}}
-  
-    
+      
   <table class="main" id="tab-constantes-medicales">
     <tr>
       <td class="narrow" id="constantes-medicales-form">
