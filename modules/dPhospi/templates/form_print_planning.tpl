@@ -20,7 +20,7 @@ function popPlanning() {
   url.addElement(form._date_max);
   url.addElement(form._horodatage);
   url.addElement(form.ordre);
-  url.addParam("service", [$V(form._service)].flatten().join(","));
+  url.addParam("_service", [$V(form._service)].flatten().join(","));
   url.addElement(form._filter_type);
   url.addParam("praticien_id", [$V(form.praticien_id)].flatten().join(","));
   url.addElement(form._specialite);
