@@ -40,7 +40,6 @@ class CExchangeAny extends CExchangeDataFormat {
     $props["message_content_id"]      = "ref class|CContentAny show|0 cascade";
     $props["acquittement_content_id"] = "ref class|CContentAny show|0 cascade";   
     
-    $props["sender_id"]               = "ref class|CInteropSender";
     $props["receiver_id"]             = "ref class|CInteropReceiver";
     $props["object_class"]            = "str class show|0";
     

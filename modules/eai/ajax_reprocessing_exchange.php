@@ -21,6 +21,10 @@ $exchange = $object->loadFromGuid($exchange_guid);
 $sender = new $exchange->sender_class;
 $sender->load($exchange->sender_id);
 
+if ($exchange instanceof CExchangeAny) {
+  $exchange->_id = null;;
+}
+
 if (!$ack_data = CEAIDispatcher::dispatch($exchange->_message, $sender, $exchange->_id)) {
   CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' ne peut retraité", UI_MSG_ERROR);
 }
@@ -52,6 +56,10 @@ if ($exchange instanceof CExchangeIHE) {
   $exchange->store();
   
   CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' a été retraité");
+}
+
+if ($exchange instanceof CExchangeAny) {
+  
 }
 
 ?>

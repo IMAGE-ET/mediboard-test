@@ -29,7 +29,7 @@ class CEAIDispatcher {
     // Accepte t-on des utilisateurs acteurs non enregistrés ?
     if (!$actor) {
       CEAIDispatcher::$errors[] = CAppUI::tr("CEAIDispatcher-no_actor");
-      return self::dispatchError($data);
+      return self::dispatchError($data, $actor);
     }
     
     foreach (CExchangeDataFormat::getAll() as $key => $_exchange_class) {  
@@ -50,7 +50,7 @@ class CEAIDispatcher {
 
     if (!$understand) {
       self::$errors[] = CAppUI::tr("CEAIDispatcher-no_understand");
-      return self::dispatchError($data);
+      return self::dispatchError($data, $actor);
     }
 
     // est-ce que je comprend la famille de messages ?
@@ -64,7 +64,7 @@ class CEAIDispatcher {
 
     if (!$supported) {
       self::$errors[] = CAppUI::tr("CEAIDispatcher-_family_message_no_supported_for_this_actor", $family_message_class);
-      return self::dispatchError($data);
+      return self::dispatchError($data, $actor);
     }
     
     CAppUI::stepAjax("CEAIDispatcher-understand");
@@ -85,11 +85,11 @@ class CEAIDispatcher {
     } 
     catch(CMbException $e) {
       self::$errors[] = $e->getMessage();
-      return self::dispatchError($data);
+      return self::dispatchError($data, $actor);
     }
   }
   
-  static function dispatchError($data) {
+  static function dispatchError($data, $actor = null) {
     foreach (self::$errors as $_error) {
       CAppUI::stepAjax($_error, UI_MSG_WARNING);
     }
@@ -97,7 +97,9 @@ class CEAIDispatcher {
     // Création d'un échange Any
     $exchange_any                  = new CExchangeAny();
     $exchange_any->date_production = mbDateTime();
-    $exchange_any->group_id        = CGroups::loadCurrent()->_id;
+    $exchange_any->sender_id       = $actor->_id;
+    $exchange_any->sender_class    = $actor->_class;
+    $exchange_any->group_id        = $actor->group_id ? $actor->group_id : CGroups::loadCurrent()->_id;
     $exchange_any->type            = "None";
     $exchange_any->_message        = $data;
     $exchange_any->store();

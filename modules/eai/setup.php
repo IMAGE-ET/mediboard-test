@@ -88,7 +88,13 @@ class CSetupeai extends CSetup {
                 ADD INDEX (`receiver_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.06";
+    $this->makeRevision("0.06");
+    
+    $query = "ALTER TABLE `echange_any` 
+                CHANGE `sender_class` `sender_class` VARCHAR (80);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.07";
   }
 }
 
