@@ -16,9 +16,10 @@ CotationRHS = {
     
   },
   
-  refreshRHS: function(rhs_id) {
+  refreshRHS: function(rhs_id, recalculate) {
     new Url('ssr', 'ajax_edit_rhs') .
       addParam('rhs_id', rhs_id) .
+      addParam('recalculate', recalculate) .
       requestUpdate('cotation-' + rhs_id, CotationRHS.launchDrawDependancesGraph.curry(rhs_id));
   },
   

@@ -281,11 +281,15 @@ class CRHS extends CMbObject {
     }
     $this->loadBackRefs("lines");
     
+    // Chargement du séjour
+    $sejour = $this->loadRefSejour();
+    
     // Ajout des lignes d'activités 
     $evenementSSR = new CEvenementSSR();
-    $evenementSSR->sejour_id = $this->_ref_sejour->_id;
+    $evenementSSR->sejour_id = $sejour->_id;
     $evenementSSR->realise = 1;
     $evenements = $evenementSSR->loadMatchingList();
+
     foreach ($evenements as $_evenement) {
       $evenementRhs = $_evenement->getRHS();
       if ($evenementRhs->_id != $this->_id) {
@@ -309,10 +313,8 @@ class CRHS extends CMbObject {
       }
     }  
     
-    
     // Gestion des administrations
-    $this->_ref_sejour->loadBackRefs("actes_cdarr");
-    foreach($this->_ref_sejour->_back["actes_cdarr"] as $_acte_cdarr_adm){
+    foreach ($sejour->loadBackRefs("actes_cdarr") as $_acte_cdarr_adm){
       $_acte_cdarr_adm->loadRefAdministration();
       $administration = $_acte_cdarr_adm->_ref_administration;
       $administration->loadRefAdministrateur();
