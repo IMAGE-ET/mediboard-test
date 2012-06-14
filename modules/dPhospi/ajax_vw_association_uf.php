@@ -23,22 +23,32 @@ $function = $praticien->loadRefFunction();
 $ufs_medicale    = array();
 $ufs_soins       = array();
 $ufs_hebergement = array();
+$uf_sejour_hebergement = array();
+$uf_sejour_medicale = array();
+$uf_sejour_soins = array();
+
 $auf = new CAffectationUniteFonctionnelle();
 
 // UFs de séjour
 $ufs_sejour = array();
 
 $uf = $sejour->loadRefUFHebergement();
-$uf_sejour_hebergement[$uf->_id] = $uf;
-$ufs_hebergement[$uf->_id] = $uf;
+if ($uf->_id) {
+  $uf_sejour_hebergement[$uf->_id] = $uf;
+  $ufs_hebergement[$uf->_id] = $uf;
+}
 
 $uf = $sejour->loadRefUFMedicale();
-$uf_sejour_medicale[$uf->_id] = $uf;
-$ufs_medicale[$uf->_id] = $uf;
+if ($uf->_id) {
+  $uf_sejour_medicale[$uf->_id] = $uf;
+  $ufs_medicale[$uf->_id] = $uf;
+}
 
 $uf = $sejour->loadRefUFSoins();
-$uf_sejour_soins[$uf->_id] = $uf;
-$ufs_soins[$uf->_id] = $uf;
+if ($uf->_id) {
+  $uf_sejour_soins[$uf->_id] = $uf;
+  $ufs_soins[$uf->_id] = $uf;
+}
 
 // UFs de services
 $ufs_service = array();
