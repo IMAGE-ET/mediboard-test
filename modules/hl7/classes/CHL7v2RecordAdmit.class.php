@@ -811,7 +811,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if (!$movement) {
       return;
     }
-    
+
     $exchange_ihe = $this->_ref_exchange_ihe;
     
     $PV1_3 = $this->queryNode("PV1.3", $data["PV1"]);
@@ -841,7 +841,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       
       return $affectation;     
     }
-    
+
     // Chargement des affectations du séjour
     $datetime = $this->queryTextNode("EVN.6/TS.1", $data["EVN"]);
     
@@ -908,7 +908,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     // Tous les autres cas on récupère et on met à jour la première affectation
     else {
-      $affectation =  $newVenue->getCurrAffectation($datetime);    
+      $newVenue->loadRefsAffectations();  
+      $affectation = $newVenue->_ref_first_affectation;  
       if (!$affectation->_id) {
         $affectation->sejour_id = $newVenue->_id;
         $affectation->entree    = $newVenue->entree;
