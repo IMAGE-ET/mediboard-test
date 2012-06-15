@@ -47,7 +47,6 @@ function endModePlay(editor) {
 function mbplay_onclick(editor) {
   
   var window_parent = window.parent;
-  var instance = CKEDITOR.instances.htmlarea; 
   var bodyEditor = editor.document.getBody().$;
   
   // Si la modale a été fermée, alors on relance l'étape courante,
@@ -59,7 +58,7 @@ function mbplay_onclick(editor) {
     return;
   }
   
-  var content = instance.getData();
+  var content = editor.getData();
   var field,re = /\[Liste - ([^\]]+)\]|\[\[Texte libre - ([^\]]+)\]\]/g;
   
   /*while (field = re.exec(content)) {
@@ -203,11 +202,6 @@ window.parent.replaceField = function(elt, class_name, empty) {
     var nom = unescapeHtml(elt.getAttribute("data-nom"));
     
     if (corr_name && corr_name.indexOf("- " + nom + "]") != -1) {
-      if (textReplacement == "") {
-        corr.parentNode.removeChild(corr);
-        return;
-      }
-      
       var pattern = "";
       if (class_name == "name") {
         pattern = "[Liste - " + nom + "]";
@@ -215,12 +209,17 @@ window.parent.replaceField = function(elt, class_name, empty) {
       else {
         pattern = "[[Texte libre - " + nom + "]]";
       }
+      
       // Ne remplacer que la sous-chaîne,
       // car des spans peuvent être imbriqués
       var begin = corr.innerHTML.indexOf(pattern);
       var end = begin + pattern.length;
       
       if (begin > -1 && end > -1) {
+        if (textReplacement == "") {
+          corr.parentNode.removeChild(corr);
+          return;
+        }
         corr.innerHTML = corr.innerHTML.substr(0, begin) +
           unescapeHtml(corr.innerHTML.substr(begin, end)).replace(pattern, textReplacement) +
           corr.innerHTML.substr(end);
