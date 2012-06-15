@@ -35,26 +35,9 @@
   <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
 </form>
 
-{{if $results|@count}}
-  <table class="tbl">
-    <tr>
-      <th class="title" colspan="3">{{$results|@count}} interventions </th>
-    </tr>
-    <tr>
-      <th>NDA</th>
-      <th>Adeli</th>
-      <th>Etat</th>
-    </tr>
-    {{foreach from=$results item=_result}}
-    <tr>
-      <td class="narrow">{{$_result.NDA}}</td>
-      <td class="narrow">{{$_result.ADELI}}</td>
-      <td class="text {{if !$_result.error}}ok{{else}}error{{/if}}">
-        {{if $_result.error}}
-          {{$_result.error}}
-        {{/if}}
-      </td>
-    </tr>
-    {{/foreach}}
-  </table>
+{{if $results.count_nda_nt > 0 || $results.count_erreur > 0}}
+  <div class="small-error">
+    {{$results.count_nda_nt}} séjours n'ont pu être retrouvés par le NDA 
+    {{$results.count_erreur}} interventions n'ont pu être importées
+  </div>
 {{/if}}

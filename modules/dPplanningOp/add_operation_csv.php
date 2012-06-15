@@ -10,10 +10,14 @@
 
 CCanDo::checkAdmin();
 
+set_time_limit(240);
+
 $file    = isset($_FILES['import']) ? $_FILES['import'] : null;
 
-$results = array();
-$i       = 0;
+$results = array(
+  "count_nda_nt" => 0,
+  "count_erreur" => 0,
+);
 
 if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
   // Object columns on the first line
@@ -24,26 +28,23 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     if (!isset($line[0]) || $line[0] == "") {
       continue;
     }
-    
-    $results[$i]["error"] = 0;
-    
+      
     // Parsing
-    $results[$i]["NDA"]          = $NDA        = trim($line[0]);
-    $results[$i]["ADELI"]        = $ADELI      = trim($line[1]);
-    $results[$i]["date_debut"]   = $date_debut = mbDateTime(trim($line[2]));
-    $results[$i]["date_fin"]     = $date_fin   = mbDateTime(trim($line[3]));
-    $results[$i]["libelle"]      = $libelle    = CMbString::capitalize(addslashes(trim($line[4])));
-    $results[$i]["salle"]        = $nom_salle  = addslashes(trim($line[5]));
-    $results[$i]["cote"] = $cote = isset($line[6]) ? addslashes(trim($line[6])) : null;;
-    
+    $NDA        = trim($line[0]);
+    $ADELI      = trim($line[1]);
+    $date_debut = mbDateTime(trim($line[2]));
+    $date_fin   = mbDateTime(trim($line[3]));
+    $libelle    = CMbString::capitalize(addslashes(trim($line[4])));
+    $nom_salle  = addslashes(trim($line[5]));
+    $cote       = isset($line[6]) ? addslashes(trim($line[6])) : null;;
     
     // Traitement du séjour
     $sejour = new CSejour();
     $sejour->loadFromNDA($NDA);
-    
+
     if (!$sejour->_id) {
-      $results[$i]["error"] = "Le sejour n'a pas été retrouvé dans Mediboard par le NDA : '$NDA'";
-      $i++;
+      CAppUI::stepAjax("Le sejour n'a pas été retrouvé dans Mediboard par le NDA : '$NDA'", UI_MSG_WARNING);
+      $results["count_nda_nt"]++;
       continue;
     }
     
@@ -52,13 +53,13 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $mediuser->adeli = $ADELI;
     $count           = $mediuser->countMatchingList();
     if ($count == "0") {
-      $results[$i]["error"] = "L'utilisateur n'a pas été retrouvé dans Mediboard";
-      $i++;
+      CAppUI::stepAjax("L'utilisateur n'a pas été retrouvé dans Mediboard", UI_MSG_WARNING);
+      $results["count_erreur"]++;
       continue;
     }
     elseif ($count > 1) {
-      $results[$i]["error"] = "Plusieurs utilisateurs correspondent à cette recherche";
-      $i++;
+      CAppUI::stepAjax("Plusieurs utilisateurs correspondent à cette recherche", UI_MSG_WARNING);
+      $results["count_erreur"]++;
       continue;
     }    
     $mediuser->loadMatchingObject();
@@ -72,8 +73,8 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $salle      = new CSalle();
     $salle->nom = $nom_salle;
     if (!$salle->loadMatchingObject()) {
-      $results[$i]["error"] = "La salle '$nom_salle' n'a pas été retrouvée dans Mediboard";
-      $i++;
+      CAppUI::stepAjax("La salle '$nom_salle' n'a pas été retrouvée dans Mediboard", UI_MSG_WARNING);
+      $results["count_erreur"]++;
       continue;
     }
     
@@ -106,17 +107,12 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $operation->cote           = $cote ? $cote : "inconnu";
     
     if ($msg = $operation->store()) {
-      CAppUI::setMsg($msg, UI_MSG_ERROR);
-      $results[$i]["error"] = $msg;
-      $i++;
+      CAppUI::stepAjax($msg, UI_MSG_WARNING);
+      $results["count_erreur"]++;
       continue;
     }
-    
-    $i++;
   }
 }
-
-CAppUI::callbackAjax('$("systemMsg").insert', CAppUI::getMsg());
 
 // Création du template
 $smarty = new CSmartyDP();
