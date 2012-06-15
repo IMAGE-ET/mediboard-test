@@ -19,8 +19,7 @@ $source_guid = CValue::get("source_guid");
 
 $status = null;
 
-$object = new CMbObject();
-$source = $object->loadFromGuid($source_guid);
+$source = CMbObject::loadFromGuid($source_guid);
 
 $source->isReachable();
 $source->getResponseTime();

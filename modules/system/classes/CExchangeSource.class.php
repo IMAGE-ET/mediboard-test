@@ -150,6 +150,8 @@ class CExchangeSource extends CMbObject {
     return $this->_acquittement;
   }
   
+  function receiveOne() {}
+  
   function receive() {}
   
   /**

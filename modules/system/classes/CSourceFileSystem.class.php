@@ -19,6 +19,7 @@ class CSourceFileSystem extends CExchangeSource {
   var $_path             = null;
   var $_file_path        = null;
   var $_files            = array();
+  var $_dir_handles      = array();
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -48,6 +49,39 @@ class CSourceFileSystem extends CExchangeSource {
     if (!is_dir($this->host)) {
       throw new CMbException("CSourceFileSystem-host-not-a-dir", $this->host);
     }
+  }
+  
+  /**
+   * Iterates through the files in the directory
+   */
+  function receiveOne() {
+    $this->init();
+    
+    $path = $this->getFullPath($this->_path);
+    $path = rtrim($path, "/\\");
+    
+    if (isset($this->_dir_handles[$path])) {
+      $handle = $this->_dir_handles[$path];
+    }
+    else {
+      if (!is_dir($path)) {
+        throw new CMbException("CSourceFileSystem-path-not-found", $path);
+      }
+      
+      if (!is_readable($path)) {
+        throw new CMbException("CSourceFileSystem-path-not-readable", $path);
+      }
+      
+      if (!$handle = opendir($path)) {
+        throw new CMbException("CSourceFileSystem-path-not-readable", $path);
+      }
+      
+      $this->_dir_handles[$path] = $handle;
+    }
+    
+    while(false !== ($file = readdir($handle)) && is_dir($filepath = "$path/$file"));
+    
+    return $filepath;
   }
   
   function receive() {

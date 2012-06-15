@@ -15,8 +15,7 @@ CCanDo::checkRead();
 $exchange_guid = CValue::get("exchange_guid");
 
 // Chargement de l'échange demandé
-$object = new CMbObject();
-$exchange = $object->loadFromGuid($exchange_guid);
+$exchange = CMbObject::loadFromGuid($exchange_guid);
 
 $sender = new $exchange->sender_class;
 $sender->load($exchange->sender_id);
