@@ -307,7 +307,21 @@ class CSetupdPurgences extends CSetup {
       ADD `regule_par` ENUM ('centre_15','medecin');";
     $this->addQuery($query);
     
-    $this->mod_version = "0.37";
+    $this->makeRevision("0.37");
+    
+    $query = "CREATE TABLE `box_urgences` (
+                 `box_urgences_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+                 `nom` VARCHAR(30) NOT NULL,
+                 `description` VARCHAR(50),
+					       `type` ENUM('Suture','Degravillonage','Dechockage','Traumatologie','Radio','Retour_radio','Imagerie','Bio','Echo','Attente','Resultats','Sortie') NOT NULL DEFAULT 'Attente',
+					       `plan_x` INT(11) NULL,
+                 `plan_y` INT(11) NULL,
+                 `color` VARCHAR(6) DEFAULT 'ABE',
+                 `hauteur` INT(11) NOT NULL DEFAULT '1',
+                 `largeur` INT(11) NOT NULL DEFAULT '1',
+                 PRIMARY KEY (`box_urgences_id`)) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query); 
+    $this->mod_version = "0.38";
   }  
 }
 
