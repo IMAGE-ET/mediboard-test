@@ -43,7 +43,7 @@
 {{/if}}
 
 {{if $results.count_ok > 0}}
-  <div class="small-ok">
+  <div class="small-success">
     {{$results.count_ok}} interventions importées avec succès
   </div>
 {{/if}}
