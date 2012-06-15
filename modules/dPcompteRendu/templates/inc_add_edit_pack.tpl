@@ -119,6 +119,12 @@ Main.add(function() {
       </td>
     </tr>
     <tr>
+      <th>{{mb_label object=$pack field="merge_docs"}}</th>
+      <td>
+        {{mb_field object=$pack field="merge_docs"}}
+      </td>
+    </tr>
+    <tr>
       <th>{{mb_label object=$pack field="fast_edit"}}</th>
       <td>
         {{mb_field object=$pack field="fast_edit"}}

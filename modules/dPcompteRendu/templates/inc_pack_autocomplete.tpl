@@ -27,7 +27,7 @@
           <img style="float: right;" src="images/icons/lightning.png"/>
         {{/if}}
       
-      <div {{if $_pack->fast_edit}}class="fast_edit"{{/if}}>{{$_pack->nom|emphasize:$keywords}}</div>
+      <div class="{{if $_pack->fast_edit}}fast_edit{{elseif !$_pack->merge_docs}}merge_docs{{/if}}">{{$_pack->nom|emphasize:$keywords}}</div>
       
       <div style="display: none;" class="id">{{$_pack->_id}}</div>
     </li>

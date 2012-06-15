@@ -768,7 +768,12 @@ class CSetupdPcompteRendu extends CSetup {
     $query = self::replaceTemplateQuery("[Patient - âge", "[Patient - années", true);
     $this->addQuery($query);
     
-    $this->mod_version = "0.77";
+    $this->makeRevision("0.77");
+    $query = "ALTER TABLE `pack` 
+      ADD `merge_docs` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.78";
   }
 }
 ?>

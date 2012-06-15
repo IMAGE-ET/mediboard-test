@@ -157,7 +157,6 @@ Main.add(function() {
   <input type="hidden" name="modele_id" value="{{$modele_id}}" />
   <input type="hidden" name="compte_rendu_id" value="" />
   <input type="hidden" name="fast_edit" value="1" />
-  <input type="hidden" name="fast_edit_pdf" value="0"/>
   <input type="hidden" name="callback" value="generatePdf" />
 	<input type="hidden" name="suppressHeaders" value="1"/>
 	<input type="hidden" name="dialog" value="1"/>

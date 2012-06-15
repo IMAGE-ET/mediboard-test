@@ -213,6 +213,11 @@ Document = {
     url.addParam("object_id"   , object_id);
     url.addParam("object_class", object_class);
     url.popup(700, 500, "printSelDocuments");
+  },
+  
+  afterUnmerge: function(compte_rendu_id, obj) {
+    Document.refreshList(obj.file_category_id, obj.object_class, obj.object_id);
+    Document.edit(compte_rendu_id);
   }
 };
 

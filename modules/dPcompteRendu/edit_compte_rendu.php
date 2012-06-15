@@ -253,11 +253,21 @@ else if (!$compte_rendu_id && !$switch_mode && ($compte_rendu->fast_edit || ($co
   
   $smarty->display("fast_mode.tpl");
 }
-else {
+else { 
+  // Charger le document précédent et suivant
+  $prevnext = array();
+  if ($compte_rendu->_id) {
+    $object = new $compte_rendu->object_class;
+    $object->load($compte_rendu->object_id);
+    $object->loadRefsDocs();
+    
+    $prevnext = CMbArray::getPrevNextKeys($object->_ref_documents, $compte_rendu->_id);
+  }
+  
   $templateManager->initHTMLArea();
   $smarty->assign("switch_mode"    , CValue::get("switch_mode", 0));
   $smarty->assign("templateManager", $templateManager);
-  
+  $smarty->assign("prevnext", $prevnext);
   $smarty->display("edit_compte_rendu.tpl");
 }
 ?>

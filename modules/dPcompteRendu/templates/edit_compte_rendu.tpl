@@ -384,8 +384,6 @@ Main.add(function(){
   <input type="hidden" name="function_id" value="" />
   <input type="hidden" name="user_id" value="" />
   <input type="hidden" name="group_id" value="" />
-  <input type="hidden" name="fast_edit" value="0"/>
-  <input type="hidden" name="fast_edit_pdf" value="0"/>
   <input type="hidden" name="switch_mode" value='{{$switch_mode}}'/>
   <input type="hidden" name="date_print" value="{{$compte_rendu->date_print}}" />
   <input type="hidden" name="do_merge" value="0" />
@@ -400,6 +398,18 @@ Main.add(function(){
     <tr>
     <th class="category" colspan="2">
       {{if $compte_rendu->_id}}
+        <a style="float: left;" class="button left {{if !$prevnext.prev}}disabled{{/if}}"
+          {{if $prevnext.prev}}
+            href="?m=compteRendu&a=edit_compte_rendu&compte_rendu_id={{$prevnext.prev}}&dialog=1"
+          {{/if}}>
+          {{tr}}Previous{{/tr}}
+        </a>
+        <a style="float: right;" class="button right {{if !$prevnext.next}}disabled{{/if}}"
+          {{if $prevnext.next}}
+            href="?m=compteRendu&a=edit_compte_rendu&compte_rendu_id={{$prevnext.next}}&dialog=1"
+          {{/if}}>
+          {{tr}}Next{{/tr}}
+        </a>
         {{mb_include module=system template=inc_object_idsante400 object=$compte_rendu}}
         {{mb_include module=system template=inc_object_history object=$compte_rendu}}
       {{/if}}

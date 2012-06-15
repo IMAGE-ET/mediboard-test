@@ -21,6 +21,7 @@ class CPack extends CMbObject {
   var $object_class  = null;
   var $fast_edit     = null;
   var $fast_edit_pdf = null;
+  var $merge_docs    = null;
   
   // Form fields
   var $_modeles      = null;
@@ -45,14 +46,15 @@ class CPack extends CMbObject {
 
   function getProps() {
   	$specs = parent::getProps();
-    $specs["user_id"]      = "ref class|CMediusers";
-    $specs["function_id"]  = "ref class|CFunctions";
-    $specs["group_id"]     = "ref class|CGroups";
-    $specs["nom"]          = "str notNull seekable confidential";
-    $specs["object_class"] = "enum notNull list|CPatient|CConsultAnesth|COperation|CConsultation|CSejour default|COperation";
-    $specs["fast_edit"]        = "bool notNull default|0";
-    $specs["fast_edit_pdf"]    = "bool notNull default|0";
-    $specs["_owner"]       = "enum list|user|func|etab";
+    $specs["user_id"]       = "ref class|CMediusers";
+    $specs["function_id"]   = "ref class|CFunctions";
+    $specs["group_id"]      = "ref class|CGroups";
+    $specs["nom"]           = "str notNull seekable confidential";
+    $specs["object_class"]  = "enum notNull list|CPatient|CConsultAnesth|COperation|CConsultation|CSejour default|COperation";
+    $specs["fast_edit"]     = "bool default|0";
+    $specs["fast_edit_pdf"] = "bool default|0";
+    $specs["merge_docs"]    = "bool default|1";
+    $specs["_owner"]        = "enum list|user|func|etab";
     return $specs;
   }
   

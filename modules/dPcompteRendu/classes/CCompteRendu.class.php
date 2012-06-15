@@ -120,8 +120,8 @@ class CCompteRendu extends CDocumentItem {
     $specs["page_width"]       = "float notNull min|1 default|21 show|0";
     $specs["valide"]           = "bool";
     $specs["private"]          = "bool notNull default|0";
-    $specs["fast_edit"]        = "bool notNull default|0";
-    $specs["fast_edit_pdf"]    = "bool notNull default|0";
+    $specs["fast_edit"]        = "bool default|0";
+    $specs["fast_edit_pdf"]    = "bool default|0";
     $specs["date_print"]       = "dateTime";
     $specs["purge_field"]      = "str";
     $specs["_owner"]           = "enum list|prat|func|etab";

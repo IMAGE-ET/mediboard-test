@@ -21,9 +21,13 @@
 </form>
 {{/if}}
 
-<form name="DocumentAdd-{{$unique_id}}-{{$object->_guid}}" action="?m={{$m}}" method="post" class="prepared">
-<input type="text" value="&mdash; Modèle" name="keywords_modele" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 5em;" />
-<input type="text" value="&mdash; Pack" name="keywords_pack" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 4em;"/>
+<form name="unmergePack_{{$object->_guid}}" method="post" onsubmit="return onSubmitFormAjax(this);">
+  <input type="hidden" name="m" value="dPcompteRendu" />
+  <input type="hidden" name="dosql" value="do_pack_multi_aed" />
+  <input type="hidden" name="pack_id" value="" />
+  <input type="hidden" name="object_id" value="{{$object->_id}}" />
+  <input type="hidden" name="callback" value="Document.afterUnmerge" />
+</form>
 
 <script type="text/javascript">
 
@@ -78,16 +82,25 @@ Main.add(function() {
     if (selected.select(".fast_edit").length) {
       Document.fastModePack(selected.down(".id").innerHTML, '{{$object_id}}');
     }
+    else if (selected.select(".merge_docs")){
+      var form = getForm("unmergePack_{{$object->_guid}}");
+      $V(form.pack_id, selected.down(".id").innerHTML);
+      form.onsubmit();
+    }
     else {
       Document.createPack(selected.down(".id").innerHTML, '{{$object_id}}');
     }
     $V(input, '');
-  } 
+  }
 });
 
 //Création via ModeleSelector
 modeleSelector[{{$object_id}}] = new ModeleSelector("DocumentAdd-{{$unique_id}}-{{$object->_guid}}", null, "_modele_id", "_object_id");
 </script>
+
+<form name="DocumentAdd-{{$unique_id}}-{{$object->_guid}}" action="?m={{$m}}" method="post" class="prepared">
+  <input type="text" value="&mdash; Modèle" name="keywords_modele" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 5em;" />
+  <input type="text" value="&mdash; Pack" name="keywords_pack" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 4em;"/>
 
 <button type="button" class="search notext" onclick="modeleSelector[{{$object_id}}].pop('{{$object_id}}','{{$object_class}}','{{$praticien->_id}}')">
   {{if $praticien->_can->edit}}

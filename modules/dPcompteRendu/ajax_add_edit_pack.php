@@ -60,7 +60,6 @@ if($pack->_id) {
   }
 } else {
   $pack->user_id = $userSel->_id;
-  $pack->fast_edit_pdf = 0;
 }
 
 // Création du template
