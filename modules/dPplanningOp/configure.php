@@ -17,7 +17,7 @@ $today = mbDate();
 
 // Nombre de patients
 $where = array("entree" => ">= '$today 00:00:00'");
-$sejour = new Csejour();
+$sejour = new CSejour();
 $nb_sejours = $sejour->countList($where);
 
 // Création du template
