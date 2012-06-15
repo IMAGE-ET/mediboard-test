@@ -219,9 +219,12 @@ window.parent.replaceField = function(elt, class_name, empty) {
       // car des spans peuvent être imbriqués
       var begin = corr.innerHTML.indexOf(pattern);
       var end = begin + pattern.length;
-      corr.innerHTML = corr.innerHTML.substr(0, begin) +
-        unescapeHtml(corr.innerHTML.substr(begin, end)).replace(pattern, textReplacement) +
-        corr.innerHTML.substr(end);
+      
+      if (begin > -1 && end > -1) {
+        corr.innerHTML = corr.innerHTML.substr(0, begin) +
+          unescapeHtml(corr.innerHTML.substr(begin, end)).replace(pattern, textReplacement) +
+          corr.innerHTML.substr(end);
+      }
     }
     // On efface le background apposé lors du lancement du mode play
     Element.setStyle(corr, {background: ''});
