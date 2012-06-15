@@ -1109,7 +1109,7 @@ class CPatient extends CMbObject {
     // Consultations
     $this->loadRefsConsultations();
     foreach ($this->_ref_consultations as $_consult) {
-      $praticien = $_consult->_ref_praticien;
+      $praticien = $_consult->loadRefPraticien();
       $praticien->loadRefFunction()->loadRefGroup();
       $this->_ref_praticiens[$praticien->_id] = $praticien;
     }

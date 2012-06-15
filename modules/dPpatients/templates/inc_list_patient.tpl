@@ -226,18 +226,21 @@ emptyBirthday = function() {
 <form name="fusion" action="?" method="get" onsubmit="return false;">
   <table class="tbl" id="list_patients">
     <tr>
-      <th class="narrow">
-      {{if ((!$conf.dPpatients.CPatient.merge_only_admin || $can->admin)) && $can->edit}}
-      	<button type="button" class="merge notext" title="{{tr}}Merge{{/tr}}" style="margin: -1px;" onclick="doMerge(this.form);">
-      		{{tr}}Merge{{/tr}}
-      	</button>
+      {{if (((!$conf.dPpatients.CPatient.merge_only_admin || $can->admin)) && $can->edit) ||
+               $conf.dPpatients.CPatient.show_patient_link == 1}}
+        <th class="narrow">
+        {{if ((!$conf.dPpatients.CPatient.merge_only_admin || $can->admin)) && $can->edit}}
+        	<button type="button" class="merge notext" title="{{tr}}Merge{{/tr}}" style="margin: -1px;" onclick="doMerge(this.form);">
+        		{{tr}}Merge{{/tr}}
+        	</button>
+        {{/if}}
+        {{if $conf.dPpatients.CPatient.show_patient_link}}
+          <button type="button" class="link notext" title="{{tr}}Link{{/tr}}" style="margin: -1px;" onclick="doLink(this.form);">
+            {{tr}}Link{{/tr}}
+          </button>
+        {{/if}}
+        </th>
       {{/if}}
-      {{if $conf.dPpatients.CPatient.show_patient_link}}
-        <button type="button" class="link notext" title="{{tr}}Link{{/tr}}" style="margin: -1px;" onclick="doLink(this.form);">
-          {{tr}}Link{{/tr}}
-        </button>
-      {{/if}}
-      </th>
       <th>{{tr}}CPatient{{/tr}}</th>
       <th class="narrow">{{tr}}CPatient-naissance-court{{/tr}}</th>
       <th>{{tr}}CPatient-adresse{{/tr}}</th>
