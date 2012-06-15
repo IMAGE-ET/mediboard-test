@@ -58,7 +58,7 @@
             <description>Actual Length of Inpatient Stay</description>
             <datatype>NM</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="80">
+        <field minOccurs="0" maxOccurs="0" length="250">
             <name>PV2.12</name>
             <description>Visit Description</description>
             <datatype>ST</datatype>
