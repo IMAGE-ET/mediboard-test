@@ -21,8 +21,9 @@ class CGrossesse extends CMbObject{
   // DB Fields
   var $terme_prevu    = null;
   var $active         = null;
-  var $date_dernieres_regles = null;
   var $multiple       = null;
+  var $allaitement_maternel = null;
+  var $date_dernieres_regles = null;
   
   // DB References
   var $_ref_parturiente = null;
@@ -51,8 +52,10 @@ class CGrossesse extends CMbObject{
     $specs["parturiente_id"] = "ref notNull class|CPatient";
     $specs["terme_prevu"]    = "date notNull";
     $specs["active"]         = "bool default|1";
-    $specs["date_dernieres_regles"] = "date";
     $specs["multiple"]       = "bool default|0";
+    $specs["allaitement_maternel"] = "bool default|1";
+    $specs["date_dernieres_regles"] = "date";
+    
     return $specs;
   }
   
