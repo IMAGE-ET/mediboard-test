@@ -79,9 +79,17 @@ class CSourceFileSystem extends CExchangeSource {
       $this->_dir_handles[$path] = $handle;
     }
     
-    while(false !== ($file = readdir($handle)) && is_dir($filepath = "$path/$file"));
-    
-    return $filepath;
+    while(true) {
+      $file = readdir($handle);
+      
+      if ($file === false) {
+        return;
+      }
+      
+      if (!is_dir($filepath = "$path/$file")) {
+        return $filepath;
+      }
+    }
   }
   
   function receive() {
