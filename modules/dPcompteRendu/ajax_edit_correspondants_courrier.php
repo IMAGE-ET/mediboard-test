@@ -29,10 +29,17 @@ $compte_rendu->mergeCorrespondantsCourrier($destinataires);
 $empty_corres = new CCorrespondantCourrier;
 $empty_corres->valueDefaults();
 
+$patient = new CPatient;
+
+if (CDestinataire::$_patient != null) {
+  $patient = CDestinataire::$_patient;
+}
+
 $smarty = new CSmartyDP;
 
-$smarty->assign("compte_rendu", $compte_rendu);
+$smarty->assign("compte_rendu" , $compte_rendu);
 $smarty->assign("destinataires", $destinataires);
-$smarty->assign("empty_corres", $empty_corres);
+$smarty->assign("empty_corres" , $empty_corres);
+$smarty->assign("patient"      , $patient);
 
 $smarty->display("inc_edit_correspondants_courrier.tpl");

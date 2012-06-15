@@ -21,7 +21,8 @@ class CDestinataire {
   var $_guid_object = null;
   
   static $destByClass = array();
-
+  static $_patient = null;
+  
   /**
    * Constructeur standard
    * @param string $tag Tag par défaut, optionnel
@@ -103,7 +104,10 @@ class CDestinataire {
     
     if ($mbObject instanceof CPatient) {
       $patient = $mbObject;
+      // Garder une référence vers le patient pour l'ajout de correspondants
+      // en modale dans la popup d'édition de document
       
+      self::$_patient = $patient;
       self::makeFor($patient);
       
       $patient->loadRefsCorrespondants();

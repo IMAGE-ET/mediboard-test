@@ -20,11 +20,17 @@
       });
     });
   </script>
+  
+  {{if $patient->_id}}
+    {{mb_script module=patients script=correspondant ajax=true}}
+  {{/if}}
 {{/if}}
 
 <table class="tbl">
   <tr>
     <th class="title" colspan="3">
+      <button type="button" class="add notext" style="float: left;"
+        onclick="Correspondant.edit(0, '{{$patient->_id}}', openCorrespondants.curry('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}', 0))"></button>
       Correspondants
       {{if $compte_rendu->_id}}
         <input type="text" name="_view" class="autocomplete"/>

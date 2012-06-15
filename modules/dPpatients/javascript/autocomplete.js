@@ -1,6 +1,6 @@
 // $Id$
 
-var InseeFields = {
+InseeFields = {
   initCPVille: function(sFormName, sFieldCP, sFieldCommune, sFieldFocus) {
     var oForm = getForm(sFormName);
       
@@ -66,7 +66,7 @@ var InseeFields = {
   }
 }
 
-function updateFields(selected, sFormName, sFieldFocus, sFirstField, sSecondField) {
+updateFields = function(selected, sFormName, sFieldFocus, sFirstField, sSecondField) {
   Element.cleanWhitespace(selected);
   var dn = selected.childNodes;
   $V(sFormName + '_' + sFirstField, dn[0].firstChild.firstChild.nodeValue, true);
@@ -80,7 +80,7 @@ function updateFields(selected, sFormName, sFieldFocus, sFirstField, sSecondFiel
   }
 }
 
-function initPaysField(sFormName, sFieldPays, sFieldFocus){
+initPaysField = function(sFormName, sFieldPays, sFieldFocus){
   var sFieldId = sFormName + '_' + sFieldPays;
   var sCompleteId = sFieldPays + '_auto_complete';
   Assert.that($(sFieldId), "Pays field '%s'is missing", sFieldId);

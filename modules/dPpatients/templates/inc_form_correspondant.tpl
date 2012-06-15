@@ -1,3 +1,5 @@
+{{mb_script module="patients" script="autocomplete" ajax=true}}
+
 <script type="text/javascript">
   InseeFields.initCPVille("editCorrespondant", "cp", "ville", "tel");
 
