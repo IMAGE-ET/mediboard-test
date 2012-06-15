@@ -37,7 +37,13 @@
 
 {{if $results.count_nda_nt > 0 || $results.count_erreur > 0}}
   <div class="small-error">
-    {{$results.count_nda_nt}} séjours n'ont pu être retrouvés par le NDA 
+    {{$results.count_nda_nt}} séjours n'ont pu être retrouvés par le NDA <br />
     {{$results.count_erreur}} interventions n'ont pu être importées
+  </div>
+{{/if}}
+
+{{if $results.count_ok > 0}}
+  <div class="small-ok">
+    {{$results.count_ok}} interventions importées avec succès
   </div>
 {{/if}}

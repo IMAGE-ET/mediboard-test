@@ -15,6 +15,7 @@ set_time_limit(240);
 $file    = isset($_FILES['import']) ? $_FILES['import'] : null;
 
 $results = array(
+  "count_ok"     => 0,
   "count_nda_nt" => 0,
   "count_erreur" => 0,
 );
@@ -111,6 +112,8 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       $results["count_erreur"]++;
       continue;
     }
+    
+    $results["count_ok"]++;
   }
 }
 
