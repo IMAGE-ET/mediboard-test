@@ -54,7 +54,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $mediuser->adeli = $ADELI;
     $count           = $mediuser->countMatchingList();
     if ($count == "0") {
-      CAppUI::stepAjax("L'utilisateur n'a pas été retrouvé dans Mediboard", UI_MSG_WARNING);
+      CAppUI::stepAjax("L'utilisateur '$ADELI' n'a pas été retrouvé dans Mediboard", UI_MSG_WARNING);
       $results["count_erreur"]++;
       continue;
     }
