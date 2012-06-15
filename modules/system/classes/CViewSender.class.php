@@ -81,8 +81,11 @@ class CViewSender extends CMbObject {
     parent::updateFormFields();
 
     $this->_view         = $this->name;
-    $this->_params       = explode("&", $this->params);
     $this->_when         = "$this->period mn + $this->offset";
+
+    // Parse parameters
+    $params = strtr($this->params, array("\r\n" => "&", "\n" => "&", " " => "")); 
+    parse_str($params, $this->_params);
   }
   
   function getActive($minute) {
@@ -121,14 +124,11 @@ class CViewSender extends CMbObject {
 
   function makeUrl($user) {
     $base = CAppUI::conf("base_url");
-    $params = array();
-    parse_str(strtr($this->params, array("\r\n" => "&", "\n" => "&", " " => "")), $params);
-    $params["login"] = "1";
-    $params["username"] = $user->user_username;
-    $params["password"] = $user->user_password;
-    $params["dialog"] = "1";
-    $params["_aio"] = "1";
-    $query = CMbString::toQuery($params);
+    
+    $this->_params["login"] = "$user->user_username:$user->user_password";
+    $this->_params["dialog"] = "1";
+    $this->_params["_aio"] = "1";
+    $query = CMbString::toQuery($this->_params);
     $url = "$base/?$query";
     
     return $this->_url = $url;  

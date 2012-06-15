@@ -12,10 +12,16 @@
 
 <table class="tbl">
 	<tr>
-    <th colspan="2">{{mb_title class=CViewSender field=name}}</th>
-		<th>{{mb_title class=CViewSender field=description}}</th>
-    <th>{{mb_title class=CViewSender field=params}}</th>
-    <th class="narrow" colspan="2">{{tr}}CViewSender-back-sources_link{{/tr}}</th>
+    <th colspan="2">
+      {{mb_title class=CViewSender field=name}} /
+      {{mb_title class=CViewSender field=description}}
+    </th>
+    <th colspan="2">
+      {{mb_title class=CViewSender field=params}}
+    </th>
+    <th class="narrow" colspan="2">
+      {{tr}}CViewSender-back-sources_link{{/tr}}
+    </th>
     <th class="narrow">
       {{mb_title class=CViewSender field=period}}
     </th>
@@ -35,11 +41,21 @@
           {{tr}}Edit{{/tr}}
         </button> 
       </td>
-      <td {{if ($_sender->_active)}}style="font-weight: bold;"{{/if}}>
-        {{mb_value object=$_sender field=name}}
+      <td class="text">
+        <div {{if ($_sender->_active)}} style="font-weight: bold;"{{/if}}>
+          {{mb_value object=$_sender field=name}}
+        </div>
+        <div class="compact">
+          {{mb_value object=$_sender field=description}}
+        </div>
   		</td>
-  		<td class="text compact">
-        {{mb_value object=$_sender field=description}}
+      <td class="narrow">
+        <script type="text/javascript">
+          ViewSender.senders['{{$_sender->_id}}'] = {{$_sender->_params|@json}};
+        </script>
+        <button class="search notext" onclick="ViewSender.show('{{$_sender->_id}}');">
+          {{tr}}View{{/tr}}
+        </button>
       </td>
       <td class="text compact">
       	{{$_sender->params|nl2br|replace:"=":" = "}}

@@ -11,12 +11,20 @@
 ViewSender = {
   status_images : ["images/icons/status_red.png", "images/icons/status_orange.png", "images/icons/status_green.png"],
   modal: null,
+  senders: {},
   
   edit: function(sender_id) {
     var url = new Url('system', 'ajax_form_view_sender');
     url.addParam('sender_id', sender_id);
     url.requestModal(400);
     this.modal = url.modalObject;
+  },
+
+  show: function(sender_id) {
+    var url = new Url();
+    url.mergeParams(this.senders[sender_id]);
+    url.addParam('dialog', '1');
+    url.popup(1000, 700);
   },
 
   onSubmit: function(form) {
