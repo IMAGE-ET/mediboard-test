@@ -1,4 +1,3 @@
-
 Main.add(function(){
 	var elements;
 	var divGauche = $('list-patients-non-placees');
@@ -28,15 +27,14 @@ function TraiterDrop(element, zoneDrop)
 	zoneDrop.appendChild(element);
 	savePlan(element, zoneDrop);
 	if(zoneDrop.select('div.patient').length==zoneDrop.getAttribute("data-nb-lits")){
-		Droppables.remove(zoneDrop);		
+		Droppables.remove(zoneDrop);
 	}
 }
 
 function savePlan(element, zoneDrop){
 	element.style.width="120px";
-	var url=new Url("dPhospi", "do_affectation_aed");
+	var url=new Url("dPhospi", "ajax_creation_affectation");
 	
-	url.addParam("del", 0);
 	url.addParam("sejour_id",element.getAttribute("data-sejour-id"));
 	url.addParam("entree",element.getAttribute("data-entree"));
 	url.addParam("sortie",element.getAttribute("data-sortie"));
