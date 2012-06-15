@@ -320,8 +320,12 @@ class CSetupdPurgences extends CSetup {
                  `hauteur` INT(11) NOT NULL DEFAULT '1',
                  `largeur` INT(11) NOT NULL DEFAULT '1',
                  PRIMARY KEY (`box_urgences_id`)) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);     
+    $this->makeRevision("0.38");
+    
+    $query = "DROP TABLE `box_urgences`;";
     $this->addQuery($query); 
-    $this->mod_version = "0.38";
+    $this->mod_version = "0.39";
   }  
 }
 
