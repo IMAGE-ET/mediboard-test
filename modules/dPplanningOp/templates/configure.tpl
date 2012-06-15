@@ -5,13 +5,14 @@
 </script>
 
 <ul id="tabs-configure" class="control_tabs">
-  <li><a href="#configure-mode_easy">Aff. DHE Simplifiée</a></li>
-  <li><a href="#configure-COperation">{{tr}}COperation{{/tr}}</a></li>
-  <li><a href="#configure-CSejour">{{tr}}CSejour{{/tr}}</a></li>
-  <li><a href="#configure-blocage">Blocage</a></li>
+  <li><a href="#configure-mode_easy"  >Aff. DHE Simplifiée         </a></li>
+  <li><a href="#configure-COperation" >{{tr}}COperation{{/tr}}     </a></li>
+  <li><a href="#configure-CSejour"    >{{tr}}CSejour{{/tr}}        </a></li>
+  <li><a href="#configure-blocage"    >Blocage                     </a></li>
   <li><a href="#configure-CIdSante400">{{tr}}CIdSante400-tag{{/tr}}</a></li>
-  <li><a href="#configure-maintenance">{{tr}}Maintenance{{/tr}}</a></li>
-  <li><a href="#config-sae-base">{{tr}}config-sae-base{{/tr}}</a></li>
+  <li><a href="#configure-maintenance">{{tr}}Maintenance{{/tr}}    </a></li>
+  <li><a href="#config-sae-base"      >{{tr}}config-sae-base{{/tr}}</a></li>
+  <li><a href="#Purge"                >{{tr}}Purge{{/tr}}          </a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -42,4 +43,8 @@
 
 <div id="config-sae-base" style="display: none;">
   {{mb_include template=inc_config_base_sae}}
+</div>
+
+<div id="Purge" style="display: none;">
+  {{mb_include template=inc_configure_purge_sejours}}
 </div>
