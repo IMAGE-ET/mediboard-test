@@ -22,7 +22,7 @@
 {{assign var=const_med value=$patient->_ref_constantes_medicales}}
 {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
 {{assign var=ant value=$dossier_medical->_ref_antecedents_by_type}}
-<table class="{{$tbl_class}}">
+<table class="{{$tbl_class}}" style="page-break-after: always;">
   <tr>
     <td colspan="2">
       <!-- Bordereau d'en-tête -->
