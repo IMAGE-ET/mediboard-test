@@ -150,7 +150,7 @@ Main.add(function() {
                              {{if $_event->type == "rdvfull"}}onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}')"{{/if}}
                              {{if ($_event->type == "rdvfree" || $_event->type == "rdvfull") && !$_event->disabled}}onclick="setClose('{{$_event->start|date_format:"%H:%M:00"}}', '{{$_event->plage.id}}', '{{$_event->start|date_format:"%A %d/%m/%Y"}}', '{{$chir_id}}');"{{/if}}>
                             {{if $_event->type == "consultation"}}
-                              <div style="height:100%;width:5px;background-color:#{{$_event->plage.color}};"> </div>
+                              <div style="height:100%;width:5px;background-color:#{{if isset($_event->plage.color|smarty:nodefaults)}}{{$_event->plage.color}};{{else}}DDDDDD{{/if}}"> </div>
                             {{/if}}
                             
                            {{if $_event->menu|@count == 3}}
@@ -213,7 +213,9 @@ Main.add(function() {
                               {{/foreach}}
                               
                             {{elseif $_event->type == "rdvfree" || $_event->type == "rdvfull"}}
-                              <div style="background-color:#{{$_event->plage.color}};display:inline;">&nbsp;&nbsp;</div>
+                              {{if isset($_event->plage.color|smarty:nodefaults)}}
+                                <div style="background-color:#{{$_event->plage.color}};display:inline;">&nbsp;&nbsp;</div>
+                              {{/if}}
                               {{if $_event->disabled}}
                                 <img src="style/mediboard/images/buttons/lock.png" style="float: right; height: 12px; width: 12px;" />
                               {{/if}}
