@@ -25,6 +25,7 @@ $locales['mod-dPadmissions-tab-print_admission'] = 'Impression des séjours d\'ad
 $locales['mod-dPadmissions-tab-print_ambu'] = 'Impression des séjours ambulatoires';
 $locales['mod-dPadmissions-tab-print_depassement'] = 'Impression des dépassements';
 $locales['mod-dPadmissions-tab-print_entrees'] = 'Impression des entrées';
+$locales['mod-dPadmissions-tab-print_fiches_anesth'] = 'Impression des fiches d\'anesthésie';
 $locales['mod-dPadmissions-tab-print_sorties'] = 'Impression des sorties';
 $locales['mod-dPadmissions-tab-vw_idx_admission'] = 'Admissions';
 $locales['mod-dPadmissions-tab-vw_idx_consult'] = 'Consultation des anesthésistes';
