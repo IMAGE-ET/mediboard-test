@@ -1,7 +1,7 @@
 <table class="tbl">
   <tr>
     <th class="title" rowspan="2">Praticien</th>
-    <th class="title" colspan="30">Totaux par jour</th>
+    <th class="title" colspan="30">Totaux par {{tr}}{{$period}}{{/tr}}</th>
   </tr>
   <tr>
     {{if $period == "day"  }}{{assign var=format value="%d %a"}}{{/if}}
