@@ -99,6 +99,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $operation->chir_id        = $mediuser->_id;
     $operation->plageop_id     = $plageOp->_id;
     $operation->salle_id       = $salle->_id;
+    $operation->libelle        = $libelle;
     if (!$operation->plageop_id) {
       $operation->date         = $date_op;
     }
