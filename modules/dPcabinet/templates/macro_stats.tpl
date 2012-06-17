@@ -4,8 +4,12 @@
     <th class="title" colspan="30">Totaux par jour</th>
   </tr>
   <tr>
+    {{if $period == "day"  }}{{assign var=format value="%d %a"}}{{/if}}
+    {{if $period == "week" }}{{assign var=format value="%W"   }}{{/if}}
+    {{if $period == "month"}}{{assign var=format value="%m"   }}{{/if}}
+    
     {{foreach from=$dates item=_date}}
-    <th class="text narrow" title="{{$_date}}">{{$_date|date_format:"%d %a"}}</th>
+    <th class="text narrow" title="{{$_date}}">{{$_date|date_format:$format}}</th>
     {{/foreach}}
   </tr>
  

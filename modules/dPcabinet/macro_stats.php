@@ -12,23 +12,48 @@ CCanDo::checkAdmin();
 $consult = new CConsultation;
 $ds = $consult->_spec->ds;
 
-$ref = mbDate("+14 days");
+$date = CValue::get("date");
+$period = CValue::get("period", "month");
+switch ($period) {
+  case "day": 
+    $php_relative = "+0 day";
+    $php_period = "days";
+    $sql_cast = "date";
+    break;
+  case "week":
+    $php_relative = "next monday";
+    $php_period = "weeks";
+    $sql_cast = "DATE_ADD( date, INTERVAL (2 - DAYOFWEEK(date)) DAY)";
+    break;
+  case "month":
+    $php_relative = "first day of +0 month";
+    $php_period = "months";
+    $sql_cast = "DATE_ADD( date, INTERVAL (1 - DAYOFMONTH(date)) DAY)";
+    break;
+} 
 
+$date = mbDate($php_relative, $date);
 $dates = array();
 foreach (range(0, 29) as $n) {
-  $dates[] = $min = mbDate("- $n days", $ref);
+  $dates[] = $min = mbDate("- $n $php_period", $date);
 }
 
-$query = " SELECT COUNT(*) total, chir_id, date
+
+$dates = array_reverse($dates);
+
+$query = "SELECT COUNT(*) total, chir_id, $sql_cast AS refdate
   FROM `consultation`
   LEFT JOIN plageconsult AS plage ON plage.plageconsult_id = consultation.plageconsult_id
-  WHERE date > '$min'
-  GROUP BY chir_id, date
+  WHERE $sql_cast >= '$min'
+  AND annule != '1'
+  AND patient_id IS NOT NULL
+  GROUP BY chir_id, refdate
+  ORDER BY refdate DESC
 ";
 
 $totaux = array();
 foreach ($result = $ds->loadList($query) as $_row) {
-  $totaux[$_row["chir_id"]][$_row["date"]] = $_row["total"];
+  $totaux[$_row["chir_id"]][$_row["refdate"]] = $_row["total"];
 }
 
 $user = CMediusers::get();
@@ -40,8 +65,9 @@ foreach ($users as $_user) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("dates", $dates);
-$smarty->assign("users", $users);
+$smarty->assign("period", $period);
+$smarty->assign("dates" , $dates );
+$smarty->assign("users" , $users );
 $smarty->assign("totaux", $totaux);
 
 $smarty->display("macro_stats.tpl");
