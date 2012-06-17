@@ -586,7 +586,7 @@ class CSejour extends CCodable implements IPatientRelated {
         break;
     }
     
-    return CMbRange::collides($lower1, $upper1, $lower2, $upper2, true);
+    return CMbRange::collides($lower1, $upper1, $lower2, $upper2, false);
   }
   
   function applyProtocolesPrescription($operation_id = null) {
