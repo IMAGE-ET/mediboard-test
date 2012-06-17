@@ -478,7 +478,7 @@ Main.add(function () {
           {{if $consult->_id}}
             {{if !$consult->_locks || $can->admin}}
               <button class="modify" type="submit">
-              	{{tr}}Edit{{/tr}}
+              	{{tr}}Save{{/tr}}
               </button>
               {{if $consult->annule}}
   	            <button class="change" type="button" onclick="annuleConsult(this.form, 0)">
