@@ -16,28 +16,31 @@ $date = CValue::get("date");
 $period = CValue::get("period", "month");
 switch ($period) {
   case "day": 
-    $php_relative = "+0 day";
     $php_period = "days";
     $sql_cast = "date";
     break;
   case "week":
-    $php_relative = "next monday";
+    $date = mbDate("next monday", $date);
     $php_period = "weeks";
     $sql_cast = "DATE_ADD( date, INTERVAL (2 - DAYOFWEEK(date)) DAY)";
     break;
   case "month":
-    $php_relative = "first day of +0 month";
+    $date = mbDate("first day of +0 month", $date);
     $php_period = "months";
     $sql_cast = "DATE_ADD( date, INTERVAL (1 - DAYOFMONTH(date)) DAY)";
     break;
+  case "year":
+    $date = mbTransformTime(null, $date, "%Y-01-01");
+    $php_relative = "first january of this year";
+    $php_period = "years";
+    $sql_cast = "DATE_ADD( date, INTERVAL (1 - DAYOFYEAR(date)) DAY)";
+    break;
 } 
 
-$date = mbDate($php_relative, $date);
 $dates = array();
 foreach (range(0, 29) as $n) {
   $dates[] = $min = mbDate("- $n $php_period", $date);
 }
-
 
 $dates = array_reverse($dates);
 

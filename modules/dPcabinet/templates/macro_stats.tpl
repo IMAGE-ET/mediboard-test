@@ -7,6 +7,7 @@
     {{if $period == "day"  }}{{assign var=format value="%d %a"}}{{/if}}
     {{if $period == "week" }}{{assign var=format value="%W"   }}{{/if}}
     {{if $period == "month"}}{{assign var=format value="%m"   }}{{/if}}
+    {{if $period == "year" }}{{assign var=format value="%Y"   }}{{/if}}
     
     {{foreach from=$dates item=_date}}
     <th class="text narrow" title="{{$_date}}">{{$_date|date_format:$format}}</th>

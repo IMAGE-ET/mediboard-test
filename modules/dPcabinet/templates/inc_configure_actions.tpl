@@ -45,9 +45,10 @@
       <form name="MacroStats" method="get">
         <input type="hidden" name="date" value="{{$date}}" />
         <select name="period">
-          <option value="day"  >{{tr}}Day{{/tr}}  </option>
-          <option value="week" >{{tr}}Week{{/tr}} </option>
+          <option value="day"  >{{tr}}Day  {{/tr}}</option>
+          <option value="week" >{{tr}}Week {{/tr}}</option>
           <option value="month">{{tr}}Month{{/tr}}</option>
+          <option value="year" >{{tr}}Year {{/tr}}</option>
         </select>
         <button class="modify" type="button" onclick="Consultations.macroStats(this);">
           {{tr}}mod-dPcabinet-tab-macro_stats{{/tr}}
