@@ -31,7 +31,6 @@ switch ($period) {
     break;
   case "year":
     $date = mbTransformTime(null, $date, "%Y-01-01");
-    $php_relative = "first january of this year";
     $php_period = "years";
     $sql_cast = "DATE_ADD( date, INTERVAL (1 - DAYOFYEAR(date)) DAY)";
     break;
