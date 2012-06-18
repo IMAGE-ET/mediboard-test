@@ -92,7 +92,7 @@
   <br />
 
   {{assign var=sejour value=$consult_anesth->_ref_sejour}}
-  {{if $sejour->_id}}
+  {{if $sejour && $sejour->_id}}
 	<span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
   <strong>Séjour :</strong>
 	  Dr {{$sejour->_ref_praticien->_view}} -
