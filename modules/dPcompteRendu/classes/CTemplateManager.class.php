@@ -475,7 +475,7 @@ class CTemplateManager {
     }
   
     if (count($fields)) {
-      $this->document = str_replace($fields, $values, $_source);
+      $this->document = str_ireplace($fields, $values, $_source);
     }
   }
   
