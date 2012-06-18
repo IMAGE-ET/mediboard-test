@@ -20,6 +20,12 @@
     url.popup(800, 600, "Ajout des intervensions");
     return false;
   }
+  
+  mergeInterv = function () {
+    var url = new Url("dPplanningOp", "ajax_merge_interv");
+    url.addParam("date_min_interv", $V($("date_min_interv")));
+    url.requestUpdate("result-merge-interv");
+  }  
 </script>
 
 <h2>Actions de maintenances</h2>
@@ -74,5 +80,16 @@
       </button>
     </td>
     <td></td>
+  </tr>
+  
+  <tr>
+    <td>
+      <button class="change" onclick="mergeInterv()">
+        {{tr}}merge-interv{{/tr}}
+      </button>
+      
+      <input type="text" name="date_min_interv" value="{{$today}}" id="date_min_interv"/> Date minimale (YYYY-MM-DD)
+    </td>
+    <td id="result-merge-interv"></td>
   </tr>
 </table>
