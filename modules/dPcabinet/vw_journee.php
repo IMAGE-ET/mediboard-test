@@ -80,8 +80,7 @@ $heure_min = null;
 
 foreach ($listPlages as $key_prat => $infos_by_prat) {
   foreach ($infos_by_prat["plages"] as $key_plage => $plage) {
-    
-    $plage->_ref_chir =& $infos_by_prat["prat"];
+    $plage->_ref_chir = $infos_by_prat["prat"];
     $plage->loadRefsConsultations(false, $closed);
     if(!count($plage->_ref_consultations) && !$closed) {
       unset($infos_by_prat["plages"][$key_plage]);
@@ -92,7 +91,7 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
       $plage->_ref_consultations = array_combine(range(0, count($plage->_ref_consultations)-1),$plage->_ref_consultations);
     }
     
-    foreach ($plage->_ref_consultations as &$consultation) {
+    foreach ($plage->_ref_consultations as $consultation) {
       if ($mode_urgence){
         if ($consultation->loadRefSejour()->_id && $consultation->_ref_sejour->type == "urg"){
           unset($plage->_ref_consultations[$consultation->_id]);
@@ -132,11 +131,11 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
 }
 
 // Destinations : plages des autres praticiens
-foreach ($listPlages as $infos_by_prat) {
-  foreach ($listPlages as $infos_other_prat) {
+foreach ($listPlages as $key_prat => $infos_by_prat) {
+  foreach ($listPlages as $key_other_prat => $infos_other_prat) {
     if ($infos_by_prat["prat"]->_id != $infos_other_prat["prat"]->_id) {
-      foreach ($infos_other_prat["plages"] as $other_plage) {
-        $infos_by_prat["destinations"][] = $other_plage;
+      foreach ($listPlages[$key_other_prat]["plages"] as $key_plage => $other_plage) {
+        $listPlages[$key_prat]["destinations"][] = $other_plage;
       }
     }
   }
