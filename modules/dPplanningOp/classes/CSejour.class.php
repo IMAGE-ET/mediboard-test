@@ -177,6 +177,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_ref_hl7_movement            = null;
   var $_ref_grossesse               = null;
   var $_ref_curr_operation          = null;
+  var $_ref_curr_operations         = null;
   var $_ref_exams_igs               = null;
   
   // External objects
@@ -335,7 +336,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["discipline_id"]            = "ref class|CDisciplineTarifaire autocomplete|description show|0";
     $props["ald"]                      = "bool default|0";
     
-    $props["provenance"]               = "enum list|1|2|3|4|5|6|7|8";
+    $props["provenance"]               = "enum list|1|2|3|4|5|6|7|8|R";
     $props["destination"]              = "enum list|1|2|3|4|6|7";
     $props["transport"]                = "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo";
     $props["transport_sortie"]         = "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo";
@@ -1900,7 +1901,7 @@ class CSejour extends CCodable implements IPatientRelated {
     return $this->_ref_last_operation = $operation;
   } 
   
-  function getCurrOperation($date, $show_trace = true) {
+  function getCurrOperation($date, $show_trace = true, $only_one = true) {
     $date = mbDate($date);
     
     $where["operations.sejour_id"] = "= '$this->_id'";
@@ -1913,7 +1914,14 @@ class CSejour extends CCodable implements IPatientRelated {
     if ($show_trace) {
       CSQLDataSource::$trace = true;
     }
-    $operation->loadObject($where, null, null, $leftjoin);
+    
+    if ($only_one) {
+      $operation->loadObject($where, null, null, $leftjoin);
+    }
+    else {
+      // C'est bien la liste d'interventions que l'on retourne
+      $operation = $operation->loadList($where, null, null, null, $leftjoin);
+    }
     
     if ($show_trace) {
       CSQLDataSource::$trace = false;
@@ -1924,6 +1932,10 @@ class CSejour extends CCodable implements IPatientRelated {
   
   function loadRefCurrOperation($date) {
     return $this->_ref_curr_operation = $this->getCurrOperation($date, false);
+  }
+  
+  function loadRefCurrOperations($date) {
+    return $this->_ref_curr_operations = $this->getCurrOperation($date, false, false);
   }
   
   function loadRefsBack() {

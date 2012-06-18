@@ -33,8 +33,9 @@ Voir les séjour :
     <th colspan="6" class="title">{{tr}}CPatient{{/tr}}</th>
     <th colspan="3" class="title">{{tr}}CSejour{{/tr}}</th>
     {{if ($module == "dPurgences")}}
-    <th rowspan="2" class="title">RPU</th>
+      <th rowspan="2" class="title">RPU</th>
     {{/if}}
+    <th rowspan="2" class="title">{{tr}}COperation{{/tr}}</th>
   </tr>
 
   <tr>
@@ -126,13 +127,28 @@ Voir les séjour :
 	    {{/foreach}}
     </td>
     {{/if}}
+    
+    {{assign var=count_operation value=$_sejour->_ref_curr_operations|@count}}
+    <td {{if ($_sejour->annule == 1)}}class="cancelled"{{/if}}>
+      {{foreach from=$_sejour->_ref_curr_operations item=_operation}}
+      <div>
+        {{if count($_sejour->_ref_curr_operations) > 1}}
+        <input name="{{$_operation->_class}}-first" type="checkbox" value="{{$_operation->_id}}" onclick="IdentitoVigilance.highlite(this);" />
+        <input name="{{$_operation->_class}}-second" type="radio" value="{{$_operation->_id}}" style="visibility: hidden;" onclick="IdentitoVigilance.merge(this);"/>
+        {{/if}}
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
+          {{tr}}COperation-msg-create{{/tr}}
+        </span>
+      </div>
+      {{/foreach}}
+    </td>
        
     {{/foreach}}
   </tbody>
   {{/if}}
 
   {{foreachelse}}
-  <tr><td colspan="10" class="empty">{{tr}}None{{/tr}}</td></tr>
+  <tr><td colspan="12" class="empty">{{tr}}None{{/tr}}</td></tr>
   {{/foreach}}
 	
 

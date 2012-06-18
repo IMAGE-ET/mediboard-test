@@ -88,15 +88,21 @@ foreach ($patients as $patient_id => $patient) {
 	if (count($patient->_ref_sejours) > 1) {
     $guess["mergeable"] = true;
 	}
-	
-	if ($module == "dPurgences") {
-  	// Multiple RPU 
-  	foreach ($patient->_ref_sejours as $_sejour) {
-  		if (count($_sejour->_back["rpu"]) > 1) {
+  
+  // Multiple Interventions
+  foreach ($patient->_ref_sejours as $_sejour) {
+    $operations = $_sejour->loadRefCurrOperations($date);
+    if (count($operations) > 1) {
+      $guess["mergeable"] = true;
+    }
+    
+    // Multiple RPU 
+    if ($module == "dPurgences") {
+      if (count($_sejour->_back["rpu"]) > 1) {
         $guess["mergeable"] = true;
-  		}
-  	}
-	}
+      }
+    }
+  }  
 	
 	if ($guess["mergeable"]) {
 		$mergeables_count++;
