@@ -44,6 +44,68 @@ class CSmpObjectHandler extends CEAIObjectHandler {
       throw new CMbException("no_alternative_mode");
     }
     
+     $sejour = $mbObject;
+
+    $sejour_elimine = new CSejour();
+    $sejour_elimine->load(reset($mbObject->_merging));
+
+    // Si Client
+    if (!CAppUI::conf('smp server')) {
+      $mbObject->_fusion = array();
+      foreach (CGroups::loadGroups() as $_group) {
+        if ($mbObject->_eai_initiateur_group_id == $_group->_id) {
+          continue;
+        }
+        
+        $sejour->_NDA = null;
+        $sejour->loadNDA($_group->_id);
+        $sejour1_nda = $sejour->_NDA;
+
+        $sejour_elimine->_NDA = null;
+        $sejour_elimine->loadNDA($_group->_id);
+        $sejour2_nda = $sejour_elimine->_NDA;
+
+        // Passage en trash des NDA des séjours
+        $tag_NDA = CSejour::getTagNDA($_group->_id);
+        
+        $id400Sejour               = new CIdSante400();
+        $id400Sejour->tag          = $tag_NDA;
+        $id400Sejour->object_class = "CSejour";
+        $id400Sejour->object_id    = $sejour->_id;
+        $id400sSejour = $id400Sejour->loadMatchingList();
+
+        $id400SejourElimine               = new CIdSante400();
+        $id400SejourElimine->tag          = $tag_NDA;
+        $id400SejourElimine->object_class = "CSejour";
+        $id400SejourElimine->object_id    = $sejour_elimine->_id;
+        $id400sSejourElimine = $id400SejourElimine->loadMatchingList();
+
+        $id400s = array_merge($id400sSejour, $id400sSejourElimine);
+        if (count($id400s) > 1) {
+          foreach ($id400s as $_id_400) {
+            // On continue pour ne pas mettre en trash le NDA du séjour que l'on garde
+            if ($_id_400->id400 == $sejour1_nda) {
+              continue;
+            }
+            
+            $_id_400->tag = CAppUI::conf('dPpatients CPatient tag_ipp_trash').$tap_IPP;
+            $_id_400->last_update = mbDateTime();
+            $_id_400->store();
+          }
+        }
+        
+        if (!$sejour1_nda && !$sejour2_nda) {
+          continue;  
+        }
+        
+        $mbObject->_fusion[$_group->_id] = array (
+          "sejourElimine" => $sejour_elimine,
+          "sejour1_nda"   => $sejour1_nda,
+          "sejour2_nda"   => $sejour2_nda,
+        );
+      }        
+    }
+    
     $this->sendFormatAction("onBeforeMerge", $mbObject);
   }
   
@@ -52,6 +114,11 @@ class CSmpObjectHandler extends CEAIObjectHandler {
       return;
     }
     
+     // Si pas en mode alternatif
+    if (!CAppUI::conf("alternative_mode")) {
+      throw new CMbException("no_alternative_mode");
+    }
+
     $this->sendFormatAction("onAfterMerge", $mbObject);
   }
   
