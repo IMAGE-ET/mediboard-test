@@ -15,6 +15,8 @@ if (!is_array($objects_id)) {
   $objects_id = explode("-", $objects_id);
 }
 
+CMbArray::removeValue("", $objects_id);
+
 $objects = array();
 $result = null;
 $checkMerge = null;
