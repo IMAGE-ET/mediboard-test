@@ -43,8 +43,8 @@ cp $index $backup
 date=`date '+%Y-%m-%dT%H:%M:%S'`
 
 # Archive binlogs
-tar -vcjf $backup/binlogs_$date.tar.bz2 -C $backup *bin.0*
+#tar -vcjf $backup/binlogs_$date.tar.bz2 -C $backup *bin.0*
 
 # Rotate binlogs and indeces for a week
 find $backup -name "*bin.0*" -exec rm -f {} \; 
-         
+find $backup -name "binlogs_*.tar.bz2" -mtime +7 -exec rm -f {} \;

@@ -61,5 +61,6 @@ function rotateBinlogs($userAdminDB, $passAdminDB, $binLogsDir, $binLogIndexFile
   # Rotate binlogs and indeces for a week
   shell_exec("find $backup -name \"*bin.*\" -mtime +7 -exec rm -f {} \;");
   shell_exec("find $backup -name \"binlog-*.index\" -mtime +7 -exec rm -f {} \;");
+  shell_exec("find $backup -name \"binlogs_*.tar.bz2\" -mtime +7 -exec rm -f {} \;");
 }
 ?>
