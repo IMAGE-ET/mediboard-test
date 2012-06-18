@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CCanDo::checkRead();
+CCanDo::checkAdmin();
 
 $date = CValue::get("date_min_interv", mbDate());
 
