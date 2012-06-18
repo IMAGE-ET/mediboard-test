@@ -107,10 +107,8 @@
         {{/if}}
         {{if $consult->rques}}
         <tr>
-          <th>
-            Remarques
-          </th>
-          <td>
+          <td colspan="2">
+            <strong>Remarques</strong>
             {{$consult->rques|nl2br}}
           </td>
         </tr>
