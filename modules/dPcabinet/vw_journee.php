@@ -38,8 +38,8 @@ $cabinet = new CFunctions;
 
 if ($cabinet_id) {
   $praticiens = CAppUI::pref("pratOnlyForConsult", 1) ? 
-    $mediuser->loadPraticiens(PERM_READ, $cabinet_id) :
-    $mediuser->loadProfessionnelDeSante(PERM_READ, $cabinet_id);
+  $mediuser->loadPraticiens(PERM_READ, $cabinet_id) :
+  $mediuser->loadProfessionnelDeSante(PERM_READ, $cabinet_id);
     
   $cabinet->load($cabinet_id);
 }
@@ -78,12 +78,16 @@ $patients_fetch = array();
 
 $heure_min = null;
 
-foreach ($listPlages as &$infos_by_prat) {
-  foreach ($infos_by_prat["plages"] as $plage) {
+foreach ($listPlages as $key_prat => $infos_by_prat) {
+  foreach ($infos_by_prat["plages"] as $key_plage => $plage) {
     
     $plage->_ref_chir =& $infos_by_prat["prat"];
-    $plage->loadRefsConsultations(true, $closed);
-    
+    $plage->loadRefsConsultations(false, $closed);
+    if(!count($plage->_ref_consultations) && !$closed) {
+      unset($infos_by_prat["plages"][$key_plage]);
+      continue;
+    }
+    $plage->loadRefsNotes();
     if (count($plage->_ref_consultations) && $mode_vue == "horizontal") {
       $plage->_ref_consultations = array_combine(range(0, count($plage->_ref_consultations)-1),$plage->_ref_consultations);
     }
@@ -121,11 +125,15 @@ foreach ($listPlages as &$infos_by_prat) {
       }
     }
   }
+  if(!count($infos_by_prat["plages"]) && !$closed) {
+    unset($listPlages[$key_prat]);
+    unset($praticiens[$key_prat]);
+  }
 }
 
 // Destinations : plages des autres praticiens
-foreach ($listPlages as &$infos_by_prat) {
-  foreach ($listPlages as &$infos_other_prat) {
+foreach ($listPlages as $infos_by_prat) {
+  foreach ($listPlages as $infos_other_prat) {
     if ($infos_by_prat["prat"]->_id != $infos_other_prat["prat"]->_id) {
       foreach ($infos_other_prat["plages"] as $other_plage) {
         $infos_by_prat["destinations"][] = $other_plage;
