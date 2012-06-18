@@ -1086,6 +1086,8 @@ TESTS A EFFECTUER
       return $msg;
     }
     
+    // $this->createConsultAnesth();
+    
     // Forfait SE et facturable. A laisser apres le store()
     if ($this->sejour_id && CAppUI::conf("dPcabinet CConsultation attach_consult_sejour")) {
       if ($forfait_se !== null || $facturable !== null || $forfait_sd !== null) {
@@ -1659,6 +1661,22 @@ TESTS A EFFECTUER
             
     if ($msg = $this->store()) {
       return $msg;
+    }
+  }
+
+  function createConsultAnesth(){
+    $this->loadRefPlageConsult();
+    
+    if (!$this->_is_anesth || !$this->patient_id || !$this->_id) {
+      return;
+    }
+    
+    $consultAnesth = new CConsultAnesth;
+    $consultAnesth->consultation_id = $this->_id;
+    $consultAnesth->loadMatchingObject();
+    
+    if (!$consultAnesth->_id) {
+      return $consultAnesth->store();
     }
   }
 }
