@@ -58,15 +58,21 @@ foreach ($operations_merge as $_operation_merge) {
     }
   }
   
+  $continue = false;
   switch ($plageop) {
     case 0 :
       $op_merge = array_values($_operation_merge);
       
       break;
     case 2 :
+      $continue = true;
       CAppUI::stepAjax("Deux interventions avec les plages, impossible de fusionner", UI_MSG_WARNING);
       
-      continue;
+      break;
+  }
+  
+  if ($continue) {
+    continue;
   }
 
   $first_op  = $op_merge[0];
