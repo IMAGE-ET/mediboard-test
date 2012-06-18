@@ -53,7 +53,8 @@ class COracleDataSource extends CSQLDataSource {
   }   
 
   function error() {
-    return oci_error($this->link);
+    $err = oci_error($this->link);
+    return $err['message']." (Query: {$err['sqltext']}, offset: {$err['offset']})";
   }
 
   function errno() {
