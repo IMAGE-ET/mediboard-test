@@ -105,6 +105,16 @@
           </td>
         </tr>
         {{/if}}
+        {{if $consult->rques}}
+        <tr>
+          <th>
+            Remarques
+          </th>
+          <td>
+            {{$consult->rques|nl2br}}
+          </td>
+        </tr>
+      {{/if}}
       </table>    
     </td>
   </tr>
@@ -534,17 +544,6 @@
           <th>Clasification NYHA</th>
           <td>{{mb_value object=$consult->_ref_examnyha field="_classeNyha"}}</td>
         </tr>   
-      {{/if}}
-      
-      {{if $consult->rques}}
-        <tr>
-          <th>
-            Remarques
-          </th>
-          <td>
-            {{$consult->rques|nl2br}}
-          </td>
-        </tr>
       {{/if}}
       </table>
 
