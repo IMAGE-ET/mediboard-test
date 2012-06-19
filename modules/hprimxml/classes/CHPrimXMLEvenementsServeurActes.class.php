@@ -86,7 +86,16 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     // Ajout des actes NGAP
     if (CAppUI::conf("hprimxml send_actes_ngap")) {
       $actesNGAP = $this->addElement($evenementServeurActe, "actesNGAP");
+      
+      $actes_ngap_excludes = array();
+      if (CAppUI::conf("hprimxml actes_ngap_excludes")) {
+        $actes_ngap_excludes = array_flip(explode("|", CAppUI::conf("hprimxml actes_ngap_excludes")));
+      }
+
       foreach ($codable->_ref_actes_ngap as $_acte_ngap) {
+        if (array_key_exists($_acte_ngap->code, $actes_ngap_excludes)) {
+          continue;
+        }
         $this->addActeNGAP($actesNGAP, $_acte_ngap, $codable);
       }
     }

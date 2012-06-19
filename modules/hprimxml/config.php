@@ -48,7 +48,8 @@ $dPconfig["hprimxml"] = array (
   "concatenate_xsd"            => "0",
   "mvtComplet"                 => "0",
   "send_diagnostic"            => "evt_pmsi",
-  "send_actes_ngap"            => "0"
+  "send_actes_ngap"            => "0",
+  "actes_ngap_excludes"        => ""
 );
 
 

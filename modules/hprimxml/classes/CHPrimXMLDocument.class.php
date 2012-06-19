@@ -352,6 +352,20 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $acteNGAP = $this->addElement($elParent, "acteNGAP");
     $this->addAttribute($acteNGAP, "action", "création");
     
+    // executionNuit
+    if ($mbActeNGAP->complement == "N") {
+      // non     non réalisé de nuit
+      // 1t      réalisé 1re tranche de nuit
+      // 2t      2me tranche
+      // @todo Comment gérer ceci ?
+      // $this->addAttribute($acteNGAP, "executionNuit", "oui");
+    }
+    
+    // executionDimancheJourFerie
+    if ($mbActeNGAP->complement == "F") {
+       $this->addAttribute($acteNGAP, "executionDimancheJourFerie", "oui");
+    }    
+    
     $identifiant = $this->addElement($acteNGAP, "identifiant");
     $emetteur    = $this->addElement($identifiant, "emetteur", "acte{$mbActeNGAP->_id}");
     
