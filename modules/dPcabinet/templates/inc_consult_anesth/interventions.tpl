@@ -29,23 +29,32 @@
 </script>
 
 <div class="big-info"  style="display: none; text-align: center;" id="evenement-chooser-modal">
-  {{if $nextSejourAndOperation.COperation->_id}}
-    Une intervention est présente dans le système pour ce patient :
+  {{assign var=next_operation value=$nextSejourAndOperation.COperation}}
+  {{assign var=next_sejour    value=$nextSejourAndOperation.CSejour   }}
+  {{if $next_operation->_id}}
+    <div>Une intervention à venir est présente pour ce patient :</div>
     <br />
-    <strong>{{$nextSejourAndOperation.COperation->_view}} -
-    {{$nextSejourAndOperation.COperation->_datetime|date_format:"%d/%m/%Y"}}</strong>
+    <div><strong>{{$next_operation}}</strong></div>
+    {{if $next_operation->libelle}} 
+    <div><strong>{{$next_operation->libelle}}</strong></div>
+    {{/if}}
+    <div><strong>Prévu le {{$next_operation->_datetime|date_format:$conf.date}}</strong></div>
+    <div><strong>Avec le Dr {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$next_operation->_ref_chir}}</strong></div>
     <br />
-    Ce patient vient-il pour cette intervention ?
+    <div>Ce patient vient-il pour cette intervention ?</div>
+    <button class="tick" onclick="selectOperation('{{$next_operation->_id}}'); modalWindow.close();">Oui</button>
+    
+  {{elseif $next_sejour->_id}}
+    <div>Un séjour à venir est présent dans le système pour ce patient :</div>
     <br />
-    <button class="tick" onclick="selectOperation('{{$nextSejourAndOperation.COperation->_id}}'); modalWindow.close();">Oui</button>
-  {{elseif $nextSejourAndOperation.CSejour->_id}}
-    Un dossier est présent dans le système pour ce patient :
+    <div><strong>{{$next_sejour}}</strong></div>
+    {{if $next_sejour->libelle}} 
+    <div><strong>{{$next_sejour->libelle}}</strong></div>
+    {{/if}}
+    <div><strong>Avec le Dr {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$next_sejour->_ref_praticien}}</strong></div>
     <br />
-    <strong>{{$nextSejourAndOperation.CSejour->_view}}</strong>
-    <br />
-    Ce patient vient-il pour ce séjour ?
-    <br />
-    <button class="tick" onclick="selectSejour('{{$nextSejourAndOperation.CSejour->_id}}'); modalWindow.close();">Oui</button>
+    <div>Ce patient vient-il pour ce séjour ?</div>
+    <button class="tick" onclick="selectSejour('{{$next_sejour->_id}}'); modalWindow.close();">Oui</button>
   {{/if}}
   <button class="cancel" onclick="modalWindow.close();">Non</button>
 </div>
