@@ -139,16 +139,16 @@ Reconvocation = {
             <td>
               <input name="_empty" type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $empty}}checked="checked"{{/if}} />
               <input name="empty" type="hidden" value="{{$empty}}" />
-              <label title="Afficher les plages vides">Plages vides</label>
+              <label for="_empty" title="Afficher les plages vides">Plages vides</label>
               <input name="_canceled" type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $canceled}}checked="checked"{{/if}} />
               <input name="canceled" type="hidden" value="{{$canceled}}" />
-              <label title="Afficher les consultations annulées">Annulées</label>
+              <label for="_canceled" title="Afficher les consultations annulées">Annulées</label>
               <input name="_paid" type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $paid}}checked="checked"{{/if}} />
               <input name="paid" type="hidden" value="{{$paid}}" />
-              <label title="Afficher les consultations réglées">Réglées</label>
+              <label for="_paid" title="Afficher les consultations réglées">Réglées</label>
               <input name="_finished" type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $finished}}checked="checked"{{/if}} />
               <input name="finished" type="hidden" value="{{$finished}}" />
-              <label title="Afficher les consultations terminées">Terminées</label>
+              <label for="_finished" title="Afficher les consultations terminées">Terminées</label>
             </td>
             {{if !$mode_urgence}}
               <th>
