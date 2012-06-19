@@ -8,8 +8,11 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_script module=planningOp script=prestations ajax=1}}
+
 <script type="text/javascript">
 Calendar.regField(getForm("changeDatePresents").date, null, {noView: true});
+Prestations.callback = reloadPresent;
 </script>
 
 <table class="tbl" id="admissions">

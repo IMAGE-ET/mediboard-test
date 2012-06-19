@@ -69,21 +69,7 @@
 </td>
 {{if !$curr_adm->annule && $curr_consult->_ref_consult_anesth->_ref_sejour->_id}}
 <td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-{{if $canAdmissions->edit}}
-  {{mb_include template=inc_form_prestations sejour=$curr_adm}}
-{{else}}
-  {{if $curr_adm->chambre_seule}}
-    Chambre simple
-  {{else}}
-    Chambre double
-  {{/if}}
-  {{if $curr_adm->prestation_id && $prestations}}
-  {{assign var=_prestation_id value=$curr_adm->prestation_id}}
-  <br />
-  Prest. {{$prestations.$_prestation_id->_view}}
-  {{/if}}
-{{/if}}
-  
+  {{mb_include template=inc_form_prestations sejour=$curr_adm edit=$canAdmissions->edit}}
   {{mb_include module=hospi template=inc_placement_sejour sejour=$curr_adm}}
 </td>
 

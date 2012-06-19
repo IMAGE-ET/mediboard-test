@@ -12,7 +12,7 @@
 
 <script type="text/javascript">
 function submitPreAdmission(oForm) {
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadPreAdmission });
+  return onSubmitFormAjax(oForm, reloadPreAdmission);
 }
 
 function reloadPreAdmission() {

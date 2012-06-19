@@ -34,9 +34,6 @@ $demain = mbDate("+ 1 day", $date);
 $date_min = mbDateTime("00:00:00", $date);
 $date_max = mbDateTime("23:59:59", $date);
 
-// Chargement des prestations
-$prestations = CPrestation::loadCurrentList();
-
 // Entrées de la journée
 $sejour = new CSejour;
 
@@ -168,7 +165,7 @@ $smarty->assign("selSaisis"     , $selSaisis);
 $smarty->assign("order_col"     , $order_col);
 $smarty->assign("order_way"     , $order_way);
 $smarty->assign("sejours"       , $sejours);
-$smarty->assign("prestations"   , $prestations);
+$smarty->assign("prestations"   , CPrestation::loadCurrentList());
 $smarty->assign("canAdmissions" , CModule::getCanDo("dPadmissions"));
 $smarty->assign("canPatients"   , CModule::getCanDo("dPpatients"));
 $smarty->assign("canPlanningOp" , CModule::getCanDo("dPplanningOp"));

@@ -49,36 +49,40 @@ if ($order_col_pre == "patient_id"){
 
 $listConsultations = $consult->loadList($where, $order, null, null, $ljoin);
 
-foreach($listConsultations as $curr_consult) {
-  $curr_consult->loadRefPatient();
-  $curr_consult->loadRefPlageconsult();
-  $curr_consult->_ref_chir->loadRefFunction();
-  $curr_consult->loadRefConsultAnesth();
-  $curr_consult->_ref_consult_anesth->loadRefOperation();
-  $curr_sejour = $curr_consult->_ref_consult_anesth->_ref_sejour;
-  if($curr_sejour->_id) {
-    $curr_sejour->loadRefPatient();
-    $curr_sejour->loadRefPraticien();
-    $curr_sejour->loadNDA();
-    $curr_sejour->loadRefsNotes();
-    $curr_sejour->loadRefsAffectations();
-    $curr_sejour->loadRefsOperations();
-    foreach($curr_sejour->_ref_affectations as $_aff) {
+foreach ($listConsultations as $_consult) {
+  $_consult->loadRefPatient();
+  $_consult->loadRefPlageconsult();
+  $_consult->_ref_chir->loadRefFunction();
+  $_consult->loadRefConsultAnesth();
+  $_consult->_ref_consult_anesth->loadRefOperation();
+  $_sejour = $_consult->_ref_consult_anesth->_ref_sejour;
+  if ($_sejour->_id) {
+    $_sejour->loadRefPatient();
+    $_sejour->loadRefPraticien();
+    $_sejour->loadNDA();
+    $_sejour->loadRefsNotes();
+    $_sejour->countPrestationsSouhaitees();
+    $_sejour->loadRefsOperations();
+    $_sejour->loadRefsAffectations();
+    foreach($_sejour->_ref_affectations as $_aff) {
       $_aff->loadView();
     }
-    $curr_sejour->getDroitsCMU();
-  } else {
-    $curr_consult->_next_sejour_and_operation = $curr_consult->_ref_patient->getNextSejourAndOperation($curr_consult->_ref_plageconsult->date);
-    if($curr_consult->_next_sejour_and_operation["COperation"]->_id) {
-      $curr_consult->_next_sejour_and_operation["COperation"]->loadRefSejour();
-      $curr_consult->_next_sejour_and_operation["COperation"]->_ref_sejour->loadRefPraticien();
-      $curr_consult->_next_sejour_and_operation["COperation"]->_ref_sejour->loadNDA();
-      $curr_consult->_next_sejour_and_operation["COperation"]->_ref_sejour->loadRefsNotes();
-    } elseif($curr_consult->_next_sejour_and_operation["CSejour"]) {
-      $curr_consult->_next_sejour_and_operation["CSejour"]->loadRefPraticien();
-      $curr_consult->_next_sejour_and_operation["CSejour"]->loadNDA();
-      $curr_consult->_next_sejour_and_operation["CSejour"]->loadRefsNotes();
+    $_sejour->getDroitsCMU();
+  } 
+  else {
+    $next = $_consult->_ref_patient->getNextSejourAndOperation($_consult->_ref_plageconsult->date);
+    if ($next["COperation"]->_id) {
+      $next["COperation"]->loadRefSejour();
+      $next["COperation"]->_ref_sejour->loadRefPraticien();
+      $next["COperation"]->_ref_sejour->loadNDA();
+      $next["COperation"]->_ref_sejour->loadRefsNotes();
+    } 
+    if ($next["CSejour"]->_id) {
+      $next["CSejour"]->loadRefPraticien();
+      $next["CSejour"]->loadNDA();
+      $next["CSejour"]->loadRefsNotes();
     }
+    $_consult->_next_sejour_and_operation = $next;
   }
 }
 

@@ -8,29 +8,12 @@
     <th class="title" colspan="2">Affichage</th>
   </tr>
   
+  {{mb_include module=system template=inc_config_enum var=fiche_admission values="a4|a5"}}
   {{mb_include module=system template=inc_config_bool var=show_dh}}
-  
-  {{assign var="var" value="fiche_admission"}}
-  <tr>
-    <th style="width:50%">
-      <label for="{{$m}}[fiche_admission]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <select name="{{$m}}[{{$var}}]">
-        <option value="a4" {{if $conf.$m.$var == "a4"}}selected="selected"{{/if}}>
-          Modèle A4
-        </option>
-        <option value="a5" {{if $conf.$m.$var == "a5"}}selected="selected"{{/if}}>
-          Modèle A5
-        </option>
-      </select>
-    </td>
-  </tr>
-  <tr>
-    {{mb_include module=system template=inc_config_bool var=show_deficience}}
-  </tr>
+  {{mb_include module=system template=inc_config_bool var=show_prestations_sorties}}
+
+  {{mb_include module=system template=inc_config_bool var=show_deficience}}
+
   <tr>
     <th style="width: 50%"></th>
     <td class="text">

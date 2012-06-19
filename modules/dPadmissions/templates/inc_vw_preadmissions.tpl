@@ -8,7 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_script module=planningOp script=prestations ajax=1}}
+
 <script type="text/javascript">
+Prestations.callback = reloadPreAdmission;
 Calendar.regField(getForm("changeDatePreAdmissions").date, null, {noView: true});
 </script>
 
