@@ -8,8 +8,11 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_script module=planningOp script=prestations ajax=1}}
+
 <script type="text/javascript">
 Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
+Prestations.callback = reloadSorties;
 </script>
 
 <table class="tbl" id="sortie">
@@ -204,17 +207,19 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
     </td>
     <td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
       {{if !($_sejour->type == 'exte') && !($_sejour->type == 'consult') && $_sejour->annule != 1}}
+        {{if $conf.dPadmissions.show_prestations_sorties}}
+          {{mb_include template=inc_form_prestations sejour=$_sejour edit=$canAdmissions->edit}}
+        {{/if}}        
+
         {{foreach from=$_sejour->_ref_affectations item=_aff}}
-          {{if $_aff->effectue}}
-            <div class="effectue">{{$_aff->_ref_lit}}</div>
-          {{else}}
-            <div>{{$_aff->_ref_lit}}</div>
-          {{/if}}
-        {{/foreach}}
-        
-        {{if !$_sejour->_ref_affectations|@count}}
+          <div {{if $_aff->effectue}} class="effectue" {{/if}}> 
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$_aff->_guid}}');">
+              {{$_aff->_ref_lit}}
+            </span>
+          </div>
+        {{foreachelse}}
           <div class="empty">Non placé</div>
-        {{/if}}
+        {{/foreach}}
        {{/if}}  
     </td>
     {{if $conf.dPadmissions.show_dh}}

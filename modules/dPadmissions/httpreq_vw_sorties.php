@@ -112,6 +112,9 @@ foreach ($sejours as $sejour_id => $_sejour) {
   
   // Chargements des notes sur le séjour
   $_sejour->loadRefsNotes();
+  
+  // Chargement des prestations
+  $_sejour->countPrestationsSouhaitees();
 
   // Chargement des interventions
   $whereOperations = array("annulee" => "= '0'");
@@ -165,6 +168,7 @@ $smarty->assign("selSortis"     , $selSortis);
 $smarty->assign("order_col"     , $order_col);
 $smarty->assign("order_way"     , $order_way);
 $smarty->assign("sejours"       , $sejours);
+$smarty->assign("prestations"   , CPrestation::loadCurrentList());
 $smarty->assign("canAdmissions" , CModule::getCanDo("dPadmissions"));
 $smarty->assign("canPatients"   , CModule::getCanDo("dPpatients"));
 $smarty->assign("canPlanningOp" , CModule::getCanDo("dPplanningOp"));

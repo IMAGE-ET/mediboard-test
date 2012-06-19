@@ -86,9 +86,6 @@ foreach ($listConsultations as $_consult) {
   }
 }
 
-// Chargement des prestations
-$prestations = CPrestation::loadCurrentList();
-
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("hier", $hier);
@@ -102,7 +99,7 @@ $smarty->assign("date"             , $date);
 $smarty->assign("order_col_pre"    , $order_col_pre);
 $smarty->assign("order_way_pre"    , $order_way_pre);
 $smarty->assign("listConsultations", $listConsultations);
-$smarty->assign("prestations"      , $prestations);
+$smarty->assign("prestations"      , CPrestation::loadCurrentList());
 $smarty->assign("canAdmissions"    , CModule::getCanDo("dPadmissions"));
 $smarty->assign("canPatients"      , CModule::getCanDo("dPpatients"));
 $smarty->assign("canPlanningOp"    , CModule::getCanDo("dPplanningOp"));
