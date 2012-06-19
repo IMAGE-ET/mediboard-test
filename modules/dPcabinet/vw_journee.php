@@ -154,7 +154,7 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
       }
     }
   }
-  if(!count($infos_by_prat["plages"]) && !$empty) {
+  if(!count($listPlages[$key_prat]["plages"]) && !$empty) {
     unset($listPlages[$key_prat]);
     unset($praticiens[$key_prat]);
   }

@@ -80,13 +80,13 @@ Main.add( function () {
     {{mb_include module=cabinet template=inc_detail_consult}}
   {{foreachelse}}
     <tr>
-      <td colspan="3"class="empty">{{tr}}CConsultation.none{{/tr}}</td>
+      <td colspan="3"class="empty">{{tr}}CPlageconsult.none{{/tr}}</td>
     </tr>
   {{/foreach}}
   
   {{foreachelse}}
   <tr>
-    <th colspan="3" style="font-weight: bold;">{{tr}}CPlageconsult.none{{/tr}}</th>
+    <td colspan="3" class="empty">{{tr}}CPlageconsult.none{{/tr}}</td>
   </tr>
   {{/foreach}}
 </table>

@@ -206,8 +206,6 @@ Reconvocation = {
                {{assign var="userSel" value=$curr_day.prat}}
                {{mb_include module=cabinet template=inc_list_consult}}
              </td>
-           {{foreachelse}}
-             <td class="empty">{{tr}}CPlageconsult.none{{/tr}}</td>
            {{/foreach}}
          </tr>
        {{/if}}
