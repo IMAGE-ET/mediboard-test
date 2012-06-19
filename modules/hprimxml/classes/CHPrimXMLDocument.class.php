@@ -377,6 +377,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($acteNGAP, "quantite"     , $mbActeNGAP->quantite);
     
     $execute = $this->addElement($acteNGAP, "execute");
+    $mbActeNGAP->loadExecution();
+
     $this->addElement($execute, "date" , mbDate($mbActeNGAP->_execution));
     $this->addElement($execute, "heure", mbTime($mbActeNGAP->_execution));
     
