@@ -28,6 +28,7 @@
     {{mb_include module=system template=inc_config_bool var=gerer_circonstance}}
 	  {{mb_include module=system template=inc_config_str var=sibling_hours size="2" suffix="h"}}
 	  {{mb_include module=system template=inc_config_bool var=pec_change_prat}}
+    {{mb_include module=system template=inc_config_bool var=pec_after_sortie}}
 	  {{mb_include module=system template=inc_config_bool var=create_sejour_hospit}}
     {{mb_include module=system template=inc_config_bool var=show_statut}}
     {{mb_include module=system template=inc_config_bool var=valid_cotation_sortie_reelle}}

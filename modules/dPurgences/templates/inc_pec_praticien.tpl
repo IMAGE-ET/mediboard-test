@@ -40,7 +40,7 @@
   
   {{else}}
   	{{if !$consult->_id}}
-  		{{if !$sejour->sortie_reelle}}
+  		{{if !$sejour->sortie_reelle || $conf.dPurgences.pec_after_sortie}}
   			{{if $can->edit}}
           {{main}}
             var form = getForm("createConsult-{{$rpu->_id}}");
