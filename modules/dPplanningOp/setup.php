@@ -1375,7 +1375,13 @@ class CSetupdPplanningOp extends CSetup {
       ADD INDEX (`uf_medicale_id`),
       ADD INDEX (`uf_soins_id`);";
     
-    $this->mod_version = "1.47";
+    $this->makeRevision("1.47");
+    
+    $query = "ALTER TABLE `type_anesth`
+      ADD `actif` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.48";
   }
 }
 ?>

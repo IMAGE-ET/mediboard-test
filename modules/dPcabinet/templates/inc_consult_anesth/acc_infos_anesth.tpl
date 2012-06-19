@@ -98,7 +98,16 @@ checkUSCPO = function() {
                     </div>
                   {{/if}}
                   {{mb_label object=$operation field=type_anesth}}
-                  {{mb_field object=$operation field=type_anesth options=$anesth style="width: 12em;" onchange="this.form.onsubmit()"}}
+                  <select name="type_anesth" onchange="this.form.onsubmit()" style="width: 12em;">
+                    <option value="">&mdash; Anesthésie</option>
+                    {{foreach from=$anesth item=curr_anesth}}
+                      {{if $curr_anesth->actif || $operation->type_anesth == $curr_anesth->type_anesth_id}}
+                        <option value="{{$curr_anesth->type_anesth_id}}" {{if $operation->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}}>
+                          {{$curr_anesth->name}} {{if !$curr_anesth->actif && $operation->type_anesth == $curr_anesth->type_anesth_id}}(Obsolète){{/if}}
+                        </option>
+                      {{/if}}
+                    {{/foreach}}
+                  </select>
                   <br />
                 </form>
               {{/if}}

@@ -18,6 +18,7 @@ class CTypeAnesth extends CMbObject {
   // DB Fields
   var $name = null;
   var $ext_doc = null;
+  var $actif = null;
   
   // References
   var $_count_operations = null;
@@ -47,7 +48,8 @@ class CTypeAnesth extends CMbObject {
   function getProps() {
   	$specs = parent::getProps();
     $specs["name"]    = "str notNull";
-    $specs["ext_doc"] = "enum list|1|2|3|4|5|6";
+    $specs["ext_doc"] = "enum list|1|2|3|4|5|6"; 
+    $specs["actif"]   = "bool notNull default|1" ;
     return $specs;
   }
 }

@@ -66,9 +66,11 @@ reloadPrescriptionAnesth = function(prescription_id){
               <select name="type_anesth" onchange="submitAnesth(this.form);">
                 <option value="">&mdash; Type d'anesthésie</option>
                 {{foreach from=$listAnesthType item=curr_anesth}}
-                <option value="{{$curr_anesth->type_anesth_id}}" {{if $selOp->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}} >
-                  {{$curr_anesth->name}}
-                </option>
+                  {{if $curr_anesth->actif || $selOp->type_anesth == $curr_anesth->type_anesth_id}}
+                    <option value="{{$curr_anesth->type_anesth_id}}" {{if $selOp->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}}>
+                      {{$curr_anesth->name}}{{if !$curr_anesth->actif && $selOp->type_anesth == $curr_anesth->type_anesth_id}}(Obsolète){{/if}}
+                    </option>
+                  {{/if}}
                {{/foreach}}
               </select>
               {{elseif $selOp->type_anesth}}

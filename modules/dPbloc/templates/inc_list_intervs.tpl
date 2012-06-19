@@ -118,9 +118,11 @@
         <select name="type_anesth" onchange="submitOrder(this.form, '{{$list_type}}');" style="width: 11em; clear: both;">
           <option value="">&mdash; Anesthésie</option>
           {{foreach from=$anesth item=curr_anesth}}
-          <option value="{{$curr_anesth->type_anesth_id}}" {{if $_op->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}} >
-            {{$curr_anesth->name}}
-          </option>
+            {{if $curr_anesth->actif || $_op->type_anesth == $curr_anesth->type_anesth_id}}
+              <option value="{{$curr_anesth->type_anesth_id}}" {{if $_op->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}}>
+                {{$curr_anesth->name}}{{if !$curr_anesth->actif && $_op->type_anesth == $curr_anesth->type_anesth_id}}(Obsolète){{/if}}
+              </option>
+            {{/if}}
           {{/foreach}}
         </select>
         <br />

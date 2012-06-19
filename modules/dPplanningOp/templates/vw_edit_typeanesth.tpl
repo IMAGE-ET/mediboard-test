@@ -10,6 +10,7 @@
           <th>{{mb_title object=$type_anesth field=name}}</th>
           <th>{{tr}}CTypeAnesth-back-operations{{/tr}}</th>
           <th>{{mb_title object=$type_anesth field=ext_doc}}</th>
+          <th>{{mb_title object=$type_anesth field=actif}}</th>
         </tr>
         {{foreach from=$types_anesth item=_type_anesth}}
         <tr>
@@ -24,6 +25,7 @@
           <td class="text {{if !$_type_anesth->ext_doc}} empty {{/if}}">
 						{{mb_value object=$_type_anesth field=ext_doc}}
           </td>
+          <td>{{mb_value object=$_type_anesth field=actif}}</td>
         </tr>
         {{/foreach}}        
       </table>  
@@ -47,6 +49,10 @@
           <th>{{mb_label object=$type_anesth field="ext_doc"}}</th>
           <td>{{mb_field object=$type_anesth field="ext_doc" emptyLabel="Choose"}}</td>
         </tr>  
+        <tr>
+          <th>{{mb_label object=$type_anesth field="actif"}}</th>
+          <td>{{mb_field object=$type_anesth field="actif"}}</td>
+        </tr>
         <tr>
           <td class="button" colspan="2">
             {{if $type_anesth->_id}}
