@@ -373,7 +373,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($acteNGAP, "coefficient"  , $mbActeNGAP->demi ? $mbActeNGAP->coefficient * 0.5 : $mbActeNGAP->coefficient);
     // dénombrement doit être égale à 1 pour les actes ngap (CS, C etc....), 
     // elle varie seulement pour les actes de Biologie "dénombrement = nombre de code affinés"
-    $this->addElement($acteNGAP, "denombrement" , 1);
+   // $this->addElement($acteNGAP, "denombrement" , 1);
     $this->addElement($acteNGAP, "quantite"     , $mbActeNGAP->quantite);
     
     $execute = $this->addElement($acteNGAP, "execute");
