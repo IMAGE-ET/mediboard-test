@@ -15,10 +15,22 @@ $mediuser->load(CAppUI::$instance->user_id);
 //Initialisations des variables
 $cabinet_id   = CValue::getOrSession("cabinet_id", $mediuser->function_id);
 $date         = CValue::getOrSession("date", mbDate());
-$closed       = CValue::getOrSession("closed", true);
+
+$canceled       = CValue::getOrSession("canceled", false);
+$finished       = CValue::getOrSession("finished", true);
+$paid           = CValue::getOrSession("paid"    , true);
+$empty          = CValue::getOrSession("empty"   , true);
+$mode_vue       = CValue::getOrSession("mode_vue", "vertical");
+
+/*
+$canceled       = 0;
+$finished       = 1;
+$paid           = 1;
+$empty          = 1;
+*/
+
 $mode_urgence = CValue::get("mode_urgence", false);
-$offline      = CValue::get("offline", false);
-$mode_vue     = CValue::getOrSession("mode_vue", "vertical");
+$offline      = CValue::get("offline"     , false);
 
 $hour         = mbTime(null);
 $board        = CValue::get("board", 1);
@@ -44,7 +56,7 @@ if ($cabinet_id) {
   $cabinet->load($cabinet_id);
 }
 
-// Praticiens disponibles
+// Praticiens disponibles ??????????????????
 $all_prats = $praticiens;
 
 if ($consult->_id) {
@@ -71,6 +83,17 @@ foreach($praticiens as $prat) {
   }
 }
 
+// Destinations : plages des autres praticiens
+foreach ($listPlages as $key_prat => $infos_by_prat) {
+  foreach ($listPlages as $key_other_prat => $infos_other_prat) {
+    if ($infos_by_prat["prat"]->_id != $infos_other_prat["prat"]->_id) {
+      foreach ($listPlages[$key_other_prat]["plages"] as $key_plage => $other_plage) {
+        $listPlages[$key_prat]["destinations"][] = $other_plage;
+      }
+    }
+  }
+}
+
 
 $nb_attente = 0;
 $nb_a_venir = 0;
@@ -81,9 +104,16 @@ $heure_min = null;
 foreach ($listPlages as $key_prat => $infos_by_prat) {
   foreach ($infos_by_prat["plages"] as $key_plage => $plage) {
     $plage->_ref_chir = $infos_by_prat["prat"];
-    $plage->loadRefsConsultations(false, $closed);
-    if(!count($plage->_ref_consultations) && !$closed) {
-      unset($infos_by_prat["plages"][$key_plage]);
+    $plage->loadRefsConsultations($canceled, $finished);
+    if(!$paid) {
+      foreach($plage->_ref_consultations as $key_consult => $_consult) {
+        if($_consult->patient_date_reglement) {
+          unset($plage->_ref_consultations[$key_consult]);
+        }
+      }
+    }
+    if(!count($plage->_ref_consultations) && !$empty) {
+      unset($listPlages[$key_prat]["plages"][$key_plage]);
       continue;
     }
     $plage->loadRefsNotes();
@@ -124,20 +154,9 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
       }
     }
   }
-  if(!count($infos_by_prat["plages"]) && !$closed) {
+  if(!count($infos_by_prat["plages"]) && !$empty) {
     unset($listPlages[$key_prat]);
     unset($praticiens[$key_prat]);
-  }
-}
-
-// Destinations : plages des autres praticiens
-foreach ($listPlages as $key_prat => $infos_by_prat) {
-  foreach ($listPlages as $key_other_prat => $infos_other_prat) {
-    if ($infos_by_prat["prat"]->_id != $infos_other_prat["prat"]->_id) {
-      foreach ($listPlages[$key_other_prat]["plages"] as $key_plage => $other_plage) {
-        $listPlages[$key_prat]["destinations"][] = $other_plage;
-      }
-    }
   }
 }
 
@@ -149,7 +168,10 @@ $smarty->assign("cabinet"       , $cabinet);
 $smarty->assign("patients_fetch", $patients_fetch);
 $smarty->assign("consult"       , $consult);
 $smarty->assign("listPlages"    , $listPlages);
-$smarty->assign("closed"        , $closed);
+$smarty->assign("empty"         , $empty);
+$smarty->assign("canceled"      , $canceled);
+$smarty->assign("paid"          , $paid);
+$smarty->assign("finished"      , $finished);
 $smarty->assign("date"          , $date);
 $smarty->assign("hour"          , $hour);
 $smarty->assign("praticiens"    , $praticiens);

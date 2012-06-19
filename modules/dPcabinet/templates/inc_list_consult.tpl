@@ -63,7 +63,6 @@ Main.add( function () {
   </tr>
   
   {{foreach from=$listPlage item=_plage}}
-  {{if count($_plage->_ref_consultations)}}
   <tr>
     <th colspan="3">
       {{if $current_m == "dPurgences"}}
@@ -77,9 +76,12 @@ Main.add( function () {
       {{if $_plage->libelle}}: {{$_plage->libelle}}{{/if}}
     </th>
   </tr>
-  {{/if}}
   {{foreach from=$_plage->_ref_consultations item=_consult}}
     {{mb_include module=cabinet template=inc_detail_consult}}
+  {{foreachelse}}
+    <tr>
+      <td colspan="3"class="empty">{{tr}}CConsultation.none{{/tr}}</td>
+    </tr>
   {{/foreach}}
   
   {{foreachelse}}

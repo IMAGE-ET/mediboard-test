@@ -5,16 +5,28 @@ Main.add(function () {
   }
   
   // Mise à jour du compteur de patients arrivés
-	if($('tab_main_courante')){
-		var link = $('tab_main_courante').select("a[href=#consultations]")[0];
-	  link.update('Reconvocations <small>({{$nb_attente}} / {{$nb_a_venir}})</small>');
-	  {{if $nb_attente == '0'}}
-	    link.addClassName('empty');
-	  {{else}}
-	    link.removeClassName('empty');
-	  {{/if}}
+  if($('tab_main_courante')){
+    var link = $('tab_main_courante').select("a[href=#consultations]")[0];
+    link.update('Reconvocations <small>({{$nb_attente}} / {{$nb_a_venir}})</small>');
+    {{if $nb_attente == '0'}}
+      link.addClassName('empty');
+    {{else}}
+      link.removeClassName('empty');
+    {{/if}}
   }
 });
+
+synchronizeView = function(form) {
+  var empty = $V(form._empty) ? 1 : 0;
+  $V(form.empty, empty);
+  var canceled = $V(form._canceled) ? 1 : 0;
+  $V(form.canceled, canceled);
+  var paid = $V(form._paid) ? 1 : 0;
+  $V(form.paid, paid);
+  var finished = $V(form._finished) ? 1 : 0;
+  $V(form.finished, finished);
+  form.submit();
+}
 
 printPlage = function(plage_id) {
   var url = new Url;
@@ -26,7 +38,7 @@ printPlage = function(plage_id) {
 Reconvocation = {
   checkPraticien: function() {
     var form = getForm('Create-Reconvocation');
-		
+    
     if ($V(form.prat_id) == '') {
       alert('Veuillez sélectionner un praticien');
       return false;
@@ -43,10 +55,10 @@ Reconvocation = {
       }
     {{/if}}
     
-		{{if $mode_urgence}}
+    {{if $mode_urgence}}
       this.createConsult();
-		{{/if}}
-		
+    {{/if}}
+    
     return false;
   },
   createConsult: function() {
@@ -64,17 +76,17 @@ Reconvocation = {
 {{mb_ternary var=current_m test=$mode_urgence value=dPurgences other=dPcabinet}}
 <table class="main">
   {{if $mode_urgence}}
-	<tr>
-		<td>
-		  <script type="text/javascript">
-				PatSelector.init = function() {
-				  this.sForm = 'Create-Reconvocation';
-				  this.sId   = 'patient_id';
-				  this.sView = '_patient_view';
-				  this.pop();
-				}
-		  </script>
-			
+  <tr>
+    <td>
+      <script type="text/javascript">
+        PatSelector.init = function() {
+          this.sForm = 'Create-Reconvocation';
+          this.sId   = 'patient_id';
+          this.sView = '_patient_view';
+          this.pop();
+        }
+      </script>
+      
       <form name="Create-Reconvocation" method="post" action="?" onsubmit="return Reconvocation.choosePatient();">
         <input type="hidden" name="dosql" value="do_consult_now" />
         <input type="hidden" name="m" value="dPcabinet" />
@@ -87,19 +99,19 @@ Reconvocation = {
         <input type="hidden" name="motif" value="" />   
         <button type="submit" class="new">Reconvocation immédiate</button>
       </form>
-			
-		</td>
-	</tr>
-	{{else}}
+      
+    </td>
+  </tr>
+  {{else}}
   <tr>
     <td>
       <form name="selCabinet" action="?" method="get">
-	    <input type="hidden" name="m" value="{{$m}}" />
-	    <input type="hidden" name="tab" value="{{$tab}}" />
+      <input type="hidden" name="m" value="{{$m}}" />
+      <input type="hidden" name="tab" value="{{$tab}}" />
       <table class="form">
         <tr>
           <th class="title" colspan="100">
-          	Journée de consultation du
+            Journée de consultation du
             {{$date|date_format:$conf.longdate}}
             <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
           </th>
@@ -121,15 +133,23 @@ Reconvocation = {
               </select>
             </td>
             
-  	        <th {{if $mode_urgence}}colspan="5"{{/if}}>
-  		      	<label for="closed" title="Type de vue du planning">Type de vue</label>
+            <th {{if $mode_urgence}}colspan="5"{{/if}}>
+              Afficher les
             </th>
-  		      <td>
-  		        <select name="closed" onchange="this.form.submit()">
-  		          <option value="1"{{if $closed == "1"}}selected="selected"{{/if}}>Tout afficher</option>
-  		          <option value="0"{{if $closed == "0"}}selected="selected"{{/if}}>Masquer les terminées</option>
-  		        </select>
-  		      </td>
+            <td>
+              <input name="_empty" type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $empty}}checked="checked"{{/if}} />
+              <input name="empty" type="hidden" value="{{$empty}}" />
+              <label title="Afficher les plages vides">Plages vides</label>
+              <input name="_canceled" type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $canceled}}checked="checked"{{/if}} />
+              <input name="canceled" type="hidden" value="{{$canceled}}" />
+              <label title="Afficher les consultations annulées">Annulées</label>
+              <input name="_paid" type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $paid}}checked="checked"{{/if}} />
+              <input name="paid" type="hidden" value="{{$paid}}" />
+              <label title="Afficher les consultations réglées">Réglées</label>
+              <input name="_finished" type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $finished}}checked="checked"{{/if}} />
+              <input name="finished" type="hidden" value="{{$finished}}" />
+              <label title="Afficher les consultations terminées">Terminées</label>
+            </td>
             {{if !$mode_urgence}}
               <th>
                 <label for="mode_vue" title="Mode de vue du planning">Mode de vue</label>
