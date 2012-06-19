@@ -23,6 +23,10 @@
     {{mb_include module=system template=inc_config_enum var=duree_fin  values=$hours skip_locales=true}}
     {{mb_include module=system template=inc_config_enum var=hour_urgence_deb  values=$hours skip_locales=true}}
     {{mb_include module=system template=inc_config_enum var=hour_urgence_fin  values=$hours skip_locales=true}}
+
+    {{mb_include module=system template=inc_config_bool var=fiche_examen  }}
+    {{mb_include module=system template=inc_config_bool var=fiche_materiel}}
+    {{mb_include module=system template=inc_config_bool var=fiche_rques   }}
     
     {{mb_include module=system template=inc_config_enum var=min_intervalle values=$intervals skip_locales=true}}
     <tr>

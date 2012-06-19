@@ -31,8 +31,11 @@ $dPconfig["dPplanningOp"]= array(
     "show_duree_preop"   => "0",
     "show_duree_uscpo"   => "0",
     "save_rank_annulee_validee" => "0",
-    "cancel_only_for_resp_bloc" => "0"
-	),
+    "cancel_only_for_resp_bloc" => "0",
+    "fiche_examen"       => "0",
+    "fiche_materiel"     => "0",
+    "fiche_rques"        => "0",
+   ),
   "CSejour" => array (
     "check_collisions"    => "date",
     "easy_cim10"          => "0",

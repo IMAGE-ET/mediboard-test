@@ -88,7 +88,8 @@
     <th>{{mb_label object=$patient field=adresse}}</th>
     <td>
       {{mb_value object=$patient field=adresse}}
-      {{mb_value object=$patient field=cp}} {{mb_value object=$patient field=ville}}
+      {{mb_value object=$patient field=cp}} 
+      {{mb_value object=$patient field=ville}}
     </td>
   </tr>
   
@@ -99,9 +100,7 @@
   {{if $sejour->libelle}}
   <tr>
     <th>{{mb_label object=$sejour field=libelle}}</th>
-    <td>
-      {{$sejour->libelle}}
-    </td>
+    <td>{{mb_value object=$sejour field=libelle}}</td>
   </tr>
   {{/if}}
   
@@ -142,7 +141,7 @@
   </tr>
   {{/if}}
 
-  {{if $conf.dPplanningOp.COperation.use_ccam}}
+  {{if $conf.dPplanningOp.COperation.use_ccam && $operation->codes_ccam}}
   <tr>
     <th>Actes</th>
     <td class="text">
@@ -160,6 +159,27 @@
     <td>{{mb_value object=$operation field=cote}}</td>
   </tr>
   
+  {{if $conf.dPplanningOp.COperation.fiche_examen && $operation->examen}}
+  <tr>
+    <th>{{mb_label object=$operation field=examen}}</th>
+    <td>{{mb_value object=$operation field=examen}}</td>
+  </tr>
+  {{/if}}
+
+  {{if $conf.dPplanningOp.COperation.fiche_materiel && $operation->materiel}}
+  <tr>
+    <th>{{mb_label object=$operation field=materiel}}</th>
+    <td>{{mb_value object=$operation field=materiel}}</td>
+  </tr>
+  {{/if}}
+
+  {{if $conf.dPplanningOp.COperation.fiche_rques && $operation->rques}}
+  <tr>
+    <th>{{mb_label object=$operation field=rques}}</th>
+    <td>{{mb_value object=$operation field=rques}}</td>
+  </tr>
+  {{/if}}
+
   {{/if}}
   {{/if}}
   
