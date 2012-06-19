@@ -41,7 +41,7 @@
       </td>
       
       <td rowspan="{{$count_sources}}">
-        {{$_sender->last_duration|round:3}}s
+        {{$_sender->last_duration|string_format:"%.3f"}}s
       </td>
       
       <td rowspan="{{$count_sources}}" title="{{$_sender->last_size}}">
@@ -50,7 +50,7 @@
 
 	    {{foreach from=$_sender->_ref_senders_source item=_sender_source name=sender_source}}
 	    <td>{{mb_value object=$_sender_source field=source_id tooltip=true}}</td>
-	    <td>{{$_sender_source->last_duration|round:3}}s</td>
+	    <td>{{$_sender_source->last_duration|string_format:"%.3f"}}s</td>
 			
       {{assign var=class value=ok}}
       {{if $_sender_source->last_size < 1000}} 

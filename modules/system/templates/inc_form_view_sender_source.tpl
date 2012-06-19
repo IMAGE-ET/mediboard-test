@@ -9,25 +9,12 @@
 *}}
 
 <form name="Edit-{{$sender_source->_guid}}" action="?m={{$m}}" method="post" onsubmit="return ViewSenderSource.onSubmit(this);">
-  <input type="hidden" name="@class" value="{{$sender_source->_class}}" />
+  {{mb_class object=$sender_source}}
+  {{mb_key   object=$sender_source}}
   <input type="hidden" name="del" value="0" />
-  {{mb_key object=$sender_source}}
   
   <table class="form">
-    <tr>
-      {{if $sender_source->_id}}
-      <th class="title modify" colspan="2">
-        {{mb_include module=system template=inc_object_notes      object=$sender_source}}
-        {{mb_include module=system template=inc_object_idsante400 object=$sender_source}}
-        {{mb_include module=system template=inc_object_history    object=$sender_source}}
-    
-        {{tr}}CViewSenderSource-title-modify{{/tr}} '{{$sender_source}}'
-      {{else}}
-      <th class="title" colspan="2">
-        {{tr}}CViewSenderSource-title-create{{/tr}}
-      {{/if}}
-      </th>
-    </tr>
+    {{mb_include template=inc_form_table_header object=$sender_source}}
     
     <tr>
       <th>{{mb_label object=$sender_source field=name}}</th>

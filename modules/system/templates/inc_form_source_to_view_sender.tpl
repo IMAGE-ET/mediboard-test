@@ -9,21 +9,12 @@
 *}}
 
 <form name="Edit-{{$source_to_vw_sender->_guid}}" action="?m={{$m}}" method="post" onsubmit="return SourceToViewSender.onSubmit(this);">
-  <input type="hidden" name="@class" value="{{$source_to_vw_sender->_class}}" />
+  {{mb_class object=$source_to_vw_sender}}
+  {{mb_key   object=$source_to_vw_sender}}
   <input type="hidden" name="del" value="0" />
-  {{mb_key object=$source_to_vw_sender}}
-  
+
   <table class="form">
-    <tr>
-      {{if $source_to_vw_sender->_id}}
-      <th class="title modify" colspan="2">
-        {{tr}}CSourceToViewSender-title-modify{{/tr}} '{{$source_to_vw_sender}}'
-      {{else}}
-      <th class="title" colspan="2">
-        {{tr}}CSourceToViewSender-title-create{{/tr}}
-      {{/if}}
-      </th>
-    </tr>
+    {{mb_include template=inc_form_table_header object=$source_to_vw_sender}}
     
     <tr>
       <th>{{mb_label object=$source_to_vw_sender field=sender_id}}</th>
