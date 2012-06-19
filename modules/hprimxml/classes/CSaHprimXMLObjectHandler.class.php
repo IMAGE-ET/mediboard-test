@@ -25,17 +25,62 @@ class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       return;
     }
     
-    // Envoi des diags du séjour
-    if ($mbObject instanceof CSejour) {
-      $sejour = $mbObject;
-      if ($sejour->DP || $sejour->DR || (count($sejour->loadRefDossierMedical()->_codes_cim) > 0)) {
-        $evt = (CAppUI::conf("hprimxml send_diagnostic") == "evt_serveuretatspatient") ? 
-                   "CHPrimXMLEvenementsServeurEtatsPatient" : "CHPrimXMLEvenementsPmsi";
-                   
-        $this->sendEvenementPMSI($evt, $sejour);         
-      }
+    switch ($mbObject->_class) {
+      // CSejour 
+      // Envoi des actes / diags soit quand le séjour est facturé, soit quand le sejour a une sortie réelle, soit quand on a la clôture sur le sejour
+      case 'CSejour': 
+        $sejour = $mbObject;
+        $sejour->loadNDA($receiver->group_id);
+        
+        $patient = $sejour->loadRefPatient();
+        $patient->loadIPP($receiver->group_id);
+        
+        if (CAppUI::conf("sa send_only_with_ipp_nda")) {
+          if (!$patient->_IPP || !$sejour->_NDA) {
+            throw new CMbException("CSaObjectHandler-send_only_with_ipp_nda", UI_MSG_ERROR);
+          }
+        }
+        
+        if ($sejour->DP || $sejour->DR || (count($sejour->loadRefDossierMedical()->_codes_cim) > 0)) {
+          $evt = (CAppUI::conf("hprimxml send_diagnostic") == "evt_serveuretatspatient") ? 
+                     "CHPrimXMLEvenementsServeurEtatsPatient" : "CHPrimXMLEvenementsPmsi";
+                     
+          $this->sendEvenementPMSI($evt, $sejour);         
+        }
+      
+        break;
+      // COperation
+      // Envoi des actes soit quand l'interv est facturée, soit quand on a la clôture sur l'interv
+      case 'COperation':
+        $operation = $mbObject;
+        
+        $sejour  = $operation->_ref_sejour;
+        $sejour->loadNDA($receiver->group_id);
+        
+        $patient = $sejour->loadRefPatient();
+        $patient->loadIPP($receiver->group_id);
+        
+        break;
+      // CConsultation
+      // Envoi des actes dans le cas de la clôture de la cotation
+      case 'CConsultation':
+        $consultation = $mbObject;
+        
+        $patient = $consultation->loadRefPatient();
+        $patient->loadIPP($receiver->group_id);
+        
+        $sejour  = $consultation->_ref_sejour;
+        $sejour->loadNDA($receiver->group_id);
+        
+        break; 
     }
     
+    if (CAppUI::conf("sa send_only_with_ipp_nda")) {
+      if (!$patient->_IPP || !$sejour->_NDA) {
+        throw new CMbException("CSaObjectHandler-send_only_with_ipp_nda", UI_MSG_ERROR);
+      }
+    }
+
     $codable = $mbObject;
     // Chargement des actes du codable
     $codable->loadRefsActes();  

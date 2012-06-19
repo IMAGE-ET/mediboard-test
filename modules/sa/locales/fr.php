@@ -1,6 +1,7 @@
 <?php
 $locales['CSaObjectHandler'] = 'Gestionnaire SA';
 $locales['CSaObjectHandler-send_only_with_type'] = 'Le type du séjour \'%s\' n\'est pas pris en charge pour un envoi d\'actes';
+$locales['CSaObjectHandler-send_only_with_ipp_nda'] = 'L\'IPP et/ou le numéro de dossier (NDA) sont manquants pour l\'envoi d\'actes en facturation';
 $locales['SA'] = 'SA';
 $locales['config-object_handlers-CSaObjectHandler'] = 'Activer le gestionnaire SA';
 $locales['config-object_handlers-CSaObjectHandler-desc'] = 'Activer le gestionnaire SA';

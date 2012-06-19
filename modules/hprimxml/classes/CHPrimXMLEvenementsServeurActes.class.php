@@ -31,15 +31,14 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     switch ($codable->_class) {
       // CSejour / CConsultation
       case 'CSejour': case 'CConsultation':
-        $mbPatient = $codable->loadRefPatient();
+        $mbPatient = $codable->_ref_patient;
         break;
       
       // COperation
       case 'COperation':
-        $mbPatient = $codable->_ref_sejour->loadRefPatient();
+        $mbPatient = $codable->_ref_sejour->_ref_patient;
         break;
     }  
-    $mbPatient->loadIPP();
     $this->addPatient($patient, $mbPatient, false, true);
     
     // Ajout de la venue
@@ -55,7 +54,6 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
         $mbSejour = $codable;
         break;
     }
-    $mbSejour->loadNDA();
     $this->addVenue($venue, $mbSejour, null, true);
     
     // Ajout de l'intervention ou consultation ou sejour

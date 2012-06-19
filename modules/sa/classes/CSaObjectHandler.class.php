@@ -19,7 +19,7 @@ class CSaObjectHandler extends CEAIObjectHandler {
     if (!parent::onAfterStore($mbObject)) {
       return;
     }
-
+    
     switch ($mbObject->_class) {
       // CSejour 
       // Envoi des actes / diags soit quand le séjour est facturé, soit quand le sejour a une sortie réelle, soit quand on a la clôture sur le sejour
@@ -30,7 +30,7 @@ class CSaObjectHandler extends CEAIObjectHandler {
         if ($send_only_with_type && ($send_only_with_type != $sejour->type)) {
           return;  
         }
-        
+
         switch (CAppUI::conf("sa trigger_sejour")) {
           case 'sortie_reelle':
             if ($sejour->fieldModified('sortie_reelle')) {
@@ -57,7 +57,6 @@ class CSaObjectHandler extends CEAIObjectHandler {
       case 'COperation':
         $operation = $mbObject;
         
-        $sejour  = $operation->_ref_sejour;
         $send_only_with_type = CAppUI::conf("sa send_only_with_type");
         if ($send_only_with_type && ($send_only_with_type != $sejour->type)) {
           CAppUI::stepAjax("CSaObjectHandler-send_only_with_type", UI_MSG_WARNING, CAppUI::tr("CSejour.type.$sejour->type"));
@@ -82,6 +81,7 @@ class CSaObjectHandler extends CEAIObjectHandler {
       // Envoi des actes dans le cas de la clôture de la cotation
       case 'CConsultation':
         $consultation = $mbObject;
+        
         if ($consultation->sejour_id && $consultation->fieldModified("valide", 1)) {
           $this->sendFormatAction("onAfterStore", $consultation);
         }
