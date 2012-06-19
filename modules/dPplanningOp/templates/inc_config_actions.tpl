@@ -26,6 +26,12 @@
     url.addParam("date_min_interv", $V($("date_min_interv")));
     url.requestUpdate("result-merge-interv");
   }  
+  
+  mergeSejours = function () {
+    var url = new Url("dPplanningOp", "ajax_merge_sejours");
+    url.addParam("date_min_sejour", $V($("date_min_sejour")));
+    url.requestUpdate("result-merge-sejours");
+  }  
 </script>
 
 <h2>Actions de maintenances</h2>
@@ -86,10 +92,22 @@
     <td>
       <button class="change" onclick="mergeInterv()">
         {{tr}}merge-interv{{/tr}}
-      </button>
-      
+      </button>  
+      <br />
+      <input type="checkbox" name="see_yesterday" id="see_yesterday" /> Également ceux de la veille <br />
       <input type="text" name="date_min_interv" value="{{$today}}" id="date_min_interv"/> Date minimale (YYYY-MM-DD)
     </td>
     <td id="result-merge-interv"></td>
+  </tr>
+  
+  <tr>
+    <td>
+      <button class="change" onclick="mergeSejours()">
+        {{tr}}merge-sejours{{/tr}}
+      </button>
+      <br />
+      <input type="text" name="date_min_sejour" value="{{$today}}" id="date_min_sejour"/> Date minimale (YYYY-MM-DD)
+    </td>
+    <td id="result-merge-sejours"></td>
   </tr>
 </table>
