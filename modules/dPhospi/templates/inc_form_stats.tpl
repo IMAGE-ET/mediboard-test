@@ -14,10 +14,10 @@
     </tr>
     <tr>
       <td>
-        A partir du <input type="hidden" name="date_min" class="date notNull" value="{{$date_min}}" "/>
+        A partir du <input type="hidden" name="date_min" class="date notNull" value="{{$date_min}}"/>
       </td>
       <td>
-        Jusqu'au <input type="hidden" name="date_max" class="date notNull" value="{{$date_max}}" "/>
+        Jusqu'au <input type="hidden" name="date_max" class="date notNull" value="{{$date_max}}"/>
       </td>
       <td>
         {{if $type == "occupation"}}
