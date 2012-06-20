@@ -9,6 +9,7 @@
  */
 
 class COracleDataSource extends CSQLDataSource {
+  private $_queries = array();
     
   function connect($host, $name, $user, $pass) {
     if (!function_exists( "oci_connect" )) {
@@ -72,6 +73,11 @@ class COracleDataSource extends CSQLDataSource {
     if (!oci_execute($stid)) {
       mbLog($query);
     }
+    
+    if (CSQLDataSource::$trace) {
+      $this->_queries[$stid] = $query;
+    }
+    
     return $stid;
   }
 
@@ -121,7 +127,16 @@ class COracleDataSource extends CSQLDataSource {
   }
 
   function fetchAssoc($result) {
-    return $this->readLOB(oci_fetch_assoc($result));
+    if (CSQLDataSource::$trace) {
+      $t = microtime(true);
+    }
+    
+    $assoc = $this->readLOB(oci_fetch_assoc($result));
+    
+    if (CSQLDataSource::$trace) {
+      $t = (microtime(true) - $t) * 1000;
+      mbTrace("$t ms", @$this->_queries[$result]);
+    }
   }
 
   function fetchArray($result) {
