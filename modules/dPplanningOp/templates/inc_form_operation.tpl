@@ -154,6 +154,11 @@ CCAMSelector.init = function(){
   </tr>
   
   <tr>
+    <th>{{mb_label object=$op field=exam_extempo}}</th>
+    <td colspan="2">{{mb_field object=$op field=exam_extempo}}</td>
+  </tr>
+  
+  <tr>
     <th>{{mb_label object=$op field="cote"}}</th>
     <td colspan="2">
       {{mb_field object=$op field="cote" style="width: 15em" emptyLabel="Choose" onchange="Value.synchronize(this);"}}

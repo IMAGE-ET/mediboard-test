@@ -12,8 +12,11 @@ CCanDo::checkRead();
 $userSel   = CMediusers::get(CValue::getOrSession("pratSel"));
 
 $date      = CValue::getOrSession("date", mbDate());
+$canceled  = CValue::getOrSession("canceled", 0);
 $board     = CValue::get("board", 0);
 $boardItem = CValue::get("boardItem", 0);
+
+$nb_canceled = 0;
 
 // Urgences du jour
 $list_urgences = array();
@@ -22,7 +25,12 @@ $operation = new COperation();
 if($userSel->_id){
   $operation->date = $date;
   $operation->chir_id = $userSel->_id;
-  $list_urgences = $operation->loadMatchingList("date");
+  if(!$canceled) {
+    $operation->annulee = 0;
+  }
+  $list_urgences = $operation->loadMatchingList("annulee, date");
+  $operation->annulee = 1;
+  $nb_canceled += $operation->countMatchingList();
   foreach($list_urgences as $curr_urg) {
     $curr_urg->loadRefsFwd();
     $curr_urg->loadRefsDocs();
@@ -58,6 +66,11 @@ if($userSel->_id){
   $list_plages = $plageop->loadList($where, $order);
   
   foreach ($list_plages as $_plage) {
+    $op_canceled = new COperation();
+    $op_canceled->annulee = 1;
+    $op_canceled->plageop_id = $_plage->_id;
+    $nb_canceled += $op_canceled->countMatchingList();
+    
     $_plage->loadRefsFwd();
     
     $where = array();
@@ -65,7 +78,7 @@ if($userSel->_id){
       $where["chir_id"] = "= '$userSel->_id'";
     }
     
-    $_plage->loadRefsOperations(false, "rank, rank_voulu, horaire_voulu", true, null, $where);
+    $_plage->loadRefsOperations($canceled, "annulee ASC, rank, rank_voulu, horaire_voulu", false, null, $where);
     
     foreach ($_plage->_ref_operations as $_op) {
       $_op->loadRefsFwd();
@@ -130,12 +143,14 @@ $smarty = new CSmartyDP();
 $smarty->assign("modelesByOwner", $modelesByOwner);
 $smarty->assign("packsByOwner"  , $packsByOwner);
 $smarty->assign("praticien"     , $praticien);
-$smarty->assign("boardItem"   , $boardItem);
-$smarty->assign("date"        , $date);
-$smarty->assign("listUrgences", $list_urgences);
-$smarty->assign("listDay"     , $list_plages);
-$smarty->assign("board"       , $board);
-$smarty->assign("nb_printers" , $nb_printers);
+$smarty->assign("boardItem"     , $boardItem);
+$smarty->assign("date"          , $date);
+$smarty->assign("canceled"      , $canceled);
+$smarty->assign("listUrgences"  , $list_urgences);
+$smarty->assign("listDay"       , $list_plages);
+$smarty->assign("nb_canceled"   , $nb_canceled);
+$smarty->assign("board"         , $board);
+$smarty->assign("nb_printers"   , $nb_printers);
 $smarty->assign("nb_modeles_etiquettes", $nb_modeles_etiquettes);
 
 $smarty->display("inc_list_operations.tpl");

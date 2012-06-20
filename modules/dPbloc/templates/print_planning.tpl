@@ -25,7 +25,8 @@ function popPlanning(form) {
   url.addElement(form._date_max);
   url.addParam("_plage", $V(form._plage));
   url.addElement(form._codes_ccam);
-  url.addElement(form._intervention);
+  url.addElement(form.exam_extempo);
+  url.addParam("_intervention", $V(form._intervention));
   url.addElement(form._prat_id);
   url.addElement(form._specialite);
   url.addElement(form._bloc_id);
@@ -143,11 +144,12 @@ function showCheckboxAnesth(element){
         <tr>
           <th>{{mb_label object=$filter field="_intervention"}}</th>
           <td colspan="2">
-            <select name="_intervention" style="width: 15em;">
-              <option value="0">&mdash; Toutes les interventions</option>
-              <option value="1">insérées dans le planning</option>
-              <option value="2">à insérer dans le planning</option>
-            </select>
+            <input type="radio" name="_intervention" value="0" checked="checked" />
+            <label for="_intervention_0">Toutes</label>
+            <input type="radio" name="_intervention" value="1" />
+            <label for="_intervention_1">Validées</label>
+            <input type="radio" name="_intervention" value="2" />
+            <label for="_intervention_2">Non validées (NP)</label>
           </td>
         </tr>
         <tr>
@@ -251,6 +253,8 @@ function showCheckboxAnesth(element){
           </script>
           </td>
         </tr>
+          <th>{{mb_label object=$filter field="exam_extempo"}}</th>
+          <td>{{mb_field object=$filter field="exam_extempo" typeEnum=checkbox}}</td>
 
       </table>
 

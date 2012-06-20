@@ -14,20 +14,21 @@ $ds = CSQLDataSource::get("std");
 
 $now       = mbDate();
 $filter = new COperation;
-$filter->_date_min     = CValue::get("_date_min", $now);
-$filter->_date_max     = CValue::get("_date_max", $now);
-$filter->_prat_id      = CValue::get("_prat_id");
-$filter->_bloc_id      = CValue::get("_bloc_id");
-$filter->salle_id      = CValue::get("salle_id");
-$filter->_plage        = CValue::get("_plage", CAppUI::conf("dPbloc CPlageOp plage_vide"));
-$filter->_intervention = CValue::get("_intervention");
-$filter->_specialite   = CValue::get("_specialite");
-$filter->_codes_ccam   = CValue::get("_codes_ccam");
-$filter->_ccam_libelle = CValue::get("_ccam_libelle", CAppUI::conf("dPbloc CPlageOp libelle_ccam"));
+$filter->_date_min       = CValue::get("_date_min", $now);
+$filter->_date_max       = CValue::get("_date_max", $now);
+$filter->_prat_id        = CValue::get("_prat_id");
+$filter->_bloc_id        = CValue::get("_bloc_id");
+$filter->salle_id        = CValue::get("salle_id");
+$filter->_plage          = CValue::get("_plage", CAppUI::conf("dPbloc CPlageOp plage_vide"));
+$filter->_intervention   = CValue::get("_intervention");
+$filter->_specialite     = CValue::get("_specialite");
+$filter->_codes_ccam     = CValue::get("_codes_ccam");
+$filter->exam_extempo    = CValue::get("exam_extempo");
+$filter->_ccam_libelle   = CValue::get("_ccam_libelle", CAppUI::conf("dPbloc CPlageOp libelle_ccam"));
 $filter->_planning_perso = CValue::get("planning_perso");
-$_coordonnees   = CValue::get("_coordonnees");
-$_print_numdoss = CValue::get("_print_numdoss");
-$_print_annulees = CValue::get("_print_annulees");
+$_coordonnees            = CValue::get("_coordonnees");
+$_print_numdoss          = CValue::get("_print_numdoss");
+$_print_annulees         = CValue::get("_print_annulees");
 
 $filterSejour = new CSejour;
 $filterSejour->type = CValue::get("type");
@@ -139,6 +140,10 @@ switch ($filter->_intervention) {
 if ($filter->_codes_ccam) {
   $where["operations.codes_ccam"]           = "LIKE '%$filter->_codes_ccam%'";
   $whereOperations["operations.codes_ccam"] = "LIKE '%$filter->_codes_ccam%'";
+}
+if ($filter->exam_extempo) {
+  $where["operations.exam_extempo"]           = "= '1'";
+  $whereOperations["operations.exam_extempo"] = "= '1'";
 }
 if($filterSejour->type) {
   $where["sejour.type"]           = "= '$filterSejour->type'";

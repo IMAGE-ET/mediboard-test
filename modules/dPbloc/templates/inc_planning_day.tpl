@@ -10,22 +10,22 @@
 
 <tr>
   <th class="narrow">
-    <a href="?m=dPbloc&amp;tab=vw_edit_planning&amp;date={{$curr_day}}" >
+    <a href="?m=dPbloc&amp;tab=vw_edit_planning&amp;date={{$curr_day}}&amp;type_view_planning=day" >
       <strong>{{$curr_day|date_format:"%a %d %b"}}</strong>
     </a>
-    {{if $can->edit}}
-      <br />
-      {{assign var=plages_ids value=$listPlages.$curr_day}}
-      <form name="chg-{{$curr_day}}" action="?m={{$m}}" method="post" onsubmit="return EditPlanning.lockPlages(this);">
-        <input type="hidden" name="m" value="bloc" />
-        <input type="hidden" name="@class" value="CPlageOp" />
-        <input type="hidden" name="verrouillage" value="oui" />
-        <input type="hidden" name="plageop_ids" value="{{$plages_ids|@array_keys|@join:"-"}}" />
+    <br />
+    {{assign var=plages_ids value=$listPlages.$curr_day}}
+    <form name="chg-{{$curr_day}}" action="?m={{$m}}" method="post" onsubmit="return EditPlanning.lockPlages(this);">
+      <input type="hidden" name="m" value="bloc" />
+      <input type="hidden" name="@class" value="CPlageOp" />
+      <input type="hidden" name="verrouillage" value="oui" />
+      <input type="hidden" name="plageop_ids" value="{{$plages_ids|@array_keys|@join:"-"}}" />
+      {{if $can->edit}}
         <button type="button" class="new notext" onclick="EditPlanning.edit('','{{$curr_day}}');">{{tr}}Edit{{/tr}}</button>
         <button type="submit" class="lock notext">{{tr}}Lock{{/tr}}</button>
-        <button type="button" class="print notext" onclick="EditPlanning.popPlanning('{{$curr_day}}');">{{tr}}Print{{/tr}}</button>
-      </form>
-    {{/if}}
+      {{/if}}
+      <button type="button" class="print notext" onclick="EditPlanning.popPlanning('{{$curr_day}}');">{{tr}}Print{{/tr}}</button>
+    </form>
   </th>
   {{foreach from=$listHours item=_hour}}
   <th colspan="4" class="heure">{{$_hour}}:00</th>

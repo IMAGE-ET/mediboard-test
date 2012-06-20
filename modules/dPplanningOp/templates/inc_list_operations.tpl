@@ -3,6 +3,12 @@
   Main.add(function(){
     Calendar.regField(getForm("changeDate").date, null, {noView: true});
   });
+
+  synchronizeView = function(form) {
+    var canceled = $V(form._canceled) ? 1 : 0;
+    $V(form.canceled, canceled);
+    form.submit();
+  }
 </script>
 
 <form action="?" name="changeDate" method="get" style="font-weight:bold; padding: 2px; text-align:center; display: block;">
@@ -10,6 +16,11 @@
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="vw_idx_planning" />
   <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+  <div style="float: right";>
+    Afficher les interventions annulées ({{$nb_canceled}})
+    <input type="checkbox" name="_canceled" value="1" {{if $canceled}}checked="checked"{{/if}} onchange="synchronizeView(this.form)" />
+    <input type="hidden" name ="canceled" value="{{$canceled}}" />
+  </div>
 </form>
 {{/if}}
 
@@ -54,7 +65,8 @@
     <tr>
       {{assign var=patient value=$_operation->_ref_sejour->_ref_patient}}
       
-      <td rowspan="2" class="narrow" style="text-align: center;">
+      <td rowspan="2" class="narrow {{if $_operation->annulee}}cancelled{{/if}}" style="text-align: center;">
+        {{if !$_operation->annulee}}
         {{if !$board && !$_operation->rank && (!$prev_interv || $prev_interv && !$prev_interv->rank) && !($curr_plage->spec_id && !$curr_plage->unique_chir)}}
           {{if $_operation->rank_voulu || $_operation->horaire_voulu}}
             {{if !$smarty.foreach._operation.first && $prev_interv && !$prev_interv->rank}}
@@ -108,6 +120,7 @@
               </form>
             {{/if}}
           {{/if}}
+        {{/if}}
         {{/if}}
       </td>
       

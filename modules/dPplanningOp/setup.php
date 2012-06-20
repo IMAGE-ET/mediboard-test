@@ -1381,7 +1381,13 @@ class CSetupdPplanningOp extends CSetup {
       ADD `actif` ENUM ('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.48";
+    $this->makeRevision("1.48");
+    
+    $query = "ALTER TABLE `operations` 
+              ADD `exam_extempo` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.49";
   }
 }
 ?>

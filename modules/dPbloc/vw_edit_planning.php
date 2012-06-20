@@ -8,8 +8,22 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$date       = CValue::getOrSession("date", mbDate());
-$plageop_id = CValue::getOrSession("plageop_id");
+$date               = CValue::getOrSession("date", mbDate());
+$type_view_planning = CValue::getOrSession("type_view_planning", "day");
+
+if($type_view_planning == "day") {
+  $debut = $fin = $date;
+} else {
+  $debut = mbDate("last sunday", $date);
+  $fin   = mbDate("next sunday", $date);
+  $debut = mbDate("+1 day", $debut);
+}
+
+// Liste des jours
+$listDays = array();
+for($i = $debut; $i <= $fin; $i = mbDate("+1 day", $i)) {
+  $listDays[$i] = $i;  
+}
 
 $listBlocs  = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");
 $bloc_id    = CValue::getOrSession("bloc_id", reset($listBlocs)->_id);
@@ -27,141 +41,121 @@ $bloc->load($bloc_id);
 $bloc->loadRefsSalles();
 $nbAlertesInterv = count($bloc->loadRefsAlertesIntervs());
 
-$listSalles = $bloc->_ref_salles;
-
-foreach ($listSalles as $_salle) {
-  $_salle->_blocage[$date] = $_salle->loadRefsBlocages($date);
+if (!$listSalles = $bloc->_ref_salles) {
+  $listSalles = array();
 }
 
-// Informations sur la plage demandée
-$plagesel = new CPlageOp;
-$plagesel->load($plageop_id);
-if(!$plagesel->temps_inter_op) {
-  $plagesel->temps_inter_op = "00:00:00";
-}
-if($plagesel->_id){
-  $arrKeySalle = array_keys($listSalles);
-  if(!in_array($plagesel->salle_id, $arrKeySalle) || $plagesel->date != $date) {
-    $plageop_id = 0;
-    $plagesel = new CPlageOp;
-  }
-}
-
-if(!$plagesel->_id) {
-  $plagesel->debut = CPlageOp::$hours_start.":00:00";
-  $plagesel->fin   = CPlageOp::$hours_start.":00:00";
-}
-
-// Liste des Specialités
-$function = new CFunctions;
-$specs = $function->loadSpecialites(PERM_READ, 1);
-
-// Liste des Anesthésistes
-$mediuser = new CMediusers;
-$anesths = $mediuser->loadAnesthesistes();
-foreach($anesths as $_anesth) {
-  $_anesth->loadRefFunction();
-}
-
-// Liste des praticiens
-$chirs = $mediuser->loadChirurgiens();
-foreach($chirs as $_chir) {
-  $_chir->loadRefFunction();
-}
-
-// Récupération des plages pour le jour demandé
-$listPlage = new CPlageOp();
-$where = array();
-$where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
-$where["date"] = "= '$date'";
-$order = "debut";
-$listPlages[$date] = $listPlage->loadList($where,$order);
-
-// Détermination des bornes du semainier
-$min = CPlageOp::$hours_start.":".reset(CPlageOp::$minutes).":00";
-$max = CPlageOp::$hours_stop.":".end(CPlageOp::$minutes).":00";
-
-// Liste des interventions hors plage pour la journée
-$operation = new COperation();
-$ljoin = array();
-$ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
-$where = array();
-$where["operations.date"]    = "= '$date'";
-$where["operations.annulee"] = "= '0'";
-$where[]                     = "operations.salle_id IS NULL OR operations.salle_id ". CSQLDataSource::prepareIn(array_keys($listSalles));
-$where["sejour.group_id"]    = "= '".CGroups::loadCurrent()->_id."'";
-$horsPlages = $operation->loadList($where, null, null, null, $ljoin);
-$nbIntervHorsPlage = count($horsPlages);
-
-$nbIntervNonPlacees = 0;
-// Détermination des bornes de chaque plage
-foreach($listPlages[$date] as &$plage){
-  $plage->loadRefsFwd();
-	$plage->loadRefsNotes();
-  $plage->_ref_chir->loadRefsFwd();
-  $plage->getNbOperations();
-  $nbIntervNonPlacees += $plage->_nb_operations - $plage->_nb_operations_placees;
-  $plage->loadAffectationsPersonnel();
-  
-  $plage->fin = min($plage->fin, $max);
-  $plage->debut = max($plage->debut, $min);
-  
-  $plage->updateFormFields();
-  $plage->makeView();
-  
-  if($plage->debut >= $plage->fin){  
-    unset($listPlages[$date][$plage->_id]);
-  }  
-}
-
-// Création du tableau de visualisation vide
+// Création du tableau de visualisation
 $affichages = array();
-foreach($listSalles as $keySalle=>$valSalle){
-  foreach(CPlageOp::$hours as $keyHours=>$valHours){
-    foreach(CPlageOp::$minutes as $keyMins=>$valMins){
-      // Initialisation du tableau
-      $affichages["$date-s$keySalle-$valHours:$valMins:00"] = "empty";
-      $affichages["$date-s$keySalle-HorsPlage"] = array();
+foreach($listDays as $keyDate => $valDate){
+  foreach($listSalles as $keySalle => $valSalle){
+    $valSalle->_blocage[$valDate] = $valSalle->loadRefsBlocages($valDate);
+    foreach(CPlageOp::$hours as $keyHours => $valHours){
+      foreach(CPlageOp::$minutes as $keyMins => $valMins){
+        // Initialisation du tableau
+        $affichages["$keyDate-s$keySalle-$valHours:$valMins:00"] = "empty";
+        $affichages["$keyDate-s$keySalle-HorsPlage"] = array();
+      }
     }
   }
 }
 
-// Remplissage du tableau de visualisation
-foreach($listPlages[$date] as &$plage){
-  $plage->debut = mbTimeGetNearestMinsWithInterval($plage->debut, CPlageOp::$minutes_interval);
-  $plage->fin   = mbTimeGetNearestMinsWithInterval($plage->fin  , CPlageOp::$minutes_interval);
-  $plage->_nbQuartHeure = mbTimeCountIntervals($plage->debut, $plage->fin, "00:".CPlageOp::$minutes_interval.":00");
-  for($time = $plage->debut; $time < $plage->fin; $time = mbTime("+".CPlageOp::$minutes_interval." minutes", $time) ){
-    $affichages["$date-s$plage->salle_id-$time"] = "full";
-  } 
-  $affichages["$date-s$plage->salle_id-$plage->debut"] = $plage->_id;
+$listPlages         = array();
+$operation          = new COperation();
+$nbIntervHorsPlage  = 0;
+$listPlage          = new CPlageOp();
+$nbIntervNonPlacees = 0;
+
+// Nombre d'interventions hors plage pour la semaine
+$ljoin = array();
+$ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
+$where = array();
+$where["date"]            = "BETWEEN '$debut' AND '$fin'";
+$where["annulee"]         = "= '0'";
+$where[]                  = "salle_id IS NULL OR salle_id ". CSQLDataSource::prepareIn(array_keys($listSalles));
+$where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+$nbIntervHorsPlage = $operation->countList($where, null, $ljoin);
+
+foreach($listDays as $keyDate => $valDate){
+  
+  // Récupération des plages par jour
+  $where = array();
+  $where["date"]     = "= '$keyDate'";
+  $where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
+  $order             = "debut";
+  $listPlages[$keyDate] = $listPlage->loadList($where,$order);
+  
+  // Récupération des interventions hors plages du jour
+  $where = array();
+  $where["date"]     = "= '$keyDate'";
+  $where["annulee"]   = "= '0'";
+  $where["salle_id"]        = CSQLDataSource::prepareIn(array_keys($listSalles));
+  $order = "time_operation";
+  $horsPlages = $operation->loadList($where,$order);
+  
+  // Détermination des bornes du semainier
+  $min = CPlageOp::$hours_start.":".reset(CPlageOp::$minutes).":00";
+  $max = CPlageOp::$hours_stop.":".end(CPlageOp::$minutes).":00";
+  
+  // Détermination des bornes de chaque plage
+  foreach($listPlages[$keyDate] as $plage){
+    $plage->loadRefsFwd();
+    $plage->loadRefsNotes();
+    $plage->_ref_chir->loadRefsFwd();
+    $plage->getNbOperations();
+    $nbIntervNonPlacees += $plage->_nb_operations - $plage->_nb_operations_placees;
+    $plage->loadAffectationsPersonnel();
+  
+    $plage->fin = min($plage->fin, $max);
+    $plage->debut = max($plage->debut, $min);
+  
+    $plage->updateFormFields();
+    $plage->makeView();
+  
+    if($plage->debut >= $plage->fin){  
+      unset($listPlages[$keyDate][$plage->_id]);
+    }
+  }
+  
+  // Remplissage du tableau de visualisation
+  foreach($listPlages[$keyDate] as $plage){
+    $plage->debut = mbTimeGetNearestMinsWithInterval($plage->debut, CPlageOp::$minutes_interval);
+    $plage->fin   = mbTimeGetNearestMinsWithInterval($plage->fin  , CPlageOp::$minutes_interval);
+    $plage->_nbQuartHeure = mbTimeCountIntervals($plage->debut, $plage->fin, "00:".CPlageOp::$minutes_interval.":00");
+    for($time = $plage->debut; $time < $plage->fin; $time = mbTime("+".CPlageOp::$minutes_interval." minutes", $time) ){
+      $affichages["$keyDate-s$plage->salle_id-$time"] = "full";
+    } 
+    $affichages["$keyDate-s$plage->salle_id-$plage->debut"] = $plage->_id;
+  }
+  // Ajout des interventions hors plage
+  foreach($horsPlages as $_op) {
+    if($_op->salle_id) {
+      $affichages["$keyDate-s".$_op->salle_id."-HorsPlage"][$_op->_id] = $_op;
+    }
+  }
 }
-// Ajout des interventions hors plage
-foreach($horsPlages as $_op) {
-	if($_op->salle_id) {
-    $affichages["$date-s".$_op->salle_id."-HorsPlage"][$_op->_id] = $_op;
-	}
-}
+
+// Liste des Spécialités
+$listSpec = new CFunctions();
+$listSpec = $listSpec->loadSpecialites();
 
 //Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("listPlages"        , $listPlages        );
-$smarty->assign("bloc"              , $bloc              );
+$smarty->assign("listDays"          , $listDays          );
 $smarty->assign("listBlocs"         , $listBlocs         );
-$smarty->assign("listSalles"        , $listSalles        );
 $smarty->assign("bloc"              , $bloc              );
+$smarty->assign("listSalles"        , $listSalles        );
 $smarty->assign("listHours"         , CPlageOp::$hours   );
 $smarty->assign("listMins"          , CPlageOp::$minutes );
+$smarty->assign("type_view_planning", $type_view_planning);
 $smarty->assign("affichages"        , $affichages        );
 $smarty->assign("nbIntervNonPlacees", $nbIntervNonPlacees);
 $smarty->assign("nbIntervHorsPlage" , $nbIntervHorsPlage );
 $smarty->assign("nbAlertesInterv"   , $nbAlertesInterv   );
 $smarty->assign("date"              , $date              );
-$smarty->assign("plagesel"          , $plagesel          );
-$smarty->assign("specs"             , $specs             );
-$smarty->assign("anesths"           , $anesths           );
-$smarty->assign("chirs"             , $chirs             );
+$smarty->assign("listSpec"          , $listSpec          );
 
 $smarty->display("vw_edit_planning.tpl");
 ?>

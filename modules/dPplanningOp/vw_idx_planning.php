@@ -10,6 +10,7 @@
 CCanDo::checkEdit();
 $ds = CSQLDataSource::get("std");
 $date      = CValue::getOrSession("date", mbDate());
+$canceled  = CValue::getOrSession("canceled", 0);
 $lastmonth = mbDate("-1 month", $date);
 $nextmonth = mbDate("+1 month", $date);
 
@@ -184,6 +185,7 @@ if($selPraticien->isAnesth()) {
   $smarty = new CSmartyDP();
   
   $smarty->assign("date"        , $date);
+  $smarty->assign("canceled"    , $canceled);
   $smarty->assign("lastmonth"   , $lastmonth);
   $smarty->assign("nextmonth"   , $nextmonth);
   $smarty->assign("listPrat"    , $listPrat);

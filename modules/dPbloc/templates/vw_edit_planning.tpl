@@ -12,7 +12,7 @@
 
 <table class="main">
   <tr>
-    <td class="greedyPane" style="text-align:center;">
+    <td class="greedyPane" style="text-align:center; height: 1px;">
       {{if $can->edit && ($nbIntervNonPlacees || $nbIntervHorsPlage || $nbAlertesInterv)}}
         <div class="warning" style="float: right; text-align:left;">
           <a href="#nothing" onclick="EditPlanning.showAlerte('{{$date}}', '{{$bloc->_id}}', 'jour')">
@@ -31,14 +31,11 @@
           </a>
         </div>
       {{/if}}
-      <button class="print" onclick="EditPlanning.popPlanning('{{$date}}');" style="font-weight: bold;">
-        {{$date|date_format:"%A %d %B"}}
-      </button>
       
       <form action="?" name="selectBloc" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="vw_edit_planning" />
-        <select name="bloc_id" onchange="this.form.submit();">
+        <select name="bloc_id" onchange="this.form.submit();" style="width: 14em;">
           {{foreach from=$listBlocs item=curr_bloc}}
             <option value="{{$curr_bloc->_id}}" {{if $curr_bloc->_id == $bloc->_id}}selected="selected"{{/if}}>
               {{$curr_bloc->nom}}
@@ -47,23 +44,27 @@
             <option value="" disabled="disabled">{{tr}}CBlocOperatoire.none{{/tr}}</option>
           {{/foreach}}
         </select>
+        <select name="type_view_planning" onchange="this.form.submit();" style="width: 14em;">
+          <option value="day" {{if $type_view_planning == "day"}}selected="selected"{{/if}}>
+            {{tr}}Day{{/tr}}
+          </option>
+          <option value="week" {{if $type_view_planning == "week"}}selected="selected"{{/if}}>
+            {{tr}}Week{{/tr}}
+          </option>
+        </select>
       </form>
-      
+    </td>
+    <td rowspan="100">
+      {{include file="inc_legende_planning.tpl"}}
+    </td>
+  </tr>
+  <tr>
+    <td class="greedyPane">
       <table class="planningBloc">
-      {{assign var=typeVuePlanning value="day"}}
-      {{assign var=curr_day value=$date}}
-      {{mb_include module=bloc template=inc_planning_day}}
+      {{foreach from=$listDays key=curr_day item=plagesPerDay}}
+        {{include file="inc_planning_day.tpl"}}
+      {{/foreach}}
       </table>
-      {{if $can->edit}}
-      <button type="button" class="new" style="float: left;" onclick="EditPlanning.edit('','{{$date}}');">
-        {{tr}}CPlageOp-title-create{{/tr}}
-      </button>
-			
-    </form>
-    {{/if}}
-   </td>
-   <td>
-     {{include file="inc_legende_planning.tpl" listSpec=$specs}}
-   </td>
+    </td>
   </tr>
 </table>

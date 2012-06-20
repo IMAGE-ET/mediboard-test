@@ -30,6 +30,7 @@ class COperation extends CCodable implements IPatientRelated {
   var $temp_operation = null;
   var $pause          = null;
   var $time_operation = null;
+  var $exam_extempo   = null;
   var $examen         = null;
   var $materiel       = null;
   var $commande_mat   = null;
@@ -206,6 +207,7 @@ class COperation extends CCodable implements IPatientRelated {
     $props["sortie_salle"]       = "time show|0";
     $props["time_operation"]     = "time show|0";
     $props["examen"]             = "text helped";
+    $props["exam_extempo"]       = "bool";
     $props["materiel"]           = "text helped seekable show|0";
     $props["commande_mat"]       = "bool show|0";
     $props["info"]               = "bool";

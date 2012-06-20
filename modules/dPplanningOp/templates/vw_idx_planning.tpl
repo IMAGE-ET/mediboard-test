@@ -6,8 +6,9 @@
 
 function updateListOperations(date) {
   var url = new Url("dPplanningOp", "httpreq_vw_list_operations");
-  url.addParam("pratSel", "{{$selPrat}}");
-  url.addParam("date"   , date);
+  url.addParam("pratSel" , "{{$selPrat}}");
+  url.addParam("canceled", "{{$canceled}}");
+  url.addParam("date"    , date);
   url.requestUpdate('operations');
   
   var row = $("date-"+date);
