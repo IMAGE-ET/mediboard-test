@@ -73,7 +73,13 @@ class CSetupdPccam extends CSetup {
     $this->makeRevision("0.14");
     $this->addPrefQuery("new_search_ccam", "1");
     
-    $this->mod_version = "0.15";    
+    $this->makeRevision("0.15");
+    
+    $query = "ALTER TABLE `frais_divers` 
+              CHANGE `facturable` `facturable` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.16";    
 		
 		// Data source query
     $query = "SELECT *

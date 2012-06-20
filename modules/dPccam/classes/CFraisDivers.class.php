@@ -27,7 +27,7 @@ class CFraisDivers extends CActe {
     $specs["type_id"]     = "ref notNull class|CFraisDiversType autocomplete|code";
     $specs["coefficient"] = "float notNull default|1";
     $specs["quantite"]    = "num min|0";
-    $specs["facturable"]  = "bool notNull default|0";
+    $specs["facturable"]  = "bool notNull default|1";
     
     $specs["_execution"]  = "dateTime";
     $specs["_montant"]    = "currency";
