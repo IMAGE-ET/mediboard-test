@@ -41,8 +41,23 @@ if ($user->isPraticien()) {
   CValue::setSession("prat_id", $user->_id);
 }
 
-$modeles = CCompteRendu::loadAllModelesFor($filtre->user_id, 'prat', $filtre->object_class, $filtre->type, 1, $order);
 $owners = $user->getOwners();
+$modeles = CCompteRendu::loadAllModelesFor($filtre->user_id, 'prat', $filtre->object_class, $filtre->type, 1, $order);
+foreach ($modeles as $_modeles) {
+  foreach ($_modeles as $_modele) {
+    if ($_modele->type == "body") {
+      $_modele->loadComponents(); 
+    }
+
+    if ($_modele->type == "header") {
+      $_modele->countBackRefs("modeles_headed"); 
+    }
+    
+    if ($_modele->type == "footer") {
+      $_modele->countBackRefs("modeles_footed"); 
+    }
+  }
+}
 
 // On ne met que les classes qui ont une methode filTemplate
 $filtre->_specs['object_class']->_locales = CCompteRendu::getTemplatedClasses();
