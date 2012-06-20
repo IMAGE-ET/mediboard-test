@@ -25,8 +25,13 @@
         
     {{mb_include module=system template=inc_config_bool var=server}}
     
-    {{mb_include module=system template=inc_config_enum var=trigger_sejour    values=facture|sortie_reelle|testCloture}}
-    {{mb_include module=system template=inc_config_enum var=trigger_operation values=facture|testCloture}}
+    {{mb_include module=system template=inc_config_enum var=trigger_sejour       values=facture|sortie_reelle|testCloture}}
+    {{mb_include module=system template=inc_config_bool var=send_actes_consult}}
+    {{mb_include module=system template=inc_config_bool var=send_actes_interv}}
+    
+    {{mb_include module=system template=inc_config_enum var=trigger_operation    values=facture|testCloture|sortie_reelle}}
+    
+    {{mb_include module=system template=inc_config_enum var=trigger_consultation values=valide|sortie_reelle}}
     
     {{mb_include module=system template=inc_config_bool var=send_only_with_ipp_nda}}
     {{assign var=list_types_sejour value='|'|implode:$sejour_types}}
