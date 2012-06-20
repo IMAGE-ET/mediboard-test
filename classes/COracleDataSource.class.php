@@ -131,12 +131,23 @@ class COracleDataSource extends CSQLDataSource {
       $t = microtime(true);
     }
     
-    $assoc = $this->readLOB(oci_fetch_assoc($result));
+    $assoc = oci_fetch_assoc($result);
     
     if (CSQLDataSource::$trace) {
-      $t = (microtime(true) - $t) * 1000;
-      mbTrace("$t ms", @$this->_queries[$result]);
+      $new_t = microtime(true);
+      mbTrace(@$this->_queries[$result], "FETCH ASSOC in ".(($new_t - $t)*1000)." ms");
+      $t = $new_t;
     }
+    
+    $assoc = $this->readLOB($assoc);
+    
+    if (CSQLDataSource::$trace) {
+      $new_t = microtime(true);
+      mbTrace(@$this->_queries[$result], "READ LOB in ".(($new_t - $t)*1000)." ms");
+      $t = $new_t;
+    }
+    
+    return $assoc;
   }
 
   function fetchArray($result) {
