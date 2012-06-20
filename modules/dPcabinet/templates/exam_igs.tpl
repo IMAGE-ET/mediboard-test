@@ -15,7 +15,6 @@ checkSelect = function(){
 }
 
 empty_on_click = function(elem) {
-  console.log(getForm("editScoreIGS").elements[elem]);
   $A(getForm("editScoreIGS").elements[elem]).each(function(radio){
     radio.checked = false;
   });
