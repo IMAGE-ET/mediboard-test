@@ -1500,9 +1500,10 @@ TESTS A EFFECTUER
   function canDeleteEx() {
     // Date dépassée
     $this->loadRefPlageConsult();
-    if ($this->_ref_plageconsult->date < mbDate()) {
+    if ($this->_date < mbDate() && !$this->_ref_module->_can->admin) {
       return "Impossible de supprimer une consultation passée";
     }
+    
     return parent::canDeleteEx();
   }
   
