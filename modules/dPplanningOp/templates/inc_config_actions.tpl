@@ -2,6 +2,15 @@
   viewNoPratSejour = function() {
     var url = new Url("dPplanningOp", "vw_resp_no_prat"); 
     url.popup(700, 500, "printFiche");
+    
+    return false;
+  }
+
+  popAddOperation = function () {
+    var url = new Url("dPplanningOp", "add_operation_csv");
+    url.popup(800, 600, "Ajout des intervensions");
+    
+    return false;
   }
   
   checkSynchroSejour = function(sType) {
@@ -14,37 +23,45 @@
     var url = new Url("dPplanningOp", "ajax_close_sejour_consult");
     url.requestUpdate("result-close-sejour-consult");
   }
-
-  popAddOperation = function () {
-    var url = new Url("dPplanningOp", "add_operation_csv");
-    url.popup(800, 600, "Ajout des intervensions");
-    return false;
-  }
   
   mergeInterv = function () {
     var url = new Url("dPplanningOp", "ajax_merge_interv");
-    url.addParam("date_min_interv", $V($("date_min_interv")));
-    url.requestUpdate("result-merge-interv");
+    url.addParam("date_min", $V($("date_min")));
+    url.requestUpdate("result-actions-change", { onComplete: function() {
+      repeatActions("mergeInterv");
+    }});
   }  
   
   mergeSejours = function () {
     var url = new Url("dPplanningOp", "ajax_merge_sejours");
-    url.addParam("date_min_sejour", $V($("date_min_sejour")));
-    url.requestUpdate("result-merge-sejours");
+    url.addParam("date_min", $V($("date_min")));
+    url.requestUpdate("result-actions-change", { onComplete: function() {
+      repeatActions("mergeSejours");
+    }});
   }  
+  
+  repeatActions = function (func) {
+    if ($V($("check_repeat_actions"))) {
+      var date = Date.fromDATE($V($("date_min")));
+      date.addDays(1);
+      
+      $V($("date_min"), date.toDATE());
+      window[func]();
+    }
+  }
 </script>
 
 <h2>Actions de maintenances</h2>
 
 <table class="tbl">
   <tr>
-    <th style="width: 50%">{{tr}}Action{{/tr}}</th>
-    <th style="width: 50%">{{tr}}Status{{/tr}}</th>
+    <th>{{tr}}Action{{/tr}}</th>
+    <th>{{tr}}Status{{/tr}}</th>
   </tr>
   
   <tr>
-    <td>
-      <button class="change" onclick="viewNoPratSejour()">
+    <td class="narrow">
+      <button class="search" onclick="viewNoPratSejour()">
         Corriger les praticiens des séjours
       </button>
     </td>
@@ -52,7 +69,7 @@
   </tr>
   
   <tr>
-    <td>
+    <td class="narrow">
       <button class="search" onclick="checkSynchroSejour('check_entree');">
         Nombre d'heure d'entrée non conforme
       </button>
@@ -69,16 +86,7 @@
     </td>
     <td id="resultSynchroSejour"></td>
   </tr>
-	
-	<tr>
-    <td>
-      <button class="change" onclick="closeSejourConsult()">
-        {{tr}}close-sejour-consult{{/tr}}
-      </button>
-    </td>
-    <td id="result-close-sejour-consult"></td>
-  </tr>
-  
+
   <tr>
     <td>
       <button class="hslip" onclick="return popAddOperation();">
@@ -90,24 +98,29 @@
   
   <tr>
     <td>
+      <button class="change" onclick="closeSejourConsult()">
+        {{tr}}close-sejour-consult{{/tr}}
+      </button>
+    </td>
+    <td id="result-close-sejour-consult"></td>
+  </tr>
+    
+  <tr>
+    <td class="narrow">
       <button class="change" onclick="mergeInterv()">
         {{tr}}merge-interv{{/tr}}
       </button>  
       <br />
-      <input type="checkbox" name="see_yesterday" id="see_yesterday" /> Également ceux de la veille <br />
-      <input type="text" name="date_min_interv" value="{{$today}}" id="date_min_interv"/> Date minimale (YYYY-MM-DD)
-    </td>
-    <td id="result-merge-interv"></td>
-  </tr>
-  
-  <tr>
-    <td>
+
       <button class="change" onclick="mergeSejours()">
         {{tr}}merge-sejours{{/tr}}
       </button>
       <br />
-      <input type="text" name="date_min_sejour" value="{{$today}}" id="date_min_sejour"/> Date minimale (YYYY-MM-DD)
+      <input type="text" name="date_min" value="{{$today}}" id="date_min"   /> Date minimale (YYYY-MM-DD) <br />
+      <input type="checkbox" name="see_yesterday"  id="see_yesterday"       /> Également ceux de la veille <br />
+      <input type="checkbox" name="repeat_actions" id="check_repeat_actions"/> Relancer automatiquement
     </td>
-    <td id="result-merge-sejours"></td>
+    
+    <td id="result-actions-change"></td>
   </tr>
 </table>

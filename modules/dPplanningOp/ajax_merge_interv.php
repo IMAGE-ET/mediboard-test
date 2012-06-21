@@ -10,7 +10,7 @@
 
 CCanDo::checkAdmin();
 
-$date          = CValue::get("date_min_interv", mbDate());
+$date          = CValue::get("date_min", mbDate());
 $see_yesterday = CValue::getOrSession("see_yesterday", "1");
 
 $date_min = $date;
