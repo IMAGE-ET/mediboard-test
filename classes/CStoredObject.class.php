@@ -1717,7 +1717,7 @@ class CStoredObject extends CModelObject {
       }
       
       // Cas de la suppression en cascade
-      if ($fwdSpec->cascade) {
+      if ($fwdSpec->cascade || $backSpec->cascade) {
         
         // Vérification de la possibilité de supprimer chaque backref
         $backObject->$backField = $this->_id;
@@ -1785,7 +1785,7 @@ class CStoredObject extends CModelObject {
       /* Cas du module non installé, 
        * Cas de l'interdiction de suppression, 
        * Cas de l'interdiction de la non liaison des backRefs */
-      if (!$backObject->_ref_module || !$fwdSpec->cascade || $fwdSpec->unlink) {
+      if (!$backObject->_ref_module || !($fwdSpec->cascade || $backSpec->cascade) || $fwdSpec->unlink) {
         continue; 
       }
       
@@ -1832,7 +1832,7 @@ class CStoredObject extends CModelObject {
     foreach ($this->_back as $backName => $backRefs) {
       foreach ($backRefs as $backRef) {
         $backSpec = $this->_backSpecs[$backName];
-        if ($backSpec->_notNull || $backSpec->_purgeable || $backSpec->_cascade) {
+        if ($backSpec->_notNull || $backSpec->_purgeable || $backSpec->_cascade || $backSpec->cascade) {
            if ($msg = $backRef->purge()) {
              return $msg;
            }
