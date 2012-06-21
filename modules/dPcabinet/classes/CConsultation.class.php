@@ -1416,10 +1416,8 @@ TESTS A EFFECTUER
   }
   
   function getPerm($permType) {
-    if (!$this->_ref_plageconsult) {
-      $this->loadRefPlageConsult();
-    }
-    return $this->_ref_plageconsult->getPerm($permType);
+    // Délégation sur la plage
+    return $this->loadRefPlageConsult()->getPerm($permType);
   }
   
   function fillTemplate(&$template) {
