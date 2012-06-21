@@ -33,6 +33,14 @@ class CMovement extends CMbObject {
     return $spec;
   }
   
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    
+    $backProps["identifiants"] = "CIdSante400 object_id cascade";
+    
+    return $backProps;
+  }
+
   function getProps() {
     $props = parent::getProps();
     $props["sejour_id"]             = "ref notNull class|CSejour seekable";

@@ -699,8 +699,12 @@ class CSejour extends CCodable implements IPatientRelated {
 
     // Cas d'une annulation de séjour
     if ($this->annule) {
-      $this->delAffectations();
-      $this->cancelOperations();
+      if ($msg = $this->delAffectations()) {
+        return $msg;
+      }
+      if ($msg = $this->cancelOperations()) {
+        return $msg;
+      }
     }
 
     // Synchronisation des affectations
@@ -775,22 +779,28 @@ class CSejour extends CCodable implements IPatientRelated {
   
   function delAffectations() {
     $this->loadRefsAffectations();
+    
     $msg = null;
     // dPhospi might not be active
-    if($this->_ref_affectations) {
+    if ($this->_ref_affectations) {
       foreach($this->_ref_affectations as $key => $value) {
         $msg .= $this->_ref_affectations[$key]->deleteOne();
       }
     }
+    
     return $msg;
   }
   
   function cancelOperations(){
     $this->loadRefsOperations();
+    
+    $msg = null;
     foreach($this->_ref_operations as $key => $value) {
       $value->annulee = 1;
-      $this->_ref_operations[$key]->store();
+      $msg .= $this->_ref_operations[$key]->store();
     }
+    
+    return $msg;
   }
   
   function getActeExecution() {
