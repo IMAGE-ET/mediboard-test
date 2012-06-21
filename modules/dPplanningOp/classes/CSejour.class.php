@@ -336,7 +336,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["discipline_id"]            = "ref class|CDisciplineTarifaire autocomplete|description show|0";
     $props["ald"]                      = "bool default|0";
     
-    $props["provenance"]               = "enum list|1|2|3|4|5|6|7|8|R";
+    $props["provenance"]               = "enum list|1|2|3|4|5|6|7|8";
     $props["destination"]              = "enum list|1|2|3|4|6|7";
     $props["transport"]                = "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo";
     $props["transport_sortie"]         = "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo";
