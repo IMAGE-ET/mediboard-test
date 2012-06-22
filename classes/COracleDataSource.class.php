@@ -103,7 +103,7 @@ class COracleDataSource extends CSQLDataSource {
     return "SELECT COUNT(*) as total";
   }
   
-  private function readLOB($hash) {
+  function readLOB($hash) {
     if (empty($hash)) {
       return $hash;
     }
@@ -126,7 +126,7 @@ class COracleDataSource extends CSQLDataSource {
     return $this->readLOB(oci_fetch_row($result));
   }
 
-  function fetchAssoc($result) {
+  function fetchAssoc($result, $read_lob = true) {
     if (CSQLDataSource::$trace) {
       $t = microtime(true);
     }
@@ -139,19 +139,27 @@ class COracleDataSource extends CSQLDataSource {
       $t = $new_t;
     }
     
-    $assoc = $this->readLOB($assoc);
-    
-    if (CSQLDataSource::$trace) {
-      $new_t = microtime(true);
-      mbTrace(@$this->_queries[$result], "READ LOB in ".(($new_t - $t)*1000)." ms");
-      $t = $new_t;
+    if ($read_lob) {
+      $assoc = $this->readLOB($assoc);
+      
+      if (CSQLDataSource::$trace) {
+        $new_t = microtime(true);
+        mbTrace(@$this->_queries[$result], "READ LOB in ".(($new_t - $t)*1000)." ms");
+        $t = $new_t;
+      }
     }
     
     return $assoc;
   }
 
-  function fetchArray($result) {
-    return $this->readLOB(oci_fetch_array($result));
+  function fetchArray($result, $read_lob = true) {
+    $array = oci_fetch_array($result);
+    
+    if ($read_lob) {
+      $array = $this->readLOB($array);
+    }
+    
+    return $array;
   }
 
   function fetchObject($result, $class = null, $params = array()) {
