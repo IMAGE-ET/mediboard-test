@@ -33,7 +33,7 @@
       {{if $curr_plage_id == "hors_plage"}}
         <h2>
           <strong>Interventions hors plage</strong>
-          du {{$curr_date|date_format:"%d/%m/%Y"}}
+          du {{$curr_date|date_format:"%a %d/%m/%Y"}}
         </h2>
       {{else}}
         <h2>
@@ -50,7 +50,7 @@
             {{/if}}
           </strong>
           <div style="font-size: 70%">
-            {{$curr_plageop->date|date_format:"%d/%m/%Y"}}
+            {{$curr_plageop->date|date_format:"%a %d/%m/%Y"}}
             {{$curr_plageop->_ref_salle->_view}}
             de {{$curr_plageop->debut|date_format:$conf.time}} à {{$curr_plageop->fin|date_format:$conf.time}}
             {{assign var="plageOp_id" value=$curr_plageop->_id}}
