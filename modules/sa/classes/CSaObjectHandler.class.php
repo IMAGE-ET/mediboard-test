@@ -78,11 +78,6 @@ class CSaObjectHandler extends CEAIObjectHandler {
       case 'COperation':
         $operation = $mbObject;
         
-        $send_only_with_type = CAppUI::conf("sa send_only_with_type");
-        if ($send_only_with_type && ($send_only_with_type != $sejour->type)) {
-          CAppUI::stepAjax("CSaObjectHandler-send_only_with_type", UI_MSG_WARNING, CAppUI::tr("CSejour.type.$sejour->type"));
-        }
-        
         switch (CAppUI::conf("sa trigger_operation")) {
           case 'testCloture':
             if ($operation->testCloture()) {
