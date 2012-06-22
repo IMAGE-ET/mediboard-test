@@ -1056,7 +1056,7 @@ class COperation extends CCodable implements IPatientRelated {
         $this->_dmi_praticien_id    = $_line->loadRefPrescription()->praticien_id;
       }
       
-      if (!$_line->isValidated()) {
+      if ($_line->type != "purchase" && !$_line->isValidated()) {
         return $this->_dmi_alert = "warning";
       }
     }
