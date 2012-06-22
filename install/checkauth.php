@@ -27,6 +27,7 @@ if (!@include_once $mbpath."includes/config.php") {
  */
 function showLogin() {
   include "valid.php";
+  checkAll();
   showHeader();
   // @codingStandardsIgnoreStart
 ?>

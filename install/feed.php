@@ -115,6 +115,7 @@ if ($db->getOne("SELECT * FROM `users`")) {
 <?php 
 // @codingStandardsIgnoreStop
 
-require "valid.php"; 
+require "valid.php";
+checkAll();
 showFooter(); 
 ?>

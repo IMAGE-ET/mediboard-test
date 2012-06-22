@@ -147,4 +147,4 @@ if (@$_POST["changePassword"] and $password != "admin") {
   </a>
 </div>
 
-<?php require("valid.php"); showFooter(); ?>
+<?php require("valid.php"); checkAll(); showFooter(); ?>

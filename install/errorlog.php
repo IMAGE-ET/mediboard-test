@@ -21,5 +21,5 @@ showHeader();
 @readfile("../tmp/mb-log.html");
 
 require "valid.php";
-
+checkAll();
 showFooter(); ?>

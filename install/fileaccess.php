@@ -130,5 +130,6 @@ showHeader();
 <?php
 // @codingStandardsIgnoreStop
 require "valid.php"; 
+checkAll();
 showFooter(); 
 ?>

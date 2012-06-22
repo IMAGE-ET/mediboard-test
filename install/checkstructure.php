@@ -38,6 +38,7 @@ if (!$db->getOne("SELECT * FROM `users`")) {
 <?php
   // @codingStandardsIgnoreStop
   require "valid.php";
+  checkAll();
   showFooter();
   die();
 }

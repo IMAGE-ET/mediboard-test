@@ -25,6 +25,7 @@ log=$MB_PATH/tmp/svnlog.txt
 tmp=$MB_PATH/tmp/svnlog.tmp
 dif=$MB_PATH/tmp/svnlog.dif
 status=$MB_PATH/tmp/svnstatus.txt
+event=$MB_PATH/tmp/svnevent.txt
 prefixes="erg|fnc|fct|bug|war|edi|sys|svn"
 revision=HEAD
 
@@ -103,6 +104,10 @@ case "$1" in
     svn info $MB_PATH | awk 'NR==5' > $status
     echo "Date: $(date +%Y-%m-%dT%H:%M:%S)" >> $status
     check_errs $? "Failed to write status file" "Status file written!"
+    
+    # Write event file
+    echo "#$(date +%Y-%m-%dT%H:%M:%S)" >> $event
+    echo "Mise a jour." `svn info $MB_PATH | awk 'NR==5'` >> $event
     ;;
 
   *)

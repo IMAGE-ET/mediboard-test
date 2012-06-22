@@ -113,4 +113,4 @@ Defaults:[nom de l'utilisateur Apache] passwd_timeout=0</pre>
   </fieldset>
 </form>
 
-<?php require("valid.php"); showFooter(); ?>
+<?php require("valid.php"); checkAll(); showFooter(); ?>

@@ -182,4 +182,4 @@ if (@$_POST["adminhost"]) {
   
 </table>
 
-<?php require("valid.php"); showFooter(); ?>
+<?php require("valid.php"); checkAll(); showFooter(); ?>

@@ -435,7 +435,7 @@ showHeader();
 </table>
 
 <div class="big-info">
-  Certains packages Pear ne sont pas publiés dans un status <strong>stable</strong>, 
+  Certains packages Pear ne sont pas publiés dans un statut <strong>stable</strong>, 
   bien que suffisemment fonctionnels pour Mediboard. 
   <br />Pour pouvoir installer les packages en statut <strong>beta</strong>, il peut être
   néccessaire de configurer PEAR avec la commande :
@@ -443,7 +443,69 @@ showHeader();
   <pre>pear config-set preferred_state beta</pre>
 </div>
 
+<h3>Droits d'accès distants</h3>
+
+<p>
+  Certaines ressources ne devraient pas être accessibles autrement que depuis le serveur local.
+  <br />
+  En revanche, il convient de s'assurer que certaines autres le soient bel et bien. 
+</p>
+  
+<table class="tbl" >
+
+<tr>
+  <th class="title" colspan="3">Droits d'accès distants</th>
+</tr>
+
+<tr>
+  <th>URL</th>
+  <th>Pré-requis</th>
+  <th>Autorisation</th>
+</tr>
+
+<?php // @codingStandardsIgnoreStart ?>  
+<?php require("testHTTP.php"); ?>
+<?php
+$success = true;
+
+( array_key_exists( "HTTPS", $_SERVER ) ) ? $http = "https://" : $http = "http://";
+
+$goodUrls[] = $http.dirname( dirname( $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] ) )."/tmp/locales-fr.js";
+
+$badUrls[] = $http.dirname( dirname( $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] ) )."/files";
+$badUrls[] = $http.dirname( dirname( $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] ) )."/tmp";
+$badUrls[] = $http.dirname( dirname( $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] ) )."/tmp/mb-log.html";
+
+$urls = array();
+
+$urls = array_merge( testHTTPCode( $goodUrls, "Autorisé" ), testHTTPCode( $badUrls, "Interdit" ) );
+
+foreach ( $urls as $url => $result ) {
+  ?>
+  <tr>
+    <td><strong><?php echo $url; ?></strong></td>
+    <td class="text"><?php echo $result["type"]; ?></td>
+    <?php
+      if ($result['result']) {
+        (($result['type'] == "Autorisé")) ? $autorisation = "Autorisé" : $autorisation = "Interdit";
+      }
+      else {
+        $success = false;
+        (($result['type'] == "Autorisé")) ? $autorisation = "Interdit" : $autorisation = "Autorisé";
+      }
+    ?>
+    <td class="<?php if ($result['result']) { echo 'ok'; } else { echo 'error'; } ?>" style="text-align: center"><?php echo $autorisation; ?></td>
+  </tr>
+  <?php
+}
+?>
+<?php ?>
+<?php // @codingStandardsIgnoreEnd ?>  
+
+</table>
+
 <?php 
-require "valid.php"; 
+require "valid.php";
+checkAll();
 showFooter(); 
 ?>

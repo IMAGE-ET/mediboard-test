@@ -28,7 +28,7 @@ if (!@include_once $mbpath."includes/config.php") {
   // @codingStandardsIgnoreStop
 
   require("valid.php");
-  
+  checkAll();
   showFooter();
   die();
 }

@@ -131,4 +131,4 @@ showHeader();
 </table>
 </form>
 
-<?php require("valid.php"); showFooter(); ?>
+<?php require("valid.php"); checkAll(); showFooter(); ?>

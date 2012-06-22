@@ -13,6 +13,7 @@ function update($action, $revision) {
 	$tmp = $MB_PATH . "/tmp/svnlog.tmp";
 	$dif = $MB_PATH . "/tmp/svnlog.dif";
 	$status = $MB_PATH . "/tmp/svnstatus.txt";
+  $event = $MB_PATH . "/tmp/svnevent.txt";
 	$prefixes = "erg|fnc|fct|bug|war|edi|sys|svn";
 
 	if ($revision === "") {
@@ -131,6 +132,16 @@ function update($action, $revision) {
 				$fic = fopen($status, "w");
 				fwrite($fic, $svn . "Date: " . date("Y-m-d\TH:i:s") . "\n");
 				fclose($fic);
+        
+        if (file_exists($event)) {
+          $fic = fopen($event, "a");
+        }
+        else {
+          $fic = fopen($event, "w");
+        }
+        fwrite($fic, "#".date('Y-m-d H:i:s'));
+        fwrite($fic, "\nMise a jour. ".$svn);
+        fclose($fic);
 			}
 			
 			break;
