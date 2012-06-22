@@ -1,17 +1,17 @@
-{{if !@$offline}}
-	    </td>
-	  </tr>
-	</table>
-	
-	{{if $print}}
-	  <script type="text/javascript">
-	  Main.add(window.print);
-	  </script> 
-	{{/if}}
-	
-	{{assign var=tbl_class value="print"}}
+{{if !@$offline || @$multi}}
+      </td>
+    </tr>
+  </table>
+  
+  {{if $print && !@$multi}}
+    <script type="text/javascript">
+    Main.add(window.print);
+    </script> 
+  {{/if}}
+  
+  {{assign var=tbl_class value="print"}}
 {{else}}
-{{assign var=tbl_class value="main form"}}
+  {{assign var=tbl_class value="main form"}}
 {{/if}}
 
 {{assign var="patient" value=$consult->_ref_patient}}
@@ -148,22 +148,22 @@
         <tr>
           <td>
             <ul>
-			        {{if $dossier_medical->_ref_prescription}}
-					      {{foreach from=$dossier_medical->_ref_prescription->_ref_prescription_lines item=_line_med}}
-					        <li>
-					          {{$_line_med->_view}}
-					          {{if $_line_med->_ref_prises|@count}}
-						          ({{foreach from=$_line_med->_ref_prises item=_prise name=foreach_prise}}
-						            {{$_prise->_view}}{{if !$smarty.foreach.foreach_prise.last}},{{/if}}
-						          {{/foreach}})
-					          {{/if}}
-					        </li>
-					      {{/foreach}}
-					    {{/if}}
-		        </ul>
-		      </td>
-		    </tr>
-		    <tr>
+              {{if $dossier_medical->_ref_prescription}}
+                {{foreach from=$dossier_medical->_ref_prescription->_ref_prescription_lines item=_line_med}}
+                  <li>
+                    {{$_line_med->_view}}
+                    {{if $_line_med->_ref_prises|@count}}
+                      ({{foreach from=$_line_med->_ref_prises item=_prise name=foreach_prise}}
+                        {{$_prise->_view}}{{if !$smarty.foreach.foreach_prise.last}},{{/if}}
+                      {{/foreach}})
+                    {{/if}}
+                  </li>
+                {{/foreach}}
+              {{/if}}
+            </ul>
+          </td>
+        </tr>
+        <tr>
           <th class="category">Allergies</th>
         </tr>
         <tr>
@@ -449,7 +449,7 @@
             {{/if}}
           </td>
         </tr>
-				
+        
         <tr>
           <th class="category">Examen Pulmonaire</th>
         </tr>
@@ -470,7 +470,7 @@
             {{/if}}
           </td>
         </tr>
-				
+        
         <tr>
           <th class="category">Examen Digestif</th>
         </tr>
@@ -491,8 +491,8 @@
             {{/if}}
           </td>
         </tr>
-				
-				{{if $consult_anesth->examenAutre}}
+        
+        {{if $consult_anesth->examenAutre}}
         <tr>
           <th class="category">Examen Autre</th>
         </tr>
@@ -501,8 +501,8 @@
             {{$consult_anesth->examenAutre}}
           </td>
         </tr>
-				{{/if}}
-				
+        {{/if}}
+        
         <tr>
           <th class="category">Uro-nephrologie</th>
         </tr>
@@ -623,7 +623,7 @@
       </table>
     </td>
   </tr>
-	*}}
+  *}}
 
   {{if $conf.dPcabinet.CConsultAnesth.show_facteurs_risque}}
   <tr>
@@ -672,8 +672,8 @@
      </table>
    </td>
   </tr>
-	{{/if}}
-	
+  {{/if}}
+  
   <tr>
     <th class="category" colspan="2">Visite de pré-anesthésie {{if $operation->date_visite_anesth}}- {{$operation->date_visite_anesth|date_format:$conf.datetime}}{{/if}}</th>
   </tr>

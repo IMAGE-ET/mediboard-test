@@ -20,6 +20,7 @@ $today = mbDate();
 $consultation_id       = CValue::get("consultation_id");
 $operation_id          = CValue::get("operation_id");
 $create_dossier_anesth = CValue::get("create_dossier_anesth", 0);
+$multi   = CValue::get("multi");
 $offline = CValue::get("offline");
 
 $lines = array();
@@ -85,7 +86,7 @@ if ($consultation_id) {
     
     // Lignes de prescription en prémédication    
     if (CModule::getActive("dPprescription")) {
-	  $prescription = $consult_anesth->_ref_sejour->loadRefPrescriptionSejour();
+    $prescription = $consult_anesth->_ref_sejour->loadRefPrescriptionSejour();
       $prescription->loadRefsLinesElement();
       $prescription->loadRefsLinesMed();
       $prescription->loadRefsPrescriptionLineMixes();
@@ -129,9 +130,9 @@ if ($consultation_id) {
   $dossier_medical->loadRefsEtatsDents();
   $dossier_medical->loadRefPrescription();
   if($dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_id){
-	  foreach($dossier_medical->_ref_prescription->_ref_prescription_lines as $_line){
-	    $_line->loadRefsPrises();
-	  }
+    foreach($dossier_medical->_ref_prescription->_ref_prescription_lines as $_line){
+      $_line->loadRefsPrises();
+    }
   }
   $etats = array();
   if (is_array($dossier_medical->_ref_etats_dents)) {
@@ -166,21 +167,21 @@ $listChamps = array(
                 );
 $cAnesth =& $consult->_ref_consult_anesth;
 foreach($listChamps as $keyCol=>$aColonne){
-	foreach($aColonne as $keyChamp=>$champ){
-	  $verifchamp = true;
+  foreach($aColonne as $keyChamp=>$champ){
+    $verifchamp = true;
     if($champ=="tca"){
-	    $champ2 = $cAnesth->tca_temoin;
-	  }else{
-	    $champ2 = false;
+      $champ2 = $cAnesth->tca_temoin;
+    }else{
+      $champ2 = false;
       if(($champ=="ecbu" && $cAnesth->ecbu=="?") || ($champ=="tsivy" && $cAnesth->tsivy=="00:00:00")){
         $verifchamp = false;
       }
-	  }
+    }
     $champ_exist = $champ2 || ($verifchamp && $cAnesth->$champ);
     if(!$champ_exist){
       unset($listChamps[$keyCol][$keyChamp]);
     }
-	}
+  }
 }
 
 //Tableau d'unités
@@ -211,6 +212,7 @@ $smarty->assign("etatDents" , $sEtatsDents);
 $smarty->assign("print"     , $print);
 $smarty->assign("praticien" , new CUser);
 $smarty->assign("lines"     , $lines);
+$smarty->assign("multi"     , $multi);
 $smarty->assign("dossier_medical_sejour", $consult->_ref_consult_anesth->_ref_sejour->_ref_dossier_medical);
 $template = CAppUI::conf("dPcabinet CConsultAnesth feuille_anesthesie");
 

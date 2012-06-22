@@ -30,7 +30,12 @@ foreach ($sejours as $_sejour) {
   $consult_anesth = $_operation->loadRefsConsultAnesth();
   
   if ($consult_anesth->_id) {
-    $result .= CApp::fetch("dPcabinet", "print_fiche", array("consultation_id" => $consult_anesth->consultation_id, "offline" => 1));
+    $result .= CApp::fetch("dPcabinet", "print_fiche", array(
+      "consultation_id" => $consult_anesth->consultation_id, 
+      "offline"         => 1,
+      "multi"           => 1,
+    ));
+    
     if ($_sejour != $last_sejour ) {
       $result .= "<br style=\"page-break-after: always;\" />";
     }
