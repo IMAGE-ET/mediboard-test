@@ -27,8 +27,8 @@ class CSejour extends CCodable implements IPatientRelated {
   
   var $etablissement_entree_id = null;
   var $etablissement_sortie_id = null;
-  var $service_entree_id       = null; // Service d'entrée du séjour
-  var $service_sortie_id       = null; // Service du séjour de mutation
+  var $service_entree_id       = null; // Service d' entrée de mutation
+  var $service_sortie_id       = null; // Service de sortie de mutation
   
   // DB Fields
   var $type                = null; 

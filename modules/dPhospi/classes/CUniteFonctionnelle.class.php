@@ -47,10 +47,20 @@ class CUniteFonctionnelle extends CMbObject {
   
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["affectations_uf"] = "CAffectationUniteFonctionnelle uf_id";
-    $backProps["affectations_hebergement"]  = "CAffectation uf_hebergement_id";
-    $backProps["affectations_medical"]  = "CAffectation uf_medicale_id";
-    $backProps["affectations_soin"]  = "CAffectation uf_soins_id";
+    $backProps["affectations_uf"         ] = "CAffectationUniteFonctionnelle uf_id";
+
+    $backProps["affectations_hebergement"] = "CAffectation uf_hebergement_id";
+    $backProps["affectations_medical"    ] = "CAffectation uf_medicale_id";
+    $backProps["affectations_soin"       ] = "CAffectation uf_soins_id";
+    
+    $backProps["sejours_hebergement"     ] = "CSejour uf_hebergement_id";
+    $backProps["sejours_medical"         ] = "CSejour uf_medicale_id";
+    $backProps["sejours_soin"            ] = "CSejour uf_soins_id";
+    
+    $backProps["protocoles_hebergement"  ] = "CProtocole uf_hebergement_id";
+    $backProps["protocoles_medical"      ] = "CProtocole uf_medicale_id";
+    $backProps["protocoles_soin"         ] = "CProtocole uf_soins_id";
+    
     return $backProps;
   }
   
