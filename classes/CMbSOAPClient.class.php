@@ -99,6 +99,13 @@ class CMbSOAPClient extends SoapClient {
     
     $echange_soap->function_name = $function_name;
     
+    // Truncate input and output before storing
+    $arguments = array_map_recursive(array("CMbSOAPClient", "truncate"), $arguments);
+    
+    $echange_soap->input = serialize($arguments);
+    
+    $echange_soap->store();
+    
     $phpChrono->stop();
     $chrono = new Chronometer();
     $chrono->start();
@@ -140,10 +147,6 @@ class CMbSOAPClient extends SoapClient {
     // response time
     $echange_soap->response_time = $chrono->total;
 
-    // Truncate input and output before storing
-    $arguments = array_map_recursive(array("CMbSOAPClient", "truncate"), $arguments);
-    
-    $echange_soap->input = serialize($arguments);
     if ($echange_soap->soapfault != 1) {
       $echange_soap->output = serialize(array_map_recursive(array("CMbSOAPClient", "truncate"), $output));
     }
