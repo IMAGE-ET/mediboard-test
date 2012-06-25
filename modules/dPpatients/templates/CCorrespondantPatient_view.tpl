@@ -4,6 +4,9 @@
     if (!Object.isUndefined(document.form_prescription)) {
       loadSuiviClinique(document.form_prescription.sejour_id.value);
     }
+    else if (window.reloadSynthese) {
+      reloadSynthese();
+    }
   }
 </script>
 <table class="tbl">

@@ -42,6 +42,10 @@ onMergeComplete = function() {
   MainCourante.start(1, 60);
 }
 
+reloadSynthese = function() {
+  $$(".modal")[0].down("button.change").click();
+}
+
 showSynthese = function(sejour_id) {
   var url = new Url("soins", "ajax_vw_suivi_clinique");
   url.addParam("sejour_id", sejour_id);

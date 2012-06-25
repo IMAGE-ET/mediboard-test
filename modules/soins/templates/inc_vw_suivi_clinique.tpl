@@ -21,6 +21,15 @@
     $$(".in_progress_after").invoke("toggleClassName", "show_important");
   }
   
+  afterEditCorrespondant = function() {
+    if (window.loadSuiviClinique) {
+      loadSuiviClinique(document.form_prescription.sejour_id.value)
+    }
+    else if (window.reloadSynthese) {
+      window.reloadSynthese();
+    }
+  }
+  
   {{if "forms"|module_active}}
     Main.add(function(){
       ExObject.loadExObjects("{{$sejour->_class}}", "{{$sejour->_id}}", "list-ex_objects", 1);
@@ -158,7 +167,7 @@
         <tr>
           <th style="width: 1%;">
             <button type="button" class="add notext" style="float: left;"
-              onclick="Correspondant.edit(0, '{{$patient->_id}}', loadSuiviClinique.curry(document.form_prescription.sejour_id.value))"></button>
+              onclick="Correspondant.edit(0, '{{$patient->_id}}', afterEditCorrespondant);"></button>
           </th>
           <th class="category">
             {{tr}}CCorrespondantPatient-nom{{/tr}} / {{tr}}CCorrespondantPatient-prenom{{/tr}}
