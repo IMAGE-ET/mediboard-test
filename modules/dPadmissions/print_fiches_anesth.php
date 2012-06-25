@@ -27,6 +27,10 @@ $last_sejour = end($sejours);
 foreach ($sejours as $_sejour) {
   $_operation = $_sejour->loadRefLastOperation();
   
+  if (!$_operation->_id) {
+    continue;
+  }
+  
   $consult_anesth = $_operation->loadRefsConsultAnesth();
   
   if ($consult_anesth->_id) {
