@@ -33,22 +33,24 @@ $cr_to_push = null;
 
 foreach ($modeles_to_pack as $_modele_to_pack) {
   $modele = $_modele_to_pack->loadRefModele();
-  
   $modele->loadContent();
+  
   $template = new CTemplateManager;
   $template->isModele = false;
+  
   $object->fillTemplate($template);
   
-  $template->applyTemplate($template);
-  $template->renderDocument($modele->_source);
   $cr = new CCompteRendu;
   $cr->object_class = $modele->object_class;
   $cr->object_id    = $object_id;
   $cr->author_id    = $user_id;
   $cr->nom          = $modele->nom;
   $cr->file_category_id = $modele->file_category_id;
-  $cr->loadContent();
-  $cr->_source      = $template->document;
+  $cr->loadContent(false);
+  
+  $cr->_source = $modele->_source;
+  $template->applyTemplate($cr);
+  
   
   if ($msg = $cr->store()) {
     CAppUI::setMsg($msg, UI_MSG_ERROR);
