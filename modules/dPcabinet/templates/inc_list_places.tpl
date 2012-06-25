@@ -135,7 +135,7 @@ PlageConsult.addPlaceAfter = function(plage_id) {
   <tr>
     <td>
       <div style="float:left">
-        {{if $online && !$plage->locked}}
+        {{if $online && !$plage->locked && ($can->admin || $plage->_ref_chir->function_id == $user->function_id)}}
           <button type="button" class="tick" onclick="PlageConsult.setClose('{{$_place.time}}')">{{$_place.time|date_format:$conf.time}}</button>
         {{else}}
           {{$_place.time|date_format:$conf.time}}

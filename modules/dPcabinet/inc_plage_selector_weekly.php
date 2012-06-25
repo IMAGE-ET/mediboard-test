@@ -20,6 +20,8 @@ if(!$chir_id) {
 $prat = new CMediusers;
 $prat->load($chir_id);
 
+$user = CMediusers::get();
+
 //Planning au format  CPlanningWeek
 $today = mbDate();
 $debut = $date;
@@ -53,7 +55,12 @@ $planning->pauses   = array("07", "12", "19");
 for ($i = 0; $i < $nbDays; $i++) {
   $jour = mbDate("+$i day", $debut);
   $where["date"] = "= '$jour'";
-  foreach($plage->loadList($where) as $_plage){
+  $plages = $plage->loadList($where);
+  
+  CMbObject::massLoadFwdRef($plages, "chir_id");
+  
+  foreach($plages as $_plage){
+    $_plage->loadRefsFwd(1);
     $_plage->loadRefsConsultations(false);
     foreach($_plage->_ref_consultations as $_consult) {
       $debute = "$jour $_consult->heure";
@@ -65,9 +72,11 @@ for ($i = 0; $i < $nbDays; $i++) {
       }
       $event->type        = "rdvfull";
       $event->plage["id"] = $_plage->_id;
-      if($_plage->locked == 1) {
+      
+      if($_plage->locked == 1 || (!CCanDo::admin() && $_plage->_ref_chir->function_id != $user->function_id)) {
         $event->disabled = true;
       }
+      
       $_consult->loadRefCategorie();
       if($_consult->categorie_id) {
         $event->icon = "./modules/dPcabinet/images/categories/".$_consult->_ref_categorie->nom_icone;
@@ -84,7 +93,7 @@ for ($i = 0; $i < $nbDays; $i++) {
         $event = new CPlanningEvent($debute, $debute, $_plage->_freq, "", "#cfc", true, null, null);
         $event->type        = "rdvfree";
         $event->plage["id"] = $_plage->_id;
-        if($_plage->locked == 1) {
+        if($_plage->locked == 1 || (!CCanDo::admin() && $_plage->_ref_chir->function_id != $user->function_id)) {
           $event->disabled = true;
         }
         $event->plage["color"] = $_plage->color;

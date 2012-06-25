@@ -149,6 +149,8 @@ if ($plageconsult_id) {
   }
 }
 
+$user = CMediusers::get();
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("plageconsult_id", $plageconsult_id);
@@ -157,6 +159,7 @@ $smarty->assign("listPlace"      , $listPlace);
 $smarty->assign("listBefore"     , $listBefore);
 $smarty->assign("listAfter"      , $listAfter);
 $smarty->assign("quotas"         , $quotas);
+$smarty->assign("user"           , $user);
 
 if ($display_nb_consult == "cab" || $display_nb_consult == "etab") {
   $smarty->assign("utilisation_func", $utilisation_func);
