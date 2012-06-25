@@ -147,6 +147,10 @@
       
       <em>{{mb_label object=$_op field=cote}}</em> :
       {{mb_value object=$_op field=cote}}
+      {{if $_op->exam_extempo}}
+        <br />
+        {{mb_title object=$_op field=exam_extempo}}
+      {{/if}}
       {{if $_op->materiel}}
         <br />
         <em>{{mb_label object=$_op field=materiel}}</em> :

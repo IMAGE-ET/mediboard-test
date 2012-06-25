@@ -38,7 +38,13 @@
   &mdash;
   {{/if}}
 </td>
-<td class="text">{{$curr_op->rques|nl2br}}</td>
+<td class="text">
+  {{if $curr_op->exam_extempo}}
+    <strong>{{mb_title object=$curr_op field=exam_extempo}}</strong>
+    <br />
+  {{/if}}
+  {{$curr_op->rques|nl2br}}
+</td>
 <td class="text">
   {{if $curr_op->commande_mat == '0' && $curr_op->materiel != ''}}
   <em>Materiel manquant:</em>

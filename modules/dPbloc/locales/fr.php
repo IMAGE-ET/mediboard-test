@@ -51,6 +51,7 @@ $locales['CFunctions-back-plages_op_repl'] = 'Plage opératoires remplacées';
 $locales['CGroups-back-blocs'] = 'Blocs opératoires de l\'établissement';
 $locales['CMediusers-back-plages_op_anesth'] = 'Plages opératoires';
 $locales['CMediusers-back-plages_op_chir'] = 'Plages opératoires';
+$locales['COperation-exam_extempo-court'] = 'Exam extempo prévu';
 $locales['CPlageOp'] = 'Plage Opératoire';
 $locales['CPlageOp-_type_repeat'] = 'Type de répétition';
 $locales['CPlageOp-_type_repeat-court'] = 'Répétition';
