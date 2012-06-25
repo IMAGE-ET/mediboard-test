@@ -7,13 +7,18 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
-<script type="text/javascript">
 
-Main.add(function(){
-  var form = getForm('editFrm');
-  Calendar.regField(form.debut);
-  Calendar.regField(form.fin  );
-});
+<script type="text/javascript">
+  Main.add(function(){
+    var form = getForm('editFrm');
+    
+    {{if !$can->admin && $plageSel->_id && $user->function_id != $plageSel->_ref_chir->function_id}}
+      makeReadOnly(form);
+    {{/if}}
+    
+    Calendar.regField(form.debut);
+    Calendar.regField(form.fin  );
+  });
 </script>
 
 {{mb_script module="mediusers" script="color_selector" ajax=true}}

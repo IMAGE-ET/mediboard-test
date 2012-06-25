@@ -133,6 +133,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("_firstconsult_time", $_firstconsult_time);
 $smarty->assign("_lastconsult_time" , $_lastconsult_time);
 $smarty->assign("plageconsult_id"   , $plageconsult_id);
+$smarty->assign("user"              , CMediusers::get());
 $smarty->assign("chirSel"           , $chirSel);
 $smarty->assign("plageSel"          , $plageSel);
 $smarty->assign("listChirs"         , $listChirs);
