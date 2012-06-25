@@ -32,7 +32,7 @@ $services          = $service->loadGroupList($where);
 
 // Récupération de la liste des praticiens
 $prat = CMediusers::get();
-$prats = $prat->loadChirurgiens();
+$prats = $prat->loadPraticiens();
 
 $sejour = new CSejour();
 $sejour->_type_admission = $type;
