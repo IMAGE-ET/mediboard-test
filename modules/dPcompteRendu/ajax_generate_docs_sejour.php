@@ -27,6 +27,10 @@ foreach ($sejours as $_sejour) {
   $_sejour->loadRefPatient();
 }
 
+// Tri par nom de patient
+$sorter = CMbArray::pluck($sejours, "_ref_patient", "nom");
+array_multisort($sorter, SORT_ASC, $sejours);
+
 // Chargement du modèle
 $modele = new CCompteRendu();
 $modele->load($modele_id);
