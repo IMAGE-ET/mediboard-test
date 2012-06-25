@@ -32,6 +32,8 @@
 	  {{mb_include module=system template=inc_config_bool var=create_sejour_hospit}}
     {{mb_include module=system template=inc_config_bool var=show_statut}}
     {{mb_include module=system template=inc_config_bool var=valid_cotation_sortie_reelle}}
+    {{mb_include module=system template=inc_config_bool var=display_regule_par}}
+    
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
