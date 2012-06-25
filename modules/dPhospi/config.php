@@ -20,6 +20,7 @@ $dPconfig["dPhospi"] = array (
   "max_affectations_view" => "480",
   "max_services_view" => "6",
   "systeme_prestations" => "standard",
+  "use_vue_topologique" => "0",
   
   "CLit" => array(
     "prefixe"         => "",
