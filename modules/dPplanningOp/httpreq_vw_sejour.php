@@ -127,6 +127,7 @@ $smarty->assign("mins"         , $mins);
 $smarty->assign("hours_duree"  , $hours_duree);
 $smarty->assign("hours_urgence", $hours_urgence);
 $smarty->assign("mins_duree"   , $mins_duree);
+$smarty->assign("ufs"          , CUniteFonctionnelle::getUFs());
 
 $smarty->assign("sejour"   , $sejour);
 $smarty->assign("op"       , new COperation);
