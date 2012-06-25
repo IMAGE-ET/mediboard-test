@@ -11,8 +11,11 @@
 {{mb_script module=planningOp script=prestations ajax=1}}
 
 <script type="text/javascript">
-Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
-Prestations.callback = reloadSorties;
+  Main.add(function() {
+    Admissions.restoreSelection('listSorties');
+    Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
+    Prestations.callback = reloadSorties;
+  });
 </script>
 
 <table class="tbl" id="sortie">

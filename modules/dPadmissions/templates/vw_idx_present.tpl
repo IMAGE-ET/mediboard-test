@@ -134,7 +134,12 @@ Main.add(function () {
   
   var listUpdater = new Url("dPadmissions", "httpreq_vw_presents");
   listUpdater.addParam("date", "{{$date}}");
-  Admissions.listUpdater = listUpdater.periodicalUpdate('listPresents', { frequency: 120 });
+  Admissions.listUpdater = listUpdater.periodicalUpdate('listPresents', {
+    frequency: 120,
+    onCreate: function() {
+      WaitingMessage.cover($('listPresents'));
+      Admissions.rememberSelection('listPresents');
+    } });
 });
 
 </script>

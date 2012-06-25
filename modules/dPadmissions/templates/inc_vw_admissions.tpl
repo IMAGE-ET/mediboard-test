@@ -14,6 +14,7 @@
 Main.add(function() {
   Prestations.callback = reloadAdmission;
   Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
+  Admissions.restoreSelection('listAdmissions');
 });
 </script>
 

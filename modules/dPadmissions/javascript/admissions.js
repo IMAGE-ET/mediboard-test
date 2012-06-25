@@ -34,7 +34,7 @@ Admissions = {
       return false;
     }
     var table = $(table_id);
-    var sejours_ids = table.select("input[name=print_doc]:checked").collect(function(elt) { return elt.value });
+    var sejours_ids = table.select("input[name=print_doc]:checked").pluck("value");
     
     if (sejours_ids == "") {
       alert("Veuillez sélectionner au minimum un patient pour l'impression");
@@ -46,10 +46,26 @@ Admissions = {
     oForm.submit();
     return true;
   },
+  
+  rememberSelection: function(table_id) {
+    var table = $(table_id);
+    window.sejours_ids = table.select("input[name=print_doc]:checked").pluck("value");
+  },
+  
+  restoreSelection: function(table_id) {
+    console.log("ON COMPLETE");
+    var table = $(table_id);
+    
+    table.select("input[name=print_doc]").each(function(elt) {
+      if ($H(window.sejours_ids).index(elt.value)) {
+        elt.checked = true;
+      }
+    });
+  },
   printFichesAnesth: function(table_id) {
     var url = new Url("admissions", "print_fiches_anesth");
     var table = $(table_id);
-    var sejours_ids = table.select("input[name=print_doc]:checked").collect(function(elt) { return elt.value });
+    var sejours_ids = table.select("input[name=print_doc]:checked").pluck("value");
     
     if (sejours_ids == "") {
       alert("Veuillez sélectionner au minimum un patient pour l'impression");

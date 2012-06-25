@@ -145,7 +145,13 @@ Main.add(function () {
   listUpdater.addParam("selAdmis", "{{$selAdmis}}");
   listUpdater.addParam("selSaisis", "{{$selSaisis}}");
   listUpdater.addParam("date", "{{$date}}");
-  Admissions.listUpdater = listUpdater.periodicalUpdate('listAdmissions', { frequency: 120 });
+  Admissions.listUpdater = listUpdater.periodicalUpdate('listAdmissions', {
+    frequency: 120,
+    onCreate: function() {
+      WaitingMessage.cover($('listAdmissions'));
+      Admissions.rememberSelection('listAdmissions');
+    }
+  });
 });
 
 </script>

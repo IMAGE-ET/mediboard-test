@@ -129,7 +129,13 @@ Main.add(function () {
   var listUpdater = new Url("dPadmissions", "httpreq_vw_sorties");
   listUpdater.addParam("selSortis", "{{$selSortis}}");
   listUpdater.addParam("date", "{{$date}}");
-  Admissions.listUpdater = listUpdater.periodicalUpdate('listSorties', { frequency: 120 });
+  Admissions.listUpdater = listUpdater.periodicalUpdate('listSorties', {
+    frequency: 120,
+    onCreate: function() {
+      WaitingMessage.cover($('listSorties'));
+      Admissions.rememberSelection('listSorties');
+    }
+  });
 });
 
 </script>
