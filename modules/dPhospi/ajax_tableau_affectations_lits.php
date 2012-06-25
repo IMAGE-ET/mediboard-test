@@ -111,6 +111,7 @@ $smarty->assign("filterFunction"        , $filterFunction);
 $smarty->assign("totalLits"             , $totalLits);
 $smarty->assign("services"              , $services);
 $smarty->assign("alerte"                , $alerte);
+$smarty->assign("prestations"           , CPrestation::loadCurrentList());
 
 $smarty->display("inc_tableau_affectations_lits.tpl");
 

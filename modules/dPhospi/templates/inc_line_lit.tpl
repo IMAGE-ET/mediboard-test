@@ -198,18 +198,16 @@
                       {{/if}}
                       <span class="toolbar_affectation">
                         {{if $_affectation->sejour_id}}
-                          {{if $_affectation->sejour_id}}
-                            {{if $conf.dPadmissions.show_deficience}}
-                              <span style="margin-top: 3px; margin-right: 3px;">
-                                {{mb_include module=patients template=inc_vw_antecedents patient=$_patient type=deficience readonly=1}}
-                              </span>
-                            {{/if}}
-                            {{if $_affectation->uf_hebergement_id && $_affectation->uf_medicale_id && $_affectation->uf_soins_id}} 
-                              <a style="margin-top: 3px; display: inline" href="#1"
-                                 onclick="AffectationUf.affecter('{{$_affectation->_guid}}','{{$_lit->_guid}}', 'refreshMouvements.curry(null, \'{{$_affectation->lit_id}}\')')">
-                                <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF" class="opacity-40"
-                                  onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"/></a>
-                            {{/if}}
+                          {{if $conf.dPadmissions.show_deficience}}
+                            <span style="margin-top: 3px; margin-right: 3px;">
+                              {{mb_include module=patients template=inc_vw_antecedents patient=$_patient type=deficience readonly=1}}
+                            </span>
+                          {{/if}}
+                          {{if $_affectation->uf_hebergement_id && $_affectation->uf_medicale_id && $_affectation->uf_soins_id}} 
+                            <a style="margin-top: 3px; display: inline" href="#1"
+                               onclick="AffectationUf.affecter('{{$_affectation->_guid}}','{{$_lit->_guid}}', 'refreshMouvements.curry(null, \'{{$_affectation->lit_id}}\')')">
+                              <img src="images/icons/uf.png" width="16" height="16" title="Affecter les UF" class="opacity-40"
+                                onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"/></a>
                           {{/if}}
                         {{/if}}
                         {{if !$in_corridor && $_affectation->sejour_id != 0}}
