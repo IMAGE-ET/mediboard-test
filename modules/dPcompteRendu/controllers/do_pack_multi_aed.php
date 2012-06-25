@@ -48,7 +48,7 @@ foreach ($modeles_to_pack as $_modele_to_pack) {
   $cr->file_category_id = $modele->file_category_id;
   $cr->loadContent(false);
   
-  $cr->_source = $modele->_source;
+  $cr->_source = $modele->generateDocFromModel();
   $template->applyTemplate($cr);
   
   
