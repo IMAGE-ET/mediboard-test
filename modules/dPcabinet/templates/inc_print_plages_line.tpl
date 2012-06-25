@@ -37,6 +37,9 @@
         ({{mb_value object=$patient field="naissance"}})
       {{/if}}
     </td>
+    <td rowspan="2">
+      {{$patient->_ref_curr_affectation}}
+    </td>
     
     {{else}}
     <td rowspan="2" colspan="{{if $filter->_coordonnees}}4{{else}}2{{/if}}" style="{{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
