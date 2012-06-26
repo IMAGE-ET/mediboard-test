@@ -650,7 +650,33 @@ class CSetupdPhospi extends CSetup {
               CHANGE `object_class` `object_class` ENUM ('CService','CChambre','CLit','CMediusers','CFunctions','CSejour','CProtocole') NOT NULL;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.70";
+    $this->makeRevision("0.70");
+    
+    $query = "ALTER TABLE `chambre` 
+              DROP `plan_x`,
+              DROP `plan_y`;";
+    $this->addQuery($query);
+    
+    $query = "CREATE TABLE `emplacement`(
+             `emplacement_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+             `chambre_id` INT (11) UNSIGNED NOT NULL,
+             `plan_x` INT (11) NOT NULL,
+             `plan_y` INT (11) NOT NULL,
+             `color` VARCHAR(6) NOT NULL DEFAULT 'DDDDDD',
+             `hauteur` INT (11) NOT NULL DEFAULT '1',
+             `largeur` INT (11) NOT NULL DEFAULT '1',
+             PRIMARY KEY (`emplacement_id`)) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `emplacement` 
+              ADD INDEX (`chambre_id`);";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE  `emplacement`
+              ADD UNIQUE  `chambre_id` (`chambre_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.71";
   }
 }
 ?>

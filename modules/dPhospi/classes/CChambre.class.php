@@ -27,8 +27,6 @@ class CChambre extends CMbObject {
   var $caracteristiques = null; // côté rue, fenêtre, lit accompagnant, ...
   var $lits_alpha       = null;
   var $annule           = null;
-  var $plan_x			      = null;
-  var $plan_y			      = null;
 
   // Form Fields
   var $_nb_lits_dispo        = null;
@@ -42,8 +40,9 @@ class CChambre extends CMbObject {
   var $_conflits_pathologies = null;
 
   // Object references
-  var $_ref_service = null;
-  var $_ref_lits    = null;
+  var $_ref_service     = null;
+  var $_ref_lits        = null;
+  var $_ref_emplacement  = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -55,8 +54,9 @@ class CChambre extends CMbObject {
   
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["lits"] = "CLit chambre_id";
-    $backProps["ufs"]  = "CAffectationUniteFonctionnelle object_id";
+    $backProps["lits"]         = "CLit chambre_id";
+    $backProps["ufs"]          = "CAffectationUniteFonctionnelle object_id";
+    $backProps["emplacement"]  = "CEmplacement chambre_id";
     return $backProps;
   }
   
@@ -67,8 +67,6 @@ class CChambre extends CMbObject {
     $specs["caracteristiques"] = "text";
     $specs["lits_alpha"]       = "bool default|0";
     $specs["annule"]           = "bool";
-    $specs["plan_x"]           = "num";
-    $specs["plan_y"]           = "num";
     return $specs;
   }
   
@@ -93,6 +91,13 @@ class CChambre extends CMbObject {
       $order = "lit.nom DESC";
     }
     return $this->_ref_lits = $this->loadBackRefs("lits", $order);
+  }
+
+  function loadRefEmplacement() {
+    $emplacement = new CEmplacement();
+    $emplacement->loadObject("chambre_id = '$this->chambre_id'");
+    $this->_ref_emplacement = $emplacement;
+    return $this->_ref_emplacement;
   }
 
   function loadRefsBack() {
