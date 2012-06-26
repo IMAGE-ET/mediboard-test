@@ -13,6 +13,23 @@
 <table class="main">
   <tr>
     <td class="greedyPane" style="text-align:center; height: 1px;">
+      <div class="small-info">
+        L'affichage du planning de bloc a évolué :
+        <ul>
+          <li>Pour passer de la vue Jour à la vue Semaine, veuillez utiliser la liste déroulante dédiée à côté du choix du bloc</li>
+          {{if $can->edit}}
+          <li>Pour créer une nouvelle vacation, veuillez utiliser le bouton
+            <button type="button" class="new notext">{{tr}}Edit{{/tr}}</button>
+            situé en haut à gauche de la journée concernée
+          </li>
+          {{/if}}
+          <li>
+            Pour imprimer le programme d'une journée, veuillez utiliser le bouton 
+            <button type="button" class="print notext">{{tr}}Print{{/tr}}</button>
+            situé en haut à gauche de la journée concernée
+          </li>
+        </ul>
+      </div>
       {{if $can->edit && ($nbIntervNonPlacees || $nbIntervHorsPlage || $nbAlertesInterv)}}
         <div class="warning" style="float: right; text-align:left;">
           <a href="#nothing" onclick="EditPlanning.showAlerte('{{$date}}', '{{$bloc->_id}}', 'jour')">
