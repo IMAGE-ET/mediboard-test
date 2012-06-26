@@ -651,13 +651,13 @@ class CSetupdPhospi extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("0.70");
-    
+        
     $query = "ALTER TABLE `chambre` 
               DROP `plan_x`,
               DROP `plan_y`;";
     $this->addQuery($query);
     
-    $query = "CREATE TABLE `emplacement`(
+    $query = "CREATE TABLE IF NOT EXISTS `emplacement`(
              `emplacement_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
              `chambre_id` INT (11) UNSIGNED NOT NULL,
              `plan_x` INT (11) NOT NULL,
