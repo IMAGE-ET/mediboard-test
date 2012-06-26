@@ -672,10 +672,6 @@ class CSetupdPhospi extends CSetup {
               ADD INDEX (`chambre_id`);";
     $this->addQuery($query);
     
-    $query = "ALTER TABLE  `emplacement`
-              ADD UNIQUE  `chambre_id` (`chambre_id`);";
-    $this->addQuery($query);
-    
     $this->mod_version = "0.71";
   }
 }
