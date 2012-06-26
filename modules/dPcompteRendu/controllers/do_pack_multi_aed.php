@@ -41,11 +41,17 @@ foreach ($modeles_to_pack as $_modele_to_pack) {
   $object->fillTemplate($template);
   
   $cr = new CCompteRendu;
-  $cr->object_class = $modele->object_class;
-  $cr->object_id    = $object_id;
-  $cr->author_id    = $user_id;
-  $cr->nom          = $modele->nom;
+  
+  $cr->object_class  = $modele->object_class;
+  $cr->object_id     = $object_id;
+  $cr->author_id     = $user_id;
+  $cr->nom           = $modele->nom;
+  $cr->margin_right  = $modele->margin_right;
+  $cr->margin_left   = $modele->margin_left;
+  $cr->margin_top    = $modele->margin_top;
+  $cr->margin_bottom = $modele->margin_bottom;
   $cr->file_category_id = $modele->file_category_id;
+  
   $cr->loadContent(false);
   
   $cr->_source = $modele->generateDocFromModel();

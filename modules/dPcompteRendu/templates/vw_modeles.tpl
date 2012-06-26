@@ -5,6 +5,10 @@ Main.add(function () {
 });
 </script>
 
+<a class="button new" href="?m=compteRendu&tab=addedit_modeles&compte_rendu_id=0">
+  {{tr}}CCompteRendu-title-create{{/tr}}
+</a>
+
 <form name="selectPrat" action="?" method="get">
 
 <input type="hidden" name="m" value="{{$m}}" />
