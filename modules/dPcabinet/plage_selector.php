@@ -43,7 +43,7 @@ if ($period == "weekly") {
  * http://www.php.net/manual/fr/function.strtotime.php#107331
  * */
 
-if ($period == "month" && phpversion() > "5.2") {
+if ($period == "month" && phpversion() >= "5.3") {
   $ndate = mbDate("first day of next month"   , $date);
   $pdate = mbDate("last day of previous month", $date);
 } 

@@ -13,7 +13,7 @@ CCanDo::checkRead();
 // Initialisation de variables
 $date = CValue::getOrSession("date", mbDate());
 
-if (phpversion() > "5.2") {
+if (phpversion() >= "5.3") {
   $month_min     = mbDate("first day of +0 month", $date);
   $lastmonth     = mbDate("last day of -1 month" , $date);
   $nextmonth     = mbDate("first day of +1 month", $date);
