@@ -12,9 +12,17 @@ CCanDo::checkRead();
 
 // Initialisation de variables
 $date = CValue::getOrSession("date", mbDate());
-$month_min     = mbDate("first day of +0 month", $date);
-$lastmonth     = mbDate("last day of -1 month" , $date);
-$nextmonth     = mbDate("first day of +1 month", $date);
+
+if (phpversion() > "5.2") {
+  $month_min     = mbDate("first day of +0 month", $date);
+  $lastmonth     = mbDate("last day of -1 month" , $date);
+  $nextmonth     = mbDate("first day of +1 month", $date);
+}
+else {
+  $month_min     = mbTransformTime("+ 0 month", $date, "%Y-%m-01");
+  $lastmonth     = mbDate("-1 month", $date);
+  $nextmonth     = mbDate("+1 month", $date);
+}
 
 $type          = CValue::getOrSession("type");
 $service_id    = CValue::getOrSession("service_id");
