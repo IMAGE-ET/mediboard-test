@@ -26,13 +26,13 @@ class CWsdlDocument extends CMbXMLDocument {
  
   function addNameSpaces($elParent) {
     // Ajout des namespace
-    $this->addAttribute($elParent, "name"           , "MediboardWSDL");
+    $this->addAttribute($elParent, "name", "MediboardWSDL");
     $this->addAttribute($elParent, "targetNamespace", "urn:MediboardWSDL");
-    $this->addAttribute($elParent, "xmlns:typens"   , "urn:MediboardWSDL");
-    $this->addAttribute($elParent, "xmlns:xsd"      , "http://www.w3.org/2001/XMLSchema");
-    $this->addAttribute($elParent, "xmlns:soap"     , "http://schemas.xmlsoap.org/wsdl/soap/");
-    $this->addAttribute($elParent, "xmlns:soapenc"  , "http://schemas.xmlsoap.org/soap/encoding/");
-    $this->addAttribute($elParent, "xmlns:wsdl"     , "http://schemas.xmlsoap.org/wsdl/");
+    $this->addAttribute($elParent, "xmlns:typens", "urn:MediboardWSDL");
+    $this->addAttribute($elParent, "xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
+    $this->addAttribute($elParent, "xmlns:soap", "http://schemas.xmlsoap.org/wsdl/soap/");
+    $this->addAttribute($elParent, "xmlns:soapenc", "http://schemas.xmlsoap.org/soap/encoding/");
+    $this->addAttribute($elParent, "xmlns:wsdl", "http://schemas.xmlsoap.org/wsdl/");
   }
   
   function addTexte($elParent, $elName, $elValue, $elMaxSize = 100) {
@@ -44,7 +44,7 @@ class CWsdlDocument extends CMbXMLDocument {
     $definitions = $this->documentElement;
     $partie2 = $this->createComment("partie 2 : Types");
     $definitions->appendChild($partie2);
-    $types = $this->addElement($definitions, "types", null, "http://schemas.xmlsoap.org/wsdl/");
+    $types = $this->addElement($definitions, "types");
     
     $xsd = $this->addElement($types, "xsd:schema", null, "http://www.w3.org/2001/XMLSchema");
     $this->addAttribute($xsd, "xmlns", "http://www.w3.org/2001/XMLSchema");
@@ -60,27 +60,27 @@ class CWsdlDocument extends CMbXMLDocument {
     $definitions->appendChild($partie3);
     
     foreach($functions as $nameFunction => $atts) {
-      $message = $this->addElement($definitions, "message", null, "http://schemas.xmlsoap.org/wsdl/");
+      $message = $this->addElement($definitions, "message");
       $this->addAttribute($message, "name", $nameFunction."Request");
       
       foreach($atts as $attName => $attValue) {
-        $part = $this->addElement($message, "part", null, "http://schemas.xmlsoap.org/wsdl/");
+        $part = $this->addElement($message, "part");
         $this->addAttribute($part, "name", $attName);
         $this->addAttribute($part, "type", "xsd:".$this->xsd[$attValue]);
       }
       
-      $message = $this->addElement($definitions, "message", null, "http://schemas.xmlsoap.org/wsdl/");
+      $message = $this->addElement($definitions, "message");
       $this->addAttribute($message, "name", $nameFunction."Response");
       
       if (!empty($returns) && array_key_exists($nameFunction, $returns)) {
         foreach ($returns[$nameFunction] as $returnName => $returnValue) {
-          $part = $this->addElement($message, "part", null, "http://schemas.xmlsoap.org/wsdl/");
+          $part = $this->addElement($message, "part");
           $this->addAttribute($part, "name", $returnName);
           $this->addAttribute($part, "type", "xsd:".$this->xsd[$returnValue]);
         }
       } 
       else {
-        $part = $this->addElement($message, "part", null, "http://schemas.xmlsoap.org/wsdl/");
+        $part = $this->addElement($message, "part");
         $this->addAttribute($part, "name", "return");
         $this->addAttribute($part, "type", "xsd:".$this->xsd["string"]);
       }
@@ -92,19 +92,19 @@ class CWsdlDocument extends CMbXMLDocument {
     $partie4 = $this->createComment("partie 4 : Port Type");
     $definitions->appendChild($partie4);
     
-    $portType = $this->addElement($definitions, "portType", null, "http://schemas.xmlsoap.org/wsdl/");
+    $portType = $this->addElement($definitions, "portType");
     $this->addAttribute($portType, "name", "MediboardPort");
     
     foreach($functions as $nameFunction => $atts) {
       $partie5 = $this->createComment("partie 5 : Operation");
       $portType->appendChild($partie5);
-      $operation = $this->addElement($portType, "operation", null, "http://schemas.xmlsoap.org/wsdl/");
+      $operation = $this->addElement($portType, "operation");
       $this->addAttribute($operation, "name", $nameFunction);
       
-      $input = $this->addElement($operation, "input", null, "http://schemas.xmlsoap.org/wsdl/");
+      $input = $this->addElement($operation, "input");
       $this->addAttribute($input, "message", "typens:".$nameFunction."Request");
       
-      $output = $this->addElement($operation, "output", null, "http://schemas.xmlsoap.org/wsdl/");
+      $output = $this->addElement($operation, "output");
       $this->addAttribute($output, "message", "typens:".$nameFunction."Response");
     }
   }
@@ -114,7 +114,7 @@ class CWsdlDocument extends CMbXMLDocument {
     $partie6 = $this->createComment("partie 6 : Binding");
     $definitions->appendChild($partie6);
     
-    $binding = $this->addElement($definitions, "binding", null, "http://schemas.xmlsoap.org/wsdl/");
+    $binding = $this->addElement($definitions, "binding");
     $this->addAttribute($binding, "name", "MediboardBinding");
     $this->addAttribute($binding, "type", "typens:MediboardPort");
     
@@ -123,23 +123,27 @@ class CWsdlDocument extends CMbXMLDocument {
     $this->addAttribute($soap, "transport", "http://schemas.xmlsoap.org/soap/http");
 
     foreach($functions as $nameFunction => $atts) {
-      $operation = $this->addElement($binding, "operation", null, "http://schemas.xmlsoap.org/wsdl/");
-      
+      $operation = $this->addElement($binding, "operation");
       $this->addAttribute($operation, "name", $nameFunction);
       
       $soapoperation = $this->addElement($operation, "soap:operation", null, "http://schemas.xmlsoap.org/wsdl/soap/");
-      $this->addAttribute($soapoperation, "soapAction", $nameFunction);
-      $this->addAttribute($soapoperation, "style", "document");
+      $this->addAttribute($soapoperation, "soapAction", "MediboardAction");
       
-      $input = $this->addElement($operation, "input", null, "http://schemas.xmlsoap.org/wsdl/");
+      $input = $this->addElement($operation, "input");
+      $this->addAttribute($input, "name", $nameFunction."Request");
       
       $soapbody = $this->addElement($input, "soap:body", null, "http://schemas.xmlsoap.org/wsdl/soap/");
-      $this->addAttribute($soapbody, "use", "literal");
+      $this->addAttribute($soapbody, "use", "encoded");
+      $this->addAttribute($soapbody, "namespace", "urn:MediboardWSDL");
+      $this->addAttribute($soapbody, "encodingStyle", "http://schemas.xmlsoap.org/soap/encoding/");
       
-      $output = $this->addElement($operation, "output", null, "http://schemas.xmlsoap.org/wsdl/");
+      $output = $this->addElement($operation, "output");
+      $this->addAttribute($output, "name", $nameFunction."Reponse");
       
       $soapbody = $this->addElement($output, "soap:body", null, "http://schemas.xmlsoap.org/wsdl/soap/");
-      $this->addAttribute($soapbody, "use", "literal");
+      $this->addAttribute($soapbody, "use", "encoded");
+      $this->addAttribute($soapbody, "namespace", "urn:MediboardWSDL");
+      $this->addAttribute($soapbody, "encodingStyle", "http://schemas.xmlsoap.org/soap/encoding/");
     }
   }
   
@@ -148,19 +152,19 @@ class CWsdlDocument extends CMbXMLDocument {
     $partie7 = $this->createComment("partie 7 : Service");
     $definitions->appendChild($partie7);
     
-    $service = $this->addElement($definitions, "service", null, "http://schemas.xmlsoap.org/wsdl/");
+    $service = $this->addElement($definitions, "service");
     $this->addAttribute($service, "name", "MediboardService");
     
     $this->addTexte($service, "documentation", "Documentation du WebService");
     
     $partie8 = $this->createComment("partie 8 : Port");
     $service->appendChild($partie8);
-    $port = $this->addElement($service, "port", null, "http://schemas.xmlsoap.org/wsdl/");
+    $port = $this->addElement($service, "port");
     $this->addAttribute($port, "name", "MediboardPort");
     $this->addAttribute($port, "binding", "typens:MediboardBinding");
     
     $soapaddress = $this->addElement($port, "soap:address", null, "http://schemas.xmlsoap.org/wsdl/soap/");
-    $this->addAttribute($soapaddress, "location", CApp::getBaseUrl()."/?login=1&username=$username&password=$password&m=$module&a=$tab&class=$classname&suppressHeaders=1");
+    $this->addAttribute($soapaddress, "location", CApp::getBaseUrl()."/?login=$username:$password&m=$module&a=$tab&class=$classname&suppressHeaders=1");
   }
   
   function saveFileXML() {
