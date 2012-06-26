@@ -63,6 +63,8 @@ $source->send();
 
 if ($ack_data = $source->getACQ()) {
   if ($exchange instanceof CEchangeHprim) {
+    $ack_data = utf8_decode($ack_data);
+    $exchange->date_echange = mbDateTime();
     $ack = CHPrimXMLAcquittements::getAcquittementEvenementXML($data_format);
     $ack->loadXML($ack_data);
     $doc_valid = $ack->schemaValidate();
