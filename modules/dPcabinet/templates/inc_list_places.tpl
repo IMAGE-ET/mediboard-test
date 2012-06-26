@@ -65,10 +65,10 @@ PlageConsult.addPlaceAfter = function(plage_id) {
   {{if $online && !$plage->locked}}
   <tr>
     <td class="button" colspan="{{if $display_nb_consult}}5{{else}}3{{/if}}">
-      <button type="button" class="add singleclick" onclick="PlageConsult.addPlaceBefore()">
+      <button type="button" class="add singleclick" onclick="PlageConsult.addPlaceBefore()" {{if !$plage->_canEdit}}disabled="disabled"{{/if}}>
         Avant
       </button>
-      <button type="button" class="add singleclick" onclick="PlageConsult.addPlaceAfter()">
+      <button type="button" class="add singleclick" onclick="PlageConsult.addPlaceAfter()" {{if !$plage->_canEdit}}disabled="disabled"{{/if}}>
         Après
       </button>
     </td>

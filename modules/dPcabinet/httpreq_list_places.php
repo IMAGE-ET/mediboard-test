@@ -149,6 +149,9 @@ if ($plageconsult_id) {
   }
 }
 
+// Vérifier le droit d'écriture sur la plage sélectionnée
+$plage->canEdit();
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("plageconsult_id", $plageconsult_id);
