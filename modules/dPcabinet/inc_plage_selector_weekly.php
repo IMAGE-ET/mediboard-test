@@ -20,8 +20,6 @@ if(!$chir_id) {
 $prat = new CMediusers;
 $prat->load($chir_id);
 
-$user = CMediusers::get();
-
 //Planning au format  CPlanningWeek
 $today = mbDate();
 $debut = $date;
@@ -73,7 +71,7 @@ for ($i = 0; $i < $nbDays; $i++) {
       $event->type        = "rdvfull";
       $event->plage["id"] = $_plage->_id;
       
-      if($_plage->locked == 1 || (!CCanDo::admin() && $_plage->_ref_chir->function_id != $user->function_id)) {
+      if($_plage->locked == 1) {
         $event->disabled = true;
       }
       
@@ -93,7 +91,7 @@ for ($i = 0; $i < $nbDays; $i++) {
         $event = new CPlanningEvent($debute, $debute, $_plage->_freq, "", "#cfc", true, null, null);
         $event->type        = "rdvfree";
         $event->plage["id"] = $_plage->_id;
-        if($_plage->locked == 1 || (!CCanDo::admin() && $_plage->_ref_chir->function_id != $user->function_id)) {
+        if($_plage->locked == 1) {
           $event->disabled = true;
         }
         $event->plage["color"] = $_plage->color;
