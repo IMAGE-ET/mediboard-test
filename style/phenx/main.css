@@ -192,7 +192,7 @@ th.category.modify {
 
 .cancelled {
   color: #fff;
-  background-color: #f88;
+  background-color: #f88 !important;
   text-shadow: 0 0 0 transparent, 0 0 2px rgba(0, 0, 0, 0.7);
   text-transform: uppercase;
   font-weight: bold;
