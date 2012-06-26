@@ -24,10 +24,18 @@ function testHTTPCode( $urls = array(), $type = "Autorisé" ) {
 }
 
 function getLastHTTPCode( $url ) {
-  $headers = get_headers( $url, 1 );
+  $ctx = stream_context_create( array( 
+     'http' => array( 
+         'timeout' => 5 
+         ) 
+     ) 
+ );
+
+  @file_get_contents( $url, false, $ctx );
+  $headers = $http_response_header;
 
   foreach ( $headers as $key => $header ) {
-    if ( is_int( $key ) ) {
+    if ( substr( $header, 0, 4 ) == "HTTP" ) {
       $response = split( " ", $header );
       $response = $response[1];
     }

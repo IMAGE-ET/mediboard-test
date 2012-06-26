@@ -506,6 +506,6 @@ foreach ( $urls as $url => $result ) {
 
 <?php 
 require "valid.php";
-checkAll();
+checkAll(true);
 showFooter(); 
 ?>

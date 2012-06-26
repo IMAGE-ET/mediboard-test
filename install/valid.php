@@ -330,33 +330,39 @@ function install() {
 }
 // End of checking
 
-function checkAll() {
+function checkAll($avoid = false) {
   
-  require_once ("testHTTP.php");
+  if ($avoid) {
+    require_once ("testHTTP.php");
   
-  $success = true;
-
-  ( array_key_exists( "HTTPS", $_SERVER ) ) ? $http = "https://" : $http = "http://";
+    $success = true;
   
-  $goodUrls[] = $http.dirname( dirname( $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] ) )."/tmp/locales-fr.js";
+    ( array_key_exists( "HTTPS", $_SERVER ) ) ? $http = "https://" : $http = "http://";
+    
+    $goodUrls[] = $http.dirname( dirname( $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] ) )."/tmp/locales-fr.js";
+    
+    $badUrls[] = $http.dirname( dirname( $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] ) )."/files";
+    $badUrls[] = $http.dirname( dirname( $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] ) )."/tmp";
+    $badUrls[] = $http.dirname( dirname( $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] ) )."/tmp/mb-log.html";
+    
+    $urls = array();
+    
+    $urls = array_merge( testHTTPCode( $goodUrls, "Autorisé" ), testHTTPCode( $badUrls, "Interdit" ) );
   
-  $badUrls[] = $http.dirname( dirname( $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] ) )."/files";
-  $badUrls[] = $http.dirname( dirname( $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] ) )."/tmp";
-  $badUrls[] = $http.dirname( dirname( $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] ) )."/tmp/mb-log.html";
-  
-  $urls = array();
-  
-  $urls = array_merge( testHTTPCode( $goodUrls, "Autorisé" ), testHTTPCode( $badUrls, "Interdit" ) );
-
-  foreach ( $urls as $url => $result ) {
-    if (!$result['result']) {
-      $success = false;
+    foreach ( $urls as $url => $result ) {
+      if (!$result['result']) {
+        $success = false;
+      }
     }
-  }
-
-  $valid = array();
   
-  ($success) ? $valid['check'] = check() : $valid['check'] = false;
+    $valid = array();
+    
+    ($success) ? $valid['check'] = check() : $valid['check'] = false;
+  }
+  else {
+    $valid['check'] = check();
+  }
+  
   
   $valid['fileaccess'] = fileaccess();
   $valid['install'] = install();
