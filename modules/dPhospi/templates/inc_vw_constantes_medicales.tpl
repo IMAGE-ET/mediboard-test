@@ -363,16 +363,20 @@ refreshFiches = function(sejour_id){
       <li>
         <a href="#tab-constantes-medicales">Constantes</a>
       </li>
-      {{if "forms"|module_active && $context instanceof CSejour && !$simple_view}}
+      
+      {{if $context instanceof CSejour && !$simple_view}}
+        {{if "forms"|module_active}}
+          <li>
+            <a href="#tab-ex_class-list" onmousedown="this.onmousedown=null; ExObject.loadExObjects('{{$context->_class}}', '{{$context->_id}}', 'tab-ex_class-list', 0)">
+              Formulaires
+            </a>
+          </li>
+        {{/if}}
+        
         <li>
-          <a href="#tab-ex_class-list" onmousedown="this.onmousedown=null; ExObject.loadExObjects('{{$context->_class}}', '{{$context->_id}}', 'tab-ex_class-list', 0)">
-            Formulaires
-          </a>
+          <a href="#tab-fiches" onmousedown="refreshFiches('{{$context->_id}}');">Fiches</a>
         </li>
       {{/if}}
-      <li>
-        <a href="#tab-fiches" onmousedown="refreshFiches('{{$context->_id}}');">Fiches</a>
-      </li>
     </ul>
     <hr class="control_tabs" />
       
