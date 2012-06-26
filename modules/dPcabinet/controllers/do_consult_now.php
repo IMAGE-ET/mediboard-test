@@ -151,34 +151,16 @@ if ($msg = $consult->store()) {
 
 CAppUI::setMsg("CConsultation-msg-create", UI_MSG_OK);
 
-if ($ref_chir->isFromType(array("Anesthésiste"))) {
-  // Un Anesthesiste a été choisi 
-  $consultAnesth = new CConsultAnesth;
-  $where = array();
-  $where["consultation_id"] = "= '".$consult->_id."'";
-  
-  $consultAnesth->loadObject($where);
-  
-  $consultAnesth->consultation_id = $consult->_id;
-  if ($_operation_id) {
-    $consultAnesth->operation_id = $_operation_id;
-  }
-  elseif ($sejour->_id) {
-    $consultAnesth->sejour_id = $sejour->_id;
-  }
-  if($msg = $consultAnesth->store()) {
-    CAppUI::setMsg($msg, UI_MSG_WARNING);
-  }
-}
 
 // Redirect final
-if($ajax) {
+if ($ajax) {
   echo CAppUI::getMsg();
   if ($callback) {
     CAppUI::callbackAjax($callback, $consult->_id);
   }
   CApp::rip();
 }
+
 if($current_m = CValue::post("_m_redirect")) {
   CAppUI::redirect("m=$current_m");
 } else {

@@ -43,22 +43,26 @@ $medecin_adresse_par = "";
 
 // Nouvelle consultation
 if (!$consultation_id) {
+
   // A t'on fourni une plage de consultation
-  if($plageconsult_id){
+  if ($plageconsult_id){
     $plageConsult->load($plageconsult_id);    
   } 
+  // A t'on fourni l'id du praticien
   else {
-    // A t'on fourni l'id du praticien
-    $chir_id = CAppUI::conf("dPcabinet keepchir") ? CValue::getOrSession("chir_id") : CValue::get("chir_id");
+    $chir_id = CAppUI::conf("dPcabinet keepchir") ?
+      CValue::getOrSession("chir_id") : 
+      CValue::get("chir_id");
+    
     if ($chir_id) {
       $chir = new CMediusers();
       $chir->load($chir_id);
     }
+  }
 
-    // A t'on fourni l'id du patient
-    if ($pat_id = CValue::get("pat_id")) {
-      $pat->load($pat_id);
-    }
+  // A t'on fourni l'id du patient
+  if ($pat_id = CValue::get("pat_id")) {
+    $pat->load($pat_id);
   }
 } 
 
@@ -69,28 +73,26 @@ else {
   
   $canConsult->needsRead("consultation_id");
   
-  $consult->loadRefs();
-  $consult->_ref_plageconsult->loadRefs();  
+  $consult->loadRefConsultAnesth();
   $consult->loadRefsNotes();
+  $consult->loadRefSejour();
+  $consult->loadRefPlageConsult()->loadRefs();  
+
+  $chir = $consult->loadRefPraticien();
+    
+  $pat = $consult->loadRefPatient();
+  $pat->loadIdVitale();
   
-  if ($consult->sejour_id) {
-    $consult->loadRefSejour();
+  // Correspondants médicaux
+  $correspondants = $pat->loadRefsCorrespondants();
+  foreach ($correspondants as $_correspondant) {
+    $correspondantsMedicaux["correspondants"][] = $_correspondant->_ref_medecin;
   }
-  
-  $chir =& $consult->_ref_plageconsult->_ref_chir;
-  $pat  =& $consult->_ref_patient;
-  
-  $pat->loadRefsFwd();
-  $pat->loadRefsCorrespondants();
-  
   
   if ($pat->_ref_medecin_traitant->_id) {
     $correspondantsMedicaux["traitant"] = $pat->_ref_medecin_traitant;
   }
-  foreach($pat->_ref_medecins_correspondants as $correspondant) {
-    $correspondantsMedicaux["correspondants"][] = $correspondant->_ref_medecin;
-  }
-
+  
   if ($consult->adresse_par_prat_id && ($consult->adresse_par_prat_id != $pat->_ref_medecin_traitant->_id)) {
     $medecin_adresse_par = new CMedecin();
     $medecin_adresse_par->load($consult->adresse_par_prat_id);
@@ -149,22 +151,37 @@ if ($chir->_id) {
 if (CModule::getActive("maternite")) {
   $consult->loadRefGrossesse();
 }
-  
+
+// Consultation suivantes, en cas de suppression ou annulation
+$following_consultations = array();
+if ($pat->_id) {
+  $where["date"] = ">= '$consult->_date'";
+  $following_consultations = $pat->loadRefsConsultations($where);
+  unset($following_consultations[$consult->_id]);
+  foreach ($following_consultations as $_consultation) {
+    $_consultation->loadRefPlageConsult();
+    $_consultation->loadRefPraticien();
+    $_consultation->canEdit();
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("listCat"               , $listCat);
-$smarty->assign("categories"            , $categories);
-$smarty->assign("plageConsult"     	    , $plageConsult);
-$smarty->assign("consult"               , $consult);
-$smarty->assign("chir"                  , $chir);
-$smarty->assign("_functions"            , $_functions);
-$smarty->assign("pat"                   , $pat);
-$smarty->assign("listPraticiens"        , $listPraticiens);
-$smarty->assign("listFunctions"         , $listFunctions);
-$smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
-$smarty->assign("medecin_adresse_par"   , $medecin_adresse_par);
-$smarty->assign("today"                 , $today);
+$smarty->assign("listCat"                , $listCat);
+$smarty->assign("categories"             , $categories);
+$smarty->assign("plageConsult"     	     , $plageConsult);
+$smarty->assign("consult"                , $consult);
+$smarty->assign("following_consultations", $following_consultations);
+$smarty->assign("chir"                   , $chir);
+$smarty->assign("_functions"             , $_functions);
+$smarty->assign("pat"                    , $pat);
+$smarty->assign("listPraticiens"         , $listPraticiens);
+$smarty->assign("listFunctions"          , $listFunctions);
+$smarty->assign("correspondantsMedicaux" , $correspondantsMedicaux);
+$smarty->assign("medecin_adresse_par"    , $medecin_adresse_par);
+$smarty->assign("today"                  , $today);
+
 $smarty->display("addedit_planning.tpl");
 
 ?>

@@ -239,7 +239,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     if ($this->_ref_operation->_id) {
       $this->_ref_operation->loadRefSejour();
       $this->_ref_operation->loadRefPlageOp();
-      $this->_ref_sejour =& $this->_ref_operation->_ref_sejour;
+      $this->_ref_sejour = $this->_ref_operation->_ref_sejour;
     } 
     else {
       $this->loadRefSejour();

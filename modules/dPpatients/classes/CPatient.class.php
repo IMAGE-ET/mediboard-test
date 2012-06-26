@@ -972,11 +972,11 @@ class CPatient extends CMbObject {
   function loadRefsConsultations($where = null) {
     $consultation = new CConsultation();
     $curr_user = CAppUI::$user;
-    if ($this->_id){
+    if ($this->_id) {
       if ($where === null) {
         $where = array();
       }
-      if(!$curr_user->isAdmin()) {
+      if (!$curr_user->isAdmin()) {
         $where[] = "functions_mediboard.consults_partagees = '1' ||
                     (functions_mediboard.consults_partagees = '0' && functions_mediboard.function_id = '$curr_user->function_id')";
       }
@@ -1077,14 +1077,18 @@ class CPatient extends CMbObject {
     $this->loadRefsGrossesses();
   }
 
-  // Forward references
-  function loadRefsFwd() {
+  function loadIdVitale() {
     if (CModule::getActive("fse")) {
       $cv = CFseFactory::createCV();
       if ($cv) {
         $cv->loadIdVitale($this);
       }
     }
+  }
+  
+  // Forward references
+  function loadRefsFwd() {
+    $this->loadIdVitale();
   }
       
   function loadComplete(){

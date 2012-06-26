@@ -80,23 +80,13 @@ function ClearRDV(){
   }
 }
 
-function annuleConsult(form, value) {
-  if (!confirm($T('CConsultation-confirm-cancel-'+value))) {
-    return;
-  }
-
-  $V(form.annule, value);
-  if (checkForm(form)) {
-    form.submit();
-  }
-}
-
 function checkFormRDV(form){
   if(!form._pause.checked && form.patient_id.value == ""){
     alert("Veuillez sélectionner un patient");
     PatSelector.init();
     return false;
-  }else{
+  }
+  else{
     var infoPat = $('infoPat');
     var operations = infoPat.select('input[name=_operation_id]');
     var checkedOperation = operations.find(function (o) {return o.checked});
@@ -105,6 +95,13 @@ function checkFormRDV(form){
     }
     
     return checkForm(form);
+  }
+}
+
+function submitRDV() {
+  var form = getForm('editFrm');
+  if (checkFormRDV(form)) {
+    form.submit(); 
   }
 }
 
@@ -468,48 +465,38 @@ Main.add(function () {
       </fieldset>
     </td>
   </tr>
+</table>
 
+</form>
+
+<table class="form">
   <tr>
-    <td colspan="2">
+    <td colspan="2" class="button">
 
-      <table class="form">
-        <tr>
-          <td class="button">
-          {{if $consult->_id}}
-            {{if !$consult->_locks || $can->admin}}
-              <button class="modify" type="submit">
-              	{{tr}}Save{{/tr}}
-              </button>
-              {{if $consult->annule}}
-  	            <button class="change" type="button" onclick="annuleConsult(this.form, 0)">
-  	            	{{tr}}Restore{{/tr}}
-  	            </button>
-              {{else}}
-  	            <button class="cancel" type="button" onclick="annuleConsult(this.form, 1)">
-  	            	{{tr}}Cancel{{/tr}}
-  	            </button>
-              {{/if}}
-              {{if $can->admin || !$consult->patient_id}}
-              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la consultation de',objName:'{{$consult->_ref_patient->_view|smarty:nodefaults|JSAttribute}}'})">
-                {{tr}}Delete{{/tr}}
-              </button>
-              {{/if}}
-            {{/if}}
-            <button class="print" id="print_fiche_consult" type="button" {{if !$consult->patient_id}}disabled="disabled"{{/if}}onclick="printForm();">
-              {{tr}}Print{{/tr}}
-            </button>
-          {{else}}
-            <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
-          {{/if}}
-          </td>
-        </tr>
-      </table>
+      {{if $consult->_id}}
+        {{if !$consult->_locks || $can->admin}}
+          <button class="modify" type="submit" onclick="submitRDV();">
+          	{{tr}}Save{{/tr}}
+          </button>
+
+          {{mb_include template=inc_cancel_planning}}              
+                      
+        {{/if}}
+        
+        <button class="print" id="print_fiche_consult" type="button" onclick="printForm();"
+          {{if !$consult->patient_id}} disabled="disabled" {{/if}}
+        >
+          {{tr}}Print{{/tr}}
+        </button>
+      {{else}}
+        <button class="submit" type="submit" onclick="submitRDV();">
+          {{tr}}Create{{/tr}}
+        </button>
+      {{/if}}
     
     </td>
   </tr>
 </table>
-
-</form>
 
 <table class="form">
   <tr>

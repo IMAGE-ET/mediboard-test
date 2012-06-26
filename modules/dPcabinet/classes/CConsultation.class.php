@@ -140,6 +140,9 @@ class CConsultation extends CCodable {
   var $_empty_places           = null;
   var $_non_pourvues           = null;
   
+  // Behaviour fields
+  var $_operation_id = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'consultation';
@@ -168,87 +171,87 @@ class CConsultation extends CCodable {
   }
   
   function getProps() {
-    $specs = parent::getProps();
-    $specs["sejour_id"]         = "ref class|CSejour";
-    $specs["plageconsult_id"]   = "ref notNull class|CPlageconsult seekable show|1";
-    $specs["patient_id"]        = "ref class|CPatient purgeable seekable show|1";
-    $specs["categorie_id"]      = "ref class|CConsultationCategorie show|1";
-    $specs["grossesse_id"]      = "ref class|CGrossesse show|0";
-    $specs["factureconsult_id"] = "ref class|CFactureConsult show|0";
-    $specs["_praticien_id"]     ="ref class|CMediusers seekable show|1"; //is put here for view
-    $specs["_function_secondary_id"] = "ref class|CFunctions";
-    $specs["motif"]             = "text helped seekable";
-    $specs["type"]              = "enum list|classique|entree|chimio default|classique";
-    $specs["heure"]             = "time notNull show|0";
-    $specs["duree"]             = "num min|1 max|9 notNull default|1 show|0";
-    $specs["secteur1"]          = "currency min|0 show|0";
-    $specs["secteur2"]          = "currency show|0";
-    $specs["chrono"]            = "enum notNull list|16|32|48|64 show|0";
-    $specs["annule"]            = "bool show|0";
-    $specs["_etat"]             = "str";
+    $props = parent::getProps();
+    $props["sejour_id"]         = "ref class|CSejour";
+    $props["plageconsult_id"]   = "ref notNull class|CPlageconsult seekable show|1";
+    $props["patient_id"]        = "ref class|CPatient purgeable seekable show|1";
+    $props["categorie_id"]      = "ref class|CConsultationCategorie show|1";
+    $props["grossesse_id"]      = "ref class|CGrossesse show|0";
+    $props["factureconsult_id"] = "ref class|CFactureConsult show|0";
+    $props["_praticien_id"]     ="ref class|CMediusers seekable show|1"; //is put here for view
+    $props["_function_secondary_id"] = "ref class|CFunctions";
+    $props["motif"]             = "text helped seekable";
+    $props["type"]              = "enum list|classique|entree|chimio default|classique";
+    $props["heure"]             = "time notNull show|0";
+    $props["duree"]             = "num min|1 max|9 notNull default|1 show|0";
+    $props["secteur1"]          = "currency min|0 show|0";
+    $props["secteur2"]          = "currency show|0";
+    $props["chrono"]            = "enum notNull list|16|32|48|64 show|0";
+    $props["annule"]            = "bool show|0";
+    $props["_etat"]             = "str";
     
-    $specs["rques"]             = "text helped seekable";
-    $specs["examen"]            = "text helped seekable show|0";
-    $specs["traitement"]        = "text helped seekable";
-    $specs["histoire_maladie"]  = "text helped seekable";
-    $specs["conclusion"]        = "text helped seekable";
+    $props["rques"]             = "text helped seekable";
+    $props["examen"]            = "text helped seekable show|0";
+    $props["traitement"]        = "text helped seekable";
+    $props["histoire_maladie"]  = "text helped seekable";
+    $props["conclusion"]        = "text helped seekable";
     
-    $specs["facture"]           = "bool default|0 show|0";
+    $props["facture"]           = "bool default|0 show|0";
     
-    $specs["premiere"]            = "bool show|0";
-    $specs["adresse"]             = "bool show|0";
-    $specs["adresse_par_prat_id"] = "ref class|CMedecin";
-    $specs["tarif"]               = "str show|0";
-    $specs["arrivee"]             = "dateTime show|0";
-    $specs["concerne_ALD"]        = "bool";
+    $props["premiere"]            = "bool show|0";
+    $props["adresse"]             = "bool show|0";
+    $props["adresse_par_prat_id"] = "ref class|CMedecin";
+    $props["tarif"]               = "str show|0";
+    $props["arrivee"]             = "dateTime show|0";
+    $props["concerne_ALD"]        = "bool";
     
-    $specs["patient_date_reglement"]    = "date show|0";
-    $specs["tiers_date_reglement"]      = "date show|0";
-    $specs["du_patient"]                = "currency show|0";
-    $specs["du_tiers"  ]                = "currency show|0";
+    $props["patient_date_reglement"]    = "date show|0";
+    $props["tiers_date_reglement"]      = "date show|0";
+    $props["du_patient"]                = "currency show|0";
+    $props["du_tiers"  ]                = "currency show|0";
     
-    $specs["date_at"]  = "date";
-    $specs["fin_at"]   = "dateTime";
-    $specs["pec_at"]   = "enum list|soins|arret";
-    $specs["reprise_at"] = "dateTime";
-    $specs["at_sans_arret"] = "bool default|0";
-    $specs["arret_maladie"] = "bool default|0";
+    $props["date_at"]  = "date";
+    $props["fin_at"]   = "dateTime";
+    $props["pec_at"]   = "enum list|soins|arret";
+    $props["reprise_at"] = "dateTime";
+    $props["at_sans_arret"] = "bool default|0";
+    $props["arret_maladie"] = "bool default|0";
     
-    $specs["total_amo"]         = "currency show|0";
-    $specs["total_amc"]         = "currency show|0";
-    $specs["total_assure"]      = "currency show|0";
+    $props["total_amo"]         = "currency show|0";
+    $props["total_amc"]         = "currency show|0";
+    $props["total_assure"]      = "currency show|0";
 
-    $specs["valide"]            = "bool show|0";
-    $specs["si_desistement"]    = "bool notNull default|0";
+    $props["valide"]            = "bool show|0";
+    $props["si_desistement"]    = "bool notNull default|0";
 
-    $specs["_du_patient_restant"]       = "currency";
-    $specs["_du_tiers_restant"]         = "currency";
-    $specs["_reglements_total_patient"] = "currency";
-    $specs["_reglements_total_tiers"  ] = "currency";
-    $specs["_etat_reglement_patient"]   = "enum list|reglee|non_reglee";
-    $specs["_etat_reglement_tiers"  ]   = "enum list|reglee|non_reglee";
-    $specs["_forfait_se"]               = "bool default|0";
-    $specs["_forfait_sd"]               = "bool default|0";
-    $specs["_facturable"]               = "bool default|1";
+    $props["_du_patient_restant"]       = "currency";
+    $props["_du_tiers_restant"]         = "currency";
+    $props["_reglements_total_patient"] = "currency";
+    $props["_reglements_total_tiers"  ] = "currency";
+    $props["_etat_reglement_patient"]   = "enum list|reglee|non_reglee";
+    $props["_etat_reglement_tiers"  ]   = "enum list|reglee|non_reglee";
+    $props["_forfait_se"]               = "bool default|0";
+    $props["_forfait_sd"]               = "bool default|0";
+    $props["_facturable"]               = "bool default|1";
     
-    $specs["_date"]             = "date";
-    $specs["_datetime"]         = "dateTime show|1";
-    $specs["_date_min"]         = "date";
-    $specs["_date_max"]         = "date moreEquals|_date_min";
-    $specs["_type_affichage"]   = "enum list|complete|totaux";
-    $specs["_telephone"]        = "bool default|0";
-    $specs["_coordonnees"]      = "bool default|0";
-    $specs["_plages_vides"]     = "bool default|1";
-    $specs["_non_pourvues"]     = "bool default|1";
+    $props["_date"]             = "date";
+    $props["_datetime"]         = "dateTime show|1";
+    $props["_date_min"]         = "date";
+    $props["_date_max"]         = "date moreEquals|_date_min";
+    $props["_type_affichage"]   = "enum list|complete|totaux";
+    $props["_telephone"]        = "bool default|0";
+    $props["_coordonnees"]      = "bool default|0";
+    $props["_plages_vides"]     = "bool default|1";
+    $props["_non_pourvues"]     = "bool default|1";
     
-    $specs["_check_premiere"]   = "";
-    $specs["_check_adresse"]    = "";
-    $specs["_somme"]            = "currency";    
-    $specs["_type"]             = "enum list|urg|anesth";
-    $specs["_prat_id"]          = "ref class|CMediusers";
-    $specs["_acte_dentaire_id"] = "ref class|CActeDentaire";
-    $specs["_ref_grossesse"]    = "ref class|CGrossesse";
-    return $specs;
+    $props["_check_premiere"]   = "";
+    $props["_check_adresse"]    = "";
+    $props["_somme"]            = "currency";    
+    $props["_type"]             = "enum list|urg|anesth";
+    $props["_prat_id"]          = "ref class|CMediusers";
+    $props["_acte_dentaire_id"] = "ref class|CActeDentaire";
+    $props["_ref_grossesse"]    = "ref class|CGrossesse";
+    return $props;
   }
   
   function getEtat() {
@@ -829,20 +832,27 @@ class CConsultation extends CCodable {
    * @todo: refactoring complet de la fonction store de la consultation
 
 ANALYSE DU CODE
-1. gestion du désistement
-2. premier if : creation d'une consultation à laquelle on doit attacher un séjour (conf active) : comportement DEPART / ARRIVEE
-3. mise en cache du forfait FSE et facturable : uniquement dans le cas d'un séjour
-4. on load le séjour de la consultation
-5. on initialise le _adjust_sejour à false
-6. dans le cas ou on a un séjour
-  6.1. s'il est de type consultation, on ajuste le séjour en fonction du comportement DEPART / ARRIVEE
-  6.2. si la plage de consultation a été modifiée, adjust_sejour passe à true et on ajuste le séjour en fonction du comportement DEPART / ARRIVEE (en passant par l'adjustSejour() )
-  6.3. si on a un id (à virer) et que le chrono est modifié en PATIENT_ARRIVE, si on gère les admissions auto (conf) on met une entrée réelle au séjour
-7. Si le patient est modifié, qu'on est pas en train de merger et qu'on a un séjour, on empeche le store
-8. On appelle le parent::store()
-9. On passe le forfait SE et facturable au séjour
+ 1. Gestion du désistement
+ 2. Premier if : creation d'une consultation à laquelle on doit attacher 
+    un séjour (conf active): comportement DEPART / ARRIVEE
+ 3. Mise en cache du forfait FSE et facturable : uniquement dans le cas d'un séjour
+ 4. On load le séjour de la consultation
+ 5. On initialise le _adjust_sejour à false
+ 6. Dans le cas ou on a un séjour
+  6.1. S'il est de type consultation, on ajuste le séjour en fonction du
+       comportement DEPART / ARRIVEE
+  6.2. Si la plage de consultation a été modifiée, adjust_sejour passe à
+       true et on ajuste le séjour en fonction du comportement DEPART / ARRIVEE 
+       (en passant par l'adjustSejour() )
+  6.3. Si on a un id (à virer) et que le chrono est modifié en PATIENT_ARRIVE, 
+       si on gère les admissions auto (conf) on met une entrée réelle au séjour
+ 7. Si le patient est modifié, qu'on est pas en train de merger et qu'on a un séjour, 
+    on empeche le store
+ 8. On appelle le parent::store()
+ 9. On passe le forfait SE et facturable au séjour
 10. On propage la modification du patient de la consultation au séjour
-11. si on a ajusté le séjour et qu'on est dans un séjour de type conclut et que le séjour n'a plus de consultations, on essaie de le supprimer, sinon on l'annule
+11. Si on a ajusté le séjour et qu'on est dans un séjour de type conclut et que le séjour 
+    n'a plus de consultations, on essaie de le supprimer, sinon on l'annule
 12. Gestion du tarif et précodage des actes (bindTarif)
 13. Bind FSE
 
@@ -867,17 +877,17 @@ modif de la date d'une consultation ayant un séjour sur le modèle DEPART / ARRIV
 -> sinon on crée un séjour de consultation
 
 TESTS A EFFECTUER
-0. Création d'un pause
-0.1. Déplacement d'une pause
-1. Création d'une consultation simple C1 (Séjour S1)
-2. Création d'une deuxième consultation le même jour / même patient C2 (Séjour S1)
-3. Création d'une troisième consultation le même jour / même patient C3 (Séjour S1)
-4. Déplacement de la consultation C1 un autre jour (Séjour S2)
-5. Changement du nom du patient C2 (pas de modification car une autre consultation)
-6. Déplacement de C3 au même jour (Toujours séjour S1)
-7. Annulation de C1 (Suppression ou annulation de S1)
-8. Déplacement de C2 et C3 à un autre jour (séjour S3 créé, séjour S1 supprimé ou annulé)
-9. Arrivée du patient pour C2 (S3 a une entrée réelle)
+ 0. Création d'un pause
+ 0.1. Déplacement d'une pause
+ 1. Création d'une consultation simple C1 (Séjour S1)
+ 2. Création d'une deuxième consultation le même jour / même patient C2 (Séjour S1)
+ 3. Création d'une troisième consultation le même jour / même patient C3 (Séjour S1)
+ 4. Déplacement de la consultation C1 un autre jour (Séjour S2)
+ 5. Changement du nom du patient C2 (pas de modification car une autre consultation)
+ 6. Déplacement de C3 au même jour (Toujours séjour S1)
+ 7. Annulation de C1 (Suppression ou annulation de S1)
+ 8. Déplacement de C2 et C3 à un autre jour (séjour S3 créé, séjour S1 supprimé ou annulé)
+ 9. Arrivée du patient pour C2 (S3 a une entrée réelle)
 10. Déplacement de C3 dans un autre jour (S4)
 11. Déplacement de C2 dans un autre jour (S5 et S3 reste tel quel)
    */
@@ -1086,7 +1096,7 @@ TESTS A EFFECTUER
       return $msg;
     }
     
-    // $this->createConsultAnesth();
+    $this->createConsultAnesth();
     
     // Forfait SE et facturable. A laisser apres le store()
     if ($this->sejour_id && CAppUI::conf("dPcabinet CConsultation attach_consult_sejour")) {
@@ -1162,7 +1172,7 @@ TESTS A EFFECTUER
    * 
    * @var CSejour
    */ 
-  function loadRefSejour($cache = 1){
+  function loadRefSejour($cache = 1) {
     $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
     $this->_ref_sejour->loadRefRPU();
     
@@ -1200,7 +1210,7 @@ TESTS A EFFECTUER
     $this->_ref_plageconsult->loadRefsFwd($cache);
     
     // Distant fields
-    $this->_ref_chir =& $this->_ref_plageconsult->_ref_chir;
+    $this->_ref_chir = $this->_ref_plageconsult->_ref_chir;
     $this->_date     = $this->_ref_plageconsult->date;
     $this->_datetime = mbAddDateTime($this->heure,$this->_date);
     $this->_acte_execution = $this->_datetime;
@@ -1670,12 +1680,60 @@ TESTS A EFFECTUER
       return;
     }
     
-    $consultAnesth = new CConsultAnesth;
-    $consultAnesth->consultation_id = $this->_id;
-    $consultAnesth->loadMatchingObject();
-    
+    // Création de la consultation d'anesthésie
+    $consultAnesth = $this->loadRefConsultAnesth();
     if (!$consultAnesth->_id) {
-      return $consultAnesth->store();
+      $consultAnesth->consultation_id = $this->_id;
+      if ($msg = $consultAnesth->store()) {
+        return $msg;
+      }      
+    }
+    
+    // Remplissage automatique des motifs et remarques
+    if ($this->_operation_id) {
+      // Association à l'intervention
+      $consultAnesth->operation_id = $this->_operation_id;
+      $operation = $consultAnesth->loadRefOperation();
+      if ($msg = $consultAnesth->store()) {
+        return $msg;
+      }      
+      
+      // Remplissage du motif de pré-anesthésie si creation et champ motif vide
+      if ($operation->_id) {
+        $format_motif = CAppUI::conf('cabinet CConsultAnesth format_auto_motif');
+        $format_rques = CAppUI::conf('cabinet CConsultAnesth format_auto_rques');
+        
+        if (($format_motif && !$this->motif) || ($format_rques && !$this->rques)) {
+          $operation = $consultAnesth->_ref_operation;
+          $operation->loadRefPlageOp();
+          $sejour = $operation->loadRefSejour();
+          $chir   = $operation->loadRefChir();
+          $chir->updateFormFields();
+
+          $items = array (
+            '%N' => $chir->_user_last_name,
+            '%P' => $chir->_user_first_name,
+            '%S' => $chir->_shortview,
+            '%L' => $operation->libelle,
+            '%I' => mbTransformTime(null, $operation->_datetime , CAppUI::conf('date')),
+            '%E' => mbTransformTime(null, $sejour->entree_prevue, CAppUI::conf('date')),
+            '%e' => mbTransformTime(null, $sejour->entree_prevue, CAppUI::conf('time')),
+            '%T' => strtoupper(substr($sejour->type, 0, 1)),
+          );
+  
+          if ($format_motif && !$this->motif) {
+            $this->motif = str_replace(array_keys($items), $items, $format_motif);
+          }
+          
+          if ($format_rques && !$this->rques) {
+            $this->rques = str_replace(array_keys($items), $items, $format_rques);
+          }
+
+          if ($msg = $this->store()) {
+            return $msg;
+          }      
+        }
+      }
     }
   }
 }
