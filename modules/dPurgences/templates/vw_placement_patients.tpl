@@ -30,10 +30,11 @@ Rafraichissement = {
 
 <style type="text/css">
 div.patient{
+  padding: 1px;
   margin: 3px;
   background-color: rgba(255,255,255,0.8);
-  border:1px solid silver;
   width: 92%;
+  box-shadow: 0 0 0 1px silver;
 }
 
 div.grille table{
