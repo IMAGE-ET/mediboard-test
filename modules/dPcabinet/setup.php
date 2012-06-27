@@ -1555,7 +1555,14 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `examigs` DROP `consultation_id`;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.61";
+    $this->makeRevision("1.61");
+    
+    $query = "UPDATE `plageconsult`
+							SET color = 'DDDDDD'
+							WHERE color = 'DDD'";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.62";
   }
 }
 ?>
