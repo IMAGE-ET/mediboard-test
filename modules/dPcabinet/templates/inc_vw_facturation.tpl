@@ -46,7 +46,8 @@
               <input type="hidden" name="factureconsult_id" value="{{$facture->factureconsult_id}}" />
               <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
               <input type="hidden" name="cession_creance" value="{{if $facture->cession_creance == 1}}0{{else}}1{{/if}}" />
-              <input type="checkbox" name="cession_tmp" value="{{$facture->cession_creance}}" {{if $facture->cession_creance}}checked="checked"{{/if}} onchange="Facture.modifCloture(this.form);" />Cession de créance 
+              <input type="checkbox" name="cession_tmp" value="{{$facture->cession_creance}}" {{if $facture->cession_creance}}checked="checked"{{/if}} onchange="Facture.modifCloture(this.form);" />
+              {{mb_label object=$facture field=cession_creance}}
             </form>
             <form name="npq_facture" method="post" action=""> 
               <input type="hidden" name="dosql" value="do_factureconsult_aed" />
@@ -55,7 +56,8 @@
               <input type="hidden" name="factureconsult_id" value="{{$facture->factureconsult_id}}" />
               <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
               <input type="hidden" name="npq" value="{{if $facture->npq == 1}}0{{else}}1{{/if}}" />
-              <input type="checkbox" name="npq_tmp" value="{{$facture->npq}}" {{if $facture->npq}}checked="checked"{{/if}} onchange="Facture.modifCloture(this.form);" />NPQ
+              <input type="checkbox" name="npq_tmp" value="{{$facture->npq}}" {{if $facture->npq}}checked="checked"{{/if}} onchange="Facture.modifCloture(this.form);" />
+              {{mb_label object=$facture field=npq}}
             </form>
           </td>
         </tr>
