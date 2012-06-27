@@ -24,6 +24,8 @@
   .chambre{
     text-align:center;
     height:60px;
+    padding: 1px;
+    box-shadow: 0 0 0 1px silver;
   }
   .chambre a{
     text-shadow:  0 0 0 transparent,
