@@ -22,6 +22,7 @@ $operation_id          = CValue::get("operation_id");
 $create_dossier_anesth = CValue::get("create_dossier_anesth", 0);
 $multi   = CValue::get("multi");
 $offline = CValue::get("offline");
+$display = CValue::get("display");
 
 $lines = array();
 
@@ -204,6 +205,7 @@ $unites["date_analyse"] = array("nom"=>"Date","unit"=>"");
 // Création du template
 $smarty = new CSmartyDP("modules/dPcabinet");
 
+$smarty->assign("display"   , $display);
 $smarty->assign("offline"   , $offline);
 $smarty->assign("unites"    , $unites);
 $smarty->assign("listChamps", $listChamps);

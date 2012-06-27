@@ -369,12 +369,7 @@ function reloadSurveillancePerop(){
 {{if !$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && $currUser->_is_anesth)}}
 <!-- Anesthesie -->
 <div id="anesth_tab" style="display:none">
-  <div id="anesth">
-    {{include file="inc_vw_anesth.tpl"}}
-  </div>  
-  <div id="info_anesth"> 
   {{include file="inc_vw_info_anesth.tpl"}}
-  </div>
 </div>
 {{/if}}
 

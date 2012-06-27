@@ -22,6 +22,15 @@ refreshAnesthPerops = function(operation_id){
 	url.requestUpdate("list_perops_"+operation_id);
 }
 
+
+refreshFicheAnesth = function() {
+  var url = new Url("cabinet", "print_fiche");
+  url.addParam("consultation_id", "{{$consult_anesth->consultation_id}}");
+  url.addParam("offline", true);
+  url.addParam("display", true);
+  url.requestUpdate("fiche_anesth"); 
+}
+
 printIntervAnesth = function(){
   var url = new Url("dPsalleOp", "print_intervention_anesth");
 	url.addParam("operation_id", "{{$selOp->_id}}");
@@ -45,7 +54,7 @@ reloadAnesth = function() {
 Main.add(function(){
   
   if ($('anesth_tab_group')){
-    Control.Tabs.create('anesth_tab_group', true);
+    Control.Tabs.create('anesth_tab_group');
   }
 	
   // Refresh tab perop
@@ -68,7 +77,24 @@ Main.add(function(){
   {{assign var=onSubmit value="return checkForm(this)"}}
 {{/if}}
 
-{{if $consult_anesth->_id}}
+<ul id="anesth_tab_group" class="control_tabs small">
+  <li><a href="#anesth">Info. Anesthésie</a>
+  <li onmousedown="refreshAnesthPerops('{{$selOp->_id}}');"><a href="#tab_perop">Evenements per-opératoire</a></li>
+  <li onmousedown="if(window.Prescription){ Prescription.updatePerop('{{$selOp->sejour_id}}'); }"><a href="#perop">Administrations per-opératoires</a></li>
+  <li onmousedown="refreshFicheAnesth();"><a href="#fiche_anesth" {{if !$consult_anesth->_id}}class="wrong"{{/if}}>Fiche d'anesthésie</a></li>
+  <li><a href="#tab_preanesth" {{if !$selOp->date_visite_anesth}}class="wrong"{{/if}}>Pré-anesthésie</a></li>
+  <li><a href="#document_anesth">Documents</a></li>
+</ul>
+<hr class="control_tabs" />
+
+<div id="anesth">
+  {{include file="inc_vw_anesth.tpl"}}
+</div>  
+
+<div id="fiche_anesth"></div>
+
+<div id="document_anesth">
+  {{if $consult_anesth->_id}}
   <table class="form">
     <tr>
       <td class="halfPane">
@@ -96,17 +122,11 @@ Main.add(function(){
       </td>
     </tr>
   </table>
-{{/if}}
-	
-	
-<ul id="anesth_tab_group" class="control_tabs">
-	<li><a href="#tab_preanesth">Pré-anesthésie</a></li>
-	<li onmousedown="refreshAnesthPerops('{{$selOp->_id}}');"><a href="#tab_perop">Evenements per-opératoire</a></li>
-	<li onmousedown="if(window.Prescription){ Prescription.updatePerop('{{$selOp->sejour_id}}'); }"><a href="#perop">Administrations per-opératoires</a></li>
-  <!--<li style="float: right"><button type="button" class="print" onclick="printIntervAnesth();">Fiche d'intervention anesthésie</button></li>-->
-</ul>
-<hr class="control_tabs" />
-
+  {{else}}
+  <div class="small-info">L'intervention n'est pas reliée à une consultation d'anesthésie, vous ne pouvez donc pas créer de documents</div>
+  {{/if}}
+</div>
+  
 <div id="tab_preanesth" style="display: none;">
   {{if $consult_anesth->_id}}
 		<table class="form">

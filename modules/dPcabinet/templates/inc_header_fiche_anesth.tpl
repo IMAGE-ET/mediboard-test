@@ -1,15 +1,21 @@
+{{mb_default var=display value=false}}
+
 <table class="{{$tbl_class}}">
   <tr>
     <td>
       <table width="100%">
         <tr>
           <th class="title" colspan="4">
-            {{if $offline}}
+            {{if $offline && !$display}}
               <button type="button" style="float: right;" class="cancel not-printable" onclick="Control.Modal.close();">{{tr}}Close{{/tr}}</button>
             {{/if}}
+            {{if !$display}}
             <a href="#" onclick="window.print()">
               Consultation pré-anesthésique
             </a>
+            {{else}}
+              Consultation pré-anesthésique
+            {{/if}}
           </th>
         </tr>
         <tr>

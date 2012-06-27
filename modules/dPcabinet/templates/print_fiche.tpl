@@ -1,3 +1,5 @@
+{{mb_default var=display value=false}}
+
 {{if !@$offline || @$multi}}
       </td>
     </tr>
@@ -374,7 +376,9 @@
   </tr>
 </table>
 
-{{mb_include module=cabinet template=inc_header_fiche_anesth}}
+{{if !$display}}
+  {{mb_include module=cabinet template=inc_header_fiche_anesth}}
+{{/if}}
 
 <table class="{{$tbl_class}}">
   <tr>
