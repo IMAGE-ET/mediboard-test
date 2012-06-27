@@ -30,6 +30,8 @@ if ($dossier_medical->_id) {
 	$dossier_medical->loadRefsAntecedents(true); // On doit charger TOUS les antecedents, meme les annulés (argument true)
 	$dossier_medical->loadRefsTraitements();
 	$dossier_medical->countAntecedents();
+  $dossier_medical->countTraitements();
+
 	$prescription = $dossier_medical->loadRefPrescription();
 	
   foreach ($dossier_medical->_all_antecedents as $_antecedent) {

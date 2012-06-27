@@ -16,6 +16,7 @@ class CTraitement extends CMbObject {
   var $fin                = null;
   var $traitement         = null;
   var $dossier_medical_id = null;
+  var $annule             = null;
 
   // Form Fields
   var $_search = null;
@@ -32,11 +33,17 @@ class CTraitement extends CMbObject {
     $specs["debut"       ] = "date progressive";
     $specs["fin"         ] = "date progressive moreEquals|debut";
     $specs["traitement"  ] = "text helped seekable";
-    $specs["dossier_medical_id"] = "ref notNull class|CDossierMedical";
-    
+    $specs["dossier_medical_id"] = "ref notNull class|CDossierMedical show|0";
+    $specs["annule"] = "bool";
+
     $specs["_search"] = "str";
     
     return $specs;
+  }
+  
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view = $this->traitement;
   }
   
   function store() {
@@ -46,6 +53,16 @@ class CTraitement extends CMbObject {
     }
     // DossierMedical store
     $this->checkCodeCim10();
+  }
+  
+  function loadRefDossierMedical(){ 
+    $this->_ref_dossier_medical = new CDossierMedical();
+    $this->_ref_dossier_medical->load($this->dossier_medical_id);
+  }
+  
+  function loadView(){
+    $this->loadLogs();
+    $this->loadRefDossierMedical();
   }
   
   function checkCodeCim10(){
@@ -76,11 +93,6 @@ class CTraitement extends CMbObject {
         }
       }
     }
-  }
-  
-  function loadRefDossierMedical(){ 
-    $this->_ref_dossier_medical = new CDossierMedical();
-    $this->_ref_dossier_medical->load($this->dossier_medical_id);
   }
 }
 

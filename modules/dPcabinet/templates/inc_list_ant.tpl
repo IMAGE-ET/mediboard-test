@@ -21,6 +21,29 @@ Traitement = {
     };
     
     confirmDeletion(oForm, oOptions, oOptionsAjax);
+  },  
+  cancel: function(oForm, onComplete) {
+    $V(oForm.annule, 1);
+    onSubmitFormAjax(oForm, {
+      onComplete: function(){
+        if (onComplete) {
+          onComplete();
+        }
+      }
+    });
+    $V(oForm.annule, '');
+  },
+  restore: function(oForm, onComplete) {
+    $V(oForm.annule, '0');
+    onSubmitFormAjax(oForm, {onComplete: function(){
+      if (onComplete) {
+        onComplete();
+      }
+    }});
+    $V(oForm.annule, '');
+  },
+  toggleCancelled: function(list) {
+    $(list).select('.cancelled').invoke('toggle');
   },
   copyTraitement: function(traitement_id) {
     var oFormPrescription = getForm("prescription-sejour-{{$patient->_id}}");
@@ -70,9 +93,10 @@ Traitement = {
   <input type="hidden" name="prescription_id" value="{{$prescription_sejour_id}}" />
 </form>
 
-{{if $dossier_medical->_count_cancelled_antecedents}}
-<button class="search" style="float: right" onclick="Antecedent.toggleCancelled('antecedents-{{$dossier_medical->_guid}}')">
-  Afficher les {{$dossier_medical->_count_cancelled_antecedents}} annulés
+{{if $dossier_medical->_count_cancelled_antecedents || $dossier_medical->_count_cancelled_traitements}}
+<button class="search" style="float: right" onclick="Antecedent.toggleCancelled('listAnt')">
+  {{math equation=x+y x=$dossier_medical->_count_cancelled_antecedents y=$dossier_medical->_count_cancelled_traitements assign=_count_cancelled}}
+  Afficher les {{$_count_cancelled}} annulés
 </button>
 {{/if}}
 
@@ -173,7 +197,7 @@ Traitement = {
 {{/if}}
 <ul>
   {{foreach from=$dossier_medical->_ref_traitements item=_traitement}}
-  <li>
+  <li {{if $_traitement->annule}}class="cancelled" style="display: none;"{{/if}}>
     <form name="delTrmtFrm-{{$_traitement->_id}}" action="?m=dPcabinet" method="post">
     <input type="hidden" name="m" value="dPpatients" />
     <input type="hidden" name="del" value="0" />
@@ -191,7 +215,7 @@ Traitement = {
 
     {{mb_include module=system template=inc_interval_date_progressive object=$_traitement from_field=debut to_field=fin}}
 
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$_traitement->_guid}}', 'objectViewHistory')">
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$_traitement->_guid}}')">
       {{$_traitement->traitement|nl2br}}
     </span>
 

@@ -44,9 +44,10 @@ toggleCancelledAnesth = function(list) {
 
 </script>
 
-{{if $dossier_medical->_count_cancelled_antecedents}}
-<button class="search" style="float: right" onclick="toggleCancelledAnesth('antecedents-{{$dossier_medical->_guid}}')">
-  Afficher les {{$dossier_medical->_count_cancelled_antecedents}} annulés
+{{if $dossier_medical->_count_cancelled_antecedents || $dossier_medical->_count_cancelled_traitements}}
+<button class="search" style="float: right" onclick="toggleCancelledAnesth('listAntCAnesth')">
+  {{math equation=x+y x=$dossier_medical->_count_cancelled_antecedents y=$dossier_medical->_count_cancelled_traitements assign=_count_cancelled}}
+  Afficher les {{$_count_cancelled}} annulés
 </button>
 {{/if}}
 
@@ -96,7 +97,7 @@ toggleCancelledAnesth = function(list) {
 <strong>Traitements significatifs</strong>
 <ul>
   {{foreach from=$dossier_medical->_ref_traitements item=curr_trmt}}
-  <li>
+  <li {{if $curr_trmt->annule}}class="cancelled" style="display: none;"{{/if}}>
     <form name="delTrmtFrm-{{$curr_trmt->_id}}" action="?m=dPcabinet" method="post">
     <input type="hidden" name="m" value="dPpatients" />
     <input type="hidden" name="del" value="0" />
@@ -111,7 +112,7 @@ toggleCancelledAnesth = function(list) {
     {{elseif $curr_trmt->debut}}
       Depuis {{mb_value object=$curr_trmt field=debut}} :
     {{/if}}
-     <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_trmt->_guid}}', 'objectViewHistory')">
+     <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_trmt->_guid}}')">
        {{$curr_trmt->traitement|nl2br}}
      </span>
     </form>

@@ -36,6 +36,8 @@ $patient->loadRefDossierMedical();
 
 $dossier_medical = $patient->_ref_dossier_medical;
 $dossier_medical->countAntecedents();
+$dossier_medical->countTraitements();
+
 $dossier_medical->loadRefPrescription();
 $dossier_medical->loadRefsTraitements();
 

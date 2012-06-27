@@ -44,7 +44,10 @@ class CDossierMedical extends CMbMetaObject {
 	
   // Derived back references
   var $_count_antecedents = null;
+  var $_count_traitements = null;
   var $_count_cancelled_antecedents = null;
+  var $_count_cancelled_traitements = null;
+
   var $_count_allergies = null;
   
   function getSpec() {
@@ -195,6 +198,22 @@ class CDossierMedical extends CMbMetaObject {
   	$this->_count_cancelled_antecedents = $antedecent->countList($where);
   }
   
+  /**
+   * Compte les antécédents annulés et non-annulés
+   */
+  function countTraitements(){
+    
+    $traitement = new CTraitement();
+    $where = array();
+    $where["dossier_medical_id"] = " = '$this->_id'";
+
+    $where["annule"] = " != '1'";
+    $this->_count_traitements = $traitement->countList($where);
+
+    $where["annule"] = " = '1'";
+    $this->_count_cancelled_traitements = $traitement->countList($where);
+  }
+  
   /*
    * Compte les antecedents de type allergies
    */
@@ -217,10 +236,16 @@ class CDossierMedical extends CMbMetaObject {
     $this->_ref_allergies = $antecedent->loadMatchingList();
   }
   
-  function loadRefsTraitements() {
+  function loadRefsTraitements($cancelled = false) {
     $order = "fin DESC, debut DESC";
-    if (CAppUI::conf("dPpatients CTraitement enabled")) {
-      return $this->_ref_traitements = $this->loadBackRefs("traitements", $order);
+    
+    $this->_ref_traitements = $this->loadBackRefs("traitements", $order);
+    
+     // Filtrage sur les annulés
+    foreach ($this->_ref_traitements as $_traitement) {
+      if ($_traitement->annule && !$cancelled) {
+        unset($this->_ref_traitements[$_traitement->_id]);
+      }
     }
   }
   
