@@ -38,7 +38,15 @@ class CTraitement extends CMbObject {
     
     return $specs;
   }
-
+  
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    
+    $backProps["identifiants"] = "CIdSante400 object_id cascade";
+    
+    return $backProps;
+  }
+  
   function store() {
     // Standard store
     if ($msg = parent::store()) {

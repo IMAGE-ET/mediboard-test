@@ -66,6 +66,14 @@ class CAntecedent extends CMbObject {
     return $props;
   }
   
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    
+    $backProps["identifiants"] = "CIdSante400 object_id cascade";
+    
+    return $backProps;
+  }
+  
 	function updateFormFields() {
 		parent::updateFormFields();
 		$this->_view = $this->rques;
