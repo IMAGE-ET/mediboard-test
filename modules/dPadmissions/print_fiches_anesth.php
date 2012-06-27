@@ -24,6 +24,16 @@ $result = "";
 
 $last_sejour = end($sejours);
 
+CMbObject::massLoadFwdRef($sejours, "patient_id");
+
+foreach ($sejours as $_sejour) {
+  $_sejour->loadRefPatient();
+}
+
+// Tri par nom de patient
+$sorter = CMbArray::pluck($sejours, "_ref_patient", "nom");
+array_multisort($sorter, SORT_ASC, $sejours);
+
 foreach ($sejours as $_sejour) {
   $_operation = $_sejour->loadRefLastOperation();
   
