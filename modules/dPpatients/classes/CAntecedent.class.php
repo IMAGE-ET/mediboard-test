@@ -27,25 +27,25 @@ class CAntecedent extends CMbObject {
   
   // Types
   static $types = array(
-	  'med', 'alle', 'trans', 'obst', 'deficience', 'chir', 'fam', 'anesth', 'gyn', 
-	  'cardio', 'pulm', 'stomato', 'plast', 'ophtalmo', 'digestif', 'gastro', 
-	  'stomie', 'uro', 'ortho', 'traumato', 'amput', 'neurochir', 'greffe', 'thrombo',
+    'med', 'alle', 'trans', 'obst', 'deficience', 'chir', 'fam', 'anesth', 'gyn', 
+    'cardio', 'pulm', 'stomato', 'plast', 'ophtalmo', 'digestif', 'gastro', 
+    'stomie', 'uro', 'ortho', 'traumato', 'amput', 'neurochir', 'greffe', 'thrombo',
     'cutane', 'hemato', 'rhumato', 'neuropsy', 'infect', 'endocrino', 'carcino', 
     'orl', 'addiction', 'habitus', 'coag'
-	);
-	
-	// Types that should not be types, mostly appareils
-	static $non_types = array(
+  );
+  
+  // Types that should not be types, mostly appareils
+  static $non_types = array(
     'obst', 'gyn', 'cardio', 'stomato', 'digestif', 'gastro', 'stomie', 'neuropsy', 
     'endocrino', 'orl', 'uro', 'ortho', 'pulm',
-	);
-	
-	// Appareils
-	static $appareils = array(
-	  'cardiovasculaire', 'digestif', 'endocrinien', 'neuro_psychiatrique',
-	  'pulmonaire', 'uro_nephrologique', 'orl', 'gyneco_obstetrique', 'orthopedique',
-	  'ophtalmologique', 'locomoteur',
-	);
+  );
+  
+  // Appareils
+  static $appareils = array(
+    'cardiovasculaire', 'digestif', 'endocrinien', 'neuro_psychiatrique',
+    'pulmonaire', 'uro_nephrologique', 'orl', 'gyneco_obstetrique', 'orthopedique',
+    'ophtalmologique', 'locomoteur',
+  );
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -66,19 +66,11 @@ class CAntecedent extends CMbObject {
     return $props;
   }
   
-  function getBackProps() {
-    $backProps = parent::getBackProps();
-    
-    $backProps["identifiants"] = "CIdSante400 object_id cascade";
-    
-    return $backProps;
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view = $this->rques;
   }
   
-	function updateFormFields() {
-		parent::updateFormFields();
-		$this->_view = $this->rques;
-	}
-	
   function loadRefDossierMedical() { 
     $this->_ref_dossier_medical = new CDossierMedical();
     $this->_ref_dossier_medical->load($this->dossier_medical_id);
@@ -147,9 +139,9 @@ class CAntecedent extends CMbObject {
       $count =& $this->_count_rques_aides;
       $count[$depend_value_1] = 0;
       if (isset($rques_aides[$depend_value_1])) {
-	      foreach ($rques_aides[$depend_value_1] as $aides_by_depend_field_2) {
-	        $count[$depend_value_1] += count($aides_by_depend_field_2);
-	      }
+        foreach ($rques_aides[$depend_value_1] as $aides_by_depend_field_2) {
+          $count[$depend_value_1] += count($aides_by_depend_field_2);
+        }
       }
     }
   }
