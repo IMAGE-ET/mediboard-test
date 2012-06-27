@@ -31,7 +31,7 @@ if ($dossier_medical->_ref_antecedents_by_type) {
 	}
 }
 
-$dossier_medical->loadRefsTraitements();
+$dossier_medical->loadRefsTraitements(true);
 
 // Chargement de la prescription de sejour
 $prescription = $sejour->loadRefPrescriptionSejour();

@@ -34,7 +34,7 @@ class CTraitement extends CMbObject {
     $specs["fin"         ] = "date progressive moreEquals|debut";
     $specs["traitement"  ] = "text helped seekable";
     $specs["dossier_medical_id"] = "ref notNull class|CDossierMedical show|0";
-    $specs["annule"] = "bool";
+    $specs["annule"] = "bool show|0";
 
     $specs["_search"] = "str";
     
