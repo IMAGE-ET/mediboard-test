@@ -125,6 +125,9 @@ if (!isset($hours[$max_hour])) {
   }
 }
 
+// Vérifier le droit d'écriture sur la plage sélectionnée
+$plageSel->canEdit();
+
 ksort($hours);
 
 // Création du template

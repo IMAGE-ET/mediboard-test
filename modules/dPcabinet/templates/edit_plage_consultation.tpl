@@ -12,7 +12,7 @@
   Main.add(function(){
     var form = getForm('editFrm');
     
-    {{if !$can->admin && $plageSel->_id && $user->function_id != $plageSel->_ref_chir->function_id}}
+    {{if !$can->admin && $plageSel->_id && !$plageSel->_canEdit}}
       makeReadOnly(form);
     {{/if}}
     
