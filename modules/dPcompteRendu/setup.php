@@ -773,7 +773,11 @@ class CSetupdPcompteRendu extends CSetup {
       ADD `merge_docs` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.78";
+    $this->makeRevision("0.78");
+    
+    $this->addPrefQuery("auto_capitalize", 0);
+    
+    $this->mod_version = "0.79";
   }
 }
 ?>

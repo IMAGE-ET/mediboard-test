@@ -22,6 +22,7 @@ CPreferences::$modules["dPcompteRendu"] = array(
   "pdf_and_thumbs",
   "mode_play",
   "choice_factory",
-  "multiple_docs"
+  "multiple_docs",
+  "auto_capitalize"
 );
 ?>
