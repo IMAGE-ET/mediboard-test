@@ -13,7 +13,7 @@
 
 CCanDo::checkRead();
 
-$date_min   = CValue::getOrSession("date_min", mbDate("-1 month"));
+$date_min   = CValue::getOrSession("date_min", mbDate("-1 week"));
 $date_max   = CValue::getOrSession("date_max", mbDate());
 $service_id = CValue::getOrSession("service_id", "");
  
