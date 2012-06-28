@@ -36,8 +36,8 @@
 		<td>
       <input type="hidden" name="user_id" class="notNull" value="{{$personnel->user_id}}"/>
       <input type="hidden" name="object_class" value="CMediusers" />
-    	<input disabled="disabled" size="40" readonly="readonly" name="object_view" value="{{$personnel->_ref_user}}" />
-      <button class="search" type="button" onclick="ObjectSelector.initEdit()">{{tr}}Search{{/tr}}</button>
+    	<input size="40" readonly="readonly" name="object_view" value="{{$personnel->_ref_user}}" onclick="ObjectSelector.initEdit()" />
+      <button class="search notext" type="button" onclick="ObjectSelector.initEdit()">{{tr}}Search{{/tr}}</button>
       <script type="text/javascript">
       ObjectSelector.initEdit = function(){
         this.sForm     = "editFrm";
@@ -76,6 +76,8 @@
 </table>
    
 </form>
+
+{{if $personnel->_id}}
   
 <table class="tbl">
   <tr>
@@ -101,3 +103,5 @@
   {{/foreach}}
 
 </table>
+
+{{/if}}
