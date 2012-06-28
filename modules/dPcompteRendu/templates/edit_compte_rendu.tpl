@@ -139,7 +139,7 @@ function refreshZones(id, obj) {
     }});
   }
     
-  //Remise du content sauvegardé, avec le refresh des vignettes si dispo, et/ou l'impression en callback
+  // Remise du content sauvegardé, avec le refresh des vignettes si dispo, et/ou l'impression en callback
   CKEDITOR.instances.htmlarea.setData(obj._source, afterSetData);
 }
 
@@ -351,6 +351,15 @@ Main.add(function(){
   <input type="hidden" name="tag" value="correspondant" />
   <input type="hidden" name="object_id" />
 </form>
+
+
+<form name="addCorrespondantToDossier" method="post">
+  <input type="hidden" name="m" value="dPpatients"/>
+  <input type="hidden" name="dosql" value="do_correspondant_aed" />
+  <input type="hidden" name="patient_id" value="" />
+  <input type="hidden" name="medecin_id" value="" />
+</form>
+
 
 <!-- Formulaire pour l'impression server side -->
 <form name="print-server" method="post" action="?m=dPcompteRendu&amp;ajax_print_server">

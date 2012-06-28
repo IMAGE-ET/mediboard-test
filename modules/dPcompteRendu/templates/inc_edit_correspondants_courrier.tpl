@@ -10,11 +10,21 @@
         minChars: 2,
         dropdown: true,
         afterUpdateElement : function(input, selected) {
-          $V(formCorres.object_id, selected.id.split("-")[1]);
+          var medecin_id = selected.id.split("-")[1];
+          $V(formCorres.object_id, medecin_id);
           $V(formCorres.compte_rendu_id, '{{$compte_rendu->_id}}');
           onSubmitFormAjax(formCorres, {onComplete: function(){
-            Control.Modal.close();
-            openCorrespondants('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}', 1);
+            if (confirm($T("CCorrespondantPatient-add_to_dossier"))) {
+              var formAdd = getForm("addCorrespondantToDossier");
+              $V(formAdd.patient_id, '{{$patient->_id}}');
+              $V(formAdd.medecin_id, medecin_id);
+              onSubmitFormAjax(formAdd, { onComplete: function() {
+                openCorrespondants('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}');
+              } });
+            }
+            else {
+              openCorrespondants('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}');
+            }
           } });
         }
       });
@@ -27,20 +37,20 @@
 {{/if}}
 
 <table class="tbl">
-  <tr>
-    <th class="title" colspan="3">
-      <button type="button" class="add notext" style="float: left;"
-        onclick="Correspondant.edit(0, '{{$patient->_id}}', openCorrespondants.curry('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}', 0))"></button>
-      Correspondants
-      {{if $compte_rendu->_id}}
-        <input type="text" name="_view" class="autocomplete"/>
-        <div id="correspondants_area" style="color: #000; text-align: left; width: 35px;" class="autocomplete"></div>
-      {{/if}}
-    </th>
-  </tr>
   {{foreach from=$destinataires key=_class item=_destinataires}}
     <tr>
-      <th class="category" colspan="3">
+      <th class="title" colspan="3">
+        {{if $_class == "CPatient"}}
+          <button type="button" class="add notext" style="float: left;"
+          onclick="Correspondant.edit(0, '{{$patient->_id}}', openCorrespondants.curry('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}', 0))"></button>
+          {{tr}}CCorrespondantPatient{{/tr}}
+        {{else}}
+          <div style="float: left">
+            <input type="text" name="_view" class="autocomplete"/>
+            <div id="correspondants_area" style="color: #000; text-align: left; width: 35px; float: left;" class="autocomplete"></div>
+          </div>
+        {{/if}}
+        
         {{tr}}{{$_class}}{{/tr}}
       </th>
     </tr>
