@@ -93,7 +93,7 @@ toggleCancelledAnesth = function(list) {
 
 {{if $dossier_medical->_count_cancelled_traitements}}
 <button class="search" style="float: right" onclick="Traitement.toggleCancelled('traitements-{{$dossier_medical->_guid}}')">
-  Afficher les {{$dossier_medical->_count_cancelled_traitements}} traitements annulés
+  Afficher les {{$dossier_medical->_count_cancelled_traitements}} traitements stoppés
 </button>
 {{/if}}
       
