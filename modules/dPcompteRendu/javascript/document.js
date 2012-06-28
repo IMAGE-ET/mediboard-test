@@ -212,7 +212,7 @@ Document = {
     var url = new Url("dPcompteRendu", "print_select_docs");
     url.addParam("object_id"   , object_id);
     url.addParam("object_class", object_class);
-    url.popup(700, 500, "printSelDocuments");
+    url.requestModal();
   },
   
   afterUnmerge: function(compte_rendu_id, obj) {

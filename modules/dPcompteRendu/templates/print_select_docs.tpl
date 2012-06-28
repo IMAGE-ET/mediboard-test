@@ -3,21 +3,11 @@
     {{tr}}CCompteRendu.none{{/tr}}
   </div>
 {{else}}
-
-  <script type="text/javascript">
-    printDocuments = function() {
-      var oIframe = Element.getTempIframe();
-      var url = new Url("dPcompteRendu", "print_docs");
-      url.addParam("dialog", 1);
-      url.addParam("suppressHeaders", 1);
-      url.addFormData("selectDocsFrm");
-      url.redirect();
-    }
-  </script>
-  <form name="selectDocsFrm" action="?" method="get">
+  <form name="selectDocsFrm" action="?" method="get" target="_blank">
     <input type="hidden" name="m" value="dPcompteRendu" />
     <input type="hidden" name="dialog" value="1" />
     <input type="hidden" name="a" value="print_docs" />
+    <input type="hidden" name="suppressHeaders" value="1" />
     <table class="main form">
       <tr>
         <th class="category" colspan="2">
@@ -39,9 +29,7 @@
       {{/foreach}}
       <tr>
         <td class="button" colspan="2">
-          <button type="button" class="print" onclick="printDocuments()">
-            {{tr}}Print{{/tr}}
-          </button>
+          <button class="pdf">{{tr}}Print{{/tr}}</button>
         </td>
       </tr>
     </table>
