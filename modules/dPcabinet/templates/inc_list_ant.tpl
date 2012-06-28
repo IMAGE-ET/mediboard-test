@@ -93,14 +93,13 @@ Traitement = {
   <input type="hidden" name="prescription_id" value="{{$prescription_sejour_id}}" />
 </form>
 
-{{if $dossier_medical->_count_cancelled_antecedents || $dossier_medical->_count_cancelled_traitements}}
-<button class="search" style="float: right" onclick="Antecedent.toggleCancelled('listAnt')">
-  {{math equation=x+y x=$dossier_medical->_count_cancelled_antecedents y=$dossier_medical->_count_cancelled_traitements assign=_count_cancelled}}
-  Afficher les {{$_count_cancelled}} annulés
-</button>
-{{/if}}
 
-<strong>Antécédents</strong>
+{{if $dossier_medical->_count_cancelled_antecedents}}
+  <button class="search" style="float: right" onclick="Antecedent.toggleCancelled('antecedents-{{$dossier_medical->_guid}}')">
+    Afficher les {{$dossier_medical->_count_cancelled_antecedents}} antécédents annulés
+  </button>
+{{/if}}
+<strong {{if $dossier_medical->_count_cancelled_antecedents}}style="line-height: 22px;"{{/if}}>Antécédents</strong>
 
 <ul id="antecedents-{{$dossier_medical->_guid}}">
   {{if $dossier_medical->_count_antecedents || $dossier_medical->_count_cancelled_antecedents}}
@@ -145,11 +144,21 @@ Traitement = {
   {{/if}}
 </ul>
 
-{{if $dossier_medical->_ref_prescription}}
+<!-- Traitements -->
+{{if is_array($dossier_medical->_ref_traitements) || $dossier_medical->_ref_prescription}}
+  {{if $dossier_medical->_count_cancelled_traitements}}
+    <button class="search" style="float: right;" onclick="Traitement.toggleCancelled('traitements-{{$dossier_medical->_guid}}')">
+      Afficher les {{$dossier_medical->_count_cancelled_traitements}} traitements annulés
+    </button>
+  {{/if}}
   <strong>Traitements personnels</strong>
+{{/if}}
+
+<div id="traitements-{{$dossier_medical->_guid}}">
+{{if $dossier_medical->_ref_prescription}}
   <ul>
   {{foreach from=$dossier_medical->_ref_prescription->_ref_prescription_lines item=_line}}
-    <li>
+    <li {{if $_line->_stopped}}class="cancelled" style="display: none;"{{/if}}>
       <form name="delTraitementDossierMedPat-{{$_line->_id}}"  action="?" method="post">
         <input type="hidden" name="m" value="dPprescription" />
         <input type="hidden" name="del" value="1" />
@@ -191,10 +200,6 @@ Traitement = {
 
 
 {{if is_array($dossier_medical->_ref_traitements)}}
-<!-- Traitements -->
-{{if !$dossier_medical->_ref_prescription}}
-<strong>Traitements personnels</strong>
-{{/if}}
 <ul>
   {{foreach from=$dossier_medical->_ref_traitements item=_traitement}}
   <li {{if $_traitement->annule}}class="cancelled" style="display: none;"{{/if}}>
@@ -228,6 +233,7 @@ Traitement = {
   {{/foreach}}
 </ul>
 {{/if}}
+</div>
 
 <strong>Diagnostics CIM</strong>
 <ul>

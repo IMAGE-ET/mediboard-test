@@ -132,6 +132,9 @@ if ($consultation_id) {
   $dossier_medical->loadRefPrescription();
   if($dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_id){
     foreach($dossier_medical->_ref_prescription->_ref_prescription_lines as $_line){
+      if($_line->fin && $_line->fin <= mbDate()){
+        unset($dossier_medical->_ref_prescription->_ref_prescription_lines[$_line->_id]);
+      }
       $_line->loadRefsPrises();
     }
   }

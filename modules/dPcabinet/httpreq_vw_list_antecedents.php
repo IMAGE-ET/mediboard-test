@@ -41,6 +41,10 @@ if ($dossier_medical->_id) {
   if ($prescription && is_array($prescription->_ref_prescription_lines)) {
     foreach($prescription->_ref_prescription_lines as $_line) {
       $_line->loadRefsPrises();
+      if($_line->fin && $_line->fin <= mbDate()){
+        $_line->_stopped = true;
+        $dossier_medical->_count_cancelled_traitements++;
+      }
     }
   }
 }

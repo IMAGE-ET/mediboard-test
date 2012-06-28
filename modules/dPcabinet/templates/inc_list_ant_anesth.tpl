@@ -44,14 +44,13 @@ toggleCancelledAnesth = function(list) {
 
 </script>
 
-{{if $dossier_medical->_count_cancelled_antecedents || $dossier_medical->_count_cancelled_traitements}}
-<button class="search" style="float: right" onclick="toggleCancelledAnesth('listAntCAnesth')">
-  {{math equation=x+y x=$dossier_medical->_count_cancelled_antecedents y=$dossier_medical->_count_cancelled_traitements assign=_count_cancelled}}
-  Afficher les {{$_count_cancelled}} annulés
+{{if $dossier_medical->_count_cancelled_antecedents}}
+<button class="search" style="float: right" onclick="Antecedent.toggleCancelled('antecedents-{{$dossier_medical->_guid}}')">
+  Afficher les {{$dossier_medical->_count_cancelled_antecedents}} antécédents annulés
 </button>
 {{/if}}
 
-<strong>Antécédents significatifs</strong>
+<strong {{if $dossier_medical->_count_cancelled_antecedents}}style="line-height: 22px;"{{/if}}>Antécédents significatifs</strong>
 
 <ul id="antecedents-{{$dossier_medical->_guid}}">
   {{if $dossier_medical->_count_antecedents || $dossier_medical->_count_cancelled_antecedents}}
@@ -91,11 +90,17 @@ toggleCancelledAnesth = function(list) {
     <li class="empty">{{tr}}CAntecedent.none{{/tr}}</li>
   {{/if}}
 </ul>
+
+{{if $dossier_medical->_count_cancelled_traitements}}
+<button class="search" style="float: right" onclick="Traitement.toggleCancelled('traitements-{{$dossier_medical->_guid}}')">
+  Afficher les {{$dossier_medical->_count_cancelled_traitements}} traitements annulés
+</button>
+{{/if}}
       
 {{if is_array($dossier_medical->_ref_traitements)}}
 <!-- Traitements -->
 <strong>Traitements significatifs</strong>
-<ul>
+<ul id="traitements-{{$dossier_medical->_guid}}">
   {{foreach from=$dossier_medical->_ref_traitements item=curr_trmt}}
   <li {{if $curr_trmt->annule}}class="cancelled" style="display: none;"{{/if}}>
     <form name="delTrmtFrm-{{$curr_trmt->_id}}" action="?m=dPcabinet" method="post">
