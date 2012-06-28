@@ -133,7 +133,7 @@ class CMbDb {
       $_line = trim($_line);
       
       // Ignore empty lines
-      if (!$line) {
+      if (!$_line) {
         continue;
       }
       
