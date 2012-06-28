@@ -53,7 +53,22 @@ class CTemplateManager {
     // Connected user
     $user_complete = $user->_view;
     if ($user->isPraticien()) {
-      $user_complete .= "\n" . $user->titres;
+      if ($user->titres) {
+        $user_complete .= "\n" . $user->titres;
+      }
+      if ($user->spec_cpam_id) {
+        $spec_cpam = $user->loadRefSpecCPAM();
+        $user_complete .= "\n" . $spec_cpam->text;
+      }
+      if ($user->adeli) {
+        $user_complete .= "\nAdeli : " . $user->adeli;
+      }
+      if ($user->rpps) {
+        $user_complete .= "\nRPPS : " . $user->rpps;
+      }
+      if ($user->_user_email) {
+        $user_complete .= "\nE-mail : " . $user->_user_email;
+      }
     }
     
     // Initials
