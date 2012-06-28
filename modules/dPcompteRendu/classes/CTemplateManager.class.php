@@ -53,7 +53,7 @@ class CTemplateManager {
     // Connected user
     $user_complete = $user->_view;
     if ($user->isPraticien()) {
-      $user_complete .= "<br />" . $user->titres;
+      $user_complete .= "\n" . $user->titres;
     }
     
     // Initials
