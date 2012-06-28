@@ -164,6 +164,11 @@
     </table>
   </div>
 </div>
+
+<div class="small-info" id="alerte_tableau_vue_temporel" style="display: none">
+  {{tr}}CSejour-partial_view{{/tr}}
+</div>
+
 <table class="tbl layout_temporel" id="tableau_vue_temporel" style="table-layout: fixed; position: relative;">
   {{if $prestation_id}}
     <col style="width: 5%;" />

@@ -85,6 +85,10 @@
   </div>
 </div>
 
+<div class="small-info" id="alerte_non_places_temporel" style="display: none;">
+  {{tr}}CSejour-partial_view{{/tr}}
+</div>
+
 {{if $sejours_non_affectes|@count}}
   <table class="tbl layout_temporel" style="table-layout: fixed; position: relative;" id="non_places_temporel">
     <col style="width: 15%;" />

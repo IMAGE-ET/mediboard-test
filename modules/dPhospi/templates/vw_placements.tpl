@@ -79,11 +79,18 @@
   }
   
   filter = function(input, table) {
+    var alerte = $("alerte_"+table);
     table = $(table);
     table.select("tr").invoke("show");
     
     var term = $V(input);
-    if (!term) return;
+    
+    if (!term) {
+      alerte.hide();
+      return;
+    }
+    
+    alerte.show();
     
     table.select(".CPatient-view").each(function(e) {
       if (!e.innerHTML.like(term)) {
