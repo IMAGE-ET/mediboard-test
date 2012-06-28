@@ -87,6 +87,8 @@ class CTemplateManager {
     }
     
     $this->addProperty("Général - rédacteur"        , $user->_shortview);
+    $this->addProperty("Général - rédacteur - prénom", $user->_user_first_name);
+    $this->addProperty("Général - rédacteur - nom"  , $user->_user_last_name);
     $this->addProperty("Général - rédacteur complet", $user_complete);
     $this->addProperty("Général - rédacteur (initiales) - prénom", $initials_first_name);
     $this->addProperty("Général - rédacteur (initiales) - nom", $initials_last_name);
