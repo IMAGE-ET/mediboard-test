@@ -52,7 +52,9 @@
         <th class="narrow">Tel</th>
       {{/if}}
       <th class="narrow">Age</th>
-      <th class="narrow">Lit</th>
+      {{if $show_lit}}
+        <th class="narrow">Lit</th>
+      {{/if}}
       <th style="width: 25%;">Motif</th>
       <th style="width: 25%;">Remarques</th>
       <th>Durée</th>

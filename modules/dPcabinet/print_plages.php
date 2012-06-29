@@ -20,6 +20,7 @@ $filter->_plages_vides   = CValue::get("_plages_vides", 1);
 $filter->_non_pourvues   = CValue::get("_non_pourvues", 1);
 
 $chir = CValue::getOrSession("chir");
+$show_lit = false;
 
 // On selectionne les plages
 $plage = new CPlageconsult;
@@ -75,6 +76,9 @@ foreach ($listPlage as $plage_id => &$plage) {
     if ($consultation->sejour_id) {
       $patient->_ref_curr_affectation = $consultation->loadRefSejour()->loadRefCurrAffectation(mbDate($consultation->_datetime));
       $patient->_ref_curr_affectation->loadView();
+      if ($patient->_ref_curr_affectation->_id) {
+        $show_lit = true;
+      }
     }
     
     // Chargement de la categorie
@@ -113,6 +117,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("filter"     , $filter);
 $smarty->assign("listPlage"  , $listPlage);
+$smarty->assign("show_lit"   , $show_lit);
 $smarty->display("print_plages.tpl");
 
 ?>
