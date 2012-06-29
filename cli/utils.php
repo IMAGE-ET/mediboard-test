@@ -62,6 +62,16 @@ function force_file($file) {
 	}
 }
 
+// Prompt
+function recup($ask, $default = false) {
+  echo $ask;
+  $answer = trim(fgets(STDIN));
+  if ($default && $answer === "") {
+    return $default;
+  }
+  return $answer;
+}
+
 // Not tested
 function package_lib($libName, $url, $version) {
 

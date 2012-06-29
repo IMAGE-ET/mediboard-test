@@ -1,6 +1,7 @@
 <?php
 require_once ("utils.php");
 require_once("baseBackup.php");
+require_once("Procedure.php");
 
 function replaceBase($srcLocation, $srcDir, $srcDB, $tgtDir, $tgtDB, $restart = false, $safeCopy = false, $mysqlDir = "/var/lib/mysql", $port = "22", $localCopy) {
     
@@ -65,6 +66,7 @@ function replaceBase($srcLocation, $srcDir, $srcDB, $tgtDir, $tgtDB, $restart = 
 
 		$scp = shell_exec("scp " . $srcLocation . ":" . $srcDir . "/" . $srcDB . "-db/" . $srcDB . "-latest.tar.gz " . $tgtDir . "/" . $archive);
 		echo $scp . "\n";
+    
 		if (!(check_errs(file_exists($tgtDir . "/" . $archive), false, "Failed to retrieve remote archive", "Succesfully retrieved remote archive!"))) {
 			
 			exit(0);
@@ -73,7 +75,8 @@ function replaceBase($srcLocation, $srcDir, $srcDB, $tgtDir, $tgtDB, $restart = 
 	else {
 		
 		$res = symlink($srcDir . "/" . $srcDB . "-db/" . $srcDB . "-latest.tar.gz", $tgtDir . "/" . $archive);
-		if (!(check_errs($res, false, "Failed to symlink local archive", "Successfully symlinked local archive!"))) {
+		
+    if (!(check_errs($res, false, "Failed to symlink local archive", "Successfully symlinked local archive!"))) {
 			
 			exit(0);
 		}
@@ -81,6 +84,7 @@ function replaceBase($srcLocation, $srcDir, $srcDB, $tgtDir, $tgtDB, $restart = 
 	
 	// Extract base
 	chdir($tgtDir);
+
 	exec("tar -xf " . $archive, $tar, $return_var);
 	check_errs($return_var, true, "Failed to extract files", "Succesfully extracted files");
 	
@@ -171,7 +175,7 @@ function replaceBase($srcLocation, $srcDir, $srcDB, $tgtDir, $tgtDB, $restart = 
 			
 		$res = $res && $tab2[$i];
 	}
-	check_errs($res, false, "Failed to move fles", "Successfully moved files");
+	check_errs($res, false, "Failed to move files", "Successfully moved files");
 	
 	// Change owner and group
 	chdir($dir_target);
@@ -218,5 +222,84 @@ function replaceBase($srcLocation, $srcDir, $srcDB, $tgtDir, $tgtDB, $restart = 
 	$res = rrmdir($tgtDir . "/" . $srcDB);
 	$res2 = unlink($tgtDir . "/" . $archive);
 	check_errs(($res && $res2), false, "Failed to delete temporary archive", "Succesfully deleted temporary archive");
+}
+
+function replacebaseProcedure( $backMenu ) {
+  $procedure = new Procedure();
+  
+  $choice = "0";
+  $procedure->showReturnChoice( $choice );
+  
+  $qt_srcLocation  = $procedure->createQuestion( "Source location (if localhost 'symlink' instead of 'scp'): " );
+  $srcLocation     = $procedure->askQuestion( $qt_srcLocation );
+  
+  if ( $srcLocation === $choice ) {
+    $procedure->clearScreen();
+    $procedure->showMenu( $backMenu, true );
+    exit();
+  }
+  
+  $qt_srcDir    = $procedure->createQuestion( "Source directory (ie /var/backup): " );
+  $srcDir       = $procedure->askQuestion( $qt_srcDir );
+  
+  $qt_srcDB     = $procedure->createQuestion( "Source database (ie mediboard): " );
+  $srcDB        = $procedure->askQuestion( $qt_srcDB );
+  
+  $qt_tgtDir    = $procedure->createQuestion( "Target directory (ie /tmp) [default /tmp]: ", "/tmp" );
+  $tgtDir       = $procedure->askQuestion( $qt_tgtDir );
+  
+  $qt_tgtDB     = $procedure->createQuestion( "Target database (ie target_mediboard): " );
+  $tgtDB        = $procedure->askQuestion( $qt_tgtDB );
+  
+  $qt_restart   = $procedure->createQuestion( "Restart MySQL Server (Warning) (ie for InnoDB) [y or n, default n]? ", "n");
+  $restart      = $procedure->askQuestion( $qt_restart );
+  
+  $qt_safeCopy  = $procedure->createQuestion( "Make a safe copy of existing target database first [y or n, default n]? ", "n");
+  $safeCopy     = $procedure->askQuestion( $qt_safeCopy );
+  
+  $qt_mySQLDir  = $procedure->createQuestion( "MySQL directory where databases are stored [default /var/lib/mysql]: ", "/var/lib/mysql");
+  $mySQLDir     = $procedure->askQuestion( $qt_mySQLDir );
+  
+  $qt_port      = $procedure->createQuestion( "SSH port [default 22]: ", 22 );
+  $port         = $procedure->askQuestion( $qt_port );
+  
+  $qt_localCopy = $procedure->createQuestion( "Make a distant copy (scp) [y or n, default y]? ", "y");
+  $localCopy    = $procedure->askQuestion( $qt_localCopy );
+  
+  echo "\n";
+  replaceBase($srcLocation, $srcDir, $srcDB, $tgtDir, $tgtDB, $restart, $safeCopy, $mySQLDir, $port, $localCopy);
+}
+
+function replaceBaseCall( $command, $argv ) {
+  if (count($argv) == 10) {
+    $srcLocation  = $argv[0];
+    $srcDir       = $argv[1];
+    $srcDB        = $argv[2];
+    $tgtDir       = $argv[3];
+    $tgtDB        = $argv[4];
+    $restart      = $argv[5];
+    $safeCopy     = $argv[6];
+    $mysqlDir     = $argv[7];
+    $port         = $argv[8];
+    $localCopy    = $argv[9];
+    
+    replaceBase($srcLocation, $srcDir, $srcDB, $tgtDir, $tgtDB, $restart, $safeCopy, $mysqlDir, $port, $localCopy);
+    return 0;
+  }
+  else {
+    echo "\nUsage : $command replacebase <source_location> <source_directory> <source_database> <target_directory> <target_database> [options below]\n
+<source_location>   : remote location, ie user@host. if localhost, symlink instead of scp
+<source_directory>  : remote directory, ie /var/backup
+<source_database>   : source database name, ie mediboard
+<target_directory>  : temporary target directory, ie /tmp
+<target_database>   : target database name, ie target_mediboard\n
+Options :
+[<restart>]         : to restart the Mysql server (Warning), ie for InnoDB, default no
+[<safe_copy>]       : to make a safe copy of existing target database first, default no
+[<MySQL directory>] : directory where databases are stored, default /var/lib/mysql
+[<port>]            : ssh port of the target remote location, default 22
+[<local_copy>]      : to do a local copy, default scp\n\n";
+    return 1;
+  }
 }
 ?>

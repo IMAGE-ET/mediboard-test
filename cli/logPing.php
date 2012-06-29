@@ -1,6 +1,7 @@
 <?php
 
 require_once("utils.php");
+require_once( "Procedure.php" );
 
 function logPing($hostname, $fileLog, $dirLog) {
 
@@ -45,5 +46,49 @@ function logPing($hostname, $fileLog, $dirLog) {
 			fclose($fic);
 		}
 	}
+}
+
+function logPingProcedure( $backMenu ) {
+  $procedure = new Procedure();
+  
+  $choice = "0";
+  $procedure->showReturnChoice( $choice );
+  
+  $qt_hostname  = $procedure->createQuestion( "Hostname [default localhost]: ", "localhost" );
+  $hostname     = $procedure->askQuestion( $qt_hostname );
+  
+  if ( $hostname === $choice ) {
+    $procedure->clearScreen();
+    $procedure->showMenu( $backMenu, true );
+    exit();
+  }
+  
+  $qt_dir       = $procedure->createQuestion( "File directory [default /var/log/ping]: ", "/var/log/ping" );
+  $dir          = $procedure->askQuestion( $qt_dir );
+  
+  $qt_output    = $procedure->createQuestion( "Output file [default $hostname.log]: ", "$hostname.log" );
+  $output       = $procedure->askQuestion( $qt_output );
+  
+  echo "\n";
+  logPing( $hostname, $output, $dir );
+}
+
+function logPingCall( $command, $argv ) {
+  if (count($argv) == 3) {
+    $hostname = $argv[0];
+    $fileLog  = $argv[1];
+    $dirLog   = $argv[2];
+    
+    logPing($hostname, $fileLog, $dirLog);
+    return 0;
+  }
+  else {
+    echo "\nUsage : $command logping <host> [<output_filename>] [<directory>]\n
+<host>              : target to ping\n
+Options :
+[<output_filename>] : filename for the output, default <host>.log
+[<directory>]       : directory where to create <output_filename>, default /var/log/ping\n\n";
+    return 1;
+  }
 }
 ?>

@@ -1,6 +1,7 @@
 <?php 
 require_once ("utils.php");
 require_once ("update.php");
+require_once( "Procedure.php" );
 
 function rsyncupdate($action, $revision) {
 
@@ -107,6 +108,72 @@ function rsyncupdate($action, $revision) {
         
       }
     }
+  }
+}
+
+function rsyncUpdateProcedure( $backMenu ) {
+  $procedure = new Procedure();
+  
+  echo "Action to perform:\n\n";
+  echo "[1] Show the update log\n";
+  echo "[2] Perform the actual update\n";
+  echo "[3] No update, only rsync\n";
+  echo "--------------------------------\n";
+  
+  $choice = "0";
+  $procedure->showReturnChoice( $choice );
+  
+  $qt_action = $procedure->createQuestion("\nSelected action: " );
+  $action = $procedure->askQuestion( $qt_action );
+  
+  switch ( $action ) {
+    case "1":
+      $action = "info";
+      break;
+      
+    case "2":
+      $action = "real";
+      break;
+      
+    case "3":
+      $action = "noup";
+      break;
+      
+    case $choice:
+      $procedure->clearScreen();
+      $procedure->showMenu( $backMenu, true );
+      
+    default:
+      $procedure->clearScreen();
+      cecho( "Incorrect input", "red" );
+      echo "\n";
+      setupProcedure( $backMenu );
+  }
+  
+  $qt_revision = $procedure->createQuestion("\nRevision number [default HEAD]: ", "HEAD");
+  $revision = $procedure->askQuestion( $qt_revision );
+  
+  echo "\n";
+  rsyncupdate( $action, $revision );
+}
+
+function rsyncupdateCall( $command, $argv ) {
+  if (count($argv) == 2) {
+    $action   = $argv[0];
+    $revision = $argv[1];
+    
+    rsyncupdate($action, $revision);
+    return 0;
+  }
+  else {
+    echo "\nUsage : $command rsyncupdate <action> [<revision>]\n
+<action>      : action to perform: info|real|noup
+  info        : shows the update log, no rsync
+  real        : performs the actual update and the rsync
+  noup        : no update, only rsync\n
+Option:
+[<revision>]  : revision number you want to update to, default HEAD\n\n";        
+    return 1;
   }
 }
 ?>

@@ -1,5 +1,6 @@
 <?php 
 require_once ("utils.php");
+require_once("Procedure.php");
 
 function baseBackup($method, $username, $password, $hostname, $port, $database, $backupPath, $time, $binary, $loginUsername, $loginPassword) {
     
@@ -289,5 +290,118 @@ function formatSize($size) {
             $suffix = 'B';
     }
     return round($size, 2).$suffix;
+}
+
+function baseBackupProcedure( $backMenu ) {
+  $procedure = new Procedure();
+  
+  echo "Method:\n\n";
+  echo "[1] Hotcopy\n";
+  echo "[2] Dump\n";
+  echo "--------------------\n";
+  
+  $choice = "0";
+  $procedure->showReturnChoice( $choice );
+  
+  $qt_method = $procedure->createQuestion("\nSelected method: " );
+  $method = $procedure->askQuestion( $qt_method );
+  
+  switch ( $method ) {
+    case "1":
+      $method = "hotcopy";
+      break;
+      
+    case "2":
+      $method = "dump";
+      break;
+      
+    case $choice:
+      $procedure->clearScreen();
+      $procedure->showMenu( $backMenu, true );
+      break;
+      
+    default:
+      $procedure->clearScreen();
+      cecho( "Incorrect input", "red" );
+      echo "\n";
+      baseBackupProcedure( $backMenu );
+  }
+  
+  $qt_username = $procedure->createQuestion("Username (to access database): " );
+  $username = $procedure->askQuestion( $qt_username );
+  
+  $password = prompt_silent();
+  
+  $hostname = "";
+  $port = "";
+  
+  $qt_DBBackup = $procedure->createQuestion("Database to backup (ie mediboard): " );
+  $DBBackup = $procedure->askQuestion( $qt_DBBackup );
+  
+  $qt_backupPath = $procedure->createQuestion("Backup path (ie /var/backup): " );
+  $backupPath = $procedure->askQuestion( $qt_backupPath );
+  
+  $qt_time = $procedure->createQuestion("Time (in days before removal of files) [default 7]: ", 7 );
+  $time = $procedure->askQuestion( $qt_time );
+  
+  if ($method == "hotcopy") {
+    $qt_binLog = $procedure->createQuestion("Create a binary log index [y or n, default n]? ", "n" );
+    $binLog = $procedure->askQuestion( $qt_binLog );
+  }
+  else {
+    $binLog = "";
+  }
+  
+  $qt_mail = $procedure->createQuestion("Send a mail when diskfull is detected [y or n, default n]? ", "n" );
+  $mail = $procedure->askQuestion( $qt_mail );
+  
+  if ($mail == "y") {
+    $qt_usernameMail = $procedure->createQuestion("Username (to send a mail): " );
+    $usernameMail = $procedure->askQuestion( $qt_usernameMail );
+    
+    $passwordMail = prompt_silent();
+  }
+  else {
+    $usernameMail = "";
+    $passwordMail = "";
+  }
+  
+  echo "\n";
+  baseBackup($method, $username, $password, $hostname, $port, $DBBackup, $backupPath, $time, $binLog, $usernameMail, $passwordMail);
+}
+
+function baseBackupCall( $command, $argv ) {
+  if (count($argv) == 11) {
+    $method         = $argv[0];
+    $username       = $argv[1];
+    $password       = $argv[2];
+    $hostname       = $argv[3];
+    $port           = $argv[4];
+    $database       = $argv[5];
+    $backupPath     = $argv[6];
+    $time           = $argv[7];
+    $binary         = $argv[8];
+    $loginUsername  = $argv[9];
+    $loginPassword  = $argv[10];
+    
+    baseBackup($method, $username, $password, $hostname, $port, $database, $backupPath, $time, $binary, $loginUsername, $loginPassword);
+    return 0;
+  }
+  else {
+    echo "\nUsage : $command basebackup <method> <username> <password> <database> <backup_path> [options below]\n
+<method>              : hotcopy or dump method
+<username>            : access database
+<password>            : authenticate user
+<hostname>            : database server, default localhost
+<port>                : MySQL port, default 3306
+<database>            : database to backup, ie mediboard
+<backup_path>         : backup path, ie /var/backup\n
+Options :
+[<time>]              : time in days before removal of files, default 7
+[<binary_log_index>]  : to create mysql binary log index, default no
+[<login_username>]    : username login to send a mail when diskfull is detected
+[<login_password>]    : password login to send a mail when diskfull is detected\n\n";
+    return 1;
+  }
 }
 ?>

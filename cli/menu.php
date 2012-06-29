@@ -834,9 +834,9 @@ function task7() {
 
 function task8() {
   
-  echo "###################################\n";
-  echo "Log Ping for server load analysis #\n";
-  echo "###################################\n\n";
+  echo "#####################################\n";
+  echo "# Log Ping for server load analysis #\n";
+  echo "#####################################\n\n";
   
   echo "[0] Return to main menu\n\n";
 
@@ -912,7 +912,7 @@ function task10() {
   echo "############################################\n\n";
 
   echo "Select a mode:\n\n";
-  echo "[1] All (perform all checks [default]\n";
+  echo "[1] All (perform all checks) [default]\n";
   echo "[2] Prompt (prompt for login credintials and socket and execution mode)\n";
   echo "[3] Memory (run checks for tunable options which effect memory usage)\n";
   echo "[4] Disk, file (run checks for options which effect i/o performance or file handle limits)\n";

@@ -1,7 +1,8 @@
 <?php 
 require_once ("utils.php");
+require_once( "Procedure.php" );
 
-function setup($mediboardDir, $subDir, $apacheGrp) {
+function setup($subDir, $apacheGrp) {
 
   $currentDir = dirname(__FILE__);
   
@@ -12,16 +13,16 @@ function setup($mediboardDir, $subDir, $apacheGrp) {
   // To MAC
   if ($darwin_kernel == "Darwin") {
   
-    $APACHE_USER = shell_exec("ps -ef|grep httpd|head -2|tail -1|cut -d' ' -f4");
-    $APACHE_GROUP = shell_exec("groups ".$APACHE_USER." | cut -d' ' -f1");
+    $APACHE_USER = trim(shell_exec("ps -ef|grep httpd|head -2|tail -1|cut -d' ' -f4"));
+    $APACHE_GROUP = trim(shell_exec("groups ".$APACHE_USER." | cut -d' ' -f1"));
   }
   // To Linux distributions
   else {
   
-    $APACHE_USER = shell_exec("ps -ef|grep apache|head -2|tail -1|cut -d' ' -f1");
-    $APACHE_GROUP = shell_exec("groups ".$APACHE_USER." | cut -d' ' -f3");
+    $APACHE_USER = trim(shell_exec("ps -ef|grep apache|head -2|tail -1|cut -d' ' -f1"));
+    $APACHE_GROUP = trim(shell_exec("groups ".$APACHE_USER." | cut -d' ' -f3"));
   }
-  
+
   if ($apacheGrp != NULL) {
   
     $APACHE_GROUP = $apacheGrp;
@@ -158,5 +159,58 @@ function chmod_R($path, $filemode, $dirmode) {
   }
   
   return true;
+}
+
+function setupProcedure( $backMenu ) {
+  $procedure = new Procedure();
+  
+  $choice = "0";
+  $procedure->showReturnChoice( $choice );
+  
+  echo "Select an optional sub directory [default none]:\n\n";
+  echo "[1] modules\n";
+  echo "[2] style\n";
+  echo "[3] No sub directory\n";
+  
+  $qt_subDir  = $procedure->createQuestion( "\nSelected sub directory: " );
+  $subDir     = $procedure->askQuestion( $qt_subDir );
+  
+  switch ( $subDir ) {
+    case "1":
+    	$subDir = "modules";
+      break;
+      
+    case "2":
+    	$subDir = "style";
+      break;
+      
+    case $choice:
+    	$procedure->clearScreen();
+      $procedure->showMenu( $backMenu, true );
+      exit();
+  }
+  
+  $qt_apacheGrp    = $procedure->createQuestion( "\nApache user's group [optional]: " );
+  $apacheGrp       = $procedure->askQuestion( $qt_apacheGrp );
+  
+  echo "\n";
+  setup( $subDir, $apacheGrp );
+}
+
+function setupCall( $command, $argv ) {
+  if (count($argv) == 2) {
+    $subDir     = $argv[0];
+    $apacheGrp  = $argv[1];
+    
+    setup( $subDir, $apacheGrp );
+    return 0;
+  }
+  else {
+    echo "\nUsage : $command setup [<sub directory>] [<apache group>]\n
+Options :
+[<sub directory>]     : modules|style
+[<apache group>]      : name of the primary group for apache user\n\n";
+    return 1;
+  }
 }
 ?>
