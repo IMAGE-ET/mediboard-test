@@ -29,6 +29,7 @@ function insertUpperCase(editor, event, keystroke) {
 function autoCap(event) {
   var editor = CKEDITOR.instances.htmlarea;
   var keystroke = event.data.getKeystroke();
+  
   if (keystroke < 65 || keystroke > 90) {
     return;
   }
@@ -46,8 +47,8 @@ function autoCap(event) {
   }
   
   if (
-      /* Commence par un retour chariot*/
-     /<br/.test(node.$.outerHTML) ||
+      /* Commence par un retour chariot ou une ligne verticale */
+     /(<br|<hr)/.test(node.$.outerHTML) ||
      /* Les 2 derniers caractères sont :
        - un point ou
        - un point d'exclamation ou
