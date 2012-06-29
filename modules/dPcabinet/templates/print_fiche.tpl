@@ -68,6 +68,19 @@
           <td class="halfPane text">
             {{if $consult_anesth->operation_id}}
               <table>
+                {{if $conf.dPplanningOp.COperation.show_duree_uscpo != "0"}}
+                <tr>
+                  <th style="font-weight: normal;">USCPO</th>
+                  <td style="font-weight: bold;">
+                    {{if !$consult_anesth->_ref_operation->passage_uscpo}}
+                      Non
+                    {{else}}
+                      {{$consult_anesth->_ref_operation->duree_uscpo}} nuit(s)
+                    {{/if}}
+                    
+                  </td>
+                </tr>
+                {{/if}}
                 <tr>
                   <th style="font-weight: normal;">Anesthésie prévue</th>
                   <td style="font-weight: bold;">
