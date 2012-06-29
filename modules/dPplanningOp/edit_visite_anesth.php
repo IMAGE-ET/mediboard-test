@@ -38,6 +38,7 @@ $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"))
 $smarty->assign("isImedsInstalled"       , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("operation"              , $operation);
 $smarty->assign("anesth_perop"           , new CAnesthPerop());
+$smarty->assign("create_dossier_anesth"  , 0);
 $smarty->display("edit_visite_anesth.tpl");
 
 ?>

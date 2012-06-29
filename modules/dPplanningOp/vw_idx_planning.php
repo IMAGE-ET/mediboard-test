@@ -63,15 +63,15 @@ if($selPraticien->isAnesth()) {
       $_interv->loadRefsConsultAnesth();
       $_interv->_ref_chir->loadRefFunction();
     }
-    $listInterv["hospi"][$_service->_id]      = $interv->loadList($whereHospi, $order, null, null, $ljoin);
-    foreach($listInterv["hospi"][$_service->_id] as &$_interv) {
+    $listInterv["comp"][$_service->_id]      = $interv->loadList($whereHospi, $order, null, null, $ljoin);
+    foreach($listInterv["comp"][$_service->_id] as &$_interv) {
       $_interv->loadRefAffectation();
       $_interv->loadRefsFwd(1);
       $_interv->loadRefsConsultAnesth();
       $_interv->_ref_chir->loadRefFunction();
     }
-    $listInterv["hors plage"][$_service->_id] = $interv->loadList($whereUrg  , $order, null, null, $ljoin);
-    foreach($listInterv["hors plage"][$_service->_id] as &$_interv) {
+    $listInterv["hors_plage"][$_service->_id] = $interv->loadList($whereUrg  , $order, null, null, $ljoin);
+    foreach($listInterv["hors_plage"][$_service->_id] as &$_interv) {
       $_interv->loadRefAffectation();
       $_interv->loadRefsFwd(1);
       $_interv->loadRefsConsultAnesth();
@@ -88,15 +88,15 @@ if($selPraticien->isAnesth()) {
     $_interv->loadRefsConsultAnesth();
     $_interv->_ref_chir->loadRefFunction();
   }
-  $listInterv["hospi"]["non_place"]      = $interv->loadList($whereHospi, $order, null, null, $ljoin);
-  foreach($listInterv["hospi"]["non_place"] as &$_interv) {
+  $listInterv["comp"]["non_place"]      = $interv->loadList($whereHospi, $order, null, null, $ljoin);
+  foreach($listInterv["comp"]["non_place"] as &$_interv) {
     $_interv->loadRefAffectation();
     $_interv->loadRefsFwd(1);
     $_interv->loadRefsConsultAnesth();
     $_interv->_ref_chir->loadRefFunction();
   }
-  $listInterv["hors plage"]["non_place"] = $interv->loadList($whereUrg  , $order, null, null, $ljoin);
-  foreach($listInterv["hors plage"]["non_place"] as &$_interv) {
+  $listInterv["hors_plage"]["non_place"] = $interv->loadList($whereUrg  , $order, null, null, $ljoin);
+  foreach($listInterv["hors_plage"]["non_place"] as &$_interv) {
     $_interv->loadRefAffectation();
     $_interv->loadRefsFwd(1);
     $_interv->loadRefsConsultAnesth();

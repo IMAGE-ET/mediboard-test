@@ -49,7 +49,7 @@ Main.add(function(){
     <td>
       <ul id="type_sejour" class="control_tabs">
       {{foreach from=$listInterv key=_key_type item=_services}}
-      <li><a href="#{{$_key_type}}_tab">{{$_key_type}}</a></li>
+      <li><a href="#{{$_key_type}}_tab">{{tr}}CSejour.type.{{$_key_type}}{{/tr}}</a></li>
       {{/foreach}}
       </ul>
       <hr class="control_tabs" />
@@ -110,7 +110,7 @@ Main.add(function(){
           </td>
           <td class="text">
             {{if $_operation->date_visite_anesth}}
-              Le {{$_operation->date_visite_anesth|date_format:$conf.datetime}} par le Dr {{$_operation->_ref_anesth_visite->_view}}
+              Le {{$_operation->date_visite_anesth|date_format:$conf.date}} par le Dr {{$_operation->_ref_anesth_visite->_view}}
             {{else}}
               Visite non effectuée
             {{/if}}

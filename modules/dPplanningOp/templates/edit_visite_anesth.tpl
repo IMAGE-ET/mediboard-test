@@ -36,13 +36,8 @@ signVisiteAnesth = function(anesth_id) {
 }
 
 reloadAnesth = function(operation_id){
-  var url = new Url("dPsalleOp", "httpreq_vw_anesth");
-  url.addParam("operation_id", operation_id);
-  url.requestUpdate("anesth", { 
-  	onComplete: function() { 
-  		ActesCCAM.refreshList(operation_id,"{{$operation->chir_id}}"); 
-  	}
-  } );	
+  window.opener.location.reload(true);
+  window.location.reload(true);
 }
 
 var constantesMedicalesDrawn = false;
@@ -92,11 +87,14 @@ Main.add(function () {
   }
 });
 
+
 </script>
 
 {{assign var="selOp" value=$operation}}
 {{assign var="sejour" value=$operation->_ref_sejour}}
 {{assign var="patient" value=$sejour->_ref_patient}}
+{{assign var="consult_anesth" value=$selOp->_ref_consult_anesth}}
+
 {{if $selOp->prat_visite_anesth_id}}
   {{assign var="modeles_prat_id" value=$selOp->prat_visite_anesth_id}}
 {{elseif $selOp->_ref_consult_anesth->_id}}
@@ -118,10 +116,12 @@ Main.add(function () {
   
 <hr class="control_tabs" />
 
+{{assign var=onSubmit value="return onSubmitFormAjax(this, {onComplete: function(){ reloadAnesth(); } })"}}
+
 <!-- Anesthesie -->
 <div id="anesth_tab" style="display:none;">
-  <div id="info_anesth">
-  {{include file="../../dPsalleOp/templates/inc_vw_info_anesth.tpl"}}
+  <div id="anesth">
+    {{mb_include module=salleOp template=inc_vw_visite_pre_anesth}}
   </div>
 </div>
 

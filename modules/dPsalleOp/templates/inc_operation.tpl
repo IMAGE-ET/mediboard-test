@@ -256,6 +256,7 @@ function reloadSurveillancePerop(){
 		{{/if}}
 		
 		{{if !$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && $currUser->_is_anesth)}}
+      {{assign var=callback value=refreshVisite}}
       <li onmouseup="reloadAnesth('{{$selOp->_id}}'); {{if "dPprescription"|module_active}}Prescription.updatePerop('{{$selOp->sejour_id}}');{{/if}}"><a href="#anesth_tab">Anesth.</a></li>
 		{{/if}}
     {{if !$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && !$currUser->_is_anesth)}}

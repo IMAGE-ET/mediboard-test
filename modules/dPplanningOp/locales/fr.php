@@ -1036,6 +1036,7 @@ $locales['CSejour.type.psy'] = 'Psychiatrie';
 $locales['CSejour.type.seances'] = 'Séance(s)';
 $locales['CSejour.type.ssr'] = 'SSR';
 $locales['CSejour.type.urg'] = 'Urgences';
+$locales['CSejour.type.hors_plage'] = 'Hors plage';
 $locales['CSejour.type_pec.'] = 'indéterminé';
 $locales['CSejour.type_pec.C'] = 'C';
 $locales['CSejour.type_pec.M'] = 'M';
