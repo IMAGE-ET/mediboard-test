@@ -1,6 +1,6 @@
 <?php 
 require_once ("utils.php");
-require_once("Procedure.php");
+require_once("Procedure.class.php");
 
 function baseBackup($method, $username, $password, $hostname, $port, $database, $backupPath, $time, $binary, $loginUsername, $loginPassword) {
     

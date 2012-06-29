@@ -1,7 +1,7 @@
 <?php
 
 require_once("utils.php");
-require_once("Procedure.php");
+require_once("Procedure.class.php");
 
 function logUptime($file, $hostname) {
 

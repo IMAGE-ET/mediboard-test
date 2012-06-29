@@ -9,7 +9,7 @@
  * @link     http://www.mediboard.org
  */
 
-require_once( "Task.php" );
+require_once( "Task.class.php" );
 
 require_once( "logPing.php" );
 require_once( "logUptime.php" );

@@ -10,7 +10,7 @@
  */
 
 require_once( "utils.php" );
-require_once( "Task.php" );
+require_once( "Task.class.php" );
 
 class Menu extends Task {
   

@@ -1,7 +1,7 @@
 <?php
 require_once ("utils.php");
 require_once("baseBackup.php");
-require_once("Procedure.php");
+require_once("Procedure.class.php");
 
 function replaceBase($srcLocation, $srcDir, $srcDB, $tgtDir, $tgtDB, $restart = false, $safeCopy = false, $mysqlDir = "/var/lib/mysql", $port = "22", $localCopy) {
     

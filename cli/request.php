@@ -1,6 +1,6 @@
 <?php
 require_once ("utils.php");
-require_once ("Procedure.php");
+require_once ("Procedure.class.php");
 
 function request($rootURL, $username, $password, $params, $times, $delay, $file) {
     

@@ -10,8 +10,8 @@
  */
 
 require_once( "utils.php" );
-require_once( "Question.php" );
-require_once( "Menu.php" );
+require_once( "Question.class.php" );
+require_once( "Menu.class.php" );
 
 class Task {
   

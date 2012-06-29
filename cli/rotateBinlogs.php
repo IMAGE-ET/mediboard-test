@@ -1,6 +1,6 @@
 <?php 
 require_once ("utils.php");
-require_once("Procedure.php");
+require_once("Procedure.class.php");
 
 function rotateBinlogs($userAdminDB, $passAdminDB, $binLogsDir, $binLogIndexFilename, $backup) {
   $currentDir = dirname(__FILE__);
