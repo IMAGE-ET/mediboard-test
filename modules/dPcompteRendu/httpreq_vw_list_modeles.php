@@ -17,19 +17,20 @@ $filter_class = CValue::get("filter_class");
 $object = CMbObject::loadFromGuid($object_guid, true); 
 $type = "";
 $name_object_id = "";
+$types = array();
 
 switch($object->_class) {
 	case "CMediusers" :
-    $type = "prat";
-    $name_object_id = "user_id";
+    $types["prat"] = array("user_id", $object->_id);
+    $types["func"] = array("function_id", $object->loadRefFunction()->_id);
+    $types["etab"] = array("group_id", CGroups::loadCurrent()->_id);
 		break;
 	case "CFunctions" :
-	  $type = "func";
-	  $name_object_id = "function_id";
+	  $types["func"] = array("function_id", $object->_id);
+      $types["etab"] = array("group_id", CGroups::loadCurrent()->_id);
 		break;
 	case "CGroups" :
-	  $type = "etab";
-	  $name_object_id = "group_id";
+	  $types["etab"] = array("group_id", $object->_id);
 }
 
 // Chargement du pack
@@ -39,15 +40,21 @@ $pack->loadRefsFwd();
 
 // Modèles concernés
 $modeles = array("prat"=>array(), "func"=>array(), "etab"=>array());
+
 $compte_rendu = new CCompteRendu;
-$where        = array();
 $order        = "nom";
 
-$where["object_id"]     = " IS NULL";
-$where["object_class"]  = " = '$filter_class'";
-$where[$name_object_id] = $compte_rendu->_spec->ds->prepare("= %", $object->_id);
-
-$modeles[$type] = $compte_rendu->loadlist($where, $order);
+foreach ($types as $_type => $_content) {
+  $where        = array();
+  $id_field = $_content[0];
+  $id_value = $_content[1];
+  
+  $where["object_id"]     = " IS NULL";
+  $where["object_class"]  = " = '$filter_class'";
+  $where[$id_field] = "= '$id_value'";
+  
+  $modeles[$_type] = $compte_rendu->loadlist($where, $order);
+}
 
 // Création du template
 $smarty = new CSmartyDP();
