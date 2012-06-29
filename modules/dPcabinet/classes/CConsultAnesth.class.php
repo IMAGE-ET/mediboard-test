@@ -409,7 +409,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $template->addProperty("Anesthésie - Ht final"               , "$this->ht_final %");
     $template->addProperty("Anesthésie - PSA"                    , "$this->_psa ml/GR");
     $template->addProperty("Anesthésie - Plaquettes"             , ($this->plaquettes*1000)."/mm3");
-    $template->addProperty("Anesthésie - Créatinine"             , "$this->creatinine ml/l");
+    $template->addProperty("Anesthésie - Créatinine"             , "$this->creatinine mg/l");
     $template->addProperty("Anesthésie - Clairance"              , "$this->_clairance ml/min");
     $template->addProperty("Anesthésie - Na+"                    , "$this->na mmol/l");
     $template->addProperty("Anesthésie - K+"                     , "$this->k mmol/l");
@@ -438,9 +438,9 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $template->addProperty("Anesthésie - Etat bucco-dentaire"       , $this->etatBucco);
     $img = "";
     if ($this->mallampati) {
-      $img = $this->mallampati.'<br /><img src="../../../images/pictures/'.$this->mallampati.'.png" alt="'.$this->mallampati.'" />';
+      $img = $this->mallampati.'<br /><img src="images/pictures/'.$this->mallampati.'.png" alt="'.$this->mallampati.'" />';
     }
-    $template->addProperty("Anesthésie - Mallampati", $img, false);
+    $template->addProperty("Anesthésie - Mallampati", $img, null, false);
     $template->addProperty("Anesthésie - Remarques",  $this->conclusion);
     $template->addProperty("Anesthésie - Score APFEL", $this->_score_apfel);
     
