@@ -147,6 +147,10 @@ printOffline = function(element) {
       {{/if}}
     </td>
     <td colspan="2" class="text">      
+      {{if $conf.ssr.CPrescription.show_dossier_soins}}
+      <button type="button" class="search" onclick="showDossierSoins('{{$sejour_id}}');" style="float: right;">Dossier</button>
+      {{/if}}
+      
       {{mb_include template=inc_view_patient patient=$_sejour->_ref_patient
         link="?m=$m&tab=vw_aed_sejour_ssr&sejour_id=$sejour_id"
       }}

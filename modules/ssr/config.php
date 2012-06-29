@@ -28,4 +28,7 @@ $dPconfig["ssr"] = array (
 	"CBilanSSR" => array (
     "tolerance_sejour_demandeur" => "2",
 	),
+  "CPrescription" => array(
+    "show_dossier_soins" => "0"
+  )
 );

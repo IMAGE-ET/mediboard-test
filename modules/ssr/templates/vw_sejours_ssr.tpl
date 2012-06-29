@@ -8,6 +8,35 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{if $conf.ssr.CPrescription.show_dossier_soins}}
+  {{mb_script module="soins" script="plan_soins"}}
+  
+  {{if "dPprescription"|module_active}}
+    {{mb_script module="dPprescription" script="prescription"}}
+    {{mb_script module="dPprescription" script="element_selector"}}
+  {{/if}}
+  
+  {{if "dPmedicament"|module_active}}
+    {{mb_script module="dPmedicament" script="medicament_selector"}}
+    {{mb_script module="dPmedicament" script="equivalent_selector"}}
+  {{/if}}
+  
+  <script type="text/javascript">
+  
+  showDossierSoins = function(sejour_id, date, default_tab){
+    $('dossier_sejour').update("");
+    var url = new Url("soins", "ajax_vw_dossier_sejour");
+    url.addParam("sejour_id", sejour_id);
+    if(default_tab){
+      url.addParam("default_tab", default_tab);
+    }
+    url.requestUpdate($('dossier_sejour'));
+    modalWindow = modal($('dossier_sejour'));
+  }
+  
+  </script>
+{{/if}}
+
 {{mb_script module=ssr script=sejours_ssr}}
 
 {{if $dialog}}
@@ -75,4 +104,8 @@
 
 {{if $dialog}}
   {{mb_include style=mediboard template=close_printable}}
+{{/if}}
+
+{{if $conf.ssr.CPrescription.show_dossier_soins}}
+<div id="dossier_sejour" style="width: 95%; height: 90%; overflow: auto;"></div>  
 {{/if}}

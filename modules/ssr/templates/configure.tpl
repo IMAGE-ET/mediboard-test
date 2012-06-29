@@ -19,6 +19,7 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
   <li><a href="#CReplacement">{{tr}}CReplacement{{/tr}}</a></li>
   <li><a href="#gui">{{tr}}GUI{{/tr}}</a></li>
   <li><a href="#offline">{{tr}}Offline{{/tr}}</a></li>
+  <li><a href="#CPrescription">{{tr}}CPrescription{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -41,4 +42,8 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
 
 <div id="offline" style="display: none;">
   {{mb_include template=inc_configure_offline}}
+</div>
+
+<div id="CPrescription" style="display: none">
+  {{mb_include template=CPrescription_configure}}
 </div>
