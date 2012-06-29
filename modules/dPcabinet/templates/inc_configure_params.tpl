@@ -59,6 +59,8 @@
     <th class="category" colspan="2">{{tr}}{{$class}}{{/tr}}</th>
   </tr>
   
+  {{mb_include module=system template=inc_config_bool var=use_last_consult}}
+  
   {{mb_include module=system template=inc_config_bool var=show_examen}}
   
   {{mb_include module=system template=inc_config_bool var=show_histoire_maladie}}

@@ -113,6 +113,8 @@ PlageConsult.addPlaceAfter = function(plage_id) {
         {{assign var="style" value="style='background: #ffa;'"}}
       {{elseif $_consultation->premiere}}
         {{assign var="style" value="style='background: #faa;'"}}
+      {{elseif $_consultation->derniere}}
+        {{assign var="style" value="style='background: #faf;'"}}
       {{else}} 
         {{assign var="style" value=""}}
       {{/if}}
@@ -149,6 +151,8 @@ PlageConsult.addPlaceAfter = function(plage_id) {
         {{assign var="style" value="style='background: #ffa;'"}}
       {{elseif $_consultation->premiere}}
         {{assign var="style" value="style='background: #faa;'"}}
+      {{elseif $_consultation->derniere}}
+        {{assign var="style" value="style='background: #faf;'"}}
       {{else}} 
         {{assign var="style" value=""}}
       {{/if}}
@@ -209,6 +213,8 @@ PlageConsult.addPlaceAfter = function(plage_id) {
         {{assign var="style" value="style='background: #ffa;'"}}
       {{elseif $_consultation->premiere}}
         {{assign var="style" value="style='background: #faa;'"}}
+      {{elseif $_consultation->derniere}}
+        {{assign var="style" value="style='background: #faf;'"}}
       {{else}} 
         {{assign var="style" value=""}}
       {{/if}}

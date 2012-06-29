@@ -359,13 +359,15 @@ Main.add(function () {
             
           <tr>
             <th>{{mb_label object=$consult field="premiere"}}</th>
-            <td>
-              <input type="checkbox" name="_check_premiere" value="1"
-                {{if $consult->_check_premiere}} checked="checked" {{/if}}
-                onchange="this.form.premiere.value = this.checked ? 1 : 0;" />
-              {{mb_field object=$consult field="premiere" hidden="hidden"}}
-            </td>
+            <td>{{mb_field object=$consult field="premiere" typeEnum=checkbox}}</td>
           </tr>
+          
+          {{if $conf.dPcabinet.CConsultation.use_last_consult}}
+          <tr>
+            <th>{{mb_label object=$consult field="derniere"}}</th>
+            <td>{{mb_field object=$consult field="derniere" typeEnum=checkbox}}</td>
+          </tr>
+          {{/if}}
   
           <tr>
             <th>{{mb_label object=$consult field="adresse"}}</th>

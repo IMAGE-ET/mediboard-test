@@ -4,7 +4,9 @@
 {{if !$patient->_id}}
   {{assign var="style" value="background: #ffa;"}}          
 {{elseif $_consult->premiere}} 
-  {{assign var="style" value="background: #faa;"}}
+  {{assign var="style" value="background: #faa;"}}          
+{{elseif $_consult->derniere}} 
+  {{assign var="style" value="background: #faf;"}}
 {{elseif $_consult->_ref_sejour->_id}} 
   {{assign var="style" value="background: #cfa;"}}
 {{else}} 

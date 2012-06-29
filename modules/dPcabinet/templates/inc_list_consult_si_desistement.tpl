@@ -33,7 +33,9 @@
     {{if !$patient->_id}}
       {{assign var="style" value="style='background: #ffa;'"}}          
     {{elseif $_consult->premiere}} 
-      {{assign var="style" value="style='background: #faa;'"}}
+      {{assign var="style" value="style='background: #faa;'"}}          
+    {{elseif $_consult->derniere}} 
+      {{assign var="style" value="style='background: #faf;'"}}
     {{elseif $_consult->sejour_id}} 
       {{assign var="style" value="style='background: #CFFFAD;'"}}
     {{else}} 

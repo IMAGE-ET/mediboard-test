@@ -43,6 +43,7 @@ class CConsultation extends CCodable {
   
   var $traitement          = null;
   var $premiere            = null;
+  var $derniere            = null;
   var $adresse             = null; // Le patient a-t'il été adressé ?
   var $adresse_par_prat_id = null;
   var $tarif               = null;
@@ -70,7 +71,6 @@ class CConsultation extends CCodable {
   var $_etat           = null;
   var $_hour           = null;
   var $_min            = null;
-  var $_check_premiere = null;
   var $_check_adresse  = null;
   var $_somme          = null;
   var $_types_examen   = null;
@@ -199,6 +199,7 @@ class CConsultation extends CCodable {
     $props["facture"]           = "bool default|0 show|0";
     
     $props["premiere"]            = "bool show|0";
+    $props["derniere"]            = "bool show|0";
     $props["adresse"]             = "bool show|0";
     $props["adresse_par_prat_id"] = "ref class|CMedecin";
     $props["tarif"]               = "str show|0";
@@ -244,7 +245,6 @@ class CConsultation extends CCodable {
     $props["_plages_vides"]     = "bool default|1";
     $props["_non_pourvues"]     = "bool default|1";
     
-    $props["_check_premiere"]   = "";
     $props["_check_adresse"]    = "";
     $props["_somme"]            = "currency";    
     $props["_type"]             = "enum list|urg|anesth";
@@ -293,7 +293,6 @@ class CConsultation extends CCodable {
     $this->du_tiers   = round($this->du_tiers  , 2);
     $this->_hour = intval(substr($this->heure, 0, 2));
     $this->_min  = intval(substr($this->heure, 3, 2));
-    $this->_check_premiere = $this->premiere;
     $this->_check_adresse = $this->adresse;
     $this->getEtat();
     $this->_view = "Consultation ".$this->_etat;

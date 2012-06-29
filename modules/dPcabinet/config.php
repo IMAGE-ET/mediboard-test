@@ -17,6 +17,7 @@ $dPconfig["dPcabinet"] = array(
     "minutes_interval" => "15",
   ),
   "CConsultation" => array(
+    "use_last_consult"      => 0,
     "show_examen"           => 1,
     "show_histoire_maladie" => 0,
     "show_conclusion"       => 0,
