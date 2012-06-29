@@ -7,7 +7,7 @@
 
 {{if !@$only_comment}}
 	<strong onmouseover="ObjectTooltip.createDOM(this, 'details-{{$element->_guid}}')">
-		<span class="mediuser" style="border-left-color: #{{$element->_color}};">
+		<span class="mediuser" style="border-left-color: #{{$element->_color}}; margin-left: 10px;">
 		{{$element}}
 	  </span>
 	</strong>
@@ -19,5 +19,5 @@
 </div>
 
 {{if $_line->commentaire}}
-<div style="{{if @$only_comment}}display: inline;{{else}}margin-left: 25px;{{/if}}" class="text message">{{$_line->commentaire}}</div>
+<div style="{{if @$only_comment}}display: inline; margin-left: 10px;{{else}}margin-left: 25px;{{/if}}" class="text message">{{$_line->commentaire}}</div>
 {{/if}}
