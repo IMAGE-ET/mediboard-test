@@ -174,6 +174,19 @@ class CMbXMLDocument extends DOMDocument {
     $atValue = utf8_encode($atValue);
     return $elParent->setAttribute($atName, $atValue);
   }
+  
+  function addComment($elParent, $comment) {
+    return $elParent->appendChild($this->createComment($comment));
+  }
+  
+  function addDocumentation($elParent, $documentation = null) {
+    if (!$documentation) {
+      return;
+    }
+    
+    $annotation = $this->addElement($elParent, "annotation", null, "http://www.w3.org/2001/XMLSchema");
+    $this->addElement($annotation, "documentation", $documentation, "http://www.w3.org/2001/XMLSchema");
+  }
 
   function purgeEmptyElements() {
     $this->purgeEmptyElementsNode($this->documentElement);
