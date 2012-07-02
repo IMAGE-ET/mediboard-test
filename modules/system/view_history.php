@@ -68,8 +68,19 @@ $listUsers = $user->loadMatchingList($order);
 // Récupération des logs correspondants
 $where = array();
 if ($filter->user_id     ) $where["user_id"     ] = "= '$filter->user_id'";
-if ($filter->object_id   ) $where["object_id"   ] = "= '$filter->object_id'";
-if ($filter->object_class) $where["object_class"] = "= '$filter->object_class'";
+
+// Inclusion des logs sur l'objet CContentHTML si c'est un compte-rendu
+if ($object instanceof CCompteRendu) {
+  $object->loadContent(false);
+  $content = $object->_ref_content;
+  $where[] = "(object_id = '$filter->object_id' AND object_class = '$filter->object_class') OR
+  (object_id = '$content->_id' AND object_class = 'CContentHTML')";
+}
+else {
+  if ($filter->object_id   ) $where["object_id"   ] = "= '$filter->object_id'";
+  if ($filter->object_class) $where["object_class"] = "= '$filter->object_class'";
+}
+
 if ($filter->type        ) $where["type"        ] = "= '$filter->type'";
 if ($filter->_date_min   ) $where[] = "date >= '$filter->_date_min'";
 if ($filter->_date_max   ) $where[] = "date <= '$filter->_date_max'";
