@@ -130,7 +130,7 @@ Main.add(function () {
   {{if $show_header}} 
     <tr>
       <th class="title" colspan="2">
-        <a style="float: left" href="?m=patients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
+        <a style="float: left" href="?m=patients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}">
           {{mb_include module=patients template=inc_vw_photo_identite size=42}}
         </a>
        
@@ -178,7 +178,7 @@ Main.add(function () {
                 <th style="height: 1%">{{mb_label object=$antecedent field=date}}</th>
                 <td>{{mb_field object=$antecedent field=date form=editAntFrm register=true}}</td>
               {{else}}
-                <td colspan="2" />
+                <td colspan="2"></td>
               {{/if}}
               <td rowspan="3" style="width: 100%">
                 {{mb_field object=$antecedent field="rques" rows="4" form="editAntFrm"
