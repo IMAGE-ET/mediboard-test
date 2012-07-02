@@ -107,6 +107,7 @@ $locales['CExchangeDataFormat-_count_exchanges'] = 'Echanges';
 $locales['CExchangeDataFormat-_count_msg_invalide'] = 'MSG invalide';
 $locales['CExchangeDataFormat-group_id'] = 'Etablissement';
 $locales['CExchangeDataFormat-group_id-desc'] = 'Etablissement';
+$locales['CExchangeDataFormat-utilities_treatment_exchanges'] = 'Traitement des échanges';
 $locales['CExchangeDataFormat.none'] = 'Échange supprimé / inexistant';
 $locales['CExchangeDataFormat.sender_class.CSenderFTP'] = 'Expéditeur FTP';
 $locales['CExchangeDataFormat.sender_class.CSenderSOAP'] = 'Expéditeur SOAP';

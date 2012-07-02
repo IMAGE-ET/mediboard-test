@@ -68,6 +68,12 @@ ExchangeDataFormat = {
     url.addParam("exchange_guid", exchange_guid);
     url.requestUpdate("exchange_"+exchange_guid);
   },
+  
+  treatmentExchanges : function(source_guid){
+    var url = new Url("eai", "ajax_treatment_exchanges");
+    url.addParam("source_guid", source_guid);
+    url.requestUpdate("CExchangeDataFormat-treatment_exchanges");
+  },
 
   sendMessage : function(exchange_guid){
     var url = new Url("eai", "ajax_send_message");

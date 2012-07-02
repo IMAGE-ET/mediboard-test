@@ -8,7 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module=system script=sender_fs ajax=true}}
+{{mb_script module=eai    script=exchange_data_format ajax=true}}
+{{mb_script module=system script=sender_fs            ajax=true}}
 
 <table class="main">
   <tr>
@@ -22,6 +23,15 @@
       </button> 
     </td>
     <td id="CSenderFileSystem-create_exchanges"></td>
+  </tr> 
+  
+  <tr>
+    <td class="narrow">
+      <button type="button" class="tick" onclick="ExchangeDataFormat.treatmentExchanges('{{$actor->_guid}}');">
+        {{tr}}CExchangeDataFormat-utilities_treatment_exchanges{{/tr}}
+      </button> 
+    </td>
+    <td id="CExchangeDataFormat-treatment_exchanges"></td>
   </tr> 
    
   <tr>
