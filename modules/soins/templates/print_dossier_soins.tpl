@@ -222,12 +222,20 @@
     </th>
   </tr>
   {{/if}}
-  {{foreach from=$prescription->_ref_lines_med_comments.med item=line_med}}
+  {{foreach from=$prescription->_ref_lines_med_comments.med key=atc_code item=lines_med_by_atc}}
     <tr>
-      <td class="text">
-        {{mb_include module="dPprescription" template="inc_print_medicament" med=$line_med nodebug=true print=false dci=0}}
-      </td>
-    </tr>
+      <th class="section">
+        {{assign var=_libelle_ATC value=$atc_classes.$atc_code}}
+        {{$_libelle_ATC}}
+      </th>
+    </tr>  
+    {{foreach from=$lines_med_by_atc item=line_med}}
+      <tr>
+        <td class="text">
+          {{mb_include module="dPprescription" template="inc_print_medicament" med=$line_med nodebug=true print=false dci=0}}
+        </td>
+      </tr>
+    {{/foreach}}
   {{/foreach}}
 
   {{foreach from=$prescription->_ref_lines_med_comments.comment item=line_med_comment}}

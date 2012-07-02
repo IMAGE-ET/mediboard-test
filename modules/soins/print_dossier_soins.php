@@ -20,6 +20,9 @@ if(!$sejour_id){
 $fiches_anesthesies = array();
 $formulaires = null;
 
+global $atc_classes;
+$atc_classes = array();
+
 // Chargement du sejour
 $sejour = new CSejour();
 $sejour->load($sejour_id);
@@ -103,7 +106,7 @@ if(CModule::getActive("dPprescription")){
 	$prescription->loadMatchingObject();
 	
 	// Chargement des lignes
-	$prescription->loadRefsLinesMedComments();
+	$prescription->loadRefsLinesMedComments("1", "", "", "0", "1");
 	$prescription->loadRefsLinesElementsComments();
 	$prescription->loadRefsPrescriptionLineMixes();
 	
@@ -113,7 +116,7 @@ if(CModule::getActive("dPprescription")){
 	    $_prescription_line_mix->calculQuantiteTotal();
 	    $_prescription_line_mix->loadRefPraticien();
 	    foreach($_prescription_line_mix->_ref_lines as $_perf_line){
-	      $list_lines["prescription_line_mix"][$_perf_line->_id] = $_perf_line;
+	      //$list_lines["prescription_line_mix"][$_perf_line->_id] = $_perf_line;
 	      $_perf_line->loadRefsAdministrations();
 	      foreach($_perf_line->_ref_administrations as $_administration_perf){
 	        $_administration_perf->loadRefAdministrateur();
@@ -126,18 +129,25 @@ if(CModule::getActive("dPprescription")){
 	}
 	
 	// Parcours des lignes de medicament et stockage du dossier cloturé
-	if (count($prescription->_ref_prescription_lines)) {
-	  foreach($prescription->_ref_prescription_lines as $_line_med){
-	    $_line_med->_ref_produit->loadConditionnement();
-	    $list_lines["medicament"][$_line_med->_id] = $_line_med;
-	    $_line_med->loadRefsAdministrations();
-	    foreach($_line_med->_ref_administrations as $_administration_med){
-	      $_administration_med->loadRefAdministrateur();
-	      if(!$_administration_med->planification){
-	        $dossier[mbDate($_administration_med->dateTime)]["medicament"][$_line_med->_id][$_administration_med->quantite][$_administration_med->_id] = $_administration_med;
-	      }
-	    }
-	  }
+	if (count($prescription->_ref_lines_med_comments["med"])) {
+    foreach($prescription->_ref_lines_med_comments["med"] as $_atc => $lines_by_type){
+      if(!isset($atc_classes[$_atc])){
+        $classe_atc = new CBcbClasseATC();
+        $atc_classes[$_atc] = $classe_atc->getLibelle($_atc);
+      }
+      foreach($lines_by_type as $med_id => $_line_med){
+        $_line_med->_ref_produit->loadConditionnement();
+        //$list_lines["medicament"][$_line_med->_id] = $_line_med;
+      
+        $_line_med->loadRefsAdministrations();
+        foreach($_line_med->_ref_administrations as $_administration_med){
+          $_administration_med->loadRefAdministrateur();
+          if(!$_administration_med->planification){
+            $dossier[mbDate($_administration_med->dateTime)]["medicament"][$_line_med->_id][$_administration_med->quantite][$_administration_med->_id] = $_administration_med;
+          }
+        }
+      }
+    }
 	}
 	
 	// Parcours des lignes d'elements
@@ -148,7 +158,7 @@ if(CModule::getActive("dPprescription")){
 	        $_line_elt_comment->loadRefPraticien();
 	      }
 	      foreach($_lines_by_cat["element"] as $_line_elt){
-	        $list_lines[$chap][$_line_elt->_id] = $_line_elt;
+	        //$list_lines[$chap][$_line_elt->_id] = $_line_elt;
 	        $_line_elt->loadRefsAdministrations();
 	        foreach($_line_elt->_ref_administrations as $_administration_elt){
 	          $_administration_elt->loadRefAdministrateur();
@@ -184,6 +194,7 @@ $smarty->assign("praticien", $praticien);
 $smarty->assign("offline", $offline);
 $smarty->assign("in_modal", $in_modal);
 $smarty->assign("fiches_anesthesies", $fiches_anesthesies);
+$smarty->assign("atc_classes", $atc_classes);
 $smarty->display("print_dossier_soins.tpl");
 
 ?>
