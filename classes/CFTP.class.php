@@ -20,6 +20,7 @@ class CFTP {
   var $fileprefix    = null;
   var $fileextension = null;
   var $filenbroll    = null;
+  var $loggable     = null;
   
   private static $aliases = array(
     'sslconnect' => 'ssl_connect',
@@ -54,6 +55,15 @@ class CFTP {
     
     if ($function_name == "_init") {
       return call_user_func_array(array($this, $function_name), $args);
+    }
+    
+    if (!$this->loggable) {
+      try {
+        return call_user_func_array(array($this, $function_name), $args);
+      } 
+      catch(CMbException $fault) {
+        throw $fault;
+      }
     }
     
     $echange_ftp = new CExchangeFTP();
@@ -135,6 +145,7 @@ class CFTP {
     $this->fileprefix    = $exchange_source->fileprefix;
     $this->fileextension = $exchange_source->fileextension;
     $this->filenbroll    = $exchange_source->filenbroll;
+    $this->loggable      = $exchange_source->loggable;
   }
   
   private function _testSocket() {
