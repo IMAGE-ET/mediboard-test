@@ -81,7 +81,7 @@ $user = new CMediusers();
 $user->load($user_id);
 $user->loadRefFunction();
 
-$group = CGroups::loadCurrent();
+$group = $user->_ref_function->loadRefGroup();
 
 $aidebis = new CAideSaisie();
 $where[] = "`class` = '".$class."' AND
