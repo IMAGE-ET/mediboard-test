@@ -58,3 +58,43 @@
   </tr>
 
 </table>
+
+<h2>Actions de maintenances</h2>
+
+<script type="text/javascript">
+  createConsultAnesth = function() {
+    var url = new Url("dPcabinet", "ajax_create_missing_consult_anesth");
+    url.addParam("anesth_id", $V($("anesth_id")));
+    url.requestUpdate("result-create_consult_anesth", { onComplete: function() {
+      repeatActions("createConsultAnesth");
+    }});
+  }
+  
+   repeatActions = function (func) {
+    if ($V($("check_repeat_actions"))) {      
+      window[func]();
+    }
+  }
+</script>
+
+<table class="tbl">
+  <tr>
+    <th>{{tr}}Action{{/tr}}</th>
+    <th>{{tr}}Status{{/tr}}</th>
+  </tr>
+  
+  <tr>
+    <td class="narrow">
+      <button class="search" onclick="createConsultAnesth()">
+        Créer les consultations d'anesth pour des consultations
+      </button> <br />
+      <select name="anesth_id" id="anesth_id">
+        {{foreach from=$anesths item=_anesth}}
+          <option value="{{$_anesth->_id}}">{{$_anesth->_view}}</option>
+        {{/foreach}}
+      </select><br />
+      <input type="checkbox" name="repeat_actions" id="check_repeat_actions"/> Relancer automatiquement 
+    </td>
+    <td id="result-create_consult_anesth"></td>
+  </tr>
+</table>
