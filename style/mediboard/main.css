@@ -1726,3 +1726,22 @@ tr.transmission_haute td {
 div.scroll_shadow {
   box-shadow: 0px 3px 8px rgba(0,0,0,.3);
 }
+
+div.badge {
+  background: radial-gradient( center -9px, circle closest-side, white 0, red 26px );
+  background: -moz-radial-gradient( center -9px, circle closest-side, white 0, red 26px );
+  background: -ms-radial-gradient( center -9px, circle closest-side, white 0, red 26px );
+  background: -o-radial-gradient( center -9px, circle closest-side, white 0, red 26px );
+  background: -webkit-radial-gradient( center -9px, circle, white 0, red 26px );
+  background-color: red;
+  border: 2px solid white;
+  border-radius: 50%; 
+  box-shadow: 1px 1px 1px black;
+  color: white;
+  font: bold 10px Helvetica, Verdana, Tahoma;
+  height: 14px; /* height + padding-top must equal width */
+  padding-top: 2px; /* height + padding-top must equal width */
+  text-align: center;
+  width: 16px;
+}
+
