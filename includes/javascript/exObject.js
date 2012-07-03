@@ -259,6 +259,7 @@ var ExObject = {
   toggleField: function(name, v) {
     $$(".field-"+name).each(function(field){
       field.setClassName("opacity-20", !v);
+      field.disabled = !v;
     })
   }
 };

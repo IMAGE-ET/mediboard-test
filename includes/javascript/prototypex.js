@@ -601,6 +601,14 @@ Element.addMethods({
       new NoClickDelay(element);
     });
     */
+   
+   root.select("label").each(function(label){
+     if (label.hasAttribute("onclick")) {
+       return;
+     }
+     
+     label.setAttribute("onclick", "");
+   });
     
     if (App.onMouseOverPrepared) return;
     

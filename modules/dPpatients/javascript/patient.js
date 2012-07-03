@@ -8,19 +8,19 @@ Patient = Object.extend({
       addParam("patient_id", patient_id).
       redirectOpener();
   },
-	
+  
   history: function(patient_id) {
     new Url("dPpatients", "vw_history").
       addParam("patient_id", patient_id).
       popup(600, 500, "patient history");
   },
-	
+  
   print: function (patient_id) {
     new Url("dPpatients", "print_patient").
       addParam("patient_id", patient_id).
       popup(700, 550, "Patient");
   },
-	
+  
   edit: function(patient_id, use_vitale) {
     new Url().
       setModuleTab("dPpatients", "vw_edit_patients").
@@ -30,7 +30,7 @@ Patient = Object.extend({
   },
   
   exportVcard: function(patient_id) {
-	  new Url("dPpatients", "ajax_export_vcard").
+    new Url("dPpatients", "ajax_export_vcard").
       addParam("patient_id", patient_id).
       addParam("suppressHeaders", 1).
       pop(700, 550, "Patient");

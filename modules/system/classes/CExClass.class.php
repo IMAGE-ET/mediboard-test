@@ -30,6 +30,8 @@ class CExClass extends CMbObject {
   var $_host_class_options = null;
   var $_available_native_views = null;
   
+  private $_latest_ex_object_cache = array();
+  
   static $_groups_cache = array();
   
   static $_list_cache = array();
@@ -159,9 +161,10 @@ class CExClass extends CMbObject {
       }
     }
     
-    $field = "native_views";
+    /*$field = "native_views";
     $this->_props[$field] = "set vertical list|".implode("|", array_keys($available_views));
     $this->_specs[$field] = CMbFieldSpecFact::getSpec($this, $field, $this->_props[$field]);
+    */
     
     return $this->_available_native_views = $available_views;
   }
@@ -283,15 +286,28 @@ class CExClass extends CMbObject {
     return array();
   }
   
-  function getExObjectInstance(){
+  function getExObjectInstance($cache = false){
+    static $instances = array();
+    
+    if ($cache && isset($instances[$this->_id])) {
+      return clone $instances[$this->_id];
+    }
+    
     $ex_object = new CExObject;
     $ex_object->_ex_class_id = $this->_id;
     $ex_object->setExClass();
+    
+    if ($cache) {
+      $instances[$this->_id] = $ex_object;
+    }
+    
     return $ex_object;
   }
   
   function getLatestExObject(CMbObject $object, $level = 1){
-    $ex_object = $this->getExObjectInstance();
+    if (isset($this->_latest_ex_object_cache[$level][$object->_class][$object->_id])) {
+      return $this->_latest_ex_object_cache[$level][$object->_class][$object->_id];
+    }
 
     switch($level) {
       case 1:
@@ -316,10 +332,11 @@ class CExClass extends CMbObject {
         break;
     }
     
+    $ex_object = $this->getExObjectInstance(true);
     $ex_object->loadObject($where, "ex_object_id DESC");
     $ex_object->load(); // needed !!!!!!!
 
-    return $ex_object;
+    return $this->_latest_ex_object_cache[$level][$object->_class][$object->_id] = $ex_object;
   }
   
   function resolveReferenceObject(CMbObject $object, $level = 1){

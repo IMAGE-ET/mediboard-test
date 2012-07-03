@@ -181,6 +181,10 @@ class CExObject extends CMbMetaObject {
     
     $fields = $this->_ref_ex_class->loadRefsAllFields(true);
     
+    // Cache de concepts
+    $concepts = array();
+    $ex_classes = array();
+    
     // on cherche les champs reportés de l'objet courant
     foreach($fields as $_field) {
       $field_name = $_field->name;
@@ -197,16 +201,36 @@ class CExObject extends CMbMetaObject {
       
       // si champ basé sur un concept, il faut parcourir 
       // tous les formulaires qui ont un champ du meme concept
+      
       if ($_field->concept_id) {
-        $_concept = $_field->loadRefConcept();
-        $_concept_fields = $_concept->loadRefClassFields();
+        if (!isset($concepts[$_field->concept_id])) {
+          $_concept = $_field->loadRefConcept();
+          $_concept_fields = $_concept->loadRefClassFields();
+          
+          foreach($_concept_fields as $_concept_field) {
+            if (!isset($ex_classes[$_concept_field->ex_group_id])) {
+              $ex_classes[$_concept_field->ex_group_id] = $_concept_field->loadRefExClass();
+            }
+            else {
+              $_concept_field->_ref_ex_class = $ex_classes[$_concept_field->ex_group_id];
+            }
+          }
+          
+          $concepts[$_field->concept_id] = array(
+            $_concept,
+            $_concept_fields,
+          );
+        }
+        else {
+          list($_concept, $_concept_fields) = $concepts[$_field->concept_id];
+        }
         
         $_latest = null;
         $_latest_value = null;
         
         // on regarde tous les champs du concept
         foreach($_concept_fields as $_concept_field) {
-          $_ex_class = $_concept_field->loadRefExClass();
+          $_ex_class = $_concept_field->_ref_ex_class;
           
           // en fonction du niveau
           switch($_level) {
