@@ -1740,24 +1740,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $this->_NDA_view = $this->_NDA = $id400->id400;
     
     // Cas de l'utilisation du rang
-    if(CAppUI::conf("dPplanningOp CSejour use_dossier_rang")) {
-      // Aucune configuration du numero de rang
-      if (null == $tag_NRA = $this->getTagNRA($group_id)) {
-        return;
-      }
-      // Recuperation de la valeur de l'id400
-      $id400 = new CIdSante400();
-      $id400->loadLatestFor($this, $tag_NRA);
-      
-      // Récupération de l'IPP du patient
-      $this->loadRefPatient();
-      $this->_ref_patient->loadIPP();
-      
-      // Stockage de la valeur de l'id400
-      $this->_ref_NRA = $id400;
-      $NRA = $id400->_id ? $id400->id400 : "-";
-      $this->_NDA_view = $this->_ref_patient->_IPP."/".$NRA;
-    }
+    $this->loadNRA($group_id);
   }
   
   /**
@@ -1784,6 +1767,41 @@ class CSejour extends CCodable implements IPatientRelated {
     $this->_ref_NPA = $id400;
     $this->_NPA     = $id400->id400;
   }
+  
+  /**
+   * Charge le Numéro de rang du séjour pour l'établissement courant
+   * @param $group_id Permet de charger le NRA pour un établissement donné si non null
+   */
+  function loadNRA($group_id = null) {
+    // Utilise t-on le rang pour le dossier
+    if (CAppUI::conf("dPplanningOp CSejour use_dossier_rang")) {
+      return;
+    }
+      
+    // Objet inexistant
+    if (!$this->_id) {
+      return "-";
+    }
+    
+    // Aucune configuration du numero de rang
+    if (null == $tag_NRA = $this->getTagNRA($group_id)) {
+      return;
+    }
+    
+    // Recuperation de la valeur de l'id400
+    $id400 = new CIdSante400();
+    $id400->loadLatestFor($this, $tag_NRA);
+
+    // Stockage de la valeur de l'id400
+    $this->_ref_NRA = $id400;
+    $NRA            = $id400->_id ? $id400->id400 : "-";
+    
+    // Récupération de l'IPP du patient
+    $this->loadRefPatient();
+    $this->_ref_patient->loadIPP();
+    
+    $this->_NDA_view = $this->_ref_patient->_IPP."/".$NRA;
+  }  
   
   function loadFromNDA($nda) {
     // Aucune configuration de numéro de dossier
