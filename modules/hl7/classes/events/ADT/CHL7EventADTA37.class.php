@@ -15,6 +15,7 @@
  * Interface CHL7EventADTA37 
  * A37 - Unlink patient information
  */
-interface CHL7EventADTA37 extends CHL7EventADT {}
+interface CHL7EventADTA37 extends CHL7EventADT {
+}
 
 ?>

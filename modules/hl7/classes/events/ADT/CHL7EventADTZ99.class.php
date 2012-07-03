@@ -15,6 +15,7 @@
  * Interface CHL7EventADTZ99
  * Z99 - Change admit
  */
-interface CHL7EventADTZ99 extends CHL7EventADT {}
+interface CHL7EventADTZ99 extends CHL7EventADT {
+}
 
 ?>

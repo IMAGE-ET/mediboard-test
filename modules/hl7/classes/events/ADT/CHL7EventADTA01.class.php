@@ -15,6 +15,7 @@
  * Interface CHL7EventADTA01 
  * A01 - Structure
  */
-interface CHL7EventADTA01 extends CHL7EventADT {}
+interface CHL7EventADTA01 extends CHL7EventADT {
+}
 
 ?>

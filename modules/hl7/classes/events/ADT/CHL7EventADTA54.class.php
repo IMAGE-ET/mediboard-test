@@ -15,6 +15,7 @@
  * Interface CHL7EventADTA54
  * A54 - Structure
  */
-interface CHL7EventADTA54 extends CHL7EventADT {}
+interface CHL7EventADTA54 extends CHL7EventADT {
+}
 
 ?>

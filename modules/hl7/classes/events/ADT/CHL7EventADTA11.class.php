@@ -15,6 +15,7 @@
  * Interface CHL7EventADTA11 
  * A11 - Cancel admit/visit notification 
  */
-interface CHL7EventADTA11 extends CHL7EventADT {}
+interface CHL7EventADTA11 extends CHL7EventADT {
+}
 
 ?>

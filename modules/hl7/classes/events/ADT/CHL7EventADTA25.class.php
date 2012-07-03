@@ -15,6 +15,7 @@
  * Interface CHL7EventADTA25 
  * A25 - Cancel Pending Discharge
  */
-interface CHL7EventADTA25 extends CHL7EventADT {}
+interface CHL7EventADTA25 extends CHL7EventADT {
+}
 
 ?>

@@ -15,6 +15,7 @@
  * Interface CHL7EventADTA12
  * A12 - Cancel transfer 
  */
-interface CHL7EventADTA12 extends CHL7EventADT {}
+interface CHL7EventADTA12 extends CHL7EventADT {
+}
 
 ?>

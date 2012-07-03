@@ -15,6 +15,7 @@
  * Interface CHL7EventADTA30 
  * A30 - Merge person information
  */
-interface CHL7EventADTA30 extends CHL7EventADT {}
+interface CHL7EventADTA30 extends CHL7EventADT {
+}
 
 ?>

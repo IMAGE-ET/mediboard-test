@@ -15,6 +15,7 @@
  * Interface CHL7EventADTA16 
  * A16 - Pending Discharge
  */
-interface CHL7EventADTA16 extends CHL7EventADT {}
+interface CHL7EventADTA16 extends CHL7EventADT {
+}
 
 ?>

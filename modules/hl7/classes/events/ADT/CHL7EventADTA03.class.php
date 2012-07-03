@@ -15,6 +15,7 @@
  * Interface CHL7EventADTA03 
  * A03 - Discharge/end visit 
  */
-interface CHL7EventADTA03 extends CHL7EventADT {}
+interface CHL7EventADTA03 extends CHL7EventADT {
+}
 
 ?>

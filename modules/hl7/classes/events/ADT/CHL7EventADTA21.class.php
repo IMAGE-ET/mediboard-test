@@ -15,6 +15,7 @@
  * Interface CHL7EventADTA21 
  * A21 - Patient goes on a _leave of absence_
  */
-interface CHL7EventADTA21 extends CHL7EventADT {}
+interface CHL7EventADTA21 extends CHL7EventADT {
+}
 
 ?>

@@ -15,6 +15,7 @@
  * Interface CHL7EventADTA24 
  * A24 - Link patient information 
  */
-interface CHL7EventADTA24 extends CHL7EventADT {}
+interface CHL7EventADTA24 extends CHL7EventADT {
+}
 
 ?>

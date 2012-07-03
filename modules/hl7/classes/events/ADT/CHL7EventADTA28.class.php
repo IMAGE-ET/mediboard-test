@@ -15,6 +15,7 @@
  * Interface CHL7EventADTA28 
  * A28 - Add person information
  */
-interface CHL7EventADTA28 extends CHL7EventADT {}
+interface CHL7EventADTA28 extends CHL7EventADT {
+}
 
 ?>

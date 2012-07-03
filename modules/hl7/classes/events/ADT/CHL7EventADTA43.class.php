@@ -15,6 +15,7 @@
  * Interface CHL7EventADTA43
  * A43 - Structure
  */
-interface CHL7EventADTA43 extends CHL7EventADT {}
+interface CHL7EventADTA43 extends CHL7EventADT {
+}
 
 ?>

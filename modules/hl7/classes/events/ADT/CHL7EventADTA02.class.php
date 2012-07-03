@@ -15,6 +15,7 @@
  * Interface CHL7EventADTA02 
  * A02 - Transfer a patient
  */
-interface CHL7EventADTA02 extends CHL7EventADT {}
+interface CHL7EventADTA02 extends CHL7EventADT {
+}
 
 ?>

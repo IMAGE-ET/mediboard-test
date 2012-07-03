@@ -15,6 +15,7 @@
  * Interface CHL7EventADTA38
  * A38 - Cancel pre-admit
  */
-interface CHL7EventADTA38 extends CHL7EventADT {}
+interface CHL7EventADTA38 extends CHL7EventADT {
+}
 
 ?>
