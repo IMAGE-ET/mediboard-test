@@ -7,9 +7,7 @@
  *  @author Romain Ollivier
  */
  
-global $can;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $examen = new CExamenLabo;
 $examen->load(CValue::get("examen_id"));

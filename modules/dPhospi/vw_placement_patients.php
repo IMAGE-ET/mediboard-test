@@ -10,11 +10,6 @@
 
 CCanDo::checkRead();
 
-global $can, $g;
-
-$can->needsRead();
-$ds   = CSQLDataSource::get("std");
-
 // Récupération des paramètres
 $service_id 	   = CValue::postOrSession("service_id");
 $date  = CValue::getOrSession("date", mbDateTime());
@@ -124,7 +119,7 @@ $listAff = array(
 );
   
 if($service_id){
-  
+  $group = CGroups::loadCurrent();
   $affectation = new CAffectation;
   $ljoin = array(
     "lit"     => "affectation.lit_id = lit.lit_id",
@@ -136,7 +131,7 @@ if($service_id){
     "affectation.entree"  => "< '$date'",
     "affectation.sortie"  => "> '$date'",
     "service.service_id"  => CSQLDataSource::prepareIn(array_keys($services), null),
-    "sejour.group_id"     => "= '$g'"
+    "sejour.group_id"     => "= '$group->_id'"
   );
   $order = "service.nom, chambre.nom, lit.nom";
   $listAff["Aff"] = $affectation->loadList($where, $order, null, null, $ljoin);
@@ -151,9 +146,9 @@ if($service_id){
     $sejour = new CSejour();
     
     $where = array(
-      "sejour.entree"  => "< '$date'",
-      "sejour.sortie"  => "> '$date'",
-      "sejour.group_id"     => "= '$g'"
+      "sejour.entree"   => "< '$date'",
+      "sejour.sortie"   => "> '$date'",
+      "sejour.group_id" => "= '$group->_id'"
     );
     $order = "sejour.entree, sejour.sortie";
     $listAff["NotAff"] = $sejour->loadList($where, $order);

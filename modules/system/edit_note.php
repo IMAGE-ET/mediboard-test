@@ -16,9 +16,10 @@ $note_id     = CValue::get("note_id");
 $object_guid = CValue::get("object_guid");
 
 $note = new CNote;
-if($note_id) {
+if ($note_id) {
   $note->load($note_id);
-} else {
+} 
+else {
   $note->setObject(CMbObject::loadFromGuid($object_guid));
   $note->user_id = $user->_id;
   $note->date = mbDateTime();

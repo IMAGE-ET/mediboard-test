@@ -7,11 +7,9 @@
 * @author Fabien Ménager
 */
 
-
-global $can;
 // @todo à transférer dans  dPpatient
 // En l'état on ne peut pas vérifier les droits sur dPcabinet
-//$can->needsRead();
+// CCanDo::checkRead();
 
 $patient_id = CValue::get("patient_id");
 $consult_id = CValue::get("consult_id");

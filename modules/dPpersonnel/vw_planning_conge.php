@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-//$can->needsRead();
+// CCanDo::checkRead();
+
 $choix = CValue::get("choix", "mois");
 $affiche_nom = CValue::get("affiche_nom",1); 
 $filter = new CPlageConge();

@@ -8,10 +8,11 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $m, $g;
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
-$can->needsRead();
+CCanDo::checkRead();
+
+$group = CGroups::loadCurrent();
 
 // Filtres
 $date           = CValue::getOrSession("date", mbDate());
@@ -125,7 +126,7 @@ if($praticien_id && !$service_id){
   $sejours = array();
   $sejour = new CSejour();
   $where = array();
-  $where["group_id"] = "= '$g'";
+  $where["group_id"] = "= '$group->_id'";
 
   if ($praticien->isAnesth()) {
     $ljoin = array();

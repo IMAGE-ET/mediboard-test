@@ -7,9 +7,9 @@
 * @author Sébastien Fillonneau
 */
 
-global $can, $m, $uistyle, $messages, $version;
+CCanDo::checkRead();
 
-$can->needsRead();
+global $uistyle, $messages, $version;
 
 set_time_limit(90);
 

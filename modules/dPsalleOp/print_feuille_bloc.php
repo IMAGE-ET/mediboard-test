@@ -8,6 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 */
 
+// @todo bloc n'est pas forcément actif
 global $can;
 $can->read |= CModule::getActive("dPbloc")->_can->read;
 $can->needsRead();

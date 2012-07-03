@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $g;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $doc_ged_id   = CValue::getOrSession("doc_ged_id");
 $theme_id     = CValue::getOrSession("theme_id");
@@ -37,10 +35,12 @@ if(!$docGed->load($doc_ged_id)){
   }
 }
 
+$group = CGroups::loadCurrent();
+
 // Liste des Thèmes
 $listThemes = new CThemeDoc;
 $where = array();
-$where[] = "group_id = '$g' OR group_id IS NULL";
+$where[] = "group_id = '$group->_id' OR group_id IS NULL";
 $listThemes = $listThemes->loadlist($where,"nom");
 
 // Liste des chapitres
@@ -48,7 +48,7 @@ $listChapitres = new CChapitreDoc;
 $order = "group_id, nom";
 $where = array();
 $where["pere_id"] = "IS NULL";
-$where[] = "group_id = '$g' OR group_id IS NULL";
+$where[] = "group_id = '$group->_id' OR group_id IS NULL";
 $listChapitres = $listChapitres->loadlist($where,$order);
 foreach($listChapitres as &$_chapitre) {
   $_chapitre->loadChapsDeep(); 

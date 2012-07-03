@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
+CCanDo::checkRead();
 
 $object_id = CValue::getOrSession("object_id");
 $object_class = CValue::getOrSession("object_class");
@@ -19,7 +19,6 @@ $listPers = array();
 
 // Recuperation du user selectionné
 $user_id = CValue::getOrSession("user_id");
-$can->needsRead();
 
 // Récupération de la liste des classes disponibles
 $classes = CApp::getInstalledClasses();

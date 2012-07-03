@@ -7,8 +7,7 @@
  * @author Fabien
  */
 
-global $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 $forum_theme_id = CValue::getOrSession('forum_theme_id');
 

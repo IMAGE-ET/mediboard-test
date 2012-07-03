@@ -7,9 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $can, $m, $g;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $date  = CValue::getOrSession("date", mbDate());
 $operation_id = CValue::getOrSession("operation_id");

@@ -7,11 +7,11 @@
 * @author Thomas Despoix
 */
 
-global $can, $m;
 
+CCanDo::checkRead();
+
+global $m;
 CAppUI::requireModuleFile($m, "inc_vw_affectations");
-
-$can->needsRead();
 
 $date       = CValue::getOrSession("date", mbDate());
 $mode       = CValue::getOrSession("mode", 0);

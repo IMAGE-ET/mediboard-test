@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $m;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $filter       = new COperation();
 $filterSejour = new CSejour();

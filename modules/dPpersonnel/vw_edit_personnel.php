@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-//$can->needsRead();
+//CCanDo::checkRead();
 
 $emplacement = CValue::getOrSession("emplacement");
 $_user_last_name = CValue::getOrSession("_user_last_name");

@@ -7,9 +7,7 @@
  *  @author Romain Ollivier
  */
  
-global $can;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 // Chargement de l'item choisi
 $siblingItems = array();

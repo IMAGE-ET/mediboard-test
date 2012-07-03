@@ -8,11 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+CCanDo::checkRead();
 
-
-global $can;
-
-$can->needsRead();
 $ds = CSQLDataSource::get("std");
 
 // Initialisation des variables

@@ -7,8 +7,7 @@
  *  @author Thomas Despoix
  */
  
-global $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 // Chargement de la prescription
 $prescription = new CPrescriptionLabo;

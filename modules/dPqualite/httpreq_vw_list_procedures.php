@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $g;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $doc_ged_id   = CValue::getOrSession("doc_ged_id");
 $theme_id     = CValue::getOrSession("theme_id");
@@ -20,10 +18,12 @@ $sort_way     = CValue::getOrSession("sort_way", "DESC");
 $keywords     = CValue::get("keywords");
 $first        = intval(CValue::get("first", 0));
 
+$group = CGroups::loadCurrent();
+
 // Procédure active et non annulée
 $where = array();
 $where[] = "annule = '0' OR annule IS NULL";
-$where[] = "doc_ged.group_id = '$g' OR doc_ged.group_id IS NULL";
+$where[] = "doc_ged.group_id = '$group->_id' OR doc_ged.group_id IS NULL";
 $where["actif"]    = "= '1'";
 $where[] = "date = (SELECT max(date) FROM doc_ged_suivi d1 WHERE d1.doc_ged_id = doc_ged.doc_ged_id AND actif = '1')";
 if($theme_id){

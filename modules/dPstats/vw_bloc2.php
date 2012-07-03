@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 //set_time_limit(180);
 //ini_set("memory_limit", "512M");

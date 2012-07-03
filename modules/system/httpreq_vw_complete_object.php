@@ -8,12 +8,11 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-
 $object = mbGetObjectFromGet("object_class", "object_id", "object_guid");
 
 $object->loadComplete();
 
+global $can;
 $can->read = $object->canRead();
 $can->edit = $object->canEdit();
 $can->needsRead();

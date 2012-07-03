@@ -7,10 +7,9 @@
 * @author Romain OLLIVIER
 */
 
-global $can, $g;
+CCanDo::checkRead();
 
-$can->needsRead();
-$ds = CSQLDataSource::get("std");
+$group = CGroups::loadCurrent();
 
 // Récupération des paramètres
 $typeVue = CValue::getOrSession("typeVue");
@@ -26,7 +25,7 @@ $listPrat = $listPrat->loadPraticiens(PERM_READ);
 // Liste des services
 $services = new CService;
 $where = array();
-$where["group_id"] = "= '$g'";
+$where["group_id"] = "= '$group->_id'";
 $order = "nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 
@@ -61,7 +60,7 @@ if($typeVue == 0) {
 					LEFT JOIN service ON service.service_id = chambre.service_id
 					WHERE lit.lit_id NOT IN($notIn)
 					AND chambre.annule = '0'
-			    AND service.group_id = '$g'
+			    AND service.group_id = '$group->_id'
 			    AND service.service_id ".CSQLDataSource::prepareIn(array_keys($services), $selService)."
 					GROUP BY lit.lit_id
 					ORDER BY service.nom, chambre.nom, lit.nom, limite DESC";
@@ -90,7 +89,7 @@ else if ($typeVue == 1) {
     "affectation.sortie"  => "> '$date_recherche'",
     "service.service_id"  => CSQLDataSource::prepareIn(array_keys($services), $selService),
     "sejour.praticien_id" => CSQLDataSource::prepareIn(array_keys($listPrat), $selPrat),
-    "sejour.group_id"     => "= '$g'"
+    "sejour.group_id"     => "= '$group->_id'"
   );
   $order = "service.nom, chambre.nom, lit.nom";
   $listAff["Aff"] = $affectation->loadList($where, $order, null, null, $ljoin);
@@ -114,7 +113,7 @@ else if ($typeVue == 1) {
       "sejour.entree"  => "< '$date_recherche'",
       "sejour.sortie"  => "> '$date_recherche'",
       "sejour.praticien_id" => CSQLDataSource::prepareIn(array_keys($listPrat), $selPrat),
-      "sejour.group_id"     => "= '$g'"
+      "sejour.group_id"     => "= '$group->_id'"
     );
     $order = "sejour.entree, sejour.sortie, sejour.praticien_id";
     $listAff["NotAff"] = $sejour->loadList($where, $order);

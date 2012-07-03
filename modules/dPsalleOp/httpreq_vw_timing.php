@@ -7,14 +7,11 @@
 * @author Alexis Granger
 */
 
-global $can, $m, $g;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $operation_id = CValue::getOrSession("operation_id");
 $date  = CValue::getOrSession("date", mbDate());
-$modif_operation = $can->edit || $date >= mbDate();
-
+$modif_operation = CCanDo::edit() || $date >= mbDate();
 
 $operation = new COperation();
 if($operation_id){

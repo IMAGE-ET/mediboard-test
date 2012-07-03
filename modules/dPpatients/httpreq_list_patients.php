@@ -9,8 +9,7 @@
 
 /// @todo: Ce fichier ressemble beaucoup à vw_idx_patient.php, il faudrait factoriser
 
-global $can, $g;
-$can->needsRead();
+CCanDo::checkRead();
 
 $board = CValue::get("board", 0);
 

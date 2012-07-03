@@ -7,8 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 $patient_id = CValue::get("patient_id");
 $patient = new CPatient;

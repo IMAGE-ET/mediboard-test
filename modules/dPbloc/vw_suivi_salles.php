@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $g;
-$can->needsRead();
+CCanDo::checkRead();
+
 $date_suivi = CAppUI::pref("suivisalleAutonome") ? CValue::get("date", mbDate()) : CValue::getOrSession("date", mbDate());
 $listBlocs  = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");
 $bloc_id    = CValue::getOrSession("bloc_id", reset($listBlocs)->_id);

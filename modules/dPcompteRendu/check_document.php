@@ -7,8 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 $doc = new CCompteRendu;
 $where = array(
