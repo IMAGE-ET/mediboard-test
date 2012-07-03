@@ -32,7 +32,7 @@ class CHPrimXMLEvenementsPmsi extends CHPrimXMLEvenementsServeurActivitePmsi {
     
     // Ajout de la venue, c'est-à-dire le séjour
     $venue = $this->addElement($evenementPMSI, "venue");
-    $this->addVenue($venue, $mbSejour);
+    $this->addVenue($venue, $mbSejour, false, true);
     
     if ($mbSejour->type == "ssr") {
       // Ajout du contenu rhss
