@@ -166,7 +166,7 @@
     <tr>
       <th class="title">
         {{$object->_view}}
-        {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+        {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
         <br />
         {{$object->_ref_curr_affectation->_ref_lit}}
       </th>
@@ -206,7 +206,7 @@
     <tr>
       <th class="title">
         {{$sejour->_view}}
-        {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+        {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
       </th>
     </tr>
   </thead>

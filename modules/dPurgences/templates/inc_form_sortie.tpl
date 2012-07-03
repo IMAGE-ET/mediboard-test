@@ -45,7 +45,7 @@
       {{else}}
         <strong>
           <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$rpu->mutation_sejour_id}}">
-            Hospitalisation dossier {{mb_include module=planningOp template=inc_vw_numdos nda=$rpu->_ref_sejour_mutation->_NDA}}
+            Hospitalisation dossier {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$rpu->_ref_sejour_mutation}}
            </a> 
          </strong>
       {{/if}}

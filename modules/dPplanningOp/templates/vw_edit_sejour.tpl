@@ -116,7 +116,7 @@ function reloadSejours(checkCollision) {
       </button>
       
       Modification du séjour {{$sejour->_view}} 
-      {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+      {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
     </th>
     {{else}}
     <th colspan="2" class="title">

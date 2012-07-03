@@ -27,7 +27,7 @@
   {{if $rpu->mutation_sejour_id}}
   Hospitalisation
   <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$rpu->mutation_sejour_id}}">
-    dossier {{mb_include module=planningOp template=inc_vw_numdos nda=$rpu->_ref_sejour_mutation->_NDA}}
+    dossier {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$rpu->_ref_sejour_mutation}}
   </a> 
   {{else}}
   {{tr}}Cancelled{{/tr}}
@@ -104,7 +104,7 @@
 
 <td class="text sortie {{$sejour->mode_sortie}}">
   <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
-    {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+    {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
     {{if !$sejour->sortie_reelle}} 
       {{mb_title object=$sejour field=_entree}}
     {{/if}}

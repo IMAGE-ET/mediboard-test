@@ -11,6 +11,6 @@
 <td class="warning" colspan="{{$colspan}}">
   <strong>Mutation à {{$rpu->_ref_sejour->sortie|date_format:$conf.time}}</strong> <br/>
   <span onmouseover="ObjectTooltip.createEx(this, 'CSejour-{{$rpu->mutation_sejour_id}}')">
-    {{mb_include module=planningOp template=inc_vw_numdos nda=$rpu->_ref_sejour_mutation->_NDA}}
+    {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$rpu->_ref_sejour_mutation}}
   </span> 
 </td>

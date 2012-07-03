@@ -44,7 +44,7 @@
   <tr>
     <th class="category {{if $sejour->sortie_reelle}}arretee{{/if}}" colspan="4">
       {{tr}}CSejour-_etat.{{$sejour->_etat}}{{/tr}}
-      {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA _doss_id=$sejour->_id}}
+      {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
     </th>
   </tr>
   

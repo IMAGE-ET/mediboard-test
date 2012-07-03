@@ -40,7 +40,7 @@ Main.add(function () {
           <td>
             <div class="{{if ($_sejour->_ref_consult_atu->_ref_chir->_id)}}message{{else}}error{{/if}}">
               <span onclick="window.opener.location.href='?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$_sejour->_id}}'" onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
-              {{mb_include module=planningOp template=inc_vw_numdos nda=$_sejour->_NDA}} - {{$_sejour}} ({{$_sejour->_ref_consult_atu->_ref_chir}})
+              {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$_sejour}} - {{$_sejour}} ({{$_sejour->_ref_consult_atu->_ref_chir}})
               </span>
             </div>
           </td>

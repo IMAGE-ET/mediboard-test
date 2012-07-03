@@ -259,14 +259,14 @@
   
         {{tr}}CRPU-title-modify{{/tr}}
         '{{$rpu}}'
-        {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+        {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
       </th>
       {{else}}
       <th class="title" colspan="4">
         {{tr}}CRPU-title-create{{/tr}}
         {{if $sejour->_NDA}}
           pour le dossier
-          {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+          {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
         {{/if}}
       </th>
       {{/if}}

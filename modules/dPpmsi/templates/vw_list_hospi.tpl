@@ -40,7 +40,7 @@ Main.add(function () {
     </td>
     <td>
       <strong onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
-        {{mb_include module=planningOp template=inc_vw_numdos nda=$_sejour->_NDA}}
+        {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$_sejour}}
       </strong>
     </td>
 

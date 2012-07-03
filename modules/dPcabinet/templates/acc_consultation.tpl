@@ -92,7 +92,7 @@ Main.add(function () {
   {{if $rpu}}
 	  <li><a href="#rpuConsult">
 	     RPU 
-	    {{mb_include module=planningOp template=inc_vw_numdos nda=$consult->_ref_sejour->_NDA}}
+	    {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$consult->_ref_sejour}}
 	    </a>
 	  </li>
   {{/if}}

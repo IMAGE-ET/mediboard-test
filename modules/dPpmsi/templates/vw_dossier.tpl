@@ -205,7 +205,7 @@ Main.add(function () {
           {{if $_sejour->group_id == $g || $conf.dPpatients.CPatient.multi_group == "full"}}
           <tr {{if $_sejour->_id == $isSejourPatient}}class="selected{{/if}}">
             <td class="text">
-              {{mb_include module=planningOp template=inc_vw_numdos nda=$_sejour->_NDA}}
+              {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$_sejour}}
               <a href="#{{$_sejour->_guid}}" onclick="loadSejour('{{$_sejour->_id}}'); $(this).up('tr').addUniqueClassName('selected')">
                 <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
                   {{$_sejour->_shortview}}

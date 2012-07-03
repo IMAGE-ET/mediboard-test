@@ -414,7 +414,7 @@ Main.add( function(){
     {{/if}}
     {{tr}}CSejour-msg-informations{{/tr}} 
     {{if $mode_operation && $sejour->_NDA}}
-    {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+    {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
     {{/if}}
   </th>
 </tr>

@@ -1,5 +1,6 @@
-{{mb_default var=_doss_id value=0}}
 {{assign var=show_modal_identifiant value=$conf.dPplanningOp.CSejour.show_modal_identifiant}}
+{{assign var=nda                    value=$nda_obj->_NDA_view}}
+{{assign var=_doss_id               value=$nda_obj->_id}}
 
 {{if @$hide_empty}}
   {{if $nda}}

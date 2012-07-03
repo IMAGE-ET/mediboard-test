@@ -31,7 +31,7 @@
         {{foreach from=$grossesse->_ref_sejours item=object}}
           <tr>
             <td>
-              {{mb_include module=planningOp template=inc_vw_numdos nda=$object->_NDA _doss_id=$object->_id}}
+              {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$object}}
               <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
                 {{$object->_shortview}}
               </span>

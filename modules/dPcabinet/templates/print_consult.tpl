@@ -19,7 +19,11 @@
 			<br />
       né(e) le {{mb_value object=$patient field=naissance}} ({{mb_value object=$patient field="_age"}})
 			de sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}} <br /> <hr />
-      <span style="font-size: 14px">par le Dr {{$consult->_ref_praticien}} le {{mb_value object=$consult field=_date}} - Dossier {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}</span>
+      <span style="font-size: 14px">
+        par le Dr {{$consult->_ref_praticien}}
+        le {{mb_value object=$consult field=_date}}
+        - Dossier {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
+      </span>
     </th>
   </tr>
 

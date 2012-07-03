@@ -31,7 +31,7 @@ printDossier = function(rpu_id) {
     <th class="title text" colspan="2" style="vertical-align:middle;">
       {{mb_include module=system template=inc_object_notes}}
 			
-      <a style="float:left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$sejour->_ref_patient->_id}}"'>
+      <a style="float:left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$sejour->_ref_patient->_id}}">
        {{mb_include module=patients template=inc_vw_photo_identite patient=$sejour->_ref_patient size=42}}
       </a>
 	    
@@ -50,7 +50,7 @@ printDossier = function(rpu_id) {
       </div>
 
       {{$object}}
-      {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+      {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
     </th>
   </tr>
   {{/if}}

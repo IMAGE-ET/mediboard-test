@@ -10,7 +10,7 @@
 	<td>
   	{{assign var=sejour value=$_operation->_ref_sejour}}
     <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
-    	<strong>{{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}</strong>
+    	<strong>{{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}</strong>
     </span>
   </td>
   

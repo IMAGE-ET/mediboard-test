@@ -118,7 +118,7 @@
   </form>
   {{/if}}
   {{/if}}
-  {{mb_include module=planningOp template=inc_vw_numdos nda=$_sejour->_NDA _doss_id=$_sejour->_id}}
+  {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$_sejour}}
   <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
     {{$patient}}
   </span>

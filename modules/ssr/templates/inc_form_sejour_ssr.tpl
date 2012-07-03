@@ -122,7 +122,7 @@ function printFormSejour() {
           <img src="images/icons/edit.png" alt="modifier" />
         </a>
         {{tr}}CSejour-title-modify{{/tr}} {{$sejour}}
-        {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+        {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
       </th>
       {{else}}
       <th class="title" colspan="8">
@@ -133,7 +133,7 @@ function printFormSejour() {
         {{tr}}CSejour-title-create{{/tr}} 
         {{if $sejour->_NDA}}
           pour le dossier
-          {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+          {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
         {{/if}}
       </th>
       {{/if}}

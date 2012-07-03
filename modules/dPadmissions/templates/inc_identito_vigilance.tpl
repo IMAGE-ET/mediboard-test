@@ -104,7 +104,7 @@ Voir les séjour :
           {{tr}}None{{/tr}}
        </div>
     	{{else}}
-      <strong>{{mb_include module=planningOp template=inc_vw_numdos nda=$_sejour->_NDA _doss_id=$_sejour->_id}}</strong>
+      <strong>{{mb_include module=planningOp template=inc_vw_numdos nda_obj=$_sejour}}</strong>
     	{{/if}}
 		</td>
     

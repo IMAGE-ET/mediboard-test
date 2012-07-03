@@ -66,7 +66,7 @@ Main.add(function() {
         
         <td style="text-align: center;">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
-           {{mb_include module=planningOp template=inc_vw_numdos nda=$_sejour->_NDA}}
+           {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$_sejour}}
           </span>
           <div class="opacity-60">
            {{mb_value object=$_sejour field=service_id}}

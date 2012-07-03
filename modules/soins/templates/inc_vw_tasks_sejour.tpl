@@ -28,7 +28,7 @@ editTask = function(task_id){
       <tr>
         <th class="title" colspan="3">
           {{$sejour->_view}}
-          {{mb_include module=planningOp template=inc_vw_numdos nda=$sejour->_NDA}}
+          {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
         </th>
       </tr>
     </thead>

@@ -164,7 +164,8 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_ref_prescriptions           = null;
   var $_ref_last_prescription       = null;
   var $_ref_NDA                     = null; 
-  var $_ref_NPA                     = null; 
+  var $_ref_NPA                     = null;
+  var $_ref_NRA                     = null; 
   var $_ref_prescripteurs           = null;
   var $_ref_adresse_par_prat        = null;
   var $_ref_prescription_sejour     = null;
@@ -1688,7 +1689,7 @@ class CSejour extends CCodable implements IPatientRelated {
   }
   
   /**
-   * Construit le tag NPA en fonction des variables de configuration
+   * Construit le tag NPA (préad) en fonction des variables de configuration
    * @param $group_id Permet de charger le NPA pour un établissement donné si non null
    * @return string
    */
@@ -1702,7 +1703,16 @@ class CSejour extends CCodable implements IPatientRelated {
    * @return string
    */
   static function getTagNTA($group_id = null) {
-    return self::getTagNTA($group_id, "tag_dossier_trash");
+    return self::getTagNDA($group_id, "tag_dossier_trash");
+  }
+  
+  /**
+   * Construit le tag NRA (rang) en fonction des variables de configuration
+   * @param $group_id Permet de charger le NRA pour un établissement donné si non null
+   * @return string
+   */
+  static function getTagNRA($group_id = null) {
+    return self::getTagNDA($group_id, "tag_dossier_rang");
   }
   
   /**
@@ -1717,7 +1727,7 @@ class CSejour extends CCodable implements IPatientRelated {
     
     // Aucune configuration de numéro de dossier
     if (null == $tag_NDA = $this->getTagNDA($group_id)) {
-      $this->_NDA = str_pad($this->_id, 6, "0", STR_PAD_LEFT);
+      $this->_NDA_view = $this->_NDA = str_pad($this->_id, 6, "0", STR_PAD_LEFT);
       return;
     }  
     
@@ -1726,8 +1736,28 @@ class CSejour extends CCodable implements IPatientRelated {
     $id400->loadLatestFor($this, $tag_NDA);
     
     // Stockage de la valeur de l'id400
-    $this->_ref_NDA = $id400;
-    $this->_NDA     = $id400->id400;
+    $this->_ref_NDA  = $id400;
+    $this->_NDA_view = $this->_NDA = $id400->id400;
+    
+    // Cas de l'utilisation du rang
+    if(CAppUI::conf("dPplanningOp CSejour use_dossier_rang")) {
+      // Aucune configuration du numero de rang
+      if (null == $tag_NRA = $this->getTagNRA($group_id)) {
+        return;
+      }
+      // Recuperation de la valeur de l'id400
+      $id400 = new CIdSante400();
+      $id400->loadLatestFor($this, $tag_NRA);
+      
+      // Récupération de l'IPP du patient
+      $this->loadRefPatient();
+      $this->_ref_patient->loadIPP();
+      
+      // Stockage de la valeur de l'id400
+      $this->_ref_NRA = $id400;
+      $NRA = $id400->_id ? $id400->id400 : "-";
+      $this->_NDA_view = $this->_ref_patient->_IPP."/".$NRA;
+    }
   }
   
   /**
