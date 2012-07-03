@@ -12,7 +12,7 @@
  * The CHprimSoapHandler class
  */
 class CHprimSoapHandler extends CSoapHandler {
-  var $paramSpecs = array(
+  static $paramSpecs = array(
     "evenementPatient" => array ( 
       "messagePatient" => "string"),
     "evenementServeurActes" => array ( 
@@ -20,6 +20,10 @@ class CHprimSoapHandler extends CSoapHandler {
     "evenementPmsi" => array ( 
       "messagePmsi" => "string")
   );
+  
+  static function getParamSpecs() {
+    return array_merge(parent::getParamSpecs(), self::$paramSpecs);
+  }
 
   /**
    * The message contains a collection of administrative notifications of events occurring to patients in a healthcare facility.

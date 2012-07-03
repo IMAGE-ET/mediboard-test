@@ -9,14 +9,22 @@
  */
 
 class CSoapHandler {
-  var $paramSpecs = array(
+  static $paramSpecs = array(
     "calculatorAuth" => array ( 
       "operation" => "string",
       "entier1"   => "int",
       "entier2"   => "int")
   );
   
-   var $returnSpecs = array();
+  static $returnSpecs = array();
+  
+  static function getParamSpecs() {
+    return self::$paramSpecs;
+  }
+  
+  static function getReturnSpecs() {
+    return self::$returnSpecs;
+  }
   
   /**
    * Calculation method (add/substract)

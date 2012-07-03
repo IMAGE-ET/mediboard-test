@@ -17,10 +17,14 @@
  */
 
 class CEAISoapHandler extends CSoapHandler {
-  var $paramSpecs = array(
+  static $paramSpecs = array(
     "event" => array ( 
       "message" => "string"),
   );
+  
+  static function getParamSpecs() {
+    return array_merge(parent::getParamSpecs(), self::$paramSpecs);
+  }
   
   function event($message, $actor_id = null) {
     $actor = null;

@@ -21,7 +21,8 @@ ini_set("soap.wsdl_cache_enabled", "0");
 $wsdl      = CValue::get('wsdl');
 $username  = CValue::request('username');
 $password  = CValue::request('password');
-$classname = CValue::request('class', "CEAISoapHandler");
+$classname = CValue::request('class'    , "CEAISoapHandler");
+$wsdl_mode = CValue::request('wsdl_mode', "CWSDLRPCEncoded");
 
 // Génération du fichier WSDL
 if (isset($wsdl)) {
@@ -33,15 +34,14 @@ if (isset($wsdl)) {
 
   header('Content-Type: application/xml; charset=iso-8859-1');
   
-  $functions = $returns = array();
-  if ($classname != "CSoapHandler") {
+  /*if ($classname != "CSoapHandler") {
     $soap_handler= new CSoapHandler();
     $functions += $soap_handler->paramSpecs;
-  }
-  $functions += $class->paramSpecs;
-  $returns   += $class->returnSpecs;
+  }*/
+  $functions = $class::getParamSpecs();
+  $returns   = $class::getReturnSpecs();
   
-  $wsdlFile = new CWsdlDocument();
+  $wsdlFile = new $wsdl_mode;
   $wsdlFile->addTypes();
   $wsdlFile->addMessage($functions, $returns);
   $wsdlFile->addPortType($functions);
