@@ -56,7 +56,7 @@ if (isset($wsdl)) {
     
   // on indique au serveur à quel fichier de description il est lié
   try {
-    $serverSOAP = new SoapServer(CApp::getBaseUrl()."/?login=$username:$password&m=$m&a=$a&class=$classname&wsdl");
+    $serverSOAP = new SoapServer(CApp::getBaseUrl()."/?login=1&username=$username&password=$password&m=$m&a=$a&class=$classname&wsdl");
   } catch (Exception $e) {
     echo $e->getMessage();
   }
