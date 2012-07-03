@@ -8,10 +8,11 @@ var Value = {
   // Synchronize elements value between Easy and Expert forms
   synchronize: function(element, expert) {
     expert = expert || "editOp";
-    Console.debug(expert);
+    
     var other = element.form.name == expert ?
       document.editOpEasy :
       document.forms[expert];
+      
     if (other) {
       $V(other[element.name], element.value);
     }
@@ -56,12 +57,12 @@ function checkDureeHospi(sType) {
     }
   } else if(sType == "syncDuree") {
     if($V(oDureeField) > 0 && $V(oTypeField) == "ambu") {
-    	$V(oDureeField, "0");
+      $V(oDureeField, "0");
     }
   } else {
     if($V(oTypeField) == "comp" && ($V(oDureeField) == 0 || $V(oDureeField) == '')) {
-    	$V(oDureeField, prompt("Veuillez saisir une durée prévue d'hospitalisation d'au moins 1 jour", "1"));
-    	oDureeField.focus();
+      $V(oDureeField, prompt("Veuillez saisir une durée prévue d'hospitalisation d'au moins 1 jour", "1"));
+      oDureeField.focus();
       return false;
     }
     if ($V(oTypeField) == "ambu" && $V(oDureeField) != 0 && $V(oDureeField) != '') {
@@ -94,38 +95,38 @@ function removePlageOp(bIgnoreGroup){
   }
 }
 
-CanBloc = {{$modules.dPbloc->_can|json}};	
+CanBloc = {{$modules.dPbloc->_can|json}};  
 
 function checkCancelAlerts() {
- 	var msg = "Vous êtes sur le point d'annuler ce séjour, ceci entraîne :";
- 	msg += "\n\n1. Tous les placements dans les lits seront supprimés.";
- 	
-	{{if count($sejour->_cancel_alerts.all)}}
- 	msg += "\n\n2. Attention, vous allez également annuler des opérations :";
- 	{{foreach from=$sejour->_cancel_alerts.all item=alert}}
- 	msg += "\n\t- " + "{{$alert|smarty:nodefaults|escape:'javascript'}}";
- 	{{/foreach}}
- 	{{/if}}
- 	msg += "\n\nSouhaitez-vous continuer ?"; 	
+   var msg = "Vous êtes sur le point d'annuler ce séjour, ceci entraîne :";
+   msg += "\n\n1. Tous les placements dans les lits seront supprimés.";
+   
+  {{if count($sejour->_cancel_alerts.all)}}
+   msg += "\n\n2. Attention, vous allez également annuler des opérations :";
+   {{foreach from=$sejour->_cancel_alerts.all item=alert}}
+   msg += "\n\t- " + "{{$alert|smarty:nodefaults|escape:'javascript'}}";
+   {{/foreach}}
+   {{/if}}
+   msg += "\n\nSouhaitez-vous continuer ?";   
   if (!confirm(msg)) {
     return;
   }
 
-	{{if count($sejour->_cancel_alerts.acted)}}
- 	msg = "Ce séjour contient une ou plusieurs interventions qui ont probablement déjà eu lieu :";
-	{{foreach from=$sejour->_cancel_alerts.acted item=alert}}
-	msg += "\n\t- " + "{{$alert|smarty:nodefaults|escape:'javascript'}}";
-	{{/foreach}}
-	if (CanBloc.edit) {
-	  if (!confirm(msg + "\n\nVoulez-vous malgré tout l'annuler ?")) {
-	  	return;
-	 	}
-	}
-	else {
-	  alert(msg + "\n\nVeuillez vous adresser au responsable de bloc pour annuler cette intervention.");
-	  return;
-	}
-	{{/if}}   	
+  {{if count($sejour->_cancel_alerts.acted)}}
+   msg = "Ce séjour contient une ou plusieurs interventions qui ont probablement déjà eu lieu :";
+  {{foreach from=$sejour->_cancel_alerts.acted item=alert}}
+  msg += "\n\t- " + "{{$alert|smarty:nodefaults|escape:'javascript'}}";
+  {{/foreach}}
+  if (CanBloc.edit) {
+    if (!confirm(msg + "\n\nVoulez-vous malgré tout l'annuler ?")) {
+      return;
+     }
+  }
+  else {
+    alert(msg + "\n\nVeuillez vous adresser au responsable de bloc pour annuler cette intervention.");
+    return;
+  }
+  {{/if}}     
   
   return true;
 }
@@ -136,11 +137,11 @@ function cancelSejour() {
   
   // Annulation 
   if (oElement.value == "0") {
-  	if (checkCancelAlerts()) {
-	    oElement.value = "1";
-	    oForm.submit();
-	    return;   
-  	}
+    if (checkCancelAlerts()) {
+      oElement.value = "1";
+      oForm.submit();
+      return;   
+    }
   }
       
   // Rétablissement
@@ -184,7 +185,7 @@ function updateSortiePrevue() {
   dDate.addDays(nDuree);
 
   // Update fields
-	$V(oForm._date_sortie_prevue, dDate.toDATE());
+  $V(oForm._date_sortie_prevue, dDate.toDATE());
   oView = getForm('editSejour')._date_sortie_prevue_da;
   $V(oView, dDate.toLocaleDate());
   updateHeureSortie();
