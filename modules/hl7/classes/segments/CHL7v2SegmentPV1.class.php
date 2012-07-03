@@ -266,7 +266,18 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     $data[] = null;
     
     // PV1-50: Alternate Visit ID (CX) (optional)
-    $data[] = null;
+    // Cas de l'utilisation du rang
+    if (CAppUI::conf("dPplanningOp CSejour use_dossier_rang")) {
+      $sejour->loadNRA($group->_id);
+      if (CHL7v2Message::$build_mode == "simple") {
+        $data[] = array (
+          $sejour->_ref_NRA->id400,
+        );
+      } 
+    }
+    else {
+      $data[] = null;
+    }
     
     // PV1-51: Visit Indicator (IS) (optional)
     $data[] = null;
