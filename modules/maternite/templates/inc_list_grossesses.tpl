@@ -6,7 +6,7 @@
 <form name="bindFormGrossesse" method="get">
   <table class="tbl">
     <tr>
-      <th colspan="2" class="category">
+      <th colspan="3" class="category">
         Liste des grossesses
       </th>
     </tr>
@@ -19,6 +19,23 @@
           data-view_grossesse="{{$_grossesse}}"/>
         <td>
           <a href="#1" onclick="Grossesse.editGrossesse('{{$_grossesse->_id}}')">{{$_grossesse}}</a>
+        </td>
+        <td class="compact">
+          {{if $_grossesse->_count.sejours}}
+            <div>
+              {{$_grossesse->_count.sejours}} {{tr}}CGrossesse-back-sejours{{/tr}}
+            </div>
+          {{/if}}
+          {{if $_grossesse->_count.consultations}}
+            <div>
+              {{$_grossesse->_count.consultations}} {{tr}}CGrossesse-back-sejours{{/tr}}
+            </div>
+          {{/if}}
+          {{if $_grossesse->_count.naissances}}
+            <div>
+              {{$_grossesse->_count.naissances}} {{tr}}CGrossesse-back-consultations{{/tr}}
+            </div>
+          {{/if}}
         </td>
       </tr>
     {{foreachelse}}

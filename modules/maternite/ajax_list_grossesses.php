@@ -21,6 +21,12 @@ $grossesse = new CGrossesse;
 $grossesse->parturiente_id = $patient_id;
 $grossesses = $grossesse->loadMatchingList("terme_prevu DESC, active DESC");
 
+foreach ($grossesses as $_grossesse) {
+  $_grossesse->countBackRefs("sejours");
+  $_grossesse->countBackRefs("consultations");
+  $_grossesse->countBackRefs("naissances");
+}
+
 $smarty = new CSmartyDP;
 
 $smarty->assign("grossesses"  , $grossesses);
