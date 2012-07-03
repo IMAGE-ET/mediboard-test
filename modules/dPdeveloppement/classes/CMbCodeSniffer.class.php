@@ -7,7 +7,7 @@
 * @author SARL OpenXtrem
 */
 
-//@include "PHP/CodeSniffer.php";
+@include "PHP/CodeSniffer.php";
 @include "../PHP_CodeSniffer/CodeSniffer.php";
 
 if (!class_exists("PHP_CodeSniffer")) {
