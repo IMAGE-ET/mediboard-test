@@ -38,7 +38,7 @@ class CSourceSOAP extends CExchangeSource {
 		$specs["stream_context"]   = "str";
     $specs["type_soap"]        = "enum list|CMbSOAPClient|CNuSOAPClient default|CMbSOAPClient notNull";
     $specs["local_cert"]       = "str";
-    $specs["passphrase"]       = "str";
+    $specs["passphrase"]       = "password revealable";
 		
     return $specs;
   }
