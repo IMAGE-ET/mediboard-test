@@ -15,14 +15,15 @@ class CCompteRendu extends CDocumentItem {
   var $user_id           = null; // not null when is a template associated to a user
   var $function_id       = null; // not null when is a template associated to a function
   var $group_id          = null; // not null when is a template associated to a group
+  var $header_id         = null;
+  var $footer_id         = null;
   var $content_id        = null;
+  var $modele_id         = null;
   
   // DB fields
   var $nom               = null;
   var $type              = null;
   var $valide            = null;
-  var $header_id         = null;
-  var $footer_id         = null;
   var $height            = null;
   var $margin_top        = null;
   var $margin_bottom     = null;
@@ -35,6 +36,7 @@ class CCompteRendu extends CDocumentItem {
   var $fast_edit_pdf     = null;
   var $date_print        = null;
   var $purge_field       = null;
+  var $purgeable         = null;
   
   // Form fields
   var $_is_document      = false;
@@ -92,6 +94,7 @@ class CCompteRendu extends CDocumentItem {
     $backProps["listes_choix"]   = "CListeChoix compte_rendu_id";
     $backProps["modeles_headed"] = "CCompteRendu header_id";
     $backProps["modeles_footed"] = "CCompteRendu footer_id";
+    $backProps["documents"]      = "CCompteRendu modele_id";
     $backProps["pack_links"]     = "CModeleToPack modele_id";
     $backProps["correspondants_courrier"] = "CCorrespondantCourrier compte_rendu_id";
     return $backProps;
@@ -111,6 +114,7 @@ class CCompteRendu extends CDocumentItem {
     //mbTrace(implode("|", array_keys(CCompteRendu::getTemplatedClasses())));
     $specs["header_id"]        = "ref class|CCompteRendu";
     $specs["footer_id"]        = "ref class|CCompteRendu";
+    $specs["modele_id"]        = "ref class|CCompteRendu";
     $specs["height"]           = "float min|0";
     $specs["margin_top"]       = "float notNull min|0 default|2 show|0";
     $specs["margin_bottom"]    = "float notNull min|0 default|2 show|0";
@@ -124,6 +128,7 @@ class CCompteRendu extends CDocumentItem {
     $specs["fast_edit_pdf"]    = "bool default|0";
     $specs["date_print"]       = "dateTime";
     $specs["purge_field"]      = "str";
+    $specs["purgeable"]        = "bool default|0";
     $specs["_owner"]           = "enum list|prat|func|etab";
     $specs["_orientation"]     = "enum list|portrait|landscape";
     $specs["_page_format"]     = "enum list|".implode("|", array_keys(self::$_page_formats));
@@ -582,6 +587,7 @@ class CCompteRendu extends CDocumentItem {
     $this->loadRefsFiles();
 
     // Remove PDF preview
+    
     foreach($this->_ref_files as $_file) {
       $_file->delete();
     }

@@ -45,6 +45,7 @@ foreach ($sejours as $_sejour) {
   $compte_rendu->object_class = "CSejour";
   $compte_rendu->object_id = $_sejour->_id;
   $compte_rendu->nom = $modele->nom;
+  $compte_rendu->modele_id = $modele->_id;
   $compte_rendu->margin_top = $modele->margin_top;
   $compte_rendu->margin_bottom = $modele->margin_bottom;
   $compte_rendu->margin_left = $modele->margin_left;

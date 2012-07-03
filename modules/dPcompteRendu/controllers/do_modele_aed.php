@@ -242,6 +242,7 @@ if (isset($_POST["_source"])) {
         
         $compte_rendu->_source = $content;
         $compte_rendu->nom    .= " à {$allDest[$curr_dest[1]][$curr_dest[2]]->nom}";
+        $compte_rendu->modele_id  = $modele_base->_id;
         
         $do->doStore();
         $ids_corres .= "{$do->_obj->_id}-";

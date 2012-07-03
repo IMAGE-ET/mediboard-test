@@ -292,40 +292,40 @@ class CSetupdPcompteRendu extends CSetup {
     
     $this->makeRevision("0.34");
     $query = "ALTER TABLE `compte_rendu` 
-			ADD `type` ENUM ('header','body','footer'),
-			CHANGE `valide` `valide` ENUM ('0','1'),
-			ADD `header_id` INT (11) UNSIGNED,
-			ADD `footer_id` INT (11) UNSIGNED,
-			ADD INDEX (`header_id`),
-			ADD INDEX (`footer_id`)";
+      ADD `type` ENUM ('header','body','footer'),
+      CHANGE `valide` `valide` ENUM ('0','1'),
+      ADD `header_id` INT (11) UNSIGNED,
+      ADD `footer_id` INT (11) UNSIGNED,
+      ADD INDEX (`header_id`),
+      ADD INDEX (`footer_id`)";
     $this->addQuery($query);
 
     $this->makeRevision("0.35");
     $query = "UPDATE `compte_rendu` 
-			SET `type` = 'body'
-			WHERE `object_id` IS NULL";
+      SET `type` = 'body'
+      WHERE `object_id` IS NULL";
     $this->addQuery($query);
     
     $this->makeRevision("0.36");
     $query = "UPDATE `compte_rendu` 
-			SET `object_class` = 'CSejour'
-			WHERE `file_category_id` = 3
+      SET `object_class` = 'CSejour'
+      WHERE `file_category_id` = 3
       AND `object_class` = 'COperation'
       AND `object_id` IS NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("0.37");
     $query = "ALTER TABLE `compte_rendu` 
-			ADD `height` FLOAT;";
+      ADD `height` FLOAT;";
     $this->addQuery($query);
 
     $this->makeRevision("0.38");
     $query = "ALTER TABLE `compte_rendu` 
-			ADD `group_id` INT (11) UNSIGNED;";
+      ADD `group_id` INT (11) UNSIGNED;";
     $this->addQuery($query);
 
     $query = "ALTER TABLE `compte_rendu` 
-			ADD INDEX (`group_id`);";
+      ADD INDEX (`group_id`);";
     $this->addQuery($query);
     
     $this->makeRevision("0.39");
@@ -341,14 +341,14 @@ class CSetupdPcompteRendu extends CSetup {
     // Apres verification, c'est toujours comme ça quil a transformé, donc c'est OK.
     $this->addQuery($query);
     
-		if (CModule::getInstalled('dPcabinet') && CModule::getInstalled('dPpatients')) {
-	    $this->addDependency("dPcabinet", "0.79");
-	    $this->addDependency("dPpatients", "0.73");
+    if (CModule::getInstalled('dPcabinet') && CModule::getInstalled('dPpatients')) {
+      $this->addDependency("dPcabinet", "0.79");
+      $this->addDependency("dPpatients", "0.73");
     }
     
     $this->makeRevision("0.41");
     $query = "ALTER TABLE `aide_saisie` 
-			      CHANGE `depend_value` `depend_value_1` VARCHAR (255),
+            CHANGE `depend_value` `depend_value_1` VARCHAR (255),
             ADD `depend_value_2` VARCHAR (255);";
     $this->addQuery($query);
 
@@ -360,9 +360,9 @@ class CSetupdPcompteRendu extends CSetup {
     $this->makeRevision("0.43");
     $this->setTimeLimit(1800);
     $query = "ALTER TABLE `compte_rendu` 
-						CHANGE `object_class` `object_class` ENUM ('CPatient','CConsultation','CConsultAnesth','COperation','CSejour','CPrescription') NOT NULL;";
+            CHANGE `object_class` `object_class` ENUM ('CPatient','CConsultation','CConsultAnesth','COperation','CSejour','CPrescription') NOT NULL;";
     $this->addQuery($query);
-		
+    
     $this->makeRevision("0.44");
     $this->setTimeLimit(1800);
     $query = "ALTER TABLE `compte_rendu` 
@@ -421,15 +421,15 @@ class CSetupdPcompteRendu extends CSetup {
     $this->makeRevision("0.51");
     $this->addPrefQuery("choicepratcab", "prat");
 
-		$this->makeRevision("0.52");
+    $this->makeRevision("0.52");
     
-		$query = "INSERT INTO content_html (content, cr_id) SELECT source, compte_rendu_id FROM compte_rendu";
-	  $this->addQuery($query);
-	  
-	  $query = "ALTER TABLE `compte_rendu` DROP `source`";
+    $query = "INSERT INTO content_html (content, cr_id) SELECT source, compte_rendu_id FROM compte_rendu";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `compte_rendu` DROP `source`";
     $this->addQuery($query);
 
-	  $query = "ALTER TABLE `compte_rendu` 
+    $query = "ALTER TABLE `compte_rendu` 
               ADD `content_id` INT (11) UNSIGNED";
     $this->addQuery($query);
     
@@ -437,68 +437,68 @@ class CSetupdPcompteRendu extends CSetup {
               ADD INDEX (`content_id`);";
     $this->addQuery($query);
     
-		$query = "UPDATE compte_rendu c JOIN content_html ch ON c.compte_rendu_id = ch.cr_id
-		        SET c.content_id = ch.content_id";
-		$this->addQuery($query);
-		
-		$query = "ALTER TABLE `content_html` DROP `cr_id`";
-		$this->addQuery($query);
-
-		$this->makeRevision("0.53");
-		
-		// Déplacement du contenthtml dans system
-
-		$this->makeRevision("0.54");
-
-		$query = "ALTER TABLE `compte_rendu`
-		        ADD `fast_edit` ENUM ('0','1') NOT NULL DEFAULT '0';";
-		$this->addQuery($query);
-
-		$query = "UPDATE `aide_saisie` SET `field` = '_source' WHERE `class` = 'CCompteRendu' AND `field` = 'source'";
-		$this->addQuery($query);
+    $query = "UPDATE compte_rendu c JOIN content_html ch ON c.compte_rendu_id = ch.cr_id
+            SET c.content_id = ch.content_id";
+    $this->addQuery($query);
     
-		$this->makeRevision("0.55");
-		
-		$query = "CREATE TABLE `modele_to_pack` (
+    $query = "ALTER TABLE `content_html` DROP `cr_id`";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.53");
+    
+    // Déplacement du contenthtml dans system
+
+    $this->makeRevision("0.54");
+
+    $query = "ALTER TABLE `compte_rendu`
+            ADD `fast_edit` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+
+    $query = "UPDATE `aide_saisie` SET `field` = '_source' WHERE `class` = 'CCompteRendu' AND `field` = 'source'";
+    $this->addQuery($query);
+    
+    $this->makeRevision("0.55");
+    
+    $query = "CREATE TABLE `modele_to_pack` (
               `modele_to_pack_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `modele_id` INT (11) UNSIGNED,
               `pack_id` INT (11) UNSIGNED
-					 ) /*! ENGINE=MyISAM */;";
-		$this->addQuery($query);
-		
-		$query = "ALTER TABLE `modele_to_pack` 
+           ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `modele_to_pack` 
               ADD INDEX (`modele_id`),
               ADD INDEX (`pack_id`);
            ";
-		$this->addQuery($query);
-		
+    $this->addQuery($query);
+    
    
-		// Insertion des modèles par référence pour les packs
-		function setup_addmodeles() {
-			$ds = CSQLDataSource::get("std");
-		  $query = "SELECT * from pack;";	
-	    $packs = $ds->loadList($query);
+    // Insertion des modèles par référence pour les packs
+    function setup_addmodeles() {
+      $ds = CSQLDataSource::get("std");
+      $query = "SELECT * from pack;";	
+      $packs = $ds->loadList($query);
 
-	    foreach($packs as $_pack) {
-	    	if ($_pack['modeles'] == '') continue;
-	    	$modeles = explode("|", $_pack['modeles']);
-	    	if (count($modeles) == 0) continue;
-	    	
-	    	$compterendu = new CCompteRendu;
-    		foreach($modeles as $_modele) {
-    			if (!$compterendu->load($_modele)) continue;
+      foreach($packs as $_pack) {
+        if ($_pack['modeles'] == '') continue;
+        $modeles = explode("|", $_pack['modeles']);
+        if (count($modeles) == 0) continue;
+        
+        $compterendu = new CCompteRendu;
+        foreach($modeles as $_modele) {
+          if (!$compterendu->load($_modele)) continue;
           $query = "INSERT INTO modele_to_pack (modele_id, pack_id)
                   VALUES ($_modele, {$_pack['pack_id']})";
           $ds->exec($query);
-    		}
-	    }
-	    return true;
-		}
-		
-		$this->addFunction("setup_addmodeles");
-		
-		$this->makeRevision("0.56");
-		
+        }
+      }
+      return true;
+    }
+    
+    $this->addFunction("setup_addmodeles");
+    
+    $this->makeRevision("0.56");
+    
     $query = "ALTER TABLE `pack`
               DROP `modeles`";
     $this->addQuery($query);
@@ -527,7 +527,7 @@ class CSetupdPcompteRendu extends CSetup {
       AND user_log.object_id = compte_rendu.compte_rendu_id
       AND user_log.fields = 'source'";
     $this->addQuery($query);
-		
+    
     $this->makeRevision("0.58");
     $this->addPrefQuery("listDefault", "ulli");
     $this->addPrefQuery("listBrPrefix", "&bull;");
@@ -546,7 +546,7 @@ class CSetupdPcompteRendu extends CSetup {
 
     $query = self::replaceTemplateQuery("[Constantes mode", "[Constantes - mode", true);
     $this->addQuery($query);
-		
+    
     $this->makeRevision("0.60");
     $query = self::replaceTemplateQuery("[Patient - médecin correspondants]", "[Patient - médecins correspondants]", true);
     $this->addQuery($query);
@@ -777,7 +777,18 @@ class CSetupdPcompteRendu extends CSetup {
     
     $this->addPrefQuery("auto_capitalize", 0);
     
-    $this->mod_version = "0.79";
+    $this->makeRevision("0.79");
+    $query = "ALTER TABLE `compte_rendu` 
+      ADD `modele_id` INT (11) UNSIGNED AFTER `object_id`,
+      ADD `purgeable` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `compte_rendu`
+      ADD INDEX (`modele_id`),
+      ADD INDEX (`date_print`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.80";
   }
 }
 ?>

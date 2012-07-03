@@ -410,6 +410,8 @@ Main.add(function(){
   {{mb_field object=$compte_rendu field="object_id" hidden=1}}
   {{mb_field object=$compte_rendu field="object_class" hidden=1}}
   {{mb_field object=$compte_rendu field="author_id" hidden=1}}
+  {{mb_field object=$compte_rendu field="modele_id" hidden=1}}
+  
   <table class="form">
     <tr>
     <th class="category" colspan="2">

@@ -49,6 +49,7 @@ else {
   $compte_rendu->group_id = null;
   $compte_rendu->object_id = $object_id;
   $compte_rendu->_ref_object = null;
+  $compte_rendu->modele_id = $modele_id;
   $compte_rendu->author_id = CAppUI::$user->_id;
   // Utilisation des headers/footers
   if ($compte_rendu->header_id || $compte_rendu->footer_id) {

@@ -303,6 +303,11 @@ Main.add(function () {
           {{/if}}
         {{/if}}
         <tr>
+          <th>{{mb_label object=$compte_rendu field="purgeable"}}</th>
+          <td>{{mb_field object=$compte_rendu field="purgeable"}}</td>
+        </tr>
+        
+        <tr>
           <th>{{mb_label object=$compte_rendu field=type}}</th>
           <td>
             {{if $droit}}

@@ -42,6 +42,7 @@ foreach ($modeles_to_pack as $_modele_to_pack) {
   
   $cr = new CCompteRendu;
   
+  $cr->modele_id     = $modele->_id;
   $cr->object_class  = $modele->object_class;
   $cr->object_id     = $object_id;
   $cr->author_id     = $user_id;
