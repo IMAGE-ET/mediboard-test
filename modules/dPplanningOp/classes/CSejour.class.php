@@ -1774,7 +1774,7 @@ class CSejour extends CCodable implements IPatientRelated {
    */
   function loadNRA($group_id = null) {
     // Utilise t-on le rang pour le dossier
-    if (CAppUI::conf("dPplanningOp CSejour use_dossier_rang")) {
+    if (!CAppUI::conf("dPplanningOp CSejour use_dossier_rang")) {
       return;
     }
       
