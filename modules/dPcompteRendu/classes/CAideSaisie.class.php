@@ -47,11 +47,6 @@ class CAideSaisie extends CMbObject {
   var $_ref_group         = null;
   var $_ref_owner         = null;
   
-  /**
-   * Initialize object specification
-   * 
-   * @return CMbObjectSpec the spec
-   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'aide_saisie';
@@ -60,11 +55,6 @@ class CAideSaisie extends CMbObject {
     return $spec;
   }
   
-  /**
-   * Get properties specifications as strings
-   * 
-   * @return array
-   */
   function getProps() {
     $specs = parent::getProps();
     $specs["user_id"]      = "ref class|CMediusers";
@@ -129,11 +119,6 @@ class CAideSaisie extends CMbObject {
     return $msg . parent::check();
   }
   
-  /**
-   * Update the form (derived) fields plain fields
-   * 
-   * @return void
-   */
   function updateFormFields() {
     parent::updateFormFields();
     
@@ -198,11 +183,6 @@ class CAideSaisie extends CMbObject {
     return $this->_ref_group = $this->loadFwdRef("group_id", $cached);
   }
   
-  /**
-   * Forward references global loader
-   * 
-   * @return void 
-   */
   function loadRefsFwd() {
     $this->loadRefUser(true);
     $this->loadRefFunction(true);

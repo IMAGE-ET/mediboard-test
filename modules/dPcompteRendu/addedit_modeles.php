@@ -100,8 +100,10 @@ foreach ($listObjectClass as $keyClass => $value) {
 
 // Headers and footers
 $component = new CCompteRendu();
-$footers = array();
-$headers = array();
+$headers  = array();
+$prefaces = array();
+$endings  = array();
+$footers  = array();
 
 if ($compte_rendu->_id) {
   // Si modèle de fonction, on charge en fonction d'un des praticiens de la fonction
@@ -121,22 +123,34 @@ if ($compte_rendu->_id) {
     $id = CGroups::loadCurrent()->_id;
   }
 
-  $footers = CCompteRendu::loadAllModelesFor($id, $owner, $compte_rendu->object_class, "footer");
-  $headers = CCompteRendu::loadAllModelesFor($id, $owner, $compte_rendu->object_class, "header");
+  $headers  = CCompteRendu::loadAllModelesFor($id, $owner, $compte_rendu->object_class, "header");
+  $prefaces = CCompteRendu::loadAllModelesFor($id, $owner, $compte_rendu->object_class, "preface");
+  $endings  = CCompteRendu::loadAllModelesFor($id, $owner, $compte_rendu->object_class, "ending"); 
+  $footers  = CCompteRendu::loadAllModelesFor($id, $owner, $compte_rendu->object_class, "footer");
   
   if ($compte_rendu->_owner != "prat") {
-    unset($footers["prat"]);
     unset($headers["prat"]);
+    unset($prefaces["prat"]);
+    unset($endings["prat"]);
+    unset($footers["prat"]);
   }
   
   if ($compte_rendu->_owner == "etab") {
-    unset($footers["func"]);
     unset($headers["func"]);
+    unset($prefaces["func"]);
+    unset($endings["func"]);
+    unset($footers["func"]);
   }
   
   switch ($compte_rendu->type) {
     case "header":
       $compte_rendu->_count_utilisation = $compte_rendu->countBackRefs("modeles_headed");
+      break;
+    case "preface":
+      $compte_rendu->_count_utilisation = $compte_rendu->countBackRefs("modeles_prefaced");
+      break;
+    case "preface":
+      $compte_rendu->_count_utilisation = $compte_rendu->countBackRefs("modeles_ended");
       break;
     case "footer":
       $compte_rendu->_count_utilisation = $compte_rendu->countBackRefs("modeles_footed");
@@ -160,8 +174,10 @@ $smarty->assign("listObjectClass"     , $listObjectClass);
 $smarty->assign("compte_rendu"        , $compte_rendu);
 $smarty->assign("listObjectAffichage" , $listObjectAffichage);
 $smarty->assign("droit"               , $droit);
-$smarty->assign("footers"             , $footers);
 $smarty->assign("headers"             , $headers);
+$smarty->assign("prefaces"            , $prefaces);
+$smarty->assign("endings"             , $endings);
+$smarty->assign("footers"             , $footers);
 $smarty->assign("formats"             , $formats);
 $smarty->display("addedit_modeles.tpl");
 

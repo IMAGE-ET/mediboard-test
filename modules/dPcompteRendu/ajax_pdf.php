@@ -21,8 +21,10 @@ $generate_thumbs = CValue::post("generate_thumbs");
 $mode        = CValue::post("mode","doc");
 $print       = CValue::post("print", 0);
 $type        = CValue::post("type", $compte_rendu->type);
-$footer_id   = CValue::post("footer_id", $compte_rendu->footer_id);
-$header_id   = CValue::post("header_id", $compte_rendu->header_id);
+$preface_id  = CValue::post("preface_id", $compte_rendu->preface_id);
+$ending_id   = CValue::post("ending_id" , $compte_rendu->ending_id);
+$header_id   = CValue::post("header_id" , $compte_rendu->header_id);
+$footer_id   = CValue::post("footer_id" , $compte_rendu->footer_id);
 $stream      = CValue::post("stream");
 $content     = stripslashes(urldecode(CValue::post("content", null)));
 if (!$content) {
@@ -81,33 +83,50 @@ else {
       case "header":
       case "footer":
         $height = CValue::post("height",$compte_rendu->height);
-        $content = $compte_rendu->loadHTMLcontent($content, $mode, $type, '', $height, '', '', $margins);
+        $content = $compte_rendu->loadHTMLcontent($content, $mode, $margins, $type, "", $height, "", "");
         break;
       case "body":
-        $compte_rendu_h_f = new CCompteRendu;
-        $header = ''; $sizeheader = 0;
-        $footer = ''; $sizefooter = 0;
-        if($header_id) {
-          $compte_rendu_h_f->load($header_id);
-          $compte_rendu_h_f->loadContent();
-          $header = $compte_rendu_h_f->_source;
-          $sizeheader = $compte_rendu_h_f->height;
+      case "preface":
+      case "ending":
+        $header  = ""; $sizeheader = 0;
+        $footer  = ""; $sizefooter = 0;
+        $preface = "";
+        $ending  = "";
+        if ($header_id) {
+          $component = new CCompteRendu;
+          $component->load($header_id);
+          $component->loadContent();
+          $header = $component->_source;
+          $sizeheader = $component->height;
         }
-        if($footer_id) {
-          $compte_rendu_h_f = new CCompteRendu;
-          $compte_rendu_h_f->load($footer_id);
-          $compte_rendu_h_f->loadContent();
-          $footer = $compte_rendu_h_f->_source;
-          $sizefooter = $compte_rendu_h_f->height;
+        if ($preface_id) {
+          $component = new CCompteRendu;
+          $component->load($preface_id);
+          $component->loadContent();
+          $preface = $component->_source;
         }
-        $content = $compte_rendu->loadHTMLcontent($content, $mode, $type, $header, $sizeheader, $footer, $sizefooter, $margins);
+        if ($ending_id) {
+          $component = new CCompteRendu;
+          $component->load($ending_id);
+          $component->loadContent();
+          $ending = $component->_source;
+        }
+        if ($footer_id) {
+          $component = new CCompteRendu;
+          $component->load($footer_id);
+          $component->loadContent();
+          $footer = $component->_source;
+          $sizefooter = $component->height;
+        }
+        
+        $content = $compte_rendu->loadHTMLcontent($content, $mode, $margins, $type, $header, $sizeheader, $footer, $sizefooter, $preface, $ending);
       }
     }
   else {
     if ($textes_libres = CValue::post("texte_libre") && CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") && CAppUI::pref("pdf_and_thumbs")) {
       $compte_rendu->_source = $compte_rendu->replaceFreeTextFields($content, $_POST["texte_libre"]);
     }
-    $content = $compte_rendu->loadHTMLcontent($content, $mode,'','','','','',$margins);
+    $content = $compte_rendu->loadHTMLcontent($content, $mode, $margins);
   }
   
   // Traitement du format de la page

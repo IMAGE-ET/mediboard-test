@@ -1,12 +1,19 @@
-<?php /* $Id$ */
-  
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage dPcompteRendu
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$ 
+ */
 
+/**
+ * Gestion de documents / modèles avec marges, entêtes et pieds de pages.
+ * Un modèle est associé à un utilisateur, une fonction ou un établissement.
+ * Le document est une utilisation d'un modèle (référencé par modele_id)
+ */
 class CCompteRendu extends CDocumentItem {
   // DB Table key
   var $compte_rendu_id   = null;
@@ -15,9 +22,11 @@ class CCompteRendu extends CDocumentItem {
   var $user_id           = null; // not null when is a template associated to a user
   var $function_id       = null; // not null when is a template associated to a function
   var $group_id          = null; // not null when is a template associated to a group
+  var $content_id        = null;
   var $header_id         = null;
   var $footer_id         = null;
-  var $content_id        = null;
+  var $preface_id        = null;
+  var $ending_id         = null;
   var $modele_id         = null;
   
   // DB fields
@@ -59,14 +68,16 @@ class CCompteRendu extends CDocumentItem {
   var $_ref_function     = null;
   var $_ref_group        = null;
   var $_ref_header       = null;
+  var $_ref_preface      = null;
+  var $_ref_ending       = null;
   var $_ref_footer       = null;
   var $_ref_file         = null;
+  var $_ref_modele       = null;
   var $_ref_content      = null;
   var $_refs_correspondants_courrier = null;
   var $_refs_correspondants_courrier_by_tag_guid = null;
   
   // Other fields
-  var $_is_pack          = false;
   var $_entire_doc       = null;
   var $_ids_corres       = null;
   static $_page_formats = array(
@@ -94,6 +105,8 @@ class CCompteRendu extends CDocumentItem {
     $backProps["listes_choix"]   = "CListeChoix compte_rendu_id";
     $backProps["modeles_headed"] = "CCompteRendu header_id";
     $backProps["modeles_footed"] = "CCompteRendu footer_id";
+    $backProps["modeles_prefaced"] = "CCompteRendu preface_id";
+    $backProps["modeles_ended"]  = "CCompteRendu ending_id";
     $backProps["documents"]      = "CCompteRendu modele_id";
     $backProps["pack_links"]     = "CModeleToPack modele_id";
     $backProps["correspondants_courrier"] = "CCorrespondantCourrier compte_rendu_id";
@@ -109,11 +122,13 @@ class CCompteRendu extends CDocumentItem {
     $specs["content_id"]       = "ref class|CContentHTML show|0";
     $specs["object_class"]     = "str notNull class show|0";
     $specs["nom"]              = "str notNull show|0 seekable";
-    $specs["type"]             = "enum list|header|body|footer default|body";
+    $specs["type"]             = "enum list|header|preface|body|ending|footer default|body";
     $specs["_list_classes"]    = "enum list|CBloodSalvage|CConsultAnesth|CConsultation|CDossierMedical|CFunctions|CGroups|CMediusers|COperation|CPatient|CPrescription|CSejour";
     //mbTrace(implode("|", array_keys(CCompteRendu::getTemplatedClasses())));
     $specs["header_id"]        = "ref class|CCompteRendu";
     $specs["footer_id"]        = "ref class|CCompteRendu";
+    $specs["preface_id"]       = "ref class|CCompteRendu";
+    $specs["ending_id"]        = "ref class|CCompteRendu";
     $specs["modele_id"]        = "ref class|CCompteRendu";
     $specs["height"]           = "float min|0";
     $specs["margin_top"]       = "float notNull min|0 default|2 show|0";
@@ -139,6 +154,12 @@ class CCompteRendu extends CDocumentItem {
     return $specs;
   }
   
+  /**
+   * Génère et retourne le fichier PDF si possible,
+   * la source html sinon.
+   * 
+   * @return string
+   */
   function getBinaryContent() {
     // Content from PDF preview
     $this->makePDFpreview();
@@ -152,6 +173,11 @@ class CCompteRendu extends CDocumentItem {
     return $this->_source;
   }
   
+  /**
+   * Retourne le nom du fichier associé
+   * 
+   * @return string 
+   */
   function getExtensioned() {
     $file = $this->loadFile();
     if ($file->_id) {
@@ -160,6 +186,17 @@ class CCompteRendu extends CDocumentItem {
     return parent::getExtensioned();
   }
   
+  /**
+   * Charge les modèles suivant certains critères
+   * 
+   * @param array  $where    [optional]
+   * @param string $order    [optional]
+   * @param string $limit    [optional]
+   * @param string $group    [optional]
+   * @param array  $leftjoin [optional]
+   * 
+   * @return array
+   */
   function loadModeles($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
     if (!isset($where["object_id"])) {
       $where["object_id"] = "IS NULL";
@@ -167,7 +204,19 @@ class CCompteRendu extends CDocumentItem {
 
     return parent::loadList($where, $order, $limit, $group, $leftjoin);
   }
-
+  
+  /**
+   * Charge une liste de documents suivant certains critères
+   * 
+   * @param array  $where    [optional]
+   * @param string $order    [optional]
+   * @param string $limit    [optional]
+   * @param string $group    [optional]
+   * @param array  $leftjoin [optional]
+   * 
+   * @return array
+   */
+  
   function loadDocuments($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
     if (!isset($where["object_id"])) {
       $where["object_id"] = "IS NOT NULL";
@@ -177,8 +226,8 @@ class CCompteRendu extends CDocumentItem {
     $current_user = CAppUI::$user;
     $current_user->loadRefFunction();
 
-    foreach($docs as $_doc) {
-      if(!$docs[$key]->canRead()){
+    foreach ($docs as $_doc) {
+      if (!$docs[$key]->canRead()) {
         unset($docs[$_doc->_id]);
       }
     }
@@ -191,15 +240,29 @@ class CCompteRendu extends CDocumentItem {
     $this->_view = $this->object_id ? "" : "Modèle : ";
     $this->_view.= $this->nom;
     
-    if ($this->user_id    ) $this->_owner = "prat";
-    if ($this->function_id) $this->_owner = "func";
-    if ($this->group_id   ) $this->_owner = "etab";
-
+    $modele = $this->loadModele();
+    
+    if ($modele->_id && $modele->purgeable) {
+      $this->_view = "[temp] " . $this->_view;
+    }
+    
+    if ($this->user_id) {
+      $this->_owner = "prat";
+    }
+    if ($this->function_id) {
+      $this->_owner = "func";
+    }
+    
+    if ($this->group_id) {
+      $this->_owner = "etab";
+    }
+    
     $this->_page_format = "";
     
-    foreach(CCompteRendu::$_page_formats as $_key=>$_format) {
-      if(($_format[0] == $this->page_width && $_format[1] == $this->page_height) ||
-        ($_format[1] == $this->page_width && $_format[0] == $this->page_height)) {
+    foreach (CCompteRendu::$_page_formats as $_key=>$_format) {
+      if (($_format[0] == $this->page_width && $_format[1] == $this->page_height) ||
+          ($_format[1] == $this->page_width && $_format[0] == $this->page_height)
+      ) {
         $this->_page_format = $_key;
         break;
       }
@@ -224,11 +287,18 @@ class CCompteRendu extends CDocumentItem {
     
     // Valeur par défaut pour private
     $this->completeField("private");
-    if($this->private === "") {
+    if ($this->private === "") {
       $this->private = 0;
     }
   }
   
+  /**
+   * Charge le contenu html
+   * 
+   * @param boolean $field_source [optional]
+   * 
+   * @return void
+   */
   function loadContent($field_source = true) {
     $this->_ref_content = $this->loadFwdRef("content_id", true);
     if ($field_source) {
@@ -247,8 +317,8 @@ class CCompteRendu extends CDocumentItem {
         $elements = $xpath->query("*/style");
         
         if ($elements != null) {
-          foreach($elements as $_element) {
-            if (preg_match("/(header|footer)/",$_element->nodeValue) == 0) {
+          foreach ($elements as $_element) {
+            if (preg_match("/(header|footer)/", $_element->nodeValue) == 0) {
               $_element->parentNode->removeChild($_element);
             }
           }
@@ -264,11 +334,41 @@ class CCompteRendu extends CDocumentItem {
     }
   }
   
+  /**
+   * Charge les composants d'un modèle
+   * 
+   * @return void 
+   */
   function loadComponents() {
-    $this->_ref_header = $this->loadFwdRef("header_id", true);
-    $this->_ref_footer = $this->loadFwdRef("footer_id", true);
+    $this->_ref_header  = $this->loadFwdRef("header_id" , true);
+    $this->_ref_footer  = $this->loadFwdRef("footer_id" , true);
+    $this->loadIntroConclusion();
   }
-
+  
+  /**
+   * Charge l'introduction et la conclusion
+   * 
+   * @return void 
+   */
+  function loadIntroConclusion() {
+    $this->_ref_preface = $this->loadFwdRef("preface_id", true);
+    $this->_ref_ending  = $this->loadFwdRef("ending_id" , true);
+  }
+  
+  /**
+   * Charge le modèle de référence du document
+   * 
+   * @return void 
+   */
+  function loadModele() {
+    return $this->_ref_modele = $this->loadFwdRef("modele_id");
+  }
+  
+  /**
+   * Charge le fichier unique d'un document / modèle
+   * 
+   * @return void
+   */
   function loadFile() {
     return $this->_ref_file = $this->loadUniqueBackRef("files");
   }
@@ -280,10 +380,10 @@ class CCompteRendu extends CDocumentItem {
     
     // Utilisateur
     $this->_ref_user = new CMediusers;
-    if($this->user_id) {
+    if ($this->user_id) {
       $this->_ref_user->load($this->user_id);
-    } 
-    elseif($this->object_id) {
+    }
+    elseif ($this->object_id) {
       switch($this->object_class) {
         case "CConsultation" :
           $this->_ref_user->load($this->_ref_object->_ref_plageconsult->chir_id);
@@ -300,62 +400,96 @@ class CCompteRendu extends CDocumentItem {
 
     // Fonction
     $this->_ref_function = new CFunctions;
-    if($this->function_id)
+    if ($this->function_id) {
       $this->_ref_function->load($this->function_id);
+    }
       
     // Etablissement
     $this->_ref_group = new CGroups();
-    if($this->group_id)
+    if ($this->group_id) {
       $this->_ref_group->load($this->group_id);
+    }
   }
   
+  /**
+   * Charge les modèles par catégorie
+   * 
+   * @param string  $catName nom de la catégorie
+   * @param array   $where1  [optional]
+   * @param string  $order   [optional]
+   * @param boolean $horsCat [optional]
+   * 
+   * @return array
+   */
   static function loadModeleByCat($catName, $where1 = null, $order = "nom", $horsCat = null){
     $ds = CSQLDataSource::get("std");
     $where = array();
-    if(is_array($catName)) {
+    if (is_array($catName)) {
       $where = array_merge($where, $catName);
-    }elseif(is_string($catName)){
+    }
+    elseif (is_string($catName)) {
       $where["nom"] = $ds->prepare("= %", $catName);
     }
     $category = new CFilesCategory;
     $resultCategory = $category->loadList($where);
     $documents = array();
     
-    if(count($resultCategory) || $horsCat){
+    if (count($resultCategory) || $horsCat) {
       $where = array();
-      if($horsCat){
+      if ($horsCat) {
         $resultCategory[0] = "";
-        $where[] = "file_category_id IS NULL OR file_category_id ".CSQLDataSource::prepareIn(array_keys($resultCategory));
-      } else {
+        $where[] = "file_category_id IS NULL OR file_category_id ".
+          CSQLDataSource::prepareIn(array_keys($resultCategory));
+      }
+      else {
         $where["file_category_id"] = CSQLDataSource::prepareIn(array_keys($resultCategory));
       }
       $where["object_id"] = " IS NULL";
-      if($where1){
-        if(is_array($where1)) {
+      if ($where1) {
+        if (is_array($where1)) {
           $where = array_merge($where, $where1);
-        }elseif(is_string($where1)){
+        }
+        elseif (is_string($where1)) {
           $where[] = $where1;
         }
       }
       $resultDoc = new CCompteRendu;
-      $documents = $resultDoc->loadList($where,$order);
+      $documents = $resultDoc->loadList($where, $order);
     }
     return $documents;
   }
   
+  /**
+   * Charge les correspondants d'un document
+   * 
+   * @return array 
+   */
   function loadRefsCorrespondantsCourrier() {
     return $this->_refs_correspondants_courrier = $this->loadBackRefs("correspondants_courrier");
   }
   
+  /**
+   * Charge les correspondants d'un document triés par tag puis par cible
+   * 
+   * @return array 
+   */
   function loadRefsCorrespondantsCourrierByTagGuid() {
     if (!$this->_refs_correspondants_courrier) {
       $this->loadRefsCorrespondantsCourrier();
     }
     foreach ($this->_refs_correspondants_courrier as $_corres) {
-      $this->_refs_correspondants_courrier_by_tag_guid[$_corres->tag]["$_corres->object_class-$_corres->object_id"] = $_corres;
+      $guid = "$_corres->object_class-$_corres->object_id";
+      $this->_refs_correspondants_courrier_by_tag_guid[$_corres->tag][$guid] = $_corres;
     }
   }
   
+  /**
+   * Fusion de correspondants
+   * 
+   * @param array &$destinataires tableau de destinataires
+   * 
+   * @return void
+   */
   function mergeCorrespondantsCourrier(&$destinataires) {
     $this->loadRefsCorrespondantsCourrierByTagGuid();
     
@@ -388,10 +522,14 @@ class CCompteRendu extends CDocumentItem {
   
   /**
    * Charge tous les modèles pour une classe d'objets associés à un utilisateur
-   * @param $prat_id ref|CMediuser L'utilisateur concerné
-   * @param $object_class string Nom de la classe d'objet, optionnel. Doit être un CMbObject
-   * @param $type enum list|header|body|footer Type de composant, optionnel
-   * @param $fast_edit boolean Inclue les modèles en édition rapide
+   * 
+   * @param integer $id           Identifiant
+   * @param string  $owner        Propriétaire du document / modèle
+   * @param string  $object_class string  Nom de la classe d'objet, optionnel. Doit être un CMbObject
+   * @param string  $type         Type de composant, optionnel
+   * @param boolean $fast_edit    Inclue les modèles en édition rapide
+   * @param string  $order        Ordre de tri de la liste
+   * 
    * @return array ("prat" => array<CCompteRendu>, "func" => array<CCompteRendu>, "etab" => array<CCompteRendu>)
    */
   static function loadAllModelesFor($id, $owner = 'prat', $object_class = null, $type = null, $fast_edit = 1, $order = "") {
@@ -401,7 +539,9 @@ class CCompteRendu extends CDocumentItem {
       "etab" => array(),
     );
     
-    if (!$id) return $modeles;
+    if (!$id) {
+      return $modeles;
+    }
     
     // Clauses de recherche
     $modele = new CCompteRendu();
@@ -428,7 +568,9 @@ class CCompteRendu extends CDocumentItem {
     switch ($owner) {
       case 'prat': // Modèle du praticien
         $prat = new CMediusers();
-        if (!$prat->load($id)) return $modeles;
+        if (!$prat->load($id)) {
+          return $modeles;
+        }
         $prat->loadRefFunction();
 
         $where["user_id"]     = "= '$prat->_id'";
@@ -439,10 +581,12 @@ class CCompteRendu extends CDocumentItem {
       case 'func': // Modèle de la fonction
         if (isset($prat)) {
           $func_id = $prat->function_id;
-        } else {
+        }
+        else {
           $func = new CFunctions();
-          if (!$func->load($id)) return $modeles;
-          
+          if (!$func->load($id)) {
+            return $modeles;
+          }
           $func_id = $func->_id;
         }
         
@@ -455,14 +599,15 @@ class CCompteRendu extends CDocumentItem {
         $etab_id = CGroups::loadCurrent()->_id;
         if ($owner == 'etab') {
           $etab = new CGroups();
-          if (!$etab->load($id)) return $modeles;
-          
+          if (!$etab->load($id)) {
+            return $modeles;
+          }
           $etab_id = $etab->_id;
         }
-        else if (isset($func)) {
+        elseif (isset($func)) {
           $etab_id = $func->group_id;
-        } 
-        else if(isset($func_id)) {
+        }
+        elseif (isset($func_id)) {
           $func = new CFunctions();
           $func->load($func_id);
           
@@ -486,16 +631,16 @@ class CCompteRendu extends CDocumentItem {
   }
     
   function getPerm($permType) {
-    if(!($this->_ref_user || $this->_ref_function || $this->_ref_group) || !$this->_ref_object) {
+    if (!($this->_ref_user || $this->_ref_function || $this->_ref_group) || !$this->_ref_object) {
       $this->loadRefsFwd();
     }
-    if($this->_ref_object->_id){
+    if ($this->_ref_object->_id) {
       $can = $this->_ref_object->getPerm($permType);
     }
-    elseif($this->_ref_user->_id) {
+    elseif ($this->_ref_user->_id) {
       $can = $this->_ref_user->getPerm($permType);
     }
-    elseif($this->_ref_function->_id) {
+    elseif ($this->_ref_function->_id) {
       $can = $this->_ref_function->getPerm($permType);
     }
     else {
@@ -504,6 +649,11 @@ class CCompteRendu extends CDocumentItem {
     return $can;
   }
   
+  /**
+   * Vérifie si l'enregistrement du modèle est possible.
+   * 
+   * @return string 
+   */
   function check() {
     $this->completeField("type", "header_id", "footer_id", "object_class");
     // Si c'est un entête ou pied, et utilisé dans des documents dont le type ne correspond pas au nouveau
@@ -513,11 +663,12 @@ class CCompteRendu extends CDocumentItem {
       $where = 'object_class != "'. $this->object_class.
           '" and ( header_id ="' . $this->_id .
           '" or footer_id ="' . $this->_id . '")';;
-      if ($doc->countList($where))
+      if ($doc->countList($where)) {
         return "Des documents sont rattachés à ce pied de page (ou entête) et ils ont un type différent";
+      }
     }
-    // Si c'est un document dont le type de l'en-tête ou du pied de page ne correspond pas à son nouveau type
-    // alors pas d'enregistrement
+    // Si c'est un document dont le type de l'en-tête, de l'introduction, de la conclusion
+    // ou du pied de page ne correspond pas à son nouveau type, alors pas d'enregistrement
     if ($this->header_id) {
       $header = new CCompteRendu;
       $header->load($this->header_id);
@@ -533,9 +684,31 @@ class CCompteRendu extends CDocumentItem {
         return "Le document n'est pas du même type que son pied de page";
       }
     }
+    
+    if ($this->preface_id) {
+      $preface = new CCompteRendu;
+      $preface->load($this->preface_id);
+      if ($preface->object_class != $this->object_class) {
+        return "Le document n'est pas du même type que son introduction";
+      }
+    }
+    
+    if ($this->ending_id) {
+      $ending = new CCompteRendu;
+      $ending->load($this->ending_id);
+      if ($ending->object_class != $this->object_class) {
+        return "Le document n'est pas du même type que sa conclusion";
+      }
+    }
+    
     return parent::check();
   }
   
+  /**
+   * Enregistrement du document / modèle
+   * 
+   * @return string 
+   */
   function store() {
     $this->completeField("content_id", "_source");
     
@@ -550,16 +723,17 @@ class CCompteRendu extends CDocumentItem {
       $this->fieldModified("margin_bottom") || 
       $this->fieldModified("page_height") || 
       $this->fieldModified("page_width") || 
-      $this->fieldModified("header_id") || 
+      $this->fieldModified("header_id") ||
+      $this->fieldModified("preface_id") ||
+      $this->fieldModified("ending_id") || 
       $this->fieldModified("footer_id");
     
     if ($source_modified) {
-      
       // Bug IE : delete id attribute
       $this->_source = CCompteRendu::restoreId($this->_source);
       
       // Empty PDF File
-      foreach($this->loadBackRefs("files") as $_file) {
+      foreach ($this->loadBackRefs("files") as $_file) {
         $_file->file_empty();
       }
       
@@ -569,18 +743,25 @@ class CCompteRendu extends CDocumentItem {
         $this->etat_envoi = "obsolete";
       }
     }
-
+    
     $this->_ref_content->content = $this->_source;
     
-    if ($msg = $this->_ref_content->store())
+    if ($msg = $this->_ref_content->store()) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
-
-    if (!$this->content_id )
+    }
+    
+    if (!$this->content_id ) {
       $this->content_id = $this->_ref_content->_id;
-
+    }
+    
     return parent::store();
   }
   
+  /**
+   * Suppression de document / modèle
+   * 
+   * @return string
+   */
   function delete() {
     $this->completeField("content_id");
     $this->loadContent(false);
@@ -588,7 +769,7 @@ class CCompteRendu extends CDocumentItem {
 
     // Remove PDF preview
     
-    foreach($this->_ref_files as $_file) {
+    foreach ($this->_ref_files as $_file) {
       $_file->delete();
     }
     
@@ -600,6 +781,11 @@ class CCompteRendu extends CDocumentItem {
     return $this->_ref_content->delete();
   }
   
+  /**
+   * Envoi de document
+   * 
+   * @return string
+   */
   function handleSend() {
     if (!$this->_send) {
       return;
@@ -614,7 +800,9 @@ class CCompteRendu extends CDocumentItem {
   
   /**
    * Tell whether object has a document with the same name has this one
+   * 
    * @param CMbObject $object
+   * 
    * @return boolean
    */
   function existsFor(CMbObject $object) {
@@ -648,7 +836,7 @@ class CCompteRendu extends CDocumentItem {
     return self::$templated_classes = $classes;
   }
 
-  function loadHTMLcontent($htmlcontent, $mode = "modele", $type = "body", $header = "", $sizeheader = 0, $footer = "", $sizefooter = 0, $margins = array()) {
+  function loadHTMLcontent($htmlcontent, $mode = "modele", $margins = array(), $type = "body", $header = "", $sizeheader = 0, $footer = "", $sizefooter = 0, $preface = "", $ending = "") {
     $default_font = CAppUI::conf("dPcompteRendu CCompteRendu default_font");
     $default_size = CAppUI::conf("dPcompteRendu CCompteRendu default_size");
     
@@ -690,6 +878,8 @@ class CCompteRendu extends CDocumentItem {
           $content =  "<div id=\"$type\">$htmlcontent</div>";
           break;
         case "body":
+        case "preface":
+        case "ending":
           if($header) {
             $sizeheader = $sizeheader != '' ? $sizeheader : 50;
             $padding_top = $sizeheader;
@@ -721,6 +911,12 @@ class CCompteRendu extends CDocumentItem {
                   }
                 }";
             $content .= "<div id=\"footer\">$footer</div>";
+          }
+          if ($preface) {
+            $htmlcontent = "$preface<br />" . $htmlcontent;
+          }
+          if ($ending) {
+            $htmlcontent .= "<br />$ending";
           }
           $content .= "<div id=\"body\">$htmlcontent</div>";
         }
@@ -766,7 +962,7 @@ class CCompteRendu extends CDocumentItem {
       $this->margin_bottom, 
       $this->margin_left);
     $this->loadContent();
-    $content = $this->loadHTMLcontent($this->_source, '','','','','','', $margins);
+    $content = $this->loadHTMLcontent($this->_source, '', $margins);
     $htmltopdf = new CHtmlToPDF;
     $htmltopdf->generatePDF($content, 0, $this->_page_format, $this->_orientation, $file);
     $file->file_size = filesize($file->_file_path);
@@ -777,26 +973,36 @@ class CCompteRendu extends CDocumentItem {
   
   function generateDocFromModel($other_source = null, $header_id = null, $footer_id = null) {
     $source = $this->_source;
+    
     if ($other_source) {
       $source = $other_source;
     }
-
-    if ($this->header_id || $this->footer_id || $this->_is_pack) {
-      if (!$this->_is_pack) {
-        $this->loadComponents();
-      }
-      $header = isset($this->_ref_header) ? $this->_ref_header : new CCompteRendu;
-      $footer = isset($this->_ref_footer) ? $this->_ref_footer : new CCompteRendu;
+    
+    $this->loadComponents();
+    
+    $header  = $this->_ref_header;
+    $footer  = $this->_ref_footer;
+    $preface = $this->_ref_preface;
+    $ending  = $this->_ref_ending;
+    
+    if ($header_id) {
+      $header->load($header_id);
     }
-    else {
-      $header = new CCompteRendu;
-      $footer = new CCompteRendu;
-      if ($header_id) {
-        $header->load($header_id);
-      }
-      if ($footer_id) {
-        $footer->load($footer_id);
-      }
+    if ($footer_id) {
+      $footer->load($footer_id);
+    }
+    
+    $header->loadContent();
+    $footer->loadContent();
+    $preface->loadContent();
+    $ending->loadContent();
+    
+    if ($preface->_id) {
+      $source = "$preface->_source<br />".$source;
+    }
+    
+    if ($ending->_id) {
+      $source .= "<br />$ending->_source";
     }
     
     if ($header->_id || $footer->_id) {
@@ -853,9 +1059,10 @@ class CCompteRendu extends CDocumentItem {
           }
         }</style>";
       
-      $source = "<div id='body'>$source</div>";
+      $source = "<div id=\"body\">$source</div>";
       $source = $style . $header->_source . $footer->_source . $source;
     }
+    
     return $source;
   }
   

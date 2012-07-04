@@ -276,7 +276,7 @@ if (!count($destinataires) || !$do_merge || !CAppUI::conf("dPcompteRendu CCompte
       $do->_obj->margin_right,
       $do->_obj->margin_bottom,
       $do->_obj->margin_left);
-    $do->_obj->_entire_doc = CCompteRendu::loadHTMLcontent($do->_obj->_source, "doc",'','','','','',$margins);
+    $do->_obj->_entire_doc = CCompteRendu::loadHTMLcontent($do->_obj->_source, "", $margins);
   }
 }
 

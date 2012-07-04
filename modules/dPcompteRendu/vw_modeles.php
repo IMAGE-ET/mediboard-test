@@ -56,6 +56,14 @@ foreach ($modeles as $_modeles) {
     if ($_modele->type == "footer") {
       $_modele->countBackRefs("modeles_footed"); 
     }
+    
+    if ($_modele->type == "preface") {
+      $_modele->countBackRefs("modeles_prefaced");
+    }
+    
+    if ($_modele->type == "ending") {
+      $_modele->countBackRefs("modeles_ended");
+    }
   }
 }
 

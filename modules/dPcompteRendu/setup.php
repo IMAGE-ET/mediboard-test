@@ -788,7 +788,19 @@ class CSetupdPcompteRendu extends CSetup {
       ADD INDEX (`date_print`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.80";
+    $this->makeRevision("0.80");
+    $query = "ALTER TABLE `compte_rendu`
+      CHANGE `type` `type` ENUM ('header','preface','body','ending','footer') DEFAULT 'body', 
+      ADD `preface_id` INT (11) UNSIGNED AFTER `header_id`,
+      ADD `ending_id` INT (11) UNSIGNED AFTER `preface_id`;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `compte_rendu` 
+      ADD INDEX (`preface_id`),
+      ADD INDEX (`ending_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.81";
   }
 }
 ?>

@@ -24,6 +24,12 @@ switch ($compte_rendu->type) {
   case "header":
     $modeles = $compte_rendu->loadBackRefs("modeles_headed", "nom");
     break;
+  case "preface":
+    $modeles = $compte_rendu->loadBackRefs("modeles_prefaced", "nom");
+    break;
+  case "ending":
+    $modeles = $compte_rendu->loadBackRefs("modeles_ended", "nom");
+    break;
   case "footer":
     $modeles = $compte_rendu->loadBackRefs("modeles_footed", "nom");
 }

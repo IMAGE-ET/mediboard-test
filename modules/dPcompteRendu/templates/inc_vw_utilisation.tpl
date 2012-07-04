@@ -1,7 +1,7 @@
 <table class="tbl">
   <tr>
     <th class="title">
-      Liste des modèles qui utilisent {{if $compte_rendu->type == "header"}}cet entête{{else}}ce pied de plage{{/if}}
+      Liste des modèles qui utilisent {{$compte_rendu->nom}}
     </th>
   </tr>
   {{foreach from=$modeles item=_modele}}

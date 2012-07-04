@@ -151,9 +151,9 @@ Main.add(function () {
   loadCategory('{{$compte_rendu->file_category_id}}');
   {{if $compte_rendu->_id && $droit && $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
     Thumb.modele_id = '{{$compte_rendu->_id}}';
-		Thumb.user_id = '{{$user_id}}';
-		Thumb.mode = "modele";
-		PageFormat.init(getForm("editFrm"));
+    Thumb.user_id = '{{$user_id}}';
+    Thumb.mode = "modele";
+    PageFormat.init(getForm("editFrm"));
   {{/if}}
 });
 
@@ -194,7 +194,7 @@ Main.add(function () {
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_modele_aed" />
-			<input type="hidden" name="private" value="0"/>
+      <input type="hidden" name="private" value="0"/>
       {{mb_key object=$compte_rendu}}
       {{mb_field object=$compte_rendu field="object_id" hidden=1}}
       {{mb_field object=$compte_rendu field="author_id" hidden=1}}
@@ -202,7 +202,12 @@ Main.add(function () {
         <button class="new" type="button" onclick="Modele.create()">
           {{tr}}CCompteRendu-title-create{{/tr}}
         </button>
+        {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+          <button class="hslip notext" type="button" title="Afficher / Masquer les vignettes"
+            onclick = "Thumb.choixAffiche(0);" style="float: right;"></button>  
+        {{/if}}
       {{/if}}
+      
       <table class="form" id="info_model">
         <tr>
           <th class="category" colspan="2">
@@ -322,6 +327,7 @@ Main.add(function () {
                   var oForm = document.editFrm;
                   var bBody = oForm.type.value == "body";
                   var bHeader = oForm.type.value == "header";
+                  var bOther  = (oForm.type.value == "preface" || oForm.type.value == "ending");
                   
                   if(bHeader) {
                     $("preview_page").insert({top: $("header_footer_content").remove()});
@@ -331,29 +337,33 @@ Main.add(function () {
                     $("preview_page").insert({bottom: $("header_footer_content").remove()});
                     $("preview_page").insert({top: $("body_content").remove()});
                   }
-                  // layout
-    							if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
+                  
+                  // General Layout
+                  $("layout").setVisible(!bOther);
+                  
+                  // Page layout
+                  if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
                     $("page_layout").setVisible(bBody);
                   }
-                  $("layout_header_footer").setVisible(!bBody);
+                  $("layout_header_footer").setVisible(!bBody && !bOther);
+                  
                   
                   // Height
-                  $("height").setVisible(!bBody);
+                  $("height").setVisible(!bBody && !bOther);
                   if (bBody) $V(oForm.height, '');
     
-                  // Footers
-                  var oFooter = $("footers");
-                  if (oFooter) {
-                    oFooter.setVisible(bBody);
-                    if (!bBody) $V(oForm.footer_id, '');
+                  // Headers, Footers, Prefaces and Endings
+                  var oComponent = $("components");
+                  if (oComponent) {
+                    oComponent.setVisible(bBody);
+                    if (!bBody) {
+                      $V(oForm.header_id, '');
+                      $V(oForm.footer_id, '');
+                      $V(oForm.preface_id, '');
+                      $V(oForm.ending_id, '');
+                    }
                   }
-    
-                  // Headers
-                  var oHeader = $("headers");
-                  if (oHeader) {
-                    oHeader.setVisible(bBody);
-                    if (!bBody) $V(oForm.header_id, '');
-                  }
+                  
                   Modele.preview_layout();
                 {{/if}}
               }
@@ -364,48 +374,89 @@ Main.add(function () {
           </td>
         </tr>
         
-        
+        <tbody id="components">
 
-        {{if $headers|@count}}
-        <tr id="headers">
-          <th>{{mb_label object=$compte_rendu field=header_id}}</th>
-          <td>
-            <select name="header_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.header_id}}" {{if !$droit}}disabled="disabled"{{/if}} style="width: 15em;">
-              <option value="">&mdash; {{tr}}CCompteRendu-set-header{{/tr}}</option>
-              {{foreach from=$headers item=headersByOwner key=owner}}
-              <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
-                {{foreach from=$headersByOwner item=_header}}
-                <option value="{{$_header->_id}}" {{if $compte_rendu->header_id == $_header->_id}}selected="selected"{{/if}}>{{$_header->nom}}</option>
-                {{foreachelse}}
-                <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
-                {{/foreach}}
-              </optgroup>
-              {{/foreach}}
-            </select>
-          </td>
-        </tr>
-        {{/if}}
+          {{if $headers|@count}}
+            <tr id="headers">
+              <th>{{mb_label object=$compte_rendu field=header_id}}</th>
+              <td>
+                <select name="header_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.header_id}}" {{if !$droit}}disabled="disabled"{{/if}} style="width: 15em;">
+                  <option value="">&mdash; {{tr}}CCompteRendu-set-header{{/tr}}</option>
+                  {{foreach from=$headers item=headersByOwner key=owner}}
+                  <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
+                    {{foreach from=$headersByOwner item=_header}}
+                    <option value="{{$_header->_id}}" {{if $compte_rendu->header_id == $_header->_id}}selected="selected"{{/if}}>{{$_header->nom}}</option>
+                    {{foreachelse}}
+                    <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
+                    {{/foreach}}
+                  </optgroup>
+                  {{/foreach}}
+                </select>
+              </td>
+            </tr>
+          {{/if}}
           
-        {{if $footers|@count}}
-        <tr id="footers">
-          <th>{{mb_label object=$compte_rendu field=footer_id}}</th>
-          <td>
-            <select name="footer_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.footer_id}}" {{if !$droit}}disabled="disabled"{{/if}} style="width: 15em;">
-              <option value="">&mdash; {{tr}}CCompteRendu-set-footer{{/tr}}</option>
-              {{foreach from=$footers item=footersByOwner key=owner}}
-              <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
-                {{foreach from=$footersByOwner item=_footer}}
-                <option value="{{$_footer->_id}}" {{if $compte_rendu->footer_id == $_footer->_id}}selected="selected"{{/if}}>{{$_footer->nom}}</option>
-                {{foreachelse}}
-                <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
-                {{/foreach}}
-              </optgroup>
-              {{/foreach}}
-            </select>
-          </td>
-        </tr>
-        {{/if}}
+          {{if $prefaces|@count}}
+            <tr id="prefaces">
+              <th>{{mb_label object=$compte_rendu field=preface_id}}</th>
+              <td>
+                <select name="preface_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.preface_id}}" {{if !$droit}}disabled="disabled"{{/if}} style="width: 15em;">
+                  <option value="">&mdash; {{tr}}CCompteRendu-set-preface{{/tr}}</option>
+                  {{foreach from=$prefaces item=prefacesByOwner key=owner}}
+                  <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
+                    {{foreach from=$prefacesByOwner item=_preface}}
+                    <option value="{{$_preface->_id}}" {{if $compte_rendu->preface_id == $_preface->_id}}selected="selected"{{/if}}>{{$_preface->nom}}</option>
+                    {{foreachelse}}
+                    <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
+                    {{/foreach}}
+                  </optgroup>
+                  {{/foreach}}
+                </select>
+              </td>
+            </tr>
+          {{/if}}
           
+          {{if $endings|@count}}
+            <tr id="endings">
+              <th>{{mb_label object=$compte_rendu field=ending_id}}</th>
+              <td>
+                <select name="ending_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.ending_id}}" {{if !$droit}}disabled="disabled"{{/if}} style="width: 15em;">
+                  <option value="">&mdash; {{tr}}CCompteRendu-set-ending{{/tr}}</option>
+                  {{foreach from=$endings item=endingsByOwner key=owner}}
+                  <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
+                    {{foreach from=$endingsByOwner item=_ending}}
+                    <option value="{{$_ending->_id}}" {{if $compte_rendu->ending_id == $_ending->_id}}selected="selected"{{/if}}>{{$_ending->nom}}</option>
+                    {{foreachelse}}
+                    <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
+                    {{/foreach}}
+                  </optgroup>
+                  {{/foreach}}
+                </select>
+              </td>
+            </tr>
+          {{/if}}
+          
+          {{if $footers|@count}}
+            <tr id="footers">
+              <th>{{mb_label object=$compte_rendu field=footer_id}}</th>
+              <td>
+                <select name="footer_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.footer_id}}" {{if !$droit}}disabled="disabled"{{/if}} style="width: 15em;">
+                  <option value="">&mdash; {{tr}}CCompteRendu-set-footer{{/tr}}</option>
+                  {{foreach from=$footers item=footersByOwner key=owner}}
+                  <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
+                    {{foreach from=$footersByOwner item=_footer}}
+                    <option value="{{$_footer->_id}}" {{if $compte_rendu->footer_id == $_footer->_id}}selected="selected"{{/if}}>{{$_footer->nom}}</option>
+                    {{foreachelse}}
+                    <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
+                    {{/foreach}}
+                  </optgroup>
+                  {{/foreach}}
+                </select>
+              </td>
+            </tr>
+          {{/if}}
+        </tbody>
+        
         <tr>
           <th>{{mb_label object=$compte_rendu field="object_class"}}</th>
           <td>
@@ -431,46 +482,45 @@ Main.add(function () {
         
         {{if $compte_rendu->_id}}
         
-        
-        {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
-        <tr>
-          <th class="category" colspan="2">
-          	{{tr}}CCompteRendu-Pagelayout{{/tr}}
-					  <button class="hslip notext" type="button" title="Afficher / Masquer les vignettes"
-                    onclick = "Thumb.choixAffiche(0);"></button>	
-					</th>
-        </tr>
-				<tr id="page_layout" style="display: none;">
-          <td colspan="2">
-            {{include file="inc_page_layout.tpl"}}
-          </td>
-        </tr>
-        {{/if}}
-        <tr id="height"  style="display: none;">
-          <th>{{mb_label object=$compte_rendu field=height}}</th>
-          <td>
-          {{if $droit}}
-            <button type="button" class="change" onclick="Thumb.old(); Modele.generate_auto_height(); Modele.preview_layout();">{{tr}}CCompteRendu.auto_height{{/tr}}</button><br/>
-              {{mb_field object=$compte_rendu field=height increment=true form=editFrm onchange="Thumb.old(); Modele.preview_layout();" step="10" onkeyup="Modele.preview_layout();"}}
-          {{else}}
-            {{mb_field object=$compte_rendu field=height readonly="readonly"}}
-          {{/if}}
-          </td>
-        </tr>
-        <tr id="layout_header_footer" style="display: none;">
-          <th>{{tr}}CCompteRendu-preview-header-footer{{/tr}}</th>
-          <td>
-            <div id="preview_page" style="color: #000; height: 84px; padding: 7px; width: 58px; background: #fff; border: 1px solid #000; overflow: hidden;">
-              <div id="header_footer_content" style="color: #000; white-space: normal; background: #fff; overflow: hidden; margin: -1px; height: 30px; width: 100%; font-size: 3px;">
-                {{include file="lorem_ipsum.tpl"}}
-              </div>
-              <hr style="width: 100%; margin-top: 3px; margin-bottom: 3px;"/>
-              <div id="body_content" style="margin: -1px; color: #999; height: 50px; width: 100%; font-size: 3px; white-space: normal; overflow: hidden;">
-                {{include file="lorem_ipsum.tpl"}}  
-              </div>
-            </div>
-          </td>
-        </tr>
+          <tbody id="layout">
+            {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+            <tr>
+              <th class="category" colspan="2">
+                {{tr}}CCompteRendu-Pagelayout{{/tr}}
+              </th>
+            </tr>
+            <tr id="page_layout" style="display: none;">
+              <td colspan="2">
+                {{include file="inc_page_layout.tpl"}}
+              </td>
+            </tr>
+            {{/if}}
+            <tr id="height"  style="display: none;">
+              <th>{{mb_label object=$compte_rendu field=height}}</th>
+              <td>
+              {{if $droit}}
+                <button type="button" class="change" onclick="Thumb.old(); Modele.generate_auto_height(); Modele.preview_layout();">{{tr}}CCompteRendu.auto_height{{/tr}}</button><br/>
+                  {{mb_field object=$compte_rendu field=height increment=true form=editFrm onchange="Thumb.old(); Modele.preview_layout();" step="10" onkeyup="Modele.preview_layout();"}}
+              {{else}}
+                {{mb_field object=$compte_rendu field=height readonly="readonly"}}
+              {{/if}}
+              </td>
+            </tr>
+            <tr id="layout_header_footer" style="display: none;">
+              <th>{{tr}}CCompteRendu-preview-header-footer{{/tr}}</th>
+              <td>
+                <div id="preview_page" style="color: #000; height: 84px; padding: 7px; width: 58px; background: #fff; border: 1px solid #000; overflow: hidden;">
+                  <div id="header_footer_content" style="color: #000; white-space: normal; background: #fff; overflow: hidden; margin: -1px; height: 30px; width: 100%; font-size: 3px;">
+                    {{include file="lorem_ipsum.tpl"}}
+                  </div>
+                  <hr style="width: 100%; margin-top: 3px; margin-bottom: 3px;"/>
+                  <div id="body_content" style="margin: -1px; color: #999; height: 50px; width: 100%; font-size: 3px; white-space: normal; overflow: hidden;">
+                    {{include file="lorem_ipsum.tpl"}}  
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
         {{/if}}
 
         <tr>

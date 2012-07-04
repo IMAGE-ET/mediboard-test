@@ -45,7 +45,7 @@ class CPack extends CMbObject {
   }
 
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["user_id"]       = "ref class|CMediusers";
     $specs["function_id"]   = "ref class|CFunctions";
     $specs["group_id"]      = "ref class|CGroups";
@@ -87,16 +87,34 @@ class CPack extends CMbObject {
     $this->loadBackRefs("modele_links", "modele_to_pack_id");
 
     if (count($this->_back['modele_links']) > 0) {
-    	$last_key = end(array_keys($this->_back['modele_links']));
+      $last_key = end(array_keys($this->_back['modele_links']));
       foreach ($this->_back['modele_links'] as $key => $_modeletopack) {
-        $_modeletopack->_ref_modele->loadContent();
-        if (!$this->_object_class)
-          $this->_object_class = $_modeletopack->_ref_modele->object_class;
-
-        $this->_source .= $_modeletopack->_ref_modele->_source ;
+        $modele = $_modeletopack->_ref_modele;
+        $modele->loadContent();
+        $modele->loadIntroConclusion();
+        
+        if (!$this->_object_class) {
+          $this->_object_class = $modele->object_class;
+        }
+        
+        if ($modele->_ref_preface->_id) {
+          $preface = $modele->_ref_preface;
+          $preface->loadContent();
+          $modele->_source = $preface->_source . "<br />" . $modele->_source;
+        }
+        
+        if ($modele->_ref_ending->_id) {
+          $ending = $modele->_ref_ending;
+          $ending->loadContent();
+          $modele->_source .= "<br />" . $ending->_source;
+        }
+        
+        $this->_source .= $modele->_source;
         
         // Si on est au dernier modèle, pas de page break
-        if ($key === $last_key) break;
+        if ($key === $last_key) {
+          break;
+        }
         $this->_source .= '<hr class="pagebreak" />';
       }
     }

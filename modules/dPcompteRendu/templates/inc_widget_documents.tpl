@@ -82,7 +82,7 @@ Main.add(function() {
     if (selected.select(".fast_edit").length) {
       Document.fastModePack(selected.down(".id").innerHTML, '{{$object_id}}');
     }
-    else if (selected.select(".merge_docs")){
+    else if (selected.select(".merge_docs").length){
       var form = getForm("unmergePack_{{$object->_guid}}");
       $V(form.pack_id, selected.down(".id").innerHTML);
       form.onsubmit();

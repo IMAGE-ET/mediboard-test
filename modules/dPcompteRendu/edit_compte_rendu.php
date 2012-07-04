@@ -8,7 +8,7 @@
 */
 
 $compte_rendu_id = CValue::get("compte_rendu_id"   , 0);
-$modele_id       = CValue::get("modele_id"         , 0);
+$modele_id       = CValue::get("modele_id"         , null);
 $praticien_id    = CValue::get("praticien_id"      , 0);
 $type            = CValue::get("type"              , 0);
 $pack_id         = CValue::get("pack_id"           , 0);
@@ -38,9 +38,6 @@ else if ($modele_id == 0 && !$pack_id) {
 }
 // Création à partir d'un modèle
 else {
-  $header = new CCompteRendu;
-  $footer = new CCompteRendu;
-  
   $compte_rendu->load($modele_id);
   $compte_rendu->loadFile();
   $compte_rendu->loadContent();
@@ -51,12 +48,13 @@ else {
   $compte_rendu->_ref_object = null;
   $compte_rendu->modele_id = $modele_id;
   $compte_rendu->author_id = CAppUI::$user->_id;
+  $header_id = null;
+  $footer_id = null;
+  
   // Utilisation des headers/footers
   if ($compte_rendu->header_id || $compte_rendu->footer_id) {
-    $compte_rendu->loadComponents();
-    
-    $header = $compte_rendu->_ref_header;
-    $footer = $compte_rendu->_ref_footer;
+    $header_id = $compte_rendu->header_id;
+    $footer_id = $compte_rendu->footer_id;
   }
   
   // On fournit la cible
@@ -72,34 +70,33 @@ else {
     
     $pack->loadContent();
     $compte_rendu->nom = $pack->nom;
-    $compte_rendu->_is_pack = true;
     $compte_rendu->object_class = $pack->object_class;
     $compte_rendu->fast_edit = $pack->fast_edit;
     $compte_rendu->fast_edit_pdf = $pack->fast_edit_pdf;
     $compte_rendu->_source = $pack->_source;
+    $compte_rendu->modele_id = null;
     
     // Parcours des modeles du pack pour trouver le premier header et footer
     foreach($pack->_back['modele_links'] as $mod) {
       $modele = $mod->_ref_modele;
       
       if ($modele->header_id || $modele->footer_id) {
-        $modele->loadComponents();
+        $header_id = $modele->header_id;
+        $footer_id = $modele->footer_id;
       }
-      if (!$header->_id && $modele->header_id) {
-        $header = $modele->_ref_header;
+      if (!$header_id && $modele->header_id) {
+        $header_id = $modele->header_id;
       }
-      if (!$footer->_id && $modele->footer_id) {
-        $footer = $modele->_ref_footer;
+      if (!$footer_id && $modele->footer_id) {
+        $footer = $modele->footer_id;
       }
-      if ($header->_id && $footer->_id) {
+      if ($header_id && $footer_id) {
         break;
       }
     }
     
     // Marges et format
     $first_modele = reset($pack->_back['modele_links']);
-    $compte_rendu->_ref_header   = $header;
-    $compte_rendu->_ref_footer   = $footer;
     $compte_rendu->margin_top    = $first_modele->_ref_modele->margin_top;
     $compte_rendu->margin_left   = $first_modele->_ref_modele->margin_left;
     $compte_rendu->margin_right  = $first_modele->_ref_modele->margin_right;
@@ -108,7 +105,7 @@ else {
     $compte_rendu->page_width    = $first_modele->_ref_modele->page_width;
 
   }
-  $compte_rendu->_source = $compte_rendu->generateDocFromModel();
+  $compte_rendu->_source = $compte_rendu->generateDocFromModel(null, $header_id, $footer_id);
   $compte_rendu->updateFormFields();
 }
 

@@ -4,10 +4,10 @@ var Thumb = {
   file_id: 0,
   thumb_up2date: true,
   thumb_refreshing: false,
-	nb_thumbs: 0,
-	first_time: 1,
-	changed: false,
-	contentChanged: false,
+  nb_thumbs: 0,
+  first_time: 1,
+  changed: false,
+  contentChanged: false,
   choixAffiche: function(isNotModele) {
     $("thumbs").toggle();
     if (isNotModele == 1) {
@@ -58,10 +58,12 @@ var Thumb = {
     }
     
     if (this.modele_id) {
-      url.addParam("type",      $V(form.elements.type));
-      url.addParam("header_id", $V(form.elements.header_id));
-      url.addParam("footer_id", $V(form.elements.footer_id));
-      url.addParam("height",    $V(form.elements.height));
+      url.addParam("type",       $V(form.elements.type));
+      url.addParam("header_id",  $V(form.elements.header_id));
+      url.addParam("preface_id", $V(form.elements.preface_id));
+      url.addParam("ending_id",  $V(form.elements.ending_id));
+      url.addParam("footer_id",  $V(form.elements.footer_id));
+      url.addParam("height",     $V(form.elements.height));
     }
     
     url.addParam("stream", 0);
@@ -143,8 +145,8 @@ var Thumb = {
         return;
       }
       var on_click = function(){
-    	  CKEDITOR.instances.htmlarea.on("key", loadOld);
-    	  Thumb.changed = true;
+        CKEDITOR.instances.htmlarea.on("key", loadOld);
+        Thumb.changed = true;
         Thumb.first_time = 0;
         Thumb.thumb_refreshing = true;
         window.thumbs_timeout = setTimeout(function() {
