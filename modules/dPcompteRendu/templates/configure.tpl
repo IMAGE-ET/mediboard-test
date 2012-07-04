@@ -16,7 +16,7 @@
   restoreModeleId = function(modele_id, do_it, auto) {
     var url = new Url("dPcompteRendu", "ajax_restore_link");
     url.addParam("modele_id", modele_id);
-    url.addParam("do_it", do_it)
+    url.addParam("do_it", do_it);
     url.requestUpdate("result_restore", {
       insertion: function(element, content){
         window.save_content = content;
@@ -28,7 +28,7 @@
           var elt = form.modele_id;
           if (elt.selectedIndex == (elt.length - 1)) return;
           var converted = 0, total = 0;
-          if (window.save_content != "" && window.save_content.indexOf("/") != -1) {
+          if (window.save_content != "" && do_it && window.save_content.indexOf("/") != -1) {
             converted = parseInt(window.save_content.split("/")[0]);
             total = parseInt(window.save_content.split("/")[1]);
           }
