@@ -1481,6 +1481,7 @@ $locales['config-db-dbtype-mysql'] = 'MySQL';
 $locales['config-db-dbtype-mysqli'] = 'MySQLi (recommandé)';
 $locales['config-db-dbtype-oracle'] = 'Oracle';
 $locales['config-db-dbtype-pdo_mysql'] = 'PDO MySQL (expérimental)';
+$locales['config-db-dbtype-pdo_oci'] = 'PDO Oracle (expérimental)';
 $locales['config-db-dbtype-pdo_sqlsrv'] = 'PDO SQL Server (expérimental)';
 $locales['config-db-dbuser'] = 'Utilisateur';
 $locales['config-debug'] = 'Mode debug';

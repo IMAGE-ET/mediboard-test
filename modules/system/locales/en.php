@@ -16,6 +16,7 @@ $locales['config-db-dbtype-mysql'] = 'MySQL';
 $locales['config-db-dbtype-mysqli'] = 'MySQLi (recommended)';
 $locales['config-db-dbtype-oracle'] = 'Oracle';
 $locales['config-db-dbtype-pdo_mysql'] = 'PDO MySQL (experimental)';
+$locales['config-db-dbtype-pdo_oci'] = 'PDO Oracle (experimental)';
 $locales['config-db-dbtype-pdo_sqlsrv'] = 'PDO SQL Server (experimental)';
 $locales['config-db-dbuser'] = 'User';
 $locales['config-dsn-create'] = 'Base and privileged user configuration';

@@ -16,6 +16,7 @@ abstract class CSQLDataSource {
     "oracle"     => "COracleDataSource",
     "pdo_sqlsrv" => "CPDOSQLServerDataSource",
     "pdo_mysql"  => "CPDOMySQLDataSource",
+    "pdo_oci"    => "CPDOOracleDataSource",
   );
   
   static $dataSources = array();
