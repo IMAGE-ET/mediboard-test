@@ -116,7 +116,7 @@ if(CModule::getActive("dPprescription")){
 	    $_prescription_line_mix->calculQuantiteTotal();
 	    $_prescription_line_mix->loadRefPraticien();
 	    foreach($_prescription_line_mix->_ref_lines as $_perf_line){
-	      //$list_lines["prescription_line_mix"][$_perf_line->_id] = $_perf_line;
+	      $list_lines["prescription_line_mix"][$_perf_line->_id] = $_perf_line;
 	      $_perf_line->loadRefsAdministrations();
 	      foreach($_perf_line->_ref_administrations as $_administration_perf){
 	        $_administration_perf->loadRefAdministrateur();
@@ -137,7 +137,7 @@ if(CModule::getActive("dPprescription")){
       }
       foreach($lines_by_type as $med_id => $_line_med){
         $_line_med->_ref_produit->loadConditionnement();
-        //$list_lines["medicament"][$_line_med->_id] = $_line_med;
+        $list_lines["medicament"][$_line_med->_id] = $_line_med;
       
         $_line_med->loadRefsAdministrations();
         foreach($_line_med->_ref_administrations as $_administration_med){
@@ -158,7 +158,7 @@ if(CModule::getActive("dPprescription")){
 	        $_line_elt_comment->loadRefPraticien();
 	      }
 	      foreach($_lines_by_cat["element"] as $_line_elt){
-	        //$list_lines[$chap][$_line_elt->_id] = $_line_elt;
+	        $list_lines[$chap][$_line_elt->_id] = $_line_elt;
 	        $_line_elt->loadRefsAdministrations();
 	        foreach($_line_elt->_ref_administrations as $_administration_elt){
 	          $_administration_elt->loadRefAdministrateur();
