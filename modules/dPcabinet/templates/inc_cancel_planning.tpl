@@ -6,6 +6,12 @@ CancelAction = {
   action: null,
   form: null,
   
+  checkAll: function(input) {
+    $$('input.consult').each(function(element) {
+      element.checked = input.checked;
+    });
+  },
+  
   confirm: function(button, action) {
     $$('div.confirm').invoke('hide');
     $$('div.'+action).invoke('show');
@@ -60,7 +66,7 @@ CancelAction = {
 </form>
 
 
-<div id="following_consultations" style="display: none; width: 500px;">
+<div id="following_consultations" style="display: none; width: 500px; max-height: 600px; overflow-y: auto;">
   <table class="tbl">
     {{if count($following_consultations)}} 
     <tr>
@@ -79,7 +85,10 @@ CancelAction = {
       <th colspan="4" class="title">Rendez-vous suivants</th>
     </tr>
     <tr>
-      <th style="text-align: center;" colspan="2" >{{mb_label class=CConsultation field=_datetime}}</th>
+      <th class="narrow">
+        <input type="checkbox" value="" onclick="CancelAction.checkAll(this);" />
+      </th>
+      <th style="text-align: center;">{{mb_label class=CConsultation field=_datetime}}</th>
       <th style="text-align: center;">{{mb_label class=CConsultation field=_praticien_id}}</th>
       <th style="text-align: center;">{{mb_label class=CConsultation field=_etat}}</th>
     </tr>
