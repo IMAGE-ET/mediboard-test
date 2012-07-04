@@ -158,7 +158,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if ($venueAN) {
       $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
     }
-	
+  
     // NDA non connu (non fourni ou non retrouvé)
     if (!$NDA->_id) {
       // Aucun NDA fourni / Association du NDA
@@ -846,8 +846,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $datetime = $this->queryTextNode("EVN.6/TS.1", $data["EVN"]);
     
     if ($this->_ref_exchange_ihe->code == "A11") {
-    	$affectation =  $newVenue->getCurrAffectation($datetime);
-    	
+      $affectation =  $newVenue->getCurrAffectation($datetime);
+      
       // Si on le mouvement n'a pas d'affectation associée, et que l'on a déjà une affectation dans MB
       if (!$movement->affectation_id && $affectation->_id) {
         return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
@@ -859,7 +859,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       }
       
       if ($msg = $affectation->delete()) {
-      	return $msg;
+        return $msg;
       }
       
       return null;
@@ -933,10 +933,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if (!array_key_exists("ZBE", $data)) {
       return;
     }
-	
-	if (!($ZBE_7 = $this->queryNode("ZBE.7", $data["ZBE"]))) {
-		return;
-	}
+  
+  if (!($ZBE_7 = $this->queryNode("ZBE.7", $data["ZBE"]))) {
+    return;
+  }
     
     return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_7))->_id;
   }
@@ -945,10 +945,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if (!array_key_exists("ZBE", $data)) {
       return;
     }
-	
-	if (!($ZBE_8 = $this->queryNode("ZBE.8", $data["ZBE"]))) {
-		return;
-	}
+  
+  if (!($ZBE_8 = $this->queryNode("ZBE.8", $data["ZBE"]))) {
+    return;
+  }
     
     return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_8))->_id;
   }  
@@ -988,6 +988,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     // Entrée / Sortie réelle du séjour
     $this->getAdmitDischarge($node, $newVenue);
+    
+    // Numéro de rang
+    $this->getAlternateVisitID($node, $newVenue);
   }
   
   function getPatientClass(DOMNode $node, CSejour $newVenue) {
@@ -1235,6 +1238,23 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
   }
   
+  function getAlternateVisitID(DOMNode $node, CSejour $newVenue) {
+    if (!CAppUI::conf("dPplanningOp CSejour use_dossier_rang")) {
+      return;
+    }
+    
+    //Paramétrage de l'id 400
+    $id400NRA               = new CIdSante400();
+    $id400NRA->object_class = "CSejour";
+    $id400NRA->object_id    = $newVenue->_id;
+    $id400NRA->tag          = $newVenue->getTagNRA($newVenue->group_id);
+    $id400NRA->id400        = $this->queryTextNode("PV1.50/CX.1", $node);
+    $id400NRA->loadMatchingObject();
+    $id400NRA->last_update  = mbDateTime();
+
+    $id400NRA->store();
+  }
+  
   function getPV2(DOMNode $node, CSejour $newVenue) {    
     // Entrée / Sortie prévue du séjour
     $this->getExpectedAdmitDischarge($node, $newVenue);
@@ -1370,18 +1390,18 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getModeProvenancePMSI(DOMNode $node, CSejour $newVenue) {
-  	$ZFM_3 = $this->queryTextNode("ZFM.3", $node);
-  	if ($ZFM_3 == 0) {
-  	  $ZFM_3 = null;	
-  	}
+    $ZFM_3 = $this->queryTextNode("ZFM.3", $node);
+    if ($ZFM_3 == 0) {
+      $ZFM_3 = null;	
+    }
     $newVenue->provenance = $ZFM_3;
   }
   
   function getModeDestinationPMSI(DOMNode $node, CSejour $newVenue) {
-  	$ZFM_4 = $this->queryTextNode("ZFM.4", $node);
-  	if ($ZFM_4 == 0) {
-  	  $ZFM_4 = null;	
-  	}
+    $ZFM_4 = $this->queryTextNode("ZFM.4", $node);
+    if ($ZFM_4 == 0) {
+      $ZFM_4 = null;	
+    }
     $newVenue->destination = $ZFM_4;
   }
   
