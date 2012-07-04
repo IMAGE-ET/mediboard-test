@@ -1,4 +1,13 @@
-<?php
+<?php /** $Id:$ **/
+
+/**
+ * @category Cli
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
+ */
 
 global $argv;
 
@@ -16,31 +25,31 @@ $command = array_shift($argv);
 foreach ($argv as $key=>$arg) {
   switch ($arg) {
     case "-p":
-    	$port = $argv[$key+1];
+      $port = $argv[$key+1];
       unset($argv[$key+1]);
-    	break;
+      break;
     case "-m":
-    	$source_mode = "passive";
-    	break;
+      $source_mode = "passive";
+      break;
     case "-t":
-    	$transport_mode = FTP_ASCII;
+      $transport_mode = FTP_ASCII;
       break;
     case "-h":
-    	$help = true;
+      $help = true;
       break;
     default:
       switch ($i) {
         case 0:
-        	$hostname = $arg;
+          $hostname = $arg;
           break;
         case 1:
-        	$username = $arg;
+          $username = $arg;
           break;
         case 2:
-        	$password = $arg;
+          $password = $arg;
           break;
         case 3:
-        	$file = $arg;
+          $file = $arg;
       }
       $i++;
   }  

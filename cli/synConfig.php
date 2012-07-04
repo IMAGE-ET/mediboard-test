@@ -1,5 +1,15 @@
-<?php 
-require_once ('utils.php');
+<?php /** $Id:$ **/
+
+/**
+ * @category Cli
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
+ */
+
+require_once "utils.php";
 
 global $argv;
 
@@ -16,22 +26,27 @@ if (count($argv) >= 2 && count($argv) <= 4) {
       case "-h":
         $help = true;
         break;
+        
       default:
         switch ($i) {
           case 0:
             $hostname = $arg;
             break;
+            
           case 1:
             $username = $arg;
             break;
+            
           case 2:
             $file = $arg;
             break;
         }
+        
         $i++;
     }
   }
-} else {
+}
+else {
   $help = true;
 }
 
@@ -42,17 +57,24 @@ if ($help) {
 <hostname> : host to connect
 <username> : username requesting
 <file>     : file to get or push\n";
+
   return;
 }
 
 // Create the temporary directory
 if (!(is_file("/tmp/synConfig"))) {
   if (!(is_dir("/tmp/synConfig"))) {
-    if (!(check_errs(mkdir("/tmp/synConfig", 0, true), false, "Unable to create temporay directory.", "Temporary directory created!"))) {
+    if (!(check_errs(
+      mkdir("/tmp/synConfig", 0, true),
+      false,
+      "Unable to create temporay directory.",
+      "Temporary directory created!"
+    ))) {
       return;
     }
   }
-} else {
+}
+else {
   cecho("Error, /tmp/synConfig directory cannot be created.", "red");
   return;
 }
@@ -71,7 +93,13 @@ if (filemtime("/tmp/synConfig".basename($file)) != filemtime($file)) {
   // If remote file is younger, we get
   if (filemtime("/tmp/synConfig".basename($file)) > filemtime($file)) {
     echo "Remote file is younger. Older will be replaced.\n";
-    if (!(check_errs(rename("/tmp/synConfig".basename($file), $file), false, "Unable to replace the file.", "The file has been replaced!"))) {
+    
+    if (!(check_errs(
+      rename("/tmp/synConfig".basename($file), $file),
+      false,
+      "Unable to replace the file.",
+      "The file has been replaced!"
+    ))) {
       return;
     }
     
@@ -79,13 +107,25 @@ if (filemtime("/tmp/synConfig".basename($file)) != filemtime($file)) {
     $APACHE_USER = shell_exec("ps -ef|grep apache|head -2|tail -1|cut -d' ' -f1");
     $APACHE_GROUP = shell_exec("groups ".$APACHE_USER." | cut -d' ' -f3");
     exec("chgrp ".$APACHE_GROUP." ".$file, $result, $returnVar);
-    if (!(check_errs($returnVar, true, "Unable to change owner group of ".$file.".", "Owner group of ".$file." set to ".$APACHE_GROUP."!"))) {
+    
+    if (!(check_errs(
+      $returnVar,
+      true,
+      "Unable to change owner group of ".$file.".",
+      "Owner group of ".$file." set to ".$APACHE_GROUP."!"
+    ))) {
       return;
     }
     
     // Set group permissions to file
     exec("chmod g+w ".$file, $result, $returnVar);
-    if (!(check_errs($returnVar, true, "Unable to change permissions of ".$file.".", "Permissions of ".$file." changed!"))) {
+    
+    if (!(check_errs(
+      $returnVar,
+      true,
+      "Unable to change permissions of ".$file.".",
+      "Permissions of ".$file." changed!"
+    ))) {
       return;
     }
   }
@@ -93,13 +133,15 @@ if (filemtime("/tmp/synConfig".basename($file)) != filemtime($file)) {
   else {
     echo "Remote file is older. It will be replaced.\n";
     exec("scp ".$file." ".$username."@".$hostname.":".$file, $result, $returnVar);
+    
     if (!(check_errs($returnVar, true, "Unable to push the file.", "File sent!"))) {
       return;
     }
   }
-} else {
+}
+else {
   echo "Files have the same last modification time.\n";
+  
   return;
 }
-
 ?>

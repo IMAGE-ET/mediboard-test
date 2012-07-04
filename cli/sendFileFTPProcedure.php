@@ -1,44 +1,60 @@
-<?php
+<?php /** $Id:$ **/
 
-require_once("utils.php");
-require_once("Procedure.class.php");
+/**
+ * @category Cli
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
+ */
 
-function sendFileFTPProcedure( $backMenu ) {
+require_once "utils.php";
+require_once "Procedure.class.php";
+
+/**
+ * The Procedure for the sendfileftp function
+ * 
+ * @param object $backMenu The Menu for return
+ * 
+ * @return None
+ */
+function sendFileFTPProcedure($backMenu) {
   $procedure = new Procedure();
   
   $choice = "0";
-  $procedure->showReturnChoice( $choice );
+  $procedure->showReturnChoice($choice);
   
-  $qt_hostname  = $procedure->createQuestion( "Hostname: " );
-  $hostname     = $procedure->askQuestion( $qt_hostname );
+  $qt_hostname  = $procedure->createQuestion("Hostname: ");
+  $hostname     = $procedure->askQuestion($qt_hostname);
   
   if ( $hostname === $choice ) {
     $procedure->clearScreen();
-    $procedure->showMenu( $backMenu, true );
+    $procedure->showMenu($backMenu, true);
     exit();
   }
   
-  $qt_username    = $procedure->createQuestion( "Username: " );
-  $username       = $procedure->askQuestion( $qt_username );
+  $qt_username    = $procedure->createQuestion("Username: ");
+  $username       = $procedure->askQuestion($qt_username);
   
   $password       = prompt_silent();
   
-  $qt_file        = $procedure->createQuestion( "File: " );
-  $file           = $procedure->askQuestion( $qt_file );
+  $qt_file        = $procedure->createQuestion("File: ");
+  $file           = $procedure->askQuestion($qt_file);
   
-  $qt_port        = $procedure->createQuestion( "Port [default 21]: ", 21 );
-  $port           = $procedure->askQuestion( $qt_port );
+  $qt_port        = $procedure->createQuestion("Port [default 21]: ", 21);
+  $port           = $procedure->askQuestion($qt_port);
   
-  $qt_passiveMode = $procedure->createQuestion( "Switch to passive mode [y or n, default n]? ", "n" );
-  $passiveMode    = $procedure->askQuestion( $qt_passiveMode );
+  $qt_passiveMode = $procedure->createQuestion("Switch to passive mode [y or n, default n]? ", "n");
+  $passiveMode    = $procedure->askQuestion($qt_passiveMode);
   
-  $qt_ASCIIMode   = $procedure->createQuestion( "Switch to ASCII mode [y or n, default n]? ", "n" );
-  $ASCIIMode      = $procedure->askQuestion( $qt_ASCIIMode );
+  $qt_ASCIIMode   = $procedure->createQuestion("Switch to ASCII mode [y or n, default n]? ", "n");
+  $ASCIIMode      = $procedure->askQuestion($qt_ASCIIMode);
   
-  $commandLine = "php " . dirname(__FILE__) . "/sendFileFTP.php " . $hostname . " " . $username . " " . $password . " " . $file;
+  $commandLine = "php ".dirname(__FILE__)."/sendFileFTP.php ".$hostname." ".$username." ".$password." ".$file;
   
   if ($port != "") {
-    $commandLine .= " -p " . $port;
+    $commandLine .= " -p ".$port;
   }
 
   if ($passiveMode == "y") {
@@ -50,9 +66,17 @@ function sendFileFTPProcedure( $backMenu ) {
   }
   
   echo "\n";
-  echo shell_exec($commandLine) . "\n\n";
+  echo shell_exec($commandLine)."\n\n";
 }
 
+/**
+ * Function to use sendfileftp in one line
+ * 
+ * @param string $command The command input
+ * @param array  $argv    The given parameters
+ * 
+ * @return bool
+ */
 function sendFileFTPCall( $command, $argv ) {
   if (count($argv) == 7) {
     $hostname = $argv[0];
@@ -63,11 +87,11 @@ function sendFileFTPCall( $command, $argv ) {
     $passiveMode = $argv[5];
     $ASCIIMode = $argv[6];
     
-    $commandLine = "php " . dirname(__FILE__) . "/sendFileFTP.php " . $hostname . " " . $username . " " . $password . " " . $file;
+    $commandLine = "php ".dirname(__FILE__)."/sendFileFTP.php ".$hostname." ".$username." ".$password." ".$file;
 
     if ($port != "") {
   
-      $commandLine .= " -p " . $port;
+      $commandLine .= " -p ".$port;
     }
   
     if ($passiveMode == "y") {
@@ -80,7 +104,8 @@ function sendFileFTPCall( $command, $argv ) {
       $commandLine .= " -t";
     }
   
-    echo shell_exec($commandLine) . "\n\n";
+    echo shell_exec($commandLine)."\n\n";
+    
     return 0;
   }
   else {
@@ -93,6 +118,7 @@ Options :
 [<port>]          : port to connect, default 21
 [<passive_mode>]  : switch to passive mode, default n
 [<ascii_mode>]    : switch to ascii mode, default n\n\n";
+
     return 1;
   }
 }
