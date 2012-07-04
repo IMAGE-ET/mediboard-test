@@ -18,7 +18,10 @@
     <td>
       {{mb_value object=$patient}}
     </td>
-    <td>Le <strong>{{mb_value object=$object field=_datetime}}</strong></td>
+    <td>
+      Le <strong {{if $object->plageop_id}}onmouseover="ObjectTooltip.createEx(this, '{{$object->_ref_plageop->_guid}}')"{{/if}}>
+        {{mb_value object=$object field=_datetime}}</strong>
+    </td>
   </tr>
   <tr>
     <td>
