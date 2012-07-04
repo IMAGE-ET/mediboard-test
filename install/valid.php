@@ -1,9 +1,24 @@
-<?php
+<?php /** $Id:$ **/
+
+/**
+ * @category Install
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
+ */
 
 // Check the check.php page
+/**
+ * Check the check.php page
+ * 
+ * @return array
+ */
 function check() {
   if (!(class_exists("CPrerequisite"))) {
-    class CPrerequisite {
+    class CPrerequisite
+        {
       var $name = "";
       var $description = "";
       var $mandatory = false;
@@ -14,21 +29,24 @@ function check() {
       }
     }
     
-    class CPearPackage extends CPrerequisite {
+    class CPearPackage extends CPrerequisite
+        {
       var $status = "stable";
     
       function check() {
-        return @include_once("$this->name.php");
+        return @include_once "$this->name.php";
       }
     }
     
-    class CPHPExtension  extends CPrerequisite {
+    class CPHPExtension  extends CPrerequisite
+        {
       function check() {
         return extension_loaded(strtolower($this->name));
       }
     }
     
-    class CPHPVersion extends CPrerequisite {
+    class CPHPVersion extends CPrerequisite
+        {
       function check() {
         return phpversion() >= $this->name;
       }
@@ -75,16 +93,6 @@ function check() {
   $package->mandatory = false;
   $package->reasons[] = "Outil de génie logiciel pour vérifier la qualité du code source de Mediboard";
   $packages[] = $package;
-  
-  /*
-  $package = new CPearPackage;
-  $package->name = "phpUnit";
-  $package->description = "Package de test unitaire";
-  $package->mandatory = false;
-  $package->reasons[] = "Tests unitaires et fonctionnels de Mediboard";
-  $package->reasons[] = "cf. <a href='http://www.phpunit.de/wiki/Documentation' style='display: inline;'>http://www.phpunit.de/wiki/Documentation</a>";
-  $packages[] = $package;
-  */
   
   $extensions = array();
   
@@ -154,13 +162,15 @@ function check() {
   
   $extension = new CPHPExtension;
   $extension->name = "CURL";
-  $extension->description = "Extension permettant de communiquer avec des serveurs distants, grâce à de nombreux protocoles";
+  $extension->description = "Extension permettant de communiquer avec des serveurs distants,".
+  " grâce à de nombreux protocoles";
   $extension->reasons[] = "Connexion au site web du Conseil National l'Ordre des Médecins";
   $extensions[] = $extension;
   
   $extension = new CPHPExtension;
   $extension->name = "GD";
-  $extension->description = "Extension de manipulation d'image. \nGD version 2 est recommandée car elle permet un meilleur rendu, grâce à de nombreux protocoles";
+  $extension->description = "Extension de manipulation d'image. \n".
+  "GD version 2 est recommandée car elle permet un meilleur rendu, grâce à de nombreux protocoles";
   $extension->reasons[] = "Module de statistiques graphiques";
   $extension->reasons[] = "Fonction d'audiogrammes";
   $extensions[] = $extension;
@@ -248,10 +258,15 @@ function check() {
 }
 // End of checking
 
-// Check the fileaccess.php page
+/**
+ * Check the fileaccess.php page
+ * 
+ * @return array 
+ */
 function fileaccess() {
   if (!(class_exists("CPathAccess"))) {
-    class CPathAccess {
+    class CPathAccess
+        {
       var $path = "";
       var $description = "";
       var $reason = array();
@@ -299,7 +314,7 @@ function fileaccess() {
   $i = 0;
   $validFileAccess = array();
   
-  foreach($pathAccesses as $pathAccess) {
+  foreach ($pathAccesses as $pathAccess) {
     $validFileAccess[$i] = $pathAccess->check();
     $i++;
   }
@@ -308,20 +323,24 @@ function fileaccess() {
 }
 // End of checking
 
-// Check the install.php page
+/**
+ * Check the install.php page
+ * 
+ * @return array 
+ */
 function install() {
   $mbpath = "../";
-  if (!file_exists($mbpath."classes/CMbPath.class.php")){
+  if (!file_exists($mbpath."classes/CMbPath.class.php")) {
     $mbpath = "./";
   }
   
-  require_once($mbpath."classes/CMbPath.class.php");
-  require_once("libs.php");
+  include_once $mbpath."classes/CMbPath.class.php";
+  include_once "libs.php";
   
   // Start of checking
   $i=0;
   $validInstall = array();
-  foreach(CLibrary::$all as $library) {
+  foreach (CLibrary::$all as $library) {
     $validInstall[$i] = $library->getUpdateState();
     $i++;
   }
@@ -330,24 +349,31 @@ function install() {
 }
 // End of checking
 
+/**
+ * Check all the needed pages
+ *  
+ * @param object $avoid [optional] If true, test HTTP return codes
+ * 
+ * @return array
+ */
 function checkAll($avoid = false) {
   
   if ($avoid) {
-    require_once ("testHTTP.php");
+    include_once "testHTTP.php";
   
     $success = true;
   
-    ( array_key_exists( "HTTPS", $_SERVER ) ) ? $http = "https://" : $http = "http://";
+    ( array_key_exists("HTTPS", $_SERVER) ) ? $http = "https://" : $http = "http://";
     
-    $goodUrls[] = $http.dirname( dirname( $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] ) )."/tmp/locales-fr.js";
+    $goodUrls[] = $http.dirname(dirname($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']))."/tmp/locales-fr.js";
     
-    $badUrls[] = $http.dirname( dirname( $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] ) )."/files";
-    $badUrls[] = $http.dirname( dirname( $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] ) )."/tmp";
-    $badUrls[] = $http.dirname( dirname( $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] ) )."/tmp/mb-log.html";
+    $badUrls[] = $http.dirname(dirname($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']))."/files";
+    $badUrls[] = $http.dirname(dirname($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']))."/tmp";
+    $badUrls[] = $http.dirname(dirname($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']))."/tmp/mb-log.html";
     
     $urls = array();
     
-    $urls = array_merge( testHTTPCode( $goodUrls, "Autorisé" ), testHTTPCode( $badUrls, "Interdit" ) );
+    $urls = array_merge(testHTTPCode($goodUrls, "Autorisé"), testHTTPCode($badUrls, "Interdit"));
   
     foreach ( $urls as $url => $result ) {
       if (!$result['result']) {
