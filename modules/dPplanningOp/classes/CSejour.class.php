@@ -191,6 +191,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_dates_consultations       = null;
   var $_codes_ccam_operations     = null;
   var $_NDA                       = null; // Numéro Dossier Administratif
+  var $_NDA_view                  = null; // Vue du NDA
   var $_NPA                       = null; // Numéro Pré-Admission
   var $_list_constantes_medicales = null; 
   var $_cancel_alerts             = null;
