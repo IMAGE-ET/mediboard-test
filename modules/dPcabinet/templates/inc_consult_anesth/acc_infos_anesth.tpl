@@ -6,7 +6,7 @@ function submitTech(oForm) {
   if ($V(oForm.elements.del)) {
     oForm.reset();
   }
-	return false;
+  return false;
 }
 
 function reloadListTech() {
@@ -34,9 +34,11 @@ toggleUSCPO = function(status) {
     $("uscpo_area").setStyle({visibility: "visible"});
   }
   else {
-    $V(form.duree_uscpo, 0);
     $("uscpo_area").setStyle({visibility: "hidden"});
   }
+  // Permet de valuer à 1 automatiquement la durée uscpo,
+  // ou bien 0 si le passage uscpo est repassé à non.
+  $V(form.duree_uscpo, status);
 }
 
 checkUSCPO = function() {
@@ -129,55 +131,55 @@ checkUSCPO = function() {
       <fieldset>
         <legend>Pré-opératoire</legend>
         <form name="editInfosAnesthFrm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
-	        <input type="hidden" name="m" value="dPcabinet" />
-	        <input type="hidden" name="del" value="0" />
-	        <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-	        {{mb_key object=$consult_anesth}}
-	        <table class="layout main">
-	          <tr>
-	            <td class="halfPane">
-	              {{mb_label object=$consult_anesth field="prepa_preop"}}
-	              {{mb_field object=$consult_anesth field="prepa_preop" rows="4" onchange="this.form.onsubmit()" form="editInfosAnesthFrm"
+          <input type="hidden" name="m" value="dPcabinet" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+          {{mb_key object=$consult_anesth}}
+          <table class="layout main">
+            <tr>
+              <td class="halfPane">
+                {{mb_label object=$consult_anesth field="prepa_preop"}}
+                {{mb_field object=$consult_anesth field="prepa_preop" rows="4" onchange="this.form.onsubmit()" form="editInfosAnesthFrm"
                   aidesaisie="validateOnBlur: 0"}}
-	            </td>
-	            <td class="halfPane">
-	              {{if !$isPrescriptionInstalled || ($conf.dPcabinet.CConsultAnesth.view_premedication && $app->user_prefs.displayPremedConsult)}}
-	                {{mb_label object=$consult_anesth field="premedication"}}
-	                {{mb_field object=$consult_anesth field="premedication" rows="4" onchange="this.form.onsubmit()" form="editInfosAnesthFrm"
+              </td>
+              <td class="halfPane">
+                {{if !$isPrescriptionInstalled || ($conf.dPcabinet.CConsultAnesth.view_premedication && $app->user_prefs.displayPremedConsult)}}
+                  {{mb_label object=$consult_anesth field="premedication"}}
+                  {{mb_field object=$consult_anesth field="premedication" rows="4" onchange="this.form.onsubmit()" form="editInfosAnesthFrm"
                   aidesaisie="validateOnBlur: 0"}}
-	              {{else}}
-	                {{if $conf.dPcabinet.CPrescription.view_prescription}}
+                {{else}}
+                  {{if $conf.dPcabinet.CPrescription.view_prescription}}
                     {{if $view_prescription}}
-  	                  {{mb_label object=$consult_anesth field="premedication"}}
-  	                  <br />
-	                    <button class="tick" type="button" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour')">Accéder à la prescription</button>
+                      {{mb_label object=$consult_anesth field="premedication"}}
+                      <br />
+                      <button class="tick" type="button" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour')">Accéder à la prescription</button>
                     {{/if}}
-	                {{else}}
-	                  <div class="small-info">
-	                    La saisie de la prémédication n'est actuellement pas active
-	                  </div>
-	                {{/if}}
-	              {{/if}}
-	            </td>
-	          </tr>
-	        </table>
+                  {{else}}
+                    <div class="small-info">
+                      La saisie de la prémédication n'est actuellement pas active
+                    </div>
+                  {{/if}}
+                {{/if}}
+              </td>
+            </tr>
+          </table>
         </form>
       </fieldset>
-			
+      
       <fieldset>
         <legend>{{mb_label object=$techniquesComp field="technique"}}</legend>
         <table class="layout main">
           <tr>
             <td class="halfPane">
-				      <form name="addEditTechCompFrm" action="?m=dPcabinet" method="post" onsubmit="return submitTech(this)">
-					      <input type="hidden" name="m" value="dPcabinet" />
-					      <input type="hidden" name="del" value="0" />
-					      <input type="hidden" name="dosql" value="do_technique_aed" />
-					      {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1}}
-	              {{mb_field object=$techniquesComp field="technique" rows="4" form="addEditTechCompFrm"
+              <form name="addEditTechCompFrm" action="?m=dPcabinet" method="post" onsubmit="return submitTech(this)">
+                <input type="hidden" name="m" value="dPcabinet" />
+                <input type="hidden" name="del" value="0" />
+                <input type="hidden" name="dosql" value="do_technique_aed" />
+                {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1}}
+                {{mb_field object=$techniquesComp field="technique" rows="4" form="addEditTechCompFrm"
                   aidesaisie="validateOnBlur: 0"}}
-	              <button class="add" type="submit">{{tr}}Add{{/tr}}</button>
-							</form>
+                <button class="add" type="submit">{{tr}}Add{{/tr}}</button>
+              </form>
             </td>
             <td class="halfPane text" id="listTech">
               {{mb_include module=cabinet template=inc_consult_anesth/techniques_comp}}
@@ -186,7 +188,7 @@ checkUSCPO = function() {
         </table>
       </fieldset>
     </td>
-	</tr>
+  </tr>
   <tr>
     <td style="width: 50%;">
       <form name="editRquesConsultFrm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
