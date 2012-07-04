@@ -246,8 +246,8 @@ function viewActes(etab){
 </table>
 {{else}}
 <div class="big-info">
-  Votre compta a été déléguée.<br/>
-  Veuillez contacter l'administrateur
+  Vous n'avez accès à la comptabilité d'aucun praticien.<br/>
+  Veuillez contacter un administrateur
 </div>
 
 {{/if}}

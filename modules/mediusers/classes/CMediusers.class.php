@@ -768,22 +768,26 @@ class CMediusers extends CMbObject {
   }
   
   function loadPraticiensCompta(){
-  	
-		$is_admin               = in_array(CUser::$types[$this->_user_type], array("Administrator"));
-		$is_admin_or_secretaire = in_array(CUser::$types[$this->_user_type], array("Administrator", "Secrétaire"));
+		$is_admin      = in_array(CUser::$types[$this->_user_type], array("Administrator"));
+		$is_secretaire = in_array(CUser::$types[$this->_user_type], array("Secrétaire"));
+    $is_directeur  = in_array(CUser::$types[$this->_user_type], array("Directeur"));
 		$listPrat = array();
+    $this->loadRefFunction();
 		// Liste des praticiens du cabinet
-		if($is_admin_or_secretaire || $this->_ref_function->compta_partagee) {
+		if($is_admin || $is_secretaire || $is_directeur || $this->_ref_function->compta_partagee) {
 		  if($is_admin) {
 		    if(CAppUI::pref("pratOnlyForConsult", 1)) {
 		      $listPrat = $this->loadPraticiens(PERM_EDIT);
-		    } else {
+		    }
+		    else {
 		      $listPrat = $this->loadProfessionnelDeSante(PERM_EDIT);
 		    }
-		  } else {
+		  }
+		  else {
 		    if(CAppUI::pref("pratOnlyForConsult", 1)) {
 		      $listPrat = $this->loadPraticiens(PERM_EDIT, $this->function_id);
-		    } else {
+		    }
+		    else {
 		      $listPrat = $this->loadProfessionnelDeSante(PERM_EDIT, $this->function_id);
 		    }
 		    // On ajoute les praticiens qui ont délégués leurs compta
@@ -796,8 +800,8 @@ class CMediusers extends CMbObject {
         $order = "users.user_last_name, users.user_first_name";
         
         $mediuser = new CMediusers();
-        //les praticiens WithPerms sont déjà chargés
-//        $mediusers = $mediuser->loadListWithPerms(PERM_EDIT, $where, $order, null, null, $ljoin);
+        // les praticiens WithPerms sont déjà chargés
+        // $mediusers = $mediuser->loadListWithPerms(PERM_EDIT, $where, $order, null, null, $ljoin);
         $mediusers = $mediuser->loadList($where, $order, null, null, $ljoin);
         
         // Associate already loaded function
