@@ -78,6 +78,10 @@
     <exclude name="PEAR.WhiteSpace.ScopeIndent" />
   </rule>
 
+  <rule ref="PEAR.Classes.ClassDeclaration.OpenBraceNewLine">
+    <severity>0</severity>
+  </rule>
+  
   <rule ref="PEAR.WhiteSpace.ScopeIndent.Incorrect">
     <severity>0</severity>
   </rule>
