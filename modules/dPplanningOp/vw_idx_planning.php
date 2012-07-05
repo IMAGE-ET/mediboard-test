@@ -9,10 +9,12 @@
 
 CCanDo::checkEdit();
 $ds = CSQLDataSource::get("std");
-$date      = CValue::getOrSession("date", mbDate());
-$canceled  = CValue::getOrSession("canceled", 0);
-$lastmonth = mbDate("-1 month", $date);
-$nextmonth = mbDate("+1 month", $date);
+
+$date           = CValue::getOrSession("date", mbDate());
+$canceled       = CValue::getOrSession("canceled", 0);
+$lastmonth      = mbDate("-1 month", $date);
+$nextmonth      = mbDate("+1 month", $date);
+$sans_anesth    = CValue::getOrSession("sans_anesth", 0);
 
 // Sélection du praticien
 $mediuser = CMediusers::get();
@@ -23,7 +25,7 @@ $selPrat = CValue::getOrSession("selPrat", $mediuser->isPraticien() ? $mediuser-
 $selPraticien = new CMediusers();
 $selPraticien->load($selPrat);
 
-if($selPraticien->isAnesth()) {
+if ($selPraticien->isAnesth()) {
   // Selection des différentes interventions de la journée par service
   $service = new CService();
   $services = $service->loadGroupList();
@@ -35,43 +37,71 @@ if($selPraticien->isAnesth()) {
              "affectation" => "affectation.sejour_id = sejour.sejour_id AND '$date' BETWEEN DATE(affectation.entree) AND DATE(affectation.sortie)",
              "lit"         => "lit.lit_id = affectation.lit_id",
              "chambre"     => "chambre.chambre_id = lit.chambre_id",
-             "service"     => "service.service_id = chambre.service_id",
+             "service"     => "service.service_id = chambre.service_id"
            );
+  
+  $where_anesth = "operations.anesth_id = '$selPraticien->_id' OR plagesop.anesth_id = '$selPraticien->_id'";
+  
+  if ($sans_anesth) {
+    $where_anesth .= " OR operations.anesth_id IS NULL OR plagesop.anesth_id IS NULL";
+  }
+  
   $whereAmbu = array(
                  "plagesop.date = '$date' OR operations.date = '$date'",
                  "sejour.type"   => "= 'ambu'",
                  "sejour.group_id" => "= '".CGroups::loadCurrent()->_id."'",
                );
+  $whereAmbu[] = $where_anesth;
+  
+  if (!$canceled) {
+    $whereAmbu["operations.annulee"] = " = '0'";
+  }
+  
   $whereHospi = array(
                  "plagesop.date = '$date' OR operations.date = '$date'",
                  "sejour.type"   => "= 'comp'",
                  "sejour.group_id" => "= '".CGroups::loadCurrent()->_id."'",
+                 "operations.anesth_id = '$selPraticien->_id' OR plagesop.anesth_id = '$selPraticien->_id'"
                );
+  $whereAmbu[] = $where_anesth;
+  
+  if (!$canceled) {
+    $whereHospi["operations.annulee"] = " = '0'";
+  }
+  
   $whereUrg   = array(
                  "plagesop.plageop_id" => "IS NULL",
                  "operations.date"     => "= '$date'",
                  "sejour.group_id" => "= '".CGroups::loadCurrent()->_id."'",
+                 "operations.anesth_id = '$selPraticien->_id' OR plagesop.anesth_id = '$selPraticien->_id'"
                );
-  foreach($services as $_service) {
+  $whereUrg[] = $where_anesth;
+  
+  if (!$canceled) {
+    $whereUrg["operations.annulee"] = " = '0'";
+  }
+  
+  foreach ($services as $_service) {
     $whereAmbu["service.service_id"]          = "= '$_service->_id'";
     $whereHospi["service.service_id"]         = "= '$_service->_id'";
     $whereUrg["service.service_id"]           = "= '$_service->_id'";
+    
     $listInterv["ambu"][$_service->_id]       = $interv->loadList($whereAmbu , $order, null, null, $ljoin);
-    foreach($listInterv["ambu"][$_service->_id] as &$_interv) {
+    foreach ($listInterv["ambu"][$_service->_id] as &$_interv) {
       $_interv->loadRefAffectation();
       $_interv->loadRefsFwd(1);
       $_interv->loadRefsConsultAnesth();
       $_interv->_ref_chir->loadRefFunction();
     }
     $listInterv["comp"][$_service->_id]      = $interv->loadList($whereHospi, $order, null, null, $ljoin);
-    foreach($listInterv["comp"][$_service->_id] as &$_interv) {
+    foreach ($listInterv["comp"][$_service->_id] as &$_interv) {
       $_interv->loadRefAffectation();
       $_interv->loadRefsFwd(1);
       $_interv->loadRefsConsultAnesth();
       $_interv->_ref_chir->loadRefFunction();
     }
     $listInterv["hors_plage"][$_service->_id] = $interv->loadList($whereUrg  , $order, null, null, $ljoin);
-    foreach($listInterv["hors_plage"][$_service->_id] as &$_interv) {
+    foreach ($listInterv["hors_plage"][$_service->_id] as &$_interv) {
       $_interv->loadRefAffectation();
       $_interv->loadRefsFwd(1);
       $_interv->loadRefsConsultAnesth();
@@ -82,21 +112,21 @@ if($selPraticien->isAnesth()) {
   $whereHospi["service.service_id"]      = "IS NULL";
   $whereUrg["service.service_id"]        = "IS NULL";
   $listInterv["ambu"]["non_place"]       = $interv->loadList($whereAmbu , $order, null, null, $ljoin);
-  foreach($listInterv["ambu"]["non_place"] as &$_interv) {
+  foreach ($listInterv["ambu"]["non_place"] as &$_interv) {
     $_interv->loadRefAffectation();
     $_interv->loadRefsFwd(1);
     $_interv->loadRefsConsultAnesth();
     $_interv->_ref_chir->loadRefFunction();
   }
   $listInterv["comp"]["non_place"]      = $interv->loadList($whereHospi, $order, null, null, $ljoin);
-  foreach($listInterv["comp"]["non_place"] as &$_interv) {
+  foreach ($listInterv["comp"]["non_place"] as &$_interv) {
     $_interv->loadRefAffectation();
     $_interv->loadRefsFwd(1);
     $_interv->loadRefsConsultAnesth();
     $_interv->_ref_chir->loadRefFunction();
   }
   $listInterv["hors_plage"]["non_place"] = $interv->loadList($whereUrg  , $order, null, null, $ljoin);
-  foreach($listInterv["hors_plage"]["non_place"] as &$_interv) {
+  foreach ($listInterv["hors_plage"]["non_place"] as &$_interv) {
     $_interv->loadRefAffectation();
     $_interv->loadRefsFwd(1);
     $_interv->loadRefsConsultAnesth();
@@ -111,7 +141,8 @@ if($selPraticien->isAnesth()) {
   $smarty->assign("listInterv"  , $listInterv);
   $smarty->assign("services"    , $services);
   $smarty->assign("selPrat"     , $selPrat);
-  
+  $smarty->assign("canceled"    , $canceled);
+  $smarty->assign("sans_anesth" , $sans_anesth);
   $smarty->display("vw_idx_visite_anesth.tpl");
   
 } else {
@@ -123,7 +154,7 @@ if($selPraticien->isAnesth()) {
     $selPratLogin = $selPraticien->user_id;
     $specialite = $selPraticien->function_id;
     $selPraticien->loadBackRefs("secondary_functions");
-    foreach($selPraticien->_back["secondary_functions"] as  $curr_sec_spec) {
+    foreach ($selPraticien->_back["secondary_functions"] as  $curr_sec_spec) {
       $curr_sec_spec->loadRefsFwd();
       $curr_function = $curr_sec_spec->_ref_function;
       $secondary_specs[$curr_function->_id] = $curr_function;
@@ -149,10 +180,9 @@ if($selPraticien->isAnesth()) {
         AND plagesop.date BETWEEN '$month_min' AND '$month_max'
       GROUP BY plagesop.plageop_id
       ORDER BY plagesop.date, plagesop.debut, plagesop.plageop_id";
-  if($selPratLogin) {
+  $listPlages = array();
+  if ($selPratLogin) {
     $listPlages = $ds->loadList($sql);
-  } else {
-    $listPlages = array();
   }
   
   // Urgences du mois
@@ -165,10 +195,9 @@ if($selPraticien->isAnesth()) {
         AND operations.date BETWEEN '$month_min' AND '$month_max'
       GROUP BY operations.date
       ORDER BY operations.date";
+  $listUrgences = array();
   if($selPratLogin) {
     $listUrgences = $ds->loadList($sql);
-  } else {
-    $listUrgences = array();
   }
   
   $listDays = array();
