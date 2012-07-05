@@ -3,25 +3,26 @@
 {{assign var=mode_play value=$app->user_prefs.mode_play}}
 
 // Preloading extra plugins
-CKEDITOR.plugins.addExternal("mbheader"   , "../../modules/dPcompteRendu/fcke_plugins/mbheader/plugin.js");
-CKEDITOR.plugins.addExternal("mbfooter"   , "../../modules/dPcompteRendu/fcke_plugins/mbfooter/plugin.js");
-CKEDITOR.plugins.addExternal("mbfields"   , "../../modules/dPcompteRendu/fcke_plugins/mbfields/plugin.js");
-CKEDITOR.plugins.addExternal("mbfreetext" , "../../modules/dPcompteRendu/fcke_plugins/mbfreetext/plugin.js");
-CKEDITOR.plugins.addExternal("mbhelpers"  , "../../modules/dPcompteRendu/fcke_plugins/mbhelpers/plugin.js");
-CKEDITOR.plugins.addExternal("mblists"    , "../../modules/dPcompteRendu/fcke_plugins/mblists/plugin.js");
+CKEDITOR.plugins.addExternal("mbheader"    , "../../modules/dPcompteRendu/fcke_plugins/mbheader/plugin.js");
+CKEDITOR.plugins.addExternal("mbfooter"    , "../../modules/dPcompteRendu/fcke_plugins/mbfooter/plugin.js");
+CKEDITOR.plugins.addExternal("mbfields"    , "../../modules/dPcompteRendu/fcke_plugins/mbfields/plugin.js");
+CKEDITOR.plugins.addExternal("mbfreetext"  , "../../modules/dPcompteRendu/fcke_plugins/mbfreetext/plugin.js");
+CKEDITOR.plugins.addExternal("mbhelpers"   , "../../modules/dPcompteRendu/fcke_plugins/mbhelpers/plugin.js");
+CKEDITOR.plugins.addExternal("mblists"     , "../../modules/dPcompteRendu/fcke_plugins/mblists/plugin.js");
 {{if $mode_play && !$templateManager->isModele}}
-  CKEDITOR.plugins.addExternal("mbplay"     , "../../modules/dPcompteRendu/fcke_plugins/mbplay/plugin.js");
+  CKEDITOR.plugins.addExternal("mbplay"    , "../../modules/dPcompteRendu/fcke_plugins/mbplay/plugin.js");
 {{/if}}
-CKEDITOR.plugins.addExternal("mbprint"    , "../../modules/dPcompteRendu/fcke_plugins/mbprint/plugin.js");
-CKEDITOR.plugins.addExternal("mbprinting" , "../../modules/dPcompteRendu/fcke_plugins/mbprinting/plugin.js");
-CKEDITOR.plugins.addExternal("mbprintPDF" , "../../modules/dPcompteRendu/fcke_plugins/mbprintPDF/plugin.js");
-CKEDITOR.plugins.addExternal("mbpagebreak", "../../modules/dPcompteRendu/fcke_plugins/mbpagebreak/plugin.js");
+CKEDITOR.plugins.addExternal("mbprint"     , "../../modules/dPcompteRendu/fcke_plugins/mbprint/plugin.js");
+CKEDITOR.plugins.addExternal("mbprinting"  , "../../modules/dPcompteRendu/fcke_plugins/mbprinting/plugin.js");
+CKEDITOR.plugins.addExternal("mbprintPDF"  , "../../modules/dPcompteRendu/fcke_plugins/mbprintPDF/plugin.js");
+CKEDITOR.plugins.addExternal("mbpagebreak" , "../../modules/dPcompteRendu/fcke_plugins/mbpagebreak/plugin.js");
 CKEDITOR.plugins.addExternal("mblineheight", "../../modules/dPcompteRendu/fcke_plugins/mblineheight/plugin.js");
-CKEDITOR.plugins.addExternal("mbmail"     , "../../modules/dPcompteRendu/fcke_plugins/mbmail/plugin.js");
+CKEDITOR.plugins.addExternal("mbmail"      , "../../modules/dPcompteRendu/fcke_plugins/mbmail/plugin.js");
 {{if $can->admin}}
-  CKEDITOR.plugins.addExternal("mbthumbs", "../../modules/dPcompteRendu/fcke_plugins/mbthumbs/plugin.js");
+  CKEDITOR.plugins.addExternal("mbthumbs"  , "../../modules/dPcompteRendu/fcke_plugins/mbthumbs/plugin.js");
 {{/if}}
-CKEDITOR.plugins.addExternal("mbbreakage", "../../modules/dPcompteRendu/fcke_plugins/mbbreakage/plugin.js");
+CKEDITOR.plugins.addExternal("mbbreakage"  , "../../modules/dPcompteRendu/fcke_plugins/mbbreakage/plugin.js");
+CKEDITOR.plugins.addExternal("mbcap"       , "../../modules/dPcompteRendu/fcke_plugins/mbcap/plugin.js");
 
 // CK editor general configuration
 CKEDITOR.editorConfig = function(config) {
@@ -90,7 +91,7 @@ CKEDITOR.editorConfig = function(config) {
     {{/if}}
     
     config.extraPlugins =  'mbfields,mbfreetext,mbhelpers,mblists,{{if $mode_play && !$templateManager->isModele}}mbplay,{{/if}},mbprint,mbprintPDF,';
-    config.extraPlugins += 'mbheader,mbfooter,mbpagebreak,mblineheight{{if "printing"|module_active && !$templateManager->isModele}},mbprinting{{/if}}{{if $can->admin}},mbthumbs{{/if}},mbbreakage';
+    config.extraPlugins += 'mbheader,mbfooter,mbpagebreak,mblineheight{{if "printing"|module_active && !$templateManager->isModele}},mbprinting{{/if}}{{if $can->admin}},mbthumbs{{/if}},mbcap,mbbreakage';
     {{if !$templateManager->isModele}}
       config.extraPlugins += ',mbmail';
     {{/if}}    
@@ -101,9 +102,9 @@ CKEDITOR.editorConfig = function(config) {
       ['Maximize', 'Source'], '/',
       ['Font', 'FontSize'],
       ['RemoveFormat', 'Bold', 'Italic', 'Underline', 'Strike'],
-      ['Subscript', 'Superscript', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList'],
+      ['Subscript', 'Superscript', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList'],'/',
       ['Outdent', 'Indent', 'mblineheight', 'TextColor', 'BGColor'],'/',
-      [{{if !$templateManager->isModele && $mode_play}}'mbplay', {{/if}} 'mbfields', {{if $templateManager->isModele}}'mblists', 'mbfreetext', {{/if}}{{if !$templateManager->isModele}}'mbhelpers', 'mbmail', {{/if}}'mbbreakage', {{if $can->admin}}'mbthumbs'{{/if}}]];
+      [{{if !$templateManager->isModele && $mode_play}}'mbplay', {{/if}} 'mbfields', {{if $templateManager->isModele}}'mblists', 'mbfreetext', {{/if}}{{if !$templateManager->isModele}}'mbhelpers', 'mbmail', {{/if}}'mbbreakage', 'mbcap', {{if $can->admin}}'mbthumbs'{{/if}}]];
 
     window.parent.fields = [];
     window.parent.listeChoix = [];

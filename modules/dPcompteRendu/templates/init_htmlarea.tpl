@@ -20,45 +20,6 @@ window.time_before_thumbs *= 1000;
 window.nb_lists = {{$templateManager->usedLists|@count}};
 window.nb_textes_libres = {{$templateManager->textes_libres|@count}};
 
-function insertUpperCase(editor, event, keystroke) {
-  // insert 'A' instead of 'a' (example)
-  editor.insertText(String.fromCharCode(keystroke).toUpperCase());
-  event.data.preventDefault();
-}
-
-function autoCap(event) {
-  var editor = CKEDITOR.instances.htmlarea;
-  var keystroke = event.data.getKeystroke();
-  
-  if (keystroke < 65 || keystroke > 90) {
-    return;
-  }
-
-  var range, walker, node;
-  
-  range = editor.getSelection().getRanges()[0];
-  range.setStartAt(editor.document.getBody(), CKEDITOR.POSITION_AFTER_START);
-  walker = new CKEDITOR.dom.walker(range);
-  
-  var node = walker.previous();
-  
-  if (!node) {
-    return insertUpperCase(editor, event, keystroke);
-  }
-  
-  if (
-      /* Commence par un retour chariot ou une ligne verticale */
-     /(<br|<hr)/.test(node.$.outerHTML) ||
-     /* Les 2 derniers caractères sont :
-       - un point ou
-       - un point d'exclamation ou
-       - un point d'interrogation
-       et un espace*/
-      !Object.isUndefined(node.$.data) && /[\.\?!]\s/.test(node.$.data.substr(-2))) {
-    insertUpperCase(editor, event, keystroke)
-  }
-}
-
 function initCKEditor() {
   CKEDITOR.ispasting = false;
   window.old_source = $("htmlarea").value;
@@ -168,11 +129,6 @@ function initCKEditor() {
       ck_instance.on("beforerenderColors", window.toggleContentEditable.curry(true));
       ck_instance.on("afterrenderColors" , window.toggleContentEditable.curry(false));
     {{/if}}
-    
-    // Majuscule auto en début de phrase
-    if (Preferences.auto_capitalize == "1") {
-      ck_instance.document.getBody().on('keydown', autoCap);
-    }
     
     // Redimensionnement de l'éditeur
     window.resizeEditor();
