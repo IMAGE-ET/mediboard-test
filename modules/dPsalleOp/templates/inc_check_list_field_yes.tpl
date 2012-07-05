@@ -11,7 +11,7 @@
   {{/if}}
 {{/if}}
 
-<label style="white-space: nowrap; {{if $class == "COperation"}}{{if $default_value == "no"}}font-style: italic;{{/if}} {{if $default_value == "yes"}}font-weight: bold;{{/if}}{{/if}}">
+<label style="white-space: nowrap; {{if in_array($class, 'CDailyCheckList'|static:_HAS_classes)}}{{if $default_value == "no"}}font-style: italic;{{/if}} {{if $default_value == "yes"}}font-weight: bold;{{/if}}{{/if}}">
   <input type="radio" name="_items[{{$curr_type->_id}}]" value="yes" {{if $checked}} checked="checked" {{/if}} />
-  {{tr}}CDailyCheckItem.checked.yes{{/tr}}{{if $class == "COperation" && $default_value == "no"}}*{{/if}}
+  {{tr}}CDailyCheckItem.checked.yes{{/tr}}{{if in_array($class, 'CDailyCheckList'|static:_HAS_classes) && $default_value == "no"}}*{{/if}}
 </label>

@@ -18,7 +18,7 @@ $operation->load($operation_id);
 $check_lists = $operation->loadBackRefs("check_lists", "date");
 foreach($check_lists as $_check_list) {
   $_check_list->loadItemTypes();
-  $_check_list->loadBackRefs('items');
+  $_check_list->loadBackRefs('items', "daily_check_item_id");
   foreach($_check_list->_back['items'] as $_item) {
     $_item->loadRefsFwd();
   }

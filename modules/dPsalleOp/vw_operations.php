@@ -232,6 +232,7 @@ $group = CGroups::loadCurrent();
 $group->loadConfigValues();
 
 $listValidateurs = CPersonnel::loadListPers(array("op", "op_panseuse"), true, true);
+$operateurs_disp_vasc = implode("-", array_merge(CMbArray::pluck($listChirs, "_id"), CMbArray::pluck($listValidateurs, "user_id")));
 
 // Lib Flot pour les graphiques de surveillance perop
 if (CAppUI::conf("dPsalleOp enable_surveillance_perop")) {
@@ -261,6 +262,7 @@ $smarty->assign("currUser"               , $currUser);
 $smarty->assign("listAnesthType"         , $listAnesthType);
 $smarty->assign("listAnesths"            , $listAnesths);
 $smarty->assign("listChirs"              , $listChirs);
+$smarty->assign("operateurs_disp_vasc"   , $operateurs_disp_vasc);
 $smarty->assign("modeDAS"                , CAppUI::conf("dPsalleOp CDossierMedical DAS"));
 $smarty->assign("selOp"                  , $selOp);
 $smarty->assign("date"                   , $date);

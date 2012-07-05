@@ -30,8 +30,8 @@ class CDailyCheckItemCategory extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs['title'] = 'str notNull';
-    $specs['target_class'] = 'enum list|CSalle|CBlocOperatoire|COperation notNull default|CSalle';
-    $specs['type']  = 'enum list|preanesth|preop|postop|preendoscopie|postendoscopie|preendoscopie_bronchique|postendoscopie_bronchique|preanesth_radio|preop_radio|postop_radio';
+    $specs['target_class'] = 'enum list|CSalle|CBlocOperatoire|COperation|CPoseDispositifVasculaire notNull default|CSalle';
+    $specs['type']  = 'enum list|'.implode('|', array_keys(CDailyCheckList::$types));
     $specs['desc']  = 'text';
     return $specs;
   }

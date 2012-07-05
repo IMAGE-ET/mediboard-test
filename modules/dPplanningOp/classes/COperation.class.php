@@ -144,6 +144,7 @@ class COperation extends CCodable implements IPatientRelated {
   var $_ref_echange_hprim  = null;
   var $_ref_anesth_perops  = null;
   var $_ref_naissances     = null;
+  var $_ref_poses_disp_vasc= null;
   
   // External references
   var $_ext_codes_ccam = null;
@@ -315,7 +316,7 @@ class COperation extends CCodable implements IPatientRelated {
     $backProps["product_orders"]           = "CProductOrder object_id";
     $backProps["op_brancardardage"]        = "CBrancardage operation_id";
     $backProps["besoins_ressources"]       = "CBesoinRessource operation_id";
-    
+    $backProps["poses_disp_vasc"]          = "CPoseDispositifVasculaire operation_id";
     return $backProps;
   }
 
@@ -885,6 +886,13 @@ class COperation extends CCodable implements IPatientRelated {
    */
   function loadRefsAnesthPerops(){
     return $this->_ref_anesth_perops = $this->loadBackRefs("anesth_perops", "datetime");
+  }
+  
+  /**
+   * Chargement des pose de dispositifs vasculaire
+   */
+  function loadRefsPosesDispVasc(){
+    return $this->_ref_poses_disp_vasc = $this->loadBackRefs("poses_disp_vasc", "date");
   }
   
   /**

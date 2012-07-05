@@ -17,4 +17,4 @@ du {{mb_value object=$sejour field=entree}}
 au {{mb_value object=$sejour field=sortie_prevue}}
 </h3>
 
-{{mb_include module=salleOp template=inc_vw_check_lists}}
+{{mb_include module=salleOp template=inc_vw_check_lists object=$operation}}

@@ -18,13 +18,14 @@ Main.add(function () {
   // Chargement de la gestion du personnel pour l'intervention
   reloadPersonnel('{{$selOp->_id}}');
 
-	{{if $isPrescriptionInstalled}}
+  {{if $isPrescriptionInstalled}}
   if($('prescription_sejour')){
     Prescription.reloadPrescSejour('','{{$selOp->_ref_sejour->_id}}', null, null, '{{$selOp->_id}}', null, null);
   }
   {{/if}}
   
   reloadSurveillancePerop();
+  loadPosesDispVasc();
   
   if($('dossier_traitement')){
     PlanSoins.loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');
@@ -35,16 +36,16 @@ Main.add(function () {
     url.addParam("sejour_id","{{$selOp->sejour_id}}");
     url.requestUpdate("antecedents");
   }
-	
-	if($('constantes-medicales')){
+  
+  if($('constantes-medicales')){
     constantesMedicalesDrawn = false;
     refreshConstantesHack('{{$selOp->sejour_id}}');
   }
   
-  if($('bloodSalvage_tab')){
+  if($('bloodsalvage_form')){
     var url = new Url("bloodSalvage", "httpreq_vw_bloodSalvage");
     url.addParam("op","{{$selOp->_id}}");
-    url.requestUpdate("bloodSalvage_tab");
+    url.requestUpdate("bloodsalvage_form");
   }
   
   if($('Imeds_tab')){
@@ -122,6 +123,14 @@ function reloadSurveillancePerop(){
   }
 }
 
+function loadPosesDispVasc(){
+  var url = new Url("dPplanningOp", "ajax_list_pose_disp_vasc");
+  url.addParam("operation_id", "{{$selOp->_id}}");
+  url.addParam("sejour_id",    "{{$selOp->sejour_id}}");
+  url.addParam("operateur_ids", "{{$operateurs_disp_vasc}}")
+  url.requestUpdate("list-pose-dispositif-vasculaire");
+}
+
 {{if "maternite"|module_active}}
   function refreshGrossesse(operation_id) {
     var url = new Url("maternite", "ajax_vw_grossesse");
@@ -144,7 +153,7 @@ function reloadSurveillancePerop(){
       </a>
       <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
         <img src="images/icons/edit.png" />
- 			</a>
+       </a>
       
       {{$patient->_view}}
       ({{$patient->_age}}
@@ -245,32 +254,30 @@ function reloadSurveillancePerop(){
     <li onmouseup="reloadSurveillancePerop();"><a href="#surveillance_perop">Perop</a></li>
   {{/if}}
 
-  {{if $isbloodSalvageInstalled && (!$currUser->_is_praticien || $currUser->_is_praticien && $can->edit)}}
-    <li><a href="#bloodSalvage_tab">Cell Saver</a></li>
-  {{/if}}
+  <li><a href="#disp_vasculaire">Dispositifs vasc.</a></li>
 
-	{{if !$conf.dPsalleOp.mode_anesth}}
-	  {{if (!$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && $codage_prat))}}
+  {{if !$conf.dPsalleOp.mode_anesth}}
+    {{if (!$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && $codage_prat))}}
     <li><a href="#codage_tab">Actes</a></li>
     <li><a href="#diag_tab">Diags.</a></li>
-		{{/if}}
-		
-		{{if !$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && $currUser->_is_anesth)}}
+    {{/if}}
+    
+    {{if !$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && $currUser->_is_anesth)}}
       {{assign var=callback value=refreshVisite}}
       <li onmouseup="reloadAnesth('{{$selOp->_id}}'); {{if "dPprescription"|module_active}}Prescription.updatePerop('{{$selOp->sejour_id}}');{{/if}}"><a href="#anesth_tab">Anesth.</a></li>
-		{{/if}}
+    {{/if}}
     {{if !$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && !$currUser->_is_anesth)}}
       <li><a href="#dossier_tab">Chir.</a></li>
     {{/if}}
 
     {{if $isPrescriptionInstalled}}
-      <li onmouseup="PlanSoins.loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');"><a href="#dossier_traitement">Suivi de soins</a></li>
+      <li onmouseup="PlanSoins.loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');"><a href="#dossier_traitement">Suivi soins</a></li>
       <li><a href="#prescription_sejour_tab">Prescription</a></li>
     {{/if}}
-		
+    
     <li onmousedown="refreshConstantesHack('{{$selOp->sejour_id}}');"><a href="#constantes-medicales">Surveillance</a></li>
-		<li><a href="#antecedents">Atcd.</a></li>
-	{{/if}}
+    <li><a href="#antecedents">Atcd.</a></li>
+  {{/if}}
   
   {{if $isImedsInstalled}}
     <li><a href="#Imeds_tab">Labo</a></li>
@@ -310,10 +317,19 @@ function reloadSurveillancePerop(){
   <div id="surveillance_perop" style="display:none"></div>
 {{/if}}
 
-{{if $isbloodSalvageInstalled && (!$currUser->_is_praticien || $currUser->_is_praticien && $can->edit)}}
-<!--  Cell Saver -->
-<div id="bloodSalvage_tab" style="display:none"></div>
-{{/if}}
+<div id="disp_vasculaire" style="display:none">
+  <fieldset style="clear: both;">
+    <legend>{{tr}}CPoseDispositifVasculaire{{/tr}}</legend>
+    <div id="list-pose-dispositif-vasculaire"></div>
+  </fieldset>
+  
+  {{if $isbloodSalvageInstalled && (!$currUser->_is_praticien || $currUser->_is_praticien && $can->edit)}}
+    <fieldset>
+      <legend>{{tr}}CCellSaver{{/tr}}</legend>
+      <div id="bloodsalvage_form"></div>
+    </fieldset>
+  {{/if}}
+</div>
 
 {{if !$conf.dPsalleOp.mode_anesth}}
 
@@ -348,7 +364,7 @@ function reloadSurveillancePerop(){
         <td style="vertical-align:middle;">     
           {{mb_field object=$selOp field=labo typeEnum="radio" onChange="submitFormAjax(this.form, 'systemMsg');"}}
         </td>
-        <td colspan="2" />
+        <td colspan="2"></td>
       </tr>
     </table>
   </form>
@@ -378,42 +394,42 @@ function reloadSurveillancePerop(){
 <!-- Documents et facteurs de risque -->
 {{assign var="dossier_medical" value=$selOp->_ref_sejour->_ref_dossier_medical}}
 <div id="dossier_tab" style="display:none">
-	<table class="form">
-		<tr>
-		  <th class="title">Documents</th>
-		</tr>
-	  <tr>
-	    <td>
-			  <div id="documents">
-					{{mb_script module="dPcompteRendu" script="document"}}
-					{{mb_script module="dPcompteRendu" script="modele_selector"}}
-			    {{mb_include module=planningOp template=inc_documents_operation operation=$selOp}}
-			  </div>
-		  </td>
-	  </tr>
-	</table>
-	<hr />
-	<table class="tbl">
-	  <tr>
-	    <th class="title">Facteurs de risque</th>
-	  </tr>
-	</table>
-	{{include file=../../dPcabinet/templates/inc_consult_anesth/inc_vw_facteurs_risque.tpl sejour=$selOp->_ref_sejour patient=$selOp->_ref_sejour->_ref_patient}}
+  <table class="form">
+    <tr>
+      <th class="title">Documents</th>
+    </tr>
+    <tr>
+      <td>
+        <div id="documents">
+          {{mb_script module="dPcompteRendu" script="document"}}
+          {{mb_script module="dPcompteRendu" script="modele_selector"}}
+          {{mb_include module=planningOp template=inc_documents_operation operation=$selOp}}
+        </div>
+      </td>
+    </tr>
+  </table>
+  <hr />
+  <table class="tbl">
+    <tr>
+      <th class="title">Facteurs de risque</th>
+    </tr>
+  </table>
+  {{include file=../../dPcabinet/templates/inc_consult_anesth/inc_vw_facteurs_risque.tpl sejour=$selOp->_ref_sejour patient=$selOp->_ref_sejour->_ref_patient}}
 </div>
 {{/if}}
 
 
 <div id="constantes-medicales" style="display: none;"></div>
-<div id="antecedents" style="display:none"></div>	
+<div id="antecedents" style="display:none"></div>  
 
 {{if $isPrescriptionInstalled}}
-	<!-- Affichage de la prescription -->
-	<div id="prescription_sejour_tab" style="display:none">
-	  <div id="prescription_sejour"></div>
-	</div>
-	
-	<!-- Affichage du dossier de soins avec les lignes "bloc" -->
-	<div id="dossier_traitement" style="display:none"></div>
+  <!-- Affichage de la prescription -->
+  <div id="prescription_sejour_tab" style="display:none">
+    <div id="prescription_sejour"></div>
+  </div>
+  
+  <!-- Affichage du dossier de soins avec les lignes "bloc" -->
+  <div id="dossier_traitement" style="display:none"></div>
 {{/if}}
 
 {{/if}}

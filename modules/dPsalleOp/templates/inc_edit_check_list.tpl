@@ -32,7 +32,7 @@
       </tr>
     {{/foreach}}
     
-    {{if $check_list->object_class != "COperation" || $check_list->type == "postop" || $check_list->type == "postendoscopie"}}
+    {{if !in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes) || $check_list->type == "postop" || $check_list->type == "postendoscopie" || $check_list->type == "postendoscopie_bronchique" || $check_list->type == "postop_radio" || $check_list->type == "disp_vasc_apres"}}
     <tr>
       <td colspan="10">
         <strong>Commentaires:</strong><br />
@@ -56,7 +56,7 @@ confirmCheckList = function(form) {
   return checkForm(form) &&
     confirm('Tous les points ont-ils été bien vérifiés ?') && 
     onSubmitFormAjax(form, {onComplete: function(){
-      {{if $check_list->object_class != "COperation"}}
+      {{if !in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes)}}
         location.reload();
       {{/if}}
     } });
@@ -92,11 +92,11 @@ Main.add(function(){
   <input type="hidden" name="type" value="{{$check_list->type}}" />
   <input type="hidden" name="date" value="{{$check_list->date|ternary:$check_list->date:"now"}}" />
   
-  {{if $check_list->object_class == "COperation"}}
+  {{if in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes)}}
     <input type="hidden" name="callback" value="refreshCheckList{{$check_list->type}}" />
   {{/if}}
 
-  {{if $check_list->object_class != "COperation"}}
+  {{if !in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes)}}
     {{if !$check_list->_id}}
       <div class="small-info">Veuillez effectuer la vérification journalière pour <strong>{{$check_list->_ref_object}}</strong> grâce au formulaire suivant.</div>
     {{else}}
@@ -163,7 +163,7 @@ Main.add(function(){
       </tr>
     {{/foreach}}
     
-    {{if $check_list->object_class != "COperation" || $check_list->type == "postop" || $check_list->type == "postendoscopie" || $check_list->type == "postendoscopie_bronchique" || $check_list->type == "postop_radio"}}
+    {{if !in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes) || $check_list->type == "postop" || $check_list->type == "postendoscopie" || $check_list->type == "postendoscopie_bronchique" || $check_list->type == "postop_radio" || $check_list->type == "disp_vasc_apres"}}
     <tr>
       <td colspan="10" style="white-space: normal;">
         <hr />
@@ -183,21 +183,26 @@ Main.add(function(){
           <option value="" disabled="disabled" selected="selected">&mdash; Validateur</option>
           
           {{if $check_list->object_class == "COperation"}}
-          <optgroup label="Praticiens">
-            {{assign var=_obj value=$check_list->_ref_object}}
-            <option value="{{$_obj->_ref_chir->user_id}}">{{$_obj->_ref_chir}}</option>
-            {{if $anesth_id}}
-            <option value="{{$anesth->_id}}">{{$anesth}}</option>
-            {{/if}}
-          </optgroup>
+            <optgroup label="Praticiens">
+              {{assign var=_obj value=$check_list->_ref_object}}
+              <option value="{{$_obj->_ref_chir->user_id}}">{{$_obj->_ref_chir}}</option>
+              {{if $anesth_id}}
+              <option value="{{$anesth->_id}}">{{$anesth}}</option>
+              {{/if}}
+            </optgroup>
+            
+            <optgroup label="Personnel">
+              {{foreach from=$personnel item=curr_personnel}}
+                {{assign var=curr_user value=$curr_personnel->_ref_user}}
+                <option value="{{$curr_user->_id}}" {{if $app->user_id == $curr_user->_id}}selected="selected"{{/if}}>{{$curr_user->_view}}</option>
+              {{/foreach}}
+            </optgroup>
+          {{else}}
+            {{foreach from=$personnel item=curr_personnel}}
+              {{assign var=curr_user value=$curr_personnel->_ref_user}}
+              <option value="{{$curr_user->_id}}" {{if $app->user_id == $curr_user->_id}}selected="selected"{{/if}}>{{$curr_user->_view}}</option>
+            {{/foreach}}
           {{/if}}
-          
-          <optgroup label="Personnel">
-          {{foreach from=$personnel item=curr_personnel}}
-            {{assign var=curr_user value=$curr_personnel->_ref_user}}
-            <option value="{{$curr_user->_id}}" {{if $app->user_id == $curr_user->_id}}selected="selected"{{/if}}>{{$curr_user->_view}}</option>
-          {{/foreach}}
-          </optgroup>
           
         </select>
         <input type="password" class="notNull str" size="10" maxlength="32" name="_validator_password" />

@@ -1387,7 +1387,29 @@ class CSetupdPplanningOp extends CSetup {
               ADD `exam_extempo` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.49";
+    $this->makeRevision("1.49");
+    $query = "CREATE TABLE `pose_dispositif_vasculaire` (
+              `pose_dispositif_vasculaire_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `operation_id` INT (11) UNSIGNED,
+              `sejour_id` INT (11) UNSIGNED NOT NULL,
+              `date` DATETIME NOT NULL,
+              `lieu` VARCHAR (255),
+              `urgence` ENUM ('0','1') NOT NULL DEFAULT '0',
+              `operateur_id` INT (11) UNSIGNED NOT NULL,
+              `encadrant_id` INT (11) UNSIGNED,
+              `type_materiel` ENUM ('cvc','cvc_tunnelise','cvc_dialyse','cvc_bioactif','chambre_implantable','autre') NOT NULL,
+              `voie_abord_vasc` TEXT
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `pose_dispositif_vasculaire` 
+              ADD INDEX (`operation_id`),
+              ADD INDEX (`sejour_id`),
+              ADD INDEX (`date`),
+              ADD INDEX (`operateur_id`),
+              ADD INDEX (`encadrant_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.50";
   }
 }
 ?>

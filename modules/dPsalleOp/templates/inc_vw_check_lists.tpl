@@ -1,25 +1,25 @@
 
-<table class="layout" style="table-layout: fixed;">
+<table class="main layout">
   <tr>
     
-  {{foreach from=$operation->_back.check_lists item=check_list}}
+  {{foreach from=$object->_back.check_lists item=check_list}}
     <td style="vertical-align: top">
       <table class="main form">
         <tr>
-          <th class="title" colspan="2">
+          <th class="title">
             Checklist {{mb_value object=$check_list field=type}}
           </th>
         </tr>
         
         <tr>
-          <th class="category" colspan="2">
+          <th class="category">
             {{mb_label object=$check_list field=validator_id}} :
             {{mb_value object=$check_list field=validator_id}}
           </th>
         </tr>
         
         <tr>
-          <td colspan="2" style="padding: 0;">
+          <td style="padding: 0;">
             
             <table class="main">
               {{assign var=category_id value=0}}
@@ -50,24 +50,22 @@
                   <td colspan="3" class="empty" style="border: none;">{{tr}}CDailyCheckItemType.none{{/tr}}</td>
                 </tr>
               {{/foreach}}
-							
-							{{if $check_list->comments}}
+              
+              {{if $check_list->comments}}
               <tr>
                 <td colspan="3" style="border: none;">
                   <strong>Commentaires:</strong><br />
                   {{mb_value object=$check_list field=comments}}
                 </td>
               </tr>
-							{{/if}}
+              {{/if}}
             </table>
           </td>
         </tr>
       </table>
     </td>
-	{{foreachelse}}
-	  <tr>
-	  	<td class="empty">{{tr}}CDailyCheckList.none{{/tr}}</td>
-	  </tr>
+  {{foreachelse}}
+    <td class="empty">{{tr}}CDailyCheckList.none{{/tr}}</td>
   {{/foreach}}
   
   </tr>

@@ -36,16 +36,33 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   var $_date_max       = null;
   
   static $types = array(
+    // Secu patient
     "preanesth" => "normal", 
     "preop"     => "normal",
     "postop"    => "normal",
+    
+    // Endoscopie digestive
     "preendoscopie"  => "endoscopie", 
     "postendoscopie" => "endoscopie",
+    
+    // Endoscopie bronchique
     "preendoscopie_bronchique"  => "endoscopie-bronchique", 
     "postendoscopie_bronchique" => "endoscopie-bronchique",
+    
+    // Radiologie interventionnelle
     "preanesth_radio" => "radio",
-    "preop_radio" => "radio",
-    "postop_radio" => "radio",
+    "preop_radio"     => "radio",
+    "postop_radio"    => "radio",
+    
+    // Pose dispositif vasculaire
+    "disp_vasc_avant"   => "disp-vasc",
+    "disp_vasc_pendant" => "disp-vasc",
+    "disp_vasc_apres"   => "disp-vasc",
+  );
+  
+  static $_HAS_classes = array(
+    "COperation", 
+    "CPoseDispositifVasculaire",
   );
   
   function getSpec() {
@@ -58,9 +75,9 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   function getProps() {
     $specs = parent::getProps();
     $specs['date']         = 'date notNull';
-    $specs['object_class'] = 'enum list|CSalle|CBlocOperatoire|COperation notNull default|CSalle';
+    $specs['object_class'] = 'enum list|CSalle|CBlocOperatoire|COperation|CPoseDispositifVasculaire notNull default|CSalle';
     $specs['object_id']    = 'ref class|CMbObject meta|object_class notNull autocomplete';
-    $specs['type']         = 'enum list|preanesth|preop|postop|preendoscopie|postendoscopie|preendoscopie_bronchique|postendoscopie_bronchique|preanesth_radio|preop_radio|postop_radio';
+    $specs['type']         = 'enum list|'.implode('|', array_keys(CDailyCheckList::$types));
     $specs['validator_id'] = 'ref class|CMediusers';
     $specs['comments']     = 'text';
     $specs['_validator_password'] = 'password notNull';
@@ -156,13 +173,15 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     );
     
     $orderby = 'daily_check_item_category.title, ';
+    
     // Si liste des points de la HAS
-    if ($this->object_class == "COperation") {
+    if (in_array($this->object_class, self::$_HAS_classes)) {
       $orderby .= "daily_check_item_type_id";
     }
     else {
       $orderby .= "title";
     }
+    
     $itemType = new CDailyCheckItemType();
     $this->_ref_item_types = $itemType->loadGroupList($where, $orderby, null, null, $ljoin);
     foreach($this->_ref_item_types as $type) {
@@ -181,4 +200,3 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     }
   }
 }
-?>

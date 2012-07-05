@@ -5,21 +5,21 @@
   </td>
   <td>{{$_operation->_datetime|date_format:$conf.date}} 
             
-	{{if @$modules.brancardage->_can->read}}
-	  {{mb_script module=brancardage script=creation_brancardage ajax=true }}
-		<input id="modif" type="hidden" name="modif"/>
-	  <div id="patientpret" >
-	  	<input type="hidden" name="param_brancard"  id="param_brancard"
+  {{if @$modules.brancardage->_can->read}}
+    {{mb_script module=brancardage script=creation_brancardage ajax=true }}
+    <input id="modif" type="hidden" name="modif"/>
+    <div id="patientpret" >
+      <input type="hidden" name="param_brancard"  id="param_brancard"
          data-salle-id  ="{{$_operation->salle_id}}"
          data-sejour-id ="{{$_operation->sejour_id}}"
-				 data-operation-id="{{$_operation->_id}}"
+         data-operation-id="{{$_operation->_id}}"
          data-charge    ="" />
-	    <button type="button" class="brancard" onclick="CreationBrancard.patientPret('{{$_operation->sejour_id}}','{{$_operation->salle_id}}','{{$_operation->_id}}');" >
-	       Patient pret
-	    </button>
-	  </div>
-	{{/if}}
-	
+      <button type="button" class="brancard" onclick="CreationBrancard.patientPret('{{$_operation->sejour_id}}','{{$_operation->salle_id}}','{{$_operation->_id}}');" >
+         Patient pret
+      </button>
+    </div>
+  {{/if}}
+  
   {{if $_operation->annulee}}
   <th class="category cancelled">
     <strong onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}');">{{tr}}COperation-annulee{{/tr}}</strong>
@@ -28,7 +28,7 @@
   <td class="text">
     {{mb_include module=planningOp template=inc_vw_operation}}
   </td>
-	{{/if}}
+  {{/if}}
   <td class="narrow button">
     <button class="{{if $_operation->_ref_consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}" type="button"
     onclick="
@@ -53,7 +53,7 @@
 {{if $_operation->_back && array_key_exists("check_lists", $_operation->_back)}}
 <tr>
   <td colspan="10">
-    {{mb_include module=salleOp template=inc_vw_check_lists operation=$_operation}}
+    {{mb_include module=salleOp template=inc_vw_check_lists object=$_operation}}
   </td>
 </tr>
 {{/if}}

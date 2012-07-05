@@ -42,5 +42,6 @@ $dPconfig["dPsalleOp"] = array(
     "default_good_answer_COperation"      => "0",
     "default_good_answer_CBlocOperatoire" => "0",
     "default_good_answer_CSalle"          => "0",
+    "default_good_answer_CPoseDispositifVasculaire" => "0",
   ),
 );

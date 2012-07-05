@@ -882,20 +882,138 @@ class CSetupdPsalleOp extends CSetup {
     
     $this->addNewCheckList($check_list);
     
-    $this->mod_version = "0.41";
+    $this->makeRevision("0.41");
+    
+    // Check list pose CVC
+    
+    $query = "ALTER TABLE `daily_check_list` 
+                CHANGE `object_class` `object_class` ENUM ('CSalle','CBlocOperatoire','COperation','CPoseDispositifVasculaire') NOT NULL DEFAULT 'CSalle',
+                CHANGE `type` `type` ENUM ('preanesth','preop','postop','preendoscopie','postendoscopie','preendoscopie_bronchique','postendoscopie_bronchique','preanesth_radio','preop_radio','postop_radio','disp_vasc_avant','disp_vasc_pendant','disp_vasc_apres')";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `daily_check_item_category` 
+                CHANGE `type` `type` ENUM ('preanesth','preop','postop','preendoscopie','postendoscopie','preendoscopie_bronchique','postendoscopie_bronchique','preanesth_radio','preop_radio','postop_radio','disp_vasc_avant','disp_vasc_pendant','disp_vasc_apres');";
+    $this->addQuery($query);
+    
+    $check_list = array(
+      // AVANT
+      '01' => array('disp_vasc_avant', null, 
+        array(
+          array('Identité du patient vérifiée', 'normal', 'yes'),
+        ),
+      ),
+      '02' => array('disp_vasc_avant', null, 
+        array(
+          array('Patient / famille informé', 'normal', 'yes'),
+        ),
+      ),
+      '03' => array('disp_vasc_avant', "ÉVALUATION DES RISQUES", 
+        array(
+          array('Risque hémorragique, allergie, contre-indications anatomique ou pathologique', 'normal', 'yes'),
+        ),
+      ),
+      '04' => array('disp_vasc_avant', null, 
+        array(
+          array('Choix argumenté du site d\'insertion', 'normal', 'yes'),
+        ),
+      ),
+      '05' => array('disp_vasc_avant', null, 
+        array(
+          array('Choix concerté du matériel', 'normal', 'yes'),
+        ),
+      ),
+      '06' => array('disp_vasc_avant', null, 
+        array(
+          array('Préparation cutanée appropriée', 'normal', 'yes'),
+        ),
+      ),
+      '07' => array('disp_vasc_avant', null, 
+        array(
+          array('Monitorage approprié', 'normal', 'yes'),
+        ),
+      ),
+      '08' => array('disp_vasc_avant', "Vérification du matériel", 
+        array(
+          array('Date de péremption, intégrité de l\'emballage', 'normal', 'yes'),
+        ),
+      ),
+      '09' => array('disp_vasc_avant', null, 
+        array(
+          array('Échographie', 'normal', 'yes'),
+        ),
+      ),
+      
+      // PENDANT
+      '10' => array('disp_vasc_pendant', "PROCÉDURES D'HYGIÈNE", 
+        array(
+          array('Détersion/désinfection avec antiseptique alcoolique', 'normal', 'yes'),
+          array('Conditions d\'asepsie chirurgicale', 'normal', 'yes'),
+        ),
+      ),
+      '11' => array('disp_vasc_pendant', "Vérifications per opératoires des matériels", 
+        array(
+          array('Mécanique: Solidité des connexions', 'normal', 'yes'),
+          array('Positionnelle: Extrémité du cathéter', 'normal', 'yes'),
+          array('FONCTIONNELLE: Reflux sanguin', 'normal', 'yes'),
+          array('FONCTIONNELLE: Système perméable', 'normal', 'yes'),
+        ),
+      ),
+      '12' => array('disp_vasc_pendant', null, 
+        array(
+          array('Vérification de la fixation du dispositif', 'normal', 'yes'),
+        ),
+      ),
+      '13' => array('disp_vasc_pendant', null, 
+        array(
+          array('Pose d\'un pansement occlusif', 'normal', 'yes'),
+        ),
+      ),
+      '14' => array('disp_vasc_pendant', "Si utilisation différée, fermeture du dispositif", 
+        array(
+          array('En accord avec la procédure locale', 'normal', 'yes'),
+        ),
+      ),
+      
+      // APRES
+      '15' => array('disp_vasc_apres', "CONTRÔLE CVC / DV", 
+        array(
+          array('Position du CVC vérifiée', 'normal', 'yes'),
+          array('Recherche de complication', 'normal', 'yes'),
+        ),
+      ),
+      '16' => array('disp_vasc_apres', "TRAÇABILITÉ / COMPTE RENDU", 
+        array(
+          array('Matériel, technique, nombre de ponctions, incident', 'normal', 'yes'),
+        ),
+      ),
+      '17' => array('disp_vasc_apres', null, 
+        array(
+          array('Prescriptions pour le suivi après pose', 'normal', 'yes'),
+        ),
+      ),
+      '18' => array('disp_vasc_apres', null, 
+        array(
+          array('Documents remis au patient', 'normal', 'yes'),
+        ),
+      ),
+    );
+    
+    $this->addNewCheckList($check_list, "CPoseDispositifVasculaire");
+    
+    $this->mod_version = "0.42";
   }
   
-  function addNewCheckList($check_list) {
+  function addNewCheckList($check_list, $object_class = 'COperation') {
     foreach($check_list as $title => $cat) {
       // Ajout de la catégorie
       $query = $this->ds->prepare("INSERT INTO `daily_check_item_category` (`title`, `desc`, `target_class`, `type`) VALUES 
-                               (%1, %2, 'COperation', %3)", $title, $cat[1], $cat[0]);
+                               (%1, %2, '$object_class', %3)", $title, $cat[1], $cat[0]);
       $this->addQuery($query);
       
       // Ajout des élements
       foreach($cat[2] as $i => $type) {
         $query = $this->ds->prepare("INSERT INTO `daily_check_item_type` (`title`, `active`, `attribute`, `category_id`, `index`, `default_value`) VALUES
-                    (%1, '1', %2, (SELECT `daily_check_item_category_id` FROM `daily_check_item_category` WHERE `title` = %3 AND `target_class` = 'COperation' AND `type` = %4), %5, %6)", 
+                    (%1, '1', %2, (SELECT `daily_check_item_category_id` FROM `daily_check_item_category` WHERE `title` = %3 AND `target_class` = '$object_class' AND `type` = %4), %5, %6)", 
                      $type[0], $type[1], $title, $cat[0], $i+1, $type[2]);
         $this->addQuery($query);
       }

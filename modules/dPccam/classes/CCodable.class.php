@@ -316,14 +316,14 @@ class CCodable extends CMbObject {
       $this->_ref_actes[] = $acte_ngap;
     }
     if($this->_ref_actes_tarmed){
-	    foreach($this->_ref_actes_tarmed as $acte_tarmed){
-	      $this->_ref_actes[] = $acte_tarmed;
-	    }
+      foreach($this->_ref_actes_tarmed as $acte_tarmed){
+        $this->_ref_actes[] = $acte_tarmed;
+      }
     }
     if($this->_ref_actes_caisse){
-	    foreach($this->_ref_actes_caisse as $acte_caisse){
-	      $this->_ref_actes[] = $acte_caisse;
-	    }
+      foreach($this->_ref_actes_caisse as $acte_caisse){
+        $this->_ref_actes[] = $acte_caisse;
+      }
     }
     
     $this->_count_actes = count($this->_ref_actes);
@@ -382,36 +382,36 @@ class CCodable extends CMbObject {
    * Charge les actes Tarmed codés
    */
   function loadRefsActesTarmed(){
-  	$this->_ref_actes_tarmed = array();
-  	
+    $this->_ref_actes_tarmed = array();
+    
     if(CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ){
       //Classement des actes par ordre chonologique et par code
-    	$ljoin = array();
-    	$ljoin["consultation"] = "acte_tarmed.object_id = consultation.consultation_id";
-    	$ljoin["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
-    	
+      $ljoin = array();
+      $ljoin["consultation"] = "acte_tarmed.object_id = consultation.consultation_id";
+      $ljoin["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
+      
       $where = array();
       $where["acte_tarmed.object_class"] = " = 'CConsultation'";
       $where["acte_tarmed.object_id"] = " = '$this->_id'";
       
       //Dans le cas ou la date est nulle on prend celle de la plage de consultation correspondante
-	    $order = "IFNULL(acte_tarmed.date, plageconsult.date) ,code ASC";
-	    
-	    $acte_tarmed = new CActeTarmed();
-	    $this->_ref_actes_tarmed = $acte_tarmed->loadList($where, $order, null, null, $ljoin );
-	    
-	  	if (null === $this->_ref_actes_tarmed) {
-	      return;
-	    }
-	    
-	    $this->_codes_tarmed = array();
-	    foreach ($this->_ref_actes_tarmed as $_acte_tarmed){
-	      $this->_codes_tarmed[] = $_acte_tarmed->makeFullCode(); 
-	      $_acte_tarmed->loadRefExecutant();
-	      $_acte_tarmed->loadRefTarmed();
-	      $_acte_tarmed->countActesAssocies();
-	    }
-	    $this->_tokens_tarmed = implode("|", $this->_codes_tarmed);
+      $order = "IFNULL(acte_tarmed.date, plageconsult.date) ,code ASC";
+      
+      $acte_tarmed = new CActeTarmed();
+      $this->_ref_actes_tarmed = $acte_tarmed->loadList($where, $order, null, null, $ljoin );
+      
+      if (null === $this->_ref_actes_tarmed) {
+        return;
+      }
+      
+      $this->_codes_tarmed = array();
+      foreach ($this->_ref_actes_tarmed as $_acte_tarmed){
+        $this->_codes_tarmed[] = $_acte_tarmed->makeFullCode(); 
+        $_acte_tarmed->loadRefExecutant();
+        $_acte_tarmed->loadRefTarmed();
+        $_acte_tarmed->countActesAssocies();
+      }
+      $this->_tokens_tarmed = implode("|", $this->_codes_tarmed);
     }
   }
   
@@ -419,8 +419,8 @@ class CCodable extends CMbObject {
    * Charge les actes Caisse codés
    */
   function loadRefsActesCaisse(){
-  	$this->_ref_actes_caisse = array();
-  	
+    $this->_ref_actes_caisse = array();
+    
     if(CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ){
       //Classement des actes par ordre chonologique et par code
       
@@ -428,23 +428,23 @@ class CCodable extends CMbObject {
       $where["acte_caisse.object_class"] = " = 'CConsultation'";
       $where["acte_caisse.object_id"] = " = '$this->_id'";
       
-	    $order = "caisse_maladie_id, code ASC";
-	    
-	    $acte_caisse = new CActeCaisse();
-	    $this->_ref_actes_caisse = $acte_caisse->loadList($where, $order);
-	    
-	  	if (null === $this->_ref_actes_caisse) {
-	      return;
-	    }
-	    
-	    $this->_codes_caisse = array();
-	    foreach ($this->_ref_actes_caisse as $_acte_caisse){
-	      $this->_codes_caisse[] = $_acte_caisse->makeFullCode(); 
+      $order = "caisse_maladie_id, code ASC";
+      
+      $acte_caisse = new CActeCaisse();
+      $this->_ref_actes_caisse = $acte_caisse->loadList($where, $order);
+      
+      if (null === $this->_ref_actes_caisse) {
+        return;
+      }
+      
+      $this->_codes_caisse = array();
+      foreach ($this->_ref_actes_caisse as $_acte_caisse){
+        $this->_codes_caisse[] = $_acte_caisse->makeFullCode(); 
         $_acte_caisse->loadRefExecutant();
-	      $_acte_caisse->loadRefPrestationCaisse();
-	      $_acte_caisse->loadRefCaisseMaladie();
-	    }
-	    $this->_tokens_caisse = implode("|", $this->_codes_caisse);
+        $_acte_caisse->loadRefPrestationCaisse();
+        $_acte_caisse->loadRefCaisseMaladie();
+      }
+      $this->_tokens_caisse = implode("|", $this->_codes_caisse);
     }
   }
   
@@ -583,7 +583,7 @@ class CCodable extends CMbObject {
           ($date >= "$date_ref 00:00:01" && $date < "$date_ref 06:00:00");
         break;
       case "U":
-      	$date_tomorrow = mbDate("+1 day", $date_ref)." 08:00:00";
+        $date_tomorrow = mbDate("+1 day", $date_ref)." 08:00:00";
         return !in_array($discipline->text, array("MEDECINE GENERALE", "PEDIATRIE")) &&
           ($date > "$date_ref 20:00:00" && $date < $date_tomorrow);
     }
