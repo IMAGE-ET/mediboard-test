@@ -138,7 +138,7 @@ PlageConsult.addPlaceAfter = function(plage_id) {
     <td>
       <div style="float:left">
         {{assign var=count_places value=$_place.consultations|@count}}
-        {{if $online && !$plage->locked && ($plage->_canEdit || $count_places == 0)}}
+        {{if $online && !$plage->locked && ($conf.dPcabinet.CConsultation.surbooking_readonly || $plage->_canEdit || $count_places == 0)}}
           <button type="button" class="tick" onclick="PlageConsult.setClose('{{$_place.time}}')">{{$_place.time|date_format:$conf.time}}</button>
         {{else}}
           {{$_place.time|date_format:$conf.time}}

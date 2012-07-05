@@ -83,6 +83,8 @@
   
   {{mb_include module=system template=inc_config_bool var=consult_facture}}
   
+  {{mb_include module=system template=inc_config_bool var=surbooking_readonly}}
+  
   <!-- CConsultAnesth -->  
   {{assign var="class" value="CConsultAnesth"}}
     
