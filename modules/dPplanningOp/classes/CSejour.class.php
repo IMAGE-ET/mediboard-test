@@ -2427,7 +2427,12 @@ class CSejour extends CCodable implements IPatientRelated {
       return $affectation->getUFs();
     }
     
+    if ($this->uf_hebergement_id) {
+      return array("hebergement" => $this->loadRefUFHebergement());
+    }
+    
     $affectation_uf = new CAffectationUniteFonctionnelle();
+    
     // Service
     if ($this->service_id){
       $affectation_uf->object_id    = $this->service_id;
