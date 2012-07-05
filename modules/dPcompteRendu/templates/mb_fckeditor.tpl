@@ -101,10 +101,10 @@ CKEDITOR.editorConfig = function(config) {
       ['Table','HorizontalRule','Image','SpecialChar'],
       ['Maximize', 'Source'], '/',
       ['Font', 'FontSize'],
-      ['RemoveFormat', 'Bold', 'Italic', 'Underline', 'Strike'],
+      ['RemoveFormat', 'Bold', 'Italic', 'Underline', 'Strike', 'mbbreakage', 'mbcap'],
       ['Subscript', 'Superscript', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList'],'/',
       ['Outdent', 'Indent', 'mblineheight', 'TextColor', 'BGColor'],'/',
-      [{{if !$templateManager->isModele && $mode_play}}'mbplay', {{/if}} 'mbfields', {{if $templateManager->isModele}}'mblists', 'mbfreetext', {{/if}}{{if !$templateManager->isModele}}'mbhelpers', 'mbmail', {{/if}}'mbbreakage', 'mbcap', {{if $can->admin}}'mbthumbs'{{/if}}]];
+      [{{if !$templateManager->isModele && $mode_play}}'mbplay', {{/if}} 'mbfields', {{if $templateManager->isModele}}'mblists', 'mbfreetext', {{/if}}{{if !$templateManager->isModele}}'mbhelpers', 'mbmail', {{/if}}{{if $can->admin}}'mbthumbs'{{/if}}]];
 
     window.parent.fields = [];
     window.parent.listeChoix = [];
