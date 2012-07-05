@@ -23,14 +23,14 @@ $group = CGroups::loadCurrent();
 // Liste des Etablissements
 $etablissements = CMediusers::loadEtablissements(PERM_READ);
 
-if($type_name == "services"){
+if ($type_name == "services") {
   // Chargement du service à ajouter/editer
   $service = new CService();
   $service->group_id = $group->_id;
   $service->load($service_id);
   $service->loadRefsNotes();
 }
-if($type_name == "chambres"){
+if ($type_name == "chambres") {
   // Récupération de la chambre à ajouter/editer
   $chambre = new CChambre();
   $chambre->load($chambre_id);
@@ -55,13 +55,15 @@ $where = array();
 $where["group_id"] = "= '$group->_id'";
 $order = "nom";
 $service = new CService();
-  $services = $service->loadListWithPerms(PERM_READ,$where, $order);
-  foreach ($services as $_service) {
-    foreach ($_service->loadRefsChambres() as $_chambre) {
-      $_chambre->loadRefs();
-    }
+$services = $service->loadListWithPerms(PERM_READ,$where, $order);
+
+foreach ($services as $_service) {
+  foreach ($_service->loadRefsChambres() as $_chambre) {
+    $_chambre->loadRefs();
   }
-if($type_name == "UF"){
+}
+
+if ($type_name == "UF") {
   // Chargement de l'uf à ajouter/éditer
   $uf = new CUniteFonctionnelle();
   $uf->group_id = $group->_id;
@@ -70,9 +72,11 @@ if($type_name == "UF"){
   
   // Récupération des ufs
   $order = "group_id, code";
-  $ufs = $uf->loadList(null, $order);
+  $ufs = array("hebergement" => $uf->loadList(array("type" => "= 'hebergement'"), $order),
+               "medicale"    => $uf->loadList(array("type" => "= 'medicale'"), $order),
+               "soins"       => $uf->loadList(array("type" => "= 'soins'"), $order));
 }
-if($type_name == "prestations"){
+if ($type_name == "prestations") {
   // Chargement de la prestation à ajouter/éditer
   $prestation = new CPrestation();
   $prestation->group_id = $group->_id;
@@ -82,19 +86,19 @@ if($type_name == "prestations"){
   // Récupération des prestations
   $order = "group_id, nom";
   $prestations = $prestation->loadList(null, $order);
-  foreach ($prestations as $_prestation){
+  foreach ($prestations as $_prestation) {
     $_prestation->loadRefGroup();
   }
 }
-if($type_name == "secteurs"){
-	 // Chargement du secteur à ajouter / éditer
-	$secteur = new CSecteur;
-	$secteur->group_id = $group->_id;
-	$secteur->load($secteur_id);
-	$secteur->loadRefsNotes();
-	$secteur->loadRefsServices();
-	// Récupération des secteurs
-	$secteurs = $secteur->loadListWithPerms(PERM_READ, $where, $order);
+if ($type_name == "secteurs") {
+   // Chargement du secteur à ajouter / éditer
+  $secteur = new CSecteur;
+  $secteur->group_id = $group->_id;
+  $secteur->load($secteur_id);
+  $secteur->loadRefsNotes();
+  $secteur->loadRefsServices();
+  // Récupération des secteurs
+  $secteurs = $secteur->loadListWithPerms(PERM_READ, $where, $order);
 }
 
 $praticiens = CAppUI::$user->loadPraticiens();
@@ -127,8 +131,8 @@ if($type_name == "prestations"){
   $smarty->display("inc_vw_idx_prestations.tpl");
 }
 if($type_name == "secteurs"){
-	$smarty->assign("secteurs"      , $secteurs);
-	$smarty->assign("secteur"       , $secteur);
+  $smarty->assign("secteurs"      , $secteurs);
+  $smarty->assign("secteur"       , $secteur);
   $smarty->display("inc_vw_idx_secteurs.tpl");
 }
 ?>

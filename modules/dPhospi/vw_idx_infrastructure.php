@@ -40,7 +40,7 @@ $chambre->load($chambre_id);
 $chambre->loadRefsNotes();
 $chambre->loadRefService();
 foreach ($chambre->loadRefsLits() as $_lit) {
-	$_lit->loadRefsNotes();
+  $_lit->loadRefsNotes();
 }
 
 if (!$chambre->_id) {
@@ -59,8 +59,8 @@ $order = "nom";
 $services = $service->loadListWithPerms(PERM_READ,$where, $order);
 foreach ($services as $_service) {
   foreach ($_service->loadRefsChambres() as $_chambre) {
-	  $_chambre->loadRefs();
-	}
+    $_chambre->loadRefs();
+  }
 }
 
 $secteurs = $secteur->loadListWithPerms(PERM_READ, $where, $order);
@@ -73,7 +73,9 @@ $uf->loadRefsNotes();
 
 // Récupération des ufs
 $order = "group_id, code";
-$ufs = $uf->loadList(null, $order);
+$ufs = array("hebergement" => $uf->loadList(array("type" => "= 'hebergement'"), $order),
+             "medicale"    => $uf->loadList(array("type" => "= 'medicale'"), $order),
+             "soins"       => $uf->loadList(array("type" => "= 'soins'"), $order));
 
 // Chargement de la prestation à ajouter/éditer
 $prestation = new CPrestation();

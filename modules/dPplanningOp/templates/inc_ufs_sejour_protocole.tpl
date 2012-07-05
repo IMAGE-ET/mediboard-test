@@ -17,7 +17,7 @@
     <td>
       <select name="uf_hebergement_id">
         <option value="">{{tr}}CUniteFonctionnelle.none{{/tr}}</option>
-        {{foreach from=$ufs item=_uf}}
+        {{foreach from=$ufs.hebergement item=_uf}}
           <option value="{{$_uf->_id}}" {{if $object->uf_hebergement_id == $_uf->_id}}selected="selected"{{/if}}>
             {{mb_value object=$_uf field=libelle}}
           </option>
@@ -32,7 +32,7 @@
     <td>
       <select name="uf_soins_id">
         <option value="">{{tr}}CUniteFonctionnelle.none{{/tr}}</option>
-        {{foreach from=$ufs item=_uf}}
+        {{foreach from=$ufs.soins item=_uf}}
           <option value="{{$_uf->_id}}" {{if $object->uf_soins_id == $_uf->_id}}selected="selected"{{/if}}>
             {{mb_value object=$_uf field=libelle}}
           </option>
@@ -47,7 +47,7 @@
     <td>
       <select name="uf_medicale_id">
         <option value="">{{tr}}CUniteFonctionnelle.none{{/tr}}</option>
-        {{foreach from=$ufs item=_uf}}
+        {{foreach from=$ufs.medicale item=_uf}}
           <option value="{{$_uf->_id}}" {{if $object->uf_medicale_id == $_uf->_id}}selected="selected"{{/if}}>
             {{mb_value object=$_uf field=libelle}}
           </option>

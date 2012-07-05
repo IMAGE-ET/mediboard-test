@@ -17,92 +17,92 @@ class CSetupdPhospi extends CSetup {
     $this->makeRevision("all");
     $query = "CREATE TABLE `service` (
       `service_id` INT NOT NULL AUTO_INCREMENT ,
-			`nom` VARCHAR( 50 ) NOT NULL ,
-			`description` TEXT,
-			PRIMARY KEY ( `service_id` )) /*! ENGINE=MyISAM */;";
+      `nom` VARCHAR( 50 ) NOT NULL ,
+      `description` TEXT,
+      PRIMARY KEY ( `service_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-		
+    
     $query = "CREATE TABLE `chambre` (
-		  `chambre_id` INT NOT NULL AUTO_INCREMENT ,
-			`service_id` INT NOT NULL ,
-			`nom` VARCHAR( 50 ) ,
-			`caracteristiques` TEXT ,
+      `chambre_id` INT NOT NULL AUTO_INCREMENT ,
+      `service_id` INT NOT NULL ,
+      `nom` VARCHAR( 50 ) ,
+      `caracteristiques` TEXT ,
       PRIMARY KEY ( `chambre_id` ) ,
-			INDEX ( `service_id` )) /*! ENGINE=MyISAM */;";
+      INDEX ( `service_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-		
+    
     $query = "CREATE TABLE `lit` (
-		  `lit_id` INT NOT NULL AUTO_INCREMENT ,
-			`chambre_id` INT NOT NULL,
-			`nom` VARCHAR( 50 ) NOT NULL ,
-			PRIMARY KEY ( `lit_id` ) ,
-			INDEX ( `chambre_id` )) /*! ENGINE=MyISAM */;";
+      `lit_id` INT NOT NULL AUTO_INCREMENT ,
+      `chambre_id` INT NOT NULL,
+      `nom` VARCHAR( 50 ) NOT NULL ,
+      PRIMARY KEY ( `lit_id` ) ,
+      INDEX ( `chambre_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.1");
     $query = "CREATE TABLE `affectation` (
-		  `affectation_id` INT NOT NULL AUTO_INCREMENT,
-			`lit_id` INT NOT NULL ,
-			`operation_id` INT NOT NULL ,
-			`entree` DATETIME NOT NULL ,
-			`sortie` DATETIME NOT NULL ,
-			PRIMARY KEY ( `affectation_id` ) ,
-			INDEX ( `lit_id` , `operation_id` )) /*! ENGINE=MyISAM */;";
+      `affectation_id` INT NOT NULL AUTO_INCREMENT,
+      `lit_id` INT NOT NULL ,
+      `operation_id` INT NOT NULL ,
+      `entree` DATETIME NOT NULL ,
+      `sortie` DATETIME NOT NULL ,
+      PRIMARY KEY ( `affectation_id` ) ,
+      INDEX ( `lit_id` , `operation_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.11");
     $query = "ALTER TABLE `affectation` 
-		  ADD `confirme` TINYINT DEFAULT '0' NOT NULL,
-			ADD `effectue` TINYINT DEFAULT '0' NOT NULL ;";
+      ADD `confirme` TINYINT DEFAULT '0' NOT NULL,
+      ADD `effectue` TINYINT DEFAULT '0' NOT NULL ;";
     $this->addQuery($query);
     
     $this->makeRevision("0.12");
     $query = "ALTER TABLE `affectation` 
-		  ADD INDEX ( `entree` );";
+      ADD INDEX ( `entree` );";
     $this->addQuery($query);
-		
+    
     $query = "ALTER TABLE `affectation` 
-		  ADD INDEX ( `sortie` );";
+      ADD INDEX ( `sortie` );";
     $this->addQuery($query);
     
     $this->makeRevision("0.13");
     $query = "ALTER TABLE `affectation` 
-		  ADD INDEX ( `operation_id` ) ;";
+      ADD INDEX ( `operation_id` ) ;";
     $this->addQuery($query);
-		
+    
     $query = "ALTER TABLE `affectation` 
-		  ADD INDEX ( `lit_id` ) ;";
+      ADD INDEX ( `lit_id` ) ;";
     $this->addQuery($query);
     
     $this->makeRevision("0.14");
     $this->addDependency("dPplanningOp", "0.38");
     $query = "DELETE affectation.* 
-		  FROM affectation
-		  LEFT JOIN operations ON affectation.operation_id = operations.operation_id
-			WHERE operations.operation_id IS NULL;";
+      FROM affectation
+      LEFT JOIN operations ON affectation.operation_id = operations.operation_id
+      WHERE operations.operation_id IS NULL;";
     $this->addQuery($query);
-		
+    
     $query = "ALTER TABLE `affectation`
-		  ADD `sejour_id` INT UNSIGNED DEFAULT '0' NOT NULL AFTER `operation_id`;";
+      ADD `sejour_id` INT UNSIGNED DEFAULT '0' NOT NULL AFTER `operation_id`;";
     $this->addQuery($query);
-		
+    
     $query = "ALTER TABLE `affectation` 
-		  ADD INDEX (`sejour_id`);";
+      ADD INDEX (`sejour_id`);";
     $this->addQuery($query);
-		
+    
     $query = "UPDATE `affectation`,`operations`
-		  SET `affectation`.`sejour_id` = `operations`.`sejour_id`
-			WHERE `affectation`.`operation_id` = `operations`.`operation_id`;";
+      SET `affectation`.`sejour_id` = `operations`.`sejour_id`
+      WHERE `affectation`.`operation_id` = `operations`.`operation_id`;";
     $this->addQuery($query);
     
     $this->makeRevision("0.15");
     $this->addDependency("dPetablissement", "0.1");
     $query = "ALTER TABLE `service` 
-		  ADD `group_id` INT UNSIGNED NOT NULL DEFAULT 1 AFTER `service_id`;";
+      ADD `group_id` INT UNSIGNED NOT NULL DEFAULT 1 AFTER `service_id`;";
     $this->addQuery($query);
-		
+    
     $query = "ALTER TABLE `service` 
-		  ADD INDEX ( `group_id` ) ;";
+      ADD INDEX ( `group_id` ) ;";
     $this->addQuery($query);
     
     $this->makeRevision("0.16");
@@ -111,40 +111,40 @@ class CSetupdPhospi extends CSetup {
     
     $this->makeRevision("0.17");
     $query = "ALTER TABLE `affectation`
-		  CHANGE `affectation_id` `affectation_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-			CHANGE `lit_id` `lit_id` int(11) unsigned NOT NULL DEFAULT '0',
-			CHANGE `confirme` `confirme` enum('0','1') NOT NULL DEFAULT '0',
-			CHANGE `effectue` `effectue` enum('0','1') NOT NULL DEFAULT '0',
-			CHANGE `sejour_id` `sejour_id` int(11) unsigned NOT NULL DEFAULT '0';";
+      CHANGE `affectation_id` `affectation_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+      CHANGE `lit_id` `lit_id` int(11) unsigned NOT NULL DEFAULT '0',
+      CHANGE `confirme` `confirme` enum('0','1') NOT NULL DEFAULT '0',
+      CHANGE `effectue` `effectue` enum('0','1') NOT NULL DEFAULT '0',
+      CHANGE `sejour_id` `sejour_id` int(11) unsigned NOT NULL DEFAULT '0';";
     $this->addQuery($query);
-		
+    
     $query = "ALTER TABLE `chambre` 
-		  CHANGE `chambre_id` `chambre_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-			CHANGE `service_id` `service_id` int(11) unsigned NOT NULL DEFAULT '0',
-			CHANGE `nom` `nom` varchar(255) NOT NULL;";
+      CHANGE `chambre_id` `chambre_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+      CHANGE `service_id` `service_id` int(11) unsigned NOT NULL DEFAULT '0',
+      CHANGE `nom` `nom` varchar(255) NOT NULL;";
     $this->addQuery($query);
     $query = "ALTER TABLE `lit` 
-		  CHANGE `lit_id` `lit_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-			CHANGE `chambre_id` `chambre_id` int(11) unsigned NOT NULL,
-			CHANGE `nom` `nom` varchar(255) NOT NULL;";
+      CHANGE `lit_id` `lit_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+      CHANGE `chambre_id` `chambre_id` int(11) unsigned NOT NULL,
+      CHANGE `nom` `nom` varchar(255) NOT NULL;";
     $this->addQuery($query);
     $query = "ALTER TABLE `service` 
-		  CHANGE `service_id` `service_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-			CHANGE `group_id` `group_id` int(11) unsigned NOT NULL DEFAULT '1',
-			CHANGE `nom` `nom` varchar(255) NOT NULL;";
+      CHANGE `service_id` `service_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+      CHANGE `group_id` `group_id` int(11) unsigned NOT NULL DEFAULT '1',
+      CHANGE `nom` `nom` varchar(255) NOT NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("0.18");
     $query = "ALTER TABLE `affectation` 
-		  ADD `rques` text NULL;";
+      ADD `rques` text NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("0.19");
     $query = "ALTER TABLE `affectation` 
-		  ADD INDEX ( `confirme` )";
+      ADD INDEX ( `confirme` )";
     $this->addQuery($query);
     $query = "ALTER TABLE `affectation` 
-		  ADD INDEX ( `effectue` )";
+      ADD INDEX ( `effectue` )";
     $this->addQuery($query);
     
     $this->makeRevision("0.20");
@@ -161,7 +161,7 @@ class CSetupdPhospi extends CSetup {
 
     $this->makeRevision("0.22");
     $query = "ALTER TABLE `service`
-			ADD `urgence` ENUM('0','1');";
+      ADD `urgence` ENUM('0','1');";
     $this->addQuery($query);
     
     $this->makeRevision("0.23");
@@ -237,27 +237,27 @@ class CSetupdPhospi extends CSetup {
     
     $this->makeRevision("0.28");
     $query = "ALTER TABLE `transmission_medicale` 
-   	  CHANGE `object_class` `object_class` ENUM ('CPrescriptionLineElement','CPrescriptionLineMedicament','CPrescriptionLineComment','CCategoryPrescription','CAdministration','CPerfusion');";
+       CHANGE `object_class` `object_class` ENUM ('CPrescriptionLineElement','CPrescriptionLineMedicament','CPrescriptionLineComment','CCategoryPrescription','CAdministration','CPerfusion');";
     $this->addQuery($query);
     
     $this->makeRevision("0.29");
     $query = "ALTER TABLE `chambre` 
-		  ADD `annule` ENUM('0','1') DEFAULT '0'";
+      ADD `annule` ENUM('0','1') DEFAULT '0'";
     $this->addQuery($query);
     
     $this->makeRevision("0.30");
     $query = "ALTER TABLE `observation_medicale` 
-		  CHANGE `degre` `degre` ENUM ('low','high','info') NOT NULL;";
+      CHANGE `degre` `degre` ENUM ('low','high','info') NOT NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("0.31");
     $query = "ALTER TABLE `transmission_medicale` 
-			ADD `type` ENUM ('data','action','result');";
+      ADD `type` ENUM ('data','action','result');";
     $this->addQuery($query);
     
     $this->makeRevision("0.32");
     $query = "ALTER TABLE `transmission_medicale` 
-			ADD `libelle_ATC` TEXT;";
+      ADD `libelle_ATC` TEXT;";
     $this->addQuery($query);
     
     $this->makeRevision("0.33");
@@ -280,7 +280,7 @@ class CSetupdPhospi extends CSetup {
       ADD `cancelled` ENUM ('0','1') DEFAULT '0',
       ADD `hospit_jour` ENUM ('0','1') DEFAULT '0'";
     $this->addQuery($query);
-		
+    
     $query = "ALTER TABLE `service` 
       ADD INDEX (`responsable_id`);";
     $this->addQuery($query);
@@ -316,27 +316,27 @@ class CSetupdPhospi extends CSetup {
               ADD `lits_alpha` ENUM ('0','1') DEFAULT '0' AFTER `caracteristiques`;";
     $this->addQuery($query);
     
-		$this->makeRevision("0.40");
-		$query = "ALTER TABLE `modele_etiquette`
-		  ADD texte_2 TEXT AFTER texte,
-			ADD texte_3 TEXT AFTER texte_2,
-			ADD texte_4 TEXT AFTER texte_3;";
-	  $this->addQuery($query);
-		
-	  $this->makeRevision("0.41");
-	  $query = "ALTER TABLE `modele_etiquette`
-	    ADD `group_id` INT (11) UNSIGNED;";
-	  $this->addQuery($query);
-	  
-	  $query = "UPDATE `modele_etiquette`
-	    SET `group_id` = '".CGroups::loadCurrent()->_id."'
-	    WHERE `group_id` IS NULL;";
-	  $this->addQuery($query);
-	  
-	  $this->makeRevision("0.42");
-	  $query = "ALTER TABLE `modele_etiquette`
-	    ADD `show_border` ENUM ('0','1') DEFAULT '0';";
-	  $this->addQuery($query);
+    $this->makeRevision("0.40");
+    $query = "ALTER TABLE `modele_etiquette`
+      ADD texte_2 TEXT AFTER texte,
+      ADD texte_3 TEXT AFTER texte_2,
+      ADD texte_4 TEXT AFTER texte_3;";
+    $this->addQuery($query);
+    
+    $this->makeRevision("0.41");
+    $query = "ALTER TABLE `modele_etiquette`
+      ADD `group_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $query = "UPDATE `modele_etiquette`
+      SET `group_id` = '".CGroups::loadCurrent()->_id."'
+      WHERE `group_id` IS NULL;";
+    $this->addQuery($query);
+    
+    $this->makeRevision("0.42");
+    $query = "ALTER TABLE `modele_etiquette`
+      ADD `show_border` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
     
     $this->makeRevision("0.43");
     $query = "ALTER TABLE `service` 
@@ -672,7 +672,17 @@ class CSetupdPhospi extends CSetup {
               ADD INDEX (`chambre_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.71";
+    $this->makeRevision("0.71");
+    
+    $query = "ALTER TABLE `uf` 
+      ADD `type` ENUM ('hebergement','soins','medicale');";
+    $this->addQuery($query);
+    
+    $query = "UPDATE `uf`
+      SET `type` = 'medicale' WHERE `type` IS NULL";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.72";
   }
 }
 ?>

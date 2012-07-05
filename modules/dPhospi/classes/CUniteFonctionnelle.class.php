@@ -18,6 +18,7 @@ class CUniteFonctionnelle extends CMbObject {
   var $code        = null;
   var $libelle     = null;
   var $description = null;
+  var $type        = null;
   
   // References
   var $_ref_group           = null;
@@ -37,11 +38,13 @@ class CUniteFonctionnelle extends CMbObject {
   }
 
   function getProps() {
-  	$props = parent::getProps();
+    $props = parent::getProps();
     $props["group_id"]    = "ref class|CGroups notNull";
     $props["code"]        = "str notNull seekable";
     $props["libelle"]     = "str notNull seekable";
     $props["description"] = "text";
+    $props["type"]        = "enum list|hebergement|soins|medicale";
+    
     return $props;
   }
   
@@ -79,9 +82,14 @@ class CUniteFonctionnelle extends CMbObject {
   
   static function getUFs() {
     $uf = new self;
-    $uf->group_id = CGroups::loadCurrent()->_id;
+    $group_id = CGroups::loadCurrent()->_id;
     
-    return $uf->loadMatchingList("libelle");
+    return array("hebergement" =>
+                   $uf->loadList(array("type" => "= 'hebergement'", "group_id" => "= '$group_id'"), "libelle"),
+                 "medicale"    =>
+                   $uf->loadList(array("type" => "= 'medicale'", "group_id" => "= '$group_id'"), "libelle"),
+                 "soins"       =>
+                   $uf->loadList(array("type" => "= 'soins'", "group_id" => "= '$group_id'"), "libelle"));
   }
 }
 
