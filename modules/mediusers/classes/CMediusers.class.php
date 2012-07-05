@@ -270,6 +270,8 @@ class CMediusers extends CMbObject {
     $backProps["documents_crees"]                 = "CCompteRendu author_id";
     $backProps["devenirs_dentaires"]              = "CDevenirDentaire etudiant_id";
     $backProps["plages_remplacees"]               = "CPlageconsult remplacant_id";
+    $backProps["poses_disp_vasc_operateur"]       = "CPoseDispositifVasculaire operateur_id";
+    $backProps["poses_disp_vasc_encadrant"]       = "CPoseDispositifVasculaire encadrant_id";
     
     return $backProps;
   }
@@ -768,31 +770,31 @@ class CMediusers extends CMbObject {
   }
   
   function loadPraticiensCompta(){
-		$is_admin      = in_array(CUser::$types[$this->_user_type], array("Administrator"));
-		$is_secretaire = in_array(CUser::$types[$this->_user_type], array("Secrétaire"));
+    $is_admin      = in_array(CUser::$types[$this->_user_type], array("Administrator"));
+    $is_secretaire = in_array(CUser::$types[$this->_user_type], array("Secrétaire"));
     $is_directeur  = in_array(CUser::$types[$this->_user_type], array("Directeur"));
-		$listPrat = array();
+    $listPrat = array();
     $this->loadRefFunction();
-		// Liste des praticiens du cabinet
-		if($is_admin || $is_secretaire || $is_directeur || $this->_ref_function->compta_partagee) {
-		  if($is_admin) {
-		    if(CAppUI::pref("pratOnlyForConsult", 1)) {
-		      $listPrat = $this->loadPraticiens(PERM_EDIT);
-		    }
-		    else {
-		      $listPrat = $this->loadProfessionnelDeSante(PERM_EDIT);
-		    }
-		  }
-		  else {
-		    if(CAppUI::pref("pratOnlyForConsult", 1)) {
-		      $listPrat = $this->loadPraticiens(PERM_EDIT, $this->function_id);
-		    }
-		    else {
-		      $listPrat = $this->loadProfessionnelDeSante(PERM_EDIT, $this->function_id);
-		    }
-		    // On ajoute les praticiens qui ont délégués leurs compta
-		    $where = array();
-	      $where[] = "users_mediboard.compta_deleguee = '1' ||  users_mediboard.user_id ". CSQLDataSource::prepareIn(array_keys($listPrat));
+    // Liste des praticiens du cabinet
+    if($is_admin || $is_secretaire || $is_directeur || $this->_ref_function->compta_partagee) {
+      if($is_admin) {
+        if(CAppUI::pref("pratOnlyForConsult", 1)) {
+          $listPrat = $this->loadPraticiens(PERM_EDIT);
+        }
+        else {
+          $listPrat = $this->loadProfessionnelDeSante(PERM_EDIT);
+        }
+      }
+      else {
+        if(CAppUI::pref("pratOnlyForConsult", 1)) {
+          $listPrat = $this->loadPraticiens(PERM_EDIT, $this->function_id);
+        }
+        else {
+          $listPrat = $this->loadProfessionnelDeSante(PERM_EDIT, $this->function_id);
+        }
+        // On ajoute les praticiens qui ont délégués leurs compta
+        $where = array();
+        $where[] = "users_mediboard.compta_deleguee = '1' ||  users_mediboard.user_id ". CSQLDataSource::prepareIn(array_keys($listPrat));
         // Filters on users values
         $where["users_mediboard.actif"] = "= '1'";
     
@@ -806,14 +808,14 @@ class CMediusers extends CMbObject {
         
         // Associate already loaded function
         foreach ($mediusers as $key => $_mediuser) {
-        	$_mediuser->loadRefFunction();
+          $_mediuser->loadRefFunction();
         }
         $listPrat = $mediusers;
-		  }
-		} else if($this->isPraticien() && !$this->compta_deleguee){
-		  $listPrat = array($this->_id => $this);
-		}
-		
+      }
+    } else if($this->isPraticien() && !$this->compta_deleguee){
+      $listPrat = array($this->_id => $this);
+    }
+    
     return $listPrat;
   }
   
