@@ -1,11 +1,16 @@
-<?php /* $Id$ */
+<?php
 
 /**
- *  @package Mediboard
- *  @subpackage eai
- *  @version $Revision$
- *  @author SARL OpenXtrem
+ * EAI Graph
+ *  
+ * @category EAI
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version  SVN: $Id:$ 
+ * @link     http://www.mediboard.org
  */
+
 
 CCanDo::checkAdmin(); 
 
@@ -31,15 +36,19 @@ $options["yaxis"] = array("min" => 0, "autoscaleMargin" => 1);
 $options["y2axis"] = array("min" => 0, "autoscaleMargin" => 1);
 $options["xaxis"] = array("labelsAngle" => 45, "ticks" => array());
 $options["HtmlText"] = false;
-$options["spreadsheet"] = array("show" => true, "tabGraphLabel" => "Graphique", "tabDataLabel" => "Donn&eacute;es", 
-                                                    "toolbarDownload" => "T&eacute;l&eacute;charger le fichir CSV", 
-                                                    "toolbarSelectAll" => "S&eacute;lectionner le tableau",
-                                                    "csvFileSeparator" => ";", "decimalSeparator" => ",");
-if($mode == "lines") {
+$options["spreadsheet"] = array("show" => true, 
+                                "tabGraphLabel" => "Graphique", 
+                                "tabDataLabel" => "Donn&eacute;es", 
+                                "toolbarDownload" => "T&eacute;l&eacute;charger le fichir CSV", 
+                                "toolbarSelectAll" => "S&eacute;lectionner le tableau",
+                                "csvFileSeparator" => ";", 
+                                "decimalSeparator" => ",");
+if ($mode == "lines") {
   $options["lines"] = array("show" => true, "lineWidth" => 2);
-} else {
-  $options["bars"] = array("show" => true, "barWidth" => 1, "fill" => true, "fillOpacity" => 0.4, "stacked" => false,
-                                               "centered" => true);
+}
+else {
+  $options["bars"] = array("show" => true, "barWidth" => 1, "fill" => true, "fillOpacity" => 0.4, 
+                           "stacked" => false, "centered" => true);
 }
 $options["title"] = "Echanges";
 

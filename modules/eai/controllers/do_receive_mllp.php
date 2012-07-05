@@ -1,23 +1,27 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage eai
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Receive MLLP
+ *  
+ * @category EAI
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version  SVN: $Id:$ 
+ * @link     http://www.mediboard.org
  */
+
 
 $client_addr = CValue::post("client_addr");
 $message     = stripslashes(CValue::post("message"));
 
-$source_mllp 		 = new CSourceMLLP;
+$source_mllp 		     = new CSourceMLLP;
 $source_mllp->host 	 = $client_addr;
 $source_mllp->active = 1;
 $source_mllp->loadMatchingObject();
 
 if (!$source_mllp->_id) {
-	/*
+  /*
   $message          = new CHL7v2Message();
   $message->version = "2.5";
   $message->name    = "ACK";
@@ -100,9 +104,10 @@ if (!$source_mllp->_id) {
   $ERR->build($error);
   
   $message->appendChild($ERR);*/
-	
-	$now = mbTransformTime(null,null,"%Y%m%d%H%M%S");
-	$ACK  =      "MSH|^~\&|".CAppUI::conf("hl7 sending_application")."|".CAppUI::conf("hl7 sending_facility")."|||$now||ACK|$now|P|2.5||||||".CHL7v2TableEntry::mapTo("211", CApp::$encoding);
+  
+  $now  = mbTransformTime(null, null, "%Y%m%d%H%M%S");
+  $ACK  = "MSH|^~\&|".CAppUI::conf("hl7 sending_application")."|".CAppUI::conf("hl7 sending_facility").
+          "|||$now||ACK|$now|P|2.5||||||".CHL7v2TableEntry::mapTo("211", CApp::$encoding);
   $ACK .= "\r"."ERR||0^0|207|E|E200^Acteur inconnu|||||||";
     
   ob_clean();

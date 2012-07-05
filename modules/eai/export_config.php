@@ -1,6 +1,6 @@
 <?php 
 /**
- * Refresh Exchanges Source Actor EAI
+ * Export CExchangeDataFormatConfig
  *  
  * @category EAI
  * @package  Mediboard

@@ -95,7 +95,7 @@ $total_exchanges = $itemExchange->countList($where, null, $ljoin, $forceindex);
 $order = "date_production DESC";
 
 $exchanges = $itemExchange->loadList($where, $order, "$page, 25", null, $ljoin, $forceindex);
-foreach($exchanges as $_exchange) {
+foreach ($exchanges as $_exchange) {
   $_exchange->loadRefsBack();
   $_exchange->getObservations();
   $_exchange->loadRefsInteropActor();

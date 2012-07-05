@@ -37,7 +37,7 @@ if ($actor instanceof CInteropSender) {
   }
 }
 // Destinataire d'intégration 
-else if($actor instanceof CInteropReceiver) {
+else if ($actor instanceof CInteropReceiver) {
   $actor->makeBackSpec("echanges");
   $data_format = new $actor->_backSpecs["echanges"]->class;
   

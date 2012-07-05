@@ -24,7 +24,9 @@ if ($exchange_object instanceof CExchangeIHE) {
 
 if (CValue::get("message") == 1) {
   $exchange = utf8_decode($exchange_object->_message);
-  header("Content-Disposition: attachment; filename=msg-{$exchange_object->sous_type}-{$exchange_object->_id}{$extension}");
+  
+  $filename = "msg-{$exchange_object->sous_type}-{$exchange_object->_id}{$extension}";
+  header("Content-Disposition: attachment; filename=$filename");
   header("Content-Type: text/plain; charset=".CApp::$encoding);
   header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT" );
   header("Cache-Control: post-check=0, pre-check=0", false );
@@ -33,7 +35,9 @@ if (CValue::get("message") == 1) {
 }
 if (CValue::get("ack") == 1) {
   $exchange = utf8_decode($exchange_object->_acquittement);
-  header("Content-Disposition: attachment; filename=ack-{$exchange_object->sous_type}-{$exchange_object->_id}{$extension}");
+  
+  $filename = "ack-{$exchange_object->sous_type}-{$exchange_object->_id}{$extension}";
+  header("Content-Disposition: attachment; filename=$filename");
   header("Content-Type: text/plain; charset=".CApp::$encoding);
   header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT" );
   header("Cache-Control: post-check=0, pre-check=0", false );

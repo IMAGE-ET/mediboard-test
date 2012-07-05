@@ -17,6 +17,13 @@
  */
 
 class CEAIMbObject {
+  /**
+   * Get modified fields
+   * 
+   * @param CMbObject $object First object
+   * 
+   * @return string Modified fields
+   */  
   static function getModifiedFields(CMbObject $object) {
     $modified_fields = "";
 
@@ -34,7 +41,14 @@ class CEAIMbObject {
     return $modified_fields;
   }
   
-  
+  /**
+   * Comment log
+   * 
+   * @param CMbObject $object      First object
+   * @param CMbObject $otherObject Other object (merge)
+   * 
+   * @return string Comment
+   */  
   static function getComment(CMbObject $object, CMbObject $otherObject = null) {
     $modified_fields = self::getModifiedFields($object);
     
@@ -55,7 +69,8 @@ class CEAIMbObject {
           break;
         // Fusion des patients
         case "merge" : 
-          $comment  = "Le patient avec l'IC '$object->_id' a été fusionné avec le patient dont l'IC est '$otherObject->_id'.";
+          $comment  = "Le patient avec l'IC '$object->_id' a été fusionné avec 
+                       le patient dont l'IC est '$otherObject->_id'.";
           break;
         default :
           $comment = "";
@@ -77,7 +92,8 @@ class CEAIMbObject {
           break;
         // Fusion des séjours
         case "merge" : 
-          $comment  = "Le séjour avec l'IC '$object->_id' a été fusionné avec le séjour dont l'IC est '$otherObject->_id'.";
+          $comment  = "Le séjour avec l'IC '$object->_id' a été fusionné avec 
+                       le séjour dont l'IC est '$otherObject->_id'.";
         default :
           $comment = "";
       }     

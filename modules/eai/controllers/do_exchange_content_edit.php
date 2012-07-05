@@ -1,4 +1,4 @@
-<?php /* $Id: $ */
+<?php
 
 /**
  * Message supported
@@ -27,7 +27,7 @@ $map = array(
 $segment_terminator = CValue::read($map, $segment_terminator);
 
 if ($segment_terminator) {
-	$lines = preg_split("/(\r\n|\r|\n)/", $_message);
+  $lines = preg_split("/(\r\n|\r|\n)/", $_message);
   $_message = implode($segment_terminator, $lines);
 }
 
@@ -37,13 +37,13 @@ if ($segment_terminator) {
 $exchange = CMbObject::loadFromGuid($exchange_guid);
 
 if ($exchange->_id) {
-	$exchange->_message = $_message;
-	if ($msg = $exchange->store()) {
-		CAppUI::setMsg($msg, UI_MSG_ERROR);
-	}
-	else {
-		CAppUI::setMsg("$exchange->_class-msg-modify");
-	}
+  $exchange->_message = $_message;
+  if ($msg = $exchange->store()) {
+    CAppUI::setMsg($msg, UI_MSG_ERROR);
+  }
+  else {
+    CAppUI::setMsg("$exchange->_class-msg-modify");
+  }
 }
 
 echo CAppUI::getMsg();

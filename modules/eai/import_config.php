@@ -1,11 +1,13 @@
-<?php /* $Id: prat_import_csv.php 6103 2009-04-16 13:36:52Z yohann $ */
-
+<?php 
 /**
- * @package Mediboard
- * @subpackage eai
- * @version $Revision: 6153 $
- * @author SARL OpenXtrem
- * @license GNU GPL
+ * Import CExchangeDataFormatConfig
+ *  
+ * @category EAI
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version  SVN: $Id:$ 
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkAdmin();
@@ -45,7 +47,11 @@ if (!empty($file) && ($contents = file_get_contents($file['tmp_name']))) {
     }
     
     if ($count = array_diff_key($array_configs, $fields)) {
-      CAppUI::setMsg("Trop de données ('".count($array_configs)."') par rapport aux champs de l'objet ('".count($fields)."')", UI_MSG_ERROR);
+      CAppUI::setMsg(
+        "Trop de données ('".count($array_configs)."') par rapport aux 
+        champs de l'objet ('".count($fields)."')", 
+        UI_MSG_ERROR
+      );
     }
     else {
       foreach ($array_configs as $key => $value) {
@@ -60,16 +66,23 @@ if (!empty($file) && ($contents = file_get_contents($file['tmp_name']))) {
     } 
   }
   else {
-    CAppUI::setMsg("La classe du fichier de configuration importé ('$root_name'), ne correspond pas à celle de la configuration choisie ('$format_config->_class')", UI_MSG_ERROR);
+    CAppUI::setMsg(
+      "La classe du fichier de configuration importé ('$root_name'), ne correspond pas à celle 
+      de la configuration choisie ('$format_config->_class')", 
+      UI_MSG_ERROR
+    );
   }
 
-  CAppUI::callbackAjax('window.parent.uploadCallback', array(
-    "message" => CAppUI::getMsg(), 
-    "sender"  => array(
-      "sender_class" => $actor->_class,
-      "sender_id"    => $actor->_id, 
+  CAppUI::callbackAjax(
+    'window.parent.uploadCallback', 
+    array(
+      "message" => CAppUI::getMsg(), 
+      "sender"  => array(
+        "sender_class" => $actor->_class,
+        "sender_id"    => $actor->_id, 
+      )
     )
-  ));
+  );
 }
 
 // Création du template

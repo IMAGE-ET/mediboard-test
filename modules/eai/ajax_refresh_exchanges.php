@@ -42,7 +42,7 @@ $evenements = array();
 foreach ($messages as $_message => $_evt_class) { 
   $evt  = new $_evt_class;
   $evts = $evt->getEvenements(); 
-  $keys       = array_map_recursive(array("CMbString" , "removeDiacritics"),array_keys($evts));
+  $keys       = array_map_recursive(array("CMbString" , "removeDiacritics"), array_keys($evts));
   $values     = array_values($evts);
   $evenements[$_message] = ($keys && $values) ? array_combine($keys, $values) : array();
 }

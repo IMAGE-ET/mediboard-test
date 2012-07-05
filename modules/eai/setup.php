@@ -10,6 +10,11 @@
  * @link     http://www.mediboard.org
  */
 
+ /**
+ * Class CSetupeai
+ * Setup EAI
+ */
+
 class CSetupeai extends CSetup {
   
   function __construct() {

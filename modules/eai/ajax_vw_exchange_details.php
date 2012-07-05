@@ -44,14 +44,14 @@ switch(true) {
     $smarty->assign("msg_segment_group", $msg_segment_group);
     $smarty->assign("ack_segment_group", $ack_segment_group);
     $smarty->display("inc_exchange_tabular_details.tpl");
-  break;
+    break;
 
   case $exchange instanceof CEchangeXML:
     $smarty->display("inc_exchange_xml_details.tpl");
-  break;
+    break;
   
   default:
     $exchange->guessDataType();
     $smarty->display("inc_exchange_any_details.tpl");
-  break;
+    break;
 }

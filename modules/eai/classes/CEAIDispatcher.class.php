@@ -17,9 +17,28 @@
  */
 
 class CEAIDispatcher {
-  static $errors      = null;
-  static $xml_error   = null;
-    
+  /**
+   * Error logs
+   * @var array
+   */
+  static $errors    = null;
+ 
+  /**
+   * MB XML errors
+   * @var string
+   */
+  static $xml_error = null;
+   
+  /**
+   * Dispatch message
+   * 
+   * @param string         $data         Data
+   * @param CInteropSender $actor        Actor data
+   * @param int            $exchange_id  Identifier exchange 
+   * @param bool           $to_treatment Treat the exchange
+   * 
+   * @return string Dispatch response
+   */  
   static function dispatch($data, CInteropSender $actor = null, $exchange_id = null, $to_treatment = true) {
     if ($actor && isset($actor->_configs["encoding"]) && $actor->_configs["encoding"] == "UTF-8") {
       $data = utf8_decode($data);
@@ -55,15 +74,22 @@ class CEAIDispatcher {
 
     // est-ce que je comprend la famille de messages ?
     $supported = false;
-    $family_message_class = (!$data_format->_family_message_class) ? get_class($data_format->_family_message) : $data_format->_family_message_class;    
-    foreach ($data_format->getMessagesSupported($actor->_guid, false, null, true) as $_msg_supported_class => $_msg_supported) {
+    $family_message_class = (!$data_format->_family_message_class) ? 
+                                get_class($data_format->_family_message) : $data_format->_family_message_class; 
+    
+    $msg_supported_classes = $data_format->getMessagesSupported($actor->_guid, false, null, true);
+    foreach ($msg_supported_classes as $_msg_supported_class => $_msg_supported) {
       if ($family_message_class == $_msg_supported_class) {
         $supported = true;
       }
     }
 
     if (!$supported) {
-      self::$errors[] = CAppUI::tr("CEAIDispatcher-_family_message_no_supported_for_this_actor", $family_message_class);
+      self::$errors[] = CAppUI::tr(
+        "CEAIDispatcher-_family_message_no_supported_for_this_actor", 
+        $family_message_class
+      );
+      
       return self::dispatchError($data, $actor);
     }
     
@@ -89,6 +115,14 @@ class CEAIDispatcher {
     }
   }
   
+  /**
+   * Dispatch error
+   * 
+   * @param string         $data  Data
+   * @param CInteropSender $actor Actor data
+   * 
+   * @return bool Always false
+   */  
   static function dispatchError($data, $actor = null) {
     foreach (self::$errors as $_error) {
       CAppUI::stepAjax($_error, UI_MSG_WARNING);
@@ -115,9 +149,14 @@ class CEAIDispatcher {
     return false;
   }
   
-  /*
+  /**
    * Create ACK
-   */
+   * 
+   * @param string         $msg    Data
+   * @param CInteropSender $sender Actor data
+   * 
+   * @return void
+   */  
   static function createFileACK($msg, $sender) {
     if (!$sender->create_ack_file) {
       return;
