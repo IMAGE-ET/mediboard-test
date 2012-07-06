@@ -528,6 +528,10 @@
           <a class="button new" href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id=0">
             {{tr}}CRPU-title-create{{/tr}}
           </a>
+          
+          {{if @$modules.ecap->mod_active}}
+            {{mb_include module=ecap template=inc_button_dhe_urgence sejour_id=$sejour->_id}}
+          {{/if}}
         {{else}}
           <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
         {{/if}}

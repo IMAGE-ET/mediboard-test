@@ -33,15 +33,15 @@
 {{if $consult}}
   {{if ($sejour->type != "urg" && !$sejour->UHCD) ||  $rpu->mutation_sejour_id}}
     <strong>{{mb_value object=$sejour field=type}}</strong>
-  	<br/>
-  	<a class="button search" title="Voir le dossier complet du patient" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$sejour->patient_id}}">
-  	  Dossier Complet
-  	</a>
+    <br/>
+    <a class="button search" title="Voir le dossier complet du patient" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$sejour->patient_id}}">
+      Dossier Complet
+    </a>
   
   {{else}}
-  	{{if !$consult->_id}}
-  		{{if !$sejour->sortie_reelle || $conf.dPurgences.pec_after_sortie}}
-  			{{if $can->edit}}
+    {{if !$consult->_id}}
+      {{if !$sejour->sortie_reelle || $conf.dPurgences.pec_after_sortie}}
+        {{if $can->edit}}
           {{main}}
             var form = getForm("createConsult-{{$rpu->_id}}");
             var field = form._datetime;
@@ -62,38 +62,38 @@
             
           {{/main}}
           
-    			<form name="createConsult-{{$rpu->_id}}" method="post" action="?" onsubmit="return checkForm(this);" class="prepared">
-    			  <input type="hidden" name="dosql" value="do_consult_now" />
-    			  <input type="hidden" name="m" value="dPcabinet" />
-    			  <input type="hidden" name="del" value="0" />
-    			  <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
-    			  <input type="hidden" name="patient_id" value="{{$sejour->patient_id}}" />   
+          <form name="createConsult-{{$rpu->_id}}" method="post" action="?" onsubmit="return checkForm(this);" class="prepared">
+            <input type="hidden" name="dosql" value="do_consult_now" />
+            <input type="hidden" name="m" value="dPcabinet" />
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+            <input type="hidden" name="patient_id" value="{{$sejour->patient_id}}" />   
             <input type="hidden" name="date_at" value="{{$rpu->date_at}}" />
-    			  
-    				<div style="white-space: nowrap;">
-    	        <select name="prat_id" class="ref notNull" style="width: 10em;">
-    	          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+            
+            <div style="white-space: nowrap;">
+              <select name="prat_id" class="ref notNull" style="width: 10em;">
+                <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
                 {{mb_include module=mediusers template=inc_options_mediuser list=$listPrats selected=$sejour->praticien_id}}
-    	        </select>
-    	        <input type="hidden" name="_datetime" value="" class="dateTime" />
-    				</div>
-    			  
-    			  <button type="submit" class="new" onclick="return checkPraticien(this.form)">Prendre en charge</button>
-    			</form>
-  			{{else}}
-  			  &mdash;
-  			{{/if}}
-  		{{else}}
-  		  <em>{{tr}}CRPU-ATU-missing{{/tr}}</em>
-  		{{/if}}
-  	{{else}}
-  	  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$consult->_ref_praticien}}
-  		{{if $can->edit}}
-  		<br />
-  		<a class="button search" title="Prise en charge" href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
-  		  Voir prise en charge
-  		</a>
-  		{{/if}}
-  	{{/if}}
+              </select>
+              <input type="hidden" name="_datetime" value="" class="dateTime" />
+            </div>
+            
+            <button type="submit" class="new" onclick="return checkPraticien(this.form)">Prendre en charge</button>
+          </form>
+        {{else}}
+          &mdash;
+        {{/if}}
+      {{else}}
+        <em>{{tr}}CRPU-ATU-missing{{/tr}}</em>
+      {{/if}}
+    {{else}}
+      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$consult->_ref_praticien}}
+      {{if $can->edit}}
+      <br />
+      <a class="button search" title="Prise en charge" href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
+        Voir prise en charge
+      </a>
+      {{/if}}
+    {{/if}}
   {{/if}}
 {{/if}}
