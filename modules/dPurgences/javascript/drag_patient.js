@@ -27,7 +27,7 @@ function TraiterDrop(element, zoneDrop)
     element.style.width = "92%";
     ChoiceLit.edit(zoneDrop.get("chambre-id"), element.get("patient-id"), getForm("changeDate").date.value);    
   }
-  else if(nb_chambres_libres == 1){
+  else{
     element.style.width = "92%";
     ChoiceLit.submitRPU(zoneDrop.get("lit-id"));
   }
