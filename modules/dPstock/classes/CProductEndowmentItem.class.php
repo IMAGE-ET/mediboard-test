@@ -14,6 +14,7 @@ class CProductEndowmentItem extends CMbObject {
   var $quantity          = null;
   var $endowment_id      = null;
   var $product_id        = null;
+  var $cancelled         = null;
 
   // Object References
   var $_ref_endowment    = null;
@@ -32,6 +33,7 @@ class CProductEndowmentItem extends CMbObject {
     $specs['quantity']     = 'num notNull min|0';
     $specs['endowment_id'] = 'ref notNull class|CProductEndowment autocomplete|name';
     $specs['product_id']   = 'ref notNull class|CProduct autocomplete|name dependsOn|cancelled seekable';
+    $specs['cancelled']    = 'bool notNull default|0';
     return $specs;
   }
 

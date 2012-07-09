@@ -199,13 +199,13 @@ Main.add(function(){
       <label>Title 7</label>
     </th>
     <td>
-      <input type="hidden" class="dateTime" name="dateTime" value="{{$smarty.now|@iso_datetime}}" />
+      <input type="hidden" class="dateTime" name="dateTime" value="{{$smarty.now|date_format:'%Y-%m-%d %H:%M:%S'}}" />
     </td>
     <th>
       <label>Title 8</label>
     </th>
     <td>
-      <input type="hidden" class="time" name="time" value="{{$smarty.now|@iso_time}}" />
+      <input type="hidden" class="time" name="time" value="{{$smarty.now|date_format:'%H:%M:%S'}}" />
     </td>
   </tr>
   <tr>
@@ -213,7 +213,7 @@ Main.add(function(){
       <label>Title 7</label>
     </th>
     <td>
-      <input type="hidden" class="date" name="date" value="{{$smarty.now|@iso_date}}" />
+      <input type="hidden" class="date" name="date" value="{{$smarty.now|date_format:'%Y-%m-%d'}}" />
     </td>
     <th>
       <label>Title 8</label>

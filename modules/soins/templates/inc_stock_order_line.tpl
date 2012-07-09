@@ -62,9 +62,11 @@
         {{mb_field object=$stock field=quantity form="form-dispensation-$stock_id" increment=1 size=3 min=1 value=$qty style=$style 
          onchange="this.form._quantity_package.value = this.value/$qty" class="num notNull min|1"}}
       {{else}}
+        <input type="hidden" name="endowment_quantity" value="{{$stock->quantity}}" class="num" />
+        <input type="hidden" name="endowment_item_id" value="{{$stock->_endowment_item_id}}" class="ref" />
         {{mb_field object=$stock field=quantity form="form-dispensation-$stock_id" prop="num notNull min|1" increment=1 size=3 min=1 style=$style}}
       {{/if}}
-      <button type="button" class="down notext" title="{{tr}}CProductDelivery-comments-desc{{/tr}}" onclick="$(this).next('input[name=comments]').show().focus()"></button>
+      <button type="button" class="comment notext" title="{{tr}}CProductDelivery-comments-desc{{/tr}}" onclick="$(this).up('form').elements.comments.up('.com').show().down('textarea').tryFocus()"></button>
       <button type="submit" class="tick notext singleclick" title="Dispenser" style="{{$style}}">Dispenser</button>
       
       {{if $stock->_ref_product->packaging && $qty && !$endowment_id}}
@@ -75,8 +77,7 @@
           getForm("form-dispensation-{{$stock->_id}}")._quantity_package.addSpinner({min:1});
         </script>
       {{/if}}
-      <br />
-      <input type="text" name="comments" style="display: none; width: 100%;" />
+      <div style="display: none;" class="com"><textarea name="comments"></textarea></div>
     </form>
   </td>
   

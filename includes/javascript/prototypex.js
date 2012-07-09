@@ -601,6 +601,7 @@ Element.addMethods({
       new NoClickDelay(element);
     });
     */
+    
    
    root.select("label").each(function(label){
      if (label.hasAttribute("onclick")) {

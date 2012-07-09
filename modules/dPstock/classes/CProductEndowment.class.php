@@ -41,21 +41,38 @@ class CProductEndowment extends CMbObject {
 
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = "$this->name ($this->_ref_service)";
+    $this->_view = "$this->name";
+    
+    if ($this->_ref_service) {
+      $this->_view .= " ({$this->_ref_service->_view})";
+    }
   }
 
   function loadRefsFwd(){
     parent::loadRefsFwd();
-    $this->_ref_service = $this->loadFwdRef("service_id", true);
+    
+    $this->loadRefService();
+  }
+  
+  /**
+   * @return CService
+   */
+  function loadRefService(){
+    return $this->_ref_service = $this->loadFwdRef("service_id", true);
   }
 
   function loadRefsBack(){
+    $this->loadRefsEndowmentItems();
+  }
+
+  function loadRefsEndowmentItems() {
     $ljoin = array(
-      "product" => "product.product_id = product_endowment_item.product_id",
-      "product_stock_group" => "product_stock_group.product_id = product.product_id",
+      "product"                => "product.product_id = product_endowment_item.product_id",
+      "product_stock_group"    => "product_stock_group.product_id = product.product_id",
       "product_stock_location" => "product_stock_location.stock_location_id = product_stock_group.location_id"
     );
-    $this->_ref_endowment_items = $this->loadBackRefs('endowment_items', "product_stock_location.position, product.name", null, null, $ljoin);
+    
+    return $this->_ref_endowment_items = $this->loadBackRefs('endowment_items', "product_stock_location.position, product.name", null, null, $ljoin);
   }
   
   function getPerm($permType) {
@@ -64,4 +81,3 @@ class CProductEndowment extends CMbObject {
     return parent::getPerm($permType) && $this->_ref_service->getPerm($permType);
   }
 }
-?>

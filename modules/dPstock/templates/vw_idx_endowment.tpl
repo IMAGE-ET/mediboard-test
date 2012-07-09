@@ -49,7 +49,7 @@ Main.add(function(){
 
 <table class="main">
   <tr>
-    <td class="halfPane" rowspan="10">
+    <td class="halfPane">
       <form name="filter-endowments" action="?" method="get" onsubmit="return filterEndowments(this)">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />

@@ -10,42 +10,44 @@
 
 class CProductDelivery extends CMbObject {
   // DB Table key
-  var $delivery_id  = null;
-
-  // DB Fields
+  var $delivery_id        = null;
   
   // Source
-  var $stock_id       = null;
-  var $stock_class    = null;
+  var $stock_id           = null;
+  var $stock_class        = null;
   
   // Target
-  var $service_id     = null;
-  var $patient_id     = null;
-  //var $prescription_id = null;
+  var $service_id         = null;
+  var $patient_id         = null;
+  //var $prescription_id   = null;
   
-  var $date_dispensation = null;
-  var $date_delivery  = null;
-  var $datetime_min  = null;
-  var $datetime_max  = null;
+  var $date_dispensation  = null;
+  var $date_delivery      = null;
+  var $datetime_min       = null;
+  var $datetime_max       = null;
   
-  var $quantity       = null;
-  var $order          = null;
-  var $manual         = null;
-  var $comments       = null;
-  var $type           = null;
+  var $quantity           = null;
+  var $endowment_quantity = null;
+  var $endowment_item_id  = null;
+  var $order              = null;
+  var $manual             = null;
+  var $comments           = null;
+  var $comments_deliver   = null;
+  var $type               = null;
 
   // Object References
-  //    Single
   /**
    * @var CProductStockGroup 
    */
-  var $_ref_stock     = null;
-  var $_ref_stock_service = null;
+  var $_ref_stock           = null;
+  var $_ref_stock_service   = null;
+  var $_ref_endowment_item  = null;
+  
   /**
    * @var CService
    */
-  var $_ref_service = null;
-  var $_ref_patient = null;
+  var $_ref_service         = null;
+  var $_ref_patient         = null;
   
   var $_ref_location_source = null;
   var $_ref_location_target = null;
@@ -54,20 +56,19 @@ class CProductDelivery extends CMbObject {
   var $_ref_prises_dispensation = null;
   var $_ref_prises_dispensation_med = null;
   
-  
-  var $_date_min      = null;
-  var $_date_max      = null;
-  var $_datetime_min      = null;
-  var $_datetime_max      = null;
-  var $_delivered     = null;
-  var $_auto_deliver  = null;
+  var $_date_min            = null;
+  var $_date_max            = null;
+  var $_datetime_min        = null;
+  var $_datetime_max        = null;
+  var $_delivered           = null;
+  var $_auto_deliver        = null;
   var $_make_delivery_trace = null;
   
-  var $_products                  = null;
-  var $_prises                    = null;
-  var $_pilulier                  = null;
-  var $_code_cis                  = null;
-  var $_code_ucd                  = null;
+  var $_products            = null;
+  var $_prises              = null;
+  var $_pilulier            = null;
+  var $_code_cis            = null;
+  var $_code_ucd            = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -97,16 +98,19 @@ class CProductDelivery extends CMbObject {
     
     $type = (CProductStock::$allow_quantity_fractions ? "float" : "num");
     $specs['quantity']          = "$type notNull";
+    $specs['endowment_quantity']= "$type";
+    $specs['endowment_item_id'] = "ref class|CProductEndowmentItem";
     $specs['order']             = 'bool default|0';
     $specs['manual']            = 'bool default|0';
     $specs['comments']          = 'text';
+    $specs['comments_deliver']  = 'text';
     $specs['type']              = 'enum list|other|expired|breakage|loss|gift|discrepancy|notused|toomany';
     
     $specs['_date_min']         = 'date notNull';
     $specs['_date_max']         = 'date notNull moreEquals|_date_min';
     
-    $specs['_datetime_min']         = 'dateTime notNull';
-    $specs['_datetime_max']         = 'dateTime notNull moreEquals|_datetime_min';
+    $specs['_datetime_min']     = 'dateTime notNull';
+    $specs['_datetime_max']     = 'dateTime notNull moreEquals|_datetime_min';
     
     return $specs;
   }
@@ -204,6 +208,10 @@ class CProductDelivery extends CMbObject {
   function loadRefPatient(){
     return $this->_ref_patient = $this->loadFwdRef("patient_id", true);  
   }
+  
+  function loadRefEndowmentItem(){
+    return $this->_ref_endowment_item = $this->loadFwdRef("endowment_item_id", true);  
+  }
 
   /**
    * @return CProductStock
@@ -247,7 +255,7 @@ class CProductDelivery extends CMbObject {
     if ($this->_prises) {
       $prises = json_decode(stripslashes($this->_prises), true);
       
-      foreach($prises as $_prise){
+      foreach ($prises as $_prise) {
         $prise_dispensation = new CPriseDispensation();
         $prise_dispensation->delivery_id   = $this->_id;
         $prise_dispensation->datetime      = $_prise["datetime"];
@@ -262,7 +270,9 @@ class CProductDelivery extends CMbObject {
       $this->_prises = null;
     }
 
-    if (!$is_new) return;
+    if (!$is_new) {
+      return;
+    }
     
     if ($this->manual) {
       $delivery_trace = new CProductDeliveryTrace;
@@ -290,13 +300,15 @@ class CProductDelivery extends CMbObject {
   }
 
   function getPerm($permType) {
-    if(!$this->_ref_stock || !$this->_ref_service) {
+    if (!$this->_ref_stock || !$this->_ref_service) {
       $this->loadRefsFwd();
     }
+    
     if ($this->_ref_service) {
-      return ($this->_ref_stock->getPerm($permType) && $this->_ref_service->getPerm($permType));
-    } else {
-      return ($this->_ref_stock->getPerm($permType));
+      return $this->_ref_stock->getPerm($permType) && $this->_ref_service->getPerm($permType);
+    }
+    else {
+      return $this->_ref_stock->getPerm($permType);
     }
     return true;
   }
@@ -306,7 +318,7 @@ class CProductDelivery extends CMbObject {
     
     if ($this->manual) {
       $traces = $this->loadBackRefs("delivery_traces");
-      foreach($traces as $_trace) {
+      foreach ($traces as $_trace) {
         $_trace->delete();
       }
     }

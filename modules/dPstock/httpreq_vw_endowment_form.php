@@ -15,9 +15,10 @@ $endowment_id = CValue::getOrSession('endowment_id');
 $endowment = new CProductEndowment();
 
 if ($endowment->load($endowment_id)) {
-  $endowment->loadRefsBack();
+  $items = $endowment->loadRefsEndowmentItems();
+  $endowment->loadRefsNotes();
   
-  foreach($endowment->_back["endowment_items"] as $_item) {
+  foreach($items as $_item) {
     $_item->updateFormFields();
     $_item->_ref_product->loadRefStock();
   }

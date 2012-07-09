@@ -730,7 +730,7 @@ class CMbFieldSpec {
       $params["readonly"] = "readonly";
     }
     
-    $autocomplete = CMbArray::extract($params, "autocomplete", "true,2,30,false,false");
+    $autocomplete = CMbArray::extract($params, "autocomplete", "true,2,30,false,false,1");
     $form         = CMbArray::extract($params, "form");
     $multiline    = CMbArray::extract($params, "multiline");
     $extra        = CMbArray::makeXmlAttributes($params);
@@ -738,7 +738,7 @@ class CMbFieldSpec {
     $ref = false;
 
     // @todo: use a better way of getting options
-    @list($activated, $minChars, $limit, $wholeString, $dropdown) = explode(',', $autocomplete);
+    @list($activated, $minChars, $limit, $wholeString, $dropdown, $minOccurences) = explode(',', $autocomplete);
     
     if ($this->autocomplete && $form && $activated === 'true') {
       if ($minChars    === null || $minChars    === "") {
@@ -752,6 +752,9 @@ class CMbFieldSpec {
       }
       if ($dropdown    === null || $dropdown    === "" || $dropdown === "false") {
         $dropdown = false;
+      }
+      if ($minOccurences === null || $minOccurences === "") {
+        $minOccurences = 1;
       }
       
       $options = explode('|', $this->autocomplete);
@@ -786,6 +789,7 @@ class CMbFieldSpec {
         url.addParam("show_view", '.($show_view ? 'true' : 'false').');
         url.addParam("input_field", "'.$field.($ref ? '_autocomplete_view' : '').'");
         url.addParam("wholeString", '.$wholeString.');
+        url.addParam("min_occurences", '.$minOccurences.');
         url.autoComplete(input, "'.$id.'_autocomplete", {
           minChars: '.$minChars.',
           method: "get",

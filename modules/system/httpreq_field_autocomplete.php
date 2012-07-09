@@ -17,6 +17,7 @@ $input       = CValue::get($input_field);
 $limit       = CValue::get('limit', 30);
 $wholeString = CValue::get('wholeString', 'false') == 'true';
 $where       = CValue::get('where', array());
+$min_occurences = CValue::get('min_occurences', 1);
 
 $object = new $class;
 $ds = $object->_spec->ds;
@@ -62,7 +63,13 @@ if ($spec instanceof CRefSpec) {
 }
 else {
   $where[$field] = $ds->prepareLike($search);
-  $matches = $object->loadList($where, $field, $limit, $field);
+  $group_by = $field;
+  
+  if ($min_occurences > 1) {
+    $group_by .= " HAVING COUNT(*) > $min_occurences";
+  }
+  
+  $matches = $object->loadList($where, $field, $limit, $group_by);
   /*$counts = CMbArray::pluck($object->countMultipleList($where, $field, $field), "total");
   $count = count($counts);
   

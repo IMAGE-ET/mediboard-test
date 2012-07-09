@@ -1,11 +1,11 @@
 <?php /* $Id: httpreq_vw_restockages_service_list.php 6146 2009-04-21 14:40:08Z alexis_granger $ */
 
 /**
- *	@package Mediboard
- *	@subpackage soins
- *	@version $Revision: 6146 $
- *  @author SARL OpenXtrem
- *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @package Mediboard
+ * @subpackage soins
+ * @version $Revision: 6146 $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
 CCanDo::checkRead();
@@ -62,6 +62,7 @@ if ($endowment_id) {
     $endowment_item = new CProductEndowmentItem;
     
     $where["product_endowment_item.endowment_id"] = "= '$endowment_id'";
+    $where["product_endowment_item.cancelled"] = "= '0'";
     $ljoin = array(
       'product' => 'product.product_id = product_endowment_item.product_id'
     );
@@ -135,9 +136,11 @@ else if ($only_service_stocks == 1 || $only_common == 1) {
       }
     }
   }
-} 
+}
 else {
-  $where["product_stock_group.group_id"] = "= '$group_id'";
+  $where = array(
+    "product_stock_group.group_id" => "= '$group_id'"
+  );
   $ljoin = array(
     'product' => 'product.product_id = product_stock_group.product_id'
   );

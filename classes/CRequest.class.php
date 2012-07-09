@@ -29,6 +29,7 @@ class CRequest {
    * SELECT [...]
    * 
    * @param mixed $select An array or a string of the SELECT clause
+   * 
    * @return CRequest Current request
    */
   function addSelect($select) {
@@ -43,9 +44,10 @@ class CRequest {
   }
   
   /**
+   * SELECT [...] AS [...]
    * 
    * @param string $column An column name in the SELECT clause
-   * @param string $as The columns's alias
+   * @param string $as     The columns's alias
    * 
    * @return CRequest Current request
    */
@@ -59,8 +61,10 @@ class CRequest {
   }
   
   /**
+   * FROM [...]
    * 
-   * @param mixed An array or a string of the FROM clause
+   * @param mixed $table An array or a string of the FROM clause
+   * 
    * @return CRequest Current request
    */
   function addTable($table) {
@@ -75,8 +79,10 @@ class CRequest {
   }
   
   /**
+   * LEFT JOIN [...] ON [...]
    * 
-   * @param mixed An array or a string of the LEFT JOIN clause
+   * @param mixed $ljoin An array or a string of the LEFT JOIN clause
+   * 
    * @return CRequest Current request
    */
   function addLJoin($ljoin) {
@@ -88,9 +94,11 @@ class CRequest {
   }
   
   /**
+   * LEFT JOIN [...] ON [...]
    * 
-   * @param string The table name of the LEFT JOIN clause
-   * @param string The conditional expression of the LEFT JOIN clause 
+   * @param string $key   The table name of the LEFT JOIN clause
+   * @param string $value The conditional expression of the LEFT JOIN clause 
+   * 
    * @return CRequest Current request
    */
   function addLJoinClause($key, $value) {
@@ -100,8 +108,10 @@ class CRequest {
   }
   
   /**
+   * RIGHT JOIN [...] ON [...]
    * 
-   * @param mixed An array or a string of the RIGHT JOIN statement
+   * @param mixed $ljoin An array or a string of the RIGHT JOIN statement
+   * 
    * @return CRequest Current request
    */
   function addRJoin($ljoin) {
@@ -113,9 +123,11 @@ class CRequest {
   }
   
   /**
+   * RIGHT JOIN [...] ON [...]
    * 
-   * @param string The table name of the RIGHT JOIN clause
-   * @param string The conditional expression of the RIGHT JOIN clause 
+   * @param string $key   The table name of the RIGHT JOIN clause
+   * @param string $value The conditional expression of the RIGHT JOIN clause 
+   * 
    * @return CRequest Current request
    */
   function addRJoinClause($key, $value) {
@@ -125,8 +137,10 @@ class CRequest {
   }
   
   /**
+   * WHERE [...]
    * 
-   * @param mixed An array or a string of the SELECT clause
+   * @param mixed $where An array or a string of the SELECT clause
+   * 
    * @return CRequest Current request
    */
   function addWhere($where) {
@@ -141,9 +155,11 @@ class CRequest {
   }
   
   /**
+   * WHERE [...]
    * 
-   * @param string $key The field to perform the test on
+   * @param string $key   The field to perform the test on
    * @param string $value The test to be performed
+   * 
    * @return CRequest Current request
    */
   function addWhereClause($key, $value) {
@@ -158,8 +174,10 @@ class CRequest {
   }
 
   /**
+   * GROUP BY [...]
    * 
-   * @param mixed An array or a string of the GROUP BY clause
+   * @param mixed $group An array or a string of the GROUP BY clause
+   * 
    * @return CRequest Current request
    */
   function addGroup($group) {
@@ -174,8 +192,10 @@ class CRequest {
   }
   
   /**
+   * HAVING [...]
    * 
-   * @param mixed An array or a string of the HAVING statement
+   * @param mixed $having An array or a string of the HAVING clause
+   * 
    * @return CRequest Current request
    */
   function addHaving($having) {
@@ -190,8 +210,10 @@ class CRequest {
   }
 
   /**
+   * ORDER BY [...]
    * 
-   * @param mixed An array or a string of the ORDER BY statement
+   * @param mixed $order An array or a string of the ORDER BY clause
+   * 
    * @return CRequest Current request
    */
   function addOrder($order) {
@@ -206,8 +228,10 @@ class CRequest {
   }
   
   /**
+   * FORCE INDEX [...]
    * 
-   * @param mixed An array or a string of the select statement
+   * @param mixed $forceindex An array or a string of the FORCE INDEX clause
+   * 
    * @return CRequest Current request
    */
   function addForceIndex($forceindex) {
@@ -220,10 +244,12 @@ class CRequest {
     
     return $this;
   }
-
+  
   /**
+   * LIMIT [...]
    * 
-   * @param mixed An array or a string of the LIMIT statement
+   * @param mixed $limit An array or a string of the LIMIT statement
+   * 
    * @return CRequest Current request
    */
   function setLimit($limit) {
@@ -232,6 +258,14 @@ class CRequest {
     return $this;
   }
   
+  /**
+   * Create an artificial limit from an array of results
+   * 
+   * @param array  $list  The list 
+   * @param string $limit The limit, MySQL styled
+   * 
+   * @return array The slice of the list 
+   */
   static function artificialLimit($list, $limit) {
     preg_match("/(?:(\d+),\s*)?(\d+)/", $limit, $matches);
     $offset = intval($matches[1]);
@@ -241,9 +275,10 @@ class CRequest {
   }
   
   /**
+   * Returns the SQL query fragment containing everything after the SELECT *
    * 
-   * returns the SQL query fragment containing everything after the SELECT *
-   * @param  string $from The table names
+   * @param string $from The table names
+   * 
    * @return string
    */
   function getRequestFrom($from) {
@@ -268,7 +303,7 @@ class CRequest {
         }
       }
     }
-
+    
     // Right join clauses
     if ($this->rjoin) {
       assert(is_array($this->rjoin));
@@ -294,13 +329,13 @@ class CRequest {
       $sql .= "\nWHERE ";
       $sql .= is_array($this->where) ? implode("\nAND ", $where) : $this->where;
     }
-      
+    
     // Group by fields
     if ($this->group) {
       $sql .= "\nGROUP BY ";
       $sql .= is_array($this->group) ? implode(', ', $this->group) : $this->group;
     }
-      
+    
     // Having
     if (is_array($this->having)) {
       $having = $this->having;
@@ -332,27 +367,31 @@ class CRequest {
     
     return $sql;
   }
-
+  
   /**
-   * returns the SQL string
-   * @param CMbObject $obj Object on which table we prefix selects, ne prefix if null
+   * Returns the SQL string
+   * 
+   * @param CMbObject $obj        Object on which table we prefix selects, ne prefix if null
+   * @param bool      $found_rows Return the found rows count
+   * 
+   * @return string
    */
   function getRequest(CMbObject $obj = null, $found_rows = false) {
     $arraySelect = array();
     $arrayTable = array();
-
+    
     // MbObject binding
     if ($obj) {
       if (count($this->select)) {
         trigger_error("You have to choose either an object or select(s)", E_USER_ERROR);
       }
-
+      
       $arraySelect[] = "`{$obj->_spec->table}`.*";
       
       if (count($this->table)) {
         trigger_error("You have to choose either an object or table(s)");
       }
-
+      
       $arrayTable[] = $obj->_spec->table;
     }
     else {
@@ -366,17 +405,21 @@ class CRequest {
     }
     
     $select = implode(', ', $select);
-
+    
     $sql = $found_rows ? "SELECT SQL_CALC_FOUND_ROWS $select" : "SELECT $select";
     
     // Table clauses
     $table = implode(', ', $arrayTable);
     return $sql . $this->getRequestFrom($table);
   }
-
+  
   /**
-   * returns the SQL string that count the number of rows
-   * @param CMbObject $obj Object on which table we prefix selects, ne prefix if null
+   * Returns the SQL string that count the number of rows
+   * 
+   * @param CMbObject $obj    Object on which table we prefix selects, one prefix if null
+   * @param array     $fields The fields to include in the SELECT clause
+   * 
+   * @return string A COUNT request
    */
   function getCountRequest(CMbObject $obj = null, $fields = array()) {
     // MbObject binding
@@ -403,8 +446,11 @@ class CRequest {
   }
 
   /**
-   * returns the SQL string that count the number of rows
+   * Returns the SQL string that count the number of rows
+   * 
    * @param CMbObject $object Object concerned
+   * 
+   * @return string
    */
   function getIdsRequest(CMbObject $object) {
     $query = "SELECT `{$object->_spec->table}`.`{$object->_spec->key}`";

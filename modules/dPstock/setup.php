@@ -928,6 +928,19 @@ class CSetupdPstock extends CSetup {
               CHANGE `fax` `fax` VARCHAR (20);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.54";
+    $this->makeRevision("1.54");
+    $query = "ALTER TABLE `product_delivery` 
+              ADD `endowment_quantity` FLOAT,
+              ADD `endowment_item_id` INT (11) UNSIGNED,
+              ADD `comments_deliver` TEXT AFTER `comments`";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `product_delivery` 
+              ADD INDEX (`endowment_item_id`)";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `product_endowment_item` 
+              ADD `cancelled` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.55";
   }
 }

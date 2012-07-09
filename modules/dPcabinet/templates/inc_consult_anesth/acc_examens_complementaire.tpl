@@ -209,30 +209,32 @@ function calculPSA () {
       </table> 
       </form>
     </td>
-    {{if $app->user_prefs.displayDocsConsult}}
-      <td class="text">
-        <div id="listExamComp">
+    <td class="text">
+      <div id="listExamComp">
         {{include file="../../dPcabinet/templates/exam_comp.tpl"}}
-        </div>
-        {{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription && $view_prescription}}
+      </div>
+      
+      {{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription && $view_prescription}}
         <button class="tick" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour')">Accéder à la prescription</button>
-        {{/if}}
+      {{/if}}
+      
+      {{if $app->user_prefs.displayDocsConsult}}
         <table class="form">
-  			  <!-- Documents ExamComp -->
-  			  <tr>
-  			    <th class="category">Documents</th>
-  			  </tr>
-  			  <tr>
-  			    <td id="documents-exam">
-  			      {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
-  			      <!-- Documents -->
-  			      <script type="text/javascript">
-  			         Document.register('{{$object->_id}}','{{$object->_class}}','{{$consult->_praticien_id}}','documents-exam');
+          <!-- Documents ExamComp -->
+          <tr>
+            <th class="category">Documents</th>
+          </tr>
+          <tr>
+            <td id="documents-exam">
+              {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
+              <!-- Documents -->
+              <script type="text/javascript">
+                 Document.register('{{$object->_id}}','{{$object->_class}}','{{$consult->_praticien_id}}','documents-exam');
               </script>
-  			    </td>
-  			  </tr>
+            </td>
+          </tr>
         </table>
-      </td>
-    {{/if}}
+      {{/if}}
+    </td>
   </tr>
 </table>

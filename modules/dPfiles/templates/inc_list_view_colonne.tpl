@@ -20,15 +20,15 @@ Main.add(function () {
 
 <ul id="tab-{{if $accordDossier}}{{$object_class}}{{$object_id}}{{else}}consult{{/if}}" class="control_tabs">
 {{foreach from=$affichageFile item=_cat key=_cat_id}}
-  <li>
-    {{assign var=docCount value=$_cat.items|@count}}
-    {{if $docCount || $conf.dPfiles.CFilesCategory.show_empty}}
-  	<a href="#Category-{{$_cat_id}}" {{if !$docCount}}class="empty"{{/if}} id="tab_category_{{$_cat_id}}">
-  		{{$_cat.name}}
-  		<small>({{$docCount}})</small>
-  	</a>
-		{{/if}}
-  </li>
+  {{assign var=docCount value=$_cat.items|@count}}
+  {{if $docCount || $conf.dPfiles.CFilesCategory.show_empty}}
+    <li>
+      <a href="#Category-{{$_cat_id}}" {{if !$docCount}}class="empty"{{/if}} id="tab_category_{{$_cat_id}}">
+        {{$_cat.name}}
+        <small>({{$docCount}})</small>
+      </a>
+    </li>
+  {{/if}}
 {{/foreach}}
 </ul>
 

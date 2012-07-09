@@ -75,7 +75,7 @@ changeCiviliteForSexe = function(element, assure) {
 
     default:
     disableOptions($(form[civilite]), $w('m mme mlle enf dr pr me vve'));
-	  break;
+    break;
   }
 }
 
@@ -250,7 +250,7 @@ Main.add(function() {
         </tr>
         <tr>
           <th>{{mb_label object=$patient field="profession"}}</th>
-          <td>{{mb_field object=$patient field="profession" form=editFrm onchange="copyIdentiteAssureValues(this)"}}</td>
+          <td>{{mb_field object=$patient field="profession" form=editFrm onchange="copyIdentiteAssureValues(this)" autocomplete="true,2,30,true,true,2"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$patient field="csp"}}</th>
