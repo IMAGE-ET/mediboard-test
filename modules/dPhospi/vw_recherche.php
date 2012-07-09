@@ -32,39 +32,41 @@ $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 $listAff = null;
 $libre = null;
 
+$ds    = CSQLDataSource::get("std");
+
 //
 // Cas de l'affichage des lits libres
 //
 if($typeVue == 0) {
-	// Recherche de tous les lits disponibles
-	$sql = "SELECT lit.lit_id
-					FROM affectation
-				  LEFT JOIN lit ON lit.lit_id = affectation.lit_id
-				  LEFT JOIN chambre ON lit.chambre_id = chambre.chambre_id
-					WHERE '$date_recherche' BETWEEN affectation.entree AND affectation.sortie
-					AND chambre.annule = '0'
-					AND affectation.effectue = '0'
-				  GROUP BY lit.lit_id";
-	$occupes = $ds->loadlist($sql);
-	$arrayIn = array();
-	foreach($occupes as $key => $occupe) {
-	  $arrayIn[] = $occupe["lit_id"];
-	}
-	$notIn = count($arrayIn) > 0 ? implode(', ', $arrayIn) : 0;
-	
-	$sql = "SELECT lit.nom AS lit, chambre.nom AS chambre, service.nom AS service, MIN(affectation.entree) AS limite
-					FROM lit
-					LEFT JOIN affectation ON affectation.lit_id = lit.lit_id
-					AND (affectation.entree > '$date_recherche' OR affectation.entree IS NULL)
-					LEFT JOIN chambre ON chambre.chambre_id = lit.chambre_id
-					LEFT JOIN service ON service.service_id = chambre.service_id
-					WHERE lit.lit_id NOT IN($notIn)
-					AND chambre.annule = '0'
-			    AND service.group_id = '$group->_id'
-			    AND service.service_id ".CSQLDataSource::prepareIn(array_keys($services), $selService)."
-					GROUP BY lit.lit_id
-					ORDER BY service.nom, chambre.nom, lit.nom, limite DESC";
-	$libre = $ds->loadlist($sql);
+  // Recherche de tous les lits disponibles
+  $sql = "SELECT lit.lit_id
+          FROM affectation
+          LEFT JOIN lit ON lit.lit_id = affectation.lit_id
+          LEFT JOIN chambre ON lit.chambre_id = chambre.chambre_id
+          WHERE '$date_recherche' BETWEEN affectation.entree AND affectation.sortie
+          AND chambre.annule = '0'
+          AND affectation.effectue = '0'
+          GROUP BY lit.lit_id";
+  $occupes = $ds->loadlist($sql);
+  $arrayIn = array();
+  foreach($occupes as $key => $occupe) {
+    $arrayIn[] = $occupe["lit_id"];
+  }
+  $notIn = count($arrayIn) > 0 ? implode(', ', $arrayIn) : 0;
+  
+  $sql = "SELECT lit.nom AS lit, chambre.nom AS chambre, service.nom AS service, MIN(affectation.entree) AS limite
+          FROM lit
+          LEFT JOIN affectation ON affectation.lit_id = lit.lit_id
+          AND (affectation.entree > '$date_recherche' OR affectation.entree IS NULL)
+          LEFT JOIN chambre ON chambre.chambre_id = lit.chambre_id
+          LEFT JOIN service ON service.service_id = chambre.service_id
+          WHERE lit.lit_id NOT IN($notIn)
+          AND chambre.annule = '0'
+          AND service.group_id = '$group->_id'
+          AND service.service_id ".CSQLDataSource::prepareIn(array_keys($services), $selService)."
+          GROUP BY lit.lit_id
+          ORDER BY service.nom, chambre.nom, lit.nom, limite DESC";
+  $libre = $ds->loadlist($sql);
 }
 
 //
@@ -118,7 +120,7 @@ else if ($typeVue == 1) {
     $order = "sejour.entree, sejour.sortie, sejour.praticien_id";
     $listAff["NotAff"] = $sejour->loadList($where, $order);
     foreach($listAff["NotAff"] as &$_sejour) {
-    	$_sejour->loadRefPatient();
+      $_sejour->loadRefPatient();
       $_sejour->_ref_praticien =& $listPrat[$_sejour->praticien_id];
       $_sejour->loadRefGHM();
     }
