@@ -21,7 +21,11 @@
                     {{mb_key object=$rpu}}
                     <input type="hidden" name="box_id"      value="{{$rpu->box_id}}"/>
                   </form>
-                 <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');" >{{$_patient->nom}} {{$_patient->prenom}}</span>
+                   <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}">
+                     <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');" >
+                       {{$_patient->nom}} {{$_patient->prenom}}
+                     </span>
+                   </a>                 
                   {{mb_include template=inc_icone_attente rpu=$_sejour->_ref_rpu width=16}}
                  <div class="libelle compact" >
                     {{$rpu->motif|truncate:30|lower}}
