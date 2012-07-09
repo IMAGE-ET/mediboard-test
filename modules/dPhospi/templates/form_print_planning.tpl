@@ -98,10 +98,11 @@ function toggleMultiple(select, multiple) {
           <th>{{mb_label object=$filter field="_date_max"}}</th>
           <td>{{mb_field object=$filter field="_date_max" form="paramFrm" register=true canNull="false" onchange="changeDateCal(false)"}} </td>
         </tr>
+        
         <tr>
           <th>{{mb_label object=$filter field="_admission"}}</th>
           <td colspan="2">
-            <select name="_admission">
+            <select name="_admission" style="width: 15em;">
               <option value="heure">Par heure d'admission</option>
               <option value="nom">Par nom du patient</option>
             </select>
@@ -110,25 +111,22 @@ function toggleMultiple(select, multiple) {
         
         <tr>
           <th>{{mb_label object=$filter field=_horodatage}}</th>
-          <td colspan="2">{{mb_field object=$filter field=_horodatage}}</td>
+          <td colspan="2">{{mb_field object=$filter field=_horodatage style="width: 15em;"}}</td>
         </tr>
 
         <tr>
           <th>{{mb_label object=$filter field="_service"}}</th>
-          <td>
-          	<select name="_service">
-            	<option value="0">&mdash; {{tr}}All{{/tr}}</option>
+          <td colspan="2">
+          	<select name="_service" style="width: 15em;">
+              <option value="0">&mdash; {{tr}}All{{/tr}}</option>
             	{{foreach from=$listServ item=curr_serv}}
-            	<option value="{{$curr_serv->service_id}}">{{$curr_serv->nom}}</option>
-            	{{/foreach}}
-             </select>
-           </td>
-           <td>
-             <label>
-               <input type="checkbox" name="_multiple_services" onclick="toggleMultiple(this.form._service, this.checked)"/> Multiple
-             </label>
-           <td>
-         </td>
+            	  <option value="{{$curr_serv->service_id}}">{{$curr_serv->nom}}</option>
+              {{/foreach}}
+            </select>
+            <label style="vertical-align: top;">
+              <input type="checkbox" name="_multiple_services" onclick="toggleMultiple(this.form._service, this.checked)"/> Multiple
+            </label>
+          </td>
         </tr>
       </table>
 
@@ -141,20 +139,18 @@ function toggleMultiple(select, multiple) {
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_filter_type"}}</th>
-          <td colspan="2">{{mb_field object=$filter field="_filter_type" emptyLabel="All"}}</td>
+          <td colspan="2">{{mb_field object=$filter field="_filter_type" emptyLabel="All" style="width: 15em;"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="praticien_id"}}</th>
-          <td>
+          <td colspan="2">
             <select name="praticien_id" style="width: 20em;">
               <option value="0">&mdash; {{tr}}All{{/tr}}</option>
               {{foreach from=$listPrat item=curr_prat}}
                 <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}">{{$curr_prat->_view}}</option>
               {{/foreach}}
             </select>
-          </td>
-          <td>
-            <label>
+            <label style="vertical-align: top;">
               <input type="checkbox" onclick="toggleMultiple(this.form.praticien_id, this.checked)"/>Multiple
             </label>
           </td>
@@ -173,7 +169,7 @@ function toggleMultiple(select, multiple) {
         <tr>
           <th>{{mb_label object=$filter field="convalescence"}}</th>
           <td colspan="2">
-            <select name="convalescence">
+            <select name="convalescence" style="width: 15em;">
               <option value="0">&mdash; Indifférent</option>
               <option value="o">avec</option>
               <option value="n">sans</option>

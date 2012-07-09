@@ -58,7 +58,7 @@ if ($filter->_specialite or $filter->praticien_id) {
     $sejourReq->addWhereClause("sejour.praticien_id", CSQLDataSource::prepareIn($filter->praticien_id));
   }
   else {
-    $sejourReq->addWhereClause("sejour.praticien_id", array_keys($speChirs));
+    $sejourReq->addWhereClause("sejour.praticien_id", CSQLDataSource::prepareIn(array_keys($speChirs)));
   }
 }
 
