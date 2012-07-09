@@ -83,34 +83,54 @@ function toggleList(list, button) {
 		<td colspan="3">{{$patient->rques|nl2br}}</td>
 	</tr>
   <tr>
-    <th class="category" colspan="4">Correspondants médicaux</th>
+    <th class="category" colspan="4">Correspondants</th>
   </tr>
-    <tr>
-      <th>Médecin traitant</th>
-      <td colspan="3">
-        {{if $patient->_ref_medecin_traitant->_id}}
-          {{$patient->_ref_medecin_traitant->_view}}<br />
-          {{$patient->_ref_medecin_traitant->adresse|nl2br}}<br />
-          {{$patient->_ref_medecin_traitant->cp}} {{$patient->_ref_medecin_traitant->ville}}
-        {{else}}
-          Non renseigné
-        {{/if}}
-      </td>
-    </tr>
-    <tr>
-      <th>Correspondants</th>
-      <td colspan="3">
-        {{foreach from=$patient->_ref_medecins_correspondants item=curr_corresp}}
-        <div style="float: left; margin-right: 1em; margin-bottom: 0.5em; margin-top: 0.4em; width: 15em;">
-          {{$curr_corresp->_ref_medecin->_view}}<br />
-          {{$curr_corresp->_ref_medecin->adresse|nl2br}}<br />
-          {{$curr_corresp->_ref_medecin->cp}} {{$curr_corresp->_ref_medecin->ville}}
-        </div>
-        {{foreachelse}}
-          Non renseigné
+  <tr>
+    <td colspan="2" class="halfPane">
+      <table>
+        <tr>
+          <th>Médecin traitant</th>
+          <td>
+            {{if $patient->_ref_medecin_traitant->_id}}
+              {{$patient->_ref_medecin_traitant->_view}}<br />
+              {{$patient->_ref_medecin_traitant->adresse|nl2br}}<br />
+              {{$patient->_ref_medecin_traitant->cp}} {{$patient->_ref_medecin_traitant->ville}}
+            {{else}}
+              Non renseigné
+            {{/if}}
+          </td>
+        </tr>
+        <tr>
+          <th>Corresp. médicaux</th>
+          <td>
+            {{foreach from=$patient->_ref_medecins_correspondants item=curr_corresp}}
+            <div style="float: left; margin-right: 1em; margin-bottom: 0.5em; margin-top: 0.4em; width: 15em;">
+              {{$curr_corresp->_ref_medecin->_view}}<br />
+              {{$curr_corresp->_ref_medecin->adresse|nl2br}}<br />
+              {{$curr_corresp->_ref_medecin->cp}} {{$curr_corresp->_ref_medecin->ville}}
+            </div>
+            {{foreachelse}}
+              Non renseigné
+            {{/foreach}}
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td colspan="2">
+      <table>
+        {{foreach from=$patient->_ref_correspondants_patient item=curr_corresp}}
+        <tr>
+          <th>{{mb_value object=$curr_corresp field=relation}}</th>
+          <td>
+            {{$curr_corresp->nom}} {{$curr_corresp->prenom}}<br />
+            {{$curr_corresp->adresse|nl2br}}<br />
+            {{$curr_corresp->cp}} {{$curr_corresp->ville}}
+          </td>
+        </tr>
         {{/foreach}}
-      </td>
-    </tr>
+      </table>
+    </td>
+  </tr>
   {{if $patient->_ref_sejours|@count}}
   <tr>
     <th class="category" colspan="4">
