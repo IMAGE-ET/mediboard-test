@@ -1,5 +1,6 @@
 <form name="add-CPoseDispositifVasculaire" method="post" action="?" onsubmit="return onSubmitFormAjax(this, Control.Modal.close)">
   <input type="hidden" name="m" value="dPplanningOp" />
+  <input type="hidden" name="del" value="0" />
   <input type="hidden" name="callback" value="PoseDispVasc.checkListCallback" />
   {{mb_class class=CPoseDispositifVasculaire}}
   {{mb_key object=$pose}}
@@ -64,7 +65,7 @@
       <td>
         <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
         {{if $pose->_id}}
-          <button class="trash" type="button" onclick="confirmDeletion(this.form,{ajax: true, typeName:'', objName:'{{$object->_view|smarty:nodefaults|JSAttribute}}'})">
+          <button class="trash" type="button" onclick="confirmDeletion(this.form,{ajax: true, typeName:'', objName:'{{$pose->_view|smarty:nodefaults|JSAttribute}}'})">
             {{tr}}Delete{{/tr}}
           </button>
         {{/if}}

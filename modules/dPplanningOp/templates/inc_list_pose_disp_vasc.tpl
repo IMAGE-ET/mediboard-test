@@ -25,7 +25,9 @@ PoseDispVasc = {
     url.modalObject.observe("afterClose", PoseDispVasc.onClose);
   },
   checkListCallback: function(id) {
-    PoseDispVasc.checkList("CPoseDispositifVasculaire-"+id);
+    if (id) {
+      PoseDispVasc.checkList("CPoseDispositifVasculaire-"+id);
+    }
   }
 }
 </script>
