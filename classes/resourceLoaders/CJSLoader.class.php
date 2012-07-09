@@ -66,7 +66,11 @@ abstract class CJSLoader extends CHTMLResourceLoader {
       if (!$uptodate) {
         $all_scripts = "";
         foreach($files as $file) {
-          $all_scripts .= file_get_contents($file)."\n";
+          $_script = file_get_contents($file);
+          if (substr($_script, 0, 3) == chr(0xEF).chr(0xBB).chr(0xBF)) {
+            $_script = substr($_script, 3);
+          }
+          $all_scripts .= $_script."\n";
         }
         
         if($compress == 2) {
