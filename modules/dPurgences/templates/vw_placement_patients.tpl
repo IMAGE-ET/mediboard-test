@@ -49,7 +49,7 @@ div.grille td.chambre, div.grille td.pas-de-chambre{
 
 div.grille small{
   float: right;
-  margin-top: -11px;
+  margin-top: -9px;
   border-radius: 2px;
   padding: 0 3px;
   text-shadow:  0 0 0 transparent,
