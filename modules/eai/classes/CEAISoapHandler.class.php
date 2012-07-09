@@ -17,22 +17,40 @@
  */
 
 class CEAISoapHandler extends CSoapHandler {
+  /**
+   * Params specs
+   * @var array
+   */
   static $paramSpecs = array(
     "event" => array ( 
       "message" => "string"),
   );
   
+  /**
+   * Get parameters specifications
+   * 
+   * @return array
+   */
   static function getParamSpecs() {
     return array_merge(parent::getParamSpecs(), self::$paramSpecs);
   }
   
+  /**
+   * Event method
+   * 
+   * @param string $message  Message
+   * @param int    $actor_id Actor id
+   * 
+   * @return string ACK
+   */ 
   function event($message, $actor_id = null) {
     $actor = null;
     
     $sender_soap = new CSenderSOAP();
     if ($actor_id) {
       $sender_soap->load($actor_id);
-    } else {
+    }
+    else {
       $sender_soap->user_id = CUser::get()->_id;
       $sender_soap->loadMatchingObject();
     }

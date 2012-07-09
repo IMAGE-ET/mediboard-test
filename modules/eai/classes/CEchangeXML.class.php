@@ -23,12 +23,18 @@ class CEchangeXML extends CExchangeDataFormat {
   // Forward references
   var $_ref_notifications = null;
   
+  /**
+   * @see parent::getSpec()
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->loggable = false;
     return $spec;
   }
   
+  /**
+   * @see parent::getProps()
+   */
   function getProps() {
     $props = parent::getProps();
     
@@ -42,6 +48,11 @@ class CEchangeXML extends CExchangeDataFormat {
     return $props;
   }
    
+  /**
+   * Load content
+   * 
+   * @return void
+   */ 
   function loadContent() {
     $content = new CContentXML();
     $content->load($this->message_content_id);
@@ -51,7 +62,10 @@ class CEchangeXML extends CExchangeDataFormat {
     $content->load($this->acquittement_content_id);
     $this->_acquittement = $content->content;
   }
-    
+  
+  /**
+   * @see parent::updatePlainFields()
+   */   
   function updatePlainFields() {
     if ($this->_message !== null) {
       $content = new CContentXML();

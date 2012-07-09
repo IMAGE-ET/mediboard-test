@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Echange Data Format EAI
+ * Exchange Data Format EAI
  *  
  * @category EAI
  * @package  Mediboard
@@ -13,7 +13,7 @@
 
 /**
  * Class CExchangeDataFormat
- * Echange Data Format
+ * Exchange Data Format
  */
 
 class CExchangeDataFormat extends CMbMetaObject {  

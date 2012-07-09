@@ -1,21 +1,40 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage sip
- * @version $Revision: 12588 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * EAI Object handler
+ *  
+ * @category EAI
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version  SVN: $Id:$ 
+ * @link     http://www.mediboard.org
+ */
+
+/**
+ * Class CEAIObjectHandler
+ * EAI Object handler
  */
 
 class CEAIObjectHandler extends CMbObjectHandler {
   static $handled               = array ();
   var $_eai_initiateur_group_id = null;
-
+  
+  /**
+   * @see parent::isHandled()
+   */
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);
   }
   
+  /**
+   * Trigger action on the right handler
+   * 
+   * @param $action   string    Action name
+   * @param $mbObject CMbObject Object
+   * 
+   * @return void
+   */
   function sendFormatAction($action, CMbObject $mbObject) {
     if (!$action) {
       return;
@@ -56,6 +75,9 @@ class CEAIObjectHandler extends CMbObjectHandler {
     }
   }
   
+  /**
+   * @see parent::onBeforeStore()
+   */
   function onBeforeStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
@@ -66,6 +88,9 @@ class CEAIObjectHandler extends CMbObjectHandler {
     }
   }
   
+  /**
+   * @see parent::onAfterStore()
+   */
   function onAfterStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
@@ -88,7 +113,10 @@ class CEAIObjectHandler extends CMbObjectHandler {
     
     return true;
   }
-
+  
+  /**
+   * @see parent::onBeforeMerge()
+   */
   function onBeforeMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
@@ -101,6 +129,9 @@ class CEAIObjectHandler extends CMbObjectHandler {
     return true;
   }
   
+  /**
+   * @see parent::onAfterMerge()
+   */
   function onAfterMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
@@ -113,6 +144,9 @@ class CEAIObjectHandler extends CMbObjectHandler {
     return true;
   }
   
+  /**
+   * @see parent::onBeforeDelete()
+   */
   function onBeforeDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
@@ -121,6 +155,9 @@ class CEAIObjectHandler extends CMbObjectHandler {
     return true;
   }
   
+  /**
+   * @see parent::onAfterDelete()
+   */
   function onAfterDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;

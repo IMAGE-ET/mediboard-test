@@ -51,23 +51,7 @@ class CEAIDispatcher {
       return self::dispatchError($data, $actor);
     }
     
-    foreach (CExchangeDataFormat::getAll() as $key => $_exchange_class) {  
-      $understand = false;
-      foreach (CApp::getChildClasses($_exchange_class, array(), true) as $under_key => $_data_format) {
-        /**
-         * @var CExchangeDataFormat
-         */
-        $data_format = new $_data_format;
-        
-        // Test si le message est compris
-        $understand = $data_format->understand($data, $actor);    
-        if ($understand) {
-          break 2;
-        }
-      }
-    }
-
-    if (!$understand) {
+    if (!self::understand()) {
       self::$errors[] = CAppUI::tr("CEAIDispatcher-no_understand");
       return self::dispatchError($data, $actor);
     }
@@ -113,6 +97,33 @@ class CEAIDispatcher {
       self::$errors[] = $e->getMessage();
       return self::dispatchError($data, $actor);
     }
+  }
+
+  /**
+   * Message understood ?
+   * 
+   * @param string         $data  Data
+   * @param CInteropSender $actor Actor data
+   * 
+   * @return bool Understood ? 
+   */  
+  static function understand($data, $actor = null) {
+    foreach (CExchangeDataFormat::getAll() as $key => $_exchange_class) {  
+      foreach (CApp::getChildClasses($_exchange_class, array(), true) as $under_key => $_data_format) {
+        /**
+         * @var CExchangeDataFormat
+         */
+        $data_format = new $_data_format;
+        
+        // Test si le message est compris
+        $understand = $data_format->understand($data, $actor);    
+        if ($understand) {
+          return true;
+        }
+      }
+    }
+    
+    return false;
   }
   
   /**

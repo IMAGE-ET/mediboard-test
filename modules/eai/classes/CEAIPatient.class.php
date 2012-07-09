@@ -17,6 +17,16 @@
  */
 
 class CEAIPatient extends CEAIMbObject {
+  /**
+   * Recording the external identifier of the CIP
+   * 
+   * @param CIdSante400    $id400Patient    Object id400
+   * @param CInteropSender $sender          Sender
+   * @param int            $idSourcePatient External identifier
+   * @param CPatient       $newPatient      Patient
+   * 
+   * @return null|string null if successful otherwise returns and error message
+   */ 
   static function storeID400CIP(CIdSante400 $id400Patient, CInteropSender $sender, $idSourcePatient, CPatient $newPatient) {
     //Paramétrage de l'id 400
     $id400Patient->object_class = "CPatient";
@@ -29,17 +39,31 @@ class CEAIPatient extends CEAIMbObject {
     return $id400Patient->store();
   }
   
+  /**
+   * Recording the external identifier of the CIP
+   * 
+   * @param CIdSante400 $IPP          Object id400
+   * @param int         $idPatientSIP External identifier
+   * 
+   * @return void
+   */ 
   static function IPPSIPSetting(CIdSante400 $IPP, $idPatientSIP = null) {
     $IPP->object_class = "CPatient";
     $IPP->tag          = CAppUI::conf("sip tag_ipp");
-    if ($idPatientSIP)
+    if ($idPatientSIP) {
       $IPP->object_id  = $idPatientSIP;
+    }
   }
   
-  static function incrementIPPSIP(CPatient $patient,  CInteropSender $sender) {
-    
-  }
-  
+  /**
+   * Recording IPP
+   * 
+   * @param CIdSante400    $IPP     Object id400
+   * @param CPatient       $patient Patient
+   * @param CInteropSender $sender  Sender
+   * 
+   * @return null|string null if successful otherwise returns and error message
+   */ 
   static function storeIPP(CIdSante400 $IPP, CPatient $patient, CInteropSender $sender) {
     /* Gestion du numéroteur */
     $group = new CGroups();
@@ -53,8 +77,10 @@ class CEAIPatient extends CEAIMbObject {
         return null;
       }
       
-      if ($patient)
+      if ($patient) {
         $IPP->object_id   = $patient->_id;
+      }
+        
       $IPP->last_update = mbDateTime();
       
       return $IPP->store();  
@@ -87,6 +113,14 @@ class CEAIPatient extends CEAIMbObject {
     }  
   }
   
+  /**
+   * Recording patient
+   * 
+   * @param CPatient    $newPatient Patient
+   * @param CIdSante400 $IPP        Object id400
+   * 
+   * @return null|string null if successful otherwise returns and error message
+   */ 
   static function storePatient(CPatient $newPatient, $IPP) {
     $newPatient->_IPP = $IPP;
     

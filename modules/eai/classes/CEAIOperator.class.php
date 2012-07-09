@@ -17,7 +17,16 @@
  */
 
 class CEAIOperator {
-  function event($data_format) {}
+  /**
+   * Event method
+   * 
+   * @param CExchangeDataFormat $data_format Exchange Data Format
+   * 
+   * @return void
+   */ 
+  function event($data_format) {
+    
+  }
 }
 
 ?>

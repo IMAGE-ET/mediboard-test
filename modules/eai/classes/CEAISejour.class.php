@@ -17,37 +17,66 @@
  */
 
 class CEAISejour extends CEAIMbObject {
-  static function storeID400CIP(CIdSante400 $id400Patient, CInteropSender $sender, $idSourceSejour, CSejour $newSejour) {
+  /**
+   * Recording the external identifier of the CIP
+   * 
+   * @param CIdSante400    $id400Sejour    Object id400
+   * @param CInteropSender $sender         Sender
+   * @param int            $idSourceSejour External identifier
+   * @param CSejour        $newSejour      Admit
+   * 
+   * @return null|string null if successful otherwise returns and error message
+   */ 
+  static function storeID400CIP(CIdSante400 $id400Sejour, CInteropSender $sender, $idSourceSejour, CSejour $newSejour) {
     //Paramétrage de l'id 400
-    $id400Patient->object_class = "CSejour";
-    $id400Patient->tag          = $sender->_tag_sejour;
-    $id400Patient->id400        = $idSourceSejour;
-    $id400Patient->object_id    = $newSejour->_id;
-    $id400Patient->_id          = null;
-    $id400Patient->last_update  = mbDateTime();
+    $id400Sejour->object_class = "CSejour";
+    $id400Sejour->tag          = $sender->_tag_sejour;
+    $id400Sejour->id400        = $idSourceSejour;
+    $id400Sejour->object_id    = $newSejour->_id;
+    $id400Sejour->_id          = null;
+    $id400Sejour->last_update  = mbDateTime();
 
-    return $id400Patient->store();
+    return $id400Sejour->store();
   }
   
+  /**
+   * Recording the external identifier of the CIP
+   * 
+   * @param CIdSante400 $NDA        Object id400
+   * @param int         $idVenueSMP External identifier
+   * 
+   * @return void
+   */ 
   static function NDASMPSetting(CIdSante400 $NDA, $idVenueSMP = null) {
     $NDA->object_class = "CSejour";
     $NDA->tag          = CAppUI::conf("smp tag_dossier");
-    if ($idVenueSMP)
+    if ($idVenueSMP) {
       $NDA->object_id  = $idVenueSMP;
+    }
   }
   
+  /**
+   * Increment NDA
+   * 
+   * @param CIdSante400 $NDA Object id400
+   * 
+   * @return void
+   */ 
   static function NDASMPIncrement(CIdSante400 $NDA) {
     $NDA->id400++;
     $NDA->id400 = str_pad($NDA->id400, 6, '0', STR_PAD_LEFT);
     $NDA->_id   = null;
   }
   
-  static function storeSejour(CSejour $newSejour, $NDA) {
-    $newSejour->_NDA = $NDA;
-    
-    return $newSejour->store();
-  }
-  
+  /**
+   * Recording NDA
+   * 
+   * @param CIdSante400    $NDA    Object id400
+   * @param CSejour        $sejour Admit
+   * @param CInteropSender $sender Sender
+   * 
+   * @return null|string null if successful otherwise returns and error message
+   */ 
   static function storeNDA(CIdSante400 $NDA, CSejour $sejour, CInteropSender $sender) {
     /* Gestion du numéroteur */
     $group = new CGroups();
@@ -61,8 +90,10 @@ class CEAISejour extends CEAIMbObject {
         return null;
       }
       
-      if ($sejour)
+      if ($sejour) {
         $NDA->object_id   = $sejour->_id;
+      }
+        
       $NDA->last_update = mbDateTime();
       
       return $NDA->store();  
@@ -94,6 +125,21 @@ class CEAISejour extends CEAIMbObject {
       }
     }  
   }
+
+  /**
+   * Recording admit
+   * 
+   * @param CSejour     $newSejour Admit
+   * @param CIdSante400 $NDA       Object id400
+   * 
+   * @return null|string null if successful otherwise returns and error message
+   */ 
+  static function storeSejour(CSejour $newSejour, $NDA) {
+    $newSejour->_NDA = $NDA;
+    
+    return $newSejour->store();
+  }
+  
 }
 
 ?>
