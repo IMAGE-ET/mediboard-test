@@ -136,6 +136,7 @@ duplicateObject = function (form) {
     <th>{{mb_label object=$product field="auto_dispensed"}}</th>
     <td>{{mb_field object=$product field="auto_dispensed"}}</td>
   </tr>
+  {{if $product->_id}}
   <tr>
     <th>Conso. <strong>3 dern. mois</strong></th>
     <td>{{mb_value object=$product field="_consumption"}}</td>
@@ -151,6 +152,7 @@ duplicateObject = function (form) {
       {{/foreach}}
     </td>
   </tr>
+  {{/if}}
   
   {{if @$modules.dmi && $conf.dPstock.CProduct.use_renewable}}
   <tr>
