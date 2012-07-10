@@ -45,7 +45,7 @@ if ($exam_igs_id) {
   $patient->loadRefConstantesMedicales();
   $constantes_medicales = $patient->_ref_constantes_medicales;
   
-  $FC = $constantes_medicales->frequence_respiratoire;
+  $FC = $constantes_medicales->pouls;
   if ($FC) {
     $last_constantes["FC"] = $FC;
     if($FC < 40){
@@ -61,7 +61,8 @@ if ($exam_igs_id) {
     }
   }
   
-  $TA = $constantes_medicales->ta;
+  $_TA = explode("|", $constantes_medicales->ta);
+  $TA = $_TA[0];
   if ($TA) {
     $last_constantes["TA"] = $TA;
     if($TA < 70){
