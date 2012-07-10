@@ -224,6 +224,7 @@ $locales['COperation-entree_salle-court'] = 'Entrée salle';
 $locales['COperation-entree_salle-desc'] = 'Heure d\'entrée en salle';
 $locales['COperation-event-checklist'] = 'Check list';
 $locales['COperation-event-liaison'] = 'Liaison';
+$locales['COperation-event-perop'] = 'Peropératoire';
 $locales['COperation-event-sortie_reveil'] = 'Sortie réveil';
 $locales['COperation-exam_extempo'] = 'Exam. extempo. prévu';
 $locales['COperation-exam_extempo-court'] = 'Extampo';

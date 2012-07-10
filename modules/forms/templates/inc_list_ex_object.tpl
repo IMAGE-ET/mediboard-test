@@ -276,11 +276,43 @@ ExObject.refreshSelf.{{$self_guid}} = function(start){
 {{* NO DETAIL *}}
 {{else}}
 
-{{if $ex_objects_counts_by_event|@count > 0}}
+<script type="text/javascript">
+  showExClassFormSelect = function(select){
+    var selected = select.options[select.selectedIndex];
+    var reference_class = selected.get("reference_class");
+    var reference_id    = selected.get("reference_id");
+    var host_class      = selected.get("host_class");
+    var event           = selected.get("event");
+    
+    showExClassForm(selected.value, reference_class+"-"+reference_id, host_class+"-"+event, null, event, '@ExObject.refreshSelf.{{$self_guid}}');
+    
+    select.selectedIndex = 0;
+  }
+</script>
+
 <table class="main layout">
   <tr>
     <td class="narrow" style="min-width: 20em;">
       <table class="main tbl">
+        {{if $ex_classes_creation|@count}}
+          <select onchange="showExClassFormSelect(this)" style="float: right; width: 100%; max-width: 20em;">
+            <option value=""> &ndash; Remplir nouveau formulaire </option>
+            {{foreach from=$ex_classes_creation item=_ex_classes key=_event_key}}
+              <optgroup label="{{tr}}{{$_event_key}}{{/tr}}">
+                {{foreach from=$_ex_classes item=_ex_class}}
+                  <option value="{{$_ex_class->_id}}" 
+                          data-reference_class="{{$reference_class}}" 
+                          data-reference_id="{{$reference_id}}"
+                          data-host_class="{{$_ex_class->host_class}}"
+                          data-event="{{$_ex_class->event}}">
+                    {{$_ex_class->name}}
+                  </option>
+                {{/foreach}}
+              </optgroup>
+            {{/foreach}}
+          </select>
+        {{/if}}
+        
         {{foreach from=$ex_objects_counts_by_event item=ex_objects_by_class key=_host_event}}
           <tr>
             <th colspan="2">
@@ -304,6 +336,10 @@ ExObject.refreshSelf.{{$self_guid}} = function(start){
             </tr>
             {{/if}}
           {{/foreach}}
+        {{foreachelse}}
+          <tr>
+            <td colspan="2" class="empty">Aucun formulaire saisi</td>
+          </tr>
         {{/foreach}}
       </table>
     </td>
@@ -314,10 +350,5 @@ ExObject.refreshSelf.{{$self_guid}} = function(start){
     </td>
   </tr>
 </table>
-{{else}}
-  <div class="small-info">
-    Aucun formulaire saisi
-  </div>
-{{/if}}
 
 {{/if}}

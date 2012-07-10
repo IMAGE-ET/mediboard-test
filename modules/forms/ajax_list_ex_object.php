@@ -5,7 +5,7 @@
  * @subpackage forms
  * @version $Revision$
  * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
 CCanDo::checkRead();
@@ -30,7 +30,7 @@ CValue::setSession('reference_id',    $reference_id);
 
 if ($reference_class) {
   $reference = new $reference_class;
-  
+
   if ($reference_id) {
     $reference->load($reference_id);
   }
@@ -55,7 +55,7 @@ if ($ex_class_id) {
 if (empty(CExClass::$_list_cache)) {
   $ex_class = new CExClass;
   CExClass::$_list_cache = $ex_class->loadList($where);
-  
+
   if ($detail > 1) {
     foreach(CExClass::$_list_cache as $_ex_class) {
       foreach($_ex_class->loadRefsGroups() as $_group) {
@@ -81,13 +81,13 @@ if ($print) {
 }
 else {
   switch($detail) {
-    case 3: 
-    case 2: 
+    case 3:
+    case 2:
       $limit = ($search_mode ? 50 : ($ex_class_id ? 20 : 10)); break;
-    case 1: 
+    case 1:
       $limit = ($ex_class_id ? 50 : 25); break;
   default:
-    case 0: 
+    case 0:
   }
 }
 
@@ -108,53 +108,78 @@ if ($concept_search) {
 
 foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
   $ex_class_key = "$_ex_class->host_class-event-$_ex_class->event";
-  
+
   $_ex_object = new CExObject;
   $_ex_object->_ex_class_id = $_ex_class_id;
   $_ex_object->setExClass();
-  
+
   if ($search_mode) {
     $where = array(
       "group_id" => "= '$group_id'",
       "user_log.date" => "BETWEEN '$date_min' AND '$date_max'",
       "user_log.type" => "= 'create'",
     );
-    
+
     $ljoin = array(
       "user_log" => "user_log.object_id = {$_ex_object->_spec->table}.ex_object_id AND user_log.object_class = '$_ex_object->_class'"
     );
-    
+
     if (!empty($search)) {
       $where = array_merge($where, $_ex_class->getWhereConceptSearch($search));
     }
   }
   else {
     $where = array(
-      "(reference_class  = '$reference_class' AND reference_id  = '$reference_id') OR 
-       (reference2_class = '$reference_class' AND reference2_id = '$reference_id') OR 
+      "(reference_class  = '$reference_class' AND reference_id  = '$reference_id') OR
+       (reference2_class = '$reference_class' AND reference2_id = '$reference_id') OR
        (object_class     = '$reference_class' AND object_id     = '$reference_id')"
     );
-    
+
     $ljoin = array();
   }
-  
+
   $_ex_objects = $_ex_object->loadList($where, "{$_ex_object->_spec->key} DESC", $limit, null, $ljoin);
   $_ex_objects_count = $_ex_object->countList($where, null, $ljoin);
-  
+
   $total = max($_ex_objects_count, $total);
-  
+
   if ($_ex_objects_count) {
     $ex_objects_counts_by_event[$ex_class_key][$_ex_class_id] = $_ex_objects_count;
   }
-  
-  if ($detail == 0) continue;
-  
+
+  if (!isset($ex_classes_creation[$ex_class_key])) {
+    $ex_classes_creation[$ex_class_key] = array();
+  }
+
+  if ( $_ex_class->host_class == $reference_class && // Possible context
+      !$_ex_class->disabled && // Not disabled
+       $_ex_class->checkConstraints($reference) && // Passes constraints
+       $_ex_class->canCreateNew($reference)
+  ) { // Check unicity
+    $ex_classes_creation[$ex_class_key][$_ex_class_id] = $_ex_class;
+
+    if (count($_ex_objects) == 0){
+      $ex_objects_by_event[$ex_class_key][$_ex_class_id] = array();
+    }
+  }
+
+  if ($detail == 0) {
+    // suppression de tableaux vides
+    foreach ($ex_classes_creation as $_event_key => $_ex_classes) {
+      if (count($_ex_classes) == 0) {
+        unset($ex_classes_creation[$_event_key]);
+      }
+    }
+
+    continue;
+  }
+
   foreach($_ex_objects as $_ex) {
     $_ex->_ex_class_id = $_ex_class_id;
     $_ex->load();
-    
+
     $guid = "$_ex->object_class-$_ex->object_id";
-    
+
     if (!isset($ref_objects_cache[$guid])) {
       $_ex->loadTargetObject()->loadComplete(); // to get the view
       $ref_objects_cache[$guid] = $_ex->_ref_object;
@@ -162,36 +187,20 @@ foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
     else {
       $_ex->_ref_object = $ref_objects_cache[$guid];
     }
-    
+
     $_ex->loadLogs();
     $_log = $_ex->_ref_first_log;
-    
+
     // Cas tres etrange de formulaire sans aucun log
     // Plutot que de tout planter, on ne l'affiche pas
     if (!$_log) {
       continue;
     }
-    
+
     $all_ex_objects["$_log->date $_ex->_id"] = $_ex;
     $ex_objects_by_event[$ex_class_key][$_ex_class_id]["$_log->date $_ex->_id"] = $_ex;
   }
 
-  if (!isset($ex_classes_creation[$ex_class_key])) {
-    $ex_classes_creation[$ex_class_key] = array();
-  }
-  
-  if ( $_ex_class->host_class == $reference_class && // Possible context
-      !$_ex_class->disabled && // Not disabled
-       $_ex_class->checkConstraints($reference) && // Passes constraints
-       $_ex_class->canCreateNew($reference)
-  ) { // Check unicity
-    $ex_classes_creation[$ex_class_key][$_ex_class_id] = $_ex_class;
-    
-    if (count($_ex_objects) == 0){
-      $ex_objects_by_event[$ex_class_key][$_ex_class_id] = array();
-    }
-  }
-  
   if (isset($ex_objects_by_event[$ex_class_key][$_ex_class_id])) {
     krsort($ex_objects_by_event[$ex_class_key][$_ex_class_id]);
   }
@@ -201,19 +210,19 @@ if ($detail == 2) {
   foreach($ex_objects_by_event as $ex_objects_by_class) {
     foreach($ex_objects_by_class as $_ex_objects) {
       $first = reset($_ex_objects);
-      
+
       if (!$first) {
         continue;
       }
-      
+
       $_ex_class = $first->_ref_ex_class;
-  
+
       foreach ($_ex_class->_ref_groups as $_ex_group) {
         $_ex_group->_empty = true;
-        
+
         foreach ($_ex_group->_ref_fields as $_ex_field) {
           $_ex_field->_empty = true;
-        
+
           foreach ($_ex_objects as $_ex_object) {
             if ($_ex_object->{$_ex_field->name} != "") {
               $_ex_field->_empty = false;
@@ -226,7 +235,7 @@ if ($detail == 2) {
     }
   }
 }
-  
+
 ksort($ex_objects_by_event);
 ksort($all_ex_objects);
 

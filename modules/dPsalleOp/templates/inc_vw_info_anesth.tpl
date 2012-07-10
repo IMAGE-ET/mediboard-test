@@ -18,10 +18,9 @@ reloadDocumentsAnesth = function () {
 
 refreshAnesthPerops = function(operation_id){
   var url = new Url("dPsalleOp", "httpreq_vw_anesth_perop");
-	url.addParam("operation_id", operation_id);
-	url.requestUpdate("list_perops_"+operation_id);
+  url.addParam("operation_id", operation_id);
+  url.requestUpdate("list_perops_"+operation_id);
 }
-
 
 refreshFicheAnesth = function() {
   var url = new Url("cabinet", "print_fiche");
@@ -33,8 +32,8 @@ refreshFicheAnesth = function() {
 
 printIntervAnesth = function(){
   var url = new Url("dPsalleOp", "print_intervention_anesth");
-	url.addParam("operation_id", "{{$selOp->_id}}");
-	url.popup(800, 600, "Intervention anesthésiste");
+  url.addParam("operation_id", "{{$selOp->_id}}");
+  url.popup(800, 600, "Intervention anesthésiste");
 }
 
 refreshVisite = function(operation_id) {
@@ -42,6 +41,10 @@ refreshVisite = function(operation_id) {
   url.addParam("operation_id", operation_id);
   url.addParam("callback", "refreshVisite");
   url.requestUpdate("visite_pre_anesth");
+}
+
+refreshFormsPerop = function(){
+  ExObject.loadExObjects("{{$selOp->_class}}", "{{$selOp->_id}}", "forms_perop", 0);
 }
 
 {{if $dialog}}
@@ -52,11 +55,10 @@ reloadAnesth = function() {
 {{/if}}
 
 Main.add(function(){
-  
   if ($('anesth_tab_group')){
     Control.Tabs.create('anesth_tab_group');
   }
-	
+  
   // Refresh tab perop
   if($("tab_perop").visible()){
     refreshAnesthPerops('{{$selOp->_id}}');
@@ -67,7 +69,6 @@ Main.add(function(){
       Prescription.updatePerop('{{$selOp->sejour_id}}');
     }
   {{/if}}
-
 });
 </script>
 
@@ -84,6 +85,9 @@ Main.add(function(){
   <li onmousedown="refreshFicheAnesth();"><a href="#fiche_anesth" {{if !$consult_anesth->_id}}class="wrong"{{/if}}>Fiche d'anesthésie</a></li>
   <li><a href="#tab_preanesth" {{if !$selOp->date_visite_anesth}}class="wrong"{{/if}}>Pré-anesthésie</a></li>
   <li><a href="#document_anesth">Documents</a></li>
+  {{if "forms"|module_installed}}
+    <li onmousedown="refreshFormsPerop()"><a href="#forms_perop">Formulaires</a></li>
+  {{/if}}
 </ul>
 <hr class="control_tabs" />
 
@@ -132,26 +136,30 @@ Main.add(function(){
 </div>
 
 <div id="tab_perop" style="display: none;">
-	<table class="form">
-	  <tr>
-	    <th class="title" colspan="3">Per-operatoire</th>
-	  </tr>
+  <table class="form">
+    <tr>
+      <th class="title" colspan="3">Per-operatoire</th>
+    </tr>
     <tr>
       <th class="category">Evenements</th>
       <th class="category">Incidents</th>
       <th class="category"></th>
     </tr>
-	  <tr>
-	    <td style="width: 30%">
-	      {{mb_include module="salleOp" template="inc_form_evenement_perop"}}
-	    </td>
-	    <td style="width: 30%">
+    <tr>
+      <td style="width: 30%">
+        {{mb_include module="salleOp" template="inc_form_evenement_perop"}}
+      </td>
+      <td style="width: 30%">
         {{mb_include module="salleOp" template="inc_form_evenement_perop" incident=1}}
       </td>
       <td id="list_perops_{{$selOp->_id}}">
       </td>
-	  </tr>
-	</table>
+    </tr>
+  </table>
 </div>
+
+{{if "forms"|module_installed}}
+  <div id="forms_perop"></div>
+{{/if}}
 
 <div id="perop"></div>
