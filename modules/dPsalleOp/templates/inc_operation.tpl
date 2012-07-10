@@ -286,7 +286,7 @@ function loadPosesDispVasc(){
     {{if "vivalto"|module_active && $can->edit}}
       {{mb_include module=vivalto template=inc_button_dmi operation=$selOp}}
     {{/if}}
-    <button type="button" class="print" onclick="printFicheBloc('{{$selOp->_id}}}');">Feuille de bloc</button>
+    <button type="button" class="print" onclick="printFicheBloc('{{$selOp->_id}}');">Feuille de bloc</button>
   </li>
   
   {{if "maternite"|module_active && $sejour->grossesse_id}}

@@ -19,6 +19,10 @@ Main.add(function(){
   url.addParam("date_max", "{{$operation->_datetime_reel_fin}}");
   url.addParam("print", 1);
   url.requestUpdate("constantes");
+  
+  {{if "forms"|module_installed}}
+    ExObject.loadExObjects("{{$operation->_class}}", "{{$operation->_id}}", "ex_objects_list", 3, null, {print: 1});
+  {{/if}}
 });
 
 </script>
@@ -29,17 +33,11 @@ Main.add(function(){
 
 <table class="print">
   <tr>
-    <td>
-      <table width="100%" style="font-size: 110%;">
-        <tr>
-          <th class="title" colspan="4">
-            <a href="#" onclick="window.print()">
-              Feuille de Bloc
-            </a>
-          </th>
-        </tr>
-      </table>
-    </td>
+    <th class="title">
+      <a href="#" onclick="window.print()" style="font-size: 1.3em;">
+        Feuille de Bloc
+      </a>
+    </th>
   </tr>
 </table>
 
@@ -367,3 +365,14 @@ Main.add(function(){
 </table>
 
 <div id="constantes"></div>
+
+{{if "forms"|module_installed}}
+  <table class="print"> 
+    <tr>
+      <th class="category">Formulaires</th>
+    </tr> 
+    <tr>
+      <td id="ex_objects_list"></td>
+    </tr>
+  </table>
+{{/if}}
