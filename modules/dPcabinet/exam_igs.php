@@ -62,7 +62,7 @@ if ($exam_igs_id) {
   }
   
   $_TA = explode("|", $constantes_medicales->ta);
-  $TA = $_TA[0];
+  $TA = $_TA[0]*10;
   if ($TA) {
     $last_constantes["TA"] = $TA;
     if($TA < 70){
