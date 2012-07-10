@@ -1033,7 +1033,10 @@ class CSetupsystem extends CSetup {
               ADD `native_views` VARCHAR(255),
               ADD INDEX (`native_views`)";
     $this->addQuery($query);
+
+    $this->makeRevision("1.1.01");
+    $this->addPrefQuery("MobileDefaultModuleView", 1);
     
-    $this->mod_version = "1.1.01";
+    $this->mod_version = "1.1.02";
   }
 }
