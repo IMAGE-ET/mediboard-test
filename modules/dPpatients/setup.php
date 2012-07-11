@@ -1773,7 +1773,12 @@ class CSetupdPpatients extends CSetup {
               ADD `annule` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.50";
+    $this->makeRevision("1.50");
+    $query = "ALTER TABLE `antecedent` 
+              CHANGE `type` `type` VARCHAR (80);";
+    $this->addQuery($query);          
+              
+    $this->mod_version = "1.51";
     
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
