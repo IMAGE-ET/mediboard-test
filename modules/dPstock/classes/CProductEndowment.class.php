@@ -13,6 +13,7 @@ class CProductEndowment extends CMbObject {
   
   var $name         = null;
   var $service_id   = null;
+  var $_duplicate_to_service_id = null;
 
   // Object References
   var $_ref_service = null;
@@ -27,10 +28,11 @@ class CProductEndowment extends CMbObject {
   }
 
   function getProps() {
-    $specs = parent::getProps();
-    $specs['name']       = 'str notNull';
-    $specs['service_id'] = 'ref notNull class|CService autocomplete|nom';
-    return $specs;
+    $props = parent::getProps();
+    $props["name"]       = "str notNull";
+    $props["service_id"] = "ref notNull class|CService autocomplete|nom";
+    $props["_duplicate_to_service_id"] = $props["service_id"];
+    return $props;
   }
   
   function getBackProps() {
@@ -79,5 +81,37 @@ class CProductEndowment extends CMbObject {
     $this->loadRefsFwd();
     
     return parent::getPerm($permType) && $this->_ref_service->getPerm($permType);
+  }
+  
+  function store(){
+    if ($this->_id && $this->_duplicate_to_service_id) {
+      $this->completeField("name");
+      
+      $dup = new self;
+      $dup->service_id = $this->_duplicate_to_service_id;
+      $dup->name = $this->name;
+      if ($msg = $dup->store()) {
+        return $msg;
+      }
+      
+      $items = $this->loadRefsEndowmentItems();
+      
+      foreach($items as $_item) {
+        if ($_item->cancelled) {
+          continue;
+        }
+        
+        $_dup_item = new CProductEndowmentItem;
+        $_dup_item->product_id = $_item->product_id;
+        $_dup_item->quantity   = $_item->quantity;
+        $_dup_item->endowment_id = $dup->_id;
+        $_dup_item->store();
+      }
+      
+      $this->_duplicate_to_service_id = null;
+      return;
+    }
+    
+    return parent::store();
   }
 }

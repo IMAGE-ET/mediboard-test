@@ -38,8 +38,8 @@
         </div>
       </fieldset>
       {{/if}}
-		</td>  
-	</tr>
+    </td>  
+  </tr>
   {{if $consult->sejour_id}} {{* Cas d'un RPU *}}
   {{assign var=sejour value=$consult->_ref_sejour}}
   <tr>

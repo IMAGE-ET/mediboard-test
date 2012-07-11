@@ -8,6 +8,18 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+duplicateEndowment = function(endowment_id){
+  var url = new Url("stock", "ajax_duplicate_endowment");
+  url.addParam("endowment_id", endowment_id);
+  url.requestModal(400, 300);
+}
+
+Main.add(function(){
+  $("list-{{$_endowment->_guid}}").addUniqueClassName("selected");
+});
+</script>
+
 <button class="new" onclick="loadEndowment(0)">{{tr}}CProductEndowment-title-create{{/tr}}</button>
       
 <form name="edit_endowment" action="" method="post" onsubmit="return onSubmitFormAjax(this)">
@@ -38,6 +50,8 @@
         <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$endowment->_view|smarty:nodefaults|JSAttribute}}'})">
           {{tr}}Delete{{/tr}}
         </button>
+        
+        <button class="hslip" type="button" onclick="duplicateEndowment({{$endowment->_id}})">{{tr}}Duplicate{{/tr}}</button>
         {{else}}
         <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
         {{/if}}

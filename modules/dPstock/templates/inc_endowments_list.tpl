@@ -19,17 +19,17 @@
   </tr>
   {{foreach from=$list item=_endowment}}
     <tbody class="hoverable">
-    <tr {{if $_endowment->_id == $endowment->_id}}class="selected"{{/if}}>
-      <td style="font-weight: bold;">
-        <a href="#1" onclick="return loadEndowment({{$_endowment->_id}})">
-          {{mb_value object=$_endowment field=name}}
-        </a>
-      </td>
-      <td>{{mb_value object=$_endowment field=service_id}}</td>
-      <td>
-        {{$_endowment->_count.endowment_items}}
-      </td>
-    </tr>
+      <tr id="list-{{$_endowment->_guid}}">
+        <td style="font-weight: bold;">
+          <a href="#1" onclick="return loadEndowment({{$_endowment->_id}})">
+            {{mb_value object=$_endowment field=name}}
+          </a>
+        </td>
+        <td>{{mb_value object=$_endowment field=service_id}}</td>
+        <td>
+          {{$_endowment->_count.endowment_items}}
+        </td>
+      </tr>
     </tbody>
   {{foreachelse}}
     <tr>
