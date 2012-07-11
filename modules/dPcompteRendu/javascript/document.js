@@ -152,6 +152,9 @@ Document = {
     url.addParam("praticien_id", oOptions.praticien_id);
     url.addParam("mode"        , oOptions.mode);
     
+    // When two doc widget with the same args in the same page, the ajax request is down ONCE !!!
+    url.addParam("_dummyarg_"  , container.identify()); 
+    
     if (only_docs == undefined || only_docs == 1) {
       url.addParam("only_docs", 1);
       url.requestUpdate(container.down("table"));
