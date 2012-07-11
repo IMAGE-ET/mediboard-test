@@ -25,6 +25,8 @@ synchronizeView = function(form) {
   $V(form.paid, paid);
   var finished = $V(form._finished) ? 1 : 0;
   $V(form.finished, finished);
+  var immediate = $V(form._immediate) ? 1 : 0;
+  $V(form.immediate, immediate);
   form.submit();
 }
 
@@ -132,11 +134,7 @@ Reconvocation = {
                 {{/foreach}}
               </select>
             </td>
-            
-            <th {{if $mode_urgence}}colspan="5"{{/if}}>
-              Afficher les
-            </th>
-            <td>
+            <td {{if $mode_urgence}}colspan="5"{{/if}}>
               <input name="_empty" type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $empty}}checked="checked"{{/if}} />
               <input name="empty" type="hidden" value="{{$empty}}" />
               <label for="_empty" title="Afficher les plages vides">Plages vides</label>
@@ -149,6 +147,9 @@ Reconvocation = {
               <input name="_finished" type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $finished}}checked="checked"{{/if}} />
               <input name="finished" type="hidden" value="{{$finished}}" />
               <label for="_finished" title="Afficher les consultations terminées">Terminées</label>
+              <input name="_immediate" type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $immediate}}checked="checked"{{/if}} />
+              <input name="immediate" type="hidden" value="{{$immediate}}" />
+              <label for="_immediate" title="Afficher les consultations immédiates">Immediates</label>
             </td>
             {{if !$mode_urgence}}
               <th>

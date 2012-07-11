@@ -16,18 +16,12 @@ $mediuser->load(CAppUI::$instance->user_id);
 $cabinet_id   = CValue::getOrSession("cabinet_id", $mediuser->function_id);
 $date         = CValue::getOrSession("date", mbDate());
 
-$canceled       = CValue::getOrSession("canceled", false);
-$finished       = CValue::getOrSession("finished", true);
-$paid           = CValue::getOrSession("paid"    , true);
-$empty          = CValue::getOrSession("empty"   , true);
-$mode_vue       = CValue::getOrSession("mode_vue", "vertical");
-
-/*
-$canceled       = 0;
-$finished       = 1;
-$paid           = 1;
-$empty          = 1;
-*/
+$canceled       = CValue::getOrSession("canceled" , false);
+$finished       = CValue::getOrSession("finished" , true);
+$paid           = CValue::getOrSession("paid"     , true);
+$empty          = CValue::getOrSession("empty"    , true);
+$immediate      = CValue::getOrSession("immediate", true);
+$mode_vue       = CValue::getOrSession("mode_vue" , "vertical");
 
 $mode_urgence = CValue::get("mode_urgence", false);
 $offline      = CValue::get("offline"     , false);
@@ -105,9 +99,13 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
   foreach ($infos_by_prat["plages"] as $key_plage => $plage) {
     $plage->_ref_chir = $infos_by_prat["prat"];
     $plage->loadRefsConsultations($canceled, $finished);
-    if(!$paid) {
+    if(!$paid || !$immediate) {
+      $_consult = new CConsultation();
       foreach($plage->_ref_consultations as $key_consult => $_consult) {
-        if($_consult->patient_date_reglement) {
+        if(!$paid && $_consult->patient_date_reglement) {
+          unset($plage->_ref_consultations[$key_consult]);
+        }
+        elseif(!$immediate && $_consult->heure == mbTime(null, $_consult->arrivee)) {
           unset($plage->_ref_consultations[$key_consult]);
         }
       }
@@ -172,6 +170,7 @@ $smarty->assign("empty"         , $empty);
 $smarty->assign("canceled"      , $canceled);
 $smarty->assign("paid"          , $paid);
 $smarty->assign("finished"      , $finished);
+$smarty->assign("immediate"     , $immediate);
 $smarty->assign("date"          , $date);
 $smarty->assign("hour"          , $hour);
 $smarty->assign("praticiens"    , $praticiens);
