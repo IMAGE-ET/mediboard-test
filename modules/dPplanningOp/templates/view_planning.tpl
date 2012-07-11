@@ -4,7 +4,7 @@
 <table class="print">
   <tr>
     <th class="title" colspan="2">
-      <span style="float:left;font-size:12px;">
+      <span style="float:left; font-size:12px;">
         [{{$sejour->_NDA}}]
       </span>
       <span style="float:right;font-size:12px;">
@@ -122,10 +122,13 @@
     <th>{{mb_label object=$sejour field=type}}</th>
     <td>{{mb_value object=$sejour field=type}}</td>
   </tr>
+
+  {{if $conf.dPhospi.systeme_prestations == "standard"}}
   <tr>
     <th>{{mb_label object=$sejour field=chambre_seule}}</th>
     <td>{{mb_value object=$sejour field=chambre_seule}}</td>
   </tr>
+  {{/if}}
   
   {{if $operation->_id}}
   <tr>
