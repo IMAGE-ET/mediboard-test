@@ -73,7 +73,7 @@
           <legend>Validation du codage</legend>
           {{if $conf.dPsalleOp.CActeCCAM.envoi_actes_salle || $m == "dPpmsi" && $subject instanceof COperation}}
             <table class="main layout">
-              <tr id="export_{{$subject->_class}}_{{$subject->_id}}">
+              <tr>
                 {{if !$subject->facture || $m == "dPpmsi" || $can->admin}}
                   {{mb_include module=pmsi template="inc_export_actes_pmsi" object=$subject confirmCloture=1}}
                 {{else}}
