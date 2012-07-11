@@ -481,9 +481,10 @@ Main.add(function () {
           	{{tr}}Save{{/tr}}
           </button>
 
-          {{mb_include template=inc_cancel_planning}}              
-                      
         {{/if}}
+
+        {{mb_include template=inc_cancel_planning}}              
+                      
         
         <button class="print" id="print_fiche_consult" type="button" onclick="printForm();"
           {{if !$consult->patient_id}} disabled="disabled" {{/if}}
