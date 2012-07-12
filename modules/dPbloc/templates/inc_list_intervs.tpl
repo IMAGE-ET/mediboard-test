@@ -63,7 +63,9 @@
           <div class="rank" style="float: left;{{if $_op->annulee}}background: #800; color: #fff;{{/if}}">{{$_op->rank}}</div>
           {{$_op->time_operation|date_format:$conf.time}}
         {{elseif $_op->rank_voulu}}
-          <div class="rank desired" style="float: left;">{{$_op->rank_voulu}}</div>
+          <div class="rank desired" style="float: left;{{if $_op->annulee}}background: #800; color: #fff;{{/if}}">{{$_op->rank_voulu}}</div>
+        {{else}}
+          <div class="rank" style="float: left;{{if $_op->annulee}}background: #800; color: #fff;{{/if}}"></div>
         {{/if}}
         <a href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$patient->_id}}">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
