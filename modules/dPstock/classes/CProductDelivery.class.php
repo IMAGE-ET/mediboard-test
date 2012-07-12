@@ -63,6 +63,7 @@ class CProductDelivery extends CMbObject {
   var $_delivered           = null;
   var $_auto_deliver        = null;
   var $_make_delivery_trace = null;
+  var $_initial_quantity    = null;
   
   var $_products            = null;
   var $_prises              = null;
@@ -99,6 +100,8 @@ class CProductDelivery extends CMbObject {
     $type = (CProductStock::$allow_quantity_fractions ? "float" : "num");
     $specs['quantity']          = "$type notNull";
     $specs['endowment_quantity']= "$type";
+    $specs['_initial_quantity'] = "$type";
+    
     $specs['endowment_item_id'] = "ref class|CProductEndowmentItem";
     $specs['order']             = 'bool default|0';
     $specs['manual']            = 'bool default|0';
@@ -233,6 +236,22 @@ class CProductDelivery extends CMbObject {
     if (!$this->stock_class) {
       $this->stock_class = "CProductStockGroup";
     }
+  }
+  
+  function getInitialQuantity(){
+    $logs = $this->loadLogsForField("quantity", true, null, true);
+    $first = end($logs);
+    
+    if ($first && $first->_id) {
+      $old = $first->getOldValues();
+      $quantity = $old["quantity"];
+    }
+    else {
+      $this->completeField("quantity");
+      $quantity = $this->quantity;
+    }
+    
+    return $this->_initial_quantity = $quantity;
   }
   
   function store(){

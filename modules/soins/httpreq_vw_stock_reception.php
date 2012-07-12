@@ -1,9 +1,9 @@
 <?php /* $Id: httpreq_vw_restockages_service_list.php 6146 2009-04-21 14:40:08Z alexis_granger $ */
 
 /**
- *	@package Mediboard
- *	@subpackage pharmacie
- *	@version $Revision: 6146 $
+ *  @package Mediboard
+ *  @subpackage pharmacie
+ *  @version $Revision: 6146 $
  *  @author SARL OpenXtrem
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
@@ -37,6 +37,7 @@ if (count($deliveries)) {
     $_delivery->_ref_stock->loadRefsFwd();
     $_delivery->loadRefPatient();
     $_delivery->loadRefService();
+    $_delivery->getInitialQuantity();
     
     /*if($_delivery->patient_id){
       $_delivery->loadRefPatient();

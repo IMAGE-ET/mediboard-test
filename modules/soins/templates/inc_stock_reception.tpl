@@ -34,6 +34,7 @@ changeReceptionPage = function(start) {
 
 <div style="float: left;">
   <button class="print" onclick="printReceptionReport({{$service_id}})">{{tr}}Print{{/tr}}</button>
+  <button class="change" onclick="getForm('filter-reception').onsubmit()">{{tr}}Refresh{{/tr}}</button>
 </div>
 
 {{mb_include module=system template=inc_pagination change_page="changeReceptionPage" 
@@ -49,7 +50,8 @@ changeReceptionPage = function(start) {
     <th>{{*tr}}CProductDelivery-service_id{{/tr*}}Pour</th>
     <th>{{tr}}CProduct{{/tr}}</th>
     <th colspan="2">Date commande</th>
-    <th>{{tr}}CProductDelivery-quantity{{/tr}}</th>
+    <th style="white-space: normal;">{{tr}}CProductDelivery-_initial_quantity-court{{/tr}}</th>
+    <th>{{tr}}CProductDelivery-quantity-court{{/tr}}</th>
     <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
     <th>
       <button type="button" onclick="receiveAll('list-reception')" class="tick">Tout recevoir</button>
@@ -69,19 +71,29 @@ changeReceptionPage = function(start) {
       </td>
       <td>
         {{if $curr_delivery->stock_id}}
-          <div id="tooltip-content-{{$curr_delivery->_id}}" style="display: none;">
-            {{if $curr_delivery->comments}}
-              <strong>Commentaires: </strong>{{mb_value object=$curr_delivery field=comments}}
-              <hr />
-            {{/if}}
-            {{$curr_delivery->_ref_stock->_ref_product->_quantity}}
-          </div>
+          {{if $curr_delivery->comments || $curr_delivery->comments_deliver}}
+            <div id="tooltip-content-{{$curr_delivery->_id}}" style="display: none;">
+              {{if $curr_delivery->comments}}
+                <fieldset>
+                  <legend>Commentaires</legend>
+                  {{$curr_delivery->comments|nl2br}}
+                </fieldset>
+              {{/if}}
+              {{if $curr_delivery->comments_deliver}}
+                <fieldset>
+                  <legend>Commentaires validateur</legend>
+                  {{$curr_delivery->comments_deliver|nl2br}}
+                </fieldset>
+              {{/if}}
+            </div>
+            
+            <img style="float: right;" src="style/mediboard/images/buttons/comment.png" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_delivery->_id}}')" />
+          {{/if}}
+          
           {{if $curr_delivery->_ref_stock->canEdit()}}
           <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_service_id={{$curr_delivery->_ref_stock->_id}}">
           {{/if}}
-            <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_delivery->_id}}')">
-              {{$curr_delivery->_ref_stock}}
-            </span>
+            {{$curr_delivery->_ref_stock}}
           {{if $curr_delivery->_ref_stock->canEdit()}}
           </a>
           {{/if}}
@@ -91,6 +103,11 @@ changeReceptionPage = function(start) {
       </td>
       <td style="text-align: center;">{{mb_ditto name=date value=$curr_delivery->date_dispensation|date_format:$conf.date}}</td>
       <td style="text-align: center;">{{mb_ditto name=time value=$curr_delivery->date_dispensation|date_format:$conf.time}}</td>
+      <td style="text-align: right">
+        {{if $curr_delivery->_initial_quantity != $curr_delivery->quantity}}
+          {{mb_value object=$curr_delivery field=_initial_quantity}}
+        {{/if}}
+      </td>
       <td style="text-align: right">{{mb_value object=$curr_delivery field=quantity}}</td>
       <td>{{mb_value object=$curr_delivery->_ref_stock->_ref_product field=_unit_title}}</td>
       <td>
@@ -125,7 +142,7 @@ changeReceptionPage = function(start) {
           </tr>
         {{foreachelse}}
           <tr>
-            <td>Pas encore sorti de la pharmacie</td>
+            <td class="empty">Pas encore sorti de la pharmacie</td>
           </tr>
         {{/foreach}}
         </table>

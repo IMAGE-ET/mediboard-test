@@ -82,10 +82,12 @@
   </td>
   
   <!-- Affichage des dispensations deja effectuées -->
-  <td style="text-align: left" class="text" title="Dans {{$stock->_ref_deliveries|@count}} commandes">
+  <td style="text-align: left" class="text">
     {{if $stock->_total_quantity}}
-      <button class="down notext" type="button" onclick="$(this).next('table').toggle()"></button>
-      {{$stock->_total_quantity}}
+      <div title="Dans {{$stock->_ref_deliveries|@count}} commandes">
+        <button class="down notext" type="button" onclick="$(this).up('div').next('table').toggle()"></button>
+        {{$stock->_total_quantity}}
+      </div>
     
       <table class="layout" style="display: none;">
       {{foreach from=$stock->_ref_deliveries item=dispensation}}
