@@ -10,8 +10,10 @@
   submitReveilForm = function(oFormOperation) {
     submitFormAjax(oFormOperation,'systemMsg', {onComplete: function(){refreshTabsReveil()}});
   }
-</script> 
-
+</script>
+{{if @$modules.brancardage->_can->read}}
+  {{mb_script module=brancardage script=creation_brancardage ajax=true}}
+{{/if}}
 <table class="tbl">
   <tr>
     <th>{{tr}}SSPI.Salle{{/tr}}</th>
@@ -147,6 +149,21 @@
     </td>
     <td class="button">
       {{if $modif_operation}}
+        {{if @$modules.brancardage->_can->read}}
+          <span id="demandebrancard-{{$_operation->sejour_id}}"></span>
+          <script>
+            Main.add(function () {
+              var url = new Url("brancardage", "ajax_exist_brancard");
+              url.addParam("sejour_id", "{{$_operation->sejour_id}}");
+              url.addParam("salle_id", "{{$_operation->salle_id}}");
+              url.addParam("operation_id", '{{$_operation->_id}}');
+              url.addParam("reveil", true);
+              url.addParam("id", "demandebrancard");
+              url.addParam("opid", "{{$_operation->_id}}");
+              url.requestUpdate('demandebrancard-{{$_operation->sejour_id}}');
+            });
+          </script>
+        {{/if}}
       <form name="editSortieReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />

@@ -6,18 +6,19 @@
   <td>{{$_operation->_datetime|date_format:$conf.date}} 
             
   {{if @$modules.brancardage->_can->read}}
-    {{mb_script module=brancardage script=creation_brancardage ajax=true }}
+    {{mb_script module=brancardage script=creation_brancardage ajax=true}}
     <input id="modif" type="hidden" name="modif"/>
-    <div id="patientpret" >
-      <input type="hidden" name="param_brancard"  id="param_brancard"
-         data-salle-id  ="{{$_operation->salle_id}}"
-         data-sejour-id ="{{$_operation->sejour_id}}"
-         data-operation-id="{{$_operation->_id}}"
-         data-charge    ="" />
-      <button type="button" class="brancard" onclick="CreationBrancard.patientPret('{{$_operation->sejour_id}}','{{$_operation->salle_id}}','{{$_operation->_id}}');" >
-         Patient pret
-      </button>
-    </div>
+    <div id="patientpret-{{$_operation->sejour_id}}"> </div>
+    <script>
+      Main.add(function () {
+        var url = new Url("brancardage", "ajax_exist_brancard");
+        url.addParam("sejour_id"    , "{{$_operation->sejour_id}}");
+        url.addParam("salle_id"     , "{{$_operation->salle_id}}");
+        url.addParam("operation_id" , '{{$_operation->_id}}');
+        url.addParam("id"           , "patientpret");
+        url.requestUpdate('patientpret-{{$_operation->sejour_id}}');
+      });
+    </script>
   {{/if}}
   
   {{if $_operation->annulee}}

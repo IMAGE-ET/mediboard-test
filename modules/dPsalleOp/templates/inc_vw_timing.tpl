@@ -15,20 +15,20 @@
   {{assign var=opid value=$selOp->operation_id}}
   {{assign var=form value=timing$opid}}
   <tr>
-  	{{if @$modules.brancardage->_can->read}}
-		
-	  	<td id="demandebrancard" rowspan="2">
-	  		
-      <input type="hidden" name="param_brancard" id="param_brancard"
-	       data-salle-id="{{$selOp->salle_id}}"
-	       data-sejour-id="{{$selOp->sejour_id}}"
-	       data-operation-id="{{$selOp->_id}}"
-	       data-charge=""	data-opid="{{$opid}}"  />
-		    <button type="button" class="brancard" onclick="CreationBrancard.demandeBrancard('{{$selOp->sejour_id}}','{{$selOp->salle_id}}', '{{$opid}}', '{{$selOp->_id}}');" >
-		      Demande Brancardage
-	      </button>
-	    </td>
-	    {{mb_script module=brancardage script=creation_brancardage ajax=true}}
+    {{if @$modules.brancardage->_can->read}}
+      {{mb_script module=brancardage script=creation_brancardage ajax=true}}
+      <td id="demandebrancard-{{$selOp->sejour_id}}" rowspan="2"> </td>
+      <script>
+        Main.add(function () {
+          var url = new Url("brancardage", "ajax_exist_brancard");
+          url.addParam("sejour_id"    , "{{$selOp->sejour_id}}");
+          url.addParam("salle_id"     , "{{$selOp->salle_id}}");
+          url.addParam("operation_id" , '{{$selOp->_id}}');
+          url.addParam("id"           , "demandebrancard");
+          url.addParam("opid"         , "{{$opid}}");
+          url.requestUpdate('demandebrancard-{{$selOp->sejour_id}}');
+        });
+      </script>
     {{/if}}
     
     {{include file=inc_field_timing.tpl object=$selOp field=entree_salle}}
