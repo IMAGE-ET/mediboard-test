@@ -44,7 +44,7 @@ if (count($ids_consults) == 0) {
   return;
 }
 
-$ids_consults = array_slice($ids_consults, 0, 50);
+$ids_consults = array_slice($ids_consults, 0, 100);
 
 foreach ($ids_consults as $_consult_id) {
   $consult = new CConsultation;
