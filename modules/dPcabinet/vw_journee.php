@@ -102,10 +102,13 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
     if(!$paid || !$immediate) {
       $_consult = new CConsultation();
       foreach($plage->_ref_consultations as $key_consult => $_consult) {
-        if(!$paid && $_consult->patient_date_reglement) {
-          unset($plage->_ref_consultations[$key_consult]);
+        if(!$paid) {
+          $_consult->loadRefsReglements();
+          if($_consult->valide == 1 && $_consult->_du_patient_restant == 0) {
+            unset($plage->_ref_consultations[$key_consult]);
+          }
         }
-        elseif(!$immediate && $_consult->heure == mbTime(null, $_consult->arrivee)) {
+        elseif(!$immediate && ($_consult->heure == mbTime(null, $_consult->arrivee)) && ($_consult->motif == "Consultation immédiate")) {
           unset($plage->_ref_consultations[$key_consult]);
         }
       }

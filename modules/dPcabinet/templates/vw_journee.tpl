@@ -135,21 +135,21 @@ Reconvocation = {
               </select>
             </td>
             <td {{if $mode_urgence}}colspan="5"{{/if}}>
-              <input name="_empty" type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $empty}}checked="checked"{{/if}} />
-              <input name="empty" type="hidden" value="{{$empty}}" />
-              <label for="_empty" title="Afficher les plages vides">Plages vides</label>
-              <input name="_canceled" type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $canceled}}checked="checked"{{/if}} />
-              <input name="canceled" type="hidden" value="{{$canceled}}" />
-              <label for="_canceled" title="Afficher les consultations annulées">Annulées</label>
-              <input name="_paid" type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $paid}}checked="checked"{{/if}} />
-              <input name="paid" type="hidden" value="{{$paid}}" />
-              <label for="_paid" title="Afficher les consultations réglées">Réglées</label>
-              <input name="_finished" type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $finished}}checked="checked"{{/if}} />
-              <input name="finished" type="hidden" value="{{$finished}}" />
-              <label for="_finished" title="Afficher les consultations terminées">Terminées</label>
+              <input name="_empty"     type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $empty}}checked="checked"{{/if}} />
+              <input name="empty"      type="hidden"   value="{{$empty}}" />
+              <label for="_empty"      title="Afficher les plages vides">Plages vides</label>
+              <input name="_canceled"  type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $canceled}}checked="checked"{{/if}} />
+              <input name="canceled"   type="hidden"   value="{{$canceled}}" />
+              <label for="_canceled"   title="Afficher les consultations annulées">Annulées</label>
+              <input name="_paid"      type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $paid}}checked="checked"{{/if}} />
+              <input name="paid"       type="hidden"   value="{{$paid}}" />
+              <label for="_paid"       title="Afficher les consultations réglées">Réglées</label>
+              <input name="_finished"  type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $finished}}checked="checked"{{/if}} />
+              <input name="finished"   type="hidden"   value="{{$finished}}" />
+              <label for="_finished"   title="Afficher les consultations terminées">Terminées</label>
               <input name="_immediate" type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $immediate}}checked="checked"{{/if}} />
-              <input name="immediate" type="hidden" value="{{$immediate}}" />
-              <label for="_immediate" title="Afficher les consultations immédiates">Immediates</label>
+              <input name="immediate"  type="hidden"   value="{{$immediate}}" />
+              <label for="_immediate"  title="Afficher les consultations immédiates">Immediates</label>
             </td>
             {{if !$mode_urgence}}
               <th>
