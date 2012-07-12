@@ -10,14 +10,14 @@
     submitOpConsult();
   }
   function newOperation(chir_id, pat_id) {
-	  var url = new Url;
-	  url.setModuleTab("dPplanningOp", "vw_edit_planning");
-	  url.addParam("chir_id", chir_id);
-	  url.addParam("pat_id", pat_id);
-	  url.addParam("operation_id", 0);
-	  url.addParam("sejour_id", 0);
-	  url.redirect();
-	}
+    var url = new Url;
+    url.setModuleTab("dPplanningOp", "vw_edit_planning");
+    url.addParam("chir_id", chir_id);
+    url.addParam("pat_id", pat_id);
+    url.addParam("operation_id", 0);
+    url.addParam("sejour_id", 0);
+    url.redirect();
+  }
   {{if !$consult_anesth->libelle_interv && !$consult_anesth->sejour_id && !$consult_anesth->operation_id && ($nextSejourAndOperation.COperation->_id || $nextSejourAndOperation.CSejour->_id)}}
   modalWindow = null;
   Main.add(function () {
@@ -75,7 +75,7 @@
     <option value="">Pas de séjour</option>
     {{foreach from=$patient->_ref_sejours item=curr_sejour}}
     <option value="{{$curr_sejour->_id}}"{{if $consult_anesth->sejour_id==$curr_sejour->_id}} selected="selected"{{/if}}>
-      Séjour du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}} au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}
+      {{if $curr_sejour->annule}}ANNULE - {{/if}}Séjour du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}} au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}
     </option>
     {{/foreach}}
   </select>
@@ -88,11 +88,11 @@
   <select name="operation_id" style="width: 20em;" onchange="submitOpConsult()">
     <option value="">Pas d'Intervention</option>
     {{foreach from=$patient->_ref_sejours item=curr_sejour}}
-    <optgroup label="Séjour du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}} au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}"
+    <optgroup label="{{if $curr_sejour->annule}}ANNULE - {{/if}}Séjour du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}} au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}"
     {{if $consult_anesth->sejour_id!=$curr_sejour->_id && $consult_anesth->sejour_id}}disabled="disabled"{{/if}}>
       {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
       <option value="{{$curr_op->operation_id}}"{{if $consult_anesth->operation_id==$curr_op->_id}} selected="selected"{{/if}}>
-        Le {{$curr_op->_datetime|date_format:"%d/%m/%Y"}} &mdash; Dr {{$curr_op->_ref_chir->_view}}
+        {{if $curr_op->annulee}}ANNULEE - {{/if}}Le {{$curr_op->_datetime|date_format:"%d/%m/%Y"}} &mdash; Dr {{$curr_op->_ref_chir->_view}}
       </option>
       {{/foreach}}
     </optgroup>
@@ -102,24 +102,24 @@
 
   {{assign var=sejour value=$consult_anesth->_ref_sejour}}
   {{if $sejour && $sejour->_id}}
-	<span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
+  <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
   <strong>Séjour :</strong>
-	  Dr {{$sejour->_ref_praticien->_view}} -
-	  {{if $sejour->type!="ambu" && $sejour->type!="exte"}} {{$sejour->_duree_prevue}} jour(s) -{{/if}}
-	  {{mb_value object=$sejour field=type}}
-	</span>
+    Dr {{$sejour->_ref_praticien->_view}} -
+    {{if $sejour->type!="ambu" && $sejour->type!="exte"}} {{$sejour->_duree_prevue}} jour(s) -{{/if}}
+    {{mb_value object=$sejour field=type}}
+  </span>
   <br />
   {{/if}}
   
   {{if $operation->_id}}
-	<span onmouseover="ObjectTooltip.createEx(this, '{{$operation->_guid}}', null, { view_tarif: true })">
-	  <strong>Intervention :</strong>
-	  le <strong>{{$operation->_datetime|date_format:"%a %d %b %Y"}}</strong>
-	  par le <strong>Dr {{$operation->_ref_chir->_view}}</strong>
+  <span onmouseover="ObjectTooltip.createEx(this, '{{$operation->_guid}}', null, { view_tarif: true })">
+    <strong>Intervention :</strong>
+    le <strong>{{$operation->_datetime|date_format:"%a %d %b %Y"}}</strong>
+    par le <strong>Dr {{$operation->_ref_chir->_view}}</strong>
     {{if $operation->libelle}}
     <em>[{{$operation->libelle}}]</em>
     {{/if}}
-	</span>
+  </span>
   <br />
   <strong>{{mb_label object=$operation field="depassement"}} :</strong>
   {{mb_value object=$operation field="depassement"}}
