@@ -28,6 +28,9 @@
     {{/if}}
     <th>{{tr}}SSPI.Responsable{{/tr}}</th>
     <th>{{tr}}SSPI.EntreeReveil{{/tr}}</th>
+    {{if @$modules.brancardage->_can->read}}
+      <th>{{tr}}CBrancardage{{/tr}}</th>
+    {{/if}}
     <th>{{tr}}SSPI.SortieReveil{{/tr}}</th>
     <th class="narrow"></th>
   </tr>    
@@ -147,23 +150,25 @@
         {{/if}}
       </form>
     </td>
+    {{if @$modules.brancardage->_can->read}}
+    <td>
+       <span id="demandebrancard-{{$_operation->sejour_id}}"></span>
+        <script>
+          Main.add(function () {
+            var url = new Url("brancardage", "ajax_exist_brancard");
+            url.addParam("sejour_id", "{{$_operation->sejour_id}}");
+            url.addParam("salle_id", "{{$_operation->salle_id}}");
+            url.addParam("operation_id", '{{$_operation->_id}}');
+            url.addParam("reveil", true);
+            url.addParam("id", "demandebrancard");
+            url.addParam("opid", "{{$_operation->_id}}");
+            url.requestUpdate('demandebrancard-{{$_operation->sejour_id}}');
+          });
+        </script>
+    </td>
+    {{/if}}
     <td class="button">
       {{if $modif_operation}}
-        {{if @$modules.brancardage->_can->read}}
-          <span id="demandebrancard-{{$_operation->sejour_id}}"></span>
-          <script>
-            Main.add(function () {
-              var url = new Url("brancardage", "ajax_exist_brancard");
-              url.addParam("sejour_id", "{{$_operation->sejour_id}}");
-              url.addParam("salle_id", "{{$_operation->salle_id}}");
-              url.addParam("operation_id", '{{$_operation->_id}}');
-              url.addParam("reveil", true);
-              url.addParam("id", "demandebrancard");
-              url.addParam("opid", "{{$_operation->_id}}");
-              url.requestUpdate('demandebrancard-{{$_operation->sejour_id}}');
-            });
-          </script>
-        {{/if}}
       <form name="editSortieReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />

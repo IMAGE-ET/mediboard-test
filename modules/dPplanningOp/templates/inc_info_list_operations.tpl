@@ -4,23 +4,6 @@
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}
   </td>
   <td>{{$_operation->_datetime|date_format:$conf.date}} 
-            
-  {{if @$modules.brancardage->_can->read}}
-    {{mb_script module=brancardage script=creation_brancardage ajax=true}}
-    <input id="modif" type="hidden" name="modif"/>
-    <div id="patientpret-{{$_operation->sejour_id}}"> </div>
-    <script>
-      Main.add(function () {
-        var url = new Url("brancardage", "ajax_exist_brancard");
-        url.addParam("sejour_id"    , "{{$_operation->sejour_id}}");
-        url.addParam("salle_id"     , "{{$_operation->salle_id}}");
-        url.addParam("operation_id" , '{{$_operation->_id}}');
-        url.addParam("id"           , "patientpret");
-        url.requestUpdate('patientpret-{{$_operation->sejour_id}}');
-      });
-    </script>
-  {{/if}}
-  
   {{if $_operation->annulee}}
   <th class="category cancelled">
     <strong onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}');">{{tr}}COperation-annulee{{/tr}}</strong>
@@ -30,6 +13,25 @@
     {{mb_include module=planningOp template=inc_vw_operation}}
   </td>
   {{/if}}
+  
+  {{if @$modules.brancardage->_can->read}}
+    <td>
+      {{mb_script module=brancardage script=creation_brancardage ajax=true}}
+      <input id="modif" type="hidden" name="modif"/>
+      <div id="patientpret-{{$_operation->sejour_id}}"> </div>
+      <script>
+        Main.add(function () {
+          var url = new Url("brancardage", "ajax_exist_brancard");
+          url.addParam("sejour_id"    , "{{$_operation->sejour_id}}");
+          url.addParam("salle_id"     , "{{$_operation->salle_id}}");
+          url.addParam("operation_id" , '{{$_operation->_id}}');
+          url.addParam("id"           , "patientpret");
+          url.requestUpdate('patientpret-{{$_operation->sejour_id}}');
+        });
+      </script>
+    </td>  
+  {{/if}}
+  
   <td class="narrow button">
     <button class="{{if $_operation->_ref_consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}" type="button"
     onclick="

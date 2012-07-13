@@ -34,7 +34,7 @@ refreshListIntervs = function() {
 {{if $sejour->_canRead}}
 	<table class="tbl">
 	  <tr>
-	    <th class="title" colspan="4">
+	    <th class="title" colspan="{{if @$modules.brancardage->_can->read}}5{{else}}4{{/if}}">
 	      {{if $sejour->_ref_consult_anesth->_id && !$sejour->_ref_consult_anesth->operation_id}}
 	        <button style="float: right" class="print" type="button" onclick="printFicheAnesth('{{$sejour->_ref_consult_anesth->_ref_consultation->_id}}');">
             Fiche d'anesthésie
@@ -47,6 +47,9 @@ refreshListIntervs = function() {
 	    <th>{{tr}}COperation-chir_id{{/tr}}</th>
 	    <th>{{tr}}Date{{/tr}}</th>
 	    <th>{{tr}}COperation-_ext_codes_ccam{{/tr}}</th>
+      {{if @$modules.brancardage->_can->read}}
+        <th>{{tr}}CBrancardage{{/tr}}</th>
+      {{/if}}
 	    <th></th>
 	  </tr>
 	  <tbody id="intervs-sejour-{{$sejour->_guid}}">
