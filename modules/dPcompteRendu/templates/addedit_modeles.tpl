@@ -157,6 +157,8 @@ Main.add(function () {
   {{/if}}
 });
 
+Main.add(Control.Tabs.create.curry('tabs-edit'));
+
 </script>
 
 {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
@@ -190,7 +192,7 @@ Main.add(function () {
 
 <table class="main">
   <tr>
-    <td class="narrow">
+    <td width="300px;">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_modele_aed" />
@@ -208,17 +210,27 @@ Main.add(function () {
         {{/if}}
       {{/if}}
       
-      <table class="form" id="info_model">
+      <table class="form">
         <tr>
           <th class="category" colspan="2">
             {{if $compte_rendu->_id}}
+              {{mb_include module=system template=inc_object_notes      object=$compte_rendu}}
               {{mb_include module=system template=inc_object_idsante400 object=$compte_rendu}}
-              {{mb_include module=system template=inc_object_history object=$compte_rendu}}
+              {{mb_include module=system template=inc_object_history    object=$compte_rendu}}
             {{/if}}
             {{tr}}CCompteRendu-informations{{/tr}}
           </th>
         </tr>
-        
+      </table>
+
+      <ul id="tabs-edit" class="control_tabs">
+        <li><a href="#info"  >Informations</a></li>
+        <li><a href="#layout">Mise en page</a></li>
+      </ul>
+    
+      <hr class="control_tabs" />
+      
+      <table class="form" id="info" style="display: none;">
         <tr>
           <th>{{mb_label object=$compte_rendu field="nom"}}</th>
           <td>
@@ -237,10 +249,10 @@ Main.add(function () {
                <input type="hidden" name="group_id" />
             {{/if}}
             <select {{if !$droit}}disabled='disabled'{{/if}} name="group_id" class="{{$compte_rendu->_props.group_id}}" style="width: 15em;">
-              <option value="">&mdash; {{tr}}CCompteRendu-set-etab{{/tr}}</option>
+              <option value="">&mdash; {{tr}}Associate{{/tr}}</option>
               {{foreach from=$listEtab item=curr_etab}}
               <option value="{{$curr_etab->_id}}" {{if $curr_etab->_id == $compte_rendu->group_id}} selected="selected" {{/if}}>
-              {{$curr_etab->_view}}
+              {{$curr_etab}}
               </option>
               {{/foreach}}
             </select>
@@ -254,7 +266,7 @@ Main.add(function () {
                <input type="hidden" name="function_id" />
             {{/if}}
             <select {{if !$droit}}disabled='disabled'{{/if}} name="function_id" class="{{$compte_rendu->_props.function_id}}" style="width: 15em;">
-              <option value="">&mdash; {{tr}}CCompteRendu-set-function{{/tr}}</option>
+              <option value="">&mdash; {{tr}}Associate{{/tr}}</option>
               {{foreach from=$listFunc item=curr_func}}
               <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->_id}}" {{if $curr_func->_id == $compte_rendu->function_id}} selected="selected" {{/if}}>
               {{if $smarty.session.browser.name == "msie"}}
@@ -275,7 +287,7 @@ Main.add(function () {
               <input type="hidden" name="user_id" value="{{$mediuser->_id}}" />
             {{/if}}
             <select {{if !$droit}}disabled='disabled'{{/if}} name="user_id" class="{{$compte_rendu->_props.user_id}}" style="width: 15em;">
-              <option value="">&mdash; {{tr}}CCompteRendu-set-user{{/tr}}</option>
+              <option value="">&mdash; {{tr}}Associate{{/tr}}</option>
               {{foreach from=$listPrat item=curr_prat}}
               <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->_id}}" {{if $curr_prat->_id == $compte_rendu->user_id}} selected="selected" {{/if}}>
               {{$curr_prat->_view}}
@@ -329,17 +341,18 @@ Main.add(function () {
                   var bHeader = oForm.type.value == "header";
                   var bOther  = (oForm.type.value == "preface" || oForm.type.value == "ending");
                   
-                  if(bHeader) {
-                    $("preview_page").insert({top: $("header_footer_content").remove()});
+                  if (bHeader) {
+                    $("preview_page").insert({top   : $("header_footer_content").remove()});
                     $("preview_page").insert({bottom: $("body_content").remove()});
                   }
                   else {
                     $("preview_page").insert({bottom: $("header_footer_content").remove()});
-                    $("preview_page").insert({top: $("body_content").remove()});
+                    $("preview_page").insert({top   : $("body_content").remove()});
                   }
                   
                   // General Layout
-                  $("layout").setVisible(!bOther);
+                  $("layout").down('.fields').setVisible(!bOther);
+                  $("layout").down('.notice').setVisible(bOther);
                   
                   // Page layout
                   if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
@@ -357,10 +370,10 @@ Main.add(function () {
                   if (oComponent) {
                     oComponent.setVisible(bBody);
                     if (!bBody) {
-                      $V(oForm.header_id, '');
-                      $V(oForm.footer_id, '');
+                      $V(oForm.header_id , '');
+                      $V(oForm.footer_id , '');
                       $V(oForm.preface_id, '');
-                      $V(oForm.ending_id, '');
+                      $V(oForm.ending_id , '');
                     }
                   }
                   
@@ -381,7 +394,7 @@ Main.add(function () {
               <th>{{mb_label object=$compte_rendu field=header_id}}</th>
               <td>
                 <select name="header_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.header_id}}" {{if !$droit}}disabled="disabled"{{/if}} style="width: 15em;">
-                  <option value="">&mdash; {{tr}}CCompteRendu-set-header{{/tr}}</option>
+                  <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
                   {{foreach from=$headers item=headersByOwner key=owner}}
                   <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
                     {{foreach from=$headersByOwner item=_header}}
@@ -401,7 +414,7 @@ Main.add(function () {
               <th>{{mb_label object=$compte_rendu field=preface_id}}</th>
               <td>
                 <select name="preface_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.preface_id}}" {{if !$droit}}disabled="disabled"{{/if}} style="width: 15em;">
-                  <option value="">&mdash; {{tr}}CCompteRendu-set-preface{{/tr}}</option>
+                  <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
                   {{foreach from=$prefaces item=prefacesByOwner key=owner}}
                   <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
                     {{foreach from=$prefacesByOwner item=_preface}}
@@ -421,7 +434,7 @@ Main.add(function () {
               <th>{{mb_label object=$compte_rendu field=ending_id}}</th>
               <td>
                 <select name="ending_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.ending_id}}" {{if !$droit}}disabled="disabled"{{/if}} style="width: 15em;">
-                  <option value="">&mdash; {{tr}}CCompteRendu-set-ending{{/tr}}</option>
+                  <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
                   {{foreach from=$endings item=endingsByOwner key=owner}}
                   <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
                     {{foreach from=$endingsByOwner item=_ending}}
@@ -441,7 +454,7 @@ Main.add(function () {
               <th>{{mb_label object=$compte_rendu field=footer_id}}</th>
               <td>
                 <select name="footer_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.footer_id}}" {{if !$droit}}disabled="disabled"{{/if}} style="width: 15em;">
-                  <option value="">&mdash; {{tr}}CCompteRendu-set-footer{{/tr}}</option>
+                  <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
                   {{foreach from=$footers item=footersByOwner key=owner}}
                   <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
                     {{foreach from=$footersByOwner item=_footer}}
@@ -461,7 +474,7 @@ Main.add(function () {
           <th>{{mb_label object=$compte_rendu field="object_class"}}</th>
           <td>
             <select name="object_class" class="{{$compte_rendu->_props.object_class}}" onchange="loadCategory(); reloadHeadersFooters();" style="width: 15em;">
-              <option value="">&mdash; {{tr}}CCompteRendu-set-object{{/tr}}</option>
+              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
             </select>
           </td>
         </tr>
@@ -470,7 +483,7 @@ Main.add(function () {
           <th>{{mb_label object=$compte_rendu field="file_category_id"}}</th>
           <td>
             <select name="file_category_id" class="{{$compte_rendu->_props.file_category_id}}" style="width: 15em;">
-              <option value="">&mdash; {{tr}}CCompteRendu-no-category{{/tr}}</option>
+              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
             </select>
           </td>
         </tr>
@@ -479,10 +492,19 @@ Main.add(function () {
           <th>{{mb_label object=$compte_rendu field="purge_field"}}</th>
           <td>{{mb_field object=$compte_rendu field="purge_field"}}</td>
         </tr>
-        
+      </table>
+      
         {{if $compte_rendu->_id}}
-        
-          <tbody id="layout">
+        <table class="form" id="layout" style="display: none;">
+          <tr class="notice">
+            <td>
+              <div class="small-info">
+                Ce modèle n'est pas un corps de texte.
+              </div>
+            </td>
+          </tr>
+          
+          <tbody class="fields">
             {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
             <tr>
               <th class="category" colspan="2">
@@ -506,6 +528,7 @@ Main.add(function () {
               {{/if}}
               </td>
             </tr>
+            
             <tr id="layout_header_footer" style="display: none;">
               <th>{{tr}}CCompteRendu-preview-header-footer{{/tr}}</th>
               <td>
@@ -521,8 +544,12 @@ Main.add(function () {
               </td>
             </tr>
           </tbody>
+        </table>
         {{/if}}
 
+        <hr />
+		<table class="form">
+		
         <tr>
           {{if $droit}}
             <td class="button" colspan="2">
@@ -556,7 +583,7 @@ Main.add(function () {
       </table>
     </td>
     
-    <td class="greedyPane" style="height: 500px; max-width: 600px !important;">
+    <td style="height: 500px; max-width: 600px !important;">
       {{if $compte_rendu->_id}}
         {{if !$droit}}
           <div class="big-info">

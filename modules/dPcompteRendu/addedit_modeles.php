@@ -40,6 +40,7 @@ if (!$prat_id) {
 $compte_rendu = new CCompteRendu();
 $compte_rendu->load($compte_rendu_id);
 $compte_rendu->loadContent();
+$compte_rendu->loadRefsNotes();
 
 if (!$compte_rendu->_id) {
   $compte_rendu->valueDefaults();
