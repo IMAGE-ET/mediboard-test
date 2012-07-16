@@ -29,6 +29,8 @@ class CExClass extends CMbObject {
   var $_host_class_fields = null;
   var $_host_class_options = null;
   var $_available_native_views = null;
+  var $_dont_create_default_group = null;
+  var $_duplicate = null;
   
   private $_latest_ex_object_cache = array();
   
@@ -57,7 +59,7 @@ class CExClass extends CMbObject {
     $classes = self::$_extendable_classes;
     $specs = array();
     
-    foreach($classes as $_class) {
+    foreach ($classes as $_class) {
       if (!class_exists($_class)) {
         continue;
       }
@@ -147,8 +149,8 @@ class CExClass extends CMbObject {
     $options = $this->getHostClassOptions();
     $available_views = array();
     
-    foreach(self::$_native_views as $_name => $_class) {
-      foreach($levels as $_level) {
+    foreach (self::$_native_views as $_name => $_class) {
+      foreach ($levels as $_level) {
         if ($_level == "host") {
           $ref_class = $this->host_class;
         }
@@ -187,7 +189,9 @@ class CExClass extends CMbObject {
   }
   
   function getHostClassOptions(){
-    if (!$this->host_class || !$this->event || $this->event === "void") return;
+    if (!$this->host_class || !$this->event || $this->event === "void") {
+      return;
+    }
     
     $object = new $this->host_class;
     return $this->_host_class_options = $object->_spec->events[$this->event];
@@ -206,7 +210,7 @@ class CExClass extends CMbObject {
     $_table  = $this->getTableName();
     $where   = array();
     
-    foreach($_fields as $_field) {
+    foreach ($_fields as $_field) {
       if (!isset($search[$_field->concept_id])) {
         continue;
       }
@@ -214,7 +218,7 @@ class CExClass extends CMbObject {
       $_ds    = $_field->_spec->ds;
       $_col   = "$_table.$_field->name";
       
-      foreach($search[$_field->concept_id] as $_i => $_val) {
+      foreach ($search[$_field->concept_id] as $_i => $_val) {
         $_val_a = $_val['a'];
         $_comp  = $_val['comp'];
         
@@ -352,7 +356,7 @@ class CExClass extends CMbObject {
     $parts = explode(".", $path);
     
     $reference = $object;
-    foreach($parts as $_fwd) {
+    foreach ($parts as $_fwd) {
       $reference = $reference->loadFwdRef($_fwd);
     }
     
@@ -423,7 +427,7 @@ class CExClass extends CMbObject {
   function loadRefsAllFields($cache = false){
     $groups = $this->loadRefsGroups();
     $fields = array();
-    foreach($groups as $_group) {
+    foreach ($groups as $_group) {
       $_fields = $_group->loadRefsFields($cache);
       $fields = array_merge($_fields, $fields);
     }
@@ -450,7 +454,7 @@ class CExClass extends CMbObject {
       }
       
       $groups = $this->loadRefsGroups();
-      foreach($groups as $_group) {
+      foreach ($groups as $_group) {
         if ($_group->countBackRefs("host_fields")) {
           $old_class = $this->_old->host_class;
           return "Impossible de changer le type d'objet hôte de ce formulaire car il comporte
@@ -468,8 +472,10 @@ class CExClass extends CMbObject {
       return true;
     }
     
-    foreach($constraints as $_constraint) {
-      if ($_constraint->checkConstraint($object)) return true;
+    foreach ($constraints as $_constraint) {
+      if ($_constraint->checkConstraint($object)) {
+        return true;
+      }
     }
     
     return false;
@@ -486,7 +492,7 @@ class CExClass extends CMbObject {
     
     $this->_host_class_fields = self::getHostObjectSpecs($object);
     
-    foreach($this->_host_class_fields as $_field => $_spec) {
+    foreach ($this->_host_class_fields as $_field => $_spec) {
       if ($_field == $object->_spec->key) {
         unset($this->_host_class_fields[$_field]);
         continue;
@@ -515,7 +521,7 @@ class CExClass extends CMbObject {
           // boucle sur les classes du enum
           $classes = $this->_host_class_fields[$_spec->meta]->_list;
           
-          foreach($classes as $_class) {
+          foreach ($classes as $_class) {
             $_key = "$_field.$_class";
             
             $_target = new $_class;
@@ -523,8 +529,10 @@ class CExClass extends CMbObject {
             $this->_host_class_fields[$_key] = new CRefSpec($this->host_class, $_field, "ref class|$_class");
             $this->_host_class_fields[$_key]->_subspecs = array();
             
-            foreach($_target->_specs as $_subfield => $_subspec) {
-              if (!$_subfield || $_subfield === $_target->_spec->key) continue;
+            foreach ($_target->_specs as $_subfield => $_subspec) {
+              if (!$_subfield || $_subfield === $_target->_spec->key) {
+                continue;
+              }
               
               if ($_subfield[0] === "_" || // form field
                   !($_subspec->show === null || $_subspec->show == 1) || // not shown
@@ -544,12 +552,16 @@ class CExClass extends CMbObject {
           $this->_host_class_fields[$_key]->_subspecs = array();
           
           $_class = $_spec->class;
-          if (!$_class) continue;
+          if (!$_class) {
+            continue;
+          }
           
           $_target = new $_class;
           
-          foreach($_target->_specs as $_subfield => $_subspec) {
-            if (!$_subfield || $_subfield === $_target->_spec->key) continue;
+          foreach ($_target->_specs as $_subfield => $_subspec) {
+            if (!$_subfield || $_subfield === $_target->_spec->key) {
+              continue;
+            }
             
             if ($_subfield[0] === "_" || // form field
                 !($_subspec->show === null || $_subspec->show == 1) || // not shown
@@ -571,7 +583,7 @@ class CExClass extends CMbObject {
     $this->getAvailableFields();
     
     $list = array();
-    foreach($this->_host_class_fields as $_field => $_spec) {
+    foreach ($this->_host_class_fields as $_field => $_spec) {
       $element = array(
         "prop"  => $_spec,
         "title" => null,
@@ -668,7 +680,7 @@ class CExClass extends CMbObject {
     $ex_object->setObject($object);
     $list = $ex_object->loadMatchingList();
     
-    foreach($list as $_object) {
+    foreach ($list as $_object) {
       $_object->_ex_class_id = $this->_id;
       $_object->setExClass();
     }
@@ -677,7 +689,7 @@ class CExClass extends CMbObject {
   }
   
   function canCreateNew(CMbObject $host) {
-    switch($this->unicity) {
+    switch ($this->unicity) {
       default:
       case "no":
         return true;
@@ -711,7 +723,7 @@ class CExClass extends CMbObject {
       "CMbObject" => array(),
     );
     
-    foreach($list_ex_class as $_ex_class) {
+    foreach ($list_ex_class as $_ex_class) {
       $host_class = $_ex_class->host_class;
       $event = $_ex_class->event;
       
@@ -763,7 +775,7 @@ class CExClass extends CMbObject {
     
     $ex_classes = $ex_class->loadList($where);
     
-    foreach($ex_classes as $_id => $_ex_class) {
+    foreach ($ex_classes as $_id => $_ex_class) {
       if (isset($exclude_ex_class_ids[$_id]) || !$_ex_class->checkConstraints($object)) {
         unset($ex_classes[$_id]);
       }
@@ -778,7 +790,7 @@ class CExClass extends CMbObject {
   static function getFormsStruct($ex_classes) {
     $forms = array();
     
-    foreach($ex_classes as $_ex_class) {
+    foreach ($ex_classes as $_ex_class) {
       // We may have more than one form per exclass
       $forms[] = array(
         "ex_class_id" => $_ex_class->_id,
@@ -791,7 +803,9 @@ class CExClass extends CMbObject {
   }
   
   static function getJStrigger($ex_classes) {
-    if (count($ex_classes) == 0) return "";
+    if (count($ex_classes) == 0) {
+      return "";
+    }
     
     $forms = self::getFormsStruct($ex_classes);
     
@@ -819,7 +833,7 @@ class CExClass extends CMbObject {
     $big_out_of_grid = array();
     $groups = $this->loadRefsGroups(true);
     
-    foreach($groups as $_ex_group) {
+    foreach ($groups as $_ex_group) {
       $grid = array_fill(0, $h, array_fill(0, $w, array(
         "type" => null, 
         "object" => null,
@@ -839,7 +853,7 @@ class CExClass extends CMbObject {
       
       $_ex_group->loadRefsFields();
       
-      foreach($_ex_group->_ref_fields as $_ex_field) {
+      foreach ($_ex_group->_ref_fields as $_ex_field) {
         $_ex_field->getSpecObject();
         
         $label_x = $_ex_field->coord_label_x;
@@ -867,7 +881,7 @@ class CExClass extends CMbObject {
     
       // Host fields
       $_ex_group->loadRefsHostFields();
-      foreach($_ex_group->_ref_host_fields as $_host_field) {
+      foreach ($_ex_group->_ref_host_fields as $_host_field) {
         $label_x = $_host_field->coord_label_x;
         $label_y = $_host_field->coord_label_y;
         
@@ -887,7 +901,7 @@ class CExClass extends CMbObject {
     
       // Messages
       $_ex_group->loadRefsMessages();
-      foreach($_ex_group->_ref_messages as $_message) {
+      foreach ($_ex_group->_ref_messages as $_message) {
         $title_x = $_message->coord_title_x;
         $title_y = $_message->coord_title_y;
         
@@ -914,11 +928,11 @@ class CExClass extends CMbObject {
       if ($reduce) {
         $max_filled = 0;
         
-        foreach($grid as $_y => $_line) {
+        foreach ($grid as $_y => $_line) {
           $n_filled = 0;
           $x_filled = 0;
           
-          foreach($_line as $_x => $_cell) {
+          foreach ($_line as $_x => $_cell) {
             if ($_cell !== array("type" => null, "object" => null)) {
               $n_filled++;
               $x_filled = max($_x, $x_filled);
@@ -931,7 +945,7 @@ class CExClass extends CMbObject {
         }
         
         if (empty($out_of_grid)) {
-          foreach($grid as $_y => $_line) {
+          foreach ($grid as $_y => $_line) {
             $grid[$_y] = array_slice($_line, 0, $max_filled+1);
           }
         }
@@ -950,7 +964,14 @@ class CExClass extends CMbObject {
   }
   
   function store(){
-    if ($msg = $this->check()) return $msg;
+    if ($this->_id && $this->_duplicate) {
+      $this->_duplicate = null;
+      return $this->duplicate();      
+    }
+    
+    if ($msg = $this->check()) {
+      return $msg;
+    }
     
     $is_new = !$this->_id;
     
@@ -960,10 +981,12 @@ class CExClass extends CMbObject {
       }
       
       // Groupe par défaut
-      $ex_group = new CExClassFieldGroup;
-      $ex_group->name = "Groupe général";
-      $ex_group->ex_class_id = $this->_id;
-      $ex_group->store();
+      if (!$this->_dont_create_default_group) {
+        $ex_group = new CExClassFieldGroup;
+        $ex_group->name = "Groupe général";
+        $ex_group->ex_class_id = $this->_id;
+        $ex_group->store();
+      }
       
       $table_name = $this->getTableName();
       $query = "CREATE TABLE `$table_name` (
@@ -1001,11 +1024,13 @@ class CExClass extends CMbObject {
   }
   
   function delete(){
-    if ($msg = $this->canDeleteEx()) return $msg;
+    if ($msg = $this->canDeleteEx()) {
+      return $msg;
+    }
     
     // suppression des objets des champs sans supprimer les colonnes de la table
     $fields = $this->loadRefsAllFields();
-    foreach($fields as $_field) {
+    foreach ($fields as $_field) {
       $_field->_dont_drop_column = true;
       $_field->delete();
     }
@@ -1019,5 +1044,110 @@ class CExClass extends CMbObject {
     }
     
     return parent::delete();
+  }
+  
+  /**
+   * - field_groups
+   *   - class_fields
+   *     - enum_translations
+   *     - field_translations
+   *     - list_items
+   *     - ex_triggers
+   *     - (predicates)
+   * 
+   *   - host_fields
+   *   - class_messages
+   * 
+   * - constraints
+   * - ex_triggers
+   */
+  function duplicate(){
+    if (!$this->_id) {
+      return;
+    }
+    
+    // Load all field values
+    $this->load();
+    
+    $new = new self;
+    $new->cloneFrom($this);
+    
+    $new->name .= " (Copie)";
+    $new->disabled = 1;
+    $new->_dont_create_default_group = true;
+    
+    if ($msg = $new->store()) {
+      return $msg;
+    }
+    
+    // field_groups
+    foreach ($this->loadRefsGroups() as $_group) {
+      /**
+       * @var CExClassFieldGroup
+       */
+      $_group;
+      
+      if ($msg = $this->duplicateObject($_group, "ex_class_id", $new->_id, $_new_group)) {
+        continue;
+      }
+      
+      $fwd_field = "ex_group_id";
+      $fwd_value = $_new_group->_id;
+      
+      // class_fields
+      foreach ($_group->loadRefsFields() as $_field) {
+        /**
+         * @var CExClassField
+         */
+        $_field;
+        
+        if ($msg = $this->duplicateObject($_field, "ex_group_id", $_new_group->_id, $_new_field)) {
+          continue;
+        }
+        
+        $_fwd_field = "ex_class_field_id";
+        $_fwd_value = $_new_field->_id;
+        
+        // enum_translations
+        $this->duplicateBackRefs($_field, "enum_translations", $_fwd_field, $_fwd_value);
+        
+        // list_items
+        $this->duplicateBackRefs($_field, "list_items", "field_id", $_fwd_value);
+        
+        // ex_triggers
+        $this->duplicateBackRefs($_field, "ex_triggers", $_fwd_field, $_fwd_value);
+        
+        // predicates
+        //$this->duplicateBackRefs($_field, "predicates", $_fwd_field, $_fwd_value);
+      }
+      
+      // host_fields
+      $this->duplicateBackRefs($_group, "host_fields", $fwd_field, $fwd_value);
+      
+      // class_messages
+      $this->duplicateBackRefs($_group, "class_messages", $fwd_field, $fwd_value);
+    }
+    
+    // constraints
+    $this->duplicateBackRefs($this, "constraints", "ex_class_id", $new->_id);
+    
+    // ex_triggers
+    $this->duplicateBackRefs($this, "ex_triggers", "ex_class_triggered_id", $new->_id);
+  }
+
+  private function duplicateObject(CMbObject $object, $fwd_field, $fwd_value, &$new = null) {
+    $class = $object->_class;
+    
+    $new = new $class;
+    $new->cloneFrom($object);
+    $new->$fwd_field = $fwd_value;
+    
+    return $new->store();
+  }
+  
+  private function duplicateBackRefs(CMbObject $object, $backname, $fwd_field, $fwd_value) {
+    foreach ($object->loadBackRefs($backname) as $_back) {
+      $this->duplicateObject($_back, $fwd_field, $fwd_value);
+    }
   }
 }

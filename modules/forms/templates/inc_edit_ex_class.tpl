@@ -29,6 +29,7 @@ Main.add(function(){
         <input type="hidden" name="m" value="system" />
         <input type="hidden" name="dosql" value="do_ex_class_aed" />
         <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="_duplicate" value="" />
         <input type="hidden" name="callback" value="ExClass.editCallback" />
         {{mb_key object=$ex_class}}
         
@@ -110,6 +111,8 @@ Main.add(function(){
                 {{/if}}
                 
                 <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
+                <button type="button" class="hslip" onclick="if (confirm('Confirmez-vous la duplication de ce formulaire ?')) { $V(this.form._duplicate, 1); this.form.onsubmit(); }">{{tr}}Duplicate{{/tr}}</button>
+                
                 <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'{{tr}}CExClass.one{{/tr}}',objName:'{{$ex_class->_view|smarty:nodefaults|JSAttribute}}'})">
                   {{tr}}Delete{{/tr}}
                 </button>
