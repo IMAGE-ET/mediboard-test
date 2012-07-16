@@ -99,7 +99,7 @@
                 {{foreach from=$item_categories_list item=_cat_list key=_target}}
                   <optgroup label="{{tr}}CDailyCheckItemCategory.target_class.{{$_target}}{{/tr}}">
                     {{foreach from=$_cat_list item=_cat}}
-                      <option value="{{$_cat->_id}}">{{$_cat->title}}</option>
+                      <option value="{{$_cat->_id}}" {{if $_cat->_id == $item_type->category_id}} selected="selected" {{/if}}>{{$_cat->title}}</option>
                     {{/foreach}}
                   </optgroup>
                 {{/foreach}}

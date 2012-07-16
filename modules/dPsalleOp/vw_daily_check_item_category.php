@@ -16,11 +16,13 @@ $item_category_id = CValue::getOrSession('item_category_id');
 $item_category = new CDailyCheckItemCategory;
 $item_category->load($item_category_id);
 
-unset($item_category->_specs["target_class"]->_list["COperation"]);
-unset($item_category->_specs["target_class"]->_locales["COperation"]);
+foreach(CDailyCheckList::$_HAS_classes as $_class) {
+  unset($item_category->_specs["target_class"]->_list[$_class]);
+  unset($item_category->_specs["target_class"]->_locales[$_class]);
+}
 
 $where = array(
-  "target_class" => "!= 'COperation'"
+  "target_class" => "NOT ".$item_category->_spec->ds->prepareIn(CDailyCheckList::$_HAS_classes),
 );
 $item_categories_list = $item_category->loadList($where, 'target_class, type, title');
 

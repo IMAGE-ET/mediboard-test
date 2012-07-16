@@ -169,6 +169,7 @@ $locales['CDailyCheckItemCategory.one'] = 'catégorie';
 $locales['CDailyCheckItemCategory.target_class.CBlocOperatoire'] = 'Salle de réveil (Bloc)';
 $locales['CDailyCheckItemCategory.target_class.COperation'] = 'Intervention';
 $locales['CDailyCheckItemCategory.target_class.CSalle'] = 'Salle opératoire';
+$locales['CDailyCheckItemCategory.target_class.CPoseDispositifVasculaire'] = 'Pose dispositif vasculaire';
 $locales['CDailyCheckItemCategory.type.'] = ' ';
 $locales['CDailyCheckItemCategory.type.disp_vasc_apres'] = 'Après la mise en place';
 $locales['CDailyCheckItemCategory.type.disp_vasc_avant'] = 'Avant la mise en place';

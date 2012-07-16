@@ -15,14 +15,17 @@ $item_type_id = CValue::getOrSession('item_type_id');
 
 $item_type = new CDailyCheckItemType;
 if (!$item_type->load($item_type_id)) {
-	$item_type->index = 1;
+  $item_type->index = 1;
 }
 
 $item_category = new CDailyCheckItemCategory;
 $item_categories_list = array();
 
 $target_class_list = $item_category->_specs["target_class"]->_list;
-CMbArray::removeValue("COperation", $target_class_list);
+
+foreach(CDailyCheckList::$_HAS_classes as $_class) {
+  CMbArray::removeValue($_class, $target_class_list);
+}
 
 foreach($target_class_list as $_target) {
   $item_category->target_class = $_target;
