@@ -1,11 +1,12 @@
-<?php /* $Id: mysqlDataSource.class.php 12478 2011-06-20 08:10:44Z lryo $ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision: 12478 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CPDOMySQLDataSource extends CPDODataSource {

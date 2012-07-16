@@ -1,11 +1,12 @@
-<?php /* $Id: mbArray.class.php 10776 2010-12-02 14:22:08Z MyttO $ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision: 10776 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 /**
@@ -34,36 +35,36 @@ abstract class CMbRange {
     return ($lower !== null && $upper !== null);
   }
 
-	/**
-	 * Tell whether given value is in range (permissive)
-	 * @param object $value The value to check
-	 * @param object $lower The lower bound
-	 * @param object $upper The upper bound
-	 * @return boolean 
-	 */
-	static function in($value, $lower, $upper) {
-	  return 
-		  ($value <= $upper || $upper === null) && 
-			($value >= $lower || $lower === null);
-	}
-	
-	/**
-	 * Tell whether two ranges collide (permissive)
-	 * @param object $lower1
-	 * @param object $upper1
-	 * @param object $lower2
-	 * @param object $upper2
-	 * @param boolean permissive
-	 * @return boolean
-	 */
-	static function collides($lower1, $upper1, $lower2, $upper2, $permissive = true) {
-		return 
-		  $permissive ?
+  /**
+   * Tell whether given value is in range (permissive)
+   * @param object $value The value to check
+   * @param object $lower The lower bound
+   * @param object $upper The upper bound
+   * @return boolean 
+   */
+  static function in($value, $lower, $upper) {
+    return 
+      ($value <= $upper || $upper === null) && 
+      ($value >= $lower || $lower === null);
+  }
+  
+  /**
+   * Tell whether two ranges collide (permissive)
+   * @param object $lower1
+   * @param object $upper1
+   * @param object $lower2
+   * @param object $upper2
+   * @param boolean permissive
+   * @return boolean
+   */
+  static function collides($lower1, $upper1, $lower2, $upper2, $permissive = true) {
+    return 
+      $permissive ?
         ($lower1 < $upper2 || $lower1 === null || $upper2 === null) && 
-	    ($upper1 > $lower2 || $upper1 === null || $lower2 === null) :
+      ($upper1 > $lower2 || $upper1 === null || $lower2 === null) :
         ($lower1 <= $upper2 || $lower1 === null || $upper2 === null) && 
         ($upper1 >= $lower2 || $upper1 === null || $lower2 === null);
-	}
+  }
 
   /**
    * Get the intersection of two ranges (permissive)
@@ -78,9 +79,9 @@ abstract class CMbRange {
     return array (
       ($lower1 !== null && $lower2 !== null ) ? max($lower1, $lower2) : null,
       ($upper1 !== null && $upper2 !== null ) ? min($upper1, $upper2) : null,
-		);
+    );
   }
-	
+  
   /**
    * Tell whether range1 is inside range2 (permissive)
    * @param object $lower1
@@ -90,10 +91,10 @@ abstract class CMbRange {
    * @return boolean
    */
   static function inside($lower1, $upper1, $lower2, $upper2) {
-  	list($lower, $upper) = self::intersection($lower1, $upper1, $lower2, $upper2);
-		return $lower == $lower1 && $upper = $upper1;
+    list($lower, $upper) = self::intersection($lower1, $upper1, $lower2, $upper2);
+    return $lower == $lower1 && $upper = $upper1;
   }
-	
+  
   /**
    * Crop a range with another, resulting in 0 to 2 range fragments
    * Limitation: cropper has to be finite
@@ -105,16 +106,16 @@ abstract class CMbRange {
    */
   static function crop($lower1, $upper1, $lower2, $upper2) {
     if (!self::finite($lower2, $upper2)) {
-    	return false;
-		}
-		
+      return false;
+    }
+    
     $fragments = array();
 
     // No collision: cropped intact
-		if (!self::collides($lower1, $upper1, $lower2, $upper2)) {
+    if (!self::collides($lower1, $upper1, $lower2, $upper2)) {
       $fragments[] = array($lower1, $upper1);
       return $fragments;
-		}
+    }
 
 
     // Right fragment
@@ -146,20 +147,20 @@ abstract class CMbRange {
     $fragments = array(array($lower, $upper));
 
     foreach ($croppers as $_cropper) {
-			$new_fragments = array();
-    	foreach ($fragments as $key => $_fragment) {
-				$new_fragments = array_merge($new_fragments, self::crop($_fragment[0],$_fragment[1], $_cropper[0], $_cropper[1]));
-    	}
-			$fragments = $new_fragments;
+      $new_fragments = array();
+      foreach ($fragments as $key => $_fragment) {
+        $new_fragments = array_merge($new_fragments, self::crop($_fragment[0],$_fragment[1], $_cropper[0], $_cropper[1]));
+      }
+      $fragments = $new_fragments;
     }
 
     return $fragments;
   }
   
   static function forceInside($lower, $upper, $value) {
-  	$value = max($value, $lower);
-  	$value = min($value, $upper);
-  	return $value;
+    $value = max($value, $lower);
+    $value = min($value, $upper);
+    return $value;
   }
   
   /**

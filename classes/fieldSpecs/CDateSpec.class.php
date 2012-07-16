@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CDateSpec extends CMbFieldSpec {
@@ -26,7 +27,10 @@ class CDateSpec extends CMbFieldSpec {
   }
   
   function getValue($object, $smarty = null, $params = array()) {
-    if ($smarty) require_once $smarty->_get_plugin_filepath('modifier', 'date_format');
+    if ($smarty) {
+      include_once $smarty->_get_plugin_filepath('modifier', 'date_format');
+    }
+    
     $propValue = $object->{$this->fieldName};
     $format = CValue::first(@$params["format"], CAppUI::conf("date"));
     return ($propValue && $propValue != "0000-00-00") ? 
@@ -45,8 +49,8 @@ class CDateSpec extends CMbFieldSpec {
     
     // Vérification du format
     $matches = array();
-    if (!preg_match ("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})$/", $propValue, $matches)) {
-      if($propValue === 'current'|| $propValue ===  'now') {
+    if (!preg_match("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})$/", $propValue, $matches)) {
+      if ($propValue === 'current'|| $propValue ===  'now') {
         $propValue = mbDate();
         return null;
       } 
@@ -68,15 +72,15 @@ class CDateSpec extends CMbFieldSpec {
   
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
-    $object->{$this->fieldName} = 
-		  sprintf("19%02d-%02d-%02d", self::randomString(CMbFieldSpec::$nums, 2),
-			                            self::randomString(CMbFieldSpec::$months, 1),
-																	self::randomString(CMbFieldSpec::$days, 1));
+    $object->{$this->fieldName} = sprintf(
+      "19%02d-%02d-%02d", 
+      self::randomString(CMbFieldSpec::$nums, 2),
+      self::randomString(CMbFieldSpec::$months, 1),
+      self::randomString(CMbFieldSpec::$days, 1)
+    );
   }
   
   function getFormHtmlElement($object, $params, $value, $className) {
     return $this->getFormElementDateTime($object, $params, $value, $className, CAppUI::conf("date"));
   }
 }
-
-?>

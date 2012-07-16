@@ -1,11 +1,12 @@
-<?php /* $Id:$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision: 10311 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CMbException extends Exception {  
@@ -20,12 +21,8 @@ class CMbException extends Exception {
     $args = func_get_args();
     $msg = CAppUI::tr($this->getMessage(), array_slice($args, 1));
     
-  	CAppUI::$localize = false;
+    CAppUI::$localize = false;
     CAppUI::stepAjax($msg, $type); 
     CAppUI::$localize = true;
   }
 }
-
-
-
-?>

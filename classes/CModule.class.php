@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 if(!defined("TAB_READ")) {
@@ -80,6 +81,7 @@ class CModule extends CMbObject {
       if (!$object->_ref_module) {
         continue;
       }
+      
       if ($object->_ref_module->mod_name == $module) {
         $tabClass[] = $object->_class;
       }
@@ -174,7 +176,7 @@ class CModule extends CMbObject {
   }
   
   function canDo(){
-    if(!$this->_can) {
+    if (!$this->_can) {
       $canDo = new CCanDo;
       $canDo->read  = $this->canRead();
       $canDo->edit  = $this->canEdit();
@@ -205,13 +207,13 @@ class CModule extends CMbObject {
     foreach ($modules as &$module) {
       $module->checkModuleFiles();
       self::$installed[$module->mod_name] =& $module;
-      if($module->mod_active == 1) {
+      if ($module->mod_active == 1) {
         self::$active[$module->mod_name] =& $module;  
       } 
-      if($module->mod_ui_active == 1) {
+      if ($module->mod_ui_active == 1) {
         self::$visible[$module->mod_name] =& $module;
       }
-      if($module->_files_missing) {
+      if ($module->_files_missing) {
         self::$absent[$module->mod_name] =& $module;
       }
     }
@@ -220,17 +222,17 @@ class CModule extends CMbObject {
   function registerTab($file, $permType) {
     switch($permType) {
       case TAB_READ:
-        if($this->canRead()) {
+        if ($this->canRead()) {
           $this->_tabs[] = $file;
         }
         break;
       case TAB_EDIT:
-        if($this->canEdit()) {
+        if ($this->canEdit()) {
           $this->_tabs[] = $file;
         }
         break;
       case TAB_ADMIN:
-        if($this->canAdmin()) {
+        if ($this->canAdmin()) {
           $this->_tabs[] = $file;
         }
         break;
@@ -379,7 +381,7 @@ class CModule extends CMbObject {
     $sql = "SELECT * FROM modules ORDER BY mod_ui_order";
     $result = $this->_spec->ds->exec($sql);
     $i = 1;
-    while($row = $this->_spec->ds->fetchArray($result)) {
+    while ($row = $this->_spec->ds->fetchArray($result)) {
       $sql = "UPDATE modules SET mod_ui_order = '$i' WHERE mod_id = '".$row["mod_id"]."'";
       $this->_spec->ds->exec($sql);
       $i++;
@@ -403,7 +405,8 @@ class CModule extends CMbObject {
     $sql = "DELETE FROM modules WHERE mod_id = $this->mod_id";
     if (!$this->_spec->ds->exec( $sql )) {
       return $this->_spec->ds->error();
-    } else {
+    }
+    else {
       $this->reorder();
       $sql = "DELETE FROM perm_module WHERE mod_id = $this->mod_id";
       $this->_spec->ds->exec( $sql );
@@ -413,11 +416,12 @@ class CModule extends CMbObject {
 
   function move($dirn) {
     $temp = $this->mod_ui_order;
-    if($dirn == "moveup") {
+    if ($dirn == "moveup") {
       $temp--;
       $sql = "UPDATE modules SET mod_ui_order = (mod_ui_order+1) WHERE mod_ui_order = $temp";
       $this->_spec->ds->exec($sql);
-    } else if($dirn == "movedn") {
+    }
+    else if ($dirn == "movedn") {
       $temp++;
       $sql = "UPDATE modules SET mod_ui_order = (mod_ui_order-1) WHERE mod_ui_order = $temp";
       $this->_spec->ds->exec($sql);

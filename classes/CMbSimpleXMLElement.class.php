@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 if (!class_exists("SimpleXMLElement", false)) {
@@ -13,23 +14,23 @@ if (!class_exists("SimpleXMLElement", false)) {
 }
 
 class CMbSimpleXMLElement extends SimpleXMLElement {
-	function getValidPatterns(){
-		return array("*");
-	}
-	
-	function getXpath($prefix = "") {
-		$tokens = array();
-		
-		foreach($this->getValidPatterns() as $patt) {
-			$tokens[] = "$prefix$patt";
-		}
-		
-		return implode(" | ", $tokens);
-	}
-	
-	/**
-	 * @return CMbSimpleXMLElement
-	 */
+  function getValidPatterns(){
+    return array("*");
+  }
+  
+  function getXpath($prefix = "") {
+    $tokens = array();
+    
+    foreach($this->getValidPatterns() as $patt) {
+      $tokens[] = "$prefix$patt";
+    }
+    
+    return implode(" | ", $tokens);
+  }
+  
+  /**
+   * @return CMbSimpleXMLElement
+   */
   function getParent(){
     return current($this->xpath($this->getXpath("parent::")));
   }
@@ -58,13 +59,13 @@ class CMbSimpleXMLElement extends SimpleXMLElement {
   /**
    * @return CMbSimpleXMLElement
    */
-	function getNext(){
-		if ($next = $this->getNextSibling()) {
-			return $next;
-		}
-		
-		if ($parent = $this->getParent()) {
-			return $parent->getNext();
-		}
-	}
+  function getNext(){
+    if ($next = $this->getNextSibling()) {
+      return $next;
+    }
+    
+    if ($parent = $this->getParent()) {
+      return $parent->getNext();
+    }
+  }
 }

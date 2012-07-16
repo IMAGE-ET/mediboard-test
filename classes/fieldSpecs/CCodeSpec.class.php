@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CCodeSpec extends CMbFieldSpec {
@@ -25,18 +26,24 @@ class CCodeSpec extends CMbFieldSpec {
   function getDBSpec(){
     $type_sql = null;
     
-    if($this->ccam)
+    if ($this->ccam) {
       $type_sql = "VARCHAR(7)";
-    elseif($this->cim10)
+    }
+    elseif ($this->cim10) {
       $type_sql = "VARCHAR(5)";
-    elseif($this->adeli)
+    }
+    elseif ($this->adeli) {
       $type_sql = "VARCHAR(9)";
-    elseif($this->insee)
+    }
+    elseif ($this->insee) {
       $type_sql = "VARCHAR(15)";
-    elseif($this->rib)
+    }
+    elseif ($this->rib) {
       $type_sql = "VARCHAR(23)";
-    elseif($this->siret)
+    }
+    elseif ($this->siret) {
       $type_sql = "VARCHAR(14)";
+    }
 
     return $type_sql;
   }
@@ -57,17 +64,17 @@ class CCodeSpec extends CMbFieldSpec {
     $propValue = $object->{$this->fieldName};
        
     // ccam
-    if($this->ccam){
+    if ($this->ccam) {
       //^[A-Z]{4}[0-9]{3}(-[0-9](-[0-9])?)?$
       // ancienne expression reguliere ([a-z0-9]){0,7}
-      if (!preg_match ("/^[A-Z]{4}[0-9]{3}(-[0-9](-[0-9])?)?$/i", $propValue)) {
+      if (!preg_match("/^[A-Z]{4}[0-9]{3}(-[0-9](-[0-9])?)?$/i", $propValue)) {
         return "Code CCAM incorrect";
       }
     }
     
     // cim10
     elseif ($this->cim10) {
-      if (!preg_match ("/^[a-z][0-9x]{2,4}$/i", $propValue)) {
+      if (!preg_match("/^[a-z][0-9x]{2,4}$/i", $propValue)) {
 //        $codeCim = new CCodeCIM10($propValue);
 //        if ($codeCim->loadLite()) {
 //          return "Code CIM inconnu";
@@ -78,14 +85,14 @@ class CCodeSpec extends CMbFieldSpec {
     }
     
     // adeli
-    elseif($this->adeli) {
-      if (!preg_match ("/^([0-9]){9}$/i", $propValue)) {
+    elseif ($this->adeli) {
+      if (!preg_match("/^([0-9]){9}$/i", $propValue)) {
         return "Code Adeli incorrect, doit contenir exactement 9 chiffres";
       }
     }
 
     // RIB
-    elseif($this->rib) {
+    elseif ($this->rib) {
       $compte_banque  = substr($propValue, 0, 5);
       $compte_guichet = substr($propValue, 5, 5);
       $compte_numero  = substr($propValue, 10, 11);
@@ -104,7 +111,7 @@ class CCodeSpec extends CMbFieldSpec {
         }
       }
       $int = $compte_banque . $compte_guichet . $tabcompte . $compte_cle;
-      if (!((strlen($int) >= 21) && (bcmod($int, 97) == 0))){
+      if (!((strlen($int) >= 21) && (bcmod($int, 97) == 0))) {
         return "Rib incorrect";
       }
     }
@@ -112,12 +119,12 @@ class CCodeSpec extends CMbFieldSpec {
     // INSEE
     elseif($this->insee){
       
-      if (preg_match ("/^([0-9]{7,8}[A-Z])$/i", $propValue)) {
+      if (preg_match("/^([0-9]{7,8}[A-Z])$/i", $propValue)) {
         return;
       }
       
       $matches = null;
-      if (!preg_match ("/^([12478][0-9]{2}[0-9]{2}[0-9][0-9ab][0-9]{3}[0-9]{3})([0-9]{2})$/i", $propValue, $matches)) {
+      if (!preg_match("/^([12478][0-9]{2}[0-9]{2}[0-9][0-9ab][0-9]{3}[0-9]{3})([0-9]{2})$/i", $propValue, $matches)) {
         return "Matricule incorrect";
       }
  
@@ -130,19 +137,18 @@ class CCodeSpec extends CMbFieldSpec {
     }
     
     // siret
-    elseif($this->siret) {
+    elseif ($this->siret) {
       if (!luhn($propValue)) {
         return "Code SIRET incorrect, doit contenir exactement 14 chiffres";
       }
     }
     
     // order_number
-    elseif($this->order_number) {
+    elseif ($this->order_number) {
       if (!preg_match('#\%id#', $propValue)) {
         return "Format de numéro de serie incorrect, doit contenir au moins une fois %id";
       }
     }
-    
     else {
       return "Spécification de code invalide";
     }
@@ -157,30 +163,33 @@ class CCodeSpec extends CMbFieldSpec {
     $propValue = &$object->{$this->fieldName};
     
     // ccam
-    if($this->ccam){
+    if ($this->ccam) {
       $propValue = "BFGA004";
+    }
     
     // cim10
-    }elseif($this->cim10){
+    elseif ($this->cim10) {
       $propValue = "H251";
-      
+    }
+    
     // adeli
-    }elseif($this->adeli){
+    elseif ($this->adeli) {
       $propValue = "123456789";
-
+    }
+    
     // rib
-    }elseif($this->rib){
+    elseif ($this->rib) {
       $propValue = "11111111111111111111111";
+    }
     
     // siret
-    }elseif($this->siret){
+    elseif ($this->siret) {
       $propValue = "73282932000074";
+    }
     
     // insee
-    }elseif($this->insee){
+    elseif ($this->insee) {
       $propValue = "100000000000047";
     }
   }
 }
-
-?>

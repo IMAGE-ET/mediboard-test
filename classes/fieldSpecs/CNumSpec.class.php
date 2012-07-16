@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CNumSpec extends CMbFieldSpec {
@@ -24,15 +25,18 @@ class CNumSpec extends CMbFieldSpec {
   function getDBSpec(){
     $type_sql = "INT(11)";
     
-    if($this->max !== null){
+    if ($this->max !== null) {
       $max = $this->max;
       $type_sql = "TINYINT(4)";
+      
       if ($max > pow(2,8)) {
         $type_sql = "MEDIUMINT(9)";
       }
+      
       if ($max > pow(2,16)) {
         $type_sql = "INT(11)";
       }
+      
       if ($max > pow(2,32)) {
         $type_sql = "BIGINT(20)";
       }
@@ -79,7 +83,7 @@ class CNumSpec extends CMbFieldSpec {
   function checkProperty($object){
     $propValue = CMbFieldSpec::checkNumeric($object->{$this->fieldName});
     
-    if ($propValue === null){
+    if ($propValue === null) {
       return "N'est pas une chaîne numérique";
     }
 
@@ -89,8 +93,8 @@ class CNumSpec extends CMbFieldSpec {
     }  
 
     // min
-    if ($this->min){
-      if(!$min = CMbFieldSpec::checkNumeric($this->min)){
+    if ($this->min) {
+      if (!$min = CMbFieldSpec::checkNumeric($this->min)) {
         trigger_error("Spécification de minimum numérique invalide (min = $this->min)", E_USER_WARNING);
         return "Erreur système";
       }
@@ -100,9 +104,9 @@ class CNumSpec extends CMbFieldSpec {
     }
     
     // max  
-    if($this->max){
+    if ($this->max) {
       $max = CMbFieldSpec::checkNumeric($this->max);
-      if($max === null){
+      if ($max === null) {
         trigger_error("Spécification de maximum numérique invalide (max = $this->max)", E_USER_WARNING);
         return "Erreur système";
       }      
@@ -112,8 +116,8 @@ class CNumSpec extends CMbFieldSpec {
     }
     
     // length  
-    if($this->length){
-      if(!$length = $this->checkLengthValue($this->length)){
+    if ($this->length) {
+      if (!$length = $this->checkLengthValue($this->length)) {
         trigger_error("Spécification de longueur invalide (longueur = $this->length)", E_USER_WARNING);
         return "Erreur système";
       }
@@ -123,8 +127,8 @@ class CNumSpec extends CMbFieldSpec {
     }
     
     // minLength
-    if($this->minLength){
-      if(!$length = $this->checkLengthValue($this->minLength)){
+    if ($this->minLength) {
+      if (!$length = $this->checkLengthValue($this->minLength)) {
         trigger_error("Spécification de longueur minimale invalide (longueur = $this->minLength)", E_USER_WARNING);
         return "Erreur système";
       }
@@ -134,8 +138,8 @@ class CNumSpec extends CMbFieldSpec {
     }
     
     // maxLength
-    if($this->maxLength){
-      if(!$length = $this->checkLengthValue($this->maxLength)){
+    if ($this->maxLength) {
+      if (!$length = $this->checkLengthValue($this->maxLength)) {
         trigger_error("Spécification de longueur maximale invalide (longueur = $this->maxLength)", E_USER_WARNING);
         return "Erreur système";
       }
@@ -149,16 +153,16 @@ class CNumSpec extends CMbFieldSpec {
     parent::sample($object, $consistent);
     $propValue =& $object->{$this->fieldName};
     
-    if($this->length) {
+    if ($this->length) {
       $propValue = self::randomString(CMbFieldSpec::$nums, $this->length);
     }
-    elseif($this->minLength) {
+    elseif ($this->minLength) {
       $propValue = self::randomString(CMbFieldSpec::$nums, max($this->minLength, $this->_defaultLength));
     }
-    elseif($this->maxLength) {
+    elseif ($this->maxLength) {
       $propValue = self::randomString(CMbFieldSpec::$nums, min($this->maxLength, $this->_defaultLength));
     }
-    elseif($this->max || $this->min) {
+    elseif ($this->max || $this->min) {
       $min = $this->min !== null ? $this->min : 0;
       $max = $this->max !== null ? $this->max : 999999;
       $propValue = rand($min, $max);
@@ -188,7 +192,9 @@ class CNumSpec extends CMbFieldSpec {
     }
     
     $new_value = CMbArray::extract($params, "value");
-    if ($new_value !== null) $value = $new_value;
+    if ($new_value !== null) {
+      $value = $new_value;
+    }
     
     $step = CMbFieldSpec::checkNumeric(CMbArray::extract($params, "step"));
     
@@ -214,11 +220,10 @@ class CNumSpec extends CMbFieldSpec {
         });
       });
     </script>';
-    } else {
+    }
+    else {
       $sHtml = $this->getFormElementText($object, $params, $value, $className);
     }
     return $sHtml;
   }
 }
-
-?>

@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CDateTimeSpec extends CMbFieldSpec {
@@ -19,7 +20,9 @@ class CDateTimeSpec extends CMbFieldSpec {
   }
   
   function getValue($object, $smarty = null, $params = array()) {
-    if ($smarty) require_once $smarty->_get_plugin_filepath('modifier','date_format');
+    if ($smarty) {
+      include_once $smarty->_get_plugin_filepath('modifier','date_format');
+    }
     
     $propValue = $object->{$this->fieldName};
     
@@ -31,7 +34,7 @@ class CDateTimeSpec extends CMbFieldSpec {
     
     $date = CMbArray::extract($params, "date");
     if ($date && mbDate($propValue) == $date) {
-    	$format = CAppUI::conf("time");
+      $format = CAppUI::conf("time");
     }
     
     return ($propValue && $propValue != "0000-00-00 00:00:00") ?
@@ -42,12 +45,12 @@ class CDateTimeSpec extends CMbFieldSpec {
   function checkProperty($object){
     $propValue = &$object->{$this->fieldName};
     
-    if (!preg_match ("/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}[ \+][0-9]{1,2}:[0-9]{1,2}(:[0-9]{1,2})?$/", $propValue)) {
-      if($propValue === 'current'|| $propValue ===  'now') {
+    if (!preg_match("/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}[ \+][0-9]{1,2}:[0-9]{1,2}(:[0-9]{1,2})?$/", $propValue)) {
+      if ($propValue === 'current'|| $propValue ===  'now') {
         $propValue = mbDateTime();
         return null;
       } 
-    	return "format de dateTime invalide : '$propValue'";
+      return "format de dateTime invalide : '$propValue'";
     }
     
     $propValue = strtr($propValue, "+", " ");
@@ -68,5 +71,3 @@ class CDateTimeSpec extends CMbFieldSpec {
     return $this->getFormElementDateTime($object, $params, $value, $className, CAppUI::conf("datetime"));
   }
 }
-
-?>

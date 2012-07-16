@@ -1,11 +1,12 @@
-<?php /* $Id: CMbXMLDocument.class.php 13439 2011-10-10 13:29:15Z flaviencrochard $ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision: 13439 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CMbObjectImport {
@@ -41,7 +42,7 @@ class CMbObjectImport {
   
   function getObjectGuidByFwdRef(CMbObject $object, $fwd) {
     // Primary key
-    if($fwd === "id" || $fwd === $object->_spec->key) return $object;
+    if ($fwd === "id" || $fwd === $object->_spec->key) return $object;
     
     $spec = $object->_specs[$fwd]; // We assume it's alway a CRefSpec
     

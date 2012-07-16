@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 define ("K_TCPDF_EXTERNAL_CONFIG", "config_externe");
@@ -59,54 +60,54 @@ class CMbPdf extends TCPDF {
   }
   
   public function WriteBarcodeGrid($x, $y, $width, $height, $col_num, $row_num, $data) {
-  	$cell_width = $width / $col_num;
-  	$cell_height = $height / $row_num;
-  	$i = 0;
+    $cell_width = $width / $col_num;
+    $cell_height = $height / $row_num;
+    $i = 0;
 
-  	$delta_x = 0;
-  	$delta_y = 0;
+    $delta_x = 0;
+    $delta_y = 0;
     $this->SetFontSize(7);
     $this->SetDrawColor(20, 20, 20);
     
     $barcode_height = 8;
     $barcode_width_ratio = 0.8;
     
-  	foreach ($data as $cell) {
-  		if ($i % $col_num == 0 && $i != 0) {
-  			$y += $cell_height;
-  			$delta_x = 0;
-  		}
-  		
-  		$line_height = ($cell_height - $barcode_height) / (count($cell));
-  		
-  	  $this->Rect($x + $delta_x, $y + $delta_y, $cell_width, $cell_height);
-  		foreach ($cell as $line) {
-  			// if it's a barcode
-  			if (is_array($line)) {
-  				// draw barcode
-  				$this->writeBarcode($x + $delta_x + ($cell_width*(1 - $barcode_width_ratio)/ 2), 
-  				                    $y + $delta_y, $cell_width*$barcode_width_ratio, 
-  				                    $barcode_height, $line['type'], false, false, 2, $line['barcode']);
-  				                    
-  				$delta_y += $barcode_height;
-  				
-  				$this->writeHTMLCell(0, $line_height, $x + $delta_x + ($cell_width*(1 - $barcode_width_ratio) / 2), 
-  				                           $y + $delta_y, str_replace("x",' ',$line['barcode']), 0, 0, 0);
-  				                           
-  				$delta_y += $line_height;
-  			}
-  			else {
-	  			// print line
-	  			$this->writeHTMLCell(0, $line_height, $x + $delta_x + ($cell_width*(1 - $barcode_width_ratio) / 2), 
-	  			                           $y + $delta_y, utf8_encode($line), 0, 0, 0);
-	  			                           
-	  			$delta_y += $line_height;
-  			}
-  		}
-  		$delta_y = 0;
-  		$delta_x += $cell_width;
-  		$i++;
-  	}
+    foreach ($data as $cell) {
+      if ($i % $col_num == 0 && $i != 0) {
+        $y += $cell_height;
+        $delta_x = 0;
+      }
+      
+      $line_height = ($cell_height - $barcode_height) / (count($cell));
+      
+      $this->Rect($x + $delta_x, $y + $delta_y, $cell_width, $cell_height);
+      foreach ($cell as $line) {
+        // if it's a barcode
+        if (is_array($line)) {
+          // draw barcode
+          $this->writeBarcode($x + $delta_x + ($cell_width*(1 - $barcode_width_ratio)/ 2), 
+                              $y + $delta_y, $cell_width*$barcode_width_ratio, 
+                              $barcode_height, $line['type'], false, false, 2, $line['barcode']);
+                              
+          $delta_y += $barcode_height;
+          
+          $this->writeHTMLCell(0, $line_height, $x + $delta_x + ($cell_width*(1 - $barcode_width_ratio) / 2), 
+                                     $y + $delta_y, str_replace("x",' ',$line['barcode']), 0, 0, 0);
+                                     
+          $delta_y += $line_height;
+        }
+        else {
+          // print line
+          $this->writeHTMLCell(0, $line_height, $x + $delta_x + ($cell_width*(1 - $barcode_width_ratio) / 2), 
+                                     $y + $delta_y, utf8_encode($line), 0, 0, 0);
+                                     
+          $delta_y += $line_height;
+        }
+      }
+      $delta_y = 0;
+      $delta_x += $cell_width;
+      $i++;
+    }
   }
   
   function OutPut($name='',$dest='') {

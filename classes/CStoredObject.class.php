@@ -1,11 +1,12 @@
-<?php /* $Id: mbobject.class.php 12740 2011-07-23 08:15:51Z mytto $ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision: 12740 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 /**
@@ -214,7 +215,7 @@ class CStoredObject extends CModelObject {
   function nullifyAlteredFields() {
     $count = 0;
     foreach($this->getPlainFields() as $_field => $_value) {
-      if($this->fieldAltered($_field)) {
+      if ($this->fieldAltered($_field)) {
         $this->$_field = null;
         $count++;
       }
@@ -861,7 +862,7 @@ class CStoredObject extends CModelObject {
         } 
         else {
           $value = $this->$name;
-          if(($value !== null) || (!$this->_id)) {
+          if (($value !== null) || (!$this->_id)) {
             $msgProp = $this->checkProperty($name);
             
             $truncated = CMbString::truncate($value);
@@ -1250,7 +1251,8 @@ class CStoredObject extends CModelObject {
     // DB query
     if ($this->_old->_id) {
       $ret = $spec->ds->updateObject($spec->table, $this, $spec->key, $spec->nullifyEmptyStrings);
-    } else {
+    }
+    else {
       $keyToUpdate = $spec->incremented ? $spec->key : null;
       $ret = $spec->ds->insertObject($spec->table, $this, $keyToUpdate);
     }

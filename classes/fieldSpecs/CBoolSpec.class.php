@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CBoolSpec extends CMbFieldSpec {
@@ -42,17 +43,19 @@ class CBoolSpec extends CMbFieldSpec {
   function checkOptions(){
     parent::checkOptions();
     
-    if($this->default === null){
+    if ($this->default === null) {
       $this->default = (self::$_default_no ? 0 : "");
     }
   }
   
   function checkProperty($object){
     $propValue = CMbFieldSpec::checkNumeric($object->{$this->fieldName}, true);
-    if($propValue === null){
+    
+    if ($propValue === null) {
       return "N'est pas une chaîne numérique";
     }
-    if($propValue != 0 && $propValue != 1){
+    
+    if ($propValue != 0 && $propValue != 1) {
       return "Ne peut être différent de 0 ou 1";
     }
   }
@@ -76,33 +79,33 @@ class CBoolSpec extends CMbFieldSpec {
     
     switch ($typeEnum) {
       case "radio":
-  	    // Attributes for all inputs
-  	    $attributes = array(
-  	      "type" => "radio",
-  	      "name" => $field,
-  	    );
+        // Attributes for all inputs
+        $attributes = array(
+          "type" => "radio",
+          "name" => $field,
+        );
 
-  	    if (null === $value) {
-  	      $value = "$default";
-  	    }
-  	    
-  	    for ($i = 1; $i >= 0; $i--) {
-  	      $attributes["value"] = "$i"; 
-  	      $attributes["checked"] = $value === "$i" ? "checked" : null; 
-  	      $attributes["disabled"] = $disabled === "$i" || $readonly ? "disabled" : null; 
-  	      $attributes["class"] = $className;
-  	      
-  	      $xmlAttributes = CMbArray::makeXmlAttributes($attributes);
-  	      $sHtml .= "\n<input $xmlAttributes $extra />";
-  	      
-  	      $sTr = CAppUI::tr("bool.$i");
-  	      $sHtml .= "\n<label for=\"{$field}_$i\">$sTr</label> ";
-  	      
-  	      if ($separator && $i != 0){
-  	        $sHtml .= "\n$separator";
-  	      }
-  	    }
-	      return $sHtml;
+        if (null === $value) {
+          $value = "$default";
+        }
+        
+        for ($i = 1; $i >= 0; $i--) {
+          $attributes["value"] = "$i"; 
+          $attributes["checked"] = $value === "$i" ? "checked" : null; 
+          $attributes["disabled"] = $disabled === "$i" || $readonly ? "disabled" : null; 
+          $attributes["class"] = $className;
+          
+          $xmlAttributes = CMbArray::makeXmlAttributes($attributes);
+          $sHtml .= "\n<input $xmlAttributes $extra />";
+          
+          $sTr = CAppUI::tr("bool.$i");
+          $sHtml .= "\n<label for=\"{$field}_$i\">$sTr</label> ";
+          
+          if ($separator && $i != 0) {
+            $sHtml .= "\n$separator";
+          }
+        }
+        return $sHtml;
     
       case "checkbox":
         $disabled = $readonly ? "disabled=\"1\"" : $disabled;
@@ -111,33 +114,38 @@ class CBoolSpec extends CMbFieldSpec {
           $value = "$default";
         }
         
-      	if(($value !== null && $value == 1)){
+        if ($value !== null && $value == 1) {
           $checked = " checked=\"checked\""; 
-        }else{
+        }
+        else {
           $checked = "";
           $value = "0";
         }
-      	$sHtml = '<input type="checkbox" name="__'.$field.'" 
+        
+        $sHtml = '<input type="checkbox" name="__'.$field.'" 
           onclick="$V(this.form.'.$field.', $V(this)?1:0);" '.$checked.' '.$disabled.' />';
-      	$sHtml .= '<input type="hidden" name="'.$field.'" '.$extra.' value="'.$value.'" />';
-    	  return $sHtml;
+          
+        $sHtml .= '<input type="hidden" name="'.$field.'" '.$extra.' value="'.$value.'" />';
+        return $sHtml;
     
       case "select":
         $disabled = $readonly ? "disabled=\"1\"" : $disabled;
         $sHtml       = "<select name=\"$field\" class=\"$className\" $disabled $extra>";
         
-        if ($emptyLabel){
-          if($value === null) {
+        if ($emptyLabel) {
+          if ($value === null) {
             $sHtml    .= "\n<option value=\"\" selected=\"selected\">$emptyLabel</option>";
-          } else {
+          }
+          else {
             $sHtml    .= "\n<option value=\"\">$emptyLabel</option>";
           }
         }
         
-        foreach ($this->_locales as $key => $item){
-          if(($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default" && !$emptyLabel)){
+        foreach ($this->_locales as $key => $item) {
+          if (($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default" && !$emptyLabel)) {
             $selected = " selected=\"selected\""; 
-          }else{
+          }
+          else {
             $selected = "";
           }
           $sHtml    .= "\n<option value=\"$key\" $selected>$item</option>";
@@ -148,7 +156,7 @@ class CBoolSpec extends CMbFieldSpec {
   }
   
   function getLabelForAttribute($object, &$params){
-  	$typeEnum  = CMbArray::extract($params, "typeEnum", "radio");
+    $typeEnum  = CMbArray::extract($params, "typeEnum", "radio");
     
     switch ($typeEnum) {
       //case "radio":    return "{$this->fieldName}_1";
@@ -163,5 +171,3 @@ class CBoolSpec extends CMbFieldSpec {
     $object->{$this->fieldName} = rand(0,1);
   }
 }
-
-?>

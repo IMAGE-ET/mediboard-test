@@ -1,12 +1,12 @@
 <?php
 /**
- * $Id: $
+ * $Id$
  * 
  * @package    Mediboard
  * @subpackage classes
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    $Revision: $
+ * @version    $Revision$
  */
 
 /**
@@ -343,6 +343,7 @@ class CApp {
   
   /**
    * Staticly build index handlers array
+   * 
    * @return void
    */
   public static final function makeHandlers() {
@@ -361,9 +362,14 @@ class CApp {
   
   /**
    * Subject notification mechanism 
-   * @todo Implement to factorise 
+   * 
+   * TODO Implement to factorise 
    *   on[Before|After][Store|Merge|Delete]()
    *   which have to get back de CPersistantObject layer
+   * 
+   * @param string $message The message type to run
+   * 
+   * @return void
    */
   static function notify($message) {
     // Event Handlers
@@ -377,7 +383,4 @@ class CApp {
       }
     }
   }
-  
-  
 }
-?>

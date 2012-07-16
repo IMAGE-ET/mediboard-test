@@ -1,12 +1,14 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
+ 
 
 class CIngresDataSource extends CSQLDataSource {
   private $nextLimit = null;
@@ -16,7 +18,7 @@ class CIngresDataSource extends CSQLDataSource {
       trigger_error("FATAL ERROR: Ingres support not available.  Please check your configuration.", E_USER_ERROR);
       return;
     }
-	    
+      
     if ("localhost" != $host) { 
       trigger_error("FATAL ERROR: Ingres server host has to be 'localhost'", E_USER_ERROR);
       return;

@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CCurrencySpec extends CFloatSpec {
@@ -20,7 +21,7 @@ class CCurrencySpec extends CFloatSpec {
       'precise' => 'bool',
     ) + parent::getOptions();
   }
-  	
+    
   function getValue($object, $smarty = null, $params = array()) {
     $propValue = $object->{$this->fieldName};
     
@@ -28,7 +29,7 @@ class CCurrencySpec extends CFloatSpec {
     if ($decimals == null) {
       $decimals = isset($this->precise) ? 4 : 2;
     }
-		
+    
     return ($propValue !== null && $propValue !== "") ? 
       number_format($propValue, $decimals, ',', ' ').' '.CAppUI::conf("currency_symbol") : 
       "-";
@@ -38,11 +39,9 @@ class CCurrencySpec extends CFloatSpec {
     CMbArray::defaultValue($params, "size", 4);
     return parent::getFormHtmlElement($object, $params, $value, $className).CAppUI::conf("currency_symbol");
   }
-	
+  
   function getDBSpec() {
     $size = $this->precise ? "12, 5" : "10, 3";
     return "DECIMAL ($size)".($this->pos ? " UNSIGNED" : "");
   }
 }
-
-?>

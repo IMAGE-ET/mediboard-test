@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CStrSpec extends CMbFieldSpec {
@@ -61,8 +62,8 @@ class CStrSpec extends CMbFieldSpec {
     $propValue = $object->{$this->fieldName};
     
     // length
-    if($this->length){
-      if(!$length = $this->checkLengthValue($this->length)){
+    if ($this->length) {
+      if (!$length = $this->checkLengthValue($this->length)) {
         trigger_error("Spécification de longueur invalide (longueur = $this->length)", E_USER_WARNING);
         return "Erreur système";
       } 
@@ -72,8 +73,8 @@ class CStrSpec extends CMbFieldSpec {
     }
     
     // minLength
-    if($this->minLength){
-      if(!$length = $this->checkLengthValue($this->minLength)){
+    if ($this->minLength) {
+      if (!$length = $this->checkLengthValue($this->minLength)) {
         trigger_error("Spécification de longueur minimale invalide (longueur = $this->minLength)", E_USER_WARNING);
         return "Erreur système";
       }     
@@ -83,8 +84,8 @@ class CStrSpec extends CMbFieldSpec {
     }
     
     // maxLength
-    if($this->maxLength){
-      if(!$length = $this->checkLengthValue($this->maxLength)){
+    if ($this->maxLength) {
+      if (!$length = $this->checkLengthValue($this->maxLength)) {
         trigger_error("Spécification de longueur maximale invalide (longueur = $this->maxLength)", E_USER_WARNING);
         return "Erreur système";
       }
@@ -94,7 +95,7 @@ class CStrSpec extends CMbFieldSpec {
     }
     
     // delimiter
-    if($this->delimiter){
+    if ($this->delimiter) {
       $delim = chr(intval($this->delimiter));
       $values = explode($delim, $propValue);
       
@@ -104,7 +105,7 @@ class CStrSpec extends CMbFieldSpec {
     }
     
     // canonical
-    if($this->canonical){
+    if ($this->canonical) {
       if (!preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/', $propValue)) {
         return "Ne doit contenir que des chiffres et des lettres non-accentuées (pas d'espaces)";
       }
@@ -123,20 +124,24 @@ class CStrSpec extends CMbFieldSpec {
     parent::sample($object, $consistent);
     $propValue =& $object->{$this->fieldName};
     
-    if($this->length) {
+    if ($this->length) {
       $propValue = self::randomString(CMbFieldSpec::$chars, $this->length);
     }
-    elseif($this->minLength) {
-      if($this->_defaultLength < $this->minLength)
+    elseif ($this->minLength) {
+      if ($this->_defaultLength < $this->minLength) {
         $propValue = self::randomString(CMbFieldSpec::$chars, $this->minLength);
-      else
+      }
+      else {
         $propValue = self::randomString(CMbFieldSpec::$chars, $this->_defaultLength);
+      }
     }
-    elseif($this->maxLength) {
-      if($this->_defaultLength > $this->maxLength)
+    elseif ($this->maxLength) {
+      if ($this->_defaultLength > $this->maxLength) {
         $propValue = self::randomString(CMbFieldSpec::$chars, $this->maxLength);
-      else
+      }
+      else {
         $propValue = self::randomString(CMbFieldSpec::$chars, $this->_defaultLength);
+      }
     }
     else {
       $propValue = self::randomString(CMbFieldSpec::$chars, $this->_defaultLength);
@@ -150,5 +155,3 @@ class CStrSpec extends CMbFieldSpec {
     return $this->getFormElementText($object, $params, $value, $className);
   }
 }
-
-?>

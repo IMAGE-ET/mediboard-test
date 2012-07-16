@@ -1,8 +1,7 @@
 <?php 
-
 /**
  * $Id$
- *
+ * 
  * @package    Mediboard
  * @subpackage classes
  * @author     SARL OpenXtrem <dev@openxtrem.com>
@@ -79,6 +78,7 @@ abstract class CSQLDataSource {
         error_reporting($reporting);
       }
     }
+    
     return self::$dataSources[$dsn];
   }
   
@@ -123,7 +123,7 @@ abstract class CSQLDataSource {
   /**
    * Get all tables with given prefix
    * 
-   * @param array[string] Table names 
+   * @param array[string] $table Table names 
    */
   abstract function loadTables($table = null);
   
@@ -159,7 +159,7 @@ abstract class CSQLDataSource {
   /**
    * Free a query result
    * 
-   * @param resource $result
+   * @param resource $result The result to free
    */
   abstract function freeResult($result);
 
@@ -227,7 +227,7 @@ abstract class CSQLDataSource {
   /**
    * Escape value
    * 
-   * @param string $value
+   * @param string $value The value to escape
    * 
    * @return string the escaped value
    */
@@ -243,7 +243,7 @@ abstract class CSQLDataSource {
   /**
    * Prepares a LIKE clause with a given value to search
    * 
-   * @param string $value
+   * @param string $value The LIKE value to prepare
    * 
    * @return string The prepared like clause
    */
@@ -262,6 +262,10 @@ abstract class CSQLDataSource {
   
   /**
    * Initialize a data source by creating the link to the data base
+   * 
+   * @param string $dsn The data source name to init
+   * 
+   * @return void
    */
   function init($dsn) {
     $this->dsn = $dsn;
@@ -276,7 +280,7 @@ abstract class CSQLDataSource {
     );
     
     if (!$this->link) {
-      trigger_error( "FATAL ERROR: link to '$this->dsn' not found.", E_USER_ERROR );
+      trigger_error("FATAL ERROR: link to '$this->dsn' not found.", E_USER_ERROR);
     }
   }
   
@@ -322,7 +326,8 @@ abstract class CSQLDataSource {
    * Query an SQL dump
    * Will fail to and exit to the first error
    * 
-   * @param string $dumpPath the dump path
+   * @param string $dumpPath  The dump path
+   * @param bool   $utfDecode Set to true if the $dumpPath data is encoded in UTF-8
    * 
    * @return int number of queried lines, false if failed
    */
@@ -366,7 +371,7 @@ abstract class CSQLDataSource {
   /**
    * Loads the first field of the first row returned by the query.
    * 
-   * @param string The SQL query
+   * @param string $sql The SQL query
    * 
    * @return The value returned in the query or null if the query failed.
    */
@@ -389,8 +394,8 @@ abstract class CSQLDataSource {
    * If an object is passed to this function, the returned row is bound to the existing elements of $object.
    * If $object has a value of null, then all of the returned query fields returned in the object. 
    * 
-   * @param string The SQL query
-   * @param object The address of variable
+   * @param string $sql     The SQL query
+   * @param object &$object The address of variable
    */
   function loadObject($sql, &$object) {
     if ($object != null) {
@@ -418,7 +423,7 @@ abstract class CSQLDataSource {
   /**
    * Execute query and returns first result row as array 
    * 
-   * @param string $query
+   * @param string $query The SQL query
    * 
    * @return array The hash, false if failed
    */
@@ -433,7 +438,7 @@ abstract class CSQLDataSource {
   /**
    * Returns a array as result of query where column 0 is key and column 1 is value
    * 
-   * @param string $query
+   * @param string $query The SQL query
    */
   function loadHashList($query) {
     $cur = $this->exec($query);
@@ -449,7 +454,7 @@ abstract class CSQLDataSource {
   /**
    * Returns a array as result of query where column 0 is key and all columns are values
    * 
-   * @param string $query
+   * @param string $query The SQL query
    */
   function loadHashAssoc($query) {
     $cur = $this->exec($query);
@@ -467,8 +472,8 @@ abstract class CSQLDataSource {
   /**
    * Return a list of associative array as the query result
    * 
-   * @param string $query
-   * @param int $maxrows
+   * @param string $query   The SQL query
+   * @param int    $maxrows Maximum number of rows to return
    * 
    * @return array the query result
    */
@@ -505,8 +510,8 @@ abstract class CSQLDataSource {
   /**
    * Return a array of the first column of the query result
    * 
-   * @param string $query
-   * @param int    $maxrows
+   * @param string $query   The SQL query
+   * @param int    $maxrows Maximum number of rows to return
    * 
    * @return array the query result
    */
@@ -532,9 +537,9 @@ abstract class CSQLDataSource {
    * Insert a row matching object fields
    * null and underscored vars are skipped
    * 
-   * @param string $table The table name
-   * @param object $object The object with fields
-   * @param string $keyName The var name of the key to set
+   * @param string $table   The table name
+   * @param object &$object The object with fields
+   * @param string $keyName The variable name of the key to set
    * 
    * @return bool job done
    */
@@ -601,7 +606,7 @@ abstract class CSQLDataSource {
     $count_data = count($data);
     
     foreach ($data as $_data) {
-      if ($counter % $step == 0){
+      if ($counter % $step == 0) {
         $query = "INSERT INTO `$table` ($fields) VALUES ";
         $queries = array();
       }
@@ -609,7 +614,7 @@ abstract class CSQLDataSource {
       $_query = array();
       foreach ($_data as $_value) {
         $_value = trim($_value);
-        if($_value === ""){
+        if ($_value === "") {
           $_query[] = "NULL";
         }
         else {
@@ -621,7 +626,7 @@ abstract class CSQLDataSource {
       
       $counter++;
       
-      if($counter % $step == 0 || $counter == $count_data){
+      if ($counter % $step == 0 || $counter == $count_data) {
         $query .= implode(",", $queries);
         $query .= ";";
         
@@ -634,8 +639,8 @@ abstract class CSQLDataSource {
    * Quote columns and values 
    * 
    * @param string $table Table name
-   * @param mixed  $k     in/out column name
-   * @param string $v     in/out column value
+   * @param mixed  &$k    in/out column name
+   * @param string &$v    in/out column value
    */
   function quote($table, &$k, &$v) {
     if (!isset($this->unquotable[$table]) || !in_array($k, $this->unquotable[$table])) {
@@ -648,9 +653,10 @@ abstract class CSQLDataSource {
    * Update a row matching object fields
    * null and underscored vars are skipped
    * 
-   * @param string $table   The table name
-   * @param object $object  The object with fields
-   * @param string $keyName The var name of the key to set
+   * @param string $table               The table name
+   * @param object &$object             The object with fields
+   * @param string $keyName             The variable name of the key to set
+   * @param bool   $nullifyEmptyStrings Whether to nullify empty values
    * 
    * @return bool job done
    */
@@ -763,7 +769,9 @@ abstract class CSQLDataSource {
       
       $_field['params']   = $props['params'];
       
-      if ($field === $field_name) return $_field;
+      if ($field === $field_name) {
+        return $_field;
+      }
     }
     
     return $fields;
@@ -773,8 +781,8 @@ abstract class CSQLDataSource {
    * Prepares an IN where clause with a given array of values
    * Prepares a standard where clause when alternate value is supplied
    * 
-   * @param array $values
-   * @param string $alternate
+   * @param array  $values    The values to include in the IN clause
+   * @param string $alternate An alternate value
    * 
    * @return string The prepared where clause
    */
@@ -799,9 +807,9 @@ abstract class CSQLDataSource {
 
   /**
    * Prepares an LIKE where clause with a given name-like value
-   * tread all non non-caracters as % wildcards
+   * tread all non non-characters as % wildcards
    * 
-   * @param string $name
+   * @param string $name The value to include in the LIKE clause
    * 
    * @return string The prepared where clause
    */
@@ -813,8 +821,8 @@ abstract class CSQLDataSource {
    * Prepares an NOT IN where clause with a given array of values
    * Prepares a standard where clause when alternate value is supplied
    * 
-   * @param array  $values
-   * @param string $alternate
+   * @param array  $values    An array of values to include in the IN clause
+   * @param string $alternate An alternate value
    * 
    * @return string The prepared where clause
    */

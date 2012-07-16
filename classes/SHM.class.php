@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 // Use $dPconfig for both application and install wizard to use it
@@ -86,11 +87,11 @@ class DiskSharedMemory implements ISharedMemory {
   }
 
   /*function clear() {
-  	$files = glob($this->dir);
-  	$ok = true;
-  	 
-  	foreach ($files as $file)
-  	  unlink($file);
+    $files = glob($this->dir);
+    $ok = true;
+     
+    foreach ($files as $file)
+      unlink($file);
   }*/
 }
 
@@ -150,7 +151,7 @@ class APCSharedMemory implements ISharedMemory {
   }
 
   /*function clear() {
-  	return apc_clear_cache('user');
+    return apc_clear_cache('user');
   }*/
 }
 

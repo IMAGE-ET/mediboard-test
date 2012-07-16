@@ -1,11 +1,12 @@
-<?php /* $Id: mb_functions.php 7046 2009-10-13 12:29:24Z phenxdesign $ */
-
+<?php 
 /**
- * @package Mediboard
- * @subpackage includes
- * @version $Revision: 7046 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage classes
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 abstract class CValue {
@@ -129,7 +130,7 @@ abstract class CValue {
     return self::read($_SESSION[$m], $name, $default);
   }
 
-	/**
+  /**
  * Returns the value of a variable retreived from HTTP GET or Session, with at least a
  * default value. Stores it in $_SESSION in all cases, with at least a default value.
  * @access public

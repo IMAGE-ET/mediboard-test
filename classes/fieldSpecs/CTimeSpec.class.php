@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CTimeSpec extends CMbFieldSpec {
@@ -21,17 +22,19 @@ class CTimeSpec extends CMbFieldSpec {
   function checkProperty($object){
     $propValue = &$object->{$this->fieldName};
   
-    if (!preg_match ("/^\d{1,2}:\d{1,2}(:\d{1,2})?$/", $propValue)) { 
-    	if($propValue === 'current' || $propValue ===  'now') {
+    if (!preg_match("/^\d{1,2}:\d{1,2}(:\d{1,2})?$/", $propValue)) { 
+      if ($propValue === 'current' || $propValue ===  'now') {
         $propValue = mbTime();
         return null;
       }
+      
       return "Format d'heure invalide";
     }
   }
   
   function getValue($object, $smarty = null, $params = array()) {
-    require_once $smarty->_get_plugin_filepath('modifier','date_format');
+    include_once $smarty->_get_plugin_filepath('modifier','date_format');
+    
     $propValue = $object->{$this->fieldName};
     $format = CValue::first(@$params["format"], CAppUI::conf("time"));
     return $propValue ? smarty_modifier_date_format($propValue, $format) : "";
@@ -49,5 +52,3 @@ class CTimeSpec extends CMbFieldSpec {
     return $this->getFormElementDateTime($object, $params, $value, $className, CAppUI::conf("time"));
   }
 }
-
-?>

@@ -1,21 +1,22 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CMySQLDataSource extends CSQLDataSource {
-		
+    
   function connect($host, $name, $user, $pass) {
     if (!function_exists( "mysql_connect" )) {
       trigger_error( "FATAL ERROR: MySQL support not available.  Please check your configuration.", E_USER_ERROR );
       return;
     }
-	    
+      
     if (null == $this->link = mysql_connect($host, $user, $pass, true)) { 
       trigger_error( "FATAL ERROR: Connection to MySQL server failed", E_USER_ERROR );
       return;
@@ -80,7 +81,7 @@ class CMySQLDataSource extends CSQLDataSource {
   }
   
   function fetchRow($result) {
-	  return mysql_fetch_row($result);
+    return mysql_fetch_row($result);
   }
 
   function fetchAssoc($result) {

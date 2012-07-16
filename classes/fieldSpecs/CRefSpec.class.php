@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CRefSpec extends CMbFieldSpec {
@@ -34,11 +35,12 @@ class CRefSpec extends CMbFieldSpec {
   }
   
   function getValue($object, $smarty = null, $params = array()) {
-  	$tooltip = CMbArray::extract($params, "tooltip");
-  	$ref = $object->loadFwdRef($this->fieldName, true);
+    $tooltip = CMbArray::extract($params, "tooltip");
+    $ref = $object->loadFwdRef($this->fieldName, true);
+    
     if ($ref->_id && $this->fieldName != $object->_spec->key) {
-    	return $tooltip ?
-			  "<span onmouseover=\"ObjectTooltip.createEx(this, '$ref->_guid')\">$ref->_view</span>" :
+      return $tooltip ?
+        "<span onmouseover=\"ObjectTooltip.createEx(this, '$ref->_guid')\">$ref->_view</span>" :
         $ref->_view;
     }
  
@@ -49,7 +51,7 @@ class CRefSpec extends CMbFieldSpec {
     $fieldName = $this->fieldName;
     $propValue = CMbFieldSpec::checkNumeric($object->$fieldName, true);
     
-    if ($propValue === null || $object->$fieldName === ""){
+    if ($propValue === null || $object->$fieldName === "") {
       return "N'est pas une référence (format non numérique)";
     }
     
@@ -97,28 +99,25 @@ class CRefSpec extends CMbFieldSpec {
    * @see classes/CMbFieldSpec#getFormHtmlElement($object, $params, $value, $className)
    */
   function getFormHtmlElement($object, $params, $value, $className) {
-  	if ($options = CMbArray::extract($params, "options")) {
+    if ($options = CMbArray::extract($params, "options")) {
       $field         = htmlspecialchars($this->fieldName);
       $className     = htmlspecialchars(trim("$className $this->prop"));
-	    $extra         = CMbArray::makeXmlAttributes($params);
+      $extra         = CMbArray::makeXmlAttributes($params);
       $choose        = CMbArray::extract($params, "choose", "Choose");
-	    $choose = CAppUI::tr($choose);
-	    
+      $choose = CAppUI::tr($choose);
+      
       $html = "\n<select name=\"$field\" class=\"$className\" $extra>";
       $html.= "\n<option value=\"\">&mdash; $choose</option>";
-			foreach ($options as $_option) {
-				$selected = $value == $_option->_id ? "selected=\"selected\"" : "";
+      foreach ($options as $_option) {
+        $selected = $value == $_option->_id ? "selected=\"selected\"" : "";
         $html.= "\n<option value=\"$_option->_id\" $selected>$_option->_view</option>";
-			}
-			$html.= "\n</select>";
-  		
-  		return $html;
-  	}
-		
+      }
+      $html.= "\n</select>";
+      
+      return $html;
+    }
+    
     CMbArray::defaultValue($params, "size", 25);
     return $this->getFormElementText($object, $params, $value, $className);
-
   }
 }
-
-?>

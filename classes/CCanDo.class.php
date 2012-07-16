@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
  
 /**
@@ -25,8 +26,8 @@ class CCanDo {
     // on passe a null soit "tab" soit "a" selon ou l'on se trouve
     CValue::setSession($actionType);
     
-    if($this->setValues){
-      if(is_scalar($this->setValues)){
+    if ($this->setValues){
+      if (is_scalar($this->setValues)){
         CValue::setSession($this->setValues);
       }
       else{
@@ -77,7 +78,7 @@ class CCanDo {
   
   function needsObject(CMbObject $object, $setValues = null){
     $this->setValues = $setValues;
-    if(!$object->_id){
+    if (!$object->_id){
       $params = "&object_guid=$object->_class-?";
       $this->redirect("object_not_found", $params);
     }

@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CPctSpec extends CFloatSpec {
@@ -19,11 +20,11 @@ class CPctSpec extends CFloatSpec {
   
   function checkProperty($object){
     $propValue = CMbFieldSpec::checkNumeric($object->{$this->fieldName}, false);
-    if($propValue === null){
+    if ($propValue === null) {
       return "N'est pas une valeur décimale";
     }
     
-    if (!preg_match ("/^([0-9]+)(\.[0-9]{0,4}){0,1}$/", $propValue)) {
+    if (!preg_match("/^([0-9]+)(\.[0-9]{0,4}){0,1}$/", $propValue)) {
       return "N'est pas un pourcentage";
     }
   }
@@ -43,5 +44,3 @@ class CPctSpec extends CFloatSpec {
     $object->{$this->fieldName} = rand(0, 100);
   }
 }
-
-?>

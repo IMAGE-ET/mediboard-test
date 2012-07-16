@@ -1,11 +1,12 @@
-<?php /* $Id: CSmartyDP.class.php 15231 2012-04-16 15:59:41Z mytto $ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision: 15231 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 CAppUI::requireLibraryFile("smarty/libs/Smarty.class");
@@ -327,9 +328,10 @@ class CSmartyMB extends Smarty {
   function thumb($params, &$smarty) {
     $finUrl = "";
     foreach ($params as $_key => $_val) {
-      if($_key === "src") {
+      if ($_key === "src") {
         $src = urlencode(CAppUI::conf("root_dir")."/".$_val);
-      } else {
+      }
+      else {
         $finUrl .= ("&amp;$_key=$_val");
       }
     }

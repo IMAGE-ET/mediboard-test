@@ -1,11 +1,13 @@
-<?php
+<?php 
 /**
+ * $Id$
+ * 
  * @package php-socket
  * @link    http://php-socket.googlecode.com/
  * @author  Juan M. Hidalgo <juan@sentidocomunsite.com.ar>
  * @author  Fabien Ménager <fabien.menager@gmail.com>
  * @license http://www.gnu.org/licenses/ GNU GPLv3
- * @version $Id$
+ * @version $Revision$
  */
 
 class SocketClient {

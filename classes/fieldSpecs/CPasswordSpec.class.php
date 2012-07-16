@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CPasswordSpec extends CMbFieldSpec {
@@ -32,21 +33,23 @@ class CPasswordSpec extends CMbFieldSpec {
     $propValue = $object->{$this->fieldName};
 
     // minLength
-    if($this->minLength){
-      if(!$length = $this->checkLengthValue($this->minLength)){
+    if ($this->minLength) {
+      if (!$length = $this->checkLengthValue($this->minLength)) {
         trigger_error("Spécification de longueur minimale invalide (longueur = $this->minLength)", E_USER_WARNING);
         return "Erreur système";
-      }     
+      }
+      
       if (strlen($propValue) < $length) {
         return "Le mot de passe n'a pas la bonne longueur '$propValue' (longueur minimale souhaitée : $length)'";
       }
     }
     
     // notContaining
-    if($field = $this->notContaining){
-      if($msg = $this->checkTargetPropValue($object, $field)){
+    if ($field = $this->notContaining) {
+      if ($msg = $this->checkTargetPropValue($object, $field)) {
         return $msg;
       }
+      
       $targetPropValue = $object->$field;  
       if (stristr($propValue, $targetPropValue)) {
         return "Le mot de passe ne doit pas contenir '$field->fieldName'";
@@ -54,8 +57,8 @@ class CPasswordSpec extends CMbFieldSpec {
     }
     
     // notNear
-    if($field = $this->notNear){
-      if($msg = $this->checkTargetPropValue($object, $field)){
+    if ($field = $this->notNear) {
+      if ($msg = $this->checkTargetPropValue($object, $field)) {
         return $msg;
       }
       $targetPropValue = $object->$field;  
@@ -65,7 +68,7 @@ class CPasswordSpec extends CMbFieldSpec {
     }
     
     // alphaAndNum
-    if($this->alphaAndNum){
+    if ($this->alphaAndNum) {
       if (!preg_match("/[A-z]/", $propValue) || !preg_match("/\d+/", $propValue)) {
         return 'Le mot de passe doit contenir au moins un chiffre ET une lettre';
       }
@@ -98,5 +101,3 @@ class CPasswordSpec extends CMbFieldSpec {
     $object->{$this->fieldName} = self::randomString(array_merge(range('0','9'), range('a','z'), range('A','Z')), 8);
   }
 }
-
-?>

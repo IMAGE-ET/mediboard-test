@@ -1,11 +1,12 @@
-<?php /* $Id: chrono.class.php 7722 2010-01-01 21:26:22Z phenxdesign $ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision: 7722 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
  /**
@@ -103,19 +104,27 @@ class CMemcacheSessionHandler implements ISessionHandler {
 
 class CMySQLSessionHandler implements ISessionHandler {
   private static $ds;
+  
   function init() {
     return ini_set("session.save_handler", "user");
   }
-  function useUserHandler() { return true; }
+  
+  function useUserHandler() {
+    return true;
+  }
+  
   function open() {
-    if(self::$ds = CSQLDataSource::get("std")) {
+    if (self::$ds = CSQLDataSource::get("std")) {
       return true;
     }
+    
     return false;
   }
+  
   function close() {
     return true;
   }
+  
   function read($id) {
     $id = mysql_real_escape_string($id);
     $query = sprintf("SELECT `data` FROM `session` WHERE `session_id` = '%s'", $id);
@@ -125,6 +134,7 @@ class CMySQLSessionHandler implements ISessionHandler {
     }
     return '';
   }
+  
   function write($id, $data) {
     $address = get_remote_address();
     
@@ -151,7 +161,8 @@ class CMySQLSessionHandler implements ISessionHandler {
         $user_agent,
         $data,
         $id);
-    } else {
+    }
+    else {
       $replace = sprintf("INSERT INTO `session`
         VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s')",
         $id,
@@ -164,15 +175,18 @@ class CMySQLSessionHandler implements ISessionHandler {
     }
     return self::$ds->query($replace);
   }
+
   function destroy($id) {
     $query = sprintf("DELETE FROM `session` WHERE `session_id` = '%s'", mysql_real_escape_string($id));
     return self::$ds->query($query);
   }
+  
   function gc($max) {
     $query = sprintf("DELETE FROM `sessions` WHERE `date_modification` < '%s'",
       mysql_real_escape_string(time() - $max));
     return self::$ds->query($query);
   }
+  
   function listSessions() { return array(); }
 }
 
@@ -191,7 +205,7 @@ abstract class CSessionHandler {
    * Init the correct session handler
    */
   static function setHandler($engine = "files") {
-    if(!isset(self::$availableEngines[$engine])) {
+    if (!isset(self::$availableEngines[$engine])) {
       $engine = "files";
     }
     $engine = new self::$availableEngines[$engine];
@@ -199,7 +213,7 @@ abstract class CSessionHandler {
       $engine = new self::$availableEngines["files"];
       $engine->init();
     }
-    if($engine->useUserHandler()) {
+    if ($engine->useUserHandler()) {
       session_set_save_handler(
         array("CSessionHandler", "open"),
         array("CSessionHandler", "close"),

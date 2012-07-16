@@ -1,12 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage classes
- * @version $Revision$
- * @author Johan Barbier <barbier_johan@hotmail.com>
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
  * Soundex2 French version based on the algorithm described here : http://sqlpro.developpez.com/cours/soundex/ by Frédéric BROUARD
+ * 
+ * @package    Mediboard
+ * @subpackage classes
+ * @version    $Revision$
+ * @author     Johan Barbier <barbier_johan@hotmail.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
 class soundex2 {
@@ -75,7 +76,8 @@ class soundex2 {
     */
     if (is_string ($sString) && $sString != '') {
       $this -> sString = $sString;
-    } else {
+    }
+    else {
       return '';
     }
     /**
@@ -98,7 +100,7 @@ class soundex2 {
     * let's remove every '-' in the string
     */
     $this -> sString = str_replace ('-', '', $this -> sString);
-    if(!strlen($this->sString)) {
+    if (!strlen($this->sString)) {
       return $sString{0};
     }
     /**
@@ -120,14 +122,14 @@ class soundex2 {
     * let's remove every 'H' but those prededed by a 'C' or an 'S'
     */
     $this -> sString = preg_replace ('/(?<![CS])H/', '', $this -> sString);
-    if(!strlen($this->sString)) {
+    if (!strlen($this->sString)) {
       return $sString{0};
     }
     /**
     * let's remove every 'Y' but those preceded by an 'A'
     */
     $this -> sString = preg_replace ('/(?<!A)Y/', '', $this -> sString);
-    if(!strlen($this->sString)) {
+    if (!strlen($this->sString)) {
       return $sString{0};
     }
     /**
@@ -137,7 +139,7 @@ class soundex2 {
     if (in_array ($this -> sString{$length}, $this -> aEnd)) {
       $this -> sString = substr ($this -> sString, 0, $length);
     }
-    if(!strlen($this->sString)) {
+    if (!strlen($this->sString)) {
       return $sString{0};
     }
     /**
@@ -149,14 +151,14 @@ class soundex2 {
     }
     $this -> sString = str_replace ('A', '', $this -> sString);
     $this -> sString = $sChar.$this -> sString;
-    if(!strlen($this->sString)) {
+    if (!strlen($this->sString)) {
       return $sString{0};
     }
     /**
     * let's have only 1 occurence of each letter
     */
     $this -> sString = preg_replace( '/(.)\1/', '$1', $this -> sString );
-    if(!strlen($this->sString)) {
+    if (!strlen($this->sString)) {
       return $sString{0};
     }
     /**
@@ -196,9 +198,11 @@ class soundex2 {
   private function arrReplace ($tab, $pref = false) {
     $fromRep = array_keys ($tab);
     $toRep = array_values ($tab);
+    
     if (false === $pref) {
       $this -> sString = str_replace ($fromRep, $toRep, $this -> sString);
-    } else {
+    }
+    else {
       foreach ($fromRep as $clef => $val) {
         $length = strlen ($val);
         if (substr ($this -> sString, 0, $length) === $val) {

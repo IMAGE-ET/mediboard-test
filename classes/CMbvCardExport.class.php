@@ -1,11 +1,12 @@
 <?php 
-
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision: 8980 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CMbvCardExport {
@@ -62,8 +63,8 @@ class CMbvCardExport {
   }
   
   function toString($object){
-    if(!method_exists($object, "toVcard")) {
-    	return false;
+    if (!method_exists($object, "toVcard")) {
+      return false;
     }
     $this->addBegin();
     $this->addVersion();
@@ -79,8 +80,8 @@ class CMbvCardExport {
   }
    
   function saveVCard($object){
-    if(!$content = $this->toString($object)) {
-    	return false;
+    if (!$content = $this->toString($object)) {
+      return false;
     }
     header("Content-Disposition: attachment; filename={$this->name}.vcf");
     header("Content-Type: text/x-vcard; charset=".CApp::$encoding);

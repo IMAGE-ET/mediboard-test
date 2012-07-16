@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 /**
@@ -33,7 +34,7 @@ class CBirthDateSpec extends CMbFieldSpec {
   }
   
   function checkProperty($object){
-    if (!preg_match ("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})$/", $object->{$this->fieldName}, $match)) {
+    if (!preg_match("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})$/", $object->{$this->fieldName}, $match)) {
       return "Format de date invalide";
     }
 
@@ -44,11 +45,13 @@ class CBirthDateSpec extends CMbFieldSpec {
   
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
-		
-    $object->{$this->fieldName} = 
-      sprintf("19%02d-%02d-%02d", self::randomString(CMbFieldSpec::$nums, 2),
-                                  self::randomString(CMbFieldSpec::$months, 1),
-                                  self::randomString(CMbFieldSpec::$days, 1));
+    
+    $object->{$this->fieldName} = sprintf(
+      "19%02d-%02d-%02d", 
+      self::randomString(CMbFieldSpec::$nums, 2),
+      self::randomString(CMbFieldSpec::$months, 1),
+      self::randomString(CMbFieldSpec::$days, 1)
+    );
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
@@ -58,5 +61,3 @@ class CBirthDateSpec extends CMbFieldSpec {
     return $this->getFormElementText($object, $params, $value, $className);
   }
 }
-
-?>

@@ -1,8 +1,7 @@
 <?php 
-
 /**
  * $Id$
- *
+ * 
  * @package    Mediboard
  * @subpackage classes
  * @author     SARL OpenXtrem <dev@openxtrem.com>

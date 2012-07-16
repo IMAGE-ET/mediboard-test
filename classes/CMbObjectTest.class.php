@@ -1,14 +1,13 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
-
-// Test class for CMbObject class
 
 class CMbObjectTest {
   
@@ -16,7 +15,7 @@ class CMbObjectTest {
   
   function sample(&$object, $staticsProps = array()){
     foreach($object->_specs as $key => $spec){
-      if(isset($staticsProps[$key])){
+      if (isset($staticsProps[$key])){
         $object->$key = $staticsProps[$key];
       }
       elseif($key[0] != "_"){
@@ -45,5 +44,3 @@ class CMbObjectTest {
   }
   
 }
-
-?>

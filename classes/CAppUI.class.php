@@ -61,10 +61,10 @@ class CAppUI {
   /** @var bool Weak password */
   var $weak_password = null;
 
-  /** @var string langage alert mask */
+  /** @var string language alert mask */
   static $locale_mask = "";
 
-  /** @var string langage alert mask */
+  /** @var string language alert mask */
   static $unlocalized  = array();
   
   // Global collections
@@ -96,12 +96,12 @@ class CAppUI {
   
   /**
    * Used to include a php class file from the lib directory
+   * TODO Migrate to CApp
    * 
    * @param string $name The class root file name (excluding .php)
-   * @param bool $rip Trigger CApp::rip
+   * @param bool   $rip  Trigger CApp::rip
    * 
    * @return mixed Job-done bool or file return value
-   * @todo Migrate to CApp
    */
   static function requireLibraryFile($name, $rip = true) {
     if ($root = self::conf("root_dir")) {
@@ -830,8 +830,8 @@ class CAppUI {
   /**
    * Return the configuration setting for a given path
    * 
-   * @param string $path   Tokenized path, eg "module class var", dP proof
-   * @param mixed  $object The context
+   * @param string $path    Tokenized path, eg "module class var", dP proof
+   * @param mixed  $context The context
    * 
    * @return mixed String or array of values depending on the path
    */
@@ -875,7 +875,7 @@ class CAppUI {
    * @return integer The ID
    * @todo: $unique_id should be internal to function
    */
-  static function unique_id() {
+  static function uniqueId() {
     return self::$unique_id++;
   }
   
@@ -910,6 +910,8 @@ class CAppUI {
   
   /**
    * Check if session is up to date by comparing with module versions
+   * 
+   * @return void
    */
   static function checkSessionUpdate(){
     global $version;

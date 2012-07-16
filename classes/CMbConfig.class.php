@@ -1,12 +1,14 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
+ 
  
 // Throws some E_STRICT errors
 @require_once("Config.php");
@@ -69,7 +71,7 @@ class CMbConfig {
     }
     
     if (!count($newValues)) {
-      if(is_file($this->targetPath)){
+      if (is_file($this->targetPath)){
         unlink($this->targetPath);
       }
       return;

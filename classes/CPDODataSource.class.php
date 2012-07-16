@@ -1,21 +1,22 @@
-<?php /* $Id: mysqlDataSource.class.php 12478 2011-06-20 08:10:44Z lryo $ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision: 12478 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CPDODataSource extends CSQLDataSource {
   protected $driver_name;
-	protected $affected_rows;
-	
-	/**
-	 * @var PDO
-	 */
-	var $link;
+  protected $affected_rows;
+  
+  /**
+   * @var PDO
+   */
+  var $link;
     
   function connect($host, $name, $user, $pass) {
     if (!class_exists("PDO")) {
@@ -23,8 +24,8 @@ class CPDODataSource extends CSQLDataSource {
       return;
     }
     
-		$dsn = "$this->driver_name:dbname=$name;host=$host";
-		$this->link = new PDO($dsn, $user, $pass);
+    $dsn = "$this->driver_name:dbname=$name;host=$host";
+    $this->link = new PDO($dsn, $user, $pass);
 
     return $this->link;
   }
@@ -42,8 +43,8 @@ class CPDODataSource extends CSQLDataSource {
   }
 
   function query($query) {
-  	$stmt = $this->link->query($query);
-		$this->affected_rows = $stmt->rowCount();
+    $stmt = $this->link->query($query);
+    $this->affected_rows = $stmt->rowCount();
     return $stmt;
   }
 

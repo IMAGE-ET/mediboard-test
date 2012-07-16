@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CNumcharSpec extends CNumSpec {
@@ -19,10 +20,12 @@ class CNumcharSpec extends CNumSpec {
   function getDBSpec(){
     $type_sql = "BIGINT ZEROFILL";
     
-    if($this->maxLength || $this->length){
+    if ($this->maxLength || $this->length) {
       $length = $this->maxLength ? $this->maxLength : $this->length;
       $valeur_max = pow(10,$length);
+      
       $type_sql = "TINYINT";
+      
       if ($valeur_max > pow(2,8)) {
         $type_sql = "MEDIUMINT";
       }
@@ -32,8 +35,10 @@ class CNumcharSpec extends CNumSpec {
       if ($valeur_max > pow(2,32)) {
         $type_sql = "BIGINT";
       }
+      
       $type_sql .= "($length) UNSIGNED ZEROFILL";
     }
+    
     return $type_sql;
   }
   
@@ -48,13 +53,11 @@ class CNumcharSpec extends CNumSpec {
     $propValue = $object->{$this->fieldName};
         
     // control
-    if($this->control){
-    	// Luhn control
-    	if($this->control == "luhn") {
-	    	if (!$this->checkLuhn($propValue)) {
-	        return "La clé est incorrecte.";
-	      }
-    	}
+    if ($this->control) {
+      // Luhn control
+      if ($this->control == "luhn" && !$this->checkLuhn($propValue)) {
+        return "La clé est incorrecte";
+      }
     }
   }
   
@@ -62,12 +65,13 @@ class CNumcharSpec extends CNumSpec {
   // @FIXME Why not use luhn() function ?
   function checkLuhn($number) {
     $split = array_reverse(str_split($number));
-    for($i = 1; $i <= count($split); $i += 2) {
-      if(isset($split[$i]))
+    
+    for ($i = 1; $i <= count($split); $i += 2) {
+      if (isset($split[$i])) {
         $split[$i] = array_sum(str_split($split[$i]*2));
+      }
     }
+    
     return !(array_sum($split) % 10);
   }
 }
-
-?>

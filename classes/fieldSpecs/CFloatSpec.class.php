@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CFloatSpec extends CMbFieldSpec {
@@ -60,33 +61,35 @@ class CFloatSpec extends CMbFieldSpec {
   
   function checkProperty($object){
     $propValue = CMbFieldSpec::checkNumeric($object->{$this->fieldName}, false);
-    if($propValue === null){
+    if ($propValue === null) {
       return "N'est pas une valeur décimale";
     }
     
     // pos
-    if($this->pos && $propValue <= 0) {
+    if ($this->pos && $propValue <= 0) {
       return "Doit avoir une valeur positive";
     }
     
     // min
-    if($this->min){
-      if(!$min = CMbFieldSpec::checkNumeric($this->min, false)){
+    if ($this->min) {
+      if (!$min = CMbFieldSpec::checkNumeric($this->min, false)) {
         trigger_error("Spécification de minimum numérique invalide (min = $this->min)", E_USER_WARNING);
         return "Erreur système";
       }
+      
       if ($propValue < $min) {
         return "Doit avoir une valeur minimale de $min";
       }
     }
       
     // max
-    if($this->max){
+    if ($this->max) {
       $max = CMbFieldSpec::checkNumeric($this->max, false);
-      if($max === null){
+      if ($max === null) {
         trigger_error("Spécification de maximum numérique invalide (max = $this->max)", E_USER_WARNING);
         return "Erreur système";
-      }      
+      }
+      
       if ($propValue > $max) {
         return "Doit avoir une valeur maximale de $max";
       }
@@ -164,5 +167,3 @@ class CFloatSpec extends CMbFieldSpec {
     return $sHtml;
   }
 }
-
-?>

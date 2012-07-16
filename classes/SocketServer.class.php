@@ -1,12 +1,14 @@
-<?php
+<?php 
 /**
+ * $Id$
+ * 
  * @package php-socket
  * @link    http://blog.ixti.ru/?p=116
  * @link    http://php-socket.googlecode.com/
  * @author  Aleksey V. Zapparov AKA ixti <http://ixti.ru/>
  * @author  Fabien Ménager <fabien.menager@gmail.com>
  * @license http://www.gnu.org/licenses/ GNU GPLv3
- * @version $Id$
+ * @version $Revision$
  */
 
 class SocketServer {

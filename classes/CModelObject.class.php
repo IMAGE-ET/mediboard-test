@@ -1,13 +1,14 @@
-<?php /* $Id: mbobject.class.php 12740 2011-07-23 08:15:51Z mytto $ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision: 12740 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
- 
+
 /**
  * @abstract Mediboard model definition 
  * - Metamodel: properties, class, validation 
@@ -318,7 +319,7 @@ class CModelObject {
   
   function checkConfidential($specs = null) {
     if (CAppUI::conf("hide_confidential")) {
-      if($specs == null){
+      if ($specs == null){
         $specs = $this->_specs;
       }
       foreach ($specs as $name => $_spec) {
@@ -485,6 +486,11 @@ class CModelObject {
         }
       }
     }
+  }
+  
+  function cloneFrom(CMbObject $mbObject) {
+    $this->extendsWith($mbObject);
+    $this->_id = null;
   }
   
   /**

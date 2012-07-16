@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 /**
@@ -205,7 +206,7 @@ class CMbObject extends CStoredObject {
    */
   function loadLastId400($tag = null) {
     $id400 = new CIdSante400();
-    if($id400->_ref_module) {
+    if ($id400->_ref_module) {
       $id400->loadLatestFor($this, $tag);
       $this->_ref_last_id400 = $id400;
     }
@@ -313,7 +314,7 @@ class CMbObject extends CStoredObject {
       }
     }
     
-    if($object_field){
+    if ($object_field){
       $where["field"] = " = '$object_field'";
     }
     

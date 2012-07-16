@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CEnumSpec extends CMbFieldSpec {
@@ -13,7 +14,7 @@ class CEnumSpec extends CMbFieldSpec {
   var $list = null;
   var $typeEnum = null;
   var $vertical = null;
-	
+  
   var $_list = null;
   var $_locales = null;
   
@@ -27,7 +28,7 @@ class CEnumSpec extends CMbFieldSpec {
       $this->_locales[$value] = CAppUI::tr("$className.$field.$value");
     }
   }
-	
+  
   protected function getListValues($string){
     $list = array();
     
@@ -62,7 +63,7 @@ class CEnumSpec extends CMbFieldSpec {
   
   function checkOptions(){
     parent::checkOptions();
-    if (!$this->list){
+    if (!$this->list) {
       trigger_error("Spécification 'list' manquante pour le champ '$this->fieldName' de la classe '$this->className'", E_USER_WARNING);
     }
   }
@@ -119,14 +120,14 @@ class CEnumSpec extends CMbFieldSpec {
         if ($emptyLabel) {
           if ($value === null) {
             $html .= "\n<option value=\"\" selected=\"selected\">$emptyLabel</option>";
-          } 
+          }
           else {
             $html .= "\n<option value=\"\">$emptyLabel</option>";
           }
         }
         
         // All other options
-        foreach ($locales as $key => $item){
+        foreach ($locales as $key => $item) {
           $selected = "";
           if (($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default" && !$emptyLabel)) {
             $selected = " selected=\"selected\""; 
@@ -141,7 +142,7 @@ class CEnumSpec extends CMbFieldSpec {
       case "radio":
         $compteur = 0;
         
-        foreach ($locales as $key => $item){
+        foreach ($locales as $key => $item) {
           $selected = "";
           if (($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default")) {
             $selected = " checked=\"checked\""; 
@@ -152,7 +153,7 @@ class CEnumSpec extends CMbFieldSpec {
           $compteur++;
           
           $modulo = $compteur % $cycle;
-          if($separator != null && $modulo == 0 && $compteur < count($locales)){
+          if ($separator != null && $modulo == 0 && $compteur < count($locales)) {
             $html  .= $separator;
           }
  

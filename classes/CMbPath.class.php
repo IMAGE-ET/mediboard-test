@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 // PEAR Throws 
@@ -310,9 +311,9 @@ abstract class CMbPath {
    * @return int Comparison result as an integer, 0 being tie
    */
   static function cmpFiles($a, $b) {
-  	$dira = is_dir($a);
-  	$dirb = is_dir($b);
-  	return $dira == $dirb ? strcmp($a, $b) : $dirb - $dira;
+    $dira = is_dir($a);
+    $dirb = is_dir($b);
+    return $dira == $dirb ? strcmp($a, $b) : $dirb - $dira;
   }
   
   /**

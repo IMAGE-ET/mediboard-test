@@ -1,11 +1,12 @@
-<?php /* $Id: enumSpec.class.php 11092 2011-01-13 13:30:35Z phenxdesign $ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision: 11092 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CSetSpec extends CEnumSpec {
@@ -17,7 +18,7 @@ class CSetSpec extends CEnumSpec {
 
     $this->_list_default = $this->getListValues($this->default);
   }
-	
+  
   function getSpecType() {
     return "set";
   }
@@ -36,12 +37,12 @@ class CSetSpec extends CEnumSpec {
   function getValue($object, $smarty = null, $params = array()) {
     $fieldName = $this->fieldName;
     $propValue = $this->getListValues($object->$fieldName);
-		
+    
     $ret = array();
     foreach ($propValue as $_value) {
       $ret[] = htmlspecialchars(CAppUI::tr("$object->_class.$fieldName.$_value"));
     }
-		
+    
     return implode(", ", $ret);
   }
   
@@ -59,7 +60,7 @@ class CSetSpec extends CEnumSpec {
   function getFormHtmlElement($object, $params, $value, $className){
     $field         = htmlspecialchars($this->fieldName);
     $locales       = $this->_locales;
-		
+    
     $typeEnum      = CMbArray::extract($params, "typeEnum", $this->typeEnum ? $this->typeEnum : "checkbox");
     $separator     = CMbArray::extract($params, "separator", $this->vertical ? "<br />" : null);
     $cycle         = CMbArray::extract($params, "cycle", 1);
@@ -70,16 +71,16 @@ class CSetSpec extends CEnumSpec {
     
     $extra         = CMbArray::makeXmlAttributes($params);
     $className     = htmlspecialchars(trim("$className $this->prop"));
-		
+    
     $uid = uniqid();
     
     $sHtml          = "<span id=\"set-container-$uid\">\n";
     $sHtml         .= "<input type=\"hidden\" name=\"$field\" value=\"$value\" class=\"$className\" $extra />\n";
-		
+    
     $sHtml         .= "<script type=\"text/javascript\">
       Main.add(function(){
-      	var cont = \$('set-container-$uid'),
-      	    element = cont.down('input'),
+        var cont = \$('set-container-$uid'),
+            element = cont.down('input'),
             tokenField = new TokenField(element, {" .($onchange ? "onChange: function(){ $onchange }.bind(element)" : "")."});
 
         cont.select('input').invoke('observe', 'click', function(event){
@@ -98,30 +99,30 @@ class CSetSpec extends CEnumSpec {
     switch ($typeEnum) {
       case "select":
         /*$sHtml      .= "<select name=\"$field\" class=\"$className\" multiple=\"multiple\" size=\"$size\" $extra>";
-				
+        
         foreach ($locales as $key => $item){
           if (!empty($value) && in_array($key, $value)) {
             $selected = " selected=\"selected\""; 
           }
-					else {
+          else {
             $selected = "";
           }
           $sHtml    .= "\n<option value=\"$key\" $selected>$item</option>";
         }
-				
+        
         $sHtml      .= "\n</select>";
         */
       default:
       case "checkbox":
         $compteur = 0;
         
-        foreach ($locales as $key => $item){
+        foreach ($locales as $key => $item) {
           $selected = "";
-					
+          
           if (!empty($value) && in_array($key, $value)) {
             $selected = " checked=\"checked\""; 
           }
-					
+          
           $sHtml .= "\n<label>
               <input type=\"checkbox\" name=\"_{$field}_{$key}\" value=\"$key\" class=\"set-checkbox token$uid\" $selected />
               $item
@@ -129,12 +130,12 @@ class CSetSpec extends CEnumSpec {
           $compteur++;
           
           $modulo = $compteur % $cycle;
-          if($separator != null && $modulo == 0 && $compteur < count($locales)){
+          if ($separator != null && $modulo == 0 && $compteur < count($locales)) {
             $sHtml  .= $separator;
           }
         }
     }
-		
+    
     $sHtml .= "</span>\n";
     return $sHtml;
   }

@@ -1,13 +1,14 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
- 
+
 /**
  * Setup abstract class
  * Install, upgrade or remove modules
@@ -36,7 +37,7 @@ class CSetup {
   static private $_old_pref_system = null;
   
   function __construct() {
-  	$this->ds = CSQLDataSource::get("std");
+    $this->ds = CSQLDataSource::get("std");
   }
 
   /**
@@ -44,7 +45,7 @@ class CSetup {
    * @param string $revision Revision number of form x.y
    */
   function makeRevision($revision) {
-  	 
+     
     if (in_array($revision, $this->revisions)) {
       trigger_error("Revision '$revision' already exists", E_USER_ERROR);
     }
@@ -151,12 +152,12 @@ class CSetup {
     }
     
     // Former pure SQL system
-		// Cannot check against module version or fresh install will generate errors
-		// Very consuming though...
+    // Cannot check against module version or fresh install will generate errors
+    // Very consuming though...
     if (self::$_old_pref_system) {
       $sqlTest = "SELECT * FROM `user_preferences` WHERE `pref_user` = '0' && `pref_name` = '$name'";
       $result = $this->ds->exec($sqlTest);
-      if(!$this->ds->numRows($result)) {
+      if (!$this->ds->numRows($result)) {
         $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )
           VALUES ('0', '$name', '$default');";
         $this->addQuery($sql);
@@ -168,7 +169,7 @@ class CSetup {
       $pref->user_id = 0;
       $pref->key = $name;
       if (!$pref->loadMatchingObject()) {
-	      $pref->value = $default;
+        $pref->value = $default;
         $pref->store();
       }
     }
@@ -183,7 +184,7 @@ class CSetup {
     return; 
     // FIXME: les fonctions addPrefQuery et delPrefQuery sont EXECUTEES
     // a CHAQUE fois quon va sur la page de setup ! cf. pure SQL
-  	$pref = new CPreferences;
+    $pref = new CPreferences;
     $where = array();
     $where['key'] = " = '$name'";
     foreach ($pref->loadList($where) as $_pref) {
@@ -270,7 +271,7 @@ class CSetup {
       }
       
       // Set Time Limit
-      if($this->timeLimit[$currRevision]){
+      if ($this->timeLimit[$currRevision]){
         set_time_limit($this->timeLimit[$currRevision]);
       }
 

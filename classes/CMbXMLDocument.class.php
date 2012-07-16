@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 if (!class_exists("DOMDocument")) {
@@ -54,7 +55,7 @@ class CMbXMLDocument extends DOMDocument {
   }
   
   function checkSchema() {
-    if(!$this->schemafilename) {
+    if (!$this->schemafilename) {
       trigger_error("You haven't set the schema", E_USER_WARNING);
       return false;
     }

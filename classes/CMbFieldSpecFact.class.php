@@ -9,7 +9,6 @@
  * @version    $Id$
  */
 
-
 /**
  * CFieldSpec factory for prop serialized definitions
  * 

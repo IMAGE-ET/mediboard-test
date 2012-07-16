@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 abstract class CJSLoader extends CHTMLResourceLoader {
@@ -73,7 +74,7 @@ abstract class CJSLoader extends CHTMLResourceLoader {
           $all_scripts .= $_script."\n";
         }
         
-        if($compress == 2) {
+        if ($compress == 2) {
           $all_scripts = self::minify($all_scripts);
         }
         

@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
  
 class CFTP {
@@ -203,7 +204,7 @@ class CFTP {
     foreach ($files as &$_file) {
       // Some FTP servers do not retrieve whole paths
       if ($folder && $folder != "." && strpos($_file, $folder) !== 0) {
-      	$_file = "$folder/$_file";
+        $_file = "$folder/$_file";
       }
     }
 
@@ -267,10 +268,10 @@ class CFTP {
     $dir = dirname($destination_file);
     if ($dir != ".") {
       $pwd = ftp_pwd($this->connexion);
-    	if (!@ftp_chdir($this->connexion, $dir)) {
-    		@ftp_mkdir($this->connexion, $dir);
-    	}	
-    	ftp_chdir($this->connexion, $pwd);
+      if (!@ftp_chdir($this->connexion, $dir)) {
+        @ftp_mkdir($this->connexion, $dir);
+      }  
+      ftp_chdir($this->connexion, $pwd);
     }
     
     // Upload the file

@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CSmartyDP extends CSmartyMB {
@@ -252,20 +253,20 @@ class CSmartyDP extends CSmartyMB {
     $css_class = ($order_col == $field) ? "sorted" : "sortable";
     $order_way_inv = ($order_way == "ASC") ? "DESC" : "ASC";
     
-    if($url){
-      if($css_class == "sorted"){
+    if ($url){
+      if ($css_class == "sorted"){
         return "<a class='$css_class $order_way' href='$url&amp;order_col$order_suffixe=$order_col&amp;order_way$order_suffixe=$order_way_inv'>$sHtml</a>";
       }
-      if($css_class == "sortable"){
+      if ($css_class == "sortable"){
         return "<a class='$css_class' href='$url&amp;order_col$order_suffixe=$field&amp;order_way$order_suffixe=ASC'>$sHtml</a>";
       }
     }
     
-    if($function){
-      if($css_class == "sorted"){
+    if ($function){
+      if ($css_class == "sorted"){
         return "<a class='$css_class $order_way' onclick=$function('$order_col','$order_way_inv');>$sHtml</a>";
       }
-      if($css_class == "sortable"){
+      if ($css_class == "sortable"){
         return "<a class='$css_class' onclick=$function('$field','ASC');>$sHtml</a>";
       }    
     }

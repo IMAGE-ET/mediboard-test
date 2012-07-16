@@ -1,14 +1,17 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
  
-// Chronometer
+/**
+ * Time tracking utility class
+ */
 class Chronometer {
   var $total = 0;
   var $step  = 0;
@@ -19,11 +22,23 @@ class Chronometer {
   
   var $report = array();
   
+  /**
+   * Starts the chronometer
+   * 
+   * @return void
+   */
   function start() {
     $this->nbSteps++;
     $this->step = microtime(true);
   }
   
+  /**
+   * Pauses the chronometer, saving a step
+   * 
+   * @param string $key The key of the step
+   * 
+   * @return void
+   */
   function stop($key = "") {
     if ($this->step === 0) {
       trigger_error("Chrono stopped without starting", E_USER_WARNING);
@@ -48,7 +63,7 @@ class Chronometer {
       $report->maxStep = max($report->maxStep, $report->step);
       $report->avgStep = $report->total/$report->nbSteps;
     }
+    
     $this->step = 0; 
   }
 }
-?>
