@@ -91,6 +91,8 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       continue;
     }
     CAppUI::setMsg("Utilisateur créé", UI_MSG_OK);
+    $user->insFunctionPermission();
+    $user->insGroupPermission();
     $results[$i]["result"] = 0;
     $results[$i]["username"] = $user->_user_username;
     $results[$i]["password"] = $user->_user_password;
