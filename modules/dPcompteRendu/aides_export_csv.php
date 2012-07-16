@@ -14,6 +14,10 @@ $list  = CValue::get('id', array());
 $owner = CValue::get('owner');
 $object_class = CValue::get('object_class');
 
+if (!is_array($list)) {
+  $list = explode("-", $list);
+}
+
 $out = fopen('php://output', 'w');
 header('Content-Type: application/csv');
 header('Content-Disposition: attachment; filename="Aides saisie'. ($owner ? " - $owner" : '') . ($object_class ? " - ".CAppUI::tr($object_class) : '') . '.csv"');
@@ -21,7 +25,10 @@ header('Content-Disposition: attachment; filename="Aides saisie'. ($owner ? " - 
 $aide = new CAideSaisie();
 fputcsv($out, array_keys($aide->getCSVFields()));
 
-foreach($list as $id) {
-  if (!$aide->load($id)) continue;
+foreach ($list as $id) {
+  if (!$aide->load($id)) {
+    continue;
+  }
+  
   fputcsv($out, $aide->getCSVFields());
 }

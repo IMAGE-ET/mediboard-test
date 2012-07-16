@@ -36,9 +36,9 @@ $listes  = CListeChoix::loadAllFor($user->_id);
 
 // Modèles associés
 foreach($listes as $_listes) {
-	foreach($_listes as $_liste) {
-		$_liste->loadRefModele();
-	}
+  foreach($_listes as $_liste) {
+    $_liste->loadRefModele();
+  }
 }
 
 // Liste sélectionnée

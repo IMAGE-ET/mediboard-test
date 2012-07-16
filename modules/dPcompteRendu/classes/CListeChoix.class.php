@@ -25,6 +25,7 @@ class CListeChoix extends CMbObject {
   var $_valeurs = null;
   var $_new     = null;
   var $_del     = null;
+  var $_owner   = null;
   
   // Referenced objects
   var $_ref_user     = null;
@@ -41,14 +42,14 @@ class CListeChoix extends CMbObject {
   }
 
   function getProps() {
-  	$props = parent::getProps();
+    $props = parent::getProps();
     $props["user_id"]         = "ref class|CMediusers";
     $props["function_id"]     = "ref class|CFunctions";
     $props["group_id"]        = "ref class|CGroups";
     $props["nom"]             = "str notNull";
     $props["valeurs"]         = "text confidential";
     $props["compte_rendu_id"] = "ref class|CCompteRendu cascade";
-		
+    
     $props["_owner"]           = "enum list|prat|func|etab";
     return $props;
   }
@@ -65,18 +66,18 @@ class CListeChoix extends CMbObject {
     return $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
   
-	function loadRefOwner() {
-		return CValue::first(
-		  $this->loadRefUser(),
-			$this->loadRefFunction(),
-			$this->loadRefGroup()
-		);
-	}
-	
-	function loadRefModele() {
-		return $this->_ref_modele = $this->loadFwdRef("compte_rendu_id", true);
-	}
-	
+  function loadRefOwner() {
+    return CValue::first(
+      $this->loadRefUser(),
+      $this->loadRefFunction(),
+      $this->loadRefGroup()
+    );
+  }
+  
+  function loadRefModele() {
+    return $this->_ref_modele = $this->loadFwdRef("compte_rendu_id", true);
+  }
+  
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;
@@ -108,18 +109,18 @@ class CListeChoix extends CMbObject {
   
   function getPerm($permType) {
     $owner = $this->loadRefsOwner();
-		return $owner->getPerm($permType);
+    return $owner->getPerm($permType);
   }
-	
+  
   static function loadAllFor($user_id) {
-		$user = new CMediusers;
-		$user->load($user_id);
+    $user = new CMediusers;
+    $user->load($user_id);
 
     $listes = array();
-		foreach ($user->getOwners() as $type => $owner) {
-			$listes[$type] = $owner->loadBackRefs("listes_choix", "nom");
-		}
-		return $listes;
+    foreach ($user->getOwners() as $type => $owner) {
+      $listes[$type] = $owner->loadBackRefs("listes_choix", "nom");
+    }
+    return $listes;
   }
 }
 
