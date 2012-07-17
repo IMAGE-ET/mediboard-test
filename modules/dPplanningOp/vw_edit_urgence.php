@@ -76,9 +76,11 @@ if($sejour_id && !$operation_id) {
   $sejour->load($sejour_id);
   $sejour->loadRefsFwd();
   if(!$chir_id) {
-    $chir =& $sejour->_ref_praticien;
+    $chir = $sejour->_ref_praticien;
   }
-  $patient =& $sejour->_ref_patient;
+  // On ne change a priori pas le praticien du séjour
+  $prat    = $sejour->_ref_praticien;
+  $patient = $sejour->_ref_patient;
 }
 
 // On récupère l'opération
@@ -100,11 +102,11 @@ if ($op->_id) {
     $acte->loadRefExecutant();
   }	
 	
-  $sejour =& $op->_ref_sejour;
+  $sejour = $op->_ref_sejour;
   $sejour->loadRefsFwd();
   $sejour->makeCancelAlerts($op->_id);
-  $chir =& $op->_ref_chir;
-  $patient =& $sejour->_ref_patient;
+  $chir    = $op->_ref_chir;
+  $patient = $sejour->_ref_patient;
 }
 
 // Liste des types d'anesthésie

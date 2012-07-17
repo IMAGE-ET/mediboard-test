@@ -68,9 +68,11 @@ if($sejour_id && !$operation_id) {
   $sejour->loadRefsFwd();
   
   if(!$chir_id) {
-    $chir =& $sejour->_ref_praticien;
+    $chir = $sejour->_ref_praticien;
   }
-  $patient =& $sejour->_ref_patient;
+  // On ne change a priori pas le praticien du séjour
+  $prat    = $sejour->_ref_praticien;
+  $patient = $sejour->_ref_patient;
 }
 
 // Liste des types d'anesthésie
