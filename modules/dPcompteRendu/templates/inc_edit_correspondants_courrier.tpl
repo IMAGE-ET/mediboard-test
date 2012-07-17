@@ -47,7 +47,8 @@
         {{else}}
           <div style="float: left">
             <input type="text" name="_view" class="autocomplete"/>
-            <div id="correspondants_area" style="color: #000; text-align: left; width: 35px; float: left;" class="autocomplete"></div>
+            <div id="correspondants_area"
+              style="color: #000; text-align: left; width: 35px; float: left; font-weight: normal;" class="autocomplete"></div>
           </div>
         {{/if}}
         
@@ -81,6 +82,10 @@
             });
           </script>
         </td>
+      </tr>
+    {{foreachelse}}
+      <tr>
+        <td class="empty" colspan="3">{{tr}}CMedecin.none{{/tr}}</td>
       </tr>
     {{/foreach}}
   {{/foreach}}

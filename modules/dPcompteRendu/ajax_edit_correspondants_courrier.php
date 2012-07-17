@@ -23,6 +23,10 @@ $destinataires = array();
 CDestinataire::makeAllFor($object);
 $destinataires = CDestinataire::$destByClass;
 
+if (!isset($destinataires["CMedecin"])) {
+  $destinataires["CMedecin"] = array();
+}
+
 // Fusion avec les correspondants ajoutés par l'autocomplete
 $compte_rendu->mergeCorrespondantsCourrier($destinataires);
 
