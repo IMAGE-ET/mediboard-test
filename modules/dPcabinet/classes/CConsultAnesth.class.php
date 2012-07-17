@@ -433,8 +433,8 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $template->addProperty("Anesthésie - Examen digestif"           , $this->examenDigest);
     $template->addProperty("Anesthésie - Examen autre"              , $this->examenAutre);
     
-    $template->addProperty("Anesthésie - Ouverture de la bouche"    , $this->getFormattedValue('bouche'));
-    $template->addProperty("Anesthésie - Distance thyro-mentonnière", $this->getFormattedValue('distThyro'));
+    $template->addProperty("Anesthésie - Ouverture de la bouche"    , $this->getFormattedValue('bouche'), null, false);
+    $template->addProperty("Anesthésie - Distance thyro-mentonnière", $this->getFormattedValue('distThyro'), null, false);
     $template->addProperty("Anesthésie - Etat bucco-dentaire"       , $this->etatBucco);
     $img = "";
     if ($this->mallampati) {
