@@ -333,6 +333,7 @@ $locales['CListeChoix._owner.etab'] = 'Etablissement';
 $locales['CListeChoix._owner.func'] = 'Fonction';
 $locales['CListeChoix._owner.prat'] = 'Utilisateur';
 $locales['CListeChoix.all'] = 'Toutes les listes de choix';
+$locales['CListeChoix.empty'] = 'Vider';
 $locales['CListeChoix.fill'] = 'Complété';
 $locales['CListeChoix.none'] = 'Aucune liste de choix';
 $locales['CListeChoix.one'] = 'liste de choix';

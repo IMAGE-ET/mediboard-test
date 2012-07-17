@@ -56,19 +56,19 @@ lockAllButtons = function() {
 }
 
 generatePdf = function(id) {
-	oState = $("state");
-	oState.className = "loading";
-	oState.setStyle({backgroundPosition: "50% 50%", height: '100px', textAlign: "center", marginTop: "1em", fontWeight: "bold"});
-	oState.innerHTML = "{{tr}}CCompteRendu.generating_pdf{{/tr}}";
-	var form = getForm('create-pdf-form-{{$uid_fast_mode}}'); 
-	$V(form.compte_rendu_id, id);
-	form.onsubmit();
+  oState = $("state");
+  oState.className = "loading";
+  oState.setStyle({backgroundPosition: "50% 50%", height: '100px', textAlign: "center", marginTop: "1em", fontWeight: "bold"});
+  oState.innerHTML = "{{tr}}CCompteRendu.generating_pdf{{/tr}}";
+  var form = getForm('create-pdf-form-{{$uid_fast_mode}}'); 
+  $V(form.compte_rendu_id, id);
+  form.onsubmit();
 }
 
 printDoc = function(id, args) {
   Document.print(id);
-	Document.refreshList($V(getForm('fastModeForm-{{$uid_fast_mode}}').file_category_id), '{{$object_class}}', '{{$object_id}}');
-	Control.Modal.close();
+  Document.refreshList($V(getForm('fastModeForm-{{$uid_fast_mode}}').file_category_id), '{{$object_class}}', '{{$object_id}}');
+  Control.Modal.close();
 }
 
 printToServer = function(file_id) {
@@ -79,24 +79,24 @@ printToServer = function(file_id) {
 }
 
 streamOrNotStream = function(form) {
-	if ($V(form.stream) == 1) {
-		$V(form.callback, "streamPDF");
-		onSubmitFormAjax(form);
-	}
-	else {
-		onSubmitFormAjax(form, {onComplete: function() {
+  if ($V(form.stream) == 1) {
+    $V(form.callback, "streamPDF");
+    onSubmitFormAjax(form);
+  }
+  else {
+    onSubmitFormAjax(form, {onComplete: function() {
       Document.refreshList($V(getForm('fastModeForm-{{$uid_fast_mode}}').file_category_id), '{{$object_class}}', '{{$object_id}}')
       Control.Modal.close();
     }});
-	}
+  }
 }
 
 streamPDF = function(id) {
-	var form = getForm("stream-pdf-{{$uid_fast_mode}}");
-	$V(form.file_id, id);
-	form.submit();
-	Document.refreshList($V(getForm('fastModeForm-{{$uid_fast_mode}}').file_category_id), '{{$object_class}}', '{{$object_id}}');
-	Control.Modal.close();
+  var form = getForm("stream-pdf-{{$uid_fast_mode}}");
+  $V(form.file_id, id);
+  form.submit();
+  Document.refreshList($V(getForm('fastModeForm-{{$uid_fast_mode}}').file_category_id), '{{$object_class}}', '{{$object_id}}');
+  Control.Modal.close();
 }
 
 switchToEditor = function() {
@@ -110,20 +110,20 @@ switchToEditor = function() {
 }
 
 Main.add(function() {
-	{{if $lists|@count == 0 && $textes_libres|@count == 0 && $printers|@count <= 1}}
-	  {{if $printers|@count == 1}}
+  {{if $lists|@count == 0 && $textes_libres|@count == 0 && $printers|@count <= 1}}
+    {{if $printers|@count == 1}}
       $$(".printerServer")[0].click();
-	  {{else}}
-	  lockAllButtons();
-  	  var oForm = getForm('fastModeForm-{{$uid_fast_mode}}');
-  	  {{if $compte_rendu->fast_edit_pdf && $pdf_thumbnails && $pdf_and_thumbs}}
+    {{else}}
+    lockAllButtons();
+      var oForm = getForm('fastModeForm-{{$uid_fast_mode}}');
+      {{if $compte_rendu->fast_edit_pdf && $pdf_thumbnails && $pdf_and_thumbs}}
         $V(getForm('create-pdf-form-{{$uid_fast_mode}}').stream, 1);
       {{else}}
         $V(oForm.callback, 'printDoc');
       {{/if}}
-      	oForm.onsubmit();
+        oForm.onsubmit();
     {{/if}}
-	{{/if}}
+  {{/if}}
 });
 
 
@@ -138,8 +138,8 @@ Main.add(function() {
 <form style="display: none;" name="create-pdf-form-{{$uid_fast_mode}}" method="post" action="?"
       onsubmit="printFast(); streamOrNotStream(this); return false;">
   <input type="hidden" name="compte_rendu_id" value='' />
-	<input type="hidden" name="m" value="dPcompteRendu" />
-	<input type="hidden" name="dosql" value="do_pdf_cfile_aed" />
+  <input type="hidden" name="m" value="dPcompteRendu" />
+  <input type="hidden" name="dosql" value="do_pdf_cfile_aed" />
   <input type="hidden" name="stream" value="0" />
   <input type="hidden" name="print_to_server" value="0" />
   <input type="hidden" name="callback" value=""/>
@@ -158,8 +158,8 @@ Main.add(function() {
   <input type="hidden" name="compte_rendu_id" value="" />
   <input type="hidden" name="fast_edit" value="1" />
   <input type="hidden" name="callback" value="generatePdf" />
-	<input type="hidden" name="suppressHeaders" value="1"/>
-	<input type="hidden" name="dialog" value="1"/>
+  <input type="hidden" name="suppressHeaders" value="1"/>
+  <input type="hidden" name="dialog" value="1"/>
   <input type="hidden" name="page_height" value="{{$compte_rendu->page_height}}" />
   <input type="hidden" name="page_width" value="{{$compte_rendu->page_width}}" />
   <input type="hidden" name="margin_left" value="{{$compte_rendu->margin_left}}"/>
@@ -225,7 +225,8 @@ Main.add(function() {
                   <fieldset>
                     <legend>{{tr}}CListeChoix{{/tr}}</legend>
                   {{foreach from=$lists item=curr_list}}
-                    <input type="checkbox" name="_empty_list[{{$curr_list->_id}}]" title="{{tr}}CListeChoix.fill{{/tr}}"
+                    <input type="checkbox" name="_empty_list[{{$curr_list->_id}}]"
+                      title="{{if $check_to_empty_field}}{{tr}}CListeChoix.empty{{/tr}}{{else}}{{tr}}CListeChoix.fill{{/tr}}{{/if}}"
                       style="float: left;" class="empty_field"/>
                     <select name="_{{$curr_list->_class}}[{{$curr_list->_id}}][]" class="liste" {{if !$check_to_empty_field}}onchange="this.form.elements['_empty_list[{{$curr_list->_id}}]'].checked='checked'"{{/if}}>
                       <option value="undef">&mdash; {{$curr_list->nom}}</option>
@@ -272,19 +273,19 @@ Main.add(function() {
                   {{if !$check_to_empty_field}}onkeydown="this.form.elements['_empty_texte_libre[{{$_nom|md5}}]'].checked='checked'; this.onkeydown=''"{{/if}}></textarea>
                   <input type="hidden" name="_texte_libre_md5[{{$_nom|md5}}]" value="{{$_nom}}"/>
                 </fieldset>
-	              {{main}}
-	                new AideSaisie.AutoComplete(getForm("fastModeForm-{{$uid_fast_mode}}").elements["_texte_libre[{{$_nom|md5}}]"],
+                {{main}}
+                  new AideSaisie.AutoComplete(getForm("fastModeForm-{{$uid_fast_mode}}").elements["_texte_libre[{{$_nom|md5}}]"],
                    {
                       objectClass: '{{$compte_rendu->_class}}',
                       contextUserId: User.id,
                       contextUserView: "{{$user_view}}",
-		                  timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-		                  resetSearchField: false,
-		                  resetDependFields: false,
-		                  validateOnBlur: false,
+                      timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+                      resetSearchField: false,
+                      resetDependFields: false,
+                      validateOnBlur: false,
                       property: "_source"
-		                });
-						    {{/main}}
+                    });
+                {{/main}}
               </td>
             </tr>
             {{/foreach}}

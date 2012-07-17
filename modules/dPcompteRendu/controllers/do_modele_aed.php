@@ -40,7 +40,7 @@ if (isset($_POST["_source"])) {
 }
 
 $check_to_empty_field = CAppUI::conf("dPcompteRendu CCompteRendu check_to_empty_field");
-
+//mbLog($_POST["_empty_texte_libre"]);
 // Remplacement des zones de texte libre
 if (isset($_POST["_texte_libre"])) {
   $compte_rendu = new CCompteRendu();
@@ -49,13 +49,26 @@ if (isset($_POST["_texte_libre"])) {
 
   // Remplacement des \n par des <br>
   foreach($_POST["_texte_libre"] as $key=>$_texte_libre) {
+    $is_empty = false;
     if (($check_to_empty_field && isset($_POST["_empty_texte_libre"][$key])) ||
-        (!$check_to_empty_field && !isset($_POST["_empty_texte_libre"][$key])) ||
-        $_POST["_texte_libre"][$key] != '') {
-      $fields[] = "[[Texte libre - " . $_POST["_texte_libre_md5"][$key] . "]]";
+        (!$check_to_empty_field && !isset($_POST["_empty_texte_libre"][$key]))) {
+      $values[] = "";
+      $is_empty = true;
+    }
+    else {
+      if ($_POST["_texte_libre"][$key] === "") {
+        continue;
+      }
       $values[] = nl2br($_POST["_texte_libre"][$key]);
     }
+    if ($is_empty) {
+      $fields[] = "<span class=\"field\">[[Texte libre - " . $_POST["_texte_libre_md5"][$key] . "]]</span>";
+    }
+    else {
+      $fields[] = "[[Texte libre - " . $_POST["_texte_libre_md5"][$key] . "]]";
+    }
   }
+  
   $_POST["_source"] = str_ireplace($fields, $values, $_POST["_source"]);
   $_POST["_texte_libre"] = null;
 }
