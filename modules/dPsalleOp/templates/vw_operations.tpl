@@ -18,9 +18,9 @@ function printFicheAnesth(consult_id) {
 
 function submitTiming(oForm) {
   submitFormAjax(oForm, 'systemMsg', { 
-  	onComplete : function() { 
-  		reloadTiming(oForm.operation_id.value) 
-  	} 
+    onComplete : function() { 
+      reloadTiming(oForm.operation_id.value) 
+    } 
   });
 }
 
@@ -34,15 +34,15 @@ function reloadTiming(operation_id){
 
 function submitAnesth(oForm) {
   submitFormAjax(oForm, 'systemMsg', { 
-  	onComplete: function() {
-		  if(Prescription.updatePerop){
+    onComplete: function() {
+      if(Prescription.updatePerop){
         Prescription.updatePerop('{{$selOp->sejour_id}}');
       }
       reloadAnesth(oForm.operation_id.value);
-			if(document.visiteAnesth && document.visiteAnesth.date_visite_anesth.value == 'current'){
-			  $V(document.visiteAnesth.prat_visite_anesth_id, oForm.anesth_id.value);
-			}
-  	}
+      if(document.visiteAnesth && document.visiteAnesth.date_visite_anesth.value == 'current'){
+        $V(document.visiteAnesth.prat_visite_anesth_id, oForm.anesth_id.value);
+      }
+    }
   });
 }
 
@@ -54,13 +54,13 @@ function reloadAnesth(operation_id){
   var url = new Url("dPsalleOp", "httpreq_vw_anesth");
   url.addParam("operation_id", operation_id);
   url.requestUpdate("anesth", { 
-  	onComplete: function() { 
+    onComplete: function() { 
       if(reloadDocumentsAnesth) {
         reloadDocumentsAnesth();
       }
-  		ActesCCAM.refreshList(operation_id,"{{$selOp->chir_id}}"); 
-  	}
-  } );	
+      ActesCCAM.refreshList(operation_id,"{{$selOp->chir_id}}"); 
+    }
+  } );  
 }
 
 function reloadDiagnostic(sejour_id, modeDAS) {
@@ -90,12 +90,12 @@ Main.add(function () {
   url.addParam("date", "{{$date}}");
   url.addParam("operation_id", "{{$selOp->_id}}");
   url.addParam("hide_finished", "{{$hide_finished}}");
-	
+  
   url.periodicalUpdate('listplages', { frequency: 90 });
   
   {{if $selOp->_id}}
   // Initialisation des onglets
-	if ($('main_tab_group')){
+  if ($('main_tab_group')){
     Control.Tabs.create('main_tab_group', true);
     var tabName = Control.Tabs.loadTab('main_tab_group');
     {{if "maternite"|module_active}}
@@ -103,16 +103,16 @@ Main.add(function () {
         refreshGrossesse('{{$selOp->_id}}');
       }
     {{/if}}      
-	}
+  }
 
   // Effet sur le programme
-	if ($('listplages') && $('listplages-trigger')){
+  if ($('listplages') && $('listplages-trigger')){
     new PairEffect("listplages", { sEffect : "appear", bStartVisible : true });
-	}		
+  }    
   {{/if}}
-	
-	// Sauvegarde de l'operation_id selectionné (utile pour l'ajout de DMI dans la prescription)
-	window.DMI_operation_id = "{{$selOp->_id}}";
+  
+  // Sauvegarde de l'operation_id selectionné (utile pour l'ajout de DMI dans la prescription)
+  window.DMI_operation_id = "{{$selOp->_id}}";
 });
 
 </script>
@@ -122,12 +122,12 @@ Main.add(function () {
     <td style="width: 220px;" id="listplages"></td>
     <td>
     {{if $selOp->_id}}
-		  {{if $conf.dPsalleOp.CDailyCheckList.active != '1' || 
-           $date < $smarty.now|iso_date || 
+      {{if $conf.dPsalleOp.CDailyCheckList.active != '1' || 
+           $date < $smarty.now|date_format:'%Y-%m-%d' || 
            $daily_check_list->_id && $daily_check_list->validator_id || 
            $currUser->_is_praticien}}
         {{include file=inc_operation.tpl}}
-			{{else}}
+      {{else}}
         {{include file=inc_edit_check_list.tpl 
                   check_list=$daily_check_list 
                   check_item_categories=$daily_check_item_categories
@@ -135,14 +135,14 @@ Main.add(function () {
       {{/if}}
     {{else}}
       <div class="big-info">
-      	Veuillez sélectionner une intervention dans la liste pour pouvoir :
-      	<ul>
-      	  <li>sélectionner le personnel en salle</li>
-      	  <li>effectuer l'horodatage</li>
-      	  <li>coder les diagnostics</li>
-      	  <li>coder les actes</li>
-      	  <li>consulter le dossier</li>
-      	</ul>
+        Veuillez sélectionner une intervention dans la liste pour pouvoir :
+        <ul>
+          <li>sélectionner le personnel en salle</li>
+          <li>effectuer l'horodatage</li>
+          <li>coder les diagnostics</li>
+          <li>coder les actes</li>
+          <li>consulter le dossier</li>
+        </ul>
       </div>
     {{/if}}
     </td>
