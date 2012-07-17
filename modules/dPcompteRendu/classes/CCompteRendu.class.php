@@ -46,6 +46,7 @@ class CCompteRendu extends CDocumentItem {
   var $date_print        = null;
   var $purge_field       = null;
   var $purgeable         = null;
+  var $fields_missing    = null;
   
   // Form fields
   var $_is_document      = false;
@@ -144,6 +145,7 @@ class CCompteRendu extends CDocumentItem {
     $specs["date_print"]       = "dateTime";
     $specs["purge_field"]      = "str";
     $specs["purgeable"]        = "bool default|0";
+    $specs["fields_missing"]   = "num default|0 show|0";
     $specs["_owner"]           = "enum list|prat|func|etab";
     $specs["_orientation"]     = "enum list|portrait|landscape";
     $specs["_page_format"]     = "enum list|".implode("|", array_keys(self::$_page_formats));
@@ -244,6 +246,10 @@ class CCompteRendu extends CDocumentItem {
     
     if ($modele->_id && $modele->purgeable) {
       $this->_view = "[temp] " . $this->_view;
+    }
+    
+    if ($this->object_id && $this->fields_missing) {
+      $this->_view = " [" . $this->fields_missing . "] $this->_view";
     }
     
     if ($this->user_id) {
@@ -749,6 +755,11 @@ class CCompteRendu extends CDocumentItem {
     if ($msg = $this->_ref_content->store()) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
     }
+    
+    // Detect the fields not completed
+    $matches = array();
+    preg_match_all("/(field|name)\">(\[)+[^\]]+(\])+<\/span>/ms", $this->_source, $matches);
+    $this->fields_missing = count($matches[0]);
     
     if (!$this->content_id ) {
       $this->content_id = $this->_ref_content->_id;

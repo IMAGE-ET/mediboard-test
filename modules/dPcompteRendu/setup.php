@@ -800,7 +800,12 @@ class CSetupdPcompteRendu extends CSetup {
       ADD INDEX (`ending_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.81";
+    $this->makeRevision("0.81");
+    $query = "ALTER TABLE `compte_rendu`
+      ADD `fields_missing` INT (11) UNSIGNED DEFAULT 0";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.82";
   }
 }
 ?>

@@ -11,24 +11,33 @@
     <table class="main form">
       <tr>
         <th class="category" colspan="2">
-          Veuillez choisir le nombre de documents à imprimer
+          Document
+        </th>
+        <th class="category">
+          Date de dernière impression
         </th>
       </tr>
       {{foreach from=$documents item=curr_doc}}
-      <tr>
-        <th>
-          {{$curr_doc->nom}}
-        </th>
-        <td>
-          <input name="nbDoc[{{$curr_doc->compte_rendu_id}}]" type="text" size="2" value="1" />
-          <script type="text/javascript">
-            $(getForm("selectDocsFrm").elements['nbDoc[{{$curr_doc->compte_rendu_id}}]']).addSpinner({min:0});
-          </script>
-        </td>
-      </tr>
+        <tr>
+          <th>
+            {{$curr_doc->nom}}
+          </th>
+          <td>
+            <input name="nbDoc[{{$curr_doc->compte_rendu_id}}]" type="text" size="2"
+              value="{{if $curr_doc->date_print}}0{{else}}1{{/if}}" />
+            <script type="text/javascript">
+              $(getForm("selectDocsFrm").elements['nbDoc[{{$curr_doc->compte_rendu_id}}]']).addSpinner({min:0});
+            </script>
+          </td>
+          <td style="text-align: right;">
+            {{if $curr_doc->date_print}}
+              {{mb_value object=$curr_doc field=date_print}}
+            {{/if}}
+          </td>
+        </tr>
       {{/foreach}}
       <tr>
-        <td class="button" colspan="2">
+        <td class="button" colspan="3">
           <button class="pdf">{{tr}}Print{{/tr}}</button>
         </td>
       </tr>
