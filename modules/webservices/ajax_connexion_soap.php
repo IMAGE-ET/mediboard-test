@@ -29,10 +29,12 @@ $options = array(
   "encoding" => $exchange_source->encoding
 );
 
-$client = CMbSOAPClient::make($exchange_source->host, $exchange_source->user, $exchange_source->password, $exchange_source->type_echange, $options);
-if (!$client || $client->soap_client_error) {
-  CAppUI::stepAjax("Impossible de joindre la source de donnée : '$exchange_source_name'", UI_MSG_ERROR);
+$soap_client = new CSOAPClient($exchange_source->type_soap);
+$soap_client->make($exchange_source->host, $exchange_source->user, $exchange_source->password, $exchange_source->type_echange, $options);
+
+if (!$soap_client || $soap_client->client->soap_client_error) {
+  CAppUI::stepAjax("Impossible de joindre la source de donnée : '$exchange_source_name'", UI_MSG_ERROR);
 } 
 else {
-  CAppUI::stepAjax("Connecté à la source '$exchange_source_name'");
+  CAppUI::stepAjax("Connecté à la source '$exchange_source_name'");
 }
