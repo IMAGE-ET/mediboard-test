@@ -548,8 +548,8 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
         {{/if}}
 
         <hr />
-		<table class="form">
-		
+    <table class="form">
+    
         <tr>
           {{if $droit}}
             <td class="button" colspan="2">
@@ -583,7 +583,7 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
       </table>
     </td>
     
-    <td style="height: 500px; max-width: 600px !important;">
+    <td style="height: 500px; max-width: 600px !important;" class="greedyPane">
       {{if $compte_rendu->_id}}
         {{if !$droit}}
           <div class="big-info">
