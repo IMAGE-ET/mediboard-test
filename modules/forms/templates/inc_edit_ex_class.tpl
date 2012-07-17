@@ -174,7 +174,7 @@ toggleGroupLabelEdit = function(link) {
 <div id="fields-specs">
 
 <ul class="control_tabs" id="field_groups" style="font-size: 0.9em;">
-  {{foreach from=$ex_class->_ref_groups item=_group}}
+  {{foreach from=$ex_class->_ref_groups item=_group name=_groups}}
     <li>
       <a href="#group-{{$_group->_guid}}" ondblclick="toggleGroupLabelEdit(this)" title="Double-cliquer pour modifier" style="padding: 2px 4px;">
         <span class="label" style="font-weight: normal;">
@@ -186,9 +186,19 @@ toggleGroupLabelEdit = function(link) {
             onsubmit="return onSubmitFormAjax(this, {onComplete: ExClass.edit.curry({{$ex_class->_id}})})">
         <input type="hidden" name="m" value="system" />
         <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="_move" value="" />
         <input type="hidden" name="@class" value="CExClassFieldGroup" />
         {{mb_key object=$_group}}
+        
+        {{if !$smarty.foreach._groups.first}}
+          <button type="button" class="left notext" onclick="$V(this.form._move, 'before'); this.form.onsubmit()" title="Déplacer sur la gauche"></button>
+        {{/if}}
+        
         {{mb_field object=$_group field=name size=18}}
+        
+        {{if !$smarty.foreach._groups.last}}
+          <button type="button" class="right notext" onclick="$V(this.form._move, 'after'); this.form.onsubmit()" title="Déplacer sur la droite"></button>
+        {{/if}}
         
         <button onclick="Event.stop(event); this.form.onsubmit();" 
                 class="submit notext" type="submit" style="margin: -1px;">

@@ -676,13 +676,26 @@ ExFormula = {
 };
 
 ExFieldPredicate = {
-  edit: function(id, ex_field_id) {
+  edit: function(id, ex_field_id, exclude_ex_field_id, form) {
     var url = new Url("forms", "ajax_edit_ex_field_predicate");
     url.addParam("ex_field_predicate_id", id);
-    url.addParam("ex_field_id", ex_field_id);
+    
+    if (ex_field_id) {
+      url.addParam("ex_field_id", ex_field_id);
+    }
+    
+    if (exclude_ex_field_id) {
+      url.addParam("exclude_ex_field_id", exclude_ex_field_id);
+    }
+    
+    if (form && id == 0) {
+      url.addParam("opener_field_value", form.predicate_id.identify());
+      url.addParam("opener_field_view",  form.predicate_id_autocomplete_view.identify());
+    }
+    
     url.requestModal(500, 300);
   },
-  create: function(ex_field_id) {
-    this.edit("0", ex_field_id);
+  create: function(ex_field_id, exclude_ex_field_id, form) {
+    this.edit("0", ex_field_id, exclude_ex_field_id, form);
   }
 };

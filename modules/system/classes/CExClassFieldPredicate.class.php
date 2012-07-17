@@ -65,27 +65,6 @@ class CExClassFieldPredicate extends CMbObject {
   }
   
   function getAutocompleteList($keywords, $where = null, $limit = null, $ljoin = null, $order = null) {
-    $ex_class_id = $this->loadRefExClassField()->loadRefExGroup()->ex_class_id;
-    
-    $where = array_merge($where, array(
-      "ex_class_field_group.ex_class_id" => "= '$ex_class_id'",
-    ));
-    
-    $ljoin_new = array(
-      "ex_class_field"       => "ex_class_field.ex_class_field_id = ex_class_field_predicate.ex_class_field_id",
-      "ex_class_field_group" => "ex_class_field_group.ex_class_field_group_id = ex_class_field.ex_group_id",
-    );
-    
-    if (is_array($ljoin)) {
-      $ljoin = array_merge($ljoin, $ljoin_new);
-    }
-    else {
-      $ljoin = $ljoin_new;
-    }
-    
-    mbLog($where);
-    mbLog($ljoin);
-    
     $list = $this->loadList($where, null, null, null, $ljoin);
     
     $real_list = array();
@@ -94,20 +73,20 @@ class CExClassFieldPredicate extends CMbObject {
     $re = str_replace("/", "\\/", $re);
     $re = "/($re)/i";
     
-    foreach($list as $_predicate) {
-      if ($keywords == "%" || $keywords == "" || preg_match($re, $_predicate->_view)) {
-        $real_list[$_predicate->_id] = $_predicate;
+    foreach($list as $_match) {
+      if ($keywords == "%" || $keywords == "" || preg_match($re, $_match->_view)) {
+        $real_list[$_match->_id] = $_match;
       }
     }
+    
+    $views = CMbArray::pluck($real_list, "_view");
+    array_multisort($views, $real_list);
     
     $empty = new self;
     $empty->_id = null;
     $empty->_guid = "$this->_class-$this->_id"; // FIXME
-    $empty->_view = "Aucune (toujours afficher)";
+    $empty->_view = " -- Toujours afficher -- ";
     array_unshift($real_list, $empty);
-    
-    $views = CMbArray::pluck($real_list, "_view");
-    array_multisort($views, $real_list);
     
     return $real_list;
   }

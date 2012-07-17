@@ -13,11 +13,14 @@ class CExClassFieldGroup extends CMbObject {
   
   var $ex_class_id = null;
   var $name = null; // != object_class, object_id, ex_ClassName_event_id, 
+  var $rank = null;
   
   var $_ref_ex_class = null;
   var $_ref_fields = null;
   var $_ref_messages = null;
   var $_ref_host_fields = null;
+  
+  var $_move = null;
   
   static $_fields_cache = array();
 
@@ -33,6 +36,7 @@ class CExClassFieldGroup extends CMbObject {
     $props = parent::getProps();
     $props["ex_class_id"] = "ref class|CExClass cascade";
     $props["name"]        = "str notNull";
+    $props["rank"]        = "num min|0";
     return $props;
   }
   
@@ -49,6 +53,9 @@ class CExClassFieldGroup extends CMbObject {
     $this->_view = $this->name;
   }
   
+  /**
+   * @return CExClass
+   */
   function loadRefExClass($cache = true){
     return $this->_ref_ex_class = $this->loadFwdRef("ex_class_id", $cache);
   }
@@ -65,6 +72,47 @@ class CExClassFieldGroup extends CMbObject {
     }
     
     return $this->_ref_fields;
+  }
+  
+  function store(){
+    if ($this->_move && $this->_id) {
+      $this->completeField("ex_class_id");
+      $groups = $this->loadRefExClass()->loadRefsGroups();
+      $groups_ids = array_keys($groups);
+      $self_index = array_search($this->_id, $groups_ids);
+      
+      $signs = array(
+        "before" => -1,
+        "after"  => +1,
+      );
+      
+      $sign = Cvalue::read($signs, $this->_move);
+      
+      // Si signe valide et que l'index existe
+      if ($sign && isset($groups_ids[$self_index+$sign])) {
+        list($groups_ids[$self_index+$sign], $groups_ids[$self_index]) = array($groups_ids[$self_index], $groups_ids[$self_index+$sign]); 
+      
+        $new_groups = array();
+        foreach($groups_ids as $i => $id) {
+          $new_groups[$id] = $groups[$id];
+        }
+        
+        $i = 1;
+        foreach($new_groups as $_group) {
+          if ($_group->_id == $this->_id) {
+            $this->rank = $i;
+          }
+          else {
+            $_group->rank = $i;
+            $_group->store();
+          }
+          
+          $i++;
+        }
+      }
+    }
+    
+    return parent::store();
   }
   
   function loadRefsHostFields(){

@@ -1037,6 +1037,11 @@ class CSetupsystem extends CSetup {
     $this->makeRevision("1.1.01");
     $this->addPrefQuery("MobileDefaultModuleView", 1);
     
-    $this->mod_version = "1.1.02";
+    $this->makeRevision("1.1.02");
+    $query = "ALTER TABLE `ex_class_field_group` 
+              ADD `rank` TINYINT (4) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.1.03";
   }
 }

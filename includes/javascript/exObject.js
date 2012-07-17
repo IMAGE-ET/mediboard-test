@@ -177,10 +177,27 @@ var ExObject = {
     url.mergeParams(options);
     url.requestUpdate(target, {onComplete: options.onComplete});
   },
-  
+  getCastedInputValue: function(value, input){
+    if (input.hasClassName("float") || 
+        input.hasClassName("currency") || 
+        input.hasClassName("pct")) {
+      return parseFloat(value);
+    }
+    
+    if (input.hasClassName("num") || 
+        input.hasClassName("numchar") || 
+        input.hasClassName("pct")) {
+      return parseInt(value);
+    }
+    
+    return value;
+  },
   handlePredicates: function(predicates, form){
     predicates.each(function(p){
-      var triggerValue = $V(form.elements[p.trigger]);
+      var triggerField = form.elements[p.trigger];
+      var targetField  = form.elements[p.target];
+      var triggerValue = $V(triggerField);
+      
       if (Object.isArray(triggerValue)) {
         triggerValue = triggerValue.join("|");
       }
@@ -188,9 +205,16 @@ var ExObject = {
         triggerValue += "";
       }
       
+      var refValue = p.value;
+      
+      if ([">", ">=", "<", "<="].indexOf(p.operator) > -1) {
+        refValue     = ExObject.getCastedInputValue(p.value, triggerField);
+        triggerValue = ExObject.getCastedInputValue(triggerValue, triggerField);
+      }
+      
       var display = (function(){
         // An empty value hides the target
-        if (triggerValue === "") {
+        if (triggerValue === "" || isNaN(triggerValue)) {
           return false;
         }
         
@@ -204,19 +228,19 @@ var ExObject = {
             break;
             
           case ">": 
-            if (triggerValue > p.value) return true;
+            if (triggerValue > refValue) return true;
             break;
             
           case ">=": 
-            if (triggerValue >= p.value) return true;
+            if (triggerValue >= refValue) return true;
             break;
             
           case "<": 
-            if (triggerValue < p.value) return true;
+            if (triggerValue < refValue) return true;
             break;
             
           case "<=": 
-            if (triggerValue <= p.value) return true;
+            if (triggerValue <= refValue) return true;
             break;
             
           case "startsWith": 
@@ -237,7 +261,7 @@ var ExObject = {
         return false;
       })();
       
-      ExObject.toggleField(p.target, display);
+      ExObject.toggleField(p.target, display, triggerField, targetField);
     });
   },
   
@@ -256,11 +280,18 @@ var ExObject = {
     });
   },
   
-  toggleField: function(name, v) {
-    $$(".field-"+name).each(function(field){
-      field.setClassName("opacity-20", !v);
-      field.disabled = !v;
-    })
+  toggleField: function(name, v, triggerField, targetField) {
+    $$("div.field-"+name).each(function(container){
+      container.setClassName("opacity-20", !v);
+      
+      Form.getInputsArray(targetField).each(function(input){
+        input.disabled = !v;
+      });
+      
+      if (!v) {
+        $V(targetField, "");
+      }
+    });
   }
 };
 
@@ -350,7 +381,9 @@ var ExObjectFormula = Class.create({
         var inputs = Form.getInputsArray(this.form[v]);
         
         inputs.each(function(input){
-          if (input.hasClassName("date") || input.hasClassName("dateTime") || input.hasClassName("time")) {
+          if (input.hasClassName("date") || 
+              input.hasClassName("dateTime") || 
+              input.hasClassName("time")) {
             input.onchange = compute;
           }
           else {

@@ -15,7 +15,13 @@ showField = function(field_id, field_name, value){
 }
 
 predicateCallback = function(id, obj) {
-  ExField.edit("{{$ex_field_predicate->ex_class_field_id}}");
+  {{if $opener_field_value && $opener_field_view}}
+    $V($("{{$opener_field_value}}"), id);
+    $V($("{{$opener_field_view}}"), obj._view);
+  {{else if $ex_field_predicate->ex_class_field_id}}
+    ExField.edit("{{$ex_field_predicate->ex_class_field_id}}");
+  {{/if}}
+  
   Control.Modal.close();
 }
 
@@ -42,7 +48,7 @@ Main.add(function(){
       }
     },
     callback: function(input, queryString){
-      return queryString + "&ex_class_id={{$ex_class->_id}}"; 
+      return queryString + "&ex_class_id={{$ex_class->_id}}&exclude_ex_field_id={{$exclude_ex_field_id}}"; 
     }
   });
   
@@ -58,6 +64,10 @@ Main.add(function(){
   <input type="hidden" name="dosql" value="do_ex_class_field_predicate_aed" />
   <input type="hidden" name="callback" value="predicateCallback" />
   {{mb_key object=$ex_field_predicate}}
+  
+  {{if $ex_field_predicate->ex_class_field_id}}
+    {{mb_field object=$ex_field_predicate field=ex_class_field_id hidden=true}}
+  {{/if}}
   
   <table class="main form">
     <tr>
@@ -75,6 +85,7 @@ Main.add(function(){
       </th>
       {{/if}}
     </tr>
+    {{if !$ex_field_predicate->ex_class_field_id}}
     <tr>
       <th>{{mb_label object=$ex_field_predicate field=ex_class_field_id}}</th>
       <td>
@@ -82,6 +93,7 @@ Main.add(function(){
         {{mb_field object=$ex_field_predicate field=ex_class_field_id hidden=true}}
       </td>
     </tr>
+    {{/if}}
     <tr>
       <th>{{mb_label object=$ex_field_predicate field=operator}}</th>
       <td>{{mb_field object=$ex_field_predicate field=operator}}</td>

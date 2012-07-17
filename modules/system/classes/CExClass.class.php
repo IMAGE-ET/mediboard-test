@@ -415,7 +415,7 @@ class CExClass extends CMbObject {
       return $this->_ref_groups = self::$_groups_cache[$this->_id];
     }
     
-    $this->_ref_groups = $this->loadBackRefs("field_groups", "ex_class_field_group_id");
+    $this->_ref_groups = $this->loadBackRefs("field_groups", "rank, ex_class_field_group_id");
     
     if ($cache) {
       self::$_groups_cache[$this->_id] = $this->_ref_groups;

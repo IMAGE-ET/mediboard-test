@@ -45,6 +45,13 @@ selectConcept = function(input) {
   }
 }
 
+warnNotNullPredicate = function() {
+  var warning = $("notNull-predicate-warning");
+  var form = getForm("editField");
+  
+  warning.setVisible($V(form.prop).indexOf(" notNull") > -1 && $V(form.predicate_id)); 
+}
+
 Main.add(function(){
   var form = getForm("editField");
   var field_id = $V(form.ex_class_field_id);
@@ -79,6 +86,38 @@ Main.add(function(){
   if (selected.length) {
     selected[0].addClassName("selected");
   }
+  
+  var url = new Url("forms", "ajax_autocomplete_ex_class_field_predicate");
+  url.autoComplete(form.elements.predicate_id_autocomplete_view, null, {
+    minChars: 2,
+    method: "get",
+    select: "view",
+    dropdown: true,
+    afterUpdateElement: function(field, selected){
+      var id = selected.get("id");
+      
+      if (!id) {
+        $V(field.form.predicate_id, "");
+        $V(field.form.elements.predicate_id_autocomplete_view, "");
+        return;
+      }
+      
+      $V(field.form.predicate_id, id);
+      
+      if (id) {
+        showField(id, selected.down('.name').getText());
+      }
+      
+      if ($V(field.form.elements.predicate_id_autocomplete_view) == "") {
+        $V(field.form.elements.predicate_id_autocomplete_view, selected.down('.view').getText());
+      }
+    },
+    callback: function(input, queryString){
+      return queryString + "&ex_class_id={{$ex_class->_id}}&ex_class_field_id={{$ex_field->_id}}"; 
+    }
+  });
+  
+  warnNotNullPredicate();
 });
 </script>
 
@@ -250,15 +289,18 @@ Main.add(function(){
       </td>
     </tr>
     
-    {{*
     <tr>
       <th>{{mb_label object=$ex_field field=predicate_id}}</th>
       <td colspan="3">
-        {{mb_field object=$ex_field field=predicate_id form="editField" autocomplete="true,1,50,true,true" size=70}}
-        <button class="new notext" onclick="ExFieldPredicate.create({{$ex_field->_id}})" type="button">{{tr}}New{{/tr}}</button>
+        <div class="small-warning" id="notNull-predicate-warning">
+          Le champ est à la fois <strong>obligatoire et conditionnel</strong>, 
+          ceci peut provoquer des problèmes lors de la saisie du formulaire. 
+        </div>
+        <input type="text" name="predicate_id_autocomplete_view" size="70" value="{{$ex_field->_ref_predicate->_view}}" placeholder=" -- Toujours afficher -- " />
+        {{mb_field object=$ex_field field=predicate_id hidden=true onchange="warnNotNullPredicate(this)"}}
+        <button class="new notext" onclick="ExFieldPredicate.create('{{$ex_field->_id}}', '{{$ex_field->_id}}', this.form)" type="button">{{tr}}New{{/tr}}</button>
       </td>
     </tr>
-    *}}
     
     <tr>
       <td></td>
@@ -300,13 +342,11 @@ Main.add(function(){
       </li>
     {{/if}}
     
-    {{*
     <li>
       <a href="#fieldPredicates" {{if $ex_field->_ref_predicates|@count == 0}} class="empty" {{/if}}>
         {{tr}}CExClassField-back-predicates{{/tr}} <small>({{$ex_field->_ref_predicates|@count}})</small>
       </a>
     </li>
-    *}}
   {{/if}}
 </ul>
 <hr class="control_tabs" />
@@ -318,19 +358,25 @@ Main.add(function(){
 </div>
 
 <div id="fieldPredicates" style="display: none;">
+  <div class="small-info">
+    Les prédicats permettent de définir des conditions d'affichage d'autres champs en 
+    fonction de la valeur du champ actuellement en cours de modification (<strong>{{$ex_field}}</strong>).<br />
+    Il est possible, en plus de les créer ici, de les créer lors de la modification de l'autre champ.
+  </div>
+  
   {{if $ex_field->_id}}
     <button class="new" onclick="ExFieldPredicate.create('{{$ex_field->_id}}')">{{tr}}CExClassFieldPredicate-title-create{{/tr}}</button>
     
-    <table class="main tbl" style="table-layout: fixed;">
+    <table class="main tbl">
       <tr>
         <th class="narrow"></th>
-        <th>{{mb_title class=CExClassFieldPredicate field=operator}}</th>
+        <th style="width: 50%;">{{mb_title class=CExClassFieldPredicate field=operator}}</th>
         <th>{{mb_title class=CExClassFieldPredicate field=_value}}</th>
       </tr>
       {{foreach from=$ex_field->_ref_predicates item=_predicate}}
         <tr>
           <td>
-            <button class="edit notext" onclick="ExFieldPredicate.edit({{$_predicate->_id}})">{{tr}}Edit{{/tr}}</button>
+            <button class="edit notext" onclick="ExFieldPredicate.edit({{$_predicate->_id}})" style="margin: -1px;">{{tr}}Edit{{/tr}}</button>
           </td>
           <td style="text-align: right;">{{mb_value object=$_predicate field=operator}}</td>
           <td>{{mb_value object=$_predicate field=_value}}</td>
