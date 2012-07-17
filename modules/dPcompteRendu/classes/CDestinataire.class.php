@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage dPcompteRendu
- * @version $Revision$
- * @author Thomas Despoix
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -25,6 +26,7 @@ class CDestinataire {
   
   /**
    * Constructeur standard
+   * 
    * @param string $tag Tag par défaut, optionnel
    */
   function __construct($tag = null) {
@@ -33,10 +35,13 @@ class CDestinataire {
   
   /**
    * Construit les destinataires pour un MbObject
-   * @param CMbObject $mbObject L'objet en question
-   * @param string $tag tag par défaut,  optionnel
+   * 
+   * @param CMbObject &$mbObject L'objet en question
+   * @param string    $tag       [optionnel] tag par défaut 
+   * 
+   * @return void
    */
-  static function makeFor(CMbObject & $mbObject, $tag = null) {
+  static function makeFor(CMbObject &$mbObject, $tag = null) {
     $destinataires = array();
 
     if (!$mbObject->_id) {
@@ -69,7 +74,9 @@ class CDestinataire {
       
       // Personne à prévenir et employeur
       foreach ($patient->_ref_correspondants_patient as $_corres) {
-        if ($_corres->relation == "confiance") continue;
+        if ($_corres->relation == "confiance") {
+          continue;
+        }
         $dest = new CDestinataire($tag);
         $dest->tag = $_corres->relation;
         $dest->nom = $_corres->nom;
@@ -97,9 +104,12 @@ class CDestinataire {
 
   /**
    * Construit les destinataires pour un MbObject et ses dépendances
-   * @param CMbObject $mbObject L'objet en question 
+   * 
+   * @param CMbObject &$mbObject L'objet en question
+   * 
+   * @return void
    */
-  static function makeAllFor(CMbObject & $mbObject) {
+  static function makeAllFor(CMbObject &$mbObject) {
     self::$destByClass = array();
     
     if ($mbObject instanceof CPatient) {

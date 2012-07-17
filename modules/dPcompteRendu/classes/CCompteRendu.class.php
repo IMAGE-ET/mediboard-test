@@ -801,7 +801,7 @@ class CCompteRendu extends CDocumentItem {
   /**
    * Tell whether object has a document with the same name has this one
    * 
-   * @param CMbObject $object
+   * @param CMbObject $object Object to test with
    * 
    * @return boolean
    */
@@ -813,6 +813,11 @@ class CCompteRendu extends CDocumentItem {
     return $doc->countMatchingList();
   }
   
+  /**
+   * Construit un tableau de traduction des classes pour lesquelles la fonction filltemplate existe
+   * 
+   * @return array
+   */
   static function getTemplatedClasses() {
     if (self::$templated_classes !== null) {
       return self::$templated_classes;
@@ -822,7 +827,7 @@ class CCompteRendu extends CDocumentItem {
       "CBloodSalvage", "CConsultAnesth", "CConsultation", "CDossierMedical", "CRPU",
       "CFunctions", "CGroups", "CMediusers", "COperation", "CPatient", "CSejour"
     );
-    if(CModule::getActive("dPprescription")){
+    if (CModule::getActive("dPprescription")) {
       $all_classes[] = "CPrescription";
     }
     $installed = CApp::getInstalledClasses(null, $all_classes);
@@ -835,7 +840,23 @@ class CCompteRendu extends CDocumentItem {
     
     return self::$templated_classes = $classes;
   }
-
+  
+  /**
+   * Construit une source html
+   * 
+   * @param string $htmlcontent html source to use if not a model
+   * @param string $mode        [optional]
+   * @param array  $margins     [optional]
+   * @param string $type        [optional]
+   * @param string $header      [optional]
+   * @param int    $sizeheader  [optional]
+   * @param string $footer      [optional]
+   * @param int    $sizefooter  [optional]
+   * @param string $preface     [optional]
+   * @param string $ending      [optional]
+   * 
+   * @return string
+   */
   function loadHTMLcontent($htmlcontent, $mode = "modele", $margins = array(), $type = "body", $header = "", $sizeheader = 0, $footer = "", $sizefooter = 0, $preface = "", $ending = "") {
     $default_font = CAppUI::conf("dPcompteRendu CCompteRendu default_font");
     $default_size = CAppUI::conf("dPcompteRendu CCompteRendu default_size");
@@ -860,7 +881,7 @@ class CCompteRendu extends CDocumentItem {
       "footer" => "bottom"
     );
                       
-    if($mode == "modele") {
+    if ($mode == "modele") {
       switch($type) {
         case "header":
         case "footer":
@@ -880,7 +901,7 @@ class CCompteRendu extends CDocumentItem {
         case "body":
         case "preface":
         case "ending":
-          if($header) {
+          if ($header) {
             $sizeheader = $sizeheader != '' ? $sizeheader : 50;
             $padding_top = $sizeheader;
             
@@ -897,7 +918,7 @@ class CCompteRendu extends CDocumentItem {
               
             $content .= "<div id=\"header\">$header</div>";
           }
-          if($footer) {
+          if ($footer) {
             $sizefooter = $sizefooter != '' ? $sizefooter : 50;
             $padding_bottom = $sizefooter;
             $style .= "
@@ -919,7 +940,7 @@ class CCompteRendu extends CDocumentItem {
             $htmlcontent .= "<br />$ending";
           }
           $content .= "<div id=\"body\">$htmlcontent</div>";
-        }
+      }
     }
     else {
       $content = $htmlcontent;
@@ -930,11 +951,20 @@ class CCompteRendu extends CDocumentItem {
     return $smarty->fetch("../../dPcompteRendu/templates/htmlheader.tpl");
   }
   
+  /**
+   * Generate a pdf preview for the document
+   * 
+   * @param boolean $force_generating [optional]
+   * 
+   * @return string
+   */
   function makePDFpreview($force_generating = 0) {
-    if ((!CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") || !CAppUI::pref("pdf_and_thumbs")) && !$force_generating) {
-      return;      
-    } 
-  
+    if ((!CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") ||!CAppUI::pref("pdf_and_thumbs"))
+        && !$force_generating
+    ) {
+      return;
+    }
+    
     $this->loadRefsFwd();
     $file = $this->loadFile();
     
@@ -971,6 +1001,16 @@ class CCompteRendu extends CDocumentItem {
     return $this->_ref_file->store();
   }
   
+  /**
+   * Generate the html source from a modele. Can use an optionnal header, footer
+   * and another source.
+   * 
+   * @param string $other_source [optional]
+   * @param int    $header_id    [optional]
+   * @param int    $footer_id    [optional]
+   * 
+   * @return string
+   */
   function generateDocFromModel($other_source = null, $header_id = null, $footer_id = null) {
     $source = $this->_source;
     
@@ -1066,10 +1106,18 @@ class CCompteRendu extends CDocumentItem {
     return $source;
   }
   
+  /**
+   * Patch the disappearance of an html attribute
+   * 
+   * @param string $source source to control
+   * 
+   * @return string 
+   */
   static function restoreId($source) {
     if (strpos($source, '<div id="body"') === false && 
         strpos($source, "<div id='body'") === false && 
-        strpos($source, "@media dompdf")  !== false ) {
+        strpos($source, "@media dompdf")  !== false
+    ) {
           
       $xml = new DOMDocument('1.0', 'iso-8859-1');
       $xml->loadXML("<div>".utf8_encode(CMbString::convertHTMLToXMLEntities($source))."</div>");
@@ -1118,6 +1166,9 @@ class CCompteRendu extends CDocumentItem {
   }
   
   /**
+   * User stats on models
+   * 
+   * @return array
    * @see parent::getUsersStats();
    */
   function getUsersStats() {
@@ -1135,6 +1186,11 @@ class CCompteRendu extends CDocumentItem {
   }
   
   /**
+   * Advanced user stats on modeles
+   * 
+   * @param string $user_ids identifiants of users
+   * 
+   * @return array
    * @see parent::getUsersStatsDetails();
    */
   function getUsersStatsDetails($user_ids) {

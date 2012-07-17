@@ -1,10 +1,16 @@
 <?php
+/**
+ * $Id: CCorrespondantCourrier.class.php $
+ * 
+ * @package    Mediboard
+ * @subpackage dPcompteRendu
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: $ 
+ */
 
 /**
- * @package Mediboard
- * @subpackage dPcompteRendu
- * @version $Revision: $
- * @author
+ * Gestion de correpondants dans les documents
  */
 
 class CCorrespondantCourrier extends CMbMetaObject {

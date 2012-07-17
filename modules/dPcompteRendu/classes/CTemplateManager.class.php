@@ -1,12 +1,17 @@
-<?php /* $Id$ */
+<?php
+/**
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage dPcompteRendu
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision$
-* @author Thomas Despoix
-*/
-
+ * Gestion avancée de documents (destinataires, listes de choix, etc.)
+ */
 class CTemplateManager {
   var $editor = "ckeditor";
   
@@ -31,6 +36,13 @@ class CTemplateManager {
   
   private static $barcodeCache = array();
   
+  /**
+   * Constructeur
+   * 
+   * @param array $parameters [optional]
+   * 
+   * @return void
+   */
   function CTemplateManager($parameters = array()) {
     $user = CMediusers::get();
     $this->parameters = $parameters;
@@ -97,10 +109,26 @@ class CTemplateManager {
     }
   }
   
+  /**
+   * Retrouve un paramètre dans un tableau
+   * 
+   * @param string $name    nom du paramètre
+   * @param object $default [optional] valeur par défaut, si non retrouvé
+   * 
+   * @return string
+   */
   function getParameter($name, $default = null) {
     return CValue::read($this->parameters, $name, $default);
   }
-
+  
+  /**
+   * Construit l'élément html pour les champs, listes de choix et textes libres. 
+   * 
+   * @param string $spanClass classe de l'élément
+   * @param string $text      contenu de l'élément
+   * 
+   * @return string
+   */
   function makeSpan($spanClass, $text) {
     // Escape entities cuz CKEditor does so
     $text = htmlentities($text);
@@ -110,9 +138,20 @@ class CTemplateManager {
     return "<span class=\"{$spanClass}\">{$text}</span>";
   }
   
+  /**
+   * Ajoute un champ
+   * 
+   * @param string  $field      nom du champ
+   * @param string  $value      [optional]
+   * @param array   $options    [optional]
+   * @param boolean $htmlescape [optional]
+   * 
+   * @return void
+   */
   function addProperty($field, $value = null, $options = array(), $htmlescape = true) {
-    if ($htmlescape)
+    if ($htmlescape) {
       $value = htmlspecialchars($value);
+    }
     
     $sec = explode(' - ', $field, 3);
     switch(count($sec)) {
@@ -164,10 +203,12 @@ class CTemplateManager {
     if (isset($options["barcode"])) {
       $_field = &$this->sections[$section][$field];
       
-      if ($this->valueMode)
+      if ($this->valueMode) {
         $src = $this->getBarcodeDataUri($_field['value'], $options["barcode"]);
-      else 
+      }
+      else { 
         $src = $_field['fieldHTML'];
+      }
       
       $_field["field"] = "";
       
@@ -177,7 +218,7 @@ class CTemplateManager {
       
       $_field["field"] .= "<img alt=\"$field\" src=\"$src\" ";
       
-      foreach($options["barcode"] as $name => $attribute) {
+      foreach ($options["barcode"] as $name => $attribute) {
         $_field["field"] .= " $name=\"$attribute\"";
       }
       
@@ -193,34 +234,88 @@ class CTemplateManager {
     }
   }
   
+  /**
+   * Ajoute un champ de type date
+   * 
+   * @param string $field nom du champ
+   * @param string $value [optional]
+   * 
+   * @return void
+   */
   function addDateProperty($field, $value = null) {
     $value = $value ? mbTransformTime(null, $value, CAppUI::conf("date")) : "";
     $this->addProperty($field, $value);
   }
   
+  /**
+   * Ajoute un champ de type date longue
+   * 
+   * @param string $field  nom du champ
+   * @param string $value valeur du champ
+   * 
+   * @return void 
+   */
   function addLongDateProperty($field, $value) {
     $value = ucfirst(mbTransformTime(null, $value, CAppUI::conf("longdate")));
     $this->addProperty($field, $value);
   }
   
+  /**
+   * Ajoute un champ de type heure
+   * 
+   * @param object $field nom du champ
+   * @param object $value [optional] valeur du champ
+   * 
+   * @return void 
+   */
   function addTimeProperty($field, $value = null) {
     $value = $value ? mbTransformTime(null, $value, CAppUI::conf("time")) : "";
     $this->addProperty($field, $value);
   }
   
+  /**
+   * Ajoute un champ de type date et heure
+   * 
+   * @param string $field nom du champ
+   * @param string $value [optional] valeur du champ
+   * 
+   * @return void 
+   */
   function addDateTimeProperty($field, $value = null) {
     $value = $value ? mbTransformTime(null, $value, CAppUI::conf("datetime")) : "";
     $this->addProperty($field, $value);
   }
   
+  /**
+   * Ajoute un champ de type liste
+   * @param string $field  nom du champ
+   * @param array  $items  liste de valeurs
+   * 
+   * @return void 
+   */
   function addListProperty($field, $items = null) {
     $this->addProperty($field, $this->makeList($items), null, false);
   }
   
+  /**
+   * Ajoute un champ de type image
+   * 
+   * @param string $field   nom du champ
+   * @param int    $file_id identifiant du fichier
+   * 
+   * @return void
+   */
   function addImageProperty($field, $file_id) {
     $this->addProperty($field, $file_id, array("image" => 1), false);
   }
   
+  /**
+   * Génération de la source html pour la liste d'items
+   * 
+   * @param array $items liste d'items
+   * 
+   * @return string
+   */
   function makeList($items) {
     if (!$items) {
       return;
@@ -270,6 +365,15 @@ class CTemplateManager {
     return $html;
   }
   
+  /**
+   * Ajoute un champ de type graphique
+   * 
+   * @param string $field champ
+   * @param array  $data tableau de données
+   * @param array  $options [optional]
+   * 
+   * @return void
+   */
   function addGraph($field, $data, $options = array()) {
     $this->graphs[utf8_encode($field)] = array(
       "data" => $data, 
@@ -280,6 +384,14 @@ class CTemplateManager {
     $this->addProperty($field, $field, null, false);
   }
   
+  /**
+   * Ajoute un champ de type code-barre
+   * 
+   * @param object $field champ
+   * @param object $data 
+   * @param object $options [optional]
+   * @return 
+   */
   function addBarcode($field, $data, $options = array()) {
     $options = array_replace_recursive(array(
       "barcode" => array(

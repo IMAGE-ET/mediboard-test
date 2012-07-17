@@ -1,12 +1,17 @@
-<?php /* $Id$ */
+<?php
+/**
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage dPcompteRendu
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
+ * Gestion de packs de documents
+ */
 class CPack extends CMbObject {
   // DB Table key
   var $pack_id       = null;
@@ -74,14 +79,25 @@ class CPack extends CMbObject {
     parent::updateFormFields();
     $this->_view = $this->nom;
     
-    if ($this->user_id    ) $this->_owner = "user";
-    if ($this->function_id) $this->_owner = "func";
-    if ($this->group_id   ) $this->_owner = "etab";
-    
-    if (!$this->_object_class)
+    if ($this->user_id) {
+      $this->_owner = "user";
+    }
+    if ($this->function_id) {
+      $this->_owner = "func";
+    }
+    if ($this->group_id) {
+      $this->_owner = "etab";
+    }
+    if (!$this->_object_class) {
       $this->_object_class = "COperation";
+    }
   }
   
+  /**
+   * Réunit les contenus des modèles pour constituer la source html du pack
+   * 
+   * @return void
+   */
   function loadContent() {
     $this->_source = "";
     $this->loadBackRefs("modele_links", "modele_to_pack_id");
@@ -121,11 +137,15 @@ class CPack extends CMbObject {
   }
   
   /**
-   * @todo: refactor this to be in a super class
-   * @param object $id
-   * @param object $owner [optional]
+   * Charge les packs pour un propriétaire donné
+   * 
+   * @param object $id           identifiant du propriétaire
+   * @param object $owner        [optional]
    * @param object $object_class [optional]
-   * @return 
+   * 
+   * @todo: refactor this to be in a super class
+   * 
+   * @return array
    */
   static function loadAllPacksFor($id, $owner = 'user', $object_class = null) {
     $packs = array(
@@ -134,7 +154,9 @@ class CPack extends CMbObject {
       "etab" => array(),
     );
     
-    if (!$id) return $packs;
+    if (!$id) {
+      return $packs;
+    }
     
     // Clauses de recherche
     $pack = new CPack();
@@ -149,7 +171,9 @@ class CPack extends CMbObject {
     switch ($owner) {
       case 'user': // Modèle du praticien
         $user = new CMediusers();
-        if (!$user->load($id)) return $packs;
+        if (!$user->load($id)) {
+          return $packs;
+        }
         $user->loadRefFunction();
 
         $where["user_id"]     = "= '$user->_id'";
@@ -160,9 +184,12 @@ class CPack extends CMbObject {
       case 'func': // Modèle de la fonction
         if (isset($user)) {
           $func_id = $user->function_id;
-        } else {
+        }
+        else {
           $func = new CFunctions();
-          if (!$func->load($id)) return $packs;
+          if (!$func->load($id)) {
+            return $packs;
+          }
           
           $func_id = $func->_id;
         }
@@ -176,14 +203,16 @@ class CPack extends CMbObject {
         $etab_id = CGroups::loadCurrent()->_id;
         if ($owner == 'etab') {
           $etab = new CGroups();
-          if (!$etab->load($id)) return $packs;
+          if (!$etab->load($id)) {
+            return $packs;
+          }
           
           $etab_id = $etab->_id;
         }
         else if (isset($func)) {
           $etab_id = $func->group_id;
-        } 
-        else if(isset($func_id)) {
+        }
+        else if (isset($func_id)) {
           $func = new CFunctions();
           $func->load($func_id);
           
@@ -200,7 +229,7 @@ class CPack extends CMbObject {
   }
   
   function getPerm($permType) {
-    if(!$this->_ref_user) {
+    if (!$this->_ref_user) {
       $this->loadRefsFwd();
     }
     return $this->_ref_user->getPerm($permType);
