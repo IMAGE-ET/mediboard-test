@@ -17,7 +17,7 @@
       <img src="images/icons/planning.png" alt="Planifier"/>
     </a>
     {{/if}}
-    {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$object}}
+    {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$object _show_numdoss_modal=1}}
     <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
     {{$object->_shortview}}
     {{if $object->_nb_files_docs}}

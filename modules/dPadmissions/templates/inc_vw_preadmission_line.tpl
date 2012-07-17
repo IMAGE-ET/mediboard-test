@@ -62,7 +62,7 @@
   <div style="float: right;">
     {{mb_include module=system template=inc_object_notes object=$curr_adm}}
   </div>
-  {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$curr_adm}}
+  {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$curr_adm _show_numdoss_modal=1}}
   <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_adm->_guid}}');">
   le {{$curr_adm->_entree|date_format:$conf.date}}
   </span>
@@ -80,7 +80,7 @@
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="dosql" value="do_sejour_aed" />
   <input type="hidden" name="sejour_id" value="{{$curr_adm->_id}}" />
-	<input type="hidden" name="patient_id" value="{{$curr_adm->patient_id}}" />
+  <input type="hidden" name="patient_id" value="{{$curr_adm->patient_id}}" />
   {{if !$curr_adm->entree_preparee}}
   <input type="hidden" name="entree_preparee" value="1" />
   <button class="tick" type="button" onclick="submitPreAdmission(this.form);">

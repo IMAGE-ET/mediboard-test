@@ -102,7 +102,7 @@
   {{/if}}
   {{/if}}
   <input type="checkbox" name="print_doc" value="{{$_sejour->_id}}"/>
-  {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$_sejour}}
+  {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$_sejour _show_numdoss_modal=1}}
   <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
     {{$patient}}
   </span>

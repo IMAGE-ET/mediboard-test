@@ -186,7 +186,7 @@
       
       <input type="checkbox" name="print_doc" value="{{$_sejour->_id}}"/>
       
-      {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$_sejour}}
+      {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$_sejour _show_numdoss_modal=1}}
       
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_ref_patient->_guid}}');">
         {{$_sejour->_ref_patient->_view}}
