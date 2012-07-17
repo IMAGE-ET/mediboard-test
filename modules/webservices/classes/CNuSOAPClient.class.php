@@ -13,29 +13,50 @@ if (!class_exists("nusoap_client", false)) {
   return;
 }
 
+/**
+ * The CNuSOAPClient class
+ */
 class CNuSOAPClient extends nusoap_client {
-  var $type_echange_soap  = null;
-  var $loggable           = null;
+  var $wsdl_url          = null;
+  var $type_echange_soap = null;
+  var $soap_client_error = false;
+  var $flatten           = null;
+  var $loggable          = null;
+  var $encoding          = null;
   
   /**
+   * The constructor
    * 
-   * @param wsdl string The URL of the wsdl file
-   * @param type_echange string The type of exchange
-   * @param encoding string The type of encoding
-   * @param loggable boolean True if you want to log all the exchanges with the web service
-   * @param flatten boolean
+   * @param string  $rooturl    The URL of the wsdl file
+   * @param string  $type       The type of exchange
+   * @param array   $options    An array of options
+   * @param boolean $loggable   True if you want to log all the exchanges with the web service
+   * @param string  $local_cert Path of the certifacte
+   * @param string  $passphrase Pass phrase for the certificate
    */
-  function __construct($wsdl, $type_echange  = null, $encoding = null, $loggable = null, $local_cert = null, $passphrase = null) {
-    
+  function __construct($rooturl, $type = null, $options = array(), $loggable = null, $local_cert = null, $passphrase = null) {
+    $this->wsdl_url = $rooturl;
+
     if ($loggable) {
       $this->loggable = $loggable;
     }
     
-    if ($type_echange) {
-      $this->type_echange_soap = $type_echange;
+    if ($type) {
+      $this->type_echange_soap = $type;
     }
     
-    if ($encoding) {
+    if (!$html = file_get_contents($this->wsdl_url)) {
+      $this->soap_client_error = true;
+      throw new CMbException("CSourceSOAP-unable-to-parse-url", $this->wsdl_url);
+    }
+
+    if (strpos($html, "<?xml") === false) {
+      $this->soap_client_error = true;
+      throw new CMbException("CSourceSOAP-wsdl-invalid");
+    }
+    
+    if (array_key_exists("encoding", $options)) {
+      $encoding = $options["encoding"];
       $this->soap_defencoding = $encoding;
       if ($encoding == "UTF-8") {
         $this->decode_utf8 = false;
@@ -53,8 +74,9 @@ class CNuSOAPClient extends nusoap_client {
         "passphrase" => $passphrase
       );
     }
-    
-    parent::__construct($wsdl, true);
+
+    parent::__construct($rooturl, true);
+    $this->wsdl_url = $rooturl;
   }
   
   /**
@@ -63,147 +85,85 @@ class CNuSOAPClient extends nusoap_client {
    * @param arguments array The arguments for the operation
    * @return string The result of the operation
    */
-  public function call($function_name, $arguments) {
-    global $phpChrono; 
-
-    if (isset($arguments[0]) && empty($arguments[0])) {
-      $arguments = array();
+  public function call($function_name, $arguments, $options = null, $input_headers = null, &$output_headers = null) {      
+    $output = parent::call($function_name, $arguments);
+    
+    if ($this->fault) {
+      throw new SoapFault($this->faultcode, $this->faultstring, $this->fault->faultactor, $this->faultdetail);
+    } 
+    elseif ($this->getError()) {
+      throw new SoapFault(-1, $this->getError());
     }
     
-    if (!$this->loggable) {
-      return parent::call($function_name, $arguments);
-      
-      // Traitement des Erreurs :
-      if ($this->fault) {
-        throw new CMbException($this->faultstring);
-      } elseif ($this->getError()) {
-        throw new CMbException($this->getError());
-      }
-    } else {
-      $echange_soap = new CEchangeSOAP();
-      
-      $echange_soap->emetteur     = CAppUI::conf("mb_id");
-      $echange_soap->destinataire = $this->endpoint;
-      $echange_soap->type         = $this->type_echange_soap;
-      
-      $url = parse_url($this->endpoint);
-      $path = explode("/", $url['path']);
-      $echange_soap->web_service_name = end($path);
-      
-      $echange_soap->function_name = $function_name;
-      
-      $phpChrono->stop();
-      $chrono = new Chronometer();
-      $chrono->start();
-
-      $output = parent::call($function_name, $arguments);
-
-      // Gestion des erreurs :
-      if ($this->fault || $this->getError()) {
-        if (CAppUI::conf("webservices trace")) {
-          $echange_soap->trace                  = true;
-          $echange_soap->last_request_headers   = $this->requestHeaders;
-          $echange_soap->last_request           = $this->request;
-          $echange_soap->last_response_headers  = $this->responseHeader;
-          $echange_soap->last_response          = $this->response;
-        }
-        
-        if ($this->fault) {
-          $errorString = $this->faultstring;
-        } elseif($this->getError()) {
-          $errorString = $this->getError();
-        }
-        
-        $echange_soap->date_echange = mbDateTime();
-        $echange_soap->output       = $errorString;
-        $echange_soap->soapfault    = 1;
-        $echange_soap->store();
-        
-        $phpChrono->start();
-        
-        throw new CMbException($errorString);
-      }
-      
-      $chrono->stop();
-      $phpChrono->start();
-      $echange_soap->date_echange = mbDateTime();
-      
-      if (CAppUI::conf("webservices trace")) {
-        $echange_soap->trace                  = true;
-        $echange_soap->last_request_headers   = $this->requestHeaders;
-        $echange_soap->last_request           = $this->request;
-        $echange_soap->last_response_headers  = $this->responseHeader;
-        $echange_soap->last_response          = $this->response;
-      }
-      
-      $echange_soap->response_time = $chrono->total;
-      
-      $echange_soap->input = serialize(array_map_recursive(array($this, "truncate"), $arguments));
-      
-      if ($echange_soap->soapfault != 1) {
-        $echange_soap->output = serialize(array_map_recursive(array($this, "truncate"), $output));
-      }
-      $echange_soap->store();
-      
-      return $output;
-    }
-  }
-  
-  static public function truncate($string) {
-    if (!is_string($string)) {
-      return $string;
-    }
-
-    // Truncate
-    $max = 1024;    
-    $result = CMbString::truncate($string, $max);
-    
-    // Indicate true size
-    $length = strlen($string);
-    if ($length > 1024) {
-      $result .= " [$length bytes]";
-    }
-    
-    return $result;
+    return $output;
   }
   
   /**
-   * Test if the wsdl is reachable, valid, and create a CNuSOAPClient
-   * @param wsdl string The URL of the wsdl file
-   * @param type_echange string The type of exchange
-   * @param encoding string The type of encoding
-   * @param loggable boolean True if you want to log all the exchanges with the web service
-   * @param login string The login for accessing the web service
-   * @param password string The password for accessing the web service
-   * @param local_cert string local_cert must be in PEM format
-   * @param passphrase  string Pass Phrase (password) of private key
-   * @return CNuSOAPClient
+   * Set the request and the response of the exchange and return it
+   * 
+   * @param CEchangeSOAP $exchange The exchangeSOAP
+   * 
+   * @return CEchangeSOAP
    */
-  static public function make($wsdl, $type_echange = null, $encoding = null, $loggable = null, $login = null, $password = null, $local_cert = null, $passphrase = null) {
-    if (!url_exists($wsdl)) {
-      throw new CMbException("CSourceSOAP-unreachable-source", $wsdl);
-    }
+  public function getTrace(CEchangeSOAP $exchange) {
+    $exchange->trace                 = true;
+    $exchange->last_request_headers   = $this->requestHeaders;
+    $exchange->last_request           = $this->request;
+    $exchange->last_response_headers  = $this->responseHeader;
+    $exchange->last_response          = $this->response;
     
-    if (!$html = file_get_contents($wsdl)) {
-      throw new CMbException("CSourceSOAP-unable-to-parse-url", $wsdl);
-    }
-    
-    if (strpos($html, "<?xml") === false) {
-      throw new CMbException("CSourceSOAP-wsdl-invalid");
-    }
-    
-    $client = new CNuSOAPClient($wsdl, $type_echange, $encoding, $loggable, $local_cert, $passphrase);
-    
-    // Gestion des mots de passe
-    if ($login && $password) {
-      $this->setCredentials($login, $password);
-    }
-    
-    if ($client->getError()) {
-      throw new CMbException("CSourceSOAP-unreachable-source", $this->name);
-    }
-    
-    return $client;
+    return $exchange;
   }
+  
+  /**
+   * Return the list of the operation of the WSDL
+   * 
+   * @return array An array who contains all the operation of the WSDL
+   */
+  public function __getFunctions() {
+    $wsdl = new wsdl($this->wsdl);
+    $operations = $wsdl->getOperations();
+    $return = array();
+    
+    foreach ($operations as $_operation) {
+      $output = $_operation['output']['parts'];
+      $output_type = 'void';
+      if (array_key_exists('return', $output)) {
+        $output_type = end(explode(':', $output['return']));
+      }
+      $name = $_operation['name'];
+      
+      $input = array();
+      
+      foreach ($_operation['input']['parts'] as $_param => $_type) {
+        $input[] = end(explode(':', $_type)) . ' $' . $_param;
+      }
+      $input = join(', ', $input);
+      
+      $return[] = "$output_type $name($input)";
+    }
+    mbTrace($return);
+    return $return;
+  }
+  
+  /**
+   * Returns an array of functions described in the WSDL for the Web service. 
+   * 
+   * @return array The array of SOAP function prototype
+   */
+  public function __getTypes() {
+    /* TODO Retourner les types */
+    return array();
+  } 
+  
+  /**
+   * Defines headers to be sent along with the SOAP requests
+   * 
+   * @param array $soapheaders The headers to be set
+   * 
+   * @return boolean True on success or False on failure 
+   */
+  public function setHeaders($soapheaders) {
+  } 
 }
 ?>
