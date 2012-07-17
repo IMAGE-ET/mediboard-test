@@ -38,8 +38,8 @@ if (isset($wsdl)) {
     $soap_handler= new CSoapHandler();
     $functions += $soap_handler->paramSpecs;
   }*/
-  $functions = $class::getParamSpecs();
-  $returns   = $class::getReturnSpecs();
+  $functions = $class->getParamSpecs();
+  $returns   = $class->getReturnSpecs();
   
   $wsdlFile = new $wsdl_mode;
   $wsdlFile->addTypes();
