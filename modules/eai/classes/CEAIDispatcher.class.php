@@ -51,7 +51,7 @@ class CEAIDispatcher {
       return self::dispatchError($data, $actor);
     }
     
-    if (!self::understand()) {
+    if (($data_format = self::understand($data, $actor)) === null) {
       self::$errors[] = CAppUI::tr("CEAIDispatcher-no_understand");
       return self::dispatchError($data, $actor);
     }
@@ -118,12 +118,12 @@ class CEAIDispatcher {
         // Test si le message est compris
         $understand = $data_format->understand($data, $actor);    
         if ($understand) {
-          return true;
+          return $data_format;
         }
       }
     }
     
-    return false;
+    return null;
   }
   
   /**
