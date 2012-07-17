@@ -80,7 +80,7 @@ Main.add(function(){
 
 <ul id="anesth_tab_group" class="control_tabs small">
   <li><a href="#anesth">Info. Anesthésie</a>
-  <li onmousedown="refreshAnesthPerops('{{$selOp->_id}}');"><a href="#tab_perop">Evenements per-opératoire</a></li>
+  <li onmousedown="refreshAnesthPerops('{{$selOp->_id}}');"><a href="#tab_perop">Evenements per-opératoires</a></li>
   <li onmousedown="if(window.Prescription){ Prescription.updatePerop('{{$selOp->sejour_id}}'); }"><a href="#perop">Administrations per-opératoires</a></li>
   <li onmousedown="refreshFicheAnesth();"><a href="#fiche_anesth" {{if !$consult_anesth->_id}}class="wrong"{{/if}}>Fiche d'anesthésie</a></li>
   <li><a href="#tab_preanesth" {{if !$selOp->date_visite_anesth}}class="wrong"{{/if}}>Pré-anesthésie</a></li>
