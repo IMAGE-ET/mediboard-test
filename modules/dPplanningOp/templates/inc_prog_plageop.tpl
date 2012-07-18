@@ -54,7 +54,7 @@
       <td colspan="4">
         <button style="float: right;" class="tick" type="button" onclick="setClose('', '')">{{tr}}OK{{/tr}}</button>
         <button style="float: right;" class="cancel" type="button" onclick="window._close()">{{tr}}Cancel{{/tr}}</button>
-        <label class="insert">
+        <label class="insert" style="display: inline;">
           <input type="radio" name="_place_after_interv_id" value="0" checked="checked" />
           Sans préférence pour le placement
         </label>

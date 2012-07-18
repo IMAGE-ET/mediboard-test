@@ -51,8 +51,10 @@ function setClose(date, salle_id) {
     min_entree  = $V(oForm.min_veille);
   }
   
-  window.parent.PlageOpSelector.set(plage_id, salle_id, date, adm, typeHospi, hour_entree, min_entree, place_after_interv_id, horaire_voulu);
+  // Le close doit etre fait avant le doSet car il declenche une modale dans certains cas !!
+  // S'il etait apres, ca serait l'autre modale qui serait fermée
   window._close();
+  window.parent.PlageOpSelector.set(plage_id, salle_id, date, adm, typeHospi, hour_entree, min_entree, place_after_interv_id, horaire_voulu);
 }  
 
 Main.add(function () {
