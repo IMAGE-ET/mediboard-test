@@ -2,32 +2,29 @@
 {{assign var=vue_right value=$app->user_prefs.viewWeeklyConsultCalendar}}
 
 <script type="text/javascript">
-
-setClose = function(time, plage_id, plage_date, chir_id) {
-  {{if !$print}}
-    window.parent.PlageConsultSelector.set(time, plage_id, plage_date, chir_id);
-    window.close();
-    var form = window.parent.getForm(window.parent.PlageConsultSelector.sForm);
-    if (Preferences.choosePatientAfterDate == 1 && !$V(form.patient_id) && !form._pause.checked) {
-      window.parent.PatSelector.init();
-    }
-  {{/if}}
-};
-
-Main.add(function () {
-  {{if !$print}}
-    Calendar.regField(getForm("FilterTop").date, null, {noView: true});
-    {{if $vue_right}}
-    Calendar.regField(getForm("FilterRight").date, null, {noView: true, inline: true, container: null});
+  setClose = function(time, plage_id, plage_date, chir_id) {
+    {{if !$print}}
+      window.parent.PlageConsultSelector.set(time, plage_id, plage_date, chir_id);
+      window.close();
+      var form = window.parent.getForm(window.parent.PlageConsultSelector.sForm);
+      if (Preferences.choosePatientAfterDate == 1 && !$V(form.patient_id) && !form._pause.checked) {
+        window.parent.PatSelector.init();
+      }
     {{/if}}
-    var planning = window["planning-{{$planning->guid}}"];
-    ViewPort.SetAvlHeight("plageSelectorTable", 1);
-    $('planningWeek').style.height = "1500px";
-  {{/if}}
-});
-
+  };
+  
+  Main.add(function () {
+    {{if !$print}}
+      Calendar.regField(getForm("FilterTop").date, null, {noView: true});
+      {{if $vue_right}}
+      Calendar.regField(getForm("FilterRight").date, null, {noView: true, inline: true, container: null});
+      {{/if}}
+      var planning = window["planning-{{$planning->guid}}"];
+      ViewPort.SetAvlHeight("plageSelectorTable", 1);
+      $('planningWeek').style.height = "1500px";
+    {{/if}}
+  });
 </script>
-
 <div id="plageSelectorTable">
   {{if !$print}}
     <table class="main layout" style="height: 100%">
@@ -106,25 +103,36 @@ Main.add(function () {
       </tr>
     </table>
   {{else}}
-  {{mb_include module=ssr template=inc_vw_week print=1}}
-  <script type="text/javascript">
-    // Pour l'impression, on cache les lignes vides
-    // et on redimensionne les events
-    Main.add(function() {
-      $('plageSelectorTable').select(".planning col")[2].style.width = "1px";
-      $('plageSelectorTable').select(".week-container")[0].style.overflowY = "visible";
-      
-      var table = $("planningWeek");
-      
-      table.select("tr").each (function(tr) {
-        if (tr.hasClassName("not-printable")) {
-          tr.hide();
-        }
+    {{mb_include module=ssr template=inc_vw_week print=1}}
+    <script type="text/javascript">
+      // Pour l'impression, on cache les lignes vides
+      // et on redimensionne les events
+      Main.add(function() {
+        $('plageSelectorTable').select(".planning col")[2].style.width = "1px";
+        $('plageSelectorTable').select(".week-container")[0].style.overflowY = "visible";
+        
+        var table = $("planningWeek");
+        
+        table.select("tr").each (function(tr) {
+          if (tr.hasClassName("not-printable")) {
+            tr.hide();
+          }
+        });
+        
+        var planning = window["planning-{{$planning->guid}}"];
+        planning.updateEventsDimensions();
       });
-      
-      var planning = window["planning-{{$planning->guid}}"];
-      planning.updateEventsDimensions();
-    });
+    </script>
+  {{/if}}
+</div>
+
+{{if !$print}}
+  <script type="text/javascript">
+  Main.add(function() {
+    var planning = window["planning-{{$planning->guid}}"];
+    planning.setPlanningHeight(750);
+    planning.adaptRangeHeight();
+    planning.scroll();  
+  });
   </script>
 {{/if}}
-</div>
