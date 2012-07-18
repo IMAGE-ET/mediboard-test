@@ -16,16 +16,20 @@
  *  - delimiters, enclosures configuration
  */
 class CCSVFile {
-  var $handle = null;
-  var $delimiter = ',';
-  var $enclosure = '"';
+  const PROFILE_OPENOFFICE = "openoffice";
+  const PROFILE_EXCEL      = "excel";
+  
+  var $handle       = null;
+  var $delimiter    = ',';
+  var $enclosure    = '"';
+  var $column_names = null;
   
   static $profiles = array(
-    "openoffice" => array(
+    self::PROFILE_OPENOFFICE => array(
       "delimiter" => ',',
       "enclosure" => '"',
     ),
-    "excel"     => array(
+    self::PROFILE_EXCEL => array(
       "delimiter" => ';',
       "enclosure" => '"',
     ),
@@ -39,7 +43,7 @@ class CCSVFile {
    * 
    * @return void
    */
-  function __construct($handle = null, $profile_name = "excel") {
+  function __construct($handle = null, $profile_name = self::PROFILE_EXCEL) {
     if ($handle) {
       $this->handle = $handle;
       
@@ -57,7 +61,7 @@ class CCSVFile {
   /**
    * Set the profile parameters
    * 
-   * @param enum $profile_name Profile name, one of openoffice and excel 
+   * @param string $profile_name Profile name, one of "openoffice" and "excel"
    * 
    * @return void
    */
@@ -77,8 +81,18 @@ class CCSVFile {
    * 
    * @return array An indexed array containing the fields read
    */
-  function readLine() {
-    return fgetcsv($this->handle, null, $this->delimiter, $this->enclosure);
+  function readLine($assoc = false, $nullify_empty_values = false) {
+    $line = fgetcsv($this->handle, null, $this->delimiter, $this->enclosure);
+    
+    if ($nullify_empty_values) {
+      $line = $this->nullifyEmptyValues($line);
+    }
+    
+    if ($assoc && $this->column_names) {
+      return array_combine($this->column_names, $line);
+    }
+    
+    return $line;
   }
   
   /**
@@ -86,10 +100,31 @@ class CCSVFile {
    * 
    * @param array $values An array of string values
    * 
-   * @return int The length of the written string, or false on failure
+   * @return integer The length of the written string, or false on failure
    */
   function writeLine($values) {
     return fputcsv($this->handle, $values, $this->delimiter, $this->enclosure);
+  }
+  
+  /**
+   * Set columns names to be used when reading the CSV file (to return associative arrays)
+   * 
+   * @param array $names The columns names
+   * 
+   * @return void
+   */
+  function setColumnNames($names) {
+    $this->column_names = $names;
+  }
+  
+  function nullifyEmptyValues($values) {
+    foreach ($values as &$_value) {
+      if ($_value === "") {
+        $_value = null;
+      }
+    }
+    
+    return $values;
   }
   
   /**
