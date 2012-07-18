@@ -1,4 +1,4 @@
-<?php  /* $Id: vw_placement_patients.php  $ */
+<?php  /** $Id: vw_placement_patients.php  $ **/
 
 /**
  * @package Mediboard
@@ -49,50 +49,51 @@ $temp["sejour.entree"]    = " BETWEEN '$date_before' AND '$date_after'";
 $temp["sejour.annule"]    = " = '0'";
 $temp["sejour.group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
 
-for($num = 0; $num <= 1; $num++){
-	if($num == 0){
+for ($num = 0; $num <= 1; $num++) {
+	if ($num == 0) {
     $chambres = $chambres_uhcd;
     $temp["sejour.uhcd"] = " = '1'";
     $nom = "uhcd";
-	}else{
+	}
+	else {
     $chambres = $chambres_urgences;
     $temp["sejour.uhcd"] = " = '0'";
     $nom = "urgence";
 	}
 	
-  foreach($chambres as $chambre){
+  foreach ($chambres as $chambre) {
     $chambre->loadRefsFwd();
     $chambre->loadRefsLits();
     $chambre->loadRefEmplacement();
     $grille[$nom][$chambre->_ref_emplacement->plan_y][$chambre->_ref_emplacement->plan_x] = $chambre;
     $emplacement = $chambre->_ref_emplacement;
-    if($emplacement->hauteur-1){
-      for($a = 0; $a <= $emplacement->hauteur-1; $a++){
-        if($emplacement->largeur-1){
-         for($b = 0; $b <= $emplacement->largeur-1; $b++){
-           if($b != 0){
+    if ($emplacement->hauteur-1) {
+      for ($a = 0; $a <= $emplacement->hauteur-1; $a++) {
+        if ($emplacement->largeur-1) {
+         for ($b = 0; $b <= $emplacement->largeur-1; $b++) {
+           if ($b != 0) {
              unset($grille[$nom][$emplacement->plan_y+$a][$emplacement->plan_x+$b]);
            }
-           elseif($a != 0){
+           elseif ($a != 0) {
              unset($grille[$nom][$emplacement->plan_y+$a][$emplacement->plan_x+$b]);
            }
-          }
+         }
         }
-        elseif($a < $emplacement->hauteur-1){
+        elseif ($a < $emplacement->hauteur-1) {
           $c = $a+1;
           unset($grille[$nom][$emplacement->plan_y+$c][$emplacement->plan_x]);
         }
       }
     }
-    elseif($emplacement->largeur-1){
-      for($b = 1; $b <= $emplacement->largeur-1; $b++){
+    elseif ($emplacement->largeur-1) {
+      for ($b = 1; $b <= $emplacement->largeur-1; $b++) {
         unset($grille[$nom][$emplacement->plan_y][$emplacement->plan_x+$b]);
       }
     }
     $nb_lits=0;
     $q = "";
-    foreach($chambre->_ref_lits as $lit){
-    	if($nb_lits){
+    foreach ($chambre->_ref_lits as $lit) {
+    	if ($nb_lits) {
     		$q .= " OR ";
     	}
       $q .= "rpu.box_id = '".$lit->_id."'";
@@ -104,8 +105,8 @@ for($num = 0; $num <= 1; $num++){
     $where[] = $q;
     $sejour = new CSejour();
     $sejours = $sejour->loadList($where, null, null,null, $ljoin);
-    if($sejours){
-    	foreach($sejours as $sejour){
+    if ($sejours) {
+    	foreach ($sejours as $sejour) {
     		$sejour->loadRefRPU();
     		$sejour->loadRefPrescriptionSejour();
     		$sejour->loadRefsDocItems();
@@ -116,44 +117,46 @@ for($num = 0; $num <= 1; $num++){
   
   //Traitement des lignes vides
   $nb=0;  $total=0;
-  foreach($grille[$nom] as $j => $value) {
+  foreach ($grille[$nom] as $j => $value) {
     $nb=0;
-      foreach($value as $i => $valeur){
-      if($valeur == "0"){
-        if($j == 0 || $j == 9){
-          $nb++;
-        }
-        else{
-          if( !isset($grille[$nom][$j-1][$i]) || $grille[$nom][$j-1][$i] == "0" || !isset($grille[$nom][$j+1][$i]) || $grille[$nom][$j+1][$i] == "0" ){
-            $nb++;
-          }
-        }
+      foreach ($value as $i => $valeur) {
+	      if ($valeur == "0") {
+	        if ($j == 0 || $j == 9) {
+	          $nb++;
+	        }
+	        else {
+	          if (!isset($grille[$nom][$j-1][$i]) || $grille[$nom][$j-1][$i] == "0" || !isset($grille[$nom][$j+1][$i]) || $grille[$nom][$j+1][$i] == "0" ) {
+	            $nb++;
+	          }
+	        }
+	      }
       }
-    }
     //suppression des lignes inutiles
-    if($nb == 10){
+    if ($nb == 10) {
       unset($grille[$nom][$j]);
     }
   }
   
   //Traitement des colonnes vides
-  for($i = 0; $i < 10; $i++) {
+  for ($i = 0; $i < 10; $i++) {
     $nb = 0;
     $total = 0;
-    for($j = 0; $j < 10; $j++){
+    for ($j = 0; $j < 10; $j++) {
       $total++;
-      if(!isset($grille[$nom][$j][$i]) || $grille[$nom][$j][$i] == "0"){
-        if($i == 0 || $i == 9){ $nb++; }
-        else{
-          if ( (!isset($grille[$nom][$j][$i-1]) || $grille[$nom][$j][$i-1] == "0") || (!isset($grille[$nom][$j][$i+1]) || $grille[$nom][$j][$i+1] == "0")){
+      if (!isset($grille[$nom][$j][$i]) || $grille[$nom][$j][$i] == "0") {
+        if ($i == 0 || $i == 9) {
+        	$nb++; 
+        }
+        else {
+          if ((!isset($grille[$nom][$j][$i-1]) || $grille[$nom][$j][$i-1] == "0") || (!isset($grille[$nom][$j][$i+1]) || $grille[$nom][$j][$i+1] == "0")) {
           $nb++;
           }
         }
       }
     }
     //suppression des colonnes inutiles
-    if($nb == $total){
-      for($a = 0; $a < 10; $a++){
+    if ($nb == $total) {
+      for ($a = 0; $a < 10; $a++) {
        unset($grille[$nom][$a][$i]);
       }
     }
