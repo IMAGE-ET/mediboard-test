@@ -61,7 +61,9 @@ var Module = {
   }
 }
 
-Main.add(Module.updateInstalledControlTabs);
+{{if $coreModules|@count == 0}}
+  Main.add(Module.updateInstalledControlTabs);
+{{/if}}
 </script>
 
 {{if $installed}}

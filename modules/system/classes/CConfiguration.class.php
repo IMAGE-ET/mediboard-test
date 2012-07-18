@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
- * @subpackage classes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage system
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CConfiguration extends CMbMetaObject {
@@ -40,6 +41,8 @@ class CConfiguration extends CMbMetaObject {
   }
   
   /**
+   * Returns the CMbObjectSpec object of the host object
+   *
    * @return CMbObjectSpec
    */
   static function _getSpec(){
@@ -58,7 +61,7 @@ class CConfiguration extends CMbMetaObject {
   }
 
   static protected function buildTree() {
-    foreach(self::$model_raw as $_inherit => $_tree) {
+    foreach (self::$model_raw as $_inherit => $_tree) {
       $list = array();
       self::_buildConfigs($list, array(), $_tree);
 
@@ -71,7 +74,7 @@ class CConfiguration extends CMbMetaObject {
   }
 
   protected static function _buildConfigs(&$list, $path, $tree) {
-    foreach($tree as $key => $subtree) {
+    foreach ($tree as $key => $subtree) {
       $_path = $path;
       $_path[] = $key;
 
@@ -149,11 +152,14 @@ class CConfiguration extends CMbMetaObject {
       else {
         self::buildTree();
         
-        SHM::put("config-model", array(
-          "date"    => mbDateTime(),
-          "hash"    => md5(serialize(self::$model_raw)),
-          "content" => self::$model,
-        ));
+        SHM::put(
+          "config-model", 
+          array(
+            "date"    => mbDateTime(),
+            "hash"    => md5(serialize(self::$model_raw)),
+            "content" => self::$model,
+          )
+        );
       }
     }
     
@@ -165,14 +171,14 @@ class CConfiguration extends CMbMetaObject {
     
     $values_flat = array();
     
-    foreach($inherits as $_inherit) {
+    foreach ($inherits as $_inherit) {
       $tree = self::getObjectTree($_inherit);
       $all = array();
       self::_flattenObjectTree($all, $tree);
       
       $values_flat["global"] = self::getConfigs($_inherit);
       
-      foreach($all as $_object) {
+      foreach ($all as $_object) {
         $_guid = $_object->_guid;
         
         if (!isset($values_flat[$_guid])) {
@@ -189,10 +195,13 @@ class CConfiguration extends CMbMetaObject {
   static function refreshDataCache(){
     self::buildAllConfig();
     
-    SHM::put("config-values", array(
-      "date"    => mbDateTime(),
-      "content" => self::$values,
-    ));
+    SHM::put(
+      "config-values", 
+      array(
+        "date"    => mbDateTime(),
+        "content" => self::$values,
+      )
+    );
   }
   
   static function getValues($object_guid = null){
@@ -221,7 +230,7 @@ class CConfiguration extends CMbMetaObject {
       $feature_prefix = "$feature ";
       $feature_length = strlen($feature_prefix);
       
-      foreach($values as $_feature => $_value) {
+      foreach ($values as $_feature => $_value) {
         if (strpos($_feature, $feature_prefix) !== false) {
           $_feature = substr($_feature, $feature_length);
           $features[$_feature] = $_value;
@@ -229,7 +238,7 @@ class CConfiguration extends CMbMetaObject {
       }
       
       $tree = array();
-      foreach($features as $_key => $_value) {
+      foreach ($features as $_key => $_value) {
         $path = explode(" ", $_key);
         self::_unflattenFeatureList($path, $_value, $tree);
       }
@@ -268,7 +277,7 @@ class CConfiguration extends CMbMetaObject {
   static protected function _flattenObjectTree(&$all, $children) {
     $all = array_merge($all, CMbArray::pluck($children, "object"));
     
-    foreach($children as $child) {
+    foreach ($children as $child) {
       self::_flattenObjectTree($all, $child["children"]);
     }
   }
@@ -283,10 +292,10 @@ class CConfiguration extends CMbMetaObject {
     $configs = array();
     $module_start = "$module ";
 
-    foreach($model as $_inherit => $_configs) {
+    foreach ($model as $_inherit => $_configs) {
       $_conf = array();
 
-      foreach($_configs as $_feature => $_spec) {
+      foreach ($_configs as $_feature => $_spec) {
         if (strpos($_feature, $module_start) === false) {
           continue;
         }
@@ -307,8 +316,8 @@ class CConfiguration extends CMbMetaObject {
     
     $patterns = array("$class ", "$class.");
     
-    foreach($model as $_inherit => $_configs) {
-      foreach($patterns as $_patt) {
+    foreach ($model as $_inherit => $_configs) {
+      foreach ($patterns as $_patt) {
         // Faster than preg_match ?
         if (strpos($_inherit, $_patt) !== false) {
           if ($flatten) {
@@ -333,7 +342,7 @@ class CConfiguration extends CMbMetaObject {
       $config_keys = array_flip($config_keys);
     }
     
-    foreach($model as $_inherit => $_configs) {
+    foreach ($model as $_inherit => $_configs) {
       if ($flatten) {
         $configs = array_merge($configs, $_configs);
         
@@ -386,7 +395,7 @@ class CConfiguration extends CMbMetaObject {
     $_obj = new $class;
     $_list = $_obj->loadListWithPerms(PERM_EDIT, $where);
     
-    foreach($_list as $_object) {
+    foreach ($_list as $_object) {
       $subtree[$_object->_guid] = array(
         "object"   => $_object,
         "children" => array(),
@@ -397,8 +406,12 @@ class CConfiguration extends CMbMetaObject {
   }
 
   /**
-   * @param array Configs
-   * @param CMbObject Object to get the configs of
+   * Apply inheritance to resolve an object
+   *
+   * @param array     &$configs   Configs
+   * @param string    $path       Path to the config
+   * @param string    $parent_fwd Parent forward name
+   * @param CMbObject $object     Object to get the configs of
    *
    * @return CMbObject The resolved next object
    */
@@ -409,7 +422,7 @@ class CConfiguration extends CMbMetaObject {
 
     $new_object = null;
 
-    foreach($this->_inherit[$object->_class] as $_fwd) {
+    foreach ($this->_inherit[$object->_class] as $_fwd) {
       $object = $object->loadFwdRef($_fwd);
 
       if (!$new_object) {
@@ -423,10 +436,13 @@ class CConfiguration extends CMbMetaObject {
   }
 
   /**
-   * @param string  Object class
-   * @param integer Object ID
+   * Get the configuration values of an object, without inheritance
    *
-   * @return array
+   * @param string  $object_class Object class
+   * @param integer $object_id    Object ID
+   * @param array   $config_keys  The keys of the values to get
+   *
+   * @return array The configuration values
    */
   static protected function getSelfConfig($object_class = null, $object_id = null, $config_keys = null) {
     $where = array();
@@ -455,11 +471,15 @@ class CConfiguration extends CMbMetaObject {
 
   /**
    * Returns the default values
+   * 
+   * @param array $config_keys The keys of the values to get
+   * 
+   * @return array The values
    */
   static public function getDefaultValues($config_keys = null){
     $values = array();
 
-    foreach(self::getConfigsSpecs(null, $config_keys) as $_feature => $_params) {
+    foreach (self::getConfigsSpecs(null, $config_keys) as $_feature => $_params) {
       $values[$_feature] = $_params["default"];
     }
 
@@ -467,9 +487,11 @@ class CConfiguration extends CMbMetaObject {
   }
 
   /**
-   * @param
-   * @param
-   * @param CMbObject Object
+   * Get the usable configuration values of an object 
+   *
+   * @param string    $config_inherit The inheritance path
+   * @param array     $config_keys    The keys to get the configuration value of
+   * @param CMbObject $object         Object
    *
    * @return array The corresponding configs
    */
@@ -478,7 +500,7 @@ class CConfiguration extends CMbMetaObject {
     
     $configs = array();
     
-    foreach($ancestor_configs as $_ancestor){
+    foreach ($ancestor_configs as $_ancestor) {
       $configs = array_merge($configs, $_ancestor["config"]);
     }
 
@@ -486,7 +508,7 @@ class CConfiguration extends CMbMetaObject {
   }
   
   static function lookupInherit($feature) {
-    foreach(self::getModel() as $_inherit => $_config) {
+    foreach (self::getModel() as $_inherit => $_config) {
       if (isset($_config[$feature])) {
         return $_inherit;
       }
@@ -526,7 +548,7 @@ class CConfiguration extends CMbMetaObject {
       $fwd = null;
       $self_found = false;
       $prev_object = $object;
-      foreach($config_inherit_parts as $i => $class) {
+      foreach ($config_inherit_parts as $i => $class) {
         $class_fwd = explode(".", $class);
         
         // Never need the fwd field for the first item
@@ -541,7 +563,7 @@ class CConfiguration extends CMbMetaObject {
         if ($class == $prev_object->_class && !$fwd) {
           $ancestors[] = $prev_object;
         }
-        elseif($fwd) {
+        elseif ($fwd) {
           $object = $prev_object->loadFwdRef($fwd);
           $ancestors[] = $object;
           $prev_object = $object;
@@ -550,7 +572,7 @@ class CConfiguration extends CMbMetaObject {
       
       $ancestors = array_reverse($ancestors);
       
-      foreach($ancestors as $_ancestor) {
+      foreach ($ancestors as $_ancestor) {
         $_config = self::getSelfConfig($_ancestor->_class, $_ancestor->_id, $config_keys);
         
         $configs[] = array(
@@ -605,13 +627,17 @@ class CConfiguration extends CMbMetaObject {
   }
 
   /**
-   * @param array Configs
-   * @param CMbObject Object
+   * Save the configuration values of an object 
+   *
+   * @param array     $configs Configs
+   * @param CMbObject $object  Object
+   * 
+   * @return array A list of store messages if any error happens
    */
   static function setConfigs($configs, CMbObject $object = null) {
     $messages = array();
     
-    foreach($configs as $_feature => $_value) {
+    foreach ($configs as $_feature => $_value) {
       if ($msg = self::setConfig($_feature, $_value, $object)) {
         $messages[] = $msg;
       }

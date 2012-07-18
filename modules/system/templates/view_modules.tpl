@@ -8,40 +8,39 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-	
-Main.add(function () {
-  Control.Tabs.create('tabs-modules', true);
-});
-</script>
-
 {{if $coreModules|@count}}
   <div class="big-warning">
     Un ou plusieurs des modules de base ne sont pas à jour.<br />
     Des erreurs risquent de s'afficher et le système ne fonctionnera pas correctement.<br />
     Veuillez les mettre à jour afin de supprimer ces erreurs résultantes et avoir accès aux autres modules
   </div>
-	{{mb_include template="inc_modules" object=$coreModules installed=true}}
+  {{mb_include template="inc_modules" object=$coreModules installed=true}}
 {{else}}
-	<ul id="tabs-modules" class="control_tabs">
-	  <li><a {{if $upgradable}}class="wrong"{{/if}} {{if !$mbmodules.installed|@count}}class="empty"{{/if}} href="#installed">{{tr}}CModule-modules-installed{{/tr}} ({{$mbmodules.installed|@count}})</a></li>
-	  <li><a {{if !$mbmodules.notInstalled|@count}}class="empty"{{/if}} href="#notInstalled">{{tr}}CModule-modules-notInstalled{{/tr}} ({{$mbmodules.notInstalled|@count}})</a></li>
+  <script type="text/javascript">
+  Main.add(function () {
+    Control.Tabs.create('tabs-modules', true);
+  });
+  </script>
+
+  <ul id="tabs-modules" class="control_tabs">
+    <li><a {{if $upgradable}}class="wrong"{{/if}} {{if !$mbmodules.installed|@count}}class="empty"{{/if}} href="#installed">{{tr}}CModule-modules-installed{{/tr}} ({{$mbmodules.installed|@count}})</a></li>
+    <li><a {{if !$mbmodules.notInstalled|@count}}class="empty"{{/if}} href="#notInstalled">{{tr}}CModule-modules-notInstalled{{/tr}} ({{$mbmodules.notInstalled|@count}})</a></li>
     {{if $can->edit}}
     <li><a href="#cache">{{tr}}module-system-cache{{/tr}}</a></li>
     {{/if}}
     <li><a {{if $obsoleteLibs|@count}}class="wrong"{{/if}} href="#libs">{{tr}}module-system-libs{{/tr}} {{if $obsoleteLibs|@count}}({{$obsoleteLibs|@count}}){{/if}}</a></li>
     <li><a  href="#assistant">{{tr}}module-system-assistant{{/tr}}</a></li>
-	</ul>
-	
-	<hr class="control_tabs" />
-	
-	<div id="installed" style="display: none;">
-		{{mb_include template="inc_modules" object=$mbmodules.installed installed=true}}
-	</div>
-	
-	<div id="notInstalled" style="display: none;">
-	  {{mb_include template="inc_modules" object=$mbmodules.notInstalled installed=false}}
-	</div>
+  </ul>
+  
+  <hr class="control_tabs" />
+  
+  <div id="installed" style="display: none;">
+    {{mb_include template="inc_modules" object=$mbmodules.installed installed=true}}
+  </div>
+  
+  <div id="notInstalled" style="display: none;">
+    {{mb_include template="inc_modules" object=$mbmodules.notInstalled installed=false}}
+  </div>
   
   {{if $can->edit}}
   <div id="cache" style="display: none;">
