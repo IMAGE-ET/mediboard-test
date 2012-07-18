@@ -220,7 +220,7 @@ class CApp {
    */
   static function getChildClasses($parent = "CMbObject", $properties = array(), $active_module = false) {
     $childclasses = SHM::get("child-classes");
-    
+
     // Do not cache when we want all the classes
     if ($parent && empty($properties) && isset($childclasses[$parent][$active_module])) {
       return $childclasses[$parent][$active_module];
@@ -363,13 +363,9 @@ class CApp {
   /**
    * Subject notification mechanism 
    * 
-   * TODO Implement to factorise 
+   * @todo Implement to factorise 
    *   on[Before|After][Store|Merge|Delete]()
    *   which have to get back de CPersistantObject layer
-   * 
-   * @param string $message The message type to run
-   * 
-   * @return void
    */
   static function notify($message) {
     // Event Handlers
@@ -383,4 +379,7 @@ class CApp {
       }
     }
   }
+  
+  
 }
+?>

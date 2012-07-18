@@ -8,9 +8,10 @@
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @version    $Revision$
  */
- 
+
 /**
  * CanDo class
+ * 
  * Allow to check permissions on a module with redirect helpers
  */ 
 class CCanDo {
@@ -20,31 +21,40 @@ class CCanDo {
   var $admin      = null;
   var $setValues  = null;
   
-  function redirect($a = "access_denied", $params = null){
+  /**
+   * Redirection facility
+   *  
+   * @param string $action Action view     
+   * @param string $params HTTP GET styled paramters
+   * 
+   * @return void
+   */
+  function redirect($action = "access_denied", $params = null){
     global $actionType;
 
     // on passe a null soit "tab" soit "a" selon ou l'on se trouve
     CValue::setSession($actionType);
     
-    if ($this->setValues){
-      if (is_scalar($this->setValues)){
+    if ($this->setValues) {
+      if (is_scalar($this->setValues)) {
         CValue::setSession($this->setValues);
-      }
-      else{
-        foreach($this->setValues as $key => $value){
+      } 
+      else {
+        foreach ($this->setValues as $key => $value) {
           CValue::setSession($key, $value);
         }
       }
     }
     
-    $dialog = CValue::get("dialog");
+    $dialog          = CValue::get("dialog");
     $suppressHeaders = CValue::get("suppressHeaders");
-    $ajax = CValue::get("ajax");
-    CAppUI::redirect("m=system&a=$a&dialog=$dialog&ajax=$ajax&suppressHeaders=$suppressHeaders".$params);
+    $ajax            = CValue::get("ajax");
+    CAppUI::redirect("m=system&a=$action&dialog=$dialog&ajax=$ajax&suppressHeaders=$suppressHeaders".$params);
   }
   
   /** 
    * Check if the connected user has READ rights on the current page
+   * 
    * @return void
    */
   function needsRead($setValues = null) {
@@ -56,6 +66,7 @@ class CCanDo {
   
   /** 
    * Check if the connected user has EDIT rights on the current page
+   * 
    * @return void
    */
   function needsEdit($setValues = null) {
@@ -67,6 +78,7 @@ class CCanDo {
   
   /** 
    * Check if the connected user has ADMIN rights on the current page
+   * 
    * @return void
    */
   function needsAdmin($setValues = null) {
