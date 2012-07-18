@@ -169,10 +169,12 @@ Main.add(function(){
         <hr />
         {{mb_label object=$check_list field=comments}}<br />
         {{mb_field object=$check_list field=comments}}
-        <div class="small-info">
-          Pour consulter les informations sur la version 2011 des check-lists, 
-          <a href="http://www.has-sante.fr/portail/jcms/c_1019445/la-version-2011-de-la-check-list-securite-du-patient-au-bloc-operatoire" target="_blank" style="display: inline;">rendez-vous sur le site de la HAS en cliquant ici</a>.
-        </div>
+        {{if in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes)}}
+          <div class="small-info">
+            Pour consulter les informations sur la version 2011 des check-lists, 
+            <a href="http://www.has-sante.fr/portail/jcms/c_1019445/la-version-2011-de-la-check-list-securite-du-patient-au-bloc-operatoire" target="_blank" style="display: inline;">rendez-vous sur le site de la HAS en cliquant ici</a>.
+          </div>
+        {{/if}}
       </td>
     </tr>
     {{/if}}
