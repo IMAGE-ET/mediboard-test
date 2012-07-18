@@ -130,7 +130,7 @@
   <script type="text/javascript">
   Main.add(function() {
     var planning = window["planning-{{$planning->guid}}"];
-    planning.setPlanningHeight(750);
+    planning.setPlanningHeight(1000);
     planning.adaptRangeHeight();
     planning.scroll();  
   });
