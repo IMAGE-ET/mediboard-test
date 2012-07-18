@@ -105,6 +105,9 @@ if (CModule::getActive("dPprescription")) {
 	  }
 	}
 	
+  $prescription->loadJourOp($date);
+
+
 	$composition_dossier = array();
 	$bornes_composition_dossier = array();
 	$count_composition_dossier = array();

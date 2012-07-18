@@ -337,6 +337,20 @@ Main.add(function () {
             {{assign var=antecedents value=$dossier_medical->_ref_antecedents_by_type}}
             {{assign var=sejour_id value=$sejour->_id}}
             {{mb_include module="soins" template="inc_vw_antecedent_allergie"}}
+            
+            
+            {{if $dossier_medical->_id && $dossier_medical->_count_allergies}}
+              <script type="text/javascript">
+                ObjectTooltip.modes.allergies = {  
+                  module: "patients",
+                  action: "ajax_vw_allergies",
+                  sClass: "tooltip"
+                };
+             
+              </script> 
+              <img src="images/icons/warning.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_ref_patient->_guid}}', 'allergies');" />
+            {{/if}}
+          
            </h2>
         </th>
       </tr>
@@ -371,7 +385,11 @@ Main.add(function () {
                    {{if $sejour->_entree < $bornes_composition_dossier|@reset|@reset}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$prev_date}}', null, null, null, null, null, null, '1', '{{$hide_close}}');"{{/if}}
                    ></button>
     
-         Plan de soins du {{$date|@date_format:"%d/%m/%Y"}}
+         Plan de soins du {{$date|@date_format:"%d/%m/%Y"}}       
+         
+         {{foreach from=$prescription->_jour_op item=_info_jour_op}}
+           (<span onmouseover="ObjectTooltip.createEx(this, '{{$_info_jour_op.operation_guid}}');">J{{$_info_jour_op.jour_op}}</span>)
+         {{/foreach}}
          <form name="changeDateDossier" method="get" action="?" onsubmit="return false" style="font-size: 11px">
            <input type="hidden" name="date" class="date" value="{{$date}}" onchange="PlanSoins.loadTraitement('{{$sejour->_id}}',this.value,'','administration', null, null, null, null, '1', '{{$hide_close}}');"/>
          </form>
@@ -380,7 +398,7 @@ Main.add(function () {
                  {{if $sortie_sejour > $bornes_composition_dossier|@end|@end}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration', null, null, null, null, '1', '{{$hide_close}}');"{{/if}}
                  ></button>
       </h1>
-      
+            
       <table style="width: 100%">
          <tr>
           <td>
