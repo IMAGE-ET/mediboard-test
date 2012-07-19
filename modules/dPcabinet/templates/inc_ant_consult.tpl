@@ -160,17 +160,17 @@ Main.add(function () {
 
         <form name="editAntFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitAnt(this);">
       
-        <input type="hidden" name="m" value="patients" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="dosql" value="do_antecedent_aed" />
-        <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />
-      
-        <!-- dossier_medical_id du sejour si c'est une consultation_anesth -->
+          <input type="hidden" name="m" value="patients" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="dosql" value="do_antecedent_aed" />
+          <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />
         
-        {{if $sejour_id}}
-        <!-- On passe _sejour_id seulement s'il y a un sejour_id -->
-        <input type="hidden" name="_sejour_id" value="{{$sejour_id}}" />
-        {{/if}}
+          <!-- dossier_medical_id du sejour si c'est une consultation_anesth -->
+          
+          {{if $sejour_id}}
+          <!-- On passe _sejour_id seulement s'il y a un sejour_id -->
+          <input type="hidden" name="_sejour_id" value="{{$sejour_id}}" />
+          {{/if}}
         
           <table class="layout main">
             <tr>
@@ -185,17 +185,14 @@ Main.add(function () {
                   aidesaisie="filterWithDependFields: false, validateOnBlur: 0"}}
               </td>
             </tr>
-    
             <tr>
               <th style="height: 100%">{{mb_label object=$antecedent field="type"}}</th>
               <td>{{mb_field object=$antecedent field="type" emptyLabel="None" alphabet="1" style="width: 9em;" onchange=""}}</td>
             </tr>
-    
             <tr>
               <th>{{mb_label object=$antecedent field="appareil"}}</th>
               <td>{{mb_field object=$antecedent field="appareil" emptyLabel="None" alphabet="1" style="width: 9em;"}}</td>
             </tr>
-            
             <tr>
               <td class="button" colspan="3">
                 <button class="tick" type="button" onclick="this.form.onsubmit();">
@@ -204,9 +201,7 @@ Main.add(function () {
               </td>
             </tr>
           </table>
-          
         </form>
-      
       </fieldset>
       
       {{if $isPrescriptionInstalled || $conf.dPpatients.CTraitement.enabled}}
