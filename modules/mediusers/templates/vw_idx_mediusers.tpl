@@ -13,6 +13,10 @@ showMediuser = function(user_id, element) {
 
   var url = new Url("mediusers", "ajax_edit_mediuser");
   url.addParam("user_id", user_id);
+  url.addParam("no_association", "{{$no_association}}");
+  url.addParam("ldap_user_actif", "{{$ldap_user_actif}}");
+  url.addParam("ldap_user_deb_activite", "{{$ldap_user_deb_activite}}");
+  url.addParam("ldap_user_fin_activite", "{{$ldap_user_fin_activite}}");
   url.requestUpdate("vw_mediuser");
 }
 
@@ -22,7 +26,7 @@ createUserFromLDAP = function(){
 }
 
 function changePage(page) {
-	$V(getForm('listFilter').page,page);
+  $V(getForm('listFilter').page,page);
 }
 
 Main.add(function() {
@@ -49,8 +53,8 @@ Main.add(function() {
   </tr>
   {{/if}}
   <tr>
-  	<td>
-  	  <button type="button" style="float:right;" onclick="return popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button>
+    <td>
+      <button type="button" style="float:right;" onclick="return popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button>
       <form name="listFilter" action="?m={{$m}}" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
@@ -61,9 +65,9 @@ Main.add(function() {
               {{tr}}Filter{{/tr}}
             </th>
           </tr>
-        	<tr>
-        		<th>Champ de recherche</th>
-        		<td>
+          <tr>
+            <th>Champ de recherche</th>
+            <td>
               <input type="text" name="filter" value="{{$filter}}" onchange="$V(this.form.page, 0)" />
             </td>
           </tr>
@@ -80,7 +84,7 @@ Main.add(function() {
               {{/if}}
             </td>
           </tr>
-        	<tr>
+          <tr>
             <td colspan="2" style="text-align: center">
               <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
             </td>
@@ -88,7 +92,7 @@ Main.add(function() {
         </table>        
         {{if $total_mediuser != 0}}
           {{mb_include module=system template=inc_pagination total=$total_mediuser current=$page change_page='changePage'}}
-	      {{/if}}
+        {{/if}}
       </form>
       {{mb_include template=vw_list_mediusers}}
     </td>

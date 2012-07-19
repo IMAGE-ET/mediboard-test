@@ -122,6 +122,10 @@ $smarty->assign("group"         , $group         );
 $smarty->assign("order_way"     , $order_way     );
 $smarty->assign("order_col"     , $order_col     );
 $smarty->assign("step"          , $step          );
+$smarty->assign("no_association", CValue::get("no_association"));
+$smarty->assign("ldap_user_actif", CValue::get("ldap_user_actif"));
+$smarty->assign("ldap_user_deb_activite", CValue::get("ldap_user_deb_activite"));
+$smarty->assign("ldap_user_fin_activite", CValue::get("ldap_user_fin_activite"));
 
 $smarty->display("vw_idx_mediusers.tpl");
 
