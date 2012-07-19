@@ -578,8 +578,8 @@
       <li><a href="#antecedents">Antécédents &amp; Traitements</a></li>
       
       {{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !$conf.dPprescription.CPrescription.prescription_suivi_soins}}
-        <li {{if $consult->sejour_id}} onmouseup="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'');" {{/if}}><a href="#prescription_sejour">Prescription</a></li>
-        <li {{if $consult->sejour_id}} onmouseup="PlanSoins.loadTraitement('{{$consult->sejour_id}}',null,'','administration');"{{/if}}><a href="#dossier_traitement">Suivi de soins</a></li>
+        <li {{if $rpu->sejour_id}} onmouseup="Prescription.reloadPrescSejour('', '{{$rpu->sejour_id}}','', '', null, null, null,'');" {{/if}}><a href="#prescription_sejour">Prescription</a></li>
+        <li {{if $rpu->sejour_id}} onmouseup="PlanSoins.loadTraitement('{{$rpu->sejour_id}}',null,'','administration');"{{/if}}><a href="#dossier_traitement">Suivi de soins</a></li>
       {{else}}
         <li onmouseup="loadSuivi({{$rpu->sejour_id}});"><a href="#dossier_suivi">Suivi de soins</a></li>
       {{/if}}
