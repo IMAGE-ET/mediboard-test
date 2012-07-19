@@ -192,7 +192,7 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
 
 <table class="main">
   <tr>
-    <td width="300px;">
+    <td style="width: 300px;">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_modele_aed" />
@@ -223,8 +223,8 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
         </tr>
       </table>
 
-      <ul id="tabs-edit" class="control_tabs">
-        <li><a href="#info"  >Informations</a></li>
+      <ul id="tabs-edit" class="control_tabs small">
+        <li><a href="#info">Informations</a></li>
         <li><a href="#layout">Mise en page</a></li>
       </ul>
     
@@ -495,60 +495,64 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
       </table>
       
         {{if $compte_rendu->_id}}
-        <table class="form" id="layout" style="display: none;">
-          <tr class="notice">
-            <td>
-              <div class="small-info">
-                Ce modèle n'est pas un corps de texte.
-              </div>
-            </td>
-          </tr>
-          
-          <tbody class="fields">
-            {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
-            <tr>
-              <th class="category" colspan="2">
-                {{tr}}CCompteRendu-Pagelayout{{/tr}}
-              </th>
-            </tr>
-            <tr id="page_layout" style="display: none;">
-              <td colspan="2">
-                {{include file="inc_page_layout.tpl"}}
-              </td>
-            </tr>
-            {{/if}}
-            <tr id="height"  style="display: none;">
-              <th>{{mb_label object=$compte_rendu field=height}}</th>
+          <table class="form" id="layout" style="display: none;">
+            <tr class="notice">
               <td>
-              {{if $droit}}
-                <button type="button" class="change" onclick="Thumb.old(); Modele.generate_auto_height(); Modele.preview_layout();">{{tr}}CCompteRendu.auto_height{{/tr}}</button><br/>
-                  {{mb_field object=$compte_rendu field=height increment=true form=editFrm onchange="Thumb.old(); Modele.preview_layout();" step="10" onkeyup="Modele.preview_layout();"}}
-              {{else}}
-                {{mb_field object=$compte_rendu field=height readonly="readonly"}}
-              {{/if}}
-              </td>
-            </tr>
-            
-            <tr id="layout_header_footer" style="display: none;">
-              <th>{{tr}}CCompteRendu-preview-header-footer{{/tr}}</th>
-              <td>
-                <div id="preview_page" style="color: #000; height: 84px; padding: 7px; width: 58px; background: #fff; border: 1px solid #000; overflow: hidden;">
-                  <div id="header_footer_content" style="color: #000; white-space: normal; background: #fff; overflow: hidden; margin: -1px; height: 30px; width: 100%; font-size: 3px;">
-                    {{include file="lorem_ipsum.tpl"}}
-                  </div>
-                  <hr style="width: 100%; margin-top: 3px; margin-bottom: 3px;"/>
-                  <div id="body_content" style="margin: -1px; color: #999; height: 50px; width: 100%; font-size: 3px; white-space: normal; overflow: hidden;">
-                    {{include file="lorem_ipsum.tpl"}}  
-                  </div>
+                <div class="small-info">
+                  Ce modèle n'est pas un corps de texte.
                 </div>
               </td>
             </tr>
-          </tbody>
-        </table>
+            
+            <tbody class="fields">
+              {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+              <tr>
+                <th class="category" colspan="2">
+                  {{tr}}CCompteRendu-Pagelayout{{/tr}}
+                </th>
+              </tr>
+              <tr id="page_layout" style="display: none;">
+                <td colspan="2">
+                  {{include file="inc_page_layout.tpl"}}
+                </td>
+              </tr>
+              {{/if}}
+              <tr id="height"  style="display: none;">
+                <th>{{mb_label object=$compte_rendu field=height}}</th>
+                <td>
+                {{if $droit}}
+                  <button type="button" class="change" onclick="Thumb.old(); Modele.generate_auto_height(); Modele.preview_layout();">{{tr}}CCompteRendu.auto_height{{/tr}}</button><br/>
+                    {{mb_field object=$compte_rendu field=height increment=true form=editFrm onchange="Thumb.old(); Modele.preview_layout();" step="10" onkeyup="Modele.preview_layout();"}}
+                {{else}}
+                  {{mb_field object=$compte_rendu field=height readonly="readonly"}}
+                {{/if}}
+                </td>
+              </tr>
+              
+              <tr id="layout_header_footer" style="display: none;">
+                <th>{{tr}}CCompteRendu-preview-header-footer{{/tr}}</th>
+                <td>
+                  <div id="preview_page" style="color: #000; height: 84px; padding: 7px; width: 58px; background: #fff; border: 1px solid #000; overflow: hidden;">
+                    <div id="header_footer_content" style="color: #000; white-space: normal; background: #fff; overflow: hidden; margin: -1px; height: 30px; width: 100%; font-size: 3px;">
+                      {{include file="lorem_ipsum.tpl"}}
+                    </div>
+                    <hr style="width: 100%; margin-top: 3px; margin-bottom: 3px;"/>
+                    <div id="body_content" style="margin: -1px; color: #999; height: 50px; width: 100%; font-size: 3px; white-space: normal; overflow: hidden;">
+                      {{include file="lorem_ipsum.tpl"}}  
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        {{else}}
+          <div id="layout" style="display: none; " class="small-info">
+            Aucune mise en page possible
+          </div>
         {{/if}}
 
-        <hr />
-    <table class="form">
+    <hr />
+    <table class="form" style="width: 265px;">
     
         <tr>
           {{if $droit}}
