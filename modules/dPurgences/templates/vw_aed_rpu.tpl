@@ -530,6 +530,7 @@
           </a>
           
           {{if @$modules.ecap->mod_active}}
+            {{mb_include module=ecap template=inc_button_dhe_urgence sejour_id=$sejour->_id}}
           {{/if}}
         {{else}}
           <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
