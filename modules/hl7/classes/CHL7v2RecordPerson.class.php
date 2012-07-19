@@ -60,8 +60,8 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
         if ($newPatient->load($patientRI)) {
           $recoveredPatient = clone $newPatient;
           
-          // Mapping du patient
-          $this->mappingPatient($data, $newPatient);
+          // Mapping primaire du patient
+          $this->primaryMappingPatient($data, $newPatient);
           
           // Le patient retrouvé est-il différent que celui du message ?
           if (!$this->checkSimilarPatient($recoveredPatient, $newPatient)) {
@@ -95,13 +95,13 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       }      
       
       if (!$newPatient->_id) {
-        // Mapping du patient
-        $this->mappingPatient($data, $newPatient);
+        // Mapping primaire du patient
+          $this->primaryMappingPatient($data, $newPatient);
 
         // Patient retrouvé
         if ($newPatient->loadMatchingPatient()) {
-          // Mapping du patient
-          $this->mappingPatient($data, $newPatient);
+          // Mapping primaire du patient
+          $this->primaryMappingPatient($data, $newPatient);
                 
           $code_IPP      = "A121";
           $_modif_patient = true; 
@@ -113,6 +113,11 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
         if ($msgPatient = $newPatient->store()) {
           return $exchange_ihe->setAckAR($ack, "E101", $msgPatient, $newPatient);
         }
+      }
+      
+      // Mapping secondaire (correspondants, médecins) du patient
+      if ($msgPatient = $this->secondaryMappingPatient($data, $newPatient)) {
+        return $exchange_ihe->setAckAR($ack, "E101", $msgPatient, $newPatient);
       }
 
       if ($msgIPP = CEAIPatient::storeIPP($IPP, $newPatient, $sender)) {
@@ -130,8 +135,8 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       
       $recoveredPatient = clone $newPatient;
           
-      // Mapping du patient
-      $this->mappingPatient($data, $newPatient);
+      // Mapping primaire du patient
+      $this->primaryMappingPatient($data, $newPatient);
       
       // Le patient retrouvé est-il différent que celui du message ?
       if (!$this->checkSimilarPatient($recoveredPatient, $newPatient)) {
@@ -163,6 +168,11 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       if ($msgPatient = $newPatient->store()) {
         return $exchange_ihe->setAckAR($ack, "E101", $msgPatient, $newPatient);
       }
+      
+      // Mapping secondaire (correspondants, médecins) du patient
+      if ($msgPatient = $this->secondaryMappingPatient($data, $newPatient)) {
+        return $exchange_ihe->setAckAR($ack, "E101", $msgPatient, $newPatient);
+      }
             
       $codes = array ("I102", $code_IPP);
       
@@ -172,15 +182,22 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     return $exchange_ihe->setAckAA($ack, $codes, $comment, $newPatient);
   }    
   
-  function mappingPatient($data, CPatient $newPatient) {
+  function primaryMappingPatient($data, CPatient $newPatient) {
     // Segment PID
     $this->getPID($data["PID"], $newPatient, $data);
     
     // Segment PD1
     $this->getSegment("PD1", $data, $newPatient);
+  }
+  
+  function secondaryMappingPatient($data, CPatient $newPatient) {
+    // Possible seulement dans le cas où le patient 
+    if (!$newPatient->_id) {
+      return;
+    }
     
     // Correspondants médicaux
-    if ($newPatient->_id && array_key_exists("ROL", $data)) {
+    if (array_key_exists("ROL", $data)) {
       foreach ($data["ROL"] as $_ROL) {
         $this->getROL($_ROL, $newPatient);
       }
@@ -188,11 +205,13 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     
     // Correspondances
     // Possible ssi le patient est déjà enregistré
-    if ($newPatient->_id && array_key_exists("NK1", $data)) {
+    if (array_key_exists("NK1", $data)) {
       foreach ($data["NK1"] as $_NK1) {
         $this->getNK1($_NK1, $newPatient);
       }
     }
+    
+    return $newPatient->store();
   }
 
   function checkSimilarPatient(CPatient $recoveredPatient, CPatient $newPatient) {
@@ -250,26 +269,26 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
   }
   
   function getNames(DOMNode $node, CPatient $newPatient, DOMNodeList $PID5) {
-  	$fn1 = $this->queryTextNode("XPN.1/FN.1", $node);
+    $fn1 = $this->queryTextNode("XPN.1/FN.1", $node);
 
-		switch($this->queryTextNode("XPN.7", $node)) {
-			case "D" :
-				$newPatient->nom = $fn1;
-				break;
-			case "L" :
-				// Dans le cas où l'on a pas de nom de nom de naissance le legal name
-      	// est le nom du patient
-      	if ($PID5->length > 1) {
-      		$newPatient->nom_jeune_fille = $fn1;
-				}
+    switch($this->queryTextNode("XPN.7", $node)) {
+      case "D" :
+        $newPatient->nom = $fn1;
+        break;
+      case "L" :
+        // Dans le cas où l'on a pas de nom de nom de naissance le legal name
+        // est le nom du patient
+        if ($PID5->length > 1) {
+          $newPatient->nom_jeune_fille = $fn1;
+        }
         else {
           $newPatient->nom = $fn1;
         }
-				break;
-			default:
-				$newPatient->nom = $fn1;
-				break;
-		}    
+        break;
+      default:
+        $newPatient->nom = $fn1;
+        break;
+    }    
   }
   
   function getFirstNames(DOMNode $node, CPatient $newPatient) {
@@ -287,7 +306,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       $adress_type = $this->queryTextNode("XAD.7", $_PID11);
       /* @todo Ajouter la gestion des multi-lignes - SAD.2 */
       $addresses[$adress_type]["adresse"]      = $this->queryTextNode("XAD.1", $_PID11);
-	  $addresses[$adress_type]["adresse_comp"] = $this->queryTextNode("XAD.2", $_PID11);
+    $addresses[$adress_type]["adresse_comp"] = $this->queryTextNode("XAD.2", $_PID11);
       $addresses[$adress_type]["ville"]        = $this->queryTextNode("XAD.3", $_PID11);
       $addresses[$adress_type]["cp"]           = $this->queryTextNode("XAD.5", $_PID11);
       $addresses[$adress_type]["pays_insee"]   = $this->queryTextNode("XAD.6", $_PID11);
@@ -312,16 +331,16 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
   
   function getAdress($adress, CPatient $newPatient) {    
     $newPatient->adresse    = $adress["adresse"];
-	if ($adress["adresse_comp"]) {
+  if ($adress["adresse_comp"]) {
       $newPatient->adresse  .= $this->getCompAdress($adress["adresse_comp"]);
-	}
+  }
     $newPatient->ville      = $adress["ville"];
     $newPatient->cp         = $adress["cp"];
     $newPatient->pays_insee = $adress["pays_insee"];
   }
   
   function getCompAdress($adress) {
-  	return "\n". str_replace("\\S\\", "\n", $adress);
+    return "\n". str_replace("\\S\\", "\n", $adress);
   }
   
   function getPhones(DOMNode $node, CPatient $newPatient) {
@@ -331,16 +350,16 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       $tel_number = $this->queryTextNode("XTN.12", $_PID13);
       
       if (!$tel_number) {
-      	$tel_number = $this->queryTextNode("XTN.1", $_PID13);
+        $tel_number = $this->queryTextNode("XTN.1", $_PID13);
       }
       
       switch ($this->queryTextNode("XTN.2", $_PID13)) {
         case "PRN" :
-	      if ($this->queryTextNode("XTN.3", $_PID13) == "PH") {
-	      	$newPatient->tel  = $this->getPhone($tel_number);
-		  }		
+        if ($this->queryTextNode("XTN.3", $_PID13) == "PH") {
+          $newPatient->tel  = $this->getPhone($tel_number);
+      }		
           
-	      if ($this->queryTextNode("XTN.3", $_PID13) == "CP") {
+        if ($this->queryTextNode("XTN.3", $_PID13) == "CP") {
             $newPatient->tel2 = $this->getPhone($tel_number);
           }
           break;
