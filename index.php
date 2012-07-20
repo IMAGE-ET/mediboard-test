@@ -100,6 +100,12 @@ if ($ajax = CValue::request("ajax")) {
   $ajax = 1;
 }
 
+// Raw output for export purposes
+if ($raw = CValue::request("raw")) {
+  $suppressHeaders = 1;
+  $index = $raw;
+}
+
 // Check if we are in the dialog mode
 if ($dialog = CValue::request("dialog")) {
   $index = $dialog;
