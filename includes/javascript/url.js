@@ -121,7 +121,8 @@ var Url = Class.create({
   },
   
   redirect: function(sBaseUrl) {
-    var uri = decodeURI(this.make());
+    var uri = decodeURI(this.make(!!sBaseUrl));
+
     if(this.oWindow)
       this.oWindow.location.href = (sBaseUrl ? sBaseUrl : "") + uri;
     else
