@@ -1,4 +1,4 @@
-<?php  /* $Id: ajax_creation_affectation.php  $ */
+<?php  /** $Id: ajax_creation_affectation.php  $ **/
 
 /**
  * @package Mediboard
